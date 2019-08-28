@@ -4,7 +4,7 @@
 
 #include <DWidget>
 #include <QVBoxLayout>
-#include <QStackedWidget>
+#include <DStackedWidget>
 #include "MainOperationWidget.h"
 
 DWIDGET_USE_NAMESPACE
@@ -26,7 +26,7 @@ private:
 private:
     QVBoxLayout             *m_pVBoxLayout = nullptr;
 
-    QStackedWidget          *m_pStackedWidget = nullptr;
+    DStackedWidget           *m_pStackedWidget = nullptr;
     MainOperationWidget     *m_operationWidget = nullptr;
 };
 

@@ -7,9 +7,9 @@
 HomeWidget::HomeWidget(DWidget *parent):
     DWidget (parent),
     m_layout(new QVBoxLayout(this)),
-    m_iconLabel(new QLabel),
-    m_tipsLabel(new QLabel(tr("Drag font file here"))),
-    m_splitLine(new QLabel),
+    m_iconLabel(new DLabel),
+    m_tipsLabel(new DLabel(tr("Drag font file here"))),
+    m_splitLine(new DLabel),
     m_chooseBtn(new DLinkButton(tr("Select file"))),
     m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
                              QSettings::IniFormat))
@@ -56,11 +56,9 @@ void HomeWidget::setIconPixmap(bool isLoaded)
 
 void HomeWidget::onChooseBtnClicked()
 {
-    QString suffixList = QString("Pdf Files (*.txt)");
-
     QFileDialog dialog;
     dialog.setFileMode(QFileDialog::ExistingFiles);
-    dialog.setNameFilter(suffixList);
+    dialog.setNameFilter(Utils::getSuffixList());
 
     QString historyDir = m_settings->value("dir").toString();
     if (historyDir.isEmpty()) {

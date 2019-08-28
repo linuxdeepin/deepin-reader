@@ -2,7 +2,7 @@
 #include <QDebug>
 
 TitleWidget::TitleWidget(DWidget *parent) :
-    QWidget(parent)
+    DWidget(parent)
 {
     setFixedWidth(200);
 
@@ -18,6 +18,12 @@ void TitleWidget::on_thumbnailBtn_clicked(bool bCheck)
     emit sendThumbnailState(bCheck);
 }
 
+//  字体
+void TitleWidget::on_fontBtn_clicked()
+{
+
+}
+
 //  放大镜 功能
 void TitleWidget::on_magnifyingBtn_clicked(bool bCheck)
 {
@@ -28,6 +34,10 @@ void TitleWidget::on_magnifyingBtn_clicked(bool bCheck)
 void TitleWidget::initBtns()
 {
     createBtn(tr("缩略图"), SLOT(on_thumbnailBtn_clicked(bool)), true);
+    createBtn(tr("字体"), SLOT(on_fontBtn_clicked()));
+    DComboBox* comboBox = new  DComboBox;
+    comboBox->addItem(tr("123"));
+    m_layout->addWidget(comboBox);
     createBtn(tr("放大镜"), SLOT(on_magnifyingBtn_clicked(bool)), true);
 }
 

@@ -26,6 +26,7 @@
 #include <QPainter>
 #include <QString>
 #include <QImage>
+#include <QIcon>
 
 class Utils : public QObject
 {
@@ -60,4 +61,6 @@ public:
     static QPixmap renderSVG(const QString &filePath, const QSize &size);
 
     static QString getConfigPath();
+    static QString getSuffixList();
+    static QIcon getActionIcon(const QString&);
 };

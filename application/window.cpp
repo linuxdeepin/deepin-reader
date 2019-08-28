@@ -1,13 +1,7 @@
 #include "window.h"
 
-#include <DTitlebar>
 #include <DWidget>
 #include <DPushButton>
-#include "toolbar.h"
-#include "danchors.h"
-#include "dthememanager.h"
-#include "utils.h"
-
 #include <DSettingsWidgetFactory>
 #include <DSettingsGroup>
 #include <DSettings>
@@ -16,9 +10,6 @@
 #include <DAnchors>
 
 #include <QApplication>
-//#include <QPrintDialog>
-//#include <QPrintPreviewDialog>
-//#include <QPrinter>
 #include <QScreen>
 #include <QStyleFactory>
 #include <QEvent>
@@ -26,34 +17,36 @@
 #include <QGuiApplication>
 #include <QWindow>
 
+#include <DThemeManager>
+#include "toolbar.h"
+#include "utils.h"
+
 #ifdef DTKWIDGET_CLASS_DFileDialog
 #include <DFileDialog>
 #else
 #include <QFileDialog>
 #endif
+
+
+
 Window::Window(DMainWindow *parent)
     : DMainWindow(parent),
       m_centralLayout(new QVBoxLayout(m_centralWidget)),
-      m_tabbar(new Tabbar),
       m_menu(new QMenu)
 {
     initUI();
 
-    initTitlebar();
-
     // Init layoutr
-   m_centralLayout->setMargin(0);
+    m_centralLayout->setMargin(0);
     m_centralLayout->setSpacing(0);
 
-//    m_centralLayout->addWidget(m_editorWidget);
-//    //setWindowIcon(QIcon::fromTheme("deepin-editor"));
- //  setWindowIcon(QIcon(":/images/logo_24.svg"));
-//    setCentralWidget(m_centralWidget);
     // Init titlebar.
     if (titlebar()) {
         titlebar()->setIcon(QIcon(":/images/logo_24.svg"));
         initTitlebar();
     }
+
+    initConnections();
 }
 
 Window::~Window()
@@ -64,6 +57,8 @@ Window::~Window()
 void Window::initUI()
 {
     m_centralWidget = new MainWidget();
+    connect(this, SIGNAL(sigOpenFile()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
+
     setCentralWidget(m_centralWidget);
 
     m_titleWidget = new TitleWidget();
@@ -74,109 +69,123 @@ void Window::initUI()
 
 void Window::initConnections()
 {
-    QAction *newWindowAction(new QAction(tr("New window"), this));  
-    QAction *openFileAction(new QAction(tr("Open file"), this));
-    QAction *saveAction(new QAction(tr("Save"), this));
-    QAction *saveAsAction(new QAction(tr("Save as"), this));
-    QAction *printAction(new QAction(tr("Print"), this));
-    QAction *switchThemeAction(new QAction(tr("Switch theme"), this));
-    QAction *settingAction(new QAction(tr("Settings"), this));
-    QAction *findAction(new QAction(QApplication::translate("DTextEdit", "Find"), this));
-    QAction *replaceAction(new QAction(QApplication::translate("DTextEdit", "Replace"), this));
+    createAction(tr("Open file"), tr("Open"), tr(""), SLOT(action_OpenFile()));
+    createAction(tr("Save"), tr("Save"), tr(""), SLOT(action_SaveFile()));
+    createAction(tr("Save as"), tr("Save as"), tr(""), SLOT(action_SaveAsFile()));
+    createAction(tr("Open folder"), tr("Open folder"), tr(""), SLOT(action_OpenFolder()));
+    createAction(tr("Print"), tr("Print"), tr(""), SLOT(action_Print()));
+    createAction(tr("Attr"), tr("Attr"), tr(""), SLOT(action_Attr()));
+    m_menu->addSeparator();
 
-    m_menu->addAction(newWindowAction);  
-    m_menu->addAction(openFileAction);
+    createAction(tr("Find"), tr("Find"), tr(""), SLOT(action_Find()));
+    createAction(tr("Full screen"), tr("Full"), tr(""), SLOT(action_FullScreen()));
+    createAction(tr("Screening"), tr("Screening"), tr(""), SLOT(action_Screening()));
+    createAction(tr("Larger"), tr("Larger"), tr(""), SLOT(action_Larger()));
+    createAction(tr("Smaller"), tr("Smaller"), tr(""), SLOT(action_Smaller()));
+    createAction(tr("Switch theme"), tr("Switch theme"), tr(""), SLOT(action_SwitchTheme()));
     m_menu->addSeparator();
-    m_menu->addAction(findAction);
-    m_menu->addAction(replaceAction);
-    m_menu->addAction(saveAction);
-    m_menu->addAction(saveAsAction);
-    m_menu->addAction(printAction);
-    m_menu->addAction(switchThemeAction);
-    m_menu->addSeparator();
+
+    createAction(tr("Help"), tr("Help"), tr(""), SLOT(action_Help()));
 
     m_menu->setStyle(QStyleFactory::create("dlight"));
     m_menu->setMinimumWidth(150);
     titlebar()->setMenu(m_menu);
-//    ToolBar *toolBar = new ToolBar;
-//    //toolBar->setTabbar(m_tabbar);r
-
-//    titlebar()->setCustomWidget(toolBar, Qt::AlignVCenter, false);
-//    titlebar()->setAutoHideOnFullscreen(true);
-//    titlebar()->setSeparatorVisible(true);
-//    titlebar()->setFixedHeight(40);
-//    titlebar()->setMenu(m_menu);
-
-//    connect(m_tabbar, &DTabBar::tabBarDoubleClicked, titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
-
-//    connect(m_tabbar, &Tabbar::closeTabs, this, &Window::handleTabsClosed, Qt::QueuedConnection);
-//    connect(m_tabbar, &Tabbar::requestHistorySaved, this, [=] (const QString &filePath) {
-//        if (QFileInfo(filePath).dir().absolutePath() == m_blankFileDir) {
-//            return;
-//        }
-
-//        if (!m_closeFileHistory.contains(filePath)) {
-//            m_closeFileHistory << filePath;
-//        }
-//    });
-
-//    connect(m_tabbar, &DTabBar::tabCloseRequested, this, &Window::handleTabCloseRequested, Qt::QueuedConnection);
-//    connect(m_tabbar, &DTabBar::tabAddRequested, this, static_cast<void (Window::*)()>(&Window::addBlankTab), Qt::QueuedConnection);
-//    connect(m_tabbar, &DTabBar::currentChanged, this, &Window::handleCurrentChanged, Qt::QueuedConnection);
-
-//    connect(newWindowAction, &QAction::triggered, this, &Window::newWindow);
-//    connect(newTabAction, &QAction::triggered, this, static_cast<void (Window::*)()>(&Window::addBlankTab));
-//    connect(openFileAction, &QAction::triggered, this, &Window::openFile);
-//    connect(findAction, &QAction::triggered, this, &Window::popupFindBar);
-//    connect(replaceAction, &QAction::triggered, this, &Window::popupReplaceBar);
-//    connect(saveAction, &QAction::triggered, this, &Window::saveFile);
-//    connect(saveAsAction, &QAction::triggered, this, &Window::saveAsFile);
-//    connect(printAction, &QAction::triggered, this, &Window::popupPrintDialog);
-//    connect(settingAction, &QAction::triggered, this, &Window::popupSettingsDialog);
-//    connect(switchThemeAction, &QAction::triggered, this, &Window::popupThemePanel); m_menu->addAction(settingAction);
-
-//    m_menu->setStyle(QStyleFactory::create("dlight"));
-//    m_menu->setMinimumWidth(150);
-
-//    ToolBar *toolBar = new ToolBar;
-//    toolBar->setTabbar(m_tabbar);
-
-//    titlebar()->setCustomWidget(toolBar, Qt::AlignVCenter, false);
-//    titlebar()->setAutoHideOnFullscreen(true);
-//    titlebar()->setSeparatorVisible(true);
-//    titlebar()->setFixedHeight(40);
-//    titlebar()->setMenu(m_menu);
-
-//    connect(m_tabbar, &DTabBar::tabBarDoubleClicked, titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
-
-//    connect(m_tabbar, &Tabbar::closeTabs, this, &Window::handleTabsClosed, Qt::QueuedConnection);
-//    connect(m_tabbar, &Tabbar::requestHistorySaved, this, [=] (const QString &filePath) {
-//        if (QFileInfo(filePath).dir().absolutePath() == m_blankFileDir) {
-//            return;
-//        }
-
-//        if (!m_closeFileHistory.contains(filePath)) {
-//            m_closeFileHistory << filePath;
-//        }
-//    });
-
-//    connect(m_tabbar, &DTabBar::tabCloseRequested, this, &Window::handleTabCloseRequested, Qt::QueuedConnection);
-//    connect(m_tabbar, &DTabBar::tabAddRequested, this, static_cast<void (Window::*)()>(&Window::addBlankTab), Qt::QueuedConnection);
-//    connect(m_tabbar, &DTabBar::currentChanged, this, &Window::handleCurrentChanged, Qt::QueuedConnection);
-
-//    connect(newWindowAction, &QAction::triggered, this, &Window::newWindow);
-//    connect(newTabAction, &QAction::triggered, this, static_cast<void (Window::*)()>(&Window::addBlankTab));
-//    connect(openFileAction, &QAction::triggered, this, &Window::openFile);
-//    connect(findAction, &QAction::triggered, this, &Window::popupFindBar);
-//    connect(replaceAction, &QAction::triggered, this, &Window::popupReplaceBar);
-//    connect(saveAction, &QAction::triggered, this, &Window::saveFile);
-//    connect(saveAsAction, &QAction::triggered, this, &Window::saveAsFile);
-//    connect(printAction, &QAction::triggered, this, &Window::popupPrintDialog);
-//    connect(settingAction, &QAction::triggered, this, &Window::popupSettingsDialog);
-//    connect(switchThemeAction, &QAction::triggered, this, &Window::popupThemePanel);
 }
 
 void Window::initTitlebar()
 {
-    titlebar()->setTitle(tr("123"));
+    titlebar()->setTitle(tr(""));
+}
+
+//  打开 文件
+void Window::action_OpenFile()
+{
+    emit sigOpenFile();
+}
+
+//  保存文件
+void Window::action_SaveFile()
+{
+    qDebug() << "action_SaveFile";
+}
+
+//  另存为
+void Window::action_SaveAsFile()
+{
+    qDebug() << "action_SaveAsFile";
+}
+
+//  打开 所在文件夹
+void Window::action_OpenFolder()
+{
+    qDebug() << "action_OpenFolder";
+}
+
+//  打印
+void Window::action_Print()
+{
+    qDebug() << "action_Print";
+}
+
+//  属性
+void Window::action_Attr()
+{
+    qDebug() << "action_Attr";
+}
+
+//  搜索
+void Window::action_Find()
+{
+    qDebug() << "action_Find";
+}
+
+//  全屏
+void Window::action_FullScreen()
+{
+    qDebug() << "action_FullScreen";
+}
+
+//  放映
+void Window::action_Screening()
+{
+    qDebug() << "action_Screening";
+}
+
+//  放大
+void Window::action_Larger()
+{
+    qDebug() << "action_Larger";
+}
+
+//  缩小
+void Window::action_Smaller()
+{
+    qDebug() << "action_Smaller";
+}
+
+//  主题切换
+void Window::action_SwitchTheme()
+{
+    qDebug() << "action_SwitchTheme";
+}
+
+//  帮助
+void Window::action_Help()
+{
+    qDebug() << "action_Help";
+}
+
+void Window::createAction(const QString& actionName, const QString& objectName, const QString& iconName, const char* member)
+{
+    QAction *action = new QAction(actionName, this);
+
+    action->setObjectName(objectName);
+
+    QIcon icon = Utils::getActionIcon(iconName);
+    action->setIcon(icon);
+
+    connect(action, SIGNAL(triggered()), member);
+
+    addAction(action);
+    m_menu->addAction(action);
 }

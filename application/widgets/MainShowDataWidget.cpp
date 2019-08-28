@@ -16,8 +16,6 @@ MainShowDataWidget::MainShowDataWidget(DWidget *parent) :
 void MainShowDataWidget::initWidgets()
 {
     m_pLeftShowWidget = new LeftSidebarWidget;
-    m_pLeftShowWidget->hide();
-
     m_mainLayout->addWidget(m_pLeftShowWidget, 0, Qt::AlignLeft);
 }
 

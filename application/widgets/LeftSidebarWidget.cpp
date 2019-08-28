@@ -10,11 +10,13 @@ LeftSidebarWidget::LeftSidebarWidget(DWidget *parent):
     this->setLayout(m_pVBoxLayout);
 
     initOperationWidget();
+
+    this->setVisible(false);    //  默认 隐藏
 }
 
 void LeftSidebarWidget::initOperationWidget()
 {
-    m_pStackedWidget = new QStackedWidget;
+    m_pStackedWidget = new DStackedWidget ;
     m_pVBoxLayout->addWidget(m_pStackedWidget, 0,  Qt::AlignTop);
 
     m_operationWidget = new MainOperationWidget;

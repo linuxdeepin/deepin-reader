@@ -3,7 +3,7 @@
 
 #include <DWidget>
 #include <QVBoxLayout>
-#include <QStackedWidget>
+#include <DStackedWidget>
 #include "tabbar.h"
 
 #include "MainShowDataWidget.h"
@@ -25,6 +25,7 @@ public:
 
 signals:
     void setShowSliderState(const bool&) const;
+    void sigHomeOpenFile();
 
 private slots:
     void showFileSelected(const QStringList) const;
@@ -36,7 +37,7 @@ private:
 private:    
     QVBoxLayout *m_centralLayout = nullptr;
 
-    QStackedWidget      *m_pStackedWidget = nullptr;        //  栈式 显示
+    DStackedWidget      *m_pStackedWidget = nullptr;        //  栈式 显示
 
     HomeWidget          *m_pHomeWidget = nullptr;       //  选择文件
     MainShowDataWidget  *m_pMainShowDataWidget = nullptr;    //  文件显示 和 操作

@@ -642,3 +642,20 @@ QString Utils::getConfigPath()
 
     return dir.filePath(qApp->applicationName());
 }
+
+QString Utils::getSuffixList()
+{
+    return QString("Pdf Files (*.pdf)");
+}
+
+//  获取 action 图标
+QIcon Utils::getActionIcon(const QString& iconName)
+{
+    QIcon icon = QIcon::fromTheme(iconName);
+
+    if(icon.isNull())
+    {
+        icon = QIcon(QLatin1String(":icons/") + iconName);
+    }
+    return  icon;
+}

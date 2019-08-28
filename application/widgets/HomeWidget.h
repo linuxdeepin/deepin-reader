@@ -3,9 +3,8 @@
 
 #include <DObject>
 #include <DWidget>
-#include <QWidget>
 #include <QVBoxLayout>
-#include <QLabel>
+#include <DLabel>
 #include <QFileDialog>
 #include <QSettings>
 #include "dlinkbutton.h"
@@ -30,16 +29,16 @@ public:
 signals:
     void fileSelected(const QStringList files) const;
 
-private:
+private slots:
     void onChooseBtnClicked();
 
 private:
     QVBoxLayout     *m_layout = nullptr;
     QPixmap         m_unloadPixmap;
     QPixmap         m_loadedPixmap;
-    QLabel          *m_iconLabel = nullptr;
-    QLabel          *m_tipsLabel = nullptr;
-    QLabel          *m_splitLine = nullptr;
+    DLabel          *m_iconLabel = nullptr;
+    DLabel          *m_tipsLabel = nullptr;
+    DLabel          *m_splitLine = nullptr;
     DLinkButton     *m_chooseBtn = nullptr;
     QSettings       *m_settings = nullptr;
 };

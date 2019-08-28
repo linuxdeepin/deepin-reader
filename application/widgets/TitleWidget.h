@@ -4,6 +4,7 @@
 #include <DWidget>
 #include <QHBoxLayout>
 #include <DPushButton>
+#include <DComboBox>
 
 DWIDGET_USE_NAMESPACE
 
@@ -27,7 +28,8 @@ signals:
 
 private slots:
      void on_thumbnailBtn_clicked(bool);
-    void on_magnifyingBtn_clicked(bool);
+     void on_fontBtn_clicked();
+     void on_magnifyingBtn_clicked(bool);
 
 private:
     void initBtns();

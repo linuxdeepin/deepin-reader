@@ -33,11 +33,12 @@ void MainWidget::setSliderState(const bool &bVis) const
 
 void MainWidget::initWidgets()
 {
-    m_pStackedWidget = new QStackedWidget;
+    m_pStackedWidget = new DStackedWidget;
     m_centralLayout->addWidget(m_pStackedWidget);
 
     m_pHomeWidget = new  HomeWidget;
     connect(m_pHomeWidget, SIGNAL(fileSelected(const QStringList)), this, SLOT(showFileSelected(const QStringList)));
+    connect(this, SIGNAL(sigHomeOpenFile()), m_pHomeWidget, SLOT(onChooseBtnClicked()));
     m_pStackedWidget->addWidget(m_pHomeWidget);
 
     m_pMainShowDataWidget = new MainShowDataWidget;   
