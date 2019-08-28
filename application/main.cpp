@@ -11,6 +11,7 @@
 #include <QDesktopWidget>
 #include <QScreen>
 #include <iostream>
+#include "window.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -28,7 +29,7 @@ int main(int argc, char *argv[])
     app.setTheme("light");
     app.setOrganizationName("deepin");
     app.setApplicationName("deepin_reader");
-     app.setApplicationDisplayName(QObject::tr("Deepin Reader"));
+    app.setApplicationDisplayName(QObject::tr("Deepin Reader"));
     app.setApplicationVersion("1.0");
     app.setProductIcon(QIcon(":/images/logo.svg"));
     app.setProductName(DApplication::translate("MainWindow", "Deepin Reader"));
@@ -55,7 +56,7 @@ int main(int argc, char *argv[])
 
     bool hasWindowFlag = parser.isSet(newWindowOption);
 
-    DMainWindow w;
+    Window w;
     w.setMinimumSize(500, 500);
     w.show();
 

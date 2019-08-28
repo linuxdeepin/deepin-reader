@@ -633,3 +633,12 @@ QPixmap Utils::renderSVG(const QString &filePath, const QSize &size)
 
     return pixmap;
 }
+
+
+QString Utils::getConfigPath()
+{
+    QDir dir(QDir(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first())
+             .filePath(qApp->organizationName()));
+
+    return dir.filePath(qApp->applicationName());
+}

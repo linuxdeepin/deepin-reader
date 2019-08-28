@@ -16,6 +16,8 @@
 #include <QStackedWidget>
 #include <QResizeEvent>
 #include <QVBoxLayout>
+#include "widgets/TitleWidget.h"
+#include "widgets/MainWidget.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -26,11 +28,17 @@ public:
     Window(DMainWindow *parent = 0);
     ~Window();
 
+private:
+    void initUI();
+    void initConnections();
     void initTitlebar();
 
-signals:
+private slots:
+//    void set
 
-public slots:
+private:
+    MainWidget  *m_centralWidget = nullptr;
+    TitleWidget *m_titleWidget = nullptr;
 };
 
 #endif // WINDOW_H

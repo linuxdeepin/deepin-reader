@@ -12,7 +12,13 @@ SOURCES += \
     tabbar.cpp \
     utils.cpp \
     window.cpp \
-    settings.cpp
+    settings.cpp \
+    widgets/MainOperationWidget.cpp \
+    widgets/MainWidget.cpp \
+    widgets/TitleWidget.cpp \
+    widgets/MainShowDataWidget.cpp \
+    widgets/HomeWidget.cpp \
+    widgets/LeftSidebarWidget.cpp
 
 
 RESOURCES +=         resources.qrc
@@ -21,4 +27,10 @@ HEADERS += \
     tabbar.h \
     utils.h \
     window.h \
-    settings.h
+    settings.h \
+    widgets/MainOperationWidget.h \
+    widgets/TitleWidget.h \
+    widgets/MainWidget.h \
+    widgets/MainShowDataWidget.h \
+    widgets/HomeWidget.h \
+    widgets/LeftSidebarWidget.h
