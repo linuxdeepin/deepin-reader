@@ -1,25 +1,3 @@
-//#ifndef SETTINGS_H
-//#define SETTINGS_H
-
-//#include <DSettingsDialog>
-//#include <qsettingbackend.h>
-//#include <QSettings>
-//#include <QPointer>
-
-//DWIDGET_USE_NAMESPACE
-//DCORE_USE_NAMESPACE
-//DTK_USE_NAMESPACE
-
-//class Settings : public QObject
-//{
-//    Q_OBJECT
-//public:
-//    Settings(QWidget *parent = 0);
-//    ~Settings();
-//};
-//#endif // SETTINGS_H
-
-
 /* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
  * -*- coding: utf-8 -*-
  *

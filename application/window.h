@@ -8,8 +8,9 @@
 //#include "jumplinebar.h"
 //#include "replacebar.h"
 //#include "settings.h"
-//#include "tabbar.h"
+
 //#include "thememodule/themepanel.h"
+#include "tabbar.h"
 
 #include <DMainWindow>
 #include <QWidget>
@@ -34,11 +35,15 @@ private:
     void initTitlebar();
 
 private slots:
-//    void set
 
 private:
     MainWidget  *m_centralWidget = nullptr;
     TitleWidget *m_titleWidget = nullptr;
+
+    QStackedWidget *m_editorWidget;
+    QVBoxLayout *m_centralLayout;
+    Tabbar *m_tabbar;
+    QMenu *m_menu;
 };
 
 #endif // WINDOW_H

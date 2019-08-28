@@ -1,24 +1,3 @@
-
-//#include "settings.h"
-//#include <DThemeManager>
-//#include <DSettings>
-//#include <DSettingsGroup>
-//#include <DSettingsWidgetFactory>
-//#include <DSettingsOption>
-//#include <QStyleFactory>
-//#include <QFontDatabase>
-//#include <QApplication>
-//#include <QComboBox>
-//#include <QDebug>
-//#include <QDir>
-//#include <QStandardPaths>
-
-//Settings::Settings(QWidget *parent)
-//    : QObject(parent)
-//{
-//    \
-
-//}
 /* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
  * -*- coding: utf-8 -*-
  *
@@ -42,8 +21,6 @@
  */
 
 #include "settings.h"
-
-#include "dthememanager.h"
 //#include "fontitemdelegate.h"
 
 #include <DThemeManager>

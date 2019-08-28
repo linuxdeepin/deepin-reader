@@ -18,7 +18,8 @@ SOURCES += \
     widgets/TitleWidget.cpp \
     widgets/MainShowDataWidget.cpp \
     widgets/HomeWidget.cpp \
-    widgets/LeftSidebarWidget.cpp
+    widgets/LeftSidebarWidget.cpp \
+    toolbar.cpp
 
 
 RESOURCES +=         resources.qrc
@@ -33,4 +34,5 @@ HEADERS += \
     widgets/MainWidget.h \
     widgets/MainShowDataWidget.h \
     widgets/HomeWidget.h \
-    widgets/LeftSidebarWidget.h
+    widgets/LeftSidebarWidget.h \
+    toolbar.h
