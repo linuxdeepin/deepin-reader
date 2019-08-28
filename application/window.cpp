@@ -38,8 +38,17 @@ Window::Window(DMainWindow *parent)
       m_menu(new QMenu)
 {
 
+    // Init layoutr
+   m_centralLayout->setMargin(0);
+    m_centralLayout->setSpacing(0);
+
+//    m_centralLayout->addWidget(m_editorWidget);
+//    //setWindowIcon(QIcon::fromTheme("deepin-editor"));
+ //  setWindowIcon(QIcon(":/images/logo_24.svg"));
+//    setCentralWidget(m_centralWidget);
     // Init titlebar.
     if (titlebar()) {
+        titlebar()->setIcon(QIcon(":/images/logo_24.svg"));
         initTitlebar();
     }
 
@@ -54,8 +63,7 @@ Window::~Window()
 
 void Window::initTitlebar()
 {
-    QAction *newWindowAction(new QAction(tr("New window"), this));
-    QAction *newTabAction(new QAction(tr("New tab"), this));
+    QAction *newWindowAction(new QAction(tr("New window"), this));  
     QAction *openFileAction(new QAction(tr("Open file"), this));
     QAction *saveAction(new QAction(tr("Save"), this));
     QAction *saveAsAction(new QAction(tr("Save as"), this));
@@ -65,8 +73,7 @@ void Window::initTitlebar()
     QAction *findAction(new QAction(QApplication::translate("DTextEdit", "Find"), this));
     QAction *replaceAction(new QAction(QApplication::translate("DTextEdit", "Replace"), this));
 
-    m_menu->addAction(newWindowAction);
-    m_menu->addAction(newTabAction);
+    m_menu->addAction(newWindowAction);  
     m_menu->addAction(openFileAction);
     m_menu->addSeparator();
     m_menu->addAction(findAction);
