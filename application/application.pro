@@ -12,7 +12,8 @@ SOURCES += \
     tabbar.cpp \
     utils.cpp \
     window.cpp \
-    settings.cpp
+    settings.cpp \
+    toolbar.cpp
 
 
 RESOURCES +=         resources.qrc
@@ -21,4 +22,5 @@ HEADERS += \
     tabbar.h \
     utils.h \
     window.h \
-    settings.h
+    settings.h \
+    toolbar.h

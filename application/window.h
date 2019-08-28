@@ -8,8 +8,9 @@
 //#include "jumplinebar.h"
 //#include "replacebar.h"
 //#include "settings.h"
-//#include "tabbar.h"
+
 //#include "thememodule/themepanel.h"
+#include "tabbar.h"
 
 #include <DMainWindow>
 #include <QWidget>
@@ -31,6 +32,14 @@ public:
 signals:
 
 public slots:
+
+
+private:
+    QWidget *m_centralWidget;
+    QStackedWidget *m_editorWidget;
+    QVBoxLayout *m_centralLayout;
+    Tabbar *m_tabbar;
+    QMenu *m_menu;
 };
 
 #endif // WINDOW_H
