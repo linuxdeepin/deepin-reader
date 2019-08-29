@@ -2,23 +2,11 @@
 
 #include <DWidget>
 #include <DPushButton>
-#include <DSettingsWidgetFactory>
-#include <DSettingsGroup>
-#include <DSettings>
-#include <DSettingsOption>
 #include <DTitlebar>
-#include <DAnchors>
 
-#include <QApplication>
-#include <QScreen>
 #include <QStyleFactory>
-#include <QEvent>
-
-#include <QGuiApplication>
-#include <QWindow>
 
 #include <DThemeManager>
-#include "toolbar.h"
 #include "utils.h"
 
 #ifdef DTKWIDGET_CLASS_DFileDialog
@@ -26,8 +14,6 @@
 #else
 #include <QFileDialog>
 #endif
-
-
 
 Window::Window(DMainWindow *parent)
     : DMainWindow(parent),
@@ -57,14 +43,27 @@ Window::~Window()
 void Window::initUI()
 {
     m_centralWidget = new MainWidget();
-    connect(this, SIGNAL(sigOpenFile()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
-
     setCentralWidget(m_centralWidget);
 
-    m_titleWidget = new TitleWidget();
-    connect(m_titleWidget, SIGNAL(sendThumbnailState(const bool&)), m_centralWidget, SLOT(setSliderState(const bool&)));
+    connect(this, SIGNAL(sigOpenFile()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
+//    connect(this, SIGNAL(sigSaveFile()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
+//    connect(this, SIGNAL(sigSaveAsFile()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
+    connect(this, SIGNAL(sigOpenFileFolder()), m_centralWidget, SLOT(slotOpenFileFolder()));
+//    connect(this, SIGNAL(sigPrint()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
+    connect(this, SIGNAL(sigFileAttr()), m_centralWidget, SLOT(slotFileAttr()));
+//    connect(this, SIGNAL(sigFileFind()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
+//    connect(this, SIGNAL(sigFileFullScreen()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
+//    connect(this, SIGNAL(sigFileScreening()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
+//    connect(this, SIGNAL(sigFileLarger()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
+//    connect(this, SIGNAL(sigFileSmaller()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
+//    connect(this, SIGNAL(sigSwitchTheme()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
 
+    m_titleWidget = new TitleWidget();
     titlebar()->addWidget(m_titleWidget, Qt::AlignLeft);
+
+    connect(m_titleWidget, SIGNAL(sendThumbnailState(const bool&)), m_centralWidget, SIGNAL(setShowSliderState(const bool&)));  //  信号 可以一直传递下去
+    connect(m_titleWidget, SIGNAL(sendHandShapeState(const bool&)), m_centralWidget, SIGNAL(setHandShapeState(const bool&)));
+    connect(m_titleWidget, SIGNAL(sendMagnifyingState(const bool&)), m_centralWidget, SIGNAL(setMagnifyingState(const bool&)));
 }
 
 void Window::initConnections()
@@ -106,73 +105,73 @@ void Window::action_OpenFile()
 //  保存文件
 void Window::action_SaveFile()
 {
-    qDebug() << "action_SaveFile";
+    emit sigSaveFile();
 }
 
 //  另存为
 void Window::action_SaveAsFile()
 {
-    qDebug() << "action_SaveAsFile";
+    emit sigSaveAsFile();
 }
 
 //  打开 所在文件夹
 void Window::action_OpenFolder()
 {
-    qDebug() << "action_OpenFolder";
+    emit sigOpenFileFolder();
 }
 
 //  打印
 void Window::action_Print()
 {
-    qDebug() << "action_Print";
+    emit sigPrint();
 }
 
 //  属性
 void Window::action_Attr()
 {
-    qDebug() << "action_Attr";
+    emit sigFileAttr();
 }
 
 //  搜索
 void Window::action_Find()
 {
-    qDebug() << "action_Find";
+    emit sigFileFind();
 }
 
 //  全屏
 void Window::action_FullScreen()
 {
-    qDebug() << "action_FullScreen";
+    emit sigFileFullScreen();
 }
 
 //  放映
 void Window::action_Screening()
 {
-    qDebug() << "action_Screening";
+    emit sigFileScreening();
 }
 
 //  放大
 void Window::action_Larger()
 {
-    qDebug() << "action_Larger";
+    emit sigFileLarger();
 }
 
 //  缩小
 void Window::action_Smaller()
 {
-    qDebug() << "action_Smaller";
+    emit sigFileSmaller();
 }
 
 //  主题切换
 void Window::action_SwitchTheme()
 {
-    qDebug() << "action_SwitchTheme";
+    emit sigSwitchTheme();
 }
 
-//  帮助
+//  打开 帮助文档
 void Window::action_Help()
 {
-    qDebug() << "action_Help";
+
 }
 
 void Window::createAction(const QString& actionName, const QString& objectName, const QString& iconName, const char* member)

@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<<<<<<< HEAD
-<!-- Written by QtCreator 4.8.2, 2019-08-28T14:24:33. -->
-=======
-<!-- Written by QtCreator 4.8.2, 2019-08-28T09:40:04. -->
->>>>>>> 7fc3b2d8b9181700c011d796c0b6fda1240b19d6
+<!-- Written by QtCreator 4.8.2, 2019-08-29T15:45:18. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -61,11 +57,6 @@
   <valuemap type="QVariantMap">
    <valuelist type="QVariantList" key="ClangCodeModel.CustomCommandLineKey"/>
    <value type="bool" key="ClangCodeModel.UseGlobalConfig">true</value>
-   <value type="bool" key="ClangTools.BuildBeforeAnalysis">false</value>
-   <valuelist type="QVariantList" key="ClangTools.SelectedDirs"/>
-   <valuelist type="QVariantList" key="ClangTools.SelectedFiles"/>
-   <valuelist type="QVariantList" key="ClangTools.SuppressedDiagnostics"/>
-   <value type="bool" key="ClangTools.UseGlobalSettings">true</value>
   </valuemap>
  </data>
  <data>

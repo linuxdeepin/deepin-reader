@@ -1,17 +1,7 @@
-
 #include "window.h"
 #include <DApplication>
-#include <DMainWindow>
 #include <DWidgetUtil>
 #include <DLog>
-
-#include <QApplication>
-#include <QCommandLineParser>
-#include <QDebug>
-#include <QDesktopWidget>
-#include <QScreen>
-#include <iostream>
-#include "window.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -38,23 +28,6 @@ int main(int argc, char *argv[])
 
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
-
-    // Parser input arguments.
-    QCommandLineParser parser;
-    const QCommandLineOption newWindowOption("w", "Open file in new window");
-    const QCommandLineOption helpOption = parser.addHelpOption();
-    parser.addOption(newWindowOption);
-    parser.process(app);
-
-    QStringList urls;
-    QStringList arguments = parser.positionalArguments();
-
-    for (const QString &path : arguments) {
-        //UrlInfo info(path);
-        //urls << info.url.toLocalFile();
-    }
-
-    bool hasWindowFlag = parser.isSet(newWindowOption);
 
     Window w;
     w.setMinimumSize(500, 500);

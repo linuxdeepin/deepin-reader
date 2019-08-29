@@ -3,6 +3,8 @@
 #include <QApplication>
 #include <QDir>
 
+#include <DFileDialog>
+
 
 HomeWidget::HomeWidget(DWidget *parent):
     DWidget (parent),
@@ -39,10 +41,20 @@ HomeWidget::HomeWidget(DWidget *parent):
     m_layout->setSpacing(0);
 
     connect(m_chooseBtn, &DLinkButton::clicked, this, &HomeWidget::onChooseBtnClicked);
+
+    m_pThemeSubject = ThemeSubject::getInstace();
+    if(m_pThemeSubject)
+    {
+        m_pThemeSubject->addObserver(this);
+    }
 }
 
 HomeWidget::~HomeWidget()
 {
+    if(m_pThemeSubject)
+    {
+        m_pThemeSubject->removeObserver(this);
+    }
 }
 
 void HomeWidget::setIconPixmap(bool isLoaded)
@@ -56,8 +68,8 @@ void HomeWidget::setIconPixmap(bool isLoaded)
 
 void HomeWidget::onChooseBtnClicked()
 {
-    QFileDialog dialog;
-    dialog.setFileMode(QFileDialog::ExistingFiles);
+    DFileDialog dialog;
+    dialog.setFileMode(DFileDialog::ExistingFile);
     dialog.setNameFilter(Utils::getSuffixList());
 
     QString historyDir = m_settings->value("dir").toString();
@@ -77,4 +89,9 @@ void HomeWidget::onChooseBtnClicked()
     }
 
     emit fileSelected(dialog.selectedFiles());
+}
+
+int HomeWidget::update(const QString &)
+{
+    return 0;
 }

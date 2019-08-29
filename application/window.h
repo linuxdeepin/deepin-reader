@@ -11,7 +11,6 @@
 
 //#include "thememodule/themepanel.h"
 #include "tabbar.h"
-
 #include <DMainWindow>
 #include <QVBoxLayout>
 #include "widgets/TitleWidget.h"
@@ -34,6 +33,17 @@ public:
 
 signals:
     void sigOpenFile();
+    void sigSaveFile();
+    void sigSaveAsFile();
+    void sigOpenFileFolder();
+    void sigPrint();
+    void sigFileAttr();
+    void sigFileFind();
+    void sigFileFullScreen();
+    void sigFileScreening();
+    void sigFileLarger();
+    void sigFileSmaller();
+    void sigSwitchTheme();
 
 private:
     void initUI();

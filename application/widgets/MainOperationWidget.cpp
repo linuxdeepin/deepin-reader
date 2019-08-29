@@ -10,6 +10,20 @@ MainOperationWidget::MainOperationWidget(DWidget* parent):
     this->setLayout(m_hboxLayout);
 
     initBtns();
+
+    m_pThemeSubject = ThemeSubject::getInstace();
+    if(m_pThemeSubject)
+    {
+        m_pThemeSubject->addObserver(this);
+    }
+}
+
+MainOperationWidget::~MainOperationWidget()
+{
+    if(m_pThemeSubject)
+    {
+        m_pThemeSubject->removeObserver(this);
+    }
 }
 
 void MainOperationWidget::initBtns()
@@ -51,4 +65,9 @@ void MainOperationWidget::on_bookmarksBtn_clicked(bool)
 void MainOperationWidget::on_annotationBtn_clicked(bool)
 {
     emit showType(2);
+}
+
+int MainOperationWidget::update(const QString &)
+{
+    return 0;
 }

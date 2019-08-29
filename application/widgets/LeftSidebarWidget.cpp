@@ -12,6 +12,20 @@ LeftSidebarWidget::LeftSidebarWidget(DWidget *parent):
     initOperationWidget();
 
     this->setVisible(false);    //  默认 隐藏
+
+    m_pThemeSubject = ThemeSubject::getInstace();
+    if(m_pThemeSubject)
+    {
+        m_pThemeSubject->addObserver(this);
+    }
+}
+
+LeftSidebarWidget::~LeftSidebarWidget()
+{
+    if(m_pThemeSubject)
+    {
+        m_pThemeSubject->removeObserver(this);
+    }
 }
 
 void LeftSidebarWidget::initOperationWidget()
@@ -21,4 +35,9 @@ void LeftSidebarWidget::initOperationWidget()
 
     m_operationWidget = new MainOperationWidget;
     m_pVBoxLayout->addWidget(m_operationWidget, 0, Qt::AlignBottom);
+}
+
+int LeftSidebarWidget::update(const QString &)
+{
+    return 0;
 }

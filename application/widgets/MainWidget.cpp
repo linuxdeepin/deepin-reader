@@ -1,5 +1,9 @@
 #include "MainWidget.h"
+#include <DDesktopServices>
 #include <QDebug>
+
+#include "data/DataManager.h"
+#include "FileAttrWidget.h"
 
 MainWidget::MainWidget(DWidget *parent):
     DWidget (parent)
@@ -13,6 +17,26 @@ MainWidget::MainWidget(DWidget *parent):
     this->setLayout(m_centralLayout);
 
     initWidgets();
+
+    m_pThemeSubject = ThemeSubject::getInstace();
+    if(m_pThemeSubject)
+    {
+        m_pThemeSubject->addObserver(this);
+    }
+}
+
+MainWidget::~MainWidget()
+{
+    if(m_pThemeSubject)
+    {
+        m_pThemeSubject->removeObserver(this);
+    }
+
+    if(m_pAttrWidget)
+    {
+        m_pAttrWidget->deleteLater();
+        m_pAttrWidget = nullptr;
+    }
 }
 
 //  open file
@@ -20,15 +44,32 @@ void MainWidget::showFileSelected(const QStringList files) const
 {
     int nSize = files.count();
     QString filePath = files.at(0);
-    qDebug() << nSize << "    "<< filePath;
 
+    DataManager::instance()->setStrOnlyFilePath(filePath);
     //  open  file
     m_pStackedWidget->setCurrentIndex(1);
 }
 
-void MainWidget::setSliderState(const bool &bVis) const
+ //  打开文件所在文件夹
+void MainWidget::slotOpenFileFolder()
 {
-    emit setShowSliderState(bVis);
+    QString strFilePath = DataManager::instance()->strOnlyFilePath();
+    if(strFilePath != "")
+    {
+        int nLastPos = strFilePath.lastIndexOf('/');
+        strFilePath = strFilePath.mid(0, nLastPos);
+        DDesktopServices::showFolder(strFilePath);
+    }
+}
+
+//  查看 文件属性
+void MainWidget::slotFileAttr()
+{
+    if(m_pAttrWidget == nullptr)
+    {
+       m_pAttrWidget = new FileAttrWidget();
+    }
+    m_pAttrWidget->show();
 }
 
 void MainWidget::initWidgets()
@@ -43,10 +84,17 @@ void MainWidget::initWidgets()
 
     m_pMainShowDataWidget = new MainShowDataWidget;   
     connect(this, SIGNAL(setShowSliderState(const bool&)), m_pMainShowDataWidget, SLOT(setSidebarVisible(const bool&)));
+    connect(this, SIGNAL(setHandShapeState(const bool&)), m_pMainShowDataWidget, SLOT(setFileHandShapeState(const bool&)));
+    connect(this, SIGNAL(setMagnifyingState(const bool&)), m_pMainShowDataWidget, SLOT(setFileMagnifyingState(const bool&)));
 
     m_pStackedWidget->addWidget(m_pMainShowDataWidget);
 
     m_pStackedWidget->setCurrentIndex(0);
+}
+
+int MainWidget::update(const QString &)
+{
+    return 0;
 }
 
 

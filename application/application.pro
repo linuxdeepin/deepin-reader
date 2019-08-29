@@ -19,7 +19,10 @@ SOURCES += \
     widgets/MainShowDataWidget.cpp \
     widgets/HomeWidget.cpp \
     widgets/LeftSidebarWidget.cpp \
-    toolbar.cpp
+    toolbar.cpp \
+    data/DataManager.cpp \
+    widgets/FileAttrWidget.cpp \
+    header/ThemeSubject.cpp
 
 
 RESOURCES +=         resources.qrc
@@ -35,4 +38,10 @@ HEADERS += \
     widgets/MainShowDataWidget.h \
     widgets/HomeWidget.h \
     widgets/LeftSidebarWidget.h \
-    toolbar.h
+    toolbar.h \
+    data/DataManager.h \
+    widgets/FileAttrWidget.h \
+    header/ISubject.h \
+    header/IObserver.h \
+    header/ThemeSubject.h \
+    header/IThemeObserver.h
