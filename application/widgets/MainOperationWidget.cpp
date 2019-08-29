@@ -1,4 +1,5 @@
 #include "MainOperationWidget.h"
+#include <QDebug>
 
 MainOperationWidget::MainOperationWidget(DWidget* parent):
     DWidget (parent)
@@ -54,16 +55,19 @@ void MainOperationWidget::createBtn(const QString& iconName, const char* member,
 
 void MainOperationWidget::on_thumbnailBtn_clicked(bool)
 {
+ //   qDebug() << "showType(0)";
     emit showType(0);
 }
 
 void MainOperationWidget::on_bookmarksBtn_clicked(bool)
 {
+ //   qDebug() << "showType(1)";
     emit showType(1);
 }
 
 void MainOperationWidget::on_annotationBtn_clicked(bool)
 {
+//    qDebug() << "showType(2)";
     emit showType(2);
 }
 

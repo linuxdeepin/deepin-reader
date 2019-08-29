@@ -22,7 +22,11 @@ SOURCES += \
     toolbar.cpp \
     data/DataManager.cpp \
     widgets/FileAttrWidget.cpp \
-    header/ThemeSubject.cpp
+    header/ThemeSubject.cpp \
+    widgets/BookMarkWidget.cpp \
+    widgets/NotesWidget.cpp \
+    widgets/ThumbnailWidget.cpp \
+    widgets/PagingWidget.cpp
 
 
 RESOURCES +=         resources.qrc
@@ -44,4 +48,15 @@ HEADERS += \
     header/ISubject.h \
     header/IObserver.h \
     header/ThemeSubject.h \
-    header/IThemeObserver.h
+    header/IThemeObserver.h \
+    widgets/BookMarkWidget.h \
+    widgets/NotesWidget.h \
+    widgets/ThumbnailWidget.h \
+    widgets/PagingWidget.h
+
+DISTFILES += \
+    themes/solarized_light.theme \
+    themes/atom_dark.theme \
+    themes/deepin_dark.theme \
+    themes/solarized_dark.theme \
+    themes/deepin.theme
