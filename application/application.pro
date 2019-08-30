@@ -30,7 +30,8 @@ SOURCES += \
     listWidget/ThumbnailItemWidget.cpp \
     listWidget/ThumbnailWidget.cpp \
     listWidget/BookMarkItemWidget.cpp \
-    listWidget/NotesItemWidget.cpp
+    listWidget/NotesItemWidget.cpp \
+    view/MagnifyingWidget.cpp
 
 
 RESOURCES +=         resources.qrc
@@ -61,6 +62,7 @@ HEADERS += \
     listWidget/BookMarkWidget.h \
     listWidget/BookMarkItemWidget.h \
     listWidget/NotesItemWidget.h \
+    view/MagnifyingWidget.h
 
 DISTFILES += \
     themes/solarized_light.theme \

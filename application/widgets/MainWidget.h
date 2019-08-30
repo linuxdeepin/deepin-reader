@@ -25,7 +25,7 @@ class MainWidget : public DWidget, public IThemeObserver
     Q_OBJECT
 public:
     MainWidget(DWidget *parent = nullptr);
-    ~MainWidget();
+    ~MainWidget() override;
 
 signals:
     void setShowSliderState(const bool&) const;     //  缩略图、书签、注释  侧边栏显隐 信号
@@ -55,7 +55,7 @@ private:
 
     // IObserver interface
 public:
-    int update(const QString &);
+    int update(const QString &) override;
 };
 
 #endif // MAINWIDGET_H

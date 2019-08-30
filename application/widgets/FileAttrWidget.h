@@ -20,9 +20,10 @@ DWIDGET_USE_NAMESPACE
 
 class FileAttrWidget : public DWidget, public IThemeObserver
 {
+    Q_OBJECT
 public:
     FileAttrWidget(DWidget *parent = nullptr);
-    ~FileAttrWidget();
+    ~FileAttrWidget() override;
 
 public:
     void setFileAttr();
@@ -40,7 +41,7 @@ private:
 
     // IObserver interface
 public:
-    int update(const QString &);
+    int update(const QString &) override;
 };
 
 #endif // FILEATTRWIDGET_H

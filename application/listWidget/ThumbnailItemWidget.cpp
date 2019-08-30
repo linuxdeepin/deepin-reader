@@ -1,7 +1,8 @@
 #include "ThumbnailItemWidget.h"
 #include <QDebug>
 
-ThumbnailItemWidget::ThumbnailItemWidget()
+ThumbnailItemWidget::ThumbnailItemWidget(DWidget *parent) :
+    DWidget (parent)
 {
     m_pThemeSubject = ThemeSubject::getInstace();
     if(m_pThemeSubject)
@@ -47,13 +48,13 @@ void ThumbnailItemWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
 
-    QPainter pw(m_sonWidget?m_sonWidget:nullptr);
-    pw.setPen(Qt::NoPen);
-    pw.setBrush(m_bPaint?Qt::white:Qt::darkBlue);
-    pw.drawRect(rect());
+//    QPainter pw(m_sonWidget?m_sonWidget:nullptr);
+//    pw.setPen(Qt::NoPen);
+//    pw.setBrush(m_bPaint?Qt::white:Qt::darkBlue);
+//    pw.drawRect(rect());
 
-    m_sonWidget->update();
-    qDebug() << "paint ground color";
+//    m_sonWidget->update();
+//    qDebug() << "paint ground color";
 
 //    QPainter pl(m_pPageLabel?m_pPageLabel:nullptr);
 //    pl.setPen(Qt::NoPen);
@@ -69,8 +70,8 @@ void ThumbnailItemWidget::initWidget()
     m_sonWidget->setAutoFillBackground(true);
     m_sonWidget->setLayout(gridLayout);
 
-    m_pContantLabel = new DLabel(this);
-    m_pPageLabel = new DLabel(this);
+    m_pContantLabel = new DLabel();
+    m_pPageLabel = new DLabel();
     m_pPageLabel->setFixedSize(QSize(250, 20));
 
     m_pContantLabel->setFixedSize(QSize(150,150));

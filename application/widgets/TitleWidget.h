@@ -25,7 +25,7 @@ class TitleWidget : public DWidget, public IThemeObserver
     Q_OBJECT
 public:
     TitleWidget(DWidget *parent = nullptr);
-    ~TitleWidget();
+    ~TitleWidget() override;
 
 signals:
     void sendThumbnailState(const bool&) const;
@@ -57,7 +57,7 @@ private:
 
     // IObserver interface
 public:
-    int update(const QString &);
+    int update(const QString &) override;
 };
 
 #endif // TITLEWIDGET_H

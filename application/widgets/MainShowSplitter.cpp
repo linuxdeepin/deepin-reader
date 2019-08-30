@@ -28,7 +28,12 @@ void MainShowSplitter::initWidgets()
     insertWidget(0, m_pLeftShowWidget);
 
     m_pFileViewWidget = new FileViewWidget();
+    connect(this, SIGNAL(sigFileMagnifyingState(const bool&)), m_pFileViewWidget, SLOT(setMagnifyingState(const bool&)));
     insertWidget(1, m_pFileViewWidget);
+
+    //  布局 占比
+    setStretchFactor(0, 2);
+    setStretchFactor(1, 8);
 }
 
 //  侧边栏的显隐
@@ -44,10 +49,10 @@ void MainShowSplitter::setFileHandShapeState(const bool &bState) const
 }
 
 //  文档显示区域的 放大镜状态
-void MainShowSplitter::setFileMagnifyingState(const bool &bState) const
-{
-    qDebug() << "setFileMagnifyingState      "  << bState;
-}
+//void MainShowSplitter::setFileMagnifyingState(const bool &bState) const
+//{
+//    qDebug() << "setFileMagnifyingState      "  << bState;
+//}
 
 int MainShowSplitter::update(const QString &)
 {

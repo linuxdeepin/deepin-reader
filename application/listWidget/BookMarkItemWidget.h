@@ -21,9 +21,6 @@ public:
     BookMarkItemWidget(DWidget *parent = nullptr);
     ~BookMarkItemWidget() override;
 
-protected:
-    void contextMenuEvent(QContextMenuEvent *event) override;
-
 public:
     void setPicture(const QString&);
     void setPage(const QString &);

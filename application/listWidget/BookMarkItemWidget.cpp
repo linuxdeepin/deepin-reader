@@ -33,11 +33,6 @@ BookMarkItemWidget::~BookMarkItemWidget()
     }
 }
 
-void BookMarkItemWidget::contextMenuEvent(QContextMenuEvent *event)
-{
-
-}
-
 void BookMarkItemWidget::setPicture(const QString &pix)
 {
     m_pPicture->setPixmap(QPixmap(pix));
@@ -64,7 +59,7 @@ void BookMarkItemWidget::onDltBookMark()
 void BookMarkItemWidget::onShowContextMenu(const QPoint &point)
 {
     QMenu * t_menu = new QMenu(this);
-    QAction *dltBookMarkAction = t_menu->addAction(tr("删除书签"));
+    QAction *dltBookMarkAction = t_menu->addAction(tr("delete BookMark"));
     connect(dltBookMarkAction, SIGNAL(triggered()), this, SLOT(onDltBookMark()));
     t_menu->exec(QCursor::pos());
 }

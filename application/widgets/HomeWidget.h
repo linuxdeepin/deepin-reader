@@ -25,7 +25,7 @@ class HomeWidget : public DWidget, public IThemeObserver
     Q_OBJECT
 public:
     HomeWidget(DWidget *parent = nullptr);
-    ~HomeWidget();
+    ~HomeWidget() override;
 
     void setIconPixmap(bool isLoaded);
 
@@ -49,7 +49,7 @@ private:
 
     // IObserver interface
 public:
-    int update(const QString &);
+    int update(const QString &) override;
 };
 
 #endif // OPENFILEWIDGET_H
