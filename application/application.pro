@@ -27,7 +27,9 @@ SOURCES += \
     listWidget/NotesWidget.cpp \
     listWidget/BookMarkWidget.cpp \
     listWidget/ThumbnailItemWidget.cpp \
-    listWidget/ThumbnailWidget.cpp
+    listWidget/ThumbnailWidget.cpp \
+    listWidget/BookMarkItemWidget.cpp \
+    listWidget/NotesItemWidget.cpp
 
 
 RESOURCES +=         resources.qrc
@@ -54,7 +56,9 @@ HEADERS += \
     listWidget/NotesWidget.h \
     listWidget/ThumbnailWidget.h \
     listWidget/PagingWidget.h \
-    listWidget/BookMarkWidget.h
+    listWidget/BookMarkWidget.h \
+    listWidget/BookMarkItemWidget.h \
+    listWidget/NotesItemWidget.h
 
 DISTFILES += \
     themes/solarized_light.theme \

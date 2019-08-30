@@ -9,7 +9,9 @@
 #include <DPushButton>
 #include <QDebug>
 
-
+#include <listWidget/ThumbnailItemWidget.h>
+#include "header/IThemeObserver.h"
+#include "header/ThemeSubject.h"
 #include "PagingWidget.h"
 
 DWIDGET_USE_NAMESPACE
@@ -17,13 +19,17 @@ DWIDGET_USE_NAMESPACE
 /*
 *缩略图列表页面
 */
-class ThumbnailWidget : public DWidget
+class ThumbnailWidget : public DWidget, public IThemeObserver
 {
     Q_OBJECT
 
 public:
     ThumbnailWidget(DWidget *parent = nullptr);
     ~ThumbnailWidget();
+
+public:
+    // IObserver interface
+    int update(const QString &);
 
 private:
     void initWidget();
@@ -46,6 +52,9 @@ private:
 
     DWidget * m_itemWidget = nullptr;
     DLabel * m_pSonWidgetPageLabel = nullptr;
+    ThumbnailItemWidget *m_pThumbnailItemWidget = nullptr;
+
+    ThemeSubject    *m_pThemeSubject = nullptr;
 };
 
 #endif // THUMBNAILWIDGET_H

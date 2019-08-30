@@ -2,6 +2,11 @@
 #define BOOKMARKFORM_H
 
 #include <DWidget>
+#include <DListWidget>
+#include <QListWidgetItem>
+#include <QHBoxLayout>
+
+#include "BookMarkItemWidget.h"
 #include "header/IThemeObserver.h"
 #include "header/ThemeSubject.h"
 
@@ -16,11 +21,17 @@ public:
     ~BookMarkWidget();
 
 private:
-    ThemeSubject    *m_pThemeSubject = nullptr;
+    void initWidget();
 
-    // IObserver interface
 public:
+    // IObserver interface
     int update(const QString &);
+
+private:
+    ThemeSubject    *m_pThemeSubject = nullptr;
+    DListWidget * m_pBookMarkListWidget = nullptr;
+    QVBoxLayout * m_pVBoxLayout = nullptr;
+
 };
 
 #endif // BOOKMARKFORM_H
