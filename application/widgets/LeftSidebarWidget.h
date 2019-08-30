@@ -4,6 +4,8 @@
 #include <DWidget>
 #include <QVBoxLayout>
 #include <DStackedWidget>
+#include <QEvent>
+
 #include "MainOperationWidget.h"
 #include "listWidget/ThumbnailWidget.h"
 #include "listWidget/BookMarkWidget.h"
@@ -30,7 +32,7 @@ class LeftSidebarWidget : public DWidget, public IThemeObserver
     Q_OBJECT
 public:
     LeftSidebarWidget(DWidget *parent = nullptr);
-    ~LeftSidebarWidget();
+    ~LeftSidebarWidget() override;
 
 private slots:
     void showListWidget(const int &) const;
@@ -45,13 +47,13 @@ private:
 
     ThumbnailWidget * m_pThumbnailWidget = nullptr;
     BookMarkWidget * m_pBookMarkWidget = nullptr;
-    NotesForm * m_pNotesWidget = nullptr;
+    NotesWidget * m_pNotesWidget = nullptr;
 
     ThemeSubject            *m_pThemeSubject = nullptr;
 
     // IObserver interface
 public:
-    int update(const QString &);
+    int update(const QString &) override;
 };
 
 #endif // LEFTSHOWWIDGET_H

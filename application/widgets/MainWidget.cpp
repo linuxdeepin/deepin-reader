@@ -45,6 +45,8 @@ void MainWidget::showFileSelected(const QStringList files) const
     int nSize = files.count();
     QString filePath = files.at(0);
 
+    //  判断文件 是否有损坏
+
     DataManager::instance()->setStrOnlyFilePath(filePath);
     //  open  file
     m_pStackedWidget->setCurrentIndex(1);
@@ -82,12 +84,12 @@ void MainWidget::initWidgets()
     connect(this, SIGNAL(sigHomeOpenFile()), m_pHomeWidget, SLOT(onChooseBtnClicked()));
     m_pStackedWidget->addWidget(m_pHomeWidget);
 
-    m_pMainShowDataWidget = new MainShowDataWidget;   
-    connect(this, SIGNAL(setShowSliderState(const bool&)), m_pMainShowDataWidget, SLOT(setSidebarVisible(const bool&)));
-    connect(this, SIGNAL(setHandShapeState(const bool&)), m_pMainShowDataWidget, SLOT(setFileHandShapeState(const bool&)));
-    connect(this, SIGNAL(setMagnifyingState(const bool&)), m_pMainShowDataWidget, SLOT(setFileMagnifyingState(const bool&)));
+    m_pMainShowSplitter = new MainShowSplitter;
+    connect(this, SIGNAL(setShowSliderState(const bool&)), m_pMainShowSplitter, SLOT(setSidebarVisible(const bool&)));
+    connect(this, SIGNAL(setHandShapeState(const bool&)), m_pMainShowSplitter, SLOT(setFileHandShapeState(const bool&)));
+    connect(this, SIGNAL(setMagnifyingState(const bool&)), m_pMainShowSplitter, SLOT(setFileMagnifyingState(const bool&)));
 
-    m_pStackedWidget->addWidget(m_pMainShowDataWidget);
+    m_pStackedWidget->addWidget(m_pMainShowSplitter);
 
     m_pStackedWidget->setCurrentIndex(0);
 }

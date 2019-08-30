@@ -9,6 +9,7 @@
 #include <QMenu>
 #include <QAction>
 #include <DTextEdit>
+#include <QContextMenuEvent>
 
 #include "header/IThemeObserver.h"
 #include "header/ThemeSubject.h"
@@ -20,11 +21,11 @@ class NotesItemWidget : public DWidget, public IThemeObserver
     Q_OBJECT
 
 public:
-    NotesItemWidget();
-    ~NotesItemWidget();
+    NotesItemWidget(DWidget *parent = nullptr);
+    ~NotesItemWidget() override;
 
 protected:
-    void contextMenuEvent(QContextMenuEvent *event);
+    void contextMenuEvent(QContextMenuEvent *event) override;
 
 private slots:
     void onDltNoteItem();
@@ -39,14 +40,15 @@ public:
     void setPage(const QString &);
     void setNoteText(const QString &);
     // IObserver interface
-    int update(const QString &);
+    int update(const QString &) override;
 
 private:
     DLabel * m_pPicture = nullptr;
     DLabel * m_pPage = nullptr;
     DTextEdit * m_pTextEdit = nullptr;
     QHBoxLayout * m_pHLayout = nullptr;
-    ThemeSubject    *m_pThemeSubject = nullptr;
+
+    ThemeSubject    *m_pThemeSubject  = nullptr;
 };
 
 #endif // NOTESITEMWIDGET_H

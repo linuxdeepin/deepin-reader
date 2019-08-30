@@ -5,7 +5,7 @@
 #include <QVBoxLayout>
 #include <DStackedWidget>
 
-#include "MainShowDataWidget.h"
+#include "MainShowSplitter.h"
 #include "HomeWidget.h"
 #include "FileAttrWidget.h"
 
@@ -49,7 +49,7 @@ private:
     ThemeSubject        *m_pThemeSubject = nullptr;
 
     HomeWidget          *m_pHomeWidget = nullptr;       //  选择文件
-    MainShowDataWidget  *m_pMainShowDataWidget = nullptr;    //  文件显示 和 操作
+    MainShowSplitter    *m_pMainShowSplitter = nullptr;    //  文件显示 和 操作
 
     FileAttrWidget      *m_pAttrWidget = nullptr;
 

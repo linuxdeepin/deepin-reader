@@ -1,7 +1,7 @@
-#include "NotesWidget.h"
+#include "FileViewWidget.h"
 
-NotesWidget::NotesWidget(DWidget *parent) :
-    DWidget(parent)
+FileViewWidget::FileViewWidget(DWidget *parent) :
+    DWidget (parent)
 {
     m_pThemeSubject = ThemeSubject::getInstace();
     if(m_pThemeSubject)
@@ -10,7 +10,7 @@ NotesWidget::NotesWidget(DWidget *parent) :
     }
 }
 
-NotesWidget::~NotesWidget()
+FileViewWidget::~FileViewWidget()
 {
     if(m_pThemeSubject)
     {
@@ -18,7 +18,7 @@ NotesWidget::~NotesWidget()
     }
 }
 
-int NotesWidget::update(const QString &)
+int FileViewWidget::update(const QString &)
 {
     return 0;
 }

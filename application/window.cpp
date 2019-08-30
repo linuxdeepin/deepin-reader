@@ -17,8 +17,7 @@
 
 Window::Window(DMainWindow *parent)
     : DMainWindow(parent),
-      m_centralLayout(new QVBoxLayout(m_centralWidget)),
-      m_menu(new QMenu)
+      m_centralLayout(new QVBoxLayout(m_centralWidget))
 {
     initUI();
 
@@ -27,10 +26,7 @@ Window::Window(DMainWindow *parent)
     m_centralLayout->setSpacing(0);
 
     // Init titlebar.
-    if (titlebar()) {
-        titlebar()->setIcon(QIcon(":/images/logo_24.svg"));
-        initTitlebar();
-    }
+    initTitlebar();
 
     initConnections();
 }
@@ -45,6 +41,12 @@ void Window::initUI()
     m_centralWidget = new MainWidget();
     setCentralWidget(m_centralWidget);
 
+    m_titleWidget = new TitleWidget();
+    titlebar()->addWidget(m_titleWidget, Qt::AlignLeft);
+}
+
+void Window::initConnections()
+{
     connect(this, SIGNAL(sigOpenFile()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
 //    connect(this, SIGNAL(sigSaveFile()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
 //    connect(this, SIGNAL(sigSaveAsFile()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
@@ -58,16 +60,12 @@ void Window::initUI()
 //    connect(this, SIGNAL(sigFileSmaller()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
 //    connect(this, SIGNAL(sigSwitchTheme()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
 
-    m_titleWidget = new TitleWidget();
-    titlebar()->addWidget(m_titleWidget, Qt::AlignLeft);
-
     connect(m_titleWidget, SIGNAL(sendThumbnailState(const bool&)), m_centralWidget, SIGNAL(setShowSliderState(const bool&)));  //  信号 可以一直传递下去
     connect(m_titleWidget, SIGNAL(sendHandShapeState(const bool&)), m_centralWidget, SIGNAL(setHandShapeState(const bool&)));
     connect(m_titleWidget, SIGNAL(sendMagnifyingState(const bool&)), m_centralWidget, SIGNAL(setMagnifyingState(const bool&)));
-}
 
-void Window::initConnections()
-{
+    m_menu = new DMenu;
+
     createAction(tr("Open file"), tr("Open"), tr(""), SLOT(action_OpenFile()));
     createAction(tr("Save"), tr("Save"), tr(""), SLOT(action_SaveFile()));
     createAction(tr("Save as"), tr("Save as"), tr(""), SLOT(action_SaveAsFile()));
@@ -93,7 +91,10 @@ void Window::initConnections()
 
 void Window::initTitlebar()
 {
-    titlebar()->setTitle(tr(""));
+    if (titlebar()) {
+        titlebar()->setIcon(QIcon(":/images/logo_24.svg"));
+        titlebar()->setTitle(tr(""));
+    }
 }
 
 //  打开 文件

@@ -24,9 +24,9 @@ public:
 
     // ISubject interface
 public:
-    void addObserver(IObserver *obs);
-    void removeObserver(IObserver *obs);
-    void Notify(const QString&);
+    void addObserver(IObserver *obs) override;
+    void removeObserver(IObserver *obs) override;
+    void Notify(const QString&) override;
 
 private:
     QList<IObserver*> m_observerList;

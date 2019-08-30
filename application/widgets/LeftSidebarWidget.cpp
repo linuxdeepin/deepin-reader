@@ -3,15 +3,18 @@
 LeftSidebarWidget::LeftSidebarWidget(DWidget *parent):
     DWidget (parent)
 {
-    setFixedWidth(250);
+    setMinimumWidth(250);
+    setMaximumWidth(500);
 
     m_pVBoxLayout = new QVBoxLayout;
+    m_pVBoxLayout->setContentsMargins(0, 0, 0, 0);
+    m_pVBoxLayout->setSpacing(0);
 
     this->setLayout(m_pVBoxLayout);
 
     initOperationWidget();
 
-    this->setVisible(false);    //  默认 隐藏
+    //this->setVisible(false);    //  默认 隐藏
 
     m_pThemeSubject = ThemeSubject::getInstace();
     if(m_pThemeSubject)
@@ -41,7 +44,7 @@ void LeftSidebarWidget::initOperationWidget()
 
     m_pThumbnailWidget = new ThumbnailWidget;
     m_pBookMarkWidget = new BookMarkWidget;
-    m_pNotesWidget = new NotesForm;
+    m_pNotesWidget = new NotesWidget;
 
     m_pStackedWidget->insertWidget(THUMBNAIL, m_pThumbnailWidget);
     m_pStackedWidget->insertWidget(BOOK, m_pBookMarkWidget);

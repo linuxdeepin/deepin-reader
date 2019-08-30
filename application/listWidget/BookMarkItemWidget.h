@@ -7,6 +7,7 @@
 #include <QFont>
 #include <QMenu>
 #include <QAction>
+#include <QContextMenuEvent>
 
 #include "header/IThemeObserver.h"
 #include "header/ThemeSubject.h"
@@ -17,17 +18,17 @@ class BookMarkItemWidget : public DWidget, public IThemeObserver
 {
     Q_OBJECT
 public:
-    BookMarkItemWidget();
-    ~BookMarkItemWidget();
+    BookMarkItemWidget(DWidget *parent = nullptr);
+    ~BookMarkItemWidget() override;
 
 protected:
-    void contextMenuEvent(QContextMenuEvent *event);
+    void contextMenuEvent(QContextMenuEvent *event) override;
 
 public:
     void setPicture(const QString&);
     void setPage(const QString &);
     // IObserver interface
-    int update(const QString &);
+    int update(const QString &) override;
 
 private slots:
     void onDltBookMark();

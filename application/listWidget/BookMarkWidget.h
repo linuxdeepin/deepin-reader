@@ -12,6 +12,12 @@
 
 DWIDGET_USE_NAMESPACE
 
+/**
+ * @brief The BookMarkWidget class
+ * @brief   书签  列表数据
+ */
+
+
 class BookMarkWidget : public DWidget, public IThemeObserver
 {
     Q_OBJECT

@@ -44,7 +44,7 @@ void TitleWidget::on_fontBtn_clicked()
 //  手型点击
 void TitleWidget::on_handleShapeBtn_clicked()
 {
-    DPushButton* btn = (DPushButton*)(QObject::sender());
+    DPushButton* btn = dynamic_cast<DPushButton*>(QObject::sender());
     int nHeight = btn->height();
     int nWidth = btn->width();
 

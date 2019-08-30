@@ -1,14 +1,15 @@
 #include "NotesItemWidget.h"
 #include <QDebug>
 
-NotesItemWidget::NotesItemWidget()
+
+NotesItemWidget::NotesItemWidget(DWidget *parent) :
+    DWidget (parent)
 {
     m_pThemeSubject = ThemeSubject::getInstace();
     if(m_pThemeSubject)
     {
         m_pThemeSubject->addObserver(this);
     }
-
     m_pHLayout = new QHBoxLayout;
     //set around distance
     m_pHLayout->setContentsMargins(0, 0, 0, 0);

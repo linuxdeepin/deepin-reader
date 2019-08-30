@@ -20,13 +20,10 @@ class PagingWidget : public DWidget, public IThemeObserver
 
 public:
     PagingWidget(DWidget *parent = nullptr);
-    ~PagingWidget();
+    ~PagingWidget() override;
 
 public:
     void setTotalPages(int pages);
-    // IObserver interface
-    int update(const QString &);
-
 
 signals:
     void jumpToIndexPage(const int&);
@@ -54,6 +51,9 @@ private:
     int m_totalPage = 0;
 
     ThemeSubject    *m_pThemeSubject = nullptr;
+    // IObserver interface
+public:
+    int update(const QString &) override;
 };
 
 #endif // PAGINGWIDGET_H

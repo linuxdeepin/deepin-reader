@@ -3,17 +3,17 @@
 PagingWidget::PagingWidget(DWidget *parent) :
     DWidget(parent)
 {
-    m_pThemeSubject = ThemeSubject::getInstace();
-    if(m_pThemeSubject)
-    {
-        m_pThemeSubject->addObserver(this);
-    }
-
     resize(250, 20);
     initWidget();
 
     connect(m_pPrePageBtn, SIGNAL(clicked()), this, SLOT(onPrePage()));
     connect(m_pNextPageBtn, SIGNAL(clicked()), this, SLOT(onNextPage()));
+
+    m_pThemeSubject = ThemeSubject::getInstace();
+    if(m_pThemeSubject)
+    {
+        m_pThemeSubject->addObserver(this);
+    }
 }
 
 PagingWidget::~PagingWidget()
@@ -22,27 +22,6 @@ PagingWidget::~PagingWidget()
     {
         m_pThemeSubject->removeObserver(this);
     }
-
-//    if(m_pTotalPagesLab)
-//    {
-//        delete m_pTotalPagesLab;
-//        m_pTotalPagesLab = nullptr;
-//    }
-//    if(m_pPrePageBtn)
-//    {
-//        delete m_pPrePageBtn;
-//        m_pPrePageBtn = nullptr;
-//    }
-//    if(m_pNextPageBtn)
-//    {
-//        delete m_pNextPageBtn;
-//        m_pNextPageBtn = nullptr;
-//    }
-//    if(m_pJumpPageSpinBox)
-//    {
-//        delete m_pJumpPageSpinBox;
-//        m_pJumpPageSpinBox = nullptr;
-//    }
 }
 
 void PagingWidget::initWidget()

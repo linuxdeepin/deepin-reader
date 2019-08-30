@@ -13,15 +13,16 @@ SOURCES += \
     utils.cpp \
     window.cpp \
     settings.cpp \
+    toolbar.cpp \
     widgets/MainOperationWidget.cpp \
     widgets/MainWidget.cpp \
     widgets/TitleWidget.cpp \
-    widgets/MainShowDataWidget.cpp \
     widgets/HomeWidget.cpp \
     widgets/LeftSidebarWidget.cpp \
-    toolbar.cpp \
-    data/DataManager.cpp \
+    widgets/FileViewWidget.cpp \
+    widgets/MainShowSplitter.cpp \
     widgets/FileAttrWidget.cpp \
+    data/DataManager.cpp \
     header/ThemeSubject.cpp \
     listWidget/PagingWidget.cpp \
     listWidget/NotesWidget.cpp \
@@ -39,15 +40,16 @@ HEADERS += \
     utils.h \
     window.h \
     settings.h \
+    toolbar.h \
     widgets/MainOperationWidget.h \
     widgets/TitleWidget.h \
     widgets/MainWidget.h \
-    widgets/MainShowDataWidget.h \
     widgets/HomeWidget.h \
     widgets/LeftSidebarWidget.h \
-    toolbar.h \
-    data/DataManager.h \
+    widgets/FileViewWidget.h \
+    widgets/MainShowSplitter.h \
     widgets/FileAttrWidget.h \
+    data/DataManager.h \
     header/ISubject.h \
     header/IObserver.h \
     header/ThemeSubject.h \
@@ -58,7 +60,7 @@ HEADERS += \
     listWidget/PagingWidget.h \
     listWidget/BookMarkWidget.h \
     listWidget/BookMarkItemWidget.h \
-    listWidget/NotesItemWidget.h
+    listWidget/NotesItemWidget.h \
 
 DISTFILES += \
     themes/solarized_light.theme \

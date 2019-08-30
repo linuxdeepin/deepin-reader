@@ -1,18 +1,9 @@
 ﻿#ifndef WINDOW_H
 #define WINDOW_H
 
-//#include "ddialog.h"
-//#include "dmainwindow.h"
-//#include "editwrapper.h"
-//#include "findbar.h"
-//#include "jumplinebar.h"
-//#include "replacebar.h"
-//#include "settings.h"
-
-//#include "thememodule/themepanel.h"
-#include "tabbar.h"
 #include <DMainWindow>
 #include <QVBoxLayout>
+
 #include "widgets/TitleWidget.h"
 #include "widgets/MainWidget.h"
 
@@ -73,7 +64,7 @@ private:
     TitleWidget *m_titleWidget = nullptr;
 
     QVBoxLayout *m_centralLayout;
-    QMenu *m_menu;
+    DMenu       *m_menu = nullptr;
 };
 
 #endif // WINDOW_H
