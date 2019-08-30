@@ -23,10 +23,11 @@ SOURCES += \
     data/DataManager.cpp \
     widgets/FileAttrWidget.cpp \
     header/ThemeSubject.cpp \
-    widgets/BookMarkWidget.cpp \
-    widgets/NotesWidget.cpp \
-    widgets/ThumbnailWidget.cpp \
-    widgets/PagingWidget.cpp
+    listWidget/PagingWidget.cpp \
+    listWidget/NotesWidget.cpp \
+    listWidget/BookMarkWidget.cpp \
+    listWidget/ThumbnailItemWidget.cpp \
+    listWidget/ThumbnailWidget.cpp
 
 
 RESOURCES +=         resources.qrc
@@ -49,10 +50,11 @@ HEADERS += \
     header/IObserver.h \
     header/ThemeSubject.h \
     header/IThemeObserver.h \
-    widgets/BookMarkWidget.h \
-    widgets/NotesWidget.h \
-    widgets/ThumbnailWidget.h \
-    widgets/PagingWidget.h
+    listWidget/ThumbnailItemWidget.h \
+    listWidget/NotesWidget.h \
+    listWidget/ThumbnailWidget.h \
+    listWidget/PagingWidget.h \
+    listWidget/BookMarkWidget.h
 
 DISTFILES += \
     themes/solarized_light.theme \

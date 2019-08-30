@@ -5,11 +5,9 @@
 #include <QVBoxLayout>
 #include <DStackedWidget>
 #include "MainOperationWidget.h"
-#include "ThumbnailWidget.h"
-#include "BookMarkWidget.h"
-#include "NotesWidget.h"
-#include "PagingWidget.h"
-#include "BookMarkWidget.h"
+#include "listWidget/ThumbnailWidget.h"
+#include "listWidget/BookMarkWidget.h"
+#include "listWidget/NotesWidget.h"
 
 #include "header/IThemeObserver.h"
 #include "header/ThemeSubject.h"
@@ -46,9 +44,8 @@ private:
     MainOperationWidget     *m_operationWidget = nullptr;
 
     ThumbnailWidget * m_pThumbnailWidget = nullptr;
-    BookMarkForm * m_pBookMarkWidget = nullptr;
+    BookMarkWidget * m_pBookMarkWidget = nullptr;
     NotesForm * m_pNotesWidget = nullptr;
-    PagingWidget * m_pPageWidget = nullptr;
 
     ThemeSubject            *m_pThemeSubject = nullptr;
 

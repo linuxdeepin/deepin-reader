@@ -38,6 +38,7 @@ protected:
 private:
     void initWidget();
 
+    void setCurrentPage(const int&);
 private:
     DLabel * m_pTotalPagesLab = nullptr;
     DPushButton * m_pPrePageBtn = nullptr;

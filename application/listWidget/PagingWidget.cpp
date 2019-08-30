@@ -35,7 +35,7 @@ PagingWidget::~PagingWidget()
 }
 
 void PagingWidget::initWidget()
-{
+{    
     m_pTotalPagesLab = new DLabel(this);
     m_pTotalPagesLab->setText(QString("/xxx页"));
     m_pTotalPagesLab->setMinimumWidth(80);
@@ -57,6 +57,13 @@ void PagingWidget::initWidget()
     hLayout->addWidget(m_pPrePageBtn);
     hLayout->addWidget(m_pNextPageBtn);
     this->setLayout(hLayout);
+
+    setTotalPages(30);
+}
+
+void PagingWidget::setCurrentPage(const int &index)
+{
+    m_pJumpPageSpinBox->setValue(index);
 }
 
 void PagingWidget::setTotalPages(int pages)
@@ -79,6 +86,7 @@ void PagingWidget::onPrePage()
     }
     m_currntPage = t_page;
 
+    setCurrentPage(m_currntPage);
     emit jumpToIndexPage(m_currntPage);
 }
 
@@ -94,6 +102,7 @@ void PagingWidget::onNextPage()
     }
     m_currntPage = t_page;
 
+    setCurrentPage(m_currntPage);
     emit jumpToIndexPage(m_currntPage);
 }
 
@@ -119,6 +128,7 @@ void PagingWidget::onSetCurrentPage(const int& index)
         m_pNextPageBtn->setEnabled(false);
     }
 
+    setCurrentPage(m_currntPage);
     emit jumpToIndexPage(m_currntPage);
 }
 
