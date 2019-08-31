@@ -15,16 +15,14 @@ TitleWidget::TitleWidget(DWidget *parent) :
     initBtns();
 
     m_pMsgSubject = MsgSubject::getInstance();
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
     }
 }
 
 TitleWidget::~TitleWidget()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->removeObserver(this);
     }
 }
@@ -32,8 +30,7 @@ TitleWidget::~TitleWidget()
 //  缩略图 显示
 void TitleWidget::on_thumbnailBtn_clicked(bool bCheck)
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->sendMsg(MSG_SLIDER_SHOW_STATE, QString::number(bCheck));
     }
 }
@@ -47,25 +44,22 @@ void TitleWidget::on_fontBtn_clicked()
 //  手型点击
 void TitleWidget::on_handleShapeBtn_clicked()
 {
-    DPushButton* btn = dynamic_cast<DPushButton*>(QObject::sender());
+    DPushButton *btn = dynamic_cast<DPushButton *>(QObject::sender());
     int nHeight = btn->height();
     int nWidth = btn->width();
 
     QPoint point = btn->mapToGlobal(QPoint(0, 0));
     int nOldY = point.y();
 
-    point.setY(nHeight+nOldY+2);
+    point.setY(nHeight + nOldY + 2);
 
     DMenu *pHandleMenu = new DMenu();
     pHandleMenu->setFixedWidth(nWidth);
 
-    if(!m_bCurrentState)
-    {
+    if (!m_bCurrentState) {
         createAction(tr("Handle"), SLOT(on_HandleAction_trigger()));
         pHandleMenu->addAction(m_pHandleAction);
-    }
-    else
-    {
+    } else {
         createAction(tr("Default"), SLOT(on_DefaultAction_trigger()));
         pHandleMenu->addAction(m_pDefaultAction);
     }
@@ -76,8 +70,7 @@ void TitleWidget::on_handleShapeBtn_clicked()
 //  放大镜 功能
 void TitleWidget::on_magnifyingBtn_clicked(bool bCheck)
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->sendMsg(MSG_MAGNIFYING, QString::number(bCheck));
     }
 }
@@ -86,8 +79,7 @@ void TitleWidget::on_magnifyingBtn_clicked(bool bCheck)
 void TitleWidget::on_HandleAction_trigger()
 {
     m_bCurrentState = true;
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->sendMsg(MSG_HANDLESHAPE, QString::number(m_bCurrentState));
     }
 }
@@ -96,8 +88,7 @@ void TitleWidget::on_HandleAction_trigger()
 void TitleWidget::on_DefaultAction_trigger()
 {
     m_bCurrentState = false;
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->sendMsg(MSG_HANDLESHAPE, QString::number(m_bCurrentState));
     }
 }
@@ -111,19 +102,16 @@ void TitleWidget::initBtns()
     createBtn(tr("放大镜"), SLOT(on_magnifyingBtn_clicked(bool)), true);
 }
 
-void TitleWidget::createBtn(const QString& iconName, const char* member, bool checkable, bool checked)
+void TitleWidget::createBtn(const QString &iconName, const char *member, bool checkable, bool checked)
 {
-    DPushButton * btn = new DPushButton(iconName);
+    DPushButton *btn = new DPushButton(iconName);
 
-    if(checkable)
-    {
+    if (checkable) {
         btn->setCheckable(true);
         btn->setChecked(checked);
 
         connect(btn, SIGNAL(clicked(bool)), member);
-    }
-    else
-    {
+    } else {
         connect(btn, SIGNAL(clicked()), member);
     }
 
@@ -135,20 +123,15 @@ void TitleWidget::createAction(const QString &iconName, const char *member)
 {
     QIcon icon = Utils::getActionIcon(iconName);
 
-    if(iconName == tr("Handle"))
-    {
-        if(m_pHandleAction == nullptr)
-        {
+    if (iconName == tr("Handle")) {
+        if (m_pHandleAction == nullptr) {
             m_pHandleAction = new QAction(this);
             m_pHandleAction->setIcon(icon);
 
             connect(m_pHandleAction, SIGNAL(triggered()), member);
         }
-    }
-    else
-    {
-        if(m_pDefaultAction == nullptr)
-        {
+    } else {
+        if (m_pDefaultAction == nullptr) {
             m_pDefaultAction = new QAction(this);
             m_pDefaultAction->setIcon(icon);
 
@@ -157,7 +140,7 @@ void TitleWidget::createAction(const QString &iconName, const char *member)
     }
 }
 
-int TitleWidget::update(const int&, const QString &)
+int TitleWidget::update(const int &, const QString &)
 {
     return 0;
 }

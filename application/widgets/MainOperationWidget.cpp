@@ -1,7 +1,7 @@
 #include "MainOperationWidget.h"
 #include <QDebug>
 
-MainOperationWidget::MainOperationWidget(DWidget* parent):
+MainOperationWidget::MainOperationWidget(DWidget *parent):
     DWidget (parent)
 {
     m_hboxLayout = new QHBoxLayout;
@@ -13,16 +13,14 @@ MainOperationWidget::MainOperationWidget(DWidget* parent):
     initBtns();
 
     m_pMsgSubject = MsgSubject::getInstance();
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
     }
 }
 
 MainOperationWidget::~MainOperationWidget()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->removeObserver(this);
     }
 }
@@ -36,19 +34,16 @@ void MainOperationWidget::initBtns()
     m_hboxLayout->addStretch(1);
 }
 
-void MainOperationWidget::createBtn(const QString& iconName, const char* member, bool checkable, bool checked)
+void MainOperationWidget::createBtn(const QString &iconName, const char *member, bool checkable, bool checked)
 {
-    DPushButton * btn = new DPushButton(iconName);
+    DPushButton *btn = new DPushButton(iconName);
     btn->setToolTip(iconName);
-    if(checkable)
-    {
+    if (checkable) {
         btn->setCheckable(true);
         btn->setChecked(checked);
 
         connect(btn, SIGNAL(clicked(bool)), member);
-    }
-    else
-    {
+    } else {
         connect(btn, SIGNAL(clicked()), member);
     }
 
@@ -57,13 +52,13 @@ void MainOperationWidget::createBtn(const QString& iconName, const char* member,
 
 void MainOperationWidget::on_thumbnailBtn_clicked(bool)
 {
- //   qDebug() << "showType(0)";
+//   qDebug() << "showType(0)";
     emit showType(0);
 }
 
 void MainOperationWidget::on_bookmarksBtn_clicked(bool)
 {
- //   qDebug() << "showType(1)";
+//   qDebug() << "showType(1)";
     emit showType(1);
 }
 
@@ -73,7 +68,7 @@ void MainOperationWidget::on_annotationBtn_clicked(bool)
     emit showType(2);
 }
 
-int MainOperationWidget::update(const int&, const QString &)
+int MainOperationWidget::update(const int &, const QString &)
 {
     return 0;
 }

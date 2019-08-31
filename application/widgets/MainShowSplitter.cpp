@@ -9,16 +9,14 @@ MainShowSplitter::MainShowSplitter(DWidget *parent) :
     initWidgets();
 
     m_pMsgSubject = MsgSubject::getInstance();
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
     }
 }
 
 MainShowSplitter::~MainShowSplitter()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->removeObserver(this);
     }
 }
@@ -44,8 +42,7 @@ void MainShowSplitter::setSidebarVisible(const bool &bVis ) const
 
 int MainShowSplitter::update(const int &msgType, const QString &msgContent)
 {
-    if(msgType == MSG_SLIDER_SHOW_STATE)
-    {
+    if (msgType == MSG_SLIDER_SHOW_STATE) {
         int nState = msgContent.toInt();
         setSidebarVisible(nState);
         return  ConstantMsg::g_effective_res;

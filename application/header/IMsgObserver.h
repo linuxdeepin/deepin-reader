@@ -6,7 +6,7 @@
 class IMsgObserver : public IObserver
 {
 public:
-     virtual int update(const int&, const QString&) = 0;
+    virtual int update(const int &, const QString &) = 0;
 };
 
 #endif // IMsgObserver_H

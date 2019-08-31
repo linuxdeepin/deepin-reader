@@ -14,8 +14,6 @@ DWIDGET_USE_NAMESPACE
  * @brief   放大镜窗口
  */
 
-
-
 class MagnifyingWidget : public DWidget, public IMsgObserver
 {
     Q_OBJECT
@@ -24,14 +22,14 @@ public:
     ~MagnifyingWidget() override;
 
 protected:
-    void    paintEvent(QPaintEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 
 private:
-    MsgSubject    *m_pMsgSubject = nullptr;
+    MsgSubject *m_pMsgSubject = nullptr;
 
     // IObserver interface
 public:
-    int update(const int&, const QString &) override;
+    int update(const int &, const QString &) override;
 };
 
 #endif // MAGNIFYINGWIDGET_H

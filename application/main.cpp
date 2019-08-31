@@ -1,6 +1,5 @@
 #include "window.h"
 #include <DApplication>
-#include <DWidgetUtil>
 #include <DLog>
 
 DWIDGET_USE_NAMESPACE
@@ -32,7 +31,6 @@ int main(int argc, char *argv[])
     Window w;
     w.setMinimumSize(500, 500);
     w.show();
-    Dtk::Widget::moveToCenter(&w);
 
     return app.exec();
 }

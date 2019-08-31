@@ -17,16 +17,14 @@ LeftSidebarWidget::LeftSidebarWidget(DWidget *parent):
     this->setVisible(false);    //  默认 隐藏
 
     m_pMsgSubject = MsgSubject::getInstance();
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
     }
 }
 
 LeftSidebarWidget::~LeftSidebarWidget()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->removeObserver(this);
     }
 }
@@ -52,12 +50,12 @@ void LeftSidebarWidget::initOperationWidget()
     m_pStackedWidget->setCurrentIndex(THUMBNAIL);
 
     m_operationWidget = new MainOperationWidget;
-    connect(m_operationWidget, SIGNAL(showType(const int&)), this, SLOT(showListWidget(const int&)));
+    connect(m_operationWidget, SIGNAL(showType(const int &)), this, SLOT(showListWidget(const int &)));
 
     m_pVBoxLayout->addWidget(m_operationWidget, 0, Qt::AlignBottom);
 }
 
-int LeftSidebarWidget::update(const int&, const QString &)
+int LeftSidebarWidget::update(const int &, const QString &)
 {
     return 0;
 }

@@ -11,16 +11,14 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wweak-vtables"
 
-
 class IObserver
 {
 public:
-    virtual int update(const int&, const QString&) = 0;
+    virtual int update(const int &, const QString &) = 0;
 
 protected:
-    virtual ~IObserver(){}
+    virtual ~IObserver() {}
 };
-
 
 #pragma clang diagnostic pop
 
