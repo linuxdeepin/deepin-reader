@@ -19,7 +19,7 @@ ThumbnailWidget::ThumbnailWidget(DWidget *parent) :
     initWidget();
 
     connect(m_pThumbnailListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
-    connect(m_pPageWidget, SIGNAL(sigJumpToIndexPage(const int &)), this, SLOT(slotSetJumpToPage(const int &)));
+    //connect(m_pPageWidget, SIGNAL(sigJumpToIndexPage(const int &)), this, SLOT(slotSetJumpToPage(const int &)));
 }
 
 ThumbnailWidget::~ThumbnailWidget()
@@ -29,8 +29,16 @@ ThumbnailWidget::~ThumbnailWidget()
     }
 }
 
-int ThumbnailWidget::update(const int &, const QString &)
+int ThumbnailWidget::update(const int &msgType, const QString &msgContant)
 {
+    if (MSG_THUMBNAIL_JUMPTOPAGE == msgType) {
+        int row = msgContant.toInt();
+
+        setCurrentRow(row);
+
+        return ConstantMsg::g_effective_res;
+    }
+
     return 0;
 }
 
@@ -114,16 +122,22 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
     }
 }
 
+void ThumbnailWidget::setCurrentRow(const int &row)
+{
+    m_pThumbnailListWidget->setCurrentRow(row);
+}
+
 void ThumbnailWidget::slotShowSelectItem(QListWidgetItem *item)
 {
     setSelectItemBackColor(item);
 
-    int index = m_pThumbnailListWidget->row(item);
-    emit sigSelectIndexPage(++index);
+    int row = m_pThumbnailListWidget->row(item);
+
+    m_pMsgSubject->sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(row));
+
     if (m_pPageWidget) {
-        m_pPageWidget->setCurrentPageValue(index);
+        m_pPageWidget->setCurrentPageValue(row);
     }
-    qDebug() << index;
 }
 
 void ThumbnailWidget::slotSetJumpToPage(const int &index)

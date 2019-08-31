@@ -9,6 +9,8 @@
 
 #include "header/IMsgObserver.h"
 #include "header/MsgSubject.h"
+#include "header/MsgHeader.h"
+#include "header/MsgHeader.h"
 
 DWIDGET_USE_NAMESPACE
 

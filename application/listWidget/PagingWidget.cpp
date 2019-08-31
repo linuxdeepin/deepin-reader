@@ -1,4 +1,5 @@
 #include "PagingWidget.h"
+#include <QDebug>
 
 PagingWidget::PagingWidget(DWidget *parent) :
     DWidget(parent)
@@ -10,22 +11,20 @@ PagingWidget::PagingWidget(DWidget *parent) :
     connect(m_pNextPageBtn, SIGNAL(clicked()), this, SLOT(slotNextPage()));
 
     m_pMsgSubject = MsgSubject::getInstance();
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
     }
 }
 
 PagingWidget::~PagingWidget()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->removeObserver(this);
     }
 }
 
 void PagingWidget::initWidget()
-{    
+{
     m_pTotalPagesLab = new DLabel(this);
     m_pTotalPagesLab->setText(QString("/xxx页"));
     m_pTotalPagesLab->setMinimumWidth(80);
@@ -41,7 +40,7 @@ void PagingWidget::initWidget()
     m_pJumpPageSpinBox->setValue(1);
     m_pJumpPageSpinBox->setMinimumWidth(50);
 
-    QHBoxLayout * hLayout = new QHBoxLayout;
+    QHBoxLayout *hLayout = new QHBoxLayout;
     hLayout->addWidget(m_pJumpPageSpinBox);
     hLayout->addWidget(m_pTotalPagesLab);
     hLayout->addWidget(m_pPrePageBtn);
@@ -54,6 +53,8 @@ void PagingWidget::initWidget()
 void PagingWidget::setCurrentPage(const int &index)
 {
     m_pJumpPageSpinBox->setValue(index);
+
+    qDebug() << tr("page: %1").arg(index);
 }
 
 void PagingWidget::setTotalPages(int pages)
@@ -62,10 +63,10 @@ void PagingWidget::setTotalPages(int pages)
     m_currntPage = FIRSTPAGES;
     m_pTotalPagesLab->setText(QString("/%1页").arg(pages));
 
-    m_pJumpPageSpinBox->setRange(1, (pages<1)?1:pages);
+    m_pJumpPageSpinBox->setRange(1, (pages < 1) ? 1 : pages);
 }
 
-int PagingWidget::update(const int&, const QString &)
+int PagingWidget::update(const int &msgType, const QString &msgContant)
 {
     return 0;
 }
@@ -75,17 +76,17 @@ void PagingWidget::slotPrePage()
     int t_page = --m_currntPage;
 
     m_pNextPageBtn->setEnabled(true);
-    if(t_page <= FIRSTPAGES){
+    if (t_page <= FIRSTPAGES) {
         m_pPrePageBtn->setEnabled(false);
     }
-    if(t_page < FIRSTPAGES){
+    if (t_page < FIRSTPAGES) {
         m_currntPage = FIRSTPAGES;
         return;
     }
     m_currntPage = t_page;
 
     setCurrentPage(m_currntPage);
-    emit sigJumpToIndexPage(m_currntPage);
+    m_pMsgSubject->sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(m_currntPage - FIRSTPAGES));
 }
 
 void PagingWidget::slotNextPage()
@@ -93,35 +94,35 @@ void PagingWidget::slotNextPage()
     int t_page = ++m_currntPage;
 
     m_pPrePageBtn->setEnabled(true);
-    if(t_page >= m_totalPage){
+    if (t_page >= m_totalPage) {
         m_pNextPageBtn->setEnabled(false);
     }
-    if(t_page > m_totalPage){
+    if (t_page > m_totalPage) {
         m_currntPage = m_totalPage;
         return;
     }
     m_currntPage = t_page;
 
     setCurrentPage(m_currntPage);
-    emit sigJumpToIndexPage(m_currntPage);
+    m_pMsgSubject->sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(m_currntPage - FIRSTPAGES));
 }
 
 void PagingWidget::setCurrentPageValue(const int &index)
 {
-    m_currntPage = index;
+    m_currntPage = index + FIRSTPAGES;
 
-    if(m_currntPage <= FIRSTPAGES){
+    if (m_currntPage <= FIRSTPAGES) {
         m_pPrePageBtn->setEnabled(false);
         m_pNextPageBtn->setEnabled(true);
-    }else if(m_currntPage >= m_totalPage && m_totalPage != FIRSTPAGES){
+    } else if (m_currntPage >= m_totalPage && m_totalPage != FIRSTPAGES) {
         m_pPrePageBtn->setEnabled(true);
         m_pNextPageBtn->setEnabled(false);
-    }else{
+    } else {
         m_pPrePageBtn->setEnabled(true);
         m_pNextPageBtn->setEnabled(true);
     }
 
-    if(m_totalPage == FIRSTPAGES){
+    if (m_totalPage == FIRSTPAGES) {
         m_pPrePageBtn->setEnabled(false);
         m_pNextPageBtn->setEnabled(false);
     }
