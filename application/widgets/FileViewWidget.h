@@ -1,8 +1,7 @@
 #ifndef FILEVIEWWIDGET_H
 #define FILEVIEWWIDGET_H
 
-#include "header/IMsgObserver.h"
-#include "header/MsgSubject.h"
+#include "header/CustomWidget.h"
 #include <DWidget>
 #include <QMouseEvent>
 
@@ -15,20 +14,17 @@ DWIDGET_USE_NAMESPACE
  * @brief   文档显示区域
  */
 
-class FileViewWidget : public DWidget, public IMsgObserver
+class FileViewWidget : public CustomWidget
 {
     Q_OBJECT
 public:
-    FileViewWidget(DWidget *parent = nullptr);
-    ~FileViewWidget() override;
+    FileViewWidget(CustomWidget *parent = nullptr);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void leaveEvent(QEvent *event) override;
 
 private:
-    MsgSubject *m_pMsgSubject = nullptr;
-
     MagnifyingWidget *m_pMagnifyingWidget = nullptr;
     bool m_bCanVisible = false; //  放大镜 是否可以显示
 

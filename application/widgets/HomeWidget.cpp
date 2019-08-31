@@ -7,8 +7,8 @@
 #include <DFileDialog>
 
 
-HomeWidget::HomeWidget(DWidget *parent):
-    DWidget (parent),
+HomeWidget::HomeWidget(CustomWidget *parent):
+    CustomWidget (parent),
     m_layout(new QVBoxLayout(this)),
     m_iconLabel(new DLabel),
     m_tipsLabel(new DLabel(tr("Drag font file here"))),
@@ -42,18 +42,6 @@ HomeWidget::HomeWidget(DWidget *parent):
     m_layout->setSpacing(0);
 
     connect(m_chooseBtn, &DLinkButton::clicked, this, &HomeWidget::onChooseBtnClicked);
-
-    m_pMsgSubject = MsgSubject::getInstance();
-    if (m_pMsgSubject) {
-        m_pMsgSubject->addObserver(this);
-    }
-}
-
-HomeWidget::~HomeWidget()
-{
-    if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
-    }
 }
 
 void HomeWidget::setIconPixmap(bool isLoaded)

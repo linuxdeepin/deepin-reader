@@ -9,8 +9,7 @@
 #include "HomeWidget.h"
 #include "MainShowSplitter.h"
 
-#include "header/IMsgObserver.h"
-#include "header/MsgSubject.h"
+#include "header/CustomWidget.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -19,11 +18,11 @@ DWIDGET_USE_NAMESPACE
  * @brief   主窗体显示
  */
 
-class MainWidget : public DWidget, public IMsgObserver
+class MainWidget : public CustomWidget
 {
     Q_OBJECT
 public:
-    MainWidget(DWidget *parent = nullptr);
+    MainWidget(CustomWidget *parent = nullptr);
     ~MainWidget() override;
 
 private slots:
@@ -36,7 +35,6 @@ private:
 
 private:
     QVBoxLayout *m_centralLayout = nullptr;
-    MsgSubject *m_pMsgSubject = nullptr;
 
     DStackedWidget *m_pStackedWidget = nullptr; //  栈式 显示
     HomeWidget *m_pHomeWidget = nullptr; //  选择文件

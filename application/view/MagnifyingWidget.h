@@ -4,8 +4,7 @@
 #include <DWidget>
 #include <QPaintEvent>
 
-#include "header/IMsgObserver.h"
-#include "header/MsgSubject.h"
+#include "header/CustomWidget.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -14,18 +13,14 @@ DWIDGET_USE_NAMESPACE
  * @brief   放大镜窗口
  */
 
-class MagnifyingWidget : public DWidget, public IMsgObserver
+class MagnifyingWidget : public CustomWidget
 {
     Q_OBJECT
 public:
-    MagnifyingWidget(DWidget *parent = nullptr);
-    ~MagnifyingWidget() override;
+    MagnifyingWidget(CustomWidget *parent = nullptr);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
-
-private:
-    MsgSubject *m_pMsgSubject = nullptr;
 
     // IObserver interface
 public:

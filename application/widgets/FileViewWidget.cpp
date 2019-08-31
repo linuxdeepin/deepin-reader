@@ -2,24 +2,12 @@
 #include "header/MsgHeader.h"
 #include <QDebug>
 
-FileViewWidget::FileViewWidget(DWidget *parent)
-    : DWidget(parent)
+FileViewWidget::FileViewWidget(CustomWidget *parent)
+    : CustomWidget(parent)
 {
-    m_pMsgSubject = MsgSubject::getInstance();
-    if (m_pMsgSubject) {
-        m_pMsgSubject->addObserver(this);
-    }
-
     setMouseTracking(true); //  接受 鼠标滑动事件
 
     m_pMagnifyingWidget = new MagnifyingWidget(this); //  放大镜 窗口
-}
-
-FileViewWidget::~FileViewWidget()
-{
-    if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
-    }
 }
 
 void FileViewWidget::mouseMoveEvent(QMouseEvent *event)

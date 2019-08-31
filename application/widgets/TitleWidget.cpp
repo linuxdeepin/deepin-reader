@@ -4,8 +4,8 @@
 #include <QDebug>
 
 
-TitleWidget::TitleWidget(DWidget *parent) :
-    DWidget(parent)
+TitleWidget::TitleWidget(CustomWidget *parent) :
+    CustomWidget(parent)
 {
     setFixedWidth(200);
 
@@ -13,18 +13,6 @@ TitleWidget::TitleWidget(DWidget *parent) :
     setLayout(m_layout);
 
     initBtns();
-
-    m_pMsgSubject = MsgSubject::getInstance();
-    if (m_pMsgSubject) {
-        m_pMsgSubject->addObserver(this);
-    }
-}
-
-TitleWidget::~TitleWidget()
-{
-    if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
-    }
 }
 
 //  缩略图 显示

@@ -1,7 +1,7 @@
 #include "LeftSidebarWidget.h"
 
-LeftSidebarWidget::LeftSidebarWidget(DWidget *parent):
-    DWidget (parent)
+LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent):
+    CustomWidget (parent)
 {
     setMinimumWidth(250);
     setMaximumWidth(500);
@@ -15,18 +15,6 @@ LeftSidebarWidget::LeftSidebarWidget(DWidget *parent):
     initOperationWidget();
 
     this->setVisible(false);    //  默认 隐藏
-
-    m_pMsgSubject = MsgSubject::getInstance();
-    if (m_pMsgSubject) {
-        m_pMsgSubject->addObserver(this);
-    }
-}
-
-LeftSidebarWidget::~LeftSidebarWidget()
-{
-    if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
-    }
 }
 
 void LeftSidebarWidget::initOperationWidget()

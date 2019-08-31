@@ -9,8 +9,7 @@
 #include <QSettings>
 #include <QVBoxLayout>
 
-#include "header/IMsgObserver.h"
-#include "header/MsgSubject.h"
+#include "header/CustomWidget.h"
 
 /**
  *  @brief  支持拖拽
@@ -19,12 +18,11 @@
 
 DWIDGET_USE_NAMESPACE
 
-class HomeWidget : public DWidget, public IMsgObserver
+class HomeWidget : public CustomWidget
 {
     Q_OBJECT
 public:
-    HomeWidget(DWidget *parent = nullptr);
-    ~HomeWidget() override;
+    HomeWidget(CustomWidget *parent = nullptr);
 
     void setIconPixmap(bool isLoaded);
 
@@ -46,8 +44,6 @@ private:
     DLabel *m_splitLine = nullptr;
     DLinkButton *m_chooseBtn = nullptr;
     QSettings *m_settings = nullptr;
-
-    MsgSubject *m_pMsgSubject = nullptr;
 
     // IObserver interface
 public:

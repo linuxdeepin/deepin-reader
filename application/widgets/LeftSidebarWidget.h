@@ -11,8 +11,7 @@
 #include "listWidget/NotesWidget.h"
 #include "listWidget/ThumbnailWidget.h"
 
-#include "header/IMsgObserver.h"
-#include "header/MsgSubject.h"
+#include "header/CustomWidget.h"
 #include "header/MsgHeader.h"
 
 DWIDGET_USE_NAMESPACE
@@ -28,12 +27,11 @@ enum WIDGETINDEX {
     NOTE
 };
 
-class LeftSidebarWidget : public DWidget, public IMsgObserver
+class LeftSidebarWidget : public CustomWidget
 {
     Q_OBJECT
 public:
-    LeftSidebarWidget(DWidget *parent = nullptr);
-    ~LeftSidebarWidget() override;
+    LeftSidebarWidget(CustomWidget *parent = nullptr);
 
 private:
     void initOperationWidget();
@@ -46,8 +44,6 @@ private:
     ThumbnailWidget *m_pThumbnailWidget = nullptr;
     BookMarkWidget *m_pBookMarkWidget = nullptr;
     NotesWidget *m_pNotesWidget = nullptr;
-
-    MsgSubject *m_pMsgSubject = nullptr;
 
     // IObserver interface
 public:

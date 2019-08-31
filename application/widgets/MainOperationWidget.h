@@ -5,8 +5,7 @@
 #include <DWidget>
 #include <QHBoxLayout>
 
-#include "header/IMsgObserver.h"
-#include "header/MsgSubject.h"
+#include "header/CustomWidget.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -15,12 +14,11 @@ DWIDGET_USE_NAMESPACE
  * @brief   缩略图、书签、注释 操作widget
  */
 
-class MainOperationWidget : public DWidget, public IMsgObserver
+class MainOperationWidget : public CustomWidget
 {
     Q_OBJECT
 public:
-    MainOperationWidget(DWidget *parent = nullptr);
-    ~MainOperationWidget() override;
+    MainOperationWidget(CustomWidget *parent = nullptr);
 
 private:
     void initBtns();
@@ -33,7 +31,6 @@ private slots:
 
 private:
     QHBoxLayout *m_hboxLayout = nullptr;
-    MsgSubject *m_pMsgSubject = nullptr;
 
     // IObserver interface
 public:

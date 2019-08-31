@@ -6,8 +6,7 @@
 #include <DWidget>
 #include <QHBoxLayout>
 
-#include "header/IMsgObserver.h"
-#include "header/MsgSubject.h"
+#include "header/CustomWidget.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -16,12 +15,11 @@ DWIDGET_USE_NAMESPACE
  * @brief   标题栏的 按钮操作
  */
 
-class TitleWidget : public DWidget, public IMsgObserver
+class TitleWidget : public CustomWidget
 {
     Q_OBJECT
 public:
-    TitleWidget(DWidget *parent = nullptr);
-    ~TitleWidget() override;
+    TitleWidget(CustomWidget *parent = nullptr);
 
 private slots:
     void on_thumbnailBtn_clicked(bool);
@@ -43,8 +41,6 @@ private:
     bool m_bCurrentState = false;
     QAction *m_pHandleAction = nullptr;
     QAction *m_pDefaultAction = nullptr;
-
-    MsgSubject *m_pMsgSubject = nullptr;
 
     // IObserver interface
 public:

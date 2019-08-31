@@ -6,8 +6,8 @@
 #include "FileAttrWidget.h"
 #include "header/MsgHeader.h"
 
-MainWidget::MainWidget(DWidget *parent):
-    DWidget (parent)
+MainWidget::MainWidget(CustomWidget *parent):
+    CustomWidget (parent)
 {
     m_centralLayout = new QVBoxLayout();
 
@@ -18,19 +18,10 @@ MainWidget::MainWidget(DWidget *parent):
     this->setLayout(m_centralLayout);
 
     initWidgets();
-
-    m_pMsgSubject = MsgSubject::getInstance();
-    if (m_pMsgSubject) {
-        m_pMsgSubject->addObserver(this);
-    }
 }
 
 MainWidget::~MainWidget()
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
-    }
-
     if (m_pAttrWidget) {
         m_pAttrWidget->deleteLater();
         m_pAttrWidget = nullptr;

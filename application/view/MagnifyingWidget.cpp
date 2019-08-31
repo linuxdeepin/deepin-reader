@@ -1,23 +1,11 @@
 #include "MagnifyingWidget.h"
 #include <QPainter>
 
-MagnifyingWidget::MagnifyingWidget(DWidget *parent)
-    : DWidget(parent)
+MagnifyingWidget::MagnifyingWidget(CustomWidget *parent)
+    : CustomWidget(parent)
 {
     this->setFixedSize(QSize(50, 50));
     this->setVisible(false); //  默认隐藏
-
-    m_pMsgSubject = MsgSubject::getInstance();
-    if (m_pMsgSubject) {
-        m_pMsgSubject->addObserver(this);
-    }
-}
-
-MagnifyingWidget::~MagnifyingWidget()
-{
-    if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
-    }
 }
 
 void MagnifyingWidget::paintEvent(QPaintEvent *event)

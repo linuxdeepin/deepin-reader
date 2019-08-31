@@ -1,8 +1,8 @@
 #include "MainOperationWidget.h"
 #include <QDebug>
 
-MainOperationWidget::MainOperationWidget(DWidget *parent):
-    DWidget (parent)
+MainOperationWidget::MainOperationWidget(CustomWidget *parent):
+    CustomWidget (parent)
 {
     m_hboxLayout = new QHBoxLayout;
     m_hboxLayout->setContentsMargins(0, 0, 0, 0);
@@ -11,18 +11,6 @@ MainOperationWidget::MainOperationWidget(DWidget *parent):
     this->setLayout(m_hboxLayout);
 
     initBtns();
-
-    m_pMsgSubject = MsgSubject::getInstance();
-    if (m_pMsgSubject) {
-        m_pMsgSubject->addObserver(this);
-    }
-}
-
-MainOperationWidget::~MainOperationWidget()
-{
-    if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
-    }
 }
 
 void MainOperationWidget::initBtns()
