@@ -22,6 +22,9 @@ public:
     PagingWidget(DWidget *parent = nullptr);
     ~PagingWidget() override;
 
+
+
+
 public:
     void setTotalPages(int pages);
 
