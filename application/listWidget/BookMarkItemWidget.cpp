@@ -58,6 +58,7 @@ void BookMarkItemWidget::slotDltBookMark()
 void BookMarkItemWidget::slotShowContextMenu(const QPoint &point)
 {
     QMenu * t_menu = new QMenu(this);
+
     QAction *dltBookMarkAction = t_menu->addAction(tr("delete bookmark"));
     connect(dltBookMarkAction, SIGNAL(triggered()), this, SLOT(slotDltBookMark()));
     t_menu->exec(QCursor::pos());

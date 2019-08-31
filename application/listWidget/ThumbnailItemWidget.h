@@ -18,7 +18,7 @@ class ThumbnailItemWidget  : public DWidget, public IThemeObserver
 {
     Q_OBJECT
 public:
-    ThumbnailItemWidget();
+    ThumbnailItemWidget(DWidget *parent = nullptr);
     ~ ThumbnailItemWidget() override;
 
 public:
@@ -50,7 +50,7 @@ public:
     }
 
 protected:
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     void initWidget();

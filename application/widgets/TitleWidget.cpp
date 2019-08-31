@@ -73,6 +73,8 @@ void TitleWidget::on_handleShapeBtn_clicked()
 //  放大镜 功能
 void TitleWidget::on_magnifyingBtn_clicked(bool bCheck)
 {
+    qDebug() << "on_magnifyingBtn_clicked       " << bCheck;
+
     emit sendMagnifyingState(bCheck);
 }
 

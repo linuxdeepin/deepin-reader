@@ -20,7 +20,7 @@ ThumbnailWidget::ThumbnailWidget(DWidget *parent) :
     initWidget();
 
     connect(m_pThumbnailListWidget, SIGNAL(	itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
-    connect(m_pPageWidget, SIGNAL(jumpToIndexPage(const int&)), this, SLOT(slotSetJumpToPage(const int&)));
+    connect(m_pPageWidget, SIGNAL(sigJumpToIndexPage(const int&)), this, SLOT(slotSetJumpToPage(const int&)));
 }
 
 ThumbnailWidget::~ThumbnailWidget()

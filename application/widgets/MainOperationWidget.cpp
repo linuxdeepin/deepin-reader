@@ -29,9 +29,11 @@ MainOperationWidget::~MainOperationWidget()
 
 void MainOperationWidget::initBtns()
 {
+    m_hboxLayout->addStretch(1);
     createBtn(tr("缩略图"), SLOT(on_thumbnailBtn_clicked(bool)), true);
     createBtn(tr("书签"), SLOT(on_bookmarksBtn_clicked(bool)), true);
     createBtn(tr("注释"), SLOT(on_annotationBtn_clicked(bool)), true);
+    m_hboxLayout->addStretch(1);
 }
 
 void MainOperationWidget::createBtn(const QString& iconName, const char* member, bool checkable, bool checked)

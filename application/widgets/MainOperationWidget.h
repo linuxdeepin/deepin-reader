@@ -21,7 +21,7 @@ class MainOperationWidget : public DWidget, public IThemeObserver
     Q_OBJECT
 public:
     MainOperationWidget(DWidget* parent = nullptr);
-    ~MainOperationWidget();
+    ~MainOperationWidget() override;
 
 signals:
     void showType(const int&) const;
@@ -41,7 +41,7 @@ private:
 
      // IObserver interface
 public:
-     int update(const QString &);
+     int update(const QString &) override;
 };
 
 #endif // MAINOPERATIONWIDGET_H
