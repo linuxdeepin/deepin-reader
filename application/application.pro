@@ -23,7 +23,6 @@ SOURCES += \
     widgets/MainShowSplitter.cpp \
     widgets/FileAttrWidget.cpp \
     data/DataManager.cpp \
-    header/ThemeSubject.cpp \
     listWidget/PagingWidget.cpp \
     listWidget/NotesWidget.cpp \
     listWidget/BookMarkWidget.cpp \
@@ -31,7 +30,8 @@ SOURCES += \
     listWidget/ThumbnailWidget.cpp \
     listWidget/BookMarkItemWidget.cpp \
     listWidget/NotesItemWidget.cpp \
-    view/MagnifyingWidget.cpp
+    view/MagnifyingWidget.cpp \
+    header/MsgSubject.cpp
 
 
 RESOURCES +=         resources.qrc
@@ -53,8 +53,6 @@ HEADERS += \
     data/DataManager.h \
     header/ISubject.h \
     header/IObserver.h \
-    header/ThemeSubject.h \
-    header/IThemeObserver.h \
     listWidget/ThumbnailItemWidget.h \
     listWidget/NotesWidget.h \
     listWidget/ThumbnailWidget.h \
@@ -62,7 +60,9 @@ HEADERS += \
     listWidget/BookMarkWidget.h \
     listWidget/BookMarkItemWidget.h \
     listWidget/NotesItemWidget.h \
-    view/MagnifyingWidget.h
+    view/MagnifyingWidget.h \
+    header/MsgSubject.h \
+    header/IMsgObserver.h
 
 DISTFILES += \
     themes/solarized_light.theme \

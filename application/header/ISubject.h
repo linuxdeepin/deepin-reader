@@ -21,7 +21,7 @@ protected:
 public:
     virtual void addObserver(IObserver* obs) = 0;
     virtual void removeObserver(IObserver* obs) = 0;
-    virtual void Notify(const QString&) = 0;
+    virtual void Notify(const int&, const QString&) = 0;
 };
 
 #pragma clang diagnostic pop

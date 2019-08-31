@@ -9,12 +9,12 @@
 #include <QAction>
 #include <QContextMenuEvent>
 
-#include "header/IThemeObserver.h"
-#include "header/ThemeSubject.h"
+#include "header/IMsgObserver.h"
+#include "header/MsgSubject.h"
 
 DWIDGET_USE_NAMESPACE
 
-class BookMarkItemWidget : public DWidget, public IThemeObserver
+class BookMarkItemWidget : public DWidget, public IMsgObserver
 {
     Q_OBJECT
 public:
@@ -25,7 +25,7 @@ public:
     void setPicture(const QString&);
     void setPage(const QString &);
     // IObserver interface
-    int update(const QString &) override;
+    int update(const int&, const QString &) override;
 
 private slots:
     void slotDltBookMark();
@@ -38,7 +38,7 @@ private:
     DLabel * m_pPicture = nullptr;
     DLabel * m_pPage = nullptr;
     QHBoxLayout * m_pHLayout = nullptr;
-    ThemeSubject    *m_pThemeSubject = nullptr;
+    MsgSubject    *m_pMsgSubject = nullptr;
 };
 
 #endif // BOOKMARKITEMWIDGET_H

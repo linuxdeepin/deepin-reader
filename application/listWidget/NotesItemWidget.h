@@ -11,12 +11,12 @@
 #include <DTextEdit>
 #include <QContextMenuEvent>
 
-#include "header/IThemeObserver.h"
-#include "header/ThemeSubject.h"
+#include "header/IMsgObserver.h"
+#include "header/MsgSubject.h"
 
 DWIDGET_USE_NAMESPACE
 
-class NotesItemWidget : public DWidget, public IThemeObserver
+class NotesItemWidget : public DWidget, public IMsgObserver
 {
     Q_OBJECT
 
@@ -39,14 +39,15 @@ private:
 
 public:
     // IObserver interface
-    int update(const QString &) override;
+    int update(const int&, const QString &) override;
 
 private:
     DLabel * m_pPicture = nullptr;
     DLabel * m_pPage = nullptr;
     DTextEdit * m_pTextEdit = nullptr;
     QHBoxLayout * m_pHLayout = nullptr;
-    ThemeSubject    *m_pThemeSubject  = nullptr;
+
+    MsgSubject    *m_pMsgSubject  = nullptr;
 };
 
 #endif // NOTESITEMWIDGET_H

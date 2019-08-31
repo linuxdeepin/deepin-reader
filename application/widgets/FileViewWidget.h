@@ -3,8 +3,8 @@
 
 #include <DWidget>
 #include <QMouseEvent>
-#include "header/IThemeObserver.h"
-#include "header/ThemeSubject.h"
+#include "header/IMsgObserver.h"
+#include "header/MsgSubject.h"
 
 #include "view/MagnifyingWidget.h"
 
@@ -17,7 +17,7 @@ DWIDGET_USE_NAMESPACE
  */
 
 
-class FileViewWidget : public DWidget, public IThemeObserver
+class FileViewWidget : public DWidget, public IMsgObserver
 {
     Q_OBJECT
 public:
@@ -32,14 +32,14 @@ private slots:
     void setMagnifyingState(const bool&);
 
 private:
-    ThemeSubject    *m_pThemeSubject = nullptr;
+    MsgSubject    *m_pMsgSubject = nullptr;
 
     MagnifyingWidget    *m_pMagnifyingWidget = nullptr;
     bool                m_bCanVisible = false;
 
     // IObserver interface
 public:
-    int update(const QString &) override;
+    int update(const int&, const QString &) override;
 };
 
 #endif // FILEVIEWWIDGET_H

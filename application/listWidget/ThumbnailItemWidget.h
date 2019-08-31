@@ -5,8 +5,8 @@
 #include <QVBoxLayout>
 #include <QPainter>
 
-#include "header/IThemeObserver.h"
-#include "header/ThemeSubject.h"
+#include "header/IMsgObserver.h"
+#include "header/MsgSubject.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -14,7 +14,7 @@ DWIDGET_USE_NAMESPACE
  * @brief The ThumbnailItemWidget class
  * @brief   缩略图中的item
  */
-class ThumbnailItemWidget  : public DWidget, public IThemeObserver
+class ThumbnailItemWidget  : public DWidget, public IMsgObserver
 {
     Q_OBJECT
 public:
@@ -23,7 +23,7 @@ public:
 
 public:
     // IObserver interface
-    int update(const QString &) override;
+    int update(const int&, const QString &) override;
     void setContantLabelPixmap(const QString&);
     void setPageLabelText(const QString&);
 
@@ -60,7 +60,7 @@ private:
     DLabel * m_pPageLabel = nullptr;
     DWidget * m_sonWidget = nullptr;
     QVBoxLayout * m_pVLayout = nullptr;
-    ThemeSubject    *m_pThemeSubject = nullptr;
+    MsgSubject    *m_pMsgSubject = nullptr;
     bool m_bPaint = false;
 };
 

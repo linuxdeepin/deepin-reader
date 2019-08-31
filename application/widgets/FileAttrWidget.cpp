@@ -18,18 +18,18 @@ FileAttrWidget::FileAttrWidget(DWidget *parent) :
 
     initLabels();
 
-    m_pThemeSubject = ThemeSubject::getInstace();
-    if(m_pThemeSubject)
+    m_pMsgSubject = MsgSubject::getInstance();
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->addObserver(this);
+        m_pMsgSubject->addObserver(this);
     }
 }
 
 FileAttrWidget::~FileAttrWidget()
 {
-    if(m_pThemeSubject)
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->removeObserver(this);
+        m_pMsgSubject->removeObserver(this);
     }
 }
 
@@ -74,7 +74,7 @@ void FileAttrWidget::createLabel(const int &index, const QString& objName)
     m_labelList.append(labelText);
 }
 
-int FileAttrWidget::update(const QString &)
+int FileAttrWidget::update(const int&, const QString &)
 {
     return 0;
 }

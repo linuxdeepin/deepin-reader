@@ -2,17 +2,20 @@
 #define NOTESFORM_H
 
 #include <DWidget>
+
 #include <DListWidget>
 #include <QListWidgetItem>
 #include <QVBoxLayout>
 
 #include "NotesItemWidget.h"
-#include "header/IThemeObserver.h"
-#include "header/ThemeSubject.h"
+
+#include "header/IMsgObserver.h"
+#include "header/MsgSubject.h"
+
 
 DWIDGET_USE_NAMESPACE
 
-class NotesWidget : public DWidget, public IThemeObserver
+class NotesWidget : public DWidget, public IMsgObserver
 {
     Q_OBJECT
 
@@ -23,14 +26,15 @@ public:
 private:
     void initWidget();
 
-public:
-    // IObserver interface
-    int update(const QString &) override;
-
 private:
     DListWidget * m_pNotesList = nullptr;
     QVBoxLayout * m_pVLayout = nullptr;
-    ThemeSubject    *m_pThemeSubject = nullptr;
+
+    MsgSubject    *m_pMsgSubject = nullptr;
+
+public:
+    // IObserver interface
+    int update(const int&, const QString &) override;
 };
 
 #endif // NOTESFORM_H

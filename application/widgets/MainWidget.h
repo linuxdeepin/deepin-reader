@@ -9,8 +9,8 @@
 #include "HomeWidget.h"
 #include "FileAttrWidget.h"
 
-#include "header/IThemeObserver.h"
-#include "header/ThemeSubject.h"
+#include "header/IMsgObserver.h"
+#include "header/MsgSubject.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -20,7 +20,7 @@ DWIDGET_USE_NAMESPACE
  */
 
 
-class MainWidget : public DWidget, public IThemeObserver
+class MainWidget : public DWidget, public IMsgObserver
 {
     Q_OBJECT
 public:
@@ -46,7 +46,7 @@ private:
     QVBoxLayout *m_centralLayout = nullptr;
 
     DStackedWidget      *m_pStackedWidget = nullptr;        //  栈式 显示
-    ThemeSubject        *m_pThemeSubject = nullptr;
+    MsgSubject        *m_pMsgSubject = nullptr;
 
     HomeWidget          *m_pHomeWidget = nullptr;       //  选择文件
     MainShowSplitter    *m_pMainShowSplitter = nullptr;    //  文件显示 和 操作
@@ -55,7 +55,7 @@ private:
 
     // IObserver interface
 public:
-    int update(const QString &) override;
+    int update(const int&, const QString &) override;
 };
 
 #endif // MAINWIDGET_H

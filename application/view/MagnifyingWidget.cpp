@@ -7,18 +7,18 @@ MagnifyingWidget::MagnifyingWidget(DWidget *parent) :
     this->setFixedSize(QSize(50, 50));
     this->setVisible(false);    //  默认隐藏
 
-    m_pThemeSubject = ThemeSubject::getInstace();
-    if(m_pThemeSubject)
+    m_pMsgSubject = MsgSubject::getInstance();
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->addObserver(this);
+        m_pMsgSubject->addObserver(this);
     }
 }
 
 MagnifyingWidget::~MagnifyingWidget()
 {
-    if(m_pThemeSubject)
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->removeObserver(this);
+        m_pMsgSubject->removeObserver(this);
     }
 }
 
@@ -34,7 +34,7 @@ void MagnifyingWidget::paintEvent(QPaintEvent *event)
     painter.restore();
 }
 
-int MagnifyingWidget::update(const QString &)
+int MagnifyingWidget::update(const int&, const QString &)
 {
     return 0;
 }

@@ -9,8 +9,8 @@
 #include <QSettings>
 #include "dlinkbutton.h"
 
-#include "header/IThemeObserver.h"
-#include "header/ThemeSubject.h"
+#include "header/IMsgObserver.h"
+#include "header/MsgSubject.h"
 
 /**
  *  @brief  支持拖拽
@@ -20,7 +20,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-class HomeWidget : public DWidget, public IThemeObserver
+class HomeWidget : public DWidget, public IMsgObserver
 {
     Q_OBJECT
 public:
@@ -45,11 +45,11 @@ private:
     DLinkButton     *m_chooseBtn = nullptr;
     QSettings       *m_settings = nullptr;
 
-    ThemeSubject    *m_pThemeSubject = nullptr;
+    MsgSubject      *m_pMsgSubject = nullptr;
 
     // IObserver interface
 public:
-    int update(const QString &) override;
+    int update(const int&, const QString &) override;
 };
 
 #endif // OPENFILEWIDGET_H

@@ -14,18 +14,18 @@ TitleWidget::TitleWidget(DWidget *parent) :
 
     initBtns();
 
-    m_pThemeSubject = ThemeSubject::getInstace();
-    if(m_pThemeSubject)
+    m_pMsgSubject = MsgSubject::getInstance();
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->addObserver(this);
+        m_pMsgSubject->addObserver(this);
     }
 }
 
 TitleWidget::~TitleWidget()
 {
-    if(m_pThemeSubject)
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->removeObserver(this);
+        m_pMsgSubject->removeObserver(this);
     }
 }
 
@@ -147,7 +147,7 @@ void TitleWidget::createAction(const QString &iconName, const char *member)
     }
 }
 
-int TitleWidget::update(const QString &)
+int TitleWidget::update(const int&, const QString &)
 {
     return 0;
 }

@@ -5,10 +5,10 @@
 BookMarkItemWidget::BookMarkItemWidget(DWidget *parent) :
     DWidget (parent)
 {
-    m_pThemeSubject = ThemeSubject::getInstace();
-    if(m_pThemeSubject)
+    m_pMsgSubject = MsgSubject::getInstance();
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->addObserver(this);
+        m_pMsgSubject->addObserver(this);
     }
 
     m_pHLayout =new QHBoxLayout;
@@ -26,9 +26,9 @@ BookMarkItemWidget::BookMarkItemWidget(DWidget *parent) :
 
 BookMarkItemWidget::~BookMarkItemWidget()
 {
-    if(m_pThemeSubject)
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->removeObserver(this);
+        m_pMsgSubject->removeObserver(this);
     }
 }
 
@@ -45,7 +45,7 @@ void BookMarkItemWidget::setPage(const QString &value)
     m_pPage->setText(value);
 }
 
-int BookMarkItemWidget::update(const QString &)
+int BookMarkItemWidget::update(const int&, const QString &)
 {
     return 0;
 }

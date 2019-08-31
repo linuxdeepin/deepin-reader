@@ -42,18 +42,18 @@ HomeWidget::HomeWidget(DWidget *parent):
 
     connect(m_chooseBtn, &DLinkButton::clicked, this, &HomeWidget::onChooseBtnClicked);
 
-    m_pThemeSubject = ThemeSubject::getInstace();
-    if(m_pThemeSubject)
+    m_pMsgSubject = MsgSubject::getInstance();
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->addObserver(this);
+        m_pMsgSubject->addObserver(this);
     }
 }
 
 HomeWidget::~HomeWidget()
 {
-    if(m_pThemeSubject)
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->removeObserver(this);
+        m_pMsgSubject->removeObserver(this);
     }
 }
 
@@ -91,7 +91,7 @@ void HomeWidget::onChooseBtnClicked()
     emit fileSelected(dialog.selectedFiles());
 }
 
-int HomeWidget::update(const QString &)
+int HomeWidget::update(const int&, const QString &)
 {
     return 0;
 }

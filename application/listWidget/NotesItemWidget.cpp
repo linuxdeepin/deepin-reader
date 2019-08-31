@@ -5,10 +5,10 @@
 NotesItemWidget::NotesItemWidget(DWidget *parent) :
     DWidget (parent)
 {
-    m_pThemeSubject = ThemeSubject::getInstace();
-    if(m_pThemeSubject)
+    m_pMsgSubject = MsgSubject::getInstance();
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->addObserver(this);
+        m_pMsgSubject->addObserver(this);
     }
     m_pHLayout = new QHBoxLayout;
     //set around distance
@@ -25,9 +25,9 @@ NotesItemWidget::NotesItemWidget(DWidget *parent) :
 
 NotesItemWidget::~NotesItemWidget()
 {
-    if(m_pThemeSubject)
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->removeObserver(this);
+        m_pMsgSubject->removeObserver(this);
     }
 }
 
@@ -87,7 +87,7 @@ void NotesItemWidget::initWidget()
     m_pHLayout->addLayout(t_vLayout);
 }
 
-int NotesItemWidget::update(const QString &)
+int NotesItemWidget::update(const int&, const QString &)
 {
     return 0;
 }

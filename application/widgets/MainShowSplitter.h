@@ -5,8 +5,8 @@
 #include <QResizeEvent>
 #include "LeftSidebarWidget.h"
 #include "FileViewWidget.h"
-#include "header/IThemeObserver.h"
-#include "header/ThemeSubject.h"
+#include "header/IMsgObserver.h"
+#include "header/MsgSubject.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -15,7 +15,7 @@ DWIDGET_USE_NAMESPACE
  * @brief   主要用于显示文档 和 操作界面, 分割器
  */
 
-class MainShowSplitter : public DSplitter, public IThemeObserver
+class MainShowSplitter : public DSplitter, public IMsgObserver
 {
     Q_OBJECT
 public:
@@ -37,11 +37,11 @@ private:
     LeftSidebarWidget   *m_pLeftShowWidget = nullptr;       //  侧边栏
     FileViewWidget      *m_pFileViewWidget = nullptr;       //  显示文档区域
 
-    ThemeSubject        *m_pThemeSubject = nullptr;
+    MsgSubject          *m_pMsgSubject = nullptr;
 
     // IObserver interface
 public:
-    int update(const QString &) override;
+    int update(const int&, const QString &) override;
 };
 
 #endif // MAINSHOWDATAWIDGET_H

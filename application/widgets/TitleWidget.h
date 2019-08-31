@@ -7,8 +7,8 @@
 #include <DMenu>
 
 
-#include "header/IThemeObserver.h"
-#include "header/ThemeSubject.h"
+#include "header/IMsgObserver.h"
+#include "header/MsgSubject.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -20,7 +20,7 @@ DWIDGET_USE_NAMESPACE
 
 
 
-class TitleWidget : public DWidget, public IThemeObserver
+class TitleWidget : public DWidget, public IMsgObserver
 {
     Q_OBJECT
 public:
@@ -53,11 +53,11 @@ private:
     QAction     *m_pHandleAction = nullptr;
     QAction     *m_pDefaultAction = nullptr;
 
-    ThemeSubject    *m_pThemeSubject = nullptr;
+    MsgSubject    *m_pMsgSubject = nullptr;
 
     // IObserver interface
 public:
-    int update(const QString &) override;
+    int update(const int&, const QString &) override;
 };
 
 #endif // TITLEWIDGET_H

@@ -5,8 +5,8 @@
 #include <DPushButton>
 #include <QHBoxLayout>
 
-#include "header/IThemeObserver.h"
-#include "header/ThemeSubject.h"
+#include "header/IMsgObserver.h"
+#include "header/MsgSubject.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -16,7 +16,7 @@ DWIDGET_USE_NAMESPACE
  */
 
 
-class MainOperationWidget : public DWidget, public IThemeObserver
+class MainOperationWidget : public DWidget, public IMsgObserver
 {
     Q_OBJECT
 public:
@@ -37,11 +37,11 @@ private slots:
 
 private:
      QHBoxLayout    *m_hboxLayout = nullptr;
-     ThemeSubject   *m_pThemeSubject = nullptr;
+     MsgSubject     *m_pMsgSubject = nullptr;
 
      // IObserver interface
 public:
-     int update(const QString &) override;
+     int update(const int&, const QString &) override;
 };
 
 #endif // MAINOPERATIONWIDGET_H

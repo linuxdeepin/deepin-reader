@@ -11,8 +11,8 @@
 #include "listWidget/BookMarkWidget.h"
 #include "listWidget/NotesWidget.h"
 
-#include "header/IThemeObserver.h"
-#include "header/ThemeSubject.h"
+#include "header/IMsgObserver.h"
+#include "header/MsgSubject.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -27,7 +27,7 @@ enum WIDGETINDEX{
     NOTE
 };
 
-class LeftSidebarWidget : public DWidget, public IThemeObserver
+class LeftSidebarWidget : public DWidget, public IMsgObserver
 {
     Q_OBJECT
 public:
@@ -49,11 +49,11 @@ private:
     BookMarkWidget * m_pBookMarkWidget = nullptr;
     NotesWidget * m_pNotesWidget = nullptr;
 
-    ThemeSubject            *m_pThemeSubject = nullptr;
+    MsgSubject            *m_pMsgSubject = nullptr;
 
     // IObserver interface
 public:
-    int update(const QString &) override;
+    int update(const int&, const QString &) override;
 };
 
 #endif // LEFTSHOWWIDGET_H

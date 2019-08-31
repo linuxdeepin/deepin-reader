@@ -7,18 +7,18 @@ MainShowSplitter::MainShowSplitter(DWidget *parent) :
     setChildrenCollapsible(false);      //  子部件 不可以被拉伸到 宽度 为0
     initWidgets();
 
-    m_pThemeSubject = ThemeSubject::getInstace();
-    if(m_pThemeSubject)
+    m_pMsgSubject = MsgSubject::getInstance();
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->addObserver(this);
+        m_pMsgSubject->addObserver(this);
     }
 }
 
 MainShowSplitter::~MainShowSplitter()
 {
-    if(m_pThemeSubject)
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->removeObserver(this);
+        m_pMsgSubject->removeObserver(this);
     }
 }
 
@@ -54,7 +54,7 @@ void MainShowSplitter::setFileHandShapeState(const bool &bState) const
 //    qDebug() << "setFileMagnifyingState      "  << bState;
 //}
 
-int MainShowSplitter::update(const QString &)
+int MainShowSplitter::update(const int&, const QString &)
 {
     return 0;
 }

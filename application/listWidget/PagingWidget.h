@@ -7,14 +7,14 @@
 #include <DPushButton>
 #include <DSpinBox>
 
-#include "header/IThemeObserver.h"
-#include "header/ThemeSubject.h"
+#include "header/IMsgObserver.h"
+#include "header/MsgSubject.h"
 
 DWIDGET_USE_NAMESPACE
 
 const int FIRSTPAGES = 1;
 //
-class PagingWidget : public DWidget, public IThemeObserver
+class PagingWidget : public DWidget, public IMsgObserver
 {
     Q_OBJECT
 
@@ -53,10 +53,10 @@ private:
     int m_currntPage = 0;
     int m_totalPage = 0;
 
-    ThemeSubject    *m_pThemeSubject = nullptr;
+    MsgSubject    *m_pMsgSubject = nullptr;
     // IObserver interface
 public:
-    int update(const QString &) override;
+    int update(const int&, const QString &) override;
 };
 
 #endif // PAGINGWIDGET_H

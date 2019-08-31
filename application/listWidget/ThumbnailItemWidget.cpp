@@ -4,10 +4,10 @@
 ThumbnailItemWidget::ThumbnailItemWidget(DWidget *parent) :
     DWidget (parent)
 {
-    m_pThemeSubject = ThemeSubject::getInstace();
-    if(m_pThemeSubject)
+    m_pMsgSubject = MsgSubject::getInstance();
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->addObserver(this);
+        m_pMsgSubject->addObserver(this);
     }
 
     m_pVLayout = new QVBoxLayout;
@@ -20,13 +20,13 @@ ThumbnailItemWidget::ThumbnailItemWidget(DWidget *parent) :
 
 ThumbnailItemWidget::~ThumbnailItemWidget()
 {
-    if(m_pThemeSubject)
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->removeObserver(this);
+        m_pMsgSubject->removeObserver(this);
     }
 }
 
-int ThumbnailItemWidget::update(const QString &)
+int ThumbnailItemWidget::update(const int&, const QString &)
 {
     return 0;
 }

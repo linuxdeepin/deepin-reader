@@ -18,18 +18,18 @@ MainWidget::MainWidget(DWidget *parent):
 
     initWidgets();
 
-    m_pThemeSubject = ThemeSubject::getInstace();
-    if(m_pThemeSubject)
+    m_pMsgSubject = MsgSubject::getInstance();
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->addObserver(this);
+        m_pMsgSubject->addObserver(this);
     }
 }
 
 MainWidget::~MainWidget()
 {
-    if(m_pThemeSubject)
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->removeObserver(this);
+        m_pMsgSubject->removeObserver(this);
     }
 
     if(m_pAttrWidget)
@@ -94,7 +94,7 @@ void MainWidget::initWidgets()
     m_pStackedWidget->setCurrentIndex(0);
 }
 
-int MainWidget::update(const QString &)
+int MainWidget::update(const int&, const QString &)
 {
     return 0;
 }

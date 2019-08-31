@@ -9,18 +9,18 @@ PagingWidget::PagingWidget(DWidget *parent) :
     connect(m_pPrePageBtn, SIGNAL(clicked()), this, SLOT(slotPrePage()));
     connect(m_pNextPageBtn, SIGNAL(clicked()), this, SLOT(slotNextPage()));
 
-    m_pThemeSubject = ThemeSubject::getInstace();
-    if(m_pThemeSubject)
+    m_pMsgSubject = MsgSubject::getInstance();
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->addObserver(this);
+        m_pMsgSubject->addObserver(this);
     }
 }
 
 PagingWidget::~PagingWidget()
 {
-    if(m_pThemeSubject)
+    if(m_pMsgSubject)
     {
-        m_pThemeSubject->removeObserver(this);
+        m_pMsgSubject->removeObserver(this);
     }
 }
 
@@ -65,7 +65,7 @@ void PagingWidget::setTotalPages(int pages)
     m_pJumpPageSpinBox->setRange(1, (pages<1)?1:pages);
 }
 
-int PagingWidget::update(const QString &)
+int PagingWidget::update(const int&, const QString &)
 {
     return 0;
 }
