@@ -28,22 +28,22 @@ public:
     ~BookMarkItemWidget() override;
 
 public:
-    void setPicture(const QString&);
+    void setPicture(const QString &);
     void setPage(const QString &);
     // IObserver interface
-    int update(const int&, const QString &) override;
+    int update(const int &, const QString &) override;
 
 private slots:
     void slotDltBookMark();
-    void slotShowContextMenu(const QPoint&);
+    void slotShowContextMenu(const QPoint &);
 
 private:
     void initWidget();
 
 private:
-    DLabel * m_pPicture = nullptr;
-    DLabel * m_pPage = nullptr;
-    QHBoxLayout * m_pHLayout = nullptr;
+    DLabel *m_pPicture = nullptr;
+    DLabel *m_pPage = nullptr;
+    QHBoxLayout *m_pHLayout = nullptr;
     MsgSubject    *m_pMsgSubject = nullptr;
 };
 

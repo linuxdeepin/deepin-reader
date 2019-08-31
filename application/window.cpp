@@ -3,7 +3,7 @@
 #include <DWidget>
 #include <DPushButton>
 #include <DTitlebar>
-
+#include <DWidgetUtil>
 #include <QStyleFactory>
 
 #include <DThemeManager>
@@ -31,6 +31,8 @@ Window::Window(DMainWindow *parent)
     initConnections();
 
     m_pMsgSubject = MsgSubject::getInstance();
+
+    Dtk::Widget::moveToCenter(this);
 }
 
 Window::~Window()
@@ -85,8 +87,7 @@ void Window::initTitlebar()
 //  打开 文件
 void Window::action_OpenFile()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->sendMsg(MSG_OPERATION_OPEN_FILE);
     }
 }
@@ -94,8 +95,7 @@ void Window::action_OpenFile()
 //  保存文件
 void Window::action_SaveFile()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->sendMsg(MSG_OPERATION_SAVE_FILE);
     }
 }
@@ -103,8 +103,7 @@ void Window::action_SaveFile()
 //  另存为
 void Window::action_SaveAsFile()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->sendMsg(MSG_OPERATION_SAVE_AS_FILE);
     }
 }
@@ -112,8 +111,7 @@ void Window::action_SaveAsFile()
 //  打开 所在文件夹
 void Window::action_OpenFolder()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->sendMsg(MSG_OPERATION_OPEN_FOLDER);
     }
 }
@@ -121,8 +119,7 @@ void Window::action_OpenFolder()
 //  打印
 void Window::action_Print()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->sendMsg(MSG_OPERATION_PRINT);
     }
 }
@@ -130,8 +127,7 @@ void Window::action_Print()
 //  属性
 void Window::action_Attr()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->sendMsg(MSG_OPERATION_ATTR);
     }
 }
@@ -139,8 +135,7 @@ void Window::action_Attr()
 //  搜索
 void Window::action_Find()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->sendMsg(MSG_OPERATION_FIND);
     }
 }
@@ -148,8 +143,7 @@ void Window::action_Find()
 //  全屏
 void Window::action_FullScreen()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->sendMsg(MSG_OPERATION_FULLSCREEN);
     }
 }
@@ -157,8 +151,7 @@ void Window::action_FullScreen()
 //  放映
 void Window::action_Screening()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->sendMsg(MSG_OPERATION_SCREENING);
     }
 }
@@ -166,8 +159,7 @@ void Window::action_Screening()
 //  放大
 void Window::action_Larger()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->sendMsg(MSG_OPERATION_LARGER);
     }
 }
@@ -175,8 +167,7 @@ void Window::action_Larger()
 //  缩小
 void Window::action_Smaller()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->sendMsg(MSG_OPERATION_SMALLER);
     }
 }
@@ -184,8 +175,7 @@ void Window::action_Smaller()
 //  主题切换
 void Window::action_SwitchTheme()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->sendMsg(MSG_OPERATION_SWITCH_THEME);
     }
 }
@@ -196,7 +186,7 @@ void Window::action_Help()
 
 }
 
-void Window::createAction(const QString& actionName, const QString& objectName, const QString& iconName, const char* member)
+void Window::createAction(const QString &actionName, const QString &objectName, const QString &iconName, const char *member)
 {
     QAction *action = new QAction(actionName, this);
 

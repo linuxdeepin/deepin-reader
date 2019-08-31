@@ -1,12 +1,12 @@
 #ifndef MAINSHOWSPLITTER_H
 #define MAINSHOWSPLITTER_H
 
-#include <DSplitter>
-#include <QResizeEvent>
-#include "LeftSidebarWidget.h"
 #include "FileViewWidget.h"
+#include "LeftSidebarWidget.h"
 #include "header/IMsgObserver.h"
 #include "header/MsgSubject.h"
+#include <DSplitter>
+#include <QResizeEvent>
 
 DWIDGET_USE_NAMESPACE
 
@@ -26,17 +26,17 @@ private:
     void initWidgets();
 
 private:
-    void setSidebarVisible(const bool&) const;
+    void setSidebarVisible(const bool &) const;
 
 private:
-    LeftSidebarWidget   *m_pLeftShowWidget = nullptr;       //  侧边栏
-    FileViewWidget      *m_pFileViewWidget = nullptr;       //  显示文档区域
+    LeftSidebarWidget *m_pLeftShowWidget = nullptr; //  侧边栏
+    FileViewWidget *m_pFileViewWidget = nullptr; //  显示文档区域
 
-    MsgSubject          *m_pMsgSubject = nullptr;
+    MsgSubject *m_pMsgSubject = nullptr;
 
     // IObserver interface
 public:
-    int update(const int&, const QString &) override;
+    int update(const int &, const QString &) override;
 };
 
 #endif // MAINSHOWDATAWIDGET_H

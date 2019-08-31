@@ -27,7 +27,7 @@ private:
     void initUI();
     void initConnections();
     void initTitlebar();
-    void createAction(const QString& actionName, const QString& objectName, const QString& iconName, const char* member);
+    void createAction(const QString &actionName, const QString &objectName, const QString &iconName, const char *member);
 
 private slots:
     void action_OpenFile();
@@ -52,7 +52,7 @@ private:
     MainWidget  *m_centralWidget = nullptr;
     TitleWidget *m_titleWidget = nullptr;
 
-    QVBoxLayout *m_centralLayout;
+    QVBoxLayout *m_centralLayout = nullptr;
     DMenu       *m_menu = nullptr;
 };
 

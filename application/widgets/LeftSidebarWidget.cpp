@@ -17,16 +17,14 @@ LeftSidebarWidget::LeftSidebarWidget(DWidget *parent):
     this->setVisible(false);    //  默认 隐藏
 
     m_pMsgSubject = MsgSubject::getInstance();
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
     }
 }
 
 LeftSidebarWidget::~LeftSidebarWidget()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->removeObserver(this);
     }
 }
@@ -49,10 +47,9 @@ void LeftSidebarWidget::initOperationWidget()
     m_pVBoxLayout->addWidget(m_operationWidget, 0, Qt::AlignBottom);
 }
 
-int LeftSidebarWidget::update(const int&msgType, const QString &msgContent)
+int LeftSidebarWidget::update(const int &msgType, const QString &msgContent)
 {
-    if(msgType == MSG_SWITCHLEFTWIDGET)       //切换页面
-    {
+    if (msgType == MSG_SWITCHLEFTWIDGET) {    //切换页面
         int nIndex = msgContent.toInt();
         m_pStackedWidget->setCurrentIndex(nIndex);
         return ConstantMsg::g_effective_res;

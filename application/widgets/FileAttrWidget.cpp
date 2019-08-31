@@ -1,12 +1,11 @@
 #include "FileAttrWidget.h"
 #include <DWidgetUtil>
 
-FileAttrWidget::FileAttrWidget(DWidget *parent) :
-    DWidget (parent)
+FileAttrWidget::FileAttrWidget(DWidget *parent)
+    : DWidget(parent)
 {
     setFixedSize(QSize(400, 500));
-    setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint);
-    setAttribute(Qt::WA_ShowModal, true);   //  模态对话框， 属性设置
+    setAttribute(Qt::WA_ShowModal, true); //  模态对话框， 属性设置
 
     m_pGridLayout = new QGridLayout;
     m_pGridLayout->setSpacing(0);
@@ -19,25 +18,20 @@ FileAttrWidget::FileAttrWidget(DWidget *parent) :
     initLabels();
 
     m_pMsgSubject = MsgSubject::getInstance();
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
     }
 }
 
 FileAttrWidget::~FileAttrWidget()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->removeObserver(this);
     }
 }
 
 //  各个 对应的 label 赋值
-void FileAttrWidget::setFileAttr()
-{
-
-}
+void FileAttrWidget::setFileAttr() {}
 
 //  初始化 所有的label 显示
 void FileAttrWidget::initLabels()
@@ -59,7 +53,7 @@ void FileAttrWidget::initLabels()
     createLabel(14, tr("File Size:"));
 }
 
-void FileAttrWidget::createLabel(const int &index, const QString& objName)
+void FileAttrWidget::createLabel(const int &index, const QString &objName)
 {
     DLabel *label = new DLabel(objName);
     label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
@@ -74,9 +68,7 @@ void FileAttrWidget::createLabel(const int &index, const QString& objName)
     m_labelList.append(labelText);
 }
 
-int FileAttrWidget::update(const int&, const QString &)
+int FileAttrWidget::update(const int &, const QString &)
 {
     return 0;
 }
-
-

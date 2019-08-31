@@ -44,16 +44,14 @@ HomeWidget::HomeWidget(DWidget *parent):
     connect(m_chooseBtn, &DLinkButton::clicked, this, &HomeWidget::onChooseBtnClicked);
 
     m_pMsgSubject = MsgSubject::getInstance();
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
     }
 }
 
 HomeWidget::~HomeWidget()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->removeObserver(this);
     }
 }
@@ -70,8 +68,7 @@ void HomeWidget::setIconPixmap(bool isLoaded)
 void HomeWidget::onChooseBtnClicked()
 {
     QStringList fileList = getOpenFileList();
-    if(fileList.size() > 0)
-    {
+    if (fileList.size() > 0) {
         emit fileSelected(fileList);
     }
 }
@@ -106,13 +103,9 @@ QStringList HomeWidget::getOpenFileList()
 
 int HomeWidget::update(const int &msgType, const QString &msgContent)
 {
-    if(msgType == MSG_OPERATION_OPEN_FILE)
-    {
-        QStringList fileList = getOpenFileList();
-        if(fileList.size() > 0)
-        {
-            emit fileSelected(fileList);
-        }
+    Q_UNUSED(msgContent);
+    if (msgType == MSG_OPERATION_OPEN_FILE) {
+        onChooseBtnClicked();
         return ConstantMsg::g_effective_res;
     }
     return 0;

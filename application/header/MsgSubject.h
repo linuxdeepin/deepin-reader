@@ -4,9 +4,6 @@
 #include "ISubject.h"
 #include <QList>
 
-
-
-
 //  消息类型
 enum MSG_TYPE {
     MSG_UPDATE_THEME = 0,           //  更新主题
@@ -59,11 +56,12 @@ public:
 public:
     void addObserver(IObserver *obs) override;
     void removeObserver(IObserver *obs) override;
-    void Notify(const int &, const QString &) override;
 
 public:
     void sendMsg(const int &, const QString &msgContent = "");
 
+private:
+    void NotifyObservers(const int &, const QString &);
 private:
     QList<IObserver *> m_observerList;
 };
