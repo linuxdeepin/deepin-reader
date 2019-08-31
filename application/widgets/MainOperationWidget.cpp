@@ -58,19 +58,22 @@ void MainOperationWidget::createBtn(const QString& iconName, const char* member,
 void MainOperationWidget::on_thumbnailBtn_clicked(bool)
 {
  //   qDebug() << "showType(0)";
-    emit showType(0);
+    //emit showType(0);
+    m_pMsgSubject->sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(0));
 }
 
 void MainOperationWidget::on_bookmarksBtn_clicked(bool)
 {
  //   qDebug() << "showType(1)";
-    emit showType(1);
+    //emit showType(1);
+    m_pMsgSubject->sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(1));
 }
 
 void MainOperationWidget::on_annotationBtn_clicked(bool)
 {
 //    qDebug() << "showType(2)";
-    emit showType(2);
+    //emit showType(2);
+    m_pMsgSubject->sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(2));
 }
 
 int MainOperationWidget::update(const int&, const QString &)

@@ -8,7 +8,7 @@
 
 
 //  消息类型
-enum MSG_TYPE{
+enum MSG_TYPE {
     MSG_UPDATE_THEME = 0,           //  更新主题
 
     MSG_SLIDER_SHOW_STATE = 10,     //  侧边栏 显隐消息
@@ -27,8 +27,16 @@ enum MSG_TYPE{
     MSG_OPERATION_LARGER,           //  放大
     MSG_OPERATION_SMALLER,          //  缩小
     MSG_OPERATION_SWITCH_THEME,     //  主题切换
-};
 
+    MSG_THUMBNAIL_JUMPTOPAGE = 100, //  跳转到指定页 消息
+    MSG_BOOKMARK_DLTITEM,           //  删除指定书签 消息
+    MSG_BOOKMARK_ADDITEM,           //  添加指定书签 消息
+    MSG_NOTE_COPYCHOICECONTANT,     //  拷贝指定注释内容 消息
+    MSG_NOTE_ADDCONTANT,            //  添加注释内容 消息
+    MSG_NOTE_ADDITEM,               //  添加注释子节点 消息
+    MSG_NOTE_DLTNOTEITEM,           //  删除注释子节点 消息
+    MSG_SWITCHLEFTWIDGET,           //  切换左侧窗口(缩略图、书签、注释) 消息
+};
 
 /**
  * @brief The MsgSubject class
@@ -41,7 +49,7 @@ private:
     MsgSubject();
 
 public:
-    static MsgSubject* getInstance()
+    static MsgSubject *getInstance()
     {
         static MsgSubject subject;
         return &subject;
@@ -51,13 +59,13 @@ public:
 public:
     void addObserver(IObserver *obs) override;
     void removeObserver(IObserver *obs) override;
-    void Notify(const int&, const QString &) override;
+    void Notify(const int &, const QString &) override;
 
 public:
-    void sendMsg(const int&, const QString& msgContent = "");
+    void sendMsg(const int &, const QString &msgContent = "");
 
 private:
-    QList<IObserver*> m_observerList;
+    QList<IObserver *> m_observerList;
 };
 
 #endif // MSGSUBJECT_H

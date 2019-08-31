@@ -7,31 +7,29 @@ ThumbnailWidget::ThumbnailWidget(DWidget *parent) :
     DWidget(parent)
 {
     m_pMsgSubject = MsgSubject::getInstance();
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
     }
 
-    m_pvBoxLayout =new QVBoxLayout;
+    m_pvBoxLayout = new QVBoxLayout;
     m_pvBoxLayout->setContentsMargins(0, 0, 0, 0);
     m_pvBoxLayout->setSpacing(0);
     this->setLayout(m_pvBoxLayout);
 
     initWidget();
 
-    connect(m_pThumbnailListWidget, SIGNAL(	itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
-    connect(m_pPageWidget, SIGNAL(sigJumpToIndexPage(const int&)), this, SLOT(slotSetJumpToPage(const int&)));
+    connect(m_pThumbnailListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
+    connect(m_pPageWidget, SIGNAL(sigJumpToIndexPage(const int &)), this, SLOT(slotSetJumpToPage(const int &)));
 }
 
 ThumbnailWidget::~ThumbnailWidget()
 {
-    if(m_pMsgSubject)
-    {
+    if (m_pMsgSubject) {
         m_pMsgSubject->removeObserver(this);
     }
 }
 
-int ThumbnailWidget::update(const int&, const QString &)
+int ThumbnailWidget::update(const int &, const QString &)
 {
     return 0;
 }
@@ -47,14 +45,14 @@ void ThumbnailWidget::initWidget()
     m_pvBoxLayout->addWidget(m_pPageWidget);
 
     for (int idex = 0; idex < 30; ++idex) {
-        ThumbnailItemWidget * widget = new ThumbnailItemWidget;
+        ThumbnailItemWidget *widget = new ThumbnailItemWidget;
         widget->setContantLabelPixmap(QString(":/images/logo_96.svg"));
         widget->setPageLabelText(QString("               %1").arg(idex + 1));
-        widget->setMinimumSize(QSize(250,250));
+        widget->setMinimumSize(QSize(250, 250));
 
-        QListWidgetItem * item = new QListWidgetItem(m_pThumbnailListWidget);
+        QListWidgetItem *item = new QListWidgetItem(m_pThumbnailListWidget);
         item->setFlags(Qt::ItemIsSelectable);
-        item->setSizeHint(QSize(250,250));
+        item->setSizeHint(QSize(250, 250));
 
         m_pThumbnailListWidget->insertItem(idex, item);
         //m_pThumbnailListWidget->addItem(item);
@@ -64,9 +62,8 @@ void ThumbnailWidget::initWidget()
 
 void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 {
-    if(m_itemWidget)
-    {
-         m_pThumbnailItemWidget->setPaint(false);
+    if (m_itemWidget) {
+        m_pThumbnailItemWidget->setPaint(false);
 //1
 //        QPalette pal(m_itemWidget->palette());
 //        //设置页面背景白色
@@ -86,11 +83,10 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 
         //qDebug() << "clean background color";
     }
-    if(item)
-    {
-        DWidget * t_widget = nullptr;
-        DLabel * t_label = nullptr;
-        ThumbnailItemWidget * t_ItemWidget = (ThumbnailItemWidget *)(m_pThumbnailListWidget->itemWidget(item));
+    if (item) {
+        DWidget *t_widget = nullptr;
+        DLabel *t_label = nullptr;
+        ThumbnailItemWidget *t_ItemWidget = (ThumbnailItemWidget *)(m_pThumbnailListWidget->itemWidget(item));
         t_ItemWidget->setPaint(true);
 
         t_widget = t_ItemWidget->getSonWidget();
@@ -111,27 +107,27 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 //        pl.setColor(QPalette::WindowText,Qt::darkBlue);
 //        t_label->setPalette(pl);
 
-       // qDebug() << "set background color";
+        // qDebug() << "set background color";
         m_itemWidget = t_widget;
         m_pSonWidgetPageLabel = t_label;
         m_pThumbnailItemWidget = t_ItemWidget;
     }
 }
 
-void ThumbnailWidget::slotShowSelectItem(QListWidgetItem * item)
+void ThumbnailWidget::slotShowSelectItem(QListWidgetItem *item)
 {
     setSelectItemBackColor(item);
 
     int index = m_pThumbnailListWidget->row(item);
     emit sigSelectIndexPage(++index);
-    if(m_pPageWidget){
+    if (m_pPageWidget) {
         m_pPageWidget->setCurrentPageValue(index);
     }
     qDebug() << index;
 }
 
-void ThumbnailWidget::slotSetJumpToPage(const int& index)
+void ThumbnailWidget::slotSetJumpToPage(const int &index)
 {
-    QListWidgetItem * item = m_pThumbnailListWidget->item(index);
+    QListWidgetItem *item = m_pThumbnailListWidget->item(index);
     setSelectItemBackColor(item);
 }

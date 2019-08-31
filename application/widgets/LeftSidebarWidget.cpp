@@ -31,12 +31,6 @@ LeftSidebarWidget::~LeftSidebarWidget()
     }
 }
 
-void LeftSidebarWidget::showListWidget(const int &index) const
-{
-    qDebug() << index;
-    m_pStackedWidget->setCurrentIndex(index);
-}
-
 void LeftSidebarWidget::initOperationWidget()
 {
     m_pStackedWidget = new DStackedWidget;
@@ -52,12 +46,17 @@ void LeftSidebarWidget::initOperationWidget()
     m_pStackedWidget->setCurrentIndex(THUMBNAIL);
 
     m_operationWidget = new MainOperationWidget;
-    connect(m_operationWidget, SIGNAL(showType(const int&)), this, SLOT(showListWidget(const int&)));
-
     m_pVBoxLayout->addWidget(m_operationWidget, 0, Qt::AlignBottom);
 }
 
-int LeftSidebarWidget::update(const int&, const QString &)
+int LeftSidebarWidget::update(const int&msgType, const QString &msgContent)
 {
+    if(msgType == MSG_SWITCHLEFTWIDGET)       //切换页面
+    {
+        int nIndex = msgContent.toInt();
+        m_pStackedWidget->setCurrentIndex(nIndex);
+        return ConstantMsg::g_effective_res;
+    }
+
     return 0;
 }

@@ -13,6 +13,7 @@
 
 #include "header/IMsgObserver.h"
 #include "header/MsgSubject.h"
+#include "header/MsgHeader.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -33,9 +34,6 @@ class LeftSidebarWidget : public DWidget, public IMsgObserver
 public:
     LeftSidebarWidget(DWidget *parent = nullptr);
     ~LeftSidebarWidget() override;
-
-private slots:
-    void showListWidget(const int &) const;
 
 private:
     void initOperationWidget();

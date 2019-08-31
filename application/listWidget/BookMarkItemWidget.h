@@ -14,6 +14,12 @@
 
 DWIDGET_USE_NAMESPACE
 
+//操作类型
+enum OPERATION_TYPE{
+    ADDITEM = 0,        //增加item
+    DLTITEM,            //删除item
+};
+
 class BookMarkItemWidget : public DWidget, public IMsgObserver
 {
     Q_OBJECT
