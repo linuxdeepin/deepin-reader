@@ -22,9 +22,6 @@ public:
     MainOperationWidget(DWidget *parent = nullptr);
     ~MainOperationWidget() override;
 
-signals:
-    void showType(const int &) const;
-
 private:
     void initBtns();
     void createBtn(const QString &iconName, const char *member, bool checkable = false, bool checked = false);

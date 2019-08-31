@@ -31,6 +31,9 @@ Window::Window(DMainWindow *parent)
     initConnections();
 
     m_pMsgSubject = MsgSubject::getInstance();
+    if (m_pMsgSubject) {
+        m_pMsgSubject->addObserver(this);
+    }
 
     Dtk::Widget::moveToCenter(this);
 }
@@ -38,6 +41,9 @@ Window::Window(DMainWindow *parent)
 Window::~Window()
 {
     // We don't need clean pointers because application has exit here.
+    if (m_pMsgSubject) {
+        m_pMsgSubject->removeObserver(this);
+    }
 }
 
 void Window::initUI()
@@ -72,16 +78,14 @@ void Window::initConnections()
     createAction(tr("Help"), tr("Help"), tr(""), SLOT(action_Help()));
 
     m_menu->setStyle(QStyleFactory::create("dlight"));
-    m_menu->setMinimumWidth(150);
+    m_menu->setMinimumWidth(ConstantMsg::g_menu_width);
     titlebar()->setMenu(m_menu);
 }
 
 void Window::initTitlebar()
 {
-    if (titlebar()) {
-        titlebar()->setIcon(QIcon(":/images/logo_24.svg"));
-        titlebar()->setTitle(tr(""));
-    }
+    titlebar()->setIcon(QIcon(":/images/logo_24.svg"));
+    titlebar()->setTitle(tr(""));
 }
 
 //  打开 文件
@@ -184,6 +188,16 @@ void Window::action_SwitchTheme()
 void Window::action_Help()
 {
 
+}
+
+int Window::update(const int &msgType, const QString &msgContent)
+{
+    //  设置文档标题
+    if (msgType == MSG_SET_WINDOW_TITLE) {
+        titlebar()->setTitle(msgContent);
+        return ConstantMsg::g_effective_res;
+    }
+    return 0;
 }
 
 void Window::createAction(const QString &actionName, const QString &objectName, const QString &iconName, const char *member)

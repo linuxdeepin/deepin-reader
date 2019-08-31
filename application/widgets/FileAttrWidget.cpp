@@ -1,8 +1,8 @@
 #include "FileAttrWidget.h"
 #include <DWidgetUtil>
 
-FileAttrWidget::FileAttrWidget(DWidget *parent)
-    : DWidget(parent)
+FileAttrWidget::FileAttrWidget(CustomWidget *parent)
+    : CustomWidget(parent)
 {
     setFixedSize(QSize(400, 500));
     setAttribute(Qt::WA_ShowModal, true); //  模态对话框， 属性设置
@@ -16,19 +16,8 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
     Dtk::Widget::moveToCenter(this);
 
     initLabels();
-
-    m_pMsgSubject = MsgSubject::getInstance();
-    if (m_pMsgSubject) {
-        m_pMsgSubject->addObserver(this);
-    }
 }
 
-FileAttrWidget::~FileAttrWidget()
-{
-    if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
-    }
-}
 
 //  各个 对应的 label 赋值
 void FileAttrWidget::setFileAttr() {}

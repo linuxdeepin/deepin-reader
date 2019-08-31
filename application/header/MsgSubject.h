@@ -7,6 +7,7 @@
 //  消息类型
 enum MSG_TYPE {
     MSG_UPDATE_THEME = 0,           //  更新主题
+    MSG_SET_WINDOW_TITLE,           //  设置 应用标题
 
     MSG_SLIDER_SHOW_STATE = 10,     //  侧边栏 显隐消息
     MSG_MAGNIFYING,                 //  放大镜消息

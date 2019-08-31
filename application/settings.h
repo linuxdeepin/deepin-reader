@@ -37,7 +37,7 @@ class Settings : public QObject
     Q_OBJECT
 
 public:
-    Settings(QWidget *parent = 0);
+    Settings(QWidget *parent = nullptr);
     ~Settings();
 
     void dtkThemeWorkaround(QWidget *parent, const QString &theme);

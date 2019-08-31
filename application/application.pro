@@ -31,7 +31,8 @@ SOURCES += \
     listWidget/BookMarkItemWidget.cpp \
     listWidget/NotesItemWidget.cpp \
     view/MagnifyingWidget.cpp \
-    header/MsgSubject.cpp
+    header/MsgSubject.cpp \
+    header/CustomWidget.cpp
 
 
 RESOURCES +=         resources.qrc
@@ -63,7 +64,8 @@ HEADERS += \
     view/MagnifyingWidget.h \
     header/MsgSubject.h \
     header/IMsgObserver.h \
-    header/MsgHeader.h
+    header/MsgHeader.h \
+    header/CustomWidget.h
 
 DISTFILES += \
     themes/solarized_light.theme \

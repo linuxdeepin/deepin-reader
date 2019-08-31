@@ -6,8 +6,7 @@
 #include <QGridLayout>
 #include <QList>
 
-#include "header/IMsgObserver.h"
-#include "header/MsgSubject.h"
+#include "header/CustomWidget.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -16,12 +15,11 @@ DWIDGET_USE_NAMESPACE
  * @brief   文件属性框
  */
 
-class FileAttrWidget : public DWidget, public IMsgObserver
+class FileAttrWidget : public CustomWidget
 {
     Q_OBJECT
 public:
-    FileAttrWidget(DWidget *parent = nullptr);
-    ~FileAttrWidget() override;
+    FileAttrWidget(CustomWidget *parent = nullptr);
 
 public:
     void setFileAttr();
@@ -32,8 +30,6 @@ private:
 
 private:
     QGridLayout *m_pGridLayout = nullptr;
-    MsgSubject *m_pMsgSubject = nullptr;
-
     QList<DLabel *> m_labelList;
 
     // IObserver interface

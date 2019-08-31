@@ -16,12 +16,12 @@ DWIDGET_USE_NAMESPACE
  */
 
 
-class Window : public DMainWindow
+class Window : public DMainWindow, public IMsgObserver
 {
     Q_OBJECT
 public:
     Window(DMainWindow *parent = nullptr);
-    ~Window();
+    ~Window() override;
 
 private:
     void initUI();
@@ -54,6 +54,10 @@ private:
 
     QVBoxLayout *m_centralLayout = nullptr;
     DMenu       *m_menu = nullptr;
+
+    // IObserver interface
+public:
+    int update(const int &, const QString &) override;
 };
 
 #endif // WINDOW_H
