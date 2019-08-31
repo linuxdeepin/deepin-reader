@@ -18,7 +18,7 @@ NotesItemWidget::NotesItemWidget(DWidget *parent) :
 
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
-            this, SLOT(onShowContextMenu(const QPoint&)));
+            this, SLOT(slotShowContextMenu(const QPoint&)));
 
     initWidget();
 }
@@ -31,34 +31,60 @@ NotesItemWidget::~NotesItemWidget()
     }
 }
 
-void NotesItemWidget::contextMenuEvent(QContextMenuEvent *event)
+void NotesItemWidget::setLabelPix(const QString &pix)
 {
-
+    m_pPicture->setPixmap(QPixmap(pix));
 }
 
-void NotesItemWidget::onDltNoteItem()
+void NotesItemWidget::setLabelPage(const QString &value)
+{
+    QFont ft;
+    ft.setPointSize(12);
+    m_pPage->setFont(ft);
+    m_pPage->setText(value);
+}
+
+void NotesItemWidget::setTextEditText(const QString &contant)
+{
+    m_pTextEdit->setText(contant);
+}
+
+void NotesItemWidget::slotDltNoteItem()
 {
     qDebug() << "delet NotesItemWidget";
 }
 
-void NotesItemWidget::onCopyContant()
+void NotesItemWidget::slotCopyContant()
 {
     qDebug() << "copy contant";
 }
 
-void NotesItemWidget::onShowContextMenu(const QPoint &)
+void NotesItemWidget::slotShowContextMenu(const QPoint &)
 {
     QMenu * t_menu = new QMenu(this);
-    QAction *dltAction = t_menu->addAction(tr("删除书签"));
     QAction *copyAction = t_menu->addAction(tr("复制"));
-    connect(dltAction, SIGNAL(triggered()), this, SLOT(onDltBookMark()));
-    connect(copyAction, SIGNAL(triggered()), this, SLOT(onCopyContant()));
+    QAction *dltItemAction = t_menu->addAction(tr("删除书签"));
+    connect(dltItemAction, SIGNAL(triggered()), this, SLOT(slotDltNoteItem()));
+    connect(copyAction, SIGNAL(triggered()), this, SLOT(slotCopyContant()));
     t_menu->exec(QCursor::pos());
 }
 
 void NotesItemWidget::initWidget()
 {
+    QVBoxLayout * t_vLayout = new QVBoxLayout;
+    t_vLayout->setContentsMargins(0, 0, 0, 0);
+    t_vLayout->setSpacing(0);
 
+    m_pPicture = new  DLabel;
+    m_pPage = new  DLabel;
+    m_pTextEdit = new DTextEdit;
+    m_pTextEdit->setEnabled(false);
+
+    t_vLayout->addWidget(m_pPage);
+    t_vLayout->addWidget(m_pTextEdit);
+
+    m_pHLayout->addWidget(m_pPicture);
+    m_pHLayout->addLayout(t_vLayout);
 }
 
 int NotesItemWidget::update(const QString &)

@@ -19,11 +19,11 @@ class ThumbnailItemWidget  : public DWidget, public IThemeObserver
     Q_OBJECT
 public:
     ThumbnailItemWidget();
-    ~ ThumbnailItemWidget();
+    ~ ThumbnailItemWidget() override;
 
 public:
     // IObserver interface
-    int update(const QString &);
+    int update(const QString &) override;
     void setContantLabelPixmap(const QString&);
     void setPageLabelText(const QString&);
 

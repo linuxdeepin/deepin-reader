@@ -24,14 +24,14 @@ class BookMarkWidget : public DWidget, public IThemeObserver
 
 public:
     BookMarkWidget(DWidget *parent = nullptr);
-    ~BookMarkWidget();
+    ~BookMarkWidget() override;
 
 private:
     void initWidget();
 
 public:
     // IObserver interface
-    int update(const QString &);
+    int update(const QString &) override;
 
 private:
     ThemeSubject    *m_pThemeSubject = nullptr;

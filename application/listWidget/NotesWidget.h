@@ -2,9 +2,11 @@
 #define NOTESFORM_H
 
 #include <DWidget>
-#include "header/IThemeObserver.h"
-#include "header/ThemeSubject.h"
+#include <DListWidget>
+#include <QListWidgetItem>
+#include <QVBoxLayout>
 
+#include "NotesItemWidget.h"
 #include "header/IThemeObserver.h"
 #include "header/ThemeSubject.h"
 
@@ -19,11 +21,16 @@ public:
     ~NotesWidget() override;
 
 private:
-    ThemeSubject    *m_pThemeSubject = nullptr;
+    void initWidget();
 
-    // IObserver interface
 public:
+    // IObserver interface
     int update(const QString &) override;
+
+private:
+    DListWidget * m_pNotesList = nullptr;
+    QVBoxLayout * m_pVLayout = nullptr;
+    ThemeSubject    *m_pThemeSubject = nullptr;
 };
 
 #endif // NOTESFORM_H

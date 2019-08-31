@@ -26,11 +26,11 @@ public:
     void setTotalPages(int pages);
 
 signals:
-    void jumpToIndexPage(const int&);
+    void sigJumpToIndexPage(const int&);
 
 private slots:
-    void onPrePage();
-    void onNextPage();
+    void slotPrePage();
+    void slotNextPage();
 
 public:
     void setCurrentPageValue(const int&);
@@ -40,8 +40,8 @@ protected:
 
 private:
     void initWidget();
-
     void setCurrentPage(const int&);
+
 private:
     DLabel * m_pTotalPagesLab = nullptr;
     DPushButton * m_pPrePageBtn = nullptr;

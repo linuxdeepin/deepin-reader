@@ -24,21 +24,20 @@ public:
     NotesItemWidget(DWidget *parent = nullptr);
     ~NotesItemWidget() override;
 
-protected:
-    void contextMenuEvent(QContextMenuEvent *event) override;
+public:
+    void setLabelPix(const QString&);
+    void setLabelPage(const QString&);
+    void setTextEditText(const QString&);
 
 private slots:
-    void onDltNoteItem();
-    void onCopyContant();
-    void onShowContextMenu(const QPoint&);
+    void slotDltNoteItem();
+    void slotCopyContant();
+    void slotShowContextMenu(const QPoint&);
 
 private:
     void initWidget();
 
 public:
-    void setPicture(const QString&);
-    void setPage(const QString &);
-    void setNoteText(const QString &);
     // IObserver interface
     int update(const QString &) override;
 
@@ -47,7 +46,6 @@ private:
     DLabel * m_pPage = nullptr;
     DTextEdit * m_pTextEdit = nullptr;
     QHBoxLayout * m_pHLayout = nullptr;
-
     ThemeSubject    *m_pThemeSubject  = nullptr;
 };
 

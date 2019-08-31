@@ -25,24 +25,24 @@ class ThumbnailWidget : public DWidget, public IThemeObserver
 
 public:
     ThumbnailWidget(DWidget *parent = nullptr);
-    ~ThumbnailWidget();
+    ~ThumbnailWidget() override;
 
 public:
     // IObserver interface
-    int update(const QString &);
+    int update(const QString &) override;
 
 private:
     void initWidget();
     void setSelectItemBackColor(QListWidgetItem *);
 
 signals:
-    void selectIndexPage(const int &);
+    void sigSelectIndexPage(const int &);
 
 public slots:
-    void onSetJumpToPage(const int&);
+    void slotSetJumpToPage(const int&);
 
 private slots:
-    void onShowSelectItem(QListWidgetItem *);
+    void slotShowSelectItem(QListWidgetItem *);
 
 private:
     DListWidget * m_pThumbnailListWidget = nullptr;
@@ -53,7 +53,6 @@ private:
     DWidget * m_itemWidget = nullptr;
     DLabel * m_pSonWidgetPageLabel = nullptr;
     ThumbnailItemWidget *m_pThumbnailItemWidget = nullptr;
-
     ThemeSubject    *m_pThemeSubject = nullptr;
 };
 

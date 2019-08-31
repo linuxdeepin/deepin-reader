@@ -6,8 +6,8 @@ PagingWidget::PagingWidget(DWidget *parent) :
     resize(250, 20);
     initWidget();
 
-    connect(m_pPrePageBtn, SIGNAL(clicked()), this, SLOT(onPrePage()));
-    connect(m_pNextPageBtn, SIGNAL(clicked()), this, SLOT(onNextPage()));
+    connect(m_pPrePageBtn, SIGNAL(clicked()), this, SLOT(slotPrePage()));
+    connect(m_pNextPageBtn, SIGNAL(clicked()), this, SLOT(slotNextPage()));
 
     m_pThemeSubject = ThemeSubject::getInstace();
     if(m_pThemeSubject)
@@ -70,7 +70,7 @@ int PagingWidget::update(const QString &)
     return 0;
 }
 
-void PagingWidget::onPrePage()
+void PagingWidget::slotPrePage()
 {
     int t_page = --m_currntPage;
 
@@ -85,10 +85,10 @@ void PagingWidget::onPrePage()
     m_currntPage = t_page;
 
     setCurrentPage(m_currntPage);
-    emit jumpToIndexPage(m_currntPage);
+    emit sigJumpToIndexPage(m_currntPage);
 }
 
-void PagingWidget::onNextPage()
+void PagingWidget::slotNextPage()
 {
     int t_page = ++m_currntPage;
 
@@ -103,7 +103,7 @@ void PagingWidget::onNextPage()
     m_currntPage = t_page;
 
     setCurrentPage(m_currntPage);
-    emit jumpToIndexPage(m_currntPage);
+    emit sigJumpToIndexPage(m_currntPage);
 }
 
 void PagingWidget::setCurrentPageValue(const int &index)

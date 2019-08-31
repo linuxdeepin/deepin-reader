@@ -11,7 +11,6 @@ BookMarkItemWidget::BookMarkItemWidget(DWidget *parent) :
         m_pThemeSubject->addObserver(this);
     }
 
-
     m_pHLayout =new QHBoxLayout;
     //set around distance
     m_pHLayout->setContentsMargins(0, 0, 0, 0);
@@ -20,7 +19,7 @@ BookMarkItemWidget::BookMarkItemWidget(DWidget *parent) :
 
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
-            this, SLOT(onShowContextMenu(const QPoint&)));
+            this, SLOT(slotShowContextMenu(const QPoint&)));
 
     initWidget();
 }
@@ -31,11 +30,6 @@ BookMarkItemWidget::~BookMarkItemWidget()
     {
         m_pThemeSubject->removeObserver(this);
     }
-}
-
-void BookMarkItemWidget::contextMenuEvent(QContextMenuEvent *event)
-{
-
 }
 
 void BookMarkItemWidget::setPicture(const QString &pix)
@@ -56,16 +50,16 @@ int BookMarkItemWidget::update(const QString &)
     return 0;
 }
 
-void BookMarkItemWidget::onDltBookMark()
+void BookMarkItemWidget::slotDltBookMark()
 {
     qDebug() << "delet BookMark";
 }
 
-void BookMarkItemWidget::onShowContextMenu(const QPoint &point)
+void BookMarkItemWidget::slotShowContextMenu(const QPoint &point)
 {
     QMenu * t_menu = new QMenu(this);
-    QAction *dltBookMarkAction = t_menu->addAction(tr("删除书签"));
-    connect(dltBookMarkAction, SIGNAL(triggered()), this, SLOT(onDltBookMark()));
+    QAction *dltBookMarkAction = t_menu->addAction(tr("delete bookmark"));
+    connect(dltBookMarkAction, SIGNAL(triggered()), this, SLOT(slotDltBookMark()));
     t_menu->exec(QCursor::pos());
 }
 
