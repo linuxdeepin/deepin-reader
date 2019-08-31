@@ -29,6 +29,8 @@ Window::Window(DMainWindow *parent)
     initTitlebar();
 
     initConnections();
+
+    m_pMsgSubject = MsgSubject::getInstance();
 }
 
 Window::~Window()
@@ -47,19 +49,6 @@ void Window::initUI()
 
 void Window::initConnections()
 {
-    connect(this, SIGNAL(sigOpenFile()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
-//    connect(this, SIGNAL(sigSaveFile()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
-//    connect(this, SIGNAL(sigSaveAsFile()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
-    connect(this, SIGNAL(sigOpenFileFolder()), m_centralWidget, SLOT(slotOpenFileFolder()));
-//    connect(this, SIGNAL(sigPrint()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
-    connect(this, SIGNAL(sigFileAttr()), m_centralWidget, SLOT(slotFileAttr()));
-//    connect(this, SIGNAL(sigFileFind()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
-//    connect(this, SIGNAL(sigFileFullScreen()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
-//    connect(this, SIGNAL(sigFileScreening()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
-//    connect(this, SIGNAL(sigFileLarger()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
-//    connect(this, SIGNAL(sigFileSmaller()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
-//    connect(this, SIGNAL(sigSwitchTheme()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
-
     m_menu = new DMenu;
 
     createAction(tr("Open file"), tr("Open"), tr(""), SLOT(action_OpenFile()));
@@ -96,73 +85,109 @@ void Window::initTitlebar()
 //  打开 文件
 void Window::action_OpenFile()
 {
-    emit sigOpenFile();
+    if(m_pMsgSubject)
+    {
+        m_pMsgSubject->sendMsg(MSG_OPERATION_OPEN_FILE);
+    }
 }
 
 //  保存文件
 void Window::action_SaveFile()
 {
-    emit sigSaveFile();
+    if(m_pMsgSubject)
+    {
+        m_pMsgSubject->sendMsg(MSG_OPERATION_SAVE_FILE);
+    }
 }
 
 //  另存为
 void Window::action_SaveAsFile()
 {
-    emit sigSaveAsFile();
+    if(m_pMsgSubject)
+    {
+        m_pMsgSubject->sendMsg(MSG_OPERATION_SAVE_AS_FILE);
+    }
 }
 
 //  打开 所在文件夹
 void Window::action_OpenFolder()
 {
-    emit sigOpenFileFolder();
+    if(m_pMsgSubject)
+    {
+        m_pMsgSubject->sendMsg(MSG_OPERATION_OPEN_FOLDER);
+    }
 }
 
 //  打印
 void Window::action_Print()
 {
-    emit sigPrint();
+    if(m_pMsgSubject)
+    {
+        m_pMsgSubject->sendMsg(MSG_OPERATION_PRINT);
+    }
 }
 
 //  属性
 void Window::action_Attr()
 {
-    emit sigFileAttr();
+    if(m_pMsgSubject)
+    {
+        m_pMsgSubject->sendMsg(MSG_OPERATION_ATTR);
+    }
 }
 
 //  搜索
 void Window::action_Find()
 {
-    emit sigFileFind();
+    if(m_pMsgSubject)
+    {
+        m_pMsgSubject->sendMsg(MSG_OPERATION_FIND);
+    }
 }
 
 //  全屏
 void Window::action_FullScreen()
 {
-    emit sigFileFullScreen();
+    if(m_pMsgSubject)
+    {
+        m_pMsgSubject->sendMsg(MSG_OPERATION_FULLSCREEN);
+    }
 }
 
 //  放映
 void Window::action_Screening()
 {
-    emit sigFileScreening();
+    if(m_pMsgSubject)
+    {
+        m_pMsgSubject->sendMsg(MSG_OPERATION_SCREENING);
+    }
 }
 
 //  放大
 void Window::action_Larger()
 {
-    emit sigFileLarger();
+    if(m_pMsgSubject)
+    {
+        m_pMsgSubject->sendMsg(MSG_OPERATION_LARGER);
+    }
 }
 
 //  缩小
 void Window::action_Smaller()
 {
-    emit sigFileSmaller();
+    if(m_pMsgSubject)
+    {
+        m_pMsgSubject->sendMsg(MSG_OPERATION_SMALLER);
+    }
 }
 
 //  主题切换
 void Window::action_SwitchTheme()
 {
-    emit sigSwitchTheme();
+    if(m_pMsgSubject)
+    {
+        m_pMsgSubject->sendMsg(MSG_OPERATION_SWITCH_THEME);
+    }
 }
 
 //  打开 帮助文档

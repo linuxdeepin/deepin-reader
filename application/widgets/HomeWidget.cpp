@@ -1,5 +1,6 @@
 #include "HomeWidget.h"
 #include "utils.h"
+#include "header/MsgHeader.h"
 #include <QApplication>
 #include <QDir>
 
@@ -68,6 +69,17 @@ void HomeWidget::setIconPixmap(bool isLoaded)
 
 void HomeWidget::onChooseBtnClicked()
 {
+    QStringList fileList = getOpenFileList();
+    if(fileList.size() > 0)
+    {
+        emit fileSelected(fileList);
+    }
+}
+
+QStringList HomeWidget::getOpenFileList()
+{
+    QStringList fileList;
+
     DFileDialog dialog;
     dialog.setFileMode(DFileDialog::ExistingFile);
     dialog.setNameFilter(Utils::getSuffixList());
@@ -85,13 +97,23 @@ void HomeWidget::onChooseBtnClicked()
 
     // if click cancel button or close button.
     if (mode != QDialog::Accepted) {
-        return;
+        return fileList;
     }
-
-    emit fileSelected(dialog.selectedFiles());
+    fileList = dialog.selectedFiles();
+    return fileList;
 }
 
-int HomeWidget::update(const int&, const QString &)
+
+int HomeWidget::update(const int &msgType, const QString &msgContent)
 {
+    if(msgType == MSG_OPERATION_OPEN_FILE)
+    {
+        QStringList fileList = getOpenFileList();
+        if(fileList.size() > 0)
+        {
+            emit fileSelected(fileList);
+        }
+        return ConstantMsg::g_effective_res;
+    }
     return 0;
 }

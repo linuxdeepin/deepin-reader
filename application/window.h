@@ -6,6 +6,7 @@
 
 #include "widgets/TitleWidget.h"
 #include "widgets/MainWidget.h"
+#include "header/MsgSubject.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -21,20 +22,6 @@ class Window : public DMainWindow
 public:
     Window(DMainWindow *parent = nullptr);
     ~Window();
-
-signals:
-    void sigOpenFile();
-    void sigSaveFile();
-    void sigSaveAsFile();
-    void sigOpenFileFolder();
-    void sigPrint();
-    void sigFileAttr();
-    void sigFileFind();
-    void sigFileFullScreen();
-    void sigFileScreening();
-    void sigFileLarger();
-    void sigFileSmaller();
-    void sigSwitchTheme();
 
 private:
     void initUI();
@@ -60,6 +47,8 @@ private slots:
     void action_Help();
 
 private:
+    MsgSubject  *m_pMsgSubject = nullptr;
+
     MainWidget  *m_centralWidget = nullptr;
     TitleWidget *m_titleWidget = nullptr;
 

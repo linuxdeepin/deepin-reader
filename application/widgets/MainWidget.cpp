@@ -81,7 +81,6 @@ void MainWidget::initWidgets()
 
     m_pHomeWidget = new  HomeWidget;
     connect(m_pHomeWidget, SIGNAL(fileSelected(const QStringList)), this, SLOT(showFileSelected(const QStringList)));
-    connect(this, SIGNAL(sigHomeOpenFile()), m_pHomeWidget, SLOT(onChooseBtnClicked()));
     m_pStackedWidget->addWidget(m_pHomeWidget);
 
     m_pMainShowSplitter = new MainShowSplitter;

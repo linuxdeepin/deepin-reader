@@ -36,6 +36,9 @@ private slots:
     void onChooseBtnClicked();
 
 private:
+    QStringList getOpenFileList();
+
+private:
     QVBoxLayout     *m_layout = nullptr;
     QPixmap         m_unloadPixmap;
     QPixmap         m_loadedPixmap;

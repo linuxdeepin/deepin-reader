@@ -27,9 +27,6 @@ public:
     MainWidget(DWidget *parent = nullptr);
     ~MainWidget() override;
 
-signals:
-    void sigHomeOpenFile();
-
 private slots:
     void showFileSelected(const QStringList) const;
     void slotOpenFileFolder();
