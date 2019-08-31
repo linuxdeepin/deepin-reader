@@ -62,7 +62,8 @@ HEADERS += \
     listWidget/NotesItemWidget.h \
     view/MagnifyingWidget.h \
     header/MsgSubject.h \
-    header/IMsgObserver.h
+    header/IMsgObserver.h \
+    header/MsgHeader.h
 
 DISTFILES += \
     themes/solarized_light.theme \

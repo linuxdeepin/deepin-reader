@@ -27,11 +27,6 @@ public:
     TitleWidget(DWidget *parent = nullptr);
     ~TitleWidget() override;
 
-signals:
-    void sendThumbnailState(const bool&) const;
-    void sendHandShapeState(const bool&) const;
-    void sendMagnifyingState(const bool&) const;
-
 private slots:
      void on_thumbnailBtn_clicked(bool);
      void on_fontBtn_clicked();

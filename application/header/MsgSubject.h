@@ -5,9 +5,15 @@
 #include <QList>
 
 
+
+
 //  消息类型
 enum MSG_TYPE{
-    MSG_UPDATE_THEME = 0,       //  更新主题
+    MSG_UPDATE_THEME = 0,           //  更新主题
+
+    MSG_SLIDER_SHOW_STATE = 10,     //  侧边栏 显隐消息
+    MSG_MAGNIFYING,                 //  放大镜消息
+    MSG_HANDLESHAPE,                //  手型 消息
 };
 
 
@@ -33,14 +39,14 @@ public:
         return &subject;
     }
 
-protected:
-    void sendMsg(const int&, const QString&);
-
     // ISubject interface
 public:
     void addObserver(IObserver *obs) override;
     void removeObserver(IObserver *obs) override;
     void Notify(const int&, const QString &) override;
+
+public:
+    void sendMsg(const int&, const QString&);
 
 private:
     QList<IObserver*> m_observerList;

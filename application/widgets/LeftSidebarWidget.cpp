@@ -14,7 +14,7 @@ LeftSidebarWidget::LeftSidebarWidget(DWidget *parent):
 
     initOperationWidget();
 
-    //this->setVisible(false);    //  默认 隐藏
+    this->setVisible(false);    //  默认 隐藏
 
     m_pMsgSubject = MsgSubject::getInstance();
     if(m_pMsgSubject)

@@ -1,4 +1,5 @@
 #include "MainShowSplitter.h"
+#include "header/MsgHeader.h"
 #include <QDebug>
 
 MainShowSplitter::MainShowSplitter(DWidget *parent) :
@@ -28,7 +29,6 @@ void MainShowSplitter::initWidgets()
     insertWidget(0, m_pLeftShowWidget);
 
     m_pFileViewWidget = new FileViewWidget();
-    connect(this, SIGNAL(sigFileMagnifyingState(const bool&)), m_pFileViewWidget, SLOT(setMagnifyingState(const bool&)));
     insertWidget(1, m_pFileViewWidget);
 
     //  布局 占比
@@ -42,19 +42,13 @@ void MainShowSplitter::setSidebarVisible(const bool &bVis ) const
     m_pLeftShowWidget->setVisible(bVis);
 }
 
-//  文档显示区域的 手势鼠标状态
-void MainShowSplitter::setFileHandShapeState(const bool &bState) const
+int MainShowSplitter::update(const int &msgType, const QString &msgContent)
 {
-    qDebug() << "setFileHandShapeState      "  << bState;
-}
-
-//  文档显示区域的 放大镜状态
-//void MainShowSplitter::setFileMagnifyingState(const bool &bState) const
-//{
-//    qDebug() << "setFileMagnifyingState      "  << bState;
-//}
-
-int MainShowSplitter::update(const int&, const QString &)
-{
+    if(msgType == MSG_SLIDER_SHOW_STATE)
+    {
+        int nState = msgContent.toInt();
+        setSidebarVisible(nState);
+        return  ConstantMsg::g_effective_res;
+    }
     return 0;
 }

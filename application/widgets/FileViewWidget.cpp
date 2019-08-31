@@ -1,4 +1,6 @@
 #include "FileViewWidget.h"
+#include "header/MsgHeader.h"
+#include <QDebug>
 
 FileViewWidget::FileViewWidget(DWidget *parent) :
     DWidget (parent)
@@ -49,21 +51,22 @@ void FileViewWidget::leaveEvent(QEvent *event)
     DWidget::leaveEvent(event);
 }
 
-//  放大镜的显隐 标志位
-void FileViewWidget::setMagnifyingState(const bool &bVis)
+//  消息 数据 处理
+int FileViewWidget::update(const int &msgType, const QString &msgContent)
 {
-    if(!bVis)
+    if(msgType == MSG_MAGNIFYING)       //  放大镜 的控制
     {
-        m_bCanVisible = false;      //  放大镜效果关闭
-        m_pMagnifyingWidget->setVisible(bVis);
+        int nRes = msgContent.toInt();
+        m_bCanVisible = nRes;
+        return ConstantMsg::g_effective_res;
     }
-    else
+    else if( msgType == MSG_HANDLESHAPE)    //  手势 信号
     {
-        m_bCanVisible = true;       //  放大镜效果开启
+        int nRes = msgContent.toInt();
     }
-}
+    else if (msgType == MSG_UPDATE_THEME)       //  更新主题
+    {
 
-int FileViewWidget::update(const int&, const QString &)
-{
+    }
     return 0;
 }

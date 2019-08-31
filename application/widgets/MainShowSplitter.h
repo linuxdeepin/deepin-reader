@@ -22,16 +22,11 @@ public:
     MainShowSplitter(DWidget *parent = nullptr);
     ~MainShowSplitter() override;
 
-signals:
-    void sigFileMagnifyingState(const bool&) const;
-
 private:
     void initWidgets();
 
-private slots:
+private:
     void setSidebarVisible(const bool&) const;
-    void setFileHandShapeState(const bool&) const;
-//    void setFileMagnifyingState(const bool&) const;
 
 private:
     LeftSidebarWidget   *m_pLeftShowWidget = nullptr;       //  侧边栏

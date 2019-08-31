@@ -60,10 +60,6 @@ void Window::initConnections()
 //    connect(this, SIGNAL(sigFileSmaller()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
 //    connect(this, SIGNAL(sigSwitchTheme()), m_centralWidget, SIGNAL(sigHomeOpenFile()));
 
-    connect(m_titleWidget, SIGNAL(sendThumbnailState(const bool&)), m_centralWidget, SIGNAL(setShowSliderState(const bool&)));  //  信号 可以一直传递下去
-    connect(m_titleWidget, SIGNAL(sendHandShapeState(const bool&)), m_centralWidget, SIGNAL(setHandShapeState(const bool&)));
-    connect(m_titleWidget, SIGNAL(sendMagnifyingState(const bool&)), m_centralWidget, SIGNAL(setMagnifyingState(const bool&)));
-
     m_menu = new DMenu;
 
     createAction(tr("Open file"), tr("Open"), tr(""), SLOT(action_OpenFile()));

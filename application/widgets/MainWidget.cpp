@@ -85,9 +85,6 @@ void MainWidget::initWidgets()
     m_pStackedWidget->addWidget(m_pHomeWidget);
 
     m_pMainShowSplitter = new MainShowSplitter;
-    connect(this, SIGNAL(setShowSliderState(const bool&)), m_pMainShowSplitter, SLOT(setSidebarVisible(const bool&)));
-    connect(this, SIGNAL(setHandShapeState(const bool&)), m_pMainShowSplitter, SLOT(setFileHandShapeState(const bool&)));
-    connect(this, SIGNAL(setMagnifyingState(const bool&)), m_pMainShowSplitter, SIGNAL(sigFileMagnifyingState(const bool&)));
 
     m_pStackedWidget->addWidget(m_pMainShowSplitter);
 

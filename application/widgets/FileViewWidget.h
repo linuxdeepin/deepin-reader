@@ -28,9 +28,6 @@ protected:
     void	mouseMoveEvent(QMouseEvent *event) override;
     void	leaveEvent(QEvent *event) override;
 
-private slots:
-    void setMagnifyingState(const bool&);
-
 private:
     MsgSubject    *m_pMsgSubject = nullptr;
 

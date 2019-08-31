@@ -1,4 +1,5 @@
 #include "MsgSubject.h"
+#include "MsgHeader.h"
 
 MsgSubject::MsgSubject()
 {
@@ -28,7 +29,7 @@ void MsgSubject::Notify(const int &msgType, const QString &msgContent)
         ！！！消息截断！！！
         */
         int nRes = obs->update(msgType, msgContent);
-        if(nRes == 0 )
+        if(nRes == ConstantMsg::g_effective_res)
         {
             break;
         }

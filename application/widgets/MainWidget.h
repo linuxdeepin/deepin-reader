@@ -28,10 +28,6 @@ public:
     ~MainWidget() override;
 
 signals:
-    void setShowSliderState(const bool&) const;     //  缩略图、书签、注释  侧边栏显隐 信号
-    void setHandShapeState(const bool&) const;      //  手势 信号
-    void setMagnifyingState(const bool&) const;     //  放大镜 信号
-
     void sigHomeOpenFile();
 
 private slots:
