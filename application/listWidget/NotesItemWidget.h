@@ -33,8 +33,11 @@ private slots:
     void slotCopyContant();
     void slotShowContextMenu(const QPoint &);
 
+protected:
+    void initWidget() override;
+
 private:
-    void initWidget();
+    //void initWidget();
 
 public:
     // IObserver interface

@@ -13,6 +13,11 @@ MainOperationWidget::MainOperationWidget(CustomWidget *parent):
     initBtns();
 }
 
+void MainOperationWidget::initWidget()
+{
+
+}
+
 void MainOperationWidget::initBtns()
 {
     m_hboxLayout->addStretch(1);

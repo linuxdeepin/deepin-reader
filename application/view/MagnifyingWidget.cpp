@@ -22,6 +22,11 @@ void MagnifyingWidget::paintEvent(QPaintEvent *event)
     painter.restore();
 }
 
+void MagnifyingWidget::initWidget()
+{
+
+}
+
 int MagnifyingWidget::update(const int &, const QString &)
 {
     return 0;

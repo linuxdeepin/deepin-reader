@@ -36,9 +36,10 @@ public:
 
 protected:
     //void keyPressEvent(QKeyEvent * event);
+    void initWidget() override;
 
 private:
-    void initWidget();
+    //void initWidget();
     void setCurrentPage(const int &);
 
 private:

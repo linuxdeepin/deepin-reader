@@ -33,6 +33,9 @@ class LeftSidebarWidget : public CustomWidget
 public:
     LeftSidebarWidget(CustomWidget *parent = nullptr);
 
+protected:
+    void initWidget() override;
+
 private:
     void initOperationWidget();
 

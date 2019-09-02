@@ -28,6 +28,11 @@ MainWidget::~MainWidget()
     }
 }
 
+void MainWidget::initWidget()
+{
+
+}
+
 //  open file
 void MainWidget::showFileSelected(const QStringList files) const
 {

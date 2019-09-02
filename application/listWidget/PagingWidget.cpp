@@ -19,9 +19,11 @@ void PagingWidget::initWidget()
 
     m_pPrePageBtn = new DPushButton(this);
     m_pPrePageBtn->setText(QString("<"));
+    m_pPrePageBtn->setFixedSize(QSize(40, 40));
 
     m_pNextPageBtn = new DPushButton(this);
     m_pNextPageBtn->setText(QString(">"));
+    m_pNextPageBtn->setFixedSize(QSize(40, 40));
 
     m_pJumpPageSpinBox = new DSpinBox(this);
     m_pJumpPageSpinBox->setRange(1, 100);

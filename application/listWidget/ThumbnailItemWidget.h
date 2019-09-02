@@ -51,9 +51,10 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
+    void initWidget() override;
 
 private:
-    void initWidget();
+    //void initWidget();
 
 private:
     DLabel *m_pContantLabel = nullptr;

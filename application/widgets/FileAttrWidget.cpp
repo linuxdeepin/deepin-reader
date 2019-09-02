@@ -22,6 +22,11 @@ FileAttrWidget::FileAttrWidget(CustomWidget *parent)
 //  各个 对应的 label 赋值
 void FileAttrWidget::setFileAttr() {}
 
+void FileAttrWidget::initWidget()
+{
+
+}
+
 //  初始化 所有的label 显示
 void FileAttrWidget::initLabels()
 {

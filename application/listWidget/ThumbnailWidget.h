@@ -30,8 +30,11 @@ public:
     // IObserver interface
     int update(const int &, const QString &) override;
 
+protected:
+    void initWidget() override;
+
 private:
-    void initWidget();
+    //void initWidget();
     void setSelectItemBackColor(QListWidgetItem *);
     void setCurrentRow(const int &);
 

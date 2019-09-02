@@ -24,6 +24,9 @@ public:
 public:
     void setFileAttr();
 
+protected:
+    void initWidget() override;
+
 private:
     void initLabels();
     void createLabel(const int &, const QString &);

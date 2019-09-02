@@ -20,6 +20,9 @@ class MainOperationWidget : public CustomWidget
 public:
     MainOperationWidget(CustomWidget *parent = nullptr);
 
+protected:
+    void initWidget() override;
+
 private:
     void initBtns();
     void createBtn(const QString &iconName, const char *member, bool checkable = false, bool checked = false);

@@ -53,6 +53,11 @@ void HomeWidget::setIconPixmap(bool isLoaded)
     }
 }
 
+void HomeWidget::initWidget()
+{
+
+}
+
 void HomeWidget::onChooseBtnClicked()
 {
     QStringList fileList = getOpenFileList();

@@ -25,6 +25,9 @@ public:
     virtual int update(const int &, const QString &) = 0;
 
 protected:
+    virtual void initWidget() = 0;
+
+protected:
     MsgSubject  *m_pMsgSubject = nullptr;
 };
 

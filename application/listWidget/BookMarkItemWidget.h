@@ -36,8 +36,11 @@ private slots:
     void slotDltBookMark();
     void slotShowContextMenu(const QPoint &);
 
+protected:
+    void initWidget() override;
+
 private:
-    void initWidget();
+    //void initWidget();
 
 private:
     DLabel *m_pPicture = nullptr;

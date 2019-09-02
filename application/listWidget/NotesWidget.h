@@ -22,8 +22,11 @@ class NotesWidget : public CustomWidget
 public:
     NotesWidget(CustomWidget *parent = nullptr);
 
+protected:
+    void initWidget() override;
+
 private:
-    void initWidget();
+    //void initWidget();
 
 private:
     DListWidget *m_pNotesList = nullptr;

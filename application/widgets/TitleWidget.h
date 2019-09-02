@@ -21,6 +21,9 @@ class TitleWidget : public CustomWidget
 public:
     TitleWidget(CustomWidget *parent = nullptr);
 
+protected:
+    void initWidget() override;
+
 private slots:
     void on_thumbnailBtn_clicked(bool);
     void on_fontBtn_clicked();

@@ -10,6 +10,11 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
     m_pMagnifyingWidget = new MagnifyingWidget(this); //  放大镜 窗口
 }
 
+void FileViewWidget::initWidget()
+{
+
+}
+
 void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
 {
     if (m_pMagnifyingWidget && m_bCanVisible) {

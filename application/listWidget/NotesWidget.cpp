@@ -14,6 +14,9 @@ NotesWidget::NotesWidget(CustomWidget *parent) :
 void NotesWidget::initWidget()
 {
     m_pNotesList = new DListWidget;
+    m_pNotesList->setSpacing(10);
+    //设置自动适应布局调整（Adjust适应，Fixed不适应），默认不适应
+    m_pNotesList->setResizeMode(QListWidget::Adjust);
     m_pVLayout->addWidget(m_pNotesList);
 
     for (int page = 0; page < 20; ++page) {

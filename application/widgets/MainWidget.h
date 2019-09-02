@@ -25,6 +25,9 @@ public:
     MainWidget(CustomWidget *parent = nullptr);
     ~MainWidget() override;
 
+protected:
+    void initWidget() override;
+
 private slots:
     void showFileSelected(const QStringList) const;
 

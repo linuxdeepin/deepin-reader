@@ -29,6 +29,9 @@ public:
 signals:
     void fileSelected(const QStringList files) const;
 
+protected:
+    void initWidget() override;
+
 private slots:
     void onChooseBtnClicked();
 

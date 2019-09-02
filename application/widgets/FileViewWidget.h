@@ -21,6 +21,9 @@ public:
     FileViewWidget(CustomWidget *parent = nullptr);
 
 protected:
+    void initWidget() override;
+
+protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void leaveEvent(QEvent *event) override;
 

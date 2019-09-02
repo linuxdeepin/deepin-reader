@@ -15,6 +15,11 @@ TitleWidget::TitleWidget(CustomWidget *parent) :
     initBtns();
 }
 
+void TitleWidget::initWidget()
+{
+
+}
+
 //  缩略图 显示
 void TitleWidget::on_thumbnailBtn_clicked(bool bCheck)
 {

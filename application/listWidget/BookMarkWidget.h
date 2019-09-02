@@ -28,8 +28,11 @@ public:
 private slots:
     void slotShowSelectItem(QListWidgetItem *);
 
+protected:
+    void initWidget() override;
+
 private:
-    void initWidget();
+    //void initWidget();
     void dltItem();
 
 public:

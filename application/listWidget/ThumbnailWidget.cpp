@@ -32,6 +32,9 @@ int ThumbnailWidget::update(const int &msgType, const QString &msgContant)
 void ThumbnailWidget::initWidget()
 {
     m_pThumbnailListWidget = new DListWidget;
+    m_pThumbnailListWidget->setSpacing(10);
+    //设置自动适应布局调整（Adjust适应，Fixed不适应），默认不适应
+    m_pThumbnailListWidget->setResizeMode(QListWidget::Adjust);
     m_pvBoxLayout->addWidget(m_pThumbnailListWidget);
     //m_pThumbnailListWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //m_pThumbnailListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -46,6 +49,7 @@ void ThumbnailWidget::initWidget()
         widget->setMinimumSize(QSize(250, 250));
 
         QListWidgetItem *item = new QListWidgetItem(m_pThumbnailListWidget);
+        item->setFlags(Qt::NoItemFlags);
         item->setFlags(Qt::ItemIsSelectable);
         item->setSizeHint(QSize(250, 250));
 

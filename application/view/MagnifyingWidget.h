@@ -22,6 +22,9 @@ public:
 protected:
     void paintEvent(QPaintEvent *event) override;
 
+protected:
+    void initWidget() override;
+
     // IObserver interface
 public:
     int update(const int &, const QString &) override;
