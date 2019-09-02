@@ -23,7 +23,7 @@ public:
     ~MainWidget() override;
 
 private slots:
-    void showFileSelected(const QStringList) const;
+    void showFileSelected(const QStringList);
 
 private:
     void initWidgets();

@@ -49,3 +49,9 @@ int MainShowSplitter::dealWithData(const int &msgType, const QString &msgContent
     }
     return 0;
 }
+
+void MainShowSplitter::sendMsg(const int &msgType, const QString &msgContent)
+{
+    Q_UNUSED(msgType);
+    Q_UNUSED(msgContent);
+}

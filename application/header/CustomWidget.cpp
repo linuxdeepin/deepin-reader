@@ -15,3 +15,10 @@ CustomWidget::~CustomWidget()
         m_pMsgSubject->removeObserver(this);
     }
 }
+
+void CustomWidget::sendMsg(const int &msgType, const QString &msgContent)
+{
+    if (m_pMsgSubject) {
+        m_pMsgSubject->sendMsg(msgType, msgContent);
+    }
+}

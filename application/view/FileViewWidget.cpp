@@ -65,6 +65,7 @@ void FileViewWidget::SlotCustomContextMenuRequested(const QPoint &point)
 {
     QPoint clickPos = this->mapToGlobal(point);
 
+    //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
     m_pTextOperationWidget->show();
     m_pTextOperationWidget->move(clickPos.x(), clickPos.y());
     m_pTextOperationWidget->raise();
@@ -75,31 +76,56 @@ void FileViewWidget::SlotCustomContextMenuRequested(const QPoint &point)
     */
 }
 
+//  打开　文件路径
+int FileViewWidget::openFilePath(const QString &filePath)
+{
+    qDebug() << MSG_OPEN_FILE_PATH <<  "       " << filePath;
+    return ConstantMsg::g_effective_res;
+}
+
+//  放大镜　控制
+int FileViewWidget::magnifying(const QString &data)
+{
+    int nRes = data.toInt();
+    m_bCanVisible = nRes;
+    return ConstantMsg::g_effective_res;
+}
+
+//  手势控制
+int FileViewWidget::setHandShape(const QString &data)
+{
+    int nRes = data.toInt();
+
+    return ConstantMsg::g_effective_res;
+}
+
+//  放映
+int FileViewWidget::screening(const QString &data)
+{
+    return ConstantMsg::g_effective_res;
+}
+
 //  消息 数据 处理
 int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     //  打开文件， 内容为  文件 路径
     if (msgType == MSG_OPEN_FILE_PATH) {
-        qDebug() << MSG_OPEN_FILE_PATH <<  "       " << msgContent;
-        return ConstantMsg::g_effective_res;
+        return openFilePath(msgContent);
     }
     //  放大镜 的控制
     if (msgType == MSG_MAGNIFYING) {
-        int nRes = msgContent.toInt();
-        m_bCanVisible = nRes;
-        return ConstantMsg::g_effective_res;
+        return magnifying(msgContent);
     }
 
     //  手势 信号
     if (msgType == MSG_HANDLESHAPE) {
-        int nRes = msgContent.toInt();
-        return ConstantMsg::g_effective_res;
+        return setHandShape(msgContent);
     }
 
     //  放映
     if (msgType == MSG_OPERATION_SCREENING) {
         qDebug() << "       MSG_OPERATION_SCREENING";
-        return ConstantMsg::g_effective_res;
+        return screening(msgContent);
     }
 
     //  放大

@@ -31,6 +31,8 @@ Window::Window(DMainWindow *parent)
     initConnections();
 
     m_pMsgSubject = MsgSubject::getInstance();
+    if (m_pMsgSubject == nullptr)
+        return ;
     if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
     }
@@ -41,9 +43,7 @@ Window::Window(DMainWindow *parent)
 Window::~Window()
 {
     // We don't need clean pointers because application has exit here.
-    if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
-    }
+    m_pMsgSubject->removeObserver(this);
 }
 
 void Window::initUI()
@@ -91,97 +91,73 @@ void Window::initTitlebar()
 //  打开 文件
 void Window::action_OpenFile()
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_OPERATION_OPEN_FILE);
-    }
+    sendMsg(MSG_OPERATION_OPEN_FILE);
 }
 
 //  保存文件
 void Window::action_SaveFile()
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_OPERATION_SAVE_FILE);
-    }
+    sendMsg(MSG_OPERATION_SAVE_FILE);
 }
 
 //  另存为
 void Window::action_SaveAsFile()
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_OPERATION_SAVE_AS_FILE);
-    }
+    sendMsg(MSG_OPERATION_SAVE_AS_FILE);
 }
 
 //  打开 所在文件夹
 void Window::action_OpenFolder()
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_OPERATION_OPEN_FOLDER);
-    }
+    sendMsg(MSG_OPERATION_OPEN_FOLDER);
 }
 
 //  打印
 void Window::action_Print()
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_OPERATION_PRINT);
-    }
+    sendMsg(MSG_OPERATION_PRINT);
 }
 
 //  属性
 void Window::action_Attr()
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_OPERATION_ATTR);
-    }
+    sendMsg(MSG_OPERATION_ATTR);
 }
 
 //  搜索
 void Window::action_Find()
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_OPERATION_FIND);
-    }
+    sendMsg(MSG_OPERATION_FIND);
 }
 
 //  全屏
 void Window::action_FullScreen()
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_OPERATION_FULLSCREEN);
-    }
+    sendMsg(MSG_OPERATION_FULLSCREEN);
 }
 
 //  放映
 void Window::action_Screening()
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_OPERATION_SCREENING);
-    }
+    sendMsg(MSG_OPERATION_SCREENING);
 }
 
 //  放大
 void Window::action_Larger()
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_OPERATION_LARGER);
-    }
+    sendMsg(MSG_OPERATION_LARGER);
 }
 
 //  缩小
 void Window::action_Smaller()
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_OPERATION_SMALLER);
-    }
+    sendMsg(MSG_OPERATION_SMALLER);
 }
 
 //  主题切换
 void Window::action_SwitchTheme()
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_OPERATION_SWITCH_THEME);
-    }
+    sendMsg(MSG_OPERATION_SWITCH_THEME);
 }
 
 //  打开 帮助文档
@@ -198,6 +174,13 @@ int Window::dealWithData(const int &msgType, const QString &msgContent)
         return ConstantMsg::g_effective_res;
     }
     return 0;
+}
+
+void Window::sendMsg(const int &msgType, const QString &msgContent)
+{
+    if (m_pMsgSubject) {
+        m_pMsgSubject->sendMsg(msgType, msgContent);
+    }
 }
 
 void Window::createAction(const QString &actionName, const QString &objectName, const QString &iconName, const char *member)

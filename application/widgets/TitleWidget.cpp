@@ -23,9 +23,7 @@ void TitleWidget::initWidget()
 //  缩略图 显示
 void TitleWidget::on_thumbnailBtn_clicked(bool bCheck)
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_SLIDER_SHOW_STATE, QString::number(bCheck));
-    }
+    sendMsg(MSG_SLIDER_SHOW_STATE, QString::number(bCheck));
 }
 
 //  字体
@@ -63,27 +61,23 @@ void TitleWidget::on_handleShapeBtn_clicked()
 //  放大镜 功能
 void TitleWidget::on_magnifyingBtn_clicked(bool bCheck)
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_MAGNIFYING, QString::number(bCheck));
-    }
+    sendMsg(MSG_MAGNIFYING, QString::number(bCheck));
 }
 
 //  切换为 手型 鼠标
 void TitleWidget::on_HandleAction_trigger()
 {
     m_bCurrentState = true;
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_HANDLESHAPE, QString::number(m_bCurrentState));
-    }
+
+    sendMsg(MSG_HANDLESHAPE, QString::number(m_bCurrentState));
 }
 
 //  切换为 默认鼠标
 void TitleWidget::on_DefaultAction_trigger()
 {
     m_bCurrentState = false;
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_HANDLESHAPE, QString::number(m_bCurrentState));
-    }
+
+    sendMsg(MSG_HANDLESHAPE, QString::number(m_bCurrentState));
 }
 
 //  初始化 标题栏 按钮

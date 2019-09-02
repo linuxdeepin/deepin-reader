@@ -32,6 +32,12 @@ private slots:
     void SlotCustomContextMenuRequested(const QPoint &);
 
 private:
+    int openFilePath(const QString &);
+    int magnifying(const QString &);
+    int setHandShape(const QString &);
+    int screening(const QString &);
+
+private:
     MagnifyingWidget *m_pMagnifyingWidget = nullptr;
     bool m_bCanVisible = false; //  放大镜 是否可以显示
 

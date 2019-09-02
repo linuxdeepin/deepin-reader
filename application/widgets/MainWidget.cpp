@@ -32,7 +32,7 @@ void MainWidget::initWidget()
 }
 
 //  open file
-void MainWidget::showFileSelected(const QStringList files) const
+void MainWidget::showFileSelected(const QStringList files)
 {
     int nSize = files.count();
     QString filePath = files.at(0);
@@ -41,7 +41,7 @@ void MainWidget::showFileSelected(const QStringList files) const
 
     DataManager::instance()->setStrOnlyFilePath(filePath);
 
-    m_pMsgSubject->sendMsg(MSG_OPEN_FILE_PATH, filePath);
+    sendMsg(MSG_OPEN_FILE_PATH, filePath);
     //  open  file
     m_pStackedWidget->setCurrentIndex(1);
 }

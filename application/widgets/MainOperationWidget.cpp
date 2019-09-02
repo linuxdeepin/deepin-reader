@@ -45,17 +45,17 @@ void MainOperationWidget::createBtn(const QString &iconName, const char *member,
 
 void MainOperationWidget::on_thumbnailBtn_clicked(bool)
 {
-    m_pMsgSubject->sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(0));
+    sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(0));
 }
 
 void MainOperationWidget::on_bookmarksBtn_clicked(bool)
 {
-    m_pMsgSubject->sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(1));
+    sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(1));
 }
 
 void MainOperationWidget::on_annotationBtn_clicked(bool)
 {
-    m_pMsgSubject->sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(2));
+    sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(2));
 }
 
 int MainOperationWidget::dealWithData(const int &, const QString &)

@@ -124,7 +124,7 @@ void ThumbnailWidget::slotShowSelectItem(QListWidgetItem *item)
 
     int row = m_pThumbnailListWidget->row(item);
 
-    m_pMsgSubject->sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(row));
+    sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(row));
 
     if (m_pPageWidget) {
         m_pPageWidget->setCurrentPageValue(row);

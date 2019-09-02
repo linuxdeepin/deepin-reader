@@ -19,37 +19,37 @@ void DefaultOperationWidget::createBtn(const QString &btnName, const char *membe
 void DefaultOperationWidget::SlotBtnSearchClicked()
 {
     this->hide();
-    m_pMsgSubject->sendMsg(MSG_OPERATION_FIND);
+    sendMsg(MSG_OPERATION_FIND);
 }
 
 void DefaultOperationWidget::SlotBtnAddBookMarkClicked()
 {
     this->hide();
-    m_pMsgSubject->sendMsg(MSG_OPERATION_ADD_BOOKMARK);
+    sendMsg(MSG_OPERATION_ADD_BOOKMARK);
 }
 
 void DefaultOperationWidget::SlotBtnFirstPageClicked()
 {
     this->hide();
-    m_pMsgSubject->sendMsg(MSG_OPERATION_FIRST_PAGE);
+    sendMsg(MSG_OPERATION_FIRST_PAGE);
 }
 
 void DefaultOperationWidget::SlotBtnPrevPageClicked()
 {
     this->hide();
-    m_pMsgSubject->sendMsg(MSG_OPERATION_PREV_PAGE);
+    sendMsg(MSG_OPERATION_PREV_PAGE);
 }
 
 void DefaultOperationWidget::SlotBtnNextPageClicked()
 {
     this->hide();
-    m_pMsgSubject->sendMsg(MSG_OPERATION_NEXT_PAGE);
+    sendMsg(MSG_OPERATION_NEXT_PAGE);
 }
 
 void DefaultOperationWidget::SlotBtnEndPageClicked()
 {
     this->hide();
-    m_pMsgSubject->sendMsg(MSG_OPERATION_END_PAGE);
+    sendMsg(MSG_OPERATION_END_PAGE);
 }
 
 int DefaultOperationWidget::dealWithData(const int &, const QString &)

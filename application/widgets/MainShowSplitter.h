@@ -36,6 +36,7 @@ private:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
+    void sendMsg(const int &msgType, const QString &msgContent) override;
 };
 
 #endif // MAINSHOWDATAWIDGET_H

@@ -21,10 +21,13 @@ class CustomWidget : public DWidget, public IObserver
     Q_OBJECT
 public:
     CustomWidget(DWidget *parent = nullptr);
-    ~CustomWidget();
+    ~CustomWidget() override;
 
 protected:
     virtual void initWidget() = 0;
+
+protected:
+    void sendMsg(const int &msgType, const QString &msgContent = "") override;
 
 protected:
     MsgSubject  *m_pMsgSubject = nullptr;

@@ -18,6 +18,7 @@ protected:
 
 public:
     virtual int dealWithData(const int &, const QString &) = 0;
+    virtual void sendMsg(const int &, const QString &) = 0;
 };
 
 #pragma clang diagnostic pop

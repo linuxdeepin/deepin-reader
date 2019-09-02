@@ -27,7 +27,7 @@ public:
     void removeObserver(IObserver *obs) override;
 
 public:
-    void sendMsg(const int &, const QString &msgContent = "");
+    void sendMsg(const int &, const QString &msgContent);
 
 private:
     void NotifyObservers(const int &, const QString &);

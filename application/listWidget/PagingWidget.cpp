@@ -76,7 +76,7 @@ void PagingWidget::slotPrePage()
     m_currntPage = t_page;
 
     setCurrentPage(m_currntPage);
-    m_pMsgSubject->sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(m_currntPage - FIRSTPAGES));
+    sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(m_currntPage - FIRSTPAGES));
 }
 
 void PagingWidget::slotNextPage()
@@ -94,7 +94,7 @@ void PagingWidget::slotNextPage()
     m_currntPage = t_page;
 
     setCurrentPage(m_currntPage);
-    m_pMsgSubject->sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(m_currntPage - FIRSTPAGES));
+    sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(m_currntPage - FIRSTPAGES));
 }
 
 void PagingWidget::setCurrentPageValue(const int &index)
