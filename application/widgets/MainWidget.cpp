@@ -4,7 +4,6 @@
 
 #include "data/DataManager.h"
 #include "FileAttrWidget.h"
-#include "header/MsgHeader.h"
 
 MainWidget::MainWidget(CustomWidget *parent):
     CustomWidget (parent)

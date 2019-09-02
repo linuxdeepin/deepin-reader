@@ -3,8 +3,9 @@
 
 #include <DWidget>
 
-#include "header/IObserver.h"
-#include "header/MsgSubject.h"
+#include "IObserver.h"
+#include "MsgSubject.h"
+#include "MsgHeader.h"
 
 DWIDGET_USE_NAMESPACE
 

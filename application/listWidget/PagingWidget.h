@@ -8,7 +8,6 @@
 #include <DSpinBox>
 
 #include "header/CustomWidget.h"
-#include "header/MsgHeader.h"
 
 DWIDGET_USE_NAMESPACE
 

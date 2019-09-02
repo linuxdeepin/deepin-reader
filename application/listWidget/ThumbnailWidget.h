@@ -9,9 +9,8 @@
 #include <DPushButton>
 #include <QDebug>
 
-#include <listWidget/ThumbnailItemWidget.h>
+#include "listWidget/ThumbnailItemWidget.h"
 #include "header/CustomWidget.h"
-#include "header/MsgHeader.h"
 #include "PagingWidget.h"
 
 DWIDGET_USE_NAMESPACE

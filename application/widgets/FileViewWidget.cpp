@@ -1,5 +1,4 @@
 #include "FileViewWidget.h"
-#include "header/MsgHeader.h"
 #include <QDebug>
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)

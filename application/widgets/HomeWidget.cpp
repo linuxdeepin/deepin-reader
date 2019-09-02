@@ -1,6 +1,5 @@
 #include "HomeWidget.h"
 #include "utils.h"
-#include "header/MsgHeader.h"
 #include <QApplication>
 #include <QDir>
 
