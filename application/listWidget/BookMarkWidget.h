@@ -28,7 +28,6 @@ protected:
     void initWidget() override;
 
 private:
-    //void initWidget();
     void dltItem();
 
 public:

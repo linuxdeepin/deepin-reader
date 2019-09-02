@@ -22,9 +22,6 @@ protected:
     void initWidget() override;
 
 private:
-    //void initWidget();
-
-private:
     DListWidget *m_pNotesList = nullptr;
     QVBoxLayout *m_pVLayout = nullptr;
 

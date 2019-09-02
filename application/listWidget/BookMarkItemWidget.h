@@ -36,9 +36,6 @@ protected:
     void initWidget() override;
 
 private:
-    //void initWidget();
-
-private:
     DLabel *m_pPicture = nullptr;
     DLabel *m_pPage = nullptr;
     QHBoxLayout *m_pHLayout = nullptr;

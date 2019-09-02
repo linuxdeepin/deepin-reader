@@ -42,6 +42,15 @@ public:
         }
     }
 
+    inline DLabel   *getContantLabel()
+    {
+        if (m_pContantLabel != nullptr) {
+            return m_pContantLabel;
+        } else {
+            return nullptr;
+        }
+    }
+
     void setPaint(const bool &paint)
     {
         m_bPaint = paint;
@@ -50,9 +59,6 @@ public:
 protected:
     void paintEvent(QPaintEvent *event) override;
     void initWidget() override;
-
-private:
-    //void initWidget();
 
 private:
     DLabel *m_pContantLabel = nullptr;

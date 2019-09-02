@@ -49,6 +49,8 @@ void ThumbnailWidget::initWidget()
         widget->setMinimumSize(QSize(250, 250));
 
         QListWidgetItem *item = new QListWidgetItem(m_pThumbnailListWidget);
+        //item->setBackgroundColor(Qt::GlobalColor::lightGray);
+        //item->setBackgroundColor(Qt::GlobalColor::white);
         item->setFlags(Qt::NoItemFlags);
         item->setFlags(Qt::ItemIsSelectable);
         item->setSizeHint(QSize(250, 250));
@@ -61,54 +63,34 @@ void ThumbnailWidget::initWidget()
 
 void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 {
-    if (m_itemWidget) {
+    if (m_pThumbnailItemWidget) {
         m_pThumbnailItemWidget->setPaint(false);
-//1
-//        QPalette pal(m_itemWidget->palette());
-//        //设置页面背景白色
-//        pal.setColor(QPalette::Background, Qt::white);
-//        m_itemWidget->setPalette(pal);
-
-//2
-//        QColor color = QColor(Qt::color0);
-//        QPalette pw = m_itemWidget->palette();
-//        pw.setColor(QPalette::Window,color);
-//        m_itemWidget->setPalette(pw);
-
-//        //设置页码标签字体颜色
-//        QPalette pl;
-//        pl.setColor(QPalette::WindowText,Qt::black);
-//        m_pSonWidgetPageLabel->setPalette(pl);
+        m_pSonWidgetContantLabel->setFrameShape (QFrame::NoFrame);
 
         //qDebug() << "clean background color";
     }
     if (item) {
         DWidget *t_widget = nullptr;
-        DLabel *t_label = nullptr;
+        DLabel *t_pageLab = nullptr;
+        DLabel *t_contantLab = nullptr;
         ThumbnailItemWidget *t_ItemWidget = (ThumbnailItemWidget *)(m_pThumbnailListWidget->itemWidget(item));
         t_ItemWidget->setPaint(true);
-
         t_widget = t_ItemWidget->getSonWidget();
-        t_label = t_ItemWidget->getPageLabel();
+        t_widget->setAutoFillBackground(true);
+//        QPalette p;
+//        p.setColor(QPalette::Background, QColor(126, 192, 238));
+//        t_widget->setPalette(p);
+        //t_widget->setBackgroundColor(Qt::GlobalColor::white);
+        t_contantLab = t_ItemWidget->getContantLabel();
+        t_contantLab->setFrameShape (QFrame::Box);
+        //t_contantLab->setPalette(p);
+        t_contantLab->setLineWidth(2);
 
-//        QPalette pal(t_widget->palette());
-//        //设置背景红色
-//        pal.setColor(QPalette::Background, Qt::red);
-//        t_widget->setPalette(pal);
+        t_pageLab = t_ItemWidget->getContantLabel();
 
-//        QColor color = QColor(Qt::darkBlue);
-//        QPalette pw = t_widget->palette();
-//        pw.setColor(QPalette::Window,color);
-//        t_widget->setPalette(pw);
-
-//        //设置页码标签字体颜色
-//        QPalette pl;
-//        pl.setColor(QPalette::WindowText,Qt::darkBlue);
-//        t_label->setPalette(pl);
-
-        // qDebug() << "set background color";
-        m_itemWidget = t_widget;
-        m_pSonWidgetPageLabel = t_label;
+        qDebug() << "set background color";
+        m_pSonWidgetContantLabel = t_contantLab;
+        m_pSonWidgetPageLabel = t_pageLab;
         m_pThumbnailItemWidget = t_ItemWidget;
     }
 }
@@ -116,6 +98,9 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 void ThumbnailWidget::setCurrentRow(const int &row)
 {
     m_pThumbnailListWidget->setCurrentRow(row);
+    QListWidgetItem *item = m_pThumbnailListWidget->item(row);
+    setSelectItemBackColor(item);
+    //slotShowSelectItem(item);
 }
 
 void ThumbnailWidget::slotShowSelectItem(QListWidgetItem *item)

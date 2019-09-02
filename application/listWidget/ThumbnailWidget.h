@@ -31,7 +31,6 @@ protected:
     void initWidget() override;
 
 private:
-    //void initWidget();
     void setSelectItemBackColor(QListWidgetItem *);
     void setCurrentRow(const int &);
 
@@ -50,8 +49,9 @@ private:
     DLabel *m_pThumbnailPageLabel = nullptr;
     PagingWidget *m_pPageWidget = nullptr;
 
-    DWidget *m_itemWidget = nullptr;
+    //DWidget *m_itemWidget = nullptr;
     DLabel *m_pSonWidgetPageLabel = nullptr;
+    DLabel *m_pSonWidgetContantLabel = nullptr;
     ThumbnailItemWidget *m_pThumbnailItemWidget = nullptr;
 };
 

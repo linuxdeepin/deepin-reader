@@ -35,7 +35,6 @@ protected:
     void initWidget() override;
 
 private:
-    //void initWidget();
     void setCurrentPage(const int &);
 
 private:

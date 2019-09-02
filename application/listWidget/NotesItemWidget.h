@@ -33,9 +33,6 @@ private slots:
 protected:
     void initWidget() override;
 
-private:
-    //void initWidget();
-
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
