@@ -2,34 +2,21 @@
 #include <QDebug>
 
 
-BookMarkItemWidget::BookMarkItemWidget(DWidget *parent) :
-    DWidget (parent)
+BookMarkItemWidget::BookMarkItemWidget(CustomWidget *parent) :
+    CustomWidget (parent)
 {
-    m_pMsgSubject = MsgSubject::getInstance();
-    if(m_pMsgSubject)
-    {
-        m_pMsgSubject->addObserver(this);
-    }
 
-    m_pHLayout =new QHBoxLayout;
+    m_pHLayout = new QHBoxLayout;
     //set around distance
     m_pHLayout->setContentsMargins(0, 0, 0, 0);
     m_pHLayout->setSpacing(0);
     this->setLayout(m_pHLayout);
 
     this->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
-            this, SLOT(slotShowContextMenu(const QPoint&)));
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
+            this, SLOT(slotShowContextMenu(const QPoint &)));
 
     initWidget();
-}
-
-BookMarkItemWidget::~BookMarkItemWidget()
-{
-    if(m_pMsgSubject)
-    {
-        m_pMsgSubject->removeObserver(this);
-    }
 }
 
 void BookMarkItemWidget::setPicture(const QString &pix)
@@ -45,7 +32,7 @@ void BookMarkItemWidget::setPage(const QString &value)
     m_pPage->setText(value);
 }
 
-int BookMarkItemWidget::update(const int&, const QString &)
+int BookMarkItemWidget::update(const int &, const QString &)
 {
     return 0;
 }
@@ -58,7 +45,7 @@ void BookMarkItemWidget::slotDltBookMark()
 
 void BookMarkItemWidget::slotShowContextMenu(const QPoint &point)
 {
-    QMenu * t_menu = new QMenu(this);
+    QMenu *t_menu = new QMenu(this);
 
     QAction *dltBookMarkAction = t_menu->addAction(tr("delete bookmark"));
     connect(dltBookMarkAction, SIGNAL(triggered()), this, SLOT(slotDltBookMark()));

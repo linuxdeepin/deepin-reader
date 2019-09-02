@@ -1,15 +1,9 @@
 #include "ThumbnailItemWidget.h"
 #include <QDebug>
 
-ThumbnailItemWidget::ThumbnailItemWidget(DWidget *parent) :
-    DWidget (parent)
+ThumbnailItemWidget::ThumbnailItemWidget(CustomWidget *parent) :
+    CustomWidget (parent)
 {
-    m_pMsgSubject = MsgSubject::getInstance();
-    if(m_pMsgSubject)
-    {
-        m_pMsgSubject->addObserver(this);
-    }
-
     m_pVLayout = new QVBoxLayout;
     m_pVLayout->setContentsMargins(0, 0, 0, 0);
     m_pVLayout->setSpacing(0);
@@ -18,15 +12,7 @@ ThumbnailItemWidget::ThumbnailItemWidget(DWidget *parent) :
     initWidget();
 }
 
-ThumbnailItemWidget::~ThumbnailItemWidget()
-{
-    if(m_pMsgSubject)
-    {
-        m_pMsgSubject->removeObserver(this);
-    }
-}
-
-int ThumbnailItemWidget::update(const int&, const QString &)
+int ThumbnailItemWidget::update(const int &, const QString &)
 {
     return 0;
 }
@@ -64,9 +50,9 @@ void ThumbnailItemWidget::paintEvent(QPaintEvent *event)
 
 void ThumbnailItemWidget::initWidget()
 {
-    QGridLayout * gridLayout = new QGridLayout;
+    QGridLayout *gridLayout = new QGridLayout;
     m_sonWidget = new DWidget;
-    m_sonWidget->setFixedSize(QSize(250,250));
+    m_sonWidget->setFixedSize(QSize(250, 250));
     m_sonWidget->setAutoFillBackground(true);
     m_sonWidget->setLayout(gridLayout);
 
@@ -74,7 +60,7 @@ void ThumbnailItemWidget::initWidget()
     m_pPageLabel = new DLabel();
     m_pPageLabel->setFixedSize(QSize(250, 20));
 
-    m_pContantLabel->setFixedSize(QSize(150,150));
+    m_pContantLabel->setFixedSize(QSize(150, 150));
     gridLayout->setContentsMargins(5, 5, 5, 5);
     gridLayout->addWidget(m_pContantLabel);
 

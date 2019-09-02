@@ -9,32 +9,31 @@
 
 #include "NotesItemWidget.h"
 
-#include "header/IMsgObserver.h"
-#include "header/MsgSubject.h"
+#include "header/CustomWidget.h"
+#include "header/MsgHeader.h"
 
 
 DWIDGET_USE_NAMESPACE
 
-class NotesWidget : public DWidget, public IMsgObserver
+class NotesWidget : public CustomWidget
 {
     Q_OBJECT
 
 public:
-    NotesWidget(DWidget *parent = nullptr);
-    ~NotesWidget() override;
+    NotesWidget(CustomWidget *parent = nullptr);
 
 private:
     void initWidget();
 
 private:
-    DListWidget * m_pNotesList = nullptr;
-    QVBoxLayout * m_pVLayout = nullptr;
+    DListWidget *m_pNotesList = nullptr;
+    QVBoxLayout *m_pVLayout = nullptr;
 
     MsgSubject    *m_pMsgSubject = nullptr;
 
 public:
     // IObserver interface
-    int update(const int&, const QString &) override;
+    int update(const int &, const QString &) override;
 };
 
 #endif // NOTESFORM_H

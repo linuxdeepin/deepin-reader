@@ -1,26 +1,14 @@
 #include "PagingWidget.h"
 #include <QDebug>
 
-PagingWidget::PagingWidget(DWidget *parent) :
-    DWidget(parent)
+PagingWidget::PagingWidget(CustomWidget *parent) :
+    CustomWidget(parent)
 {
     resize(250, 20);
     initWidget();
 
     connect(m_pPrePageBtn, SIGNAL(clicked()), this, SLOT(slotPrePage()));
     connect(m_pNextPageBtn, SIGNAL(clicked()), this, SLOT(slotNextPage()));
-
-    m_pMsgSubject = MsgSubject::getInstance();
-    if (m_pMsgSubject) {
-        m_pMsgSubject->addObserver(this);
-    }
-}
-
-PagingWidget::~PagingWidget()
-{
-    if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
-    }
 }
 
 void PagingWidget::initWidget()

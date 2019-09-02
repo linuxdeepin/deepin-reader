@@ -7,22 +7,19 @@
 #include <DPushButton>
 #include <DSpinBox>
 
-#include "header/IMsgObserver.h"
-#include "header/MsgSubject.h"
-#include "header/MsgHeader.h"
+#include "header/CustomWidget.h"
 #include "header/MsgHeader.h"
 
 DWIDGET_USE_NAMESPACE
 
 const int FIRSTPAGES = 1;
 //
-class PagingWidget : public DWidget, public IMsgObserver
+class PagingWidget : public CustomWidget
 {
     Q_OBJECT
 
 public:
-    PagingWidget(DWidget *parent = nullptr);
-    ~PagingWidget() override;
+    PagingWidget(CustomWidget *parent = nullptr);
 
 public:
     void setTotalPages(int pages);
@@ -52,8 +49,6 @@ private:
     int m_currntPage = 0;
     int m_totalPage = 0;
 
-    MsgSubject    *m_pMsgSubject = nullptr;
-    // IObserver interface
 public:
     int update(const int &, const QString &) override;
 };

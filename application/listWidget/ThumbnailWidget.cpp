@@ -3,14 +3,9 @@
 /*
  *
  */
-ThumbnailWidget::ThumbnailWidget(DWidget *parent) :
-    DWidget(parent)
+ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
+    CustomWidget(parent)
 {
-    m_pMsgSubject = MsgSubject::getInstance();
-    if (m_pMsgSubject) {
-        m_pMsgSubject->addObserver(this);
-    }
-
     m_pvBoxLayout = new QVBoxLayout;
     m_pvBoxLayout->setContentsMargins(0, 0, 0, 0);
     m_pvBoxLayout->setSpacing(0);
@@ -19,14 +14,6 @@ ThumbnailWidget::ThumbnailWidget(DWidget *parent) :
     initWidget();
 
     connect(m_pThumbnailListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
-    //connect(m_pPageWidget, SIGNAL(sigJumpToIndexPage(const int &)), this, SLOT(slotSetJumpToPage(const int &)));
-}
-
-ThumbnailWidget::~ThumbnailWidget()
-{
-    if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
-    }
 }
 
 int ThumbnailWidget::update(const int &msgType, const QString &msgContant)

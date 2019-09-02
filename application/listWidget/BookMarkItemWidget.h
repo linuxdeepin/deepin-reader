@@ -9,23 +9,22 @@
 #include <QAction>
 #include <QContextMenuEvent>
 
-#include "header/IMsgObserver.h"
-#include "header/MsgSubject.h"
+#include "header/CustomWidget.h"
+#include "header/MsgHeader.h"
 
 DWIDGET_USE_NAMESPACE
 
 //操作类型
-enum OPERATION_TYPE{
+enum OPERATION_TYPE {
     ADDITEM = 0,        //增加item
     DLTITEM,            //删除item
 };
 
-class BookMarkItemWidget : public DWidget, public IMsgObserver
+class BookMarkItemWidget : public CustomWidget
 {
     Q_OBJECT
 public:
-    BookMarkItemWidget(DWidget *parent = nullptr);
-    ~BookMarkItemWidget() override;
+    BookMarkItemWidget(CustomWidget *parent = nullptr);
 
 public:
     void setPicture(const QString &);
@@ -44,7 +43,6 @@ private:
     DLabel *m_pPicture = nullptr;
     DLabel *m_pPage = nullptr;
     QHBoxLayout *m_pHLayout = nullptr;
-    MsgSubject    *m_pMsgSubject = nullptr;
 };
 
 #endif // BOOKMARKITEMWIDGET_H

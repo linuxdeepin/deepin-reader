@@ -5,8 +5,8 @@
 #include <QVBoxLayout>
 #include <QPainter>
 
-#include "header/IMsgObserver.h"
-#include "header/MsgSubject.h"
+#include "header/CustomWidget.h"
+#include "header/MsgHeader.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -14,38 +14,38 @@ DWIDGET_USE_NAMESPACE
  * @brief The ThumbnailItemWidget class
  * @brief   缩略图中的item
  */
-class ThumbnailItemWidget  : public DWidget, public IMsgObserver
+class ThumbnailItemWidget  : public CustomWidget
 {
     Q_OBJECT
 public:
-    ThumbnailItemWidget(DWidget *parent = nullptr);
-    ~ ThumbnailItemWidget() override;
+    ThumbnailItemWidget(CustomWidget *parent = nullptr);
 
 public:
     // IObserver interface
-    int update(const int&, const QString &) override;
-    void setContantLabelPixmap(const QString&);
-    void setPageLabelText(const QString&);
+    int update(const int &, const QString &) override;
+    void setContantLabelPixmap(const QString &);
+    void setPageLabelText(const QString &);
 
-    inline DWidget *  getSonWidget()
+    inline DWidget   *getSonWidget()
     {
-        if(m_sonWidget != nullptr){
+        if (m_sonWidget != nullptr) {
             return m_sonWidget;
-        }else {
+        } else {
             return nullptr;
         }
     }
 
-    inline DLabel *  getPageLabel()
+    inline DLabel   *getPageLabel()
     {
-        if(m_pPageLabel != nullptr){
+        if (m_pPageLabel != nullptr) {
             return m_pPageLabel;
-        }else {
+        } else {
             return nullptr;
         }
     }
 
-    void setPaint(const bool& paint){
+    void setPaint(const bool &paint)
+    {
         m_bPaint = paint;
     }
 
@@ -56,11 +56,10 @@ private:
     void initWidget();
 
 private:
-    DLabel * m_pContantLabel = nullptr;
-    DLabel * m_pPageLabel = nullptr;
-    DWidget * m_sonWidget = nullptr;
-    QVBoxLayout * m_pVLayout = nullptr;
-    MsgSubject    *m_pMsgSubject = nullptr;
+    DLabel *m_pContantLabel = nullptr;
+    DLabel *m_pPageLabel = nullptr;
+    DWidget *m_sonWidget = nullptr;
+    QVBoxLayout *m_pVLayout = nullptr;
     bool m_bPaint = false;
 };
 

@@ -10,8 +10,7 @@
 #include <QDebug>
 
 #include <listWidget/ThumbnailItemWidget.h>
-#include "header/IMsgObserver.h"
-#include "header/MsgSubject.h"
+#include "header/CustomWidget.h"
 #include "header/MsgHeader.h"
 #include "PagingWidget.h"
 
@@ -20,13 +19,12 @@ DWIDGET_USE_NAMESPACE
 /*
 *缩略图列表页面
 */
-class ThumbnailWidget : public DWidget, public IMsgObserver
+class ThumbnailWidget : public CustomWidget
 {
     Q_OBJECT
 
 public:
-    ThumbnailWidget(DWidget *parent = nullptr);
-    ~ThumbnailWidget() override;
+    ThumbnailWidget(CustomWidget *parent = nullptr);
 
 public:
     // IObserver interface
@@ -55,8 +53,6 @@ private:
     DWidget *m_itemWidget = nullptr;
     DLabel *m_pSonWidgetPageLabel = nullptr;
     ThumbnailItemWidget *m_pThumbnailItemWidget = nullptr;
-
-    MsgSubject    *m_pMsgSubject = nullptr;
 };
 
 #endif // THUMBNAILWIDGET_H

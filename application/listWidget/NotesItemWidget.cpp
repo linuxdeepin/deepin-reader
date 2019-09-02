@@ -2,14 +2,9 @@
 #include <QDebug>
 
 
-NotesItemWidget::NotesItemWidget(DWidget *parent) :
-    DWidget (parent)
+NotesItemWidget::NotesItemWidget(CustomWidget *parent) :
+    CustomWidget (parent)
 {
-    m_pMsgSubject = MsgSubject::getInstance();
-    if(m_pMsgSubject)
-    {
-        m_pMsgSubject->addObserver(this);
-    }
     m_pHLayout = new QHBoxLayout;
     //set around distance
     m_pHLayout->setContentsMargins(0, 0, 0, 0);
@@ -17,18 +12,10 @@ NotesItemWidget::NotesItemWidget(DWidget *parent) :
     this->setLayout(m_pHLayout);
 
     this->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
-            this, SLOT(slotShowContextMenu(const QPoint&)));
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
+            this, SLOT(slotShowContextMenu(const QPoint &)));
 
     initWidget();
-}
-
-NotesItemWidget::~NotesItemWidget()
-{
-    if(m_pMsgSubject)
-    {
-        m_pMsgSubject->removeObserver(this);
-    }
 }
 
 void NotesItemWidget::setLabelPix(const QString &pix)
@@ -61,7 +48,7 @@ void NotesItemWidget::slotCopyContant()
 
 void NotesItemWidget::slotShowContextMenu(const QPoint &)
 {
-    QMenu * t_menu = new QMenu(this);
+    QMenu *t_menu = new QMenu(this);
     QAction *copyAction = t_menu->addAction(tr("复制"));
     QAction *dltItemAction = t_menu->addAction(tr("删除书签"));
     connect(dltItemAction, SIGNAL(triggered()), this, SLOT(slotDltNoteItem()));
@@ -71,7 +58,7 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
 
 void NotesItemWidget::initWidget()
 {
-    QVBoxLayout * t_vLayout = new QVBoxLayout;
+    QVBoxLayout *t_vLayout = new QVBoxLayout;
     t_vLayout->setContentsMargins(0, 0, 0, 0);
     t_vLayout->setSpacing(0);
 
@@ -87,7 +74,7 @@ void NotesItemWidget::initWidget()
     m_pHLayout->addLayout(t_vLayout);
 }
 
-int NotesItemWidget::update(const int&, const QString &)
+int NotesItemWidget::update(const int &, const QString &)
 {
     return 0;
 }

@@ -1,14 +1,9 @@
 #include "BookMarkWidget.h"
 #include <QDebug>
 
-BookMarkWidget::BookMarkWidget(DWidget *parent) :
-    DWidget(parent)
+BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
+    CustomWidget(parent)
 {
-    m_pMsgSubject = MsgSubject::getInstance();
-    if (m_pMsgSubject) {
-        m_pMsgSubject->addObserver(this);
-    }
-
     m_pVBoxLayout = new QVBoxLayout;
     m_pVBoxLayout->setContentsMargins(0, 0, 0, 0);
     m_pVBoxLayout->setSpacing(0);
@@ -17,13 +12,6 @@ BookMarkWidget::BookMarkWidget(DWidget *parent) :
     initWidget();
 
     connect(m_pBookMarkListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
-}
-
-BookMarkWidget::~BookMarkWidget()
-{
-    if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
-    }
 }
 
 void BookMarkWidget::slotShowSelectItem(QListWidgetItem *item)
