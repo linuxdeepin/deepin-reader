@@ -42,6 +42,11 @@ void FileViewWidget::leaveEvent(QEvent *event)
 //  消息 数据 处理
 int FileViewWidget::update(const int &msgType, const QString &msgContent)
 {
+    //  打开文件， 内容为  文件 路径
+    if (msgType == MSG_OPEN_FILE_PATH) {
+        qDebug() << MSG_OPEN_FILE_PATH <<  "       " << msgContent;
+        return ConstantMsg::g_effective_res;
+    }
     //  放大镜 的控制
     if (msgType == MSG_MAGNIFYING) {
         int nRes = msgContent.toInt();

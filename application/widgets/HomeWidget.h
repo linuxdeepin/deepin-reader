@@ -4,7 +4,6 @@
 #include "dlinkbutton.h"
 #include <DLabel>
 #include <DObject>
-#include <DWidget>
 #include <QFileDialog>
 #include <QSettings>
 #include <QVBoxLayout>
@@ -15,8 +14,6 @@
  *  @brief  支持拖拽
  *  @brief  打开pdf 文件
  */
-
-DWIDGET_USE_NAMESPACE
 
 class HomeWidget : public CustomWidget
 {

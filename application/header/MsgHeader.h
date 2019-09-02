@@ -15,6 +15,7 @@ enum MSG_TYPE {
     MSG_SLIDER_SHOW_STATE,              //  侧边栏 显隐消息
     MSG_MAGNIFYING,                     //  放大镜消息
     MSG_HANDLESHAPE,                    //  手型 消息
+    MSG_OPEN_FILE_PATH                  //  打开的文件消息
 };
 
 //  右键菜单消息类型

@@ -1,12 +1,9 @@
 #ifndef MAGNIFYINGWIDGET_H
 #define MAGNIFYINGWIDGET_H
 
-#include <DWidget>
 #include <QPaintEvent>
 
 #include "header/CustomWidget.h"
-
-DWIDGET_USE_NAMESPACE
 
 /**
  * @brief The MagnifyingWidget class

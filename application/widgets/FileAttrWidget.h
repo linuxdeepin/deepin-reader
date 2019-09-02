@@ -2,13 +2,11 @@
 #define FILEATTRWIDGET_H
 
 #include <DLabel>
-#include <DWidget>
 #include <QGridLayout>
 #include <QList>
 
 #include "header/CustomWidget.h"
 
-DWIDGET_USE_NAMESPACE
 
 /**
  * @brief The FileAttrWidget class

@@ -41,6 +41,8 @@ void MainWidget::showFileSelected(const QStringList files) const
     //  判断文件 是否有损坏
 
     DataManager::instance()->setStrOnlyFilePath(filePath);
+
+    m_pMsgSubject->sendMsg(MSG_OPEN_FILE_PATH, filePath);
     //  open  file
     m_pStackedWidget->setCurrentIndex(1);
 }

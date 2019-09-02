@@ -1,8 +1,6 @@
 #ifndef NOTESFORM_H
 #define NOTESFORM_H
 
-#include <DWidget>
-
 #include <DListWidget>
 #include <QListWidgetItem>
 #include <QVBoxLayout>
@@ -12,7 +10,6 @@
 #include "header/CustomWidget.h"
 
 
-DWIDGET_USE_NAMESPACE
 
 class NotesWidget : public CustomWidget
 {

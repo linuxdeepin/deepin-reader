@@ -1,7 +1,6 @@
 #ifndef THUMBNAILWIDGET_H
 #define THUMBNAILWIDGET_H
 
-#include <DWidget>
 #include <DListWidget>
 #include <QListWidgetItem>
 #include <DLabel>
@@ -13,7 +12,6 @@
 #include "header/CustomWidget.h"
 #include "PagingWidget.h"
 
-DWIDGET_USE_NAMESPACE
 
 /*
 *缩略图列表页面

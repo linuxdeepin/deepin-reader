@@ -1,13 +1,12 @@
 #ifndef THUMBNAILITEMWIDGET_H
 #define THUMBNAILITEMWIDGET_H
-#include <DWidget>
+
+
 #include <DLabel>
 #include <QVBoxLayout>
 #include <QPainter>
 
 #include "header/CustomWidget.h"
-
-DWIDGET_USE_NAMESPACE
 
 /**
  * @brief The ThumbnailItemWidget class

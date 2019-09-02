@@ -2,7 +2,6 @@
 #define LEFTSIDEBARWIDGET_H
 
 #include <DStackedWidget>
-#include <DWidget>
 #include <QEvent>
 #include <QVBoxLayout>
 
@@ -12,8 +11,6 @@
 #include "listWidget/ThumbnailWidget.h"
 
 #include "header/CustomWidget.h"
-
-DWIDGET_USE_NAMESPACE
 
 /**
  * @brief The LeftShowWidget class

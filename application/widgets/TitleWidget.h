@@ -3,12 +3,9 @@
 
 #include <DMenu>
 #include <DPushButton>
-#include <DWidget>
 #include <QHBoxLayout>
 
 #include "header/CustomWidget.h"
-
-DWIDGET_USE_NAMESPACE
 
 /**
  * @brief The TitleWidget class

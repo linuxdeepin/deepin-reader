@@ -1,15 +1,12 @@
 #ifndef BOOKMARKFORM_H
 #define BOOKMARKFORM_H
 
-#include <DWidget>
 #include <DListWidget>
 #include <QListWidgetItem>
 #include <QHBoxLayout>
 
 #include "BookMarkItemWidget.h"
 #include "header/CustomWidget.h"
-
-DWIDGET_USE_NAMESPACE
 
 /**
  * @brief The BookMarkWidget class

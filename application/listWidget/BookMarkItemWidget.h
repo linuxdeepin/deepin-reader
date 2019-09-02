@@ -1,7 +1,6 @@
 #ifndef BOOKMARKITEMWIDGET_H
 #define BOOKMARKITEMWIDGET_H
 
-#include <DWidget>
 #include <DLabel>
 #include <QHBoxLayout>
 #include <QFont>
@@ -10,8 +9,6 @@
 #include <QContextMenuEvent>
 
 #include "header/CustomWidget.h"
-
-DWIDGET_USE_NAMESPACE
 
 //操作类型
 enum OPERATION_TYPE {

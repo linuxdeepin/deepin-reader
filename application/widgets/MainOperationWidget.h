@@ -2,12 +2,9 @@
 #define MAINOPERATIONWIDGET_H
 
 #include <DPushButton>
-#include <DWidget>
 #include <QHBoxLayout>
 
 #include "header/CustomWidget.h"
-
-DWIDGET_USE_NAMESPACE
 
 /**
  * @brief The MainOperationWidget class

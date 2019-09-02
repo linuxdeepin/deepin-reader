@@ -1,7 +1,6 @@
 #ifndef NOTESITEMWIDGET_H
 #define NOTESITEMWIDGET_H
 
-#include <DWidget>
 #include <DLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -13,7 +12,6 @@
 
 #include "header/CustomWidget.h"
 
-DWIDGET_USE_NAMESPACE
 
 class NotesItemWidget : public CustomWidget
 {

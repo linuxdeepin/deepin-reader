@@ -2,7 +2,6 @@
 #define MAINWIDGET_H
 
 #include <DStackedWidget>
-#include <DWidget>
 #include <QVBoxLayout>
 
 #include "FileAttrWidget.h"
@@ -10,8 +9,6 @@
 #include "MainShowSplitter.h"
 
 #include "header/CustomWidget.h"
-
-DWIDGET_USE_NAMESPACE
 
 /**
  * @brief The MainWidget class

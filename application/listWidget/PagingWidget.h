@@ -1,15 +1,12 @@
 #ifndef PAGINGWIDGET_H
 #define PAGINGWIDGET_H
 
-#include <DWidget>
 #include <DLabel>
 #include <QVBoxLayout>
 #include <DPushButton>
 #include <DSpinBox>
 
 #include "header/CustomWidget.h"
-
-DWIDGET_USE_NAMESPACE
 
 const int FIRSTPAGES = 1;
 //

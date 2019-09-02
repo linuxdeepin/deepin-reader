@@ -2,12 +2,10 @@
 #define FILEVIEWWIDGET_H
 
 #include "header/CustomWidget.h"
-#include <DWidget>
 #include <QMouseEvent>
 
 #include "view/MagnifyingWidget.h"
 
-DWIDGET_USE_NAMESPACE
 
 /**
  * @brief The FileViewWidget class
