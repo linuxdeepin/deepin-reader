@@ -8,6 +8,7 @@
 #include "widgets/MainWidget.h"
 #include "header/MsgSubject.h"
 
+
 DWIDGET_USE_NAMESPACE
 
 /**
@@ -45,6 +46,7 @@ private slots:
     void action_SwitchTheme();
 
     void action_Help();
+
 
 private:
     MsgSubject  *m_pMsgSubject = nullptr;

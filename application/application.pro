@@ -1,11 +1,14 @@
 QT += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core gui
+QT       += xml
 
 TARGET = deepin_reader
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
 PKGCONFIG += dtkwidget
+PKGCONFIG += poppler-qt5
 
 SOURCES += \
         main.cpp \
@@ -32,12 +35,16 @@ SOURCES += \
     listWidget/NotesItemWidget.cpp \
     view/MagnifyingWidget.cpp \
     header/MsgSubject.cpp \
-    header/CustomWidget.cpp
+    header/CustomWidget.cpp\
+    pdfview/documentview.cpp \
+    pdfview/pdfmodel.cpp \
+    pdfview/loadhandler.cpp \
+
 
 
 RESOURCES +=         resources.qrc
 
-HEADERS += \
+HEADERS +=\
     tabbar.h \
     utils.h \
     window.h \
@@ -65,11 +72,18 @@ HEADERS += \
     header/MsgSubject.h \
     header/IMsgObserver.h \
     header/MsgHeader.h \
-    header/CustomWidget.h
+    header/CustomWidget.h\
+    pdfview/documentview.h \
+    pdfview/model.h \
+    pdfview/global.h \
+    pdfview/pdfmodel.h \
+    pdfview/loadhandler.h \
 
 DISTFILES += \
     themes/solarized_light.theme \
     themes/atom_dark.theme \
     themes/deepin_dark.theme \
     themes/solarized_dark.theme \
-    themes/deepin.theme
+    themes/deepin.theme\
+
+
