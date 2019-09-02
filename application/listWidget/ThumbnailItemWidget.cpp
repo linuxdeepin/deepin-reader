@@ -12,7 +12,7 @@ ThumbnailItemWidget::ThumbnailItemWidget(CustomWidget *parent) :
     initWidget();
 }
 
-int ThumbnailItemWidget::update(const int &, const QString &)
+int ThumbnailItemWidget::dealWithData(const int &, const QString &)
 {
     return 0;
 }
@@ -39,7 +39,7 @@ void ThumbnailItemWidget::paintEvent(QPaintEvent *event)
 //    pw.setBrush(m_bPaint?Qt::white:Qt::darkBlue);
 //    pw.drawRect(rect());
 
-//    m_sonWidget->update();
+//    m_sonWidget->dealWithData();
 //    qDebug() << "paint ground color";
 
 //    QPainter pl(m_pPageLabel?m_pPageLabel:nullptr);

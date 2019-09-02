@@ -16,7 +16,7 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
     connect(m_pThumbnailListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
 }
 
-int ThumbnailWidget::update(const int &msgType, const QString &msgContant)
+int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContant)
 {
     if (MSG_THUMBNAIL_JUMPTOPAGE == msgType) {
         int row = msgContant.toInt();

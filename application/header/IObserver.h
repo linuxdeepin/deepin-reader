@@ -17,7 +17,7 @@ protected:
     virtual ~IObserver() {}
 
 public:
-    virtual int update(const int &, const QString &) = 0;
+    virtual int dealWithData(const int &, const QString &) = 0;
 };
 
 #pragma clang diagnostic pop

@@ -5,6 +5,7 @@
 
 #include "header/CustomWidget.h"
 
+
 /**
  * @brief The MagnifyingWidget class
  * @brief   放大镜窗口
@@ -16,12 +17,21 @@ class MagnifyingWidget : public CustomWidget
 public:
     MagnifyingWidget(CustomWidget *parent = nullptr);
 
+signals:
+    void sigDrawImage();
+
 protected:
     void paintEvent(QPaintEvent *event) override;
 
+private slots:
+    void setShowImage(const QImage &);
+
+private:
+    QImage  m_showImage;
+
     // IObserver interface
 public:
-    int update(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
 
     // CustomWidget interface
 protected:

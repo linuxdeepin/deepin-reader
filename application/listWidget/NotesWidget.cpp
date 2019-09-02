@@ -35,7 +35,7 @@ void NotesWidget::initWidget()
     }
 }
 
-int NotesWidget::update(const int &, const QString &)
+int NotesWidget::dealWithData(const int &, const QString &)
 {
     return 0;
 }

@@ -74,7 +74,7 @@ void NotesItemWidget::initWidget()
     m_pHLayout->addLayout(t_vLayout);
 }
 
-int NotesItemWidget::update(const int &, const QString &)
+int NotesItemWidget::dealWithData(const int &, const QString &)
 {
     return 0;
 }

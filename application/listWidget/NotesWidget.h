@@ -30,7 +30,7 @@ private:
 
 public:
     // IObserver interface
-    int update(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
 };
 
 #endif // NOTESFORM_H

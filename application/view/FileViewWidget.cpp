@@ -6,12 +6,33 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
 {
     setMouseTracking(true); //  接受 鼠标滑动事件
 
-    m_pMagnifyingWidget = new MagnifyingWidget(this); //  放大镜 窗口
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(SlotCustomContextMenuRequested(const QPoint &)));
+
+
+    initWidget();
+}
+
+FileViewWidget::~FileViewWidget()
+{
+    if (m_pDefaultOperationWidget) {
+        m_pDefaultOperationWidget->deleteLater();
+        m_pDefaultOperationWidget = nullptr;
+    }
+
+    if (m_pTextOperationWidget) {
+        m_pTextOperationWidget->deleteLater();
+        m_pTextOperationWidget = nullptr;
+    }
 }
 
 void FileViewWidget::initWidget()
 {
+    m_pMagnifyingWidget = new MagnifyingWidget(this); //  放大镜 窗口
+    connect(this, SIGNAL(sigSetMagnifyingImage(const QImage &)), m_pMagnifyingWidget, SLOT(setShowImage(const QImage &)));
 
+    m_pDefaultOperationWidget = new DefaultOperationWidget;
+    m_pTextOperationWidget = new  TextOperationWidget;
 }
 
 void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
@@ -39,8 +60,23 @@ void FileViewWidget::leaveEvent(QEvent *event)
     DWidget::leaveEvent(event);
 }
 
+//  弹出 自定义 菜单
+void FileViewWidget::SlotCustomContextMenuRequested(const QPoint &point)
+{
+    QPoint clickPos = this->mapToGlobal(point);
+
+    m_pTextOperationWidget->show();
+    m_pTextOperationWidget->move(clickPos.x(), clickPos.y());
+    m_pTextOperationWidget->raise();
+    /*
+    m_pDefaultOperationWidget->show();
+    m_pDefaultOperationWidget->move(clickPos.x(), clickPos.y());
+    m_pDefaultOperationWidget->raise();
+    */
+}
+
 //  消息 数据 处理
-int FileViewWidget::update(const int &msgType, const QString &msgContent)
+int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     //  打开文件， 内容为  文件 路径
     if (msgType == MSG_OPEN_FILE_PATH) {

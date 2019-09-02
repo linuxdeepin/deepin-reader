@@ -93,7 +93,7 @@ QStringList HomeWidget::getOpenFileList()
 }
 
 
-int HomeWidget::update(const int &msgType, const QString &msgContent)
+int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     Q_UNUSED(msgContent);
     if (msgType == MSG_OPERATION_OPEN_FILE) {

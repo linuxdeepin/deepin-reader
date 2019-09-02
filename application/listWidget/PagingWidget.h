@@ -47,7 +47,7 @@ private:
     int m_totalPage = 0;
 
 public:
-    int update(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
 };
 
 #endif // PAGINGWIDGET_H

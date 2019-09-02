@@ -59,7 +59,7 @@ private:
 
     // IObserver interface
 public:
-    int update(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
 };
 
 #endif // WINDOW_H

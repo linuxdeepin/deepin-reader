@@ -48,7 +48,7 @@ protected:
 
     // IObserver interface
 public:
-    int update(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
 };
 
 #endif // OPENFILEWIDGET_H

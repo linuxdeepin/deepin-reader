@@ -52,7 +52,7 @@ void BookMarkWidget::dltItem()
     }
 }
 
-int BookMarkWidget::update(const int &msgType, const QString &msgContent)
+int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_BOOKMARK_DLTITEM == msgType) {
         //dltItem();

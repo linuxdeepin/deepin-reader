@@ -190,7 +190,7 @@ void Window::action_Help()
 
 }
 
-int Window::update(const int &msgType, const QString &msgContent)
+int Window::dealWithData(const int &msgType, const QString &msgContent)
 {
     //  设置文档标题
     if (msgType == MSG_SET_WINDOW_TITLE) {

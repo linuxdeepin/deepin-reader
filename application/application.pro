@@ -22,9 +22,7 @@ SOURCES += \
     widgets/TitleWidget.cpp \
     widgets/HomeWidget.cpp \
     widgets/LeftSidebarWidget.cpp \
-    widgets/FileViewWidget.cpp \
     widgets/MainShowSplitter.cpp \
-    widgets/FileAttrWidget.cpp \
     data/DataManager.cpp \
     listWidget/PagingWidget.cpp \
     listWidget/NotesWidget.cpp \
@@ -33,12 +31,17 @@ SOURCES += \
     listWidget/ThumbnailWidget.cpp \
     listWidget/BookMarkItemWidget.cpp \
     listWidget/NotesItemWidget.cpp \
-    view/MagnifyingWidget.cpp \
     header/MsgSubject.cpp \
     header/CustomWidget.cpp\
     pdfview/documentview.cpp \
     pdfview/pdfmodel.cpp \
     pdfview/loadhandler.cpp \
+    view/MagnifyingWidget.cpp \
+    view/DefaultOperationWidget.cpp \
+    view/TextOperationWidget.cpp \
+    view/LightedWidget.cpp \
+    view/FileViewWidget.cpp \
+    view/FileAttrWidget.cpp
 
 
 
@@ -55,9 +58,7 @@ HEADERS +=\
     widgets/MainWidget.h \
     widgets/HomeWidget.h \
     widgets/LeftSidebarWidget.h \
-    widgets/FileViewWidget.h \
     widgets/MainShowSplitter.h \
-    widgets/FileAttrWidget.h \
     data/DataManager.h \
     header/ISubject.h \
     header/IObserver.h \
@@ -67,8 +68,7 @@ HEADERS +=\
     listWidget/PagingWidget.h \
     listWidget/BookMarkWidget.h \
     listWidget/BookMarkItemWidget.h \
-    listWidget/NotesItemWidget.h \
-    view/MagnifyingWidget.h \
+    listWidget/NotesItemWidget.h \ 
     header/MsgSubject.h \
     header/MsgHeader.h \
     header/CustomWidget.h\
@@ -77,6 +77,12 @@ HEADERS +=\
     pdfview/global.h \
     pdfview/pdfmodel.h \
     pdfview/loadhandler.h \
+    view/MagnifyingWidget.h \
+    view/DefaultOperationWidget.h \
+    view/TextOperationWidget.h \
+    view/LightedWidget.h \
+    view/FileViewWidget.h \
+    view/FileAttrWidget.h
 
 DISTFILES += \
     themes/solarized_light.theme \

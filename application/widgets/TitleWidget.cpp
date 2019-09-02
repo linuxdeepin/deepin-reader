@@ -133,7 +133,7 @@ void TitleWidget::createAction(const QString &iconName, const char *member)
     }
 }
 
-int TitleWidget::update(const int &, const QString &)
+int TitleWidget::dealWithData(const int &, const QString &)
 {
     return 0;
 }

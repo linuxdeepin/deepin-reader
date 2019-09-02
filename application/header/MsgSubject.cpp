@@ -28,7 +28,7 @@ void MsgSubject::NotifyObservers(const int &msgType, const QString &msgContent)
      *  若没有处理， 则继续传递给下一个观察者，
      */
     foreach (IObserver *obs, m_observerList) {
-        int nRes = obs->update(msgType, msgContent);
+        int nRes = obs->dealWithData(msgType, msgContent);
         if (nRes == ConstantMsg::g_effective_res) {
             break;
         }

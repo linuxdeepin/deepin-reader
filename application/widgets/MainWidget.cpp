@@ -3,7 +3,6 @@
 #include <QDebug>
 
 #include "data/DataManager.h"
-#include "FileAttrWidget.h"
 
 MainWidget::MainWidget(CustomWidget *parent):
     CustomWidget (parent)
@@ -82,7 +81,7 @@ void MainWidget::initWidgets()
     m_pStackedWidget->setCurrentIndex(0);
 }
 
-int MainWidget::update(const int &msgType, const QString &msgContent)
+int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     Q_UNUSED(msgContent);
 

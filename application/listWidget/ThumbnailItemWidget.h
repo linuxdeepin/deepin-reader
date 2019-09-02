@@ -20,7 +20,7 @@ public:
 
 public:
     // IObserver interface
-    int update(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
     void setContantLabelPixmap(const QString &);
     void setPageLabelText(const QString &);
 

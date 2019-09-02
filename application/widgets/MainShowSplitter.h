@@ -1,7 +1,7 @@
 #ifndef MAINSHOWSPLITTER_H
 #define MAINSHOWSPLITTER_H
 
-#include "FileViewWidget.h"
+#include "view/FileViewWidget.h"
 #include "LeftSidebarWidget.h"
 #include "header/MsgSubject.h"
 #include <DSplitter>
@@ -35,7 +35,7 @@ private:
 
     // IObserver interface
 public:
-    int update(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
 };
 
 #endif // MAINSHOWDATAWIDGET_H

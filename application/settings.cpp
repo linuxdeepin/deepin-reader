@@ -102,12 +102,12 @@ Settings::Settings(QWidget *parent)
             keySplitList[1] = QString("%1_keymap_customize").arg(keySplitList[1]);
             QString customizeKey = keySplitList.join(".");
 
-            // Just update customize key user input, don't change keymap.
+            // Just dealWithData customize key user input, don't change keymap.
             if (currentKeymap == "customize") {
                 settings->option(customizeKey)->setValue(value);
             }
             // If current kemap is not "customize".
-            // Copy all customize keys from current keymap, and then update customize key just user input.
+            // Copy all customize keys from current keymap, and then dealWithData customize key just user input.
             // Then change keymap name.
             else {
                 copyCustomizeKeysFromKeymap(currentKeymap);

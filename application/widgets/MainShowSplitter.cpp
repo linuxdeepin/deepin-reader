@@ -40,7 +40,7 @@ void MainShowSplitter::setSidebarVisible(const bool &bVis ) const
     m_pLeftShowWidget->setVisible(bVis);
 }
 
-int MainShowSplitter::update(const int &msgType, const QString &msgContent)
+int MainShowSplitter::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_SLIDER_SHOW_STATE) {
         int nState = msgContent.toInt();

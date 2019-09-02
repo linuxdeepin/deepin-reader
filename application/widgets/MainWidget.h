@@ -4,7 +4,7 @@
 #include <DStackedWidget>
 #include <QVBoxLayout>
 
-#include "FileAttrWidget.h"
+#include "view/FileAttrWidget.h"
 #include "HomeWidget.h"
 #include "MainShowSplitter.h"
 
@@ -44,7 +44,7 @@ protected:
 
     // IObserver interface
 public:
-    int update(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
 };
 
 #endif // MAINWIDGET_H

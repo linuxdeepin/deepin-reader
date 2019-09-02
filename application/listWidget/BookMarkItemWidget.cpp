@@ -32,7 +32,7 @@ void BookMarkItemWidget::setPage(const QString &value)
     m_pPage->setText(value);
 }
 
-int BookMarkItemWidget::update(const int &, const QString &)
+int BookMarkItemWidget::dealWithData(const int &, const QString &)
 {
     return 0;
 }

@@ -56,7 +56,7 @@ void PagingWidget::setTotalPages(int pages)
     m_pJumpPageSpinBox->setRange(1, (pages < 1) ? 1 : pages);
 }
 
-int PagingWidget::update(const int &msgType, const QString &msgContant)
+int PagingWidget::dealWithData(const int &msgType, const QString &msgContant)
 {
     return 0;
 }

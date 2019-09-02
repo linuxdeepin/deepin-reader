@@ -38,7 +38,7 @@ private:
 
 public:
     // IObserver interface
-    int update(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
 
 private:
     DLabel *m_pPicture = nullptr;

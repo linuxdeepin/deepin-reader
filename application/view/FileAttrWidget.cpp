@@ -62,7 +62,7 @@ void FileAttrWidget::createLabel(const int &index, const QString &objName)
     m_labelList.append(labelText);
 }
 
-int FileAttrWidget::update(const int &, const QString &)
+int FileAttrWidget::dealWithData(const int &, const QString &)
 {
     return 0;
 }

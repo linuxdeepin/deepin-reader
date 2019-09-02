@@ -58,7 +58,7 @@ void MainOperationWidget::on_annotationBtn_clicked(bool)
     m_pMsgSubject->sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(2));
 }
 
-int MainOperationWidget::update(const int &, const QString &)
+int MainOperationWidget::dealWithData(const int &, const QString &)
 {
     return 0;
 }
