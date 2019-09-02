@@ -76,7 +76,6 @@ void MainWidget::initWidgets()
     m_pStackedWidget->addWidget(m_pHomeWidget);
 
     m_pMainShowSplitter = new MainShowSplitter;
-
     m_pStackedWidget->addWidget(m_pMainShowSplitter);
 
     m_pStackedWidget->setCurrentIndex(0);
@@ -85,10 +84,12 @@ void MainWidget::initWidgets()
 int MainWidget::update(const int &msgType, const QString &msgContent)
 {
     Q_UNUSED(msgContent);
+
     if (msgType == MSG_OPERATION_ATTR) {
         showFileAttr();
         return ConstantMsg::g_effective_res;
     }
+
     if (msgType == MSG_OPERATION_OPEN_FOLDER) {
         openFileFolder();
         return ConstantMsg::g_effective_res;

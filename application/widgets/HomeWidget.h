@@ -29,9 +29,6 @@ public:
 signals:
     void fileSelected(const QStringList files) const;
 
-protected:
-    void initWidget() override;
-
 private slots:
     void onChooseBtnClicked();
 
@@ -47,6 +44,10 @@ private:
     DLabel *m_splitLine = nullptr;
     DLinkButton *m_chooseBtn = nullptr;
     QSettings *m_settings = nullptr;
+
+    // CustomWidget interface
+protected:
+    void initWidget() override;
 
     // IObserver interface
 public:

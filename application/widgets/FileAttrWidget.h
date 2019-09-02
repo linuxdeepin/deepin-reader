@@ -24,9 +24,6 @@ public:
 public:
     void setFileAttr();
 
-protected:
-    void initWidget() override;
-
 private:
     void initLabels();
     void createLabel(const int &, const QString &);
@@ -34,6 +31,10 @@ private:
 private:
     QGridLayout *m_pGridLayout = nullptr;
     QList<DLabel *> m_labelList;
+
+    // CustomWidget interface
+protected:
+    void initWidget() override;
 
     // IObserver interface
 public:

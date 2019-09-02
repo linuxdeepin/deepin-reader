@@ -17,7 +17,7 @@ DWIDGET_USE_NAMESPACE
  */
 
 
-class Window : public DMainWindow, public IMsgObserver
+class Window : public DMainWindow, public IObserver
 {
     Q_OBJECT
 public:

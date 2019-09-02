@@ -3,7 +3,7 @@
 
 #include "FileViewWidget.h"
 #include "LeftSidebarWidget.h"
-#include "header/IMsgObserver.h"
+#include "header/IObserver.h"
 #include "header/MsgSubject.h"
 #include <DSplitter>
 #include <QResizeEvent>
@@ -15,7 +15,7 @@ DWIDGET_USE_NAMESPACE
  * @brief   主要用于显示文档 和 操作界面, 分割器
  */
 
-class MainShowSplitter : public DSplitter, public IMsgObserver
+class MainShowSplitter : public DSplitter, public IObserver
 {
     Q_OBJECT
 public:

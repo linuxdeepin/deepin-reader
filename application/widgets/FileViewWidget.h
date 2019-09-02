@@ -21,15 +21,16 @@ public:
     FileViewWidget(CustomWidget *parent = nullptr);
 
 protected:
-    void initWidget() override;
-
-protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void leaveEvent(QEvent *event) override;
 
 private:
     MagnifyingWidget *m_pMagnifyingWidget = nullptr;
     bool m_bCanVisible = false; //  放大镜 是否可以显示
+
+    // CustomWidget interface
+protected:
+    void initWidget() override;
 
     // IObserver interface
 public:

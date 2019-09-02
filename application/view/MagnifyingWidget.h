@@ -22,12 +22,13 @@ public:
 protected:
     void paintEvent(QPaintEvent *event) override;
 
-protected:
-    void initWidget() override;
-
     // IObserver interface
 public:
     int update(const int &, const QString &) override;
+
+    // CustomWidget interface
+protected:
+    void initWidget() override;
 };
 
 #endif // MAGNIFYINGWIDGET_H

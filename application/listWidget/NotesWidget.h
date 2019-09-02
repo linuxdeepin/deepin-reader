@@ -32,8 +32,6 @@ private:
     DListWidget *m_pNotesList = nullptr;
     QVBoxLayout *m_pVLayout = nullptr;
 
-    MsgSubject    *m_pMsgSubject = nullptr;
-
 public:
     // IObserver interface
     int update(const int &, const QString &) override;

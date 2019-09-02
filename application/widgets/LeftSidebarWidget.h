@@ -33,9 +33,6 @@ class LeftSidebarWidget : public CustomWidget
 public:
     LeftSidebarWidget(CustomWidget *parent = nullptr);
 
-protected:
-    void initWidget() override;
-
 private:
     void initOperationWidget();
 
@@ -47,6 +44,10 @@ private:
     ThumbnailWidget *m_pThumbnailWidget = nullptr;
     BookMarkWidget *m_pBookMarkWidget = nullptr;
     NotesWidget *m_pNotesWidget = nullptr;
+
+    // CustomWidget interface
+protected:
+    void initWidget() override;
 
     // IObserver interface
 public:

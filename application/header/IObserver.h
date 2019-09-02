@@ -13,11 +13,11 @@
 
 class IObserver
 {
-public:
-    virtual int update(const int &, const QString &) = 0;
-
 protected:
     virtual ~IObserver() {}
+
+public:
+    virtual int update(const int &, const QString &) = 0;
 };
 
 #pragma clang diagnostic pop

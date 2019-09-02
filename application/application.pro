@@ -70,7 +70,6 @@ HEADERS +=\
     listWidget/NotesItemWidget.h \
     view/MagnifyingWidget.h \
     header/MsgSubject.h \
-    header/IMsgObserver.h \
     header/MsgHeader.h \
     header/CustomWidget.h\
     pdfview/documentview.h \

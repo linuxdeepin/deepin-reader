@@ -55,6 +55,25 @@ int FileViewWidget::update(const int &msgType, const QString &msgContent)
         int nRes = msgContent.toInt();
         return ConstantMsg::g_effective_res;
     }
+
+    //  放映
+    if (msgType == MSG_OPERATION_SCREENING) {
+        qDebug() << "       MSG_OPERATION_SCREENING";
+        return ConstantMsg::g_effective_res;
+    }
+
+    //  放大
+    if (msgType == MSG_OPERATION_LARGER) {
+        qDebug() << "       MSG_OPERATION_LARGER";
+        return ConstantMsg::g_effective_res;
+    }
+
+    //  缩小
+    if (msgType == MSG_OPERATION_SMALLER) {
+        qDebug() << "       MSG_OPERATION_SMALLER";
+        return ConstantMsg::g_effective_res;
+    }
+
     //  更新主题
     if (msgType == MSG_UPDATE_THEME) {
     }

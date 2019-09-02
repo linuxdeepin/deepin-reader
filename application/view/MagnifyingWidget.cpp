@@ -27,7 +27,10 @@ void MagnifyingWidget::initWidget()
 
 }
 
-int MagnifyingWidget::update(const int &, const QString &)
+int MagnifyingWidget::update(const int &msgType, const QString &)
 {
+    if (msgType == MSG_UPDATE_THEME) {  //  更新主题特殊， 即使处理， 也不截断该消息
+        return 0;
+    }
     return 0;
 }

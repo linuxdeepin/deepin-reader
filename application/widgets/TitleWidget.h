@@ -21,9 +21,6 @@ class TitleWidget : public CustomWidget
 public:
     TitleWidget(CustomWidget *parent = nullptr);
 
-protected:
-    void initWidget() override;
-
 private slots:
     void on_thumbnailBtn_clicked(bool);
     void on_fontBtn_clicked();
@@ -44,6 +41,10 @@ private:
     bool m_bCurrentState = false;
     QAction *m_pHandleAction = nullptr;
     QAction *m_pDefaultAction = nullptr;
+
+    // CustomWidget interface
+protected:
+    void initWidget() override;
 
     // IObserver interface
 public:

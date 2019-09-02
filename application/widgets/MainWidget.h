@@ -25,9 +25,6 @@ public:
     MainWidget(CustomWidget *parent = nullptr);
     ~MainWidget() override;
 
-protected:
-    void initWidget() override;
-
 private slots:
     void showFileSelected(const QStringList) const;
 
@@ -43,6 +40,10 @@ private:
     HomeWidget *m_pHomeWidget = nullptr; //  选择文件
     MainShowSplitter *m_pMainShowSplitter = nullptr; //  文件显示 和 操作
     FileAttrWidget *m_pAttrWidget = nullptr;
+
+    // CustomWidget interface
+protected:
+    void initWidget() override;
 
     // IObserver interface
 public:
