@@ -7,7 +7,7 @@ QT       += xml
 TARGET = deepin_reader
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
-PKGCONFIG += dtkwidget
+QT += dtkwidget
 PKGCONFIG += poppler-qt5
 
 SOURCES += \

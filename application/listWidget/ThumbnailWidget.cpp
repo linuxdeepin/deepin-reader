@@ -68,9 +68,9 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 
         m_pSonWidgetPageLabel->setPalette(p);
 
-        //m_pSonWidgetContantLabel->setFrameShape (QFrame::NoFrame);
+        m_pSonWidgetContantLabel->setFrameShape (QFrame::NoFrame);
         m_pSonWidgetContantLabel->setPalette(p);
-        //m_pSonWidgetContantLabel->setLineWidth(3);
+        m_pSonWidgetContantLabel->setLineWidth(1);
     }
 
     if (item) {
@@ -84,7 +84,7 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 
         t_contantLab = t_ItemWidget->getContantLabel();
         //t_contantLab->setFrameShape (QFrame::Box);
-        //t_contantLab->setLineWidth(30);
+        t_contantLab->setLineWidth(3);
         t_contantLab->setPalette(p);
 
         t_pageLab = t_ItemWidget->getPageLabel();

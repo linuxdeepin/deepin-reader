@@ -13,7 +13,7 @@ MyLabel::~MyLabel()
 
 void MyLabel::paintEvent(QPaintEvent *e)
 {
-    QRectF rectangle(0.0, 0.0, this->width() - 20, this->height());
+    QRectF rectangle(0.0, 0.0, this->width(), this->height());
 
     QPainter painter(this);
     painter.setRenderHint( QPainter::Antialiasing, true );
