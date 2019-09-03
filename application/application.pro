@@ -1,13 +1,12 @@
 QT += core gui
+QT += dtkwidget
+QT += xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-QT       += core gui
-QT       += xml
 
 TARGET = deepin_reader
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
-QT += dtkwidget
 PKGCONFIG += poppler-qt5
 
 SOURCES += \
