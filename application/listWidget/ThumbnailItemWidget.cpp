@@ -47,7 +47,7 @@ void ThumbnailItemWidget::paintEvent(QPaintEvent *event)
 
 void ThumbnailItemWidget::initWidget()
 {
-    m_pContantLabel = new DLabel();
+    m_pContantLabel = new MyLabel(this);
     m_pPageLabel = new DLabel();
 
     m_pPageLabel->setFixedSize(QSize(200, 20));
