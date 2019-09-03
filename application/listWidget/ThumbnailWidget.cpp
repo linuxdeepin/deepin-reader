@@ -1,8 +1,8 @@
 #include "ThumbnailWidget.h"
 #include "ThumbnailItemWidget.h"
-/*
+/*×
  *
- */
+*/
 ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
     CustomWidget("ThumbnailWidget", parent)
 {
@@ -61,23 +61,33 @@ void ThumbnailWidget::initWidget()
 
 void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 {
-    if (m_pThumbnailItemWidget) {
-        m_pThumbnailItemWidget->setPaint(false);
+    QPalette p;
+
+    if (m_pSonWidgetPageLabel && m_pSonWidgetContantLabel && item) {
+        p.setColor(QPalette::Text, QColor(0, 0, 0));
+
+        m_pSonWidgetPageLabel->setPalette(p);
+
         m_pSonWidgetContantLabel->setFrameShape (QFrame::NoFrame);
+        m_pSonWidgetContantLabel->setPalette(p);
     }
 
     if (item) {
         DLabel *t_pageLab = nullptr;
         DLabel *t_contantLab = nullptr;
+        ThumbnailItemWidget *t_ItemWidget = nullptr;
 
-        ThumbnailItemWidget *t_ItemWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
-        t_ItemWidget->setPaint(true);
+        t_ItemWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
+
+        p.setColor(QPalette::Text, QColor(30, 144, 255));
 
         t_contantLab = t_ItemWidget->getContantLabel();
         t_contantLab->setFrameShape (QFrame::Box);
-        t_contantLab->setLineWidth(2);
+        t_contantLab->setLineWidth(3);
+        t_contantLab->setPalette(p);
 
-        t_pageLab = t_ItemWidget->getContantLabel();
+        t_pageLab = t_ItemWidget->getPageLabel();
+        t_pageLab->setPalette(p);
 
         m_pSonWidgetContantLabel = t_contantLab;
         m_pSonWidgetPageLabel = t_pageLab;
