@@ -43,7 +43,8 @@ SOURCES += \
     view/FileViewWidget.cpp \
     view/FileAttrWidget.cpp \
     widgets/FindBar.cpp \
-    widgets/LineBar.cpp
+    widgets/LineBar.cpp \
+    listWidget/MyLabel.cpp
 
 
 
@@ -86,7 +87,8 @@ HEADERS +=\
     view/FileViewWidget.h \
     view/FileAttrWidget.h \
     widgets/FindBar.h \
-    widgets/LineBar.h
+    widgets/LineBar.h \
+    listWidget/MyLabel.h
 
 DISTFILES += \
     themes/solarized_light.theme \
