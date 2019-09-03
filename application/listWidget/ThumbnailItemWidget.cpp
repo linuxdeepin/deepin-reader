@@ -4,11 +4,6 @@
 ThumbnailItemWidget::ThumbnailItemWidget(CustomWidget *parent) :
     CustomWidget (parent)
 {
-    m_pVLayout = new QVBoxLayout;
-    m_pVLayout->setContentsMargins(0, 0, 0, 0);
-    m_pVLayout->setSpacing(0);
-    this->setLayout(m_pVLayout);
-
     initWidget();
 }
 
@@ -27,6 +22,8 @@ void ThumbnailItemWidget::setPageLabelText(const QString &text)
     QFont ft;
     ft.setPointSize(12);
     m_pPageLabel->setFont(ft);
+    m_pPageLabel->setAlignment(Qt::AlignHCenter);
+    m_pPageLabel->setAlignment(Qt::AlignVCenter);
     m_pPageLabel->setText(text);
 }
 
@@ -50,21 +47,21 @@ void ThumbnailItemWidget::paintEvent(QPaintEvent *event)
 
 void ThumbnailItemWidget::initWidget()
 {
-    QGridLayout *gridLayout = new QGridLayout;
-    m_sonWidget = new DWidget;
-    m_sonWidget->setFixedSize(QSize(200, 200));
-    //m_sonWidget->setAutoFillBackground(true);
-    m_sonWidget->setLayout(gridLayout);
-
     m_pContantLabel = new DLabel();
     m_pPageLabel = new DLabel();
+
     m_pPageLabel->setFixedSize(QSize(200, 20));
-
     m_pContantLabel->setFixedSize(QSize(150, 150));
-    gridLayout->setContentsMargins(5, 5, 5, 5);
-    gridLayout->addWidget(m_pContantLabel);
 
-    m_pVLayout->addWidget(m_sonWidget);
-    m_pVLayout->addWidget(m_pPageLabel);
-    this->setLayout(m_pVLayout);
+    QVBoxLayout *t_vLayout = new QVBoxLayout;
+    QHBoxLayout *t_hLayout = new QHBoxLayout;
+
+    t_vLayout->addWidget(m_pContantLabel);
+    t_vLayout->addWidget(m_pPageLabel);
+
+    t_hLayout->addSpacing(1);
+    t_hLayout->addItem(t_vLayout);
+    t_hLayout->addSpacing(1);
+
+    this->setLayout(t_hLayout);
 }

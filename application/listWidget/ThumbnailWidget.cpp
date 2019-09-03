@@ -49,14 +49,12 @@ void ThumbnailWidget::initWidget()
         widget->setMinimumSize(QSize(250, 250));
 
         QListWidgetItem *item = new QListWidgetItem(m_pThumbnailListWidget);
-        //item->setBackgroundColor(Qt::GlobalColor::lightGray);
-        //item->setBackgroundColor(Qt::GlobalColor::white);
+
         item->setFlags(Qt::NoItemFlags);
         item->setFlags(Qt::ItemIsSelectable);
         item->setSizeHint(QSize(250, 250));
 
         m_pThumbnailListWidget->insertItem(idex, item);
-        //m_pThumbnailListWidget->addItem(item);
         m_pThumbnailListWidget->setItemWidget(item, widget);
     }
 }
@@ -66,39 +64,33 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
     if (m_pThumbnailItemWidget) {
         m_pThumbnailItemWidget->setPaint(false);
         m_pSonWidgetContantLabel->setFrameShape (QFrame::NoFrame);
-
-        //qDebug() << "clean background color";
     }
     if (item) {
-        DWidget *t_widget = nullptr;
         DLabel *t_pageLab = nullptr;
         DLabel *t_contantLab = nullptr;
-        ThumbnailItemWidget *t_ItemWidget = (ThumbnailItemWidget *)(m_pThumbnailListWidget->itemWidget(item));
+
+        ThumbnailItemWidget *t_ItemWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
         t_ItemWidget->setPaint(true);
-        t_widget = t_ItemWidget->getSonWidget();
-        t_widget->setAutoFillBackground(true);
-//        QPalette p;
-//        p.setColor(QPalette::Background, QColor(126, 192, 238));
-//        t_widget->setPalette(p);
-        //t_widget->setBackgroundColor(Qt::GlobalColor::white);
+
         t_contantLab = t_ItemWidget->getContantLabel();
         t_contantLab->setFrameShape (QFrame::Box);
-        //t_contantLab->setPalette(p);
         t_contantLab->setLineWidth(2);
 
         t_pageLab = t_ItemWidget->getContantLabel();
 
-        qDebug() << "set background color";
         m_pSonWidgetContantLabel = t_contantLab;
         m_pSonWidgetPageLabel = t_pageLab;
         m_pThumbnailItemWidget = t_ItemWidget;
+
+        qDebug() << "set background color";
     }
 }
 
 void ThumbnailWidget::setCurrentRow(const int &row)
 {
-    m_pThumbnailListWidget->setCurrentRow(row);
+    m_pThumbnailListWidget->setCurrentRow(row, QItemSelectionModel::NoUpdate);
     QListWidgetItem *item = m_pThumbnailListWidget->item(row);
+    item->setForeground(QColor(255, 255, 255));
     setSelectItemBackColor(item);
     //slotShowSelectItem(item);
 }

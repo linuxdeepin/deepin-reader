@@ -24,14 +24,14 @@ public:
     void setContantLabelPixmap(const QString &);
     void setPageLabelText(const QString &);
 
-    inline DWidget   *getSonWidget()
-    {
-        if (m_sonWidget != nullptr) {
-            return m_sonWidget;
-        } else {
-            return nullptr;
-        }
-    }
+//    inline DWidget   *getSonWidget()
+//    {
+//        if (m_sonWidget != nullptr) {
+//            return m_sonWidget;
+//        } else {
+//            return nullptr;
+//        }
+//    }
 
     inline DLabel   *getPageLabel()
     {
@@ -63,8 +63,8 @@ protected:
 private:
     DLabel *m_pContantLabel = nullptr;
     DLabel *m_pPageLabel = nullptr;
-    DWidget *m_sonWidget = nullptr;
-    QVBoxLayout *m_pVLayout = nullptr;
+    //DWidget *m_sonWidget = nullptr;
+    //QVBoxLayout *m_pVLayout = nullptr;
     bool m_bPaint = false;
 };
 
