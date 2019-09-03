@@ -7,7 +7,7 @@
 
 
 HomeWidget::HomeWidget(CustomWidget *parent):
-    CustomWidget (parent),
+    CustomWidget ("HomeWidget", parent),
     m_layout(new QVBoxLayout(this)),
     m_iconLabel(new DLabel),
     m_tipsLabel(new DLabel(tr("Drag font file here"))),

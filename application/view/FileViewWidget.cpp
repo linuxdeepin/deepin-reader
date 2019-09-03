@@ -2,7 +2,7 @@
 #include <QDebug>
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
-    : CustomWidget(parent)
+    : CustomWidget("FileViewWidget", parent)
 {
     setMouseTracking(true); //  接受 鼠标滑动事件
 

@@ -1,7 +1,7 @@
 #include "DefaultOperationWidget.h"
 
 DefaultOperationWidget::DefaultOperationWidget(CustomWidget *parent)
-    : CustomWidget(parent)
+    : CustomWidget("DefaultOperationWidget", parent)
 {
     setWindowFlags(Qt::Popup);
 

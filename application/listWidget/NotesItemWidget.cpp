@@ -3,7 +3,7 @@
 
 
 NotesItemWidget::NotesItemWidget(CustomWidget *parent) :
-    CustomWidget (parent)
+    CustomWidget ("NotesItemWidget", parent)
 {
     m_pHLayout = new QHBoxLayout;
     //set around distance

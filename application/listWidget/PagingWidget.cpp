@@ -2,7 +2,7 @@
 #include <QDebug>
 
 PagingWidget::PagingWidget(CustomWidget *parent) :
-    CustomWidget(parent)
+    CustomWidget("PagingWidget", parent)
 {
     resize(250, 20);
     initWidget();

@@ -2,7 +2,7 @@
 #include <DWidgetUtil>
 
 FileAttrWidget::FileAttrWidget(CustomWidget *parent)
-    : CustomWidget(parent)
+    : CustomWidget("FileAttrWidget", parent)
 {
     setFixedSize(QSize(400, 500));
     setAttribute(Qt::WA_ShowModal, true); //  模态对话框， 属性设置

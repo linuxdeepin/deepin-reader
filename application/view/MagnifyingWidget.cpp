@@ -2,7 +2,7 @@
 #include <QPainter>
 
 MagnifyingWidget::MagnifyingWidget(CustomWidget *parent)
-    : CustomWidget(parent)
+    : CustomWidget("MagnifyingWidget", parent)
 {
     this->setFixedSize(QSize(100, 100));
     this->setVisible(false); //  默认隐藏

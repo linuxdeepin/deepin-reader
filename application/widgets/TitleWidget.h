@@ -4,7 +4,6 @@
 #include <DMenu>
 #include <DImageButton>
 #include <QHBoxLayout>
-
 #include "header/CustomWidget.h"
 
 /**

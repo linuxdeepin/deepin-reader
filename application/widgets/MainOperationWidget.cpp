@@ -2,7 +2,7 @@
 #include <QDebug>
 
 MainOperationWidget::MainOperationWidget(CustomWidget *parent):
-    CustomWidget (parent)
+    CustomWidget ("MainOperationWidget", parent)
 {
     m_hboxLayout = new QHBoxLayout;
     m_hboxLayout->setContentsMargins(0, 0, 0, 0);

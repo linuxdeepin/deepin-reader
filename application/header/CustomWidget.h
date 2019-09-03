@@ -20,7 +20,7 @@ class CustomWidget : public DWidget, public IObserver
 {
     Q_OBJECT
 public:
-    CustomWidget(DWidget *parent = nullptr);
+    CustomWidget(const QString &, DWidget *parent = nullptr);
     ~CustomWidget() override;
 
 protected:

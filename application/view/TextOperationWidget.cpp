@@ -1,7 +1,7 @@
 #include "TextOperationWidget.h"
 
 TextOperationWidget::TextOperationWidget(CustomWidget *parent)
-    : CustomWidget(parent)
+    : CustomWidget("TextOperationWidget", parent)
 {
     setWindowFlags(Qt::Popup);
 

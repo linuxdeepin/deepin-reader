@@ -5,7 +5,7 @@
 #include "data/DataManager.h"
 
 MainWidget::MainWidget(CustomWidget *parent):
-    CustomWidget (parent)
+    CustomWidget ("MainWidget", parent)
 {
     m_centralLayout = new QVBoxLayout();
 

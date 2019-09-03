@@ -4,7 +4,7 @@
 
 
 TitleWidget::TitleWidget(CustomWidget *parent) :
-    CustomWidget(parent)
+    CustomWidget("TitleWidget", parent)
 {
     setFixedWidth(200);
 
@@ -135,7 +135,12 @@ void TitleWidget::sendMsgToSubject(const int &msgType, const QString &msgContent
     sendMsg(msgType, msgContent);
 }
 
-int TitleWidget::dealWithData(const int &, const QString &)
+int TitleWidget::dealWithData(const int &msgType, const QString &)
 {
+    //  取消放大镜
+    if (msgType == MSG_MAGNIFYING_CANCEL) {
+        on_magnifyingBtn_checkedChanged(false);
+        return ConstantMsg::g_effective_res;
+    }
     return 0;
 }

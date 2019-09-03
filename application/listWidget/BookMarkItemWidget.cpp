@@ -3,7 +3,7 @@
 
 
 BookMarkItemWidget::BookMarkItemWidget(CustomWidget *parent) :
-    CustomWidget (parent)
+    CustomWidget ("BookMarkItemWidget", parent)
 {
 
     m_pHLayout = new QHBoxLayout;

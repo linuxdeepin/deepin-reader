@@ -2,7 +2,7 @@
 #include <QDebug>
 
 BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
-    CustomWidget(parent)
+    CustomWidget("BookMarkWidget", parent)
 {
     m_pVBoxLayout = new QVBoxLayout;
     m_pVBoxLayout->setContentsMargins(0, 0, 0, 0);

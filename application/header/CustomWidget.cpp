@@ -1,8 +1,10 @@
 #include "CustomWidget.h"
 
-CustomWidget::CustomWidget(DWidget *parent)
+CustomWidget::CustomWidget(const QString &name, DWidget *parent)
     : DWidget (parent)
 {
+    setObserverName(name);
+
     m_pMsgSubject = MsgSubject::getInstance();
     if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);

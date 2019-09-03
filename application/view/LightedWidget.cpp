@@ -1,7 +1,7 @@
 #include "LightedWidget.h"
 
 LightedWidget::LightedWidget(CustomWidget *parent)
-    : CustomWidget (parent)
+    : CustomWidget ("LightedWidget", parent)
 {
     initWidget();
 }

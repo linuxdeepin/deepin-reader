@@ -1,7 +1,7 @@
 #include "LeftSidebarWidget.h"
 
 LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent):
-    CustomWidget (parent)
+    CustomWidget ("LeftSidebarWidget", parent)
 {
     setMinimumWidth(250);
     setMaximumWidth(500);

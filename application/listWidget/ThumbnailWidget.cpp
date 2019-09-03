@@ -4,7 +4,7 @@
  *
  */
 ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
-    CustomWidget(parent)
+    CustomWidget("ThumbnailWidget", parent)
 {
     m_pvBoxLayout = new QVBoxLayout;
     m_pvBoxLayout->setContentsMargins(0, 0, 0, 0);

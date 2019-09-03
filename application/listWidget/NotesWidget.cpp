@@ -1,7 +1,7 @@
 #include "NotesWidget.h"
 
 NotesWidget::NotesWidget(CustomWidget *parent) :
-    CustomWidget(parent)
+    CustomWidget("NotesWidget", parent)
 {
     m_pVLayout = new QVBoxLayout;
     m_pVLayout->setContentsMargins(0, 0, 0, 0);

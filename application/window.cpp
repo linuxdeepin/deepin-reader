@@ -46,12 +46,17 @@ Window::~Window()
     m_pMsgSubject->removeObserver(this);
 }
 
-void Window::keyPressEvent(QKeyEvent *ev)
+void Window::keyPressEvent(QKeyEvent *e)
 {
-    int nKey = ev->key();
-    qDebug() <<  nKey;
-
-    DMainWindow::keyPressEvent(ev);
+    QString key = Utils::getKeyshortcut(e);
+    qDebug() << "Window::keyPressEvent      "   << key;
+    if ( key == "Esc") {
+        sendMsg(MSG_MAGNIFYING_CANCEL);
+//        qDebug() << "keyPressEvent";
+    } else if (key == "F1") {   //  F1　跳转　帮助文档
+//        qDebug() << "keyPressEvent";
+    }
+    DMainWindow::keyPressEvent(e);
 }
 
 void Window::initUI()
