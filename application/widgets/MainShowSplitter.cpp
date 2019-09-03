@@ -8,7 +8,7 @@ MainShowSplitter::MainShowSplitter(DWidget *parent) :
     setObserverName("MainShowSplitter");
 
     setChildrenCollapsible(false);      //  子部件 不可以被拉伸到 宽度 为0
-    initWidgets();
+    initWidget();
 
     m_pMsgSubject = MsgSubject::getInstance();
     if (m_pMsgSubject) {
@@ -23,7 +23,7 @@ MainShowSplitter::~MainShowSplitter()
     }
 }
 
-void MainShowSplitter::initWidgets()
+void MainShowSplitter::initWidget()
 {
     m_pLeftShowWidget = new LeftSidebarWidget();
     insertWidget(0, m_pLeftShowWidget);

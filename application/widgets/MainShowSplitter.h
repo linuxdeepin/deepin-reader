@@ -22,7 +22,7 @@ public:
     ~MainShowSplitter() override;
 
 private:
-    void initWidgets();
+    void initWidget();
 
 private:
     void setSidebarVisible(const bool &) const;

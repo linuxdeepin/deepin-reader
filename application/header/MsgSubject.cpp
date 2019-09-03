@@ -9,7 +9,7 @@ MsgSubject::MsgSubject(QObject *parent)
     Q_UNUSED(parent);
 
     //  默认启动线程，　只在　mainwindow 中　停止运行
-    setRunFlag(true);
+    m_bRunFlag = true;
     start();
 }
 
@@ -35,7 +35,8 @@ void MsgSubject::sendMsg(IObserver *obs, const int &msgType, const QString &msgC
     m_msgList.append(msg);
 
     qDebug() << "sendMsg   " << msgType
-             <<  "  " << msgContent <<  "   " << obs->getObserverName();
+             <<  "  " << msgContent
+             <<  "   " << obs->getObserverName();
 }
 
 int MsgSubject::NotifyObservers(const int &msgType, const QString &msgContent)
@@ -48,21 +49,20 @@ int MsgSubject::NotifyObservers(const int &msgType, const QString &msgContent)
         int nRes = obs->dealWithData(msgType, msgContent);
         if (nRes == ConstantMsg::g_effective_res) {
             qDebug() << "dealWithData   " << msgType
-                     <<  "  " << msgContent <<  "   " << obs->getObserverName();
+                     <<  "  " << msgContent
+                     << "   " << obs->getObserverName();
             return 0;
         }
     }
     return -1;
 }
 
-void MsgSubject::setRunFlag(const bool &flag)
+void MsgSubject::stopThreadRun()
 {
-    m_bRunFlag = flag;
+    m_bRunFlag = false;
 
-    if (!m_bRunFlag) {
-        terminate();    //终止线程
-        wait();         //阻塞等待
-    }
+    terminate();    //终止线程
+    wait();         //阻塞等待
 }
 
 void MsgSubject::run()
@@ -76,7 +76,7 @@ void MsgSubject::run()
         }
 
         if (msgList.size() > 0) {
-            foreach ( MsgStruct msg, msgList) {
+            foreach (const MsgStruct &msg, msgList) {
                 int nRes = NotifyObservers(msg.msgType, msg.msgContent);
                 if (nRes == 0) {
                     break;
@@ -84,6 +84,6 @@ void MsgSubject::run()
             }
         }
 
-        msleep(800);
+        msleep(300);
     }
 }

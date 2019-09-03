@@ -47,7 +47,7 @@ Window::~Window()
 {
     // We don't need clean pointers because application has exit here.
     m_pMsgSubject->removeObserver(this);
-    m_pMsgSubject->setRunFlag(false);
+    m_pMsgSubject->stopThreadRun();
 }
 
 void Window::keyPressEvent(QKeyEvent *e)
