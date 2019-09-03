@@ -34,6 +34,18 @@ private:
     void setSelectItemBackColor(QListWidgetItem *);
     void setCurrentRow(const int &);
 
+    inline void setPreRowVal(const int &val)
+    {
+        m_preRow = val;
+    }
+    inline int getPreRowVal() const
+    {
+        return m_preRow;
+    }
+
+signals:
+    void sigSelectIndexPage(const int &);
+
 private slots:
     void slotShowSelectItem(QListWidgetItem *);
 
@@ -43,12 +55,11 @@ private:
     DLabel *m_pThumbnailPageLabel = nullptr;
     PagingWidget *m_pPageWidget = nullptr;
 
-    //DWidget *m_itemWidget = nullptr;
     DLabel *m_pSonWidgetPageLabel = nullptr;
     DLabel *m_pSonWidgetContantLabel = nullptr;
     ThumbnailItemWidget *m_pThumbnailItemWidget = nullptr;
 
-    int     m_nCurrentRow = -1;     //  上一次　所在的行，避免多次重复点击
+    int m_preRow = -1;//前一次页码数
 };
 
 #endif // THUMBNAILWIDGET_H

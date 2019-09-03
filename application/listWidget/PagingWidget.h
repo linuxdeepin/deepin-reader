@@ -3,8 +3,9 @@
 
 #include <DLabel>
 #include <QVBoxLayout>
-#include <DPushButton>
+#include <DImageButton>
 #include <DSpinBox>
+#include <QKeyEvent>
 
 #include "header/CustomWidget.h"
 
@@ -33,17 +34,28 @@ public:
 protected:
     //void keyPressEvent(QKeyEvent * event);
     void initWidget() override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
     void setCurrentPage(const int &);
 
+    inline void setPreRowVal(const int &val)
+    {
+        m_preRow = val;
+    }
+    inline int getPreRowVal() const
+    {
+        return m_preRow;
+    }
+
 private:
     DLabel *m_pTotalPagesLab = nullptr;
-    DPushButton *m_pPrePageBtn = nullptr;
-    DPushButton *m_pNextPageBtn = nullptr;
+    DImageButton *m_pPrePageBtn = nullptr;
+    DImageButton *m_pNextPageBtn = nullptr;
     DSpinBox *m_pJumpPageSpinBox = nullptr;
     int m_currntPage = 0;
     int m_totalPage = 0;
+    int m_preRow = -1;
 
 public:
     int dealWithData(const int &, const QString &) override;

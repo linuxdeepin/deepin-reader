@@ -17,11 +17,11 @@ void PagingWidget::initWidget()
     m_pTotalPagesLab->setText(QString("/xxx页"));
     m_pTotalPagesLab->setMinimumWidth(80);
 
-    m_pPrePageBtn = new DPushButton(this);
+    m_pPrePageBtn = new DImageButton(this);
     m_pPrePageBtn->setText(QString("<"));
     m_pPrePageBtn->setFixedSize(QSize(40, 40));
 
-    m_pNextPageBtn = new DPushButton(this);
+    m_pNextPageBtn = new DImageButton(this);
     m_pNextPageBtn->setText(QString(">"));
     m_pNextPageBtn->setFixedSize(QSize(40, 40));
 
@@ -29,6 +29,8 @@ void PagingWidget::initWidget()
     m_pJumpPageSpinBox->setRange(1, 100);
     m_pJumpPageSpinBox->setValue(1);
     m_pJumpPageSpinBox->setMinimumWidth(50);
+    m_pJumpPageSpinBox->installEventFilter(this);
+    m_pJumpPageSpinBox->setWrapping(true);
 
     QHBoxLayout *hLayout = new QHBoxLayout;
     hLayout->addWidget(m_pJumpPageSpinBox);
@@ -40,8 +42,32 @@ void PagingWidget::initWidget()
     setTotalPages(30);
 }
 
+bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_pJumpPageSpinBox) {
+        if (event->type() == QEvent::KeyPress) {
+
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+
+            if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
+
+                int index = m_pJumpPageSpinBox->value() - 1;
+                if (this->getPreRowVal() != index) {
+
+                    this->setPreRowVal(index);
+                    setCurrentPageValue(index);
+                    sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(index));
+                }
+            }
+        }
+    }
+    return QWidget::eventFilter(watched, event);
+}
+
 void PagingWidget::setCurrentPage(const int &index)
 {
+    this->setPreRowVal(index - 1);
+
     m_pJumpPageSpinBox->setValue(index);
 
     qDebug() << tr("page: %1").arg(index);
@@ -119,11 +145,3 @@ void PagingWidget::setCurrentPageValue(const int &index)
 
     setCurrentPage(m_currntPage);
 }
-
-//void PagingWidget::keyPressEvent(QKeyEvent *event)
-//{
-//    if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
-//    {
-//        qDebug() << "emit enter event";
-//    }
-//}

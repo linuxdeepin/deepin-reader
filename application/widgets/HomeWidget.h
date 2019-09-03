@@ -1,7 +1,8 @@
 #ifndef HOMEWIDGET_H
 #define HOMEWIDGET_H
 
-#include "dlinkbutton.h"
+//#include "dlinkbutton.h"
+#include <QPushButton>
 #include <DLabel>
 #include <DObject>
 #include <QFileDialog>
@@ -39,7 +40,7 @@ private:
     DLabel *m_iconLabel = nullptr;
     DLabel *m_tipsLabel = nullptr;
     DLabel *m_splitLine = nullptr;
-    DLinkButton *m_chooseBtn = nullptr;
+    QPushButton *m_chooseBtn = nullptr;
     QSettings *m_settings = nullptr;
 
     // CustomWidget interface
