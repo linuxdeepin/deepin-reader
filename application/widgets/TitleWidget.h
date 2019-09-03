@@ -32,6 +32,8 @@ private:
     void createBtn(const QString &iconName, const char *member, bool checkable = false, bool checked = false);
     void createAction(const QString &iconName, const char *member);
 
+    void sendMsgToSubject(const int &, const QString &);
+
 private:
     QHBoxLayout *m_layout = nullptr;
 

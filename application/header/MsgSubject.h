@@ -31,6 +31,7 @@ public:
 
 private:
     void NotifyObservers(const int &, const QString &);
+
 private:
     QList<IObserver *> m_observerList;
 };

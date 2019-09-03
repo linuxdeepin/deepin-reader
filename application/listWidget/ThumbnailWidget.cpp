@@ -65,6 +65,7 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
         m_pThumbnailItemWidget->setPaint(false);
         m_pSonWidgetContantLabel->setFrameShape (QFrame::NoFrame);
     }
+
     if (item) {
         DLabel *t_pageLab = nullptr;
         DLabel *t_contantLab = nullptr;
@@ -74,6 +75,7 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 
         t_contantLab = t_ItemWidget->getContantLabel();
         t_contantLab->setFrameShape (QFrame::Box);
+        //t_contantLab->setStyleSheet(tr("border-width: 2px;border-style: solid;border-color: rgb(163, 235, 117);"));
         t_contantLab->setLineWidth(2);
 
         t_pageLab = t_ItemWidget->getContantLabel();
@@ -92,14 +94,22 @@ void ThumbnailWidget::setCurrentRow(const int &row)
     QListWidgetItem *item = m_pThumbnailListWidget->item(row);
     item->setForeground(QColor(255, 255, 255));
     setSelectItemBackColor(item);
-    //slotShowSelectItem(item);
 }
 
 void ThumbnailWidget::slotShowSelectItem(QListWidgetItem *item)
 {
-    setSelectItemBackColor(item);
-
+    static int t_currentRow = -1;
     int row = m_pThumbnailListWidget->row(item);
+
+    if (t_currentRow == row) {
+        return;
+    }
+
+    qDebug() << tr("currentRow:%1    preRow:%2").arg(row).arg(t_currentRow);
+
+    t_currentRow = row;
+
+    setSelectItemBackColor(item);
 
     sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(row));
 

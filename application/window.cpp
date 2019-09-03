@@ -46,6 +46,14 @@ Window::~Window()
     m_pMsgSubject->removeObserver(this);
 }
 
+void Window::keyPressEvent(QKeyEvent *ev)
+{
+    int nKey = ev->key();
+    qDebug() <<  nKey;
+
+    DMainWindow::keyPressEvent(ev);
+}
+
 void Window::initUI()
 {
     m_centralWidget = new MainWidget();

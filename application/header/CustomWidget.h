@@ -29,7 +29,7 @@ protected:
 protected:
     void sendMsg(const int &msgType, const QString &msgContent = "") override;
 
-protected:
+private:
     MsgSubject  *m_pMsgSubject = nullptr;
 };
 

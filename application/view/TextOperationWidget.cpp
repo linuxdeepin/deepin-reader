@@ -18,26 +18,28 @@ void TextOperationWidget::createBtn(const QString &btnName, const char *member)
 
 void TextOperationWidget::SlotBtnCopyClicked()
 {
-    this->hide();
-    sendMsg(MSG_OPERATION_TEXT_COPY);
+    sendMsgAndHide(MSG_OPERATION_TEXT_COPY);
 }
 
 void TextOperationWidget::SlotBtnRemoveHighLightedClicked()
 {
-    this->hide();
-    sendMsg(MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED);
+    sendMsgAndHide(MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED);
 }
 
 void TextOperationWidget::SlotBtnAddAnnotationClicked()
 {
-    this->hide();
-    sendMsg(MSG_OPERATION_TEXT_ADD_ANNOTATION);
+    sendMsgAndHide(MSG_OPERATION_TEXT_ADD_ANNOTATION);
 }
 
 void TextOperationWidget::SlotBtnAddBookMarkClicked()
 {
+    sendMsgAndHide(MSG_OPERATION_TEXT_ADD_BOOKMARK);
+}
+
+void TextOperationWidget::sendMsgAndHide(const int &msgType)
+{
+    sendMsg(msgType);
     this->hide();
-    sendMsg(MSG_OPERATION_TEXT_ADD_BOOKMARK);
 }
 
 int TextOperationWidget::dealWithData(const int &, const QString &)

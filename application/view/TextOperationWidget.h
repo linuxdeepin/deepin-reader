@@ -30,6 +30,9 @@ private slots:
     void SlotBtnAddBookMarkClicked();
 
 private:
+    void sendMsgAndHide(const int &);
+
+private:
     QVBoxLayout *layout = nullptr;
     LightedWidget   *m_pLightedWidget = nullptr;
 

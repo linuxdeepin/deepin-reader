@@ -37,8 +37,8 @@ private:
 signals:
     void sigSelectIndexPage(const int &);
 
-public slots:
-    void slotSetJumpToPage(const int &);
+//public slots:
+//    void slotSetJumpToPage(const int &);
 
 private slots:
     void slotShowSelectItem(QListWidgetItem *);
@@ -53,6 +53,8 @@ private:
     DLabel *m_pSonWidgetPageLabel = nullptr;
     DLabel *m_pSonWidgetContantLabel = nullptr;
     ThumbnailItemWidget *m_pThumbnailItemWidget = nullptr;
+
+    int     m_nCurrentRow = -1;     //  上一次　所在的行，避免多次重复点击
 };
 
 #endif // THUMBNAILWIDGET_H

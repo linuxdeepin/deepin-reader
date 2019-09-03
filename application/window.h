@@ -24,6 +24,9 @@ public:
     Window(DMainWindow *parent = nullptr);
     ~Window() override;
 
+protected:
+    void keyPressEvent(QKeyEvent *ev) override;
+
 private:
     void initUI();
     void initConnections();
@@ -46,7 +49,6 @@ private slots:
     void action_SwitchTheme();
 
     void action_Help();
-
 
 private:
     MsgSubject  *m_pMsgSubject = nullptr;

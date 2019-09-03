@@ -30,6 +30,9 @@ private slots:
     void SlotBtnEndPageClicked();
 
 private:
+    void sendMsgAndHide(const int &);
+
+private:
     QVBoxLayout *layout = nullptr;
 
     // IObserver interface
