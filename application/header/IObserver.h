@@ -21,17 +21,16 @@ public:
     virtual void sendMsg(const int &, const QString &) = 0;
 
     //  添加订阅者身份，用于具体定位到某个订阅者
+private:
+    virtual void setObserverName(const QString &name) = 0;
+
 public:
-    void setObserverName(const QString &name)
-    {
-        m_strObserverName = name;
-    }
     QString getObserverName()
     {
         return m_strObserverName;
     }
 
-private:
+protected:
     QString     m_strObserverName = "";
 };
 

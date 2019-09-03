@@ -3,16 +3,27 @@
 
 #include "ISubject.h"
 #include <QList>
+#include <QThread>
+#include <QObject>
+#include <QMutex>
 
 /**
  * @brief The MsgSubject class
+ * @brief   采用线程的方式　进行消息的推送
  * @brief   消息服务的 发布者
  */
 
-class MsgSubject : public ISubject
+struct MsgStruct {
+    IObserver *obs;
+    int msgType;
+    QString msgContent;
+};
+
+class MsgSubject : public QThread, public ISubject
 {
+    Q_OBJECT
 private:
-    MsgSubject();
+    MsgSubject(QObject *parent = nullptr);
 
 public:
     static MsgSubject *getInstance()
@@ -27,13 +38,25 @@ public:
     void removeObserver(IObserver *obs) override;
 
 public:
-    void sendMsg(const int &, const QString &msgContent);
+    void sendMsg(IObserver *, const int &, const QString &msgContent);
 
 private:
-    void NotifyObservers(const int &, const QString &);
+    int NotifyObservers(const int &, const QString &);
 
 private:
     QList<IObserver *> m_observerList;
+
+public:
+    void setRunFlag(const bool &);
+private:
+    bool    m_bRunFlag = false;
+    // QThread interface
+protected:
+    void run() override;
+
+private:
+    QList<MsgStruct> m_msgList;
+    QMutex      m_mutex;
 };
 
 #endif // MSGSUBJECT_H

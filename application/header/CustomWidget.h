@@ -30,6 +30,9 @@ protected:
     void sendMsg(const int &msgType, const QString &msgContent = "") override;
 
 private:
+    void setObserverName(const QString &name) override;
+
+private:
     MsgSubject  *m_pMsgSubject = nullptr;
 };
 

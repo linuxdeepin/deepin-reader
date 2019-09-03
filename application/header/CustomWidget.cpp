@@ -21,6 +21,11 @@ CustomWidget::~CustomWidget()
 void CustomWidget::sendMsg(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(msgType, msgContent);
+        m_pMsgSubject->sendMsg(this, msgType, msgContent);
     }
+}
+
+void CustomWidget::setObserverName(const QString &name)
+{
+    m_strObserverName = name;
 }

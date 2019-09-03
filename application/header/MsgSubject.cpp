@@ -2,10 +2,15 @@
 #include "MsgHeader.h"
 
 #include <QDebug>
+#include <QMutexLocker>
 
-MsgSubject::MsgSubject()
+MsgSubject::MsgSubject(QObject *parent)
 {
+    Q_UNUSED(parent);
 
+    //  默认启动线程，　只在　mainwindow 中　停止运行
+    setRunFlag(true);
+    start();
 }
 
 void MsgSubject::addObserver(IObserver *obs)
@@ -18,12 +23,22 @@ void MsgSubject::removeObserver(IObserver *obs)
     m_observerList.removeOne(obs);
 }
 
-void MsgSubject::sendMsg(const int &msgType, const QString &msgContent)
+void MsgSubject::sendMsg(IObserver *obs, const int &msgType, const QString &msgContent)
 {
-    NotifyObservers(msgType, msgContent);
+    QMutexLocker locker(&m_mutex);
+
+    MsgStruct msg;
+    msg.obs = obs;
+    msg.msgType = msgType;
+    msg.msgContent = msgContent;
+
+    m_msgList.append(msg);
+
+    qDebug() << "sendMsg   " << msgType
+             <<  "  " << msgContent <<  "   " << obs->getObserverName();
 }
 
-void MsgSubject::NotifyObservers(const int &msgType, const QString &msgContent)
+int MsgSubject::NotifyObservers(const int &msgType, const QString &msgContent)
 {
     /*
      * 如果 该消息 在某一个 观察者中被处理了， 就返回9999  则截断该消息，
@@ -34,7 +49,41 @@ void MsgSubject::NotifyObservers(const int &msgType, const QString &msgContent)
         if (nRes == ConstantMsg::g_effective_res) {
             qDebug() << "dealWithData   " << msgType
                      <<  "  " << msgContent <<  "   " << obs->getObserverName();
-            break;
+            return 0;
         }
+    }
+    return -1;
+}
+
+void MsgSubject::setRunFlag(const bool &flag)
+{
+    m_bRunFlag = flag;
+
+    if (!m_bRunFlag) {
+        terminate();    //终止线程
+        wait();         //阻塞等待
+    }
+}
+
+void MsgSubject::run()
+{
+    while (m_bRunFlag) {
+        QList<MsgStruct> msgList;
+        {
+            QMutexLocker locker(&m_mutex);
+            msgList = m_msgList;
+            m_msgList.clear();
+        }
+
+        if (msgList.size() > 0) {
+            foreach ( MsgStruct msg, msgList) {
+                int nRes = NotifyObservers(msg.msgType, msg.msgContent);
+                if (nRes == 0) {
+                    break;
+                }
+            }
+        }
+
+        msleep(800);
     }
 }

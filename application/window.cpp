@@ -19,6 +19,8 @@ Window::Window(DMainWindow *parent)
     : DMainWindow(parent),
       m_centralLayout(new QVBoxLayout(m_centralWidget))
 {
+    setObserverName("Window");
+
     initUI();
 
     // Init layoutr
@@ -33,6 +35,7 @@ Window::Window(DMainWindow *parent)
     m_pMsgSubject = MsgSubject::getInstance();
     if (m_pMsgSubject == nullptr)
         return ;
+
     if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
     }
@@ -44,6 +47,7 @@ Window::~Window()
 {
     // We don't need clean pointers because application has exit here.
     m_pMsgSubject->removeObserver(this);
+    m_pMsgSubject->setRunFlag(false);
 }
 
 void Window::keyPressEvent(QKeyEvent *e)
@@ -192,8 +196,13 @@ int Window::dealWithData(const int &msgType, const QString &msgContent)
 void Window::sendMsg(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(msgType, msgContent);
+        m_pMsgSubject->sendMsg(this, msgType, msgContent);
     }
+}
+
+void Window::setObserverName(const QString &name)
+{
+    m_strObserverName = name;
 }
 
 void Window::createAction(const QString &actionName, const QString &objectName, const QString &iconName, const char *member)

@@ -5,6 +5,8 @@
 MainShowSplitter::MainShowSplitter(DWidget *parent) :
     DSplitter (parent)
 {
+    setObserverName("MainShowSplitter");
+
     setChildrenCollapsible(false);      //  子部件 不可以被拉伸到 宽度 为0
     initWidgets();
 
@@ -54,4 +56,9 @@ void MainShowSplitter::sendMsg(const int &msgType, const QString &msgContent)
 {
     Q_UNUSED(msgType);
     Q_UNUSED(msgContent);
+}
+
+void MainShowSplitter::setObserverName(const QString &name)
+{
+    m_strObserverName = name;
 }
