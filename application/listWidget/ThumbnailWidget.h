@@ -34,12 +34,6 @@ private:
     void setSelectItemBackColor(QListWidgetItem *);
     void setCurrentRow(const int &);
 
-signals:
-    void sigSelectIndexPage(const int &);
-
-//public slots:
-//    void slotSetJumpToPage(const int &);
-
 private slots:
     void slotShowSelectItem(QListWidgetItem *);
 

@@ -118,8 +118,8 @@ void ThumbnailWidget::slotShowSelectItem(QListWidgetItem *item)
     }
 }
 
-void ThumbnailWidget::slotSetJumpToPage(const int &index)
-{
-    QListWidgetItem *item = m_pThumbnailListWidget->item(index);
-    setSelectItemBackColor(item);
-}
+//void ThumbnailWidget::slotSetJumpToPage(const int &index)
+//{
+//    QListWidgetItem *item = m_pThumbnailListWidget->item(index);
+//    setSelectItemBackColor(item);
+//}
