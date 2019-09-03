@@ -7,8 +7,9 @@
 #include "view/FileAttrWidget.h"
 #include "HomeWidget.h"
 #include "MainShowSplitter.h"
-
+#include "FindBar.h"
 #include "header/CustomWidget.h"
+#include <DAnchors>
 
 /**
  * @brief The MainWidget class
@@ -26,7 +27,6 @@ private slots:
     void showFileSelected(const QStringList);
 
 private:
-    void initWidgets();
     void openFileFolder();
     void showFileAttr();
 
@@ -37,6 +37,7 @@ private:
     HomeWidget *m_pHomeWidget = nullptr; //  选择文件
     MainShowSplitter *m_pMainShowSplitter = nullptr; //  文件显示 和 操作
     FileAttrWidget *m_pAttrWidget = nullptr;
+    FindBar *m_pFindBar = nullptr;
 
     // CustomWidget interface
 protected:

@@ -41,7 +41,9 @@ SOURCES += \
     view/TextOperationWidget.cpp \
     view/LightedWidget.cpp \
     view/FileViewWidget.cpp \
-    view/FileAttrWidget.cpp
+    view/FileAttrWidget.cpp \
+    widgets/FindBar.cpp \
+    widgets/LineBar.cpp
 
 
 
@@ -62,16 +64,16 @@ HEADERS +=\
     data/DataManager.h \
     header/ISubject.h \
     header/IObserver.h \
+    header/MsgSubject.h \
+    header/MsgHeader.h \
+    header/CustomWidget.h\
     listWidget/ThumbnailItemWidget.h \
     listWidget/NotesWidget.h \
     listWidget/ThumbnailWidget.h \
     listWidget/PagingWidget.h \
     listWidget/BookMarkWidget.h \
     listWidget/BookMarkItemWidget.h \
-    listWidget/NotesItemWidget.h \ 
-    header/MsgSubject.h \
-    header/MsgHeader.h \
-    header/CustomWidget.h\
+    listWidget/NotesItemWidget.h \   
     pdfview/documentview.h \
     pdfview/model.h \
     pdfview/global.h \
@@ -82,7 +84,9 @@ HEADERS +=\
     view/TextOperationWidget.h \
     view/LightedWidget.h \
     view/FileViewWidget.h \
-    view/FileAttrWidget.h
+    view/FileAttrWidget.h \
+    widgets/FindBar.h \
+    widgets/LineBar.h
 
 DISTFILES += \
     themes/solarized_light.theme \

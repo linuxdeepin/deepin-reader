@@ -1,7 +1,7 @@
 #ifndef MAINOPERATIONWIDGET_H
 #define MAINOPERATIONWIDGET_H
 
-#include <DPushButton>
+#include <DImageButton>
 #include <QHBoxLayout>
 
 #include "header/CustomWidget.h"
@@ -19,12 +19,14 @@ public:
 
 private:
     void initBtns();
-    void createBtn(const QString &iconName, const char *member, bool checkable = false, bool checked = false);
+    void createBtn(const QString &iconName, const QString &normalPic, const QString &hoverPic,
+                   const QString &pressPic, const QString &checkedPic,
+                   const char *member);
 
 private slots:
-    void on_thumbnailBtn_clicked(bool);
-    void on_bookmarksBtn_clicked(bool);
-    void on_annotationBtn_clicked(bool);
+    void on_thumbnailBtn_checkedChanged(bool);
+    void on_bookmarksBtn_checkedChanged(bool);
+    void on_annotationBtn_checkedChanged(bool);
 
 private:
     QHBoxLayout *m_hboxLayout = nullptr;
