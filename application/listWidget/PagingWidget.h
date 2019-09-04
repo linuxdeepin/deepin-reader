@@ -39,6 +39,10 @@ protected:
 private:
     void setCurrentPage(const int &);
 
+    void createBtn(DImageButton *btn, QWidget *parent, const QString &text, const QString &btnName, const QString &normalPic, const QString &hoverPic,
+                   const QString &pressPic, const QString &checkedPic,
+                   const char *member, bool checkable = false, bool checked = false);
+
     inline void setPreRowVal(const int &val)
     {
         m_preRow = val;

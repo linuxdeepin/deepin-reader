@@ -6,12 +6,13 @@
 #include <QPainter>
 #include <QRectF>
 #include <QString>
+#include <QPainterPath>
 
 class MyLabel : public QLabel
 {
     Q_OBJECT
 public:
-    MyLabel(QWidget *parent = 0);
+    MyLabel(QWidget *parent = nullptr);
     ~MyLabel() override;
 
 protected:

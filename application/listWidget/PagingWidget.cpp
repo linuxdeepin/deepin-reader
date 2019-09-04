@@ -6,9 +6,6 @@ PagingWidget::PagingWidget(CustomWidget *parent) :
 {
     resize(250, 20);
     initWidget();
-
-    connect(m_pPrePageBtn, SIGNAL(clicked()), this, SLOT(slotPrePage()));
-    connect(m_pNextPageBtn, SIGNAL(clicked()), this, SLOT(slotNextPage()));
 }
 
 void PagingWidget::initWidget()
@@ -18,12 +15,15 @@ void PagingWidget::initWidget()
     m_pTotalPagesLab->setMinimumWidth(80);
 
     m_pPrePageBtn = new DImageButton(this);
-    m_pPrePageBtn->setText(QString("<"));
+    m_pPrePageBtn->setText(tr("<"));
     m_pPrePageBtn->setFixedSize(QSize(40, 40));
 
     m_pNextPageBtn = new DImageButton(this);
-    m_pNextPageBtn->setText(QString(">"));
+    m_pNextPageBtn->setText(tr(">"));
     m_pNextPageBtn->setFixedSize(QSize(40, 40));
+
+    connect(m_pPrePageBtn, SIGNAL(clicked()), SLOT(slotPrePage()));
+    connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPage()));
 
     m_pJumpPageSpinBox = new DSpinBox(this);
     m_pJumpPageSpinBox->setRange(1, 100);
@@ -71,6 +71,17 @@ void PagingWidget::setCurrentPage(const int &index)
     m_pJumpPageSpinBox->setValue(index);
 
     qDebug() << tr("page: %1").arg(index);
+}
+
+void PagingWidget::createBtn(DImageButton *btn, QWidget *parent, const QString &text, const QString &btnName, const QString &normalPic, const QString &hoverPic, const QString &pressPic, const QString &checkedPic, const char *member, bool checkable, bool checked)
+{
+    btn = new DImageButton(normalPic, hoverPic, pressPic, checkedPic, parent);
+    btn->setText(text);
+    btn->setFixedSize(QSize(40, 40));
+    btn->setToolTip(btnName);
+    btn->setCheckable(checkable);
+
+    connect(btn, SIGNAL(checkedChanged()), member);
 }
 
 void PagingWidget::setTotalPages(int pages)
