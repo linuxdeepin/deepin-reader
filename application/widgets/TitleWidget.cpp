@@ -83,7 +83,7 @@ void TitleWidget::on_DefaultAction_trigger()
 //  初始化 标题栏 按钮
 void TitleWidget::initBtns()
 {
-    createBtn(tr("缩略图"), tr(""), tr(""), tr(""), tr(""), SLOT(on_thumbnailBtn_checkedChanged(bool)), true);
+    createBtn(tr("缩略图"), tr(":/image/normal/thumbnail_normal_light.svg"), tr(""), tr(":/image/press/thumbnail_press_light.svg"), tr(""), SLOT(on_thumbnailBtn_checkedChanged(bool)), true);
     createBtn(tr("字体"), tr(""), tr(""), tr(""), tr(""), SLOT(on_fontBtn_clicked()));
     createBtn(tr("手型"), tr(""), tr(""), tr(""), tr(""), SLOT(on_handleShapeBtn_clicked()));
     createBtn(tr("放大镜"), tr(""), tr(""), tr(""), tr(""), SLOT(on_magnifyingBtn_checkedChanged(bool)), true);

@@ -101,7 +101,7 @@ void Window::initConnections()
 
 void Window::initTitlebar()
 {
-    titlebar()->setIcon(QIcon(":/images/logo_24.svg"));
+    titlebar()->setIcon(QIcon(":/image/logo_big.svg"));
     titlebar()->setTitle(tr(""));
 }
 
