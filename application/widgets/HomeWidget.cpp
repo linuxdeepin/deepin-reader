@@ -1,12 +1,11 @@
 #include "HomeWidget.h"
 #include "utils.h"
-#include "header/MsgHeader.h"
 #include <QApplication>
 #include <QDir>
 #include <DFileDialog>
 
 HomeWidget::HomeWidget(CustomWidget *parent):
-    CustomWidget (parent),
+    CustomWidget ("HomeWidget", parent),
     m_layout(new QVBoxLayout(this)),
     m_iconLabel(new DLabel),
     m_tipsLabel(new DLabel(tr("Drag font file here"))),
@@ -51,6 +50,11 @@ void HomeWidget::setIconPixmap(bool isLoaded)
     }
 }
 
+void HomeWidget::initWidget()
+{
+
+}
+
 void HomeWidget::onChooseBtnClicked()
 {
     QStringList fileList = getOpenFileList();
@@ -87,7 +91,7 @@ QStringList HomeWidget::getOpenFileList()
 }
 
 
-int HomeWidget::update(const int &msgType, const QString &msgContent)
+int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     Q_UNUSED(msgContent);
     if (msgType == MSG_OPERATION_OPEN_FILE) {

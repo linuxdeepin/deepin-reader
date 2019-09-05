@@ -3,48 +3,28 @@
 
 #include "ISubject.h"
 #include <QList>
-
-//  消息类型
-enum MSG_TYPE {
-    MSG_UPDATE_THEME = 0,           //  更新主题
-    MSG_SET_WINDOW_TITLE,           //  设置 应用标题
-
-    MSG_SLIDER_SHOW_STATE = 10,     //  侧边栏 显隐消息
-    MSG_MAGNIFYING,                 //  放大镜消息
-    MSG_HANDLESHAPE,                //  手型 消息
-
-    MSG_OPERATION_OPEN_FILE = 50,  //  打开文件
-    MSG_OPERATION_SAVE_FILE,        //  保存文件
-    MSG_OPERATION_SAVE_AS_FILE,     //  另存为文件
-    MSG_OPERATION_OPEN_FOLDER,      //  打开文件所处文件夹
-    MSG_OPERATION_PRINT,            //  打印
-    MSG_OPERATION_ATTR,             //  属性
-    MSG_OPERATION_FIND,             //  搜索
-    MSG_OPERATION_FULLSCREEN,       //  全屏
-    MSG_OPERATION_SCREENING,        //  放映
-    MSG_OPERATION_LARGER,           //  放大
-    MSG_OPERATION_SMALLER,          //  缩小
-    MSG_OPERATION_SWITCH_THEME,     //  主题切换
-
-    MSG_THUMBNAIL_JUMPTOPAGE = 100, //  跳转到指定页 消息
-    MSG_BOOKMARK_DLTITEM,           //  删除指定书签 消息
-    MSG_BOOKMARK_ADDITEM,           //  添加指定书签 消息
-    MSG_NOTE_COPYCHOICECONTANT,     //  拷贝指定注释内容 消息
-    MSG_NOTE_ADDCONTANT,            //  添加注释内容 消息
-    MSG_NOTE_ADDITEM,               //  添加注释子节点 消息
-    MSG_NOTE_DLTNOTEITEM,           //  删除注释子节点 消息
-    MSG_SWITCHLEFTWIDGET,           //  切换左侧窗口(缩略图、书签、注释) 消息
-};
+#include <QThread>
+#include <QObject>
+#include <QMutex>
 
 /**
  * @brief The MsgSubject class
+ * @brief   采用线程的方式, 进行　消息的发送服务
  * @brief   消息服务的 发布者
  */
 
-class MsgSubject : public ISubject
+//  消息数据结构体
+typedef struct {
+    IObserver *obs;
+    int msgType;
+    QString msgContent;
+} MsgStruct;
+
+class MsgSubject : public QThread, public ISubject
 {
+    Q_OBJECT
 private:
-    MsgSubject();
+    MsgSubject(QObject *parent = nullptr);
 
 public:
     static MsgSubject *getInstance()
@@ -58,13 +38,23 @@ public:
     void addObserver(IObserver *obs) override;
     void removeObserver(IObserver *obs) override;
 
+    // QThread interface
+protected:
+    void run() override;
+
 public:
-    void sendMsg(const int &, const QString &msgContent = "");
+    void sendMsg(IObserver *, const int &, const QString &msgContent);
+    void stopThreadRun();
 
 private:
-    void NotifyObservers(const int &, const QString &);
+    int NotifyObservers(const int &, const QString &);
+
 private:
     QList<IObserver *> m_observerList;
+    QList<MsgStruct> m_msgList;
+    QMutex      m_mutex;
+
+    bool    m_bRunFlag = false;
 };
 
 #endif // MSGSUBJECT_H

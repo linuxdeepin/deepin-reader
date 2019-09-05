@@ -2,17 +2,12 @@
 #include <QDebug>
 
 ThumbnailItemWidget::ThumbnailItemWidget(CustomWidget *parent) :
-    CustomWidget (parent)
+    CustomWidget ("ThumbnailItemWidget", parent)
 {
-    m_pVLayout = new QVBoxLayout;
-    m_pVLayout->setContentsMargins(0, 0, 0, 0);
-    m_pVLayout->setSpacing(0);
-    this->setLayout(m_pVLayout);
-
     initWidget();
 }
 
-int ThumbnailItemWidget::update(const int &, const QString &)
+int ThumbnailItemWidget::dealWithData(const int &, const QString &)
 {
     return 0;
 }
@@ -27,44 +22,46 @@ void ThumbnailItemWidget::setPageLabelText(const QString &text)
     QFont ft;
     ft.setPointSize(12);
     m_pPageLabel->setFont(ft);
+    m_pPageLabel->setAlignment(Qt::AlignHCenter);
+    m_pPageLabel->setAlignment(Qt::AlignVCenter);
     m_pPageLabel->setText(text);
 }
 
 void ThumbnailItemWidget::paintEvent(QPaintEvent *event)
 {
-    Q_UNUSED(event);
+    //Q_UNUSED(event);
+//    m_pContantLabel->setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
+//    m_pContantLabel->setWindowFlags(Qt::FramelessWindowHint); //设置无边框窗口
 
-//    QPainter pw(m_sonWidget?m_sonWidget:nullptr);
-//    pw.setPen(Qt::NoPen);
-//    pw.setBrush(m_bPaint?Qt::white:Qt::darkBlue);
-//    pw.drawRect(rect());
+//    QPainter painter(m_pContantLabel);
+//    painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
+//    painter.setBrush(QBrush(Qt::yellow));
+//    painter.setPen(Qt::transparent);
+//    QRect rect = m_pContantLabel->rect();
+//    rect.setWidth(rect.width() - 1);
+//    rect.setHeight(rect.height() - 1);
+//    painter.drawRoundedRect(rect, 20, 20);
 
-//    m_sonWidget->update();
-//    qDebug() << "paint ground color";
-
-//    QPainter pl(m_pPageLabel?m_pPageLabel:nullptr);
-//    pl.setPen(Qt::NoPen);
-//    pl.setBrush(m_bPaint?Qt::white:Qt::blue);
-//    pl.drawRect(rect());
+    DWidget::paintEvent(event);
 }
 
 void ThumbnailItemWidget::initWidget()
 {
-    QGridLayout *gridLayout = new QGridLayout;
-    m_sonWidget = new DWidget;
-    m_sonWidget->setFixedSize(QSize(250, 250));
-    m_sonWidget->setAutoFillBackground(true);
-    m_sonWidget->setLayout(gridLayout);
-
-    m_pContantLabel = new DLabel();
+    m_pContantLabel = new MyLabel(this);
     m_pPageLabel = new DLabel();
-    m_pPageLabel->setFixedSize(QSize(250, 20));
 
+    m_pPageLabel->setFixedSize(QSize(200, 20));
     m_pContantLabel->setFixedSize(QSize(150, 150));
-    gridLayout->setContentsMargins(5, 5, 5, 5);
-    gridLayout->addWidget(m_pContantLabel);
 
-    m_pVLayout->addWidget(m_sonWidget);
-    m_pVLayout->addWidget(m_pPageLabel);
-    this->setLayout(m_pVLayout);
+    QVBoxLayout *t_vLayout = new QVBoxLayout;
+    QHBoxLayout *t_hLayout = new QHBoxLayout;
+
+    t_vLayout->addWidget(m_pContantLabel);
+    t_vLayout->addWidget(m_pPageLabel);
+
+    t_hLayout->addSpacing(1);
+    t_hLayout->addItem(t_vLayout);
+    t_hLayout->addSpacing(1);
+
+    this->setLayout(t_hLayout);
 }

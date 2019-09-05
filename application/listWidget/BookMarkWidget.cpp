@@ -2,7 +2,7 @@
 #include <QDebug>
 
 BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
-    CustomWidget(parent)
+    CustomWidget("BookMarkWidget", parent)
 {
     m_pVBoxLayout = new QVBoxLayout;
     m_pVBoxLayout->setContentsMargins(0, 0, 0, 0);
@@ -22,6 +22,9 @@ void BookMarkWidget::slotShowSelectItem(QListWidgetItem *item)
 void BookMarkWidget::initWidget()
 {
     m_pBookMarkListWidget = new DListWidget;
+    m_pBookMarkListWidget->setSpacing(10);
+    //设置自动适应布局调整（Adjust适应，Fixed不适应），默认不适应
+    m_pBookMarkListWidget->setResizeMode(QListWidget::Adjust);
     m_pVBoxLayout->addWidget(m_pBookMarkListWidget);
 
     for (int page = 0; page < 20; ++page) {
@@ -49,7 +52,7 @@ void BookMarkWidget::dltItem()
     }
 }
 
-int BookMarkWidget::update(const int &msgType, const QString &msgContent)
+int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_BOOKMARK_DLTITEM == msgType) {
         //dltItem();

@@ -2,27 +2,55 @@
 #include <QPainter>
 
 MagnifyingWidget::MagnifyingWidget(CustomWidget *parent)
-    : CustomWidget(parent)
+    : CustomWidget("MagnifyingWidget", parent)
 {
-    this->setFixedSize(QSize(50, 50));
+    this->setFixedSize(QSize(100, 100));
     this->setVisible(false); //  默认隐藏
+    this->setAttribute(Qt::WA_TranslucentBackground, true);
+
+    initWidget();
+}
+
+//  图形 是 文档传递过来进行展示
+void MagnifyingWidget::setShowImage(const QImage &temp)
+{
+    m_showImage = temp;
+
+    update();
 }
 
 void MagnifyingWidget::paintEvent(QPaintEvent *event)
 {
-    DWidget::paintEvent(event);
-
     QPainter painter(this);
     painter.save();
 
-    QRect rect = this->geometry();
-    painter.setBrush(QBrush(QColor(255, 0, 0)));
-    painter.drawEllipse(0, 0, rect.height(), rect.width());
+//    painter.drawImage(100, 100, m_showImage);
+    //设置反锯齿
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::Qt4CompatiblePainting);
+
+    painter.setPen(Qt::red);
+    painter.setBrush(Qt::red);
+
+    QPainterPath bigCircle;
+    bigCircle.addEllipse(0, 0, 100, 100);
+
+    QPainterPath smallCircle;
+    smallCircle.addEllipse(10, 10, 80, 80);
+
+    QPainterPath path = bigCircle - smallCircle;
+    painter.drawPath(path);
 
     painter.restore();
 }
 
-int MagnifyingWidget::update(const int &, const QString &)
+void MagnifyingWidget::initWidget()
 {
+}
+
+int MagnifyingWidget::dealWithData(const int &msgType, const QString &)
+{
+    if (msgType == MSG_UPDATE_THEME) {  //  更新主题特殊， 即使处理， 也不截断该消息
+        return 0;
+    }
     return 0;
 }

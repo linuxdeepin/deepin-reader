@@ -2,7 +2,7 @@
 #include <QDebug>
 
 MainOperationWidget::MainOperationWidget(CustomWidget *parent):
-    CustomWidget (parent)
+    CustomWidget ("MainOperationWidget", parent)
 {
     m_hboxLayout = new QHBoxLayout;
     m_hboxLayout->setContentsMargins(0, 0, 0, 0);
@@ -13,47 +13,49 @@ MainOperationWidget::MainOperationWidget(CustomWidget *parent):
     initBtns();
 }
 
+void MainOperationWidget::initWidget()
+{
+
+}
+
 void MainOperationWidget::initBtns()
 {
     m_hboxLayout->addStretch(1);
-    createBtn(tr("缩略图"), SLOT(on_thumbnailBtn_clicked(bool)), true);
-    createBtn(tr("书签"), SLOT(on_bookmarksBtn_clicked(bool)), true);
-    createBtn(tr("注释"), SLOT(on_annotationBtn_clicked(bool)), true);
+    createBtn(tr("thumbnail"), tr(""), tr(""), tr(""), tr(""), SLOT(on_thumbnailBtn_checkedChanged(bool)));
+    createBtn(tr("book mark"), tr(""), tr(""), tr(""), tr(""), SLOT(on_bookmarksBtn_checkedChanged(bool)));
+    createBtn(tr("annotation"), tr(""), tr(""), tr(""), tr(""), SLOT(on_annotationBtn_checkedChanged(bool)));
     m_hboxLayout->addStretch(1);
 }
 
-void MainOperationWidget::createBtn(const QString &iconName, const char *member, bool checkable, bool checked)
+void MainOperationWidget::createBtn(const QString &iconName, const QString &normalPic, const QString &hoverPic,
+                                    const QString &pressPic, const QString &checkedPic, const char *member)
 {
-    DPushButton *btn = new DPushButton(iconName);
+    DImageButton *btn = new DImageButton(normalPic, hoverPic, pressPic, checkedPic);
     btn->setToolTip(iconName);
-    if (checkable) {
-        btn->setCheckable(true);
-        btn->setChecked(checked);
+    btn->setCheckable(true);
+    btn->setChecked(false);
 
-        connect(btn, SIGNAL(clicked(bool)), member);
-    } else {
-        connect(btn, SIGNAL(clicked()), member);
-    }
+    connect(btn, SIGNAL(checkedChanged(bool)), member);
 
     m_hboxLayout->addWidget(btn);
 }
 
-void MainOperationWidget::on_thumbnailBtn_clicked(bool)
+void MainOperationWidget::on_thumbnailBtn_checkedChanged(bool)
 {
-    m_pMsgSubject->sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(0));
+    sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(0));
 }
 
-void MainOperationWidget::on_bookmarksBtn_clicked(bool)
+void MainOperationWidget::on_bookmarksBtn_checkedChanged(bool)
 {
-    m_pMsgSubject->sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(1));
+    sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(1));
 }
 
-void MainOperationWidget::on_annotationBtn_clicked(bool)
+void MainOperationWidget::on_annotationBtn_checkedChanged(bool)
 {
-    m_pMsgSubject->sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(2));
+    sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(2));
 }
 
-int MainOperationWidget::update(const int &, const QString &)
+int MainOperationWidget::dealWithData(const int &, const QString &)
 {
     return 0;
 }

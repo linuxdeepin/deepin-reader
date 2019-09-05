@@ -4,7 +4,6 @@
 #include <QPushButton>
 #include <DLabel>
 #include <DObject>
-#include <DWidget>
 #include <QFileDialog>
 #include <QSettings>
 #include <QVBoxLayout>
@@ -15,8 +14,6 @@
  *  @brief  支持拖拽
  *  @brief  打开pdf 文件
  */
-
-DWIDGET_USE_NAMESPACE
 
 class HomeWidget : public CustomWidget
 {
@@ -45,9 +42,13 @@ private:
     QPushButton *m_chooseBtn = nullptr;
     QSettings *m_settings = nullptr;
 
+    // CustomWidget interface
+protected:
+    void initWidget() override;
+
     // IObserver interface
 public:
-    int update(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
 };
 
 #endif // OPENFILEWIDGET_H

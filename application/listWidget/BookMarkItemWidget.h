@@ -1,7 +1,6 @@
 #ifndef BOOKMARKITEMWIDGET_H
 #define BOOKMARKITEMWIDGET_H
 
-#include <DWidget>
 #include <DLabel>
 #include <QHBoxLayout>
 #include <QFont>
@@ -10,9 +9,6 @@
 #include <QContextMenuEvent>
 
 #include "header/CustomWidget.h"
-#include "header/MsgHeader.h"
-
-DWIDGET_USE_NAMESPACE
 
 //操作类型
 enum OPERATION_TYPE {
@@ -30,14 +26,14 @@ public:
     void setPicture(const QString &);
     void setPage(const QString &);
     // IObserver interface
-    int update(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
 
 private slots:
     void slotDltBookMark();
     void slotShowContextMenu(const QPoint &);
 
-private:
-    void initWidget();
+protected:
+    void initWidget() override;
 
 private:
     DLabel *m_pPicture = nullptr;

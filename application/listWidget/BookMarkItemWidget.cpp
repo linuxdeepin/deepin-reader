@@ -3,7 +3,7 @@
 
 
 BookMarkItemWidget::BookMarkItemWidget(CustomWidget *parent) :
-    CustomWidget (parent)
+    CustomWidget ("BookMarkItemWidget", parent)
 {
 
     m_pHLayout = new QHBoxLayout;
@@ -32,7 +32,7 @@ void BookMarkItemWidget::setPage(const QString &value)
     m_pPage->setText(value);
 }
 
-int BookMarkItemWidget::update(const int &, const QString &)
+int BookMarkItemWidget::dealWithData(const int &, const QString &)
 {
     return 0;
 }
@@ -40,7 +40,7 @@ int BookMarkItemWidget::update(const int &, const QString &)
 void BookMarkItemWidget::slotDltBookMark()
 {
     qDebug() << "delet BookMark";
-    m_pMsgSubject->sendMsg(MSG_BOOKMARK_DLTITEM, QString::number(DLTITEM));
+    sendMsg(MSG_BOOKMARK_DLTITEM, QString::number(DLTITEM));
 }
 
 void BookMarkItemWidget::slotShowContextMenu(const QPoint &point)

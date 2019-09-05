@@ -1,16 +1,12 @@
 #ifndef BOOKMARKFORM_H
 #define BOOKMARKFORM_H
 
-#include <DWidget>
 #include <DListWidget>
 #include <QListWidgetItem>
 #include <QHBoxLayout>
 
 #include "BookMarkItemWidget.h"
 #include "header/CustomWidget.h"
-#include "header/MsgHeader.h"
-
-DWIDGET_USE_NAMESPACE
 
 /**
  * @brief The BookMarkWidget class
@@ -28,13 +24,15 @@ public:
 private slots:
     void slotShowSelectItem(QListWidgetItem *);
 
+protected:
+    void initWidget() override;
+
 private:
-    void initWidget();
     void dltItem();
 
 public:
     // IObserver interface
-    int update(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
 
 private:
     DListWidget *m_pBookMarkListWidget = nullptr;

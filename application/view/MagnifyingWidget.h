@@ -1,12 +1,10 @@
 #ifndef MAGNIFYINGWIDGET_H
 #define MAGNIFYINGWIDGET_H
 
-#include <DWidget>
 #include <QPaintEvent>
 
 #include "header/CustomWidget.h"
 
-DWIDGET_USE_NAMESPACE
 
 /**
  * @brief The MagnifyingWidget class
@@ -19,12 +17,25 @@ class MagnifyingWidget : public CustomWidget
 public:
     MagnifyingWidget(CustomWidget *parent = nullptr);
 
+signals:
+    void sigDrawImage();
+
 protected:
     void paintEvent(QPaintEvent *event) override;
 
+private slots:
+    void setShowImage(const QImage &);
+
+private:
+    QImage  m_showImage;
+
     // IObserver interface
 public:
-    int update(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
+
+    // CustomWidget interface
+protected:
+    void initWidget() override;
 };
 
 #endif // MAGNIFYINGWIDGET_H

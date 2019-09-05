@@ -1,11 +1,10 @@
 #include "TitleWidget.h"
-#include <DListWidget>
 #include "utils.h"
 #include <QDebug>
 
 
 TitleWidget::TitleWidget(CustomWidget *parent) :
-    CustomWidget(parent)
+    CustomWidget("TitleWidget", parent)
 {
     setFixedWidth(200);
 
@@ -15,12 +14,16 @@ TitleWidget::TitleWidget(CustomWidget *parent) :
     initBtns();
 }
 
-//  缩略图 显示
-void TitleWidget::on_thumbnailBtn_clicked(bool bCheck)
+void TitleWidget::initWidget()
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_SLIDER_SHOW_STATE, QString::number(bCheck));
-    }
+
+}
+
+//  缩略图 显示
+void TitleWidget::on_thumbnailBtn_checkedChanged(bool bCheck)
+{
+    qDebug() << "   on_thumbnailBtn_checkedChanged";
+    sendMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(bCheck));
 }
 
 //  字体
@@ -32,7 +35,7 @@ void TitleWidget::on_fontBtn_clicked()
 //  手型点击
 void TitleWidget::on_handleShapeBtn_clicked()
 {
-    DPushButton *btn = dynamic_cast<DPushButton *>(QObject::sender());
+    DImageButton *btn = reinterpret_cast<DImageButton *>(QObject::sender());
     int nHeight = btn->height();
     int nWidth = btn->width();
 
@@ -56,49 +59,48 @@ void TitleWidget::on_handleShapeBtn_clicked()
 }
 
 //  放大镜 功能
-void TitleWidget::on_magnifyingBtn_clicked(bool bCheck)
+void TitleWidget::on_magnifyingBtn_checkedChanged(bool bCheck)
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_MAGNIFYING, QString::number(bCheck));
-    }
+    sendMsgToSubject(MSG_MAGNIFYING, QString::number(bCheck));
 }
 
 //  切换为 手型 鼠标
 void TitleWidget::on_HandleAction_trigger()
 {
     m_bCurrentState = true;
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_HANDLESHAPE, QString::number(m_bCurrentState));
-    }
+
+    sendMsgToSubject(MSG_HANDLESHAPE, QString::number(m_bCurrentState));
 }
 
 //  切换为 默认鼠标
 void TitleWidget::on_DefaultAction_trigger()
 {
     m_bCurrentState = false;
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(MSG_HANDLESHAPE, QString::number(m_bCurrentState));
-    }
+
+    sendMsgToSubject(MSG_HANDLESHAPE, QString::number(m_bCurrentState));
 }
 
 //  初始化 标题栏 按钮
 void TitleWidget::initBtns()
 {
-    createBtn(tr("缩略图"), SLOT(on_thumbnailBtn_clicked(bool)), true);
-    createBtn(tr("字体"), SLOT(on_fontBtn_clicked()));
-    createBtn(tr("手型"), SLOT(on_handleShapeBtn_clicked()));
-    createBtn(tr("放大镜"), SLOT(on_magnifyingBtn_clicked(bool)), true);
+    createBtn(tr("缩略图"), tr(":/image/normal/thumbnail_normal_light.svg"), tr(""), tr(":/image/press/thumbnail_press_light.svg"), tr(""), SLOT(on_thumbnailBtn_checkedChanged(bool)), true);
+    createBtn(tr("字体"), tr(""), tr(""), tr(""), tr(""), SLOT(on_fontBtn_clicked()));
+    createBtn(tr("手型"), tr(""), tr(""), tr(""), tr(""), SLOT(on_handleShapeBtn_clicked()));
+    createBtn(tr("放大镜"), tr(""), tr(""), tr(""), tr(""), SLOT(on_magnifyingBtn_checkedChanged(bool)), true);
 }
 
-void TitleWidget::createBtn(const QString &iconName, const char *member, bool checkable, bool checked)
+void TitleWidget::createBtn(const QString &btnName, const QString &normalPic, const QString &hoverPic,
+                            const QString &pressPic, const QString &checkedPic,
+                            const char *member, bool checkable, bool checked)
 {
-    DPushButton *btn = new DPushButton(iconName);
+    DImageButton *btn = new DImageButton(normalPic, hoverPic, pressPic, checkedPic);
+    btn->setToolTip(btnName);
+    btn->setCheckable(checkable);
 
     if (checkable) {
-        btn->setCheckable(true);
         btn->setChecked(checked);
 
-        connect(btn, SIGNAL(clicked(bool)), member);
+        connect(btn, SIGNAL(checkedChanged(bool)), member);
     } else {
         connect(btn, SIGNAL(clicked()), member);
     }
@@ -128,7 +130,17 @@ void TitleWidget::createAction(const QString &iconName, const char *member)
     }
 }
 
-int TitleWidget::update(const int &, const QString &)
+void TitleWidget::sendMsgToSubject(const int &msgType, const QString &msgContent)
 {
+    sendMsg(msgType, msgContent);
+}
+
+int TitleWidget::dealWithData(const int &msgType, const QString &)
+{
+    //  取消放大镜
+    if (msgType == MSG_MAGNIFYING_CANCEL) {
+        on_magnifyingBtn_checkedChanged(false);
+        return ConstantMsg::g_effective_res;
+    }
     return 0;
 }

@@ -2,13 +2,10 @@
 #include <QDebug>
 
 PagingWidget::PagingWidget(CustomWidget *parent) :
-    CustomWidget(parent)
+    CustomWidget("PagingWidget", parent)
 {
     resize(250, 20);
     initWidget();
-
-    connect(m_pPrePageBtn, SIGNAL(clicked()), this, SLOT(slotPrePage()));
-    connect(m_pNextPageBtn, SIGNAL(clicked()), this, SLOT(slotNextPage()));
 }
 
 void PagingWidget::initWidget()
@@ -17,16 +14,23 @@ void PagingWidget::initWidget()
     m_pTotalPagesLab->setText(QString("/xxx页"));
     m_pTotalPagesLab->setMinimumWidth(80);
 
-    m_pPrePageBtn = new DPushButton(this);
-    m_pPrePageBtn->setText(QString("<"));
+    m_pPrePageBtn = new DImageButton(this);
+    m_pPrePageBtn->setText(tr("<"));
+    m_pPrePageBtn->setFixedSize(QSize(40, 40));
 
-    m_pNextPageBtn = new DPushButton(this);
-    m_pNextPageBtn->setText(QString(">"));
+    m_pNextPageBtn = new DImageButton(this);
+    m_pNextPageBtn->setText(tr(">"));
+    m_pNextPageBtn->setFixedSize(QSize(40, 40));
+
+    connect(m_pPrePageBtn, SIGNAL(clicked()), SLOT(slotPrePage()));
+    connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPage()));
 
     m_pJumpPageSpinBox = new DSpinBox(this);
     m_pJumpPageSpinBox->setRange(1, 100);
     m_pJumpPageSpinBox->setValue(1);
     m_pJumpPageSpinBox->setMinimumWidth(50);
+    m_pJumpPageSpinBox->installEventFilter(this);
+    m_pJumpPageSpinBox->setWrapping(true);
 
     QHBoxLayout *hLayout = new QHBoxLayout;
     hLayout->addWidget(m_pJumpPageSpinBox);
@@ -38,11 +42,46 @@ void PagingWidget::initWidget()
     setTotalPages(30);
 }
 
+bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_pJumpPageSpinBox) {
+        if (event->type() == QEvent::KeyPress) {
+
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+
+            if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
+
+                int index = m_pJumpPageSpinBox->value() - 1;
+                if (this->getPreRowVal() != index) {
+
+                    this->setPreRowVal(index);
+                    setCurrentPageValue(index);
+                    sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(index));
+                }
+            }
+        }
+    }
+    return QWidget::eventFilter(watched, event);
+}
+
 void PagingWidget::setCurrentPage(const int &index)
 {
+    this->setPreRowVal(index - 1);
+
     m_pJumpPageSpinBox->setValue(index);
 
     qDebug() << tr("page: %1").arg(index);
+}
+
+void PagingWidget::createBtn(DImageButton *btn, QWidget *parent, const QString &text, const QString &btnName, const QString &normalPic, const QString &hoverPic, const QString &pressPic, const QString &checkedPic, const char *member, bool checkable, bool checked)
+{
+    btn = new DImageButton(normalPic, hoverPic, pressPic, checkedPic, parent);
+    btn->setText(text);
+    btn->setFixedSize(QSize(40, 40));
+    btn->setToolTip(btnName);
+    btn->setCheckable(checkable);
+
+    connect(btn, SIGNAL(checkedChanged()), member);
 }
 
 void PagingWidget::setTotalPages(int pages)
@@ -54,7 +93,7 @@ void PagingWidget::setTotalPages(int pages)
     m_pJumpPageSpinBox->setRange(1, (pages < 1) ? 1 : pages);
 }
 
-int PagingWidget::update(const int &msgType, const QString &msgContant)
+int PagingWidget::dealWithData(const int &msgType, const QString &msgContant)
 {
     return 0;
 }
@@ -74,7 +113,7 @@ void PagingWidget::slotPrePage()
     m_currntPage = t_page;
 
     setCurrentPage(m_currntPage);
-    m_pMsgSubject->sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(m_currntPage - FIRSTPAGES));
+    sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(m_currntPage - FIRSTPAGES));
 }
 
 void PagingWidget::slotNextPage()
@@ -92,7 +131,7 @@ void PagingWidget::slotNextPage()
     m_currntPage = t_page;
 
     setCurrentPage(m_currntPage);
-    m_pMsgSubject->sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(m_currntPage - FIRSTPAGES));
+    sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(m_currntPage - FIRSTPAGES));
 }
 
 void PagingWidget::setCurrentPageValue(const int &index)
@@ -117,11 +156,3 @@ void PagingWidget::setCurrentPageValue(const int &index)
 
     setCurrentPage(m_currntPage);
 }
-
-//void PagingWidget::keyPressEvent(QKeyEvent *event)
-//{
-//    if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
-//    {
-//        qDebug() << "emit enter event";
-//    }
-//}

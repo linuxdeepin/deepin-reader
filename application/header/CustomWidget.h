@@ -3,8 +3,9 @@
 
 #include <DWidget>
 
-#include "header/IMsgObserver.h"
-#include "header/MsgSubject.h"
+#include "IObserver.h"
+#include "MsgSubject.h"
+#include "MsgHeader.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -15,16 +16,23 @@ DWIDGET_USE_NAMESPACE
  */
 
 
-class CustomWidget : public DWidget, public IMsgObserver
+class CustomWidget : public DWidget, public IObserver
 {
+    Q_OBJECT
 public:
-    CustomWidget(DWidget *parent = nullptr);
-    ~CustomWidget();
-
-public:
-    virtual int update(const int &, const QString &) = 0;
+    CustomWidget(const QString &, DWidget *parent = nullptr);
+    ~CustomWidget() override;
 
 protected:
+    virtual void initWidget() = 0;
+
+protected:
+    void sendMsg(const int &msgType, const QString &msgContent = "") override;
+
+private:
+    void setObserverName(const QString &name) override;
+
+private:
     MsgSubject  *m_pMsgSubject = nullptr;
 };
 

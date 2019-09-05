@@ -1,16 +1,13 @@
 #ifndef PAGINGWIDGET_H
 #define PAGINGWIDGET_H
 
-#include <DWidget>
 #include <DLabel>
 #include <QVBoxLayout>
-#include <DPushButton>
+#include <DImageButton>
 #include <DSpinBox>
+#include <QKeyEvent>
 
 #include "header/CustomWidget.h"
-#include "header/MsgHeader.h"
-
-DWIDGET_USE_NAMESPACE
 
 const int FIRSTPAGES = 1;
 //
@@ -36,21 +33,36 @@ public:
 
 protected:
     //void keyPressEvent(QKeyEvent * event);
+    void initWidget() override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
-    void initWidget();
     void setCurrentPage(const int &);
+
+    void createBtn(DImageButton *btn, QWidget *parent, const QString &text, const QString &btnName, const QString &normalPic, const QString &hoverPic,
+                   const QString &pressPic, const QString &checkedPic,
+                   const char *member, bool checkable = false, bool checked = false);
+
+    inline void setPreRowVal(const int &val)
+    {
+        m_preRow = val;
+    }
+    inline int getPreRowVal() const
+    {
+        return m_preRow;
+    }
 
 private:
     DLabel *m_pTotalPagesLab = nullptr;
-    DPushButton *m_pPrePageBtn = nullptr;
-    DPushButton *m_pNextPageBtn = nullptr;
+    DImageButton *m_pPrePageBtn = nullptr;
+    DImageButton *m_pNextPageBtn = nullptr;
     DSpinBox *m_pJumpPageSpinBox = nullptr;
     int m_currntPage = 0;
     int m_totalPage = 0;
+    int m_preRow = -1;
 
 public:
-    int update(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
 };
 
 #endif // PAGINGWIDGET_H

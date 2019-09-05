@@ -1,13 +1,12 @@
 QT += core gui
+QT += dtkwidget
+QT += xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-QT       += core gui
-QT       += xml
 
 TARGET = deepin_reader
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
-PKGCONFIG += dtkwidget
 PKGCONFIG += poppler-qt5
 
 SOURCES += \
@@ -22,9 +21,7 @@ SOURCES += \
     widgets/TitleWidget.cpp \
     widgets/HomeWidget.cpp \
     widgets/LeftSidebarWidget.cpp \
-    widgets/FileViewWidget.cpp \
     widgets/MainShowSplitter.cpp \
-    widgets/FileAttrWidget.cpp \
     data/DataManager.cpp \
     listWidget/PagingWidget.cpp \
     listWidget/NotesWidget.cpp \
@@ -33,7 +30,6 @@ SOURCES += \
     listWidget/ThumbnailWidget.cpp \
     listWidget/BookMarkItemWidget.cpp \
     listWidget/NotesItemWidget.cpp \
-    view/MagnifyingWidget.cpp \
     header/MsgSubject.cpp \
     header/CustomWidget.cpp\
     pdfview/documentview.cpp \
@@ -43,7 +39,16 @@ SOURCES += \
     pdfview/documentlayout.cpp \
     pdfview/viewsettings.cpp \
     pdfview/rendertask.cpp \
-    pdfview/tileitem.cpp
+    pdfview/tileitem.cpp\
+    view/MagnifyingWidget.cpp \
+    view/DefaultOperationWidget.cpp \
+    view/TextOperationWidget.cpp \
+    view/LightedWidget.cpp \
+    view/FileViewWidget.cpp \
+    view/FileAttrWidget.cpp \
+    widgets/FindBar.cpp \
+    widgets/LineBar.cpp \
+    listWidget/MyLabel.cpp\
 
 
 
@@ -60,24 +65,20 @@ HEADERS +=\
     widgets/MainWidget.h \
     widgets/HomeWidget.h \
     widgets/LeftSidebarWidget.h \
-    widgets/FileViewWidget.h \
     widgets/MainShowSplitter.h \
-    widgets/FileAttrWidget.h \
     data/DataManager.h \
     header/ISubject.h \
     header/IObserver.h \
+    header/MsgSubject.h \
+    header/MsgHeader.h \
+    header/CustomWidget.h\
     listWidget/ThumbnailItemWidget.h \
     listWidget/NotesWidget.h \
     listWidget/ThumbnailWidget.h \
     listWidget/PagingWidget.h \
     listWidget/BookMarkWidget.h \
     listWidget/BookMarkItemWidget.h \
-    listWidget/NotesItemWidget.h \
-    view/MagnifyingWidget.h \
-    header/MsgSubject.h \
-    header/IMsgObserver.h \
-    header/MsgHeader.h \
-    header/CustomWidget.h\
+    listWidget/NotesItemWidget.h \   
     pdfview/documentview.h \
     pdfview/model.h \
     pdfview/global.h \
@@ -88,7 +89,16 @@ HEADERS +=\
     pdfview/documentlayout.h \
     pdfview/viewsettings.h \
     pdfview/rendertask.h \
-    pdfview/tileitem.h
+    pdfview/tileitem.h\
+    view/MagnifyingWidget.h \
+    view/DefaultOperationWidget.h \
+    view/TextOperationWidget.h \
+    view/LightedWidget.h \
+    view/FileViewWidget.h \
+    view/FileAttrWidget.h \
+    widgets/FindBar.h \
+    widgets/LineBar.h \
+    listWidget/MyLabel.h\
 
 DISTFILES += \
     themes/solarized_light.theme \

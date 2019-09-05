@@ -1,7 +1,7 @@
 #include "NotesWidget.h"
 
 NotesWidget::NotesWidget(CustomWidget *parent) :
-    CustomWidget(parent)
+    CustomWidget("NotesWidget", parent)
 {
     m_pVLayout = new QVBoxLayout;
     m_pVLayout->setContentsMargins(0, 0, 0, 0);
@@ -14,6 +14,9 @@ NotesWidget::NotesWidget(CustomWidget *parent) :
 void NotesWidget::initWidget()
 {
     m_pNotesList = new DListWidget;
+    m_pNotesList->setSpacing(10);
+    //设置自动适应布局调整（Adjust适应，Fixed不适应），默认不适应
+    m_pNotesList->setResizeMode(QListWidget::Adjust);
     m_pVLayout->addWidget(m_pNotesList);
 
     for (int page = 0; page < 20; ++page) {
@@ -32,7 +35,7 @@ void NotesWidget::initWidget()
     }
 }
 
-int NotesWidget::update(const int &, const QString &)
+int NotesWidget::dealWithData(const int &, const QString &)
 {
     return 0;
 }

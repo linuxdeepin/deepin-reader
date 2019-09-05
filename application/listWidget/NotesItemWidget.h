@@ -1,7 +1,6 @@
 #ifndef NOTESITEMWIDGET_H
 #define NOTESITEMWIDGET_H
 
-#include <DWidget>
 #include <DLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -12,9 +11,7 @@
 #include <QContextMenuEvent>
 
 #include "header/CustomWidget.h"
-#include "header/MsgHeader.h"
 
-DWIDGET_USE_NAMESPACE
 
 class NotesItemWidget : public CustomWidget
 {
@@ -33,12 +30,12 @@ private slots:
     void slotCopyContant();
     void slotShowContextMenu(const QPoint &);
 
-private:
-    void initWidget();
+protected:
+    void initWidget() override;
 
 public:
     // IObserver interface
-    int update(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
 
 private:
     DLabel *m_pPicture = nullptr;

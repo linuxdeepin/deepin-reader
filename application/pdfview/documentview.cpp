@@ -97,14 +97,14 @@ DocumentView:: ~DocumentView()
 
 }
 
-bool DocumentView::open(const QString& filePath)
+bool DocumentView::open(const QString &filePath)
 {
-    ModelDocument* document =LoadHandler::instance()->loadDocument(filePath);
-    if(document != 0)
-    {
-        QVector< ModelPage* > pages;
-        if(!checkDocument(filePath, document, pages))
-        {
+    qDebug() << " open " << filePath;
+
+    ModelDocument *document = LoadHandler::instance()->loadDocument(filePath);
+    if (document != 0) {
+        QVector< ModelPage * > pages;
+        if (!checkDocument(filePath, document, pages)) {
             delete document;
             qDeleteAll(pages);
             return false;
@@ -254,25 +254,10 @@ void DocumentView::prepareView(qreal newLeft, qreal newTop, bool forceScroll, in
             else
             {
                 page->setVisible(false);
-
-                // page->cancelRender();
-            }
-        }
-
-        if(index == scrollToPage - 1)
-        {
-            const QRectF boundingRect = page->uncroppedBoundingRect().translated(page->pos());
-
-            horizontalValue = qFloor(boundingRect.left() + newLeft * boundingRect.width());
-            verticalValue = qFloor(boundingRect.top() + newTop * boundingRect.height());
-        }
-
-        if(index == highlightIsOnPage - 1)
-        {
-            //            m_highlight->setPos(page->pos());
             //            m_highlight->setTransform(page->transform());
 
             //            page->stackBefore(m_highlight);
+            }
         }
 
         //  m_thumbnailItems.at(index)->setHighlighted(highlightCurrentThumbnail && (index == m_currentPage - 1));

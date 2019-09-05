@@ -1,7 +1,6 @@
 #ifndef THUMBNAILWIDGET_H
 #define THUMBNAILWIDGET_H
 
-#include <DWidget>
 #include <DListWidget>
 #include <QListWidgetItem>
 #include <DLabel>
@@ -9,12 +8,10 @@
 #include <DPushButton>
 #include <QDebug>
 
-#include <listWidget/ThumbnailItemWidget.h>
+#include "listWidget/ThumbnailItemWidget.h"
 #include "header/CustomWidget.h"
-#include "header/MsgHeader.h"
 #include "PagingWidget.h"
 
-DWIDGET_USE_NAMESPACE
 
 /*
 *缩略图列表页面
@@ -28,18 +25,26 @@ public:
 
 public:
     // IObserver interface
-    int update(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
+
+protected:
+    void initWidget() override;
 
 private:
-    void initWidget();
     void setSelectItemBackColor(QListWidgetItem *);
     void setCurrentRow(const int &);
 
+    inline void setPreRowVal(const int &val)
+    {
+        m_preRow = val;
+    }
+    inline int getPreRowVal() const
+    {
+        return m_preRow;
+    }
+
 signals:
     void sigSelectIndexPage(const int &);
-
-public slots:
-    void slotSetJumpToPage(const int &);
 
 private slots:
     void slotShowSelectItem(QListWidgetItem *);
@@ -50,9 +55,11 @@ private:
     DLabel *m_pThumbnailPageLabel = nullptr;
     PagingWidget *m_pPageWidget = nullptr;
 
-    DWidget *m_itemWidget = nullptr;
     DLabel *m_pSonWidgetPageLabel = nullptr;
+    DLabel *m_pSonWidgetContantLabel = nullptr;
     ThumbnailItemWidget *m_pThumbnailItemWidget = nullptr;
+
+    int m_preRow = -1;//前一次页码数
 };
 
 #endif // THUMBNAILWIDGET_H

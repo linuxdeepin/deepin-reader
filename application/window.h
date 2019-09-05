@@ -17,12 +17,15 @@ DWIDGET_USE_NAMESPACE
  */
 
 
-class Window : public DMainWindow, public IMsgObserver
+class Window : public DMainWindow, public IObserver
 {
     Q_OBJECT
 public:
     Window(DMainWindow *parent = nullptr);
     ~Window() override;
+
+protected:
+    void keyPressEvent(QKeyEvent *ev) override;
 
 private:
     void initUI();
@@ -47,7 +50,6 @@ private slots:
 
     void action_Help();
 
-
 private:
     MsgSubject  *m_pMsgSubject = nullptr;
 
@@ -59,7 +61,12 @@ private:
 
     // IObserver interface
 public:
-    int update(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
+    void sendMsg(const int &, const QString &msgContent = "") override;
+
+    // IObserver interface
+private:
+    void setObserverName(const QString &name) override;
 };
 
 #endif // WINDOW_H

@@ -2,7 +2,6 @@
 #define LEFTSIDEBARWIDGET_H
 
 #include <DStackedWidget>
-#include <DWidget>
 #include <QEvent>
 #include <QVBoxLayout>
 
@@ -12,9 +11,6 @@
 #include "listWidget/ThumbnailWidget.h"
 
 #include "header/CustomWidget.h"
-#include "header/MsgHeader.h"
-
-DWIDGET_USE_NAMESPACE
 
 /**
  * @brief The LeftShowWidget class
@@ -45,9 +41,13 @@ private:
     BookMarkWidget *m_pBookMarkWidget = nullptr;
     NotesWidget *m_pNotesWidget = nullptr;
 
+    // CustomWidget interface
+protected:
+    void initWidget() override;
+
     // IObserver interface
 public:
-    int update(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
 };
 
 #endif // LEFTSHOWWIDGET_H

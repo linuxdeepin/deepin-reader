@@ -1,7 +1,7 @@
 #include "LeftSidebarWidget.h"
 
 LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent):
-    CustomWidget (parent)
+    CustomWidget ("LeftSidebarWidget", parent)
 {
     setMinimumWidth(250);
     setMaximumWidth(500);
@@ -35,7 +35,12 @@ void LeftSidebarWidget::initOperationWidget()
     m_pVBoxLayout->addWidget(m_operationWidget, 0, Qt::AlignBottom);
 }
 
-int LeftSidebarWidget::update(const int &msgType, const QString &msgContent)
+void LeftSidebarWidget::initWidget()
+{
+
+}
+
+int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_SWITCHLEFTWIDGET) {    //切换页面
         int nIndex = msgContent.toInt();

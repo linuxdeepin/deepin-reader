@@ -3,11 +3,9 @@
 #include <QDebug>
 
 #include "data/DataManager.h"
-#include "FileAttrWidget.h"
-#include "header/MsgHeader.h"
 
 MainWidget::MainWidget(CustomWidget *parent):
-    CustomWidget (parent)
+    CustomWidget ("MainWidget", parent)
 {
     m_centralLayout = new QVBoxLayout();
 
@@ -17,7 +15,7 @@ MainWidget::MainWidget(CustomWidget *parent):
 
     this->setLayout(m_centralLayout);
 
-    initWidgets();
+    initWidget();
 }
 
 MainWidget::~MainWidget()
@@ -28,8 +26,32 @@ MainWidget::~MainWidget()
     }
 }
 
+void MainWidget::initWidget()
+{
+    m_pFindBar = new FindBar(this);
+    DAnchors<FindBar> anchors_findbar(m_pFindBar);
+    anchors_findbar.setAnchor(Qt::AnchorTop, this, Qt::AnchorTop);
+    anchors_findbar.setAnchor(Qt::AnchorRight, this, Qt::AnchorRight);
+    anchors_findbar.setTopMargin(10);
+    anchors_findbar.setRightMargin(10);
+//    m_pFindBar->raise();
+
+
+    m_pStackedWidget = new DStackedWidget;
+    m_centralLayout->addWidget(m_pStackedWidget);
+
+    m_pHomeWidget = new  HomeWidget;
+    connect(m_pHomeWidget, SIGNAL(fileSelected(const QStringList)), this, SLOT(showFileSelected(const QStringList)));
+    m_pStackedWidget->addWidget(m_pHomeWidget);
+
+    m_pMainShowSplitter = new MainShowSplitter;
+    m_pStackedWidget->addWidget(m_pMainShowSplitter);
+
+    m_pStackedWidget->setCurrentIndex(0);
+}
+
 //  open file
-void MainWidget::showFileSelected(const QStringList files) const
+void MainWidget::showFileSelected(const QStringList files)
 {
     int nSize = files.count();
     QString filePath = files.at(0);
@@ -37,6 +59,8 @@ void MainWidget::showFileSelected(const QStringList files) const
     //  判断文件 是否有损坏
 
     DataManager::instance()->setStrOnlyFilePath(filePath);
+
+    sendMsg(MSG_OPEN_FILE_PATH, filePath);
     //  open  file
     m_pStackedWidget->setCurrentIndex(1);
 }
@@ -61,30 +85,24 @@ void MainWidget::showFileAttr()
     m_pAttrWidget->show();
 }
 
-void MainWidget::initWidgets()
-{
-    m_pStackedWidget = new DStackedWidget;
-    m_centralLayout->addWidget(m_pStackedWidget);
-
-    m_pHomeWidget = new  HomeWidget;
-    connect(m_pHomeWidget, SIGNAL(fileSelected(const QStringList)), this, SLOT(showFileSelected(const QStringList)));
-    m_pStackedWidget->addWidget(m_pHomeWidget);
-
-    m_pMainShowSplitter = new MainShowSplitter;
-    m_pStackedWidget->addWidget(m_pMainShowSplitter);
-
-    m_pStackedWidget->setCurrentIndex(1);
-}
-
-int MainWidget::update(const int &msgType, const QString &msgContent)
+int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     Q_UNUSED(msgContent);
+
     if (msgType == MSG_OPERATION_ATTR) {
         showFileAttr();
         return ConstantMsg::g_effective_res;
     }
+
     if (msgType == MSG_OPERATION_OPEN_FOLDER) {
         openFileFolder();
+        return ConstantMsg::g_effective_res;
+    }
+
+    if (msgType == MSG_OPERATION_FIND) {
+        m_pFindBar->show();
+
+        QTimer::singleShot(10, this, [ = ] { m_pFindBar->focus(); });
         return ConstantMsg::g_effective_res;
     }
     return 0;
