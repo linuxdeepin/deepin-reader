@@ -1,0 +1,64 @@
+/*
+ * Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#include "application.h"
+
+//#include "controller/configsetter.h"
+//#include "controller/globaleventfilter.h"
+//#include "controller/signalmanager.h"
+//#include "controller/wallpapersetter.h"
+
+#include <QIcon>
+#include <QTranslator>
+
+namespace {
+
+}  // namespace
+
+Application::Application(int &argc, char **argv)
+    : DApplication(argc, argv)
+{
+    initI18n();
+
+    setAttribute(Qt::AA_UseHighDpiPixmaps);
+    setAttribute(Qt::AA_EnableHighDpiScaling);
+
+    setTheme("light");
+    setOrganizationName("deepin");
+    setApplicationName("deepin_reader");
+    setApplicationDisplayName(QObject::tr("Deepin Reader"));
+    setApplicationVersion("1.0");
+    setProductIcon(QIcon(":/images/logo.svg"));
+    setProductName(DApplication::translate("MainWindow", "Deepin Reader"));
+
+//    setApplicationVersion(DApplication::buildVersion("20190828"));
+//    installEventFilter(new GlobalEventFilter());
+
+    initChildren();
+}
+
+void Application::initChildren()
+{
+    viewerTheme = ViewerThemeManager::instance();
+//    setter = ConfigSetter::instance();
+//    signalM = SignalManager::instance();
+}
+
+void Application::initI18n()
+{
+    // install translators
+//    loadTranslator(QList<QLocale>() << QLocale::system());
+}

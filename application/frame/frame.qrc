@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/images"/>
+    <qresource prefix="/qss"/>
+    <qresource prefix="/images/importtip"/>
+</RCC>
