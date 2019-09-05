@@ -48,8 +48,14 @@ QT_END_NAMESPACE
 
 QString Utils::getQrcPath(const QString &imageName)
 {
-    return QString(":/images/%1").arg(imageName);
+    return QString(":/image/%1").arg(imageName);
 }
+
+QString Utils::getQrcPath(const QString &imageName, const QString &state)
+{
+    return QString(":/image/%1/%2.svg").arg(state).arg(imageName);
+}
+
 
 QString Utils::getQssPath(const QString &qssName)
 {
@@ -341,7 +347,7 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
 //    if (def_codec && codecConfidenceForData(def_codec, data, QLocale::system().country()) > confidence) {
 //        return def_codec->name();
 //    }
-QByteArray encoding;
+    QByteArray encoding;
     return encoding;
 }
 
@@ -391,7 +397,7 @@ QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
 {
     QStringList keys;
     Qt::KeyboardModifiers modifiers = keyEvent->modifiers();
-    if (modifiers != Qt::NoModifier){
+    if (modifiers != Qt::NoModifier) {
         if (modifiers.testFlag(Qt::ControlModifier)) {
             keys.append("Ctrl");
         }
@@ -409,14 +415,14 @@ QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
         }
     }
 
-    if(keyEvent->key() !=0 && keyEvent->key() != Qt::Key_unknown){
+    if (keyEvent->key() != 0 && keyEvent->key() != Qt::Key_unknown) {
         keys.append(QKeySequence(keyEvent->key()).toString());
     }
 
     return keys.join("+");
 }
 
-QString Utils::getKeyshortcutFromKeymap(Settings* settings, const QString &keyCategory, const QString &keyName)
+QString Utils::getKeyshortcutFromKeymap(Settings *settings, const QString &keyCategory, const QString &keyName)
 {
     return settings->settings->option(QString("shortcuts.%1.%2").arg(keyCategory).arg(keyName))->value().toString();
 }
@@ -497,7 +503,7 @@ qreal Utils::easeOutQuint(qreal x)
 QVariantMap Utils::getThemeMapFromPath(const QString &filepath)
 {
     QFile file(filepath);
-    if(!file.open(QIODevice::ReadOnly)){
+    if (!file.open(QIODevice::ReadOnly)) {
         qDebug() << "Failed to open " << filepath;
     }
 
@@ -524,41 +530,41 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
     // Please check full mime type list from: https://www.freeformatter.com/mime-types-list.html
     QStringList textMimeTypes;
     textMimeTypes << "application/cmd"
-                      << "application/javascript"
-                      << "application/json"
-                      << "application/pkix-cert"
-                      << "application/octet-stream"
-                      << "application/sql"
-                      << "application/vnd.apple.mpegurl"
-                      << "application/vnd.nokia.qt.qmakeprofile"
-                      << "application/vnd.nokia.xml.qt.resource"
-                      << "application/x-desktop"
-                      << "application/x-designer"
-                      << "application/x-empty"
-                      << "application/x-msdos-program"
-                      << "application/x-pearl"
-                      << "application/x-php"
-                      << "application/x-shellscript"
-                      << "application/x-sh"
-                      << "application/x-theme"
-                      << "application/x-cue"
-                      << "application/x-csh"
-                      << "application/x-asp"
-                      << "application/x-subrip"
-                      << "application/x-text"
-                      << "application/x-trash"
-                      << "application/x-xbel"
-                      << "application/x-yaml"
-                      << "application/x-pem-key"
-                      << "application/xml"
-                      << "application/yaml"
-                      << "application/x-zerosize"
-                      << "image/svg+xml"
-                      << "application/x-perl"
-                      << "application/x-ruby"
-                      << "application/x-mpegURL"
-                      << "application/x-wine-extension-ini"
-                      << "model/vrml";
+                  << "application/javascript"
+                  << "application/json"
+                  << "application/pkix-cert"
+                  << "application/octet-stream"
+                  << "application/sql"
+                  << "application/vnd.apple.mpegurl"
+                  << "application/vnd.nokia.qt.qmakeprofile"
+                  << "application/vnd.nokia.xml.qt.resource"
+                  << "application/x-desktop"
+                  << "application/x-designer"
+                  << "application/x-empty"
+                  << "application/x-msdos-program"
+                  << "application/x-pearl"
+                  << "application/x-php"
+                  << "application/x-shellscript"
+                  << "application/x-sh"
+                  << "application/x-theme"
+                  << "application/x-cue"
+                  << "application/x-csh"
+                  << "application/x-asp"
+                  << "application/x-subrip"
+                  << "application/x-text"
+                  << "application/x-trash"
+                  << "application/x-xbel"
+                  << "application/x-yaml"
+                  << "application/x-pem-key"
+                  << "application/xml"
+                  << "application/yaml"
+                  << "application/x-zerosize"
+                  << "image/svg+xml"
+                  << "application/x-perl"
+                  << "application/x-ruby"
+                  << "application/x-mpegURL"
+                  << "application/x-wine-extension-ini"
+                  << "model/vrml";
 
     if (textMimeTypes.contains(mimeType)) {
         return true;
@@ -570,30 +576,31 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
 bool Utils::isDraftFile(const QString &filepath)
 {
     QString draftDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first())
-                                                                            .filePath("blank-files");
+                       .filePath("blank-files");
     QString dir = QFileInfo(filepath).dir().absolutePath();
 
     return draftDir == dir;
 }
 
 void Utils::toast(const QString &message, QWidget *parent)
-{/*
-    Toast *toast = new Toast(parent);
-    int avaliableHeight = parent->height() - toast->height();
-    int toastPaddingBottom = qMin(avaliableHeight / 2, 100);
+{
+    /*
+       Toast *toast = new Toast(parent);
+       int avaliableHeight = parent->height() - toast->height();
+       int toastPaddingBottom = qMin(avaliableHeight / 2, 100);
 
-    QObject::connect(toast, &Toast::visibleChanged, parent, [toast] (bool visible) {
-        if (visible == false) {
-            toast->deleteLater();
-        }
-    });
+       QObject::connect(toast, &Toast::visibleChanged, parent, [toast] (bool visible) {
+           if (visible == false) {
+               toast->deleteLater();
+           }
+       });
 
-    toast->setText(message);
-    toast->setIcon(Utils::getQrcPath("logo_24.svg"));
-    toast->pop();
+       toast->setText(message);
+       toast->setIcon(Utils::getQrcPath("logo_24.svg"));
+       toast->pop();
 
-    toast->move((parent->width() - toast->width()) / 2,
-                avaliableHeight - toastPaddingBottom);*/
+       toast->move((parent->width() - toast->width()) / 2,
+                   avaliableHeight - toastPaddingBottom);*/
 }
 
 const QStringList Utils::getEncodeList()
@@ -649,12 +656,11 @@ QString Utils::getSuffixList()
 }
 
 //  获取 action 图标
-QIcon Utils::getActionIcon(const QString& iconName)
+QIcon Utils::getActionIcon(const QString &iconName)
 {
     QIcon icon = QIcon::fromTheme(iconName);
 
-    if(icon.isNull())
-    {
+    if (icon.isNull()) {
         icon = QIcon(QLatin1String(":icons/") + iconName);
     }
     return  icon;

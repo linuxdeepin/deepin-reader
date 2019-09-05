@@ -49,7 +49,8 @@ SOURCES += \
     docview/pageitem.cpp \
     docview/rendertask.cpp \
     docview/tileitem.cpp \
-    docview/viewsettings.cpp
+    docview/viewsettings.cpp \
+    header/CustomImageButton.cpp
 
 
 RESOURCES +=         resources.qrc
@@ -99,7 +100,10 @@ HEADERS +=\
     docview/renderparam.h \
     docview/rendertask.h \
     docview/tileitem.h \
-    docview/viewsettings.h
+    docview/viewsettings.h \
+    header/ImageHeader.h \
+    header/CustomImageButton.h
+
 
 DISTFILES += \
     themes/solarized_light.theme \

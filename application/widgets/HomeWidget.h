@@ -21,8 +21,6 @@ class HomeWidget : public CustomWidget
 public:
     HomeWidget(CustomWidget *parent = nullptr);
 
-    void setIconPixmap(bool isLoaded);
-
 signals:
     void fileSelected(const QStringList files) const;
 
@@ -34,12 +32,6 @@ private:
 
 private:
     QVBoxLayout *m_layout = nullptr;
-    QPixmap m_unloadPixmap;
-    QPixmap m_loadedPixmap;
-    DLabel *m_iconLabel = nullptr;
-    DLabel *m_tipsLabel = nullptr;
-    DLabel *m_splitLine = nullptr;
-    QPushButton *m_chooseBtn = nullptr;
     QSettings *m_settings = nullptr;
 
     // CustomWidget interface

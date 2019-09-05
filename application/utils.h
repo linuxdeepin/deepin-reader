@@ -20,6 +20,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef UTILS_H
+#define UTILS_H
+
 #include "settings.h"
 #include <QKeyEvent>
 #include <QObject>
@@ -34,12 +37,13 @@ class Utils : public QObject
 
 public:
     static QString getQrcPath(const QString &imageName);
+    static QString getQrcPath(const QString &imageName, const QString &);
     static QString getQssPath(const QString &qssName);
     static QSize getRenderSize(int fontSize, const QString &string);
     static void setFontSize(QPainter &painter, int textSize);
     static void applyQss(QWidget *widget, const QString &qssName);
     static QString getKeyshortcut(QKeyEvent *keyEvent);
-    static QString getKeyshortcutFromKeymap(Settings* settings, const QString &keyCategory, const QString &keyName);
+    static QString getKeyshortcutFromKeymap(Settings *settings, const QString &keyCategory, const QString &keyName);
     static bool fileExists(const QString &path);
     static bool fileIsWritable(const QString &path);
     static bool fileIsHome(const QString &path);
@@ -56,11 +60,13 @@ public:
     static QVariantMap getThemeMapFromPath(const QString &filepath);
     static bool isMimeTypeSupport(const QString &filepath);
     static bool isDraftFile(const QString &filepath);
-    static void toast(const QString &message, QWidget* parent = nullptr);
+    static void toast(const QString &message, QWidget *parent = nullptr);
     static const QStringList getEncodeList();
     static QPixmap renderSVG(const QString &filePath, const QSize &size);
 
     static QString getConfigPath();
     static QString getSuffixList();
-    static QIcon getActionIcon(const QString&);
+    static QIcon getActionIcon(const QString &);
 };
+
+#endif // UTILS_H

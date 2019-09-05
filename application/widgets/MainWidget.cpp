@@ -36,7 +36,6 @@ void MainWidget::initWidget()
     anchors_findbar.setRightMargin(10);
 //    m_pFindBar->raise();
 
-
     m_pStackedWidget = new DStackedWidget;
     m_centralLayout->addWidget(m_pStackedWidget);
 

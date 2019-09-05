@@ -1,6 +1,6 @@
 #include "TitleWidget.h"
-#include "utils.h"
 #include <QDebug>
+#include "header/CustomImageButton.h"
 
 
 TitleWidget::TitleWidget(CustomWidget *parent) :
@@ -9,6 +9,8 @@ TitleWidget::TitleWidget(CustomWidget *parent) :
     setFixedWidth(200);
 
     m_layout = new QHBoxLayout();
+    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->setSpacing(6);
     setLayout(m_layout);
 
     initBtns();
@@ -27,15 +29,15 @@ void TitleWidget::on_thumbnailBtn_checkedChanged(bool bCheck)
 }
 
 //  字体
-void TitleWidget::on_fontBtn_clicked()
+void TitleWidget::on_fontBtn_clicked(bool)
 {
 
 }
 
 //  手型点击
-void TitleWidget::on_handleShapeBtn_clicked()
+void TitleWidget::on_handleShapeBtn_clicked(bool)
 {
-    DImageButton *btn = reinterpret_cast<DImageButton *>(QObject::sender());
+    CustomImageButton *btn = reinterpret_cast<CustomImageButton *>(QObject::sender());
     int nHeight = btn->height();
     int nWidth = btn->width();
 
@@ -44,18 +46,13 @@ void TitleWidget::on_handleShapeBtn_clicked()
 
     point.setY(nHeight + nOldY + 2);
 
-    DMenu *pHandleMenu = new DMenu();
-    pHandleMenu->setFixedWidth(nWidth);
+    if (m_pHandleMenu == nullptr) {
+        m_pHandleMenu = new DMenu(btn);
 
-    if (!m_bCurrentState) {
-        createAction(tr("Handle"), SLOT(on_HandleAction_trigger()));
-        pHandleMenu->addAction(m_pHandleAction);
-    } else {
-        createAction(tr("Default"), SLOT(on_DefaultAction_trigger()));
-        pHandleMenu->addAction(m_pDefaultAction);
+        createAction(tr("Handle"), SLOT(on_HandleAction_trigger(bool)));
+        createAction(tr("Default"), SLOT(on_DefaultAction_trigger(bool)));
     }
-
-    pHandleMenu->exec(point);
+    m_pHandleMenu->exec(point);
 }
 
 //  放大镜 功能
@@ -65,42 +62,58 @@ void TitleWidget::on_magnifyingBtn_checkedChanged(bool bCheck)
 }
 
 //  切换为 手型 鼠标
-void TitleWidget::on_HandleAction_trigger()
+void TitleWidget::on_HandleAction_trigger(bool)
 {
-    m_bCurrentState = true;
+    m_nCurrentState = 1;
 
-    sendMsgToSubject(MSG_HANDLESHAPE, QString::number(m_bCurrentState));
+    sendMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurrentState));
 }
 
 //  切换为 默认鼠标
-void TitleWidget::on_DefaultAction_trigger()
+void TitleWidget::on_DefaultAction_trigger(bool)
 {
-    m_bCurrentState = false;
+    m_nCurrentState = 0;
 
-    sendMsgToSubject(MSG_HANDLESHAPE, QString::number(m_bCurrentState));
+    sendMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurrentState));
 }
 
 //  初始化 标题栏 按钮
 void TitleWidget::initBtns()
 {
-    createBtn(tr("缩略图"), tr(":/image/normal/thumbnail_normal_light.svg"), tr(""), tr(":/image/press/thumbnail_press_light.svg"), tr(""), SLOT(on_thumbnailBtn_checkedChanged(bool)), true);
-    createBtn(tr("字体"), tr(""), tr(""), tr(""), tr(""), SLOT(on_fontBtn_clicked()));
-    createBtn(tr("手型"), tr(""), tr(""), tr(""), tr(""), SLOT(on_handleShapeBtn_clicked()));
-    createBtn(tr("放大镜"), tr(""), tr(""), tr(""), tr(""), SLOT(on_magnifyingBtn_checkedChanged(bool)), true);
+    createBtn("thumbnail", SLOT(on_thumbnailBtn_checkedChanged(bool)), true);
+    createBtn("setting", SLOT(on_fontBtn_clicked(bool)), true);
+    createBtn("choose", SLOT(on_handleShapeBtn_clicked(bool)), true);
+    createBtn("magnifier", SLOT(on_magnifyingBtn_checkedChanged(bool)), true);
+    m_layout->addStretch(1);
 }
 
-void TitleWidget::createBtn(const QString &btnName, const QString &normalPic, const QString &hoverPic,
-                            const QString &pressPic, const QString &checkedPic,
-                            const char *member, bool checkable, bool checked)
+void TitleWidget::createBtn(const QString &btnName, const char *member, bool checkable, bool checked)
 {
-    DImageButton *btn = new DImageButton(normalPic, hoverPic, pressPic, checkedPic);
+    QString normalPic = Utils::getQrcPath(btnName, g_normal_state);
+    QString hoverPic = Utils::getQrcPath(btnName, g_hover_state);
+    QString pressPic = Utils::getQrcPath(btnName, g_press_state);
+    QString checkedPic = Utils::getQrcPath(btnName, g_checked_state);
+
+//    qDebug() << "normalPic " << normalPic << " , hoverPic " << hoverPic
+//             << ", pressPic " << pressPic << ", checkedPic " << checkedPic;
+
+    CustomImageButton *btn = new CustomImageButton;
+//    btn->setEnabled(false);
+    btn->setStrNormalPic(normalPic);
+    btn->setStrHoverPic(hoverPic);
+    btn->setStrPressPic(pressPic);
+    btn->setStrCheckPic(checkedPic);
+//    DImageButton *btn = new DImageButton(normalPic, hoverPic, pressPic, checkedPic);
     btn->setToolTip(btnName);
-    btn->setCheckable(checkable);
+//    btn->setCheckable(true);
+//    btn->setChecked(false);
 
     if (checkable) {
+        btn->setCheckable(true);
         btn->setChecked(checked);
 
-        connect(btn, SIGNAL(checkedChanged(bool)), member);
+//    connect(btn, SIGNAL(checkedChanged(bool)), member);
+        connect(btn, SIGNAL(clicked(bool)), member);
     } else {
         connect(btn, SIGNAL(clicked()), member);
     }
@@ -113,22 +126,25 @@ void TitleWidget::createAction(const QString &iconName, const char *member)
 {
     QIcon icon = Utils::getActionIcon(iconName);
 
-    if (iconName == tr("Handle")) {
-        if (m_pHandleAction == nullptr) {
-            m_pHandleAction = new QAction(this);
-            m_pHandleAction->setIcon(icon);
+    QAction *_action = new QAction(iconName, this);
+    _action->setObjectName(iconName);
+    _action->setIcon(icon);
+    _action->setCheckable(true);
+    connect(_action, SIGNAL(triggered(bool)), member);
 
-            connect(m_pHandleAction, SIGNAL(triggered()), member);
-        }
-    } else {
-        if (m_pDefaultAction == nullptr) {
-            m_pDefaultAction = new QAction(this);
-            m_pDefaultAction->setIcon(icon);
-
-            connect(m_pDefaultAction, SIGNAL(triggered()), member);
-        }
-    }
+    m_pHandleMenu->addAction(_action);
 }
+//    } else {
+//        if (m_pDefaultAction == nullptr) {
+//            m_pDefaultAction = new QAction(tr("Default"), this);
+//            m_pDefaultAction->setIcon(icon);
+//            m_pDefaultAction->setCheckable(true);
+
+//            if (m_nCurrentState == 0) {
+//                m_pDefaultAction->setChecked(true);
+//            }
+//            connect(m_pDefaultAction, SIGNAL(triggered()), member);
+//        }
 
 void TitleWidget::sendMsgToSubject(const int &msgType, const QString &msgContent)
 {

@@ -19,14 +19,12 @@ public:
 
 private:
     void initBtns();
-    void createBtn(const QString &iconName, const QString &normalPic, const QString &hoverPic,
-                   const QString &pressPic, const QString &checkedPic,
-                   const char *member);
+    void createBtn(const QString &btnName, const char *member);
 
 private slots:
-    void on_thumbnailBtn_checkedChanged(bool);
-    void on_bookmarksBtn_checkedChanged(bool);
-    void on_annotationBtn_checkedChanged(bool);
+    void on_thumbnailBtn_checkedChanged();
+    void on_bookmarksBtn_checkedChanged();
+    void on_annotationBtn_checkedChanged();
 
 private:
     QHBoxLayout *m_hboxLayout = nullptr;

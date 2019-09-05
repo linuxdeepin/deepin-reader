@@ -6,6 +6,8 @@
 #include "IObserver.h"
 #include "MsgSubject.h"
 #include "MsgHeader.h"
+#include "ImageHeader.h"
+#include "utils.h"
 
 DWIDGET_USE_NAMESPACE
 

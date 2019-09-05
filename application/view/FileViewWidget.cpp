@@ -31,9 +31,10 @@ FileViewWidget::~FileViewWidget()
 
 void FileViewWidget::initWidget()
 {
-    m_docview=new DocumentView;
-    QGridLayout* pgrlyout=new QGridLayout(this);
+    m_docview = new DocumentView;
+    QGridLayout *pgrlyout = new QGridLayout(this);
     pgrlyout->addWidget(m_docview);
+
     m_pMagnifyingWidget = new MagnifyingWidget(this); //  放大镜 窗口
     connect(this, SIGNAL(sigSetMagnifyingImage(const QImage &)), m_pMagnifyingWidget, SLOT(setShowImage(const QImage &)));
 
@@ -73,9 +74,9 @@ void FileViewWidget::dragEnterEvent(QDragEnterEvent *event)
     event->accept();
 }
 
-void FileViewWidget::dropEvent(QDropEvent* event)
+void FileViewWidget::dropEvent(QDropEvent *event)
 {
-    const QMimeData* mimeData = event->mimeData();
+    const QMimeData *mimeData = event->mimeData();
 
     if (mimeData->hasUrls()) {
         for (auto url : mimeData->urls()) {
@@ -84,11 +85,10 @@ void FileViewWidget::dropEvent(QDropEvent* event)
     }
 
 }
-void FileViewWidget::on_slot_openfile(const QString& filePath)
+void FileViewWidget::on_slot_openfile(const QString &filePath)
 {
-    if(nullptr!= m_docview)
-    {
-         m_docview->open(filePath);
+    if (nullptr != m_docview) {
+        m_docview->open(filePath);
     }
 }
 
@@ -112,6 +112,7 @@ void FileViewWidget::SlotCustomContextMenuRequested(const QPoint &point)
 int FileViewWidget::openFilePath(const QString &filePath)
 {
     qDebug() << MSG_OPEN_FILE_PATH <<  "       " << filePath;
+    on_slot_openfile(filePath);
     return ConstantMsg::g_effective_res;
 }
 

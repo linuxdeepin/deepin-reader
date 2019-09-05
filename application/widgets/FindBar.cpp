@@ -21,7 +21,6 @@
  */
 
 #include "FindBar.h"
-#include "utils.h"
 
 #include <QDebug>
 
@@ -64,7 +63,7 @@ FindBar::FindBar(CustomWidget *parent)
 
     connect(m_closeButton, &DImageButton::clicked, this, &FindBar::findCancel, Qt::QueuedConnection);
 
-//    setVisible(false);
+    setVisible(false);
 }
 
 bool FindBar::isFocus()

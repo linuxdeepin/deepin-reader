@@ -1,5 +1,4 @@
 #include "HomeWidget.h"
-#include "utils.h"
 #include <QApplication>
 #include <QDir>
 #include <DFileDialog>
@@ -7,52 +6,39 @@
 HomeWidget::HomeWidget(CustomWidget *parent):
     CustomWidget ("HomeWidget", parent),
     m_layout(new QVBoxLayout(this)),
-    m_iconLabel(new DLabel),
-    m_tipsLabel(new DLabel(tr("Drag font file here"))),
-    m_splitLine(new DLabel),
-    m_chooseBtn(new QPushButton(tr("Select file"))),
     m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
                              QSettings::IniFormat))
 {
-    m_unloadPixmap = Utils::renderSVG(":/images/font_unload.svg", QSize(160, 160));
-    m_loadedPixmap = Utils::renderSVG(":/images/font_loaded.svg", QSize(160, 160));
-
-    m_iconLabel->setFixedSize(160, 160);
-    m_iconLabel->setPixmap(m_unloadPixmap);
-    m_splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
-    m_tipsLabel->setStyleSheet("QLabel { color: #6a6a6a; }");
+    initWidget();
 
     // initalize the configuration file.
     if (m_settings->value("dir").toString().isEmpty()) {
         m_settings->setValue("dir", "");
     }
-
-    m_layout->addSpacing(40);
-    m_layout->addWidget(m_iconLabel, 0, Qt::AlignTop | Qt::AlignHCenter);
-    m_layout->addSpacing(20);
-    m_layout->addWidget(m_tipsLabel, 0, Qt::AlignHCenter);
-    m_layout->addSpacing(15);
-    m_layout->addWidget(m_splitLine, 0, Qt::AlignHCenter);
-    m_layout->addSpacing(15);
-    m_layout->addWidget(m_chooseBtn, 0, Qt::AlignHCenter);
-    m_layout->addStretch();
-    m_layout->setSpacing(0);
-
-    connect(m_chooseBtn, &QPushButton::clicked, this, &HomeWidget::onChooseBtnClicked);
-}
-
-void HomeWidget::setIconPixmap(bool isLoaded)
-{
-    if (isLoaded) {
-        m_iconLabel->setPixmap(m_loadedPixmap);
-    } else {
-        m_iconLabel->setPixmap(m_unloadPixmap);
-    }
 }
 
 void HomeWidget::initWidget()
 {
+    DLabel *iconLabel = new DLabel;
+    iconLabel->setPixmap(QPixmap(":/image/icon_import_photo.svg"));
 
+    DLabel *tipsLabel = new DLabel(tr("drag font file here"));
+    tipsLabel->setStyleSheet("QLabel { color: #6a6a6a; }");
+
+    DLabel *splitLine = new DLabel;
+    splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
+
+    DPushButton *chooseBtn  = new DPushButton(tr("select file"));
+    chooseBtn->setFixedSize(QSize(302, 36));
+    connect(chooseBtn, &DPushButton::clicked, this, &HomeWidget::onChooseBtnClicked);
+
+    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->addStretch(1);
+    m_layout->addWidget(iconLabel, 0, Qt::AlignCenter);
+    m_layout->addWidget(tipsLabel, 0, Qt::AlignHCenter);
+    m_layout->addWidget(splitLine, 0, Qt::AlignHCenter);
+    m_layout->addWidget(chooseBtn, 0, Qt::AlignHCenter);
+    m_layout->addStretch(1);
 }
 
 void HomeWidget::onChooseBtnClicked()

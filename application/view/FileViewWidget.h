@@ -29,10 +29,10 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void leaveEvent(QEvent *event) override;
     void dragEnterEvent(QDragEnterEvent *event) override;
-    void dropEvent(QDropEvent* event) override;
+    void dropEvent(QDropEvent *event) override;
 
 public slots:
-     void on_slot_openfile(const QString& filePath);
+    void on_slot_openfile(const QString &filePath);
 private slots:
     void SlotCustomContextMenuRequested(const QPoint &);
 
@@ -48,7 +48,7 @@ private:
 
     DefaultOperationWidget  *m_pDefaultOperationWidget = nullptr;
     TextOperationWidget     *m_pTextOperationWidget = nullptr;
-     DocumentView* m_docview;
+    DocumentView *m_docview = nullptr;
     // CustomWidget interface
 protected:
     void initWidget() override;
@@ -57,5 +57,6 @@ protected:
 public:
     int dealWithData(const int &, const QString &) override;
 };
+
 
 #endif // FILEVIEWWIDGET_H
