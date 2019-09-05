@@ -71,10 +71,9 @@ void MainWidget::initWidgets()
     m_pStackedWidget->addWidget(m_pHomeWidget);
 
     m_pMainShowSplitter = new MainShowSplitter;
-
     m_pStackedWidget->addWidget(m_pMainShowSplitter);
 
-    m_pStackedWidget->setCurrentIndex(0);
+    m_pStackedWidget->setCurrentIndex(1);
 }
 
 int MainWidget::update(const int &msgType, const QString &msgContent)

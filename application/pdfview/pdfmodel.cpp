@@ -156,8 +156,48 @@ QWidget * PdfFormField::createWidget()
 
  QSizeF PdfPage::size() const
  {
-     QSizeF sz;
-     return  sz;
+     LOCK_PAGE
+     return m_page->pageSizeF();
+ }
+
+ QImage PdfPage::render(qreal horizontalResolution, qreal verticalResolution, Rotation rotation, QRect boundingRect) const
+ {
+     LOCK_PAGE
+
+     Poppler::Page::Rotation rotate;
+
+     switch(rotation)
+     {
+     default:
+     case RotateBy0:
+         rotate = Poppler::Page::Rotate0;
+         break;
+     case RotateBy90:
+         rotate = Poppler::Page::Rotate90;
+         break;
+     case RotateBy180:
+         rotate = Poppler::Page::Rotate180;
+         break;
+     case RotateBy270:
+         rotate = Poppler::Page::Rotate270;
+         break;
+     }
+
+     int x = -1;
+     int y = -1;
+     int w = -1;
+     int h = -1;
+
+     if(!boundingRect.isNull())
+     {
+         x = boundingRect.x();
+         y = boundingRect.y();
+         w = boundingRect.width();
+         h = boundingRect.height();
+     }
+
+     return m_page->renderToImage(horizontalResolution, verticalResolution, x, y, w, h, rotate);
+      //return m_page->renderToImage(90, 90, x, y, w, h, rotate);
  }
 
  PdfDocument::~PdfDocument()
@@ -167,17 +207,32 @@ QWidget * PdfFormField::createWidget()
 
  int PdfDocument::numberOfPages() const
  {
-     int index=0;
-
-     return index;
+     LOCK_DOCUMENT
+      return m_document->numPages();
  }
 
  ModelPage *PdfDocument::page(int index) const
  {
-     return nullptr;
+     LOCK_DOCUMENT
+
+     if(Poppler::Page* page = m_document->page(index))
+     {
+         return new PdfPage(&m_mutex, page);
+     }
+
+     return 0;
  }
 
- PdfDocument::PdfDocument(Poppler::Document *document)
+ bool PdfDocument::isLocked() const
+ {
+     LOCK_DOCUMENT
+
+     return m_document->isLocked();
+ }
+
+ PdfDocument::PdfDocument(Poppler::Document *document):
+     m_mutex(),
+     m_document(document)
  {
 
  }
@@ -192,6 +247,7 @@ QWidget * PdfFormField::createWidget()
  {
      if(Poppler::Document* document = Poppler::Document::load(filePath))
      {
+         int pages=0;
          document->setRenderHint(Poppler::Document::Antialiasing, m_settings->value("antialiasing", Defaults::antialiasing).toBool());
          document->setRenderHint(Poppler::Document::TextAntialiasing, m_settings->value("textAntialiasing", Defaults::textAntialiasing).toBool());
 

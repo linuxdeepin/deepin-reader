@@ -83,7 +83,7 @@ public:
 
    QSizeF size() const;
 
-//    QImage render(qreal horizontalResolution, qreal verticalResolution, Rotation rotation, QRect boundingRect) const;
+   QImage render(qreal horizontalResolution, qreal verticalResolution, Rotation rotation, QRect boundingRect) const;
 
 //    QString label() const;
 
@@ -126,7 +126,7 @@ public:
 
     ModelPage* page(int index) const;
 
-//    bool isLocked() const;
+    bool isLocked() const;
 //    bool unlock(const QString& password);
 
 //    QStringList saveFilter() const;

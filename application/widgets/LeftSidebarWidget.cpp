@@ -14,7 +14,7 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent):
 
     initOperationWidget();
 
-    this->setVisible(false);    //  默认 隐藏
+    //this->setVisible(false);    //  默认 隐藏
 }
 
 void LeftSidebarWidget::initOperationWidget()

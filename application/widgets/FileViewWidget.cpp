@@ -1,13 +1,38 @@
 #include "FileViewWidget.h"
 #include "header/MsgHeader.h"
+#include "pdfview/documentview.h"
 #include <QDebug>
+#include <QEvent>
+#include <QDragEnterEvent>
+#include <QMimeData>
+#include <QMainWindow>
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
-    : CustomWidget(parent)
+    : CustomWidget(parent),
+      m_viewwindow(nullptr)
 {
-    setMouseTracking(true); //  接受 鼠标滑动事件
 
-    m_pMagnifyingWidget = new MagnifyingWidget(this); //  放大镜 窗口
+    DocumentView* ptem=new DocumentView(this);
+
+    ptem->open(QString("/home/archermind/Desktop/test.pdf"));
+
+//    // 构建主窗口界面内容
+//    initUI();
+//    // 初始化信号槽连接
+//    initConnections();
+//    setAcceptDrops(true);
+//    setMouseTracking(true); //  接受 鼠标滑动事件
+
+
+//    m_pMagnifyingWidget = new MagnifyingWidget(this); //  放大镜 窗口
+}
+
+void FileViewWidget::on_slot_openfile(const QString& filePath)
+{
+
+//    m_docview=new DocumentView(m_viewwindow);
+//    m_docview->open(filePath);
+   // m_docview->open(filePath);
 }
 
 void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
@@ -33,6 +58,36 @@ void FileViewWidget::leaveEvent(QEvent *event)
     }
 
     DWidget::leaveEvent(event);
+}
+
+void FileViewWidget::dragEnterEvent(QDragEnterEvent *event)
+{
+    // Accept drag event if mime type is url.
+    event->accept();
+}
+
+void FileViewWidget::dropEvent(QDropEvent *event)
+{
+    const QMimeData* mimeData = event->mimeData();
+
+    if (mimeData->hasUrls()) {
+        for (auto url : mimeData->urls()) {
+            on_slot_openfile(url.toLocalFile());
+        }
+    }
+}
+
+void FileViewWidget::initUI()
+{
+    //m_viewwindow=new QMainWindow(this);
+//setStyleSheet("background-color:black;");
+
+
+}
+
+void FileViewWidget::initConnections()
+{
+
 }
 
 //  消息 数据 处理

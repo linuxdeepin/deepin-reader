@@ -39,6 +39,11 @@ SOURCES += \
     pdfview/documentview.cpp \
     pdfview/pdfmodel.cpp \
     pdfview/loadhandler.cpp \
+    pdfview/pageitem.cpp \
+    pdfview/documentlayout.cpp \
+    pdfview/viewsettings.cpp \
+    pdfview/rendertask.cpp \
+    pdfview/tileitem.cpp
 
 
 
@@ -78,6 +83,12 @@ HEADERS +=\
     pdfview/global.h \
     pdfview/pdfmodel.h \
     pdfview/loadhandler.h \
+    pdfview/pageitem.h \
+    pdfview/renderparam.h \
+    pdfview/documentlayout.h \
+    pdfview/viewsettings.h \
+    pdfview/rendertask.h \
+    pdfview/tileitem.h
 
 DISTFILES += \
     themes/solarized_light.theme \

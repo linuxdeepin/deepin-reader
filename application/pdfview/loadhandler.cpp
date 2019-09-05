@@ -77,6 +77,7 @@ LoadHandler::FileType matchFileType(const QString& filePath)
     {
         qDebug() << "Unknown MIME type:" << mimeType.name();
     }
+    return fileType;
 }
 
 LoadHandler* LoadHandler::s_instance = 0;

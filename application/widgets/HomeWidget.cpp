@@ -3,9 +3,7 @@
 #include "header/MsgHeader.h"
 #include <QApplication>
 #include <QDir>
-
 #include <DFileDialog>
-
 
 HomeWidget::HomeWidget(CustomWidget *parent):
     CustomWidget (parent),
@@ -13,7 +11,7 @@ HomeWidget::HomeWidget(CustomWidget *parent):
     m_iconLabel(new DLabel),
     m_tipsLabel(new DLabel(tr("Drag font file here"))),
     m_splitLine(new DLabel),
-    m_chooseBtn(new DLinkButton(tr("Select file"))),
+    m_chooseBtn(new QPushButton(tr("Select file"))),
     m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
                              QSettings::IniFormat))
 {
@@ -41,7 +39,7 @@ HomeWidget::HomeWidget(CustomWidget *parent):
     m_layout->addStretch();
     m_layout->setSpacing(0);
 
-    connect(m_chooseBtn, &DLinkButton::clicked, this, &HomeWidget::onChooseBtnClicked);
+    connect(m_chooseBtn, &QPushButton::clicked, this, &HomeWidget::onChooseBtnClicked);
 }
 
 void HomeWidget::setIconPixmap(bool isLoaded)

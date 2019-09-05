@@ -1,7 +1,7 @@
 #include "window.h"
 #include <DApplication>
 #include <DLog>
-
+#include <QGridLayout>
 DWIDGET_USE_NAMESPACE
 
 int main(int argc, char *argv[])
@@ -28,6 +28,14 @@ int main(int argc, char *argv[])
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
 
+    //begin>>2019-9-3 kyz show test
+//    QMainWindow w;
+//    DocumentView* const newTab = new DocumentView;
+//    w.setCentralWidget(newTab);
+//    newTab->open(QString("/home/archermind/Desktop/test.pdf"));
+//    w.resize(800,1000);
+//    w.show();
+    //end<<
     Window w;
     w.setMinimumSize(500, 500);
     w.show();
