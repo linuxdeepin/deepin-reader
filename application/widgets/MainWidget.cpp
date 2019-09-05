@@ -47,7 +47,7 @@ void MainWidget::initWidget()
     m_pMainShowSplitter = new MainShowSplitter;
     m_pStackedWidget->addWidget(m_pMainShowSplitter);
 
-    m_pStackedWidget->setCurrentIndex(0);
+    m_pStackedWidget->setCurrentIndex(1);
 }
 
 //  open file

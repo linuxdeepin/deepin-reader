@@ -32,14 +32,6 @@ SOURCES += \
     listWidget/NotesItemWidget.cpp \
     header/MsgSubject.cpp \
     header/CustomWidget.cpp\
-    pdfview/documentview.cpp \
-    pdfview/pdfmodel.cpp \
-    pdfview/loadhandler.cpp \
-    pdfview/pageitem.cpp \
-    pdfview/documentlayout.cpp \
-    pdfview/viewsettings.cpp \
-    pdfview/rendertask.cpp \
-    pdfview/tileitem.cpp\
     view/MagnifyingWidget.cpp \
     view/DefaultOperationWidget.cpp \
     view/TextOperationWidget.cpp \
@@ -49,6 +41,14 @@ SOURCES += \
     widgets/FindBar.cpp \
     widgets/LineBar.cpp \
     listWidget/MyLabel.cpp\
+    docview/pdf/pdfmodel.cpp \
+    docview/documentlayout.cpp \
+    docview/documentview.cpp \
+    docview/loadhandler.cpp \
+    docview/pageitem.cpp \
+    docview/rendertask.cpp \
+    docview/tileitem.cpp \
+    docview/viewsettings.cpp
 
 
 
@@ -78,18 +78,7 @@ HEADERS +=\
     listWidget/PagingWidget.h \
     listWidget/BookMarkWidget.h \
     listWidget/BookMarkItemWidget.h \
-    listWidget/NotesItemWidget.h \   
-    pdfview/documentview.h \
-    pdfview/model.h \
-    pdfview/global.h \
-    pdfview/pdfmodel.h \
-    pdfview/loadhandler.h \
-    pdfview/pageitem.h \
-    pdfview/renderparam.h \
-    pdfview/documentlayout.h \
-    pdfview/viewsettings.h \
-    pdfview/rendertask.h \
-    pdfview/tileitem.h\
+    listWidget/NotesItemWidget.h \
     view/MagnifyingWidget.h \
     view/DefaultOperationWidget.h \
     view/TextOperationWidget.h \
@@ -99,6 +88,17 @@ HEADERS +=\
     widgets/FindBar.h \
     widgets/LineBar.h \
     listWidget/MyLabel.h\
+    docview/pdf/pdfmodel.h \
+    docview/documentlayout.h \
+    docview/documentview.h \
+    docview/global.h \
+    docview/loadhandler.h \
+    docview/model.h \
+    docview/pageitem.h \
+    docview/renderparam.h \
+    docview/rendertask.h \
+    docview/tileitem.h \
+    docview/viewsettings.h
 
 DISTFILES += \
     themes/solarized_light.theme \

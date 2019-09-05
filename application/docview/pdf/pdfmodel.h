@@ -22,7 +22,7 @@ class Document;
 class FormField;
 class Page;
 }
-#include "model.h"
+#include "../model.h"
 
 class PdfAnnotation : public ModelAnnotation
 {

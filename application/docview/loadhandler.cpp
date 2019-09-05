@@ -4,7 +4,7 @@
 #include <QFileInfo>
 #include <QImageReader>
 //tmp
-#include "pdfmodel.h"
+#include "pdf/pdfmodel.h"
 
 struct MimeTypeMapping
 {

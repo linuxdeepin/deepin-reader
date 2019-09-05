@@ -3,7 +3,7 @@
 #include <DLog>
 #include <QGridLayout>
 DWIDGET_USE_NAMESPACE
-
+#include "docview/documentview.h"
 int main(int argc, char *argv[])
 {
     // Init DTK.
