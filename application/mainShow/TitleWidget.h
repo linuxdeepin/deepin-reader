@@ -21,29 +21,26 @@ public:
     ~TitleWidget() override;
 
 private slots:
-    void on_thumbnailBtn_checkedChanged(bool);
-    void on_fontBtn_clicked(bool);
-    void on_handleShapeBtn_clicked(bool);
-    void on_magnifyingBtn_checkedChanged(bool);
+    void on_thumbnailBtn_clicked();
+    void on_fontBtn_clicked();
+    void on_handleShapeBtn_clicked();
+    void on_magnifyingBtn_clicked();
 
     void on_HandleAction_trigger(bool);
     void on_DefaultAction_trigger(bool);
 
 private:
-    void initBtns();
-    void createBtn(const QString &btnName, const char *member, bool checkable = false, bool checked = false);
+    void createBtn(const QString &btnName, const char *member);
 
     void createAction(const QString &iconName, const char *member);
 
-    void sendMsgToSubject(const int &, const QString &);
+    void sendMsgToSubject(const int &, const QString &msgCotent = "");
 
 private:
     QHBoxLayout *m_layout = nullptr;
 
     int     m_nCurrentState = 0;
     DMenu   *m_pHandleMenu = nullptr;
-//    QAction *m_pHandleAction = nullptr;
-//    QAction *m_pDefaultAction = nullptr;
 
     // CustomWidget interface
 

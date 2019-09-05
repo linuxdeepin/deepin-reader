@@ -25,7 +25,7 @@ private:
     void initWidget();
 
 private:
-    void setSidebarVisible(const bool &) const;
+    void setSidebarVisible() const;
 
 private:
     LeftSidebarWidget *m_pLeftShowWidget = nullptr; //  侧边栏

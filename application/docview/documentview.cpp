@@ -13,26 +13,24 @@
 #include "documentlayout.h"
 #include "viewsettings.h"
 
-inline void adjustScaleFactor(RenderParam& renderParam, qreal scaleFactor)
+inline void adjustScaleFactor(RenderParam &renderParam, qreal scaleFactor)
 {
-    if(!qFuzzyCompare(renderParam.scaleFactor(), scaleFactor))
-    {
+    if (!qFuzzyCompare(renderParam.scaleFactor(), scaleFactor)) {
         renderParam.setScaleFactor(scaleFactor);
     }
 }
 
-inline void setValueIfNotVisible(QScrollBar* scrollBar, int value)
+inline void setValueIfNotVisible(QScrollBar *scrollBar, int value)
 {
-    if(value < scrollBar->value() || value > scrollBar->value() + scrollBar->pageStep())
-    {
+    if (value < scrollBar->value() || value > scrollBar->value() + scrollBar->pageStep()) {
         scrollBar->setValue(value);
     }
 }
 
 
-ViewSettings* DocumentView::s_settings = nullptr;
+ViewSettings *DocumentView::s_settings = nullptr;
 
-DocumentView::DocumentView(QWidget* parent) : QGraphicsView(parent),
+DocumentView::DocumentView(QWidget *parent) : QGraphicsView(parent),
     m_document(nullptr),
     m_pages(),
     m_currentPage(-1),
@@ -44,8 +42,7 @@ DocumentView::DocumentView(QWidget* parent) : QGraphicsView(parent),
     m_rightToLeftMode(false),
     m_continuousMode(false)
 {
-    if(s_settings == 0)
-    {
+    if (s_settings == 0) {
         s_settings = ViewSettings::instance();
     }
 
@@ -63,23 +60,19 @@ DocumentView::DocumentView(QWidget* parent) : QGraphicsView(parent),
     m_scaleFactor = s_settings->documentView().scaleFactor();
     m_rotation = s_settings->documentView().rotation();
 
-    if(s_settings->documentView().invertColors())
-    {
+    if (s_settings->documentView().invertColors()) {
         m_renderFlags |= InvertColors;
     }
 
-    if(s_settings->documentView().convertToGrayscale())
-    {
+    if (s_settings->documentView().convertToGrayscale()) {
         m_renderFlags |= ConvertToGrayscale;
     }
 
-    if(s_settings->documentView().trimMargins())
-    {
+    if (s_settings->documentView().trimMargins()) {
         m_renderFlags |= TrimMargins;
     }
 
-    switch(s_settings->documentView().compositionMode())
-    {
+    switch (s_settings->documentView().compositionMode()) {
     default:
     case DefaultCompositionMode:
         break;
@@ -112,7 +105,7 @@ bool DocumentView::open(const QString &filePath)
         qreal left = 0.0, top = 0.0;
         m_currentPage = 1;
         m_fileInfo.setFile(filePath);
-        //  saveLeftAndTop(left, top);
+//        //  saveLeftAndTop(left, top);
         prepareDocument(document, pages);
         loadDocumentDefaults();
         adjustScrollBarPolicy();
@@ -142,14 +135,12 @@ void DocumentView::preparePages()
 {
     m_pageItems.clear();
     m_pageItems.reserve(m_pages.count());
-    for(int index = 0; index < m_pages.count(); ++index)
-    {
-        PageItem* page = new PageItem(m_pages.at(index), index);
+    for (int index = 0; index < m_pages.count(); ++index) {
+        PageItem *page = new PageItem(m_pages.at(index), index);
         // page->setRubberBandMode(m_rubberBandMode);
-        QGraphicsScene *pscene=scene();
-        if(pscene==nullptr)
-        {
-            int a=0;
+        QGraphicsScene *pscene = scene();
+        if (pscene == nullptr) {
+            int a = 0;
         }
         scene()->addItem(page);
         m_pageItems.append(page);
@@ -160,16 +151,12 @@ void DocumentView::prepareBackground()
 {
     QColor backgroundColor;
 
-    if(s_settings->pageItem().decoratePages())
-    {
+    if (s_settings->pageItem().decoratePages()) {
         backgroundColor = s_settings->pageItem().backgroundColor();
-    }
-    else
-    {
+    } else {
         backgroundColor = s_settings->pageItem().paperColor();
 
-        if(invertColors())
-        {
+        if (invertColors()) {
             backgroundColor.setRgb(~backgroundColor.rgb());
         }
     }
@@ -188,16 +175,12 @@ void DocumentView:: prepareScene()
     const qreal visibleWidth = m_layout->visibleWidth(viewport()->width());
     const qreal visibleHeight = m_layout->visibleHeight(viewport()->height());
 
-    foreach(PageItem* page, m_pageItems)
-    {
+    foreach (PageItem *page, m_pageItems) {
         const QSizeF displayedSize = page->displayedSize(renderParam);
 
-        if(m_scaleMode == FitToPageWidthMode)
-        {
+        if (m_scaleMode == FitToPageWidthMode) {
             adjustScaleFactor(renderParam, visibleWidth / displayedSize.width());
-        }
-        else if(m_scaleMode == FitToPageSizeMode)
-        {
+        } else if (m_scaleMode == FitToPageSizeMode) {
             adjustScaleFactor(renderParam, qMin(visibleWidth / displayedSize.width(), visibleHeight / displayedSize.height()));
         }
 
@@ -207,7 +190,7 @@ void DocumentView:: prepareScene()
     //    // prepare layout
     qreal left = 0.0;
     qreal right = 0.0;
-    qreal height =s_settings->documentView().pageSpacing();
+    qreal height = s_settings->documentView().pageSpacing();
 
     m_layout->prepareLayout(m_pageItems, m_rightToLeftMode,
                             left, right, height);
@@ -232,31 +215,24 @@ void DocumentView::prepareView(qreal newLeft, qreal newTop, bool forceScroll, in
     const int highlightIsOnPage = 0;//m_currentResult.isValid() ? pageOfResult(m_currentResult) : 0;
     //const bool highlightCurrentThumbnail = s_settings->documentView().highlightCurrentThumbnail();
 
-    for(int index = 0; index < m_pageItems.count(); ++index)
-    {
-        PageItem* page = m_pageItems.at(index);
+    for (int index = 0; index < m_pageItems.count(); ++index) {
+        PageItem *page = m_pageItems.at(index);
 
-        if(m_continuousMode)
-        {
+        if (m_continuousMode) {
             page->setVisible(true);
-        }
-        else
-        {
-            if(m_layout->leftIndex(index) == m_currentPage - 1)
-            {
+        } else {
+            if (m_layout->leftIndex(index) == m_currentPage - 1) {
                 page->setVisible(true);
 
                 const QRectF boundingRect = page->boundingRect().translated(page->pos());
 
                 top = boundingRect.top() - s_settings->documentView().pageSpacing();
                 height = boundingRect.height() + 2.0 * s_settings->documentView().pageSpacing();
-            }
-            else
-            {
+            } else {
                 page->setVisible(false);
-            //            m_highlight->setTransform(page->transform());
+                //            m_highlight->setTransform(page->transform());
 
-            //            page->stackBefore(m_highlight);
+                //            page->stackBefore(m_highlight);
             }
         }
 
@@ -265,13 +241,10 @@ void DocumentView::prepareView(qreal newLeft, qreal newTop, bool forceScroll, in
 
     setSceneRect(sceneRect.left(), top, sceneRect.width(), height);
 
-    if(!forceScroll && s_settings->documentView().minimalScrolling())
-    {
+    if (!forceScroll && s_settings->documentView().minimalScrolling()) {
         setValueIfNotVisible(horizontalScrollBar(), horizontalValue);
         setValueIfNotVisible(verticalScrollBar(), verticalValue);
-    }
-    else
-    {
+    } else {
         horizontalScrollBar()->setValue(horizontalValue);
         verticalScrollBar()->setValue(verticalValue);
     }
@@ -281,27 +254,22 @@ void DocumentView::prepareView(qreal newLeft, qreal newTop, bool forceScroll, in
 
 bool DocumentView::checkDocument(const QString &filePath, ModelDocument *document, QVector<ModelPage *> &pages)
 {
-    if(document->isLocked())
-    {
+    if (document->isLocked()) {
         QString password = QInputDialog::getText(this, tr("Unlock %1").arg(QFileInfo(filePath).completeBaseName()), tr("Password:"), QLineEdit::Password);
 
-        if(document->unlock(password))
-        {
+        if (document->unlock(password)) {
             return false;
         }
     }
     const int numberOfPages = document->numberOfPages();
-    if(numberOfPages == 0)
-    {
+    if (numberOfPages == 0) {
         qWarning() << "No pages were found in document at" << filePath;
         return false;
     }
     pages.reserve(numberOfPages);
-    for(int index = 0; index < numberOfPages; ++index)
-    {
-        ModelPage* page = document->page(index);
-        if(page == 0)
-        {
+    for (int index = 0; index < numberOfPages; ++index) {
+        ModelPage *page = document->page(index);
+        if (page == 0) {
             qWarning() << "No page" << index << "was found in document at" << filePath;
 
             return false;
@@ -314,7 +282,7 @@ bool DocumentView::checkDocument(const QString &filePath, ModelDocument *documen
 
 void DocumentView::saveLeftAndTop(qreal &left, qreal &top) const
 {
-    const PageItem* page = m_pageItems.at(m_currentPage - 1);
+    const PageItem *page = m_pageItems.at(m_currentPage - 1);
     const QRectF boundingRect = page->uncroppedBoundingRect().translated(page->pos());
 
     const QPointF topLeft = mapToScene(viewport()->rect().topLeft());
@@ -325,8 +293,7 @@ void DocumentView::saveLeftAndTop(qreal &left, qreal &top) const
 
 void DocumentView::adjustScrollBarPolicy()
 {
-    switch(m_scaleMode)
-    {
+    switch (m_scaleMode) {
     default:
     case ScaleFactorMode:
         setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -345,13 +312,11 @@ void DocumentView::adjustScrollBarPolicy()
 
 void DocumentView::loadDocumentDefaults()
 {
-    if(m_document->wantsContinuousMode())
-    {
+    if (m_document->wantsContinuousMode()) {
         m_continuousMode = true;
     }
 
-    if(m_document->wantsSinglePageMode())
-    {
+    if (m_document->wantsSinglePageMode()) {
         m_layout.reset(new SinglePageLayout);
     }
     //    else if(m_document->wantsTwoPagesMode())

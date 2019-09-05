@@ -1,6 +1,7 @@
 #include "TitleWidget.h"
 #include <QDebug>
-#include <DPushButton>
+
+#include "subjectObserver/PushButton.h"
 
 TitleWidget::TitleWidget(CustomWidget *parent) :
     CustomWidget("TitleWidget", parent)
@@ -12,37 +13,37 @@ TitleWidget::TitleWidget(CustomWidget *parent) :
     m_layout->setSpacing(6);
     setLayout(m_layout);
 
-    initBtns();
+    initWidget();
 }
 
 TitleWidget::~TitleWidget()
 {
     if (m_pFontWidget) {
-        delete  m_pFontWidget;
+        m_pFontWidget->deleteLater();
         m_pFontWidget = nullptr;
     }
 }
 
 void TitleWidget::initWidget()
 {
+    m_pFontWidget = new FontWidget;
 
+    createBtn("thumbnail", SLOT(on_thumbnailBtn_clicked()));
+    createBtn("setting", SLOT(on_fontBtn_clicked()));
+    createBtn("choose", SLOT(on_handleShapeBtn_clicked()));
+    createBtn("magnifier", SLOT(on_magnifyingBtn_clicked()));
+    m_layout->addStretch(1);
 }
 
 //  缩略图 显示
-void TitleWidget::on_thumbnailBtn_checkedChanged(bool bCheck)
+void TitleWidget::on_thumbnailBtn_clicked()
 {
-    qDebug() << "   on_thumbnailBtn_checkedChanged";
-    sendMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(bCheck));
+    sendMsgToSubject(MSG_SLIDER_SHOW_STATE);
 }
 
 //  字体
-void TitleWidget::on_fontBtn_clicked(bool)
+void TitleWidget::on_fontBtn_clicked()
 {
-    if (!m_pFontWidget) {
-        return;
-    }
-
-    static bool t_show = true;
     DPushButton *btn = reinterpret_cast<DPushButton *>(QObject::sender());
     int nHeight = btn->height();
     int nWidth = btn->width() / 2;
@@ -51,49 +52,38 @@ void TitleWidget::on_fontBtn_clicked(bool)
     int nOldY = point.y();
     int nOldX = point.x();
 
-    qDebug() << tr("point1") << point;
-
     point.setX(nWidth + nOldX - 100);
     point.setY(nHeight + nOldY);
 
-    qDebug() << tr("point1") << point;
-
-    if (t_show) {
-        m_pFontWidget->resize(310, 350);
-        m_pFontWidget->setGeometry(point.x(), point.y(), 200, 250);
-        m_pFontWidget->show();
-    } else {
-        m_pFontWidget->hide();
-    }
-
-    t_show = !t_show;
+    m_pFontWidget->setGeometry(point.x(), point.y(), 200, 250);
+    m_pFontWidget->show();
 }
 
 //  手型点击
-void TitleWidget::on_handleShapeBtn_clicked(bool)
+void TitleWidget::on_handleShapeBtn_clicked()
 {
-//    CustomImageButton *btn = reinterpret_cast<CustomImageButton *>(QObject::sender());
-//    int nHeight = btn->height();
-//    int nWidth = btn->width();
+    PushButton *btn = reinterpret_cast<PushButton *>(QObject::sender());
+    int nHeight = btn->height();
+    int nWidth = btn->width();
 
-//    QPoint point = btn->mapToGlobal(QPoint(0, 0));
-//    int nOldY = point.y();
+    QPoint point = btn->mapToGlobal(QPoint(0, 0));
+    int nOldY = point.y();
 
-//    point.setY(nHeight + nOldY + 2);
+    point.setY(nHeight + nOldY + 2);
 
-//    if (m_pHandleMenu == nullptr) {
-//        m_pHandleMenu = new DMenu(btn);
+    if (m_pHandleMenu == nullptr) {
+        m_pHandleMenu = new DMenu;
 
-//        createAction(tr("Handle"), SLOT(on_HandleAction_trigger(bool)));
-//        createAction(tr("Default"), SLOT(on_DefaultAction_trigger(bool)));
-//    }
-//    m_pHandleMenu->exec(point);
+        createAction(tr("Handle"), SLOT(on_HandleAction_trigger(bool)));
+        createAction(tr("Default"), SLOT(on_DefaultAction_trigger(bool)));
+    }
+    m_pHandleMenu->exec(point);
 }
 
 //  放大镜 功能
-void TitleWidget::on_magnifyingBtn_checkedChanged(bool bCheck)
+void TitleWidget::on_magnifyingBtn_clicked()
 {
-    sendMsgToSubject(MSG_MAGNIFYING, QString::number(bCheck));
+    sendMsgToSubject(MSG_MAGNIFYING);
 }
 
 //  切换为 手型 鼠标
@@ -112,51 +102,29 @@ void TitleWidget::on_DefaultAction_trigger(bool)
     sendMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurrentState));
 }
 
-//  初始化 标题栏 按钮
-void TitleWidget::initBtns()
-{
-    m_pFontWidget = new FontWidget;
-    m_pFontWidget->hide();
-
-    createBtn("thumbnail", SLOT(on_thumbnailBtn_checkedChanged(bool)), true);
-    createBtn("setting", SLOT(on_fontBtn_clicked(bool)), true);
-    createBtn("choose", SLOT(on_handleShapeBtn_clicked(bool)), true);
-    createBtn("magnifier", SLOT(on_magnifyingBtn_checkedChanged(bool)), true);
-    m_layout->addStretch(1);
-}
-
-void TitleWidget::createBtn(const QString &btnName, const char *member, bool checkable, bool checked)
+void TitleWidget::createBtn(const QString &btnName, const char *member)
 {
     QString normalPic = Utils::getQrcPath(btnName, g_normal_state);
     QString hoverPic = Utils::getQrcPath(btnName, g_hover_state);
     QString pressPic = Utils::getQrcPath(btnName, g_press_state);
     QString checkedPic = Utils::getQrcPath(btnName, g_checked_state);
+    QString disablePic = Utils::getQrcPath(btnName, g_disable_state);
 
-//    qDebug() << "normalPic " << normalPic << " , hoverPic " << hoverPic
-//             << ", pressPic " << pressPic << ", checkedPic " << checkedPic;
+    PushButton *btn = new PushButton;
+    btn->setNormalPic(normalPic);
+    btn->setHoverPic(hoverPic);
+    btn->setHoverColor(QColor(255, 0, 0));
+    btn->setPressPic(pressPic);
+    btn->setPressColor(QColor(255, 255, 0));
+    btn->setCheckedPic(checkedPic);
+    btn->setDisablePic(disablePic);
 
-//    CustomImageButton *btn = new CustomImageButton;
-////    btn->setEnabled(false);
-//    btn->setStrNormalPic(normalPic);
-//    btn->setStrHoverPic(hoverPic);
-//    btn->setStrPressPic(pressPic);
-//    btn->setStrCheckPic(checkedPic);
-////    DImageButton *btn = new DImageButton(normalPic, hoverPic, pressPic, checkedPic);
-//    btn->setToolTip(btnName);
-////    btn->setCheckable(true);
-////    btn->setChecked(false);
+    btn->setToolTip(btnName);
+    btn->setCheckable(true);
 
-//    if (checkable) {
-//        btn->setCheckable(true);
-//        btn->setChecked(checked);
+    connect(btn, SIGNAL(clicked()), member);
 
-////    connect(btn, SIGNAL(checkedChanged(bool)), member);
-//        connect(btn, SIGNAL(clicked(bool)), member);
-//    } else {
-//        connect(btn, SIGNAL(clicked()), member);
-//    }
-
-//    m_layout->addWidget(btn);
+    m_layout->addWidget(btn);
 }
 
 //  创建两个按钮菜单， 对应 手型 和 默认鼠标
@@ -172,28 +140,17 @@ void TitleWidget::createAction(const QString &iconName, const char *member)
 
     m_pHandleMenu->addAction(_action);
 }
-//    } else {
-//        if (m_pDefaultAction == nullptr) {
-//            m_pDefaultAction = new QAction(tr("Default"), this);
-//            m_pDefaultAction->setIcon(icon);
-//            m_pDefaultAction->setCheckable(true);
 
-//            if (m_nCurrentState == 0) {
-//                m_pDefaultAction->setChecked(true);
-//            }
-//            connect(m_pDefaultAction, SIGNAL(triggered()), member);
-//        }
-
-void TitleWidget::sendMsgToSubject(const int &msgType, const QString &msgContent)
+void TitleWidget::sendMsgToSubject(const int &msgType, const QString &msgCotent)
 {
-    sendMsg(msgType, msgContent);
+    sendMsg(msgType, msgCotent);
 }
 
 int TitleWidget::dealWithData(const int &msgType, const QString &)
 {
     //  取消放大镜
     if (msgType == MSG_MAGNIFYING_CANCEL) {
-        on_magnifyingBtn_checkedChanged(false);
+        on_magnifyingBtn_clicked();
         return ConstantMsg::g_effective_res;
     }
     return 0;

@@ -4,9 +4,8 @@
 FontWidget::FontWidget(CustomWidget *parent):
     CustomWidget("FontWidget", parent)
 {
-    setWindowFlags(Qt::Popup);
-
-
+    //让程序无边框
+    setWindowFlags(Qt::Popup | Qt::FramelessWindowHint);
 
     initWidget();
 }
@@ -23,10 +22,9 @@ int FontWidget::dealWithData(const int &, const QString &)
 
 void FontWidget::initWidget()
 {
-    //让程序无边框
-    setWindowFlags( Qt::FramelessWindowHint );
+
     //让程序背景透明
-    setAttribute(Qt::WA_TranslucentBackground, true);
+//    setAttribute(Qt::WA_TranslucentBackground, true);
 
     QFont ft;
     QVBoxLayout *t_pVBoxLayout = new QVBoxLayout;
