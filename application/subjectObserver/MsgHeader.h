@@ -56,6 +56,16 @@ enum MSG_LEFT_SLIDER_TYPE {
     MSG_SWITCHLEFTWIDGET,               //  切换左侧窗口(缩略图、书签、注释) 消息
 };
 
+//  字体菜单 消息
+enum MSG_FONT_MENU_TYPE {
+    MSG_SCALEUP_MULTIPLE = 150,     //  缩放倍数
+    MSG_DOUB_PAGE_VIEW,             //  双页视图
+    MSG_SELF_ADAPTE_HEIGHT,         //  自适应高度
+    MSG_SELF_ADAPTE_WIDTH,          //  自适应宽度
+    MSG_ROTATE_LEFT,                //  左旋转
+    MSG_ROTATE_RIGHT,               //  右旋转
+};
+
 namespace ConstantMsg {
 static int g_effective_res = 9999;  //  表明 消息已被处理
 static int g_menu_width = 150;      //  菜单的宽度

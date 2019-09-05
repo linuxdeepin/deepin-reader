@@ -1,6 +1,6 @@
 #include "TitleWidget.h"
 #include <QDebug>
-
+#include <DPushButton>
 
 TitleWidget::TitleWidget(CustomWidget *parent) :
     CustomWidget("TitleWidget", parent)
@@ -13,6 +13,14 @@ TitleWidget::TitleWidget(CustomWidget *parent) :
     setLayout(m_layout);
 
     initBtns();
+}
+
+TitleWidget::~TitleWidget()
+{
+    if (m_pFontWidget) {
+        delete  m_pFontWidget;
+        m_pFontWidget = nullptr;
+    }
 }
 
 void TitleWidget::initWidget()
@@ -30,7 +38,35 @@ void TitleWidget::on_thumbnailBtn_checkedChanged(bool bCheck)
 //  字体
 void TitleWidget::on_fontBtn_clicked(bool)
 {
+    if (!m_pFontWidget) {
+        return;
+    }
 
+    static bool t_show = true;
+    DPushButton *btn = reinterpret_cast<DPushButton *>(QObject::sender());
+    int nHeight = btn->height();
+    int nWidth = btn->width() / 2;
+
+    QPoint point = btn->mapToGlobal(QPoint(0, 0));
+    int nOldY = point.y();
+    int nOldX = point.x();
+
+    qDebug() << tr("point1") << point;
+
+    point.setX(nWidth + nOldX - 100);
+    point.setY(nHeight + nOldY);
+
+    qDebug() << tr("point1") << point;
+
+    if (t_show) {
+        m_pFontWidget->resize(310, 350);
+        m_pFontWidget->setGeometry(point.x(), point.y(), 200, 250);
+        m_pFontWidget->show();
+    } else {
+        m_pFontWidget->hide();
+    }
+
+    t_show = !t_show;
 }
 
 //  手型点击
@@ -79,6 +115,9 @@ void TitleWidget::on_DefaultAction_trigger(bool)
 //  初始化 标题栏 按钮
 void TitleWidget::initBtns()
 {
+    m_pFontWidget = new FontWidget;
+    m_pFontWidget->hide();
+
     createBtn("thumbnail", SLOT(on_thumbnailBtn_checkedChanged(bool)), true);
     createBtn("setting", SLOT(on_fontBtn_clicked(bool)), true);
     createBtn("choose", SLOT(on_handleShapeBtn_clicked(bool)), true);

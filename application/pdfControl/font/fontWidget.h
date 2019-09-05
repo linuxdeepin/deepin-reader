@@ -8,6 +8,8 @@
 #include <QHBoxLayout>
 #include <QButtonGroup>
 #include <QPixmap>
+#include <QPainter>
+#include <QRectF>
 
 #include "subjectObserver/CustomWidget.h"
 
@@ -23,6 +25,9 @@ public:
 
 protected:
     void initWidget() override;
+
+protected:
+    void  paintEvent(QPaintEvent *e) override;
 
 private slots:
     void slotSetChangeVal(int);

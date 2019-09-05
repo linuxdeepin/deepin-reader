@@ -6,6 +6,8 @@
 #include <QHBoxLayout>
 #include "subjectObserver/CustomWidget.h"
 
+#include "pdfControl/font/fontWidget.h"
+
 /**
  * @brief The TitleWidget class
  * @brief   标题栏的 按钮操作
@@ -16,6 +18,7 @@ class TitleWidget : public CustomWidget
     Q_OBJECT
 public:
     TitleWidget(CustomWidget *parent = nullptr);
+    ~TitleWidget() override;
 
 private slots:
     void on_thumbnailBtn_checkedChanged(bool);
@@ -43,6 +46,8 @@ private:
 //    QAction *m_pDefaultAction = nullptr;
 
     // CustomWidget interface
+
+    FontWidget *m_pFontWidget = nullptr;
 protected:
     void initWidget() override;
 
