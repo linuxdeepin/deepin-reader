@@ -41,7 +41,6 @@ SOURCES += \
     widgets/FindBar.cpp \
     widgets/LineBar.cpp \
     font/fontWidget.cpp \
-    listWidget/MyLabel.cpp \
     docview/pdf/pdfmodel.cpp \
     docview/documentlayout.cpp \
     docview/documentview.cpp \
@@ -50,7 +49,8 @@ SOURCES += \
     docview/rendertask.cpp \
     docview/tileitem.cpp \
     docview/viewsettings.cpp \
-    header/CustomImageButton.cpp
+    header/CustomImageButton.cpp \
+    listWidget/MyLabel.cpp
 
 
 RESOURCES +=         resources.qrc
@@ -89,7 +89,6 @@ HEADERS +=\
     widgets/FindBar.h \
     widgets/LineBar.h \
     font/fontWidget.h \
-    listWidget/MyLabel.h \
     docview/pdf/pdfmodel.h \
     docview/documentlayout.h \
     docview/documentview.h \
@@ -102,8 +101,8 @@ HEADERS +=\
     docview/tileitem.h \
     docview/viewsettings.h \
     header/ImageHeader.h \
-    header/CustomImageButton.h
-
+    header/CustomImageButton.h \
+    listWidget/MyLabel.h
 
 DISTFILES += \
     themes/solarized_light.theme \
