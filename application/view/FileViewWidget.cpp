@@ -1,15 +1,18 @@
 #include "FileViewWidget.h"
+#include "docview/documentview.h"
 #include <QDebug>
+#include <QMimeData>
+#include <QUrl>
+#include <QGridLayout>
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
-    : CustomWidget("FileViewWidget", parent)
+    : CustomWidget("FileViewWidget", parent),
+      m_docview(nullptr)
 {
     setMouseTracking(true); //  接受 鼠标滑动事件
-
+    setAcceptDrops(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(SlotCustomContextMenuRequested(const QPoint &)));
-
-
     initWidget();
 }
 
@@ -28,6 +31,9 @@ FileViewWidget::~FileViewWidget()
 
 void FileViewWidget::initWidget()
 {
+    m_docview=new DocumentView;
+    QGridLayout* pgrlyout=new QGridLayout(this);
+    pgrlyout->addWidget(m_docview);
     m_pMagnifyingWidget = new MagnifyingWidget(this); //  放大镜 窗口
     connect(this, SIGNAL(sigSetMagnifyingImage(const QImage &)), m_pMagnifyingWidget, SLOT(setShowImage(const QImage &)));
 
@@ -58,6 +64,32 @@ void FileViewWidget::leaveEvent(QEvent *event)
     }
 
     DWidget::leaveEvent(event);
+}
+
+//文件拖拽
+void FileViewWidget::dragEnterEvent(QDragEnterEvent *event)
+{
+    // Accept drag event if mime type is url.
+    event->accept();
+}
+
+void FileViewWidget::dropEvent(QDropEvent* event)
+{
+    const QMimeData* mimeData = event->mimeData();
+
+    if (mimeData->hasUrls()) {
+        for (auto url : mimeData->urls()) {
+            on_slot_openfile(url.toLocalFile());
+        }
+    }
+
+}
+void FileViewWidget::on_slot_openfile(const QString& filePath)
+{
+    if(nullptr!= m_docview)
+    {
+         m_docview->open(filePath);
+    }
 }
 
 //  弹出 自定义 菜单

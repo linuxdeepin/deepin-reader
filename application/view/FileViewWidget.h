@@ -9,6 +9,7 @@
 #include "view/DefaultOperationWidget.h"
 #include "view/TextOperationWidget.h"
 
+class DocumentView;
 /**
  * @brief The FileViewWidget class
  * @brief   文档显示区域
@@ -27,7 +28,11 @@ signals:
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void leaveEvent(QEvent *event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent* event) override;
 
+public slots:
+     void on_slot_openfile(const QString& filePath);
 private slots:
     void SlotCustomContextMenuRequested(const QPoint &);
 
@@ -43,7 +48,7 @@ private:
 
     DefaultOperationWidget  *m_pDefaultOperationWidget = nullptr;
     TextOperationWidget     *m_pTextOperationWidget = nullptr;
-
+     DocumentView* m_docview;
     // CustomWidget interface
 protected:
     void initWidget() override;
