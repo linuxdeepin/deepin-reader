@@ -6,10 +6,7 @@
 #include <QVBoxLayout>
 
 #include "NotesItemWidget.h"
-
 #include "header/CustomWidget.h"
-
-
 
 class NotesWidget : public CustomWidget
 {
