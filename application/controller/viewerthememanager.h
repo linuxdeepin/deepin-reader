@@ -19,16 +19,18 @@
 
 #include <QObject>
 
+enum AppTheme {
+    Dark,
+    Light,
+};
+
 class ViewerThemeManager : public QObject
 {
     Q_OBJECT
+private:
     ViewerThemeManager(QObject *parent = nullptr);
-public:
-    enum AppTheme {
-        Dark,
-        Light,
-    };
 
+public:
     static ViewerThemeManager *instance();
 
 signals:

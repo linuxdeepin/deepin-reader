@@ -1,13 +1,11 @@
 ﻿#ifndef MainWindow_H
 #define MainWindow_H
 
+#include "application.h"
 #include <DMainWindow>
-#include <QVBoxLayout>
+#include <DMenu>
 
-#include "mainShow/TitleWidget.h"
-#include "mainShow/MainWidget.h"
-#include "subjectObserver/MsgSubject.h"
-
+#include "controller/MsgSubject.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -15,7 +13,6 @@ DWIDGET_USE_NAMESPACE
  * @brief The MainWindow class
  * @brief 不做任何的业务处理， 只发送信号， 对应的模块处理相应的业务
  */
-
 
 class MainWindow : public DMainWindow
 {
@@ -31,7 +28,7 @@ private:
     void initUI();
     void initConnections();
     void initTitlebar();
-    void createAction(const QString &actionName, const QString &objectName, const QString &iconName, const char *member);
+    void createAction(DMenu *menu, const QString &actionName, const char *member);
 
 private slots:
     void action_OpenFile();
@@ -46,7 +43,8 @@ private slots:
     void action_Screening();
     void action_Larger();
     void action_Smaller();
-    void action_SwitchTheme();
+    void action_darkTheme();
+    void action_lightTheme();
 
     void action_Help();
 
@@ -55,11 +53,6 @@ private:
 
 private:
     MsgSubject  *m_pMsgSubject = nullptr;
-
-    MainWidget  *m_centralWidget = nullptr;
-    TitleWidget *m_titleWidget = nullptr;
-
-    QVBoxLayout *m_centralLayout = nullptr;
     DMenu       *m_menu = nullptr;
 };
 

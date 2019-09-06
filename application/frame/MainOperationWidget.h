@@ -4,6 +4,10 @@
 #include <DImageButton>
 #include <QHBoxLayout>
 
+#include <QButtonGroup>
+#include <DPushButton>
+
+#include "PublicFunction.h"
 #include "subjectObserver/CustomWidget.h"
 
 /**
@@ -18,16 +22,10 @@ public:
     MainOperationWidget(CustomWidget *parent = nullptr);
 
 private:
-    void initBtns();
-    void createBtn(const QString &btnName, const char *member);
+    DPushButton *createBtn(const QString &btnName);
 
 private slots:
-    void on_thumbnailBtn_checkedChanged();
-    void on_bookmarksBtn_checkedChanged();
-    void on_annotationBtn_checkedChanged();
-
-private:
-    QHBoxLayout *m_hboxLayout = nullptr;
+    void slotButtonClicked(int);
 
     // CustomWidget interface
 protected:

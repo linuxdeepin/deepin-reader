@@ -106,7 +106,7 @@ private:
     QColor getTextColor() const;
 
     void showTooltip(const QPoint &pos);
-    void onThemeChanged(ViewerThemeManager::AppTheme theme);
+    void onThemeChanged(AppTheme theme);
 
 private:
     QString m_normalPic;

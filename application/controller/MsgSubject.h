@@ -1,7 +1,7 @@
 #ifndef MSGSUBJECT_H
 #define MSGSUBJECT_H
 
-#include "ISubject.h"
+#include "subjectObserver/ISubject.h"
 #include <QList>
 #include <QThread>
 #include <QObject>

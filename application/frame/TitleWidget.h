@@ -8,6 +8,7 @@
 
 #include "pdfControl/font/fontWidget.h"
 
+#include "PublicFunction.h"
 /**
  * @brief The TitleWidget class
  * @brief   标题栏的 按钮操作
@@ -31,9 +32,7 @@ private slots:
 
 private:
     void createBtn(const QString &btnName, const char *member);
-
     void createAction(const QString &iconName, const char *member);
-
     void sendMsgToSubject(const int &, const QString &msgCotent = "");
 
 private:

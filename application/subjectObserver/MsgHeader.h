@@ -7,8 +7,7 @@
 
 //  消息类型
 enum MSG_TYPE {
-    MSG_UPDATE_THEME = 0,               //  更新主题
-    MSG_SET_MainWindow_TITLE,               //  设置 应用标题
+    MSG_SET_MainWindow_TITLE = 0,           //  设置 应用标题
     MSG_SLIDER_SHOW_STATE,              //  侧边栏 显隐消息
     MSG_MAGNIFYING,                     //  放大镜消息
     MSG_MAGNIFYING_CANCEL,              //  取消　放大镜
@@ -29,7 +28,9 @@ enum MSG_MENU_TYPE {
     MSG_OPERATION_SCREENING,            //  放映
     MSG_OPERATION_LARGER,               //  放大
     MSG_OPERATION_SMALLER,              //  缩小
-    MSG_OPERATION_SWITCH_THEME,         //  主题切换
+    MSG_OPERATION_HELP,                 //  帮助
+    MSG_OPERATION_ABOUT,                //  关于
+    MSG_OPERATION_EXIT,                 //  退出
 
     MSG_OPERATION_ADD_BOOKMARK,         //  添加书签
     MSG_OPERATION_FIRST_PAGE,           //  第一页
@@ -64,6 +65,12 @@ enum MSG_FONT_MENU_TYPE {
     MSG_SELF_ADAPTE_WIDTH,          //  自适应宽度
     MSG_ROTATE_LEFT,                //  左旋转
     MSG_ROTATE_RIGHT,               //  右旋转
+};
+
+//  菜单操作结果 消息
+enum MSG_OPERATION_RES_TYPE {
+    MSG_OPERATION_OPEN_FILE_OK = 1000,      //  打开文件成功
+    MSG_OPERATION_OPEN_FILE_FAIL,           //  打开文件失败
 };
 
 namespace ConstantMsg {

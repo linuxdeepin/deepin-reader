@@ -4,10 +4,13 @@
 #include <DWidget>
 
 #include "IObserver.h"
-#include "MsgSubject.h"
+#include "controller/MsgSubject.h"
 #include "MsgHeader.h"
 #include "ImageHeader.h"
 #include "utils/utils.h"
+#include "controller/viewerthememanager.h"
+
+#include <QDebug>
 
 DWIDGET_USE_NAMESPACE
 
@@ -33,6 +36,9 @@ protected:
 
 private:
     void setObserverName(const QString &name) override;
+
+private slots:
+    void slotViewerThemeChanged(AppTheme);
 
 private:
     MsgSubject  *m_pMsgSubject = nullptr;

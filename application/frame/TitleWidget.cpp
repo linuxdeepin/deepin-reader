@@ -104,11 +104,11 @@ void TitleWidget::on_DefaultAction_trigger(bool)
 
 void TitleWidget::createBtn(const QString &btnName, const char *member)
 {
-    QString normalPic = Utils::getQrcPath(btnName, g_normal_state);
-    QString hoverPic = Utils::getQrcPath(btnName, g_hover_state);
-    QString pressPic = Utils::getQrcPath(btnName, g_press_state);
-    QString checkedPic = Utils::getQrcPath(btnName, g_checked_state);
-    QString disablePic = Utils::getQrcPath(btnName, g_disable_state);
+    QString normalPic = PF::getQrcPath(btnName, g_normal_state);
+    QString hoverPic = PF::getQrcPath(btnName, g_hover_state);
+    QString pressPic = PF::getQrcPath(btnName, g_press_state);
+    QString checkedPic = PF::getQrcPath(btnName, g_checked_state);
+    QString disablePic = PF::getQrcPath(btnName, g_disable_state);
 
     PushButton *btn = new PushButton;
     btn->setNormalPic(normalPic);

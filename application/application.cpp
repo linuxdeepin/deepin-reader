@@ -21,8 +21,14 @@
 //#include "controller/signalmanager.h"
 //#include "controller/wallpapersetter.h"
 
+
+#include "controller/MsgSubject.h"
+#include "subjectObserver/MsgHeader.h"
+
 #include <QIcon>
 #include <QTranslator>
+
+#include <QDebug>
 
 namespace {
 
@@ -31,10 +37,11 @@ namespace {
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
 {
-    initI18n();
-
     setAttribute(Qt::AA_UseHighDpiPixmaps);
     setAttribute(Qt::AA_EnableHighDpiScaling);
+    setAttribute(Qt::AA_ForceRasterWidgets);
+
+    initI18n();
 
     setTheme("light");
     setOrganizationName("deepin");
@@ -50,10 +57,20 @@ Application::Application(int &argc, char **argv)
     initChildren();
 }
 
+void Application::handleAboutAction()
+{
+    MsgSubject::getInstance()->sendMsg(nullptr, MSG_OPERATION_ABOUT, "");
+}
+
+void Application::handleQuitAction()
+{
+    MsgSubject::getInstance()->sendMsg(nullptr, MSG_OPERATION_EXIT, "");
+}
+
 void Application::initChildren()
 {
     viewerTheme = ViewerThemeManager::instance();
-//    setter = ConfigSetter::instance();
+    setter = ConfigSetter::instance();
 //    signalM = SignalManager::instance();
 }
 

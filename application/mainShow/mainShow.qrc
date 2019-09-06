@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/images"/>
+    <qresource prefix="/qss"/>
+    <qresource prefix="/images/importtip"/>
+    <qresource prefix="/">
+        <file>resources/image/maganifier.svg</file>
+    </qresource>
+</RCC>

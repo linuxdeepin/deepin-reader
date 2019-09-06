@@ -2,6 +2,7 @@
 #include <QApplication>
 #include <QDir>
 #include <DFileDialog>
+#include <QDebug>
 
 HomeWidget::HomeWidget(CustomWidget *parent):
     CustomWidget ("HomeWidget", parent),
@@ -20,7 +21,7 @@ HomeWidget::HomeWidget(CustomWidget *parent):
 void HomeWidget::initWidget()
 {
     DLabel *iconLabel = new DLabel;
-    iconLabel->setPixmap(QPixmap(":/image/icon_import_photo.svg"));
+    iconLabel->setPixmap(QPixmap(":/resources/import_photo.svg"));
 
     DLabel *tipsLabel = new DLabel(tr("drag font file here"));
     tipsLabel->setStyleSheet("QLabel { color: #6a6a6a; }");
@@ -45,7 +46,14 @@ void HomeWidget::onChooseBtnClicked()
 {
     QStringList fileList = getOpenFileList();
     if (fileList.size() > 0) {
-        emit fileSelected(fileList);
+
+        QString sRes = "";
+
+        foreach (QString s, fileList) {
+            sRes += s + "@#&wzx";
+        }
+
+        sendMsg(MSG_OPEN_FILE_PATH, sRes);
     }
 }
 

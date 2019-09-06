@@ -1,4 +1,4 @@
-QT += core gui svg x11extras
+QT += core gui svg
 QT += dtkwidget
 QT += xml
 
@@ -33,3 +33,7 @@ DISTFILES += \
     themes/solarized_dark.theme \
     themes/deepin.theme
 
+APPICONDIR = $$PREFIX/share/icons/deepin/apps/scalable
+
+app_icon.path = $$APPICONDIR
+app_icon.files = $$PWD/resources/image/logo/logo.svg

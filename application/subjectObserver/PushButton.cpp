@@ -339,7 +339,7 @@ void PushButton::showTooltip(const QPoint &pos)
     connect(this, &PushButton::clicked, tf, &QFrame::deleteLater);
 }
 
-void PushButton::onThemeChanged(ViewerThemeManager::AppTheme theme)
+void PushButton::onThemeChanged(AppTheme theme)
 {
     QFile darkF(":/resources/dark/qss/PushButton.qss"),
           lightF(":/resources/light/qss/PushButton.qss");

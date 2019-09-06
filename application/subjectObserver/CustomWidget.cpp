@@ -5,6 +5,10 @@ CustomWidget::CustomWidget(const QString &name, DWidget *parent)
 {
     setObserverName(name);
 
+    //  主题变化
+    connect(ViewerThemeManager::instance(), SIGNAL(viewerThemeChanged(AppTheme)),
+            this, SLOT(slotViewerThemeChanged(AppTheme)));
+
     m_pMsgSubject = MsgSubject::getInstance();
     if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
@@ -28,4 +32,9 @@ void CustomWidget::sendMsg(const int &msgType, const QString &msgContent)
 void CustomWidget::setObserverName(const QString &name)
 {
     m_strObserverName = name;
+}
+
+void CustomWidget::slotViewerThemeChanged(AppTheme theme)
+{
+    qDebug() << m_strObserverName << "      slotViewerThemeChanged     "   << theme;
 }

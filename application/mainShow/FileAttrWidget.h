@@ -2,9 +2,11 @@
 #define FILEATTRWIDGET_H
 
 #include <DLabel>
+#include <QVBoxLayout>
 #include <QGridLayout>
 #include <QList>
-
+#include <DPushButton>
+#include <QMouseEvent>
 #include "subjectObserver/CustomWidget.h"
 
 
@@ -21,15 +23,30 @@ public:
 
 public:
     void setFileAttr();
+    void showScreenCenter();
+
+protected:
+    //拖拽窗口
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
     void initLabels();
-    void createLabel(const int &, const QString &);
+    void initCloseBtn();
+    void initImageLabel();
+    void createLabel(QGridLayout *, const int &, const QString &);
+
+private slots:
+    void slotBtnCloseClicked();
 
 private:
-    QGridLayout *m_pGridLayout = nullptr;
+    QVBoxLayout *m_pVBoxLayout = nullptr;
     QList<DLabel *> m_labelList;
 
+    bool m_bClickDown = false;
+    QPoint      mouseStartPoint;
+    QPoint      windowTopLeftPoint;
     // CustomWidget interface
 protected:
     void initWidget() override;

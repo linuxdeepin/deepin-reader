@@ -21,9 +21,6 @@ class HomeWidget : public CustomWidget
 public:
     HomeWidget(CustomWidget *parent = nullptr);
 
-signals:
-    void fileSelected(const QStringList files) const;
-
 private slots:
     void onChooseBtnClicked();
 

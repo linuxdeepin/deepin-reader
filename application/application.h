@@ -36,6 +36,11 @@ class Application : public DApplication
 public:
     Application(int &argc, char **argv);
 
+protected:
+    void handleAboutAction() override;
+    void handleQuitAction() override;
+
+public:
     ConfigSetter *setter = nullptr;
 //    DBManager *dbM = nullptr;
 //    Exporter *exporter = nullptr;

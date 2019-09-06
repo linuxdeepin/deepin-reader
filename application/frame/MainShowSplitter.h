@@ -3,7 +3,7 @@
 
 #include "FileViewWidget.h"
 #include "LeftSidebarWidget.h"
-#include "subjectObserver/MsgSubject.h"
+#include "controller/MsgSubject.h"
 #include <DSplitter>
 #include <QResizeEvent>
 

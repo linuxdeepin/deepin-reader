@@ -21,10 +21,10 @@
 #include <QFileInfo>
 #include <QProcess>
 
-const QString CONFIG_PATH =   QDir::homePath() +
-                              "/.config/deepin/deepin-image-viewer/config.conf";
+const QString CONFIG_PATH =  QDir::homePath() +
+                             "/.config/deepin/deepin_reader/config.conf";
 const QString DB_PATH = QDir::homePath() +
-                        "/.local/share/deepin/deepin-image-viewer/deepinimageviewer.db";
+                        "/.local/share/deepin/deepin_reader/deepinreader.db";
 
 ConfigSetter::ConfigSetter(QObject *parent) : QObject(parent)
 {

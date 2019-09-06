@@ -1,5 +1,5 @@
 #include "MsgSubject.h"
-#include "MsgHeader.h"
+#include "subjectObserver/MsgHeader.h"
 
 #include <QDebug>
 #include <QMutexLocker>

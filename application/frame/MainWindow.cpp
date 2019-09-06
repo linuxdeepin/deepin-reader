@@ -1,36 +1,24 @@
 #include "MainWindow.h"
 
-#include <DWidget>
-#include <DPushButton>
+#include "TitleWidget.h"
+#include "MainWidget.h"
+
 #include <DTitlebar>
 #include <DWidgetUtil>
-#include <QStyleFactory>
-
-#include <DThemeManager>
-#include "utils/utils.h"
-
-#ifdef DTKWIDGET_CLASS_DFileDialog
-#include <DFileDialog>
-#else
-#include <QFileDialog>
-#endif
+#include <QDebug>
 
 MainWindow::MainWindow(DMainWindow *parent)
-    : DMainWindow(parent),
-      m_centralLayout(new QVBoxLayout(m_centralWidget))
+    : DMainWindow(parent)
 {
     initUI();
 
-    // Init layoutr
-    m_centralLayout->setMargin(0);
-    m_centralLayout->setSpacing(0);
-
-    // Init titlebar.
     initTitlebar();
 
     initConnections();
 
     m_pMsgSubject = MsgSubject::getInstance();
+
+    setMinimumSize(500, 500);
 
     Dtk::Widget::moveToCenter(this);
 }
@@ -56,43 +44,47 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
 
 void MainWindow::initUI()
 {
-    m_centralWidget = new MainWidget();
-    setCentralWidget(m_centralWidget);
+    MainWidget *pMainWidget = new MainWidget;
+    setCentralWidget(pMainWidget);
 
-    m_titleWidget = new TitleWidget();
-    titlebar()->addWidget(m_titleWidget, Qt::AlignLeft);
+    TitleWidget *titleWidget = new TitleWidget();
+    titlebar()->addWidget(titleWidget, Qt::AlignLeft);
 }
 
 void MainWindow::initConnections()
 {
     m_menu = new DMenu;
 
-    createAction(tr("Open file"), tr("Open"), tr(""), SLOT(action_OpenFile()));
-    createAction(tr("Save"), tr("Save"), tr(""), SLOT(action_SaveFile()));
-    createAction(tr("Save as"), tr("Save as"), tr(""), SLOT(action_SaveAsFile()));
-    createAction(tr("Open folder"), tr("Open folder"), tr(""), SLOT(action_OpenFolder()));
-    createAction(tr("Print"), tr("Print"), tr(""), SLOT(action_Print()));
-    createAction(tr("Attr"), tr("Attr"), tr(""), SLOT(action_Attr()));
+    createAction(m_menu, tr("Open file"), SLOT(action_OpenFile()));
+    createAction(m_menu, tr("Save"), SLOT(action_SaveFile()));
+    createAction(m_menu, tr("Save as"), SLOT(action_SaveAsFile()));
+    createAction(m_menu, tr("Open folder"), SLOT(action_OpenFolder()));
+    createAction(m_menu, tr("Print"), SLOT(action_Print()));
+    createAction(m_menu, tr("Attr"), SLOT(action_Attr()));
     m_menu->addSeparator();
 
-    createAction(tr("Find"), tr("Find"), tr(""), SLOT(action_Find()));
-    createAction(tr("Full screen"), tr("Full"), tr(""), SLOT(action_FullScreen()));
-    createAction(tr("Screening"), tr("Screening"), tr(""), SLOT(action_Screening()));
-    createAction(tr("Larger"), tr("Larger"), tr(""), SLOT(action_Larger()));
-    createAction(tr("Smaller"), tr("Smaller"), tr(""), SLOT(action_Smaller()));
-    createAction(tr("Switch theme"), tr("Switch theme"), tr(""), SLOT(action_SwitchTheme()));
+    createAction(m_menu, tr("Find"), SLOT(action_Find()));
+    createAction(m_menu, tr("Full screen"), SLOT(action_FullScreen()));
+    createAction(m_menu, tr("Screening"), SLOT(action_Screening()));
+    createAction(m_menu, tr("Larger"), SLOT(action_Larger()));
+    createAction(m_menu, tr("Smaller"), SLOT(action_Smaller()));
+
+    DMenu *themeMenu = new DMenu(tr("switch theme"));
+    createAction(themeMenu, tr("dark theme"), SLOT(action_darkTheme()));
+    createAction(themeMenu, tr("light theme"), SLOT(action_lightTheme()));
+    m_menu->addMenu(themeMenu);
+
     m_menu->addSeparator();
 
-    createAction(tr("Help"), tr("Help"), tr(""), SLOT(action_Help()));
+    createAction(m_menu, tr("Help"), SLOT(action_Help()));
 
-    m_menu->setStyle(QStyleFactory::create("dlight"));
     m_menu->setMinimumWidth(ConstantMsg::g_menu_width);
     titlebar()->setMenu(m_menu);
 }
 
 void MainWindow::initTitlebar()
 {
-    titlebar()->setIcon(QIcon(":/image/logo_big.svg"));
+    titlebar()->setIcon(QIcon(":/resources/image/logo/logo_big.svg"));
     titlebar()->setTitle(tr(""));
 }
 
@@ -162,16 +154,20 @@ void MainWindow::action_Smaller()
     sendMsg(MSG_OPERATION_SMALLER);
 }
 
-//  主题切换
-void MainWindow::action_SwitchTheme()
+void MainWindow::action_darkTheme()
 {
-    sendMsg(MSG_OPERATION_SWITCH_THEME);
+    dApp->viewerTheme->setCurrentTheme(Dark);
+}
+
+void MainWindow::action_lightTheme()
+{
+    dApp->viewerTheme->setCurrentTheme(Light);
 }
 
 //  打开 帮助文档
 void MainWindow::action_Help()
 {
-
+    sendMsg(MSG_OPERATION_HELP);
 }
 
 void MainWindow::sendMsg(const int &msgType, const QString &msgContent)
@@ -180,17 +176,11 @@ void MainWindow::sendMsg(const int &msgType, const QString &msgContent)
         m_pMsgSubject->sendMsg(nullptr, msgType, msgContent);
     }
 }
-void MainWindow::createAction(const QString &actionName, const QString &objectName, const QString &iconName, const char *member)
+
+void MainWindow::createAction(DMenu *menu, const QString &actionName, const char *member)
 {
     QAction *action = new QAction(actionName, this);
-
-    action->setObjectName(objectName);
-
-    QIcon icon = Utils::getActionIcon(iconName);
-    action->setIcon(icon);
-
     connect(action, SIGNAL(triggered()), member);
 
-    addAction(action);
-    m_menu->addAction(action);
+    menu->addAction(action);
 }

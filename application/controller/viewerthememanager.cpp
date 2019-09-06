@@ -37,17 +37,19 @@ ViewerThemeManager::ViewerThemeManager(QObject *parent) : QObject(parent)
 
 }
 
-ViewerThemeManager::AppTheme ViewerThemeManager::getCurrentTheme()
+AppTheme ViewerThemeManager::getCurrentTheme()
 {
     return m_currentTheme;
 }
 
 void ViewerThemeManager::setCurrentTheme(AppTheme theme)
 {
-    m_currentTheme = theme;
-    if (m_currentTheme == Dark)
-        dApp->setter->setValue(THEME_GROUP, THEME_TEXT, QVariant("Dark"));
-    else
-        dApp->setter->setValue(THEME_GROUP, THEME_TEXT, QVariant("Light"));
-    emit viewerThemeChanged(m_currentTheme);
+    if (m_currentTheme != theme) {
+        m_currentTheme = theme;
+        if (m_currentTheme == Dark)
+            dApp->setter->setValue(THEME_GROUP, THEME_TEXT, QVariant("Dark"));
+        else
+            dApp->setter->setValue(THEME_GROUP, THEME_TEXT, QVariant("Light"));
+        emit viewerThemeChanged(m_currentTheme);
+    }
 }

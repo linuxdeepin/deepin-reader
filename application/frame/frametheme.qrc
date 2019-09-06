@@ -1,5 +1,43 @@
 <RCC>
     <qresource prefix="/">
         <file>resources/deepin_logo.svg</file>
+        <file>resources/image/checked/bookmarkbig.svg</file>
+        <file>resources/image/checked/view.svg</file>
+        <file>resources/image/checked/comments.svg</file>
+        <file>resources/image/checked/bookmark.svg</file>
+        <file>resources/image/checked/magnifier.svg</file>
+        <file>resources/image/checked/thumbnail.svg</file>
+        <file>resources/image/hover/bookmarkbig.svg</file>
+        <file>resources/image/hover/view.svg</file>
+        <file>resources/image/hover/close.svg</file>
+        <file>resources/image/hover/comments.svg</file>
+        <file>resources/image/hover/choose_small.svg</file>
+        <file>resources/image/hover/commenticon.svg</file>
+        <file>resources/image/hover/bookmark.svg</file>
+        <file>resources/image/hover/hand_small.svg</file>
+        <file>resources/image/normal/commenticon.svg</file>
+        <file>resources/image/normal/choose.svg</file>
+        <file>resources/image/normal/view.svg</file>
+        <file>resources/image/normal/choose_small.svg</file>
+        <file>resources/image/normal/close.svg</file>
+        <file>resources/image/normal/magnifier.svg</file>
+        <file>resources/image/normal/comments.svg</file>
+        <file>resources/image/normal/bookmark.svg</file>
+        <file>resources/image/normal/hand_small.svg</file>
+        <file>resources/image/normal/hand.svg</file>
+        <file>resources/image/normal/thumbnail.svg</file>
+        <file>resources/image/normal/setting.svg</file>
+        <file>resources/image/press/thumbnail.svg</file>
+        <file>resources/image/press/bookmarkbig.svg</file>
+        <file>resources/image/press/choose.svg</file>
+        <file>resources/image/press/magnifier.svg</file>
+        <file>resources/image/press/commenticon.svg</file>
+        <file>resources/image/press/setting.svg</file>
+        <file>resources/image/press/bookmark.svg</file>
+        <file>resources/image/press/comments.svg</file>
+        <file>resources/image/press/view.svg</file>
+        <file>resources/image/press/hand.svg</file>
+        <file>resources/image/press/close.svg</file>
+        <file>resources/import_photo.svg</file>
     </qresource>
 </RCC>
