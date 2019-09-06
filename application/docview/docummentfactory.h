@@ -8,7 +8,7 @@ class DocummentFactory
 public:
     DocummentFactory();
 
-    DocummentBase *creatDocumment(DocType_EM type, QWidget *father);
+    static DocummentBase *creatDocumment(DocType_EM type, QWidget *father);
 
 };
 

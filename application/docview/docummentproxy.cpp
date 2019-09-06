@@ -8,25 +8,34 @@ DocummentProxy::DocummentProxy(QObject *parent)
     : QObject(parent),
       m_type(DocType_NULL),
       m_path(""),
-      m_documment(NULL)
+      m_documment(nullptr)
 {
     qwfather = (QWidget *)parent;
 }
 
 bool DocummentProxy::openFile(DocType_EM type, QString filepath)
 {
-    DocummentFactory factory;
     m_type = type;
-    m_documment = factory.creatDocumment(type, qwfather);
+    m_documment = DocummentFactory::creatDocumment(type, qwfather);
     m_path = filepath;
-    QWidget *widget = new QWidget(qwfather);
-    widget->setGeometry(0, 0, 300, 300);
-    QVBoxLayout *vboxLayout = new QVBoxLayout(qwfather);
-    QLabel *label = new QLabel(qwfather);
-    label->setText(filepath);
-    vboxLayout->addWidget(label);
-    widget->setLayout(vboxLayout);
-    m_documment->setWidget(widget);
-    qDebug() << "aaa";
-    return true;
+    return m_documment->openFile(filepath);
+}
+
+bool DocummentProxy::mouseSelectText(QPoint start, QPoint stop)
+{
+    if (!m_documment)
+        return false;
+    return m_documment->mouseSelectText(start, stop);
+}
+
+void DocummentProxy::mouseSelectTextClear()
+{
+    m_documment->mouseSelectTextClear();
+}
+
+bool DocummentProxy::mouseBeOverText(QPoint point)
+{
+    if (!m_documment)
+        return false;
+    return m_documment->mouseBeOverText(point);
 }

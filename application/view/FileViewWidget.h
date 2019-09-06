@@ -4,6 +4,7 @@
 #include <QMouseEvent>
 #include <QAction>
 #include <DMenu>
+#include <QPoint>
 #include "view/MagnifyingWidget.h"
 #include "header/CustomWidget.h"
 #include "view/DefaultOperationWidget.h"
@@ -28,11 +29,13 @@ signals:
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
     void leaveEvent(QEvent *event) override;
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
 
-public slots:
+public:
     void on_slot_openfile(const QString &filePath);
 private slots:
     void SlotCustomContextMenuRequested(const QPoint &);
@@ -52,6 +55,8 @@ private:
 //    DocumentView *m_docview;
     DocummentProxy *pproxy;
     // CustomWidget interface
+    bool bmousepress;
+    QPoint m_presspoint;
 protected:
     void initWidget() override;
 

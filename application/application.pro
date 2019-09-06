@@ -44,7 +44,9 @@ SOURCES += \
     docview/docummentproxy.cpp \
     docview/docummentbase.cpp \
     docview/docummentfactory.cpp \
-    docview/pdf/docummentpdf.cpp
+    docview/pdf/docummentpdf.cpp \
+    docview/pagebase.cpp \
+    docview/pdf/pagepdf.cpp
 #\
 #    docview/pdf/pdfmodel.cpp \
 #    docview/documentlayout.cpp \
@@ -96,7 +98,9 @@ HEADERS +=\
     docview/docummentproxy.h \
     docview/docummentbase.h \
     docview/docummentfactory.h \
-    docview/pdf/docummentpdf.h
+    docview/pdf/docummentpdf.h \
+    docview/pagebase.h \
+    docview/pdf/pagepdf.h
 #\
 #    docview/pdf/pdfmodel.h \
 #    docview/documentlayout.h \

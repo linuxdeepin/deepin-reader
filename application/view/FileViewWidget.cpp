@@ -9,6 +9,7 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
       //,
       // m_docview(nullptr)
 {
+    bmousepress = false;
     setMouseTracking(true); //  接受 鼠标滑动事件
     setAcceptDrops(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -31,18 +32,21 @@ FileViewWidget::~FileViewWidget()
 
 void FileViewWidget::initWidget()
 {
-    pproxy = new DocummentProxy((QObject *)this);
-    QString filePath = "aaa.pdf";
-    qDebug() << "filePath:" << filePath;
-    pproxy->openFile(DocType_PDF, filePath);
+//    pproxy = new DocummentProxy((QObject *)this);
+//    QString filePath = "/home/archermind/Desktop/test.pdf";
+//    qDebug() << "filePath:" << filePath;
+//    pproxy->openFile(DocType_PDF, filePath);
 //    m_docview = new DocumentView;
-//    QGridLayout *pgrlyout = new QGridLayout(this);
-//    pgrlyout->addWidget(m_docview);
+
     m_pMagnifyingWidget = new MagnifyingWidget(this); //  放大镜 窗口
     connect(this, SIGNAL(sigSetMagnifyingImage(const QImage &)), m_pMagnifyingWidget, SLOT(setShowImage(const QImage &)));
 
     m_pDefaultOperationWidget = new DefaultOperationWidget;
     m_pTextOperationWidget = new  TextOperationWidget;
+
+    pproxy = new DocummentProxy((QObject *)this);
+
+
 }
 
 void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
@@ -58,6 +62,32 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
     }
 
     DWidget::mouseMoveEvent(event);
+    if (bmousepress) {
+        pproxy->mouseSelectText(m_presspoint, event->globalPos());
+    } else {
+        if (pproxy->mouseBeOverText(event->globalPos())) {
+            qDebug() << "------QCursor:IBeamCursor";
+            setCursor(QCursor(Qt::IBeamCursor));
+        } else {
+            qDebug() << "------QCursor:ArrowCursor";
+            setCursor(QCursor(Qt::ArrowCursor));
+        }
+    }
+}
+
+void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    qDebug() << "mouseReleaseEvent";
+    bmousepress = false;
+    this->update();
+}
+
+void FileViewWidget::mousePressEvent(QMouseEvent *event)
+{
+    qDebug() << "mousePressEvent";
+    bmousepress = true;
+    pproxy->mouseSelectTextClear();
+    m_presspoint = event->globalPos();
 }
 
 //  鼠标 离开 文档显示区域
@@ -90,10 +120,11 @@ void FileViewWidget::dropEvent(QDropEvent *event)
 }
 void FileViewWidget::on_slot_openfile(const QString &filePath)
 {
-    //if (nullptr != m_docview) {
-    qDebug() << "filePath:" << filePath;
-    pproxy->openFile(DocType_PDF, filePath);
-//}
+    if (nullptr != pproxy) {
+        qDebug() << "filePath:" << filePath;
+        pproxy->openFile(DocType_PDF, filePath);
+
+    }
 }
 
 //  弹出 自定义 菜单

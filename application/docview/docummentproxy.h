@@ -15,6 +15,9 @@ class DocummentProxy: public QObject
 public:
     DocummentProxy(QObject *parent = nullptr);
     bool openFile(DocType_EM type, QString filepath);
+    bool mouseSelectText(QPoint start, QPoint stop);
+    void mouseSelectTextClear();
+    bool mouseBeOverText(QPoint point);
 private:
     QWidget *qwfather;
     DocType_EM m_type;
