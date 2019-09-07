@@ -22,7 +22,7 @@ void NotesWidget::initWidget()
     for (int page = 0; page < 20; ++page) {
         NotesItemWidget *itemWidget = new NotesItemWidget;
         itemWidget->setLabelPage(tr(" Page:%1").arg(page + 1));
-        itemWidget->setLabelPix(tr(":/images/logo_96.svg"));
+        itemWidget->setLabelPix(tr(":/image/logo_big.svg"));
         itemWidget->setTextEditText(tr("note something..."));
         itemWidget->setMinimumSize(QSize(250, 150));
 

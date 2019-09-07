@@ -29,7 +29,7 @@ void BookMarkWidget::initWidget()
 
     for (int page = 0; page < 20; ++page) {
         BookMarkItemWidget *t_widget = new BookMarkItemWidget;
-        t_widget->setPicture(QString(":/images/logo_96.svg"));
+        t_widget->setPicture(QString(tr(":/image/logo_big.svg")));
         t_widget->setPage(QString("页面%1").arg(page + 1));
         t_widget->setMinimumSize(QSize(250, 150));
 
