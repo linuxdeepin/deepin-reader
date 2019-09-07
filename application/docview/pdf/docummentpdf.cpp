@@ -8,8 +8,8 @@
 
 ThreadLoadDoc::ThreadLoadDoc()
 {
-    bStop = false;
     m_doc = nullptr;
+    brun = false;
 }
 
 void ThreadLoadDoc::setDoc(DocummentPDF *doc)
@@ -17,23 +17,54 @@ void ThreadLoadDoc::setDoc(DocummentPDF *doc)
     m_doc = doc;
 }
 
-void ThreadLoadDoc::closeThread()
-{
-    bStop = true;
-}
-
 void ThreadLoadDoc::run()
 {
+    if (brun) {
+        this->terminate();
+        this->wait();
+        brun = false;
+    }
     if (!m_doc)
         return;
-    //while (!bStop) {
+    brun = true;
     m_doc->loadPages();
-    //}
+    brun = false;
 }
+
+
+ThreadLoadWords::ThreadLoadWords()
+{
+    m_doc = nullptr;
+    brun = false;
+}
+
+void ThreadLoadWords::setDoc(DocummentPDF *doc)
+{
+    m_doc = doc;
+}
+
+void ThreadLoadWords::run()
+{
+    if (brun) {
+        this->terminate();
+        this->wait();
+        brun = false;
+    }
+    if (!m_doc)
+        return;
+    brun = true;
+    m_doc->loadPages();
+    brun = false;
+}
+
 
 DocummentPDF::DocummentPDF(QWidget *parent): DocummentBase(parent), document(nullptr)
 {
     m_threadloaddoc.setDoc(this);
+    m_threadloadwords.setDoc(this);
+    setWidgetResizable(true);
+    setWidget(&m_widget);
+    m_scale = 1;
 }
 
 bool DocummentPDF::openFile(QString filepath)
@@ -42,10 +73,14 @@ bool DocummentPDF::openFile(QString filepath)
     m_pages.clear();
     qDebug() << "numPages :" << document->numPages();
     for (int i = 0; i < document->numPages(); i++) {
-        PageBase *page = new PagePdf(this);
-        m_pages.append(page);
+        PagePdf *page = new PagePdf(this);
+        page->setPage(document->page(i));
+        m_pages.append((PageBase *)page);
+        m_vboxLayout.addWidget(m_pages.at(i));
+        m_vboxLayout.setAlignment(&m_widget, Qt::AlignCenter);
     }
     m_threadloaddoc.start();
+    m_threadloadwords.start();
     return true;
 }
 
@@ -54,51 +89,61 @@ bool DocummentPDF::loadPages()
     if (!document && m_pages.size() == document->numPages())
         return false;
     qDebug() << "loadPages";
-    for (int i = 0; i < document->numPages(); i++) {
-//        PageBase *page = new PagePdf(this);
-        QImage image = document->page(i)->renderToImage(216, 216);  //截取pdf文件中的相应图片
-        m_pages.at(i)->setPixmap(QPixmap::fromImage(image));  //将该图片放进label中
-        m_vboxLayout.addWidget(m_pages.at(i));
-        m_vboxLayout.setAlignment(&m_widget, Qt::AlignCenter);
-//        m_pages.append(page);
+    for (int i = 0; i < m_pages.size(); i++) {
+//        QImage image = document->page(i)->renderToImage(500, 500); //截取pdf文件中的相应图片
+        PagePdf *ppdf = (PagePdf *)m_pages.at(i);
+//        ppdf->setImage(image);
+//        ppdf->setImageWidth(document->page(i)->pageSizeF().width());
+//        ppdf->setImageHeight(document->page(i)->pageSizeF().height());
+        ppdf->showImage(m_scale);
     }
-    setWidget(&m_widget);
+    return true;
+}
+
+bool DocummentPDF::loadWords()
+{
+    if (!document && m_pages.size() == document->numPages())
+        return false;
+    qDebug() << "loadWords";
     for (int i = 0; i < m_pages.size(); i++) { //根据获取到的pdf页数循环
-        qDebug() << "i:" << i;
+        qDebug() << "i:" << i << " width:" << m_pages.at(i)->width() << " height:" << m_pages.at(i)->height();
         loadWordCache(i, m_pages.at(i));
     }
     return true;
 }
 
+void DocummentPDF::scaleAndShow(double scale)
+{
+    m_scale = scale;
+    m_threadloaddoc.start();
+//    for (int i = 0; i < m_pages.size(); i++) {
+//        PagePdf *ppdf = (PagePdf *)m_pages.at(i);
+//        ppdf->showImage(scale);
+//    }
+
+}
 void DocummentPDF::loadWordCache(int indexpage, PageBase *page)
 {
     if (!document) {
         return;
     }
-    double pageWidth = 0, pageHeight = 0;
     Poppler::Page *pp = document->page(indexpage);
     QList<Poppler::TextBox *> textList;
     pp->textList();
     if (pp) {
         textList = pp->textList();
         const QSizeF s = pp->pageSizeF();
-        pageWidth = s.width();
-        pageHeight = s.height();
     }
     delete pp;
 
-    abstractTextPage(textList, pageHeight, pageWidth, page);
+    abstractTextPage(textList, page);
     qDeleteAll(textList);
 }
 
-bool DocummentPDF::abstractTextPage(const QList<Poppler::TextBox *> &text, double height,
-                                    double width, PageBase *page)
+bool DocummentPDF::abstractTextPage(const QList<Poppler::TextBox *> &text, PageBase *page)
 {
-    // qDebug() << "abstractTextPage";
     Poppler::TextBox *next;
     PagePdf *ppdf = (PagePdf *)page;
-    ppdf->setImageWidth(width);
-    ppdf->setImageHeight(height);
     QString s;
     bool addChar;
     foreach (Poppler::TextBox *word, text) {

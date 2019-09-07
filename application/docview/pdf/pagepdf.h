@@ -1,6 +1,8 @@
 #ifndef PAGEPDF_H
 #define PAGEPDF_H
 #include "../pagebase.h"
+#include <QImage>
+#include <poppler-qt5.h>
 
 struct stWord {
     QString s;
@@ -16,8 +18,8 @@ public:
     bool pageTextSelections(const QPoint start, const QPoint end);
     void clearPageTextSelections();
     void appendWord(stWord word);
-    void setImageWidth(double width);
-    void setImageHeight(double height);
+    void setPage(Poppler::Page *page);
+    void showImage(double scale = 1);
 protected:
     void paintEvent(QPaintEvent *event) override;
 private:
@@ -25,6 +27,7 @@ private:
     QList<stWord> m_words;
     double m_imagewidth;
     double m_imageheight;
+    Poppler::Page *m_page;
 };
 
 #endif // PAGEPDF_H

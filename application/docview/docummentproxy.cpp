@@ -39,3 +39,9 @@ bool DocummentProxy::mouseBeOverText(QPoint point)
         return false;
     return m_documment->mouseBeOverText(point);
 }
+
+void DocummentProxy::scaleAndShow(double scale)
+{
+    m_documment->scaleAndShow(scale);
+
+}

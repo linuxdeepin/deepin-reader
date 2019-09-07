@@ -5,7 +5,8 @@
 PagePdf::PagePdf(QWidget *parent)
     : PageBase(parent),
       m_imagewidth(0.01),
-      m_imageheight(0.01)
+      m_imageheight(0.01),
+      m_page(nullptr)
 {
 }
 
@@ -27,6 +28,20 @@ void PagePdf::clearPageTextSelections()
         paintrects.clear();
         update();
     }
+}
+
+void PagePdf::setPage(Poppler::Page *page)
+{
+    m_page = page;
+    m_imagewidth = m_page->pageSizeF().width();
+    m_imageheight = m_page->pageSizeF().height();
+}
+void PagePdf::showImage(double scale)
+{
+    int xres = 72.0, yres = 72.0;
+    QImage image = m_page->renderToImage(xres * scale, yres * scale, m_imagewidth * scale, m_imageheight * scale);
+    QPixmap map = QPixmap::fromImage(image);
+    setPixmap(map);
 }
 
 bool PagePdf::pageTextSelections(const QPoint start, const QPoint end)
@@ -218,15 +233,9 @@ bool PagePdf::ifMouseMoveOverText(const QPoint point)
     }
     return false;
 }
+
 void PagePdf::appendWord(stWord word)
 {
     m_words.append(word);
 }
-void PagePdf::setImageWidth(double width)
-{
-    m_imagewidth = width;
-}
-void PagePdf::setImageHeight(double height)
-{
-    m_imageheight = height;
-}
+

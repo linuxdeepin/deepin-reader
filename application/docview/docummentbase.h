@@ -23,6 +23,10 @@ public:
     {
         return;
     }
+    virtual void scaleAndShow(double scale)
+    {
+        return;
+    }
     virtual bool mouseBeOverText(QPoint point)
     {
         return false;

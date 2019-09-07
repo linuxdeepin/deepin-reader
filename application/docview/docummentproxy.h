@@ -18,6 +18,7 @@ public:
     bool mouseSelectText(QPoint start, QPoint stop);
     void mouseSelectTextClear();
     bool mouseBeOverText(QPoint point);
+    void scaleAndShow(double scale);
 private:
     QWidget *qwfather;
     DocType_EM m_type;
