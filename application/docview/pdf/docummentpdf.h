@@ -50,6 +50,7 @@ public:
 
     bool loadPages();
     bool loadWords();
+    bool save(const QString& filePath, bool withChanges) const;
 private:
     void loadWordCache(int indexpage, PageBase *page);
     bool abstractTextPage(const QList<Poppler::TextBox *> &text,

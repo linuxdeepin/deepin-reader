@@ -170,6 +170,24 @@ void DocummentPDF::scaleAndShow(double scale, RotateType_EM rotate)
     m_rotate = rotate;
     m_threadloaddoc.start();
 }
+bool DocummentPDF::save(const QString &filePath, bool withChanges) const
+{
+    QScopedPointer< Poppler::PDFConverter > pdfConverter(document->pdfConverter());
+
+    pdfConverter->setOutputFileName(filePath);
+
+    Poppler::PDFConverter::PDFOptions options = pdfConverter->pdfOptions();
+
+    if(withChanges)
+    {
+        options |= Poppler::PDFConverter::WithChanges;
+    }
+
+    pdfConverter->setPDFOptions(options);
+
+    return pdfConverter->convert();
+}
+
 void DocummentPDF::loadWordCache(int indexpage, PageBase *page)
 {
     if (!document) {
