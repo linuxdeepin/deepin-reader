@@ -22,6 +22,10 @@ public:
     bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     bool getImage(QImage &image, double width, double height, RotateType_EM rotate = RotateType_Normal);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
+    void setImageWidth(double width);
+    void setImageHeight(double height);
+    //Annotation
+    void addAnnotation(QPoint screenPos);
 protected:
     void paintEvent(QPaintEvent *event) override;
 private:

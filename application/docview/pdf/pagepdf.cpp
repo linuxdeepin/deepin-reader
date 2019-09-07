@@ -369,3 +369,16 @@ void PagePdf::appendWord(stWord word)
     m_words.append(word);
 }
 
+void PagePdf::setImageWidth(double width)
+{
+    m_imagewidth = width;
+}
+void PagePdf::setImageHeight(double height)
+{
+    m_imageheight = height;
+}
+
+void PagePdf::addAnnotation(QPoint screenPos)
+{
+
+}
