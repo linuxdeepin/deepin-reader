@@ -17,7 +17,13 @@ void NotesWidget::initWidget()
     m_pNotesList->setSpacing(10);
     //设置自动适应布局调整（Adjust适应，Fixed不适应），默认不适应
     m_pNotesList->setResizeMode(QListWidget::Adjust);
+
+    m_pAddNotesBtn = new DImageButton;
+    m_pAddNotesBtn->setText(tr("添加注释"));
+    m_pAddNotesBtn->setFixedSize(QSize(250, 50));
+
     m_pVLayout->addWidget(m_pNotesList);
+    m_pVLayout->addWidget(m_pAddNotesBtn);
 
     for (int page = 0; page < 20; ++page) {
         NotesItemWidget *itemWidget = new NotesItemWidget;

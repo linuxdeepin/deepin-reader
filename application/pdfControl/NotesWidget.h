@@ -2,6 +2,7 @@
 #define NOTESFORM_H
 
 #include <DListWidget>
+#include <DImageButton>
 #include <QListWidgetItem>
 #include <QVBoxLayout>
 
@@ -22,6 +23,7 @@ private:
     DListWidget *m_pNotesList = nullptr;
     QVBoxLayout *m_pVLayout = nullptr;
 
+    DImageButton *m_pAddNotesBtn = nullptr;
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
