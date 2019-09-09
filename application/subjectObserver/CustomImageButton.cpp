@@ -5,6 +5,7 @@
 CustomImageButton::CustomImageButton(DWidget *parent)
     : DImageButton (parent)
 {
+    setFixedHeight(36);
 }
 
 /*
@@ -55,21 +56,12 @@ void CustomImageButton::paintEvent(QPaintEvent *event)
     } else if (curState == Press) {
         drawPressPic();
     } else if (curState == Checked) {
-
+        drawCheckedPic();
     } else if (curState == Disabled) {
 
     }
 
     DImageButton::paintEvent(event);
-}
-
-void CustomImageButton::drawNorPic()
-{
-    QPainter painter(this);
-
-    painter.setPen(QPen(Qt::red, 1));
-    painter.setBrush(Qt::NoBrush);
-    painter.drawRoundedRect(0, 0, this->width(), this->height(), 8, 8);
 }
 
 void CustomImageButton::drawHoverPic()
@@ -88,6 +80,11 @@ void CustomImageButton::drawHoverPic()
     painter.setPen(QPen(QColor(242, 242, 242)));
 
     painter.setBrush(QColor(242, 242, 242));
+    int nnWidth = this->width();
+    int nnHeight = this->height();
+
+    qDebug() << "nnWidth    " << nnWidth << "     nnHeight    " <<    nnHeight;
+
     painter.drawRoundedRect(0, 0, this->width(), this->height(), 8, 8);
 }
 
@@ -95,16 +92,35 @@ void CustomImageButton::drawPressPic()
 {
     QString sPressPic = this->getPressPic();
     if ( QFile::exists(sPressPic)) {
-        qDebug() << "111        " << sPressPic << "         123";
+        qDebug() << "111     111   " << sPressPic << "         123";
     } else {
         QString strNoPic = this->getNormalPic();
         this->setPressPic(strNoPic);
+
+        QPainter painter(this);
+        painter.setRenderHints(QPainter::SmoothPixmapTransform);
+
+        painter.setPen(QPen(QColor(230, 230, 230)));
+
+        painter.setBrush(QColor(230, 230, 230));
+        painter.drawRoundedRect(0, 0, this->width(), this->height(), 8, 8);
+    }
+}
+
+void CustomImageButton::drawCheckedPic()
+{
+    QString sCheckPic = this->getCheckedPic();
+    if ( QFile::exists(sCheckPic)) {
+    } else {
+        QString strNoPic = this->getNormalPic();
+        this->setCheckedPic(strNoPic);
     }
     QPainter painter(this);
     painter.setRenderHints(QPainter::SmoothPixmapTransform);
 
-    painter.setPen(QPen(QColor(230, 230, 230)));
+    painter.setPen(QPen(QColor("#0081FF")));
 
-    painter.setBrush(QColor(230, 230, 230));
+    painter.setBrush(QColor("#0081FF"));
     painter.drawRoundedRect(0, 0, this->width(), this->height(), 8, 8);
 }
+

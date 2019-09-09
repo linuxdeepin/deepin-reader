@@ -18,6 +18,9 @@ class MainWidget : public CustomWidget
 public:
     MainWidget(CustomWidget *parent = nullptr);
 
+signals:
+    void sigOpenFileOk();
+
 private:
     void openFileOk();
     void openFileFail(const QString &);
@@ -27,11 +30,11 @@ private:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &);
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 
     // CustomWidget interface
 protected:
-    void initWidget();
+    void initWidget() Q_DECL_OVERRIDE;
 };
 
 #endif // MAINSTACKWIDGET_H

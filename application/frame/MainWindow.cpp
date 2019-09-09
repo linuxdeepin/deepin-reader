@@ -49,25 +49,28 @@ void MainWindow::initUI()
 
     TitleWidget *titleWidget = new TitleWidget();
     titlebar()->addWidget(titleWidget, Qt::AlignLeft);
+
+    connect(pMainWidget, SIGNAL(sigOpenFileOk()), titleWidget, SLOT(slotOpenFileOk()));
+    connect(pMainWidget, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
 }
 
 void MainWindow::initConnections()
 {
     m_menu = new DMenu;
 
-    createAction(m_menu, tr("Open file"), SLOT(action_OpenFile()));
-    createAction(m_menu, tr("Save"), SLOT(action_SaveFile()));
-    createAction(m_menu, tr("Save as"), SLOT(action_SaveAsFile()));
-    createAction(m_menu, tr("Open folder"), SLOT(action_OpenFolder()));
-    createAction(m_menu, tr("Print"), SLOT(action_Print()));
-    createAction(m_menu, tr("Attr"), SLOT(action_Attr()));
+    createAction(m_menu, tr("Open file"), SLOT(action_OpenFile()), false);
+    m_pSaveFile = createAction(m_menu, tr("Save"), SLOT(action_SaveFile()));
+    m_pSaveAsFile = createAction(m_menu, tr("Save as"), SLOT(action_SaveAsFile()));
+    m_pOpenFolder = createAction(m_menu, tr("Open folder"), SLOT(action_OpenFolder()));
+    m_pFilePrint = createAction(m_menu, tr("Print"), SLOT(action_Print()));
+    m_pFileAttr = createAction(m_menu, tr("Attr"), SLOT(action_Attr()));
     m_menu->addSeparator();
 
-    createAction(m_menu, tr("Find"), SLOT(action_Find()));
-    createAction(m_menu, tr("Full screen"), SLOT(action_FullScreen()));
-    createAction(m_menu, tr("Screening"), SLOT(action_Screening()));
-    createAction(m_menu, tr("Larger"), SLOT(action_Larger()));
-    createAction(m_menu, tr("Smaller"), SLOT(action_Smaller()));
+    m_pFileFind = createAction(m_menu, tr("Find"), SLOT(action_Find()));
+    m_pFileFullScreen = createAction(m_menu, tr("Full screen"), SLOT(action_FullScreen()));
+    m_pFileScreening = createAction(m_menu, tr("Screening"), SLOT(action_Screening()));
+    m_pFileLarger = createAction(m_menu, tr("Larger"), SLOT(action_Larger()));
+    m_pFileSmaller = createAction(m_menu, tr("Smaller"), SLOT(action_Smaller()));
 
 //    DMenu *themeMenu = new DMenu(tr("switch theme"));
 //    createAction(themeMenu, tr("dark theme"), SLOT(action_darkTheme()));
@@ -76,7 +79,7 @@ void MainWindow::initConnections()
 
     m_menu->addSeparator();
 
-    createAction(m_menu, tr("Help"), SLOT(action_Help()));
+    createAction(m_menu, tr("Help"), SLOT(action_Help()), false);
 
     m_menu->setMinimumWidth(ConstantMsg::g_menu_width);
     titlebar()->setMenu(m_menu);
@@ -170,6 +173,22 @@ void MainWindow::action_Help()
     sendMsg(MSG_OPERATION_HELP);
 }
 
+//  文件打开成，　功能性　菜单才能点击
+void MainWindow::slotOpenFileOk()
+{
+    m_pSaveFile->setDisabled(false);
+    m_pSaveAsFile->setDisabled(false);
+    m_pOpenFolder->setDisabled(false);;
+    m_pFilePrint->setDisabled(false);;
+    m_pFileAttr->setDisabled(false);
+    m_pFileFind->setDisabled(false);
+    m_pFileFullScreen->setDisabled(false);
+    m_pFileScreening->setDisabled(false);
+    m_pFileLarger->setDisabled(false);
+    m_pFileSmaller->setDisabled(false);
+    qDebug() << "MainWindowMainWindow   slotOpenFileOk";
+}
+
 void MainWindow::sendMsg(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgSubject) {
@@ -177,10 +196,12 @@ void MainWindow::sendMsg(const int &msgType, const QString &msgContent)
     }
 }
 
-void MainWindow::createAction(DMenu *menu, const QString &actionName, const char *member)
+QAction *MainWindow::createAction(DMenu *menu, const QString &actionName, const char *member, const bool &disable)
 {
     QAction *action = new QAction(actionName, this);
     connect(action, SIGNAL(triggered()), member);
-
+    action->setDisabled(disable);
     menu->addAction(action);
+
+    return action;
 }

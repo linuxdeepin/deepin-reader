@@ -3,6 +3,7 @@
 #include <QDir>
 #include <DFileDialog>
 #include <QDebug>
+#include <QMimeData>
 
 HomeWidget::HomeWidget(CustomWidget *parent):
     CustomWidget ("HomeWidget", parent),
@@ -10,6 +11,7 @@ HomeWidget::HomeWidget(CustomWidget *parent):
     m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
                              QSettings::IniFormat))
 {
+    setAcceptDrops(true);
     initWidget();
 
     // initalize the configuration file.
@@ -24,7 +26,9 @@ void HomeWidget::initWidget()
     iconLabel->setPixmap(QPixmap(":/resources/import_photo.svg"));
 
     DLabel *tipsLabel = new DLabel(tr("drag font file here"));
-    tipsLabel->setStyleSheet("QLabel { color: #6a6a6a; }");
+    QPalette pe;
+    pe.setColor(QPalette::WindowText, QColor("#7a7a7a"));
+    tipsLabel->setPalette(pe);
 
     DLabel *splitLine = new DLabel;
     splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
@@ -93,4 +97,29 @@ int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
         return ConstantMsg::g_effective_res;
     }
     return 0;
+}
+
+//文件拖拽
+void HomeWidget::dragEnterEvent(QDragEnterEvent *event)
+{
+    // Accept drag event if mime type is url.
+    event->accept();
+}
+
+void HomeWidget::dropEvent(QDropEvent *event)
+{
+    const QMimeData *mimeData = event->mimeData();
+
+    if (mimeData->hasUrls()) {
+        for (auto url : mimeData->urls()) {
+            QString sFilePath =  url.toLocalFile();
+            if (sFilePath.endsWith("pdf")) {
+                //  默认打开第一个
+                QString sRes = sFilePath + "@#&wzx";
+
+                sendMsg(MSG_OPEN_FILE_PATH, sRes);
+                break;
+            }
+        }
+    }
 }

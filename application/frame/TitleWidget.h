@@ -10,6 +10,7 @@
 #include "pdfControl/font/fontWidget.h"
 
 #include "PublicFunction.h"
+#include "subjectObserver/CustomImageButton.h"
 /**
  * @brief The TitleWidget class
  * @brief   标题栏的 按钮操作
@@ -23,28 +24,40 @@ public:
     ~TitleWidget() override;
 
 private slots:
-    void on_thumbnailBtn_clicked(bool);
-    void on_fontBtn_clicked(bool);
-    void on_handleShapeBtn_clicked(bool);
-    void on_magnifyingBtn_clicked(bool);
+    void on_thumbnailBtn_clicked();
+    void on_settingBtn_clicked();
+    void on_handleShapeBtn_clicked();
+    void on_magnifyingBtn_clicked();
 
     void on_HandleAction_trigger(bool);
     void on_DefaultAction_trigger(bool);
 
+    void slotOpenFileOk();
+    void slotFontWidgetHide();
+    void slotHandleMenuHide();
+
 private:
-    void createBtn(const QString &btnName, const int &, const int &, const char *member);
-    void createAction(const QString &iconName, const char *member);
+    void initBtns();
+    CustomImageButton *createBtn(const QString &btnName, bool bCheckable = false);
+    QAction *createAction(const QString &iconName, const char *member);
     void sendMsgToSubject(const int &, const QString &msgCotent = "");
 
 private:
     QHBoxLayout *m_layout = nullptr;
 
+    FontWidget *m_pFontWidget = nullptr;
     int     m_nCurrentState = 0;
+
     DMenu   *m_pHandleMenu = nullptr;
+    QAction *m_pHandleAction = nullptr;
+    QAction *m_pDefaultAction = nullptr;
+
+    CustomImageButton *m_pThumbnailBtn = nullptr;
+    CustomImageButton *m_pSettingBtn = nullptr;
+    CustomImageButton *m_pChooseBtn = nullptr;
+    CustomImageButton *m_pMagnifierBtn = nullptr;
 
     // CustomWidget interface
-
-    FontWidget *m_pFontWidget = nullptr;
 protected:
     void initWidget() override;
 

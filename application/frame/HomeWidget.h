@@ -21,6 +21,10 @@ class HomeWidget : public CustomWidget
 public:
     HomeWidget(CustomWidget *parent = nullptr);
 
+protected:
+    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
+    void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
+
 private slots:
     void onChooseBtnClicked();
 

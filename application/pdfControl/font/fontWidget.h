@@ -1,4 +1,4 @@
-#ifndef FONTWIDGET_H
+﻿#ifndef FONTWIDGET_H
 #define FONTWIDGET_H
 
 #include <DLabel>
@@ -20,6 +20,9 @@ public:
     FontWidget(CustomWidget *parent = nullptr);
     ~FontWidget() override;
 
+signals:
+    void sigWidgetHide();
+
 public:
     int dealWithData(const int &, const QString &) override;
 
@@ -28,6 +31,7 @@ protected:
 
 protected:
     void  paintEvent(QPaintEvent *e) override;
+    void  hideEvent(QHideEvent *event) override;
 
 private slots:
     void slotSetChangeVal(int);

@@ -28,7 +28,7 @@ private:
     void initUI();
     void initConnections();
     void initTitlebar();
-    void createAction(DMenu *menu, const QString &actionName, const char *member);
+    QAction *createAction(DMenu *menu, const QString &actionName, const char *member, const bool &disable = true);
 
 private slots:
     void action_OpenFile();
@@ -48,12 +48,26 @@ private slots:
 
     void action_Help();
 
+    void slotOpenFileOk();
+
 private:
     void sendMsg(const int &, const QString &msgContent = "");
 
 private:
     MsgSubject  *m_pMsgSubject = nullptr;
     DMenu       *m_menu = nullptr;
+
+private:
+    QAction *m_pSaveFile = nullptr;
+    QAction *m_pSaveAsFile = nullptr;
+    QAction *m_pOpenFolder = nullptr;
+    QAction *m_pFilePrint = nullptr;
+    QAction *m_pFileAttr = nullptr;
+    QAction *m_pFileFind = nullptr;
+    QAction *m_pFileFullScreen = nullptr;
+    QAction *m_pFileScreening = nullptr;
+    QAction *m_pFileLarger = nullptr;
+    QAction *m_pFileSmaller = nullptr;
 };
 
 #endif // MainWindow_H

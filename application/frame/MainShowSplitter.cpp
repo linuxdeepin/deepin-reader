@@ -37,16 +37,15 @@ void MainShowSplitter::initWidget()
 }
 
 //  侧边栏的显隐
-void MainShowSplitter::setSidebarVisible( ) const
+void MainShowSplitter::setSidebarVisible(const bool &bVis) const
 {
-    bool bVis =  m_pLeftShowWidget->isVisible();
-    m_pLeftShowWidget->setVisible(!bVis);
+    m_pLeftShowWidget->setVisible(bVis);
 }
 
 int MainShowSplitter::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_SLIDER_SHOW_STATE) {
-        setSidebarVisible();
+        setSidebarVisible(msgContent.toInt());
         return  ConstantMsg::g_effective_res;
     }
     return 0;

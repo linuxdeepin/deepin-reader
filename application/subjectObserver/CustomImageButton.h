@@ -9,6 +9,7 @@ DWIDGET_USE_NAMESPACE
 
 class CustomImageButton : public DImageButton
 {
+    Q_OBJECT
 public:
     CustomImageButton(DWidget *parent = nullptr);
 
@@ -22,9 +23,9 @@ protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    void drawNorPic();
     void drawHoverPic();
     void drawPressPic();
+    void drawCheckedPic();
 
 };
 

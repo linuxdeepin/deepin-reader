@@ -15,9 +15,6 @@ FileAttrWidget::FileAttrWidget(CustomWidget *parent)
     this->setLayout(m_pVBoxLayout);
 
     initWidget();
-
-    //  桌面 中心显示
-    Dtk::Widget::moveToCenter(this);
 }
 
 //  各个 对应的 label 赋值

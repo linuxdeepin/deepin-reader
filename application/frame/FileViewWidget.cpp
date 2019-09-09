@@ -35,6 +35,11 @@ FileViewWidget::~FileViewWidget()
         m_pFileAttrWidget->deleteLater();
         m_pFileAttrWidget = nullptr;
     }
+
+    if (m_pAppAboutWidget) {
+        m_pAppAboutWidget->deleteLater();
+        m_pAppAboutWidget = nullptr;
+    }
 }
 
 void FileViewWidget::initWidget()
@@ -162,6 +167,7 @@ void FileViewWidget::initConnections()
             this, SLOT(SlotCustomContextMenuRequested(const QPoint &)));
 
     connect(this, SIGNAL(sigShowFileAttr()), this, SLOT(slotShowFileAttr()));
+    connect(this, SIGNAL(sigShowAppAboutWidget()), this, SLOT(slotShowAppAboutWidget()));
 }
 
 //  查看 文件属性
@@ -172,6 +178,14 @@ void FileViewWidget::slotShowFileAttr()
     }
     //  获取文件的基本数据，　进行展示
     m_pFileAttrWidget->showScreenCenter();
+}
+
+void FileViewWidget::slotShowAppAboutWidget()
+{
+    if (m_pAppAboutWidget == nullptr) {
+        m_pAppAboutWidget = new  AppAboutWidget;
+    }
+    m_pAppAboutWidget->showScreenCenter();
 }
 
 //  打开文件所在文件夹
@@ -194,6 +208,9 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         return openFilePath(msgContent);
     case MSG_OPERATION_ATTR:        //  打开该文件的属性信息
         emit sigShowFileAttr();
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_ABOUT :
+        emit sigShowAppAboutWidget();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_OPEN_FOLDER: //  打开该文件所处文件夹
         return openFileFolder();

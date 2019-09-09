@@ -7,7 +7,8 @@ HEADERS += \
     $$PWD/MainOperationWidget.h \
     $$PWD/TitleWidget.h \
     $$PWD/PublicFunction.h \
-    $$PWD/MainWidget.h
+    $$PWD/MainWidget.h \
+    $$PWD/AppAboutWidget.h
 
 SOURCES += \
     $$PWD/MainWindow.cpp \
@@ -17,7 +18,8 @@ SOURCES += \
     $$PWD/LeftSidebarWidget.cpp \
     $$PWD/MainOperationWidget.cpp \
     $$PWD/TitleWidget.cpp \
-    $$PWD/MainWidget.cpp
+    $$PWD/MainWidget.cpp \
+    $$PWD/AppAboutWidget.cpp
 
 RESOURCES += \
     $$PWD/frametheme.qrc

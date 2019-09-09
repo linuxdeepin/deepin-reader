@@ -237,6 +237,12 @@ void FontWidget::paintEvent(QPaintEvent *)
     this->update();
 }
 
+void FontWidget::hideEvent(QHideEvent *event)
+{
+    emit sigWidgetHide();
+    CustomWidget::hideEvent(event);
+}
+
 void FontWidget::slotSetChangeVal(int val)
 {
     m_pEnlargeLab->clear();
