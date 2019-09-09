@@ -39,7 +39,7 @@ int BookMarkItemWidget::dealWithData(const int &, const QString &)
 
 void BookMarkItemWidget::slotDltBookMark()
 {
-    qDebug() << "delet BookMark";
+    //qDebug() << "delet BookMark";
     sendMsg(MSG_BOOKMARK_DLTITEM, QString::number(DLTITEM));
 }
 

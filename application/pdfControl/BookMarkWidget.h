@@ -2,8 +2,10 @@
 #define BOOKMARKFORM_H
 
 #include <DListWidget>
+#include <DImageButton>
 #include <QListWidgetItem>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include "BookMarkItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
@@ -23,6 +25,7 @@ public:
 
 private slots:
     void slotShowSelectItem(QListWidgetItem *);
+    void slotAddBookMark();
 
 protected:
     void initWidget() override;
@@ -37,7 +40,8 @@ public:
 private:
     DListWidget *m_pBookMarkListWidget = nullptr;
     QVBoxLayout *m_pVBoxLayout = nullptr;
-    int m_iCurrentIndex = 0;
+    QListWidgetItem *m_pCurrentItem = nullptr;
+    DImageButton *m_pAddBookMarkBtn = nullptr;
 };
 
 #endif // BOOKMARKFORM_H

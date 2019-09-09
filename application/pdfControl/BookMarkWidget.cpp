@@ -16,7 +16,12 @@ BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
 
 void BookMarkWidget::slotShowSelectItem(QListWidgetItem *item)
 {
-    m_iCurrentIndex = m_pBookMarkListWidget->row(item);
+    m_pCurrentItem = item;
+}
+
+void BookMarkWidget::slotAddBookMark()
+{
+    qDebug() << tr("AddBookMark...");
 }
 
 void BookMarkWidget::initWidget()
@@ -25,11 +30,18 @@ void BookMarkWidget::initWidget()
     m_pBookMarkListWidget->setSpacing(10);
     //设置自动适应布局调整（Adjust适应，Fixed不适应），默认不适应
     m_pBookMarkListWidget->setResizeMode(QListWidget::Adjust);
+
+    m_pAddBookMarkBtn = new DImageButton;
+    m_pAddBookMarkBtn->setFixedSize(QSize(250, 50));
+    m_pAddBookMarkBtn->setText(tr("添加书签"));
+    connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(slotAddBookMark()));
+
     m_pVBoxLayout->addWidget(m_pBookMarkListWidget);
+    m_pVBoxLayout->addWidget(m_pAddBookMarkBtn);
 
     for (int page = 0; page < 20; ++page) {
         BookMarkItemWidget *t_widget = new BookMarkItemWidget;
-        t_widget->setPicture(QString(tr(":/image/logo_big.svg")));
+        t_widget->setPicture(QString(tr(":/resources/image/logo/logo_big.svg")));
         t_widget->setPage(QString("页面%1").arg(page + 1));
         t_widget->setMinimumSize(QSize(250, 150));
 
@@ -44,18 +56,16 @@ void BookMarkWidget::initWidget()
 
 void BookMarkWidget::dltItem()
 {
-    if (m_iCurrentIndex >= 0) {
-        QListWidgetItem *t_item = m_pBookMarkListWidget->takeItem(m_iCurrentIndex);
-        delete t_item;
-        t_item = nullptr;
-        m_iCurrentIndex = -1;
+    if (m_pCurrentItem != nullptr) {
+        delete m_pCurrentItem;
+        m_pCurrentItem = nullptr;
     }
 }
 
 int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_BOOKMARK_DLTITEM == msgType) {
-        //dltItem();
+        dltItem();
         qDebug() << "dlt bookmark item";
         return ConstantMsg::g_effective_res;
     }

@@ -44,7 +44,7 @@ void ThumbnailWidget::initWidget()
 
     for (int idex = 0; idex < 30; ++idex) {
         ThumbnailItemWidget *widget = new ThumbnailItemWidget;
-        widget->setContantLabelPixmap(QString(":/image/light/normal/commenticon.svg"));
+        widget->setContantLabelPixmap(QString(":/resources/image/logo/logo_big.svg"));
         widget->setPageLabelText(QString("               %1").arg(idex + 1));
         widget->setMinimumSize(QSize(250, 250));
 

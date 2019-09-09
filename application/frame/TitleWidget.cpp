@@ -53,7 +53,7 @@ void TitleWidget::on_fontBtn_clicked(bool)
 
     point.setX(nWidth + nOldX - 100);
     point.setY(nHeight + nOldY);
-
+    qDebug() << "show setting font menu widget";
     m_pFontWidget->setGeometry(point.x(), point.y(), 200, 250);
     m_pFontWidget->show();
 }

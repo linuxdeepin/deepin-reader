@@ -22,7 +22,6 @@ int FontWidget::dealWithData(const int &, const QString &)
 
 void FontWidget::initWidget()
 {
-
     //让程序背景透明
 //    setAttribute(Qt::WA_TranslucentBackground, true);
 
@@ -255,7 +254,7 @@ void FontWidget::slotSetDoubPageViewCheckIcon()
     t_isDoubPage = !t_isDoubPage;
 
     if (t_isDoubPage) {
-        m_pDoubPageViewLab->setPixmap(QPixmap(tr(":/image/checked/bookmark.svg")));
+        m_pDoubPageViewLab->setPixmap(QPixmap(tr(":/resources/image/select .svg")));
         sendMsg(MSG_DOUB_PAGE_VIEW, QString::number(1));
     } else {
         m_pDoubPageViewLab->setPixmap(QPixmap(tr("")));
@@ -269,7 +268,7 @@ void FontWidget::slotSetSuitHCheckIcon()
     t_isSuitH = !t_isSuitH;
 
     if (t_isSuitH) {
-        m_pSuitHLab->setPixmap(QPixmap(tr(":/image/checked/bookmark.svg")));
+        m_pSuitHLab->setPixmap(QPixmap(tr(":/resources/image/select .svg")));
         sendMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(1));
     } else {
         m_pSuitHLab->setPixmap(QPixmap(tr("")));
@@ -283,7 +282,7 @@ void FontWidget::slotSetSuitWCheckIcon()
     t_isSuitW = !t_isSuitW;
 
     if (t_isSuitW) {
-        m_pSuitWLab->setPixmap(QPixmap(tr(":/image/checked/bookmark.svg")));
+        m_pSuitWLab->setPixmap(QPixmap(tr(":/resources/image/select .svg")));
         sendMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(1));
     } else {
         m_pSuitWLab->setPixmap(QPixmap(tr("")));
@@ -297,7 +296,7 @@ void FontWidget::slotSetRotateLeftCheckIcon()
     t_isRotateL = !t_isRotateL;
 
     if (t_isRotateL) {
-        m_pRotateLeftLab->setPixmap(QPixmap(tr(":/image/checked/bookmark.svg")));
+        m_pRotateLeftLab->setPixmap(QPixmap(tr(":/resources/image/select .svg")));
         sendMsg(MSG_ROTATE_LEFT, QString::number(1));
     } else {
         m_pRotateLeftLab->setPixmap(QPixmap(tr("")));
@@ -311,7 +310,7 @@ void FontWidget::slotSetRotateRightCheckIcon()
     t_isRotateR = !t_isRotateR;
 
     if (t_isRotateR) {
-        m_pRotateRightLab->setPixmap(QPixmap(tr(":/image/checked/bookmark.svg")));
+        m_pRotateRightLab->setPixmap(QPixmap(tr(":/resources/image/select .svg")));
         sendMsg(MSG_ROTATE_RIGHT, QString::number(1));
     } else {
         m_pRotateRightLab->setPixmap(QPixmap(tr("")));
