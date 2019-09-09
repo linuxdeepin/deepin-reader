@@ -15,7 +15,6 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
     setAcceptDrops(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
 
-    m_bCanVisible = true;
     initWidget();
     initConnections();
 }
@@ -57,9 +56,9 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
         QPoint oldPos = event->pos();
 
         //  鼠标  在放大镜 的中心
-        QPoint pos(oldPos.x() - m_pMagnifyLabel->width() / 2, oldPos.y() - m_pMagnifyLabel->height() / 2);
+        QPoint pos(oldPos.x(), oldPos.y());
 
-        m_pMagnifyLabel->move(pos.x(), pos.y());
+        m_pMagnifyLabel->move(pos.x() - m_pMagnifyLabel->width() / 2, pos.y() - m_pMagnifyLabel->height() / 2);
     }
 
     DWidget::mouseMoveEvent(event);

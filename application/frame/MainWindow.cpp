@@ -69,10 +69,10 @@ void MainWindow::initConnections()
     createAction(m_menu, tr("Larger"), SLOT(action_Larger()));
     createAction(m_menu, tr("Smaller"), SLOT(action_Smaller()));
 
-    DMenu *themeMenu = new DMenu(tr("switch theme"));
-    createAction(themeMenu, tr("dark theme"), SLOT(action_darkTheme()));
-    createAction(themeMenu, tr("light theme"), SLOT(action_lightTheme()));
-    m_menu->addMenu(themeMenu);
+//    DMenu *themeMenu = new DMenu(tr("switch theme"));
+//    createAction(themeMenu, tr("dark theme"), SLOT(action_darkTheme()));
+//    createAction(themeMenu, tr("light theme"), SLOT(action_lightTheme()));
+//    m_menu->addMenu(themeMenu);
 
     m_menu->addSeparator();
 
@@ -154,15 +154,15 @@ void MainWindow::action_Smaller()
     sendMsg(MSG_OPERATION_SMALLER);
 }
 
-void MainWindow::action_darkTheme()
-{
-    dApp->viewerTheme->setCurrentTheme(Dark);
-}
+//void MainWindow::action_darkTheme()
+//{
+//    dApp->viewerTheme->setCurrentTheme(Dark);
+//}
 
-void MainWindow::action_lightTheme()
-{
-    dApp->viewerTheme->setCurrentTheme(Light);
-}
+//void MainWindow::action_lightTheme()
+//{
+//    dApp->viewerTheme->setCurrentTheme(Light);
+//}
 
 //  打开 帮助文档
 void MainWindow::action_Help()

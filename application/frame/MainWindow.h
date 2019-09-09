@@ -43,8 +43,8 @@ private slots:
     void action_Screening();
     void action_Larger();
     void action_Smaller();
-    void action_darkTheme();
-    void action_lightTheme();
+//    void action_darkTheme();
+//    void action_lightTheme();
 
     void action_Help();
 

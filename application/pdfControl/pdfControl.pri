@@ -19,3 +19,6 @@ SOURCES += \
     $$PWD/NotesItemWidget.cpp \
     $$PWD/font/fontWidget.cpp \
     $$PWD/CustomLabel.cpp
+
+RESOURCES += \
+    $$PWD/pdfControl.qrc

@@ -4,6 +4,7 @@
 #include <DMenu>
 #include <DImageButton>
 #include <QHBoxLayout>
+#include "subjectObserver/CustomImageButton.h"
 #include "subjectObserver/CustomWidget.h"
 
 #include "pdfControl/font/fontWidget.h"
@@ -22,16 +23,16 @@ public:
     ~TitleWidget() override;
 
 private slots:
-    void on_thumbnailBtn_clicked();
-    void on_fontBtn_clicked();
-    void on_handleShapeBtn_clicked();
-    void on_magnifyingBtn_clicked();
+    void on_thumbnailBtn_clicked(bool);
+    void on_fontBtn_clicked(bool);
+    void on_handleShapeBtn_clicked(bool);
+    void on_magnifyingBtn_clicked(bool);
 
     void on_HandleAction_trigger(bool);
     void on_DefaultAction_trigger(bool);
 
 private:
-    void createBtn(const QString &btnName, const char *member);
+    void createBtn(const QString &btnName, const int &, const int &, const char *member);
     void createAction(const QString &iconName, const char *member);
     void sendMsgToSubject(const int &, const QString &msgCotent = "");
 

@@ -1,7 +1,6 @@
 #include "TitleWidget.h"
 #include <QDebug>
-
-#include "subjectObserver/PushButton.h"
+#include <DImageButton>
 
 TitleWidget::TitleWidget(CustomWidget *parent) :
     CustomWidget("TitleWidget", parent)
@@ -10,7 +9,7 @@ TitleWidget::TitleWidget(CustomWidget *parent) :
 
     m_layout = new QHBoxLayout();
     m_layout->setContentsMargins(0, 0, 0, 0);
-    m_layout->setSpacing(6);
+    m_layout->setSpacing(10);
     setLayout(m_layout);
 
     initWidget();
@@ -28,23 +27,23 @@ void TitleWidget::initWidget()
 {
     m_pFontWidget = new FontWidget;
 
-    createBtn("thumbnail", SLOT(on_thumbnailBtn_clicked()));
-    createBtn("setting", SLOT(on_fontBtn_clicked()));
-    createBtn("choose", SLOT(on_handleShapeBtn_clicked()));
-    createBtn("magnifier", SLOT(on_magnifyingBtn_clicked()));
+    createBtn("thumbnail", 36, 36, SLOT(on_thumbnailBtn_clicked(bool)));
+    createBtn("setting", 36, 36, SLOT(on_fontBtn_clicked(bool)));
+    createBtn("choose", 42, 36, SLOT(on_handleShapeBtn_clicked(bool)));
+    createBtn("magnifier", 36, 36, SLOT(on_magnifyingBtn_clicked(bool)));
     m_layout->addStretch(1);
 }
 
 //  缩略图 显示
-void TitleWidget::on_thumbnailBtn_clicked()
+void TitleWidget::on_thumbnailBtn_clicked(bool)
 {
     sendMsgToSubject(MSG_SLIDER_SHOW_STATE);
 }
 
 //  字体
-void TitleWidget::on_fontBtn_clicked()
+void TitleWidget::on_fontBtn_clicked(bool)
 {
-    DPushButton *btn = reinterpret_cast<DPushButton *>(QObject::sender());
+    CustomImageButton *btn = reinterpret_cast<CustomImageButton *>(QObject::sender());
     int nHeight = btn->height();
     int nWidth = btn->width() / 2;
 
@@ -60,9 +59,9 @@ void TitleWidget::on_fontBtn_clicked()
 }
 
 //  手型点击
-void TitleWidget::on_handleShapeBtn_clicked()
+void TitleWidget::on_handleShapeBtn_clicked(bool)
 {
-    PushButton *btn = reinterpret_cast<PushButton *>(QObject::sender());
+    CustomImageButton *btn = reinterpret_cast<CustomImageButton *>(QObject::sender());
     int nHeight = btn->height();
     int nWidth = btn->width();
 
@@ -81,9 +80,9 @@ void TitleWidget::on_handleShapeBtn_clicked()
 }
 
 //  放大镜 功能
-void TitleWidget::on_magnifyingBtn_clicked()
+void TitleWidget::on_magnifyingBtn_clicked(bool bCheck)
 {
-    sendMsgToSubject(MSG_MAGNIFYING);
+    sendMsgToSubject(MSG_MAGNIFYING, QString::number(bCheck));
 }
 
 //  切换为 手型 鼠标
@@ -102,7 +101,7 @@ void TitleWidget::on_DefaultAction_trigger(bool)
     sendMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurrentState));
 }
 
-void TitleWidget::createBtn(const QString &btnName, const char *member)
+void TitleWidget::createBtn(const QString &btnName, const int &width, const int &height,  const char *member)
 {
     QString normalPic = PF::getQrcPath(btnName, g_normal_state);
     QString hoverPic = PF::getQrcPath(btnName, g_hover_state);
@@ -110,19 +109,24 @@ void TitleWidget::createBtn(const QString &btnName, const char *member)
     QString checkedPic = PF::getQrcPath(btnName, g_checked_state);
     QString disablePic = PF::getQrcPath(btnName, g_disable_state);
 
-    PushButton *btn = new PushButton;
+    CustomImageButton *btn = new  CustomImageButton;
     btn->setNormalPic(normalPic);
     btn->setHoverPic(hoverPic);
-    btn->setHoverColor(QColor(255, 0, 0));
     btn->setPressPic(pressPic);
-    btn->setPressColor(QColor(255, 255, 0));
     btn->setCheckedPic(checkedPic);
-    btn->setDisablePic(disablePic);
 
     btn->setToolTip(btnName);
     btn->setCheckable(true);
+    btn->setChecked(false);
 
-    connect(btn, SIGNAL(clicked()), member);
+    connect(btn, &DImageButton::clicked, [btn] {
+        qDebug() << "111111111111111        " << btn->isChecked();
+        btn->setChecked(!btn->isChecked());
+    });
+
+    connect(btn, &DImageButton::checkedChanged, [btn](bool b) {
+        qDebug() << "aaaa       " << btn->isChecked();
+    });
 
     m_layout->addWidget(btn);
 }
@@ -150,7 +154,7 @@ int TitleWidget::dealWithData(const int &msgType, const QString &)
 {
     //  取消放大镜
     if (msgType == MSG_MAGNIFYING_CANCEL) {
-        on_magnifyingBtn_clicked();
+        on_magnifyingBtn_clicked(false);
         return ConstantMsg::g_effective_res;
     }
     return 0;
