@@ -1,17 +1,17 @@
-#include "MyLabel.h"
+#include "CustomLabel.h"
 
-MyLabel::MyLabel(QWidget *parent) :
+CustomLabel::CustomLabel(QWidget *parent) :
     QLabel(parent)
 {
 
 }
 
-MyLabel::~MyLabel()
+CustomLabel::~CustomLabel()
 {
 
 }
 
-void MyLabel::paintEvent(QPaintEvent *e)
+void CustomLabel::paintEvent(QPaintEvent *e)
 {
     QRectF rectangle(0.0, 0.0, (this->width() * 1.0), (this->height() * 1.0));
 

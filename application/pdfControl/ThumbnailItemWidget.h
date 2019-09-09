@@ -6,7 +6,7 @@
 #include <QVBoxLayout>
 #include <QPainter>
 
-#include "MyLabel.h"
+#include "CustomLabel.h"
 #include "subjectObserver/CustomWidget.h"
 
 /**
@@ -53,7 +53,7 @@ protected:
     void initWidget() override;
 
 private:
-    MyLabel *m_pContantLabel = nullptr;
+    CustomLabel *m_pContantLabel = nullptr;
     DLabel *m_pPageLabel = nullptr;
     bool m_bPaint = false;
 };

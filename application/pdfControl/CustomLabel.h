@@ -1,5 +1,5 @@
-#ifndef MYLABEL_H
-#define MYLABEL_H
+#ifndef CUSTOMLABEL_H
+#define CUSTOMLABEL_H
 
 #include <QLabel>
 #include <DWidget>
@@ -8,15 +8,15 @@
 #include <QString>
 #include <QPainterPath>
 
-class MyLabel : public QLabel
+class CustomLabel : public QLabel
 {
     Q_OBJECT
 public:
-    MyLabel(QWidget *parent = nullptr);
-    ~MyLabel() override;
+    CustomLabel(QWidget *parent = nullptr);
+    ~CustomLabel() override;
 
 protected:
     void  paintEvent(QPaintEvent *e) override;
 };
 
-#endif // MYLABEL_H
+#endif // CUSTOMLABEL_H

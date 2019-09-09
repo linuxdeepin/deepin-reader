@@ -6,8 +6,8 @@ HEADERS += \
     $$PWD/ThumbnailWidget.h \
     $$PWD/BookMarkItemWidget.h \
     $$PWD/NotesItemWidget.h \
-    $$PWD/MyLabel.h \
-    $$PWD/font/fontWidget.h
+    $$PWD/font/fontWidget.h \
+    $$PWD/CustomLabel.h
 
 SOURCES += \
     $$PWD/PagingWidget.cpp \
@@ -17,5 +17,5 @@ SOURCES += \
     $$PWD/ThumbnailWidget.cpp \
     $$PWD/BookMarkItemWidget.cpp \
     $$PWD/NotesItemWidget.cpp \
-    $$PWD/MyLabel.cpp \
-    $$PWD/font/fontWidget.cpp
+    $$PWD/font/fontWidget.cpp \
+    $$PWD/CustomLabel.cpp
