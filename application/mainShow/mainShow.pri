@@ -3,7 +3,7 @@ HEADERS += \
     $$PWD/TextOperationWidget.h \
     $$PWD/LightedWidget.h \
     $$PWD/FileAttrWidget.h \
-    $$PWD/FindBar.h \
+    $$PWD/FindWidget.h \
     $$PWD/LineBar.h \
     $$PWD/MagnifyLabel.h
 
@@ -12,10 +12,9 @@ SOURCES += \
     $$PWD/TextOperationWidget.cpp \
     $$PWD/LightedWidget.cpp \
     $$PWD/FileAttrWidget.cpp \
-    $$PWD/FindBar.cpp \
+    $$PWD/FindWidget.cpp \
     $$PWD/LineBar.cpp \
     $$PWD/MagnifyLabel.cpp
-
 
 RESOURCES += \
     $$PWD/mainShow.qrc

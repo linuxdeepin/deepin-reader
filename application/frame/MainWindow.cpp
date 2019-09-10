@@ -18,7 +18,7 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     m_pMsgSubject = MsgSubject::getInstance();
 
-    setMinimumSize(500, 500);
+    setMinimumSize(720, 560);
 
     Dtk::Widget::moveToCenter(this);
 }

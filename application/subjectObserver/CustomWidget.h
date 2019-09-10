@@ -8,11 +8,12 @@
 #include "MsgHeader.h"
 #include "ImageHeader.h"
 #include "utils/utils.h"
-#include "controller/viewerthememanager.h"
 
+#include <DGuiApplicationHelper>
 #include <QDebug>
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 /**
  * @brief The CustomWidget class
@@ -33,12 +34,12 @@ protected:
 
 protected:
     void sendMsg(const int &msgType, const QString &msgContent = "") override;
+    void showScreenCenter();
+
+    void initThemeChanged();
 
 private:
     void setObserverName(const QString &name) override;
-
-private slots:
-    void slotViewerThemeChanged(AppTheme);
 
 private:
     MsgSubject  *m_pMsgSubject = nullptr;

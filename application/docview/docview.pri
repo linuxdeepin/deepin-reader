@@ -16,7 +16,3 @@ SOURCES += \
     $$PWD/docummentproxy.cpp \
     $$PWD/pagebase.cpp \
     $$PWD/publicfunc.cpp \
-
-
-DISTFILES += \
-    $$PWD/docview.pri

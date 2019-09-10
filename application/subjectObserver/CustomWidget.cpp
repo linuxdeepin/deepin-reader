@@ -1,13 +1,12 @@
 #include "CustomWidget.h"
+#include <DWidgetUtil>
 
 CustomWidget::CustomWidget(const QString &name, DWidget *parent)
     : DWidget (parent)
 {
     setObserverName(name);
 
-    //  主题变化
-    connect(ViewerThemeManager::instance(), SIGNAL(viewerThemeChanged(AppTheme)),
-            this, SLOT(slotViewerThemeChanged(AppTheme)));
+    initThemeChanged();
 
     m_pMsgSubject = MsgSubject::getInstance();
     if (m_pMsgSubject) {
@@ -29,12 +28,22 @@ void CustomWidget::sendMsg(const int &msgType, const QString &msgContent)
     }
 }
 
+void CustomWidget::showScreenCenter()
+{
+    Dtk::Widget::moveToCenter(this);
+    this->show();
+}
+
+//  主题变化
+void CustomWidget::initThemeChanged()
+{
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::paletteTypeChanged,
+    [](DGuiApplicationHelper::ColorType type) {
+        qDebug() << "       " << type;
+    });
+}
+
 void CustomWidget::setObserverName(const QString &name)
 {
     m_strObserverName = name;
-}
-
-void CustomWidget::slotViewerThemeChanged(AppTheme theme)
-{
-    qDebug() << m_strObserverName << "      slotViewerThemeChanged     "   << theme;
 }

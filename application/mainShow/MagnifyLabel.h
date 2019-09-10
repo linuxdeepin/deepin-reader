@@ -17,6 +17,10 @@ class MagnifyLabel : public DLabel
 public:
     MagnifyLabel(DWidget *parent = nullptr);
 
+public:
+    void setWidgetVisible();
+    void setWidgetShow();
+
 private slots:
     void updatePixmap(const QPixmap &);
 

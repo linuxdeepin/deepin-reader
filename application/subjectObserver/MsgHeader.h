@@ -29,7 +29,6 @@ enum MSG_MENU_TYPE {
     MSG_OPERATION_LARGER,               //  放大
     MSG_OPERATION_SMALLER,              //  缩小
     MSG_OPERATION_HELP,                 //  帮助
-    MSG_OPERATION_ABOUT,                //  关于
     MSG_OPERATION_EXIT,                 //  退出
 
     MSG_OPERATION_ADD_BOOKMARK,         //  添加书签
@@ -65,6 +64,14 @@ enum MSG_FONT_MENU_TYPE {
     MSG_SELF_ADAPTE_WIDTH,          //  自适应宽度
     MSG_ROTATE_LEFT,                //  左旋转
     MSG_ROTATE_RIGHT,               //  右旋转
+};
+
+//  搜索菜单 消息
+enum MSG_FIND_TYPE {
+    MSG_FIND_CONTENT = 200,         //  查询内容
+    MSG_CLEAR_FIND_CONTENT,         //  清除查询内容
+    MSG_FIND_PREV,                  //  上一个
+    MSG_FIND_NEXT,                  //  下一个
 };
 
 //  菜单操作结果 消息

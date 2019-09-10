@@ -20,7 +20,6 @@
 #include <DApplication>
 
 #include "controller/configsetter.h"
-#include "controller/viewerthememanager.h"
 
 #if defined(dApp)
 #undef dApp
@@ -37,17 +36,14 @@ public:
     Application(int &argc, char **argv);
 
 protected:
-    void handleAboutAction() override;
     void handleQuitAction() override;
 
 public:
-    ConfigSetter *setter = nullptr;
+//    ConfigSetter *setter = nullptr;
 //    DBManager *dbM = nullptr;
 //    Exporter *exporter = nullptr;
 //    Importer *importer = nullptr;
 //    SignalManager *signalM = nullptr;
-
-    ViewerThemeManager *viewerTheme = nullptr;
 private:
     void initChildren();
     void initI18n();

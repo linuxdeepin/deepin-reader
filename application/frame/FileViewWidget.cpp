@@ -7,8 +7,7 @@
 #include "controller/DataManager.h"
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
-    : CustomWidget("FileViewWidget", parent),
-      m_docview(nullptr)
+    : CustomWidget("FileViewWidget", parent)
 {
     setMouseTracking(true); //  接受 鼠标滑动事件
     setAcceptDrops(true);
@@ -34,11 +33,6 @@ FileViewWidget::~FileViewWidget()
         m_pFileAttrWidget->deleteLater();
         m_pFileAttrWidget = nullptr;
     }
-
-    if (m_pAppAboutWidget) {
-        m_pAppAboutWidget->deleteLater();
-        m_pAppAboutWidget = nullptr;
-    }
 }
 
 void FileViewWidget::initWidget()
@@ -46,6 +40,8 @@ void FileViewWidget::initWidget()
 //    m_docview = new DocumentView;
 //    QGridLayout *pgrlyout = new QGridLayout(this);
 //    pgrlyout->addWidget(m_docview);
+
+    m_pDocummentProxy = new DocummentProxy(this);
 
     m_pMagnifyLabel = new MagnifyLabel(this);   //  放大镜 窗口
 
@@ -55,16 +51,17 @@ void FileViewWidget::initWidget()
 
 void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    if (m_pMagnifyLabel && m_bCanVisible) {
-        m_pMagnifyLabel->setVisible(true);
-        QPoint oldPos = event->pos();
+    if (m_pMagnifyLabel) {
+        if (m_bCanVisible) {
+            m_pMagnifyLabel->setWidgetShow();
+            QPoint oldPos = event->pos();
 
-        //  鼠标  在放大镜 的中心
-        QPoint pos(oldPos.x(), oldPos.y());
+            //  鼠标  在放大镜 的中心
+            QPoint pos(oldPos.x(), oldPos.y());
 
-        m_pMagnifyLabel->move(pos.x() - m_pMagnifyLabel->width() / 2, pos.y() - m_pMagnifyLabel->height() / 2);
+            m_pMagnifyLabel->move(pos.x() - m_pMagnifyLabel->width() / 2, pos.y() - m_pMagnifyLabel->height() / 2);
+        }
     }
-
     DWidget::mouseMoveEvent(event);
 }
 
@@ -72,7 +69,7 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
 void FileViewWidget::leaveEvent(QEvent *event)
 {
     if (m_pMagnifyLabel && m_bCanVisible) {
-        m_pMagnifyLabel->setVisible(false);
+        m_pMagnifyLabel->setWidgetVisible();
     }
 
     DWidget::leaveEvent(event);
@@ -96,13 +93,30 @@ void FileViewWidget::dropEvent(QDropEvent *event)
     }
 }
 
+void FileViewWidget::resizeEvent(QResizeEvent *event)
+{
+    if (m_pFindWidget != nullptr) {
+        int nParentWidth = this->width();
+        int nWidget = m_pFindWidget->width();
+        m_pFindWidget->move(nParentWidth - nWidget - 20, 20);
+    }
+
+    CustomWidget::resizeEvent(event);
+}
+
+//  实际打开文件操作
 void FileViewWidget::on_slot_openfile(const QString &filePath)
 {
-    if (nullptr != m_docview) {
+    if (nullptr != m_pDocummentProxy) {
 
         DataManager::instance()->setStrOnlyFilePath(filePath);
 
-//        m_docview->open(filePath);
+        bool rl = m_pDocummentProxy->openFile(DocType_PDF, filePath);
+        if (rl) {
+            m_pDocummentProxy->scaleRotateAndShow(1, RotateType_Normal);
+        } else {
+
+        }
     }
 }
 
@@ -123,7 +137,7 @@ void FileViewWidget::SlotCustomContextMenuRequested(const QPoint &point)
 }
 
 //  打开　文件路径
-int FileViewWidget::openFilePath(const QString &filePaths)
+void FileViewWidget::openFilePath(const QString &filePaths)
 {
     QStringList fileList = filePaths.split("@#&wzx",  QString::SkipEmptyParts);
     int nSize = fileList.size();
@@ -135,7 +149,6 @@ int FileViewWidget::openFilePath(const QString &filePaths)
 
         sendMsg(MSG_OPERATION_OPEN_FILE_OK);
     }
-    return ConstantMsg::g_effective_res;
 }
 
 //  放大镜　控制
@@ -143,6 +156,12 @@ int FileViewWidget::magnifying(const QString &data)
 {
     int nRes = data.toInt();
     m_bCanVisible = nRes;
+
+    if (!m_bCanVisible) {
+        m_pMagnifyLabel->setWidgetVisible();
+    } else {
+        m_pMagnifyLabel->setWidgetShow();
+    }
     return ConstantMsg::g_effective_res;
 }
 
@@ -166,7 +185,8 @@ void FileViewWidget::initConnections()
             this, SLOT(SlotCustomContextMenuRequested(const QPoint &)));
 
     connect(this, SIGNAL(sigShowFileAttr()), this, SLOT(slotShowFileAttr()));
-    connect(this, SIGNAL(sigShowAppAboutWidget()), this, SLOT(slotShowAppAboutWidget()));
+    connect(this, SIGNAL(sigShowFindWidget()), this, SLOT(slotShowFindWidget()));
+    connect(this, SIGNAL(sigOpenFile(const QString &)), this, SLOT(openFilePath(const QString &)));
 }
 
 //  查看 文件属性
@@ -179,12 +199,16 @@ void FileViewWidget::slotShowFileAttr()
     m_pFileAttrWidget->showScreenCenter();
 }
 
-void FileViewWidget::slotShowAppAboutWidget()
+//  显示搜索框
+void FileViewWidget::slotShowFindWidget()
 {
-    if (m_pAppAboutWidget == nullptr) {
-        m_pAppAboutWidget = new  AppAboutWidget;
+    if (m_pFindWidget == nullptr) {
+        m_pFindWidget = new FindWidget(this);
+        int nParentWidth = this->width();
+        int nWidget = m_pFindWidget->width();
+        m_pFindWidget->move(nParentWidth - nWidget - 20, 20);
     }
-    m_pAppAboutWidget->showScreenCenter();
+    m_pFindWidget->show();
 }
 
 //  打开文件所在文件夹
@@ -204,12 +228,13 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
     case MSG_OPEN_FILE_PATH:        //  打开文件
-        return openFilePath(msgContent);
+        emit sigOpenFile(msgContent);
+        return ConstantMsg::g_effective_res;
     case MSG_OPERATION_ATTR:        //  打开该文件的属性信息
         emit sigShowFileAttr();
         return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_ABOUT :
-        emit sigShowAppAboutWidget();
+    case MSG_OPERATION_FIND:        //  搜索
+        emit sigShowFindWidget();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_OPEN_FOLDER: //  打开该文件所处文件夹
         return openFileFolder();
@@ -222,6 +247,14 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
     case MSG_OPERATION_LARGER:      //  放大
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_SMALLER:     //  缩小
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_FIRST_PAGE:  //  第一页
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_PREV_PAGE:   //  上一页
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_NEXT_PAGE:   //  下一页
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_END_PAGE:    //  最后一页
         return ConstantMsg::g_effective_res;
     }
     return 0;

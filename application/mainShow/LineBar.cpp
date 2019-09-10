@@ -31,12 +31,11 @@ LineBar::LineBar(DLineEdit *parent)
     // Init.
     setClearButtonEnabled(true);
 
-    setFixedWidth(150);
+//    setFixedWidth(150);
 
     m_autoSaveInternal = 500;
     m_autoSaveTimer = new QTimer(this);
     m_autoSaveTimer->setSingleShot(true);
-
 
     connect(m_autoSaveTimer, &QTimer::timeout, this, &LineBar::handleTextChangeTimer);
     connect(this, &DLineEdit::textChanged, this, &LineBar::handleTextChanged, Qt::QueuedConnection);

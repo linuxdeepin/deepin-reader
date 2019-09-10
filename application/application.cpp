@@ -29,6 +29,7 @@
 #include <QTranslator>
 
 #include <QDebug>
+#include "frame/AppAboutWidget.h"
 
 namespace {
 
@@ -48,18 +49,15 @@ Application::Application(int &argc, char **argv)
     setApplicationName("deepin_reader");
     setApplicationDisplayName(QObject::tr("Deepin Reader"));
     setApplicationVersion("1.0");
-    setProductIcon(QIcon(":/images/logo.svg"));
+    setProductIcon(QIcon(":/resources/image/logo/logo.svg"));
     setProductName(DApplication::translate("MainWindow", "Deepin Reader"));
 
 //    setApplicationVersion(DApplication::buildVersion("20190828"));
 //    installEventFilter(new GlobalEventFilter());
 
-    initChildren();
-}
+    setAboutDialog(new AppAboutWidget);
 
-void Application::handleAboutAction()
-{
-    MsgSubject::getInstance()->sendMsg(nullptr, MSG_OPERATION_ABOUT, "");
+    initChildren();
 }
 
 void Application::handleQuitAction()
@@ -69,8 +67,7 @@ void Application::handleQuitAction()
 
 void Application::initChildren()
 {
-    viewerTheme = ViewerThemeManager::instance();
-    setter = ConfigSetter::instance();
+//   setter = ConfigSetter::instance();
 //    signalM = SignalManager::instance();
 }
 

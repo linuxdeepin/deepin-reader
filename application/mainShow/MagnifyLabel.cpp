@@ -9,7 +9,17 @@ MagnifyLabel::MagnifyLabel(DWidget *parent)
     setContentsMargins(0, 0, 0, 0);
     initBcakLabel();
 
+    setWidgetVisible();
+}
+
+void MagnifyLabel::setWidgetVisible()
+{
     this->setVisible(false);
+}
+
+void MagnifyLabel::setWidgetShow()
+{
+    this->setVisible(true);
 }
 
 void MagnifyLabel::updatePixmap(const QPixmap &pixmap)

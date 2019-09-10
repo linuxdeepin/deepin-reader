@@ -20,8 +20,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FINDBAR_H
-#define FINDBAR_H
+#ifndef FINDWIDGET_H
+#define FINDWIDGET_H
 
 #include "LineBar.h"
 
@@ -29,55 +29,40 @@
 #include <DPushButton>
 #include <DLabel>
 #include <QPainter>
-#include "dimagebutton.h"
+#include <DImageButton>
 #include <QColor>
 
 #include "subjectObserver/CustomWidget.h"
 
-class FindBar : public CustomWidget
+class FindWidget : public CustomWidget
 {
     Q_OBJECT
 
 public:
-    FindBar(CustomWidget *parent = nullptr);
+    FindWidget(CustomWidget *parent = nullptr);
 
     bool isFocus();
     void focus();
 
-    void activeInput(QString text, QString file, int row, int column, int scrollOffset);
     void setMismatchAlert(bool isAlert);
 
     void setBackground(QString color);
 
-signals:
-    void findNext();
-    void findPrev();
-
-    void removeSearchKeyword();
-    void updateSearchKeyword(QString file, QString keyword);
-
-    //add guoshao
-    void sigFindbarCancel();
-
-public slots:
+private slots:
     void findCancel();
     void handleContentChanged();
+    void slotFindNextBtnClicked();
+    void slotFindPrevBtnClicked();
 
 protected:
     void paintEvent(QPaintEvent *event);
     void hideEvent(QHideEvent *event);
 
 private:
-    DPushButton *m_findNextButton;
-    DPushButton *m_findPrevButton;
     DImageButton *m_closeButton;
     LineBar *m_editLine;
     QHBoxLayout *m_layout;
-    DLabel *m_findLabel;
-    QString m_findFile;
-    int m_findFileColumn;
-    int m_findFileRow;
-    int m_findFileSrollOffset;
+
     QColor m_backgroundColor;
 
     // IObserver interface
