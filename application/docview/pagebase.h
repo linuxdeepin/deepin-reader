@@ -18,6 +18,7 @@ public:
 protected:
     RotateType_EM m_rotate;
     double m_scale;
+    virtual void addHighlightAnnotation(const QList<QRectF>& listrect, const QColor &color){}
 };
 
 #endif // PAGEBASE_H

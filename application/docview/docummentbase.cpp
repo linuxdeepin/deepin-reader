@@ -2,6 +2,7 @@
 #include <QHBoxLayout>
 
 DocummentBase::DocummentBase(QWidget *parent): QScrollArea(parent)
+  ,m_bModified(false)
 {
     QHBoxLayout *phblyout = new QHBoxLayout(parent);
     parent->setLayout(phblyout);

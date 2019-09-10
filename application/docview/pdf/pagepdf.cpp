@@ -378,7 +378,49 @@ void PagePdf::setImageHeight(double height)
     m_imageheight = height;
 }
 
-void PagePdf::addAnnotation(QPoint screenPos)
+void PagePdf::addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color)
 {
+    qDebug()<<"*************"<<listrect.size();
+    if(listrect.size()<=0)return;
+    Poppler::Annotation::Style style;
+    style.setColor(color);
 
+    Poppler::Annotation::Popup popup;
+    popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
+
+    Poppler::HighlightAnnotation* annotation = new Poppler::HighlightAnnotation();
+
+    Poppler::HighlightAnnotation::Quad quad;
+    QList<Poppler::HighlightAnnotation::Quad> qlistquad;
+    QRectF rec,recboundary;
+    foreach(rec,listrect)
+    {
+        recboundary.setTopLeft(QPointF(rec.left()/m_page->pageSizeF().width(),
+                                   rec.top()/m_page->pageSizeF().height()));
+        recboundary.setTopRight(QPointF(rec.right()/m_page->pageSizeF().width(),
+                                    rec.top()/m_page->pageSizeF().height()));
+        recboundary.setBottomLeft(QPointF(rec.left()/m_page->pageSizeF().width(),
+                                      rec.bottom()/m_page->pageSizeF().height()));
+        recboundary.setBottomRight(QPointF(rec.right()/m_page->pageSizeF().width(),
+                                       rec.bottom()/m_page->pageSizeF().height()));
+
+
+        qDebug()<<"**"<<rec<<"**";
+        quad.points[0] = recboundary.topLeft();
+        quad.points[1] = recboundary.topRight();
+        quad.points[2] = recboundary.bottomRight();
+        quad.points[3] = recboundary.bottomLeft();
+        qlistquad.append(quad);
+    }
+    annotation->setHighlightQuads(qlistquad);
+    annotation->setBoundary(recboundary);
+    annotation->setStyle(style);
+    annotation->setPopup(popup);
+    m_page->addAnnotation(annotation);
+    qDebug()<<"addHighlightAnnotation"<<annotation->boundary();
+}
+
+void PagePdf::removeAnnotation(Poppler::Annotation *annotation)
+{
+    m_page->removeAnnotation(annotation);
 }

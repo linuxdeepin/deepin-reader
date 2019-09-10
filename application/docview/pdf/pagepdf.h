@@ -26,6 +26,13 @@ public:
     void setImageHeight(double height);
     //Annotation
     void addAnnotation(QPoint screenPos);
+    void setPage(Poppler::Page *page);
+    void showImage(double scale = 1);
+
+
+    //Annotation
+    void addHighlightAnnotation(const QList<QRectF>& listrect, const QColor &color) override;
+    void removeAnnotation(Poppler::Annotation* annotation);
 protected:
     void paintEvent(QPaintEvent *event) override;
 private:

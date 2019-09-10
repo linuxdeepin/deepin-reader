@@ -46,7 +46,8 @@ SOURCES += \
     docview/docummentfactory.cpp \
     docview/pdf/docummentpdf.cpp \
     docview/pagebase.cpp \
-    docview/pdf/pagepdf.cpp
+    docview/pdf/pagepdf.cpp \
+    docview/publicfunc.cpp
 #\
 #    docview/pdf/pdfmodel.cpp \
 #    docview/documentlayout.cpp \
@@ -100,7 +101,8 @@ HEADERS +=\
     docview/docummentfactory.h \
     docview/pdf/docummentpdf.h \
     docview/pagebase.h \
-    docview/pdf/pagepdf.h
+    docview/pdf/pagepdf.h \
+    docview/publicfunc.h
 #\
 #    docview/pdf/pdfmodel.h \
 #    docview/documentlayout.h \

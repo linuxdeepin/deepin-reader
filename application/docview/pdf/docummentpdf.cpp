@@ -1,9 +1,12 @@
 #include "docummentpdf.h"
 #include "pagepdf.h"
+#include "docview/publicfunc.h"
 #include <QDebug>
 #include <QLabel>
 #include <QImage>
 #include <QScrollBar>
+#include <QTemporaryFile>
+#include <QFileInfo>
 
 
 ThreadLoadDoc::ThreadLoadDoc()
@@ -58,7 +61,9 @@ void ThreadLoadWords::run()
 }
 
 
-DocummentPDF::DocummentPDF(QWidget *parent): DocummentBase(parent), document(nullptr)
+DocummentPDF::DocummentPDF(QWidget *parent): DocummentBase(parent),
+    document(nullptr),
+    m_listsearch()
 {
     m_threadloaddoc.setDoc(this);
     m_threadloadwords.setDoc(this);
@@ -74,6 +79,8 @@ DocummentPDF::DocummentPDF(QWidget *parent): DocummentBase(parent), document(nul
 bool DocummentPDF::openFile(QString filepath)
 {
     document = Poppler::Document::load(filepath);
+    if(nullptr==document||document->numPages()<=0)
+        return false;
     m_pages.clear();
     qDebug() << "numPages :" << document->numPages();
     for (int i = 0; i < document->numPages(); i++) {
@@ -170,7 +177,78 @@ void DocummentPDF::scaleAndShow(double scale, RotateType_EM rotate)
     m_rotate = rotate;
     m_threadloaddoc.start();
 }
+void DocummentPDF::removeAllAnnotation()
+{
+    if(!document)return;
+    for(int i=0;i<document->numPages();++i)
+    {
+        QList<Poppler::Annotation*> listannote=document->page(i)->annotations();
+        foreach(Poppler::Annotation* atmp,listannote)
+        {
+            document->page(i)->removeAnnotation(atmp);
+        }
+    }
+    //todo 刷新所有页面
+}
+
+void DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos, const QColor &color)
+{
+
+}
+
+void DocummentPDF::search(const QString &strtext,const QColor& color)
+{
+    for(int i=0;i<document->numPages();++i)
+    {
+        m_pages.at(i)->addHighlightAnnotation(document->page(i)->search(strtext),color);
+
+    }
+}
+
 bool DocummentPDF::save(const QString &filePath, bool withChanges) const
+{
+    // Save document to temporary file...
+    QTemporaryFile temporaryFile;
+    temporaryFile.setFileTemplate(temporaryFile.fileTemplate() + QLatin1String(".") + QFileInfo(filePath).suffix());
+    if(!temporaryFile.open())
+    {
+        return false;
+    }
+
+    temporaryFile.close();
+
+    if(!pdfsave(temporaryFile.fileName(), withChanges))
+    {
+        return false;
+    }
+
+    // Copy from temporary file to actual file...
+    QFile file(filePath);
+
+    if(!temporaryFile.open())
+    {
+        return false;
+    }
+
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    {
+        return false;
+    }
+
+    if(!PublicFunc::copyFile(temporaryFile, file))
+    {
+        return false;
+    }
+
+    if(withChanges)
+    {
+        m_bModified = false;//reset modify status
+    }
+
+    return true;
+}
+
+bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges) const
 {
     QScopedPointer< Poppler::PDFConverter > pdfConverter(document->pdfConverter());
 
@@ -186,8 +264,30 @@ bool DocummentPDF::save(const QString &filePath, bool withChanges) const
     pdfConverter->setPDFOptions(options);
 
     return pdfConverter->convert();
+
 }
 
+void DocummentPDF::clearSearch()
+{
+    foreach(Poppler::Annotation* annote,m_listsearch)
+    {
+        for(int i=0;i<document->numPages();++i)
+        {
+            document->page(0)->removeAnnotation(annote);
+        }
+    }
+}
+
+void DocummentPDF::scaleAndShow(double scale)
+{
+    m_scale = scale;
+    m_threadloaddoc.start();
+    //    for (int i = 0; i < m_pages.size(); i++) {
+    //        PagePdf *ppdf = (PagePdf *)m_pages.at(i);
+    //        ppdf->showImage(scale);
+    //    }
+
+}
 void DocummentPDF::loadWordCache(int indexpage, PageBase *page)
 {
     if (!document) {
@@ -232,7 +332,7 @@ bool DocummentPDF::abstractTextPage(const QList<Poppler::TextBox *> &text, PageB
 
             if (addChar) {
                 QRectF charBBox = word->charBoundingBox(textBoxChar);
-//                qDebug() << "addChar s:" << s << " charBBox:" << charBBox;
+                //                qDebug() << "addChar s:" << s << " charBBox:" << charBBox;
                 stWord sword;
                 sword.s = s;
                 sword.rect = charBBox;
@@ -244,7 +344,7 @@ bool DocummentPDF::abstractTextPage(const QList<Poppler::TextBox *> &text, PageB
         if (word->hasSpaceAfter() && next) {
             QRectF wordBBox = word->boundingBox();
             QRectF nextWordBBox = next->boundingBox();
-//            qDebug() << "hasSpaceAfter wordBBox:" << wordBBox << " nextWordBBox:" << nextWordBBox;
+            //            qDebug() << "hasSpaceAfter wordBBox:" << wordBBox << " nextWordBBox:" << nextWordBBox;
             stWord sword;
             sword.s = QStringLiteral(" ");
             QRectF qrect;
