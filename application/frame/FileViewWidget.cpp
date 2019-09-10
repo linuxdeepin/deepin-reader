@@ -1,5 +1,4 @@
 #include "FileViewWidget.h"
-#include "docview/documentview.h"
 #include <QDebug>
 #include <QMimeData>
 #include <QUrl>
