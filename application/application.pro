@@ -32,8 +32,7 @@ DISTFILES += \
     themes/atom_dark.theme \
     themes/deepin_dark.theme \
     themes/solarized_dark.theme \
-    themes/deepin.theme \
-    docview/docview.pri
+    themes/deepin.theme
 
 APPICONDIR = $$PREFIX/share/icons/deepin/apps/scalable
 

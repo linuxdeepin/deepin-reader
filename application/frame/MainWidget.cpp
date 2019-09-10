@@ -2,7 +2,10 @@
 #include <QHBoxLayout>
 
 #include "HomeWidget.h"
-#include "MainShowSplitter.h"
+
+#include <DSplitter>
+#include "FileViewWidget.h"
+#include "LeftSidebarWidget.h"
 
 MainWidget::MainWidget(CustomWidget *parent) :
     CustomWidget ("MainWidget", parent)
@@ -50,8 +53,20 @@ void MainWidget::initWidget()
     HomeWidget *homeWidget = new HomeWidget;
     m_pStackedWidget->addWidget(homeWidget);
 
-    MainShowSplitter *showSplitter = new MainShowSplitter;
-    m_pStackedWidget->addWidget(showSplitter);
+    DSplitter *pSplitter = new  DSplitter;
+    pSplitter->setChildrenCollapsible(false);   //  子部件不可拉伸到 0
+
+    LeftSidebarWidget *pLeftShowWidget = new LeftSidebarWidget;
+    pSplitter->insertWidget(0, pLeftShowWidget);
+
+    FileViewWidget *pFileViewWidget = new FileViewWidget;
+    pSplitter->insertWidget(1, pFileViewWidget);
+
+    //  布局 占比
+    pSplitter->setStretchFactor(0, 2);
+    pSplitter->setStretchFactor(1, 8);
+
+    m_pStackedWidget->addWidget(pSplitter);
 
     m_pStackedWidget->setCurrentIndex(0);
 }

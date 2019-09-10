@@ -174,11 +174,9 @@ void DBManager::checkDatabase()
     query.prepare( "SELECT name FROM sqlite_master "
                    "WHERE type=\"table\" AND name = \"BookMarkTable\"");
     if (query.exec() && query.first()) {
-        tableExist = ! query.value(0).toString().isEmpty();
-    } else {
-        qDebug() << "BookMarkTable      database is exist!";
+        tableExist = !query.value(0).toString().isEmpty();
     }
-    qDebug() << "BookMarkTable     33    database is exist!     " << tableExist;
+
     //if tables not exist, create it.
     if ( !tableExist ) {
         QSqlQuery query(db);
@@ -192,9 +190,8 @@ void DBManager::checkDatabase()
                             "FileName TEXT, "
                             "PageNumber TEXT, "
                             "Time TEXT )"));
-    } else {
-        qDebug() << "BookMarkTable     11    database is exist!";
     }
+
     mutex.unlock();
 }
 
