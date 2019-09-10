@@ -38,10 +38,15 @@ class DocummentPDF: public DocummentBase
 public:
     DocummentPDF(QWidget *parent = nullptr);
     bool openFile(QString filepath) override;
+    QPoint global2RelativePoint(QPoint globalpoint) override;
+    bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0) override;
     bool mouseSelectText(QPoint start, QPoint stop) override;
     void mouseSelectTextClear() override;
     bool mouseBeOverText(QPoint point) override;
-    void scaleAndShow(double scale) override;
+    void scaleAndShow(double scale, RotateType_EM rotate) override;
+    bool getImage(int pagenum, QImage &image, double width, double height, RotateType_EM rotate = RotateType_Normal) override;
+    int getPageSNum() override;
+    bool setViewModeAndShow(ViewMode_EM viewmode) override;
 
     bool loadPages();
     bool loadWords();
@@ -49,10 +54,15 @@ private:
     void loadWordCache(int indexpage, PageBase *page);
     bool abstractTextPage(const QList<Poppler::TextBox *> &text,
                           PageBase *page);
+    void showSinglePage();
+    void showFacingPage();
     Poppler::Document *document;
     ThreadLoadDoc m_threadloaddoc;
     ThreadLoadWords m_threadloadwords;
     double m_scale;
+    RotateType_EM m_rotate;
+    QList<QWidget *>m_widgets;
+    QWidget *pblankwidget;
 };
 
 #endif // DOCUMMENTPDF_H

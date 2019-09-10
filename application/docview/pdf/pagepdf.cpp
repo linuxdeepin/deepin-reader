@@ -6,7 +6,10 @@ PagePdf::PagePdf(QWidget *parent)
     : PageBase(parent),
       m_imagewidth(0.01),
       m_imageheight(0.01),
-      m_page(nullptr)
+      m_page(nullptr),
+      m_paintercolor(QColor(72, 118, 255, 100)),
+      m_pencolor (QColor(72, 118, 255, 0)),
+      m_penwidth(0)
 {
 }
 
@@ -14,8 +17,8 @@ void PagePdf::paintEvent(QPaintEvent *event)
 {
     QLabel::paintEvent(event);
     QPainter qpainter(this);
-    qpainter.setBrush(QColor(72, 118, 255, 100));
-    QPen qpen(QColor(72, 118, 255, 0), 0);
+    qpainter.setBrush(m_paintercolor);
+    QPen qpen(m_pencolor, m_penwidth);
     qpainter.setPen(qpen);
     for (int i = 0; i < paintrects.size(); i++) {
         qpainter.drawRect(paintrects[i]);
@@ -36,18 +39,82 @@ void PagePdf::setPage(Poppler::Page *page)
     m_imagewidth = m_page->pageSizeF().width();
     m_imageheight = m_page->pageSizeF().height();
 }
-void PagePdf::showImage(double scale)
+bool PagePdf::showImage(double scale, RotateType_EM rotate)
 {
+    if (!m_page)
+        return false;
     int xres = 72.0, yres = 72.0;
+    m_scale = scale;
+    m_rotate = rotate;
     QImage image = m_page->renderToImage(xres * scale, yres * scale, m_imagewidth * scale, m_imageheight * scale);
     QPixmap map = QPixmap::fromImage(image);
-    setPixmap(map);
+    QMatrix leftmatrix;
+    switch (rotate) {
+    case RotateType_90:
+        leftmatrix.rotate(90);
+        break;
+    case RotateType_180:
+        leftmatrix.rotate(180);
+        break;
+    case RotateType_270:
+        leftmatrix.rotate(270);
+        break;
+    default:
+        leftmatrix.rotate(0);
+        break;
+    }
+    setPixmap(map.transformed(leftmatrix, Qt::SmoothTransformation));
+    return true;
+}
+
+bool PagePdf::getImage(QImage &image, double width, double height, RotateType_EM rotate)
+{
+    if (!m_page)
+        return false;
+    int xres = 72.0, yres = 72.0;
+    double scalex = width / m_imagewidth;
+    double scaley = height / m_imageheight;
+    image = m_page->renderToImage(xres * scalex, yres * scaley, width, height, (Poppler::Page::Rotation)rotate);
+    return true;
+}
+
+bool PagePdf::setSelectTextStyle(QColor paintercolor, QColor pencolor, int penwidth)
+{
+    m_paintercolor = paintercolor;
+    m_pencolor = pencolor;
+    m_penwidth = penwidth;
+    update();
+    return true;
 }
 
 bool PagePdf::pageTextSelections(const QPoint start, const QPoint end)
 {
-    QPoint startC = start;
-    QPoint endC = end;
+    qDebug() << "pageTextSelections start:" << start << " end:" << end;
+    qDebug() << "pageTextSelections x():" << x() << " y()" << y();
+    QPoint startC = QPoint(start.x() - x() - (width() - m_scale * m_imagewidth) / 2, start.y() - y() - (height() - m_scale * m_imageheight) / 2);
+    QPoint endC = QPoint(end.x() - x() - (width() - m_scale * m_imagewidth) / 2, end.y() - y() - (height() - m_scale * m_imageheight) / 2);
+    qDebug() << "startC1:" << startC << " endC1:" << endC;
+    switch (m_rotate) {
+    case RotateType_90:
+        startC = QPoint((start.x() - x() - (width() - m_scale * m_imageheight) / 2), (start.y() - y() - (height() - m_scale * m_imagewidth) / 2));
+        startC = QPoint(startC.y(), m_scale * m_imageheight - startC.x());
+        endC = QPoint((end.x() - x() - (width() - m_scale * m_imageheight) / 2), (end.y() - y() - (height() - m_scale * m_imagewidth) / 2));
+        endC = QPoint(endC.y(), m_scale * m_imageheight - endC.x());
+        break;
+    case RotateType_180:
+        startC = QPoint(m_scale * m_imagewidth - startC.x(), m_scale * m_imageheight - startC.y());
+        endC = QPoint(m_scale * m_imagewidth - endC.x(), m_scale * m_imageheight - endC.y());
+        break;
+    case RotateType_270:
+        startC = QPoint((start.x() - x() - (width() - m_scale * m_imageheight) / 2), (start.y() - y() - (height() - m_scale * m_imagewidth) / 2));
+        startC = QPoint(m_scale * m_imagewidth - startC.y(), startC.x());
+        endC = QPoint((end.x() - x() - (width() - m_scale * m_imageheight) / 2), (end.y() - y() - (height() - m_scale * m_imagewidth) / 2));
+        endC = QPoint(m_scale * m_imagewidth - endC.y(), endC.x());
+        break;
+    default:
+        break;
+    }
+    qDebug() << "startC:" << startC << " endC:" << endC;
     QPoint temp;
     if (startC.x() > endC.x()) {
         temp = startC;
@@ -58,22 +125,28 @@ bool PagePdf::pageTextSelections(const QPoint start, const QPoint end)
     const QRect start_end = (startC.y() < endC.y())
                             ? QRect(startC.x(), startC.y(), endC.x(), endC.y())
                             : QRect(startC.x(), endC.y(), endC.x(), startC.y());
+
     QRectF tmp;
     int startword = 0, stopword = -1;
-    const double scaleX = width() / m_imagewidth;
-    const double scaleY = height() / m_imageheight;
+    qDebug() << "page width:" << width() << " height:" << height() << " m_imagewidth:" << m_imagewidth << " m_imageheight:" << m_imageheight;
+//    const double scaleX = width() / m_imagewidth;
+//    const double scaleY = height() / m_imageheight;
+    const double scaleX = m_scale;
+    const double scaleY = m_scale;
+    qDebug() << "m_words size:" << m_words.size();
     for (int i = 0; i < m_words.size(); i++) {
+//        qDebug() << "m_words i:" << i << " rect:" << m_words.at(i).rect;
         tmp = m_words.at(i).rect;
-        if (startC.x() > (tmp.x() * scaleX + x()) &&
-                startC.x() < (tmp.x() * scaleX + tmp.width() * scaleX + x()) &&
-                startC.y() > (tmp.y() * scaleY + y()) &&
-                startC.y() < (tmp.y() * scaleY + tmp.height() * scaleY + y())) {
+        if (startC.x() > (tmp.x() * m_scale) &&
+                startC.x() < (tmp.x() * scaleX + tmp.width() * scaleX) &&
+                startC.y() > (tmp.y() * scaleY) &&
+                startC.y() < (tmp.y() * scaleY + tmp.height() * scaleY)) {
             startword = i;
         }
-        if (endC.x() > (tmp.x() * scaleX + x()) &&
-                endC.x() < (tmp.x() * scaleX + tmp.width() * scaleX + x()) &&
-                endC.y() > (tmp.y() * scaleY + y()) &&
-                endC.y() < (tmp.y() * scaleY + tmp.height() * scaleY + y())) {
+        if (endC.x() > (tmp.x() * scaleX ) &&
+                endC.x() < (tmp.x() * scaleX + tmp.width() * scaleX ) &&
+                endC.y() > (tmp.y() * scaleY ) &&
+                endC.y() < (tmp.y() * scaleY + tmp.height() * scaleY)) {
             stopword = i;
         }
     }
@@ -82,10 +155,10 @@ bool PagePdf::pageTextSelections(const QPoint start, const QPoint end)
         int i;
         for (i = 0; i < m_words.size(); i++) {
             tmp = m_words.at(i).rect;
-            if (start_end.intersects(QRect(tmp.x() * scaleX + x(),
-                                           tmp.y() * scaleY + y(), tmp.width() * scaleX,
+            if (start_end.intersects(QRect(tmp.x() * scaleX,
+                                           tmp.y() * scaleY, tmp.width() * scaleX,
                                            tmp.height() * scaleY))) {
-                qDebug() << "break i:" << i;
+//                qDebug() << "break i:" << i;
                 break;
             }
         }
@@ -100,7 +173,7 @@ bool PagePdf::pageTextSelections(const QPoint start, const QPoint end)
         if (startC.y() <= endC.y()) {
             for (int i = 0; i < m_words.size(); i++) {
                 tmp = m_words.at(i).rect;
-                rect = QRect(tmp.x() * scaleX + x(), tmp.y() * scaleY + y(),
+                rect = QRect(tmp.x() * scaleX, tmp.y() * scaleY,
                              tmp.width() * scaleX, tmp.height() * scaleY);
                 if (rect.y() > startC.y() && rect.x() > startC.x()) {
                     startword = i;
@@ -114,7 +187,7 @@ bool PagePdf::pageTextSelections(const QPoint start, const QPoint end)
 
             for (int i = 0; i < m_words.size(); i++) {
                 tmp = m_words.at(i).rect;
-                rect = QRect(tmp.x() * scaleX + x(), tmp.y() * scaleY + y(),
+                rect = QRect(tmp.x() * scaleX, tmp.y() * scaleY,
                              tmp.width() * scaleX, tmp.height() * scaleY);
 
                 if ((rect.y() + rect.height()) < startC.y() &&
@@ -143,7 +216,7 @@ bool PagePdf::pageTextSelections(const QPoint start, const QPoint end)
         if (startC.y() <= endC.y()) {
             for (int i = m_words.size() - 1; i >= 0; i--) {
                 tmp = m_words.at(i).rect;
-                rect = QRect(tmp.x() * scaleX + x(), tmp.y() * scaleY + y(),
+                rect = QRect(tmp.x() * scaleX, tmp.y() * scaleY,
                              tmp.width() * scaleX, tmp.height() * scaleY);
 
                 if ((rect.y() + rect.height()) < endC.y() && (rect.x() + rect.width()) < endC.x()) {
@@ -157,7 +230,7 @@ bool PagePdf::pageTextSelections(const QPoint start, const QPoint end)
             int distance = scaleX + scaleY + 100;
             for (int i = m_words.size() - 1; i >= 0; i--) {
                 tmp = m_words.at(i).rect;
-                rect = QRect(tmp.x() * scaleX + x(), tmp.y() * scaleY + y(),
+                rect = QRect(tmp.x() * scaleX, tmp.y() * scaleY,
                              tmp.width() * scaleX, tmp.height() * scaleY);
                 if (rect.y() > endC.y() && rect.x() > endC.x()) {
                     int xdist, ydist;
@@ -206,28 +279,85 @@ bool PagePdf::pageTextSelections(const QPoint start, const QPoint end)
             }
             tmp.setWidth(tmpafter.x() + tmpafter.width() - tmp.x());
         } else {
-            paintrects.append(QRect(tmp.x() * scaleX, tmp.y() * scaleY, tmp.width() * scaleX,
-                                    tmp.height() * scaleY));
+            QRect paintrect = QRect(tmp.x() * scaleX + (width() - m_scale * m_imagewidth) / 2, tmp.y() * scaleY + (height() - m_scale * m_imageheight) / 2, tmp.width() * scaleX,
+                                    tmp.height() * scaleY);
+            switch (m_rotate) {
+            case RotateType_90:
+                paintrect = QRect(tmp.x() * scaleX + (height() - m_scale * m_imagewidth) / 2, tmp.y() * scaleY + (width() - m_scale * m_imageheight) / 2, tmp.width() * scaleX,
+                                  tmp.height() * scaleY);
+                paintrect = QRect(width() - paintrect.y() - paintrect.height(), paintrect.x(), paintrect.height(), paintrect.width());
+                break;
+            case RotateType_180:
+                paintrect = QRect(width() - paintrect.x() - paintrect.width(), height() - paintrect.y() - paintrect.height(), paintrect.width(), paintrect.height());
+                break;
+            case RotateType_270:
+                paintrect = QRect(tmp.x() * scaleX + (height() - m_scale * m_imagewidth) / 2, tmp.y() * scaleY + (width() - m_scale * m_imageheight) / 2, tmp.width() * scaleX,
+                                  tmp.height() * scaleY);
+                paintrect = QRect(paintrect.y(), height() - paintrect.x() - paintrect.width(), paintrect.height(), paintrect.width());
+                break;
+            default:
+                break;
+            }
+            paintrects.append(paintrect);
             tmp = tmpafter;
         }
     }
-
-    paintrects.append(
-        QRect(tmp.x() * scaleX, tmp.y() * scaleY, tmp.width() * scaleX, tmp.height() * scaleY));
+    QRect paintrect = QRect(tmp.x() * scaleX + (width() - m_scale * m_imagewidth) / 2, tmp.y() * scaleY + (height() - m_scale * m_imageheight) / 2, tmp.width() * scaleX, tmp.height() * scaleY);
+    switch (m_rotate) {
+    case RotateType_90:
+        paintrect = QRect(tmp.x() * scaleX + (height() - m_scale * m_imagewidth) / 2, tmp.y() * scaleY + (width() - m_scale * m_imageheight) / 2, tmp.width() * scaleX,
+                          tmp.height() * scaleY);
+        paintrect = QRect(width() - paintrect.y() - paintrect.height(), paintrect.x(), paintrect.height(), paintrect.width());
+        break;
+    case RotateType_180:
+        paintrect = QRect(width() - paintrect.x() - paintrect.width(), height() - paintrect.y() - paintrect.height(), paintrect.width(), paintrect.height());
+        break;
+    case RotateType_270:
+        paintrect = QRect(tmp.x() * scaleX + (height() - m_scale * m_imagewidth) / 2, tmp.y() * scaleY + (width() - m_scale * m_imageheight) / 2, tmp.width() * scaleX,
+                          tmp.height() * scaleY);
+        paintrect = QRect(paintrect.y(), height() - paintrect.x() - paintrect.width(), paintrect.height(), paintrect.width());
+        break;
+    default:
+        break;
+    }
+    paintrects.append(paintrect);
     update();
     return true;
 }
 
 bool PagePdf::ifMouseMoveOverText(const QPoint point)
 {
-    const double scaleX = width() / m_imagewidth;
-    const double scaleY = height() / m_imageheight;
-    QPoint qp = QPoint((point.x() - x()) / scaleX, (point.y() - y()) / scaleY);
+//    QPoint qpoint = QPoint(point.x() - (width() - m_scale * m_imagewidth) / 2, point.y() - (height() - m_scale * m_imageheight) / 2);
+//    const double scaleX = width() / m_imagewidth;
+//    const double scaleY = height() / m_imageheight;
+    const double scaleX = m_scale;
+    const double scaleY = m_scale;
+    QPoint qp = QPoint((point.x() - x() - (width() - m_scale * m_imagewidth) / 2) / scaleX, (point.y() - y() - (height() - m_scale * m_imageheight) / 2) / scaleY);
+//    qDebug() << "point:" << point;
+//    qDebug() << "qp1:" << qp;
+    switch (m_rotate) {
+    case RotateType_90:
+        qp = QPoint((point.x() - x() - (width() - m_scale * m_imageheight) / 2) / scaleX, (point.y() - y() - (height() - m_scale * m_imagewidth) / 2) / scaleY);
+        qp = QPoint(qp.y(), m_imageheight - qp.x());
+        break;
+    case RotateType_180:
+        qp = QPoint(m_imagewidth - qp.x(),  m_imageheight - qp.y());
+        break;
+    case RotateType_270:
+        qp = QPoint((point.x() - x() - (width() - m_imageheight) / 2) / scaleX, (point.y() - y() - (height() - m_scale * m_imagewidth) / 2) / scaleY);
+        qp = QPoint(m_imagewidth - qp.y(), qp.x());
+        break;
+    default:
+        break;
+    }
+//    qDebug() << "------this rect x:" << x() << " y:" << y() << " width:" << width() << " height:" << height();
+//    qDebug() << "qp:" << qp;
     for (int i = 0; i < m_words.size(); i++) {
         if (qp.x() > m_words.at(i).rect.x() &&
                 qp.x() < m_words.at(i).rect.x() + m_words.at(i).rect.width() &&
                 qp.y() > m_words.at(i).rect.y() &&
                 qp.y() < m_words.at(i).rect.y() + m_words.at(i).rect.height()) {
+            qDebug() << "rect:" << m_words.at(i).rect;
             return true;
         }
     }

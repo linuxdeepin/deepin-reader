@@ -21,6 +21,13 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath)
     return m_documment->openFile(filepath);
 }
 
+bool DocummentProxy::setSelectTextStyle(QColor paintercolor, QColor pencolor, int penwidth)
+{
+    if (!m_documment)
+        return false;
+    return m_documment->setSelectTextStyle(paintercolor, pencolor, penwidth);
+}
+
 bool DocummentProxy::mouseSelectText(QPoint start, QPoint stop)
 {
     if (!m_documment)
@@ -40,8 +47,38 @@ bool DocummentProxy::mouseBeOverText(QPoint point)
     return m_documment->mouseBeOverText(point);
 }
 
-void DocummentProxy::scaleAndShow(double scale)
+void DocummentProxy::scaleRotateAndShow(double scale, RotateType_EM rotate)
 {
-    m_documment->scaleAndShow(scale);
+    if (!m_documment)
+        return;
+    m_documment->scaleAndShow(scale, rotate);
 
+}
+
+QPoint DocummentProxy::global2RelativePoint(QPoint globalpoint)
+{
+    if (!m_documment)
+        return QPoint();
+    return m_documment->global2RelativePoint(globalpoint);
+}
+
+bool DocummentProxy::getImage(int pagenum, QImage &image, double width, double height, RotateType_EM rotate)
+{
+    if (!m_documment)
+        return false;
+    return m_documment->getImage(pagenum, image, width, height, rotate);
+}
+
+int DocummentProxy::getPageSNum()
+{
+    if (!m_documment)
+        return false;
+    return m_documment->getPageSNum();
+}
+
+bool DocummentProxy::setViewModeAndShow(ViewMode_EM viewmode)
+{
+    if (!m_documment)
+        return false;
+    return  m_documment->setViewModeAndShow(viewmode);
 }
