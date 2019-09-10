@@ -1,20 +1,22 @@
 HEADERS += \
-    $$PWD/pdf/pdfmodel.h \
-    $$PWD/documentlayout.h \
-    $$PWD/documentview.h \
-    $$PWD/loadhandler.h \
-    $$PWD/pageitem.h \
-    $$PWD/rendertask.h \
-    $$PWD/tileitem.h \
-    $$PWD/viewsettings.h \
-    $$PWD/model.h
+    $$PWD/pdf/ \
+    $$PWD/pdf/docummentpdf.h \
+    $$PWD/pdf/pagepdf.h \
+    $$PWD/docummentbase.h \
+    $$PWD/docummentfactory.h \
+    $$PWD/docummentproxy.h \
+    $$PWD/pagebase.h \
+    $$PWD/publicfunc.h \
 
 SOURCES += \
-    $$PWD/pdf/pdfmodel.cpp \
-    $$PWD/documentlayout.cpp \
-    $$PWD/documentview.cpp \
-    $$PWD/loadhandler.cpp \
-    $$PWD/pageitem.cpp \
-    $$PWD/rendertask.cpp \
-    $$PWD/tileitem.cpp \
-    $$PWD/viewsettings.cpp
+    $$PWD/pdf/docummentpdf.cpp \
+    $$PWD/pdf/pagepdf.cpp \
+    $$PWD/docummentbase.cpp \
+    $$PWD/docummentfactory.cpp \
+    $$PWD/docummentproxy.cpp \
+    $$PWD/pagebase.cpp \
+    $$PWD/publicfunc.cpp \
+
+
+DISTFILES += \
+    $$PWD/docview.pri
