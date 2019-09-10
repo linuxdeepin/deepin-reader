@@ -107,4 +107,11 @@ bool DocummentProxy::save(const QString &filepath, bool withChanges)
     m_documment->save(filepath,withChanges);
 }
 
+void DocummentProxy::search(const QString &strtext, const QColor &color)
+{
+    if (!m_documment)
+        return ;
+    m_documment->search(strtext,color);
+}
+
 

@@ -64,6 +64,9 @@ private:
     bool pdfsave(const QString& filePath, bool withChanges)const;
     void clearSearch();
     void searchHightlight(Poppler::Page* page,const QString& strtext,const QColor& color);
+    void refreshOnePage(int ipage);
+    int  curpage();
+
 
     Poppler::Document *document;
     ThreadLoadDoc m_threadloaddoc;

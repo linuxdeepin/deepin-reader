@@ -26,6 +26,7 @@ public:
     bool setViewModeAndShow(ViewMode_EM viewmode);
     void addAnnotation(const QPoint& startpos,const QPoint& endpos,QColor color=Qt::yellow);
     bool save(const QString& filepath,bool withChanges);
+    void search(const QString& strtext,const QColor& color);
 private:
     DocummentProxy(QObject *parent = nullptr);
     QWidget *qwfather;
