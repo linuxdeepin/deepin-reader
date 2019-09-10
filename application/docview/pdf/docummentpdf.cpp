@@ -265,17 +265,6 @@ void DocummentPDF::clearSearch()
         }
     }
 }
-
-void DocummentPDF::scaleAndShow(double scale)
-{
-    m_scale = scale;
-    m_threadloaddoc.start();
-    //    for (int i = 0; i < m_pages.size(); i++) {
-    //        PagePdf *ppdf = (PagePdf *)m_pages.at(i);
-    //        ppdf->showImage(scale);
-    //    }
-
-}
 void DocummentPDF::loadWordCache(int indexpage, PageBase *page)
 {
     if (!document) {
