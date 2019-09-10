@@ -42,7 +42,7 @@ public:
         return false;
     }
 
-    virtual bool getImage(int pagenum, QImage &image, double width, double height, RotateType_EM rotate = RotateType_Normal)
+    virtual bool getImage(int pagenum, QImage &image, double width, double height)
     {
         return false;
     }

@@ -21,7 +21,7 @@ public:
     void mouseSelectTextClear();
     bool mouseBeOverText(QPoint point);
     void scaleRotateAndShow(double scale, RotateType_EM rotate);
-    bool getImage(int pagenum, QImage &image, double width, double height, RotateType_EM rotate = RotateType_Normal);
+    bool getImage(int pagenum, QImage &image, double width, double height);
     int  getPageSNum();
     bool setViewModeAndShow(ViewMode_EM viewmode);
 private:

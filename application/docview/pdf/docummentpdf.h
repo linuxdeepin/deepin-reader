@@ -44,7 +44,7 @@ public:
     void mouseSelectTextClear() override;
     bool mouseBeOverText(QPoint point) override;
     void scaleAndShow(double scale, RotateType_EM rotate) override;
-    bool getImage(int pagenum, QImage &image, double width, double height, RotateType_EM rotate = RotateType_Normal) override;
+    bool getImage(int pagenum, QImage &image, double width, double height) override;
     int getPageSNum() override;
     bool setViewModeAndShow(ViewMode_EM viewmode) override;
 

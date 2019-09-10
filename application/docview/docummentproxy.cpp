@@ -62,11 +62,11 @@ QPoint DocummentProxy::global2RelativePoint(QPoint globalpoint)
     return m_documment->global2RelativePoint(globalpoint);
 }
 
-bool DocummentProxy::getImage(int pagenum, QImage &image, double width, double height, RotateType_EM rotate)
+bool DocummentProxy::getImage(int pagenum, QImage &image, double width, double height)
 {
     if (!m_documment)
         return false;
-    return m_documment->getImage(pagenum, image, width, height, rotate);
+    return m_documment->getImage(pagenum, image, width, height);
 }
 
 int DocummentProxy::getPageSNum()

@@ -458,10 +458,10 @@ bool DocummentPDF::mouseBeOverText(QPoint point)
     return false;
 }
 
-bool DocummentPDF::getImage(int pagenum, QImage &image, double width, double height, RotateType_EM rotate)
+bool DocummentPDF::getImage(int pagenum, QImage &image, double width, double height)
 {
     PagePdf *ppdf = (PagePdf *)m_pages.at(pagenum);
-    return ppdf->getImage(image, width, height, rotate);
+    return ppdf->getImage(image, width, height);
 }
 int DocummentPDF::getPageSNum()
 {

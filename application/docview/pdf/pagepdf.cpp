@@ -67,14 +67,14 @@ bool PagePdf::showImage(double scale, RotateType_EM rotate)
     return true;
 }
 
-bool PagePdf::getImage(QImage &image, double width, double height, RotateType_EM rotate)
+bool PagePdf::getImage(QImage &image, double width, double height)
 {
     if (!m_page)
         return false;
     int xres = 72.0, yres = 72.0;
     double scalex = width / m_imagewidth;
     double scaley = height / m_imageheight;
-    image = m_page->renderToImage(xres * scalex, yres * scaley, width, height, (Poppler::Page::Rotation)rotate);
+    image = m_page->renderToImage(xres * scalex, yres * scaley, width, height);
     return true;
 }
 
