@@ -24,13 +24,9 @@ public:
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
     void setImageWidth(double width);
     void setImageHeight(double height);
+     void showImage(double scale = 1);
     //Annotation
-    void addAnnotation(QPoint screenPos);
-    void setPage(Poppler::Page *page);
-    void showImage(double scale = 1);
-
-
-    //Annotation
+    void addAnnotation(QPoint screenPos);   
     void addHighlightAnnotation(const QList<QRectF>& listrect, const QColor &color) override;
     void removeAnnotation(Poppler::Annotation* annotation);
 protected:
