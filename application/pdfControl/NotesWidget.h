@@ -20,6 +20,10 @@ protected:
     void initWidget() override;
 
 private:
+    void addNotesItem(const QImage &image, const int &page, const QString &text);
+    void fillContantToList();
+
+private:
     DListWidget *m_pNotesList = nullptr;
     QVBoxLayout *m_pVLayout = nullptr;
 

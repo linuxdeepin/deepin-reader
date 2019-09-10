@@ -2,11 +2,14 @@
 #define THUMBNAILWIDGET_H
 
 #include <DListWidget>
-#include <QListWidgetItem>
 #include <DLabel>
-#include <QVBoxLayout>
 #include <DPushButton>
+
+#include <QPalette>
 #include <QDebug>
+#include <QListWidgetItem>
+#include <QVBoxLayout>
+#include <QImage>
 
 #include "pdfControl/ThumbnailItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
@@ -33,14 +36,27 @@ protected:
 private:
     void setSelectItemBackColor(QListWidgetItem *);
     void setCurrentRow(const int &);
+    void addThumbnailItem(const QImage &, const int &);
+    void fillContantToList();
+
+    inline int preRowVal() const
+    {
+        return m_preRow;
+    }
 
     inline void setPreRowVal(const int &val)
     {
         m_preRow = val;
     }
-    inline int getPreRowVal() const
+
+    inline int totalPages() const
     {
-        return m_preRow;
+        return m_totalPages;
+    }
+
+    inline void setTotalPages(const int &pages)
+    {
+        m_totalPages = pages;
     }
 
 signals:
@@ -58,8 +74,8 @@ private:
     DLabel *m_pSonWidgetPageLabel = nullptr;
     DLabel *m_pSonWidgetContantLabel = nullptr;
     ThumbnailItemWidget *m_pThumbnailItemWidget = nullptr;
-
-    int m_preRow = -1;//前一次页码数
+    int m_totalPages = -1; // 总页码数
+    int m_preRow     = -1; // 前一次页码数
 };
 
 #endif // THUMBNAILWIDGET_H

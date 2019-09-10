@@ -5,6 +5,7 @@
 #include <DLabel>
 #include <QVBoxLayout>
 #include <QPainter>
+#include <QImage>
 
 #include "CustomLabel.h"
 #include "subjectObserver/CustomWidget.h"
@@ -22,7 +23,7 @@ public:
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
-    void setContantLabelPixmap(const QString &);
+    void setContantLabelPixmap(const QImage &);
     void setPageLabelText(const QString &);
 
     inline DLabel   *getPageLabel()
@@ -49,7 +50,7 @@ public:
     }
 
 protected:
-    void paintEvent(QPaintEvent *event) override;
+//    void paintEvent(QPaintEvent *event) override;
     void initWidget() override;
 
 private:
