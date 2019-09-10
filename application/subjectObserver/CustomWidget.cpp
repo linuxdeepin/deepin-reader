@@ -12,12 +12,20 @@ CustomWidget::CustomWidget(const QString &name, DWidget *parent)
     if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
     }
+
+    m_pNotifySubject = NotifySubject::getInstance();
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
 }
 
 CustomWidget::~CustomWidget()
 {
     if (m_pMsgSubject) {
         m_pMsgSubject->removeObserver(this);
+    }
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
     }
 }
 

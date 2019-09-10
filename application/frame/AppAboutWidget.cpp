@@ -23,5 +23,6 @@ void AppAboutWidget::initLabels()
                       "除了打开和阅读PDF文件外，你还可以对文档进行\r\n"
                       "添加书签、添加注释和对选择的文本进行高亮显示等操作。"));
 
+//    setAcknowledgementLink("https://www.deepin.org/acknowledgments/deepin-image-viewer/");
     setAcknowledgementVisible(false);
 }

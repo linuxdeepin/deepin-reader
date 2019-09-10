@@ -13,14 +13,13 @@ MainWidget::MainWidget(CustomWidget *parent) :
 //  文件打开成功
 void MainWidget::openFileOk()
 {
-    emit sigOpenFileOk();
     m_pStackedWidget->setCurrentIndex(1);
 }
 
 //  文件打开失败
 void MainWidget::openFileFail(const QString &errorInfo)
 {
-    qDebug() << errorInfo;
+    qDebug() << "openFileFail       "   <<  errorInfo;
 }
 
 
@@ -28,7 +27,6 @@ int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         openFileOk();
-        return ConstantMsg::g_effective_res;
     }
 
     if (msgType == MSG_OPERATION_OPEN_FILE_FAIL) {

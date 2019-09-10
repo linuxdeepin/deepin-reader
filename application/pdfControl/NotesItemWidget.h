@@ -21,7 +21,7 @@ public:
     NotesItemWidget(CustomWidget *parent = nullptr);
 
 public:
-    void setLabelPix(const QString &);
+    void setLabelImage(const QImage &);
     void setLabelPage(const QString &);
     void setTextEditText(const QString &);
 

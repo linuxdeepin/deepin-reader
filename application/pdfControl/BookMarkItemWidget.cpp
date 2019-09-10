@@ -19,9 +19,9 @@ BookMarkItemWidget::BookMarkItemWidget(CustomWidget *parent) :
     initWidget();
 }
 
-void BookMarkItemWidget::setPicture(const QString &pix)
+void BookMarkItemWidget::setItemImage(const QImage &image)
 {
-    m_pPicture->setPixmap(QPixmap(pix));
+    m_pPicture->setPixmap(QPixmap::fromImage(image));
 }
 
 void BookMarkItemWidget::setPage(const QString &value)

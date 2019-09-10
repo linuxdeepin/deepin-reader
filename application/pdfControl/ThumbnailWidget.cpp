@@ -42,21 +42,9 @@ void ThumbnailWidget::initWidget()
     m_pPageWidget = new PagingWidget;
     m_pvBoxLayout->addWidget(m_pPageWidget);
 
-    for (int idex = 0; idex < 30; ++idex) {
-        ThumbnailItemWidget *widget = new ThumbnailItemWidget;
-        widget->setContantLabelPixmap(QString(":/resources/image/logo/logo_big.svg"));
-        widget->setPageLabelText(QString("               %1").arg(idex + 1));
-        widget->setMinimumSize(QSize(250, 250));
+    this->setTotalPages(30);
 
-        QListWidgetItem *item = new QListWidgetItem(m_pThumbnailListWidget);
-
-        item->setFlags(Qt::NoItemFlags);
-        item->setFlags(Qt::ItemIsSelectable);
-        item->setSizeHint(QSize(250, 250));
-
-        m_pThumbnailListWidget->insertItem(idex, item);
-        m_pThumbnailListWidget->setItemWidget(item, widget);
-    }
+    this->fillContantToList();
 }
 
 void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
@@ -100,7 +88,7 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 
 void ThumbnailWidget::setCurrentRow(const int &row)
 {
-    if (this->getPreRowVal() == row) {
+    if (this->preRowVal() == row) {
         return;
     }
 
@@ -110,11 +98,38 @@ void ThumbnailWidget::setCurrentRow(const int &row)
     setSelectItemBackColor(item);
 }
 
+void ThumbnailWidget::addThumbnailItem(const QImage &image, const int &idex)
+{
+    ThumbnailItemWidget *widget = new ThumbnailItemWidget;
+
+    widget->setContantLabelPixmap(image);
+    widget->setPageLabelText(tr("%1").arg(idex + 1));
+    widget->setMinimumSize(QSize(250, 250));
+
+    QListWidgetItem *item = new QListWidgetItem(m_pThumbnailListWidget);
+
+    item->setFlags(Qt::NoItemFlags);
+    item->setFlags(Qt::ItemIsSelectable);
+    item->setSizeHint(QSize(250, 250));
+
+    m_pThumbnailListWidget->insertItem(idex, item);
+    m_pThumbnailListWidget->setItemWidget(item, widget);
+}
+
+void ThumbnailWidget::fillContantToList()
+{
+    for (int idex = 0; idex < totalPages(); ++idex) {
+        QImage image(tr(":/resources/image/logo/logo_big.svg"));
+
+        addThumbnailItem(image, idex);
+    }
+}
+
 void ThumbnailWidget::slotShowSelectItem(QListWidgetItem *item)
 {
     int row = m_pThumbnailListWidget->row(item);
 
-    if (this->getPreRowVal() == row) {
+    if (this->preRowVal() == row) {
         return;
     }
 

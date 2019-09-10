@@ -52,6 +52,9 @@ Application::Application(int &argc, char **argv)
     setProductIcon(QIcon(":/resources/image/logo/logo.svg"));
     setProductName(DApplication::translate("MainWindow", "Deepin Reader"));
 
+    //  帮助文档
+    setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin-image-viewer/");
+
 //    setApplicationVersion(DApplication::buildVersion("20190828"));
 //    installEventFilter(new GlobalEventFilter());
 
