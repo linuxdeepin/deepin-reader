@@ -18,9 +18,9 @@ NotesItemWidget::NotesItemWidget(CustomWidget *parent) :
     initWidget();
 }
 
-void NotesItemWidget::setLabelPix(const QString &pix)
+void NotesItemWidget::setLabelImage(const QImage &image)
 {
-    m_pPicture->setPixmap(QPixmap(pix));
+    m_pPicture->setPixmap(QPixmap::fromImage(image));
 }
 
 void NotesItemWidget::setLabelPage(const QString &value)
@@ -49,8 +49,8 @@ void NotesItemWidget::slotCopyContant()
 void NotesItemWidget::slotShowContextMenu(const QPoint &)
 {
     QMenu *t_menu = new QMenu(this);
-    QAction *copyAction = t_menu->addAction(tr("复制"));
-    QAction *dltItemAction = t_menu->addAction(tr("删除书签"));
+    QAction *copyAction = t_menu->addAction(tr("Copy"));
+    QAction *dltItemAction = t_menu->addAction(tr("Del Note"));
     connect(dltItemAction, SIGNAL(triggered()), this, SLOT(slotDltNoteItem()));
     connect(copyAction, SIGNAL(triggered()), this, SLOT(slotCopyContant()));
     t_menu->exec(QCursor::pos());

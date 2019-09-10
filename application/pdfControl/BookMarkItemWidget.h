@@ -23,7 +23,7 @@ public:
     BookMarkItemWidget(CustomWidget *parent = nullptr);
 
 public:
-    void setPicture(const QString &);
+    void setItemImage(const QImage &);
     void setPage(const QString &);
     // IObserver interface
     int dealWithData(const int &, const QString &) override;

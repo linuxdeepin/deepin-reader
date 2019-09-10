@@ -33,24 +33,27 @@ void BookMarkWidget::initWidget()
 
     m_pAddBookMarkBtn = new DImageButton;
     m_pAddBookMarkBtn->setFixedSize(QSize(250, 50));
-    m_pAddBookMarkBtn->setText(tr("添加书签"));
+    m_pAddBookMarkBtn->setText(tr("adding bookmark"));
     connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(slotAddBookMark()));
 
     m_pVBoxLayout->addWidget(m_pBookMarkListWidget);
     m_pVBoxLayout->addWidget(m_pAddBookMarkBtn);
 
-    for (int page = 0; page < 20; ++page) {
-        BookMarkItemWidget *t_widget = new BookMarkItemWidget;
-        t_widget->setPicture(QString(tr(":/resources/image/logo/logo_big.svg")));
-        t_widget->setPage(QString("页面%1").arg(page + 1));
-        t_widget->setMinimumSize(QSize(250, 150));
+    this->setBookMarks(20);
 
-        QListWidgetItem *item = new QListWidgetItem(m_pBookMarkListWidget);
-        item->setFlags(Qt::ItemIsSelectable);
-        item->setSizeHint(QSize(250, 150));
+    this->fillContantToList();
+}
 
-        m_pBookMarkListWidget->insertItem(page, item);
-        m_pBookMarkListWidget->setItemWidget(item, t_widget);
+void BookMarkWidget::keyPressEvent(QKeyEvent *e)
+{
+    QString key = Utils::getKeyshortcut(e);
+
+    if (key == "Del") {
+        dltItem();
+        qDebug() << "dlt bookmark item by key";
+    }  else {
+        // Pass event to CustomWidget continue, otherwise you can't type anything after here. ;)
+        CustomWidget::keyPressEvent(e);
     }
 }
 
@@ -62,11 +65,35 @@ void BookMarkWidget::dltItem()
     }
 }
 
+void BookMarkWidget::addBookMarkItem(const QImage &image, const int &page)
+{
+    BookMarkItemWidget *t_widget = new BookMarkItemWidget;
+    t_widget->setItemImage(image);
+    t_widget->setPage(tr("page%1").arg(page + 1));
+    t_widget->setMinimumSize(QSize(250, 150));
+
+    QListWidgetItem *item = new QListWidgetItem(m_pBookMarkListWidget);
+    item->setFlags(Qt::ItemIsSelectable);
+    item->setSizeHint(QSize(250, 150));
+
+    m_pBookMarkListWidget->insertItem(page, item);
+    m_pBookMarkListWidget->setItemWidget(item, t_widget);
+}
+
+void BookMarkWidget::fillContantToList()
+{
+    for (int page = 0; page < this->bookMarks(); ++page) {
+        QImage image(tr(":/resources/image/logo/logo_big.svg"));
+
+        this->addBookMarkItem(image, page);
+    }
+}
+
 int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_BOOKMARK_DLTITEM == msgType) {
         dltItem();
-        qDebug() << "dlt bookmark item";
+        qDebug() << "dlt bookmark item by menu";
         return ConstantMsg::g_effective_res;
     }
 

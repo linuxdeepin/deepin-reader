@@ -59,9 +59,9 @@ void FontWidget::initWidget()
     m_pEnlargeLab->setFont(ft);
     m_pEnlargeLab->setFixedSize(QSize(150, 25));
 
-    //t_pHLayout1->setSpacing(1);
+    t_pHLayout1->setSpacing(1);
     t_pHLayout1->addWidget(m_pEnlargeLab);
-    //t_pHLayout1->setSpacing(1);
+    t_pHLayout1->setSpacing(1);
 
     m_pMinLabALab = new QLabel;
     m_pMinLabALab->setText(tr("A"));
@@ -82,7 +82,6 @@ void FontWidget::initWidget()
     m_pEnlargeSlider->setMaximum(300);
     m_pEnlargeSlider->setValue(200);
     m_pEnlargeSlider->setTickPosition(QSlider::TicksBothSides);
-    //m_pEnlargeSlider->setLayoutDirection(Qt::LeftToRight);
     m_pEnlargeSlider->setFixedSize(QSize(100, 25));
     connect(m_pEnlargeSlider, SIGNAL(valueChanged(int)),  SLOT(slotSetChangeVal(int)));
 
@@ -93,9 +92,9 @@ void FontWidget::initWidget()
     //t_pHLayout2->addSpacing(1);
 
     m_pDoubPageViewBtn = new DImageButton;
-    m_pDoubPageViewBtn->setText(tr("    双页视图"));
+    m_pDoubPageViewBtn->setText(tr("Doub View"));
     m_pDoubPageViewBtn->setAlignment(Qt::AlignCenter);
-    ft.setPointSize(11);
+    ft.setPointSize(12);
     m_pDoubPageViewBtn->setFont(ft);
     m_pDoubPageViewBtn->setFixedSize(QSize(120, 25));
     m_pDoubPageViewLab = new QLabel;
@@ -107,7 +106,7 @@ void FontWidget::initWidget()
     //t_pHLayout3->addStretch(1);
 
     m_pSuitHBtn = new DImageButton;
-    m_pSuitHBtn->setText(tr("    适合高度"));
+    m_pSuitHBtn->setText(tr("Adaptate Height"));
     m_pSuitHBtn->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
     m_pSuitHBtn->setFont(ft);
@@ -121,7 +120,7 @@ void FontWidget::initWidget()
     //t_pHLayout4->addSpacing(1);
 
     m_pSuitWBtn = new DImageButton;
-    m_pSuitWBtn->setText(tr("    适合宽度"));
+    m_pSuitWBtn->setText(tr("Adaptate Width"));
     m_pSuitWBtn->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
     m_pSuitWBtn->setFont(ft);
@@ -135,7 +134,7 @@ void FontWidget::initWidget()
     //t_pHLayout5->addSpacing(1);
 
     m_pRotateLeftBtn = new DImageButton;
-    m_pRotateLeftBtn->setText(tr("左旋转"));
+    m_pRotateLeftBtn->setText(tr("Rotated To Left"));
     m_pRotateLeftBtn->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
     m_pRotateLeftBtn->setFont(ft);
@@ -149,7 +148,7 @@ void FontWidget::initWidget()
     //t_pHLayout6->addSpacing(1);
 
     m_pRotateRightBtn = new DImageButton;
-    m_pRotateRightBtn->setText(tr("右旋转"));
+    m_pRotateRightBtn->setText(tr("Rotated To Right"));
     m_pRotateRightBtn->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
     m_pRotateRightBtn->setFont(ft);
