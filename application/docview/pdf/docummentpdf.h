@@ -49,13 +49,20 @@ public:
     bool setViewModeAndShow(ViewMode_EM viewmode) override;
 
     bool loadPages();
+    bool save(const QString& filePath, bool withChanges)const override;
     bool loadWords();
+    void removeAllAnnotation();
+    void removeAnnotation(QPoint start);
+    void addAnnotation(const QPoint& startpos,const QPoint& endpos,const QColor& color);
+    void search(const QString& strtext,const QColor& color);
 private:
     void loadWordCache(int indexpage, PageBase *page);
     bool abstractTextPage(const QList<Poppler::TextBox *> &text,
                           PageBase *page);
     void showSinglePage();
     void showFacingPage();
+    bool pdfsave(const QString& filePath, bool withChanges)const;
+    void clearSearch();
     Poppler::Document *document;
     ThreadLoadDoc m_threadloaddoc;
     ThreadLoadWords m_threadloadwords;
@@ -63,6 +70,7 @@ private:
     RotateType_EM m_rotate;
     QList<QWidget *>m_widgets;
     QWidget *pblankwidget;
+    QList<Poppler::Annotation*> m_listsearch;
 };
 
 #endif // DOCUMMENTPDF_H

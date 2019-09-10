@@ -22,6 +22,13 @@ public:
     bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     bool getImage(QImage &image, double width, double height);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
+    void setImageWidth(double width);
+    void setImageHeight(double height);
+     void showImage(double scale = 1);
+    //Annotation
+    void addAnnotation(QPoint screenPos);   
+    void addHighlightAnnotation(const QList<QRectF>& listrect, const QColor &color) override;
+    void removeAnnotation(Poppler::Annotation* annotation);
 protected:
     void paintEvent(QPaintEvent *event) override;
 private:

@@ -11,6 +11,7 @@ enum ViewMode_EM {
     ViewMode_SinglePage = 0,
     ViewMode_FacingPage
 };
+#include <QtDebug>
 
 class DocummentBase: public QScrollArea
 {
@@ -62,6 +63,11 @@ public:
         return false;
     }
 
+    virtual bool save(const QString& filePath, bool withChanges)const
+    {
+        qDebug()<<"do nothing";
+        return false;
+    }
     QList<PageBase *> *getPages()
     {
         return &m_pages;
@@ -77,6 +83,7 @@ protected:
     QWidget m_widget;
     QVBoxLayout m_vboxLayout;
     ViewMode_EM m_viewmode;
+    mutable bool m_bModified;
 };
 
 #endif // DOCUMMENTBASE_H
