@@ -43,8 +43,6 @@ void FileViewWidget::initWidget()
 
     m_pDocummentProxy =DocummentProxy::instance(this);
 
-    m_pMagnifyLabel = new MagnifyLabel(this);   //  放大镜 窗口
-
     m_pDefaultOperationWidget = new DefaultOperationWidget;
     m_pTextOperationWidget = new  TextOperationWidget;
     m_pFileAttrWidget = new FileAttrWidget;
@@ -54,7 +52,6 @@ void FileViewWidget::initWidget()
     int nWidget = m_pFindWidget->width();
     m_pFindWidget->move(nParentWidth - nWidget - 20, 20);
 
-    m_pDocummentProxy = new DocummentProxy(this);
 }
 
 void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
