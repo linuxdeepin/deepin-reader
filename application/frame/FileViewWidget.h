@@ -4,7 +4,7 @@
 #include <QMouseEvent>
 #include <QAction>
 #include <DMenu>
-#include "mainShow/MagnifyLabel.h"
+
 #include "subjectObserver/CustomWidget.h"
 #include "mainShow/DefaultOperationWidget.h"
 #include "mainShow/TextOperationWidget.h"
@@ -26,38 +26,31 @@ public:
     ~FileViewWidget() override;
 
 signals:
-    void sigSetMagnifyingImage(const QImage &);
-    void sigShowFileAttr();
-    void sigShowFindWidget();
     void sigOpenFile(const QString &);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
-    void leaveEvent(QEvent *event) override;
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 
 private slots:
-    void slotShowFileAttr();
-    void slotShowFindWidget();
-    void on_slot_openfile(const QString &filePath);
+
     void SlotCustomContextMenuRequested(const QPoint &);
     void openFilePath(const QString &);
 
 private:
-
     int magnifying(const QString &);
     int setHandShape(const QString &);
     int screening(const QString &);
     int openFileFolder();
+    void onShowFileAttr();
+    void onShowFindWidget();
+    void onOpenFile(const QString &filePath);
 
     void initConnections();
 
 private:
-    MagnifyLabel            *m_pMagnifyLabel = nullptr;
-    bool m_bCanVisible = false; //  放大镜 是否可以显示
-
     FindWidget              *m_pFindWidget = nullptr;
     FileAttrWidget          *m_pFileAttrWidget = nullptr;
     DefaultOperationWidget  *m_pDefaultOperationWidget = nullptr;

@@ -32,7 +32,6 @@ private slots:
     void on_HandleAction_trigger(bool);
     void on_DefaultAction_trigger(bool);
 
-    void slotOpenFileOk();
     void slotFontWidgetHide();
     void slotHandleMenuHide();
 
@@ -41,6 +40,8 @@ private:
     CustomImageButton *createBtn(const QString &btnName, bool bCheckable = false);
     QAction *createAction(const QString &iconName, const char *member);
     void sendMsgToSubject(const int &, const QString &msgCotent = "");
+
+    void openFileOk();
 
 private:
     QHBoxLayout *m_layout = nullptr;

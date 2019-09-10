@@ -6,19 +6,12 @@
 #include <QThread>
 #include <QObject>
 #include <QMutex>
-
+#include "SubjectHeader.h"
 /**
  * @brief The MsgSubject class
- * @brief   采用线程的方式, 进行　消息的发送服务
+ * @brief   采用线程的方式, 进行　消息的发送服务, 并由特定的observer进行处理， 截断！！
  * @brief   消息服务的 发布者
  */
-
-//  消息数据结构体
-typedef struct {
-    IObserver *obs;
-    int msgType;
-    QString msgContent;
-} MsgStruct;
 
 class MsgSubject : public QThread, public ISubject
 {

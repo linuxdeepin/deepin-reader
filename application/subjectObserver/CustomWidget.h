@@ -5,6 +5,7 @@
 
 #include "IObserver.h"
 #include "controller/MsgSubject.h"
+#include "controller/NotifySubject.h"
 #include "MsgHeader.h"
 #include "ImageHeader.h"
 #include "utils/utils.h"
@@ -43,6 +44,8 @@ private:
 
 private:
     MsgSubject  *m_pMsgSubject = nullptr;
+    NotifySubject   *m_pNotifySubject = nullptr;
+
 };
 
 #endif // CUSTOMWIDGET_H

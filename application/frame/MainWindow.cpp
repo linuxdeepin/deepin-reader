@@ -17,6 +17,14 @@ MainWindow::MainWindow(DMainWindow *parent)
     initConnections();
 
     m_pMsgSubject = MsgSubject::getInstance();
+    if (m_pMsgSubject) {
+        m_pMsgSubject->addObserver(this);
+    }
+
+    m_pNotifySubject = NotifySubject::getInstance();
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
 
     setMinimumSize(720, 560);
 
@@ -26,7 +34,16 @@ MainWindow::MainWindow(DMainWindow *parent)
 MainWindow::~MainWindow()
 {
     // We don't need clean pointers because application has exit here.
-    m_pMsgSubject->stopThreadRun();
+    if (m_pMsgSubject) {
+        m_pMsgSubject->removeObserver(this);
+
+        m_pMsgSubject->stopThreadRun();
+    }
+
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+        m_pNotifySubject->stopThreadRun();
+    }
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
@@ -49,9 +66,6 @@ void MainWindow::initUI()
 
     TitleWidget *titleWidget = new TitleWidget();
     titlebar()->addWidget(titleWidget, Qt::AlignLeft);
-
-    connect(pMainWidget, SIGNAL(sigOpenFileOk()), titleWidget, SLOT(slotOpenFileOk()));
-    connect(pMainWidget, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
 }
 
 void MainWindow::initConnections()
@@ -72,14 +86,7 @@ void MainWindow::initConnections()
     m_pFileLarger = createAction(m_menu, tr("Larger"), SLOT(action_Larger()));
     m_pFileSmaller = createAction(m_menu, tr("Smaller"), SLOT(action_Smaller()));
 
-//    DMenu *themeMenu = new DMenu(tr("switch theme"));
-//    createAction(themeMenu, tr("dark theme"), SLOT(action_darkTheme()));
-//    createAction(themeMenu, tr("light theme"), SLOT(action_lightTheme()));
-//    m_menu->addMenu(themeMenu);
-
     m_menu->addSeparator();
-
-    createAction(m_menu, tr("Help"), SLOT(action_Help()), false);
 
     m_menu->setMinimumWidth(ConstantMsg::g_menu_width);
     titlebar()->setMenu(m_menu);
@@ -157,24 +164,8 @@ void MainWindow::action_Smaller()
     sendMsg(MSG_OPERATION_SMALLER);
 }
 
-//void MainWindow::action_darkTheme()
-//{
-//    dApp->viewerTheme->setCurrentTheme(Dark);
-//}
-
-//void MainWindow::action_lightTheme()
-//{
-//    dApp->viewerTheme->setCurrentTheme(Light);
-//}
-
-//  打开 帮助文档
-void MainWindow::action_Help()
-{
-    sendMsg(MSG_OPERATION_HELP);
-}
-
 //  文件打开成，　功能性　菜单才能点击
-void MainWindow::slotOpenFileOk()
+void MainWindow::openFileOk()
 {
     m_pSaveFile->setDisabled(false);
     m_pSaveAsFile->setDisabled(false);
@@ -186,14 +177,26 @@ void MainWindow::slotOpenFileOk()
     m_pFileScreening->setDisabled(false);
     m_pFileLarger->setDisabled(false);
     m_pFileSmaller->setDisabled(false);
-    qDebug() << "MainWindowMainWindow   slotOpenFileOk";
 }
 
 void MainWindow::sendMsg(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(nullptr, msgType, msgContent);
+        m_pMsgSubject->sendMsg(this, msgType, msgContent);
     }
+}
+
+int MainWindow::dealWithData(const int &msgType, const QString &)
+{
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        openFileOk();
+    }
+    return 0;
+}
+
+void MainWindow::setObserverName(const QString &name)
+{
+    m_strObserverName = name;
 }
 
 QAction *MainWindow::createAction(DMenu *menu, const QString &actionName, const char *member, const bool &disable)

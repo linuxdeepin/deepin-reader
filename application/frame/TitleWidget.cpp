@@ -133,7 +133,7 @@ void TitleWidget::on_DefaultAction_trigger(bool)
 }
 
 //  文件打开成功，　功能性　按钮才能点击
-void TitleWidget::slotOpenFileOk()
+void TitleWidget::openFileOk()
 {
     m_pThumbnailBtn->setDisabled(false);
     m_pSettingBtn->setDisabled(false);
@@ -224,6 +224,10 @@ int TitleWidget::dealWithData(const int &msgType, const QString &)
         m_pMagnifierBtn->setChecked(false);
         sendMsgToSubject(MSG_MAGNIFYING, QString::number(0));
         return ConstantMsg::g_effective_res;
+    }
+
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        openFileOk();
     }
     return 0;
 }
