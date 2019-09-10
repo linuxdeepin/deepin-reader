@@ -12,6 +12,10 @@
 
 #include "subjectObserver/CustomWidget.h"
 
+/**
+ * @brief The ThumbnailItemWidget class
+ * @brief   注释item
+ */
 
 class NotesItemWidget : public CustomWidget
 {

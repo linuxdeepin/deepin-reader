@@ -9,6 +9,11 @@
 #include "NotesItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
 
+/**
+ * @brief The ThumbnailItemWidget class
+ * @brief   注释窗体
+ */
+
 class NotesWidget : public CustomWidget
 {
     Q_OBJECT

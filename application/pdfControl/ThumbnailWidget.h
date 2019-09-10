@@ -14,7 +14,7 @@
 #include "pdfControl/ThumbnailItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
 #include "PagingWidget.h"
-
+#include "docview/docummentproxy.h"
 
 /*
 *缩略图列表页面
@@ -25,6 +25,10 @@ class ThumbnailWidget : public CustomWidget
 
 public:
     ThumbnailWidget(CustomWidget *parent = nullptr);
+
+signals:
+    void sigOpenFileOk();
+    void sigSelectIndexPage(const int &);
 
 public:
     // IObserver interface
@@ -59,11 +63,9 @@ private:
         m_totalPages = pages;
     }
 
-signals:
-    void sigSelectIndexPage(const int &);
-
 private slots:
     void slotShowSelectItem(QListWidgetItem *);
+    void slotOpenFileOk();
 
 private:
     DListWidget *m_pThumbnailListWidget = nullptr;
@@ -74,6 +76,7 @@ private:
     DLabel *m_pSonWidgetPageLabel = nullptr;
     DLabel *m_pSonWidgetContantLabel = nullptr;
     ThumbnailItemWidget *m_pThumbnailItemWidget = nullptr;
+
     int m_totalPages = -1; // 总页码数
     int m_preRow     = -1; // 前一次页码数
 };

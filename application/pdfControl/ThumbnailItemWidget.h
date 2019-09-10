@@ -14,6 +14,7 @@
  * @brief The ThumbnailItemWidget class
  * @brief   缩略图中的item
  */
+
 class ThumbnailItemWidget  : public CustomWidget
 {
     Q_OBJECT

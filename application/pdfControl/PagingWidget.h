@@ -9,6 +9,11 @@
 
 #include "subjectObserver/CustomWidget.h"
 
+/**
+ * @brief The ThumbnailItemWidget class
+ * @brief   跳转页窗体
+ */
+
 const int FIRSTPAGES = 1;
 //
 class PagingWidget : public CustomWidget

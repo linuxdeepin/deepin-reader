@@ -10,6 +10,11 @@
 
 #include "subjectObserver/CustomWidget.h"
 
+/**
+ * @brief The BookMarkWidget class
+ * @brief   书签列表item
+ */
+
 //操作类型
 enum OPERATION_TYPE {
     ADDITEM = 0,        //增加item

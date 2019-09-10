@@ -9,10 +9,10 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
     m_pvBoxLayout = new QVBoxLayout;
     m_pvBoxLayout->setContentsMargins(0, 0, 0, 0);
     m_pvBoxLayout->setSpacing(0);
-    this->setLayout(m_pvBoxLayout);
 
     initWidget();
 
+    connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(m_pThumbnailListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
 }
 
@@ -24,6 +24,8 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContant)
         setCurrentRow(row);
 
         return ConstantMsg::g_effective_res;
+    } else if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
+        emit sigOpenFileOk();
     }
 
     return 0;
@@ -31,7 +33,7 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContant)
 
 void ThumbnailWidget::initWidget()
 {
-    m_pThumbnailListWidget = new DListWidget;
+    m_pThumbnailListWidget = new DListWidget(this);
     m_pThumbnailListWidget->setSpacing(10);
     //设置自动适应布局调整（Adjust适应，Fixed不适应），默认不适应
     m_pThumbnailListWidget->setResizeMode(QListWidget::Adjust);
@@ -42,9 +44,11 @@ void ThumbnailWidget::initWidget()
     m_pPageWidget = new PagingWidget;
     m_pvBoxLayout->addWidget(m_pPageWidget);
 
-    this->setTotalPages(30);
+    this->setLayout(m_pvBoxLayout);
 
-    this->fillContantToList();
+//    this->setTotalPages(30);
+
+//    this->fillContantToList();
 }
 
 void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
@@ -100,13 +104,12 @@ void ThumbnailWidget::setCurrentRow(const int &row)
 
 void ThumbnailWidget::addThumbnailItem(const QImage &image, const int &idex)
 {
+    QListWidgetItem *item = new QListWidgetItem;
     ThumbnailItemWidget *widget = new ThumbnailItemWidget;
 
     widget->setContantLabelPixmap(image);
     widget->setPageLabelText(tr("%1").arg(idex + 1));
     widget->setMinimumSize(QSize(250, 250));
-
-    QListWidgetItem *item = new QListWidgetItem(m_pThumbnailListWidget);
 
     item->setFlags(Qt::NoItemFlags);
     item->setFlags(Qt::ItemIsSelectable);
@@ -119,7 +122,9 @@ void ThumbnailWidget::addThumbnailItem(const QImage &image, const int &idex)
 void ThumbnailWidget::fillContantToList()
 {
     for (int idex = 0; idex < totalPages(); ++idex) {
-        QImage image(tr(":/resources/image/logo/logo_big.svg"));
+        //QImage image(tr(":/resources/image/logo/logo_big.svg"));
+        QImage image;
+        DocummentProxy::instance(nullptr)->getImage(idex, image, 113, 143);
 
         addThumbnailItem(image, idex);
     }
@@ -142,4 +147,14 @@ void ThumbnailWidget::slotShowSelectItem(QListWidgetItem *item)
     if (m_pPageWidget) {
         m_pPageWidget->setCurrentPageValue(row);
     }
+}
+
+void ThumbnailWidget::slotOpenFileOk()
+{
+    int pages = DocummentProxy::instance()->getPageSNum();
+
+    m_pPageWidget->setTotalPages(pages);
+
+    setTotalPages(pages);
+    fillContantToList();
 }
