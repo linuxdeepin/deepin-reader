@@ -15,10 +15,10 @@ class PageBase: public QLabel
     Q_OBJECT
 public:
     PageBase(QWidget *parent = 0);
+    virtual void addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color) {}
 protected:
     RotateType_EM m_rotate;
     double m_scale;
-    virtual void addHighlightAnnotation(const QList<QRectF>& listrect, const QColor &color){}
 };
 
 #endif // PAGEBASE_H

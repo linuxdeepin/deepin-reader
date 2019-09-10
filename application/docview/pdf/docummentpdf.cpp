@@ -79,7 +79,7 @@ DocummentPDF::DocummentPDF(QWidget *parent): DocummentBase(parent),
 bool DocummentPDF::openFile(QString filepath)
 {
     document = Poppler::Document::load(filepath);
-    if(nullptr==document||document->numPages()<=0)
+    if (nullptr == document || document->numPages() <= 0)
         return false;
     m_pages.clear();
     qDebug() << "numPages :" << document->numPages();
@@ -179,12 +179,10 @@ void DocummentPDF::scaleAndShow(double scale, RotateType_EM rotate)
 }
 void DocummentPDF::removeAllAnnotation()
 {
-    if(!document)return;
-    for(int i=0;i<document->numPages();++i)
-    {
-        QList<Poppler::Annotation*> listannote=document->page(i)->annotations();
-        foreach(Poppler::Annotation* atmp,listannote)
-        {
+    if (!document)return;
+    for (int i = 0; i < document->numPages(); ++i) {
+        QList<Poppler::Annotation *> listannote = document->page(i)->annotations();
+        foreach (Poppler::Annotation *atmp, listannote) {
             document->page(i)->removeAnnotation(atmp);
         }
     }
@@ -196,11 +194,10 @@ void DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos, c
 
 }
 
-void DocummentPDF::search(const QString &strtext,const QColor& color)
+void DocummentPDF::search(const QString &strtext, const QColor &color)
 {
-    for(int i=0;i<document->numPages();++i)
-    {
-        m_pages.at(i)->addHighlightAnnotation(document->page(i)->search(strtext),color);
+    for (int i = 0; i < document->numPages(); ++i) {
+        m_pages.at(i)->addHighlightAnnotation(document->page(i)->search(strtext), color);
 
     }
 }
@@ -210,38 +207,32 @@ bool DocummentPDF::save(const QString &filePath, bool withChanges) const
     // Save document to temporary file...
     QTemporaryFile temporaryFile;
     temporaryFile.setFileTemplate(temporaryFile.fileTemplate() + QLatin1String(".") + QFileInfo(filePath).suffix());
-    if(!temporaryFile.open())
-    {
+    if (!temporaryFile.open()) {
         return false;
     }
 
     temporaryFile.close();
 
-    if(!pdfsave(temporaryFile.fileName(), withChanges))
-    {
+    if (!pdfsave(temporaryFile.fileName(), withChanges)) {
         return false;
     }
 
     // Copy from temporary file to actual file...
     QFile file(filePath);
 
-    if(!temporaryFile.open())
-    {
+    if (!temporaryFile.open()) {
         return false;
     }
 
-    if(!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
-    {
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         return false;
     }
 
-    if(!PublicFunc::copyFile(temporaryFile, file))
-    {
+    if (!PublicFunc::copyFile(temporaryFile, file)) {
         return false;
     }
 
-    if(withChanges)
-    {
+    if (withChanges) {
         m_bModified = false;//reset modify status
     }
 
@@ -256,8 +247,7 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges) const
 
     Poppler::PDFConverter::PDFOptions options = pdfConverter->pdfOptions();
 
-    if(withChanges)
-    {
+    if (withChanges) {
         options |= Poppler::PDFConverter::WithChanges;
     }
 
@@ -269,10 +259,8 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges) const
 
 void DocummentPDF::clearSearch()
 {
-    foreach(Poppler::Annotation* annote,m_listsearch)
-    {
-        for(int i=0;i<document->numPages();++i)
-        {
+    foreach (Poppler::Annotation *annote, m_listsearch) {
+        for (int i = 0; i < document->numPages(); ++i) {
             document->page(0)->removeAnnotation(annote);
         }
     }
