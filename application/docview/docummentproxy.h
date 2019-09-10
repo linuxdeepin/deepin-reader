@@ -11,9 +11,9 @@ enum DocType_EM {
 
 class DocummentProxy: public QObject
 {
-    Q_OBJECT
+    Q_OBJECT    
 public:
-    DocummentProxy(QObject *parent = nullptr);
+    static DocummentProxy* instance(QObject *parent = nullptr);
     bool openFile(DocType_EM type, QString filepath);
     QPoint global2RelativePoint(QPoint globalpoint);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
@@ -24,11 +24,15 @@ public:
     bool getImage(int pagenum, QImage &image, double width, double height);
     int  getPageSNum();
     bool setViewModeAndShow(ViewMode_EM viewmode);
+    void addAnnotation(const QPoint& startpos,const QPoint& endpos,QColor color=Qt::yellow);
+    bool save(const QString& filepath,bool withChanges);
 private:
+    DocummentProxy(QObject *parent = nullptr);
     QWidget *qwfather;
     DocType_EM m_type;
     QString m_path;
     DocummentBase *m_documment;
+    static  DocummentProxy* s_pDocProxy;
 };
 
 #endif // DOCUMMENTPROXY_H

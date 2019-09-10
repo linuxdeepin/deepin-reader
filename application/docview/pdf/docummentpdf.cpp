@@ -189,7 +189,12 @@ void DocummentPDF::removeAllAnnotation()
     //todo 刷新所有页面
 }
 
-void DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos, const QColor &color)
+void DocummentPDF::removeAnnotation(const QPoint &startpos)
+{
+
+}
+
+void DocummentPDF::addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color)
 {
 
 }
@@ -197,9 +202,10 @@ void DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos, c
 void DocummentPDF::search(const QString &strtext, const QColor &color)
 {
     for (int i = 0; i < document->numPages(); ++i) {
-        m_pages.at(i)->addHighlightAnnotation(document->page(i)->search(strtext), color);
-
+        searchHightlight(document->page(i),strtext,color);
     }
+    //todo kyz 先单独更新当前页
+    scaleAndShow(m_scale,m_rotate);//全部刷新
 }
 
 bool DocummentPDF::save(const QString &filePath, bool withChanges) const
@@ -265,6 +271,52 @@ void DocummentPDF::clearSearch()
         }
     }
 }
+
+void DocummentPDF::searchHightlight(Poppler::Page* page,const QString& strtext,const QColor& color)
+{
+    if(nullptr==page) return;
+    QList<QRectF> listrect=page->search(strtext);
+    if(listrect.size()<=0)return;
+
+    if(listrect.size()<=0)return;
+    Poppler::Annotation::Style style;
+    style.setColor(color);
+
+    Poppler::Annotation::Popup popup;
+    popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
+
+    Poppler::HighlightAnnotation* annotation = new Poppler::HighlightAnnotation();
+
+    Poppler::HighlightAnnotation::Quad quad;
+    QList<Poppler::HighlightAnnotation::Quad> qlistquad;
+    QRectF rec,recboundary;
+    foreach(rec,listrect)
+    {
+        recboundary.setTopLeft(QPointF(rec.left()/page->pageSizeF().width(),
+                                   rec.top()/page->pageSizeF().height()));
+        recboundary.setTopRight(QPointF(rec.right()/page->pageSizeF().width(),
+                                    rec.top()/page->pageSizeF().height()));
+        recboundary.setBottomLeft(QPointF(rec.left()/page->pageSizeF().width(),
+                                      rec.bottom()/page->pageSizeF().height()));
+        recboundary.setBottomRight(QPointF(rec.right()/page->pageSizeF().width(),
+                                       rec.bottom()/page->pageSizeF().height()));
+
+
+        qDebug()<<"**"<<rec<<"**";
+        quad.points[0] = recboundary.topLeft();
+        quad.points[1] = recboundary.topRight();
+        quad.points[2] = recboundary.bottomRight();
+        quad.points[3] = recboundary.bottomLeft();
+        qlistquad.append(quad);
+    }
+    annotation->setHighlightQuads(qlistquad);
+    annotation->setBoundary(recboundary);
+    annotation->setStyle(style);
+    annotation->setPopup(popup);
+    page->addAnnotation(annotation);
+
+}
+
 void DocummentPDF::loadWordCache(int indexpage, PageBase *page)
 {
     if (!document) {
@@ -504,6 +556,47 @@ bool DocummentPDF::mouseSelectText(QPoint start, QPoint stop)
     }
     return re;
 }
+
+int DocummentPDF::pointInWhichPage(QPoint &qpoint)
+{
+    int pagenum = -1;
+        for (int i = 0; i < m_widgets.size(); i++) {
+            if (qpoint.x() > m_widgets.at(i)->x() &&
+                    qpoint.x() <
+                    (m_widgets.at(i)->width() + m_widgets.at(i)->x()) &&
+                    qpoint.y() > m_widgets.at(i)->y() &&
+                    qpoint.y() <
+                    (m_widgets.at(i)->height() + m_widgets.at(i)->y())) {
+                qpoint = QPoint(qpoint.x() - m_widgets.at(i)->x(), qpoint.y() - m_widgets.at(i)->y());
+                switch (m_viewmode) {
+                case ViewMode_SinglePage:
+                    pagenum = i;
+    //                qpoint = QPoint(qpoint.x() - m_widgets.at(i)->x(), qpoint.y() - m_widgets.at(i)->y());
+                    break;
+                case ViewMode_FacingPage:
+    //                qpoint = QPoint(qpoint.x() - m_widgets.at(i)->x(), qpoint.y() - m_widgets.at(i)->y());
+                    if (qpoint.x() > m_pages.at(2 * i)->x() &&
+                            qpoint.x() <
+                            (m_pages.at(2 * i)->width() + m_pages.at(2 * i)->x()) &&
+                            qpoint.y() > m_pages.at(2 * i)->y() &&
+                            qpoint.y() <
+                            (m_pages.at(2 * i)->height() + m_pages.at(2 * i)->y())) {
+                        pagenum = 2 * i;
+                    } else {
+                        pagenum = 2 * i + 1;
+                        if (pagenum >= m_pages.size())
+                            return -1;
+                    }
+                    break;
+                default:
+                    break;
+                }
+                break;
+            }
+        }
+        return pagenum;
+}
+
 bool DocummentPDF::mouseBeOverText(QPoint point)
 {
     if (!document) {

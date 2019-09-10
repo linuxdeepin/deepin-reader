@@ -4,6 +4,7 @@
 #include <QVBoxLayout>
 #include <QDebug>
 
+DocummentProxy* DocummentProxy::s_pDocProxy=nullptr;
 DocummentProxy::DocummentProxy(QObject *parent)
     : QObject(parent),
       m_type(DocType_NULL),
@@ -11,6 +12,15 @@ DocummentProxy::DocummentProxy(QObject *parent)
       m_documment(nullptr)
 {
     qwfather = (QWidget *)parent;
+}
+
+DocummentProxy *DocummentProxy::instance(QObject *parent)
+{
+    if(nullptr!=parent&&nullptr==s_pDocProxy)
+    {
+        s_pDocProxy=new DocummentProxy(parent);
+    }
+    return  s_pDocProxy;
 }
 
 bool DocummentProxy::openFile(DocType_EM type, QString filepath)
@@ -82,3 +92,19 @@ bool DocummentProxy::setViewModeAndShow(ViewMode_EM viewmode)
         return false;
     return  m_documment->setViewModeAndShow(viewmode);
 }
+
+void DocummentProxy::addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color)
+{
+    if (!m_documment)
+        return ;
+    m_documment->addAnnotation(startpos,endpos,color);
+}
+
+bool DocummentProxy::save(const QString &filepath, bool withChanges)
+{
+    if (!m_documment)
+        return false;
+    m_documment->save(filepath,withChanges);
+}
+
+

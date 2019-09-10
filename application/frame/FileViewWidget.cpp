@@ -41,7 +41,7 @@ void FileViewWidget::initWidget()
 //    QGridLayout *pgrlyout = new QGridLayout(this);
 //    pgrlyout->addWidget(m_docview);
 
-    m_pDocummentProxy = new DocummentProxy(this);
+    m_pDocummentProxy =DocummentProxy::instance(this);
 
     m_pMagnifyLabel = new MagnifyLabel(this);   //  放大镜 窗口
 

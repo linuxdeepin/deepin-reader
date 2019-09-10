@@ -39,7 +39,7 @@ public:
     DocummentPDF(QWidget *parent = nullptr);
     bool openFile(QString filepath) override;
     QPoint global2RelativePoint(QPoint globalpoint) override;
-    bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0) override;
+    bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0) override;    
     bool mouseSelectText(QPoint start, QPoint stop) override;
     void mouseSelectTextClear() override;
     bool mouseBeOverText(QPoint point) override;
@@ -52,17 +52,19 @@ public:
     bool save(const QString& filePath, bool withChanges)const override;
     bool loadWords();
     void removeAllAnnotation();
-    void removeAnnotation(QPoint start);
-    void addAnnotation(const QPoint& startpos,const QPoint& endpos,const QColor& color);
-    void search(const QString& strtext,const QColor& color);
+    void removeAnnotation(const QPoint& startpos) override;
+    void addAnnotation(const QPoint& starpos,const QPoint& endpos,QColor color=Qt::yellow) override;
+    void search(const QString& strtext,const QColor& color) override;
 private:
+    int pointInWhichPage(QPoint &qpoint);
     void loadWordCache(int indexpage, PageBase *page);
-    bool abstractTextPage(const QList<Poppler::TextBox *> &text,
-                          PageBase *page);
+    bool abstractTextPage(const QList<Poppler::TextBox *> &text,PageBase *page);
     void showSinglePage();
     void showFacingPage();
     bool pdfsave(const QString& filePath, bool withChanges)const;
     void clearSearch();
+    void searchHightlight(Poppler::Page* page,const QString& strtext,const QColor& color);
+
     Poppler::Document *document;
     ThreadLoadDoc m_threadloaddoc;
     ThreadLoadWords m_threadloadwords;
