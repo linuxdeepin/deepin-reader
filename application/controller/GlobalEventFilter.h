@@ -14,40 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef APPLICATION_H_
-#define APPLICATION_H_
+#ifndef GLOBALEVENTFILTER_H
+#define GLOBALEVENTFILTER_H
 
-#include <DApplication>
+#include <QObject>
 
-#include "controller/configsetter.h"
-#include "controller/DBManager.h"
+/**
+ * @brief The GlobalEventFilter class
+ * @brief   事件过滤器
+ */
 
-#if defined(dApp)
-#undef dApp
-#endif
-#define dApp (static_cast<Application *>(QCoreApplication::instance()))
 
-DWIDGET_USE_NAMESPACE
-
-class Application : public DApplication
+class GlobalEventFilter : public QObject
 {
     Q_OBJECT
-
 public:
-    Application(int &argc, char **argv);
+    explicit GlobalEventFilter(QObject *parent = nullptr);
 
 protected:
-    void handleQuitAction() override;
-
-public:
-//    ConfigSetter *setter = nullptr;
-    DBManager *dbM = nullptr;
-//    Exporter *exporter = nullptr;
-//    Importer *importer = nullptr;
-//    SignalManager *signalM = nullptr;
-private:
-    void initChildren();
-    void initI18n();
+    bool eventFilter(QObject *obj, QEvent *e) Q_DECL_OVERRIDE;
 };
 
-#endif  // APPLICATION_H_
+#endif // GLOBALEVENTFILTER_H

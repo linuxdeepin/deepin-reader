@@ -37,26 +37,24 @@ FileViewWidget::~FileViewWidget()
 
 void FileViewWidget::initWidget()
 {
-//    m_docview = new DocumentView;
-//    QGridLayout *pgrlyout = new QGridLayout(this);
-//    pgrlyout->addWidget(m_docview);
+    m_pDocummentProxy = DocummentProxy::instance(this);
 
-    m_pDocummentProxy =DocummentProxy::instance(this);
+    int nParentWidth = this->width();
+
+    setBookMarkStateWidget();
 
     m_pDefaultOperationWidget = new DefaultOperationWidget;
     m_pTextOperationWidget = new  TextOperationWidget;
     m_pFileAttrWidget = new FileAttrWidget;
 
     m_pFindWidget = new FindWidget(this);
-    int nParentWidth = this->width();
     int nWidget = m_pFindWidget->width();
     m_pFindWidget->move(nParentWidth - nWidget - 20, 20);
-
 }
 
 void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    DWidget::mouseMoveEvent(event);
+//    DWidget::mouseMoveEvent(event);
 }
 
 //文件拖拽
@@ -84,6 +82,8 @@ void FileViewWidget::resizeEvent(QResizeEvent *event)
         int nWidget = m_pFindWidget->width();
         m_pFindWidget->move(nParentWidth - nWidget - 20, 20);
     }
+
+    setBookMarkStateWidget();
 
     CustomWidget::resizeEvent(event);
 }
@@ -161,6 +161,18 @@ void FileViewWidget::initConnections()
     connect(this, SIGNAL(sigOpenFile(const QString &)), this, SLOT(openFilePath(const QString &)));
 }
 
+void FileViewWidget::setBookMarkStateWidget()
+{
+    if (m_pBookMarkStateWidgt == nullptr) {
+        m_pBookMarkStateWidgt = new BookMarkStateLabel(this);
+    }
+    int nParentWidth = this->width();
+    int nWidget = m_pBookMarkStateWidgt->width();
+    m_pBookMarkStateWidgt->move(nParentWidth - nWidget - 20, 10);
+    m_pBookMarkStateWidgt->show();
+    m_pBookMarkStateWidgt->raise();
+}
+
 //  查看 文件属性
 void FileViewWidget::onShowFileAttr()
 {
@@ -220,6 +232,13 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_END_PAGE:    //  最后一页
         return ConstantMsg::g_effective_res;
+    case MSG_FIND_CONTENT:
+        m_pDocummentProxy->search(msgContent, QColor(255, 0, 0));
+        qDebug() << "       " << msgContent;
+        return ConstantMsg::g_effective_res;
+    case MSG_NOTIFY_MSG:
+        qDebug() << "   MSG_NOTIFY_MSG      " << msgContent;
+        break;
     }
     return 0;
 }

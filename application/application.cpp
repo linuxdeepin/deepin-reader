@@ -17,7 +17,7 @@
 #include "application.h"
 
 //#include "controller/configsetter.h"
-//#include "controller/globaleventfilter.h"
+#include "controller/GlobalEventFilter.h"
 //#include "controller/signalmanager.h"
 //#include "controller/wallpapersetter.h"
 
@@ -56,8 +56,8 @@ Application::Application(int &argc, char **argv)
     setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin-image-viewer/");
 
 //    setApplicationVersion(DApplication::buildVersion("20190828"));
-//    installEventFilter(new GlobalEventFilter());
 
+    installEventFilter(new GlobalEventFilter);
     setAboutDialog(new AppAboutWidget);
 
     initChildren();
@@ -70,6 +70,7 @@ void Application::handleQuitAction()
 
 void Application::initChildren()
 {
+    dbM = DBManager::instance();
 //   setter = ConfigSetter::instance();
 //    signalM = SignalManager::instance();
 }

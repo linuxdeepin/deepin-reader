@@ -10,6 +10,7 @@
 #include "mainShow/TextOperationWidget.h"
 #include "mainShow/FileAttrWidget.h"
 #include "mainShow/FindWidget.h"
+#include "mainShow/BookMarkStateLabel.h"
 
 #include "docview/docummentproxy.h"
 
@@ -35,7 +36,6 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private slots:
-
     void SlotCustomContextMenuRequested(const QPoint &);
     void openFilePath(const QString &);
 
@@ -50,7 +50,10 @@ private:
 
     void initConnections();
 
+    void setBookMarkStateWidget();
+
 private:
+    BookMarkStateLabel      *m_pBookMarkStateWidgt = nullptr;
     FindWidget              *m_pFindWidget = nullptr;
     FileAttrWidget          *m_pFileAttrWidget = nullptr;
     DefaultOperationWidget  *m_pDefaultOperationWidget = nullptr;

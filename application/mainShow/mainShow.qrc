@@ -4,5 +4,8 @@
     <qresource prefix="/images/importtip"/>
     <qresource prefix="/">
         <file>resources/image/maganifier.svg</file>
+        <file>resources/image/hover/bookmark.svg</file>
+        <file>resources/image/checked/bookmark.svg</file>
+        <file>resources/image/press/bookmark.svg</file>
     </qresource>
 </RCC>
