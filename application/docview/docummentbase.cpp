@@ -2,6 +2,7 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QPainter>
+#include <QScrollBar>
 
 MagnifierWidget::MagnifierWidget(QWidget *parent): QWidget(parent)
 {
@@ -118,4 +119,6 @@ DocummentBase::DocummentBase(QWidget *parent): QScrollArea(parent)
 
     m_viewmode = ViewMode_SinglePage;
     m_lastmagnifierpagenum = -1;
+    connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_vScrollBarValueChanged(int)));
+    connect(this->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_hScrollBarValueChanged(int)));
 }

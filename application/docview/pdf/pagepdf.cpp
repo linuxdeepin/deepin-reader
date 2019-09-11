@@ -11,6 +11,8 @@ PagePdf::PagePdf(QWidget *parent)
       m_pencolor (QColor(72, 118, 255, 0)),
       m_penwidth(0)
 {
+//    setFrameShape (QFrame::Box);
+//    setStyleSheet("border-width: 1px;border-style: solid;border-color: rgb(255, 170, 0);");
 }
 
 void PagePdf::paintEvent(QPaintEvent *event)
@@ -39,6 +41,32 @@ void PagePdf::setPage(Poppler::Page *page)
     m_imagewidth = m_page->pageSizeF().width();
     m_imageheight = m_page->pageSizeF().height();
 }
+
+void PagePdf::setScaleAndRotate(double scale, RotateType_EM rotate)
+{
+    m_scale = scale;
+    m_rotate = rotate;
+    switch (rotate) {
+    case RotateType_90:
+        setMaximumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
+        setMinimumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
+        break;
+    case RotateType_180:
+        setMaximumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
+        setMinimumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
+        break;
+    case RotateType_270:
+        setMaximumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
+        setMinimumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
+        break;
+    default:
+        setMaximumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
+        setMinimumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
+        break;
+    }
+    update();
+}
+
 bool PagePdf::showImage(double scale, RotateType_EM rotate)
 {
     if (!m_page)
@@ -46,10 +74,10 @@ bool PagePdf::showImage(double scale, RotateType_EM rotate)
     int xres = 72.0, yres = 72.0;
     m_scale = scale;
     m_rotate = rotate;
-    QImage image = m_page->renderToImage(xres * scale, yres * scale, m_imagewidth * scale, m_imageheight * scale);
+    QImage image = m_page->renderToImage(xres * m_scale, yres * m_scale, m_imagewidth * m_scale, m_imageheight * m_scale);
     QPixmap map = QPixmap::fromImage(image);
     QMatrix leftmatrix;
-    switch (rotate) {
+    switch (m_rotate) {
     case RotateType_90:
         leftmatrix.rotate(90);
         break;

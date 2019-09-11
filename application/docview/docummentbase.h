@@ -97,15 +97,6 @@ public:
         m_magnifierwidget->setMagnifierColor(magnifiercolor);
     }
 
-
-    virtual void magnifierClear()
-    {
-        if (m_magnifierwidget) {
-            m_magnifierwidget->setPixmap(QPixmap());
-            m_magnifierwidget->hide();
-        }
-    }
-
     virtual int getPageSNum()
     {
         return 0;
@@ -122,11 +113,23 @@ public:
         return false;
     }
 
-    virtual void removeAnnotation(const QPoint& startpos){}
+    virtual void removeAnnotation(const QPoint &startpos) {}
 
-    virtual void addAnnotation(const QPoint& starpos,const QPoint& endpos,QColor color=Qt::yellow){}
+    virtual void addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) {}
+
 
     virtual void search(const QString& strtext,QMap<int,stSearchRes>& resmap,QColor color=Qt::yellow){}
+    virtual int currentPageNo()
+    {
+        return -1;
+    }
+
+    virtual bool pageJump(int pagenum)
+    {
+        return false;
+    }
+
+    virtual void clearSearch(){}
 
     QList<PageBase *> *getPages()
     {
@@ -138,8 +141,24 @@ public:
             return (PageBase *)m_pages.at(index);
         return nullptr;
     }
-protected:
 
+    void magnifierClear()
+    {
+        if (m_magnifierwidget) {
+            m_magnifierwidget->setPixmap(QPixmap());
+            m_magnifierwidget->hide();
+        }
+    }
+protected slots:
+    virtual void slot_vScrollBarValueChanged(int value)
+    {
+//        qDebug() << "slot_vScrollBarValueChanged" << value;
+    }
+    virtual void slot_hScrollBarValueChanged(int value)
+    {
+//        qDebug() << "slot_hScrollBarValueChanged" << value;
+    }
+protected:
     QList<PageBase *> m_pages;
     QWidget m_widget;
     QVBoxLayout m_vboxLayout;

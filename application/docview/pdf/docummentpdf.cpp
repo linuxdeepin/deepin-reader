@@ -11,6 +11,7 @@
 
 ThreadLoadDoc::ThreadLoadDoc()
 {
+//    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
     m_doc = nullptr;
     brun = false;
 }
@@ -37,6 +38,7 @@ void ThreadLoadDoc::run()
 
 ThreadLoadWords::ThreadLoadWords()
 {
+//    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
     m_doc = nullptr;
     brun = false;
 }
@@ -71,9 +73,11 @@ DocummentPDF::DocummentPDF(QWidget *parent): DocummentBase(parent),
     setWidget(&m_widget);
     m_scale = 1;
     m_rotate = RotateType_Normal;
+    m_currentpageno = 0;
     pblankwidget = new QWidget(this);
     pblankwidget->setMouseTracking(true);
     pblankwidget->hide();
+    donotneedreloaddoc = false;
 }
 
 bool DocummentPDF::openFile(QString filepath)
@@ -98,6 +102,11 @@ bool DocummentPDF::openFile(QString filepath)
         page->setPage(document->page(i));
         m_pages.append((PageBase *)page);
     }
+
+    for (int i = 0; i < m_pages.size(); i++) {
+        PagePdf *page = (PagePdf *)m_pages.at(i);
+        page->setScaleAndRotate(m_scale, m_rotate);
+    }
     setViewModeAndShow(m_viewmode);
     m_threadloaddoc.start();
     m_threadloadwords.start();
@@ -106,7 +115,9 @@ bool DocummentPDF::openFile(QString filepath)
 
 bool DocummentPDF::setViewModeAndShow(ViewMode_EM viewmode)
 {
+    int currpageno = m_currentpageno;
     m_viewmode = viewmode;
+    donotneedreloaddoc = true;
     switch (m_viewmode) {
     case ViewMode_SinglePage:
         showSinglePage();
@@ -118,6 +129,9 @@ bool DocummentPDF::setViewModeAndShow(ViewMode_EM viewmode)
         return false;
         break;
     }
+    donotneedreloaddoc = false;
+    pageJump(currpageno);
+    m_threadloaddoc.start();
     return true;;
 }
 
@@ -153,7 +167,16 @@ bool DocummentPDF::loadPages()
     if (!document && m_pages.size() == document->numPages())
         return false;
     qDebug() << "loadPages";
-    for (int i = 0; i < m_pages.size(); i++) {
+//    for (int i = 0; i < m_pages.size(); i++) {
+    int startnum = m_currentpageno - 3;
+    if (startnum < 0) {
+        startnum = 0;
+    }
+    int endnum = startnum + 7;
+    if (endnum > m_pages.size()) {
+        endnum = m_pages.size();
+    }
+    for (int i = startnum; i < endnum; i++) {
         PagePdf *ppdf = (PagePdf *)m_pages.at(i);
         ppdf->showImage(m_scale, m_rotate);
     }
@@ -174,8 +197,16 @@ bool DocummentPDF::loadWords()
 
 void DocummentPDF::scaleAndShow(double scale, RotateType_EM rotate)
 {
+    int currpageno = m_currentpageno;
     m_scale = scale;
     m_rotate = rotate;
+    donotneedreloaddoc = true;
+    for (int i = 0; i < m_pages.size(); i++) {
+        PagePdf *page = (PagePdf *)m_pages.at(i);
+        page->setScaleAndRotate(m_scale, m_rotate);
+    }
+    donotneedreloaddoc = false;
+    pageJump(currpageno);
     m_threadloaddoc.start();
 }
 void DocummentPDF::removeAllAnnotation()
@@ -215,7 +246,7 @@ void DocummentPDF::search(const QString &strtext, QMap<int, stSearchRes> &resmap
             resmap.insert(i,stres);
     }
     //todo kyz 先单独更新当前页后期优化
-    scaleAndShow(m_scale,m_rotate);//全部刷新
+    scaleAndShow(m_scale, m_rotate); //全部刷新
 }
 
 bool DocummentPDF::save(const QString &filePath, bool withChanges) const
@@ -274,32 +305,30 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges) const
 }
 
 void DocummentPDF::clearSearch()
-{ 
-    for(int i=0;i<document->numPages();++i)
-    {
-        foreach(Poppler::Annotation* ptmp,m_listsearch)
-        {
+{
+    for (int i = 0; i < document->numPages(); ++i) {
+        foreach (Poppler::Annotation *ptmp, m_listsearch) {
             document->page(i)->removeAnnotation(ptmp);
         }
         //refresh(i);
     }
-    scaleAndShow(m_scale,m_rotate);
+    scaleAndShow(m_scale, m_rotate);
 }
 
 void DocummentPDF::searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color)
 {
-    if(nullptr==page) return;
-    QList<QRectF> listrect=page->search(strtext);
-    if(listrect.size()<=0)return;
+    if (nullptr == page) return;
+    QList<QRectF> listrect = page->search(strtext);
+    if (listrect.size() <= 0)return;
 
-    if(listrect.size()<=0)return;
+    if (listrect.size() <= 0)return;
     Poppler::Annotation::Style style;
     style.setColor(color);
 
     Poppler::Annotation::Popup popup;
     popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
 
-    Poppler::HighlightAnnotation* annotation = new Poppler::HighlightAnnotation();
+    Poppler::HighlightAnnotation *annotation = new Poppler::HighlightAnnotation();
 
     Poppler::HighlightAnnotation::Quad quad;
     QList<Poppler::HighlightAnnotation::Quad> qlistquad;
@@ -577,8 +606,8 @@ bool DocummentPDF::mouseSelectText(QPoint start, QPoint stop)
             }
         } else if (i == endpagenum) {
             re = ppdf->pageTextSelections(
-                        pfirst,
-                        qstop);
+                     pfirst,
+                     qstop);
         } else {
             re = ppdf->pageTextSelections(pfirst,
                                           plast);
@@ -691,22 +720,117 @@ bool DocummentPDF::showMagnifier(QPoint point)
     int bigcirclex = gpoint.x() - radius;
     int bigcircley = gpoint.y() - radius;
     if (bigcircley < 0) {
-        QScrollBar *pScrollBar = verticalScrollBar();
-        if (pScrollBar)
-            pScrollBar->setValue(pScrollBar->value() + bigcircley);
+//        QScrollBar *pScrollBar = verticalScrollBar();
+        if (scrollBar_Y)
+            scrollBar_Y->setValue(scrollBar_Y->value() + bigcircley);
     } else if (bigcircley > m_magnifierwidget->height() - radius * 2) {
-        QScrollBar *pScrollBar = verticalScrollBar();
-        if (pScrollBar)
-            pScrollBar->setValue(pScrollBar->value() + bigcircley - (m_magnifierwidget->height() - radius * 2));
+//        QScrollBar *pScrollBar = verticalScrollBar();
+        if (scrollBar_Y)
+            scrollBar_Y->setValue(scrollBar_Y->value() + bigcircley - (m_magnifierwidget->height() - radius * 2));
     }
     if (bigcirclex < 0) {
-        QScrollBar *pScrollBar = horizontalScrollBar();
-        if (pScrollBar)
-            pScrollBar->setValue(pScrollBar->value() + bigcirclex);
+//        QScrollBar *pScrollBar = horizontalScrollBar();
+        if (scrollBar_X)
+            scrollBar_X->setValue(scrollBar_X->value() + bigcirclex);
     } else if (bigcirclex > m_magnifierwidget->width() - radius * 2) {
-        QScrollBar *pScrollBar = horizontalScrollBar();
-        if (pScrollBar)
-            pScrollBar->setValue(pScrollBar->value() + bigcirclex - (m_magnifierwidget->width() - radius * 2));
+//        QScrollBar *pScrollBar = horizontalScrollBar();
+        if (scrollBar_X)
+            scrollBar_X->setValue(scrollBar_X->value() + bigcirclex - (m_magnifierwidget->width() - radius * 2));
     }
     return false;
+}
+
+int DocummentPDF::currentPageNo()
+{
+    int pagenum = -1;
+    int x_offset = 0;
+    int y_offset = 0;
+    QScrollBar *scrollBar_X = horizontalScrollBar();
+    if (scrollBar_X)
+        x_offset = scrollBar_X->value();
+    QScrollBar *scrollBar_Y = verticalScrollBar();
+    if (scrollBar_Y)
+        y_offset = scrollBar_Y->value();
+    switch (m_viewmode) {
+    case ViewMode_SinglePage:
+        for (int i = 0; i < m_pages.size(); i++) {
+            if (y_offset < m_widgets.at(i)->y() + m_widgets.at(i)->height()) {
+                pagenum = i;
+                break;
+            }
+        }
+        break;
+    case ViewMode_FacingPage:
+        for (int i = 0; i < m_pages.size() / 2; i++) {
+            if (y_offset < m_widgets.at(i)->y() + m_widgets.at(i)->height()) {
+                if (x_offset < m_widgets.at(i)->x() + m_pages.at(i * 2)->x() + m_pages.at(i * 2)->width()) {
+                    pagenum = i * 2;
+                } else {
+                    pagenum = i * 2 + 1;
+                }
+                break;
+            }
+        }
+        if (-1 == pagenum && m_pages.size() % 2) {
+            if (y_offset < m_widgets.at(m_pages.size() / 2)->y() + m_widgets.at(m_pages.size() / 2)->height()) {
+                if (x_offset < m_widgets.at(m_pages.size() / 2)->x() + m_pages.at(m_pages.size() - 1)->x() + m_pages.at(m_pages.size() - 1)->width()) {
+                    pagenum = m_pages.size() - 1;
+                } else {
+                    pagenum = m_pages.size();
+                }
+                break;
+            }
+        }
+        break;
+    default:
+        break;
+    }
+    return pagenum;
+}
+
+bool DocummentPDF::pageJump(int pagenum)
+{
+    if (pagenum < 0 || pagenum > m_pages.size())
+        return false;
+    QScrollBar *scrollBar_X = horizontalScrollBar();
+    QScrollBar *scrollBar_Y = verticalScrollBar();
+    switch (m_viewmode) {
+    case ViewMode_SinglePage:
+        if (scrollBar_X)
+            scrollBar_X->setValue(m_widgets.at(pagenum)->x());
+        if (scrollBar_Y)
+            scrollBar_Y->setValue(m_widgets.at(pagenum)->y());
+        break;
+    case ViewMode_FacingPage:
+        if (scrollBar_X)
+            scrollBar_X->setValue(m_widgets.at(pagenum / 2)->x() + m_pages.at(pagenum)->x());
+        if (scrollBar_Y)
+            scrollBar_Y->setValue(m_widgets.at(pagenum / 2)->y());
+        break;
+    default:
+        break;
+    }
+    return true;
+}
+
+void DocummentPDF::slot_vScrollBarValueChanged(int value)
+{
+    qDebug() << "slot_vScrollBarValueChanged" << value;
+    int pageno = currentPageNo();
+    if (m_currentpageno != pageno) {
+        m_currentpageno = pageno;
+    }
+    if (!donotneedreloaddoc)
+        m_threadloaddoc.start();
+}
+
+void DocummentPDF::slot_hScrollBarValueChanged(int value)
+{
+    qDebug() << "slot_hScrollBarValueChanged" << value;
+    int pageno = currentPageNo();
+    if (m_currentpageno != pageno) {
+        m_currentpageno = pageno;
+    }
+    if (!donotneedreloaddoc)
+        m_threadloaddoc.start();
 }

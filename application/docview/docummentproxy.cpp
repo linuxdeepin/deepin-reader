@@ -138,7 +138,20 @@ void DocummentProxy::clearsearch()
 {
     if (!m_documment)
         return ;
-  //  m_documment->clears;
+    m_documment->clearSearch();
+}
+
+int DocummentProxy::currentPageNo()
+{
+    if (!m_documment)
+        return -1;
+    return m_documment->currentPageNo();
+}
+bool DocummentProxy::pageJump(int pagenum)
+{
+    if (!m_documment)
+        return false;
+    return m_documment->pageJump(pagenum);
 }
 
 
