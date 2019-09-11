@@ -56,14 +56,14 @@ public:
     void removeAnnotation(const QPoint &startpos) override;
     void addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) override;    
     void search(const QString& strtext,QMap<int,stSearchRes>& resmap,QColor color=Qt::yellow) override;
+    void clearSearch();
 private:
     int pointInWhichPage(QPoint &qpoint);
     void loadWordCache(int indexpage, PageBase *page);
     bool abstractTextPage(const QList<Poppler::TextBox *> &text, PageBase *page);
     void showSinglePage();
     void showFacingPage();
-    bool pdfsave(const QString &filePath, bool withChanges)const;
-    void clearSearch();
+    bool pdfsave(const QString &filePath, bool withChanges)const;   
     void searchHightlight(Poppler::Page* page,const QString& strtext,stSearchRes& stres,const QColor& color);
     void refreshOnePage(int ipage);
 
