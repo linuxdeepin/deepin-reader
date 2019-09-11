@@ -24,6 +24,8 @@ public:
     bool getImage(int pagenum, QImage &image, double width, double height);
     int  getPageSNum();
     bool setViewModeAndShow(ViewMode_EM viewmode);
+    bool showMagnifier(QPoint point);
+    bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3);
 private:
     QWidget *qwfather;
     DocType_EM m_type;

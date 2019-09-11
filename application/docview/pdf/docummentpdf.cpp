@@ -81,6 +81,7 @@ bool DocummentPDF::openFile(QString filepath)
     document = Poppler::Document::load(filepath);
     if (nullptr == document || document->numPages() <= 0)
         return false;
+    document->setRenderHint(Poppler::Document::TextAntialiasing);
     m_pages.clear();
     qDebug() << "numPages :" << document->numPages();
     for (int i = 0; i < document->numPages(); i++) {
@@ -165,7 +166,7 @@ bool DocummentPDF::loadWords()
         return false;
     qDebug() << "loadWords";
     for (int i = 0; i < m_pages.size(); i++) { //根据获取到的pdf页数循环
-        qDebug() << "i:" << i << " width:" << m_pages.at(i)->width() << " height:" << m_pages.at(i)->height();
+//        qDebug() << "i:" << i << " width:" << m_pages.at(i)->width() << " height:" << m_pages.at(i)->height();
         loadWordCache(i, m_pages.at(i));
     }
     return true;
@@ -346,10 +347,14 @@ void DocummentPDF::mouseSelectTextClear()
 
 QPoint DocummentPDF::global2RelativePoint(QPoint globalpoint)
 {
+    int x_offset = 0;
+    int y_offset = 0;
     QScrollBar *scrollBar_X = horizontalScrollBar();
-    const int x_offset = scrollBar_X->value();
+    if (scrollBar_X)
+        x_offset = scrollBar_X->value();
     QScrollBar *scrollBar_Y = verticalScrollBar();
-    const int y_offset = scrollBar_Y->value();
+    if (scrollBar_Y)
+        y_offset = scrollBar_Y->value();
     QPoint qpoint = QPoint(mapFromGlobal(globalpoint).x() + x_offset,
                            mapFromGlobal(globalpoint).y() + y_offset);
 //    qDebug() << "globalpoint:" << globalpoint << " relativepoint:" << qpoint;
@@ -450,7 +455,7 @@ bool DocummentPDF::mouseSelectText(QPoint start, QPoint stop)
         }
     }
 
-    qDebug() << "startpagenum:" << startpagenum << " endpagenum:" << endpagenum;
+//    qDebug() << "startpagenum:" << startpagenum << " endpagenum:" << endpagenum;
     if (-1 == startpagenum || -1 == endpagenum)
         return false;
     if (startpagenum > endpagenum) {
@@ -461,7 +466,7 @@ bool DocummentPDF::mouseSelectText(QPoint start, QPoint stop)
         qstart = qstop;
         qstop = mp;
     }
-    qDebug() << "startpagenum:" << startpagenum << " endpagenum:" << endpagenum;
+//    qDebug() << "startpagenum:" << startpagenum << " endpagenum:" << endpagenum;
     bool re = false;
     for (int i = startpagenum; i < endpagenum + 1; i++) {
         PagePdf *ppdf = (PagePdf *)m_pages.at(i);
@@ -504,12 +509,9 @@ bool DocummentPDF::mouseSelectText(QPoint start, QPoint stop)
     }
     return re;
 }
-bool DocummentPDF::mouseBeOverText(QPoint point)
+
+int DocummentPDF::pointInWhichPage(QPoint &qpoint)
 {
-    if (!document) {
-        return false;
-    }
-    QPoint qpoint = point;
     int pagenum = -1;
     for (int i = 0; i < m_widgets.size(); i++) {
         if (qpoint.x() > m_widgets.at(i)->x() &&
@@ -536,7 +538,7 @@ bool DocummentPDF::mouseBeOverText(QPoint point)
                 } else {
                     pagenum = 2 * i + 1;
                     if (pagenum >= m_pages.size())
-                        return false;
+                        return -1;
                 }
                 break;
             default:
@@ -545,7 +547,18 @@ bool DocummentPDF::mouseBeOverText(QPoint point)
             break;
         }
     }
-    qDebug() << "pagenum:" << pagenum;
+    return pagenum;
+}
+
+bool DocummentPDF::mouseBeOverText(QPoint point)
+{
+    if (!document) {
+        return false;
+    }
+    QPoint qpoint = point;
+    int pagenum = -1;
+    pagenum = pointInWhichPage(qpoint);
+    qDebug() << "mouseBeOverText pagenum:" << pagenum;
     if (-1 != pagenum) {
         PagePdf *ppdf = (PagePdf *)m_pages.at(pagenum);
         return ppdf ->ifMouseMoveOverText(qpoint);
@@ -561,4 +574,62 @@ bool DocummentPDF::getImage(int pagenum, QImage &image, double width, double hei
 int DocummentPDF::getPageSNum()
 {
     return m_pages.size();
+}
+
+bool DocummentPDF::showMagnifier(QPoint point)
+{
+    if (!document || !m_magnifierwidget) {
+        return false;
+    }
+    QPoint qpoint = point;
+    int pagenum = -1;
+    int x_offset = 0;
+    int y_offset = 0;
+    QScrollBar *scrollBar_X = horizontalScrollBar();
+    if (scrollBar_X)
+        x_offset = scrollBar_X->value();
+    QScrollBar *scrollBar_Y = verticalScrollBar();
+    if (scrollBar_Y)
+        y_offset = scrollBar_Y->value();
+    QPoint gpoint = m_magnifierwidget->mapFromGlobal(mapToGlobal(QPoint(point.x() - x_offset, point.y() - y_offset)));
+    pagenum = pointInWhichPage(qpoint);
+    qDebug() << "showMagnifier pagenum:" << pagenum;
+    if (-1 != pagenum) {
+        if (pagenum != m_lastmagnifierpagenum && -1 != m_lastmagnifierpagenum) {
+            PagePdf *ppdf = (PagePdf *)m_pages.at(m_lastmagnifierpagenum);
+            ppdf->clearMagnifierPixmap();
+        }
+        m_lastmagnifierpagenum = pagenum;
+        PagePdf *ppdf = (PagePdf *)m_pages.at(pagenum);
+        QPixmap pixmap;
+        if (ppdf ->getMagnifierPixmap(pixmap, qpoint, m_magnifierwidget->getMagnifierRadius(), ppdf->width() *m_magnifierwidget->getMagnifierScale(), ppdf->height() *m_magnifierwidget->getMagnifierScale())) {
+            m_magnifierwidget->setPixmap(pixmap);
+//            QPoint qpoint = QPoint(mapFromGlobal(globalpoint).x()
+            m_magnifierwidget->setPoint(gpoint);
+            m_magnifierwidget->show();
+            m_magnifierwidget->update();
+        }
+    }
+    int radius = m_magnifierwidget->getMagnifierRadius() - m_magnifierwidget->getMagnifierRingWidth();
+    int bigcirclex = gpoint.x() - radius;
+    int bigcircley = gpoint.y() - radius;
+    if (bigcircley < 0) {
+        QScrollBar *pScrollBar = verticalScrollBar();
+        if (pScrollBar)
+            pScrollBar->setValue(pScrollBar->value() + bigcircley);
+    } else if (bigcircley > m_magnifierwidget->height() - radius * 2) {
+        QScrollBar *pScrollBar = verticalScrollBar();
+        if (pScrollBar)
+            pScrollBar->setValue(pScrollBar->value() + bigcircley - (m_magnifierwidget->height() - radius * 2));
+    }
+    if (bigcirclex < 0) {
+        QScrollBar *pScrollBar = horizontalScrollBar();
+        if (pScrollBar)
+            pScrollBar->setValue(pScrollBar->value() + bigcirclex);
+    } else if (bigcirclex > m_magnifierwidget->width() - radius * 2) {
+        QScrollBar *pScrollBar = horizontalScrollBar();
+        if (pScrollBar)
+            pScrollBar->setValue(pScrollBar->value() + bigcirclex - (m_magnifierwidget->width() - radius * 2));
+    }
+    return false;
 }

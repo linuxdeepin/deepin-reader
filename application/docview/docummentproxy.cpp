@@ -82,3 +82,17 @@ bool DocummentProxy::setViewModeAndShow(ViewMode_EM viewmode)
         return false;
     return  m_documment->setViewModeAndShow(viewmode);
 }
+
+bool DocummentProxy::showMagnifier(QPoint point)
+{
+    if (!m_documment)
+        return false;
+    return  m_documment->showMagnifier(point);
+}
+
+bool DocummentProxy::setMagnifierStyle(QColor magnifiercolor, int magnifierradius, int magnifierringwidth, double magnifierscale)
+{
+    if (!m_documment)
+        return false;
+    return  m_documment->setMagnifierStyle(magnifiercolor, magnifierradius, magnifierringwidth, magnifierscale);
+}

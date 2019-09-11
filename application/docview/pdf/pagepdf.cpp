@@ -78,6 +78,65 @@ bool PagePdf::getImage(QImage &image, double width, double height)
     return true;
 }
 
+bool PagePdf::clearMagnifierPixmap()
+{
+    m_magnifierpixmap = QPixmap();
+    return true;
+}
+
+bool PagePdf::getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, double width, double height)
+{
+    qDebug() << "getMagnifierPixmap";
+    QImage image;
+    QPixmap qpixmap;
+    if (!m_magnifierpixmap.isNull()) {
+        qpixmap = m_magnifierpixmap;
+    } else {
+        if (getImage(image, width, height)) {
+            qpixmap = QPixmap::fromImage(image);
+            m_magnifierpixmap = qpixmap;
+        } else {
+            return false;
+        }
+
+    }
+    QPoint qp = point;
+    getImagePoint(qp);
+    double scalex = width / m_imagewidth;
+    double scaley = height / m_imageheight;
+    double relx = qp.x() * scalex, rely = qp.y() * scaley;
+    if (qp.x() * scalex - radius < 0) {
+        relx = radius;
+    } else if (qp.x() * scalex > width - radius) {
+        relx = width - radius;
+    }
+    if (qp.y() * scaley - radius < 0) {
+        rely = radius;
+    } else if (qp.y() * scaley > height - radius) {
+        rely = height - radius;
+    }
+//    qDebug() << "getMagnifierPixmap scalex:" << scalex << " scaley: " << scaley << " radius: " << radius << " qp: " << qp;
+    QPixmap qpixmap1 = qpixmap.copy(relx - radius, rely - radius, radius * 2, radius * 2);
+    QMatrix leftmatrix;
+    switch (m_rotate) {
+    case RotateType_90:
+        leftmatrix.rotate(90);
+        break;
+    case RotateType_180:
+        leftmatrix.rotate(180);
+        break;
+    case RotateType_270:
+        leftmatrix.rotate(270);
+        break;
+    default:
+        pixmap = qpixmap1;
+        return true;
+        break;
+    }
+    pixmap = qpixmap1.transformed(leftmatrix, Qt::SmoothTransformation);
+    return true;
+}
+
 bool PagePdf::setSelectTextStyle(QColor paintercolor, QColor pencolor, int penwidth)
 {
     m_paintercolor = paintercolor;
@@ -90,10 +149,10 @@ bool PagePdf::setSelectTextStyle(QColor paintercolor, QColor pencolor, int penwi
 bool PagePdf::pageTextSelections(const QPoint start, const QPoint end)
 {
     qDebug() << "pageTextSelections start:" << start << " end:" << end;
-    qDebug() << "pageTextSelections x():" << x() << " y()" << y();
+//    qDebug() << "pageTextSelections x():" << x() << " y()" << y();
     QPoint startC = QPoint(start.x() - x() - (width() - m_scale * m_imagewidth) / 2, start.y() - y() - (height() - m_scale * m_imageheight) / 2);
     QPoint endC = QPoint(end.x() - x() - (width() - m_scale * m_imagewidth) / 2, end.y() - y() - (height() - m_scale * m_imageheight) / 2);
-    qDebug() << "startC1:" << startC << " endC1:" << endC;
+//    qDebug() << "startC1:" << startC << " endC1:" << endC;
     switch (m_rotate) {
     case RotateType_90:
         startC = QPoint((start.x() - x() - (width() - m_scale * m_imageheight) / 2), (start.y() - y() - (height() - m_scale * m_imagewidth) / 2));
@@ -114,7 +173,7 @@ bool PagePdf::pageTextSelections(const QPoint start, const QPoint end)
     default:
         break;
     }
-    qDebug() << "startC:" << startC << " endC:" << endC;
+//    qDebug() << "startC:" << startC << " endC:" << endC;
     QPoint temp;
     if (startC.x() > endC.x()) {
         temp = startC;
@@ -128,7 +187,7 @@ bool PagePdf::pageTextSelections(const QPoint start, const QPoint end)
 
     QRectF tmp;
     int startword = 0, stopword = -1;
-    qDebug() << "page width:" << width() << " height:" << height() << " m_imagewidth:" << m_imagewidth << " m_imageheight:" << m_imageheight;
+//    qDebug() << "page width:" << width() << " height:" << height() << " m_imagewidth:" << m_imagewidth << " m_imageheight:" << m_imageheight;
 //    const double scaleX = width() / m_imagewidth;
 //    const double scaleY = height() / m_imageheight;
     const double scaleX = m_scale;
@@ -325,16 +384,11 @@ bool PagePdf::pageTextSelections(const QPoint start, const QPoint end)
     return true;
 }
 
-bool PagePdf::ifMouseMoveOverText(const QPoint point)
+void PagePdf::getImagePoint(QPoint &point)
 {
-//    QPoint qpoint = QPoint(point.x() - (width() - m_scale * m_imagewidth) / 2, point.y() - (height() - m_scale * m_imageheight) / 2);
-//    const double scaleX = width() / m_imagewidth;
-//    const double scaleY = height() / m_imageheight;
     const double scaleX = m_scale;
     const double scaleY = m_scale;
     QPoint qp = QPoint((point.x() - x() - (width() - m_scale * m_imagewidth) / 2) / scaleX, (point.y() - y() - (height() - m_scale * m_imageheight) / 2) / scaleY);
-//    qDebug() << "point:" << point;
-//    qDebug() << "qp1:" << qp;
     switch (m_rotate) {
     case RotateType_90:
         qp = QPoint((point.x() - x() - (width() - m_scale * m_imageheight) / 2) / scaleX, (point.y() - y() - (height() - m_scale * m_imagewidth) / 2) / scaleY);
@@ -350,8 +404,13 @@ bool PagePdf::ifMouseMoveOverText(const QPoint point)
     default:
         break;
     }
-//    qDebug() << "------this rect x:" << x() << " y:" << y() << " width:" << width() << " height:" << height();
-//    qDebug() << "qp:" << qp;
+    point = qp;
+}
+
+bool PagePdf::ifMouseMoveOverText(const QPoint point)
+{
+    QPoint qp = point;
+    getImagePoint(qp);
     for (int i = 0; i < m_words.size(); i++) {
         if (qp.x() > m_words.at(i).rect.x() &&
                 qp.x() < m_words.at(i).rect.x() + m_words.at(i).rect.width() &&
@@ -380,32 +439,31 @@ void PagePdf::setImageHeight(double height)
 
 void PagePdf::addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color)
 {
-    qDebug()<<"*************"<<listrect.size();
-    if(listrect.size()<=0)return;
+    qDebug() << "*************" << listrect.size();
+    if (listrect.size() <= 0)return;
     Poppler::Annotation::Style style;
     style.setColor(color);
 
     Poppler::Annotation::Popup popup;
     popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
 
-    Poppler::HighlightAnnotation* annotation = new Poppler::HighlightAnnotation();
+    Poppler::HighlightAnnotation *annotation = new Poppler::HighlightAnnotation();
 
     Poppler::HighlightAnnotation::Quad quad;
     QList<Poppler::HighlightAnnotation::Quad> qlistquad;
-    QRectF rec,recboundary;
-    foreach(rec,listrect)
-    {
-        recboundary.setTopLeft(QPointF(rec.left()/m_page->pageSizeF().width(),
-                                   rec.top()/m_page->pageSizeF().height()));
-        recboundary.setTopRight(QPointF(rec.right()/m_page->pageSizeF().width(),
-                                    rec.top()/m_page->pageSizeF().height()));
-        recboundary.setBottomLeft(QPointF(rec.left()/m_page->pageSizeF().width(),
-                                      rec.bottom()/m_page->pageSizeF().height()));
-        recboundary.setBottomRight(QPointF(rec.right()/m_page->pageSizeF().width(),
-                                       rec.bottom()/m_page->pageSizeF().height()));
+    QRectF rec, recboundary;
+    foreach (rec, listrect) {
+        recboundary.setTopLeft(QPointF(rec.left() / m_page->pageSizeF().width(),
+                                       rec.top() / m_page->pageSizeF().height()));
+        recboundary.setTopRight(QPointF(rec.right() / m_page->pageSizeF().width(),
+                                        rec.top() / m_page->pageSizeF().height()));
+        recboundary.setBottomLeft(QPointF(rec.left() / m_page->pageSizeF().width(),
+                                          rec.bottom() / m_page->pageSizeF().height()));
+        recboundary.setBottomRight(QPointF(rec.right() / m_page->pageSizeF().width(),
+                                           rec.bottom() / m_page->pageSizeF().height()));
 
 
-        qDebug()<<"**"<<rec<<"**";
+        qDebug() << "**" << rec << "**";
         quad.points[0] = recboundary.topLeft();
         quad.points[1] = recboundary.topRight();
         quad.points[2] = recboundary.bottomRight();
@@ -417,7 +475,7 @@ void PagePdf::addHighlightAnnotation(const QList<QRectF> &listrect, const QColor
     annotation->setStyle(style);
     annotation->setPopup(popup);
     m_page->addAnnotation(annotation);
-    qDebug()<<"addHighlightAnnotation"<<annotation->boundary();
+    qDebug() << "addHighlightAnnotation" << annotation->boundary();
 }
 
 void PagePdf::removeAnnotation(Poppler::Annotation *annotation)
