@@ -4,7 +4,7 @@
 #include <QVBoxLayout>
 #include <QDebug>
 
-DocummentProxy* DocummentProxy::s_pDocProxy=nullptr;
+DocummentProxy *DocummentProxy::s_pDocProxy = nullptr;
 DocummentProxy::DocummentProxy(QObject *parent)
     : QObject(parent),
       m_type(DocType_NULL),
@@ -16,9 +16,8 @@ DocummentProxy::DocummentProxy(QObject *parent)
 
 DocummentProxy *DocummentProxy::instance(QObject *parent)
 {
-    if(nullptr!=parent&&nullptr==s_pDocProxy)
-    {
-        s_pDocProxy=new DocummentProxy(parent);
+    if (nullptr != parent && nullptr == s_pDocProxy) {
+        s_pDocProxy = new DocummentProxy(parent);
     }
     return  s_pDocProxy;
 }
@@ -100,6 +99,14 @@ bool DocummentProxy::showMagnifier(QPoint point)
     return  m_documment->showMagnifier(point);
 }
 
+bool DocummentProxy::closeMagnifier()
+{
+    if (!m_documment)
+        return false;
+    m_documment->magnifierClear();
+    return true;
+}
+
 bool DocummentProxy::setMagnifierStyle(QColor magnifiercolor, int magnifierradius, int magnifierringwidth, double magnifierscale)
 {
     if (!m_documment)
@@ -110,21 +117,21 @@ void DocummentProxy::addAnnotation(const QPoint &startpos, const QPoint &endpos,
 {
     if (!m_documment)
         return ;
-    m_documment->addAnnotation(startpos,endpos,color);
+    m_documment->addAnnotation(startpos, endpos, color);
 }
 
 bool DocummentProxy::save(const QString &filepath, bool withChanges)
 {
     if (!m_documment)
         return false;
-    m_documment->save(filepath,withChanges);
+    m_documment->save(filepath, withChanges);
 }
 
 void DocummentProxy::search(const QString &strtext, const QColor &color)
 {
     if (!m_documment)
         return ;
-    m_documment->search(strtext,color);
+    m_documment->search(strtext, color);
 }
 
 
