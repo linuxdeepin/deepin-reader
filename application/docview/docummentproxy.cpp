@@ -135,6 +135,13 @@ void DocummentProxy::search(const QString &strtext, QMap<int, stSearchRes> &resm
     m_documment->search(strtext, resmap, color);
 }
 
+void DocummentProxy::clearsearch()
+{
+    if (!m_documment)
+        return ;
+    m_documment->clearSearch();
+}
+
 int DocummentProxy::currentPageNo()
 {
     if (!m_documment)

@@ -129,6 +129,8 @@ public:
         return false;
     }
 
+    virtual void clearSearch(){}
+
     QList<PageBase *> *getPages()
     {
         return &m_pages;

@@ -32,6 +32,7 @@ public:
     void addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow);
     bool save(const QString &filepath, bool withChanges);
     void search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color);
+    void clearsearch();
     int currentPageNo();
     bool pageJump(int pagenum);
 signals:
