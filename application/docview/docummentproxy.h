@@ -1,8 +1,10 @@
 #ifndef DOCUMMENTPROXY_H
 #define DOCUMMENTPROXY_H
 #include "docummentbase.h"
+#include "commonstruct.h"
 #include <QObject>
 #include <QWidget>
+
 
 enum DocType_EM {
     DocType_NULL = 0,
@@ -29,7 +31,7 @@ public:
     bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3);
     void addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow);
     bool save(const QString &filepath, bool withChanges);
-    void search(const QString &strtext, const QColor &color);
+    void search(const QString& strtext,QMap<int,stSearchRes>& resmap,const QColor& color);
 private:
     DocummentProxy(QObject *parent = nullptr);
     QWidget *qwfather;

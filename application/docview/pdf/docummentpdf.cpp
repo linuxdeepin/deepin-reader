@@ -200,10 +200,19 @@ void DocummentPDF::addAnnotation(const QPoint &starpos, const QPoint &endpos, QC
 
 }
 
-void DocummentPDF::search(const QString &strtext, const QColor &color)
+void DocummentPDF::search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color)
 {
+    //先清理
+    if(m_listsearch.size()>0)
+    {
+        clearSearch();
+    }
+
     for (int i = 0; i < document->numPages(); ++i) {
-        searchHightlight(document->page(i),strtext,color);
+        stSearchRes stres;
+        searchHightlight(document->page(i),strtext,stres,color);
+        if(stres.listtext.size()>0)
+            resmap.insert(i,stres);
     }
     //todo kyz 先单独更新当前页后期优化
     scaleAndShow(m_scale,m_rotate);//全部刷新
@@ -277,7 +286,7 @@ void DocummentPDF::clearSearch()
     scaleAndShow(m_scale,m_rotate);
 }
 
-void DocummentPDF::searchHightlight(Poppler::Page* page,const QString& strtext,const QColor& color)
+void DocummentPDF::searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color)
 {
     if(nullptr==page) return;
     QList<QRectF> listrect=page->search(strtext);
@@ -297,6 +306,11 @@ void DocummentPDF::searchHightlight(Poppler::Page* page,const QString& strtext,c
     QRectF rec,recboundary;
     foreach(rec,listrect)
     {
+        //获取搜索结果附近文字
+        QRectF rctext=rec;
+        rctext.setX(rctext.x()-40);
+        rctext.setWidth(rctext.width()+80);
+        stres.listtext.push_back(page->text(rctext));
         recboundary.setTopLeft(QPointF(rec.left()/page->pageSizeF().width(),
                                        rec.top()/page->pageSizeF().height()));
         recboundary.setTopRight(QPointF(rec.right()/page->pageSizeF().width(),
@@ -306,7 +320,6 @@ void DocummentPDF::searchHightlight(Poppler::Page* page,const QString& strtext,c
         recboundary.setBottomRight(QPointF(rec.right()/page->pageSizeF().width(),
                                            rec.bottom()/page->pageSizeF().height()));
 
-
         qDebug()<<"**"<<rec<<"**";
         quad.points[0] = recboundary.topLeft();
         quad.points[1] = recboundary.topRight();
@@ -315,10 +328,11 @@ void DocummentPDF::searchHightlight(Poppler::Page* page,const QString& strtext,c
         qlistquad.append(quad);
     }
     annotation->setHighlightQuads(qlistquad);
-    annotation->setBoundary(recboundary);
+    //annotation->setBoundary(recboundary);
     annotation->setStyle(style);
     annotation->setPopup(popup);
     page->addAnnotation(annotation);
+    m_listsearch.append(annotation);
 }
 
 void DocummentPDF::refreshOnePage(int ipage)
@@ -327,15 +341,6 @@ void DocummentPDF::refreshOnePage(int ipage)
         return ;
     PagePdf *ppdf = (PagePdf *)m_pages.at(ipage);
     ppdf->showImage(m_scale, m_rotate);
-}
-
-int DocummentPDF::curpage()
-{
-    QScrollBar *scrollBar_X = horizontalScrollBar();
-    const int x_offset = scrollBar_X->value();
-    QScrollBar *scrollBar_Y = verticalScrollBar();
-    const int y_offset = scrollBar_Y->value();
-
 }
 
 void DocummentPDF::loadWordCache(int indexpage, PageBase *page)

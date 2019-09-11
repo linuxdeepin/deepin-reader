@@ -7,6 +7,7 @@ HEADERS += \
     $$PWD/docummentproxy.h \
     $$PWD/pagebase.h \
     $$PWD/publicfunc.h \
+    $$PWD/commonstruct.h
 
 SOURCES += \
     $$PWD/pdf/docummentpdf.cpp \

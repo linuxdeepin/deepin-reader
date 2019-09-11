@@ -2,6 +2,7 @@
 #define DOCUMMENTBASE_H
 
 #include "pagebase.h"
+#include "docview/commonstruct.h"
 #include <QScrollArea>
 #include <QList>
 #include <QVBoxLayout>
@@ -125,7 +126,7 @@ public:
 
     virtual void addAnnotation(const QPoint& starpos,const QPoint& endpos,QColor color=Qt::yellow){}
 
-    virtual void search(const QString& strtext,const QColor& color){}
+    virtual void search(const QString& strtext,QMap<int,stSearchRes>& resmap,QColor color=Qt::yellow){}
 
     QList<PageBase *> *getPages()
     {
