@@ -1,5 +1,4 @@
 #include "fontWidget.h"
-#include <QDebug>
 
 FontWidget::FontWidget(CustomWidget *parent):
     CustomWidget("FontWidget", parent)
@@ -22,9 +21,6 @@ int FontWidget::dealWithData(const int &, const QString &)
 
 void FontWidget::initWidget()
 {
-    //让程序背景透明
-//    setAttribute(Qt::WA_TranslucentBackground, true);
-
     QFont ft;
     QVBoxLayout *t_pVBoxLayout = new QVBoxLayout;
     t_pVBoxLayout->setContentsMargins(1, 0, 1, 0);
@@ -246,7 +242,37 @@ void FontWidget::hideEvent(QHideEvent *event)
 
 void FontWidget::rotateFileView(bool isRight)
 {
+    int ival = m_pEnlargeSlider->value();
 
+    int t_rotate = 0;
+
+    if (isRight) {
+        m_rotate += 90;
+    } else {
+        m_rotate -= 90;
+    }
+
+    t_rotate = (m_rotate / 90) % 4;
+
+    switch (t_rotate) {
+    case RotateType_Normal:
+        m_rotate = 360;
+        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_Normal);
+        break;
+    case RotateType_90:
+        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_90);
+        break;
+    case RotateType_180:
+        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_180);
+        break;
+    case RotateType_270:
+        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_270);
+        break;
+    default:
+        m_rotate = 360;
+        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_Normal);
+        break;
+    }
 }
 
 void FontWidget::slotSetChangeVal(int val)
@@ -265,15 +291,14 @@ void FontWidget::slotSetDoubPageViewCheckIcon()
 {
     static bool t_isDoubPage = false;
 
-    qDebug() << tr("slotSetDoubPageViewCheckIcon");
-
     t_isDoubPage = !t_isDoubPage;
 
     if (t_isDoubPage) {
         m_pDoubPageViewLab->setPixmap(QPixmap(tr(":/resources/image/select .svg")));
-        sendMsg(MSG_DOUB_PAGE_VIEW, QString::number(1));
+        DocummentProxy::instance()->setViewModeAndShow(ViewMode_FacingPage);
     } else {
         m_pDoubPageViewLab->setPixmap(QPixmap(tr("")));
+        DocummentProxy::instance()->setViewModeAndShow(ViewMode_SinglePage);
     }
 }
 
@@ -307,87 +332,11 @@ void FontWidget::slotSetSuitWCheckIcon()
 
 void FontWidget::slotSetRotateLeftCheckIcon()
 {
-    int ival = m_pEnlargeSlider->value();
-
-    m_rotate -= 90;
-    int t_rotate = (m_rotate / 90) % 4;
-
-    t_rotate = qAbs(t_rotate);
-
-    qDebug() << tr("m_rotate:%1").arg(m_rotate);
-
-    switch (t_rotate) {
-    case RotateType_Normal:
-        m_rotate = 360;
-        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_Normal);
-        break;
-    case RotateType_90:
-        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_90);
-        break;
-    case RotateType_180:
-        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_180);
-        break;
-    case RotateType_270:
-        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_270);
-        break;
-    default:
-        m_rotate = 360;
-        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_Normal);
-        break;
-    }
-
-//    static bool t_isRotateL = false;
-
-//    t_isRotateL = !t_isRotateL;
-
-//    if (t_isRotateL) {
-//        m_pRotateLeftLab->setPixmap(QPixmap(tr(":/resources/image/select .svg")));
-//        sendMsg(MSG_ROTATE_LEFT, QString::number(1));
-//    } else {
-//        m_pRotateLeftLab->setPixmap(QPixmap(tr("")));
-//    }
+    rotateFileView(false);
 }
 
 void FontWidget::slotSetRotateRightCheckIcon()
 {
-    int ival = m_pEnlargeSlider->value();
-
-    m_rotate += 90;
-
-    int t_rotate = (m_rotate / 90) % 4;
-
-    t_rotate = qAbs(t_rotate);
-
-    qDebug() << tr("m_rotate:%1").arg(m_rotate);
-
-    switch (t_rotate) {
-    case RotateType_Normal:
-        m_rotate = 360;
-        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_Normal);
-        break;
-    case RotateType_90:
-        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_90);
-        break;
-    case RotateType_180:
-        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_180);
-        break;
-    case RotateType_270:
-        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_270);
-        break;
-    default:
-        m_rotate = 360;
-        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_Normal);
-        break;
-    }
-//    static bool t_isRotateR = false;
-
-//    t_isRotateR = !t_isRotateR;
-
-//    if (t_isRotateR) {
-//        m_pRotateRightLab->setPixmap(QPixmap(tr(":/resources/image/select .svg")));
-//        sendMsg(MSG_ROTATE_RIGHT, QString::number(1));
-//    } else {
-//        m_pRotateRightLab->setPixmap(QPixmap(tr("")));
-//    }
+    rotateFileView(true);
 }
 
