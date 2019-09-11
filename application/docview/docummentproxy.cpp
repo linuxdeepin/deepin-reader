@@ -134,4 +134,16 @@ void DocummentProxy::search(const QString &strtext, QMap<int, stSearchRes> &resm
     m_documment->search(strtext,resmap,color);
 }
 
+int DocummentProxy::currentPageNo()
+{
+    if (!m_documment)
+        return -1;
+    return m_documment->currentPageNo();
+}
+bool DocummentProxy::pageJump(int pagenum)
+{
+    if (!m_documment)
+        return false;
+    return m_documment->pageJump(pagenum);
+}
 

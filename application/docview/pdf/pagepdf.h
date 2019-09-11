@@ -19,12 +19,12 @@ public:
     void clearPageTextSelections();
     void appendWord(stWord word);
     void setPage(Poppler::Page *page);
+    void setScaleAndRotate(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     bool getImage(QImage &image, double width, double height);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
     void setImageWidth(double width);
     void setImageHeight(double height);
-    void showImage(double scale = 1);
     bool getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, double width, double height);
     bool clearMagnifierPixmap();
     //Annotation

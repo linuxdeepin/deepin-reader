@@ -129,9 +129,11 @@ void FileViewWidget::onOpenFile(const QString &filePath)
         if (rl) {
             DataManager::instance()->setStrOnlyFilePath(filePath);
 
-            m_pDocummentProxy->scaleRotateAndShow(1, RotateType_Normal);
+            //m_pDocummentProxy->scaleRotateAndShow(1, RotateType_Normal);
 
             NotifySubject::getInstance()->sendMsg(MSG_OPERATION_OPEN_FILE_OK);
+//            m_pDocummentProxy->pageJump(10);
+//            qDebug() << "---currentPageNo:" << m_pDocummentProxy->currentPageNo();
         } else {
             sendMsg(MSG_OPERATION_OPEN_FILE_FAIL);
         }
