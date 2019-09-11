@@ -11,8 +11,8 @@ PagePdf::PagePdf(QWidget *parent)
       m_pencolor (QColor(72, 118, 255, 0)),
       m_penwidth(0)
 {
-    setFrameShape (QFrame::Box);
-    setStyleSheet("border-width: 1px;border-style: solid;border-color: rgb(255, 170, 0);");
+//    setFrameShape (QFrame::Box);
+//    setStyleSheet("border-width: 1px;border-style: solid;border-color: rgb(255, 170, 0);");
 }
 
 void PagePdf::paintEvent(QPaintEvent *event)
