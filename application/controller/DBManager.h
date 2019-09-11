@@ -47,10 +47,9 @@ public:
     QString getBookMarks();     //  获取给文件 所有标签的页码
     void insertBookMark(const QString &);
     void updateBookMark(const QString &);
+    void deleteBookMark();
 
     void setStrFilePath(const QString &strFilePath);
-
-    void setStrFileName(const QString &strFileName);
 
 private:
     QString m_connectionName = "";

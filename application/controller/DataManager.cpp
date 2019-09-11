@@ -1,4 +1,5 @@
 #include "DataManager.h"
+#include "application.h"
 
 DataManager::DataManager(QObject *parent) :
     QObject (parent)
@@ -13,5 +14,7 @@ QString DataManager::strOnlyFilePath() const
 
 void DataManager::setStrOnlyFilePath(const QString &strOnlyFilePath)
 {
+    dApp->dbM->setStrFilePath(strOnlyFilePath);
+
     m_strOnlyFilePath = strOnlyFilePath;
 }

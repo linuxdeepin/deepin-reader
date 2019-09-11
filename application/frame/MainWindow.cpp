@@ -31,6 +31,7 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     setMinimumSize(720, 560);
 
+    setBorderColor(QColor(255, 0, 0));
     Dtk::Widget::moveToCenter(this);
 }
 

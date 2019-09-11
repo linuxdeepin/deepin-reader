@@ -52,3 +52,14 @@ void BookMarkStateLabel::setPixmapState(const QString &state)
     QPixmap pixmap(ssPath);
     this->setPixmap(pixmap);
 }
+
+void BookMarkStateLabel::SlotSetMarkState(const bool &bCheck)
+{
+    m_bChecked = bCheck;
+
+    if (!m_bChecked) {
+        this->clear();
+    } else {
+        setPixmapState(ImageModule::g_checked_state);
+    }
+}

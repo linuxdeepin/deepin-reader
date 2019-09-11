@@ -14,11 +14,4 @@ const QString g_disable_state = "disable";
 
 }
 
-namespace KeyModule {
-
-const QString g_esc_key = "Esc";
-const QString g_f1_key = "F1";
-
-}
-
 #endif // IMAGEHEADER_H

@@ -41,12 +41,12 @@ class FindWidget : public CustomWidget
 public:
     FindWidget(CustomWidget *parent = nullptr);
 
-    bool isFocus();
-    void focus();
+//    bool isFocus();
+//    void focus();
 
-    void setMismatchAlert(bool isAlert);
+//    void setMismatchAlert(bool isAlert);
 
-    void setBackground(QString color);
+//    void setBackground(QString color);
 
 private slots:
     void findCancel();
@@ -55,7 +55,7 @@ private slots:
     void slotFindPrevBtnClicked();
 
 protected:
-    void paintEvent(QPaintEvent *event);
+//    void paintEvent(QPaintEvent *event);
     void hideEvent(QHideEvent *event);
 
 private:
@@ -63,7 +63,9 @@ private:
     LineBar *m_editLine;
     QHBoxLayout *m_layout;
 
-    QColor m_backgroundColor;
+    QString     m_strOldFindContent = "";
+
+//    QColor m_backgroundColor;
 
     // IObserver interface
 public:
