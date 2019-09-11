@@ -118,7 +118,7 @@ public:
     virtual void addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) {}
 
 
-    virtual void search(const QString& strtext,QMap<int,stSearchRes>& resmap,QColor color=Qt::yellow){}
+    virtual void search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color = Qt::yellow) {}
     virtual int currentPageNo()
     {
         return -1;
@@ -147,6 +147,8 @@ public:
             m_magnifierwidget->hide();
         }
     }
+signals:
+    void signal_pageChange(int);
 protected slots:
     virtual void slot_vScrollBarValueChanged(int value)
     {

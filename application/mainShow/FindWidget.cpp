@@ -147,3 +147,4 @@ void FindWidget::setBackground(QString color)
 
     update();
 }
+

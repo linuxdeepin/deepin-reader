@@ -322,16 +322,14 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         return setHandShape(msgContent);
     case MSG_FIND_CONTENT:          //  查询内容
         if (msgContent != "") {
-            QMap<int,stSearchRes> resmap;
-             m_pDocummentProxy->search(msgContent,resmap, QColor(255, 0, 0));
-             for(auto it=resmap.begin();it!=resmap.end();++it)
-             {
-                 qDebug()<<it.key();
-                 foreach(QString strtext,it.value().listtext)
-                 {
-                     qDebug()<<strtext;
-                 }
-             }
+            QMap<int, stSearchRes> resmap;
+            m_pDocummentProxy->search(msgContent, resmap, QColor(255, 0, 0));
+            for (auto it = resmap.begin(); it != resmap.end(); ++it) {
+                qDebug() << it.key();
+                foreach (QString strtext, it.value().listtext) {
+                    qDebug() << strtext;
+                }
+            }
         }
         return ConstantMsg::g_effective_res;
     }
