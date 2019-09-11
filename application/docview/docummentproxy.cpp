@@ -27,6 +27,7 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath)
     m_type = type;
     m_documment = DocummentFactory::creatDocumment(type, qwfather);
     m_path = filepath;
+    connect(m_documment, SIGNAL(signal_pageChange(int)), this, SLOT(slot_pageChange(int)));
     return m_documment->openFile(filepath);
 }
 
@@ -131,7 +132,7 @@ void DocummentProxy::search(const QString &strtext, QMap<int, stSearchRes> &resm
 {
     if (!m_documment)
         return ;
-    m_documment->search(strtext,resmap,color);
+    m_documment->search(strtext, resmap, color);
 }
 
 void DocummentProxy::clearsearch()
@@ -147,6 +148,7 @@ int DocummentProxy::currentPageNo()
         return -1;
     return m_documment->currentPageNo();
 }
+
 bool DocummentProxy::pageJump(int pagenum)
 {
     if (!m_documment)
@@ -154,4 +156,7 @@ bool DocummentProxy::pageJump(int pagenum)
     return m_documment->pageJump(pagenum);
 }
 
-
+void DocummentProxy::slot_pageChange(int pageno)
+{
+    emit signal_pageChange(pageno);
+}

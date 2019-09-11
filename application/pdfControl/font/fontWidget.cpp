@@ -4,7 +4,7 @@ FontWidget::FontWidget(CustomWidget *parent):
     CustomWidget("FontWidget", parent)
 {
     //让程序无边框
-    setWindowFlags(Qt::Popup | Qt::FramelessWindowHint);
+    setWindowFlags(Qt::Popup);
 
     initWidget();
 }
@@ -14,8 +14,31 @@ FontWidget::~FontWidget()
 
 }
 
-int FontWidget::dealWithData(const int &, const QString &)
+int FontWidget::dealWithData(const int &msgType, const QString &)
 {
+    int scale = 0;
+    switch (msgType) {
+    case MSG_OPERATION_LARGER:      //  放大
+        scale = m_pEnlargeSlider->value();
+        if (scale < 300) {
+            scale += 25;
+            if (scale > 300) {
+                scale = 300;
+            }
+            m_pEnlargeSlider->setValue(scale);
+        }
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_SMALLER:     //  缩小
+        scale = m_pEnlargeSlider->value();
+        if (scale > 50) {
+            scale -= 25;
+            if (scale <= 50) {
+                scale = 50;
+            }
+            m_pEnlargeSlider->setValue(scale);
+        }
+        return ConstantMsg::g_effective_res;
+    }
     return 0;
 }
 
@@ -158,7 +181,6 @@ void FontWidget::initWidget()
     t_pHLayout7->addWidget(m_pRotateRightBtn);
     t_pHLayout7->addWidget(m_pRotateRightLab);
     //t_pHLayout7->addSpacing(1);
-
 
     t_pVBoxLayout->setContentsMargins(0, 0, 1, 0);
     t_pVBoxLayout->addSpacing(1);

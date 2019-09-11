@@ -158,13 +158,13 @@ void FileViewWidget::SlotCustomContextMenuRequested(const QPoint &point)
     qDebug() << "       " << rl;
 
     //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
-    m_pTextOperationWidget->show();
-    m_pTextOperationWidget->move(clickPos.x(), clickPos.y());
-    m_pTextOperationWidget->raise();
+//    m_pTextOperationWidget->show();
+//    m_pTextOperationWidget->move(clickPos.x(), clickPos.y());
+//    m_pTextOperationWidget->raise();
 
-//    m_pDefaultOperationWidget->show();
-//    m_pDefaultOperationWidget->move(clickPos.x(), clickPos.y());
-//    m_pDefaultOperationWidget->raise();
+    m_pDefaultOperationWidget->show();
+    m_pDefaultOperationWidget->move(clickPos.x(), clickPos.y());
+    m_pDefaultOperationWidget->raise();
 
 }
 
