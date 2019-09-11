@@ -37,9 +37,14 @@ void TextOperationWidget::SlotBtnAddBookMarkClicked()
     sendMsgAndHide(MSG_OPERATION_TEXT_ADD_BOOKMARK);
 }
 
-void TextOperationWidget::sendMsgAndHide(const int &msgType)
+void TextOperationWidget::SlotSendLightedColor(const int &nColor)
 {
-    sendMsg(msgType);
+    sendMsgAndHide(MSG_OPERATION_TEXT_ADD_HIGHLIGHTED, QString::number(nColor));
+}
+
+void TextOperationWidget::sendMsgAndHide(const int &msgType, const QString &msgContent)
+{
+    sendMsg(msgType, msgContent);
     this->hide();
 }
 
@@ -56,8 +61,9 @@ void TextOperationWidget::initWidget()
     this->setLayout(layout);
 
     createBtn(tr("copy"), SLOT(SlotBtnCopyClicked()));
-    m_pLightedWidget = new LightedWidget;
-    layout->addWidget(m_pLightedWidget);
+    LightedWidget *pLightedWidget = new LightedWidget;
+    connect(pLightedWidget, SIGNAL(sigSendLightedColor(const int &)), this, SLOT(SlotSendLightedColor(const int &)));
+    layout->addWidget(pLightedWidget);
 
     createBtn(tr("remove high lighted"), SLOT(SlotBtnRemoveHighLightedClicked()));
     createBtn(tr("add annotation"), SLOT(SlotBtnAddAnnotationClicked()));

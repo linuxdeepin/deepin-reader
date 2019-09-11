@@ -29,12 +29,13 @@ private slots:
     void SlotBtnAddAnnotationClicked();
     void SlotBtnAddBookMarkClicked();
 
+    void SlotSendLightedColor(const int &);
+
 private:
-    void sendMsgAndHide(const int &);
+    void sendMsgAndHide(const int &, const QString &msgContent = "");
 
 private:
     QVBoxLayout *layout = nullptr;
-    LightedWidget   *m_pLightedWidget = nullptr;
 
     // IObserver interface
 public:

@@ -7,7 +7,7 @@
 #include "controller/MsgSubject.h"
 #include "controller/NotifySubject.h"
 #include "MsgHeader.h"
-#include "ImageHeader.h"
+#include "ModuleHeader.h"
 #include "utils/utils.h"
 
 #include <DGuiApplicationHelper>

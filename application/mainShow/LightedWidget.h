@@ -21,6 +21,9 @@ class LightedWidget : public CustomWidget
 public:
     LightedWidget(CustomWidget *parent = nullptr);
 
+signals:
+    void sigSendLightedColor(const int &);
+
 private:
     void createBtn(const QString &, const char *, QHBoxLayout *bottomLayout);
 

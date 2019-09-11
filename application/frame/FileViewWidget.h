@@ -14,6 +14,13 @@
 
 #include "docview/docummentproxy.h"
 
+//  当前鼠标状态
+enum Handel_Enum {
+    Default_State,
+    Handel_State,
+    Magnifier_State
+};
+
 /**
  * @brief The FileViewWidget class
  * @brief   文档显示区域
@@ -31,6 +38,9 @@ signals:
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
@@ -43,22 +53,29 @@ private:
     int magnifying(const QString &);
     int setHandShape(const QString &);
     int screening(const QString &);
-    int openFileFolder();
     void onShowFileAttr();
     void onShowFindWidget();
     void onOpenFile(const QString &filePath);
 
     void initConnections();
 
+    int dealWithTitleMenuRequest(const int &msgType, const QString &msgContent);
+    int dealWithFileMenuRequest(const int &msgType, const QString &msgContent);
+
     void setBookMarkStateWidget();
 
 private:
-    BookMarkStateLabel      *m_pBookMarkStateWidgt = nullptr;
+    BookMarkStateLabel      *m_pBookMarkStateLabel = nullptr;
     FindWidget              *m_pFindWidget = nullptr;
     FileAttrWidget          *m_pFileAttrWidget = nullptr;
     DefaultOperationWidget  *m_pDefaultOperationWidget = nullptr;
     TextOperationWidget     *m_pTextOperationWidget = nullptr;
     DocummentProxy          *m_pDocummentProxy = nullptr;
+
+private:
+    int         m_nCurrentHandelState = Default_State; //  当前鼠标状态
+    bool        m_bSelectText = false;      //  是否可以选中文字
+    QPoint      m_pStartPoint;
 
     // CustomWidget interface
 protected:

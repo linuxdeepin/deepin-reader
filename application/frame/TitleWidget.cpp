@@ -94,10 +94,10 @@ void TitleWidget::on_HandleAction_trigger(bool)
     m_nCurrentState = 1;
     QString btnName = "hand";
 
-    QString normalPic = PF::getQrcPath(btnName, g_normal_state);
-    QString hoverPic = PF::getQrcPath(btnName, g_hover_state);
-    QString pressPic = PF::getQrcPath(btnName, g_press_state);
-    QString checkedPic = PF::getQrcPath(btnName, g_checked_state);
+    QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
+    QString hoverPic = PF::getQrcPath(btnName, ImageModule::g_hover_state);
+    QString pressPic = PF::getQrcPath(btnName, ImageModule::g_press_state);
+    QString checkedPic = PF::getQrcPath(btnName, ImageModule::g_checked_state);
 
     m_pChooseBtn->setNormalPic(normalPic);
     m_pChooseBtn->setHoverPic(hoverPic);
@@ -117,10 +117,10 @@ void TitleWidget::on_DefaultAction_trigger(bool)
 
     QString btnName = "choose";
 
-    QString normalPic = PF::getQrcPath(btnName, g_normal_state);
-    QString hoverPic = PF::getQrcPath(btnName, g_hover_state);
-    QString pressPic = PF::getQrcPath(btnName, g_press_state);
-    QString checkedPic = PF::getQrcPath(btnName, g_checked_state);
+    QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
+    QString hoverPic = PF::getQrcPath(btnName, ImageModule::g_hover_state);
+    QString pressPic = PF::getQrcPath(btnName, ImageModule::g_press_state);
+    QString checkedPic = PF::getQrcPath(btnName, ImageModule::g_checked_state);
 
     m_pChooseBtn->setNormalPic(normalPic);
     m_pChooseBtn->setHoverPic(hoverPic);
@@ -172,10 +172,10 @@ void TitleWidget::initBtns()
 
 CustomImageButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 {
-    QString normalPic = PF::getQrcPath(btnName, g_normal_state);
-    QString hoverPic = PF::getQrcPath(btnName, g_hover_state);
-    QString pressPic = PF::getQrcPath(btnName, g_press_state);
-    QString disablePic = PF::getQrcPath(btnName, g_disable_state);
+    QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
+    QString hoverPic = PF::getQrcPath(btnName, ImageModule::g_hover_state);
+    QString pressPic = PF::getQrcPath(btnName, ImageModule::g_press_state);
+    QString disablePic = PF::getQrcPath(btnName, ImageModule::g_disable_state);
 
     CustomImageButton *btn = new  CustomImageButton;
     btn->setNormalPic(normalPic);
@@ -188,7 +188,7 @@ CustomImageButton *TitleWidget::createBtn(const QString &btnName, bool bCheckabl
     if (bCheckable) {
         btn->setChecked(false);
 
-        QString checkedPic = PF::getQrcPath(btnName, g_checked_state);
+        QString checkedPic = PF::getQrcPath(btnName, ImageModule::g_checked_state);
         btn->setCheckedPic(checkedPic);
     }
 

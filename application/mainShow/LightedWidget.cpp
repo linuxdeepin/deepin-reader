@@ -16,17 +16,17 @@ void LightedWidget::createBtn(const QString &btnName, const char *member, QHBoxL
 
 void LightedWidget::SlotBtnRedClicked()
 {
-
+    emit sigSendLightedColor(0);
 }
 
 void LightedWidget::SlotBtnGreenClicked()
 {
-
+    emit sigSendLightedColor(1);
 }
 
 void LightedWidget::SlotBtnBlueClicked()
 {
-
+    emit sigSendLightedColor(2);
 }
 
 int LightedWidget::dealWithData(const int &, const QString &)
@@ -46,9 +46,9 @@ void LightedWidget::initWidget()
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     bottomLayout->setContentsMargins(0, 0, 0, 0);
     bottomLayout->setSpacing(0);
-    createBtn(tr("red"), SLOT(SlotBtnRedClicked()), bottomLayout);
-    createBtn(tr("green"), SLOT(SlotBtnGreenClicked()), bottomLayout);
-    createBtn(tr("blue"), SLOT(SlotBtnBlueClicked()), bottomLayout);
+    createBtn("red", SLOT(SlotBtnRedClicked()), bottomLayout);
+    createBtn("green", SLOT(SlotBtnGreenClicked()), bottomLayout);
+    createBtn("blue", SLOT(SlotBtnBlueClicked()), bottomLayout);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->setContentsMargins(0, 0, 0, 0);

@@ -37,10 +37,10 @@ void MainOperationWidget::initWidget()
 
 DPushButton *MainOperationWidget::createBtn(const QString &btnName)
 {
-    QString normalPic = PF::getQrcPath(btnName, g_normal_state);
-    QString hoverPic = PF::getQrcPath(btnName, g_hover_state);
-    QString pressPic = PF::getQrcPath(btnName, g_press_state);
-    QString checkedPic = PF::getQrcPath(btnName, g_checked_state);
+    QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
+    QString hoverPic = PF::getQrcPath(btnName, ImageModule::g_hover_state);
+    QString pressPic = PF::getQrcPath(btnName, ImageModule::g_press_state);
+    QString checkedPic = PF::getQrcPath(btnName, ImageModule::g_checked_state);
 
     DPushButton *btn = new DPushButton;
     btn->setToolTip(btnName);

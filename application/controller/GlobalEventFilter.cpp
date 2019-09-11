@@ -19,6 +19,7 @@
 #include <QEvent>
 #include <QWindowStateChangeEvent>
 #include "utils/utils.h"
+#include "subjectObserver/ModuleHeader.h"
 
 #include "NotifySubject.h"
 #include "subjectObserver/MsgHeader.h"
@@ -38,10 +39,17 @@ bool GlobalEventFilter::eventFilter(QObject *obj, QEvent *e)
         QKeyEvent *event = static_cast<QKeyEvent *>(e);
         QString key = Utils::getKeyshortcut(event);
 
-//        NotifySubject::getInstance()->sendMsg(MSG_NOTIFY_MSG, key);
+        qDebug() << "GlobalEventFilter      eventFilter     " << key;
 
-        //  拦截， 不在向下转发
-        //return true;
+        if (key == KeyModule::g_esc_key) {
+            NotifySubject::getInstance()->sendMsg(MSG_NOTIFY_MSG, key);
+
+            //  拦截， 不在向下转发
+            return true;
+        }
+        if (key == KeyModule::g_f1_key) {
+            return true;
+        }
     }
 
     return false;

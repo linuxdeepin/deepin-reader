@@ -40,9 +40,9 @@ FindWidget::FindWidget(CustomWidget *parent)
     initWidget();
 
     connect(m_editLine, &LineBar::pressEsc, this, &FindWidget::findCancel);
-    connect(m_editLine, &LineBar::pressEnter, this, &FindWidget::slotFindNextBtnClicked);
+    connect(m_editLine, &LineBar::pressEnter, this, &FindWidget::handleContentChanged);
     connect(m_editLine, &LineBar::pressCtrlEnter, this, &FindWidget::slotFindPrevBtnClicked);
-    connect(m_editLine, &LineBar::contentChanged, this, &FindWidget::handleContentChanged, Qt::QueuedConnection);
+    //connect(m_editLine, &LineBar::contentChanged, this, &FindWidget::handleContentChanged, Qt::QueuedConnection);
 
     setVisible(false);
 }

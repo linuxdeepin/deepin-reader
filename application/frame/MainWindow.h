@@ -22,9 +22,6 @@ public:
     MainWindow(DMainWindow *parent = nullptr);
     ~MainWindow() override;
 
-protected:
-    void keyPressEvent(QKeyEvent *ev) override;
-
 private:
     void initUI();
     void initConnections();

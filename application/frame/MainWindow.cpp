@@ -6,6 +6,9 @@
 #include <DTitlebar>
 #include <DWidgetUtil>
 #include <QDebug>
+#include <DDesktopServices>
+
+#include "controller/DataManager.h"
 
 MainWindow::MainWindow(DMainWindow *parent)
     : DMainWindow(parent)
@@ -36,7 +39,6 @@ MainWindow::~MainWindow()
     // We don't need clean pointers because application has exit here.
     if (m_pMsgSubject) {
         m_pMsgSubject->removeObserver(this);
-
         m_pMsgSubject->stopThreadRun();
     }
 
@@ -44,19 +46,6 @@ MainWindow::~MainWindow()
         m_pNotifySubject->removeObserver(this);
         m_pNotifySubject->stopThreadRun();
     }
-}
-
-void MainWindow::keyPressEvent(QKeyEvent *e)
-{
-    QString key = Utils::getKeyshortcut(e);
-    qDebug() << "Window::keyPressEvent      "   << key;
-    if ( key == "Esc") {
-        sendMsg(MSG_MAGNIFYING_CANCEL);
-//        qDebug() << "keyPressEvent";
-    } else if (key == "F1") {   //  F1　跳转　帮助文档
-//        qDebug() << "keyPressEvent";
-    }
-    DMainWindow::keyPressEvent(e);
 }
 
 void MainWindow::initUI()
@@ -119,7 +108,12 @@ void MainWindow::action_SaveAsFile()
 //  打开 所在文件夹
 void MainWindow::action_OpenFolder()
 {
-    sendMsg(MSG_OPERATION_OPEN_FOLDER);
+    QString strFilePath = DataManager::instance()->strOnlyFilePath();
+    if (strFilePath != "") {
+        int nLastPos = strFilePath.lastIndexOf('/');
+        strFilePath = strFilePath.mid(0, nLastPos);
+        DDesktopServices::showFolder(strFilePath);
+    }
 }
 
 //  打印
