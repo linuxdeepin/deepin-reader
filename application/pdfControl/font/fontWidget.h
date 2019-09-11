@@ -4,14 +4,17 @@
 #include <DLabel>
 #include <DSlider>
 #include <DImageButton>
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QButtonGroup>
 #include <QPixmap>
 #include <QPainter>
 #include <QRectF>
+#include <QtMath>
 
 #include "subjectObserver/CustomWidget.h"
+#include "docview/docummentproxy.h"
 
 class FontWidget : public CustomWidget
 {
@@ -32,6 +35,9 @@ protected:
 protected:
     void  paintEvent(QPaintEvent *e) override;
     void  hideEvent(QHideEvent *event) override;
+
+private:
+    void rotateFileView(bool isRight = true);
 
 private slots:
     void slotSetChangeVal(int);
@@ -56,6 +62,7 @@ private:
     DLabel *m_pSuitWLab = nullptr;
     DLabel *m_pRotateLeftLab = nullptr;
     DLabel *m_pRotateRightLab = nullptr;
+    int m_rotate = 360;  // 旋转角度
 };
 
 #endif // FONTWIDGET_H
