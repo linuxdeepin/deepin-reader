@@ -18,7 +18,6 @@ class CustomLabel : public QLabel
     Q_OBJECT
 public:
     CustomLabel(QWidget *parent = nullptr);
-    ~CustomLabel() override;
 
 protected:
     void  paintEvent(QPaintEvent *e) override;

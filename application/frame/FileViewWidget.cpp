@@ -152,13 +152,13 @@ void FileViewWidget::SlotCustomContextMenuRequested(const QPoint &point)
     QPoint clickPos = this->mapToGlobal(point);
 
     //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
-    m_pTextOperationWidget->show();
-    m_pTextOperationWidget->move(clickPos.x(), clickPos.y());
-    m_pTextOperationWidget->raise();
+//    m_pTextOperationWidget->show();
+//    m_pTextOperationWidget->move(clickPos.x(), clickPos.y());
+//    m_pTextOperationWidget->raise();
 
-//    m_pDefaultOperationWidget->show();
-//    m_pDefaultOperationWidget->move(clickPos.x(), clickPos.y());
-//    m_pDefaultOperationWidget->raise();
+    m_pDefaultOperationWidget->show();
+    m_pDefaultOperationWidget->move(clickPos.x(), clickPos.y());
+    m_pDefaultOperationWidget->raise();
 
 }
 
@@ -239,10 +239,10 @@ int FileViewWidget::dealWithTitleMenuRequest(const int &msgType, const QString &
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_SCREENING:   //  放映
         return screening(msgContent);
-    case MSG_OPERATION_LARGER:      //  放大
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_SMALLER:     //  缩小
-        return ConstantMsg::g_effective_res;
+//    case MSG_OPERATION_LARGER:      //  放大
+//        return ConstantMsg::g_effective_res;
+//    case MSG_OPERATION_SMALLER:     //  缩小
+//        return ConstantMsg::g_effective_res;
     }
     return 0;
 }
@@ -254,18 +254,18 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
     case MSG_OPERATION_ADD_BOOKMARK:            //  添加书签
         qDebug() << "   MSG_OPERATION_ADD_BOOKMARK  ";
         return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_FIRST_PAGE:              //  第一页
-        qDebug() << "   MSG_OPERATION_FIRST_PAGE  ";
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_PREV_PAGE:               //  上一页
-        qDebug() << "   MSG_OPERATION_PREV_PAGE  ";
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_NEXT_PAGE:               //  下一页
-        qDebug() << "   MSG_OPERATION_NEXT_PAGE  ";
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_END_PAGE:                //  最后一页
-        qDebug() << "   MSG_OPERATION_END_PAGE  ";
-        return ConstantMsg::g_effective_res;
+//    case MSG_OPERATION_FIRST_PAGE:              //  第一页
+//        qDebug() << "   MSG_OPERATION_FIRST_PAGE  ";
+//        return ConstantMsg::g_effective_res;
+//    case MSG_OPERATION_PREV_PAGE:               //  上一页
+//        qDebug() << "   MSG_OPERATION_PREV_PAGE  ";
+//        return ConstantMsg::g_effective_res;
+//    case MSG_OPERATION_NEXT_PAGE:               //  下一页
+//        qDebug() << "   MSG_OPERATION_NEXT_PAGE  ";
+//        return ConstantMsg::g_effective_res;
+//    case MSG_OPERATION_END_PAGE:                //  最后一页
+//        qDebug() << "   MSG_OPERATION_END_PAGE  ";
+//        return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_COPY:               //  复制
         qDebug() << "   MSG_OPERATION_TEXT_COPY  ";
         return ConstantMsg::g_effective_res;
