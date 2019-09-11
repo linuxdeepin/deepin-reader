@@ -12,6 +12,10 @@
 
 #include "subjectObserver/CustomWidget.h"
 
+/**
+ * @brief The ThumbnailItemWidget class
+ * @brief   注释item
+ */
 
 class NotesItemWidget : public CustomWidget
 {
@@ -21,7 +25,7 @@ public:
     NotesItemWidget(CustomWidget *parent = nullptr);
 
 public:
-    void setLabelPix(const QString &);
+    void setLabelImage(const QImage &);
     void setLabelPage(const QString &);
     void setTextEditText(const QString &);
 

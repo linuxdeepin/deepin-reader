@@ -53,18 +53,22 @@ public:
     bool save(const QString &filePath, bool withChanges)const override;
     bool loadWords();
     void removeAllAnnotation();
-    void removeAnnotation(QPoint start);
-    void addAnnotation(const QPoint &startpos, const QPoint &endpos, const QColor &color);
-    void search(const QString &strtext, const QColor &color);
+    void removeAnnotation(const QPoint &startpos) override;
+    void addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) override;
+    void search(const QString &strtext, const QColor &color) override;
 private:
     int pointInWhichPage(QPoint &qpoint);
     void loadWordCache(int indexpage, PageBase *page);
-    bool abstractTextPage(const QList<Poppler::TextBox *> &text,
-                          PageBase *page);
+    bool abstractTextPage(const QList<Poppler::TextBox *> &text, PageBase *page);
     void showSinglePage();
     void showFacingPage();
     bool pdfsave(const QString &filePath, bool withChanges)const;
     void clearSearch();
+    void searchHightlight(Poppler::Page *page, const QString &strtext, const QColor &color);
+    void refreshOnePage(int ipage);
+    int  curpage();
+
+
     Poppler::Document *document;
     ThreadLoadDoc m_threadloaddoc;
     ThreadLoadWords m_threadloadwords;

@@ -18,9 +18,6 @@ class MainWidget : public CustomWidget
 public:
     MainWidget(CustomWidget *parent = nullptr);
 
-signals:
-    void sigOpenFileOk();
-
 private:
     void openFileOk();
     void openFileFail(const QString &);

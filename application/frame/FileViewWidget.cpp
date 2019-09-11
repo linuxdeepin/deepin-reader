@@ -37,42 +37,24 @@ FileViewWidget::~FileViewWidget()
 
 void FileViewWidget::initWidget()
 {
-//    m_docview = new DocumentView;
-//    QGridLayout *pgrlyout = new QGridLayout(this);
-//    pgrlyout->addWidget(m_docview);
+    m_pDocummentProxy = DocummentProxy::instance(this);
 
-    m_pDocummentProxy = new DocummentProxy(this);
+    int nParentWidth = this->width();
 
-    m_pMagnifyLabel = new MagnifyLabel(this);   //  放大镜 窗口
+    setBookMarkStateWidget();
 
     m_pDefaultOperationWidget = new DefaultOperationWidget;
     m_pTextOperationWidget = new  TextOperationWidget;
+    m_pFileAttrWidget = new FileAttrWidget;
+
+    m_pFindWidget = new FindWidget(this);
+    int nWidget = m_pFindWidget->width();
+    m_pFindWidget->move(nParentWidth - nWidget - 20, 20);
 }
 
 void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    if (m_pMagnifyLabel) {
-        if (m_bCanVisible) {
-            m_pMagnifyLabel->setWidgetShow();
-            QPoint oldPos = event->pos();
-
-            //  鼠标  在放大镜 的中心
-            QPoint pos(oldPos.x(), oldPos.y());
-
-            m_pMagnifyLabel->move(pos.x() - m_pMagnifyLabel->width() / 2, pos.y() - m_pMagnifyLabel->height() / 2);
-        }
-    }
-    DWidget::mouseMoveEvent(event);
-}
-
-//  鼠标 离开 文档显示区域
-void FileViewWidget::leaveEvent(QEvent *event)
-{
-    if (m_pMagnifyLabel && m_bCanVisible) {
-        m_pMagnifyLabel->setWidgetVisible();
-    }
-
-    DWidget::leaveEvent(event);
+//    DWidget::mouseMoveEvent(event);
 }
 
 //文件拖拽
@@ -88,7 +70,7 @@ void FileViewWidget::dropEvent(QDropEvent *event)
 
     if (mimeData->hasUrls()) {
         for (auto url : mimeData->urls()) {
-            on_slot_openfile(url.toLocalFile());
+            onOpenFile(url.toLocalFile());
         }
     }
 }
@@ -101,21 +83,24 @@ void FileViewWidget::resizeEvent(QResizeEvent *event)
         m_pFindWidget->move(nParentWidth - nWidget - 20, 20);
     }
 
+    setBookMarkStateWidget();
+
     CustomWidget::resizeEvent(event);
 }
 
 //  实际打开文件操作
-void FileViewWidget::on_slot_openfile(const QString &filePath)
+void FileViewWidget::onOpenFile(const QString &filePath)
 {
     if (nullptr != m_pDocummentProxy) {
-
-        DataManager::instance()->setStrOnlyFilePath(filePath);
-
         bool rl = m_pDocummentProxy->openFile(DocType_PDF, filePath);
         if (rl) {
-            m_pDocummentProxy->scaleRotateAndShow(1, RotateType_Normal);
-        } else {
+            DataManager::instance()->setStrOnlyFilePath(filePath);
 
+            m_pDocummentProxy->scaleRotateAndShow(1, RotateType_Normal);
+
+            NotifySubject::getInstance()->sendMsg(MSG_OPERATION_OPEN_FILE_OK);
+        } else {
+            sendMsg(MSG_OPERATION_OPEN_FILE_FAIL);
         }
     }
 }
@@ -126,14 +111,14 @@ void FileViewWidget::SlotCustomContextMenuRequested(const QPoint &point)
     QPoint clickPos = this->mapToGlobal(point);
 
     //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
-    m_pTextOperationWidget->show();
-    m_pTextOperationWidget->move(clickPos.x(), clickPos.y());
-    m_pTextOperationWidget->raise();
-    /*
+//    m_pTextOperationWidget->show();
+//    m_pTextOperationWidget->move(clickPos.x(), clickPos.y());
+//    m_pTextOperationWidget->raise();
+
     m_pDefaultOperationWidget->show();
     m_pDefaultOperationWidget->move(clickPos.x(), clickPos.y());
     m_pDefaultOperationWidget->raise();
-    */
+
 }
 
 //  打开　文件路径
@@ -143,11 +128,7 @@ void FileViewWidget::openFilePath(const QString &filePaths)
     int nSize = fileList.size();
     if (nSize > 0) {
         QString sPath = fileList.at(0);
-
-        //  检测文件是否损坏
-        on_slot_openfile(sPath);
-
-        sendMsg(MSG_OPERATION_OPEN_FILE_OK);
+        onOpenFile(sPath);
     }
 }
 
@@ -155,13 +136,6 @@ void FileViewWidget::openFilePath(const QString &filePaths)
 int FileViewWidget::magnifying(const QString &data)
 {
     int nRes = data.toInt();
-    m_bCanVisible = nRes;
-
-    if (!m_bCanVisible) {
-        m_pMagnifyLabel->setWidgetVisible();
-    } else {
-        m_pMagnifyLabel->setWidgetShow();
-    }
     return ConstantMsg::g_effective_res;
 }
 
@@ -184,31 +158,33 @@ void FileViewWidget::initConnections()
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(SlotCustomContextMenuRequested(const QPoint &)));
 
-    connect(this, SIGNAL(sigShowFileAttr()), this, SLOT(slotShowFileAttr()));
-    connect(this, SIGNAL(sigShowFindWidget()), this, SLOT(slotShowFindWidget()));
     connect(this, SIGNAL(sigOpenFile(const QString &)), this, SLOT(openFilePath(const QString &)));
 }
 
-//  查看 文件属性
-void FileViewWidget::slotShowFileAttr()
+void FileViewWidget::setBookMarkStateWidget()
 {
-    if (m_pFileAttrWidget == nullptr) {
-        m_pFileAttrWidget = new FileAttrWidget();
+    if (m_pBookMarkStateWidgt == nullptr) {
+        m_pBookMarkStateWidgt = new BookMarkStateLabel(this);
     }
+    int nParentWidth = this->width();
+    int nWidget = m_pBookMarkStateWidgt->width();
+    m_pBookMarkStateWidgt->move(nParentWidth - nWidget - 20, 10);
+    m_pBookMarkStateWidgt->show();
+    m_pBookMarkStateWidgt->raise();
+}
+
+//  查看 文件属性
+void FileViewWidget::onShowFileAttr()
+{
     //  获取文件的基本数据，　进行展示
     m_pFileAttrWidget->showScreenCenter();
 }
 
 //  显示搜索框
-void FileViewWidget::slotShowFindWidget()
+void FileViewWidget::onShowFindWidget()
 {
-    if (m_pFindWidget == nullptr) {
-        m_pFindWidget = new FindWidget(this);
-        int nParentWidth = this->width();
-        int nWidget = m_pFindWidget->width();
-        m_pFindWidget->move(nParentWidth - nWidget - 20, 20);
-    }
     m_pFindWidget->show();
+    m_pFindWidget->raise();
 }
 
 //  打开文件所在文件夹
@@ -231,10 +207,10 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigOpenFile(msgContent);
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_ATTR:        //  打开该文件的属性信息
-        emit sigShowFileAttr();
+        onShowFileAttr();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_FIND:        //  搜索
-        emit sigShowFindWidget();
+        onShowFindWidget();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_OPEN_FOLDER: //  打开该文件所处文件夹
         return openFileFolder();
@@ -256,6 +232,13 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_END_PAGE:    //  最后一页
         return ConstantMsg::g_effective_res;
+    case MSG_FIND_CONTENT:
+        m_pDocummentProxy->search(msgContent, QColor(255, 0, 0));
+        qDebug() << "       " << msgContent;
+        return ConstantMsg::g_effective_res;
+    case MSG_NOTIFY_MSG:
+        qDebug() << "   MSG_NOTIFY_MSG      " << msgContent;
+        break;
     }
     return 0;
 }

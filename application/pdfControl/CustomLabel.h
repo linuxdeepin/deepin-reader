@@ -8,6 +8,11 @@
 #include <QString>
 #include <QPainterPath>
 
+/**
+ * @brief The ThumbnailItemWidget class
+ * @brief   存放缩略图Label
+ */
+
 class CustomLabel : public QLabel
 {
     Q_OBJECT

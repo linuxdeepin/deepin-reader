@@ -1,9 +1,14 @@
 HEADERS += \
     $$PWD/DataManager.h \
     $$PWD/MsgSubject.h \
-    $$PWD/DbManager.h
+    $$PWD/NotifySubject.h \
+    $$PWD/SubjectHeader.h \
+    $$PWD/GlobalEventFilter.h \
+    $$PWD/DBManager.h
 
 SOURCES += \
     $$PWD/DataManager.cpp \
     $$PWD/MsgSubject.cpp \
-    $$PWD/DbManager.cpp
+    $$PWD/NotifySubject.cpp \
+    $$PWD/GlobalEventFilter.cpp \
+    $$PWD/DBManager.cpp

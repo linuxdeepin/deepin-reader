@@ -5,7 +5,7 @@ HEADERS += \
     $$PWD/FileAttrWidget.h \
     $$PWD/FindWidget.h \
     $$PWD/LineBar.h \
-    $$PWD/MagnifyLabel.h
+    $$PWD/BookMarkStateLabel.h
 
 SOURCES += \
     $$PWD/DefaultOperationWidget.cpp \
@@ -14,7 +14,7 @@ SOURCES += \
     $$PWD/FileAttrWidget.cpp \
     $$PWD/FindWidget.cpp \
     $$PWD/LineBar.cpp \
-    $$PWD/MagnifyLabel.cpp
+    $$PWD/BookMarkStateLabel.cpp
 
 RESOURCES += \
     $$PWD/mainShow.qrc

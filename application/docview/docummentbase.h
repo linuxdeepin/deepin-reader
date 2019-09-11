@@ -120,6 +120,13 @@ public:
         qDebug() << "do nothing";
         return false;
     }
+
+    virtual void removeAnnotation(const QPoint& startpos){}
+
+    virtual void addAnnotation(const QPoint& starpos,const QPoint& endpos,QColor color=Qt::yellow){}
+
+    virtual void search(const QString& strtext,const QColor& color){}
+
     QList<PageBase *> *getPages()
     {
         return &m_pages;

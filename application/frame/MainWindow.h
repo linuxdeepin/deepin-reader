@@ -6,6 +6,7 @@
 #include <DMenu>
 
 #include "controller/MsgSubject.h"
+#include "controller/NotifySubject.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -14,7 +15,7 @@ DWIDGET_USE_NAMESPACE
  * @brief 不做任何的业务处理， 只发送信号， 对应的模块处理相应的业务
  */
 
-class MainWindow : public DMainWindow
+class MainWindow : public DMainWindow, public IObserver
 {
     Q_OBJECT
 public:
@@ -30,6 +31,8 @@ private:
     void initTitlebar();
     QAction *createAction(DMenu *menu, const QString &actionName, const char *member, const bool &disable = true);
 
+    void openFileOk();
+
 private slots:
     void action_OpenFile();
     void action_SaveFile();
@@ -43,19 +46,14 @@ private slots:
     void action_Screening();
     void action_Larger();
     void action_Smaller();
-//    void action_darkTheme();
-//    void action_lightTheme();
-
-    void action_Help();
-
-    void slotOpenFileOk();
 
 private:
-    void sendMsg(const int &, const QString &msgContent = "");
+    void sendMsg(const int &, const QString &msgContent = "") override;
 
 private:
-    MsgSubject  *m_pMsgSubject = nullptr;
-    DMenu       *m_menu = nullptr;
+    MsgSubject      *m_pMsgSubject = nullptr;
+    NotifySubject   *m_pNotifySubject = nullptr;
+    DMenu           *m_menu = nullptr;
 
 private:
     QAction *m_pSaveFile = nullptr;
@@ -68,6 +66,13 @@ private:
     QAction *m_pFileScreening = nullptr;
     QAction *m_pFileLarger = nullptr;
     QAction *m_pFileSmaller = nullptr;
+
+    // IObserver interface
+public:
+    int dealWithData(const int &, const QString &) override;
+
+private:
+    void setObserverName(const QString &name) override;
 };
 
 #endif // MainWindow_H

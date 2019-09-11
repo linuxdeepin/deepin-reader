@@ -19,25 +19,38 @@ void NotesWidget::initWidget()
     m_pNotesList->setResizeMode(QListWidget::Adjust);
 
     m_pAddNotesBtn = new DImageButton;
-    m_pAddNotesBtn->setText(tr("添加注释"));
+    m_pAddNotesBtn->setText(tr("adding note"));
     m_pAddNotesBtn->setFixedSize(QSize(250, 50));
 
     m_pVLayout->addWidget(m_pNotesList);
     m_pVLayout->addWidget(m_pAddNotesBtn);
 
+    this->fillContantToList();
+}
+
+void NotesWidget::addNotesItem(const QImage &image, const int &page, const QString &text)
+{
+    NotesItemWidget *itemWidget = new NotesItemWidget;
+
+    itemWidget->setLabelImage(image);
+    itemWidget->setLabelPage(tr(" Page:%1").arg(page + 1));
+    itemWidget->setTextEditText(text);
+    itemWidget->setMinimumSize(QSize(250, 150));
+
+    QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
+    item->setFlags(Qt::ItemIsSelectable);
+    item->setSizeHint(QSize(250, 150));
+
+    m_pNotesList->insertItem(page, item);
+    m_pNotesList->setItemWidget(item, itemWidget);
+}
+
+void NotesWidget::fillContantToList()
+{
     for (int page = 0; page < 20; ++page) {
-        NotesItemWidget *itemWidget = new NotesItemWidget;
-        itemWidget->setLabelPage(tr(" Page:%1").arg(page + 1));
-        itemWidget->setLabelPix(tr(":/resources/image/logo/logo_big.svg"));
-        itemWidget->setTextEditText(tr("note something..."));
-        itemWidget->setMinimumSize(QSize(250, 150));
+        QImage image(tr(":/resources/image/logo/logo_big.svg"));
 
-        QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
-        item->setFlags(Qt::ItemIsSelectable);
-        item->setSizeHint(QSize(250, 150));
-
-        m_pNotesList->insertItem(page, item);
-        m_pNotesList->setItemWidget(item, itemWidget);
+        addNotesItem(image, page, tr("something..."));
     }
 }
 

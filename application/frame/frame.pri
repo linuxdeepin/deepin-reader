@@ -1,7 +1,6 @@
 HEADERS += \
     $$PWD/MainWindow.h \
     $$PWD/HomeWidget.h \
-    $$PWD/MainShowSplitter.h \
     $$PWD/LeftSidebarWidget.h \
     $$PWD/FileViewWidget.h \
     $$PWD/MainOperationWidget.h \
@@ -13,7 +12,6 @@ HEADERS += \
 SOURCES += \
     $$PWD/MainWindow.cpp \
     $$PWD/HomeWidget.cpp \
-    $$PWD/MainShowSplitter.cpp \
     $$PWD/FileViewWidget.cpp \
     $$PWD/LeftSidebarWidget.cpp \
     $$PWD/MainOperationWidget.cpp \

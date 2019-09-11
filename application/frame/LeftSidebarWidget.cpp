@@ -47,6 +47,11 @@ int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgConten
         m_pStackedWidget->setCurrentIndex(nIndex);
         return ConstantMsg::g_effective_res;
     }
+    if (msgType == MSG_SLIDER_SHOW_STATE) { //  控制 侧边栏显隐
+        bool bVis = msgContent.toInt();
+        setVisible(bVis);
+        return  ConstantMsg::g_effective_res;
+    }
 
     return 0;
 }

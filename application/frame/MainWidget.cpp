@@ -2,7 +2,10 @@
 #include <QHBoxLayout>
 
 #include "HomeWidget.h"
-#include "MainShowSplitter.h"
+
+#include <DSplitter>
+#include "FileViewWidget.h"
+#include "LeftSidebarWidget.h"
 
 MainWidget::MainWidget(CustomWidget *parent) :
     CustomWidget ("MainWidget", parent)
@@ -13,14 +16,13 @@ MainWidget::MainWidget(CustomWidget *parent) :
 //  文件打开成功
 void MainWidget::openFileOk()
 {
-    emit sigOpenFileOk();
     m_pStackedWidget->setCurrentIndex(1);
 }
 
 //  文件打开失败
 void MainWidget::openFileFail(const QString &errorInfo)
 {
-    qDebug() << errorInfo;
+    qDebug() << "openFileFail       "   <<  errorInfo;
 }
 
 
@@ -28,7 +30,6 @@ int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         openFileOk();
-        return ConstantMsg::g_effective_res;
     }
 
     if (msgType == MSG_OPERATION_OPEN_FILE_FAIL) {
@@ -52,8 +53,20 @@ void MainWidget::initWidget()
     HomeWidget *homeWidget = new HomeWidget;
     m_pStackedWidget->addWidget(homeWidget);
 
-    MainShowSplitter *showSplitter = new MainShowSplitter;
-    m_pStackedWidget->addWidget(showSplitter);
+    DSplitter *pSplitter = new  DSplitter;
+    pSplitter->setChildrenCollapsible(false);   //  子部件不可拉伸到 0
+
+    LeftSidebarWidget *pLeftShowWidget = new LeftSidebarWidget;
+    pSplitter->insertWidget(0, pLeftShowWidget);
+
+    FileViewWidget *pFileViewWidget = new FileViewWidget;
+    pSplitter->insertWidget(1, pFileViewWidget);
+
+    //  布局 占比
+    pSplitter->setStretchFactor(0, 2);
+    pSplitter->setStretchFactor(1, 8);
+
+    m_pStackedWidget->addWidget(pSplitter);
 
     m_pStackedWidget->setCurrentIndex(0);
 }

@@ -14,40 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef APPLICATION_H_
-#define APPLICATION_H_
+#include "GlobalEventFilter.h"
+#include <QDebug>
+#include <QEvent>
+#include <QWindowStateChangeEvent>
+#include "utils/utils.h"
 
-#include <DApplication>
+#include "NotifySubject.h"
+#include "subjectObserver/MsgHeader.h"
 
-#include "controller/configsetter.h"
-#include "controller/DBManager.h"
-
-#if defined(dApp)
-#undef dApp
-#endif
-#define dApp (static_cast<Application *>(QCoreApplication::instance()))
-
-DWIDGET_USE_NAMESPACE
-
-class Application : public DApplication
+GlobalEventFilter::GlobalEventFilter(QObject *parent)
+    : QObject(parent)
 {
-    Q_OBJECT
 
-public:
-    Application(int &argc, char **argv);
+}
 
-protected:
-    void handleQuitAction() override;
+bool GlobalEventFilter::eventFilter(QObject *obj, QEvent *e)
+{
+    int nType = e->type();
 
-public:
-//    ConfigSetter *setter = nullptr;
-    DBManager *dbM = nullptr;
-//    Exporter *exporter = nullptr;
-//    Importer *importer = nullptr;
-//    SignalManager *signalM = nullptr;
-private:
-    void initChildren();
-    void initI18n();
-};
+    Q_UNUSED(obj)
+    if (nType == QEvent::KeyPress) {
+        QKeyEvent *event = static_cast<QKeyEvent *>(e);
+        QString key = Utils::getKeyshortcut(event);
 
-#endif  // APPLICATION_H_
+//        NotifySubject::getInstance()->sendMsg(MSG_NOTIFY_MSG, key);
+
+        //  拦截， 不在向下转发
+        //return true;
+    }
+
+    return false;
+}

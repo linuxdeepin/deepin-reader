@@ -53,7 +53,7 @@ void HomeWidget::onChooseBtnClicked()
 
         QString sRes = "";
 
-        foreach (QString s, fileList) {
+        foreach (const QString &s, fileList) {
             sRes += s + "@#&wzx";
         }
 

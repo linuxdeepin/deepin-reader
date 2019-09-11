@@ -89,7 +89,7 @@ bool DocummentPDF::openFile(QString filepath)
         QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
         qwidget->setLayout(qhblayout);
         m_vboxLayout.addWidget(qwidget);
-//        m_vboxLayout.addWidget(m_pages.at(i));
+        //        m_vboxLayout.addWidget(m_pages.at(i));
         m_vboxLayout.setAlignment(&m_widget, Qt::AlignCenter);
         qwidget->setMouseTracking(true);
         m_widgets.append(qwidget);
@@ -190,7 +190,12 @@ void DocummentPDF::removeAllAnnotation()
     //todo 刷新所有页面
 }
 
-void DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos, const QColor &color)
+void DocummentPDF::removeAnnotation(const QPoint &startpos)
+{
+
+}
+
+void DocummentPDF::addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color)
 {
 
 }
@@ -198,9 +203,10 @@ void DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos, c
 void DocummentPDF::search(const QString &strtext, const QColor &color)
 {
     for (int i = 0; i < document->numPages(); ++i) {
-        m_pages.at(i)->addHighlightAnnotation(document->page(i)->search(strtext), color);
-
+        searchHightlight(document->page(i),strtext,color);
     }
+    //todo kyz 先单独更新当前页后期优化
+    scaleAndShow(m_scale,m_rotate);//全部刷新
 }
 
 bool DocummentPDF::save(const QString &filePath, bool withChanges) const
@@ -259,13 +265,79 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges) const
 }
 
 void DocummentPDF::clearSearch()
-{
-    foreach (Poppler::Annotation *annote, m_listsearch) {
-        for (int i = 0; i < document->numPages(); ++i) {
-            document->page(0)->removeAnnotation(annote);
+{ 
+    for(int i=0;i<document->numPages();++i)
+    {
+        foreach(Poppler::Annotation* ptmp,m_listsearch)
+        {
+            document->page(i)->removeAnnotation(ptmp);
         }
+        //refresh(i);
     }
+    scaleAndShow(m_scale,m_rotate);
 }
+
+void DocummentPDF::searchHightlight(Poppler::Page* page,const QString& strtext,const QColor& color)
+{
+    if(nullptr==page) return;
+    QList<QRectF> listrect=page->search(strtext);
+    if(listrect.size()<=0)return;
+
+    if(listrect.size()<=0)return;
+    Poppler::Annotation::Style style;
+    style.setColor(color);
+
+    Poppler::Annotation::Popup popup;
+    popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
+
+    Poppler::HighlightAnnotation* annotation = new Poppler::HighlightAnnotation();
+
+    Poppler::HighlightAnnotation::Quad quad;
+    QList<Poppler::HighlightAnnotation::Quad> qlistquad;
+    QRectF rec,recboundary;
+    foreach(rec,listrect)
+    {
+        recboundary.setTopLeft(QPointF(rec.left()/page->pageSizeF().width(),
+                                       rec.top()/page->pageSizeF().height()));
+        recboundary.setTopRight(QPointF(rec.right()/page->pageSizeF().width(),
+                                        rec.top()/page->pageSizeF().height()));
+        recboundary.setBottomLeft(QPointF(rec.left()/page->pageSizeF().width(),
+                                          rec.bottom()/page->pageSizeF().height()));
+        recboundary.setBottomRight(QPointF(rec.right()/page->pageSizeF().width(),
+                                           rec.bottom()/page->pageSizeF().height()));
+
+
+        qDebug()<<"**"<<rec<<"**";
+        quad.points[0] = recboundary.topLeft();
+        quad.points[1] = recboundary.topRight();
+        quad.points[2] = recboundary.bottomRight();
+        quad.points[3] = recboundary.bottomLeft();
+        qlistquad.append(quad);
+    }
+    annotation->setHighlightQuads(qlistquad);
+    annotation->setBoundary(recboundary);
+    annotation->setStyle(style);
+    annotation->setPopup(popup);
+    page->addAnnotation(annotation);
+}
+
+void DocummentPDF::refreshOnePage(int ipage)
+{
+    if (!document)
+        return ;
+    PagePdf *ppdf = (PagePdf *)m_pages.at(ipage);
+    ppdf->showImage(m_scale, m_rotate);
+}
+
+int DocummentPDF::curpage()
+{
+    QScrollBar *scrollBar_X = horizontalScrollBar();
+    const int x_offset = scrollBar_X->value();
+    QScrollBar *scrollBar_Y = verticalScrollBar();
+    const int y_offset = scrollBar_Y->value();
+
+}
+
 void DocummentPDF::loadWordCache(int indexpage, PageBase *page)
 {
     if (!document) {
@@ -357,7 +429,7 @@ QPoint DocummentPDF::global2RelativePoint(QPoint globalpoint)
         y_offset = scrollBar_Y->value();
     QPoint qpoint = QPoint(mapFromGlobal(globalpoint).x() + x_offset,
                            mapFromGlobal(globalpoint).y() + y_offset);
-//    qDebug() << "globalpoint:" << globalpoint << " relativepoint:" << qpoint;
+    //    qDebug() << "globalpoint:" << globalpoint << " relativepoint:" << qpoint;
     return qpoint;
 }
 
@@ -500,8 +572,8 @@ bool DocummentPDF::mouseSelectText(QPoint start, QPoint stop)
             }
         } else if (i == endpagenum) {
             re = ppdf->pageTextSelections(
-                     pfirst,
-                     qstop);
+                        pfirst,
+                        qstop);
         } else {
             re = ppdf->pageTextSelections(pfirst,
                                           plast);
@@ -524,10 +596,10 @@ int DocummentPDF::pointInWhichPage(QPoint &qpoint)
             switch (m_viewmode) {
             case ViewMode_SinglePage:
                 pagenum = i;
-//                qpoint = QPoint(qpoint.x() - m_widgets.at(i)->x(), qpoint.y() - m_widgets.at(i)->y());
+                //                qpoint = QPoint(qpoint.x() - m_widgets.at(i)->x(), qpoint.y() - m_widgets.at(i)->y());
                 break;
             case ViewMode_FacingPage:
-//                qpoint = QPoint(qpoint.x() - m_widgets.at(i)->x(), qpoint.y() - m_widgets.at(i)->y());
+                //                qpoint = QPoint(qpoint.x() - m_widgets.at(i)->x(), qpoint.y() - m_widgets.at(i)->y());
                 if (qpoint.x() > m_pages.at(2 * i)->x() &&
                         qpoint.x() <
                         (m_pages.at(2 * i)->width() + m_pages.at(2 * i)->x()) &&

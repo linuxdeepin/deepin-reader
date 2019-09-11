@@ -10,6 +10,11 @@
 
 #include "subjectObserver/CustomWidget.h"
 
+/**
+ * @brief The BookMarkWidget class
+ * @brief   书签列表item
+ */
+
 //操作类型
 enum OPERATION_TYPE {
     ADDITEM = 0,        //增加item
@@ -23,7 +28,7 @@ public:
     BookMarkItemWidget(CustomWidget *parent = nullptr);
 
 public:
-    void setPicture(const QString &);
+    void setItemImage(const QImage &);
     void setPage(const QString &);
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
