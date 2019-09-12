@@ -9,6 +9,7 @@
 #include <QPoint>
 #include <QColor>
 #include <QWidget>
+#include <QScrollBar>
 
 enum ViewMode_EM {
     ViewMode_SinglePage = 0,
@@ -129,7 +130,13 @@ public:
         return false;
     }
 
-    virtual void clearSearch(){}
+    virtual void clearSearch() {}
+
+
+    virtual Page::Link *mouseBeOverLink(QPoint point)
+    {
+        return nullptr;
+    }
 
     QList<PageBase *> *getPages()
     {
@@ -148,6 +155,16 @@ public:
             m_magnifierwidget->setPixmap(QPixmap());
             m_magnifierwidget->hide();
         }
+    }
+
+    void pageMove(double mvx, double mvy)
+    {
+        QScrollBar *scrollBar_X = horizontalScrollBar();
+        if (scrollBar_X)
+            scrollBar_X->setValue(scrollBar_X->value() + mvx);
+        QScrollBar *scrollBar_Y = verticalScrollBar();
+        if (scrollBar_Y)
+            scrollBar_Y->setValue(scrollBar_Y->value() + mvy);
     }
 signals:
     void signal_pageChange(int);

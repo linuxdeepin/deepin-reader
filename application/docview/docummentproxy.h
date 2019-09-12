@@ -35,6 +35,8 @@ public:
     void clearsearch();
     int currentPageNo();
     bool pageJump(int pagenum);
+    bool pageMove(double mvx, double mvy);
+    Page::Link *mouseBeOverLink(QPoint point);
 signals:
     void signal_pageChange(int);
 private slots:

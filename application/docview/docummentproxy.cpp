@@ -160,3 +160,19 @@ void DocummentProxy::slot_pageChange(int pageno)
 {
     emit signal_pageChange(pageno);
 }
+
+
+bool DocummentProxy::pageMove(double mvx, double mvy)
+{
+    if (!m_documment)
+        return false;
+    m_documment->pageMove(mvx, mvy);
+    return true;
+}
+
+Page::Link *DocummentProxy::mouseBeOverLink(QPoint point)
+{
+    if (!m_documment)
+        return nullptr;
+    return m_documment->mouseBeOverLink(point);
+}

@@ -386,6 +386,8 @@ void DocummentPDF::loadWordCache(int indexpage, PageBase *page)
 
     abstractTextPage(textList, page);
     qDeleteAll(textList);
+    PagePdf *ppdf = (PagePdf *)page;
+    ppdf->loadLinks();
 }
 
 bool DocummentPDF::abstractTextPage(const QList<Poppler::TextBox *> &text, PageBase *page)
@@ -832,4 +834,20 @@ void DocummentPDF::slot_hScrollBarValueChanged(int value)
     }
     if (!donotneedreloaddoc)
         m_threadloaddoc.start();
+}
+
+Page::Link *DocummentPDF::mouseBeOverLink(QPoint point)
+{
+    if (!document) {
+        return nullptr;
+    }
+    QPoint qpoint = point;
+    int pagenum = -1;
+    pagenum = pointInWhichPage(qpoint);
+    qDebug() << "mouseBeOverLink pagenum:" << pagenum;
+    if (-1 != pagenum) {
+        PagePdf *ppdf = (PagePdf *)m_pages.at(pagenum);
+        return ppdf ->ifMouseMoveOverLink(qpoint);
+    }
+    return nullptr;
 }
