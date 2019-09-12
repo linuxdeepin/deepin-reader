@@ -66,6 +66,11 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
             m_pDocummentProxy->mouseSelectText(m_pStartPoint, m_pDocummentProxy->global2RelativePoint(event->globalPos()));
         }
     }
+    if (m_pDocummentProxy->mouseBeOverText(m_pDocummentProxy->global2RelativePoint(event->globalPos())))
+        setCursor(QCursor(Qt::IBeamCursor));
+    else {
+        setCursor(QCursor(Qt::ArrowCursor));
+    }
 }
 
 //  鼠标左键 按下

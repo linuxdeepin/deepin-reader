@@ -148,6 +148,11 @@ void ThumbnailWidget::slotShowSelectItem(QListWidgetItem *item)
 void ThumbnailWidget::slotOpenFileOk()
 {
     int pages = DocummentProxy::instance()->getPageSNum();
+    qDebug() << "ThumbnailWidget    slotOpenFileOk      " << pages;
+
+    if (pages < FIRSTPAGES) {
+        return;
+    }
 
     m_pPageWidget->setTotalPages(pages);
 
