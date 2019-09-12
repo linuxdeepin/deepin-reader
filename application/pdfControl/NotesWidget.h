@@ -5,8 +5,7 @@
 #include <DImageButton>
 
 #include <QListWidgetItem>
-#include <QVBoxLayout>
-#include <QString>
+#include <QVBoxLayout>>
 
 #include "NotesItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
