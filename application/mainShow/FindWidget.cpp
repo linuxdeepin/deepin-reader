@@ -49,7 +49,7 @@ FindWidget::FindWidget(CustomWidget *parent)
 
 void FindWidget::findCancel()
 {
-    QWidget::hide();
+    this->close();
 }
 
 void FindWidget::handleContentChanged()
@@ -91,12 +91,12 @@ void FindWidget::initWidget()
     findPrevButton->setFixedSize(QSize(36, 36));
     connect(findPrevButton, &DPushButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
 
-    m_closeButton = new DImageButton();
-    m_closeButton->setFixedSize(20, 20);
-    connect(m_closeButton, &DImageButton::clicked, this, &FindWidget::findCancel);
+    DImageButton *closeButton = new DImageButton();
+    closeButton->setFixedSize(20, 20);
+    connect(closeButton, &DImageButton::clicked, this, &FindWidget::findCancel);
 
     m_layout->addWidget(m_editLine);
     m_layout->addWidget(findNextButton);
     m_layout->addWidget(findPrevButton);
-    m_layout->addWidget(m_closeButton);
+    m_layout->addWidget(closeButton);
 }

@@ -39,8 +39,6 @@ void FileViewWidget::initWidget()
     //  实际文档类  唯一实例化设置 父窗口
     m_pDocummentProxy = DocummentProxy::instance(this);
 
-    int nParentWidth = this->width();
-
     setBookMarkStateWidget();
 
     m_pDefaultOperationWidget = new DefaultOperationWidget;
@@ -48,6 +46,7 @@ void FileViewWidget::initWidget()
     m_pFileAttrWidget = new FileAttrWidget;
 
     m_pFindWidget = new FindWidget(this);
+    int nParentWidth = this->width();
     int nWidget = m_pFindWidget->width();
     m_pFindWidget->move(nParentWidth - nWidget - 20, 20);
 }
@@ -106,7 +105,15 @@ void FileViewWidget::dropEvent(QDropEvent *event)
 
     if (mimeData->hasUrls()) {
         for (auto url : mimeData->urls()) {
-            onOpenFile(url.toLocalFile());
+            QString sFilePath =  url.toLocalFile();
+            if (sFilePath.endsWith(".pdf")) {
+                //  默认打开第一个
+                QString sRes = sFilePath + "@#&wzx";
+
+                onOpenFile(sFilePath);
+
+                break;
+            }
         }
     }
 }
@@ -155,17 +162,16 @@ void FileViewWidget::SlotCustomContextMenuRequested(const QPoint &point)
     QPoint globalPos = m_pDocummentProxy->global2RelativePoint(clickPos);
 
     bool rl = m_pDocummentProxy->mouseBeOverText(globalPos);
-    qDebug() << "       " << rl;
-
-    //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
-//    m_pTextOperationWidget->show();
-//    m_pTextOperationWidget->move(clickPos.x(), clickPos.y());
-//    m_pTextOperationWidget->raise();
-
-    m_pDefaultOperationWidget->show();
-    m_pDefaultOperationWidget->move(clickPos.x(), clickPos.y());
-    m_pDefaultOperationWidget->raise();
-
+    if (rl) {
+        //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
+        m_pTextOperationWidget->show();
+        m_pTextOperationWidget->move(clickPos.x(), clickPos.y());
+        m_pTextOperationWidget->raise();
+    } else {
+        m_pDefaultOperationWidget->show();
+        m_pDefaultOperationWidget->move(clickPos.x(), clickPos.y());
+        m_pDefaultOperationWidget->raise();
+    }
 }
 
 //  打开　文件路径
@@ -318,6 +324,7 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
 
     int nRes = dealWithTitleMenuRequest(msgType, msgContent);
     if (nRes != ConstantMsg::g_effective_res) {
+
         nRes = dealWithFileMenuRequest(msgType, msgContent);
         if (nRes != ConstantMsg::g_effective_res) {
 

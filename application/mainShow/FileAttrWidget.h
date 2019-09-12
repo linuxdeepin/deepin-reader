@@ -42,11 +42,11 @@ private slots:
 
 private:
     QVBoxLayout *m_pVBoxLayout = nullptr;
-    QList<DLabel *> m_labelList;
 
-    bool m_bClickDown = false;
+    bool        m_bClickDown = false;
     QPoint      mouseStartPoint;
     QPoint      windowTopLeftPoint;
+
     // CustomWidget interface
 protected:
     void initWidget() override;

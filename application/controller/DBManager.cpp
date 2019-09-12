@@ -38,7 +38,7 @@ DBManager *DBManager::m_dbManager = nullptr;
 DBManager *DBManager::instance()
 {
     if (!m_dbManager) {
-        m_dbManager = new DBManager();
+        m_dbManager = new DBManager;
     }
 
     return m_dbManager;

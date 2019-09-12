@@ -51,7 +51,6 @@ protected:
     void hideEvent(QHideEvent *event);
 
 private:
-    DImageButton *m_closeButton;
     LineBar *m_editLine;
     QHBoxLayout *m_layout;
 

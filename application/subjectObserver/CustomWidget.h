@@ -22,13 +22,6 @@ DGUI_USE_NAMESPACE
  *          实现 相应的消息处理， 更关注于 对应的业务处理
  */
 
-enum WIDGETINDEX {
-    THUMBNAIL = 0,
-    BOOK,
-    NOTE,
-    SEARCH
-};
-
 class CustomWidget : public DWidget, public IObserver
 {
     Q_OBJECT

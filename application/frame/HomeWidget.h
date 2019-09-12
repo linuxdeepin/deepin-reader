@@ -1,12 +1,7 @@
 #ifndef HOMEWIDGET_H
 #define HOMEWIDGET_H
 
-#include <QPushButton>
-#include <DLabel>
-#include <DObject>
-#include <QFileDialog>
 #include <QSettings>
-#include <QVBoxLayout>
 
 #include "subjectObserver/CustomWidget.h"
 
@@ -32,7 +27,6 @@ private:
     QStringList getOpenFileList();
 
 private:
-    QVBoxLayout *m_layout = nullptr;
     QSettings *m_settings = nullptr;
 
     // CustomWidget interface

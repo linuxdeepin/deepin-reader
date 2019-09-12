@@ -31,7 +31,7 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     setMinimumSize(720, 560);
 
-    setBorderColor(QColor(255, 0, 0));
+    //  在屏幕中心显示
     Dtk::Widget::moveToCenter(this);
 }
 
@@ -51,11 +51,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::initUI()
 {
-    MainWidget *pMainWidget = new MainWidget;
-    setCentralWidget(pMainWidget);
+    setCentralWidget(new MainWidget);
 
-    TitleWidget *titleWidget = new TitleWidget();
-    titlebar()->addWidget(titleWidget, Qt::AlignLeft);
+    titlebar()->addWidget(new TitleWidget, Qt::AlignLeft);
 }
 
 void MainWindow::initConnections()
