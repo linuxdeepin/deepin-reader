@@ -13,6 +13,7 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
     initWidget();
 
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
+    connect(this, SIGNAL(sigJumpIndexPage(const int)), this, SLOT(slotJumpIndexPage(const int)));
     connect(m_pThumbnailListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
 }
 
@@ -21,7 +22,7 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContant)
     if (MSG_THUMBNAIL_JUMPTOPAGE == msgType) {
         int row = msgContant.toInt();
 
-        setCurrentRow(row);
+        emit sigJumpIndexPage(row);
 
         return ConstantMsg::g_effective_res;
     } else if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
@@ -118,7 +119,6 @@ void ThumbnailWidget::addThumbnailItem(const QImage &image, const int &idex)
 void ThumbnailWidget::fillContantToList()
 {
     for (int idex = 0; idex < totalPages(); ++idex) {
-        //QImage image(tr(":/resources/image/logo/logo_big.svg"));
         QImage image;
         DocummentProxy::instance()->getImage(idex, image, 113, 143);
 
@@ -155,4 +155,9 @@ void ThumbnailWidget::slotOpenFileOk()
 
     setTotalPages(pages);
     fillContantToList();
+}
+
+void ThumbnailWidget::slotJumpIndexPage(const int &index)
+{
+    setCurrentRow(index);
 }

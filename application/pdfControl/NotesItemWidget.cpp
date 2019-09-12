@@ -25,14 +25,14 @@ void NotesItemWidget::setLabelImage(const QImage &image)
 
 void NotesItemWidget::setLabelPage(const QString &value)
 {
-    if (1) {
+    if (m_pPage) {
         m_pPage->setText(value);
     }
 }
 
 void NotesItemWidget::setTextEditText(const QString &contant)
 {
-    if (1) {
+    if (m_pTextEdit) {
         m_pTextEdit->setText(contant);
     }
 }

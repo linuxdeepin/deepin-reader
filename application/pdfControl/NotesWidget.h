@@ -17,6 +17,7 @@
  * @brief   注释窗体
  */
 
+
 class NotesWidget : public CustomWidget
 {
     Q_OBJECT
@@ -24,14 +25,16 @@ class NotesWidget : public CustomWidget
 public:
     NotesWidget(CustomWidget *parent = nullptr);
 
+
 protected:
     void initWidget() override;
 
 private:
-    void addNotesItem(const QImage &image, const unsigned int &page, const QString &text);
+    void addNotesItem(const QImage &image, const int &page, const QString &text);
 
 private:
     DListWidget *m_pNotesList = nullptr;
+
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;

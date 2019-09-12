@@ -30,6 +30,16 @@ public:
     void setTextEditText(const QString &);
     void setSerchResultText(const QString &);
 
+    inline unsigned int page() const
+    {
+        return m_page;
+    }
+
+    inline void setPage(const unsigned int &page)
+    {
+        m_page = page;
+    }
+
 private slots:
     void slotDltNoteItem();
     void slotCopyContant();
@@ -48,6 +58,7 @@ private:
     DLabel *m_pSearchResultNum = nullptr;
     DTextEdit *m_pTextEdit = nullptr;
     QHBoxLayout *m_pHLayout = nullptr;
+    unsigned int m_page = 0;
 };
 
 #endif // NOTESITEMWIDGET_H

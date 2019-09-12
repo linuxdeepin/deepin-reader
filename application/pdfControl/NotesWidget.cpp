@@ -6,6 +6,7 @@ NotesWidget::NotesWidget(CustomWidget *parent) :
     initWidget();
 }
 
+
 void NotesWidget::initWidget()
 {
     QVBoxLayout *m_pVLayout = new QVBoxLayout;
@@ -27,10 +28,11 @@ void NotesWidget::initWidget()
     m_pVLayout->addWidget(m_pAddNotesBtn);
 }
 
-void NotesWidget::addNotesItem(const QImage &image, const unsigned int &page, const QString &text)
+void NotesWidget::addNotesItem(const QImage &image, const int &page, const QString &text)
 {
     NotesItemWidget *itemWidget = new NotesItemWidget;
 
+    itemWidget->setPage(page);
     itemWidget->setLabelImage(image);
     itemWidget->setLabelPage(tr("Page:%1").arg(page + 1));
     itemWidget->setTextEditText(text);
