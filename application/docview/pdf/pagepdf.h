@@ -30,10 +30,11 @@ public:
     //Annotation
     void addAnnotation(QPoint screenPos);
     void addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color) override;
-    void removeAnnotation(Poppler::Annotation *annotation);
+    void removeAnnotation(const QPoint& pos);
 protected:
     void paintEvent(QPaintEvent *event) override;
 private:
+    void removeAnnotation(Poppler::Annotation *annotation);
     void getImagePoint(QPoint &point);
     QList<QRect> paintrects;
     QList<stWord> m_words;

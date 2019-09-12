@@ -62,7 +62,14 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
     } else {
         if (m_bSelectText && m_pDocummentProxy) {
             m_pDocummentProxy->mouseSelectText(m_pStartPoint, m_pDocummentProxy->global2RelativePoint(event->globalPos()));
+            return ;
         }
+//        if(m_pDocummentProxy->mouseBeOverText(m_pDocummentProxy->global2RelativePoint(event->globalPos())))
+//                 setCursor(QCursor(Qt::IBeamCursor));
+//        else {
+//             setCursor(QCursor(Qt::ArrowCursor));
+//        }
+
     }
 }
 
@@ -79,6 +86,7 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 
                 m_pDocummentProxy->mouseSelectTextClear();
                 m_pStartPoint = m_pDocummentProxy->global2RelativePoint(event->globalPos());
+                m_pDocummentProxy->removeAnnotation(m_pStartPoint);
             }
         }
     }
@@ -252,7 +260,7 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
 {
     switch (msgType) {
     case MSG_OPERATION_ADD_BOOKMARK:            //  添加书签
-        qDebug() << "   MSG_OPERATION_ADD_BOOKMARK  ";
+        qDebug() << "   MSG_OPERATION_ADD_BOOKMARK  ";        
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_FIRST_PAGE:              //  第一页
         qDebug() << "   MSG_OPERATION_FIRST_PAGE  ";

@@ -35,6 +35,8 @@ public:
     void clearsearch();
     int currentPageNo();
     bool pageJump(int pagenum);
+    void docBasicInfo(stFileInfo& info);
+    void removeAnnotation(const QPoint &startpos);
 
 private:
     DocummentProxy(QObject *parent = nullptr);

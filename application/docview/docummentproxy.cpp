@@ -154,4 +154,18 @@ bool DocummentProxy::pageJump(int pagenum)
     return m_documment->pageJump(pagenum);
 }
 
+void DocummentProxy::docBasicInfo(stFileInfo &info)
+{
+    if (!m_documment)
+        return ;
+    m_documment->docBasicInfo(info);
+}
+
+void DocummentProxy::removeAnnotation(const QPoint &startpos)
+{
+    if (!m_documment)
+        return ;
+    m_documment->removeAnnotation(startpos);
+}
+
 

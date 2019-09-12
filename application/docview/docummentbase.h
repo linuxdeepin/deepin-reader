@@ -107,7 +107,7 @@ public:
         return false;
     }
 
-    virtual bool save(const QString &filePath, bool withChanges)const
+    virtual bool save(const QString &filePath, bool withChanges)
     {
         qDebug() << "do nothing";
         return false;
@@ -130,6 +130,8 @@ public:
     }
 
     virtual void clearSearch(){}
+
+    virtual void docBasicInfo(stFileInfo &info){};
 
     QList<PageBase *> *getPages()
     {
