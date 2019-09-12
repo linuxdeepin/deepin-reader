@@ -2,6 +2,41 @@
 #include <QPainter>
 #include <QDebug>
 
+ThreadLoadMagnifierCache::ThreadLoadMagnifierCache()
+{
+//    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
+    m_page = nullptr;
+    restart = false;
+    m_width = 0;
+    m_height = 0;
+}
+
+void ThreadLoadMagnifierCache::setRestart()
+{
+    restart = true;
+}
+
+void ThreadLoadMagnifierCache::setPage(PagePdf *page, double width, double height)
+{
+    m_page = page;
+    m_width = width;
+    m_height = height;
+}
+
+void ThreadLoadMagnifierCache::run()
+{
+    if (!m_page)
+        return;
+    restart = true;
+    while (restart) {
+        restart = false;
+        if (m_width > 0 && m_height > 0) {
+            m_page->loadMagnifierPixmapCache(m_width, m_height);
+        }
+    }
+}
+
+
 PagePdf::PagePdf(QWidget *parent)
     : PageBase(parent),
       m_imagewidth(0.01),
@@ -113,21 +148,41 @@ bool PagePdf::clearMagnifierPixmap()
     return true;
 }
 
+
+void PagePdf::loadMagnifierCacheThreadStart(double width, double height)
+{
+    if (m_magnifierpixmap.isNull() && !loadmagnifiercachethread.isRunning()) {
+        loadmagnifiercachethread.setPage(this, width, height);
+        loadmagnifiercachethread.start();
+    }
+}
+
+void PagePdf::loadMagnifierPixmapCache(double width, double height)
+{
+    QImage image;
+    QPixmap qpixmap;
+    if (getImage(image, width, height)) {
+        qpixmap = QPixmap::fromImage(image);
+        m_magnifierpixmap = qpixmap;
+    }
+}
+
 bool PagePdf::getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, double width, double height)
 {
     qDebug() << "getMagnifierPixmap";
-    QImage image;
+//    QImage image;
     QPixmap qpixmap;
     if (!m_magnifierpixmap.isNull()) {
         qpixmap = m_magnifierpixmap;
     } else {
-        if (getImage(image, width, height)) {
-            qpixmap = QPixmap::fromImage(image);
-            m_magnifierpixmap = qpixmap;
-        } else {
-            return false;
-        }
-
+//        if (getImage(image, width, height)) {
+//            qpixmap = QPixmap::fromImage(image);
+//            m_magnifierpixmap = qpixmap;
+//        } else {
+//            return false;
+//        }
+        loadMagnifierCacheThreadStart(width, height);
+        return false;
     }
     QPoint qp = point;
     getImagePoint(qp);

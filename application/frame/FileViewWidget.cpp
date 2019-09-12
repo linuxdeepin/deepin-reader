@@ -60,7 +60,7 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
             }
         }
     } else if (m_nCurrentHandelState == Magnifier_State) {  //  当前是放大镜状态
-        m_pDocummentProxy->showMagnifier(event->pos());
+        m_pDocummentProxy->showMagnifier(m_pDocummentProxy->global2RelativePoint(event->globalPos()));
     } else {
         if (m_bSelectOrMove && m_pDocummentProxy) {
             m_pDocummentProxy->mouseSelectText(m_pStartPoint, m_pDocummentProxy->global2RelativePoint(event->globalPos()));
@@ -196,7 +196,7 @@ int FileViewWidget::magnifying(const QString &data)
     int nRes = data.toInt();
     if (nRes == 1) {
         m_nCurrentHandelState = Magnifier_State;
-        this->setCursor(Qt::BlankCursor);
+//        this->setCursor(Qt::BlankCursor);
     } else {
         //  取消放大镜显示
         m_nCurrentHandelState = Default_State;

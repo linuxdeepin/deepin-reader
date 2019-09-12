@@ -10,13 +10,14 @@ class ThreadLoadDoc : public QThread
 public:
     ThreadLoadDoc();
     void setDoc(DocummentPDF *doc);
+    void setRestart();
 
 protected:
     virtual void run();
 
 private:
-    volatile bool brun;       //bStop是易失性变量，需要用volatile进行申明
     DocummentPDF *m_doc;
+    bool restart;
 };
 
 class ThreadLoadWords : public QThread
@@ -24,13 +25,14 @@ class ThreadLoadWords : public QThread
 public:
     ThreadLoadWords();
     void setDoc(DocummentPDF *doc);
+    void setRestart();
 
 protected:
     virtual void run();
 
 private:
-    volatile bool brun;       //bStop是易失性变量，需要用volatile进行申明
     DocummentPDF *m_doc;
+    bool restart;
 };
 
 class DocummentPDF: public DocummentBase
