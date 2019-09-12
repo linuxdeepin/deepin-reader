@@ -1,32 +1,21 @@
 #include "LightedWidget.h"
+#include <QButtonGroup>
 
 LightedWidget::LightedWidget(CustomWidget *parent)
     : CustomWidget ("LightedWidget", parent)
 {
+    setFixedHeight(50);
+
     initWidget();
 }
 
-void LightedWidget::createBtn(const QString &btnName, const char *member, QHBoxLayout *bottomLayout)
+void LightedWidget::SlotOnBtnGroupClicked(int nId)
 {
-    DPushButton *btn = new DPushButton(btnName);
-    connect(btn, SIGNAL(clicked()), member);
+    if (m_nOldId != nId) {
+        m_nOldId = nId;
 
-    bottomLayout->addWidget(btn);
-}
-
-void LightedWidget::SlotBtnRedClicked()
-{
-    emit sigSendLightedColor(0);
-}
-
-void LightedWidget::SlotBtnGreenClicked()
-{
-    emit sigSendLightedColor(1);
-}
-
-void LightedWidget::SlotBtnBlueClicked()
-{
-    emit sigSendLightedColor(2);
+        sendMsg(MSG_OPERATION_TEXT_ADD_HIGHLIGHTED, QString::number(nId));
+    }
 }
 
 int LightedWidget::dealWithData(const int &, const QString &)
@@ -36,23 +25,33 @@ int LightedWidget::dealWithData(const int &, const QString &)
 
 void LightedWidget::initWidget()
 {
+    DLabel *titleLabel = new DLabel(tr("high lighted"));
+
     QHBoxLayout *topLayout = new QHBoxLayout;
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
-    DLabel *titleLabel = new DLabel(tr("high lighted"));
     topLayout->addWidget(titleLabel);
     topLayout->addStretch(1);
 
     QHBoxLayout *bottomLayout = new QHBoxLayout;
-    bottomLayout->setContentsMargins(0, 0, 0, 0);
-    bottomLayout->setSpacing(0);
-    createBtn("red", SLOT(SlotBtnRedClicked()), bottomLayout);
-    createBtn("green", SLOT(SlotBtnGreenClicked()), bottomLayout);
-    createBtn("blue", SLOT(SlotBtnBlueClicked()), bottomLayout);
+    bottomLayout->setContentsMargins(0, 6, 0, 6);
+    bottomLayout->setSpacing(8);
+
+    QButtonGroup *btnGroup = new QButtonGroup;
+    connect(btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(SlotOnBtnGroupClicked(int)));
+
+    for (int i = 0; i < 7; i ++ ) {
+        DPushButton *btn = new DPushButton(QString::number(i));
+        btn->setFixedSize(QSize(16, 16));
+        btnGroup->addButton(btn, i);
+        bottomLayout->addWidget(btn);
+    }
+
+    bottomLayout->addStretch(1);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->setSpacing(0);
+    mainLayout->setContentsMargins(0, 6, 0, 6);
+    mainLayout->setSpacing(3);
 
     mainLayout->addItem(topLayout);
     mainLayout->addItem(bottomLayout);

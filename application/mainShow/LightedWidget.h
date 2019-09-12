@@ -24,13 +24,11 @@ public:
 signals:
     void sigSendLightedColor(const int &);
 
-private:
-    void createBtn(const QString &, const char *, QHBoxLayout *bottomLayout);
-
 private slots:
-    void SlotBtnRedClicked();
-    void SlotBtnGreenClicked();
-    void SlotBtnBlueClicked();
+    void SlotOnBtnGroupClicked(int);
+
+private:
+    int     m_nOldId = -1;
 
     // IObserver interface
 public:

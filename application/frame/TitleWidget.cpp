@@ -182,7 +182,6 @@ CustomImageButton *TitleWidget::createBtn(const QString &btnName, bool bCheckabl
     btn->setHoverPic(hoverPic);
     btn->setPressPic(pressPic);
 
-
     btn->setToolTip(btnName);
     btn->setCheckable(bCheckable);
     if (bCheckable) {

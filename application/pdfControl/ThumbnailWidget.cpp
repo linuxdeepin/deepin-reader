@@ -13,6 +13,7 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
     initWidget();
 
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
+    connect(this, SIGNAL(sigJumpIndexPage(const int)), this, SLOT(slotJumpIndexPage(const int)));
     connect(m_pThumbnailListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
 }
 
@@ -21,7 +22,7 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContant)
     if (MSG_THUMBNAIL_JUMPTOPAGE == msgType) {
         int row = msgContant.toInt();
 
-        setCurrentRow(row);
+        emit sigJumpIndexPage(row);
 
         return ConstantMsg::g_effective_res;
     } else if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
@@ -45,10 +46,6 @@ void ThumbnailWidget::initWidget()
     m_pvBoxLayout->addWidget(m_pPageWidget);
 
     this->setLayout(m_pvBoxLayout);
-
-//    this->setTotalPages(30);
-
-//    this->fillContantToList();
 }
 
 void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
@@ -122,9 +119,8 @@ void ThumbnailWidget::addThumbnailItem(const QImage &image, const int &idex)
 void ThumbnailWidget::fillContantToList()
 {
     for (int idex = 0; idex < totalPages(); ++idex) {
-        //QImage image(tr(":/resources/image/logo/logo_big.svg"));
         QImage image;
-        DocummentProxy::instance(nullptr)->getImage(idex, image, 113, 143);
+        DocummentProxy::instance()->getImage(idex, image, 113, 143);
 
         addThumbnailItem(image, idex);
     }
@@ -153,8 +149,20 @@ void ThumbnailWidget::slotOpenFileOk()
 {
     int pages = DocummentProxy::instance()->getPageSNum();
 
+    if (pages < FIRSTPAGES) {
+        return;
+    }
+
+
     m_pPageWidget->setTotalPages(pages);
+
+    m_pThumbnailListWidget->clear();
 
     setTotalPages(pages);
     fillContantToList();
+}
+
+void ThumbnailWidget::slotJumpIndexPage(const int &index)
+{
+    setCurrentRow(index);
 }

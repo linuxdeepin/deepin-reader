@@ -14,7 +14,7 @@
 
 /**
  * @brief The ThumbnailItemWidget class
- * @brief   注释item
+ * @brief   注释和搜索item
  */
 
 class NotesItemWidget : public CustomWidget
@@ -28,6 +28,17 @@ public:
     void setLabelImage(const QImage &);
     void setLabelPage(const QString &);
     void setTextEditText(const QString &);
+    void setSerchResultText(const QString &);
+
+    inline unsigned int page() const
+    {
+        return m_page;
+    }
+
+    inline void setPage(const unsigned int &page)
+    {
+        m_page = page;
+    }
 
 private slots:
     void slotDltNoteItem();
@@ -44,8 +55,10 @@ public:
 private:
     DLabel *m_pPicture = nullptr;
     DLabel *m_pPage = nullptr;
+    DLabel *m_pSearchResultNum = nullptr;
     DTextEdit *m_pTextEdit = nullptr;
     QHBoxLayout *m_pHLayout = nullptr;
+    unsigned int m_page = 0;
 };
 
 #endif // NOTESITEMWIDGET_H

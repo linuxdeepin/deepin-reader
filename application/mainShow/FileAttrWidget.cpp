@@ -32,7 +32,6 @@ void FileAttrWidget::mousePressEvent(QMouseEvent *event)
         m_bClickDown = true;
         //获得鼠标的初始位置
         mouseStartPoint = event->globalPos();
-        //mouseStartPoint = event->pos();
         //获得窗口的初始位置
         windowTopLeftPoint = this->frameGeometry().topLeft();
     }
@@ -44,7 +43,6 @@ void FileAttrWidget::mouseMoveEvent(QMouseEvent *event)
     if (m_bClickDown) {
         //获得鼠标移动的距离
         QPoint distance = event->globalPos() - mouseStartPoint;
-        //QPoint distance = event->pos() - mouseStartPoint;
         //改变窗口的位置
         this->move(windowTopLeftPoint + distance);
     }
@@ -125,7 +123,7 @@ void FileAttrWidget::initImageLabel()
     layout->addWidget(imagelabel);
     layout->addStretch(1);
 
-    DLabel *nameLabel = new DLabel("11111111111", this);
+    DLabel *nameLabel = new DLabel("文件名称", this);
     nameLabel->setAlignment(Qt::AlignCenter);
     nameLabel->setObjectName("imageName");
 
@@ -149,8 +147,6 @@ void FileAttrWidget::createLabel(QGridLayout *layout, const int &index, const QS
     labelText->setObjectName(objName);
     labelText->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     layout->addWidget(labelText, index, 1);
-
-    m_labelList.append(labelText);
 }
 
 void FileAttrWidget::slotBtnCloseClicked()

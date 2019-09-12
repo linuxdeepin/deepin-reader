@@ -7,7 +7,7 @@
 
 #include <QVBoxLayout>
 #include <DPushButton>
-
+#include <QButtonGroup>
 /**
  * @brief The DefaultOperationWidget class
  * @brief   右键  文本菜单操作， 复制、高亮显示、移除高亮显示、添加注释、添加书签
@@ -21,7 +21,7 @@ public:
     TextOperationWidget(CustomWidget *parent = nullptr);
 
 private:
-    void createBtn(const QString &, const char *member);
+    DPushButton *createBtn(const QString &, const char *member);
 
 private slots:
     void SlotBtnCopyClicked();
@@ -35,7 +35,6 @@ private:
     void sendMsgAndHide(const int &, const QString &msgContent = "");
 
 private:
-    QVBoxLayout *layout = nullptr;
 
     // IObserver interface
 public:

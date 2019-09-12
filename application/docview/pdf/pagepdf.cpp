@@ -11,8 +11,10 @@ PagePdf::PagePdf(QWidget *parent)
       m_pencolor (QColor(72, 118, 255, 0)),
       m_penwidth(0)
 {
-    //    setFrameShape (QFrame::Box);
-    //    setStyleSheet("border-width: 1px;border-style: solid;border-color: rgb(255, 170, 0);");
+
+//    setFrameShape (QFrame::Box);
+//    setStyleSheet("border-width: 1px;border-style: solid;border-color: rgb(255, 170, 0);");
+    m_links.clear();
 }
 
 void PagePdf::paintEvent(QPaintEvent *event)
@@ -550,4 +552,83 @@ void PagePdf::removeAnnotation(const QPoint &pt)
         }
     }
     showImage();
+}
+
+bool PagePdf::loadLinks()
+{
+
+    if (!m_page) {
+        return false;
+    }
+    for (int i = 0; i < m_links.size(); i++) {
+        delete m_links.at(i);
+    }
+    m_links.clear();
+
+    foreach (const Poppler::Link *link, m_page->links()) {
+        const QRectF boundary = link->linkArea().normalized();
+        qDebug() << "boundary:" << boundary;
+
+        if (link->linkType() == Poppler::Link::Goto) {
+            const Poppler::LinkGoto *linkGoto = static_cast< const Poppler::LinkGoto * >(link);
+
+            int page = linkGoto->destination().pageNumber();
+            qreal left = qQNaN();
+            qreal top = qQNaN();
+
+            page = page >= 1 ? page : 1;
+
+            if (linkGoto->destination().isChangeLeft()) {
+                left = linkGoto->destination().left();
+
+                left = left >= 0.0 ? left : 0.0;
+                left = left <= 1.0 ? left : 1.0;
+            }
+
+            if (linkGoto->destination().isChangeTop()) {
+                top = linkGoto->destination().top();
+
+                top = top >= 0.0 ? top : 0.0;
+                top = top <= 1.0 ? top : 1.0;
+            }
+
+            if (linkGoto->isExternal()) {
+                qDebug() << "isExternal filename:" << linkGoto->fileName() << " page:" << page;
+                m_links.append(new Page::Link(boundary, linkGoto->fileName(), page));
+            } else {
+                qDebug() << "unExternal left:" << left << " top:" << top << " page:" << page;
+                m_links.append(new Page::Link(boundary, page, left, top));
+            }
+        } else if (link->linkType() == Poppler::Link::Browse) {
+            const Poppler::LinkBrowse *linkBrowse = static_cast< const Poppler::LinkBrowse * >(link);
+            const QString url = linkBrowse->url();
+
+            m_links.append(new Page::Link(boundary, url));
+        } else if (link->linkType() == Poppler::Link::Execute) {
+            const Poppler::LinkExecute *linkExecute = static_cast< const Poppler::LinkExecute * >(link);
+            const QString url = linkExecute->fileName();
+
+            m_links.append(new Page::Link(boundary, url, Page::LinkType_Execute));
+        }
+
+        delete link;
+    }
+    return true;
+}
+
+Page::Link *PagePdf::ifMouseMoveOverLink(const QPoint point)
+{
+    QPoint qp = point;
+    getImagePoint(qp);
+//    qDebug() << "ifMouseMoveOverLink qp:" << qp;
+    for (int i = 0; i < m_links.size(); i++) {
+        if (qp.x() > m_links.at(i)->boundary.x()*m_imagewidth &&
+                qp.x() < m_links.at(i)->boundary.x()*m_imagewidth + m_links.at(i)->boundary.width()*m_imagewidth &&
+                qp.y() > m_links.at(i)->boundary.y()*m_imageheight &&
+                qp.y() < m_links.at(i)->boundary.y()*m_imageheight + m_links.at(i)->boundary.height()*m_imageheight) {
+//            qDebug() << "boundary:" << m_links.at(i)->boundary;
+            return m_links.at(i);
+        }
+    }
+    return nullptr;
 }

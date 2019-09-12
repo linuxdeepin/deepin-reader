@@ -14,6 +14,7 @@
 
 #include "docview/docummentproxy.h"
 
+
 //  当前鼠标状态
 enum Handel_Enum {
     Default_State,
@@ -35,6 +36,7 @@ public:
 
 signals:
     void sigOpenFile(const QString &);
+    void sigSetMarkState(const bool &);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
@@ -74,7 +76,7 @@ private:
 
 private:
     int         m_nCurrentHandelState = Default_State; //  当前鼠标状态
-    bool        m_bSelectText = false;      //  是否可以选中文字
+    bool        m_bSelectOrMove = false;      //  是否可以选中文字、移动
     QPoint      m_pStartPoint;
 
     // CustomWidget interface

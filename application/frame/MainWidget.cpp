@@ -1,9 +1,9 @@
 #include "MainWidget.h"
 #include <QHBoxLayout>
+#include <DStackedWidget>
+#include <DSplitter>
 
 #include "HomeWidget.h"
-
-#include <DSplitter>
 #include "FileViewWidget.h"
 #include "LeftSidebarWidget.h"
 
@@ -16,7 +16,10 @@ MainWidget::MainWidget(CustomWidget *parent) :
 //  文件打开成功
 void MainWidget::openFileOk()
 {
-    m_pStackedWidget->setCurrentIndex(1);
+    DStackedWidget *pWidget = this->findChild<DStackedWidget *>();
+    if (pWidget) {
+        pWidget->setCurrentIndex(1);
+    }
 }
 
 //  文件打开失败
@@ -47,26 +50,21 @@ void MainWidget::initWidget()
     layout->setSpacing(0);
     this->setLayout(layout);
 
-    m_pStackedWidget = new DStackedWidget;
-    layout->addWidget(m_pStackedWidget);
+    DStackedWidget *pStackedWidget = new DStackedWidget;
+    layout->addWidget(pStackedWidget);
 
-    HomeWidget *homeWidget = new HomeWidget;
-    m_pStackedWidget->addWidget(homeWidget);
+    pStackedWidget->addWidget(new HomeWidget);
 
-    DSplitter *pSplitter = new  DSplitter;
+    DSplitter *pSplitter = new DSplitter;
     pSplitter->setChildrenCollapsible(false);   //  子部件不可拉伸到 0
 
-    LeftSidebarWidget *pLeftShowWidget = new LeftSidebarWidget;
-    pSplitter->insertWidget(0, pLeftShowWidget);
-
-    FileViewWidget *pFileViewWidget = new FileViewWidget;
-    pSplitter->insertWidget(1, pFileViewWidget);
-
-    //  布局 占比
+    pSplitter->insertWidget(0, new LeftSidebarWidget);
     pSplitter->setStretchFactor(0, 2);
+
+    pSplitter->insertWidget(1, new FileViewWidget);
     pSplitter->setStretchFactor(1, 8);
 
-    m_pStackedWidget->addWidget(pSplitter);
+    pStackedWidget->addWidget(pSplitter);
 
-    m_pStackedWidget->setCurrentIndex(0);
+    pStackedWidget->setCurrentIndex(0);
 }

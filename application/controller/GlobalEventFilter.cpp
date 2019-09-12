@@ -41,13 +41,16 @@ bool GlobalEventFilter::eventFilter(QObject *obj, QEvent *e)
 
         qDebug() << "GlobalEventFilter      eventFilter     " << key;
 
-        if (key == KeyModule::g_esc_key) {
-            NotifySubject::getInstance()->sendMsg(MSG_NOTIFY_MSG, key);
-
-            //  拦截， 不在向下转发
+        if (key == "Esc") {
             return true;
         }
-        if (key == KeyModule::g_f1_key) {
+        if (key == "F1") {
+            return true;
+        }
+        if (key == "Ctrl+S") {
+            return true;
+        }
+        if (key == "Ctrl+O") {
             return true;
         }
     }

@@ -38,7 +38,7 @@ DBManager *DBManager::m_dbManager = nullptr;
 DBManager *DBManager::instance()
 {
     if (!m_dbManager) {
-        m_dbManager = new DBManager();
+        m_dbManager = new DBManager;
     }
 
     return m_dbManager;
@@ -79,7 +79,7 @@ void DBManager::insertBookMark(const QString &pageNumber)
     QSqlQuery query( db );
     query.setForwardOnly(true);
     query.exec("BEGIN IMMEDIATE TRANSACTION");
-    query.prepare( "REPLACE INTO BookMarkTable "
+    query.prepare( "INSERT INTO BookMarkTable "
                    "(FilePath, FileName, PageNumber, Time) VALUES (?, ?, ?, ?)" );
     query.addBindValue(m_strFilePath);
     query.addBindValue(m_strFileName);
@@ -106,14 +106,36 @@ void DBManager::updateBookMark(const QString &pageNumber)
     QSqlQuery query( db );
     query.setForwardOnly(true);
     query.exec("BEGIN IMMEDIATE TRANSACTION");
-    query.prepare( "REPLACE UPDATE BookMarkTable "
-                   "set PageNumber= ? where FilePath = ? and m_strFileName = ?" );
+    query.prepare( "UPDATE BookMarkTable "
+                   "set PageNumber = ? where FilePath = ? and FileName = ?" );
     query.addBindValue(pageNumber);
     query.addBindValue(m_strFilePath);
     query.addBindValue(m_strFileName);
 
     if (! query.execBatch()) {
         qWarning() << "update BookMarkTable failed: "
+                   << query.lastError();
+    }
+    query.exec("COMMIT");
+    mutex.unlock();
+}
+
+void DBManager::deleteBookMark()
+{
+    const QSqlDatabase db = getDatabase();
+
+    QMutexLocker mutex(&m_mutex);
+    // Insert into BookMarkTable
+    QSqlQuery query( db );
+    query.setForwardOnly(true);
+    query.exec("BEGIN IMMEDIATE TRANSACTION");
+    query.prepare( "DELETE FROM BookMarkTable "
+                   "where FilePath = ? and FileName = ?" );
+    query.addBindValue(m_strFilePath);
+    query.addBindValue(m_strFileName);
+
+    if (! query.execBatch()) {
+        qWarning() << "delete BookMarkTable failed: "
                    << query.lastError();
     }
     query.exec("COMMIT");
@@ -198,9 +220,8 @@ void DBManager::checkDatabase()
 void DBManager::setStrFilePath(const QString &strFilePath)
 {
     m_strFilePath = strFilePath;
-}
 
-void DBManager::setStrFileName(const QString &strFileName)
-{
-    m_strFileName = strFileName;
+    int nLastPos = strFilePath.lastIndexOf('/');
+    nLastPos++;
+    m_strFileName = strFilePath.mid(nLastPos);
 }

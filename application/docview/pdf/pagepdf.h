@@ -30,7 +30,10 @@ public:
     //Annotation
     void addAnnotation(QPoint screenPos);
     void addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color) override;
-    void removeAnnotation(const QPoint& pos);
+    void removeAnnotation(const QPoint& pos);    
+    bool loadLinks();
+    Page::Link *ifMouseMoveOverLink(const QPoint point);
+
 protected:
     void paintEvent(QPaintEvent *event) override;
 private:
@@ -45,6 +48,7 @@ private:
     QColor m_pencolor;
     int m_penwidth;
     QPixmap m_magnifierpixmap;
+    QList< Page::Link * > m_links;
 };
 
 #endif // PAGEPDF_H

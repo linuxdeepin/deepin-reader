@@ -1,13 +1,14 @@
 #include "HomeWidget.h"
-#include <QApplication>
 #include <QDir>
 #include <DFileDialog>
 #include <QDebug>
 #include <QMimeData>
+#include <DPushButton>
+#include <QVBoxLayout>
+#include <DLabel>
 
 HomeWidget::HomeWidget(CustomWidget *parent):
     CustomWidget ("HomeWidget", parent),
-    m_layout(new QVBoxLayout(this)),
     m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
                              QSettings::IniFormat))
 {
@@ -37,13 +38,17 @@ void HomeWidget::initWidget()
     chooseBtn->setFixedSize(QSize(302, 36));
     connect(chooseBtn, &DPushButton::clicked, this, &HomeWidget::onChooseBtnClicked);
 
-    m_layout->setContentsMargins(0, 0, 0, 0);
-    m_layout->addStretch(1);
-    m_layout->addWidget(iconLabel, 0, Qt::AlignCenter);
-    m_layout->addWidget(tipsLabel, 0, Qt::AlignHCenter);
-    m_layout->addWidget(splitLine, 0, Qt::AlignHCenter);
-    m_layout->addWidget(chooseBtn, 0, Qt::AlignHCenter);
-    m_layout->addStretch(1);
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->setSpacing(8);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addStretch(1);
+    layout->addWidget(iconLabel, 0, Qt::AlignCenter);
+    layout->addWidget(tipsLabel, 0, Qt::AlignHCenter);
+    layout->addWidget(splitLine, 0, Qt::AlignHCenter);
+    layout->addWidget(chooseBtn, 0, Qt::AlignHCenter);
+    layout->addStretch(1);
+
+    this->setLayout(layout);
 }
 
 void HomeWidget::onChooseBtnClicked()
@@ -113,7 +118,7 @@ void HomeWidget::dropEvent(QDropEvent *event)
     if (mimeData->hasUrls()) {
         for (auto url : mimeData->urls()) {
             QString sFilePath =  url.toLocalFile();
-            if (sFilePath.endsWith("pdf")) {
+            if (sFilePath.endsWith(".pdf")) {
                 //  默认打开第一个
                 QString sRes = sFilePath + "@#&wzx";
 

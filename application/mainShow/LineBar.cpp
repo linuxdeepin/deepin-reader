@@ -73,7 +73,7 @@ void LineBar::keyPressEvent(QKeyEvent *e)
 
     if (key == "Esc") {
         pressEsc();
-    } else if (key == "Return") {
+    } else if (key == "Return" || key == "Enter") {
         pressEnter();
     } else if (key == "Ctrl + Return") {
         pressCtrlEnter();

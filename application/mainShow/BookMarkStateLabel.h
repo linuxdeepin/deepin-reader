@@ -27,6 +27,9 @@ protected:
 private:
     void setPixmapState(const QString &);
 
+private slots:
+    void SlotSetMarkState(const bool &);
+
 private:
     bool    m_bChecked = false;
 };

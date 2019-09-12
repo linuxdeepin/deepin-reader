@@ -239,16 +239,15 @@ void DocummentPDF::addAnnotation(const QPoint &starpos, const QPoint &endpos, QC
 void DocummentPDF::search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color)
 {
     //先清理
-    if(m_listsearch.size()>0)
-    {
+    if (m_listsearch.size() > 0) {
         clearSearch();
     }
 
     for (int i = 0; i < document->numPages(); ++i) {
         stSearchRes stres;
-        searchHightlight(document->page(i),strtext,stres,color);
-        if(stres.listtext.size()>0)
-            resmap.insert(i,stres);
+        searchHightlight(document->page(i), strtext, stres, color);
+        if (stres.listtext.size() > 0)
+            resmap.insert(i, stres);
     }
     //todo kyz 先单独更新当前页后期优化
     scaleAndShow(m_scale, m_rotate); //全部刷新
@@ -338,24 +337,23 @@ void DocummentPDF::searchHightlight(Poppler::Page *page, const QString &strtext,
 
     Poppler::HighlightAnnotation::Quad quad;
     QList<Poppler::HighlightAnnotation::Quad> qlistquad;
-    QRectF rec,recboundary;
-    foreach(rec,listrect)
-    {
+    QRectF rec, recboundary;
+    foreach (rec, listrect) {
         //获取搜索结果附近文字
-        QRectF rctext=rec;
-        rctext.setX(rctext.x()-40);
-        rctext.setWidth(rctext.width()+80);
+        QRectF rctext = rec;
+        rctext.setX(rctext.x() - 40);
+        rctext.setWidth(rctext.width() + 80);
         stres.listtext.push_back(page->text(rctext));
-        recboundary.setTopLeft(QPointF(rec.left()/page->pageSizeF().width(),
-                                       rec.top()/page->pageSizeF().height()));
-        recboundary.setTopRight(QPointF(rec.right()/page->pageSizeF().width(),
-                                        rec.top()/page->pageSizeF().height()));
-        recboundary.setBottomLeft(QPointF(rec.left()/page->pageSizeF().width(),
-                                          rec.bottom()/page->pageSizeF().height()));
-        recboundary.setBottomRight(QPointF(rec.right()/page->pageSizeF().width(),
-                                           rec.bottom()/page->pageSizeF().height()));
+        recboundary.setTopLeft(QPointF(rec.left() / page->pageSizeF().width(),
+                                       rec.top() / page->pageSizeF().height()));
+        recboundary.setTopRight(QPointF(rec.right() / page->pageSizeF().width(),
+                                        rec.top() / page->pageSizeF().height()));
+        recboundary.setBottomLeft(QPointF(rec.left() / page->pageSizeF().width(),
+                                          rec.bottom() / page->pageSizeF().height()));
+        recboundary.setBottomRight(QPointF(rec.right() / page->pageSizeF().width(),
+                                           rec.bottom() / page->pageSizeF().height()));
 
-        qDebug()<<"**"<<rec<<"**";
+        qDebug() << "**" << rec << "**";
         quad.points[0] = recboundary.topLeft();
         quad.points[1] = recboundary.topRight();
         quad.points[2] = recboundary.bottomRight();
@@ -410,6 +408,8 @@ void DocummentPDF::loadWordCache(int indexpage, PageBase *page)
 
     abstractTextPage(textList, page);
     qDeleteAll(textList);
+    PagePdf *ppdf = (PagePdf *)page;
+    ppdf->loadLinks();
 }
 
 bool DocummentPDF::abstractTextPage(const QList<Poppler::TextBox *> &text, PageBase *page)
@@ -846,6 +846,7 @@ void DocummentPDF::slot_vScrollBarValueChanged(int value)
     int pageno = currentPageNo();
     if (m_currentpageno != pageno) {
         m_currentpageno = pageno;
+        emit signal_pageChange(m_currentpageno);
     }
     if (!donotneedreloaddoc)
         m_threadloaddoc.start();
@@ -860,4 +861,20 @@ void DocummentPDF::slot_hScrollBarValueChanged(int value)
     }
     if (!donotneedreloaddoc)
         m_threadloaddoc.start();
+}
+
+Page::Link *DocummentPDF::mouseBeOverLink(QPoint point)
+{
+    if (!document) {
+        return nullptr;
+    }
+    QPoint qpoint = point;
+    int pagenum = -1;
+    pagenum = pointInWhichPage(qpoint);
+    qDebug() << "mouseBeOverLink pagenum:" << pagenum;
+    if (-1 != pagenum) {
+        PagePdf *ppdf = (PagePdf *)m_pages.at(pagenum);
+        return ppdf ->ifMouseMoveOverLink(qpoint);
+    }
+    return nullptr;
 }

@@ -1,4 +1,13 @@
 #include "LeftSidebarWidget.h"
+#include <DStackedWidget>
+#include <QVBoxLayout>
+
+#include "pdfControl/BookMarkWidget.h"
+#include "pdfControl/NotesWidget.h"
+#include "pdfControl/ThumbnailWidget.h"
+#include "pdfControl/SearchResWidget.h"
+
+#include "MainOperationWidget.h"
 
 LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent):
     CustomWidget ("LeftSidebarWidget", parent)
@@ -6,45 +15,40 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent):
     setMinimumWidth(250);
     setMaximumWidth(500);
 
-    m_pVBoxLayout = new QVBoxLayout;
-    m_pVBoxLayout->setContentsMargins(0, 0, 0, 0);
-    m_pVBoxLayout->setSpacing(0);
-
-    this->setLayout(m_pVBoxLayout);
-
-    initOperationWidget();
+    initWidget();
 
     this->setVisible(false);    //  默认 隐藏
 }
 
-void LeftSidebarWidget::initOperationWidget()
-{
-    m_pStackedWidget = new DStackedWidget;
-    m_pVBoxLayout->addWidget(m_pStackedWidget);
-
-    m_pThumbnailWidget = new ThumbnailWidget;
-    m_pBookMarkWidget = new BookMarkWidget;
-    m_pNotesWidget = new NotesWidget;
-
-    m_pStackedWidget->insertWidget(THUMBNAIL, m_pThumbnailWidget);
-    m_pStackedWidget->insertWidget(BOOK, m_pBookMarkWidget);
-    m_pStackedWidget->insertWidget(NOTE, m_pNotesWidget);
-    m_pStackedWidget->setCurrentIndex(THUMBNAIL);
-
-    m_operationWidget = new MainOperationWidget;
-    m_pVBoxLayout->addWidget(m_operationWidget, 0, Qt::AlignBottom);
-}
 
 void LeftSidebarWidget::initWidget()
 {
+    QVBoxLayout *pVBoxLayout = new QVBoxLayout;
+    pVBoxLayout->setContentsMargins(0, 0, 0, 0);
+    pVBoxLayout->setSpacing(0);
 
+    this->setLayout(pVBoxLayout);
+
+    DStackedWidget *m_pStackedWidget = new DStackedWidget;
+    pVBoxLayout->addWidget(m_pStackedWidget);
+
+    m_pStackedWidget->insertWidget(0, new ThumbnailWidget);
+    m_pStackedWidget->insertWidget(1, new BookMarkWidget);
+    m_pStackedWidget->insertWidget(2, new NotesWidget);
+    m_pStackedWidget->insertWidget(3, new SearchResWidget);
+    m_pStackedWidget->setCurrentIndex(0);
+
+    pVBoxLayout->addWidget(new MainOperationWidget, 0, Qt::AlignBottom);
 }
 
 int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_SWITCHLEFTWIDGET) {    //切换页面
-        int nIndex = msgContent.toInt();
-        m_pStackedWidget->setCurrentIndex(nIndex);
+        DStackedWidget *pWidget = this->findChild<DStackedWidget *>();
+        if (pWidget) {
+            int nIndex = msgContent.toInt();
+            pWidget->setCurrentIndex(nIndex);
+        }
         return ConstantMsg::g_effective_res;
     }
     if (msgType == MSG_SLIDER_SHOW_STATE) { //  控制 侧边栏显隐

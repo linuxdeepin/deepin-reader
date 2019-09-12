@@ -2,7 +2,6 @@
 #define MAINWIDGET_H
 
 #include "subjectObserver/CustomWidget.h"
-#include <DStackedWidget>
 
 DWIDGET_USE_NAMESPACE
 
@@ -21,9 +20,6 @@ public:
 private:
     void openFileOk();
     void openFileFail(const QString &);
-
-private:
-    DStackedWidget  *m_pStackedWidget = nullptr;
 
     // IObserver interface
 public:

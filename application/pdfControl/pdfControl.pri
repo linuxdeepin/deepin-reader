@@ -7,7 +7,8 @@ HEADERS += \
     $$PWD/BookMarkItemWidget.h \
     $$PWD/NotesItemWidget.h \
     $$PWD/font/fontWidget.h \
-    $$PWD/CustomLabel.h
+    $$PWD/CustomLabel.h \
+    $$PWD/SearchResWidget.h
 
 SOURCES += \
     $$PWD/PagingWidget.cpp \
@@ -18,7 +19,8 @@ SOURCES += \
     $$PWD/BookMarkItemWidget.cpp \
     $$PWD/NotesItemWidget.cpp \
     $$PWD/font/fontWidget.cpp \
-    $$PWD/CustomLabel.cpp
+    $$PWD/CustomLabel.cpp \
+    $$PWD/SearchResWidget.cpp
 
 RESOURCES += \
     $$PWD/pdfControl.qrc

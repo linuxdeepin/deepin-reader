@@ -54,12 +54,14 @@ public:
     bool loadWords();
     void removeAllAnnotation();
     void removeAnnotation(const QPoint &startpos) override;
-    void addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) override;    
-    void search(const QString& strtext,QMap<int,stSearchRes>& resmap,QColor color=Qt::yellow) override;
-    void clearSearch() override;
+    void addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) override;
+    void search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color = Qt::yellow) override;
+    void clearSearch();
     int currentPageNo() override;
     bool pageJump(int pagenum) override;
     void docBasicInfo(stFileInfo &info) override;
+    Page::Link *mouseBeOverLink(QPoint point) override;
+
 private slots:
     void slot_vScrollBarValueChanged(int value) override;
     void slot_hScrollBarValueChanged(int value) override;
@@ -70,8 +72,8 @@ private:
     bool abstractTextPage(const QList<Poppler::TextBox *> &text, PageBase *page);
     void showSinglePage();
     void showFacingPage();
-    bool pdfsave(const QString &filePath, bool withChanges)const;   
-    void searchHightlight(Poppler::Page* page,const QString& strtext,stSearchRes& stres,const QColor& color);
+    bool pdfsave(const QString &filePath, bool withChanges)const;
+    void searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color);
     void refreshOnePage(int ipage);
     void setBasicInfo(const QString& filepath);
     Poppler::Document *document;

@@ -95,11 +95,32 @@ void PagingWidget::setTotalPages(int pages)
 
 int PagingWidget::dealWithData(const int &msgType, const QString &msgContant)
 {
+    switch (msgType) {
+    case MSG_OPERATION_FIRST_PAGE:              //  第一页
+        qDebug() << "   MSG_OPERATION_FIRST_PAGE  ";
+        setCurrentPageValue(0);
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_PREV_PAGE:               //  上一页
+        qDebug() << "   MSG_OPERATION_PREV_PAGE  ";
+        slotPrePage();
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_NEXT_PAGE:               //  下一页
+        qDebug() << "   MSG_OPERATION_NEXT_PAGE  ";
+        slotNextPage();
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_END_PAGE:                //  最后一页
+        qDebug() << "   MSG_OPERATION_END_PAGE  ";
+        setCurrentPageValue(m_totalPage - FIRSTPAGES);
+        return ConstantMsg::g_effective_res;
+    }
     return 0;
 }
 
 void PagingWidget::slotPrePage()
 {
+    if (m_currntPage == FIRSTPAGES) {
+        return;
+    }
     int t_page = --m_currntPage;
 
     m_pNextPageBtn->setEnabled(true);
@@ -118,6 +139,9 @@ void PagingWidget::slotPrePage()
 
 void PagingWidget::slotNextPage()
 {
+    if (m_currntPage == m_totalPage) {
+        return;
+    }
     int t_page = ++m_currntPage;
 
     m_pPrePageBtn->setEnabled(true);

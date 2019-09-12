@@ -1,11 +1,10 @@
-#ifndef NOTESFORM_H
-#define NOTESFORM_H
+#ifndef SEARCHRESWIDGET_H
+#define SEARCHRESWIDGET_H
 
 #include <DListWidget>
-#include <DImageButton>
 
 #include <QListWidgetItem>
-#include <QVBoxLayout>>
+#include <QVBoxLayout>
 
 #include "NotesItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
@@ -13,23 +12,27 @@
 
 /**
  * @brief The ThumbnailItemWidget class
- * @brief   注释窗体
+ * @brief   搜索结果显示窗体
  */
 
-
-class NotesWidget : public CustomWidget
+class SearchResWidget : public CustomWidget
 {
     Q_OBJECT
 
 public:
-    NotesWidget(CustomWidget *parent = nullptr);
+    SearchResWidget(CustomWidget *parent = nullptr);
 
+signals:
+    void sigFlushSearchWidget(QVariant);
+
+private slots:
+    void slotFlushSearchList(QVariant);
 
 protected:
     void initWidget() override;
 
 private:
-    void addNotesItem(const QImage &image, const int &page, const QString &text);
+    void addNotesItem(const QImage &image, const int &page, const QString &text, const int &resultNum);
 
 private:
     DListWidget *m_pNotesList = nullptr;

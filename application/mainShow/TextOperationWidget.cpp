@@ -1,5 +1,5 @@
 #include "TextOperationWidget.h"
-#include <DPushButton>
+
 
 TextOperationWidget::TextOperationWidget(CustomWidget *parent)
     : CustomWidget("TextOperationWidget", parent)
@@ -9,12 +9,11 @@ TextOperationWidget::TextOperationWidget(CustomWidget *parent)
     initWidget();
 }
 
-void TextOperationWidget::createBtn(const QString &btnName, const char *member)
+DPushButton *TextOperationWidget::createBtn(const QString &btnName, const char *member)
 {
     DPushButton *btn = new DPushButton(btnName);
     connect(btn, SIGNAL(clicked()), member);
-
-    layout->addWidget(btn);
+    return btn;
 }
 
 void TextOperationWidget::SlotBtnCopyClicked()
@@ -55,17 +54,22 @@ int TextOperationWidget::dealWithData(const int &, const QString &)
 
 void TextOperationWidget::initWidget()
 {
-    layout = new QVBoxLayout;
+    QVBoxLayout *layout = new QVBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     this->setLayout(layout);
 
-    createBtn(tr("copy"), SLOT(SlotBtnCopyClicked()));
+    DPushButton *copyBtn = createBtn(tr("copy"), SLOT(SlotBtnCopyClicked()));
+    layout->addWidget(copyBtn);
+
     LightedWidget *pLightedWidget = new LightedWidget;
     connect(pLightedWidget, SIGNAL(sigSendLightedColor(const int &)), this, SLOT(SlotSendLightedColor(const int &)));
     layout->addWidget(pLightedWidget);
 
-    createBtn(tr("remove high lighted"), SLOT(SlotBtnRemoveHighLightedClicked()));
-    createBtn(tr("add annotation"), SLOT(SlotBtnAddAnnotationClicked()));
-    createBtn(tr("add book mark"), SLOT(SlotBtnAddBookMarkClicked()));
+    DPushButton *removeBtn = createBtn(tr("remove high lighted"), SLOT(SlotBtnRemoveHighLightedClicked()));
+    layout->addWidget(removeBtn);
+    DPushButton *addAnnoBtn = createBtn(tr("add annotation"), SLOT(SlotBtnAddAnnotationClicked()));
+    layout->addWidget(addAnnoBtn);
+    DPushButton *AddBookMarkBtn = createBtn(tr("add book mark"), SLOT(SlotBtnAddBookMarkClicked()));
+    layout->addWidget(AddBookMarkBtn);
 }

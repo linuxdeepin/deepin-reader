@@ -47,25 +47,18 @@ FindWidget::FindWidget(CustomWidget *parent)
     setVisible(false);
 }
 
-bool FindWidget::isFocus()
-{
-    return m_editLine->hasFocus();
-}
-
-void FindWidget::focus()
-{
-    m_editLine->setFocus();
-    m_editLine->selectAll();
-}
-
 void FindWidget::findCancel()
 {
-    QWidget::hide();
+    this->close();
 }
 
 void FindWidget::handleContentChanged()
 {
-    sendMsg(MSG_FIND_CONTENT, m_editLine->text());
+    QString strNewFind = m_editLine->text();
+    if (strNewFind != m_strOldFindContent) {
+        m_strOldFindContent = strNewFind;
+        sendMsg(MSG_FIND_CONTENT, m_strOldFindContent);
+    }
 }
 
 void FindWidget::slotFindNextBtnClicked()
@@ -98,52 +91,12 @@ void FindWidget::initWidget()
     findPrevButton->setFixedSize(QSize(36, 36));
     connect(findPrevButton, &DPushButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
 
-    m_closeButton = new DImageButton();
-    m_closeButton->setFixedSize(20, 20);
-    connect(m_closeButton, &DImageButton::clicked, this, &FindWidget::findCancel);
+    DImageButton *closeButton = new DImageButton();
+    closeButton->setFixedSize(20, 20);
+    connect(closeButton, &DImageButton::clicked, this, &FindWidget::findCancel);
 
     m_layout->addWidget(m_editLine);
     m_layout->addWidget(findNextButton);
     m_layout->addWidget(findPrevButton);
-    m_layout->addWidget(m_closeButton);
-
-    // Make button don't grab keyboard focus after click it.
-    findNextButton->setFocusPolicy(Qt::NoFocus);
-    findPrevButton->setFocusPolicy(Qt::NoFocus);
-    m_closeButton->setFocusPolicy(Qt::NoFocus);
-}
-
-void FindWidget::paintEvent(QPaintEvent *)
-{
-//    QPainter painter(this);
-//    painter.setOpacity(1);
-//    QPainterPath path;
-//    path.addRect(rect());
-//    painter.fillPath(path, m_backgroundColor);
-}
-
-void FindWidget::setMismatchAlert(bool isAlert)
-{
-    m_editLine->setAlert(isAlert);
-}
-
-void FindWidget::setBackground(QString color)
-{
-    m_backgroundColor = QColor(color);
-
-    if (QColor(m_backgroundColor).lightness() < 128) {
-        //m_findLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
-
-        m_closeButton->setNormalPic(Utils::getQrcPath("bar_close_normal_dark.svg"));
-        m_closeButton->setHoverPic(Utils::getQrcPath("bar_close_hover_dark.svg"));
-        m_closeButton->setPressPic(Utils::getQrcPath("bar_close_press_dark.svg"));
-    } else {
-        //m_findLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
-
-        m_closeButton->setNormalPic(Utils::getQrcPath("bar_close_normal_light.svg"));
-        m_closeButton->setHoverPic(Utils::getQrcPath("bar_close_hover_light.svg"));
-        m_closeButton->setPressPic(Utils::getQrcPath("bar_close_press_light.svg"));
-    }
-
-    update();
+    m_layout->addWidget(closeButton);
 }
