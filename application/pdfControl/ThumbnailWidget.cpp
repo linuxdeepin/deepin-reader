@@ -45,10 +45,6 @@ void ThumbnailWidget::initWidget()
     m_pvBoxLayout->addWidget(m_pPageWidget);
 
     this->setLayout(m_pvBoxLayout);
-
-//    this->setTotalPages(30);
-
-//    this->fillContantToList();
 }
 
 void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
@@ -124,7 +120,7 @@ void ThumbnailWidget::fillContantToList()
     for (int idex = 0; idex < totalPages(); ++idex) {
         //QImage image(tr(":/resources/image/logo/logo_big.svg"));
         QImage image;
-        DocummentProxy::instance(nullptr)->getImage(idex, image, 113, 143);
+        DocummentProxy::instance()->getImage(idex, image, 113, 143);
 
         addThumbnailItem(image, idex);
     }
@@ -154,6 +150,8 @@ void ThumbnailWidget::slotOpenFileOk()
     int pages = DocummentProxy::instance()->getPageSNum();
 
     m_pPageWidget->setTotalPages(pages);
+
+    m_pThumbnailListWidget->clear();
 
     setTotalPages(pages);
     fillContantToList();

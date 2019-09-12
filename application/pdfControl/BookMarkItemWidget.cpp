@@ -8,9 +8,7 @@ BookMarkItemWidget::BookMarkItemWidget(CustomWidget *parent) :
 
     m_pHLayout = new QHBoxLayout;
     //set around distance
-    m_pHLayout->setContentsMargins(0, 0, 0, 0);
-    m_pHLayout->setSpacing(0);
-    this->setLayout(m_pHLayout);
+    m_pHLayout->setContentsMargins(1, 0, 1, 0);
 
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
@@ -57,7 +55,11 @@ void BookMarkItemWidget::initWidget()
     m_pPicture = new DLabel;
     m_pPage = new DLabel;
 
+    m_pHLayout->setSpacing(1);
     m_pHLayout->addWidget(m_pPicture);
     m_pHLayout->addWidget(m_pPage);
+    m_pHLayout->setSpacing(1);
+
+    this->setLayout(m_pHLayout);
 }
 

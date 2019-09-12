@@ -17,17 +17,17 @@
  * @brief   侧边栏显示
  */
 
-enum WIDGETINDEX {
-    THUMBNAIL = 0,
-    BOOK,
-    NOTE
-};
-
 class LeftSidebarWidget : public CustomWidget
 {
     Q_OBJECT
 public:
     LeftSidebarWidget(CustomWidget *parent = nullptr);
+
+signals:
+    void sigSwitchWidget(const int &);
+
+private slots:
+    void slotSwitchWidget(const int &);
 
 private:
     void initOperationWidget();
@@ -40,6 +40,7 @@ private:
     ThumbnailWidget *m_pThumbnailWidget = nullptr;
     BookMarkWidget *m_pBookMarkWidget = nullptr;
     NotesWidget *m_pNotesWidget = nullptr;
+    NotesWidget *m_pSearchWidget = nullptr;
 
     // CustomWidget interface
 protected:
