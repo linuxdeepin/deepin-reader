@@ -20,7 +20,6 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent):
     this->setVisible(false);    //  默认 隐藏
 }
 
-
 void LeftSidebarWidget::initWidget()
 {
     QVBoxLayout *pVBoxLayout = new QVBoxLayout;
