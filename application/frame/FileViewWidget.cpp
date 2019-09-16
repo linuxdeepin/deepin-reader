@@ -5,6 +5,8 @@
 #include <QGridLayout>
 #include "controller/DataManager.h"
 
+#include "application.h"
+
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
 {
@@ -38,6 +40,7 @@ void FileViewWidget::initWidget()
 {
     //  实际文档类  唯一实例化设置 父窗口
     m_pDocummentProxy = DocummentProxy::instance(this);
+    connect(m_pDocummentProxy, SIGNAL(signal_pageChange(int)), this, SLOT(SlotDocViewPageChange(int)));
 
     setBookMarkStateWidget();
 
@@ -64,20 +67,14 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
     } else {
         if (m_bSelectOrMove && m_pDocummentProxy) {
             m_pDocummentProxy->mouseSelectText(m_pStartPoint, m_pDocummentProxy->global2RelativePoint(event->globalPos()));
-            return ;
+        } else {
+            if (m_pDocummentProxy->mouseBeOverText(m_pDocummentProxy->global2RelativePoint(event->globalPos())))
+                setCursor(QCursor(Qt::IBeamCursor));
+            else {
+                setCursor(QCursor(Qt::ArrowCursor));
+            }
         }
-//        if(m_pDocummentProxy->mouseBeOverText(m_pDocummentProxy->global2RelativePoint(event->globalPos())))
-//                 setCursor(QCursor(Qt::IBeamCursor));
-//        else {
-//             setCursor(QCursor(Qt::ArrowCursor));
-//        }
-
     }
-//    if (m_pDocummentProxy->mouseBeOverText(m_pDocummentProxy->global2RelativePoint(event->globalPos())))
-//        setCursor(QCursor(Qt::IBeamCursor));
-//    else {
-//        setCursor(QCursor(Qt::ArrowCursor));
-//    }
 }
 
 //  鼠标左键 按下
@@ -91,7 +88,7 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 
             } else if (m_nCurrentHandelState == Default_State) {
                 m_pDocummentProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
-                m_pStartPoint = m_pDocummentProxy->global2RelativePoint(event->globalPos());                
+                m_pStartPoint = m_pDocummentProxy->global2RelativePoint(event->globalPos());
             }
         }
     }
@@ -101,7 +98,7 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     QPoint pt = m_pDocummentProxy->global2RelativePoint(event->globalPos());
-    m_pDocummentProxy->addAnnotation(m_pStartPoint,pt);
+    m_pDocummentProxy->addAnnotation(m_pStartPoint, pt);
     m_bSelectOrMove = false;
     CustomWidget::mouseReleaseEvent(event);
 }
@@ -154,6 +151,9 @@ void FileViewWidget::onOpenFile(const QString &filePath)
             DataManager::instance()->setStrOnlyFilePath(filePath);
 
             m_pDocummentProxy->scaleRotateAndShow(2, RotateType_Normal);
+
+
+
             //  通知 其他窗口， 打开文件成功了！！！
             NotifySubject::getInstance()->sendMsg(MSG_OPERATION_OPEN_FILE_OK);
 
@@ -197,6 +197,11 @@ void FileViewWidget::openFilePath(const QString &filePaths)
         QString sPath = fileList.at(0);
         onOpenFile(sPath);
     }
+}
+
+void FileViewWidget::SlotDocViewPageChange(int page)
+{
+    qDebug() << "       SlotDocViewPageChange      " << page;
 }
 
 //  放大镜　控制
@@ -281,7 +286,7 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
 {
     switch (msgType) {
     case MSG_OPERATION_ADD_BOOKMARK:            //  添加书签
-        qDebug() << "   MSG_OPERATION_ADD_BOOKMARK  ";        
+        qDebug() << "   MSG_OPERATION_ADD_BOOKMARK  ";
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_FIRST_PAGE:              //  第一页
         qDebug() << "   MSG_OPERATION_FIRST_PAGE  ";

@@ -47,6 +47,9 @@ bool GlobalEventFilter::eventFilter(QObject *obj, QEvent *e)
         if (key == "F1") {
             return true;
         }
+//        if (key == "Del") {
+//            return true;
+//        }
         if (key == "Ctrl+S") {
             return true;
         }
