@@ -33,6 +33,13 @@ public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
 
+    inline DLabel *pageLabel() const
+    {
+        return m_pPage;
+    }
+
+    void destructMember();
+
 private slots:
     void slotDltBookMark();
     void slotShowContextMenu(const QPoint &);

@@ -35,6 +35,24 @@ int BookMarkItemWidget::dealWithData(const int &, const QString &)
     return 0;
 }
 
+void BookMarkItemWidget::destructMember()
+{
+    if (m_pPicture) {
+        m_pPicture->deleteLater();
+        m_pPicture = nullptr;
+    }
+
+    if (m_pPage) {
+        m_pPage->deleteLater();
+        m_pPage = nullptr;
+    }
+
+    if (m_pHLayout) {
+        m_pHLayout->deleteLater();
+        m_pHLayout = nullptr;
+    }
+}
+
 void BookMarkItemWidget::slotDltBookMark()
 {
     //qDebug() << "delet BookMark";

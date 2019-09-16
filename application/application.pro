@@ -8,6 +8,8 @@ TARGET = deepin_reader
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
 PKGCONFIG += x11 poppler-qt5
+LIBS+=-luuid
+
 
 include (frame/frame.pri)
 include (utils/utils.pri)

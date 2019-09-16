@@ -66,11 +66,13 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
 
 void PagingWidget::setCurrentPage(const int &index)
 {
-    this->setPreRowVal(index - 1);
+    int t_page = index - 1;
+
+    this->setPreRowVal(t_page);
 
     m_pJumpPageSpinBox->setValue(index);
 
-    DocummentProxy::instance()->pageJump(index - 1);
+    DocummentProxy::instance()->pageJump(t_page);
 
 //    qDebug() << tr("page: %1").arg(index);
 }

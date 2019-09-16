@@ -64,13 +64,20 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
     } else {
         if (m_bSelectOrMove && m_pDocummentProxy) {
             m_pDocummentProxy->mouseSelectText(m_pStartPoint, m_pDocummentProxy->global2RelativePoint(event->globalPos()));
+            return ;
         }
+//        if(m_pDocummentProxy->mouseBeOverText(m_pDocummentProxy->global2RelativePoint(event->globalPos())))
+//                 setCursor(QCursor(Qt::IBeamCursor));
+//        else {
+//             setCursor(QCursor(Qt::ArrowCursor));
+//        }
+
     }
-    if (m_pDocummentProxy->mouseBeOverText(m_pDocummentProxy->global2RelativePoint(event->globalPos())))
-        setCursor(QCursor(Qt::IBeamCursor));
-    else {
-        setCursor(QCursor(Qt::ArrowCursor));
-    }
+//    if (m_pDocummentProxy->mouseBeOverText(m_pDocummentProxy->global2RelativePoint(event->globalPos())))
+//        setCursor(QCursor(Qt::IBeamCursor));
+//    else {
+//        setCursor(QCursor(Qt::ArrowCursor));
+//    }
 }
 
 //  鼠标左键 按下
@@ -84,7 +91,7 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 
             } else if (m_nCurrentHandelState == Default_State) {
                 m_pDocummentProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
-                m_pStartPoint = m_pDocummentProxy->global2RelativePoint(event->globalPos());
+                m_pStartPoint = m_pDocummentProxy->global2RelativePoint(event->globalPos());                
             }
         }
     }
@@ -93,6 +100,8 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 //  鼠标松开
 void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 {
+    QPoint pt = m_pDocummentProxy->global2RelativePoint(event->globalPos());
+    m_pDocummentProxy->addAnnotation(m_pStartPoint,pt);
     m_bSelectOrMove = false;
     CustomWidget::mouseReleaseEvent(event);
 }
@@ -271,6 +280,21 @@ int FileViewWidget::dealWithTitleMenuRequest(const int &msgType, const QString &
 int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
+    case MSG_OPERATION_ADD_BOOKMARK:            //  添加书签
+        qDebug() << "   MSG_OPERATION_ADD_BOOKMARK  ";        
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_FIRST_PAGE:              //  第一页
+        qDebug() << "   MSG_OPERATION_FIRST_PAGE  ";
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_PREV_PAGE:               //  上一页
+        qDebug() << "   MSG_OPERATION_PREV_PAGE  ";
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_NEXT_PAGE:               //  下一页
+        qDebug() << "   MSG_OPERATION_NEXT_PAGE  ";
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_END_PAGE:                //  最后一页
+        qDebug() << "   MSG_OPERATION_END_PAGE  ";
+        return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_COPY:               //  复制
         qDebug() << "   MSG_OPERATION_TEXT_COPY  ";
         return ConstantMsg::g_effective_res;
