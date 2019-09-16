@@ -29,7 +29,6 @@ void LeftSidebarWidget::initWidget()
 
     DStackedWidget *m_pStackedWidget = new DStackedWidget;
     pVBoxLayout->addWidget(m_pStackedWidget);
-
     m_pStackedWidget->insertWidget(0, new ThumbnailWidget);
     m_pStackedWidget->insertWidget(1, new BookMarkWidget);
     m_pStackedWidget->insertWidget(2, new NotesWidget);
