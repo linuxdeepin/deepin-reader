@@ -13,25 +13,53 @@ BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
     initWidget();
 
     initConnection();
+
+    m_pAllPageList.append(0);//测试专用
 }
 
 void BookMarkWidget::slotShowSelectItem(QListWidgetItem *item)
 {
-    m_pCurrentItem = item;
+    BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
+    if (t_widget) {
+        int nnPageNumber = t_widget->PageNumber();
+        m_nCurrentPage = nnPageNumber;
+
+        DocummentProxy::instance()->pageJump(nnPageNumber);
+    }
 }
 
 void BookMarkWidget::slotAddBookMark()
 {
     int page = DocummentProxy::instance()->currentPageNo();
 
-    QImage image;
+    if (m_pAllPageList.contains(page)) {
+        return;
+    }
 
-    DocummentProxy::instance()->getImage(page, image, 130, 150);
+    if (m_pAllPageList.size() == 0) {
+        //bool rl =
+        dApp->dbM->insertBookMark(QString::number(page));
+//        m_pAllPageList.append(page);
+
+//        addBookMarkItem(page);
+    } else {
+        QString sPage = "";
+        foreach (int i, m_pAllPageList) {
+            sPage += QString::number(page) + tr(",");
+        }
+
+        dApp->dbM->updateBookMark(QString::number(page));
+    }
+
+    m_pAllPageList.append(page);
+    addBookMarkItem(page);
 }
 
 //  打开文件成功，　获取该文件的书签数据
 void BookMarkWidget::slotOpenFileOk()
 {
+    connect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotDocFilePageChanged(int)));
+
     QString sAllPages = dApp->dbM->getBookMarks();
     QStringList sPageList = sAllPages.split(",", QString::SkipEmptyParts);
     foreach (QString s, sPageList) {
@@ -39,11 +67,44 @@ void BookMarkWidget::slotOpenFileOk()
 
         m_pAllPageList.append(nPage);
 
-        QImage image;
+        addBookMarkItem(nPage);
+    }
+}
 
-        DocummentProxy::instance()->getImage(nPage, image, 130, 150);
+/**
+ * @brief BookMarkWidget::slotDocFilePageChanged
+ * @param page:当前活动页，页码
+ */
+void BookMarkWidget::slotDocFilePageChanged(int page)
+{
+    m_nCurrentPage = page;
 
-        addBookMarkItem(image, nPage);
+    bool bl =  m_pAllPageList.contains(page);
+
+    m_pAddBookMarkBtn->setEnabled(!bl);
+    sendMsg(MSG_BOOKMARK_STATE, QString::number(bl));
+}
+
+void BookMarkWidget::slotDeleteBookItem(const int &nPage)
+{
+    int nCount = m_pBookMarkListWidget->count();
+
+    for (int iLoop = 0; iLoop < nCount; iLoop++) {
+        QListWidgetItem *pItem = m_pBookMarkListWidget->item(iLoop);
+        BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
+        if (t_widget) {
+            int nnPageNumber = t_widget->PageNumber();
+            if (nnPageNumber == nPage) {
+                m_pAllPageList.removeOne(nPage);
+
+                t_widget->deleteLater();
+                t_widget = nullptr;
+
+                delete  pItem;
+
+                break;
+            }
+        }
     }
 }
 
@@ -79,25 +140,38 @@ void BookMarkWidget::keyPressEvent(QKeyEvent *e)
 void BookMarkWidget::initConnection()
 {
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
+    connect(this, SIGNAL(sigDeleteBookItem(const int &)), this, SLOT(slotDeleteBookItem(const int &)));
     connect(m_pBookMarkListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
 }
 
 void BookMarkWidget::dltItem()
 {
-    if (m_pCurrentItem != nullptr) {
-        BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(m_pCurrentItem));
+    slotDeleteBookItem(m_nCurrentPage);
+    m_nCurrentPage = -1;
+//    QList<QListWidgetItem *> items =  m_pBookMarkListWidget->selectedItems();
+//    foreach (QListWidgetItem *item, items) {
 
-        if (t_widget) {
-            int page = t_widget->PageNumber();
+//        BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
+//        if (t_widget) {
+//            int nnPageNumber = t_widget->PageNumber();
 
-            t_widget->deleteLater();
-            t_widget = nullptr;
-        }
-    }
+//            m_pAllPageList.removeOne(nnPageNumber);
+
+//            t_widget->deleteLater();
+//            t_widget = nullptr;
+//        }
+//        delete  item;
+//    }
 }
 
-void BookMarkWidget::addBookMarkItem(const QImage &image, const int &page)
+
+
+void BookMarkWidget::addBookMarkItem(const int &page)
 {
+    QImage image;
+
+    DocummentProxy::instance()->getImage(page, image, 130, 150);
+
     BookMarkItemWidget *t_widget = new BookMarkItemWidget(this);
     t_widget->setItemImage(image);
     t_widget->setPageNumber(page);
@@ -114,7 +188,10 @@ void BookMarkWidget::addBookMarkItem(const QImage &image, const int &page)
 int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_BOOKMARK_DLTITEM == msgType) {
-        dltItem();
+
+        int nPage = msgContent.toInt();
+
+        emit sigDeleteBookItem(nPage);
         qDebug() << "dlt bookmark item by menu";
         return ConstantMsg::g_effective_res;
     }

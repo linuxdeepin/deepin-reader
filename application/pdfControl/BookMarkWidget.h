@@ -29,12 +29,15 @@ public:
 
 signals:
     void sigOpenFileOk();
+    void sigDeleteBookItem(const int &);
 
 
 private slots:
     void slotShowSelectItem(QListWidgetItem *);
     void slotAddBookMark();
     void slotOpenFileOk();
+    void slotDocFilePageChanged(int);
+    void slotDeleteBookItem(const int &);
 
 protected:
     void initWidget() override;
@@ -43,7 +46,7 @@ protected:
 private:
     void initConnection();
     void dltItem();
-    void addBookMarkItem(const QImage &, const int &);
+    void addBookMarkItem(const int &);
 
 public:
     // IObserver interface
@@ -52,10 +55,11 @@ public:
 private:
     DListWidget *m_pBookMarkListWidget = nullptr;
     QVBoxLayout *m_pVBoxLayout = nullptr;
-    QListWidgetItem *m_pCurrentItem = nullptr;
+//    QListWidgetItem *m_pCurrentItem = nullptr;
     DImageButton *m_pAddBookMarkBtn = nullptr;
 
     QList<int>      m_pAllPageList;
+    int m_nCurrentPage = -1;
 };
 
 #endif // BOOKMARKFORM_H
