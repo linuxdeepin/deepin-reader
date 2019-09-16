@@ -16,6 +16,7 @@
  * @brief   注释窗体
  */
 
+
 class NotesWidget : public CustomWidget
 {
     Q_OBJECT
@@ -25,7 +26,6 @@ public:
 
 signals:
     void sigFlushSearchWidget(QMap<int, stSearchRes> &);
-
 protected:
     void initWidget() override;
 

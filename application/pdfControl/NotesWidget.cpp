@@ -45,7 +45,6 @@ void NotesWidget::addNotesItem(const QImage &image, const int &page, const QStri
     m_pNotesList->setItemWidget(item, itemWidget);
 }
 
-
 int NotesWidget::dealWithData(const int &, const QString &)
 {
     return 0;
