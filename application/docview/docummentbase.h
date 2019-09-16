@@ -114,7 +114,9 @@ public:
         return false;
     }
 
-    virtual void removeAnnotation(const QPoint &startpos) {}
+    virtual QString removeAnnotation(const QPoint &startpos) {}
+
+    virtual void removeAnnotation(const QString& struuid){}
 
     virtual void addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) {}
 
@@ -168,6 +170,8 @@ public:
         if (scrollBar_Y)
             scrollBar_Y->setValue(scrollBar_Y->value() + mvy);
     }
+    virtual void title(QString& title){}
+
 signals:
     void signal_pageChange(int);
 protected slots:

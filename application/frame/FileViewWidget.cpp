@@ -73,11 +73,11 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
 //        }
 
     }
-    if (m_pDocummentProxy->mouseBeOverText(m_pDocummentProxy->global2RelativePoint(event->globalPos())))
-        setCursor(QCursor(Qt::IBeamCursor));
-    else {
-        setCursor(QCursor(Qt::ArrowCursor));
-    }
+//    if (m_pDocummentProxy->mouseBeOverText(m_pDocummentProxy->global2RelativePoint(event->globalPos())))
+//        setCursor(QCursor(Qt::IBeamCursor));
+//    else {
+//        setCursor(QCursor(Qt::ArrowCursor));
+//    }
 }
 
 //  鼠标左键 按下
@@ -91,8 +91,7 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 
             } else if (m_nCurrentHandelState == Default_State) {
                 m_pDocummentProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
-                m_pStartPoint = m_pDocummentProxy->global2RelativePoint(event->globalPos());
-                m_pDocummentProxy->removeAnnotation(m_pStartPoint);
+                m_pStartPoint = m_pDocummentProxy->global2RelativePoint(event->globalPos());                
             }
         }
     }
@@ -101,6 +100,8 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 //  鼠标松开
 void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 {
+    QPoint pt = m_pDocummentProxy->global2RelativePoint(event->globalPos());
+    m_pDocummentProxy->addAnnotation(m_pStartPoint,pt);
     m_bSelectOrMove = false;
     CustomWidget::mouseReleaseEvent(event);
 }

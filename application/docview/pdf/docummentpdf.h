@@ -53,13 +53,16 @@ public:
     bool save(const QString &filePath, bool withChanges) override;
     bool loadWords();
     void removeAllAnnotation();
-    void removeAnnotation(const QPoint &startpos) override;
-    void addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) override;
+    QString removeAnnotation(const QPoint &startpos) override;
+    void removeAnnotation(const QString& struuid) override;
+    void addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow) override;
     void search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color = Qt::yellow) override;
-    void clearSearch();
+    void clearSearch() override;
     int currentPageNo() override;
     bool pageJump(int pagenum) override;
     void docBasicInfo(stFileInfo &info) override;
+    bool annotationClicked(const QPoint& pos,QString& strtext);
+    void title(QString& title) override;
     Page::Link *mouseBeOverLink(QPoint point) override;
 
 private slots:

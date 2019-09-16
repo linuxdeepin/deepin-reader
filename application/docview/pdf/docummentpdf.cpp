@@ -220,20 +220,27 @@ void DocummentPDF::removeAllAnnotation()
             document->page(i)->removeAnnotation(atmp);
         }
     }
-   scaleAndShow(m_scale,m_rotate);
+    scaleAndShow(m_scale,m_rotate);
 }
 
-void DocummentPDF::removeAnnotation(const QPoint &startpos)
+QString DocummentPDF::removeAnnotation(const QPoint &startpos)
 {
     //暂时只处理未旋转
     QPoint pt=startpos;
     int page=pointInWhichPage(pt);
-   static_cast<PagePdf*>(m_pages.at(page))->removeAnnotation(pt);
+    return static_cast<PagePdf*>(m_pages.at(page))->removeAnnotation(pt);
 }
 
-void DocummentPDF::addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color)
+void DocummentPDF::removeAnnotation(const QString &struuid)
 {
+    return static_cast<PagePdf*>(m_pages.at(currentPageNo()))->removeAnnotation(struuid);
+}
 
+void DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color)
+{    
+    QPoint pt=startpos;
+    int page=pointInWhichPage(pt);
+    static_cast<PagePdf*>(m_pages.at(page))->addAnnotation(pt);
 }
 
 void DocummentPDF::search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color)
@@ -249,7 +256,7 @@ void DocummentPDF::search(const QString &strtext, QMap<int, stSearchRes> &resmap
         if (stres.listtext.size() > 0)
             resmap.insert(i, stres);
     }
-    //todo kyz 先单独更新当前页后期优化
+    static_cast<PagePdf*>(m_pages.at(currentPageNo()))->showImage(m_scale,m_rotate);
     scaleAndShow(m_scale, m_rotate); //全部刷新
 }
 
@@ -838,6 +845,17 @@ bool DocummentPDF::pageJump(int pagenum)
 void DocummentPDF::docBasicInfo(stFileInfo &info)
 {
     info=m_fileinfo;
+}
+
+bool DocummentPDF::annotationClicked(const QPoint &pos, QString &strtext)
+{
+    QPoint pt(pos);
+    return static_cast<PagePdf>(m_pages.at(pointInWhichPage(pt))).annotationClicked(pt,strtext);
+}
+
+void DocummentPDF::title(QString &title)
+{
+    title=document->title();
 }
 
 void DocummentPDF::slot_vScrollBarValueChanged(int value)

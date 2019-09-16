@@ -28,9 +28,10 @@ public:
     bool getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, double width, double height);
     bool clearMagnifierPixmap();
     //Annotation
-    void addAnnotation(QPoint screenPos);
-    void addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color) override;
-    void removeAnnotation(const QPoint& pos);    
+    QString addAnnotation(QPoint screenPos);
+    QString removeAnnotation(const QPoint& pos);
+    void removeAnnotation(const QString& struuid);
+    bool annotationClicked(const QPoint &pos, QString &strtext);
     bool loadLinks();
     Page::Link *ifMouseMoveOverLink(const QPoint point);
 
@@ -39,6 +40,7 @@ protected:
 private:
     void removeAnnotation(Poppler::Annotation *annotation);
     void getImagePoint(QPoint &point);
+    QString addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color);
     QList<QRect> paintrects;
     QList<stWord> m_words;
     double m_imagewidth;

@@ -163,11 +163,18 @@ void DocummentProxy::docBasicInfo(stFileInfo &info)
     m_documment->docBasicInfo(info);
 }
 
-void DocummentProxy::removeAnnotation(const QPoint &startpos)
+QString DocummentProxy::removeAnnotation(const QPoint &startpos)
+{
+    if (!m_documment)
+        return "";
+    return m_documment->removeAnnotation(startpos);
+}
+
+void DocummentProxy::removeAnnotation(const QString &struuid)
 {
     if (!m_documment)
         return ;
-    m_documment->removeAnnotation(startpos);
+    m_documment->removeAnnotation(struuid);
 }
 
 void DocummentProxy::slot_pageChange(int pageno)
@@ -175,13 +182,19 @@ void DocummentProxy::slot_pageChange(int pageno)
     emit signal_pageChange(pageno);
 }
 
-
 bool DocummentProxy::pageMove(double mvx, double mvy)
 {
     if (!m_documment)
         return false;
     m_documment->pageMove(mvx, mvy);
     return true;
+}
+
+void DocummentProxy::title(QString &title)
+{
+    if (!m_documment)
+        return;
+    m_documment->title(title);
 }
 
 Page::Link *DocummentProxy::mouseBeOverLink(QPoint point)
