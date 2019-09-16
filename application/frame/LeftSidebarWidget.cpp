@@ -18,20 +18,47 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent):
     initWidget();
 
     this->setVisible(false);    //  默认 隐藏
-}
+//<<<<<<< Updated upstream
+//=======
 
+//    connect(this, SIGNAL(sigSwitchWidget(const int)), this, SLOT(slotSwitchWidget(const int)));
+//}
+
+//void LeftSidebarWidget::slotSwitchWidget(const int &index)
+//{
+//    m_pStackedWidget->setCurrentIndex(index);
+//}
+
+//void LeftSidebarWidget::initOperationWidget()
+//{
+//    m_pStackedWidget = new DStackedWidget;
+//    m_pVBoxLayout->addWidget(m_pStackedWidget);
+
+//    m_pThumbnailWidget = new ThumbnailWidget;
+//    m_pBookMarkWidget = new BookMarkWidget;
+//    m_pNotesWidget = new NotesWidget(NOTE);
+//    m_pSearchWidget = new NotesWidget(SEARCH);
+
+//    m_pStackedWidget->insertWidget(THUMBNAIL, m_pThumbnailWidget);
+//    m_pStackedWidget->insertWidget(BOOK, m_pBookMarkWidget);
+//    m_pStackedWidget->insertWidget(NOTE, m_pNotesWidget);
+//    m_pStackedWidget->insertWidget(SEARCH, m_pSearchWidget);
+//    m_pStackedWidget->setCurrentIndex(THUMBNAIL);
+
+//    m_operationWidget = new MainOperationWidget;
+//    m_pVBoxLayout->addWidget(m_operationWidget, 0, Qt::AlignBottom);
+//>>>>>>> Stashed changes
+}
 
 void LeftSidebarWidget::initWidget()
 {
     QVBoxLayout *pVBoxLayout = new QVBoxLayout;
     pVBoxLayout->setContentsMargins(0, 0, 0, 0);
     pVBoxLayout->setSpacing(0);
-
     this->setLayout(pVBoxLayout);
 
     DStackedWidget *m_pStackedWidget = new DStackedWidget;
     pVBoxLayout->addWidget(m_pStackedWidget);
-
     m_pStackedWidget->insertWidget(0, new ThumbnailWidget);
     m_pStackedWidget->insertWidget(1, new BookMarkWidget);
     m_pStackedWidget->insertWidget(2, new NotesWidget);
