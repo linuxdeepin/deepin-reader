@@ -3,12 +3,16 @@
 
 #include <DListWidget>
 #include <DImageButton>
+
 #include <QListWidgetItem>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QMap>
+#include <QStringList>
 
 #include "BookMarkItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
+#include "docview/docummentproxy.h"
 
 /**
  * @brief The BookMarkWidget class
@@ -33,7 +37,7 @@ protected:
 
 private:
     void dltItem();
-    void addBookMarkItem(const QImage &, const int &);
+    void addBookMarkItem(const QImage &, const int &, const int &);
     void fillContantToList();
 
     inline int bookMarks() const
@@ -57,6 +61,7 @@ private:
     DImageButton *m_pAddBookMarkBtn = nullptr;
 
     int m_bookMarks = 0;       // 当前书签页总数
+    QMap<int, bool> m_booksMap;// 当前书签页列表简略信息(页码(从1开始), )
 };
 
 #endif // BOOKMARKFORM_H
