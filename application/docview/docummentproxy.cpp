@@ -176,3 +176,24 @@ Page::Link *DocummentProxy::mouseBeOverLink(QPoint point)
         return nullptr;
     return m_documment->mouseBeOverLink(point);
 }
+
+bool DocummentProxy::getSelectTextString(QString &st)
+{
+    if (!m_documment)
+        return false;
+    return m_documment->getSelectTextString(st);
+}
+
+
+bool DocummentProxy::showSlideModel()
+{
+    if (!m_documment)
+        return false;
+    return m_documment->showSlideModel();
+}
+bool DocummentProxy::exitSlideModel()
+{
+    if (!m_documment)
+        return false;
+    return m_documment->exitSlideModel();
+}

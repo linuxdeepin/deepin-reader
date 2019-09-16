@@ -53,6 +53,8 @@ public:
     Page::Link *ifMouseMoveOverLink(const QPoint point);
     void loadMagnifierPixmapCache(double width, double height);
     void loadMagnifierCacheThreadStart(double width, double height);
+    bool getSelectTextString(QString &st);
+    bool getSlideImage(QImage &image, double &width, double &height);
 protected:
     void paintEvent(QPaintEvent *event) override;
 private:
@@ -68,6 +70,8 @@ private:
     QPixmap m_magnifierpixmap;
     QList< Page::Link * > m_links;
     ThreadLoadMagnifierCache loadmagnifiercachethread;
+    int m_selecttextstartword;
+    int m_selecttextendword;
 };
 
 #endif // PAGEPDF_H

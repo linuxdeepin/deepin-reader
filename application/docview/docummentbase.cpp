@@ -104,13 +104,18 @@ void MagnifierWidget::setMagnifierColor(QColor color)
 }
 
 DocummentBase::DocummentBase(QWidget *parent): QScrollArea(parent)
-    , m_bModified(false)
+    , m_bModified(false), m_bslidemodel(false)
 {
     m_magnifierwidget = new MagnifierWidget(parent);
+    m_slidewidget = new QWidget(parent);
+    pslidelabel = new QLabel(m_slidewidget);
     QGridLayout *gridlyout = new QGridLayout(parent);
     parent->setLayout(gridlyout);
     gridlyout->addWidget(this, 0, 0);
     gridlyout->addWidget(m_magnifierwidget, 0, 0);
+    gridlyout->addWidget(m_slidewidget, 0, 0);
+    m_slidewidget->raise();
+    m_slidewidget->hide();
     m_magnifierwidget->raise();
     m_magnifierwidget->hide();
     m_widget.setLayout(&m_vboxLayout);

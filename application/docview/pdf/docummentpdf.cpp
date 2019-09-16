@@ -838,23 +838,35 @@ bool DocummentPDF::pageJump(int pagenum)
 {
     if (pagenum < 0 || pagenum > m_pages.size())
         return false;
-    QScrollBar *scrollBar_X = horizontalScrollBar();
-    QScrollBar *scrollBar_Y = verticalScrollBar();
-    switch (m_viewmode) {
-    case ViewMode_SinglePage:
-        if (scrollBar_X)
-            scrollBar_X->setValue(m_widgets.at(pagenum)->x());
-        if (scrollBar_Y)
-            scrollBar_Y->setValue(m_widgets.at(pagenum)->y());
-        break;
-    case ViewMode_FacingPage:
-        if (scrollBar_X)
-            scrollBar_X->setValue(m_widgets.at(pagenum / 2)->x() + m_pages.at(pagenum)->x());
-        if (scrollBar_Y)
-            scrollBar_Y->setValue(m_widgets.at(pagenum / 2)->y());
-        break;
-    default:
-        break;
+    if (m_bslidemodel) {
+        QImage image;
+        double width = m_slidewidget->width(), height = m_slidewidget->height();
+        PagePdf *ppdf = (PagePdf *)m_pages.at(pagenum);
+        if (!ppdf->getSlideImage(image, width, height)) {
+            return false;
+        }
+        pslidelabel->setGeometry((m_slidewidget->width() - width) / 2, (m_slidewidget->height() - height) / 2, width, height);
+        QPixmap map = QPixmap::fromImage(image);
+        pslidelabel->setPixmap(map);
+    } else {
+        QScrollBar *scrollBar_X = horizontalScrollBar();
+        QScrollBar *scrollBar_Y = verticalScrollBar();
+        switch (m_viewmode) {
+        case ViewMode_SinglePage:
+            if (scrollBar_X)
+                scrollBar_X->setValue(m_widgets.at(pagenum)->x());
+            if (scrollBar_Y)
+                scrollBar_Y->setValue(m_widgets.at(pagenum)->y());
+            break;
+        case ViewMode_FacingPage:
+            if (scrollBar_X)
+                scrollBar_X->setValue(m_widgets.at(pagenum / 2)->x() + m_pages.at(pagenum)->x());
+            if (scrollBar_Y)
+                scrollBar_Y->setValue(m_widgets.at(pagenum / 2)->y());
+            break;
+        default:
+            break;
+        }
     }
     return true;
 }
@@ -904,4 +916,43 @@ Page::Link *DocummentPDF::mouseBeOverLink(QPoint point)
         return ppdf ->ifMouseMoveOverLink(qpoint);
     }
     return nullptr;
+}
+
+bool DocummentPDF::getSelectTextString(QString &st)
+{
+    if (!document) {
+        return false;
+    }
+    st = "";
+    bool bselectexit = false;
+    for (int i = 0; i < m_pages.size(); i++) {
+        PagePdf *ppdf = (PagePdf *)m_pages.at(i);
+        QString stpage = "";
+        if (ppdf->getSelectTextString(stpage)) {
+            bselectexit = true;
+            st += stpage;
+        }
+    }
+    return bselectexit;
+}
+
+bool DocummentPDF::showSlideModel()
+{
+    if (!document) {
+        return false;
+    }
+    int curpageno = currentPageNo();
+    if (curpageno < 0) {
+        curpageno = 0;
+    }
+    m_bslidemodel = true;
+    this->hide();
+    m_slidewidget->show();
+    if (pageJump(curpageno)) {
+        return true;
+    }
+    m_bslidemodel = false;
+    this->show();
+    m_slidewidget->hide();
+    return false;
 }
