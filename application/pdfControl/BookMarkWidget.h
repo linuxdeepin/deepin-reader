@@ -27,28 +27,23 @@ class BookMarkWidget : public CustomWidget
 public:
     BookMarkWidget(CustomWidget *parent = nullptr);
 
+signals:
+    void sigOpenFileOk();
+
+
 private slots:
     void slotShowSelectItem(QListWidgetItem *);
     void slotAddBookMark();
+    void slotOpenFileOk();
 
 protected:
     void initWidget() override;
     void keyPressEvent(QKeyEvent *e) override;
 
 private:
+    void initConnection();
     void dltItem();
-    void addBookMarkItem(const QImage &, const int &, const int &);
-    void fillContantToList();
-
-    inline int bookMarks() const
-    {
-        return m_bookMarks;
-    }
-
-    inline void setBookMarks(const int &marks)
-    {
-        m_bookMarks = marks;
-    }
+    void addBookMarkItem(const QImage &, const int &);
 
 public:
     // IObserver interface
@@ -60,8 +55,7 @@ private:
     QListWidgetItem *m_pCurrentItem = nullptr;
     DImageButton *m_pAddBookMarkBtn = nullptr;
 
-    int m_bookMarks = 0;       // 当前书签页总数
-    QMap<int, bool> m_booksMap;// 当前书签页列表简略信息(页码(从1开始), )
+    QList<int>      m_pAllPageList;
 };
 
 #endif // BOOKMARKFORM_H
