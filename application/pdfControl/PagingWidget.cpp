@@ -70,7 +70,9 @@ void PagingWidget::setCurrentPage(const int &index)
 
     m_pJumpPageSpinBox->setValue(index);
 
-    qDebug() << tr("page: %1").arg(index);
+    DocummentProxy::instance()->pageJump(index - 1);
+
+//    qDebug() << tr("page: %1").arg(index);
 }
 
 void PagingWidget::createBtn(DImageButton *btn, QWidget *parent, const QString &text, const QString &btnName, const QString &normalPic, const QString &hoverPic, const QString &pressPic, const QString &checkedPic, const char *member, bool checkable, bool checked)

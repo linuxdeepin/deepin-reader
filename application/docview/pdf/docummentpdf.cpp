@@ -7,13 +7,22 @@
 #include <QScrollBar>
 #include <QTemporaryFile>
 #include <QFileInfo>
+#include <QMutex>
+
+//static QMutex mutexloaddoc;
+//static QMutex mutexloadwords;
 
 
 ThreadLoadDoc::ThreadLoadDoc()
 {
     //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
     m_doc = nullptr;
-    brun = false;
+    restart = false;
+}
+
+void ThreadLoadDoc::setRestart()
+{
+    restart = true;
 }
 
 void ThreadLoadDoc::setDoc(DocummentPDF *doc)
@@ -23,16 +32,15 @@ void ThreadLoadDoc::setDoc(DocummentPDF *doc)
 
 void ThreadLoadDoc::run()
 {
-    if (brun) {
-        this->terminate();
-        this->wait();
-        brun = false;
-    }
+//    mutexloaddoc.lock();
     if (!m_doc)
         return;
-    brun = true;
-    m_doc->loadPages();
-    brun = false;
+    restart = true;
+    while (restart) {
+        restart = false;
+        m_doc->loadPages();
+    }
+//    mutexloaddoc.unlock();
 }
 
 
@@ -40,7 +48,7 @@ ThreadLoadWords::ThreadLoadWords()
 {
     //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
     m_doc = nullptr;
-    brun = false;
+    restart = false;
 }
 
 void ThreadLoadWords::setDoc(DocummentPDF *doc)
@@ -48,18 +56,22 @@ void ThreadLoadWords::setDoc(DocummentPDF *doc)
     m_doc = doc;
 }
 
+void ThreadLoadWords::setRestart()
+{
+    restart = true;
+}
+
 void ThreadLoadWords::run()
 {
-    if (brun) {
-        this->terminate();
-        this->wait();
-        brun = false;
-    }
+//    mutexloadwords.lock();
     if (!m_doc)
         return;
-    brun = true;
-    m_doc->loadWords();
-    brun = false;
+    restart = true;
+    while (restart) {
+        restart = false;
+        m_doc->loadWords();
+    }
+//    mutexloadwords.unlock();
 }
 
 
@@ -110,8 +122,14 @@ bool DocummentPDF::openFile(QString filepath)
         page->setScaleAndRotate(m_scale, m_rotate);
     }
     setViewModeAndShow(m_viewmode);
-    m_threadloaddoc.start();
-    m_threadloadwords.start();
+    if (m_threadloaddoc.isRunning())
+        m_threadloaddoc.setRestart();
+    else
+        m_threadloaddoc.start();
+    if (m_threadloadwords.isRunning())
+        m_threadloadwords.setRestart();
+    else
+        m_threadloadwords.start();
     return true;
 }
 
@@ -131,9 +149,12 @@ bool DocummentPDF::setViewModeAndShow(ViewMode_EM viewmode)
         return false;
         break;
     }
-    donotneedreloaddoc = false;
     pageJump(currpageno);
-    m_threadloaddoc.start();
+    donotneedreloaddoc = false;
+    if (m_threadloaddoc.isRunning())
+        m_threadloaddoc.setRestart();
+    else
+        m_threadloaddoc.start();
     return true;;
 }
 
@@ -207,9 +228,13 @@ void DocummentPDF::scaleAndShow(double scale, RotateType_EM rotate)
         PagePdf *page = (PagePdf *)m_pages.at(i);
         page->setScaleAndRotate(m_scale, m_rotate);
     }
-    donotneedreloaddoc = false;
     pageJump(currpageno);
-    m_threadloaddoc.start();
+    donotneedreloaddoc = false;
+
+    if (m_threadloaddoc.isRunning())
+        m_threadloaddoc.setRestart();
+    else
+        m_threadloaddoc.start();
 }
 void DocummentPDF::removeAllAnnotation()
 {
@@ -731,38 +756,61 @@ bool DocummentPDF::showMagnifier(QPoint point)
     qDebug() << "showMagnifier pagenum:" << pagenum;
     if (-1 != pagenum) {
         if (pagenum != m_lastmagnifierpagenum && -1 != m_lastmagnifierpagenum) {
-            PagePdf *ppdf = (PagePdf *)m_pages.at(m_lastmagnifierpagenum);
-            ppdf->clearMagnifierPixmap();
+            if (pagenum > m_lastmagnifierpagenum && m_lastmagnifierpagenum - 3 > 0) {
+                PagePdf *ppdf = (PagePdf *)m_pages.at(m_lastmagnifierpagenum - 3);
+                ppdf->clearMagnifierPixmap();
+                if (pagenum - m_lastmagnifierpagenum > 1) {
+                    ppdf = (PagePdf *)m_pages.at(m_lastmagnifierpagenum - 2);
+                    ppdf->clearMagnifierPixmap();
+                }
+            } else if (pagenum < m_lastmagnifierpagenum && m_lastmagnifierpagenum + 3 < m_pages.size()) {
+                PagePdf *ppdf = (PagePdf *)m_pages.at(m_lastmagnifierpagenum + 3);
+                ppdf->clearMagnifierPixmap();
+                if ( m_lastmagnifierpagenum - pagenum > 1) {
+                    ppdf = (PagePdf *)m_pages.at(m_lastmagnifierpagenum + 2);
+                    ppdf->clearMagnifierPixmap();
+                }
+            }
+            for (int i = pagenum - 3; i < pagenum + 4; i++) {
+                if (i > 0 && i < m_pages.size()) {
+                    PagePdf *ppdf = (PagePdf *)m_pages.at(i);
+                    ppdf->loadMagnifierCacheThreadStart(ppdf->width() *m_magnifierwidget->getMagnifierScale(), ppdf->height() *m_magnifierwidget->getMagnifierScale());
+                }
+            }
         }
         m_lastmagnifierpagenum = pagenum;
         PagePdf *ppdf = (PagePdf *)m_pages.at(pagenum);
         QPixmap pixmap;
         if (ppdf ->getMagnifierPixmap(pixmap, qpoint, m_magnifierwidget->getMagnifierRadius(), ppdf->width() *m_magnifierwidget->getMagnifierScale(), ppdf->height() *m_magnifierwidget->getMagnifierScale())) {
             m_magnifierwidget->setPixmap(pixmap);
-            //            QPoint qpoint = QPoint(mapFromGlobal(globalpoint).x()
+
             m_magnifierwidget->setPoint(gpoint);
             m_magnifierwidget->show();
             m_magnifierwidget->update();
         }
+    } else {
+        QPixmap pix(m_magnifierwidget->getMagnifierRadius() * 2, m_magnifierwidget->getMagnifierRadius() * 2);
+        pix.fill(Qt::transparent);
+        m_magnifierwidget->setPixmap(pix);
+        m_magnifierwidget->setPoint(gpoint);
+        m_magnifierwidget->show();
+        m_magnifierwidget->update();
     }
     int radius = m_magnifierwidget->getMagnifierRadius() - m_magnifierwidget->getMagnifierRingWidth();
     int bigcirclex = gpoint.x() - radius;
     int bigcircley = gpoint.y() - radius;
     if (bigcircley < 0) {
-        //        QScrollBar *pScrollBar = verticalScrollBar();
+
         if (scrollBar_Y)
             scrollBar_Y->setValue(scrollBar_Y->value() + bigcircley);
     } else if (bigcircley > m_magnifierwidget->height() - radius * 2) {
-        //        QScrollBar *pScrollBar = verticalScrollBar();
         if (scrollBar_Y)
             scrollBar_Y->setValue(scrollBar_Y->value() + bigcircley - (m_magnifierwidget->height() - radius * 2));
     }
     if (bigcirclex < 0) {
-        //        QScrollBar *pScrollBar = horizontalScrollBar();
         if (scrollBar_X)
             scrollBar_X->setValue(scrollBar_X->value() + bigcirclex);
     } else if (bigcirclex > m_magnifierwidget->width() - radius * 2) {
-        //        QScrollBar *pScrollBar = horizontalScrollBar();
         if (scrollBar_X)
             scrollBar_X->setValue(scrollBar_X->value() + bigcirclex - (m_magnifierwidget->width() - radius * 2));
     }
@@ -866,8 +914,12 @@ void DocummentPDF::slot_vScrollBarValueChanged(int value)
         m_currentpageno = pageno;
         emit signal_pageChange(m_currentpageno);
     }
-    if (!donotneedreloaddoc)
-        m_threadloaddoc.start();
+    if (!donotneedreloaddoc) {
+        if (m_threadloaddoc.isRunning())
+            m_threadloaddoc.setRestart();
+        else
+            m_threadloaddoc.start();
+    }
 }
 
 void DocummentPDF::slot_hScrollBarValueChanged(int value)
@@ -877,8 +929,12 @@ void DocummentPDF::slot_hScrollBarValueChanged(int value)
     if (m_currentpageno != pageno) {
         m_currentpageno = pageno;
     }
-    if (!donotneedreloaddoc)
-        m_threadloaddoc.start();
+    if (!donotneedreloaddoc) {
+        if (m_threadloaddoc.isRunning())
+            m_threadloaddoc.setRestart();
+        else
+            m_threadloaddoc.start();
+    }
 }
 
 Page::Link *DocummentPDF::mouseBeOverLink(QPoint point)

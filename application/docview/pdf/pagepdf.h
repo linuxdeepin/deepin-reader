@@ -2,11 +2,29 @@
 #define PAGEPDF_H
 #include "../pagebase.h"
 #include <QImage>
+#include <QThread>
 #include <poppler-qt5.h>
 
 struct stWord {
     QString s;
     QRectF rect;
+};
+class PagePdf;
+class ThreadLoadMagnifierCache : public QThread
+{
+public:
+    ThreadLoadMagnifierCache();
+    void setPage(PagePdf *page, double width, double height);
+    void setRestart();
+
+protected:
+    virtual void run();
+
+private:
+    PagePdf *m_page;
+    bool restart;
+    double m_width;
+    double m_height;
 };
 
 class PagePdf: public PageBase
@@ -34,6 +52,8 @@ public:
     bool annotationClicked(const QPoint &pos, QString &strtext);
     bool loadLinks();
     Page::Link *ifMouseMoveOverLink(const QPoint point);
+    void loadMagnifierPixmapCache(double width, double height);
+    void loadMagnifierCacheThreadStart(double width, double height);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -51,6 +71,7 @@ private:
     int m_penwidth;
     QPixmap m_magnifierpixmap;
     QList< Page::Link * > m_links;
+    ThreadLoadMagnifierCache loadmagnifiercachethread;
 };
 
 #endif // PAGEPDF_H

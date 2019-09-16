@@ -154,9 +154,11 @@ void ThumbnailWidget::slotOpenFileOk()
     }
 
 
-    m_pPageWidget->setTotalPages(pages);
+    if (m_pPageWidget)
+        m_pPageWidget->setTotalPages(pages);
 
-    m_pThumbnailListWidget->clear();
+    if (m_pThumbnailListWidget)
+        m_pThumbnailListWidget->clear();
 
     setTotalPages(pages);
     fillContantToList();
