@@ -8,6 +8,7 @@
 #include <QKeyEvent>
 
 #include "subjectObserver/CustomWidget.h"
+#include "docview/docummentproxy.h"
 
 /**
  * @brief The ThumbnailItemWidget class
