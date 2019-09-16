@@ -1,5 +1,6 @@
 #include "BookMarkWidget.h"
 #include <QDebug>
+#include "application.h"
 
 BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
     CustomWidget("BookMarkWidget", parent)
@@ -11,7 +12,7 @@ BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
 
     initWidget();
 
-    connect(m_pBookMarkListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
+    initConnection();
 }
 
 void BookMarkWidget::slotShowSelectItem(QListWidgetItem *item)
@@ -21,7 +22,29 @@ void BookMarkWidget::slotShowSelectItem(QListWidgetItem *item)
 
 void BookMarkWidget::slotAddBookMark()
 {
-    qDebug() << tr("AddBookMark...");
+    int page = DocummentProxy::instance()->currentPageNo();
+
+    QImage image;
+
+    DocummentProxy::instance()->getImage(page, image, 130, 150);
+}
+
+//  打开文件成功，　获取该文件的书签数据
+void BookMarkWidget::slotOpenFileOk()
+{
+    QString sAllPages = dApp->dbM->getBookMarks();
+    QStringList sPageList = sAllPages.split(",", QString::SkipEmptyParts);
+    foreach (QString s, sPageList) {
+        int nPage = s.toInt();
+
+        m_pAllPageList.append(nPage);
+
+        QImage image;
+
+        DocummentProxy::instance()->getImage(nPage, image, 130, 150);
+
+        addBookMarkItem(image, nPage);
+    }
 }
 
 void BookMarkWidget::initWidget()
@@ -38,10 +61,6 @@ void BookMarkWidget::initWidget()
 
     m_pVBoxLayout->addWidget(m_pBookMarkListWidget);
     m_pVBoxLayout->addWidget(m_pAddBookMarkBtn);
-
-    this->setBookMarks(20);
-
-    this->fillContantToList();
 }
 
 void BookMarkWidget::keyPressEvent(QKeyEvent *e)
@@ -50,43 +69,46 @@ void BookMarkWidget::keyPressEvent(QKeyEvent *e)
 
     if (key == "Del") {
         dltItem();
-        qDebug() << "dlt bookmark item by key";
+//        qDebug() << "dlt bookmark item by key";
     }  else {
         // Pass event to CustomWidget continue, otherwise you can't type anything after here. ;)
         CustomWidget::keyPressEvent(e);
     }
 }
 
+void BookMarkWidget::initConnection()
+{
+    connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
+    connect(m_pBookMarkListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
+}
+
 void BookMarkWidget::dltItem()
 {
     if (m_pCurrentItem != nullptr) {
-        delete m_pCurrentItem;
-        m_pCurrentItem = nullptr;
+        BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(m_pCurrentItem));
+
+        if (t_widget) {
+            int page = t_widget->PageNumber();
+
+            t_widget->deleteLater();
+            t_widget = nullptr;
+        }
     }
 }
 
 void BookMarkWidget::addBookMarkItem(const QImage &image, const int &page)
 {
-    BookMarkItemWidget *t_widget = new BookMarkItemWidget;
+    BookMarkItemWidget *t_widget = new BookMarkItemWidget(this);
     t_widget->setItemImage(image);
-    t_widget->setPage(tr("page%1").arg(page + 1));
+    t_widget->setPageNumber(page);
     t_widget->setMinimumSize(QSize(250, 150));
 
     QListWidgetItem *item = new QListWidgetItem(m_pBookMarkListWidget);
     item->setFlags(Qt::ItemIsSelectable);
     item->setSizeHint(QSize(250, 150));
 
-    m_pBookMarkListWidget->insertItem(page, item);
+    m_pBookMarkListWidget->addItem(item);
     m_pBookMarkListWidget->setItemWidget(item, t_widget);
-}
-
-void BookMarkWidget::fillContantToList()
-{
-    for (int page = 0; page < this->bookMarks(); ++page) {
-        QImage image(tr(":/resources/image/logo/logo_big.svg"));
-
-        this->addBookMarkItem(image, page);
-    }
 }
 
 int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
@@ -95,6 +117,10 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
         dltItem();
         qDebug() << "dlt bookmark item by menu";
         return ConstantMsg::g_effective_res;
+    }
+
+    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
+        emit sigOpenFileOk();
     }
 
     return 0;

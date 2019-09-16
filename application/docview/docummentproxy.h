@@ -29,13 +29,17 @@ public:
     bool showMagnifier(QPoint point);
     bool closeMagnifier();
     bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3);
-    void addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow);
+    QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow);
     bool save(const QString &filepath, bool withChanges);
     void search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color);
     void clearsearch();
     int currentPageNo();
     bool pageJump(int pagenum);
+    void docBasicInfo(stFileInfo& info);
+    QString removeAnnotation(const QPoint &startpos);
+    void removeAnnotation(const QString& struuid);
     bool pageMove(double mvx, double mvy);
+    void title(QString& title);
     Page::Link *mouseBeOverLink(QPoint point);
     bool getSelectTextString(QString &st);
     bool showSlideModel();
@@ -44,6 +48,7 @@ signals:
     void signal_pageChange(int);
 private slots:
     void slot_pageChange(int);
+
 private:
     DocummentProxy(QObject *parent = nullptr);
     QWidget *qwfather;

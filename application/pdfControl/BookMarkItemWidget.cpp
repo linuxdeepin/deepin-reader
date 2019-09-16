@@ -22,14 +22,6 @@ void BookMarkItemWidget::setItemImage(const QImage &image)
     m_pPicture->setPixmap(QPixmap::fromImage(image));
 }
 
-void BookMarkItemWidget::setPage(const QString &value)
-{
-    QFont ft;
-    ft.setPointSize(12);
-    m_pPage->setFont(ft);
-    m_pPage->setText(value);
-}
-
 int BookMarkItemWidget::dealWithData(const int &, const QString &)
 {
     return 0;
@@ -61,5 +53,19 @@ void BookMarkItemWidget::initWidget()
     m_pHLayout->setSpacing(1);
 
     this->setLayout(m_pHLayout);
+}
+
+int BookMarkItemWidget::PageNumber() const
+{
+    return m_nPageNumber;
+}
+
+void BookMarkItemWidget::setPageNumber(int nPageNumber)
+{
+    m_nPageNumber = nPageNumber;
+
+    QString sPageText = QString(tr("page:%1")).arg( nPageNumber + 1);
+
+    m_pPage->setText(sPageText);
 }
 

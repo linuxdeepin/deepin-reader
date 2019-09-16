@@ -108,15 +108,17 @@ public:
         return false;
     }
 
-    virtual bool save(const QString &filePath, bool withChanges)const
+    virtual bool save(const QString &filePath, bool withChanges)
     {
         qDebug() << "do nothing";
         return false;
     }
 
-    virtual void removeAnnotation(const QPoint &startpos) {}
+    virtual QString removeAnnotation(const QPoint &startpos) {}
 
-    virtual void addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) {}
+    virtual void removeAnnotation(const QString& struuid){}
+
+    virtual QString addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) {}
 
 
     virtual void search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color = Qt::yellow) {}
@@ -138,7 +140,6 @@ public:
         return nullptr;
     }
 
-
     virtual bool getSelectTextString(QString &st)
     {
         return false;
@@ -156,6 +157,7 @@ public:
         m_bslidemodel = false;
         return true;
     }
+    virtual void docBasicInfo(stFileInfo &info){};
 
     QList<PageBase *> *getPages()
     {
@@ -185,6 +187,8 @@ public:
         if (scrollBar_Y)
             scrollBar_Y->setValue(scrollBar_Y->value() + mvy);
     }
+    virtual void title(QString& title){}
+
 signals:
     void signal_pageChange(int);
 protected slots:

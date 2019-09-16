@@ -5,7 +5,7 @@
 #include <DImageButton>
 
 #include <QListWidgetItem>
-#include <QVBoxLayout>>
+#include <QVBoxLayout>
 
 #include "NotesItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
@@ -24,16 +24,24 @@ class NotesWidget : public CustomWidget
 public:
     NotesWidget(CustomWidget *parent = nullptr);
 
-
+signals:
+    void sigFlushSearchWidget(QMap<int, stSearchRes> &);
 protected:
     void initWidget() override;
 
 private:
     void addNotesItem(const QImage &image, const int &page, const QString &text);
-
 private:
     DListWidget *m_pNotesList = nullptr;
+    void fillContantToList();
 
+private:
+    QVBoxLayout *m_pVLayout = nullptr;
+
+    DImageButton *m_pAddNotesBtn = nullptr;
+
+//    QMap<int, stSearchRes> m_resMap;
+    QListWidgetItem *m_pCurrentItem = nullptr;
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;

@@ -1,5 +1,6 @@
 #include "publicfunc.h"
 #include <QFile>
+#include <uuid/uuid.h>
 
 
 bool PublicFunc::copyFile(QFile &source, QFile &destination)
@@ -24,6 +25,15 @@ bool PublicFunc::copyFile(QFile &source, QFile &destination)
     while(size > 0);
 
     return true;
+}
+
+QString PublicFunc::getUuid()
+{
+    uuid_t uuid;
+    char str[36];
+    uuid_generate(uuid);
+    uuid_unparse(uuid, str);
+    return  QString(str);
 }
 
 PublicFunc::PublicFunc()

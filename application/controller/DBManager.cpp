@@ -54,7 +54,8 @@ QString DBManager::getBookMarks()
     QMutexLocker mutex(&m_mutex);
     QSqlQuery query( db );
     query.setForwardOnly(true);
-    query.prepare( "SELECT PageNumber FROM BookMarkTable ORDER BY Time DESC where FilePath = '" + m_strFilePath + "'");
+    query.prepare( "SELECT PageNumber FROM BookMarkTable where FilePath = ? ORDER BY Time desc");
+    query.addBindValue(m_strFilePath);
     if (! query.exec()) {
         qWarning() << "Get Data from BookMarkTable failed: " << query.lastError();
         mutex.unlock();
@@ -88,7 +89,7 @@ void DBManager::insertBookMark(const QString &pageNumber)
     QString nowTime = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
     query.addBindValue(nowTime);
 
-    if (! query.execBatch()) {
+    if (! query.exec()) {
         qWarning() << "Insert data into BookMarkTable failed: "
                    << query.lastError();
     }

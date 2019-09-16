@@ -52,15 +52,19 @@ public:
     bool showMagnifier(QPoint point) override;
 
     bool loadPages();
-    bool save(const QString &filePath, bool withChanges)const override;
+    bool save(const QString &filePath, bool withChanges) override;
     bool loadWords();
     void removeAllAnnotation();
-    void removeAnnotation(const QPoint &startpos) override;
-    void addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) override;
+    QString removeAnnotation(const QPoint &startpos) override;
+    void removeAnnotation(const QString& struuid) override;
+    QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow) override;
     void search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color = Qt::yellow) override;
-    void clearSearch();
+    void clearSearch() override;
     int currentPageNo() override;
     bool pageJump(int pagenum) override;
+    void docBasicInfo(stFileInfo &info) override;
+    bool annotationClicked(const QPoint& pos,QString& strtext);
+    void title(QString& title) override;
     Page::Link *mouseBeOverLink(QPoint point) override;
     bool getSelectTextString(QString &st) override;
     bool showSlideModel() override;
@@ -77,6 +81,7 @@ private:
     bool pdfsave(const QString &filePath, bool withChanges)const;
     void searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color);
     void refreshOnePage(int ipage);
+    void setBasicInfo(const QString& filepath);
     Poppler::Document *document;
     ThreadLoadDoc m_threadloaddoc;
     ThreadLoadWords m_threadloadwords;
@@ -87,6 +92,7 @@ private:
     QList<Poppler::Annotation *> m_listsearch;
     int m_currentpageno;
     bool donotneedreloaddoc;
+    stFileInfo m_fileinfo;
 };
 
 #endif // DOCUMMENTPDF_H

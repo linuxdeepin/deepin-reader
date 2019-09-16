@@ -66,11 +66,15 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
 
 void PagingWidget::setCurrentPage(const int &index)
 {
-    this->setPreRowVal(index - 1);
+    int t_page = index - 1;
+
+    this->setPreRowVal(t_page);
 
     m_pJumpPageSpinBox->setValue(index);
 
-    qDebug() << tr("page: %1").arg(index);
+    DocummentProxy::instance()->pageJump(t_page);
+
+//    qDebug() << tr("page: %1").arg(index);
 }
 
 void PagingWidget::createBtn(DImageButton *btn, QWidget *parent, const QString &text, const QString &btnName, const QString &normalPic, const QString &hoverPic, const QString &pressPic, const QString &checkedPic, const char *member, bool checkable, bool checked)
