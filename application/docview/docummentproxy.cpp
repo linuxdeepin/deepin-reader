@@ -114,11 +114,11 @@ bool DocummentProxy::setMagnifierStyle(QColor magnifiercolor, int magnifierradiu
         return false;
     return  m_documment->setMagnifierStyle(magnifiercolor, magnifierradius, magnifierringwidth, magnifierscale);
 }
-void DocummentProxy::addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color)
+QString DocummentProxy::addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color)
 {
     if (!m_documment)
-        return ;
-    m_documment->addAnnotation(startpos, endpos, color);
+        return QString("");
+    return m_documment->addAnnotation(startpos, endpos, color);
 }
 
 bool DocummentProxy::save(const QString &filepath, bool withChanges)

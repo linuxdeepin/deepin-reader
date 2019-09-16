@@ -118,7 +118,7 @@ public:
 
     virtual void removeAnnotation(const QString& struuid){}
 
-    virtual void addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) {}
+    virtual QString addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) {}
 
 
     virtual void search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color = Qt::yellow) {}

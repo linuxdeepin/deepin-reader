@@ -29,7 +29,7 @@ public:
     bool showMagnifier(QPoint point);
     bool closeMagnifier();
     bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3);
-    void addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow);
+    QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow);
     bool save(const QString &filepath, bool withChanges);
     void search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color);
     void clearsearch();

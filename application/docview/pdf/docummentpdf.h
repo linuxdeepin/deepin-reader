@@ -57,7 +57,7 @@ public:
     void removeAllAnnotation();
     QString removeAnnotation(const QPoint &startpos) override;
     void removeAnnotation(const QString& struuid) override;
-    void addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow) override;
+    QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow) override;
     void search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color = Qt::yellow) override;
     void clearSearch() override;
     int currentPageNo() override;

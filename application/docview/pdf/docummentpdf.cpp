@@ -261,11 +261,11 @@ void DocummentPDF::removeAnnotation(const QString &struuid)
     return static_cast<PagePdf*>(m_pages.at(currentPageNo()))->removeAnnotation(struuid);
 }
 
-void DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color)
+QString DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color)
 {    
     QPoint pt=startpos;
     int page=pointInWhichPage(pt);
-    static_cast<PagePdf*>(m_pages.at(page))->addAnnotation(pt);
+    return static_cast<PagePdf*>(m_pages.at(page))->addAnnotation(pt);
 }
 
 void DocummentPDF::search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color)
