@@ -5,6 +5,7 @@ NotesWidget::NotesWidget(CustomWidget *parent) :
 {
     initWidget();
 }
+
 void NotesWidget::initWidget()
 {
     QVBoxLayout *m_pVLayout = new QVBoxLayout;
