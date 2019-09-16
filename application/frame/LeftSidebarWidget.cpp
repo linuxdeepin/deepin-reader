@@ -26,7 +26,6 @@ void LeftSidebarWidget::initWidget()
     QVBoxLayout *pVBoxLayout = new QVBoxLayout;
     pVBoxLayout->setContentsMargins(0, 0, 0, 0);
     pVBoxLayout->setSpacing(0);
-
     this->setLayout(pVBoxLayout);
 
     DStackedWidget *m_pStackedWidget = new DStackedWidget;

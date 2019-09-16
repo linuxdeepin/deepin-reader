@@ -5,8 +5,6 @@ NotesWidget::NotesWidget(CustomWidget *parent) :
 {
     initWidget();
 }
-
-
 void NotesWidget::initWidget()
 {
     QVBoxLayout *m_pVLayout = new QVBoxLayout;
@@ -36,7 +34,6 @@ void NotesWidget::addNotesItem(const QImage &image, const int &page, const QStri
     itemWidget->setLabelImage(image);
     itemWidget->setLabelPage(tr("Page:%1").arg(page + 1));
     itemWidget->setTextEditText(text);
-
     itemWidget->setMinimumSize(QSize(250, 150));
 
     QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
