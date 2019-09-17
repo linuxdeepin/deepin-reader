@@ -589,9 +589,7 @@ QString PagePdf::addHighlightAnnotation(const QList<QRectF> &listrect, const QCo
 }
 
 QString PagePdf::removeAnnotation(const QPoint &pos)
-{
-    const double scaleX = m_scale;
-    const double scaleY = m_scale;
+{  
     double curwidth=m_scale * m_imagewidth;
     double curheight=m_scale * m_imageheight;
     QString uniqueName;

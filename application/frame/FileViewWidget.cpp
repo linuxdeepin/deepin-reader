@@ -100,8 +100,6 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 //  鼠标松开
 void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-    QPoint pt = m_pDocummentProxy->global2RelativePoint(event->globalPos());
-    m_pDocummentProxy->addAnnotation(m_pStartPoint,pt);
     m_bSelectOrMove = false;
     CustomWidget::mouseReleaseEvent(event);
 }
