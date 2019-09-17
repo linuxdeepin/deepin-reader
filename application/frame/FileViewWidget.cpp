@@ -4,7 +4,6 @@
 #include <QUrl>
 #include <QGridLayout>
 #include "controller/DataManager.h"
-
 #include "application.h"
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
@@ -57,6 +56,7 @@ void FileViewWidget::initWidget()
 //  鼠标移动
 void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
 {
+    qDebug() << "mouseMoveEvent";
     if (m_nCurrentHandelState == Handel_State) {    //   手型状态下， 按住鼠标左键 位置进行移动
         if (m_pDocummentProxy && m_bSelectOrMove) {
             if (2) {
@@ -150,7 +150,7 @@ void FileViewWidget::onOpenFile(const QString &filePath)
         if (rl) {
             DataManager::instance()->setStrOnlyFilePath(filePath);
 
-            m_pDocummentProxy->scaleRotateAndShow(2, RotateType_Normal);
+//            m_pDocummentProxy->scaleRotateAndShow(2, RotateType_Normal);
 
 
 

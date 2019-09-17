@@ -116,7 +116,7 @@ public:
 
     virtual QString removeAnnotation(const QPoint &startpos) {}
 
-    virtual void removeAnnotation(const QString& struuid){}
+    virtual void removeAnnotation(const QString &struuid) {}
 
     virtual QString addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) {}
 
@@ -155,9 +155,10 @@ public:
         m_slidewidget->hide();
         this->show();
         m_bslidemodel = false;
+        m_slidepageno = -1;
         return true;
     }
-    virtual void docBasicInfo(stFileInfo &info){};
+    virtual void docBasicInfo(stFileInfo &info) {};
 
     QList<PageBase *> *getPages()
     {
@@ -187,7 +188,7 @@ public:
         if (scrollBar_Y)
             scrollBar_Y->setValue(scrollBar_Y->value() + mvy);
     }
-    virtual void title(QString& title){}
+    virtual void title(QString &title) {}
 
 signals:
     void signal_pageChange(int);
@@ -211,6 +212,7 @@ protected:
     QWidget *m_slidewidget;
     bool m_bslidemodel;
     QLabel *pslidelabel;
+    int m_slidepageno;
 };
 
 #endif // DOCUMMENTBASE_H

@@ -104,7 +104,7 @@ void MagnifierWidget::setMagnifierColor(QColor color)
 }
 
 DocummentBase::DocummentBase(QWidget *parent): QScrollArea(parent)
-    , m_bModified(false), m_bslidemodel(false)
+    , m_bModified(false), m_bslidemodel(false), m_slidepageno(-1)
 {
     m_magnifierwidget = new MagnifierWidget(parent);
     m_slidewidget = new QWidget(parent);
@@ -120,10 +120,16 @@ DocummentBase::DocummentBase(QWidget *parent): QScrollArea(parent)
     m_magnifierwidget->hide();
     m_widget.setLayout(&m_vboxLayout);
     m_widget.setMouseTracking(true);
+    m_slidewidget->setMouseTracking(true);
+    pslidelabel->setMouseTracking(true);
     setMouseTracking(true);
 
     m_viewmode = ViewMode_SinglePage;
     m_lastmagnifierpagenum = -1;
+
+    m_slidewidget->setAttribute(Qt::WA_StyledBackground, true);
+    m_slidewidget->setStyleSheet("background-color: rgb(0,0,0)");
+
     connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_vScrollBarValueChanged(int)));
     connect(this->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_hScrollBarValueChanged(int)));
 }
