@@ -12,7 +12,7 @@
 #include "mainShow/FindWidget.h"
 #include "mainShow/BookMarkStateLabel.h"
 
-#include "DocummentHelper.h"
+#include "docview/docummentproxy.h"
 
 //  当前鼠标状态
 enum Handel_Enum {
@@ -75,7 +75,7 @@ private:
     DefaultOperationWidget  *m_pDefaultOperationWidget = nullptr;
     TextOperationWidget     *m_pTextOperationWidget = nullptr;
 
-    DocummentHelper         *m_pDocummentHelper = nullptr;
+    DocummentProxy          *m_pDocummentProxy = nullptr;
 
 private:
     int         m_nCurrentHandelState = Default_State; //  当前鼠标状态

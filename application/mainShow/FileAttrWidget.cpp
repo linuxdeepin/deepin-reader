@@ -2,7 +2,7 @@
 #include <DWidgetUtil>
 #include <QDebug>
 #include "utils/utils.h"
-#include "docview/docummentproxy.h"
+#include "frame/DocummentWidget.h"
 
 FileAttrWidget::FileAttrWidget(CustomWidget *parent)
     : CustomWidget("FileAttrWidget", parent)
@@ -23,12 +23,12 @@ FileAttrWidget::FileAttrWidget(CustomWidget *parent)
 void FileAttrWidget::setFileAttr()
 {
     stFileInfo fileInfo;
-    DocummentProxy::instance()->docBasicInfo(fileInfo);
+    //DocummentHelper::instance()->docBasicInfo(fileInfo);
 
     QImage image;
-    bool rl = DocummentProxy::instance()->getImage(0, image, 94, 113);
-    if (rl) {
-        labelImage->setPixmap(QPixmap::fromImage(image));
+    //bool rl = DocummentHelper::instance()->getImage(0, image, 94, 113);
+    if (1) {
+        //    labelImage->setPixmap(QPixmap::fromImage(image));
     }
 
     QString szTitle = fileInfo.strTheme;
