@@ -10,11 +10,43 @@
 #include <QListWidgetItem>
 #include <QVBoxLayout>
 #include <QImage>
+#include <QThread>
+#include <QTimer>
 
 #include "pdfControl/ThumbnailItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
 #include "PagingWidget.h"
 #include "docview/docummentproxy.h"
+
+class ThreadLoadImage : public QThread
+{
+public:
+    ThreadLoadImage();
+
+    void getPageImage(const int &page, QImage &);
+    inline void setPages(const int pages)
+    {
+        m_pages = pages;
+    }
+
+    inline void clearImageMap()
+    {
+        m_imageMap.clear();
+    }
+
+    bool isLoaded()
+    {
+        return m_isLoaded;
+    }
+
+protected:
+    virtual void run();
+
+private:
+    QMap<int, QImage> m_imageMap;
+    int m_pages = -1; // 文件总页数
+    bool m_isLoaded = false;// 是都加载完毕
+};
 
 /*
 *缩略图列表页面
@@ -34,6 +66,7 @@ signals:
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
+    bool fillContantToList();
 
 protected:
     void initWidget() override;
@@ -42,7 +75,6 @@ private:
     void setSelectItemBackColor(QListWidgetItem *);
     void setCurrentRow(const int &);
     void addThumbnailItem(const QImage &, const int &);
-    void fillContantToList();
 
     inline int preRowVal() const
     {
@@ -68,6 +100,7 @@ private slots:
     void slotShowSelectItem(QListWidgetItem *);
     void slotOpenFileOk();
     void slotJumpIndexPage(int);
+    void loadThumbnailImage();
 
 private:
     DListWidget *m_pThumbnailListWidget = nullptr;
@@ -81,6 +114,8 @@ private:
 
     int m_totalPages = -1; // 总页码数
     int m_preRow     = -1; // 前一次页码数
+    ThreadLoadImage m_ThreadLoadImage;
+    QTimer m_loadImageTimer;
 };
 
 #endif // THUMBNAILWIDGET_H

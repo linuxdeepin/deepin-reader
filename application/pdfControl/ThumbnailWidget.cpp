@@ -12,6 +12,7 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigJumpIndexPage(int)), this, SLOT(slotJumpIndexPage(int)));
     connect(m_pThumbnailListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
+    connect(&m_loadImageTimer, SIGNAL(timeout()), this, SLOT(loadThumbnailImage()));
 }
 
 int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContant)
@@ -103,7 +104,7 @@ void ThumbnailWidget::addThumbnailItem(const QImage &image, const int &idex)
     QListWidgetItem *item = new QListWidgetItem;
     ThumbnailItemWidget *widget = new ThumbnailItemWidget;
 
-    widget->setContantLabelPixmap(image);
+    //widget->setContantLabelPixmap(image);
     widget->setPageLabelText(tr("%1").arg(idex + 1));
     widget->setMinimumSize(QSize(250, 250));
 
@@ -115,14 +116,16 @@ void ThumbnailWidget::addThumbnailItem(const QImage &image, const int &idex)
     m_pThumbnailListWidget->setItemWidget(item, widget);
 }
 
-void ThumbnailWidget::fillContantToList()
+bool ThumbnailWidget::fillContantToList()
 {
     for (int idex = 0; idex < totalPages(); ++idex) {
         QImage image;
-        DocummentProxy::instance()->getImage(idex, image, 113, 143);
+        //DocummentProxy::instance()->getImage(idex, image, 113, 143);
 
         addThumbnailItem(image, idex);
     }
+
+    return true;
 }
 
 void ThumbnailWidget::slotShowSelectItem(QListWidgetItem *item)
@@ -149,12 +152,10 @@ void ThumbnailWidget::slotOpenFileOk()
     connect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotJumpIndexPage(int)), Qt::QueuedConnection);
 
     int pages = DocummentProxy::instance()->getPageSNum();
-    qDebug() << "       ThumbnailWidget     slotOpenFileOk      " << pages;
 
     if (pages < FIRSTPAGES) {
         return;
     }
-
 
     if (m_pPageWidget)
         m_pPageWidget->setTotalPages(pages);
@@ -162,11 +163,80 @@ void ThumbnailWidget::slotOpenFileOk()
     if (m_pThumbnailListWidget)
         m_pThumbnailListWidget->clear();
 
+    m_ThreadLoadImage.setPages(pages);
+    m_ThreadLoadImage.start();
+
     setTotalPages(pages);
+
     fillContantToList();
+    m_loadImageTimer.start(1);
 }
 
 void ThumbnailWidget::slotJumpIndexPage(int index)
 {
     setCurrentRow(index);
+}
+
+void ThumbnailWidget::loadThumbnailImage()
+{
+    if (m_ThreadLoadImage.isLoaded()) {
+
+//        const int nPageSpace = 20;
+//        static int nStartPage = 0;
+//        static int nEndPage = 19;
+
+//        if (nEndPage > totalPages()) {
+//            m_loadImageTimer.stop();
+//            nEndPage = totalPages();
+//        }
+
+        for (int idex = 0; idex < totalPages(); ++idex) {
+            QImage image;
+
+            ThumbnailItemWidget *t_ItemWidget = nullptr;
+            QListWidgetItem *item = nullptr;
+            item = m_pThumbnailListWidget->item(idex);
+            if (item) {
+                t_ItemWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
+                if (t_ItemWidget) {
+                    m_ThreadLoadImage.getPageImage(idex, image);
+                    t_ItemWidget->setContantLabelPixmap(image);
+                }
+            }
+        }
+
+//        nStartPage += nPageSpace;
+//        nEndPage += nPageSpace;
+        m_loadImageTimer.stop();
+    }
+}
+
+/*******************************ThreadLoadImage*************************************************/
+
+ThreadLoadImage::ThreadLoadImage()
+{
+
+}
+
+void ThreadLoadImage::getPageImage(const int &page, QImage &image)
+{
+    if (m_imageMap.contains(page)) {
+        image = m_imageMap[page];
+    }
+}
+
+void ThreadLoadImage::run()
+{
+    m_isLoaded = false;
+    for (int page = 0; page < m_pages; page++) {
+        QImage image;
+        bool bl = DocummentProxy::instance()->getImage(page, image, 113, 143);
+
+        if (bl) {
+            m_imageMap[page] = image;
+        }
+    }
+
+    m_isLoaded = true;
+    qDebug() << tr("ThreadLoadImage::run");
 }
