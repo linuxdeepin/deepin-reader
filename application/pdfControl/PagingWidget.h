@@ -2,10 +2,11 @@
 #define PAGINGWIDGET_H
 
 #include <DLabel>
-#include <QVBoxLayout>
 #include <DImageButton>
 #include <DSpinBox>
+
 #include <QKeyEvent>
+#include <QVBoxLayout>
 
 #include "subjectObserver/CustomWidget.h"
 #include "docview/docummentproxy.h"

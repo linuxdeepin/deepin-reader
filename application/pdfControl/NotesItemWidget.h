@@ -2,12 +2,13 @@
 #define NOTESITEMWIDGET_H
 
 #include <DLabel>
+#include <DTextEdit>
+
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QFont>
 #include <QMenu>
 #include <QAction>
-#include <DTextEdit>
 #include <QContextMenuEvent>
 
 #include "subjectObserver/CustomWidget.h"

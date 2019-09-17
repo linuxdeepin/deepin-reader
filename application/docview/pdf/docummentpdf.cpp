@@ -301,6 +301,7 @@ QString DocummentPDF::removeAnnotation(const QPoint &startpos)
     //暂时只处理未旋转
     QPoint pt = startpos;
     int page = pointInWhichPage(pt);
+    if (page < 0) return "";
     return static_cast<PagePdf *>(m_pages.at(page))->removeAnnotation(pt);
 }
 
@@ -313,6 +314,7 @@ QString DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos
 {
     QPoint pt = startpos;
     int page = pointInWhichPage(pt);
+    if (page < 0) return "";
     return static_cast<PagePdf *>(m_pages.at(page))->addAnnotation(pt);
 }
 
@@ -465,6 +467,14 @@ void DocummentPDF::setBasicInfo(const QString &filepath)
     m_fileinfo.strAuther = info.owner();
     m_fileinfo.strFilepath = info.filePath();
     if (document) {
+        int major, minor;
+        document->getPdfVersion(&major, &minor);
+        m_fileinfo.strFormat.arg("PDF v.%1.%2", major, minor);
+        m_fileinfo.strKeyword = document->info(QStringLiteral("Keywords"));
+        m_fileinfo.strTheme = document->title();
+        m_fileinfo.strProducter = document->producer();
+        m_fileinfo.strCreater = document->creator();
+        m_fileinfo.bsafe = document->isEncrypted();
         m_fileinfo.iWidth = document->page(0)->pageSize().width();
         m_fileinfo.iHeight = document->page(0)->pageSize().height();
         m_fileinfo.iNumpages = document->numPages();
@@ -994,7 +1004,9 @@ void DocummentPDF::docBasicInfo(stFileInfo &info)
 bool DocummentPDF::annotationClicked(const QPoint &pos, QString &strtext)
 {
     QPoint pt(pos);
-    return static_cast<PagePdf>(m_pages.at(pointInWhichPage(pt))).annotationClicked(pt, strtext);
+    int ipage = pointInWhichPage(pt);
+    if (ipage < 0) return  false;
+    return static_cast<PagePdf>(m_pages.at(ipage)).annotationClicked(pt, strtext);
 }
 
 void DocummentPDF::title(QString &title)

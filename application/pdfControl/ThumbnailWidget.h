@@ -29,7 +29,7 @@ public:
 signals:
     void sigOpenFileOk();
     void sigSelectIndexPage(const int &);
-    void sigJumpIndexPage(const int &);
+    void sigJumpIndexPage(int);
 
 public:
     // IObserver interface
@@ -67,7 +67,7 @@ private:
 private slots:
     void slotShowSelectItem(QListWidgetItem *);
     void slotOpenFileOk();
-    void slotJumpIndexPage(const int &);
+    void slotJumpIndexPage(int);
 
 private:
     DListWidget *m_pThumbnailListWidget = nullptr;

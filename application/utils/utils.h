@@ -67,6 +67,8 @@ public:
     static QString getConfigPath();
     static QString getSuffixList();
     static QIcon getActionIcon(const QString &);
+
+    static QString getInputDataSize(const qint64 &);
 };
 
 #endif // UTILS_H

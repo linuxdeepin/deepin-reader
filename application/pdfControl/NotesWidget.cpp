@@ -41,7 +41,7 @@ void NotesWidget::addNotesItem(const QImage &image, const int &page, const QStri
     item->setFlags(Qt::ItemIsSelectable);
     item->setSizeHint(QSize(250, 150));
 
-    m_pNotesList->insertItem(page, item);
+    m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);
 }
 
