@@ -45,7 +45,9 @@ PagePdf::PagePdf(QWidget *parent)
       m_page(nullptr),
       m_paintercolor(QColor(72, 118, 255, 100)),
       m_pencolor (QColor(72, 118, 255, 0)),
-      m_penwidth(0)
+      m_penwidth(0),
+      m_selecttextstartword(-1),
+      m_selecttextendword(-1)
 {
 
     //    setFrameShape (QFrame::Box);
@@ -74,6 +76,8 @@ void PagePdf::clearPageTextSelections()
 {
     if (paintrects.size() > 0) {
         paintrects.clear();
+        m_selecttextstartword = -1;
+        m_selecttextendword = -1;
         update();
     }
 }
@@ -135,6 +139,25 @@ bool PagePdf::showImage(double scale, RotateType_EM rotate)
         break;
     }
     setPixmap(map.transformed(leftmatrix, Qt::SmoothTransformation));
+    return true;
+}
+
+bool PagePdf::getSlideImage(QImage &image, double &width, double &height)
+{
+    if (!m_page)
+        return false;
+    int xres = 72.0, yres = 72.0;
+    double scalex = width / m_imagewidth;
+    double scaley = height / m_imageheight;
+    double scale = 1;
+    if (scalex > scaley) {
+        scale = scaley;
+    } else {
+        scale = scalex;
+    }
+    width = m_imagewidth * scale;
+    height = m_imageheight * scale;
+    image = m_page->renderToImage(xres * scale, yres * scale, width, height);
     return true;
 }
 
@@ -430,6 +453,8 @@ bool PagePdf::pageTextSelections(const QPoint start, const QPoint end)
         stopword = im;
     }
     paintrects.clear();
+    m_selecttextstartword = startword;
+    m_selecttextendword = stopword;
     tmp = m_words.at(startword).rect;
     for (int i = startword + 1; i <= stopword; i++) {
         QRectF tmpafter;
@@ -750,4 +775,17 @@ Page::Link *PagePdf::ifMouseMoveOverLink(const QPoint point)
         }
     }
     return nullptr;
+}
+
+bool PagePdf::getSelectTextString(QString &st)
+{
+    if (m_selecttextstartword < 0 || m_selecttextendword < 0 || m_words.size() < 1 ||
+            m_words.size() <= m_selecttextendword || m_words.size() <= m_selecttextstartword) {
+        return false;
+    }
+    st = "";
+    for (int i = m_selecttextstartword; i <= m_selecttextendword; i++) {
+        st += m_words.at(i).s;
+    }
+    return true;
 }

@@ -140,6 +140,23 @@ public:
         return nullptr;
     }
 
+    virtual bool getSelectTextString(QString &st)
+    {
+        return false;
+    }
+
+    virtual bool showSlideModel()
+    {
+        return false;
+    }
+
+    bool exitSlideModel()
+    {
+        m_slidewidget->hide();
+        this->show();
+        m_bslidemodel = false;
+        return true;
+    }
     virtual void docBasicInfo(stFileInfo &info){};
 
     QList<PageBase *> *getPages()
@@ -191,6 +208,9 @@ protected:
     mutable bool m_bModified;
     MagnifierWidget *m_magnifierwidget;
     int m_lastmagnifierpagenum;
+    QWidget *m_slidewidget;
+    bool m_bslidemodel;
+    QLabel *pslidelabel;
 };
 
 #endif // DOCUMMENTBASE_H

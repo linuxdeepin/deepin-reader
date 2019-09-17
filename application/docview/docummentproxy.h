@@ -41,6 +41,9 @@ public:
     bool pageMove(double mvx, double mvy);
     void title(QString& title);
     Page::Link *mouseBeOverLink(QPoint point);
+    bool getSelectTextString(QString &st);
+    bool showSlideModel();
+    bool exitSlideModel();
 signals:
     void signal_pageChange(int);
 private slots:

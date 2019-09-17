@@ -50,6 +50,7 @@ protected:
 private slots:
     void SlotCustomContextMenuRequested(const QPoint &);
     void openFilePath(const QString &);
+    void SlotDocViewPageChange(int);
 
 private:
     int magnifying(const QString &);
@@ -78,6 +79,7 @@ private:
     int         m_nCurrentHandelState = Default_State; //  当前鼠标状态
     bool        m_bSelectOrMove = false;      //  是否可以选中文字、移动
     QPoint      m_pStartPoint;
+    QPoint      m_pMoveStartPoint;
 
     // CustomWidget interface
 protected:

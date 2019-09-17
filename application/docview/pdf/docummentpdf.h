@@ -66,7 +66,8 @@ public:
     bool annotationClicked(const QPoint& pos,QString& strtext);
     void title(QString& title) override;
     Page::Link *mouseBeOverLink(QPoint point) override;
-
+    bool getSelectTextString(QString &st) override;
+    bool showSlideModel() override;
 private slots:
     void slot_vScrollBarValueChanged(int value) override;
     void slot_hScrollBarValueChanged(int value) override;

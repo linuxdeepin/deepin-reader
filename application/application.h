@@ -44,7 +44,6 @@ public:
     DBManager *dbM = nullptr;
 //    Exporter *exporter = nullptr;
 //    Importer *importer = nullptr;
-//    SignalManager *signalM = nullptr;
 private:
     void initChildren();
     void initI18n();

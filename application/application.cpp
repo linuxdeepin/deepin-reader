@@ -16,11 +16,7 @@
  */
 #include "application.h"
 
-//#include "controller/configsetter.h"
 #include "controller/GlobalEventFilter.h"
-//#include "controller/signalmanager.h"
-//#include "controller/wallpapersetter.h"
-
 
 #include "controller/MsgSubject.h"
 #include "subjectObserver/MsgHeader.h"
@@ -53,7 +49,7 @@ Application::Application(int &argc, char **argv)
     setProductName(DApplication::translate("MainWindow", "Deepin Reader"));
 
     //  帮助文档
-    setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin-image-viewer/");
+    setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin_reader/");
 
 //    setApplicationVersion(DApplication::buildVersion("20190828"));
 
@@ -72,7 +68,6 @@ void Application::initChildren()
 {
     dbM = DBManager::instance();
 //   setter = ConfigSetter::instance();
-//    signalM = SignalManager::instance();
 }
 
 void Application::initI18n()

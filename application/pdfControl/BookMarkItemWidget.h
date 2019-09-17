@@ -29,9 +29,16 @@ public:
 
 public:
     void setItemImage(const QImage &);
-    void setPage(const QString &);
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
+
+    inline DLabel *pageLabel() const
+    {
+        return m_pPage;
+    }
+
+    int PageNumber() const;
+    void setPageNumber(int nPageNumber);
 
 private slots:
     void slotDltBookMark();
@@ -41,6 +48,7 @@ protected:
     void initWidget() override;
 
 private:
+    int     m_nPageNumber = -1;
     DLabel *m_pPicture = nullptr;
     DLabel *m_pPage = nullptr;
     QHBoxLayout *m_pHLayout = nullptr;

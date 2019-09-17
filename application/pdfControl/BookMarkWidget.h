@@ -3,12 +3,16 @@
 
 #include <DListWidget>
 #include <DImageButton>
+
 #include <QListWidgetItem>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QMap>
+#include <QStringList>
 
 #include "BookMarkItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
+#include "docview/docummentproxy.h"
 
 /**
  * @brief The BookMarkWidget class
@@ -23,28 +27,26 @@ class BookMarkWidget : public CustomWidget
 public:
     BookMarkWidget(CustomWidget *parent = nullptr);
 
+signals:
+    void sigOpenFileOk();
+    void sigDeleteBookItem(const int &);
+
+
 private slots:
     void slotShowSelectItem(QListWidgetItem *);
     void slotAddBookMark();
+    void slotOpenFileOk();
+    void slotDocFilePageChanged(int);
+    void slotDeleteBookItem(const int &);
 
 protected:
     void initWidget() override;
     void keyPressEvent(QKeyEvent *e) override;
 
 private:
+    void initConnection();
     void dltItem();
-    void addBookMarkItem(const QImage &, const int &);
-    void fillContantToList();
-
-    inline int bookMarks() const
-    {
-        return m_bookMarks;
-    }
-
-    inline void setBookMarks(const int &marks)
-    {
-        m_bookMarks = marks;
-    }
+    void addBookMarkItem(const int &);
 
 public:
     // IObserver interface
@@ -53,10 +55,11 @@ public:
 private:
     DListWidget *m_pBookMarkListWidget = nullptr;
     QVBoxLayout *m_pVBoxLayout = nullptr;
-    QListWidgetItem *m_pCurrentItem = nullptr;
+//    QListWidgetItem *m_pCurrentItem = nullptr;
     DImageButton *m_pAddBookMarkBtn = nullptr;
 
-    int m_bookMarks = 0;       // 当前书签页总数
+    QList<int>      m_pAllPageList;
+    int m_nCurrentPage = -1;
 };
 
 #endif // BOOKMARKFORM_H

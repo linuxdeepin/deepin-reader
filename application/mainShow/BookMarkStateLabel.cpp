@@ -1,10 +1,10 @@
 #include "BookMarkStateLabel.h"
 #include "subjectObserver/ModuleHeader.h"
-
-#include "controller/NotifySubject.h"
+#include "subjectObserver/MsgHeader.h"
+#include "controller/MsgSubject.h"
 
 BookMarkStateLabel::BookMarkStateLabel(DWidget *parent)
-    : QLabel ( parent)
+    : QLabel (parent)
 {
     setFixedSize(QSize(39, 39));
 
@@ -28,8 +28,10 @@ void BookMarkStateLabel::mousePressEvent(QMouseEvent *event)
 
     if (!m_bChecked) {
         setPixmapState(ImageModule::g_press_state);
+        MsgSubject::getInstance()->sendMsg(nullptr, MSG_BOOKMARK_DLTITEM, "");
     } else {
         setPixmapState(ImageModule::g_checked_state);
+        MsgSubject::getInstance()->sendMsg(nullptr, MSG_BOOKMARK_ADDITEM, "");
     }
 
     DLabel::mousePressEvent(event);

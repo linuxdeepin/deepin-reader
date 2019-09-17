@@ -82,8 +82,6 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
         m_pSonWidgetContantLabel = t_contantLab;
         m_pSonWidgetPageLabel = t_pageLab;
         m_pThumbnailItemWidget = t_ItemWidget;
-
-        qDebug() << "set background color";
     }
 }
 
@@ -112,7 +110,7 @@ void ThumbnailWidget::addThumbnailItem(const QImage &image, const int &idex)
     item->setFlags(Qt::ItemIsSelectable);
     item->setSizeHint(QSize(250, 250));
 
-    m_pThumbnailListWidget->insertItem(idex, item);
+    m_pThumbnailListWidget->addItem(item);
     m_pThumbnailListWidget->setItemWidget(item, widget);
 }
 
@@ -148,6 +146,7 @@ void ThumbnailWidget::slotShowSelectItem(QListWidgetItem *item)
 void ThumbnailWidget::slotOpenFileOk()
 {
     int pages = DocummentProxy::instance()->getPageSNum();
+    qDebug() << "       ThumbnailWidget     slotOpenFileOk      " << pages;
 
     if (pages < FIRSTPAGES) {
         return;
