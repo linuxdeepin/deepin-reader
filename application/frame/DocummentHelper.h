@@ -26,8 +26,15 @@ public:
         return &helper;
     }
 
+private slots:
+    void slotDocFilePageChanged(int);
+
 public:
     bool openFile(const DocType_EM &type, const QString &filepath);
+    bool save(const QString &filepath, const bool &withChanges);
+    void search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color);
+    void clearsearch();
+    void docBasicInfo(stFileInfo &info);
 
     //  获取指定页，指定大小的图片
     bool getImage(const int &pagenum, QImage &image, const int &width, const int &height);
@@ -39,6 +46,8 @@ public:
     bool closeMagnifier();
 
     //  页面移动、切换
+    int currentPageNo() const;
+    bool pageJump(const int &pagenum);
     int  getPageSNum();
     bool pageMove(const double &x, const double &y);
 
@@ -53,6 +62,7 @@ public:
     //  缩放操作
     void scaleRotateAndShow(const double &scale, const RotateType_EM &rotate);
     bool setViewModeAndShow(const ViewMode_EM &viewmode);
+
 
 private:
     DocummentProxy          *m_pDocummentProxy = nullptr;       //  渠成　提供的文档处理类
