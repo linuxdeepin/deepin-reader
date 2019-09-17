@@ -19,16 +19,6 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
 
 FileViewWidget::~FileViewWidget()
 {
-    if (m_pDefaultOperationWidget) {
-        m_pDefaultOperationWidget->deleteLater();
-        m_pDefaultOperationWidget = nullptr;
-    }
-
-    if (m_pTextOperationWidget) {
-        m_pTextOperationWidget->deleteLater();
-        m_pTextOperationWidget = nullptr;
-    }
-
     if (m_pFileAttrWidget) {
         m_pFileAttrWidget->deleteLater();
         m_pFileAttrWidget = nullptr;
@@ -42,9 +32,8 @@ void FileViewWidget::initWidget()
 
     setBookMarkStateWidget();
 
-    m_pDefaultOperationWidget = new DefaultOperationWidget;
-    m_pTextOperationWidget = new TextOperationWidget;
-    m_pFileAttrWidget = new FileAttrWidget;
+    m_pDefaultOperationWidget = new DefaultOperationWidget(this);
+    m_pTextOperationWidget = new TextOperationWidget(this);
 
     m_pFindWidget = new FindWidget(this);
     int nParentWidth = this->width();
@@ -249,6 +238,8 @@ void FileViewWidget::initConnections()
 
     connect(this, SIGNAL(sigOpenFile(const QString &)),
             this, SLOT(openFilePath(const QString &)));
+
+    connect(this, SIGNAL(sigShowFileAttr()), this, SLOT(slotShowFileAttr()));
 }
 
 //  标题栏的菜单消息处理
@@ -267,7 +258,7 @@ int FileViewWidget::dealWithTitleMenuRequest(const int &msgType, const QString &
     case MSG_OPERATION_PRINT :      //  打印
         return  ConstantMsg::g_effective_res;
     case MSG_OPERATION_ATTR:        //  打开该文件的属性信息
-        onShowFileAttr();
+        emit sigShowFileAttr();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_FIND:        //  搜索
         onShowFindWidget();
@@ -333,9 +324,12 @@ void FileViewWidget::setBookMarkStateWidget()
 }
 
 //  查看 文件属性
-void FileViewWidget::onShowFileAttr()
+void FileViewWidget::slotShowFileAttr()
 {
     //  获取文件的基本数据，　进行展示
+    if (m_pFileAttrWidget == nullptr) {
+        m_pFileAttrWidget = new FileAttrWidget;
+    }
     m_pFileAttrWidget->showScreenCenter();
 }
 

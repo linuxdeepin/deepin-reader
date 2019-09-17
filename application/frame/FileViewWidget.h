@@ -36,6 +36,7 @@ public:
 signals:
     void sigOpenFile(const QString &);
     void sigSetMarkState(const bool &);
+    void sigShowFileAttr();
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
@@ -52,12 +53,12 @@ protected:
 private slots:
     void SlotCustomContextMenuRequested(const QPoint &);
     void openFilePath(const QString &);
+    void slotShowFileAttr();
 
 private:
     int magnifying(const QString &);
     int setHandShape(const QString &);
     int screening(const QString &);
-    void onShowFileAttr();
     void onShowFindWidget();
     void onOpenFile(const QString &filePath);
 
@@ -75,7 +76,7 @@ private:
     DefaultOperationWidget  *m_pDefaultOperationWidget = nullptr;
     TextOperationWidget     *m_pTextOperationWidget = nullptr;
 
-    DocummentProxy          *m_pDocummentProxy = nullptr;
+    DocummentProxy          *m_pDocummentProxy = nullptr;   //  文档操作代理类
 
 private:
     int         m_nCurrentHandelState = Default_State; //  当前鼠标状态
