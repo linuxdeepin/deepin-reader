@@ -1,6 +1,5 @@
 #include "BookMarkWidget.h"
 #include <QDebug>
-#include "application.h"
 
 BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
     CustomWidget("BookMarkWidget", parent)
@@ -23,7 +22,7 @@ void BookMarkWidget::slotShowSelectItem(QListWidgetItem *item)
     BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
     if (t_widget) {
         int nnPageNumber = t_widget->PageNumber();
-        m_nCurrentPage = nnPageNumber;
+        //m_nCurrentPage = nnPageNumber;
 
         DocummentProxy::instance()->pageJump(nnPageNumber);
     }
@@ -35,7 +34,7 @@ void BookMarkWidget::slotShowSelectItem(QListWidgetItem *item)
  */
 void BookMarkWidget::slotAddBookMark()
 {
-    int page = DocummentProxy::instance()->currentPageNo();
+    int page = m_nCurrentPage;
 
     if (m_pAllPageList.contains(page)) {
         return;
@@ -48,9 +47,10 @@ void BookMarkWidget::slotAddBookMark()
     } else {
         QString sPage = "";
         foreach (int i, m_pAllPageList) {
-            sPage += QString::number(page) + tr(",");
+            sPage += QString::number(i) + tr(",");
         }
 
+        sPage += QString::number(page);
         dApp->dbM->updateBookMark(QString::number(page));
     }
 
@@ -67,7 +67,7 @@ void BookMarkWidget::slotAddBookMark()
 
 void BookMarkWidget::slotOpenFileOk()
 {
-    connect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotDocFilePageChanged(int)));
+    connect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotDocFilePageChanged(int)), Qt::QueuedConnection);
 
     QString sAllPages = dApp->dbM->getBookMarks();
     QStringList sPageList = sAllPages.split(",", QString::SkipEmptyParts);
@@ -140,6 +140,8 @@ void BookMarkWidget::initWidget()
     m_pAddBookMarkBtn->setFixedSize(QSize(250, 50));
     m_pAddBookMarkBtn->setText(tr("adding bookmark"));
     connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(slotAddBookMark()));
+
+    connect(this, SIGNAL(sigAddBookMark()), this, SLOT(slotAddBookMark()));
 
     m_pVBoxLayout->addWidget(m_pBookMarkListWidget);
     m_pVBoxLayout->addWidget(m_pAddBookMarkBtn);
@@ -241,6 +243,10 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
 
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
         emit sigOpenFileOk();
+    }
+
+    if (MSG_BOOKMARK_ADDITEM == msgType) {
+        emit sigAddBookMark();
     }
 
     return 0;

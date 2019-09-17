@@ -38,8 +38,6 @@ void PagingWidget::initWidget()
     hLayout->addWidget(m_pPrePageBtn);
     hLayout->addWidget(m_pNextPageBtn);
     this->setLayout(hLayout);
-
-    setTotalPages(30);
 }
 
 bool PagingWidget::eventFilter(QObject *watched, QEvent *event)

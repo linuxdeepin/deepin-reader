@@ -13,6 +13,7 @@
 #include "BookMarkItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
 #include "docview/docummentproxy.h"
+#include "application.h"
 
 /**
  * @brief The BookMarkWidget class
@@ -30,7 +31,7 @@ public:
 signals:
     void sigOpenFileOk();
     void sigDeleteBookItem(const int &);
-
+    void sigAddBookMark();
 
 private slots:
     void slotShowSelectItem(QListWidgetItem *);

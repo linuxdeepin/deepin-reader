@@ -1,8 +1,5 @@
 #include "ThumbnailWidget.h"
-#include "ThumbnailItemWidget.h"
-/*×
- *
-*/
+
 ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
     CustomWidget("ThumbnailWidget", parent)
 {
@@ -13,7 +10,7 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
     initWidget();
 
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
-    connect(this, SIGNAL(sigJumpIndexPage(const int)), this, SLOT(slotJumpIndexPage(const int)));
+    connect(this, SIGNAL(sigJumpIndexPage(int)), this, SLOT(slotJumpIndexPage(int)));
     connect(m_pThumbnailListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
 }
 
@@ -95,6 +92,10 @@ void ThumbnailWidget::setCurrentRow(const int &row)
     m_pThumbnailListWidget->setCurrentRow(row, QItemSelectionModel::NoUpdate);
     QListWidgetItem *item = m_pThumbnailListWidget->item(row);
     setSelectItemBackColor(item);
+
+    if (m_pPageWidget) {
+        m_pPageWidget->setCurrentPageValue(row);
+    }
 }
 
 void ThumbnailWidget::addThumbnailItem(const QImage &image, const int &idex)
@@ -145,6 +146,8 @@ void ThumbnailWidget::slotShowSelectItem(QListWidgetItem *item)
 
 void ThumbnailWidget::slotOpenFileOk()
 {
+    connect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotJumpIndexPage(int)), Qt::QueuedConnection);
+
     int pages = DocummentProxy::instance()->getPageSNum();
     qDebug() << "       ThumbnailWidget     slotOpenFileOk      " << pages;
 
@@ -163,7 +166,7 @@ void ThumbnailWidget::slotOpenFileOk()
     fillContantToList();
 }
 
-void ThumbnailWidget::slotJumpIndexPage(const int &index)
+void ThumbnailWidget::slotJumpIndexPage(int index)
 {
     setCurrentRow(index);
 }
