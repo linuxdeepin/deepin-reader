@@ -207,6 +207,7 @@ void ThumbnailWidget::loadThumbnailImage()
 
 //        nStartPage += nPageSpace;
 //        nEndPage += nPageSpace;
+        m_ThreadLoadImage.clearImageMap();
         m_loadImageTimer.stop();
     }
 }

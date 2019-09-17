@@ -135,7 +135,7 @@ void PagingWidget::slotPrePage()
     }
     m_currntPage = t_page;
 
-    setCurrentPage(m_currntPage);
+//    setCurrentPage(m_currntPage);
     sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(m_currntPage - FIRSTPAGES));
 }
 

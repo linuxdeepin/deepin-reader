@@ -266,32 +266,69 @@ void FontWidget::rotateFileView(bool isRight)
 {
     int ival = m_pEnlargeSlider->value();
 
-    int t_rotate = 0;
+//    int t_rotate = 0;
 
     if (isRight) {
         m_rotate += 90;
     } else {
         m_rotate -= 90;
     }
+    scaleAndRotate(ival);
+//    t_rotate = (m_rotate / 90) % 4;
+
+//    switch (t_rotate) {
+//    case RotateType_Normal:
+//        m_rotate = 360;
+//        m_rotateType = RotateType_Normal;
+//        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_Normal);
+//        break;
+//    case RotateType_90:
+//        m_rotateType = RotateType_90;
+//        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_90);
+//        break;
+//    case RotateType_180:
+//        m_rotateType = RotateType_180;
+//        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_180);
+//        break;
+//    case RotateType_270:
+//        m_rotateType = RotateType_270;
+//        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_270);
+//        break;
+//    default:
+//        m_rotate = 360;
+//        m_rotateType = RotateType_Normal;
+//        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_Normal);
+//        break;
+//    }
+}
+
+void FontWidget::scaleAndRotate(int ival)
+{
+    int t_rotate = 0;
 
     t_rotate = (m_rotate / 90) % 4;
 
     switch (t_rotate) {
     case RotateType_Normal:
         m_rotate = 360;
+        m_rotateType = RotateType_Normal;
         DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_Normal);
         break;
     case RotateType_90:
+        m_rotateType = RotateType_90;
         DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_90);
         break;
     case RotateType_180:
+        m_rotateType = RotateType_180;
         DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_180);
         break;
     case RotateType_270:
+        m_rotateType = RotateType_270;
         DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_270);
         break;
     default:
         m_rotate = 360;
+        m_rotateType = RotateType_Normal;
         DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_Normal);
         break;
     }
@@ -302,11 +339,8 @@ void FontWidget::slotSetChangeVal(int val)
     m_pEnlargeLab->clear();
     m_pEnlargeLab->setText(tr("%1%").arg(val));
 
-    qDebug() <<  (val * 0.01);
-
-    DocummentProxy::instance()->scaleRotateAndShow((val * 0.01), RotateType_Normal);
-
-//    sendMsg(MSG_SCALEUP_MULTIPLE, QString::number(val));
+    scaleAndRotate(val);
+    //DocummentProxy::instance()->scaleRotateAndShow((val * 0.01), RotateType_Normal);
 }
 
 void FontWidget::slotSetDoubPageViewCheckIcon()
