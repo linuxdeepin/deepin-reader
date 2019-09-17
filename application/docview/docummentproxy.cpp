@@ -11,7 +11,7 @@ DocummentProxy::DocummentProxy(QObject *parent)
       m_path(""),
       m_documment(nullptr)
 {
-    qwfather = (QWidget *)parent;
+    qwfather = (DWidget *)parent;
 }
 
 DocummentProxy *DocummentProxy::instance(QObject *parent)

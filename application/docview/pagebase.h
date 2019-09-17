@@ -1,7 +1,11 @@
 #ifndef PAGEBASE_H
 #define PAGEBASE_H
-#include <QObject>
-#include <QLabel>
+#include <DObject>
+#include <DLabel>
+#include <DGuiApplicationHelper>
+
+DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 namespace Page {
 enum LinkType_EM {
@@ -40,11 +44,11 @@ enum RotateType_EM {
     RotateType_270
 };
 
-class PageBase: public QLabel
+class PageBase: public DLabel
 {
     Q_OBJECT
 public:
-    PageBase(QWidget *parent = 0);
+    PageBase(DWidget *parent = 0);
 protected:
     RotateType_EM m_rotate;
     double m_scale;

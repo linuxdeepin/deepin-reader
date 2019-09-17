@@ -2,9 +2,8 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QPainter>
-#include <QScrollBar>
 
-MagnifierWidget::MagnifierWidget(QWidget *parent): QWidget(parent)
+MagnifierWidget::MagnifierWidget(DWidget *parent): DWidget(parent)
 {
 
     m_magnifiercolor = Qt::white;
@@ -16,7 +15,7 @@ MagnifierWidget::MagnifierWidget(QWidget *parent): QWidget(parent)
 
 void MagnifierWidget::paintEvent(QPaintEvent *event)
 {
-    QWidget::paintEvent(event);
+    DWidget::paintEvent(event);
     QPainter qpainter(this);
 //    qpainter.save();
     if (m_magnifierpixmap.isNull())
@@ -103,12 +102,13 @@ void MagnifierWidget::setMagnifierColor(QColor color)
     m_magnifiercolor = color;
 }
 
-DocummentBase::DocummentBase(QWidget *parent): QScrollArea(parent)
+DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
     , m_bModified(false), m_bslidemodel(false), m_slidepageno(-1)
 {
     m_magnifierwidget = new MagnifierWidget(parent);
-    m_slidewidget = new QWidget(parent);
-    pslidelabel = new QLabel(m_slidewidget);
+    m_slidewidget = new DWidget(parent);
+    pslidelabel = new DLabel(m_slidewidget);
+    pslideanimationlabel = new DLabel(m_slidewidget);
     QGridLayout *gridlyout = new QGridLayout(parent);
     parent->setLayout(gridlyout);
     gridlyout->addWidget(this, 0, 0);

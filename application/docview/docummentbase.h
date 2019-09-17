@@ -3,13 +3,17 @@
 
 #include "pagebase.h"
 #include "docview/commonstruct.h"
-#include <QScrollArea>
+#include <DWidget>
+#include <DScrollArea>
+#include <DScrollBar>
+#include <DGuiApplicationHelper>
 #include <QList>
 #include <QVBoxLayout>
 #include <QPoint>
 #include <QColor>
-#include <QWidget>
-#include <QScrollBar>
+
+DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 enum ViewMode_EM {
     ViewMode_SinglePage = 0,
@@ -17,11 +21,11 @@ enum ViewMode_EM {
 };
 #include <QtDebug>
 
-class MagnifierWidget: public QWidget
+class MagnifierWidget: public DWidget
 {
     Q_OBJECT
 public:
-    MagnifierWidget(QWidget *parent = nullptr);
+    MagnifierWidget(DWidget *parent = nullptr);
     void setPixmap(QPixmap pixmap);
     void setPoint(QPoint point);
     int getMagnifierRadius();
@@ -42,11 +46,11 @@ private:
     double m_magnifierscale;
 };
 
-class DocummentBase: public QScrollArea
+class DocummentBase: public DScrollArea
 {
     Q_OBJECT
 public:
-    DocummentBase(QWidget *parent = nullptr);
+    DocummentBase(DWidget *parent = nullptr);
     virtual bool openFile(QString filepath)
     {
         return false;
@@ -181,10 +185,10 @@ public:
 
     void pageMove(double mvx, double mvy)
     {
-        QScrollBar *scrollBar_X = horizontalScrollBar();
+        DScrollBar *scrollBar_X = horizontalScrollBar();
         if (scrollBar_X)
             scrollBar_X->setValue(scrollBar_X->value() + mvx);
-        QScrollBar *scrollBar_Y = verticalScrollBar();
+        DScrollBar *scrollBar_Y = verticalScrollBar();
         if (scrollBar_Y)
             scrollBar_Y->setValue(scrollBar_Y->value() + mvy);
     }
@@ -203,16 +207,17 @@ protected slots:
     }
 protected:
     QList<PageBase *> m_pages;
-    QWidget m_widget;
+    DWidget m_widget;
     QVBoxLayout m_vboxLayout;
     ViewMode_EM m_viewmode;
     mutable bool m_bModified;
     MagnifierWidget *m_magnifierwidget;
     int m_lastmagnifierpagenum;
-    QWidget *m_slidewidget;
+    DWidget *m_slidewidget;
     bool m_bslidemodel;
-    QLabel *pslidelabel;
+    DLabel *pslidelabel;
     int m_slidepageno;
+    DLabel *pslideanimationlabel;
 };
 
 #endif // DOCUMMENTBASE_H

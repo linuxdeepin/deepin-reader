@@ -38,7 +38,7 @@ private:
 class DocummentPDF: public DocummentBase
 {
 public:
-    DocummentPDF(QWidget *parent = nullptr);
+    DocummentPDF(DWidget *parent = nullptr);
     bool openFile(QString filepath) override;
     QPoint global2RelativePoint(QPoint globalpoint) override;
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0) override;
@@ -87,8 +87,8 @@ private:
     ThreadLoadWords m_threadloadwords;
     double m_scale;
     RotateType_EM m_rotate;
-    QList<QWidget *>m_widgets;
-    QWidget *pblankwidget;
+    QList<DWidget *>m_widgets;
+    DWidget *pblankwidget;
     QList<Poppler::Annotation *> m_listsearch;
     int m_currentpageno;
     bool donotneedreloaddoc;

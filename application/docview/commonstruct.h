@@ -20,7 +20,7 @@ typedef struct SEARCH_RESULT {
 
 Q_DECLARE_METATYPE(stSearchRes)
 
-typedef struct FILE_INFO{
+typedef struct FILE_INFO {
     QString strFilepath;
     QString strTheme;
     QString strAuther;
@@ -36,13 +36,14 @@ typedef struct FILE_INFO{
     bool     boptimization;
     bool     bsafe;
     float    size;
-    FILE_INFO(){
-        iWidth=iHeight=iNumpages=0;
-        boptimization=bsafe=false;
-        size=0.0;
+    FILE_INFO()
+    {
+        iWidth = iHeight = iNumpages = 0;
+        boptimization = bsafe = false;
+        size = 0.0;
     }
 
 
-}stFileInfo;
+} stFileInfo;
 
 #endif // COMMONSTRUCT_H

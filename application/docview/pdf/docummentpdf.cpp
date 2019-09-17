@@ -1,14 +1,13 @@
 #include "docummentpdf.h"
 #include "pagepdf.h"
 #include "docview/publicfunc.h"
-#include <QDebug>
-#include <QLabel>
+#include <DScrollBar>
 #include <QImage>
-#include <QScrollBar>
 #include <QTemporaryFile>
 #include <QFileInfo>
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
+#include <QDebug>
 //#include <QMutex>
 
 ThreadLoadDoc::ThreadLoadDoc()
@@ -69,7 +68,7 @@ void ThreadLoadWords::run()
 }
 
 
-DocummentPDF::DocummentPDF(QWidget *parent): DocummentBase(parent),
+DocummentPDF::DocummentPDF(DWidget *parent): DocummentBase(parent),
     document(nullptr),
     m_listsearch(),
     m_fileinfo()
@@ -81,7 +80,7 @@ DocummentPDF::DocummentPDF(QWidget *parent): DocummentBase(parent),
     m_scale = 1;
     m_rotate = RotateType_Normal;
     m_currentpageno = 0;
-    pblankwidget = new QWidget(this);
+    pblankwidget = new DWidget(this);
     pblankwidget->setMouseTracking(true);
     pblankwidget->hide();
     donotneedreloaddoc = false;
@@ -98,7 +97,7 @@ bool DocummentPDF::openFile(QString filepath)
     m_pages.clear();
     qDebug() << "numPages :" << document->numPages();
     for (int i = 0; i < document->numPages(); i++) {
-        QWidget *qwidget = new QWidget(this);
+        DWidget *qwidget = new DWidget(this);
         QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
         qhblayout->setAlignment(qwidget, Qt::AlignCenter);
         qwidget->setLayout(qhblayout);
@@ -566,10 +565,10 @@ QPoint DocummentPDF::global2RelativePoint(QPoint globalpoint)
 {
     int x_offset = 0;
     int y_offset = 0;
-    QScrollBar *scrollBar_X = horizontalScrollBar();
+    DScrollBar *scrollBar_X = horizontalScrollBar();
     if (scrollBar_X)
         x_offset = scrollBar_X->value();
-    QScrollBar *scrollBar_Y = verticalScrollBar();
+    DScrollBar *scrollBar_Y = verticalScrollBar();
     if (scrollBar_Y)
         y_offset = scrollBar_Y->value();
     QPoint qpoint = QPoint(mapFromGlobal(globalpoint).x() + x_offset,
@@ -802,10 +801,10 @@ bool DocummentPDF::showMagnifier(QPoint point)
     int pagenum = -1;
     int x_offset = 0;
     int y_offset = 0;
-    QScrollBar *scrollBar_X = horizontalScrollBar();
+    DScrollBar *scrollBar_X = horizontalScrollBar();
     if (scrollBar_X)
         x_offset = scrollBar_X->value();
-    QScrollBar *scrollBar_Y = verticalScrollBar();
+    DScrollBar *scrollBar_Y = verticalScrollBar();
     if (scrollBar_Y)
         y_offset = scrollBar_Y->value();
     QPoint gpoint = m_magnifierwidget->mapFromGlobal(mapToGlobal(QPoint(point.x() - x_offset, point.y() - y_offset)));
@@ -882,10 +881,10 @@ int DocummentPDF::currentPageNo()
     int pagenum = -1;
     int x_offset = 0;
     int y_offset = 0;
-    QScrollBar *scrollBar_X = horizontalScrollBar();
+    DScrollBar *scrollBar_X = horizontalScrollBar();
     if (scrollBar_X)
         x_offset = scrollBar_X->value();
-    QScrollBar *scrollBar_Y = verticalScrollBar();
+    DScrollBar *scrollBar_Y = verticalScrollBar();
     if (scrollBar_Y)
         y_offset = scrollBar_Y->value();
     switch (m_viewmode) {
@@ -936,18 +935,18 @@ bool DocummentPDF::pageJump(int pagenum)
         if (!ppdf->getSlideImage(image, width, height)) {
             return false;
         }
-        QLabel *label = new QLabel(m_slidewidget);
+//        QLabel *label = new QLabel(m_slidewidget);
         if (-1 != m_slidepageno) {
-            label->resize(pslidelabel->size());
-            label->setPixmap(pslidelabel->grab());
-            label->show();
+            pslideanimationlabel->resize(pslidelabel->size());
+            pslideanimationlabel->setPixmap(pslidelabel->grab());
+            pslideanimationlabel->show();
         }
         pslidelabel->setGeometry((m_slidewidget->width() - width) / 2, (m_slidewidget->height() - height) / 2, width, height);
         QPixmap map = QPixmap::fromImage(image);
         pslidelabel->setPixmap(map);
 
         if (-1 != m_slidepageno) {
-            QPropertyAnimation *animation = new QPropertyAnimation(label, "geometry");
+            QPropertyAnimation *animation = new QPropertyAnimation(pslideanimationlabel, "geometry");
             animation->setDuration(500);
 
             QPropertyAnimation *animation1 = new QPropertyAnimation(pslidelabel, "geometry");
@@ -973,8 +972,8 @@ bool DocummentPDF::pageJump(int pagenum)
         }
         m_slidepageno = pagenum;
     } else {
-        QScrollBar *scrollBar_X = horizontalScrollBar();
-        QScrollBar *scrollBar_Y = verticalScrollBar();
+        DScrollBar *scrollBar_X = horizontalScrollBar();
+        DScrollBar *scrollBar_Y = verticalScrollBar();
         switch (m_viewmode) {
         case ViewMode_SinglePage:
             qDebug() << "-------pagenum:" << pagenum << " x():" << m_widgets.at(pagenum)->x() << " y():" << m_widgets.at(pagenum)->y();

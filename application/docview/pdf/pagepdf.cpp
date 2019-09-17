@@ -57,7 +57,7 @@ PagePdf::PagePdf(QWidget *parent)
 
 void PagePdf::paintEvent(QPaintEvent *event)
 {
-    QLabel::paintEvent(event);
+    DLabel::paintEvent(event);
     QPainter qpainter(this);
     qpainter.setBrush(m_paintercolor);
     QPen qpen(m_pencolor, m_penwidth);
@@ -84,12 +84,12 @@ void PagePdf::clearPageTextSelections()
 
 void PagePdf::setPage(Poppler::Page *page)
 {
-    qDebug() << "----setpage";
+//    qDebug() << "----setpage";
     m_page = page;
     QSizeF qsize = m_page->pageSizeF();
     m_imagewidth = qsize.width();
     m_imageheight = qsize.height();
-    qDebug() << "----setpage m_imagewidth:" << m_imagewidth << " m_imageheight:" << m_imageheight;
+//    qDebug() << "----setpage m_imagewidth:" << m_imagewidth << " m_imageheight:" << m_imageheight;
 }
 
 void PagePdf::setScaleAndRotate(double scale, RotateType_EM rotate)
