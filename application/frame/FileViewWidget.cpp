@@ -38,7 +38,9 @@ FileViewWidget::~FileViewWidget()
 void FileViewWidget::initWidget()
 {
     //  实际文档类  唯一实例化设置 父窗口
-    m_pDocummentProxy = DocummentProxy::instance(this);
+    m_pDocummentHelper = DocummentHelper::instance();
+    m_pDocummentHelper->setParent(this);
+//   m_pDocummentProxy = DocummentProxy::instance(this);
 
     setBookMarkStateWidget();
 
@@ -55,9 +57,9 @@ void FileViewWidget::initWidget()
 //  鼠标移动
 void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    if (m_pDocummentProxy) {
+    if (m_pDocummentHelper) {
         QPoint globalPos = event->globalPos();
-        QPoint docGlobalPos = m_pDocummentProxy->global2RelativePoint(globalPos);
+        QPoint docGlobalPos = m_pDocummentHelper->global2RelativePoint(globalPos);
         if (m_nCurrentHandelState == Handel_State) {    //   手型状态下， 按住鼠标左键 位置进行移动
             if (m_bSelectOrMove) {
 
@@ -65,15 +67,15 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
                 int mvX = mvPoint.x();
                 int mvY = mvPoint.y();
 
-                m_pDocummentProxy->pageMove(mvX, mvY);
+                m_pDocummentHelper->pageMove(mvX, mvY);
             }
         } else if (m_nCurrentHandelState == Magnifier_State) {  //  当前是放大镜状态
-            m_pDocummentProxy->showMagnifier(docGlobalPos);
+            m_pDocummentHelper->showMagnifier(docGlobalPos);
         } else {
             if (m_bSelectOrMove) {
-                m_pDocummentProxy->mouseSelectText(m_pStartPoint, docGlobalPos);
+                m_pDocummentHelper->mouseSelectText(m_pStartPoint, docGlobalPos);
             } else {
-                if (m_pDocummentProxy->mouseBeOverText(docGlobalPos))
+                if (m_pDocummentHelper->mouseBeOverText(docGlobalPos))
                     setCursor(QCursor(Qt::IBeamCursor));
                 else {
                     setCursor(QCursor(Qt::ArrowCursor));
@@ -88,13 +90,13 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 {
     Qt::MouseButton nBtn = event->button();
     if (nBtn == Qt::LeftButton) {
-        if (m_pDocummentProxy) {
+        if (m_pDocummentHelper) {
             m_bSelectOrMove = true;
             if (m_nCurrentHandelState == Handel_State) {
                 m_pMoveStartPoint = event->globalPos();     //  变成手，　需要的是　相对坐标
             } else if (m_nCurrentHandelState == Default_State) {
-                m_pDocummentProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
-                m_pStartPoint = m_pDocummentProxy->global2RelativePoint(event->globalPos());
+                m_pDocummentHelper->mouseSelectTextClear();  //  清除之前选中的文字高亮
+                m_pStartPoint = m_pDocummentHelper->global2RelativePoint(event->globalPos());
             }
         }
     }
@@ -149,8 +151,8 @@ void FileViewWidget::resizeEvent(QResizeEvent *event)
 //  实际打开文件操作
 void FileViewWidget::onOpenFile(const QString &filePath)
 {
-    if (nullptr != m_pDocummentProxy) {
-        bool rl = m_pDocummentProxy->openFile(DocType_PDF, filePath);
+    if (nullptr != m_pDocummentHelper) {
+        bool rl = m_pDocummentHelper->openFile(DocType_PDF, filePath);
         if (rl) {
             DataManager::instance()->setStrOnlyFilePath(filePath);
 
@@ -175,9 +177,9 @@ void FileViewWidget::SlotCustomContextMenuRequested(const QPoint &point)
         return;
 
     QPoint clickPos = this->mapToGlobal(point);
-    QPoint globalPos = m_pDocummentProxy->global2RelativePoint(clickPos);
+    QPoint globalPos = m_pDocummentHelper->global2RelativePoint(clickPos);
 
-    bool rl = m_pDocummentProxy->mouseBeOverText(globalPos);
+    bool rl = m_pDocummentHelper->mouseBeOverText(globalPos);
     if (rl) {
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
         m_pTextOperationWidget->show();
@@ -212,7 +214,7 @@ int FileViewWidget::magnifying(const QString &data)
         //  取消放大镜显示
         m_nCurrentHandelState = Default_State;
         this->setCursor(Qt::ArrowCursor);
-        m_pDocummentProxy->closeMagnifier();
+        m_pDocummentHelper->closeMagnifier();
     }
     return ConstantMsg::g_effective_res;
 }
@@ -230,7 +232,7 @@ int FileViewWidget::setHandShape(const QString &data)
     }
 
     //  手型 切换 也需要将之前选中的文字清除 选中样式
-    m_pDocummentProxy->mouseSelectTextClear();
+    m_pDocummentHelper->mouseSelectTextClear();
 
     return ConstantMsg::g_effective_res;
 }
@@ -238,6 +240,7 @@ int FileViewWidget::setHandShape(const QString &data)
 //  放映
 int FileViewWidget::screening(const QString &data)
 {
+    m_pDocummentHelper->showSlideModel();    //  开启幻灯片
     return ConstantMsg::g_effective_res;
 }
 
@@ -271,8 +274,10 @@ int FileViewWidget::dealWithTitleMenuRequest(const int &msgType, const QString &
     case MSG_OPERATION_FIND:        //  搜索
         onShowFindWidget();
         return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_FULLSCREEN:  //  全屏
-        return ConstantMsg::g_effective_res;
+//    case MSG_OPERATION_FULLSCREEN:  //  全屏
+//        this->setWindowState(Qt::WindowFullScreen);
+//        break;
+//        return ConstantMsg::g_effective_res;
     case MSG_OPERATION_SCREENING:   //  放映
         return screening(msgContent);
     }
@@ -363,7 +368,7 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         nRes = dealWithFileMenuRequest(msgType, msgContent);
         if (nRes != ConstantMsg::g_effective_res) {
 
-            if (msgType == MSG_NOTIFY_MSG) {    //  最后一个处理通知消息
+            if (msgType == MSG_NOTIFY_KEY_MSG) {    //  最后一个处理通知消息
                 qDebug() << "   MSG_NOTIFY_MSG      " << msgContent;
             }
         }

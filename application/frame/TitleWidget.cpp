@@ -227,6 +227,8 @@ int TitleWidget::dealWithData(const int &msgType, const QString &)
 
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         openFileOk();
+    } else if (msgType == MSG_OPERATION_FULLSCREEN) {
+        m_pThumbnailBtn->setChecked(false);
     }
     return 0;
 }
