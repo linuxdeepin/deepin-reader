@@ -56,6 +56,8 @@ void BookMarkWidget::slotAddBookMark()
 
     m_pAllPageList.append(page);
     addBookMarkItem(page);
+
+    slotDocFilePageChanged(page);
 }
 
 /**
@@ -76,6 +78,8 @@ void BookMarkWidget::slotOpenFileOk()
 
         addBookMarkItem(nPage);
     }
+
+    slotDocFilePageChanged(0);
 }
 
 /**
@@ -105,8 +109,8 @@ void BookMarkWidget::slotDeleteBookItem(const int &nPage)
         QListWidgetItem *pItem = m_pBookMarkListWidget->item(iLoop);
         BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
         if (t_widget) {
-            int nnPageNumber = t_widget->PageNumber();
-            if (nnPageNumber == nPage) {
+            int nPageNumber = t_widget->PageNumber();
+            if (nPageNumber == nPage) {
                 m_pAllPageList.removeOne(nPage);
 
                 t_widget->deleteLater();
@@ -114,6 +118,7 @@ void BookMarkWidget::slotDeleteBookItem(const int &nPage)
 
                 delete  pItem;
 
+                slotDocFilePageChanged(nPage);
                 break;
             }
         }
@@ -151,7 +156,6 @@ void BookMarkWidget::keyPressEvent(QKeyEvent *e)
 
     if (key == "Del") {
         dltItem();
-//        qDebug() << "dlt bookmark item by key";
     }  else {
         // Pass event to CustomWidget continue, otherwise you can't type anything after here. ;)
         CustomWidget::keyPressEvent(e);
@@ -176,7 +180,7 @@ void BookMarkWidget::initConnection()
 void BookMarkWidget::dltItem()
 {
     slotDeleteBookItem(m_nCurrentPage);
-    m_nCurrentPage = -1;
+//    m_nCurrentPage = -1;
 //    QList<QListWidgetItem *> items =  m_pBookMarkListWidget->selectedItems();
 //    foreach (QListWidgetItem *item, items) {
 
