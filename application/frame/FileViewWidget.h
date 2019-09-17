@@ -50,7 +50,6 @@ protected:
 private slots:
     void SlotCustomContextMenuRequested(const QPoint &);
     void openFilePath(const QString &);
-    void SlotDocViewPageChange(int);
 
 private:
     int magnifying(const QString &);

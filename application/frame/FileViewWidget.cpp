@@ -40,7 +40,6 @@ void FileViewWidget::initWidget()
 {
     //  实际文档类  唯一实例化设置 父窗口
     m_pDocummentProxy = DocummentProxy::instance(this);
-    connect(m_pDocummentProxy, SIGNAL(signal_pageChange(int)), this, SLOT(SlotDocViewPageChange(int)));
 
     setBookMarkStateWidget();
 
@@ -68,10 +67,6 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
                 int mvY = mvPoint.y();
 
                 m_pDocummentProxy->pageMove(mvX, mvY);
-
-                qDebug() << "mv     " << mvX << "       " << mvY;
-                if (2) {
-                }
             }
         } else if (m_nCurrentHandelState == Magnifier_State) {  //  当前是放大镜状态
             m_pDocummentProxy->showMagnifier(docGlobalPos);
@@ -205,11 +200,6 @@ void FileViewWidget::openFilePath(const QString &filePaths)
         QString sPath = fileList.at(0);
         onOpenFile(sPath);
     }
-}
-
-void FileViewWidget::SlotDocViewPageChange(int page)
-{
-    qDebug() << "       SlotDocViewPageChange      " << page;
 }
 
 //  放大镜　控制
