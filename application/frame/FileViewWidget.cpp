@@ -154,7 +154,7 @@ void FileViewWidget::onOpenFile(const QString &filePath)
         if (rl) {
             DataManager::instance()->setStrOnlyFilePath(filePath);
 
-//            m_pDocummentProxy->scaleRotateAndShow(2, RotateType_Normal);
+            m_pDocummentProxy->scaleRotateAndShow(2, RotateType_Normal);
 
             //  通知 其他窗口， 打开文件成功了！！！
             NotifySubject::getInstance()->sendMsg(MSG_OPERATION_OPEN_FILE_OK);
@@ -238,6 +238,7 @@ int FileViewWidget::setHandShape(const QString &data)
 //  放映
 int FileViewWidget::screening(const QString &data)
 {
+    m_pDocummentProxy->showSlideModel();    //  开启幻灯片
     return ConstantMsg::g_effective_res;
 }
 
@@ -271,8 +272,10 @@ int FileViewWidget::dealWithTitleMenuRequest(const int &msgType, const QString &
     case MSG_OPERATION_FIND:        //  搜索
         onShowFindWidget();
         return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_FULLSCREEN:  //  全屏
-        return ConstantMsg::g_effective_res;
+//    case MSG_OPERATION_FULLSCREEN:  //  全屏
+//        this->setWindowState(Qt::WindowFullScreen);
+//        break;
+//        return ConstantMsg::g_effective_res;
     case MSG_OPERATION_SCREENING:   //  放映
         return screening(msgContent);
     }
@@ -363,7 +366,7 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         nRes = dealWithFileMenuRequest(msgType, msgContent);
         if (nRes != ConstantMsg::g_effective_res) {
 
-            if (msgType == MSG_NOTIFY_MSG) {    //  最后一个处理通知消息
+            if (msgType == MSG_NOTIFY_KEY_MSG) {    //  最后一个处理通知消息
                 qDebug() << "   MSG_NOTIFY_MSG      " << msgContent;
             }
         }

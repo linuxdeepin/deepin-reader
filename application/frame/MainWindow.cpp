@@ -29,7 +29,7 @@ MainWindow::MainWindow(DMainWindow *parent)
         m_pNotifySubject->addObserver(this);
     }
 
-    setMinimumSize(720, 560);
+    setMinimumSize(1000, 680);
 
     //  在屏幕中心显示
     Dtk::Widget::moveToCenter(this);
@@ -136,6 +136,8 @@ void MainWindow::action_Find()
 //  全屏
 void MainWindow::action_FullScreen()
 {
+    titlebar()->setVisible(false);
+    this->setWindowState(Qt::WindowFullScreen);
     sendMsg(MSG_OPERATION_FULLSCREEN);
 }
 
@@ -179,10 +181,15 @@ void MainWindow::sendMsg(const int &msgType, const QString &msgContent)
     }
 }
 
-int MainWindow::dealWithData(const int &msgType, const QString &)
+int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         openFileOk();
+    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
+        if (msgContent == "Esc") {
+            titlebar()->setVisible(true);
+            this->setWindowState(Qt::WindowNoState);
+        }
     }
     return 0;
 }

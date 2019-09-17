@@ -79,7 +79,7 @@ enum MSG_FIND_TYPE {
 enum MSG_OPERATION_RES_TYPE {
     MSG_OPERATION_OPEN_FILE_OK = 1000,      //  打开文件成功, 要告诉所有人
     MSG_OPERATION_OPEN_FILE_FAIL,           //  打开文件失败
-    MSG_NOTIFY_MSG                          //  通知消息
+    MSG_NOTIFY_KEY_MSG                      //  按键通知消息
 };
 
 namespace ConstantMsg {

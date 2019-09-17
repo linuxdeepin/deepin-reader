@@ -14,7 +14,6 @@
 
 #include "docview/docummentproxy.h"
 
-
 //  当前鼠标状态
 enum Handel_Enum {
     Default_State,
@@ -42,6 +41,9 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
+
+//    void    keyPressEvent(QKeyEvent *event) override;
+//    void    keyReleaseEvent(QKeyEvent *event) override;
 
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
@@ -72,6 +74,7 @@ private:
     FileAttrWidget          *m_pFileAttrWidget = nullptr;
     DefaultOperationWidget  *m_pDefaultOperationWidget = nullptr;
     TextOperationWidget     *m_pTextOperationWidget = nullptr;
+
     DocummentProxy          *m_pDocummentProxy = nullptr;
 
 private:
