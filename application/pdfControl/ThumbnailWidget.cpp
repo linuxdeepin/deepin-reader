@@ -104,7 +104,7 @@ void ThumbnailWidget::addThumbnailItem(const QImage &image, const int &idex)
     QListWidgetItem *item = new QListWidgetItem;
     ThumbnailItemWidget *widget = new ThumbnailItemWidget;
 
-    //widget->setContantLabelPixmap(image);
+    widget->setContantLabelPixmap(image);
     widget->setPageLabelText(tr("%1").arg(idex + 1));
     widget->setMinimumSize(QSize(250, 250));
 
@@ -120,8 +120,9 @@ bool ThumbnailWidget::fillContantToList()
 {
     for (int idex = 0; idex < totalPages(); ++idex) {
         QImage image;
-        //DocummentProxy::instance()->getImage(idex, image, 113, 143);
-
+        if (idex < FIRST_LOAD_PAGES) {
+            DocummentProxy::instance()->getImage(idex, image, 113, 143);
+        }
         addThumbnailItem(image, idex);
     }
 
@@ -163,13 +164,13 @@ void ThumbnailWidget::slotOpenFileOk()
     if (m_pThumbnailListWidget)
         m_pThumbnailListWidget->clear();
 
-    m_ThreadLoadImage.setPages(pages);
+    m_ThreadLoadImage.setPages((pages < FIRST_LOAD_PAGES) ? 0 : pages);
     m_ThreadLoadImage.start();
 
     setTotalPages(pages);
 
     fillContantToList();
-    m_loadImageTimer.start(1);
+    m_loadImageTimer.start(10);
 }
 
 void ThumbnailWidget::slotJumpIndexPage(int index)
@@ -190,7 +191,7 @@ void ThumbnailWidget::loadThumbnailImage()
 //            nEndPage = totalPages();
 //        }
 
-        for (int idex = 0; idex < totalPages(); ++idex) {
+        for (int idex = FIRST_LOAD_PAGES; idex < totalPages(); ++idex) {
             QImage image;
 
             ThumbnailItemWidget *t_ItemWidget = nullptr;
@@ -229,6 +230,7 @@ void ThreadLoadImage::getPageImage(const int &page, QImage &image)
 void ThreadLoadImage::run()
 {
     m_isLoaded = false;
+
     for (int page = 0; page < m_pages; page++) {
         QImage image;
         bool bl = DocummentProxy::instance()->getImage(page, image, 113, 143);
