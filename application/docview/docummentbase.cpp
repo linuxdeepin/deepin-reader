@@ -102,26 +102,51 @@ void MagnifierWidget::setMagnifierColor(QColor color)
     m_magnifiercolor = color;
 }
 
+SlideWidget::SlideWidget(DWidget *parent): DWidget(parent)
+{
+    setMouseTracking(true);
+}
+
+void SlideWidget::paintEvent(QPaintEvent *event)
+{
+    DWidget::paintEvent(event);
+//    this->resize(size());
+//    pix = new QPixmap(size());
+//    pix->fill(Qt::black);
+//    QPainter qpainter(this);
+//    qpainter.drawPixmap(QPoint(0, 0), *pix);
+//    delete pix;
+////    qpainter.setBrush(QColor(Qt::black));
+////    qpainter.setPen(QColor(Qt::black, 1, Qt::SolidLine));
+////    qpainter.drawRect(0, 0, this->width(), this->height());
+////    this->resize(this->size());
+}
+
 DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
     , m_bModified(false), m_bslidemodel(false), m_slidepageno(-1)
+    //, pslideanimationlabel(nullptr), pslidelabel(nullptr)
 {
     m_magnifierwidget = new MagnifierWidget(parent);
-    m_slidewidget = new DWidget(parent);
+    m_slidewidget = new SlideWidget(parent);
     pslidelabel = new DLabel(m_slidewidget);
     pslideanimationlabel = new DLabel(m_slidewidget);
+    pslideanimationlabel->setGeometry(-200, -200, 100, 100);
     QGridLayout *gridlyout = new QGridLayout(parent);
     parent->setLayout(gridlyout);
     gridlyout->addWidget(this, 0, 0);
     gridlyout->addWidget(m_magnifierwidget, 0, 0);
     gridlyout->addWidget(m_slidewidget, 0, 0);
-    m_slidewidget->raise();
+    gridlyout->setMargin(0);
+
+//    QGridLayout *gridlyoutslide = new QGridLayout(m_slidewidget);
+//    m_slidewidget->setLayout(gridlyoutslide);
+//    m_slidewidget->raise();
     m_slidewidget->hide();
-    m_magnifierwidget->raise();
+//    m_magnifierwidget->raise();
     m_magnifierwidget->hide();
     m_widget.setLayout(&m_vboxLayout);
     m_widget.setMouseTracking(true);
-    m_slidewidget->setMouseTracking(true);
-    pslidelabel->setMouseTracking(true);
+//    pslidelabel->setMouseTracking(true);
     setMouseTracking(true);
 
     m_viewmode = ViewMode_SinglePage;

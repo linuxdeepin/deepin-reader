@@ -21,9 +21,9 @@
 #include "controller/MsgSubject.h"
 #include "subjectObserver/MsgHeader.h"
 
+#include <DApplicationSettings>
 #include <QIcon>
 #include <QTranslator>
-#include <DApplicationSettings>
 #include <QDebug>
 #include "frame/AppAboutWidget.h"
 

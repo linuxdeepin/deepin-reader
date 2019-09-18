@@ -11,6 +11,7 @@
 #include <QVBoxLayout>
 #include <QPoint>
 #include <QColor>
+#include <QVideoWidget>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -44,6 +45,17 @@ private:
     QPoint m_magnifierpoint;
     QPixmap m_magnifierpixmap;
     double m_magnifierscale;
+};
+
+class SlideWidget: public DWidget
+{
+    Q_OBJECT
+public:
+    SlideWidget(DWidget *parent = nullptr);
+protected:
+    void paintEvent(QPaintEvent *event) override;
+private:
+    QPixmap *pix;
 };
 
 class DocummentBase: public DScrollArea
@@ -213,7 +225,7 @@ protected:
     mutable bool m_bModified;
     MagnifierWidget *m_magnifierwidget;
     int m_lastmagnifierpagenum;
-    DWidget *m_slidewidget;
+    SlideWidget *m_slidewidget;
     bool m_bslidemodel;
     DLabel *pslidelabel;
     int m_slidepageno;
