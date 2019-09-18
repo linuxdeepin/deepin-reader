@@ -92,6 +92,7 @@ private:
     void setCurrentRow(const int &);
     void addThumbnailItem(const QImage &, const int &);
 
+
     inline int preRowVal() const
     {
         return m_preRow;
@@ -117,7 +118,8 @@ private slots:
     void slotShowSelectItem(QListWidgetItem *);
     void slotOpenFileOk();
     void slotJumpIndexPage(int);
-    void loadThumbnailImage();
+    void slotLoadThumbnailImage();
+    void slotFileViewToListPage(int);
 
 private:
     DListWidget *m_pThumbnailListWidget = nullptr;

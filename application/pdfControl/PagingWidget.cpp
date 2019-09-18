@@ -133,6 +133,8 @@ void PagingWidget::slotPrePage()
     }
     m_currntPage = t_page;
 
+    m_pJumpPageSpinBox->setValue(m_currntPage);
+
     sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(m_currntPage - FIRSTPAGES));
 }
 
@@ -153,10 +155,19 @@ void PagingWidget::slotNextPage()
     }
     m_currntPage = t_page;
 
+    m_pJumpPageSpinBox->setValue(m_currntPage);
+
     sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(m_currntPage - FIRSTPAGES));
 }
 
 void PagingWidget::setCurrentPageValue(const int &index)
+{
+    setPageValue(index);
+
+    setCurrentPage(m_currntPage);
+}
+
+void PagingWidget::setPageValue(const int &index)
 {
     m_currntPage = index + FIRSTPAGES;
 
@@ -176,5 +187,5 @@ void PagingWidget::setCurrentPageValue(const int &index)
         m_pNextPageBtn->setEnabled(false);
     }
 
-    setCurrentPage(m_currntPage);
+    m_pJumpPageSpinBox->setValue(m_currntPage);
 }
