@@ -47,17 +47,6 @@ private:
     double m_magnifierscale;
 };
 
-class SlideWidget: public DWidget
-{
-    Q_OBJECT
-public:
-    SlideWidget(DWidget *parent = nullptr);
-protected:
-    void paintEvent(QPaintEvent *event) override;
-private:
-    QPixmap *pix;
-};
-
 class DocummentBase: public DScrollArea
 {
     Q_OBJECT
@@ -225,7 +214,7 @@ protected:
     mutable bool m_bModified;
     MagnifierWidget *m_magnifierwidget;
     int m_lastmagnifierpagenum;
-    SlideWidget *m_slidewidget;
+    DWidget *m_slidewidget;
     bool m_bslidemodel;
     DLabel *pslidelabel;
     int m_slidepageno;

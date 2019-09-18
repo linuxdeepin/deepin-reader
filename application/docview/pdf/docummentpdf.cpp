@@ -936,18 +936,10 @@ bool DocummentPDF::pageJump(int pagenum)
             return false;
         }
         if (-1 != m_slidepageno) {
-//            pslideanimationlabel->resize(pslidelabel->size());
-//            pslideanimationlabel->setPixmap(pslidelabel->grab());
-//            pslideanimationlabel->show();
             DLabel *plabel = pslideanimationlabel;
             pslideanimationlabel = pslidelabel;
             pslidelabel = plabel;
         }
-//        pslideanimationlabel->lower();
-//        m_slidewidget->lower();
-
-//        pslideanimationlabel->setStyleSheet("border:2px solid red;");
-//        pslidelabel->setStyleSheet("border:2px solid red;");
         pslidelabel->setGeometry((m_slidewidget->width() - width) / 2, (m_slidewidget->height() - height) / 2, width, height);
         QPixmap map = QPixmap::fromImage(image);
         pslidelabel->setPixmap(map);
@@ -963,16 +955,16 @@ bool DocummentPDF::pageJump(int pagenum)
             if (m_slidepageno > pagenum) {
                 qDebug() << "pageJump previous pagenum:" << pagenum;
                 animation->setStartValue(pslideanimationlabel->geometry());
-                animation->setEndValue(QRect(m_slidewidget->width(), 0, pslideanimationlabel->width(), pslideanimationlabel->height()));
+                animation->setEndValue(QRect(m_slidewidget->width(), 10, pslideanimationlabel->width(), pslideanimationlabel->height()));
 
-                animation1->setStartValue(QRect(-m_slidewidget->width(), 0, pslidelabel->width(), pslidelabel->height()));
+                animation1->setStartValue(QRect(-m_slidewidget->width(), 10, pslidelabel->width(), pslidelabel->height()));
                 animation1->setEndValue(pslidelabel->geometry());
             } else {
                 qDebug() << "pageJump next pagenum:" << pagenum;
                 animation->setStartValue(pslideanimationlabel->geometry());
-                animation->setEndValue(QRect(-m_slidewidget->width(), 0, pslideanimationlabel->width(), pslideanimationlabel->height()));
+                animation->setEndValue(QRect(-m_slidewidget->width(), 10, pslideanimationlabel->width(), pslideanimationlabel->height()));
 
-                animation1->setStartValue(QRect(m_slidewidget->width(), 0, pslidelabel->width(), pslidelabel->height()));
+                animation1->setStartValue(QRect(m_slidewidget->width(), 10, pslidelabel->width(), pslidelabel->height()));
                 animation1->setEndValue(pslidelabel->geometry());
             }
             QParallelAnimationGroup *group = new QParallelAnimationGroup;
@@ -981,7 +973,6 @@ bool DocummentPDF::pageJump(int pagenum)
 
             group->start(QAbstractAnimation::DeleteWhenStopped);
         }
-
 
         m_slidepageno = pagenum;
     } else {
