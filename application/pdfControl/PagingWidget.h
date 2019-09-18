@@ -27,6 +27,8 @@ public:
 
 public:
     void setTotalPages(int pages);
+    void setCurrentPageValue(const int &);
+    void setPageValue(const int &);
 
 signals:
     void sigJumpToIndexPage(const int &);
@@ -34,9 +36,6 @@ signals:
 private slots:
     void slotPrePage();
     void slotNextPage();
-
-public:
-    void setCurrentPageValue(const int &);
 
 protected:
     //void keyPressEvent(QKeyEvent * event);

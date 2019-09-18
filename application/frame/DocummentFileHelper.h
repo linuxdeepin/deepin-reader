@@ -18,6 +18,7 @@ signals:
     void sigOpenFile(const QString &);
 
 private:
+    void onSaveFileCtrlS();
     void onSaveFile();
     void onSaveAsFile();
     void onCopySelectContent();

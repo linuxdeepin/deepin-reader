@@ -28,7 +28,8 @@ FindWidget::FindWidget(CustomWidget *parent)
     : CustomWidget("FindWidget", parent)
 {
     // Init.
-    setWindowFlags(Qt::WindowStaysOnTopHint);   //  搜索框　保持置顶
+//    setWindowFlags(Qt::WindowStaysOnTopHint);   //  搜索框　保持置顶
+//    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Popup);   //  搜索框　保持置顶
     setFixedSize(QSize(410, 50));
 
     // Init layout and mainShow.

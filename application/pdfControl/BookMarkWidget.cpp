@@ -182,12 +182,11 @@ void BookMarkWidget::initConnection()
  */
 void BookMarkWidget::addBookMarkItem(const int &page)
 {
-    QImage image;
-
-    DocummentProxy::instance()->getImage(page, image, 130, 150);
+//    QImage image;
+//    DocummentProxy::instance()->getImage(page, image, 130, 150);
 
     BookMarkItemWidget *t_widget = new BookMarkItemWidget(this);
-    t_widget->setItemImage(image);
+    //t_widget->setItemImage(image);
     t_widget->setPageNumber(page);
     t_widget->setMinimumSize(QSize(250, 150));
 
@@ -226,4 +225,17 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &)
     }
 
     return 0;
+}
+
+/*************************************LoadBookMarkThread**************************************/
+/*************************************加载书签列表线程******************************************/
+
+LoadBookMarkThread::LoadBookMarkThread()
+{
+
+}
+
+void LoadBookMarkThread::run()
+{
+
 }

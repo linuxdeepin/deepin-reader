@@ -9,6 +9,7 @@
 #include <QVBoxLayout>
 #include <QMap>
 #include <QStringList>
+#include <QThread>
 
 #include "BookMarkItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
@@ -19,6 +20,8 @@
  * @brief The BookMarkWidget class
  * @brief   书签  列表数据
  */
+
+class LoadBookMarkThread;
 
 class BookMarkWidget : public CustomWidget
 {
@@ -57,6 +60,24 @@ private:
     DImageButton *m_pAddBookMarkBtn = nullptr;
     QList<int>      m_pAllPageList;
     int m_nCurrentPage = -1;
+};
+
+class LoadBookMarkThread : public QThread
+{
+public:
+    LoadBookMarkThread();
+
+public:
+    inline void setBookMark(BookMarkWidget *bookMarkW)
+    {
+        m_pBookMarkWidget = bookMarkW;
+    }
+
+protected:
+    void run() override;
+
+private:
+    BookMarkWidget *m_pBookMarkWidget = nullptr;
 };
 
 #endif // BOOKMARKFORM_H

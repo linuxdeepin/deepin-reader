@@ -63,7 +63,8 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
             pDocummentProxy->showMagnifier(docGlobalPos);
         } else {
             if (m_bSelectOrMove) {  //  鼠标已经按下，　则选中所经过的文字
-                pDocummentProxy->mouseSelectText(m_pStartPoint, docGlobalPos);
+                m_pMoveEndPoint = docGlobalPos;
+                pDocummentProxy->mouseSelectText(m_pStartPoint, m_pMoveEndPoint);
             } else {
                 if (pDocummentProxy->mouseBeOverText(docGlobalPos))
                     setCursor(QCursor(Qt::IBeamCursor));
@@ -163,8 +164,8 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         return;
     DocummentProxy *pDocummentProxy = DocummentProxy::instance();
 
-    QPoint clickPos = this->mapToGlobal(point);
-    QPoint globalPos = pDocummentProxy->global2RelativePoint(clickPos);
+    m_pRightClickPoint = this->mapToGlobal(point);
+    QPoint globalPos = pDocummentProxy->global2RelativePoint(m_pRightClickPoint);
     bool rl = pDocummentProxy->mouseBeOverText(globalPos);
     if (rl) {
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
@@ -172,14 +173,14 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
             m_pTextOperationWidget = new TextOperationWidget(this);
         }
         m_pTextOperationWidget->show();
-        m_pTextOperationWidget->move(clickPos.x(), clickPos.y());
+        m_pTextOperationWidget->move(m_pRightClickPoint.x(), m_pRightClickPoint.y());
         m_pTextOperationWidget->raise();
     } else {
         if (m_pDefaultOperationWidget == nullptr) {
             m_pDefaultOperationWidget = new DefaultOperationWidget(this);
         }
         m_pDefaultOperationWidget->show();
-        m_pDefaultOperationWidget->move(clickPos.x(), clickPos.y());
+        m_pDefaultOperationWidget->move(m_pRightClickPoint.x(), m_pRightClickPoint.y());
         m_pDefaultOperationWidget->raise();
     }
 }
@@ -217,6 +218,17 @@ int FileViewWidget::setHandShape(const QString &data)
     DocummentProxy::instance()->mouseSelectTextClear();
 
     return ConstantMsg::g_effective_res;
+}
+
+void FileViewWidget::onFileAddAnnotation(const QString &)
+{
+    QString ss = DocummentProxy::instance()->addAnnotation(m_pRightClickPoint, m_pRightClickPoint);
+    qDebug() << "   onFileAddAnnotation     " << ss;
+}
+
+void FileViewWidget::onFileRemoveAnnotation()
+{
+    DocummentProxy::instance()->removeAnnotation(m_pRightClickPoint);
 }
 
 void FileViewWidget::initConnections()
@@ -288,10 +300,10 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
 {
     switch (msgType) {
     case MSG_OPERATION_TEXT_ADD_HIGHLIGHTED:    //  高亮显示
-        qDebug() << "   MSG_OPERATION_TEXT_ADD_HIGHLIGHTED  " << msgContent;
+        onFileAddAnnotation(msgContent);
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED: //  移除高亮显示
-        qDebug() << "   MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED  ";
+        onFileRemoveAnnotation();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_ADD_ANNOTATION:     //  添加注释
         qDebug() << "   MSG_OPERATION_TEXT_ADD_ANNOTATION  ";

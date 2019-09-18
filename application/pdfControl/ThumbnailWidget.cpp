@@ -17,6 +17,11 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
     connect(m_pThumbnailListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
 }
 
+ThumbnailWidget::~ThumbnailWidget()
+{
+    m_ThreadLoadImage.stopThreadRun();
+}
+
 int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContant)
 {
     if (MSG_THUMBNAIL_JUMPTOPAGE == msgType) {
@@ -87,14 +92,7 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 
 void ThumbnailWidget::setCurrentRow(const int &row)
 {
-    if (this->preRowVal() == row) {
-        return;
-    }
-
-    this->setPreRowVal(row);
-    m_pThumbnailListWidget->setCurrentRow(row, QItemSelectionModel::NoUpdate);
-    QListWidgetItem *item = m_pThumbnailListWidget->item(row);
-    setSelectItemBackColor(item);
+    slotFileViewToListPage(row);
 
     if (m_pPageWidget) {
         m_pPageWidget->setCurrentPageValue(row);
@@ -103,7 +101,7 @@ void ThumbnailWidget::setCurrentRow(const int &row)
 
 void ThumbnailWidget::addThumbnailItem(const QImage &image, const int &idex)
 {
-    QListWidgetItem *item = new QListWidgetItem;
+    QListWidgetItem *item = new QListWidgetItem(m_pThumbnailListWidget);
     ThumbnailItemWidget *widget = new ThumbnailItemWidget;
 
     //widget->setContantLabelPixmap(image);
@@ -116,6 +114,22 @@ void ThumbnailWidget::addThumbnailItem(const QImage &image, const int &idex)
 
     m_pThumbnailListWidget->addItem(item);
     m_pThumbnailListWidget->setItemWidget(item, widget);
+}
+
+void ThumbnailWidget::slotFileViewToListPage(int page)
+{
+    if (this->preRowVal() == page) {
+        return;
+    }
+
+    this->setPreRowVal(page);
+    m_pThumbnailListWidget->setCurrentRow(page, QItemSelectionModel::NoUpdate);
+    QListWidgetItem *item = m_pThumbnailListWidget->item(page);
+    setSelectItemBackColor(item);
+
+    if (m_pPageWidget) {
+        m_pPageWidget->setPageValue(page);
+    }
 }
 
 bool ThumbnailWidget::fillContantToList()
@@ -154,7 +168,7 @@ void ThumbnailWidget::slotShowSelectItem(QListWidgetItem *item)
 
     setSelectItemBackColor(item);
 
-    sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(row));
+//    sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(row));
 
     if (m_pPageWidget) {
         m_pPageWidget->setCurrentPageValue(row);
@@ -163,7 +177,7 @@ void ThumbnailWidget::slotShowSelectItem(QListWidgetItem *item)
 
 void ThumbnailWidget::slotOpenFileOk()
 {
-    connect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotJumpIndexPage(int)), Qt::QueuedConnection);
+    connect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotFileViewToListPage(int)), Qt::QueuedConnection);
 
     int pages = DocummentProxy::instance()->getPageSNum();
 
@@ -185,18 +199,20 @@ void ThumbnailWidget::slotOpenFileOk()
 
     fillContantToList();
 
-    connect(&m_loadImageTimer, SIGNAL(timeout()), this, SLOT(loadThumbnailImage()));
+    connect(&m_loadImageTimer, SIGNAL(timeout()), this, SLOT(slotLoadThumbnailImage()));
     m_loadImageTimer.start(50);
 }
 
 void ThumbnailWidget::slotJumpIndexPage(int index)
 {
     setCurrentRow(index);
+
+//    fileViewToListPage(index);
 }
 
-void ThumbnailWidget::loadThumbnailImage()
+void ThumbnailWidget::slotLoadThumbnailImage()
 {
-    if (m_ThreadLoadImage.endPage() == totalPages()) {
+    if (m_ThreadLoadImage.endPage() == (totalPages() - 1)) {
         m_loadImageTimer.stop();
     }
     if (!m_ThreadLoadImage.isRunning()) {
@@ -210,6 +226,12 @@ void ThumbnailWidget::loadThumbnailImage()
 ThreadLoadImage::ThreadLoadImage()
 {
 
+}
+
+void ThreadLoadImage::stopThreadRun()
+{
+    terminate();    //终止线程
+    wait();         //阻塞等待
 }
 
 void ThreadLoadImage::run()

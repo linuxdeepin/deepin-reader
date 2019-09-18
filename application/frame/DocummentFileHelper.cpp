@@ -24,10 +24,16 @@ DocummentFileHelper::DocummentFileHelper(QObject *parent) : QObject(parent)
     }
 }
 
+//  ctrl s  保存文件
+void DocummentFileHelper::onSaveFileCtrlS()
+{
+    m_pDocummentProxy->save(m_szFilePath, true);
+}
+
 //  保存
 void DocummentFileHelper::onSaveFile()
 {
-    m_pDocummentProxy->save(m_szFilePath, false);
+    m_pDocummentProxy->save(m_szFilePath, true);
 }
 
 //  另存为
@@ -46,25 +52,22 @@ void DocummentFileHelper::onSaveAsFile()
 //  打开　文件路径
 void DocummentFileHelper::slotOpenFile(const QString &filePaths)
 {
-    if (nullptr != m_pDocummentProxy) {
+    QStringList fileList = filePaths.split("@#&wzx",  QString::SkipEmptyParts);
+    int nSize = fileList.size();
+    if (nSize > 0) {
+        QString sPath = fileList.at(0);
+        bool rl = m_pDocummentProxy->openFile(DocType_PDF, sPath);
+        if (rl) {
+            m_szFilePath = sPath;
+            DataManager::instance()->setStrOnlyFilePath(sPath);
 
-        QStringList fileList = filePaths.split("@#&wzx",  QString::SkipEmptyParts);
-        int nSize = fileList.size();
-        if (nSize > 0) {
-            QString sPath = fileList.at(0);
-            bool rl = m_pDocummentProxy->openFile(DocType_PDF, sPath);
-            if (rl) {
-                m_szFilePath = sPath;
-                DataManager::instance()->setStrOnlyFilePath(sPath);
+            m_pDocummentProxy->scaleRotateAndShow(2, RotateType_Normal);
 
-                m_pDocummentProxy->scaleRotateAndShow(2, RotateType_Normal);
+            //  通知 其他窗口， 打开文件成功了！！！
+            NotifySubject::getInstance()->sendMsg(MSG_OPERATION_OPEN_FILE_OK);
 
-                //  通知 其他窗口， 打开文件成功了！！！
-                NotifySubject::getInstance()->sendMsg(MSG_OPERATION_OPEN_FILE_OK);
-
-            } else {
-                sendMsg(MSG_OPERATION_OPEN_FILE_FAIL);
-            }
+        } else {
+            sendMsg(MSG_OPERATION_OPEN_FILE_FAIL);
         }
     }
 }
@@ -72,11 +75,11 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
 //  复制
 void DocummentFileHelper::onCopySelectContent()
 {
-    QString sss = "";
-    bool rl = m_pDocummentProxy->getSelectTextString(sss);
+    QString sCopy = "";
+    bool rl = m_pDocummentProxy->getSelectTextString(sCopy);
     if (rl) {
         QClipboard *clipboard = DApplication::clipboard();   //获取系统剪贴板指针
-        clipboard->setText(sss);
+        clipboard->setText(sCopy);
     }
 }
 
@@ -114,7 +117,7 @@ int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgCont
         return ConstantMsg::g_effective_res;
     case MSG_NOTIFY_KEY_MSG :
         if ("Ctrl+S" == msgContent) {
-            onSaveFile();
+            onSaveFileCtrlS();
             return ConstantMsg::g_effective_res;
         }
         if ("Esc" == msgContent) {

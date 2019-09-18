@@ -28,6 +28,8 @@ public:
     ThreadLoadImage();
 
 public:
+    void stopThreadRun();
+
     inline void setPages(const int pages)
     {
         m_pages = pages;
@@ -49,7 +51,7 @@ public:
     }
 
 protected:
-    virtual void run();
+    void run() override;
 
 private:
     int m_pages = 0; // 文件总页数
@@ -68,6 +70,7 @@ class ThumbnailWidget : public CustomWidget
 
 public:
     ThumbnailWidget(CustomWidget *parent = nullptr);
+    ~ThumbnailWidget() override;
 
 signals:
     void sigOpenFileOk();
@@ -88,6 +91,7 @@ private:
     void setSelectItemBackColor(QListWidgetItem *);
     void setCurrentRow(const int &);
     void addThumbnailItem(const QImage &, const int &);
+
 
     inline int preRowVal() const
     {
@@ -114,7 +118,8 @@ private slots:
     void slotShowSelectItem(QListWidgetItem *);
     void slotOpenFileOk();
     void slotJumpIndexPage(int);
-    void loadThumbnailImage();
+    void slotLoadThumbnailImage();
+    void slotFileViewToListPage(int);
 
 private:
     DListWidget *m_pThumbnailListWidget = nullptr;
