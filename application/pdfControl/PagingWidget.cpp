@@ -71,8 +71,6 @@ void PagingWidget::setCurrentPage(const int &index)
     m_pJumpPageSpinBox->setValue(index);
 
     DocummentProxy::instance()->pageJump(t_page);
-
-//    qDebug() << tr("page: %1").arg(index);
 }
 
 void PagingWidget::createBtn(DImageButton *btn, QWidget *parent, const QString &text, const QString &btnName, const QString &normalPic, const QString &hoverPic, const QString &pressPic, const QString &checkedPic, const char *member, bool checkable, bool checked)
@@ -135,7 +133,6 @@ void PagingWidget::slotPrePage()
     }
     m_currntPage = t_page;
 
-//    setCurrentPage(m_currntPage);
     sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(m_currntPage - FIRSTPAGES));
 }
 
@@ -156,7 +153,6 @@ void PagingWidget::slotNextPage()
     }
     m_currntPage = t_page;
 
-//    setCurrentPage(m_currntPage);
     sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(m_currntPage - FIRSTPAGES));
 }
 

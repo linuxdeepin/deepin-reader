@@ -28,6 +28,8 @@ public:
     ThreadLoadImage();
 
 public:
+    void stopThreadRun();
+
     inline void setPages(const int pages)
     {
         m_pages = pages;
@@ -49,7 +51,7 @@ public:
     }
 
 protected:
-    virtual void run();
+    void run() override;
 
 private:
     int m_pages = 0; // 文件总页数
@@ -68,6 +70,7 @@ class ThumbnailWidget : public CustomWidget
 
 public:
     ThumbnailWidget(CustomWidget *parent = nullptr);
+    ~ThumbnailWidget() override;
 
 signals:
     void sigOpenFileOk();

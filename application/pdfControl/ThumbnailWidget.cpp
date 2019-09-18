@@ -17,6 +17,11 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
     connect(m_pThumbnailListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
 }
 
+ThumbnailWidget::~ThumbnailWidget()
+{
+    m_ThreadLoadImage.stopThreadRun();
+}
+
 int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContant)
 {
     if (MSG_THUMBNAIL_JUMPTOPAGE == msgType) {
@@ -103,7 +108,7 @@ void ThumbnailWidget::setCurrentRow(const int &row)
 
 void ThumbnailWidget::addThumbnailItem(const QImage &image, const int &idex)
 {
-    QListWidgetItem *item = new QListWidgetItem;
+    QListWidgetItem *item = new QListWidgetItem(m_pThumbnailListWidget);
     ThumbnailItemWidget *widget = new ThumbnailItemWidget;
 
     //widget->setContantLabelPixmap(image);
@@ -154,7 +159,7 @@ void ThumbnailWidget::slotShowSelectItem(QListWidgetItem *item)
 
     setSelectItemBackColor(item);
 
-    sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(row));
+//    sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(row));
 
     if (m_pPageWidget) {
         m_pPageWidget->setCurrentPageValue(row);
@@ -196,7 +201,7 @@ void ThumbnailWidget::slotJumpIndexPage(int index)
 
 void ThumbnailWidget::loadThumbnailImage()
 {
-    if (m_ThreadLoadImage.endPage() == totalPages()) {
+    if (m_ThreadLoadImage.endPage() == (totalPages() - 1)) {
         m_loadImageTimer.stop();
     }
     if (!m_ThreadLoadImage.isRunning()) {
@@ -210,6 +215,12 @@ void ThumbnailWidget::loadThumbnailImage()
 ThreadLoadImage::ThreadLoadImage()
 {
 
+}
+
+void ThreadLoadImage::stopThreadRun()
+{
+    terminate();    //终止线程
+    wait();         //阻塞等待
 }
 
 void ThreadLoadImage::run()
