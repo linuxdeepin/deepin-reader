@@ -1,7 +1,7 @@
 #include "pagebase.h"
 
-PageBase::PageBase(QWidget *parent)
-    : QLabel(parent)
+PageBase::PageBase(DWidget *parent)
+    : DLabel(parent)
 {
     setMouseTracking(true);
     setAlignment(Qt::AlignCenter);

@@ -216,7 +216,7 @@ void TitleWidget::sendMsgToSubject(const int &msgType, const QString &msgCotent)
     sendMsg(msgType, msgCotent);
 }
 
-int TitleWidget::dealWithData(const int &msgType, const QString &)
+int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     //  取消放大镜
     if (msgType == MSG_MAGNIFYING_CANCEL) {
@@ -227,6 +227,13 @@ int TitleWidget::dealWithData(const int &msgType, const QString &)
 
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         openFileOk();
+    } else if (msgType == MSG_OPERATION_FULLSCREEN) {
+        m_pThumbnailBtn->setChecked(false);
+    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
+        if (msgContent == "Esc") {      //  退出放大镜模式
+            m_pMagnifierBtn->setChecked(false);
+            sendMsgToSubject(MSG_MAGNIFYING, QString::number(0));
+        }
     }
     return 0;
 }

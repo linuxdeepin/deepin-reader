@@ -665,3 +665,20 @@ QIcon Utils::getActionIcon(const QString &iconName)
     }
     return  icon;
 }
+
+QString Utils::getInputDataSize(const qint64 &dSize)
+{
+    if (dSize < 1024) {
+        return QString("%1 B").arg(dSize);
+    }
+    if (dSize < 1024 * 1024) {
+        double d = dSize / 1024.0;
+        return QString::number(d, 'f', 1) + " KB";
+    }
+    if (dSize < 1024 * 1024 * 1024) {
+        double d = dSize / 1024.0 / 1024.0;
+        return QString::number(d, 'f', 1) + " MB";
+    }
+    double d = dSize / 1024.0 / 1024.0 / 1024.0;
+    return QString::number(d, 'f', 1) + " GB";
+}

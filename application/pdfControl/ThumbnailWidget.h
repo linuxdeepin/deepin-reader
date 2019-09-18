@@ -10,11 +10,54 @@
 #include <QListWidgetItem>
 #include <QVBoxLayout>
 #include <QImage>
+#include <QThread>
+#include <QTimer>
 
 #include "pdfControl/ThumbnailItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
 #include "PagingWidget.h"
 #include "docview/docummentproxy.h"
+
+const int FIRST_LOAD_PAGES = 20;
+
+class ThumbnailWidget;
+
+class ThreadLoadImage : public QThread
+{
+public:
+    ThreadLoadImage();
+
+public:
+    inline void setPages(const int pages)
+    {
+        m_pages = pages;
+    }
+
+    inline const int endPage()
+    {
+        return m_nEndPage;
+    }
+
+    inline bool isLoaded()
+    {
+        return m_isLoaded;
+    }
+
+    inline void setThumbnail(ThumbnailWidget *thumbnail)
+    {
+        m_pThumbnailWidget = thumbnail;
+    }
+
+protected:
+    virtual void run();
+
+private:
+    int m_pages = 0; // 文件总页数
+    bool m_isLoaded = false;// 是都加载完毕
+    ThumbnailWidget *m_pThumbnailWidget = nullptr;
+    int m_nStartPage = 0;  // 加载图片起始页码
+    int m_nEndPage = 19;   // 加载图片结束页码
+};
 
 /*
 *缩略图列表页面
@@ -29,11 +72,14 @@ public:
 signals:
     void sigOpenFileOk();
     void sigSelectIndexPage(const int &);
-    void sigJumpIndexPage(const int &);
+    void sigJumpIndexPage(int);
 
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
+    bool fillContantToList();
+
+    void loadImage(const int &, QImage &);
 
 protected:
     void initWidget() override;
@@ -42,7 +88,6 @@ private:
     void setSelectItemBackColor(QListWidgetItem *);
     void setCurrentRow(const int &);
     void addThumbnailItem(const QImage &, const int &);
-    void fillContantToList();
 
     inline int preRowVal() const
     {
@@ -64,10 +109,12 @@ private:
         m_totalPages = pages;
     }
 
+
 private slots:
     void slotShowSelectItem(QListWidgetItem *);
     void slotOpenFileOk();
-    void slotJumpIndexPage(const int &);
+    void slotJumpIndexPage(int);
+    void loadThumbnailImage();
 
 private:
     DListWidget *m_pThumbnailListWidget = nullptr;
@@ -81,6 +128,8 @@ private:
 
     int m_totalPages = -1; // 总页码数
     int m_preRow     = -1; // 前一次页码数
+    ThreadLoadImage m_ThreadLoadImage;
+    QTimer m_loadImageTimer;
 };
 
 #endif // THUMBNAILWIDGET_H

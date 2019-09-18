@@ -42,15 +42,25 @@ bool GlobalEventFilter::eventFilter(QObject *obj, QEvent *e)
         qDebug() << "GlobalEventFilter      eventFilter     " << key;
 
         if (key == "Esc") {
+            NotifySubject::getInstance()->sendMsg(MSG_NOTIFY_KEY_MSG, key);
             return true;
         }
         if (key == "F1") {
+            return true;
+        }
+
+        if (key == "Up") {
+            NotifySubject::getInstance()->sendMsg(MSG_NOTIFY_KEY_MSG, key);
+            return true;
+        } else if (key == "Down") {
+            NotifySubject::getInstance()->sendMsg(MSG_NOTIFY_KEY_MSG, key);
             return true;
         }
 //        if (key == "Del") {
 //            return true;
 //        }
         if (key == "Ctrl+S") {
+            NotifySubject::getInstance()->sendMsg(MSG_NOTIFY_KEY_MSG, key);
             return true;
         }
         if (key == "Ctrl+O") {

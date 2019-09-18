@@ -38,8 +38,6 @@ void PagingWidget::initWidget()
     hLayout->addWidget(m_pPrePageBtn);
     hLayout->addWidget(m_pNextPageBtn);
     this->setLayout(hLayout);
-
-    setTotalPages(30);
 }
 
 bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
@@ -137,7 +135,7 @@ void PagingWidget::slotPrePage()
     }
     m_currntPage = t_page;
 
-    setCurrentPage(m_currntPage);
+//    setCurrentPage(m_currntPage);
     sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(m_currntPage - FIRSTPAGES));
 }
 
@@ -158,7 +156,7 @@ void PagingWidget::slotNextPage()
     }
     m_currntPage = t_page;
 
-    setCurrentPage(m_currntPage);
+//    setCurrentPage(m_currntPage);
     sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(m_currntPage - FIRSTPAGES));
 }
 

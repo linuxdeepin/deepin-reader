@@ -6,7 +6,7 @@ DocummentFactory::DocummentFactory()
 
 }
 
-DocummentBase *DocummentFactory::creatDocumment(DocType_EM type, QWidget *father)
+DocummentBase *DocummentFactory::creatDocumment(DocType_EM type, DWidget *father)
 {
     DocummentBase *documment;
     switch (type) {

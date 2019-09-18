@@ -14,11 +14,12 @@ BookMarkStateLabel::BookMarkStateLabel(DWidget *parent)
 void BookMarkStateLabel::mouseMoveEvent(QMouseEvent *event)
 {
     if (m_bChecked) {
+        setToolTip(tr("delete bookmark"));
         setPixmapState(ImageModule::g_checked_state);
     } else {
+        setToolTip(tr("add bookmark"));
         setPixmapState(ImageModule::g_hover_state);
     }
-
     DLabel::mouseMoveEvent(event);
 }
 

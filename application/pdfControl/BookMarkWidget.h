@@ -13,12 +13,12 @@
 #include "BookMarkItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
 #include "docview/docummentproxy.h"
+#include "application.h"
 
 /**
  * @brief The BookMarkWidget class
  * @brief   书签  列表数据
  */
-
 
 class BookMarkWidget : public CustomWidget
 {
@@ -29,15 +29,15 @@ public:
 
 signals:
     void sigOpenFileOk();
-    void sigDeleteBookItem(const int &);
-
+    void sigDeleteBookItem();
+    void sigAddBookMark();
 
 private slots:
     void slotShowSelectItem(QListWidgetItem *);
     void slotAddBookMark();
     void slotOpenFileOk();
     void slotDocFilePageChanged(int);
-    void slotDeleteBookItem(const int &);
+    void slotDeleteBookItem();
 
 protected:
     void initWidget() override;
@@ -45,7 +45,6 @@ protected:
 
 private:
     void initConnection();
-    void dltItem();
     void addBookMarkItem(const int &);
 
 public:
@@ -55,9 +54,7 @@ public:
 private:
     DListWidget *m_pBookMarkListWidget = nullptr;
     QVBoxLayout *m_pVBoxLayout = nullptr;
-//    QListWidgetItem *m_pCurrentItem = nullptr;
     DImageButton *m_pAddBookMarkBtn = nullptr;
-
     QList<int>      m_pAllPageList;
     int m_nCurrentPage = -1;
 };

@@ -47,8 +47,8 @@ public:
     bool clearMagnifierPixmap();
     //Annotation
     QString addAnnotation(QPoint screenPos);
-    QString removeAnnotation(const QPoint& pos);
-    void removeAnnotation(const QString& struuid);
+    QString removeAnnotation(const QPoint &pos);
+    void removeAnnotation(const QString &struuid);
     bool annotationClicked(const QPoint &pos, QString &strtext);
     bool loadLinks();
     Page::Link *ifMouseMoveOverLink(const QPoint point);

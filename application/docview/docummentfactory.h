@@ -2,13 +2,15 @@
 #define DOCUMMENTFACTORY_H
 #include "docummentbase.h"
 #include "docummentproxy.h"
+#include <DWidget>
 
+DWIDGET_USE_NAMESPACE
 class DocummentFactory
 {
 public:
     DocummentFactory();
 
-    static DocummentBase *creatDocumment(DocType_EM type, QWidget *father);
+    static DocummentBase *creatDocumment(DocType_EM type, DWidget *father);
 
 };
 

@@ -38,6 +38,7 @@ protected:
 
 private:
     void rotateFileView(bool isRight = true);
+    void scaleAndRotate(int);
 
 private slots:
     void slotSetChangeVal(int);
@@ -63,6 +64,7 @@ private:
     DLabel *m_pRotateLeftLab = nullptr;
     DLabel *m_pRotateRightLab = nullptr;
     int m_rotate = 360;  // 旋转角度
+    int m_rotateType = RotateType_Normal;
 };
 
 #endif // FONTWIDGET_H

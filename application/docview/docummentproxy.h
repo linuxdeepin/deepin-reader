@@ -3,7 +3,7 @@
 #include "docummentbase.h"
 #include "commonstruct.h"
 #include <QObject>
-#include <QWidget>
+#include <DWidget>
 
 
 enum DocType_EM {
@@ -35,11 +35,11 @@ public:
     void clearsearch();
     int currentPageNo();
     bool pageJump(int pagenum);
-    void docBasicInfo(stFileInfo& info);
+    void docBasicInfo(stFileInfo &info);
     QString removeAnnotation(const QPoint &startpos);
-    void removeAnnotation(const QString& struuid);
+    void removeAnnotation(const QString &struuid);
     bool pageMove(double mvx, double mvy);
-    void title(QString& title);
+    void title(QString &title);
     Page::Link *mouseBeOverLink(QPoint point);
     bool getSelectTextString(QString &st);
     bool showSlideModel();
@@ -53,7 +53,7 @@ private slots:
 
 private:
     DocummentProxy(QObject *parent = nullptr);
-    QWidget *qwfather;
+    DWidget *qwfather;
     DocType_EM m_type;
     QString m_path;
     DocummentBase *m_documment;

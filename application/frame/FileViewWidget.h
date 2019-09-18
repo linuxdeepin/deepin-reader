@@ -12,8 +12,7 @@
 #include "mainShow/FindWidget.h"
 #include "mainShow/BookMarkStateLabel.h"
 
-#include "docview/docummentproxy.h"
-
+#include "DocummentFileHelper.h"
 
 //  当前鼠标状态
 enum Handel_Enum {
@@ -35,8 +34,10 @@ public:
     ~FileViewWidget() override;
 
 signals:
-    void sigOpenFile(const QString &);
+//    void sigCopyContent();
     void sigSetMarkState(const bool &);
+    void sigShowFileAttr();
+    void sigShowFileFind();
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
@@ -48,17 +49,16 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private slots:
-    void SlotCustomContextMenuRequested(const QPoint &);
-    void openFilePath(const QString &);
-    void SlotDocViewPageChange(int);
+    void slotCustomContextMenuRequested(const QPoint &);
+    void slotShowFileAttr();
+    void slotShowFindWidget();
 
 private:
     int magnifying(const QString &);
     int setHandShape(const QString &);
-    int screening(const QString &);
-    void onShowFileAttr();
-    void onShowFindWidget();
-    void onOpenFile(const QString &filePath);
+
+//    void onSaveFile();
+//    void onCopySelectContent();
 
     void initConnections();
 
@@ -67,13 +67,15 @@ private:
 
     void setBookMarkStateWidget();
 
+
 private:
     BookMarkStateLabel      *m_pBookMarkStateLabel = nullptr;
     FindWidget              *m_pFindWidget = nullptr;
     FileAttrWidget          *m_pFileAttrWidget = nullptr;
     DefaultOperationWidget  *m_pDefaultOperationWidget = nullptr;
     TextOperationWidget     *m_pTextOperationWidget = nullptr;
-    DocummentProxy          *m_pDocummentProxy = nullptr;
+
+    DocummentFileHelper     *m_pDocummentFileHelper = nullptr;
 
 private:
     int         m_nCurrentHandelState = Default_State; //  当前鼠标状态

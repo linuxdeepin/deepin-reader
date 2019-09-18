@@ -1,6 +1,5 @@
 #include "BookMarkWidget.h"
 #include <QDebug>
-#include "application.h"
 
 BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
     CustomWidget("BookMarkWidget", parent)
@@ -23,7 +22,7 @@ void BookMarkWidget::slotShowSelectItem(QListWidgetItem *item)
     BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
     if (t_widget) {
         int nnPageNumber = t_widget->PageNumber();
-        m_nCurrentPage = nnPageNumber;
+        //m_nCurrentPage = nnPageNumber;
 
         DocummentProxy::instance()->pageJump(nnPageNumber);
     }
@@ -35,7 +34,7 @@ void BookMarkWidget::slotShowSelectItem(QListWidgetItem *item)
  */
 void BookMarkWidget::slotAddBookMark()
 {
-    int page = DocummentProxy::instance()->currentPageNo();
+    int page = m_nCurrentPage;
 
     if (m_pAllPageList.contains(page)) {
         return;
@@ -48,9 +47,10 @@ void BookMarkWidget::slotAddBookMark()
     } else {
         QString sPage = "";
         foreach (int i, m_pAllPageList) {
-            sPage += QString::number(page) + tr(",");
+            sPage += QString::number(i) + tr(",");
         }
 
+        sPage += QString::number(page);
         dApp->dbM->updateBookMark(QString::number(page));
     }
 
@@ -67,7 +67,7 @@ void BookMarkWidget::slotAddBookMark()
 
 void BookMarkWidget::slotOpenFileOk()
 {
-    connect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotDocFilePageChanged(int)));
+    connect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotDocFilePageChanged(int)), Qt::QueuedConnection);
 
     QString sAllPages = dApp->dbM->getBookMarks();
     QStringList sPageList = sAllPages.split(",", QString::SkipEmptyParts);
@@ -101,7 +101,7 @@ void BookMarkWidget::slotDocFilePageChanged(int page)
  * 按页码删除书签
  * @param nPage：要删除的书签页
  */
-void BookMarkWidget::slotDeleteBookItem(const int &nPage)
+void BookMarkWidget::slotDeleteBookItem()
 {
     int nCount = m_pBookMarkListWidget->count();
 
@@ -110,15 +110,15 @@ void BookMarkWidget::slotDeleteBookItem(const int &nPage)
         BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
         if (t_widget) {
             int nPageNumber = t_widget->PageNumber();
-            if (nPageNumber == nPage) {
-                m_pAllPageList.removeOne(nPage);
+            if (nPageNumber == m_nCurrentPage) {
+                m_pAllPageList.removeOne(m_nCurrentPage);
 
                 t_widget->deleteLater();
                 t_widget = nullptr;
 
                 delete  pItem;
 
-                slotDocFilePageChanged(nPage);
+                slotDocFilePageChanged(m_nCurrentPage);
                 break;
             }
         }
@@ -141,6 +141,8 @@ void BookMarkWidget::initWidget()
     m_pAddBookMarkBtn->setText(tr("adding bookmark"));
     connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(slotAddBookMark()));
 
+    connect(this, SIGNAL(sigAddBookMark()), this, SLOT(slotAddBookMark()));
+
     m_pVBoxLayout->addWidget(m_pBookMarkListWidget);
     m_pVBoxLayout->addWidget(m_pAddBookMarkBtn);
 }
@@ -155,7 +157,7 @@ void BookMarkWidget::keyPressEvent(QKeyEvent *e)
     QString key = Utils::getKeyshortcut(e);
 
     if (key == "Del") {
-        dltItem();
+        slotDeleteBookItem();
     }  else {
         // Pass event to CustomWidget continue, otherwise you can't type anything after here. ;)
         CustomWidget::keyPressEvent(e);
@@ -169,32 +171,8 @@ void BookMarkWidget::keyPressEvent(QKeyEvent *e)
 void BookMarkWidget::initConnection()
 {
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
-    connect(this, SIGNAL(sigDeleteBookItem(const int &)), this, SLOT(slotDeleteBookItem(const int &)));
+    connect(this, SIGNAL(sigDeleteBookItem()), this, SLOT(slotDeleteBookItem()));
     connect(m_pBookMarkListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
-}
-
-/**
- * @brief BookMarkWidget::dltItem
- * 按键删除书签页
- */
-void BookMarkWidget::dltItem()
-{
-    slotDeleteBookItem(m_nCurrentPage);
-//    m_nCurrentPage = -1;
-//    QList<QListWidgetItem *> items =  m_pBookMarkListWidget->selectedItems();
-//    foreach (QListWidgetItem *item, items) {
-
-//        BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
-//        if (t_widget) {
-//            int nnPageNumber = t_widget->PageNumber();
-
-//            m_pAllPageList.removeOne(nnPageNumber);
-
-//            t_widget->deleteLater();
-//            t_widget = nullptr;
-//        }
-//        delete  item;
-//    }
 }
 
 /**
@@ -228,17 +206,21 @@ void BookMarkWidget::addBookMarkItem(const int &page)
  * @param msgContent:消息内容
  * @return
  */
-int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
+int BookMarkWidget::dealWithData(const int &msgType, const QString &)
 {
+    //  删除书签消息
     if (MSG_BOOKMARK_DLTITEM == msgType) {
-
-        int nPage = msgContent.toInt();
-
-        emit sigDeleteBookItem(nPage);
-        qDebug() << "dlt bookmark item by menu";
+        emit sigDeleteBookItem();
         return ConstantMsg::g_effective_res;
     }
 
+    //  增加书签消息
+    if (MSG_BOOKMARK_ADDITEM == msgType || MSG_OPERATION_ADD_BOOKMARK == msgType) {
+        emit sigAddBookMark();
+        return ConstantMsg::g_effective_res;
+    }
+
+    //  打开w文件通知消息
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
         emit sigOpenFileOk();
     }

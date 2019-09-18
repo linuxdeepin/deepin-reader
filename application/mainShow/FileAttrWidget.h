@@ -22,7 +22,6 @@ public:
     FileAttrWidget(CustomWidget *parent = nullptr);
 
 public:
-    void setFileAttr();
     void showScreenCenter();
 
 protected:
@@ -32,10 +31,14 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
+    void setFileAttr();
     void initLabels();
     void initCloseBtn();
     void initImageLabel();
-    void createLabel(QGridLayout *, const int &, const QString &);
+    DLabel *createLabel(QGridLayout *, const int &, const QString &);
+
+    void setFileInfoPath(const QString &);
+    void setFileInfoTime(const QDateTime &, const QDateTime &);
 
 private slots:
     void slotBtnCloseClicked();
@@ -46,6 +49,23 @@ private:
     bool        m_bClickDown = false;
     QPoint      mouseStartPoint;
     QPoint      windowTopLeftPoint;
+
+    DLabel *labelImage = nullptr;
+    DLabel *labelFileName = nullptr;
+    DLabel *labelFilePath = nullptr;
+    DLabel *labelTheme = nullptr;
+    DLabel *labelAuthor = nullptr;
+    DLabel *labelKeyWord = nullptr;
+    DLabel *labelCreator = nullptr;
+    DLabel *labelProducer = nullptr;
+    DLabel *labelCreateTime = nullptr;
+    DLabel *labelUpdateTime = nullptr;
+    DLabel *labelFormat = nullptr;
+    DLabel *labelPageNumber = nullptr;
+    DLabel *labelBetter = nullptr;
+    DLabel *labelSafe = nullptr;
+    DLabel *labelPaperSize = nullptr;
+    DLabel *labelSize = nullptr;
 
     // CustomWidget interface
 protected:

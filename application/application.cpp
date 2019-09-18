@@ -21,9 +21,9 @@
 #include "controller/MsgSubject.h"
 #include "subjectObserver/MsgHeader.h"
 
+#include <DApplicationSettings>
 #include <QIcon>
 #include <QTranslator>
-
 #include <QDebug>
 #include "frame/AppAboutWidget.h"
 
@@ -52,6 +52,8 @@ Application::Application(int &argc, char **argv)
     setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin_reader/");
 
 //    setApplicationVersion(DApplication::buildVersion("20190828"));
+
+    DApplicationSettings savetheme;
 
     installEventFilter(new GlobalEventFilter);
     setAboutDialog(new AppAboutWidget);
