@@ -206,20 +206,23 @@ void BookMarkWidget::addBookMarkItem(const int &page)
  * @param msgContent:消息内容
  * @return
  */
-int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
+int BookMarkWidget::dealWithData(const int &msgType, const QString &)
 {
+    //  删除书签消息
     if (MSG_BOOKMARK_DLTITEM == msgType) {
-
         emit sigDeleteBookItem();
         return ConstantMsg::g_effective_res;
     }
 
-    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
-        emit sigOpenFileOk();
+    //  增加书签消息
+    if (MSG_BOOKMARK_ADDITEM == msgType || MSG_OPERATION_ADD_BOOKMARK == msgType) {
+        emit sigAddBookMark();
+        return ConstantMsg::g_effective_res;
     }
 
-    if (MSG_BOOKMARK_ADDITEM == msgType) {
-        emit sigAddBookMark();
+    //  打开w文件通知消息
+    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
+        emit sigOpenFileOk();
     }
 
     return 0;

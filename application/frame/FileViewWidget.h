@@ -37,29 +37,27 @@ signals:
     void sigOpenFile(const QString &);
     void sigSetMarkState(const bool &);
     void sigShowFileAttr();
+    void sigShowFileFind();
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
 
-//    void    keyPressEvent(QKeyEvent *event) override;
-//    void    keyReleaseEvent(QKeyEvent *event) override;
-
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 
 private slots:
-    void SlotCustomContextMenuRequested(const QPoint &);
-    void openFilePath(const QString &);
+    void slotCustomContextMenuRequested(const QPoint &);
+    void slotOpenFilePath(const QString &);
     void slotShowFileAttr();
+    void slotShowFindWidget();
 
 private:
     int magnifying(const QString &);
     int setHandShape(const QString &);
-    int screening(const QString &);
-    void onShowFindWidget();
+    int screening();
     void onOpenFile(const QString &filePath);
 
     void initConnections();
@@ -83,7 +81,6 @@ private:
     bool        m_bSelectOrMove = false;      //  是否可以选中文字、移动
     QPoint      m_pStartPoint;
     QPoint      m_pMoveStartPoint;
-
     // CustomWidget interface
 protected:
     void initWidget() override;

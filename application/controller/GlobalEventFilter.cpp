@@ -51,10 +51,10 @@ bool GlobalEventFilter::eventFilter(QObject *obj, QEvent *e)
 
         if (key == "Up") {
             NotifySubject::getInstance()->sendMsg(MSG_NOTIFY_KEY_MSG, key);
-//            return true;
+            return true;
         } else if (key == "Down") {
             NotifySubject::getInstance()->sendMsg(MSG_NOTIFY_KEY_MSG, key);
-//            return true;
+            return true;
         }
 //        if (key == "Del") {
 //            return true;
