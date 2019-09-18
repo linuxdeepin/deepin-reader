@@ -235,5 +235,8 @@ void DocummentProxy::findNext()
 
 void DocummentProxy::findPrev()
 {
-
+    if(m_documment)
+    {
+        m_documment->findPrev();
+    }
 }
