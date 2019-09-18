@@ -164,23 +164,23 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         return;
     DocummentProxy *pDocummentProxy = DocummentProxy::instance();
 
-    m_pRightClickPoint = this->mapToGlobal(point);
-    QPoint globalPos = pDocummentProxy->global2RelativePoint(m_pRightClickPoint);
-    bool rl = pDocummentProxy->mouseBeOverText(globalPos);
+    QPoint tempPoint = this->mapToGlobal(point);
+    m_pRightClickPoint = pDocummentProxy->global2RelativePoint(tempPoint);
+    bool rl = pDocummentProxy->mouseBeOverText(m_pRightClickPoint);
     if (rl) {
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
         if (m_pTextOperationWidget == nullptr) {
             m_pTextOperationWidget = new TextOperationWidget(this);
         }
         m_pTextOperationWidget->show();
-        m_pTextOperationWidget->move(m_pRightClickPoint.x(), m_pRightClickPoint.y());
+        m_pTextOperationWidget->move(tempPoint.x(), tempPoint.y());
         m_pTextOperationWidget->raise();
     } else {
         if (m_pDefaultOperationWidget == nullptr) {
             m_pDefaultOperationWidget = new DefaultOperationWidget(this);
         }
         m_pDefaultOperationWidget->show();
-        m_pDefaultOperationWidget->move(m_pRightClickPoint.x(), m_pRightClickPoint.y());
+        m_pDefaultOperationWidget->move(tempPoint.x(), tempPoint.y());
         m_pDefaultOperationWidget->raise();
     }
 }
