@@ -11,6 +11,7 @@
 #include <QVBoxLayout>
 #include <QPoint>
 #include <QColor>
+#include <QVideoWidget>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE

@@ -104,24 +104,30 @@ void MagnifierWidget::setMagnifierColor(QColor color)
 
 DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
     , m_bModified(false), m_bslidemodel(false), m_slidepageno(-1)
+    //, pslideanimationlabel(nullptr), pslidelabel(nullptr)
 {
     m_magnifierwidget = new MagnifierWidget(parent);
     m_slidewidget = new DWidget(parent);
     pslidelabel = new DLabel(m_slidewidget);
     pslideanimationlabel = new DLabel(m_slidewidget);
+    pslideanimationlabel->setGeometry(-200, -200, 100, 100);
     QGridLayout *gridlyout = new QGridLayout(parent);
     parent->setLayout(gridlyout);
     gridlyout->addWidget(this, 0, 0);
     gridlyout->addWidget(m_magnifierwidget, 0, 0);
     gridlyout->addWidget(m_slidewidget, 0, 0);
-    m_slidewidget->raise();
+    gridlyout->setMargin(0);
+    pslidelabel->lower();
+    pslideanimationlabel->lower();
+    m_slidewidget->lower();
+//    m_slidewidget->raise();
     m_slidewidget->hide();
-    m_magnifierwidget->raise();
+//    m_magnifierwidget->raise();
     m_magnifierwidget->hide();
     m_widget.setLayout(&m_vboxLayout);
     m_widget.setMouseTracking(true);
-    m_slidewidget->setMouseTracking(true);
     pslidelabel->setMouseTracking(true);
+    pslideanimationlabel->setMouseTracking(true);
     setMouseTracking(true);
 
     m_viewmode = ViewMode_SinglePage;

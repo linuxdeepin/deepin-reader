@@ -150,8 +150,8 @@ bool PagePdf::getSlideImage(QImage &image, double &width, double &height)
     if (!m_page)
         return false;
     int xres = 72.0, yres = 72.0;
-    double scalex = (width - 10) / m_imagewidth;
-    double scaley = (height - 10) / m_imageheight;
+    double scalex = (width - 20) / m_imagewidth;
+    double scaley = (height - 20) / m_imageheight;
     double scale = 1;
     if (scalex > scaley) {
         scale = scaley;
