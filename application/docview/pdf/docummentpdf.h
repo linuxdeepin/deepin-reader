@@ -68,6 +68,8 @@ public:
     Page::Link *mouseBeOverLink(QPoint point) override;
     bool getSelectTextString(QString &st) override;
     bool showSlideModel() override;
+    void findNext()override;
+    void findPrev()override;
 private slots:
     void slot_vScrollBarValueChanged(int value) override;
     void slot_hScrollBarValueChanged(int value) override;
@@ -92,7 +94,10 @@ private:
     QList<Poppler::Annotation *> m_listsearch;
     int m_currentpageno;
     bool donotneedreloaddoc;
-    stFileInfo m_fileinfo;
+    stFileInfo m_fileinfo;  
+    unsigned int m_cursearch;
+    int m_findcurpage;
+    QMap<int,int> m_pagecountsearch;//搜索结果页对应当前页个数
 };
 
 #endif // DOCUMMENTPDF_H

@@ -87,6 +87,10 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
             return ConstantMsg::g_effective_res;
         }
     }
+    else if(msgType==MSG_FIND_PREV)
+    {
+        DocummentProxy::instance()->findNext();
+    }
 
     return 0;
 }

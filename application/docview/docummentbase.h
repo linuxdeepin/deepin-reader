@@ -157,7 +157,11 @@ public:
         m_bslidemodel = false;
         return true;
     }
-    virtual void docBasicInfo(stFileInfo &info){};
+    virtual void docBasicInfo(stFileInfo &info){}
+
+    virtual void findNext(){}
+
+    virtual void findPrev(){}
 
     QList<PageBase *> *getPages()
     {
