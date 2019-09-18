@@ -1,5 +1,4 @@
 #include "MainOperationWidget.h"
-#include <QDebug>
 
 MainOperationWidget::MainOperationWidget(CustomWidget *parent):
     CustomWidget ("MainOperationWidget", parent)

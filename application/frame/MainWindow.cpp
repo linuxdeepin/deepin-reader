@@ -30,6 +30,7 @@ MainWindow::MainWindow(DMainWindow *parent)
     }
 
     setMinimumSize(1000, 680);
+    setObserverName("MainWindow");
 
     //  在屏幕中心显示
     Dtk::Widget::moveToCenter(this);
@@ -138,13 +139,16 @@ void MainWindow::action_FullScreen()
 {
     titlebar()->setVisible(false);
     this->setWindowState(Qt::WindowFullScreen);
+    DataManager::instance()->setCurShowState(FILE_FULLSCREEN);  //  全屏状态
     sendMsg(MSG_OPERATION_FULLSCREEN);
 }
 
 //  放映
 void MainWindow::action_Screening()
 {
-    sendMsg(MSG_OPERATION_SCREENING);
+    titlebar()->setVisible(false);
+    this->setWindowState(Qt::WindowFullScreen);
+    sendMsg(MSG_OPERATION_SLIDE);
 }
 
 //  放大
@@ -186,7 +190,7 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         openFileOk();
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (msgContent == "Esc") {
+        if (msgContent == "Esc") {  //  退出全屏模式
             titlebar()->setVisible(true);
             this->setWindowState(Qt::WindowNoState);
         }

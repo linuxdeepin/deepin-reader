@@ -28,7 +28,7 @@ FindWidget::FindWidget(CustomWidget *parent)
     : CustomWidget("FindWidget", parent)
 {
     // Init.
-    setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
+    setWindowFlags(Qt::WindowStaysOnTopHint);   //  搜索框　保持置顶
     setFixedSize(QSize(410, 50));
 
     // Init layout and mainShow.
