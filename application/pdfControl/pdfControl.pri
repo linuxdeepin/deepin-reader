@@ -8,8 +8,7 @@ HEADERS += \
     $$PWD/NotesItemWidget.h \
     $$PWD/font/fontWidget.h \
     $$PWD/CustomLabel.h \
-    $$PWD/SearchResWidget.h \
-    $$PWD/ThumbnailLoadThread.h
+    $$PWD/SearchResWidget.h
 
 SOURCES += \
     $$PWD/PagingWidget.cpp \
@@ -21,8 +20,7 @@ SOURCES += \
     $$PWD/NotesItemWidget.cpp \
     $$PWD/font/fontWidget.cpp \
     $$PWD/CustomLabel.cpp \
-    $$PWD/SearchResWidget.cpp \
-    $$PWD/ThumbnailLoadThread.cpp
+    $$PWD/SearchResWidget.cpp
 
 RESOURCES += \
     $$PWD/pdfControl.qrc

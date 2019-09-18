@@ -18,36 +18,45 @@
 #include "PagingWidget.h"
 #include "docview/docummentproxy.h"
 
-const int FIRST_LOAD_PAGES = 5;
+const int FIRST_LOAD_PAGES = 20;
+
+class ThumbnailWidget;
 
 class ThreadLoadImage : public QThread
 {
 public:
     ThreadLoadImage();
 
-    void getPageImage(const int &page, QImage &);
+public:
     inline void setPages(const int pages)
     {
         m_pages = pages;
     }
 
-    inline void clearImageMap()
+    inline const int endPage()
     {
-        m_imageMap.clear();
+        return m_nEndPage;
     }
 
-    bool isLoaded()
+    inline bool isLoaded()
     {
         return m_isLoaded;
+    }
+
+    inline void setThumbnail(ThumbnailWidget *thumbnail)
+    {
+        m_pThumbnailWidget = thumbnail;
     }
 
 protected:
     virtual void run();
 
 private:
-    QMap<int, QImage> m_imageMap;
-    int m_pages = -1; // 文件总页数
+    int m_pages = 0; // 文件总页数
     bool m_isLoaded = false;// 是都加载完毕
+    ThumbnailWidget *m_pThumbnailWidget = nullptr;
+    int m_nStartPage = 0;  // 加载图片起始页码
+    int m_nEndPage = 19;   // 加载图片结束页码
 };
 
 /*
@@ -69,6 +78,8 @@ public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
     bool fillContantToList();
+
+    void loadImage(const int &, QImage &);
 
 protected:
     void initWidget() override;
@@ -97,6 +108,7 @@ private:
     {
         m_totalPages = pages;
     }
+
 
 private slots:
     void slotShowSelectItem(QListWidgetItem *);
