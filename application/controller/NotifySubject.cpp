@@ -34,8 +34,7 @@ void NotifySubject::run()
                 NotifyObservers(msg.msgType, msg.msgContent);
             }
         }
-
-        msleep(300);
+        msleep(50);
     }
 }
 

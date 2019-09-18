@@ -28,13 +28,13 @@ void LeftSidebarWidget::initWidget()
     this->setLayout(pVBoxLayout);
 
     DStackedWidget *m_pStackedWidget = new DStackedWidget;
-    pVBoxLayout->addWidget(m_pStackedWidget);
     m_pStackedWidget->insertWidget(0, new ThumbnailWidget);
     m_pStackedWidget->insertWidget(1, new BookMarkWidget);
     m_pStackedWidget->insertWidget(2, new NotesWidget);
     m_pStackedWidget->insertWidget(3, new SearchResWidget);
     m_pStackedWidget->setCurrentIndex(0);
 
+    pVBoxLayout->addWidget(m_pStackedWidget);
     pVBoxLayout->addWidget(new MainOperationWidget, 0, Qt::AlignBottom);
 }
 

@@ -34,7 +34,6 @@ public:
     ~FileViewWidget() override;
 
 signals:
-//    void sigCopyContent();
     void sigSetMarkState(const bool &);
     void sigShowFileAttr();
     void sigShowFileFind();
@@ -57,8 +56,8 @@ private:
     int magnifying(const QString &);
     int setHandShape(const QString &);
 
-//    void onSaveFile();
-//    void onCopySelectContent();
+    void onFileAddAnnotation(const QString &);
+    void onFileRemoveAnnotation();
 
     void initConnections();
 
@@ -81,7 +80,9 @@ private:
     int         m_nCurrentHandelState = Default_State; //  当前鼠标状态
     bool        m_bSelectOrMove = false;      //  是否可以选中文字、移动
     QPoint      m_pStartPoint;
+    QPoint      m_pRightClickPoint;            //   右键菜单点
     QPoint      m_pMoveStartPoint;
+    QPoint      m_pMoveEndPoint;
 
     // CustomWidget interface
 protected:
