@@ -31,19 +31,16 @@ void FileViewWidget::initWidget()
     m_pDocummentProxy = DocummentProxy::instance(this);
 
     setBookMarkStateWidget();
-
-    m_pDefaultOperationWidget = new DefaultOperationWidget(this);
-    m_pTextOperationWidget = new TextOperationWidget(this);
-
-    m_pFindWidget = new FindWidget(this);
-    int nParentWidth = this->width();
-    int nWidget = m_pFindWidget->width();
-    m_pFindWidget->move(nParentWidth - nWidget - 20, 20);
 }
 
 //  鼠标移动
 void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
 {
+    //  处于幻灯片模式下
+    if (DataManager::instance()->CurShowState() == FILE_SCREEN) {
+        return;
+    }
+
     if (m_pDocummentProxy) {
         QPoint globalPos = event->globalPos();
         QPoint docGlobalPos = m_pDocummentProxy->global2RelativePoint(globalPos);
@@ -75,6 +72,11 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
 //  鼠标左键 按下
 void FileViewWidget::mousePressEvent(QMouseEvent *event)
 {
+    //  处于幻灯片模式下
+    if (DataManager::instance()->CurShowState() == FILE_SCREEN) {
+        return;
+    }
+
     Qt::MouseButton nBtn = event->button();
     if (nBtn == Qt::LeftButton) {
         if (m_pDocummentProxy) {
@@ -92,6 +94,10 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 //  鼠标松开
 void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 {
+    //  处于幻灯片模式下
+    if (DataManager::instance()->CurShowState() == FILE_SCREEN) {
+        return;
+    }
     m_bSelectOrMove = false;
     CustomWidget::mouseReleaseEvent(event);
 }
@@ -155,8 +161,12 @@ void FileViewWidget::onOpenFile(const QString &filePath)
 }
 
 //  弹出 自定义 菜单
-void FileViewWidget::SlotCustomContextMenuRequested(const QPoint &point)
+void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 {
+    //  处于幻灯片模式下
+    if (DataManager::instance()->CurShowState() == FILE_SCREEN) {
+        return;
+    }
     //  放大镜状态， 直接返回
     if (m_nCurrentHandelState == Magnifier_State)
         return;
@@ -169,10 +179,16 @@ void FileViewWidget::SlotCustomContextMenuRequested(const QPoint &point)
     bool rl = m_pDocummentProxy->mouseBeOverText(globalPos);
     if (rl) {
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
+        if (m_pTextOperationWidget == nullptr) {
+            m_pTextOperationWidget = new TextOperationWidget(this);
+        }
         m_pTextOperationWidget->show();
         m_pTextOperationWidget->move(clickPos.x(), clickPos.y());
         m_pTextOperationWidget->raise();
     } else {
+        if (m_pDefaultOperationWidget == nullptr) {
+            m_pDefaultOperationWidget = new DefaultOperationWidget(this);
+        }
         m_pDefaultOperationWidget->show();
         m_pDefaultOperationWidget->move(clickPos.x(), clickPos.y());
         m_pDefaultOperationWidget->raise();
@@ -180,7 +196,7 @@ void FileViewWidget::SlotCustomContextMenuRequested(const QPoint &point)
 }
 
 //  打开　文件路径
-void FileViewWidget::openFilePath(const QString &filePaths)
+void FileViewWidget::slotOpenFilePath(const QString &filePaths)
 {
     QStringList fileList = filePaths.split("@#&wzx",  QString::SkipEmptyParts);
     int nSize = fileList.size();
@@ -225,21 +241,24 @@ int FileViewWidget::setHandShape(const QString &data)
 }
 
 //  放映
-int FileViewWidget::screening(const QString &data)
+int FileViewWidget::screening()
 {
-    m_pDocummentProxy->showSlideModel();    //  开启幻灯片
+    bool bSlideModel = m_pDocummentProxy->showSlideModel();    //  开启幻灯片
+    if (bSlideModel) {
+        DataManager::instance()->setCurShowState(FILE_FULLSCREEN);
+    }
     return ConstantMsg::g_effective_res;
 }
 
 void FileViewWidget::initConnections()
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
-            this, SLOT(SlotCustomContextMenuRequested(const QPoint &)));
+            this, SLOT(slotCustomContextMenuRequested(const QPoint &)));
 
-    connect(this, SIGNAL(sigOpenFile(const QString &)),
-            this, SLOT(openFilePath(const QString &)));
+    connect(this, SIGNAL(sigOpenFile(const QString &)), this, SLOT(slotOpenFilePath(const QString &)));
 
     connect(this, SIGNAL(sigShowFileAttr()), this, SLOT(slotShowFileAttr()));
+    connect(this, SIGNAL(sigShowFileFind()), this, SLOT(slotShowFindWidget()));
 }
 
 //  标题栏的菜单消息处理
@@ -261,14 +280,10 @@ int FileViewWidget::dealWithTitleMenuRequest(const int &msgType, const QString &
         emit sigShowFileAttr();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_FIND:        //  搜索
-        onShowFindWidget();
+        emit sigShowFileFind();
         return ConstantMsg::g_effective_res;
-//    case MSG_OPERATION_FULLSCREEN:  //  全屏
-//        this->setWindowState(Qt::WindowFullScreen);
-//        break;
-//        return ConstantMsg::g_effective_res;
     case MSG_OPERATION_SCREENING:   //  放映
-        return screening(msgContent);
+        return screening();
     }
     return 0;
 }
@@ -277,21 +292,6 @@ int FileViewWidget::dealWithTitleMenuRequest(const int &msgType, const QString &
 int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
-    case MSG_OPERATION_ADD_BOOKMARK:            //  添加书签
-        qDebug() << "   MSG_OPERATION_ADD_BOOKMARK  ";
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_FIRST_PAGE:              //  第一页
-        qDebug() << "   MSG_OPERATION_FIRST_PAGE  ";
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_PREV_PAGE:               //  上一页
-        qDebug() << "   MSG_OPERATION_PREV_PAGE  ";
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_NEXT_PAGE:               //  下一页
-        qDebug() << "   MSG_OPERATION_NEXT_PAGE  ";
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_END_PAGE:                //  最后一页
-        qDebug() << "   MSG_OPERATION_END_PAGE  ";
-        return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_COPY:               //  复制
         qDebug() << "   MSG_OPERATION_TEXT_COPY  ";
         return ConstantMsg::g_effective_res;
@@ -334,10 +334,17 @@ void FileViewWidget::slotShowFileAttr()
 }
 
 //  显示搜索框
-void FileViewWidget::onShowFindWidget()
+void FileViewWidget::slotShowFindWidget()
 {
+    if (m_pFindWidget == nullptr) {
+        m_pFindWidget = new FindWidget(this);
+    }
+
+    int nParentWidth = this->width();
+    int nWidget = m_pFindWidget->width();
+    m_pFindWidget->move(nParentWidth - nWidget - 20, 20);
+
     m_pFindWidget->show();
-    m_pFindWidget->activateWindow();
     m_pFindWidget->raise();
 }
 
@@ -361,7 +368,18 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         if (nRes != ConstantMsg::g_effective_res) {
 
             if (msgType == MSG_NOTIFY_KEY_MSG) {    //  最后一个处理通知消息
-                qDebug() << "   MSG_NOTIFY_MSG      " << msgContent;
+                if (msgContent == "Up") {
+                    sendMsg(MSG_OPERATION_PREV_PAGE);
+                } else if (msgContent == "Down") {
+                    sendMsg(MSG_OPERATION_NEXT_PAGE);
+                } else if (msgContent == "Esc") {
+                    if (DataManager::instance()->CurShowState() == FILE_SCREEN) {
+                        DataManager::instance()->setCurShowState(FILE_NORMAL);
+                    } else {
+                        if (m_nCurrentHandelState == Handel_State) {
+                        }
+                    }
+                }
             }
         }
     }

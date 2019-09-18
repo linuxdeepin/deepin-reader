@@ -18,3 +18,13 @@ void DataManager::setStrOnlyFilePath(const QString &strOnlyFilePath)
 
     m_strOnlyFilePath = strOnlyFilePath;
 }
+
+int DataManager::CurShowState() const
+{
+    return m_nCurShowState;
+}
+
+void DataManager::setCurShowState(int nCurShowState)
+{
+    m_nCurShowState = nCurShowState;
+}

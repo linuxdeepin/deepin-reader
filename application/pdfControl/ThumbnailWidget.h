@@ -18,6 +18,8 @@
 #include "PagingWidget.h"
 #include "docview/docummentproxy.h"
 
+const int FIRST_LOAD_PAGES = 5;
+
 class ThreadLoadImage : public QThread
 {
 public:
