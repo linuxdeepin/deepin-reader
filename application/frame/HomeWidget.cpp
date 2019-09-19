@@ -118,13 +118,13 @@ void HomeWidget::dropEvent(QDropEvent *event)
     if (mimeData->hasUrls()) {
         for (auto url : mimeData->urls()) {
             QString sFilePath =  url.toLocalFile();
-            if (sFilePath.endsWith(".pdf")) {
-                //  默认打开第一个
-                QString sRes = sFilePath + "@#&wzx";
+//            if (sFilePath.endsWith(".pdf")) {
+            //  默认打开第一个
+            QString sRes = sFilePath + "@#&wzx";
 
-                sendMsg(MSG_OPEN_FILE_PATH, sRes);
-                break;
-            }
+            sendMsg(MSG_OPEN_FILE_PATH, sRes);
+            break;
+//        }
         }
     }
 }

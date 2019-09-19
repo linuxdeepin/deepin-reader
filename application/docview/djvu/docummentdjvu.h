@@ -1,14 +1,21 @@
-#ifndef DOCUMMENTPDF_H
-#define DOCUMMENTPDF_H
+#ifndef DOCUMMENTDJVU_H
+#define DOCUMMENTDJVU_H
 
 #include "../docummentbase.h"
 #include <poppler-qt5.h>
+#include <libdjvu/ddjvuapi.h>
+#include <libdjvu/miniexp.h>
+#include <QThread>
 
-class DocummentPDF: public DocummentBase
+class DocummentDJVU: public DocummentBase
 {
 public:
-    DocummentPDF(DWidget *parent = nullptr);
+    DocummentDJVU(DWidget *parent = nullptr);
     bool openFile(QString filepath) override;
+    ddjvu_document_t *getDocument();
+    ddjvu_context_t *getContext();
+    ddjvu_format_t *getFormat();
+    QHash< QString, int > getPageByName();
     QPoint global2RelativePoint(QPoint globalpoint) override;
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0) override;
     bool mouseSelectText(QPoint start, QPoint stop) override;
@@ -43,15 +50,20 @@ private slots:
 
 private:
     int pointInWhichPage(QPoint &qpoint);
-    void loadWordCache(int indexpage, PageBase *page);
-    bool abstractTextPage(const QList<Poppler::TextBox *> &text, PageBase *page);
+//    void loadWordCache(int indexpage, PageBase *page);
+//    bool abstractTextPage(const QList<Poppler::TextBox *> &text, PageBase *page);
     void showSinglePage();
     void showFacingPage();
     bool pdfsave(const QString &filePath, bool withChanges)const;
     void searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color);
     void refreshOnePage(int ipage);
     void setBasicInfo(const QString &filepath);
-    Poppler::Document *document;
+//    Poppler::Document *document;
+    ddjvu_document_t *document;
+    ddjvu_context_t *m_context;
+    ddjvu_format_t *m_format;
+    QHash< QString, int > m_pageByName;
+    QHash< int, QString > m_titleByIndex;
     double m_scale;
     RotateType_EM m_rotate;
     QList<DWidget *>m_widgets;
@@ -62,4 +74,4 @@ private:
     stFileInfo m_fileinfo;
 };
 
-#endif // DOCUMMENTPDF_H
+#endif // DOCUMMENTDJVU_H

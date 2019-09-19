@@ -7,7 +7,9 @@ HEADERS += \
     $$PWD/docummentproxy.h \
     $$PWD/pagebase.h \
     $$PWD/publicfunc.h \
-    $$PWD/commonstruct.h
+    $$PWD/commonstruct.h \
+    $$PWD/djvu/docummentdjvu.h \
+    $$PWD/djvu/pagedjvu.h
 
 SOURCES += \
     $$PWD/pdf/docummentpdf.cpp \
@@ -17,3 +19,5 @@ SOURCES += \
     $$PWD/docummentproxy.cpp \
     $$PWD/pagebase.cpp \
     $$PWD/publicfunc.cpp \
+    $$PWD/djvu/docummentdjvu.cpp \
+    $$PWD/djvu/pagedjvu.cpp

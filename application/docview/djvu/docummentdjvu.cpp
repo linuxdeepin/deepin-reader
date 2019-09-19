@@ -1,5 +1,5 @@
-#include "docummentpdf.h"
-#include "pagepdf.h"
+#include "docummentdjvu.h"
+#include "pagedjvu.h"
 #include "docview/publicfunc.h"
 #include <DScrollBar>
 #include <QImage>
@@ -9,10 +9,31 @@
 #include <QParallelAnimationGroup>
 #include <QDebug>
 
-DocummentPDF::DocummentPDF(DWidget *parent): DocummentBase(parent),
+void waitForMessageTag(ddjvu_context_t *context, ddjvu_message_tag_t tag)
+{
+    ddjvu_message_wait(context);
+
+    while (true) {
+        ddjvu_message_t *message = ddjvu_message_peek(context);
+
+        if (message != 0) {
+            if (message->m_any.tag == tag) {
+                break;
+            }
+
+            ddjvu_message_pop(context);
+        } else {
+            break;
+        }
+    }
+}
+
+DocummentDJVU::DocummentDJVU(DWidget *parent): DocummentBase(parent),
     document(nullptr),
     m_listsearch(),
-    m_fileinfo()
+    m_fileinfo(),
+    m_pageByName(),
+    m_titleByIndex()
 {
     m_threadloaddoc.setDoc(this);
     m_threadloadwords.setDoc(this);
@@ -27,17 +48,48 @@ DocummentPDF::DocummentPDF(DWidget *parent): DocummentBase(parent),
     donotneedreloaddoc = false;
 }
 
-bool DocummentPDF::openFile(QString filepath)
+bool DocummentDJVU::openFile(QString filepath)
 {
-    document = Poppler::Document::load(filepath);
-    if (nullptr == document || document->numPages() <= 0)
+    m_context = ddjvu_context_create("deepin_reader");
+
+    if (m_context == 0) {
         return false;
-    document->setRenderHint(Poppler::Document::TextAntialiasing);
+    }
+
+#if DDJVUAPI_VERSION >= 19
+
+    document = ddjvu_document_create_by_filename_utf8(m_context, filepath.toUtf8(), FALSE);
+
+#else
+
+    document = ddjvu_document_create_by_filename(context, QFile::encodeName(filepath), FALSE);
+
+#endif // DDJVUAPI_VERSION
+
+    if (document == 0) {
+        ddjvu_context_release(m_context);
+
+        return false;
+    }
+
+    waitForMessageTag(m_context, DDJVU_DOCINFO);
+
+    if (ddjvu_document_decoding_error(document)) {
+        ddjvu_document_release(document);
+        ddjvu_context_release(m_context);
+
+        return false;
+    }
+    unsigned int mask[] = {0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000};
+
+    m_format = ddjvu_format_create(DDJVU_FORMAT_RGBMASK32, 4, mask);
+    ddjvu_format_set_row_order(m_format, 1);
+    ddjvu_format_set_y_direction(m_format, 1);
     setBasicInfo(filepath);
     donotneedreloaddoc = true;
     m_pages.clear();
-    qDebug() << "numPages :" << document->numPages();
-    for (int i = 0; i < document->numPages(); i++) {
+    qDebug() << "djvu numPages :" << ddjvu_document_get_pagenum(document);
+    for (int i = 0; i < ddjvu_document_get_pagenum(document); i++) {
         DWidget *qwidget = new DWidget(this);
         QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
         qhblayout->setAlignment(qwidget, Qt::AlignCenter);
@@ -48,14 +100,13 @@ bool DocummentPDF::openFile(QString filepath)
         qwidget->setMouseTracking(true);
         m_widgets.append(qwidget);
 
-        PagePdf *page = new PagePdf(this);
-        page->setPage(document->page(i));
+        PageDJVU *page = new PageDJVU(this);
+        page->setPage(i);
         m_pages.append((PageBase *)page);
     }
 
     for (int i = 0; i < m_pages.size(); i++) {
-        PagePdf *page = (PagePdf *)m_pages.at(i);
-//        page->setPage(document->page(i));
+        PageDJVU *page = (PageDJVU *)m_pages.at(i);
         page->setScaleAndRotate(m_scale, m_rotate);
     }
     setViewModeAndShow(m_viewmode);
@@ -72,7 +123,7 @@ bool DocummentPDF::openFile(QString filepath)
     return true;
 }
 
-bool DocummentPDF::setViewModeAndShow(ViewMode_EM viewmode)
+bool DocummentDJVU::setViewModeAndShow(ViewMode_EM viewmode)
 {
     int currpageno = m_currentpageno;
     m_viewmode = viewmode;
@@ -97,7 +148,7 @@ bool DocummentPDF::setViewModeAndShow(ViewMode_EM viewmode)
     return true;;
 }
 
-void DocummentPDF::showSinglePage()
+void DocummentDJVU::showSinglePage()
 {
     pblankwidget->hide();
     for (int i = 0; i < m_pages.size(); i++) {
@@ -110,7 +161,7 @@ void DocummentPDF::showSinglePage()
         rey += m_widgets.at(i)->layout()->margin() * 2 + m_pages.at(i)->height() + m_vboxLayout.spacing();
     }
 }
-void DocummentPDF::showFacingPage()
+void DocummentDJVU::showFacingPage()
 {
     for (int i = 0; i < m_widgets.size(); i++) {
         m_widgets.at(i)->hide();
@@ -144,9 +195,9 @@ void DocummentPDF::showFacingPage()
     }
 }
 
-bool DocummentPDF::loadPages()
+bool DocummentDJVU::loadPages()
 {
-    if (!document && m_pages.size() == document->numPages())
+    if (!document && m_pages.size() == ddjvu_document_get_pagenum(document))
         return false;
     qDebug() << "loadPages";
     //    for (int i = 0; i < m_pages.size(); i++) {
@@ -159,32 +210,33 @@ bool DocummentPDF::loadPages()
         endnum = m_pages.size();
     }
     for (int i = startnum; i < endnum; i++) {
-        PagePdf *ppdf = (PagePdf *)m_pages.at(i);
+        PageDJVU *ppdf = (PageDJVU *)m_pages.at(i);
         ppdf->showImage(m_scale, m_rotate);
     }
     return true;
 }
 
-bool DocummentPDF::loadWords()
+bool DocummentDJVU::loadWords()
 {
-    if (!document && m_pages.size() == document->numPages())
+    if (!document && m_pages.size() == ddjvu_document_get_pagenum(document))
         return false;
     qDebug() << "loadWords";
-    for (int i = 0; i < m_pages.size(); i++) { //根据获取到的pdf页数循环
-        //        qDebug() << "i:" << i << " width:" << m_pages.at(i)->width() << " height:" << m_pages.at(i)->height();
-        loadWordCache(i, m_pages.at(i));
+    for (int i = 0; i < m_pages.size(); i++) {
+        PageDJVU *pdjvu = (PageDJVU *)m_pages.at(i);
+        pdjvu->loadWords();
+        pdjvu->loadLinks();
     }
     return true;
 }
 
-void DocummentPDF::scaleAndShow(double scale, RotateType_EM rotate)
+void DocummentDJVU::scaleAndShow(double scale, RotateType_EM rotate)
 {
     int currpageno = m_currentpageno;
     m_scale = scale;
     m_rotate = rotate;
     donotneedreloaddoc = true;
     for (int i = 0; i < m_pages.size(); i++) {
-        PagePdf *page = (PagePdf *)m_pages.at(i);
+        PageDJVU *page = (PageDJVU *)m_pages.at(i);
         page->setScaleAndRotate(m_scale, m_rotate);
     }
 
@@ -224,58 +276,58 @@ void DocummentPDF::scaleAndShow(double scale, RotateType_EM rotate)
     else
         m_threadloaddoc.start();
 }
-void DocummentPDF::removeAllAnnotation()
+void DocummentDJVU::removeAllAnnotation()
 {
     if (!document)return;
-    for (int i = 0; i < document->numPages(); ++i) {
-        QList<Poppler::Annotation *> listannote = document->page(i)->annotations();
-        foreach (Poppler::Annotation *atmp, listannote) {
-            document->page(i)->removeAnnotation(atmp);
-        }
-    }
-    scaleAndShow(m_scale, m_rotate);
+//    for (int i = 0; i < document->numPages(); ++i) {
+//        QList<Poppler::Annotation *> listannote = document->page(i)->annotations();
+//        foreach (Poppler::Annotation *atmp, listannote) {
+//            document->page(i)->removeAnnotation(atmp);
+//        }
+//    }
+//    scaleAndShow(m_scale, m_rotate);
 }
 
-QString DocummentPDF::removeAnnotation(const QPoint &startpos)
+QString DocummentDJVU::removeAnnotation(const QPoint &startpos)
 {
     //暂时只处理未旋转
     QPoint pt = startpos;
     int page = pointInWhichPage(pt);
     if (page < 0) return "";
-    return static_cast<PagePdf *>(m_pages.at(page))->removeAnnotation(pt);
+    return static_cast<PageDJVU *>(m_pages.at(page))->removeAnnotation(pt);
 }
 
-void DocummentPDF::removeAnnotation(const QString &struuid)
+void DocummentDJVU::removeAnnotation(const QString &struuid)
 {
-    return static_cast<PagePdf *>(m_pages.at(currentPageNo()))->removeAnnotation(struuid);
+    return static_cast<PageDJVU *>(m_pages.at(currentPageNo()))->removeAnnotation(struuid);
 }
 
-QString DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color)
+QString DocummentDJVU::addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color)
 {
     QPoint pt = startpos;
     int page = pointInWhichPage(pt);
     if (page < 0) return "";
-    return static_cast<PagePdf *>(m_pages.at(page))->addAnnotation(pt);
+    return static_cast<PageDJVU *>(m_pages.at(page))->addAnnotation(pt);
 }
 
-void DocummentPDF::search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color)
+void DocummentDJVU::search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color)
 {
-    //先清理
-    if (m_listsearch.size() > 0) {
-        clearSearch();
-    }
+//    //先清理
+//    if (m_listsearch.size() > 0) {
+//        clearSearch();
+//    }
 
-    for (int i = 0; i < document->numPages(); ++i) {
-        stSearchRes stres;
-        searchHightlight(document->page(i), strtext, stres, color);
-        if (stres.listtext.size() > 0)
-            resmap.insert(i, stres);
-    }
-    static_cast<PagePdf *>(m_pages.at(currentPageNo()))->showImage(m_scale, m_rotate);
-    scaleAndShow(m_scale, m_rotate); //全部刷新
+//    for (int i = 0; i < document->numPages(); ++i) {
+//        stSearchRes stres;
+//        searchHightlight(document->page(i), strtext, stres, color);
+//        if (stres.listtext.size() > 0)
+//            resmap.insert(i, stres);
+//    }
+//    static_cast<PageDJVU *>(m_pages.at(currentPageNo()))->showImage(m_scale, m_rotate);
+//    scaleAndShow(m_scale, m_rotate); //全部刷新
 }
 
-bool DocummentPDF::save(const QString &filePath, bool withChanges)
+bool DocummentDJVU::save(const QString &filePath, bool withChanges)
 {
     // Save document to temporary file...
     QTemporaryFile temporaryFile;
@@ -313,36 +365,37 @@ bool DocummentPDF::save(const QString &filePath, bool withChanges)
     return true;
 }
 
-bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges) const
+bool DocummentDJVU::pdfsave(const QString &filePath, bool withChanges) const
 {
-    QScopedPointer< Poppler::PDFConverter > pdfConverter(document->pdfConverter());
+//    QScopedPointer< Poppler::PDFConverter > pdfConverter(document->pdfConverter());
 
-    pdfConverter->setOutputFileName(filePath);
+//    pdfConverter->setOutputFileName(filePath);
 
-    Poppler::PDFConverter::PDFOptions options = pdfConverter->pdfOptions();
+//    Poppler::PDFConverter::PDFOptions options = pdfConverter->pdfOptions();
 
-    if (withChanges) {
-        options |= Poppler::PDFConverter::WithChanges;
-    }
+//    if (withChanges) {
+//        options |= Poppler::PDFConverter::WithChanges;
+//    }
 
-    pdfConverter->setPDFOptions(options);
+//    pdfConverter->setPDFOptions(options);
 
-    return pdfConverter->convert();
+//    return pdfConverter->convert();
+    return  false;
 
 }
 
-void DocummentPDF::clearSearch()
+void DocummentDJVU::clearSearch()
 {
-    for (int i = 0; i < document->numPages(); ++i) {
-        foreach (Poppler::Annotation *ptmp, m_listsearch) {
-            document->page(i)->removeAnnotation(ptmp);
-        }
-        //refresh(i);
-    }
-    scaleAndShow(m_scale, m_rotate);
+//    for (int i = 0; i < document->numPages(); ++i) {
+//        foreach (Poppler::Annotation *ptmp, m_listsearch) {
+//            document->page(i)->removeAnnotation(ptmp);
+//        }
+//        //refresh(i);
+//    }
+//    scaleAndShow(m_scale, m_rotate);
 }
 
-void DocummentPDF::searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color)
+void DocummentDJVU::searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color)
 {
     if (nullptr == page) return;
     QList<QRectF> listrect = page->search(strtext);
@@ -390,15 +443,15 @@ void DocummentPDF::searchHightlight(Poppler::Page *page, const QString &strtext,
     m_listsearch.append(annotation);
 }
 
-void DocummentPDF::refreshOnePage(int ipage)
+void DocummentDJVU::refreshOnePage(int ipage)
 {
     if (!document)
         return ;
-    PagePdf *ppdf = (PagePdf *)m_pages.at(ipage);
+    PageDJVU *ppdf = (PageDJVU *)m_pages.at(ipage);
     ppdf->showImage(m_scale, m_rotate);
 }
 
-void DocummentPDF::setBasicInfo(const QString &filepath)
+void DocummentDJVU::setBasicInfo(const QString &filepath)
 {
     QFileInfo info(filepath);
     m_fileinfo.size = info.size();
@@ -408,101 +461,123 @@ void DocummentPDF::setBasicInfo(const QString &filepath)
     m_fileinfo.strFilepath = info.filePath();
     if (document) {
         int major, minor;
-        document->getPdfVersion(&major, &minor);
+        //document->getPdfVersion(&major, &minor);
         m_fileinfo.strFormat.arg("PDF v.%1.%2", major, minor);
-        m_fileinfo.strKeyword = document->info(QStringLiteral("Keywords"));
-        m_fileinfo.strTheme = document->title();
-        m_fileinfo.strProducter = document->producer();
-        m_fileinfo.strCreater = document->creator();
-        m_fileinfo.bsafe = document->isEncrypted();
-        m_fileinfo.iWidth = document->page(0)->pageSize().width();
-        m_fileinfo.iHeight = document->page(0)->pageSize().height();
-        m_fileinfo.iNumpages = document->numPages();
-    }
-}
+//        m_fileinfo.strKeyword = document->info(QStringLiteral("Keywords"));
+//        m_fileinfo.strTheme = document->title();
+//        m_fileinfo.strProducter = document->producer();
+//        m_fileinfo.strCreater = document->creator();
+//        m_fileinfo.bsafe = document->isEncrypted();
+//        m_fileinfo.iWidth = document->page(0)->pageSize().width();
+//        m_fileinfo.iHeight = document->page(0)->pageSize().height();
+//        m_fileinfo.iNumpages = document->numPages();
 
-void DocummentPDF::loadWordCache(int indexpage, PageBase *page)
-{
-    if (!document) {
-        return;
-    }
-    Poppler::Page *pp = document->page(indexpage);
-    QList<Poppler::TextBox *> textList;
-    pp->textList();
-    if (pp) {
-        textList = pp->textList();
-        const QSizeF s = pp->pageSizeF();
-    }
-    delete pp;
+        /*---------djyu code--------*/
+        for (int index = 0, count = ddjvu_document_get_filenum(document); index < count; ++index) {
+            ddjvu_fileinfo_t fileinfo;
 
-    abstractTextPage(textList, page);
-    qDeleteAll(textList);
-    PagePdf *ppdf = (PagePdf *)page;
-    ppdf->loadLinks();
-}
-
-bool DocummentPDF::abstractTextPage(const QList<Poppler::TextBox *> &text, PageBase *page)
-{
-    Poppler::TextBox *next;
-    PagePdf *ppdf = (PagePdf *)page;
-    QString s;
-    bool addChar;
-    foreach (Poppler::TextBox *word, text) {
-        const int qstringCharCount = word->text().length();
-        next = word->nextWord();
-        // if(next)
-        int textBoxChar = 0;
-        for (int j = 0; j < qstringCharCount; j++) {
-            const QChar c = word->text().at(j);
-            if (c.isHighSurrogate()) {
-                s = c;
-                addChar = false;
-            } else if (c.isLowSurrogate()) {
-                s += c;
-                addChar = true;
-            } else {
-                s = c;
-                addChar = true;
+            if (ddjvu_document_get_fileinfo(document, index, &fileinfo) != DDJVU_JOB_OK || fileinfo.type != 'P') {
+                continue;
             }
 
-            if (addChar) {
-                QRectF charBBox = word->charBoundingBox(textBoxChar);
-                //                qDebug() << "addChar s:" << s << " charBBox:" << charBBox;
-                stWord sword;
-                sword.s = s;
-                sword.rect = charBBox;
-                ppdf->appendWord(sword);
-                textBoxChar++;
+            const QString id = QString::fromUtf8(fileinfo.id);
+            const QString name = QString::fromUtf8(fileinfo.name);
+            const QString title = QString::fromUtf8(fileinfo.title);
+
+            m_pageByName[id] = m_pageByName[name] = m_pageByName[title] = fileinfo.pageno + 1;
+
+            if (!title.endsWith(".djvu", Qt::CaseInsensitive) && !title.endsWith(".djv", Qt::CaseInsensitive)) {
+                m_titleByIndex[fileinfo.pageno] = title;
             }
         }
 
-        if (word->hasSpaceAfter() && next) {
-            QRectF wordBBox = word->boundingBox();
-            QRectF nextWordBBox = next->boundingBox();
-            //            qDebug() << "hasSpaceAfter wordBBox:" << wordBBox << " nextWordBBox:" << nextWordBBox;
-            stWord sword;
-            sword.s = QStringLiteral(" ");
-            QRectF qrect;
-            qrect.setLeft(wordBBox.right());
-            qrect.setBottom(wordBBox.bottom());
-            qrect.setRight(nextWordBBox.left());
-            qrect.setTop(wordBBox.top());
-            sword.rect = qrect;
-            ppdf->appendWord(sword);
-        }
+        m_pageByName.squeeze();
+        m_titleByIndex.squeeze();
     }
-    return true;
 }
 
-void DocummentPDF::mouseSelectTextClear()
+//void DocummentDJVU::loadWordCache(int indexpage, PageBase *page)
+//{
+//    if (!document) {
+//        return;
+//    }
+//    Poppler::Page *pp = document->page(indexpage);
+//    QList<Poppler::TextBox *> textList;
+//    pp->textList();
+//    if (pp) {
+//        textList = pp->textList();
+//        const QSizeF s = pp->pageSizeF();
+//    }
+//    delete pp;
+
+//    abstractTextPage(textList, page);
+//    qDeleteAll(textList);
+//    PageDJVU *ppdf = (PageDJVU *)page;
+//    ppdf->loadLinks();
+//}
+
+//bool DocummentDJVU::abstractTextPage(const QList<Poppler::TextBox *> &text, PageBase *page)
+//{
+//    Poppler::TextBox *next;
+//    PageDJVU *ppdf = (PageDJVU *)page;
+//    QString s;
+//    bool addChar;
+//    foreach (Poppler::TextBox *word, text) {
+//        const int qstringCharCount = word->text().length();
+//        next = word->nextWord();
+//        // if(next)
+//        int textBoxChar = 0;
+//        for (int j = 0; j < qstringCharCount; j++) {
+//            const QChar c = word->text().at(j);
+//            if (c.isHighSurrogate()) {
+//                s = c;
+//                addChar = false;
+//            } else if (c.isLowSurrogate()) {
+//                s += c;
+//                addChar = true;
+//            } else {
+//                s = c;
+//                addChar = true;
+//            }
+
+//            if (addChar) {
+//                QRectF charBBox = word->charBoundingBox(textBoxChar);
+//                //                qDebug() << "addChar s:" << s << " charBBox:" << charBBox;
+//                stWord sword;
+//                sword.s = s;
+//                sword.rect = charBBox;
+//                ppdf->appendWord(sword);
+//                textBoxChar++;
+//            }
+//        }
+
+//        if (word->hasSpaceAfter() && next) {
+//            QRectF wordBBox = word->boundingBox();
+//            QRectF nextWordBBox = next->boundingBox();
+//            //            qDebug() << "hasSpaceAfter wordBBox:" << wordBBox << " nextWordBBox:" << nextWordBBox;
+//            stWord sword;
+//            sword.s = QStringLiteral(" ");
+//            QRectF qrect;
+//            qrect.setLeft(wordBBox.right());
+//            qrect.setBottom(wordBBox.bottom());
+//            qrect.setRight(nextWordBBox.left());
+//            qrect.setTop(wordBBox.top());
+//            sword.rect = qrect;
+//            ppdf->appendWord(sword);
+//        }
+//    }
+//    return true;
+//}
+
+void DocummentDJVU::mouseSelectTextClear()
 {
     for (int i = 0; i < m_pages.size(); i++) {
-        PagePdf *ppdf = (PagePdf *)m_pages.at(i);
+        PageDJVU *ppdf = (PageDJVU *)m_pages.at(i);
         ppdf->clearPageTextSelections();
     }
 }
 
-QPoint DocummentPDF::global2RelativePoint(QPoint globalpoint)
+QPoint DocummentDJVU::global2RelativePoint(QPoint globalpoint)
 {
     int x_offset = 0;
     int y_offset = 0;
@@ -518,18 +593,18 @@ QPoint DocummentPDF::global2RelativePoint(QPoint globalpoint)
     return qpoint;
 }
 
-bool DocummentPDF::setSelectTextStyle(QColor paintercolor, QColor pencolor, int penwidth)
+bool DocummentDJVU::setSelectTextStyle(QColor paintercolor, QColor pencolor, int penwidth)
 {
     if (!document) {
         return false;
     }
     for (int i = 0; i < m_pages.size(); i++) {
-        PagePdf *ppdf = (PagePdf *)m_pages.at(i);
+        PageDJVU *ppdf = (PageDJVU *)m_pages.at(i);
         ppdf->setSelectTextStyle(paintercolor, pencolor, penwidth);
     }
 }
 
-bool DocummentPDF::mouseSelectText(QPoint start, QPoint stop)
+bool DocummentDJVU::mouseSelectText(QPoint start, QPoint stop)
 {
     if (!document) {
         return false;
@@ -626,7 +701,7 @@ bool DocummentPDF::mouseSelectText(QPoint start, QPoint stop)
     //    qDebug() << "startpagenum:" << startpagenum << " endpagenum:" << endpagenum;
     bool re = false;
     for (int i = startpagenum; i < endpagenum + 1; i++) {
-        PagePdf *ppdf = (PagePdf *)m_pages.at(i);
+        PageDJVU *ppdf = (PageDJVU *)m_pages.at(i);
         QPoint pfirst = QPoint(m_pages.at(i)->x(), m_pages.at(i)->y());
         QPoint plast = QPoint(m_pages.at(i)->width() + m_pages.at(i)->x(),
                               m_pages.at(i)->height() + m_pages.at(i)->y());
@@ -667,7 +742,7 @@ bool DocummentPDF::mouseSelectText(QPoint start, QPoint stop)
     return re;
 }
 
-int DocummentPDF::pointInWhichPage(QPoint &qpoint)
+int DocummentDJVU::pointInWhichPage(QPoint &qpoint)
 {
     int pagenum = -1;
     for (int i = 0; i < m_widgets.size(); i++) {
@@ -707,7 +782,7 @@ int DocummentPDF::pointInWhichPage(QPoint &qpoint)
     return pagenum;
 }
 
-bool DocummentPDF::mouseBeOverText(QPoint point)
+bool DocummentDJVU::mouseBeOverText(QPoint point)
 {
     if (!document) {
         return false;
@@ -717,23 +792,23 @@ bool DocummentPDF::mouseBeOverText(QPoint point)
     pagenum = pointInWhichPage(qpoint);
     qDebug() << "mouseBeOverText pagenum:" << pagenum;
     if (-1 != pagenum) {
-        PagePdf *ppdf = (PagePdf *)m_pages.at(pagenum);
+        PageDJVU *ppdf = (PageDJVU *)m_pages.at(pagenum);
         return ppdf ->ifMouseMoveOverText(qpoint);
     }
     return false;
 }
 
-bool DocummentPDF::getImage(int pagenum, QImage &image, double width, double height)
+bool DocummentDJVU::getImage(int pagenum, QImage &image, double width, double height)
 {
-    PagePdf *ppdf = (PagePdf *)m_pages.at(pagenum);
+    PageDJVU *ppdf = (PageDJVU *)m_pages.at(pagenum);
     return ppdf->getImage(image, width, height);
 }
-int DocummentPDF::getPageSNum()
+int DocummentDJVU::getPageSNum()
 {
     return m_pages.size();
 }
 
-bool DocummentPDF::showMagnifier(QPoint point)
+bool DocummentDJVU::showMagnifier(QPoint point)
 {
     if (!document || !m_magnifierwidget) {
         return false;
@@ -754,29 +829,29 @@ bool DocummentPDF::showMagnifier(QPoint point)
     if (-1 != pagenum) {
         if (pagenum != m_lastmagnifierpagenum && -1 != m_lastmagnifierpagenum) {
             if (pagenum > m_lastmagnifierpagenum && m_lastmagnifierpagenum - 3 > 0) {
-                PagePdf *ppdf = (PagePdf *)m_pages.at(m_lastmagnifierpagenum - 3);
+                PageDJVU *ppdf = (PageDJVU *)m_pages.at(m_lastmagnifierpagenum - 3);
                 ppdf->clearMagnifierPixmap();
                 if (pagenum - m_lastmagnifierpagenum > 1) {
-                    ppdf = (PagePdf *)m_pages.at(m_lastmagnifierpagenum - 2);
+                    ppdf = (PageDJVU *)m_pages.at(m_lastmagnifierpagenum - 2);
                     ppdf->clearMagnifierPixmap();
                 }
             } else if (pagenum < m_lastmagnifierpagenum && m_lastmagnifierpagenum + 3 < m_pages.size()) {
-                PagePdf *ppdf = (PagePdf *)m_pages.at(m_lastmagnifierpagenum + 3);
+                PageDJVU *ppdf = (PageDJVU *)m_pages.at(m_lastmagnifierpagenum + 3);
                 ppdf->clearMagnifierPixmap();
                 if ( m_lastmagnifierpagenum - pagenum > 1) {
-                    ppdf = (PagePdf *)m_pages.at(m_lastmagnifierpagenum + 2);
+                    ppdf = (PageDJVU *)m_pages.at(m_lastmagnifierpagenum + 2);
                     ppdf->clearMagnifierPixmap();
                 }
             }
             for (int i = pagenum - 3; i < pagenum + 4; i++) {
                 if (i > 0 && i < m_pages.size()) {
-                    PagePdf *ppdf = (PagePdf *)m_pages.at(i);
+                    PageDJVU *ppdf = (PageDJVU *)m_pages.at(i);
                     ppdf->loadMagnifierCacheThreadStart(ppdf->width() *m_magnifierwidget->getMagnifierScale(), ppdf->height() *m_magnifierwidget->getMagnifierScale());
                 }
             }
         }
         m_lastmagnifierpagenum = pagenum;
-        PagePdf *ppdf = (PagePdf *)m_pages.at(pagenum);
+        PageDJVU *ppdf = (PageDJVU *)m_pages.at(pagenum);
         QPixmap pixmap;
         if (ppdf ->getMagnifierPixmap(pixmap, qpoint, m_magnifierwidget->getMagnifierRadius(), ppdf->width() *m_magnifierwidget->getMagnifierScale(), ppdf->height() *m_magnifierwidget->getMagnifierScale())) {
             m_magnifierwidget->setPixmap(pixmap);
@@ -814,7 +889,7 @@ bool DocummentPDF::showMagnifier(QPoint point)
     return false;
 }
 
-int DocummentPDF::currentPageNo()
+int DocummentDJVU::currentPageNo()
 {
     if (m_bslidemodel) {
         return m_slidepageno;
@@ -865,14 +940,14 @@ int DocummentPDF::currentPageNo()
     return pagenum;
 }
 
-bool DocummentPDF::pageJump(int pagenum)
+bool DocummentDJVU::pageJump(int pagenum)
 {
     if (pagenum < 0 || pagenum > m_pages.size())
         return false;
     if (m_bslidemodel) {
         QImage image;
         double width = m_slidewidget->width(), height = m_slidewidget->height();
-        PagePdf *ppdf = (PagePdf *)m_pages.at(pagenum);
+        PageDJVU *ppdf = (PageDJVU *)m_pages.at(pagenum);
         if (!ppdf->getSlideImage(image, width, height)) {
             return false;
         }
@@ -940,25 +1015,25 @@ bool DocummentPDF::pageJump(int pagenum)
     return true;
 }
 
-void DocummentPDF::docBasicInfo(stFileInfo &info)
+void DocummentDJVU::docBasicInfo(stFileInfo &info)
 {
     info = m_fileinfo;
 }
 
-bool DocummentPDF::annotationClicked(const QPoint &pos, QString &strtext)
+bool DocummentDJVU::annotationClicked(const QPoint &pos, QString &strtext)
 {
     QPoint pt(pos);
     int ipage = pointInWhichPage(pt);
     if (ipage < 0) return  false;
-    return static_cast<PagePdf>(m_pages.at(ipage)).annotationClicked(pt, strtext);
+    return static_cast<PageDJVU>(m_pages.at(ipage)).annotationClicked(pt, strtext);
 }
 
-void DocummentPDF::title(QString &title)
+void DocummentDJVU::title(QString &title)
 {
-    title = document->title();
+//    title = document->title();
 }
 
-void DocummentPDF::slot_vScrollBarValueChanged(int value)
+void DocummentDJVU::slot_vScrollBarValueChanged(int value)
 {
     qDebug() << "slot_vScrollBarValueChanged" << value;
     if (!donotneedreloaddoc) {
@@ -974,7 +1049,7 @@ void DocummentPDF::slot_vScrollBarValueChanged(int value)
     }
 }
 
-void DocummentPDF::slot_hScrollBarValueChanged(int value)
+void DocummentDJVU::slot_hScrollBarValueChanged(int value)
 {
     qDebug() << "slot_hScrollBarValueChanged" << value;
     if (!donotneedreloaddoc) {
@@ -990,7 +1065,7 @@ void DocummentPDF::slot_hScrollBarValueChanged(int value)
     }
 }
 
-Page::Link *DocummentPDF::mouseBeOverLink(QPoint point)
+Page::Link *DocummentDJVU::mouseBeOverLink(QPoint point)
 {
     if (!document) {
         return nullptr;
@@ -1000,13 +1075,13 @@ Page::Link *DocummentPDF::mouseBeOverLink(QPoint point)
     pagenum = pointInWhichPage(qpoint);
     qDebug() << "mouseBeOverLink pagenum:" << pagenum;
     if (-1 != pagenum) {
-        PagePdf *ppdf = (PagePdf *)m_pages.at(pagenum);
+        PageDJVU *ppdf = (PageDJVU *)m_pages.at(pagenum);
         return ppdf ->ifMouseMoveOverLink(qpoint);
     }
     return nullptr;
 }
 
-bool DocummentPDF::getSelectTextString(QString &st)
+bool DocummentDJVU::getSelectTextString(QString &st)
 {
     if (!document) {
         return false;
@@ -1014,7 +1089,7 @@ bool DocummentPDF::getSelectTextString(QString &st)
     st = "";
     bool bselectexit = false;
     for (int i = 0; i < m_pages.size(); i++) {
-        PagePdf *ppdf = (PagePdf *)m_pages.at(i);
+        PageDJVU *ppdf = (PageDJVU *)m_pages.at(i);
         QString stpage = "";
         if (ppdf->getSelectTextString(stpage)) {
             bselectexit = true;
@@ -1024,7 +1099,7 @@ bool DocummentPDF::getSelectTextString(QString &st)
     return bselectexit;
 }
 
-bool DocummentPDF::showSlideModel()
+bool DocummentDJVU::showSlideModel()
 {
     if (!document) {
         return false;
@@ -1044,4 +1119,22 @@ bool DocummentPDF::showSlideModel()
     this->show();
     m_slidewidget->hide();
     return false;
+}
+
+
+ddjvu_document_t *DocummentDJVU::getDocument()
+{
+    return document;
+}
+ddjvu_context_t *DocummentDJVU::getContext()
+{
+    return m_context;
+}
+ddjvu_format_t *DocummentDJVU::getFormat()
+{
+    return m_format;
+}
+QHash< QString, int > DocummentDJVU::getPageByName()
+{
+    return m_pageByName;
 }

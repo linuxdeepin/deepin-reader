@@ -3,41 +3,6 @@
 #include <QPainter>
 #include <QDebug>
 
-ThreadLoadMagnifierCache::ThreadLoadMagnifierCache()
-{
-//    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
-    m_page = nullptr;
-    restart = false;
-    m_width = 0;
-    m_height = 0;
-}
-
-void ThreadLoadMagnifierCache::setRestart()
-{
-    restart = true;
-}
-
-void ThreadLoadMagnifierCache::setPage(PagePdf *page, double width, double height)
-{
-    m_page = page;
-    m_width = width;
-    m_height = height;
-}
-
-void ThreadLoadMagnifierCache::run()
-{
-    if (!m_page)
-        return;
-    restart = true;
-    while (restart) {
-        restart = false;
-        if (m_width > 0 && m_height > 0) {
-            m_page->loadMagnifierPixmapCache(m_width, m_height);
-        }
-    }
-}
-
-
 PagePdf::PagePdf(QWidget *parent)
     : PageBase(parent),
       m_imagewidth(0.01),
@@ -124,7 +89,7 @@ bool PagePdf::showImage(double scale, RotateType_EM rotate)
     int xres = 72.0, yres = 72.0;
     m_scale = scale;
     m_rotate = rotate;
-    QImage image = m_page->renderToImage(xres * m_scale, yres * m_scale, m_imagewidth * m_scale, m_imageheight * m_scale);
+    QImage image = m_page->renderToImage(xres * m_scale, yres * m_scale, -1, -1, m_imagewidth * m_scale, m_imageheight * m_scale);
     QPixmap map = QPixmap::fromImage(image);
     QMatrix leftmatrix;
     switch (m_rotate) {
@@ -160,7 +125,7 @@ bool PagePdf::getSlideImage(QImage &image, double &width, double &height)
     }
     width = m_imagewidth * scale;
     height = m_imageheight * scale;
-    image = m_page->renderToImage(xres * scale, yres * scale, width, height);
+    image = m_page->renderToImage(xres * scale, yres * scale, -1, -1, width, height);
     return true;
 }
 
@@ -171,7 +136,7 @@ bool PagePdf::getImage(QImage &image, double width, double height)
     int xres = 72.0, yres = 72.0;
     double scalex = width / m_imagewidth;
     double scaley = height / m_imageheight;
-    image = m_page->renderToImage(xres * scalex, yres * scaley, width, height);
+    image = m_page->renderToImage(xres * scalex, yres * scaley, -1, -1, width, height);
     return true;
 }
 

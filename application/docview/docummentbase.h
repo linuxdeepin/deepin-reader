@@ -12,6 +12,7 @@
 #include <QPoint>
 #include <QColor>
 #include <QVideoWidget>
+#include <QThread>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -21,6 +22,37 @@ enum ViewMode_EM {
     ViewMode_FacingPage
 };
 #include <QtDebug>
+
+class DocummentBase;
+class ThreadLoadDoc : public QThread
+{
+public:
+    ThreadLoadDoc();
+    void setDoc(DocummentBase *doc);
+    void setRestart();
+
+protected:
+    virtual void run();
+
+private:
+    DocummentBase *m_doc;
+    bool restart;
+};
+
+class ThreadLoadWords : public QThread
+{
+public:
+    ThreadLoadWords();
+    void setDoc(DocummentBase *doc);
+    void setRestart();
+
+protected:
+    virtual void run();
+
+private:
+    DocummentBase *m_doc;
+    bool restart;
+};
 
 class MagnifierWidget: public DWidget
 {
@@ -155,6 +187,16 @@ public:
         return false;
     }
 
+    virtual bool loadPages()
+    {
+        return false;
+    }
+
+    virtual bool loadWords()
+    {
+        return false;
+    }
+
     bool exitSlideModel()
     {
         m_slidewidget->hide();
@@ -219,6 +261,8 @@ protected:
     DLabel *pslidelabel;
     int m_slidepageno;
     DLabel *pslideanimationlabel;
+    ThreadLoadDoc m_threadloaddoc;
+    ThreadLoadWords m_threadloadwords;
 };
 
 #endif // DOCUMMENTBASE_H

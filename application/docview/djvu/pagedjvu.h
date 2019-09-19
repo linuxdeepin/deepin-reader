@@ -1,23 +1,27 @@
-#ifndef PAGEPDF_H
-#define PAGEPDF_H
+#ifndef PAGEDJVU_H
+#define PAGEDJVU_H
 #include "../pagebase.h"
-#include <QImage>
 #include <poppler-qt5.h>
+#include <libdjvu/ddjvuapi.h>
+#include <libdjvu/miniexp.h>
+#include <QImage>
+#include <QThread>
 
 struct stWord {
     QString s;
     QRectF rect;
 };
-class PagePdf: public PageBase
+class DocummentDJVU;
+class PageDJVU: public PageBase
 {
     Q_OBJECT
 public:
-    PagePdf(QWidget *parent = 0);
+    PageDJVU(QWidget *parent = 0);
     bool ifMouseMoveOverText(const QPoint point);
     bool pageTextSelections(const QPoint start, const QPoint end);
     void clearPageTextSelections();
-    void appendWord(stWord word);
-    void setPage(Poppler::Page *page);
+//    void appendWord(stWord word);
+    void setPage(int pageno);
     void setScaleAndRotate(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     bool getImage(QImage &image, double width, double height);
@@ -31,6 +35,7 @@ public:
     QString removeAnnotation(const QPoint &pos);
     void removeAnnotation(const QString &struuid);
     bool annotationClicked(const QPoint &pos, QString &strtext);
+    bool loadWords();
     bool loadLinks();
     Page::Link *ifMouseMoveOverLink(const QPoint point);
     void loadMagnifierPixmapCache(double width, double height) override;
@@ -40,6 +45,9 @@ public:
 protected:
     void paintEvent(QPaintEvent *event) override;
 private:
+    DocummentDJVU *m_parent;
+    int m_pageno;
+    int m_resolution;
     void removeAnnotation(Poppler::Annotation *annotation);
     void getImagePoint(QPoint &point);
     QString addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color);
@@ -47,7 +55,7 @@ private:
     QList<stWord> m_words;
     double m_imagewidth;
     double m_imageheight;
-    Poppler::Page *m_page;
+//    Poppler::Page *m_page;
     QColor m_paintercolor;
     QColor m_pencolor;
     int m_penwidth;
@@ -57,4 +65,4 @@ private:
     int m_selecttextendword;
 };
 
-#endif // PAGEPDF_H
+#endif // PAGEDJVU_H

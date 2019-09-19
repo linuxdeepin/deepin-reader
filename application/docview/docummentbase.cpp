@@ -3,6 +3,63 @@
 #include <QGridLayout>
 #include <QPainter>
 
+ThreadLoadDoc::ThreadLoadDoc()
+{
+    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
+    m_doc = nullptr;
+    restart = false;
+}
+
+void ThreadLoadDoc::setRestart()
+{
+    restart = true;
+}
+
+void ThreadLoadDoc::setDoc(DocummentBase *doc)
+{
+    m_doc = doc;
+}
+
+void ThreadLoadDoc::run()
+{
+    if (!m_doc)
+        return;
+    restart = true;
+    while (restart) {
+        restart = false;
+        m_doc->loadPages();
+    }
+}
+
+
+ThreadLoadWords::ThreadLoadWords()
+{
+    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
+    m_doc = nullptr;
+    restart = false;
+}
+
+void ThreadLoadWords::setDoc(DocummentBase *doc)
+{
+    m_doc = doc;
+}
+
+void ThreadLoadWords::setRestart()
+{
+    restart = true;
+}
+
+void ThreadLoadWords::run()
+{
+    if (!m_doc)
+        return;
+    restart = true;
+    while (restart) {
+        restart = false;
+        m_doc->loadWords();
+    }
+}
+
 MagnifierWidget::MagnifierWidget(DWidget *parent): DWidget(parent)
 {
 

@@ -3,6 +3,7 @@
 #include <DObject>
 #include <DLabel>
 #include <DGuiApplicationHelper>
+#include <QThread>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -44,14 +45,37 @@ enum RotateType_EM {
     RotateType_270
 };
 
+class PageBase;
+class ThreadLoadMagnifierCache : public QThread
+{
+public:
+    ThreadLoadMagnifierCache();
+    void setPage(PageBase *page, double width, double height);
+    void setRestart();
+
+protected:
+    virtual void run();
+
+private:
+    PageBase *m_page;
+    bool restart;
+    double m_width;
+    double m_height;
+};
+
 class PageBase: public DLabel
 {
     Q_OBJECT
 public:
     PageBase(DWidget *parent = 0);
+    virtual void loadMagnifierPixmapCache(double width, double height)
+    {
+        return;
+    }
 protected:
     RotateType_EM m_rotate;
     double m_scale;
+    ThreadLoadMagnifierCache loadmagnifiercachethread;
 };
 
 #endif // PAGEBASE_H

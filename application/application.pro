@@ -7,7 +7,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = deepin_reader
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
-PKGCONFIG += x11 poppler-qt5
+PKGCONFIG += x11 poppler-qt5 ddjvuapi
 LIBS+=-luuid
 
 
