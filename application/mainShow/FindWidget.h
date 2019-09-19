@@ -46,6 +46,7 @@ private slots:
     void handleContentChanged();
     void slotFindNextBtnClicked();
     void slotFindPrevBtnClicked();
+    void slotClearContent();
 
 protected:
     void hideEvent(QHideEvent *event);

@@ -24,12 +24,17 @@ public:
 
 signals:
     void sigFlushSearchWidget(QVariant);
+    void sigClearWidget();
 
 private slots:
     void slotFlushSearchList(QVariant);
+    void slotClearWidget();
 
 protected:
     void initWidget() override;
+
+private:
+    void initConnections();
 
 private:
     void addNotesItem(const QImage &image, const int &page, const QString &text, const int &resultNum);

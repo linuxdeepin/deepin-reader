@@ -20,9 +20,6 @@ class TextOperationWidget : public CustomWidget
 public:
     TextOperationWidget(CustomWidget *parent = nullptr);
 
-private:
-    DPushButton *createBtn(const QString &, const char *member);
-
 private slots:
     void SlotBtnCopyClicked();
     void SlotBtnRemoveHighLightedClicked();
@@ -33,8 +30,7 @@ private slots:
 
 private:
     void sendMsgAndHide(const int &, const QString &msgContent = "");
-
-private:
+    DPushButton *createBtn(const QString &, const char *member);
 
     // IObserver interface
 public:

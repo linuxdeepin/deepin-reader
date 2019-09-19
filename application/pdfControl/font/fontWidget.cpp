@@ -95,9 +95,9 @@ void FontWidget::initWidget()
     m_pEnlargeSlider->setMinimum(50);
     m_pEnlargeSlider->setMaximum(300);
     m_pEnlargeSlider->setValue(100);
-    m_pEnlargeSlider->setSingleStep(25);
+    m_pEnlargeSlider->slider()->setSingleStep(25);
     m_pEnlargeSlider->setPageStep(25);
-    m_pEnlargeSlider->setTickPosition(QSlider::TicksBothSides);
+    m_pEnlargeSlider->slider()->setTickPosition(QSlider::TicksBothSides);
     m_pEnlargeSlider->setFixedSize(QSize(100, 25));
     connect(m_pEnlargeSlider, SIGNAL(valueChanged(int)),  SLOT(slotSetChangeVal(int)));
 
