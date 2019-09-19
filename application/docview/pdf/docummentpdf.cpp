@@ -13,17 +13,6 @@ DocummentPDF::DocummentPDF(DWidget *parent): DocummentBase(parent),
     document(nullptr),
     m_fileinfo()
 {
-    m_threadloaddoc.setDoc(this);
-    m_threadloadwords.setDoc(this);
-    setWidgetResizable(true);
-    setWidget(&m_widget);
-    m_scale = 1;
-    m_rotate = RotateType_Normal;
-    m_currentpageno = 0;
-    pblankwidget = new DWidget(this);
-    pblankwidget->setMouseTracking(true);
-    pblankwidget->hide();
-    donotneedreloaddoc = false;
 }
 
 bool DocummentPDF::openFile(QString filepath)

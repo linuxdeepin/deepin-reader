@@ -164,9 +164,19 @@ void MagnifierWidget::setMagnifierColor(QColor color)
 
 DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
     , m_bModified(false), m_bslidemodel(false), m_slidepageno(-1),
-    m_currentpageno(-1)
-    //, pslideanimationlabel(nullptr), pslidelabel(nullptr)
+    m_currentpageno(-1),
+    m_scale(1),
+    m_rotate(RotateType_Normal),
+    donotneedreloaddoc(false)
 {
+    m_currentpageno = 0;
+    m_threadloaddoc.setDoc(this);
+    m_threadloadwords.setDoc(this);
+    setWidgetResizable(true);
+    setWidget(&m_widget);
+    pblankwidget = new DWidget(this);
+    pblankwidget->setMouseTracking(true);
+    pblankwidget->hide();
     m_magnifierwidget = new MagnifierWidget(parent);
     m_slidewidget = new DWidget(parent);
     pslidelabel = new DLabel(m_slidewidget);
