@@ -66,10 +66,16 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
                 m_pMoveEndPoint = docGlobalPos;
                 pDocummentProxy->mouseSelectText(m_pStartPoint, m_pMoveEndPoint);
             } else {
-                if (pDocummentProxy->mouseBeOverText(docGlobalPos))
-                    setCursor(QCursor(Qt::IBeamCursor));
-                else {
-                    setCursor(QCursor(Qt::ArrowCursor));
+                //  首先判断文档划过属性
+                Page::Link *pLink  = pDocummentProxy->mouseBeOverLink(docGlobalPos);
+                if (pLink) {
+                    setCursor(QCursor(Qt::PointingHandCursor));
+                } else {
+                    if (pDocummentProxy->mouseBeOverText(docGlobalPos))
+                        setCursor(QCursor(Qt::IBeamCursor));
+                    else {
+                        setCursor(QCursor(Qt::ArrowCursor));
+                    }
                 }
             }
         }
@@ -86,15 +92,24 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 
     Qt::MouseButton nBtn = event->button();
     if (nBtn == Qt::LeftButton) {
+        DocummentProxy *pDocummentProxy = DocummentProxy::instance();
 
-        m_bSelectOrMove = true;
+        QPoint globalPos = event->globalPos();
+        QPoint docGlobalPos = pDocummentProxy->global2RelativePoint(globalPos);
 
-        if (m_nCurrentHandelState == Handel_State) {
-            m_pMoveStartPoint = event->globalPos();     //  变成手，　需要的是　相对坐标
-        } else if (m_nCurrentHandelState == Default_State) {
-            DocummentProxy *pDocummentProxy = DocummentProxy::instance();
-            pDocummentProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
-            m_pStartPoint = pDocummentProxy->global2RelativePoint(event->globalPos());
+        //  点击的时候　先判断　点击处　　是否有链接之类
+        Page::Link *pLink  = pDocummentProxy->mouseBeOverLink(docGlobalPos);
+        if (pLink) {
+            m_pDocummentFileHelper->onClickPageLink(pLink);
+        } else {
+            m_bSelectOrMove = true;
+
+            if (m_nCurrentHandelState == Handel_State) {
+                m_pMoveStartPoint = globalPos;     //  变成手，　需要的是　相对坐标
+            } else if (m_nCurrentHandelState == Default_State) {
+                pDocummentProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
+                m_pStartPoint = pDocummentProxy->global2RelativePoint(globalPos);
+            }
         }
     }
 }
@@ -222,8 +237,7 @@ int FileViewWidget::setHandShape(const QString &data)
 
 void FileViewWidget::onFileAddAnnotation(const QString &)
 {
-    QString ss = DocummentProxy::instance()->addAnnotation(m_pRightClickPoint, m_pRightClickPoint);
-    qDebug() << "   onFileAddAnnotation     " << ss;
+    DocummentProxy::instance()->addAnnotation(m_pRightClickPoint, m_pRightClickPoint);
 }
 
 void FileViewWidget::onFileRemoveAnnotation()
@@ -336,7 +350,6 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
                     sendMsg(MSG_OPERATION_PREV_PAGE);
                 } else if (msgContent == "Down") {
                     sendMsg(MSG_OPERATION_NEXT_PAGE);
-                } else if (msgContent == "Esc") {
                 }
             }
         }

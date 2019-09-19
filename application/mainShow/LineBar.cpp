@@ -31,44 +31,13 @@ LineBar::LineBar(DLineEdit *parent)
     // Init.
     setClearButtonEnabled(true);
 
-//    setFixedWidth(150);
-
-    m_autoSaveInternal = 500;
-    m_autoSaveTimer = new QTimer(this);
-    m_autoSaveTimer->setSingleShot(true);
-
-    connect(m_autoSaveTimer, &QTimer::timeout, this, &LineBar::handleTextChangeTimer);
     connect(this, &DLineEdit::textChanged, this, &LineBar::handleTextChanged, Qt::QueuedConnection);
 }
-
-void LineBar::handleTextChangeTimer()
-{
-    // Emit contentChanged signal.
-    contentChanged();
-}
-
 void LineBar::handleTextChanged()
 {
-    // Stop timer if new character is typed, avoid unused timer run.
-    if (m_autoSaveTimer->isActive()) {
-        m_autoSaveTimer->stop();
-    }
-
-    // Start new timer.
-    m_autoSaveTimer->start(m_autoSaveInternal);
-
     if (text() == "") {
-        emit clearContent();
+        clearContent();
     }
-}
-
-void LineBar::focusOutEvent(QFocusEvent *e)
-{
-    // Emit focus out signal.
-    focusOut();
-
-    // Throw event out avoid DLineEdit can't hide cursor after lost focus.
-    DLineEdit::focusOutEvent(e);
 }
 
 void LineBar::keyPressEvent(QKeyEvent *e)
@@ -81,10 +50,6 @@ void LineBar::keyPressEvent(QKeyEvent *e)
         pressEnter();
     } else if (key == "Ctrl + Return") {
         pressCtrlEnter();
-    } else if (key == "Alt + Return") {
-        pressAltEnter();
-    } else if (key == "Meta + Return") {
-        pressMetaEnter();
     } else {
         // Pass event to DLineEdit continue, otherwise you can't type anything after here. ;)
         DLineEdit::keyPressEvent(e);

@@ -66,7 +66,6 @@ private:
 
     void setBookMarkStateWidget();
 
-
 private:
     BookMarkStateLabel      *m_pBookMarkStateLabel = nullptr;
     FindWidget              *m_pFindWidget = nullptr;
