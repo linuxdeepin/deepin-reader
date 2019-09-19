@@ -9,11 +9,6 @@ FontWidget::FontWidget(CustomWidget *parent):
     initWidget();
 }
 
-FontWidget::~FontWidget()
-{
-
-}
-
 int FontWidget::dealWithData(const int &msgType, const QString &)
 {
     int scale = 0;
@@ -71,7 +66,7 @@ void FontWidget::initWidget()
     t_pHLayout6->setContentsMargins(0, 0, 0, 0);
     t_pHLayout6->setSpacing(0);
 
-    m_pEnlargeLab = new QLabel;
+    m_pEnlargeLab = new DLabel;
     m_pEnlargeLab->setText(tr("100%"));
     m_pEnlargeLab->setAlignment(Qt::AlignCenter);
     ft.setPointSize(15);
@@ -82,14 +77,14 @@ void FontWidget::initWidget()
     t_pHLayout1->addWidget(m_pEnlargeLab);
     t_pHLayout1->setSpacing(1);
 
-    m_pMinLabALab = new QLabel;
+    m_pMinLabALab = new DLabel;
     m_pMinLabALab->setText(tr("A"));
     m_pMinLabALab->setAlignment(Qt::AlignCenter);
     ft.setPointSize(8);
     m_pMinLabALab->setFont(ft);
     m_pMinLabALab->setFixedSize(QSize(25, 25));
 
-    m_pMaxLabALab = new QLabel;
+    m_pMaxLabALab = new DLabel;
     m_pMaxLabALab->setText(tr("A"));
     m_pMaxLabALab->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
@@ -133,7 +128,7 @@ void FontWidget::initWidget()
     m_pSuitHBtn->setFont(ft);
     m_pSuitHBtn->setFixedSize(QSize(120, 25));
     connect(m_pSuitHBtn, SIGNAL(clicked()), SLOT(slotSetSuitHCheckIcon()));
-    m_pSuitHLab = new QLabel;
+    m_pSuitHLab = new DLabel;
     m_pSuitHLab->setFixedSize(QSize(30, 25));
     //t_pHLayout4->addSpacing(1);
     t_pHLayout4->addWidget(m_pSuitHBtn);
@@ -161,7 +156,7 @@ void FontWidget::initWidget()
     m_pRotateLeftBtn->setFont(ft);
     m_pRotateLeftBtn->setFixedSize(QSize(120, 25));
     connect(m_pRotateLeftBtn, SIGNAL(clicked()), SLOT(slotSetRotateLeftCheckIcon()));
-    m_pRotateLeftLab = new QLabel;
+    m_pRotateLeftLab = new DLabel;
     m_pRotateLeftLab->setFixedSize(QSize(30, 25));
     //t_pHLayout6->addSpacing(1);
     t_pHLayout6->addWidget(m_pRotateLeftBtn);
@@ -175,7 +170,7 @@ void FontWidget::initWidget()
     m_pRotateRightBtn->setFont(ft);
     m_pRotateRightBtn->setFixedSize(QSize(120, 25));
     connect(m_pRotateRightBtn, SIGNAL(clicked()), SLOT(slotSetRotateRightCheckIcon()));
-    m_pRotateRightLab = new QLabel;
+    m_pRotateRightLab = new DLabel;
     m_pRotateRightLab->setFixedSize(QSize(30, 25));
     //t_pHLayout7->addSpacing(1);
     t_pHLayout7->addWidget(m_pRotateRightBtn);
@@ -266,40 +261,12 @@ void FontWidget::rotateFileView(bool isRight)
 {
     int ival = m_pEnlargeSlider->value();
 
-//    int t_rotate = 0;
-
     if (isRight) {
         m_rotate += 90;
     } else {
         m_rotate -= 90;
     }
     scaleAndRotate(ival);
-//    t_rotate = (m_rotate / 90) % 4;
-
-//    switch (t_rotate) {
-//    case RotateType_Normal:
-//        m_rotate = 360;
-//        m_rotateType = RotateType_Normal;
-//        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_Normal);
-//        break;
-//    case RotateType_90:
-//        m_rotateType = RotateType_90;
-//        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_90);
-//        break;
-//    case RotateType_180:
-//        m_rotateType = RotateType_180;
-//        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_180);
-//        break;
-//    case RotateType_270:
-//        m_rotateType = RotateType_270;
-//        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_270);
-//        break;
-//    default:
-//        m_rotate = 360;
-//        m_rotateType = RotateType_Normal;
-//        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_Normal);
-//        break;
-//    }
 }
 
 void FontWidget::scaleAndRotate(int ival)
@@ -340,7 +307,6 @@ void FontWidget::slotSetChangeVal(int val)
     m_pEnlargeLab->setText(tr("%1%").arg(val));
 
     scaleAndRotate(val);
-    //DocummentProxy::instance()->scaleRotateAndShow((val * 0.01), RotateType_Normal);
 }
 
 void FontWidget::slotSetDoubPageViewCheckIcon()
