@@ -8,6 +8,8 @@
 #include "application.h"
 
 #include "docview/docummentproxy.h"
+#include <QPrinter>
+#include <QPrintDialog>
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
@@ -53,7 +55,7 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
         if (m_nCurrentHandelState == Handel_State) {    //   手型状态下， 按住鼠标左键 位置进行移动
             if (m_bSelectOrMove) {
 
-                QPoint mvPoint = globalPos - m_pMoveStartPoint;
+                QPoint mvPoint = globalPos - m_pHandleMoveStartPoint;
                 int mvX = mvPoint.x();
                 int mvY = mvPoint.y();
 
@@ -105,10 +107,10 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
             m_bSelectOrMove = true;
 
             if (m_nCurrentHandelState == Handel_State) {
-                m_pMoveStartPoint = globalPos;     //  变成手，　需要的是　相对坐标
+                m_pHandleMoveStartPoint = globalPos;     //  变成手，　需要的是　相对坐标
             } else if (m_nCurrentHandelState == Default_State) {
                 pDocummentProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
-                m_pStartPoint = pDocummentProxy->global2RelativePoint(globalPos);
+                m_pStartPoint = docGlobalPos;
             }
         }
     }
@@ -129,7 +131,11 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 void FileViewWidget::dragEnterEvent(QDragEnterEvent *event)
 {
     // Accept drag event if mime type is url.
-    event->accept();
+    const QMimeData *mimeData = event->mimeData();
+
+    if (mimeData->hasUrls()) {
+        event->accept();
+    }
 }
 
 void FileViewWidget::dropEvent(QDropEvent *event)
@@ -235,8 +241,11 @@ int FileViewWidget::setHandShape(const QString &data)
     return ConstantMsg::g_effective_res;
 }
 
-void FileViewWidget::onFileAddAnnotation(const QString &)
+void FileViewWidget::onFileAddAnnotation(const QString &sColor)
 {
+    QList<QColor> colorList = {};
+
+    qDebug() << "onFileAddAnnotation            " << sColor;
     DocummentProxy::instance()->addAnnotation(m_pRightClickPoint, m_pRightClickPoint);
 }
 
@@ -252,14 +261,13 @@ void FileViewWidget::initConnections()
 
     connect(this, SIGNAL(sigShowFileAttr()), this, SLOT(slotShowFileAttr()));
     connect(this, SIGNAL(sigShowFileFind()), this, SLOT(slotShowFindWidget()));
+    connect(this, SIGNAL(sigPrintFile()), this, SLOT(slotPrintFile()));
 }
 
 void FileViewWidget::setBookMarkStateWidget()
 {
     if (m_pBookMarkStateLabel == nullptr) {
         m_pBookMarkStateLabel = new BookMarkStateLabel(this);
-        connect(this, SIGNAL(sigSetMarkState(const bool &)),
-                m_pBookMarkStateLabel, SLOT(SlotSetMarkState(const bool &)));
     }
     int nParentWidth = this->width();
     int nWidget = m_pBookMarkStateLabel->width();
@@ -293,18 +301,34 @@ void FileViewWidget::slotShowFindWidget()
     m_pFindWidget->raise();
 }
 
+//  打印
+void FileViewWidget::slotPrintFile()
+{
+    QPrinter printer;
+    QString printerName = printer.printerName();
+    if ( printerName.size() > 0) {
+        QPrintDialog printDialog(&printer, this);
+        if (printDialog.exec() == QDialog::Accepted) {
+            //  print
+        }
+    } else {
+        qDebug() <<  "   no  print   ";
+    }
+}
+
 //  标题栏的菜单消息处理
 int FileViewWidget::dealWithTitleMenuRequest(const int &msgType, const QString &)
 {
     switch (msgType) {
-    case MSG_OPERATION_PRINT :      //  打印
-        return  ConstantMsg::g_effective_res;
     case MSG_OPERATION_ATTR:        //  打开该文件的属性信息
         emit sigShowFileAttr();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_FIND:        //  搜索
         emit sigShowFileFind();
         return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_PRINT :      //  打印
+        emit sigPrintFile();
+        return  ConstantMsg::g_effective_res;
     }
     return 0;
 }
@@ -334,9 +358,6 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         return magnifying(msgContent);
     case MSG_HANDLESHAPE:           //  手势 信号
         return setHandShape(msgContent);
-    case MSG_BOOKMARK_STATE :       //  当前页的书签状态
-        emit sigSetMarkState(msgContent.toInt());
-        return ConstantMsg::g_effective_res;
     }
 
     int nRes = dealWithTitleMenuRequest(msgType, msgContent);

@@ -1,4 +1,4 @@
-QT += core gui svg sql
+QT += core gui svg sql printsupport
 QT += dtkwidget
 QT += xml
 
@@ -26,7 +26,8 @@ SOURCES += \
 RESOURCES +=         resources.qrc
 
 HEADERS +=\
-    application.h\
+    application.h \
+    translator/Frame.h
 
 
 DISTFILES += \

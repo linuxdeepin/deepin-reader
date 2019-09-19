@@ -34,9 +34,9 @@ public:
     ~FileViewWidget() override;
 
 signals:
-    void sigSetMarkState(const bool &);
     void sigShowFileAttr();
     void sigShowFileFind();
+    void sigPrintFile();
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
@@ -51,6 +51,7 @@ private slots:
     void slotCustomContextMenuRequested(const QPoint &);
     void slotShowFileAttr();
     void slotShowFindWidget();
+    void slotPrintFile();
 
 private:
     int magnifying(const QString &);
@@ -80,7 +81,7 @@ private:
     bool        m_bSelectOrMove = false;      //  是否可以选中文字、移动
     QPoint      m_pStartPoint;
     QPoint      m_pRightClickPoint;            //   右键菜单点
-    QPoint      m_pMoveStartPoint;
+    QPoint      m_pHandleMoveStartPoint;
     QPoint      m_pMoveEndPoint;
 
     // CustomWidget interface
