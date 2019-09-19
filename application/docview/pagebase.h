@@ -38,6 +38,10 @@ struct Link {
 
 };
 }
+struct stWord {
+    QString s;
+    QRectF rect;
+};
 enum RotateType_EM {
     RotateType_Normal = 0,
     RotateType_90,
@@ -68,11 +72,46 @@ class PageBase: public DLabel
     Q_OBJECT
 public:
     PageBase(DWidget *parent = 0);
-    virtual void loadMagnifierPixmapCache(double width, double height)
+    virtual bool getImage(QImage &image, double width, double height)
     {
-        return;
+        return false;
     }
+    virtual bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal)
+    {
+        return false;
+    }
+    virtual bool getSlideImage(QImage &image, double &width, double &height)
+    {
+        return false;
+    }
+    void loadMagnifierPixmapCache(double width, double height);
+    bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100),
+                            QColor pencolor = QColor(72, 118, 255, 0),
+                            int penwidth = 0);
+    void clearPageTextSelections();
+    bool pageTextSelections(const QPoint start, const QPoint end);
+    bool ifMouseMoveOverText(const QPoint point);
+    bool getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, double width, double height);
+    bool clearMagnifierPixmap();
+    void loadMagnifierCacheThreadStart(double width, double height);
+    void setScaleAndRotate(double scale = 1, RotateType_EM rotate = RotateType_Normal);
+    Page::Link *ifMouseMoveOverLink(const QPoint point);
+    bool getSelectTextString(QString &st);
 protected:
+    void paintEvent(QPaintEvent *event) override;
+protected:
+    void getImagePoint(QPoint &point);
+    QColor m_paintercolor;
+    QColor m_pencolor;
+    int m_penwidth;
+    QList<QRect> paintrects;
+    QList< Page::Link * > m_links;
+    QList<stWord> m_words;
+    int m_selecttextstartword;
+    int m_selecttextendword;
+    double m_imagewidth;
+    double m_imageheight;
+    QPixmap m_magnifierpixmap;
     RotateType_EM m_rotate;
     double m_scale;
     ThreadLoadMagnifierCache loadmagnifiercachethread;

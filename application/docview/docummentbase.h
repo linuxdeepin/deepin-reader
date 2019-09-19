@@ -88,41 +88,24 @@ public:
     {
         return false;
     }
-    virtual bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0)
+    virtual bool bDocummentExist()
     {
         return false;
     }
-    virtual bool mouseSelectText(QPoint start, QPoint stop)
-    {
-        return false;
-    }
-    virtual void mouseSelectTextClear()
-    {
-        return;
-    }
-    virtual void scaleAndShow(double scale, RotateType_EM rotate)
-    {
-        return;
-    }
-    virtual bool mouseBeOverText(QPoint point)
-    {
-        return false;
-    }
+    bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
+    bool mouseSelectText(QPoint start, QPoint stop);
+    void mouseSelectTextClear();
+    void scaleAndShow(double scale, RotateType_EM rotate);
+    bool mouseBeOverText(QPoint point);
 
     virtual bool getImage(int pagenum, QImage &image, double width, double height)
     {
         return false;
     }
 
-    virtual QPoint global2RelativePoint(QPoint globalpoint)
-    {
-        return QPoint();
-    }
+    QPoint global2RelativePoint(QPoint globalpoint);
 
-    virtual bool showMagnifier(QPoint point)
-    {
-        return false;
-    }
+    bool showMagnifier(QPoint point);
 
     virtual bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3)
     {
@@ -133,17 +116,15 @@ public:
         m_magnifierwidget->setMagnifierScale(magnifierscale);
         m_magnifierwidget->setMagnifierRingWidth(magnifierringwidth);
         m_magnifierwidget->setMagnifierColor(magnifiercolor);
+        return true;
     }
 
-    virtual int getPageSNum()
+    int getPageSNum()
     {
-        return 0;
+        return m_pages.size();
     }
 
-    virtual bool setViewModeAndShow(ViewMode_EM viewmode)
-    {
-        return false;
-    }
+    bool setViewModeAndShow(ViewMode_EM viewmode);
 
     virtual bool save(const QString &filePath, bool withChanges)
     {
@@ -159,33 +140,18 @@ public:
 
 
     virtual void search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color = Qt::yellow) {}
-    virtual int currentPageNo()
-    {
-        return -1;
-    }
+    int currentPageNo();
 
-    virtual bool pageJump(int pagenum)
-    {
-        return false;
-    }
+    bool pageJump(int pagenum);
 
     virtual void clearSearch() {}
 
 
-    virtual Page::Link *mouseBeOverLink(QPoint point)
-    {
-        return nullptr;
-    }
+    Page::Link *mouseBeOverLink(QPoint point);
 
-    virtual bool getSelectTextString(QString &st)
-    {
-        return false;
-    }
+    bool getSelectTextString(QString &st);
 
-    virtual bool showSlideModel()
-    {
-        return false;
-    }
+    bool showSlideModel();
 
     virtual bool loadPages()
     {
@@ -206,11 +172,11 @@ public:
         return true;
     }
 
-    virtual void docBasicInfo(stFileInfo &info){}
+    virtual void docBasicInfo(stFileInfo &info) {}
 
-    virtual void findNext(){}
+    virtual void findNext() {}
 
-    virtual void findPrev(){}
+    virtual void findPrev() {}
 
     QList<PageBase *> *getPages()
     {
@@ -245,16 +211,14 @@ public:
 signals:
     void signal_pageChange(int);
 protected slots:
-    virtual void slot_vScrollBarValueChanged(int value)
-    {
-//        qDebug() << "slot_vScrollBarValueChanged" << value;
-    }
-    virtual void slot_hScrollBarValueChanged(int value)
-    {
-//        qDebug() << "slot_hScrollBarValueChanged" << value;
-    }
+    void slot_vScrollBarValueChanged(int value);
+    void slot_hScrollBarValueChanged(int value);
 protected:
+    int pointInWhichPage(QPoint &qpoint);
+    void showSinglePage();
+    void showFacingPage();
     QList<PageBase *> m_pages;
+    QList<DWidget *>m_widgets;
     DWidget m_widget;
     QVBoxLayout m_vboxLayout;
     ViewMode_EM m_viewmode;
@@ -268,6 +232,11 @@ protected:
     DLabel *pslideanimationlabel;
     ThreadLoadDoc m_threadloaddoc;
     ThreadLoadWords m_threadloadwords;
+    RotateType_EM m_rotate;
+    int m_currentpageno;
+    double m_scale;
+    bool donotneedreloaddoc;
+    DWidget *pblankwidget;
 };
 
 #endif // DOCUMMENTBASE_H
