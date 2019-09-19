@@ -21,7 +21,6 @@ class FontWidget : public CustomWidget
     Q_OBJECT
 public:
     FontWidget(CustomWidget *parent = nullptr);
-    ~FontWidget() override;
 
 signals:
     void sigWidgetHide();

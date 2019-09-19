@@ -224,3 +224,19 @@ bool DocummentProxy::exitSlideModel()
         return false;
     return m_documment->exitSlideModel();
 }
+
+void DocummentProxy::findNext()
+{
+    if(m_documment)
+    {
+        m_documment->findNext();
+    }
+}
+
+void DocummentProxy::findPrev()
+{
+    if(m_documment)
+    {
+        m_documment->findPrev();
+    }
+}

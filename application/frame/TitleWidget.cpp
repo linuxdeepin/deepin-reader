@@ -230,7 +230,7 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (msgType == MSG_OPERATION_FULLSCREEN) {
         m_pThumbnailBtn->setChecked(false);
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (msgContent == "Esc") {
+        if (msgContent == "Esc") {      //  退出放大镜模式
             m_pMagnifierBtn->setChecked(false);
             sendMsgToSubject(MSG_MAGNIFYING, QString::number(0));
         }

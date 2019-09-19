@@ -60,6 +60,7 @@ bool GlobalEventFilter::eventFilter(QObject *obj, QEvent *e)
 //            return true;
 //        }
         if (key == "Ctrl+S") {
+            NotifySubject::getInstance()->sendMsg(MSG_NOTIFY_KEY_MSG, key);
             return true;
         }
         if (key == "Ctrl+O") {

@@ -28,7 +28,8 @@ FindWidget::FindWidget(CustomWidget *parent)
     : CustomWidget("FindWidget", parent)
 {
     // Init.
-    setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
+//    setWindowFlags(Qt::WindowStaysOnTopHint);   //  搜索框　保持置顶
+//    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Popup);   //  搜索框　保持置顶
     setFixedSize(QSize(410, 50));
 
     // Init layout and mainShow.
@@ -42,6 +43,8 @@ FindWidget::FindWidget(CustomWidget *parent)
     connect(m_editLine, &LineBar::pressEsc, this, &FindWidget::findCancel);
     connect(m_editLine, &LineBar::pressEnter, this, &FindWidget::handleContentChanged);
     connect(m_editLine, &LineBar::pressCtrlEnter, this, &FindWidget::slotFindPrevBtnClicked);
+    connect(m_editLine, &LineBar::clearContent, this, &FindWidget::slotClearContent);
+
     //connect(m_editLine, &LineBar::contentChanged, this, &FindWidget::handleContentChanged, Qt::QueuedConnection);
 
     setVisible(false);
@@ -71,9 +74,19 @@ void FindWidget::slotFindPrevBtnClicked()
     sendMsg(MSG_FIND_PREV);
 }
 
-void FindWidget::hideEvent(QHideEvent *)
+//  清空搜索内容
+void FindWidget::slotClearContent()
 {
+    m_strOldFindContent = "";
     sendMsg(MSG_CLEAR_FIND_CONTENT);
+}
+
+void FindWidget::hideEvent(QHideEvent *e)
+{
+    m_strOldFindContent = "";
+    sendMsg(MSG_CLEAR_FIND_CONTENT);
+
+    CustomWidget::hideEvent(e);
 }
 
 int FindWidget::dealWithData(const int &, const QString &)
@@ -83,11 +96,11 @@ int FindWidget::dealWithData(const int &, const QString &)
 
 void FindWidget::initWidget()
 {
-    DPushButton *findNextButton = new DPushButton("u");
+    DPushButton *findNextButton = new DPushButton("d");
     findNextButton->setFixedSize(QSize(36, 36));
     connect(findNextButton, &DPushButton::clicked, this, &FindWidget::slotFindNextBtnClicked);
 
-    DPushButton *findPrevButton = new DPushButton("d");
+    DPushButton *findPrevButton = new DPushButton("u");
     findPrevButton->setFixedSize(QSize(36, 36));
     connect(findPrevButton, &DPushButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
 

@@ -56,6 +56,10 @@ void LineBar::handleTextChanged()
 
     // Start new timer.
     m_autoSaveTimer->start(m_autoSaveInternal);
+
+    if (text() == "") {
+        emit clearContent();
+    }
 }
 
 void LineBar::focusOutEvent(QFocusEvent *e)

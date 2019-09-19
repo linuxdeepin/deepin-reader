@@ -45,6 +45,8 @@ public:
     bool getSelectTextString(QString &st);
     bool showSlideModel();
     bool exitSlideModel();
+    void findNext();
+    void findPrev();
 signals:
     void signal_pageChange(int);
 private slots:

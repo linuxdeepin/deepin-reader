@@ -3,15 +3,14 @@
 SearchResWidget::SearchResWidget(CustomWidget *parent) :
     CustomWidget("SearchResWidget", parent)
 {
-    connect(this, SIGNAL(sigFlushSearchWidget(QVariant)),
-            this, SLOT(slotFlushSearchList(QVariant)));
-
     initWidget();
+
+    initConnections();
 }
 
 void SearchResWidget::slotFlushSearchList(QVariant value)
 {
-    QMap<int, stSearchRes> m_resMap =     value.value<QMap<int, stSearchRes>>();
+    QMap<int, stSearchRes> m_resMap = value.value<QMap<int, stSearchRes>>();
     qDebug() << "slotFlushSearchList...";
     m_pNotesList->clear();
 
@@ -38,6 +37,11 @@ void SearchResWidget::slotFlushSearchList(QVariant value)
     sendMsg(MSG_SWITCHLEFTWIDGET, "3");
 }
 
+void SearchResWidget::slotClearWidget()
+{
+    m_pNotesList->clear();
+}
+
 void SearchResWidget::initWidget()
 {
     QVBoxLayout *m_pVLayout  = new QVBoxLayout;
@@ -51,6 +55,13 @@ void SearchResWidget::initWidget()
     m_pNotesList->setResizeMode(QListWidget::Adjust);
 
     m_pVLayout->addWidget(m_pNotesList);
+}
+
+void SearchResWidget::initConnections()
+{
+    connect(this, SIGNAL(sigClearWidget()), this, SLOT(slotClearWidget()));
+    connect(this, SIGNAL(sigFlushSearchWidget(QVariant)),
+            this, SLOT(slotFlushSearchList(QVariant)));
 }
 
 void SearchResWidget::addNotesItem(const QImage &image, const int &page, const QString &text, const int &resultNum)
@@ -86,6 +97,22 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
 
             return ConstantMsg::g_effective_res;
         }
+    }
+
+    if (msgType == MSG_FIND_PREV) {
+        DocummentProxy::instance()->findPrev();
+        return ConstantMsg::g_effective_res;
+    }
+
+    if (msgType == MSG_FIND_NEXT) {
+        DocummentProxy::instance()->findPrev();
+        return ConstantMsg::g_effective_res;
+    }
+
+    if (msgType == MSG_CLEAR_FIND_CONTENT) {
+        emit sigClearWidget();
+        DocummentProxy::instance()->clearsearch();
+        return ConstantMsg::g_effective_res;
     }
 
     return 0;

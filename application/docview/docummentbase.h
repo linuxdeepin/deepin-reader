@@ -205,7 +205,12 @@ public:
         m_slidepageno = -1;
         return true;
     }
-    virtual void docBasicInfo(stFileInfo &info) {};
+
+    virtual void docBasicInfo(stFileInfo &info){}
+
+    virtual void findNext(){}
+
+    virtual void findPrev(){}
 
     QList<PageBase *> *getPages()
     {

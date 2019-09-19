@@ -36,11 +36,12 @@ class LineBar : public DLineEdit
 public:
     LineBar(DLineEdit *parent = nullptr);
 
-public slots:
+private slots:
     void handleTextChangeTimer();
     void handleTextChanged();
 
 signals:
+    void clearContent();
     void contentChanged();
     void focusOut();
     void pressAltEnter();
