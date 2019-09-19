@@ -9,6 +9,16 @@ BookMarkStateLabel::BookMarkStateLabel(DWidget *parent)
     setFixedSize(QSize(39, 39));
 
     setMouseTracking(true);
+    setObserverName("");
+
+    m_pMsgSubject = MsgSubject::getInstance();
+    if (m_pMsgSubject) {
+        m_pMsgSubject->addObserver(this);
+    }
+    m_pNotifySubject = NotifySubject::getInstance();
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
 }
 
 void BookMarkStateLabel::mouseMoveEvent(QMouseEvent *event)
@@ -29,10 +39,10 @@ void BookMarkStateLabel::mousePressEvent(QMouseEvent *event)
 
     if (!m_bChecked) {
         setPixmapState(ImageModule::g_press_state);
-        MsgSubject::getInstance()->sendMsg(nullptr, MSG_BOOKMARK_DLTITEM, "");
+        sendMsg(MSG_BOOKMARK_DLTITEM);
     } else {
         setPixmapState(ImageModule::g_checked_state);
-        MsgSubject::getInstance()->sendMsg(nullptr, MSG_BOOKMARK_ADDITEM, "");
+        sendMsg(MSG_BOOKMARK_ADDITEM);
     }
 
     DLabel::mousePressEvent(event);
@@ -56,7 +66,7 @@ void BookMarkStateLabel::setPixmapState(const QString &state)
     this->setPixmap(pixmap);
 }
 
-void BookMarkStateLabel::SlotSetMarkState(const bool &bCheck)
+void BookMarkStateLabel::setMarkState(const bool &bCheck)
 {
     m_bChecked = bCheck;
 
@@ -65,4 +75,24 @@ void BookMarkStateLabel::SlotSetMarkState(const bool &bCheck)
     } else {
         setPixmapState(ImageModule::g_checked_state);
     }
+}
+
+int BookMarkStateLabel::dealWithData(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_BOOKMARK_STATE) {     //  当前页的书签状态
+        setMarkState(msgContent.toInt());
+        return ConstantMsg::g_effective_res;
+    }
+    return 0;
+}
+
+void BookMarkStateLabel::sendMsg(const int &msgType, const QString &msgContent)
+{
+    m_pMsgSubject->sendMsg(this, msgType, msgContent);
+}
+
+void BookMarkStateLabel::setObserverName(const QString &)
+{
+    m_strObserverName = "BookMarkStateLabel";
+
 }
