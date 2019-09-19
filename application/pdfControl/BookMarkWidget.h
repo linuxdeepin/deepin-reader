@@ -21,7 +21,36 @@
  * @brief   书签  列表数据
  */
 
-class LoadBookMarkThread;
+class BookMarkWidget;
+
+class LoadBookMarkThread : public QThread
+{
+public:
+    LoadBookMarkThread();
+
+public:
+    inline void setBookMark(BookMarkWidget *bookMarkW)
+    {
+        m_pBookMarkWidget = bookMarkW;
+    }
+
+    inline void setBookMarks(const int &count)
+    {
+        m_bookMarks = count;
+    }
+
+    void stopThreadRun();
+
+protected:
+    void run() override;
+
+private:
+    BookMarkWidget *m_pBookMarkWidget = nullptr;
+    int m_bookMarks   = 0;   // 书签总数
+    int m_nStartIndex = 0;   // 加载图片起始位置
+    int m_nEndIndex   = 19;  // 加载图片结束位置
+    bool m_isRunning = true; // 运行状态
+};
 
 class BookMarkWidget : public CustomWidget
 {
@@ -29,6 +58,7 @@ class BookMarkWidget : public CustomWidget
 
 public:
     BookMarkWidget(CustomWidget *parent = nullptr);
+    ~BookMarkWidget() override;
 
 signals:
     void sigOpenFileOk();
@@ -48,11 +78,14 @@ protected:
 
 private:
     void initConnection();
+    void loadBookMarkItem(const int &);
     void addBookMarkItem(const int &);
 
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
+    int getBookMarkPage(const int &index);
+    int setBookMarkItemImage(const QImage &);
 
 private:
     DListWidget *m_pBookMarkListWidget = nullptr;
@@ -60,24 +93,8 @@ private:
     DImageButton *m_pAddBookMarkBtn = nullptr;
     QList<int>      m_pAllPageList;
     int m_nCurrentPage = -1;
-};
-
-class LoadBookMarkThread : public QThread
-{
-public:
-    LoadBookMarkThread();
-
-public:
-    inline void setBookMark(BookMarkWidget *bookMarkW)
-    {
-        m_pBookMarkWidget = bookMarkW;
-    }
-
-protected:
-    void run() override;
-
-private:
-    BookMarkWidget *m_pBookMarkWidget = nullptr;
+    LoadBookMarkThread m_loadBookMarkThread;
+    BookMarkItemWidget *m_pItemWidget = nullptr; // 当前要填充图片的ItemWidget
 };
 
 #endif // BOOKMARKFORM_H

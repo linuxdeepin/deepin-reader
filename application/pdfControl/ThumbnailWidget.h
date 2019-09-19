@@ -18,7 +18,7 @@
 #include "PagingWidget.h"
 #include "docview/docummentproxy.h"
 
-const int FIRST_LOAD_PAGES = 20;
+//const int FIRST_LOAD_PAGES = 20;
 
 class ThumbnailWidget;
 
@@ -35,7 +35,7 @@ public:
         m_pages = pages;
     }
 
-    inline const int endPage()
+    inline int endPage()
     {
         return m_nEndPage;
     }

@@ -19,7 +19,9 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
 
 ThumbnailWidget::~ThumbnailWidget()
 {
-    m_ThreadLoadImage.stopThreadRun();
+    if (!m_ThreadLoadImage.isRunning()) {
+        m_ThreadLoadImage.stopThreadRun();
+    }
 }
 
 int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContant)

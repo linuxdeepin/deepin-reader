@@ -4,6 +4,8 @@
 BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
     CustomWidget("BookMarkWidget", parent)
 {
+    m_loadBookMarkThread.setBookMark(this);
+
     m_pVBoxLayout = new QVBoxLayout;
     m_pVBoxLayout->setContentsMargins(0, 0, 0, 0);
     m_pVBoxLayout->setSpacing(0);
@@ -13,6 +15,14 @@ BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
 
     initConnection();
 }
+
+BookMarkWidget::~BookMarkWidget()
+{
+    if (m_loadBookMarkThread.isRunning()) {
+        m_loadBookMarkThread.stopThreadRun();
+    }
+}
+
 /**
  * @brief BookMarkWidget::slotShowSelectItem
  * @param 点击左侧书签列表, fileView跳转相应的页
@@ -69,6 +79,8 @@ void BookMarkWidget::slotOpenFileOk()
 {
     connect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotDocFilePageChanged(int)), Qt::QueuedConnection);
 
+    m_pAllPageList.clear();
+
     QString sAllPages = dApp->dbM->getBookMarks();
     QStringList sPageList = sAllPages.split(",", QString::SkipEmptyParts);
     foreach (QString s, sPageList) {
@@ -76,8 +88,11 @@ void BookMarkWidget::slotOpenFileOk()
 
         m_pAllPageList.append(nPage);
 
-        addBookMarkItem(nPage);
+        loadBookMarkItem(nPage);
     }
+
+    m_loadBookMarkThread.setBookMarks(m_pAllPageList.count());
+    m_loadBookMarkThread.start();
 
     slotDocFilePageChanged(0);
 }
@@ -175,6 +190,21 @@ void BookMarkWidget::initConnection()
     connect(m_pBookMarkListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
 }
 
+void BookMarkWidget::loadBookMarkItem(const int &page)
+{
+    BookMarkItemWidget *t_widget = new BookMarkItemWidget(this);
+//    t_widget->setItemImage(image);
+    t_widget->setPageNumber(page);
+    t_widget->setMinimumSize(QSize(250, 150));
+
+    QListWidgetItem *item = new QListWidgetItem(m_pBookMarkListWidget);
+    item->setFlags(Qt::ItemIsSelectable);
+    item->setSizeHint(QSize(250, 150));
+
+    m_pBookMarkListWidget->addItem(item);
+    m_pBookMarkListWidget->setItemWidget(item, t_widget);
+}
+
 /**
  * @brief BookMarkWidget::addBookMarkItem
  * 添加书签
@@ -182,11 +212,12 @@ void BookMarkWidget::initConnection()
  */
 void BookMarkWidget::addBookMarkItem(const int &page)
 {
-//    QImage image;
-//    DocummentProxy::instance()->getImage(page, image, 130, 150);
+    QImage t_image;
+
+    DocummentProxy::instance()->getImage(page, t_image, 113, 143);
 
     BookMarkItemWidget *t_widget = new BookMarkItemWidget(this);
-    //t_widget->setItemImage(image);
+    t_widget->setItemImage(t_image);
     t_widget->setPageNumber(page);
     t_widget->setMinimumSize(QSize(250, 150));
 
@@ -227,6 +258,30 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &)
     return 0;
 }
 
+int BookMarkWidget::getBookMarkPage(const int &index)
+{
+    QListWidgetItem *pItem = m_pBookMarkListWidget->item(index);
+    m_pItemWidget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
+    if (m_pItemWidget) {
+        int page = m_pItemWidget->PageNumber();
+        if (m_pAllPageList.contains(page)) {
+            return page;
+        }
+    }
+
+    return -1;
+}
+
+int BookMarkWidget::setBookMarkItemImage(const QImage &image)
+{
+    if (m_pItemWidget) {
+        m_pItemWidget->setItemImage(image);
+        m_pItemWidget = nullptr;
+    }
+
+    return 0;
+}
+
 /*************************************LoadBookMarkThread**************************************/
 /*************************************加载书签列表线程******************************************/
 
@@ -235,7 +290,50 @@ LoadBookMarkThread::LoadBookMarkThread()
 
 }
 
+void LoadBookMarkThread::stopThreadRun()
+{
+    m_isRunning = false;
+
+    terminate();    //终止线程
+    wait();         //阻塞等待
+}
+
 void LoadBookMarkThread::run()
 {
+    while (m_isRunning) {
 
+        if (m_nStartIndex < 0) {
+            m_nStartIndex = 0;
+        }
+        if (m_nEndIndex >= m_bookMarks) {
+            m_isRunning = false;
+            m_nEndIndex = m_bookMarks - 1;
+        }
+
+        for (int index = m_nStartIndex; index <= m_nEndIndex; index++) {
+            QImage image;
+            int page = -1;
+
+            if (!m_pBookMarkWidget) {
+                continue;
+            }
+
+            page = m_pBookMarkWidget->getBookMarkPage(index);
+
+            if (page == -1) {
+                continue;
+            }
+
+            bool bl = DocummentProxy::instance()->getImage(page, image, 113, 143);
+
+            if (bl) {
+                m_pBookMarkWidget->setBookMarkItemImage(image);
+            }
+        }
+
+        m_nStartIndex += FIRST_LOAD_PAGES;
+        m_nEndIndex += FIRST_LOAD_PAGES;
+
+        msleep(50);
+    }
 }
