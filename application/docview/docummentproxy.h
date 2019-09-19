@@ -47,6 +47,8 @@ public:
     bool exitSlideModel();
     void findNext();
     void findPrev();
+    void setAnnotationText(int ipage, const QString &struuid, const QString &strtext);
+    void getAnnotationText(const QString& struuid,QString& strtext);
 signals:
     void signal_pageChange(int);
 private slots:
