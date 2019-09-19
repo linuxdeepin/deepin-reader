@@ -101,6 +101,13 @@ int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
         onChooseBtnClicked();
         return ConstantMsg::g_effective_res;
     }
+
+    if (msgType == MSG_NOTIFY_KEY_MSG) {
+        if (msgContent == "Ctrl+O") {   //  Ctrl+O 打开文档
+            onChooseBtnClicked();
+            return ConstantMsg::g_effective_res;
+        }
+    }
     return 0;
 }
 
@@ -116,15 +123,15 @@ void HomeWidget::dropEvent(QDropEvent *event)
     const QMimeData *mimeData = event->mimeData();
 
     if (mimeData->hasUrls()) {
-        for (auto url : mimeData->urls()) {
+        foreach (QUrl url, mimeData->urls()) {
             QString sFilePath =  url.toLocalFile();
-//            if (sFilePath.endsWith(".pdf")) {
-            //  默认打开第一个
-            QString sRes = sFilePath + "@#&wzx";
+            if (sFilePath.endsWith(".pdf")) {
+                //  默认打开第一个
+                QString sRes = sFilePath + "@#&wzx";
 
-            sendMsg(MSG_OPEN_FILE_PATH, sRes);
-            break;
-//        }
+                sendMsg(MSG_OPEN_FILE_PATH, sRes);
+                break;
+            }
         }
     }
 }

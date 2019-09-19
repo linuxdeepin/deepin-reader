@@ -17,6 +17,9 @@ public:
 signals:
     void sigOpenFile(const QString &);
 
+public:
+    void onClickPageLink(Page::Link *pLink);
+
 private:
     void onSaveFileCtrlS();
     void onSaveFile();

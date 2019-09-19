@@ -33,6 +33,9 @@ public:
 
 protected:
     bool eventFilter(QObject *obj, QEvent *e) Q_DECL_OVERRIDE;
+
+private:
+    QStringList     m_pFilterList;
 };
 
 #endif // GLOBALEVENTFILTER_H

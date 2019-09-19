@@ -37,26 +37,17 @@ public:
     LineBar(DLineEdit *parent = nullptr);
 
 private slots:
-    void handleTextChangeTimer();
     void handleTextChanged();
 
 signals:
     void clearContent();
-    void contentChanged();
-    void focusOut();
-    void pressAltEnter();
+
     void pressCtrlEnter();
     void pressEnter();
     void pressEsc();
-    void pressMetaEnter();
 
 protected:
-    virtual void focusOutEvent(QFocusEvent *e);
     virtual void keyPressEvent(QKeyEvent *e);
-
-private:
-    QTimer *m_autoSaveTimer;
-    int m_autoSaveInternal;
 };
 
 #endif

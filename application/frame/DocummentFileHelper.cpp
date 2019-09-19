@@ -5,6 +5,7 @@
 #include "controller/DataManager.h"
 #include <DFileDialog>
 #include "utils/utils.h"
+#include <QDesktopServices>
 
 DocummentFileHelper::DocummentFileHelper(QObject *parent) : QObject(parent)
 {
@@ -91,6 +92,26 @@ void DocummentFileHelper::onFileSlider()
         DataManager::instance()->setCurShowState(FILE_SLIDE);
     }
 }
+
+void DocummentFileHelper::onClickPageLink(Page::Link *pLink)
+{
+    Page::LinkType_EM linkType = pLink->type;
+    if (linkType == Page::LinkType_NULL) {
+
+    } else if (linkType == Page::LinkType_Goto) {
+        int page = pLink->page;
+        m_pDocummentProxy->pageJump(page);
+    } else if (linkType == Page::LinkType_GotoOtherFile) {
+
+    } else if (linkType == Page::LinkType_Browse) {
+        QString surlOrFileName = pLink->urlOrFileName;
+        qDebug() << "   surlOrFileName      " << surlOrFileName;
+        QDesktopServices::openUrl(QUrl(surlOrFileName, QUrl::TolerantMode));
+    } else if (linkType == Page::LinkType_Execute) {
+
+    }
+}
+
 
 void DocummentFileHelper::initConnections()
 {

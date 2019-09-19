@@ -27,7 +27,7 @@
 GlobalEventFilter::GlobalEventFilter(QObject *parent)
     : QObject(parent)
 {
-
+    m_pFilterList = QStringList() << "Esc" << "F1" << "Up" << "Down" << "Ctrl+S" << "Ctrl+O";
 }
 
 bool GlobalEventFilter::eventFilter(QObject *obj, QEvent *e)
@@ -41,29 +41,8 @@ bool GlobalEventFilter::eventFilter(QObject *obj, QEvent *e)
 
         qDebug() << "GlobalEventFilter      eventFilter     " << key;
 
-        if (key == "Esc") {
+        if (m_pFilterList.contains(key)) {
             NotifySubject::getInstance()->sendMsg(MSG_NOTIFY_KEY_MSG, key);
-            return true;
-        }
-        if (key == "F1") {
-            return true;
-        }
-
-        if (key == "Up") {
-            NotifySubject::getInstance()->sendMsg(MSG_NOTIFY_KEY_MSG, key);
-            return true;
-        } else if (key == "Down") {
-            NotifySubject::getInstance()->sendMsg(MSG_NOTIFY_KEY_MSG, key);
-            return true;
-        }
-//        if (key == "Del") {
-//            return true;
-//        }
-        if (key == "Ctrl+S") {
-            NotifySubject::getInstance()->sendMsg(MSG_NOTIFY_KEY_MSG, key);
-            return true;
-        }
-        if (key == "Ctrl+O") {
             return true;
         }
     }
