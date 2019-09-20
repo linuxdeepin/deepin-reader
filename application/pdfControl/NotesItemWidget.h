@@ -61,7 +61,7 @@ private:
     DLabel *m_pSearchResultNum = nullptr;
     DTextEdit *m_pTextEdit = nullptr;
     QHBoxLayout *m_pHLayout = nullptr;
-    int m_page = 0;
+    int m_page = -1;
 };
 
 #endif // NOTESITEMWIDGET_H

@@ -68,7 +68,7 @@ void FontWidget::initWidget()
     t_pHLayout6->setSpacing(0);
 
     m_pEnlargeLab = new DLabel;
-    m_pEnlargeLab->setText(PdfControl::SCALE_CURRENT);
+    m_pEnlargeLab->setText(QString("100%"));
     m_pEnlargeLab->setAlignment(Qt::AlignCenter);
     ft.setPointSize(15);
     m_pEnlargeLab->setFont(ft);
@@ -79,14 +79,14 @@ void FontWidget::initWidget()
     t_pHLayout1->setSpacing(1);
 
     m_pMinLabALab = new DLabel;
-    m_pMinLabALab->setText(PdfControl::SCALE_SIG);
+    m_pMinLabALab->setText(QString("A"));
     m_pMinLabALab->setAlignment(Qt::AlignCenter);
     ft.setPointSize(8);
     m_pMinLabALab->setFont(ft);
     m_pMinLabALab->setFixedSize(QSize(25, 25));
 
     m_pMaxLabALab = new DLabel;
-    m_pMaxLabALab->setText(PdfControl::SCALE_SIG);
+    m_pMaxLabALab->setText(QString("A"));
     m_pMaxLabALab->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
     m_pMaxLabALab->setFont(ft);
