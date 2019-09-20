@@ -79,7 +79,6 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
         p.setColor(QPalette::Text, QColor(30, 144, 255));
 
         t_contantLab = t_ItemWidget->getContantLabel();
-        //t_contantLab->setFrameShape (QFrame::Box);
         t_contantLab->setLineWidth(3);
         t_contantLab->setPalette(p);
 
@@ -101,15 +100,13 @@ void ThumbnailWidget::setCurrentRow(const int &row)
     }
 }
 
-void ThumbnailWidget::addThumbnailItem(const QImage &image, const int &idex)
+void ThumbnailWidget::addThumbnailItem(const int &idex)
 {
-    QListWidgetItem *item = new QListWidgetItem(m_pThumbnailListWidget);
     ThumbnailItemWidget *widget = new ThumbnailItemWidget;
-
-    //widget->setContantLabelPixmap(image);
     widget->setPageLabelText(QString("%1").arg(idex + 1));
     widget->setMinimumSize(QSize(250, 250));
 
+    QListWidgetItem *item = new QListWidgetItem(m_pThumbnailListWidget);
     item->setFlags(Qt::NoItemFlags);
     item->setFlags(Qt::ItemIsSelectable);
     item->setSizeHint(QSize(250, 250));
@@ -136,10 +133,9 @@ void ThumbnailWidget::slotFileViewToListPage(int page)
 
 bool ThumbnailWidget::fillContantToList()
 {
-    QImage image;
     for (int idex = 0; idex < totalPages(); ++idex) {
 
-        addThumbnailItem(image, idex);
+        addThumbnailItem(idex);
     }
 
     return true;

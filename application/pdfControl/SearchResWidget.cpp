@@ -67,7 +67,7 @@ void SearchResWidget::addNotesItem(const QImage &image, const int &page, const Q
     NotesItemWidget *itemWidget = new NotesItemWidget;
 
     itemWidget->setLabelImage(image);
-    itemWidget->setLabelPage(PAGE_PREFS + QString("%1").arg(page + 1));
+    itemWidget->setLabelPage(PAGE_PREF + QString("%1").arg(page + 1));
     itemWidget->setTextEditText(text);
 
     itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + SEARCH_RES_CONT));

@@ -7,6 +7,7 @@
 #include <QListWidgetItem>
 #include <QVBoxLayout>
 
+#include "translator/Frame.h"
 #include "NotesItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
 #include "docview/docummentproxy.h"
@@ -16,6 +17,8 @@
  * @brief   注释窗体
  */
 
+using namespace  COMMON;
+using namespace  NOTE;
 
 class NotesWidget : public CustomWidget
 {

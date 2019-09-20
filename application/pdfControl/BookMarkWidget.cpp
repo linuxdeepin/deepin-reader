@@ -32,7 +32,6 @@ void BookMarkWidget::slotShowSelectItem(QListWidgetItem *item)
     BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
     if (t_widget) {
         int nnPageNumber = t_widget->PageNumber();
-        //m_nCurrentPage = nnPageNumber;
 
         DocummentProxy::instance()->pageJump(nnPageNumber);
     }

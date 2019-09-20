@@ -90,7 +90,7 @@ protected:
 private:
     void setSelectItemBackColor(QListWidgetItem *);
     void setCurrentRow(const int &);
-    void addThumbnailItem(const QImage &, const int &);
+    void addThumbnailItem(const int &);
 
 
     inline int preRowVal() const

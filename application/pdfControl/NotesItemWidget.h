@@ -11,7 +11,7 @@
 #include <QAction>
 #include <QContextMenuEvent>
 
-#include "translator/Note.h"
+#include "translator/Frame.h"
 #include "subjectObserver/CustomWidget.h"
 
 /**

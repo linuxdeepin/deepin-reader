@@ -8,7 +8,7 @@
 #include <QAction>
 #include <QContextMenuEvent>
 
-#include "translator/BookMark.h"
+#include "translator/Frame.h"
 #include "subjectObserver/CustomWidget.h"
 
 /**
@@ -16,6 +16,7 @@
  * @brief   书签列表item
  */
 
+using namespace  COMMON;
 using namespace  BOOKMARK;
 
 //操作类型
