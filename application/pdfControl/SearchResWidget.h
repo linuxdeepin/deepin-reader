@@ -22,7 +22,7 @@ class SearchResWidget;
 class LoadSearchResThread : public QThread
 {
 public:
-    LoadSearchResThread(QThread *parent = nullptr);
+    LoadSearchResThread();
 
 public:
     inline void setSearchResW(SearchResWidget *searchResW)
@@ -48,9 +48,9 @@ protected:
 private:
     SearchResWidget *m_pSearchResWidget = nullptr;
     bool m_isRunning                    = false;
-    int m_nStartIndex                   = -1;      //　每次加载开始页
-    int m_nEndIndex                     = -1;      //　每次加载结束页
-    int m_pages                         = -1;      // 搜索内容总页数
+    int m_nStartIndex                   = 0;      //　每次加载开始页
+    int m_nEndIndex                     = 19;     //　每次加载结束页
+    int m_pages                         = -1;     //  搜索内容总页数
 };
 
 class SearchResWidget : public CustomWidget

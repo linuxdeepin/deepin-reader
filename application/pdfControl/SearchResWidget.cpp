@@ -26,8 +26,6 @@ void SearchResWidget::slotFlushSearchList(QVariant value)
     int resultNum = 0;
     QString strText;
 
-    m_loadSearchResThread.setPages(m_resMap.count());
-
     for (auto it = m_resMap.begin(); it != m_resMap.end(); ++it) {
         int page = it.key();
         foreach (QString strtext, it.value().listtext) {
@@ -43,9 +41,12 @@ void SearchResWidget::slotFlushSearchList(QVariant value)
         strText.clear();
     }
 
+    m_loadSearchResThread.setPages(m_resMap.count());
+    m_loadSearchResThread.setRunning(true);
     m_loadSearchResThread.start();
 
     sendMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
+
 }
 
 void SearchResWidget::slotClearWidget()
@@ -152,8 +153,7 @@ int SearchResWidget::setSearchItemImage(const QImage &image)
 /************************************LoadSearchResList*******************************************************/
 /************************************加载搜索列表缩略图*********************************************************/
 
-LoadSearchResThread::LoadSearchResThread(QThread *parent):
-    QThread(parent)
+LoadSearchResThread::LoadSearchResThread()
 {
 
 }
@@ -189,7 +189,6 @@ void LoadSearchResThread::run()
 
             page = m_pSearchResWidget->getSearchPage(index);
 
-            qDebug() << tr("      search content page: %1").arg(page);
 
             if (page == -1) {
                 continue;
