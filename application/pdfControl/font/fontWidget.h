@@ -13,8 +13,11 @@
 #include <QRectF>
 #include <QtMath>
 
+#include "translator/Font.h"
 #include "subjectObserver/CustomWidget.h"
 #include "docview/docummentproxy.h"
+
+using namespace FONT;
 
 class FontWidget : public CustomWidget
 {

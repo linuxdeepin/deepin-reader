@@ -1,7 +1,7 @@
 #include "fontWidget.h"
 
 FontWidget::FontWidget(CustomWidget *parent):
-    CustomWidget("FontWidget", parent)
+    CustomWidget(QString("FontWidget"), parent)
 {
     //让程序无边框
     setWindowFlags(Qt::Popup);
@@ -67,7 +67,7 @@ void FontWidget::initWidget()
     t_pHLayout6->setSpacing(0);
 
     m_pEnlargeLab = new DLabel;
-    m_pEnlargeLab->setText(tr("100%"));
+    m_pEnlargeLab->setText(SCALE_CURRENT);
     m_pEnlargeLab->setAlignment(Qt::AlignCenter);
     ft.setPointSize(15);
     m_pEnlargeLab->setFont(ft);
@@ -78,14 +78,14 @@ void FontWidget::initWidget()
     t_pHLayout1->setSpacing(1);
 
     m_pMinLabALab = new DLabel;
-    m_pMinLabALab->setText(tr("A"));
+    m_pMinLabALab->setText(SCALE_SIG);
     m_pMinLabALab->setAlignment(Qt::AlignCenter);
     ft.setPointSize(8);
     m_pMinLabALab->setFont(ft);
     m_pMinLabALab->setFixedSize(QSize(25, 25));
 
     m_pMaxLabALab = new DLabel;
-    m_pMaxLabALab->setText(tr("A"));
+    m_pMaxLabALab->setText(SCALE_SIG);
     m_pMaxLabALab->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
     m_pMaxLabALab->setFont(ft);
@@ -99,6 +99,8 @@ void FontWidget::initWidget()
     m_pEnlargeSlider->setPageStep(25);
     m_pEnlargeSlider->slider()->setTickPosition(QSlider::TicksBelow);
     m_pEnlargeSlider->setFixedSize(QSize(100, 25));
+//    m_pEnlargeSlider->setLeftIcon(QIcon(tr(":/resources/image/hover/close.svg")));
+//    m_pEnlargeSlider->setRightIcon(QIcon(tr(":/resources/image/press/close.svg")));
     connect(m_pEnlargeSlider, SIGNAL(valueChanged(int)),  SLOT(slotSetChangeVal(int)));
 
     //t_pHLayout2->addSpacing(1);
@@ -108,7 +110,7 @@ void FontWidget::initWidget()
     //t_pHLayout2->addSpacing(1);
 
     m_pDoubPageViewBtn = new DImageButton;
-    m_pDoubPageViewBtn->setText(tr("Doub View"));
+    m_pDoubPageViewBtn->setText(DOUB_VIEW);
     m_pDoubPageViewBtn->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
     m_pDoubPageViewBtn->setFont(ft);
@@ -122,7 +124,7 @@ void FontWidget::initWidget()
     //t_pHLayout3->addStretch(1);
 
     m_pSuitHBtn = new DImageButton;
-    m_pSuitHBtn->setText(tr("Adaptate Height"));
+    m_pSuitHBtn->setText(ADAP_HEIGHT);
     m_pSuitHBtn->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
     m_pSuitHBtn->setFont(ft);
@@ -136,7 +138,7 @@ void FontWidget::initWidget()
     //t_pHLayout4->addSpacing(1);
 
     m_pSuitWBtn = new DImageButton;
-    m_pSuitWBtn->setText(tr("Adaptate Width"));
+    m_pSuitWBtn->setText(ADAP_WIDTH);
     m_pSuitWBtn->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
     m_pSuitWBtn->setFont(ft);
@@ -150,7 +152,7 @@ void FontWidget::initWidget()
     //t_pHLayout5->addSpacing(1);
 
     m_pRotateLeftBtn = new DImageButton;
-    m_pRotateLeftBtn->setText(tr("Rotated To Left"));
+    m_pRotateLeftBtn->setText(ROTAT_TO_L);
     m_pRotateLeftBtn->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
     m_pRotateLeftBtn->setFont(ft);
@@ -164,7 +166,7 @@ void FontWidget::initWidget()
     //t_pHLayout6->addSpacing(1);
 
     m_pRotateRightBtn = new DImageButton;
-    m_pRotateRightBtn->setText(tr("Rotated To Right"));
+    m_pRotateRightBtn->setText(ROTAT_TO_R);
     m_pRotateRightBtn->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
     m_pRotateRightBtn->setFont(ft);
@@ -316,10 +318,10 @@ void FontWidget::slotSetDoubPageViewCheckIcon()
     t_isDoubPage = !t_isDoubPage;
 
     if (t_isDoubPage) {
-        m_pDoubPageViewLab->setPixmap(QPixmap(tr(":/resources/image/select .svg")));
+        m_pDoubPageViewLab->setPixmap(QPixmap(QString(":/resources/image/select .svg")));
         DocummentProxy::instance()->setViewModeAndShow(ViewMode_FacingPage);
     } else {
-        m_pDoubPageViewLab->setPixmap(QPixmap(tr("")));
+        m_pDoubPageViewLab->setPixmap(QPixmap(QString("")));
         DocummentProxy::instance()->setViewModeAndShow(ViewMode_SinglePage);
     }
 }
@@ -331,10 +333,10 @@ void FontWidget::slotSetSuitHCheckIcon()
     t_isSuitH = !t_isSuitH;
 
     if (t_isSuitH) {
-        m_pSuitHLab->setPixmap(QPixmap(tr(":/resources/image/select .svg")));
+        m_pSuitHLab->setPixmap(QPixmap(QString(":/resources/image/select .svg")));
         sendMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(1));
     } else {
-        m_pSuitHLab->setPixmap(QPixmap(tr("")));
+        m_pSuitHLab->setPixmap(QPixmap(QString("")));
     }
 }
 
@@ -345,10 +347,10 @@ void FontWidget::slotSetSuitWCheckIcon()
     t_isSuitW = !t_isSuitW;
 
     if (t_isSuitW) {
-        m_pSuitWLab->setPixmap(QPixmap(tr(":/resources/image/select .svg")));
+        m_pSuitWLab->setPixmap(QPixmap(QString(":/resources/image/select .svg")));
         sendMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(1));
     } else {
-        m_pSuitWLab->setPixmap(QPixmap(tr("")));
+        m_pSuitWLab->setPixmap(QPixmap(QString("")));
     }
 }
 

@@ -3,7 +3,7 @@
 
 
 NotesItemWidget::NotesItemWidget(CustomWidget *parent) :
-    CustomWidget ("NotesItemWidget", parent)
+    CustomWidget(QString("NotesItemWidget"), parent)
 {
     m_pHLayout = new QHBoxLayout;
     //set around distance
@@ -57,8 +57,8 @@ void NotesItemWidget::slotCopyContant()
 void NotesItemWidget::slotShowContextMenu(const QPoint &)
 {
     QMenu *t_menu = new QMenu(this);
-    QAction *copyAction = t_menu->addAction(tr("Copy"));
-    QAction *dltItemAction = t_menu->addAction(tr("Del Note"));
+    QAction *copyAction = t_menu->addAction(COPY_CONT);
+    QAction *dltItemAction = t_menu->addAction(DLT_NOTE);
     connect(dltItemAction, SIGNAL(triggered()), this, SLOT(slotDltNoteItem()));
     connect(copyAction, SIGNAL(triggered()), this, SLOT(slotCopyContant()));
     t_menu->exec(QCursor::pos());

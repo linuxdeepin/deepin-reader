@@ -2,7 +2,7 @@
 #include <QDebug>
 
 PagingWidget::PagingWidget(CustomWidget *parent) :
-    CustomWidget("PagingWidget", parent)
+    CustomWidget(QString("PagingWidget"), parent)
 {
     resize(250, 20);
     initWidget();
@@ -15,11 +15,11 @@ void PagingWidget::initWidget()
     m_pTotalPagesLab->setMinimumWidth(80);
 
     m_pPrePageBtn = new DImageButton(this);
-    m_pPrePageBtn->setText(tr("<"));
+    m_pPrePageBtn->setText(QString("<"));
     m_pPrePageBtn->setFixedSize(QSize(40, 40));
 
     m_pNextPageBtn = new DImageButton(this);
-    m_pNextPageBtn->setText(tr(">"));
+    m_pNextPageBtn->setText(QString(">"));
     m_pNextPageBtn->setFixedSize(QSize(40, 40));
 
     connect(m_pPrePageBtn, SIGNAL(clicked()), SLOT(slotPrePage()));

@@ -2,7 +2,7 @@
 #include <QDebug>
 
 ThumbnailItemWidget::ThumbnailItemWidget(CustomWidget *parent) :
-    CustomWidget ("ThumbnailItemWidget", parent)
+    CustomWidget (QString("ThumbnailItemWidget"), parent)
 {
     initWidget();
 }

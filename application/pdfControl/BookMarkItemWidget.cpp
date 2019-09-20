@@ -3,7 +3,7 @@
 
 
 BookMarkItemWidget::BookMarkItemWidget(CustomWidget *parent) :
-    CustomWidget ("BookMarkItemWidget", parent)
+    CustomWidget(QString("BookMarkItemWidget"), parent)
 {
 
     m_pHLayout = new QHBoxLayout;
@@ -29,15 +29,14 @@ int BookMarkItemWidget::dealWithData(const int &, const QString &)
 
 void BookMarkItemWidget::slotDltBookMark()
 {
-    //qDebug() << "delet BookMark";
     sendMsg(MSG_BOOKMARK_DLTITEM, QString::number(m_nPageNumber));
 }
 
-void BookMarkItemWidget::slotShowContextMenu(const QPoint &point)
+void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
 {
     QMenu *t_menu = new QMenu(this);
 
-    QAction *dltBookMarkAction = t_menu->addAction(tr("delete bookmark"));
+    QAction *dltBookMarkAction = t_menu->addAction(DLT_BK);
     connect(dltBookMarkAction, SIGNAL(triggered()), this, SLOT(slotDltBookMark()));
     t_menu->exec(QCursor::pos());
 }
@@ -64,7 +63,7 @@ void BookMarkItemWidget::setPageNumber(int nPageNumber)
 {
     m_nPageNumber = nPageNumber;
 
-    QString sPageText = QString(tr("page:%1")).arg( nPageNumber + 1);
+    QString sPageText = PAGE_PREF + QString("%1").arg( nPageNumber + 1);
 
     m_pPage->setText(sPageText);
 }

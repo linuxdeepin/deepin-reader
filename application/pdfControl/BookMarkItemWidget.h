@@ -8,12 +8,15 @@
 #include <QAction>
 #include <QContextMenuEvent>
 
+#include "translator/BookMark.h"
 #include "subjectObserver/CustomWidget.h"
 
 /**
  * @brief The BookMarkWidget class
  * @brief   书签列表item
  */
+
+using namespace  BOOKMARK;
 
 //操作类型
 enum OPERATION_TYPE {

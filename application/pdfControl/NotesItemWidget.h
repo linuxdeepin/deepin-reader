@@ -11,12 +11,15 @@
 #include <QAction>
 #include <QContextMenuEvent>
 
+#include "translator/Note.h"
 #include "subjectObserver/CustomWidget.h"
 
 /**
  * @brief The ThumbnailItemWidget class
  * @brief   注释和搜索item
  */
+
+using namespace NOTE;
 
 class NotesItemWidget : public CustomWidget
 {
@@ -31,12 +34,12 @@ public:
     void setTextEditText(const QString &);
     void setSerchResultText(const QString &);
 
-    inline unsigned int page() const
+    inline int page() const
     {
         return m_page;
     }
 
-    inline void setPage(const unsigned int &page)
+    inline void setPage(const int &page)
     {
         m_page = page;
     }
@@ -59,7 +62,7 @@ private:
     DLabel *m_pSearchResultNum = nullptr;
     DTextEdit *m_pTextEdit = nullptr;
     QHBoxLayout *m_pHLayout = nullptr;
-    unsigned int m_page = 0;
+    int m_page = 0;
 };
 
 #endif // NOTESITEMWIDGET_H

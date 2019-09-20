@@ -1,7 +1,7 @@
 #include "SearchResWidget.h"
 
 SearchResWidget::SearchResWidget(CustomWidget *parent) :
-    CustomWidget("SearchResWidget", parent)
+    CustomWidget(QString("SearchResWidget"), parent)
 {
     initWidget();
 
@@ -11,7 +11,6 @@ SearchResWidget::SearchResWidget(CustomWidget *parent) :
 void SearchResWidget::slotFlushSearchList(QVariant value)
 {
     QMap<int, stSearchRes> m_resMap = value.value<QMap<int, stSearchRes>>();
-    qDebug() << "slotFlushSearchList...";
     m_pNotesList->clear();
 
     int index = 0;
@@ -20,11 +19,10 @@ void SearchResWidget::slotFlushSearchList(QVariant value)
     QImage image;
 
     for (auto it = m_resMap.begin(); it != m_resMap.end(); ++it) {
-        qDebug() << it.key();
         int page = it.key();
         foreach (QString strtext, it.value().listtext) {
             qDebug() << strtext;
-            strText += strtext + tr("\n");
+            strText += strtext + QString("\n");
             ++resultNum;
         }
 
@@ -34,7 +32,7 @@ void SearchResWidget::slotFlushSearchList(QVariant value)
         strText.clear();
     }
 
-    sendMsg(MSG_SWITCHLEFTWIDGET, "3");
+    sendMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
 }
 
 void SearchResWidget::slotClearWidget()
@@ -69,10 +67,10 @@ void SearchResWidget::addNotesItem(const QImage &image, const int &page, const Q
     NotesItemWidget *itemWidget = new NotesItemWidget;
 
     itemWidget->setLabelImage(image);
-    itemWidget->setLabelPage(tr("Page:%1").arg(page + 1));
+    itemWidget->setLabelPage(PAGE_PREFS + QString("%1").arg(page + 1));
     itemWidget->setTextEditText(text);
 
-    itemWidget->setSerchResultText(tr("   %1个结果").arg(resultNum));
+    itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + SEARCH_RES_CONT));
 
     itemWidget->setMinimumSize(QSize(250, 150));
 
@@ -87,7 +85,7 @@ void SearchResWidget::addNotesItem(const QImage &image, const int &page, const Q
 int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_FIND_CONTENT) {        //  查询内容
-        if (msgContent != "") {
+        if (msgContent != QString("")) {
             QMap<int, stSearchRes> resMap;
             DocummentProxy::instance()->search(msgContent, resMap, QColor(255, 0, 0));
 

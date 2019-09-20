@@ -6,6 +6,7 @@
 #include <QListWidgetItem>
 #include <QVBoxLayout>
 
+#include "translator/Search.h"
 #include "NotesItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
 #include "docview/docummentproxy.h"
@@ -14,6 +15,8 @@
  * @brief The ThumbnailItemWidget class
  * @brief   搜索结果显示窗体
  */
+
+using namespace SEARCH;
 
 class SearchResWidget : public CustomWidget
 {
