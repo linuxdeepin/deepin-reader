@@ -18,6 +18,7 @@ include (pdfControl/pdfControl.pri)
 include (docview/docview.pri)
 include (subjectObserver/subjectObserver.pri)
 include (mainShow/mainShow.pri)
+include (translator/translator.pri)
 
 SOURCES += \
         main.cpp \
