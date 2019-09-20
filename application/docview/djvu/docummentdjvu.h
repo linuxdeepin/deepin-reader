@@ -5,12 +5,12 @@
 #include <poppler-qt5.h>
 #include <libdjvu/ddjvuapi.h>
 #include <libdjvu/miniexp.h>
-#include <QThread>
 
 class DocummentDJVU: public DocummentBase
 {
 public:
     DocummentDJVU(DWidget *parent = nullptr);
+    ~DocummentDJVU();
     bool openFile(QString filepath) override;
     bool bDocummentExist() override;
     bool getImage(int pagenum, QImage &image, double width, double height) override;

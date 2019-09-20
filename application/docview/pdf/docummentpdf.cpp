@@ -15,6 +15,11 @@ DocummentPDF::DocummentPDF(DWidget *parent): DocummentBase(parent),
 {
 }
 
+DocummentPDF::~DocummentPDF()
+{
+    delete document;
+}
+
 bool DocummentPDF::openFile(QString filepath)
 {
     document = Poppler::Document::load(filepath);

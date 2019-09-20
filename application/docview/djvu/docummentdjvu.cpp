@@ -28,11 +28,18 @@ void waitForMessageTag(ddjvu_context_t *context, ddjvu_message_tag_t tag)
 
 DocummentDJVU::DocummentDJVU(DWidget *parent): DocummentBase(parent),
     document(nullptr),
-    m_listsearch(),
+//    m_listsearch(),
     m_fileinfo(),
     m_pageByName(),
     m_titleByIndex()
 {
+}
+
+DocummentDJVU::~DocummentDJVU()
+{
+    ddjvu_document_release(document);
+    ddjvu_context_release(m_context);
+    ddjvu_format_release(m_format);
 }
 
 bool DocummentDJVU::openFile(QString filepath)

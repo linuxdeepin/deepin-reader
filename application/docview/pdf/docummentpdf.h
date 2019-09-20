@@ -8,6 +8,7 @@ class DocummentPDF: public DocummentBase
 {
 public:
     DocummentPDF(DWidget *parent = nullptr);
+    ~DocummentPDF();
     bool openFile(QString filepath) override;
     bool bDocummentExist() override;
     bool getImage(int pagenum, QImage &image, double width, double height) override;

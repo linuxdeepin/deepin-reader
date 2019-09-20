@@ -1,6 +1,8 @@
 #include "docummentfactory.h"
 #include "pdf/docummentpdf.h"
 #include "djvu/docummentdjvu.h"
+#include "ps/docummentps.h"
+#include "xps/docummentxps.h"
 
 DocummentFactory::DocummentFactory()
 {
@@ -16,6 +18,12 @@ DocummentBase *DocummentFactory::creatDocumment(DocType_EM type, DWidget *father
         break;
     case DocType_DJVU:
         documment = new DocummentDJVU(father);
+        break;
+    case DocType_PS:
+        documment = new DocummentPS(father);
+        break;
+    case DocType_XPS:
+        documment = new DocummentXPS(father);
         break;
     default:
         break;
