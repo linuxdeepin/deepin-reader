@@ -16,9 +16,6 @@
  * @brief   书签列表item
  */
 
-using namespace  COMMON;
-using namespace  BOOKMARK;
-
 //操作类型
 enum OPERATION_TYPE {
     ADDITEM = 0,        //增加item

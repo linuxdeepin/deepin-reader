@@ -1,5 +1,7 @@
 #include "NotesWidget.h"
 
+#include "translator/PdfControl.h"
+
 NotesWidget::NotesWidget(CustomWidget *parent) :
     CustomWidget(QString("NotesWidget"), parent)
 {
@@ -21,7 +23,7 @@ void NotesWidget::initWidget()
     m_pVLayout->addWidget(m_pNotesList);
 
     DImageButton *m_pAddNotesBtn = new DImageButton;
-    m_pAddNotesBtn->setText(ADD_NOTE);
+    m_pAddNotesBtn->setText(PdfControl::ADD_NOTE);
     m_pAddNotesBtn->setFixedSize(QSize(250, 50));
 
     m_pVLayout->addWidget(m_pAddNotesBtn);
@@ -33,7 +35,7 @@ void NotesWidget::addNotesItem(const QImage &image, const int &page, const QStri
 
     itemWidget->setPage(page);
     itemWidget->setLabelImage(image);
-    itemWidget->setLabelPage((PAGE_PREF + QString("%1").arg(page + 1)));
+    itemWidget->setLabelPage((PdfControl::PAGE_PREF + QString("%1").arg(page + 1)));
     itemWidget->setTextEditText(text);
     itemWidget->setMinimumSize(QSize(250, 150));
 

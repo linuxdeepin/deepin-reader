@@ -27,8 +27,7 @@ SOURCES += \
 RESOURCES +=         resources.qrc
 
 HEADERS +=\
-    application.h \
-    translator/Frame.h
+    application.h
 
 
 DISTFILES += \

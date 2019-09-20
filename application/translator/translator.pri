@@ -1,2 +1,3 @@
 HEADERS += \
-    $$PWD/Frame.h
+    $$PWD/Frame.h \
+    $$PWD/PdfControl.h

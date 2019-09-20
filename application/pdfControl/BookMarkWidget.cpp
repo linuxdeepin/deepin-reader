@@ -1,5 +1,6 @@
 #include "BookMarkWidget.h"
 #include <QDebug>
+#include "translator/PdfControl.h"
 
 BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
     CustomWidget(QString("BookMarkWidget"), parent)
@@ -56,7 +57,7 @@ void BookMarkWidget::slotAddBookMark()
     } else {
         QString sPage = "";
         foreach (int i, m_pAllPageList) {
-            sPage += QString::number(i) + COMMA;
+            sPage += QString::number(i) + ",";
         }
 
         sPage += QString::number(page);
@@ -81,7 +82,7 @@ void BookMarkWidget::slotOpenFileOk()
     m_pAllPageList.clear();
 
     QString sAllPages = dApp->dbM->getBookMarks();
-    QStringList sPageList = sAllPages.split(COMMA, QString::SkipEmptyParts);
+    QStringList sPageList = sAllPages.split(",", QString::SkipEmptyParts);
     foreach (QString s, sPageList) {
         int nPage = s.toInt();
 
@@ -152,7 +153,7 @@ void BookMarkWidget::initWidget()
 
     m_pAddBookMarkBtn = new DImageButton;
     m_pAddBookMarkBtn->setFixedSize(QSize(250, 50));
-    m_pAddBookMarkBtn->setText(ADD_BK);
+    m_pAddBookMarkBtn->setText(PdfControl::ADD_BK);
     connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(slotAddBookMark()));
 
     connect(this, SIGNAL(sigAddBookMark()), this, SLOT(slotAddBookMark()));
@@ -170,7 +171,7 @@ void BookMarkWidget::keyPressEvent(QKeyEvent *e)
 {
     QString key = Utils::getKeyshortcut(e);
 
-    if (key == DEL_KEY) {
+    if (key == PdfControl::DEL_KEY) {
         slotDeleteBookItem();
     }  else {
         // Pass event to CustomWidget continue, otherwise you can't type anything after here. ;)

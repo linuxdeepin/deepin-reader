@@ -1,4 +1,5 @@
 #include "fontWidget.h"
+#include "translator/PdfControl.h"
 
 FontWidget::FontWidget(CustomWidget *parent):
     CustomWidget(QString("FontWidget"), parent)
@@ -67,7 +68,7 @@ void FontWidget::initWidget()
     t_pHLayout6->setSpacing(0);
 
     m_pEnlargeLab = new DLabel;
-    m_pEnlargeLab->setText(SCALE_CURRENT);
+    m_pEnlargeLab->setText(PdfControl::SCALE_CURRENT);
     m_pEnlargeLab->setAlignment(Qt::AlignCenter);
     ft.setPointSize(15);
     m_pEnlargeLab->setFont(ft);
@@ -78,14 +79,14 @@ void FontWidget::initWidget()
     t_pHLayout1->setSpacing(1);
 
     m_pMinLabALab = new DLabel;
-    m_pMinLabALab->setText(SCALE_SIG);
+    m_pMinLabALab->setText(PdfControl::SCALE_SIG);
     m_pMinLabALab->setAlignment(Qt::AlignCenter);
     ft.setPointSize(8);
     m_pMinLabALab->setFont(ft);
     m_pMinLabALab->setFixedSize(QSize(25, 25));
 
     m_pMaxLabALab = new DLabel;
-    m_pMaxLabALab->setText(SCALE_SIG);
+    m_pMaxLabALab->setText(PdfControl::SCALE_SIG);
     m_pMaxLabALab->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
     m_pMaxLabALab->setFont(ft);
@@ -110,7 +111,7 @@ void FontWidget::initWidget()
     //t_pHLayout2->addSpacing(1);
 
     m_pDoubPageViewBtn = new DImageButton;
-    m_pDoubPageViewBtn->setText(DOUB_VIEW);
+    m_pDoubPageViewBtn->setText(PdfControl::DOUB_VIEW);
     m_pDoubPageViewBtn->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
     m_pDoubPageViewBtn->setFont(ft);
@@ -124,7 +125,7 @@ void FontWidget::initWidget()
     //t_pHLayout3->addStretch(1);
 
     m_pSuitHBtn = new DImageButton;
-    m_pSuitHBtn->setText(ADAP_HEIGHT);
+    m_pSuitHBtn->setText(PdfControl::ADAP_HEIGHT);
     m_pSuitHBtn->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
     m_pSuitHBtn->setFont(ft);
@@ -138,7 +139,7 @@ void FontWidget::initWidget()
     //t_pHLayout4->addSpacing(1);
 
     m_pSuitWBtn = new DImageButton;
-    m_pSuitWBtn->setText(ADAP_WIDTH);
+    m_pSuitWBtn->setText(PdfControl::ADAP_WIDTH);
     m_pSuitWBtn->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
     m_pSuitWBtn->setFont(ft);
@@ -152,7 +153,7 @@ void FontWidget::initWidget()
     //t_pHLayout5->addSpacing(1);
 
     m_pRotateLeftBtn = new DImageButton;
-    m_pRotateLeftBtn->setText(ROTAT_TO_L);
+    m_pRotateLeftBtn->setText(PdfControl::ROTAT_TO_L);
     m_pRotateLeftBtn->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
     m_pRotateLeftBtn->setFont(ft);
@@ -166,7 +167,7 @@ void FontWidget::initWidget()
     //t_pHLayout6->addSpacing(1);
 
     m_pRotateRightBtn = new DImageButton;
-    m_pRotateRightBtn->setText(ROTAT_TO_R);
+    m_pRotateRightBtn->setText(PdfControl::ROTAT_TO_R);
     m_pRotateRightBtn->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
     m_pRotateRightBtn->setFont(ft);

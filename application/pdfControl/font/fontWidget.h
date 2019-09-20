@@ -17,8 +17,6 @@
 #include "subjectObserver/CustomWidget.h"
 #include "docview/docummentproxy.h"
 
-using namespace FONT;
-
 class FontWidget : public CustomWidget
 {
     Q_OBJECT

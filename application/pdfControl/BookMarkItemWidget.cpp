@@ -1,6 +1,6 @@
 #include "BookMarkItemWidget.h"
 #include <QDebug>
-
+#include "translator/PdfControl.h"
 
 BookMarkItemWidget::BookMarkItemWidget(CustomWidget *parent) :
     CustomWidget(QString("BookMarkItemWidget"), parent)
@@ -36,7 +36,7 @@ void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
 {
     QMenu *t_menu = new QMenu(this);
 
-    QAction *dltBookMarkAction = t_menu->addAction(DLT_BK);
+    QAction *dltBookMarkAction = t_menu->addAction(PdfControl::DLT_BK);
     connect(dltBookMarkAction, SIGNAL(triggered()), this, SLOT(slotDltBookMark()));
     t_menu->exec(QCursor::pos());
 }
@@ -63,7 +63,7 @@ void BookMarkItemWidget::setPageNumber(int nPageNumber)
 {
     m_nPageNumber = nPageNumber;
 
-    QString sPageText = PAGE_PREF + QString("%1").arg( nPageNumber + 1);
+    QString sPageText = PdfControl::PAGE_PREF + QString("%1").arg( nPageNumber + 1);
 
     m_pPage->setText(sPageText);
 }

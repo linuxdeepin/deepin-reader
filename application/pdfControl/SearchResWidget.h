@@ -16,9 +16,6 @@
  * @brief   搜索结果显示窗体
  */
 
-using namespace COMMON;
-using namespace SEARCH;
-
 class SearchResWidget : public CustomWidget
 {
     Q_OBJECT

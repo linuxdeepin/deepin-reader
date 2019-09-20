@@ -1,4 +1,5 @@
 #include "SearchResWidget.h"
+#include "translator/PdfControl.h"
 
 SearchResWidget::SearchResWidget(CustomWidget *parent) :
     CustomWidget(QString("SearchResWidget"), parent)
@@ -67,10 +68,10 @@ void SearchResWidget::addNotesItem(const QImage &image, const int &page, const Q
     NotesItemWidget *itemWidget = new NotesItemWidget;
 
     itemWidget->setLabelImage(image);
-    itemWidget->setLabelPage(PAGE_PREF + QString("%1").arg(page + 1));
+    itemWidget->setLabelPage(PdfControl::PAGE_PREF + QString("%1").arg(page + 1));
     itemWidget->setTextEditText(text);
 
-    itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + SEARCH_RES_CONT));
+    itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + PdfControl::SEARCH_RES_CONT));
 
     itemWidget->setMinimumSize(QSize(250, 150));
 

@@ -19,7 +19,6 @@
  * @brief   注释和搜索item
  */
 
-using namespace NOTE;
 
 class NotesItemWidget : public CustomWidget
 {

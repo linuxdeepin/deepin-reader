@@ -8,7 +8,6 @@
 #include <QKeyEvent>
 #include <QVBoxLayout>
 
-#include "translator/Frame.h"
 #include "subjectObserver/CustomWidget.h"
 #include "docview/docummentproxy.h"
 
@@ -16,8 +15,6 @@
  * @brief The ThumbnailItemWidget class
  * @brief   跳转页窗体
  */
-
-using namespace  COMMON;
 
 const int FIRSTPAGES = 1;
 //

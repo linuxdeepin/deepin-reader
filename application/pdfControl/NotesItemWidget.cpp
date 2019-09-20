@@ -1,6 +1,6 @@
 #include "NotesItemWidget.h"
 #include <QDebug>
-
+#include "translator/PdfControl.h"
 
 NotesItemWidget::NotesItemWidget(CustomWidget *parent) :
     CustomWidget(QString("NotesItemWidget"), parent)
@@ -57,8 +57,8 @@ void NotesItemWidget::slotCopyContant()
 void NotesItemWidget::slotShowContextMenu(const QPoint &)
 {
     QMenu *t_menu = new QMenu(this);
-    QAction *copyAction = t_menu->addAction(COPY_CONT);
-    QAction *dltItemAction = t_menu->addAction(DLT_NOTE);
+    QAction *copyAction = t_menu->addAction(PdfControl::COPY_CONT);
+    QAction *dltItemAction = t_menu->addAction(PdfControl::DLT_NOTE);
     connect(dltItemAction, SIGNAL(triggered()), this, SLOT(slotDltNoteItem()));
     connect(copyAction, SIGNAL(triggered()), this, SLOT(slotCopyContant()));
     t_menu->exec(QCursor::pos());
