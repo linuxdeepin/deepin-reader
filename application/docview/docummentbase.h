@@ -208,6 +208,10 @@ public:
     }
     virtual void title(QString &title) {}
 
+    virtual void setAnnotationText(int ipage,const QString& struuid,const QString& strtext){}
+    virtual void getAnnotationText(const QString& struuid,QString& strtext){}
+
+
 signals:
     void signal_pageChange(int);
 protected slots:

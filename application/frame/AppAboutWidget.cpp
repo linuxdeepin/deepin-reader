@@ -1,5 +1,6 @@
 #include "AppAboutWidget.h"
 #include <DWidgetUtil>
+#include "translator/Frame.h"
 
 AppAboutWidget::AppAboutWidget(DWidget *parent)
     : DAboutDialog (parent)
@@ -17,11 +18,9 @@ void AppAboutWidget::showScreenCenter()
 void AppAboutWidget::initLabels()
 {
     setProductIcon(QPixmap(":/resources/image/logo/logo_big.svg"));
-    setProductName(tr("deepin_reader"));
+    setProductName(Frame::sAppName);
     setVersion("1.3.18");
-    setDescription(tr("文档查看器是深度操作系统自带的文档查看软件。\r\n"
-                      "除了打开和阅读PDF文件外，你还可以对文档进行\r\n"
-                      "添加书签、添加注释和对选择的文本进行高亮显示等操作。"));
+    setDescription(Frame::sDescription);
 
 //    setAcknowledgementLink("https://www.deepin.org/acknowledgments/deepin-image-viewer/");
     setAcknowledgementVisible(false);

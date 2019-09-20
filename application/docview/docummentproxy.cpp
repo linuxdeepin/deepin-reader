@@ -240,3 +240,19 @@ void DocummentProxy::findPrev()
         m_documment->findPrev();
     }
 }
+
+void DocummentProxy::setAnnotationText(int ipage, const QString &struuid, const QString &strtext)
+{
+    if(m_documment)
+    {
+        m_documment->setAnnotationText(ipage,struuid,strtext);
+    }
+}
+
+void DocummentProxy::getAnnotationText(const QString &struuid, QString &strtext)
+{
+    if(m_documment)
+    {
+        m_documment->getAnnotationText(struuid,strtext);
+    }
+}

@@ -7,6 +7,7 @@
 #include "utils/utils.h"
 #include <QDesktopServices>
 
+
 DocummentFileHelper::DocummentFileHelper(QObject *parent) : QObject(parent)
 {
     m_pDocummentProxy = DocummentProxy::instance();
@@ -78,7 +79,7 @@ void DocummentFileHelper::onCopySelectContent()
 {
     QString sCopy = "";
     bool rl = m_pDocummentProxy->getSelectTextString(sCopy);
-    if (rl) {
+    if (rl && sCopy != "") {
         QClipboard *clipboard = DApplication::clipboard();   //获取系统剪贴板指针
         clipboard->setText(sCopy);
     }
@@ -93,6 +94,7 @@ void DocummentFileHelper::onFileSlider()
     }
 }
 
+//  文档　跳转页码　．　打开浏览器
 void DocummentFileHelper::onClickPageLink(Page::Link *pLink)
 {
     Page::LinkType_EM linkType = pLink->type;

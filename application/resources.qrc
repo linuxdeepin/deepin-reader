@@ -2,5 +2,8 @@
     <qresource prefix="/">
         <file>resources/image/logo/logo.svg</file>
         <file>resources/image/logo/logo_big.svg</file>
+        <file>resources/image/hover/close.svg</file>
+        <file>resources/image/normal/close.svg</file>
+        <file>resources/image/press/close.svg</file>
     </qresource>
 </RCC>

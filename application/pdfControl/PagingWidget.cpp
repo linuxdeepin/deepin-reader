@@ -1,8 +1,10 @@
 #include "PagingWidget.h"
 #include <QDebug>
 
+#include "translator/PdfControl.h"
+
 PagingWidget::PagingWidget(CustomWidget *parent) :
-    CustomWidget("PagingWidget", parent)
+    CustomWidget(QString("PagingWidget"), parent)
 {
     resize(250, 20);
     initWidget();
@@ -11,15 +13,15 @@ PagingWidget::PagingWidget(CustomWidget *parent) :
 void PagingWidget::initWidget()
 {
     m_pTotalPagesLab = new DLabel(this);
-    m_pTotalPagesLab->setText(QString("/xxx页"));
+    m_pTotalPagesLab->setText(QString("/xxx") + PdfControl::PAGES);
     m_pTotalPagesLab->setMinimumWidth(80);
 
     m_pPrePageBtn = new DImageButton(this);
-    m_pPrePageBtn->setText(tr("<"));
+    m_pPrePageBtn->setText(QString("<"));
     m_pPrePageBtn->setFixedSize(QSize(40, 40));
 
     m_pNextPageBtn = new DImageButton(this);
-    m_pNextPageBtn->setText(tr(">"));
+    m_pNextPageBtn->setText(QString(">"));
     m_pNextPageBtn->setFixedSize(QSize(40, 40));
 
     connect(m_pPrePageBtn, SIGNAL(clicked()), SLOT(slotPrePage()));
@@ -88,7 +90,7 @@ void PagingWidget::setTotalPages(int pages)
 {
     m_totalPage = pages;
     m_currntPage = FIRSTPAGES;
-    m_pTotalPagesLab->setText(QString("/%1页").arg(pages));
+    m_pTotalPagesLab->setText(QString("/%1").arg(pages) + PdfControl::PAGES);
 
     m_pJumpPageSpinBox->setRange(1, (pages < 1) ? 1 : pages);
 }

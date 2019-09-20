@@ -1,8 +1,9 @@
 #include "BookMarkWidget.h"
 #include <QDebug>
+#include "translator/PdfControl.h"
 
 BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
-    CustomWidget("BookMarkWidget", parent)
+    CustomWidget(QString("BookMarkWidget"), parent)
 {
     m_loadBookMarkThread.setBookMark(this);
 
@@ -32,7 +33,6 @@ void BookMarkWidget::slotShowSelectItem(QListWidgetItem *item)
     BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
     if (t_widget) {
         int nnPageNumber = t_widget->PageNumber();
-        //m_nCurrentPage = nnPageNumber;
 
         DocummentProxy::instance()->pageJump(nnPageNumber);
     }
@@ -57,7 +57,7 @@ void BookMarkWidget::slotAddBookMark()
     } else {
         QString sPage = "";
         foreach (int i, m_pAllPageList) {
-            sPage += QString::number(i) + tr(",");
+            sPage += QString::number(i) + ",";
         }
 
         sPage += QString::number(page);
@@ -153,7 +153,7 @@ void BookMarkWidget::initWidget()
 
     m_pAddBookMarkBtn = new DImageButton;
     m_pAddBookMarkBtn->setFixedSize(QSize(250, 50));
-    m_pAddBookMarkBtn->setText(tr("adding bookmark"));
+    m_pAddBookMarkBtn->setText(PdfControl::ADD_BK);
     connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(slotAddBookMark()));
 
     connect(this, SIGNAL(sigAddBookMark()), this, SLOT(slotAddBookMark()));
@@ -171,7 +171,7 @@ void BookMarkWidget::keyPressEvent(QKeyEvent *e)
 {
     QString key = Utils::getKeyshortcut(e);
 
-    if (key == "Del") {
+    if (key == PdfControl::DEL_KEY) {
         slotDeleteBookItem();
     }  else {
         // Pass event to CustomWidget continue, otherwise you can't type anything after here. ;)
@@ -193,7 +193,6 @@ void BookMarkWidget::initConnection()
 void BookMarkWidget::loadBookMarkItem(const int &page)
 {
     BookMarkItemWidget *t_widget = new BookMarkItemWidget(this);
-//    t_widget->setItemImage(image);
     t_widget->setPageNumber(page);
     t_widget->setMinimumSize(QSize(250, 150));
 

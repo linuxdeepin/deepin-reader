@@ -1,4 +1,4 @@
-QT += core gui svg sql
+QT += core gui svg sql printsupport
 QT += dtkwidget
 QT += xml
 
@@ -16,6 +16,7 @@ include (pdfControl/pdfControl.pri)
 include (docview/docview.pri)
 include (subjectObserver/subjectObserver.pri)
 include (mainShow/mainShow.pri)
+include (translator/translator.pri)
 
 SOURCES += \
         main.cpp \
@@ -24,7 +25,7 @@ SOURCES += \
 RESOURCES +=         resources.qrc
 
 HEADERS +=\
-    application.h\
+    application.h
 
 
 DISTFILES += \

@@ -6,7 +6,6 @@
         <file>resources/image/checked/bookmark.svg</file>
         <file>resources/image/checked/thumbnail.svg</file>
         <file>resources/image/hover/view.svg</file>
-        <file>resources/image/hover/close.svg</file>
         <file>resources/image/hover/comments.svg</file>
         <file>resources/image/hover/choose_small.svg</file>
         <file>resources/image/hover/commenticon.svg</file>
@@ -16,7 +15,6 @@
         <file>resources/image/normal/choose.svg</file>
         <file>resources/image/normal/view.svg</file>
         <file>resources/image/normal/choose_small.svg</file>
-        <file>resources/image/normal/close.svg</file>
         <file>resources/image/normal/magnifier.svg</file>
         <file>resources/image/normal/comments.svg</file>
         <file>resources/image/normal/bookmark.svg</file>
@@ -33,7 +31,6 @@
         <file>resources/image/press/comments.svg</file>
         <file>resources/image/press/view.svg</file>
         <file>resources/image/press/hand.svg</file>
-        <file>resources/image/press/close.svg</file>
         <file>resources/import_photo.svg</file>
     </qresource>
 </RCC>
