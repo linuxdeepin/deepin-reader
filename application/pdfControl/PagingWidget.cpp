@@ -33,6 +33,7 @@ void PagingWidget::initWidget()
     m_pJumpPageSpinBox->setMinimumWidth(50);
     m_pJumpPageSpinBox->installEventFilter(this);
     m_pJumpPageSpinBox->setWrapping(true);
+    m_pJumpPageSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
 
     QHBoxLayout *hLayout = new QHBoxLayout;
     hLayout->addWidget(m_pJumpPageSpinBox);
@@ -95,7 +96,7 @@ void PagingWidget::setTotalPages(int pages)
     m_pJumpPageSpinBox->setRange(1, (pages < 1) ? 1 : pages);
 }
 
-int PagingWidget::dealWithData(const int &msgType, const QString &msgContant)
+int PagingWidget::dealWithData(const int &msgType, const QString &)
 {
     switch (msgType) {
     case MSG_OPERATION_FIRST_PAGE:              //  第一页

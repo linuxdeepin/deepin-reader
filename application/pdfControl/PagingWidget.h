@@ -4,7 +4,9 @@
 #include <DLabel>
 #include <DImageButton>
 #include <DSpinBox>
+#include <DLineEdit>
 
+#include <QIntValidator>
 #include <QKeyEvent>
 #include <QVBoxLayout>
 
