@@ -8,6 +8,7 @@
 #include <QAction>
 #include <QContextMenuEvent>
 
+#include "translator/Frame.h"
 #include "subjectObserver/CustomWidget.h"
 
 /**

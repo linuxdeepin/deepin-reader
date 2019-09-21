@@ -13,6 +13,7 @@
 #include <QRectF>
 #include <QtMath>
 
+#include "translator/Frame.h"
 #include "subjectObserver/CustomWidget.h"
 #include "docview/docummentproxy.h"
 

@@ -53,6 +53,18 @@ PageBase::PageBase(DWidget *parent)
     setAlignment(Qt::AlignCenter);
 }
 
+PageBase::~PageBase()
+{
+    for (int i = 0; i < m_links.size(); i++) {
+        delete m_links.at(i);
+    }
+    m_links.clear();
+    if (loadmagnifiercachethread.isRunning()) {
+        loadmagnifiercachethread.quit();
+        loadmagnifiercachethread.wait();
+    }
+}
+
 void PageBase::paintEvent(QPaintEvent *event)
 {
     DLabel::paintEvent(event);

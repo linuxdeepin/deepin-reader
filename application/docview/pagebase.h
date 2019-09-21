@@ -72,6 +72,7 @@ class PageBase: public DLabel
     Q_OBJECT
 public:
     PageBase(DWidget *parent = 0);
+    ~PageBase();
     virtual bool getImage(QImage &image, double width, double height)
     {
         return false;
@@ -83,6 +84,14 @@ public:
     virtual bool getSlideImage(QImage &image, double &width, double &height)
     {
         return false;
+    }
+    double getOriginalImageWidth()
+    {
+        return m_imagewidth;
+    }
+    double getOriginalImageHeight()
+    {
+        return m_imageheight;
     }
     void loadMagnifierPixmapCache(double width, double height);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100),

@@ -1,4 +1,5 @@
 #include "docummentbase.h"
+#include "publicfunc.h"
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QPainter>
@@ -182,6 +183,7 @@ DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
     pslidelabel = new DLabel(m_slidewidget);
     pslideanimationlabel = new DLabel(m_slidewidget);
     pslideanimationlabel->setGeometry(-200, -200, 100, 100);
+    delete parent->layout();
     QGridLayout *gridlyout = new QGridLayout(parent);
     parent->setLayout(gridlyout);
     gridlyout->addWidget(this, 0, 0);
@@ -209,6 +211,28 @@ DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
 
     connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_vScrollBarValueChanged(int)));
     connect(this->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_hScrollBarValueChanged(int)));
+}
+
+DocummentBase::~DocummentBase()
+{
+    if (m_threadloaddoc.isRunning()) {
+        m_threadloaddoc.requestInterruption();
+        m_threadloaddoc.quit();
+        m_threadloaddoc.wait();
+    }
+    if (m_threadloadwords.isRunning()) {
+        m_threadloadwords.requestInterruption();
+        m_threadloadwords.quit();
+        m_threadloadwords.wait();
+    }
+    if (m_magnifierwidget) {
+        delete m_magnifierwidget;
+        m_magnifierwidget = nullptr;
+    }
+    if (m_slidewidget) {
+        delete m_slidewidget;
+        m_slidewidget = nullptr;
+    }
 }
 
 QPoint DocummentBase::global2RelativePoint(QPoint globalpoint)
@@ -596,8 +620,13 @@ bool DocummentBase::pageJump(int pagenum)
 void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
 {
     int currpageno = m_currentpageno;
+    if (m_pages.size() < 1) {
+        return;
+    }
+
     m_scale = scale;
-    m_rotate = rotate;
+    if (rotate != RotateType_Normal)
+        m_rotate = rotate;
     donotneedreloaddoc = true;
     for (int i = 0; i < m_pages.size(); i++) {
         m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
@@ -755,7 +784,7 @@ Page::Link *DocummentBase::mouseBeOverLink(QPoint point)
 
 void DocummentBase::slot_vScrollBarValueChanged(int value)
 {
-    qDebug() << "slot_vScrollBarValueChanged" << value;
+//    qDebug() << "slot_vScrollBarValueChanged" << value;
     if (!donotneedreloaddoc) {
         int pageno = currentPageNo();
         if (m_currentpageno != pageno) {
@@ -771,7 +800,7 @@ void DocummentBase::slot_vScrollBarValueChanged(int value)
 
 void DocummentBase::slot_hScrollBarValueChanged(int value)
 {
-    qDebug() << "slot_hScrollBarValueChanged" << value;
+//    qDebug() << "slot_hScrollBarValueChanged" << value;
     if (!donotneedreloaddoc) {
         int pageno = currentPageNo();
         if (m_currentpageno != pageno) {

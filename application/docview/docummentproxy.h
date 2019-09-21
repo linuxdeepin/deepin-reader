@@ -10,7 +10,10 @@ enum DocType_EM {
     DocType_NULL = 0,
     DocType_PDF,
     DocType_DJVU,
-    DocType_TIFF
+    DocType_TIFF,
+    DocType_PS,
+    DocType_XPS
+
 };
 
 class DocummentProxy: public QObject
@@ -49,7 +52,9 @@ public:
     void findNext();
     void findPrev();
     void setAnnotationText(int ipage, const QString &struuid, const QString &strtext);
-    void getAnnotationText(const QString& struuid,QString& strtext);
+    void getAnnotationText(const QString &struuid, QString &strtext);
+    bool adaptWidthAndShow(double width);
+    bool adaptHeightAndShow(double height);
 signals:
     void signal_pageChange(int);
 private slots:

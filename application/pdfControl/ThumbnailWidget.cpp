@@ -1,7 +1,7 @@
 #include "ThumbnailWidget.h"
 
 ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
-    CustomWidget("ThumbnailWidget", parent)
+    CustomWidget(QString("ThumbnailWidget"), parent)
 {
     m_ThreadLoadImage.setParent(this);
     m_ThreadLoadImage.setThumbnail(this);
@@ -79,7 +79,6 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
         p.setColor(QPalette::Text, QColor(30, 144, 255));
 
         t_contantLab = t_ItemWidget->getContantLabel();
-        //t_contantLab->setFrameShape (QFrame::Box);
         t_contantLab->setLineWidth(3);
         t_contantLab->setPalette(p);
 
@@ -101,15 +100,13 @@ void ThumbnailWidget::setCurrentRow(const int &row)
     }
 }
 
-void ThumbnailWidget::addThumbnailItem(const QImage &image, const int &idex)
+void ThumbnailWidget::addThumbnailItem(const int &idex)
 {
-    QListWidgetItem *item = new QListWidgetItem(m_pThumbnailListWidget);
     ThumbnailItemWidget *widget = new ThumbnailItemWidget;
-
-    //widget->setContantLabelPixmap(image);
-    widget->setPageLabelText(tr("%1").arg(idex + 1));
+    widget->setPageLabelText(QString("%1").arg(idex + 1));
     widget->setMinimumSize(QSize(250, 250));
 
+    QListWidgetItem *item = new QListWidgetItem(m_pThumbnailListWidget);
     item->setFlags(Qt::NoItemFlags);
     item->setFlags(Qt::ItemIsSelectable);
     item->setSizeHint(QSize(250, 250));
@@ -136,10 +133,9 @@ void ThumbnailWidget::slotFileViewToListPage(int page)
 
 bool ThumbnailWidget::fillContantToList()
 {
-    QImage image;
     for (int idex = 0; idex < totalPages(); ++idex) {
 
-        addThumbnailItem(image, idex);
+        addThumbnailItem(idex);
     }
 
     return true;
@@ -247,17 +243,13 @@ void ThreadLoadImage::run()
             m_nEndPage = m_pages - 1;
         }
 
-        qDebug() << tr("m_nStartPage: %1   m_nEndPage: %2").arg(m_nStartPage).arg(m_nEndPage);
-
         for (int page = m_nStartPage; page <= m_nEndPage; page++) {
             QImage image;
             bool bl = DocummentProxy::instance()->getImage(page, image, 113, 143);
 
             if (bl) {
                 m_pThumbnailWidget->loadImage(page, image);
-            }/* else {
-                qDebug() << tr("loss: %1   loss page: %2").arg(bl).arg(page);
-            }*/
+            }
         }
         m_nStartPage += FIRST_LOAD_PAGES;
         m_nEndPage += FIRST_LOAD_PAGES;

@@ -28,11 +28,18 @@ void waitForMessageTag(ddjvu_context_t *context, ddjvu_message_tag_t tag)
 
 DocummentDJVU::DocummentDJVU(DWidget *parent): DocummentBase(parent),
     document(nullptr),
-    m_listsearch(),
+//    m_listsearch(),
     m_fileinfo(),
     m_pageByName(),
     m_titleByIndex()
 {
+}
+
+DocummentDJVU::~DocummentDJVU()
+{
+    ddjvu_document_release(document);
+    ddjvu_context_release(m_context);
+    ddjvu_format_release(m_format);
 }
 
 bool DocummentDJVU::openFile(QString filepath)
@@ -124,6 +131,9 @@ bool DocummentDJVU::loadPages()
         endnum = m_pages.size();
     }
     for (int i = startnum; i < endnum; i++) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
         m_pages.at(i)->showImage(m_scale, m_rotate);
     }
     return true;
@@ -135,6 +145,9 @@ bool DocummentDJVU::loadWords()
         return false;
     qDebug() << "loadWords";
     for (int i = 0; i < m_pages.size(); i++) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
         PageDJVU *pdjvu = (PageDJVU *)m_pages.at(i);
         pdjvu->loadWords();
         pdjvu->loadLinks();

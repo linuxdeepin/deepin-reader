@@ -1,40 +1,52 @@
 #include "SearchResWidget.h"
+#include "translator/PdfControl.h"
 
 SearchResWidget::SearchResWidget(CustomWidget *parent) :
-    CustomWidget("SearchResWidget", parent)
+    CustomWidget(QString("SearchResWidget"), parent)
 {
+    m_loadSearchResThread.setSearchResW(this);
+
     initWidget();
 
     initConnections();
 }
 
+SearchResWidget::~SearchResWidget()
+{
+    if (m_loadSearchResThread.isRunning()) {
+        m_loadSearchResThread.stopThread();
+    }
+}
+
 void SearchResWidget::slotFlushSearchList(QVariant value)
 {
     QMap<int, stSearchRes> m_resMap = value.value<QMap<int, stSearchRes>>();
-    qDebug() << "slotFlushSearchList...";
     m_pNotesList->clear();
 
-    int index = 0;
     int resultNum = 0;
     QString strText;
-    QImage image;
 
     for (auto it = m_resMap.begin(); it != m_resMap.end(); ++it) {
-        qDebug() << it.key();
         int page = it.key();
         foreach (QString strtext, it.value().listtext) {
-            qDebug() << strtext;
-            strText += strtext + tr("\n");
+
+            strText += strtext;
+            strText += QString("\n");
+
             ++resultNum;
         }
 
-        DocummentProxy::instance()->getImage(page, image, 113, 143);
-        addNotesItem(image, index++, strText, resultNum);
+        addNotesItem(page, strText, resultNum);
         resultNum = 0;
         strText.clear();
     }
 
-    sendMsg(MSG_SWITCHLEFTWIDGET, "3");
+    m_loadSearchResThread.setPages(m_resMap.count());
+    m_loadSearchResThread.setRunning(true);
+    m_loadSearchResThread.start();
+
+    sendMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
+
 }
 
 void SearchResWidget::slotClearWidget()
@@ -64,15 +76,14 @@ void SearchResWidget::initConnections()
             this, SLOT(slotFlushSearchList(QVariant)));
 }
 
-void SearchResWidget::addNotesItem(const QImage &image, const int &page, const QString &text, const int &resultNum)
+void SearchResWidget::addNotesItem(const int &page, const QString &text, const int &resultNum)
 {
     NotesItemWidget *itemWidget = new NotesItemWidget;
 
-    itemWidget->setLabelImage(image);
-    itemWidget->setLabelPage(tr("Page:%1").arg(page + 1));
+    itemWidget->setLabelPage(PdfControl::PAGE_PREF + QString("%1").arg(page + 1));
     itemWidget->setTextEditText(text);
-
-    itemWidget->setSerchResultText(tr("   %1个结果").arg(resultNum));
+    itemWidget->setPage(page);
+    itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + PdfControl::SEARCH_RES_CONT));
 
     itemWidget->setMinimumSize(QSize(250, 150));
 
@@ -80,14 +91,14 @@ void SearchResWidget::addNotesItem(const QImage &image, const int &page, const Q
     item->setFlags(Qt::ItemIsSelectable);
     item->setSizeHint(QSize(250, 150));
 
-    m_pNotesList->insertItem(page, item);
+    m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);
 }
 
 int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_FIND_CONTENT) {        //  查询内容
-        if (msgContent != "") {
+        if (msgContent != QString("")) {
             QMap<int, stSearchRes> resMap;
             DocummentProxy::instance()->search(msgContent, resMap, QColor(255, 0, 0));
 
@@ -116,4 +127,83 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
     }
 
     return 0;
+}
+
+int SearchResWidget::getSearchPage(const int &index)
+{
+    QListWidgetItem *pItem = m_pNotesList->item(index);
+    m_pSearchItemWidget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
+    if (m_pSearchItemWidget) {
+        return m_pSearchItemWidget->page();
+    }
+
+    return -1;
+}
+
+int SearchResWidget::setSearchItemImage(const QImage &image)
+{
+    if (m_pSearchItemWidget) {
+        m_pSearchItemWidget->setLabelImage(image);
+        m_pSearchItemWidget = nullptr;
+    }
+
+    return 0;
+}
+
+/************************************LoadSearchResList*******************************************************/
+/************************************加载搜索列表缩略图*********************************************************/
+
+LoadSearchResThread::LoadSearchResThread()
+{
+
+}
+
+void LoadSearchResThread::stopThread()
+{
+    m_isRunning = false;
+
+    terminate();    //终止线程
+    wait();         //阻塞等待
+}
+
+void LoadSearchResThread::run()
+{
+    while (m_isRunning) {
+
+        if (m_nStartIndex < 0) {
+            m_nStartIndex = 0;
+        }
+        if (m_nEndIndex >= m_pages) {
+            m_isRunning = false;
+            m_nEndIndex = m_pages - 1;
+        }
+
+        QImage image;
+        int page = -1;
+
+        for (int index = m_nStartIndex; index <= m_nEndIndex; index++) {
+
+            if (!m_pSearchResWidget) {
+                continue;
+            }
+
+            page = m_pSearchResWidget->getSearchPage(index);
+
+
+            if (page == -1) {
+                continue;
+            }
+
+            bool bl = DocummentProxy::instance()->getImage(page, image, 113, 143);
+
+            if (bl) {
+                m_pSearchResWidget->setSearchItemImage(image);
+            }
+        }
+
+        m_nStartIndex += FIRST_LOAD_PAGES;
+        m_nEndIndex   += FIRST_LOAD_PAGES;
+
+        msleep(50);
+    }
 }

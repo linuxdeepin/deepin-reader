@@ -7,9 +7,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = deepin_reader
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
-PKGCONFIG += x11 poppler-qt5 ddjvuapi
-LIBS+=-luuid -ltiff
-
 
 include (frame/frame.pri)
 include (utils/utils.pri)
@@ -18,6 +15,7 @@ include (pdfControl/pdfControl.pri)
 include (docview/docview.pri)
 include (subjectObserver/subjectObserver.pri)
 include (mainShow/mainShow.pri)
+include (translator/translator.pri)
 
 SOURCES += \
         main.cpp \
@@ -26,8 +24,7 @@ SOURCES += \
 RESOURCES +=         resources.qrc
 
 HEADERS +=\
-    application.h \
-    translator/Frame.h
+    application.h
 
 
 DISTFILES += \
