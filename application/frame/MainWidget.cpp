@@ -28,7 +28,6 @@ void MainWidget::openFileFail(const QString &errorInfo)
     qDebug() << "openFileFail       "   <<  errorInfo;
 }
 
-
 int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {

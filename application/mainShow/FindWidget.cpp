@@ -22,30 +22,12 @@
 
 #include "FindWidget.h"
 
-#include <QDebug>
-
 FindWidget::FindWidget(CustomWidget *parent)
     : CustomWidget("FindWidget", parent)
 {
-    // Init.
-//    setWindowFlags(Qt::WindowStaysOnTopHint);   //  搜索框　保持置顶
-//    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Popup);   //  搜索框　保持置顶
     setFixedSize(QSize(410, 50));
 
-    // Init layout and mainShow.
-    m_layout = new QHBoxLayout(this);
-
-    //modify by guoshaoyu
-    m_editLine = new LineBar();
-
     initWidget();
-
-    connect(m_editLine, &LineBar::pressEsc, this, &FindWidget::findCancel);
-    connect(m_editLine, &LineBar::pressEnter, this, &FindWidget::handleContentChanged);
-    connect(m_editLine, &LineBar::pressCtrlEnter, this, &FindWidget::slotFindPrevBtnClicked);
-    connect(m_editLine, &LineBar::clearContent, this, &FindWidget::slotClearContent);
-
-    //connect(m_editLine, &LineBar::contentChanged, this, &FindWidget::handleContentChanged, Qt::QueuedConnection);
 
     setVisible(false);
 }
@@ -57,7 +39,7 @@ void FindWidget::findCancel()
 
 void FindWidget::handleContentChanged()
 {
-    QString strNewFind = m_editLine->text();
+    QString strNewFind = m_pSearchEdit->text();
     if (strNewFind != m_strOldFindContent) {
         m_strOldFindContent = strNewFind;
         sendMsg(MSG_FIND_CONTENT, m_strOldFindContent);
@@ -104,12 +86,17 @@ void FindWidget::initWidget()
     findPrevButton->setFixedSize(QSize(36, 36));
     connect(findPrevButton, &DPushButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
 
-    DImageButton *closeButton = new DImageButton();
+    DImageButton *closeButton = new DImageButton;
     closeButton->setFixedSize(20, 20);
     connect(closeButton, &DImageButton::clicked, this, &FindWidget::findCancel);
 
-    m_layout->addWidget(m_editLine);
-    m_layout->addWidget(findNextButton);
-    m_layout->addWidget(findPrevButton);
-    m_layout->addWidget(closeButton);
+    m_pSearchEdit = new DSearchEdit;
+    connect(m_pSearchEdit, &DSearchEdit::returnPressed, this, &FindWidget::handleContentChanged);
+    connect(m_pSearchEdit, &DSearchEdit::textChanged, this, &FindWidget::slotClearContent);
+
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->addWidget(m_pSearchEdit);
+    layout->addWidget(findNextButton);
+    layout->addWidget(findPrevButton);
+    layout->addWidget(closeButton);
 }

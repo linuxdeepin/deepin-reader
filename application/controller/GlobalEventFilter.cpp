@@ -27,7 +27,7 @@
 GlobalEventFilter::GlobalEventFilter(QObject *parent)
     : QObject(parent)
 {
-    m_pFilterList = QStringList() << "Esc" << "F1" << "Up" << "Down" << "Ctrl+S" << "Ctrl+O";
+    m_pFilterList = QStringList() << "Esc" << "F1" << "Up" << "Down" << "Ctrl+S" << "Ctrl+O" << "Ctrl+F";
 }
 
 bool GlobalEventFilter::eventFilter(QObject *obj, QEvent *e)

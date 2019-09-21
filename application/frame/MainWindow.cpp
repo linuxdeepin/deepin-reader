@@ -7,8 +7,9 @@
 #include <DWidgetUtil>
 #include <QDebug>
 #include <DDesktopServices>
-
+#include <QSignalMapper>
 #include "controller/DataManager.h"
+#include "translator/Frame.h"
 
 MainWindow::MainWindow(DMainWindow *parent)
     : DMainWindow(parent)
@@ -59,26 +60,40 @@ void MainWindow::initUI()
 
 void MainWindow::initConnections()
 {
-    m_menu = new DMenu;
+    DMenu *m_menu = new DMenu(this);
 
-    createAction(m_menu, tr("Open file"), SLOT(action_OpenFile()), false);
-    m_pSaveFile = createAction(m_menu, tr("Save"), SLOT(action_SaveFile()));
-    m_pSaveAsFile = createAction(m_menu, tr("Save as"), SLOT(action_SaveAsFile()));
-    m_pOpenFolder = createAction(m_menu, tr("Open folder"), SLOT(action_OpenFolder()));
-    m_pFilePrint = createAction(m_menu, tr("Print"), SLOT(action_Print()));
-    m_pFileAttr = createAction(m_menu, tr("Attr"), SLOT(action_Attr()));
+    QSignalMapper *pSigManager = new QSignalMapper(this);
+    connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(SlotActionTrigger(const QString &)));
+
+    QStringList firstActionList = QStringList() << Frame::sOpenFile << Frame::sSaveFile << Frame::sSaveAsFile
+                                  << Frame::sOpenFolder << Frame::sPrint << Frame::sFileAttr;
+
+    foreach (const QString &s, firstActionList) {
+        QAction *_action = createAction(m_menu, s);
+        connect(_action, SIGNAL(triggered()), pSigManager, SLOT(map()));
+        pSigManager->setMapping(_action, s);
+    }
     m_menu->addSeparator();
 
-    m_pFileFind = createAction(m_menu, tr("Find"), SLOT(action_Find()));
-    m_pFileFullScreen = createAction(m_menu, tr("Full screen"), SLOT(action_FullScreen()));
-    m_pFileScreening = createAction(m_menu, tr("Screening"), SLOT(action_Screening()));
-    m_pFileLarger = createAction(m_menu, tr("Larger"), SLOT(action_Larger()));
-    m_pFileSmaller = createAction(m_menu, tr("Smaller"), SLOT(action_Smaller()));
-
+    QStringList secondActionList = QStringList() << Frame::sSearch << Frame::sFullScreen << Frame::sScreening
+                                   << Frame::sLarger << Frame::sSmaller;
+    foreach (const QString &s, secondActionList) {
+        QAction *_action = createAction(m_menu, s);
+        connect(_action, SIGNAL(triggered()), pSigManager, SLOT(map()));
+        pSigManager->setMapping(_action, s);
+    }
     m_menu->addSeparator();
 
     m_menu->setMinimumWidth(ConstantMsg::g_menu_width);
     titlebar()->setMenu(m_menu);
+
+    QList<QAction *> actions = this->findChildren<QAction *>();
+    foreach (QAction *a, actions) {
+        if (a->text() == Frame::sOpenFile) {
+            a->setDisabled(false);
+            break;
+        }
+    }
 }
 
 void MainWindow::initTitlebar()
@@ -87,26 +102,8 @@ void MainWindow::initTitlebar()
     titlebar()->setTitle(tr(""));
 }
 
-//  打开 文件
-void MainWindow::action_OpenFile()
-{
-    sendMsg(MSG_OPERATION_OPEN_FILE);
-}
-
-//  保存文件
-void MainWindow::action_SaveFile()
-{
-    sendMsg(MSG_OPERATION_SAVE_FILE);
-}
-
-//  另存为
-void MainWindow::action_SaveAsFile()
-{
-    sendMsg(MSG_OPERATION_SAVE_AS_FILE);
-}
-
 //  打开 所在文件夹
-void MainWindow::action_OpenFolder()
+void MainWindow::onOpenFolder()
 {
     QString strFilePath = DataManager::instance()->strOnlyFilePath();
     if (strFilePath != "") {
@@ -116,26 +113,8 @@ void MainWindow::action_OpenFolder()
     }
 }
 
-//  打印
-void MainWindow::action_Print()
-{
-    sendMsg(MSG_OPERATION_PRINT);
-}
-
-//  属性
-void MainWindow::action_Attr()
-{
-    sendMsg(MSG_OPERATION_ATTR);
-}
-
-//  搜索
-void MainWindow::action_Find()
-{
-    sendMsg(MSG_OPERATION_FIND);
-}
-
 //  全屏
-void MainWindow::action_FullScreen()
+void MainWindow::onFullScreen()
 {
     titlebar()->setVisible(false);
     this->setWindowState(Qt::WindowFullScreen);
@@ -144,38 +123,48 @@ void MainWindow::action_FullScreen()
 }
 
 //  放映
-void MainWindow::action_Screening()
+void MainWindow::onScreening()
 {
     titlebar()->setVisible(false);
     this->setWindowState(Qt::WindowFullScreen);
     sendMsg(MSG_OPERATION_SLIDE);
 }
 
-//  放大
-void MainWindow::action_Larger()
-{
-    sendMsg(MSG_OPERATION_LARGER);
-}
-
-//  缩小
-void MainWindow::action_Smaller()
-{
-    sendMsg(MSG_OPERATION_SMALLER);
-}
-
 //  文件打开成，　功能性　菜单才能点击
 void MainWindow::openFileOk()
 {
-    m_pSaveFile->setDisabled(false);
-    m_pSaveAsFile->setDisabled(false);
-    m_pOpenFolder->setDisabled(false);;
-    m_pFilePrint->setDisabled(false);;
-    m_pFileAttr->setDisabled(false);
-    m_pFileFind->setDisabled(false);
-    m_pFileFullScreen->setDisabled(false);
-    m_pFileScreening->setDisabled(false);
-    m_pFileLarger->setDisabled(false);
-    m_pFileSmaller->setDisabled(false);
+    QList<QAction *> actions = this->findChildren<QAction *>();
+    foreach (QAction *a, actions) {
+        a->setDisabled(false);
+    }
+}
+
+//  点击菜单　发送指令
+void MainWindow::SlotActionTrigger(const QString &sAction)
+{
+    if (sAction == Frame::sOpenFile) {
+        sendMsg(MSG_OPERATION_OPEN_FILE);
+    } else if (sAction == Frame::sSaveFile) {
+        sendMsg(MSG_OPERATION_SAVE_FILE);
+    } else if (sAction == Frame::sSaveAsFile) {
+        sendMsg(MSG_OPERATION_SAVE_AS_FILE);
+    } else if (sAction == Frame::sOpenFolder) {
+        onOpenFolder();
+    } else if (sAction == Frame::sPrint) {
+        sendMsg(MSG_OPERATION_PRINT);
+    } else if (sAction == Frame::sFileAttr) {
+        sendMsg(MSG_OPERATION_ATTR);
+    } else if (sAction == Frame::sSearch) {
+        sendMsg(MSG_OPERATION_FIND);
+    } else if (sAction == Frame::sFullScreen) {
+        onFullScreen();
+    } else if (sAction == Frame::sScreening) {
+        onScreening();
+    } else if (sAction == Frame::sLarger) {
+        sendMsg(MSG_OPERATION_LARGER);
+    } else if (sAction == Frame::sSmaller) {
+        sendMsg(MSG_OPERATION_SMALLER);
+    }
 }
 
 void MainWindow::sendMsg(const int &msgType, const QString &msgContent)
@@ -203,11 +192,10 @@ void MainWindow::setObserverName(const QString &name)
     m_strObserverName = name;
 }
 
-QAction *MainWindow::createAction(DMenu *menu, const QString &actionName, const char *member, const bool &disable)
+QAction *MainWindow::createAction(DMenu *menu, const QString &actionName)
 {
     QAction *action = new QAction(actionName, this);
-    connect(action, SIGNAL(triggered()), member);
-    action->setDisabled(disable);
+    action->setDisabled(true);
     menu->addAction(action);
 
     return action;

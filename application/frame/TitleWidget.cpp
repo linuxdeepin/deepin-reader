@@ -1,6 +1,8 @@
 #include "TitleWidget.h"
 #include <QDebug>
 #include <DImageButton>
+#include <QSignalMapper>
+#include "translator/Frame.h"
 
 TitleWidget::TitleWidget(CustomWidget *parent) :
     CustomWidget("TitleWidget", parent)
@@ -40,17 +42,16 @@ void TitleWidget::on_thumbnailBtn_clicked()
 //  字体
 void TitleWidget::on_settingBtn_clicked()
 {
-    CustomImageButton *btn = reinterpret_cast<CustomImageButton *>(QObject::sender());
-    int nHeight = btn->height();
-    int nWidth = btn->width() / 2;
+    int nHeight = m_pSettingBtn->height();
+    int nWidth = m_pSettingBtn->width() / 2;
 
-    QPoint point = btn->mapToGlobal(QPoint(0, 0));
+    QPoint point = m_pSettingBtn->mapToGlobal(QPoint(0, 0));
     int nOldY = point.y();
     int nOldX = point.x();
 
     point.setX(nWidth + nOldX - 100);
     point.setY(nHeight + nOldY);
-    qDebug() << "show setting font menu widget";
+
     m_pFontWidget->setGeometry(point.x(), point.y(), 200, 250);
     m_pFontWidget->show();
 }
@@ -58,11 +59,9 @@ void TitleWidget::on_settingBtn_clicked()
 //  手型点击
 void TitleWidget::on_handleShapeBtn_clicked()
 {
-    CustomImageButton *btn = reinterpret_cast<CustomImageButton *>(QObject::sender());
-    int nHeight = btn->height();
-    int nWidth = btn->width();
+    int nHeight = m_pHandleShapeBtn->height();
 
-    QPoint point = btn->mapToGlobal(QPoint(0, 0));
+    QPoint point = m_pHandleShapeBtn->mapToGlobal(QPoint(0, 0));
     int nOldY = point.y();
 
     point.setY(nHeight + nOldY + 2);
@@ -71,12 +70,20 @@ void TitleWidget::on_handleShapeBtn_clicked()
         m_pHandleMenu = new DMenu;
         connect(m_pHandleMenu, SIGNAL(aboutToHide()), this, SLOT(slotHandleMenuHide()));
 
-        m_pHandleAction = createAction(tr("hand"), SLOT(on_HandleAction_trigger(bool)));
-        m_pHandleAction->setIcon(QIcon(":/resources/image/normal/hand_small.svg"));
+        QSignalMapper *pSigManager = new QSignalMapper(this);
+        connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(SlotActionTrigger(const QString &)));
 
-        m_pDefaultAction = createAction(tr("choose"), SLOT(on_DefaultAction_trigger(bool)));
-        m_pDefaultAction->setIcon(QIcon(":/resources/image/normal/choose_small.svg"));
+        m_pHandleAction = createAction(Frame::sHandleShape);
+        connect(m_pHandleAction, SIGNAL(triggered()), pSigManager, SLOT(map()));
+
+        pSigManager->setMapping(m_pHandleAction, "HandleAction");
+
+        m_pDefaultAction = createAction(Frame::sDefaultShape);
         m_pDefaultAction->setChecked(true);
+
+        connect(m_pDefaultAction, SIGNAL(triggered()), pSigManager, SLOT(map()));
+
+        pSigManager->setMapping(m_pDefaultAction, "DefaultAction");
     }
     m_pHandleMenu->exec(point);
 }
@@ -88,48 +95,39 @@ void TitleWidget::on_magnifyingBtn_clicked()
     sendMsgToSubject(MSG_MAGNIFYING, QString::number(bCheck));
 }
 
-//  切换为 手型 鼠标
-void TitleWidget::on_HandleAction_trigger(bool)
+void TitleWidget::SlotActionTrigger(const QString &sAction)
 {
-    m_nCurrentState = 1;
-    QString btnName = "hand";
-
-    QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
-    QString hoverPic = PF::getQrcPath(btnName, ImageModule::g_hover_state);
-    QString pressPic = PF::getQrcPath(btnName, ImageModule::g_press_state);
-    QString checkedPic = PF::getQrcPath(btnName, ImageModule::g_checked_state);
-
-    m_pChooseBtn->setNormalPic(normalPic);
-    m_pChooseBtn->setHoverPic(hoverPic);
-    m_pChooseBtn->setPressPic(pressPic);
-    m_pChooseBtn->setCheckedPic(checkedPic);
-
-    m_pHandleAction->setChecked(true);
-    m_pDefaultAction->setChecked(false);
+    if (sAction == "DefaultAction") {
+        on_DefaultAction_trigger();
+    } else {
+        on_HandleAction_trigger();
+    }
 
     sendMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurrentState));
 }
 
+//  切换为 手型 鼠标
+void TitleWidget::on_HandleAction_trigger()
+{
+    m_nCurrentState = 1;
+
+    QString btnName = Frame::sHandleShape;
+    setHandleShapeBtn(btnName);
+
+    m_pHandleAction->setChecked(true);
+    m_pDefaultAction->setChecked(false);
+}
+
 //  切换为 默认鼠标
-void TitleWidget::on_DefaultAction_trigger(bool)
+void TitleWidget::on_DefaultAction_trigger()
 {
     m_nCurrentState = 0;
 
-    QString btnName = "choose";
-
-    QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
-    QString hoverPic = PF::getQrcPath(btnName, ImageModule::g_hover_state);
-    QString pressPic = PF::getQrcPath(btnName, ImageModule::g_press_state);
-    QString checkedPic = PF::getQrcPath(btnName, ImageModule::g_checked_state);
-
-    m_pChooseBtn->setNormalPic(normalPic);
-    m_pChooseBtn->setHoverPic(hoverPic);
-    m_pChooseBtn->setPressPic(pressPic);
-    m_pChooseBtn->setCheckedPic(checkedPic);
+    QString btnName = Frame::sDefaultShape;
+    setHandleShapeBtn(btnName);
 
     m_pHandleAction->setChecked(false);
     m_pDefaultAction->setChecked(true);
-    sendMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurrentState));
 }
 
 //  文件打开成功，　功能性　按钮才能点击
@@ -137,8 +135,22 @@ void TitleWidget::openFileOk()
 {
     m_pThumbnailBtn->setDisabled(false);
     m_pSettingBtn->setDisabled(false);
-    m_pChooseBtn->setDisabled(false);
+    m_pHandleShapeBtn->setDisabled(false);
     m_pMagnifierBtn->setDisabled(false);
+}
+
+//  设置　手型按钮的图标
+void TitleWidget::setHandleShapeBtn(const QString &btnName)
+{
+    QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
+    QString hoverPic = PF::getQrcPath(btnName, ImageModule::g_hover_state);
+    QString pressPic = PF::getQrcPath(btnName, ImageModule::g_press_state);
+    QString checkedPic = PF::getQrcPath(btnName, ImageModule::g_checked_state);
+
+    m_pHandleShapeBtn->setNormalPic(normalPic);
+    m_pHandleShapeBtn->setHoverPic(hoverPic);
+    m_pHandleShapeBtn->setPressPic(pressPic);
+    m_pHandleShapeBtn->setCheckedPic(checkedPic);
 }
 
 void TitleWidget::slotFontWidgetHide()
@@ -148,24 +160,24 @@ void TitleWidget::slotFontWidgetHide()
 
 void TitleWidget::slotHandleMenuHide()
 {
-    m_pChooseBtn->setChecked(false);
+    m_pHandleShapeBtn->setChecked(false);
 }
 
 void TitleWidget::initBtns()
 {
-    m_pThumbnailBtn = createBtn(tr("thumbnail"), true);
+    m_pThumbnailBtn = createBtn(Frame::sThumbnail, true);
     connect(m_pThumbnailBtn, SIGNAL(clicked()), this, SLOT(on_thumbnailBtn_clicked()));
     m_layout->addWidget(m_pThumbnailBtn);
 
-    m_pSettingBtn = createBtn(tr("setting"));
+    m_pSettingBtn = createBtn(Frame::sSetting);
     connect(m_pSettingBtn, SIGNAL(clicked()), this, SLOT(on_settingBtn_clicked()));
     m_layout->addWidget(m_pSettingBtn);
 
-    m_pChooseBtn = createBtn(tr("choose"));
-    connect(m_pChooseBtn, SIGNAL(clicked()), this, SLOT(on_handleShapeBtn_clicked()));
-    m_layout->addWidget(m_pChooseBtn);
+    m_pHandleShapeBtn = createBtn(Frame::sDefaultShape);
+    connect(m_pHandleShapeBtn, SIGNAL(clicked()), this, SLOT(on_handleShapeBtn_clicked()));
+    m_layout->addWidget(m_pHandleShapeBtn);
 
-    m_pMagnifierBtn = createBtn(tr("magnifier"), true);
+    m_pMagnifierBtn = createBtn(Frame::sMagnifier, true);
     connect(m_pMagnifierBtn, SIGNAL(clicked()), this, SLOT(on_magnifyingBtn_clicked()));
     m_layout->addWidget(m_pMagnifierBtn);
 }
@@ -197,15 +209,11 @@ CustomImageButton *TitleWidget::createBtn(const QString &btnName, bool bCheckabl
 }
 
 //  创建两个按钮菜单， 对应 手型 和 默认鼠标
-QAction *TitleWidget::createAction(const QString &actionName, const char *member)
+QAction *TitleWidget::createAction(const QString &actionName)
 {
-    QString iconName = actionName + "_small";
-    QIcon icon = Utils::getActionIcon(iconName);
-
     QAction *_action = new QAction(actionName, this);
-    _action->setIcon(icon);
     _action->setCheckable(true);
-    connect(_action, SIGNAL(triggered(bool)), member);
+    _action->setIcon(QIcon(QString(":/resources/image/normal/%1_small.svg").arg(actionName)));
 
     m_pHandleMenu->addAction(_action);
     return _action;

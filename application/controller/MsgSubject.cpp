@@ -50,9 +50,6 @@ int MsgSubject::NotifyObservers(const int &msgType, const QString &msgContent)
     foreach (IObserver *obs, m_observerList) {
         int nRes = obs->dealWithData(msgType, msgContent);
         if (nRes == ConstantMsg::g_effective_res) {
-            qDebug() << "dealWithData   " << msgType
-                     <<  "  " << msgContent
-                     << "   " << obs->getObserverName();
             return 0;
         }
     }

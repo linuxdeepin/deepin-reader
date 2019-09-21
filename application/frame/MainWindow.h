@@ -26,23 +26,17 @@ private:
     void initUI();
     void initConnections();
     void initTitlebar();
-    QAction *createAction(DMenu *menu, const QString &actionName, const char *member, const bool &disable = true);
+    QAction *createAction(DMenu *menu, const QString &actionName);
 
     void openFileOk();
 
-private slots:
-    void action_OpenFile();
-    void action_SaveFile();
-    void action_SaveAsFile();
-    void action_OpenFolder();
-    void action_Print();
-    void action_Attr();
+    void onOpenFile();
+    void onOpenFolder();
+    void onFullScreen();
+    void onScreening();
 
-    void action_Find();
-    void action_FullScreen();
-    void action_Screening();
-    void action_Larger();
-    void action_Smaller();
+private slots:
+    void SlotActionTrigger(const QString &);
 
 private:
     void sendMsg(const int &, const QString &msgContent = "") override;
@@ -50,19 +44,6 @@ private:
 private:
     MsgSubject      *m_pMsgSubject = nullptr;
     NotifySubject   *m_pNotifySubject = nullptr;
-    DMenu           *m_menu = nullptr;
-
-private:
-    QAction *m_pSaveFile = nullptr;
-    QAction *m_pSaveAsFile = nullptr;
-    QAction *m_pOpenFolder = nullptr;
-    QAction *m_pFilePrint = nullptr;
-    QAction *m_pFileAttr = nullptr;
-    QAction *m_pFileFind = nullptr;
-    QAction *m_pFileFullScreen = nullptr;
-    QAction *m_pFileScreening = nullptr;
-    QAction *m_pFileLarger = nullptr;
-    QAction *m_pFileSmaller = nullptr;
 
     // IObserver interface
 public:

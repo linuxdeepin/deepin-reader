@@ -6,7 +6,7 @@
 #include <DFileDialog>
 #include "utils/utils.h"
 #include <QDesktopServices>
-
+#include "translator/Frame.h"
 
 DocummentFileHelper::DocummentFileHelper(QObject *parent) : QObject(parent)
 {
@@ -42,7 +42,7 @@ void DocummentFileHelper::onSaveFile()
 void DocummentFileHelper::onSaveAsFile()
 {
     DFileDialog dialog;
-    QString fileName = dialog.getSaveFileName(nullptr, tr("Save File"),
+    QString fileName = dialog.getSaveFileName(nullptr, Frame::sSaveFile,
                                               "/home/",
                                               Utils::getSuffixList());
     if (fileName != "") {
