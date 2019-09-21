@@ -24,24 +24,28 @@ public:
     ~TitleWidget() override;
 
 private slots:
+
+    void slotFontWidgetHide();
+    void slotHandleMenuHide();
+
     void on_thumbnailBtn_clicked();
     void on_settingBtn_clicked();
     void on_handleShapeBtn_clicked();
     void on_magnifyingBtn_clicked();
 
-    void on_HandleAction_trigger(bool);
-    void on_DefaultAction_trigger(bool);
-
-    void slotFontWidgetHide();
-    void slotHandleMenuHide();
+    void SlotActionTrigger(const QString &);
 
 private:
     void initBtns();
     CustomImageButton *createBtn(const QString &btnName, bool bCheckable = false);
-    QAction *createAction(const QString &iconName, const char *member);
+    QAction *createAction(const QString &iconName);
     void sendMsgToSubject(const int &, const QString &msgCotent = "");
 
     void openFileOk();
+    void setHandleShapeBtn(const QString &);
+
+    void on_HandleAction_trigger();
+    void on_DefaultAction_trigger();
 
 private:
     QHBoxLayout *m_layout = nullptr;
@@ -55,7 +59,7 @@ private:
 
     CustomImageButton *m_pThumbnailBtn = nullptr;
     CustomImageButton *m_pSettingBtn = nullptr;
-    CustomImageButton *m_pChooseBtn = nullptr;
+    CustomImageButton *m_pHandleShapeBtn = nullptr;
     CustomImageButton *m_pMagnifierBtn = nullptr;
 
     // CustomWidget interface

@@ -367,6 +367,11 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         if (nRes != ConstantMsg::g_effective_res) {
 
             if (msgType == MSG_NOTIFY_KEY_MSG) {    //  最后一个处理通知消息
+                if ("Ctrl+F" == msgContent) {
+                    emit sigShowFileFind();
+                    return ConstantMsg::g_effective_res;
+                }
+
                 if (msgContent == "Up") {
                     sendMsg(MSG_OPERATION_PREV_PAGE);
                 } else if (msgContent == "Down") {

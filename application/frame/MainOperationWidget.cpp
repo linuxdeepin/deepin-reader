@@ -1,4 +1,6 @@
 #include "MainOperationWidget.h"
+//#include <DIconButton>
+#include "translator/Frame.h"
 
 MainOperationWidget::MainOperationWidget(CustomWidget *parent):
     CustomWidget ("MainOperationWidget", parent)
@@ -17,17 +19,15 @@ void MainOperationWidget::initWidget()
     QButtonGroup *btnGroup = new QButtonGroup;  //  按钮组，　自动实现按钮唯一check属性
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
 
-    DPushButton *btn = createBtn(tr("view"));
-    btnGroup->addButton(btn, 0);
-    hboxLayout->addWidget(btn);
+    QStringList btnList = QStringList() << Frame::sThumbnail << Frame::sBookmark << Frame::sAnnotation;
 
-    btn = createBtn(tr("bookmark"));
-    btnGroup->addButton(btn, 1);
-    hboxLayout->addWidget(btn);
-
-    btn = createBtn(tr("comments"));
-    btnGroup->addButton(btn, 2);
-    hboxLayout->addWidget(btn);
+    int nSize = btnList.size();
+    for (int iLoop = 0; iLoop < nSize; iLoop++) {
+        QString sBtn = btnList.at(iLoop);
+        DPushButton *btn = createBtn(sBtn);
+        btnGroup->addButton(btn, iLoop);
+        hboxLayout->addWidget(btn);
+    }
 
     hboxLayout->addStretch(1);
 
@@ -41,6 +41,7 @@ DPushButton *MainOperationWidget::createBtn(const QString &btnName)
     QString pressPic = PF::getQrcPath(btnName, ImageModule::g_press_state);
     QString checkedPic = PF::getQrcPath(btnName, ImageModule::g_checked_state);
 
+    //DIconButton *btn1 = new DIconButton;
     DPushButton *btn = new DPushButton;
     btn->setToolTip(btnName);
     btn->setCheckable(true);

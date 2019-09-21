@@ -23,8 +23,6 @@
 #ifndef FINDWIDGET_H
 #define FINDWIDGET_H
 
-#include "LineBar.h"
-
 #include <QHBoxLayout>
 #include <DPushButton>
 #include <DLabel>
@@ -33,6 +31,7 @@
 #include <QColor>
 
 #include "subjectObserver/CustomWidget.h"
+#include <DSearchEdit>
 
 class FindWidget : public CustomWidget
 {
@@ -52,8 +51,7 @@ protected:
     void hideEvent(QHideEvent *event);
 
 private:
-    LineBar *m_editLine;
-    QHBoxLayout *m_layout;
+    DSearchEdit     *m_pSearchEdit = nullptr;
 
     QString     m_strOldFindContent = "";
 

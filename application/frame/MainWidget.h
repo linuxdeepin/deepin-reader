@@ -18,8 +18,8 @@ public:
     MainWidget(CustomWidget *parent = nullptr);
 
 private:
-    void openFileOk();
     void openFileFail(const QString &);
+    void openFileOk();
 
     // IObserver interface
 public:
