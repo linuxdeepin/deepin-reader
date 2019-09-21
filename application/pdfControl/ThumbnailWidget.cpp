@@ -175,6 +175,15 @@ void ThumbnailWidget::slotShowSelectItem(QListWidgetItem *item)
 
 void ThumbnailWidget::slotOpenFileOk()
 {
+    m_pSonWidgetContantLabel = nullptr;
+    m_pSonWidgetPageLabel = nullptr;
+    m_pThumbnailItemWidget = nullptr;
+
+    m_ThreadLoadImage.setIsLoaded(false);
+    if (m_ThreadLoadImage.isRunning()) {
+        m_ThreadLoadImage.stopThreadRun();
+    }
+
     connect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotFileViewToListPage(int)), Qt::QueuedConnection);
 
     int pages = DocummentProxy::instance()->getPageSNum();
@@ -191,14 +200,20 @@ void ThumbnailWidget::slotOpenFileOk()
         m_pThumbnailListWidget->clear();
     }
 
-    m_ThreadLoadImage.setPages(pages);
-
     setTotalPages(pages);
 
     fillContantToList();
 
-    connect(&m_loadImageTimer, SIGNAL(timeout()), this, SLOT(slotLoadThumbnailImage()));
-    m_loadImageTimer.start(50);
+    if (!m_ThreadLoadImage.isRunning()) {
+
+        m_ThreadLoadImage.setStartAndEndIndex();
+    }
+    m_ThreadLoadImage.setPages(pages);
+    m_ThreadLoadImage.setIsLoaded(true);
+    m_ThreadLoadImage.start();
+
+//    connect(&m_loadImageTimer, SIGNAL(timeout()), this, SLOT(slotLoadThumbnailImage()));
+//    m_loadImageTimer.start(50);
 }
 
 void ThumbnailWidget::slotJumpIndexPage(int index)
@@ -228,13 +243,15 @@ ThreadLoadImage::ThreadLoadImage()
 
 void ThreadLoadImage::stopThreadRun()
 {
+    m_isLoaded = false;
+
     terminate();    //终止线程
     wait();         //阻塞等待
 }
 
 void ThreadLoadImage::run()
 {
-    if (!m_isLoaded) {
+    while (m_isLoaded) {
         if (m_nStartPage < 0) {
             m_nStartPage = 0;
         }
@@ -253,5 +270,7 @@ void ThreadLoadImage::run()
         }
         m_nStartPage += FIRST_LOAD_PAGES;
         m_nEndPage += FIRST_LOAD_PAGES;
+
+        msleep(50);
     }
 }

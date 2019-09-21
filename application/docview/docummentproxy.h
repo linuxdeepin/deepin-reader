@@ -10,8 +10,10 @@ enum DocType_EM {
     DocType_NULL = 0,
     DocType_PDF,
     DocType_DJVU,
+    DocType_TIFF,
     DocType_PS,
     DocType_XPS
+
 };
 
 class DocummentProxy: public QObject

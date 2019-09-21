@@ -40,8 +40,7 @@ bool DocummentPDF::openFile(QString filepath)
         QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
         qhblayout->setAlignment(qwidget, Qt::AlignCenter);
         qwidget->setLayout(qhblayout);
-        m_vboxLayout.addWidget(qwidget);
-        //        m_vboxLayout.addWidget(m_pages.at(i));
+        m_vboxLayout.addWidget(qwidget);        
         m_vboxLayout.setAlignment(&m_widget, Qt::AlignCenter);
         qwidget->setMouseTracking(true);
         m_widgets.append(qwidget);

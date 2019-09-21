@@ -8,7 +8,6 @@ TARGET = deepin_reader
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
 
-
 include (frame/frame.pri)
 include (utils/utils.pri)
 include (controller/controller.pri)

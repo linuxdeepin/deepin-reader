@@ -652,7 +652,7 @@ QString Utils::getConfigPath()
 
 QString Utils::getSuffixList()
 {
-    return QString("Pdf Files (*.pdf)");
+    return QString("Pdf Files (*.pdf *.tiff)");
 }
 
 //  获取 action 图标
