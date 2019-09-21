@@ -40,6 +40,11 @@ public:
         return m_nEndPage;
     }
 
+    inline void setIsLoaded(const bool &load)
+    {
+        m_isLoaded = load;
+    }
+
     inline bool isLoaded()
     {
         return m_isLoaded;
@@ -48,6 +53,12 @@ public:
     inline void setThumbnail(ThumbnailWidget *thumbnail)
     {
         m_pThumbnailWidget = thumbnail;
+    }
+
+    inline void setStartAndEndIndex()
+    {
+        m_nStartPage = 0;  // 加载图片起始页码
+        m_nEndPage = 19;   // 加载图片结束页码
     }
 
 protected:
@@ -112,7 +123,6 @@ private:
     {
         m_totalPages = pages;
     }
-
 
 private slots:
     void slotShowSelectItem(QListWidgetItem *);

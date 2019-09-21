@@ -72,8 +72,6 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
             m_szFilePath = sPath;
             DataManager::instance()->setStrOnlyFilePath(sPath);
 
-//            m_pDocummentProxy->scaleRotateAndShow(-1, RotateType_Normal);
-
             //  通知 其他窗口， 打开文件成功了！！！
             NotifySubject::getInstance()->sendMsg(MSG_OPERATION_OPEN_FILE_OK);
 
@@ -116,7 +114,6 @@ void DocummentFileHelper::onClickPageLink(Page::Link *pLink)
 
     } else if (linkType == Page::LinkType_Browse) {
         QString surlOrFileName = pLink->urlOrFileName;
-        qDebug() << "   surlOrFileName      " << surlOrFileName;
         QDesktopServices::openUrl(QUrl(surlOrFileName, QUrl::TolerantMode));
     } else if (linkType == Page::LinkType_Execute) {
 
