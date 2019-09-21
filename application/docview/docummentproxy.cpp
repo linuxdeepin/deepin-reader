@@ -1,5 +1,6 @@
 #include "docummentproxy.h"
 #include "docummentfactory.h"
+#include "publicfunc.h"
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QDebug>
@@ -24,6 +25,10 @@ DocummentProxy *DocummentProxy::instance(QObject *parent)
 
 bool DocummentProxy::openFile(DocType_EM type, QString filepath)
 {
+    if (nullptr != m_documment) {
+        delete m_documment;
+        m_documment = nullptr;
+    }
     m_type = type;
     m_documment = DocummentFactory::creatDocumment(type, qwfather);
     m_path = filepath;
@@ -227,32 +232,54 @@ bool DocummentProxy::exitSlideModel()
 
 void DocummentProxy::findNext()
 {
-    if(m_documment)
-    {
+    if (m_documment) {
         m_documment->findNext();
     }
 }
 
 void DocummentProxy::findPrev()
 {
-    if(m_documment)
-    {
+    if (m_documment) {
         m_documment->findPrev();
     }
 }
 
 void DocummentProxy::setAnnotationText(int ipage, const QString &struuid, const QString &strtext)
 {
-    if(m_documment)
-    {
-        m_documment->setAnnotationText(ipage,struuid,strtext);
+    if (m_documment) {
+        m_documment->setAnnotationText(ipage, struuid, strtext);
     }
 }
 
 void DocummentProxy::getAnnotationText(const QString &struuid, QString &strtext)
 {
-    if(m_documment)
-    {
-        m_documment->getAnnotationText(struuid,strtext);
+    if (m_documment) {
+        m_documment->getAnnotationText(struuid, strtext);
     }
+}
+
+bool DocummentProxy::adaptWidthAndShow(double width)
+{
+    if (!m_documment)
+        return false;
+    double imageoriginalwidth = m_documment->getPageOriginalImageWidth(0);
+    if (width < EPSINON) {
+        return false;
+    }
+    double scale = width / imageoriginalwidth;
+    m_documment->scaleAndShow(scale, RotateType_Normal);
+    return true;
+}
+
+bool DocummentProxy::adaptHeightAndShow(double height)
+{
+    if (!m_documment)
+        return false;
+    double imageoriginalheight = m_documment->getPageOriginalImageWidth(0);
+    if (height < EPSINON) {
+        return false;
+    }
+    double scale = height / imageoriginalheight;
+    m_documment->scaleAndShow(scale, RotateType_Normal);
+    return true;
 }

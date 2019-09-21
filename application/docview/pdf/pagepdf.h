@@ -9,6 +9,7 @@ class PagePdf: public PageBase
     Q_OBJECT
 public:
     PagePdf(QWidget *parent = 0);
+    ~PagePdf();
     bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal) override;
     bool getImage(QImage &image, double width, double height) override;
     bool getSlideImage(QImage &image, double &width, double &height) override;

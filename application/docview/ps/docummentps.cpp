@@ -95,6 +95,9 @@ bool DocummentPS::loadPages()
         endnum = m_pages.size();
     }
     for (int i = startnum; i < endnum; i++) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
         m_pages.at(i)->showImage(m_scale, m_rotate);
     }
     return true;
@@ -106,6 +109,9 @@ bool DocummentPS::loadWords()
         return false;
     qDebug() << "loadWords";
     for (int i = 0; i < m_pages.size(); i++) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
         PagePS *pps = (PagePS *)m_pages.at(i);
         pps->loadWords();
         pps->loadLinks();

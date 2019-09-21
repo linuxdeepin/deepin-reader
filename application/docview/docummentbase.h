@@ -84,6 +84,7 @@ class DocummentBase: public DScrollArea
     Q_OBJECT
 public:
     DocummentBase(DWidget *parent = nullptr);
+    ~DocummentBase();
     virtual bool openFile(QString filepath)
     {
         return false;
@@ -92,21 +93,10 @@ public:
     {
         return false;
     }
-    bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
-    bool mouseSelectText(QPoint start, QPoint stop);
-    void mouseSelectTextClear();
-    void scaleAndShow(double scale, RotateType_EM rotate);
-    bool mouseBeOverText(QPoint point);
-
     virtual bool getImage(int pagenum, QImage &image, double width, double height)
     {
         return false;
     }
-
-    QPoint global2RelativePoint(QPoint globalpoint);
-
-    bool showMagnifier(QPoint point);
-
     virtual bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3)
     {
         if (!m_magnifierwidget) {
@@ -118,51 +108,37 @@ public:
         m_magnifierwidget->setMagnifierColor(magnifiercolor);
         return true;
     }
-
-    int getPageSNum()
-    {
-        return m_pages.size();
-    }
-
-    bool setViewModeAndShow(ViewMode_EM viewmode);
-
     virtual bool save(const QString &filePath, bool withChanges)
     {
         qDebug() << "do nothing";
         return false;
     }
-
     virtual QString removeAnnotation(const QPoint &startpos) {}
-
     virtual void removeAnnotation(const QString &struuid) {}
-
     virtual QString addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) {}
-
-
     virtual void search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color = Qt::yellow) {}
-    int currentPageNo();
-
-    bool pageJump(int pagenum);
-
     virtual void clearSearch() {}
-
-
-    Page::Link *mouseBeOverLink(QPoint point);
-
-    bool getSelectTextString(QString &st);
-
-    bool showSlideModel();
-
     virtual bool loadPages()
     {
         return false;
     }
-
     virtual bool loadWords()
     {
         return false;
     }
+    virtual void docBasicInfo(stFileInfo &info) {}
+    virtual void findNext() {}
+    virtual void findPrev() {}
+    virtual void title(QString &title) {}
+    virtual void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) {}
+    virtual void getAnnotationText(const QString &struuid, QString &strtext) {}
 
+
+
+    int getPageSNum()
+    {
+        return m_pages.size();
+    }
     bool exitSlideModel()
     {
         m_slidewidget->hide();
@@ -171,13 +147,6 @@ public:
         m_slidepageno = -1;
         return true;
     }
-
-    virtual void docBasicInfo(stFileInfo &info) {}
-
-    virtual void findNext() {}
-
-    virtual void findPrev() {}
-
     QList<PageBase *> *getPages()
     {
         return &m_pages;
@@ -188,7 +157,6 @@ public:
             return (PageBase *)m_pages.at(index);
         return nullptr;
     }
-
     void magnifierClear()
     {
         if (m_magnifierwidget) {
@@ -196,7 +164,6 @@ public:
             m_magnifierwidget->hide();
         }
     }
-
     void pageMove(double mvx, double mvy)
     {
         DScrollBar *scrollBar_X = horizontalScrollBar();
@@ -206,11 +173,35 @@ public:
         if (scrollBar_Y)
             scrollBar_Y->setValue(scrollBar_Y->value() + mvy);
     }
-    virtual void title(QString &title) {}
+    double getPageOriginalImageWidth(int pagenum)
+    {
+        if (m_pages.size() <= pagenum) {
+            return -1;
+        }
+        return m_pages.at(pagenum)->getOriginalImageWidth();
+    }
+    double getPageOriginalImageHeight(int pagenum)
+    {
+        if (m_pages.size() <= pagenum) {
+            return -1;
+        }
+        return m_pages.at(pagenum)->getOriginalImageHeight();
+    }
 
-    virtual void setAnnotationText(int ipage,const QString& struuid,const QString& strtext){}
-    virtual void getAnnotationText(const QString& struuid,QString& strtext){}
 
+    bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
+    bool mouseSelectText(QPoint start, QPoint stop);
+    void mouseSelectTextClear();
+    void scaleAndShow(double scale, RotateType_EM rotate);
+    bool mouseBeOverText(QPoint point);
+    QPoint global2RelativePoint(QPoint globalpoint);
+    bool showMagnifier(QPoint point);
+    bool setViewModeAndShow(ViewMode_EM viewmode);
+    int currentPageNo();
+    bool pageJump(int pagenum);
+    Page::Link *mouseBeOverLink(QPoint point);
+    bool getSelectTextString(QString &st);
+    bool showSlideModel();
 
 signals:
     void signal_pageChange(int);

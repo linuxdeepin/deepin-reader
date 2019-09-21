@@ -85,6 +85,9 @@ bool DocummentXPS::loadPages()
         endnum = m_pages.size();
     }
     for (int i = startnum; i < endnum; i++) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
         m_pages.at(i)->showImage(m_scale, m_rotate);
     }
     return true;

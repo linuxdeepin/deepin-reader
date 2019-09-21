@@ -1547,7 +1547,7 @@ bool XpsPage::loadPageWords(void *words)
     bool useMatrix = false;
     QXmlStreamAttributes glyphsAtts;
 
-    while ( ! xml.atEnd() ) {
+    while ( ! xml.atEnd() || !QThread::currentThread()->isInterruptionRequested()) {
         xml.readNext();
         if ( xml.isStartElement() ) {
             if ( xml.name() == QStringLiteral("Canvas")) {

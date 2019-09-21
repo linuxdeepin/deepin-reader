@@ -184,90 +184,12 @@ bool PagePS::loadWords()
 {
     if (!m_page)
         return false;
-//    int res = 72.0;
-//    miniexp_t r;
-////    while ( ( r = ddjvu_document_get_pagetext( m_parent->getDocument(), m_pageno, nullptr ) ) == miniexp_dummy )
-////        handle_ddjvu_messages( m_parent->getContext(), true );
-
-//    if ( r == miniexp_nil )
-//        return false;
-//    m_words.clear();
-////    QList<KDjVu::TextEntity> ret;
-
-//    int height = m_imageheight;
-
-//    QQueue<miniexp_t> queue;
-//    queue.enqueue( r );
-
-//    while ( !queue.isEmpty() ) {
-//        miniexp_t cur = queue.dequeue();
-
-//        if ( miniexp_listp( cur )
-//                && ( miniexp_length( cur ) > 0 )
-//                && miniexp_symbolp( miniexp_nth( 0, cur ) ) ) {
-//            int size = miniexp_length( cur );
-//            QString sym = QString::fromUtf8( miniexp_to_name( miniexp_nth( 0, cur ) ) );
-//            if ( sym == "word" ) {
-//                if ( size >= 6 ) {
-//                    int xmin = miniexp_to_int( miniexp_nth( 1, cur ) ) * res / m_resolution;
-//                    int ymin = miniexp_to_int( miniexp_nth( 2, cur ) ) * res / m_resolution;
-//                    int xmax = miniexp_to_int( miniexp_nth( 3, cur ) ) * res / m_resolution;
-//                    int ymax = miniexp_to_int( miniexp_nth( 4, cur ) ) * res / m_resolution;
-//                    QRect rect( xmin, height - ymax, xmax - xmin, ymax - ymin );
-//                    stWord sword;
-//                    sword.rect = rect;
-//                    sword.s = QString::fromUtf8( miniexp_to_str( miniexp_nth( 5, cur ) ) );
-//                    qDebug() << "djvu word:" << sword.s << " rect:" << rect;
-////                    qDebug() << "xmin:" << xmin << " ymin:" << ymin << " xmax:" << xmax << " ymax:" << ymax;
-//                    m_words.append( sword );
-//                }
-//            } else {
-//                for ( int i = 5; i < size; ++i )
-//                    queue.enqueue( miniexp_nth( i, cur ) );
-//            }
-//        }
-//    }
     return true;
 }
 bool PagePS::loadLinks()
 {
     if (!m_page)
         return false;
-//    for (int i = 0; i < m_links.size(); i++) {
-//        delete m_links.at(i);
-//    }
-//    m_links.clear();
-
-//    miniexp_t pageAnnoExp = miniexp_nil;
-
-//    {
-//        while (true) {
-//            pageAnnoExp = ddjvu_document_get_pageanno(m_parent->getDocument(), m_pageno);
-
-//            if (pageAnnoExp == miniexp_dummy) {
-////                clearMessageQueue(m_parent->getContext(), true);
-//            } else {
-//                break;
-//            }
-//        }
-//    }
-
-//    int res = 72.0;
-////    const QList< Page::Link * > links = djvuLoadLinks(pageAnnoExp, QSizeF(m_imagewidth * m_resolution / res, m_imageheight * m_resolution / res), m_pageno, m_parent->getPageByName());
-////    {
-
-////        ddjvu_miniexp_release(m_parent->getDocument(), pageAnnoExp);
-////    }
-
-////    m_links = links;
-//    for (int i = 0; i < m_links.size(); i++) {
-////        qDebug() << "m_links i:" << i << " boundary:" << m_links.at(i)->boundary << " width:" << m_links.at(i)->boundary.width()* m_imagewidth << " height:" << m_links.at(i)->boundary.height()* m_imageheight;
-//        m_links.at(i)->boundary = QRectF(m_links.at(i)->boundary.x() * m_imagewidth,
-//                                         m_links.at(i)->boundary.y() * m_imageheight,
-//                                         m_links.at(i)->boundary.width() * m_imagewidth,
-//                                         m_links.at(i)->boundary.height() * m_imageheight);
-//        qDebug() << "m_links i:" << i << " boundary:" << m_links.at(i)->boundary;
-//    }
     return true;
 }
 

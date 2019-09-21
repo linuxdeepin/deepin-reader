@@ -9,6 +9,10 @@ PagePdf::PagePdf(QWidget *parent)
     //    setFrameShape (QFrame::Box);
     //    setStyleSheet("border-width: 1px;border-style: solid;border-color: rgb(255, 170, 0);");
 }
+PagePdf::~PagePdf()
+{
+    delete m_page;
+}
 void PagePdf::removeAnnotation(Poppler::Annotation *annotation)
 {
     m_page->removeAnnotation(annotation);
@@ -231,6 +235,9 @@ bool PagePdf::loadLinks()
     m_links.clear();
 
     foreach (const Poppler::Link *link, m_page->links()) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
         const QRectF boundary = link->linkArea().normalized();
 //        qDebug() << "boundary:" << boundary;
 

@@ -131,6 +131,9 @@ bool DocummentDJVU::loadPages()
         endnum = m_pages.size();
     }
     for (int i = startnum; i < endnum; i++) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
         m_pages.at(i)->showImage(m_scale, m_rotate);
     }
     return true;
@@ -142,6 +145,9 @@ bool DocummentDJVU::loadWords()
         return false;
     qDebug() << "loadWords";
     for (int i = 0; i < m_pages.size(); i++) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
         PageDJVU *pdjvu = (PageDJVU *)m_pages.at(i);
         pdjvu->loadWords();
         pdjvu->loadLinks();

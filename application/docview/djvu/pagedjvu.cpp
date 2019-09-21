@@ -403,7 +403,7 @@ bool PageDJVU::loadWords()
         return false;
     int res = 72.0;
     miniexp_t r;
-    while ( ( r = ddjvu_document_get_pagetext( m_parent->getDocument(), m_pageno, nullptr ) ) == miniexp_dummy )
+    while (!QThread::currentThread()->isInterruptionRequested() || ( r = ddjvu_document_get_pagetext( m_parent->getDocument(), m_pageno, nullptr ) ) == miniexp_dummy )
         handle_ddjvu_messages( m_parent->getContext(), true );
 
     if ( r == miniexp_nil )
@@ -416,7 +416,7 @@ bool PageDJVU::loadWords()
     QQueue<miniexp_t> queue;
     queue.enqueue( r );
 
-    while ( !queue.isEmpty() ) {
+    while ( !queue.isEmpty() || !QThread::currentThread()->isInterruptionRequested()) {
         miniexp_t cur = queue.dequeue();
 
         if ( miniexp_listp( cur )
@@ -458,7 +458,7 @@ bool PageDJVU::loadLinks()
     miniexp_t pageAnnoExp = miniexp_nil;
 
     {
-        while (true) {
+        while (!QThread::currentThread()->isInterruptionRequested()) {
             pageAnnoExp = ddjvu_document_get_pageanno(m_parent->getDocument(), m_pageno);
 
             if (pageAnnoExp == miniexp_dummy) {
@@ -478,6 +478,9 @@ bool PageDJVU::loadLinks()
 
     m_links = links;
     for (int i = 0; i < m_links.size(); i++) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
 //        qDebug() << "m_links i:" << i << " boundary:" << m_links.at(i)->boundary << " width:" << m_links.at(i)->boundary.width()* m_imagewidth << " height:" << m_links.at(i)->boundary.height()* m_imageheight;
         m_links.at(i)->boundary = QRectF(m_links.at(i)->boundary.x() * m_imagewidth,
                                          m_links.at(i)->boundary.y() * m_imageheight,

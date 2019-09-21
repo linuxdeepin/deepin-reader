@@ -50,7 +50,9 @@ public:
     void findNext();
     void findPrev();
     void setAnnotationText(int ipage, const QString &struuid, const QString &strtext);
-    void getAnnotationText(const QString& struuid,QString& strtext);
+    void getAnnotationText(const QString &struuid, QString &strtext);
+    bool adaptWidthAndShow(double width);
+    bool adaptHeightAndShow(double height);
 signals:
     void signal_pageChange(int);
 private slots:
