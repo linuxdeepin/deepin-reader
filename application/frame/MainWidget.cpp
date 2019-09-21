@@ -55,6 +55,7 @@ void MainWidget::initWidget()
     pStackedWidget->addWidget(new HomeWidget);
 
     DSplitter *pSplitter = new DSplitter;
+    pSplitter->setHandleWidth(5);
     pSplitter->setChildrenCollapsible(false);   //  子部件不可拉伸到 0
 
     pSplitter->insertWidget(0, new LeftSidebarWidget);

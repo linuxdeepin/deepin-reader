@@ -62,7 +62,7 @@ private:
 
     void initConnections();
 
-    int dealWithTitleMenuRequest(const int &msgType, const QString &msgContent);
+    int dealWithTitleRequest(const int &msgType, const QString &msgContent);
     int dealWithFileMenuRequest(const int &msgType, const QString &msgContent);
 
     void setBookMarkStateWidget();

@@ -1,5 +1,4 @@
 #include "FileViewWidget.h"
-#include <QDebug>
 #include <QMimeData>
 #include <QUrl>
 #include <QGridLayout>
@@ -10,6 +9,8 @@
 #include "docview/docummentproxy.h"
 #include <QPrinter>
 #include <QPrintDialog>
+#include <DMessageBox>
+#include "translator/Frame.h"
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
@@ -214,7 +215,6 @@ int FileViewWidget::magnifying(const QString &data)
         m_nCurrentHandelState = Magnifier_State;
         this->setCursor(Qt::BlankCursor);
     } else {
-        //  取消放大镜显示
         m_nCurrentHandelState = Default_State;
         this->setCursor(Qt::ArrowCursor);
         DocummentProxy::instance()->closeMagnifier();
@@ -241,6 +241,7 @@ int FileViewWidget::setHandShape(const QString &data)
     return ConstantMsg::g_effective_res;
 }
 
+//  添加注释
 void FileViewWidget::onFileAddAnnotation(const QString &sColor)
 {
     QList<QColor> colorList = {};
@@ -254,6 +255,7 @@ void FileViewWidget::onFileRemoveAnnotation()
     DocummentProxy::instance()->removeAnnotation(m_pRightClickPoint);
 }
 
+//  信号槽　初始化
 void FileViewWidget::initConnections()
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
@@ -264,6 +266,7 @@ void FileViewWidget::initConnections()
     connect(this, SIGNAL(sigPrintFile()), this, SLOT(slotPrintFile()));
 }
 
+//  书签显示
 void FileViewWidget::setBookMarkStateWidget()
 {
     if (m_pBookMarkStateLabel == nullptr) {
@@ -312,14 +315,18 @@ void FileViewWidget::slotPrintFile()
             //  print
         }
     } else {
-        qDebug() <<  "   no  print   ";
+        DMessageBox::warning(nullptr, "", Frame::sPrintErrorNoDevice);
     }
 }
 
 //  标题栏的菜单消息处理
-int FileViewWidget::dealWithTitleMenuRequest(const int &msgType, const QString &)
+int FileViewWidget::dealWithTitleRequest(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
+    case MSG_MAGNIFYING:            //  放大镜信号
+        return magnifying(msgContent);
+    case MSG_HANDLESHAPE:           //  手势 信号
+        return setHandShape(msgContent);
     case MSG_OPERATION_ATTR:        //  打开该文件的属性信息
         emit sigShowFileAttr();
         return ConstantMsg::g_effective_res;
@@ -353,14 +360,7 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
 //  消息 数据 处理
 int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    switch (msgType) {
-    case MSG_MAGNIFYING:            //  放大镜信号
-        return magnifying(msgContent);
-    case MSG_HANDLESHAPE:           //  手势 信号
-        return setHandShape(msgContent);
-    }
-
-    int nRes = dealWithTitleMenuRequest(msgType, msgContent);
+    int nRes = dealWithTitleRequest(msgType, msgContent);
     if (nRes != ConstantMsg::g_effective_res) {
 
         nRes = dealWithFileMenuRequest(msgType, msgContent);
