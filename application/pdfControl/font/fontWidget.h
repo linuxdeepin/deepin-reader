@@ -63,8 +63,10 @@ private:
     DLabel *m_pSuitWLab = nullptr;
     DLabel *m_pRotateLeftLab = nullptr;
     DLabel *m_pRotateRightLab = nullptr;
-    int m_rotate = 360;  // 旋转角度
+    int m_rotate = 0;  // 旋转角度
     int m_rotateType = RotateType_Normal;
+    bool m_bSuitH = false;
+    bool m_bSuitW = false;
 };
 
 #endif // FONTWIDGET_H
