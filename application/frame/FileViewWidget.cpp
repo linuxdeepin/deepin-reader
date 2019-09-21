@@ -56,7 +56,7 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
         if (m_nCurrentHandelState == Handel_State) {    //   手型状态下， 按住鼠标左键 位置进行移动
             if (m_bSelectOrMove) {
 
-                QPoint mvPoint = globalPos - m_pHandleMoveStartPoint;
+                QPoint mvPoint = m_pHandleMoveStartPoint - globalPos;
                 int mvX = mvPoint.x();
                 int mvY = mvPoint.y();
 
@@ -327,6 +327,9 @@ int FileViewWidget::dealWithTitleRequest(const int &msgType, const QString &msgC
         return magnifying(msgContent);
     case MSG_HANDLESHAPE:           //  手势 信号
         return setHandShape(msgContent);
+    case MSG_SELF_ADAPTE_HEIGHT:    //
+        qDebug() <<     "   MSG_SELF_ADAPTE_HEIGHT      " << msgContent;
+        return ConstantMsg::g_effective_res;
     case MSG_OPERATION_ATTR:        //  打开该文件的属性信息
         emit sigShowFileAttr();
         return ConstantMsg::g_effective_res;
