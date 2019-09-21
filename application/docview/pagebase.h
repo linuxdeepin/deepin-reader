@@ -44,6 +44,7 @@ struct stWord {
 };
 enum RotateType_EM {
     RotateType_Normal = 0,
+    RotateType_0,
     RotateType_90,
     RotateType_180,
     RotateType_270

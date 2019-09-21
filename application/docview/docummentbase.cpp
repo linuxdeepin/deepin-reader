@@ -167,7 +167,7 @@ DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
     , m_bModified(false), m_bslidemodel(false), m_slidepageno(-1),
     m_currentpageno(-1),
     m_scale(1),
-    m_rotate(RotateType_Normal),
+    m_rotate(RotateType_0),
     donotneedreloaddoc(false)
 {
     m_currentpageno = 0;
