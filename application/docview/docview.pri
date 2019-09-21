@@ -9,7 +9,9 @@ HEADERS += \
     $$PWD/publicfunc.h \
     $$PWD/commonstruct.h \
     $$PWD/djvu/docummentdjvu.h \
-    $$PWD/djvu/pagedjvu.h
+    $$PWD/djvu/pagedjvu.h \
+    $$PWD/tiff/pagetiff.h \
+    $$PWD/tiff/documentiff.h
 
 SOURCES += \
     $$PWD/pdf/docummentpdf.cpp \
@@ -20,4 +22,6 @@ SOURCES += \
     $$PWD/pagebase.cpp \
     $$PWD/publicfunc.cpp \
     $$PWD/djvu/docummentdjvu.cpp \
-    $$PWD/djvu/pagedjvu.cpp
+    $$PWD/djvu/pagedjvu.cpp \
+    $$PWD/tiff/pagetiff.cpp \
+    $$PWD/tiff/documentiff.cpp
