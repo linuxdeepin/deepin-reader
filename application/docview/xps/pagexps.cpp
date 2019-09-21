@@ -91,41 +91,6 @@ bool PageXPS::loadLinks()
 {
     if (!m_page)
         return false;
-//    for (int i = 0; i < m_links.size(); i++) {
-//        delete m_links.at(i);
-//    }
-//    m_links.clear();
-
-//    miniexp_t pageAnnoExp = miniexp_nil;
-
-//    {
-//        while (true) {
-//            pageAnnoExp = ddjvu_document_get_pageanno(m_parent->getDocument(), m_pageno);
-
-//            if (pageAnnoExp == miniexp_dummy) {
-////                clearMessageQueue(m_parent->getContext(), true);
-//            } else {
-//                break;
-//            }
-//        }
-//    }
-
-//    int res = 72.0;
-////    const QList< Page::Link * > links = djvuLoadLinks(pageAnnoExp, QSizeF(m_imagewidth * m_resolution / res, m_imageheight * m_resolution / res), m_pageno, m_parent->getPageByName());
-////    {
-
-////        ddjvu_miniexp_release(m_parent->getDocument(), pageAnnoExp);
-////    }
-
-////    m_links = links;
-//    for (int i = 0; i < m_links.size(); i++) {
-////        qDebug() << "m_links i:" << i << " boundary:" << m_links.at(i)->boundary << " width:" << m_links.at(i)->boundary.width()* m_imagewidth << " height:" << m_links.at(i)->boundary.height()* m_imageheight;
-//        m_links.at(i)->boundary = QRectF(m_links.at(i)->boundary.x() * m_imagewidth,
-//                                         m_links.at(i)->boundary.y() * m_imageheight,
-//                                         m_links.at(i)->boundary.width() * m_imagewidth,
-//                                         m_links.at(i)->boundary.height() * m_imageheight);
-//        qDebug() << "m_links i:" << i << " boundary:" << m_links.at(i)->boundary;
-//    }
     return true;
 }
 
