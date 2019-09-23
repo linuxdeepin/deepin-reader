@@ -1,11 +1,14 @@
 #include "DocShowShellWidget.h"
 #include <QVBoxLayout>
-
+#include <QMimeData>
+#include <QUrl>
 #include "FileViewWidget.h"
 
 DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
     : CustomWidget ("DocShowShellWidget", parent)
 {
+    setAcceptDrops(true);
+
     initWidget();
     initConnections();
 }
@@ -15,6 +18,36 @@ DocShowShellWidget::~DocShowShellWidget()
     if (m_pFileAttrWidget) {
         m_pFileAttrWidget->deleteLater();
         m_pFileAttrWidget = nullptr;
+    }
+}
+
+//文件拖拽
+void DocShowShellWidget::dragEnterEvent(QDragEnterEvent *event)
+{
+    // Accept drag event if mime type is url.
+    const QMimeData *mimeData = event->mimeData();
+
+    if (mimeData->hasUrls()) {
+        event->accept();
+    }
+}
+
+void DocShowShellWidget::dropEvent(QDropEvent *event)
+{
+    const QMimeData *mimeData = event->mimeData();
+
+    if (mimeData->hasUrls()) {
+        for (auto url : mimeData->urls()) {
+            QString sFilePath =  url.toLocalFile();
+            if (sFilePath.endsWith(".pdf")) {
+                //  默认打开第一个
+                QString sRes = sFilePath + "@#&wzx";
+
+                sendMsg(MSG_OPEN_FILE_PATH, sRes);
+
+                break;
+            }
+        }
     }
 }
 

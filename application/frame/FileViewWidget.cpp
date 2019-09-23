@@ -1,6 +1,4 @@
 #include "FileViewWidget.h"
-#include <QMimeData>
-#include <QUrl>
 #include <QGridLayout>
 #include <QClipboard>
 #include "controller/DataManager.h"
@@ -16,7 +14,6 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
 {
     setMouseTracking(true); //  接受 鼠标滑动事件
-    setAcceptDrops(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
 
     initWidget();
@@ -124,38 +121,17 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
     CustomWidget::mouseReleaseEvent(event);
 }
 
-//文件拖拽
-void FileViewWidget::dragEnterEvent(QDragEnterEvent *event)
-{
-    // Accept drag event if mime type is url.
-    const QMimeData *mimeData = event->mimeData();
-
-    if (mimeData->hasUrls()) {
-        event->accept();
-    }
-}
-
-void FileViewWidget::dropEvent(QDropEvent *event)
-{
-    const QMimeData *mimeData = event->mimeData();
-
-    if (mimeData->hasUrls()) {
-        for (auto url : mimeData->urls()) {
-            QString sFilePath =  url.toLocalFile();
-            if (sFilePath.endsWith(".pdf")) {
-                //  默认打开第一个
-                QString sRes = sFilePath + "@#&wzx";
-
-                sendMsg(MSG_OPEN_FILE_PATH, sRes);
-
-                break;
-            }
-        }
-    }
-}
 
 void FileViewWidget::resizeEvent(QResizeEvent *event)
 {
+    int nWidth = this->width();
+    int nHeight = this->height();
+    qDebug() << m_nAdapteState << "         nWidth         " << nWidth << "        nHeight     " << nHeight;
+    if (m_nAdapteState == WIDGET_State) {
+        DocummentProxy::instance()->adaptWidthAndShow(nWidth);
+    } else if (m_nAdapteState == HEIGHT_State) {
+        DocummentProxy::instance()->adaptHeightAndShow(nHeight);
+    }
 
     CustomWidget::resizeEvent(event);
 }
@@ -249,49 +225,7 @@ void FileViewWidget::initConnections()
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(slotCustomContextMenuRequested(const QPoint &)));
-
-//    connect(this, SIGNAL(sigShowFileAttr()), this, SLOT(slotShowFileAttr()));
-//    connect(this, SIGNAL(sigShowFileFind()), this, SLOT(slotShowFindWidget()));
-//    connect(this, SIGNAL(sigPrintFile()), this, SLOT(slotPrintFile()));
 }
-
-//  书签显示
-//void FileViewWidget::setBookMarkStateWidget()
-//{
-//    if (m_pBookMarkStateLabel == nullptr) {
-//        m_pBookMarkStateLabel = new BookMarkStateLabel(this);
-//    }
-//    int nParentWidth = this->width();
-//    int nWidget = m_pBookMarkStateLabel->width();
-//    m_pBookMarkStateLabel->move(nParentWidth - nWidget - 20, 0);
-//    m_pBookMarkStateLabel->show();
-//    m_pBookMarkStateLabel->raise();
-//}
-
-//  查看 文件属性
-//void FileViewWidget::slotShowFileAttr()
-//{
-//    //  获取文件的基本数据，　进行展示
-//    if (m_pFileAttrWidget == nullptr) {
-//        m_pFileAttrWidget = new FileAttrWidget;
-//    }
-//    m_pFileAttrWidget->showScreenCenter();
-//}
-
-////  显示搜索框
-//void FileViewWidget::slotShowFindWidget()
-//{
-//    if (m_pFindWidget == nullptr) {
-//        m_pFindWidget = new FindWidget(this);
-//    }
-
-//    int nParentWidth = this->width();
-//    int nWidget = m_pFindWidget->width();
-//    m_pFindWidget->move(nParentWidth - nWidget - 20, 20);
-
-//    m_pFindWidget->show();
-//    m_pFindWidget->raise();
-//}
 
 //  打印
 void FileViewWidget::slotPrintFile()
@@ -316,8 +250,23 @@ int FileViewWidget::dealWithTitleRequest(const int &msgType, const QString &msgC
         return magnifying(msgContent);
     case MSG_HANDLESHAPE:           //  手势 信号
         return setHandShape(msgContent);
-    case MSG_SELF_ADAPTE_HEIGHT:    //
-        qDebug() <<     "   MSG_SELF_ADAPTE_HEIGHT      " << msgContent;
+    case MSG_SELF_ADAPTE_HEIGHT:    //  自适应　高度
+        if (msgContent == "1") {
+            m_nAdapteState = HEIGHT_State ;
+            int nHeight = this->height();
+            DocummentProxy::instance()->adaptHeightAndShow(nHeight);
+        } else {
+            m_nAdapteState = Default_State;
+        }
+        return ConstantMsg::g_effective_res;
+    case MSG_SELF_ADAPTE_WIDTH:    //   自适应宽度
+        if (msgContent == "1") {
+            m_nAdapteState = WIDGET_State;
+            int nWidth = this->width();
+            DocummentProxy::instance()->adaptWidthAndShow(nWidth);
+        } else {
+            m_nAdapteState = Default_State;
+        }
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_PRINT :      //  打印
         emit sigPrintFile();

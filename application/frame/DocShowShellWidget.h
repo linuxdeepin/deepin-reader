@@ -25,6 +25,8 @@ signals:
     void sigShowFileFind();
 
 protected:
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 
 private:
