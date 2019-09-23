@@ -40,7 +40,7 @@ bool DocummentPDF::openFile(QString filepath)
         QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
         qhblayout->setAlignment(qwidget, Qt::AlignCenter);
         qwidget->setLayout(qhblayout);
-        m_vboxLayout.addWidget(qwidget);        
+        m_vboxLayout.addWidget(qwidget);
         m_vboxLayout.setAlignment(&m_widget, Qt::AlignCenter);
         qwidget->setMouseTracking(true);
         m_widgets.append(qwidget);
@@ -203,6 +203,44 @@ bool DocummentPDF::save(const QString &filePath, bool withChanges)
     }
 
     return true;
+}
+
+bool DocummentPDF::saveas(const QString &filePath, bool withChanges)
+{
+    QString strsource=m_fileinfo.strFilepath;
+    bool bsuccess=false;
+    if(!strsource.isEmpty())
+    {
+        if(!withChanges)
+        {
+            if(QFile::copy(strsource,filePath))
+                bsuccess=true;
+        }
+        else {
+            QString strtmp=strsource.left(strsource.lastIndexOf(QChar('/'))+1);
+            strtmp.append(PublicFunc::getUuid());
+            strtmp.append(".pdf");
+            if(QFile::copy(strsource,strtmp))
+            {
+                if(save(strsource,true))
+                {
+                    if(QFile::copy(strsource,filePath))
+                    {
+                        bsuccess=true;
+                        if(QFile::remove(strsource))
+                        {
+                            if(QFile::rename(strtmp,strsource))
+                                QFile::remove(strtmp);
+                        }
+                    }
+                    else {
+                        QFile::remove(strtmp);
+                    }
+                }
+            }
+        }
+    }
+    return  bsuccess;
 }
 
 bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges) const
@@ -503,7 +541,7 @@ void DocummentPDF::findPrev()
         QList<Poppler::Annotation *> plistannote = page->annotations();
         foreach (Poppler::Annotation *annote, plistannote) {
             if ( annote->subType() == Poppler::Annotation::AHighlight &&
-                    annote->uniqueName().endsWith(QString("search"))) { //必须判断
+                 annote->uniqueName().endsWith(QString("search"))) { //必须判断
                 double curheight = m_scale * page->pageSizeF().height();
                 double topspace = (height() - curheight) / 2;
                 QList<Poppler::HighlightAnnotation::Quad> listquad = static_cast<Poppler::HighlightAnnotation *>(annote)->highlightQuads();
@@ -557,10 +595,23 @@ void DocummentPDF::setAnnotationText(int ipage, const QString &struuid, const QS
     }
 }
 
-void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext)
+void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, int ipage)
 {
-    for (int i = 0; i < document->numPages(); ++i) {
-        Poppler::Page *page = document->page(i);
+    if(ipage<0)
+    {
+        for (int i = 0; i < document->numPages(); ++i) {
+            Poppler::Page *page = document->page(i);
+            foreach (Poppler::Annotation *annote, page->annotations()) {
+                QString uniquename = annote->uniqueName();
+                if (uniquename.isEmpty() && uniquename.compare(struuid) == 0) {
+                    strtext = annote->contents();
+                    return;
+                }
+            }
+        }
+    }
+    else {
+        Poppler::Page *page = document->page(ipage);
         foreach (Poppler::Annotation *annote, page->annotations()) {
             QString uniquename = annote->uniqueName();
             if (uniquename.isEmpty() && uniquename.compare(struuid) == 0) {
@@ -569,6 +620,7 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext)
             }
         }
     }
+
 }
 
 

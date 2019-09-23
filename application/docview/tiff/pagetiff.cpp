@@ -39,7 +39,6 @@ bool PageTiff::showImage(double scale, RotateType_EM rotate)
     m_rotate = rotate;
     uint32 width;
     uint32 height;
-
     QPixmap map;
     QImage image( m_width, m_height, QImage::Format_RGB32 );
     if(TIFFSetDirectory(m_document,m_pageno))
@@ -79,6 +78,7 @@ bool PageTiff::showImage(double scale, RotateType_EM rotate)
         break;
     }
     map=map.transformed(leftmatrix, Qt::SmoothTransformation);
+    map.scaled(m_width*m_scale,m_height*m_scale);
     setPixmap(map);
     return true;
 }
