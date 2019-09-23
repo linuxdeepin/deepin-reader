@@ -143,9 +143,7 @@ bool DocummentProxy::saveas(const QString &filepath, bool withChanges)
 }
 
 void DocummentProxy::search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color)
-{
-    m_documment->saveas("/home/archermind/Desktop/tmp/11.pdf",true);
-    return ;
+{   
     if (!m_documment)
         return ;
     m_documment->search(strtext, resmap, color);
