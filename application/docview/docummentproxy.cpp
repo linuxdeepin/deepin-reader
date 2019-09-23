@@ -275,7 +275,7 @@ bool DocummentProxy::adaptHeightAndShow(double height)
 {
     if (!m_documment)
         return false;
-    double imageoriginalheight = m_documment->getPageOriginalImageWidth(0);
+    double imageoriginalheight = m_documment->getPageOriginalImageHeight(0);
     if (height < EPSINON) {
         return false;
     }
