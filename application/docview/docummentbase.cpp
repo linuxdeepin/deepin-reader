@@ -633,7 +633,7 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
         return;
     }
 
-    if (scale - m_scale < EPSINON && (rotate == RotateType_Normal || m_rotate == rotate)) {
+    if (scale - m_scale < EPSINON && scale - m_scale > -EPSINON && (rotate == RotateType_Normal || m_rotate == rotate)) {
         return;
     }
 
@@ -980,6 +980,7 @@ double DocummentBase::adaptHeightAndShow(double height)
     scale = height / imageoriginalheight;
     if (RotateType_90 == docrotatetype || RotateType_270 == docrotatetype)
         scale = height / imageoriginalwidth;
+    qDebug() << "adaptHeightAndShow scale:" << scale;
     scaleAndShow(scale, RotateType_Normal);
     return scale;
 }
