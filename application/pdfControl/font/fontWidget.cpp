@@ -269,6 +269,11 @@ void FontWidget::rotateFileView(bool isRight)
     } else {
         m_rotate -= 90;
     }
+
+    m_rotate = (m_rotate < 0) ? (m_rotate + 360) : m_rotate;
+
+//    qDebug() << QString("          m_rotate:  %1").arg(m_rotate);
+
     scaleAndRotate(ival);
 }
 
@@ -278,11 +283,17 @@ void FontWidget::scaleAndRotate(int ival)
 
     t_rotate = (m_rotate / 90) % 4;
 
+    t_rotate = (t_rotate < 0) ? (t_rotate * -1) : t_rotate;
+
+    t_rotate += 1;
+
+//    qDebug() << QString("          t_rotate:  %1").arg(t_rotate);
+
     switch (t_rotate) {
-    case RotateType_Normal:
-        m_rotate = 360;
-        m_rotateType = RotateType_Normal;
-        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_Normal);
+    case RotateType_0:
+        m_rotate = 0;
+        m_rotateType = RotateType_0;
+        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_0);
         break;
     case RotateType_90:
         m_rotateType = RotateType_90;
@@ -297,7 +308,7 @@ void FontWidget::scaleAndRotate(int ival)
         DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_270);
         break;
     default:
-        m_rotate = 360;
+//        m_rotate = 0;
         m_rotateType = RotateType_Normal;
         DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_Normal);
         break;
@@ -333,11 +344,14 @@ void FontWidget::slotSetSuitHCheckIcon()
 
     t_isSuitH = !t_isSuitH;
 
+    sendMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(t_isSuitH));
+
     if (t_isSuitH) {
         m_pSuitHLab->setPixmap(QPixmap(QString(":/resources/image/select .svg")));
-        sendMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(1));
+//        sendMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(1));
     } else {
         m_pSuitHLab->setPixmap(QPixmap(QString("")));
+//        sendMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(0));
     }
 }
 

@@ -58,14 +58,11 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
     int nSize = fileList.size();
     if (nSize > 0) {
         QString sPath = fileList.at(0);
-        DocType_EM doctype=DocType_NULL;
-        if(filePaths.indexOf(".pdf")!=-1)
-        {
-            doctype=DocType_PDF;
-        }
-        if(filePaths.indexOf(".tiff")!=-1)
-        {
-            doctype=DocType_TIFF;
+        DocType_EM doctype = DocType_NULL;
+        if (filePaths.indexOf(".pdf") != -1) {
+            doctype = DocType_PDF;
+        } else if (filePaths.indexOf(".tiff") != -1) {
+            doctype = DocType_TIFF;
         }
         bool rl = m_pDocummentProxy->openFile(doctype, sPath);
         if (rl) {

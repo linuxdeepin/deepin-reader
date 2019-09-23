@@ -8,9 +8,6 @@
 #include "subjectObserver/CustomWidget.h"
 #include "mainShow/DefaultOperationWidget.h"
 #include "mainShow/TextOperationWidget.h"
-#include "mainShow/FileAttrWidget.h"
-#include "mainShow/FindWidget.h"
-#include "mainShow/BookMarkStateLabel.h"
 
 #include "DocummentFileHelper.h"
 
@@ -34,8 +31,6 @@ public:
     ~FileViewWidget() override;
 
 signals:
-    void sigShowFileAttr();
-    void sigShowFileFind();
     void sigPrintFile();
 
 protected:
@@ -49,8 +44,6 @@ protected:
 
 private slots:
     void slotCustomContextMenuRequested(const QPoint &);
-    void slotShowFileAttr();
-    void slotShowFindWidget();
     void slotPrintFile();
 
 private:
@@ -65,12 +58,7 @@ private:
     int dealWithTitleRequest(const int &msgType, const QString &msgContent);
     int dealWithFileMenuRequest(const int &msgType, const QString &msgContent);
 
-    void setBookMarkStateWidget();
-
 private:
-    BookMarkStateLabel      *m_pBookMarkStateLabel = nullptr;
-    FindWidget              *m_pFindWidget = nullptr;
-    FileAttrWidget          *m_pFileAttrWidget = nullptr;
     DefaultOperationWidget  *m_pDefaultOperationWidget = nullptr;
     TextOperationWidget     *m_pTextOperationWidget = nullptr;
 
