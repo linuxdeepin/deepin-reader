@@ -1,5 +1,9 @@
 #include "DefaultOperationWidget.h"
 
+#include "docview/docummentproxy.h"
+#include "translator/PdfControl.h"
+#include "translator/Frame.h"
+
 DefaultOperationWidget::DefaultOperationWidget(CustomWidget *parent)
     : CustomWidget("DefaultOperationWidget", parent)
 {
@@ -8,9 +12,25 @@ DefaultOperationWidget::DefaultOperationWidget(CustomWidget *parent)
     initWidget();
 }
 
+void DefaultOperationWidget::showWidget(const int &x, const int &y, const bool &bBookState)
+{
+    QList<DPushButton *> btnList = this->findChildren<DPushButton *>();
+    foreach (DPushButton *btn, btnList) {
+        if (btn->objectName() == PdfControl::ADD_BK) {
+            btn->setEnabled(!bBookState);
+            break;
+        }
+    }
+
+    this->show();
+    this->move(x, y);
+    this->raise();
+}
+
 void DefaultOperationWidget::createBtn(const QString &btnName, const char *member)
 {
     DPushButton *btn = new DPushButton(btnName);
+    btn->setObjectName(btnName);
     connect(btn, SIGNAL(clicked()), member);
 
     layout->addWidget(btn);
@@ -64,10 +84,10 @@ void DefaultOperationWidget::initWidget()
     layout->setSpacing(0);
     this->setLayout(layout);
 
-    createBtn(tr("search"), SLOT(SlotBtnSearchClicked()));
-    createBtn(tr("add book mark"), SLOT(SlotBtnAddBookMarkClicked()));
-    createBtn(tr("first page"), SLOT(SlotBtnFirstPageClicked()));
-    createBtn(tr("prev page"), SLOT(SlotBtnPrevPageClicked()));
-    createBtn(tr("next page"), SLOT(SlotBtnNextPageClicked()));
-    createBtn(tr("end page"), SLOT(SlotBtnEndPageClicked()));
+    createBtn(Frame::sSearch, SLOT(SlotBtnSearchClicked()));
+    createBtn(PdfControl::ADD_BK, SLOT(SlotBtnAddBookMarkClicked()));
+    createBtn(Frame::FIRST_PAGE, SLOT(SlotBtnFirstPageClicked()));
+    createBtn(Frame::PREV_PAGE, SLOT(SlotBtnPrevPageClicked()));
+    createBtn(Frame::NEXT_PAGE, SLOT(SlotBtnNextPageClicked()));
+    createBtn(Frame::END_PAGE, SLOT(SlotBtnEndPageClicked()));
 }

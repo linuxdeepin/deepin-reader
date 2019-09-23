@@ -13,6 +13,7 @@ class DocummentFileHelper : public QObject, public IObserver
     Q_OBJECT
 public:
     explicit DocummentFileHelper(QObject *parent = nullptr);
+    ~DocummentFileHelper();
 
 signals:
     void sigOpenFile(const QString &);

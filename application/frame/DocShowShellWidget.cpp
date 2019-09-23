@@ -58,9 +58,6 @@ void DocShowShellWidget::resizeEvent(QResizeEvent *event)
         int nWidget = m_pFindWidget->width();
         m_pFindWidget->move(nParentWidth - nWidget - 20, 20);
     }
-
-    setBookMarkStateWidget();
-
     CustomWidget::resizeEvent(event);
 }
 
@@ -87,18 +84,6 @@ void DocShowShellWidget::slotShowFindWidget()
     m_pFindWidget->raise();
 }
 
-void DocShowShellWidget::setBookMarkStateWidget()
-{
-    if (m_pBookMarkStateLabel == nullptr) {
-        m_pBookMarkStateLabel = new BookMarkStateLabel(this);
-    }
-    int nParentWidth = this->width();
-    int nWidget = m_pBookMarkStateLabel->width();
-    m_pBookMarkStateLabel->move(nParentWidth - nWidget - 20, 0);
-    m_pBookMarkStateLabel->show();
-    m_pBookMarkStateLabel->raise();
-}
-
 void DocShowShellWidget::initConnections()
 {
     connect(this, SIGNAL(sigShowFileAttr()), this, SLOT(slotShowFileAttr()));
@@ -114,6 +99,7 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
     case MSG_OPERATION_FIND:        //  搜索
         emit sigShowFileFind();
         return ConstantMsg::g_effective_res;
+
     case MSG_NOTIFY_KEY_MSG : {    //  最后一个处理通知消息
         if ("Ctrl+F" == msgContent) {
             emit sigShowFileFind();
@@ -130,11 +116,7 @@ void DocShowShellWidget::initWidget()
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-
-    FileViewWidget *widget = new  FileViewWidget;
-    layout->addWidget(widget);
+    layout->addWidget(new FileViewWidget);
 
     this->setLayout(layout);
-
-    setBookMarkStateWidget();
 }

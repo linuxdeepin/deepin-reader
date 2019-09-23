@@ -23,6 +23,9 @@ class BookMarkStateLabel : public DLabel, public IObserver
 public:
     BookMarkStateLabel(DWidget *parent = nullptr);
 
+public:
+    bool bChecked() const;
+
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;

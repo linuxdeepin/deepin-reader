@@ -77,6 +77,11 @@ void BookMarkStateLabel::setMarkState(const bool &bCheck)
     }
 }
 
+bool BookMarkStateLabel::bChecked() const
+{
+    return m_bChecked;
+}
+
 int BookMarkStateLabel::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_BOOKMARK_STATE) {     //  当前页的书签状态
@@ -94,5 +99,4 @@ void BookMarkStateLabel::sendMsg(const int &msgType, const QString &msgContent)
 void BookMarkStateLabel::setObserverName(const QString &)
 {
     m_strObserverName = "BookMarkStateLabel";
-
 }
