@@ -63,8 +63,7 @@ enum MSG_FONT_MENU_TYPE {
     MSG_DOUB_PAGE_VIEW,             //  双页视图
     MSG_SELF_ADAPTE_HEIGHT,         //  自适应高度
     MSG_SELF_ADAPTE_WIDTH,          //  自适应宽度
-    MSG_ROTATE_LEFT,                //  左旋转
-    MSG_ROTATE_RIGHT,               //  右旋转
+    MSG_FILE_ROTATE,                //  旋转
 };
 
 //  搜索菜单 消息

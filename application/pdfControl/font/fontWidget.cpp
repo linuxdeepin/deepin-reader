@@ -272,8 +272,6 @@ void FontWidget::rotateFileView(bool isRight)
 
     m_rotate = (m_rotate < 0) ? (m_rotate + 360) : m_rotate;
 
-//    qDebug() << QString("          m_rotate:  %1").arg(m_rotate);
-
     scaleAndRotate(ival);
 }
 
@@ -287,7 +285,7 @@ void FontWidget::scaleAndRotate(int ival)
 
     t_rotate += 1;
 
-//    qDebug() << QString("          t_rotate:  %1").arg(t_rotate);
+    sendMsg(MSG_FILE_ROTATE, QString(""));
 
     switch (t_rotate) {
     case RotateType_0:
@@ -321,7 +319,7 @@ void FontWidget::setShowSuitHIcon(const bool &show)
     sendMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(t_nShow));
 
     if (show) {
-        m_pSuitHLab->setPixmap(QPixmap(QString(":/resources/image/select .svg")));
+        m_pSuitHLab->setPixmap(QPixmap(QString(":/resources/image/select.svg")));
     } else {
         m_pSuitHLab->setPixmap(QPixmap(QString("")));
     }
@@ -333,7 +331,7 @@ void FontWidget::setShowSuitWIcon(const bool &show)
     sendMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(t_nShow));
 
     if (show) {
-        m_pSuitWLab->setPixmap(QPixmap(QString(":/resources/image/select .svg")));
+        m_pSuitWLab->setPixmap(QPixmap(QString(":/resources/image/select.svg")));
     } else {
         m_pSuitWLab->setPixmap(QPixmap(QString("")));
     }
@@ -354,7 +352,7 @@ void FontWidget::slotSetDoubPageViewCheckIcon()
     t_isDoubPage = !t_isDoubPage;
 
     if (t_isDoubPage) {
-        m_pDoubPageViewLab->setPixmap(QPixmap(QString(":/resources/image/select .svg")));
+        m_pDoubPageViewLab->setPixmap(QPixmap(QString(":/resources/image/select.svg")));
         DocummentProxy::instance()->setViewModeAndShow(ViewMode_FacingPage);
     } else {
         m_pDoubPageViewLab->setPixmap(QPixmap(QString("")));

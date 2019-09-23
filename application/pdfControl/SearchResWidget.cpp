@@ -84,7 +84,6 @@ void SearchResWidget::addNotesItem(const int &page, const QString &text, const i
     itemWidget->setTextEditText(text);
     itemWidget->setPage(page);
     itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + PdfControl::SEARCH_RES_CONT));
-
     itemWidget->setMinimumSize(QSize(250, 150));
 
     QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
