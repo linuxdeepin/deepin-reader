@@ -3,6 +3,6 @@
     <qresource prefix="/qss"/>
     <qresource prefix="/images/importtip"/>
     <qresource prefix="/">
-        <file>resources/image/select .svg</file>
+        <file>resources/image/select.svg</file>
     </qresource>
 </RCC>

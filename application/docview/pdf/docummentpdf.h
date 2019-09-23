@@ -17,6 +17,7 @@ public:
     void docBasicInfo(stFileInfo &info) override;
     //--------------------------------------------//
     bool save(const QString &filePath, bool withChanges) override;
+    bool saveas(const QString& filePath,bool withChanges) override;
     void removeAllAnnotation();
     QString removeAnnotation(const QPoint &startpos) override;
     void removeAnnotation(const QString &struuid) override;
@@ -27,8 +28,9 @@ public:
     void title(QString &title) override;
     void findNext()override;
     void findPrev()override;
-    void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) override;
-    void getAnnotationText(const QString &struuid, QString &strtext)override;
+    void setAnnotationText(int ipage,const QString& struuid,const QString& strtext) override;
+    void getAnnotationText(const QString& struuid,QString& strtext,int ipage=-1)override;
+
 
 private:
     void loadWordCache(int indexpage, PageBase *page);

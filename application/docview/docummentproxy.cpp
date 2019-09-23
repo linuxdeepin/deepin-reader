@@ -133,8 +133,19 @@ bool DocummentProxy::save(const QString &filepath, bool withChanges)
     return m_documment->save(filepath, withChanges);
 }
 
+bool DocummentProxy::saveas(const QString &filepath, bool withChanges)
+{
+    if(m_documment&&m_documment->saveas(filepath,withChanges))
+    {
+        openFile(DocType_PDF,filepath);
+    }
+    return false;
+}
+
 void DocummentProxy::search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color)
 {
+    m_documment->saveas("/home/archermind/Desktop/tmp/11.pdf",true);
+    return ;
     if (!m_documment)
         return ;
     m_documment->search(strtext, resmap, color);
@@ -251,10 +262,10 @@ void DocummentProxy::setAnnotationText(int ipage, const QString &struuid, const 
     }
 }
 
-void DocummentProxy::getAnnotationText(const QString &struuid, QString &strtext)
+void DocummentProxy::getAnnotationText(const QString &struuid, QString &strtext,int ipage)
 {
     if (m_documment) {
-        m_documment->getAnnotationText(struuid, strtext);
+        m_documment->getAnnotationText(struuid, strtext,ipage);
     }
 }
 

@@ -113,6 +113,7 @@ public:
         qDebug() << "do nothing";
         return false;
     }
+    virtual bool saveas(const QString& filePath,bool withChanges){return false;}
     virtual QString removeAnnotation(const QPoint &startpos) {}
     virtual void removeAnnotation(const QString &struuid) {}
     virtual QString addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) {}
@@ -127,7 +128,7 @@ public:
     virtual void findPrev() {}
     virtual void title(QString &title) {}
     virtual void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) {}
-    virtual void getAnnotationText(const QString &struuid, QString &strtext) {}
+    virtual void getAnnotationText(const QString &struuid, QString &strtext,int ipage=-1) {}
 
 
 
