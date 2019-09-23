@@ -152,9 +152,6 @@ PageDJVU::PageDJVU(QWidget *parent)
       m_resolution(0),
       m_pageno(-1)
 {
-
-    //    setFrameShape (QFrame::Box);
-    //    setStyleSheet("border-width: 1px;border-style: solid;border-color: rgb(255, 170, 0);");
 }
 
 

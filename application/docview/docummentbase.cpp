@@ -210,8 +210,13 @@ DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
     m_viewmode = ViewMode_SinglePage;
     m_lastmagnifierpagenum = -1;
 
-    m_slidewidget->setAttribute(Qt::WA_StyledBackground, true);
-    m_slidewidget->setStyleSheet("background-color: rgb(0,0,0)");
+
+    QPalette pal(m_slidewidget->palette());
+
+    //设置背景黑色
+    pal.setColor(QPalette::Background, Qt::black);
+    m_slidewidget->setAutoFillBackground(true);
+    m_slidewidget->setPalette(pal);
 
     connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_vScrollBarValueChanged(int)));
     connect(this->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_hScrollBarValueChanged(int)));
