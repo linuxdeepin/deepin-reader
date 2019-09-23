@@ -39,6 +39,8 @@ protected:
 private:
     void rotateFileView(bool isRight = true);
     void scaleAndRotate(int);
+    void setShowSuitHIcon(const bool &);
+    void setShowSuitWIcon(const bool &);
 
 private slots:
     void slotSetChangeVal(int);

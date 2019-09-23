@@ -153,7 +153,8 @@ int SearchResWidget::setSearchItemImage(const QImage &image)
 /************************************LoadSearchResList*******************************************************/
 /************************************加载搜索列表缩略图*********************************************************/
 
-LoadSearchResThread::LoadSearchResThread()
+LoadSearchResThread::LoadSearchResThread(QThread *parent):
+    QThread(parent)
 {
 
 }
@@ -188,7 +189,6 @@ void LoadSearchResThread::run()
             }
 
             page = m_pSearchResWidget->getSearchPage(index);
-
 
             if (page == -1) {
                 continue;
