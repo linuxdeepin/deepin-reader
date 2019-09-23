@@ -128,9 +128,11 @@ void FileViewWidget::resizeEvent(QResizeEvent *event)
     int nHeight = this->height();
     qDebug() << m_nAdapteState << "         nWidth         " << nWidth << "        nHeight     " << nHeight;
     if (m_nAdapteState == WIDGET_State) {
-        DocummentProxy::instance()->adaptWidthAndShow(nWidth);
+//        DocummentProxy::instance()->adaptWidthAndShow(nWidth);
+        DocummentProxy::instance()->scaleRotateAndShow(1, RotateType_Normal);
     } else if (m_nAdapteState == HEIGHT_State) {
-        DocummentProxy::instance()->adaptHeightAndShow(nHeight);
+//        DocummentProxy::instance()->adaptHeightAndShow(nHeight);
+        DocummentProxy::instance()->scaleRotateAndShow(1, RotateType_Normal);
     }
 
     CustomWidget::resizeEvent(event);

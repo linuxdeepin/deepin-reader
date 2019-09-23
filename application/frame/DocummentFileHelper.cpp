@@ -68,7 +68,6 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
         if (rl) {
             m_szFilePath = sPath;
             DataManager::instance()->setStrOnlyFilePath(sPath);
-
             //  通知 其他窗口， 打开文件成功了！！！
             NotifySubject::getInstance()->sendMsg(MSG_OPERATION_OPEN_FILE_OK);
 

@@ -932,12 +932,12 @@ bool DocummentBase::loadPages()
     return true;
 }
 
-bool DocummentBase::adaptWidthAndShow(double width)
+double DocummentBase::adaptWidthAndShow(double width)
 {
     if (!bDocummentExist() && m_pages.size() > 0)
-        return false;
+        return -1;
     if (width < EPSINON) {
-        return false;
+        return -1;
     }
     double imageoriginalheight = m_pages.at(0)->getOriginalImageHeight();
     double imageoriginalwidth = m_pages.at(0)->getOriginalImageWidth();
@@ -956,12 +956,15 @@ bool DocummentBase::adaptWidthAndShow(double width)
             scale = width / imageoriginalheight;
     }
     scaleAndShow(scale, RotateType_Normal);
-    return true;
+    return scale;
 }
-bool DocummentBase::adaptHeightAndShow(double height)
+double DocummentBase::adaptHeightAndShow(double height)
 {
+    qDebug() << "adaptHeightAndShow height:" << height;
+    if (!bDocummentExist() && m_pages.size() > 0)
+        return -1;
     if (height < EPSINON) {
-        return false;
+        return -1;
     }
     double imageoriginalheight = m_pages.at(0)->getOriginalImageHeight();
     double imageoriginalwidth = m_pages.at(0)->getOriginalImageWidth();
@@ -972,5 +975,5 @@ bool DocummentBase::adaptHeightAndShow(double height)
     if (RotateType_90 == docrotatetype || RotateType_270 == docrotatetype)
         scale = height / imageoriginalwidth;
     scaleAndShow(scale, RotateType_Normal);
-    return true;
+    return scale;
 }
