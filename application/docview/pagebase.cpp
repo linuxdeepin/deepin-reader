@@ -47,7 +47,8 @@ PageBase::PageBase(DWidget *parent)
       m_selecttextendword(-1),
       paintrects(),
       m_links(),
-      m_words()
+      m_words(),
+      m_rotate(RotateType_0)
 {
     setMouseTracking(true);
     setAlignment(Qt::AlignCenter);

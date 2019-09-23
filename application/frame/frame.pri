@@ -8,7 +8,8 @@ HEADERS += \
     $$PWD/PublicFunction.h \
     $$PWD/MainWidget.h \
     $$PWD/AppAboutWidget.h \
-    $$PWD/DocummentFileHelper.h
+    $$PWD/DocummentFileHelper.h \
+    $$PWD/DocShowShellWidget.h
 
 SOURCES += \
     $$PWD/MainWindow.cpp \
@@ -19,7 +20,8 @@ SOURCES += \
     $$PWD/TitleWidget.cpp \
     $$PWD/MainWidget.cpp \
     $$PWD/AppAboutWidget.cpp \
-    $$PWD/DocummentFileHelper.cpp
+    $$PWD/DocummentFileHelper.cpp \
+    $$PWD/DocShowShellWidget.cpp
 
 RESOURCES += \
     $$PWD/frametheme.qrc

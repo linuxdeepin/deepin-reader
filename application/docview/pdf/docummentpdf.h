@@ -12,7 +12,7 @@ public:
     bool openFile(QString filepath) override;
     bool bDocummentExist() override;
     bool getImage(int pagenum, QImage &image, double width, double height) override;
-    bool loadPages() override;
+//    bool loadPages() override;
     bool loadWords() override;
     void docBasicInfo(stFileInfo &info) override;
     //--------------------------------------------//
@@ -30,6 +30,7 @@ public:
     void findPrev()override;
     void setAnnotationText(int ipage,const QString& struuid,const QString& strtext) override;
     void getAnnotationText(const QString& struuid,QString& strtext,int ipage=-1)override;
+
 
 private:
     void loadWordCache(int indexpage, PageBase *page);

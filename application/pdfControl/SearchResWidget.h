@@ -22,7 +22,7 @@ class SearchResWidget;
 class LoadSearchResThread : public QThread
 {
 public:
-    LoadSearchResThread();
+    LoadSearchResThread(QThread *parent = nullptr);
 
 public:
     inline void setSearchResW(SearchResWidget *searchResW)

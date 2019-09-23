@@ -84,7 +84,6 @@ void SearchResWidget::addNotesItem(const int &page, const QString &text, const i
     itemWidget->setTextEditText(text);
     itemWidget->setPage(page);
     itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + PdfControl::SEARCH_RES_CONT));
-
     itemWidget->setMinimumSize(QSize(250, 150));
 
     QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
@@ -153,7 +152,8 @@ int SearchResWidget::setSearchItemImage(const QImage &image)
 /************************************LoadSearchResList*******************************************************/
 /************************************加载搜索列表缩略图*********************************************************/
 
-LoadSearchResThread::LoadSearchResThread()
+LoadSearchResThread::LoadSearchResThread(QThread *parent):
+    QThread(parent)
 {
 
 }
@@ -188,7 +188,6 @@ void LoadSearchResThread::run()
             }
 
             page = m_pSearchResWidget->getSearchPage(index);
-
 
             if (page == -1) {
                 continue;

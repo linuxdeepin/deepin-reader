@@ -119,10 +119,6 @@ public:
     virtual QString addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) {}
     virtual void search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color = Qt::yellow) {}
     virtual void clearSearch() {}
-    virtual bool loadPages()
-    {
-        return false;
-    }
     virtual bool loadWords()
     {
         return false;
@@ -203,6 +199,7 @@ public:
     Page::Link *mouseBeOverLink(QPoint point);
     bool getSelectTextString(QString &st);
     bool showSlideModel();
+    bool loadPages();
 
 signals:
     void signal_pageChange(int);

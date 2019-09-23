@@ -67,28 +67,50 @@ bool DocummentPDF::openFile(QString filepath)
     return true;
 }
 
-bool DocummentPDF::loadPages()
-{
-    if (!document && m_pages.size() == document->numPages())
-        return false;
-    qDebug() << "loadPages";
-    //    for (int i = 0; i < m_pages.size(); i++) {
-    int startnum = m_currentpageno - 3;
-    if (startnum < 0) {
-        startnum = 0;
-    }
-    int endnum = startnum + 7;
-    if (endnum > m_pages.size()) {
-        endnum = m_pages.size();
-    }
-    for (int i = startnum; i < endnum; i++) {
-        if (QThread::currentThread()->isInterruptionRequested()) {
-            break;
-        }
-        m_pages.at(i)->showImage(m_scale, m_rotate);
-    }
-    return true;
-}
+//bool DocummentPDF::loadPages()
+//{
+//    if (!document && m_pages.size() == document->numPages())
+//        return false;
+//    qDebug() << "loadPages";
+//    //    for (int i = 0; i < m_pages.size(); i++) {
+//    int pagenum  = m_currentpageno;
+//    if (pagenum >= 0 && pagenum < m_pages.size())
+//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
+//    pagenum = m_currentpageno + 1;
+//    if (pagenum >= 0 && pagenum < m_pages.size())
+//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
+//    pagenum = m_currentpageno - 1;
+//    if (pagenum >= 0 && pagenum < m_pages.size())
+//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
+//    pagenum = m_currentpageno + 2;
+//    if (pagenum >= 0 && pagenum < m_pages.size())
+//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
+//    pagenum = m_currentpageno - 2;
+//    if (pagenum >= 0 && pagenum < m_pages.size())
+//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
+//    pagenum = m_currentpageno + 3;
+//    if (pagenum >= 0 && pagenum < m_pages.size())
+//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
+//    pagenum = m_currentpageno - 3;
+//    if (pagenum >= 0 && pagenum < m_pages.size())
+//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
+
+////    int startnum = m_currentpageno - 3;
+////    if (startnum < 0) {
+////        startnum = 0;
+////    }
+////    int endnum = startnum + 7;
+////    if (endnum > m_pages.size()) {
+////        endnum = m_pages.size();
+////    }
+////    for (int i = startnum; i < endnum; i++) {
+////        if (QThread::currentThread()->isInterruptionRequested()) {
+////            break;
+////        }
+////        m_pages.at(i)->showImage(m_scale, m_rotate);
+////    }
+//    return true;
+//}
 
 bool DocummentPDF::loadWords()
 {

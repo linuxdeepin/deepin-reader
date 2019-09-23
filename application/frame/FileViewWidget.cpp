@@ -1,7 +1,4 @@
 #include "FileViewWidget.h"
-#include <QDebug>
-#include <QMimeData>
-#include <QUrl>
 #include <QGridLayout>
 #include <QClipboard>
 #include "controller/DataManager.h"
@@ -10,12 +7,13 @@
 #include "docview/docummentproxy.h"
 #include <QPrinter>
 #include <QPrintDialog>
+#include <DMessageBox>
+#include "translator/Frame.h"
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
 {
     setMouseTracking(true); //  接受 鼠标滑动事件
-    setAcceptDrops(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
 
     initWidget();
@@ -24,10 +22,7 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
 
 FileViewWidget::~FileViewWidget()
 {
-    if (m_pFileAttrWidget) {
-        m_pFileAttrWidget->deleteLater();
-        m_pFileAttrWidget = nullptr;
-    }
+
 }
 
 void FileViewWidget::initWidget()
@@ -36,8 +31,6 @@ void FileViewWidget::initWidget()
     DocummentProxy::instance(this);
 
     m_pDocummentFileHelper = new DocummentFileHelper(this);
-
-    setBookMarkStateWidget();
 }
 
 //  鼠标移动
@@ -54,12 +47,13 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
         QPoint docGlobalPos = pDocummentProxy->global2RelativePoint(globalPos);
         if (m_nCurrentHandelState == Handel_State) {    //   手型状态下， 按住鼠标左键 位置进行移动
             if (m_bSelectOrMove) {
-
-                QPoint mvPoint = globalPos - m_pHandleMoveStartPoint;
+                QPoint mvPoint = m_pHandleMoveStartPoint - globalPos;
                 int mvX = mvPoint.x();
                 int mvY = mvPoint.y();
 
                 pDocummentProxy->pageMove(mvX, mvY);
+
+                m_pHandleMoveStartPoint = globalPos;
             }
         } else if (m_nCurrentHandelState == Magnifier_State) {  //  当前是放大镜状态
             pDocummentProxy->showMagnifier(docGlobalPos);
@@ -127,45 +121,17 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
     CustomWidget::mouseReleaseEvent(event);
 }
 
-//文件拖拽
-void FileViewWidget::dragEnterEvent(QDragEnterEvent *event)
-{
-    // Accept drag event if mime type is url.
-    const QMimeData *mimeData = event->mimeData();
-
-    if (mimeData->hasUrls()) {
-        event->accept();
-    }
-}
-
-void FileViewWidget::dropEvent(QDropEvent *event)
-{
-    const QMimeData *mimeData = event->mimeData();
-
-    if (mimeData->hasUrls()) {
-        for (auto url : mimeData->urls()) {
-            QString sFilePath =  url.toLocalFile();
-            if (sFilePath.endsWith(".pdf")) {
-                //  默认打开第一个
-                QString sRes = sFilePath + "@#&wzx";
-
-                sendMsg(MSG_OPEN_FILE_PATH, sRes);
-
-                break;
-            }
-        }
-    }
-}
 
 void FileViewWidget::resizeEvent(QResizeEvent *event)
 {
-    if (m_pFindWidget != nullptr) {
-        int nParentWidth = this->width();
-        int nWidget = m_pFindWidget->width();
-        m_pFindWidget->move(nParentWidth - nWidget - 20, 20);
+    int nWidth = this->width();
+    int nHeight = this->height();
+    qDebug() << m_nAdapteState << "         nWidth         " << nWidth << "        nHeight     " << nHeight;
+    if (m_nAdapteState == WIDGET_State) {
+        DocummentProxy::instance()->adaptWidthAndShow(nWidth);
+    } else if (m_nAdapteState == HEIGHT_State) {
+        DocummentProxy::instance()->adaptHeightAndShow(nHeight);
     }
-
-    setBookMarkStateWidget();
 
     CustomWidget::resizeEvent(event);
 }
@@ -214,7 +180,6 @@ int FileViewWidget::magnifying(const QString &data)
         m_nCurrentHandelState = Magnifier_State;
         this->setCursor(Qt::BlankCursor);
     } else {
-        //  取消放大镜显示
         m_nCurrentHandelState = Default_State;
         this->setCursor(Qt::ArrowCursor);
         DocummentProxy::instance()->closeMagnifier();
@@ -241,6 +206,7 @@ int FileViewWidget::setHandShape(const QString &data)
     return ConstantMsg::g_effective_res;
 }
 
+//  添加注释
 void FileViewWidget::onFileAddAnnotation(const QString &sColor)
 {
     QList<QColor> colorList = {};
@@ -254,51 +220,11 @@ void FileViewWidget::onFileRemoveAnnotation()
     DocummentProxy::instance()->removeAnnotation(m_pRightClickPoint);
 }
 
+//  信号槽　初始化
 void FileViewWidget::initConnections()
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(slotCustomContextMenuRequested(const QPoint &)));
-
-    connect(this, SIGNAL(sigShowFileAttr()), this, SLOT(slotShowFileAttr()));
-    connect(this, SIGNAL(sigShowFileFind()), this, SLOT(slotShowFindWidget()));
-    connect(this, SIGNAL(sigPrintFile()), this, SLOT(slotPrintFile()));
-}
-
-void FileViewWidget::setBookMarkStateWidget()
-{
-    if (m_pBookMarkStateLabel == nullptr) {
-        m_pBookMarkStateLabel = new BookMarkStateLabel(this);
-    }
-    int nParentWidth = this->width();
-    int nWidget = m_pBookMarkStateLabel->width();
-    m_pBookMarkStateLabel->move(nParentWidth - nWidget - 20, 0);
-    m_pBookMarkStateLabel->show();
-    m_pBookMarkStateLabel->raise();
-}
-
-//  查看 文件属性
-void FileViewWidget::slotShowFileAttr()
-{
-    //  获取文件的基本数据，　进行展示
-    if (m_pFileAttrWidget == nullptr) {
-        m_pFileAttrWidget = new FileAttrWidget;
-    }
-    m_pFileAttrWidget->showScreenCenter();
-}
-
-//  显示搜索框
-void FileViewWidget::slotShowFindWidget()
-{
-    if (m_pFindWidget == nullptr) {
-        m_pFindWidget = new FindWidget(this);
-    }
-
-    int nParentWidth = this->width();
-    int nWidget = m_pFindWidget->width();
-    m_pFindWidget->move(nParentWidth - nWidget - 20, 20);
-
-    m_pFindWidget->show();
-    m_pFindWidget->raise();
 }
 
 //  打印
@@ -312,19 +238,35 @@ void FileViewWidget::slotPrintFile()
             //  print
         }
     } else {
-        qDebug() <<  "   no  print   ";
+        DMessageBox::warning(nullptr, "", Frame::sPrintErrorNoDevice);
     }
 }
 
 //  标题栏的菜单消息处理
-int FileViewWidget::dealWithTitleMenuRequest(const int &msgType, const QString &)
+int FileViewWidget::dealWithTitleRequest(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
-    case MSG_OPERATION_ATTR:        //  打开该文件的属性信息
-        emit sigShowFileAttr();
+    case MSG_MAGNIFYING:            //  放大镜信号
+        return magnifying(msgContent);
+    case MSG_HANDLESHAPE:           //  手势 信号
+        return setHandShape(msgContent);
+    case MSG_SELF_ADAPTE_HEIGHT:    //  自适应　高度
+        if (msgContent == "1") {
+            m_nAdapteState = HEIGHT_State ;
+            int nHeight = this->height();
+            DocummentProxy::instance()->adaptHeightAndShow(nHeight);
+        } else {
+            m_nAdapteState = Default_State;
+        }
         return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_FIND:        //  搜索
-        emit sigShowFileFind();
+    case MSG_SELF_ADAPTE_WIDTH:    //   自适应宽度
+        if (msgContent == "1") {
+            m_nAdapteState = WIDGET_State;
+            int nWidth = this->width();
+            DocummentProxy::instance()->adaptWidthAndShow(nWidth);
+        } else {
+            m_nAdapteState = Default_State;
+        }
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_PRINT :      //  打印
         emit sigPrintFile();
@@ -353,25 +295,13 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
 //  消息 数据 处理
 int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    switch (msgType) {
-    case MSG_MAGNIFYING:            //  放大镜信号
-        return magnifying(msgContent);
-    case MSG_HANDLESHAPE:           //  手势 信号
-        return setHandShape(msgContent);
-    }
-
-    int nRes = dealWithTitleMenuRequest(msgType, msgContent);
+    int nRes = dealWithTitleRequest(msgType, msgContent);
     if (nRes != ConstantMsg::g_effective_res) {
 
         nRes = dealWithFileMenuRequest(msgType, msgContent);
         if (nRes != ConstantMsg::g_effective_res) {
 
             if (msgType == MSG_NOTIFY_KEY_MSG) {    //  最后一个处理通知消息
-                if ("Ctrl+F" == msgContent) {
-                    emit sigShowFileFind();
-                    return ConstantMsg::g_effective_res;
-                }
-
                 if (msgContent == "Up") {
                     sendMsg(MSG_OPERATION_PREV_PAGE);
                 } else if (msgContent == "Down") {

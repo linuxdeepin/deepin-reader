@@ -4,7 +4,7 @@
 #include <DSplitter>
 
 #include "HomeWidget.h"
-#include "FileViewWidget.h"
+#include "DocShowShellWidget.h"
 #include "LeftSidebarWidget.h"
 
 MainWidget::MainWidget(CustomWidget *parent) :
@@ -55,12 +55,13 @@ void MainWidget::initWidget()
     pStackedWidget->addWidget(new HomeWidget);
 
     DSplitter *pSplitter = new DSplitter;
+    pSplitter->setHandleWidth(5);
     pSplitter->setChildrenCollapsible(false);   //  子部件不可拉伸到 0
 
     pSplitter->insertWidget(0, new LeftSidebarWidget);
     pSplitter->setStretchFactor(0, 2);
 
-    pSplitter->insertWidget(1, new FileViewWidget);
+    pSplitter->insertWidget(1, new DocShowShellWidget);
     pSplitter->setStretchFactor(1, 8);
 
     pStackedWidget->addWidget(pSplitter);

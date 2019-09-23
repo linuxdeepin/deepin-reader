@@ -5,21 +5,20 @@
 
 tsize_t tiffReadProc( thandle_t handle, tdata_t buf, tsize_t size )
 {
-    QIODevice * device = static_cast< QIODevice * >( handle );
+    QIODevice *device = static_cast< QIODevice * >( handle );
     return device->isReadable() ? device->read( static_cast< char * >( buf ), size ) : -1;
 }
 
 tsize_t tiffWriteProc( thandle_t handle, tdata_t buf, tsize_t size )
 {
-    QIODevice * device = static_cast< QIODevice * >( handle );
+    QIODevice *device = static_cast< QIODevice * >( handle );
     return device->write( static_cast< char * >( buf ), size );
 }
 
 toff_t tiffSeekProc( thandle_t handle, toff_t offset, int whence )
 {
-    QIODevice * device = static_cast< QIODevice * >( handle );
-    switch ( whence )
-    {
+    QIODevice *device = static_cast< QIODevice * >( handle );
+    switch ( whence ) {
     case SEEK_SET:
         device->seek( offset );
         break;
@@ -42,7 +41,7 @@ int tiffCloseProc( thandle_t handle )
 
 toff_t tiffSizeProc( thandle_t handle )
 {
-    QIODevice * device = static_cast< QIODevice * >( handle );
+    QIODevice *device = static_cast< QIODevice * >( handle );
     return device->size();
 }
 
@@ -60,12 +59,11 @@ static void adaptSizeToResolution( TIFF *tiff, ttag_t whichres, double dpi, uint
     float resvalue = 1.0;
     uint16 resunit = 0;
     if ( !TIFFGetField( tiff, whichres, &resvalue )
-         || !TIFFGetFieldDefaulted( tiff, TIFFTAG_RESOLUTIONUNIT, &resunit ) )
+            || !TIFFGetFieldDefaulted( tiff, TIFFTAG_RESOLUTIONUNIT, &resunit ) )
         return;
 
     float newsize = *size / resvalue;
-    switch ( resunit )
-    {
+    switch ( resunit ) {
     case RESUNIT_INCH:
         *size = (uint32)( newsize * dpi );
         break;
@@ -77,7 +75,7 @@ static void adaptSizeToResolution( TIFF *tiff, ttag_t whichres, double dpi, uint
     }
 }
 
-DocumenTiff::DocumenTiff(DWidget *parent):DocummentBase(parent),document()
+DocumenTiff::DocumenTiff(DWidget *parent): DocummentBase(parent), document()
 {
 
 }
@@ -85,23 +83,22 @@ DocumenTiff::DocumenTiff(DWidget *parent):DocummentBase(parent),document()
 bool DocumenTiff::openFile(QString filepath)
 {
     m_pages.clear();
-    QFile* qfile = new QFile( filepath );
-    if(!qfile->open( QIODevice::ReadOnly)) return  false;
+    QFile *qfile = new QFile( filepath );
+    if (!qfile->open( QIODevice::ReadOnly)) return  false;
 
-    QIODevice* dev= qfile;
-    QByteArray data=QFile::encodeName( QFileInfo( *qfile ).fileName());
-    document=TIFFClientOpen( data.constData(), "r", dev,
-                         tiffReadProc, tiffWriteProc, tiffSeekProc,
-                         tiffCloseProc, tiffSizeProc,
-                         tiffMapProc, tiffUnmapProc );
-    if (document)
-    {
+    QIODevice *dev = qfile;
+    QByteArray data = QFile::encodeName( QFileInfo( *qfile ).fileName());
+    document = TIFFClientOpen( data.constData(), "r", dev,
+                               tiffReadProc, tiffWriteProc, tiffSeekProc,
+                               tiffCloseProc, tiffSizeProc,
+                               tiffMapProc, tiffUnmapProc );
+    if (document) {
         tdir_t dirs = TIFFNumberOfDirectories(document);
         tdir_t realdirs = 0;
         uint32 width = 0;
         uint32 height = 0;
-        const QSizeF dpi(76,76);
-        for (int i = 0; i <dirs; i++) {
+        const QSizeF dpi(76, 76);
+        for (int i = 0; i < dirs; i++) {
             DWidget *qwidget = new DWidget(this);
             QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
             qhblayout->setAlignment(qwidget, Qt::AlignCenter);
@@ -112,7 +109,7 @@ bool DocumenTiff::openFile(QString filepath)
             m_widgets.append(qwidget);
 
             PageTiff *page = new PageTiff(this);
-            page->setPage(i,document);
+            page->setPage(i, document);
             m_pages.append((PageBase *)page);
         }
     }
@@ -128,21 +125,21 @@ bool DocumenTiff::openFile(QString filepath)
     return  true;
 }
 
-bool DocumenTiff::loadPages()
-{
-    if (!document && m_pages.size() ==TIFFNumberOfDirectories(document))
-        return false;
+//bool DocumenTiff::loadPages()
+//{
+//    if (!document && m_pages.size() ==TIFFNumberOfDirectories(document))
+//        return false;
 
-    int startnum = m_currentpageno - 3;
-    if (startnum < 0) {
-        startnum = 0;
-    }
-    int endnum = startnum + 7;
-    if (endnum > m_pages.size()) {
-        endnum = m_pages.size();
-    }
-    for (int i = startnum; i < endnum; i++) {
-        m_pages.at(i)->showImage(m_scale, m_rotate);
-    }
-    return true;
-}
+//    int startnum = m_currentpageno - 3;
+//    if (startnum < 0) {
+//        startnum = 0;
+//    }
+//    int endnum = startnum + 7;
+//    if (endnum > m_pages.size()) {
+//        endnum = m_pages.size();
+//    }
+//    for (int i = startnum; i < endnum; i++) {
+//        m_pages.at(i)->showImage(m_scale, m_rotate);
+//    }
+//    return true;
+//}

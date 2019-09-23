@@ -58,21 +58,16 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
     int nSize = fileList.size();
     if (nSize > 0) {
         QString sPath = fileList.at(0);
-        DocType_EM doctype=DocType_NULL;
-        if(filePaths.indexOf(".pdf")!=-1)
-        {
-            doctype=DocType_PDF;
-        }
-        if(filePaths.indexOf(".tiff")!=-1)
-        {
-            doctype=DocType_TIFF;
+        DocType_EM doctype = DocType_NULL;
+        if (filePaths.indexOf(".pdf") != -1) {
+            doctype = DocType_PDF;
+        } else if (filePaths.indexOf(".tiff") != -1) {
+            doctype = DocType_TIFF;
         }
         bool rl = m_pDocummentProxy->openFile(doctype, sPath);
         if (rl) {
             m_szFilePath = sPath;
             DataManager::instance()->setStrOnlyFilePath(sPath);
-
-//            m_pDocummentProxy->scaleRotateAndShow(-1, RotateType_Normal);
 
             //  通知 其他窗口， 打开文件成功了！！！
             NotifySubject::getInstance()->sendMsg(MSG_OPERATION_OPEN_FILE_OK);
@@ -116,7 +111,6 @@ void DocummentFileHelper::onClickPageLink(Page::Link *pLink)
 
     } else if (linkType == Page::LinkType_Browse) {
         QString surlOrFileName = pLink->urlOrFileName;
-        qDebug() << "   surlOrFileName      " << surlOrFileName;
         QDesktopServices::openUrl(QUrl(surlOrFileName, QUrl::TolerantMode));
     } else if (linkType == Page::LinkType_Execute) {
 
