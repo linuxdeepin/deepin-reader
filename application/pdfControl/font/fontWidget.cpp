@@ -102,7 +102,7 @@ void FontWidget::initWidget()
     m_pEnlargeSlider->setFixedSize(QSize(100, 25));
 //    m_pEnlargeSlider->setLeftIcon(QIcon(tr(":/resources/image/hover/close.svg")));
 //    m_pEnlargeSlider->setRightIcon(QIcon(tr(":/resources/image/press/close.svg")));
-    connect(m_pEnlargeSlider, SIGNAL(valueChanged(int)),  SLOT(slotSetChangeVal(int)));
+    connect(m_pEnlargeSlider, SIGNAL(valueChanged(int)), this, SLOT(slotSetChangeVal(int)));
 
     //t_pHLayout2->addSpacing(1);
     t_pHLayout2->addWidget(m_pMinLabALab);
@@ -273,6 +273,7 @@ void FontWidget::rotateFileView(bool isRight)
     m_rotate = (m_rotate < 0) ? (m_rotate + 360) : m_rotate;
 
     scaleAndRotate(ival);
+    sendMsg(MSG_FILE_ROTATE, QString(""));
 }
 
 void FontWidget::scaleAndRotate(int ival)
@@ -285,7 +286,6 @@ void FontWidget::scaleAndRotate(int ival)
 
     t_rotate += 1;
 
-    sendMsg(MSG_FILE_ROTATE, QString(""));
 
     switch (t_rotate) {
     case RotateType_0:
@@ -306,31 +306,30 @@ void FontWidget::scaleAndRotate(int ival)
         DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_270);
         break;
     default:
-//        m_rotate = 0;
         m_rotateType = RotateType_Normal;
         DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_Normal);
         break;
     }
 }
 
-void FontWidget::setShowSuitHIcon(const bool &show)
+void FontWidget::setShowSuitHIcon()
 {
-    int t_nShow = show ? 1 : 0;
+    int t_nShow = m_bSuitH ? 1 : 0;
     sendMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(t_nShow));
 
-    if (show) {
+    if (m_bSuitH) {
         m_pSuitHLab->setPixmap(QPixmap(QString(":/resources/image/select.svg")));
     } else {
         m_pSuitHLab->setPixmap(QPixmap(QString("")));
     }
 }
 
-void FontWidget::setShowSuitWIcon(const bool &show)
+void FontWidget::setShowSuitWIcon()
 {
-    int t_nShow = show ? 1 : 0;
+    int t_nShow = m_bSuitW ? 1 : 0;
     sendMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(t_nShow));
 
-    if (show) {
+    if (m_bSuitW) {
         m_pSuitWLab->setPixmap(QPixmap(QString(":/resources/image/select.svg")));
     } else {
         m_pSuitWLab->setPixmap(QPixmap(QString("")));
@@ -362,26 +361,20 @@ void FontWidget::slotSetDoubPageViewCheckIcon()
 
 void FontWidget::slotSetSuitHCheckIcon()
 {
-    if (m_bSuitW) {
-        m_bSuitW = !m_bSuitW;
-    } else {
-        m_bSuitH = !m_bSuitH;
-    }
+    m_bSuitW = false;
+    m_pSuitWLab->setPixmap(QPixmap(QString("")));
 
-    setShowSuitHIcon(m_bSuitH);
-    setShowSuitWIcon(m_bSuitW);
+    m_bSuitH = !m_bSuitH;
+    setShowSuitHIcon();
 }
 
 void FontWidget::slotSetSuitWCheckIcon()
 {
-    if (m_bSuitH) {
-        m_bSuitH = !m_bSuitH;
-    } else {
-        m_bSuitW = !m_bSuitW;
-    }
+    m_bSuitH = false;
+    m_pSuitHLab->setPixmap(QPixmap(QString("")));
 
-    setShowSuitHIcon(m_bSuitH);
-    setShowSuitWIcon(m_bSuitW);
+    m_bSuitW = !m_bSuitW;
+    setShowSuitWIcon();
 }
 
 void FontWidget::slotSetRotateLeftCheckIcon()
