@@ -47,7 +47,7 @@ void ThumbnailWidget::initWidget()
     m_pThumbnailListWidget->setResizeMode(QListWidget::Adjust);
     m_pvBoxLayout->addWidget(m_pThumbnailListWidget);
     //m_pThumbnailListWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    //m_pThumbnailListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_pThumbnailListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     m_pPageWidget = new PagingWidget;
     m_pvBoxLayout->addWidget(m_pPageWidget);
