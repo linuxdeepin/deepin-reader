@@ -13,9 +13,9 @@ class DocumenTiff: public DocummentBase
 public:
     DocumenTiff(DWidget *parent = nullptr);
     bool openFile(QString filepath) override;
-    bool loadPages() override;
+//    bool loadPages() override;
 
-   TIFF* document;
+    TIFF *document;
 };
 
 #endif // DOCUMENTIFF_H

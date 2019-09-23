@@ -415,7 +415,7 @@ bool DocummentBase::mouseBeOverText(QPoint point)
     QPoint qpoint = point;
     int pagenum = -1;
     pagenum = pointInWhichPage(qpoint);
-    qDebug() << "mouseBeOverText pagenum:" << pagenum;
+//    qDebug() << "mouseBeOverText pagenum:" << pagenum;
     if (-1 != pagenum) {
         return m_pages.at(pagenum)->ifMouseMoveOverText(qpoint);
     }
@@ -775,7 +775,7 @@ Page::Link *DocummentBase::mouseBeOverLink(QPoint point)
     QPoint qpoint = point;
     int pagenum = -1;
     pagenum = pointInWhichPage(qpoint);
-    qDebug() << "mouseBeOverLink pagenum:" << pagenum;
+//    qDebug() << "mouseBeOverLink pagenum:" << pagenum;
     if (-1 != pagenum) {
         return m_pages.at(pagenum)->ifMouseMoveOverLink(qpoint);
     }
@@ -876,4 +876,49 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
     else
         m_threadloaddoc.start();
     return true;;
+}
+
+bool DocummentBase::loadPages()
+{
+    if (!bDocummentExist())
+        return false;
+    qDebug() << "loadPages";
+    //    for (int i = 0; i < m_pages.size(); i++) {
+    int pagenum  = m_currentpageno;
+    if (pagenum >= 0 && pagenum < m_pages.size())
+        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
+    pagenum = m_currentpageno + 1;
+    if (pagenum >= 0 && pagenum < m_pages.size())
+        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
+    pagenum = m_currentpageno - 1;
+    if (pagenum >= 0 && pagenum < m_pages.size())
+        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
+    pagenum = m_currentpageno + 2;
+    if (pagenum >= 0 && pagenum < m_pages.size())
+        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
+    pagenum = m_currentpageno - 2;
+    if (pagenum >= 0 && pagenum < m_pages.size())
+        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
+    pagenum = m_currentpageno + 3;
+    if (pagenum >= 0 && pagenum < m_pages.size())
+        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
+    pagenum = m_currentpageno - 3;
+    if (pagenum >= 0 && pagenum < m_pages.size())
+        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
+
+//    int startnum = m_currentpageno - 3;
+//    if (startnum < 0) {
+//        startnum = 0;
+//    }
+//    int endnum = startnum + 7;
+//    if (endnum > m_pages.size()) {
+//        endnum = m_pages.size();
+//    }
+//    for (int i = startnum; i < endnum; i++) {
+//        if (QThread::currentThread()->isInterruptionRequested()) {
+//            break;
+//        }
+//        m_pages.at(i)->showImage(m_scale, m_rotate);
+//    }
+    return true;
 }

@@ -80,28 +80,28 @@ bool DocummentPS::openFile(QString filepath)
     return true;
 }
 
-bool DocummentPS::loadPages()
-{
-    if (!document && m_pages.size() == spectre_document_get_n_pages(document))
-        return false;
-    qDebug() << "loadPages";
-    //    for (int i = 0; i < m_pages.size(); i++) {
-    int startnum = m_currentpageno - 3;
-    if (startnum < 0) {
-        startnum = 0;
-    }
-    int endnum = startnum + 7;
-    if (endnum > m_pages.size()) {
-        endnum = m_pages.size();
-    }
-    for (int i = startnum; i < endnum; i++) {
-        if (QThread::currentThread()->isInterruptionRequested()) {
-            break;
-        }
-        m_pages.at(i)->showImage(m_scale, m_rotate);
-    }
-    return true;
-}
+//bool DocummentPS::loadPages()
+//{
+//    if (!document && m_pages.size() == spectre_document_get_n_pages(document))
+//        return false;
+//    qDebug() << "loadPages";
+//    //    for (int i = 0; i < m_pages.size(); i++) {
+//    int startnum = m_currentpageno - 3;
+//    if (startnum < 0) {
+//        startnum = 0;
+//    }
+//    int endnum = startnum + 7;
+//    if (endnum > m_pages.size()) {
+//        endnum = m_pages.size();
+//    }
+//    for (int i = startnum; i < endnum; i++) {
+//        if (QThread::currentThread()->isInterruptionRequested()) {
+//            break;
+//        }
+//        m_pages.at(i)->showImage(m_scale, m_rotate);
+//    }
+//    return true;
+//}
 
 bool DocummentPS::loadWords()
 {
