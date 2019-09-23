@@ -1,5 +1,6 @@
 #include "TextOperationWidget.h"
-
+#include "translator/PdfControl.h"
+#include "translator/Frame.h"
 
 TextOperationWidget::TextOperationWidget(CustomWidget *parent)
     : CustomWidget("TextOperationWidget", parent)
@@ -7,6 +8,22 @@ TextOperationWidget::TextOperationWidget(CustomWidget *parent)
     setWindowFlags(Qt::Popup);
 
     initWidget();
+}
+
+//  显示当前操作框
+void TextOperationWidget::showWidget(const int &x, const int &y, const bool &bBookState)
+{
+    QList<DPushButton *> btnList = this->findChildren<DPushButton *>();
+    foreach (DPushButton *btn, btnList) {
+        if (btn->objectName() == PdfControl::ADD_BK) {
+            btn->setEnabled(!bBookState);
+            break;
+        }
+    }
+
+    this->show();
+    this->move(x, y);
+    this->raise();
 }
 
 DPushButton *TextOperationWidget::createBtn(const QString &btnName, const char *member)
@@ -68,8 +85,8 @@ void TextOperationWidget::initWidget()
 
     DPushButton *removeBtn = createBtn(tr("remove high lighted"), SLOT(SlotBtnRemoveHighLightedClicked()));
     layout->addWidget(removeBtn);
-    DPushButton *addAnnoBtn = createBtn(tr("add annotation"), SLOT(SlotBtnAddAnnotationClicked()));
+    DPushButton *addAnnoBtn = createBtn(PdfControl::ADD_NOTE, SLOT(SlotBtnAddAnnotationClicked()));
     layout->addWidget(addAnnoBtn);
-    DPushButton *AddBookMarkBtn = createBtn(tr("add book mark"), SLOT(SlotBtnAddBookMarkClicked()));
+    DPushButton *AddBookMarkBtn = createBtn(PdfControl::ADD_BK, SLOT(SlotBtnAddBookMarkClicked()));
     layout->addWidget(AddBookMarkBtn);
 }

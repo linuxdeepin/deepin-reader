@@ -6,7 +6,7 @@
 #include <DTitlebar>
 #include <DWidgetUtil>
 #include <QDebug>
-#include <DDesktopServices>
+#include <QDesktopServices>
 #include <QSignalMapper>
 #include "controller/DataManager.h"
 #include "translator/Frame.h"
@@ -109,7 +109,7 @@ void MainWindow::onOpenFolder()
     if (strFilePath != "") {
         int nLastPos = strFilePath.lastIndexOf('/');
         strFilePath = strFilePath.mid(0, nLastPos);
-        DDesktopServices::showFolder(strFilePath);
+        QDesktopServices::openUrl(QUrl(strFilePath));
     }
 }
 

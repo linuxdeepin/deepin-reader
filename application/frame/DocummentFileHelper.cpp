@@ -7,6 +7,7 @@
 #include "utils/utils.h"
 #include <QDesktopServices>
 #include "translator/Frame.h"
+#include <DMessageBox>
 
 DocummentFileHelper::DocummentFileHelper(QObject *parent) : QObject(parent)
 {
@@ -23,6 +24,13 @@ DocummentFileHelper::DocummentFileHelper(QObject *parent) : QObject(parent)
     m_pNotifySubject = NotifySubject::getInstance();
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
+    }
+}
+
+DocummentFileHelper::~DocummentFileHelper()
+{
+    if (m_pDocummentProxy && m_szFilePath != "") {
+        m_pDocummentProxy->closeFile();
     }
 }
 
@@ -54,6 +62,14 @@ void DocummentFileHelper::onSaveAsFile()
 //  打开　文件路径
 void DocummentFileHelper::slotOpenFile(const QString &filePaths)
 {
+    //  已经打开了文件，　询问是否需要保存当前打开的文件
+    if (m_szFilePath != "") {
+        if (QMessageBox::Yes == DMessageBox::question(nullptr, Frame::sSaveFile, Frame::sSaveFileTitle)) {
+            m_pDocummentProxy->save(m_szFilePath, true);
+        }
+        m_pDocummentProxy->closeFile();
+    }
+
     QStringList fileList = filePaths.split("@#&wzx",  QString::SkipEmptyParts);
     int nSize = fileList.size();
     if (nSize > 0) {

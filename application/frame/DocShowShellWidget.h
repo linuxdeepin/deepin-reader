@@ -4,8 +4,6 @@
 #include "subjectObserver/CustomWidget.h"
 #include "mainShow/FindWidget.h"
 #include "mainShow/FileAttrWidget.h"
-#include "mainShow/BookMarkStateLabel.h"
-
 
 /**
  * @brief The DocShowShellWidget class
@@ -18,7 +16,7 @@ class DocShowShellWidget : public CustomWidget
     Q_OBJECT
 public:
     DocShowShellWidget(CustomWidget *parent = nullptr);
-    ~DocShowShellWidget();
+    ~DocShowShellWidget() override;
 
 signals:
     void sigShowFileAttr();
@@ -29,8 +27,6 @@ protected:
     void dropEvent(QDropEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 
-private:
-    void setBookMarkStateWidget();
 
 private slots:
     void slotShowFileAttr();
@@ -42,8 +38,6 @@ private:
 private:
     FileAttrWidget          *m_pFileAttrWidget = nullptr;
     FindWidget              *m_pFindWidget = nullptr;
-    BookMarkStateLabel      *m_pBookMarkStateLabel = nullptr;
-
 
     // IObserver interface
 public:

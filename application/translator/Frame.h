@@ -16,6 +16,7 @@ const QString sDescription = QObject::tr("Document viewer is a document viewer t
 const QString sSelectFile = QObject::tr("Select File");     //  选择文件
 
 const QString sOpenFile = QObject::tr("Open File");         //  打开文件
+const QString sSaveFileTitle = QObject::tr("Do you need to save the file opened?");         //  保存文件
 const QString sSaveFile = QObject::tr("Save File");         //  保存文件
 const QString sSaveAsFile = QObject::tr("Save As File");    //  另存为文件
 const QString sOpenFolder = QObject::tr("Open Folder");     //  打开所在文件夹
@@ -39,6 +40,11 @@ const QString sDefaultShape = QObject::tr("defaultShape");  //  默认手型
 const QString sHandleShape = QObject::tr("handleShape");    //  手型
 
 const QString sMagnifier = QObject::tr("magnifier");        //  放大镜
+
+const QString FIRST_PAGE = QObject::tr("first page");       //  第一页
+const QString PREV_PAGE = QObject::tr("prev page");         //  上一页
+const QString NEXT_PAGE = QObject::tr("next page");         //  下一页
+const QString END_PAGE = QObject::tr("end page");           //  最后一页
 }
 
 
