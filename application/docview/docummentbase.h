@@ -169,20 +169,21 @@ public:
         if (scrollBar_Y)
             scrollBar_Y->setValue(scrollBar_Y->value() + mvy);
     }
-    double getPageOriginalImageWidth(int pagenum)
-    {
-        if (m_pages.size() <= pagenum) {
-            return -1;
-        }
-        return m_pages.at(pagenum)->getOriginalImageWidth();
-    }
-    double getPageOriginalImageHeight(int pagenum)
-    {
-        if (m_pages.size() <= pagenum) {
-            return -1;
-        }
-        return m_pages.at(pagenum)->getOriginalImageHeight();
-    }
+//    double getPageOriginalImageWidth(int pagenum)
+//    {
+//        if (m_pages.size() <= pagenum) {
+//            return -1;
+//        }
+//        return m_pages.at(pagenum)->getOriginalImageWidth();
+//    }
+//    double getPageOriginalImageHeight(int pagenum)
+//    {
+//        if (m_pages.size() <= pagenum) {
+//            return -1;
+//        }
+//        return m_pages.at(pagenum)->getOriginalImageHeight();
+//    }
+
 
 
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
@@ -199,6 +200,8 @@ public:
     bool getSelectTextString(QString &st);
     bool showSlideModel();
     bool loadPages();
+    bool adaptWidthAndShow(double width);
+    bool adaptHeightAndShow(double height);
 
 signals:
     void signal_pageChange(int);

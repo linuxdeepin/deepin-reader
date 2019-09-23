@@ -186,6 +186,8 @@ DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
     delete parent->layout();
     QGridLayout *gridlyout = new QGridLayout(parent);
     parent->setLayout(gridlyout);
+    gridlyout->setMargin(0);
+    gridlyout->setSpacing(0);
     gridlyout->addWidget(this, 0, 0);
     gridlyout->addWidget(m_magnifierwidget, 0, 0);
     gridlyout->addWidget(m_slidewidget, 0, 0);
@@ -198,6 +200,8 @@ DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
 //    m_magnifierwidget->raise();
     m_magnifierwidget->hide();
     m_widget.setLayout(&m_vboxLayout);
+    m_vboxLayout.setMargin(0);
+    m_vboxLayout.setSpacing(0);
     m_widget.setMouseTracking(true);
     pslidelabel->setMouseTracking(true);
     pslideanimationlabel->setMouseTracking(true);
@@ -920,5 +924,48 @@ bool DocummentBase::loadPages()
 //        }
 //        m_pages.at(i)->showImage(m_scale, m_rotate);
 //    }
+    return true;
+}
+
+bool DocummentBase::adaptWidthAndShow(double width)
+{
+    if (!bDocummentExist() && m_pages.size() > 0)
+        return false;
+    if (width < EPSINON) {
+        return false;
+    }
+    double imageoriginalheight = m_pages.at(0)->getOriginalImageHeight();
+    double imageoriginalwidth = m_pages.at(0)->getOriginalImageWidth();
+    RotateType_EM docrotatetype = m_rotate;
+    ViewMode_EM docviewmode = m_viewmode;
+    width = width - m_vboxLayout.margin() * 2 - m_widgets.at(0)->layout()->margin() * 2 - m_pages.at(0)->margin() * 2 - 50;
+    double scale = 1;
+    if (ViewMode_FacingPage == docviewmode) {
+        width -= m_widgets.at(0)->layout()->spacing();
+        scale = width / 2 / imageoriginalwidth;
+        if (RotateType_90 == docrotatetype || RotateType_270 == docrotatetype)
+            scale = width / 2 / imageoriginalheight;
+    } else {
+        scale = width / imageoriginalwidth;
+        if (RotateType_90 == docrotatetype || RotateType_270 == docrotatetype)
+            scale = width / imageoriginalheight;
+    }
+    scaleAndShow(scale, RotateType_Normal);
+    return true;
+}
+bool DocummentBase::adaptHeightAndShow(double height)
+{
+    if (height < EPSINON) {
+        return false;
+    }
+    double imageoriginalheight = m_pages.at(0)->getOriginalImageHeight();
+    double imageoriginalwidth = m_pages.at(0)->getOriginalImageWidth();
+    RotateType_EM docrotatetype = m_rotate;
+    height = height - m_vboxLayout.margin() - m_widgets.at(0)->layout()->margin() - m_widgets.at(0)->layout()->spacing() - m_pages.at(0)->margin();
+    double scale = 1;
+    scale = height / imageoriginalheight;
+    if (RotateType_90 == docrotatetype || RotateType_270 == docrotatetype)
+        scale = height / imageoriginalwidth;
+    scaleAndShow(scale, RotateType_Normal);
     return true;
 }

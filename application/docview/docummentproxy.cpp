@@ -262,24 +262,21 @@ bool DocummentProxy::adaptWidthAndShow(double width)
 {
     if (!m_documment)
         return false;
-    double imageoriginalwidth = m_documment->getPageOriginalImageWidth(0);
-    if (width < EPSINON) {
-        return false;
-    }
-    double scale = width / imageoriginalwidth;
-    m_documment->scaleAndShow(scale, RotateType_Normal);
-    return true;
+    return m_documment->adaptWidthAndShow(width);
 }
 
 bool DocummentProxy::adaptHeightAndShow(double height)
 {
     if (!m_documment)
         return false;
-    double imageoriginalheight = m_documment->getPageOriginalImageHeight(0);
-    if (height < EPSINON) {
+    return m_documment->adaptHeightAndShow(height);
+}
+
+bool DocummentProxy::closeFile()
+{
+    if (!m_documment)
         return false;
-    }
-    double scale = height / imageoriginalheight;
-    m_documment->scaleAndShow(scale, RotateType_Normal);
+    delete m_documment;
+    m_documment = nullptr;
     return true;
 }

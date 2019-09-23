@@ -22,6 +22,7 @@ class DocummentProxy: public QObject
 public:
     static DocummentProxy *instance(QObject *parent = nullptr);
     bool openFile(DocType_EM type, QString filepath);
+    bool closeFile();
     QPoint global2RelativePoint(QPoint globalpoint);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
     bool mouseSelectText(QPoint start, QPoint stop);
