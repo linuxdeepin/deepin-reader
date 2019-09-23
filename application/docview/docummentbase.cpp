@@ -633,9 +633,15 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
         return;
     }
 
+    if (scale - m_scale < EPSINON && (rotate == RotateType_Normal || m_rotate == rotate)) {
+        return;
+    }
+
     m_scale = scale;
+
     if (rotate != RotateType_Normal)
         m_rotate = rotate;
+
     donotneedreloaddoc = true;
     for (int i = 0; i < m_pages.size(); i++) {
         m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
