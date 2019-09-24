@@ -24,7 +24,7 @@ public:
     NotesWidget(CustomWidget *parent = nullptr);
 
 signals:
-    void sigFlushSearchWidget(QMap<int, stSearchRes> &);
+    void sigAddNewNoteItem();
 
 protected:
     void initWidget() override;

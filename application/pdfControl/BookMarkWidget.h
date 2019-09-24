@@ -3,6 +3,7 @@
 
 #include <DListWidget>
 #include <DImageButton>
+#include <DPushButton>
 
 #include <QListWidgetItem>
 #include <QHBoxLayout>
@@ -90,7 +91,7 @@ public:
 private:
     DListWidget *m_pBookMarkListWidget = nullptr;
     QVBoxLayout *m_pVBoxLayout = nullptr;
-    DImageButton *m_pAddBookMarkBtn = nullptr;
+    DPushButton *m_pAddBookMarkBtn = nullptr;
     QList<int>      m_pAllPageList;
     int m_nCurrentPage = -1;
     LoadBookMarkThread m_loadBookMarkThread;

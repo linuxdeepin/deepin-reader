@@ -151,8 +151,8 @@ void BookMarkWidget::initWidget()
     //设置自动适应布局调整（Adjust适应，Fixed不适应），默认不适应
     m_pBookMarkListWidget->setResizeMode(QListWidget::Adjust);
 
-    m_pAddBookMarkBtn = new DImageButton;
-    m_pAddBookMarkBtn->setFixedSize(QSize(250, 50));
+    m_pAddBookMarkBtn = new DPushButton(this);
+    m_pAddBookMarkBtn->setMinimumSize(QSize(250, 50));
     m_pAddBookMarkBtn->setText(PdfControl::ADD_BK);
     connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(slotAddBookMark()));
 
