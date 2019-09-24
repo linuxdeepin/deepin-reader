@@ -22,10 +22,10 @@ void NotesWidget::initWidget()
 
     m_pVLayout->addWidget(m_pNotesList);
 
-    DImageButton *m_pAddNotesBtn = new DImageButton;
-    m_pAddNotesBtn->setText(PdfControl::ADD_NOTE);
-    m_pAddNotesBtn->setFixedSize(QSize(250, 50));
-    connect(m_pAddNotesBtn, SIGNAL(clicked()), this, SLOT(slotAddNoteItem()));
+//    DImageButton *m_pAddNotesBtn = new DImageButton;
+//    m_pAddNotesBtn->setText(PdfControl::ADD_NOTE);
+//    m_pAddNotesBtn->setFixedSize(QSize(250, 50));
+//    connect(m_pAddNotesBtn, SIGNAL(clicked()), this, SLOT(slotAddNoteItem()));
 
     m_pVLayout->addWidget(m_pAddNotesBtn);
 }
