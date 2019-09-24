@@ -17,10 +17,6 @@ DocummentPDF::DocummentPDF(DWidget *parent): DocummentBase(parent),
 
 DocummentPDF::~DocummentPDF()
 {
-    for (int i = 0; i < m_listsearch.size(); i++) {
-        delete m_listsearch.at(i);
-    }
-    m_listsearch.clear();
     delete document;
     document = nullptr;
 }
@@ -31,7 +27,6 @@ bool DocummentPDF::openFile(QString filepath)
     if (nullptr == document || document->numPages() <= 0)
         return false;
     document->setRenderHint(Poppler::Document::TextAntialiasing);
-    setBasicInfo(filepath);
     donotneedreloaddoc = true;
     m_pages.clear();
     m_widgets.clear();
@@ -50,7 +45,7 @@ bool DocummentPDF::openFile(QString filepath)
         page->setPage(document->page(i));
         m_pages.append((PageBase *)page);
     }
-
+    setBasicInfo(filepath);
     for (int i = 0; i < m_pages.size(); i++) {
         m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
     }
@@ -68,76 +63,16 @@ bool DocummentPDF::openFile(QString filepath)
     return true;
 }
 
-//bool DocummentPDF::loadPages()
-//{
-//    if (!document && m_pages.size() == document->numPages())
-//        return false;
-//    qDebug() << "loadPages";
-//    //    for (int i = 0; i < m_pages.size(); i++) {
-//    int pagenum  = m_currentpageno;
-//    if (pagenum >= 0 && pagenum < m_pages.size())
-//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-//    pagenum = m_currentpageno + 1;
-//    if (pagenum >= 0 && pagenum < m_pages.size())
-//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-//    pagenum = m_currentpageno - 1;
-//    if (pagenum >= 0 && pagenum < m_pages.size())
-//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-//    pagenum = m_currentpageno + 2;
-//    if (pagenum >= 0 && pagenum < m_pages.size())
-//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-//    pagenum = m_currentpageno - 2;
-//    if (pagenum >= 0 && pagenum < m_pages.size())
-//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-//    pagenum = m_currentpageno + 3;
-//    if (pagenum >= 0 && pagenum < m_pages.size())
-//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-//    pagenum = m_currentpageno - 3;
-//    if (pagenum >= 0 && pagenum < m_pages.size())
-//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-
-////    int startnum = m_currentpageno - 3;
-////    if (startnum < 0) {
-////        startnum = 0;
-////    }
-////    int endnum = startnum + 7;
-////    if (endnum > m_pages.size()) {
-////        endnum = m_pages.size();
-////    }
-////    for (int i = startnum; i < endnum; i++) {
-////        if (QThread::currentThread()->isInterruptionRequested()) {
-////            break;
-////        }
-////        m_pages.at(i)->showImage(m_scale, m_rotate);
-////    }
-//    return true;
-//}
-
-//bool DocummentPDF::loadWords()
-//{
-//    if (!document && m_pages.size() == document->numPages())
-//        return false;
-//    qDebug() << "loadWords";
-//    for (int i = 0; i < m_pages.size(); i++) { //根据获取到的pdf页数循环
-//        if (QThread::currentThread()->isInterruptionRequested()) {
-//            break;
-//        }
-//        //        qDebug() << "i:" << i << " width:" << m_pages.at(i)->width() << " height:" << m_pages.at(i)->height();
-//        loadWordCache(i, m_pages.at(i));
-//    }
-//    return true;
-//}
-
 void DocummentPDF::removeAllAnnotation()
 {
-//    if (!document)return;
-//    for (int i = 0; i < document->numPages(); ++i) {
-//        QList<Poppler::Annotation *> listannote = document->page(i)->annotations();
-//        foreach (Poppler::Annotation *atmp, listannote) {
-//            document->page(i)->removeAnnotation(atmp);
-//        }
-//    }
-//    scaleAndShow(m_scale, m_rotate);
+    if (!document)return;
+    for (int i = 0; i < m_pages.size(); ++i) {
+        QList<Poppler::Annotation *> listannote = static_cast<PagePdf *>(m_pages.at(i))->GetPage()->annotations();
+        foreach (Poppler::Annotation *atmp, listannote) {
+            static_cast<PagePdf *>(m_pages.at(i))->GetPage()->removeAnnotation(atmp);
+        }
+    }
+    scaleAndShow(m_scale, m_rotate);
 }
 
 QString DocummentPDF::removeAnnotation(const QPoint &startpos)
@@ -166,30 +101,27 @@ QString DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos
 
 void DocummentPDF::search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color)
 {
-//    //先清理
-//    if (m_pagecountsearch.size() > 0) {
-//        clearSearch();
-//        m_pagecountsearch.clear();
-//    }
-//    for (int i = 0; i < document->numPages(); ++i) {
-//        stSearchRes stres;
-//        searchHightlight(document->page(i), strtext, stres, color);
-//        int icount = stres.listtext.size();
-//        if (icount > 0) {
-//            resmap.insert(i, stres);
-//            m_pagecountsearch.insert(i, icount);
-//        }
-//    }
-
-//    int curpage = currentPageNo();
-//    if (m_pagecountsearch.size() > 0) {
-//        m_cursearch = 1;
-//        m_findcurpage = m_pagecountsearch.firstKey();
-//        if (m_pagecountsearch.find(curpage) != m_pagecountsearch.end()) {
-//            static_cast<PagePdf *>(m_pages.at(curpage))->showImage(m_scale, m_rotate);
-//        }
-//        // scaleAndShow(m_scale, m_rotate); //全部刷新
-//    }
+    //先清理
+    if (m_pagecountsearch.size() > 0) {
+        clearSearch();
+        m_pagecountsearch.clear();
+    }
+    bool bfirst = true;
+    for (int i = 0; i < m_pages.size(); ++i) {
+        stSearchRes stres;
+        searchHightlight(static_cast<PagePdf *>(m_pages.at(i))->GetPage(), strtext, stres, color);
+        int icount = stres.listtext.size();
+        if (icount > 0) {
+            resmap.insert(i, stres);
+            m_pagecountsearch.insert(i, icount);
+            if (bfirst) {
+                bfirst = false;
+                m_findcurpage = i;
+                m_cursearch = 1;
+                findNext();
+            }
+        }
+    }
 }
 
 bool DocummentPDF::save(const QString &filePath, bool withChanges)
@@ -280,18 +212,30 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges) const
 
 void DocummentPDF::clearSearch()
 {
-//    if (m_pagecountsearch.size() > 0) {
-//        foreach (int i, m_pagecountsearch.keys()) {
-//            Poppler::Page *page = document->page(i);
-//            QList<Poppler::Annotation *> listannoate = page->annotations();
-//            foreach (Poppler::Annotation *anote, listannoate) {
-//                if (anote->uniqueName().endsWith(QString("search"))) {
-//                    page->removeAnnotation(anote);
-//                }
-//            }
-//        }
-//        scaleAndShow(m_scale, m_rotate);
-//    }
+    if (m_pagecountsearch.size() > 0) {
+        int ipage = currentPageNo();
+        if (ipage >= 0 && m_pagecountsearch.find(ipage) != m_pagecountsearch.end()) {
+            Poppler::Page *page = static_cast<PagePdf *>(m_pages.at(ipage))->GetPage();
+            QList<Poppler::Annotation *> listannoate = page->annotations();
+            foreach (Poppler::Annotation *anote, listannoate) {
+                if (anote->uniqueName().endsWith(QString("search"))) {
+                    page->removeAnnotation(anote);
+                }
+            }
+            static_cast<PagePdf *>(m_pages.at(ipage))->showImage(m_scale, m_rotate);
+        }
+        foreach (int i, m_pagecountsearch.keys()) {
+            if (ipage == i)continue;
+            Poppler::Page *page = static_cast<PagePdf *>(m_pages.at(i))->GetPage();
+            QList<Poppler::Annotation *> listannoate = page->annotations();
+            foreach (Poppler::Annotation *anote, listannoate) {
+                if (anote->uniqueName().endsWith(QString("search"))) {
+                    page->removeAnnotation(anote);
+                }
+            }
+            static_cast<PagePdf *>(m_pages.at(i))->showImage(m_scale, m_rotate);
+        }
+    }
 }
 
 void DocummentPDF::searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color)
@@ -367,85 +311,11 @@ void DocummentPDF::setBasicInfo(const QString &filepath)
         m_fileinfo.strProducter = document->producer();
         m_fileinfo.strCreater = document->creator();
         m_fileinfo.bsafe = document->isEncrypted();
-        m_fileinfo.iWidth = document->page(0)->pageSize().width();
-        m_fileinfo.iHeight = document->page(0)->pageSize().height();
+        m_fileinfo.iWidth = static_cast<PagePdf *>(m_pages.at(0))->GetPage()->pageSize().width();
+        m_fileinfo.iHeight = static_cast<PagePdf *>(m_pages.at(0))->GetPage()->pageSize().height();
         m_fileinfo.iNumpages = document->numPages();
     }
 }
-
-//void DocummentPDF::loadWordCache(int indexpage, PageBase *page)
-//{
-//    if (!document) {
-//        return;
-//    }
-////    Poppler::Page *pp = document->page(indexpage);
-////    QList<Poppler::TextBox *> textList;
-//////    pp->textList();
-////    if (pp) {
-////        textList = pp->textList();
-//////        const QSizeF s = pp->pageSizeF();
-////    }
-////    delete pp;
-
-////    abstractTextPage(textList, page);
-////    qDeleteAll(textList);
-//    PagePdf *ppdf = (PagePdf *)page;
-//    ppdf->loadWords();
-//    ppdf->loadLinks();
-//}
-
-//bool DocummentPDF::abstractTextPage(const QList<Poppler::TextBox *> &text, PageBase *page)
-//{
-//    Poppler::TextBox *next;
-//    PagePdf *ppdf = (PagePdf *)page;
-//    QString s;
-//    bool addChar;
-//    foreach (Poppler::TextBox *word, text) {
-//        const int qstringCharCount = word->text().length();
-//        next = word->nextWord();
-//        // if(next)
-//        int textBoxChar = 0;
-//        for (int j = 0; j < qstringCharCount; j++) {
-//            const QChar c = word->text().at(j);
-//            if (c.isHighSurrogate()) {
-//                s = c;
-//                addChar = false;
-//            } else if (c.isLowSurrogate()) {
-//                s += c;
-//                addChar = true;
-//            } else {
-//                s = c;
-//                addChar = true;
-//            }
-
-//            if (addChar) {
-//                QRectF charBBox = word->charBoundingBox(textBoxChar);
-//                //                qDebug() << "addChar s:" << s << " charBBox:" << charBBox;
-//                stWord sword;
-//                sword.s = s;
-//                sword.rect = charBBox;
-//                ppdf->appendWord(sword);
-//                textBoxChar++;
-//            }
-//        }
-
-//        if (word->hasSpaceAfter() && next) {
-//            QRectF wordBBox = word->boundingBox();
-//            QRectF nextWordBBox = next->boundingBox();
-//            //            qDebug() << "hasSpaceAfter wordBBox:" << wordBBox << " nextWordBBox:" << nextWordBBox;
-//            stWord sword;
-//            sword.s = QStringLiteral(" ");
-//            QRectF qrect;
-//            qrect.setLeft(wordBBox.right());
-//            qrect.setBottom(wordBBox.bottom());
-//            qrect.setRight(nextWordBBox.left());
-//            qrect.setTop(wordBBox.top());
-//            sword.rect = qrect;
-//            ppdf->appendWord(sword);
-//        }
-//    }
-//    return true;
-//}
 
 bool DocummentPDF::bDocummentExist()
 {
@@ -486,22 +356,9 @@ void DocummentPDF::findNext()
         m_findcurpage = m_pagecountsearch.firstKey();
         m_cursearch = 1;
     }
-    //    if(m_pagecountsearch.find(m_findcurpage)==m_pagecountsearch.end())
-    //    {
-    //        QList<int> keys=m_pagecountsearch.keys();
-    //        foreach(int i,keys)
-    //        {
-    //            if(i>=m_findcurpage)
-    //            {
-    //                m_findcurpage=i;
-    //                m_cursearch=1;
-    //                break;
-    //            }
-    //        }
-    //    }
 
     if (m_pagecountsearch.find(m_findcurpage).value() >= m_cursearch) {
-        Poppler::Page *page = document->page(m_findcurpage);
+        Poppler::Page *page = static_cast<PagePdf *>(m_pages.at(m_findcurpage))->GetPage();
         QList<Poppler::Annotation *> plistannote = page->annotations();
         foreach (Poppler::Annotation *annote, plistannote) {
             if (annote->uniqueName().endsWith(QString("search")) &&
@@ -509,6 +366,10 @@ void DocummentPDF::findNext()
                 double curheight = m_scale * page->pageSizeF().height();
                 double topspace = (height() - curheight) / 2;
                 QList<Poppler::HighlightAnnotation::Quad> listquad = static_cast<Poppler::HighlightAnnotation *>(annote)->highlightQuads();
+                //从上一个切换至下一个，如果findPrev查找的m_cursearch为当前页第一个则此处需要判断是否越界
+                if (m_cursearch <= 0) {
+                    m_cursearch = 1;
+                }
                 Poppler::HighlightAnnotation::Quad quadtem = listquad.at(m_cursearch - 1);
                 int value = m_widgets.at(m_findcurpage)->y() + topspace + quadtem.points[0].y() * m_scale * page->pageSizeF().height();
                 QScrollBar *scrollBar_Y = verticalScrollBar();
@@ -524,7 +385,7 @@ void DocummentPDF::findNext()
         if (++it != m_pagecountsearch.end()) {
             m_cursearch = 1;
             m_findcurpage = it.key();
-            Poppler::Page *page = document->page(m_findcurpage);
+            Poppler::Page *page = static_cast<PagePdf *>(m_pages.at(m_findcurpage))->GetPage();
             QList<Poppler::Annotation *> plistannote = page->annotations();
             foreach (Poppler::Annotation *annote, plistannote) {
                 if (annote->uniqueName().endsWith(QString("search")) &&
@@ -555,7 +416,7 @@ void DocummentPDF::findPrev()
     }
 
     if (m_cursearch >= 1) {
-        Poppler::Page *page = document->page(m_findcurpage);
+        Poppler::Page *page = static_cast<PagePdf *>(m_pages.at(m_findcurpage))->GetPage();
         QList<Poppler::Annotation *> plistannote = page->annotations();
         foreach (Poppler::Annotation *annote, plistannote) {
             if ( annote->subType() == Poppler::Annotation::AHighlight &&
@@ -563,6 +424,10 @@ void DocummentPDF::findPrev()
                 double curheight = m_scale * page->pageSizeF().height();
                 double topspace = (height() - curheight) / 2;
                 QList<Poppler::HighlightAnnotation::Quad> listquad = static_cast<Poppler::HighlightAnnotation *>(annote)->highlightQuads();
+                //从下一个切换至上一个，如果findNext查找的m_cursearch为当前页最后一个则此处需要判断是否越界
+                if (m_cursearch > listquad.size()) {
+                    m_cursearch = listquad.size();
+                }
                 Poppler::HighlightAnnotation::Quad quadtem = listquad.at(m_cursearch - 1);
                 int value = m_widgets.at(m_findcurpage)->y() + topspace + quadtem.points[0].y() * m_scale * page->pageSizeF().height();
                 QScrollBar *scrollBar_Y = verticalScrollBar();
@@ -578,7 +443,7 @@ void DocummentPDF::findPrev()
             m_cursearch = it.value();
             m_findcurpage = it.key();
             qDebug() << m_cursearch << m_findcurpage;
-            Poppler::Page *page = document->page(m_findcurpage);
+            Poppler::Page *page = static_cast<PagePdf *>(m_pages.at(m_findcurpage))->GetPage();
             QList<Poppler::Annotation *> plistannote = page->annotations();
             foreach (Poppler::Annotation *annote, plistannote) {
                 if (annote->uniqueName().endsWith(QString("search")) &&
@@ -602,40 +467,40 @@ void DocummentPDF::findPrev()
 
 void DocummentPDF::setAnnotationText(int ipage, const QString &struuid, const QString &strtext)
 {
-//    if (ipage > 0 && ipage < document->numPages()) {
-//        Poppler::Page *page = document->page(ipage);
-//        foreach (Poppler::Annotation *annote, page->annotations()) {
-//            QString uniquename = annote->uniqueName();
-//            if (uniquename.isEmpty() && uniquename.compare(struuid) == 0) {
-//                annote->setContents(strtext);
-//            }
-//        }
-//    }
+    if (ipage > 0 && ipage < m_pages.size()) {
+        Poppler::Page *page = static_cast<PagePdf *>(m_pages.at(ipage))->GetPage();
+        foreach (Poppler::Annotation *annote, page->annotations()) {
+            QString uniquename = annote->uniqueName();
+            if (uniquename.isEmpty() && uniquename.compare(struuid) == 0) {
+                annote->setContents(strtext);
+            }
+        }
+    }
 }
 
 void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, int ipage)
 {
-//    if (ipage < 0) {
-//        for (int i = 0; i < document->numPages(); ++i) {
-//            Poppler::Page *page = document->page(i);
-//            foreach (Poppler::Annotation *annote, page->annotations()) {
-//                QString uniquename = annote->uniqueName();
-//                if (uniquename.isEmpty() && uniquename.compare(struuid) == 0) {
-//                    strtext = annote->contents();
-//                    return;
-//                }
-//            }
-//        }
-//    } else {
-//        Poppler::Page *page = document->page(ipage);
-//        foreach (Poppler::Annotation *annote, page->annotations()) {
-//            QString uniquename = annote->uniqueName();
-//            if (uniquename.isEmpty() && uniquename.compare(struuid) == 0) {
-//                strtext = annote->contents();
-//                return;
-//            }
-//        }
-//    }
+    if (ipage < 0) {
+        for (int i = 0; i < m_pages.size(); ++i) {
+            Poppler::Page *page = static_cast<PagePdf *>(m_pages.at(i))->GetPage();
+            foreach (Poppler::Annotation *annote, page->annotations()) {
+                QString uniquename = annote->uniqueName();
+                if (uniquename.isEmpty() && uniquename.compare(struuid) == 0) {
+                    strtext = annote->contents();
+                    return;
+                }
+            }
+        }
+    } else {
+        Poppler::Page *page = static_cast<PagePdf *>(m_pages.at(ipage))->GetPage();
+        foreach (Poppler::Annotation *annote, page->annotations()) {
+            QString uniquename = annote->uniqueName();
+            if (uniquename.isEmpty() && uniquename.compare(struuid) == 0) {
+                strtext = annote->contents();
+                return;
+            }
+        }
+    }
 
 }
 

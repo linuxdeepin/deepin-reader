@@ -59,8 +59,11 @@ void FindWidget::slotFindPrevBtnClicked()
 //  清空搜索内容
 void FindWidget::slotClearContent()
 {
-    m_strOldFindContent = "";
-    sendMsg(MSG_CLEAR_FIND_CONTENT);
+    QString strNewFind = m_pSearchEdit->text();
+    if (strNewFind == "") {
+        m_strOldFindContent = "";
+        sendMsg(MSG_CLEAR_FIND_CONTENT);
+    }
 }
 
 void FindWidget::hideEvent(QHideEvent *e)

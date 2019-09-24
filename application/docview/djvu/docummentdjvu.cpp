@@ -28,7 +28,6 @@ void waitForMessageTag(ddjvu_context_t *context, ddjvu_message_tag_t tag)
 
 DocummentDJVU::DocummentDJVU(DWidget *parent): DocummentBase(parent),
     document(nullptr),
-//    m_listsearch(),
     m_fileinfo(),
     m_pageByName(),
     m_titleByIndex()
@@ -191,19 +190,7 @@ QString DocummentDJVU::addAnnotation(const QPoint &startpos, const QPoint &endpo
 
 void DocummentDJVU::search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color)
 {
-//    //先清理
-//    if (m_listsearch.size() > 0) {
-//        clearSearch();
-//    }
 
-//    for (int i = 0; i < document->numPages(); ++i) {
-//        stSearchRes stres;
-//        searchHightlight(document->page(i), strtext, stres, color);
-//        if (stres.listtext.size() > 0)
-//            resmap.insert(i, stres);
-//    }
-//    static_cast<PageDJVU *>(m_pages.at(currentPageNo()))->showImage(m_scale, m_rotate);
-//    scaleAndShow(m_scale, m_rotate); //全部刷新
 }
 
 bool DocummentDJVU::save(const QString &filePath, bool withChanges)
@@ -265,13 +252,7 @@ bool DocummentDJVU::pdfsave(const QString &filePath, bool withChanges) const
 
 void DocummentDJVU::clearSearch()
 {
-//    for (int i = 0; i < document->numPages(); ++i) {
-//        foreach (Poppler::Annotation *ptmp, m_listsearch) {
-//            document->page(i)->removeAnnotation(ptmp);
-//        }
-//        //refresh(i);
-//    }
-//    scaleAndShow(m_scale, m_rotate);
+
 }
 
 void DocummentDJVU::searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color)
@@ -319,7 +300,7 @@ void DocummentDJVU::searchHightlight(Poppler::Page *page, const QString &strtext
     annotation->setStyle(style);
     annotation->setPopup(popup);
     page->addAnnotation(annotation);
-    m_listsearch.append(annotation);
+
 }
 
 void DocummentDJVU::refreshOnePage(int ipage)

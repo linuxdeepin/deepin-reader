@@ -12,8 +12,6 @@ public:
     bool openFile(QString filepath) override;
     bool bDocummentExist() override;
     bool getImage(int pagenum, QImage &image, double width, double height) override;
-//    bool loadPages() override;
-//    bool loadWords() override;
     void docBasicInfo(stFileInfo &info) override;
     //--------------------------------------------//
     bool save(const QString &filePath, bool withChanges) override;
@@ -43,7 +41,6 @@ private:
 private:
     Poppler::Document *document;
     //--------------------------------------------//
-    QList<Poppler::Annotation *> m_listsearch;
     stFileInfo m_fileinfo;
     unsigned int m_cursearch;
     int m_findcurpage;

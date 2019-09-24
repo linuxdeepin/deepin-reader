@@ -43,6 +43,11 @@ public:
         m_page = page;
     }
 
+    inline void setNoteUUid(const QString &uuid)
+    {
+        m_strUUid = uuid;
+    }
+
 private slots:
     void slotDltNoteItem();
     void slotCopyContant();
@@ -61,7 +66,8 @@ private:
     DLabel *m_pSearchResultNum = nullptr;
     DTextEdit *m_pTextEdit = nullptr;
     QHBoxLayout *m_pHLayout = nullptr;
-    int m_page = -1;
+    int m_page = -1;      // 当前注释所在页
+    QString m_strUUid;    // 当前注释唯一标识
 };
 
 #endif // NOTESITEMWIDGET_H

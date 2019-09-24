@@ -22,11 +22,23 @@ void NotesWidget::initWidget()
 
     m_pVLayout->addWidget(m_pNotesList);
 
-    DImageButton *m_pAddNotesBtn = new DImageButton;
-    m_pAddNotesBtn->setText(PdfControl::ADD_NOTE);
-    m_pAddNotesBtn->setFixedSize(QSize(250, 50));
+//    DImageButton *m_pAddNotesBtn = new DImageButton;
+//    m_pAddNotesBtn->setText(PdfControl::ADD_NOTE);
+//    m_pAddNotesBtn->setFixedSize(QSize(250, 50));
+//    connect(m_pAddNotesBtn, SIGNAL(clicked()), this, SLOT(slotAddNoteItem()));
 
     m_pVLayout->addWidget(m_pAddNotesBtn);
+}
+
+void NotesWidget::slotAddNoteItem()
+{
+    qDebug() << "           NotesWidget::slotAddNoteItem               ";
+    QImage image;
+
+    int t_page = DocummentProxy::instance()->currentPageNo();
+    DocummentProxy::instance()->getImage(t_page, image, 150, 150);
+
+    addNotesItem(image, t_page, "");
 }
 
 void NotesWidget::addNotesItem(const QImage &image, const int &page, const QString &text)
@@ -35,6 +47,7 @@ void NotesWidget::addNotesItem(const QImage &image, const int &page, const QStri
 
     itemWidget->setPage(page);
     itemWidget->setLabelImage(image);
+    itemWidget->setNoteUUid(QString::number(m_nUUid));
     itemWidget->setLabelPage((PdfControl::PAGE_PREF + QString("%1").arg(page + 1)));
     itemWidget->setTextEditText(text);
     itemWidget->setMinimumSize(QSize(250, 150));
@@ -45,6 +58,8 @@ void NotesWidget::addNotesItem(const QImage &image, const int &page, const QStri
 
     m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);
+
+    ++m_nUUid;
 }
 
 int NotesWidget::dealWithData(const int &, const QString &)

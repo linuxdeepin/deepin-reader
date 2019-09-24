@@ -135,8 +135,9 @@ bool DocummentProxy::save(const QString &filepath, bool withChanges)
 
 bool DocummentProxy::saveas(const QString &filepath, bool withChanges)
 {
-    if (m_documment && m_documment->saveas(filepath, withChanges)) {
-        openFile(DocType_PDF, filepath);
+    if(m_documment&&m_documment->saveas(filepath,withChanges))
+    {
+        return openFile(DocType_PDF,filepath);
     }
     return false;
 }

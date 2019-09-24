@@ -44,7 +44,6 @@ private:
     QHash< QString, int > m_pageByName;
     QHash< int, QString > m_titleByIndex;
     //--------------------------------------------//
-    QList<Poppler::Annotation *> m_listsearch;
     stFileInfo m_fileinfo;
 };
 
