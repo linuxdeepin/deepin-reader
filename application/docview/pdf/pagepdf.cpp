@@ -9,7 +9,12 @@ PagePdf::PagePdf(QWidget *parent)
 }
 PagePdf::~PagePdf()
 {
+    for (int i = 0; i < m_links.size(); i++) {
+        delete m_links.at(i);
+    }
+    m_links.clear();
     delete m_page;
+    m_page = nullptr;
 }
 void PagePdf::removeAnnotation(Poppler::Annotation *annotation)
 {
@@ -56,8 +61,6 @@ bool PagePdf::showImage(double scale, RotateType_EM rotate)
 
 bool PagePdf::getSlideImage(QImage &image, double &width, double &height)
 {
-    if (!m_page)
-        return false;
     int xres = 72.0, yres = 72.0;
     double scalex = (width - 20) / m_imagewidth;
     double scaley = (height - 20) / m_imageheight;
@@ -69,18 +72,20 @@ bool PagePdf::getSlideImage(QImage &image, double &width, double &height)
     }
     width = m_imagewidth * scale;
     height = m_imageheight * scale;
+    if (!m_page)
+        return false;
     image = m_page->renderToImage(xres * scale, yres * scale, -1, -1, width, height);
     return true;
 }
 
 bool PagePdf::getImage(QImage &image, double width, double height)
 {
-    if (!m_page)
-        return false;
     int xres = 72.0, yres = 72.0;
     double scalex = width / m_imagewidth;
     double scaley = height / m_imageheight;
-    image = m_page->renderToImage(xres * scalex, yres * scaley, -1, -1, width, height);
+    if (!m_page)
+        return false;
+//    image = m_page->renderToImage(xres * scalex, yres * scaley, -1, -1, width, height);
     return true;
 }
 
@@ -100,10 +105,10 @@ QString PagePdf::addAnnotation(QPoint screenPos)
     return  uniqueName;
 }
 
-void PagePdf::appendWord(stWord word)
-{
-    m_words.append(word);
-}
+//void PagePdf::appendWord(stWord word)
+//{
+//    m_words.append(word);
+//}
 
 QString PagePdf::addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color)
 {
@@ -221,18 +226,82 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext)
     return  false;
 }
 
-bool PagePdf::loadLinks()
+bool PagePdf::abstractTextPage(const QList<Poppler::TextBox *> &text)
 {
+    Poppler::TextBox *next;
+    QString s;
+    bool addChar;
+    m_words.clear();
+    foreach (Poppler::TextBox *word, text) {
+        const int qstringCharCount = word->text().length();
+        next = word->nextWord();
+        // if(next)
+        int textBoxChar = 0;
+        for (int j = 0; j < qstringCharCount; j++) {
+            const QChar c = word->text().at(j);
+            if (c.isHighSurrogate()) {
+                s = c;
+                addChar = false;
+            } else if (c.isLowSurrogate()) {
+                s += c;
+                addChar = true;
+            } else {
+                s = c;
+                addChar = true;
+            }
 
+            if (addChar) {
+                QRectF charBBox = word->charBoundingBox(textBoxChar);
+                //                qDebug() << "addChar s:" << s << " charBBox:" << charBBox;
+                stWord sword;
+                sword.s = s;
+                sword.rect = charBBox;
+                m_words.append(sword);
+                textBoxChar++;
+            }
+        }
+
+        if (word->hasSpaceAfter() && next) {
+            QRectF wordBBox = word->boundingBox();
+            QRectF nextWordBBox = next->boundingBox();
+            //            qDebug() << "hasSpaceAfter wordBBox:" << wordBBox << " nextWordBBox:" << nextWordBBox;
+            stWord sword;
+            sword.s = QStringLiteral(" ");
+            QRectF qrect;
+            qrect.setLeft(wordBBox.right());
+            qrect.setBottom(wordBBox.bottom());
+            qrect.setRight(nextWordBBox.left());
+            qrect.setTop(wordBBox.top());
+            sword.rect = qrect;
+            m_words.append(sword);
+        }
+    }
+    return true;
+}
+
+bool PagePdf::loadWords()
+{
     if (!m_page) {
         return false;
     }
+    QList<Poppler::TextBox *> textList = m_page->textList();
+    abstractTextPage(textList);
+    qDeleteAll(textList);
+    return true;
+}
+
+bool PagePdf::loadLinks()
+{
+
     for (int i = 0; i < m_links.size(); i++) {
         delete m_links.at(i);
     }
     m_links.clear();
-
-    foreach (const Poppler::Link *link, m_page->links()) {
+    if (!m_page) {
+        return false;
+    }
+    QList<Poppler::Link *> qlinks = m_page->links();
+    foreach (const Poppler::Link *link, qlinks) {
         if (QThread::currentThread()->isInterruptionRequested()) {
             break;
         }

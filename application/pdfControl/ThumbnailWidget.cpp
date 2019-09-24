@@ -245,7 +245,7 @@ void ThreadLoadImage::stopThreadRun()
 {
     m_isLoaded = false;
 
-    terminate();    //终止线程
+//    terminate();    //终止线程
     wait();         //阻塞等待
 }
 
@@ -261,6 +261,8 @@ void ThreadLoadImage::run()
         }
 
         for (int page = m_nStartPage; page <= m_nEndPage; page++) {
+            if (!m_isLoaded)
+                break;
             QImage image;
             bool bl = DocummentProxy::instance()->getImage(page, image, 113, 143);
 

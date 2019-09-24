@@ -103,21 +103,21 @@ bool DocummentPS::openFile(QString filepath)
 //    return true;
 //}
 
-bool DocummentPS::loadWords()
-{
-    if (!document && m_pages.size() == spectre_document_get_n_pages(document))
-        return false;
-    qDebug() << "loadWords";
-    for (int i = 0; i < m_pages.size(); i++) {
-        if (QThread::currentThread()->isInterruptionRequested()) {
-            break;
-        }
-        PagePS *pps = (PagePS *)m_pages.at(i);
-        pps->loadWords();
-        pps->loadLinks();
-    }
-    return true;
-}
+//bool DocummentPS::loadWords()
+//{
+//    if (!document && m_pages.size() == spectre_document_get_n_pages(document))
+//        return false;
+//    qDebug() << "loadWords";
+//    for (int i = 0; i < m_pages.size(); i++) {
+//        if (QThread::currentThread()->isInterruptionRequested()) {
+//            break;
+//        }
+//        PagePS *pps = (PagePS *)m_pages.at(i);
+//        pps->loadWords();
+//        pps->loadLinks();
+//    }
+//    return true;
+//}
 
 void DocummentPS::setBasicInfo(const QString &filepath)
 {

@@ -86,6 +86,14 @@ public:
     {
         return false;
     }
+    virtual bool loadWords()
+    {
+        return false;
+    }
+    virtual bool loadLinks()
+    {
+        return false;
+    }
     double getOriginalImageWidth()
     {
         return m_imagewidth;

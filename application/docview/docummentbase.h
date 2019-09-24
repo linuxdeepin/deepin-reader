@@ -122,10 +122,6 @@ public:
     virtual QString addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) {}
     virtual void search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color = Qt::yellow) {}
     virtual void clearSearch() {}
-    virtual bool loadWords()
-    {
-        return false;
-    }
     virtual void docBasicInfo(stFileInfo &info) {}
     virtual void findNext() {}
     virtual void findPrev() {}
@@ -135,6 +131,20 @@ public:
 
 
 
+    bool loadWords()
+    {
+        if (!bDocummentExist())
+            return false;
+        qDebug() << "loadWords";
+        for (int i = 0; i < m_pages.size(); i++) {
+            if (QThread::currentThread()->isInterruptionRequested()) {
+                break;
+            }
+            m_pages.at(i)->loadWords();
+            m_pages.at(i)->loadLinks();
+        }
+        return true;
+    }
     int getPageSNum()
     {
         return m_pages.size();

@@ -14,7 +14,7 @@ public:
     bool bDocummentExist() override;
     bool getImage(int pagenum, QImage &image, double width, double height) override;
 //    bool loadPages() override;
-    bool loadWords() override;
+//    bool loadWords() override;
     void docBasicInfo(stFileInfo &info) override;
 private:
     void setBasicInfo(const QString &filepath);

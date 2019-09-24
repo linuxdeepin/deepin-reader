@@ -13,9 +13,10 @@ public:
     bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal) override;
     bool getImage(QImage &image, double width, double height) override;
     bool getSlideImage(QImage &image, double &width, double &height) override;
-    void appendWord(stWord word);
+    bool loadWords() override;
+    bool loadLinks() override;
+//    void appendWord(stWord word);
     void setPage(Poppler::Page *page);
-    bool loadLinks();
     //Annotation
     QString addAnnotation(QPoint screenPos);
     QString removeAnnotation(const QPoint &pos);
@@ -24,6 +25,7 @@ public:
 private:
     void removeAnnotation(Poppler::Annotation *annotation);
     QString addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color);
+    bool abstractTextPage(const QList<Poppler::TextBox *> &text);
     Poppler::Page *m_page;
 };
 

@@ -139,21 +139,21 @@ bool DocummentDJVU::openFile(QString filepath)
 //    return true;
 //}
 
-bool DocummentDJVU::loadWords()
-{
-    if (!document && m_pages.size() == ddjvu_document_get_pagenum(document))
-        return false;
-    qDebug() << "loadWords";
-    for (int i = 0; i < m_pages.size(); i++) {
-        if (QThread::currentThread()->isInterruptionRequested()) {
-            break;
-        }
-        PageDJVU *pdjvu = (PageDJVU *)m_pages.at(i);
-        pdjvu->loadWords();
-        pdjvu->loadLinks();
-    }
-    return true;
-}
+//bool DocummentDJVU::loadWords()
+//{
+//    if (!document && m_pages.size() == ddjvu_document_get_pagenum(document))
+//        return false;
+//    qDebug() << "loadWords";
+//    for (int i = 0; i < m_pages.size(); i++) {
+//        if (QThread::currentThread()->isInterruptionRequested()) {
+//            break;
+//        }
+//        PageDJVU *pdjvu = (PageDJVU *)m_pages.at(i);
+//        pdjvu->loadWords();
+//        pdjvu->loadLinks();
+//    }
+//    return true;
+//}
 
 void DocummentDJVU::removeAllAnnotation()
 {

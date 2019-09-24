@@ -14,9 +14,9 @@ public:
     bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal) override;
     bool getImage(QImage &image, double width, double height) override;
     bool getSlideImage(QImage &image, double &width, double &height) override;
+    bool loadWords() override;
+    bool loadLinks() override;
     void setPage(SpectrePage *page, SpectreRenderContext *renderContext);
-    bool loadWords();
-    bool loadLinks();
 private:
     SpectrePage *m_page;
     SpectreRenderContext *m_renderContext;

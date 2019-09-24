@@ -93,18 +93,18 @@ bool DocummentXPS::openFile(QString filepath)
 //    return true;
 //}
 
-bool DocummentXPS::loadWords()
-{
-    if (!m_xpsFile)
-        return false;
-    qDebug() << "loadWords";
-    for (int i = 0; i < m_pages.size(); i++) {
-        PageXPS *pps = (PageXPS *)m_pages.at(i);
-        pps->loadWords();
-        pps->loadLinks();
-    }
-    return true;
-}
+//bool DocummentXPS::loadWords()
+//{
+//    if (!m_xpsFile)
+//        return false;
+//    qDebug() << "loadWords";
+//    for (int i = 0; i < m_pages.size(); i++) {
+//        PageXPS *pps = (PageXPS *)m_pages.at(i);
+//        pps->loadWords();
+//        pps->loadLinks();
+//    }
+//    return true;
+//}
 
 void DocummentXPS::setBasicInfo(const QString &filepath)
 {

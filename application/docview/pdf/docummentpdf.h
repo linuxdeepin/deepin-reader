@@ -13,11 +13,11 @@ public:
     bool bDocummentExist() override;
     bool getImage(int pagenum, QImage &image, double width, double height) override;
 //    bool loadPages() override;
-    bool loadWords() override;
+//    bool loadWords() override;
     void docBasicInfo(stFileInfo &info) override;
     //--------------------------------------------//
     bool save(const QString &filePath, bool withChanges) override;
-    bool saveas(const QString& filePath,bool withChanges) override;
+    bool saveas(const QString &filePath, bool withChanges) override;
     void removeAllAnnotation();
     QString removeAnnotation(const QPoint &startpos) override;
     void removeAnnotation(const QString &struuid) override;
@@ -28,14 +28,14 @@ public:
     void title(QString &title) override;
     void findNext()override;
     void findPrev()override;
-    void setAnnotationText(int ipage,const QString& struuid,const QString& strtext) override;
-    void getAnnotationText(const QString& struuid,QString& strtext,int ipage=-1)override;
+    void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) override;
+    void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1)override;
 
 
 private:
-    void loadWordCache(int indexpage, PageBase *page);
+//    void loadWordCache(int indexpage, PageBase *page);
     //--------------------------------------------//
-    bool abstractTextPage(const QList<Poppler::TextBox *> &text, PageBase *page);
+//    bool abstractTextPage(const QList<Poppler::TextBox *> &text, PageBase *page);
     bool pdfsave(const QString &filePath, bool withChanges)const;
     void searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color);
     void refreshOnePage(int ipage);
