@@ -144,7 +144,7 @@ private:
     int m_totalPages = -1; // 总页码数
     int m_preRow     = -1; // 前一次页码数
     ThreadLoadImage m_ThreadLoadImage;
-    QTimer m_loadImageTimer;
+//    QTimer m_loadImageTimer;
 };
 
 #endif // THUMBNAILWIDGET_H

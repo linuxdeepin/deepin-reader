@@ -5,6 +5,7 @@
 #include <DImageButton>
 #include <DSpinBox>
 #include <DLineEdit>
+#include <DIconButton>
 
 #include <QIntValidator>
 #include <QKeyEvent>
@@ -40,16 +41,15 @@ private slots:
     void slotNextPage();
 
 protected:
-    //void keyPressEvent(QKeyEvent * event);
     void initWidget() override;
     bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
     void setCurrentPage(const int &);
 
-    void createBtn(DImageButton *btn, QWidget *parent, const QString &text, const QString &btnName, const QString &normalPic, const QString &hoverPic,
-                   const QString &pressPic, const QString &checkedPic,
-                   const char *member, bool checkable = false, bool checked = false);
+//    void createBtn(DImageButton *btn, QWidget *parent, const QString &text, const QString &btnName, const QString &normalPic, const QString &hoverPic,
+//                   const QString &pressPic, const QString &checkedPic,
+//                   const char *member, bool checkable = false, bool checked = false);
 
     inline void setPreRowVal(const int &val)
     {
@@ -62,8 +62,8 @@ private:
 
 private:
     DLabel *m_pTotalPagesLab = nullptr;
-    DImageButton *m_pPrePageBtn = nullptr;
-    DImageButton *m_pNextPageBtn = nullptr;
+    DIconButton *m_pPrePageBtn = nullptr;
+    DIconButton *m_pNextPageBtn = nullptr;
     DSpinBox *m_pJumpPageSpinBox = nullptr;
     int m_currntPage = 0;
     int m_totalPage = 0;

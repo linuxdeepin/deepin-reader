@@ -149,6 +149,7 @@ void ThumbnailWidget::loadImage(const int &page, QImage &image)
     if (item) {
         t_ItemWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
         if (t_ItemWidget) {
+//            qDebug() << tr("loading       page:%1   image").arg(page + 1);
             t_ItemWidget->setContantLabelPixmap(image);
         }
     }
@@ -165,8 +166,6 @@ void ThumbnailWidget::slotShowSelectItem(QListWidgetItem *item)
     this->setPreRowVal(row);
 
     setSelectItemBackColor(item);
-
-//    sendMsg(MSG_THUMBNAIL_JUMPTOPAGE, QString::number(row));
 
     if (m_pPageWidget) {
         m_pPageWidget->setCurrentPageValue(row);
@@ -211,25 +210,20 @@ void ThumbnailWidget::slotOpenFileOk()
     m_ThreadLoadImage.setPages(pages);
     m_ThreadLoadImage.setIsLoaded(true);
     m_ThreadLoadImage.start();
-
-//    connect(&m_loadImageTimer, SIGNAL(timeout()), this, SLOT(slotLoadThumbnailImage()));
-//    m_loadImageTimer.start(50);
 }
 
 void ThumbnailWidget::slotJumpIndexPage(int index)
 {
     setCurrentRow(index);
-
-//    fileViewToListPage(index);
 }
 
 void ThumbnailWidget::slotLoadThumbnailImage()
 {
     if (m_ThreadLoadImage.endPage() == (totalPages() - 1)) {
-        m_loadImageTimer.stop();
+//        m_loadImageTimer.stop();
+//        m_ThreadLoadImage.setIsLoaded(false);
     }
     if (!m_ThreadLoadImage.isRunning()) {
-
         m_ThreadLoadImage.start();
     }
 }
@@ -245,7 +239,7 @@ void ThreadLoadImage::stopThreadRun()
 {
     m_isLoaded = false;
 
-//    terminate();    //终止线程
+    terminate();    //终止线程
     wait();         //阻塞等待
 }
 

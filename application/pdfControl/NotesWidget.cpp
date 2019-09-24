@@ -2,6 +2,8 @@
 
 #include "translator/PdfControl.h"
 
+#include <DIconButton>
+
 NotesWidget::NotesWidget(CustomWidget *parent) :
     CustomWidget(QString("NotesWidget"), parent)
 {
@@ -28,6 +30,8 @@ void NotesWidget::initWidget()
 //    connect(m_pAddNotesBtn, SIGNAL(clicked()), this, SLOT(slotAddNoteItem()));
 
     m_pVLayout->addWidget(m_pAddNotesBtn);
+
+    connect(this, SIGNAL(sigAddNewNoteItem()), this, SLOT(slotAddNoteItem()));
 }
 
 void NotesWidget::slotAddNoteItem()
@@ -59,7 +63,7 @@ void NotesWidget::addNotesItem(const QImage &image, const int &page, const QStri
     m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);
 
-    ++m_nUUid;
+    ++m_nUUid;//测试专用
 }
 
 int NotesWidget::dealWithData(const int &, const QString &)
