@@ -29,6 +29,9 @@ signals:
 protected:
     void initWidget() override;
 
+private slots:
+    void slotAddNoteItem();
+
 private:
     void addNotesItem(const QImage &image, const int &page, const QString &text);
 
@@ -40,6 +43,8 @@ private:
     QVBoxLayout *m_pVLayout = nullptr;
     DImageButton *m_pAddNotesBtn = nullptr;
     QListWidgetItem *m_pCurrentItem = nullptr;
+
+    int m_nUUid = 1;
 
 public:
     // IObserver interface
