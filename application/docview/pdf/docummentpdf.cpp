@@ -119,6 +119,7 @@ void DocummentPDF::search(const QString &strtext, QMap<int, stSearchRes> &resmap
         clearSearch();
         m_pagecountsearch.clear();
     }
+    bool bfirst=true;
     for (int i = 0; i < document->numPages(); ++i) {
         stSearchRes stres;
         searchHightlight(document->page(i), strtext, stres, color);
@@ -126,16 +127,23 @@ void DocummentPDF::search(const QString &strtext, QMap<int, stSearchRes> &resmap
         if (icount > 0) {
             resmap.insert(i, stres);
             m_pagecountsearch.insert(i, icount);
+            if(bfirst)
+            {
+                bfirst=false;
+                m_findcurpage=i;
+                m_cursearch=1;
+                findNext();
+            }
         }
     }
-    int curpage = currentPageNo();
-    if (m_pagecountsearch.size() > 0) {
-        m_cursearch = 1;
-        m_findcurpage = m_pagecountsearch.firstKey();
-        if (m_pagecountsearch.find(curpage) != m_pagecountsearch.end()) {
-            static_cast<PagePdf *>(m_pages.at(curpage))->showImage(m_scale, m_rotate);
-        }
-    }
+//    int curpage = currentPageNo();
+//    if (m_pagecountsearch.size() > 0) {
+//        m_cursearch = 1;
+//        m_findcurpage = m_pagecountsearch.firstKey();
+//        if (m_pagecountsearch.find(curpage) != m_pagecountsearch.end()) {
+//            static_cast<PagePdf *>(m_pages.at(curpage))->showImage(m_scale, m_rotate);
+//        }
+//    }
 }
 
 bool DocummentPDF::save(const QString &filePath, bool withChanges)
@@ -256,7 +264,7 @@ void DocummentPDF::clearSearch()
                     page->removeAnnotation(anote);
                 }
             }
-           // static_cast<PagePdf *>(m_pages.at(i))->showImage(m_scale, m_rotate);
+            static_cast<PagePdf *>(m_pages.at(i))->showImage(m_scale, m_rotate);
         }
     }
 }
