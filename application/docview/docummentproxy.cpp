@@ -123,8 +123,8 @@ void DocummentProxy::scaleRotateAndShow(double scale, RotateType_EM rotate)
 {
     if (!m_documment || bcloseing)
         return;
+    mouseSelectTextClear();
     m_documment->scaleAndShow(scale, rotate);
-
 }
 
 QPoint DocummentProxy::global2RelativePoint(QPoint globalpoint)
@@ -152,6 +152,7 @@ bool DocummentProxy::setViewModeAndShow(ViewMode_EM viewmode)
 {
     if (!m_documment || bcloseing)
         return false;
+    mouseSelectTextClear();
     return  m_documment->setViewModeAndShow(viewmode);
 }
 
