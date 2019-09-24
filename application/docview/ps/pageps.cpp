@@ -8,8 +8,6 @@ PagePS::PagePS(QWidget *parent)
     : PageBase(parent),
       m_page(nullptr)
 {
-    //    setFrameShape (QFrame::Box);
-    //    setStyleSheet("border-width: 1px;border-style: solid;border-color: rgb(255, 170, 0);");
 }
 
 void PagePS::setPage(SpectrePage *page, SpectreRenderContext *renderContext)

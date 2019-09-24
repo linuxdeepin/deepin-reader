@@ -8,7 +8,8 @@
 #include "subjectObserver/CustomWidget.h"
 #include "mainShow/DefaultOperationWidget.h"
 #include "mainShow/TextOperationWidget.h"
-
+#include "mainShow/BookMarkStateLabel.h"
+#include "pdfControl/fileViewNote/FileViewNoteWidget.h"
 #include "DocummentFileHelper.h"
 
 //  当前鼠标状态
@@ -39,6 +40,8 @@ public:
 
 signals:
     void sigPrintFile();
+    void sigOpenNoteWidget();
+    void sigWidgetAdapt();
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
@@ -50,10 +53,13 @@ protected:
 private slots:
     void slotCustomContextMenuRequested(const QPoint &);
     void slotPrintFile();
+    void slotOpenNoteWidget();
+    void slotSetWidgetAdapt();
 
 private:
     int magnifying(const QString &);
     int setHandShape(const QString &);
+    void setBookMarkStateWidget();
 
     void onFileAddAnnotation(const QString &);
     void onFileRemoveAnnotation();
@@ -64,8 +70,10 @@ private:
     int dealWithFileMenuRequest(const int &msgType, const QString &msgContent);
 
 private:
+    BookMarkStateLabel      *m_pBookMarkStateLabel = nullptr;
     DefaultOperationWidget  *m_pDefaultOperationWidget = nullptr;
     TextOperationWidget     *m_pTextOperationWidget = nullptr;
+    FileViewNoteWidget      *m_pFileViewNoteWidget = nullptr;
 
     DocummentFileHelper     *m_pDocummentFileHelper = nullptr;
 

@@ -37,7 +37,7 @@ public:
     bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3);
     QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow);
     bool save(const QString &filepath, bool withChanges);
-    bool saveas(const QString& filepath,bool withChanges);
+    bool saveas(const QString &filepath, bool withChanges);
     void search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color);
     void clearsearch();
     int currentPageNo();
@@ -54,9 +54,9 @@ public:
     void findNext();
     void findPrev();
     void setAnnotationText(int ipage, const QString &struuid, const QString &strtext);
-    void getAnnotationText(const QString &struuid, QString &strtext,int ipage=-1);
-    bool adaptWidthAndShow(double width);
-    bool adaptHeightAndShow(double height);
+    void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1);
+    double adaptWidthAndShow(double width);
+    double adaptHeightAndShow(double height);
 signals:
     void signal_pageChange(int);
 private slots:

@@ -143,7 +143,7 @@ bool DocummentProxy::saveas(const QString &filepath, bool withChanges)
 }
 
 void DocummentProxy::search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color)
-{   
+{
     if (!m_documment)
         return ;
     m_documment->search(strtext, resmap, color);
@@ -260,24 +260,24 @@ void DocummentProxy::setAnnotationText(int ipage, const QString &struuid, const 
     }
 }
 
-void DocummentProxy::getAnnotationText(const QString &struuid, QString &strtext,int ipage)
+void DocummentProxy::getAnnotationText(const QString &struuid, QString &strtext, int ipage)
 {
     if (m_documment) {
-        m_documment->getAnnotationText(struuid, strtext,ipage);
+        m_documment->getAnnotationText(struuid, strtext, ipage);
     }
 }
 
-bool DocummentProxy::adaptWidthAndShow(double width)
+double DocummentProxy::adaptWidthAndShow(double width)
 {
     if (!m_documment)
-        return false;
+        return -1;
     return m_documment->adaptWidthAndShow(width);
 }
 
-bool DocummentProxy::adaptHeightAndShow(double height)
+double DocummentProxy::adaptHeightAndShow(double height)
 {
     if (!m_documment)
-        return false;
+        return -1;
     return m_documment->adaptHeightAndShow(height);
 }
 

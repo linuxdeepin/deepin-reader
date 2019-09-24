@@ -58,11 +58,11 @@ void MainWidget::initWidget()
     pSplitter->setHandleWidth(5);
     pSplitter->setChildrenCollapsible(false);   //  子部件不可拉伸到 0
 
-    pSplitter->insertWidget(0, new LeftSidebarWidget);
-    pSplitter->setStretchFactor(0, 2);
+    pSplitter->addWidget(new LeftSidebarWidget);
+    pSplitter->setStretchFactor(0, 1);
 
-    pSplitter->insertWidget(1, new DocShowShellWidget);
-    pSplitter->setStretchFactor(1, 8);
+    pSplitter->addWidget(new DocShowShellWidget);
+    pSplitter->setStretchFactor(1, 9);
 
     pStackedWidget->addWidget(pSplitter);
 

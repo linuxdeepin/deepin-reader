@@ -3,8 +3,6 @@
 
 #include "subjectObserver/CustomWidget.h"
 
-DWIDGET_USE_NAMESPACE
-
 /**
  * @brief The MainWidget class
  * @brief   采用　栈式　显示窗口，　当前只显示某一特定窗口

@@ -31,6 +31,8 @@ void FileViewWidget::initWidget()
     DocummentProxy::instance(this);
 
     m_pDocummentFileHelper = new DocummentFileHelper(this);
+
+    setBookMarkStateWidget();
 }
 
 //  鼠标移动
@@ -124,14 +126,8 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void FileViewWidget::resizeEvent(QResizeEvent *event)
 {
-    int nWidth = this->width();
-    int nHeight = this->height();
-    qDebug() << m_nAdapteState << "         nWidth         " << nWidth << "        nHeight     " << nHeight;
-    if (m_nAdapteState == WIDGET_State) {
-        DocummentProxy::instance()->adaptWidthAndShow(nWidth);
-    } else if (m_nAdapteState == HEIGHT_State) {
-        DocummentProxy::instance()->adaptHeightAndShow(nHeight);
-    }
+    slotSetWidgetAdapt();
+    setBookMarkStateWidget();
 
     CustomWidget::resizeEvent(event);
 }
@@ -151,24 +147,26 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         return;
     DocummentProxy *pDocummentProxy = DocummentProxy::instance();
 
+    QString sSelectText =  "";
+    pDocummentProxy->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
+
     QPoint tempPoint = this->mapToGlobal(point);
-    m_pRightClickPoint = pDocummentProxy->global2RelativePoint(tempPoint);
-    bool rl = pDocummentProxy->mouseBeOverText(m_pRightClickPoint);
-    if (rl) {
+
+    bool bookState = m_pBookMarkStateLabel->bChecked();
+
+    if (sSelectText != "") {
+        m_pRightClickPoint = pDocummentProxy->global2RelativePoint(tempPoint);
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
         if (m_pTextOperationWidget == nullptr) {
             m_pTextOperationWidget = new TextOperationWidget(this);
         }
-        m_pTextOperationWidget->show();
-        m_pTextOperationWidget->move(tempPoint.x(), tempPoint.y());
-        m_pTextOperationWidget->raise();
+
+        m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), bookState);
     } else {
         if (m_pDefaultOperationWidget == nullptr) {
             m_pDefaultOperationWidget = new DefaultOperationWidget(this);
         }
-        m_pDefaultOperationWidget->show();
-        m_pDefaultOperationWidget->move(tempPoint.x(), tempPoint.y());
-        m_pDefaultOperationWidget->raise();
+        m_pDefaultOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), bookState);
     }
 }
 
@@ -206,7 +204,7 @@ int FileViewWidget::setHandShape(const QString &data)
     return ConstantMsg::g_effective_res;
 }
 
-//  添加注释
+//  添加高亮颜色
 void FileViewWidget::onFileAddAnnotation(const QString &sColor)
 {
     QList<QColor> colorList = {};
@@ -225,6 +223,10 @@ void FileViewWidget::initConnections()
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(slotCustomContextMenuRequested(const QPoint &)));
+
+    connect(this, SIGNAL(sigOpenNoteWidget()), this, SLOT(slotOpenNoteWidget()));
+    connect(this, SIGNAL(sigWidgetAdapt()), this, SLOT(slotSetWidgetAdapt()));
+    connect(this, SIGNAL(sigPrintFile()), this, SLOT(slotPrintFile()));
 }
 
 //  打印
@@ -242,6 +244,48 @@ void FileViewWidget::slotPrintFile()
     }
 }
 
+//  注释窗口
+void FileViewWidget::slotOpenNoteWidget()
+{
+    if (m_pFileViewNoteWidget == nullptr) {
+        m_pFileViewNoteWidget = new FileViewNoteWidget(this);
+    }
+    m_pFileViewNoteWidget->show();
+//    m_pTextOperationWidget->move(tempPoint.x(), tempPoint.y());
+    m_pFileViewNoteWidget->raise();
+}
+
+//  设置　窗口　自适应　宽＼高　度
+void FileViewWidget::slotSetWidgetAdapt()
+{
+    if (m_nAdapteState == WIDGET_State) {
+        int nWidth = this->width();
+//        DocummentProxy::instance()->adaptWidthAndShow(nWidth);
+        DocummentProxy::instance()->scaleRotateAndShow(1.3, RotateType_Normal);
+        DocummentProxy::instance()->scaleRotateAndShow(1.3, RotateType_Normal);
+    } else if (m_nAdapteState == HEIGHT_State) {
+        int nHeight = this->height();
+
+//        DocummentProxy::instance()->adaptHeightAndShow(nHeight);
+
+
+        DocummentProxy::instance()->scaleRotateAndShow(1.3, RotateType_Normal);
+        DocummentProxy::instance()->scaleRotateAndShow(1.3, RotateType_Normal);
+    }
+}
+
+void FileViewWidget::setBookMarkStateWidget()
+{
+    if (m_pBookMarkStateLabel == nullptr) {
+        m_pBookMarkStateLabel = new BookMarkStateLabel(this);
+    }
+    int nParentWidth = this->width();
+    int nWidget = m_pBookMarkStateLabel->width();
+    m_pBookMarkStateLabel->move(nParentWidth - nWidget - 20, 0);
+    m_pBookMarkStateLabel->show();
+    m_pBookMarkStateLabel->raise();
+}
+
 //  标题栏的菜单消息处理
 int FileViewWidget::dealWithTitleRequest(const int &msgType, const QString &msgContent)
 {
@@ -253,8 +297,7 @@ int FileViewWidget::dealWithTitleRequest(const int &msgType, const QString &msgC
     case MSG_SELF_ADAPTE_HEIGHT:    //  自适应　高度
         if (msgContent == "1") {
             m_nAdapteState = HEIGHT_State ;
-            int nHeight = this->height();
-            DocummentProxy::instance()->adaptHeightAndShow(nHeight);
+            emit sigWidgetAdapt();
         } else {
             m_nAdapteState = Default_State;
         }
@@ -262,8 +305,7 @@ int FileViewWidget::dealWithTitleRequest(const int &msgType, const QString &msgC
     case MSG_SELF_ADAPTE_WIDTH:    //   自适应宽度
         if (msgContent == "1") {
             m_nAdapteState = WIDGET_State;
-            int nWidth = this->width();
-            DocummentProxy::instance()->adaptWidthAndShow(nWidth);
+            emit sigWidgetAdapt();
         } else {
             m_nAdapteState = Default_State;
         }
@@ -271,6 +313,9 @@ int FileViewWidget::dealWithTitleRequest(const int &msgType, const QString &msgC
     case MSG_OPERATION_PRINT :      //  打印
         emit sigPrintFile();
         return  ConstantMsg::g_effective_res;
+    case MSG_FILE_ROTATE:           //  文档旋转了
+        emit sigWidgetAdapt();
+        return ConstantMsg::g_effective_res;
     }
     return 0;
 }
@@ -286,6 +331,7 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
         onFileRemoveAnnotation();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_ADD_ANNOTATION:     //  添加注释
+        emit sigOpenNoteWidget();
         qDebug() << "   MSG_OPERATION_TEXT_ADD_ANNOTATION  ";
         return ConstantMsg::g_effective_res;
     }

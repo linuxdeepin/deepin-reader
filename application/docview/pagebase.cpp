@@ -346,7 +346,6 @@ bool PageBase::ifMouseMoveOverText(const QPoint point)
                 qp.x() < m_words.at(i).rect.x() + m_words.at(i).rect.width() &&
                 qp.y() > m_words.at(i).rect.y() &&
                 qp.y() < m_words.at(i).rect.y() + m_words.at(i).rect.height()) {
-           // qDebug() << "rect:" << m_words.at(i).rect;
             return true;
         }
     }

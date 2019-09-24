@@ -210,8 +210,13 @@ DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
     m_viewmode = ViewMode_SinglePage;
     m_lastmagnifierpagenum = -1;
 
-    m_slidewidget->setAttribute(Qt::WA_StyledBackground, true);
-    m_slidewidget->setStyleSheet("background-color: rgb(0,0,0)");
+
+    QPalette pal(m_slidewidget->palette());
+
+    //设置背景黑色
+    pal.setColor(QPalette::Background, Qt::black);
+    m_slidewidget->setAutoFillBackground(true);
+    m_slidewidget->setPalette(pal);
 
     connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_vScrollBarValueChanged(int)));
     connect(this->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_hScrollBarValueChanged(int)));
@@ -628,9 +633,15 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
         return;
     }
 
+    if (scale - m_scale < EPSINON && scale - m_scale > -EPSINON && (rotate == RotateType_Normal || m_rotate == rotate)) {
+        return;
+    }
+
     m_scale = scale;
+
     if (rotate != RotateType_Normal)
         m_rotate = rotate;
+
     donotneedreloaddoc = true;
     for (int i = 0; i < m_pages.size(); i++) {
         m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
@@ -927,12 +938,12 @@ bool DocummentBase::loadPages()
     return true;
 }
 
-bool DocummentBase::adaptWidthAndShow(double width)
+double DocummentBase::adaptWidthAndShow(double width)
 {
     if (!bDocummentExist() && m_pages.size() > 0)
-        return false;
+        return -1;
     if (width < EPSINON) {
-        return false;
+        return -1;
     }
     double imageoriginalheight = m_pages.at(0)->getOriginalImageHeight();
     double imageoriginalwidth = m_pages.at(0)->getOriginalImageWidth();
@@ -951,12 +962,15 @@ bool DocummentBase::adaptWidthAndShow(double width)
             scale = width / imageoriginalheight;
     }
     scaleAndShow(scale, RotateType_Normal);
-    return true;
+    return scale;
 }
-bool DocummentBase::adaptHeightAndShow(double height)
+double DocummentBase::adaptHeightAndShow(double height)
 {
+    qDebug() << "adaptHeightAndShow height:" << height;
+    if (!bDocummentExist() && m_pages.size() > 0)
+        return -1;
     if (height < EPSINON) {
-        return false;
+        return -1;
     }
     double imageoriginalheight = m_pages.at(0)->getOriginalImageHeight();
     double imageoriginalwidth = m_pages.at(0)->getOriginalImageWidth();
@@ -966,6 +980,7 @@ bool DocummentBase::adaptHeightAndShow(double height)
     scale = height / imageoriginalheight;
     if (RotateType_90 == docrotatetype || RotateType_270 == docrotatetype)
         scale = height / imageoriginalwidth;
+    qDebug() << "adaptHeightAndShow scale:" << scale;
     scaleAndShow(scale, RotateType_Normal);
-    return true;
+    return scale;
 }

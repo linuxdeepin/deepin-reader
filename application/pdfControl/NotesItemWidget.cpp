@@ -1,6 +1,8 @@
 #include "NotesItemWidget.h"
 #include <QDebug>
 #include "translator/PdfControl.h"
+#include <DApplication>
+#include <QClipboard>
 
 NotesItemWidget::NotesItemWidget(CustomWidget *parent) :
     CustomWidget(QString("NotesItemWidget"), parent)
@@ -51,7 +53,14 @@ void NotesItemWidget::slotDltNoteItem()
 
 void NotesItemWidget::slotCopyContant()
 {
-    qDebug() << "copy contant";
+    qDebug() << "            copy contant          ";
+    if (m_pTextEdit) {
+        QString str = m_pTextEdit->document()->toPlainText();
+        if (str != QString("")) {
+            QClipboard *clipboard = DApplication::clipboard();   //获取系统剪贴板指针
+            clipboard->setText(str);
+        }
+    }
 }
 
 void NotesItemWidget::slotShowContextMenu(const QPoint &)
@@ -75,7 +84,7 @@ void NotesItemWidget::initWidget()
     t_hLayout->setSpacing(0);
 
     m_pPicture = new DLabel;
-//    m_pPicture->setFixedSize(QSize(150, 150));
+    m_pPicture->setFixedSize(QSize(150, 150));
     m_pPage = new DLabel;
 //    m_pPage->setFixedSize(QSize(50, 50));
     m_pSearchResultNum = new DLabel;

@@ -20,6 +20,9 @@ class TextOperationWidget : public CustomWidget
 public:
     TextOperationWidget(CustomWidget *parent = nullptr);
 
+public:
+    void showWidget(const int &, const int &, const bool &);
+
 private slots:
     void SlotBtnCopyClicked();
     void SlotBtnRemoveHighLightedClicked();

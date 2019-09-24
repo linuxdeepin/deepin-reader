@@ -18,8 +18,8 @@ class DefaultOperationWidget : public CustomWidget
 public:
     DefaultOperationWidget(CustomWidget *parent = nullptr);
 
-private:
-    void createBtn(const QString &, const char *member);
+public:
+    void showWidget(const int &, const int &, const bool &bBookState);
 
 private slots:
     void SlotBtnSearchClicked();
@@ -30,6 +30,7 @@ private slots:
     void SlotBtnEndPageClicked();
 
 private:
+    void createBtn(const QString &, const char *member);
     void sendMsgAndHide(const int &);
 
 private:
