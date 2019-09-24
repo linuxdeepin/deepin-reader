@@ -168,7 +168,8 @@ DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
     m_currentpageno(-1),
     m_scale(1),
     m_rotate(RotateType_0),
-    donotneedreloaddoc(false)
+    donotneedreloaddoc(false),
+    m_wordsbload(false)
 {
     m_currentpageno = 0;
     m_threadloaddoc.setDoc(this);
@@ -224,6 +225,7 @@ DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
 
 DocummentBase::~DocummentBase()
 {
+    this->hide();
     if (m_threadloaddoc.isRunning()) {
         m_threadloaddoc.requestInterruption();
         m_threadloaddoc.quit();
@@ -898,6 +900,10 @@ bool DocummentBase::loadPages()
     if (!bDocummentExist())
         return false;
     qDebug() << "loadPages";
+
+    if (QThread::currentThread()->isInterruptionRequested()) {
+        return false;
+    }
     //    for (int i = 0; i < m_pages.size(); i++) {
     int pagenum  = m_currentpageno;
     if (pagenum >= 0 && pagenum < m_pages.size())

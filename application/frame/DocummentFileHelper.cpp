@@ -69,7 +69,6 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
         }
         m_pDocummentProxy->closeFile();
     }
-
     QStringList fileList = filePaths.split("@#&wzx",  QString::SkipEmptyParts);
     int nSize = fileList.size();
     if (nSize > 0) {

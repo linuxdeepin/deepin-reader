@@ -5,6 +5,23 @@
 #include <QObject>
 #include <DWidget>
 
+class ThreadWaitLoadWordsEnd : public QThread
+{
+    Q_OBJECT
+public:
+    ThreadWaitLoadWordsEnd();
+    void setDoc(DocummentBase *doc);
+    void setRestart();
+
+signals:
+    bool startOpenFile();
+protected:
+    virtual void run();
+
+private:
+    DocummentBase *m_doc;
+    bool restart;
+};
 
 enum DocType_EM {
     DocType_NULL = 0,
@@ -61,6 +78,7 @@ signals:
     void signal_pageChange(int);
 private slots:
     void slot_pageChange(int);
+    bool startOpenFile();
 
 private:
     DocummentProxy(QObject *parent = nullptr);
@@ -68,6 +86,9 @@ private:
     DocType_EM m_type;
     QString m_path;
     DocummentBase *m_documment;
+    ThreadWaitLoadWordsEnd threadwaitloadwordsend;
+    bool bclosefile;
+    bool bcloseing;
     static  DocummentProxy *s_pDocProxy;
 };
 

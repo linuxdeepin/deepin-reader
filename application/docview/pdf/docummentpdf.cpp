@@ -220,6 +220,7 @@ void DocummentPDF::clearSearch()
                     page->removeAnnotation(anote);
                 }
             }
+            qDeleteAll(listannoate);
             static_cast<PagePdf *>(m_pages.at(ipage))->showImage(m_scale, m_rotate);
         }
         foreach (int i, m_pagecountsearch.keys()) {
@@ -231,6 +232,7 @@ void DocummentPDF::clearSearch()
                     page->removeAnnotation(anote);
                 }
             }
+            qDeleteAll(listannoate);
             static_cast<PagePdf *>(m_pages.at(i))->showImage(m_scale, m_rotate);
         }
     }
@@ -377,6 +379,7 @@ void DocummentPDF::findNext()
                 break;
             }
         }
+        qDeleteAll(plistannote);
     } else {
 
         QMap<int, int>::const_iterator it = m_pagecountsearch.find(m_findcurpage);
@@ -400,6 +403,7 @@ void DocummentPDF::findNext()
                     break;
                 }
             }
+            qDeleteAll(plistannote);
         }
     }
 }
@@ -435,6 +439,7 @@ void DocummentPDF::findPrev()
                 break;
             }
         }
+        qDeleteAll(plistannote);
     } else {
         QMap<int, int>::const_iterator it = m_pagecountsearch.find(m_findcurpage);
         if (--it != m_pagecountsearch.end()) {
@@ -458,6 +463,7 @@ void DocummentPDF::findPrev()
                     break;
                 }
             }
+            qDeleteAll(plistannote);
         }
     }
 
@@ -467,12 +473,14 @@ void DocummentPDF::setAnnotationText(int ipage, const QString &struuid, const QS
 {
     if (ipage > 0 && ipage < m_pages.size()) {
         Poppler::Page *page = static_cast<PagePdf *>(m_pages.at(ipage))->GetPage();
-        foreach (Poppler::Annotation *annote, page->annotations()) {
+        QList<Poppler::Annotation *> plistannote = page->annotations();
+        foreach (Poppler::Annotation *annote, plistannote) {
             QString uniquename = annote->uniqueName();
             if (uniquename.isEmpty() && uniquename.compare(struuid) == 0) {
                 annote->setContents(strtext);
             }
         }
+        qDeleteAll(plistannote);
     }
 }
 
@@ -481,23 +489,27 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, i
     if (ipage < 0) {
         for (int i = 0; i < m_pages.size(); ++i) {
             Poppler::Page *page = static_cast<PagePdf *>(m_pages.at(i))->GetPage();
-            foreach (Poppler::Annotation *annote, page->annotations()) {
+            QList<Poppler::Annotation *> plistannote = page->annotations();
+            foreach (Poppler::Annotation *annote, plistannote) {
                 QString uniquename = annote->uniqueName();
                 if (uniquename.isEmpty() && uniquename.compare(struuid) == 0) {
                     strtext = annote->contents();
                     return;
                 }
             }
+            qDeleteAll(plistannote);
         }
     } else {
         Poppler::Page *page = static_cast<PagePdf *>(m_pages.at(ipage))->GetPage();
-        foreach (Poppler::Annotation *annote, page->annotations()) {
+        QList<Poppler::Annotation *> plistannote = page->annotations();
+        foreach (Poppler::Annotation *annote, plistannote) {
             QString uniquename = annote->uniqueName();
             if (uniquename.isEmpty() && uniquename.compare(struuid) == 0) {
                 strtext = annote->contents();
                 return;
             }
         }
+        qDeleteAll(plistannote);
     }
 
 }

@@ -135,7 +135,8 @@ public:
     {
         if (!bDocummentExist())
             return false;
-        qDebug() << "loadWords";
+        qDebug() << "loadWords start";
+        m_wordsbload = true;
         for (int i = 0; i < m_pages.size(); i++) {
             if (QThread::currentThread()->isInterruptionRequested()) {
                 break;
@@ -143,6 +144,9 @@ public:
             m_pages.at(i)->loadWords();
             m_pages.at(i)->loadLinks();
         }
+        m_wordsbload = false;
+
+        qDebug() << "loadWords end";
         return true;
     }
     int getPageSNum()
@@ -182,6 +186,10 @@ public:
         DScrollBar *scrollBar_Y = verticalScrollBar();
         if (scrollBar_Y)
             scrollBar_Y->setValue(scrollBar_Y->value() + mvy);
+    }
+    bool isWordsBeLoad()
+    {
+        return m_wordsbload;
     }
 //    double getPageOriginalImageWidth(int pagenum)
 //    {
@@ -246,6 +254,7 @@ protected:
     double m_scale;
     bool donotneedreloaddoc;
     DWidget *pblankwidget;
+    bool m_wordsbload;
 };
 
 #endif // DOCUMMENTBASE_H

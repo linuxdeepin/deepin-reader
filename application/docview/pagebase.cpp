@@ -56,9 +56,7 @@ PageBase::PageBase(DWidget *parent)
 
 PageBase::~PageBase()
 {
-    for (int i = 0; i < m_links.size(); i++) {
-        delete m_links.at(i);
-    }
+    qDeleteAll(m_links);
     m_links.clear();
     if (loadmagnifiercachethread.isRunning()) {
         loadmagnifiercachethread.quit();

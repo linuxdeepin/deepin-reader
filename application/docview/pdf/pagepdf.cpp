@@ -3,8 +3,6 @@
 #include <QDebug>
 #include <QMutex>
 
-static QMutex clearpage;
-
 PagePdf::PagePdf(QWidget *parent)
     : PageBase(parent),
       m_page(nullptr)
@@ -12,14 +10,11 @@ PagePdf::PagePdf(QWidget *parent)
 }
 PagePdf::~PagePdf()
 {
-    for (int i = 0; i < m_links.size(); i++) {
-        delete m_links.at(i);
-    }
-    m_links.clear();
-    clearpage.lock();
+//    for (int i = 0; i < m_links.size(); i++) {
+//        delete m_links.at(i);
+//    }
     delete m_page;
     m_page = nullptr;
-    clearpage.unlock();
 }
 void PagePdf::removeAnnotation(Poppler::Annotation *annotation)
 {
@@ -90,7 +85,7 @@ bool PagePdf::getImage(QImage &image, double width, double height)
     double scaley = height / m_imageheight;
     if (!m_page)
         return false;
-//    image = m_page->renderToImage(xres * scalex, yres * scaley, -1, -1, width, height);
+    image = m_page->renderToImage(xres * scalex, yres * scaley, -1, -1, width, height);
     return true;
 }
 
@@ -197,6 +192,7 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
             }
         }
     }
+    qDeleteAll(listannote);
     showImage(m_scale, m_rotate);
     return uniqueName;
 }
@@ -211,6 +207,7 @@ void PagePdf::removeAnnotation(const QString &struuid)
             showImage(m_scale, m_rotate);
         }
     }
+    qDeleteAll(listannote);
 }
 
 bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext)
@@ -241,6 +238,7 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext)
             }
         }
     }
+    qDeleteAll(listannote);
     return  false;
 }
 
@@ -255,11 +253,17 @@ bool PagePdf::abstractTextPage(const QList<Poppler::TextBox *> &text)
     bool addChar;
     m_words.clear();
     foreach (Poppler::TextBox *word, text) {
+//        if (QThread::currentThread()->isInterruptionRequested()) {
+//            break;
+//        }
         const int qstringCharCount = word->text().length();
         next = word->nextWord();
         // if(next)
         int textBoxChar = 0;
         for (int j = 0; j < qstringCharCount; j++) {
+//            if (QThread::currentThread()->isInterruptionRequested()) {
+//                break;
+//            }
             const QChar c = word->text().at(j);
             if (c.isHighSurrogate()) {
                 s = c;
@@ -303,32 +307,28 @@ bool PagePdf::abstractTextPage(const QList<Poppler::TextBox *> &text)
 
 bool PagePdf::loadWords()
 {
-    clearpage.lock();
     if (!m_page) {
         return false;
     }
     QList<Poppler::TextBox *> textList = m_page->textList();
     abstractTextPage(textList);
     qDeleteAll(textList);
-    clearpage.unlock();
     return true;
 }
 
 bool PagePdf::loadLinks()
 {
 
-    for (int i = 0; i < m_links.size(); i++) {
-        delete m_links.at(i);
-    }
+    qDeleteAll(m_links);
     m_links.clear();
     if (!m_page) {
         return false;
     }
     QList<Poppler::Link *> qlinks = m_page->links();
     foreach (const Poppler::Link *link, qlinks) {
-        if (QThread::currentThread()->isInterruptionRequested()) {
-            break;
-        }
+//        if (QThread::currentThread()->isInterruptionRequested()) {
+//            break;
+//        }
         const QRectF boundary = link->linkArea().normalized();
 //        qDebug() << "boundary:" << boundary;
 
