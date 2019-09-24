@@ -18,9 +18,11 @@ void PagingWidget::initWidget()
 
     m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
     m_pPrePageBtn->setFixedSize(QSize(40, 40));
+    m_pPrePageBtn->setCheckable(false);
 
     m_pNextPageBtn = new DIconButton(DStyle::SP_ArrowRight);
     m_pNextPageBtn->setFixedSize(QSize(40, 40));
+    m_pNextPageBtn->setCheckable(false);
 
     connect(m_pPrePageBtn, SIGNAL(clicked()), SLOT(slotPrePage()));
     connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPage()));
