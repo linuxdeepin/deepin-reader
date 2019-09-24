@@ -236,6 +236,11 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext)
     return  false;
 }
 
+Poppler::Page *PagePdf::GetPage()
+{
+    return m_page;
+}
+
 bool PagePdf::loadLinks()
 {
 

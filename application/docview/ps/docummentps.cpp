@@ -128,39 +128,9 @@ void DocummentPS::setBasicInfo(const QString &filepath)
     m_fileinfo.strAuther = info.owner();
     m_fileinfo.strFilepath = info.filePath();
     if (document) {
-        int major, minor;
-        //document->getPdfVersion(&major, &minor);
+        int major, minor;       
         m_fileinfo.strFormat.arg("PDF v.%1.%2", major, minor);
-//        m_fileinfo.strKeyword = document->info(QStringLiteral("Keywords"));
-//        m_fileinfo.strTheme = document->title();
-//        m_fileinfo.strProducter = document->producer();
-//        m_fileinfo.strCreater = document->creator();
-//        m_fileinfo.bsafe = document->isEncrypted();
-//        m_fileinfo.iWidth = document->page(0)->pageSize().width();
-//        m_fileinfo.iHeight = document->page(0)->pageSize().height();
-//        m_fileinfo.iNumpages = document->numPages();
 
-//        /*---------djyu code--------*/
-//        for (int index = 0, count = spectre_document_get_n_pages(document); index < count; ++index) {
-//            ddjvu_fileinfo_t fileinfo;
-
-//            if (ddjvu_document_get_fileinfo(document, index, &fileinfo) != DDJVU_JOB_OK || fileinfo.type != 'P') {
-//                continue;
-//            }
-
-//            const QString id = QString::fromUtf8(fileinfo.id);
-//            const QString name = QString::fromUtf8(fileinfo.name);
-//            const QString title = QString::fromUtf8(fileinfo.title);
-
-//            m_pageByName[id] = m_pageByName[name] = m_pageByName[title] = fileinfo.pageno + 1;
-
-//            if (!title.endsWith(".djvu", Qt::CaseInsensitive) && !title.endsWith(".djv", Qt::CaseInsensitive)) {
-//                m_titleByIndex[fileinfo.pageno] = title;
-//            }
-//        }
-
-//        m_pageByName.squeeze();
-//        m_titleByIndex.squeeze();
     }
 }
 
