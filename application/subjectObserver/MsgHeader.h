@@ -7,7 +7,7 @@
 
 //  消息类型
 enum MSG_TYPE {
-    MSG_SET_MainWindow_TITLE = 0,           //  设置 应用标题
+    MSG_SET_MainWindow_TITLE = 0,       //  设置 应用标题
     MSG_SLIDER_SHOW_STATE,              //  侧边栏 显隐消息
     MSG_MAGNIFYING,                     //  放大镜消息
     MSG_MAGNIFYING_CANCEL,              //  取消　放大镜
@@ -78,6 +78,7 @@ enum MSG_FIND_TYPE {
 enum MSG_OPERATION_RES_TYPE {
     MSG_OPERATION_OPEN_FILE_OK = 1000,      //  打开文件成功, 要告诉所有人
     MSG_OPERATION_OPEN_FILE_FAIL,           //  打开文件失败
+    MSG_OPERATION_UPDATE_THEME,             //  主题变了
     MSG_NOTIFY_KEY_MSG                      //  按键通知消息
 };
 

@@ -3,7 +3,6 @@
 
 #include <DLabel>
 #include <DSlider>
-#include <DImageButton>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>

@@ -21,11 +21,14 @@
  */
 
 #include "FindWidget.h"
+#include <DIconButton>
+#include "translator/MainShow.h"
 
 FindWidget::FindWidget(CustomWidget *parent)
     : CustomWidget("FindWidget", parent)
 {
-    setFixedSize(QSize(410, 50));
+    setFixedSize(QSize(410, 40));
+    setWindowFlags(windowFlags() |  Qt::WindowStaysOnTopHint);
 
     initWidget();
 
@@ -49,11 +52,13 @@ void FindWidget::handleContentChanged()
 void FindWidget::slotFindNextBtnClicked()
 {
     sendMsg(MSG_FIND_NEXT);
+    this->raise();
 }
 
 void FindWidget::slotFindPrevBtnClicked()
 {
     sendMsg(MSG_FIND_PREV);
+    this->raise();
 }
 
 //  清空搜索内容
@@ -74,30 +79,38 @@ void FindWidget::hideEvent(QHideEvent *e)
     CustomWidget::hideEvent(e);
 }
 
-int FindWidget::dealWithData(const int &, const QString &)
+int FindWidget::dealWithData(const int &msgType, const QString &)
 {
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
+
+    }
     return 0;
 }
 
 void FindWidget::initWidget()
 {
-    DPushButton *findNextButton = new DPushButton("d");
-    findNextButton->setFixedSize(QSize(36, 36));
-    connect(findNextButton, &DPushButton::clicked, this, &FindWidget::slotFindNextBtnClicked);
+    DIconButton *findNextButton = new DIconButton(DStyle::SP_ArrowNext);
+    findNextButton->setToolTip(MainShow::NEXT_ONE);
+    findNextButton->setFixedSize(QSize(30, 30));
+    connect(findNextButton, &DIconButton::clicked, this, &FindWidget::slotFindNextBtnClicked);
 
-    DPushButton *findPrevButton = new DPushButton("u");
-    findPrevButton->setFixedSize(QSize(36, 36));
-    connect(findPrevButton, &DPushButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
+    DIconButton *findPrevButton = new DIconButton(DStyle::SP_ArrowPrev);
+    findNextButton->setToolTip(MainShow::PREV_ONE);
+    findPrevButton->setFixedSize(QSize(30, 30));
+    connect(findPrevButton, &DIconButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
 
-    DImageButton *closeButton = new DImageButton;
-    closeButton->setFixedSize(20, 20);
-    connect(closeButton, &DImageButton::clicked, this, &FindWidget::findCancel);
+    DIconButton *closeButton = new DIconButton(DStyle::SP_CloseButton);
+    closeButton->setFixedSize(QSize(30, 30));
+    connect(closeButton, &DIconButton::clicked, this, &FindWidget::findCancel);
 
     m_pSearchEdit = new DSearchEdit;
+
     connect(m_pSearchEdit, &DSearchEdit::returnPressed, this, &FindWidget::handleContentChanged);
     connect(m_pSearchEdit, &DSearchEdit::textChanged, this, &FindWidget::slotClearContent);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(6);
     layout->addWidget(m_pSearchEdit);
     layout->addWidget(findNextButton);
     layout->addWidget(findPrevButton);

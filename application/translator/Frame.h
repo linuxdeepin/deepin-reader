@@ -45,6 +45,8 @@ const QString FIRST_PAGE = QObject::tr("first page");       //  第一页
 const QString PREV_PAGE = QObject::tr("prev page");         //  上一页
 const QString NEXT_PAGE = QObject::tr("next page");         //  下一页
 const QString END_PAGE = QObject::tr("end page");           //  最后一页
+
+const QString BTN_CLOSE = QObject::tr("close");             //  关闭
 }
 
 

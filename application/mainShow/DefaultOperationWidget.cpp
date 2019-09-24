@@ -72,8 +72,11 @@ void DefaultOperationWidget::sendMsgAndHide(const int &msgType)
     this->hide();
 }
 
-int DefaultOperationWidget::dealWithData(const int &, const QString &)
+int DefaultOperationWidget::dealWithData(const int &msgType, const QString &)
 {
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
+
+    }
     return 0;
 }
 

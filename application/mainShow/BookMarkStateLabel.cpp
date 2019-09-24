@@ -87,6 +87,8 @@ int BookMarkStateLabel::dealWithData(const int &msgType, const QString &msgConte
     if (msgType == MSG_BOOKMARK_STATE) {     //  当前页的书签状态
         setMarkState(msgContent.toInt());
         return ConstantMsg::g_effective_res;
+    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
+
     }
     return 0;
 }

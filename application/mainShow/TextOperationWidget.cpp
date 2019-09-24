@@ -1,6 +1,7 @@
 #include "TextOperationWidget.h"
 #include "translator/PdfControl.h"
 #include "translator/Frame.h"
+#include "translator/MainShow.h"
 
 TextOperationWidget::TextOperationWidget(CustomWidget *parent)
     : CustomWidget("TextOperationWidget", parent)
@@ -64,8 +65,11 @@ void TextOperationWidget::sendMsgAndHide(const int &msgType, const QString &msgC
     this->hide();
 }
 
-int TextOperationWidget::dealWithData(const int &, const QString &)
+int TextOperationWidget::dealWithData(const int &msgType, const QString &)
 {
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
+
+    }
     return 0;
 }
 
@@ -76,14 +80,14 @@ void TextOperationWidget::initWidget()
     layout->setSpacing(0);
     this->setLayout(layout);
 
-    DPushButton *copyBtn = createBtn(tr("copy"), SLOT(SlotBtnCopyClicked()));
+    DPushButton *copyBtn = createBtn(MainShow::COPY, SLOT(SlotBtnCopyClicked()));
     layout->addWidget(copyBtn);
 
     LightedWidget *pLightedWidget = new LightedWidget;
     connect(pLightedWidget, SIGNAL(sigSendLightedColor(const int &)), this, SLOT(SlotSendLightedColor(const int &)));
     layout->addWidget(pLightedWidget);
 
-    DPushButton *removeBtn = createBtn(tr("remove high lighted"), SLOT(SlotBtnRemoveHighLightedClicked()));
+    DPushButton *removeBtn = createBtn(MainShow::REMOVE_HIGH_LIGHTED, SLOT(SlotBtnRemoveHighLightedClicked()));
     layout->addWidget(removeBtn);
     DPushButton *addAnnoBtn = createBtn(PdfControl::ADD_NOTE, SLOT(SlotBtnAddAnnotationClicked()));
     layout->addWidget(addAnnoBtn);

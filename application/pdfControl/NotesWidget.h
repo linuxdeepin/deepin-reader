@@ -2,7 +2,6 @@
 #define NOTESFORM_H
 
 #include <DListWidget>
-#include <DImageButton>
 
 #include <QListWidgetItem>
 #include <QVBoxLayout>
@@ -41,7 +40,6 @@ private:
 
 private:
     QVBoxLayout *m_pVLayout = nullptr;
-    DImageButton *m_pAddNotesBtn = nullptr;
     QListWidgetItem *m_pCurrentItem = nullptr;
 
     int m_nUUid = 1;

@@ -6,8 +6,6 @@ CustomWidget::CustomWidget(const QString &name, DWidget *parent)
 {
     setObserverName(name);
 
-    initThemeChanged();
-
     m_pMsgSubject = MsgSubject::getInstance();
     if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
@@ -40,15 +38,6 @@ void CustomWidget::showScreenCenter()
 {
     Dtk::Widget::moveToCenter(this);
     this->show();
-}
-
-//  主题变化
-void CustomWidget::initThemeChanged()
-{
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::paletteTypeChanged,
-    [](DGuiApplicationHelper::ColorType type) {
-        qDebug() << "       " << type;
-    });
 }
 
 void CustomWidget::setObserverName(const QString &name)

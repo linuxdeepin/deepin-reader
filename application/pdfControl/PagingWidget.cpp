@@ -76,17 +76,6 @@ void PagingWidget::setCurrentPage(const int &index)
     DocummentProxy::instance()->pageJump(t_page);
 }
 
-//void PagingWidget::createBtn(DImageButton *btn, QWidget *parent, const QString &text, const QString &btnName, const QString &normalPic, const QString &hoverPic, const QString &pressPic, const QString &checkedPic, const char *member, bool checkable, bool checked)
-//{
-//    btn = new DImageButton(normalPic, hoverPic, pressPic, checkedPic, parent);
-//    btn->setText(text);
-//    btn->setFixedSize(QSize(40, 40));
-//    btn->setToolTip(btnName);
-//    btn->setCheckable(checkable);
-
-//    connect(btn, SIGNAL(checkedChanged()), member);
-//}
-
 void PagingWidget::setTotalPages(int pages)
 {
     m_totalPage = pages;

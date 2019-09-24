@@ -5,10 +5,8 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QList>
-#include <DPushButton>
 #include <QMouseEvent>
 #include "subjectObserver/CustomWidget.h"
-
 
 /**
  * @brief The FileAttrWidget class

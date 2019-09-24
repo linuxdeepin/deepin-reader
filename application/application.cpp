@@ -40,7 +40,6 @@ Application::Application(int &argc, char **argv)
 
     initI18n();
 
-    setTheme("light");
     setOrganizationName("deepin");
     setApplicationName("deepin_reader");
     setApplicationDisplayName(QObject::tr("Deepin Reader"));
@@ -48,7 +47,7 @@ Application::Application(int &argc, char **argv)
     setProductIcon(QIcon(":/resources/image/logo/logo.svg"));
     setProductName(DApplication::translate("MainWindow", "Deepin Reader"));
 
-    //  帮助文档
+//    //  帮助文档
     setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin_reader/");
 
 //    setApplicationVersion(DApplication::buildVersion("20190828"));

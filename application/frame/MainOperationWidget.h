@@ -1,11 +1,10 @@
 #ifndef MAINOPERATIONWIDGET_H
 #define MAINOPERATIONWIDGET_H
 
-#include <DImageButton>
 #include <QHBoxLayout>
 
 #include <QButtonGroup>
-#include <DPushButton>
+#include <DIconButton>
 
 #include "PublicFunction.h"
 #include "subjectObserver/CustomWidget.h"
@@ -22,7 +21,7 @@ public:
     MainOperationWidget(CustomWidget *parent = nullptr);
 
 private:
-    DPushButton *createBtn(const QString &btnName);
+    DIconButton *createBtn(const QString &btnName);
 
 private slots:
     void slotButtonClicked(int);
