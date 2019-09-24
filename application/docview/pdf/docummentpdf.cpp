@@ -17,10 +17,6 @@ DocummentPDF::DocummentPDF(DWidget *parent): DocummentBase(parent),
 
 DocummentPDF::~DocummentPDF()
 {
-    for (int i = 0; i < m_listsearch.size(); i++) {
-        delete m_listsearch.at(i);
-    }
-    m_listsearch.clear();
     delete document;
 }
 
@@ -66,51 +62,6 @@ bool DocummentPDF::openFile(QString filepath)
 
     return true;
 }
-
-//bool DocummentPDF::loadPages()
-//{
-//    if (!document && m_pages.size() == document->numPages())
-//        return false;
-//    qDebug() << "loadPages";
-//    //    for (int i = 0; i < m_pages.size(); i++) {
-//    int pagenum  = m_currentpageno;
-//    if (pagenum >= 0 && pagenum < m_pages.size())
-//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-//    pagenum = m_currentpageno + 1;
-//    if (pagenum >= 0 && pagenum < m_pages.size())
-//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-//    pagenum = m_currentpageno - 1;
-//    if (pagenum >= 0 && pagenum < m_pages.size())
-//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-//    pagenum = m_currentpageno + 2;
-//    if (pagenum >= 0 && pagenum < m_pages.size())
-//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-//    pagenum = m_currentpageno - 2;
-//    if (pagenum >= 0 && pagenum < m_pages.size())
-//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-//    pagenum = m_currentpageno + 3;
-//    if (pagenum >= 0 && pagenum < m_pages.size())
-//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-//    pagenum = m_currentpageno - 3;
-//    if (pagenum >= 0 && pagenum < m_pages.size())
-//        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-
-////    int startnum = m_currentpageno - 3;
-////    if (startnum < 0) {
-////        startnum = 0;
-////    }
-////    int endnum = startnum + 7;
-////    if (endnum > m_pages.size()) {
-////        endnum = m_pages.size();
-////    }
-////    for (int i = startnum; i < endnum; i++) {
-////        if (QThread::currentThread()->isInterruptionRequested()) {
-////            break;
-////        }
-////        m_pages.at(i)->showImage(m_scale, m_rotate);
-////    }
-//    return true;
-//}
 
 bool DocummentPDF::loadWords()
 {
@@ -177,7 +128,6 @@ void DocummentPDF::search(const QString &strtext, QMap<int, stSearchRes> &resmap
             m_pagecountsearch.insert(i, icount);
         }
     }
-
     int curpage = currentPageNo();
     if (m_pagecountsearch.size() > 0) {
         m_cursearch = 1;
@@ -185,7 +135,6 @@ void DocummentPDF::search(const QString &strtext, QMap<int, stSearchRes> &resmap
         if (m_pagecountsearch.find(curpage) != m_pagecountsearch.end()) {
             static_cast<PagePdf *>(m_pages.at(curpage))->showImage(m_scale, m_rotate);
         }
-        // scaleAndShow(m_scale, m_rotate); //全部刷新
     }
 }
 
@@ -285,8 +234,21 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges) const
 
 void DocummentPDF::clearSearch()
 {
-    if (m_pagecountsearch.size() > 0) {
+   if (m_pagecountsearch.size() > 0) {
+        int ipage=currentPageNo();
+        if(ipage>=0&&m_pagecountsearch.find(ipage)!=m_pagecountsearch.end())
+        {
+            Poppler::Page *page = document->page(ipage);
+            QList<Poppler::Annotation *> listannoate = page->annotations();
+            foreach (Poppler::Annotation *anote, listannoate) {
+                if (anote->uniqueName().endsWith(QString("search"))) {
+                    page->removeAnnotation(anote);
+                }
+            }
+            static_cast<PagePdf *>(m_pages.at(ipage))->showImage(m_scale, m_rotate);
+        }
         foreach (int i, m_pagecountsearch.keys()) {
+            if(ipage==i)continue;
             Poppler::Page *page = document->page(i);
             QList<Poppler::Annotation *> listannoate = page->annotations();
             foreach (Poppler::Annotation *anote, listannoate) {
@@ -294,8 +256,8 @@ void DocummentPDF::clearSearch()
                     page->removeAnnotation(anote);
                 }
             }
+           // static_cast<PagePdf *>(m_pages.at(i))->showImage(m_scale, m_rotate);
         }
-        scaleAndShow(m_scale, m_rotate);
     }
 }
 

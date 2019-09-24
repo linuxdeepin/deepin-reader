@@ -109,8 +109,7 @@ void PagePdf::appendWord(stWord word)
 
 QString PagePdf::addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color)
 {
-    QString uniqueName;
-    qDebug() << "*************" << listrect.size();
+    QString uniqueName;   
     if (listrect.size() <= 0)return uniqueName;
     Poppler::Annotation::Style style;
     style.setColor(color);
@@ -126,6 +125,16 @@ QString PagePdf::addHighlightAnnotation(const QList<QRectF> &listrect, const QCo
     double curwidth = m_imagewidth * m_scale;
     double curheight = m_imageheight * m_scale;
     foreach (rec, listrect) {
+
+        if(m_rotate==RotateType_180)
+        {      
+            qDebug()<<"%%%%%%%%%%%%%%%%%%%"<<m_scale;
+            rec.setTop(curheight-rec.top());
+            rec.setBottom(curheight-rec.bottom());
+            rec.setLeft(curwidth-rec.left());
+            rec.setRight(curwidth-rec.right());
+        }
+
         recboundary.setTopLeft(QPointF(rec.left() / curwidth,
                                        rec.top() / curheight));
         recboundary.setTopRight(QPointF(rec.right() / curwidth,
@@ -155,7 +164,6 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
     double curwidth = m_scale * m_imagewidth;
     double curheight = m_scale * m_imageheight;
     QString uniqueName;
-    // QPoint qp = QPoint((pos.x() - x() - (width() - m_scale * m_imagewidth) / 2) / scaleX, (pos.y() - y() - (height() - m_scale * m_imageheight) / 2) / scaleY);
     QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
     QList<Poppler::Annotation *> listannote = m_page->annotations();
     foreach (Poppler::Annotation *annote, listannote) {
@@ -167,6 +175,13 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
                 rectbound.setTopRight(quad.points[1]);
                 rectbound.setBottomLeft(quad.points[2]);
                 rectbound.setBottomRight( quad.points[3]);
+                if(m_rotate==RotateType_180)
+                {
+                    rectbound.setTop(1-rectbound.top());
+                    rectbound.setBottom(1-rectbound.bottom());
+                    rectbound.setLeft(1-rectbound.left());
+                    rectbound.setRight(1-rectbound.right());
+                }
                 if (rectbound.contains(ptf)) {
                     uniqueName = annote->uniqueName();
                     removeAnnotation(annote);
