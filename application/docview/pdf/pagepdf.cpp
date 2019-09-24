@@ -253,17 +253,17 @@ bool PagePdf::abstractTextPage(const QList<Poppler::TextBox *> &text)
     bool addChar;
     m_words.clear();
     foreach (Poppler::TextBox *word, text) {
-//        if (QThread::currentThread()->isInterruptionRequested()) {
-//            break;
-//        }
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
         const int qstringCharCount = word->text().length();
         next = word->nextWord();
         // if(next)
         int textBoxChar = 0;
         for (int j = 0; j < qstringCharCount; j++) {
-//            if (QThread::currentThread()->isInterruptionRequested()) {
-//                break;
-//            }
+            if (QThread::currentThread()->isInterruptionRequested()) {
+                break;
+            }
             const QChar c = word->text().at(j);
             if (c.isHighSurrogate()) {
                 s = c;
@@ -326,9 +326,9 @@ bool PagePdf::loadLinks()
     }
     QList<Poppler::Link *> qlinks = m_page->links();
     foreach (const Poppler::Link *link, qlinks) {
-//        if (QThread::currentThread()->isInterruptionRequested()) {
-//            break;
-//        }
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
         const QRectF boundary = link->linkArea().normalized();
 //        qDebug() << "boundary:" << boundary;
 

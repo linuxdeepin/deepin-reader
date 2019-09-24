@@ -260,17 +260,10 @@ void FileViewWidget::slotSetWidgetAdapt()
 {
     if (m_nAdapteState == WIDGET_State) {
         int nWidth = this->width();
-//        DocummentProxy::instance()->adaptWidthAndShow(nWidth);
-        DocummentProxy::instance()->scaleRotateAndShow(1.3, RotateType_Normal);
-        DocummentProxy::instance()->scaleRotateAndShow(1.3, RotateType_Normal);
+        DocummentProxy::instance()->adaptWidthAndShow(nWidth);
     } else if (m_nAdapteState == HEIGHT_State) {
         int nHeight = this->height();
-
-//        DocummentProxy::instance()->adaptHeightAndShow(nHeight);
-
-
-        DocummentProxy::instance()->scaleRotateAndShow(1.3, RotateType_Normal);
-        DocummentProxy::instance()->scaleRotateAndShow(1.3, RotateType_Normal);
+        DocummentProxy::instance()->adaptHeightAndShow(nHeight);
     }
 }
 

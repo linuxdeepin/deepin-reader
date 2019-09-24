@@ -327,6 +327,7 @@ double DocummentProxy::adaptWidthAndShow(double width)
 {
     if (!m_documment || bcloseing)
         return -1;
+    qDebug() << "adaptWidthAndShow width:" << width;
     return m_documment->adaptWidthAndShow(width);
 }
 
@@ -334,6 +335,7 @@ double DocummentProxy::adaptHeightAndShow(double height)
 {
     if (!m_documment || bcloseing)
         return -1;
+    qDebug() << "adaptHeightAndShow height:" << height;
     return m_documment->adaptHeightAndShow(height);
 }
 

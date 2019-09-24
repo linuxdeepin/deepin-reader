@@ -191,20 +191,6 @@ public:
     {
         return m_wordsbload;
     }
-//    double getPageOriginalImageWidth(int pagenum)
-//    {
-//        if (m_pages.size() <= pagenum) {
-//            return -1;
-//        }
-//        return m_pages.at(pagenum)->getOriginalImageWidth();
-//    }
-//    double getPageOriginalImageHeight(int pagenum)
-//    {
-//        if (m_pages.size() <= pagenum) {
-//            return -1;
-//        }
-//        return m_pages.at(pagenum)->getOriginalImageHeight();
-//    }
 
 
 
