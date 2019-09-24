@@ -104,81 +104,70 @@ void FontWidget::initWidget()
 //    m_pEnlargeSlider->setRightIcon(QIcon(tr(":/resources/image/press/close.svg")));
     connect(m_pEnlargeSlider, SIGNAL(valueChanged(int)), this, SLOT(slotSetChangeVal(int)));
 
-    //t_pHLayout2->addSpacing(1);
     t_pHLayout2->addWidget(m_pMinLabALab);
     t_pHLayout2->addWidget(m_pEnlargeSlider);
     t_pHLayout2->addWidget(m_pMaxLabALab);
-    //t_pHLayout2->addSpacing(1);
 
-    m_pDoubPageViewBtn = new DImageButton;
-    m_pDoubPageViewBtn->setText(PdfControl::DOUB_VIEW);
-    m_pDoubPageViewBtn->setAlignment(Qt::AlignCenter);
+    m_pDoubPageViewLb = new MenuLab(this);
+    m_pDoubPageViewLb->setText(PdfControl::DOUB_VIEW);
+    m_pDoubPageViewLb->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
-    m_pDoubPageViewBtn->setFont(ft);
-    m_pDoubPageViewBtn->setFixedSize(QSize(120, 25));
-    m_pDoubPageViewLab = new QLabel;
+    m_pDoubPageViewLb->setFont(ft);
+    m_pDoubPageViewLb->setFixedSize(QSize(120, 25));
+
+    m_pDoubPageViewLab = new DLabel;
     m_pDoubPageViewLab->setFixedSize(QSize(30, 25));
-    connect(m_pDoubPageViewBtn, SIGNAL(clicked()), SLOT(slotSetDoubPageViewCheckIcon()));
-    //t_pHLayout3->addSpacing(1);
-    t_pHLayout3->addWidget(m_pDoubPageViewBtn);
+    connect(m_pDoubPageViewLb, SIGNAL(clicked()), SLOT(slotSetDoubPageViewCheckIcon()));
+    t_pHLayout3->addWidget(m_pDoubPageViewLb);
     t_pHLayout3->addWidget(m_pDoubPageViewLab);
-    //t_pHLayout3->addStretch(1);
 
-    m_pSuitHBtn = new DImageButton;
-    m_pSuitHBtn->setText(PdfControl::ADAP_HEIGHT);
-    m_pSuitHBtn->setAlignment(Qt::AlignCenter);
+    m_pSuitHLb = new MenuLab(this);
+    m_pSuitHLb->setText(PdfControl::ADAP_HEIGHT);
+    m_pSuitHLb->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
-    m_pSuitHBtn->setFont(ft);
-    m_pSuitHBtn->setFixedSize(QSize(120, 25));
-    connect(m_pSuitHBtn, SIGNAL(clicked()), SLOT(slotSetSuitHCheckIcon()));
+    m_pSuitHLb->setFont(ft);
+    m_pSuitHLb->setFixedSize(QSize(120, 25));
+    connect(m_pSuitHLb, SIGNAL(clicked()), SLOT(slotSetSuitHCheckIcon()));
     m_pSuitHLab = new DLabel;
     m_pSuitHLab->setFixedSize(QSize(30, 25));
-    //t_pHLayout4->addSpacing(1);
-    t_pHLayout4->addWidget(m_pSuitHBtn);
+    t_pHLayout4->addWidget(m_pSuitHLb);
     t_pHLayout4->addWidget(m_pSuitHLab);
-    //t_pHLayout4->addSpacing(1);
 
-    m_pSuitWBtn = new DImageButton;
-    m_pSuitWBtn->setText(PdfControl::ADAP_WIDTH);
-    m_pSuitWBtn->setAlignment(Qt::AlignCenter);
+    m_pSuitWLb = new MenuLab(this);
+    m_pSuitWLb->setText(PdfControl::ADAP_WIDTH);
+    m_pSuitWLb->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
-    m_pSuitWBtn->setFont(ft);
-    m_pSuitWBtn->setFixedSize(QSize(120, 25));
-    connect(m_pSuitWBtn, SIGNAL(clicked()), SLOT(slotSetSuitWCheckIcon()));
-    m_pSuitWLab = new QLabel;
+    m_pSuitWLb->setFont(ft);
+    m_pSuitWLb->setFixedSize(QSize(120, 25));
+    connect(m_pSuitWLb, SIGNAL(clicked()), SLOT(slotSetSuitWCheckIcon()));
+    m_pSuitWLab = new DLabel;
     m_pSuitWLab->setFixedSize(QSize(30, 25));
-    //t_pHLayout5->addSpacing(1);
-    t_pHLayout5->addWidget(m_pSuitWBtn);
+    t_pHLayout5->addWidget(m_pSuitWLb);
     t_pHLayout5->addWidget(m_pSuitWLab);
-    //t_pHLayout5->addSpacing(1);
 
-    m_pRotateLeftBtn = new DImageButton;
-    m_pRotateLeftBtn->setText(PdfControl::ROTAT_TO_L);
-    m_pRotateLeftBtn->setAlignment(Qt::AlignCenter);
+    m_pRotateLeftLb = new MenuLab(this);
+    m_pRotateLeftLb->setText(PdfControl::ROTAT_TO_L);
+    m_pRotateLeftLb->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
-    m_pRotateLeftBtn->setFont(ft);
-    m_pRotateLeftBtn->setFixedSize(QSize(120, 25));
-    connect(m_pRotateLeftBtn, SIGNAL(clicked()), SLOT(slotSetRotateLeftCheckIcon()));
+    m_pRotateLeftLb->setFont(ft);
+    m_pRotateLeftLb->setFixedSize(QSize(120, 25));
+    connect(m_pRotateLeftLb, SIGNAL(clicked()), SLOT(slotSetRotateLeftCheckIcon()));
     m_pRotateLeftLab = new DLabel;
     m_pRotateLeftLab->setFixedSize(QSize(30, 25));
-    //t_pHLayout6->addSpacing(1);
-    t_pHLayout6->addWidget(m_pRotateLeftBtn);
+    t_pHLayout6->addWidget(m_pRotateLeftLb);
     t_pHLayout6->addWidget(m_pRotateLeftLab);
-    //t_pHLayout6->addSpacing(1);
 
-    m_pRotateRightBtn = new DImageButton;
-    m_pRotateRightBtn->setText(PdfControl::ROTAT_TO_R);
-    m_pRotateRightBtn->setAlignment(Qt::AlignCenter);
+    m_pRotateRightLb = new MenuLab(this);
+    m_pRotateRightLb->setText(PdfControl::ROTAT_TO_R);
+    m_pRotateRightLb->setAlignment(Qt::AlignCenter);
     ft.setPointSize(12);
-    m_pRotateRightBtn->setFont(ft);
-    m_pRotateRightBtn->setFixedSize(QSize(120, 25));
-    connect(m_pRotateRightBtn, SIGNAL(clicked()), SLOT(slotSetRotateRightCheckIcon()));
+    m_pRotateRightLb->setFont(ft);
+    m_pRotateRightLb->setFixedSize(QSize(120, 25));
+    connect(m_pRotateRightLb, SIGNAL(clicked()), SLOT(slotSetRotateRightCheckIcon()));
     m_pRotateRightLab = new DLabel;
     m_pRotateRightLab->setFixedSize(QSize(30, 25));
-    //t_pHLayout7->addSpacing(1);
-    t_pHLayout7->addWidget(m_pRotateRightBtn);
+    t_pHLayout7->addWidget(m_pRotateRightLb);
     t_pHLayout7->addWidget(m_pRotateRightLab);
-    //t_pHLayout7->addSpacing(1);
 
     t_pVBoxLayout->setContentsMargins(0, 0, 1, 0);
     t_pVBoxLayout->addSpacing(1);
@@ -387,3 +376,16 @@ void FontWidget::slotSetRotateRightCheckIcon()
     rotateFileView(true);
 }
 
+
+MenuLab::MenuLab(QWidget *parent):
+    DLabel(parent)
+{
+
+}
+
+void MenuLab::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+        emit clicked();
+    }
+}

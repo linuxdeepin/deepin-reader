@@ -17,6 +17,19 @@
 #include "subjectObserver/CustomWidget.h"
 #include "docview/docummentproxy.h"
 
+class MenuLab : public DLabel
+{
+    Q_OBJECT
+public:
+    MenuLab(QWidget *parent = nullptr);
+
+signals:
+    void clicked();
+
+protected:
+    void mousePressEvent(QMouseEvent *event) override;
+};
+
 class FontWidget : public CustomWidget
 {
     Q_OBJECT
@@ -55,11 +68,13 @@ private:
     DLabel *m_pMinLabALab = nullptr;
     DLabel *m_pMaxLabALab = nullptr;
     DSlider *m_pEnlargeSlider = nullptr;
-    DImageButton *m_pDoubPageViewBtn = nullptr;
-    DImageButton *m_pSuitHBtn = nullptr;
-    DImageButton *m_pSuitWBtn = nullptr;
-    DImageButton *m_pRotateLeftBtn = nullptr;
-    DImageButton *m_pRotateRightBtn = nullptr;
+
+    MenuLab *m_pDoubPageViewLb = nullptr;
+    MenuLab *m_pSuitHLb = nullptr;
+    MenuLab *m_pSuitWLb = nullptr;
+    MenuLab *m_pRotateLeftLb = nullptr;
+    MenuLab *m_pRotateRightLb = nullptr;
+
     DLabel *m_pDoubPageViewLab = nullptr;
     DLabel *m_pSuitHLab = nullptr;
     DLabel *m_pSuitWLab = nullptr;
