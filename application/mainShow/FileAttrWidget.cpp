@@ -3,6 +3,7 @@
 #include <QDebug>
 #include "utils/utils.h"
 #include "docview/docummentproxy.h"
+#include <DWindowCloseButton>
 
 FileAttrWidget::FileAttrWidget(CustomWidget *parent)
     : CustomWidget("FileAttrWidget", parent)
@@ -149,7 +150,7 @@ void FileAttrWidget::initCloseBtn()
     QHBoxLayout *layout = new QHBoxLayout;
     layout->addStretch(1);
 
-    DPushButton *closeBtn = new DPushButton("", this);
+    DWindowCloseButton *closeBtn = new DWindowCloseButton(this);
     closeBtn->setToolTip(tr("close"));
     connect(closeBtn, &DPushButton::clicked, this, &FileAttrWidget::slotBtnCloseClicked);
 

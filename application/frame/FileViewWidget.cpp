@@ -226,6 +226,7 @@ void FileViewWidget::initConnections()
 
     connect(this, SIGNAL(sigOpenNoteWidget()), this, SLOT(slotOpenNoteWidget()));
     connect(this, SIGNAL(sigWidgetAdapt()), this, SLOT(slotSetWidgetAdapt()));
+    connect(this, SIGNAL(sigPrintFile()), this, SLOT(slotPrintFile()));
 }
 
 //  打印
