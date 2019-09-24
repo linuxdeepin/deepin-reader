@@ -654,7 +654,7 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     switch (m_viewmode) {
     case ViewMode_SinglePage:
         for (int i = 0; i < m_widgets.size(); i++) {
-            m_widgets.at(i)->setGeometry(rex, rey, m_widgets.at(i)->layout()->margin() * 2 + m_pages.at(i)->width(), m_widgets.at(i)->layout()->margin() * 2 + m_pages.at(i)->height());
+            m_widgets.at(i)->setGeometry((width() - rex * 2 - m_pages.at(i)->width()) / 2, rey, m_widgets.at(i)->layout()->margin() * 2 + m_pages.at(i)->width(), m_widgets.at(i)->layout()->margin() * 2 + m_pages.at(i)->height());
             rey += m_widgets.at(i)->layout()->margin() * 2 + m_pages.at(i)->height() + m_vboxLayout.spacing();
         }
         break;
