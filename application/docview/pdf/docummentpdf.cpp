@@ -77,26 +77,24 @@ void DocummentPDF::removeAllAnnotation()
 
 QString DocummentPDF::removeAnnotation(const QPoint &startpos)
 {
-//    //暂时只处理未旋转
-//    QPoint pt = startpos;
-//    int page = pointInWhichPage(pt);
-//    if (page < 0) return "";
-//    return static_cast<PagePdf *>(m_pages.at(page))->removeAnnotation(pt);
-    return "";
+    //暂时只处理未旋转
+    QPoint pt = startpos;
+    int page = pointInWhichPage(pt);
+    if (page < 0) return "";
+    return static_cast<PagePdf *>(m_pages.at(page))->removeAnnotation(pt);
 }
 
 void DocummentPDF::removeAnnotation(const QString &struuid)
 {
-//    return static_cast<PagePdf *>(m_pages.at(currentPageNo()))->removeAnnotation(struuid);
+    return static_cast<PagePdf *>(m_pages.at(currentPageNo()))->removeAnnotation(struuid);
 }
 
 QString DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color)
 {
-//    QPoint pt = startpos;
-//    int page = pointInWhichPage(pt);
-//    if (page < 0) return "";
-//    return static_cast<PagePdf *>(m_pages.at(page))->addAnnotation(pt);
-    return "";
+    QPoint pt = startpos;
+    int page = pointInWhichPage(pt);
+    if (page < 0) return "";
+    return static_cast<PagePdf *>(m_pages.at(page))->addAnnotation(pt);
 }
 
 void DocummentPDF::search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color)

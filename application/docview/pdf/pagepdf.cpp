@@ -1,6 +1,9 @@
 #include "pagepdf.h"
 #include "docview/publicfunc.h"
 #include <QDebug>
+#include <QMutex>
+
+static QMutex clearpage;
 
 PagePdf::PagePdf(QWidget *parent)
     : PageBase(parent),
@@ -13,8 +16,10 @@ PagePdf::~PagePdf()
         delete m_links.at(i);
     }
     m_links.clear();
+    clearpage.lock();
     delete m_page;
     m_page = nullptr;
+    clearpage.unlock();
 }
 void PagePdf::removeAnnotation(Poppler::Annotation *annotation)
 {
@@ -298,12 +303,14 @@ bool PagePdf::abstractTextPage(const QList<Poppler::TextBox *> &text)
 
 bool PagePdf::loadWords()
 {
+    clearpage.lock();
     if (!m_page) {
         return false;
     }
     QList<Poppler::TextBox *> textList = m_page->textList();
     abstractTextPage(textList);
     qDeleteAll(textList);
+    clearpage.unlock();
     return true;
 }
 
