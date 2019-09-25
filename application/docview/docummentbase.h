@@ -24,21 +24,21 @@ enum ViewMode_EM {
 #include <QtDebug>
 
 class DocummentBase;
-class ThreadLoadDoc : public QThread
-{
-    Q_OBJECT
-public:
-    ThreadLoadDoc();
-    void setDoc(DocummentBase *doc);
-    void setRestart();
+//class ThreadLoadDoc : public QThread
+//{
+//    Q_OBJECT
+//public:
+//    ThreadLoadDoc();
+//    void setDoc(DocummentBase *doc);
+//    void setRestart();
 
-protected:
-    virtual void run();
+//protected:
+//    virtual void run();
 
-private:
-    DocummentBase *m_doc;
-    bool restart;
-};
+//private:
+//    DocummentBase *m_doc;
+//    bool restart;
+//};
 
 class ThreadLoadWords : public QThread
 {
@@ -133,7 +133,7 @@ public:
     virtual void title(QString &title) {}
     virtual void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) {}
     virtual void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1) {}
-
+    virtual void stopLoadPageThread() {}
 
 
     bool loadWords()
@@ -241,7 +241,7 @@ protected:
     DLabel *pslidelabel;
     int m_slidepageno;
     DLabel *pslideanimationlabel;
-    ThreadLoadDoc m_threadloaddoc;
+//    ThreadLoadDoc m_threadloaddoc;
     ThreadLoadWords m_threadloadwords;
     RotateType_EM m_rotate;
     int m_currentpageno;

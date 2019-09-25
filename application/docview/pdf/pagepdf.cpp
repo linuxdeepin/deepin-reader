@@ -2,20 +2,75 @@
 #include "docview/publicfunc.h"
 #include <QDebug>
 #include <QMutex>
+ThreadRenderImage::ThreadRenderImage()
+{
+//    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
+    m_page = nullptr;
+    restart = false;
+    m_width = 0;
+    m_height = 0;
+}
+
+void ThreadRenderImage::setRestart()
+{
+    restart = true;
+}
+
+void ThreadRenderImage::setPage(Poppler::Page *page, double xres, double yres, double width, double height)
+{
+    m_page = page;
+    m_width = width;
+    m_height = height;
+    m_xres = xres;
+    m_yres = yres;
+}
+
+void ThreadRenderImage::run()
+{
+    if (!m_page)
+        return;
+    restart = true;
+    while (restart) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
+        restart = false;
+        if (m_width > 0 && m_height > 0) {
+            QImage image = m_page->renderToImage(m_xres, m_yres, -1, -1, m_width, m_height);
+            emit signal_RenderFinish(image);
+        }
+    }
+}
 
 PagePdf::PagePdf(QWidget *parent)
     : PageBase(parent),
       m_page(nullptr)
 {
+    connect(&threadreander, SIGNAL(signal_RenderFinish(QImage)), this, SLOT(slot_RenderFinish(QImage)));
 }
 PagePdf::~PagePdf()
 {
 //    for (int i = 0; i < m_links.size(); i++) {
 //        delete m_links.at(i);
 //    }
+    if (threadreander.isRunning()) {
+        threadreander.requestInterruption();
+        threadreander.quit();
+        threadreander.wait();
+    }
     delete m_page;
     m_page = nullptr;
 }
+
+void PagePdf::clearThread()
+{
+    if (threadreander.isRunning()) {
+        threadreander.requestInterruption();
+//        threadreander.quit();
+        threadreander.wait();
+    }
+}
+
 void PagePdf::removeAnnotation(Poppler::Annotation *annotation)
 {
     m_page->removeAnnotation(annotation);
@@ -32,14 +87,8 @@ void PagePdf::setPage(Poppler::Page *page, int pageno)
 //    qDebug() << "----setpage m_imagewidth:" << m_imagewidth << " m_imageheight:" << m_imageheight;
 }
 
-bool PagePdf::showImage(double scale, RotateType_EM rotate)
+void PagePdf::slot_RenderFinish(QImage image)
 {
-    if (!m_page)
-        return false;
-    int xres = 72.0, yres = 72.0;
-    m_scale = scale;
-    m_rotate = rotate;
-    QImage image = m_page->renderToImage(xres * m_scale, yres * m_scale, -1, -1, m_imagewidth * m_scale, m_imageheight * m_scale);
     QPixmap map = QPixmap::fromImage(image);
     QMatrix leftmatrix;
     switch (m_rotate) {
@@ -57,6 +106,39 @@ bool PagePdf::showImage(double scale, RotateType_EM rotate)
         break;
     }
     setPixmap(map.transformed(leftmatrix, Qt::SmoothTransformation));
+}
+
+bool PagePdf::showImage(double scale, RotateType_EM rotate)
+{
+    if (!m_page)
+        return false;
+    int xres = 72.0, yres = 72.0;
+    m_scale = scale;
+    m_rotate = rotate;
+    threadreander.setPage(m_page, xres * m_scale, yres * m_scale, m_imagewidth * m_scale, m_imageheight * m_scale);
+    if (!threadreander.isRunning()) {
+        threadreander.start();
+    } else {
+        threadreander.setRestart();
+    }
+//    QImage image = m_page->renderToImage(xres * m_scale, yres * m_scale, -1, -1, m_imagewidth * m_scale, m_imageheight * m_scale);
+//    QPixmap map = QPixmap::fromImage(image);
+//    QMatrix leftmatrix;
+//    switch (m_rotate) {
+//    case RotateType_90:
+//        leftmatrix.rotate(90);
+//        break;
+//    case RotateType_180:
+//        leftmatrix.rotate(180);
+//        break;
+//    case RotateType_270:
+//        leftmatrix.rotate(270);
+//        break;
+//    default:
+//        leftmatrix.rotate(0);
+//        break;
+//    }
+//    setPixmap(map.transformed(leftmatrix, Qt::SmoothTransformation));
     return true;
 }
 

@@ -64,10 +64,11 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath)
     m_type = type;
     m_path = filepath;
     if (nullptr != m_documment) {
+        bcloseing = true;
+        m_documment->stopLoadPageThread();
         if (m_documment->isWordsBeLoad()) {
             qDebug() << "threadwaitloadwordsend true";
             bclosefile = false;
-            bcloseing = true;
             if (!threadwaitloadwordsend.isRunning()) {
                 threadwaitloadwordsend.setDoc(m_documment);
                 threadwaitloadwordsend.start();
@@ -345,6 +346,8 @@ bool DocummentProxy::closeFile()
     if (!m_documment)
         return false;
     if (nullptr != m_documment) {
+        bcloseing = true;
+        m_documment->stopLoadPageThread();
         if (m_documment->isWordsBeLoad()) {
             qDebug() << "threadwaitloadwordsend true";
             bclosefile = true;

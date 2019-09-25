@@ -525,4 +525,10 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, i
 
 }
 
-
+void DocummentPDF::stopLoadPageThread()
+{
+    for (int i = 0; i < m_pages.size(); i++) {
+        PagePdf *ppdf = (PagePdf *)m_pages.at(i);
+        ppdf->clearThread();
+    }
+}

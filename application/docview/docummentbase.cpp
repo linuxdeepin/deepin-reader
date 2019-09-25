@@ -7,34 +7,33 @@
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 
-ThreadLoadDoc::ThreadLoadDoc()
-{
-    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
-    m_doc = nullptr;
-    restart = false;
-}
+//ThreadLoadDoc::ThreadLoadDoc()
+//{
+//    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
+//    m_doc = nullptr;
+//    restart = false;
+//}
 
-void ThreadLoadDoc::setRestart()
-{
-    restart = true;
-}
+//void ThreadLoadDoc::setRestart()
+//{
+//    restart = true;
+//}
 
-void ThreadLoadDoc::setDoc(DocummentBase *doc)
-{
-    m_doc = doc;
-}
+//void ThreadLoadDoc::setDoc(DocummentBase *doc)
+//{
+//    m_doc = doc;
+//}
 
-void ThreadLoadDoc::run()
-{
-    if (!m_doc)
-        return;
-    restart = true;
-    while (restart) {
-        restart = false;
-        m_doc->loadPages();
-    }
-}
-
+//void ThreadLoadDoc::run()
+//{
+//    if (!m_doc)
+//        return;
+//    restart = true;
+//    while (restart) {
+//        restart = false;
+//        m_doc->loadPages();
+//    }
+//}
 
 ThreadLoadWords::ThreadLoadWords()
 {
@@ -190,7 +189,7 @@ DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
     m_magnifierpage(-1)
 {
     m_currentpageno = 0;
-    m_threadloaddoc.setDoc(this);
+//    m_threadloaddoc.setDoc(this);
     m_threadloadwords.setDoc(this);
     setWidgetResizable(true);
     setWidget(&m_widget);
@@ -251,11 +250,11 @@ DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
 DocummentBase::~DocummentBase()
 {
     this->hide();
-    if (m_threadloaddoc.isRunning()) {
-        m_threadloaddoc.requestInterruption();
-        m_threadloaddoc.quit();
-        m_threadloaddoc.wait();
-    }
+//    if (m_threadloaddoc.isRunning()) {
+//        m_threadloaddoc.requestInterruption();
+//        m_threadloaddoc.quit();
+//        m_threadloaddoc.wait();
+//    }
     if (m_threadloadwords.isRunning()) {
         m_threadloadwords.requestInterruption();
         m_threadloadwords.quit();
@@ -757,10 +756,11 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     pageJump(currpageno);
     donotneedreloaddoc = false;
     m_currentpageno = currpageno;
-    if (m_threadloaddoc.isRunning())
-        m_threadloaddoc.setRestart();
-    else
-        m_threadloaddoc.start();
+    loadPages();
+//    if (m_threadloaddoc.isRunning())
+//        m_threadloaddoc.setRestart();
+//    else
+//        m_threadloaddoc.start();
 }
 
 int DocummentBase::currentPageNo()
@@ -885,10 +885,11 @@ void DocummentBase::slot_vScrollBarValueChanged(int value)
             m_currentpageno = pageno;
             emit signal_pageChange(m_currentpageno);
         }
-        if (m_threadloaddoc.isRunning())
-            m_threadloaddoc.setRestart();
-        else
-            m_threadloaddoc.start();
+        loadPages();
+//        if (m_threadloaddoc.isRunning())
+//            m_threadloaddoc.setRestart();
+//        else
+//            m_threadloaddoc.start();
     }
 }
 
@@ -901,10 +902,11 @@ void DocummentBase::slot_hScrollBarValueChanged(int value)
             m_currentpageno = pageno;
             emit signal_pageChange(m_currentpageno);
         }
-        if (m_threadloaddoc.isRunning())
-            m_threadloaddoc.setRestart();
-        else
-            m_threadloaddoc.start();
+        loadPages();
+//        if (m_threadloaddoc.isRunning())
+//            m_threadloaddoc.setRestart();
+//        else
+//            m_threadloaddoc.start();
     }
 }
 
@@ -965,10 +967,11 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
     }
     pageJump(currpageno);
     donotneedreloaddoc = false;
-    if (m_threadloaddoc.isRunning())
-        m_threadloaddoc.setRestart();
-    else
-        m_threadloaddoc.start();
+    loadPages();
+//    if (m_threadloaddoc.isRunning())
+//        m_threadloaddoc.setRestart();
+//    else
+//        m_threadloaddoc.start();
     return true;;
 }
 
@@ -978,9 +981,9 @@ bool DocummentBase::loadPages()
         return false;
     qDebug() << "loadPages";
 
-    if (QThread::currentThread()->isInterruptionRequested()) {
-        return false;
-    }
+//    if (QThread::currentThread()->isInterruptionRequested()) {
+//        return false;
+//    }
     //    for (int i = 0; i < m_pages.size(); i++) {
     int pagenum  = m_currentpageno;
     if (pagenum >= 0 && pagenum < m_pages.size())
@@ -1101,10 +1104,11 @@ bool DocummentBase::openFile(QString filepath)
     setViewModeAndShow(m_viewmode);
     initConnect();
     donotneedreloaddoc = false;
-    if (m_threadloaddoc.isRunning())
-        m_threadloaddoc.setRestart();
-    else
-        m_threadloaddoc.start();
+    loadPages();
+//    if (m_threadloaddoc.isRunning())
+//        m_threadloaddoc.setRestart();
+//    else
+//        m_threadloaddoc.start();
     if (m_threadloadwords.isRunning())
         m_threadloadwords.setRestart();
     else

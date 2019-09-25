@@ -3,7 +3,27 @@
 #include "../pagebase.h"
 #include <QImage>
 #include <poppler-qt5.h>
+class ThreadRenderImage : public QThread
+{
+    Q_OBJECT
+public:
+    ThreadRenderImage();
+    void setPage(Poppler::Page *page, double xres, double yres, double width, double height);
+    void setRestart();
 
+protected:
+    virtual void run();
+
+signals:
+    void signal_RenderFinish(QImage);
+private:
+    Poppler::Page *m_page;
+    bool restart;
+    double m_width;
+    double m_height;
+    double m_xres;
+    double m_yres;
+};
 class PagePdf: public PageBase
 {
     Q_OBJECT
@@ -23,11 +43,15 @@ public:
     void removeAnnotation(const QString &struuid);
     bool annotationClicked(const QPoint &pos, QString &strtext);
     Poppler::Page *GetPage();
+    void clearThread();
+protected slots:
+    void slot_RenderFinish(QImage);
 private:
     void removeAnnotation(Poppler::Annotation *annotation);
     QString addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color);
     bool abstractTextPage(const QList<Poppler::TextBox *> &text);
     Poppler::Page *m_page;
+    ThreadRenderImage threadreander;
 };
 
 #endif // PAGEPDF_H

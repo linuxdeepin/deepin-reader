@@ -29,6 +29,7 @@ public:
     void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) override;
     void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1)override;
     bool loadDocumment(QString filepath) override;
+    void stopLoadPageThread() override;
 
 
 private:
