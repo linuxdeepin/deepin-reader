@@ -1,5 +1,7 @@
 #include "LightedWidget.h"
 #include <QButtonGroup>
+#include <DIconButton>
+#include "translator/MainShow.h"
 
 LightedWidget::LightedWidget(CustomWidget *parent)
     : CustomWidget ("LightedWidget", parent)
@@ -18,14 +20,17 @@ void LightedWidget::SlotOnBtnGroupClicked(int nId)
     }
 }
 
-int LightedWidget::dealWithData(const int &, const QString &)
+int LightedWidget::dealWithData(const int &msgType, const QString &)
 {
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
+
+    }
     return 0;
 }
 
 void LightedWidget::initWidget()
 {
-    DLabel *titleLabel = new DLabel(tr("high lighted"));
+    DLabel *titleLabel = new DLabel(MainShow::ADD_HIGH_LIGHTED);
 
     QHBoxLayout *topLayout = new QHBoxLayout;
     topLayout->setContentsMargins(0, 0, 0, 0);
@@ -41,7 +46,7 @@ void LightedWidget::initWidget()
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(SlotOnBtnGroupClicked(int)));
 
     for (int i = 0; i < 7; i ++ ) {
-        DPushButton *btn = new DPushButton(QString::number(i));
+        DIconButton *btn = new DIconButton(this);
         btn->setFixedSize(QSize(16, 16));
         btnGroup->addButton(btn, i);
         bottomLayout->addWidget(btn);

@@ -1,9 +1,10 @@
 #include "FileAttrWidget.h"
 #include <DWidgetUtil>
-#include <QDebug>
 #include "utils/utils.h"
 #include "docview/docummentproxy.h"
-#include <DWindowCloseButton>
+#include <DIconButton>
+#include "translator/Frame.h"
+#include "translator/MainShow.h"
 
 FileAttrWidget::FileAttrWidget(CustomWidget *parent)
     : CustomWidget("FileAttrWidget", parent)
@@ -120,25 +121,25 @@ void FileAttrWidget::initLabels()
 {
     QGridLayout *gridLayout = new QGridLayout;
 
-    createLabel(gridLayout, 0, tr("Title:"));
-    labelFilePath = createLabel(gridLayout, 1, tr("Location:"));
-    labelTheme = createLabel(gridLayout, 2, tr("Theme:"));
-    labelAuthor = createLabel(gridLayout, 3, tr("Author:"));
-    labelKeyWord = createLabel(gridLayout, 4, tr("Keywords:"));
-    labelProducer = createLabel(gridLayout, 5, tr("Producers:"));
-    labelCreator = createLabel(gridLayout, 6, tr("Creator:"));
-    labelCreateTime =  createLabel(gridLayout, 7, tr("Create Time:"));
-    labelUpdateTime = createLabel(gridLayout, 8, tr("Update Time:"));
-    labelFormat = createLabel(gridLayout, 9, tr("Format:"));
-    labelPageNumber = createLabel(gridLayout, 10, tr("Page's Number:"));
-    labelBetter = createLabel(gridLayout, 11, tr("Optimize:"));
-    labelSafe = createLabel(gridLayout, 12, tr("Security:"));
-    labelPaperSize = createLabel(gridLayout, 13, tr("Paper Size:"));
-    labelSize = createLabel(gridLayout, 14, tr("File Size:"));
+    createLabel(gridLayout, 0, MainShow::TITLE + ":");
+    labelFilePath = createLabel(gridLayout, 1, MainShow::LOCATION + ":");
+    labelTheme = createLabel(gridLayout, 2, MainShow::THEME + ":");
+    labelAuthor = createLabel(gridLayout, 3, MainShow::AUTHOR + ":");
+    labelKeyWord = createLabel(gridLayout, 4, MainShow::KEYWORDS + ":");
+    labelProducer = createLabel(gridLayout, 5, MainShow::PRODUCRES + ":");
+    labelCreator = createLabel(gridLayout, 6, MainShow::CREATOR + ":");
+    labelCreateTime =  createLabel(gridLayout, 7, MainShow::CREATE_TIME + ":");
+    labelUpdateTime = createLabel(gridLayout, 8, MainShow::UPDATE_TIME + ":");
+    labelFormat = createLabel(gridLayout, 9, MainShow::FORMAT + ":");
+    labelPageNumber = createLabel(gridLayout, 10, MainShow::PAGE_NUMBERS + ":");
+    labelBetter = createLabel(gridLayout, 11, MainShow::OPTIMIZE + ":");
+    labelSafe = createLabel(gridLayout, 12, MainShow::SECURITY + ":");
+    labelPaperSize = createLabel(gridLayout, 13, MainShow::PAPER_SIZE + ":");
+    labelSize = createLabel(gridLayout, 14, MainShow::FILE_SIZE + ":");
 
     DWidget *labelWidget = new DWidget(this);
     QVBoxLayout *vbLayout = new QVBoxLayout;
-    vbLayout->addWidget(new DLabel(tr("file basic info")));
+    vbLayout->addWidget(new DLabel(MainShow::FILE_BASIC_INFO));
     vbLayout->addItem(gridLayout);
     labelWidget->setLayout(vbLayout);
 
@@ -150,11 +151,11 @@ void FileAttrWidget::initCloseBtn()
     QHBoxLayout *layout = new QHBoxLayout;
     layout->addStretch(1);
 
-    DWindowCloseButton *closeBtn = new DWindowCloseButton(this);
-    closeBtn->setToolTip(tr("close"));
-    connect(closeBtn, &DPushButton::clicked, this, &FileAttrWidget::slotBtnCloseClicked);
+    DIconButton *closeButton = new DIconButton(DStyle::SP_CloseButton, this);
+    closeButton->setToolTip(Frame::BTN_CLOSE);
+    connect(closeButton, &DIconButton::clicked, this, &FileAttrWidget::slotBtnCloseClicked);
 
-    layout->addWidget(closeBtn);
+    layout->addWidget(closeButton);
 
     m_pVBoxLayout->addItem(layout);
 }
@@ -224,7 +225,10 @@ void FileAttrWidget::slotBtnCloseClicked()
     this->close();
 }
 
-int FileAttrWidget::dealWithData(const int &, const QString &)
+int FileAttrWidget::dealWithData(const int &msgType, const QString &)
 {
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
+
+    }
     return 0;
 }

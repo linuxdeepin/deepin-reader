@@ -24,10 +24,8 @@
 #define FINDWIDGET_H
 
 #include <QHBoxLayout>
-#include <DPushButton>
 #include <DLabel>
 #include <QPainter>
-#include <DImageButton>
 #include <QColor>
 
 #include "subjectObserver/CustomWidget.h"

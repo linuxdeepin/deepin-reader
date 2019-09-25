@@ -3,8 +3,8 @@
 
 #include <DLabel>
 #include <DSlider>
-#include <DImageButton>
 
+#include <QStringList>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QButtonGroup>
@@ -65,8 +65,6 @@ private slots:
 
 private:
     DLabel *m_pEnlargeLab = nullptr;
-    DLabel *m_pMinLabALab = nullptr;
-    DLabel *m_pMaxLabALab = nullptr;
     DSlider *m_pEnlargeSlider = nullptr;
 
     MenuLab *m_pDoubPageViewLb = nullptr;

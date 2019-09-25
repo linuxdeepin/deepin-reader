@@ -5,7 +5,6 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <DLabel>
-#include <DPushButton>
 
 
 /**

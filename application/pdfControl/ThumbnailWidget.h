@@ -95,6 +95,11 @@ public:
 
     void loadImage(const int &, QImage &);
 
+    inline bool isLoading()
+    {
+        return m_isLoading;
+    }
+
 protected:
     void initWidget() override;
 
@@ -124,6 +129,7 @@ private:
         m_totalPages = pages;
     }
 
+
 private slots:
     void slotShowSelectItem(QListWidgetItem *);
     void slotOpenFileOk();
@@ -144,6 +150,7 @@ private:
     int m_totalPages = -1; // 总页码数
     int m_preRow     = -1; // 前一次页码数
     ThreadLoadImage m_ThreadLoadImage;
+    bool m_isLoading = false;
 //    QTimer m_loadImageTimer;
 };
 

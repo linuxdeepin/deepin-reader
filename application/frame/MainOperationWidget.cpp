@@ -1,5 +1,5 @@
 #include "MainOperationWidget.h"
-//#include <DIconButton>
+#include <DIconButton>
 #include "translator/Frame.h"
 
 MainOperationWidget::MainOperationWidget(CustomWidget *parent):
@@ -24,7 +24,7 @@ void MainOperationWidget::initWidget()
     int nSize = btnList.size();
     for (int iLoop = 0; iLoop < nSize; iLoop++) {
         QString sBtn = btnList.at(iLoop);
-        DPushButton *btn = createBtn(sBtn);
+        DIconButton *btn = createBtn(sBtn);
         btnGroup->addButton(btn, iLoop);
         hboxLayout->addWidget(btn);
     }
@@ -34,15 +34,14 @@ void MainOperationWidget::initWidget()
     this->setLayout(hboxLayout);
 }
 
-DPushButton *MainOperationWidget::createBtn(const QString &btnName)
+DIconButton *MainOperationWidget::createBtn(const QString &btnName)
 {
     QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
-    QString hoverPic = PF::getQrcPath(btnName, ImageModule::g_hover_state);
-    QString pressPic = PF::getQrcPath(btnName, ImageModule::g_press_state);
-    QString checkedPic = PF::getQrcPath(btnName, ImageModule::g_checked_state);
 
-    //DIconButton *btn1 = new DIconButton;
-    DPushButton *btn = new DPushButton;
+    DIconButton *btn = new DIconButton(this);
+    btn->setIcon(QIcon(normalPic));
+    btn->setFixedSize(QSize(36, 36));
+    btn->setIconSize(QSize(36, 36));
     btn->setToolTip(btnName);
     btn->setCheckable(true);
     btn->setChecked(false);

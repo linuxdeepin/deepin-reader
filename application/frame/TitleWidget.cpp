@@ -1,6 +1,4 @@
 #include "TitleWidget.h"
-#include <QDebug>
-#include <DImageButton>
 #include <QSignalMapper>
 #include "translator/Frame.h"
 
@@ -143,14 +141,14 @@ void TitleWidget::openFileOk()
 void TitleWidget::setHandleShapeBtn(const QString &btnName)
 {
     QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
-    QString hoverPic = PF::getQrcPath(btnName, ImageModule::g_hover_state);
-    QString pressPic = PF::getQrcPath(btnName, ImageModule::g_press_state);
-    QString checkedPic = PF::getQrcPath(btnName, ImageModule::g_checked_state);
+//    QString hoverPic = PF::getQrcPath(btnName, ImageModule::g_hover_state);
+//    QString pressPic = PF::getQrcPath(btnName, ImageModule::g_press_state);
+//    QString checkedPic = PF::getQrcPath(btnName, ImageModule::g_checked_state);
 
-    m_pHandleShapeBtn->setNormalPic(normalPic);
-    m_pHandleShapeBtn->setHoverPic(hoverPic);
-    m_pHandleShapeBtn->setPressPic(pressPic);
-    m_pHandleShapeBtn->setCheckedPic(checkedPic);
+    m_pHandleShapeBtn->setIcon(QIcon(normalPic));
+//    m_pHandleShapeBtn->setHoverPic(hoverPic);
+//    m_pHandleShapeBtn->setPressPic(pressPic);
+//    m_pHandleShapeBtn->setCheckedPic(checkedPic);
 }
 
 void TitleWidget::slotFontWidgetHide()
@@ -174,6 +172,8 @@ void TitleWidget::initBtns()
     m_layout->addWidget(m_pSettingBtn);
 
     m_pHandleShapeBtn = createBtn(Frame::sDefaultShape);
+    m_pHandleShapeBtn->setFixedSize(QSize(42, 36));
+    m_pHandleShapeBtn->setIconSize(QSize(42, 36));
     connect(m_pHandleShapeBtn, SIGNAL(clicked()), this, SLOT(on_handleShapeBtn_clicked()));
     m_layout->addWidget(m_pHandleShapeBtn);
 
@@ -182,25 +182,27 @@ void TitleWidget::initBtns()
     m_layout->addWidget(m_pMagnifierBtn);
 }
 
-CustomImageButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
+DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 {
     QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
-    QString hoverPic = PF::getQrcPath(btnName, ImageModule::g_hover_state);
-    QString pressPic = PF::getQrcPath(btnName, ImageModule::g_press_state);
-    QString disablePic = PF::getQrcPath(btnName, ImageModule::g_disable_state);
+//    QString hoverPic = PF::getQrcPath(btnName, ImageModule::g_hover_state);
+//    QString pressPic = PF::getQrcPath(btnName, ImageModule::g_press_state);
+//    QString disablePic = PF::getQrcPath(btnName, ImageModule::g_disable_state);
 
-    CustomImageButton *btn = new  CustomImageButton;
-    btn->setNormalPic(normalPic);
-    btn->setHoverPic(hoverPic);
-    btn->setPressPic(pressPic);
+    DIconButton *btn = new  DIconButton(this);
+    btn->setIcon(QIcon(normalPic));
+    btn->setFixedSize(QSize(36, 36));
+    btn->setIconSize(QSize(36, 36));
+//    btn->setHoverPic(hoverPic);
+//    btn->setPressPic(pressPic);
 
     btn->setToolTip(btnName);
     btn->setCheckable(bCheckable);
     if (bCheckable) {
         btn->setChecked(false);
 
-        QString checkedPic = PF::getQrcPath(btnName, ImageModule::g_checked_state);
-        btn->setCheckedPic(checkedPic);
+//        QString checkedPic = PF::getQrcPath(btnName, ImageModule::g_checked_state);
+//        btn->setCheckedPic(checkedPic);
     }
 
     btn->setDisabled(true);
