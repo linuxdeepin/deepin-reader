@@ -78,19 +78,9 @@ void FontWidget::initWidget()
     t_pHLayout1->addWidget(m_pEnlargeLab);
     t_pHLayout1->setSpacing(1);
 
-    m_pMinLabALab = new DLabel;
-    m_pMinLabALab->setText(QString("A"));
-    m_pMinLabALab->setAlignment(Qt::AlignCenter);
-    ft.setPointSize(8);
-    m_pMinLabALab->setFont(ft);
-    m_pMinLabALab->setFixedSize(QSize(25, 25));
-
-    m_pMaxLabALab = new DLabel;
-    m_pMaxLabALab->setText(QString("A"));
-    m_pMaxLabALab->setAlignment(Qt::AlignCenter);
-    ft.setPointSize(12);
-    m_pMaxLabALab->setFont(ft);
-    m_pMaxLabALab->setFixedSize(QSize(30, 25));
+//    QStringList t_list;
+//    t_list << QString("0.5") << QString("0.75") << QString("1.0") << QString("1.25") << QString("1.5") << QString("1.75") << QString("2.0")
+//           << QString("2.25") << QString("2.5") << QString("2.75") << QString("3.0");
 
     m_pEnlargeSlider = new DSlider(Qt::Horizontal);
     m_pEnlargeSlider->setMinimum(50);
@@ -99,18 +89,19 @@ void FontWidget::initWidget()
     m_pEnlargeSlider->slider()->setSingleStep(25);
     m_pEnlargeSlider->setPageStep(25);
     m_pEnlargeSlider->slider()->setTickPosition(QSlider::TicksBelow);
-    m_pEnlargeSlider->setFixedSize(QSize(100, 25));
-//    m_pEnlargeSlider->setLeftIcon(QIcon(tr(":/resources/image/hover/close.svg")));
-//    m_pEnlargeSlider->setRightIcon(QIcon(tr(":/resources/image/press/close.svg")));
+    m_pEnlargeSlider->setFixedSize(QSize(175, 25));
+    m_pEnlargeSlider->setLeftIcon(QIcon(tr(":/resources/image/A_small.svg")));
+    m_pEnlargeSlider->setRightIcon(QIcon(tr(":/resources/image/A_big.svg")));
+//    m_pEnlargeSlider->setLeftTicks(t_list);
     connect(m_pEnlargeSlider, SIGNAL(valueChanged(int)), this, SLOT(slotSetChangeVal(int)));
 
-    t_pHLayout2->addWidget(m_pMinLabALab);
+    t_pHLayout2->addSpacing(1);
     t_pHLayout2->addWidget(m_pEnlargeSlider);
-    t_pHLayout2->addWidget(m_pMaxLabALab);
+    t_pHLayout2->addSpacing(1);
 
     m_pDoubPageViewLb = new MenuLab(this);
     m_pDoubPageViewLb->setText(PdfControl::DOUB_VIEW);
-    m_pDoubPageViewLb->setAlignment(Qt::AlignCenter);
+    m_pDoubPageViewLb->setAlignment(Qt::AlignLeft);
     ft.setPointSize(12);
     m_pDoubPageViewLb->setFont(ft);
     m_pDoubPageViewLb->setFixedSize(QSize(120, 25));
@@ -123,7 +114,7 @@ void FontWidget::initWidget()
 
     m_pSuitHLb = new MenuLab(this);
     m_pSuitHLb->setText(PdfControl::ADAP_HEIGHT);
-    m_pSuitHLb->setAlignment(Qt::AlignCenter);
+    m_pSuitHLb->setAlignment(Qt::AlignLeft);
     ft.setPointSize(12);
     m_pSuitHLb->setFont(ft);
     m_pSuitHLb->setFixedSize(QSize(120, 25));
@@ -135,7 +126,7 @@ void FontWidget::initWidget()
 
     m_pSuitWLb = new MenuLab(this);
     m_pSuitWLb->setText(PdfControl::ADAP_WIDTH);
-    m_pSuitWLb->setAlignment(Qt::AlignCenter);
+    m_pSuitWLb->setAlignment(Qt::AlignLeft);
     ft.setPointSize(12);
     m_pSuitWLb->setFont(ft);
     m_pSuitWLb->setFixedSize(QSize(120, 25));
@@ -147,7 +138,7 @@ void FontWidget::initWidget()
 
     m_pRotateLeftLb = new MenuLab(this);
     m_pRotateLeftLb->setText(PdfControl::ROTAT_TO_L);
-    m_pRotateLeftLb->setAlignment(Qt::AlignCenter);
+    m_pRotateLeftLb->setAlignment(Qt::AlignLeft);
     ft.setPointSize(12);
     m_pRotateLeftLb->setFont(ft);
     m_pRotateLeftLb->setFixedSize(QSize(120, 25));
@@ -159,7 +150,7 @@ void FontWidget::initWidget()
 
     m_pRotateRightLb = new MenuLab(this);
     m_pRotateRightLb->setText(PdfControl::ROTAT_TO_R);
-    m_pRotateRightLb->setAlignment(Qt::AlignCenter);
+    m_pRotateRightLb->setAlignment(Qt::AlignLeft);
     ft.setPointSize(12);
     m_pRotateRightLb->setFont(ft);
     m_pRotateRightLb->setFixedSize(QSize(120, 25));
@@ -183,7 +174,7 @@ void FontWidget::initWidget()
 
 void FontWidget::paintEvent(QPaintEvent *)
 {
-    QRectF rectangle(14.0, 12.0, this->width() - 30, this->height() - 20);
+    QRectF rectangle(0.0, 12.0, this->width(), this->height() - 12);
 
     QPainter painter(this);
     painter.setRenderHint( QPainter::Antialiasing, true );

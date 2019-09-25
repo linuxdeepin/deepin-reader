@@ -7,5 +7,7 @@
         <file>resources/image/close.svg</file>
         <file>resources/image/note.png</file>
         <file>resources/image/delete.png</file>
+        <file>resources/image/A_big.svg</file>
+        <file>resources/image/A_small.svg</file>
     </qresource>
 </RCC>

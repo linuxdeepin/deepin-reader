@@ -138,6 +138,8 @@ bool ThumbnailWidget::fillContantToList()
         addThumbnailItem(idex);
     }
 
+    m_isLoading = false;
+
     return true;
 }
 
@@ -174,6 +176,8 @@ void ThumbnailWidget::slotShowSelectItem(QListWidgetItem *item)
 
 void ThumbnailWidget::slotOpenFileOk()
 {
+    m_isLoading = true;
+
     m_pSonWidgetContantLabel = nullptr;
     m_pSonWidgetPageLabel = nullptr;
     m_pThumbnailItemWidget = nullptr;
@@ -246,6 +250,15 @@ void ThreadLoadImage::stopThreadRun()
 void ThreadLoadImage::run()
 {
     while (m_isLoaded) {
+
+        if (!m_pThumbnailWidget) {
+            continue;
+        }
+
+        if (m_pThumbnailWidget->isLoading()) {
+            continue;
+        }
+
         if (m_nStartPage < 0) {
             m_nStartPage = 0;
         }
