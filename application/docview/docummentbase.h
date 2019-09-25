@@ -26,6 +26,7 @@ enum ViewMode_EM {
 class DocummentBase;
 class ThreadLoadDoc : public QThread
 {
+    Q_OBJECT
 public:
     ThreadLoadDoc();
     void setDoc(DocummentBase *doc);
@@ -68,6 +69,9 @@ public:
     void setMagnifierScale(double scale);
     void setMagnifierRingWidth(int ringWidth);
     void setMagnifierColor(QColor color);
+    void stopShow();
+    void startShow();
+    bool showState();
 protected:
     void paintEvent(QPaintEvent *event) override;
 private:
@@ -77,6 +81,7 @@ private:
     QPoint m_magnifierpoint;
     QPixmap m_magnifierpixmap;
     double m_magnifierscale;
+    bool bStartShow;
 };
 
 class DocummentBase: public DScrollArea
@@ -85,7 +90,7 @@ class DocummentBase: public DScrollArea
 public:
     DocummentBase(DWidget *parent = nullptr);
     ~DocummentBase();
-    virtual bool openFile(QString filepath)
+    virtual bool loadDocumment(QString filepath)
     {
         return false;
     }
@@ -175,6 +180,8 @@ public:
     {
         if (m_magnifierwidget) {
             m_magnifierwidget->setPixmap(QPixmap());
+            m_magnifierwidget->stopShow();
+            m_magnifierpage = -1;
             m_magnifierwidget->hide();
         }
     }
@@ -192,8 +199,7 @@ public:
         return m_wordsbload;
     }
 
-
-
+    bool openFile(QString filepath);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
     bool mouseSelectText(QPoint start, QPoint stop);
     void mouseSelectTextClear();
@@ -216,10 +222,12 @@ signals:
 protected slots:
     void slot_vScrollBarValueChanged(int value);
     void slot_hScrollBarValueChanged(int value);
+    void slot_MagnifierPixmapCacheLoaded(int pageno);
 protected:
     int pointInWhichPage(QPoint &qpoint);
     void showSinglePage();
     void showFacingPage();
+    void initConnect();
     QList<PageBase *> m_pages;
     QList<DWidget *>m_widgets;
     DWidget m_widget;
@@ -241,6 +249,8 @@ protected:
     bool donotneedreloaddoc;
     DWidget *pblankwidget;
     bool m_wordsbload;
+    int m_magnifierpage;
+    QPoint m_magnifierpoint;
 };
 
 #endif // DOCUMMENTBASE_H

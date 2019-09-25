@@ -26,7 +26,6 @@ public:
     bool annotationClicked(const QPoint &pos, QString &strtext);
 private:
     DocummentDJVU *m_parent;
-    int m_pageno;
     int m_resolution;
     void removeAnnotation(Poppler::Annotation *annotation);
     QString addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color);

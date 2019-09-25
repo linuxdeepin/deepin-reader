@@ -21,10 +21,11 @@ void PagePdf::removeAnnotation(Poppler::Annotation *annotation)
     m_page->removeAnnotation(annotation);
 }
 
-void PagePdf::setPage(Poppler::Page *page)
+void PagePdf::setPage(Poppler::Page *page, int pageno)
 {
 //    qDebug() << "----setpage";
     m_page = page;
+    m_pageno = pageno;
     QSizeF qsize = m_page->pageSizeF();
     m_imagewidth = qsize.width();
     m_imageheight = qsize.height();

@@ -12,7 +12,8 @@ class DocumenTiff: public DocummentBase
     friend class PageTiff;
 public:
     DocumenTiff(DWidget *parent = nullptr);
-    bool openFile(QString filepath) override;
+//    bool openFile(QString filepath) override;
+    bool loadDocumment(QString filepath) override;
 //    bool loadPages() override;
 
     TIFF *document;

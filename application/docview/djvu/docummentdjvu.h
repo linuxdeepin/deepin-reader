@@ -11,9 +11,11 @@ class DocummentDJVU: public DocummentBase
 public:
     DocummentDJVU(DWidget *parent = nullptr);
     ~DocummentDJVU();
-    bool openFile(QString filepath) override;
+//    bool openFile(QString filepath) override;
     bool bDocummentExist() override;
     bool getImage(int pagenum, QImage &image, double width, double height) override;
+    bool loadDocumment(QString filepath) override;
+
 //    bool loadPages() override;
 //    bool loadWords() override;
     void docBasicInfo(stFileInfo &info) override;

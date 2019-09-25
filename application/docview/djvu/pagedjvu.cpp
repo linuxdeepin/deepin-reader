@@ -149,8 +149,7 @@ void clearMessageQueue(ddjvu_context_t *context, bool wait)
 PageDJVU::PageDJVU(QWidget *parent)
     : PageBase(parent),
       m_parent((DocummentDJVU *)parent),
-      m_resolution(0),
-      m_pageno(-1)
+      m_resolution(0)
 {
 }
 

@@ -9,7 +9,7 @@ class DocummentPDF: public DocummentBase
 public:
     DocummentPDF(DWidget *parent = nullptr);
     ~DocummentPDF();
-    bool openFile(QString filepath) override;
+//    bool openFile(QString filepath) override;
     bool bDocummentExist() override;
     bool getImage(int pagenum, QImage &image, double width, double height) override;
     void docBasicInfo(stFileInfo &info) override;
@@ -28,6 +28,7 @@ public:
     void findPrev()override;
     void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) override;
     void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1)override;
+    bool loadDocumment(QString filepath) override;
 
 
 private:

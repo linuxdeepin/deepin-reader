@@ -16,13 +16,13 @@ public:
     bool loadWords() override;
     bool loadLinks() override;
 //    void appendWord(stWord word);
-    void setPage(Poppler::Page *page);
+    void setPage(Poppler::Page *page, int pageno);
     //Annotation
     QString addAnnotation(QPoint screenPos);
     QString removeAnnotation(const QPoint &pos);
     void removeAnnotation(const QString &struuid);
     bool annotationClicked(const QPoint &pos, QString &strtext);
-    Poppler::Page * GetPage();
+    Poppler::Page *GetPage();
 private:
     void removeAnnotation(Poppler::Annotation *annotation);
     QString addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color);

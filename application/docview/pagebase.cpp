@@ -48,7 +48,10 @@ PageBase::PageBase(DWidget *parent)
       paintrects(),
       m_links(),
       m_words(),
-      m_rotate(RotateType_0)
+      m_rotate(RotateType_0),
+      m_magnifierwidth (0),
+      m_magnifierheight (0),
+      m_pageno(-1)
 {
     setMouseTracking(true);
     setAlignment(Qt::AlignCenter);
@@ -387,12 +390,6 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, dou
     if (!m_magnifierpixmap.isNull()) {
         qpixmap = m_magnifierpixmap;
     } else {
-//        if (getImage(image, width, height)) {
-//            qpixmap = QPixmap::fromImage(image);
-//            m_magnifierpixmap = qpixmap;
-//        } else {
-//            return false;
-//        }
         loadMagnifierCacheThreadStart(width, height);
         return false;
     }
@@ -435,7 +432,8 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, dou
 
 void PageBase::loadMagnifierCacheThreadStart(double width, double height)
 {
-    if (m_magnifierpixmap.isNull() && !loadmagnifiercachethread.isRunning()) {
+    if ((m_magnifierwidth != width || m_magnifierheight != height || m_magnifierpixmap.isNull()) &&
+            !loadmagnifiercachethread.isRunning()) {
         loadmagnifiercachethread.setPage(this, width, height);
         loadmagnifiercachethread.start();
     }
@@ -448,10 +446,54 @@ void PageBase::loadMagnifierPixmapCache(double width, double height)
     if (getImage(image, width, height)) {
         qpixmap = QPixmap::fromImage(image);
         m_magnifierpixmap = qpixmap;
+        m_magnifierwidth = width;
+        m_magnifierheight = height;
+        emit signal_MagnifierPixmapCacheLoaded(m_pageno);
     }
 }
 
 void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
+{
+    m_scale = scale;
+    m_rotate = rotate;
+    switch (rotate) {
+    case RotateType_90:
+        resize(m_imageheight * scale, m_imagewidth * scale);
+//        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
+//        if (m_imageheight * scale < this->width())
+//        setMaximumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
+//        else
+//        setMinimumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
+        break;
+    case RotateType_180:
+        resize(m_imagewidth * scale, m_imageheight * scale);
+//        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
+//        if (m_imagewidth * scale < this->width())
+//        setMaximumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
+//        else
+//        setMinimumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
+        break;
+    case RotateType_270:
+        resize(m_imageheight * scale, m_imagewidth * scale);
+//        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
+//        if (m_imageheight * scale < this->width())
+//        setMaximumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
+//        else
+//        setMinimumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
+        break;
+    default:
+        resize(m_imagewidth * scale, m_imageheight * scale);
+//        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
+//        if (m_imagewidth * scale < this->width())
+//        setMaximumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
+//        else
+//        setMinimumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
+        break;
+    }
+    update();
+}
+
+void PageBase::setReSize(double scale, RotateType_EM rotate)
 {
     m_scale = scale;
     m_rotate = rotate;

@@ -115,6 +115,9 @@ public:
     void setScaleAndRotate(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     Page::Link *ifMouseMoveOverLink(const QPoint point);
     bool getSelectTextString(QString &st);
+    void setReSize(double scale = 1, RotateType_EM rotate = RotateType_Normal);
+signals:
+    void signal_MagnifierPixmapCacheLoaded(int);
 protected:
     void paintEvent(QPaintEvent *event) override;
 protected:
@@ -133,6 +136,9 @@ protected:
     RotateType_EM m_rotate;
     double m_scale;
     ThreadLoadMagnifierCache loadmagnifiercachethread;
+    double m_magnifierwidth;
+    double m_magnifierheight;
+    int m_pageno;
 };
 
 #endif // PAGEBASE_H

@@ -71,7 +71,24 @@ MagnifierWidget::MagnifierWidget(DWidget *parent): DWidget(parent)
     m_magnifierringwidth = 10;
     m_magnifierradius = 100;
     m_magnifierscale = 3;
+    m_magnifierpixmap = QPixmap();
+    bStartShow = false;
     setMouseTracking(true);
+}
+
+void MagnifierWidget::stopShow()
+{
+    bStartShow = false;
+}
+
+void MagnifierWidget::startShow()
+{
+    bStartShow = true;
+}
+
+bool MagnifierWidget::showState()
+{
+    return bStartShow;
 }
 
 void MagnifierWidget::paintEvent(QPaintEvent *event)
@@ -79,7 +96,7 @@ void MagnifierWidget::paintEvent(QPaintEvent *event)
     DWidget::paintEvent(event);
     QPainter qpainter(this);
 //    qpainter.save();
-    if (m_magnifierpixmap.isNull())
+    if (!bStartShow || m_magnifierpixmap.isNull())
         return;
     qpainter.setBrush(m_magnifiercolor);
     qpainter.setPen(m_magnifiercolor);
@@ -166,10 +183,11 @@ void MagnifierWidget::setMagnifierColor(QColor color)
 DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
     , m_bModified(false), m_bslidemodel(false), m_slidepageno(-1),
     m_currentpageno(-1),
-    m_scale(1),
+    m_scale(1.0),
     m_rotate(RotateType_0),
     donotneedreloaddoc(false),
-    m_wordsbload(false)
+    m_wordsbload(false),
+    m_magnifierpage(-1)
 {
     m_currentpageno = 0;
     m_threadloaddoc.setDoc(this);
@@ -186,6 +204,13 @@ DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
     pslideanimationlabel->setGeometry(-200, -200, 100, 100);
     delete parent->layout();
     QGridLayout *gridlyout = new QGridLayout(parent);
+
+//    QPalette ppal(parent->palette());
+
+//    //设置背景灰色
+//    ppal.setColor(QPalette::Background, Qt::gray);
+//    parent->setAutoFillBackground(true);
+//    parent->setPalette(ppal);
     parent->setLayout(gridlyout);
     gridlyout->setMargin(0);
     gridlyout->setSpacing(0);
@@ -473,12 +498,20 @@ int DocummentBase::pointInWhichPage(QPoint &qpoint)
     return pagenum;
 }
 
+void DocummentBase::slot_MagnifierPixmapCacheLoaded(int pageno)
+{
+    if (pageno == m_lastmagnifierpagenum) {
+        showMagnifier(m_magnifierpoint);
+    }
+}
+
 bool DocummentBase::showMagnifier(QPoint point)
 {
     if (!bDocummentExist() || !m_magnifierwidget) {
         return false;
     }
     QPoint qpoint = point;
+    m_magnifierpoint = point;
     int pagenum = -1;
     int x_offset = 0;
     int y_offset = 0;
@@ -508,20 +541,58 @@ bool DocummentBase::showMagnifier(QPoint point)
                     ppage->clearMagnifierPixmap();
                 }
             }
-            for (int i = pagenum - 3; i < pagenum + 4; i++) {
-                if (i > 0 && i < m_pages.size()) {
-                    PageBase *ppage = m_pages.at(i);
-                    ppage->loadMagnifierCacheThreadStart(ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale());
-                }
+            PageBase *ppage = nullptr;
+            int ipageno = pagenum;
+            if (ipageno >= 0 && ipageno < m_pages.size()) {
+                ppage = m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale());
             }
+            ipageno = pagenum + 1;
+            if (ipageno >= 0 && ipageno < m_pages.size()) {
+                ppage = m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale());
+            }
+            ipageno = pagenum - 1;
+            if (ipageno >= 0 && ipageno < m_pages.size()) {
+                ppage = m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale());
+            }
+            ipageno = pagenum + 2;
+            if (ipageno >= 0 && ipageno < m_pages.size()) {
+                ppage = m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale());
+            }
+            ipageno = pagenum - 2;
+            if (ipageno >= 0 && ipageno < m_pages.size()) {
+                ppage = m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale());
+            }
+            ipageno = pagenum + 3;
+            if (ipageno >= 0 && ipageno < m_pages.size()) {
+                ppage = m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale());
+            }
+            ipageno = pagenum - 3;
+            if (ipageno >= 0 && ipageno < m_pages.size()) {
+                ppage = m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale());
+            }
+//            for (int i = pagenum - 3; i < pagenum + 4; i++) {
+//                if (i > 0 && i < m_pages.size()) {
+//                    PageBase *ppage = m_pages.at(i);
+//                    ppage->loadMagnifierCacheThreadStart(ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale());
+//                }
+//            }
         }
         m_lastmagnifierpagenum = pagenum;
         PageBase *ppage = m_pages.at(pagenum);
         QPixmap pixmap;
+        m_magnifierpage = pagenum;
         if (ppage ->getMagnifierPixmap(pixmap, qpoint, m_magnifierwidget->getMagnifierRadius(), ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale())) {
             m_magnifierwidget->setPixmap(pixmap);
 
             m_magnifierwidget->setPoint(gpoint);
+            m_magnifierwidget->startShow();
             m_magnifierwidget->show();
             m_magnifierwidget->update();
         }
@@ -533,6 +604,8 @@ bool DocummentBase::showMagnifier(QPoint point)
         m_magnifierwidget->show();
         m_magnifierwidget->update();
     }
+    if (!m_magnifierwidget->showState())
+        return false;
     int radius = m_magnifierwidget->getMagnifierRadius() - m_magnifierwidget->getMagnifierRingWidth();
     int bigcirclex = gpoint.x() - radius;
     int bigcircley = gpoint.y() - radius;
@@ -551,7 +624,7 @@ bool DocummentBase::showMagnifier(QPoint point)
         if (scrollBar_X)
             scrollBar_X->setValue(scrollBar_X->value() + bigcirclex - (m_magnifierwidget->width() - radius * 2));
     }
-    return false;
+    return true;
 }
 
 bool DocummentBase::pageJump(int pagenum)
@@ -645,10 +718,10 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
         m_rotate = rotate;
 
     donotneedreloaddoc = true;
+
     for (int i = 0; i < m_pages.size(); i++) {
         m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
     }
-
     int rex = m_vboxLayout.margin(), rey = m_vboxLayout.margin();
 
     switch (m_viewmode) {
@@ -666,17 +739,21 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
             } else {
                 reheight = m_pages.at(i * 2)->height();
             }
-            m_widgets.at(i)->setGeometry(rex, rey, m_widgets.at(i)->layout()->margin() * 2 + m_widgets.at(i)->layout()->spacing() + m_pages.at(i * 2)->width() + m_pages.at(i * 2 + 1)->width(), m_widgets.at(i)->layout()->margin() * 2 + reheight);
+            m_widgets.at(i)->setGeometry((width() - rex * 2 - m_pages.at(i)->width() * 2) / 2, rey, m_widgets.at(i)->layout()->margin() * 2 + m_widgets.at(i)->layout()->spacing() + m_pages.at(i * 2)->width() + m_pages.at(i * 2 + 1)->width(), m_widgets.at(i)->layout()->margin() * 2 + reheight);
             rey += m_widgets.at(i)->layout()->margin() * 2 + reheight + m_vboxLayout.spacing();
         }
         if (m_widgets.size() % 2) {
             int reheight = m_pages.at(m_pages.size() - 1)->height();
-            m_widgets.at(m_widgets.size() / 2)->setGeometry(rex, rey, m_widgets.at(m_widgets.size() / 2)->layout()->margin() * 2 + m_widgets.at(m_widgets.size() / 2)->layout()->spacing() + m_pages.at(m_pages.size() - 1)->width() * 2, m_widgets.at(m_widgets.size() / 2)->layout()->margin() * 2 + reheight);
+            m_widgets.at(m_widgets.size() / 2)->setGeometry((width() - rex * 2 - m_pages.at(m_widgets.size() / 2)->width() * 2) / 2, rey, m_widgets.at(m_widgets.size() / 2)->layout()->margin() * 2 + m_widgets.at(m_widgets.size() / 2)->layout()->spacing() + m_pages.at(m_pages.size() - 1)->width() * 2, m_widgets.at(m_widgets.size() / 2)->layout()->margin() * 2 + reheight);
         }
         break;
     default:
         break;
     }
+
+//    for (int i = 0; i < m_pages.size(); i++) {
+//        m_pages.at(i)->setReSize(m_scale, m_rotate);
+//    }
     pageJump(currpageno);
     donotneedreloaddoc = false;
     m_currentpageno = currpageno;
@@ -989,4 +1066,49 @@ double DocummentBase::adaptHeightAndShow(double height)
     qDebug() << "adaptHeightAndShow scale:" << scale;
     scaleAndShow(scale, RotateType_Normal);
     return scale;
+}
+
+
+void DocummentBase::initConnect()
+{
+    for (int i = 0; i < m_pages.size(); i++) {
+        connect(m_pages.at(i), SIGNAL(signal_MagnifierPixmapCacheLoaded(int)), this, SLOT(slot_MagnifierPixmapCacheLoaded(int)));
+    }
+}
+
+bool DocummentBase::openFile(QString filepath)
+{
+    donotneedreloaddoc = true;
+    if (!loadDocumment(filepath))
+        return false;
+
+    m_widgets.clear();
+    qDebug() << "numPages :" << m_pages.size();
+    for (int i = 0; i < m_pages.size(); i++) {
+        DWidget *qwidget = new DWidget(this);
+        QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
+        qhblayout->setAlignment(qwidget, Qt::AlignCenter);
+        qwidget->setLayout(qhblayout);
+        m_vboxLayout.addWidget(qwidget);
+        m_vboxLayout.setAlignment(&m_widget, Qt::AlignCenter);
+        qwidget->setMouseTracking(true);
+        m_widgets.append(qwidget);
+    }
+
+    for (int i = 0; i < m_pages.size(); i++) {
+        m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
+    }
+    setViewModeAndShow(m_viewmode);
+    initConnect();
+    donotneedreloaddoc = false;
+    if (m_threadloaddoc.isRunning())
+        m_threadloaddoc.setRestart();
+    else
+        m_threadloaddoc.start();
+    if (m_threadloadwords.isRunning())
+        m_threadloadwords.setRestart();
+    else
+        m_threadloadwords.start();
+
+    return true;
 }

@@ -80,7 +80,7 @@ DocumenTiff::DocumenTiff(DWidget *parent): DocummentBase(parent), document()
 
 }
 
-bool DocumenTiff::openFile(QString filepath)
+bool DocumenTiff::loadDocumment(QString filepath)
 {
     m_pages.clear();
     QFile *qfile = new QFile( filepath );
@@ -94,36 +94,60 @@ bool DocumenTiff::openFile(QString filepath)
                                tiffMapProc, tiffUnmapProc );
     if (document) {
         tdir_t dirs = TIFFNumberOfDirectories(document);
-        tdir_t realdirs = 0;
-        uint32 width = 0;
-        uint32 height = 0;
-        const QSizeF dpi(76, 76);
         for (int i = 0; i < dirs; i++) {
-            DWidget *qwidget = new DWidget(this);
-            QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
-            qhblayout->setAlignment(qwidget, Qt::AlignCenter);
-            qwidget->setLayout(qhblayout);
-            m_vboxLayout.addWidget(qwidget);
-            m_vboxLayout.setAlignment(&m_widget, Qt::AlignCenter);
-            qwidget->setMouseTracking(true);
-            m_widgets.append(qwidget);
-
             PageTiff *page = new PageTiff(this);
             page->setPage(i, document);
             m_pages.append((PageBase *)page);
         }
     }
-    for (int i = 0; i < m_pages.size(); i++) {
-        m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
-    }
-    setViewModeAndShow(m_viewmode);
-    if (m_threadloaddoc.isRunning())
-        m_threadloaddoc.setRestart();
-    else
-        m_threadloaddoc.start();
-
-    return  true;
+    return true;
 }
+
+//bool DocumenTiff::openFile(QString filepath)
+//{
+//    m_pages.clear();
+//    QFile *qfile = new QFile( filepath );
+//    if (!qfile->open( QIODevice::ReadOnly)) return  false;
+
+//    QIODevice *dev = qfile;
+//    QByteArray data = QFile::encodeName( QFileInfo( *qfile ).fileName());
+//    document = TIFFClientOpen( data.constData(), "r", dev,
+//                               tiffReadProc, tiffWriteProc, tiffSeekProc,
+//                               tiffCloseProc, tiffSizeProc,
+//                               tiffMapProc, tiffUnmapProc );
+//    if (document) {
+//        tdir_t dirs = TIFFNumberOfDirectories(document);
+//        tdir_t realdirs = 0;
+//        uint32 width = 0;
+//        uint32 height = 0;
+//        const QSizeF dpi(76, 76);
+//        for (int i = 0; i < dirs; i++) {
+//            DWidget *qwidget = new DWidget(this);
+//            QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
+//            qhblayout->setAlignment(qwidget, Qt::AlignCenter);
+//            qwidget->setLayout(qhblayout);
+//            m_vboxLayout.addWidget(qwidget);
+//            m_vboxLayout.setAlignment(&m_widget, Qt::AlignCenter);
+//            qwidget->setMouseTracking(true);
+//            m_widgets.append(qwidget);
+
+//            PageTiff *page = new PageTiff(this);
+//            page->setPage(i, document);
+//            m_pages.append((PageBase *)page);
+//        }
+//    }
+//    for (int i = 0; i < m_pages.size(); i++) {
+//        m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
+//    }
+//    setViewModeAndShow(m_viewmode);
+//    initConnect();
+//    if (m_threadloaddoc.isRunning())
+//        m_threadloaddoc.setRestart();
+//    else
+//        m_threadloaddoc.start();
+
+//    return  true;
+//}
 
 //bool DocumenTiff::loadPages()
 //{

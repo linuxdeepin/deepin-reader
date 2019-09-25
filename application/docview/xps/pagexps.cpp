@@ -9,10 +9,11 @@ PageXPS::PageXPS(QWidget *parent)
 {
 }
 
-void PageXPS::setPage(XpsPage *page)
+void PageXPS::setPage(XpsPage *page, int pageno)
 {
 //    qDebug() << "----setpage";
     m_page = page;
+    m_pageno = pageno;
     m_imagewidth = page->size().width();
     m_imageheight = page->size().height();
     qDebug() << "----setpage m_imagewidth:" << m_imagewidth << " m_imageheight:" << m_imageheight;

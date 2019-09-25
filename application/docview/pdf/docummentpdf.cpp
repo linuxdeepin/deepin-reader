@@ -21,47 +21,58 @@ DocummentPDF::~DocummentPDF()
     document = nullptr;
 }
 
-bool DocummentPDF::openFile(QString filepath)
+bool DocummentPDF::loadDocumment(QString filepath)
 {
     document = Poppler::Document::load(filepath);
     if (nullptr == document || document->numPages() <= 0)
         return false;
     document->setRenderHint(Poppler::Document::TextAntialiasing);
-    donotneedreloaddoc = true;
     m_pages.clear();
-    m_widgets.clear();
-    qDebug() << "numPages :" << document->numPages();
     for (int i = 0; i < document->numPages(); i++) {
-        DWidget *qwidget = new DWidget(this);
-        QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
-        qhblayout->setAlignment(qwidget, Qt::AlignCenter);
-        qwidget->setLayout(qhblayout);
-        m_vboxLayout.addWidget(qwidget);
-        m_vboxLayout.setAlignment(&m_widget, Qt::AlignCenter);
-        qwidget->setMouseTracking(true);
-        m_widgets.append(qwidget);
-
         PagePdf *page = new PagePdf(this);
-        page->setPage(document->page(i));
+        page->setPage(document->page(i), i);
         m_pages.append((PageBase *)page);
     }
     setBasicInfo(filepath);
-    for (int i = 0; i < m_pages.size(); i++) {
-        m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
-    }
-    setViewModeAndShow(m_viewmode);
-    donotneedreloaddoc = false;
-    if (m_threadloaddoc.isRunning())
-        m_threadloaddoc.setRestart();
-    else
-        m_threadloaddoc.start();
-    if (m_threadloadwords.isRunning())
-        m_threadloadwords.setRestart();
-    else
-        m_threadloadwords.start();
-
     return true;
 }
+
+//bool DocummentPDF::openFile(QString filepath)
+//{
+//    donotneedreloaddoc = true;
+//    loadDocumment(filepath);
+
+//    m_widgets.clear();
+//    qDebug() << "numPages :" << m_pages.size();
+//    for (int i = 0; i < m_pages.size(); i++) {
+//        DWidget *qwidget = new DWidget(this);
+//        QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
+//        qhblayout->setAlignment(qwidget, Qt::AlignCenter);
+//        qwidget->setLayout(qhblayout);
+//        m_vboxLayout.addWidget(qwidget);
+//        m_vboxLayout.setAlignment(&m_widget, Qt::AlignCenter);
+//        qwidget->setMouseTracking(true);
+//        m_widgets.append(qwidget);
+
+//    }
+//    for (int i = 0; i < m_pages.size(); i++) {
+//        m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
+//    }
+//    setBasicInfo(filepath);
+//    setViewModeAndShow(m_viewmode);
+//    initConnect();
+//    donotneedreloaddoc = false;
+//    if (m_threadloaddoc.isRunning())
+//        m_threadloaddoc.setRestart();
+//    else
+//        m_threadloaddoc.start();
+//    if (m_threadloadwords.isRunning())
+//        m_threadloadwords.setRestart();
+//    else
+//        m_threadloadwords.start();
+
+//    return true;
+//}
 
 void DocummentPDF::removeAllAnnotation()
 {

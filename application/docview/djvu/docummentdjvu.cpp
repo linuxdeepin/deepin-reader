@@ -41,7 +41,8 @@ DocummentDJVU::~DocummentDJVU()
     ddjvu_format_release(m_format);
 }
 
-bool DocummentDJVU::openFile(QString filepath)
+
+bool DocummentDJVU::loadDocumment(QString filepath)
 {
     m_context = ddjvu_context_create("deepin_reader");
 
@@ -83,37 +84,45 @@ bool DocummentDJVU::openFile(QString filepath)
     m_pages.clear();
     qDebug() << "djvu numPages :" << ddjvu_document_get_pagenum(document);
     for (int i = 0; i < ddjvu_document_get_pagenum(document); i++) {
-        DWidget *qwidget = new DWidget(this);
-        QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
-        qhblayout->setAlignment(qwidget, Qt::AlignCenter);
-        qwidget->setLayout(qhblayout);
-        m_vboxLayout.addWidget(qwidget);
-        //        m_vboxLayout.addWidget(m_pages.at(i));
-        m_vboxLayout.setAlignment(&m_widget, Qt::AlignCenter);
-        qwidget->setMouseTracking(true);
-        m_widgets.append(qwidget);
-
         PageDJVU *page = new PageDJVU(this);
         page->setPage(i);
         m_pages.append((PageBase *)page);
     }
-
-    for (int i = 0; i < m_pages.size(); i++) {
-        m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
-    }
-    setViewModeAndShow(m_viewmode);
-    donotneedreloaddoc = false;
-    if (m_threadloaddoc.isRunning())
-        m_threadloaddoc.setRestart();
-    else
-        m_threadloaddoc.start();
-    if (m_threadloadwords.isRunning())
-        m_threadloadwords.setRestart();
-    else
-        m_threadloadwords.start();
-
+    setBasicInfo(filepath);
     return true;
 }
+
+
+//bool DocummentDJVU::openFile(QString filepath)
+//{
+//    DWidget *qwidget = new DWidget(this);
+//    QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
+//    qhblayout->setAlignment(qwidget, Qt::AlignCenter);
+//    qwidget->setLayout(qhblayout);
+//    m_vboxLayout.addWidget(qwidget);
+//    //        m_vboxLayout.addWidget(m_pages.at(i));
+//    m_vboxLayout.setAlignment(&m_widget, Qt::AlignCenter);
+//    qwidget->setMouseTracking(true);
+//    m_widgets.append(qwidget);
+
+
+//    for (int i = 0; i < m_pages.size(); i++) {
+//        m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
+//    }
+//    setViewModeAndShow(m_viewmode);
+//    initConnect();
+//    donotneedreloaddoc = false;
+//    if (m_threadloaddoc.isRunning())
+//        m_threadloaddoc.setRestart();
+//    else
+//        m_threadloaddoc.start();
+//    if (m_threadloadwords.isRunning())
+//        m_threadloadwords.setRestart();
+//    else
+//        m_threadloadwords.start();
+
+//    return true;
+//}
 
 //bool DocummentDJVU::loadPages()
 //{

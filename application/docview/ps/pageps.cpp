@@ -10,10 +10,11 @@ PagePS::PagePS(QWidget *parent)
 {
 }
 
-void PagePS::setPage(SpectrePage *page, SpectreRenderContext *renderContext)
+void PagePS::setPage(SpectrePage *page, SpectreRenderContext *renderContext, int pageno)
 {
 //    qDebug() << "----setpage";
     m_page = page;
+    m_pageno = pageno;
     m_renderContext = renderContext;
     int w, h;
     spectre_page_get_size(m_page, &w, &h);

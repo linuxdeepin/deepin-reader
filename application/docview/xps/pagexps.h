@@ -15,7 +15,7 @@ public:
     bool getSlideImage(QImage &image, double &width, double &height) override;
     bool loadWords() override;
     bool loadLinks() override;
-    void setPage(XpsPage *page);
+    void setPage(XpsPage *page, int pageno);
 private:
     XpsPage *m_page;
 };

@@ -24,7 +24,7 @@ DocummentPS::~DocummentPS()
     document = 0;
 }
 
-bool DocummentPS::openFile(QString filepath)
+bool DocummentPS::loadDocumment(QString filepath)
 {
 
 
@@ -48,37 +48,45 @@ bool DocummentPS::openFile(QString filepath)
     m_pages.clear();
     qDebug() << "djvu numPages :" << spectre_document_get_n_pages(document);
     for (int i = 0; i < spectre_document_get_n_pages(document); i++) {
-        DWidget *qwidget = new DWidget(this);
-        QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
-        qhblayout->setAlignment(qwidget, Qt::AlignCenter);
-        qwidget->setLayout(qhblayout);
-        m_vboxLayout.addWidget(qwidget);
-        //        m_vboxLayout.addWidget(m_pages.at(i));
-        m_vboxLayout.setAlignment(&m_widget, Qt::AlignCenter);
-        qwidget->setMouseTracking(true);
-        m_widgets.append(qwidget);
-
         PagePS *page = new PagePS(this);
-        page->setPage(spectre_document_get_page(document, i), m_renderContext);
+        page->setPage(spectre_document_get_page(document, i), m_renderContext, i);
         m_pages.append((PageBase *)page);
     }
-
-    for (int i = 0; i < m_pages.size(); i++) {
-        m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
-    }
-    setViewModeAndShow(m_viewmode);
-    donotneedreloaddoc = false;
-    if (m_threadloaddoc.isRunning())
-        m_threadloaddoc.setRestart();
-    else
-        m_threadloaddoc.start();
-    if (m_threadloadwords.isRunning())
-        m_threadloadwords.setRestart();
-    else
-        m_threadloadwords.start();
-
+    setBasicInfo(filepath);
     return true;
 }
+
+//bool DocummentPS::openFile(QString filepath)
+//{
+//    DWidget *qwidget = new DWidget(this);
+//    QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
+//    qhblayout->setAlignment(qwidget, Qt::AlignCenter);
+//    qwidget->setLayout(qhblayout);
+//    m_vboxLayout.addWidget(qwidget);
+//    //        m_vboxLayout.addWidget(m_pages.at(i));
+//    m_vboxLayout.setAlignment(&m_widget, Qt::AlignCenter);
+//    qwidget->setMouseTracking(true);
+//    m_widgets.append(qwidget);
+
+
+
+//    for (int i = 0; i < m_pages.size(); i++) {
+//        m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
+//    }
+//    setViewModeAndShow(m_viewmode);
+//    initConnect();
+//    donotneedreloaddoc = false;
+//    if (m_threadloaddoc.isRunning())
+//        m_threadloaddoc.setRestart();
+//    else
+//        m_threadloaddoc.start();
+//    if (m_threadloadwords.isRunning())
+//        m_threadloadwords.setRestart();
+//    else
+//        m_threadloadwords.start();
+
+//    return true;
+//}
 
 //bool DocummentPS::loadPages()
 //{
@@ -128,7 +136,7 @@ void DocummentPS::setBasicInfo(const QString &filepath)
     m_fileinfo.strAuther = info.owner();
     m_fileinfo.strFilepath = info.filePath();
     if (document) {
-        int major, minor;       
+        int major, minor;
         m_fileinfo.strFormat.arg("PDF v.%1.%2", major, minor);
 
     }

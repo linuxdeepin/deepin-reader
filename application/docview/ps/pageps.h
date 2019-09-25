@@ -16,7 +16,7 @@ public:
     bool getSlideImage(QImage &image, double &width, double &height) override;
     bool loadWords() override;
     bool loadLinks() override;
-    void setPage(SpectrePage *page, SpectreRenderContext *renderContext);
+    void setPage(SpectrePage *page, SpectreRenderContext *renderContext, int pageno);
 private:
     SpectrePage *m_page;
     SpectreRenderContext *m_renderContext;

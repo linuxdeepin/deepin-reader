@@ -20,12 +20,11 @@ DocummentXPS::~DocummentXPS()
     delete m_xpsFile;
 }
 
-bool DocummentXPS::openFile(QString filepath)
+bool DocummentXPS::loadDocumment(QString filepath)
 {
 
     m_xpsFile->loadDocument( filepath );
 
-    int pagesVectorOffset = 0;
 
     qDebug() << "numDocuments:" << m_xpsFile->numDocuments();
     if (m_xpsFile->numDocuments() < 1)
@@ -37,38 +36,66 @@ bool DocummentXPS::openFile(QString filepath)
         XpsDocument *document = m_xpsFile->document( docNum );
         qDebug() << "xps numPages :" << document->numPages();
         for (int i = 0; i < document->numPages(); i++) {
-            DWidget *qwidget = new DWidget(this);
-            QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
-            qhblayout->setAlignment(qwidget, Qt::AlignCenter);
-            qwidget->setLayout(qhblayout);
-            m_vboxLayout.addWidget(qwidget);
-            //        m_vboxLayout.addWidget(m_pages.at(i));
-            m_vboxLayout.setAlignment(&m_widget, Qt::AlignCenter);
-            qwidget->setMouseTracking(true);
-            m_widgets.append(qwidget);
-
             PageXPS *page = new PageXPS(this);
-            page->setPage(document->page(i));
+            page->setPage(document->page(i), i);
             m_pages.append((PageBase *)page);
         }
     }
 
-    for (int i = 0; i < m_pages.size(); i++) {
-        m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
-    }
-    setViewModeAndShow(m_viewmode);
-    donotneedreloaddoc = false;
-    if (m_threadloaddoc.isRunning())
-        m_threadloaddoc.setRestart();
-    else
-        m_threadloaddoc.start();
-    if (m_threadloadwords.isRunning())
-        m_threadloadwords.setRestart();
-    else
-        m_threadloadwords.start();
-
+    setBasicInfo(filepath);
     return true;
 }
+
+//bool DocummentXPS::openFile(QString filepath)
+//{
+
+//    m_xpsFile->loadDocument( filepath );
+
+//    int pagesVectorOffset = 0;
+
+//    qDebug() << "numDocuments:" << m_xpsFile->numDocuments();
+//    if (m_xpsFile->numDocuments() < 1)
+//        return false;
+//    setBasicInfo(filepath);
+//    donotneedreloaddoc = true;
+//    m_pages.clear();
+//    for (int docNum = 0; docNum < m_xpsFile->numDocuments(); ++docNum ) {
+//        XpsDocument *document = m_xpsFile->document( docNum );
+//        qDebug() << "xps numPages :" << document->numPages();
+//        for (int i = 0; i < document->numPages(); i++) {
+//            DWidget *qwidget = new DWidget(this);
+//            QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
+//            qhblayout->setAlignment(qwidget, Qt::AlignCenter);
+//            qwidget->setLayout(qhblayout);
+//            m_vboxLayout.addWidget(qwidget);
+//            //        m_vboxLayout.addWidget(m_pages.at(i));
+//            m_vboxLayout.setAlignment(&m_widget, Qt::AlignCenter);
+//            qwidget->setMouseTracking(true);
+//            m_widgets.append(qwidget);
+
+//            PageXPS *page = new PageXPS(this);
+//            page->setPage(document->page(i), i);
+//            m_pages.append((PageBase *)page);
+//        }
+//    }
+
+//    for (int i = 0; i < m_pages.size(); i++) {
+//        m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
+//    }
+//    setViewModeAndShow(m_viewmode);
+//    initConnect();
+//    donotneedreloaddoc = false;
+//    if (m_threadloaddoc.isRunning())
+//        m_threadloaddoc.setRestart();
+//    else
+//        m_threadloaddoc.start();
+//    if (m_threadloadwords.isRunning())
+//        m_threadloadwords.setRestart();
+//    else
+//        m_threadloadwords.start();
+
+//    return true;
+//}
 
 //bool DocummentXPS::loadPages()
 //{
