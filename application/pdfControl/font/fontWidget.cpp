@@ -141,7 +141,7 @@ void FontWidget::initWidget()
     m_pRotateLeftLb->setAlignment(Qt::AlignLeft);
     ft.setPointSize(12);
     m_pRotateLeftLb->setFont(ft);
-    m_pRotateLeftLb->setFixedSize(QSize(120, 25));
+    m_pRotateLeftLb->setFixedSize(QSize(140, 25));
     connect(m_pRotateLeftLb, SIGNAL(clicked()), SLOT(slotSetRotateLeftCheckIcon()));
     m_pRotateLeftLab = new DLabel;
     m_pRotateLeftLab->setFixedSize(QSize(30, 25));
@@ -153,7 +153,7 @@ void FontWidget::initWidget()
     m_pRotateRightLb->setAlignment(Qt::AlignLeft);
     ft.setPointSize(12);
     m_pRotateRightLb->setFont(ft);
-    m_pRotateRightLb->setFixedSize(QSize(120, 25));
+    m_pRotateRightLb->setFixedSize(QSize(140, 25));
     connect(m_pRotateRightLb, SIGNAL(clicked()), SLOT(slotSetRotateRightCheckIcon()));
     m_pRotateRightLab = new DLabel;
     m_pRotateRightLab->setFixedSize(QSize(30, 25));
@@ -185,8 +185,8 @@ void FontWidget::paintEvent(QPaintEvent *)
 
     QPointF points[3] = {
         QPointF(10 + w - 10, 0),
-        QPointF(10 + w - 15, 12),
-        QPointF(10 + w - 5, 12),
+        QPointF(10 + w - 18, 12),
+        QPointF(10 + w - 2, 12),
     };
 
     QPen pen;
@@ -201,20 +201,20 @@ void FontWidget::paintEvent(QPaintEvent *)
     painter.drawLine(points[0], points[2]);
 
     QPointF points1[] = {
-        QPointF(15, 76),
-        QPointF(w * 2 - 17, 76),
+        QPointF(0, 76),
+        QPointF(w * 2, 76),
 
-        QPointF(40, 108),
-        QPointF(w * 2 - 17, 108),
+        QPointF(20, 108),
+        QPointF(w * 2, 108),
 
-        QPointF(40, 140),
-        QPointF(w * 2 - 17, 140),
+        QPointF(20, 140),
+        QPointF(w * 2, 140),
 
-        QPointF(15, 175),
-        QPointF(w * 2 - 17, 175),
+        QPointF(0, 175),
+        QPointF(w * 2, 175),
 
-        QPointF(40, 208),
-        QPointF(w * 2 - 17, 208),
+        QPointF(20, 208),
+        QPointF(w * 2, 208),
     };
 
     QPen pen2;
