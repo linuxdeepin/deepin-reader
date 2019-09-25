@@ -12,6 +12,7 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
 
     initWidget();
 
+    connect(&m_ThreadLoadImage, SIGNAL(signal_loadImage(int, QImage)), this, SLOT(slot_loadImage(int, QImage)));
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigJumpIndexPage(int)), this, SLOT(slotJumpIndexPage(int)));
     connect(m_pThumbnailListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
@@ -246,6 +247,12 @@ void ThumbnailWidget::slotLoadThumbnailImage()
     }
 }
 
+
+void ThumbnailWidget::slot_loadImage(int page, QImage image)
+{
+    loadImage(page, image);
+}
+
 /*******************************ThreadLoadImage*************************************************/
 
 ThreadLoadImage::ThreadLoadImage()
@@ -288,7 +295,8 @@ void ThreadLoadImage::run()
             bool bl = DocummentProxy::instance()->getImage(page, image, 113, 143);
 
             if (bl) {
-                m_pThumbnailWidget->loadImage(page, image);
+//                m_pThumbnailWidget->loadImage(page, image);
+                emit signal_loadImage(page, image);
             }
         }
         m_nStartPage += FIRST_LOAD_PAGES;

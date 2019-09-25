@@ -24,6 +24,7 @@ class ThumbnailWidget;
 
 class ThreadLoadImage : public QThread
 {
+    Q_OBJECT
 public:
     ThreadLoadImage();
 
@@ -61,6 +62,8 @@ public:
         m_nEndPage = 19;   // 加载图片结束页码
     }
 
+signals:
+    void signal_loadImage(int, QImage);
 protected:
     void run() override;
 
@@ -89,6 +92,8 @@ signals:
     void sigJumpIndexPage(int);
     void sigCloseFile();
 
+private slots:
+    void slot_loadImage(int, QImage);
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
