@@ -67,6 +67,7 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
         if (QMessageBox::Yes == DMessageBox::question(nullptr, Frame::sSaveFile, Frame::sSaveFileTitle)) {
             m_pDocummentProxy->save(m_szFilePath, true);
         }
+        sendMsg(MSG_CLOSE_FILE);
         m_pDocummentProxy->closeFile();
     }
     QStringList fileList = filePaths.split("@#&wzx",  QString::SkipEmptyParts);

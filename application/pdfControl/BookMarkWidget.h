@@ -64,6 +64,7 @@ signals:
     void sigOpenFileOk();
     void sigDeleteBookItem();
     void sigAddBookMark();
+    void sigCloseFile();
 
 private slots:
     void slotShowSelectItem(QListWidgetItem *);
@@ -71,6 +72,7 @@ private slots:
     void slotOpenFileOk();
     void slotDocFilePageChanged(int);
     void slotDeleteBookItem();
+    void slotCloseFile();
 
 protected:
     void initWidget() override;

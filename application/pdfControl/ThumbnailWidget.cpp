@@ -15,12 +15,17 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigJumpIndexPage(int)), this, SLOT(slotJumpIndexPage(int)));
     connect(m_pThumbnailListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
+    connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
 }
 
 ThumbnailWidget::~ThumbnailWidget()
 {
     if (!m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();
+    }
+
+    if (m_pThumbnailListWidget) {
+        m_pThumbnailListWidget->clear();
     }
 }
 
@@ -34,6 +39,8 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContant)
         return ConstantMsg::g_effective_res;
     } else if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
         emit sigOpenFileOk();
+    } else if (MSG_CLOSE_FILE == msgType) {
+        emit sigCloseFile();
     }
 
     return 0;
@@ -128,6 +135,13 @@ void ThumbnailWidget::slotFileViewToListPage(int page)
 
     if (m_pPageWidget) {
         m_pPageWidget->setPageValue(page);
+    }
+}
+
+void ThumbnailWidget::slotCloseFile()
+{
+    if (m_ThreadLoadImage.isRunning()) {
+        m_ThreadLoadImage.stopThreadRun();
     }
 }
 

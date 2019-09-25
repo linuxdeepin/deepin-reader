@@ -55,6 +55,7 @@ enum MSG_LEFT_SLIDER_TYPE {
     MSG_NOTE_DLTNOTEITEM,               //  删除注释子节点 消息
     MSG_SWITCHLEFTWIDGET,               //  切换左侧窗口(缩略图、书签、注释) 消息
     MSG_BOOKMARK_STATE,                 //  文件页码书签状态
+    MSG_CLOSE_FILE                      //  关闭当前文档　消息
 };
 
 //  字体菜单 消息

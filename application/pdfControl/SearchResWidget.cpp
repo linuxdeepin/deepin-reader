@@ -54,6 +54,17 @@ void SearchResWidget::slotClearWidget()
     m_pNotesList->clear();
 }
 
+void SearchResWidget::slotCloseFile()
+{
+    if (m_loadSearchResThread.isRunning()) {
+        m_loadSearchResThread.stopThread();
+    }
+
+    if (m_pNotesList) {
+        m_pNotesList->clear();
+    }
+}
+
 void SearchResWidget::initWidget()
 {
     QVBoxLayout *m_pVLayout  = new QVBoxLayout;
@@ -74,6 +85,7 @@ void SearchResWidget::initConnections()
     connect(this, SIGNAL(sigClearWidget()), this, SLOT(slotClearWidget()));
     connect(this, SIGNAL(sigFlushSearchWidget(QVariant)),
             this, SLOT(slotFlushSearchList(QVariant)));
+    connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
 }
 
 void SearchResWidget::addNotesItem(const int &page, const QString &text, const int &resultNum)
@@ -123,6 +135,11 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigClearWidget();
         DocummentProxy::instance()->clearsearch();
         return ConstantMsg::g_effective_res;
+    }
+
+    //  关闭w文件通知消息
+    if (MSG_CLOSE_FILE == msgType) {
+        emit sigCloseFile();
     }
 
     return 0;
@@ -182,6 +199,10 @@ void LoadSearchResThread::run()
         int page = -1;
 
         for (int index = m_nStartIndex; index <= m_nEndIndex; index++) {
+
+            if (!m_isRunning) {
+                break;
+            }
 
             if (!m_pSearchResWidget) {
                 continue;

@@ -64,10 +64,12 @@ public:
 signals:
     void sigFlushSearchWidget(QVariant);
     void sigClearWidget();
+    void sigCloseFile();
 
 private slots:
     void slotFlushSearchList(QVariant);
     void slotClearWidget();
+    void slotCloseFile();
 
 protected:
     void initWidget() override;

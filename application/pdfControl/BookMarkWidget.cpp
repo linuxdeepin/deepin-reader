@@ -140,6 +140,17 @@ void BookMarkWidget::slotDeleteBookItem()
     }
 }
 
+void BookMarkWidget::slotCloseFile()
+{
+    if (m_loadBookMarkThread.isRunning()) {
+        m_loadBookMarkThread.stopThreadRun();
+    }
+
+    if (m_pBookMarkListWidget) {
+        m_pBookMarkListWidget->clear();
+    }
+}
+
 /**
  * @brief BookMarkWidget::initWidget
  * 初始化书签窗体
@@ -188,6 +199,7 @@ void BookMarkWidget::initConnection()
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigDeleteBookItem()), this, SLOT(slotDeleteBookItem()));
     connect(m_pBookMarkListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
+    connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
 }
 
 void BookMarkWidget::loadBookMarkItem(const int &page)
@@ -254,6 +266,11 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &)
         emit sigOpenFileOk();
     }
 
+    //  关闭w文件通知消息
+    if (MSG_CLOSE_FILE == msgType) {
+        emit sigCloseFile();
+    }
+
     return 0;
 }
 
@@ -312,6 +329,9 @@ void LoadBookMarkThread::run()
         for (int index = m_nStartIndex; index <= m_nEndIndex; index++) {
             QImage image;
             int page = -1;
+
+            if (!m_isRunning)
+                break;
 
             if (!m_pBookMarkWidget) {
                 continue;

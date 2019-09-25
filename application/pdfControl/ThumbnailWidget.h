@@ -87,6 +87,7 @@ signals:
     void sigOpenFileOk();
     void sigSelectIndexPage(const int &);
     void sigJumpIndexPage(int);
+    void sigCloseFile();
 
 public:
     // IObserver interface
@@ -136,6 +137,7 @@ private slots:
     void slotJumpIndexPage(int);
     void slotLoadThumbnailImage();
     void slotFileViewToListPage(int);
+    void slotCloseFile();
 
 private:
     DListWidget *m_pThumbnailListWidget = nullptr;
