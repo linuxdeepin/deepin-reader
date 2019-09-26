@@ -341,6 +341,15 @@ double DocummentProxy::adaptHeightAndShow(double height)
     return m_documment->adaptHeightAndShow(height);
 }
 
+bool DocummentProxy::annotationClicked(const QPoint &pos, QString &strtext)
+{
+    if(m_documment)
+    {
+        return m_documment->annotationClicked(pos,strtext);
+    }
+    return  false;
+}
+
 bool DocummentProxy::closeFile()
 {
     if (!m_documment)

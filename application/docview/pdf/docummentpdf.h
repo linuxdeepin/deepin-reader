@@ -22,7 +22,7 @@ public:
     QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow) override;
     void search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color = Qt::yellow) override;
     void clearSearch() override;
-    bool annotationClicked(const QPoint &pos, QString &strtext);
+    bool annotationClicked(const QPoint &pos, QString &strtext) override;
     void title(QString &title) override;
     void findNext()override;
     void findPrev()override;

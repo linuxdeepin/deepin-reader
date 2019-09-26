@@ -74,6 +74,7 @@ public:
     void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1);
     double adaptWidthAndShow(double width);
     double adaptHeightAndShow(double height);
+     bool annotationClicked(const QPoint &pos, QString &strtext);
 signals:
     void signal_pageChange(int);
 private slots:
