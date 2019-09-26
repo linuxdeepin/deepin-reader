@@ -4,7 +4,6 @@
 #include "CustomListWidget.h"
 #include <DPushButton>
 
-#include <QListWidgetItem>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QMap>
@@ -28,7 +27,6 @@ class LoadBookMarkThread : public QThread
     Q_OBJECT
 public:
     LoadBookMarkThread(QObject *parent = nullptr);
-
 
 signals:
     void signal_loadImage(int, QImage);

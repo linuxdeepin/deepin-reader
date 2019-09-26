@@ -94,15 +94,13 @@ void SearchResWidget::initConnections()
 void SearchResWidget::addNotesItem(const int &page, const QString &text, const int &resultNum)
 {
     NotesItemWidget *itemWidget = new NotesItemWidget;
-
-    itemWidget->setLabelPage(PdfControl::PAGE_PREF + QString("%1").arg(page + 1));
+    itemWidget->setLabelPage(page, 1);
     itemWidget->setTextEditText(text);
-    itemWidget->setPage(page);
     itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + PdfControl::SEARCH_RES_CONT));
     itemWidget->setMinimumSize(QSize(250, 150));
 
     QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
-    item->setFlags(Qt::ItemIsSelectable);
+    item->setFlags(Qt::NoItemFlags);
     item->setSizeHint(QSize(250, 150));
 
     m_pNotesList->addItem(item);
@@ -153,7 +151,7 @@ int SearchResWidget::getSearchPage(const int &index)
     QListWidgetItem *pItem = m_pNotesList->item(index);
     m_pSearchItemWidget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
     if (m_pSearchItemWidget) {
-        return m_pSearchItemWidget->page();
+        return m_pSearchItemWidget->nPageIndex();
     }
 
     return -1;

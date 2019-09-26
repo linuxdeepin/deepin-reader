@@ -25,11 +25,12 @@ BookMarkWidget::~BookMarkWidget()
  */
 void BookMarkWidget::slotAddBookMark()
 {
-    int page = m_nCurrentPage;
 
-    if (m_pAllPageList.contains(page)) {
+    if (m_pAllPageList.contains(m_nCurrentPage)) {
         return;
     }
+
+    int page = m_nCurrentPage;
 
     if (m_pAllPageList.size() == 0) {
         //bool rl =
@@ -106,7 +107,7 @@ void BookMarkWidget::slotDeleteBookItem()
         QListWidgetItem *pItem = m_pBookMarkListWidget->item(iLoop);
         BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
         if (t_widget) {
-            int nPageNumber = t_widget->PageNumber();
+            int nPageNumber = t_widget->nPageIndex();
             if (nPageNumber == m_nCurrentPage) {
                 m_pAllPageList.removeOne(m_nCurrentPage);
 
@@ -199,13 +200,12 @@ void BookMarkWidget::addBookMarkItem(const int &page)
     if (rl) {
         BookMarkItemWidget *t_widget = new BookMarkItemWidget;
         t_widget->setLabelImage(t_image);
-        t_widget->setPageNumber(page);
+        t_widget->setLabelPage(page, 1);
         t_widget->setMinimumSize(QSize(250, 150));
 
         QListWidgetItem *item = new QListWidgetItem(m_pBookMarkListWidget);
         item->setFlags(Qt::NoItemFlags);
         item->setSizeHint(QSize(250, 150));
-        item->setData(Qt::UserRole + 1, page);
 
         m_pBookMarkListWidget->addItem(item);
         m_pBookMarkListWidget->setItemWidget(item, t_widget);
@@ -251,7 +251,7 @@ int BookMarkWidget::getBookMarkPage(const int &index)
     QListWidgetItem *pItem = m_pBookMarkListWidget->item(index);
     m_pItemWidget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
     if (m_pItemWidget) {
-        int page = m_pItemWidget->PageNumber();
+        int page = m_pItemWidget->nPageIndex();
         if (m_pAllPageList.contains(page)) {
             return page;
         }

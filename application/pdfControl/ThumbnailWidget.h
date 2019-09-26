@@ -6,7 +6,6 @@
 
 #include <QPalette>
 #include <QDebug>
-#include <QListWidgetItem>
 #include <QVBoxLayout>
 #include <QImage>
 #include <QThread>

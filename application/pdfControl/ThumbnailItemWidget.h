@@ -27,8 +27,6 @@ protected:
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
-    void setPageLabelText(const QString &);
-
     void setBSelect(const bool &paint);
 
 protected:
@@ -36,7 +34,6 @@ protected:
     void initWidget() override;
 
 private:
-    DLabel *m_pPageLabel = nullptr;
     bool m_bPaint = false;
 };
 

@@ -18,18 +18,13 @@ void ThumbnailItemWidget::paintEvent(QPaintEvent *event)
     }
 
     m_pPicture->setPalette(p);
-    m_pPageLabel->setPalette(p);
+    m_pPage->setPalette(p);
     CustomWidget::paintEvent(event);
 }
 
 int ThumbnailItemWidget::dealWithData(const int &, const QString &)
 {
     return 0;
-}
-
-void ThumbnailItemWidget::setPageLabelText(const QString &text)
-{
-    m_pPageLabel->setText(text);
 }
 
 void ThumbnailItemWidget::setBSelect(const bool &paint)
@@ -40,18 +35,18 @@ void ThumbnailItemWidget::setBSelect(const bool &paint)
 void ThumbnailItemWidget::initWidget()
 {
     m_pPicture = new CustomLabel(this);
-    m_pPageLabel = new DLabel();
+    m_pPage = new DLabel();
 
-    m_pPageLabel->setFixedSize(QSize(120, 30));
+    m_pPage->setFixedSize(QSize(120, 30));
     m_pPicture->setFixedSize(QSize(120, 150));
     m_pPicture->setAlignment(Qt::AlignCenter);
-    m_pPageLabel->setAlignment(Qt::AlignCenter);
+    m_pPage->setAlignment(Qt::AlignCenter);
 
     auto t_vLayout = new QVBoxLayout;
     auto t_hLayout = new QHBoxLayout;
 
     t_vLayout->addWidget(m_pPicture);
-    t_vLayout->addWidget(m_pPageLabel);
+    t_vLayout->addWidget(m_pPage);
 
     t_hLayout->setContentsMargins(1, 0, 1, 0);
     t_hLayout->addSpacing(1);

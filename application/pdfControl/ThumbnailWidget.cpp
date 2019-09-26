@@ -63,7 +63,7 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
             m_pOldThumbnailItemWidget->setBSelect(true);
         }
 
-        int nJumpPage = item->data(Qt::UserRole + 1).toInt();
+        int nJumpPage = m_pOldThumbnailItemWidget->nPageIndex();
         m_pPageWidget->setCurrentPageValue(nJumpPage);
     }
 }
@@ -72,12 +72,11 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 void ThumbnailWidget::addThumbnailItem(const int &iIndex)
 {
     ThumbnailItemWidget *widget = new ThumbnailItemWidget;
-    widget->setPageLabelText(QString("%1").arg(iIndex + 1));
+    widget->setLabelPage(iIndex);
     widget->setMinimumSize(QSize(250, 250));
 
     QListWidgetItem *item = new QListWidgetItem(m_pThumbnailListWidget);
     item->setFlags(Qt::NoItemFlags);
-    item->setData(Qt::UserRole + 1, iIndex);
     item->setSizeHint(QSize(250, 250));
 
     m_pThumbnailListWidget->addItem(item);

@@ -32,24 +32,12 @@ public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
 
-    inline DLabel *pageLabel() const
-    {
-        return m_pPage;
-    }
-
-    int PageNumber() const;
-    void setPageNumber(int nPageNumber);
-
 private slots:
     void slotDltBookMark();
     void slotShowContextMenu(const QPoint &);
 
 protected:
     void initWidget() override;
-
-private:
-    int     m_nPageNumber = -1;
-    DLabel *m_pPage = nullptr;
 };
 
 #endif // BOOKMARKITEMWIDGET_H

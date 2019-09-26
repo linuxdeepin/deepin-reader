@@ -18,7 +18,7 @@ int BookMarkItemWidget::dealWithData(const int &, const QString &)
 
 void BookMarkItemWidget::slotDltBookMark()
 {
-    sendMsg(MSG_BOOKMARK_DLTITEM, QString::number(m_nPageNumber));
+    sendMsg(MSG_BOOKMARK_DLTITEM, QString::number(m_nPageIndex));
 }
 
 void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
@@ -43,19 +43,5 @@ void BookMarkItemWidget::initWidget()
     m_pHLayout->addWidget(m_pPage);
 
     this->setLayout(m_pHLayout);
-}
-
-int BookMarkItemWidget::PageNumber() const
-{
-    return m_nPageNumber;
-}
-
-void BookMarkItemWidget::setPageNumber(int nPageNumber)
-{
-    m_nPageNumber = nPageNumber;
-
-    QString sPageText = PdfControl::PAGE_PREF + QString("%1").arg( nPageNumber + 1);
-
-    m_pPage->setText(sPageText);
 }
 

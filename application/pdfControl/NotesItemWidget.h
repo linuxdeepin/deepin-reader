@@ -28,19 +28,8 @@ public:
     NotesItemWidget(CustomItemWidget *parent = nullptr);
 
 public:
-    void setLabelPage(const QString &);
     void setTextEditText(const QString &);
     void setSerchResultText(const QString &);
-
-    inline int page() const
-    {
-        return m_page;
-    }
-
-    inline void setPage(const int &page)
-    {
-        m_page = page;
-    }
 
     inline void setNoteUUid(const QString &uuid)
     {
@@ -60,11 +49,9 @@ public:
     int dealWithData(const int &, const QString &) override;
 
 private:
-    DLabel *m_pPage = nullptr;
     DLabel *m_pSearchResultNum = nullptr;
     DTextEdit *m_pTextEdit = nullptr;
 
-    int m_page = -1;      // 当前注释所在页
     QString m_strUUid;    // 当前注释唯一标识
 };
 

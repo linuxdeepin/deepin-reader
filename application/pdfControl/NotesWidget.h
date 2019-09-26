@@ -1,14 +1,12 @@
 #ifndef NOTESFORM_H
 #define NOTESFORM_H
 
-#include <DListWidget>
-
-#include <QListWidgetItem>
 #include <QVBoxLayout>
 
 #include "NotesItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
 #include "docview/docummentproxy.h"
+#include "CustomListWidget.h"
 
 /**
  * @brief The ThumbnailItemWidget class
@@ -35,12 +33,11 @@ private:
     void addNotesItem(const QImage &image, const int &page, const QString &text);
 
 private:
-    DListWidget *m_pNotesList = nullptr;
+    CustomListWidget *m_pNotesList = nullptr;
     void fillContantToList();
 
 private:
     QVBoxLayout *m_pVLayout = nullptr;
-    QListWidgetItem *m_pCurrentItem = nullptr;
 
     int m_nUUid = 1;
 

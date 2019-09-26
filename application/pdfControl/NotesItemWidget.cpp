@@ -14,14 +14,6 @@ NotesItemWidget::NotesItemWidget(CustomItemWidget *parent) :
     initWidget();
 }
 
-
-void NotesItemWidget::setLabelPage(const QString &value)
-{
-    if (m_pPage) {
-        m_pPage->setText(value);
-    }
-}
-
 void NotesItemWidget::setTextEditText(const QString &contant)
 {
     if (m_pTextEdit) {

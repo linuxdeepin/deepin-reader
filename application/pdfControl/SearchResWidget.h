@@ -1,9 +1,6 @@
 #ifndef SEARCHRESWIDGET_H
 #define SEARCHRESWIDGET_H
 
-#include <DListWidget>
-
-#include <QListWidgetItem>
 #include <QVBoxLayout>
 #include <QThread>
 

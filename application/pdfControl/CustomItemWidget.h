@@ -14,9 +14,15 @@ public:
 
 public:
     void setLabelImage(const QImage &);
+    void setLabelPage(const int &, const int &nShowPage = 0);
+
+    int nPageIndex() const;
 
 protected:
     CustomLabel *m_pPicture = nullptr;
+    DLabel      *m_pPage = nullptr;
+
+    int         m_nPageIndex  = -1; //  所对应的页码
 };
 
 #endif // CUSTOMITEMWIDGET_H
