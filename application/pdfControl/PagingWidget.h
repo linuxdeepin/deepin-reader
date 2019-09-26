@@ -15,6 +15,7 @@
 
 /**
  * @brief The ThumbnailItemWidget class
+ * @brief   显示的数字 比 实际的文档 多 1
  * @brief   跳转页窗体
  */
 
@@ -27,33 +28,22 @@ class PagingWidget : public CustomWidget
 public:
     PagingWidget(CustomWidget *parent = nullptr);
 
+signals:
+    void sigJumpToSpecifiedPage(const int &);
+
 public:
     void setTotalPages(int pages);
     void setCurrentPageValue(const int &);
-    void setPageValue(const int &);
-
-signals:
-    void sigJumpToIndexPage(const int &);
 
 private slots:
     void slotPrePage();
     void slotNextPage();
+    void slotJumpToSpecifiedPage(const int &);
 
 protected:
     void initWidget() override;
     bool eventFilter(QObject *watched, QEvent *event) override;
 
-private:
-    void setCurrentPage(const int &);
-
-    inline void setPreRowVal(const int &val)
-    {
-        m_preRow = val;
-    }
-    inline int getPreRowVal() const
-    {
-        return m_preRow;
-    }
 
 private:
     DLabel *m_pTotalPagesLab = nullptr;

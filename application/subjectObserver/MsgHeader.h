@@ -46,8 +46,7 @@ enum MSG_MENU_TYPE {
 
 //  左侧 侧边栏 消息
 enum MSG_LEFT_SLIDER_TYPE {
-    MSG_THUMBNAIL_JUMPTOPAGE = 100,     //  跳转到指定页 消息
-    MSG_BOOKMARK_DLTITEM,               //  删除指定书签 消息
+    MSG_BOOKMARK_DLTITEM = 100,         //  删除指定书签 消息
     MSG_BOOKMARK_ADDITEM,               //  添加指定书签 消息
     MSG_NOTE_COPYCHOICECONTANT,         //  拷贝指定注释内容 消息
     MSG_NOTE_ADDCONTANT,                //  添加注释内容 消息

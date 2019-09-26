@@ -46,7 +46,6 @@ void SearchResWidget::slotFlushSearchList(QVariant value)
     m_loadSearchResThread.start();
 
     sendMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
-
 }
 
 void SearchResWidget::slotClearWidget()
@@ -65,23 +64,27 @@ void SearchResWidget::slotCloseFile()
     }
 }
 
+void SearchResWidget::slot_loadImage(int page, QImage image)
+{
+    m_pNotesList->setItemImage(page, image);
+}
+
 void SearchResWidget::initWidget()
 {
-    QVBoxLayout *m_pVLayout  = new QVBoxLayout;
+    auto m_pVLayout  = new QVBoxLayout;
     m_pVLayout->setContentsMargins(0, 0, 0, 0);
     m_pVLayout->setSpacing(0);
     this->setLayout(m_pVLayout);
 
-    m_pNotesList = new DListWidget;
-    m_pNotesList->setSpacing(10);
-    //设置自动适应布局调整（Adjust适应，Fixed不适应），默认不适应
-    m_pNotesList->setResizeMode(QListWidget::Adjust);
+    m_pNotesList = new CustomListWidget;
 
     m_pVLayout->addWidget(m_pNotesList);
 }
 
 void SearchResWidget::initConnections()
 {
+    connect(&m_loadSearchResThread, SIGNAL(signal_loadImage(int, QImage)), this, SLOT(slot_loadImage(int, QImage)));
+
     connect(this, SIGNAL(sigClearWidget()), this, SLOT(slotClearWidget()));
     connect(this, SIGNAL(sigFlushSearchWidget(QVariant)),
             this, SLOT(slotFlushSearchList(QVariant)));
@@ -169,7 +172,7 @@ int SearchResWidget::setSearchItemImage(const QImage &image)
 /************************************LoadSearchResList*******************************************************/
 /************************************加载搜索列表缩略图*********************************************************/
 
-LoadSearchResThread::LoadSearchResThread(QThread *parent):
+LoadSearchResThread::LoadSearchResThread(QObject *parent):
     QThread(parent)
 {
 
@@ -215,9 +218,8 @@ void LoadSearchResThread::run()
             }
 
             bool bl = DocummentProxy::instance()->getImage(page, image, 113, 143);
-
             if (bl) {
-                m_pSearchResWidget->setSearchItemImage(image);
+                emit signal_loadImage(page, image);
             }
         }
 

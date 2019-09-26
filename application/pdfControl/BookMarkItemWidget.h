@@ -9,7 +9,7 @@
 #include <QContextMenuEvent>
 
 #include "translator/Frame.h"
-#include "subjectObserver/CustomWidget.h"
+#include "CustomItemWidget.h"
 
 /**
  * @brief The BookMarkWidget class
@@ -22,14 +22,13 @@ enum OPERATION_TYPE {
     DLTITEM,            //删除item
 };
 
-class BookMarkItemWidget : public CustomWidget
+class BookMarkItemWidget : public CustomItemWidget
 {
     Q_OBJECT
 public:
-    BookMarkItemWidget(CustomWidget *parent = nullptr);
+    BookMarkItemWidget(CustomItemWidget *parent = nullptr);
 
 public:
-    void setItemImage(const QImage &);
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
 
@@ -50,9 +49,7 @@ protected:
 
 private:
     int     m_nPageNumber = -1;
-    DLabel *m_pPicture = nullptr;
     DLabel *m_pPage = nullptr;
-    QHBoxLayout *m_pHLayout = nullptr;
 };
 
 #endif // BOOKMARKITEMWIDGET_H

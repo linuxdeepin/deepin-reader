@@ -1,7 +1,7 @@
 #ifndef BOOKMARKFORM_H
 #define BOOKMARKFORM_H
 
-#include <DListWidget>
+#include "CustomListWidget.h"
 #include <DPushButton>
 
 #include <QListWidgetItem>
@@ -25,8 +25,13 @@ class BookMarkWidget;
 
 class LoadBookMarkThread : public QThread
 {
+    Q_OBJECT
 public:
-    LoadBookMarkThread();
+    LoadBookMarkThread(QObject *parent = nullptr);
+
+
+signals:
+    void signal_loadImage(int, QImage);
 
 public:
     inline void setBookMark(BookMarkWidget *bookMarkW)
@@ -67,12 +72,12 @@ signals:
     void sigCloseFile();
 
 private slots:
-    void slotShowSelectItem(QListWidgetItem *);
     void slotAddBookMark();
     void slotOpenFileOk();
     void slotDocFilePageChanged(int);
     void slotDeleteBookItem();
     void slotCloseFile();
+    void slot_loadImage(int, QImage);
 
 protected:
     void initWidget() override;
@@ -80,18 +85,16 @@ protected:
 
 private:
     void initConnection();
-    void loadBookMarkItem(const int &);
     void addBookMarkItem(const int &);
 
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
     int getBookMarkPage(const int &index);
-    int setBookMarkItemImage(const QImage &);
+
 
 private:
-    DListWidget *m_pBookMarkListWidget = nullptr;
-    QVBoxLayout *m_pVBoxLayout = nullptr;
+    CustomListWidget *m_pBookMarkListWidget = nullptr;
     DPushButton *m_pAddBookMarkBtn = nullptr;
     QList<int>      m_pAllPageList;
     int m_nCurrentPage = -1;

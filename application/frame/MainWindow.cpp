@@ -149,6 +149,7 @@ void MainWindow::SlotAppExit()
         if (QMessageBox::Yes == DMessageBox::question(nullptr, Frame::sSaveFile, Frame::sSaveFileTitle)) {
             DocummentProxy::instance()->save(sFilePath, true);
         }
+        sendMsg(MSG_CLOSE_FILE);
         DocummentProxy::instance()->closeFile();
     }
     dApp->exit();

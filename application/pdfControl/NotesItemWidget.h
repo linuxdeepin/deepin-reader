@@ -12,7 +12,7 @@
 #include <QContextMenuEvent>
 
 #include "translator/Frame.h"
-#include "subjectObserver/CustomWidget.h"
+#include "CustomItemWidget.h"
 
 /**
  * @brief The ThumbnailItemWidget class
@@ -20,15 +20,14 @@
  */
 
 
-class NotesItemWidget : public CustomWidget
+class NotesItemWidget : public CustomItemWidget
 {
     Q_OBJECT
 
 public:
-    NotesItemWidget(CustomWidget *parent = nullptr);
+    NotesItemWidget(CustomItemWidget *parent = nullptr);
 
 public:
-    void setLabelImage(const QImage &);
     void setLabelPage(const QString &);
     void setTextEditText(const QString &);
     void setSerchResultText(const QString &);
@@ -61,11 +60,10 @@ public:
     int dealWithData(const int &, const QString &) override;
 
 private:
-    DLabel *m_pPicture = nullptr;
     DLabel *m_pPage = nullptr;
     DLabel *m_pSearchResultNum = nullptr;
     DTextEdit *m_pTextEdit = nullptr;
-    QHBoxLayout *m_pHLayout = nullptr;
+
     int m_page = -1;      // 当前注释所在页
     QString m_strUUid;    // 当前注释唯一标识
 };

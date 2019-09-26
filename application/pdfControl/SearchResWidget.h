@@ -11,6 +11,7 @@
 #include "NotesItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
 #include "docview/docummentproxy.h"
+#include "CustomListWidget.h"
 
 /**
  * @brief The ThumbnailItemWidget class
@@ -21,8 +22,12 @@ class SearchResWidget;
 
 class LoadSearchResThread : public QThread
 {
+    Q_OBJECT
 public:
-    LoadSearchResThread(QThread *parent = nullptr);
+    LoadSearchResThread(QObject *parent = nullptr);
+
+signals:
+    void signal_loadImage(int, QImage);
 
 public:
     inline void setSearchResW(SearchResWidget *searchResW)
@@ -70,6 +75,7 @@ private slots:
     void slotFlushSearchList(QVariant);
     void slotClearWidget();
     void slotCloseFile();
+    void slot_loadImage(int, QImage);
 
 protected:
     void initWidget() override;
@@ -81,7 +87,7 @@ private:
     void addNotesItem(const int &page, const QString &text, const int &resultNum);
 
 private:
-    DListWidget *m_pNotesList            = nullptr;
+    CustomListWidget *m_pNotesList            = nullptr;
     NotesItemWidget *m_pSearchItemWidget = nullptr;
     LoadSearchResThread m_loadSearchResThread;
 

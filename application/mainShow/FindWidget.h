@@ -23,11 +23,6 @@
 #ifndef FINDWIDGET_H
 #define FINDWIDGET_H
 
-#include <QHBoxLayout>
-#include <DLabel>
-#include <QPainter>
-#include <QColor>
-
 #include "subjectObserver/CustomWidget.h"
 #include <DSearchEdit>
 

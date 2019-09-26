@@ -9,7 +9,9 @@ HEADERS += \
     $$PWD/font/fontWidget.h \
     $$PWD/CustomLabel.h \
     $$PWD/SearchResWidget.h \
-    $$PWD/fileViewNote/FileViewNoteWidget.h
+    $$PWD/fileViewNote/FileViewNoteWidget.h \
+    $$PWD/CustomListWidget.h \
+    $$PWD/CustomItemWidget.h
 
 SOURCES += \
     $$PWD/PagingWidget.cpp \
@@ -22,7 +24,9 @@ SOURCES += \
     $$PWD/font/fontWidget.cpp \
     $$PWD/CustomLabel.cpp \
     $$PWD/SearchResWidget.cpp \
-    $$PWD/fileViewNote/FileViewNoteWidget.cpp
+    $$PWD/fileViewNote/FileViewNoteWidget.cpp \
+    $$PWD/CustomListWidget.cpp \
+    $$PWD/CustomItemWidget.cpp
 
 RESOURCES += \
     $$PWD/pdfControl.qrc

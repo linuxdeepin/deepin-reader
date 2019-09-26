@@ -1,7 +1,6 @@
 #ifndef THUMBNAILWIDGET_H
 #define THUMBNAILWIDGET_H
 
-#include <DListWidget>
 #include <DLabel>
 #include <DPushButton>
 
@@ -17,7 +16,7 @@
 #include "subjectObserver/CustomWidget.h"
 #include "PagingWidget.h"
 #include "docview/docummentproxy.h"
-
+#include "CustomListWidget.h"
 //const int FIRST_LOAD_PAGES = 20;
 
 class ThumbnailWidget;
@@ -26,7 +25,7 @@ class ThreadLoadImage : public QThread
 {
     Q_OBJECT
 public:
-    ThreadLoadImage();
+    ThreadLoadImage(QObject *parent = nullptr);
 
 public:
     void stopThreadRun();
@@ -88,8 +87,6 @@ public:
 
 signals:
     void sigOpenFileOk();
-    void sigSelectIndexPage(const int &);
-    void sigJumpIndexPage(int);
     void sigCloseFile();
 
 private slots:
@@ -97,9 +94,7 @@ private slots:
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
-    bool fillContantToList();
-
-    void loadImage(const int &, QImage &);
+    void fillContantToList();
 
     inline bool isLoading()
     {
@@ -111,51 +106,21 @@ protected:
 
 private:
     void setSelectItemBackColor(QListWidgetItem *);
-    void setCurrentRow(const int &);
     void addThumbnailItem(const int &);
 
-
-    inline int preRowVal() const
-    {
-        return m_preRow;
-    }
-
-    inline void setPreRowVal(const int &val)
-    {
-        m_preRow = val;
-    }
-
-    inline int totalPages() const
-    {
-        return m_totalPages;
-    }
-
-    inline void setTotalPages(const int &pages)
-    {
-        m_totalPages = pages;
-    }
-
-
 private slots:
-    void slotShowSelectItem(QListWidgetItem *);
     void slotOpenFileOk();
-    void slotJumpIndexPage(int);
     void slotLoadThumbnailImage();
-    void slotFileViewToListPage(int);
+    void slotFileViewToListPage(const int &);
     void slotCloseFile();
 
 private:
-    DListWidget *m_pThumbnailListWidget = nullptr;
-    QVBoxLayout *m_pvBoxLayout = nullptr;
-    DLabel *m_pThumbnailPageLabel = nullptr;
+    CustomListWidget *m_pThumbnailListWidget = nullptr;
     PagingWidget *m_pPageWidget = nullptr;
 
-    DLabel *m_pSonWidgetPageLabel = nullptr;
-    DLabel *m_pSonWidgetContantLabel = nullptr;
-    ThumbnailItemWidget *m_pThumbnailItemWidget = nullptr;
+    ThumbnailItemWidget *m_pOldThumbnailItemWidget = nullptr;   //  当前选中的项
 
     int m_totalPages = -1; // 总页码数
-    int m_preRow     = -1; // 前一次页码数
     ThreadLoadImage m_ThreadLoadImage;
     bool m_isLoading = false;
 //    QTimer m_loadImageTimer;

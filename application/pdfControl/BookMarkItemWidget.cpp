@@ -1,25 +1,14 @@
 #include "BookMarkItemWidget.h"
-#include <QDebug>
 #include "translator/PdfControl.h"
 
-BookMarkItemWidget::BookMarkItemWidget(CustomWidget *parent) :
-    CustomWidget(QString("BookMarkItemWidget"), parent)
+BookMarkItemWidget::BookMarkItemWidget(CustomItemWidget *parent) :
+    CustomItemWidget("BookMarkItemWidget", parent)
 {
-
-    m_pHLayout = new QHBoxLayout;
-    //set around distance
-    m_pHLayout->setContentsMargins(1, 0, 1, 0);
-
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(slotShowContextMenu(const QPoint &)));
 
     initWidget();
-}
-
-void BookMarkItemWidget::setItemImage(const QImage &image)
-{
-    m_pPicture->setPixmap(QPixmap::fromImage(image));
 }
 
 int BookMarkItemWidget::dealWithData(const int &, const QString &)
@@ -43,13 +32,15 @@ void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
 
 void BookMarkItemWidget::initWidget()
 {
-    m_pPicture = new DLabel;
+    m_pPicture = new CustomLabel;
     m_pPage = new DLabel;
 
+    auto m_pHLayout = new QHBoxLayout;
+    m_pHLayout->setContentsMargins(1, 0, 1, 0);
     m_pHLayout->setSpacing(1);
+
     m_pHLayout->addWidget(m_pPicture);
     m_pHLayout->addWidget(m_pPage);
-    m_pHLayout->setSpacing(1);
 
     this->setLayout(m_pHLayout);
 }

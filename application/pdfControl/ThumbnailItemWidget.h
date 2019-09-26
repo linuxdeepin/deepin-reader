@@ -8,54 +8,34 @@
 #include <QImage>
 
 #include "CustomLabel.h"
-#include "subjectObserver/CustomWidget.h"
+#include "CustomItemWidget.h"
 
 /**
  * @brief The ThumbnailItemWidget class
  * @brief   缩略图中的item
  */
 
-class ThumbnailItemWidget  : public CustomWidget
+class ThumbnailItemWidget  : public CustomItemWidget
 {
     Q_OBJECT
 public:
-    ThumbnailItemWidget(CustomWidget *parent = nullptr);
+    ThumbnailItemWidget(CustomItemWidget *parent = nullptr);
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
 
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
-    void setContantLabelPixmap(const QImage &);
     void setPageLabelText(const QString &);
 
-    inline DLabel   *getPageLabel()
-    {
-        if (m_pPageLabel != nullptr) {
-            return m_pPageLabel;
-        } else {
-            return nullptr;
-        }
-    }
-
-    inline DLabel   *getContantLabel()
-    {
-        if (m_pContantLabel != nullptr) {
-            return m_pContantLabel;
-        } else {
-            return nullptr;
-        }
-    }
-
-    void setPaint(const bool &paint)
-    {
-        m_bPaint = paint;
-    }
+    void setBSelect(const bool &paint);
 
 protected:
 //    void paintEvent(QPaintEvent *event) override;
     void initWidget() override;
 
 private:
-    CustomLabel *m_pContantLabel = nullptr;
     DLabel *m_pPageLabel = nullptr;
     bool m_bPaint = false;
 };

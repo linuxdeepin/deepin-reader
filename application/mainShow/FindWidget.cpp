@@ -21,7 +21,8 @@
  */
 
 #include "FindWidget.h"
-#include <DIconButton>
+#include <DFloatingButton>
+#include <QHBoxLayout>
 #include "translator/MainShow.h"
 
 FindWidget::FindWidget(CustomWidget *parent)
@@ -89,19 +90,19 @@ int FindWidget::dealWithData(const int &msgType, const QString &)
 
 void FindWidget::initWidget()
 {
-    DIconButton *findNextButton = new DIconButton(DStyle::SP_ArrowNext);
+    DFloatingButton *findNextButton = new DFloatingButton(DStyle::SP_ArrowNext);
     findNextButton->setToolTip(MainShow::NEXT_ONE);
     findNextButton->setFixedSize(QSize(30, 30));
-    connect(findNextButton, &DIconButton::clicked, this, &FindWidget::slotFindNextBtnClicked);
+    connect(findNextButton, &DFloatingButton::clicked, this, &FindWidget::slotFindNextBtnClicked);
 
-    DIconButton *findPrevButton = new DIconButton(DStyle::SP_ArrowPrev);
+    DFloatingButton *findPrevButton = new DFloatingButton(DStyle::SP_ArrowPrev);
     findNextButton->setToolTip(MainShow::PREV_ONE);
     findPrevButton->setFixedSize(QSize(30, 30));
-    connect(findPrevButton, &DIconButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
+    connect(findPrevButton, &DFloatingButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
 
-    DIconButton *closeButton = new DIconButton(DStyle::SP_CloseButton);
+    DFloatingButton *closeButton = new DFloatingButton(DStyle::SP_CloseButton);
     closeButton->setFixedSize(QSize(30, 30));
-    connect(closeButton, &DIconButton::clicked, this, &FindWidget::findCancel);
+    connect(closeButton, &DFloatingButton::clicked, this, &FindWidget::findCancel);
 
     m_pSearchEdit = new DSearchEdit;
 
