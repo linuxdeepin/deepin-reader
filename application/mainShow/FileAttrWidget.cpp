@@ -5,6 +5,7 @@
 #include <DIconButton>
 #include "translator/Frame.h"
 #include "translator/MainShow.h"
+#include <QFileInfo>
 
 FileAttrWidget::FileAttrWidget(CustomWidget *parent)
     : CustomWidget("FileAttrWidget", parent)
@@ -33,21 +34,24 @@ void FileAttrWidget::setFileAttr()
         labelImage->setPixmap(QPixmap::fromImage(image));
     }
 
-    QString szTitle = fileInfo.strTheme;
+    QFileInfo info(fileInfo.strFilepath);
+
+    QString szTitle = "";
+    DocummentProxy::instance()->title(szTitle);
     if (szTitle == "") {
-        QString filePath = fileInfo.strFilepath;
-        int nLastPos = filePath.lastIndexOf("/");
-        nLastPos++;
-        szTitle = filePath.mid(nLastPos);
+        szTitle = info.baseName();
     }
     labelFileName->setText(szTitle);
+    labelFileTitle->setText(szTitle);
 
-    setFileInfoPath(fileInfo.strFilepath);
+    labelFilePath->setText(fileInfo.strFilepath);
+    labelFilePath->setWordWrap(true);
 
     labelTheme->setText(fileInfo.strTheme);
 
     labelAuthor->setText(fileInfo.strAuther);
-
+    labelKeyWord->setText(fileInfo.strKeyword);
+    labelProducer->setText(fileInfo.strProducter);
     labelCreator->setText(fileInfo.strCreater);
 
     setFileInfoTime(fileInfo.CreateTime, fileInfo.ChangeTime);
@@ -120,8 +124,9 @@ void FileAttrWidget::initWidget()
 void FileAttrWidget::initLabels()
 {
     QGridLayout *gridLayout = new QGridLayout;
+    gridLayout->setSpacing(6);
 
-    createLabel(gridLayout, 0, MainShow::TITLE + ":");
+    labelFileTitle = createLabel(gridLayout, 0, MainShow::TITLE + ":");
     labelFilePath = createLabel(gridLayout, 1, MainShow::LOCATION + ":");
     labelTheme = createLabel(gridLayout, 2, MainShow::THEME + ":");
     labelAuthor = createLabel(gridLayout, 3, MainShow::AUTHOR + ":");
@@ -194,16 +199,6 @@ DLabel *FileAttrWidget::createLabel(QGridLayout *layout, const int &index, const
     layout->addWidget(labelText, index, 1);
 
     return  labelText;
-}
-
-//  文件　位置
-void FileAttrWidget::setFileInfoPath(const QString &inputPath)
-{
-    labelFilePath->setText(inputPath);
-    int nHeight = labelFilePath->height();
-    labelFilePath->setFixedHeight(nHeight * 2);
-    labelFilePath->setWordWrap(true);
-    labelFilePath->adjustSize();
 }
 
 //  文件时间设置

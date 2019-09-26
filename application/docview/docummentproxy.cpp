@@ -90,6 +90,9 @@ bool DocummentProxy::startOpenFile()
         return false;
     }
     m_documment = DocummentFactory::creatDocumment(m_type, qwfather);
+    if (m_documment == nullptr) {
+        return false;
+    }
     connect(m_documment, SIGNAL(signal_pageChange(int)), this, SLOT(slot_pageChange(int)));
     return m_documment->openFile(m_path);
 }
