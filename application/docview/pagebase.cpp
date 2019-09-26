@@ -458,81 +458,73 @@ void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
     m_rotate = rotate;
     switch (rotate) {
     case RotateType_90:
-        resize(m_imageheight * scale, m_imagewidth * scale);
+//        resize(m_imageheight * scale, m_imagewidth * scale);
 //        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
-//        if (m_imageheight * scale < this->width())
-//        setMaximumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
-//        else
-//        setMinimumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
+        setMaximumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
+        setMinimumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
         break;
     case RotateType_180:
-        resize(m_imagewidth * scale, m_imageheight * scale);
+//        resize(m_imagewidth * scale, m_imageheight * scale);
 //        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
-//        if (m_imagewidth * scale < this->width())
-//        setMaximumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
-//        else
-//        setMinimumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
+        setMaximumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
+        setMinimumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
         break;
     case RotateType_270:
-        resize(m_imageheight * scale, m_imagewidth * scale);
+//        resize(m_imageheight * scale, m_imagewidth * scale);
 //        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
-//        if (m_imageheight * scale < this->width())
-//        setMaximumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
-//        else
-//        setMinimumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
+        setMaximumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
+        setMinimumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
         break;
     default:
-        resize(m_imagewidth * scale, m_imageheight * scale);
+//        resize(m_imagewidth * scale, m_imageheight * scale);
 //        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
-//        if (m_imagewidth * scale < this->width())
-//        setMaximumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
-//        else
-//        setMinimumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
+        setMaximumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
+        setMinimumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
         break;
     }
     update();
 }
 
-void PageBase::setReSize(double scale, RotateType_EM rotate)
-{
-    m_scale = scale;
-    m_rotate = rotate;
-    switch (rotate) {
-    case RotateType_90:
-        resize(m_imageheight * scale, m_imagewidth * scale);
-//        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
-//        if (m_imageheight * scale < this->width())
-//            setMaximumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
-//        else
-//            setMinimumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
-        break;
-    case RotateType_180:
-        resize(m_imagewidth * scale, m_imageheight * scale);
-//        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
-//        if (m_imagewidth * scale < this->width())
-//            setMaximumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
-//        else
-//            setMinimumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
-        break;
-    case RotateType_270:
-        resize(m_imageheight * scale, m_imagewidth * scale);
-//        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
-//        if (m_imageheight * scale < this->width())
-//            setMaximumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
-//        else
-//            setMinimumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
-        break;
-    default:
-        resize(m_imagewidth * scale, m_imageheight * scale);
-//        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
-//        if (m_imagewidth * scale < this->width())
-//            setMaximumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
-//        else
-//            setMinimumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
-        break;
-    }
-    update();
-}
+//void PageBase::setReSize(double scale, RotateType_EM rotate)
+//{
+//    m_scale = scale;
+//    m_rotate = rotate;
+//    switch (rotate) {
+//    case RotateType_90:
+//        resize(m_imageheight * scale, m_imagewidth * scale);
+////        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
+////        if (m_imageheight * scale < this->width())
+////            setMaximumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
+////        else
+////            setMinimumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
+//        break;
+//    case RotateType_180:
+//        resize(m_imagewidth * scale, m_imageheight * scale);
+////        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
+////        if (m_imagewidth * scale < this->width())
+////            setMaximumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
+////        else
+////            setMinimumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
+//        break;
+//    case RotateType_270:
+//        resize(m_imageheight * scale, m_imagewidth * scale);
+////        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
+////        if (m_imageheight * scale < this->width())
+////            setMaximumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
+////        else
+////            setMinimumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
+//        break;
+//    default:
+//        resize(m_imagewidth * scale, m_imageheight * scale);
+////        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
+////        if (m_imagewidth * scale < this->width())
+////            setMaximumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
+////        else
+////            setMinimumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
+//        break;
+//    }
+//    update();
+//}
 
 Page::Link *PageBase::ifMouseMoveOverLink(const QPoint point)
 {

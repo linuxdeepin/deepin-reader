@@ -115,7 +115,7 @@ public:
     void setScaleAndRotate(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     Page::Link *ifMouseMoveOverLink(const QPoint point);
     bool getSelectTextString(QString &st);
-    void setReSize(double scale = 1, RotateType_EM rotate = RotateType_Normal);
+//    void setReSize(double scale = 1, RotateType_EM rotate = RotateType_Normal);
 signals:
     void signal_MagnifierPixmapCacheLoaded(int);
 protected:
