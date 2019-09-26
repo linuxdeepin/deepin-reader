@@ -290,9 +290,11 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
     QString uniqueName;
     QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
     QList<Poppler::Annotation *> listannote = m_page->annotations();
+    QList<Poppler::Annotation *> listdel;
     foreach (Poppler::Annotation *annote, listannote) {
         if (annote->subType() == Poppler::Annotation::AHighlight) { //必须判断
             QList<Poppler::HighlightAnnotation::Quad> listquad = static_cast<Poppler::HighlightAnnotation *>(annote)->highlightQuads();
+            bool bdel=true;
             foreach (Poppler::HighlightAnnotation::Quad quad, listquad) {
                 QRectF rectbound;
                 rectbound.setTopLeft(quad.points[0]);
@@ -306,14 +308,26 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
                     rectbound.setRight(1 - rectbound.right());
                 }
                 if (rectbound.contains(ptf)) {
-                    uniqueName = annote->uniqueName();
-                    removeAnnotation(annote);
+                    uniqueName = annote->uniqueName();                   
+                   removeAnnotation(annote);
+                   bdel=false;
                 } else {
-                    qDebug() << "******* not contains";
+                    qDebug() << "******* not contains";                   
                 }
+            }
+            if(bdel)
+            {
+                listdel.append(annote);
+            }
+        }
+        else {
+            if(annote)
+            {
+               listdel.append(annote);
             }
         }
     }
+    qDeleteAll(listdel);
     showImage(m_scale, m_rotate);
     return uniqueName;
 }
@@ -327,8 +341,10 @@ void PagePdf::removeAnnotation(const QString &struuid)
             removeAnnotation(annote);
             showImage(m_scale, m_rotate);
         }
-    }
-    qDeleteAll(listannote);
+        else {
+            delete  annote;
+        }
+    }  
 }
 
 bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext)
@@ -352,6 +368,7 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext)
                 qDebug() << "########" << quad.points[0];
                 if (rectbound.contains(ptf)) {
                     qDebug() << "******* contaions";
+                     qDeleteAll(listannote);
                     return true;
                 } else {
                     qDebug() << "******* not contains";

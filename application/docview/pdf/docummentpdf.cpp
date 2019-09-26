@@ -230,8 +230,10 @@ void DocummentPDF::clearSearch()
                 if (anote->uniqueName().endsWith(QString("search"))) {
                     page->removeAnnotation(anote);
                 }
-            }
-            qDeleteAll(listannoate);
+                else {
+                    delete anote;
+                }
+            }           
             static_cast<PagePdf *>(m_pages.at(ipage))->showImage(m_scale, m_rotate);
         }
         foreach (int i, m_pagecountsearch.keys()) {
@@ -240,10 +242,12 @@ void DocummentPDF::clearSearch()
             QList<Poppler::Annotation *> listannoate = page->annotations();
             foreach (Poppler::Annotation *anote, listannoate) {
                 if (anote->uniqueName().endsWith(QString("search"))) {
-                    page->removeAnnotation(anote);
+                    page->removeAnnotation(anote);                  
                 }
-            }
-            qDeleteAll(listannoate);
+                else {
+                    delete anote;
+                }
+            }          
             static_cast<PagePdf *>(m_pages.at(i))->showImage(m_scale, m_rotate);
         }
     }
@@ -451,6 +455,7 @@ void DocummentPDF::findPrev()
             }
         }
         qDeleteAll(plistannote);
+
     } else {
         QMap<int, int>::const_iterator it = m_pagecountsearch.find(m_findcurpage);
         if (--it != m_pagecountsearch.end()) {
@@ -505,6 +510,7 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, i
                 QString uniquename = annote->uniqueName();
                 if (uniquename.isEmpty() && uniquename.compare(struuid) == 0) {
                     strtext = annote->contents();
+                    qDeleteAll(plistannote);
                     return;
                 }
             }
@@ -517,9 +523,10 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, i
             QString uniquename = annote->uniqueName();
             if (uniquename.isEmpty() && uniquename.compare(struuid) == 0) {
                 strtext = annote->contents();
+                qDeleteAll(plistannote);
                 return;
             }
-        }
+        }      
         qDeleteAll(plistannote);
     }
 
