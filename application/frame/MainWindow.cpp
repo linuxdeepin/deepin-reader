@@ -183,6 +183,9 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
             titlebar()->setVisible(true);
             this->setWindowState(Qt::WindowNoState);
         }
+    } else if (msgType == MSG_OPERATION_OPEN_FILE_TITLE) {
+        titlebar()->setTitle(msgContent);
+        return  ConstantMsg::g_effective_res;
     }
     return 0;
 }

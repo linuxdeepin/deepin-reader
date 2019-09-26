@@ -35,7 +35,6 @@ private:
     void initImageLabel();
     DLabel *createLabel(QGridLayout *, const int &, const QString &);
 
-    void setFileInfoPath(const QString &);
     void setFileInfoTime(const QDateTime &, const QDateTime &);
 
 private slots:
@@ -50,6 +49,8 @@ private:
 
     DLabel *labelImage = nullptr;
     DLabel *labelFileName = nullptr;
+
+    DLabel *labelFileTitle = nullptr;
     DLabel *labelFilePath = nullptr;
     DLabel *labelTheme = nullptr;
     DLabel *labelAuthor = nullptr;

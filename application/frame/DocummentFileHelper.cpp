@@ -70,14 +70,20 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
         sendMsg(MSG_CLOSE_FILE);
         m_pDocummentProxy->closeFile();
     }
+
+
     QStringList fileList = filePaths.split("@#&wzx",  QString::SkipEmptyParts);
     int nSize = fileList.size();
     if (nSize > 0) {
         QString sPath = fileList.at(0);
+
         DocType_EM doctype = DocType_NULL;
-        if (filePaths.indexOf(".pdf") != -1) {
+
+        QFileInfo info(sPath);
+        QString sCompleteSuffix = info.completeSuffix();
+        if (sCompleteSuffix == "pdf") {
             doctype = DocType_PDF;
-        } else if (filePaths.indexOf(".tiff") != -1) {
+        } else if (sCompleteSuffix == "tiff") {
             doctype = DocType_TIFF;
         }
         bool rl = m_pDocummentProxy->openFile(doctype, sPath);
@@ -87,6 +93,12 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
             //  通知 其他窗口， 打开文件成功了！！！
             NotifySubject::getInstance()->sendMsg(MSG_OPERATION_OPEN_FILE_OK);
 
+            QString sTitle = "";
+            m_pDocummentProxy->title(sTitle);
+            if (sTitle == "") {
+                sTitle = info.baseName();
+            }
+            sendMsg(MSG_OPERATION_OPEN_FILE_TITLE, sTitle);
         } else {
             sendMsg(MSG_OPERATION_OPEN_FILE_FAIL);
         }
