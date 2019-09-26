@@ -26,6 +26,7 @@
 #include <QTranslator>
 #include <QDebug>
 #include "frame/AppAboutWidget.h"
+#include "translator/Frame.h"
 
 namespace {
 
@@ -40,17 +41,15 @@ Application::Application(int &argc, char **argv)
 
     initI18n();
 
-    setOrganizationName("deepin");
-    setApplicationName("deepin_reader");
-    setApplicationDisplayName(QObject::tr("Deepin Reader"));
+    setOrganizationName(Frame::ORGANIZATION_NAME);
+    setApplicationName(Frame::sAppName);
+    setApplicationDisplayName(Frame::sAppName);
     setApplicationVersion("1.0");
     setProductIcon(QIcon(":/resources/image/logo/logo.svg"));
     setProductName(DApplication::translate("MainWindow", "Deepin Reader"));
 
 //    //  帮助文档
     setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin_reader/");
-
-//    setApplicationVersion(DApplication::buildVersion("20190828"));
 
     DApplicationSettings savetheme;
 

@@ -7,6 +7,7 @@
 
 #include "controller/MsgSubject.h"
 #include "controller/NotifySubject.h"
+#include <QCloseEvent>
 
 DWIDGET_USE_NAMESPACE
 
@@ -22,6 +23,12 @@ public:
     MainWindow(DMainWindow *parent = nullptr);
     ~MainWindow() override;
 
+signals:
+    void sigAppExit();
+
+protected:
+    void closeEvent(QCloseEvent *event) override;
+
 private:
     void initUI();
     void initConnections();
@@ -35,8 +42,10 @@ private:
     void onFullScreen();
     void onScreening();
 
+
 private slots:
     void SlotActionTrigger(const QString &);
+    void SlotAppExit();
 
 private:
     void sendMsg(const int &, const QString &msgContent = "") override;

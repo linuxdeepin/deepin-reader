@@ -7,6 +7,7 @@
 #include <DWidgetUtil>
 #include <QDebug>
 #include <QDesktopServices>
+#include <DMessageBox>
 #include <QSignalMapper>
 #include "controller/DataManager.h"
 #include "translator/Frame.h"
@@ -51,6 +52,14 @@ MainWindow::~MainWindow()
     }
 }
 
+//  窗口关闭
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    SlotAppExit();
+
+    DMainWindow::closeEvent(event);
+}
+
 void MainWindow::initUI()
 {
     setCentralWidget(new MainWidget);
@@ -60,6 +69,8 @@ void MainWindow::initUI()
 
 void MainWindow::initConnections()
 {
+    connect(this, SIGNAL(sigAppExit()), this, SLOT(SlotAppExit()));
+
     DMenu *m_menu = new DMenu(this);
 
     QSignalMapper *pSigManager = new QSignalMapper(this);
@@ -130,6 +141,19 @@ void MainWindow::onScreening()
     sendMsg(MSG_OPERATION_SLIDE);
 }
 
+//  退出 应用
+void MainWindow::SlotAppExit()
+{
+    QString sFilePath = DataManager::instance()->strOnlyFilePath();
+    if (sFilePath != "") {
+        if (QMessageBox::Yes == DMessageBox::question(nullptr, Frame::sSaveFile, Frame::sSaveFileTitle)) {
+            DocummentProxy::instance()->save(sFilePath, true);
+        }
+        DocummentProxy::instance()->closeFile();
+    }
+    dApp->exit();
+}
+
 //  文件打开成，　功能性　菜单才能点击
 void MainWindow::openFileOk()
 {
@@ -185,6 +209,9 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
         }
     } else if (msgType == MSG_OPERATION_OPEN_FILE_TITLE) {
         titlebar()->setTitle(msgContent);
+        return  ConstantMsg::g_effective_res;
+    } else if (msgType == MSG_OPERATION_EXIT) {
+        emit sigAppExit();
         return  ConstantMsg::g_effective_res;
     }
     return 0;
