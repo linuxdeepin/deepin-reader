@@ -34,20 +34,13 @@ public:
 
 
 private:
-//    void loadWordCache(int indexpage, PageBase *page);
-    //--------------------------------------------//
-//    bool abstractTextPage(const QList<Poppler::TextBox *> &text, PageBase *page);
     bool pdfsave(const QString &filePath, bool withChanges)const;
     void searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color);
     void refreshOnePage(int ipage);
     void setBasicInfo(const QString &filepath);
 private:
-    Poppler::Document *document;
-    //--------------------------------------------//
+    Poppler::Document *document;  
     stFileInfo m_fileinfo;
-
-
-
 };
 
 #endif // DOCUMMENTPDF_H

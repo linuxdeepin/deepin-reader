@@ -105,6 +105,17 @@ public:
     }
     virtual stSearchRes search(const QString& text, bool matchCase, bool wholeWords)const
     { Q_UNUSED(text); Q_UNUSED(matchCase); Q_UNUSED(wholeWords); stSearchRes res; return res; }
+    QRectF setCurHightLight(int index)
+    {
+        QRectF rect;
+        if(m_highlights.size()>0&&m_icurhightlight<m_highlights.size())
+        {
+             m_icurhightlight=index-1;
+             rect=m_highlights.at(m_icurhightlight);
+        }
+
+        return  rect;
+    }
     double getOriginalImageWidth()
     {
         return m_imagewidth;
@@ -153,6 +164,7 @@ protected:
     double m_magnifierwidth;
     double m_magnifierheight;
     int m_pageno;
+    int m_icurhightlight;
 };
 
 #endif // PAGEBASE_H

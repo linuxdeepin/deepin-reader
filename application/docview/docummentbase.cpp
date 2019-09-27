@@ -187,7 +187,9 @@ DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
     m_rotate(RotateType_0),
     donotneedreloaddoc(false),
     m_wordsbload(false),
-    m_magnifierpage(-1)
+    m_magnifierpage(-1),
+    m_bsearchfirst(true),
+    m_findcurpage(-1)
 {
     m_currentpageno = 0;
 //    m_threadloaddoc.setDoc(this);
@@ -245,8 +247,8 @@ DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
     m_slidewidget->setPalette(pal);
 
     m_searchTask=new SearchTask(this);
-    connect(m_searchTask,SIGNAL(resultsReady(stSearchRes)),SIGNAL(slot_searchValueAdd(stSearchRes)));
-
+    connect(m_searchTask,SIGNAL(signal_resultReady(stSearchRes)),this,SLOT(slot_searchValueAdd(stSearchRes)));
+    connect(m_searchTask, SIGNAL(finished()), SLOT(slot_searchover()));
     connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_vScrollBarValueChanged(int)));
     connect(this->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_hScrollBarValueChanged(int)));
 }
@@ -517,8 +519,18 @@ void DocummentBase::slot_MagnifierPixmapCacheLoaded(int pageno)
 
 void DocummentBase::slot_searchValueAdd(stSearchRes res)
 {
+    if(m_bsearchfirst)
+    {
+        m_bsearchfirst=false;
+        m_findcurpage=res.ipage;
+    }
     m_pagecountsearch.insert(res.ipage,res.listtext.size());
     emit signal_searchRes(res);
+}
+
+void DocummentBase::slot_searchover()
+{
+    m_bsearchfirst=true;
 }
 
 bool DocummentBase::showMagnifier(QPoint point)

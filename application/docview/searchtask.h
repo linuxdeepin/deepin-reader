@@ -24,7 +24,7 @@ public:
 signals:
     void progressChanged(int progress);
 
-    void signal_resultReady(const stSearchRes& stres);
+    void signal_resultReady(stSearchRes stres);
 
 public slots:
     void start(const QVector< PageBase* >& pages,

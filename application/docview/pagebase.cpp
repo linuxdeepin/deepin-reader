@@ -53,7 +53,8 @@ PageBase::PageBase(DWidget *parent)
       m_rotate(RotateType_0),
       m_magnifierwidth (0),
       m_magnifierheight (0),
-      m_pageno(-1)
+      m_pageno(-1),
+      m_icurhightlight(0)
 
 {
     setMouseTracking(true);

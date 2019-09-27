@@ -225,6 +225,7 @@ protected slots:
     void slot_hScrollBarValueChanged(int value);
     void slot_MagnifierPixmapCacheLoaded(int pageno);
     void slot_searchValueAdd(stSearchRes);
+    void slot_searchover();
 
 protected:
     int pointInWhichPage(QPoint &qpoint);
@@ -257,7 +258,8 @@ protected:
     SearchTask* m_searchTask;
     int m_findcurpage;
     QMap<int, int> m_pagecountsearch; //搜索结果页对应当前页个数
-     unsigned int m_cursearch;
+    int m_cursearch;
+     bool m_bsearchfirst;
 
 };
 

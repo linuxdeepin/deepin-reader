@@ -128,7 +128,9 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
     }
 
     if (msgType == MSG_FIND_NEXT) {
+        qDebug()<<"@@@@@@@@@@@@@@@@@@";
         DocummentProxy::instance()->findNext();
+        qDebug()<<"%%%%%%%%%%%%%%%%%%%%%%";
         return ConstantMsg::g_effective_res;
     }
 

@@ -77,6 +77,8 @@ stSearchRes PagePdf::search(const QString &text, bool matchCase, bool wholeWords
 {  
     m_highlights.clear();
     stSearchRes stres;
+    stres.ipage=m_pageno;
+    stres.listtext.clear();
     const Poppler::Page::SearchFlags flags((matchCase ? 0 : Poppler::Page::IgnoreCase) | (wholeWords ? Poppler::Page::WholeWords : 0));
     m_highlights = m_page->search(text, flags);
     QRectF rec;
@@ -93,12 +95,22 @@ stSearchRes PagePdf::search(const QString &text, bool matchCase, bool wholeWords
 void PagePdf::paintEvent(QPaintEvent *event)
 {
     PageBase::paintEvent(event);
-    QPainter qpainter(this);
-    qpainter.setBrush(m_searchcolor);
-    QPen qpen(m_pencolor);
-    qpainter.setPen(qpen);
+
     for (int i = 0; i < m_highlights.size(); i++) {
-        qpainter.drawRect(translateRect(m_highlights[i],m_scale,m_rotate));
+        if((m_icurhightlight)!=i)
+        {
+            QPainter qpainter(this);
+            qpainter.setBrush(m_searchcolor);
+            QPen qpen(m_pencolor);
+            qpainter.setPen(qpen);
+
+            qpainter.drawRect(translateRect(m_highlights[i],m_scale,m_rotate));
+        }
+        else {
+            QPainter qpainter(this);
+            qpainter.setBrush(m_searchcolor);
+            qpainter.drawRect(translateRect(m_highlights[i],m_scale,m_rotate));
+        }
     }
 }
 

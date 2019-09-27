@@ -78,6 +78,8 @@ void SearchTask::run()
     {
         processResults(FutureWrapper(pages, search));
     }
+    qDebug()<<"+++++++++++"<<"search end";
+
 }
 
 void SearchTask::start(const QVector<PageBase *> &pages, const QString &text, bool matchCase, bool wholeWords, int beginAtPage)
@@ -110,7 +112,5 @@ void SearchTask::processResults(Future future)
         {
              emit signal_resultReady(res);
         }
-
-
     }
 }

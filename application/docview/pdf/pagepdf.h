@@ -45,6 +45,7 @@ public:
     Poppler::Page *GetPage();
     void clearThread();
     stSearchRes search(const QString& text, bool matchCase, bool wholeWords)const override;
+
 protected:
     void paintEvent(QPaintEvent *event) override;
 protected slots:
