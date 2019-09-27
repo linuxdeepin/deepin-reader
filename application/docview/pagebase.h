@@ -4,7 +4,6 @@
 #include <DLabel>
 #include <DGuiApplicationHelper>
 #include <QThread>
-#include "commonstruct.h"
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -52,68 +51,138 @@ enum RotateType_EM {
 };
 
 class PageBase;
-class ThreadLoadMagnifierCache : public QThread
+class PageInterface;
+class PageBasePrivate;
+class ThreadRenderImage : public QThread
 {
+    Q_OBJECT
 public:
-    ThreadLoadMagnifierCache();
-    void setPage(PageBase *page, double width, double height);
+    ThreadRenderImage();
+    void setPage(PageInterface *page, double width, double height);
     void setRestart();
 
 protected:
     virtual void run();
 
+signals:
+    void signal_RenderFinish(QImage);
 private:
-    PageBase *m_page;
+    PageInterface *m_page;
     bool restart;
     double m_width;
     double m_height;
+//    double m_xres;
+//    double m_yres;
+};
+class ThreadLoadMagnifierCache : public QThread
+{
+    Q_OBJECT
+public:
+    ThreadLoadMagnifierCache();
+    void setPage(PageInterface *page, double width, double height);
+    void setRestart();
+
+protected:
+    virtual void run();
+signals:
+    void signal_loadMagnifierPixmapCache(QImage image, double width, double height);
+
+private:
+    PageInterface *m_page;
+    bool restart;
+    double m_width;
+    double m_height;
+};
+class PageInterface
+{
+public:
+    virtual bool getImage(QImage &image, double width, double height) = 0;
+    virtual bool getSlideImage(QImage &image, double &width, double &height) = 0;
+};
+class PageBasePrivate: public QObject
+{
+    Q_OBJECT
+public:
+    PageBasePrivate(PageBase *parent): q_ptr(parent)
+    {
+        m_imagewidth = 0.01;
+        m_imageheight = 0.01;
+        m_paintercolor = QColor(72, 118, 255, 100);
+        m_pencolor = QColor(72, 118, 255, 0);
+        m_penwidth = 0;
+        m_selecttextstartword = -1;
+        m_selecttextendword = -1;
+        m_rotate = RotateType_0;
+        m_magnifierwidth = 0;
+        m_magnifierheight = 0;
+        m_pageno = -1;
+        connect(&loadmagnifiercachethread, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)), this, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)));
+        connect(&threadreander, SIGNAL(signal_RenderFinish(QImage)), this, SIGNAL(signal_RenderFinish(QImage)));
+    }
+
+    ~PageBasePrivate()
+    {
+        qDeleteAll(m_links);
+        m_links.clear();
+        if (loadmagnifiercachethread.isRunning()) {
+            loadmagnifiercachethread.quit();
+            loadmagnifiercachethread.wait();
+        }
+        if (threadreander.isRunning()) {
+            threadreander.requestInterruption();
+            threadreander.quit();
+            threadreander.wait();
+        }
+    }
+
+    QColor m_paintercolor;
+    QColor m_pencolor;
+    int m_penwidth;
+    QList<QRect> paintrects;
+    QList< Page::Link * > m_links;
+    QList<stWord> m_words;
+    int m_selecttextstartword;
+    int m_selecttextendword;
+    double m_imagewidth;
+    double m_imageheight;
+    QPixmap m_magnifierpixmap;
+    RotateType_EM m_rotate;
+    double m_scale;
+    ThreadLoadMagnifierCache loadmagnifiercachethread;
+    ThreadRenderImage threadreander;
+    double m_magnifierwidth;
+    double m_magnifierheight;
+    int m_pageno;
+
+    PageBase *q_ptr;
+    Q_DECLARE_PUBLIC(PageBase)
+signals:
+    void signal_loadMagnifierPixmapCache(QImage image, double width, double height);
+    void signal_RenderFinish(QImage);
 };
 
 class PageBase: public DLabel
 {
     Q_OBJECT
 public:
-    PageBase(DWidget *parent = nullptr);
+    PageBase(PageBasePrivate *ptr = nullptr, DWidget *parent = 0);
     ~PageBase();
-    virtual bool getImage(QImage &image, double width, double height)
-    {
-        Q_UNUSED(image);
-        Q_UNUSED(width);
-        Q_UNUSED(height);
-        return false;
-    }
-    virtual bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal)
-    {
-        Q_UNUSED(scale);
-        Q_UNUSED(rotate);
-        return false;
-    }
-    virtual bool getSlideImage(QImage &image, double &width, double &height)
-    {
-        Q_UNUSED(image);
-        Q_UNUSED(width);
-        Q_UNUSED(height);
-        return false;
-    }
-    virtual bool loadWords()
-    {
-        return false;
-    }
-    virtual bool loadLinks()
-    {
-        return false;
-    }
-    virtual stSearchRes search(const QString& text, bool matchCase, bool wholeWords)const
-    { Q_UNUSED(text); Q_UNUSED(matchCase); Q_UNUSED(wholeWords); stSearchRes res; return res; }
+    virtual bool getImage(QImage &image, double width, double height) = 0;
+//    virtual bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal) = 0;
+    virtual bool getSlideImage(QImage &image, double &width, double &height) = 0;
+    virtual bool loadWords() = 0;
+    virtual bool loadLinks() = 0;
+    virtual PageInterface *getInterFace() = 0;
     double getOriginalImageWidth()
     {
-        return m_imagewidth;
+        Q_D(PageBase);
+        return d->m_imagewidth;
     }
     double getOriginalImageHeight()
     {
-        return m_imageheight;
+        Q_D(PageBase);
+        return d->m_imageheight;
     }
-    void loadMagnifierPixmapCache(double width, double height);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100),
                             QColor pencolor = QColor(72, 118, 255, 0),
                             int penwidth = 0);
@@ -126,33 +195,21 @@ public:
     void setScaleAndRotate(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     Page::Link *ifMouseMoveOverLink(const QPoint point);
     bool getSelectTextString(QString &st);
-    QRectF translateRect(QRectF& rect,double scale, RotateType_EM rotate);
+    bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal);
+    void clearThread();
 //    void setReSize(double scale = 1, RotateType_EM rotate = RotateType_Normal);
 signals:
     void signal_MagnifierPixmapCacheLoaded(int);
+protected slots:
+    void slot_loadMagnifierPixmapCache(QImage image, double width, double height);
+    void slot_RenderFinish(QImage);
 protected:
     void paintEvent(QPaintEvent *event) override;
 protected:
     void getImagePoint(QPoint &point);
-    QColor m_paintercolor;
-    QColor m_pencolor;
-    QColor m_searchcolor;
-    int m_penwidth;
-    QList<QRect> paintrects;
-    mutable QList<QRectF> m_highlights;
-    QList< Page::Link * > m_links;
-    QList<stWord> m_words;
-    int m_selecttextstartword;
-    int m_selecttextendword;
-    double m_imagewidth;
-    double m_imageheight;
-    QPixmap m_magnifierpixmap;
-    RotateType_EM m_rotate;
-    double m_scale;
-    ThreadLoadMagnifierCache loadmagnifiercachethread;
-    double m_magnifierwidth;
-    double m_magnifierheight;
-    int m_pageno;
+
+    QScopedPointer<PageBasePrivate> d_ptr;
+    Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), PageBase)
 };
 
 #endif // PAGEBASE_H

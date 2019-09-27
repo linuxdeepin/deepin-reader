@@ -8,11 +8,11 @@
 #include <QMetaType>
 
 typedef struct SEARCH_RESULT {
-    unsigned int ipage;
+    unsigned int ipages;
     QList<QString> listtext;
     SEARCH_RESULT()
     {
-        ipage = 0;
+        ipages = 0;
         listtext.clear();
     }
 

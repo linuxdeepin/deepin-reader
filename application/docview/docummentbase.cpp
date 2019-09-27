@@ -1,40 +1,12 @@
 #include "docummentbase.h"
 #include "publicfunc.h"
-#include "searchtask.h"
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QPainter>
 #include <QPoint>
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
-
-//ThreadLoadDoc::ThreadLoadDoc()
-//{
-//    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
-//    m_doc = nullptr;
-//    restart = false;
-//}
-
-//void ThreadLoadDoc::setRestart()
-//{
-//    restart = true;
-//}
-
-//void ThreadLoadDoc::setDoc(DocummentBase *doc)
-//{
-//    m_doc = doc;
-//}
-
-//void ThreadLoadDoc::run()
-//{
-//    if (!m_doc)
-//        return;
-//    restart = true;
-//    while (restart) {
-//        restart = false;
-//        m_doc->loadPages();
-//    }
-//}
+#include <qglobal.h>
 
 ThreadLoadWords::ThreadLoadWords()
 {
@@ -180,28 +152,23 @@ void MagnifierWidget::setMagnifierColor(QColor color)
     m_magnifiercolor = color;
 }
 
-DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
-    , m_bModified(false), m_bslidemodel(false), m_slidepageno(-1),
-    m_currentpageno(-1),
-    m_scale(1.0),
-    m_rotate(RotateType_0),
-    donotneedreloaddoc(false),
-    m_wordsbload(false),
-    m_magnifierpage(-1)
+DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrollArea(parent),
+    d_ptr(ptr ? ptr : new DocummentBasePrivate(this))
 {
-    m_currentpageno = 0;
-//    m_threadloaddoc.setDoc(this);
-    m_threadloadwords.setDoc(this);
+    Q_D(DocummentBase);
+//    d->m_threadloaddoc.setDoc(this);
+    d->m_threadloadwords.setDoc(this);
     setWidgetResizable(true);
-    setWidget(&m_widget);
-    pblankwidget = new DWidget(this);
-    pblankwidget->setMouseTracking(true);
-    pblankwidget->hide();
-    m_magnifierwidget = new MagnifierWidget(parent);
-    m_slidewidget = new DWidget(parent);
-    pslidelabel = new DLabel(m_slidewidget);
-    pslideanimationlabel = new DLabel(m_slidewidget);
-    pslideanimationlabel->setGeometry(-200, -200, 100, 100);
+    d->m_widget = new DWidget(this);
+    setWidget(d->m_widget);
+    d->pblankwidget = new DWidget(this);
+    d->pblankwidget->setMouseTracking(true);
+    d->pblankwidget->hide();
+    d->m_magnifierwidget = new MagnifierWidget(parent);
+    d->m_slidewidget = new DWidget(parent);
+    d->pslidelabel = new DLabel(d->m_slidewidget);
+    d->pslideanimationlabel = new DLabel(d->m_slidewidget);
+    d->pslideanimationlabel->setGeometry(-200, -200, 100, 100);
     delete parent->layout();
     QGridLayout *gridlyout = new QGridLayout(parent);
 
@@ -215,70 +182,52 @@ DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
     gridlyout->setMargin(0);
     gridlyout->setSpacing(0);
     gridlyout->addWidget(this, 0, 0);
-    gridlyout->addWidget(m_magnifierwidget, 0, 0);
-    gridlyout->addWidget(m_slidewidget, 0, 0);
+    gridlyout->addWidget(d->m_magnifierwidget, 0, 0);
+    gridlyout->addWidget(d->m_slidewidget, 0, 0);
     gridlyout->setMargin(0);
-    pslidelabel->lower();
-    pslideanimationlabel->lower();
-    m_slidewidget->lower();
+    d->pslidelabel->lower();
+    d->pslideanimationlabel->lower();
+    d->m_slidewidget->lower();
 //    m_slidewidget->raise();
-    m_slidewidget->hide();
+    d->m_slidewidget->hide();
 //    m_magnifierwidget->raise();
-    m_magnifierwidget->hide();
-    m_widget.setLayout(&m_vboxLayout);
-    m_vboxLayout.setMargin(0);
-    m_vboxLayout.setSpacing(0);
-    m_widget.setMouseTracking(true);
-    pslidelabel->setMouseTracking(true);
-    pslideanimationlabel->setMouseTracking(true);
+    d->m_magnifierwidget->hide();
+    d->m_vboxLayout = new QVBoxLayout(d->m_widget);
+    d->m_widget->setLayout(d->m_vboxLayout);
+    d->m_vboxLayout->setMargin(0);
+    d->m_vboxLayout->setSpacing(0);
+    d->m_widget->setMouseTracking(true);
+    d->pslidelabel->setMouseTracking(true);
+    d->pslideanimationlabel->setMouseTracking(true);
     setMouseTracking(true);
 
-    m_viewmode = ViewMode_SinglePage;
-    m_lastmagnifierpagenum = -1;
 
 
-    QPalette pal(m_slidewidget->palette());
+    QPalette pal(d->m_slidewidget->palette());
 
     //设置背景黑色
     pal.setColor(QPalette::Background, Qt::black);
-    m_slidewidget->setAutoFillBackground(true);
-    m_slidewidget->setPalette(pal);
-
-    m_searchTask=new SearchTask(this);
-    connect(m_searchTask,SIGNAL(resultsReady(stSearchRes)),SIGNAL(slot_searchValueAdd(stSearchRes)));
+    d->m_slidewidget->setAutoFillBackground(true);
+    d->m_slidewidget->setPalette(pal);
 
     connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_vScrollBarValueChanged(int)));
     connect(this->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_hScrollBarValueChanged(int)));
+    connect(d, SIGNAL(signal_docummentLoaded()), this, SLOT(slot_docummentLoaded()));
 }
 
 DocummentBase::~DocummentBase()
 {
+    Q_D(DocummentBase);
     this->hide();
-//    if (m_threadloaddoc.isRunning()) {
-//        m_threadloaddoc.requestInterruption();
-//        m_threadloaddoc.quit();
-//        m_threadloaddoc.wait();
-//    }
-    if(m_searchTask)
-    {
-        m_searchTask->cancel();
-        m_searchTask->wait();
-        delete m_searchTask;
-        m_searchTask=nullptr;
+    if (d->m_magnifierwidget) {
+        delete d->m_magnifierwidget;
+        d->m_magnifierwidget = nullptr;
     }
-    if (m_threadloadwords.isRunning()) {
-        m_threadloadwords.requestInterruption();
-        m_threadloadwords.quit();
-        m_threadloadwords.wait();
+    if (d->m_slidewidget) {
+        delete d->m_slidewidget;
+        d->m_slidewidget = nullptr;
     }
-    if (m_magnifierwidget) {
-        delete m_magnifierwidget;
-        m_magnifierwidget = nullptr;
-    }
-    if (m_slidewidget) {
-        delete m_slidewidget;
-        m_slidewidget = nullptr;
-    }
+
 }
 
 QPoint DocummentBase::global2RelativePoint(QPoint globalpoint)
@@ -299,17 +248,19 @@ QPoint DocummentBase::global2RelativePoint(QPoint globalpoint)
 
 bool DocummentBase::setSelectTextStyle(QColor paintercolor, QColor pencolor, int penwidth)
 {
+    Q_D(DocummentBase);
     if (!bDocummentExist()) {
         return false;
     }
-    for (int i = 0; i < m_pages.size(); i++) {
-        m_pages.at(i)->setSelectTextStyle(paintercolor, pencolor, penwidth);
+    for (int i = 0; i < d->m_pages.size(); i++) {
+        d->m_pages.at(i)->setSelectTextStyle(paintercolor, pencolor, penwidth);
     }
     return true;
 }
 
 bool DocummentBase::mouseSelectText(QPoint start, QPoint stop)
 {
+    Q_D(DocummentBase);
     if (!bDocummentExist()) {
         return false;
     }
@@ -318,32 +269,32 @@ bool DocummentBase::mouseSelectText(QPoint start, QPoint stop)
     qDebug() << "startpoint:" << start << " stoppoint:" << stop;
     int startpagenum = -1, endpagenum = -1;
 
-    for (int i = 0; i < m_widgets.size(); i++) {
-        if (qstop.x() > m_widgets.at(i)->x() &&
+    for (int i = 0; i < d->m_widgets.size(); i++) {
+        if (qstop.x() > d->m_widgets.at(i)->x() &&
                 qstop.x() <
-                (m_widgets.at(i)->width() + m_widgets.at(i)->x()) &&
-                qstop.y() > m_widgets.at(i)->y() &&
+                (d->m_widgets.at(i)->width() + d->m_widgets.at(i)->x()) &&
+                qstop.y() > d->m_widgets.at(i)->y() &&
                 qstop.y() <
-                (m_widgets.at(i)->height() + m_widgets.at(i)->y())) {
-            qstop = QPoint(qstop.x() - m_widgets.at(i)->x(), qstop.y() - m_widgets.at(i)->y());
-            switch (m_viewmode) {
+                (d->m_widgets.at(i)->height() + d->m_widgets.at(i)->y())) {
+            qstop = QPoint(qstop.x() - d->m_widgets.at(i)->x(), qstop.y() - d->m_widgets.at(i)->y());
+            switch (d->m_viewmode) {
             case ViewMode_SinglePage:
                 endpagenum = i;
                 break;
             case ViewMode_FacingPage:
-                if (qstop.x() > m_pages.at(2 * i)->x() &&
+                if (qstop.x() > d->m_pages.at(2 * i)->x() &&
                         qstop.x() <
-                        (m_pages.at(2 * i)->width() + m_pages.at(2 * i)->x()) &&
-                        qstop.y() > m_pages.at(2 * i)->y() &&
+                        (d->m_pages.at(2 * i)->width() + d->m_pages.at(2 * i)->x()) &&
+                        qstop.y() > d->m_pages.at(2 * i)->y() &&
                         qstop.y() <
-                        (m_pages.at(2 * i)->height() + m_pages.at(2 * i)->y())) {
+                        (d->m_pages.at(2 * i)->height() + d->m_pages.at(2 * i)->y())) {
                     endpagenum = 2 * i;
                 } else {
                     endpagenum = 2 * i + 1;
-                    if (endpagenum >= m_pages.size()) {
+                    if (endpagenum >= d->m_pages.size()) {
                         endpagenum = 2 * i;
-                        qstop = QPoint(m_pages.at(endpagenum)->width() + m_pages.at(endpagenum)->x(),
-                                       m_pages.at(endpagenum)->height() + m_pages.at(endpagenum)->y());
+                        qstop = QPoint(d->m_pages.at(endpagenum)->width() + d->m_pages.at(endpagenum)->x(),
+                                       d->m_pages.at(endpagenum)->height() + d->m_pages.at(endpagenum)->y());
                     }
                 }
                 break;
@@ -355,32 +306,32 @@ bool DocummentBase::mouseSelectText(QPoint start, QPoint stop)
     }
 
 
-    for (int i = 0; i < m_widgets.size(); i++) {
-        if (qstart.x() > m_widgets.at(i)->x() &&
+    for (int i = 0; i < d->m_widgets.size(); i++) {
+        if (qstart.x() > d->m_widgets.at(i)->x() &&
                 qstart.x() <
-                (m_widgets.at(i)->width() + m_widgets.at(i)->x()) &&
-                qstart.y() > m_widgets.at(i)->y() &&
+                (d->m_widgets.at(i)->width() + d->m_widgets.at(i)->x()) &&
+                qstart.y() > d->m_widgets.at(i)->y() &&
                 qstart.y() <
-                (m_widgets.at(i)->height() + m_widgets.at(i)->y())) {
-            qstart = QPoint(qstart.x() - m_widgets.at(i)->x(), qstart.y() - m_widgets.at(i)->y());
-            switch (m_viewmode) {
+                (d->m_widgets.at(i)->height() + d->m_widgets.at(i)->y())) {
+            qstart = QPoint(qstart.x() - d->m_widgets.at(i)->x(), qstart.y() - d->m_widgets.at(i)->y());
+            switch (d->m_viewmode) {
             case ViewMode_SinglePage:
                 startpagenum = i;
                 break;
             case ViewMode_FacingPage:
-                if (qstart.x() > m_pages.at(2 * i)->x() &&
+                if (qstart.x() > d->m_pages.at(2 * i)->x() &&
                         qstart.x() <
-                        (m_pages.at(2 * i)->width() + m_pages.at(2 * i)->x()) &&
-                        qstart.y() > m_pages.at(2 * i)->y() &&
+                        (d->m_pages.at(2 * i)->width() + d->m_pages.at(2 * i)->x()) &&
+                        qstart.y() > d->m_pages.at(2 * i)->y() &&
                         qstart.y() <
-                        (m_pages.at(2 * i)->height() + m_pages.at(2 * i)->y())) {
+                        (d->m_pages.at(2 * i)->height() + d->m_pages.at(2 * i)->y())) {
                     startpagenum = 2 * i;
                 } else {
                     startpagenum = 2 * i + 1;
-                    if (startpagenum >= m_pages.size()) {
+                    if (startpagenum >= d->m_pages.size()) {
                         startpagenum = 2 * i;
-                        qstart = QPoint(m_pages.at(startpagenum)->width() + m_pages.at(startpagenum)->x(),
-                                        m_pages.at(startpagenum)->height() + m_pages.at(startpagenum)->y());
+                        qstart = QPoint(d->m_pages.at(startpagenum)->width() + d->m_pages.at(startpagenum)->x(),
+                                        d->m_pages.at(startpagenum)->height() + d->m_pages.at(startpagenum)->y());
                     }
                 }
                 break;
@@ -406,41 +357,41 @@ bool DocummentBase::mouseSelectText(QPoint start, QPoint stop)
     bool re = false;
     for (int i = startpagenum; i < endpagenum + 1; i++) {
 //        PagePdf *ppdf = (PagePdf *)m_pages.at(i);
-        QPoint pfirst = QPoint(m_pages.at(i)->x(), m_pages.at(i)->y());
-        QPoint plast = QPoint(m_pages.at(i)->width() + m_pages.at(i)->x(),
-                              m_pages.at(i)->height() + m_pages.at(i)->y());
-        switch (m_rotate) {
+        QPoint pfirst = QPoint(d->m_pages.at(i)->x(), d->m_pages.at(i)->y());
+        QPoint plast = QPoint(d->m_pages.at(i)->width() + d->m_pages.at(i)->x(),
+                              d->m_pages.at(i)->height() + d->m_pages.at(i)->y());
+        switch (d->m_rotate) {
         case RotateType_90:
-            pfirst = QPoint(m_pages.at(i)->x() + m_pages.at(i)->width(), m_pages.at(i)->y());
-            plast = QPoint(m_pages.at(i)->x(),
-                           m_pages.at(i)->height() + m_pages.at(i)->y());
+            pfirst = QPoint(d->m_pages.at(i)->x() + d->m_pages.at(i)->width(), d->m_pages.at(i)->y());
+            plast = QPoint(d->m_pages.at(i)->x(),
+                           d->m_pages.at(i)->height() + d->m_pages.at(i)->y());
             break;
         case RotateType_180:
-            pfirst = QPoint(m_pages.at(i)->x() + m_pages.at(i)->width(), m_pages.at(i)->y());
-            plast = QPoint(m_pages.at(i)->x(), m_pages.at(i)->y());
+            pfirst = QPoint(d->m_pages.at(i)->x() + d->m_pages.at(i)->width(), d->m_pages.at(i)->y());
+            plast = QPoint(d->m_pages.at(i)->x(), d->m_pages.at(i)->y());
             break;
         case RotateType_270:
-            pfirst = QPoint(m_pages.at(i)->x(), m_pages.at(i)->height() + m_pages.at(i)->y());
-            plast = QPoint(m_pages.at(i)->x() + m_pages.at(i)->width(),
-                           m_pages.at(i)->y());
+            pfirst = QPoint(d->m_pages.at(i)->x(), d->m_pages.at(i)->height() + d->m_pages.at(i)->y());
+            plast = QPoint(d->m_pages.at(i)->x() + d->m_pages.at(i)->width(),
+                           d->m_pages.at(i)->y());
             break;
         default:
             break;
         }
         if (i == startpagenum) {
             if (startpagenum == endpagenum) {
-                re = m_pages.at(i)->pageTextSelections(qstart, qstop);
+                re = d->m_pages.at(i)->pageTextSelections(qstart, qstop);
             } else {
-                re = m_pages.at(i)->pageTextSelections(qstart,
-                                                       plast);
+                re = d->m_pages.at(i)->pageTextSelections(qstart,
+                                                          plast);
             }
         } else if (i == endpagenum) {
-            re = m_pages.at(i)->pageTextSelections(
+            re = d->m_pages.at(i)->pageTextSelections(
                      pfirst,
                      qstop);
         } else {
-            re = m_pages.at(i)->pageTextSelections(pfirst,
-                                                   plast);
+            re = d->m_pages.at(i)->pageTextSelections(pfirst,
+                                                      plast);
         }
     }
     return re;
@@ -448,13 +399,15 @@ bool DocummentBase::mouseSelectText(QPoint start, QPoint stop)
 
 void DocummentBase::mouseSelectTextClear()
 {
-    for (int i = 0; i < m_pages.size(); i++) {
-        m_pages.at(i)->clearPageTextSelections();
+    Q_D(DocummentBase);
+    for (int i = 0; i < d->m_pages.size(); i++) {
+        d->m_pages.at(i)->clearPageTextSelections();
     }
 }
 
 bool DocummentBase::mouseBeOverText(QPoint point)
 {
+    Q_D(DocummentBase);
     if (!bDocummentExist()) {
         return false;
     }
@@ -463,39 +416,40 @@ bool DocummentBase::mouseBeOverText(QPoint point)
     pagenum = pointInWhichPage(qpoint);
 //    qDebug() << "mouseBeOverText pagenum:" << pagenum;
     if (-1 != pagenum) {
-        return m_pages.at(pagenum)->ifMouseMoveOverText(qpoint);
+        return d->m_pages.at(pagenum)->ifMouseMoveOverText(qpoint);
     }
     return false;
 }
 
 int DocummentBase::pointInWhichPage(QPoint &qpoint)
 {
+    Q_D(DocummentBase);
     int pagenum = -1;
-    for (int i = 0; i < m_widgets.size(); i++) {
-        if (qpoint.x() > m_widgets.at(i)->x() &&
+    for (int i = 0; i < d->m_widgets.size(); i++) {
+        if (qpoint.x() > d->m_widgets.at(i)->x() &&
                 qpoint.x() <
-                (m_widgets.at(i)->width() + m_widgets.at(i)->x()) &&
-                qpoint.y() > m_widgets.at(i)->y() &&
+                (d->m_widgets.at(i)->width() + d->m_widgets.at(i)->x()) &&
+                qpoint.y() > d->m_widgets.at(i)->y() &&
                 qpoint.y() <
-                (m_widgets.at(i)->height() + m_widgets.at(i)->y())) {
-            qpoint = QPoint(qpoint.x() - m_widgets.at(i)->x(), qpoint.y() - m_widgets.at(i)->y());
-            switch (m_viewmode) {
+                (d->m_widgets.at(i)->height() + d->m_widgets.at(i)->y())) {
+            qpoint = QPoint(qpoint.x() - d->m_widgets.at(i)->x(), qpoint.y() - d->m_widgets.at(i)->y());
+            switch (d->m_viewmode) {
             case ViewMode_SinglePage:
                 pagenum = i;
                 //                qpoint = QPoint(qpoint.x() - m_widgets.at(i)->x(), qpoint.y() - m_widgets.at(i)->y());
                 break;
             case ViewMode_FacingPage:
                 //                qpoint = QPoint(qpoint.x() - m_widgets.at(i)->x(), qpoint.y() - m_widgets.at(i)->y());
-                if (qpoint.x() > m_pages.at(2 * i)->x() &&
+                if (qpoint.x() > d->m_pages.at(2 * i)->x() &&
                         qpoint.x() <
-                        (m_pages.at(2 * i)->width() + m_pages.at(2 * i)->x()) &&
-                        qpoint.y() > m_pages.at(2 * i)->y() &&
+                        (d->m_pages.at(2 * i)->width() + d->m_pages.at(2 * i)->x()) &&
+                        qpoint.y() > d->m_pages.at(2 * i)->y() &&
                         qpoint.y() <
-                        (m_pages.at(2 * i)->height() + m_pages.at(2 * i)->y())) {
+                        (d->m_pages.at(2 * i)->height() + d->m_pages.at(2 * i)->y())) {
                     pagenum = 2 * i;
                 } else {
                     pagenum = 2 * i + 1;
-                    if (pagenum >= m_pages.size())
+                    if (pagenum >= d->m_pages.size())
                         return -1;
                 }
                 break;
@@ -510,24 +464,20 @@ int DocummentBase::pointInWhichPage(QPoint &qpoint)
 
 void DocummentBase::slot_MagnifierPixmapCacheLoaded(int pageno)
 {
-    if (pageno == m_lastmagnifierpagenum) {
-        showMagnifier(m_magnifierpoint);
+    Q_D(DocummentBase);
+    if (pageno == d->m_lastmagnifierpagenum) {
+        showMagnifier(d->m_magnifierpoint);
     }
-}
-
-void DocummentBase::slot_searchValueAdd(stSearchRes res)
-{
-    m_pagecountsearch.insert(res.ipage,res.listtext.size());
-    emit signal_searchRes(res);
 }
 
 bool DocummentBase::showMagnifier(QPoint point)
 {
-    if (!bDocummentExist() || !m_magnifierwidget) {
+    Q_D(DocummentBase);
+    if (!bDocummentExist() || !d->m_magnifierwidget) {
         return false;
     }
     QPoint qpoint = point;
-    m_magnifierpoint = point;
+    d->m_magnifierpoint = point;
     int pagenum = -1;
     int x_offset = 0;
     int y_offset = 0;
@@ -537,61 +487,61 @@ bool DocummentBase::showMagnifier(QPoint point)
     DScrollBar *scrollBar_Y = verticalScrollBar();
     if (scrollBar_Y)
         y_offset = scrollBar_Y->value();
-    QPoint gpoint = m_magnifierwidget->mapFromGlobal(mapToGlobal(QPoint(point.x() - x_offset, point.y() - y_offset)));
+    QPoint gpoint = d->m_magnifierwidget->mapFromGlobal(mapToGlobal(QPoint(point.x() - x_offset, point.y() - y_offset)));
     pagenum = pointInWhichPage(qpoint);
     qDebug() << "showMagnifier pagenum:" << pagenum;
     if (-1 != pagenum) {
-        if (pagenum != m_lastmagnifierpagenum && -1 != m_lastmagnifierpagenum) {
-            if (pagenum > m_lastmagnifierpagenum && m_lastmagnifierpagenum - 3 > 0) {
-                PageBase *ppage = m_pages.at(m_lastmagnifierpagenum - 3);
+        if (pagenum != d->m_lastmagnifierpagenum && -1 != d->m_lastmagnifierpagenum) {
+            if (pagenum > d->m_lastmagnifierpagenum && d->m_lastmagnifierpagenum - 3 > 0) {
+                PageBase *ppage = d->m_pages.at(d->m_lastmagnifierpagenum - 3);
                 ppage->clearMagnifierPixmap();
-                if (pagenum - m_lastmagnifierpagenum > 1) {
-                    ppage = m_pages.at(m_lastmagnifierpagenum - 2);
+                if (pagenum - d->m_lastmagnifierpagenum > 1) {
+                    ppage = d->m_pages.at(d->m_lastmagnifierpagenum - 2);
                     ppage->clearMagnifierPixmap();
                 }
-            } else if (pagenum < m_lastmagnifierpagenum && m_lastmagnifierpagenum + 3 < m_pages.size()) {
-                PageBase *ppage = m_pages.at(m_lastmagnifierpagenum + 3);
+            } else if (pagenum < d->m_lastmagnifierpagenum && d->m_lastmagnifierpagenum + 3 < d->m_pages.size()) {
+                PageBase *ppage = d->m_pages.at(d->m_lastmagnifierpagenum + 3);
                 ppage->clearMagnifierPixmap();
-                if ( m_lastmagnifierpagenum - pagenum > 1) {
-                    ppage = m_pages.at(m_lastmagnifierpagenum + 2);
+                if ( d->m_lastmagnifierpagenum - pagenum > 1) {
+                    ppage = d->m_pages.at(d->m_lastmagnifierpagenum + 2);
                     ppage->clearMagnifierPixmap();
                 }
             }
             PageBase *ppage = nullptr;
             int ipageno = pagenum;
-            if (ipageno >= 0 && ipageno < m_pages.size()) {
-                ppage = m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale());
+            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
+                ppage = d->m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale());
             }
             ipageno = pagenum + 1;
-            if (ipageno >= 0 && ipageno < m_pages.size()) {
-                ppage = m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale());
+            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
+                ppage = d->m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale());
             }
             ipageno = pagenum - 1;
-            if (ipageno >= 0 && ipageno < m_pages.size()) {
-                ppage = m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale());
+            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
+                ppage = d->m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale());
             }
             ipageno = pagenum + 2;
-            if (ipageno >= 0 && ipageno < m_pages.size()) {
-                ppage = m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale());
+            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
+                ppage = d->m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale());
             }
             ipageno = pagenum - 2;
-            if (ipageno >= 0 && ipageno < m_pages.size()) {
-                ppage = m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale());
+            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
+                ppage = d->m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale());
             }
             ipageno = pagenum + 3;
-            if (ipageno >= 0 && ipageno < m_pages.size()) {
-                ppage = m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale());
+            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
+                ppage = d->m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale());
             }
             ipageno = pagenum - 3;
-            if (ipageno >= 0 && ipageno < m_pages.size()) {
-                ppage = m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale());
+            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
+                ppage = d->m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale());
             }
 //            for (int i = pagenum - 3; i < pagenum + 4; i++) {
 //                if (i > 0 && i < m_pages.size()) {
@@ -600,90 +550,91 @@ bool DocummentBase::showMagnifier(QPoint point)
 //                }
 //            }
         }
-        m_lastmagnifierpagenum = pagenum;
-        PageBase *ppage = m_pages.at(pagenum);
+        d->m_lastmagnifierpagenum = pagenum;
+        PageBase *ppage = d->m_pages.at(pagenum);
         QPixmap pixmap;
-        m_magnifierpage = pagenum;
-        if (ppage ->getMagnifierPixmap(pixmap, qpoint, m_magnifierwidget->getMagnifierRadius(), ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale())) {
-            m_magnifierwidget->setPixmap(pixmap);
+        d->m_magnifierpage = pagenum;
+        if (ppage ->getMagnifierPixmap(pixmap, qpoint, d->m_magnifierwidget->getMagnifierRadius(), ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale())) {
+            d->m_magnifierwidget->setPixmap(pixmap);
 
-            m_magnifierwidget->setPoint(gpoint);
-            m_magnifierwidget->startShow();
-            m_magnifierwidget->show();
-            m_magnifierwidget->update();
+            d->m_magnifierwidget->setPoint(gpoint);
+            d->m_magnifierwidget->startShow();
+            d->m_magnifierwidget->show();
+            d->m_magnifierwidget->update();
         }
     } else {
-        QPixmap pix(m_magnifierwidget->getMagnifierRadius() * 2, m_magnifierwidget->getMagnifierRadius() * 2);
+        QPixmap pix(d->m_magnifierwidget->getMagnifierRadius() * 2, d->m_magnifierwidget->getMagnifierRadius() * 2);
         pix.fill(Qt::transparent);
-        m_magnifierwidget->setPixmap(pix);
-        m_magnifierwidget->setPoint(gpoint);
-        m_magnifierwidget->show();
-        m_magnifierwidget->update();
+        d->m_magnifierwidget->setPixmap(pix);
+        d->m_magnifierwidget->setPoint(gpoint);
+        d->m_magnifierwidget->show();
+        d->m_magnifierwidget->update();
     }
-    if (!m_magnifierwidget->showState())
+    if (!d->m_magnifierwidget->showState())
         return false;
-    int radius = m_magnifierwidget->getMagnifierRadius() - m_magnifierwidget->getMagnifierRingWidth();
+    int radius = d->m_magnifierwidget->getMagnifierRadius() - d->m_magnifierwidget->getMagnifierRingWidth();
     int bigcirclex = gpoint.x() - radius;
     int bigcircley = gpoint.y() - radius;
     if (bigcircley < 0) {
 
         if (scrollBar_Y)
             scrollBar_Y->setValue(scrollBar_Y->value() + bigcircley);
-    } else if (bigcircley > m_magnifierwidget->height() - radius * 2) {
+    } else if (bigcircley > d->m_magnifierwidget->height() - radius * 2) {
         if (scrollBar_Y)
-            scrollBar_Y->setValue(scrollBar_Y->value() + bigcircley - (m_magnifierwidget->height() - radius * 2));
+            scrollBar_Y->setValue(scrollBar_Y->value() + bigcircley - (d->m_magnifierwidget->height() - radius * 2));
     }
     if (bigcirclex < 0) {
         if (scrollBar_X)
             scrollBar_X->setValue(scrollBar_X->value() + bigcirclex);
-    } else if (bigcirclex > m_magnifierwidget->width() - radius * 2) {
+    } else if (bigcirclex > d->m_magnifierwidget->width() - radius * 2) {
         if (scrollBar_X)
-            scrollBar_X->setValue(scrollBar_X->value() + bigcirclex - (m_magnifierwidget->width() - radius * 2));
+            scrollBar_X->setValue(scrollBar_X->value() + bigcirclex - (d->m_magnifierwidget->width() - radius * 2));
     }
     return true;
 }
 
 bool DocummentBase::pageJump(int pagenum)
 {
-    if (pagenum < 0 || pagenum > m_pages.size())
+    Q_D(DocummentBase);
+    if (pagenum < 0 || pagenum > d->m_pages.size())
         return false;
-    if (m_bslidemodel) {
+    if (d->m_bslidemodel) {
         QImage image;
-        double width = m_slidewidget->width(), height = m_slidewidget->height();
-        if (!m_pages.at(pagenum)->getSlideImage(image, width, height)) {
+        double width = d->m_slidewidget->width(), height = d->m_slidewidget->height();
+        if (!d->m_pages.at(pagenum)->getInterFace()->getSlideImage(image, width, height)) {
             return false;
         }
-        if (-1 != m_slidepageno) {
-            DLabel *plabel = pslideanimationlabel;
-            pslideanimationlabel = pslidelabel;
-            pslidelabel = plabel;
+        if (-1 != d->m_slidepageno) {
+            DLabel *plabel = d->pslideanimationlabel;
+            d->pslideanimationlabel = d->pslidelabel;
+            d->pslidelabel = plabel;
         }
-        pslidelabel->setGeometry((m_slidewidget->width() - width) / 2, (m_slidewidget->height() - height) / 2, width, height);
+        d->pslidelabel->setGeometry((d->m_slidewidget->width() - width) / 2, (d->m_slidewidget->height() - height) / 2, width, height);
         QPixmap map = QPixmap::fromImage(image);
-        pslidelabel->setPixmap(map);
-        pslidelabel->show();
+        d->pslidelabel->setPixmap(map);
+        d->pslidelabel->show();
 
-        if (-1 != m_slidepageno) {
-            QPropertyAnimation *animation = new QPropertyAnimation(pslideanimationlabel, "geometry");
+        if (-1 != d->m_slidepageno) {
+            QPropertyAnimation *animation = new QPropertyAnimation(d->pslideanimationlabel, "geometry");
             animation->setDuration(500);
 
-            QPropertyAnimation *animation1 = new QPropertyAnimation(pslidelabel, "geometry");
+            QPropertyAnimation *animation1 = new QPropertyAnimation(d->pslidelabel, "geometry");
             animation1->setDuration(500);
 
-            if (m_slidepageno > pagenum) {
+            if (d->m_slidepageno > pagenum) {
                 qDebug() << "pageJump previous pagenum:" << pagenum;
-                animation->setStartValue(pslideanimationlabel->geometry());
-                animation->setEndValue(QRect(m_slidewidget->width(), 10, pslideanimationlabel->width(), pslideanimationlabel->height()));
+                animation->setStartValue(d->pslideanimationlabel->geometry());
+                animation->setEndValue(QRect(d->m_slidewidget->width(), 10, d->pslideanimationlabel->width(), d->pslideanimationlabel->height()));
 
-                animation1->setStartValue(QRect(-m_slidewidget->width(), 10, pslidelabel->width(), pslidelabel->height()));
-                animation1->setEndValue(pslidelabel->geometry());
+                animation1->setStartValue(QRect(-d->m_slidewidget->width(), 10, d->pslidelabel->width(), d->pslidelabel->height()));
+                animation1->setEndValue(d->pslidelabel->geometry());
             } else {
                 qDebug() << "pageJump next pagenum:" << pagenum;
-                animation->setStartValue(pslideanimationlabel->geometry());
-                animation->setEndValue(QRect(-m_slidewidget->width(), 10, pslideanimationlabel->width(), pslideanimationlabel->height()));
+                animation->setStartValue(d->pslideanimationlabel->geometry());
+                animation->setEndValue(QRect(-d->m_slidewidget->width(), 10, d->pslideanimationlabel->width(), d->pslideanimationlabel->height()));
 
-                animation1->setStartValue(QRect(m_slidewidget->width(), 10, pslidelabel->width(), pslidelabel->height()));
-                animation1->setEndValue(pslidelabel->geometry());
+                animation1->setStartValue(QRect(d->m_slidewidget->width(), 10, d->pslidelabel->width(), d->pslidelabel->height()));
+                animation1->setEndValue(d->pslidelabel->geometry());
             }
             QParallelAnimationGroup *group = new QParallelAnimationGroup;
             group->addAnimation(animation);
@@ -692,23 +643,23 @@ bool DocummentBase::pageJump(int pagenum)
             group->start(QAbstractAnimation::DeleteWhenStopped);
         }
 
-        m_slidepageno = pagenum;
+        d->m_slidepageno = pagenum;
     } else {
         DScrollBar *scrollBar_X = horizontalScrollBar();
         DScrollBar *scrollBar_Y = verticalScrollBar();
-        switch (m_viewmode) {
+        switch (d->m_viewmode) {
         case ViewMode_SinglePage:
-            qDebug() << "-------pagenum:" << pagenum << " x():" << m_widgets.at(pagenum)->x() << " y():" << m_widgets.at(pagenum)->y();
+            qDebug() << "-------pagenum:" << pagenum << " x():" << d->m_widgets.at(pagenum)->x() << " y():" << d->m_widgets.at(pagenum)->y();
             if (scrollBar_X)
-                scrollBar_X->setValue(m_widgets.at(pagenum)->x());
+                scrollBar_X->setValue(d->m_widgets.at(pagenum)->x());
             if (scrollBar_Y)
-                scrollBar_Y->setValue(m_widgets.at(pagenum)->y());
+                scrollBar_Y->setValue(d->m_widgets.at(pagenum)->y());
             break;
         case ViewMode_FacingPage:
             if (scrollBar_X)
-                scrollBar_X->setValue(m_widgets.at(pagenum / 2)->x() + m_pages.at(pagenum)->x());
+                scrollBar_X->setValue(d->m_widgets.at(pagenum / 2)->x() + d->m_pages.at(pagenum)->x());
             if (scrollBar_Y)
-                scrollBar_Y->setValue(m_widgets.at(pagenum / 2)->y());
+                scrollBar_Y->setValue(d->m_widgets.at(pagenum / 2)->y());
             break;
         default:
             break;
@@ -719,48 +670,49 @@ bool DocummentBase::pageJump(int pagenum)
 
 void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
 {
-    int currpageno = m_currentpageno;
-    if (m_pages.size() < 1) {
+    Q_D(DocummentBase);
+    int currpageno = d->m_currentpageno;
+    if (d->m_pages.size() < 1) {
         return;
     }
 
-    if (scale - m_scale < EPSINON && scale - m_scale > -EPSINON && (rotate == RotateType_Normal || m_rotate == rotate)) {
+    if (scale - d->m_scale < EPSINON && scale - d->m_scale > -EPSINON && (rotate == RotateType_Normal || d->m_rotate == rotate)) {
         return;
     }
 
-    m_scale = scale;
+    d->m_scale = scale;
 
     if (rotate != RotateType_Normal)
-        m_rotate = rotate;
+        d->m_rotate = rotate;
 
-    donotneedreloaddoc = true;
+    d->donotneedreloaddoc = true;
 
-    for (int i = 0; i < m_pages.size(); i++) {
-        m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
+    for (int i = 0; i < d->m_pages.size(); i++) {
+        d->m_pages.at(i)->setScaleAndRotate(d->m_scale, d->m_rotate);
     }
-    int rex = m_vboxLayout.margin(), rey = m_vboxLayout.margin();
+    int rex = d->m_vboxLayout->margin(), rey = d->m_vboxLayout->margin();
 
-    switch (m_viewmode) {
+    switch (d->m_viewmode) {
     case ViewMode_SinglePage:
-        for (int i = 0; i < m_widgets.size(); i++) {
-            m_widgets.at(i)->setGeometry((width() - rex * 2 - m_pages.at(i)->width()) / 2, rey, m_widgets.at(i)->layout()->margin() * 2 + m_pages.at(i)->width(), m_widgets.at(i)->layout()->margin() * 2 + m_pages.at(i)->height());
-            rey += m_widgets.at(i)->layout()->margin() * 2 + m_pages.at(i)->height() + m_vboxLayout.spacing();
+        for (int i = 0; i < d->m_widgets.size(); i++) {
+            d->m_widgets.at(i)->setGeometry((width() - rex * 2 - d->m_pages.at(i)->width()) / 2, rey, d->m_widgets.at(i)->layout()->margin() * 2 + d->m_pages.at(i)->width(), d->m_widgets.at(i)->layout()->margin() * 2 + d->m_pages.at(i)->height());
+            rey += d->m_widgets.at(i)->layout()->margin() * 2 + d->m_pages.at(i)->height() + d->m_vboxLayout->spacing();
         }
         break;
     case ViewMode_FacingPage:
-        for (int i = 0; i < m_widgets.size() / 2; i++) {
+        for (int i = 0; i < d->m_widgets.size() / 2; i++) {
             int reheight = 0;
-            if (m_pages.at(i * 2)->height() < m_pages.at(i * 2 + 1)->height()) {
-                reheight = m_pages.at(i * 2 + 1)->height();
+            if (d->m_pages.at(i * 2)->height() < d->m_pages.at(i * 2 + 1)->height()) {
+                reheight = d->m_pages.at(i * 2 + 1)->height();
             } else {
-                reheight = m_pages.at(i * 2)->height();
+                reheight = d->m_pages.at(i * 2)->height();
             }
-            m_widgets.at(i)->setGeometry((width() - rex * 2 - m_pages.at(i)->width() * 2) / 2, rey, m_widgets.at(i)->layout()->margin() * 2 + m_widgets.at(i)->layout()->spacing() + m_pages.at(i * 2)->width() + m_pages.at(i * 2 + 1)->width(), m_widgets.at(i)->layout()->margin() * 2 + reheight);
-            rey += m_widgets.at(i)->layout()->margin() * 2 + reheight + m_vboxLayout.spacing();
+            d->m_widgets.at(i)->setGeometry((width() - rex * 2 - d->m_pages.at(i)->width() * 2) / 2, rey, d->m_widgets.at(i)->layout()->margin() * 2 + d->m_widgets.at(i)->layout()->spacing() + d->m_pages.at(i * 2)->width() + d->m_pages.at(i * 2 + 1)->width(), d->m_widgets.at(i)->layout()->margin() * 2 + reheight);
+            rey += d->m_widgets.at(i)->layout()->margin() * 2 + reheight + d->m_vboxLayout->spacing();
         }
-        if (m_widgets.size() % 2) {
-            int reheight = m_pages.at(m_pages.size() - 1)->height();
-            m_widgets.at(m_widgets.size() / 2)->setGeometry((width() - rex * 2 - m_pages.at(m_widgets.size() / 2)->width() * 2) / 2, rey, m_widgets.at(m_widgets.size() / 2)->layout()->margin() * 2 + m_widgets.at(m_widgets.size() / 2)->layout()->spacing() + m_pages.at(m_pages.size() - 1)->width() * 2, m_widgets.at(m_widgets.size() / 2)->layout()->margin() * 2 + reheight);
+        if (d->m_widgets.size() % 2) {
+            int reheight = d->m_pages.at(d->m_pages.size() - 1)->height();
+            d->m_widgets.at(d->m_widgets.size() / 2)->setGeometry((width() - rex * 2 - d->m_pages.at(d->m_widgets.size() / 2)->width() * 2) / 2, rey, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + d->m_widgets.at(d->m_widgets.size() / 2)->layout()->spacing() + d->m_pages.at(d->m_pages.size() - 1)->width() * 2, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + reheight);
         }
         break;
     default:
@@ -771,8 +723,8 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
 //        m_pages.at(i)->setReSize(m_scale, m_rotate);
 //    }
     pageJump(currpageno);
-    donotneedreloaddoc = false;
-    m_currentpageno = currpageno;
+    d->donotneedreloaddoc = false;
+    d->m_currentpageno = currpageno;
     loadPages();
 //    if (m_threadloaddoc.isRunning())
 //        m_threadloaddoc.setRestart();
@@ -782,8 +734,9 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
 
 int DocummentBase::currentPageNo()
 {
-    if (m_bslidemodel) {
-        return m_slidepageno;
+    Q_D(DocummentBase);
+    if (d->m_bslidemodel) {
+        return d->m_slidepageno;
     }
     int pagenum = -1;
     int x_offset = 0;
@@ -794,19 +747,19 @@ int DocummentBase::currentPageNo()
     DScrollBar *scrollBar_Y = verticalScrollBar();
     if (scrollBar_Y)
         y_offset = scrollBar_Y->value();
-    switch (m_viewmode) {
+    switch (d->m_viewmode) {
     case ViewMode_SinglePage:
-        for (int i = 0; i < m_pages.size(); i++) {
-            if (y_offset < m_widgets.at(i)->y() + m_widgets.at(i)->height()) {
+        for (int i = 0; i < d->m_pages.size(); i++) {
+            if (y_offset < d->m_widgets.at(i)->y() + d->m_widgets.at(i)->height()) {
                 pagenum = i;
                 break;
             }
         }
         break;
     case ViewMode_FacingPage:
-        for (int i = 0; i < m_pages.size() / 2; i++) {
-            if (y_offset < m_widgets.at(i)->y() + m_widgets.at(i)->height()) {
-                if (x_offset < m_widgets.at(i)->x() + m_pages.at(i * 2)->x() + m_pages.at(i * 2)->width()) {
+        for (int i = 0; i < d->m_pages.size() / 2; i++) {
+            if (y_offset < d->m_widgets.at(i)->y() + d->m_widgets.at(i)->height()) {
+                if (x_offset < d->m_widgets.at(i)->x() + d->m_pages.at(i * 2)->x() + d->m_pages.at(i * 2)->width()) {
                     pagenum = i * 2;
                 } else {
                     pagenum = i * 2 + 1;
@@ -814,12 +767,12 @@ int DocummentBase::currentPageNo()
                 break;
             }
         }
-        if (-1 == pagenum && m_pages.size() % 2) {
-            if (y_offset < m_widgets.at(m_pages.size() / 2)->y() + m_widgets.at(m_pages.size() / 2)->height()) {
-                if (x_offset < m_widgets.at(m_pages.size() / 2)->x() + m_pages.at(m_pages.size() - 1)->x() + m_pages.at(m_pages.size() - 1)->width()) {
-                    pagenum = m_pages.size() - 1;
+        if (-1 == pagenum && d->m_pages.size() % 2) {
+            if (y_offset < d->m_widgets.at(d->m_pages.size() / 2)->y() + d->m_widgets.at(d->m_pages.size() / 2)->height()) {
+                if (x_offset < d->m_widgets.at(d->m_pages.size() / 2)->x() + d->m_pages.at(d->m_pages.size() - 1)->x() + d->m_pages.at(d->m_pages.size() - 1)->width()) {
+                    pagenum = d->m_pages.size() - 1;
                 } else {
-                    pagenum = m_pages.size();
+                    pagenum = d->m_pages.size();
                 }
                 break;
             }
@@ -833,53 +786,56 @@ int DocummentBase::currentPageNo()
 
 void DocummentBase::showSinglePage()
 {
-    pblankwidget->hide();
-    for (int i = 0; i < m_pages.size(); i++) {
-        m_widgets.at(i)->layout()->addWidget(m_pages.at(i));
-        m_widgets.at(i)->show();
+    Q_D(DocummentBase);
+    d->pblankwidget->hide();
+    for (int i = 0; i < d->m_pages.size(); i++) {
+        d->m_widgets.at(i)->layout()->addWidget(d->m_pages.at(i));
+        d->m_widgets.at(i)->show();
     }
-    int rex = m_vboxLayout.margin(), rey = m_vboxLayout.margin();
-    for (int i = 0; i < m_widgets.size(); i++) {
-        m_widgets.at(i)->setGeometry(rex, rey, m_widgets.at(i)->layout()->margin() * 2 + m_pages.at(i)->width(), m_widgets.at(i)->layout()->margin() * 2 + m_pages.at(i)->height());
-        rey += m_widgets.at(i)->layout()->margin() * 2 + m_pages.at(i)->height() + m_vboxLayout.spacing();
+    int rex = d->m_vboxLayout->margin(), rey = d->m_vboxLayout->margin();
+    for (int i = 0; i < d->m_widgets.size(); i++) {
+        d->m_widgets.at(i)->setGeometry(rex, rey, d->m_widgets.at(i)->layout()->margin() * 2 + d->m_pages.at(i)->width(), d->m_widgets.at(i)->layout()->margin() * 2 + d->m_pages.at(i)->height());
+        rey += d->m_widgets.at(i)->layout()->margin() * 2 + d->m_pages.at(i)->height() + d->m_vboxLayout->spacing();
     }
 }
 void DocummentBase::showFacingPage()
 {
-    for (int i = 0; i < m_widgets.size(); i++) {
-        m_widgets.at(i)->hide();
+    Q_D(DocummentBase);
+    for (int i = 0; i < d->m_widgets.size(); i++) {
+        d->m_widgets.at(i)->hide();
     }
-    pblankwidget->hide();
-    for (int i = 0; i < m_pages.size() / 2; i++) {
-        m_widgets.at(i)->layout()->addWidget(m_pages.at(i * 2));
-        m_widgets.at(i)->layout()->addWidget(m_pages.at(i * 2 + 1));
-        m_widgets.at(i)->show();
+    d->pblankwidget->hide();
+    for (int i = 0; i < d->m_pages.size() / 2; i++) {
+        d->m_widgets.at(i)->layout()->addWidget(d->m_pages.at(i * 2));
+        d->m_widgets.at(i)->layout()->addWidget(d->m_pages.at(i * 2 + 1));
+        d->m_widgets.at(i)->show();
     }
-    if (m_pages.size() % 2) {
-        pblankwidget->show();
-        m_widgets.at(m_pages.size() / 2)->layout()->addWidget(m_pages.at(m_pages.size() - 1));
-        m_widgets.at(m_pages.size() / 2)->layout()->addWidget(pblankwidget);
-        m_widgets.at(m_pages.size() / 2)->show();
+    if (d->m_pages.size() % 2) {
+        d->pblankwidget->show();
+        d->m_widgets.at(d->m_pages.size() / 2)->layout()->addWidget(d->m_pages.at(d->m_pages.size() - 1));
+        d->m_widgets.at(d->m_pages.size() / 2)->layout()->addWidget(d->pblankwidget);
+        d->m_widgets.at(d->m_pages.size() / 2)->show();
     }
-    int rex = m_vboxLayout.margin(), rey = m_vboxLayout.margin();
-    for (int i = 0; i < m_widgets.size() / 2; i++) {
+    int rex = d->m_vboxLayout->margin(), rey = d->m_vboxLayout->margin();
+    for (int i = 0; i < d->m_widgets.size() / 2; i++) {
         int reheight = 0;
-        if (m_pages.at(i * 2)->height() < m_pages.at(i * 2 + 1)->height()) {
-            reheight = m_pages.at(i * 2 + 1)->height();
+        if (d->m_pages.at(i * 2)->height() < d->m_pages.at(i * 2 + 1)->height()) {
+            reheight = d->m_pages.at(i * 2 + 1)->height();
         } else {
-            reheight = m_pages.at(i * 2)->height();
+            reheight = d->m_pages.at(i * 2)->height();
         }
-        m_widgets.at(i)->setGeometry(rex, rey, m_widgets.at(i)->layout()->margin() * 2 + m_widgets.at(i)->layout()->spacing() + m_pages.at(i * 2)->width() + m_pages.at(i * 2 + 1)->width(), m_widgets.at(i)->layout()->margin() * 2 + reheight);
-        rey += m_widgets.at(i)->layout()->margin() * 2 + reheight + m_vboxLayout.spacing();
+        d->m_widgets.at(i)->setGeometry(rex, rey, d->m_widgets.at(i)->layout()->margin() * 2 + d->m_widgets.at(i)->layout()->spacing() + d->m_pages.at(i * 2)->width() + d->m_pages.at(i * 2 + 1)->width(), d->m_widgets.at(i)->layout()->margin() * 2 + reheight);
+        rey += d->m_widgets.at(i)->layout()->margin() * 2 + reheight + d->m_vboxLayout->spacing();
     }
-    if (m_pages.size() % 2) {
-        int reheight = m_pages.at(m_pages.size() - 1)->height();
-        m_widgets.at(m_widgets.size() / 2)->setGeometry(rex, rey, m_widgets.at(m_widgets.size() / 2)->layout()->margin() * 2 + m_widgets.at(m_widgets.size() / 2)->layout()->spacing() + m_pages.at(m_pages.size() - 1)->width() * 2, m_widgets.at(m_widgets.size() / 2)->layout()->margin() * 2 + reheight);
+    if (d->m_pages.size() % 2) {
+        int reheight = d->m_pages.at(d->m_pages.size() - 1)->height();
+        d->m_widgets.at(d->m_widgets.size() / 2)->setGeometry(rex, rey, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + d->m_widgets.at(d->m_widgets.size() / 2)->layout()->spacing() + d->m_pages.at(d->m_pages.size() - 1)->width() * 2, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + reheight);
     }
 }
 
 Page::Link *DocummentBase::mouseBeOverLink(QPoint point)
 {
+    Q_D(DocummentBase);
     if (!bDocummentExist()) {
         return nullptr;
     }
@@ -888,19 +844,20 @@ Page::Link *DocummentBase::mouseBeOverLink(QPoint point)
     pagenum = pointInWhichPage(qpoint);
 //    qDebug() << "mouseBeOverLink pagenum:" << pagenum;
     if (-1 != pagenum) {
-        return m_pages.at(pagenum)->ifMouseMoveOverLink(qpoint);
+        return d->m_pages.at(pagenum)->ifMouseMoveOverLink(qpoint);
     }
     return nullptr;
 }
 
 void DocummentBase::slot_vScrollBarValueChanged(int value)
 {
+    Q_D(DocummentBase);
 //    qDebug() << "slot_vScrollBarValueChanged" << value;
-    if (!donotneedreloaddoc) {
+    if (!d->donotneedreloaddoc) {
         int pageno = currentPageNo();
-        if (m_currentpageno != pageno) {
-            m_currentpageno = pageno;
-            emit signal_pageChange(m_currentpageno);
+        if (d->m_currentpageno != pageno) {
+            d->m_currentpageno = pageno;
+            emit signal_pageChange(d->m_currentpageno);
         }
         loadPages();
 //        if (m_threadloaddoc.isRunning())
@@ -912,12 +869,13 @@ void DocummentBase::slot_vScrollBarValueChanged(int value)
 
 void DocummentBase::slot_hScrollBarValueChanged(int value)
 {
+    Q_D(DocummentBase);
 //    qDebug() << "slot_hScrollBarValueChanged" << value;
-    if (!donotneedreloaddoc) {
+    if (!d->donotneedreloaddoc) {
         int pageno = currentPageNo();
-        if (m_currentpageno != pageno) {
-            m_currentpageno = pageno;
-            emit signal_pageChange(m_currentpageno);
+        if (d->m_currentpageno != pageno) {
+            d->m_currentpageno = pageno;
+            emit signal_pageChange(d->m_currentpageno);
         }
         loadPages();
 //        if (m_threadloaddoc.isRunning())
@@ -929,14 +887,15 @@ void DocummentBase::slot_hScrollBarValueChanged(int value)
 
 bool DocummentBase::getSelectTextString(QString &st)
 {
+    Q_D(DocummentBase);
     if (!bDocummentExist()) {
         return false;
     }
     st = "";
     bool bselectexit = false;
-    for (int i = 0; i < m_pages.size(); i++) {
+    for (int i = 0; i < d->m_pages.size(); i++) {
         QString stpage = "";
-        if (m_pages.at(i)->getSelectTextString(stpage)) {
+        if (d->m_pages.at(i)->getSelectTextString(stpage)) {
             bselectexit = true;
             st += stpage;
         }
@@ -946,6 +905,7 @@ bool DocummentBase::getSelectTextString(QString &st)
 
 bool DocummentBase::showSlideModel()
 {
+    Q_D(DocummentBase);
     if (!bDocummentExist()) {
         return false;
     }
@@ -953,25 +913,26 @@ bool DocummentBase::showSlideModel()
     if (curpageno < 0) {
         curpageno = 0;
     }
-    m_bslidemodel = true;
+    d->m_bslidemodel = true;
     this->hide();
-    m_slidewidget->show();
+    d->m_slidewidget->show();
     if (pageJump(curpageno)) {
         return true;
     }
-    m_slidepageno = -1;
-    m_bslidemodel = false;
+    d->m_slidepageno = -1;
+    d->m_bslidemodel = false;
     this->show();
-    m_slidewidget->hide();
+    d->m_slidewidget->hide();
     return false;
 }
 
 bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
 {
-    int currpageno = m_currentpageno;
-    m_viewmode = viewmode;
-    donotneedreloaddoc = true;
-    switch (m_viewmode) {
+    Q_D(DocummentBase);
+    int currpageno = d->m_currentpageno;
+    d->m_viewmode = viewmode;
+    d->donotneedreloaddoc = true;
+    switch (d->m_viewmode) {
     case ViewMode_SinglePage:
         showSinglePage();
         break;
@@ -983,7 +944,7 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
         break;
     }
     pageJump(currpageno);
-    donotneedreloaddoc = false;
+    d->donotneedreloaddoc = false;
     loadPages();
 //    if (m_threadloaddoc.isRunning())
 //        m_threadloaddoc.setRestart();
@@ -994,6 +955,7 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
 
 bool DocummentBase::loadPages()
 {
+    Q_D(DocummentBase);
     if (!bDocummentExist())
         return false;
     qDebug() << "loadPages";
@@ -1002,60 +964,46 @@ bool DocummentBase::loadPages()
 //        return false;
 //    }
     //    for (int i = 0; i < m_pages.size(); i++) {
-    int pagenum  = m_currentpageno;
-    if (pagenum >= 0 && pagenum < m_pages.size())
-        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-    pagenum = m_currentpageno + 1;
-    if (pagenum >= 0 && pagenum < m_pages.size())
-        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-    pagenum = m_currentpageno - 1;
-    if (pagenum >= 0 && pagenum < m_pages.size())
-        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-    pagenum = m_currentpageno + 2;
-    if (pagenum >= 0 && pagenum < m_pages.size())
-        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-    pagenum = m_currentpageno - 2;
-    if (pagenum >= 0 && pagenum < m_pages.size())
-        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-    pagenum = m_currentpageno + 3;
-    if (pagenum >= 0 && pagenum < m_pages.size())
-        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-    pagenum = m_currentpageno - 3;
-    if (pagenum >= 0 && pagenum < m_pages.size())
-        m_pages.at(pagenum)->showImage(m_scale, m_rotate);
-
-//    int startnum = m_currentpageno - 3;
-//    if (startnum < 0) {
-//        startnum = 0;
-//    }
-//    int endnum = startnum + 7;
-//    if (endnum > m_pages.size()) {
-//        endnum = m_pages.size();
-//    }
-//    for (int i = startnum; i < endnum; i++) {
-//        if (QThread::currentThread()->isInterruptionRequested()) {
-//            break;
-//        }
-//        m_pages.at(i)->showImage(m_scale, m_rotate);
-//    }
+    int pagenum  = d->m_currentpageno;
+    if (pagenum >= 0 && pagenum < d->m_pages.size())
+        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
+    pagenum = d->m_currentpageno + 1;
+    if (pagenum >= 0 && pagenum < d->m_pages.size())
+        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
+    pagenum = d->m_currentpageno - 1;
+    if (pagenum >= 0 && pagenum < d->m_pages.size())
+        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
+    pagenum = d->m_currentpageno + 2;
+    if (pagenum >= 0 && pagenum < d->m_pages.size())
+        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
+    pagenum = d->m_currentpageno - 2;
+    if (pagenum >= 0 && pagenum < d->m_pages.size())
+        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
+    pagenum = d->m_currentpageno + 3;
+    if (pagenum >= 0 && pagenum < d->m_pages.size())
+        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
+    pagenum = d->m_currentpageno - 3;
+    if (pagenum >= 0 && pagenum < d->m_pages.size())
+        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
     return true;
 }
 
 double DocummentBase::adaptWidthAndShow(double width)
 {
-    if (!bDocummentExist() && m_pages.size() > 0)
+    Q_D(DocummentBase);
+    if (!bDocummentExist() && d->m_pages.size() > 0)
         return -1;
     if (width < EPSINON) {
         return -1;
     }
-    double imageoriginalheight = m_pages.at(0)->getOriginalImageHeight();
-    double imageoriginalwidth = m_pages.at(0)->getOriginalImageWidth();
-    RotateType_EM docrotatetype = m_rotate;
-    ViewMode_EM docviewmode = m_viewmode;
-    width = width - m_vboxLayout.margin() * 2 - m_widgets.at(0)->layout()->margin() * 2 - m_pages.at(0)->margin() * 2 - 50;
+    double imageoriginalheight = d->m_pages.at(0)->getOriginalImageHeight();
+    double imageoriginalwidth = d->m_pages.at(0)->getOriginalImageWidth();
+    RotateType_EM docrotatetype = d->m_rotate;
+    ViewMode_EM docviewmode = d->m_viewmode;
+    width = width - d->m_vboxLayout->margin() * 2 - d->m_widgets.at(0)->layout()->margin() * 2 - d->m_pages.at(0)->margin() * 2 - 50;
     double scale = 1;
     if (ViewMode_FacingPage == docviewmode) {
-        width -= m_widgets.at(0)->layout()->spacing();
+        width -= d->m_widgets.at(0)->layout()->spacing();
         scale = width / 2 / imageoriginalwidth;
         if (RotateType_90 == docrotatetype || RotateType_270 == docrotatetype)
             scale = width / 2 / imageoriginalheight;
@@ -1069,16 +1017,17 @@ double DocummentBase::adaptWidthAndShow(double width)
 }
 double DocummentBase::adaptHeightAndShow(double height)
 {
+    Q_D(DocummentBase);
     qDebug() << "adaptHeightAndShow height:" << height;
-    if (!bDocummentExist() && m_pages.size() > 0)
+    if (!bDocummentExist() && d->m_pages.size() > 0)
         return -1;
     if (height < EPSINON) {
         return -1;
     }
-    double imageoriginalheight = m_pages.at(0)->getOriginalImageHeight();
-    double imageoriginalwidth = m_pages.at(0)->getOriginalImageWidth();
-    RotateType_EM docrotatetype = m_rotate;
-    height = height - m_vboxLayout.margin() - m_widgets.at(0)->layout()->margin() - m_widgets.at(0)->layout()->spacing() - m_pages.at(0)->margin();
+    double imageoriginalheight = d->m_pages.at(0)->getOriginalImageHeight();
+    double imageoriginalwidth = d->m_pages.at(0)->getOriginalImageWidth();
+    RotateType_EM docrotatetype = d->m_rotate;
+    height = height - d->m_vboxLayout->margin() - d->m_widgets.at(0)->layout()->margin() - d->m_widgets.at(0)->layout()->spacing() - d->m_pages.at(0)->margin();
     double scale = 1;
     scale = height / imageoriginalheight;
     if (RotateType_90 == docrotatetype || RotateType_270 == docrotatetype)
@@ -1091,45 +1040,181 @@ double DocummentBase::adaptHeightAndShow(double height)
 
 void DocummentBase::initConnect()
 {
-    for (int i = 0; i < m_pages.size(); i++) {
-        connect(m_pages.at(i), SIGNAL(signal_MagnifierPixmapCacheLoaded(int)), this, SLOT(slot_MagnifierPixmapCacheLoaded(int)));
+    Q_D(DocummentBase);
+    for (int i = 0; i < d->m_pages.size(); i++) {
+        connect(d->m_pages.at(i), SIGNAL(signal_MagnifierPixmapCacheLoaded(int)), this, SLOT(slot_MagnifierPixmapCacheLoaded(int)));
     }
 }
 
-bool DocummentBase::openFile(QString filepath)
+void DocummentBase::slot_docummentLoaded()
 {
-    donotneedreloaddoc = true;
-    if (!loadDocumment(filepath))
-        return false;
-
-    m_widgets.clear();
-    qDebug() << "numPages :" << m_pages.size();
-    for (int i = 0; i < m_pages.size(); i++) {
+    Q_D(DocummentBase);
+    d->m_widgets.clear();
+    qDebug() << "numPages :" << d->m_pages.size();
+    for (int i = 0; i < d->m_pages.size(); i++) {
         DWidget *qwidget = new DWidget(this);
         QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
         qhblayout->setAlignment(qwidget, Qt::AlignCenter);
         qwidget->setLayout(qhblayout);
-        m_vboxLayout.addWidget(qwidget);
-        m_vboxLayout.setAlignment(&m_widget, Qt::AlignCenter);
+        d->m_vboxLayout->addWidget(qwidget);
+        d->m_vboxLayout->setAlignment(d->m_widget, Qt::AlignCenter);
         qwidget->setMouseTracking(true);
-        m_widgets.append(qwidget);
+        d->m_widgets.append(qwidget);
     }
 
-    for (int i = 0; i < m_pages.size(); i++) {
-        m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
+    for (int i = 0; i < d->m_pages.size(); i++) {
+        d->m_pages.at(i)->setScaleAndRotate(d->m_scale, d->m_rotate);
     }
-    setViewModeAndShow(m_viewmode);
+    setViewModeAndShow(d->m_viewmode);
     initConnect();
-    donotneedreloaddoc = false;
+    d->donotneedreloaddoc = false;
     loadPages();
 //    if (m_threadloaddoc.isRunning())
 //        m_threadloaddoc.setRestart();
 //    else
 //        m_threadloaddoc.start();
-    if (m_threadloadwords.isRunning())
-        m_threadloadwords.setRestart();
+    if (d->m_threadloadwords.isRunning())
+        d->m_threadloadwords.setRestart();
     else
-        m_threadloadwords.start();
+        d->m_threadloadwords.start();
+}
+
+bool DocummentBase::openFile(QString filepath)
+{
+    Q_D(DocummentBase);
+    d->donotneedreloaddoc = true;
+    if (!loadDocumment(filepath))
+        return false;
+
+//    d->m_widgets.clear();
+//    qDebug() << "numPages :" << d->m_pages.size();
+//    for (int i = 0; i < d->m_pages.size(); i++) {
+//        DWidget *qwidget = new DWidget(this);
+//        QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
+//        qhblayout->setAlignment(qwidget, Qt::AlignCenter);
+//        qwidget->setLayout(qhblayout);
+//        d->m_vboxLayout->addWidget(qwidget);
+//        d->m_vboxLayout->setAlignment(d->m_widget, Qt::AlignCenter);
+//        qwidget->setMouseTracking(true);
+//        d->m_widgets.append(qwidget);
+//    }
+
+//    for (int i = 0; i < d->m_pages.size(); i++) {
+//        d->m_pages.at(i)->setScaleAndRotate(d->m_scale, d->m_rotate);
+//    }
+//    setViewModeAndShow(d->m_viewmode);
+//    initConnect();
+//    d->donotneedreloaddoc = false;
+//    loadPages();
+////    if (m_threadloaddoc.isRunning())
+////        m_threadloaddoc.setRestart();
+////    else
+////        m_threadloaddoc.start();
+//    if (d->m_threadloadwords.isRunning())
+//        d->m_threadloadwords.setRestart();
+//    else
+//        d->m_threadloadwords.start();
 
     return true;
+}
+
+bool DocummentBase::loadWords()
+{
+    Q_D(DocummentBase);
+    if (!bDocummentExist())
+        return false;
+    qDebug() << "loadWords start";
+    d->m_wordsbload = true;
+    for (int i = 0; i < d->m_pages.size(); i++) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
+//        d->m_pages.at(i)->loadWords();
+//        d->m_pages.at(i)->loadLinks();
+    }
+    d->m_wordsbload = false;
+
+    qDebug() << "loadWords end";
+    return true;
+}
+
+
+int DocummentBase::getPageSNum()
+{
+    Q_D(DocummentBase);
+    return d->m_pages.size();
+}
+
+bool DocummentBase::exitSlideModel()
+{
+    Q_D(DocummentBase);
+    d->m_slidewidget->hide();
+    this->show();
+    d->m_bslidemodel = false;
+    d->m_slidepageno = -1;
+    return true;
+}
+
+QList<PageBase *> *DocummentBase::getPages()
+{
+    Q_D(DocummentBase);
+    return &d->m_pages;
+}
+
+
+PageBase *DocummentBase::getPage(int index)
+{
+    Q_D(DocummentBase);
+    if (d->m_pages.size() > index)
+        return d->m_pages.at(index);
+    return nullptr;
+}
+
+void DocummentBase::magnifierClear()
+{
+    Q_D(DocummentBase);
+    if (d->m_magnifierwidget) {
+        d->m_magnifierwidget->setPixmap(QPixmap());
+        d->m_magnifierwidget->stopShow();
+        d->m_magnifierpage = -1;
+        d->m_magnifierwidget->hide();
+    }
+}
+
+void DocummentBase::pageMove(double mvx, double mvy)
+{
+    DScrollBar *scrollBar_X = horizontalScrollBar();
+    if (scrollBar_X)
+        scrollBar_X->setValue(scrollBar_X->value() + mvx);
+    DScrollBar *scrollBar_Y = verticalScrollBar();
+    if (scrollBar_Y)
+        scrollBar_Y->setValue(scrollBar_Y->value() + mvy);
+}
+
+bool DocummentBase::isWordsBeLoad()
+{
+    Q_D(DocummentBase);
+    return d->m_wordsbload;
+
+}
+
+bool DocummentBase::setMagnifierStyle(QColor magnifiercolor, int magnifierradius, int magnifierringwidth, double magnifierscale)
+{
+    Q_D(DocummentBase);
+    if (!d->m_magnifierwidget) {
+        return false;
+    }
+    d->m_magnifierwidget->setMagnifierRadius(magnifierradius);
+    d->m_magnifierwidget->setMagnifierScale(magnifierscale);
+    d->m_magnifierwidget->setMagnifierRingWidth(magnifierringwidth);
+    d->m_magnifierwidget->setMagnifierColor(magnifiercolor);
+    return true;
+}
+
+void DocummentBase::stopLoadPageThread()
+{
+    Q_D(DocummentBase);
+    for (int i = 0; i < d->m_pages.size(); i++) {
+        d->m_pages.at(i)->clearThread();
+    }
 }
