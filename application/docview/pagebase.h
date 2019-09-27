@@ -4,6 +4,7 @@
 #include <DLabel>
 #include <DGuiApplicationHelper>
 #include <QThread>
+#include "commonstruct.h"
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -72,18 +73,26 @@ class PageBase: public DLabel
 {
     Q_OBJECT
 public:
-    PageBase(DWidget *parent = 0);
+    PageBase(DWidget *parent = nullptr);
     ~PageBase();
     virtual bool getImage(QImage &image, double width, double height)
     {
+        Q_UNUSED(image);
+        Q_UNUSED(width);
+        Q_UNUSED(height);
         return false;
     }
     virtual bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal)
     {
+        Q_UNUSED(scale);
+        Q_UNUSED(rotate);
         return false;
     }
     virtual bool getSlideImage(QImage &image, double &width, double &height)
     {
+        Q_UNUSED(image);
+        Q_UNUSED(width);
+        Q_UNUSED(height);
         return false;
     }
     virtual bool loadWords()
@@ -94,6 +103,8 @@ public:
     {
         return false;
     }
+    virtual stSearchRes search(const QString& text, bool matchCase, bool wholeWords)const
+    { Q_UNUSED(text); Q_UNUSED(matchCase); Q_UNUSED(wholeWords); stSearchRes res; return res; }
     double getOriginalImageWidth()
     {
         return m_imagewidth;
@@ -115,6 +126,7 @@ public:
     void setScaleAndRotate(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     Page::Link *ifMouseMoveOverLink(const QPoint point);
     bool getSelectTextString(QString &st);
+    QRectF translateRect(QRectF& rect,double scale, RotateType_EM rotate);
 //    void setReSize(double scale = 1, RotateType_EM rotate = RotateType_Normal);
 signals:
     void signal_MagnifierPixmapCacheLoaded(int);
@@ -124,8 +136,10 @@ protected:
     void getImagePoint(QPoint &point);
     QColor m_paintercolor;
     QColor m_pencolor;
+    QColor m_searchcolor;
     int m_penwidth;
     QList<QRect> paintrects;
+    mutable QList<QRectF> m_highlights;
     QList< Page::Link * > m_links;
     QList<stWord> m_words;
     int m_selecttextstartword;

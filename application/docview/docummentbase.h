@@ -24,6 +24,8 @@ enum ViewMode_EM {
 #include <QtDebug>
 
 class DocummentBase;
+class SearchTask;
+
 //class ThreadLoadDoc : public QThread
 //{
 //    Q_OBJECT
@@ -166,16 +168,14 @@ public:
         m_slidepageno = -1;
         return true;
     }
-    QList<PageBase *> *getPages()
-    {
-        return &m_pages;
-    }
+
     PageBase *getPage(int index)
     {
         if (m_pages.size() > index)
             return (PageBase *)m_pages.at(index);
         return nullptr;
     }
+
     void magnifierClear()
     {
         if (m_magnifierwidget) {
@@ -219,16 +219,19 @@ public:
 
 signals:
     void signal_pageChange(int);
+    void signal_searchRes(stSearchRes);
 protected slots:
     void slot_vScrollBarValueChanged(int value);
     void slot_hScrollBarValueChanged(int value);
     void slot_MagnifierPixmapCacheLoaded(int pageno);
+    void slot_searchValueAdd(stSearchRes);
+
 protected:
     int pointInWhichPage(QPoint &qpoint);
     void showSinglePage();
     void showFacingPage();
     void initConnect();
-    QList<PageBase *> m_pages;
+    QVector<PageBase *> m_pages;
     QList<DWidget *>m_widgets;
     DWidget m_widget;
     QVBoxLayout m_vboxLayout;
@@ -251,6 +254,11 @@ protected:
     bool m_wordsbload;
     int m_magnifierpage;
     QPoint m_magnifierpoint;
+    SearchTask* m_searchTask;
+    int m_findcurpage;
+    QMap<int, int> m_pagecountsearch; //搜索结果页对应当前页个数
+     unsigned int m_cursearch;
+
 };
 
 #endif // DOCUMMENTBASE_H

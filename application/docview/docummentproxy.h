@@ -77,9 +77,10 @@ public:
      bool annotationClicked(const QPoint &pos, QString &strtext);
 signals:
     void signal_pageChange(int);
+    void signal_searchRes(stSearchRes);
 private slots:
     void slot_pageChange(int);
-    bool startOpenFile();
+    bool startOpenFile();    
 
 private:
     DocummentProxy(QObject *parent = nullptr);

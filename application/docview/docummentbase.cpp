@@ -1,5 +1,6 @@
 #include "docummentbase.h"
 #include "publicfunc.h"
+#include "searchtask.h"
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QPainter>
@@ -243,6 +244,9 @@ DocummentBase::DocummentBase(DWidget *parent): DScrollArea(parent)
     m_slidewidget->setAutoFillBackground(true);
     m_slidewidget->setPalette(pal);
 
+    m_searchTask=new SearchTask(this);
+    connect(m_searchTask,SIGNAL(resultsReady(stSearchRes)),SIGNAL(slot_searchValueAdd(stSearchRes)));
+
     connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_vScrollBarValueChanged(int)));
     connect(this->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_hScrollBarValueChanged(int)));
 }
@@ -255,6 +259,13 @@ DocummentBase::~DocummentBase()
 //        m_threadloaddoc.quit();
 //        m_threadloaddoc.wait();
 //    }
+    if(m_searchTask)
+    {
+        m_searchTask->cancel();
+        m_searchTask->wait();
+        delete m_searchTask;
+        m_searchTask=nullptr;
+    }
     if (m_threadloadwords.isRunning()) {
         m_threadloadwords.requestInterruption();
         m_threadloadwords.quit();
@@ -502,6 +513,12 @@ void DocummentBase::slot_MagnifierPixmapCacheLoaded(int pageno)
     if (pageno == m_lastmagnifierpagenum) {
         showMagnifier(m_magnifierpoint);
     }
+}
+
+void DocummentBase::slot_searchValueAdd(stSearchRes res)
+{
+    m_pagecountsearch.insert(res.ipage,res.listtext.size());
+    emit signal_searchRes(res);
 }
 
 bool DocummentBase::showMagnifier(QPoint point)

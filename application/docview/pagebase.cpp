@@ -4,7 +4,7 @@
 
 ThreadLoadMagnifierCache::ThreadLoadMagnifierCache()
 {
-//    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
+    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
     m_page = nullptr;
     restart = false;
     m_width = 0;
@@ -42,7 +42,9 @@ PageBase::PageBase(DWidget *parent)
       m_imageheight(0.01),
       m_paintercolor(QColor(72, 118, 255, 100)),
       m_pencolor (QColor(72, 118, 255, 0)),
+      m_searchcolor(QColor(180,245,95,100)),
       m_penwidth(0),
+      m_highlights(),
       m_selecttextstartword(-1),
       m_selecttextendword(-1),
       paintrects(),
@@ -52,6 +54,7 @@ PageBase::PageBase(DWidget *parent)
       m_magnifierwidth (0),
       m_magnifierheight (0),
       m_pageno(-1)
+
 {
     setMouseTracking(true);
     setAlignment(Qt::AlignCenter);
@@ -134,8 +137,8 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
     }
 
     const QRect start_end = (startC.y() < endC.y())
-                            ? QRect(startC.x(), startC.y(), endC.x(), endC.y())
-                            : QRect(startC.x(), endC.y(), endC.x(), startC.y());
+            ? QRect(startC.x(), startC.y(), endC.x(), endC.y())
+            : QRect(startC.x(), endC.y(), endC.x(), startC.y());
 
     QRectF tmp;
     int startword = 0, stopword = -1;
@@ -281,8 +284,8 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
         QRectF tmpafter;
         tmpafter = m_words.at(i).rect;
         if ((abs(tmp.y() - tmpafter.y()) < tmp.height() / 5 ||
-                abs(tmp.y() + tmp.height() / 2 - tmpafter.y() + tmpafter.height() / 2) <
-                tmp.height() / 5) &&
+             abs(tmp.y() + tmp.height() / 2 - tmpafter.y() + tmpafter.height() / 2) <
+             tmp.height() / 5) &&
                 abs(tmp.x() + tmp.width() - tmpafter.x()) < tmp.width() / 5) {
             if (tmpafter.y() < tmp.y()) {
                 tmp.setY(tmpafter.y());
@@ -385,7 +388,7 @@ bool PageBase::clearMagnifierPixmap()
 bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, double width, double height)
 {
     qDebug() << "getMagnifierPixmap";
-//    QImage image;
+    //    QImage image;
     QPixmap qpixmap;
     if (!m_magnifierpixmap.isNull()) {
         qpixmap = m_magnifierpixmap;
@@ -458,26 +461,26 @@ void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
     m_rotate = rotate;
     switch (rotate) {
     case RotateType_90:
-//        resize(m_imageheight * scale, m_imagewidth * scale);
-//        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
+        //        resize(m_imageheight * scale, m_imagewidth * scale);
+        //        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
         setMaximumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
         setMinimumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
         break;
     case RotateType_180:
-//        resize(m_imagewidth * scale, m_imageheight * scale);
-//        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
+        //        resize(m_imagewidth * scale, m_imageheight * scale);
+        //        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
         setMaximumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
         setMinimumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
         break;
     case RotateType_270:
-//        resize(m_imageheight * scale, m_imagewidth * scale);
-//        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
+        //        resize(m_imageheight * scale, m_imagewidth * scale);
+        //        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
         setMaximumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
         setMinimumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
         break;
     default:
-//        resize(m_imagewidth * scale, m_imageheight * scale);
-//        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
+        //        resize(m_imagewidth * scale, m_imageheight * scale);
+        //        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
         setMaximumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
         setMinimumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
         break;
@@ -554,4 +557,48 @@ bool PageBase::getSelectTextString(QString &st)
         st += m_words.at(i).s;
     }
     return true;
+}
+
+QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
+{
+    //旋转角度逆时针增加
+    QRectF newrect;
+    switch (rotate) {
+    case RotateType_Normal:
+    case RotateType_0:
+    {
+        newrect.setX(rect.x()*scale);
+        newrect.setY(rect.y()*scale);
+        newrect.setWidth(rect.width()*scale);
+        newrect.setHeight(rect.height()*scale);
+        break;
+    }
+    case RotateType_90:
+    {
+        newrect.setX((m_imageheight-rect.y()-rect.height())*scale);
+        newrect.setY(rect.x()*scale);
+        newrect.setWidth(rect.height()*scale);
+        newrect.setHeight(rect.width()*scale);
+        break;
+    }
+    case RotateType_180:
+    {
+        newrect.setX((m_imagewidth-rect.x()-rect.width())*scale);
+        newrect.setY((m_imageheight-rect.y()-rect.height())*scale);
+        newrect.setWidth(rect.width()*scale);
+        newrect.setHeight(rect.height()*scale);
+        break;
+    }
+    case RotateType_270:
+    {
+        newrect.setX(rect.y()*scale);
+        newrect.setY((m_imagewidth-rect.x()-rect.width())*scale);
+        newrect.setWidth(rect.height()*scale);
+        newrect.setHeight(rect.width()*scale);
+        break;
+    }
+    default:
+        break;
+    }
+    return  newrect;
 }

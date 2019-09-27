@@ -1,5 +1,6 @@
 #include "docummentpdf.h"
 #include "pagepdf.h"
+#include "../searchtask.h"
 #include "docview/publicfunc.h"
 #include <DScrollBar>
 #include <QImage>
@@ -13,12 +14,13 @@ DocummentPDF::DocummentPDF(DWidget *parent): DocummentBase(parent),
     document(nullptr),
     m_fileinfo()
 {
+
 }
 
 DocummentPDF::~DocummentPDF()
 {
     delete document;
-    document = nullptr;
+    document = nullptr;   
 }
 
 bool DocummentPDF::loadDocumment(QString filepath)
@@ -110,6 +112,11 @@ QString DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos
 
 void DocummentPDF::search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color)
 {
+    m_searchTask->cancel();
+    m_searchTask->wait();
+    m_searchTask->start(m_pages,strtext,false,false,m_currentpageno+1);
+
+    return ;
     //先清理
     if (m_pagecountsearch.size() > 0) {
         clearSearch();
@@ -355,7 +362,7 @@ bool DocummentPDF::annotationClicked(const QPoint &pos, QString &strtext)
     QPoint pt(pos);
     int ipage = pointInWhichPage(pt);
     if (ipage < 0) return  false;
-    return static_cast<PagePdf>(m_pages.at(ipage)).annotationClicked(pt, strtext);
+    return static_cast<PagePdf*>(m_pages.at(ipage))->annotationClicked(pt, strtext);
 }
 
 void DocummentPDF::title(QString &title)
@@ -365,6 +372,12 @@ void DocummentPDF::title(QString &title)
 
 void DocummentPDF::findNext()
 {
+    if (m_pagecountsearch.size() <= 0) return;
+
+
+
+
+    /****************************/
     if (m_pagecountsearch.size() <= 0) return;
     if (m_findcurpage == m_pagecountsearch.lastKey() &&
             m_cursearch == m_pagecountsearch.find(m_findcurpage).value()) {

@@ -20,7 +20,8 @@ HEADERS += \
     $$PWD/ps/docummentps.h \
     $$PWD/xps/docummentxps.h \
     $$PWD/xps/pagexps.h \
-    $$PWD/xps/xpsapi.h
+    $$PWD/xps/xpsapi.h \
+    $$PWD/searchtask.h
 
 
 SOURCES += \
@@ -39,5 +40,6 @@ SOURCES += \
     $$PWD/ps/docummentps.cpp \
     $$PWD/xps/pagexps.cpp \
     $$PWD/xps/docummentxps.cpp \
-    $$PWD/xps/xpsapi.cpp
+    $$PWD/xps/xpsapi.cpp \
+    $$PWD/searchtask.cpp
 

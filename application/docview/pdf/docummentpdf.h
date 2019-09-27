@@ -4,6 +4,7 @@
 #include "../docummentbase.h"
 #include <poppler-qt5.h>
 
+
 class DocummentPDF: public DocummentBase
 {
 public:
@@ -44,9 +45,9 @@ private:
     Poppler::Document *document;
     //--------------------------------------------//
     stFileInfo m_fileinfo;
-    unsigned int m_cursearch;
-    int m_findcurpage;
-    QMap<int, int> m_pagecountsearch; //搜索结果页对应当前页个数
+
+
+
 };
 
 #endif // DOCUMMENTPDF_H

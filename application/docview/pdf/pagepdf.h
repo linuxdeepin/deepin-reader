@@ -44,6 +44,9 @@ public:
     bool annotationClicked(const QPoint &pos, QString &strtext);
     Poppler::Page *GetPage();
     void clearThread();
+    stSearchRes search(const QString& text, bool matchCase, bool wholeWords)const override;
+protected:
+    void paintEvent(QPaintEvent *event) override;
 protected slots:
     void slot_RenderFinish(QImage);
 private:

@@ -48,7 +48,7 @@ DocummentProxy::DocummentProxy(QObject *parent)
       bcloseing(false)
 {
     qwfather = (DWidget *)parent;
-    connect(&threadwaitloadwordsend, SIGNAL(startOpenFile()), this, SLOT(startOpenFile()));
+    connect(&threadwaitloadwordsend, SIGNAL(startOpenFile()), this, SLOT(startOpenFile()));  
 }
 
 DocummentProxy *DocummentProxy::instance(QObject *parent)
@@ -93,7 +93,8 @@ bool DocummentProxy::startOpenFile()
     if (m_documment == nullptr) {
         return false;
     }
-    connect(m_documment, SIGNAL(signal_pageChange(int)), this, SLOT(slot_pageChange(int)));
+    connect(m_documment, SIGNAL(signal_pageChange(int)), this, SLOT(slot_pageChange(int)));   
+    connect(m_documment, SIGNAL(signal_searchRes(stSearchRes)),this, SIGNAL(signal_searchRes(stSearchRes)));
     return m_documment->openFile(m_path);
 }
 

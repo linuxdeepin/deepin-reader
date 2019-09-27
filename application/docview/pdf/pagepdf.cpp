@@ -2,9 +2,11 @@
 #include "docview/publicfunc.h"
 #include <QDebug>
 #include <QMutex>
+#include <QPainter>
+#include <QRectF>
 ThreadRenderImage::ThreadRenderImage()
 {
-//    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
+    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
     m_page = nullptr;
     restart = false;
     m_width = 0;
@@ -50,9 +52,9 @@ PagePdf::PagePdf(QWidget *parent)
 }
 PagePdf::~PagePdf()
 {
-//    for (int i = 0; i < m_links.size(); i++) {
-//        delete m_links.at(i);
-//    }
+    //    for (int i = 0; i < m_links.size(); i++) {
+    //        delete m_links.at(i);
+    //    }
     if (threadreander.isRunning()) {
         threadreander.requestInterruption();
         threadreander.quit();
@@ -66,8 +68,37 @@ void PagePdf::clearThread()
 {
     if (threadreander.isRunning()) {
         threadreander.requestInterruption();
-//        threadreander.quit();
+        //        threadreander.quit();
         threadreander.wait();
+    }
+}
+
+stSearchRes PagePdf::search(const QString &text, bool matchCase, bool wholeWords)const
+{  
+    m_highlights.clear();
+    stSearchRes stres;
+    const Poppler::Page::SearchFlags flags((matchCase ? 0 : Poppler::Page::IgnoreCase) | (wholeWords ? Poppler::Page::WholeWords : 0));
+    m_highlights = m_page->search(text, flags);
+    QRectF rec;
+    foreach (rec, m_highlights) {
+        //获取搜索结果附近文字
+        QRectF rctext = rec;
+        rctext.setX(rctext.x() - 40);
+        rctext.setWidth(rctext.width() + 80);
+        stres.listtext.push_back(m_page->text(rctext));
+    }
+    return stres;
+}
+
+void PagePdf::paintEvent(QPaintEvent *event)
+{
+    PageBase::paintEvent(event);
+    QPainter qpainter(this);
+    qpainter.setBrush(m_searchcolor);
+    QPen qpen(m_pencolor);
+    qpainter.setPen(qpen);
+    for (int i = 0; i < m_highlights.size(); i++) {
+        qpainter.drawRect(translateRect(m_highlights[i],m_scale,m_rotate));
     }
 }
 
@@ -78,13 +109,13 @@ void PagePdf::removeAnnotation(Poppler::Annotation *annotation)
 
 void PagePdf::setPage(Poppler::Page *page, int pageno)
 {
-//    qDebug() << "----setpage";
+    //    qDebug() << "----setpage";
     m_page = page;
     m_pageno = pageno;
     QSizeF qsize = m_page->pageSizeF();
     m_imagewidth = qsize.width();
     m_imageheight = qsize.height();
-//    qDebug() << "----setpage m_imagewidth:" << m_imagewidth << " m_imageheight:" << m_imageheight;
+    //    qDebug() << "----setpage m_imagewidth:" << m_imagewidth << " m_imageheight:" << m_imageheight;
 }
 
 void PagePdf::slot_RenderFinish(QImage image)
@@ -121,24 +152,24 @@ bool PagePdf::showImage(double scale, RotateType_EM rotate)
     } else {
         threadreander.setRestart();
     }
-//    QImage image = m_page->renderToImage(xres * m_scale, yres * m_scale, -1, -1, m_imagewidth * m_scale, m_imageheight * m_scale);
-//    QPixmap map = QPixmap::fromImage(image);
-//    QMatrix leftmatrix;
-//    switch (m_rotate) {
-//    case RotateType_90:
-//        leftmatrix.rotate(90);
-//        break;
-//    case RotateType_180:
-//        leftmatrix.rotate(180);
-//        break;
-//    case RotateType_270:
-//        leftmatrix.rotate(270);
-//        break;
-//    default:
-//        leftmatrix.rotate(0);
-//        break;
-//    }
-//    setPixmap(map.transformed(leftmatrix, Qt::SmoothTransformation));
+    //    QImage image = m_page->renderToImage(xres * m_scale, yres * m_scale, -1, -1, m_imagewidth * m_scale, m_imageheight * m_scale);
+    //    QPixmap map = QPixmap::fromImage(image);
+    //    QMatrix leftmatrix;
+    //    switch (m_rotate) {
+    //    case RotateType_90:
+    //        leftmatrix.rotate(90);
+    //        break;
+    //    case RotateType_180:
+    //        leftmatrix.rotate(180);
+    //        break;
+    //    case RotateType_270:
+    //        leftmatrix.rotate(270);
+    //        break;
+    //    default:
+    //        leftmatrix.rotate(0);
+    //        break;
+    //    }
+    //    setPixmap(map.transformed(leftmatrix, Qt::SmoothTransformation));
     return true;
 }
 
@@ -176,12 +207,12 @@ QString PagePdf::addAnnotation(QPoint screenPos)
 {
     QString uniqueName;
     if (paintrects.size() > 0) {
-//        QRectF rectboundry;
+        //        QRectF rectboundry;
         QList<QRectF> listrectf;
-//        foreach (QRect rect, paintrects) {
-//            rectboundry = rect;
-//            listrectf.append(rectboundry);
-//        }
+        //        foreach (QRect rect, paintrects) {
+        //            rectboundry = rect;
+        //            listrectf.append(rectboundry);
+        //        }
         uniqueName = addHighlightAnnotation(listrectf, Qt::red);
         showImage(m_scale, m_rotate);
     }
@@ -190,8 +221,8 @@ QString PagePdf::addAnnotation(QPoint screenPos)
 
 QString PagePdf::addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color)
 {
-   QString uniqueName;
-//    if (listrect.size() <= 0)return uniqueName;
+    QString uniqueName;
+    //    if (listrect.size() <= 0)return uniqueName;
     Poppler::Annotation::Style style;
     style.setColor(color);
 
@@ -233,54 +264,54 @@ QString PagePdf::addHighlightAnnotation(const QList<QRectF> &listrect, const QCo
     m_page->addAnnotation(annotation);
     return  uniqueName;
     /**********************************************/
-//    QString uniqueName;
-//    if (listrect.size() <= 0)return uniqueName;
-//    Poppler::Annotation::Style style;
-//    style.setColor(color);
+    //    QString uniqueName;
+    //    if (listrect.size() <= 0)return uniqueName;
+    //    Poppler::Annotation::Style style;
+    //    style.setColor(color);
 
-//    Poppler::Annotation::Popup popup;
-//    popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
+    //    Poppler::Annotation::Popup popup;
+    //    popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
 
-//    Poppler::HighlightAnnotation *annotation = new Poppler::HighlightAnnotation();
+    //    Poppler::HighlightAnnotation *annotation = new Poppler::HighlightAnnotation();
 
-//    Poppler::HighlightAnnotation::Quad quad;
-//    QList<Poppler::HighlightAnnotation::Quad> qlistquad;
-//    QRectF rec, recboundary;
-//    double curwidth = m_imagewidth * m_scale;
-//    double curheight = m_imageheight * m_scale;
-//    foreach (rec, listrect) {
+    //    Poppler::HighlightAnnotation::Quad quad;
+    //    QList<Poppler::HighlightAnnotation::Quad> qlistquad;
+    //    QRectF rec, recboundary;
+    //    double curwidth = m_imagewidth * m_scale;
+    //    double curheight = m_imageheight * m_scale;
+    //    foreach (rec, listrect) {
 
-//        qDebug() << "%%%%%%%%%%%%%%%%%%%"<<m_imagewidth<<m_imageheight<< m_scale;
-//        if (m_rotate == RotateType_180) {
-//            qDebug() << "%%%%%%%%%%%%%%%%%%%" << m_scale;
-//            rec.setTop(curheight - rec.top());
-//            rec.setBottom(curheight - rec.bottom());
-//            rec.setLeft(curwidth - rec.left());
-//            rec.setRight(curwidth - rec.right());
-//        }
+    //        qDebug() << "%%%%%%%%%%%%%%%%%%%"<<m_imagewidth<<m_imageheight<< m_scale;
+    //        if (m_rotate == RotateType_180) {
+    //            qDebug() << "%%%%%%%%%%%%%%%%%%%" << m_scale;
+    //            rec.setTop(curheight - rec.top());
+    //            rec.setBottom(curheight - rec.bottom());
+    //            rec.setLeft(curwidth - rec.left());
+    //            rec.setRight(curwidth - rec.right());
+    //        }
 
-//        recboundary.setTopLeft(QPointF(rec.left() / curwidth,
-//                                       rec.top() / curheight));
-//        recboundary.setTopRight(QPointF(rec.right() / curwidth,
-//                                        rec.top() / curheight));
-//        recboundary.setBottomLeft(QPointF(rec.left() / curwidth,
-//                                          rec.bottom() / curheight));
-//        recboundary.setBottomRight(QPointF(rec.right() / curwidth,
-//                                           rec.bottom() / curheight));
-//        qDebug() << "**" << rec << "**";
-//        quad.points[0] = recboundary.topLeft();
-//        quad.points[1] = recboundary.topRight();
-//        quad.points[2] = recboundary.bottomRight();
-//        quad.points[3] = recboundary.bottomLeft();
-//        qlistquad.append(quad);
-//    }
-//    annotation->setHighlightQuads(qlistquad);
-//    uniqueName = PublicFunc::getUuid();
-//    annotation->setUniqueName(uniqueName);
-//    annotation->setStyle(style);
-//    annotation->setPopup(popup);
-//    m_page->addAnnotation(annotation);
-//    return  uniqueName;
+    //        recboundary.setTopLeft(QPointF(rec.left() / curwidth,
+    //                                       rec.top() / curheight));
+    //        recboundary.setTopRight(QPointF(rec.right() / curwidth,
+    //                                        rec.top() / curheight));
+    //        recboundary.setBottomLeft(QPointF(rec.left() / curwidth,
+    //                                          rec.bottom() / curheight));
+    //        recboundary.setBottomRight(QPointF(rec.right() / curwidth,
+    //                                           rec.bottom() / curheight));
+    //        qDebug() << "**" << rec << "**";
+    //        quad.points[0] = recboundary.topLeft();
+    //        quad.points[1] = recboundary.topRight();
+    //        quad.points[2] = recboundary.bottomRight();
+    //        quad.points[3] = recboundary.bottomLeft();
+    //        qlistquad.append(quad);
+    //    }
+    //    annotation->setHighlightQuads(qlistquad);
+    //    uniqueName = PublicFunc::getUuid();
+    //    annotation->setUniqueName(uniqueName);
+    //    annotation->setStyle(style);
+    //    annotation->setPopup(popup);
+    //    m_page->addAnnotation(annotation);
+    //    return  uniqueName;
 }
 
 QString PagePdf::removeAnnotation(const QPoint &pos)
@@ -308,11 +339,11 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
                     rectbound.setRight(1 - rectbound.right());
                 }
                 if (rectbound.contains(ptf)) {
-                    uniqueName = annote->uniqueName();                   
-                   removeAnnotation(annote);
-                   bdel=false;
+                    uniqueName = annote->uniqueName();
+                    removeAnnotation(annote);
+                    bdel=false;
                 } else {
-                    qDebug() << "******* not contains";                   
+                    qDebug() << "******* not contains";
                 }
             }
             if(bdel)
@@ -323,7 +354,7 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
         else {
             if(annote)
             {
-               listdel.append(annote);
+                listdel.append(annote);
             }
         }
     }
@@ -344,11 +375,16 @@ void PagePdf::removeAnnotation(const QString &struuid)
         else {
             delete  annote;
         }
-    }  
+    }
 }
 
 bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext)
 {
+    if(!m_page)
+    {
+        qDebug()<<")))))))))))))))))))";
+        return false;
+    }
     const double scaleX = m_scale;
     const double scaleY = m_scale;
     double curwidth = m_scale * m_imagewidth;
@@ -368,7 +404,7 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext)
                 qDebug() << "########" << quad.points[0];
                 if (rectbound.contains(ptf)) {
                     qDebug() << "******* contaions";
-                     qDeleteAll(listannote);
+                    qDeleteAll(listannote);
                     return true;
                 } else {
                     qDebug() << "******* not contains";
@@ -468,7 +504,7 @@ bool PagePdf::loadLinks()
             break;
         }
         const QRectF boundary = link->linkArea().normalized();
-//        qDebug() << "boundary:" << boundary;
+        //        qDebug() << "boundary:" << boundary;
 
         if (link->linkType() == Poppler::Link::Goto) {
             const Poppler::LinkGoto *linkGoto = static_cast< const Poppler::LinkGoto * >(link);
@@ -494,10 +530,10 @@ bool PagePdf::loadLinks()
             }
 
             if (linkGoto->isExternal()) {
-//                qDebug() << "isExternal filename:" << linkGoto->fileName() << " page:" << page;
+                //                qDebug() << "isExternal filename:" << linkGoto->fileName() << " page:" << page;
                 m_links.append(new Page::Link(boundary, linkGoto->fileName(), page));
             } else {
-//                qDebug() << "unExternal left:" << left << " top:" << top << " page:" << page;
+                //                qDebug() << "unExternal left:" << left << " top:" << top << " page:" << page;
                 m_links.append(new Page::Link(boundary, page, left, top));
             }
         } else if (link->linkType() == Poppler::Link::Browse) {
