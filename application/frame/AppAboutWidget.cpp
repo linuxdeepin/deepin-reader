@@ -1,5 +1,6 @@
 #include "AppAboutWidget.h"
 #include <DWidgetUtil>
+#include "subjectObserver/ModuleHeader.h"
 #include "translator/Frame.h"
 
 AppAboutWidget::AppAboutWidget(DWidget *parent)
@@ -19,9 +20,9 @@ void AppAboutWidget::initLabels()
 {
     setProductIcon(QPixmap(":/resources/image/logo/logo_big.svg"));
     setProductName(Frame::sAppName);
-    setVersion("1.3.18");
+    setVersion("20191001");
     setDescription(Frame::sDescription);
 
-//    setAcknowledgementLink("https://www.deepin.org/acknowledgments/deepin-image-viewer/");
+    setAcknowledgementLink(Constant::sAcknowledgementLink);
     setAcknowledgementVisible(false);
 }

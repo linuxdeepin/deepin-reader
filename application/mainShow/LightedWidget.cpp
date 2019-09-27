@@ -32,13 +32,13 @@ void LightedWidget::initWidget()
 {
     DLabel *titleLabel = new DLabel(MainShow::ADD_HIGH_LIGHTED);
 
-    QHBoxLayout *topLayout = new QHBoxLayout;
+    auto topLayout = new QHBoxLayout;
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
     topLayout->addWidget(titleLabel);
     topLayout->addStretch(1);
 
-    QHBoxLayout *bottomLayout = new QHBoxLayout;
+    auto bottomLayout = new QHBoxLayout;
     bottomLayout->setContentsMargins(0, 6, 0, 6);
     bottomLayout->setSpacing(8);
 
@@ -54,7 +54,7 @@ void LightedWidget::initWidget()
 
     bottomLayout->addStretch(1);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    auto mainLayout = new QVBoxLayout;
     mainLayout->setContentsMargins(0, 6, 0, 6);
     mainLayout->setSpacing(3);
 

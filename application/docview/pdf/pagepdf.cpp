@@ -74,7 +74,7 @@ void PagePdf::clearThread()
 }
 
 stSearchRes PagePdf::search(const QString &text, bool matchCase, bool wholeWords)const
-{  
+{
     m_highlights.clear();
     stSearchRes stres;
     stres.ipage=m_pageno;
@@ -111,6 +111,7 @@ void PagePdf::paintEvent(QPaintEvent *event)
             qpainter.setBrush(m_searchcolor);
             qpainter.drawRect(translateRect(m_highlights[i],m_scale,m_rotate));
         }
+
     }
 }
 
@@ -248,10 +249,10 @@ QString PagePdf::addHighlightAnnotation(const QList<QRectF> &listrect, const QCo
     QRectF rec, recboundary;
     double curwidth = m_imagewidth;
     double curheight = m_imageheight;
-    if(m_selecttextendword<1||m_selecttextendword<0)return "";
-    for(int i=m_selecttextstartword;i<=m_selecttextendword;++i) {
+    if (m_selecttextendword < 1 || m_selecttextendword < 0)return "";
+    for (int i = m_selecttextstartword; i <= m_selecttextendword; ++i) {
 
-        rec=m_words.at(i).rect;
+        rec = m_words.at(i).rect;
 
         recboundary.setTopLeft(QPointF(rec.left() / curwidth,
                                        rec.top() / curheight));
@@ -337,7 +338,7 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
     foreach (Poppler::Annotation *annote, listannote) {
         if (annote->subType() == Poppler::Annotation::AHighlight) { //必须判断
             QList<Poppler::HighlightAnnotation::Quad> listquad = static_cast<Poppler::HighlightAnnotation *>(annote)->highlightQuads();
-            bool bdel=true;
+            bool bdel = true;
             foreach (Poppler::HighlightAnnotation::Quad quad, listquad) {
                 QRectF rectbound;
                 rectbound.setTopLeft(quad.points[0]);
@@ -353,19 +354,16 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
                 if (rectbound.contains(ptf)) {
                     uniqueName = annote->uniqueName();
                     removeAnnotation(annote);
-                    bdel=false;
+                    bdel = false;
                 } else {
                     qDebug() << "******* not contains";
                 }
             }
-            if(bdel)
-            {
+            if (bdel) {
                 listdel.append(annote);
             }
-        }
-        else {
-            if(annote)
-            {
+        } else {
+            if (annote) {
                 listdel.append(annote);
             }
         }
@@ -383,8 +381,7 @@ void PagePdf::removeAnnotation(const QString &struuid)
         if (!struuid.isEmpty() && struuid.compare(annote->uniqueName()) == 0) { //必须判断
             removeAnnotation(annote);
             showImage(m_scale, m_rotate);
-        }
-        else {
+        } else {
             delete  annote;
         }
     }
@@ -392,9 +389,8 @@ void PagePdf::removeAnnotation(const QString &struuid)
 
 bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext)
 {
-    if(!m_page)
-    {
-        qDebug()<<")))))))))))))))))))";
+    if (!m_page) {
+        qDebug() << ")))))))))))))))))))";
         return false;
     }
     const double scaleX = m_scale;

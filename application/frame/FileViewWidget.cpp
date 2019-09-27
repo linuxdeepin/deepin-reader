@@ -116,9 +116,9 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     //  处于幻灯片模式下
-    if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
+    if (DataManager::instance()->CurShowState() == FILE_SLIDE)
         return;
-    }
+
     m_bSelectOrMove = false;
     CustomWidget::mouseReleaseEvent(event);
 }
@@ -136,43 +136,43 @@ void FileViewWidget::resizeEvent(QResizeEvent *event)
 void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 {
     //  处于幻灯片模式下
-    if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
+    if (DataManager::instance()->CurShowState() == FILE_SLIDE)
         return;
-    }
+
     //  放大镜状态， 直接返回
     if (m_nCurrentHandelState == Magnifier_State)
         return;
+
     //  手型状态， 直接返回
     if (m_nCurrentHandelState == Handel_State)
         return;
+
     auto pDocummentProxy = DocummentProxy::instance();
+    if (pDocummentProxy) {
+        QString sSelectText =  "";
+        pDocummentProxy->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
 
-    QString sSelectText =  "";
-    pDocummentProxy->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
+        QPoint tempPoint = this->mapToGlobal(point);
 
-    QPoint tempPoint = this->mapToGlobal(point);
+        bool bookState = m_pBookMarkStateLabel->bChecked();
 
-    bool bookState = m_pBookMarkStateLabel->bChecked();
+        if (sSelectText != "") {
+            m_pRightClickPoint = pDocummentProxy->global2RelativePoint(tempPoint);
 
-    if (sSelectText != "") {
-        m_pRightClickPoint = pDocummentProxy->global2RelativePoint(tempPoint);
+            QString sAnnotationText = "";
+            bool bAnno = pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText);
+            //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
+            if (m_pTextOperationWidget == nullptr) {
+                m_pTextOperationWidget = new TextOperationWidget(this);
+            }
 
-        QString sAnnotationText = "";
-        bool rl = pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText);
-
-        qDebug() << "rl     " << rl << "        " << "  sAnnotationText     " << sAnnotationText;
-
-        //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
-        if (m_pTextOperationWidget == nullptr) {
-            m_pTextOperationWidget = new TextOperationWidget(this);
+            m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), bookState, bAnno);
+        } else {
+            if (m_pDefaultOperationWidget == nullptr) {
+                m_pDefaultOperationWidget = new DefaultOperationWidget(this);
+            }
+            m_pDefaultOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), bookState);
         }
-
-        m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), bookState);
-    } else {
-        if (m_pDefaultOperationWidget == nullptr) {
-            m_pDefaultOperationWidget = new DefaultOperationWidget(this);
-        }
-        m_pDefaultOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), bookState);
     }
 }
 
@@ -219,9 +219,10 @@ void FileViewWidget::onFileAddAnnotation(const QString &sColor)
     DocummentProxy::instance()->addAnnotation(m_pRightClickPoint, m_pRightClickPoint);
 }
 
+//  移除高亮, 有注释 则删除注释
 void FileViewWidget::onFileRemoveAnnotation()
 {
-    DocummentProxy::instance()->removeAnnotation(m_pRightClickPoint);
+    QString sUuid = DocummentProxy::instance()->removeAnnotation(m_pRightClickPoint);
 }
 
 //  信号槽　初始化
@@ -273,6 +274,7 @@ void FileViewWidget::slotSetWidgetAdapt()
     }
 }
 
+//  书签状态
 void FileViewWidget::setBookMarkStateWidget()
 {
     if (m_pBookMarkStateLabel == nullptr) {
@@ -331,7 +333,6 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_ADD_ANNOTATION:     //  添加注释
         emit sigOpenNoteWidget();
-        qDebug() << "   MSG_OPERATION_TEXT_ADD_ANNOTATION  ";
         return ConstantMsg::g_effective_res;
     }
     return 0;

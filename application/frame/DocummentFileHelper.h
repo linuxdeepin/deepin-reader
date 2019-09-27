@@ -27,7 +27,7 @@ private:
     void onSaveAsFile();
     void onCopySelectContent();
     void onFileSlider();
-
+    void setAppShowTitle(const QString &);
     void initConnections();
 
 private slots:

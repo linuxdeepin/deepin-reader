@@ -30,7 +30,6 @@ public:
     void setBSelect(const bool &paint);
 
 protected:
-//    void paintEvent(QPaintEvent *event) override;
     void initWidget() override;
 
 private:

@@ -228,7 +228,7 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &)
     }
 
     //  增加书签消息
-    if (MSG_BOOKMARK_ADDITEM == msgType || MSG_OPERATION_ADD_BOOKMARK == msgType) {
+    if (MSG_BOOKMARK_ADDITEM == msgType || MSG_OPERATION_ADD_BOOKMARK == msgType || MSG_OPERATION_TEXT_ADD_BOOKMARK == msgType) {
         emit sigAddBookMark();
         return ConstantMsg::g_effective_res;
     }

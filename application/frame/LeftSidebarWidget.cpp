@@ -27,21 +27,21 @@ void LeftSidebarWidget::initWidget()
     pVBoxLayout->setSpacing(0);
     this->setLayout(pVBoxLayout);
 
-    auto m_pStackedWidget = new DStackedWidget;
-    m_pStackedWidget->insertWidget(0, new ThumbnailWidget);
-    m_pStackedWidget->insertWidget(1, new BookMarkWidget);
-    m_pStackedWidget->insertWidget(2, new NotesWidget);
-    m_pStackedWidget->insertWidget(3, new SearchResWidget);
-    m_pStackedWidget->setCurrentIndex(0);
+    auto pStackedWidget = new DStackedWidget;
+    pStackedWidget->insertWidget(0, new ThumbnailWidget);
+    pStackedWidget->insertWidget(1, new BookMarkWidget);
+    pStackedWidget->insertWidget(2, new NotesWidget);
+    pStackedWidget->insertWidget(3, new SearchResWidget);
+    pStackedWidget->setCurrentIndex(0);
 
-    pVBoxLayout->addWidget(m_pStackedWidget);
+    pVBoxLayout->addWidget(pStackedWidget);
     pVBoxLayout->addWidget(new MainOperationWidget, 0, Qt::AlignBottom);
 }
 
 int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_SWITCHLEFTWIDGET) {    //切换页面
-        DStackedWidget *pWidget = this->findChild<DStackedWidget *>();
+        auto pWidget = this->findChild<DStackedWidget *>();
         if (pWidget) {
             int nIndex = msgContent.toInt();
             pWidget->setCurrentIndex(nIndex);

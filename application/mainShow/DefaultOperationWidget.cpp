@@ -14,7 +14,7 @@ DefaultOperationWidget::DefaultOperationWidget(CustomWidget *parent)
 
 void DefaultOperationWidget::showWidget(const int &x, const int &y, const bool &bBookState)
 {
-    QList<DPushButton *> btnList = this->findChildren<DPushButton *>();
+    auto btnList = this->findChildren<DPushButton *>();
     foreach (DPushButton *btn, btnList) {
         if (btn->objectName() == PdfControl::ADD_BK) {
             btn->setEnabled(!bBookState);

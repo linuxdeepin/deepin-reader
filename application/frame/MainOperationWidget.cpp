@@ -1,5 +1,4 @@
 #include "MainOperationWidget.h"
-#include <DIconButton>
 #include "translator/Frame.h"
 #include <QHBoxLayout>
 
@@ -23,12 +22,12 @@ void MainOperationWidget::initWidget()
     auto btnGroup = new QButtonGroup;  //  按钮组，　自动实现按钮唯一check属性
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
 
-    QStringList btnList = QStringList() << Frame::sThumbnail << Frame::sBookmark << Frame::sAnnotation;
+    QStringList btnStrList = QStringList() << Frame::sThumbnail << Frame::sBookmark << Frame::sAnnotation;
 
-    int nSize = btnList.size();
+    int nSize = btnStrList.size();
     for (int iLoop = 0; iLoop < nSize; iLoop++) {
-        QString sBtn = btnList.at(iLoop);
-        DIconButton *btn = createBtn(sBtn);
+        QString sBtn = btnStrList.at(iLoop);
+        auto btn = createBtn(sBtn);
         btnGroup->addButton(btn, iLoop);
         hboxLayout->addWidget(btn);
     }
@@ -36,6 +35,16 @@ void MainOperationWidget::initWidget()
     hboxLayout->addStretch(1);
 
     this->setLayout(hboxLayout);
+
+    //  缩略图 默认是 check 状态
+    auto btnList = this->findChildren<DIconButton *>();
+    foreach (auto btn, btnList) {
+        QString objName = btn->objectName();
+        if (objName == Frame::sThumbnail) {
+            btn->setChecked(true);
+            break;
+        }
+    }
 }
 
 DIconButton *MainOperationWidget::createBtn(const QString &btnName)
@@ -43,6 +52,7 @@ DIconButton *MainOperationWidget::createBtn(const QString &btnName)
     QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
 
     auto btn = new DIconButton(this);
+    btn->setObjectName(btnName);
     btn->setIcon(QIcon(normalPic));
     btn->setFixedSize(QSize(36, 36));
     btn->setIconSize(QSize(36, 36));

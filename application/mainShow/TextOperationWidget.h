@@ -21,7 +21,7 @@ public:
     TextOperationWidget(CustomWidget *parent = nullptr);
 
 public:
-    void showWidget(const int &, const int &, const bool &);
+    void showWidget(const int &, const int &, const bool &, const bool &);
 
 private slots:
     void SlotBtnCopyClicked();

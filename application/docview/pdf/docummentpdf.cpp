@@ -28,7 +28,9 @@ bool DocummentPDF::loadDocumment(QString filepath)
     document = Poppler::Document::load(filepath);
     if (nullptr == document || document->numPages() <= 0)
         return false;
-    document->setRenderHint(Poppler::Document::TextAntialiasing);
+    document->setRenderHint(Poppler::Document::TextAntialiasing, true);
+    document->setRenderHint(Poppler::Document::OverprintPreview, true);
+    document->setRenderHint(Poppler::Document::Antialiasing, true);
     m_pages.clear();
     for (int i = 0; i < document->numPages(); i++) {
         PagePdf *page = new PagePdf(this);
@@ -116,6 +118,7 @@ void DocummentPDF::search(const QString &strtext, QMap<int, stSearchRes> &resmap
     m_searchTask->cancel();
     m_searchTask->wait();
     m_searchTask->start(m_pages,strtext,false,false,m_currentpageno+1);
+
 }
 
 bool DocummentPDF::save(const QString &filePath, bool withChanges)
@@ -207,6 +210,7 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges) const
 void DocummentPDF::clearSearch()
 {
     if (m_pagecountsearch.size() > 0) {
+
 //            foreach(int key,m_pagecountsearch.keys())
 //            {
 //               PagePdf* page=static_cast<PagePdf *>(m_pages.at(key));
@@ -214,6 +218,7 @@ void DocummentPDF::clearSearch()
 //            }
 
             //static_cast<PagePdf *>(m_pages.at(i))->showImage(m_scale, m_rotate);
+
 
     }
 }
@@ -320,7 +325,7 @@ bool DocummentPDF::annotationClicked(const QPoint &pos, QString &strtext)
     QPoint pt(pos);
     int ipage = pointInWhichPage(pt);
     if (ipage < 0) return  false;
-    return static_cast<PagePdf*>(m_pages.at(ipage))->annotationClicked(pt, strtext);
+    return static_cast<PagePdf *>(m_pages.at(ipage))->annotationClicked(pt, strtext);
 }
 
 void DocummentPDF::title(QString &title)

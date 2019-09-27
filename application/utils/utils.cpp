@@ -42,6 +42,8 @@
 #include <QTextCodec>
 #include <QImageReader>
 
+#include "subjectObserver/ModuleHeader.h"
+
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
 QT_END_NAMESPACE
@@ -652,7 +654,7 @@ QString Utils::getConfigPath()
 
 QString Utils::getSuffixList()
 {
-    return QString("Pdf File (*.pdf);;Tiff files (*.tiff)");
+    return QString("%1;;%2").arg(Constant::sPdf_Filter).arg(Constant::sTiff_Filter);
 }
 
 //  获取 action 图标

@@ -18,4 +18,12 @@ const QString g_system_theme = "system";
 
 }
 
+namespace  Constant {
+const QString sAcknowledgementLink = "https://www.deepin.org/acknowledgments/deepin_reader";
+
+const QString sPdf_Filter = "Pdf File (*.pdf)";
+const QString sTiff_Filter = "Tiff files (*.tiff)";
+const QString sQStringSep = "@#&wzx";
+}
+
 #endif // IMAGEHEADER_H
