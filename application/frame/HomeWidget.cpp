@@ -42,11 +42,14 @@ void HomeWidget::initWidget()
     auto layout = new QVBoxLayout;
     layout->setSpacing(8);
     layout->setContentsMargins(0, 0, 0, 0);
+
     layout->addStretch(1);
+
     layout->addWidget(iconLabel, 0, Qt::AlignCenter);
     layout->addWidget(tipsLabel, 0, Qt::AlignHCenter);
     layout->addWidget(splitLine, 0, Qt::AlignHCenter);
     layout->addWidget(chooseBtn, 0, Qt::AlignHCenter);
+
     layout->addStretch(1);
 
     this->setLayout(layout);
@@ -125,7 +128,9 @@ void HomeWidget::dropEvent(QDropEvent *event)
     if (mimeData->hasUrls()) {
         foreach (QUrl url, mimeData->urls()) {
             QString sFilePath =  url.toLocalFile();
-            if (sFilePath.endsWith(".pdf")) {
+            QFileInfo info(sFilePath);
+            QString sCompleteSuffix = info.completeSuffix();
+            if (sCompleteSuffix == "pdf" || sCompleteSuffix == "tiff") {
                 //  默认打开第一个
                 QString sRes = sFilePath + "@#&wzx";
 

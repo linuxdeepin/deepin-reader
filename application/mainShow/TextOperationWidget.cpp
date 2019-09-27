@@ -12,15 +12,17 @@ TextOperationWidget::TextOperationWidget(CustomWidget *parent)
 }
 
 //  显示当前操作框
-void TextOperationWidget::showWidget(const int &x, const int &y, const bool &bBookState)
+void TextOperationWidget::showWidget(const int &x, const int &y, const bool &bBookState, const bool &bHigh)
 {
-    QList<DPushButton *> btnList = this->findChildren<DPushButton *>();
+    auto btnList = this->findChildren<DPushButton *>();
     foreach (DPushButton *btn, btnList) {
         if (btn->objectName() == PdfControl::ADD_BK) {
             btn->setEnabled(!bBookState);
-            break;
+        } else if (btn->objectName() == MainShow::REMOVE_HIGH_LIGHTED) {
+            btn->setEnabled(bHigh);
         }
     }
+
 
     this->show();
     this->move(x, y);
@@ -29,7 +31,8 @@ void TextOperationWidget::showWidget(const int &x, const int &y, const bool &bBo
 
 DPushButton *TextOperationWidget::createBtn(const QString &btnName, const char *member)
 {
-    DPushButton *btn = new DPushButton(btnName);
+    auto btn = new DPushButton(btnName);
+    btn->setObjectName(btnName);
     connect(btn, SIGNAL(clicked()), member);
     return btn;
 }
@@ -75,22 +78,24 @@ int TextOperationWidget::dealWithData(const int &msgType, const QString &)
 
 void TextOperationWidget::initWidget()
 {
-    QVBoxLayout *layout = new QVBoxLayout;
+    auto layout = new QVBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     this->setLayout(layout);
 
-    DPushButton *copyBtn = createBtn(MainShow::COPY, SLOT(SlotBtnCopyClicked()));
+    auto copyBtn = createBtn(MainShow::COPY, SLOT(SlotBtnCopyClicked()));
     layout->addWidget(copyBtn);
 
-    LightedWidget *pLightedWidget = new LightedWidget;
+    auto pLightedWidget = new LightedWidget;
     connect(pLightedWidget, SIGNAL(sigSendLightedColor(const int &)), this, SLOT(SlotSendLightedColor(const int &)));
     layout->addWidget(pLightedWidget);
 
-    DPushButton *removeBtn = createBtn(MainShow::REMOVE_HIGH_LIGHTED, SLOT(SlotBtnRemoveHighLightedClicked()));
+    auto removeBtn = createBtn(MainShow::REMOVE_HIGH_LIGHTED, SLOT(SlotBtnRemoveHighLightedClicked()));
     layout->addWidget(removeBtn);
-    DPushButton *addAnnoBtn = createBtn(PdfControl::ADD_NOTE, SLOT(SlotBtnAddAnnotationClicked()));
+
+    auto addAnnoBtn = createBtn(PdfControl::ADD_NOTE, SLOT(SlotBtnAddAnnotationClicked()));
     layout->addWidget(addAnnoBtn);
-    DPushButton *AddBookMarkBtn = createBtn(PdfControl::ADD_BK, SLOT(SlotBtnAddBookMarkClicked()));
+
+    auto AddBookMarkBtn = createBtn(PdfControl::ADD_BK, SLOT(SlotBtnAddBookMarkClicked()));
     layout->addWidget(AddBookMarkBtn);
 }

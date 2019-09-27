@@ -75,7 +75,7 @@ void TitleWidget::on_handleShapeBtn_clicked()
         m_pHandleMenu = new DMenu(this);
         connect(m_pHandleMenu, SIGNAL(aboutToHide()), this, SLOT(slotHandleMenuHide()));
 
-        QSignalMapper *pSigManager = new QSignalMapper(this);
+        auto pSigManager = new QSignalMapper(this);
         connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(SlotActionTrigger(const QString &)));
 
         m_pHandleAction = createAction(Frame::sHandleShape);

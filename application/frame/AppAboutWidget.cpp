@@ -19,9 +19,9 @@ void AppAboutWidget::initLabels()
 {
     setProductIcon(QPixmap(":/resources/image/logo/logo_big.svg"));
     setProductName(Frame::sAppName);
-    setVersion("1.3.18");
+    setVersion("20191001");
     setDescription(Frame::sDescription);
 
-//    setAcknowledgementLink("https://www.deepin.org/acknowledgments/deepin-image-viewer/");
+    setAcknowledgementLink(Frame::sAcknowledgementLink);
     setAcknowledgementVisible(false);
 }

@@ -51,15 +51,14 @@ void DocummentFileHelper::onSaveAsFile()
 {
     QString sFilter = "";
     if (m_nCurDocType == DocType_PDF) {
-        sFilter = "Pdf File (*.pdf)";
+        sFilter = Frame::sPdf_Filter;
     } else if (m_nCurDocType == DocType_TIFF) {
-        sFilter = "Tiff files (*.tiff)";
+        sFilter = Frame::sTiff_Filter;
     }
     if (sFilter != "") {
         DFileDialog dialog;
         dialog.selectFile(m_szFilePath);
-        QString filePath = dialog.getSaveFileName(nullptr, Frame::sSaveFile,
-                                                  m_szFilePath, sFilter);
+        QString filePath = dialog.getSaveFileName(nullptr, Frame::sSaveFile, m_szFilePath, sFilter);
         if (filePath != "") {
             if (m_nCurDocType == DocType_PDF) {
                 if (!filePath.endsWith(".pdf")) {
@@ -76,12 +75,7 @@ void DocummentFileHelper::onSaveAsFile()
             m_szFilePath = filePath;
 
             QFileInfo info(m_szFilePath);
-            QString sTitle = "";
-            m_pDocummentProxy->title(sTitle);
-            if (sTitle == "") {
-                sTitle = info.baseName();
-            }
-            sendMsg(MSG_OPERATION_OPEN_FILE_TITLE, sTitle);
+            setAppShowTitle(info.baseName());
         }
     }
 }
@@ -117,16 +111,22 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
             //  通知 其他窗口， 打开文件成功了！！！
             NotifySubject::getInstance()->sendMsg(MSG_OPERATION_OPEN_FILE_OK);
 
-            QString sTitle = "";
-            m_pDocummentProxy->title(sTitle);
-            if (sTitle == "") {
-                sTitle = info.baseName();
-            }
-            sendMsg(MSG_OPERATION_OPEN_FILE_TITLE, sTitle);
+            setAppShowTitle(info.baseName());
         } else {
             sendMsg(MSG_OPERATION_OPEN_FILE_FAIL);
         }
     }
+}
+
+//  设置  应用显示名称
+void DocummentFileHelper::setAppShowTitle(const QString &fileName)
+{
+    QString sTitle = "";
+    m_pDocummentProxy->title(sTitle);
+    if (sTitle == "") {
+        sTitle = fileName;
+    }
+    sendMsg(MSG_OPERATION_OPEN_FILE_TITLE, sTitle);
 }
 
 //  复制

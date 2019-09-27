@@ -24,9 +24,6 @@ protected:
 
 private:
     DTextEdit *m_pTextEdit = nullptr;
-    QVBoxLayout *m_pVLayout = nullptr;
-    QHBoxLayout *m_pHLayoutClose = nullptr;
-    QHBoxLayout *m_pHLayoutDlt = nullptr;
     DLabel *m_pCloseLab = nullptr;
     DLabel *m_pDltLab = nullptr;
 };

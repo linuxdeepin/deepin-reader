@@ -73,7 +73,7 @@ void MainWindow::initConnections()
 
     DMenu *m_menu = new DMenu(this);
 
-    QSignalMapper *pSigManager = new QSignalMapper(this);
+    auto pSigManager = new QSignalMapper(this);
     connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(SlotActionTrigger(const QString &)));
 
     QStringList firstActionList = QStringList() << Frame::sOpenFile << Frame::sSaveFile << Frame::sSaveAsFile
@@ -98,7 +98,7 @@ void MainWindow::initConnections()
     m_menu->setMinimumWidth(ConstantMsg::g_menu_width);
     titlebar()->setMenu(m_menu);
 
-    QList<QAction *> actions = this->findChildren<QAction *>();
+    auto actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
         if (a->text() == Frame::sOpenFile) {
             a->setDisabled(false);
@@ -158,7 +158,7 @@ void MainWindow::SlotAppExit()
 //  文件打开成，　功能性　菜单才能点击
 void MainWindow::openFileOk()
 {
-    QList<QAction *> actions = this->findChildren<QAction *>();
+    auto actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
         a->setDisabled(false);
     }
@@ -207,13 +207,16 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
         if (msgContent == "Esc") {  //  退出全屏模式
             titlebar()->setVisible(true);
             this->setWindowState(Qt::WindowNoState);
+        } else if (msgContent == "F1") {    //  显示帮助文档
+            QDesktopServices::openUrl(QUrl(Frame::sAcknowledgementLink));
+            return ConstantMsg::g_effective_res;
         }
     } else if (msgType == MSG_OPERATION_OPEN_FILE_TITLE) {
         titlebar()->setTitle(msgContent);
-        return  ConstantMsg::g_effective_res;
+        return ConstantMsg::g_effective_res;
     } else if (msgType == MSG_OPERATION_EXIT) {
         emit sigAppExit();
-        return  ConstantMsg::g_effective_res;
+        return ConstantMsg::g_effective_res;
     }
     return 0;
 }
