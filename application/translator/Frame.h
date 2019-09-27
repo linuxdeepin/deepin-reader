@@ -14,10 +14,6 @@ const QString sDescription = QObject::tr("Document viewer is a document viewer t
                                          "In addition to opening and reading PDF files, you can also do \r\n on documents"
                                          "Bookmark, comment, and highlight selected text．");
 
-const QString sAcknowledgementLink = "https://www.deepin.org/acknowledgments/deepin_reader";
-const QString sPdf_Filter = "Pdf File (*.pdf)";
-const QString sTiff_Filter = "Tiff files (*.tiff)";
-
 const QString sSelectFile = QObject::tr("Select File");     //  选择文件
 
 const QString sOpenFile = QObject::tr("Open File");         //  打开文件

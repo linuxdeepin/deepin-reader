@@ -1,5 +1,6 @@
 #include "AppAboutWidget.h"
 #include <DWidgetUtil>
+#include "subjectObserver/ModuleHeader.h"
 #include "translator/Frame.h"
 
 AppAboutWidget::AppAboutWidget(DWidget *parent)
@@ -22,6 +23,6 @@ void AppAboutWidget::initLabels()
     setVersion("20191001");
     setDescription(Frame::sDescription);
 
-    setAcknowledgementLink(Frame::sAcknowledgementLink);
+    setAcknowledgementLink(Constant::sAcknowledgementLink);
     setAcknowledgementVisible(false);
 }

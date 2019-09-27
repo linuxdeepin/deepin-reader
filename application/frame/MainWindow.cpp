@@ -10,7 +10,6 @@
 #include <DMessageBox>
 #include <QSignalMapper>
 #include "controller/DataManager.h"
-#include "translator/Frame.h"
 
 MainWindow::MainWindow(DMainWindow *parent)
     : DMainWindow(parent)
@@ -208,7 +207,7 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
             titlebar()->setVisible(true);
             this->setWindowState(Qt::WindowNoState);
         } else if (msgContent == "F1") {    //  显示帮助文档
-            QDesktopServices::openUrl(QUrl(Frame::sAcknowledgementLink));
+            QDesktopServices::openUrl(QUrl(Constant::sAcknowledgementLink));
             return ConstantMsg::g_effective_res;
         }
     } else if (msgType == MSG_OPERATION_OPEN_FILE_TITLE) {

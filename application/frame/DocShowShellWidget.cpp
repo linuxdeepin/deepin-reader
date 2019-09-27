@@ -43,7 +43,7 @@ void DocShowShellWidget::dropEvent(QDropEvent *event)
             QString sCompleteSuffix = info.completeSuffix();
             if (sCompleteSuffix == "pdf" || sCompleteSuffix == "tiff") {
                 //  默认打开第一个
-                QString sRes = sFilePath + "@#&wzx";
+                QString sRes = sFilePath + Constant::sQStringSep;
 
                 sendMsg(MSG_OPEN_FILE_PATH, sRes);
 

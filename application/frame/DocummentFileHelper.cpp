@@ -8,6 +8,7 @@
 #include <QDesktopServices>
 #include "translator/Frame.h"
 #include <DMessageBox>
+#include "subjectObserver/ModuleHeader.h"
 
 DocummentFileHelper::DocummentFileHelper(QObject *parent) : QObject(parent)
 {
@@ -51,9 +52,9 @@ void DocummentFileHelper::onSaveAsFile()
 {
     QString sFilter = "";
     if (m_nCurDocType == DocType_PDF) {
-        sFilter = Frame::sPdf_Filter;
+        sFilter = Constant::sPdf_Filter;
     } else if (m_nCurDocType == DocType_TIFF) {
-        sFilter = Frame::sTiff_Filter;
+        sFilter = Constant::sTiff_Filter;
     }
     if (sFilter != "") {
         DFileDialog dialog;
@@ -92,7 +93,7 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
         m_pDocummentProxy->closeFile();
     }
 
-    QStringList fileList = filePaths.split("@#&wzx",  QString::SkipEmptyParts);
+    QStringList fileList = filePaths.split(Constant::sQStringSep,  QString::SkipEmptyParts);
     int nSize = fileList.size();
     if (nSize > 0) {
         QString sPath = fileList.at(0);
