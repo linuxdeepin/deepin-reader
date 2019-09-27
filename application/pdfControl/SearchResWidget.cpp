@@ -157,16 +157,6 @@ int SearchResWidget::getSearchPage(const int &index)
     return -1;
 }
 
-int SearchResWidget::setSearchItemImage(const QImage &image)
-{
-    if (m_pSearchItemWidget) {
-        m_pSearchItemWidget->setLabelImage(image);
-        m_pSearchItemWidget = nullptr;
-    }
-
-    return 0;
-}
-
 /************************************LoadSearchResList*******************************************************/
 /************************************加载搜索列表缩略图*********************************************************/
 

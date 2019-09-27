@@ -1,15 +1,11 @@
 #include "TitleWidget.h"
 #include <QSignalMapper>
 #include "translator/Frame.h"
+#include <QHBoxLayout>
 
 TitleWidget::TitleWidget(CustomWidget *parent) :
     CustomWidget("TitleWidget", parent)
 {
-    m_layout = new QHBoxLayout();
-    m_layout->setContentsMargins(5, 0, 0, 0);
-    m_layout->setSpacing(10);
-    setLayout(m_layout);
-
     initWidget();
 }
 
@@ -27,6 +23,17 @@ void TitleWidget::initWidget()
     connect(m_pFontWidget, SIGNAL(sigWidgetHide()), this, SLOT(slotFontWidgetHide()));
 
     initBtns();
+
+    auto m_layout = new QHBoxLayout();
+    m_layout->setContentsMargins(5, 0, 0, 0);
+    m_layout->setSpacing(10);
+    setLayout(m_layout);
+
+    m_layout->addWidget(m_pThumbnailBtn);
+    m_layout->addWidget(m_pSettingBtn);
+    m_layout->addWidget(m_pHandleShapeBtn);
+    m_layout->addWidget(m_pMagnifierBtn);
+
     m_layout->addStretch(1);
 }
 
@@ -65,7 +72,7 @@ void TitleWidget::on_handleShapeBtn_clicked()
     point.setY(nHeight + nOldY + 2);
 
     if (m_pHandleMenu == nullptr) {
-        m_pHandleMenu = new DMenu;
+        m_pHandleMenu = new DMenu(this);
         connect(m_pHandleMenu, SIGNAL(aboutToHide()), this, SLOT(slotHandleMenuHide()));
 
         QSignalMapper *pSigManager = new QSignalMapper(this);
@@ -141,14 +148,8 @@ void TitleWidget::openFileOk()
 void TitleWidget::setHandleShapeBtn(const QString &btnName)
 {
     QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
-//    QString hoverPic = PF::getQrcPath(btnName, ImageModule::g_hover_state);
-//    QString pressPic = PF::getQrcPath(btnName, ImageModule::g_press_state);
-//    QString checkedPic = PF::getQrcPath(btnName, ImageModule::g_checked_state);
 
     m_pHandleShapeBtn->setIcon(QIcon(normalPic));
-//    m_pHandleShapeBtn->setHoverPic(hoverPic);
-//    m_pHandleShapeBtn->setPressPic(pressPic);
-//    m_pHandleShapeBtn->setCheckedPic(checkedPic);
 }
 
 void TitleWidget::slotFontWidgetHide()
@@ -165,44 +166,32 @@ void TitleWidget::initBtns()
 {
     m_pThumbnailBtn = createBtn(Frame::sThumbnail, true);
     connect(m_pThumbnailBtn, SIGNAL(clicked()), this, SLOT(on_thumbnailBtn_clicked()));
-    m_layout->addWidget(m_pThumbnailBtn);
 
     m_pSettingBtn = createBtn(Frame::sSetting);
     connect(m_pSettingBtn, SIGNAL(clicked()), this, SLOT(on_settingBtn_clicked()));
-    m_layout->addWidget(m_pSettingBtn);
 
     m_pHandleShapeBtn = createBtn(Frame::sDefaultShape);
     m_pHandleShapeBtn->setFixedSize(QSize(42, 36));
     m_pHandleShapeBtn->setIconSize(QSize(42, 36));
     connect(m_pHandleShapeBtn, SIGNAL(clicked()), this, SLOT(on_handleShapeBtn_clicked()));
-    m_layout->addWidget(m_pHandleShapeBtn);
 
     m_pMagnifierBtn = createBtn(Frame::sMagnifier, true);
     connect(m_pMagnifierBtn, SIGNAL(clicked()), this, SLOT(on_magnifyingBtn_clicked()));
-    m_layout->addWidget(m_pMagnifierBtn);
 }
 
 DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 {
     QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
-//    QString hoverPic = PF::getQrcPath(btnName, ImageModule::g_hover_state);
-//    QString pressPic = PF::getQrcPath(btnName, ImageModule::g_press_state);
-//    QString disablePic = PF::getQrcPath(btnName, ImageModule::g_disable_state);
 
     DIconButton *btn = new  DIconButton(this);
     btn->setIcon(QIcon(normalPic));
     btn->setFixedSize(QSize(36, 36));
     btn->setIconSize(QSize(36, 36));
-//    btn->setHoverPic(hoverPic);
-//    btn->setPressPic(pressPic);
 
     btn->setToolTip(btnName);
     btn->setCheckable(bCheckable);
     if (bCheckable) {
         btn->setChecked(false);
-
-//        QString checkedPic = PF::getQrcPath(btnName, ImageModule::g_checked_state);
-//        btn->setCheckedPic(checkedPic);
     }
 
     btn->setDisabled(true);

@@ -49,13 +49,40 @@ void DocummentFileHelper::onSaveFile()
 //  另存为
 void DocummentFileHelper::onSaveAsFile()
 {
-    DFileDialog dialog;
-    QString fileName = dialog.getSaveFileName(nullptr, Frame::sSaveFile,
-                                              "/home/",
-                                              Utils::getSuffixList());
-    if (fileName != "") {
-        QString filePath = fileName + ".pdf";
-        m_pDocummentProxy->save(filePath, true);
+    QString sFilter = "";
+    if (m_nCurDocType == DocType_PDF) {
+        sFilter = "Pdf File (*.pdf)";
+    } else if (m_nCurDocType == DocType_TIFF) {
+        sFilter = "Tiff files (*.tiff)";
+    }
+    if (sFilter != "") {
+        DFileDialog dialog;
+        dialog.selectFile(m_szFilePath);
+        QString filePath = dialog.getSaveFileName(nullptr, Frame::sSaveFile,
+                                                  m_szFilePath, sFilter);
+        if (filePath != "") {
+            if (m_nCurDocType == DocType_PDF) {
+                if (!filePath.endsWith(".pdf")) {
+                    filePath += ".pdf";
+                }
+            } else if (m_nCurDocType == DocType_TIFF) {
+                if (!filePath.endsWith(".tiff")) {
+                    filePath += ".tiff";
+                }
+            }
+
+            m_pDocummentProxy->save(filePath, true);
+
+            m_szFilePath = filePath;
+
+            QFileInfo info(m_szFilePath);
+            QString sTitle = "";
+            m_pDocummentProxy->title(sTitle);
+            if (sTitle == "") {
+                sTitle = info.baseName();
+            }
+            sendMsg(MSG_OPERATION_OPEN_FILE_TITLE, sTitle);
+        }
     }
 }
 
@@ -71,22 +98,19 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
         m_pDocummentProxy->closeFile();
     }
 
-
     QStringList fileList = filePaths.split("@#&wzx",  QString::SkipEmptyParts);
     int nSize = fileList.size();
     if (nSize > 0) {
         QString sPath = fileList.at(0);
 
-        DocType_EM doctype = DocType_NULL;
-
         QFileInfo info(sPath);
         QString sCompleteSuffix = info.completeSuffix();
         if (sCompleteSuffix == "pdf") {
-            doctype = DocType_PDF;
+            m_nCurDocType = DocType_PDF;
         } else if (sCompleteSuffix == "tiff") {
-            doctype = DocType_TIFF;
+            m_nCurDocType = DocType_TIFF;
         }
-        bool rl = m_pDocummentProxy->openFile(doctype, sPath);
+        bool rl = m_pDocummentProxy->openFile(m_nCurDocType, sPath);
         if (rl) {
             m_szFilePath = sPath;
             DataManager::instance()->setStrOnlyFilePath(sPath);

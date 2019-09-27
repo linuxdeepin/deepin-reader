@@ -35,11 +35,11 @@ void HomeWidget::initWidget()
     DLabel *splitLine = new DLabel;
     splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
 
-    DPushButton *chooseBtn  = new DPushButton(Frame::sSelectFile);
+    auto chooseBtn  = new DPushButton(Frame::sSelectFile);
     chooseBtn->setFixedSize(QSize(302, 36));
     connect(chooseBtn, &DPushButton::clicked, this, &HomeWidget::onChooseBtnClicked);
 
-    QVBoxLayout *layout = new QVBoxLayout;
+    auto layout = new QVBoxLayout;
     layout->setSpacing(8);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addStretch(1);
@@ -97,7 +97,6 @@ QStringList HomeWidget::getOpenFileList()
 
 int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    Q_UNUSED(msgContent);
     if (msgType == MSG_OPERATION_OPEN_FILE) {
         onChooseBtnClicked();
         return ConstantMsg::g_effective_res;
@@ -121,7 +120,7 @@ void HomeWidget::dragEnterEvent(QDragEnterEvent *event)
 
 void HomeWidget::dropEvent(QDropEvent *event)
 {
-    const QMimeData *mimeData = event->mimeData();
+    auto mimeData = event->mimeData();
 
     if (mimeData->hasUrls()) {
         foreach (QUrl url, mimeData->urls()) {

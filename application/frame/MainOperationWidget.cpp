@@ -1,6 +1,10 @@
 #include "MainOperationWidget.h"
 #include <DIconButton>
 #include "translator/Frame.h"
+#include <QHBoxLayout>
+
+#include <QButtonGroup>
+#include "PublicFunction.h"
 
 MainOperationWidget::MainOperationWidget(CustomWidget *parent):
     CustomWidget ("MainOperationWidget", parent)
@@ -10,13 +14,13 @@ MainOperationWidget::MainOperationWidget(CustomWidget *parent):
 
 void MainOperationWidget::initWidget()
 {
-    QHBoxLayout *hboxLayout = new QHBoxLayout;
+    auto hboxLayout = new QHBoxLayout;
     hboxLayout->setContentsMargins(0, 0, 0, 0);
     hboxLayout->setSpacing(10);
 
     hboxLayout->addStretch(1);
 
-    QButtonGroup *btnGroup = new QButtonGroup;  //  按钮组，　自动实现按钮唯一check属性
+    auto btnGroup = new QButtonGroup;  //  按钮组，　自动实现按钮唯一check属性
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
 
     QStringList btnList = QStringList() << Frame::sThumbnail << Frame::sBookmark << Frame::sAnnotation;
@@ -38,7 +42,7 @@ DIconButton *MainOperationWidget::createBtn(const QString &btnName)
 {
     QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
 
-    DIconButton *btn = new DIconButton(this);
+    auto btn = new DIconButton(this);
     btn->setIcon(QIcon(normalPic));
     btn->setFixedSize(QSize(36, 36));
     btn->setIconSize(QSize(36, 36));

@@ -3,7 +3,6 @@
 
 #include <DMenu>
 #include <DIconButton>
-#include <QHBoxLayout>
 #include "subjectObserver/CustomWidget.h"
 
 #include "pdfControl/font/fontWidget.h"
@@ -46,8 +45,6 @@ private:
     void on_DefaultAction_trigger();
 
 private:
-    QHBoxLayout *m_layout = nullptr;
-
     FontWidget *m_pFontWidget = nullptr;
     int     m_nCurrentState = 0;
 

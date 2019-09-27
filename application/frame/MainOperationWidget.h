@@ -1,12 +1,8 @@
 #ifndef MAINOPERATIONWIDGET_H
 #define MAINOPERATIONWIDGET_H
 
-#include <QHBoxLayout>
-
-#include <QButtonGroup>
 #include <DIconButton>
 
-#include "PublicFunction.h"
 #include "subjectObserver/CustomWidget.h"
 
 /**

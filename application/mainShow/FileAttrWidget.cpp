@@ -63,7 +63,7 @@ void FileAttrWidget::setFileAttr()
 
     labelSafe->setText(QString::number(fileInfo.bsafe));
 
-    labelPaperSize->setText(QString::number(fileInfo.iWidth) + "x" + QString::number(fileInfo.iHeight) + tr("mm"));
+    labelPaperSize->setText(QString::number(fileInfo.iWidth) + "x" + QString::number(fileInfo.iHeight) + "mm");
 
     labelSize->setText(Utils::getInputDataSize(fileInfo.size));
 }

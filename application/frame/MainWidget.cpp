@@ -16,7 +16,7 @@ MainWidget::MainWidget(CustomWidget *parent) :
 //  文件打开成功
 void MainWidget::openFileOk()
 {
-    DStackedWidget *pWidget = this->findChild<DStackedWidget *>();
+    auto pWidget = this->findChild<DStackedWidget *>();
     if (pWidget) {
         pWidget->setCurrentIndex(1);
     }
@@ -44,17 +44,17 @@ int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
 
 void MainWidget::initWidget()
 {
-    QHBoxLayout *layout = new QHBoxLayout;
+    auto layout = new QHBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     this->setLayout(layout);
 
-    DStackedWidget *pStackedWidget = new DStackedWidget;
+    auto pStackedWidget = new DStackedWidget;
     layout->addWidget(pStackedWidget);
 
     pStackedWidget->addWidget(new HomeWidget);
 
-    DSplitter *pSplitter = new DSplitter;
+    auto pSplitter = new DSplitter;
     pSplitter->setHandleWidth(5);
     pSplitter->setChildrenCollapsible(false);   //  子部件不可拉伸到 0
 

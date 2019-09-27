@@ -4,7 +4,7 @@
 #include "subjectObserver/CustomWidget.h"
 #include "CustomLabel.h"
 
-//  统一设置 image 的widget 抽象类
+//  统一设置 image 的widget 抽象类, 相对应的页码
 
 class CustomItemWidget : public CustomWidget
 {

@@ -12,8 +12,6 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
 
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
-
-//    connect(m_pThumbnailListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
 }
 
 ThumbnailWidget::~ThumbnailWidget()
@@ -142,7 +140,7 @@ void ThumbnailWidget::slotOpenFileOk()
     if (!m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.setStartAndEndIndex();
     }
-    m_ThreadLoadImage.setPages(pages);
+    m_ThreadLoadImage.setPages(m_totalPages);
     m_ThreadLoadImage.setIsLoaded(true);
     m_ThreadLoadImage.start();
 }

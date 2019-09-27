@@ -110,7 +110,7 @@ void MainWindow::initConnections()
 void MainWindow::initTitlebar()
 {
     titlebar()->setIcon(QIcon(":/resources/image/logo/logo_big.svg"));
-    titlebar()->setTitle(tr(""));
+    titlebar()->setTitle("");
 }
 
 //  打开 所在文件夹

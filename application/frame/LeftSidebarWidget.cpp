@@ -22,12 +22,12 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent):
 
 void LeftSidebarWidget::initWidget()
 {
-    QVBoxLayout *pVBoxLayout = new QVBoxLayout;
+    auto pVBoxLayout = new QVBoxLayout;
     pVBoxLayout->setContentsMargins(0, 0, 0, 0);
     pVBoxLayout->setSpacing(0);
     this->setLayout(pVBoxLayout);
 
-    DStackedWidget *m_pStackedWidget = new DStackedWidget;
+    auto m_pStackedWidget = new DStackedWidget;
     m_pStackedWidget->insertWidget(0, new ThumbnailWidget);
     m_pStackedWidget->insertWidget(1, new BookMarkWidget);
     m_pStackedWidget->insertWidget(2, new NotesWidget);

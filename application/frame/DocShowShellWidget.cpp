@@ -3,6 +3,7 @@
 #include <QMimeData>
 #include <QUrl>
 #include "FileViewWidget.h"
+#include <QFileInfo>
 
 DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
     : CustomWidget ("DocShowShellWidget", parent)
@@ -25,8 +26,7 @@ DocShowShellWidget::~DocShowShellWidget()
 void DocShowShellWidget::dragEnterEvent(QDragEnterEvent *event)
 {
     // Accept drag event if mime type is url.
-    const QMimeData *mimeData = event->mimeData();
-
+    auto mimeData = event->mimeData();
     if (mimeData->hasUrls()) {
         event->accept();
     }
@@ -34,12 +34,14 @@ void DocShowShellWidget::dragEnterEvent(QDragEnterEvent *event)
 
 void DocShowShellWidget::dropEvent(QDropEvent *event)
 {
-    const QMimeData *mimeData = event->mimeData();
-
+    auto mimeData = event->mimeData();
     if (mimeData->hasUrls()) {
         for (auto url : mimeData->urls()) {
             QString sFilePath =  url.toLocalFile();
-            if (sFilePath.endsWith(".pdf")) {
+
+            QFileInfo info(sFilePath);
+            QString sCompleteSuffix = info.completeSuffix();
+            if (sCompleteSuffix == "pdf" || sCompleteSuffix == "tiff") {
                 //  默认打开第一个
                 QString sRes = sFilePath + "@#&wzx";
 

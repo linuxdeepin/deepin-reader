@@ -92,7 +92,6 @@ public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
     int getSearchPage(const int &);
-    int setSearchItemImage(const QImage &);
 };
 
 #endif // NOTESFORM_H

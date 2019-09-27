@@ -90,8 +90,8 @@ void FontWidget::initWidget()
     m_pEnlargeSlider->setPageStep(25);
     m_pEnlargeSlider->slider()->setTickPosition(QSlider::TicksBelow);
     m_pEnlargeSlider->setFixedSize(QSize(175, 25));
-    m_pEnlargeSlider->setLeftIcon(QIcon(tr(":/resources/image/A_small.svg")));
-    m_pEnlargeSlider->setRightIcon(QIcon(tr(":/resources/image/A_big.svg")));
+    m_pEnlargeSlider->setLeftIcon(QIcon(":/resources/image/A_small.svg"));
+    m_pEnlargeSlider->setRightIcon(QIcon(":/resources/image/A_big.svg"));
 //    m_pEnlargeSlider->setLeftTicks(t_list);
     connect(m_pEnlargeSlider, SIGNAL(valueChanged(int)), this, SLOT(slotSetChangeVal(int)));
 
@@ -319,7 +319,7 @@ void FontWidget::setShowSuitWIcon()
 void FontWidget::slotSetChangeVal(int val)
 {
     m_pEnlargeLab->clear();
-    m_pEnlargeLab->setText(tr("%1%").arg(val));
+    m_pEnlargeLab->setText(QString("%1%").arg(val));
 
     scaleAndRotate(val);
 }

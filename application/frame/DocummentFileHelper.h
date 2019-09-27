@@ -39,7 +39,7 @@ private:
     NotifySubject           *m_pNotifySubject = nullptr;
 
     QString     m_szFilePath = "";
-
+    DocType_EM      m_nCurDocType = DocType_NULL;
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &);

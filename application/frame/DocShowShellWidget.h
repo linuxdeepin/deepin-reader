@@ -27,7 +27,6 @@ protected:
     void dropEvent(QDropEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 
-
 private slots:
     void slotShowFileAttr();
     void slotShowFindWidget();

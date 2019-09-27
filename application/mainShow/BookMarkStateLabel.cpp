@@ -2,6 +2,7 @@
 #include "subjectObserver/ModuleHeader.h"
 #include "subjectObserver/MsgHeader.h"
 #include "controller/MsgSubject.h"
+#include "translator/PdfControl.h"
 
 BookMarkStateLabel::BookMarkStateLabel(DWidget *parent)
     : QLabel (parent)
@@ -24,10 +25,10 @@ BookMarkStateLabel::BookMarkStateLabel(DWidget *parent)
 void BookMarkStateLabel::mouseMoveEvent(QMouseEvent *event)
 {
     if (m_bChecked) {
-        setToolTip(tr("delete bookmark"));
+        setToolTip(PdfControl::DLT_BK);
         setPixmapState(ImageModule::g_checked_state);
     } else {
-        setToolTip(tr("add bookmark"));
+        setToolTip(PdfControl::ADD_BK);
         setPixmapState(ImageModule::g_hover_state);
     }
     DLabel::mouseMoveEvent(event);

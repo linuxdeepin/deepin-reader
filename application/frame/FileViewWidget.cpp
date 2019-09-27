@@ -43,7 +43,7 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
         return;
     }
 
-    DocummentProxy *pDocummentProxy = DocummentProxy::instance();
+    auto pDocummentProxy = DocummentProxy::instance();
     if (pDocummentProxy) {
         QPoint globalPos = event->globalPos();
         QPoint docGlobalPos = pDocummentProxy->global2RelativePoint(globalPos);
@@ -90,7 +90,7 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 
     Qt::MouseButton nBtn = event->button();
     if (nBtn == Qt::LeftButton) {
-        DocummentProxy *pDocummentProxy = DocummentProxy::instance();
+        auto pDocummentProxy = DocummentProxy::instance();
 
         QPoint globalPos = event->globalPos();
         QPoint docGlobalPos = pDocummentProxy->global2RelativePoint(globalPos);
@@ -145,7 +145,7 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
     //  手型状态， 直接返回
     if (m_nCurrentHandelState == Handel_State)
         return;
-    DocummentProxy *pDocummentProxy = DocummentProxy::instance();
+    auto pDocummentProxy = DocummentProxy::instance();
 
     QString sSelectText =  "";
     pDocummentProxy->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
@@ -156,6 +156,12 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 
     if (sSelectText != "") {
         m_pRightClickPoint = pDocummentProxy->global2RelativePoint(tempPoint);
+
+        QString sAnnotationText = "";
+        bool rl = pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText);
+
+        qDebug() << "rl     " << rl << "        " << "  sAnnotationText     " << sAnnotationText;
+
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
         if (m_pTextOperationWidget == nullptr) {
             m_pTextOperationWidget = new TextOperationWidget(this);
