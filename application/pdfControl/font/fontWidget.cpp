@@ -429,13 +429,14 @@ void FontWidget::slotSetRotateRightCheckIcon()
     rotateFileView(true);
 }
 
+
 /*********************自定义label**************************************/
 /*********************MenuLab*****××××********************************/
 
 MenuLab::MenuLab(QWidget *parent):
     DLabel(parent)
 {
-
+int t_num = 0;//test
 }
 
 /**
