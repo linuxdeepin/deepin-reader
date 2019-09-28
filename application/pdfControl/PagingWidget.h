@@ -3,7 +3,6 @@
 
 #include <DLabel>
 #include <DSpinBox>
-#include <DLineEdit>
 #include <DIconButton>
 
 #include <QIntValidator>

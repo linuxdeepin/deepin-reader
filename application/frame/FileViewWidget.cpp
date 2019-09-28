@@ -259,7 +259,7 @@ void FileViewWidget::slotOpenNoteWidget()
     }
     m_pFileViewNoteWidget->show();
 //    m_pTextOperationWidget->move(tempPoint.x(), tempPoint.y());
-    m_pFileViewNoteWidget->raise();
+//    m_pFileViewNoteWidget->raise();
 }
 
 //  设置　窗口　自适应　宽＼高　度
