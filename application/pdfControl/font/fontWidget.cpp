@@ -436,7 +436,7 @@ void FontWidget::slotSetRotateRightCheckIcon()
 MenuLab::MenuLab(QWidget *parent):
     DLabel(parent)
 {
-int t_num = 0;//test
+
 }
 
 /**
