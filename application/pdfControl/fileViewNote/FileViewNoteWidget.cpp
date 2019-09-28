@@ -15,18 +15,20 @@ int FileViewNoteWidget::dealWithData(const int &, const QString &)
 
 void FileViewNoteWidget::initWidget()
 {
-    m_pCloseLab = new DLabel;
-    m_pCloseLab->setFixedSize(QSize(50, 50));
-    m_pCloseLab->setPixmap(QString(":/resources/image/close.svg"));
+    m_pCloseLab = new MenuLab;
+    m_pCloseLab->setFixedSize(QSize(30, 30));
+    m_pCloseLab->setPixmap(QPixmap(QString(":/resources/image/close.svg")));
+    connect(m_pCloseLab, SIGNAL(clicked()), this, SLOT(slotClosed()));
 
     auto m_pHLayoutClose = new QHBoxLayout;
     m_pHLayoutClose->setContentsMargins(1, 0, 0, 0);
     m_pHLayoutClose->addSpacing(1);
     m_pHLayoutClose->addWidget(m_pCloseLab);
 
-    m_pDltLab = new DLabel;
-    m_pDltLab->setFixedSize(QSize(50, 50));
-    m_pDltLab->setPixmap(QString(":/resources/image/delete.svg"));
+    m_pDltLab = new MenuLab;
+    m_pDltLab->setFixedSize(QSize(30, 30));
+    m_pDltLab->setPixmap(QPixmap(QString(":/resources/image/delete.svg")));
+    connect(m_pDltLab, SIGNAL(clicked()), this, SLOT(slotDlted()));
 
     auto m_pHLayoutDlt = new QHBoxLayout;
     m_pHLayoutDlt->setContentsMargins(0, 0, 1, 0);
@@ -34,6 +36,7 @@ void FileViewNoteWidget::initWidget()
     m_pHLayoutDlt->addSpacing(1);
 
     m_pTextEdit = new DTextEdit;
+    m_pTextEdit->setFixedSize(QSize(200,300));
 
     auto m_pVLayout = new QVBoxLayout;
     m_pVLayout->setContentsMargins(0, 0, 0, 0);
@@ -43,4 +46,16 @@ void FileViewNoteWidget::initWidget()
     m_pVLayout->addItem(m_pHLayoutDlt);
 
     this->setLayout(m_pVLayout);
+}
+
+void FileViewNoteWidget::slotClosed()
+{
+    qDebug() << "             void FileViewNoteWidget::slotClosed()   ";
+    //sendMsg closed signal;
+}
+
+void FileViewNoteWidget::slotDlted()
+{
+    qDebug() << "             void FileViewNoteWidget::slotDlted()   ";
+    //sendMsg Dlted signal;
 }

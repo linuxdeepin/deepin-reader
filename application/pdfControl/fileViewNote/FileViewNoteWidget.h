@@ -8,6 +8,9 @@
 #include <QHBoxLayout>
 
 #include "subjectObserver/CustomWidget.h"
+#include "../font/fontWidget.h"
+
+class MenuLab;
 
 class FileViewNoteWidget : public CustomWidget
 {
@@ -22,10 +25,14 @@ public:
 protected:
     void initWidget() override;
 
+private slots:
+    void slotClosed();
+    void slotDlted();
+
 private:
     DTextEdit *m_pTextEdit = nullptr;
-    DLabel *m_pCloseLab = nullptr;
-    DLabel *m_pDltLab = nullptr;
+    MenuLab *m_pCloseLab = nullptr;
+    MenuLab *m_pDltLab = nullptr;
 };
 
 #endif // FILEVIEWNOTEWIDGET_H
