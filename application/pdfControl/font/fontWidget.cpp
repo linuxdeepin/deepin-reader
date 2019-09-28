@@ -93,8 +93,8 @@ void FontWidget::initWidget()
 //           << QString("2.25") << QString("2.5") << QString("2.75") << QString("3.0");
 
     m_pEnlargeSlider = new DSlider(Qt::Horizontal);
-    m_pEnlargeSlider->setMinimum(50);
-    m_pEnlargeSlider->setMaximum(300);
+    m_pEnlargeSlider->setMinimum(10);
+    m_pEnlargeSlider->setMaximum(500);
     m_pEnlargeSlider->setValue(100);
     m_pEnlargeSlider->slider()->setSingleStep(25);
     m_pEnlargeSlider->setPageStep(25);
