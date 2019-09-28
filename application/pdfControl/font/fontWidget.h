@@ -17,6 +17,11 @@
 #include "subjectObserver/CustomWidget.h"
 #include "docview/docummentproxy.h"
 
+/**
+ * @brief The MenuLab class
+ * 自定义label，提供点击事件
+ */
+
 class MenuLab : public DLabel
 {
     Q_OBJECT
@@ -30,6 +35,10 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
 };
 
+/**
+ * @brief The FontWidget class
+ * 字体调整窗体
+ */
 class FontWidget : public CustomWidget
 {
     Q_OBJECT
@@ -64,24 +73,22 @@ private slots:
     void slotSetRotateRightCheckIcon();
 
 private:
-    DLabel *m_pEnlargeLab = nullptr;
-    DSlider *m_pEnlargeSlider = nullptr;
-
-    MenuLab *m_pDoubPageViewLb = nullptr;
-    MenuLab *m_pSuitHLb = nullptr;
-    MenuLab *m_pSuitWLb = nullptr;
-    MenuLab *m_pRotateLeftLb = nullptr;
-    MenuLab *m_pRotateRightLb = nullptr;
-
-    DLabel *m_pDoubPageViewLab = nullptr;
-    DLabel *m_pSuitHLab = nullptr;
-    DLabel *m_pSuitWLab = nullptr;
-    DLabel *m_pRotateLeftLab = nullptr;
-    DLabel *m_pRotateRightLab = nullptr;
-    int m_rotate = 0;  // 旋转角度
-    int m_rotateType = RotateType_Normal;
-    bool m_bSuitH = false;
-    bool m_bSuitW = false;
+    DLabel *m_pEnlargeLab = nullptr;         // 缩放比例
+    DSlider *m_pEnlargeSlider = nullptr;     // 缩放比例slider
+    MenuLab *m_pDoubPageViewLb = nullptr;    // 双页显示文字标签
+    MenuLab *m_pSuitHLb = nullptr;           // 自适应高度文字标签
+    MenuLab *m_pSuitWLb = nullptr;           // 自适应宽度文字标签
+    MenuLab *m_pRotateLeftLb = nullptr;      // 向左旋转文字标签
+    MenuLab *m_pRotateRightLb = nullptr;     // 向右旋转文字标签
+    DLabel *m_pDoubPageViewLab = nullptr;    // 双页显示ICON标签
+    DLabel *m_pSuitHLab = nullptr;           // 自适应高度ICON标签
+    DLabel *m_pSuitWLab = nullptr;           // 自适应宽度ICON标签
+    DLabel *m_pRotateLeftLab = nullptr;      // 向左旋转ICON标签
+    DLabel *m_pRotateRightLab = nullptr;     // 向右旋转ICON标签
+    int m_rotate = 0;                        // 旋转角度
+    int m_rotateType = RotateType_Normal;    // 旋转类型
+    bool m_bSuitH = false;                   // 自适应高度
+    bool m_bSuitW = false;                   // 自适应宽度
 };
 
 #endif // FONTWIDGET_H

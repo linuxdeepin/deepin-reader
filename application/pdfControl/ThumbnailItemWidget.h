@@ -33,7 +33,7 @@ protected:
     void initWidget() override;
 
 private:
-    bool m_bPaint = false;
+    bool m_bPaint = false;                    // 是否绘制选中item
 };
 
 #endif // THUMBNAILITEMWIDGET_H

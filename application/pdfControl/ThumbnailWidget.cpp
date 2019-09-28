@@ -16,11 +16,13 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
 
 ThumbnailWidget::~ThumbnailWidget()
 {
+    // 等待子线程退出
     if (!m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();
     }
 }
 
+// 处理消息事件
 int ThumbnailWidget::dealWithData(const int &msgType, const QString &)
 {
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
@@ -32,6 +34,7 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &)
     return 0;
 }
 
+// 初始化界面
 void ThumbnailWidget::initWidget()
 {
     m_pThumbnailListWidget = new CustomListWidget(this);
@@ -92,6 +95,7 @@ void ThumbnailWidget::slotFileViewToListPage(const int &page)
     }
 }
 
+// 关联关闭文件槽函数
 void ThumbnailWidget::slotCloseFile()
 {
     if (m_ThreadLoadImage.isRunning()) {
@@ -99,6 +103,7 @@ void ThumbnailWidget::slotCloseFile()
     }
 }
 
+// 初始化缩略图列表list，无缩略图
 void ThumbnailWidget::fillContantToList()
 {
     for (int idex = 0; idex < m_totalPages; ++idex) {
@@ -115,6 +120,7 @@ void ThumbnailWidget::fillContantToList()
     m_isLoading = false;
 }
 
+// 关联成功打开文件槽函数
 void ThumbnailWidget::slotOpenFileOk()
 {
     m_isLoading = true;
@@ -145,6 +151,7 @@ void ThumbnailWidget::slotOpenFileOk()
     m_ThreadLoadImage.start();
 }
 
+// 启动加载缩略图线程
 void ThumbnailWidget::slotLoadThumbnailImage()
 {
     if (m_ThreadLoadImage.endPage() == ( m_totalPages - 1)) {
@@ -156,7 +163,7 @@ void ThumbnailWidget::slotLoadThumbnailImage()
     }
 }
 
-
+// 关联线程加载缩略图槽函数
 void ThumbnailWidget::slot_loadImage(int page, QImage image)
 {
     m_pThumbnailListWidget->setItemImage(page, image);
@@ -178,6 +185,7 @@ void ThreadLoadImage::stopThreadRun()
     wait();         //阻塞等待
 }
 
+// 加载缩略图线程
 void ThreadLoadImage::run()
 {
     while (m_isLoaded) {

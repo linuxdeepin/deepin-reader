@@ -10,6 +10,12 @@ FontWidget::FontWidget(CustomWidget *parent):
     initWidget();
 }
 
+/**
+ * @brief FontWidget::dealWithData
+ * 处理全局信号接口
+ * @param msgType
+ * @return
+ */
 int FontWidget::dealWithData(const int &msgType, const QString &)
 {
     int scale = 0;
@@ -38,6 +44,10 @@ int FontWidget::dealWithData(const int &msgType, const QString &)
     return 0;
 }
 
+/**
+ * @brief FontWidget::initWidget
+ * 初始化界面
+ */
 void FontWidget::initWidget()
 {
     QFont ft;
@@ -172,6 +182,10 @@ void FontWidget::initWidget()
     this->setLayout(t_pVBoxLayout);
 }
 
+/**
+ * @brief FontWidget::paintEvent
+ * 重写绘制接口
+ */
 void FontWidget::paintEvent(QPaintEvent *)
 {
     QRectF rectangle(0.0, 12.0, this->width(), this->height() - 12);
@@ -234,12 +248,22 @@ void FontWidget::paintEvent(QPaintEvent *)
     this->update();
 }
 
+/**
+ * @brief FontWidget::hideEvent
+ * 隐藏事件
+ * @param event
+ */
 void FontWidget::hideEvent(QHideEvent *event)
 {
     emit sigWidgetHide();
     CustomWidget::hideEvent(event);
 }
 
+/**
+ * @brief FontWidget::rotateFileView
+ *计算旋转函数
+ * @param isRight
+ */
 void FontWidget::rotateFileView(bool isRight)
 {
     int ival = m_pEnlargeSlider->value();
@@ -256,6 +280,11 @@ void FontWidget::rotateFileView(bool isRight)
     sendMsg(MSG_FILE_ROTATE, QString(""));
 }
 
+/**
+ * @brief FontWidget::scaleAndRotate
+ * 右侧页面旋转函数
+ * @param ival
+ */
 void FontWidget::scaleAndRotate(int ival)
 {
     int t_rotate = 0;
@@ -292,6 +321,10 @@ void FontWidget::scaleAndRotate(int ival)
     }
 }
 
+/**
+ * @brief FontWidget::setShowSuitHIcon
+ * 自适应高函数
+ */
 void FontWidget::setShowSuitHIcon()
 {
     int t_nShow = m_bSuitH ? 1 : 0;
@@ -304,6 +337,10 @@ void FontWidget::setShowSuitHIcon()
     }
 }
 
+/**
+ * @brief FontWidget::setShowSuitWIcon
+ * 自适应宽函数
+ */
 void FontWidget::setShowSuitWIcon()
 {
     int t_nShow = m_bSuitW ? 1 : 0;
@@ -316,6 +353,11 @@ void FontWidget::setShowSuitWIcon()
     }
 }
 
+/**
+ * @brief FontWidget::slotSetChangeVal
+ * 设置字体缩放比例函数
+ * @param val
+ */
 void FontWidget::slotSetChangeVal(int val)
 {
     m_pEnlargeLab->clear();
@@ -324,6 +366,10 @@ void FontWidget::slotSetChangeVal(int val)
     scaleAndRotate(val);
 }
 
+/**
+ * @brief FontWidget::slotSetDoubPageViewCheckIcon
+ * 单/双页显示函数
+ */
 void FontWidget::slotSetDoubPageViewCheckIcon()
 {
     static bool t_isDoubPage = false;
@@ -339,6 +385,10 @@ void FontWidget::slotSetDoubPageViewCheckIcon()
     }
 }
 
+/**
+ * @brief FontWidget::slotSetSuitHCheckIcon
+ * 设置自适应高度选中图标
+ */
 void FontWidget::slotSetSuitHCheckIcon()
 {
     m_bSuitW = false;
@@ -348,6 +398,10 @@ void FontWidget::slotSetSuitHCheckIcon()
     setShowSuitHIcon();
 }
 
+/**
+ * @brief FontWidget::slotSetSuitWCheckIcon
+ * 设置自适应宽度选中图标
+ */
 void FontWidget::slotSetSuitWCheckIcon()
 {
     m_bSuitH = false;
@@ -357,16 +411,26 @@ void FontWidget::slotSetSuitWCheckIcon()
     setShowSuitWIcon();
 }
 
+/**
+ * @brief FontWidget::slotSetRotateLeftCheckIcon
+ * 向左旋转函数
+ */
 void FontWidget::slotSetRotateLeftCheckIcon()
 {
     rotateFileView(false);
 }
 
+/**
+ * @brief FontWidget::slotSetRotateRightCheckIcon
+ * 向右旋转函数
+ */
 void FontWidget::slotSetRotateRightCheckIcon()
 {
     rotateFileView(true);
 }
 
+/*********************自定义label**************************************/
+/*********************MenuLab*****××××********************************/
 
 MenuLab::MenuLab(QWidget *parent):
     DLabel(parent)
@@ -374,6 +438,11 @@ MenuLab::MenuLab(QWidget *parent):
 
 }
 
+/**
+ * @brief MenuLab::mousePressEvent
+ * 自定义label点击事件
+ * @param event
+ */
 void MenuLab::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {

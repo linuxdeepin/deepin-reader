@@ -12,6 +12,10 @@ PagingWidget::PagingWidget(CustomWidget *parent) :
     connect(this, SIGNAL(sigJumpToSpecifiedPage(const int &)), this, SLOT(slotJumpToSpecifiedPage(const int &)));
 }
 
+/**
+ * @brief PagingWidget::initWidget
+ * 初始化界面
+ */
 void PagingWidget::initWidget()
 {
     m_pTotalPagesLab = new DLabel(this);
@@ -42,6 +46,13 @@ void PagingWidget::initWidget()
     this->setLayout(hLayout);
 }
 
+/**
+ * @brief PagingWidget::eventFilter
+ * 输入框响应回车事件
+ * @param watched
+ * @param event
+ * @return
+ */
 bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_pJumpPageSpinBox) {
@@ -62,7 +73,11 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
     return QWidget::eventFilter(watched, event);
 }
 
-//  设置 总页数
+/**
+ * @brief PagingWidget::setTotalPages
+ * 设置 总页数
+ * @param pages
+ */
 void PagingWidget::setTotalPages(int pages)
 {
     m_totalPage = pages;
@@ -78,6 +93,12 @@ void PagingWidget::setTotalPages(int pages)
     }
 }
 
+/**
+ * @brief PagingWidget::dealWithData
+ * 处理全局消息接口
+ * @param msgType
+ * @return
+ */
 int PagingWidget::dealWithData(const int &msgType, const QString &)
 {
     switch (msgType) {

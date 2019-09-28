@@ -107,6 +107,13 @@ void SearchResWidget::addNotesItem(const int &page, const QString &text, const i
     m_pNotesList->setItemWidget(item, itemWidget);
 }
 
+/**
+ * @brief SearchResWidget::dealWithData
+ * 处理全局信号函数
+ * @param msgType
+ * @param msgContent
+ * @return
+ */
 int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_FIND_CONTENT) {        //  查询内容
@@ -148,6 +155,12 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
     return 0;
 }
 
+/**
+ * @brief SearchResWidget::getSearchPage
+ * 得到当前搜索页码
+ * @param index
+ * @return
+ */
 int SearchResWidget::getSearchPage(const int &index)
 {
     QListWidgetItem *pItem = m_pNotesList->item(index);
@@ -168,14 +181,22 @@ LoadSearchResThread::LoadSearchResThread(QObject *parent):
 
 }
 
+/**
+ * @brief LoadSearchResThread::stopThread
+ * 停止线程
+ */
 void LoadSearchResThread::stopThread()
 {
     m_isRunning = false;
 
-    terminate();    //终止线程
+//    terminate();    //终止线程
     wait();         //阻塞等待
 }
 
+/**
+ * @brief LoadSearchResThread::run
+ * 线程主工作区
+ */
 void LoadSearchResThread::run()
 {
     while (m_isRunning) {

@@ -45,13 +45,13 @@ protected:
 
 
 private:
-    DLabel *m_pTotalPagesLab = nullptr;
-    DIconButton *m_pPrePageBtn = nullptr;
-    DIconButton *m_pNextPageBtn = nullptr;
-    DSpinBox *m_pJumpPageSpinBox = nullptr;
-    int m_currntPage = 0;
-    int m_totalPage = 0;
-    int m_preRow = -1;
+    DLabel *m_pTotalPagesLab = nullptr;        // 当前文档总页数标签
+    DIconButton *m_pPrePageBtn = nullptr;      // 按钮 前一页
+    DIconButton *m_pNextPageBtn = nullptr;     // 按钮 后一页
+    DSpinBox *m_pJumpPageSpinBox = nullptr;    // 输入框 跳转页码
+    int m_currntPage = 0;                      // 当前页码数减一
+    int m_totalPage = 0;                       // 当前文档页码总数
+    int m_preRow = -1;                         // 当前页码所在list中的行
 
 public:
     int dealWithData(const int &, const QString &) override;

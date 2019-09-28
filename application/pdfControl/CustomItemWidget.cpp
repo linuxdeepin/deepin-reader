@@ -7,6 +7,11 @@ CustomItemWidget::CustomItemWidget(const QString &name, CustomWidget *parent)
 
 }
 
+/**
+ * @brief CustomItemWidget::setLabelImage
+ * 给新label填充缩略图
+ * @param image
+ */
 void CustomItemWidget::setLabelImage(const QImage &image)
 {
     if (m_pPicture != nullptr) {
@@ -14,6 +19,12 @@ void CustomItemWidget::setLabelImage(const QImage &image)
     }
 }
 
+/**
+ * @brief CustomItemWidget::setLabelPage
+ * 设置页码标签内容
+ * @param value
+ * @param nShowPage
+ */
 void CustomItemWidget::setLabelPage(const int &value,  const int &nShowPage )
 {
     m_nPageIndex = value;
@@ -28,6 +39,11 @@ void CustomItemWidget::setLabelPage(const int &value,  const int &nShowPage )
     }
 }
 
+/**
+ * @brief CustomItemWidget::nPageIndex
+ * 获取当前注释缩略图index
+ * @return
+ */
 int CustomItemWidget::nPageIndex() const
 {
     return m_nPageIndex;

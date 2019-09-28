@@ -4,23 +4,35 @@
 BookMarkItemWidget::BookMarkItemWidget(CustomItemWidget *parent) :
     CustomItemWidget("BookMarkItemWidget", parent)
 {
-    this->setContextMenuPolicy(Qt::CustomContextMenu);
+    this->setContextMenuPolicy(Qt::CustomContextMenu);//让widget支持右键菜单事件
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(slotShowContextMenu(const QPoint &)));
 
     initWidget();
 }
-
+/**
+ * @brief BookMarkItemWidget::dealWithData
+ * 处理全局消息接口
+ * @return
+ */
 int BookMarkItemWidget::dealWithData(const int &, const QString &)
 {
     return 0;
 }
 
+/**
+ * @brief BookMarkItemWidget::slotDltBookMark
+ * 删除当前书签，并发送删除书签全局消息
+ */
 void BookMarkItemWidget::slotDltBookMark()
 {
     sendMsg(MSG_BOOKMARK_DLTITEM, QString::number(m_nPageIndex));
 }
 
+/**
+ * @brief BookMarkItemWidget::slotShowContextMenu
+ * 显示书签右键菜单
+ */
 void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
 {
     QMenu *t_menu = new QMenu(this);
@@ -30,6 +42,10 @@ void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
     t_menu->exec(QCursor::pos());
 }
 
+/**
+ * @brief BookMarkItemWidget::initWidget
+ * 初始化界面
+ */
 void BookMarkItemWidget::initWidget()
 {
     m_pPicture = new CustomLabel;

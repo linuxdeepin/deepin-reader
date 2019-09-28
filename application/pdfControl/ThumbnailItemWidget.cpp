@@ -8,6 +8,7 @@ ThumbnailItemWidget::ThumbnailItemWidget(CustomItemWidget *parent) :
     initWidget();
 }
 
+// 绘制  给label填充颜色
 void ThumbnailItemWidget::paintEvent(QPaintEvent *event)
 {
     QPalette p;
@@ -22,16 +23,19 @@ void ThumbnailItemWidget::paintEvent(QPaintEvent *event)
     CustomWidget::paintEvent(event);
 }
 
+// 处理消息接口
 int ThumbnailItemWidget::dealWithData(const int &, const QString &)
 {
     return 0;
 }
 
+// 是否被选中，选中就就填充颜色
 void ThumbnailItemWidget::setBSelect(const bool &paint)
 {
     m_bPaint = paint;
 }
 
+// 初始化界面
 void ThumbnailItemWidget::initWidget()
 {
     m_pPage = new DLabel();

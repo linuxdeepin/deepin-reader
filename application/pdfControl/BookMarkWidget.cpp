@@ -11,7 +11,10 @@ BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
 
     initConnection();
 }
-
+/**
+ * @brief BookMarkWidget::~BookMarkWidget
+ * 等待子线程退出
+ */
 BookMarkWidget::~BookMarkWidget()
 {
     if (m_loadBookMarkThread.isRunning()) {
@@ -123,6 +126,10 @@ void BookMarkWidget::slotDeleteBookItem()
     }
 }
 
+/**
+ * @brief BookMarkWidget::slotCloseFile
+ *关联关闭文件成功槽函数
+ */
 void BookMarkWidget::slotCloseFile()
 {
     if (m_loadBookMarkThread.isRunning()) {
@@ -246,6 +253,11 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &)
     return 0;
 }
 
+/**
+ * @brief BookMarkWidget::getBookMarkPage
+ * @param index(list item 从0开始)
+ * @return 返回要填充缩略图的页码，不一定是index
+ */
 int BookMarkWidget::getBookMarkPage(const int &index)
 {
     QListWidgetItem *pItem = m_pBookMarkListWidget->item(index);
@@ -269,14 +281,22 @@ LoadBookMarkThread::LoadBookMarkThread(QObject *parent)
 
 }
 
+/**
+ * @brief LoadBookMarkThread::stopThreadRun
+ * 线程退出
+ */
 void LoadBookMarkThread::stopThreadRun()
 {
     m_isRunning = false;
 
-    terminate();    //终止线程
+//    terminate();    //终止线程
     wait();         //阻塞等待
 }
 
+/**
+ * @brief LoadBookMarkThread::run
+ * 线程主工作区，加载相应缩略图
+ */
 void LoadBookMarkThread::run()
 {
     while (m_isRunning) {

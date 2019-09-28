@@ -10,6 +10,10 @@ NotesWidget::NotesWidget(CustomWidget *parent) :
     initWidget();
 }
 
+/**
+ * @brief NotesWidget::initWidget
+ * 初始化界面
+ */
 void NotesWidget::initWidget()
 {
     auto m_pVLayout = new QVBoxLayout;
@@ -24,6 +28,10 @@ void NotesWidget::initWidget()
     connect(this, SIGNAL(sigAddNewNoteItem()), this, SLOT(slotAddNoteItem()));
 }
 
+/**
+ * @brief NotesWidget::slotAddNoteItem
+ * 增加注释缩略图Item槽函数
+ */
 void NotesWidget::slotAddNoteItem()
 {
     qDebug() << "           NotesWidget::slotAddNoteItem               ";
@@ -35,6 +43,13 @@ void NotesWidget::slotAddNoteItem()
     addNotesItem(image, t_page, "");
 }
 
+/**
+ * @brief NotesWidget::addNotesItem
+ * 给新节点填充内容（包括文字、缩略图等内容）
+ * @param image
+ * @param page
+ * @param text
+ */
 void NotesWidget::addNotesItem(const QImage &image, const int &page, const QString &text)
 {
     NotesItemWidget *itemWidget = new NotesItemWidget;
@@ -54,6 +69,11 @@ void NotesWidget::addNotesItem(const QImage &image, const int &page, const QStri
     ++m_nUUid;//测试专用
 }
 
+/**
+ * @brief NotesWidget::dealWithData
+ * 处理全局信号函数
+ * @return
+ */
 int NotesWidget::dealWithData(const int &, const QString &)
 {
     return 0;

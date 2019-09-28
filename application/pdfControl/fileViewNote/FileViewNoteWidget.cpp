@@ -13,6 +13,7 @@ int FileViewNoteWidget::dealWithData(const int &, const QString &)
     return 0;
 }
 
+// 初始化界面
 void FileViewNoteWidget::initWidget()
 {
     m_pCloseLab = new MenuLab;
@@ -48,12 +49,14 @@ void FileViewNoteWidget::initWidget()
     this->setLayout(m_pVLayout);
 }
 
+// 关闭槽函数
 void FileViewNoteWidget::slotClosed()
 {
     qDebug() << "             void FileViewNoteWidget::slotClosed()   ";
     //sendMsg closed signal;
 }
 
+// 删除槽函数
 void FileViewNoteWidget::slotDlted()
 {
     qDebug() << "             void FileViewNoteWidget::slotDlted()   ";

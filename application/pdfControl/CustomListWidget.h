@@ -5,6 +5,10 @@
 
 DWIDGET_USE_NAMESPACE
 
+/**
+ * @brief The CustomListWidget class
+ * 自定义缩略图ListWidget
+ */
 class CustomListWidget : public DListWidget
 {
     Q_OBJECT

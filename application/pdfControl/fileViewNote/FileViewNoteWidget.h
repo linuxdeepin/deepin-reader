@@ -10,6 +10,11 @@
 #include "subjectObserver/CustomWidget.h"
 #include "../font/fontWidget.h"
 
+/**
+ *@brief The FileViewNoteWidget class
+ *@brief 添加注释子界面
+ */
+
 class MenuLab;
 
 class FileViewNoteWidget : public CustomWidget
@@ -30,9 +35,9 @@ private slots:
     void slotDlted();
 
 private:
-    DTextEdit *m_pTextEdit = nullptr;
-    MenuLab *m_pCloseLab = nullptr;
-    MenuLab *m_pDltLab = nullptr;
+    DTextEdit *m_pTextEdit = nullptr;   // 注释
+    MenuLab *m_pCloseLab = nullptr;     // 关闭
+    MenuLab *m_pDltLab = nullptr;       // 删除
 };
 
 #endif // FILEVIEWNOTEWIDGET_H

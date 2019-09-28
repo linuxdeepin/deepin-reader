@@ -13,6 +13,12 @@ CustomListWidget::CustomListWidget(DWidget *parent)
     connect(this, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
 }
 
+/**
+ * @brief CustomListWidget::setItemImage
+ * 填充缩略图
+ * @param row
+ * @param image
+ */
 void CustomListWidget::setItemImage(const int &row, QImage &image)
 {
     QListWidgetItem *item = this->item(row);
@@ -24,7 +30,11 @@ void CustomListWidget::setItemImage(const int &row, QImage &image)
     }
 }
 
-//  单击 跳转
+/**
+ * @brief CustomListWidget::slotShowSelectItem
+ * 鼠标点击当前缩略图item，右边fileview中同步到当前页
+ * @param item
+ */
 void CustomListWidget::slotShowSelectItem(QListWidgetItem *item)
 {
     CustomItemWidget *t_ItemWidget = reinterpret_cast<CustomItemWidget *>(this->itemWidget(item));

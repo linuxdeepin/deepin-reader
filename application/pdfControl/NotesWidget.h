@@ -37,9 +37,8 @@ private:
     void fillContantToList();
 
 private:
-    QVBoxLayout *m_pVLayout = nullptr;
-
-    int m_nUUid = 1;
+    QVBoxLayout *m_pVLayout = nullptr;         // 垂直布局
+    int m_nUUid = 1;                           // 注释的uuid， 便于区分注释
 
 public:
     // IObserver interface

@@ -6,6 +6,11 @@ CustomLabel::CustomLabel(QWidget *parent) :
 
 }
 
+/**
+ * @brief CustomLabel::paintEvent
+ * 自绘承载缩略图标签
+ * @param e
+ */
 void CustomLabel::paintEvent(QPaintEvent *e)
 {
     QRectF rectangle(0.0, 0.0, (this->width() * 1.0), (this->height() * 1.0));
