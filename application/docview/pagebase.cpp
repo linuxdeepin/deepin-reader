@@ -54,7 +54,8 @@ PageBase::PageBase(DWidget *parent)
       m_magnifierwidth (0),
       m_magnifierheight (0),
       m_pageno(-1),
-      m_icurhightlight(0)
+      m_icurhightlight(0),
+      m_bcursearchshow(false)
 
 {
     setMouseTracking(true);
@@ -378,6 +379,11 @@ void PageBase::getImagePoint(QPoint &point)
         break;
     }
     point = qp;
+}
+
+void PageBase::clearHighlightRects()
+{
+    m_highlights.clear();
 }
 
 bool PageBase::clearMagnifierPixmap()

@@ -127,11 +127,9 @@ public:
     virtual QString removeAnnotation(const QPoint &startpos) {}
     virtual void removeAnnotation(const QString &struuid) {}
     virtual QString addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) {}
-    virtual void search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color = Qt::yellow) {}
+    virtual void search(const QString &strtext,QColor color = Qt::yellow) {}
     virtual void clearSearch() {}
     virtual void docBasicInfo(stFileInfo &info) {}
-    virtual void findNext() {}
-    virtual void findPrev() {}
     virtual void title(QString &title) {}
     virtual void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) {}
     virtual void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1) {}
@@ -216,6 +214,8 @@ public:
     bool loadPages();
     double adaptWidthAndShow(double width);
     double adaptHeightAndShow(double height);
+    void findNext();
+    void findPrev();
 
 signals:
     void signal_pageChange(int);
@@ -245,7 +245,7 @@ protected:
     DLabel *pslidelabel;
     int m_slidepageno;
     DLabel *pslideanimationlabel;
-//    ThreadLoadDoc m_threadloaddoc;
+    //    ThreadLoadDoc m_threadloaddoc;
     ThreadLoadWords m_threadloadwords;
     RotateType_EM m_rotate;
     int m_currentpageno;
@@ -259,7 +259,9 @@ protected:
     int m_findcurpage;
     QMap<int, int> m_pagecountsearch; //搜索结果页对应当前页个数
     int m_cursearch;
-     bool m_bsearchfirst;
+    bool m_bsearchfirst;
+    double m_imagewidht;
+    double m_imageheight;
 
 };
 

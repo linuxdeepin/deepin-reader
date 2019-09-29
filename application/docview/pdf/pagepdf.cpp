@@ -97,21 +97,20 @@ void PagePdf::paintEvent(QPaintEvent *event)
     PageBase::paintEvent(event);
 
     for (int i = 0; i < m_highlights.size(); i++) {
-        if((m_icurhightlight)!=i)
+        //m_bcursearchshow
+        if(m_icurhightlight==i&&m_bcursearchshow)
         {
             QPainter qpainter(this);
             qpainter.setBrush(m_searchcolor);
-            QPen qpen(m_pencolor);
-            qpainter.setPen(qpen);
-
             qpainter.drawRect(translateRect(m_highlights[i],m_scale,m_rotate));
         }
         else {
             QPainter qpainter(this);
             qpainter.setBrush(m_searchcolor);
+            QPen qpen(m_pencolor);
+            qpainter.setPen(qpen);
             qpainter.drawRect(translateRect(m_highlights[i],m_scale,m_rotate));
         }
-
     }
 }
 

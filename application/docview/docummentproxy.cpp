@@ -208,7 +208,7 @@ void DocummentProxy::search(const QString &strtext, QMap<int, stSearchRes> &resm
 {
     if (!m_documment || bcloseing)
         return ;
-    m_documment->search(strtext, resmap, color);
+    m_documment->search(strtext, color);
 }
 
 void DocummentProxy::clearsearch()

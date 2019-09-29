@@ -138,6 +138,8 @@ public:
     Page::Link *ifMouseMoveOverLink(const QPoint point);
     bool getSelectTextString(QString &st);
     QRectF translateRect(QRectF& rect,double scale, RotateType_EM rotate);
+    void clearHighlightRects();
+    void setCurSearchShow(bool bshow){m_bcursearchshow=bshow;}
 //    void setReSize(double scale = 1, RotateType_EM rotate = RotateType_Normal);
 signals:
     void signal_MagnifierPixmapCacheLoaded(int);
@@ -145,6 +147,7 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 protected:
     void getImagePoint(QPoint &point);
+
     QColor m_paintercolor;
     QColor m_pencolor;
     QColor m_searchcolor;
@@ -164,7 +167,9 @@ protected:
     double m_magnifierwidth;
     double m_magnifierheight;
     int m_pageno;
-    int m_icurhightlight;
+    int m_icurhightlight;//当前页搜索高亮获取"焦点"的下标
+    bool m_bcursearchshow;//当前页是否是搜索结果当前显示页
+
 };
 
 #endif // PAGEBASE_H

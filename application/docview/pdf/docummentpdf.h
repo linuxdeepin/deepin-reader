@@ -21,12 +21,10 @@ public:
     QString removeAnnotation(const QPoint &startpos) override;
     void removeAnnotation(const QString &struuid) override;
     QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow) override;
-    void search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color = Qt::yellow) override;
+    void search(const QString &strtext,QColor color = Qt::yellow) override;
     void clearSearch() override;
     bool annotationClicked(const QPoint &pos, QString &strtext) override;
-    void title(QString &title) override;
-    void findNext()override;
-    void findPrev()override;
+    void title(QString &title) override;  
     void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) override;
     void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1)override;
     bool loadDocumment(QString filepath) override;
