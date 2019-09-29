@@ -3,9 +3,11 @@
 
 #include <DLabel>
 #include <DTextEdit>
+#include <DMessageBox>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QMessageBox>
 
 #include "subjectObserver/CustomWidget.h"
 #include "../font/fontWidget.h"

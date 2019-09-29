@@ -5,7 +5,6 @@
 #include <DLabel>
 #include <QVBoxLayout>
 #include <QPainter>
-#include <QImage>
 
 #include "CustomLabel.h"
 #include "CustomItemWidget.h"
