@@ -13,6 +13,8 @@
 #include <QColor>
 #include <QVideoWidget>
 #include <QThread>
+#include <QPropertyAnimation>
+#include <QParallelAnimationGroup>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -23,22 +25,7 @@ enum ViewMode_EM {
 };
 #include <QtDebug>
 
-class DocummentBase;
-//class ThreadLoadDoc : public QThread
-//{
-//    Q_OBJECT
-//public:
-//    ThreadLoadDoc();
-//    void setDoc(DocummentBase *doc);
-//    void setRestart();
 
-//protected:
-//    virtual void run();
-
-//private:
-//    DocummentBase *m_doc;
-//    bool restart;
-//};
 class DocummentBase;
 class DocummentBasePrivate;
 class ThreadLoadWords : public QThread
@@ -111,6 +98,9 @@ public:
         m_currentpageno = 0;
         m_viewmode = ViewMode_SinglePage;
         m_lastmagnifierpagenum = -1;
+        animationfirst = nullptr;
+        animationsecond = nullptr;
+        animationgroup = nullptr;
     }
 
     ~DocummentBasePrivate()
@@ -120,14 +110,18 @@ public:
             m_threadloadwords.quit();
             m_threadloadwords.wait();
         }
-//        if (m_magnifierwidget) {
-//            delete m_magnifierwidget;
-//            m_magnifierwidget = nullptr;
-//        }
-//        if (m_slidewidget) {
-//            delete m_slidewidget;
-//            m_slidewidget = nullptr;
-//        }
+        if (!animationfirst) {
+            delete  animationfirst;
+            animationfirst = nullptr;
+        }
+        if (!animationsecond) {
+            delete  animationsecond;
+            animationsecond = nullptr;
+        }
+        if (!animationgroup) {
+            delete  animationgroup;
+            animationgroup = nullptr;
+        }
     }
 
     QList<PageBase *> m_pages;
@@ -147,13 +141,14 @@ public:
     double m_scale;
     mutable bool m_bModified;
     bool m_bslidemodel;
-//    ThreadLoadDoc m_threadloaddoc;
     ThreadLoadWords m_threadloadwords;
     RotateType_EM m_rotate;
     bool donotneedreloaddoc;
     bool m_wordsbload;
     QPoint m_magnifierpoint;
-//    virtual bool loadDocumment(QString filepath) = 0;
+    QPropertyAnimation *animationfirst;
+    QPropertyAnimation *animationsecond;
+    QParallelAnimationGroup *animationgroup;
 
 signals:
     void signal_docummentLoaded();
@@ -168,21 +163,12 @@ class DocummentBase: public DScrollArea
 public:
     DocummentBase(DocummentBasePrivate *ptr = nullptr, DWidget *parent = nullptr);
     ~DocummentBase();
-    virtual bool loadDocumment(QString filepath)
-    {
-        return false;
-    }
-    virtual bool bDocummentExist()
-    {
-        return false;
-    }
-    virtual bool getImage(int pagenum, QImage &image, double width, double height)
-    {
-        return false;
-    }
+    virtual bool loadDocumment(QString filepath) = 0;
+    virtual bool bDocummentExist() = 0;
+    virtual bool getImage(int pagenum, QImage &image, double width, double height) = 0;
     virtual bool save(const QString &filePath, bool withChanges)
     {
-        qDebug() << "do nothing";
+//        qDebug() << "do nothing";
         return false;
     }
     virtual bool saveas(const QString &filePath, bool withChanges)
@@ -212,7 +198,6 @@ public:
     bool showMagnifier(QPoint point);
     bool setViewModeAndShow(ViewMode_EM viewmode);
     int currentPageNo();
-    bool pageJump(int pagenum);
     Page::Link *mouseBeOverLink(QPoint point);
     bool getSelectTextString(QString &st);
     bool showSlideModel();
@@ -231,12 +216,13 @@ public:
 
 signals:
     void signal_pageChange(int);
-//    void signal_loadDocumment(QString);
 protected slots:
     void slot_vScrollBarValueChanged(int value);
     void slot_hScrollBarValueChanged(int value);
     void slot_MagnifierPixmapCacheLoaded(int pageno);
     void slot_docummentLoaded();
+
+    bool pageJump(int pagenum);
 protected:
     int pointInWhichPage(QPoint &qpoint);
     void showSinglePage();

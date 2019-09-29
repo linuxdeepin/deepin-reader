@@ -4,8 +4,6 @@
 #include <QGridLayout>
 #include <QPainter>
 #include <QPoint>
-#include <QPropertyAnimation>
-#include <QParallelAnimationGroup>
 #include <qglobal.h>
 
 ThreadLoadWords::ThreadLoadWords()
@@ -168,6 +166,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     d->m_slidewidget = new DWidget(parent);
     d->pslidelabel = new DLabel(d->m_slidewidget);
     d->pslideanimationlabel = new DLabel(d->m_slidewidget);
+    d->pslidelabel->setGeometry(-200, -200, 100, 100);
     d->pslideanimationlabel->setGeometry(-200, -200, 100, 100);
     delete parent->layout();
     QGridLayout *gridlyout = new QGridLayout(parent);
@@ -185,12 +184,12 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     gridlyout->addWidget(d->m_magnifierwidget, 0, 0);
     gridlyout->addWidget(d->m_slidewidget, 0, 0);
     gridlyout->setMargin(0);
-    d->pslidelabel->lower();
-    d->pslideanimationlabel->lower();
-    d->m_slidewidget->lower();
-//    m_slidewidget->raise();
+//    d->pslidelabel->lower();
+//    d->pslideanimationlabel->lower();
+//    d->m_slidewidget->lower();
+//    d->m_slidewidget->raise();
     d->m_slidewidget->hide();
-//    m_magnifierwidget->raise();
+//    d->m_magnifierwidget->raise();
     d->m_magnifierwidget->hide();
     d->m_vboxLayout = new QVBoxLayout(d->m_widget);
     d->m_widget->setLayout(d->m_vboxLayout);
@@ -596,7 +595,7 @@ bool DocummentBase::showMagnifier(QPoint point)
 bool DocummentBase::pageJump(int pagenum)
 {
     Q_D(DocummentBase);
-    if (pagenum < 0 || pagenum > d->m_pages.size())
+    if (pagenum < 0 || pagenum >= d->m_pages.size())
         return false;
     if (d->m_bslidemodel) {
         QImage image;
@@ -609,38 +608,58 @@ bool DocummentBase::pageJump(int pagenum)
             d->pslideanimationlabel = d->pslidelabel;
             d->pslidelabel = plabel;
         }
+//        d->pslideanimationlabel->hide();
         d->pslidelabel->setGeometry((d->m_slidewidget->width() - width) / 2, (d->m_slidewidget->height() - height) / 2, width, height);
         QPixmap map = QPixmap::fromImage(image);
         d->pslidelabel->setPixmap(map);
+        d->pslideanimationlabel->lower();
+//        d->pslideanimationlabel->raise();
+//        d->pslidelabel->raise();
         d->pslidelabel->show();
 
         if (-1 != d->m_slidepageno) {
-            QPropertyAnimation *animation = new QPropertyAnimation(d->pslideanimationlabel, "geometry");
-            animation->setDuration(500);
+            qDebug() << "bslidemodel pageJump pagenum:" << pagenum;
+            if (!d->animationfirst) {
+                delete d->animationfirst;
+                d->animationfirst = nullptr;
+            }
+            d->animationfirst = new QPropertyAnimation(d->pslideanimationlabel, "geometry", this);
+            d->animationfirst->setDuration(500);
 
-            QPropertyAnimation *animation1 = new QPropertyAnimation(d->pslidelabel, "geometry");
-            animation1->setDuration(500);
+            if (!d->animationsecond) {
+                delete d->animationsecond;
+                d->animationsecond = nullptr;
+            }
+            d->animationsecond = new QPropertyAnimation(d->pslidelabel, "geometry", this);
+            d->animationsecond->setDuration(500);
 
+            QRect rectslideanimationlabel = d->pslideanimationlabel->geometry();
+            QRect rectslidelabel = d->pslidelabel->geometry();
+            qDebug() << "rectslideanimationlabel:" << rectslideanimationlabel << " rectslidelabel:" << rectslidelabel;
             if (d->m_slidepageno > pagenum) {
                 qDebug() << "pageJump previous pagenum:" << pagenum;
-                animation->setStartValue(d->pslideanimationlabel->geometry());
-                animation->setEndValue(QRect(d->m_slidewidget->width(), 10, d->pslideanimationlabel->width(), d->pslideanimationlabel->height()));
+                d->animationfirst->setStartValue(rectslideanimationlabel);
+                d->animationfirst->setEndValue(QRect(d->m_slidewidget->width(), 10, d->pslideanimationlabel->width(), d->pslideanimationlabel->height()));
 
-                animation1->setStartValue(QRect(-d->m_slidewidget->width(), 10, d->pslidelabel->width(), d->pslidelabel->height()));
-                animation1->setEndValue(d->pslidelabel->geometry());
+                d->animationsecond->setStartValue(QRect(-d->m_slidewidget->width(), 10, d->pslidelabel->width(), d->pslidelabel->height()));
+                d->animationsecond->setEndValue(rectslidelabel);
             } else {
                 qDebug() << "pageJump next pagenum:" << pagenum;
-                animation->setStartValue(d->pslideanimationlabel->geometry());
-                animation->setEndValue(QRect(-d->m_slidewidget->width(), 10, d->pslideanimationlabel->width(), d->pslideanimationlabel->height()));
+                d->animationfirst->setStartValue(rectslideanimationlabel);
+                d->animationfirst->setEndValue(QRect(-d->m_slidewidget->width(), 10, d->pslideanimationlabel->width(), d->pslideanimationlabel->height()));
 
-                animation1->setStartValue(QRect(d->m_slidewidget->width(), 10, d->pslidelabel->width(), d->pslidelabel->height()));
-                animation1->setEndValue(d->pslidelabel->geometry());
+                d->animationsecond->setStartValue(QRect(d->m_slidewidget->width(), 10, d->pslidelabel->width(), d->pslidelabel->height()));
+                d->animationsecond->setEndValue(rectslidelabel);
             }
-            QParallelAnimationGroup *group = new QParallelAnimationGroup;
-            group->addAnimation(animation);
-            group->addAnimation(animation1);
-
-            group->start(QAbstractAnimation::DeleteWhenStopped);
+            if (!d->animationgroup) {
+                delete d->animationgroup;
+                d->animationgroup = nullptr;
+            }
+            d->animationgroup = new QParallelAnimationGroup;
+            d->animationgroup->addAnimation(d->animationfirst);
+            d->animationgroup->addAnimation(d->animationsecond);
+//            d->animationgroup->start(QAbstractAnimation::DeleteWhenStopped);
+            d->animationgroup->start();
         }
 
         d->m_slidepageno = pagenum;
@@ -718,18 +737,10 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     default:
         break;
     }
-
-//    for (int i = 0; i < m_pages.size(); i++) {
-//        m_pages.at(i)->setReSize(m_scale, m_rotate);
-//    }
     pageJump(currpageno);
     d->donotneedreloaddoc = false;
     d->m_currentpageno = currpageno;
     loadPages();
-//    if (m_threadloaddoc.isRunning())
-//        m_threadloaddoc.setRestart();
-//    else
-//        m_threadloaddoc.start();
 }
 
 int DocummentBase::currentPageNo()
@@ -860,10 +871,6 @@ void DocummentBase::slot_vScrollBarValueChanged(int value)
             emit signal_pageChange(d->m_currentpageno);
         }
         loadPages();
-//        if (m_threadloaddoc.isRunning())
-//            m_threadloaddoc.setRestart();
-//        else
-//            m_threadloaddoc.start();
     }
 }
 
@@ -878,10 +885,6 @@ void DocummentBase::slot_hScrollBarValueChanged(int value)
             emit signal_pageChange(d->m_currentpageno);
         }
         loadPages();
-//        if (m_threadloaddoc.isRunning())
-//            m_threadloaddoc.setRestart();
-//        else
-//            m_threadloaddoc.start();
     }
 }
 
@@ -946,10 +949,6 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
     pageJump(currpageno);
     d->donotneedreloaddoc = false;
     loadPages();
-//    if (m_threadloaddoc.isRunning())
-//        m_threadloaddoc.setRestart();
-//    else
-//        m_threadloaddoc.start();
     return true;;
 }
 
@@ -959,11 +958,6 @@ bool DocummentBase::loadPages()
     if (!bDocummentExist())
         return false;
     qDebug() << "loadPages";
-
-//    if (QThread::currentThread()->isInterruptionRequested()) {
-//        return false;
-//    }
-    //    for (int i = 0; i < m_pages.size(); i++) {
     int pagenum  = d->m_currentpageno;
     if (pagenum >= 0 && pagenum < d->m_pages.size())
         d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
@@ -1069,10 +1063,6 @@ void DocummentBase::slot_docummentLoaded()
     initConnect();
     d->donotneedreloaddoc = false;
     loadPages();
-//    if (m_threadloaddoc.isRunning())
-//        m_threadloaddoc.setRestart();
-//    else
-//        m_threadloaddoc.start();
     if (d->m_threadloadwords.isRunning())
         d->m_threadloadwords.setRestart();
     else
@@ -1085,36 +1075,6 @@ bool DocummentBase::openFile(QString filepath)
     d->donotneedreloaddoc = true;
     if (!loadDocumment(filepath))
         return false;
-
-//    d->m_widgets.clear();
-//    qDebug() << "numPages :" << d->m_pages.size();
-//    for (int i = 0; i < d->m_pages.size(); i++) {
-//        DWidget *qwidget = new DWidget(this);
-//        QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
-//        qhblayout->setAlignment(qwidget, Qt::AlignCenter);
-//        qwidget->setLayout(qhblayout);
-//        d->m_vboxLayout->addWidget(qwidget);
-//        d->m_vboxLayout->setAlignment(d->m_widget, Qt::AlignCenter);
-//        qwidget->setMouseTracking(true);
-//        d->m_widgets.append(qwidget);
-//    }
-
-//    for (int i = 0; i < d->m_pages.size(); i++) {
-//        d->m_pages.at(i)->setScaleAndRotate(d->m_scale, d->m_rotate);
-//    }
-//    setViewModeAndShow(d->m_viewmode);
-//    initConnect();
-//    d->donotneedreloaddoc = false;
-//    loadPages();
-////    if (m_threadloaddoc.isRunning())
-////        m_threadloaddoc.setRestart();
-////    else
-////        m_threadloaddoc.start();
-//    if (d->m_threadloadwords.isRunning())
-//        d->m_threadloadwords.setRestart();
-//    else
-//        d->m_threadloadwords.start();
-
     return true;
 }
 
@@ -1129,8 +1089,7 @@ bool DocummentBase::loadWords()
         if (QThread::currentThread()->isInterruptionRequested()) {
             break;
         }
-//        d->m_pages.at(i)->loadWords();
-//        d->m_pages.at(i)->loadLinks();
+        d->m_pages.at(i)->getInterFace()->loadData();
     }
     d->m_wordsbload = false;
 

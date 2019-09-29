@@ -71,8 +71,6 @@ private:
     bool restart;
     double m_width;
     double m_height;
-//    double m_xres;
-//    double m_yres;
 };
 class ThreadLoadMagnifierCache : public QThread
 {
@@ -98,6 +96,7 @@ class PageInterface
 public:
     virtual bool getImage(QImage &image, double width, double height) = 0;
     virtual bool getSlideImage(QImage &image, double &width, double &height) = 0;
+    virtual bool loadData() = 0;
 };
 class PageBasePrivate: public QObject
 {
@@ -168,10 +167,7 @@ public:
     PageBase(PageBasePrivate *ptr = nullptr, DWidget *parent = 0);
     ~PageBase();
     virtual bool getImage(QImage &image, double width, double height) = 0;
-//    virtual bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal) = 0;
     virtual bool getSlideImage(QImage &image, double &width, double &height) = 0;
-    virtual bool loadWords() = 0;
-    virtual bool loadLinks() = 0;
     virtual PageInterface *getInterFace() = 0;
     double getOriginalImageWidth()
     {
@@ -197,7 +193,6 @@ public:
     bool getSelectTextString(QString &st);
     bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     void clearThread();
-//    void setReSize(double scale = 1, RotateType_EM rotate = RotateType_Normal);
 signals:
     void signal_MagnifierPixmapCacheLoaded(int);
 protected slots:

@@ -20,8 +20,6 @@ void ThreadRenderImage::setPage(PageInterface *page, double width, double height
     m_page = page;
     m_width = width;
     m_height = height;
-//    m_xres = xres;
-//    m_yres = yres;
 }
 
 void ThreadRenderImage::run()
@@ -78,7 +76,6 @@ void ThreadLoadMagnifierCache::run()
             if (m_page->getImage(image, m_width, m_height)) {
                 emit signal_loadMagnifierPixmapCache(image, m_width, m_height);
             }
-//            m_page->loadMagnifierPixmapCache(m_width, m_height);
         }
     }
 }
@@ -91,13 +88,11 @@ PageBase::PageBase(PageBasePrivate *ptr, DWidget *parent)
     setMouseTracking(true);
     setAlignment(Qt::AlignCenter);
     connect(d, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)), this, SLOT(slot_loadMagnifierPixmapCache(QImage, double, double)));
+    connect(d, SIGNAL(signal_RenderFinish(QImage)), this, SLOT(slot_RenderFinish(QImage)));
 }
 
 PageBase::~PageBase()
 {
-//    Q_D(PageBase);
-//    qDeleteAll(d->m_links);
-//    d->m_links.clear();
 }
 
 void PageBase::paintEvent(QPaintEvent *event)
@@ -594,24 +589,6 @@ bool PageBase::showImage(double scale, RotateType_EM rotate)
     } else {
         d->threadreander.setRestart();
     }
-//    QImage image = m_page->renderToImage(xres * m_scale, yres * m_scale, -1, -1, m_imagewidth * m_scale, m_imageheight * m_scale);
-//    QPixmap map = QPixmap::fromImage(image);
-//    QMatrix leftmatrix;
-//    switch (m_rotate) {
-//    case RotateType_90:
-//        leftmatrix.rotate(90);
-//        break;
-//    case RotateType_180:
-//        leftmatrix.rotate(180);
-//        break;
-//    case RotateType_270:
-//        leftmatrix.rotate(270);
-//        break;
-//    default:
-//        leftmatrix.rotate(0);
-//        break;
-//    }
-//    setPixmap(map.transformed(leftmatrix, Qt::SmoothTransformation));
     return true;
 }
 

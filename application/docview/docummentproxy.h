@@ -76,6 +76,7 @@ public:
     double adaptHeightAndShow(double height);
 signals:
     void signal_pageChange(int);
+    bool signal_pageJump(int);
 private slots:
     void slot_pageChange(int);
     bool startOpenFile();

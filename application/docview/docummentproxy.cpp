@@ -91,6 +91,7 @@ bool DocummentProxy::startOpenFile()
     }
     m_documment = DocummentFactory::creatDocumment(m_type, qwfather);
     connect(m_documment, SIGNAL(signal_pageChange(int)), this, SLOT(slot_pageChange(int)));
+    connect(this, SIGNAL(signal_pageJump(int)), m_documment, SLOT(pageJump(int)));
     return m_documment->openFile(m_path);
 }
 
@@ -225,7 +226,9 @@ bool DocummentProxy::pageJump(int pagenum)
 {
     if (!m_documment || bcloseing)
         return false;
-    return m_documment->pageJump(pagenum);
+
+    return emit signal_pageJump(pagenum);;
+//    return m_documment->pageJump(pagenum);
 }
 
 void DocummentProxy::docBasicInfo(stFileInfo &info)

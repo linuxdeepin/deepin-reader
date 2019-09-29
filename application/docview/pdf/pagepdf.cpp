@@ -6,14 +6,9 @@
 PagePdf::PagePdf(QWidget *parent)
     : PageBase(new PagePdfPrivate(this), parent)
 {
-    Q_D(PagePdf);
-    connect(d, SIGNAL(signal_RenderFinish(QImage)), this, SLOT(slot_RenderFinish(QImage)));
 }
 PagePdf::~PagePdf()
 {
-    Q_D(PagePdf);
-    delete d->m_page;
-    d->m_page = nullptr;
 }
 
 void PagePdf::removeAnnotation(Poppler::Annotation *annotation)
@@ -25,13 +20,7 @@ void PagePdf::removeAnnotation(Poppler::Annotation *annotation)
 void PagePdf::setPage(Poppler::Page *page, int pageno)
 {
     Q_D(PagePdf);
-//    qDebug() << "----setpage";
-    d->m_page = page;
-    d->m_pageno = pageno;
-    QSizeF qsize = d->m_page->pageSizeF();
-    d->m_imagewidth = qsize.width();
-    d->m_imageheight = qsize.height();
-//    qDebug() << "----setpage m_imagewidth:" << m_imagewidth << " m_imageheight:" << m_imageheight;
+    d->setPage(page, pageno);
 }
 
 bool PagePdf::getSlideImage(QImage &image, double &width, double &height)
@@ -246,140 +235,6 @@ Poppler::Page *PagePdf::GetPage()
 {
     Q_D(PagePdf);
     return d->m_page;
-}
-bool PagePdf::abstractTextPage(const QList<Poppler::TextBox *> &text)
-{
-    Q_D(PagePdf);
-    Poppler::TextBox *next;
-    QString s;
-    bool addChar;
-    d->m_words.clear();
-    foreach (Poppler::TextBox *word, text) {
-        if (QThread::currentThread()->isInterruptionRequested()) {
-            break;
-        }
-        const int qstringCharCount = word->text().length();
-        next = word->nextWord();
-        // if(next)
-        int textBoxChar = 0;
-        for (int j = 0; j < qstringCharCount; j++) {
-            if (QThread::currentThread()->isInterruptionRequested()) {
-                break;
-            }
-            const QChar c = word->text().at(j);
-            if (c.isHighSurrogate()) {
-                s = c;
-                addChar = false;
-            } else if (c.isLowSurrogate()) {
-                s += c;
-                addChar = true;
-            } else {
-                s = c;
-                addChar = true;
-            }
-
-            if (addChar) {
-                QRectF charBBox = word->charBoundingBox(textBoxChar);
-                //                qDebug() << "addChar s:" << s << " charBBox:" << charBBox;
-                stWord sword;
-                sword.s = s;
-                sword.rect = charBBox;
-                d->m_words.append(sword);
-                textBoxChar++;
-            }
-        }
-
-        if (word->hasSpaceAfter() && next) {
-            QRectF wordBBox = word->boundingBox();
-            QRectF nextWordBBox = next->boundingBox();
-            //            qDebug() << "hasSpaceAfter wordBBox:" << wordBBox << " nextWordBBox:" << nextWordBBox;
-            stWord sword;
-            sword.s = QStringLiteral(" ");
-            QRectF qrect;
-            qrect.setLeft(wordBBox.right());
-            qrect.setBottom(wordBBox.bottom());
-            qrect.setRight(nextWordBBox.left());
-            qrect.setTop(wordBBox.top());
-            sword.rect = qrect;
-            d->m_words.append(sword);
-        }
-    }
-    return true;
-}
-
-bool PagePdf::loadWords()
-{
-    Q_D(PagePdf);
-    if (!d->m_page) {
-        return false;
-    }
-    QList<Poppler::TextBox *> textList = d->m_page->textList();
-    abstractTextPage(textList);
-    qDeleteAll(textList);
-    return true;
-}
-
-bool PagePdf::loadLinks()
-{
-    Q_D(PagePdf);
-    qDeleteAll(d->m_links);
-    d->m_links.clear();
-    if (!d->m_page) {
-        return false;
-    }
-    QList<Poppler::Link *> qlinks = d->m_page->links();
-    foreach (const Poppler::Link *link, qlinks) {
-        if (QThread::currentThread()->isInterruptionRequested()) {
-            break;
-        }
-        const QRectF boundary = link->linkArea().normalized();
-//        qDebug() << "boundary:" << boundary;
-
-        if (link->linkType() == Poppler::Link::Goto) {
-            const Poppler::LinkGoto *linkGoto = static_cast< const Poppler::LinkGoto * >(link);
-
-            int page = linkGoto->destination().pageNumber();
-            qreal left = qQNaN();
-            qreal top = qQNaN();
-
-            page = page >= 1 ? page : 1;
-
-            if (linkGoto->destination().isChangeLeft()) {
-                left = linkGoto->destination().left();
-
-                left = left >= 0.0 ? left : 0.0;
-                left = left <= 1.0 ? left : 1.0;
-            }
-
-            if (linkGoto->destination().isChangeTop()) {
-                top = linkGoto->destination().top();
-
-                top = top >= 0.0 ? top : 0.0;
-                top = top <= 1.0 ? top : 1.0;
-            }
-
-            if (linkGoto->isExternal()) {
-//                qDebug() << "isExternal filename:" << linkGoto->fileName() << " page:" << page;
-                d->m_links.append(new Page::Link(boundary, linkGoto->fileName(), page));
-            } else {
-//                qDebug() << "unExternal left:" << left << " top:" << top << " page:" << page;
-                d->m_links.append(new Page::Link(boundary, page, left, top));
-            }
-        } else if (link->linkType() == Poppler::Link::Browse) {
-            const Poppler::LinkBrowse *linkBrowse = static_cast< const Poppler::LinkBrowse * >(link);
-            const QString url = linkBrowse->url();
-
-            d->m_links.append(new Page::Link(boundary, url));
-        } else if (link->linkType() == Poppler::Link::Execute) {
-            const Poppler::LinkExecute *linkExecute = static_cast< const Poppler::LinkExecute * >(link);
-            const QString url = linkExecute->fileName();
-
-            d->m_links.append(new Page::Link(boundary, url, Page::LinkType_Execute));
-        }
-
-        delete link;
-    }
-    return true;
 }
 
 PageInterface *PagePdf::getInterFace()
