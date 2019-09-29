@@ -14,6 +14,7 @@ QString DataManager::strOnlyFilePath() const
 
 void DataManager::setStrOnlyFilePath(const QString &strOnlyFilePath)
 {
+    m_bIsUpdate = false;
     dApp->dbM->setStrFilePath(strOnlyFilePath);
 
     m_strOnlyFilePath = strOnlyFilePath;
@@ -27,4 +28,14 @@ int DataManager::CurShowState() const
 void DataManager::setCurShowState(int nCurShowState)
 {
     m_nCurShowState = nCurShowState;
+}
+
+bool DataManager::bIsUpdate() const
+{
+    return m_bIsUpdate;
+}
+
+void DataManager::setBIsUpdate(bool bIsUpdate)
+{
+    m_bIsUpdate = bIsUpdate;
 }

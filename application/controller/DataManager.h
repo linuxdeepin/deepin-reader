@@ -34,9 +34,13 @@ public:
     int CurShowState() const;
     void setCurShowState(int nCurShowState);
 
+    bool bIsUpdate() const;
+    void setBIsUpdate(bool bIsUpdate);
+
 private:
     QString m_strOnlyFilePath; //  只显示一个pdf 文件
     int     m_nCurShowState = -1;   //  文档当前显示状态
+    bool    m_bIsUpdate = false;    //  文档是否有修改
 };
 
 #endif // DATAMANAGER_H

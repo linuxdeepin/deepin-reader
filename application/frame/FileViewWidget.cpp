@@ -212,6 +212,7 @@ int FileViewWidget::setHandShape(const QString &data)
 //  添加高亮颜色
 void FileViewWidget::onFileAddAnnotation(const QString &sColor)
 {
+    DataManager::instance()->setBIsUpdate(true);
     QList<QColor> colorList = {};
 
     DocummentProxy::instance()->addAnnotation(m_pRightClickPoint, m_pRightClickPoint);
@@ -220,6 +221,7 @@ void FileViewWidget::onFileAddAnnotation(const QString &sColor)
 //  移除高亮, 有注释 则删除注释
 void FileViewWidget::onFileRemoveAnnotation()
 {
+    DataManager::instance()->setBIsUpdate(true);
     QString sUuid = DocummentProxy::instance()->removeAnnotation(m_pRightClickPoint);
 }
 

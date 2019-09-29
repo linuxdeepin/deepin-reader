@@ -145,8 +145,11 @@ void MainWindow::SlotAppExit()
 {
     QString sFilePath = DataManager::instance()->strOnlyFilePath();
     if (sFilePath != "") {
-        if (QMessageBox::Yes == DMessageBox::question(nullptr, Frame::sSaveFile, Frame::sSaveFileTitle)) {
-            DocummentProxy::instance()->save(sFilePath, true);
+        bool rl = DataManager::instance()->bIsUpdate();
+        if (rl) {
+            if (QMessageBox::Yes == DMessageBox::question(nullptr, Frame::sSaveFile, Frame::sSaveFileTitle)) {
+                DocummentProxy::instance()->save(sFilePath, true);
+            }
         }
         sendMsg(MSG_CLOSE_FILE);
         DocummentProxy::instance()->closeFile();
