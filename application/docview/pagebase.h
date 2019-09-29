@@ -170,6 +170,7 @@ protected:
     int m_icurhightlight;//当前页搜索高亮获取"焦点"的下标
     bool m_bcursearchshow;//当前页是否是搜索结果当前显示页
 
+
 };
 
 #endif // PAGEBASE_H

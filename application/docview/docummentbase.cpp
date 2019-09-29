@@ -1114,6 +1114,7 @@ double DocummentBase::adaptHeightAndShow(double height)
 
 void DocummentBase::findNext()
 {
+     qDebug()<<"----------findNext";
     if (m_pagecountsearch.size() <= 0||m_findcurpage<0) return;
     if (m_findcurpage == m_pagecountsearch.lastKey() &&
             m_cursearch == m_pagecountsearch.find(m_findcurpage).value()) {
@@ -1138,7 +1139,10 @@ void DocummentBase::findNext()
         double topspace=(m_widgets.at(m_findcurpage)->height()-curheight)/2;
         int widgetheight=m_widgets.at(m_findcurpage)->height();
         int value = m_widgets.at(m_findcurpage)->y()+topspace+rect.y() * m_scale-widgetheight/2;
+//        if(m_viewmode==ViewMode_FacingPage){
 
+//            value = m_widgets.at(m_findcurpage/2)->y()+topspace+rect.y() * m_scale-widgetheight/2;
+//        }
         QScrollBar *scrollBar_Y = verticalScrollBar();
         if (scrollBar_Y)
             scrollBar_Y->setValue(value);
@@ -1159,6 +1163,10 @@ void DocummentBase::findNext()
             double topspace=(m_widgets.at(m_findcurpage)->height()-curheight)/2;
             int widgetheight=m_widgets.at(m_findcurpage)->height();
             int value =m_widgets.at(m_findcurpage)->y()+topspace+rect.y() * m_scale-widgetheight/2;
+//            if(m_viewmode==ViewMode_FacingPage){
+
+//                value = m_widgets.at(m_findcurpage/2)->y()+topspace+rect.y() * m_scale-widgetheight/2;
+//            }
             QScrollBar *scrollBar_Y = verticalScrollBar();
             if (scrollBar_Y)
                 scrollBar_Y->setValue(value);
