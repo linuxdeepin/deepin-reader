@@ -190,7 +190,6 @@ public:
     void stopLoadPageThread();
     bool openFile(QString filepath);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
-    bool mouseSelectText(QPoint start, QPoint stop);
     void mouseSelectTextClear();
     void scaleAndShow(double scale, RotateType_EM rotate);
     bool mouseBeOverText(QPoint point);
@@ -226,6 +225,7 @@ protected slots:
     void slot_searchover();
     void slot_docummentLoaded();
     bool pageJump(int pagenum);
+    bool mouseSelectText(QPoint start, QPoint stop);
 protected:
     int pointInWhichPage(QPoint &qpoint);
     void showSinglePage();

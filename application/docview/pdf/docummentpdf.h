@@ -3,6 +3,7 @@
 
 #include "../docummentbase.h"
 #include <poppler-qt5.h>
+#include <QFileInfo>
 class DocummentPDF;
 class DocummentPDFPrivate;
 
@@ -43,7 +44,7 @@ private:
     bool pdfsave(const QString &filePath, bool withChanges);
     void searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color);
     void refreshOnePage(int ipage);
-    void setBasicInfo(const QString &filepath);
+//    void setBasicInfo(const QString &filepath);
 private:
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), DocummentPDF)
 };
@@ -71,5 +72,7 @@ public:
     Q_DECLARE_PUBLIC(DocummentPDF)
 protected slots:
     bool loadDocumment(QString filepath);
+private:
+    void setBasicInfo(const QString &filepath);
 };
 #endif // DOCUMMENTPDF_H

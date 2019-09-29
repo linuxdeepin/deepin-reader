@@ -77,6 +77,7 @@ public:
 signals:
     void signal_pageChange(int);
     bool signal_pageJump(int);
+    bool signal_mouseSelectText(QPoint start, QPoint stop);
 private slots:
     void slot_pageChange(int);
     bool startOpenFile();

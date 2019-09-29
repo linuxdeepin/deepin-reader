@@ -5,7 +5,6 @@
 #include <DScrollBar>
 #include <QImage>
 #include <QTemporaryFile>
-#include <QFileInfo>
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 #include <QDebug>
@@ -24,8 +23,34 @@ bool DocummentPDFPrivate::loadDocumment(QString filepath)
         page->setPage(document->page(i), i);
         m_pages.append((PageBase *)page);
     }
+    setBasicInfo(filepath);
     emit signal_docummentLoaded();
     return true;
+}
+
+
+void DocummentPDFPrivate::setBasicInfo(const QString &filepath)
+{
+    QFileInfo info(filepath);
+    m_fileinfo.size = info.size();
+    m_fileinfo.CreateTime = info.birthTime();
+    m_fileinfo.ChangeTime = info.lastModified();
+    m_fileinfo.strAuther = info.owner();
+    m_fileinfo.strFilepath = info.filePath();
+    if (document) {
+        int major, minor;
+        document->getPdfVersion(&major, &minor);
+        m_fileinfo.strFormat = QString("PDF v.%1.%2").arg(major).arg(minor);
+        m_fileinfo.boptimization = document->isLinearized();
+        m_fileinfo.strKeyword = document->keywords();
+        m_fileinfo.strTheme = document->title();
+        m_fileinfo.strProducter = document->producer();
+        m_fileinfo.strCreater = document->creator();
+        m_fileinfo.bsafe = document->isEncrypted();
+        m_fileinfo.iWidth = static_cast<PagePdf *>(m_pages.at(0))->GetPage()->pageSize().width();
+        m_fileinfo.iHeight = static_cast<PagePdf *>(m_pages.at(0))->GetPage()->pageSize().height();
+        m_fileinfo.iNumpages = document->numPages();
+    }
 }
 
 DocummentPDF::DocummentPDF(DWidget *parent):
@@ -256,30 +281,30 @@ void DocummentPDF::refreshOnePage(int ipage)
     d->m_pages.at(ipage)->showImage(d->m_scale, d->m_rotate);
 }
 
-void DocummentPDF::setBasicInfo(const QString &filepath)
-{
-    Q_D(DocummentPDF);
-    QFileInfo info(filepath);
-    d->m_fileinfo.size = info.size();
-    d->m_fileinfo.CreateTime = info.birthTime();
-    d->m_fileinfo.ChangeTime = info.lastModified();
-    d->m_fileinfo.strAuther = info.owner();
-    d->m_fileinfo.strFilepath = info.filePath();
-    if (d->document) {
-        int major, minor;
-        d->document->getPdfVersion(&major, &minor);
-        d->m_fileinfo.strFormat = QString("PDF v.%1.%2").arg(major).arg(minor);
-        d->m_fileinfo.boptimization = d->document->isLinearized();
-        d->m_fileinfo.strKeyword = d->document->keywords();
-        d->m_fileinfo.strTheme = d->document->title();
-        d->m_fileinfo.strProducter = d->document->producer();
-        d->m_fileinfo.strCreater = d->document->creator();
-        d->m_fileinfo.bsafe = d->document->isEncrypted();
-        d->m_fileinfo.iWidth = static_cast<PagePdf *>(d->m_pages.at(0))->GetPage()->pageSize().width();
-        d->m_fileinfo.iHeight = static_cast<PagePdf *>(d->m_pages.at(0))->GetPage()->pageSize().height();
-        d->m_fileinfo.iNumpages = d->document->numPages();
-    }
-}
+//void DocummentPDF::setBasicInfo(const QString &filepath)
+//{
+//    Q_D(DocummentPDF);
+//    QFileInfo info(filepath);
+//    d->m_fileinfo.size = info.size();
+//    d->m_fileinfo.CreateTime = info.birthTime();
+//    d->m_fileinfo.ChangeTime = info.lastModified();
+//    d->m_fileinfo.strAuther = info.owner();
+//    d->m_fileinfo.strFilepath = info.filePath();
+//    if (d->document) {
+//        int major, minor;
+//        d->document->getPdfVersion(&major, &minor);
+//        d->m_fileinfo.strFormat = QString("PDF v.%1.%2").arg(major).arg(minor);
+//        d->m_fileinfo.boptimization = d->document->isLinearized();
+//        d->m_fileinfo.strKeyword = d->document->keywords();
+//        d->m_fileinfo.strTheme = d->document->title();
+//        d->m_fileinfo.strProducter = d->document->producer();
+//        d->m_fileinfo.strCreater = d->document->creator();
+//        d->m_fileinfo.bsafe = d->document->isEncrypted();
+//        d->m_fileinfo.iWidth = static_cast<PagePdf *>(d->m_pages.at(0))->GetPage()->pageSize().width();
+//        d->m_fileinfo.iHeight = static_cast<PagePdf *>(d->m_pages.at(0))->GetPage()->pageSize().height();
+//        d->m_fileinfo.iNumpages = d->document->numPages();
+//    }
+//}
 
 bool DocummentPDF::bDocummentExist()
 {

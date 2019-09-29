@@ -92,6 +92,7 @@ bool DocummentProxy::startOpenFile()
     m_documment = DocummentFactory::creatDocumment(m_type, qwfather);
     connect(m_documment, SIGNAL(signal_pageChange(int)), this, SLOT(slot_pageChange(int)));
     connect(this, SIGNAL(signal_pageJump(int)), m_documment, SLOT(pageJump(int)));
+    connect(this, SIGNAL(signal_mouseSelectText(QPoint, QPoint)), m_documment, SLOT(mouseSelectText(QPoint, QPoint)));
     return m_documment->openFile(m_path);
 }
 
@@ -106,7 +107,8 @@ bool DocummentProxy::mouseSelectText(QPoint start, QPoint stop)
 {
     if (!m_documment || bcloseing)
         return false;
-    return m_documment->mouseSelectText(start, stop);
+    return emit signal_mouseSelectText(start, stop);
+//    return m_documment->mouseSelectText(start, stop);
 }
 
 void DocummentProxy::mouseSelectTextClear()
