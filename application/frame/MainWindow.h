@@ -21,13 +21,13 @@ class MainWindow : public DMainWindow, public IObserver
     Q_OBJECT
 public:
     MainWindow(DMainWindow *parent = nullptr);
-    ~MainWindow() override;
+    ~MainWindow() Q_DECL_OVERRIDE;
 
 signals:
     void sigAppExit();
 
 protected:
-    void closeEvent(QCloseEvent *event) override;
+    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 
 private:
     void initUI();
@@ -48,7 +48,7 @@ private slots:
     void SlotAppExit();
 
 private:
-    void sendMsg(const int &, const QString &msgContent = "") override;
+    void sendMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
 
 private:
     MsgSubject      *m_pMsgSubject = nullptr;
@@ -56,10 +56,10 @@ private:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 
 private:
-    void setObserverName(const QString &name) override;
+    void setObserverName(const QString &name) Q_DECL_OVERRIDE;
 };
 
 #endif // MainWindow_H

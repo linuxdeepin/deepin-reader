@@ -42,19 +42,23 @@ void ThumbnailItemWidget::initWidget()
     m_pPage->setFixedSize(QSize(120, 30));
     m_pPage->setAlignment(Qt::AlignCenter);
 
-    auto t_vLayout = new QVBoxLayout;
-    t_vLayout->addWidget(m_pPage);
-
     m_pPicture = new CustomLabel(this);
     m_pPicture->setFixedSize(QSize(120, 150));
     m_pPicture->setAlignment(Qt::AlignCenter);
 
-    auto t_hLayout = new QHBoxLayout;
-    t_hLayout->setContentsMargins(1, 0, 1, 0);
-    t_hLayout->setSpacing(1);
+    auto t_vLayout = new QVBoxLayout;
+    t_vLayout->setContentsMargins(1, 0, 1, 0);
+    t_vLayout->setSpacing(1);
 
     t_vLayout->addWidget(m_pPicture);
+    t_vLayout->addWidget(m_pPage);
+
+    auto t_hLayout = new QHBoxLayout;
+    t_hLayout->setContentsMargins(0, 0, 0, 0);
+    t_hLayout->setSpacing(0);
+    t_hLayout->addStretch(1);
     t_hLayout->addItem(t_vLayout);
+    t_hLayout->addStretch(1);
 
     this->setLayout(t_hLayout);
 }

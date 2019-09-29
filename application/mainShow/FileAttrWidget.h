@@ -24,9 +24,9 @@ public:
 
 protected:
     //拖拽窗口
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 private:
     void setFileAttr();
@@ -68,11 +68,11 @@ private:
 
     // CustomWidget interface
 protected:
-    void initWidget() override;
+    void initWidget() Q_DECL_OVERRIDE;
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 };
 
 #endif // FILEATTRWIDGET_H

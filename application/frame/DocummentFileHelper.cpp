@@ -204,6 +204,12 @@ int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgCont
                 DataManager::instance()->setCurShowState(FILE_NORMAL);
             }
         }
+
+        if (msgContent == "Up") {
+            sendMsg(MSG_OPERATION_PREV_PAGE);
+        } else if (msgContent == "Down") {
+            sendMsg(MSG_OPERATION_NEXT_PAGE);
+        }
     }
     return 0;
 }

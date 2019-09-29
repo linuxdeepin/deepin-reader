@@ -20,7 +20,7 @@ public:
     CustomLabel(QWidget *parent = nullptr);
 
 protected:
-    void  paintEvent(QPaintEvent *e) override;
+    void  paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
 };
 
 #endif // CUSTOMLABEL_H

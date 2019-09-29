@@ -36,7 +36,7 @@ class FileViewWidget : public CustomWidget
     Q_OBJECT
 public:
     FileViewWidget(CustomWidget *parent = nullptr);
-    ~FileViewWidget() override;
+    ~FileViewWidget() Q_DECL_OVERRIDE;
 
 signals:
     void sigPrintFile();
@@ -44,11 +44,11 @@ signals:
     void sigWidgetAdapt();
 
 protected:
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
-    void resizeEvent(QResizeEvent *event) override;
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void slotCustomContextMenuRequested(const QPoint &);
@@ -88,11 +88,11 @@ private:
 
     // CustomWidget interface
 protected:
-    void initWidget() override;
+    void initWidget() Q_DECL_OVERRIDE;
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 };
 
 

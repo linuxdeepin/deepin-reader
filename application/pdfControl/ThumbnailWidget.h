@@ -68,7 +68,7 @@ public:
 signals:
     void signal_loadImage(int, QImage);
 protected:
-    void run() override;
+    void run() Q_DECL_OVERRIDE;
 
 private:
     int m_pages = 0; // 文件总页数
@@ -87,7 +87,7 @@ class ThumbnailWidget : public CustomWidget
 
 public:
     ThumbnailWidget(CustomWidget *parent = nullptr);
-    ~ThumbnailWidget() override;
+    ~ThumbnailWidget() Q_DECL_OVERRIDE;
 
 signals:
     void sigOpenFileOk();
@@ -97,7 +97,7 @@ private slots:
     void slot_loadImage(int, QImage);
 public:
     // IObserver interface
-    int dealWithData(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
     void fillContantToList();
 
     inline bool isLoading()
@@ -106,7 +106,7 @@ public:
     }
 
 protected:
-    void initWidget() override;
+    void initWidget() Q_DECL_OVERRIDE;
 
 private:
     void setSelectItemBackColor(QListWidgetItem *);

@@ -22,15 +22,15 @@ public:
     ThumbnailItemWidget(CustomItemWidget *parent = nullptr);
 
 protected:
-    void paintEvent(QPaintEvent *event) override;
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 public:
     // IObserver interface
-    int dealWithData(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
     void setBSelect(const bool &paint);
 
 protected:
-    void initWidget() override;
+    void initWidget() Q_DECL_OVERRIDE;
 
 private:
     bool m_bPaint = false;                    // 是否绘制选中item

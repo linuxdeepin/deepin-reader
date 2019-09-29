@@ -45,7 +45,7 @@ public:
     void stopThread();
 
 protected:
-    void run() override;
+    void run() Q_DECL_OVERRIDE;
 
 private:
     SearchResWidget *m_pSearchResWidget = nullptr; // 左侧搜索结果缩略图页面
@@ -65,7 +65,7 @@ class SearchResWidget : public CustomWidget
 
 public:
     SearchResWidget(CustomWidget *parent = nullptr);
-    ~SearchResWidget() override;
+    ~SearchResWidget() Q_DECL_OVERRIDE;
 
 signals:
     void sigFlushSearchWidget(QVariant);
@@ -79,7 +79,7 @@ private slots:
     void slot_loadImage(int, QImage);
 
 protected:
-    void initWidget() override;
+    void initWidget() Q_DECL_OVERRIDE;
 
 private:
     void initConnections();
@@ -94,7 +94,7 @@ private:
 
 public:
     // IObserver interface
-    int dealWithData(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
     int getSearchPage(const int &);
 };
 

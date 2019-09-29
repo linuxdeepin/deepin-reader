@@ -28,9 +28,9 @@ public:
     int nCurPage() const;
 
 protected:
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
-    void leaveEvent(QEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 private:
     void setPixmapState(const QString &);
@@ -43,12 +43,12 @@ private:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) override;
-    void sendMsg(const int &, const QString &msgContent = "") override;
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    void sendMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
 
 
 private:
-    void setObserverName(const QString &name) override;
+    void setObserverName(const QString &name) Q_DECL_OVERRIDE;
 };
 
 #endif // BOOKMARKSTATEWIDGT_H

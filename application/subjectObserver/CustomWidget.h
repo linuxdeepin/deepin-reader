@@ -28,17 +28,17 @@ class CustomWidget : public DWidget, public IObserver
     Q_OBJECT
 public:
     CustomWidget(const QString &, DWidget *parent = nullptr);
-    ~CustomWidget() override;
+    ~CustomWidget() Q_DECL_OVERRIDE;
 
 protected:
     virtual void initWidget() = 0;
 
 protected:
-    void sendMsg(const int &msgType, const QString &msgContent = "") override;
+    void sendMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
     void showScreenCenter();
 
 private:
-    void setObserverName(const QString &name) override;
+    void setObserverName(const QString &name) Q_DECL_OVERRIDE;
 
 private:
     MsgSubject  *m_pMsgSubject = nullptr;

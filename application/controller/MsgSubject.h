@@ -28,12 +28,12 @@ public:
 
     // ISubject interface
 public:
-    void addObserver(IObserver *obs) override;
-    void removeObserver(IObserver *obs) override;
+    void addObserver(IObserver *obs) Q_DECL_OVERRIDE;
+    void removeObserver(IObserver *obs) Q_DECL_OVERRIDE;
 
     // QThread interface
 protected:
-    void run() override;
+    void run() Q_DECL_OVERRIDE;
 
 public:
     void sendMsg(IObserver *, const int &, const QString &msgContent);

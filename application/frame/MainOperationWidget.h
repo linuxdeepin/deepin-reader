@@ -24,11 +24,11 @@ private slots:
 
     // CustomWidget interface
 protected:
-    void initWidget() override;
+    void initWidget() Q_DECL_OVERRIDE;
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 };
 
 #endif // MAINOPERATIONWIDGET_H

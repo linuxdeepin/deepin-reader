@@ -121,8 +121,7 @@ int PagingWidget::dealWithData(const int &msgType, const QString &)
 //  上一页
 void PagingWidget::slotPrePage()
 {
-    int nCurPage = m_pJumpPageSpinBox->value();
-    nCurPage--;
+    int nCurPage = DocummentProxy::instance()->currentPageNo();
     nCurPage--;
     slotJumpToSpecifiedPage(nCurPage);
 }
@@ -130,13 +129,20 @@ void PagingWidget::slotPrePage()
 //  下一页
 void PagingWidget::slotNextPage()
 {
-    int nCurPage = m_pJumpPageSpinBox->value();
+    int nCurPage = DocummentProxy::instance()->currentPageNo();
+    nCurPage++;
     slotJumpToSpecifiedPage(nCurPage);
 }
 
 //  跳转 指定页
 void PagingWidget::slotJumpToSpecifiedPage(const int &nPage)
 {
+    //  跳转的页码 必须 大于0, 且 小于 总页码数
+    int nPageSize = DocummentProxy::instance()->getPageSNum();
+    if (nPage < 0 || nPage == nPageSize) {
+        return;
+    }
+
     DocummentProxy::instance()->pageJump(nPage);
 }
 

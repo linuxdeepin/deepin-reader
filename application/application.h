@@ -37,7 +37,7 @@ public:
     Application(int &argc, char **argv);
 
 protected:
-    void handleQuitAction() override;
+    void handleQuitAction() Q_DECL_OVERRIDE;
 
 public:
 //    ConfigSetter *setter = nullptr;

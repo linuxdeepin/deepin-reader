@@ -24,7 +24,7 @@ signals:
     void sigAddNewNoteItem();
 
 protected:
-    void initWidget() override;
+    void initWidget() Q_DECL_OVERRIDE;
 
 private slots:
     void slotAddNoteItem();
@@ -42,7 +42,7 @@ private:
 
 public:
     // IObserver interface
-    int dealWithData(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 };
 
 #endif // NOTESFORM_H

@@ -40,8 +40,8 @@ private slots:
     void slotJumpToSpecifiedPage(const int &);
 
 protected:
-    void initWidget() override;
-    bool eventFilter(QObject *watched, QEvent *event) override;
+    void initWidget() Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 
 
 private:
@@ -54,7 +54,7 @@ private:
     int m_preRow = -1;                         // 当前页码所在list中的行
 
 public:
-    int dealWithData(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 };
 
 #endif // PAGINGWIDGET_H

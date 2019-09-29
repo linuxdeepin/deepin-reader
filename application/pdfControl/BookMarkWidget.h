@@ -45,7 +45,7 @@ public:
     void stopThreadRun();
 
 protected:
-    void run() override;
+    void run() Q_DECL_OVERRIDE;
 
 private:
     BookMarkWidget *m_pBookMarkWidget = nullptr;
@@ -61,7 +61,7 @@ class BookMarkWidget : public CustomWidget
 
 public:
     BookMarkWidget(CustomWidget *parent = nullptr);
-    ~BookMarkWidget() override;
+    ~BookMarkWidget() Q_DECL_OVERRIDE;
 
 signals:
     void sigOpenFileOk();
@@ -79,8 +79,8 @@ private slots:
     void slot_loadImage(int, QImage);
 
 protected:
-    void initWidget() override;
-    void keyPressEvent(QKeyEvent *e) override;
+    void initWidget() Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
 
 private:
     void initConnection();
@@ -89,7 +89,7 @@ private:
 
 public:
     // IObserver interface
-    int dealWithData(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
     int getBookMarkPage(const int &index);
 
 

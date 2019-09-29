@@ -32,7 +32,7 @@ signals:
     void clicked();
 
 protected:
-    void mousePressEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 };
 
 /**
@@ -49,14 +49,14 @@ signals:
     void sigWidgetHide();
 
 public:
-    int dealWithData(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 
 protected:
-    void initWidget() override;
+    void initWidget() Q_DECL_OVERRIDE;
 
 protected:
-    void  paintEvent(QPaintEvent *e) override;
-    void  hideEvent(QHideEvent *event) override;
+    void  paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    void  hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
 
 private:
     void rotateFileView(bool isRight = true);

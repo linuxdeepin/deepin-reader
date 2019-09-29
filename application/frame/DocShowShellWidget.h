@@ -16,16 +16,16 @@ class DocShowShellWidget : public CustomWidget
     Q_OBJECT
 public:
     DocShowShellWidget(CustomWidget *parent = nullptr);
-    ~DocShowShellWidget() override;
+    ~DocShowShellWidget() Q_DECL_OVERRIDE;
 
 signals:
     void sigShowFileAttr();
     void sigShowFileFind();
 
 protected:
-    void dragEnterEvent(QDragEnterEvent *event) override;
-    void dropEvent(QDropEvent *event) override;
-    void resizeEvent(QResizeEvent *event) override;
+    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
+    void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void slotShowFileAttr();
@@ -40,11 +40,11 @@ private:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 
     // CustomWidget interface
 protected:
-    void initWidget() override;
+    void initWidget() Q_DECL_OVERRIDE;
 };
 
 #endif // DOCSHOWSHELLWIDGET_H
