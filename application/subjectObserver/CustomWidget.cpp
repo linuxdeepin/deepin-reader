@@ -4,7 +4,7 @@
 CustomWidget::CustomWidget(const QString &name, DWidget *parent)
     : DWidget (parent)
 {
-    setObserverName(name);
+    m_strObserverName = name;
 
     m_pMsgSubject = MsgSubject::getInstance();
     if (m_pMsgSubject) {
@@ -40,7 +40,6 @@ void CustomWidget::showScreenCenter()
     this->show();
 }
 
-void CustomWidget::setObserverName(const QString &name)
+void CustomWidget::setObserverName()
 {
-    m_strObserverName = name;
 }

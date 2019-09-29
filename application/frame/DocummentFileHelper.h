@@ -13,10 +13,11 @@ class DocummentFileHelper : public QObject, public IObserver
     Q_OBJECT
 public:
     explicit DocummentFileHelper(QObject *parent = nullptr);
-    ~DocummentFileHelper();
+    ~DocummentFileHelper() Q_DECL_OVERRIDE;
 
 signals:
     void sigOpenFile(const QString &);
+    void sigFileSlider();
 
 public:
     void onClickPageLink(Page::Link *pLink);
@@ -32,6 +33,7 @@ private:
 
 private slots:
     void slotOpenFile(const QString &filePaths);
+    void slotFileSlider();
 
 private:
     DocummentProxy          *m_pDocummentProxy = nullptr;   //  文档操作代理类
@@ -42,11 +44,11 @@ private:
     DocType_EM      m_nCurDocType = DocType_NULL;
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &);
-    void sendMsg(const int &, const QString &msgContent = "");
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    void sendMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
 
 private:
-    void setObserverName(const QString &name);
+    void setObserverName() Q_DECL_OVERRIDE;
 };
 
 #endif // DOCUMMENTFILEHELPER_H

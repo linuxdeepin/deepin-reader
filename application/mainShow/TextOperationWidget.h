@@ -29,8 +29,6 @@ private slots:
     void SlotBtnAddAnnotationClicked();
     void SlotBtnAddBookMarkClicked();
 
-    void SlotSendLightedColor(const int &);
-
 private:
     void sendMsgAndHide(const int &, const QString &msgContent = "");
     DPushButton *createBtn(const QString &, const char *member);

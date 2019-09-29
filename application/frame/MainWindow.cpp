@@ -31,7 +31,7 @@ MainWindow::MainWindow(DMainWindow *parent)
     }
 
     setMinimumSize(1000, 680);
-    setObserverName("MainWindow");
+    setObserverName();
 
     //  在屏幕中心显示
     Dtk::Widget::moveToCenter(this);
@@ -223,9 +223,9 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
     return 0;
 }
 
-void MainWindow::setObserverName(const QString &name)
+void MainWindow::setObserverName()
 {
-    m_strObserverName = name;
+    m_strObserverName = "MainWindow";
 }
 
 QAction *MainWindow::createAction(DMenu *menu, const QString &actionName)

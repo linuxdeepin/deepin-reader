@@ -59,7 +59,7 @@ public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 
 private:
-    void setObserverName(const QString &name) Q_DECL_OVERRIDE;
+    void setObserverName() Q_DECL_OVERRIDE;
 };
 
 #endif // MainWindow_H

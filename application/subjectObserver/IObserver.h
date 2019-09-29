@@ -19,7 +19,7 @@ public:
 
     //  添加订阅者身份，用于具体定位到某个订阅者
 private:
-    virtual void setObserverName(const QString &name) = 0;
+    virtual void setObserverName() = 0;
 
 public:
     QString getObserverName()

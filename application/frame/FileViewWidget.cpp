@@ -159,7 +159,7 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
             m_pRightClickPoint = pDocummentProxy->global2RelativePoint(tempPoint);
 
             QString sAnnotationText = "";
-//            bool bAnno = pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText);
+//           bool bAnno = pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText);
             //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
             if (m_pTextOperationWidget == nullptr) {
                 m_pTextOperationWidget = new TextOperationWidget(this);

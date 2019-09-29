@@ -58,11 +58,6 @@ void TextOperationWidget::SlotBtnAddBookMarkClicked()
     sendMsgAndHide(MSG_OPERATION_TEXT_ADD_BOOKMARK, QString("%1").arg(nCurPage));
 }
 
-void TextOperationWidget::SlotSendLightedColor(const int &nColor)
-{
-    sendMsgAndHide(MSG_OPERATION_TEXT_ADD_HIGHLIGHTED, QString::number(nColor));
-}
-
 void TextOperationWidget::sendMsgAndHide(const int &msgType, const QString &msgContent)
 {
     sendMsg(msgType, msgContent);
@@ -88,7 +83,6 @@ void TextOperationWidget::initWidget()
     layout->addWidget(copyBtn);
 
     auto pLightedWidget = new LightedWidget;
-    connect(pLightedWidget, SIGNAL(sigSendLightedColor(const int &)), this, SLOT(SlotSendLightedColor(const int &)));
     layout->addWidget(pLightedWidget);
 
     auto removeBtn = createBtn(MainShow::REMOVE_HIGH_LIGHTED, SLOT(SlotBtnRemoveHighLightedClicked()));
