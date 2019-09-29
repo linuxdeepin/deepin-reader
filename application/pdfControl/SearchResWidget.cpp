@@ -78,7 +78,8 @@ void SearchResWidget::initWidget()
 
 void SearchResWidget::initConnections()
 {
-    connect(&m_loadSearchResThread, SIGNAL(signal_loadImage(const int &, QImage &)), m_pNotesList, SLOT(slot_loadImage(const int &, QImage &)));
+    connect(&m_loadSearchResThread, SIGNAL(signal_loadImage(const int &, const QImage &)),
+            m_pNotesList, SLOT(slot_loadImage(const int &, const QImage &)));
 
     connect(this, SIGNAL(sigClearWidget()), this, SLOT(slotClearWidget()));
     connect(this, SIGNAL(sigFlushSearchWidget(QVariant)),

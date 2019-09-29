@@ -24,7 +24,7 @@ public:
     LoadSearchResThread(QObject *parent = nullptr);
 
 signals:
-    void signal_loadImage(const int &, QImage &);
+    void signal_loadImage(const int &, const QImage &);
 
 public:
     inline void setSearchResW(SearchResWidget *searchResW)
