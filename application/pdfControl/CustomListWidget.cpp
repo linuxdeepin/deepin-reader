@@ -19,7 +19,7 @@ CustomListWidget::CustomListWidget(DWidget *parent)
  * @param row
  * @param image
  */
-void CustomListWidget::setItemImage(const int &row, QImage &image)
+void CustomListWidget::slot_loadImage(const int &row, QImage &image)
 {
     QListWidgetItem *item = this->item(row);
     if (item) {

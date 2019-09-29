@@ -19,7 +19,7 @@
  * @brief The BookMarkWidget class
  * @brief   书签  列表数据
  */
-
+/*
 class BookMarkWidget;
 
 class LoadBookMarkThread : public QThread
@@ -54,7 +54,7 @@ private:
     int m_nEndIndex   = 19;  // 加载图片结束位置
     bool m_isRunning = true; // 运行状态
 };
-
+*/
 class BookMarkWidget : public CustomWidget
 {
     Q_OBJECT
@@ -76,7 +76,6 @@ private slots:
     void slotDocFilePageChanged(int);
     void slotDeleteBookItem(const int &);
     void slotCloseFile();
-    void slot_loadImage(int, QImage);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -90,7 +89,7 @@ private:
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
-    int getBookMarkPage(const int &index);
+//    int getBookMarkPage(const int &index);
 
 
 private:

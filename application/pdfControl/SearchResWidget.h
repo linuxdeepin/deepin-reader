@@ -24,7 +24,7 @@ public:
     LoadSearchResThread(QObject *parent = nullptr);
 
 signals:
-    void signal_loadImage(int, QImage);
+    void signal_loadImage(const int &, QImage &);
 
 public:
     inline void setSearchResW(SearchResWidget *searchResW)
@@ -76,7 +76,6 @@ private slots:
     void slotFlushSearchList(QVariant);
     void slotClearWidget();
     void slotCloseFile();
-    void slot_loadImage(int, QImage);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;

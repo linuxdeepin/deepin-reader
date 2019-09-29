@@ -15,8 +15,8 @@ class CustomListWidget : public DListWidget
 public:
     CustomListWidget(DWidget *parent = nullptr);
 
-public:
-    void setItemImage(const int &row, QImage &image);
+private slots:
+    void slot_loadImage(const int &row, QImage &image);
 
 private slots:
     void slotShowSelectItem(QListWidgetItem *);

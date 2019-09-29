@@ -64,11 +64,6 @@ void SearchResWidget::slotCloseFile()
     }
 }
 
-void SearchResWidget::slot_loadImage(int page, QImage image)
-{
-    m_pNotesList->setItemImage(page, image);
-}
-
 void SearchResWidget::initWidget()
 {
     auto m_pVLayout  = new QVBoxLayout;
@@ -83,7 +78,7 @@ void SearchResWidget::initWidget()
 
 void SearchResWidget::initConnections()
 {
-    connect(&m_loadSearchResThread, SIGNAL(signal_loadImage(int, QImage)), this, SLOT(slot_loadImage(int, QImage)));
+    connect(&m_loadSearchResThread, SIGNAL(signal_loadImage(const int &, QImage &)), m_pNotesList, SLOT(slot_loadImage(const int &, QImage &)));
 
     connect(this, SIGNAL(sigClearWidget()), this, SLOT(slotClearWidget()));
     connect(this, SIGNAL(sigFlushSearchWidget(QVariant)),
@@ -135,9 +130,9 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
     }
 
     if (msgType == MSG_FIND_NEXT) {
-        qDebug()<<"@@@@@@@@@@@@@@@@@@";
+        qDebug() << "@@@@@@@@@@@@@@@@@@";
         DocummentProxy::instance()->findNext();
-        qDebug()<<"%%%%%%%%%%%%%%%%%%%%%%";
+        qDebug() << "%%%%%%%%%%%%%%%%%%%%%%";
         return ConstantMsg::g_effective_res;
     }
 

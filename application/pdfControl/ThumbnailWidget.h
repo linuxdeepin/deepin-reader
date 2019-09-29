@@ -66,7 +66,8 @@ public:
     }
 
 signals:
-    void signal_loadImage(int, QImage);
+    void signal_loadImage(const int &, QImage &);
+
 protected:
     void run() Q_DECL_OVERRIDE;
 
@@ -93,8 +94,6 @@ signals:
     void sigOpenFileOk();
     void sigCloseFile();
 
-private slots:
-    void slot_loadImage(int, QImage);
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
