@@ -80,7 +80,6 @@ signals:
     bool signal_mouseSelectText(QPoint start, QPoint stop);
     void signal_scaleAndShow(double scale, RotateType_EM rotate);
     bool signal_setViewModeAndShow(ViewMode_EM viewmode);
-    bool signal_showSlideModel();
 private slots:
     void slot_pageChange(int);
     bool startOpenFile();

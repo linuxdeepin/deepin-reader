@@ -95,7 +95,6 @@ bool DocummentProxy::startOpenFile()
     connect(this, SIGNAL(signal_mouseSelectText(QPoint, QPoint)), m_documment, SLOT(mouseSelectText(QPoint, QPoint)));
     connect(this, SIGNAL(signal_scaleAndShow(double, RotateType_EM)), m_documment, SLOT(scaleAndShow(double, RotateType_EM)));
     connect(this, SIGNAL(signal_setViewModeAndShow(ViewMode_EM)), m_documment, SLOT(setViewModeAndShow(ViewMode_EM)));
-    connect(this, SIGNAL(signal_showSlideModel()), m_documment, SLOT(showSlideModel()));
     return m_documment->openFile(m_path);
 }
 
@@ -298,8 +297,7 @@ bool DocummentProxy::showSlideModel()
 {
     if (!m_documment || bcloseing)
         return false;
-//    return m_documment->showSlideModel();
-    return emit signal_showSlideModel();
+    return m_documment->showSlideModel();
 }
 bool DocummentProxy::exitSlideModel()
 {
