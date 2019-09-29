@@ -43,7 +43,8 @@ void DefaultOperationWidget::SlotBtnSearchClicked()
 
 void DefaultOperationWidget::SlotBtnAddBookMarkClicked()
 {
-    sendMsgAndHide(MSG_OPERATION_ADD_BOOKMARK);
+    int nCurPage = DocummentProxy::instance()->currentPageNo();
+    sendMsgAndHide(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(nCurPage));
 }
 
 void DefaultOperationWidget::SlotBtnFirstPageClicked()
@@ -66,9 +67,9 @@ void DefaultOperationWidget::SlotBtnEndPageClicked()
     sendMsgAndHide(MSG_OPERATION_END_PAGE);
 }
 
-void DefaultOperationWidget::sendMsgAndHide(const int &msgType)
+void DefaultOperationWidget::sendMsgAndHide(const int &msgType, const QString &msgContent)
 {
-    sendMsg(msgType);
+    sendMsg(msgType, msgContent);
     this->hide();
 }
 

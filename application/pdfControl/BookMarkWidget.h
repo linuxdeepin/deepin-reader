@@ -65,15 +65,16 @@ public:
 
 signals:
     void sigOpenFileOk();
-    void sigDeleteBookItem();
-    void sigAddBookMark();
+    void sigDeleteBookItem(const int &);
+    void sigAddBookMark(const int &);
     void sigCloseFile();
 
 private slots:
     void slotAddBookMark();
+    void slotAddBookMark(const int &);
     void slotOpenFileOk();
     void slotDocFilePageChanged(int);
-    void slotDeleteBookItem();
+    void slotDeleteBookItem(const int &);
     void slotCloseFile();
     void slot_loadImage(int, QImage);
 
@@ -84,6 +85,7 @@ protected:
 private:
     void initConnection();
     void addBookMarkItem(const int &);
+    void operateDb();
 
 public:
     // IObserver interface
@@ -95,8 +97,7 @@ private:
     CustomListWidget *m_pBookMarkListWidget = nullptr;
     DPushButton *m_pAddBookMarkBtn = nullptr;
     QList<int>      m_pAllPageList;
-    int m_nCurrentPage = -1;
-    LoadBookMarkThread m_loadBookMarkThread;
+//    LoadBookMarkThread m_loadBookMarkThread;
     BookMarkItemWidget *m_pItemWidget = nullptr; // 当前要填充图片的ItemWidget
 };
 

@@ -215,7 +215,6 @@ void FileViewWidget::onFileAddAnnotation(const QString &sColor)
 {
     QList<QColor> colorList = {};
 
-    qDebug() << "onFileAddAnnotation            " << sColor;
     DocummentProxy::instance()->addAnnotation(m_pRightClickPoint, m_pRightClickPoint);
 }
 

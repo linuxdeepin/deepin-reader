@@ -31,7 +31,7 @@ private slots:
 
 private:
     void createBtn(const QString &, const char *member);
-    void sendMsgAndHide(const int &);
+    void sendMsgAndHide(const int &, const QString &msgContent = "");
 
 private:
     QVBoxLayout *layout = nullptr;

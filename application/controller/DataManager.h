@@ -12,7 +12,7 @@
 enum File_Show_Enum {
     FILE_NORMAL,        //  正常显示
     FILE_FULLSCREEN,    //  全屏
-    FILE_SLIDE,        //  幻灯片
+    FILE_SLIDE,         //  幻灯片
 };
 
 class DataManager : public QObject

@@ -2,6 +2,7 @@
 #include "translator/PdfControl.h"
 #include "translator/Frame.h"
 #include "translator/MainShow.h"
+#include "docview/docummentproxy.h"
 
 TextOperationWidget::TextOperationWidget(CustomWidget *parent)
     : CustomWidget("TextOperationWidget", parent)
@@ -22,7 +23,6 @@ void TextOperationWidget::showWidget(const int &x, const int &y, const bool &bBo
             btn->setEnabled(bHigh);
         }
     }
-
 
     this->show();
     this->move(x, y);
@@ -54,7 +54,8 @@ void TextOperationWidget::SlotBtnAddAnnotationClicked()
 
 void TextOperationWidget::SlotBtnAddBookMarkClicked()
 {
-    sendMsgAndHide(MSG_OPERATION_TEXT_ADD_BOOKMARK);
+    int nCurPage = DocummentProxy::instance()->currentPageNo();
+    sendMsgAndHide(MSG_OPERATION_TEXT_ADD_BOOKMARK, QString("%1").arg(nCurPage));
 }
 
 void TextOperationWidget::SlotSendLightedColor(const int &nColor)

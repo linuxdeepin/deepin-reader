@@ -3,6 +3,7 @@
 #include "subjectObserver/MsgHeader.h"
 #include "controller/MsgSubject.h"
 #include "translator/PdfControl.h"
+#include "docview/docummentproxy.h"
 
 BookMarkStateLabel::BookMarkStateLabel(DWidget *parent)
     : QLabel (parent)
@@ -37,13 +38,15 @@ void BookMarkStateLabel::mouseMoveEvent(QMouseEvent *event)
 void BookMarkStateLabel::mousePressEvent(QMouseEvent *event)
 {
     m_bChecked = !m_bChecked;
+    //  将当前 添加\删除 到书签
+    int nCurPage = DocummentProxy::instance()->currentPageNo();
 
     if (!m_bChecked) {
         setPixmapState(ImageModule::g_press_state);
-        sendMsg(MSG_BOOKMARK_DLTITEM);
+        sendMsg(MSG_BOOKMARK_DLTITEM, QString("%1").arg(nCurPage));
     } else {
         setPixmapState(ImageModule::g_checked_state);
-        sendMsg(MSG_BOOKMARK_ADDITEM);
+        sendMsg(MSG_BOOKMARK_ADDITEM, QString("%1").arg(nCurPage));
     }
 
     DLabel::mousePressEvent(event);
@@ -67,9 +70,9 @@ void BookMarkStateLabel::setPixmapState(const QString &state)
     this->setPixmap(pixmap);
 }
 
-void BookMarkStateLabel::setMarkState(const bool &bCheck)
+void BookMarkStateLabel::setMarkState(const QString &sData)
 {
-    m_bChecked = bCheck;
+    m_bChecked = sData.toInt();
 
     if (!m_bChecked) {
         this->clear();
@@ -86,7 +89,7 @@ bool BookMarkStateLabel::bChecked() const
 int BookMarkStateLabel::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_BOOKMARK_STATE) {     //  当前页的书签状态
-        setMarkState(msgContent.toInt());
+        setMarkState(msgContent);
         return ConstantMsg::g_effective_res;
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
 

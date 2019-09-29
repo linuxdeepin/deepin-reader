@@ -17,9 +17,6 @@ class AppAboutWidget : public DAboutDialog
 public:
     AppAboutWidget(DWidget *parent = nullptr);
 
-public:
-    void showScreenCenter();
-
 private:
     void initLabels();
 };

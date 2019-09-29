@@ -9,18 +9,11 @@ AppAboutWidget::AppAboutWidget(DWidget *parent)
     initLabels();
 }
 
-void AppAboutWidget::showScreenCenter()
-{
-    Dtk::Widget::moveToCenter(this);
-    this->show();
-    this->raise();
-}
-
 void AppAboutWidget::initLabels()
 {
     setProductIcon(QPixmap(":/resources/image/logo/logo_big.svg"));
     setProductName(Frame::sAppName);
-    setVersion("20191001");
+    setVersion("20190929");
     setDescription(Frame::sDescription);
 
     setAcknowledgementLink(Constant::sAcknowledgementLink);
