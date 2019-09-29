@@ -191,15 +191,12 @@ public:
     bool openFile(QString filepath);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
     void mouseSelectTextClear();
-    void scaleAndShow(double scale, RotateType_EM rotate);
     bool mouseBeOverText(QPoint point);
     QPoint global2RelativePoint(QPoint globalpoint);
     bool showMagnifier(QPoint point);
-    bool setViewModeAndShow(ViewMode_EM viewmode);
     int currentPageNo();
     Page::Link *mouseBeOverLink(QPoint point);
     bool getSelectTextString(QString &st);
-    bool showSlideModel();
     bool loadPages();
     double adaptWidthAndShow(double width);
     double adaptHeightAndShow(double height);
@@ -226,6 +223,9 @@ protected slots:
     void slot_docummentLoaded();
     bool pageJump(int pagenum);
     bool mouseSelectText(QPoint start, QPoint stop);
+    void scaleAndShow(double scale, RotateType_EM rotate);
+    bool setViewModeAndShow(ViewMode_EM viewmode);
+    bool showSlideModel();
 protected:
     int pointInWhichPage(QPoint &qpoint);
     void showSinglePage();

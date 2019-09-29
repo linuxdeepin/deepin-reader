@@ -155,7 +155,7 @@ bool DocummentPDF::save(const QString &filePath, bool withChanges)
 
     if (withChanges) {
         // m_bModified = false;//reset modify status
-        setBasicInfo(filePath);
+//        setBasicInfo(filePath);
     }
 
     return true;
