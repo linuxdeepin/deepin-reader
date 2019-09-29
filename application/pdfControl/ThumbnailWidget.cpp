@@ -11,7 +11,8 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
 
     initWidget();
 
-    connect(&m_ThreadLoadImage, SIGNAL(signal_loadImage(const int &, QImage &)), m_pThumbnailListWidget, SLOT(slot_loadImage(const int &, QImage &)));
+    connect(&m_ThreadLoadImage, SIGNAL(signal_loadImage(const int &, const QImage &)),
+            m_pThumbnailListWidget, SLOT(slot_loadImage(const int &, const QImage &)));
 
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));

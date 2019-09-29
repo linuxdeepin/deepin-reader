@@ -7,7 +7,6 @@
 #include <QPalette>
 #include <QDebug>
 #include <QVBoxLayout>
-#include <QImage>
 #include <QThread>
 #include <QTimer>
 
@@ -66,7 +65,7 @@ public:
     }
 
 signals:
-    void signal_loadImage(const int &, QImage &);
+    void signal_loadImage(const int &, const QImage &);
 
 protected:
     void run() Q_DECL_OVERRIDE;
