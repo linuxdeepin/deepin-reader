@@ -3,6 +3,7 @@
 
 #include "pagebase.h"
 #include "docview/commonstruct.h"
+#include "searchtask.h"
 #include <DWidget>
 #include <DScrollArea>
 #include <DScrollBar>
@@ -101,6 +102,11 @@ public:
         animationfirst = nullptr;
         animationsecond = nullptr;
         animationgroup = nullptr;
+        m_bsearchfirst=true;
+        m_findcurpage=-1;
+        m_imagewidht=0;
+        m_imageheight=0;
+        m_cursearch=1;
     }
 
     ~DocummentBasePrivate()
@@ -121,6 +127,13 @@ public:
         if (!animationgroup) {
             delete  animationgroup;
             animationgroup = nullptr;
+        }
+        if(m_searchTask)
+        {
+            m_searchTask->cancel();
+            m_searchTask->wait();
+            delete m_searchTask;
+            m_searchTask=nullptr;
         }
     }
 
@@ -149,6 +162,13 @@ public:
     QPropertyAnimation *animationfirst;
     QPropertyAnimation *animationsecond;
     QParallelAnimationGroup *animationgroup;
+    SearchTask *m_searchTask;
+    int m_findcurpage;
+    QMap<int, int> m_pagecountsearch; //搜索结果页对应当前页个数
+    int m_cursearch;
+    bool m_bsearchfirst;
+    double m_imagewidht;
+    double m_imageheight;
 
 signals:
     void signal_docummentLoaded();
@@ -234,13 +254,7 @@ protected:
     void showFacingPage();
     void initConnect();
 
-    SearchTask *m_searchTask;
-    int m_findcurpage;
-    QMap<int, int> m_pagecountsearch; //搜索结果页对应当前页个数
-    int m_cursearch;
-    bool m_bsearchfirst;
-    double m_imagewidht;
-    double m_imageheight;
+
 
     QScopedPointer<DocummentBasePrivate> d_ptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), DocummentBase)
