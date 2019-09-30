@@ -484,18 +484,16 @@ void DocummentBase::slot_MagnifierPixmapCacheLoaded(int pageno)
 
 void DocummentBase::slot_searchValueAdd(stSearchRes res)
 {
-     Q_D(DocummentBase);
-    if(d->m_bsearchfirst)
-    {
-        d->m_bsearchfirst=false;
-        d->m_findcurpage=res.ipage;
-        d->m_cursearch=1;
-        d->m_pagecountsearch.insert(res.ipage,res.listtext.size());
+    Q_D(DocummentBase);
+    if (d->m_bsearchfirst) {
+        d->m_bsearchfirst = false;
+        d->m_findcurpage = res.ipage;
+        d->m_cursearch = 1;
+        d->m_pagecountsearch.insert(res.ipage, res.listtext.size());
         emit signal_searchRes(res);
         findNext();
-    }
-    else {
-        d->m_pagecountsearch.insert(res.ipage,res.listtext.size());
+    } else {
+        d->m_pagecountsearch.insert(res.ipage, res.listtext.size());
         emit signal_searchRes(res);
     }
 
@@ -503,7 +501,7 @@ void DocummentBase::slot_searchValueAdd(stSearchRes res)
 
 void DocummentBase::slot_searchover()
 {
-     Q_D(DocummentBase);
+    Q_D(DocummentBase);
     d->m_bsearchfirst = true;
 }
 
@@ -714,6 +712,7 @@ bool DocummentBase::pageJump(int pagenum)
                 scrollBar_Y->setValue(d->m_widgets.at(pagenum)->y());
             break;
         case ViewMode_FacingPage:
+            qDebug() << "-------FacingPage pagenum:" << pagenum << " x():" << d->m_widgets.at(pagenum)->x() << " y():" << d->m_widgets.at(pagenum)->y();
             if (scrollBar_X)
                 scrollBar_X->setValue(d->m_widgets.at(pagenum / 2)->x() + d->m_pages.at(pagenum)->x());
             if (scrollBar_Y)
@@ -722,6 +721,7 @@ bool DocummentBase::pageJump(int pagenum)
         default:
             break;
         }
+        d->m_currentpageno = pagenum;
     }
     return true;
 }
@@ -783,12 +783,20 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     loadPages();
 }
 
-int DocummentBase::currentPageNo()
+int DocummentBase::getCurrentPageNo()
 {
     Q_D(DocummentBase);
     if (d->m_bslidemodel) {
         return d->m_slidepageno;
     }
+    if (d->m_currentpageno >= 0)
+        return d->m_currentpageno;
+    return currentPageNo();
+}
+
+int DocummentBase::currentPageNo()
+{
+    Q_D(DocummentBase);
     int pagenum = -1;
     int x_offset = 0;
     int y_offset = 0;
@@ -950,7 +958,7 @@ bool DocummentBase::showSlideModel()
     if (!bDocummentExist()) {
         return false;
     }
-    int curpageno = currentPageNo();
+    int curpageno = getCurrentPageNo();
     if (curpageno < 0) {
         curpageno = 0;
     }
@@ -1074,33 +1082,32 @@ double DocummentBase::adaptHeightAndShow(double height)
 
 void DocummentBase::findNext()
 {
-     Q_D(DocummentBase);
-     qDebug()<<"----------findNext";
-    if (d->m_pagecountsearch.size() <= 0||d->m_findcurpage<0) return;
+    Q_D(DocummentBase);
+    qDebug() << "----------findNext";
+    if (d->m_pagecountsearch.size() <= 0 || d->m_findcurpage < 0) return;
     if (d->m_findcurpage == d->m_pagecountsearch.lastKey() &&
             d->m_cursearch == d->m_pagecountsearch.find(d->m_findcurpage).value()) {
         d->m_findcurpage = d->m_pagecountsearch.firstKey();
         d->m_cursearch = 1;
     }
 
-    double curwidht=d->m_scale*d->m_imagewidht;
+    double curwidht = d->m_scale * d->m_imagewidht;
     double curheight = d->m_scale * d->m_imageheight;
-    int curpagecount=d->m_pagecountsearch.find(d->m_findcurpage).value();
-    if (curpagecount >= d->m_cursearch)
-    {
-        PageBase* pagebase= d->m_pages.at(d->m_findcurpage);
+    int curpagecount = d->m_pagecountsearch.find(d->m_findcurpage).value();
+    if (curpagecount >= d->m_cursearch) {
+        PageBase *pagebase = d->m_pages.at(d->m_findcurpage);
         pagebase->setCurSearchShow(true);
         //从上一个切换至下一个，如果findPrev查找的m_cursearch为当前页第一个则此处需要判断是否越界
-        qDebug()<<"----------1"<<d->m_cursearch;
+        qDebug() << "----------1" << d->m_cursearch;
         if (d->m_cursearch <= 0) {
-             d->m_cursearch = 1;
+            d->m_cursearch = 1;
         }
 
-        QRectF rect=pagebase->setCurHightLight(d->m_cursearch);
-        double topspace=(d->m_widgets.at(d->m_findcurpage)->height()-curheight)/2;
-        int widgetheight=d->m_widgets.at(d->m_findcurpage)->height();
-        int value = d->m_widgets.at(d->m_findcurpage)->y()+topspace+rect.y() * d->m_scale-widgetheight/2;
-        qDebug()<<rect<<"--"<<topspace<<"--"<<widgetheight<<"--"<<curheight;
+        QRectF rect = pagebase->setCurHightLight(d->m_cursearch);
+        double topspace = (d->m_widgets.at(d->m_findcurpage)->height() - curheight) / 2;
+        int widgetheight = d->m_widgets.at(d->m_findcurpage)->height();
+        int value = d->m_widgets.at(d->m_findcurpage)->y() + topspace + rect.y() * d->m_scale - widgetheight / 2;
+        qDebug() << rect << "--" << topspace << "--" << widgetheight << "--" << curheight;
 //        if(m_viewmode==ViewMode_FacingPage){
 
 //            value = m_widgets.at(m_findcurpage/2)->y()+topspace+rect.y() * m_scale-widgetheight/2;
@@ -1110,21 +1117,20 @@ void DocummentBase::findNext()
             scrollBar_Y->setValue(value);
         d->m_cursearch++;
 
-    }
-    else {
-        qDebug()<<"----------2"<<d->m_cursearch;
+    } else {
+        qDebug() << "----------2" << d->m_cursearch;
         d->m_pages.at(d->m_findcurpage)->setCurSearchShow(false);
         QMap<int, int>::const_iterator it = d->m_pagecountsearch.find(d->m_findcurpage);
         if (++it != d->m_pagecountsearch.end()) {
             d->m_cursearch = 1;
             d->m_findcurpage = it.key();
 
-            PageBase* pagebase= d->m_pages.at(d->m_findcurpage);
+            PageBase *pagebase = d->m_pages.at(d->m_findcurpage);
             pagebase->setCurSearchShow(true);
-            QRectF rect=pagebase->setCurHightLight(d->m_cursearch);
-            double topspace=(d->m_widgets.at(d->m_findcurpage)->height()-curheight)/2;
-            int widgetheight=d->m_widgets.at(d->m_findcurpage)->height();
-            int value =d->m_widgets.at(d->m_findcurpage)->y()+topspace+rect.y() * d->m_scale-widgetheight/2;
+            QRectF rect = pagebase->setCurHightLight(d->m_cursearch);
+            double topspace = (d->m_widgets.at(d->m_findcurpage)->height() - curheight) / 2;
+            int widgetheight = d->m_widgets.at(d->m_findcurpage)->height();
+            int value = d->m_widgets.at(d->m_findcurpage)->y() + topspace + rect.y() * d->m_scale - widgetheight / 2;
 //            if(m_viewmode==ViewMode_FacingPage){
 
 //                value = m_widgets.at(d->m_findcurpage/2)->y()+topspace+rect.y() * m_scale-widgetheight/2;
@@ -1139,50 +1145,49 @@ void DocummentBase::findNext()
 
 void DocummentBase::findPrev()
 {
-     Q_D(DocummentBase);
-    if (d->m_pagecountsearch.size() <= 0||d->m_findcurpage<0) return;
+    Q_D(DocummentBase);
+    if (d->m_pagecountsearch.size() <= 0 || d->m_findcurpage < 0) return;
     if (d->m_findcurpage == d->m_pagecountsearch.firstKey() &&
             d->m_cursearch < 1) {
         d->m_findcurpage = d->m_pagecountsearch.lastKey();
         d->m_cursearch = d->m_pagecountsearch.find(d->m_findcurpage).value();
     }
 
-    double curwidht=d->m_scale*d->m_imagewidht;
+    double curwidht = d->m_scale * d->m_imagewidht;
     double curheight = d->m_scale * d->m_imageheight;
     if (d->m_cursearch >= 1) {
-        PageBase* pagebase= d->m_pages.at(d->m_findcurpage);
+        PageBase *pagebase = d->m_pages.at(d->m_findcurpage);
         pagebase->setCurSearchShow(true);
         //从下一个切换至上一个，如果findNext查找的m_cursearch为当前页最后一个则此处需要判断是否越界
 
-        int curpagecount=d->m_pagecountsearch.find(d->m_findcurpage).value();
-        qDebug()<<"----------"<<d->m_cursearch<<"--"<<curpagecount;
-        if (d->m_cursearch >curpagecount) {
+        int curpagecount = d->m_pagecountsearch.find(d->m_findcurpage).value();
+        qDebug() << "----------" << d->m_cursearch << "--" << curpagecount;
+        if (d->m_cursearch > curpagecount) {
             d->m_cursearch = curpagecount;
         }
 
-        QRectF rect=pagebase->setCurHightLight(d->m_cursearch);
-        double topspace=(d->m_widgets.at(d->m_findcurpage)->height()-curheight)/2;
-        int widgetheight=d->m_widgets.at(d->m_findcurpage)->height();
-        int value = d->m_widgets.at(d->m_findcurpage)->y()+topspace+rect.y() * d->m_scale-widgetheight/2;
+        QRectF rect = pagebase->setCurHightLight(d->m_cursearch);
+        double topspace = (d->m_widgets.at(d->m_findcurpage)->height() - curheight) / 2;
+        int widgetheight = d->m_widgets.at(d->m_findcurpage)->height();
+        int value = d->m_widgets.at(d->m_findcurpage)->y() + topspace + rect.y() * d->m_scale - widgetheight / 2;
 
         QScrollBar *scrollBar_Y = verticalScrollBar();
         if (scrollBar_Y)
             scrollBar_Y->setValue(value);
         d->m_cursearch--;
 
-    }
-    else {
+    } else {
         d->m_pages.at(d->m_findcurpage)->setCurSearchShow(false);
         QMap<int, int>::const_iterator it = d->m_pagecountsearch.find(d->m_findcurpage);
         if (--it != d->m_pagecountsearch.end()) {
             d->m_cursearch = it.value();
             d->m_findcurpage = it.key();
-            PageBase* pagebase= d->m_pages.at(d->m_findcurpage);
+            PageBase *pagebase = d->m_pages.at(d->m_findcurpage);
             pagebase->setCurSearchShow(true);
-            QRectF rect=pagebase->setCurHightLight(d->m_cursearch);
-            double topspace=(d->m_widgets.at(d->m_findcurpage)->height()-curheight)/2;
-            int widgetheight=d->m_widgets.at(d->m_findcurpage)->height();
-            int value =d->m_widgets.at(d->m_findcurpage)->y()+topspace+rect.y() * d->m_scale-widgetheight/2;
+            QRectF rect = pagebase->setCurHightLight(d->m_cursearch);
+            double topspace = (d->m_widgets.at(d->m_findcurpage)->height() - curheight) / 2;
+            int widgetheight = d->m_widgets.at(d->m_findcurpage)->height();
+            int value = d->m_widgets.at(d->m_findcurpage)->y() + topspace + rect.y() * d->m_scale - widgetheight / 2;
             QScrollBar *scrollBar_Y = verticalScrollBar();
             if (scrollBar_Y)
                 scrollBar_Y->setValue(value);
