@@ -178,14 +178,13 @@ public:
     virtual QString removeAnnotation(const QPoint &startpos) {}
     virtual void removeAnnotation(const QString &struuid) {}
     virtual QString addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) {}
-    virtual void search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color = Qt::yellow) {}
+    virtual void search(const QString &strtext,QColor color = Qt::yellow) {}
     virtual void clearSearch() {}
     virtual void docBasicInfo(stFileInfo &info) {}
-    virtual void findNext() {}
-    virtual void findPrev() {}
     virtual void title(QString &title) {}
     virtual void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) {}
     virtual void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1) {}
+    virtual bool annotationClicked(const QPoint &pos, QString &strtext){return false;}
 
     void stopLoadPageThread();
     bool openFile(QString filepath);
@@ -200,6 +199,8 @@ public:
     bool loadPages();
     double adaptWidthAndShow(double width);
     double adaptHeightAndShow(double height);
+    void findNext();
+    void findPrev();
     bool loadWords();
     int getPageSNum();
     bool exitSlideModel();
@@ -210,6 +211,7 @@ public:
     bool isWordsBeLoad();
     bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3);
     bool showSlideModel();
+
 
 signals:
     void signal_pageChange(int);
@@ -231,13 +233,18 @@ protected:
     void showSinglePage();
     void showFacingPage();
     void initConnect();
+
     SearchTask *m_searchTask;
     int m_findcurpage;
     QMap<int, int> m_pagecountsearch; //搜索结果页对应当前页个数
     int m_cursearch;
     bool m_bsearchfirst;
+    double m_imagewidht;
+    double m_imageheight;
+
     QScopedPointer<DocummentBasePrivate> d_ptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), DocummentBase)
+
 };
 
 #endif // DOCUMMENTBASE_H

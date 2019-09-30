@@ -197,7 +197,7 @@ QString DocummentDJVU::addAnnotation(const QPoint &startpos, const QPoint &endpo
     return static_cast<PageDJVU *>(m_pages.at(page))->addAnnotation(pt);
 }
 
-void DocummentDJVU::search(const QString &strtext, QMap<int, stSearchRes> &resmap, QColor color)
+void DocummentDJVU::search(const QString &strtext,QColor color)
 {
 
 }

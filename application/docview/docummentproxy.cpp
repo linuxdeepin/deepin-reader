@@ -92,9 +92,11 @@ bool DocummentProxy::startOpenFile()
     m_documment = DocummentFactory::creatDocumment(m_type, qwfather);
     connect(m_documment, SIGNAL(signal_pageChange(int)), this, SLOT(slot_pageChange(int)));
     connect(this, SIGNAL(signal_pageJump(int)), m_documment, SLOT(pageJump(int)));
+    connect(m_documment, SIGNAL(signal_searchRes(stSearchRes)), this, SIGNAL(signal_searchRes(stSearchRes)));
     connect(this, SIGNAL(signal_mouseSelectText(QPoint, QPoint)), m_documment, SLOT(mouseSelectText(QPoint, QPoint)));
     connect(this, SIGNAL(signal_scaleAndShow(double, RotateType_EM)), m_documment, SLOT(scaleAndShow(double, RotateType_EM)));
     connect(this, SIGNAL(signal_setViewModeAndShow(ViewMode_EM)), m_documment, SLOT(setViewModeAndShow(ViewMode_EM)));
+
     return m_documment->openFile(m_path);
 }
 
@@ -211,7 +213,7 @@ void DocummentProxy::search(const QString &strtext, QMap<int, stSearchRes> &resm
 {
     if (!m_documment || bcloseing)
         return ;
-    m_documment->search(strtext, resmap, color);
+    m_documment->search(strtext, color);
 }
 
 void DocummentProxy::clearsearch()
@@ -234,7 +236,6 @@ bool DocummentProxy::pageJump(int pagenum)
         return false;
     emit signal_pageJump(pagenum);
     return true;
-//    return m_documment->pageJump(pagenum);
 }
 
 void DocummentProxy::docBasicInfo(stFileInfo &info)
@@ -348,6 +349,14 @@ double DocummentProxy::adaptHeightAndShow(double height)
         return -1;
     qDebug() << "adaptHeightAndShow height:" << height;
     return m_documment->adaptHeightAndShow(height);
+}
+
+bool DocummentProxy::annotationClicked(const QPoint &pos, QString &strtext)
+{
+    if (m_documment) {
+        return m_documment->annotationClicked(pos, strtext);
+    }
+    return  false;
 }
 
 bool DocummentProxy::closeFile()

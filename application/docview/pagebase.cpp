@@ -3,7 +3,7 @@
 #include <QDebug>
 ThreadRenderImage::ThreadRenderImage()
 {
-//    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
+    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
     m_page = nullptr;
     restart = false;
     m_width = 0;
@@ -42,7 +42,7 @@ void ThreadRenderImage::run()
 }
 ThreadLoadMagnifierCache::ThreadLoadMagnifierCache()
 {
-//    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
+    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
     m_page = nullptr;
     restart = false;
     m_width = 0;
@@ -82,15 +82,16 @@ void ThreadLoadMagnifierCache::run()
 
 PageBase::PageBase(PageBasePrivate *ptr, DWidget *parent)
     : DLabel(parent),
-      d_ptr(ptr ? ptr : new PageBasePrivate(this)),
-      m_highlights(),
-      m_icurhightlight(0)
+      d_ptr(ptr ? ptr : new PageBasePrivate(this))
 {
     Q_D(PageBase);
     setMouseTracking(true);
     setAlignment(Qt::AlignCenter);
     connect(d, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)), this, SLOT(slot_loadMagnifierPixmapCache(QImage, double, double)));
     connect(d, SIGNAL(signal_RenderFinish(QImage)), this, SLOT(slot_RenderFinish(QImage)));
+    connect(this, &PageBase::signal_update, this, [ = ]() {
+        this->update();
+    });
 }
 
 PageBase::~PageBase()
@@ -116,7 +117,7 @@ bool PageBase::setSelectTextStyle(QColor paintercolor, QColor pencolor, int penw
     d->m_paintercolor = paintercolor;
     d->m_pencolor = pencolor;
     d->m_penwidth = penwidth;
-    update();
+    emit signal_update();
     return true;
 }
 
@@ -127,7 +128,7 @@ void PageBase::clearPageTextSelections()
         d->paintrects.clear();
         d->m_selecttextstartword = -1;
         d->m_selecttextendword = -1;
-        update();
+        emit signal_update();
     }
 }
 
@@ -368,7 +369,7 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
         break;
     }
     d->paintrects.append(paintrect);
-    update();
+    emit signal_update();
     return true;
 }
 
@@ -412,6 +413,12 @@ void PageBase::getImagePoint(QPoint &point)
     point = qp;
 }
 
+void PageBase::clearHighlightRects()
+{
+    Q_D(PageBase);
+    d->m_highlights.clear();
+}
+
 bool PageBase::clearMagnifierPixmap()
 {
     Q_D(PageBase);
@@ -423,7 +430,7 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, dou
 {
     Q_D(PageBase);
     qDebug() << "getMagnifierPixmap";
-//    QImage image;
+    //    QImage image;
     QPixmap qpixmap;
     if (!d->m_magnifierpixmap.isNull()) {
         qpixmap = d->m_magnifierpixmap;
@@ -503,15 +510,15 @@ void PageBase::slot_RenderFinish(QImage image)
 void PageBase::slot_loadMagnifierPixmapCache(QImage image, double width, double height)
 {
     Q_D(PageBase);
-//    QImage image;
+    //    QImage image;
     QPixmap qpixmap;
-//    if (getImage(image, width, height)) {
+    //    if (getImage(image, width, height)) {
     qpixmap = QPixmap::fromImage(image);
     d->m_magnifierpixmap = qpixmap;
     d->m_magnifierwidth = width;
     d->m_magnifierheight = height;
     emit signal_MagnifierPixmapCacheLoaded(d->m_pageno);
-//}
+    //}
 }
 
 void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
@@ -521,31 +528,31 @@ void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
     d->m_rotate = rotate;
     switch (rotate) {
     case RotateType_90:
-//        resize(m_imageheight * scale, m_imagewidth * scale);
-//        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
+        //        resize(m_imageheight * scale, m_imagewidth * scale);
+        //        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
         setMaximumSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale));
         setMinimumSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale));
         break;
     case RotateType_180:
-//        resize(m_imagewidth * scale, m_imageheight * scale);
-//        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
+        //        resize(m_imagewidth * scale, m_imageheight * scale);
+        //        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
         setMaximumSize(QSize(d->m_imagewidth * scale, d->m_imageheight * scale));
         setMinimumSize(QSize(d->m_imagewidth * scale, d->m_imageheight * scale));
         break;
     case RotateType_270:
-//        resize(m_imageheight * scale, m_imagewidth * scale);
-//        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
+        //        resize(m_imageheight * scale, m_imagewidth * scale);
+        //        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
         setMaximumSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale));
         setMinimumSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale));
         break;
     default:
-//        resize(m_imagewidth * scale, m_imageheight * scale);
-//        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
+        //        resize(m_imagewidth * scale, m_imageheight * scale);
+        //        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
         setMaximumSize(QSize(d->m_imagewidth * scale, d->m_imageheight * scale));
         setMinimumSize(QSize(d->m_imagewidth * scale, d->m_imageheight * scale));
         break;
     }
-    update();
+    emit signal_update();
 }
 
 Page::Link *PageBase::ifMouseMoveOverLink(const QPoint point)
@@ -580,6 +587,47 @@ bool PageBase::getSelectTextString(QString &st)
     return true;
 }
 
+QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
+{
+    Q_D(PageBase);
+    //旋转角度逆时针增加
+    QRectF newrect;
+    switch (rotate) {
+    case RotateType_Normal:
+    case RotateType_0: {
+        newrect.setX(rect.x()*scale);
+        newrect.setY(rect.y()*scale);
+        newrect.setWidth(rect.width()*scale);
+        newrect.setHeight(rect.height()*scale);
+        break;
+    }
+    case RotateType_90: {
+        newrect.setX((d_ptr->m_imageheight - rect.y() - rect.height())*scale);
+        newrect.setY(rect.x()*scale);
+        newrect.setWidth(rect.height()*scale);
+        newrect.setHeight(rect.width()*scale);
+        break;
+    }
+    case RotateType_180: {
+        newrect.setX((d_ptr->m_imagewidth - rect.x() - rect.width())*scale);
+        newrect.setY((d_ptr->m_imageheight - rect.y() - rect.height())*scale);
+        newrect.setWidth(rect.width()*scale);
+        newrect.setHeight(rect.height()*scale);
+        break;
+    }
+    case RotateType_270: {
+        newrect.setX(rect.y()*scale);
+        newrect.setY((d_ptr->m_imagewidth - rect.x() - rect.width())*scale);
+        newrect.setWidth(rect.height()*scale);
+        newrect.setHeight(rect.width()*scale);
+        break;
+    }
+    default:
+        break;
+    }
+    return  newrect;
+}
+
 bool PageBase::showImage(double scale, RotateType_EM rotate)
 {
     Q_D(PageBase);
@@ -599,12 +647,12 @@ void PageBase::clearThread()
     Q_D(PageBase);
     if (d->threadreander.isRunning()) {
         d->threadreander.requestInterruption();
-//        threadreander.quit();
+        //        threadreander.quit();
         d->threadreander.wait();
     }
     if (d->loadmagnifiercachethread.isRunning()) {
         d->loadmagnifiercachethread.requestInterruption();
-//        loadmagnifiercachethread.quit();
+        //        loadmagnifiercachethread.quit();
         d->loadmagnifiercachethread.wait();
     }
 }

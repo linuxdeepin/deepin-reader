@@ -2,6 +2,7 @@
 #include "docview/publicfunc.h"
 #include <QDebug>
 #include <QMutex>
+#include <QPainter>
 
 PagePdf::PagePdf(QWidget *parent)
     : PageBase(new PagePdfPrivate(this), parent)
@@ -14,14 +15,14 @@ PagePdf::~PagePdf()
 stSearchRes PagePdf::search(const QString &text, bool matchCase, bool wholeWords)
 {
     Q_D(PagePdf);
-    m_highlights.clear();
+    d->m_highlights.clear();
     stSearchRes stres;
-    stres.ipages = d->m_pageno;
+    stres.ipage = d_ptr->m_pageno;
     stres.listtext.clear();
     const Poppler::Page::SearchFlags flags((matchCase ? 0 : Poppler::Page::IgnoreCase) | (wholeWords ? Poppler::Page::WholeWords : 0));
-    m_highlights = d->m_page->search(text, flags);
+    d->m_highlights = d->m_page->search(text, flags);
     QRectF rec;
-    foreach (rec, m_highlights) {
+    foreach (rec, d->m_highlights) {
         //获取搜索结果附近文字
         QRectF rctext = rec;
         rctext.setX(rctext.x() - 40);
@@ -29,6 +30,31 @@ stSearchRes PagePdf::search(const QString &text, bool matchCase, bool wholeWords
         stres.listtext.push_back(d->m_page->text(rctext));
     }
     return stres;
+}
+
+
+void PagePdf::paintEvent(QPaintEvent *event)
+{
+    Q_D(PagePdf);
+    PageBase::paintEvent(event);
+
+    for (int i = 0; i < d_ptr->m_highlights.size(); i++) {
+        if(d->m_icurhightlight==i&&d->m_bcursearchshow)
+        {
+            QPainter qpainter(this);
+            d_ptr->m_searchcolor.setAlpha(100);
+            qpainter.setBrush( d_ptr->m_searchcolor);
+            qpainter.drawRect(translateRect(d_ptr->m_highlights[i],d_ptr->m_scale,d_ptr->m_rotate));
+        }
+        else {
+            QPainter qpainter(this);
+            d_ptr->m_searchcolor.setAlpha(100);
+            qpainter.setBrush(d_ptr->m_searchcolor);
+            QPen qpen(d_ptr->m_pencolor);
+            qpainter.setPen(qpen);
+            qpainter.drawRect(translateRect(d_ptr->m_highlights[i],d_ptr->m_scale,d_ptr->m_rotate));
+        }
+    }
 }
 
 void PagePdf::removeAnnotation(Poppler::Annotation *annotation)
@@ -60,12 +86,12 @@ QString PagePdf::addAnnotation(QPoint screenPos)
     Q_D(PagePdf);
     QString uniqueName;
     if (d->paintrects.size() > 0) {
-//        QRectF rectboundry;
+        //        QRectF rectboundry;
         QList<QRectF> listrectf;
-//        foreach (QRect rect, paintrects) {
-//            rectboundry = rect;
-//            listrectf.append(rectboundry);
-//        }
+        //        foreach (QRect rect, paintrects) {
+        //            rectboundry = rect;
+        //            listrectf.append(rectboundry);
+        //        }
         uniqueName = addHighlightAnnotation(listrectf, Qt::red);
         showImage(d->m_scale, d->m_rotate);
     }
@@ -76,7 +102,7 @@ QString PagePdf::addHighlightAnnotation(const QList<QRectF> &listrect, const QCo
 {
     Q_D(PagePdf);
     QString uniqueName;
-//    if (listrect.size() <= 0)return uniqueName;
+    //    if (listrect.size() <= 0)return uniqueName;
     Poppler::Annotation::Style style;
     style.setColor(color);
 
@@ -117,55 +143,6 @@ QString PagePdf::addHighlightAnnotation(const QList<QRectF> &listrect, const QCo
     annotation->setPopup(popup);
     d->m_page->addAnnotation(annotation);
     return  uniqueName;
-    /**********************************************/
-//    QString uniqueName;
-//    if (listrect.size() <= 0)return uniqueName;
-//    Poppler::Annotation::Style style;
-//    style.setColor(color);
-
-//    Poppler::Annotation::Popup popup;
-//    popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
-
-//    Poppler::HighlightAnnotation *annotation = new Poppler::HighlightAnnotation();
-
-//    Poppler::HighlightAnnotation::Quad quad;
-//    QList<Poppler::HighlightAnnotation::Quad> qlistquad;
-//    QRectF rec, recboundary;
-//    double curwidth = m_imagewidth * m_scale;
-//    double curheight = m_imageheight * m_scale;
-//    foreach (rec, listrect) {
-
-//        qDebug() << "%%%%%%%%%%%%%%%%%%%"<<m_imagewidth<<m_imageheight<< m_scale;
-//        if (m_rotate == RotateType_180) {
-//            qDebug() << "%%%%%%%%%%%%%%%%%%%" << m_scale;
-//            rec.setTop(curheight - rec.top());
-//            rec.setBottom(curheight - rec.bottom());
-//            rec.setLeft(curwidth - rec.left());
-//            rec.setRight(curwidth - rec.right());
-//        }
-
-//        recboundary.setTopLeft(QPointF(rec.left() / curwidth,
-//                                       rec.top() / curheight));
-//        recboundary.setTopRight(QPointF(rec.right() / curwidth,
-//                                        rec.top() / curheight));
-//        recboundary.setBottomLeft(QPointF(rec.left() / curwidth,
-//                                          rec.bottom() / curheight));
-//        recboundary.setBottomRight(QPointF(rec.right() / curwidth,
-//                                           rec.bottom() / curheight));
-//        qDebug() << "**" << rec << "**";
-//        quad.points[0] = recboundary.topLeft();
-//        quad.points[1] = recboundary.topRight();
-//        quad.points[2] = recboundary.bottomRight();
-//        quad.points[3] = recboundary.bottomLeft();
-//        qlistquad.append(quad);
-//    }
-//    annotation->setHighlightQuads(qlistquad);
-//    uniqueName = PublicFunc::getUuid();
-//    annotation->setUniqueName(uniqueName);
-//    annotation->setStyle(style);
-//    annotation->setPopup(popup);
-//    m_page->addAnnotation(annotation);
-//    return  uniqueName;
 }
 
 QString PagePdf::removeAnnotation(const QPoint &pos)
@@ -225,6 +202,7 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext)
     const double scaleY = d->m_scale;
     double curwidth = d->m_scale * d->m_imagewidth;
     double curheight = d->m_scale * d->m_imageheight;
+
     // QPoint qp = QPoint((pos.x() - x() - (width() - m_scale * m_imagewidth) / 2) / scaleX, (pos.y() - y() - (height() - m_scale * m_imageheight) / 2) / scaleY);
     QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();

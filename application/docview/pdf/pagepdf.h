@@ -217,6 +217,8 @@ public:
     Poppler::Page *GetPage();
     stSearchRes search(const QString &text, bool matchCase, bool wholeWords) override;
 
+protected:
+     void paintEvent(QPaintEvent *event) override;
 private:
     void removeAnnotation(Poppler::Annotation *annotation);
     QString addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color);

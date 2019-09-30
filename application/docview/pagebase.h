@@ -109,6 +109,7 @@ public:
         m_imageheight = 0.01;
         m_paintercolor = QColor(72, 118, 255, 100);
         m_pencolor = QColor(72, 118, 255, 0);
+        m_searchcolor = Qt::yellow;
         m_penwidth = 0;
         m_selecttextstartword = -1;
         m_selecttextendword = -1;
@@ -116,6 +117,9 @@ public:
         m_magnifierwidth = 0;
         m_magnifierheight = 0;
         m_pageno = -1;
+        m_highlights.clear();
+        m_icurhightlight = 0;
+        m_bcursearchshow = false;
         connect(&loadmagnifiercachethread, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)), this, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)));
         connect(&threadreander, SIGNAL(signal_RenderFinish(QImage)), this, SIGNAL(signal_RenderFinish(QImage)));
     }
@@ -153,6 +157,10 @@ public:
     double m_magnifierwidth;
     double m_magnifierheight;
     int m_pageno;
+    bool m_bcursearchshow;//当前页是否是搜索结果当前显示页
+    mutable QList<QRectF> m_highlights;
+    int m_icurhightlight;
+    QColor m_searchcolor;
 
     PageBase *q_ptr;
     Q_DECLARE_PUBLIC(PageBase)
@@ -180,10 +188,11 @@ public:
     }
     QRectF setCurHightLight(int index)
     {
+        Q_D(PageBase);
         QRectF rect;
-        if (m_highlights.size() > 0 && m_icurhightlight < m_highlights.size()) {
-            m_icurhightlight = index - 1;
-            rect = m_highlights.at(m_icurhightlight);
+        if (d->m_highlights.size() > 0 && d->m_icurhightlight < d->m_highlights.size()) {
+            d->m_icurhightlight = index - 1;
+            rect = d->m_highlights.at(d->m_icurhightlight);
         }
 
         return  rect;
@@ -210,10 +219,19 @@ public:
     void setScaleAndRotate(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     Page::Link *ifMouseMoveOverLink(const QPoint point);
     bool getSelectTextString(QString &st);
+    QRectF translateRect(QRectF &rect, double scale, RotateType_EM rotate);
+    void clearHighlightRects();
+    void setCurSearchShow(bool bshow)
+    {
+        Q_D(PageBase);
+        d->m_bcursearchshow = bshow;
+    }
     bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     void clearThread();
+
 signals:
     void signal_MagnifierPixmapCacheLoaded(int);
+    void signal_update();
 protected slots:
     void slot_loadMagnifierPixmapCache(QImage image, double width, double height);
     void slot_RenderFinish(QImage);
@@ -221,11 +239,10 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 protected:
     void getImagePoint(QPoint &point);
-    mutable QList<QRectF> m_highlights;
-    int m_icurhightlight;
 
     QScopedPointer<PageBasePrivate> d_ptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), PageBase)
+
 };
 
 #endif // PAGEBASE_H
