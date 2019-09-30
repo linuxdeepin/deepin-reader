@@ -63,8 +63,6 @@ void DocummentPSPrivate::setBasicInfo(const QString &filepath)
 DocummentPS::DocummentPS(DWidget *parent):
     DocummentBase(new DocummentPSPrivate(this), parent)
 {
-    Q_D(DocummentPS);
-    connect(this, SIGNAL(signal_loadDocumment(QString)), d, SLOT(loadDocumment(QString)));
 }
 
 DocummentPS::~DocummentPS()

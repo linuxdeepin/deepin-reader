@@ -18,8 +18,8 @@ public:
     bool getImage(int pagenum, QImage &image, double width, double height) override;
     void docBasicInfo(stFileInfo &info) override;
     bool loadDocumment(QString filepath) override;
-signals:
-    void signal_loadDocumment(QString);
+//signals:
+//    void signal_loadDocumment(QString);
 private:
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), DocummentPS)
 };
@@ -54,7 +54,7 @@ public:
     QSettings *m_settings;
     Q_DECLARE_PUBLIC(DocummentPS)
 protected slots:
-    void loadDocumment(QString filepath);
+    void loadDocumment(QString filepath) override;
 private:
     void setBasicInfo(const QString &filepath);
 };

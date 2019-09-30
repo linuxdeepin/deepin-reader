@@ -59,8 +59,6 @@ void DocummentPDFPrivate::setBasicInfo(const QString &filepath)
 DocummentPDF::DocummentPDF(DWidget *parent):
     DocummentBase(new DocummentPDFPrivate(this), parent)
 {
-    Q_D(DocummentPDF);
-    connect(this, SIGNAL(signal_loadDocumment(QString)), d, SLOT(loadDocumment(QString)));
 }
 
 DocummentPDF::~DocummentPDF()
