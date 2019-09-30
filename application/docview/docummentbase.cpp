@@ -624,6 +624,7 @@ bool DocummentBase::pageJump(int pagenum)
         return false;
     if (d->m_bslidemodel) {
         QImage image;
+        QThread::msleep(100);
         double width = d->m_slidewidget->width(), height = d->m_slidewidget->height();
         if (!d->m_pages.at(pagenum)->getInterFace()->getSlideImage(image, width, height)) {
             return false;

@@ -232,8 +232,8 @@ bool DocummentProxy::pageJump(int pagenum)
 {
     if (!m_documment || bcloseing)
         return false;
-
-    return emit signal_pageJump(pagenum);;
+    emit signal_pageJump(pagenum);
+    return true;
 //    return m_documment->pageJump(pagenum);
 }
 

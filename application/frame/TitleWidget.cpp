@@ -208,7 +208,7 @@ void TitleWidget::sendMsgToSubject(const int &msgType, const QString &msgCotent)
 
 int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    //  取消放大镜
+    qDebug() << "TitleWidget dealWithData:" << msgType << " msgContent:" << msgContent; //  取消放大镜
     if (msgType == MSG_MAGNIFYING_CANCEL) {
         m_pMagnifierBtn->setChecked(false);
         sendMsgToSubject(MSG_MAGNIFYING, QString::number(0));
