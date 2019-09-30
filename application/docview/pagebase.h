@@ -109,7 +109,7 @@ public:
         m_imageheight = 0.01;
         m_paintercolor = QColor(72, 118, 255, 100);
         m_pencolor = QColor(72, 118, 255, 0);
-        m_searchcolor=Qt::yellow;
+        m_searchcolor = Qt::yellow;
         m_penwidth = 0;
         m_selecttextstartword = -1;
         m_selecttextendword = -1;
@@ -118,8 +118,8 @@ public:
         m_magnifierheight = 0;
         m_pageno = -1;
         m_highlights.clear();
-        m_icurhightlight=0;
-        m_bcursearchshow=false;
+        m_icurhightlight = 0;
+        m_bcursearchshow = false;
         connect(&loadmagnifiercachethread, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)), this, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)));
         connect(&threadreander, SIGNAL(signal_RenderFinish(QImage)), this, SIGNAL(signal_RenderFinish(QImage)));
     }
@@ -219,21 +219,26 @@ public:
     void setScaleAndRotate(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     Page::Link *ifMouseMoveOverLink(const QPoint point);
     bool getSelectTextString(QString &st);
-    QRectF translateRect(QRectF& rect,double scale, RotateType_EM rotate);
+    QRectF translateRect(QRectF &rect, double scale, RotateType_EM rotate);
     void clearHighlightRects();
-    void setCurSearchShow(bool bshow){Q_D(PageBase);d->m_bcursearchshow=bshow;}
+    void setCurSearchShow(bool bshow)
+    {
+        Q_D(PageBase);
+        d->m_bcursearchshow = bshow;
+    }
     bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     void clearThread();
 
 signals:
     void signal_MagnifierPixmapCacheLoaded(int);
+    void signal_update();
 protected slots:
     void slot_loadMagnifierPixmapCache(QImage image, double width, double height);
     void slot_RenderFinish(QImage);
 protected:
     void paintEvent(QPaintEvent *event) override;
 protected:
-    void getImagePoint(QPoint &point); 
+    void getImagePoint(QPoint &point);
 
     QScopedPointer<PageBasePrivate> d_ptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), PageBase)

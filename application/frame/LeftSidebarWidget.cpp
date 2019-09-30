@@ -16,8 +16,28 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent):
     setMaximumWidth(500);
 
     initWidget();
+    initConnections();
 
-    this->setVisible(false);    //  默认 隐藏
+    slotWidgetVisible(0); //  默认 隐藏
+}
+
+void LeftSidebarWidget::slotStackSetCurIndex(const int &iIndex)
+{
+    auto pWidget = this->findChild<DStackedWidget *>();
+    if (pWidget) {
+        pWidget->setCurrentIndex(iIndex);
+    }
+}
+
+void LeftSidebarWidget::slotWidgetVisible(const int &nVis)
+{
+    this->setVisible(nVis);
+}
+
+void LeftSidebarWidget::initConnections()
+{
+    connect(this, SIGNAL(sigStackSetCurIndex(const int &)), this, SLOT(slotStackSetCurIndex(const int &)));
+    connect(this, SIGNAL(sigWidgetVisible(const int &)), this, SLOT(slotWidgetVisible(const int &)));
 }
 
 void LeftSidebarWidget::initWidget()
@@ -41,21 +61,16 @@ void LeftSidebarWidget::initWidget()
 int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_SWITCHLEFTWIDGET) {    //切换页面
-        auto pWidget = this->findChild<DStackedWidget *>();
-        if (pWidget) {
-            int nIndex = msgContent.toInt();
-            pWidget->setCurrentIndex(nIndex);
-        }
+        emit sigStackSetCurIndex(msgContent.toInt());
         return ConstantMsg::g_effective_res;
     }
     if (msgType == MSG_SLIDER_SHOW_STATE) { //  控制 侧边栏显隐
-        bool bVis = msgContent.toInt();
-        setVisible(bVis);
+        emit sigWidgetVisible(msgContent.toInt());
         return  ConstantMsg::g_effective_res;
     }
 
     if (msgType == MSG_OPERATION_FULLSCREEN) { //  全屏
-        this->setVisible(false);
+        emit sigWidgetVisible(0);
     }
 
     return 0;

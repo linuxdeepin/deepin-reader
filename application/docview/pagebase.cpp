@@ -89,6 +89,9 @@ PageBase::PageBase(PageBasePrivate *ptr, DWidget *parent)
     setAlignment(Qt::AlignCenter);
     connect(d, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)), this, SLOT(slot_loadMagnifierPixmapCache(QImage, double, double)));
     connect(d, SIGNAL(signal_RenderFinish(QImage)), this, SLOT(slot_RenderFinish(QImage)));
+    connect(this, &PageBase::signal_update, this, [ = ]() {
+        this->update();
+    });
 }
 
 PageBase::~PageBase()
@@ -114,7 +117,7 @@ bool PageBase::setSelectTextStyle(QColor paintercolor, QColor pencolor, int penw
     d->m_paintercolor = paintercolor;
     d->m_pencolor = pencolor;
     d->m_penwidth = penwidth;
-    update();
+    emit signal_update();
     return true;
 }
 
@@ -125,7 +128,7 @@ void PageBase::clearPageTextSelections()
         d->paintrects.clear();
         d->m_selecttextstartword = -1;
         d->m_selecttextendword = -1;
-        update();
+        emit signal_update();
     }
 }
 
@@ -166,8 +169,8 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
     }
 
     const QRect start_end = (startC.y() < endC.y())
-            ? QRect(startC.x(), startC.y(), endC.x(), endC.y())
-            : QRect(startC.x(), endC.y(), endC.x(), startC.y());
+                            ? QRect(startC.x(), startC.y(), endC.x(), endC.y())
+                            : QRect(startC.x(), endC.y(), endC.x(), startC.y());
 
     QRectF tmp;
     int startword = 0, stopword = -1;
@@ -313,8 +316,8 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
         QRectF tmpafter;
         tmpafter = d->m_words.at(i).rect;
         if ((abs(tmp.y() - tmpafter.y()) < tmp.height() / 5 ||
-             abs(tmp.y() + tmp.height() / 2 - tmpafter.y() + tmpafter.height() / 2) <
-             tmp.height() / 5) &&
+                abs(tmp.y() + tmp.height() / 2 - tmpafter.y() + tmpafter.height() / 2) <
+                tmp.height() / 5) &&
                 abs(tmp.x() + tmp.width() - tmpafter.x()) < tmp.width() / 5) {
             if (tmpafter.y() < tmp.y()) {
                 tmp.setY(tmpafter.y());
@@ -366,7 +369,7 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
         break;
     }
     d->paintrects.append(paintrect);
-    update();
+    emit signal_update();
     return true;
 }
 
@@ -549,7 +552,7 @@ void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
         setMinimumSize(QSize(d->m_imagewidth * scale, d->m_imageheight * scale));
         break;
     }
-    update();
+    emit signal_update();
 }
 
 Page::Link *PageBase::ifMouseMoveOverLink(const QPoint point)
@@ -591,34 +594,30 @@ QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
     QRectF newrect;
     switch (rotate) {
     case RotateType_Normal:
-    case RotateType_0:
-    {
+    case RotateType_0: {
         newrect.setX(rect.x()*scale);
         newrect.setY(rect.y()*scale);
         newrect.setWidth(rect.width()*scale);
         newrect.setHeight(rect.height()*scale);
         break;
     }
-    case RotateType_90:
-    {
-        newrect.setX((d_ptr->m_imageheight-rect.y()-rect.height())*scale);
+    case RotateType_90: {
+        newrect.setX((d_ptr->m_imageheight - rect.y() - rect.height())*scale);
         newrect.setY(rect.x()*scale);
         newrect.setWidth(rect.height()*scale);
         newrect.setHeight(rect.width()*scale);
         break;
     }
-    case RotateType_180:
-    {
-        newrect.setX((d_ptr->m_imagewidth-rect.x()-rect.width())*scale);
-        newrect.setY((d_ptr->m_imageheight-rect.y()-rect.height())*scale);
+    case RotateType_180: {
+        newrect.setX((d_ptr->m_imagewidth - rect.x() - rect.width())*scale);
+        newrect.setY((d_ptr->m_imageheight - rect.y() - rect.height())*scale);
         newrect.setWidth(rect.width()*scale);
         newrect.setHeight(rect.height()*scale);
         break;
     }
-    case RotateType_270:
-    {
+    case RotateType_270: {
         newrect.setX(rect.y()*scale);
-        newrect.setY((d_ptr->m_imagewidth-rect.x()-rect.width())*scale);
+        newrect.setY((d_ptr->m_imagewidth - rect.x() - rect.width())*scale);
         newrect.setWidth(rect.height()*scale);
         newrect.setHeight(rect.width()*scale);
         break;

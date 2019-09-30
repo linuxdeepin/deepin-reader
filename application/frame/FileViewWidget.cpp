@@ -159,7 +159,7 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
             m_pRightClickPoint = pDocummentProxy->global2RelativePoint(tempPoint);
 
             QString sAnnotationText = "";
-//           bool bAnno = pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText);
+//            bool bAnno = pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText);
             //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
             if (m_pTextOperationWidget == nullptr) {
                 m_pTextOperationWidget = new TextOperationWidget(this);
@@ -176,7 +176,7 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 }
 
 //  放大镜　控制
-int FileViewWidget::magnifying(const QString &data)
+void FileViewWidget::slotMagnifying(const QString &data)
 {
     int nRes = data.toInt();
     if (nRes == 1) {
@@ -187,12 +187,10 @@ int FileViewWidget::magnifying(const QString &data)
         this->setCursor(Qt::ArrowCursor);
         DocummentProxy::instance()->closeMagnifier();
     }
-
-    return ConstantMsg::g_effective_res;
 }
 
 //  手势控制
-int FileViewWidget::setHandShape(const QString &data)
+void FileViewWidget::slotSetHandShape(const QString &data)
 {
     int nRes = data.toInt();
     if (nRes == 1) { //  手形
@@ -205,12 +203,10 @@ int FileViewWidget::setHandShape(const QString &data)
 
     //  手型 切换 也需要将之前选中的文字清除 选中样式
     DocummentProxy::instance()->mouseSelectTextClear();
-
-    return ConstantMsg::g_effective_res;
 }
 
 //  添加高亮颜色
-void FileViewWidget::onFileAddAnnotation(const QString &sColor)
+void FileViewWidget::slotFileAddAnnotation(const QString &sColor)
 {
     DataManager::instance()->setBIsUpdate(true);
     QList<QColor> colorList = {};
@@ -219,7 +215,7 @@ void FileViewWidget::onFileAddAnnotation(const QString &sColor)
 }
 
 //  移除高亮, 有注释 则删除注释
-void FileViewWidget::onFileRemoveAnnotation()
+void FileViewWidget::slotFileRemoveAnnotation()
 {
     DataManager::instance()->setBIsUpdate(true);
     QString sUuid = DocummentProxy::instance()->removeAnnotation(m_pRightClickPoint);
@@ -231,9 +227,14 @@ void FileViewWidget::initConnections()
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(slotCustomContextMenuRequested(const QPoint &)));
 
+    connect(this, SIGNAL(sigSetHandShape(const QString &)), this, SLOT(slotSetHandShape(const QString &)));
+    connect(this, SIGNAL(sigMagnifying(const QString &)), this, SLOT(slotMagnifying(const QString &)));
     connect(this, SIGNAL(sigOpenNoteWidget()), this, SLOT(slotOpenNoteWidget()));
     connect(this, SIGNAL(sigWidgetAdapt()), this, SLOT(slotSetWidgetAdapt()));
     connect(this, SIGNAL(sigPrintFile()), this, SLOT(slotPrintFile()));
+
+    connect(this, SIGNAL(sigFileAddAnnotation(const QString &)), this, SLOT(slotFileAddAnnotation(const QString &)));
+    connect(this, SIGNAL(sigFileRemoveAnnotation()), this, SLOT(slotFileRemoveAnnotation()));
 }
 
 //  打印
@@ -292,9 +293,11 @@ int FileViewWidget::dealWithTitleRequest(const int &msgType, const QString &msgC
 {
     switch (msgType) {
     case MSG_MAGNIFYING:            //  放大镜信号
-        return magnifying(msgContent);
+        emit sigMagnifying(msgContent);
+        return ConstantMsg::g_effective_res;
     case MSG_HANDLESHAPE:           //  手势 信号
-        return setHandShape(msgContent);
+        emit sigSetHandShape(msgContent);
+        return ConstantMsg::g_effective_res;
     case MSG_SELF_ADAPTE_HEIGHT:    //  自适应　高度
         if (msgContent == "1") {
             m_nAdapteState = HEIGHT_State ;
@@ -326,10 +329,10 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
 {
     switch (msgType) {
     case MSG_OPERATION_TEXT_ADD_HIGHLIGHTED:    //  高亮显示
-        onFileAddAnnotation(msgContent);
+        emit sigFileAddAnnotation(msgContent);
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED: //  移除高亮显示
-        onFileRemoveAnnotation();
+        emit sigFileRemoveAnnotation();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_ADD_ANNOTATION:     //  添加注释
         emit sigOpenNoteWidget();
@@ -347,13 +350,6 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         nRes = dealWithFileMenuRequest(msgType, msgContent);
         if (nRes != ConstantMsg::g_effective_res) {
 
-            if (msgType == MSG_NOTIFY_KEY_MSG) {    //  最后一个处理通知消息
-//                if (msgContent == "Up") {
-//                    sendMsg(MSG_OPERATION_PREV_PAGE);
-//                } else if (msgContent == "Down") {
-//                    sendMsg(MSG_OPERATION_NEXT_PAGE);
-//                }
-            }
         }
     }
 

@@ -54,7 +54,7 @@ MainWindow::~MainWindow()
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    SlotAppExit();
+    slotAppExit();
 
     DMainWindow::closeEvent(event);
 }
@@ -68,12 +68,16 @@ void MainWindow::initUI()
 
 void MainWindow::initConnections()
 {
+    connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
+    connect(this, SIGNAL(sigOpenAppHelp()), this, SLOT(slotOpenAppHelp()));
     connect(this, SIGNAL(sigAppExit()), this, SLOT(SlotAppExit()));
+    connect(this, SIGNAL(sigAppShowState(const int &)), this, SLOT(slotAppShowState(const int &)));
+    connect(this, SIGNAL(sigSetAppTitle(const QString &)), this, SLOT(slotSetAppTitle(const QString &)));
 
     DMenu *m_menu = new DMenu(this);
 
     auto pSigManager = new QSignalMapper(this);
-    connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(SlotActionTrigger(const QString &)));
+    connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(slotActionTrigger(const QString &)));
 
     QStringList firstActionList = QStringList() << Frame::sOpenFile << Frame::sSaveFile << Frame::sSaveAsFile
                                   << Frame::sOpenFolder << Frame::sPrint << Frame::sFileAttr;
@@ -126,8 +130,7 @@ void MainWindow::onOpenFolder()
 //  全屏
 void MainWindow::onFullScreen()
 {
-    titlebar()->setVisible(false);
-    this->setWindowState(Qt::WindowFullScreen);
+    slotAppShowState(0);
     DataManager::instance()->setCurShowState(FILE_FULLSCREEN);  //  全屏状态
     sendMsg(MSG_OPERATION_FULLSCREEN);
 }
@@ -135,13 +138,12 @@ void MainWindow::onFullScreen()
 //  放映
 void MainWindow::onScreening()
 {
-    titlebar()->setVisible(false);
-    this->setWindowState(Qt::WindowFullScreen);
+    slotAppShowState(0);
     sendMsg(MSG_OPERATION_SLIDE);
 }
 
 //  退出 应用
-void MainWindow::SlotAppExit()
+void MainWindow::slotAppExit()
 {
     QString sFilePath = DataManager::instance()->strOnlyFilePath();
     if (sFilePath != "") {
@@ -157,8 +159,27 @@ void MainWindow::SlotAppExit()
     dApp->exit();
 }
 
+/**
+ * @brief MainWindow::slotAppShowState
+ * @param nState 1 退出全屏, 0 全屏显示
+ */
+void MainWindow::slotAppShowState(const int &nState)
+{
+    titlebar()->setVisible(nState);
+    if (nState == 1) {
+        this->setWindowState(Qt::WindowNoState);
+    } else {
+        this->setWindowState(Qt::WindowFullScreen);
+    }
+}
+
+void MainWindow::slotSetAppTitle(const QString &sData)
+{
+    titlebar()->setTitle(sData);
+}
+
 //  文件打开成，　功能性　菜单才能点击
-void MainWindow::openFileOk()
+void MainWindow::slotOpenFileOk()
 {
     auto actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
@@ -166,8 +187,14 @@ void MainWindow::openFileOk()
     }
 }
 
+//  打开帮助文档
+void MainWindow::slotOpenAppHelp()
+{
+    QDesktopServices::openUrl(QUrl(Constant::sAcknowledgementLink));
+}
+
 //  点击菜单　发送指令
-void MainWindow::SlotActionTrigger(const QString &sAction)
+void MainWindow::slotActionTrigger(const QString &sAction)
 {
     if (sAction == Frame::sOpenFile) {
         sendMsg(MSG_OPERATION_OPEN_FILE);
@@ -204,17 +231,16 @@ void MainWindow::sendMsg(const int &msgType, const QString &msgContent)
 int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        openFileOk();
+        emit sigOpenFileOk();
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == "Esc") {  //  退出全屏模式
-            titlebar()->setVisible(true);
-            this->setWindowState(Qt::WindowNoState);
+            emit sigAppShowState(1);
         } else if (msgContent == "F1") {    //  显示帮助文档
-            QDesktopServices::openUrl(QUrl(Constant::sAcknowledgementLink));
+            emit sigOpenAppHelp();
             return ConstantMsg::g_effective_res;
         }
     } else if (msgType == MSG_OPERATION_OPEN_FILE_TITLE) {
-        titlebar()->setTitle(msgContent);
+        emit sigSetAppTitle(msgContent);
         return ConstantMsg::g_effective_res;
     } else if (msgType == MSG_OPERATION_EXIT) {
         emit sigAppExit();
