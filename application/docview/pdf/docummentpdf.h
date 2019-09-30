@@ -35,9 +35,9 @@ public:
 //    void stopLoadPageThread() override;
 
 
-signals:
-//    void signal_openFile(QString file);
-    void signal_loadDocumment(QString);
+//signals:
+////    void signal_openFile(QString file);
+//    void signal_loadDocumment(QString);
 private:
     bool pdfsave(const QString &filePath, bool withChanges);
     void searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color);
@@ -56,7 +56,7 @@ public:
         document = nullptr;
     }
 
-    ~DocummentPDFPrivate()
+    ~DocummentPDFPrivate() override
     {
 
     }
@@ -67,7 +67,7 @@ public:
 
     Q_DECLARE_PUBLIC(DocummentPDF)
 protected slots:
-    void loadDocumment(QString filepath);
+    void loadDocumment(QString filepath) override;
 private:
     void setBasicInfo(const QString &filepath);
 };

@@ -171,6 +171,8 @@ public:
 
 signals:
     void signal_docummentLoaded();
+protected slots:
+    virtual void loadDocumment(QString filepath) {}
 protected:
     DocummentBase *q_ptr;
     Q_DECLARE_PUBLIC(DocummentBase)
@@ -239,6 +241,7 @@ public:
 signals:
     void signal_pageChange(int);
     void signal_searchRes(stSearchRes);
+    void signal_loadDocumment(QString);
 
 protected slots:
     void slot_vScrollBarValueChanged(int value);

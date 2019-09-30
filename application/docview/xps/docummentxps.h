@@ -4,12 +4,15 @@
 #include "../docummentbase.h"
 #include "xpsapi.h"
 #include <QSettings>
+class DocummentXPS;
+class DocummentXPSPrivate;
 
 class DocummentXPS: public DocummentBase
 {
+    Q_OBJECT
 public:
     DocummentXPS(DWidget *parent = nullptr);
-    ~DocummentXPS();
+    ~DocummentXPS() override;
 //    bool openFile(QString filepath) override;
     bool bDocummentExist() override;
     bool getImage(int pagenum, QImage &image, double width, double height) override;
@@ -17,17 +20,34 @@ public:
 //    bool loadWords() override;
     void docBasicInfo(stFileInfo &info) override;
     bool loadDocumment(QString filepath) override;
+//signals:
+//    void signal_loadDocumment(QString);
+private:
+    Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), DocummentXPS)
+};
+
+
+class DocummentXPSPrivate: public DocummentBasePrivate
+{
+    Q_OBJECT
+public:
+    DocummentXPSPrivate(DocummentXPS *parent): DocummentBasePrivate(parent)
+    {
+        m_xpsFile = new XpsFile();
+    }
+
+    ~DocummentXPSPrivate() override
+    {
+        delete m_xpsFile;
+    }
+
+    stFileInfo m_fileinfo;
+    XpsFile *m_xpsFile;
+    Q_DECLARE_PUBLIC(DocummentXPS)
+protected slots:
+    void loadDocumment(QString filepath) override;
 private:
     void setBasicInfo(const QString &filepath);
-private:
-    QString m_thumbnailFileName;
-    QString m_corePropertiesFileName;
-    QString m_signatureOrigin;
-    KZip *m_xpsArchive;
-    stFileInfo m_fileinfo;
-    QSettings *m_settings;
-//    XpsDocument *document;
-    XpsFile *m_xpsFile;
 };
 
 #endif // DOCUMMENTXPS_H

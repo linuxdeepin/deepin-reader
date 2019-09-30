@@ -9,11 +9,28 @@ class DocummentPS;
 
 class PagePS;
 class PagePSPrivate;
+
+class PagePS: public PageBase
+{
+    Q_OBJECT
+public:
+    PagePS(QWidget *parent = nullptr);
+//    bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal) override;
+    bool getImage(QImage &image, double width, double height) override;
+    bool getSlideImage(QImage &image, double &width, double &height) override;
+    PageInterface *getInterFace() override;
+//    bool loadWords() override;
+//    bool loadLinks() override;
+    void setPage(SpectrePage *page, SpectreRenderContext *renderContext, int pageno);
+private:
+    Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), PagePS)
+};
+
 class PagePSPrivate: public PageBasePrivate, public  PageInterface
 {
     Q_OBJECT
 public:
-    PagePSPrivate(PagePS *parent): PageBasePrivate((PageBase *)parent),
+    PagePSPrivate(PagePS *parent): PageBasePrivate(parent),
         m_page(nullptr),
         m_renderContext(nullptr)
     {
@@ -109,20 +126,5 @@ public:
     SpectreRenderContext *m_renderContext;
 };
 
-class PagePS: public PageBase
-{
-    Q_OBJECT
-public:
-    PagePS(QWidget *parent = 0);
-//    bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal) override;
-    bool getImage(QImage &image, double width, double height) override;
-    bool getSlideImage(QImage &image, double &width, double &height) override;
-    PageInterface *getInterFace() override;
-//    bool loadWords() override;
-//    bool loadLinks() override;
-    void setPage(SpectrePage *page, SpectreRenderContext *renderContext, int pageno);
-private:
-    Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), PagePS)
-};
 
 #endif // PAGEPS_H
