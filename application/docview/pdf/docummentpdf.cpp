@@ -23,6 +23,8 @@ bool DocummentPDFPrivate::loadDocumment(QString filepath)
         page->setPage(document->page(i), i);
         m_pages.append((PageBase *)page);
     }
+    m_imagewidht=document->page(0)->pageSizeF().width();
+    m_imageheight=document->page(0)->pageSizeF().height();
     setBasicInfo(filepath);
 
     emit signal_docummentLoaded();
@@ -120,7 +122,7 @@ void DocummentPDF::search(const QString &strtext,QColor color)
 {
     Q_D(DocummentPDF);
     clearSearch();
-    m_searchTask->start(d->m_pages,strtext,false,false,d->m_currentpageno+1);
+    d->m_searchTask->start(d->m_pages,strtext,false,false,d->m_currentpageno+1);
 }
 
 bool DocummentPDF::save(const QString &filePath, bool withChanges)
@@ -214,11 +216,11 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
 void DocummentPDF::clearSearch()
 {
     Q_D(DocummentPDF);
-    m_searchTask->cancel();
-    m_searchTask->wait();
-    if (m_pagecountsearch.size() > 0) {
+    d->m_searchTask->cancel();
+    d->m_searchTask->wait();
+    if (d->m_pagecountsearch.size() > 0) {
 
-        foreach(int key,m_pagecountsearch.keys())
+        foreach(int key,d->m_pagecountsearch.keys())
         {
             d->m_pages.at(key)->clearHighlightRects();
         }
