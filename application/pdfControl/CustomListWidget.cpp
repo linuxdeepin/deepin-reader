@@ -9,6 +9,7 @@ CustomListWidget::CustomListWidget(DWidget *parent)
     setSpacing(5);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setResizeMode(QListWidget::Adjust);
+    setViewMode(QListView::ListMode);
 
     connect(this, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
 }
@@ -19,7 +20,7 @@ CustomListWidget::CustomListWidget(DWidget *parent)
  * @param row
  * @param image
  */
-void CustomListWidget::setItemImage(const int &row, QImage &image)
+void CustomListWidget::slot_loadImage(const int &row, const QImage &image)
 {
     QListWidgetItem *item = this->item(row);
     if (item) {

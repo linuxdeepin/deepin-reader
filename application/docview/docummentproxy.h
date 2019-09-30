@@ -74,13 +74,14 @@ public:
     void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1);
     double adaptWidthAndShow(double width);
     double adaptHeightAndShow(double height);
-     bool annotationClicked(const QPoint &pos, QString &strtext);
+    bool annotationClicked(const QPoint &pos, QString &strtext);
 signals:
     void signal_pageChange(int);
+    bool signal_pageJump(int);
     void signal_searchRes(stSearchRes);
 private slots:
     void slot_pageChange(int);
-    bool startOpenFile();    
+    bool startOpenFile();
 
 private:
     DocummentProxy(QObject *parent = nullptr);

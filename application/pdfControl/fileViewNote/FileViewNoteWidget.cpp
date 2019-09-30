@@ -52,13 +52,28 @@ void FileViewNoteWidget::initWidget()
 // 关闭槽函数
 void FileViewNoteWidget::slotClosed()
 {
-    qDebug() << "             void FileViewNoteWidget::slotClosed()   ";
     //sendMsg closed signal;
+    if (QMessageBox::Yes == DMessageBox::question(nullptr,  QString("Save"), QString("Save this note"))){
+
+        QString t_contant = m_pTextEdit->toPlainText().trimmed();
+        if( t_contant != QString("")){
+            sendMsg(MSG_NOTE_ADDITEM, t_contant);
+        }else {
+            sendMsg(MSG_NOTE_DLTNOTEITEM, t_contant);
+        }
+        qDebug() << "             void FileViewNoteWidget       slotClosed()   " << t_contant;
+    }
 }
 
 // 删除槽函数
 void FileViewNoteWidget::slotDlted()
 {
-    qDebug() << "             void FileViewNoteWidget::slotDlted()   ";
     //sendMsg Dlted signal;
+    if (QMessageBox::Yes == DMessageBox::question(nullptr,  QString("DELETE"), QString("delete this note"))){
+
+        qDebug() << "             void FileViewNoteWidget      slotDlted()   ";
+        m_pTextEdit->clear();
+
+        sendMsg(MSG_NOTE_ADDCONTANT, QString(""));
+    }
 }

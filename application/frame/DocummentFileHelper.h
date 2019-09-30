@@ -38,7 +38,7 @@ private:
     MsgSubject              *m_pMsgSubject = nullptr;
     NotifySubject           *m_pNotifySubject = nullptr;
 
-    QString     m_szFilePath = "";
+    QString         m_szFilePath = "";
     DocType_EM      m_nCurDocType = DocType_NULL;
     // IObserver interface
 public:

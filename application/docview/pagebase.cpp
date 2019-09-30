@@ -1,7 +1,45 @@
 #include "pagebase.h"
 #include <QPainter>
 #include <QDebug>
+ThreadRenderImage::ThreadRenderImage()
+{
+    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
+    m_page = nullptr;
+    restart = false;
+    m_width = 0;
+    m_height = 0;
+}
 
+void ThreadRenderImage::setRestart()
+{
+    restart = true;
+}
+
+void ThreadRenderImage::setPage(PageInterface *page, double width, double height)
+{
+    m_page = page;
+    m_width = width;
+    m_height = height;
+}
+
+void ThreadRenderImage::run()
+{
+    if (!m_page)
+        return;
+    restart = true;
+    while (restart) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
+        restart = false;
+        if (m_width > 0 && m_height > 0) {
+            QImage image;
+            if (m_page->getImage(image, m_width, m_height)) {
+                emit signal_RenderFinish(image);
+            }
+        }
+    }
+}
 ThreadLoadMagnifierCache::ThreadLoadMagnifierCache()
 {
     //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
@@ -16,7 +54,7 @@ void ThreadLoadMagnifierCache::setRestart()
     restart = true;
 }
 
-void ThreadLoadMagnifierCache::setPage(PageBase *page, double width, double height)
+void ThreadLoadMagnifierCache::setPage(PageInterface *page, double width, double height)
 {
     m_page = page;
     m_width = width;
@@ -29,103 +67,92 @@ void ThreadLoadMagnifierCache::run()
         return;
     restart = true;
     while (restart) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
         restart = false;
         if (m_width > 0 && m_height > 0) {
-            m_page->loadMagnifierPixmapCache(m_width, m_height);
+            QImage image;
+            if (m_page->getImage(image, m_width, m_height)) {
+                emit signal_loadMagnifierPixmapCache(image, m_width, m_height);
+            }
         }
     }
 }
 
-PageBase::PageBase(DWidget *parent)
+PageBase::PageBase(PageBasePrivate *ptr, DWidget *parent)
     : DLabel(parent),
-      m_imagewidth(0.01),
-      m_imageheight(0.01),
-      m_paintercolor(QColor(72, 118, 255, 100)),
-      m_pencolor (QColor(72, 118, 255, 0)),
-      m_searchcolor(QColor(180,245,95,100)),
-      m_penwidth(0),
-      m_highlights(),
-      m_selecttextstartword(-1),
-      m_selecttextendword(-1),
-      paintrects(),
-      m_links(),
-      m_words(),
-      m_rotate(RotateType_0),
-      m_magnifierwidth (0),
-      m_magnifierheight (0),
-      m_pageno(-1),
-      m_icurhightlight(0),
-      m_bcursearchshow(false)
-
+      d_ptr(ptr ? ptr : new PageBasePrivate(this))
 {
+    Q_D(PageBase);
     setMouseTracking(true);
     setAlignment(Qt::AlignCenter);
+    connect(d, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)), this, SLOT(slot_loadMagnifierPixmapCache(QImage, double, double)));
+    connect(d, SIGNAL(signal_RenderFinish(QImage)), this, SLOT(slot_RenderFinish(QImage)));
 }
 
 PageBase::~PageBase()
 {
-    qDeleteAll(m_links);
-    m_links.clear();
-    if (loadmagnifiercachethread.isRunning()) {
-        loadmagnifiercachethread.quit();
-        loadmagnifiercachethread.wait();
-    }
 }
 
 void PageBase::paintEvent(QPaintEvent *event)
 {
+    Q_D(PageBase);
     DLabel::paintEvent(event);
     QPainter qpainter(this);
-    qpainter.setBrush(m_paintercolor);
-    QPen qpen(m_pencolor, m_penwidth);
+    qpainter.setBrush(d->m_paintercolor);
+    QPen qpen(d->m_pencolor, d->m_penwidth);
     qpainter.setPen(qpen);
-    for (int i = 0; i < paintrects.size(); i++) {
-        qpainter.drawRect(paintrects[i]);
+    for (int i = 0; i < d->paintrects.size(); i++) {
+        qpainter.drawRect(d->paintrects[i]);
     }
 }
 
 bool PageBase::setSelectTextStyle(QColor paintercolor, QColor pencolor, int penwidth)
 {
-    m_paintercolor = paintercolor;
-    m_pencolor = pencolor;
-    m_penwidth = penwidth;
+    Q_D(PageBase);
+    d->m_paintercolor = paintercolor;
+    d->m_pencolor = pencolor;
+    d->m_penwidth = penwidth;
     update();
     return true;
 }
 
 void PageBase::clearPageTextSelections()
 {
-    if (paintrects.size() > 0) {
-        paintrects.clear();
-        m_selecttextstartword = -1;
-        m_selecttextendword = -1;
+    Q_D(PageBase);
+    if (d->paintrects.size() > 0) {
+        d->paintrects.clear();
+        d->m_selecttextstartword = -1;
+        d->m_selecttextendword = -1;
         update();
     }
 }
 
 bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
 {
+    Q_D(PageBase);
     qDebug() << "pageTextSelections start:" << start << " end:" << end;
     //    qDebug() << "pageTextSelections x():" << x() << " y()" << y();
-    QPoint startC = QPoint(start.x() - x() - (width() - m_scale * m_imagewidth) / 2, start.y() - y() - (height() - m_scale * m_imageheight) / 2);
-    QPoint endC = QPoint(end.x() - x() - (width() - m_scale * m_imagewidth) / 2, end.y() - y() - (height() - m_scale * m_imageheight) / 2);
+    QPoint startC = QPoint(start.x() - x() - (width() - d->m_scale * d->m_imagewidth) / 2, start.y() - y() - (height() - d->m_scale * d->m_imageheight) / 2);
+    QPoint endC = QPoint(end.x() - x() - (width() - d->m_scale * d->m_imagewidth) / 2, end.y() - y() - (height() - d->m_scale * d->m_imageheight) / 2);
     //    qDebug() << "startC1:" << startC << " endC1:" << endC;
-    switch (m_rotate) {
+    switch (d->m_rotate) {
     case RotateType_90:
-        startC = QPoint((start.x() - x() - (width() - m_scale * m_imageheight) / 2), (start.y() - y() - (height() - m_scale * m_imagewidth) / 2));
-        startC = QPoint(startC.y(), m_scale * m_imageheight - startC.x());
-        endC = QPoint((end.x() - x() - (width() - m_scale * m_imageheight) / 2), (end.y() - y() - (height() - m_scale * m_imagewidth) / 2));
-        endC = QPoint(endC.y(), m_scale * m_imageheight - endC.x());
+        startC = QPoint((start.x() - x() - (width() - d->m_scale * d->m_imageheight) / 2), (start.y() - y() - (height() - d->m_scale * d->m_imagewidth) / 2));
+        startC = QPoint(startC.y(), d->m_scale * d->m_imageheight - startC.x());
+        endC = QPoint((end.x() - x() - (width() - d->m_scale * d->m_imageheight) / 2), (end.y() - y() - (height() - d->m_scale * d->m_imagewidth) / 2));
+        endC = QPoint(endC.y(), d->m_scale * d->m_imageheight - endC.x());
         break;
     case RotateType_180:
-        startC = QPoint(m_scale * m_imagewidth - startC.x(), m_scale * m_imageheight - startC.y());
-        endC = QPoint(m_scale * m_imagewidth - endC.x(), m_scale * m_imageheight - endC.y());
+        startC = QPoint(d->m_scale * d->m_imagewidth - startC.x(), d->m_scale * d->m_imageheight - startC.y());
+        endC = QPoint(d->m_scale * d->m_imagewidth - endC.x(), d->m_scale * d->m_imageheight - endC.y());
         break;
     case RotateType_270:
-        startC = QPoint((start.x() - x() - (width() - m_scale * m_imageheight) / 2), (start.y() - y() - (height() - m_scale * m_imagewidth) / 2));
-        startC = QPoint(m_scale * m_imagewidth - startC.y(), startC.x());
-        endC = QPoint((end.x() - x() - (width() - m_scale * m_imageheight) / 2), (end.y() - y() - (height() - m_scale * m_imagewidth) / 2));
-        endC = QPoint(m_scale * m_imagewidth - endC.y(), endC.x());
+        startC = QPoint((start.x() - x() - (width() - d->m_scale * d->m_imageheight) / 2), (start.y() - y() - (height() - d->m_scale * d->m_imagewidth) / 2));
+        startC = QPoint(d->m_scale * d->m_imagewidth - startC.y(), startC.x());
+        endC = QPoint((end.x() - x() - (width() - d->m_scale * d->m_imageheight) / 2), (end.y() - y() - (height() - d->m_scale * d->m_imagewidth) / 2));
+        endC = QPoint(d->m_scale * d->m_imagewidth - endC.y(), endC.x());
         break;
     default:
         break;
@@ -147,13 +174,13 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
     //    qDebug() << "page width:" << width() << " height:" << height() << " m_imagewidth:" << m_imagewidth << " m_imageheight:" << m_imageheight;
     //    const double scaleX = width() / m_imagewidth;
     //    const double scaleY = height() / m_imageheight;
-    const double scaleX = m_scale;
-    const double scaleY = m_scale;
-    qDebug() << "m_words size:" << m_words.size();
-    for (int i = 0; i < m_words.size(); i++) {
+    const double scaleX = d->m_scale;
+    const double scaleY = d->m_scale;
+    qDebug() << "m_words size:" << d->m_words.size();
+    for (int i = 0; i < d->m_words.size(); i++) {
         //        qDebug() << "m_words i:" << i << " rect:" << m_words.at(i).rect;
-        tmp = m_words.at(i).rect;
-        if (startC.x() > (tmp.x() * m_scale) &&
+        tmp = d->m_words.at(i).rect;
+        if (startC.x() > (tmp.x() * d->m_scale) &&
                 startC.x() < (tmp.x() * scaleX + tmp.width() * scaleX) &&
                 startC.y() > (tmp.y() * scaleY) &&
                 startC.y() < (tmp.y() * scaleY + tmp.height() * scaleY)) {
@@ -169,8 +196,8 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
     qDebug() << " startword:" << startword << " stopword:" << stopword;
     if (-1 == startword && stopword == -1) {
         int i;
-        for (i = 0; i < m_words.size(); i++) {
-            tmp = m_words.at(i).rect;
+        for (i = 0; i < d->m_words.size(); i++) {
+            tmp = d->m_words.at(i).rect;
             if (start_end.intersects(QRect(tmp.x() * scaleX,
                                            tmp.y() * scaleY, tmp.width() * scaleX,
                                            tmp.height() * scaleY))) {
@@ -179,7 +206,7 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
             }
         }
 
-        if (i == m_words.size()) {
+        if (i == d->m_words.size()) {
             return false;
         }
     }
@@ -187,8 +214,8 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
     if (startword == 0) {
         QRectF rect;
         if (startC.y() <= endC.y()) {
-            for (int i = 0; i < m_words.size(); i++) {
-                tmp = m_words.at(i).rect;
+            for (int i = 0; i < d->m_words.size(); i++) {
+                tmp = d->m_words.at(i).rect;
                 rect = QRect(tmp.x() * scaleX, tmp.y() * scaleY,
                              tmp.width() * scaleX, tmp.height() * scaleY);
                 if (rect.y() > startC.y() && rect.x() > startC.x()) {
@@ -201,8 +228,8 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
             int distance = scaleX + scaleY + 100;
             int count = 0;
 
-            for (int i = 0; i < m_words.size(); i++) {
-                tmp = m_words.at(i).rect;
+            for (int i = 0; i < d->m_words.size(); i++) {
+                tmp = d->m_words.at(i).rect;
                 rect = QRect(tmp.x() * scaleX, tmp.y() * scaleY,
                              tmp.width() * scaleX, tmp.height() * scaleY);
 
@@ -230,8 +257,8 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
         QRectF rect;
 
         if (startC.y() <= endC.y()) {
-            for (int i = m_words.size() - 1; i >= 0; i--) {
-                tmp = m_words.at(i).rect;
+            for (int i = d->m_words.size() - 1; i >= 0; i--) {
+                tmp = d->m_words.at(i).rect;
                 rect = QRect(tmp.x() * scaleX, tmp.y() * scaleY,
                              tmp.width() * scaleX, tmp.height() * scaleY);
 
@@ -244,8 +271,8 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
 
         else {
             int distance = scaleX + scaleY + 100;
-            for (int i = m_words.size() - 1; i >= 0; i--) {
-                tmp = m_words.at(i).rect;
+            for (int i = d->m_words.size() - 1; i >= 0; i--) {
+                tmp = d->m_words.at(i).rect;
                 rect = QRect(tmp.x() * scaleX, tmp.y() * scaleY,
                              tmp.width() * scaleX, tmp.height() * scaleY);
                 if (rect.y() > endC.y() && rect.x() > endC.x()) {
@@ -278,13 +305,13 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
         startword = stopword;
         stopword = im;
     }
-    paintrects.clear();
-    m_selecttextstartword = startword;
-    m_selecttextendword = stopword;
-    tmp = m_words.at(startword).rect;
+    d->paintrects.clear();
+    d->m_selecttextstartword = startword;
+    d->m_selecttextendword = stopword;
+    tmp = d->m_words.at(startword).rect;
     for (int i = startword + 1; i <= stopword; i++) {
         QRectF tmpafter;
-        tmpafter = m_words.at(i).rect;
+        tmpafter = d->m_words.at(i).rect;
         if ((abs(tmp.y() - tmpafter.y()) < tmp.height() / 5 ||
              abs(tmp.y() + tmp.height() / 2 - tmpafter.y() + tmpafter.height() / 2) <
              tmp.height() / 5) &&
@@ -297,11 +324,11 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
             }
             tmp.setWidth(tmpafter.x() + tmpafter.width() - tmp.x());
         } else {
-            QRect paintrect = QRect(tmp.x() * scaleX + (width() - m_scale * m_imagewidth) / 2, tmp.y() * scaleY + (height() - m_scale * m_imageheight) / 2, tmp.width() * scaleX,
+            QRect paintrect = QRect(tmp.x() * scaleX + (width() - d->m_scale * d->m_imagewidth) / 2, tmp.y() * scaleY + (height() - d->m_scale * d->m_imageheight) / 2, tmp.width() * scaleX,
                                     tmp.height() * scaleY);
-            switch (m_rotate) {
+            switch (d->m_rotate) {
             case RotateType_90:
-                paintrect = QRect(tmp.x() * scaleX + (height() - m_scale * m_imagewidth) / 2, tmp.y() * scaleY + (width() - m_scale * m_imageheight) / 2, tmp.width() * scaleX,
+                paintrect = QRect(tmp.x() * scaleX + (height() - d->m_scale * d->m_imagewidth) / 2, tmp.y() * scaleY + (width() - d->m_scale * d->m_imageheight) / 2, tmp.width() * scaleX,
                                   tmp.height() * scaleY);
                 paintrect = QRect(width() - paintrect.y() - paintrect.height(), paintrect.x(), paintrect.height(), paintrect.width());
                 break;
@@ -309,21 +336,21 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
                 paintrect = QRect(width() - paintrect.x() - paintrect.width(), height() - paintrect.y() - paintrect.height(), paintrect.width(), paintrect.height());
                 break;
             case RotateType_270:
-                paintrect = QRect(tmp.x() * scaleX + (height() - m_scale * m_imagewidth) / 2, tmp.y() * scaleY + (width() - m_scale * m_imageheight) / 2, tmp.width() * scaleX,
+                paintrect = QRect(tmp.x() * scaleX + (height() - d->m_scale * d->m_imagewidth) / 2, tmp.y() * scaleY + (width() - d->m_scale * d->m_imageheight) / 2, tmp.width() * scaleX,
                                   tmp.height() * scaleY);
                 paintrect = QRect(paintrect.y(), height() - paintrect.x() - paintrect.width(), paintrect.height(), paintrect.width());
                 break;
             default:
                 break;
             }
-            paintrects.append(paintrect);
+            d->paintrects.append(paintrect);
             tmp = tmpafter;
         }
     }
-    QRect paintrect = QRect(tmp.x() * scaleX + (width() - m_scale * m_imagewidth) / 2, tmp.y() * scaleY + (height() - m_scale * m_imageheight) / 2, tmp.width() * scaleX, tmp.height() * scaleY);
-    switch (m_rotate) {
+    QRect paintrect = QRect(tmp.x() * scaleX + (width() - d->m_scale * d->m_imagewidth) / 2, tmp.y() * scaleY + (height() - d->m_scale * d->m_imageheight) / 2, tmp.width() * scaleX, tmp.height() * scaleY);
+    switch (d->m_rotate) {
     case RotateType_90:
-        paintrect = QRect(tmp.x() * scaleX + (height() - m_scale * m_imagewidth) / 2, tmp.y() * scaleY + (width() - m_scale * m_imageheight) / 2, tmp.width() * scaleX,
+        paintrect = QRect(tmp.x() * scaleX + (height() - d->m_scale * d->m_imagewidth) / 2, tmp.y() * scaleY + (width() - d->m_scale * d->m_imageheight) / 2, tmp.width() * scaleX,
                           tmp.height() * scaleY);
         paintrect = QRect(width() - paintrect.y() - paintrect.height(), paintrect.x(), paintrect.height(), paintrect.width());
         break;
@@ -331,27 +358,28 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
         paintrect = QRect(width() - paintrect.x() - paintrect.width(), height() - paintrect.y() - paintrect.height(), paintrect.width(), paintrect.height());
         break;
     case RotateType_270:
-        paintrect = QRect(tmp.x() * scaleX + (height() - m_scale * m_imagewidth) / 2, tmp.y() * scaleY + (width() - m_scale * m_imageheight) / 2, tmp.width() * scaleX,
+        paintrect = QRect(tmp.x() * scaleX + (height() - d->m_scale * d->m_imagewidth) / 2, tmp.y() * scaleY + (width() - d->m_scale * d->m_imageheight) / 2, tmp.width() * scaleX,
                           tmp.height() * scaleY);
         paintrect = QRect(paintrect.y(), height() - paintrect.x() - paintrect.width(), paintrect.height(), paintrect.width());
         break;
     default:
         break;
     }
-    paintrects.append(paintrect);
+    d->paintrects.append(paintrect);
     update();
     return true;
 }
 
 bool PageBase::ifMouseMoveOverText(const QPoint point)
 {
+    Q_D(PageBase);
     QPoint qp = point;
     getImagePoint(qp);
-    for (int i = 0; i < m_words.size(); i++) {
-        if (qp.x() > m_words.at(i).rect.x() &&
-                qp.x() < m_words.at(i).rect.x() + m_words.at(i).rect.width() &&
-                qp.y() > m_words.at(i).rect.y() &&
-                qp.y() < m_words.at(i).rect.y() + m_words.at(i).rect.height()) {
+    for (int i = 0; i < d->m_words.size(); i++) {
+        if (qp.x() > d->m_words.at(i).rect.x() &&
+                qp.x() < d->m_words.at(i).rect.x() + d->m_words.at(i).rect.width() &&
+                qp.y() > d->m_words.at(i).rect.y() &&
+                qp.y() < d->m_words.at(i).rect.y() + d->m_words.at(i).rect.height()) {
             return true;
         }
     }
@@ -360,20 +388,21 @@ bool PageBase::ifMouseMoveOverText(const QPoint point)
 
 void PageBase::getImagePoint(QPoint &point)
 {
-    const double scaleX = m_scale;
-    const double scaleY = m_scale;
-    QPoint qp = QPoint((point.x() - x() - (width() - m_scale * m_imagewidth) / 2) / scaleX, (point.y() - y() - (height() - m_scale * m_imageheight) / 2) / scaleY);
-    switch (m_rotate) {
+    Q_D(PageBase);
+    const double scaleX = d->m_scale;
+    const double scaleY = d->m_scale;
+    QPoint qp = QPoint((point.x() - x() - (width() - d->m_scale * d->m_imagewidth) / 2) / scaleX, (point.y() - y() - (height() - d->m_scale * d->m_imageheight) / 2) / scaleY);
+    switch (d->m_rotate) {
     case RotateType_90:
-        qp = QPoint((point.x() - x() - (width() - m_scale * m_imageheight) / 2) / scaleX, (point.y() - y() - (height() - m_scale * m_imagewidth) / 2) / scaleY);
-        qp = QPoint(qp.y(), m_imageheight - qp.x());
+        qp = QPoint((point.x() - x() - (width() - d->m_scale * d->m_imageheight) / 2) / scaleX, (point.y() - y() - (height() - d->m_scale * d->m_imagewidth) / 2) / scaleY);
+        qp = QPoint(qp.y(), d->m_imageheight - qp.x());
         break;
     case RotateType_180:
-        qp = QPoint(m_imagewidth - qp.x(),  m_imageheight - qp.y());
+        qp = QPoint(d->m_imagewidth - qp.x(),  d->m_imageheight - qp.y());
         break;
     case RotateType_270:
-        qp = QPoint((point.x() - x() - (width() - m_imageheight) / 2) / scaleX, (point.y() - y() - (height() - m_scale * m_imagewidth) / 2) / scaleY);
-        qp = QPoint(m_imagewidth - qp.y(), qp.x());
+        qp = QPoint((point.x() - x() - (width() - d->m_imageheight) / 2) / scaleX, (point.y() - y() - (height() - d->m_scale * d->m_imagewidth) / 2) / scaleY);
+        qp = QPoint(d->m_imagewidth - qp.y(), qp.x());
         break;
     default:
         break;
@@ -383,30 +412,33 @@ void PageBase::getImagePoint(QPoint &point)
 
 void PageBase::clearHighlightRects()
 {
-    m_highlights.clear();
+    Q_D(PageBase);
+    d->m_highlights.clear();
 }
 
 bool PageBase::clearMagnifierPixmap()
 {
-    m_magnifierpixmap = QPixmap();
+    Q_D(PageBase);
+    d->m_magnifierpixmap = QPixmap();
     return true;
 }
 
 bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, double width, double height)
 {
+    Q_D(PageBase);
     qDebug() << "getMagnifierPixmap";
     //    QImage image;
     QPixmap qpixmap;
-    if (!m_magnifierpixmap.isNull()) {
-        qpixmap = m_magnifierpixmap;
+    if (!d->m_magnifierpixmap.isNull()) {
+        qpixmap = d->m_magnifierpixmap;
     } else {
         loadMagnifierCacheThreadStart(width, height);
         return false;
     }
     QPoint qp = point;
     getImagePoint(qp);
-    double scalex = width / m_imagewidth;
-    double scaley = height / m_imageheight;
+    double scalex = width / d->m_imagewidth;
+    double scaley = height / d->m_imageheight;
     double relx = qp.x() * scalex, rely = qp.y() * scaley;
     if (qp.x() * scalex - radius < 0) {
         relx = radius;
@@ -421,7 +453,7 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, dou
     //    qDebug() << "getMagnifierPixmap scalex:" << scalex << " scaley: " << scaley << " radius: " << radius << " qp: " << qp;
     QPixmap qpixmap1 = qpixmap.copy(relx - radius, rely - radius, radius * 2, radius * 2);
     QMatrix leftmatrix;
-    switch (m_rotate) {
+    switch (d->m_rotate) {
     case RotateType_90:
         leftmatrix.rotate(90);
         break;
@@ -442,112 +474,97 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, dou
 
 void PageBase::loadMagnifierCacheThreadStart(double width, double height)
 {
-    if ((m_magnifierwidth != width || m_magnifierheight != height || m_magnifierpixmap.isNull()) &&
-            !loadmagnifiercachethread.isRunning()) {
-        loadmagnifiercachethread.setPage(this, width, height);
-        loadmagnifiercachethread.start();
+    Q_D(PageBase);
+    if ((d->m_magnifierwidth != width || d->m_magnifierheight != height || d->m_magnifierpixmap.isNull()) &&
+            !d->loadmagnifiercachethread.isRunning()) {
+        d->loadmagnifiercachethread.setPage(getInterFace(), width, height);
+        d->loadmagnifiercachethread.start();
     }
 }
 
-void PageBase::loadMagnifierPixmapCache(double width, double height)
+void PageBase::slot_RenderFinish(QImage image)
 {
-    QImage image;
-    QPixmap qpixmap;
-    if (getImage(image, width, height)) {
-        qpixmap = QPixmap::fromImage(image);
-        m_magnifierpixmap = qpixmap;
-        m_magnifierwidth = width;
-        m_magnifierheight = height;
-        emit signal_MagnifierPixmapCacheLoaded(m_pageno);
+    Q_D(PageBase);
+    QPixmap map = QPixmap::fromImage(image);
+    QMatrix leftmatrix;
+    switch (d->m_rotate) {
+    case RotateType_90:
+        leftmatrix.rotate(90);
+        break;
+    case RotateType_180:
+        leftmatrix.rotate(180);
+        break;
+    case RotateType_270:
+        leftmatrix.rotate(270);
+        break;
+    default:
+        leftmatrix.rotate(0);
+        break;
     }
+    setPixmap(map.transformed(leftmatrix, Qt::SmoothTransformation));
+}
+
+void PageBase::slot_loadMagnifierPixmapCache(QImage image, double width, double height)
+{
+    Q_D(PageBase);
+    //    QImage image;
+    QPixmap qpixmap;
+    //    if (getImage(image, width, height)) {
+    qpixmap = QPixmap::fromImage(image);
+    d->m_magnifierpixmap = qpixmap;
+    d->m_magnifierwidth = width;
+    d->m_magnifierheight = height;
+    emit signal_MagnifierPixmapCacheLoaded(d->m_pageno);
+    //}
 }
 
 void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
 {
-    m_scale = scale;
-    m_rotate = rotate;
+    Q_D(PageBase);
+    d->m_scale = scale;
+    d->m_rotate = rotate;
     switch (rotate) {
     case RotateType_90:
         //        resize(m_imageheight * scale, m_imagewidth * scale);
         //        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
-        setMaximumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
-        setMinimumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
+        setMaximumSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale));
+        setMinimumSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale));
         break;
     case RotateType_180:
         //        resize(m_imagewidth * scale, m_imageheight * scale);
         //        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
-        setMaximumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
-        setMinimumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
+        setMaximumSize(QSize(d->m_imagewidth * scale, d->m_imageheight * scale));
+        setMinimumSize(QSize(d->m_imagewidth * scale, d->m_imageheight * scale));
         break;
     case RotateType_270:
         //        resize(m_imageheight * scale, m_imagewidth * scale);
         //        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
-        setMaximumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
-        setMinimumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
+        setMaximumSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale));
+        setMinimumSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale));
         break;
     default:
         //        resize(m_imagewidth * scale, m_imageheight * scale);
         //        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
-        setMaximumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
-        setMinimumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
+        setMaximumSize(QSize(d->m_imagewidth * scale, d->m_imageheight * scale));
+        setMinimumSize(QSize(d->m_imagewidth * scale, d->m_imageheight * scale));
         break;
     }
     update();
 }
 
-//void PageBase::setReSize(double scale, RotateType_EM rotate)
-//{
-//    m_scale = scale;
-//    m_rotate = rotate;
-//    switch (rotate) {
-//    case RotateType_90:
-//        resize(m_imageheight * scale, m_imagewidth * scale);
-////        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
-////        if (m_imageheight * scale < this->width())
-////            setMaximumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
-////        else
-////            setMinimumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
-//        break;
-//    case RotateType_180:
-//        resize(m_imagewidth * scale, m_imageheight * scale);
-////        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
-////        if (m_imagewidth * scale < this->width())
-////            setMaximumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
-////        else
-////            setMinimumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
-//        break;
-//    case RotateType_270:
-//        resize(m_imageheight * scale, m_imagewidth * scale);
-////        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
-////        if (m_imageheight * scale < this->width())
-////            setMaximumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
-////        else
-////            setMinimumSize(QSize(m_imageheight * scale, m_imagewidth * scale));
-//        break;
-//    default:
-//        resize(m_imagewidth * scale, m_imageheight * scale);
-////        setFixedSize(m_imagewidth * scale, m_imageheight * scale);
-////        if (m_imagewidth * scale < this->width())
-////            setMaximumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
-////        else
-////            setMinimumSize(QSize(m_imagewidth * scale, m_imageheight * scale));
-//        break;
-//    }
-//    update();
-//}
-
 Page::Link *PageBase::ifMouseMoveOverLink(const QPoint point)
 {
+    Q_D(PageBase);
     QPoint qp = point;
     getImagePoint(qp);
     //    qDebug() << "ifMouseMoveOverLink qp:" << qp;
-    for (int i = 0; i < m_links.size(); i++) {
-        if (qp.x() > m_links.at(i)->boundary.x()*m_imagewidth &&
-                qp.x() < m_links.at(i)->boundary.x()*m_imagewidth + m_links.at(i)->boundary.width()*m_imagewidth &&
-                qp.y() > m_links.at(i)->boundary.y()*m_imageheight &&
-                qp.y() < m_links.at(i)->boundary.y()*m_imageheight + m_links.at(i)->boundary.height()*m_imageheight) {
+    for (int i = 0; i < d->m_links.size(); i++) {
+        if (qp.x() > d->m_links.at(i)->boundary.x()*d->m_imagewidth &&
+                qp.x() < d->m_links.at(i)->boundary.x()*d->m_imagewidth + d->m_links.at(i)->boundary.width()*d->m_imagewidth &&
+                qp.y() > d->m_links.at(i)->boundary.y()*d->m_imageheight &&
+                qp.y() < d->m_links.at(i)->boundary.y()*d->m_imageheight + d->m_links.at(i)->boundary.height()*d->m_imageheight) {
             //            qDebug() << "boundary:" << m_links.at(i)->boundary;
-            return m_links.at(i);
+            return d->m_links.at(i);
         }
     }
     return nullptr;
@@ -555,19 +572,21 @@ Page::Link *PageBase::ifMouseMoveOverLink(const QPoint point)
 
 bool PageBase::getSelectTextString(QString &st)
 {
-    if (m_selecttextstartword < 0 || m_selecttextendword < 0 || m_words.size() < 1 ||
-            m_words.size() <= m_selecttextendword || m_words.size() <= m_selecttextstartword) {
+    Q_D(PageBase);
+    if (d->m_selecttextstartword < 0 || d->m_selecttextendword < 0 || d->m_words.size() < 1 ||
+            d->m_words.size() <= d->m_selecttextendword || d->m_words.size() <= d->m_selecttextstartword) {
         return false;
     }
     st = "";
-    for (int i = m_selecttextstartword; i <= m_selecttextendword; i++) {
-        st += m_words.at(i).s;
+    for (int i = d->m_selecttextstartword; i <= d->m_selecttextendword; i++) {
+        st += d->m_words.at(i).s;
     }
     return true;
 }
 
 QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
 {
+    Q_D(PageBase);
     //旋转角度逆时针增加
     QRectF newrect;
     switch (rotate) {
@@ -582,7 +601,7 @@ QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
     }
     case RotateType_90:
     {
-        newrect.setX((m_imageheight-rect.y()-rect.height())*scale);
+        newrect.setX((d_ptr->m_imageheight-rect.y()-rect.height())*scale);
         newrect.setY(rect.x()*scale);
         newrect.setWidth(rect.height()*scale);
         newrect.setHeight(rect.width()*scale);
@@ -590,8 +609,8 @@ QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
     }
     case RotateType_180:
     {
-        newrect.setX((m_imagewidth-rect.x()-rect.width())*scale);
-        newrect.setY((m_imageheight-rect.y()-rect.height())*scale);
+        newrect.setX((d_ptr->m_imagewidth-rect.x()-rect.width())*scale);
+        newrect.setY((d_ptr->m_imageheight-rect.y()-rect.height())*scale);
         newrect.setWidth(rect.width()*scale);
         newrect.setHeight(rect.height()*scale);
         break;
@@ -599,7 +618,7 @@ QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
     case RotateType_270:
     {
         newrect.setX(rect.y()*scale);
-        newrect.setY((m_imagewidth-rect.x()-rect.width())*scale);
+        newrect.setY((d_ptr->m_imagewidth-rect.x()-rect.width())*scale);
         newrect.setWidth(rect.height()*scale);
         newrect.setHeight(rect.width()*scale);
         break;
@@ -608,4 +627,33 @@ QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
         break;
     }
     return  newrect;
+}
+
+bool PageBase::showImage(double scale, RotateType_EM rotate)
+{
+    Q_D(PageBase);
+    d->m_scale = scale;
+    d->m_rotate = rotate;
+    d->threadreander.setPage(getInterFace(), d->m_imagewidth * d->m_scale, d->m_imageheight * d->m_scale);
+    if (!d->threadreander.isRunning()) {
+        d->threadreander.start();
+    } else {
+        d->threadreander.setRestart();
+    }
+    return true;
+}
+
+void PageBase::clearThread()
+{
+    Q_D(PageBase);
+    if (d->threadreander.isRunning()) {
+        d->threadreander.requestInterruption();
+        //        threadreander.quit();
+        d->threadreander.wait();
+    }
+    if (d->loadmagnifiercachethread.isRunning()) {
+        d->loadmagnifiercachethread.requestInterruption();
+        //        loadmagnifiercachethread.quit();
+        d->loadmagnifiercachethread.wait();
+    }
 }

@@ -1,4 +1,7 @@
 #include "ThumbnailWidget.h"
+#include <QStringListModel>
+#include <QStandardItemModel>
+
 
 ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
     CustomWidget(QString("ThumbnailWidget"), parent)
@@ -8,7 +11,8 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
 
     initWidget();
 
-    connect(&m_ThreadLoadImage, SIGNAL(signal_loadImage(int, QImage)), this, SLOT(slot_loadImage(int, QImage)));
+    connect(&m_ThreadLoadImage, SIGNAL(signal_loadImage(const int &, const QImage &)),
+            m_pThumbnailListWidget, SLOT(slot_loadImage(const int &, const QImage &)));
 
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
@@ -74,7 +78,7 @@ void ThumbnailWidget::addThumbnailItem(const int &iIndex)
 {
     ThumbnailItemWidget *widget = new ThumbnailItemWidget;
     widget->setLabelPage(iIndex);
-    widget->setMinimumSize(QSize(250, 250));
+//    widget->setMinimumSize(QSize(250, 250));
 
     QListWidgetItem *item = new QListWidgetItem(m_pThumbnailListWidget);
     item->setFlags(Qt::NoItemFlags);
@@ -112,11 +116,13 @@ void ThumbnailWidget::fillContantToList()
 
     if (m_totalPages > 0) {
         m_pThumbnailListWidget->setCurrentRow(0, QItemSelectionModel::NoUpdate);
+
         QListWidgetItem *item = m_pThumbnailListWidget->item(0);
         if (item) {
             setSelectItemBackColor(item);
         }
     }
+
     m_isLoading = false;
 }
 
@@ -161,12 +167,6 @@ void ThumbnailWidget::slotLoadThumbnailImage()
     if (!m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.start();
     }
-}
-
-// 关联线程加载缩略图槽函数
-void ThumbnailWidget::slot_loadImage(int page, QImage image)
-{
-    m_pThumbnailListWidget->setItemImage(page, image);
 }
 
 /*******************************ThreadLoadImage*************************************************/

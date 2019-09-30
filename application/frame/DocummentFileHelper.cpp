@@ -86,6 +86,7 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
 {
     //  已经打开了文件，　询问是否需要保存当前打开的文件
     if (m_szFilePath != "") {
+        //  是否有操作
         bool rl = DataManager::instance()->bIsUpdate();
         if (rl) {
             if (QMessageBox::Yes == DMessageBox::question(nullptr, Frame::sSaveFile, Frame::sSaveFileTitle)) {

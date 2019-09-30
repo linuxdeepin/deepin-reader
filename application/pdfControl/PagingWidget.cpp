@@ -129,6 +129,7 @@ void PagingWidget::slotPrePage()
 //  下一页
 void PagingWidget::slotNextPage()
 {
+//    int nCurPage = m_pJumpPageSpinBox->value();
     int nCurPage = DocummentProxy::instance()->currentPageNo();
     nCurPage++;
     slotJumpToSpecifiedPage(nCurPage);

@@ -13,6 +13,8 @@
 #include <QColor>
 #include <QVideoWidget>
 #include <QThread>
+#include <QPropertyAnimation>
+#include <QParallelAnimationGroup>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -23,25 +25,9 @@ enum ViewMode_EM {
 };
 #include <QtDebug>
 
-class DocummentBase;
 class SearchTask;
-
-//class ThreadLoadDoc : public QThread
-//{
-//    Q_OBJECT
-//public:
-//    ThreadLoadDoc();
-//    void setDoc(DocummentBase *doc);
-//    void setRestart();
-
-//protected:
-//    virtual void run();
-
-//private:
-//    DocummentBase *m_doc;
-//    bool restart;
-//};
-
+class DocummentBase;
+class DocummentBasePrivate;
 class ThreadLoadWords : public QThread
 {
 public:
@@ -86,38 +72,103 @@ private:
     bool bStartShow;
 };
 
+
+class DocummentBasePrivate: public QObject
+{
+    Q_OBJECT
+public:
+    DocummentBasePrivate(DocummentBase *parent): q_ptr(parent)
+    {
+        m_widget = nullptr;
+        m_vboxLayout = nullptr;
+        m_magnifierwidget = nullptr;
+        m_slidewidget = nullptr;
+        pslidelabel = nullptr;
+        pslideanimationlabel = nullptr;
+        pblankwidget = nullptr;
+        m_bModified = false;
+        m_bslidemodel = false;
+        m_slidepageno = -1;
+        m_currentpageno = -1;
+        m_scale = 1.0;
+        m_rotate = RotateType_0;
+        donotneedreloaddoc = false;
+        m_wordsbload = false;
+        m_magnifierpage = false;
+        m_currentpageno = 0;
+        m_viewmode = ViewMode_SinglePage;
+        m_lastmagnifierpagenum = -1;
+        animationfirst = nullptr;
+        animationsecond = nullptr;
+        animationgroup = nullptr;
+    }
+
+    ~DocummentBasePrivate()
+    {
+        if (m_threadloadwords.isRunning()) {
+            m_threadloadwords.requestInterruption();
+            m_threadloadwords.quit();
+            m_threadloadwords.wait();
+        }
+        if (!animationfirst) {
+            delete  animationfirst;
+            animationfirst = nullptr;
+        }
+        if (!animationsecond) {
+            delete  animationsecond;
+            animationsecond = nullptr;
+        }
+        if (!animationgroup) {
+            delete  animationgroup;
+            animationgroup = nullptr;
+        }
+    }
+
+    QVector<PageBase *> m_pages;
+    QList<DWidget *>m_widgets;
+    DWidget *m_widget;
+    QVBoxLayout *m_vboxLayout;
+    MagnifierWidget *m_magnifierwidget;
+    DWidget *m_slidewidget;
+    DLabel *pslideanimationlabel;
+    DLabel *pslidelabel;
+    DWidget *pblankwidget;
+    ViewMode_EM m_viewmode;
+    int m_lastmagnifierpagenum;
+    int m_magnifierpage;
+    int m_slidepageno;
+    int m_currentpageno;
+    double m_scale;
+    mutable bool m_bModified;
+    bool m_bslidemodel;
+    ThreadLoadWords m_threadloadwords;
+    RotateType_EM m_rotate;
+    bool donotneedreloaddoc;
+    bool m_wordsbload;
+    QPoint m_magnifierpoint;
+    QPropertyAnimation *animationfirst;
+    QPropertyAnimation *animationsecond;
+    QParallelAnimationGroup *animationgroup;
+
+signals:
+    void signal_docummentLoaded();
+protected:
+    DocummentBase *q_ptr;
+    Q_DECLARE_PUBLIC(DocummentBase)
+};
+
 class DocummentBase: public DScrollArea
 {
     Q_OBJECT
 public:
-    DocummentBase(DWidget *parent = nullptr);
+    DocummentBase(DocummentBasePrivate *ptr = nullptr, DWidget *parent = nullptr);
     ~DocummentBase();
-    virtual bool loadDocumment(QString filepath)
-    {
-        return false;
-    }
-    virtual bool bDocummentExist()
-    {
-        return false;
-    }
-    virtual bool getImage(int pagenum, QImage &image, double width, double height)
-    {
-        return false;
-    }
-    virtual bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3)
-    {
-        if (!m_magnifierwidget) {
-            return false;
-        }
-        m_magnifierwidget->setMagnifierRadius(magnifierradius);
-        m_magnifierwidget->setMagnifierScale(magnifierscale);
-        m_magnifierwidget->setMagnifierRingWidth(magnifierringwidth);
-        m_magnifierwidget->setMagnifierColor(magnifiercolor);
-        return true;
-    }
+    virtual bool loadDocumment(QString filepath) = 0;
+    virtual bool bDocummentExist() = 0;
+    virtual bool getImage(int pagenum, QImage &image, double width, double height) = 0;
     virtual bool save(const QString &filePath, bool withChanges)
     {
-        qDebug() << "do nothing";
+//        qDebug() << "do nothing";
         return false;
     }
     virtual bool saveas(const QString &filePath, bool withChanges)
@@ -133,70 +184,9 @@ public:
     virtual void title(QString &title) {}
     virtual void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) {}
     virtual void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1) {}
-    virtual void stopLoadPageThread() {}
-    virtual  bool annotationClicked(const QPoint &pos, QString &strtext){return false;}
+    virtual bool annotationClicked(const QPoint &pos, QString &strtext){return false;}
 
-    bool loadWords()
-    {
-        if (!bDocummentExist())
-            return false;
-        qDebug() << "loadWords start";
-        m_wordsbload = true;
-        for (int i = 0; i < m_pages.size(); i++) {
-            if (QThread::currentThread()->isInterruptionRequested()) {
-                break;
-            }
-            m_pages.at(i)->loadWords();
-            m_pages.at(i)->loadLinks();
-        }
-        m_wordsbload = false;
-
-        qDebug() << "loadWords end";
-        return true;
-    }
-    int getPageSNum()
-    {
-        return m_pages.size();
-    }
-    bool exitSlideModel()
-    {
-        m_slidewidget->hide();
-        this->show();
-        m_bslidemodel = false;
-        m_slidepageno = -1;
-        return true;
-    }
-
-    PageBase *getPage(int index)
-    {
-        if (m_pages.size() > index)
-            return (PageBase *)m_pages.at(index);
-        return nullptr;
-    }
-
-    void magnifierClear()
-    {
-        if (m_magnifierwidget) {
-            m_magnifierwidget->setPixmap(QPixmap());
-            m_magnifierwidget->stopShow();
-            m_magnifierpage = -1;
-            m_magnifierwidget->hide();
-        }
-    }
-    void pageMove(double mvx, double mvy)
-    {
-        DScrollBar *scrollBar_X = horizontalScrollBar();
-        if (scrollBar_X)
-            scrollBar_X->setValue(scrollBar_X->value() + mvx);
-        DScrollBar *scrollBar_Y = verticalScrollBar();
-        if (scrollBar_Y)
-            scrollBar_Y->setValue(scrollBar_Y->value() + mvy);
-    }
-    bool isWordsBeLoad()
-    {
-        return m_wordsbload;
-    }
-
+    void stopLoadPageThread();
     bool openFile(QString filepath);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
     bool mouseSelectText(QPoint start, QPoint stop);
@@ -207,7 +197,6 @@ public:
     bool showMagnifier(QPoint point);
     bool setViewModeAndShow(ViewMode_EM viewmode);
     int currentPageNo();
-    bool pageJump(int pagenum);
     Page::Link *mouseBeOverLink(QPoint point);
     bool getSelectTextString(QString &st);
     bool showSlideModel();
@@ -216,52 +205,45 @@ public:
     double adaptHeightAndShow(double height);
     void findNext();
     void findPrev();
+    bool loadWords();
+    int getPageSNum();
+    bool exitSlideModel();
+    QVector<PageBase *> *getPages();
+    PageBase *getPage(int index);
+    void magnifierClear();
+    void pageMove(double mvx, double mvy);
+    bool isWordsBeLoad();
+    bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3);
+
 
 signals:
     void signal_pageChange(int);
     void signal_searchRes(stSearchRes);
+
 protected slots:
     void slot_vScrollBarValueChanged(int value);
     void slot_hScrollBarValueChanged(int value);
     void slot_MagnifierPixmapCacheLoaded(int pageno);
     void slot_searchValueAdd(stSearchRes);
     void slot_searchover();
-
+    void slot_docummentLoaded();
+    bool pageJump(int pagenum);
 protected:
     int pointInWhichPage(QPoint &qpoint);
     void showSinglePage();
     void showFacingPage();
     void initConnect();
-    QVector<PageBase *> m_pages;
-    QList<DWidget *>m_widgets;
-    DWidget m_widget;
-    QVBoxLayout m_vboxLayout;
-    ViewMode_EM m_viewmode;
-    mutable bool m_bModified;
-    MagnifierWidget *m_magnifierwidget;
-    int m_lastmagnifierpagenum;
-    DWidget *m_slidewidget;
-    bool m_bslidemodel;
-    DLabel *pslidelabel;
-    int m_slidepageno;
-    DLabel *pslideanimationlabel;
-    //    ThreadLoadDoc m_threadloaddoc;
-    ThreadLoadWords m_threadloadwords;
-    RotateType_EM m_rotate;
-    int m_currentpageno;
-    double m_scale;
-    bool donotneedreloaddoc;
-    DWidget *pblankwidget;
-    bool m_wordsbload;
-    int m_magnifierpage;
-    QPoint m_magnifierpoint;
-    SearchTask* m_searchTask;
+
+    SearchTask *m_searchTask;
     int m_findcurpage;
     QMap<int, int> m_pagecountsearch; //搜索结果页对应当前页个数
     int m_cursearch;
     bool m_bsearchfirst;
     double m_imagewidht;
     double m_imageheight;
+
+    QScopedPointer<DocummentBasePrivate> d_ptr;
+    Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), DocummentBase)
 
 };
 
