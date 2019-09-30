@@ -22,18 +22,19 @@ public:
     NotesWidget(CustomWidget *parent = nullptr);
 
 signals:
-    void sigAddNewNoteItem();
+    void sigAddNewNoteItem(QString);
     void sigDltNoteItem(QString);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
 
 private slots:
-    void slotAddNoteItem();
+    void slotAddNoteItem(QString);
     void slotDltNoteItem(QString);
 
 private:
     void addNotesItem(const QImage &image, const int &page, const QString &text);
+    void initConnection();
 
 private:
     CustomListWidget *m_pNotesList = nullptr;

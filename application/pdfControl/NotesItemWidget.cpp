@@ -31,6 +31,7 @@ void NotesItemWidget::setSerchResultText(const QString &result)
 void NotesItemWidget::slotDltNoteItem()
 {
     qDebug() << "delet NotesItemWidget";
+    sendMsg(MSG_NOTE_DLTNOTEITEM, m_strUUid);
 }
 
 void NotesItemWidget::slotCopyContant()

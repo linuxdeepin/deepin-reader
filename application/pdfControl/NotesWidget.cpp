@@ -8,6 +8,8 @@ NotesWidget::NotesWidget(CustomWidget *parent) :
     CustomWidget(QString("NotesWidget"), parent)
 {
     initWidget();
+
+    initConnection();
 }
 
 /**
@@ -24,15 +26,13 @@ void NotesWidget::initWidget()
     m_pNotesList = new CustomListWidget;
 
     m_pVLayout->addWidget(m_pNotesList);
-
-    connect(this, SIGNAL(sigAddNewNoteItem()), this, SLOT(slotAddNoteItem()));
 }
 
 /**
  * @brief NotesWidget::slotAddNoteItem
  * 增加注释缩略图Item槽函数
  */
-void NotesWidget::slotAddNoteItem()
+void NotesWidget::slotAddNoteItem(QString uuid)
 {
     qDebug() << "           NotesWidget::slotAddNoteItem               ";
     QImage image;
@@ -62,7 +62,7 @@ void NotesWidget::slotDltNoteItem(QString uuid)
 
                     delete  pItem;
 
-                    // remove date from map
+                    // remove date from map and notify kong yun zhen
                     // todo
 
                     break;
@@ -99,11 +99,34 @@ void NotesWidget::addNotesItem(const QImage &image, const int &page, const QStri
 }
 
 /**
+ * @brief NotesWidget::initConnection
+ * 初始化信号槽
+ */
+void NotesWidget::initConnection()
+{
+    connect(this, SIGNAL(sigDltNoteItem(QString)), this, SLOT(slotDltNoteItem(QString)));
+
+    connect(this, SIGNAL(sigAddNewNoteItem(QString)), this, SLOT(slotAddNoteItem(QString)));
+}
+
+/**
  * @brief NotesWidget::dealWithData
  * 处理全局信号函数
  * @return
  */
-int NotesWidget::dealWithData(const int &, const QString &)
+int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
+    //  删除注释消息
+    if (MSG_BOOKMARK_DLTITEM == msgType) {
+        emit sigDltNoteItem(msgContent);
+        return ConstantMsg::g_effective_res;
+    }
+
+    //  增加注释消息
+    if (MSG_NOTE_ADDITEM == msgType) {
+        emit sigDltNoteItem(msgContent);
+        return ConstantMsg::g_effective_res;
+    }
+
     return 0;
 }
