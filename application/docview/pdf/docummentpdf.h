@@ -13,7 +13,7 @@ class DocummentPDF: public DocummentBase
     Q_OBJECT
 public:
     DocummentPDF(DWidget *parent = nullptr);
-    ~DocummentPDF();
+    ~DocummentPDF() override;
 //    bool openFile(QString filepath) override;
     bool bDocummentExist() override;
     bool getImage(int pagenum, QImage &image, double width, double height) override;
@@ -25,10 +25,10 @@ public:
     QString removeAnnotation(const QPoint &startpos) override;
     void removeAnnotation(const QString &struuid) override;
     QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow) override;
-    void search(const QString &strtext,QColor color = Qt::yellow) override;
+    void search(const QString &strtext, QColor color = Qt::yellow) override;
     void clearSearch() override;
     bool annotationClicked(const QPoint &pos, QString &strtext) override;
-    void title(QString &title) override;  
+    void title(QString &title) override;
     void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) override;
     void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1)override;
     bool loadDocumment(QString filepath) override;
@@ -36,7 +36,7 @@ public:
 
 
 signals:
-    void signal_openFile(QString file);
+//    void signal_openFile(QString file);
     void signal_loadDocumment(QString);
 private:
     bool pdfsave(const QString &filePath, bool withChanges);
@@ -51,7 +51,7 @@ class DocummentPDFPrivate: public DocummentBasePrivate
 {
     Q_OBJECT
 public:
-    DocummentPDFPrivate(DocummentPDF *parent): DocummentBasePrivate((DocummentBase *)parent)
+    DocummentPDFPrivate(DocummentPDF *parent): DocummentBasePrivate(parent)
     {
         document = nullptr;
     }
@@ -69,7 +69,7 @@ public:
     QMap<int, int> m_pagecountsearch; //搜索结果页对应当前页个数
     Q_DECLARE_PUBLIC(DocummentPDF)
 protected slots:
-    bool loadDocumment(QString filepath);
+    void loadDocumment(QString filepath);
 private:
     void setBasicInfo(const QString &filepath);
 };

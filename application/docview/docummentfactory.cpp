@@ -2,7 +2,7 @@
 #include "pdf/docummentpdf.h"
 //#include "djvu/docummentdjvu.h"
 //#include "tiff/documentiff.h"
-//#include "ps/docummentps.h"
+#include "ps/docummentps.h"
 //#include "xps/docummentxps.h"
 
 
@@ -24,9 +24,9 @@ DocummentBase *DocummentFactory::creatDocumment(DocType_EM type, DWidget *father
 //    case DocType_TIFF:
 //        documment = new DocumenTiff(father);
 //        break;
-//    case DocType_PS:
-//        documment = new DocummentPS(father);
-//        break;
+    case DocType_PS:
+        documment = new DocummentPS(father);
+        break;
 //    case DocType_XPS:
 //        documment = new DocummentXPS(father);
 //        break;

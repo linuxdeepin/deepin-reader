@@ -9,12 +9,12 @@
 #include <QParallelAnimationGroup>
 #include <QDebug>
 
-bool DocummentPDFPrivate::loadDocumment(QString filepath)
+void DocummentPDFPrivate::loadDocumment(QString filepath)
 {
     Q_Q(DocummentPDF);
     document = Poppler::Document::load(filepath);
     if (nullptr == document || document->numPages() <= 0)
-        return false;
+        return;
     document->setRenderHint(Poppler::Document::TextAntialiasing, true);
     document->setRenderHint(Poppler::Document::Antialiasing, true);
     m_pages.clear();
@@ -27,7 +27,6 @@ bool DocummentPDFPrivate::loadDocumment(QString filepath)
 
     emit signal_docummentLoaded();
 
-    return true;
 }
 
 
@@ -71,10 +70,7 @@ DocummentPDF::~DocummentPDF()
 
 bool DocummentPDF::loadDocumment(QString filepath)
 {
-    Q_D(DocummentPDF);
     emit signal_loadDocumment(filepath);
-    //    d->loadDocumment(filepath);
-    //    setBasicInfo(filepath);
     return true;
 }
 
@@ -116,11 +112,11 @@ QString DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos
     return static_cast<PagePdf *>(d->m_pages.at(page))->addAnnotation(pt);
 }
 
-void DocummentPDF::search(const QString &strtext,QColor color)
+void DocummentPDF::search(const QString &strtext, QColor color)
 {
     Q_D(DocummentPDF);
     clearSearch();
-    m_searchTask->start(d->m_pages,strtext,false,false,d->m_currentpageno+1);
+    m_searchTask->start(d->m_pages, strtext, false, false, d->m_currentpageno + 1);
 }
 
 bool DocummentPDF::save(const QString &filePath, bool withChanges)
@@ -218,8 +214,7 @@ void DocummentPDF::clearSearch()
     m_searchTask->wait();
     if (m_pagecountsearch.size() > 0) {
 
-        foreach(int key,m_pagecountsearch.keys())
-        {
+        foreach (int key, m_pagecountsearch.keys()) {
             d->m_pages.at(key)->clearHighlightRects();
         }
     }
@@ -333,7 +328,7 @@ bool DocummentPDF::annotationClicked(const QPoint &pos, QString &strtext)
     QPoint pt(pos);
     int ipage = pointInWhichPage(pt);
     if (ipage < 0) return  false;
-    return (static_cast<PagePdf*>(d->m_pages.at(ipage)))->annotationClicked(pt, strtext);
+    return (static_cast<PagePdf *>(d->m_pages.at(ipage)))->annotationClicked(pt, strtext);
 }
 
 void DocummentPDF::title(QString &title)
@@ -343,7 +338,7 @@ void DocummentPDF::title(QString &title)
 }
 void DocummentPDF::setAnnotationText(int ipage, const QString &struuid, const QString &strtext)
 {
-      Q_D(DocummentPDF);
+    Q_D(DocummentPDF);
     if (ipage > 0 && ipage < d_ptr->m_pages.size()) {
         Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(ipage))->GetPage();
         QList<Poppler::Annotation *> plistannote = page->annotations();
@@ -359,7 +354,7 @@ void DocummentPDF::setAnnotationText(int ipage, const QString &struuid, const QS
 
 void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, int ipage)
 {
-      Q_D(DocummentPDF);
+    Q_D(DocummentPDF);
     if (ipage < 0) {
         for (int i = 0; i < d_ptr->m_pages.size(); ++i) {
             Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(i))->GetPage();

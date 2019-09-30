@@ -16,11 +16,11 @@ HEADERS += \
 #    $$PWD/djvu/pagedjvu.h \
 #    $$PWD/tiff/pagetiff.h \
 #    $$PWD/tiff/documentiff.h\
-#    $$PWD/ps/pageps.h \
-#    $$PWD/ps/docummentps.h \
+    $$PWD/ps/pageps.h \
+    $$PWD/ps/docummentps.h \
 #    $$PWD/xps/docummentxps.h \
 #    $$PWD/xps/pagexps.h \
-#    $$PWD/xps/xpsapi.h
+#    $$PWD/xps/xpsapi.h \
     $$PWD/searchtask.h
 
 
@@ -36,10 +36,10 @@ SOURCES += \
 #    $$PWD/djvu/pagedjvu.cpp \
 #    $$PWD/tiff/pagetiff.cpp \
 #    $$PWD/tiff/documentiff.cpp\
-#    $$PWD/ps/pageps.cpp \
-#    $$PWD/ps/docummentps.cpp \
+    $$PWD/ps/pageps.cpp \
+    $$PWD/ps/docummentps.cpp \
 #    $$PWD/xps/pagexps.cpp \
 #    $$PWD/xps/docummentxps.cpp \
-#    $$PWD/xps/xpsapi.cpp
+#    $$PWD/xps/xpsapi.cpp \
     $$PWD/searchtask.cpp
 

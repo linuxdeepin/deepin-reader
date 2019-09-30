@@ -55,6 +55,12 @@ void DocummentFileHelper::onSaveAsFile()
         sFilter = Constant::sPdf_Filter;
     } else if (m_nCurDocType == DocType_TIFF) {
         sFilter = Constant::sTiff_Filter;
+    } else if (m_nCurDocType == DocType_PS) {
+        sFilter = Constant::sPs_Filter;
+    } else if (m_nCurDocType == DocType_XPS) {
+        sFilter = Constant::sXps_Filter;
+    } else if (m_nCurDocType == DocType_DJVU) {
+        sFilter = Constant::sDjvu_Filter;
     }
     if (sFilter != "") {
         DFileDialog dialog;
@@ -68,6 +74,18 @@ void DocummentFileHelper::onSaveAsFile()
             } else if (m_nCurDocType == DocType_TIFF) {
                 if (!filePath.endsWith(".tiff")) {
                     filePath += ".tiff";
+                }
+            } else if (m_nCurDocType == DocType_PS) {
+                if (!filePath.endsWith(".ps")) {
+                    filePath += ".ps";
+                }
+            } else if (m_nCurDocType == DocType_XPS) {
+                if (!filePath.endsWith(".xps")) {
+                    filePath += ".xps";
+                }
+            } else if (m_nCurDocType == DocType_DJVU) {
+                if (!filePath.endsWith(".djvu")) {
+                    filePath += ".djvu";
                 }
             }
 
@@ -108,6 +126,12 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
             m_nCurDocType = DocType_PDF;
         } else if (sCompleteSuffix == "tiff") {
             m_nCurDocType = DocType_TIFF;
+        } else if (sCompleteSuffix == "ps") {
+            m_nCurDocType = DocType_PS;
+        } else if (sCompleteSuffix == "xps") {
+            m_nCurDocType = DocType_XPS;
+        } else if (sCompleteSuffix == "djvu") {
+            m_nCurDocType = DocType_DJVU;
         }
         bool rl = m_pDocummentProxy->openFile(m_nCurDocType, sPath);
         if (rl) {

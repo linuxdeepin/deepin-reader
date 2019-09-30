@@ -8,6 +8,7 @@ PagePdf::PagePdf(QWidget *parent)
     : PageBase(new PagePdfPrivate(this), parent)
 {
 }
+
 PagePdf::~PagePdf()
 {
 }
@@ -39,20 +40,18 @@ void PagePdf::paintEvent(QPaintEvent *event)
     PageBase::paintEvent(event);
 
     for (int i = 0; i < d_ptr->m_highlights.size(); i++) {
-        if(d->m_icurhightlight==i&&d->m_bcursearchshow)
-        {
+        if (d->m_icurhightlight == i && d->m_bcursearchshow) {
             QPainter qpainter(this);
             d_ptr->m_searchcolor.setAlpha(100);
             qpainter.setBrush( d_ptr->m_searchcolor);
-            qpainter.drawRect(translateRect(d_ptr->m_highlights[i],d_ptr->m_scale,d_ptr->m_rotate));
-        }
-        else {
+            qpainter.drawRect(translateRect(d_ptr->m_highlights[i], d_ptr->m_scale, d_ptr->m_rotate));
+        } else {
             QPainter qpainter(this);
             d_ptr->m_searchcolor.setAlpha(100);
             qpainter.setBrush(d_ptr->m_searchcolor);
             QPen qpen(d_ptr->m_pencolor);
             qpainter.setPen(qpen);
-            qpainter.drawRect(translateRect(d_ptr->m_highlights[i],d_ptr->m_scale,d_ptr->m_rotate));
+            qpainter.drawRect(translateRect(d_ptr->m_highlights[i], d_ptr->m_scale, d_ptr->m_rotate));
         }
     }
 }

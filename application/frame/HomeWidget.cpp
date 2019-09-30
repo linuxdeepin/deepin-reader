@@ -130,7 +130,9 @@ void HomeWidget::dropEvent(QDropEvent *event)
             QString sFilePath =  url.toLocalFile();
             QFileInfo info(sFilePath);
             QString sCompleteSuffix = info.completeSuffix();
-            if (sCompleteSuffix == "pdf" || sCompleteSuffix == "tiff") {
+            if (sCompleteSuffix == "pdf" || sCompleteSuffix == "tiff" ||
+                    sCompleteSuffix == "ps" || sCompleteSuffix == "xps" ||
+                    sCompleteSuffix == "djvu") {
                 //  默认打开第一个
                 QString sRes = sFilePath + Constant::sQStringSep;
 
