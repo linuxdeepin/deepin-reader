@@ -8,8 +8,6 @@
 #include "subjectObserver/CustomWidget.h"
 #include "mainShow/DefaultOperationWidget.h"
 #include "mainShow/TextOperationWidget.h"
-#include "mainShow/BookMarkStateLabel.h"
-#include "pdfControl/fileViewNote/FileViewNoteWidget.h"
 #include "DocummentFileHelper.h"
 
 //  当前鼠标状态
@@ -43,12 +41,10 @@ signals:
     void sigMagnifying(const QString &);
 
     void sigPrintFile();
-    void sigOpenNoteWidget();
     void sigWidgetAdapt();
 
     void sigFileAddAnnotation(const QString &);
     void sigFileRemoveAnnotation();
-
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
@@ -63,25 +59,20 @@ private slots:
     void slotSetHandShape(const QString &);
     void slotMagnifying(const QString &);
     void slotPrintFile();
-    void slotOpenNoteWidget();
     void slotSetWidgetAdapt();
 
     void slotFileAddAnnotation(const QString &);
     void slotFileRemoveAnnotation();
 
 private:
-    void setBookMarkStateWidget();
-
     void initConnections();
 
     int dealWithTitleRequest(const int &msgType, const QString &msgContent);
     int dealWithFileMenuRequest(const int &msgType, const QString &msgContent);
 
 private:
-    BookMarkStateLabel      *m_pBookMarkStateLabel = nullptr;
     DefaultOperationWidget  *m_pDefaultOperationWidget = nullptr;
     TextOperationWidget     *m_pTextOperationWidget = nullptr;
-    FileViewNoteWidget      *m_pFileViewNoteWidget = nullptr;
 
     DocummentFileHelper     *m_pDocummentFileHelper = nullptr;
 

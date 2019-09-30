@@ -50,12 +50,8 @@ private:
 
     void setHandleShapeBtn(const QString &);
 
-    void on_HandleAction_trigger();
-    void on_DefaultAction_trigger();
-
 private:
     FontWidget *m_pFontWidget = nullptr;
-    int     m_nCurrentState = 0;
 
     DMenu   *m_pHandleMenu = nullptr;
 

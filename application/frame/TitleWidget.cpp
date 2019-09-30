@@ -128,32 +128,20 @@ void TitleWidget::on_magnifyingBtn_clicked()
 
 void TitleWidget::slotActionTrigger(QAction *action)
 {
+    QString btnName = "";
+    int nCurrentState = -1;
+
     QString sAction = action->objectName();
     if (sAction == Frame::sDefaultShape) {
-        on_DefaultAction_trigger();
+        nCurrentState = 0;
+        btnName = Frame::sDefaultShape;
     } else {
-        on_HandleAction_trigger();
+        nCurrentState = 1;
+        btnName = Frame::sHandleShape;
     }
 
-    sendMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurrentState));
-}
-
-//  切换为 手型 鼠标
-void TitleWidget::on_HandleAction_trigger()
-{
-    m_nCurrentState = 1;
-
-    QString btnName = Frame::sHandleShape;
     setHandleShapeBtn(btnName);
-}
-
-//  切换为 默认鼠标
-void TitleWidget::on_DefaultAction_trigger()
-{
-    m_nCurrentState = 0;
-
-    QString btnName = Frame::sDefaultShape;
-    setHandleShapeBtn(btnName);
+    sendMsgToSubject(MSG_HANDLESHAPE, QString::number(nCurrentState));
 }
 
 //  设置　手型按钮的图标

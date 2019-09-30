@@ -19,7 +19,7 @@ public:
     DefaultOperationWidget(CustomWidget *parent = nullptr);
 
 public:
-    void showWidget(const int &, const int &, const bool &bBookState);
+    void showWidget(const int &, const int &);
 
 private slots:
     void SlotBtnSearchClicked();

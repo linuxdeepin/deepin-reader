@@ -4,6 +4,8 @@
 #include "translator/MainShow.h"
 #include "docview/docummentproxy.h"
 
+#include "controller/DataManager.h"
+
 TextOperationWidget::TextOperationWidget(CustomWidget *parent)
     : CustomWidget("TextOperationWidget", parent)
 {
@@ -13,16 +15,21 @@ TextOperationWidget::TextOperationWidget(CustomWidget *parent)
 }
 
 //  显示当前操作框
-void TextOperationWidget::showWidget(const int &x, const int &y, const bool &bBookState, const bool &bHigh)
+void TextOperationWidget::showWidget(const int &x, const int &y, const bool &bHigh, const QString &sSelectText)
 {
     auto btnList = this->findChildren<DPushButton *>();
     foreach (DPushButton *btn, btnList) {
         if (btn->objectName() == PdfControl::ADD_BK) {
+            bool bBookState = DataManager::instance()->bIsBookMarkState();
             btn->setEnabled(!bBookState);
         } else if (btn->objectName() == MainShow::REMOVE_HIGH_LIGHTED) {
             btn->setEnabled(bHigh);
         }
     }
+
+    m_nShowY = y;
+
+    m_strSelectText = sSelectText;
 
     this->show();
     this->move(x, y);
@@ -49,7 +56,8 @@ void TextOperationWidget::SlotBtnRemoveHighLightedClicked()
 
 void TextOperationWidget::SlotBtnAddAnnotationClicked()
 {
-    sendMsgAndHide(MSG_OPERATION_TEXT_ADD_ANNOTATION);
+    sendMsgAndHide(MSG_OPERATION_TEXT_ADD_ANNOTATION, QString("%1,,,,%2")
+                   .arg(m_nShowY).arg(m_strSelectText));
 }
 
 void TextOperationWidget::SlotBtnAddBookMarkClicked()

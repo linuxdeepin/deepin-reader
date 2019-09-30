@@ -31,8 +31,6 @@ void FileViewWidget::initWidget()
     DocummentProxy::instance(this);
 
     m_pDocummentFileHelper = new DocummentFileHelper(this);
-
-    setBookMarkStateWidget();
 }
 
 //  鼠标移动
@@ -126,7 +124,6 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 void FileViewWidget::resizeEvent(QResizeEvent *event)
 {
     slotSetWidgetAdapt();
-    setBookMarkStateWidget();
 
     CustomWidget::resizeEvent(event);
 }
@@ -153,24 +150,22 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 
         QPoint tempPoint = this->mapToGlobal(point);
 
-        bool bookState = m_pBookMarkStateLabel->bChecked();
-
         if (sSelectText != "") {
             m_pRightClickPoint = pDocummentProxy->global2RelativePoint(tempPoint);
 
             QString sAnnotationText = "";
-//            bool bAnno = pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText);
+            bool bAnno = pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText);
             //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
             if (m_pTextOperationWidget == nullptr) {
                 m_pTextOperationWidget = new TextOperationWidget(this);
             }
 
-//            m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), bookState, bAnno);
+            m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), bAnno, sSelectText);
         } else {
             if (m_pDefaultOperationWidget == nullptr) {
                 m_pDefaultOperationWidget = new DefaultOperationWidget(this);
             }
-            m_pDefaultOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), bookState);
+            m_pDefaultOperationWidget->showWidget(tempPoint.x(), tempPoint.y());
         }
     }
 }
@@ -229,7 +224,6 @@ void FileViewWidget::initConnections()
 
     connect(this, SIGNAL(sigSetHandShape(const QString &)), this, SLOT(slotSetHandShape(const QString &)));
     connect(this, SIGNAL(sigMagnifying(const QString &)), this, SLOT(slotMagnifying(const QString &)));
-    connect(this, SIGNAL(sigOpenNoteWidget()), this, SLOT(slotOpenNoteWidget()));
     connect(this, SIGNAL(sigWidgetAdapt()), this, SLOT(slotSetWidgetAdapt()));
     connect(this, SIGNAL(sigPrintFile()), this, SLOT(slotPrintFile()));
 
@@ -252,17 +246,6 @@ void FileViewWidget::slotPrintFile()
     }
 }
 
-//  注释窗口
-void FileViewWidget::slotOpenNoteWidget()
-{
-    if (m_pFileViewNoteWidget == nullptr) {
-        m_pFileViewNoteWidget = new FileViewNoteWidget(this);
-    }
-    m_pFileViewNoteWidget->show();
-//    m_pTextOperationWidget->move(tempPoint.x(), tempPoint.y());
-//    m_pFileViewNoteWidget->raise();
-}
-
 //  设置　窗口　自适应　宽＼高　度
 void FileViewWidget::slotSetWidgetAdapt()
 {
@@ -273,19 +256,6 @@ void FileViewWidget::slotSetWidgetAdapt()
         int nHeight = this->height();
         DocummentProxy::instance()->adaptHeightAndShow(nHeight);
     }
-}
-
-//  书签状态
-void FileViewWidget::setBookMarkStateWidget()
-{
-    if (m_pBookMarkStateLabel == nullptr) {
-        m_pBookMarkStateLabel = new BookMarkStateLabel(this);
-    }
-    int nParentWidth = this->width();
-    int nWidget = m_pBookMarkStateLabel->width();
-    m_pBookMarkStateLabel->move(nParentWidth - nWidget - 20, 0);
-    m_pBookMarkStateLabel->show();
-    m_pBookMarkStateLabel->raise();
 }
 
 //  标题栏的菜单消息处理
@@ -333,9 +303,6 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED: //  移除高亮显示
         emit sigFileRemoveAnnotation();
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_TEXT_ADD_ANNOTATION:     //  添加注释
-        emit sigOpenNoteWidget();
         return ConstantMsg::g_effective_res;
     }
     return 0;

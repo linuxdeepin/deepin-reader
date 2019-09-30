@@ -1,4 +1,5 @@
 #include "DefaultOperationWidget.h"
+#include "controller/DataManager.h"
 
 #include "docview/docummentproxy.h"
 #include "translator/PdfControl.h"
@@ -12,11 +13,12 @@ DefaultOperationWidget::DefaultOperationWidget(CustomWidget *parent)
     initWidget();
 }
 
-void DefaultOperationWidget::showWidget(const int &x, const int &y, const bool &bBookState)
+void DefaultOperationWidget::showWidget(const int &x, const int &y)
 {
     auto btnList = this->findChildren<DPushButton *>();
     foreach (DPushButton *btn, btnList) {
         if (btn->objectName() == PdfControl::ADD_BK) {
+            bool bBookState = DataManager::instance()->bIsBookMarkState();
             btn->setEnabled(!bBookState);
             break;
         }
