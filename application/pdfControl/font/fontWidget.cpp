@@ -8,6 +8,8 @@ FontWidget::FontWidget(CustomWidget *parent):
     setWindowFlags(Qt::Popup);
 
     initWidget();
+
+    initConnection();
 }
 
 /**
@@ -40,7 +42,11 @@ int FontWidget::dealWithData(const int &msgType, const QString &)
             m_pEnlargeSlider->setValue(scale);
         }
         return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_OPEN_FILE_OK:
+        emit sigOpenFileOk();
+        break;
     }
+
     return 0;
 }
 
@@ -260,6 +266,26 @@ void FontWidget::hideEvent(QHideEvent *event)
 }
 
 /**
+ * @brief FontWidget::slotReset
+ * 重新打开文件后，复位个控件状态
+ */
+void FontWidget::slotReset()
+{
+    m_pEnlargeLab->setText(QString("100%"));
+    m_pEnlargeSlider->setValue(100);
+
+    m_pDoubPageViewLab->setPixmap(QPixmap(QString("")));
+
+    m_bSuitH = false;
+    m_bSuitW = false;
+    m_pSuitHLab->setPixmap(QPixmap(QString("")));
+    m_pSuitWLab->setPixmap(QPixmap(QString("")));
+
+    m_rotate = 0;
+    m_rotateType = RotateType_Normal;
+}
+
+/**
  * @brief FontWidget::rotateFileView
  *计算旋转函数
  * @param isRight
@@ -351,6 +377,15 @@ void FontWidget::setShowSuitWIcon()
     } else {
         m_pSuitWLab->setPixmap(QPixmap(QString("")));
     }
+}
+
+/**
+ * @brief FontWidget::initConnection
+ * 初始化信号槽
+ */
+void FontWidget::initConnection()
+{
+    connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotReset()));
 }
 
 /**
