@@ -23,8 +23,8 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
         page->setPage(document->page(i), i);
         m_pages.append((PageBase *)page);
     }
-    m_imagewidht=document->page(0)->pageSizeF().width();
-    m_imageheight=document->page(0)->pageSizeF().height();
+    m_imagewidht = document->page(0)->pageSizeF().width();
+    m_imageheight = document->page(0)->pageSizeF().height();
     setBasicInfo(filepath);
 
     emit signal_docummentLoaded();
@@ -102,7 +102,7 @@ QString DocummentPDF::removeAnnotation(const QPoint &startpos)
 void DocummentPDF::removeAnnotation(const QString &struuid)
 {
     Q_D(DocummentPDF);
-    return static_cast<PagePdf *>(d->m_pages.at(currentPageNo()))->removeAnnotation(struuid);
+    return static_cast<PagePdf *>(d->m_pages.at(getCurrentPageNo()))->removeAnnotation(struuid);
 }
 
 QString DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color)
@@ -119,7 +119,7 @@ void DocummentPDF::search(const QString &strtext, QColor color)
     Q_D(DocummentPDF);
     clearSearch();
 
-    d->m_searchTask->start(d->m_pages,strtext,false,false,d->m_currentpageno+1);
+    d->m_searchTask->start(d->m_pages, strtext, false, false, d->m_currentpageno + 1);
 }
 
 bool DocummentPDF::save(const QString &filePath, bool withChanges)
@@ -217,8 +217,7 @@ void DocummentPDF::clearSearch()
     d->m_searchTask->wait();
     if (d->m_pagecountsearch.size() > 0) {
 
-        foreach(int key,d->m_pagecountsearch.keys())
-        {
+        foreach (int key, d->m_pagecountsearch.keys()) {
             d->m_pages.at(key)->clearHighlightRects();
         }
     }
