@@ -128,8 +128,8 @@ void TitleWidget::on_magnifyingBtn_clicked()
 
 void TitleWidget::slotActionTrigger(QAction *action)
 {
-    QString sAction = action->text() ;
-    if (sAction == "DefaultAction") {
+    QString sAction = action->objectName();
+    if (sAction == Frame::sDefaultShape) {
         on_DefaultAction_trigger();
     } else {
         on_HandleAction_trigger();
@@ -215,6 +215,7 @@ DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 QAction *TitleWidget::createAction(const QString &actionName)
 {
     QAction *_action = new QAction(actionName, this);
+    _action->setObjectName(actionName);
     _action->setCheckable(true);
     _action->setIcon(QIcon(QString(":/resources/image/normal/%1_small.svg").arg(actionName)));
 
