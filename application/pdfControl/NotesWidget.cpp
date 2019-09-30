@@ -49,10 +49,9 @@ void NotesWidget::slotAddNoteItem(QString uuid)
  */
 void NotesWidget::slotDltNoteItem(QString uuid)
 {
-    for(int row = 0; m_pNotesList->count(); ++row)
-    {
+    for (int row = 0; m_pNotesList->count(); ++row) {
         QListWidgetItem *pItem = m_pNotesList->item(row);
-        if(pItem){
+        if (pItem) {
             NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
             if (t_widget) {
                 QString t_uuid = t_widget->noteUUId();
@@ -124,7 +123,7 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
 
     //  增加注释消息
     if (MSG_NOTE_ADDITEM == msgType) {
-        emit sigDltNoteItem(msgContent);
+        emit sigAddNewNoteItem(msgContent);
         return ConstantMsg::g_effective_res;
     }
 

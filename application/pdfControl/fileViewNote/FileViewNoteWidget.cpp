@@ -3,7 +3,7 @@
 FileViewNoteWidget::FileViewNoteWidget(CustomWidget *parent):
     CustomWidget(QString("FileViewNoteWidget"), parent)
 {
-    setFixedSize(QSize(300, 400));
+    setFixedSize(QSize(200, 300));
 
     initWidget();
 }
@@ -23,7 +23,7 @@ void FileViewNoteWidget::initWidget()
 
     auto m_pHLayoutClose = new QHBoxLayout;
     m_pHLayoutClose->setContentsMargins(1, 0, 0, 0);
-    m_pHLayoutClose->addSpacing(1);
+    m_pHLayoutClose->addStretch(1);
     m_pHLayoutClose->addWidget(m_pCloseLab);
 
     m_pDltLab = new MenuLab;
@@ -34,10 +34,9 @@ void FileViewNoteWidget::initWidget()
     auto m_pHLayoutDlt = new QHBoxLayout;
     m_pHLayoutDlt->setContentsMargins(0, 0, 1, 0);
     m_pHLayoutDlt->addWidget(m_pDltLab);
-    m_pHLayoutDlt->addSpacing(1);
+    m_pHLayoutDlt->addStretch(1);
 
     m_pTextEdit = new DTextEdit;
-    m_pTextEdit->setFixedSize(QSize(200,300));
 
     auto m_pVLayout = new QVBoxLayout;
     m_pVLayout->setContentsMargins(0, 0, 0, 0);
@@ -53,7 +52,7 @@ void FileViewNoteWidget::initWidget()
 void FileViewNoteWidget::slotClosed()
 {
     //sendMsg closed signal;
-    if (QMessageBox::Yes == DMessageBox::question(nullptr,  QString("Save"), QString("Save this note"))){
+    if (QMessageBox::Yes == DMessageBox::question(nullptr,  QString("Save"), QString("Save this note"))) {
 
         QString t_contant = m_pTextEdit->toPlainText().trimmed();
         sendMsg(MSG_NOTE_ADDITEM, t_contant);
@@ -64,13 +63,14 @@ void FileViewNoteWidget::slotClosed()
 //        }
         qDebug() << "             void FileViewNoteWidget       slotClosed()   " << t_contant;
     }
+    this->close();
 }
 
 // 删除槽函数
 void FileViewNoteWidget::slotDlted()
 {
     //sendMsg Dlted signal;
-    if (QMessageBox::Yes == DMessageBox::question(nullptr,  QString("DELETE"), QString("delete this note"))){
+    if (QMessageBox::Yes == DMessageBox::question(nullptr,  QString("DELETE"), QString("delete this note"))) {
 
         qDebug() << "             void FileViewNoteWidget      slotDlted()   ";
         m_pTextEdit->clear();

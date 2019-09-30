@@ -1,8 +1,5 @@
 #include "HomeWidget.h"
-#include <QDir>
 #include <DFileDialog>
-#include <QDebug>
-#include <QMimeData>
 #include <DPushButton>
 #include <QVBoxLayout>
 #include <DLabel>
@@ -13,7 +10,6 @@ HomeWidget::HomeWidget(CustomWidget *parent):
     m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
                              QSettings::IniFormat))
 {
-    setAcceptDrops(true);
     initWidget();
 
     // initalize the configuration file.
@@ -114,33 +110,4 @@ int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
         }
     }
     return 0;
-}
-
-//文件拖拽
-void HomeWidget::dragEnterEvent(QDragEnterEvent *event)
-{
-    // Accept drag event if mime type is url.
-    event->accept();
-}
-
-void HomeWidget::dropEvent(QDropEvent *event)
-{
-    auto mimeData = event->mimeData();
-
-    if (mimeData->hasUrls()) {
-        foreach (QUrl url, mimeData->urls()) {
-            QString sFilePath =  url.toLocalFile();
-            QFileInfo info(sFilePath);
-            QString sCompleteSuffix = info.completeSuffix();
-            if (sCompleteSuffix == "pdf" || sCompleteSuffix == "tiff" ||
-                    sCompleteSuffix == "ps" || sCompleteSuffix == "xps" ||
-                    sCompleteSuffix == "djvu") {
-                //  默认打开第一个
-                QString sRes = sFilePath + Constant::sQStringSep;
-
-                sendMsg(MSG_OPEN_FILE_PATH, sRes);
-                break;
-            }
-        }
-    }
 }

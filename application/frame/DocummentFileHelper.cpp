@@ -50,6 +50,27 @@ void DocummentFileHelper::slotSaveFile()
 //  另存为
 void DocummentFileHelper::slotSaveAsFile()
 {
+    QString sFilter = getFileFilter();
+
+    if (sFilter != "") {
+        DFileDialog dialog;
+        dialog.selectFile(m_szFilePath);
+        QString filePath = dialog.getSaveFileName(nullptr, Frame::sSaveFile, m_szFilePath, sFilter);
+        if (filePath != "") {
+            QString sFilePath = getFilePath(filePath);
+
+            m_pDocummentProxy->save(sFilePath, true);
+
+            m_szFilePath = sFilePath;
+
+            QFileInfo info(m_szFilePath);
+            setAppShowTitle(info.baseName());
+        }
+    }
+}
+
+QString DocummentFileHelper::getFileFilter()
+{
     QString sFilter = "";
     if (m_nCurDocType == DocType_PDF) {
         sFilter = Constant::sPdf_Filter;
@@ -62,40 +83,48 @@ void DocummentFileHelper::slotSaveAsFile()
     } else if (m_nCurDocType == DocType_DJVU) {
         sFilter = Constant::sDjvu_Filter;
     }
-    if (sFilter != "") {
-        DFileDialog dialog;
-        dialog.selectFile(m_szFilePath);
-        QString filePath = dialog.getSaveFileName(nullptr, Frame::sSaveFile, m_szFilePath, sFilter);
-        if (filePath != "") {
-            if (m_nCurDocType == DocType_PDF) {
-                if (!filePath.endsWith(".pdf")) {
-                    filePath += ".pdf";
-                }
-            } else if (m_nCurDocType == DocType_TIFF) {
-                if (!filePath.endsWith(".tiff")) {
-                    filePath += ".tiff";
-                }
-            } else if (m_nCurDocType == DocType_PS) {
-                if (!filePath.endsWith(".ps")) {
-                    filePath += ".ps";
-                }
-            } else if (m_nCurDocType == DocType_XPS) {
-                if (!filePath.endsWith(".xps")) {
-                    filePath += ".xps";
-                }
-            } else if (m_nCurDocType == DocType_DJVU) {
-                if (!filePath.endsWith(".djvu")) {
-                    filePath += ".djvu";
-                }
-            }
+    return sFilter;
+}
 
-            m_pDocummentProxy->save(filePath, true);
-
-            m_szFilePath = filePath;
-
-            QFileInfo info(m_szFilePath);
-            setAppShowTitle(info.baseName());
+QString DocummentFileHelper::getFilePath(const QString &inputPath)
+{
+    QString filePath = inputPath;
+    if (m_nCurDocType == DocType_PDF) {
+        if (!filePath.endsWith(".pdf")) {
+            filePath += ".pdf";
         }
+    } else if (m_nCurDocType == DocType_TIFF) {
+        if (!filePath.endsWith(".tiff")) {
+            filePath += ".tiff";
+        }
+    } else if (m_nCurDocType == DocType_PS) {
+        if (!filePath.endsWith(".ps")) {
+            filePath += ".ps";
+        }
+    } else if (m_nCurDocType == DocType_XPS) {
+        if (!filePath.endsWith(".xps")) {
+            filePath += ".xps";
+        }
+    } else if (m_nCurDocType == DocType_DJVU) {
+        if (!filePath.endsWith(".djvu")) {
+            filePath += ".djvu";
+        }
+    }
+    return filePath;
+}
+
+void DocummentFileHelper::setCurDocuType(const QString &sCompleteSuffix)
+{
+    if (sCompleteSuffix == "pdf") {
+        m_nCurDocType = DocType_PDF;
+    } else if (sCompleteSuffix == "tiff") {
+        m_nCurDocType = DocType_TIFF;
+    } else if (sCompleteSuffix == "ps") {
+        m_nCurDocType = DocType_PS;
+    } else if (sCompleteSuffix == "xps") {
+        m_nCurDocType = DocType_XPS;
+    } else if (sCompleteSuffix == "djvu") {
+        m_nCurDocType = DocType_DJVU;
     }
 }
 
@@ -121,18 +150,10 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
         QString sPath = fileList.at(0);
 
         QFileInfo info(sPath);
+
         QString sCompleteSuffix = info.completeSuffix();
-        if (sCompleteSuffix == "pdf") {
-            m_nCurDocType = DocType_PDF;
-        } else if (sCompleteSuffix == "tiff") {
-            m_nCurDocType = DocType_TIFF;
-        } else if (sCompleteSuffix == "ps") {
-            m_nCurDocType = DocType_PS;
-        } else if (sCompleteSuffix == "xps") {
-            m_nCurDocType = DocType_XPS;
-        } else if (sCompleteSuffix == "djvu") {
-            m_nCurDocType = DocType_DJVU;
-        }
+        setCurDocuType(sCompleteSuffix);
+
         bool rl = m_pDocummentProxy->openFile(m_nCurDocType, sPath);
         if (rl) {
             m_szFilePath = sPath;

@@ -21,7 +21,7 @@ public:
     TextOperationWidget(CustomWidget *parent = nullptr);
 
 public:
-    void showWidget(const int &, const int &, const bool &, const bool &);
+    void showWidget(const int &, const int &, const bool &, const QString &);
 
 private slots:
     void SlotBtnCopyClicked();
@@ -32,6 +32,10 @@ private slots:
 private:
     void sendMsgAndHide(const int &, const QString &msgContent = "");
     DPushButton *createBtn(const QString &, const char *member);
+
+private:
+    int     m_nShowY = -1;
+    QString     m_strSelectText = "";   //  选中的文字
 
     // IObserver interface
 public:
