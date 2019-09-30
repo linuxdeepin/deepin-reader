@@ -33,6 +33,13 @@ void FileViewWidget::initWidget()
     m_pDocummentFileHelper = new DocummentFileHelper(this);
 }
 
+//  鼠标双击事件
+void FileViewWidget::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    qDebug() << "qqqqqqqqqqq";
+    CustomWidget::mouseDoubleClickEvent(event);
+}
+
 //  鼠标移动
 void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
 {
