@@ -11,7 +11,7 @@ BookMarkStateLabel::BookMarkStateLabel(DWidget *parent)
     setFixedSize(QSize(39, 39));
 
     setMouseTracking(true);
-    setObserverName("");
+    setObserverName();
 
     m_pMsgSubject = MsgSubject::getInstance();
     if (m_pMsgSubject) {
@@ -102,7 +102,7 @@ void BookMarkStateLabel::sendMsg(const int &msgType, const QString &msgContent)
     m_pMsgSubject->sendMsg(this, msgType, msgContent);
 }
 
-void BookMarkStateLabel::setObserverName(const QString &)
+void BookMarkStateLabel::setObserverName()
 {
     m_strObserverName = "BookMarkStateLabel";
 }

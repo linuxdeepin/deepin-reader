@@ -6,7 +6,6 @@
 #include "subjectObserver/CustomWidget.h"
 
 #include "pdfControl/font/fontWidget.h"
-
 #include "PublicFunction.h"
 /**
  * @brief The TitleWidget class
@@ -30,7 +29,7 @@ private slots:
     void on_handleShapeBtn_clicked();
     void on_magnifyingBtn_clicked();
 
-    void SlotActionTrigger(const QString &);
+    void SlotActionTrigger(QAction *);
 
 private:
     void initBtns();
@@ -49,8 +48,6 @@ private:
     int     m_nCurrentState = 0;
 
     DMenu   *m_pHandleMenu = nullptr;
-    QAction *m_pHandleAction = nullptr;
-    QAction *m_pDefaultAction = nullptr;
 
     DIconButton *m_pThumbnailBtn = nullptr;
     DIconButton *m_pSettingBtn = nullptr;

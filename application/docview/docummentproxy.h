@@ -79,6 +79,10 @@ signals:
     void signal_pageChange(int);
     bool signal_pageJump(int);
     void signal_searchRes(stSearchRes);
+    bool signal_mouseSelectText(QPoint start, QPoint stop);
+    void signal_scaleAndShow(double scale, RotateType_EM rotate);
+    bool signal_setViewModeAndShow(ViewMode_EM viewmode);
+
 private slots:
     void slot_pageChange(int);
     bool startOpenFile();

@@ -20,9 +20,6 @@ class LightedWidget : public CustomWidget
 public:
     LightedWidget(CustomWidget *parent = nullptr);
 
-signals:
-    void sigSendLightedColor(const int &);
-
 private slots:
     void SlotOnBtnGroupClicked(int);
 

@@ -93,6 +93,10 @@ bool DocummentProxy::startOpenFile()
     connect(m_documment, SIGNAL(signal_pageChange(int)), this, SLOT(slot_pageChange(int)));
     connect(this, SIGNAL(signal_pageJump(int)), m_documment, SLOT(pageJump(int)));
     connect(m_documment, SIGNAL(signal_searchRes(stSearchRes)),this, SIGNAL(signal_searchRes(stSearchRes)));
+    connect(this, SIGNAL(signal_mouseSelectText(QPoint, QPoint)), m_documment, SLOT(mouseSelectText(QPoint, QPoint)));
+    connect(this, SIGNAL(signal_scaleAndShow(double, RotateType_EM)), m_documment, SLOT(scaleAndShow(double, RotateType_EM)));
+    connect(this, SIGNAL(signal_setViewModeAndShow(ViewMode_EM)), m_documment, SLOT(setViewModeAndShow(ViewMode_EM)));
+
     return m_documment->openFile(m_path);
 }
 
@@ -107,7 +111,8 @@ bool DocummentProxy::mouseSelectText(QPoint start, QPoint stop)
 {
     if (!m_documment || bcloseing)
         return false;
-    return m_documment->mouseSelectText(start, stop);
+    return emit signal_mouseSelectText(start, stop);
+//    return m_documment->mouseSelectText(start, stop);
 }
 
 void DocummentProxy::mouseSelectTextClear()
@@ -127,7 +132,8 @@ void DocummentProxy::scaleRotateAndShow(double scale, RotateType_EM rotate)
     if (!m_documment || bcloseing)
         return;
     mouseSelectTextClear();
-    m_documment->scaleAndShow(scale, rotate);
+//    m_documment->scaleAndShow(scale, rotate);
+    emit signal_scaleAndShow(scale, rotate);
 }
 
 QPoint DocummentProxy::global2RelativePoint(QPoint globalpoint)
@@ -156,7 +162,8 @@ bool DocummentProxy::setViewModeAndShow(ViewMode_EM viewmode)
     if (!m_documment || bcloseing)
         return false;
     mouseSelectTextClear();
-    return  m_documment->setViewModeAndShow(viewmode);
+//    return  m_documment->setViewModeAndShow(viewmode);
+    return emit signal_setViewModeAndShow(viewmode);
 }
 
 bool DocummentProxy::showMagnifier(QPoint point)

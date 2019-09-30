@@ -38,7 +38,7 @@ protected:
     void showScreenCenter();
 
 private:
-    void setObserverName(const QString &name) Q_DECL_OVERRIDE;
+    void setObserverName() Q_DECL_OVERRIDE;
 
 private:
     MsgSubject  *m_pMsgSubject = nullptr;

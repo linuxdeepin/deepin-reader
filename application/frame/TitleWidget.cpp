@@ -1,5 +1,4 @@
 #include "TitleWidget.h"
-#include <QSignalMapper>
 #include "translator/Frame.h"
 #include <QHBoxLayout>
 
@@ -73,22 +72,19 @@ void TitleWidget::on_handleShapeBtn_clicked()
 
     if (m_pHandleMenu == nullptr) {
         m_pHandleMenu = new DMenu(this);
+        m_pHandleMenu->setFixedWidth(200);
         connect(m_pHandleMenu, SIGNAL(aboutToHide()), this, SLOT(slotHandleMenuHide()));
 
-        auto pSigManager = new QSignalMapper(this);
-        connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(SlotActionTrigger(const QString &)));
+        QAction *m_pHandleAction = createAction(Frame::sHandleShape);
 
-        m_pHandleAction = createAction(Frame::sHandleShape);
-        connect(m_pHandleAction, SIGNAL(triggered()), pSigManager, SLOT(map()));
-
-        pSigManager->setMapping(m_pHandleAction, "HandleAction");
-
-        m_pDefaultAction = createAction(Frame::sDefaultShape);
+        QAction *m_pDefaultAction = createAction(Frame::sDefaultShape);
         m_pDefaultAction->setChecked(true);
 
-        connect(m_pDefaultAction, SIGNAL(triggered()), pSigManager, SLOT(map()));
+        QActionGroup *actionGroup = new QActionGroup(this);
+        actionGroup->addAction(m_pHandleAction);
+        actionGroup->addAction(m_pDefaultAction);
 
-        pSigManager->setMapping(m_pDefaultAction, "DefaultAction");
+        connect(actionGroup, SIGNAL(triggered(QAction *)), this, SLOT(SlotActionTrigger(QAction *)));
     }
     m_pHandleMenu->exec(point);
 }
@@ -100,8 +96,9 @@ void TitleWidget::on_magnifyingBtn_clicked()
     sendMsgToSubject(MSG_MAGNIFYING, QString::number(bCheck));
 }
 
-void TitleWidget::SlotActionTrigger(const QString &sAction)
+void TitleWidget::SlotActionTrigger(QAction *action)
 {
+    QString sAction = action->text() ;
     if (sAction == "DefaultAction") {
         on_DefaultAction_trigger();
     } else {
@@ -118,9 +115,6 @@ void TitleWidget::on_HandleAction_trigger()
 
     QString btnName = Frame::sHandleShape;
     setHandleShapeBtn(btnName);
-
-    m_pHandleAction->setChecked(true);
-    m_pDefaultAction->setChecked(false);
 }
 
 //  切换为 默认鼠标
@@ -130,9 +124,6 @@ void TitleWidget::on_DefaultAction_trigger()
 
     QString btnName = Frame::sDefaultShape;
     setHandleShapeBtn(btnName);
-
-    m_pHandleAction->setChecked(false);
-    m_pDefaultAction->setChecked(true);
 }
 
 //  文件打开成功，　功能性　按钮才能点击

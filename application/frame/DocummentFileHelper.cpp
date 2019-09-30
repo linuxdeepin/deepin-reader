@@ -13,7 +13,7 @@
 DocummentFileHelper::DocummentFileHelper(QObject *parent) : QObject(parent)
 {
     m_pDocummentProxy = DocummentProxy::instance();
-    setObserverName("DocummentFileHelper");
+    setObserverName();
 
     initConnections();
 
@@ -146,8 +146,9 @@ void DocummentFileHelper::onCopySelectContent()
 }
 
 //  放映
-void DocummentFileHelper::onFileSlider()
+void DocummentFileHelper::slotFileSlider()
 {
+    QThread::msleep(100);
     bool bSlideModel = m_pDocummentProxy->showSlideModel();    //  开启幻灯片
     if (bSlideModel) {
         DataManager::instance()->setCurShowState(FILE_SLIDE);
@@ -177,6 +178,7 @@ void DocummentFileHelper::onClickPageLink(Page::Link *pLink)
 void DocummentFileHelper::initConnections()
 {
     connect(this, SIGNAL(sigOpenFile(const QString &)), this, SLOT(slotOpenFile(const QString &)));
+    connect(this, SIGNAL(sigFileSlider()), this, SLOT(slotFileSlider()));
 }
 
 int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgContent)
@@ -195,7 +197,7 @@ int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgCont
         onCopySelectContent();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_SLIDE:               //  放映
-        onFileSlider();
+        emit sigFileSlider();
         return ConstantMsg::g_effective_res;
     case MSG_NOTIFY_KEY_MSG :
         if ("Ctrl+S" == msgContent) {
@@ -223,7 +225,7 @@ void DocummentFileHelper::sendMsg(const int &msgType, const QString &msgContent)
     m_pMsgSubject->sendMsg(this, msgType, msgContent);
 }
 
-void DocummentFileHelper::setObserverName(const QString &name)
+void DocummentFileHelper::setObserverName()
 {
-    m_strObserverName = name;
+    m_strObserverName = "DocummentFileHelper";
 }
