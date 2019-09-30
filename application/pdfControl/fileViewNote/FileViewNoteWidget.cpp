@@ -56,11 +56,12 @@ void FileViewNoteWidget::slotClosed()
     if (QMessageBox::Yes == DMessageBox::question(nullptr,  QString("Save"), QString("Save this note"))){
 
         QString t_contant = m_pTextEdit->toPlainText().trimmed();
-        if( t_contant != QString("")){
-            sendMsg(MSG_NOTE_ADDITEM, t_contant);
-        }else {
-            sendMsg(MSG_NOTE_DLTNOTEITEM, t_contant);
-        }
+        sendMsg(MSG_NOTE_ADDITEM, t_contant);
+//        if( t_contant != QString("")){
+//            sendMsg(MSG_NOTE_ADDITEM, t_contant);
+//        }else {
+//            sendMsg(MSG_NOTE_DLTNOTEITEM, t_contant);
+//        }
         qDebug() << "             void FileViewNoteWidget       slotClosed()   " << t_contant;
     }
 }

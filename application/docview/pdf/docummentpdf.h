@@ -64,9 +64,7 @@ public:
     Poppler::Document *document;
     //--------------------------------------------//
     stFileInfo m_fileinfo;
-    unsigned int m_cursearch;
-    int m_findcurpage;
-    QMap<int, int> m_pagecountsearch; //搜索结果页对应当前页个数
+
     Q_DECLARE_PUBLIC(DocummentPDF)
 protected slots:
     void loadDocumment(QString filepath);

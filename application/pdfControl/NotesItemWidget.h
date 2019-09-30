@@ -35,6 +35,10 @@ public:
     {
         m_strUUid = uuid;
     }
+    inline QString noteUUId() const
+    {
+        return m_strUUid;
+    }
 
 private slots:
     void slotDltNoteItem();

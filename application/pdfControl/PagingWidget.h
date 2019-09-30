@@ -29,6 +29,8 @@ public:
 
 signals:
     void sigJumpToSpecifiedPage(const int &);
+    void sigJumpToPrevPage();
+    void sigJumpToNextPage();
 
 public:
     void setTotalPages(int pages);
@@ -43,6 +45,8 @@ protected:
     void initWidget() Q_DECL_OVERRIDE;
     bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 
+private:
+    void initConnections();
 
 private:
     DLabel *m_pTotalPagesLab = nullptr;        // 当前文档总页数标签

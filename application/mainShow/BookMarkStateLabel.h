@@ -23,6 +23,9 @@ class BookMarkStateLabel : public DLabel, public IObserver
 public:
     BookMarkStateLabel(DWidget *parent = nullptr);
 
+signals:
+    void sigSetMarkState(const QString &);
+
 public:
     bool bChecked() const;
     int nCurPage() const;
@@ -34,7 +37,10 @@ protected:
 
 private:
     void setPixmapState(const QString &);
-    void setMarkState(const QString &);
+    void initConnections();
+
+private slots:
+    void slotSetMarkState(const QString &);
 
 private:
     bool            m_bChecked = false;

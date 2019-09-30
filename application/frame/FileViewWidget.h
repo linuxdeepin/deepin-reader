@@ -39,9 +39,16 @@ public:
     ~FileViewWidget() Q_DECL_OVERRIDE;
 
 signals:
+    void sigSetHandShape(const QString &);
+    void sigMagnifying(const QString &);
+
     void sigPrintFile();
     void sigOpenNoteWidget();
     void sigWidgetAdapt();
+
+    void sigFileAddAnnotation(const QString &);
+    void sigFileRemoveAnnotation();
+
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
@@ -52,17 +59,18 @@ protected:
 
 private slots:
     void slotCustomContextMenuRequested(const QPoint &);
+
+    void slotSetHandShape(const QString &);
+    void slotMagnifying(const QString &);
     void slotPrintFile();
     void slotOpenNoteWidget();
     void slotSetWidgetAdapt();
 
-private:
-    int magnifying(const QString &);
-    int setHandShape(const QString &);
-    void setBookMarkStateWidget();
+    void slotFileAddAnnotation(const QString &);
+    void slotFileRemoveAnnotation();
 
-    void onFileAddAnnotation(const QString &);
-    void onFileRemoveAnnotation();
+private:
+    void setBookMarkStateWidget();
 
     void initConnections();
 

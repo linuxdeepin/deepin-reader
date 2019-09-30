@@ -9,7 +9,7 @@ PagingWidget::PagingWidget(CustomWidget *parent) :
     resize(250, 20);
     initWidget();
 
-    connect(this, SIGNAL(sigJumpToSpecifiedPage(const int &)), this, SLOT(slotJumpToSpecifiedPage(const int &)));
+    initConnections();
 }
 
 /**
@@ -73,6 +73,13 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
     return QWidget::eventFilter(watched, event);
 }
 
+void PagingWidget::initConnections()
+{
+    connect(this, SIGNAL(sigJumpToPrevPage()), this, SLOT(slotPrePage()));
+    connect(this, SIGNAL(sigJumpToNextPage()), this, SLOT(slotNextPage()));
+    connect(this, SIGNAL(sigJumpToSpecifiedPage(const int &)), this, SLOT(slotJumpToSpecifiedPage(const int &)));
+}
+
 /**
  * @brief PagingWidget::setTotalPages
  * 设置 总页数
@@ -99,21 +106,31 @@ void PagingWidget::setTotalPages(int pages)
  * @param msgType
  * @return
  */
-int PagingWidget::dealWithData(const int &msgType, const QString &)
+int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
     case MSG_OPERATION_FIRST_PAGE:              //  第一页
         emit sigJumpToSpecifiedPage(0);
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_PREV_PAGE:               //  上一页
-        slotPrePage();
+        emit sigJumpToPrevPage();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_NEXT_PAGE:               //  下一页
-        slotNextPage();
+        emit sigJumpToNextPage();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_END_PAGE:                //  最后一页
         emit sigJumpToSpecifiedPage(m_totalPage - FIRSTPAGES);
         return ConstantMsg::g_effective_res;
+    case MSG_NOTIFY_KEY_MSG: {
+        if (msgContent == "Up") {
+            emit sigJumpToPrevPage();
+            return ConstantMsg::g_effective_res;
+        } else if (msgContent == "Down") {
+            emit sigJumpToNextPage();
+            return ConstantMsg::g_effective_res;
+        }
+    }
+    break;
     }
     return 0;
 }
@@ -129,7 +146,6 @@ void PagingWidget::slotPrePage()
 //  下一页
 void PagingWidget::slotNextPage()
 {
-//    int nCurPage = m_pJumpPageSpinBox->value();
     int nCurPage = DocummentProxy::instance()->currentPageNo();
     nCurPage++;
     slotJumpToSpecifiedPage(nCurPage);

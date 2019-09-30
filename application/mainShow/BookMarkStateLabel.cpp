@@ -21,6 +21,8 @@ BookMarkStateLabel::BookMarkStateLabel(DWidget *parent)
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
     }
+
+    initConnections();
 }
 
 void BookMarkStateLabel::mouseMoveEvent(QMouseEvent *event)
@@ -70,7 +72,12 @@ void BookMarkStateLabel::setPixmapState(const QString &state)
     this->setPixmap(pixmap);
 }
 
-void BookMarkStateLabel::setMarkState(const QString &sData)
+void BookMarkStateLabel::initConnections()
+{
+    connect(this, SIGNAL(sigSetMarkState(const QString &)), this, SLOT(slotSetMarkState(const QString &)));
+}
+
+void BookMarkStateLabel::slotSetMarkState(const QString &sData)
 {
     m_bChecked = sData.toInt();
 
@@ -89,7 +96,7 @@ bool BookMarkStateLabel::bChecked() const
 int BookMarkStateLabel::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_BOOKMARK_STATE) {     //  当前页的书签状态
-        setMarkState(msgContent);
+        emit sigSetMarkState(msgContent);
         return ConstantMsg::g_effective_res;
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
 

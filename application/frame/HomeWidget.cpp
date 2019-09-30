@@ -37,7 +37,9 @@ void HomeWidget::initWidget()
 
     auto chooseBtn  = new DPushButton(Frame::sSelectFile);
     chooseBtn->setFixedSize(QSize(302, 36));
-    connect(chooseBtn, &DPushButton::clicked, this, &HomeWidget::onChooseBtnClicked);
+    connect(chooseBtn, &DPushButton::clicked, this, &HomeWidget::slotChooseBtnClicked);
+
+    connect(this, SIGNAL(sigOpenFileDialog()), this, SLOT(slotChooseBtnClicked()));
 
     auto layout = new QVBoxLayout;
     layout->setSpacing(8);
@@ -55,7 +57,7 @@ void HomeWidget::initWidget()
     this->setLayout(layout);
 }
 
-void HomeWidget::onChooseBtnClicked()
+void HomeWidget::slotChooseBtnClicked()
 {
     QStringList fileList = getOpenFileList();
     if (fileList.size() > 0) {
@@ -101,13 +103,13 @@ QStringList HomeWidget::getOpenFileList()
 int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE) {
-        onChooseBtnClicked();
+        emit sigOpenFileDialog();
         return ConstantMsg::g_effective_res;
     }
 
     if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == "Ctrl+O") {   //  Ctrl+O 打开文档
-            onChooseBtnClicked();
+            emit sigOpenFileDialog();
             return ConstantMsg::g_effective_res;
         }
     }

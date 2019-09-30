@@ -36,19 +36,19 @@ DocummentFileHelper::~DocummentFileHelper()
 }
 
 //  ctrl s  保存文件
-void DocummentFileHelper::onSaveFileCtrlS()
+void DocummentFileHelper::slotSaveFileCtrlS()
 {
     m_pDocummentProxy->save(m_szFilePath, true);
 }
 
 //  保存
-void DocummentFileHelper::onSaveFile()
+void DocummentFileHelper::slotSaveFile()
 {
     m_pDocummentProxy->save(m_szFilePath, true);
 }
 
 //  另存为
-void DocummentFileHelper::onSaveAsFile()
+void DocummentFileHelper::slotSaveAsFile()
 {
     QString sFilter = "";
     if (m_nCurDocType == DocType_PDF) {
@@ -159,7 +159,7 @@ void DocummentFileHelper::setAppShowTitle(const QString &fileName)
 }
 
 //  复制
-void DocummentFileHelper::onCopySelectContent()
+void DocummentFileHelper::slotCopySelectContent()
 {
     QString sCopy = "";
     bool rl = m_pDocummentProxy->getSelectTextString(sCopy);
@@ -169,13 +169,25 @@ void DocummentFileHelper::onCopySelectContent()
     }
 }
 
-//  放映
-void DocummentFileHelper::slotFileSlider()
+/**
+ * @brief DocummentFileHelper::slotFileSlider
+ * @param nFlag 1 开启放映, 0 退出放映
+ */
+void DocummentFileHelper::slotFileSlider(const int &nFlag)
 {
-    QThread::msleep(100);
-    bool bSlideModel = m_pDocummentProxy->showSlideModel();    //  开启幻灯片
-    if (bSlideModel) {
-        DataManager::instance()->setCurShowState(FILE_SLIDE);
+    if (nFlag == 1) {
+        QThread::msleep(100);
+        bool bSlideModel = m_pDocummentProxy->showSlideModel();    //  开启幻灯片
+        if (bSlideModel) {
+            DataManager::instance()->setCurShowState(FILE_SLIDE);
+        }
+    } else {
+        if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
+            bool rl = m_pDocummentProxy->exitSlideModel();
+            if (rl) {
+                DataManager::instance()->setCurShowState(FILE_NORMAL);
+            }
+        }
     }
 }
 
@@ -202,7 +214,11 @@ void DocummentFileHelper::onClickPageLink(Page::Link *pLink)
 void DocummentFileHelper::initConnections()
 {
     connect(this, SIGNAL(sigOpenFile(const QString &)), this, SLOT(slotOpenFile(const QString &)));
-    connect(this, SIGNAL(sigFileSlider()), this, SLOT(slotFileSlider()));
+    connect(this, SIGNAL(sigSaveFile()), this, SLOT(slotSaveFile()));
+    connect(this, SIGNAL(sigSaveAsFile()), this, SLOT(slotSaveAsFile()));
+    connect(this, SIGNAL(sigFileSlider(const int &)), this, SLOT(slotFileSlider(const int &)));
+    connect(this, SIGNAL(sigCopySelectContent()), this, SLOT(slotCopySelectContent()));
+    connect(this, SIGNAL(sigSaveFileCtrlS()), this, SLOT(slotSaveFileCtrlS()));
 }
 
 int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgContent)
@@ -212,33 +228,24 @@ int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgCont
         emit sigOpenFile(msgContent);
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_SAVE_FILE :          //  保存文件
-        onSaveFile();
+        emit sigSaveFile();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_SAVE_AS_FILE:        //  另存为文件
-        onSaveAsFile();
+        emit sigSaveAsFile();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_COPY:           //  复制
-        onCopySelectContent();
+        emit sigCopySelectContent();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_SLIDE:               //  放映
-        emit sigFileSlider();
+        emit sigFileSlider(1);
         return ConstantMsg::g_effective_res;
     case MSG_NOTIFY_KEY_MSG :
         if ("Ctrl+S" == msgContent) {
-            onSaveFileCtrlS();
+            emit sigSaveFileCtrlS();
             return ConstantMsg::g_effective_res;
         }
         if ("Esc" == msgContent) {
-            if (DataManager::instance()->CurShowState() == FILE_SLIDE) {    //  幻灯片模式，　需要退出
-                m_pDocummentProxy->exitSlideModel();
-                DataManager::instance()->setCurShowState(FILE_NORMAL);
-            }
-        }
-
-        if (msgContent == "Up") {
-            sendMsg(MSG_OPERATION_PREV_PAGE);
-        } else if (msgContent == "Down") {
-            sendMsg(MSG_OPERATION_NEXT_PAGE);
+            emit sigFileSlider(0);
         }
     }
     return 0;

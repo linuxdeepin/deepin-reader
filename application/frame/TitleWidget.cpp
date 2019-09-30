@@ -6,6 +6,7 @@ TitleWidget::TitleWidget(CustomWidget *parent) :
     CustomWidget("TitleWidget", parent)
 {
     initWidget();
+    initConnections();
 }
 
 TitleWidget::~TitleWidget()
@@ -14,6 +15,28 @@ TitleWidget::~TitleWidget()
         m_pFontWidget->deleteLater();
         m_pFontWidget = nullptr;
     }
+}
+
+//  打开文件成功
+void TitleWidget::slotOpenFileOk()
+{
+    m_pThumbnailBtn->setDisabled(false);
+    m_pSettingBtn->setDisabled(false);
+    m_pHandleShapeBtn->setDisabled(false);
+    m_pMagnifierBtn->setDisabled(false);
+}
+
+// 应用全屏显示
+void TitleWidget::slotAppFullScreen()
+{
+    m_pThumbnailBtn->setChecked(false);
+}
+
+//  退出放大鏡
+void TitleWidget::slotMagnifierCancel()
+{
+    m_pMagnifierBtn->setChecked(false);
+    sendMsgToSubject(MSG_MAGNIFYING, QString::number(0));
 }
 
 void TitleWidget::initWidget()
@@ -34,6 +57,13 @@ void TitleWidget::initWidget()
     m_layout->addWidget(m_pMagnifierBtn);
 
     m_layout->addStretch(1);
+}
+
+void TitleWidget::initConnections()
+{
+    connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
+    connect(this, SIGNAL(sigMagnifierCancel()), this, SLOT(slotMagnifierCancel()));
+    connect(this, SIGNAL(sigAppFullScreen()), this, SLOT(slotAppFullScreen()));
 }
 
 //  缩略图 显示
@@ -84,7 +114,7 @@ void TitleWidget::on_handleShapeBtn_clicked()
         actionGroup->addAction(m_pHandleAction);
         actionGroup->addAction(m_pDefaultAction);
 
-        connect(actionGroup, SIGNAL(triggered(QAction *)), this, SLOT(SlotActionTrigger(QAction *)));
+        connect(actionGroup, SIGNAL(triggered(QAction *)), this, SLOT(slotActionTrigger(QAction *)));
     }
     m_pHandleMenu->exec(point);
 }
@@ -96,10 +126,10 @@ void TitleWidget::on_magnifyingBtn_clicked()
     sendMsgToSubject(MSG_MAGNIFYING, QString::number(bCheck));
 }
 
-void TitleWidget::SlotActionTrigger(QAction *action)
+void TitleWidget::slotActionTrigger(QAction *action)
 {
-    QString sAction = action->text() ;
-    if (sAction == "DefaultAction") {
+    QString sAction = action->objectName();
+    if (sAction == Frame::sDefaultShape) {
         on_DefaultAction_trigger();
     } else {
         on_HandleAction_trigger();
@@ -124,15 +154,6 @@ void TitleWidget::on_DefaultAction_trigger()
 
     QString btnName = Frame::sDefaultShape;
     setHandleShapeBtn(btnName);
-}
-
-//  文件打开成功，　功能性　按钮才能点击
-void TitleWidget::openFileOk()
-{
-    m_pThumbnailBtn->setDisabled(false);
-    m_pSettingBtn->setDisabled(false);
-    m_pHandleShapeBtn->setDisabled(false);
-    m_pMagnifierBtn->setDisabled(false);
 }
 
 //  设置　手型按钮的图标
@@ -194,6 +215,7 @@ DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 QAction *TitleWidget::createAction(const QString &actionName)
 {
     QAction *_action = new QAction(actionName, this);
+    _action->setObjectName(actionName);
     _action->setCheckable(true);
     _action->setIcon(QIcon(QString(":/resources/image/normal/%1_small.svg").arg(actionName)));
 
@@ -206,23 +228,16 @@ void TitleWidget::sendMsgToSubject(const int &msgType, const QString &msgCotent)
     sendMsg(msgType, msgCotent);
 }
 
+//  处理 推送消息
 int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    qDebug() << "TitleWidget dealWithData:" << msgType << " msgContent:" << msgContent; //  取消放大镜
-    if (msgType == MSG_MAGNIFYING_CANCEL) {
-        m_pMagnifierBtn->setChecked(false);
-        sendMsgToSubject(MSG_MAGNIFYING, QString::number(0));
-        return ConstantMsg::g_effective_res;
-    }
-
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        openFileOk();
+        emit sigOpenFileOk();
     } else if (msgType == MSG_OPERATION_FULLSCREEN) {
-        m_pThumbnailBtn->setChecked(false);
+        emit sigAppFullScreen();
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == "Esc") {      //  退出放大镜模式
-            m_pMagnifierBtn->setChecked(false);
-            sendMsgToSubject(MSG_MAGNIFYING, QString::number(0));
+            emit sigMagnifierCancel();
         }
     }
     return 0;
