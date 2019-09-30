@@ -44,6 +44,35 @@ void NotesWidget::slotAddNoteItem()
 }
 
 /**
+ * @brief NotesWidget::slotDltNoteItem
+ * 右键删除当前注释item
+ */
+void NotesWidget::slotDltNoteItem(QString uuid)
+{
+    for(int row = 0; m_pNotesList->count(); ++row)
+    {
+        QListWidgetItem *pItem = m_pNotesList->item(row);
+        if(pItem){
+            NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
+            if (t_widget) {
+                QString t_uuid = t_widget->noteUUId();
+                if (t_uuid == uuid) {
+                    t_widget->deleteLater();
+                    t_widget = nullptr;
+
+                    delete  pItem;
+
+                    // remove date from map
+                    // todo
+
+                    break;
+                }
+            }
+        }
+    }
+}
+
+/**
  * @brief NotesWidget::addNotesItem
  * 给新节点填充内容（包括文字、缩略图等内容）
  * @param image
