@@ -95,7 +95,6 @@ QStringList HomeWidget::getOpenFileList()
     return fileList;
 }
 
-
 int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE) {
