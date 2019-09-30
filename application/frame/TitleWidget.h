@@ -19,7 +19,16 @@ public:
     TitleWidget(CustomWidget *parent = nullptr);
     ~TitleWidget() Q_DECL_OVERRIDE;
 
+signals:
+    void sigOpenFileOk();
+    void sigAppFullScreen();
+
+    void sigMagnifierCancel();
+
 private slots:
+    void slotOpenFileOk();
+    void slotAppFullScreen();
+    void slotMagnifierCancel();
 
     void slotFontWidgetHide();
     void slotHandleMenuHide();
@@ -29,15 +38,16 @@ private slots:
     void on_handleShapeBtn_clicked();
     void on_magnifyingBtn_clicked();
 
-    void SlotActionTrigger(QAction *);
+    void slotActionTrigger(QAction *);
 
 private:
+    void initConnections();
+
     void initBtns();
     DIconButton *createBtn(const QString &btnName, bool bCheckable = false);
     QAction *createAction(const QString &iconName);
     void sendMsgToSubject(const int &, const QString &msgCotent = "");
 
-    void openFileOk();
     void setHandleShapeBtn(const QString &);
 
     void on_HandleAction_trigger();

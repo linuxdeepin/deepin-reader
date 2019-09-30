@@ -40,7 +40,7 @@ void DocShowShellWidget::dropEvent(QDropEvent *event)
             QString sFilePath =  url.toLocalFile();
 
             QFileInfo info(sFilePath);
-            QString sCompleteSuffix = info.completeSuffix();
+            QString sCompleteSuffix = info.completeSuffix();    //  文件后缀
             if (sCompleteSuffix == "pdf" || sCompleteSuffix == "tiff") {
                 //  默认打开第一个
                 QString sRes = sFilePath + Constant::sQStringSep;
@@ -63,15 +63,16 @@ void DocShowShellWidget::resizeEvent(QResizeEvent *event)
     CustomWidget::resizeEvent(event);
 }
 
+//  获取文件的基本数据，　进行展示
 void DocShowShellWidget::slotShowFileAttr()
 {
-    //  获取文件的基本数据，　进行展示
     if (m_pFileAttrWidget == nullptr) {
         m_pFileAttrWidget = new FileAttrWidget;
     }
     m_pFileAttrWidget->showScreenCenter();
 }
 
+//  搜索框
 void DocShowShellWidget::slotShowFindWidget()
 {
     if (m_pFindWidget == nullptr) {
@@ -101,7 +102,6 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
     case MSG_OPERATION_FIND:        //  搜索
         emit sigShowFileFind();
         return ConstantMsg::g_effective_res;
-
     case MSG_NOTIFY_KEY_MSG : {    //  最后一个处理通知消息
         if ("Ctrl+F" == msgContent) {
             emit sigShowFileFind();

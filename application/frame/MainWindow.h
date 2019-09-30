@@ -24,7 +24,11 @@ public:
     ~MainWindow() Q_DECL_OVERRIDE;
 
 signals:
+    void sigOpenFileOk();
+    void sigOpenAppHelp();
     void sigAppExit();
+    void sigAppShowState(const int &);
+    void sigSetAppTitle(const QString &);
 
 protected:
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
@@ -35,17 +39,19 @@ private:
     void initTitlebar();
     QAction *createAction(DMenu *menu, const QString &actionName);
 
-    void openFileOk();
-
     void onOpenFile();
     void onOpenFolder();
     void onFullScreen();
     void onScreening();
 
-
 private slots:
-    void SlotActionTrigger(const QString &);
-    void SlotAppExit();
+    void slotOpenFileOk();
+    void slotOpenAppHelp();
+    void slotAppExit();
+    void slotAppShowState(const int &);
+    void slotSetAppTitle(const QString &);
+
+    void slotActionTrigger(const QString &);
 
 private:
     void sendMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;

@@ -11,10 +11,18 @@ MainWidget::MainWidget(CustomWidget *parent) :
     CustomWidget ("MainWidget", parent)
 {
     initWidget();
+    initConnections();
+}
+
+void MainWidget::initConnections()
+{
+    connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
+    connect(this, SIGNAL(sigOpenFileFail(const QString &)), this, SLOT(slotOpenFileFail(const QString &)));
+
 }
 
 //  文件打开成功
-void MainWidget::openFileOk()
+void MainWidget::slotOpenFileOk()
 {
     auto pWidget = this->findChild<DStackedWidget *>();
     if (pWidget) {
@@ -23,7 +31,7 @@ void MainWidget::openFileOk()
 }
 
 //  文件打开失败
-void MainWidget::openFileFail(const QString &errorInfo)
+void MainWidget::slotOpenFileFail(const QString &errorInfo)
 {
     qDebug() << "openFileFail       "   <<  errorInfo;
 }
@@ -31,11 +39,11 @@ void MainWidget::openFileFail(const QString &errorInfo)
 int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        openFileOk();
+        emit sigOpenFileOk();
     }
 
     if (msgType == MSG_OPERATION_OPEN_FILE_FAIL) {
-        openFileFail(msgContent);
+        emit sigOpenFileFail(msgContent);
         return ConstantMsg::g_effective_res;
     }
 

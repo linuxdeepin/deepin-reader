@@ -15,9 +15,16 @@ class MainWidget : public CustomWidget
 public:
     MainWidget(CustomWidget *parent = nullptr);
 
+signals:
+    void sigOpenFileOk();
+    void sigOpenFileFail(const QString &);
+
+private slots:
+    void slotOpenFileFail(const QString &);
+    void slotOpenFileOk();
+
 private:
-    void openFileFail(const QString &);
-    void openFileOk();
+    void initConnections();
 
     // IObserver interface
 public:

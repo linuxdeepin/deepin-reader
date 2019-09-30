@@ -14,6 +14,17 @@ class LeftSidebarWidget : public CustomWidget
 public:
     LeftSidebarWidget(CustomWidget *parent = nullptr);
 
+signals:
+    void sigStackSetCurIndex(const int &);
+    void sigWidgetVisible(const int &);
+
+private slots:
+    void slotStackSetCurIndex(const int &);
+    void slotWidgetVisible(const int &);
+
+private:
+    void initConnections();
+
     // CustomWidget interface
 protected:
     void initWidget() Q_DECL_OVERRIDE;
