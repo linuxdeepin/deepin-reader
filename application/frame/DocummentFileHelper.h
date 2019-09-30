@@ -30,6 +30,10 @@ public:
 private:
     void setAppShowTitle(const QString &);
     void initConnections();
+    QString getFileFilter();
+    QString getFilePath(const QString &inputPath);
+
+    void setCurDocuType(const QString &);
 
 private slots:
     void slotOpenFile(const QString &filePaths);

@@ -3,6 +3,10 @@
 #include <DStackedWidget>
 #include <DSplitter>
 
+#include <QFileInfo>
+#include <QMimeData>
+#include <QUrl>
+
 #include "HomeWidget.h"
 #include "DocShowShellWidget.h"
 #include "LeftSidebarWidget.h"
@@ -10,6 +14,8 @@
 MainWidget::MainWidget(CustomWidget *parent) :
     CustomWidget ("MainWidget", parent)
 {
+    setAcceptDrops(true);
+
     initWidget();
     initConnections();
 }
@@ -18,7 +24,6 @@ void MainWidget::initConnections()
 {
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigOpenFileFail(const QString &)), this, SLOT(slotOpenFileFail(const QString &)));
-
 }
 
 //  文件打开成功
@@ -33,6 +38,7 @@ void MainWidget::slotOpenFileOk()
 //  文件打开失败
 void MainWidget::slotOpenFileFail(const QString &errorInfo)
 {
+    DMessageBox::warning(nullptr, Frame::sAppName, errorInfo);
     qDebug() << "openFileFail       "   <<  errorInfo;
 }
 
@@ -49,6 +55,37 @@ int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
 
     return 0;
 }
+
+void MainWidget::dragEnterEvent(QDragEnterEvent *event)
+{
+    // Accept drag event if mime type is url.
+    auto mimeData = event->mimeData();
+    if (mimeData->hasUrls()) {
+        event->accept();
+    }
+}
+
+void MainWidget::dropEvent(QDropEvent *event)
+{
+    auto mimeData = event->mimeData();
+    if (mimeData->hasUrls()) {
+        for (auto url : mimeData->urls()) {
+            QString sFilePath =  url.toLocalFile();
+
+            QFileInfo info(sFilePath);
+            QString sCompleteSuffix = info.completeSuffix();    //  文件后缀
+            if (sCompleteSuffix == "pdf" || sCompleteSuffix == "tiff") {
+                //  默认打开第一个
+                QString sRes = sFilePath + Constant::sQStringSep;
+
+                sendMsg(MSG_OPEN_FILE_PATH, sRes);
+
+                break;
+            }
+        }
+    }
+}
+
 
 void MainWidget::initWidget()
 {
