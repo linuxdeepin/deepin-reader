@@ -34,12 +34,12 @@ protected:
 
 private slots:
     void slotClosed();
-    void slotDlted();
+//    void slotDlted();
 
 private:
     DTextEdit *m_pTextEdit = nullptr;   // 注释
     MenuLab *m_pCloseLab = nullptr;     // 关闭
-    MenuLab *m_pDltLab = nullptr;       // 删除
+//    MenuLab *m_pDltLab = nullptr;       // 删除
 };
 
 #endif // FILEVIEWNOTEWIDGET_H

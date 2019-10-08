@@ -26,15 +26,15 @@ void FileViewNoteWidget::initWidget()
     m_pHLayoutClose->addStretch(1);
     m_pHLayoutClose->addWidget(m_pCloseLab);
 
-    m_pDltLab = new MenuLab;
-    m_pDltLab->setFixedSize(QSize(30, 30));
-    m_pDltLab->setPixmap(QPixmap(QString(":/resources/image/delete.svg")));
-    connect(m_pDltLab, SIGNAL(clicked()), this, SLOT(slotDlted()));
+//    m_pDltLab = new MenuLab;
+//    m_pDltLab->setFixedSize(QSize(30, 30));
+//    m_pDltLab->setPixmap(QPixmap(QString(":/resources/image/delete.svg")));
+//    connect(m_pDltLab, SIGNAL(clicked()), this, SLOT(slotDlted()));
 
-    auto m_pHLayoutDlt = new QHBoxLayout;
-    m_pHLayoutDlt->setContentsMargins(0, 0, 1, 0);
-    m_pHLayoutDlt->addWidget(m_pDltLab);
-    m_pHLayoutDlt->addStretch(1);
+//    auto m_pHLayoutDlt = new QHBoxLayout;
+//    m_pHLayoutDlt->setContentsMargins(0, 0, 1, 0);
+//    m_pHLayoutDlt->addWidget(m_pDltLab);
+//    m_pHLayoutDlt->addStretch(1);
 
     m_pTextEdit = new DTextEdit;
 
@@ -43,7 +43,7 @@ void FileViewNoteWidget::initWidget()
     m_pVLayout->setSpacing(0);
     m_pVLayout->addItem(m_pHLayoutClose);
     m_pVLayout->addWidget(m_pTextEdit);
-    m_pVLayout->addItem(m_pHLayoutDlt);
+//    m_pVLayout->addItem(m_pHLayoutDlt);
 
     this->setLayout(m_pVLayout);
 }
@@ -67,14 +67,14 @@ void FileViewNoteWidget::slotClosed()
 }
 
 // 删除槽函数
-void FileViewNoteWidget::slotDlted()
-{
-    //sendMsg Dlted signal;
-    if (QMessageBox::Yes == DMessageBox::question(nullptr,  QString("DELETE"), QString("delete this note"))) {
+//void FileViewNoteWidget::slotDlted()
+//{
+//    //sendMsg Dlted signal;
+//    if (QMessageBox::Yes == DMessageBox::question(nullptr,  QString("DELETE"), QString("delete this note"))) {
 
-        qDebug() << "             void FileViewNoteWidget      slotDlted()   ";
-        m_pTextEdit->clear();
+//        qDebug() << "             void FileViewNoteWidget      slotDlted()   ";
+//        m_pTextEdit->clear();
 
-        sendMsg(MSG_NOTE_ADDCONTANT, QString(""));
-    }
-}
+//        sendMsg(MSG_NOTE_ADDCONTANT, QString(""));
+//    }
+//}
