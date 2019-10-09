@@ -61,7 +61,7 @@ void SearchTask::run()
     pages.reserve(m_pages.count());
 
     for (int index = 0, count = m_pages.count(); index < count; ++index) {
-        const int shiftedIndex = (index + m_beginAtPage - 1) % count;
+        const int shiftedIndex = (index + m_beginAtPage - 1) % count;        
         pages.append(m_pages.at(shiftedIndex));
     }
 
@@ -101,6 +101,7 @@ void SearchTask::processResults(Future future)
         const stSearchRes res = future.resultAt(shiftedIndex);
 
         if (res.listtext.size() > 0) {
+            emit signal_restest();
             emit signal_resultReady(res);
         }
     }

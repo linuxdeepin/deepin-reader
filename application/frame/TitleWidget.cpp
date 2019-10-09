@@ -128,32 +128,20 @@ void TitleWidget::on_magnifyingBtn_clicked()
 
 void TitleWidget::slotActionTrigger(QAction *action)
 {
-    QString sAction = action->text() ;
-    if (sAction == "DefaultAction") {
-        on_DefaultAction_trigger();
+    QString btnName = "";
+    int nCurrentState = -1;
+
+    QString sAction = action->objectName();
+    if (sAction == Frame::sDefaultShape) {
+        nCurrentState = 0;
+        btnName = Frame::sDefaultShape;
     } else {
-        on_HandleAction_trigger();
+        nCurrentState = 1;
+        btnName = Frame::sHandleShape;
     }
 
-    sendMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurrentState));
-}
-
-//  切换为 手型 鼠标
-void TitleWidget::on_HandleAction_trigger()
-{
-    m_nCurrentState = 1;
-
-    QString btnName = Frame::sHandleShape;
     setHandleShapeBtn(btnName);
-}
-
-//  切换为 默认鼠标
-void TitleWidget::on_DefaultAction_trigger()
-{
-    m_nCurrentState = 0;
-
-    QString btnName = Frame::sDefaultShape;
-    setHandleShapeBtn(btnName);
+    sendMsgToSubject(MSG_HANDLESHAPE, QString::number(nCurrentState));
 }
 
 //  设置　手型按钮的图标
@@ -215,6 +203,7 @@ DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 QAction *TitleWidget::createAction(const QString &actionName)
 {
     QAction *_action = new QAction(actionName, this);
+    _action->setObjectName(actionName);
     _action->setCheckable(true);
     _action->setIcon(QIcon(QString(":/resources/image/normal/%1_small.svg").arg(actionName)));
 

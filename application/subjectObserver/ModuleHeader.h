@@ -23,7 +23,10 @@ const QString sAcknowledgementLink = "https://www.deepin.org/acknowledgments/dee
 
 const QString sPdf_Filter = "Pdf File (*.pdf)";
 const QString sTiff_Filter = "Tiff files (*.tiff)";
-const QString sQStringSep = "@#&wzx";
+const QString sPs_Filter = "Ps files (*.ps)";
+const QString sXps_Filter = "Xps files (*.xps)";
+const QString sDjvu_Filter = "Djvu files (*.djvu)";
+const QString sQStringSep = "@#&!@#$";
 }
 
 #endif // IMAGEHEADER_H

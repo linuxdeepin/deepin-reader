@@ -47,6 +47,7 @@ public:
 
 signals:
     void sigWidgetHide();
+    void sigOpenFileOk();
 
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
@@ -58,11 +59,15 @@ protected:
     void  paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
     void  hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
 
+private slots:
+    void slotReset();
+
 private:
     void rotateFileView(bool isRight = true);
     void scaleAndRotate(int);
     void setShowSuitHIcon();
     void setShowSuitWIcon();
+    void initConnection();
 
 private slots:
     void slotSetChangeVal(int);

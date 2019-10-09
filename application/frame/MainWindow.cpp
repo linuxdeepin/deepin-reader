@@ -70,7 +70,7 @@ void MainWindow::initConnections()
 {
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigOpenAppHelp()), this, SLOT(slotOpenAppHelp()));
-    connect(this, SIGNAL(sigAppExit()), this, SLOT(SlotAppExit()));
+    connect(this, SIGNAL(sigAppExit()), this, SLOT(slotAppExit()));
     connect(this, SIGNAL(sigAppShowState(const int &)), this, SLOT(slotAppShowState(const int &)));
     connect(this, SIGNAL(sigSetAppTitle(const QString &)), this, SLOT(slotSetAppTitle(const QString &)));
 

@@ -6,11 +6,37 @@
 #include <poppler-qt5.h>
 class PagePdf;
 class PagePdfPrivate;
+class PagePdf: public PageBase
+{
+    Q_OBJECT
+public:
+    PagePdf(QWidget *parent = nullptr);
+    ~PagePdf() override;
+    bool getImage(QImage &image, double width, double height) override;
+    bool getSlideImage(QImage &image, double &width, double &height) override;
+    PageInterface *getInterFace() override;
+    void setPage(Poppler::Page *page, int pageno);
+    //Annotation
+    QString addAnnotation(QPoint screenPos);
+    QString removeAnnotation(const QPoint &pos);
+    void removeAnnotation(const QString &struuid);
+    bool annotationClicked(const QPoint &pos, QString &strtext);
+    Poppler::Page *GetPage();
+    stSearchRes search(const QString &text, bool matchCase, bool wholeWords) override;
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
+private:
+    void removeAnnotation(Poppler::Annotation *annotation);
+    QString addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color);
+private:
+    Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), PagePdf)
+};
 class PagePdfPrivate: public PageBasePrivate, public  PageInterface
 {
     Q_OBJECT
 public:
-    PagePdfPrivate(PagePdf *parent): PageBasePrivate((PageBase *)parent)
+    PagePdfPrivate(PagePdf *parent): PageBasePrivate(parent)
     {
         m_page = nullptr;
     }
@@ -199,31 +225,6 @@ private:
         return true;
     }
 };
-class PagePdf: public PageBase
-{
-    Q_OBJECT
-public:
-    PagePdf(QWidget *parent = 0);
-    ~PagePdf();
-    bool getImage(QImage &image, double width, double height) override;
-    bool getSlideImage(QImage &image, double &width, double &height) override;
-    PageInterface *getInterFace() override;
-    void setPage(Poppler::Page *page, int pageno);
-    //Annotation
-    QString addAnnotation(QPoint screenPos);
-    QString removeAnnotation(const QPoint &pos);
-    void removeAnnotation(const QString &struuid);
-    bool annotationClicked(const QPoint &pos, QString &strtext);
-    Poppler::Page *GetPage();
-    stSearchRes search(const QString &text, bool matchCase, bool wholeWords) override;
 
-protected:
-     void paintEvent(QPaintEvent *event) override;
-private:
-    void removeAnnotation(Poppler::Annotation *annotation);
-    QString addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color);
-private:
-    Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), PagePdf)
-};
 
 #endif // PAGEPDF_H

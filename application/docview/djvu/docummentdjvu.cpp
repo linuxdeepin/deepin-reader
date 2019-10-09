@@ -26,28 +26,13 @@ void waitForMessageTag(ddjvu_context_t *context, ddjvu_message_tag_t tag)
     }
 }
 
-DocummentDJVU::DocummentDJVU(DWidget *parent): DocummentBase(parent),
-    document(nullptr),
-    m_fileinfo(),
-    m_pageByName(),
-    m_titleByIndex()
+void DocummentDJVUPrivate::loadDocumment(QString filepath)
 {
-}
-
-DocummentDJVU::~DocummentDJVU()
-{
-    ddjvu_document_release(document);
-    ddjvu_context_release(m_context);
-    ddjvu_format_release(m_format);
-}
-
-
-bool DocummentDJVU::loadDocumment(QString filepath)
-{
+    Q_Q(DocummentDJVU);
     m_context = ddjvu_context_create("deepin_reader");
 
     if (m_context == 0) {
-        return false;
+        return;
     }
 
 #if DDJVUAPI_VERSION >= 19
@@ -63,7 +48,7 @@ bool DocummentDJVU::loadDocumment(QString filepath)
     if (document == 0) {
         ddjvu_context_release(m_context);
 
-        return false;
+        return;
     }
 
     waitForMessageTag(m_context, DDJVU_DOCINFO);
@@ -72,7 +57,7 @@ bool DocummentDJVU::loadDocumment(QString filepath)
         ddjvu_document_release(document);
         ddjvu_context_release(m_context);
 
-        return false;
+        return;
     }
     unsigned int mask[] = {0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000};
 
@@ -84,243 +69,17 @@ bool DocummentDJVU::loadDocumment(QString filepath)
     m_pages.clear();
     qDebug() << "djvu numPages :" << ddjvu_document_get_pagenum(document);
     for (int i = 0; i < ddjvu_document_get_pagenum(document); i++) {
-        PageDJVU *page = new PageDJVU(this);
+        PageDJVU *page = new PageDJVU(q);
         page->setPage(i);
         m_pages.append((PageBase *)page);
     }
     setBasicInfo(filepath);
-    return true;
+
+    emit signal_docummentLoaded();
 }
 
 
-//bool DocummentDJVU::openFile(QString filepath)
-//{
-//    DWidget *qwidget = new DWidget(this);
-//    QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
-//    qhblayout->setAlignment(qwidget, Qt::AlignCenter);
-//    qwidget->setLayout(qhblayout);
-//    m_vboxLayout.addWidget(qwidget);
-//    //        m_vboxLayout.addWidget(m_pages.at(i));
-//    m_vboxLayout.setAlignment(&m_widget, Qt::AlignCenter);
-//    qwidget->setMouseTracking(true);
-//    m_widgets.append(qwidget);
-
-
-//    for (int i = 0; i < m_pages.size(); i++) {
-//        m_pages.at(i)->setScaleAndRotate(m_scale, m_rotate);
-//    }
-//    setViewModeAndShow(m_viewmode);
-//    initConnect();
-//    donotneedreloaddoc = false;
-//    if (m_threadloaddoc.isRunning())
-//        m_threadloaddoc.setRestart();
-//    else
-//        m_threadloaddoc.start();
-//    if (m_threadloadwords.isRunning())
-//        m_threadloadwords.setRestart();
-//    else
-//        m_threadloadwords.start();
-
-//    return true;
-//}
-
-//bool DocummentDJVU::loadPages()
-//{
-//    if (!document && m_pages.size() == ddjvu_document_get_pagenum(document))
-//        return false;
-//    qDebug() << "loadPages";
-//    //    for (int i = 0; i < m_pages.size(); i++) {
-//    int startnum = m_currentpageno - 3;
-//    if (startnum < 0) {
-//        startnum = 0;
-//    }
-//    int endnum = startnum + 7;
-//    if (endnum > m_pages.size()) {
-//        endnum = m_pages.size();
-//    }
-//    for (int i = startnum; i < endnum; i++) {
-//        if (QThread::currentThread()->isInterruptionRequested()) {
-//            break;
-//        }
-//        m_pages.at(i)->showImage(m_scale, m_rotate);
-//    }
-//    return true;
-//}
-
-//bool DocummentDJVU::loadWords()
-//{
-//    if (!document && m_pages.size() == ddjvu_document_get_pagenum(document))
-//        return false;
-//    qDebug() << "loadWords";
-//    for (int i = 0; i < m_pages.size(); i++) {
-//        if (QThread::currentThread()->isInterruptionRequested()) {
-//            break;
-//        }
-//        PageDJVU *pdjvu = (PageDJVU *)m_pages.at(i);
-//        pdjvu->loadWords();
-//        pdjvu->loadLinks();
-//    }
-//    return true;
-//}
-
-void DocummentDJVU::removeAllAnnotation()
-{
-    if (!document)return;
-//    for (int i = 0; i < document->numPages(); ++i) {
-//        QList<Poppler::Annotation *> listannote = document->page(i)->annotations();
-//        foreach (Poppler::Annotation *atmp, listannote) {
-//            document->page(i)->removeAnnotation(atmp);
-//        }
-//    }
-//    scaleAndShow(m_scale, m_rotate);
-}
-
-QString DocummentDJVU::removeAnnotation(const QPoint &startpos)
-{
-    //暂时只处理未旋转
-    QPoint pt = startpos;
-    int page = pointInWhichPage(pt);
-    if (page < 0) return "";
-    return static_cast<PageDJVU *>(m_pages.at(page))->removeAnnotation(pt);
-}
-
-void DocummentDJVU::removeAnnotation(const QString &struuid)
-{
-    return static_cast<PageDJVU *>(m_pages.at(currentPageNo()))->removeAnnotation(struuid);
-}
-
-QString DocummentDJVU::addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color)
-{
-    QPoint pt = startpos;
-    int page = pointInWhichPage(pt);
-    if (page < 0) return "";
-    return static_cast<PageDJVU *>(m_pages.at(page))->addAnnotation(pt);
-}
-
-void DocummentDJVU::search(const QString &strtext,QColor color)
-{
-
-}
-
-bool DocummentDJVU::save(const QString &filePath, bool withChanges)
-{
-    // Save document to temporary file...
-    QTemporaryFile temporaryFile;
-    temporaryFile.setFileTemplate(temporaryFile.fileTemplate() + QLatin1String(".") + QFileInfo(filePath).suffix());
-    if (!temporaryFile.open()) {
-        return false;
-    }
-
-    temporaryFile.close();
-
-    if (!pdfsave(temporaryFile.fileName(), withChanges)) {
-        return false;
-    }
-
-    // Copy from temporary file to actual file...
-    QFile file(filePath);
-
-    if (!temporaryFile.open()) {
-        return false;
-    }
-
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        return false;
-    }
-
-    if (!PublicFunc::copyFile(temporaryFile, file)) {
-        return false;
-    }
-
-    if (withChanges) {
-        // m_bModified = false;//reset modify status
-        setBasicInfo(filePath);
-    }
-
-    return true;
-}
-
-bool DocummentDJVU::pdfsave(const QString &filePath, bool withChanges) const
-{
-//    QScopedPointer< Poppler::PDFConverter > pdfConverter(document->pdfConverter());
-
-//    pdfConverter->setOutputFileName(filePath);
-
-//    Poppler::PDFConverter::PDFOptions options = pdfConverter->pdfOptions();
-
-//    if (withChanges) {
-//        options |= Poppler::PDFConverter::WithChanges;
-//    }
-
-//    pdfConverter->setPDFOptions(options);
-
-//    return pdfConverter->convert();
-    return  false;
-
-}
-
-void DocummentDJVU::clearSearch()
-{
-
-}
-
-void DocummentDJVU::searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color)
-{
-    if (nullptr == page) return;
-    QList<QRectF> listrect = page->search(strtext);
-    if (listrect.size() <= 0)return;
-
-    if (listrect.size() <= 0)return;
-    Poppler::Annotation::Style style;
-    style.setColor(color);
-
-    Poppler::Annotation::Popup popup;
-    popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
-
-    Poppler::HighlightAnnotation *annotation = new Poppler::HighlightAnnotation();
-
-    Poppler::HighlightAnnotation::Quad quad;
-    QList<Poppler::HighlightAnnotation::Quad> qlistquad;
-    QRectF rec, recboundary;
-    foreach (rec, listrect) {
-        //获取搜索结果附近文字
-        QRectF rctext = rec;
-        rctext.setX(rctext.x() - 40);
-        rctext.setWidth(rctext.width() + 80);
-        stres.listtext.push_back(page->text(rctext));
-        recboundary.setTopLeft(QPointF(rec.left() / page->pageSizeF().width(),
-                                       rec.top() / page->pageSizeF().height()));
-        recboundary.setTopRight(QPointF(rec.right() / page->pageSizeF().width(),
-                                        rec.top() / page->pageSizeF().height()));
-        recboundary.setBottomLeft(QPointF(rec.left() / page->pageSizeF().width(),
-                                          rec.bottom() / page->pageSizeF().height()));
-        recboundary.setBottomRight(QPointF(rec.right() / page->pageSizeF().width(),
-                                           rec.bottom() / page->pageSizeF().height()));
-
-        qDebug() << "**" << rec << "**";
-        quad.points[0] = recboundary.topLeft();
-        quad.points[1] = recboundary.topRight();
-        quad.points[2] = recboundary.bottomRight();
-        quad.points[3] = recboundary.bottomLeft();
-        qlistquad.append(quad);
-    }
-    annotation->setHighlightQuads(qlistquad);
-    //annotation->setBoundary(recboundary);
-    annotation->setStyle(style);
-    annotation->setPopup(popup);
-    page->addAnnotation(annotation);
-
-}
-
-void DocummentDJVU::refreshOnePage(int ipage)
-{
-    if (!document)
-        return ;
-    PageDJVU *ppdf = (PageDJVU *)m_pages.at(ipage);
-    ppdf->showImage(m_scale, m_rotate);
-}
-
-void DocummentDJVU::setBasicInfo(const QString &filepath)
+void DocummentDJVUPrivate::setBasicInfo(const QString &filepath)
 {
     QFileInfo info(filepath);
     m_fileinfo.size = info.size();
@@ -365,9 +124,28 @@ void DocummentDJVU::setBasicInfo(const QString &filepath)
     }
 }
 
+
+DocummentDJVU::DocummentDJVU(DWidget *parent):
+    DocummentBase(new DocummentDJVUPrivate(this), parent)
+{
+}
+
+DocummentDJVU::~DocummentDJVU()
+{
+}
+
+
+bool DocummentDJVU::loadDocumment(QString filepath)
+{
+
+    emit signal_loadDocumment(filepath);
+    return true;
+}
+
 bool DocummentDJVU::bDocummentExist()
 {
-    if (!document) {
+    Q_D(DocummentDJVU);
+    if (!d->document) {
         return false;
     }
     return true;
@@ -375,40 +153,46 @@ bool DocummentDJVU::bDocummentExist()
 
 bool DocummentDJVU::getImage(int pagenum, QImage &image, double width, double height)
 {
-    return m_pages.at(pagenum)->getImage(image, width, height);
+    Q_D(DocummentDJVU);
+    return d->m_pages.at(pagenum)->getInterFace()->getImage(image, width, height);
 }
 
 void DocummentDJVU::docBasicInfo(stFileInfo &info)
 {
-    info = m_fileinfo;
+    Q_D(DocummentDJVU);
+    info = d->m_fileinfo;
 }
 
-bool DocummentDJVU::annotationClicked(const QPoint &pos, QString &strtext)
-{
-    QPoint pt(pos);
-    int ipage = pointInWhichPage(pt);
-    if (ipage < 0) return  false;
-    return static_cast<PageDJVU>(m_pages.at(ipage)).annotationClicked(pt, strtext);
-}
+//bool DocummentDJVU::annotationClicked(const QPoint &pos, QString &strtext)
+//{
+//    QPoint pt(pos);
+//    int ipage = pointInWhichPage(pt);
+//    if (ipage < 0) return  false;
+//    return static_cast<PageDJVU>(m_pages.at(ipage)).annotationClicked(pt, strtext);
+//}
 
-void DocummentDJVU::title(QString &title)
-{
-//    title = document->title();
-}
+//void DocummentDJVU::title(QString &title)
+//{
+////    title = document->title();
+//}
 
 ddjvu_document_t *DocummentDJVU::getDocument()
 {
-    return document;
+    Q_D(DocummentDJVU);
+    return d->document;
 }
 ddjvu_context_t *DocummentDJVU::getContext()
 {
-    return m_context;
+    Q_D(DocummentDJVU);
+    return d->m_context;
 }
 ddjvu_format_t *DocummentDJVU::getFormat()
 {
-    return m_format;
+    Q_D(DocummentDJVU);
+    return d->m_format;
 }
 QHash< QString, int > DocummentDJVU::getPageByName()
 {
-    return m_pageByName;
+    Q_D(DocummentDJVU);
+    return d->m_pageByName;
 }

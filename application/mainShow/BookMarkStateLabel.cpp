@@ -4,6 +4,7 @@
 #include "controller/MsgSubject.h"
 #include "translator/PdfControl.h"
 #include "docview/docummentproxy.h"
+#include "controller/DataManager.h"
 
 BookMarkStateLabel::BookMarkStateLabel(DWidget *parent)
     : QLabel (parent)
@@ -86,6 +87,8 @@ void BookMarkStateLabel::slotSetMarkState(const QString &sData)
     } else {
         setPixmapState(ImageModule::g_checked_state);
     }
+
+    DataManager::instance()->setBIsBookMarkState(m_bChecked);
 }
 
 bool BookMarkStateLabel::bChecked() const

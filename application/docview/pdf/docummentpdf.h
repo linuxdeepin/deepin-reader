@@ -13,7 +13,7 @@ class DocummentPDF: public DocummentBase
     Q_OBJECT
 public:
     DocummentPDF(DWidget *parent = nullptr);
-    ~DocummentPDF();
+    ~DocummentPDF() override;
 //    bool openFile(QString filepath) override;
     bool bDocummentExist() override;
     bool getImage(int pagenum, QImage &image, double width, double height) override;
@@ -25,19 +25,19 @@ public:
     QString removeAnnotation(const QPoint &startpos) override;
     void removeAnnotation(const QString &struuid) override;
     QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow) override;
-    void search(const QString &strtext,QColor color = Qt::yellow) override;
+    void search(const QString &strtext, QColor color = Qt::yellow) override;
     void clearSearch() override;
     bool annotationClicked(const QPoint &pos, QString &strtext) override;
-    void title(QString &title) override;  
+    void title(QString &title) override;
     void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) override;
     void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1)override;
     bool loadDocumment(QString filepath) override;
 //    void stopLoadPageThread() override;
 
 
-signals:
-    void signal_openFile(QString file);
-    void signal_loadDocumment(QString);
+//signals:
+////    void signal_openFile(QString file);
+//    void signal_loadDocumment(QString);
 private:
     bool pdfsave(const QString &filePath, bool withChanges);   
     void refreshOnePage(int ipage);
@@ -50,12 +50,12 @@ class DocummentPDFPrivate: public DocummentBasePrivate
 {
     Q_OBJECT
 public:
-    DocummentPDFPrivate(DocummentPDF *parent): DocummentBasePrivate((DocummentBase *)parent)
+    DocummentPDFPrivate(DocummentPDF *parent): DocummentBasePrivate(parent)
     {
         document = nullptr;
     }
 
-    ~DocummentPDFPrivate()
+    ~DocummentPDFPrivate() override
     {
 
     }
@@ -66,7 +66,7 @@ public:
 
     Q_DECLARE_PUBLIC(DocummentPDF)
 protected slots:
-    bool loadDocumment(QString filepath);
+    void loadDocumment(QString filepath) override;
 private:
     void setBasicInfo(const QString &filepath);
 };

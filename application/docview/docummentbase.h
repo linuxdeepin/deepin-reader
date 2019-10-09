@@ -90,23 +90,22 @@ public:
         m_bModified = false;
         m_bslidemodel = false;
         m_slidepageno = -1;
-        m_currentpageno = -1;
+        m_currentpageno = 0;
         m_scale = 1.0;
         m_rotate = RotateType_0;
         donotneedreloaddoc = false;
         m_wordsbload = false;
-        m_magnifierpage = false;
-        m_currentpageno = 0;
+        m_magnifierpage = false;       
         m_viewmode = ViewMode_SinglePage;
         m_lastmagnifierpagenum = -1;
         animationfirst = nullptr;
         animationsecond = nullptr;
         animationgroup = nullptr;
-        m_bsearchfirst=true;
-        m_findcurpage=-1;
-        m_imagewidht=0;
-        m_imageheight=0;
-        m_cursearch=1;
+        m_bsearchfirst = true;
+        m_findcurpage = -1;
+        m_imagewidht = 0;
+        m_imageheight = 0;
+        m_cursearch = 1;
     }
 
     ~DocummentBasePrivate()
@@ -128,12 +127,11 @@ public:
             delete  animationgroup;
             animationgroup = nullptr;
         }
-        if(m_searchTask)
-        {
+        if (m_searchTask) {
             m_searchTask->cancel();
             m_searchTask->wait();
             delete m_searchTask;
-            m_searchTask=nullptr;
+            m_searchTask = nullptr;
         }
     }
 
@@ -172,6 +170,8 @@ public:
 
 signals:
     void signal_docummentLoaded();
+protected slots:
+    virtual void loadDocumment(QString filepath) {}
 protected:
     DocummentBase *q_ptr;
     Q_DECLARE_PUBLIC(DocummentBase)
@@ -198,13 +198,16 @@ public:
     virtual QString removeAnnotation(const QPoint &startpos) {}
     virtual void removeAnnotation(const QString &struuid) {}
     virtual QString addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) {}
-    virtual void search(const QString &strtext,QColor color = Qt::yellow) {}
+    virtual void search(const QString &strtext, QColor color = Qt::yellow) {}
     virtual void clearSearch() {}
     virtual void docBasicInfo(stFileInfo &info) {}
     virtual void title(QString &title) {}
     virtual void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) {}
     virtual void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1) {}
-    virtual bool annotationClicked(const QPoint &pos, QString &strtext){return false;}
+    virtual bool annotationClicked(const QPoint &pos, QString &strtext)
+    {
+        return false;
+    }
 
     void stopLoadPageThread();
     bool openFile(QString filepath);
@@ -213,6 +216,7 @@ public:
     bool mouseBeOverText(QPoint point);
     QPoint global2RelativePoint(QPoint globalpoint);
     bool showMagnifier(QPoint point);
+    int getCurrentPageNo();
     int currentPageNo();
     Page::Link *mouseBeOverLink(QPoint point);
     bool getSelectTextString(QString &st);
@@ -237,12 +241,14 @@ public:
 signals:
     void signal_pageChange(int);
     void signal_searchRes(stSearchRes);
+    void signal_loadDocumment(QString);
 
 protected slots:
     void slot_vScrollBarValueChanged(int value);
     void slot_hScrollBarValueChanged(int value);
     void slot_MagnifierPixmapCacheLoaded(int pageno);
-    void slot_searchValueAdd(stSearchRes);
+    void slot_searchValueAdd(stSearchRes res);
+    void slot_setarchtest();
     void slot_searchover();
     void slot_docummentLoaded();
     bool pageJump(int pagenum);
