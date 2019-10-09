@@ -231,6 +231,7 @@ public:
     bool isWordsBeLoad();
     bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3);
     bool showSlideModel();
+    void cacularValueXY(int& xvalue,int& yvalue,int cursearch);
 
 
 signals:

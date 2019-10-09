@@ -210,7 +210,6 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
     pdfConverter->setPDFOptions(options);
 
     return pdfConverter->convert();
-
 }
 
 void DocummentPDF::clearSearch()
@@ -227,54 +226,6 @@ void DocummentPDF::clearSearch()
     }
 }
 
-void DocummentPDF::searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color)
-{
-    if (nullptr == page) return;
-    QList<QRectF> listrect = page->search(strtext);
-    if (listrect.size() <= 0)return;
-
-    if (listrect.size() <= 0)return;
-    Poppler::Annotation::Style style;
-    style.setColor(color);
-
-    Poppler::Annotation::Popup popup;
-    popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
-
-    Poppler::HighlightAnnotation *annotation = new Poppler::HighlightAnnotation();
-
-    Poppler::HighlightAnnotation::Quad quad;
-    QList<Poppler::HighlightAnnotation::Quad> qlistquad;
-    QRectF rec, recboundary;
-    foreach (rec, listrect) {
-        //获取搜索结果附近文字
-        QRectF rctext = rec;
-        rctext.setX(rctext.x() - 40);
-        rctext.setWidth(rctext.width() + 80);
-        stres.listtext.push_back(page->text(rctext));
-        recboundary.setTopLeft(QPointF(rec.left() / page->pageSizeF().width(),
-                                       rec.top() / page->pageSizeF().height()));
-        recboundary.setTopRight(QPointF(rec.right() / page->pageSizeF().width(),
-                                        rec.top() / page->pageSizeF().height()));
-        recboundary.setBottomLeft(QPointF(rec.left() / page->pageSizeF().width(),
-                                          rec.bottom() / page->pageSizeF().height()));
-        recboundary.setBottomRight(QPointF(rec.right() / page->pageSizeF().width(),
-                                           rec.bottom() / page->pageSizeF().height()));
-
-        quad.points[0] = recboundary.topLeft();
-        quad.points[1] = recboundary.topRight();
-        quad.points[2] = recboundary.bottomRight();
-        quad.points[3] = recboundary.bottomLeft();
-        qlistquad.append(quad);
-    }
-    QString uniquename(PublicFunc::getUuid());
-    uniquename.append("search");
-    annotation->setUniqueName(uniquename);
-    annotation->setHighlightQuads(qlistquad);
-    annotation->setStyle(style);
-    annotation->setPopup(popup);
-    page->addAnnotation(annotation);
-}
-
 void DocummentPDF::refreshOnePage(int ipage)
 {
     Q_D(DocummentPDF);
@@ -282,31 +233,6 @@ void DocummentPDF::refreshOnePage(int ipage)
         return ;
     d->m_pages.at(ipage)->showImage(d->m_scale, d->m_rotate);
 }
-
-//void DocummentPDF::setBasicInfo(const QString &filepath)
-//{
-//    Q_D(DocummentPDF);
-//    QFileInfo info(filepath);
-//    d->m_fileinfo.size = info.size();
-//    d->m_fileinfo.CreateTime = info.birthTime();
-//    d->m_fileinfo.ChangeTime = info.lastModified();
-//    d->m_fileinfo.strAuther = info.owner();
-//    d->m_fileinfo.strFilepath = info.filePath();
-//    if (d->document) {
-//        int major, minor;
-//        d->document->getPdfVersion(&major, &minor);
-//        d->m_fileinfo.strFormat = QString("PDF v.%1.%2").arg(major).arg(minor);
-//        d->m_fileinfo.boptimization = d->document->isLinearized();
-//        d->m_fileinfo.strKeyword = d->document->keywords();
-//        d->m_fileinfo.strTheme = d->document->title();
-//        d->m_fileinfo.strProducter = d->document->producer();
-//        d->m_fileinfo.strCreater = d->document->creator();
-//        d->m_fileinfo.bsafe = d->document->isEncrypted();
-//        d->m_fileinfo.iWidth = static_cast<PagePdf *>(d->m_pages.at(0))->GetPage()->pageSize().width();
-//        d->m_fileinfo.iHeight = static_cast<PagePdf *>(d->m_pages.at(0))->GetPage()->pageSize().height();
-//        d->m_fileinfo.iNumpages = d->document->numPages();
-//    }
-//}
 
 bool DocummentPDF::bDocummentExist()
 {

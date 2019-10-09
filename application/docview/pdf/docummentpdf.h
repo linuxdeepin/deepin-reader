@@ -39,8 +39,7 @@ signals:
     void signal_openFile(QString file);
     void signal_loadDocumment(QString);
 private:
-    bool pdfsave(const QString &filePath, bool withChanges);
-    void searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color);
+    bool pdfsave(const QString &filePath, bool withChanges);   
     void refreshOnePage(int ipage);
 //    void setBasicInfo(const QString &filepath);
 private:
