@@ -499,11 +499,6 @@ void DocummentBase::slot_searchValueAdd(stSearchRes res)
     }
 }
 
-void DocummentBase::slot_setarchtest()
-{
-    int a=0;
-}
-
 void DocummentBase::slot_searchover()
 {
     Q_D(DocummentBase);

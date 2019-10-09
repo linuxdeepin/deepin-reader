@@ -100,8 +100,7 @@ void SearchTask::processResults(Future future)
         const int shiftedIndex = (index + m_beginAtPage - 1) % count;//从当前页开始，保证循环后结束于当前页前一页
         const stSearchRes res = future.resultAt(shiftedIndex);
 
-        if (res.listtext.size() > 0) {
-            emit signal_restest();
+        if (res.listtext.size() > 0) {         
             emit signal_resultReady(res);
         }
     }

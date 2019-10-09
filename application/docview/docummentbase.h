@@ -248,7 +248,6 @@ protected slots:
     void slot_hScrollBarValueChanged(int value);
     void slot_MagnifierPixmapCacheLoaded(int pageno);
     void slot_searchValueAdd(stSearchRes res);
-    void slot_setarchtest();
     void slot_searchover();
     void slot_docummentLoaded();
     bool pageJump(int pagenum);
