@@ -71,11 +71,14 @@ signals:
     void sigFlushSearchWidget(QVariant);
     void sigClearWidget();
     void sigCloseFile();
+    void sigFlushSearchWidget(const QString &);
 
 private slots:
     void slotFlushSearchList(QVariant);
     void slotClearWidget();
     void slotCloseFile();
+    void slotFlushSearchWidget(const QString &);
+    void slotGetSearchContant(stSearchRes);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -90,6 +93,7 @@ private:
     CustomListWidget *m_pNotesList            = nullptr; // 搜索结果列表
     NotesItemWidget *m_pSearchItemWidget = nullptr;      // 缩略图子窗体
     LoadSearchResThread m_loadSearchResThread;           // 加载搜索缩略图线程
+    QList<stSearchRes> m_searchContantList;              // 搜索全部内容
 
 public:
     // IObserver interface

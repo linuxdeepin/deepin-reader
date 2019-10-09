@@ -64,6 +64,22 @@ void SearchResWidget::slotCloseFile()
     }
 }
 
+void SearchResWidget::slotFlushSearchWidget(const QString &)
+{
+    connect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this, SLOT(slotGetSearchContant(stSearchRes)));
+}
+
+void SearchResWidget::slotGetSearchContant(stSearchRes search)
+{
+    if(search.listtext.size() < 1){
+        return;
+    }
+    m_searchContantList.append(search);
+
+    qDebug() << "slotGetSearchContant num:  " <<  m_searchContantList.size();
+    sendMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
+}
+
 void SearchResWidget::initWidget()
 {
     auto m_pVLayout  = new QVBoxLayout;
@@ -82,8 +98,9 @@ void SearchResWidget::initConnections()
             m_pNotesList, SLOT(slot_loadImage(const int &, const QImage &)));
 
     connect(this, SIGNAL(sigClearWidget()), this, SLOT(slotClearWidget()));
-    connect(this, SIGNAL(sigFlushSearchWidget(QVariant)),
-            this, SLOT(slotFlushSearchList(QVariant)));
+//    connect(this, SIGNAL(sigFlushSearchWidget(QVariant)),
+//            this, SLOT(slotFlushSearchList(QVariant)));
+    connect(this, SIGNAL(sigFlushSearchWidget(const QString&)), this, SLOT(slotFlushSearchWidget(const QString&)));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
 }
 
@@ -114,12 +131,14 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_FIND_CONTENT) {        //  查询内容
         if (msgContent != QString("")) {
+            emit sigFlushSearchWidget(msgContent);
+
             QMap<int, stSearchRes> resMap;
             DocummentProxy::instance()->search(msgContent, resMap, QColor(255, 0, 0));
 
-            QVariant var;
-            var.setValue(resMap);
-            emit sigFlushSearchWidget(var);
+            //           QVariant var;
+            //            var.setValue(resMap);
+            //            emit sigFlushSearchWidget(var);
 
             return ConstantMsg::g_effective_res;
         }
