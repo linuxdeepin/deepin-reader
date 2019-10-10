@@ -24,7 +24,7 @@ public:
     LoadSearchResThread(QObject *parent = nullptr);
 
 signals:
-    void signal_loadImage(const int &, const QImage &);
+    void sigLoadImage(const int&, const QImage &);
 
 public:
     inline void setSearchResW(SearchResWidget *searchResW)
@@ -42,6 +42,16 @@ public:
         m_pages = pages;
     }
 
+    inline QList<stSearchRes> searchList() const
+    {
+        return m_searchContantList;
+    }
+
+    inline void pushSearch(const stSearchRes& search)
+    {
+        m_searchContantList.append(search);
+    }
+
     void stopThread();
 
 protected:
@@ -53,6 +63,7 @@ private:
     int m_nStartIndex                   = 0;       //　每次加载开始页
     int m_nEndIndex                     = 19;      //　每次加载结束页
     int m_pages                         = -1;      //  搜索内容总页数
+    QList<stSearchRes> m_searchContantList;        // 搜索全部内容
 };
 
 /**
@@ -79,6 +90,8 @@ private slots:
     void slotCloseFile();
     void slotFlushSearchWidget(const QString &);
     void slotGetSearchContant(stSearchRes);
+    void slotSearchOver();
+    void slotLoadImage(const int&, const QImage&);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -87,13 +100,13 @@ private:
     void initConnections();
 
 private:
-    void addNotesItem(const int &page, const QString &text, const int &resultNum);
+    void initSearchList(const QList<stSearchRes>&);
+    void addSearchsItem(const int &page, const QString &text, const int &resultNum);
 
 private:
     CustomListWidget *m_pNotesList            = nullptr; // 搜索结果列表
     NotesItemWidget *m_pSearchItemWidget = nullptr;      // 缩略图子窗体
     LoadSearchResThread m_loadSearchResThread;           // 加载搜索缩略图线程
-    QList<stSearchRes> m_searchContantList;              // 搜索全部内容
 
 public:
     // IObserver interface

@@ -13,15 +13,10 @@ class DocummentXPS: public DocummentBase
 public:
     DocummentXPS(DWidget *parent = nullptr);
     ~DocummentXPS() override;
-//    bool openFile(QString filepath) override;
     bool bDocummentExist() override;
     bool getImage(int pagenum, QImage &image, double width, double height) override;
-//    bool loadPages() override;
-//    bool loadWords() override;
     void docBasicInfo(stFileInfo &info) override;
     bool loadDocumment(QString filepath) override;
-//signals:
-//    void signal_loadDocumment(QString);
 private:
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), DocummentXPS)
 };

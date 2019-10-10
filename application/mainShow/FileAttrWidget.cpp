@@ -28,12 +28,15 @@ void FileAttrWidget::setFileAttr()
     stFileInfo fileInfo;
     DocummentProxy::instance()->docBasicInfo(fileInfo);
 
+    DocummentProxy *dproxy = DocummentProxy::instance();
+    if (nullptr == dproxy) {
+        return;
+    }
     QImage image;
-    bool rl = DocummentProxy::instance()->getImage(0, image, 94, 113);
+    bool rl = dproxy->getImage(0, image, 94, 113);
     if (rl) {
         labelImage->setPixmap(QPixmap::fromImage(image));
     }
-
     QFileInfo info(fileInfo.strFilepath);
 
     QString szTitle = "";

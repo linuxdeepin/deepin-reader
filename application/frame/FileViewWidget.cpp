@@ -22,13 +22,16 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
 
 FileViewWidget::~FileViewWidget()
 {
-
+//    if (m_pDocummentProxy) {
+//        m_pDocummentProxy->closeFile();
+//        m_pDocummentProxy->waitThreadAndClearEnd();
+//    }
 }
 
 void FileViewWidget::initWidget()
 {
     //  实际文档类  唯一实例化设置 父窗口
-    DocummentProxy::instance(this);
+    m_pDocummentProxy = DocummentProxy::instance(this);
 
     m_pDocummentFileHelper = new DocummentFileHelper(this);
 }

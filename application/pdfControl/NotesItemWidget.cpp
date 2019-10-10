@@ -48,6 +48,9 @@ void NotesItemWidget::slotCopyContant()
 
 void NotesItemWidget::slotShowContextMenu(const QPoint &)
 {
+    if(!m_isNote){
+        return;
+    }
     QMenu *t_menu = new QMenu(this);
     QAction *copyAction = t_menu->addAction(PdfControl::COPY_CONT);
     QAction *dltItemAction = t_menu->addAction(PdfControl::DLT_NOTE);

@@ -67,7 +67,6 @@ void MsgSubject::stopThreadRun()
 {
     m_bRunFlag = false;
     quit();
-    //terminate();    //终止线程
     wait();         //阻塞等待
 
 }

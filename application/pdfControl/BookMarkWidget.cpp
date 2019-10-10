@@ -208,9 +208,12 @@ void BookMarkWidget::initConnection()
  */
 void BookMarkWidget::addBookMarkItem(const int &page)
 {
+    DocummentProxy *dproxy = DocummentProxy::instance();
+    if (nullptr == dproxy) {
+        return;
+    }
     QImage t_image;
-
-    bool rl = DocummentProxy::instance()->getImage(page, t_image, 113, 143);
+    bool rl = dproxy->getImage(page, t_image, 113, 143);
     if (rl) {
         BookMarkItemWidget *t_widget = new BookMarkItemWidget;
         t_widget->setLabelImage(t_image);

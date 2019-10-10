@@ -25,6 +25,7 @@
 
 #include "subjectObserver/CustomWidget.h"
 #include <DSearchEdit>
+#include <DFloatingButton>
 
 class FindWidget : public CustomWidget
 {
@@ -47,6 +48,7 @@ private:
     DSearchEdit     *m_pSearchEdit = nullptr;
 
     QString     m_strOldFindContent = "";
+
 
     // IObserver interface
 public:

@@ -19,7 +19,6 @@
  * @brief   注释和搜索item
  */
 
-
 class NotesItemWidget : public CustomItemWidget
 {
     Q_OBJECT
@@ -30,6 +29,10 @@ public:
 public:
     void setTextEditText(const QString &);
     void setSerchResultText(const QString &);
+    inline void setNoteSigne(bool note)
+    {
+        m_isNote = note;
+    }
 
     inline void setNoteUUid(const QString &uuid)
     {
@@ -55,8 +58,8 @@ public:
 private:
     DLabel *m_pSearchResultNum = nullptr;
     DTextEdit *m_pTextEdit = nullptr;
-
     QString m_strUUid;    // 当前注释唯一标识
+    bool m_isNote = true;// 是否是注释窗体,如果不是则不显示右键菜单
 };
 
 #endif // NOTESITEMWIDGET_H

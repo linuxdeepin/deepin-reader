@@ -3,7 +3,11 @@
 #include "../pagebase.h"
 #include <QImage>
 #include <QDebug>
+#include <QtConcurrent>
+#include <QThread>
+#include <QPaintDevice>
 #include <poppler-qt5.h>
+#include <unistd.h>
 class PagePdf;
 class PagePdfPrivate;
 class PagePdf: public PageBase
@@ -43,6 +47,7 @@ public:
 
     ~PagePdfPrivate() override
     {
+        //        qDebug() << "~PagePdfPrivate";
         if (m_page) {
             delete m_page;
             m_page = nullptr;
@@ -50,12 +55,13 @@ public:
     }
     bool getImage(QImage &image, double width, double height) override
     {
+//        QMutexLocker locker(&m_mutexlockgetimage);
         int xres = 72.0, yres = 72.0;
         double scalex = width / m_imagewidth;
         double scaley = height / m_imageheight;
         if (!m_page)
             return false;
-        image = m_page->renderToImage(xres * scalex, yres * scaley, -1, -1, width, height);
+        image = m_page->renderToImage(xres * scalex, yres * scaley);
         return true;
     }
     bool getSlideImage(QImage &image, double &width, double &height) override
@@ -74,7 +80,7 @@ public:
         if (!m_page)
             return false;
         qDebug() << "getSlideImage width:" << width << " height:" << height;
-        image = m_page->renderToImage(xres * scale, yres * scale, -1, -1, width, height);
+        image = m_page->renderToImage(xres * scale, yres * scale);
         return true;
     }
     bool loadData() override
@@ -161,9 +167,8 @@ private:
 
                 m_links.append(new Page::Link(boundary, url, Page::LinkType_Execute));
             }
-
-            delete link;
         }
+        qDeleteAll(qlinks);
         return true;
     }
     bool abstractTextPage(const QList<Poppler::TextBox *> &text)
@@ -181,9 +186,6 @@ private:
             // if(next)
             int textBoxChar = 0;
             for (int j = 0; j < qstringCharCount; j++) {
-                if (QThread::currentThread()->isInterruptionRequested()) {
-                    break;
-                }
                 const QChar c = word->text().at(j);
                 if (c.isHighSurrogate()) {
                     s = c;

@@ -23,36 +23,37 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
         page->setPage(document->page(i), i);
         m_pages.append((PageBase *)page);
     }
-    m_imagewidht = document->page(0)->pageSizeF().width();
-    m_imageheight = document->page(0)->pageSizeF().height();
+    if (m_pages.size() > 0) {
+        m_imagewidht = m_pages.at(0)->getOriginalImageWidth();
+        m_imageheight = m_pages.at(0)->getOriginalImageHeight();
+    }
     setBasicInfo(filepath);
 
     emit signal_docummentLoaded();
-
 }
 
 
 void DocummentPDFPrivate::setBasicInfo(const QString &filepath)
 {
     QFileInfo info(filepath);
-    m_fileinfo.size = info.size();
-    m_fileinfo.CreateTime = info.birthTime();
-    m_fileinfo.ChangeTime = info.lastModified();
-    m_fileinfo.strAuther = info.owner();
-    m_fileinfo.strFilepath = info.filePath();
+    m_fileinfo->size = info.size();
+    m_fileinfo->CreateTime = info.birthTime();
+    m_fileinfo->ChangeTime = info.lastModified();
+    m_fileinfo->strAuther = info.owner();
+    m_fileinfo->strFilepath = info.filePath();
     if (document) {
         int major, minor;
         document->getPdfVersion(&major, &minor);
-        m_fileinfo.strFormat = QString("PDF v.%1.%2").arg(major).arg(minor);
-        m_fileinfo.boptimization = document->isLinearized();
-        m_fileinfo.strKeyword = document->keywords();
-        m_fileinfo.strTheme = document->title();
-        m_fileinfo.strProducter = document->producer();
-        m_fileinfo.strCreater = document->creator();
-        m_fileinfo.bsafe = document->isEncrypted();
-        m_fileinfo.iWidth = static_cast<PagePdf *>(m_pages.at(0))->GetPage()->pageSize().width();
-        m_fileinfo.iHeight = static_cast<PagePdf *>(m_pages.at(0))->GetPage()->pageSize().height();
-        m_fileinfo.iNumpages = document->numPages();
+        m_fileinfo->strFormat = QString("PDF v.%1.%2").arg(major).arg(minor);
+        m_fileinfo->boptimization = document->isLinearized();
+        m_fileinfo->strKeyword = document->keywords();
+        m_fileinfo->strTheme = document->title();
+        m_fileinfo->strProducter = document->producer();
+        m_fileinfo->strCreater = document->creator();
+        m_fileinfo->bsafe = document->isEncrypted();
+        m_fileinfo->iWidth = static_cast<PagePdf *>(m_pages.at(0))->GetPage()->pageSize().width();
+        m_fileinfo->iHeight = static_cast<PagePdf *>(m_pages.at(0))->GetPage()->pageSize().height();
+        m_fileinfo->iNumpages = document->numPages();
     }
 }
 
@@ -63,13 +64,15 @@ DocummentPDF::DocummentPDF(DWidget *parent):
 
 DocummentPDF::~DocummentPDF()
 {
-    Q_D(DocummentPDF);
-    delete d->document;
-    d->document = nullptr;
+//    Q_D(DocummentPDF);
+//    delete d->document;
+//    d->document = nullptr;
 }
 
 bool DocummentPDF::loadDocumment(QString filepath)
 {
+    Q_D(DocummentPDF);
+//    d->loadDocumment(filepath);
     emit signal_loadDocumment(filepath);
     return true;
 }
@@ -146,8 +149,7 @@ void DocummentPDF::getAllAnnotation(QList<stHighlightContent>& listres)
 void DocummentPDF::search(const QString &strtext, QColor color)
 {
     Q_D(DocummentPDF);
-    clearSearch();
-    d->m_pages.at(d->m_currentpageno)->update();//刷新当前页
+    clearSearch();  
     d->m_searchTask->start(d->m_pages, strtext, false, false, d->m_currentpageno + 1);
 }
 
@@ -192,7 +194,7 @@ bool DocummentPDF::save(const QString &filePath, bool withChanges)
 bool DocummentPDF::saveas(const QString &filePath, bool withChanges)
 {
     Q_D(DocummentPDF);
-    QString strsource = d->m_fileinfo.strFilepath;
+    QString strsource = d->m_fileinfo->strFilepath;
     bool bsuccess = false;
     if (!strsource.isEmpty()) {
         if (!withChanges) {
@@ -249,6 +251,7 @@ void DocummentPDF::clearSearch()
             d->m_pages.at(key)->clearHighlightRects();
         }
     }
+     d->m_pages.at(d->m_currentpageno)->update();//刷新当前页
 }
 
 void DocummentPDF::refreshOnePage(int ipage)
@@ -271,13 +274,16 @@ bool DocummentPDF::bDocummentExist()
 bool DocummentPDF::getImage(int pagenum, QImage &image, double width, double height)
 {
     Q_D(DocummentPDF);
-    return d->m_pages.at(pagenum)->getInterFace()->getImage(image, width, height);
+    if (pagenum < 0 || pagenum >= d->m_pages.size()) {
+        return false;
+    }
+    return d->m_pages.at(pagenum)->getImage(image, width, height);
 }
 
 void DocummentPDF::docBasicInfo(stFileInfo &info)
 {
     Q_D(DocummentPDF);
-    info = d->m_fileinfo;
+    info = *(d->m_fileinfo);
 }
 
 bool DocummentPDF::annotationClicked(const QPoint &pos, QString &strtext)
@@ -340,6 +346,5 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, i
         }
         qDeleteAll(plistannote);
     }
-
 }
 

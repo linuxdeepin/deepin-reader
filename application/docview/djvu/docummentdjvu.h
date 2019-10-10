@@ -14,34 +14,14 @@ class DocummentDJVU: public DocummentBase
 public:
     DocummentDJVU(DWidget *parent = nullptr);
     ~DocummentDJVU() override;
-//    bool openFile(QString filepath) override;
     bool bDocummentExist() override;
     bool getImage(int pagenum, QImage &image, double width, double height) override;
     bool loadDocumment(QString filepath) override;
-
-//    bool loadPages() override;
-//    bool loadWords() override;
     void docBasicInfo(stFileInfo &info) override;
     ddjvu_document_t *getDocument();
     ddjvu_context_t *getContext();
     ddjvu_format_t *getFormat();
     QHash< QString, int > getPageByName();
-//    //--------------------------------------------//
-//    bool save(const QString &filePath, bool withChanges) override;
-//    void removeAllAnnotation();
-//    QString removeAnnotation(const QPoint &startpos) override;
-//    void removeAnnotation(const QString &struuid) override;
-//    QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow) override;
-//    void search(const QString &strtext, QColor color = Qt::yellow) override;
-//    void clearSearch() override;
-//    bool annotationClicked(const QPoint &pos, QString &strtext);
-//    void title(QString &title) override;
-//private:
-//    //--------------------------------------------//
-//    bool pdfsave(const QString &filePath, bool withChanges)const;
-//    void searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color);
-//    void refreshOnePage(int ipage);
-//    void setBasicInfo(const QString &filepath);
 private:
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), DocummentDJVU)
 };
@@ -58,7 +38,7 @@ public:
     {
     }
 
-    ~DocummentDJVUPrivate()
+    ~DocummentDJVUPrivate() override
     {
         ddjvu_document_release(document);
         ddjvu_context_release(m_context);
@@ -70,7 +50,6 @@ public:
     ddjvu_format_t *m_format;
     QHash< QString, int > m_pageByName;
     QHash< int, QString > m_titleByIndex;
-    //--------------------------------------------//
     stFileInfo m_fileinfo;
     Q_DECLARE_PUBLIC(DocummentDJVU)
 protected slots:

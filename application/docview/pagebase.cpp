@@ -1,4 +1,5 @@
 #include "pagebase.h"
+#include "publicfunc.h"
 #include <QPainter>
 #include <QDebug>
 ThreadRenderImage::ThreadRenderImage()
@@ -35,6 +36,7 @@ void ThreadRenderImage::run()
         if (m_width > 0 && m_height > 0) {
             QImage image;
             if (m_page->getImage(image, m_width, m_height)) {
+                m_page->loadData();
                 emit signal_RenderFinish(image);
             }
         }
@@ -96,6 +98,8 @@ PageBase::PageBase(PageBasePrivate *ptr, DWidget *parent)
 
 PageBase::~PageBase()
 {
+    clear();
+    delete d_ptr;
 }
 
 void PageBase::paintEvent(QPaintEvent *event)
@@ -505,6 +509,20 @@ void PageBase::slot_RenderFinish(QImage image)
         break;
     }
     setPixmap(map.transformed(leftmatrix, Qt::SmoothTransformation));
+    d->havereander = true;
+}
+
+void PageBase::clearImage()
+{
+    Q_D(PageBase);
+    stopThread();
+    waitThread();
+    clear();
+    qDeleteAll(d->m_links);
+    d->m_links.clear();
+    d->paintrects.clear();
+    d->m_words.clear(); 
+    d->havereander = false;
 }
 
 void PageBase::slot_loadMagnifierPixmapCache(QImage image, double width, double height)
@@ -524,6 +542,7 @@ void PageBase::slot_loadMagnifierPixmapCache(QImage image, double width, double 
 void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
 {
     Q_D(PageBase);
+    d->havereander = false;
     d->m_scale = scale;
     d->m_rotate = rotate;
     switch (rotate) {
@@ -631,6 +650,9 @@ QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
 bool PageBase::showImage(double scale, RotateType_EM rotate)
 {
     Q_D(PageBase);
+    if ((d->m_scale - scale) < EPSINON && d->m_rotate == rotate && d->havereander) {
+        return false;
+    }
     d->m_scale = scale;
     d->m_rotate = rotate;
     d->threadreander.setPage(getInterFace(), d->m_imagewidth * d->m_scale, d->m_imageheight * d->m_scale);
@@ -642,16 +664,21 @@ bool PageBase::showImage(double scale, RotateType_EM rotate)
     return true;
 }
 
-void PageBase::clearThread()
+void PageBase::stopThread()
+{
+    Q_D(PageBase);
+    d->threadreander.requestInterruption();
+    d->loadmagnifiercachethread.requestInterruption();
+}
+
+void PageBase::waitThread()
 {
     Q_D(PageBase);
     if (d->threadreander.isRunning()) {
-        d->threadreander.requestInterruption();
         //        threadreander.quit();
         d->threadreander.wait();
     }
     if (d->loadmagnifiercachethread.isRunning()) {
-        d->loadmagnifiercachethread.requestInterruption();
         //        loadmagnifiercachethread.quit();
         d->loadmagnifiercachethread.wait();
     }

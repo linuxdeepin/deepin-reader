@@ -35,10 +35,14 @@ void NotesWidget::initWidget()
 void NotesWidget::slotAddNoteItem(QString uuid)
 {
     qDebug() << "           NotesWidget::slotAddNoteItem               ";
-    QImage image;
 
     int t_page = DocummentProxy::instance()->currentPageNo();
-    DocummentProxy::instance()->getImage(t_page, image, 150, 150);
+    DocummentProxy *dproxy = DocummentProxy::instance();
+    if (nullptr == dproxy) {
+        return;
+    }
+    QImage image;
+    dproxy->getImage(t_page, image, 150, 150);
 
     addNotesItem(image, t_page, "");
 }
