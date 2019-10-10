@@ -252,6 +252,7 @@ void LoadSearchResThread::stopThread()
 {
     m_isRunning = false;
 
+    quit();
 //    terminate();    //终止线程
     wait();         //阻塞等待
 }
