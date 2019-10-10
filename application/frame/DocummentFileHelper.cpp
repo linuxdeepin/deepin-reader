@@ -10,7 +10,8 @@
 #include <DMessageBox>
 #include "subjectObserver/ModuleHeader.h"
 
-DocummentFileHelper::DocummentFileHelper(QObject *parent) : QObject(parent)
+DocummentFileHelper::DocummentFileHelper(QObject *parent)
+    : QObject(parent)
 {
     m_pDocummentProxy = DocummentProxy::instance();
     setObserverName();

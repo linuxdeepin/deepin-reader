@@ -165,12 +165,13 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 
             QString sAnnotationText = "";
             bool bAnno = pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText);
+
             //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
             if (m_pTextOperationWidget == nullptr) {
                 m_pTextOperationWidget = new TextOperationWidget(this);
             }
-
             m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), bAnno, sSelectText);
+
         } else {
             if (m_pDefaultOperationWidget == nullptr) {
                 m_pDefaultOperationWidget = new DefaultOperationWidget(this);

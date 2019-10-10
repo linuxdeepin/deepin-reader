@@ -61,7 +61,7 @@ void SearchTask::run()
     pages.reserve(m_pages.count());
 
     for (int index = 0, count = m_pages.count(); index < count; ++index) {
-        const int shiftedIndex = (index + m_beginAtPage - 1) % count;
+        const int shiftedIndex = (index + m_beginAtPage - 1) % count;        
         pages.append(m_pages.at(shiftedIndex));
     }
 
@@ -100,7 +100,7 @@ void SearchTask::processResults(Future future)
         const int shiftedIndex = (index + m_beginAtPage - 1) % count;//从当前页开始，保证循环后结束于当前页前一页
         const stSearchRes res = future.resultAt(shiftedIndex);
 
-        if (res.listtext.size() > 0) {
+        if (res.listtext.size() > 0) {         
             emit signal_resultReady(res);
         }
     }

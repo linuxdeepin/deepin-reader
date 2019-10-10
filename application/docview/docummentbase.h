@@ -93,7 +93,7 @@ public:
         m_bModified = false;
         m_bslidemodel = false;
         m_slidepageno = -1;
-        m_currentpageno = -1;
+        m_currentpageno = 0;
         m_scale = 1.0;
         m_rotate = RotateType_0;
         donotneedreloaddoc = false;
@@ -255,18 +255,20 @@ public:
 //    bool isWordsBeLoad();
     bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3);
     bool showSlideModel();
+    void cacularValueXY(int &xvalue, int &yvalue, int cursearch);
 
 
 signals:
     void signal_pageChange(int);
     void signal_searchRes(stSearchRes);
+    void signal_searchover();
     void signal_loadDocumment(QString);
 
 protected slots:
     void slot_vScrollBarValueChanged(int value);
     void slot_hScrollBarValueChanged(int value);
     void slot_MagnifierPixmapCacheLoaded(int pageno);
-    void slot_searchValueAdd(stSearchRes);
+    void slot_searchValueAdd(stSearchRes res);
     void slot_searchover();
     void slot_docummentLoaded();
     bool pageJump(int pagenum);

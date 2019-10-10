@@ -88,8 +88,7 @@ void MsgSubject::run()
                     break;
                 }
             }
-        }
-
+        }        
         msleep(50);
     }
 }

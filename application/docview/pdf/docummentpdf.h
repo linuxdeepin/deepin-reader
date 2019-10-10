@@ -32,8 +32,7 @@ public:
     bool loadDocumment(QString filepath) override;
 
 private:
-    bool pdfsave(const QString &filePath, bool withChanges);
-    void searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color);
+    bool pdfsave(const QString &filePath, bool withChanges);   
     void refreshOnePage(int ipage);
 private:
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), DocummentPDF)
