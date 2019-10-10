@@ -36,7 +36,7 @@ void SearchResWidget::slotFlushSearchList(QVariant value)
             ++resultNum;
         }
 
-        addNotesItem(page, strText, resultNum);
+        addSearchsItem(page, strText, resultNum);
         resultNum = 0;
         strText.clear();
     }
@@ -67,6 +67,7 @@ void SearchResWidget::slotCloseFile()
 void SearchResWidget::slotFlushSearchWidget(const QString &)
 {
     connect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this, SLOT(slotGetSearchContant(stSearchRes)));
+    connect(DocummentProxy::instance(), SIGNAL(signal_searchover()), this, SLOT(slotSearchOver()));
 }
 
 void SearchResWidget::slotGetSearchContant(stSearchRes search)
@@ -74,10 +75,32 @@ void SearchResWidget::slotGetSearchContant(stSearchRes search)
     if(search.listtext.size() < 1){
         return;
     }
-    m_searchContantList.append(search);
+    m_loadSearchResThread.pushSearch(search);
 
-    qDebug() << "slotGetSearchContant num:  " <<  m_searchContantList.size();
-    sendMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
+//    qDebug() << "slotGetSearchContant num:  " <<  m_searchContantList.size();
+    //    sendMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
+}
+
+void SearchResWidget::slotSearchOver()
+{
+    if(m_loadSearchResThread.isRunning()){
+        m_loadSearchResThread.stopThread();
+    }
+
+    qDebug() << "           slotSearchOver        ";
+
+    disconnect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this, SLOT(slotGetSearchContant(stSearchRes)));
+
+    //生成左侧搜索列表
+    //to do and send flush thumbnail and contant
+    initSearchList(m_loadSearchResThread.searchList());
+}
+
+void SearchResWidget::slotLoadImage(const QImage & image)
+{
+    if (m_pSearchItemWidget) {
+        m_pSearchItemWidget->setLabelImage(image);
+    }
 }
 
 void SearchResWidget::initWidget()
@@ -94,8 +117,8 @@ void SearchResWidget::initWidget()
 
 void SearchResWidget::initConnections()
 {
-    connect(&m_loadSearchResThread, SIGNAL(signal_loadImage(const int &, const QImage &)),
-            m_pNotesList, SLOT(slot_loadImage(const int &, const QImage &)));
+    connect(&m_loadSearchResThread, SIGNAL(sigLoadImage(const QImage &)),
+            this, SLOT(slotLoadImage(const QImage &)));
 
     connect(this, SIGNAL(sigClearWidget()), this, SLOT(slotClearWidget()));
 //    connect(this, SIGNAL(sigFlushSearchWidget(QVariant)),
@@ -104,7 +127,36 @@ void SearchResWidget::initConnections()
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
 }
 
-void SearchResWidget::addNotesItem(const int &page, const QString &text, const int &resultNum)
+void SearchResWidget::initSearchList(const QList<stSearchRes>& list)
+{
+    int resultNum = 0;
+    QString strText;
+    int pages;
+
+    foreach (stSearchRes it, list) {
+        ++pages;
+        int page = it.ipage;
+        foreach (QString strtext, it.listtext) {
+
+            strText += strtext;
+            strText += QString("\n");
+
+            ++resultNum;
+        }
+
+        addSearchsItem(page, strText, resultNum);
+        resultNum = 0;
+        strText.clear();
+    }
+
+    //开始填充缩略图线程
+    m_loadSearchResThread.setRunning(true);
+    m_loadSearchResThread.start();
+
+    sendMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
+}
+
+void SearchResWidget::addSearchsItem(const int &page, const QString &text, const int &resultNum)
 {
     NotesItemWidget *itemWidget = new NotesItemWidget;
     itemWidget->setLabelPage(page, 1);
@@ -214,6 +266,8 @@ void LoadSearchResThread::stopThread()
  */
 void LoadSearchResThread::run()
 {
+    m_pages = m_searchContantList.count();
+
     while (m_isRunning) {
 
         if (m_nStartIndex < 0) {
@@ -245,7 +299,7 @@ void LoadSearchResThread::run()
 
             bool bl = DocummentProxy::instance()->getImage(page, image, 113, 143);
             if (bl) {
-                emit signal_loadImage(page, image);
+                emit sigLoadImage(image);
             }
         }
 
