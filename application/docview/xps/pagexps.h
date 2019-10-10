@@ -11,12 +11,9 @@ class PageXPS: public PageBase
     Q_OBJECT
 public:
     PageXPS(QWidget *parent = nullptr);
-//    bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal) override;
     bool getImage(QImage &image, double width, double height) override;
     bool getSlideImage(QImage &image, double &width, double &height) override;
     PageInterface *getInterFace() override;
-//    bool loadWords() override;
-//    bool loadLinks() override;
     void setPage(XpsPage *page, int pageno);
 private:
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), PageXPS)

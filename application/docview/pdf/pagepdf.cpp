@@ -1,7 +1,6 @@
 #include "pagepdf.h"
 #include "docview/publicfunc.h"
 #include <QDebug>
-#include <QMutex>
 #include <QPainter>
 
 PagePdf::PagePdf(QWidget *parent)
@@ -77,6 +76,8 @@ bool PagePdf::getSlideImage(QImage &image, double &width, double &height)
 bool PagePdf::getImage(QImage &image, double width, double height)
 {
     Q_D(PagePdf);
+
+//    qDebug() << "devicePixelRatioF:" << devicePixelRatioF();
     return d->getImage(image, width, height);
 }
 

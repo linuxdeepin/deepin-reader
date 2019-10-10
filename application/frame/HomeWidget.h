@@ -15,6 +15,13 @@ class HomeWidget : public CustomWidget
     Q_OBJECT
 public:
     HomeWidget(CustomWidget *parent = nullptr);
+    ~HomeWidget()
+    {
+        if (m_settings) {
+            m_settings->deleteLater();
+            m_settings = nullptr;
+        }
+    };
 
 signals:
     void sigOpenFileDialog();

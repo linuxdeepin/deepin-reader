@@ -6,7 +6,7 @@
 ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
     CustomWidget(QString("ThumbnailWidget"), parent)
 {
-    m_ThreadLoadImage.setParent(this);
+//    m_ThreadLoadImage.setParent(this);
     m_ThreadLoadImage.setThumbnail(this);
 
     initWidget();
@@ -21,7 +21,7 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
 ThumbnailWidget::~ThumbnailWidget()
 {
     // 等待子线程退出
-    if (!m_ThreadLoadImage.isRunning()) {
+    if (m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();
     }
 }
@@ -43,9 +43,9 @@ void ThumbnailWidget::initWidget()
 {
     m_pThumbnailListWidget = new CustomListWidget(this);
 
-    m_pPageWidget = new PagingWidget;
+    m_pPageWidget = new PagingWidget(this);
 
-    auto m_pvBoxLayout = new QVBoxLayout;
+    auto m_pvBoxLayout = new QVBoxLayout(this);
     m_pvBoxLayout->addWidget(m_pThumbnailListWidget);
     m_pvBoxLayout->addWidget(m_pPageWidget);
 
@@ -146,6 +146,11 @@ void ThumbnailWidget::slotOpenFileOk()
     if (m_pPageWidget) {
         m_pPageWidget->setTotalPages(m_totalPages);
     }
+    int counter = m_pThumbnailListWidget->count();
+    for (int index = 0; index < counter; index++) {
+        QListWidgetItem *item = m_pThumbnailListWidget->takeItem(0);
+        delete item;
+    }
     m_pThumbnailListWidget->clear();
     fillContantToList();
 
@@ -209,8 +214,12 @@ void ThreadLoadImage::run()
         for (int page = m_nStartPage; page <= m_nEndPage; page++) {
             if (!m_isLoaded)
                 break;
+            DocummentProxy *dproxy = DocummentProxy::instance();
+            if (nullptr == dproxy) {
+                break;
+            }
             QImage image;
-            bool bl = DocummentProxy::instance()->getImage(page, image, 113, 143);
+            bool bl = dproxy->getImage(page, image, 113, 143);
 
             if (bl) {
                 emit signal_loadImage(page, image);

@@ -11,33 +11,33 @@
 #include <qglobal.h>
 
 
-ThreadLoadWords::ThreadLoadWords()
-{
-    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
-    m_doc = nullptr;
-    restart = false;
-}
+//ThreadLoadWords::ThreadLoadWords()
+//{
+//    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
+//    m_doc = nullptr;
+//    restart = false;
+//}
 
-void ThreadLoadWords::setDoc(DocummentBase *doc)
-{
-    m_doc = doc;
-}
+//void ThreadLoadWords::setDoc(DocummentBase *doc)
+//{
+//    m_doc = doc;
+//}
 
-void ThreadLoadWords::setRestart()
-{
-    restart = true;
-}
+//void ThreadLoadWords::setRestart()
+//{
+//    restart = true;
+//}
 
-void ThreadLoadWords::run()
-{
-    if (!m_doc)
-        return;
-    restart = true;
-    while (restart) {
-        restart = false;
-        m_doc->loadWords();
-    }
-}
+//void ThreadLoadWords::run()
+//{
+//    if (!m_doc)
+//        return;
+//    restart = true;
+//    while (restart) {
+//        restart = false;
+//        m_doc->loadWords();
+//    }
+//}
 
 MagnifierWidget::MagnifierWidget(DWidget *parent): DWidget(parent)
 {
@@ -108,8 +108,6 @@ void MagnifierWidget::paintEvent(QPaintEvent *event)
     brush.setTransform(tr);
     qpainter.setBrush(brush);
     qpainter.drawEllipse(smallcirclex, smallcircley, m_magnifierradius * 2, m_magnifierradius * 2);
-
-
 }
 
 void MagnifierWidget::setPixmap(QPixmap pixmap)
@@ -162,7 +160,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
 
     Q_D(DocummentBase);
 //    d->m_threadloaddoc.setDoc(this);
-    d->m_threadloadwords.setDoc(this);
+//    d->m_threadloadwords.setDoc(this);
     setWidgetResizable(true);
     d->m_widget = new DWidget(this);
     setWidget(d->m_widget);
@@ -227,19 +225,18 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
 
 DocummentBase::~DocummentBase()
 {
-    Q_D(DocummentBase);
+//    Q_D(DocummentBase);
     this->hide();
+    delete d_ptr;
+//    if (d->m_magnifierwidget) {
+//        delete d->m_magnifierwidget;
+//        d->m_magnifierwidget = nullptr;
 
-    if (d->m_magnifierwidget) {
-        delete d->m_magnifierwidget;
-        d->m_magnifierwidget = nullptr;
-
-    }
-    if (d->m_slidewidget) {
-        delete d->m_slidewidget;
-        d->m_slidewidget = nullptr;
-    }
-
+//    }
+//    if (d->m_slidewidget) {
+//        delete d->m_slidewidget;
+//        d->m_slidewidget = nullptr;
+//    }
 }
 
 QPoint DocummentBase::global2RelativePoint(QPoint globalpoint)
@@ -636,9 +633,8 @@ bool DocummentBase::pageJump(int pagenum)
         return false;
     if (d->m_bslidemodel) {
         QImage image;
-        QThread::msleep(100);
         double width = d->m_slidewidget->width(), height = d->m_slidewidget->height();
-        if (!d->m_pages.at(pagenum)->getInterFace()->getSlideImage(image, width, height)) {
+        if (!d->m_pages.at(pagenum)->getSlideImage(image, width, height)) {
             return false;
         }
         if (-1 != d->m_slidepageno) {
@@ -1006,7 +1002,9 @@ bool DocummentBase::loadPages()
     if (!bDocummentExist())
         return false;
     qDebug() << "loadPages";
-
+    for (int i = 0; i < d->m_pages.size(); i++) {
+        d->m_pages.at(i)->waitThread();
+    }
     int pagenum  = d->m_currentpageno;
     if (pagenum >= 0 && pagenum < d->m_pages.size())
         d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
@@ -1029,6 +1027,17 @@ bool DocummentBase::loadPages()
     if (pagenum >= 0 && pagenum < d->m_pages.size())
         d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
 
+    for (int i = 0; i < d->m_pages.size(); i++) {
+        bool bshow = false;
+        for (int j = 0; j < 7; j++) {
+            if (i == d->m_currentpageno - 3 + j) {
+                bshow = true;
+                break;
+            }
+        }
+        if (!bshow)
+            d->m_pages.at(i)->clearImage();
+    }
     return true;
 }
 
@@ -1228,10 +1237,10 @@ void DocummentBase::slot_docummentLoaded()
     initConnect();
     d->donotneedreloaddoc = false;
     loadPages();
-    if (d->m_threadloadwords.isRunning())
-        d->m_threadloadwords.setRestart();
-    else
-        d->m_threadloadwords.start();
+//    if (d->m_threadloadwords.isRunning())
+//        d->m_threadloadwords.setRestart();
+//    else
+//        d->m_threadloadwords.start();
 }
 
 bool DocummentBase::openFile(QString filepath)
@@ -1243,24 +1252,21 @@ bool DocummentBase::openFile(QString filepath)
     return true;
 }
 
-bool DocummentBase::loadWords()
-{
-    Q_D(DocummentBase);
-    if (!bDocummentExist())
-        return false;
-    qDebug() << "loadWords start";
-    d->m_wordsbload = true;
-    for (int i = 0; i < d->m_pages.size(); i++) {
-        if (QThread::currentThread()->isInterruptionRequested()) {
-            break;
-        }
-        d->m_pages.at(i)->getInterFace()->loadData();
-    }
-    d->m_wordsbload = false;
+//bool DocummentBase::loadWords()
+//{
+//    Q_D(DocummentBase);
+//    if (!bDocummentExist())
+//        return false;
+//    qDebug() << "loadWords start";
+//    d->m_wordsbload = true;
+////    for (int i = 0; i < d->m_pages.size(); i++) {
+////        d->m_pages.at(i)->getInterFace()->loadData();
+////    }
+//    d->m_wordsbload = false;
 
-    qDebug() << "loadWords end";
-    return true;
-}
+//    qDebug() << "loadWords end";
+//    return true;
+//}
 
 
 int DocummentBase::getPageSNum()
@@ -1315,12 +1321,12 @@ void DocummentBase::pageMove(double mvx, double mvy)
         scrollBar_Y->setValue(scrollBar_Y->value() + mvy);
 }
 
-bool DocummentBase::isWordsBeLoad()
-{
-    Q_D(DocummentBase);
-    return d->m_wordsbload;
+//bool DocummentBase::isWordsBeLoad()
+//{
+//    Q_D(DocummentBase);
+//    return d->m_wordsbload;
 
-}
+//}
 
 bool DocummentBase::setMagnifierStyle(QColor magnifiercolor, int magnifierradius, int magnifierringwidth, double magnifierscale)
 {
@@ -1338,7 +1344,13 @@ bool DocummentBase::setMagnifierStyle(QColor magnifiercolor, int magnifierradius
 void DocummentBase::stopLoadPageThread()
 {
     Q_D(DocummentBase);
+    d->bcloseing = true;
     for (int i = 0; i < d->m_pages.size(); i++) {
-        d->m_pages.at(i)->clearThread();
+        d->m_pages.at(i)->stopThread();
+    }
+    for (int i = 0; i < d->m_pages.size(); i++) {
+        d->m_pages.at(i)->waitThread();
     }
 }
+
+

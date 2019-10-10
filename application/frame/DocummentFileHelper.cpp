@@ -30,9 +30,10 @@ DocummentFileHelper::DocummentFileHelper(QObject *parent) : QObject(parent)
 
 DocummentFileHelper::~DocummentFileHelper()
 {
-    if (m_pDocummentProxy && m_szFilePath != "") {
-        m_pDocummentProxy->closeFile();
-    }
+//    if (m_pDocummentProxy && m_szFilePath != "") {
+//        m_pDocummentProxy->closeFile();
+//        m_pDocummentProxy->waitThreadAndClearEnd();
+//    }
 }
 
 //  ctrl s  保存文件
@@ -140,8 +141,8 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
                 m_pDocummentProxy->save(m_szFilePath, true);
             }
         }
-        sendMsg(MSG_CLOSE_FILE);
         m_pDocummentProxy->closeFile();
+        sendMsg(MSG_CLOSE_FILE);
     }
 
     QStringList fileList = filePaths.split(Constant::sQStringSep,  QString::SkipEmptyParts);

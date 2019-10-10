@@ -5,23 +5,23 @@
 #include <QObject>
 #include <DWidget>
 
-class ThreadWaitLoadWordsEnd : public QThread
-{
-    Q_OBJECT
-public:
-    ThreadWaitLoadWordsEnd();
-    void setDoc(DocummentBase *doc);
-    void setRestart();
+//class ThreadWaitLoadWordsEnd : public QThread
+//{
+//    Q_OBJECT
+//public:
+//    ThreadWaitLoadWordsEnd();
+//    void setDoc(DocummentBase *doc);
+//    void setRestart();
 
-signals:
-    bool startOpenFile();
-protected:
-    virtual void run();
+//signals:
+//    bool startOpenFile();
+//protected:
+//    virtual void run();
 
-private:
-    DocummentBase *m_doc;
-    bool restart;
-};
+//private:
+//    DocummentBase *m_doc;
+//    bool restart;
+//};
 
 enum DocType_EM {
     DocType_NULL = 0,
@@ -70,6 +70,7 @@ public:
     bool exitSlideModel();
     void findNext();
     void findPrev();
+    void closeFileAndWaitThreadClearEnd();
     void setAnnotationText(int ipage, const QString &struuid, const QString &strtext);
     void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1);
     double adaptWidthAndShow(double width);
@@ -85,16 +86,24 @@ signals:
 
 private slots:
     void slot_pageChange(int);
-    bool startOpenFile();
+//    bool startOpenFile();
 
 private:
     DocummentProxy(QObject *parent = nullptr);
+    ~DocummentProxy()
+    {
+        qDebug() << "----~DocummentProxy-------";
+        closeFileAndWaitThreadClearEnd();
+//        if (threadwaitloadwordsend.isRunning()) {
+//            threadwaitloadwordsend.wait();
+//        }
+    }
     DWidget *qwfather;
     DocType_EM m_type;
     QString m_path;
     DocummentBase *m_documment;
-    ThreadWaitLoadWordsEnd threadwaitloadwordsend;
-    bool bclosefile;
+//    ThreadWaitLoadWordsEnd threadwaitloadwordsend;
+//    bool bclosefile;
     bool bcloseing;
     static  DocummentProxy *s_pDocProxy;
 };

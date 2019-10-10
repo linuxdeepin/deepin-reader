@@ -205,7 +205,6 @@ void LoadSearchResThread::run()
             m_nEndIndex = m_pages - 1;
         }
 
-        QImage image;
         int page = -1;
 
         for (int index = m_nStartIndex; index <= m_nEndIndex; index++) {
@@ -223,8 +222,14 @@ void LoadSearchResThread::run()
             if (page == -1) {
                 continue;
             }
+            DocummentProxy *dproxy = DocummentProxy::instance();
+            if (nullptr == dproxy) {
+                break;
+            }
 
-            bool bl = DocummentProxy::instance()->getImage(page, image, 113, 143);
+
+            QImage image;
+            bool bl = dproxy ->getImage(page, image, 113, 143);
             if (bl) {
                 emit signal_loadImage(page, image);
             }

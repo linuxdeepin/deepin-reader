@@ -29,20 +29,20 @@ enum ViewMode_EM {
 class SearchTask;
 class DocummentBase;
 class DocummentBasePrivate;
-class ThreadLoadWords : public QThread
-{
-public:
-    ThreadLoadWords();
-    void setDoc(DocummentBase *doc);
-    void setRestart();
+//class ThreadLoadWords : public QThread
+//{
+//public:
+//    ThreadLoadWords();
+//    void setDoc(DocummentBase *doc);
+//    void setRestart();
 
-protected:
-    virtual void run();
+//protected:
+//    virtual void run();
 
-private:
-    DocummentBase *m_doc;
-    bool restart;
-};
+//private:
+//    DocummentBase *m_doc;
+//    bool restart;
+//};
 
 class MagnifierWidget: public DWidget
 {
@@ -78,7 +78,10 @@ class DocummentBasePrivate: public QObject
 {
     Q_OBJECT
 public:
-    DocummentBasePrivate(DocummentBase *parent): q_ptr(parent)
+    DocummentBasePrivate(DocummentBase *parent): q_ptr(parent),
+        m_pages(),
+        m_widgets(),
+        m_pagecountsearch()
     {
         m_widget = nullptr;
         m_vboxLayout = nullptr;
@@ -94,8 +97,8 @@ public:
         m_scale = 1.0;
         m_rotate = RotateType_0;
         donotneedreloaddoc = false;
-        m_wordsbload = false;
-        m_magnifierpage = false;
+//        m_wordsbload = false;
+        m_magnifierpage = -1;
         m_currentpageno = -1;
         m_viewmode = ViewMode_SinglePage;
         m_lastmagnifierpagenum = -1;
@@ -104,28 +107,34 @@ public:
         animationgroup = nullptr;
         m_bsearchfirst = true;
         m_findcurpage = -1;
-        m_imagewidht = 0;
-        m_imageheight = 0;
+        m_imagewidht = 0.1;
+        m_imageheight = 0.1;
         m_cursearch = 1;
+        bcloseing = false;
+        m_searchTask = nullptr;
     }
 
     ~DocummentBasePrivate()
     {
-        if (m_threadloadwords.isRunning()) {
-            m_threadloadwords.requestInterruption();
-            m_threadloadwords.quit();
-            m_threadloadwords.wait();
-        }
+        qDebug() << "~DocummentBasePrivate";
+//        m_pages.clear();
+//        m_widgets.clear();
+//        m_pagecountsearch.clear();
+//        if (m_threadloadwords.isRunning()) {
+//            m_threadloadwords.requestInterruption();
+//            m_threadloadwords.quit();
+//            m_threadloadwords.wait();
+//        }
         if (!animationfirst) {
-            delete  animationfirst;
+            animationfirst->deleteLater();
             animationfirst = nullptr;
         }
         if (!animationsecond) {
-            delete  animationsecond;
+            animationsecond->deleteLater();
             animationsecond = nullptr;
         }
         if (!animationgroup) {
-            delete  animationgroup;
+            animationgroup->deleteLater();
             animationgroup = nullptr;
         }
         if (m_searchTask) {
@@ -133,6 +142,15 @@ public:
             m_searchTask->wait();
             delete m_searchTask;
             m_searchTask = nullptr;
+        }
+        if (m_magnifierwidget) {
+            m_magnifierwidget->deleteLater();
+            m_magnifierwidget = nullptr;
+
+        }
+        if (m_slidewidget) {
+            m_slidewidget->deleteLater();
+            m_slidewidget = nullptr;
         }
     }
 
@@ -153,10 +171,10 @@ public:
     double m_scale;
     mutable bool m_bModified;
     bool m_bslidemodel;
-    ThreadLoadWords m_threadloadwords;
+//    ThreadLoadWords m_threadloadwords;
     RotateType_EM m_rotate;
     bool donotneedreloaddoc;
-    bool m_wordsbload;
+//    bool m_wordsbload;
     QPoint m_magnifierpoint;
     QPropertyAnimation *animationfirst;
     QPropertyAnimation *animationsecond;
@@ -168,6 +186,7 @@ public:
     bool m_bsearchfirst;
     double m_imagewidht;
     double m_imageheight;
+    bool bcloseing;
 
 signals:
     void signal_docummentLoaded();
@@ -226,14 +245,14 @@ public:
     double adaptHeightAndShow(double height);
     void findNext();
     void findPrev();
-    bool loadWords();
+//    bool loadWords();
     int getPageSNum();
     bool exitSlideModel();
     QVector<PageBase *> *getPages();
     PageBase *getPage(int index);
     void magnifierClear();
     void pageMove(double mvx, double mvy);
-    bool isWordsBeLoad();
+//    bool isWordsBeLoad();
     bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3);
     bool showSlideModel();
 
@@ -262,7 +281,7 @@ protected:
 
 
 
-    QScopedPointer<DocummentBasePrivate> d_ptr;
+    DocummentBasePrivate *d_ptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), DocummentBase)
 
 };

@@ -4,6 +4,8 @@
 #include <DLabel>
 #include <DGuiApplicationHelper>
 #include <QThread>
+#include <QDebug>
+#include <QMutex>
 #include "commonstruct.h"
 
 DWIDGET_USE_NAMESPACE
@@ -103,7 +105,11 @@ class PageBasePrivate: public QObject
 {
     Q_OBJECT
 public:
-    PageBasePrivate(PageBase *parent): q_ptr(parent)
+    PageBasePrivate(PageBase *parent): q_ptr(parent),
+        paintrects(),
+        m_links(),
+        m_words(),
+        m_highlights()
     {
         m_imagewidth = 0.01;
         m_imageheight = 0.01;
@@ -117,15 +123,17 @@ public:
         m_magnifierwidth = 0;
         m_magnifierheight = 0;
         m_pageno = -1;
-        m_highlights.clear();
         m_icurhightlight = 0;
         m_bcursearchshow = false;
+        m_scale = 1.0;
+        havereander = false;
         connect(&loadmagnifiercachethread, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)), this, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)));
         connect(&threadreander, SIGNAL(signal_RenderFinish(QImage)), this, SIGNAL(signal_RenderFinish(QImage)));
     }
 
     ~PageBasePrivate()
     {
+//        qDebug() << "~PageBasePrivate";
         qDeleteAll(m_links);
         m_links.clear();
         if (loadmagnifiercachethread.isRunning()) {
@@ -161,6 +169,8 @@ public:
     mutable QList<QRectF> m_highlights;
     int m_icurhightlight;
     QColor m_searchcolor;
+    bool havereander;
+    QMutex m_mutexlockgetimage;
 
     PageBase *q_ptr;
     Q_DECLARE_PUBLIC(PageBase)
@@ -227,7 +237,9 @@ public:
         d->m_bcursearchshow = bshow;
     }
     bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal);
-    void clearThread();
+    void stopThread();
+    void waitThread();
+    void clearImage();
 
 signals:
     void signal_MagnifierPixmapCacheLoaded(int);
@@ -240,7 +252,7 @@ protected:
 protected:
     void getImagePoint(QPoint &point);
 
-    QScopedPointer<PageBasePrivate> d_ptr;
+    PageBasePrivate *d_ptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), PageBase)
 
 };

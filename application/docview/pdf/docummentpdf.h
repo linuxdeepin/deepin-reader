@@ -14,11 +14,9 @@ class DocummentPDF: public DocummentBase
 public:
     DocummentPDF(DWidget *parent = nullptr);
     ~DocummentPDF() override;
-//    bool openFile(QString filepath) override;
     bool bDocummentExist() override;
     bool getImage(int pagenum, QImage &image, double width, double height) override;
     void docBasicInfo(stFileInfo &info) override;
-    //--------------------------------------------//
     bool save(const QString &filePath, bool withChanges) override;
     bool saveas(const QString &filePath, bool withChanges) override;
     void removeAllAnnotation();
@@ -32,17 +30,11 @@ public:
     void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) override;
     void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1)override;
     bool loadDocumment(QString filepath) override;
-//    void stopLoadPageThread() override;
 
-
-//signals:
-////    void signal_openFile(QString file);
-//    void signal_loadDocumment(QString);
 private:
     bool pdfsave(const QString &filePath, bool withChanges);
     void searchHightlight(Poppler::Page *page, const QString &strtext, stSearchRes &stres, const QColor &color);
     void refreshOnePage(int ipage);
-//    void setBasicInfo(const QString &filepath);
 private:
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), DocummentPDF)
 };
@@ -54,16 +46,26 @@ public:
     DocummentPDFPrivate(DocummentPDF *parent): DocummentBasePrivate(parent)
     {
         document = nullptr;
+        m_fileinfo = new stFileInfo;
     }
 
     ~DocummentPDFPrivate() override
     {
-
+//        qDebug() << "~DocummentPDFPrivate";
+        qDeleteAll(m_pages);
+        m_pages.clear();
+        if (nullptr != document) {
+            delete document;
+            document = nullptr;
+        }
+        if (nullptr != m_fileinfo) {
+            delete m_fileinfo;
+            m_fileinfo = nullptr;
+        }
     }
 
     Poppler::Document *document;
-    //--------------------------------------------//
-    stFileInfo m_fileinfo;
+    stFileInfo *m_fileinfo;
 
     Q_DECLARE_PUBLIC(DocummentPDF)
 protected slots:

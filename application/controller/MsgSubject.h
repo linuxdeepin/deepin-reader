@@ -18,7 +18,6 @@ class MsgSubject : public QThread, public ISubject
     Q_OBJECT
 private:
     MsgSubject(QObject *parent = nullptr);
-
 public:
     static MsgSubject *getInstance()
     {

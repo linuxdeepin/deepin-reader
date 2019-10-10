@@ -77,6 +77,8 @@ private:
 
     DocummentFileHelper     *m_pDocummentFileHelper = nullptr;
 
+    DocummentProxy          *m_pDocummentProxy = nullptr;
+
 private:
     int         m_nCurrentHandelState = Default_State;  //  当前鼠标状态
     int         m_nAdapteState = Default_State;         //  当前自适应状态
