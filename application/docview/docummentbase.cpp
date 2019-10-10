@@ -503,6 +503,7 @@ void DocummentBase::slot_searchover()
 {
     Q_D(DocummentBase);
     d->m_bsearchfirst = true;
+    emit signal_searchover();
 }
 
 bool DocummentBase::showMagnifier(QPoint point)

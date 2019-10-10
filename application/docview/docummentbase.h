@@ -241,6 +241,7 @@ public:
 signals:
     void signal_pageChange(int);
     void signal_searchRes(stSearchRes);
+    void signal_searchover();
     void signal_loadDocumment(QString);
 
 protected slots:
