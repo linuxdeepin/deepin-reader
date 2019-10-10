@@ -170,7 +170,7 @@ public:
     int m_icurhightlight;
     QColor m_searchcolor;
     bool havereander;
-    QMutex m_mutexlockgetimage;
+//    QMutex m_mutexlockgetimage;
 
     PageBase *q_ptr;
     Q_DECLARE_PUBLIC(PageBase)
