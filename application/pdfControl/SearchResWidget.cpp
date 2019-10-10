@@ -76,9 +76,6 @@ void SearchResWidget::slotGetSearchContant(stSearchRes search)
         return;
     }
     m_loadSearchResThread.pushSearch(search);
-
-//    qDebug() << "slotGetSearchContant num:  " <<  m_searchContantList.size();
-    //    sendMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
 }
 
 void SearchResWidget::slotSearchOver()
@@ -87,8 +84,6 @@ void SearchResWidget::slotSearchOver()
         m_loadSearchResThread.stopThread();
     }
 
-    qDebug() << "           slotSearchOver        ";
-
     disconnect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this, SLOT(slotGetSearchContant(stSearchRes)));
 
     //生成左侧搜索列表
@@ -96,10 +91,12 @@ void SearchResWidget::slotSearchOver()
     initSearchList(m_loadSearchResThread.searchList());
 }
 
-void SearchResWidget::slotLoadImage(const QImage & image)
+void SearchResWidget::slotLoadImage(const int&page, const QImage & image)
 {
     if (m_pSearchItemWidget) {
-        m_pSearchItemWidget->setLabelImage(image);
+        if(page == m_pSearchItemWidget->nPageIndex()){
+            m_pSearchItemWidget->setLabelImage(image);
+        }
     }
 }
 
@@ -117,8 +114,8 @@ void SearchResWidget::initWidget()
 
 void SearchResWidget::initConnections()
 {
-    connect(&m_loadSearchResThread, SIGNAL(sigLoadImage(const QImage &)),
-            this, SLOT(slotLoadImage(const QImage &)));
+    connect(&m_loadSearchResThread, SIGNAL(sigLoadImage(const int&, const QImage &)),
+            this, SLOT(slotLoadImage(const int&, const QImage &)));
 
     connect(this, SIGNAL(sigClearWidget()), this, SLOT(slotClearWidget()));
 //    connect(this, SIGNAL(sigFlushSearchWidget(QVariant)),
@@ -159,6 +156,7 @@ void SearchResWidget::initSearchList(const QList<stSearchRes>& list)
 void SearchResWidget::addSearchsItem(const int &page, const QString &text, const int &resultNum)
 {
     NotesItemWidget *itemWidget = new NotesItemWidget;
+    itemWidget->setNoteSigne(false);
     itemWidget->setLabelPage(page, 1);
     itemWidget->setTextEditText(text);
     itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + PdfControl::SEARCH_RES_CONT));
@@ -202,9 +200,7 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
     }
 
     if (msgType == MSG_FIND_NEXT) {
-        qDebug() << "@@@@@@@@@@@@@@@@@@";
         DocummentProxy::instance()->findNext();
-        qDebug() << "%%%%%%%%%%%%%%%%%%%%%%";
         return ConstantMsg::g_effective_res;
     }
 
@@ -267,6 +263,10 @@ void LoadSearchResThread::stopThread()
 void LoadSearchResThread::run()
 {
     m_pages = m_searchContantList.count();
+    m_searchContantList.clear();
+
+    m_nStartIndex = 0;
+    m_nEndIndex = 19;
 
     while (m_isRunning) {
 
@@ -274,7 +274,6 @@ void LoadSearchResThread::run()
             m_nStartIndex = 0;
         }
         if (m_nEndIndex >= m_pages) {
-            m_isRunning = false;
             m_nEndIndex = m_pages - 1;
         }
 
@@ -288,7 +287,7 @@ void LoadSearchResThread::run()
             }
 
             if (!m_pSearchResWidget) {
-                continue;
+                break;
             }
 
             page = m_pSearchResWidget->getSearchPage(index);
@@ -299,13 +298,14 @@ void LoadSearchResThread::run()
 
             bool bl = DocummentProxy::instance()->getImage(page, image, 113, 143);
             if (bl) {
-                emit sigLoadImage(image);
+                emit sigLoadImage(page, image);
+                msleep(10);
             }
         }
 
         m_nStartIndex += FIRST_LOAD_PAGES;
         m_nEndIndex   += FIRST_LOAD_PAGES;
 
-        msleep(50);
+        msleep(30);
     }
 }
