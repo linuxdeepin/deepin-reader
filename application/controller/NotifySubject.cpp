@@ -42,8 +42,8 @@ void NotifySubject::run()
 void NotifySubject::stopThreadRun()
 {
     m_bRunFlag = false;
-
-    terminate();    //终止线程
+    quit();
+   // terminate();    //终止线程
     wait();         //阻塞等待
 }
 

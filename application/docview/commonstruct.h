@@ -20,6 +20,20 @@ typedef struct SEARCH_RESULT {
 
 Q_DECLARE_METATYPE(stSearchRes)
 
+typedef struct HIGHLIGHT_CONTENTS
+{
+    unsigned int ipage;
+    QString strcontents;
+    QString struuid;
+    HIGHLIGHT_CONTENTS()
+    {
+        ipage=0;
+        strcontents.clear();
+        struuid.clear();
+    }
+
+}stHighlightContent;
+
 typedef struct FILE_INFO {
     QString strFilepath;
     QString strTheme;

@@ -360,6 +360,13 @@ bool DocummentProxy::annotationClicked(const QPoint &pos, QString &strtext)
     return  false;
 }
 
+void DocummentProxy::getAllAnnotation(QList<stHighlightContent> &listres)
+{
+    if (m_documment) {
+        return m_documment->getAllAnnotation(listres);
+    }
+}
+
 bool DocummentProxy::closeFile()
 {
     if (!m_documment)

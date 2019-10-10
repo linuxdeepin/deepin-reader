@@ -9,8 +9,8 @@ MsgSubject::MsgSubject(QObject *parent)
     Q_UNUSED(parent);
 
     //  默认启动线程，　只在　mainMainWindow 中　停止运行
-    m_bRunFlag = true;
-    start();
+    m_bRunFlag = true;   
+    start();    
 }
 
 void MsgSubject::addObserver(IObserver *obs)
@@ -66,9 +66,10 @@ int MsgSubject::NotifyObservers(const int &msgType, const QString &msgContent)
 void MsgSubject::stopThreadRun()
 {
     m_bRunFlag = false;
-
-    terminate();    //终止线程
+    quit();
+    //terminate();    //终止线程
     wait();         //阻塞等待
+
 }
 
 void MsgSubject::run()
@@ -82,13 +83,13 @@ void MsgSubject::run()
         }
 
         if (msgList.size() > 0) {
-            foreach (const MsgStruct &msg, msgList) {
+            foreach (const MsgStruct &msg, msgList) {               
                 int nRes = NotifyObservers(msg.msgType, msg.msgContent);
                 if (nRes == 0) {
                     break;
                 }
             }
-        }        
+        }
         msleep(50);
     }
 }

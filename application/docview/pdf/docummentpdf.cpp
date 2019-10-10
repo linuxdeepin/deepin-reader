@@ -112,11 +112,42 @@ QString DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos
     return static_cast<PagePdf *>(d->m_pages.at(page))->addAnnotation(pt);
 }
 
+void DocummentPDF::getAllAnnotation(QList<stHighlightContent>& listres)
+{
+    Q_D(DocummentPDF);
+//    QTime t;
+//    t.start();//将此时间设置为当前时间
+    for(int i=0;i<d->m_pages.size();++i)
+    {
+        QList<Poppler::Annotation *> listannote=static_cast<PagePdf *>(d->m_pages.at(i))->GetPage()->annotations();
+        foreach (Poppler::Annotation *annote, listannote) {
+            if (annote->subType() == Poppler::Annotation::AHighlight) {
+                stHighlightContent stres;
+                QList<Poppler::HighlightAnnotation::Quad> listquad = static_cast<Poppler::HighlightAnnotation *>(annote)->highlightQuads();
+                QString struuid=annote->uniqueName();
+                if(struuid.isEmpty())
+                {
+                    struuid=PublicFunc::getUuid();
+                    annote->setUniqueName(struuid);
+                }
+               QString strcontents=annote->contents();
+               stres.ipage=0;
+               stres.strcontents=strcontents;
+               stres.struuid=struuid;
+               listres.push_back(stres);
+            }
+        }
+        qDeleteAll(listannote);
+    }
+    //elapsed(): 返回自上次调用start()或restart()以来经过的毫秒数
+   // qDebug()<<"----getAllAnnotation----"<<t.elapsed()<<"ms"<<__func__;
+}
+
 void DocummentPDF::search(const QString &strtext, QColor color)
 {
     Q_D(DocummentPDF);
     clearSearch();
-
+    d->m_pages.at(d->m_currentpageno)->update();//刷新当前页
     d->m_searchTask->start(d->m_pages, strtext, false, false, d->m_currentpageno + 1);
 }
 
@@ -152,7 +183,7 @@ bool DocummentPDF::save(const QString &filePath, bool withChanges)
 
     if (withChanges) {
         // m_bModified = false;//reset modify status
-//        setBasicInfo(filePath);
+        //        setBasicInfo(filePath);
     }
 
     return true;

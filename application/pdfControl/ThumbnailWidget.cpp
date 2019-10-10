@@ -180,7 +180,7 @@ ThreadLoadImage::ThreadLoadImage(QObject *parent)
 void ThreadLoadImage::stopThreadRun()
 {
     m_isLoaded = false;
-
+    quit();
 //    terminate();    //终止线程
     wait();         //阻塞等待
 }

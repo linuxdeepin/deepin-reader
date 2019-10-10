@@ -199,6 +199,7 @@ public:
     virtual void removeAnnotation(const QString &struuid) {}
     virtual QString addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) {}
     virtual void search(const QString &strtext, QColor color = Qt::yellow) {}
+    virtual void getAllAnnotation(QList<stHighlightContent>& listres){}
     virtual void clearSearch() {}
     virtual void docBasicInfo(stFileInfo &info) {}
     virtual void title(QString &title) {}

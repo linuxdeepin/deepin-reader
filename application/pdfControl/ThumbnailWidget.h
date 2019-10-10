@@ -29,6 +29,9 @@ class ThreadLoadImage : public QThread
     Q_OBJECT
 public:
     ThreadLoadImage(QObject *parent = nullptr);
+    ~ThreadLoadImage(){
+        stopThreadRun();
+    }
 
 public:
     void stopThreadRun();

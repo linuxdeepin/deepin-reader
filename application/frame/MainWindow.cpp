@@ -42,7 +42,7 @@ MainWindow::~MainWindow()
     // We don't need clean pointers because application has exit here.
     if (m_pMsgSubject) {
         m_pMsgSubject->removeObserver(this);
-        m_pMsgSubject->stopThreadRun();
+            m_pMsgSubject->stopThreadRun();
     }
 
     if (m_pNotifySubject) {

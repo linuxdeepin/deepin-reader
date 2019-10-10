@@ -1322,7 +1322,7 @@ void DocummentBase::slot_docummentLoaded()
     if (d->m_threadloadwords.isRunning())
         d->m_threadloadwords.setRestart();
     else
-        d->m_threadloadwords.start();
+        d->m_threadloadwords.start();   
 }
 
 bool DocummentBase::openFile(QString filepath)

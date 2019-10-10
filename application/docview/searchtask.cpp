@@ -97,8 +97,8 @@ void SearchTask::processResults(Future future)
             break;
         }
 
-        const int shiftedIndex = (index + m_beginAtPage - 1) % count;//从当前页开始，保证循环后结束于当前页前一页
-        const stSearchRes res = future.resultAt(shiftedIndex);
+      //  const int shiftedIndex = (index + m_beginAtPage - 1) % count;//从当前页开始，保证循环后结束于当前页前一页
+        const stSearchRes res = future.resultAt(index);
 
         if (res.listtext.size() > 0) {         
             emit signal_resultReady(res);

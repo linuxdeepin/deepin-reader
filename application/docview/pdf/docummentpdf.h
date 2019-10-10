@@ -25,6 +25,7 @@ public:
     QString removeAnnotation(const QPoint &startpos) override;
     void removeAnnotation(const QString &struuid) override;
     QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow) override;
+    void getAllAnnotation(QList<stHighlightContent>& listres) override;
     void search(const QString &strtext, QColor color = Qt::yellow) override;
     void clearSearch() override;
     bool annotationClicked(const QPoint &pos, QString &strtext) override;
