@@ -332,7 +332,7 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
 //            m_nStartIndex = 0;
 //        }
 //        if (m_nEndIndex >= m_bookMarks) {
-//            m_isRunning = false;
+//            //m_isRunning = false;
 //            m_nEndIndex = m_bookMarks - 1;
 //        }
 

@@ -69,8 +69,9 @@ void NotesItemWidget::initWidget()
     t_hLayout->setContentsMargins(0, 0, 0, 0);
     t_hLayout->setSpacing(0);
 
-    m_pPicture = new CustomLabel;
-    m_pPicture->setFixedSize(QSize(150, 150));
+    m_pPicture = new CustomLabel(this);
+    m_pPicture->setFixedSize(QSize(120, 150));
+    m_pPicture->setAlignment(Qt::AlignCenter);
 
     m_pPage = new DLabel;
     m_pSearchResultNum = new DLabel;
@@ -85,7 +86,8 @@ void NotesItemWidget::initWidget()
 
     auto m_pHLayout = new QHBoxLayout;
 
-    m_pHLayout->setContentsMargins(0, 0, 1, 0);
+    m_pHLayout->setSpacing(1);
+    m_pHLayout->setContentsMargins(1, 0, 1, 0);
     m_pHLayout->addWidget(m_pPicture);
     m_pHLayout->addItem(t_vLayout);
     m_pHLayout->setSpacing(1);
