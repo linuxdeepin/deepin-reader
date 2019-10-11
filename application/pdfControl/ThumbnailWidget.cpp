@@ -207,7 +207,7 @@ void ThreadLoadImage::run()
             m_nStartPage = 0;
         }
         if (m_nEndPage >= m_pages) {
-            m_isLoaded = true;
+//            m_isLoaded = true;
             m_nEndPage = m_pages - 1;
         }
 
