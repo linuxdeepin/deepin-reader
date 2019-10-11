@@ -46,6 +46,8 @@ signals:
     void sigFileAddAnnotation(const QString &);
     void sigFileRemoveAnnotation();
 
+    void sigFileAddNote(const QString &);
+
 protected:
     void mouseDoubleClickEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
@@ -64,6 +66,8 @@ private slots:
 
     void slotFileAddAnnotation(const QString &);
     void slotFileRemoveAnnotation();
+
+    void slotFileAddNote(const QString &);
 
 private:
     void initConnections();
@@ -89,6 +93,7 @@ private:
     QPoint      m_pMoveEndPoint;
 
     QString m_strUUid;                         // 当前添加注释的uuid
+    bool m_bIsHighLight = false;               // 判断鼠标点击位置是否有高亮
 
     // CustomWidget interface
 protected:

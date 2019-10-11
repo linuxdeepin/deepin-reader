@@ -50,6 +50,7 @@ enum MSG_LEFT_SLIDER_TYPE {
     MSG_NOTE_COPYCHOICECONTANT,         //  拷贝指定注释内容 消息
     MSG_NOTE_ADDCONTANT,                //  添加注释内容 消息
     MSG_NOTE_ADDITEM,                   //  添加注释子节点 消息
+    MSG_NOTE_DLTNOTECONTANT,            //  删除注释内容 消息
     MSG_NOTE_DLTNOTEITEM,               //  删除注释子节点 消息
     MSG_SWITCHLEFTWIDGET,               //  切换左侧窗口(缩略图、书签、注释) 消息
     MSG_BOOKMARK_STATE,                 //  文件页码书签状态

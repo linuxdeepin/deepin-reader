@@ -120,7 +120,8 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 
         // 判断鼠标点击的地方是否有高亮
         QString selectText;
-        if(pDocummentProxy->annotationClicked(docGlobalPos, selectText, m_strUUid)){
+        m_bIsHighLight = pDocummentProxy->annotationClicked(docGlobalPos, selectText, m_strUUid);
+        if(m_bIsHighLight){
             qDebug() << "annotationClicked text:" << selectText << "  m_strUUid:" << m_strUUid;
         }
     }
@@ -233,6 +234,19 @@ void FileViewWidget::slotFileRemoveAnnotation()
     QString sUuid = DocummentProxy::instance()->removeAnnotation(m_pRightClickPoint);
 }
 
+void FileViewWidget::slotFileAddNote(const QString &note)
+{
+    if(!m_bIsHighLight){
+        // 添加高亮
+        slotFileAddAnnotation(QString(""));
+    }
+
+    QString t_str = m_strUUid.trimmed() + QString("%") + note.trimmed();
+
+    //send to note list widget on the left
+    sendMsg(MSG_NOTE_ADDITEM, t_str);
+}
+
 //  信号槽　初始化
 void FileViewWidget::initConnections()
 {
@@ -246,6 +260,8 @@ void FileViewWidget::initConnections()
 
     connect(this, SIGNAL(sigFileAddAnnotation(const QString &)), this, SLOT(slotFileAddAnnotation(const QString &)));
     connect(this, SIGNAL(sigFileRemoveAnnotation()), this, SLOT(slotFileRemoveAnnotation()));
+
+    connect(this, SIGNAL(sigFileAddNote(const QString &)), this, SLOT(slotFileAddNote(const QString &)));
 }
 
 //  打印
@@ -320,6 +336,9 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED: //  移除高亮显示
         emit sigFileRemoveAnnotation();
+        return ConstantMsg::g_effective_res;
+    case MSG_NOTE_ADDCONTANT:                      //  添加注释
+        emit sigFileAddNote(msgContent);
         return ConstantMsg::g_effective_res;
     }
     return 0;

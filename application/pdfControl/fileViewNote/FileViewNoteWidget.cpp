@@ -64,7 +64,7 @@ void FileViewNoteWidget::slotClosed()
 
         QString t_contant = m_pTextEdit->toPlainText().trimmed();
         if(m_strNote != t_contant){
-            sendMsg(MSG_NOTE_ADDITEM, t_contant);
+            sendMsg(MSG_NOTE_ADDCONTANT, t_contant);
             m_strNote = t_contant;
         }
 //        if( t_contant != QString("")){

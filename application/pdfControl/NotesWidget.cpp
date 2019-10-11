@@ -1,9 +1,5 @@
 #include "NotesWidget.h"
 
-#include "translator/PdfControl.h"
-
-#include <DIconButton>
-
 NotesWidget::NotesWidget(CustomWidget *parent) :
     CustomWidget(QString("NotesWidget"), parent)
 {
@@ -28,11 +24,37 @@ void NotesWidget::initWidget()
     m_pVLayout->addWidget(m_pNotesList);
 }
 
+void NotesWidget::keyPressEvent(QKeyEvent *e)
+{
+    QString key = Utils::getKeyshortcut(e);
+
+    if (key == PdfControl::DEL_KEY) {
+        QListWidgetItem *pItem = m_pNotesList->currentItem();
+        if (pItem) {
+            NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
+            if (t_widget) {
+                QString t_strUUid = t_widget->noteUUId();
+
+                t_widget->deleteLater();
+                t_widget = nullptr;
+
+                delete  pItem;
+                pItem = nullptr;
+
+                sendMsg(MSG_BOOKMARK_DLTITEM, t_strUUid);
+            }
+        }
+    }  else {
+        // Pass event to CustomWidget continue, otherwise you can't type anything after here. ;)
+        CustomWidget::keyPressEvent(e);
+    }
+}
+
 /**
  * @brief NotesWidget::slotAddNoteItem
  * 增加注释缩略图Item槽函数
  */
-void NotesWidget::slotAddNoteItem(QString uuid)
+void NotesWidget::slotAddNoteItem(QString note)
 {
     qDebug() << "           NotesWidget::slotAddNoteItem               ";
 
@@ -42,9 +64,9 @@ void NotesWidget::slotAddNoteItem(QString uuid)
         return;
     }
     QImage image;
-    dproxy->getImage(t_page, image, 150, 150);
+    dproxy->getImage(t_page, image, 113, 143);
 
-    addNotesItem(image, t_page, "");
+    addNotesItem(image, t_page, note);
 }
 
 /**
@@ -76,6 +98,23 @@ void NotesWidget::slotDltNoteItem(QString uuid)
 }
 
 /**
+ * @brief NotesWidget::slotDltNoteContant
+ * 根据uuid删除本地缓存中的注释内容
+ * @param uuid
+ */
+void NotesWidget::slotDltNoteContant(QString uuid)
+{
+    foreach(auto note, m_mapNotes)
+    {
+        if (note.contains(uuid)) {
+            note.remove(uuid);
+            note.insert(uuid, QString(""));
+            return;
+        }
+    }
+}
+
+/**
  * @brief NotesWidget::addNotesItem
  * 给新节点填充内容（包括文字、缩略图等内容）
  * @param image
@@ -84,9 +123,78 @@ void NotesWidget::slotDltNoteItem(QString uuid)
  */
 void NotesWidget::addNotesItem(const QImage &image, const int &page, const QString &text)
 {
+    QString t_strUUid,t_strText;
+    QStringList t_strList = text.split(QString("%"));
+
+    if(t_strList.count() < 1){
+        return;
+    }else if (t_strList.count() == 1) {
+        t_strText = QString("");
+    }else {
+        t_strText = t_strList[1].trimmed();
+    }
+
+    t_strUUid = t_strList[0].trimmed();
+
+    bool b_has = hasNoteInList(page, t_strUUid);
+
+    if(b_has){
+        flushNoteItemText(page, t_strUUid, t_strText);
+    }else{
+        addNewItem(image, page, t_strUUid, t_strText);
+
+        QMap<QString, QString> t_contant;
+        t_contant.clear();
+        t_contant.insert(t_strUUid, t_strText);
+        m_mapNotes.insert(page, t_contant);
+    }
+}
+
+/**
+ * @brief NotesWidget::initConnection
+ * 初始化信号槽
+ */
+void NotesWidget::initConnection()
+{
+    connect(this, SIGNAL(sigDltNoteItem(QString)), this, SLOT(slotDltNoteItem(QString)));
+    connect(this, SIGNAL(sigDltNoteContant(QString)), this, SLOT(slotDltNoteContant(QString)));
+
+    connect(this, SIGNAL(sigAddNewNoteItem(QString)), this, SLOT(slotAddNoteItem(QString)));
+}
+
+/**
+ * @brief NotesWidget::hasNoteInList
+ * 判断本地是否有该条注释
+ * @param page
+ * @param uuid
+ * @return
+ */
+bool NotesWidget::hasNoteInList(const int &page, const QString &uuid)
+{
+    if(m_mapNotes.contains(page)){
+        foreach(auto contant, m_mapNotes){
+            if(contant.contains(uuid)){
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+/**
+ * @brief NotesWidget::addNewItem
+ * 增加新的注释item
+ * @param image
+ * @param page
+ * @param uuid
+ * @param text
+ */
+void NotesWidget::addNewItem(const QImage &image, const int &page, const QString &uuid, const QString &text)
+{
     NotesItemWidget *itemWidget = new NotesItemWidget;
     itemWidget->setLabelImage(image);
-    itemWidget->setNoteUUid(QString::number(m_nUUid));
+    itemWidget->setNoteUUid(uuid);
     itemWidget->setLabelPage(page, 1);
     itemWidget->setTextEditText(text);
     itemWidget->setMinimumSize(QSize(250, 150));
@@ -97,19 +205,32 @@ void NotesWidget::addNotesItem(const QImage &image, const int &page, const QStri
 
     m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);
-
-    ++m_nUUid;//测试专用
 }
 
 /**
- * @brief NotesWidget::initConnection
- * 初始化信号槽
+ * @brief NotesWidget::flushNoteItemText
+ * 刷新注释内容
+ * @param page
+ * @param uuid
+ * @param text
  */
-void NotesWidget::initConnection()
+void NotesWidget::flushNoteItemText(const int &page, const QString &uuid, const QString &text)
 {
-    connect(this, SIGNAL(sigDltNoteItem(QString)), this, SLOT(slotDltNoteItem(QString)));
+    if(m_pNotesList->count() < 1){
+        return;
+    }
 
-    connect(this, SIGNAL(sigAddNewNoteItem(QString)), this, SLOT(slotAddNoteItem(QString)));
+    for(int index = 0; index < m_pNotesList->count(); ++index){
+        QListWidgetItem *pItem = m_pNotesList->item(index);
+        if (pItem) {
+            NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
+            if (t_widget) {
+                if(t_widget->nPageIndex() == page && t_widget->noteUUId() == uuid){
+                    t_widget->setTextEditText(text);
+                }
+            }
+        }
+    }
 }
 
 /**
@@ -119,15 +240,21 @@ void NotesWidget::initConnection()
  */
 int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    //  删除注释消息
-    if (MSG_BOOKMARK_DLTITEM == msgType) {
-        emit sigDltNoteItem(msgContent);
-        return ConstantMsg::g_effective_res;
-    }
+    //  删除注释item消息
+//    if (MSG_BOOKMARK_DLTITEM == msgType) {
+//        emit sigDltNoteItem(msgContent);
+//        return ConstantMsg::g_effective_res;
+//    }
 
     //  增加注释消息
     if (MSG_NOTE_ADDITEM == msgType) {
         emit sigAddNewNoteItem(msgContent);
+        return ConstantMsg::g_effective_res;
+    }
+
+    //  删除注释内容消息
+    if (MSG_NOTE_DLTNOTECONTANT == msgType) {
+        emit sigDltNoteContant(msgContent);
         return ConstantMsg::g_effective_res;
     }
 
