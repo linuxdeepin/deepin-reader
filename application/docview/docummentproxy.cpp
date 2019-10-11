@@ -234,7 +234,7 @@ QString DocummentProxy::addAnnotation(const QPoint &startpos, const QPoint &endp
     if (!m_documment || bcloseing)
         return QString("");
     qDebug() << "addAnnotation";
-    return m_documment->addAnnotation(startpos, endpos, color);
+    return m_documment->addAnnotation(startpos, color);
 }
 
 bool DocummentProxy::save(const QString &filepath, bool withChanges)

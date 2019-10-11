@@ -96,7 +96,9 @@ QString DocummentPDF::removeAnnotation(const QPoint &startpos)
     //暂时只处理未旋转
     QPoint pt = startpos;
     int page = pointInWhichPage(pt);
+    qDebug()<<"removeAnnotation start";
     if (page < 0) return "";
+     qDebug()<<"removeAnnotation end";
     return static_cast<PagePdf *>(d->m_pages.at(page))->removeAnnotation(pt);
 }
 
@@ -106,13 +108,13 @@ void DocummentPDF::removeAnnotation(const QString &struuid)
     return static_cast<PagePdf *>(d->m_pages.at(getCurrentPageNo()))->removeAnnotation(struuid);
 }
 
-QString DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color)
+QString DocummentPDF::addAnnotation(const QPoint &startpos,QColor color)
 {
     Q_D(DocummentPDF);
     QPoint pt = startpos;
     int page = pointInWhichPage(pt);
     if (page < 0) return "";
-    return static_cast<PagePdf *>(d->m_pages.at(page))->addAnnotation(pt);
+    return static_cast<PagePdf *>(d->m_pages.at(page))->addAnnotation(color);
 }
 
 void DocummentPDF::getAllAnnotation(QList<stHighlightContent>& listres)

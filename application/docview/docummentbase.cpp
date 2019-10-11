@@ -974,7 +974,6 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int cursearch)
                     xvalue = iwidth / 2;
                 }
             }
-
         }
         break;
         case RotateType_90:
@@ -1005,9 +1004,11 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int cursearch)
         case RotateType_180: {
             QRectF rectorg = pagebase->setCurHightLight(d->m_cursearch);
             rectorg = pagebase->translateRect(rectorg, d->m_scale, d->m_rotate);
+            bool left=true;
+            if(d->m_findcurpage%2)left=false;
             int ispace = d->m_widgets.at(d->m_findcurpage)->layout()->spacing();
             double topspace = (d->m_widgets.at(d->m_findcurpage)->height() - curheight) / 2;
-            double leftspace = (d->m_widgets.at(d->m_findcurpage)->width() - curwidht) / 2;
+            double leftspace = (d->m_widgets.at(d->m_findcurpage)->width() - curwidht) / 2;            
             int widgetheight = frameRect().height();
             yvalue = d->m_widgets.at(d->m_findcurpage)->y() + topspace + rectorg.y() - widgetheight / 2;
             //横向有缩放
@@ -1019,7 +1020,6 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int cursearch)
                     xvalue = iwidth / 2;
                 }
             }
-
         }
         break;
         case RotateType_90:
@@ -1368,9 +1368,11 @@ void DocummentBase::stopLoadPageThread()
 {
     Q_D(DocummentBase);
     d->bcloseing = true;
+    d->m_searchTask->cancel();
     for (int i = 0; i < d->m_pages.size(); i++) {
         d->m_pages.at(i)->stopThread();
     }
+    d->m_searchTask->wait();
     for (int i = 0; i < d->m_pages.size(); i++) {
         d->m_pages.at(i)->waitThread();
     }
