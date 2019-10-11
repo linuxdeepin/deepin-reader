@@ -24,7 +24,7 @@ public:
     QString addAnnotation(QPoint screenPos);
     QString removeAnnotation(const QPoint &pos);
     void removeAnnotation(const QString &struuid);
-    bool annotationClicked(const QPoint &pos, QString &strtext);
+    bool annotationClicked(const QPoint &pos, QString &strtext,QString& struuid);
     Poppler::Page *GetPage();
     stSearchRes search(const QString &text, bool matchCase, bool wholeWords) override;
 

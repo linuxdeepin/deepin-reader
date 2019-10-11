@@ -286,13 +286,13 @@ void DocummentPDF::docBasicInfo(stFileInfo &info)
     info = *(d->m_fileinfo);
 }
 
-bool DocummentPDF::annotationClicked(const QPoint &pos, QString &strtext)
+bool DocummentPDF::annotationClicked(const QPoint &pos, QString &strtext,QString& struuid)
 {
     Q_D(DocummentPDF);
     QPoint pt(pos);
     int ipage = pointInWhichPage(pt);
     if (ipage < 0) return  false;
-    return (static_cast<PagePdf *>(d->m_pages.at(ipage)))->annotationClicked(pt, strtext);
+    return (static_cast<PagePdf *>(d->m_pages.at(ipage)))->annotationClicked(pt, strtext,struuid);
 }
 
 void DocummentPDF::title(QString &title)

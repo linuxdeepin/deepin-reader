@@ -75,7 +75,7 @@ public:
     void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1);
     double adaptWidthAndShow(double width);
     double adaptHeightAndShow(double height);
-    bool annotationClicked(const QPoint &pos, QString &strtext);
+    bool annotationClicked(const QPoint &pos, QString &strtext,QString& struuid);
     void getAllAnnotation(QList<stHighlightContent>& listres);
 signals:
     void signal_pageChange(int);

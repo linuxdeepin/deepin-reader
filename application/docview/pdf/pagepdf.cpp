@@ -27,7 +27,14 @@ stSearchRes PagePdf::search(const QString &text, bool matchCase, bool wholeWords
         QRectF rctext = rec;
         rctext.setX(rctext.x() - 40);
         rctext.setWidth(rctext.width() + 80);
-        stres.listtext.push_back(d->m_page->text(rctext));
+        if(d->m_page)
+        {
+            stres.listtext.push_back(d->m_page->text(rctext));
+        }
+        else {
+            break;
+        }
+
     }
     return stres;
 }
@@ -77,7 +84,7 @@ bool PagePdf::getImage(QImage &image, double width, double height)
 {
     Q_D(PagePdf);
 
-//    qDebug() << "devicePixelRatioF:" << devicePixelRatioF();
+    //    qDebug() << "devicePixelRatioF:" << devicePixelRatioF();
     return d->getImage(image, width, height);
 }
 
@@ -195,7 +202,7 @@ void PagePdf::removeAnnotation(const QString &struuid)
     qDeleteAll(listannote);
 }
 
-bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext)
+bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext,QString& struuid)
 {
     Q_D(PagePdf);
     const double scaleX = d->m_scale;
@@ -217,6 +224,9 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext)
                 rectbound.setBottomRight( quad.points[3]);
                 qDebug() << "########" << quad.points[0];
                 if (rectbound.contains(ptf)) {
+                    struuid=annote->uniqueName();
+                    strtext=annote->contents();
+                    qDeleteAll(listannote);
                     qDebug() << "******* contaions";
                     return true;
                 } else {

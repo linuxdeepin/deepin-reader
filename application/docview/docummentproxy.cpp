@@ -412,11 +412,11 @@ double DocummentProxy::adaptHeightAndShow(double height)
     return m_documment->adaptHeightAndShow(height);
 }
 
-bool DocummentProxy::annotationClicked(const QPoint &pos, QString &strtext)
+bool DocummentProxy::annotationClicked(const QPoint &pos, QString &strtext,QString& struuid)
 {
     if (m_documment) {
         qDebug() << "annotationClicked";
-        return m_documment->annotationClicked(pos, strtext);
+        return m_documment->annotationClicked(pos, strtext,struuid);
     }
 }
 
