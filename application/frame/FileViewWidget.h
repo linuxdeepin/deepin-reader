@@ -88,6 +88,8 @@ private:
     QPoint      m_pHandleMoveStartPoint;
     QPoint      m_pMoveEndPoint;
 
+    QString m_strUUid;                         // 当前添加注释的uuid
+
     // CustomWidget interface
 protected:
     void initWidget() Q_DECL_OVERRIDE;

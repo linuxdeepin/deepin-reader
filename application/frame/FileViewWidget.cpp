@@ -117,6 +117,12 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
                 m_pStartPoint = docGlobalPos;
             }
         }
+
+        // 判断鼠标点击的地方是否有高亮
+        QString selectText;
+        if(pDocummentProxy->annotationClicked(docGlobalPos, selectText, m_strUUid)){
+            qDebug() << "annotationClicked text:" << selectText << "  m_strUUid:" << m_strUUid;
+        }
     }
 }
 
@@ -217,7 +223,7 @@ void FileViewWidget::slotFileAddAnnotation(const QString &sColor)
     DataManager::instance()->setBIsUpdate(true);
     QList<QColor> colorList = {};
 
-    DocummentProxy::instance()->addAnnotation(m_pRightClickPoint, m_pRightClickPoint);
+    m_strUUid = DocummentProxy::instance()->addAnnotation(m_pRightClickPoint, m_pRightClickPoint);
 }
 
 //  移除高亮, 有注释 则删除注释
