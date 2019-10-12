@@ -32,9 +32,12 @@ const QString sScreening = QObject::tr("Screening");        //  放映
 const QString sLarger = QObject::tr("Larger");              //  放大
 const QString sSmaller = QObject::tr("Smaller");            //  缩小
 
-const QString sThumbnail = QObject::tr("thumbnail");        //  缩略图
+//const QString sThumbnail = QObject::tr("thumbnail");        //  缩略图
+//const QString sBookmark = QObject::tr("bookmark");          //　书签
+//const QString sAnnotation = QObject::tr("annotation");      //　注释
+const QString sThumbnail = QObject::tr("annotation");        //  缩略图
 const QString sBookmark = QObject::tr("bookmark");          //　书签
-const QString sAnnotation = QObject::tr("annotation");      //　注释
+const QString sAnnotation = QObject::tr("comments");      //　注释
 
 const QString sSetting = QObject::tr("setting");            //  设置
 const QString sDefaultShape = QObject::tr("defaultShape");  //  默认手型
