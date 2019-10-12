@@ -74,6 +74,29 @@ void DocShowShellWidget::slotOpenNoteWidget(const QString &sPoint)
 
     QString sSelectText = ssPointList.at(1); //  选中添加注释的文字
 
+    m_pFileViewNoteWidget->setEditText(QString(""));
+    m_pFileViewNoteWidget->move(nParentWidth - nWidth - 50, 200);
+    m_pFileViewNoteWidget->show();
+    m_pFileViewNoteWidget->raise();
+}
+
+void DocShowShellWidget::slotShowNoteWidget(const QString &uuid)
+{
+    auto pDocummentProxy = DocummentProxy::instance();
+    if (m_pFileViewNoteWidget == nullptr) {
+        m_pFileViewNoteWidget = new FileViewNoteWidget(this);
+    }
+
+    int nParentWidth = this->width();
+    int nWidth = m_pFileViewNoteWidget->width();
+
+    QString t_strNote;
+
+    pDocummentProxy->getAnnotationText(uuid, t_strNote);
+
+    qDebug() << "t_strNote:" << t_strNote;
+
+    m_pFileViewNoteWidget->setEditText(t_strNote);
     m_pFileViewNoteWidget->move(nParentWidth - nWidth - 50, 200);
     m_pFileViewNoteWidget->show();
     m_pFileViewNoteWidget->raise();
@@ -86,6 +109,7 @@ void DocShowShellWidget::initConnections()
     connect(this, SIGNAL(sigShowFileFind()), this, SLOT(slotShowFindWidget()));
 
     connect(this, SIGNAL(sigOpenNoteWidget(const QString &)), this, SLOT(slotOpenNoteWidget(const QString &)));
+    connect(this, SIGNAL(sigShowNoteWidget(const QString &)), this, SLOT(slotShowNoteWidget(const QString &)));
 }
 
 int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgContent)
@@ -99,6 +123,9 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_ADD_ANNOTATION:     //  添加注释
         emit sigOpenNoteWidget(msgContent);
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_TEXT_SHOW_NOTEWIDGET:    //  显示注释窗口
+        emit sigShowNoteWidget(msgContent);
         return ConstantMsg::g_effective_res;
     case MSG_NOTIFY_KEY_MSG : {    //  最后一个处理通知消息
         if ("Ctrl+F" == msgContent) {

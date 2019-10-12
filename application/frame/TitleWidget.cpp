@@ -164,7 +164,7 @@ void TitleWidget::slotHandleMenuHide()
 
 void TitleWidget::initBtns()
 {
-    m_pThumbnailBtn = createBtn(Frame::sThumbnail, true);
+    m_pThumbnailBtn = createBtn(Frame::sThumbnailTitle, true);
     connect(m_pThumbnailBtn, SIGNAL(clicked()), this, SLOT(on_thumbnailBtn_clicked()));
 
     m_pSettingBtn = createBtn(Frame::sSetting);

@@ -122,6 +122,7 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
         QString selectText;
         m_bIsHighLight = pDocummentProxy->annotationClicked(docGlobalPos, selectText, m_strUUid);
         if(m_bIsHighLight){
+            sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, m_strUUid);
             qDebug() << "annotationClicked text:" << selectText << "  m_strUUid:" << m_strUUid;
         }
     }
