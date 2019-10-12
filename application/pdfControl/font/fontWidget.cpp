@@ -24,20 +24,20 @@ int FontWidget::dealWithData(const int &msgType, const QString &)
     switch (msgType) {
     case MSG_OPERATION_LARGER:      //  放大
         scale = m_pEnlargeSlider->value();
-        if (scale < 300) {
+        if (scale < 500) {
             scale += 25;
-            if (scale > 300) {
-                scale = 300;
+            if (scale > 500) {
+                scale = 500;
             }
             m_pEnlargeSlider->setValue(scale);
         }
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_SMALLER:     //  缩小
         scale = m_pEnlargeSlider->value();
-        if (scale > 50) {
+        if (scale > 10) {
             scale -= 25;
-            if (scale <= 50) {
-                scale = 50;
+            if (scale <= 10) {
+                scale = 10;
             }
             m_pEnlargeSlider->setValue(scale);
         }

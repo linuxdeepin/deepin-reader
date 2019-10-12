@@ -34,7 +34,6 @@ stSearchRes PagePdf::search(const QString &text, bool matchCase, bool wholeWords
         else {
             break;
         }
-
     }
     return stres;
 }
@@ -88,28 +87,22 @@ bool PagePdf::getImage(QImage &image, double width, double height)
     return d->getImage(image, width, height);
 }
 
-QString PagePdf::addAnnotation(QPoint screenPos)
+QString PagePdf::addAnnotation(const QColor &color)
 {
     Q_D(PagePdf);
     QString uniqueName;
     if (d->paintrects.size() > 0) {
-        //        QRectF rectboundry;
-        QList<QRectF> listrectf;
-        //        foreach (QRect rect, paintrects) {
-        //            rectboundry = rect;
-        //            listrectf.append(rectboundry);
-        //        }
-        uniqueName = addHighlightAnnotation(listrectf, Qt::red);
+        uniqueName = addHighlightAnnotation(color);
+        clearImage();
         showImage(d->m_scale, d->m_rotate);
     }
     return  uniqueName;
 }
 
-QString PagePdf::addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color)
+QString PagePdf::addHighlightAnnotation(const QColor &color)
 {
     Q_D(PagePdf);
     QString uniqueName;
-    //    if (listrect.size() <= 0)return uniqueName;
     Poppler::Annotation::Style style;
     style.setColor(color);
 
@@ -184,6 +177,7 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
             }
         }
     }
+    clearImage();
     showImage(d->m_scale, d->m_rotate);
     return uniqueName;
 }
@@ -192,12 +186,17 @@ void PagePdf::removeAnnotation(const QString &struuid)
 {
     Q_D(PagePdf);
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
+    int index=0;
     foreach (Poppler::Annotation *annote, listannote) {
         /*annote->subType()==Poppler::Annotation::AHighlight&&*/
         if (!struuid.isEmpty() && struuid.compare(annote->uniqueName()) == 0) { //必须判断
             removeAnnotation(annote);
+            listannote.removeAt(index);
+            clearImage();
             showImage(d->m_scale, d->m_rotate);
+            break;
         }
+        ++index;
     }
     qDeleteAll(listannote);
 }

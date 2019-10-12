@@ -136,8 +136,6 @@ public:
             animationgroup = nullptr;
         }
         if (m_searchTask) {
-            m_searchTask->cancel();
-            m_searchTask->wait();
             delete m_searchTask;
             m_searchTask = nullptr;
         }
@@ -215,7 +213,7 @@ public:
     }
     virtual QString removeAnnotation(const QPoint &startpos) {}
     virtual void removeAnnotation(const QString &struuid) {}
-    virtual QString addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) {}
+    virtual QString addAnnotation(const QPoint &startpos,QColor color = Qt::yellow) {}
     virtual void search(const QString &strtext, QColor color = Qt::yellow) {}
     virtual void getAllAnnotation(QList<stHighlightContent> &listres) {}
     virtual void clearSearch() {}

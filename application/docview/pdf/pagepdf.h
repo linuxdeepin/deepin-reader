@@ -21,7 +21,7 @@ public:
     PageInterface *getInterFace() override;
     void setPage(Poppler::Page *page, int pageno);
     //Annotation
-    QString addAnnotation(QPoint screenPos);
+    QString addAnnotation(const QColor &color);
     QString removeAnnotation(const QPoint &pos);
     void removeAnnotation(const QString &struuid);
     bool annotationClicked(const QPoint &pos, QString &strtext,QString& struuid);
@@ -32,7 +32,7 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 private:
     void removeAnnotation(Poppler::Annotation *annotation);
-    QString addHighlightAnnotation(const QList<QRectF> &listrect, const QColor &color);
+    QString addHighlightAnnotation(const QColor &color);
 private:
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), PagePdf)
 };

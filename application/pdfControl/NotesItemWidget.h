@@ -13,6 +13,7 @@
 
 #include "translator/Frame.h"
 #include "CustomItemWidget.h"
+#include "docview/docummentproxy.h"
 
 /**
  * @brief The ThumbnailItemWidget class
@@ -44,7 +45,7 @@ public:
     }
 
 private slots:
-    void slotDltNoteItem();
+    void slotDltNoteContant();
     void slotCopyContant();
     void slotShowContextMenu(const QPoint &);
 

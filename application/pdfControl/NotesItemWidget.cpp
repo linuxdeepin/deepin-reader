@@ -17,6 +17,7 @@ NotesItemWidget::NotesItemWidget(CustomItemWidget *parent) :
 void NotesItemWidget::setTextEditText(const QString &contant)
 {
     if (m_pTextEdit) {
+        m_pTextEdit->clear();
         m_pTextEdit->setText(contant);
     }
 }
@@ -28,15 +29,23 @@ void NotesItemWidget::setSerchResultText(const QString &result)
     }
 }
 
-void NotesItemWidget::slotDltNoteItem()
+void NotesItemWidget::slotDltNoteContant()
 {
-    qDebug() << "delet NotesItemWidget";
-    sendMsg(MSG_NOTE_DLTNOTEITEM, m_strUUid);
+    if(m_pTextEdit){
+        sendMsg(MSG_NOTE_DLTNOTECONTANT, m_strUUid);
+        m_pTextEdit->clear();
+        DocummentProxy *dproxy = DocummentProxy::instance();
+        if (nullptr == dproxy) {
+            return;
+        }
+        if(dproxy){
+            dproxy->setAnnotationText(this->nPageIndex(), m_strUUid, QString(""));
+        }
+    }
 }
 
 void NotesItemWidget::slotCopyContant()
 {
-    qDebug() << "            copy contant          ";
     if (m_pTextEdit) {
         QString str = m_pTextEdit->document()->toPlainText();
         if (str != QString("")) {
@@ -54,7 +63,7 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
     QMenu *t_menu = new QMenu(this);
     QAction *copyAction = t_menu->addAction(PdfControl::COPY_CONT);
     QAction *dltItemAction = t_menu->addAction(PdfControl::DLT_NOTE);
-    connect(dltItemAction, SIGNAL(triggered()), this, SLOT(slotDltNoteItem()));
+    connect(dltItemAction, SIGNAL(triggered()), this, SLOT(slotDltNoteContant()));
     connect(copyAction, SIGNAL(triggered()), this, SLOT(slotCopyContant()));
     t_menu->exec(QCursor::pos());
 }
