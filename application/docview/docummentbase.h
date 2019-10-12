@@ -73,6 +73,15 @@ private:
     bool bStartShow;
 };
 
+class SlidWidget: public DWidget
+{
+    Q_OBJECT
+public:
+    SlidWidget(DWidget *parent = nullptr);
+protected:
+    void paintEvent(QPaintEvent *event) override;
+};
+
 
 class DocummentBasePrivate: public QObject
 {
@@ -148,7 +157,7 @@ public:
     DWidget *m_widget;
     QVBoxLayout *m_vboxLayout;
     MagnifierWidget *m_magnifierwidget;
-    DWidget *m_slidewidget;
+    SlidWidget *m_slidewidget;
     DLabel *pslideanimationlabel;
     DLabel *pslidelabel;
     DWidget *pblankwidget;
@@ -208,13 +217,13 @@ public:
     virtual void removeAnnotation(const QString &struuid) {}
     virtual QString addAnnotation(const QPoint &starpos, const QPoint &endpos, QColor color = Qt::yellow) {}
     virtual void search(const QString &strtext, QColor color = Qt::yellow) {}
-    virtual void getAllAnnotation(QList<stHighlightContent>& listres){}
+    virtual void getAllAnnotation(QList<stHighlightContent> &listres) {}
     virtual void clearSearch() {}
     virtual void docBasicInfo(stFileInfo &info) {}
     virtual void title(QString &title) {}
     virtual void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) {}
     virtual void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1) {}
-    virtual bool annotationClicked(const QPoint &pos, QString &strtext,QString& struuid)
+    virtual bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
     {
         return false;
     }

@@ -10,6 +10,17 @@
 #include <poppler-qt5.h>
 #include <qglobal.h>
 
+SlidWidget::SlidWidget(DWidget *parent): DWidget(parent)
+{
+    setMouseTracking(true);
+}
+
+void SlidWidget::paintEvent(QPaintEvent *event)
+{
+    DWidget::paintEvent(event);
+    update();
+}
+
 MagnifierWidget::MagnifierWidget(DWidget *parent): DWidget(parent)
 {
 
@@ -140,7 +151,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     d->pblankwidget->setMouseTracking(true);
     d->pblankwidget->hide();
     d->m_magnifierwidget = new MagnifierWidget(parent);
-    d->m_slidewidget = new DWidget(parent);
+    d->m_slidewidget = new SlidWidget(parent);
     d->pslidelabel = new DLabel(d->m_slidewidget);
     d->pslideanimationlabel = new DLabel(d->m_slidewidget);
     d->pslidelabel->setGeometry(-200, -200, 100, 100);

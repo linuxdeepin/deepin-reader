@@ -94,7 +94,7 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath)
     connect(m_documment, SIGNAL(signal_pageChange(int)), this, SLOT(slot_pageChange(int)));
     connect(this, SIGNAL(signal_pageJump(int)), m_documment, SLOT(pageJump(int)));
     connect(m_documment, SIGNAL(signal_searchRes(stSearchRes)), this, SIGNAL(signal_searchRes(stSearchRes)));
-    connect(m_documment,SIGNAL(signal_searchover()),this,SIGNAL(signal_searchover()));
+    connect(m_documment, SIGNAL(signal_searchover()), this, SIGNAL(signal_searchover()));
     connect(this, SIGNAL(signal_mouseSelectText(QPoint, QPoint)), m_documment, SLOT(mouseSelectText(QPoint, QPoint)));
     connect(this, SIGNAL(signal_scaleAndShow(double, RotateType_EM)), m_documment, SLOT(scaleAndShow(double, RotateType_EM)));
     connect(this, SIGNAL(signal_setViewModeAndShow(ViewMode_EM)), m_documment, SLOT(setViewModeAndShow(ViewMode_EM)));
@@ -412,11 +412,11 @@ double DocummentProxy::adaptHeightAndShow(double height)
     return m_documment->adaptHeightAndShow(height);
 }
 
-bool DocummentProxy::annotationClicked(const QPoint &pos, QString &strtext,QString& struuid)
+bool DocummentProxy::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {
     if (m_documment) {
         qDebug() << "annotationClicked";
-        return m_documment->annotationClicked(pos, strtext,struuid);
+        return m_documment->annotationClicked(pos, strtext, struuid);
     }
 }
 
