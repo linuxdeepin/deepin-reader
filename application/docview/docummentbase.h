@@ -119,6 +119,7 @@ public:
         m_cursearch = 1;
         bcloseing = false;
         m_searchTask = nullptr;
+        bfindnext=true;
     }
 
     ~DocummentBasePrivate()
@@ -183,6 +184,7 @@ public:
     double m_imagewidht;
     double m_imageheight;
     bool bcloseing;
+    bool bfindnext;//上一次搜索结果是向前翻还是向后翻
 
 signals:
     void signal_docummentLoaded();

@@ -13,7 +13,7 @@ void AppAboutWidget::initLabels()
 {
     setProductIcon(QPixmap(":/resources/image/logo/logo_big.svg"));
     setProductName(Frame::sAppName);
-    setVersion("20191009");
+    setVersion("20191011");
     setDescription(Frame::sDescription);
 
     setAcknowledgementLink(Constant::sAcknowledgementLink);
