@@ -246,6 +246,12 @@ void FileViewWidget::slotFileAddNote(const QString &note)
 
     //send to note list widget on the left
     sendMsg(MSG_NOTE_ADDITEM, t_str);
+
+    auto proxy = DocummentProxy::instance();
+    int t_nPage = proxy->currentPageNo();
+    proxy->setAnnotationText(t_nPage, m_strUUid, note);
+
+    qDebug() << tr("setAnnotationText   page:%1, uuid: %2, note: %3").arg(t_nPage).arg(m_strUUid).arg(note);
 }
 
 //  信号槽　初始化
