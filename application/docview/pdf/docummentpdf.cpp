@@ -150,11 +150,11 @@ void DocummentPDF::getAllAnnotation(QList<stHighlightContent>& listres)
 
 void DocummentPDF::search(const QString &strtext, QColor color)
 {
-//    QString struuid("68add57e-205d-44ec-9c10-1c69288b08a0"),strcontents;
-//    setAnnotationText(4,struuid,"sbkebcmj");
-//    getAnnotationText(struuid,strcontents,4);
-//    qDebug()<<"DocummentPDF::search"<<strcontents<<struuid;
-//    return;
+    QString struuid("68add57e-205d-44ec-9c10-1c69288b08a0"),strcontents;
+    setAnnotationText(4,struuid,"sbkebcmj");
+    getAnnotationText(struuid,strcontents,4);
+    qDebug()<<"DocummentPDF::search"<<strcontents<<struuid;
+    return;
     Q_D(DocummentPDF);
     clearSearch();
     d->m_searchTask->start(d->m_pages, strtext, false, false, d->m_currentpageno + 1);
@@ -308,15 +308,16 @@ void DocummentPDF::title(QString &title)
     title = d->document->title();
 }
 void DocummentPDF::setAnnotationText(int ipage, const QString &struuid, const QString &strtext)
-{    
+{     qDebug()<<"setAnnotationText";
     Q_D(DocummentPDF);
     if (ipage > 0 && ipage < d_ptr->m_pages.size()) {
-        Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(ipage-1))->GetPage();
+        Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(ipage))->GetPage();
         QList<Poppler::Annotation *> plistannote = page->annotations();
         foreach (Poppler::Annotation *annote, plistannote) {
             QString uniquename = annote->uniqueName();           
             if (!uniquename.isEmpty() && uniquename.indexOf(struuid)>=0) {
-                annote->setContents(strtext);               
+                annote->setContents(strtext);
+                qDebug()<<"setAnnotationText"<<annote->contents();
             }
         }
         qDeleteAll(plistannote);
@@ -326,7 +327,7 @@ void DocummentPDF::setAnnotationText(int ipage, const QString &struuid, const QS
 void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, int ipage)
 {
     Q_D(DocummentPDF);
-    if (ipage <= 0) {
+    if (ipage < 0) {
         for (int i = 0; i < d_ptr->m_pages.size(); ++i) {
             Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(i))->GetPage();
             QList<Poppler::Annotation *> plistannote = page->annotations();
@@ -341,7 +342,7 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, i
             qDeleteAll(plistannote);
         }
     } else {
-        Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(ipage-1))->GetPage();
+        Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(ipage))->GetPage();
         QList<Poppler::Annotation *> plistannote = page->annotations();
         foreach (Poppler::Annotation *annote, plistannote) {
             QString uniquename = annote->uniqueName();
