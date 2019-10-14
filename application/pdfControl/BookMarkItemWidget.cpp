@@ -48,15 +48,25 @@ void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
  */
 void BookMarkItemWidget::initWidget()
 {
-    m_pPicture = new CustomLabel;
-    m_pPage = new DLabel;
+    m_pPicture = new CustomLabel(this);
+    m_pPicture->setFixedSize(QSize(120, 150));
+    m_pPicture->setAlignment(Qt::AlignCenter);
+
+    m_pPage = new DLabel(this);
+    auto m_pVLayout = new QVBoxLayout;
+    m_pVLayout->setContentsMargins(1, 1, 1, 0);
+    m_pVLayout->setSpacing(1);
+
+    m_pVLayout->addWidget(m_pPage);
+    m_pVLayout->addStretch(1);
 
     auto m_pHLayout = new QHBoxLayout;
     m_pHLayout->setContentsMargins(1, 0, 1, 0);
     m_pHLayout->setSpacing(1);
 
     m_pHLayout->addWidget(m_pPicture);
-    m_pHLayout->addWidget(m_pPage);
+//    m_pHLayout->addWidget(m_pPage);
+    m_pHLayout->addItem(m_pVLayout);
 
     this->setLayout(m_pHLayout);
 }
