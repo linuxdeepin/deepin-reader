@@ -255,7 +255,7 @@ public:
     bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3);
     bool showSlideModel();
     void cacularValueXY(int &xvalue, int &yvalue, int cursearch);
-
+    int pointInWhichPage(QPoint &qpoint);
 
 signals:
     void signal_pageChange(int);
@@ -274,8 +274,7 @@ protected slots:
     bool mouseSelectText(QPoint start, QPoint stop);
     void scaleAndShow(double scale, RotateType_EM rotate);
     bool setViewModeAndShow(ViewMode_EM viewmode);
-protected:
-    int pointInWhichPage(QPoint &qpoint);
+protected:   
     void showSinglePage();
     void showFacingPage();
     void initConnect();

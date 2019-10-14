@@ -77,6 +77,7 @@ public:
     double adaptHeightAndShow(double height);
     bool annotationClicked(const QPoint &pos, QString &strtext,QString& struuid);
     void getAllAnnotation(QList<stHighlightContent>& listres);
+    int  pointInWhichPage(QPoint pos);
 signals:
     void signal_pageChange(int);
     bool signal_pageJump(int);

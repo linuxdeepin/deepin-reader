@@ -427,6 +427,14 @@ void DocummentProxy::getAllAnnotation(QList<stHighlightContent> &listres)
     }
 }
 
+int DocummentProxy::pointInWhichPage(QPoint pos)
+{
+    if (m_documment) {
+        return  m_documment->pointInWhichPage(pos);
+    }
+    return  -1;
+}
+
 bool DocummentProxy::closeFile()
 {
 
