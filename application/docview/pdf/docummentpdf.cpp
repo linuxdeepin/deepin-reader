@@ -150,6 +150,11 @@ void DocummentPDF::getAllAnnotation(QList<stHighlightContent>& listres)
 
 void DocummentPDF::search(const QString &strtext, QColor color)
 {
+//    QString struuid("68add57e-205d-44ec-9c10-1c69288b08a0"),strcontents;
+//    setAnnotationText(4,struuid,"sbkebcmj");
+//    getAnnotationText(struuid,strcontents,4);
+//    qDebug()<<"DocummentPDF::search"<<strcontents<<struuid;
+//    return;
     Q_D(DocummentPDF);
     clearSearch();
     d->m_searchTask->start(d->m_pages, strtext, false, false, d->m_currentpageno + 1);
@@ -309,9 +314,9 @@ void DocummentPDF::setAnnotationText(int ipage, const QString &struuid, const QS
         Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(ipage-1))->GetPage();
         QList<Poppler::Annotation *> plistannote = page->annotations();
         foreach (Poppler::Annotation *annote, plistannote) {
-            QString uniquename = annote->uniqueName();
-            if (!uniquename.isEmpty() && uniquename.indexOf(struuid)>0) {
-                annote->setContents(strtext);
+            QString uniquename = annote->uniqueName();           
+            if (!uniquename.isEmpty() && uniquename.indexOf(struuid)>=0) {
+                annote->setContents(strtext);               
             }
         }
         qDeleteAll(plistannote);
@@ -327,7 +332,7 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, i
             QList<Poppler::Annotation *> plistannote = page->annotations();
             foreach (Poppler::Annotation *annote, plistannote) {
                 QString uniquename = annote->uniqueName();
-                if (!uniquename.isEmpty() && uniquename.indexOf(struuid)>0) {
+                if (!uniquename.isEmpty() && uniquename.indexOf(struuid)>=0) {
                     strtext = annote->contents();
                     qDeleteAll(plistannote);
                     return;
@@ -340,7 +345,7 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, i
         QList<Poppler::Annotation *> plistannote = page->annotations();
         foreach (Poppler::Annotation *annote, plistannote) {
             QString uniquename = annote->uniqueName();
-            if (!uniquename.isEmpty()&&uniquename.indexOf(struuid)>0) {
+            if (!uniquename.isEmpty()&&uniquename.indexOf(struuid)>=0) {
                 strtext = annote->contents();
                 qDeleteAll(plistannote);
                 return;

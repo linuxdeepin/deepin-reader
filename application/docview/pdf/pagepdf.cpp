@@ -93,6 +93,7 @@ QString PagePdf::addAnnotation(const QColor &color)
     QString uniqueName;
     if (d->paintrects.size() > 0) {
         uniqueName = addHighlightAnnotation(color);
+        qDebug()<<"addAnnotation uniquename"<<uniqueName;
         clearImage();
         showImage(d->m_scale, d->m_rotate);
     }
@@ -189,7 +190,7 @@ void PagePdf::removeAnnotation(const QString &struuid)
     int index=0;
     foreach (Poppler::Annotation *annote, listannote) {
         /*annote->subType()==Poppler::Annotation::AHighlight&&*/
-        if (!struuid.isEmpty() && struuid.compare(annote->uniqueName()) == 0) { //必须判断
+        if (!struuid.isEmpty() && annote->uniqueName().indexOf(struuid)>= 0) { //必须判断
             removeAnnotation(annote);
             listannote.removeAt(index);
             clearImage();
