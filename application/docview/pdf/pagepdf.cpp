@@ -226,7 +226,7 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext,QString& str
                     struuid=annote->uniqueName();
                     strtext=annote->contents();
                     qDeleteAll(listannote);
-                    qDebug() << "******* contaions";
+                    qDebug() << "******* contaions***"<<struuid;
                     return true;
                 } else {
                     qDebug() << "******* not contains";

@@ -64,15 +64,15 @@ DocummentPDF::DocummentPDF(DWidget *parent):
 
 DocummentPDF::~DocummentPDF()
 {
-//    Q_D(DocummentPDF);
-//    delete d->document;
-//    d->document = nullptr;
+    //    Q_D(DocummentPDF);
+    //    delete d->document;
+    //    d->document = nullptr;
 }
 
 bool DocummentPDF::loadDocumment(QString filepath)
 {
     Q_D(DocummentPDF);
-//    d->loadDocumment(filepath);
+    //    d->loadDocumment(filepath);
     emit signal_loadDocumment(filepath);
     return true;
 }
@@ -98,7 +98,7 @@ QString DocummentPDF::removeAnnotation(const QPoint &startpos)
     int page = pointInWhichPage(pt);
     qDebug()<<"removeAnnotation start";
     if (page < 0) return "";
-     qDebug()<<"removeAnnotation end";
+    qDebug()<<"removeAnnotation end";
     return static_cast<PagePdf *>(d->m_pages.at(page))->removeAnnotation(pt);
 }
 
@@ -120,8 +120,8 @@ QString DocummentPDF::addAnnotation(const QPoint &startpos,QColor color)
 void DocummentPDF::getAllAnnotation(QList<stHighlightContent>& listres)
 {
     Q_D(DocummentPDF);
-//    QTime t;
-//    t.start();//将此时间设置为当前时间
+    //    QTime t;
+    //    t.start();//将此时间设置为当前时间
     for(int i=0;i<d->m_pages.size();++i)
     {
         QList<Poppler::Annotation *> listannote=static_cast<PagePdf *>(d->m_pages.at(i))->GetPage()->annotations();
@@ -135,23 +135,23 @@ void DocummentPDF::getAllAnnotation(QList<stHighlightContent>& listres)
                     struuid=PublicFunc::getUuid();
                     annote->setUniqueName(struuid);
                 }
-               QString strcontents=annote->contents();
-               stres.ipage=0;
-               stres.strcontents=strcontents;
-               stres.struuid=struuid;
-               listres.push_back(stres);
+                QString strcontents=annote->contents();
+                stres.ipage=0;
+                stres.strcontents=strcontents;
+                stres.struuid=struuid;
+                listres.push_back(stres);
             }
         }
         qDeleteAll(listannote);
     }
     //elapsed(): 返回自上次调用start()或restart()以来经过的毫秒数
-   // qDebug()<<"----getAllAnnotation----"<<t.elapsed()<<"ms"<<__func__;
+    // qDebug()<<"----getAllAnnotation----"<<t.elapsed()<<"ms"<<__func__;
 }
 
 void DocummentPDF::search(const QString &strtext, QColor color)
 {
     Q_D(DocummentPDF);
-    clearSearch();  
+    clearSearch();
     d->m_searchTask->start(d->m_pages, strtext, false, false, d->m_currentpageno + 1);
 }
 
@@ -253,7 +253,7 @@ void DocummentPDF::clearSearch()
             d->m_pages.at(key)->clearHighlightRects();
         }
     }
-     d->m_pages.at(d->m_currentpageno)->update();//刷新当前页
+    d->m_pages.at(d->m_currentpageno)->update();//刷新当前页
 }
 
 void DocummentPDF::refreshOnePage(int ipage)
@@ -303,14 +303,14 @@ void DocummentPDF::title(QString &title)
     title = d->document->title();
 }
 void DocummentPDF::setAnnotationText(int ipage, const QString &struuid, const QString &strtext)
-{
+{    
     Q_D(DocummentPDF);
     if (ipage > 0 && ipage < d_ptr->m_pages.size()) {
-        Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(ipage))->GetPage();
+        Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(ipage-1))->GetPage();
         QList<Poppler::Annotation *> plistannote = page->annotations();
         foreach (Poppler::Annotation *annote, plistannote) {
             QString uniquename = annote->uniqueName();
-            if (uniquename.isEmpty() && uniquename.compare(struuid) == 0) {
+            if (!uniquename.isEmpty() && uniquename.indexOf(struuid)>0) {
                 annote->setContents(strtext);
             }
         }
@@ -321,13 +321,13 @@ void DocummentPDF::setAnnotationText(int ipage, const QString &struuid, const QS
 void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, int ipage)
 {
     Q_D(DocummentPDF);
-    if (ipage < 0) {
+    if (ipage <= 0) {
         for (int i = 0; i < d_ptr->m_pages.size(); ++i) {
             Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(i))->GetPage();
             QList<Poppler::Annotation *> plistannote = page->annotations();
             foreach (Poppler::Annotation *annote, plistannote) {
                 QString uniquename = annote->uniqueName();
-                if (uniquename.isEmpty() && uniquename.compare(struuid) == 0) {
+                if (!uniquename.isEmpty() && uniquename.indexOf(struuid)>0) {
                     strtext = annote->contents();
                     qDeleteAll(plistannote);
                     return;
@@ -336,11 +336,11 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, i
             qDeleteAll(plistannote);
         }
     } else {
-        Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(ipage))->GetPage();
+        Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(ipage-1))->GetPage();
         QList<Poppler::Annotation *> plistannote = page->annotations();
         foreach (Poppler::Annotation *annote, plistannote) {
             QString uniquename = annote->uniqueName();
-            if (uniquename.isEmpty() && uniquename.compare(struuid) == 0) {
+            if (!uniquename.isEmpty()&&uniquename.indexOf(struuid)>0) {
                 strtext = annote->contents();
                 qDeleteAll(plistannote);
                 return;
