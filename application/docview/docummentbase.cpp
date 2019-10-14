@@ -1183,10 +1183,9 @@ double DocummentBase::adaptHeightAndShow(double height)
 
 void DocummentBase::findNext()
 {
-    Q_D(DocummentBase);
-    qDebug() << "----------findNext--"<<d->m_findcurpage<<"--"<<d->m_pagecountsearch.lastKey();
+    Q_D(DocummentBase);   
     if (d->m_pagecountsearch.size() <= 0 || d->m_findcurpage < 0) return;
-
+     qDebug() << "----------findNext--"<<d->m_findcurpage<<"--"<<d->m_pagecountsearch.lastKey();
     if (d->m_findcurpage == d->m_pagecountsearch.lastKey() &&
             d->m_cursearch >= d->m_pagecountsearch.find(d->m_findcurpage).value()) {
         d->m_findcurpage = d->m_pagecountsearch.firstKey();

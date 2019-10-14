@@ -150,11 +150,6 @@ void DocummentPDF::getAllAnnotation(QList<stHighlightContent>& listres)
 
 void DocummentPDF::search(const QString &strtext, QColor color)
 {
-    QString struuid("68add57e-205d-44ec-9c10-1c69288b08a0"),strcontents;
-    setAnnotationText(4,struuid,"sbkebcmj");
-    getAnnotationText(struuid,strcontents,4);
-    qDebug()<<"DocummentPDF::search"<<strcontents<<struuid;
-    return;
     Q_D(DocummentPDF);
     clearSearch();
     d->m_searchTask->start(d->m_pages, strtext, false, false, d->m_currentpageno + 1);
