@@ -308,16 +308,17 @@ void DocummentPDF::title(QString &title)
     title = d->document->title();
 }
 void DocummentPDF::setAnnotationText(int ipage, const QString &struuid, const QString &strtext)
-{     qDebug()<<"setAnnotationText";
+{     qDebug()<<"setAnnotationText********************";
     Q_D(DocummentPDF);
-    if (ipage > 0 && ipage < d_ptr->m_pages.size()) {
+    if (ipage >= 0 && ipage < d_ptr->m_pages.size()) {
         Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(ipage))->GetPage();
         QList<Poppler::Annotation *> plistannote = page->annotations();
         foreach (Poppler::Annotation *annote, plistannote) {
-            QString uniquename = annote->uniqueName();           
+            QString uniquename = annote->uniqueName();
+             qDebug()<<"setAnnotationText--"<<uniquename<<struuid;
             if (!uniquename.isEmpty() && uniquename.indexOf(struuid)>=0) {
                 annote->setContents(strtext);
-                qDebug()<<"setAnnotationText"<<annote->contents();
+                qDebug()<<"setAnnotationText++"<<annote->contents();
             }
         }
         qDeleteAll(plistannote);
@@ -333,6 +334,7 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, i
             QList<Poppler::Annotation *> plistannote = page->annotations();
             foreach (Poppler::Annotation *annote, plistannote) {
                 QString uniquename = annote->uniqueName();
+                 qDebug()<<QString("getAnnotationText-%1-%2-%3").arg(uniquename).arg(struuid).arg(ipage);
                 if (!uniquename.isEmpty() && uniquename.indexOf(struuid)>=0) {
                     strtext = annote->contents();
                     qDeleteAll(plistannote);
@@ -346,6 +348,7 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, i
         QList<Poppler::Annotation *> plistannote = page->annotations();
         foreach (Poppler::Annotation *annote, plistannote) {
             QString uniquename = annote->uniqueName();
+             qDebug()<<QString("getAnnotationText-%1-%2-%3").arg(uniquename).arg(struuid).arg(ipage);
             if (!uniquename.isEmpty()&&uniquename.indexOf(struuid)>=0) {
                 strtext = annote->contents();
                 qDeleteAll(plistannote);

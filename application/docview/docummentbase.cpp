@@ -450,7 +450,7 @@ int DocummentBase::pointInWhichPage(QPoint &qpoint)
             }
             break;
         }
-    }
+    } 
     return pagenum;
 }
 

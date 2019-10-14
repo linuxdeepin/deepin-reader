@@ -172,9 +172,9 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
                 if (rectbound.contains(ptf)) {
                     uniqueName = annote->uniqueName();
                     removeAnnotation(annote);
-                } else {
+                } /*else {
                     qDebug() << "******* not contains";
-                }
+                }*/
             }
         }
     }
