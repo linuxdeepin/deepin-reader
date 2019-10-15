@@ -165,7 +165,6 @@ void TitleWidget::initBtns()
 {
     m_pThumbnailBtn = createBtn(Frame::sThumbnailTitle, true);
     connect(m_pThumbnailBtn, SIGNAL(clicked()), this, SLOT(on_thumbnailBtn_clicked()));
-    connect(m_pThumbnailBtn,SIGNAL())
 
     m_pSettingBtn = createBtn(Frame::sSetting);
     connect(m_pSettingBtn, SIGNAL(clicked()), this, SLOT(on_settingBtn_clicked()));
