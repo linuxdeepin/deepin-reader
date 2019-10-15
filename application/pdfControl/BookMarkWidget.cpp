@@ -4,8 +4,6 @@
 BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
     CustomWidget(QString("BookMarkWidget"), parent)
 {
-//    m_loadBookMarkThread.setBookMark(this);
-
     initWidget();
 
     initConnection();
@@ -16,9 +14,9 @@ BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
  */
 BookMarkWidget::~BookMarkWidget()
 {
-//    if (m_loadBookMarkThread.isRunning()) {
-//        m_loadBookMarkThread.stopThreadRun();
-//    }
+    if (m_loadBookMarkThread.isRunning()) {
+        m_loadBookMarkThread.stopThreadRun();
+    }
 }
 
 /**
@@ -59,6 +57,9 @@ void BookMarkWidget::slotOpenFileOk()
     connect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotDocFilePageChanged(int)), Qt::QueuedConnection);
 
     m_pAllPageList.clear();
+    if(m_pBookMarkListWidget){
+        m_pBookMarkListWidget->clear();
+    }
 
     QString sAllPages = dApp->dbM->getBookMarks();
     QStringList sPageList = sAllPages.split(",", QString::SkipEmptyParts);
@@ -70,8 +71,8 @@ void BookMarkWidget::slotOpenFileOk()
         addBookMarkItem(nPage);
     }
 
-//    m_loadBookMarkThread.setBookMarks(m_pAllPageList.count());
-//    m_loadBookMarkThread.start();
+    m_loadBookMarkThread.setBookMarks(m_pAllPageList.count());
+    m_loadBookMarkThread.start();
 
     slotDocFilePageChanged(0);
 }
@@ -127,9 +128,24 @@ void BookMarkWidget::slotDeleteBookItem(const int &nPage)
  */
 void BookMarkWidget::slotCloseFile()
 {
-//    if (m_loadBookMarkThread.isRunning()) {
-//        m_loadBookMarkThread.stopThreadRun();
-//    }
+    if (m_loadBookMarkThread.isRunning()) {
+        m_loadBookMarkThread.stopThreadRun();
+    }
+}
+
+/**
+ * @brief BookMarkWidget::slotLoadImage
+ * 填充书签缩略图
+ * @param page
+ * @param image
+ */
+void BookMarkWidget::slotLoadImage(const int &page, const QImage &image)
+{
+    if(m_pItemWidget){
+        if(m_pItemWidget->nPageIndex() == page){
+            m_pItemWidget->setLabelImage(image);
+        }
+    }
 }
 
 /**
@@ -195,7 +211,7 @@ void BookMarkWidget::keyPressEvent(QKeyEvent *e)
  */
 void BookMarkWidget::initConnection()
 {
-//    connect(&m_loadBookMarkThread, SIGNAL(signal_loadImage(int, QImage)), this, SLOT(slot_loadImage(int, QImage)));
+    connect(&m_loadBookMarkThread, SIGNAL(sigLoadImage(const int&, const QImage&)), this, SLOT(slotLoadImage(const int&, const QImage&)));
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigDeleteBookItem(const int &)), this, SLOT(slotDeleteBookItem(const int &)));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
@@ -284,84 +300,88 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
  * @param index(list item 从0开始)
  * @return 返回要填充缩略图的页码，不一定是index
  */
-//int BookMarkWidget::getBookMarkPage(const int &index)
-//{
-//    QListWidgetItem *pItem = m_pBookMarkListWidget->item(index);
-//    m_pItemWidget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
-//    if (m_pItemWidget) {
-//        int page = m_pItemWidget->nPageIndex();
-//        if (m_pAllPageList.contains(page)) {
-//            return page;
-//        }
-//    }
+int BookMarkWidget::getBookMarkPage(const int &index)
+{
+    QListWidgetItem *pItem = m_pBookMarkListWidget->item(index);
+    m_pItemWidget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
+    if (m_pItemWidget) {
+        int page = m_pItemWidget->nPageIndex();
+        if (m_pAllPageList.contains(page)) {
+            return page;
+        }
+    }
 
-//    return -1;
-//}
+    return -1;
+}
 
 
 /*************************************LoadBookMarkThread**************************************/
 /*************************************加载书签列表线程******************************************/
 
-//LoadBookMarkThread::LoadBookMarkThread(QObject *parent)
-//    : QThread (parent)
-//{
+LoadBookMarkThread::LoadBookMarkThread(QObject *parent)
+    : QThread (parent)
+{
 
-//}
+}
 
-///**
-// * @brief LoadBookMarkThread::stopThreadRun
-// * 线程退出
-// */
-//void LoadBookMarkThread::stopThreadRun()
-//{
-//    m_isRunning = false;
+/**
+ * @brief LoadBookMarkThread::stopThreadRun
+ * 线程退出
+ */
+void LoadBookMarkThread::stopThreadRun()
+{
+    m_isRunning = false;
 
-////    terminate();    //终止线程
-//    wait();         //阻塞等待
-//}
+    quit();
+//    terminate();    //终止线程
+    wait();         //阻塞等待
+}
 
-///**
-// * @brief LoadBookMarkThread::run
-// * 线程主工作区，加载相应缩略图
-// */
-//void LoadBookMarkThread::run()
-//{
-//    while (m_isRunning) {
+/**
+ * @brief LoadBookMarkThread::run
+ * 线程主工作区，加载相应缩略图
+ */
+void LoadBookMarkThread::run()
+{
+    while (m_isRunning) {
 
-//        if (m_nStartIndex < 0) {
-//            m_nStartIndex = 0;
-//        }
-//        if (m_nEndIndex >= m_bookMarks) {
-//            //m_isRunning = false;
-//            m_nEndIndex = m_bookMarks - 1;
-//        }
+        if (m_nStartIndex < 0) {
+            m_nStartIndex = 0;
+        }
+        if (m_nEndIndex >= m_bookMarks) {
+            //m_isRunning = false;
+            m_nEndIndex = m_bookMarks - 1;
+        }
 
-//        for (int index = m_nStartIndex; index <= m_nEndIndex; index++) {
-//            QImage image;
-//            int page = -1;
+        for (int index = m_nStartIndex; index <= m_nEndIndex; index++) {
+            QImage image;
+            int page = -1;
 
-//            if (!m_isRunning)
-//                break;
+            if (!m_isRunning){
+                break;
+            }
 
-//            if (!m_pBookMarkWidget) {
-//                continue;
-//            }
+            if (!m_pBookMarkWidget) {
+                break;
+            }
 
-//            page = m_pBookMarkWidget->getBookMarkPage(index);
+            page = m_pBookMarkWidget->getBookMarkPage(index);
 
-//            if (page == -1) {
-//                continue;
-//            }
+            if (page == -1) {
+                continue;
+            }
 
-//            bool bl = DocummentProxy::instance()->getImage(page, image, 113, 143);
-//            if (bl) {
-//                emit signal_loadImage(page, image);
-//            }
-//        }
+            bool bl = DocummentProxy::instance()->getImage(page, image, 113, 143);
+            if (bl) {
+                emit sigLoadImage(page, image);
+            }
 
-//        m_nStartIndex += FIRST_LOAD_PAGES;
-//        m_nEndIndex += FIRST_LOAD_PAGES;
+            msleep(10);
+        }
 
-//        msleep(50);
-//    }
-//}
+        m_nStartIndex += FIRST_LOAD_PAGES;
+        m_nEndIndex += FIRST_LOAD_PAGES;
+
+        msleep(30);
+    }
+}

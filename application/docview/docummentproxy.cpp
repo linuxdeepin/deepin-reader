@@ -129,7 +129,7 @@ bool DocummentProxy::setSelectTextStyle(QColor paintercolor, QColor pencolor, in
 {
     if (!m_documment || bcloseing)
         return false;
-    qDebug() << "setSelectTextStyle";
+    //qDebug() << "setSelectTextStyle";
     return m_documment->setSelectTextStyle(paintercolor, pencolor, penwidth);
 }
 
@@ -137,7 +137,7 @@ bool DocummentProxy::mouseSelectText(QPoint start, QPoint stop)
 {
     if (!m_documment || bcloseing)
         return false;
-    qDebug() << "mouseSelectText";
+   // qDebug() << "mouseSelectText";
     emit signal_mouseSelectText(start, stop);
     return true;
 //    return m_documment->mouseSelectText(start, stop);
@@ -153,7 +153,7 @@ bool DocummentProxy::mouseBeOverText(QPoint point)
 {
     if (!m_documment || bcloseing)
         return false;
-    qDebug() << "mouseBeOverText";
+    //qDebug() << "mouseBeOverText";
     return m_documment->mouseBeOverText(point);
 }
 
@@ -163,7 +163,7 @@ void DocummentProxy::scaleRotateAndShow(double scale, RotateType_EM rotate)
         return;
     mouseSelectTextClear();
 //    m_documment->scaleAndShow(scale, rotate);
-    qDebug() << "scaleRotateAndShow";
+   // qDebug() << "scaleRotateAndShow";
     emit signal_scaleAndShow(scale, rotate);
 }
 
@@ -171,7 +171,7 @@ QPoint DocummentProxy::global2RelativePoint(QPoint globalpoint)
 {
     if (!m_documment || bcloseing)
         return QPoint();
-    qDebug() << "global2RelativePoint";
+    //qDebug() << "global2RelativePoint";
     return m_documment->global2RelativePoint(globalpoint);
 }
 
@@ -182,7 +182,7 @@ bool DocummentProxy::getImage(int pagenum, QImage &image, double width, double h
     if (!m_documment || bcloseing) {
         return bre;
     }
-    qDebug() << "getImage";
+    //qDebug() << "getImage";
     bre = m_documment->getImage(pagenum, image, width, height);
     return bre;
 }
@@ -191,7 +191,7 @@ int DocummentProxy::getPageSNum()
 {
     if (!m_documment || bcloseing)
         return false;
-    qDebug() << "getPageSNum";
+   // qDebug() << "getPageSNum";
     return m_documment->getPageSNum();
 }
 
@@ -200,7 +200,7 @@ bool DocummentProxy::setViewModeAndShow(ViewMode_EM viewmode)
     if (!m_documment || bcloseing)
         return false;
     mouseSelectTextClear();
-    qDebug() << "setViewModeAndShow";
+   // qDebug() << "setViewModeAndShow";
     emit signal_setViewModeAndShow(viewmode);
     return true;
 }
@@ -209,7 +209,7 @@ bool DocummentProxy::showMagnifier(QPoint point)
 {
     if (!m_documment || bcloseing)
         return false;
-    qDebug() << "showMagnifier";
+   // qDebug() << "showMagnifier";
     return  m_documment->showMagnifier(point);
 }
 
@@ -217,7 +217,7 @@ bool DocummentProxy::closeMagnifier()
 {
     if (!m_documment || bcloseing)
         return false;
-    qDebug() << "closeMagnifier";
+   // qDebug() << "closeMagnifier";
     m_documment->magnifierClear();
     return true;
 }
@@ -226,14 +226,14 @@ bool DocummentProxy::setMagnifierStyle(QColor magnifiercolor, int magnifierradiu
 {
     if (!m_documment || bcloseing)
         return false;
-    qDebug() << "setMagnifierStyle";
+    //qDebug() << "setMagnifierStyle";
     return  m_documment->setMagnifierStyle(magnifiercolor, magnifierradius, magnifierringwidth, magnifierscale);
 }
 QString DocummentProxy::addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color)
 {
     if (!m_documment || bcloseing)
         return QString("");
-    qDebug() << "addAnnotation";
+   // qDebug() << "addAnnotation";
     return m_documment->addAnnotation(startpos, color);
 }
 
@@ -241,14 +241,14 @@ bool DocummentProxy::save(const QString &filepath, bool withChanges)
 {
     if (!m_documment || bcloseing)
         return false;
-    qDebug() << "save";
+    //qDebug() << "save";
     return m_documment->save(filepath, withChanges);
 }
 
 bool DocummentProxy::saveas(const QString &filepath, bool withChanges)
 {
     if (m_documment && !bcloseing && m_documment->saveas(filepath, withChanges)) {
-        qDebug() << "saveas";
+       // qDebug() << "saveas";
         return openFile(DocType_PDF, filepath);
     }
 }
@@ -257,7 +257,7 @@ void DocummentProxy::search(const QString &strtext, QMap<int, stSearchRes> &resm
 {
     if (!m_documment || bcloseing)
         return ;
-    qDebug() << "search";
+    //qDebug() << "search";
     m_documment->search(strtext, color);
 }
 
@@ -265,7 +265,7 @@ void DocummentProxy::clearsearch()
 {
     if (!m_documment || bcloseing)
         return ;
-    qDebug() << "clearsearch";
+   // qDebug() << "clearsearch";
     m_documment->clearSearch();
 }
 
@@ -273,7 +273,7 @@ int DocummentProxy::currentPageNo()
 {
     if (!m_documment || bcloseing)
         return -1;
-    qDebug() << "currentPageNo";
+    //qDebug() << "currentPageNo";
     return m_documment->getCurrentPageNo();
 }
 
@@ -290,7 +290,7 @@ void DocummentProxy::docBasicInfo(stFileInfo &info)
 {
     if (!m_documment || bcloseing)
         return ;
-    qDebug() << "docBasicInfo";
+    //qDebug() << "docBasicInfo";
     m_documment->docBasicInfo(info);
 }
 
@@ -298,7 +298,7 @@ QString DocummentProxy::removeAnnotation(const QPoint &startpos)
 {
     if (!m_documment || bcloseing)
         return "";
-    qDebug() << "removeAnnotation";
+   // qDebug() << "removeAnnotation";
     return m_documment->removeAnnotation(startpos);
 }
 
@@ -319,7 +319,7 @@ bool DocummentProxy::pageMove(double mvx, double mvy)
 {
     if (!m_documment || bcloseing)
         return false;
-    qDebug() << "pageMove";
+   // qDebug() << "pageMove";
     m_documment->pageMove(mvx, mvy);
     return true;
 }
@@ -336,7 +336,7 @@ Page::Link *DocummentProxy::mouseBeOverLink(QPoint point)
 {
     if (!m_documment || bcloseing)
         return nullptr;
-    qDebug() << "mouseBeOverLink";
+   // qDebug() << "mouseBeOverLink";
     return m_documment->mouseBeOverLink(point);
 }
 
@@ -344,7 +344,7 @@ bool DocummentProxy::getSelectTextString(QString &st)
 {
     if (!m_documment || bcloseing)
         return false;
-    qDebug() << "getSelectTextString";
+    //qDebug() << "getSelectTextString";
     return m_documment->getSelectTextString(st);
 }
 
@@ -425,6 +425,14 @@ void DocummentProxy::getAllAnnotation(QList<stHighlightContent> &listres)
     if (m_documment) {
         return m_documment->getAllAnnotation(listres);
     }
+}
+
+int DocummentProxy::pointInWhichPage(QPoint pos)
+{
+    if (m_documment) {
+        return  m_documment->pointInWhichPage(pos);
+    }
+    return  -1;
 }
 
 bool DocummentProxy::closeFile()

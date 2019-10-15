@@ -74,6 +74,34 @@ void DocShowShellWidget::slotOpenNoteWidget(const QString &sPoint)
 
     QString sSelectText = ssPointList.at(1); //  选中添加注释的文字
 
+    m_pFileViewNoteWidget->setEditText(QString(""));
+    m_pFileViewNoteWidget->move(nParentWidth - nWidth - 50, 200);
+    m_pFileViewNoteWidget->show();
+    m_pFileViewNoteWidget->raise();
+}
+
+void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
+{
+    QString t_strUUid;
+    int t_nPage = -1;
+    bool t_isShow = isShowW(contant, t_nPage, t_strUUid);
+
+    if(!t_isShow){
+        return;
+    }
+
+    auto pDocummentProxy = DocummentProxy::instance();
+    if (m_pFileViewNoteWidget == nullptr) {
+        m_pFileViewNoteWidget = new FileViewNoteWidget(this);
+    }
+
+    int nParentWidth = this->width();
+    int nWidth = m_pFileViewNoteWidget->width();
+
+    QString t_strNote;
+    pDocummentProxy->getAnnotationText(t_strUUid, t_strNote, t_nPage);
+
+    m_pFileViewNoteWidget->setEditText(t_strNote);
     m_pFileViewNoteWidget->move(nParentWidth - nWidth - 50, 200);
     m_pFileViewNoteWidget->show();
     m_pFileViewNoteWidget->raise();
@@ -86,6 +114,7 @@ void DocShowShellWidget::initConnections()
     connect(this, SIGNAL(sigShowFileFind()), this, SLOT(slotShowFindWidget()));
 
     connect(this, SIGNAL(sigOpenNoteWidget(const QString &)), this, SLOT(slotOpenNoteWidget(const QString &)));
+    connect(this, SIGNAL(sigShowNoteWidget(const QString &)), this, SLOT(slotShowNoteWidget(const QString &)));
 }
 
 int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgContent)
@@ -99,6 +128,9 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_ADD_ANNOTATION:     //  添加注释
         emit sigOpenNoteWidget(msgContent);
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_TEXT_SHOW_NOTEWIDGET:    //  显示注释窗口
+        emit sigShowNoteWidget(msgContent);
         return ConstantMsg::g_effective_res;
     case MSG_NOTIFY_KEY_MSG : {    //  最后一个处理通知消息
         if ("Ctrl+F" == msgContent) {
@@ -134,4 +166,24 @@ void DocShowShellWidget::setBookMarkStateWidget()
     m_pBookMarkStateLabel->move(nParentWidth - nWidget - 20, 0);
     m_pBookMarkStateLabel->show();
     m_pBookMarkStateLabel->raise();
+}
+
+bool DocShowShellWidget::isShowW(const QString &contant, int & page, QString&uuid)
+{
+    QStringList t_strList = contant.split(QString("%"), QString::SkipEmptyParts);
+    if(t_strList.count() == 3){
+        uuid = t_strList.at(0);
+        page = t_strList.at(2).toInt();
+        int t_show = t_strList.at(1).toInt();
+        if(t_show){
+            return true;
+        }else {
+            return false;
+        }
+    }else{
+        page = -1;
+        uuid = QString("");
+
+        return false;
+    }
 }

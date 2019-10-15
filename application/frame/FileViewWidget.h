@@ -94,6 +94,7 @@ private:
 
     QString m_strUUid;                         // 当前添加注释的uuid
     bool m_bIsHighLight = false;               // 判断鼠标点击位置是否有高亮
+    int m_nPage = -1;                          // 鼠标当前点击所在页码数
 
     // CustomWidget interface
 protected:

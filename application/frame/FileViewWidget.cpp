@@ -39,7 +39,6 @@ void FileViewWidget::initWidget()
 //  鼠标双击事件
 void FileViewWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    qDebug() << "qqqqqqqqqqq";
     CustomWidget::mouseDoubleClickEvent(event);
 }
 
@@ -97,10 +96,9 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
     }
 
     Qt::MouseButton nBtn = event->button();
+    QPoint globalPos = event->globalPos();
     if (nBtn == Qt::LeftButton) {
         auto pDocummentProxy = DocummentProxy::instance();
-
-        QPoint globalPos = event->globalPos();
         QPoint docGlobalPos = pDocummentProxy->global2RelativePoint(globalPos);
 
         //  点击的时候　先判断　点击处　　是否有链接之类
@@ -118,12 +116,16 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
             }
         }
 
+        m_nPage = pDocummentProxy->pointInWhichPage(m_pStartPoint);
+
         // 判断鼠标点击的地方是否有高亮
-        QString selectText;
+        QString selectText,t_strContant;
+
         m_bIsHighLight = pDocummentProxy->annotationClicked(docGlobalPos, selectText, m_strUUid);
-        if(m_bIsHighLight){
-            qDebug() << "annotationClicked text:" << selectText << "  m_strUUid:" << m_strUUid;
-        }
+
+        t_strContant.clear();
+        t_strContant = m_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight?1:0)) + QString("%") + QString::number(m_nPage);
+        sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
     }
 }
 
@@ -166,19 +168,19 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         pDocummentProxy->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
 
         QPoint tempPoint = this->mapToGlobal(point);
+        m_pRightClickPoint = pDocummentProxy->global2RelativePoint(tempPoint);
 
-        if (sSelectText != "") {
-            m_pRightClickPoint = pDocummentProxy->global2RelativePoint(tempPoint);
+        m_nPage = pDocummentProxy->pointInWhichPage(m_pRightClickPoint);
 
-            QString sAnnotationText = "",struuid("");
-            bool bAnno = pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText,struuid);
+        QString sAnnotationText = "",struuid("");
+        m_bIsHighLight = pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText,struuid);
 
+        if (sSelectText != "" || m_bIsHighLight) {
             //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
             if (m_pTextOperationWidget == nullptr) {
                 m_pTextOperationWidget = new TextOperationWidget(this);
             }
-            m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), bAnno, sSelectText);
-
+            m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), m_bIsHighLight, sSelectText);
         } else {
             if (m_pDefaultOperationWidget == nullptr) {
                 m_pDefaultOperationWidget = new DefaultOperationWidget(this);
@@ -232,6 +234,10 @@ void FileViewWidget::slotFileRemoveAnnotation()
 {
     DataManager::instance()->setBIsUpdate(true);
     QString sUuid = DocummentProxy::instance()->removeAnnotation(m_pRightClickPoint);
+
+    sendMsg(MSG_NOTE_DLTNOTEITEM, sUuid);
+
+    DocummentProxy::instance()->removeAnnotation(sUuid);
 }
 
 void FileViewWidget::slotFileAddNote(const QString &note)
@@ -241,10 +247,13 @@ void FileViewWidget::slotFileAddNote(const QString &note)
         slotFileAddAnnotation(QString(""));
     }
 
-    QString t_str = m_strUUid.trimmed() + QString("%") + note.trimmed();
+    QString t_str = m_strUUid.trimmed() + QString("%") + note.trimmed() + QString("%%1").arg(m_nPage);
 
     //send to note list widget on the left
     sendMsg(MSG_NOTE_ADDITEM, t_str);
+
+    auto proxy = DocummentProxy::instance();
+    proxy->setAnnotationText(m_nPage, m_strUUid, note);
 }
 
 //  信号槽　初始化
