@@ -8,6 +8,8 @@
 #include <QPaintDevice>
 #include <poppler-qt5.h>
 #include <unistd.h>
+#include <QObject>
+
 class PagePdf;
 class PagePdfPrivate;
 class PagePdf: public PageBase
