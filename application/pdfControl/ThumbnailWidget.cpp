@@ -219,17 +219,15 @@ void ThreadLoadImage::run()
                 break;
             }
             QImage image;
-            bool bl = dproxy->getImage(page, image, 113 * 1.5, 143 * 1.5);
+            bool bl = dproxy->getImage(page, image, 113, 143);
 
             if (bl) {
                 emit signal_loadImage(page, image);
             }
-
-            msleep(10);
         }
         m_nStartPage += FIRST_LOAD_PAGES;
         m_nEndPage += FIRST_LOAD_PAGES;
 
-        msleep(30);
+        msleep(50);
     }
 }
