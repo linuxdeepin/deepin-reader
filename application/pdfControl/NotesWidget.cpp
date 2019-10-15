@@ -58,15 +58,7 @@ void NotesWidget::slotAddNoteItem(QString note)
 {
     qDebug() << "           NotesWidget::slotAddNoteItem               ";
 
-    int t_page = DocummentProxy::instance()->currentPageNo();
-    DocummentProxy *dproxy = DocummentProxy::instance();
-    if (nullptr == dproxy) {
-        return;
-    }
-    QImage image;
-    dproxy->getImage(t_page, image, 113, 143);
-
-    addNotesItem(image, t_page, note);
+    addNotesItem(note);
 }
 
 /**
@@ -88,7 +80,7 @@ void NotesWidget::slotDltNoteItem(QString uuid)
                     delete  pItem;
 
                     // remove date from map and notify kong yun zhen
-                    // todo
+                    removeFromMap(uuid);
 
                     break;
                 }
@@ -121,32 +113,38 @@ void NotesWidget::slotDltNoteContant(QString uuid)
  * @param page
  * @param text
  */
-void NotesWidget::addNotesItem(const QImage &image, const int &page, const QString &text)
+void NotesWidget::addNotesItem(const QString &text)
 {
     QString t_strUUid,t_strText;
+    int t_nPage = -1;
+    QImage image;
+
     QStringList t_strList = text.split(QString("%"));
 
-    if(t_strList.count() < 1){
-        return;
-    }else if (t_strList.count() == 1) {
-        t_strText = QString("");
-    }else {
-        t_strText = t_strList[1].trimmed();
+    if(t_strList.count() == 3){
+        DocummentProxy *dproxy = DocummentProxy::instance();
+        if (nullptr == dproxy) {
+            return;
+        }
+
+        t_strUUid = t_strList.at(0).trimmed();
+        t_strText = t_strList.at(1).trimmed();
+        t_nPage = t_strList.at(2).toInt();
+
+        dproxy->getImage(t_nPage, image, 113, 143);
     }
 
-    t_strUUid = t_strList[0].trimmed();
-
-    bool b_has = hasNoteInList(page, t_strUUid);
+    bool b_has = hasNoteInList(t_nPage, t_strUUid);
 
     if(b_has){
-        flushNoteItemText(page, t_strUUid, t_strText);
+        flushNoteItemText(t_nPage, t_strUUid, t_strText);
     }else{
-        addNewItem(image, page, t_strUUid, t_strText);
+        addNewItem(image, t_nPage, t_strUUid, t_strText);
 
         QMap<QString, QString> t_contant;
         t_contant.clear();
         t_contant.insert(t_strUUid, t_strText);
-        m_mapNotes.insert(page, t_contant);
+        m_mapNotes.insert(t_nPage, t_contant);
     }
 }
 
@@ -233,6 +231,15 @@ void NotesWidget::flushNoteItemText(const int &page, const QString &uuid, const 
     }
 }
 
+void NotesWidget::removeFromMap(const QString &uuid) const
+{
+    foreach(auto node, m_mapNotes){
+        if(node.contains(uuid)){
+            node.remove(uuid);
+        }
+    }
+}
+
 /**
  * @brief NotesWidget::dealWithData
  * 处理全局信号函数
@@ -240,12 +247,6 @@ void NotesWidget::flushNoteItemText(const int &page, const QString &uuid, const 
  */
 int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    //  删除注释item消息
-//    if (MSG_BOOKMARK_DLTITEM == msgType) {
-//        emit sigDltNoteItem(msgContent);
-//        return ConstantMsg::g_effective_res;
-//    }
-
     //  增加注释消息
     if (MSG_NOTE_ADDITEM == msgType) {
         emit sigAddNewNoteItem(msgContent);
@@ -255,6 +256,12 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
     //  删除注释内容消息
     if (MSG_NOTE_DLTNOTECONTANT == msgType) {
         emit sigDltNoteContant(msgContent);
+        return ConstantMsg::g_effective_res;
+    }
+
+    // 移除高亮，删除注释内容，删除注释列表item
+    if (MSG_NOTE_DLTNOTEITEM == msgType) {
+        emit sigDltNoteItem(msgContent);
         return ConstantMsg::g_effective_res;
     }
 

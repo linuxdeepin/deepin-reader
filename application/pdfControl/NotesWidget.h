@@ -39,20 +39,19 @@ private slots:
     void slotDltNoteContant(QString);
 
 private:
-    void addNotesItem(const QImage &image, const int &page, const QString &text);
+    void addNotesItem(const QString &text);
     void initConnection();
 
 private:
-    CustomListWidget *m_pNotesList = nullptr;
     void fillContantToList();
     bool hasNoteInList(const int &, const QString&);
     void addNewItem(const QImage &image, const int &page, const QString &uuid, const QString &text);
     void flushNoteItemText(const int &page, const QString &uuid, const QString &text);
+    void removeFromMap(const QString&) const;
 
 private:
+    CustomListWidget *m_pNotesList = nullptr;
     QVBoxLayout *m_pVLayout = nullptr;            // 垂直布局
-//    QString m_strUUid;                          // 注释的uuid， 便于区分注释
-    //  page       uuid     text
     QMap<int, QMap<QString, QString>> m_mapNotes; // 当前注释列表内容
 
 public:

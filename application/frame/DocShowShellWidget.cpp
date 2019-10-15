@@ -80,8 +80,16 @@ void DocShowShellWidget::slotOpenNoteWidget(const QString &sPoint)
     m_pFileViewNoteWidget->raise();
 }
 
-void DocShowShellWidget::slotShowNoteWidget(const QString &uuid)
+void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
 {
+    QString t_strUUid;
+    int t_nPage = -1;
+    bool t_isShow = isShowW(contant, t_nPage, t_strUUid);
+    qDebug() << "t_isShow:" << t_isShow << "t_nPage:" << t_nPage<< "t_strUUid:" << t_strUUid;
+    if(!t_isShow){
+        return;
+    }
+
     auto pDocummentProxy = DocummentProxy::instance();
     if (m_pFileViewNoteWidget == nullptr) {
         m_pFileViewNoteWidget = new FileViewNoteWidget(this);
@@ -91,9 +99,8 @@ void DocShowShellWidget::slotShowNoteWidget(const QString &uuid)
     int nWidth = m_pFileViewNoteWidget->width();
 
     QString t_strNote;
-    int t_page = pDocummentProxy->currentPageNo();
-    pDocummentProxy->getAnnotationText(uuid, t_strNote, t_page);
-    qDebug() << "slotShowNoteWidget uuid:" << uuid <<  "    t_strNote:" << t_strNote;
+    pDocummentProxy->getAnnotationText(t_strUUid, t_strNote, t_nPage);
+    qDebug() << "slotShowNoteWidget uuid:" << t_strUUid <<  "    t_strNote:" << t_strNote;
 
     m_pFileViewNoteWidget->setEditText(t_strNote);
     m_pFileViewNoteWidget->move(nParentWidth - nWidth - 50, 200);
@@ -160,4 +167,24 @@ void DocShowShellWidget::setBookMarkStateWidget()
     m_pBookMarkStateLabel->move(nParentWidth - nWidget - 20, 0);
     m_pBookMarkStateLabel->show();
     m_pBookMarkStateLabel->raise();
+}
+
+bool DocShowShellWidget::isShowW(const QString &contant, int & page, QString&uuid)
+{
+    QStringList t_strList = contant.split(QString("%"), QString::SkipEmptyParts);
+    if(t_strList.count() == 3){
+        uuid = t_strList.at(0);
+        page = t_strList.at(2).toInt();
+        int t_show = t_strList.at(1).toInt();
+        if(t_show){
+            return true;
+        }else {
+            return false;
+        }
+    }else{
+        page = -1;
+        uuid = QString("");
+
+        return false;
+    }
 }

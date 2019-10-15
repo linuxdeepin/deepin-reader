@@ -38,6 +38,7 @@ private slots:
 private:
     void initConnections();
     void setBookMarkStateWidget();
+    bool isShowW(const QString&, int & page, QString&);
 
 private:
     FileAttrWidget          *m_pFileAttrWidget = nullptr;

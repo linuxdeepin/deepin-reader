@@ -97,10 +97,11 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
     }
 
     Qt::MouseButton nBtn = event->button();
+    QPoint globalPos = event->globalPos();
     if (nBtn == Qt::LeftButton) {
         auto pDocummentProxy = DocummentProxy::instance();
 
-        QPoint globalPos = event->globalPos();
+//        QPoint globalPos = event->globalPos();
         QPoint docGlobalPos = pDocummentProxy->global2RelativePoint(globalPos);
 
         //  点击的时候　先判断　点击处　　是否有链接之类
@@ -118,17 +119,17 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
             }
         }
 
-        int t_currentPage = pDocummentProxy->pointInWhichPage(m_pStartPoint);
-
-        qDebug() << tr("mosue in page:%1").arg(t_currentPage);
+        m_nPage = pDocummentProxy->pointInWhichPage(m_pStartPoint);
 
         // 判断鼠标点击的地方是否有高亮
-        QString selectText;
+        QString selectText,t_strContant;
+
         m_bIsHighLight = pDocummentProxy->annotationClicked(docGlobalPos, selectText, m_strUUid);
-        if(m_bIsHighLight){
-            sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, m_strUUid);
-            qDebug() << "annotationClicked text:" << selectText << "  m_strUUid:" << m_strUUid;
-        }
+
+        t_strContant.clear();
+        t_strContant = m_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight?1:0)) + QString("%") + QString::number(m_nPage);
+        sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+        qDebug() << "t_strContant:" << t_strContant;
     }
 }
 
@@ -175,6 +176,8 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         if (sSelectText != "") {
             m_pRightClickPoint = pDocummentProxy->global2RelativePoint(tempPoint);
 
+            m_nPage = pDocummentProxy->pointInWhichPage(m_pRightClickPoint);
+
             QString sAnnotationText = "",struuid("");
             bool bAnno = pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText,struuid);
 
@@ -184,11 +187,25 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
             }
             m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), bAnno, sSelectText);
 
+            qDebug() << "select text show TextOperationWidget";
+
         } else {
-            if (m_pDefaultOperationWidget == nullptr) {
-                m_pDefaultOperationWidget = new DefaultOperationWidget(this);
+            if(m_bIsHighLight){
+                //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
+                if (m_pTextOperationWidget == nullptr) {
+                    m_pTextOperationWidget = new TextOperationWidget(this);
+                }
+                m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), true, sSelectText);
+                qDebug() << "select  show TextOperationWidget";
+
+            }else {
+
+                if (m_pDefaultOperationWidget == nullptr) {
+                    m_pDefaultOperationWidget = new DefaultOperationWidget(this);
+                }
+                m_pDefaultOperationWidget->showWidget(tempPoint.x(), tempPoint.y());
+                qDebug() << "select  show DefaultOperationWidget";
             }
-            m_pDefaultOperationWidget->showWidget(tempPoint.x(), tempPoint.y());
         }
     }
 }
@@ -237,6 +254,10 @@ void FileViewWidget::slotFileRemoveAnnotation()
 {
     DataManager::instance()->setBIsUpdate(true);
     QString sUuid = DocummentProxy::instance()->removeAnnotation(m_pRightClickPoint);
+
+    qDebug() << "slotFileRemoveAnnotation uuid:" << sUuid;
+
+    sendMsg(MSG_NOTE_DLTNOTEITEM, sUuid);
 }
 
 void FileViewWidget::slotFileAddNote(const QString &note)
@@ -246,16 +267,15 @@ void FileViewWidget::slotFileAddNote(const QString &note)
         slotFileAddAnnotation(QString(""));
     }
 
-    QString t_str = m_strUUid.trimmed() + QString("%") + note.trimmed();
+    QString t_str = m_strUUid.trimmed() + QString("%") + note.trimmed() + QString("%%1").arg(m_nPage);
 
     //send to note list widget on the left
     sendMsg(MSG_NOTE_ADDITEM, t_str);
 
     auto proxy = DocummentProxy::instance();
-    int t_nPage = proxy->currentPageNo();
-    proxy->setAnnotationText(t_nPage, m_strUUid, note);
+    proxy->setAnnotationText(m_nPage, m_strUUid, note);
 
-    qDebug() << tr("setAnnotationText   page:%1, uuid: %2, note: %3").arg(t_nPage).arg(m_strUUid).arg(note);
+    qDebug() << tr("setAnnotationText   page:%1, uuid: %2, note: %3").arg(m_nPage).arg(m_strUUid).arg(note);
 }
 
 //  信号槽　初始化
