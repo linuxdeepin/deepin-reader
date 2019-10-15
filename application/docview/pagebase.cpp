@@ -492,6 +492,7 @@ void PageBase::loadMagnifierCacheThreadStart(double width, double height)
 
 void PageBase::slot_RenderFinish(QImage image)
 {
+
     Q_D(PageBase);
     image.setDevicePixelRatio(devicePixelRatioF());
     QPixmap map = QPixmap::fromImage(image);

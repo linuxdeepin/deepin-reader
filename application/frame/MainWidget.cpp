@@ -73,7 +73,9 @@ void MainWidget::dropEvent(QDropEvent *event)
 
             QFileInfo info(sFilePath);
             QString sCompleteSuffix = info.completeSuffix();    //  文件后缀
-            if (sCompleteSuffix == "pdf" || sCompleteSuffix == "tiff") {
+            qDebug()<<"MainWidget::dropEvent"<<sCompleteSuffix<<sFilePath;
+           // if (sCompleteSuffix == "pdf" || sCompleteSuffix == "tiff")
+            if (sFilePath.endsWith("pdf") || sFilePath.endsWith("tiff")){
                 //  默认打开第一个
                 QString sRes = sFilePath + Constant::sQStringSep;
 

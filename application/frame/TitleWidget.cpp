@@ -1,7 +1,7 @@
 #include "TitleWidget.h"
 #include "translator/Frame.h"
 #include <QHBoxLayout>
-
+#include <QBitmap>
 TitleWidget::TitleWidget(CustomWidget *parent) :
     CustomWidget("TitleWidget", parent)
 {
@@ -55,7 +55,6 @@ void TitleWidget::initWidget()
     m_layout->addWidget(m_pSettingBtn);
     m_layout->addWidget(m_pHandleShapeBtn);
     m_layout->addWidget(m_pMagnifierBtn);
-
     m_layout->addStretch(1);
 }
 
@@ -187,6 +186,7 @@ DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
     btn->setIcon(QIcon(normalPic));
     btn->setFixedSize(QSize(36, 36));
     btn->setIconSize(QSize(36, 36));
+    btn->setFlat(true);//设置后背景不自绘
 
     btn->setToolTip(btnName);
     btn->setCheckable(bCheckable);
