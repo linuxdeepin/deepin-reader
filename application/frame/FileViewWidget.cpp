@@ -118,6 +118,10 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
             }
         }
 
+        int t_currentPage = pDocummentProxy->pointInWhichPage(m_pStartPoint);
+
+        qDebug() << tr("mosue in page:%1").arg(t_currentPage);
+
         // 判断鼠标点击的地方是否有高亮
         QString selectText;
         m_bIsHighLight = pDocummentProxy->annotationClicked(docGlobalPos, selectText, m_strUUid);
