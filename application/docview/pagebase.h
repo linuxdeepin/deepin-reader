@@ -127,6 +127,7 @@ public:
         m_bcursearchshow = false;
         m_scale = 1.0;
         havereander = false;
+        pixelratiof = 1;
         connect(&loadmagnifiercachethread, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)), this, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)));
         connect(&threadreander, SIGNAL(signal_RenderFinish(QImage)), this, SIGNAL(signal_RenderFinish(QImage)));
     }
@@ -170,6 +171,7 @@ public:
     int m_icurhightlight;
     QColor m_searchcolor;
     bool havereander;
+    qreal pixelratiof;
 //    QMutex m_mutexlockgetimage;
 
     PageBase *q_ptr;

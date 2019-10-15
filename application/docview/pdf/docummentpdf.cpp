@@ -17,6 +17,8 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
         return;
     document->setRenderHint(Poppler::Document::TextAntialiasing, true);
     document->setRenderHint(Poppler::Document::Antialiasing, true);
+    document->setRenderHint(Poppler::Document::ThinLineSolid, true);
+    document->setRenderHint(Poppler::Document::ThinLineShape, true);
     m_pages.clear();
     for (int i = 0; i < document->numPages(); i++) {
         PagePdf *page = new PagePdf(q);
@@ -96,9 +98,9 @@ QString DocummentPDF::removeAnnotation(const QPoint &startpos)
     //暂时只处理未旋转
     QPoint pt = startpos;
     int page = pointInWhichPage(pt);
-    qDebug()<<"removeAnnotation start";
+    qDebug() << "removeAnnotation start";
     if (page < 0) return "";
-     qDebug()<<"removeAnnotation end";
+    qDebug() << "removeAnnotation end";
     return static_cast<PagePdf *>(d->m_pages.at(page))->removeAnnotation(pt);
 }
 
@@ -108,7 +110,7 @@ void DocummentPDF::removeAnnotation(const QString &struuid)
     return static_cast<PagePdf *>(d->m_pages.at(getCurrentPageNo()))->removeAnnotation(struuid);
 }
 
-QString DocummentPDF::addAnnotation(const QPoint &startpos,QColor color)
+QString DocummentPDF::addAnnotation(const QPoint &startpos, QColor color)
 {
     Q_D(DocummentPDF);
     QPoint pt = startpos;
@@ -117,41 +119,39 @@ QString DocummentPDF::addAnnotation(const QPoint &startpos,QColor color)
     return static_cast<PagePdf *>(d->m_pages.at(page))->addAnnotation(color);
 }
 
-void DocummentPDF::getAllAnnotation(QList<stHighlightContent>& listres)
+void DocummentPDF::getAllAnnotation(QList<stHighlightContent> &listres)
 {
     Q_D(DocummentPDF);
 //    QTime t;
 //    t.start();//将此时间设置为当前时间
-    for(int i=0;i<d->m_pages.size();++i)
-    {
-        QList<Poppler::Annotation *> listannote=static_cast<PagePdf *>(d->m_pages.at(i))->GetPage()->annotations();
+    for (int i = 0; i < d->m_pages.size(); ++i) {
+        QList<Poppler::Annotation *> listannote = static_cast<PagePdf *>(d->m_pages.at(i))->GetPage()->annotations();
         foreach (Poppler::Annotation *annote, listannote) {
             if (annote->subType() == Poppler::Annotation::AHighlight) {
                 stHighlightContent stres;
                 QList<Poppler::HighlightAnnotation::Quad> listquad = static_cast<Poppler::HighlightAnnotation *>(annote)->highlightQuads();
-                QString struuid=annote->uniqueName();
-                if(struuid.isEmpty())
-                {
-                    struuid=PublicFunc::getUuid();
+                QString struuid = annote->uniqueName();
+                if (struuid.isEmpty()) {
+                    struuid = PublicFunc::getUuid();
                     annote->setUniqueName(struuid);
                 }
-               QString strcontents=annote->contents();
-               stres.ipage=0;
-               stres.strcontents=strcontents;
-               stres.struuid=struuid;
-               listres.push_back(stres);
+                QString strcontents = annote->contents();
+                stres.ipage = 0;
+                stres.strcontents = strcontents;
+                stres.struuid = struuid;
+                listres.push_back(stres);
             }
         }
         qDeleteAll(listannote);
     }
     //elapsed(): 返回自上次调用start()或restart()以来经过的毫秒数
-   // qDebug()<<"----getAllAnnotation----"<<t.elapsed()<<"ms"<<__func__;
+    // qDebug()<<"----getAllAnnotation----"<<t.elapsed()<<"ms"<<__func__;
 }
 
 void DocummentPDF::search(const QString &strtext, QColor color)
 {
     Q_D(DocummentPDF);
-    clearSearch();  
+    clearSearch();
     d->m_searchTask->start(d->m_pages, strtext, false, false, d->m_currentpageno + 1);
 }
 
@@ -253,7 +253,7 @@ void DocummentPDF::clearSearch()
             d->m_pages.at(key)->clearHighlightRects();
         }
     }
-     d->m_pages.at(d->m_currentpageno)->update();//刷新当前页
+    d->m_pages.at(d->m_currentpageno)->update();//刷新当前页
 }
 
 void DocummentPDF::refreshOnePage(int ipage)
@@ -288,13 +288,13 @@ void DocummentPDF::docBasicInfo(stFileInfo &info)
     info = *(d->m_fileinfo);
 }
 
-bool DocummentPDF::annotationClicked(const QPoint &pos, QString &strtext,QString& struuid)
+bool DocummentPDF::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {
     Q_D(DocummentPDF);
     QPoint pt(pos);
     int ipage = pointInWhichPage(pt);
     if (ipage < 0) return  false;
-    return (static_cast<PagePdf *>(d->m_pages.at(ipage)))->annotationClicked(pt, strtext,struuid);
+    return (static_cast<PagePdf *>(d->m_pages.at(ipage)))->annotationClicked(pt, strtext, struuid);
 }
 
 void DocummentPDF::title(QString &title)

@@ -15,6 +15,8 @@ CustomItemWidget::CustomItemWidget(const QString &name, CustomWidget *parent)
 void CustomItemWidget::setLabelImage(const QImage &image)
 {
     if (m_pPicture != nullptr) {
+        QImage rimage = image;
+        rimage.setDevicePixelRatio(1.5);
         m_pPicture->setPixmap(QPixmap::fromImage(image));
     }
 }
