@@ -85,7 +85,7 @@ void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
     QString t_strUUid;
     int t_nPage = -1;
     bool t_isShow = isShowW(contant, t_nPage, t_strUUid);
-    qDebug() << "t_isShow:" << t_isShow << "t_nPage:" << t_nPage<< "t_strUUid:" << t_strUUid;
+
     if(!t_isShow){
         return;
     }
@@ -100,7 +100,6 @@ void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
 
     QString t_strNote;
     pDocummentProxy->getAnnotationText(t_strUUid, t_strNote, t_nPage);
-    qDebug() << "slotShowNoteWidget uuid:" << t_strUUid <<  "    t_strNote:" << t_strNote;
 
     m_pFileViewNoteWidget->setEditText(t_strNote);
     m_pFileViewNoteWidget->move(nParentWidth - nWidth - 50, 200);

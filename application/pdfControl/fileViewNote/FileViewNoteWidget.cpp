@@ -66,12 +66,6 @@ void FileViewNoteWidget::slotClosed()
 
             sendMsg(MSG_NOTE_ADDCONTANT, t_contant);
             m_strNote = t_contant;
-    //        if( t_contant != QString("")){
-    //            sendMsg(MSG_NOTE_ADDITEM, t_contant);
-    //        }else {
-    //            sendMsg(MSG_NOTE_DLTNOTEITEM, t_contant);
-    //        }
-            qDebug() << "             void FileViewNoteWidget       slotClosed()   " << t_contant;
         }
     }
 

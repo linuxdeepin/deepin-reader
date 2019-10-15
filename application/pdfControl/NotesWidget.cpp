@@ -56,8 +56,6 @@ void NotesWidget::keyPressEvent(QKeyEvent *e)
  */
 void NotesWidget::slotAddNoteItem(QString note)
 {
-    qDebug() << "           NotesWidget::slotAddNoteItem               ";
-
     addNotesItem(note);
 }
 
