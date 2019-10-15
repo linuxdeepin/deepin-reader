@@ -224,10 +224,12 @@ void ThreadLoadImage::run()
             if (bl) {
                 emit signal_loadImage(page, image);
             }
+
+            msleep(10);
         }
         m_nStartPage += FIRST_LOAD_PAGES;
         m_nEndPage += FIRST_LOAD_PAGES;
 
-        msleep(50);
+        msleep(30);
     }
 }

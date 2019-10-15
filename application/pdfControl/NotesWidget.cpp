@@ -104,6 +104,67 @@ void NotesWidget::slotDltNoteContant(QString uuid)
     }
 }
 
+void NotesWidget::slotOpenFileOk()
+{
+    m_ThreadLoadImage.setIsLoaded(false);
+    if (m_ThreadLoadImage.isRunning()) {
+        m_ThreadLoadImage.stopThreadRun();
+    }
+
+    auto t_docPtr = DocummentProxy::instance();
+    if(!t_docPtr){
+        return;
+    }
+
+    QList<stHighlightContent> list_note;
+    list_note.clear();
+
+    t_docPtr->getAllAnnotation(list_note);
+
+    if(list_note.count() < 1){
+        return;
+    }
+
+    foreach(auto st, list_note)
+    {
+        addNewItem();
+    }
+
+    m_ThreadLoadImage.setListNoteSt(list_note);
+    m_ThreadLoadImage.setIsLoaded(true);
+    if (!m_ThreadLoadImage.isRunning()) {
+        m_ThreadLoadImage.start();
+    }
+}
+
+void NotesWidget::slotCloseFile()
+{
+    m_ThreadLoadImage.setIsLoaded(false);
+    if (!m_ThreadLoadImage.isRunning()) {
+        m_ThreadLoadImage.stopThreadRun();
+    }
+}
+
+void NotesWidget::slotLoadImage(const int &page, const QImage &image, const QString &uuid, const QString &contant)
+{
+    static int index = 0;
+
+    if(m_pNotesList->count() < 1 || index++ >= m_pNotesList->count()){
+        return;
+    }
+
+    QListWidgetItem *pItem = m_pNotesList->item(index);
+    if (pItem) {
+        NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
+        if (t_widget) {
+            t_widget->setNoteUUid(uuid);
+            t_widget->setTextEditText(contant);
+            t_widget->setLabelPage(page,1);
+            t_widget->setLabelImage(image);
+        }
+    }
+}
+
 /**
  * @brief NotesWidget::addNotesItem
  * 给新节点填充内容（包括文字、缩略图等内容）
@@ -156,6 +217,11 @@ void NotesWidget::initConnection()
     connect(this, SIGNAL(sigDltNoteContant(QString)), this, SLOT(slotDltNoteContant(QString)));
 
     connect(this, SIGNAL(sigAddNewNoteItem(QString)), this, SLOT(slotAddNoteItem(QString)));
+
+    connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
+    connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
+    connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const int &, const QImage &, const QString&, const QString&)),
+            this, SLOT(slotLoadImage(const int &, const QImage &, const QString&, const QString&)));
 }
 
 /**
@@ -176,6 +242,22 @@ bool NotesWidget::hasNoteInList(const int &page, const QString &uuid)
     }
 
     return false;
+}
+
+void NotesWidget::addNewItem()
+{
+    NotesItemWidget *itemWidget = new NotesItemWidget;
+    itemWidget->setNoteUUid(QString(""));
+    itemWidget->setLabelPage(-1, 1);
+    itemWidget->setTextEditText(QString(""));
+    itemWidget->setMinimumSize(QSize(250, 150));
+
+    QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
+    item->setFlags(Qt::NoItemFlags);
+    item->setSizeHint(QSize(250, 150));
+
+    m_pNotesList->addItem(item);
+    m_pNotesList->setItemWidget(item, itemWidget);
 }
 
 /**
@@ -263,5 +345,68 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
         return ConstantMsg::g_effective_res;
     }
 
+    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
+        //emit sigOpenFileOk();
+    } else if (MSG_CLOSE_FILE == msgType) {
+       // emit sigCloseFile();
+    }
+
     return 0;
+}
+
+/*********************class ThreadLoadImageOfNote***********************/
+/**********************加载注释列表***************************************/
+
+ThreadLoadImageOfNote::ThreadLoadImageOfNote(QObject *parent):
+    QThread(parent)
+{
+
+}
+
+void ThreadLoadImageOfNote::stopThreadRun()
+{
+    m_isLoaded = false;
+
+    quit();
+    wait();
+}
+
+void ThreadLoadImageOfNote::run()
+{
+    while (m_isLoaded) {
+
+        int t_page = -1;
+        QString t_strUUid(""),t_noteContant("");
+        QImage image;
+        bool bl = false;
+
+        for (int page = 0; page < m_stListNote.count(); page++) {
+            if (!m_isLoaded)
+                break;
+            DocummentProxy *dproxy = DocummentProxy::instance();
+            if (nullptr == dproxy) {
+                break;
+            }
+
+            if(t_page != m_stListNote.at(page).ipage){
+                t_page = m_stListNote.at(page).ipage;
+                bl = dproxy->getImage(page, image, 113, 143);
+            }
+
+            t_strUUid = m_stListNote.at(page).struuid;
+            t_noteContant = m_stListNote.at(page).strcontents;
+
+//            qDebug() << tr("page:%1 uuid:%2 contant:%3").arg(t_page).arg(t_strUUid).arg(t_noteContant);
+            if (bl) {
+                emit sigLoadImage(page, image, t_strUUid, t_noteContant);
+                qDebug() << tr("page:%1 uuid:%2 contant:%3").arg(t_page).arg(t_strUUid).arg(t_noteContant);
+            }
+
+            msleep(20);
+        }
+
+        m_isLoaded = false;
+        m_stListNote.clear();
+        break;
+    }
 }
