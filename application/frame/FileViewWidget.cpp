@@ -172,40 +172,28 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         pDocummentProxy->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
 
         QPoint tempPoint = this->mapToGlobal(point);
+        m_pRightClickPoint = pDocummentProxy->global2RelativePoint(tempPoint);
 
-        if (sSelectText != "") {
-            m_pRightClickPoint = pDocummentProxy->global2RelativePoint(tempPoint);
+        m_nPage = pDocummentProxy->pointInWhichPage(m_pRightClickPoint);
 
-            m_nPage = pDocummentProxy->pointInWhichPage(m_pRightClickPoint);
+        QString sAnnotationText = "",struuid("");
+        m_bIsHighLight = pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText,struuid);
 
-            QString sAnnotationText = "",struuid("");
-            bool bAnno = pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText,struuid);
-
+        if (sSelectText != "" || m_bIsHighLight) {
             //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
             if (m_pTextOperationWidget == nullptr) {
                 m_pTextOperationWidget = new TextOperationWidget(this);
             }
-            m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), bAnno, sSelectText);
+            m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), m_bIsHighLight, sSelectText);
 
             qDebug() << "select text show TextOperationWidget";
 
         } else {
-            if(m_bIsHighLight){
-                //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
-                if (m_pTextOperationWidget == nullptr) {
-                    m_pTextOperationWidget = new TextOperationWidget(this);
-                }
-                m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), true, sSelectText);
-                qDebug() << "select  show TextOperationWidget";
-
-            }else {
-
-                if (m_pDefaultOperationWidget == nullptr) {
-                    m_pDefaultOperationWidget = new DefaultOperationWidget(this);
-                }
-                m_pDefaultOperationWidget->showWidget(tempPoint.x(), tempPoint.y());
-                qDebug() << "select  show DefaultOperationWidget";
+            if (m_pDefaultOperationWidget == nullptr) {
+                m_pDefaultOperationWidget = new DefaultOperationWidget(this);
             }
+            m_pDefaultOperationWidget->showWidget(tempPoint.x(), tempPoint.y());
+            qDebug() << "select  show DefaultOperationWidget";
         }
     }
 }
@@ -258,6 +246,8 @@ void FileViewWidget::slotFileRemoveAnnotation()
     qDebug() << "slotFileRemoveAnnotation uuid:" << sUuid;
 
     sendMsg(MSG_NOTE_DLTNOTEITEM, sUuid);
+
+    DocummentProxy::instance()->removeAnnotation(sUuid);
 }
 
 void FileViewWidget::slotFileAddNote(const QString &note)
