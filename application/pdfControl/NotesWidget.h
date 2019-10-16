@@ -94,6 +94,7 @@ private:
     void addNewItem(const QImage &image, const int &page, const QString &uuid, const QString &text);
     void flushNoteItemText(const int &page, const QString &uuid, const QString &text);
     void removeFromMap(const QString&) const;
+    void addNoteToMap(const stHighlightContent&);
 
 private:
     CustomListWidget *m_pNotesList = nullptr;

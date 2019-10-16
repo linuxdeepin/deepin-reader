@@ -65,7 +65,7 @@ void NotesWidget::slotAddNoteItem(QString note)
  */
 void NotesWidget::slotDltNoteItem(QString uuid)
 {
-    for (int row = 0; m_pNotesList->count(); ++row) {
+    for (int row = 0; row < m_pNotesList->count(); ++row) {
         QListWidgetItem *pItem = m_pNotesList->item(row);
         if (pItem) {
             NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
@@ -125,9 +125,12 @@ void NotesWidget::slotOpenFileOk()
         return;
     }
 
+    m_mapNotes.clear();
     foreach(auto st, list_note)
     {
         addNewItem();
+
+        addNoteToMap(st);
     }
 
     m_ThreadLoadImage.setListNoteSt(list_note);
@@ -149,10 +152,10 @@ void NotesWidget::slotLoadImage(const int &page, const QImage &image, const QStr
 {
     static int index = 0;
 
-    if(m_pNotesList->count() < 1 || index++ >= m_pNotesList->count()){
+    if(m_pNotesList->count() < 1 || index >= m_pNotesList->count()){
         return;
     }
-
+    qDebug() << "slotLoadImage page:" << page << "     m_pNotesList->count():" << m_pNotesList->count();
     QListWidgetItem *pItem = m_pNotesList->item(index);
     if (pItem) {
         NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
@@ -163,6 +166,7 @@ void NotesWidget::slotLoadImage(const int &page, const QImage &image, const QStr
             t_widget->setLabelImage(image);
         }
     }
+    ++index;
 }
 
 /**
@@ -181,23 +185,24 @@ void NotesWidget::addNotesItem(const QString &text)
     QStringList t_strList = text.split(QString("%"));
 
     if(t_strList.count() == 3){
-        DocummentProxy *dproxy = DocummentProxy::instance();
-        if (nullptr == dproxy) {
-            return;
-        }
-
         t_strUUid = t_strList.at(0).trimmed();
         t_strText = t_strList.at(1).trimmed();
-        t_nPage = t_strList.at(2).toInt();
-
-        dproxy->getImage(t_nPage, image, 113, 143);
+        t_nPage = t_strList.at(2).trimmed().toInt();
+    }else {
+        return;
     }
 
     bool b_has = hasNoteInList(t_nPage, t_strUUid);
+    qDebug() << "b_has:" << b_has << "   t_nPage:" << t_nPage << "  t_strUUid:" << t_strUUid;
 
     if(b_has){
         flushNoteItemText(t_nPage, t_strUUid, t_strText);
     }else{
+        DocummentProxy *dproxy = DocummentProxy::instance();
+        if (nullptr == dproxy) {
+            return;
+        }
+        dproxy->getImage(t_nPage, image, 113, 143);
         addNewItem(image, t_nPage, t_strUUid, t_strText);
 
         QMap<QString, QString> t_contant;
@@ -320,6 +325,22 @@ void NotesWidget::removeFromMap(const QString &uuid) const
     }
 }
 
+void NotesWidget::addNoteToMap(const stHighlightContent & note)
+{
+    int t_page = note.ipage;
+    QString t_strUUid = note.struuid;
+    QString t_strContant = note.strcontents;
+    QMap<QString, QString> t_node;
+
+    if(m_mapNotes.contains(t_page)){
+        t_node = m_mapNotes.value(t_page);
+        m_mapNotes.remove(t_page);
+    }
+
+    t_node.insert(t_strUUid, t_strContant);
+    m_mapNotes.insert(t_page, t_node);
+}
+
 /**
  * @brief NotesWidget::dealWithData
  * 处理全局信号函数
@@ -346,9 +367,9 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
     }
 
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
-        //emit sigOpenFileOk();
+        emit sigOpenFileOk();
     } else if (MSG_CLOSE_FILE == msgType) {
-       // emit sigCloseFile();
+        emit sigCloseFile();
     }
 
     return 0;
@@ -396,9 +417,8 @@ void ThreadLoadImageOfNote::run()
             t_strUUid = m_stListNote.at(page).struuid;
             t_noteContant = m_stListNote.at(page).strcontents;
 
-//            qDebug() << tr("page:%1 uuid:%2 contant:%3").arg(t_page).arg(t_strUUid).arg(t_noteContant);
             if (bl) {
-                emit sigLoadImage(page, image, t_strUUid, t_noteContant);
+                emit sigLoadImage(t_page, image, t_strUUid, t_noteContant);
                 qDebug() << tr("page:%1 uuid:%2 contant:%3").arg(t_page).arg(t_strUUid).arg(t_noteContant);
             }
 
