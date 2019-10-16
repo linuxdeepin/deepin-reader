@@ -28,6 +28,7 @@ void CustomItemWidget::setLabelImage(const QImage &image)
 void CustomItemWidget::setLabelPage(const int &value,  const int &nShowPage )
 {
     m_nPageIndex = value;
+//    qDebug() << "m_nPageIndex:" << m_nPageIndex;
     if (m_pPage) {
         int nnPage = value + 1;
         if (nShowPage == 1) {

@@ -118,6 +118,8 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 
         m_nPage = pDocummentProxy->pointInWhichPage(m_pStartPoint);
 
+        qDebug() << "pointInWhichPage page:" << m_nPage;
+
         // 判断鼠标点击的地方是否有高亮
         QString selectText,t_strContant;
 
@@ -254,6 +256,7 @@ void FileViewWidget::slotFileAddNote(const QString &note)
 
     auto proxy = DocummentProxy::instance();
     proxy->setAnnotationText(m_nPage, m_strUUid, note);
+    qDebug() << "setAnnotationText page:" << m_nPage << " uuid:" << m_strUUid << " note:" << note;
 }
 
 //  信号槽　初始化

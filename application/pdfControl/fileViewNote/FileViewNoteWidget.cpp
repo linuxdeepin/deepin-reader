@@ -18,6 +18,7 @@ void FileViewNoteWidget::setEditText(const QString &note)
     if(m_pTextEdit){
         m_pTextEdit->clear();
         m_pTextEdit->setText(note);
+        m_strNote = note;
     }
 }
 
