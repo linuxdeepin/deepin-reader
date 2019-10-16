@@ -76,6 +76,7 @@ void NotesWidget::slotDltNoteItem(QString uuid)
                     t_widget = nullptr;
 
                     delete  pItem;
+                    pItem = nullptr;
 
                     // remove date from map and notify kong yun zhen
                     removeFromMap(uuid);
@@ -155,7 +156,7 @@ void NotesWidget::slotLoadImage(const int &page, const QImage &image, const QStr
     if(m_pNotesList->count() < 1 || index >= m_pNotesList->count()){
         return;
     }
-    qDebug() << "slotLoadImage page:" << page << "     m_pNotesList->count():" << m_pNotesList->count();
+
     QListWidgetItem *pItem = m_pNotesList->item(index);
     if (pItem) {
         NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
@@ -193,7 +194,6 @@ void NotesWidget::addNotesItem(const QString &text)
     }
 
     bool b_has = hasNoteInList(t_nPage, t_strUUid);
-    qDebug() << "b_has:" << b_has << "   t_nPage:" << t_nPage << "  t_strUUid:" << t_strUUid;
 
     if(b_has){
         flushNoteItemText(t_nPage, t_strUUid, t_strText);
@@ -411,7 +411,7 @@ void ThreadLoadImageOfNote::run()
 
             if(t_page != m_stListNote.at(page).ipage){
                 t_page = m_stListNote.at(page).ipage;
-                bl = dproxy->getImage(page, image, 113, 143);
+                bl = dproxy->getImage(t_page, image, 113, 143);
             }
 
             t_strUUid = m_stListNote.at(page).struuid;
@@ -419,7 +419,6 @@ void ThreadLoadImageOfNote::run()
 
             if (bl) {
                 emit sigLoadImage(t_page, image, t_strUUid, t_noteContant);
-                qDebug() << tr("page:%1 uuid:%2 contant:%3").arg(t_page).arg(t_strUUid).arg(t_noteContant);
             }
 
             msleep(20);

@@ -101,8 +101,6 @@ void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
     QString t_strNote;
     pDocummentProxy->getAnnotationText(t_strUUid, t_strNote, t_nPage);
 
-    qDebug() << tr("getAnnotationText page:%1 uuid:%2 note:%3").arg(t_nPage).arg(t_strUUid).arg(t_strNote);
-
     m_pFileViewNoteWidget->setEditText(t_strNote);
     m_pFileViewNoteWidget->move(nParentWidth - nWidth - 50, 200);
     m_pFileViewNoteWidget->show();
