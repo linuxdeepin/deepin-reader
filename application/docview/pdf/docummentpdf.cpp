@@ -136,7 +136,7 @@ void DocummentPDF::getAllAnnotation(QList<stHighlightContent> &listres)
                     annote->setUniqueName(struuid);
                 }
                 QString strcontents = annote->contents();
-                stres.ipage = 0;
+                stres.ipage = i;
                 stres.strcontents = strcontents;
                 stres.struuid = struuid;
                 listres.push_back(stres);
