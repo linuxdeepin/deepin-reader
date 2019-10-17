@@ -46,6 +46,7 @@ void NotesWidget::slotDltNoteItem(QString uuid)
             NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
             if (t_widget) {
                 QString t_uuid = t_widget->noteUUId();
+                int page = t_widget->nPageIndex();
                 if (t_uuid == uuid) {
                     delete t_widget;
                     t_widget = nullptr;
@@ -60,7 +61,7 @@ void NotesWidget::slotDltNoteItem(QString uuid)
 
                     if(dproxy){
                         DataManager::instance()->setBIsUpdate(true);
-                        dproxy->removeAnnotation(uuid);
+                        dproxy->removeAnnotation(uuid, page);
                         qDebug() << "NotesWidget::slotDltNoteItem uuid:" << uuid;
                     }
 
@@ -168,6 +169,7 @@ void NotesWidget::slotDelNoteItem()
     NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
     if (t_widget) {
         QString t_uuid = t_widget->noteUUId();
+        int page  = t_widget->nPageIndex();
 
         delete t_widget;
         t_widget = nullptr;
@@ -180,7 +182,7 @@ void NotesWidget::slotDelNoteItem()
 
         auto t_pDocummentProxy = DocummentProxy::instance();
         if(t_pDocummentProxy){
-            t_pDocummentProxy->removeAnnotation(t_uuid);
+            t_pDocummentProxy->removeAnnotation(t_uuid, page);
         }
     }
 }
