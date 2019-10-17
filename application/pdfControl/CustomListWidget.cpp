@@ -46,6 +46,7 @@ void CustomListWidget::slotShowSelectItem(QListWidgetItem *item)
             //  页跳转
             DocummentProxy::instance()->pageJump(nJumpPage);
         }
+        emit sigSelectItem(item);
     }
 }
 

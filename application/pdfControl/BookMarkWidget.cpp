@@ -191,6 +191,7 @@ void BookMarkWidget::keyPressEvent(QKeyEvent *e)
                 t_widget = nullptr;
 
                 delete  pItem;
+                pItem = nullptr;
 
                 m_pAllPageList.removeOne(nPageIndex);
 
