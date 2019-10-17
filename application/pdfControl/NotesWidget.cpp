@@ -1,6 +1,7 @@
 #include "NotesWidget.h"
 #include "controller/DataManager.h"
 
+static int indexnote=0;
 NotesWidget::NotesWidget(CustomWidget *parent) :
     CustomWidget(QString("NotesWidget"), parent)
 {
@@ -110,8 +111,10 @@ void NotesWidget::slotOpenFileOk()
     if(list_note.count() < 1){
         return;
     }
+
     m_pNotesList->clear();
     m_mapNotes.clear();
+
     for(int index = 0; index < list_note.count(); ++index)
     {
         stHighlightContent st = list_note.at(index);
@@ -122,6 +125,8 @@ void NotesWidget::slotOpenFileOk()
 
         addNoteToMap(st);
     }
+    qDebug()<<m_pNotesList->count();
+
 
     m_ThreadLoadImage.setListNoteSt(list_note);
     m_ThreadLoadImage.setIsLoaded(true);
@@ -143,6 +148,7 @@ void NotesWidget::slotCloseFile()
 
 void NotesWidget::slotLoadImage(const QImage &image)
 {
+
     if(m_pNotesList->count() < 1 || m_nIndex >= m_pNotesList->count()){
         return;
     }
@@ -155,6 +161,26 @@ void NotesWidget::slotLoadImage(const QImage &image)
         }
     }
     ++m_nIndex;
+
+//    // static int index = 0;
+
+//    if(m_pNotesList->count() < 1 || indexnote >= m_pNotesList->count()){
+//        return;
+//    }
+//    qDebug()<<"NotesWidget::slotLoadImage"<<m_pNotesList->count()<<indexnote;
+//    QListWidgetItem *pItem = m_pNotesList->item(indexnote);
+//    if (pItem) {
+//        NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
+//        if (t_widget) {
+//            qDebug()<<"NotesWidget::slotLoadImage  QListWidgetItem";
+//            t_widget->setNoteUUid(uuid);
+//            t_widget->setTextEditText(contant);
+//            t_widget->setLabelPage(page,1);
+//            t_widget->setLabelImage(image);
+//        }
+//    }
+//    ++indexnote;
+//    m_pNotesList->update();
 }
 
 void NotesWidget::slotDelNoteItem()
@@ -290,6 +316,7 @@ void NotesWidget::addNewItem(const stHighlightContent & note)
 
     m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);
+    qDebug()<<m_pNotesList->count();
 }
 
 /**
@@ -428,7 +455,7 @@ void ThreadLoadImageOfNote::stopThreadRun()
 void ThreadLoadImageOfNote::run()
 {
     while (m_isLoaded) {
-
+        indexnote=0;
         int t_page = -1;
         QString t_strUUid(""),t_noteContant("");
         QImage image;
