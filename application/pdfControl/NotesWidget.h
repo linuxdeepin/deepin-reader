@@ -42,7 +42,7 @@ public:
     }
 
 signals:
-    void sigLoadImage(const int &, const QImage &, const QString&, const QString&);
+    void sigLoadImage(const QImage &);
 
 protected:
     void run() Q_DECL_OVERRIDE;
@@ -81,7 +81,7 @@ private slots:
     void slotDltNoteContant(QString);
     void slotOpenFileOk();
     void slotCloseFile();
-    void slotLoadImage(const int &, const QImage &, const QString&, const QString&);
+    void slotLoadImage(const QImage &);
     void slotDelNoteItem();
     void slotSelectItem(QListWidgetItem *);
 
@@ -92,7 +92,7 @@ private:
 private:
     void fillContantToList();
     bool hasNoteInList(const int &, const QString&);
-    void addNewItem();
+    void addNewItem(const stHighlightContent & note);
     void addNewItem(const QImage &image, const int &page, const QString &uuid, const QString &text);
     void flushNoteItemText(const int &page, const QString &uuid, const QString &text);
     void removeFromMap(const QString&) const;
@@ -104,6 +104,7 @@ private:
     QMap<int, QMap<QString, QString>> m_mapNotes; // 当前注释列表内容
     ThreadLoadImageOfNote m_ThreadLoadImage;      // 加载注释缩略图线程
     QListWidgetItem *m_pNoteItem = nullptr;       // 当前鼠标左键点击的item
+    int m_nIndex = -1;                            // 当前注释列表数
 
 public:
     // IObserver interface

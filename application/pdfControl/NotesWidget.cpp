@@ -62,7 +62,6 @@ void NotesWidget::slotDltNoteItem(QString uuid)
                     if(dproxy){
                         DataManager::instance()->setBIsUpdate(true);
                         dproxy->removeAnnotation(uuid, page);
-                        qDebug() << "NotesWidget::slotDltNoteItem uuid:" << uuid;
                     }
 
                     break;
@@ -90,8 +89,7 @@ void NotesWidget::slotDltNoteContant(QString uuid)
 
 void NotesWidget::slotOpenFileOk()
 {
-    qDebug()<<"slotOpenFileOk--------";
-
+    m_nIndex = 0;
     m_ThreadLoadImage.setIsLoaded(false);
     if (m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();
@@ -112,10 +110,13 @@ void NotesWidget::slotOpenFileOk()
     }
     m_pNotesList->clear();
     m_mapNotes.clear();
-    foreach(auto st, list_note)
-    {        
-        qDebug()<<"slotOpenFileOk"<<st.ipage<<st.strcontents<<"--";
-        addNewItem();
+    for(int index = 0; index < list_note.count(); ++index)
+    {
+        stHighlightContent st = list_note.at(index);
+        if(st.strcontents == QString("")){
+            continue;
+        }
+        addNewItem(st);
 
         addNoteToMap(st);
     }
@@ -123,41 +124,35 @@ void NotesWidget::slotOpenFileOk()
     m_ThreadLoadImage.setListNoteSt(list_note);
     m_ThreadLoadImage.setIsLoaded(true);
     if (!m_ThreadLoadImage.isRunning()) {
-        qDebug()<<"@@@@@@@@@@@@!!!!!!!!!!";
         m_ThreadLoadImage.start();
     }
-    qDebug()<<"!!!!!!!!!!@@@@@@@@@@@@";
 }
 
 void NotesWidget::slotCloseFile()
 {
+    m_nIndex = 0;
     m_ThreadLoadImage.setIsLoaded(false);
-    if (!m_ThreadLoadImage.isRunning()) {
+    if (m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();
     }
 
     m_pNotesList->clear();
 }
 
-void NotesWidget::slotLoadImage(const int &page, const QImage &image, const QString &uuid, const QString &contant)
+void NotesWidget::slotLoadImage(const QImage &image)
 {
-    static int index = 0;
-
-    if(m_pNotesList->count() < 1 || index >= m_pNotesList->count()){
+    if(m_pNotesList->count() < 1 || m_nIndex >= m_pNotesList->count()){
         return;
     }
 
-    QListWidgetItem *pItem = m_pNotesList->item(index);
+    QListWidgetItem *pItem = m_pNotesList->item(m_nIndex);
     if (pItem) {
         NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
         if (t_widget) {
-            t_widget->setNoteUUid(uuid);
-            t_widget->setTextEditText(contant);
-            t_widget->setLabelPage(page,1);
             t_widget->setLabelImage(image);
         }
     }
-    ++index;
+    ++m_nIndex;
 }
 
 void NotesWidget::slotDelNoteItem()
@@ -247,8 +242,8 @@ void NotesWidget::initConnection()
 
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
-    connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const int &, const QImage &, const QString&, const QString&)),
-            this, SLOT(slotLoadImage(const int &, const QImage &, const QString&, const QString&)));
+    connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const QImage &)),
+            this, SLOT(slotLoadImage(const QImage &)));
     connect(this, SIGNAL(sigDelNoteItem()), this, SLOT(slotDelNoteItem()));
     connect(m_pNotesList, SIGNAL(sigSelectItem(QListWidgetItem*)), this, SLOT(slotSelectItem(QListWidgetItem*)));
 }
@@ -273,12 +268,16 @@ bool NotesWidget::hasNoteInList(const int &page, const QString &uuid)
     return false;
 }
 
-void NotesWidget::addNewItem()
+void NotesWidget::addNewItem(const stHighlightContent & note)
 {
+    if(note.strcontents == QString("")){
+        return;
+    }
+
     NotesItemWidget *itemWidget = new NotesItemWidget;
-    itemWidget->setNoteUUid(QString(""));
-    itemWidget->setLabelPage(-1, 1);
-    itemWidget->setTextEditText(QString(""));
+    itemWidget->setNoteUUid(note.struuid);
+    itemWidget->setLabelPage(note.ipage, 1);
+    itemWidget->setTextEditText(note.strcontents);
     itemWidget->setMinimumSize(QSize(250, 150));
 
     QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
@@ -434,9 +433,12 @@ void ThreadLoadImageOfNote::run()
         for (int page = 0; page < m_stListNote.count(); page++) {
             if (!m_isLoaded)
                 break;
-            DocummentProxy *dproxy = DocummentProxy::instance();
+            auto dproxy = DocummentProxy::instance();
             if (nullptr == dproxy) {
                 break;
+            }
+            if(m_stListNote.at(page).strcontents == QString("")){
+                continue;
             }
 
             if(t_page != m_stListNote.at(page).ipage){
@@ -448,7 +450,7 @@ void ThreadLoadImageOfNote::run()
             t_noteContant = m_stListNote.at(page).strcontents;
 
             if (bl) {
-                emit sigLoadImage(t_page, image, t_strUUid, t_noteContant);
+                emit sigLoadImage(image);
             }
 
             msleep(20);
