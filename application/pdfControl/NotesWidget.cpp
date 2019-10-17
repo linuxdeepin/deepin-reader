@@ -1,4 +1,5 @@
 #include "NotesWidget.h"
+#include "controller/DataManager.h"
 
 NotesWidget::NotesWidget(CustomWidget *parent) :
     CustomWidget(QString("NotesWidget"), parent)
@@ -24,32 +25,6 @@ void NotesWidget::initWidget()
     m_pVLayout->addWidget(m_pNotesList);
 }
 
-void NotesWidget::keyPressEvent(QKeyEvent *e)
-{
-    QString key = Utils::getKeyshortcut(e);
-
-    if (key == PdfControl::DEL_KEY) {
-        QListWidgetItem *pItem = m_pNotesList->currentItem();
-        if (pItem) {
-            NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
-            if (t_widget) {
-                QString t_strUUid = t_widget->noteUUId();
-
-                t_widget->deleteLater();
-                t_widget = nullptr;
-
-                delete  pItem;
-                pItem = nullptr;
-
-                sendMsg(MSG_BOOKMARK_DLTITEM, t_strUUid);
-            }
-        }
-    }  else {
-        // Pass event to CustomWidget continue, otherwise you can't type anything after here. ;)
-        CustomWidget::keyPressEvent(e);
-    }
-}
-
 /**
  * @brief NotesWidget::slotAddNoteItem
  * 增加注释缩略图Item槽函数
@@ -72,7 +47,7 @@ void NotesWidget::slotDltNoteItem(QString uuid)
             if (t_widget) {
                 QString t_uuid = t_widget->noteUUId();
                 if (t_uuid == uuid) {
-                    t_widget->deleteLater();
+                    delete t_widget;
                     t_widget = nullptr;
 
                     delete  pItem;
@@ -80,6 +55,14 @@ void NotesWidget::slotDltNoteItem(QString uuid)
 
                     // remove date from map and notify kong yun zhen
                     removeFromMap(uuid);
+
+                    auto dproxy = DocummentProxy::instance();
+
+                    if(dproxy){
+                        DataManager::instance()->setBIsUpdate(true);
+                        dproxy->removeAnnotation(uuid);
+                        qDebug() << "NotesWidget::slotDltNoteItem uuid:" << uuid;
+                    }
 
                     break;
                 }
@@ -99,7 +82,6 @@ void NotesWidget::slotDltNoteContant(QString uuid)
     {
         if (note.contains(uuid)) {
             note.remove(uuid);
-            note.insert(uuid, QString(""));
             return;
         }
     }
@@ -181,7 +163,6 @@ void NotesWidget::slotDelNoteItem()
     NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
     if (t_widget) {
         QString t_uuid = t_widget->noteUUId();
-        int page = t_widget->nPageIndex();
 
         delete t_widget;
         t_widget = nullptr;
@@ -194,7 +175,7 @@ void NotesWidget::slotDelNoteItem()
 
         auto t_pDocummentProxy = DocummentProxy::instance();
         if(t_pDocummentProxy){
-            t_pDocummentProxy->setAnnotationText(page, t_uuid, QString(""));
+            t_pDocummentProxy->removeAnnotation(t_uuid);
         }
     }
 }
@@ -390,7 +371,7 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
         return ConstantMsg::g_effective_res;
     }
 
-    //  删除注释内容消息
+    //  删除注释内容
     if (MSG_NOTE_DLTNOTECONTANT == msgType) {
         emit sigDltNoteContant(msgContent);
         return ConstantMsg::g_effective_res;
