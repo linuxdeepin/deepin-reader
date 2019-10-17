@@ -61,7 +61,7 @@ public:
     bool pageJump(int pagenum);
     void docBasicInfo(stFileInfo &info);
     QString removeAnnotation(const QPoint &startpos);
-    void removeAnnotation(const QString &struuid);
+    void removeAnnotation(const QString &struuid,int ipage=-1);
     bool pageMove(double mvx, double mvy);
     void title(QString &title);
     Page::Link *mouseBeOverLink(QPoint point);

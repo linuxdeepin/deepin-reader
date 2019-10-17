@@ -104,10 +104,19 @@ QString DocummentPDF::removeAnnotation(const QPoint &startpos)
     return static_cast<PagePdf *>(d->m_pages.at(page))->removeAnnotation(pt);
 }
 
-void DocummentPDF::removeAnnotation(const QString &struuid)
+void DocummentPDF::removeAnnotation(const QString &struuid, int ipage)
 {
     Q_D(DocummentPDF);
-    return static_cast<PagePdf *>(d->m_pages.at(getCurrentPageNo()))->removeAnnotation(struuid);
+    if(ipage<0||ipage>=d->m_pages.size())
+    {
+        for(int i=0;i<d->m_pages.size();++i)
+        {
+            static_cast<PagePdf *>(d->m_pages.at(i))->removeAnnotation(struuid);
+        }
+    }
+    else {
+        static_cast<PagePdf *>(d->m_pages.at(ipage))->removeAnnotation(struuid);
+    }
 }
 
 QString DocummentPDF::addAnnotation(const QPoint &startpos, QColor color)
@@ -122,10 +131,11 @@ QString DocummentPDF::addAnnotation(const QPoint &startpos, QColor color)
 void DocummentPDF::getAllAnnotation(QList<stHighlightContent> &listres)
 {
     Q_D(DocummentPDF);
-//    QTime t;
-//    t.start();//将此时间设置为当前时间
+    //    QTime t;
+    //    t.start();//将此时间设置为当前时间
     for (int i = 0; i < d->m_pages.size(); ++i) {
         QList<Poppler::Annotation *> listannote = static_cast<PagePdf *>(d->m_pages.at(i))->GetPage()->annotations();
+        qDebug()<<"getAllAnnotation"<<i<<listannote.size();
         foreach (Poppler::Annotation *annote, listannote) {
             if (annote->subType() == Poppler::Annotation::AHighlight) {
                 stHighlightContent stres;

@@ -118,12 +118,13 @@ void MainWindow::initTitlebar()
 
 //  打开 所在文件夹
 void MainWindow::onOpenFolder()
-{
+{   
     QString strFilePath = DataManager::instance()->strOnlyFilePath();
     if (strFilePath != "") {
         int nLastPos = strFilePath.lastIndexOf('/');
         strFilePath = strFilePath.mid(0, nLastPos);
-        QDesktopServices::openUrl(QUrl(strFilePath));
+        strFilePath=QString("file://") +strFilePath;
+       QDesktopServices::openUrl(QUrl(strFilePath));
     }
 }
 

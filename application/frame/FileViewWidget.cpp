@@ -8,6 +8,7 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <DMessageBox>
+#include <QPrintPreviewDialog>
 #include "translator/Frame.h"
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
@@ -279,16 +280,42 @@ void FileViewWidget::initConnections()
 //  打印
 void FileViewWidget::slotPrintFile()
 {
-    QPrinter printer;
-    QString printerName = printer.printerName();
-    if ( printerName.size() > 0) {
-        QPrintDialog printDialog(&printer, this);
-        if (printDialog.exec() == QDialog::Accepted) {
-            //  print
-        }
-    } else {
-        DMessageBox::warning(nullptr, "", Frame::sPrintErrorNoDevice);
-    }
+    QPrinter printer(QPrinter::HighResolution);
+    QPrintPreviewDialog preview(&printer, this);
+
+    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [=] (QPrinter *printer) {
+//        currentWrapper()->textEditor()->print(printer);
+
+
+    });
+//    DTextEdit *wrapper = currentWrapper()->textEditor();
+//    const QString &filePath = wrapper->filepath;
+//    const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
+
+//    if (fileDir == m_blankFileDir) {
+//        printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
+//    } else {
+//        printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
+//    }
+
+//    printer.setOutputFormat(QPrinter::PdfFormat);
+
+//    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [=] (QPrinter *printer) {
+//        currentWrapper()->textEditor()->print(printer);
+//    });
+
+    preview.exec();
+//    QPrinter printer;
+//    QString printerName = printer.printerName();
+//    if ( 1||printerName.size() > 0) {
+//        QPrintDialog printDialog(&printer, this);
+//        if (printDialog.exec() == QDialog::Accepted) {
+//            //  print
+
+//        }
+//    } else {
+//        DMessageBox::warning(nullptr, "", Frame::sPrintErrorNoDevice);
+//    }
 }
 
 //  设置　窗口　自适应　宽＼高　度

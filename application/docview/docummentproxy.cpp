@@ -302,12 +302,12 @@ QString DocummentProxy::removeAnnotation(const QPoint &startpos)
     return m_documment->removeAnnotation(startpos);
 }
 
-void DocummentProxy::removeAnnotation(const QString &struuid)
+void DocummentProxy::removeAnnotation(const QString &struuid, int ipage)
 {
     if (!m_documment || bcloseing)
         return ;
     qDebug() << "removeAnnotation";
-    m_documment->removeAnnotation(struuid);
+    m_documment->removeAnnotation(struuid,ipage);
 }
 
 void DocummentProxy::slot_pageChange(int pageno)

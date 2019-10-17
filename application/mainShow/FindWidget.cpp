@@ -31,6 +31,7 @@ FindWidget::FindWidget(CustomWidget *parent)
     setFixedSize(QSize(410, 40));
     setWindowFlags(windowFlags() |  Qt::WindowStaysOnTopHint);
 
+
     initWidget();
 
     setVisible(false);
