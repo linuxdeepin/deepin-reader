@@ -15,6 +15,9 @@ class CustomListWidget : public DListWidget
 public:
     CustomListWidget(DWidget *parent = nullptr);
 
+signals:
+    void sigSelectItem(QListWidgetItem *);
+
 private slots:
     void slot_loadImage(const int &row, const QImage &image);
 

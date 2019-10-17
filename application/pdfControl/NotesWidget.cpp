@@ -147,6 +147,8 @@ void NotesWidget::slotCloseFile()
     if (!m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();
     }
+
+    m_pNotesList->clear();
 }
 
 void NotesWidget::slotLoadImage(const int &page, const QImage &image, const QString &uuid, const QString &contant)
@@ -168,6 +170,38 @@ void NotesWidget::slotLoadImage(const int &page, const QImage &image, const QStr
         }
     }
     ++index;
+}
+
+void NotesWidget::slotDelNoteItem()
+{
+    if(!m_pNoteItem){
+        return;
+    }
+
+    NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
+    if (t_widget) {
+        QString t_uuid = t_widget->noteUUId();
+        int page = t_widget->nPageIndex();
+
+        delete t_widget;
+        t_widget = nullptr;
+
+        delete  m_pNoteItem;
+        m_pNoteItem = nullptr;
+
+        // remove date from map and notify kong yun zhen
+        removeFromMap(t_uuid);
+
+        auto t_pDocummentProxy = DocummentProxy::instance();
+        if(t_pDocummentProxy){
+            t_pDocummentProxy->setAnnotationText(page, t_uuid, QString(""));
+        }
+    }
+}
+
+void NotesWidget::slotSelectItem(QListWidgetItem *item)
+{
+    m_pNoteItem = item;
 }
 
 /**
@@ -227,6 +261,8 @@ void NotesWidget::initConnection()
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
     connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const int &, const QImage &, const QString&, const QString&)),
             this, SLOT(slotLoadImage(const int &, const QImage &, const QString&, const QString&)));
+    connect(this, SIGNAL(sigDelNoteItem()), this, SLOT(slotDelNoteItem()));
+    connect(m_pNotesList, SIGNAL(sigSelectItem(QListWidgetItem*)), this, SLOT(slotSelectItem(QListWidgetItem*)));
 }
 
 /**
@@ -370,6 +406,12 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigOpenFileOk();
     } else if (MSG_CLOSE_FILE == msgType) {
         emit sigCloseFile();
+    }
+
+    if(MSG_NOTIFY_KEY_MSG == msgType){
+        if (msgContent == QString("Del")) {
+            emit sigDelNoteItem();
+        }
     }
 
     return 0;

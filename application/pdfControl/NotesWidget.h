@@ -70,6 +70,7 @@ signals:
     void sigDltNoteContant(QString);
     void sigOpenFileOk();
     void sigCloseFile();
+    void sigDelNoteItem();
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -82,6 +83,8 @@ private slots:
     void slotOpenFileOk();
     void slotCloseFile();
     void slotLoadImage(const int &, const QImage &, const QString&, const QString&);
+    void slotDelNoteItem();
+    void slotSelectItem(QListWidgetItem *);
 
 private:
     void addNotesItem(const QString &text);
@@ -101,6 +104,7 @@ private:
     QVBoxLayout *m_pVLayout = nullptr;            // 垂直布局
     QMap<int, QMap<QString, QString>> m_mapNotes; // 当前注释列表内容
     ThreadLoadImageOfNote m_ThreadLoadImage;      // 加载注释缩略图线程
+    QListWidgetItem *m_pNoteItem = nullptr;       // 当前鼠标左键点击的item
 
 public:
     // IObserver interface
