@@ -74,7 +74,6 @@ signals:
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
-    void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
 
 private slots:
     void slotAddNoteItem(QString);

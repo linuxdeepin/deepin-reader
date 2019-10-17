@@ -19,7 +19,7 @@ const QString ROTAT_TO_L    = QObject::tr("Rotated To Left");
 const QString ROTAT_TO_R    = QObject::tr("Rotated To Right");
 
 const QString COPY_CONT = QObject::tr("Copy");
-const QString DLT_NOTE  = QObject::tr("Del Note");
+const QString DLT_NOTE  = QObject::tr("Delete");
 const QString ADD_NOTE  = QObject::tr("add note");
 
 const QString SEARCH_RES_CONT = QObject::tr("个结果");

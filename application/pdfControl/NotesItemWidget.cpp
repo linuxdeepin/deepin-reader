@@ -31,17 +31,19 @@ void NotesItemWidget::setSerchResultText(const QString &result)
 
 void NotesItemWidget::slotDltNoteContant()
 {
-    if(m_pTextEdit){
-        sendMsg(MSG_NOTE_DLTNOTECONTANT, m_strUUid);
-        m_pTextEdit->clear();
-        DocummentProxy *dproxy = DocummentProxy::instance();
-        if (nullptr == dproxy) {
-            return;
-        }
-        if(dproxy){
-            dproxy->setAnnotationText(this->nPageIndex(), m_strUUid, QString(""));
-        }
-    }
+//    if(m_pTextEdit){
+//        DocummentProxy *dproxy = DocummentProxy::instance();
+//        if (nullptr == dproxy) {
+//            return;
+//        }
+//        if(dproxy){
+//            dproxy->removeAnnotation(m_strUUid);
+
+//            m_pTextEdit->clear();
+//            sendMsg(MSG_NOTE_DLTNOTEITEM, m_strUUid);
+//        }
+//    }
+    sendMsg(MSG_NOTE_DLTNOTEITEM, m_strUUid);
 }
 
 void NotesItemWidget::slotCopyContant()
