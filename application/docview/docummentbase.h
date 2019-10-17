@@ -214,7 +214,7 @@ public:
         return false;
     }
     virtual QString removeAnnotation(const QPoint &startpos) {}
-    virtual void removeAnnotation(const QString &struuid) {}
+    virtual void removeAnnotation(const QString &struuid,int ipage=-1) {}
     virtual QString addAnnotation(const QPoint &startpos,QColor color = Qt::yellow) {}
     virtual void search(const QString &strtext, QColor color = Qt::yellow) {}
     virtual void getAllAnnotation(QList<stHighlightContent> &listres) {}

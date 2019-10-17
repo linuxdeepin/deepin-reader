@@ -89,6 +89,8 @@ void NotesWidget::slotDltNoteContant(QString uuid)
 
 void NotesWidget::slotOpenFileOk()
 {
+    qDebug()<<"slotOpenFileOk--------";
+
     m_ThreadLoadImage.setIsLoaded(false);
     if (m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();
@@ -107,10 +109,11 @@ void NotesWidget::slotOpenFileOk()
     if(list_note.count() < 1){
         return;
     }
-
+    m_pNotesList->clear();
     m_mapNotes.clear();
     foreach(auto st, list_note)
-    {
+    {        
+        qDebug()<<"slotOpenFileOk"<<st.ipage<<st.strcontents<<"--";
         addNewItem();
 
         addNoteToMap(st);
@@ -119,8 +122,10 @@ void NotesWidget::slotOpenFileOk()
     m_ThreadLoadImage.setListNoteSt(list_note);
     m_ThreadLoadImage.setIsLoaded(true);
     if (!m_ThreadLoadImage.isRunning()) {
+        qDebug()<<"@@@@@@@@@@@@!!!!!!!!!!";
         m_ThreadLoadImage.start();
     }
+    qDebug()<<"!!!!!!!!!!@@@@@@@@@@@@";
 }
 
 void NotesWidget::slotCloseFile()

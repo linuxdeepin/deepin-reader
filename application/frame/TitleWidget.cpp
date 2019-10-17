@@ -186,7 +186,7 @@ DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
     btn->setIcon(QIcon(normalPic));
     btn->setFixedSize(QSize(36, 36));
     btn->setIconSize(QSize(36, 36));
-    btn->setFlat(true);//设置后背景不自绘
+   // btn->setFlat(true);//设置后背景不自绘
 
     btn->setToolTip(btnName);
     btn->setCheckable(bCheckable);
