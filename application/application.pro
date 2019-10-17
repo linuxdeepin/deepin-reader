@@ -37,4 +37,18 @@ DISTFILES += \
 APPICONDIR = $$PREFIX/share/icons/deepin/apps/scalable
 
 app_icon.path = $$APPICONDIR
-app_icon.files = $$PWD/resources/image/logo/logo.svg
+app_icon.files = $$PWD/resources/image/logo/logo_big.svg
+
+
+isEmpty(BINDIR):BINDIR=/usr/bin
+isEmpty(APPDIR):APPDIR=/usr/share/applications
+isEmpty(DSRDIR):DSRDIR=/usr/share/deepin-reader
+
+target.path = $$INSTROOT$$BINDIR
+desktop.path = $$INSTROOT$$APPDIR
+desktop.files = $$PWD/resources/deepin-reader.desktop
+
+INSTALLS += target desktop
+
+
+
