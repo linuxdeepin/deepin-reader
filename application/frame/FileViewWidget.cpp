@@ -119,10 +119,10 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 
         m_nPage = pDocummentProxy->pointInWhichPage(m_pStartPoint);
 
-//        qDebug() << "pointInWhichPage page:" << m_nPage;
-
         // 判断鼠标点击的地方是否有高亮
         QString selectText,t_strContant;
+
+        m_bIsHighLightReleasePoint = false;
 
         m_bIsHighLight = pDocummentProxy->annotationClicked(docGlobalPos, selectText, m_strUUid);
 
@@ -138,6 +138,24 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
     //  处于幻灯片模式下
     if (DataManager::instance()->CurShowState() == FILE_SLIDE)
         return;
+
+    //判断鼠标左键松开的位置有没有高亮
+    Qt::MouseButton nBtn = event->button();
+    QPoint globalPos = event->globalPos();
+    if (nBtn == Qt::LeftButton) {
+        auto pDocummentProxy = DocummentProxy::instance();
+        QPoint docGlobalPos = pDocummentProxy->global2RelativePoint(globalPos);
+        // 判断鼠标点击的地方是否有高亮
+        QString selectText,t_strContant,t_strUUid;
+
+        m_bIsHighLightReleasePoint = pDocummentProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
+        if(m_bIsHighLight && m_bIsHighLightReleasePoint){
+            qDebug() << "select same text";
+        }
+        t_strContant.clear();
+        t_strContant = t_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight?1:0)) + QString("%") + QString::number(m_nPage);
+        sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+    }
 
     m_bSelectOrMove = false;
     CustomWidget::mouseReleaseEvent(event);
@@ -228,6 +246,13 @@ void FileViewWidget::slotFileAddAnnotation(const QString &sColor)
 {
     DataManager::instance()->setBIsUpdate(true);
     QList<QColor> colorList = {};
+
+    bool t_bSame = m_bIsHighLight && m_bIsHighLightReleasePoint;
+
+    if(t_bSame){
+        qDebug() << "be hight light";
+        return;
+    }
 
     m_strUUid = DocummentProxy::instance()->addAnnotation(m_pRightClickPoint, m_pRightClickPoint);
 }
