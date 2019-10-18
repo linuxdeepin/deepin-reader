@@ -4,5 +4,6 @@
         <file>resources/image/logo/logo_big.svg</file>
         <file>resources/image/normal/close.svg</file>
         <file>resources/image/press/close.svg</file>
+        <file>resources/image/logo/deepin-reader.svg</file>
     </qresource>
 </RCC>

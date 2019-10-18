@@ -45,7 +45,8 @@ Application::Application(int &argc, char **argv)
     setApplicationName(Frame::sAppName);
     setApplicationDisplayName(Frame::sAppName);
 
-    setProductIcon(QIcon(":/resources/image/logo/logo.svg"));
+    setProductIcon(QIcon(":/resources/image/logo/deepin-reader.svg"));
+      setWindowIcon(QIcon(":/resources/image/logo/deepin-reader.svg"));
     setProductName(DApplication::translate("MainWindow", "Deepin Reader"));
 
     DApplicationSettings savetheme;
