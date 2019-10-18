@@ -1,7 +1,6 @@
 #include "NotesWidget.h"
 #include "controller/DataManager.h"
 
-static int indexnote=0;
 NotesWidget::NotesWidget(CustomWidget *parent) :
     CustomWidget(QString("NotesWidget"), parent)
 {
@@ -112,7 +111,7 @@ void NotesWidget::slotOpenFileOk()
         return;
     }
 
-    m_pNotesList->clear();
+   // m_pNotesList->clear();
     m_mapNotes.clear();
 
     for(int index = 0; index < list_note.count(); ++index)
@@ -161,26 +160,6 @@ void NotesWidget::slotLoadImage(const QImage &image)
         }
     }
     ++m_nIndex;
-
-//    // static int index = 0;
-
-//    if(m_pNotesList->count() < 1 || indexnote >= m_pNotesList->count()){
-//        return;
-//    }
-//    qDebug()<<"NotesWidget::slotLoadImage"<<m_pNotesList->count()<<indexnote;
-//    QListWidgetItem *pItem = m_pNotesList->item(indexnote);
-//    if (pItem) {
-//        NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
-//        if (t_widget) {
-//            qDebug()<<"NotesWidget::slotLoadImage  QListWidgetItem";
-//            t_widget->setNoteUUid(uuid);
-//            t_widget->setTextEditText(contant);
-//            t_widget->setLabelPage(page,1);
-//            t_widget->setLabelImage(image);
-//        }
-//    }
-//    ++indexnote;
-//    m_pNotesList->update();
 }
 
 void NotesWidget::slotDelNoteItem()
@@ -454,8 +433,7 @@ void ThreadLoadImageOfNote::stopThreadRun()
 
 void ThreadLoadImageOfNote::run()
 {
-    while (m_isLoaded) {
-        indexnote=0;
+    while (m_isLoaded) {       
         int t_page = -1;
         QString t_strUUid(""),t_noteContant("");
         QImage image;

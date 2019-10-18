@@ -8,7 +8,7 @@
 namespace Frame {
 
 const QString ORGANIZATION_NAME = QObject::tr("deepin");
-const QString sAppName = QObject::tr("deepin_reader");
+const QString sAppName = QObject::tr("deepin-reader");
 const QString sDragFile = QObject::tr("drag Pdf file here");
 const QString sDescription = QObject::tr("Document viewer is a document viewer that comes with the deep operating system. \r\n"
                                          "In addition to opening and reading PDF files, you can also do \r\n on documents"
