@@ -107,6 +107,13 @@ void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
     m_pFileViewNoteWidget->raise();
 }
 
+void DocShowShellWidget::slotCloseNoteWidget()
+{
+    if(m_pFileViewNoteWidget){
+        m_pFileViewNoteWidget->close();
+    }
+}
+
 
 void DocShowShellWidget::initConnections()
 {
@@ -115,6 +122,7 @@ void DocShowShellWidget::initConnections()
 
     connect(this, SIGNAL(sigOpenNoteWidget(const QString &)), this, SLOT(slotOpenNoteWidget(const QString &)));
     connect(this, SIGNAL(sigShowNoteWidget(const QString &)), this, SLOT(slotShowNoteWidget(const QString &)));
+    connect(this, SIGNAL(sigCloseNoteWidget()), this, SLOT(slotCloseNoteWidget()));
 }
 
 int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgContent)
@@ -137,6 +145,9 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
             emit sigShowFileFind();
             return ConstantMsg::g_effective_res;
         }
+    }
+    case MSG_CLOSE_NOTE_WIDGET:{
+        emit sigCloseNoteWidget();
     }
     }
 
