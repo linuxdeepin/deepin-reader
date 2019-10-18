@@ -32,12 +32,12 @@ DISTFILES += \
     themes/atom_dark.theme \
     themes/deepin_dark.theme \
     themes/solarized_dark.theme \
-    themes/deepin.themer
+    themes/deepin.theme
 
 APPICONDIR = $$PREFIX/share/icons/deepin/apps/scalable
 
-app_icon.path = /usr/share/icons/hicolor/scalable/apps
-app_icon.files = $$PWD/resources/image/logo/deepin-reader.svg
+#app_icon.path = /usr/share/icons/hicolor/scalable/apps
+#app_icon.files = $$PWD/resources/image/logo/deepin-reader.svg
 
 
 isEmpty(BINDIR):BINDIR=/usr/bin
