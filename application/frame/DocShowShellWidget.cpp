@@ -87,6 +87,7 @@ void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
     bool t_isShow = isShowW(contant, t_nPage, t_strUUid);
 
     if(!t_isShow){
+        slotCloseNoteWidget();
         return;
     }
 
