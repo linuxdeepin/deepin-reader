@@ -40,6 +40,8 @@ void NotesWidget::slotAddNoteItem(QString note)
  */
 void NotesWidget::slotDltNoteItem(QString uuid)
 {
+    sendMsg(MSG_CLOSE_NOTE_WIDGET, QString(""));
+
     for (int row = 0; row < m_pNotesList->count(); ++row) {
         QListWidgetItem *pItem = m_pNotesList->item(row);
         if (pItem) {
@@ -160,6 +162,8 @@ void NotesWidget::slotDelNoteItem()
     if(!m_pNoteItem){
         return;
     }
+
+    sendMsg(MSG_CLOSE_NOTE_WIDGET, QString(""));
 
     NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
     if (t_widget) {
@@ -386,7 +390,7 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
     // 移除高亮，删除注释内容，删除注释列表item
     if (MSG_NOTE_DLTNOTEITEM == msgType) {
         emit sigDltNoteItem(msgContent);
-        return ConstantMsg::g_effective_res;
+//        return ConstantMsg::g_effective_res;
     }
 
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {

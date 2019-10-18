@@ -25,6 +25,7 @@ signals:
     void sigShowFileFind();
     void sigOpenNoteWidget(const QString &);
     void sigShowNoteWidget(const QString &);
+    void sigCloseNoteWidget();
 
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
@@ -34,6 +35,7 @@ private slots:
     void slotShowFindWidget();
     void slotOpenNoteWidget(const QString &);
     void slotShowNoteWidget(const QString &);
+    void slotCloseNoteWidget();
 
 private:
     void initConnections();
