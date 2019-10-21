@@ -78,6 +78,7 @@ public:
     bool annotationClicked(const QPoint &pos, QString &strtext,QString& struuid);
     void getAllAnnotation(QList<stHighlightContent>& listres);
     int  pointInWhichPage(QPoint pos);
+    void jumpToHighLight(const QString& uuid,int ipage);
 signals:
     void signal_pageChange(int);
     bool signal_pageJump(int);

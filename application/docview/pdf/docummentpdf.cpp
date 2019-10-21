@@ -79,6 +79,42 @@ bool DocummentPDF::loadDocumment(QString filepath)
     return true;
 }
 
+void DocummentPDF::jumpToHighLight(const QString &uuid, int ipage)
+{
+    Q_D(DocummentPDF);
+    if(ipage>=0&&ipage<d->m_pages.size())
+    {
+        Poppler::Page* page= static_cast<PagePdf*>(d->m_pages.at(ipage))->GetPage();
+        QList<Poppler::Annotation*> listannote=page->annotations();
+        foreach(Poppler::Annotation* annote,listannote)
+        {
+            if (annote->subType() == Poppler::Annotation::AHighlight&&annote->uniqueName().indexOf(uuid)>=0) {
+                QList<Poppler::HighlightAnnotation::Quad> listquad = static_cast<Poppler::HighlightAnnotation *>(annote)->highlightQuads();
+                if(listquad.size()>0)
+                {
+                    QRectF rectbound;
+                    rectbound.setTopLeft(listquad.at(0).points[0]);
+                    rectbound.setTopRight(listquad.at(0).points[1]);
+                    rectbound.setBottomLeft(listquad.at(0).points[2]);
+                    rectbound.setBottomRight( listquad.at(0).points[3]);
+                    int xvalue=0,yvalue=0;
+                    cacularValueXY(xvalue,yvalue,ipage,false,rectbound);
+                    QScrollBar *scrollBar_Y = verticalScrollBar();
+                    if (scrollBar_Y)
+                        scrollBar_Y->setValue(yvalue);
+                    if (xvalue > 0) {
+                        QScrollBar *scrollBar_X = horizontalScrollBar();
+                        if (scrollBar_X)
+                            scrollBar_X->setValue(xvalue);
+                    }
+                    break;
+                }
+            }
+        }
+        qDeleteAll(listannote);
+    }
+}
+
 void DocummentPDF::removeAllAnnotation()
 {
     Q_D(DocummentPDF);
@@ -95,7 +131,6 @@ void DocummentPDF::removeAllAnnotation()
 QString DocummentPDF::removeAnnotation(const QPoint &startpos)
 {
     Q_D(DocummentPDF);
-    //暂时只处理未旋转
     QPoint pt = startpos;
     int page = pointInWhichPage(pt);
     qDebug() << "removeAnnotation start";
@@ -139,7 +174,7 @@ void DocummentPDF::getAllAnnotation(QList<stHighlightContent> &listres)
         foreach (Poppler::Annotation *annote, listannote) {
             if (annote->subType() == Poppler::Annotation::AHighlight) {
                 stHighlightContent stres;
-                QList<Poppler::HighlightAnnotation::Quad> listquad = static_cast<Poppler::HighlightAnnotation *>(annote)->highlightQuads();
+                //QList<Poppler::HighlightAnnotation::Quad> listquad = static_cast<Poppler::HighlightAnnotation *>(annote)->highlightQuads();
                 QString struuid = annote->uniqueName();
                 if (struuid.isEmpty()) {
                     struuid = PublicFunc::getUuid();
