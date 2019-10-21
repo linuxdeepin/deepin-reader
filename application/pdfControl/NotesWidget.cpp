@@ -164,7 +164,7 @@ void NotesWidget::slotLoadImage(const QImage &image)
 
 void NotesWidget::slotDelNoteItem()
 {
-    if(!m_pNoteItem){
+    if(!m_pNoteItem || m_nPageIndex != 2){
         return;
     }
 
@@ -194,6 +194,11 @@ void NotesWidget::slotDelNoteItem()
 void NotesWidget::slotSelectItem(QListWidgetItem *item)
 {
     m_pNoteItem = item;
+}
+
+void NotesWidget::slotStackSetCurIndex(const int &index)
+{
+    m_nPageIndex = index;
 }
 
 /**
@@ -254,6 +259,7 @@ void NotesWidget::initConnection()
     connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const QImage &)),
             this, SLOT(slotLoadImage(const QImage &)));
     connect(this, SIGNAL(sigDelNoteItem()), this, SLOT(slotDelNoteItem()));
+    connect(this, SIGNAL(sigStackSetCurIndex(const int&)), this, SLOT(slotStackSetCurIndex(const int&)));
     connect(m_pNotesList, SIGNAL(sigSelectItem(QListWidgetItem*)), this, SLOT(slotSelectItem(QListWidgetItem*)));
 }
 
@@ -403,6 +409,10 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigOpenFileOk();
     } else if (MSG_CLOSE_FILE == msgType) {
         emit sigCloseFile();
+    }
+
+    if (msgType == MSG_SWITCHLEFTWIDGET) {    //切换页面
+        emit sigStackSetCurIndex(msgContent.toInt());
     }
 
     if(MSG_NOTIFY_KEY_MSG == msgType){

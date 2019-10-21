@@ -62,7 +62,7 @@ int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgConten
 {
     if (msgType == MSG_SWITCHLEFTWIDGET) {    //切换页面
         emit sigStackSetCurIndex(msgContent.toInt());
-        return ConstantMsg::g_effective_res;
+//        return ConstantMsg::g_effective_res;
     }
     if (msgType == MSG_SLIDER_SHOW_STATE) { //  控制 侧边栏显隐
         emit sigWidgetVisible(msgContent.toInt());

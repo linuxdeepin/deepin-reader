@@ -19,7 +19,7 @@ class ThreadLoadImageOfNote : public QThread
     Q_OBJECT
 public:
     ThreadLoadImageOfNote(QObject *parent = nullptr);
-    ~ThreadLoadImageOfNote(){
+    ~ThreadLoadImageOfNote() Q_DECL_OVERRIDE{
         stopThreadRun();
     }
 
@@ -71,6 +71,7 @@ signals:
     void sigOpenFileOk();
     void sigCloseFile();
     void sigDelNoteItem();
+    void sigStackSetCurIndex(const int&);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -84,6 +85,7 @@ private slots:
     void slotLoadImage(const QImage &);
     void slotDelNoteItem();
     void slotSelectItem(QListWidgetItem *);
+    void slotStackSetCurIndex(const int&);
 
 private:
     void addNotesItem(const QString &text);
@@ -105,6 +107,7 @@ private:
     ThreadLoadImageOfNote m_ThreadLoadImage;      // 加载注释缩略图线程
     QListWidgetItem *m_pNoteItem = nullptr;       // 当前鼠标左键点击的item
     int m_nIndex = -1;                            // 当前注释列表数
+    int m_nPageIndex = -1;                        // 0：整书缩略图列表1：书签列表2：注释列表3：搜索列表
 
 public:
     // IObserver interface

@@ -1,5 +1,6 @@
 #include "BookMarkWidget.h"
 #include "translator/PdfControl.h"
+#include "controller/DataManager.h"
 
 BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
     CustomWidget(QString("BookMarkWidget"), parent)
@@ -44,6 +45,8 @@ void BookMarkWidget::slotAddBookMark(const int &nPage)
     addBookMarkItem(nPage);
 
     slotDocFilePageChanged(nPage);
+
+    DataManager::instance()->setBIsUpdate(true);
 }
 
 /**
@@ -115,6 +118,8 @@ void BookMarkWidget::slotDeleteBookItem(const int &nPage)
 
                     operateDb();
 
+                    DataManager::instance()->setBIsUpdate(true);
+
                     break;
                 }
             }
@@ -149,6 +154,46 @@ void BookMarkWidget::slotLoadImage(const int &page, const QImage &image)
 }
 
 /**
+ * @brief BookMarkWidget::slotDelNoteItem
+ * delete键删除鼠标选中书签item
+ */
+void BookMarkWidget::slotDelNoteItem()
+{
+    if(m_nPageIndex == 1){
+        if (m_pIndexItem) {
+            BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(m_pIndexItem));
+            if (t_widget) {
+                int nPageIndex = t_widget->nPageIndex();
+
+                t_widget->deleteLater();
+                t_widget = nullptr;
+
+                delete  m_pIndexItem;
+                m_pIndexItem = nullptr;
+
+                m_pAllPageList.removeOne(nPageIndex);
+
+                slotDocFilePageChanged(nPageIndex);
+
+                operateDb();
+
+                DataManager::instance()->setBIsUpdate(true);
+            }
+        }
+    }
+}
+
+void BookMarkWidget::slotStackSetCurIndex(const int &index)
+{
+    m_nPageIndex = index;
+}
+
+void BookMarkWidget::slotSelectItem(QListWidgetItem *item)
+{
+    m_pIndexItem = item;
+}
+
+/**
  * @brief BookMarkWidget::initWidget
  * 初始化书签窗体
  */
@@ -172,41 +217,6 @@ void BookMarkWidget::initWidget()
 }
 
 /**
- * @brief BookMarkWidget::keyPressEvent
- * 响应键盘事件
- * @param e
- */
-void BookMarkWidget::keyPressEvent(QKeyEvent *e)
-{
-    QString key = Utils::getKeyshortcut(e);
-
-    if (key == PdfControl::DEL_KEY) {
-        QListWidgetItem *pItem = m_pBookMarkListWidget->currentItem();
-        if (pItem) {
-            BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
-            if (t_widget) {
-                int nPageIndex = t_widget->nPageIndex();
-
-                t_widget->deleteLater();
-                t_widget = nullptr;
-
-                delete  pItem;
-                pItem = nullptr;
-
-                m_pAllPageList.removeOne(nPageIndex);
-
-                slotDocFilePageChanged(nPageIndex);
-
-                operateDb();
-            }
-        }
-    }  else {
-        // Pass event to CustomWidget continue, otherwise you can't type anything after here. ;)
-        CustomWidget::keyPressEvent(e);
-    }
-}
-
-/**
  * @brief BookMarkWidget::initConnection
  *初始化connect
  */
@@ -216,6 +226,9 @@ void BookMarkWidget::initConnection()
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigDeleteBookItem(const int &)), this, SLOT(slotDeleteBookItem(const int &)));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
+    connect(this, SIGNAL(sigDelNoteItem()), this, SLOT(slotDelNoteItem()));
+    connect(this, SIGNAL(sigStackSetCurIndex(const int&)), this, SLOT(slotStackSetCurIndex(const int&)));
+    connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem*)), this, SLOT(slotSelectItem(QListWidgetItem*)));
 }
 
 /**
@@ -293,6 +306,16 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigCloseFile();
     }
 
+    if (msgType == MSG_SWITCHLEFTWIDGET) {    //切换页面
+        emit sigStackSetCurIndex(msgContent.toInt());
+    }
+
+    if(MSG_NOTIFY_KEY_MSG == msgType){
+        if (msgContent == QString("Del")) {
+            emit sigDelNoteItem();
+        }
+    }
+
     return 0;
 }
 
@@ -350,7 +373,6 @@ void LoadBookMarkThread::run()
             m_nStartIndex = 0;
         }
         if (m_nEndIndex >= m_bookMarks) {
-            //m_isRunning = false;
             m_nEndIndex = m_bookMarks - 1;
         }
 

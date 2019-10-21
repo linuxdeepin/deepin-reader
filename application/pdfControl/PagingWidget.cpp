@@ -73,11 +73,17 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
     return QWidget::eventFilter(watched, event);
 }
 
+void PagingWidget::keyPressEvent(QKeyEvent *event)
+{
+    qDebug() << "PagingWidget::keyPressEvent key:" << event->key();
+}
+
 void PagingWidget::initConnections()
 {
     connect(this, SIGNAL(sigJumpToPrevPage()), this, SLOT(slotPrePage()));
     connect(this, SIGNAL(sigJumpToNextPage()), this, SLOT(slotNextPage()));
     connect(this, SIGNAL(sigJumpToSpecifiedPage(const int &)), this, SLOT(slotJumpToSpecifiedPage(const int &)));
+    connect(this, SIGNAL(sigJudgeInputPage(const QString&)), this, SLOT(slotJudgeInputPage(const QString&)));
 }
 
 /**
@@ -128,6 +134,9 @@ int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
         } else if (msgContent == "Down") {
             emit sigJumpToNextPage();
             return ConstantMsg::g_effective_res;
+        }else if (msgContent == "0") {
+            emit slotJudgeInputPage(msgContent);
+            qDebug() << "PagingWidget::dealWithData key=" << msgContent;
         }
     }
     break;
@@ -161,6 +170,14 @@ void PagingWidget::slotJumpToSpecifiedPage(const int &nPage)
     }
 
     DocummentProxy::instance()->pageJump(nPage);
+}
+
+void PagingWidget::slotJudgeInputPage(const QString &)
+{
+   QString t_strPage = QString::number(m_pJumpPageSpinBox->value());
+    if(t_strPage.length() == 1 && m_pJumpPageSpinBox->value() == 0){
+        m_pJumpPageSpinBox->setValue(m_currntPage+1);
+    }
 }
 
 //  设置当前页码, 进行比对,是否可以 上一页\下一页

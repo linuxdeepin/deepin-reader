@@ -31,6 +31,7 @@ signals:
     void sigJumpToSpecifiedPage(const int &);
     void sigJumpToPrevPage();
     void sigJumpToNextPage();
+    void sigJudgeInputPage(const QString&);
 
 public:
     void setTotalPages(int pages);
@@ -40,10 +41,12 @@ private slots:
     void slotPrePage();
     void slotNextPage();
     void slotJumpToSpecifiedPage(const int &);
+    void slotJudgeInputPage(const QString&);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
     bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
 private:
     void initConnections();
