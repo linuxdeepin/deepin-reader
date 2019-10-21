@@ -194,6 +194,16 @@ void NotesWidget::slotDelNoteItem()
 void NotesWidget::slotSelectItem(QListWidgetItem *item)
 {
     m_pNoteItem = item;
+    if(m_pNoteItem){
+        NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
+        if (t_widget) {
+            QString t_uuid = t_widget->noteUUId();
+            int page  = t_widget->nPageIndex();
+
+            auto pDocProxy = DocummentProxy::instance();
+            pDocProxy->jumpToHighLight(t_uuid, page);
+        }
+    }
 }
 
 void NotesWidget::slotStackSetCurIndex(const int &index)
