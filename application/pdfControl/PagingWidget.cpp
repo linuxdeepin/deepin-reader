@@ -31,6 +31,7 @@ void PagingWidget::initWidget()
     connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPage()));
 
     m_pJumpPageSpinBox = new DSpinBox(this);
+    m_pJumpPageSpinBox->setMinimum(1);
     m_pJumpPageSpinBox->setRange(1, 100);
     m_pJumpPageSpinBox->setValue(1);
     m_pJumpPageSpinBox->setMinimumWidth(50);
@@ -59,7 +60,11 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
         if (event->type() == QEvent::KeyPress) {
 
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-
+            //过滤掉零开头的输入
+            if(keyEvent->key()==Qt::Key_0&&m_pJumpPageSpinBox->text().isEmpty())
+            {
+                return  true;
+            }
             if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
 
                 int index = m_pJumpPageSpinBox->value() - 1;
