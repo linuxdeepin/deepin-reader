@@ -10,6 +10,7 @@
 #include <DMessageBox>
 #include <QPrintPreviewDialog>
 #include "translator/Frame.h"
+#include "controller/DataManager.h"
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
@@ -126,9 +127,11 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 
         m_bIsHighLight = pDocummentProxy->annotationClicked(docGlobalPos, selectText, m_strUUid);
 
-        t_strContant.clear();
-        t_strContant = m_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight?1:0)) + QString("%") + QString::number(m_nPage);
-        sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+        if(DataManager::instance()->stackWidgetIndex() == 2){
+            t_strContant.clear();
+            t_strContant = m_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight?1:0)) + QString("%") + QString::number(m_nPage);
+            sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+        }
     }
 }
 
@@ -152,9 +155,11 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
         if(m_bIsHighLight && m_bIsHighLightReleasePoint){
             qDebug() << "select same text";
         }
-        t_strContant.clear();
-        t_strContant = t_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight?1:0)) + QString("%") + QString::number(m_nPage);
-        sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+        if(DataManager::instance()->stackWidgetIndex() == 2){
+            t_strContant.clear();
+            t_strContant = t_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight?1:0)) + QString("%") + QString::number(m_nPage);
+            sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+        }
     }
 
     m_bSelectOrMove = false;

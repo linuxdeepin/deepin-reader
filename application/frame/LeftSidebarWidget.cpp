@@ -6,6 +6,7 @@
 #include "pdfControl/NotesWidget.h"
 #include "pdfControl/ThumbnailWidget.h"
 #include "pdfControl/SearchResWidget.h"
+#include "controller/DataManager.h"
 
 #include "MainOperationWidget.h"
 
@@ -26,6 +27,10 @@ void LeftSidebarWidget::slotStackSetCurIndex(const int &iIndex)
     auto pWidget = this->findChild<DStackedWidget *>();
     if (pWidget) {
         pWidget->setCurrentIndex(iIndex);
+        DataManager::instance()->setStackWidgetIndex(iIndex);
+        if(iIndex != 2){
+            sendMsg(MSG_CLOSE_NOTE_WIDGET, QString(""));
+        }
     }
 }
 
@@ -62,7 +67,7 @@ int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgConten
 {
     if (msgType == MSG_SWITCHLEFTWIDGET) {    //切换页面
         emit sigStackSetCurIndex(msgContent.toInt());
-//        return ConstantMsg::g_effective_res;
+        return ConstantMsg::g_effective_res;
     }
     if (msgType == MSG_SLIDER_SHOW_STATE) { //  控制 侧边栏显隐
         emit sigWidgetVisible(msgContent.toInt());

@@ -147,7 +147,7 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
             return ConstantMsg::g_effective_res;
         }
     }
-    case MSG_CLOSE_NOTE_WIDGET:{
+    case MSG_CLOSE_NOTE_WIDGET: {
         emit sigCloseNoteWidget();
     }
     }

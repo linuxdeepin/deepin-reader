@@ -111,7 +111,6 @@ void NotesWidget::slotOpenFileOk()
         return;
     }
 
-   // m_pNotesList->clear();
     m_mapNotes.clear();
 
     for(int index = 0; index < list_note.count(); ++index)
@@ -164,7 +163,8 @@ void NotesWidget::slotLoadImage(const QImage &image)
 
 void NotesWidget::slotDelNoteItem()
 {
-    if(!m_pNoteItem || m_nPageIndex != 2){
+    int t_nIndex = DataManager::instance()->stackWidgetIndex();
+    if(!m_pNoteItem || t_nIndex != 2){
         return;
     }
 
@@ -204,11 +204,6 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
             pDocProxy->jumpToHighLight(t_uuid, page);
         }
     }
-}
-
-void NotesWidget::slotStackSetCurIndex(const int &index)
-{
-    m_nPageIndex = index;
 }
 
 /**
@@ -269,7 +264,6 @@ void NotesWidget::initConnection()
     connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const QImage &)),
             this, SLOT(slotLoadImage(const QImage &)));
     connect(this, SIGNAL(sigDelNoteItem()), this, SLOT(slotDelNoteItem()));
-    connect(this, SIGNAL(sigStackSetCurIndex(const int&)), this, SLOT(slotStackSetCurIndex(const int&)));
     connect(m_pNotesList, SIGNAL(sigSelectItem(QListWidgetItem*)), this, SLOT(slotSelectItem(QListWidgetItem*)));
 }
 
@@ -419,10 +413,6 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigOpenFileOk();
     } else if (MSG_CLOSE_FILE == msgType) {
         emit sigCloseFile();
-    }
-
-    if (msgType == MSG_SWITCHLEFTWIDGET) {    //切换页面
-        emit sigStackSetCurIndex(msgContent.toInt());
     }
 
     if(MSG_NOTIFY_KEY_MSG == msgType){

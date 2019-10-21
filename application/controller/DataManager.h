@@ -40,11 +40,22 @@ public:
     bool bIsBookMarkState() const;
     void setBIsBookMarkState(bool bIsBookMarkState);
 
+    inline int stackWidgetIndex() const
+    {
+        return m_nStackWidgetIndex;
+    }
+
+    inline void setStackWidgetIndex(const int &index)
+    {
+        m_nStackWidgetIndex = index;
+    }
+
 private:
     QString m_strOnlyFilePath; //  只显示一个pdf 文件
     int     m_nCurShowState = -1;   //  文档当前显示状态
     bool    m_bIsUpdate = false;    //  文档是否有修改
     bool    m_bIsBookMarkState = false;    //  当前页的书签状态
+    int     m_nStackWidgetIndex = -1;      //  左侧缩略图stack widget当前index，0：所有缩略图1：书签缩略图2：注释缩略图3：搜索缩略图
 };
 
 #endif // DATAMANAGER_H

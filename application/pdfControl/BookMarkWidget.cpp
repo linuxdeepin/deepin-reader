@@ -159,7 +159,8 @@ void BookMarkWidget::slotLoadImage(const int &page, const QImage &image)
  */
 void BookMarkWidget::slotDelNoteItem()
 {
-    if(m_nPageIndex == 1){
+    int t_nIndex = DataManager::instance()->stackWidgetIndex();
+    if(t_nIndex == 1){
         if (m_pIndexItem) {
             BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(m_pIndexItem));
             if (t_widget) {
@@ -181,11 +182,6 @@ void BookMarkWidget::slotDelNoteItem()
             }
         }
     }
-}
-
-void BookMarkWidget::slotStackSetCurIndex(const int &index)
-{
-    m_nPageIndex = index;
 }
 
 void BookMarkWidget::slotSelectItem(QListWidgetItem *item)
@@ -227,7 +223,6 @@ void BookMarkWidget::initConnection()
     connect(this, SIGNAL(sigDeleteBookItem(const int &)), this, SLOT(slotDeleteBookItem(const int &)));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
     connect(this, SIGNAL(sigDelNoteItem()), this, SLOT(slotDelNoteItem()));
-    connect(this, SIGNAL(sigStackSetCurIndex(const int&)), this, SLOT(slotStackSetCurIndex(const int&)));
     connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem*)), this, SLOT(slotSelectItem(QListWidgetItem*)));
 }
 
@@ -304,10 +299,6 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
     //  关闭w文件通知消息
     if (MSG_CLOSE_FILE == msgType) {
         emit sigCloseFile();
-    }
-
-    if (msgType == MSG_SWITCHLEFTWIDGET) {    //切换页面
-        emit sigStackSetCurIndex(msgContent.toInt());
     }
 
     if(MSG_NOTIFY_KEY_MSG == msgType){

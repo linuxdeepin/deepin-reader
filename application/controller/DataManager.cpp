@@ -5,6 +5,7 @@ DataManager::DataManager(QObject *parent) :
     QObject (parent)
 {
     m_strOnlyFilePath = "";
+    m_nStackWidgetIndex = 0;
 }
 
 QString DataManager::strOnlyFilePath() const
