@@ -6,6 +6,14 @@ DataManager::DataManager(QObject *parent) :
 {
     m_strOnlyFilePath = "";
     m_nStackWidgetIndex = 0;
+    m_listColor.append((Qt::darkYellow));
+    m_listColor.append((Qt::red));
+    m_listColor.append((Qt::darkMagenta));
+    m_listColor.append((Qt::blue));
+    m_listColor.append((Qt::cyan));
+    m_listColor.append((Qt::green));
+    m_listColor.append((Qt::yellow));
+    m_listColor.append((Qt::white));
 }
 
 QString DataManager::strOnlyFilePath() const
@@ -49,4 +57,13 @@ bool DataManager::bIsBookMarkState() const
 void DataManager::setBIsBookMarkState(bool bIsBookMarkState)
 {
     m_bIsBookMarkState = bIsBookMarkState;
+}
+
+QColor DataManager::color(const int &index)
+{
+    if(index < m_listColor.count()){
+        return  m_listColor.at(index);
+    }
+
+    return (Qt::white);
 }

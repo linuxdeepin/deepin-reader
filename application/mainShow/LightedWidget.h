@@ -5,14 +5,8 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <DLabel>
-
-
-/**
- * @brief The LightedWidget class
- * @    高亮显示 widget
- */
-
-
+#include <DFloatingButton>
+#include <QPalette>
 
 class LightedWidget : public CustomWidget
 {

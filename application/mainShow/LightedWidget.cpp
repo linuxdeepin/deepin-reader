@@ -2,6 +2,7 @@
 #include <QButtonGroup>
 #include <DIconButton>
 #include "translator/MainShow.h"
+#include "controller/DataManager.h"
 
 LightedWidget::LightedWidget(CustomWidget *parent)
     : CustomWidget ("LightedWidget", parent)
@@ -45,9 +46,14 @@ void LightedWidget::initWidget()
     QButtonGroup *btnGroup = new QButtonGroup;
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(SlotOnBtnGroupClicked(int)));
 
-    for (int i = 0; i < 7; i ++ ) {
-        DIconButton *btn = new DIconButton(this);
+    for (int i = 0; i < 8; i ++ ) {
+        //DIconButton *btn = new DIconButton(this);
+        DFloatingButton *btn = new DFloatingButton(this);
         btn->setFixedSize(QSize(16, 16));
+        QPalette pa = btn->palette();
+        btn->setBackgroundRole(QPalette::Button);
+        pa.setBrush(QPalette::Button, DataManager::instance()->color(i));
+        btn->setPalette(pa);
         btnGroup->addButton(btn, i);
         bottomLayout->addWidget(btn);
     }
@@ -63,3 +69,4 @@ void LightedWidget::initWidget()
 
     this->setLayout(mainLayout);
 }
+

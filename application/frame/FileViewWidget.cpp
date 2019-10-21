@@ -259,7 +259,9 @@ void FileViewWidget::slotFileAddAnnotation(const QString &sColor)
         return;
     }
 
-    m_strUUid = DocummentProxy::instance()->addAnnotation(m_pRightClickPoint, m_pRightClickPoint);
+    QColor color = DataManager::instance()->color(sColor.toInt());
+
+    m_strUUid = DocummentProxy::instance()->addAnnotation(m_pRightClickPoint, m_pRightClickPoint, color);
 }
 
 //  移除高亮, 有注释 则删除注释
