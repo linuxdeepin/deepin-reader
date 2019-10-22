@@ -54,7 +54,7 @@ Application::Application(int &argc, char **argv)
     DApplicationSettings savetheme;
 
     installEventFilter(new GlobalEventFilter);
-    //使用这种方式请确保使用dpkg构建后的版本一致，否者不要使用
+    //使用这种方式请确保使用dpkg构建后的版本一致（请测试后再使用），否者不要使用
     // setAboutDialog(new AppAboutWidget);
 
     initChildren();
