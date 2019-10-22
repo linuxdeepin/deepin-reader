@@ -67,6 +67,7 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
                 m_pHandleMoveStartPoint = globalPos;
             }
         } else if (m_nCurrentHandelState == Magnifier_State) {  //  当前是放大镜状态
+            qDebug()<<"pDocummentProxy->showMagnifier(docGlobalPos)";
             pDocummentProxy->showMagnifier(docGlobalPos);
         } else {
             if (m_bSelectOrMove) {  //  鼠标已经按下，　则选中所经过的文字
