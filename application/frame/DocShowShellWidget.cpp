@@ -72,9 +72,13 @@ void DocShowShellWidget::slotOpenNoteWidget(const QString &sPoint)
 
     QStringList ssPointList = sPoint.split(",,,,", QString::SkipEmptyParts);
 
-    QString sSelectText = ssPointList.at(1); //  选中添加注释的文字
+    QString sSelectTextUUid = ssPointList.at(1); //  选中添加注释的文字UUid
 
-    m_pFileViewNoteWidget->setEditText(QString(""));
+    auto pDocummentProxy = DocummentProxy::instance();
+    QString contant;
+    pDocummentProxy->getAnnotationText(sSelectTextUUid,contant);
+
+    m_pFileViewNoteWidget->setEditText(contant);
     m_pFileViewNoteWidget->move(nParentWidth - nWidth - 50, 200);
     m_pFileViewNoteWidget->show();
     m_pFileViewNoteWidget->raise();

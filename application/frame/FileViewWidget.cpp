@@ -218,7 +218,7 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
             if (m_pTextOperationWidget == nullptr) {
                 m_pTextOperationWidget = new TextOperationWidget(this);
             }
-            m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), m_bIsHighLight, sSelectText);
+            m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), m_bIsHighLight, /*sSelectText*/struuid);
         } else {
             if (m_pDefaultOperationWidget == nullptr) {
                 m_pDefaultOperationWidget = new DefaultOperationWidget(this);
