@@ -1,19 +1,23 @@
 #ifndef CUSTOMLABEL_H
 #define CUSTOMLABEL_H
 
-#include <QLabel>
 #include <DWidget>
+#include <DLabel>
+
 #include <QPainter>
 #include <QRectF>
 #include <QString>
 #include <QPainterPath>
+#include <QLabel>
+
+DWIDGET_USE_NAMESPACE
 
 /**
  * @brief The ThumbnailItemWidget class
  * @brief   存放缩略图Label
  */
 
-class CustomLabel : public QLabel
+class CustomLabel : public DLabel
 {
     Q_OBJECT
 public:

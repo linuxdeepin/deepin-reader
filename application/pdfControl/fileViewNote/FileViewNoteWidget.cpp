@@ -22,6 +22,13 @@ void FileViewNoteWidget::setEditText(const QString &note)
     }
 }
 
+void FileViewNoteWidget::closeWidget()
+{
+    slotClosed();
+
+    close();
+}
+
 // 初始化界面
 void FileViewNoteWidget::initWidget()
 {

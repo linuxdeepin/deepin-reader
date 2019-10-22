@@ -1,7 +1,7 @@
 #include "CustomLabel.h"
 
 CustomLabel::CustomLabel(QWidget *parent) :
-    QLabel(parent)
+    DLabel(parent)
 {
 
 }
@@ -13,13 +13,14 @@ CustomLabel::CustomLabel(QWidget *parent) :
  */
 void CustomLabel::paintEvent(QPaintEvent *e)
 {
-    QRectF rectangle(0.0, 0.0, (this->width() * 1.0), (this->height() * 1.0));
+    Q_UNUSED(e);
+    QRectF rectangle(1, 1, (this->width()-2), (this->height()-2));
 
     QPainter painter(this);
     painter.setOpacity(1);
-    painter.setRenderHint( QPainter::Antialiasing, true );
-    painter.setBrush(/*QBrush(QColor(255, 255, 255))*/Qt::white);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setBrush(Qt::white);
     painter.drawRoundedRect(rectangle, 15, 15);
 
-    return QLabel::paintEvent(e);
+    DLabel::paintEvent(e);
 }

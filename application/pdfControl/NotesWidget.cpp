@@ -231,6 +231,8 @@ void NotesWidget::addNotesItem(const QString &text)
 
     bool b_has = hasNoteInList(t_nPage, t_strUUid);
 
+//    qDebug() << "b_has:" << b_has << "    t_nPage:" << t_nPage << "  t_strUUid:" << t_strUUid << "  t_strText:" << t_strText;
+
     if(b_has){
         flushNoteItemText(t_nPage, t_strUUid, t_strText);
     }else{
@@ -238,7 +240,7 @@ void NotesWidget::addNotesItem(const QString &text)
         if (nullptr == dproxy) {
             return;
         }
-        dproxy->getImage(t_nPage, image, 113, 143);
+        dproxy->getImage(t_nPage, image, 28, 50);
         addNewItem(image, t_nPage, t_strUUid, t_strText);
 
         QMap<QString, QString> t_contant;
@@ -246,6 +248,8 @@ void NotesWidget::addNotesItem(const QString &text)
         t_contant.insert(t_strUUid, t_strText);
         m_mapNotes.insert(t_nPage, t_contant);
     }
+
+    DataManager::instance()->setBIsUpdate(true);
 }
 
 /**
@@ -297,15 +301,14 @@ void NotesWidget::addNewItem(const stHighlightContent & note)
     itemWidget->setNoteUUid(note.struuid);
     itemWidget->setLabelPage(note.ipage, 1);
     itemWidget->setTextEditText(note.strcontents);
-    itemWidget->setMinimumSize(QSize(250, 150));
+    itemWidget->setMinimumSize(QSize(190, 80));
 
     QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
     item->setFlags(Qt::NoItemFlags);
-    item->setSizeHint(QSize(250, 150));
+    item->setSizeHint(QSize(190, 80));
 
     m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);
-    qDebug()<<m_pNotesList->count();
 }
 
 /**
@@ -323,11 +326,11 @@ void NotesWidget::addNewItem(const QImage &image, const int &page, const QString
     itemWidget->setNoteUUid(uuid);
     itemWidget->setLabelPage(page, 1);
     itemWidget->setTextEditText(text);
-    itemWidget->setMinimumSize(QSize(250, 150));
+    itemWidget->setMinimumSize(QSize(190, 80));
 
     QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
     item->setFlags(Qt::NoItemFlags);
-    item->setSizeHint(QSize(250, 150));
+    item->setSizeHint(QSize(190, 80));
 
     m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);
@@ -462,7 +465,7 @@ void ThreadLoadImageOfNote::run()
 
             if(t_page != m_stListNote.at(page).ipage){
                 t_page = m_stListNote.at(page).ipage;
-                bl = dproxy->getImage(t_page, image, 113, 143);
+                bl = dproxy->getImage(t_page, image, 28, 50);
             }
 
             t_strUUid = m_stListNote.at(page).struuid;

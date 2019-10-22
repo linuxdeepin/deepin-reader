@@ -111,7 +111,7 @@ void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
 void DocShowShellWidget::slotCloseNoteWidget()
 {
     if(m_pFileViewNoteWidget){
-        m_pFileViewNoteWidget->close();
+        m_pFileViewNoteWidget->closeWidget();
     }
 }
 
@@ -141,6 +141,9 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
     case MSG_OPERATION_TEXT_SHOW_NOTEWIDGET:    //  显示注释窗口
         emit sigShowNoteWidget(msgContent);
         return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET:   //  关闭注释窗口
+        emit sigCloseNoteWidget();
+        break;
     case MSG_NOTIFY_KEY_MSG : {    //  最后一个处理通知消息
         if ("Ctrl+F" == msgContent) {
             emit sigShowFileFind();
