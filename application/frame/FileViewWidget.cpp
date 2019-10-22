@@ -171,6 +171,7 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
                 sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET, t_strContant);
             }
         }
+
     }
 
     m_bSelectOrMove = false;
@@ -269,13 +270,13 @@ void FileViewWidget::slotFileAddAnnotation(const QString &sColor)
         qDebug() << "be hight light";
         return;
     }
-
     QColor color = DataManager::instance()->color(sColor.toInt());
 
     m_strUUid = DocummentProxy::instance()->addAnnotation(m_pRightClickPoint, m_pRightClickPoint, color);
     if(!m_strUUid.isEmpty()){
         m_bIsHighLight = true;
     }
+
 }
 
 //  移除高亮, 有注释 则删除注释

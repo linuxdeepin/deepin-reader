@@ -434,8 +434,6 @@ bool PageBase::clearMagnifierPixmap()
 bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, double width, double height)
 {
     Q_D(PageBase);
-    qDebug() << "getMagnifierPixmap";
-    //    QImage image;
     QPixmap qpixmap;
     if (!d->m_magnifierpixmap.isNull()) {
         qpixmap = d->m_magnifierpixmap;
@@ -446,8 +444,9 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, dou
     }
     QPoint qp = point;
     getImagePoint(qp);
-//    qp.setX(qp.x()+20);
-//    qp.setY(qp.y()+35);
+//    const double scaleX = d->m_scale ;
+//    const double scaleY = d->m_scale ;
+//    qp = QPoint((point.x() - x() - (width() - d->m_scale * d->m_imagewidth ) / 2) / scaleX, (point.y() - y() - (height() - d->m_scale * d->m_imageheight ) / 2) / scaleY);
     double scalex = width / d->m_imagewidth;
     double scaley = height / d->m_imageheight;
     double relx = qp.x() * scalex, rely = qp.y() * scaley;
@@ -481,6 +480,52 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, dou
     }
     pixmap = qpixmap1.transformed(leftmatrix, Qt::SmoothTransformation);
     return true;
+//    Q_D(PageBase);
+//    qDebug() << "getMagnifierPixmap";
+//    //    QImage image;
+//    QPixmap qpixmap;
+//    if (!d->m_magnifierpixmap.isNull()) {
+//        qpixmap = d->m_magnifierpixmap;
+//    } else {
+//        qDebug()<<"getMagnifierPixmap------------";
+//        loadMagnifierCacheThreadStart(width * d->pixelratiof, height * d->pixelratiof);
+//        return false;
+//    }
+//    QPoint qp = point;
+//    getImagePoint(qp);
+//    double scalex = width / d->m_imagewidth;
+//    double scaley = height / d->m_imageheight;
+//    double relx = qp.x() * scalex, rely = qp.y() * scaley;
+//    if (qp.x() * scalex - radius < 0) {
+//        relx = radius;
+//    } else if (qp.x() * scalex > width - radius) {
+//        relx = width - radius;
+//    }
+//    if (qp.y() * scaley - radius < 0) {
+//        rely = radius;
+//    } else if (qp.y() * scaley > height - radius) {
+//        rely = height - radius;
+//    }
+//    //    qDebug() << "getMagnifierPixmap scalex:" << scalex << " scaley: " << scaley << " radius: " << radius << " qp: " << qp;
+//    QPixmap qpixmap1 = qpixmap.copy(relx - radius, rely - radius, radius * 2, radius * 2);
+//    QMatrix leftmatrix;
+//    switch (d->m_rotate) {
+//    case RotateType_90:
+//        leftmatrix.rotate(90);
+//        break;
+//    case RotateType_180:
+//        leftmatrix.rotate(180);
+//        break;
+//    case RotateType_270:
+//        leftmatrix.rotate(270);
+//        break;
+//    default:
+//        pixmap = qpixmap1;
+//        return true;
+//        break;
+//    }
+//    pixmap = qpixmap1.transformed(leftmatrix, Qt::SmoothTransformation);
+//    return true;
 }
 
 void PageBase::loadMagnifierCacheThreadStart(double width, double height)

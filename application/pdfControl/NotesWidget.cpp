@@ -111,6 +111,7 @@ void NotesWidget::slotOpenFileOk()
         return;
     }
 
+   // m_pNotesList->clear();
     m_mapNotes.clear();
 
     for(int index = 0; index < list_note.count(); ++index)
@@ -204,6 +205,7 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
             pDocProxy->jumpToHighLight(t_uuid, page);
         }
     }
+
 }
 
 /**
