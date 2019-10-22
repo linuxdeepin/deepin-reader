@@ -262,6 +262,9 @@ void FileViewWidget::slotFileAddAnnotation(const QString &sColor)
     QColor color = DataManager::instance()->color(sColor.toInt());
 
     m_strUUid = DocummentProxy::instance()->addAnnotation(m_pRightClickPoint, m_pRightClickPoint, color);
+    if(!m_strUUid.isEmpty()){
+        m_bIsHighLight = true;
+    }
 }
 
 //  移除高亮, 有注释 则删除注释
@@ -279,7 +282,7 @@ void FileViewWidget::slotFileAddNote(const QString &note)
 {
     if(!m_bIsHighLight){
         // 添加高亮
-        slotFileAddAnnotation(QString(""));
+        slotFileAddAnnotation(QString::number(0));
     }
 
     QString t_str = m_strUUid.trimmed() + QString("%") + note.trimmed() + QString("%%1").arg(m_nPage);
