@@ -160,11 +160,11 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
     itemWidget->setLabelPage(page, 1);
     itemWidget->setTextEditText(text);
     itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + PdfControl::SEARCH_RES_CONT));
-    itemWidget->setMinimumSize(QSize(250, 150));
+    itemWidget->setMinimumSize(QSize(190, 80));
 
     QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
     item->setFlags(Qt::NoItemFlags);
-    item->setSizeHint(QSize(250, 150));
+    item->setSizeHint(QSize(190, 80));
 
     m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);
@@ -302,7 +302,7 @@ void LoadSearchResThread::run()
 
 
             QImage image;
-            bool bl = dproxy ->getImage(page, image, 113, 143);
+            bool bl = dproxy ->getImage(page, image, 28, 50);
             if (bl) {
                 emit sigLoadImage(page, image);
                 msleep(10);

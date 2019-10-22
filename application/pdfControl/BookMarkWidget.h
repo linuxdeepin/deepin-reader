@@ -68,7 +68,7 @@ signals:
     void sigDeleteBookItem(const int &);
     void sigAddBookMark(const int &);
     void sigCloseFile();
-    void sigDelNoteItem();
+    void sigDelBKItem();
 
 private slots:
     void slotAddBookMark();
@@ -78,7 +78,7 @@ private slots:
     void slotDeleteBookItem(const int &);
     void slotCloseFile();
     void slotLoadImage(const int&, const QImage&);
-    void slotDelNoteItem();
+    void slotDelBkItem();
     void slotSelectItem(QListWidgetItem *);
 
 protected:

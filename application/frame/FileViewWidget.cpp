@@ -122,16 +122,22 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
         m_nPage = pDocummentProxy->pointInWhichPage(m_pStartPoint);
 
         // 判断鼠标点击的地方是否有高亮
-        QString selectText,t_strContant;
+        QString selectText,t_strContant,t_strUUid;
+        bool b_highLight = false;
 
         m_bIsHighLightReleasePoint = false;
 
-        m_bIsHighLight = pDocummentProxy->annotationClicked(docGlobalPos, selectText, m_strUUid);
+        b_highLight = pDocummentProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
 
-        if(DataManager::instance()->stackWidgetIndex() == 2){
-            t_strContant.clear();
-            t_strContant = m_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight?1:0)) + QString("%") + QString::number(m_nPage);
-            sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+        if(b_highLight){
+            m_bIsHighLight = b_highLight;
+            m_strUUid = t_strUUid;
+
+            if(DataManager::instance()->stackWidgetIndex() == 2){
+                t_strContant.clear();
+                t_strContant = m_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight?1:0)) + QString("%") + QString::number(m_nPage);
+                sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+            }
         }
     }
 }
@@ -153,13 +159,17 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
         QString selectText,t_strContant,t_strUUid;
 
         m_bIsHighLightReleasePoint = pDocummentProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
-        if(m_bIsHighLight && m_bIsHighLightReleasePoint){
-            qDebug() << "select same text";
-        }
-        if(DataManager::instance()->stackWidgetIndex() == 2){
-            t_strContant.clear();
-            t_strContant = t_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight?1:0)) + QString("%") + QString::number(m_nPage);
-            sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+        if(m_bIsHighLight){
+            if(m_bIsHighLightReleasePoint){
+                qDebug() << "select same text";
+                if(DataManager::instance()->stackWidgetIndex() == 2){
+                    t_strContant.clear();
+                    t_strContant = t_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight?1:0)) + QString("%") + QString::number(m_nPage);
+                    sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+                }
+            }else {
+                sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET, t_strContant);
+            }
         }
 
     }

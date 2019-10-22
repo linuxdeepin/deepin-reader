@@ -81,13 +81,15 @@ void NotesItemWidget::initWidget()
     t_hLayout->setSpacing(0);
 
     m_pPicture = new CustomLabel(this);
-    m_pPicture->setFixedSize(QSize(120, 150));
+    m_pPicture->setFixedSize(QSize(40, 60));
     m_pPicture->setAlignment(Qt::AlignCenter);
 
     m_pPage = new DLabel;
     m_pSearchResultNum = new DLabel;
     m_pTextEdit = new DTextEdit;
     m_pTextEdit->setEnabled(false);
+    m_pTextEdit->setFixedHeight(51);
+    m_pTextEdit->setMinimumWidth(102);
 
     t_hLayout->addWidget(m_pPage);
     t_hLayout->addWidget(m_pSearchResultNum);

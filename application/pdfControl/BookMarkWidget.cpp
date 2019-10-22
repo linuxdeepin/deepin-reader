@@ -157,7 +157,7 @@ void BookMarkWidget::slotLoadImage(const int &page, const QImage &image)
  * @brief BookMarkWidget::slotDelNoteItem
  * delete键删除鼠标选中书签item
  */
-void BookMarkWidget::slotDelNoteItem()
+void BookMarkWidget::slotDelBkItem()
 {
     int t_nIndex = DataManager::instance()->stackWidgetIndex();
     if(t_nIndex == 1){
@@ -222,7 +222,7 @@ void BookMarkWidget::initConnection()
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigDeleteBookItem(const int &)), this, SLOT(slotDeleteBookItem(const int &)));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
-    connect(this, SIGNAL(sigDelNoteItem()), this, SLOT(slotDelNoteItem()));
+    connect(this, SIGNAL(sigDelBKItem()), this, SLOT(slotDelBkItem()));
     connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem*)), this, SLOT(slotSelectItem(QListWidgetItem*)));
 }
 
@@ -238,16 +238,16 @@ void BookMarkWidget::addBookMarkItem(const int &page)
         return;
     }
     QImage t_image;
-    bool rl = dproxy->getImage(page, t_image, 113, 143);
+    bool rl = dproxy->getImage(page, t_image, 28, 48);
     if (rl) {
         BookMarkItemWidget *t_widget = new BookMarkItemWidget;
         t_widget->setLabelImage(t_image);
         t_widget->setLabelPage(page, 1);
-        t_widget->setMinimumSize(QSize(250, 150));
+        t_widget->setMinimumSize(QSize(190, 80));
 
         QListWidgetItem *item = new QListWidgetItem(m_pBookMarkListWidget);
         item->setFlags(Qt::NoItemFlags);
-        item->setSizeHint(QSize(250, 150));
+        item->setSizeHint(QSize(190, 80));
 
         m_pBookMarkListWidget->addItem(item);
         m_pBookMarkListWidget->setItemWidget(item, t_widget);
@@ -303,7 +303,7 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
 
     if(MSG_NOTIFY_KEY_MSG == msgType){
         if (msgContent == QString("Del")) {
-            emit sigDelNoteItem();
+            emit sigDelBKItem();
         }
     }
 
@@ -385,7 +385,7 @@ void LoadBookMarkThread::run()
                 continue;
             }
 
-            bool bl = DocummentProxy::instance()->getImage(page, image, 113, 143);
+            bool bl = DocummentProxy::instance()->getImage(page, image, 28, 50);
             if (bl) {
                 emit sigLoadImage(page, image);
             }

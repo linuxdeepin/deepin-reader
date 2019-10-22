@@ -219,7 +219,7 @@ void ThreadLoadImage::run()
                 break;
             }
             QImage image;
-            bool bl = dproxy->getImage(page, image, 113, 143);
+            bool bl = dproxy->getImage(page, image, 134, 152);
 
             if (bl) {
                 emit signal_loadImage(page, image);
