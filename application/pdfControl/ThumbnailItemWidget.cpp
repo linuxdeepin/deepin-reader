@@ -13,9 +13,9 @@ void ThumbnailItemWidget::paintEvent(QPaintEvent *event)
 {
     QPalette p;
     if (m_bPaint) {
-        p.setColor(QPalette::Text, QColor(30, 144, 255));
+        p.setColor(QPalette::Text, /*QColor(30, 144, 255)*/Qt::blue);
     } else {
-        p.setColor(QPalette::Text, QColor(0, 0, 0));
+        p.setColor(QPalette::Text, /*QColor(0, 0, 0)*/Qt::black);
     }
 
     m_pPicture->setPalette(p);

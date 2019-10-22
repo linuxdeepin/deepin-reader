@@ -18,7 +18,7 @@ void CustomLabel::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     painter.setOpacity(1);
     painter.setRenderHint( QPainter::Antialiasing, true );
-    painter.setBrush(QBrush(QColor(255, 255, 255)));
+    painter.setBrush(/*QBrush(QColor(255, 255, 255))*/Qt::white);
     painter.drawRoundedRect(rectangle, 15, 15);
 
     return QLabel::paintEvent(e);
