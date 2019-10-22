@@ -19,7 +19,7 @@ class ThreadLoadImageOfNote : public QThread
     Q_OBJECT
 public:
     ThreadLoadImageOfNote(QObject *parent = nullptr);
-    ~ThreadLoadImageOfNote(){
+    ~ThreadLoadImageOfNote() Q_DECL_OVERRIDE{
         stopThreadRun();
     }
 

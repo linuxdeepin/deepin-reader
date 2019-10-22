@@ -168,10 +168,10 @@ public:
     double m_scale;
     mutable bool m_bModified;
     bool m_bslidemodel;
-//    ThreadLoadWords m_threadloadwords;
+    //    ThreadLoadWords m_threadloadwords;
     RotateType_EM m_rotate;
     bool donotneedreloaddoc;
-//    bool m_wordsbload;
+    //    bool m_wordsbload;
     QPoint m_magnifierpoint;
     QPropertyAnimation *animationfirst;
     QPropertyAnimation *animationsecond;
@@ -206,7 +206,7 @@ public:
     virtual bool getImage(int pagenum, QImage &image, double width, double height) = 0;
     virtual bool save(const QString &filePath, bool withChanges)
     {
-//        qDebug() << "do nothing";
+        //        qDebug() << "do nothing";
         return false;
     }
     virtual bool saveas(const QString &filePath, bool withChanges)
@@ -227,7 +227,7 @@ public:
     {
         return false;
     }
-
+    virtual void jumpToHighLight(const QString& uuid,int ipage){};
     void stopLoadPageThread();
     bool openFile(QString filepath);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
@@ -244,18 +244,19 @@ public:
     double adaptHeightAndShow(double height);
     void findNext();
     void findPrev();
-//    bool loadWords();
+    //    bool loadWords();
     int getPageSNum();
     bool exitSlideModel();
     QVector<PageBase *> *getPages();
     PageBase *getPage(int index);
     void magnifierClear();
     void pageMove(double mvx, double mvy);
-//    bool isWordsBeLoad();
+    //    bool isWordsBeLoad();
     bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3);
     bool showSlideModel();
-    void cacularValueXY(int &xvalue, int &yvalue, int cursearch);
+    void cacularValueXY(int &xvalue, int &yvalue,int curpage,bool bsearch=true,QRectF rect=QRectF());
     int pointInWhichPage(QPoint &qpoint);
+
 
 signals:
     void signal_pageChange(int);

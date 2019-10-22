@@ -31,6 +31,7 @@ public:
     void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) override;
     void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1)override;
     bool loadDocumment(QString filepath) override;
+    void jumpToHighLight(const QString& uuid,int ipage) override;
 
 private:
     bool pdfsave(const QString &filePath, bool withChanges);   

@@ -27,7 +27,7 @@
 #include <QDebug>
 #include "frame/AppAboutWidget.h"
 #include "translator/Frame.h"
-
+#include "subjectObserver/ModuleHeader.h"
 namespace {
 
 }  // namespace
@@ -36,23 +36,26 @@ Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
 {
     setAttribute(Qt::AA_UseHighDpiPixmaps);
-    setAttribute(Qt::AA_EnableHighDpiScaling);
-    setAttribute(Qt::AA_ForceRasterWidgets);
+    // setAttribute(Qt::AA_EnableHighDpiScaling);
+    // setAttribute(Qt::AA_ForceRasterWidgets);
 
     initI18n();
 
-    setOrganizationName(Frame::ORGANIZATION_NAME);
     setApplicationName(Frame::sAppName);
-    setApplicationDisplayName(Frame::sAppName);
+    setOrganizationName(Frame::ORGANIZATION_NAME);
 
+    setApplicationDisplayName(Frame::sAppName);
+    setApplicationVersion(DApplication::buildVersion("20191022"));
+    setApplicationAcknowledgementPage(Constant::sAcknowledgementLink);
     setProductIcon(QIcon(":/resources/image/logo/deepin-reader.svg"));
-      setWindowIcon(QIcon(":/resources/image/logo/deepin-reader.svg"));
     setProductName(DApplication::translate("MainWindow", "Deepin Reader"));
+    setApplicationDescription(Frame::sDescription);
 
     DApplicationSettings savetheme;
 
     installEventFilter(new GlobalEventFilter);
-    setAboutDialog(new AppAboutWidget);
+    //使用这种方式请确保使用dpkg构建后的版本一致（请测试后再使用），否者不要使用
+    // setAboutDialog(new AppAboutWidget);
 
     initChildren();
 }
@@ -65,11 +68,11 @@ void Application::handleQuitAction()
 void Application::initChildren()
 {
     dbM = DBManager::instance();
-//   setter = ConfigSetter::instance();
+    //   setter = ConfigSetter::instance();
 }
 
 void Application::initI18n()
 {
     // install translators
-//    loadTranslator(QList<QLocale>() << QLocale::system());
+    //    loadTranslator(QList<QLocale>() << QLocale::system());
 }

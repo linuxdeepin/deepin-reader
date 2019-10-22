@@ -10,6 +10,7 @@
 #include <poppler-qt5.h>
 #include <qglobal.h>
 
+
 SlidWidget::SlidWidget(DWidget *parent): DWidget(parent)
 {
     setMouseTracking(true);
@@ -23,7 +24,7 @@ void SlidWidget::paintEvent(QPaintEvent *event)
 
 MagnifierWidget::MagnifierWidget(DWidget *parent): DWidget(parent)
 {
-    m_magnifiercolor = Qt::white;
+    m_magnifiercolor =Qt::yellow;// Qt::white;
     m_magnifierringwidth = 10;
     m_magnifierradius = 100;
     m_magnifierscale = 3;
@@ -81,7 +82,7 @@ void MagnifierWidget::paintEvent(QPaintEvent *event)
     QPainterPath path = bigCircle - smallCircle;
     qpainter.drawPath(path);
 
-    qpainter.restore();
+   // qpainter.restore();
     QTransform tr;
     tr.translate(smallcirclex, smallcircley);
     tr.scale(1.0, 1.0);
@@ -233,7 +234,7 @@ QPoint DocummentBase::global2RelativePoint(QPoint globalpoint)
         y_offset = scrollBar_Y->value();
     QPoint qpoint = QPoint(mapFromGlobal(globalpoint).x() + x_offset,
                            mapFromGlobal(globalpoint).y() + y_offset);
-    //    qDebug() << "globalpoint:" << globalpoint << " relativepoint:" << qpoint;
+        qDebug() << "globalpoint:" << globalpoint << " relativepoint:" << qpoint<<"mapFromGlobal(globalpoint)"<<mapFromGlobal(globalpoint);
     return qpoint;
 }
 
@@ -450,7 +451,7 @@ int DocummentBase::pointInWhichPage(QPoint &qpoint)
             }
             break;
         }
-    } 
+    }
     return pagenum;
 }
 
@@ -507,6 +508,7 @@ bool DocummentBase::showMagnifier(QPoint point)
     qDebug() << "showMagnifier pagenum:" << pagenum;
     if (-1 != pagenum) {
         if (pagenum != d->m_lastmagnifierpagenum && -1 != d->m_lastmagnifierpagenum) {
+            qDebug()<<"++++++"<<pagenum<<d->m_lastmagnifierpagenum;
             if (pagenum > d->m_lastmagnifierpagenum && d->m_lastmagnifierpagenum - 3 > 0) {
                 PageBase *ppage = d->m_pages.at(d->m_lastmagnifierpagenum - 3);
                 ppage->clearMagnifierPixmap();
@@ -569,6 +571,34 @@ bool DocummentBase::showMagnifier(QPoint point)
         PageBase *ppage = d->m_pages.at(pagenum);
         QPixmap pixmap;
         d->m_magnifierpage = pagenum;
+        /*begin 2019-10-21 kyz*/
+        double curwidth = d->m_scale * d->m_imagewidht;
+        double curheight = d->m_scale * d->m_imageheight;
+       double left=(d->m_widgets.at(pagenum)->width()-curwidth)/2;
+       qDebug()<<"showMagnifier"<<qpoint<<left;
+//        if(qpoint.x()<left||qpoint.x()>left+curwidth)
+//        {
+//            qDebug()<<"********________++++++++++";
+//            QPixmap pixmapempty;
+//            d->m_magnifierwidget->setPixmap(pixmapempty);
+
+//            d->m_magnifierwidget->setPoint(gpoint);
+//            d->m_magnifierwidget->startShow();
+//            d->m_magnifierwidget->show();
+//            d->m_magnifierwidget->update();
+//        }
+//        else {
+//            if (ppage ->getMagnifierPixmap(pixmap, qpoint, d->m_magnifierwidget->getMagnifierRadius(), ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale())) {
+//                d->m_magnifierwidget->setPixmap(pixmap);
+
+//                d->m_magnifierwidget->setPoint(gpoint);
+//                d->m_magnifierwidget->startShow();
+//                d->m_magnifierwidget->show();
+//                d->m_magnifierwidget->update();
+//            }
+//        }
+         /*end 2019-10-21 kyz*/
+
         if (ppage ->getMagnifierPixmap(pixmap, qpoint, d->m_magnifierwidget->getMagnifierRadius(), ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale())) {
             d->m_magnifierwidget->setPixmap(pixmap);
 
@@ -954,26 +984,32 @@ bool DocummentBase::showSlideModel()
     return false;
 }
 
-void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int cursearch)
+void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool bsearch, QRectF rectsource)
 {
     Q_D(DocummentBase);
     double curwidth = d->m_scale * d->m_imagewidht;
     double curheight = d->m_scale * d->m_imageheight;
-    PageBase *pagebase = d->m_pages.at(d->m_findcurpage);
-    pagebase->setCurSearchShow(true);
+    PageBase *pagebase = d->m_pages.at(curpage);
+  //  d->m_widgets.at(curpage)->layout()->spacing();
+    QRectF rectorg;
+    if(bsearch)
+    {
+        pagebase->setCurSearchShow(true);
+        rectorg= pagebase->setCurHightLight(d->m_cursearch);
+    }else {
+        rectorg=rectsource;
+    }
 
-    d->m_widgets.at(d->m_findcurpage)->layout()->spacing();
-    QRectF rectorg = pagebase->setCurHightLight(d->m_cursearch);//translateRect执行后返回rect为缩放后的值
-    rectorg = pagebase->translateRect(rectorg, d->m_scale, d->m_rotate);
+    rectorg = pagebase->translateRect(rectorg, d->m_scale, d->m_rotate);//translateRect执行后返回rect为缩放后的值
     if (d->m_viewmode == ViewMode_SinglePage) {
         switch (d->m_rotate) {
         case RotateType_0:
         case RotateType_180: {
             qDebug() << "RotateType_0 RotateType_180";
-            double topspace = (d->m_widgets.at(d->m_findcurpage)->height() - curheight) / 2;
-            double leftspace = (d->m_widgets.at(d->m_findcurpage)->width() - curwidth) / 2;
+            double topspace = (d->m_widgets.at(curpage)->height() - curheight) / 2;
+            double leftspace = (d->m_widgets.at(curpage)->width() - curwidth) / 2;
             int widgetheight = frameRect().height();
-            yvalue = d->m_widgets.at(d->m_findcurpage)->y() + topspace + rectorg.y() - widgetheight / 2;
+            yvalue = d->m_widgets.at(curpage)->y() + topspace + rectorg.y() - widgetheight / 2;
             //横向有缩放
             if (frameRect().width() < curwidth) {
                 int iwidth = rectorg.x() + leftspace;
@@ -988,10 +1024,10 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int cursearch)
         case RotateType_90:
         case RotateType_270: {
             qDebug() << "RotateType_90  RotateType_270";
-            double topspace = (d->m_widgets.at(d->m_findcurpage)->height() - curwidth) / 2;
-            double leftspace = (d->m_widgets.at(d->m_findcurpage)->width() - curheight) / 2;
+            double topspace = (d->m_widgets.at(curpage)->height() - curwidth) / 2;
+            double leftspace = (d->m_widgets.at(curpage)->width() - curheight) / 2;
             int widgetheight = frameRect().height();
-            yvalue = d->m_widgets.at(d->m_findcurpage)->y() + topspace + rectorg.y() - widgetheight / 2;
+            yvalue = d->m_widgets.at(curpage)->y() + topspace + rectorg.y() - widgetheight / 2;
             //横向有缩放
             if (frameRect().width() < curheight) {
                 int iwidth = rectorg.x() + leftspace;
@@ -1005,7 +1041,7 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int cursearch)
             break;
         }
     } else if (d->m_viewmode == ViewMode_FacingPage) {
-        int index=d->m_findcurpage/2;
+        int index=curpage/2;
         int ispace = d->m_widgets.at(index)->layout()->spacing();
         switch (d->m_rotate) {
         case RotateType_0:
@@ -1014,7 +1050,7 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int cursearch)
             int widgetheight = frameRect().height();
             yvalue = d->m_widgets.at(index)->y() + topspace + rectorg.y() - widgetheight / 2;
 
-            if(0==d->m_findcurpage%2)
+            if(0==curpage%2)
             {
                 //左侧
                 double leftspace = (d->m_widgets.at(index)->width()-ispace)/2 - curwidth;
@@ -1039,7 +1075,7 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int cursearch)
             double topspace = (d->m_widgets.at(index)->height() - curwidth) / 2;
             int widgetheight = frameRect().height();
             yvalue = d->m_widgets.at(index)->y() + topspace + rectorg.y() - widgetheight / 2;
-            if(0==d->m_findcurpage%2)
+            if(0==curpage%2)
             {
                 //左侧
                 double leftspace = (d->m_widgets.at(index)->width()-ispace)/2 - curheight;
@@ -1183,9 +1219,9 @@ double DocummentBase::adaptHeightAndShow(double height)
 
 void DocummentBase::findNext()
 {
-    Q_D(DocummentBase);   
+    Q_D(DocummentBase);
     if (d->m_pagecountsearch.size() <= 0 || d->m_findcurpage < 0) return;
-     qDebug() << "----------findNext--"<<d->m_findcurpage<<"--"<<d->m_pagecountsearch.lastKey();
+    qDebug() << "----------findNext--"<<d->m_findcurpage<<"--"<<d->m_pagecountsearch.lastKey();
     if (d->m_findcurpage == d->m_pagecountsearch.lastKey() &&
             d->m_cursearch >= d->m_pagecountsearch.find(d->m_findcurpage).value()) {
         d->m_findcurpage = d->m_pagecountsearch.firstKey();
@@ -1211,7 +1247,7 @@ void DocummentBase::findNext()
                 d->m_cursearch+=2;
             }
         }
-        cacularValueXY(xvalue, yvalue, d->m_cursearch);
+        cacularValueXY(xvalue, yvalue,d->m_findcurpage);
         QScrollBar *scrollBar_Y = verticalScrollBar();
         if (scrollBar_Y)
             scrollBar_Y->setValue(yvalue);
@@ -1228,7 +1264,7 @@ void DocummentBase::findNext()
         if (++it != d->m_pagecountsearch.end()) {
             d->m_cursearch = 1;
             d->m_findcurpage = it.key();
-            cacularValueXY(xvalue, yvalue, d->m_cursearch);
+            cacularValueXY(xvalue, yvalue,d->m_findcurpage);
 
             QScrollBar *scrollBar_Y = verticalScrollBar();
             if (scrollBar_Y)
@@ -1273,7 +1309,7 @@ void DocummentBase::findPrev()
                 return;
             }
         }
-        cacularValueXY(xvalue, yvalue, d->m_cursearch);
+        cacularValueXY(xvalue, yvalue,d->m_findcurpage);
         QScrollBar *scrollBar_Y = verticalScrollBar();
         if (scrollBar_Y)
             scrollBar_Y->setValue(yvalue);
@@ -1289,7 +1325,7 @@ void DocummentBase::findPrev()
         if (--it != d->m_pagecountsearch.end()) {
             d->m_cursearch = it.value();
             d->m_findcurpage = it.key();
-            cacularValueXY(xvalue, yvalue, d->m_cursearch);
+            cacularValueXY(xvalue, yvalue,d->m_findcurpage);
             QScrollBar *scrollBar_Y = verticalScrollBar();
             if (scrollBar_Y)
                 scrollBar_Y->setValue(yvalue);

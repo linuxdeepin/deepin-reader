@@ -68,6 +68,7 @@ signals:
     void sigDeleteBookItem(const int &);
     void sigAddBookMark(const int &);
     void sigCloseFile();
+    void sigDelNoteItem();
 
 private slots:
     void slotAddBookMark();
@@ -77,10 +78,11 @@ private slots:
     void slotDeleteBookItem(const int &);
     void slotCloseFile();
     void slotLoadImage(const int&, const QImage&);
+    void slotDelNoteItem();
+    void slotSelectItem(QListWidgetItem *);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
-    void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
 
 private:
     void initConnection();
@@ -99,6 +101,7 @@ private:
     QList<int>      m_pAllPageList;
     LoadBookMarkThread m_loadBookMarkThread;
     BookMarkItemWidget *m_pItemWidget = nullptr; // 当前要填充图片的ItemWidget
+    QListWidgetItem *m_pIndexItem = nullptr;     // 当前鼠标左键点击的item
 };
 
 #endif // BOOKMARKFORM_H

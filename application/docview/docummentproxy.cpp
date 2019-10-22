@@ -435,6 +435,14 @@ int DocummentProxy::pointInWhichPage(QPoint pos)
     return  -1;
 }
 
+void DocummentProxy::jumpToHighLight(const QString &uuid, int ipage)
+{
+    if(m_documment)
+    {
+        m_documment->jumpToHighLight(uuid,ipage);
+    }
+}
+
 bool DocummentProxy::closeFile()
 {
 

@@ -51,7 +51,7 @@ public:
     bool setViewModeAndShow(ViewMode_EM viewmode);
     bool showMagnifier(QPoint point);
     bool closeMagnifier();
-    bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3);
+    bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 2);
     QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow);
     bool save(const QString &filepath, bool withChanges);
     bool saveas(const QString &filepath, bool withChanges);
@@ -78,6 +78,7 @@ public:
     bool annotationClicked(const QPoint &pos, QString &strtext,QString& struuid);
     void getAllAnnotation(QList<stHighlightContent>& listres);
     int  pointInWhichPage(QPoint pos);
+    void jumpToHighLight(const QString& uuid,int ipage);
 signals:
     void signal_pageChange(int);
     bool signal_pageJump(int);

@@ -10,6 +10,7 @@
 #include <DMessageBox>
 #include <QPrintPreviewDialog>
 #include "translator/Frame.h"
+#include "controller/DataManager.h"
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
@@ -66,6 +67,7 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
                 m_pHandleMoveStartPoint = globalPos;
             }
         } else if (m_nCurrentHandelState == Magnifier_State) {  //  当前是放大镜状态
+            qDebug()<<"pDocummentProxy->showMagnifier(docGlobalPos)";
             pDocummentProxy->showMagnifier(docGlobalPos);
         } else {
             if (m_bSelectOrMove) {  //  鼠标已经按下，　则选中所经过的文字
@@ -126,9 +128,11 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 
         m_bIsHighLight = pDocummentProxy->annotationClicked(docGlobalPos, selectText, m_strUUid);
 
-        t_strContant.clear();
-        t_strContant = m_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight?1:0)) + QString("%") + QString::number(m_nPage);
-        sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+        if(DataManager::instance()->stackWidgetIndex() == 2){
+            t_strContant.clear();
+            t_strContant = m_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight?1:0)) + QString("%") + QString::number(m_nPage);
+            sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+        }
     }
 }
 
@@ -152,9 +156,12 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
         if(m_bIsHighLight && m_bIsHighLightReleasePoint){
             qDebug() << "select same text";
         }
-        t_strContant.clear();
-        t_strContant = t_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight?1:0)) + QString("%") + QString::number(m_nPage);
-        sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+        if(DataManager::instance()->stackWidgetIndex() == 2){
+            t_strContant.clear();
+            t_strContant = t_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight?1:0)) + QString("%") + QString::number(m_nPage);
+            sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+        }
+
     }
 
     m_bSelectOrMove = false;
@@ -253,8 +260,13 @@ void FileViewWidget::slotFileAddAnnotation(const QString &sColor)
         qDebug() << "be hight light";
         return;
     }
+    QColor color = DataManager::instance()->color(sColor.toInt());
 
-    m_strUUid = DocummentProxy::instance()->addAnnotation(m_pRightClickPoint, m_pRightClickPoint);
+    m_strUUid = DocummentProxy::instance()->addAnnotation(m_pRightClickPoint, m_pRightClickPoint, color);
+    if(!m_strUUid.isEmpty()){
+        m_bIsHighLight = true;
+    }
+
 }
 
 //  移除高亮, 有注释 则删除注释
@@ -272,7 +284,7 @@ void FileViewWidget::slotFileAddNote(const QString &note)
 {
     if(!m_bIsHighLight){
         // 添加高亮
-        slotFileAddAnnotation(QString(""));
+        slotFileAddAnnotation(QString::number(0));
     }
 
     QString t_str = m_strUUid.trimmed() + QString("%") + note.trimmed() + QString("%%1").arg(m_nPage);

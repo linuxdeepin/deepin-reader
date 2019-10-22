@@ -6,6 +6,7 @@
 #include "pdfControl/NotesWidget.h"
 #include "pdfControl/ThumbnailWidget.h"
 #include "pdfControl/SearchResWidget.h"
+#include "controller/DataManager.h"
 
 #include "MainOperationWidget.h"
 
@@ -26,6 +27,10 @@ void LeftSidebarWidget::slotStackSetCurIndex(const int &iIndex)
     auto pWidget = this->findChild<DStackedWidget *>();
     if (pWidget) {
         pWidget->setCurrentIndex(iIndex);
+        DataManager::instance()->setStackWidgetIndex(iIndex);
+        if(iIndex != 2){
+            sendMsg(MSG_CLOSE_NOTE_WIDGET, QString(""));
+        }
     }
 }
 

@@ -440,11 +440,14 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, dou
     if (!d->m_magnifierpixmap.isNull()) {
         qpixmap = d->m_magnifierpixmap;
     } else {
+        qDebug()<<"getMagnifierPixmap------------";
         loadMagnifierCacheThreadStart(width * d->pixelratiof, height * d->pixelratiof);
         return false;
     }
     QPoint qp = point;
     getImagePoint(qp);
+//    qp.setX(qp.x()+20);
+//    qp.setY(qp.y()+35);
     double scalex = width / d->m_imagewidth;
     double scaley = height / d->m_imageheight;
     double relx = qp.x() * scalex, rely = qp.y() * scaley;
@@ -492,7 +495,6 @@ void PageBase::loadMagnifierCacheThreadStart(double width, double height)
 
 void PageBase::slot_RenderFinish(QImage image)
 {
-
     Q_D(PageBase);
     image.setDevicePixelRatio(devicePixelRatioF());
     QPixmap map = QPixmap::fromImage(image);

@@ -94,9 +94,12 @@ QString PagePdf::addAnnotation(const QColor &color)
     if (d->paintrects.size() > 0) {
         uniqueName = addHighlightAnnotation(color);
         qDebug()<<"addAnnotation uniquename"<<uniqueName;
-        clearImage();
-        showImage(d->m_scale, d->m_rotate);
+        // clearImage();
+        //showImage(d->m_scale, d->m_rotate);
     }
+    QImage image;
+    getImage(image,d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
+    slot_RenderFinish(image);
     return  uniqueName;
 }
 
@@ -178,8 +181,11 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
             }
         }
     }
-    clearImage();
-    showImage(d->m_scale, d->m_rotate);
+    QImage image;
+    getImage(image,d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
+    slot_RenderFinish(image);
+//    clearImage();
+//    showImage(d->m_scale, d->m_rotate);
     return uniqueName;
 }
 
@@ -193,8 +199,11 @@ void PagePdf::removeAnnotation(const QString &struuid)
         if (!struuid.isEmpty() && annote->uniqueName().indexOf(struuid)>= 0) { //必须判断
             removeAnnotation(annote);
             listannote.removeAt(index);
-            clearImage();
-            showImage(d->m_scale, d->m_rotate);
+            QImage image;
+            getImage(image,d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
+            slot_RenderFinish(image);
+//            clearImage();
+//            showImage(d->m_scale, d->m_rotate);
             break;
         }
         ++index;
