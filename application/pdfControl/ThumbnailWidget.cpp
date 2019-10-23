@@ -70,6 +70,7 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 
         int nJumpPage = m_pOldThumbnailItemWidget->nPageIndex();
         m_pPageWidget->setCurrentPageValue(nJumpPage);
+        sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET, QString(""));
     }
 }
 

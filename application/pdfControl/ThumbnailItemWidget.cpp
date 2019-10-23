@@ -13,7 +13,7 @@ void ThumbnailItemWidget::paintEvent(QPaintEvent *event)
 {
     QPalette p;
     if (m_bPaint) {
-        p.setColor(QPalette::Text, /*Qt::blue*/QColor(0, 129, 255));
+        p.setColor(QPalette::Text, this->palette().highlight().color());
     } else {
         p.setColor(QPalette::Text, Qt::black);
     }
