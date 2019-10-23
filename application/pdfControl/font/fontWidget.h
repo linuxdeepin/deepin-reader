@@ -85,11 +85,11 @@ private:
     MenuLab *m_pSuitWLb = nullptr;           // 自适应宽度文字标签
     MenuLab *m_pRotateLeftLb = nullptr;      // 向左旋转文字标签
     MenuLab *m_pRotateRightLb = nullptr;     // 向右旋转文字标签
-    DLabel *m_pDoubPageViewLab = nullptr;    // 双页显示ICON标签
-    DLabel *m_pSuitHLab = nullptr;           // 自适应高度ICON标签
-    DLabel *m_pSuitWLab = nullptr;           // 自适应宽度ICON标签
-    DLabel *m_pRotateLeftLab = nullptr;      // 向左旋转ICON标签
-    DLabel *m_pRotateRightLab = nullptr;     // 向右旋转ICON标签
+    MenuLab *m_pDoubPageViewLab = nullptr;    // 双页显示ICON标签
+    MenuLab *m_pSuitHLab = nullptr;           // 自适应高度ICON标签
+    MenuLab *m_pSuitWLab = nullptr;           // 自适应宽度ICON标签
+    MenuLab *m_pRotateLeftLab = nullptr;      // 向左旋转ICON标签
+    MenuLab *m_pRotateRightLab = nullptr;     // 向右旋转ICON标签
     int m_rotate = 0;                        // 旋转角度
     int m_rotateType = RotateType_Normal;    // 旋转类型
     bool m_bSuitH = false;                   // 自适应高度

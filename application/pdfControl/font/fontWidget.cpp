@@ -122,9 +122,10 @@ void FontWidget::initWidget()
     m_pDoubPageViewLb->setFont(ft);
     m_pDoubPageViewLb->setFixedSize(QSize(120, 25));
 
-    m_pDoubPageViewLab = new DLabel;
+    m_pDoubPageViewLab = new MenuLab(this);
     m_pDoubPageViewLab->setFixedSize(QSize(30, 25));
-    connect(m_pDoubPageViewLb, SIGNAL(clicked()), SLOT(slotSetDoubPageViewCheckIcon()));
+    connect(m_pDoubPageViewLb, SIGNAL(clicked()), this, SLOT(slotSetDoubPageViewCheckIcon()));
+    connect(m_pDoubPageViewLab, SIGNAL(clicked()), this, SLOT(slotSetDoubPageViewCheckIcon()));
     t_pHLayout3->addWidget(m_pDoubPageViewLb);
     t_pHLayout3->addWidget(m_pDoubPageViewLab);
 
@@ -134,9 +135,10 @@ void FontWidget::initWidget()
     ft.setPointSize(12);
     m_pSuitHLb->setFont(ft);
     m_pSuitHLb->setFixedSize(QSize(120, 25));
-    connect(m_pSuitHLb, SIGNAL(clicked()), SLOT(slotSetSuitHCheckIcon()));
-    m_pSuitHLab = new DLabel;
+    connect(m_pSuitHLb, SIGNAL(clicked()), this, SLOT(slotSetSuitHCheckIcon()));
+    m_pSuitHLab = new MenuLab(this);
     m_pSuitHLab->setFixedSize(QSize(30, 25));
+    connect(m_pSuitHLab, SIGNAL(clicked()), this, SLOT(slotSetSuitHCheckIcon()));
     t_pHLayout4->addWidget(m_pSuitHLb);
     t_pHLayout4->addWidget(m_pSuitHLab);
 
@@ -146,9 +148,10 @@ void FontWidget::initWidget()
     ft.setPointSize(12);
     m_pSuitWLb->setFont(ft);
     m_pSuitWLb->setFixedSize(QSize(120, 25));
-    connect(m_pSuitWLb, SIGNAL(clicked()), SLOT(slotSetSuitWCheckIcon()));
-    m_pSuitWLab = new DLabel;
+    connect(m_pSuitWLb, SIGNAL(clicked()), this, SLOT(slotSetSuitWCheckIcon()));
+    m_pSuitWLab = new MenuLab(this);
     m_pSuitWLab->setFixedSize(QSize(30, 25));
+    connect(m_pSuitWLab, SIGNAL(clicked()), this, SLOT(slotSetSuitWCheckIcon()));
     t_pHLayout5->addWidget(m_pSuitWLb);
     t_pHLayout5->addWidget(m_pSuitWLab);
 
@@ -158,9 +161,10 @@ void FontWidget::initWidget()
     ft.setPointSize(12);
     m_pRotateLeftLb->setFont(ft);
     m_pRotateLeftLb->setFixedSize(QSize(140, 25));
-    connect(m_pRotateLeftLb, SIGNAL(clicked()), SLOT(slotSetRotateLeftCheckIcon()));
-    m_pRotateLeftLab = new DLabel;
+    connect(m_pRotateLeftLb, SIGNAL(clicked()), this, SLOT(slotSetRotateLeftCheckIcon()));
+    m_pRotateLeftLab = new MenuLab(this);
     m_pRotateLeftLab->setFixedSize(QSize(30, 25));
+    connect(m_pRotateLeftLab, SIGNAL(clicked()), this, SLOT(slotSetRotateLeftCheckIcon()));
     t_pHLayout6->addWidget(m_pRotateLeftLb);
     t_pHLayout6->addWidget(m_pRotateLeftLab);
 
@@ -170,9 +174,10 @@ void FontWidget::initWidget()
     ft.setPointSize(12);
     m_pRotateRightLb->setFont(ft);
     m_pRotateRightLb->setFixedSize(QSize(140, 25));
-    connect(m_pRotateRightLb, SIGNAL(clicked()), SLOT(slotSetRotateRightCheckIcon()));
-    m_pRotateRightLab = new DLabel;
+    connect(m_pRotateRightLb, SIGNAL(clicked()), this, SLOT(slotSetRotateRightCheckIcon()));
+    m_pRotateRightLab = new MenuLab(this);
     m_pRotateRightLab->setFixedSize(QSize(30, 25));
+    connect(m_pRotateRightLab, SIGNAL(clicked()), this, SLOT(slotSetRotateRightCheckIcon()));
     t_pHLayout7->addWidget(m_pRotateRightLb);
     t_pHLayout7->addWidget(m_pRotateRightLab);
 
