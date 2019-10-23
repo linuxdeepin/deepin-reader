@@ -8,14 +8,24 @@
 #include <DFloatingButton>
 #include <QPalette>
 
+/**
+ * @brief The LightedWidget class
+ * @brief   添加高亮, 颜色选择
+ */
+
+
 class LightedWidget : public CustomWidget
 {
     Q_OBJECT
 public:
     LightedWidget(CustomWidget *parent = nullptr);
 
+signals:
+    void sigAddHighLighted();
+
 private slots:
     void SlotOnBtnGroupClicked(int);
+    void SlotRemoveHighLighted();
 
 private:
     int     m_nOldId = -1;

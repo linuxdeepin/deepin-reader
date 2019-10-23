@@ -20,8 +20,11 @@ class TextOperationWidget : public CustomWidget
 public:
     TextOperationWidget(CustomWidget *parent = nullptr);
 
+signals:
+    void sigRemoveHighLighted();    //  告诉高亮显示框, 当前高亮被移除了
+
 public:
-    void showWidget(const int &, const int &, const bool &, const QString &);
+    void showWidget(const int &, const int &, const bool &, const QString &, const QString &);
 
 private slots:
     void SlotBtnCopyClicked();
@@ -29,13 +32,16 @@ private slots:
     void SlotBtnAddAnnotationClicked();
     void SlotBtnAddBookMarkClicked();
 
+    void SlotSetBtnRemoveHighLightedAble();
+
 private:
     void sendMsgAndHide(const int &, const QString &msgContent = "");
     DPushButton *createBtn(const QString &, const char *member);
 
 private:
     int     m_nShowY = -1;
-    QString     m_strSelectText = "";   //  选中的文字
+    QString     m_strSelectText = "";       //  选中的文字
+    QString     m_strAnnotationUuid = "";   //  高亮的uuid
 
     // IObserver interface
 public:

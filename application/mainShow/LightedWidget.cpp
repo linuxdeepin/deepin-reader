@@ -17,8 +17,14 @@ void LightedWidget::SlotOnBtnGroupClicked(int nId)
     if (m_nOldId != nId) {
         m_nOldId = nId;
 
+        emit sigAddHighLighted();
         sendMsg(MSG_OPERATION_TEXT_ADD_HIGHLIGHTED, QString::number(nId));
     }
+}
+
+void LightedWidget::SlotRemoveHighLighted()
+{
+    m_nOldId = -1;
 }
 
 int LightedWidget::dealWithData(const int &msgType, const QString &)

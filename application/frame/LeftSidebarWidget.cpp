@@ -28,7 +28,7 @@ void LeftSidebarWidget::slotStackSetCurIndex(const int &iIndex)
     if (pWidget) {
         pWidget->setCurrentIndex(iIndex);
         DataManager::instance()->setStackWidgetIndex(iIndex);
-        if(iIndex != 2){
+        if (iIndex != 2) {
             sendMsg(MSG_CLOSE_NOTE_WIDGET, QString(""));
         }
     }
@@ -72,10 +72,6 @@ int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgConten
     if (msgType == MSG_SLIDER_SHOW_STATE) { //  控制 侧边栏显隐
         emit sigWidgetVisible(msgContent.toInt());
         return  ConstantMsg::g_effective_res;
-    }
-
-    if (msgType == MSG_OPERATION_FULLSCREEN) { //  全屏
-        emit sigWidgetVisible(0);
     }
 
     return 0;

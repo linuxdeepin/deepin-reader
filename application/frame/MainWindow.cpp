@@ -42,7 +42,7 @@ MainWindow::~MainWindow()
     // We don't need clean pointers because application has exit here.
     if (m_pMsgSubject) {
         m_pMsgSubject->removeObserver(this);
-            m_pMsgSubject->stopThreadRun();
+        m_pMsgSubject->stopThreadRun();
     }
 
     if (m_pNotifySubject) {
@@ -61,9 +61,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::initUI()
 {
-    setCentralWidget(new MainWidget);
-
     titlebar()->addWidget(new TitleWidget, Qt::AlignLeft);
+
+    setCentralWidget(new MainWidget);
 }
 
 void MainWindow::initConnections()
@@ -118,13 +118,13 @@ void MainWindow::initTitlebar()
 
 //  打开 所在文件夹
 void MainWindow::onOpenFolder()
-{   
+{
     QString strFilePath = DataManager::instance()->strOnlyFilePath();
     if (strFilePath != "") {
         int nLastPos = strFilePath.lastIndexOf('/');
         strFilePath = strFilePath.mid(0, nLastPos);
-        strFilePath=QString("file://") +strFilePath;
-       QDesktopServices::openUrl(QUrl(strFilePath));
+        strFilePath = QString("file://") + strFilePath;
+        QDesktopServices::openUrl(QUrl(strFilePath));
     }
 }
 
@@ -134,14 +134,14 @@ void MainWindow::onFullScreen()
     slotAppShowState(0);
     DataManager::instance()->setCurShowState(FILE_FULLSCREEN);  //  全屏状态
     sendMsg(MSG_OPERATION_FULLSCREEN);
-    sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET, QString(""));
+//    sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET, QString(""));
 }
 
 //  放映
 void MainWindow::onScreening()
 {
     slotAppShowState(0);
-    sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET, QString(""));
+//    sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET, QString(""));
     sendMsg(MSG_OPERATION_SLIDE);
 }
 

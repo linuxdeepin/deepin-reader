@@ -30,13 +30,16 @@ void TitleWidget::slotOpenFileOk()
 void TitleWidget::slotAppFullScreen()
 {
     m_pThumbnailBtn->setChecked(false);
+
+    //  侧边栏 隐藏
+    sendMsgToSubject(MSG_SLIDER_SHOW_STATE, "0");
 }
 
 //  退出放大鏡
 void TitleWidget::slotMagnifierCancel()
 {
     m_pMagnifierBtn->setChecked(false);
-    sendMsgToSubject(MSG_MAGNIFYING, QString::number(0));
+    sendMsgToSubject(MSG_MAGNIFYING, "0");
 }
 
 void TitleWidget::initWidget()
@@ -186,7 +189,7 @@ DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
     btn->setIcon(QIcon(normalPic));
     btn->setFixedSize(QSize(36, 36));
     btn->setIconSize(QSize(36, 36));
-   // btn->setFlat(true);//设置后背景不自绘
+    // btn->setFlat(true);//设置后背景不自绘
 
     btn->setToolTip(btnName);
     btn->setCheckable(bCheckable);
@@ -221,7 +224,7 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         emit sigOpenFileOk();
-    } else if (msgType == MSG_OPERATION_FULLSCREEN) {
+    } else if (msgType == MSG_OPERATION_FULLSCREEN || msgType == MSG_OPERATION_SLIDE) {
         emit sigAppFullScreen();
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == "Esc") {      //  退出放大镜模式

@@ -117,15 +117,15 @@ QString DocummentFileHelper::getFilePath(const QString &inputPath)
 
 void DocummentFileHelper::setCurDocuType(const QString &sCompleteSuffix)
 {
-    if (sCompleteSuffix == "pdf"||sCompleteSuffix.endsWith("pdf")) {
+    if (sCompleteSuffix == "pdf" || sCompleteSuffix.endsWith("pdf")) {
         m_nCurDocType = DocType_PDF;
-    } else if (sCompleteSuffix == "tiff"||sCompleteSuffix.endsWith("tiff")){
+    } else if (sCompleteSuffix == "tiff" || sCompleteSuffix.endsWith("tiff")) {
         m_nCurDocType = DocType_TIFF;
-    } else if (sCompleteSuffix == "ps"||sCompleteSuffix.endsWith("ps")) {
+    } else if (sCompleteSuffix == "ps" || sCompleteSuffix.endsWith("ps")) {
         m_nCurDocType = DocType_PS;
-    } else if (sCompleteSuffix == "xps"||sCompleteSuffix.endsWith("xps")) {
+    } else if (sCompleteSuffix == "xps" || sCompleteSuffix.endsWith("xps")) {
         m_nCurDocType = DocType_XPS;
-    } else if (sCompleteSuffix == "djvu"||sCompleteSuffix.endsWith("djvu")) {
+    } else if (sCompleteSuffix == "djvu" || sCompleteSuffix.endsWith("djvu")) {
         m_nCurDocType = DocType_DJVU;
     }
 }

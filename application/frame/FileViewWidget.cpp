@@ -39,10 +39,10 @@ void FileViewWidget::initWidget()
 }
 
 //  鼠标双击事件
-void FileViewWidget::mouseDoubleClickEvent(QMouseEvent *event)
-{
-    CustomWidget::mouseDoubleClickEvent(event);
-}
+//void FileViewWidget::mouseDoubleClickEvent(QMouseEvent *event)
+//{
+//    CustomWidget::mouseDoubleClickEvent(event);
+//}
 
 //  鼠标移动
 void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
@@ -52,38 +52,35 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
         return;
     }
 
-    auto pDocummentProxy = DocummentProxy::instance();
-    if (pDocummentProxy) {
-        QPoint globalPos = event->globalPos();
-        QPoint docGlobalPos = pDocummentProxy->global2RelativePoint(globalPos);
-        if (m_nCurrentHandelState == Handel_State) {    //   手型状态下， 按住鼠标左键 位置进行移动
-            if (m_bSelectOrMove) {
-                QPoint mvPoint = m_pHandleMoveStartPoint - globalPos;
-                int mvX = mvPoint.x();
-                int mvY = mvPoint.y();
+    QPoint globalPos = event->globalPos();
+    QPoint docGlobalPos = m_pDocummentProxy->global2RelativePoint(globalPos);
+    if (m_nCurrentHandelState == Handel_State) {    //   手型状态下， 按住鼠标左键 位置进行移动
+        if (m_bSelectOrMove) {
+            QPoint mvPoint = m_pHandleMoveStartPoint - globalPos;
+            int mvX = mvPoint.x();
+            int mvY = mvPoint.y();
 
-                pDocummentProxy->pageMove(mvX, mvY);
+            m_pDocummentProxy->pageMove(mvX, mvY);
 
-                m_pHandleMoveStartPoint = globalPos;
-            }
-        } else if (m_nCurrentHandelState == Magnifier_State) {  //  当前是放大镜状态
-            qDebug()<<"pDocummentProxy->showMagnifier(docGlobalPos)";
-            pDocummentProxy->showMagnifier(docGlobalPos);
+            m_pHandleMoveStartPoint = globalPos;
+        }
+    } else if (m_nCurrentHandelState == Magnifier_State) {  //  当前是放大镜状态
+        qDebug() << "pDocummentProxy->showMagnifier(docGlobalPos)";
+        m_pDocummentProxy->showMagnifier(docGlobalPos);
+    } else {
+        if (m_bSelectOrMove) {  //  鼠标已经按下，　则选中所经过的文字
+            m_pMoveEndPoint = docGlobalPos;
+            m_pDocummentProxy->mouseSelectText(m_pStartPoint, m_pMoveEndPoint);
         } else {
-            if (m_bSelectOrMove) {  //  鼠标已经按下，　则选中所经过的文字
-                m_pMoveEndPoint = docGlobalPos;
-                pDocummentProxy->mouseSelectText(m_pStartPoint, m_pMoveEndPoint);
+            //  首先判断文档划过属性
+            Page::Link *pLink  = m_pDocummentProxy->mouseBeOverLink(docGlobalPos);
+            if (pLink) {
+                setCursor(QCursor(Qt::PointingHandCursor));
             } else {
-                //  首先判断文档划过属性
-                Page::Link *pLink  = pDocummentProxy->mouseBeOverLink(docGlobalPos);
-                if (pLink) {
-                    setCursor(QCursor(Qt::PointingHandCursor));
-                } else {
-                    if (pDocummentProxy->mouseBeOverText(docGlobalPos))
-                        setCursor(QCursor(Qt::IBeamCursor));
-                    else {
-                        setCursor(QCursor(Qt::ArrowCursor));
-                    }
+                if (m_pDocummentProxy->mouseBeOverText(docGlobalPos))
+                    setCursor(QCursor(Qt::IBeamCursor));
+                else {
+                    setCursor(QCursor(Qt::ArrowCursor));
                 }
             }
         }
@@ -101,11 +98,10 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
     Qt::MouseButton nBtn = event->button();
     QPoint globalPos = event->globalPos();
     if (nBtn == Qt::LeftButton) {
-        auto pDocummentProxy = DocummentProxy::instance();
-        QPoint docGlobalPos = pDocummentProxy->global2RelativePoint(globalPos);
+        QPoint docGlobalPos = m_pDocummentProxy->global2RelativePoint(globalPos);
 
         //  点击的时候　先判断　点击处　　是否有链接之类
-        Page::Link *pLink  = pDocummentProxy->mouseBeOverLink(docGlobalPos);
+        Page::Link *pLink = m_pDocummentProxy->mouseBeOverLink(docGlobalPos);
         if (pLink) {
             m_pDocummentFileHelper->onClickPageLink(pLink);
         } else {
@@ -114,28 +110,28 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
             if (m_nCurrentHandelState == Handel_State) {
                 m_pHandleMoveStartPoint = globalPos;     //  变成手，　需要的是　相对坐标
             } else if (m_nCurrentHandelState == Default_State) {
-                pDocummentProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
+                m_pDocummentProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
                 m_pStartPoint = docGlobalPos;
             }
         }
 
-        m_nPage = pDocummentProxy->pointInWhichPage(m_pStartPoint);
+        m_nPage = m_pDocummentProxy->pointInWhichPage(m_pStartPoint);
 
         // 判断鼠标点击的地方是否有高亮
-        QString selectText,t_strContant,t_strUUid;
+        QString selectText, t_strContant, t_strUUid;
         bool b_highLight = false;
 
         m_bIsHighLightReleasePoint = false;
 
-        b_highLight = pDocummentProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
+        b_highLight = m_pDocummentProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
 
-        if(b_highLight){
+        if (b_highLight) {
             m_bIsHighLight = b_highLight;
             m_strUUid = t_strUUid;
 
-            if(DataManager::instance()->stackWidgetIndex() == 2){
+            if (DataManager::instance()->stackWidgetIndex() == 2) {
                 t_strContant.clear();
-                t_strContant = m_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight?1:0)) + QString("%") + QString::number(m_nPage);
+                t_strContant = m_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight ? 1 : 0)) + QString("%") + QString::number(m_nPage);
                 sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
             }
         }
@@ -151,27 +147,25 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 
     //判断鼠标左键松开的位置有没有高亮
     Qt::MouseButton nBtn = event->button();
-    QPoint globalPos = event->globalPos();
     if (nBtn == Qt::LeftButton) {
-        auto pDocummentProxy = DocummentProxy::instance();
-        QPoint docGlobalPos = pDocummentProxy->global2RelativePoint(globalPos);
+        QPoint globalPos = event->globalPos();
+        QPoint docGlobalPos = m_pDocummentProxy->global2RelativePoint(globalPos);
         // 判断鼠标点击的地方是否有高亮
-        QString selectText,t_strContant,t_strUUid;
+        QString selectText, t_strUUid;
 
-        m_bIsHighLightReleasePoint = pDocummentProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
-        if(m_bIsHighLight){
-            if(m_bIsHighLightReleasePoint){
+        m_bIsHighLightReleasePoint = m_pDocummentProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
+        if (m_bIsHighLight) {
+            if (m_bIsHighLightReleasePoint) {
                 qDebug() << "select same text";
-                if(DataManager::instance()->stackWidgetIndex() == 2){
-                    t_strContant.clear();
-                    t_strContant = t_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight?1:0)) + QString("%") + QString::number(m_nPage);
+                if (DataManager::instance()->stackWidgetIndex() == 2) {
+
+                    QString t_strContant = t_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight ? 1 : 0)) + QString("%") + QString::number(m_nPage);
                     sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
                 }
-            }else {
-                sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET, t_strContant);
+            } else {
+                sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET);
             }
         }
-
     }
 
     m_bSelectOrMove = false;
@@ -200,31 +194,29 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
     if (m_nCurrentHandelState == Handel_State)
         return;
 
-    auto pDocummentProxy = DocummentProxy::instance();
-    if (pDocummentProxy) {
-        QString sSelectText =  "";
-        pDocummentProxy->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
 
-        QPoint tempPoint = this->mapToGlobal(point);
-        m_pRightClickPoint = pDocummentProxy->global2RelativePoint(tempPoint);
+    QString sSelectText =  "";
+    m_pDocummentProxy->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
 
-        m_nPage = pDocummentProxy->pointInWhichPage(m_pRightClickPoint);
+    QPoint tempPoint = this->mapToGlobal(point);
+    m_pRightClickPoint = m_pDocummentProxy->global2RelativePoint(tempPoint);
 
-        QString sAnnotationText = "",struuid("");
-        m_bIsHighLight = pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText,struuid);
+    m_nPage = m_pDocummentProxy->pointInWhichPage(m_pRightClickPoint);
 
-        if (sSelectText != "" || m_bIsHighLight) {
-            //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
-            if (m_pTextOperationWidget == nullptr) {
-                m_pTextOperationWidget = new TextOperationWidget(this);
-            }
-            m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), m_bIsHighLight, /*sSelectText*/struuid);
-        } else {
-            if (m_pDefaultOperationWidget == nullptr) {
-                m_pDefaultOperationWidget = new DefaultOperationWidget(this);
-            }
-            m_pDefaultOperationWidget->showWidget(tempPoint.x(), tempPoint.y());
+    if (sSelectText != "") {    //  选中区域 有文字, 弹出 文字操作菜单
+        //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
+        if (m_pTextOperationWidget == nullptr) {
+            m_pTextOperationWidget = new TextOperationWidget(this);
         }
+        QString sAnnotationText = "", struuid = "";
+        m_bIsHighLight = m_pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText, struuid);
+
+        m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), m_bIsHighLight, sSelectText, struuid);
+    } else {    //  否则弹出 文档操作菜单
+        if (m_pDefaultOperationWidget == nullptr) {
+            m_pDefaultOperationWidget = new DefaultOperationWidget(this);
+        }
+        m_pDefaultOperationWidget->showWidget(tempPoint.x(), tempPoint.y());
     }
 }
 
@@ -238,7 +230,7 @@ void FileViewWidget::slotMagnifying(const QString &data)
     } else {
         m_nCurrentHandelState = Default_State;
         this->setCursor(Qt::ArrowCursor);
-        DocummentProxy::instance()->closeMagnifier();
+        m_pDocummentProxy->closeMagnifier();
     }
 }
 
@@ -255,7 +247,7 @@ void FileViewWidget::slotSetHandShape(const QString &data)
     }
 
     //  手型 切换 也需要将之前选中的文字清除 选中样式
-    DocummentProxy::instance()->mouseSelectTextClear();
+    m_pDocummentProxy->mouseSelectTextClear();
 }
 
 //  添加高亮颜色
@@ -266,33 +258,34 @@ void FileViewWidget::slotFileAddAnnotation(const QString &sColor)
 
     bool t_bSame = m_bIsHighLight && m_bIsHighLightReleasePoint;
 
-    if(t_bSame){
+    if (t_bSame) {
         qDebug() << "be hight light";
         return;
     }
     QColor color = DataManager::instance()->color(sColor.toInt());
 
-    m_strUUid = DocummentProxy::instance()->addAnnotation(m_pRightClickPoint, m_pRightClickPoint, color);
-    if(!m_strUUid.isEmpty()){
+    m_strUUid = m_pDocummentProxy->addAnnotation(m_pRightClickPoint, m_pRightClickPoint, color);
+    if (!m_strUUid.isEmpty()) {
         m_bIsHighLight = true;
     }
-
 }
 
 //  移除高亮, 有注释 则删除注释
 void FileViewWidget::slotFileRemoveAnnotation()
 {
     DataManager::instance()->setBIsUpdate(true);
-    QString sUuid = DocummentProxy::instance()->removeAnnotation(m_pRightClickPoint);
+    QString sUuid = m_pDocummentProxy->removeAnnotation(m_pRightClickPoint);
+    if (sUuid != "") {
 
-    sendMsg(MSG_NOTE_DLTNOTEITEM, sUuid);
+        sendMsg(MSG_NOTE_DLTNOTEITEM, sUuid);
 
-    DocummentProxy::instance()->removeAnnotation(sUuid);
+        m_pDocummentProxy->removeAnnotation(sUuid);
+    }
 }
 
 void FileViewWidget::slotFileAddNote(const QString &note)
 {
-    if(!m_bIsHighLight){
+    if (!m_bIsHighLight) {
         // 添加高亮
         slotFileAddAnnotation(QString::number(0));
     }
@@ -302,8 +295,7 @@ void FileViewWidget::slotFileAddNote(const QString &note)
     //send to note list widget on the left
     sendMsg(MSG_NOTE_ADDITEM, t_str);
 
-    auto proxy = DocummentProxy::instance();
-    proxy->setAnnotationText(m_nPage, m_strUUid, note);
+    m_pDocummentProxy->setAnnotationText(m_nPage, m_strUUid, note);
 //    qDebug() << "setAnnotationText page:" << m_nPage << " uuid:" << m_strUUid << " note:" << note;
 }
 
@@ -330,39 +322,11 @@ void FileViewWidget::slotPrintFile()
     QPrinter printer(QPrinter::HighResolution);
     QPrintPreviewDialog preview(&printer, this);
 
-    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [=] (QPrinter *printer) {
+    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ] (QPrinter * printer) {
 //        currentWrapper()->textEditor()->print(printer);
-
 
     });
-//    DTextEdit *wrapper = currentWrapper()->textEditor();
-//    const QString &filePath = wrapper->filepath;
-//    const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
-
-//    if (fileDir == m_blankFileDir) {
-//        printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
-//    } else {
-//        printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
-//    }
-
-//    printer.setOutputFormat(QPrinter::PdfFormat);
-
-//    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [=] (QPrinter *printer) {
-//        currentWrapper()->textEditor()->print(printer);
-//    });
-
     preview.exec();
-//    QPrinter printer;
-//    QString printerName = printer.printerName();
-//    if ( 1||printerName.size() > 0) {
-//        QPrintDialog printDialog(&printer, this);
-//        if (printDialog.exec() == QDialog::Accepted) {
-//            //  print
-
-//        }
-//    } else {
-//        DMessageBox::warning(nullptr, "", Frame::sPrintErrorNoDevice);
-//    }
 }
 
 //  设置　窗口　自适应　宽＼高　度
@@ -370,10 +334,10 @@ void FileViewWidget::slotSetWidgetAdapt()
 {
     if (m_nAdapteState == WIDGET_State) {
         int nWidth = this->width();
-        DocummentProxy::instance()->adaptWidthAndShow(nWidth);
+        m_pDocummentProxy->adaptWidthAndShow(nWidth);
     } else if (m_nAdapteState == HEIGHT_State) {
         int nHeight = this->height();
-        DocummentProxy::instance()->adaptHeightAndShow(nHeight);
+        m_pDocummentProxy->adaptHeightAndShow(nHeight);
     }
 }
 
