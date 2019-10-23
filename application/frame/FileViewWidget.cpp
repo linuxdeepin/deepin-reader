@@ -203,13 +203,15 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 
     m_nPage = m_pDocummentProxy->pointInWhichPage(m_pRightClickPoint);
 
-    if (sSelectText != "") {    //  选中区域 有文字, 弹出 文字操作菜单
+    //  右键鼠标点 是否有高亮区域
+    QString sAnnotationText = "", struuid = "";
+    m_bIsHighLight = m_pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText, struuid);
+
+    if (sSelectText != "" || m_bIsHighLight) {    //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
         if (m_pTextOperationWidget == nullptr) {
             m_pTextOperationWidget = new TextOperationWidget(this);
         }
-        QString sAnnotationText = "", struuid = "";
-        m_bIsHighLight = m_pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText, struuid);
 
         m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), m_bIsHighLight, sSelectText, struuid);
     } else {    //  否则弹出 文档操作菜单
