@@ -114,7 +114,7 @@ public:
         animationgroup = nullptr;
         m_bsearchfirst = true;
         m_findcurpage = -1;
-        m_imagewidht = 0.1;
+        m_imagewidth = 0.1;
         m_imageheight = 0.1;
         m_cursearch = 1;
         bcloseing = false;
@@ -181,7 +181,7 @@ public:
     QMap<int, int> m_pagecountsearch; //搜索结果页对应当前页个数
     int m_cursearch;
     bool m_bsearchfirst;
-    double m_imagewidht;
+    double m_imagewidth;
     double m_imageheight;
     bool bcloseing;
     bool bfindnext;//上一次搜索结果是向前翻还是向后翻

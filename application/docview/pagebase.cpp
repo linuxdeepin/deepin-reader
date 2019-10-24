@@ -18,6 +18,7 @@ void ThreadRenderImage::setRestart()
 
 void ThreadRenderImage::setPage(PageInterface *page, double width, double height)
 {
+    qDebug()<<"ThreadRenderImage::setPage"<<width<<height;
     m_page = page;
     m_width = width;
     m_height = height;
@@ -174,8 +175,8 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
     }
 
     const QRect start_end = (startC.y() < endC.y())
-                            ? QRect(startC.x(), startC.y(), endC.x(), endC.y())
-                            : QRect(startC.x(), endC.y(), endC.x(), startC.y());
+            ? QRect(startC.x(), startC.y(), endC.x(), endC.y())
+            : QRect(startC.x(), endC.y(), endC.x(), startC.y());
 
     QRectF tmp;
     int startword = 0, stopword = -1;
@@ -321,8 +322,8 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
         QRectF tmpafter;
         tmpafter = d->m_words.at(i).rect;
         if ((abs(tmp.y() - tmpafter.y()) < tmp.height() / 5 ||
-                abs(tmp.y() + tmp.height() / 2 - tmpafter.y() + tmpafter.height() / 2) <
-                tmp.height() / 5) &&
+             abs(tmp.y() + tmp.height() / 2 - tmpafter.y() + tmpafter.height() / 2) <
+             tmp.height() / 5) &&
                 abs(tmp.x() + tmp.width() - tmpafter.x()) < tmp.width() / 5) {
             if (tmpafter.y() < tmp.y()) {
                 tmp.setY(tmpafter.y());
@@ -381,7 +382,7 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
 bool PageBase::ifMouseMoveOverText(const QPoint point)
 {
     Q_D(PageBase);
-    QPoint qp = point;
+    QPointF qp = point;
     getImagePoint(qp);
     for (int i = 0; i < d->m_words.size(); i++) {
         if (qp.x() > d->m_words.at(i).rect.x() &&
@@ -394,23 +395,23 @@ bool PageBase::ifMouseMoveOverText(const QPoint point)
     return false;
 }
 
-void PageBase::getImagePoint(QPoint &point)
+void PageBase::getImagePoint(QPointF &point)
 {
     Q_D(PageBase);
     const double scaleX = d->m_scale ;
     const double scaleY = d->m_scale ;
-    QPoint qp = QPoint((point.x() - x() - (width() - d->m_scale * d->m_imagewidth ) / 2) / scaleX, (point.y() - y() - (height() - d->m_scale * d->m_imageheight ) / 2) / scaleY);
+    QPointF qp = QPointF((point.x() - x() - (width() - d->m_scale * d->m_imagewidth ) / 2) / scaleX, (point.y() - y() - (height() - d->m_scale * d->m_imageheight ) / 2) / scaleY);
     switch (d->m_rotate) {
     case RotateType_90:
-        qp = QPoint((point.x() - x() - (width() - d->m_scale * d->m_imageheight ) / 2) / scaleX, (point.y() - y() - (height() - d->m_scale * d->m_imagewidth ) / 2) / scaleY);
-        qp = QPoint(qp.y(), d->m_imageheight - qp.x());
+        qp = QPointF((point.x() - x() - (width() - d->m_scale * d->m_imageheight ) / 2) / scaleX, (point.y() - y() - (height() - d->m_scale * d->m_imagewidth ) / 2) / scaleY);
+        qp = QPointF(qp.y(), d->m_imageheight - qp.x());
         break;
     case RotateType_180:
-        qp = QPoint(d->m_imagewidth - qp.x(),  d->m_imageheight - qp.y());
+        qp = QPointF(d->m_imagewidth - qp.x(),  d->m_imageheight - qp.y());
         break;
     case RotateType_270:
-        qp = QPoint((point.x() - x() - (width() - d->m_imageheight) / 2) / scaleX, (point.y() - y() - (height() - d->m_scale * d->m_imagewidth ) / 2) / scaleY);
-        qp = QPoint(d->m_imagewidth - qp.y(), qp.x());
+        qp = QPointF((point.x() - x() - (width() - d->m_imageheight) / 2) / scaleX, (point.y() - y() - (height() - d->m_scale * d->m_imagewidth ) / 2) / scaleY);
+        qp = QPointF(d->m_imagewidth - qp.y(), qp.x());
         break;
     default:
         break;
@@ -431,7 +432,7 @@ bool PageBase::clearMagnifierPixmap()
     return true;
 }
 
-bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, double width, double height)
+bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPointF point, int radius, double width, double height)
 {
     Q_D(PageBase);
     QPixmap qpixmap;
@@ -442,13 +443,11 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, dou
         loadMagnifierCacheThreadStart(width * d->pixelratiof, height * d->pixelratiof);
         return false;
     }
-    QPoint qp = point;
+    QPointF qp = point;
     getImagePoint(qp);
-//    const double scaleX = d->m_scale ;
-//    const double scaleY = d->m_scale ;
-//    qp = QPoint((point.x() - x() - (width() - d->m_scale * d->m_imagewidth ) / 2) / scaleX, (point.y() - y() - (height() - d->m_scale * d->m_imageheight ) / 2) / scaleY);
     double scalex = width / d->m_imagewidth;
     double scaley = height / d->m_imageheight;
+
     double relx = qp.x() * scalex, rely = qp.y() * scaley;
     if (qp.x() * scalex - radius < 0) {
         relx = radius;
@@ -460,8 +459,10 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, dou
     } else if (qp.y() * scaley > height - radius) {
         rely = height - radius;
     }
-    //    qDebug() << "getMagnifierPixmap scalex:" << scalex << " scaley: " << scaley << " radius: " << radius << " qp: " << qp;
-    QPixmap qpixmap1 = qpixmap.copy(relx - radius, rely - radius, radius * 2, radius * 2);
+    relx*=devicePixelRatioF();
+    rely*=devicePixelRatioF();
+    // qDebug() << "getMagnifierPixmap scalex:" << scalex << " scaley: " << scaley << " radius: " << radius << " qp: " << qp;
+    QPixmap qpixmap1 = qpixmap.copy(relx-radius, rely-radius, radius * 2, radius * 2);
     QMatrix leftmatrix;
     switch (d->m_rotate) {
     case RotateType_90:
@@ -480,52 +481,6 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, dou
     }
     pixmap = qpixmap1.transformed(leftmatrix, Qt::SmoothTransformation);
     return true;
-//    Q_D(PageBase);
-//    qDebug() << "getMagnifierPixmap";
-//    //    QImage image;
-//    QPixmap qpixmap;
-//    if (!d->m_magnifierpixmap.isNull()) {
-//        qpixmap = d->m_magnifierpixmap;
-//    } else {
-//        qDebug()<<"getMagnifierPixmap------------";
-//        loadMagnifierCacheThreadStart(width * d->pixelratiof, height * d->pixelratiof);
-//        return false;
-//    }
-//    QPoint qp = point;
-//    getImagePoint(qp);
-//    double scalex = width / d->m_imagewidth;
-//    double scaley = height / d->m_imageheight;
-//    double relx = qp.x() * scalex, rely = qp.y() * scaley;
-//    if (qp.x() * scalex - radius < 0) {
-//        relx = radius;
-//    } else if (qp.x() * scalex > width - radius) {
-//        relx = width - radius;
-//    }
-//    if (qp.y() * scaley - radius < 0) {
-//        rely = radius;
-//    } else if (qp.y() * scaley > height - radius) {
-//        rely = height - radius;
-//    }
-//    //    qDebug() << "getMagnifierPixmap scalex:" << scalex << " scaley: " << scaley << " radius: " << radius << " qp: " << qp;
-//    QPixmap qpixmap1 = qpixmap.copy(relx - radius, rely - radius, radius * 2, radius * 2);
-//    QMatrix leftmatrix;
-//    switch (d->m_rotate) {
-//    case RotateType_90:
-//        leftmatrix.rotate(90);
-//        break;
-//    case RotateType_180:
-//        leftmatrix.rotate(180);
-//        break;
-//    case RotateType_270:
-//        leftmatrix.rotate(270);
-//        break;
-//    default:
-//        pixmap = qpixmap1;
-//        return true;
-//        break;
-//    }
-//    pixmap = qpixmap1.transformed(leftmatrix, Qt::SmoothTransformation);
-//    return true;
 }
 
 void PageBase::loadMagnifierCacheThreadStart(double width, double height)
@@ -541,8 +496,7 @@ void PageBase::loadMagnifierCacheThreadStart(double width, double height)
 void PageBase::slot_RenderFinish(QImage image)
 {
     Q_D(PageBase);
-    image.setDevicePixelRatio(devicePixelRatioF());
-    QPixmap map = QPixmap::fromImage(image);
+    double originwidth=image.width(),originheight=image.height();
     QMatrix leftmatrix;
     switch (d->m_rotate) {
     case RotateType_90:
@@ -558,7 +512,11 @@ void PageBase::slot_RenderFinish(QImage image)
         leftmatrix.rotate(0);
         break;
     }
-    setPixmap(map.transformed(leftmatrix, Qt::SmoothTransformation));
+    QPixmap map = QPixmap::fromImage(image);
+    map=map.transformed(leftmatrix, Qt::SmoothTransformation);
+    map.setDevicePixelRatio(devicePixelRatioF());
+    setPixmap(map);
+
     d->havereander = true;
 }
 
@@ -578,20 +536,19 @@ void PageBase::clearImage()
 void PageBase::slot_loadMagnifierPixmapCache(QImage image, double width, double height)
 {
     Q_D(PageBase);
-    image.setDevicePixelRatio(devicePixelRatioF());
-    //    QImage image;
     QPixmap qpixmap;
-    //    if (getImage(image, width, height)) {
     qpixmap = QPixmap::fromImage(image);
     d->m_magnifierpixmap = qpixmap;
+    d->m_magnifierpixmap.setDevicePixelRatio(devicePixelRatioF());
     d->m_magnifierwidth = width;
     d->m_magnifierheight = height;
     emit signal_MagnifierPixmapCacheLoaded(d->m_pageno);
-    //}
+
 }
 
 void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
 {
+    qDebug()<<"setScaleAndRotate";
     Q_D(PageBase);
     d->havereander = false;
     d->m_scale = scale;
@@ -600,8 +557,8 @@ void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
     case RotateType_90:
         //        resize(m_imageheight * scale, m_imagewidth * scale);
         //        setFixedSize(m_imageheight * scale, m_imagewidth * scale);
-        setMaximumSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale ));
-        setMinimumSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale ));
+        setMaximumSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale));
+        setMinimumSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale));
         break;
     case RotateType_180:
         //        resize(m_imagewidth * scale, m_imageheight * scale);
@@ -628,7 +585,7 @@ void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
 Page::Link *PageBase::ifMouseMoveOverLink(const QPoint point)
 {
     Q_D(PageBase);
-    QPoint qp = point;
+    QPointF qp = point;
     getImagePoint(qp);
     //    qDebug() << "ifMouseMoveOverLink qp:" << qp;
     for (int i = 0; i < d->m_links.size(); i++) {
@@ -706,6 +663,7 @@ bool PageBase::showImage(double scale, RotateType_EM rotate)
     }
     d->m_scale = scale;
     d->m_rotate = rotate;
+    qDebug()<<"PageBase::showImage"<<d->pixelratiof;
     d->threadreander.setPage(getInterFace(), d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
     if (!d->threadreander.isRunning()) {
         d->threadreander.start();

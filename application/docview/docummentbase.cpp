@@ -82,7 +82,7 @@ void MagnifierWidget::paintEvent(QPaintEvent *event)
     QPainterPath path = bigCircle - smallCircle;
     qpainter.drawPath(path);
 
-   // qpainter.restore();
+    // qpainter.restore();
     QTransform tr;
     tr.translate(smallcirclex, smallcircley);
     tr.scale(1.0, 1.0);
@@ -234,7 +234,7 @@ QPoint DocummentBase::global2RelativePoint(QPoint globalpoint)
         y_offset = scrollBar_Y->value();
     QPoint qpoint = QPoint(mapFromGlobal(globalpoint).x() + x_offset,
                            mapFromGlobal(globalpoint).y() + y_offset);
-        qDebug() << "globalpoint:" << globalpoint << " relativepoint:" << qpoint<<"mapFromGlobal(globalpoint)"<<mapFromGlobal(globalpoint);
+    //qDebug() << "globalpoint:" << globalpoint << " relativepoint:" << qpoint<<"mapFromGlobal(globalpoint)"<<mapFromGlobal(globalpoint);
     return qpoint;
 }
 
@@ -571,42 +571,32 @@ bool DocummentBase::showMagnifier(QPoint point)
         PageBase *ppage = d->m_pages.at(pagenum);
         QPixmap pixmap;
         d->m_magnifierpage = pagenum;
-        /*begin 2019-10-21 kyz*/
-        double curwidth = d->m_scale * d->m_imagewidht;
+
+        double curwidth = d->m_scale * d->m_imagewidth;
         double curheight = d->m_scale * d->m_imageheight;
-       double left=(d->m_widgets.at(pagenum)->width()-curwidth)/2;
-       qDebug()<<"showMagnifier"<<qpoint<<left;
-//        if(qpoint.x()<left||qpoint.x()>left+curwidth)
-//        {
-//            qDebug()<<"********________++++++++++";
-//            QPixmap pixmapempty;
-//            d->m_magnifierwidget->setPixmap(pixmapempty);
+        double left=(d->m_widgets.at(pagenum)->width()-curwidth)/2;
+        double topspace=(d->m_widgets.at(pagenum)->height() - curheight) / 2;
 
-//            d->m_magnifierwidget->setPoint(gpoint);
-//            d->m_magnifierwidget->startShow();
-//            d->m_magnifierwidget->show();
-//            d->m_magnifierwidget->update();
-//        }
-//        else {
-//            if (ppage ->getMagnifierPixmap(pixmap, qpoint, d->m_magnifierwidget->getMagnifierRadius(), ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale())) {
-//                d->m_magnifierwidget->setPixmap(pixmap);
-
-//                d->m_magnifierwidget->setPoint(gpoint);
-//                d->m_magnifierwidget->startShow();
-//                d->m_magnifierwidget->show();
-//                d->m_magnifierwidget->update();
-//            }
-//        }
-         /*end 2019-10-21 kyz*/
-
-        if (ppage ->getMagnifierPixmap(pixmap, qpoint, d->m_magnifierwidget->getMagnifierRadius(), ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale())) {
-            d->m_magnifierwidget->setPixmap(pixmap);
-
+        qDebug()<<"showMagnifier"<<qpoint<<gpoint<<d->m_widgets.at(0)->width()<<frameRect().width()<<curwidth<<curheight<<left<<topspace;
+        if(qpoint.x()<left-d->m_magnifierwidget->getMagnifierRadius()||qpoint.x()>curwidth+left+d->m_magnifierwidget->getMagnifierRadius())
+        {
+            QPixmap pix(d->m_magnifierwidget->getMagnifierRadius() * 2, d->m_magnifierwidget->getMagnifierRadius() * 2);
+            pix.fill(Qt::transparent);
+            d->m_magnifierwidget->setPixmap(pix);
             d->m_magnifierwidget->setPoint(gpoint);
-            d->m_magnifierwidget->startShow();
             d->m_magnifierwidget->show();
             d->m_magnifierwidget->update();
-        }
+            qDebug()<<"@@@@@@@@@@@@@@@@===========";
+
+        }else {
+            if (ppage ->getMagnifierPixmap(pixmap, qpoint, d->m_magnifierwidget->getMagnifierRadius(), ppage->width()*d->m_magnifierwidget->getMagnifierScale(), ppage->height()*d->m_magnifierwidget->getMagnifierScale())) {
+                d->m_magnifierwidget->setPixmap(pixmap);
+                d->m_magnifierwidget->setPoint(gpoint);
+                d->m_magnifierwidget->startShow();
+                d->m_magnifierwidget->show();
+                d->m_magnifierwidget->update();
+            }
+     }
     } else {
         QPixmap pix(d->m_magnifierwidget->getMagnifierRadius() * 2, d->m_magnifierwidget->getMagnifierRadius() * 2);
         pix.fill(Qt::transparent);
@@ -987,10 +977,10 @@ bool DocummentBase::showSlideModel()
 void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool bsearch, QRectF rectsource)
 {
     Q_D(DocummentBase);
-    double curwidth = d->m_scale * d->m_imagewidht;
+    double curwidth = d->m_scale * d->m_imagewidth;
     double curheight = d->m_scale * d->m_imageheight;
     PageBase *pagebase = d->m_pages.at(curpage);
-  //  d->m_widgets.at(curpage)->layout()->spacing();
+    //  d->m_widgets.at(curpage)->layout()->spacing();
     QRectF rectorg;
     if(bsearch)
     {

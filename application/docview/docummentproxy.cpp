@@ -8,39 +8,6 @@
 static QMutex mutexlockgetimage;
 DocummentProxy *DocummentProxy::s_pDocProxy = nullptr;
 
-//ThreadWaitLoadWordsEnd::ThreadWaitLoadWordsEnd()
-//{
-//    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
-//    m_doc = nullptr;
-//    restart = false;
-//}
-
-//void ThreadWaitLoadWordsEnd::setRestart()
-//{
-////    restart = true;
-//}
-
-//void ThreadWaitLoadWordsEnd::setDoc(DocummentBase *doc)
-//{
-//    m_doc = doc;
-//}
-
-//void ThreadWaitLoadWordsEnd::run()
-//{
-//    if (!m_doc)
-//        return;
-//    restart = true;
-//    while (restart) {
-//        restart = false;
-//        while (m_doc->isWordsBeLoad()) {
-//            QThread::msleep(30);
-//        }
-
-//        emit startOpenFile();
-//    }
-//}
-
-
 DocummentProxy::DocummentProxy(QObject *parent)
     : QObject(parent),
       m_type(DocType_NULL),

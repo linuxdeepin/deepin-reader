@@ -225,7 +225,7 @@ public:
     void clearPageTextSelections();
     bool pageTextSelections(const QPoint start, const QPoint end);
     bool ifMouseMoveOverText(const QPoint point);
-    bool getMagnifierPixmap(QPixmap &pixmap, QPoint point, int radius, double width, double height);
+    bool getMagnifierPixmap(QPixmap &pixmap, QPointF point, int radius, double width, double height);
     bool clearMagnifierPixmap();
     void loadMagnifierCacheThreadStart(double width, double height);
     void setScaleAndRotate(double scale = 1, RotateType_EM rotate = RotateType_Normal);
@@ -252,7 +252,7 @@ protected slots:
 protected:
     void paintEvent(QPaintEvent *event) override;
 protected:
-    void getImagePoint(QPoint &point);
+    void getImagePoint(QPointF &point);
 
     PageBasePrivate *d_ptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), PageBase)
