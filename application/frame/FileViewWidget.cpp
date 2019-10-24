@@ -211,8 +211,8 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
     QString sAnnotationText = "", struuid = "";
     m_bIsHighLight = m_pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText, struuid);
 
-    if(m_bIsHighLight){
-           m_strUUid = struuid;
+    if (m_bIsHighLight) {
+        m_strUUid = struuid;
     }
 
     if (sSelectText != "" || m_bIsHighLight) {    //  选中区域 有文字, 弹出 文字操作菜单
@@ -373,12 +373,17 @@ void FileViewWidget::slotPrintFile()
 //  设置　窗口　自适应　宽＼高　度
 void FileViewWidget::slotSetWidgetAdapt()
 {
+    double nScale = 0.0;
     if (m_nAdapteState == WIDGET_State) {
         int nWidth = this->width();
-        m_pDocummentProxy->adaptWidthAndShow(nWidth);
+        nScale = m_pDocummentProxy->adaptWidthAndShow(nWidth);
     } else if (m_nAdapteState == HEIGHT_State) {
         int nHeight = this->height();
-        m_pDocummentProxy->adaptHeightAndShow(nHeight);
+        nScale = m_pDocummentProxy->adaptHeightAndShow(nHeight);
+    }
+
+    if (nScale != 0.0) {
+        sendMsg(MSG_SELF_ADAPTE_SCALE, QString::number(nScale));
     }
 }
 

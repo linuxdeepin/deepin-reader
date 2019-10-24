@@ -59,7 +59,7 @@ void NotesItemWidget::slotCopyContant()
 
 void NotesItemWidget::slotShowContextMenu(const QPoint &)
 {
-    if(!m_isNote){
+    if (!m_isNote) {
         return;
     }
     QMenu *t_menu = new QMenu(this);
@@ -84,7 +84,7 @@ void NotesItemWidget::initWidget()
     m_pPicture->setFixedSize(QSize(40, 60));
     m_pPicture->setAlignment(Qt::AlignCenter);
 
-    m_pPage = new DLabel;
+    m_pPageNumber = new DLabel;
     m_pSearchResultNum = new DLabel;
     m_pTextEdit = new DTextEdit;
     m_pTextEdit->setEnabled(false);
@@ -93,7 +93,7 @@ void NotesItemWidget::initWidget()
     m_pTextEdit->setFrameStyle(QFrame::NoFrame);
 //    m_pTextEdit->setTextBackgroundColor(this->palette().highlightedText().color());
 
-    t_hLayout->addWidget(m_pPage);
+    t_hLayout->addWidget(m_pPageNumber);
     t_hLayout->addWidget(m_pSearchResultNum);
 
     t_vLayout->addItem(t_hLayout);
