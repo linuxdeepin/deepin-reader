@@ -90,6 +90,8 @@ void NotesItemWidget::initWidget()
     m_pTextEdit->setEnabled(false);
     m_pTextEdit->setFixedHeight(51);
     m_pTextEdit->setMinimumWidth(102);
+    m_pTextEdit->setFrameStyle(QFrame::NoFrame);
+//    m_pTextEdit->setTextBackgroundColor(this->palette().highlightedText().color());
 
     t_hLayout->addWidget(m_pPage);
     t_hLayout->addWidget(m_pSearchResultNum);
