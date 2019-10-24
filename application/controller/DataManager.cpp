@@ -5,7 +5,7 @@ DataManager::DataManager(QObject *parent) :
     QObject (parent)
 {
     m_strOnlyFilePath = "";
-    m_nStackWidgetIndex = 0;
+
     m_listColor.append((Qt::darkYellow));
     m_listColor.append((Qt::red));
     m_listColor.append((Qt::darkMagenta));

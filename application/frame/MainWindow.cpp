@@ -134,14 +134,12 @@ void MainWindow::onFullScreen()
     slotAppShowState(0);
     DataManager::instance()->setCurShowState(FILE_FULLSCREEN);  //  全屏状态
     sendMsg(MSG_OPERATION_FULLSCREEN);
-//    sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET, QString(""));
 }
 
 //  放映
 void MainWindow::onScreening()
 {
     slotAppShowState(0);
-//    sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET, QString(""));
     sendMsg(MSG_OPERATION_SLIDE);
 }
 

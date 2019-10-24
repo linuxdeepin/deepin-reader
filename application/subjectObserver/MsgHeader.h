@@ -42,7 +42,6 @@ enum MSG_MENU_TYPE {
     MSG_OPERATION_TEXT_ADD_BOOKMARK,    //  添加书签
     MSG_OPERATION_TEXT_ADD_ANNOTATION,  //  添加注释
     MSG_OPERATION_TEXT_SHOW_NOTEWIDGET,  //  显示注释窗口
-    MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET //  关闭注释窗口
 };
 
 //  左侧 侧边栏 消息
@@ -57,7 +56,6 @@ enum MSG_LEFT_SLIDER_TYPE {
     MSG_SWITCHLEFTWIDGET,               //  切换左侧窗口(缩略图、书签、注释) 消息
     MSG_BOOKMARK_STATE,                 //  文件页码书签状态
     MSG_CLOSE_FILE,                     //  关闭当前文档　消息
-    MSG_CLOSE_NOTE_WIDGET               //  关闭编辑注释界面
 };
 
 //  字体菜单 消息

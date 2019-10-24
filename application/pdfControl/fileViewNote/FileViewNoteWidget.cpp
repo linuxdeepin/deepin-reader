@@ -3,6 +3,7 @@
 FileViewNoteWidget::FileViewNoteWidget(CustomWidget *parent):
     CustomWidget(QString("FileViewNoteWidget"), parent)
 {
+    setWindowFlag(Qt::Popup);
     setFixedSize(QSize(200, 300));
 
     initWidget();
@@ -25,6 +26,14 @@ void FileViewNoteWidget::setEditText(const QString &note)
 void FileViewNoteWidget::closeWidget()
 {
     slotClosed();
+}
+
+void FileViewNoteWidget::showWidget(const int &nPos)
+{
+    int nWidth = this->width();
+    move(nPos - nWidth - 50, 200);
+    show();
+    raise();
 }
 
 // 初始化界面

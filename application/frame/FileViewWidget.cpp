@@ -25,10 +25,7 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
 
 FileViewWidget::~FileViewWidget()
 {
-//    if (m_pDocummentProxy) {
-//        m_pDocummentProxy->closeFile();
-//        m_pDocummentProxy->waitThreadAndClearEnd();
-//    }
+
 }
 
 void FileViewWidget::initWidget()
@@ -38,12 +35,6 @@ void FileViewWidget::initWidget()
 
     m_pDocummentFileHelper = new DocummentFileHelper(this);
 }
-
-//  鼠标双击事件
-//void FileViewWidget::mouseDoubleClickEvent(QMouseEvent *event)
-//{
-//    CustomWidget::mouseDoubleClickEvent(event);
-//}
 
 //  鼠标移动
 void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
@@ -120,21 +111,16 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 
         // 判断鼠标点击的地方是否有高亮
         QString selectText, t_strUUid;
-        bool b_highLight = false;
 
         m_bIsHighLightReleasePoint = false;
 
-        b_highLight = m_pDocummentProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
-
+        bool b_highLight = m_pDocummentProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
         if (b_highLight) {
             m_bIsHighLight = b_highLight;
             m_strUUid = t_strUUid;
 
-            /*if (DataManager::instance()->stackWidgetIndex() == 2) */{
-
-                QString t_strContant = m_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight ? 1 : 0)) + QString("%") + QString::number(m_nPage);
-                sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
-            }
+            QString t_strContant = m_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight ? 1 : 0)) + QString("%") + QString::number(m_nPage);
+            sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
         }
     }
 }
@@ -157,14 +143,8 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
         m_bIsHighLightReleasePoint = m_pDocummentProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
         if (m_bIsHighLight) {
             if (m_bIsHighLightReleasePoint) {
-//                qDebug() << "select same text";
-                /*if (DataManager::instance()->stackWidgetIndex() == 2)*/ {
-
-                    QString t_strContant = t_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight ? 1 : 0)) + QString("%") + QString::number(m_nPage);
-                    sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
-                }
-            } else {
-                sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET);
+                QString t_strContant = t_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight ? 1 : 0)) + QString("%") + QString::number(m_nPage);
+                sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
             }
         }
     }
@@ -176,8 +156,6 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 //  文档 显示区域 大小变化
 void FileViewWidget::resizeEvent(QResizeEvent *event)
 {
-    sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET);
-
     slotSetWidgetAdapt();
 
     CustomWidget::resizeEvent(event);
@@ -263,15 +241,13 @@ void FileViewWidget::slotSetHandShape(const QString &data)
 //  添加高亮颜色
 void FileViewWidget::slotFileAddAnnotation(const QString &sColor)
 {
-    DataManager::instance()->setBIsUpdate(true);
-    QList<QColor> colorList = {};
-
     bool t_bSame = m_bIsHighLight && m_bIsHighLightReleasePoint;
-
     if (t_bSame) {
         qDebug() << "be hight light";
         return;
     }
+    DataManager::instance()->setBIsUpdate(true);
+
     QColor color = DataManager::instance()->color(sColor.toInt());
 
     m_strUUid = m_pDocummentProxy->addAnnotation(m_pRightClickPoint, m_pRightClickPoint, color);
@@ -286,7 +262,6 @@ void FileViewWidget::slotFileRemoveAnnotation()
     DataManager::instance()->setBIsUpdate(true);
     QString sUuid = m_pDocummentProxy->removeAnnotation(m_pRightClickPoint);
     if (sUuid != "") {
-
         sendMsg(MSG_NOTE_DLTNOTEITEM, sUuid);
 
         m_pDocummentProxy->removeAnnotation(sUuid);
@@ -306,7 +281,6 @@ void FileViewWidget::slotFileAddNote(const QString &note)
     sendMsg(MSG_NOTE_ADDITEM, t_str);
 
     m_pDocummentProxy->setAnnotationText(m_nPage, m_strUUid, note);
-//    qDebug() << "setAnnotationText page:" << m_nPage << " uuid:" << m_strUUid << " note:" << note;
 }
 
 //  信号槽　初始化

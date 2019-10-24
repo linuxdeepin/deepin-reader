@@ -27,10 +27,6 @@ void LeftSidebarWidget::slotStackSetCurIndex(const int &iIndex)
     auto pWidget = this->findChild<DStackedWidget *>();
     if (pWidget) {
         pWidget->setCurrentIndex(iIndex);
-        DataManager::instance()->setStackWidgetIndex(iIndex);
-        if (iIndex != 2) {
-            sendMsg(MSG_CLOSE_NOTE_WIDGET, QString(""));
-        }
     }
 }
 

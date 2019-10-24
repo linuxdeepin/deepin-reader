@@ -32,6 +32,7 @@ public:
 public:
     void setEditText(const QString &note);
     void closeWidget();
+    void showWidget(const int &);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
