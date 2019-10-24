@@ -67,15 +67,19 @@ void FileViewNoteWidget::initWidget()
 // 关闭槽函数
 void FileViewNoteWidget::slotClosed()
 {
-    QString t_contant = m_pTextEdit->toPlainText().trimmed();
-    if(m_strNote != t_contant){
-        //sendMsg closed signal;
-        if (QMessageBox::Yes == DMessageBox::question(nullptr,  QString("Save"), QString("Save this note"))) {
 
-            sendMsg(MSG_NOTE_ADDCONTANT, t_contant);
-            m_strNote = t_contant;
-        }
-    }
+//    if(m_strNote != t_contant){
+//        //sendMsg closed signal;
+//        if (QMessageBox::Yes == DMessageBox::question(nullptr,  QString("Save"), QString("Save this note"))) {
+
+//            sendMsg(MSG_NOTE_ADDCONTANT, t_contant);
+//            m_strNote = t_contant;
+//        }
+//    }
+
+    m_strNote = m_pTextEdit->toPlainText().trimmed();
+
+    sendMsg(MSG_NOTE_ADDCONTANT, m_strNote);
 
     this->close();
 }
