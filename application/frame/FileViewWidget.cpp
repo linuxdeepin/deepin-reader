@@ -157,8 +157,8 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
         m_bIsHighLightReleasePoint = m_pDocummentProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
         if (m_bIsHighLight) {
             if (m_bIsHighLightReleasePoint) {
-                qDebug() << "select same text";
-                if (DataManager::instance()->stackWidgetIndex() == 2) {
+//                qDebug() << "select same text";
+                /*if (DataManager::instance()->stackWidgetIndex() == 2)*/ {
 
                     QString t_strContant = t_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight ? 1 : 0)) + QString("%") + QString::number(m_nPage);
                     sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
