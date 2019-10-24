@@ -130,7 +130,7 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
             m_bIsHighLight = b_highLight;
             m_strUUid = t_strUUid;
 
-            if (DataManager::instance()->stackWidgetIndex() == 2) {
+            /*if (DataManager::instance()->stackWidgetIndex() == 2) */{
 
                 QString t_strContant = m_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight ? 1 : 0)) + QString("%") + QString::number(m_nPage);
                 sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
