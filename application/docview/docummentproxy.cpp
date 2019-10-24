@@ -137,7 +137,7 @@ bool DocummentProxy::mouseSelectText(QPoint start, QPoint stop)
 {
     if (!m_documment || bcloseing)
         return false;
-   // qDebug() << "mouseSelectText";
+    // qDebug() << "mouseSelectText";
     emit signal_mouseSelectText(start, stop);
     return true;
 //    return m_documment->mouseSelectText(start, stop);
@@ -163,7 +163,7 @@ void DocummentProxy::scaleRotateAndShow(double scale, RotateType_EM rotate)
         return;
     mouseSelectTextClear();
 //    m_documment->scaleAndShow(scale, rotate);
-   // qDebug() << "scaleRotateAndShow";
+    // qDebug() << "scaleRotateAndShow";
     emit signal_scaleAndShow(scale, rotate);
 }
 
@@ -191,7 +191,7 @@ int DocummentProxy::getPageSNum()
 {
     if (!m_documment || bcloseing)
         return false;
-   // qDebug() << "getPageSNum";
+    // qDebug() << "getPageSNum";
     return m_documment->getPageSNum();
 }
 
@@ -200,7 +200,7 @@ bool DocummentProxy::setViewModeAndShow(ViewMode_EM viewmode)
     if (!m_documment || bcloseing)
         return false;
     mouseSelectTextClear();
-   // qDebug() << "setViewModeAndShow";
+    // qDebug() << "setViewModeAndShow";
     emit signal_setViewModeAndShow(viewmode);
     return true;
 }
@@ -209,7 +209,7 @@ bool DocummentProxy::showMagnifier(QPoint point)
 {
     if (!m_documment || bcloseing)
         return false;
-   // qDebug() << "showMagnifier";
+    // qDebug() << "showMagnifier";
     return  m_documment->showMagnifier(point);
 }
 
@@ -217,7 +217,7 @@ bool DocummentProxy::closeMagnifier()
 {
     if (!m_documment || bcloseing)
         return false;
-   // qDebug() << "closeMagnifier";
+    // qDebug() << "closeMagnifier";
     m_documment->magnifierClear();
     return true;
 }
@@ -233,7 +233,7 @@ QString DocummentProxy::addAnnotation(const QPoint &startpos, const QPoint &endp
 {
     if (!m_documment || bcloseing)
         return QString("");
-   // qDebug() << "addAnnotation";
+    // qDebug() << "addAnnotation";
     return m_documment->addAnnotation(startpos, color);
 }
 
@@ -248,7 +248,7 @@ bool DocummentProxy::save(const QString &filepath, bool withChanges)
 bool DocummentProxy::saveas(const QString &filepath, bool withChanges)
 {
     if (m_documment && !bcloseing && m_documment->saveas(filepath, withChanges)) {
-       // qDebug() << "saveas";
+        // qDebug() << "saveas";
         return openFile(DocType_PDF, filepath);
     }
 }
@@ -265,7 +265,7 @@ void DocummentProxy::clearsearch()
 {
     if (!m_documment || bcloseing)
         return ;
-   // qDebug() << "clearsearch";
+    // qDebug() << "clearsearch";
     m_documment->clearSearch();
 }
 
@@ -298,7 +298,7 @@ QString DocummentProxy::removeAnnotation(const QPoint &startpos)
 {
     if (!m_documment || bcloseing)
         return "";
-   // qDebug() << "removeAnnotation";
+    // qDebug() << "removeAnnotation";
     return m_documment->removeAnnotation(startpos);
 }
 
@@ -319,7 +319,7 @@ bool DocummentProxy::pageMove(double mvx, double mvy)
 {
     if (!m_documment || bcloseing)
         return false;
-   // qDebug() << "pageMove";
+    // qDebug() << "pageMove";
     m_documment->pageMove(mvx, mvy);
     return true;
 }
@@ -336,7 +336,7 @@ Page::Link *DocummentProxy::mouseBeOverLink(QPoint point)
 {
     if (!m_documment || bcloseing)
         return nullptr;
-   // qDebug() << "mouseBeOverLink";
+    // qDebug() << "mouseBeOverLink";
     return m_documment->mouseBeOverLink(point);
 }
 
