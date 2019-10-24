@@ -23,6 +23,7 @@ const QString sSaveAsFile = QObject::tr("Save As File");    //  另存为文件
 const QString sOpenFolder = QObject::tr("Open Folder");     //  打开所在文件夹
 
 const QString sPrint = QObject::tr("Print");                //  打印
+const QString sPrintError = QObject::tr("Print Error");                //  打印
 const QString sPrintErrorNoDevice = QObject::tr("No Print Device");                //  没有打印设备
 
 const QString sFileAttr = QObject::tr("File Attr");         //  属性

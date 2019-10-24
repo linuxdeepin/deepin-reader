@@ -1,5 +1,4 @@
 #include "ThumbnailItemWidget.h"
-#include <QDebug>
 
 ThumbnailItemWidget::ThumbnailItemWidget(CustomItemWidget *parent) :
     CustomItemWidget ("ThumbnailItemWidget", parent)
@@ -12,8 +11,10 @@ ThumbnailItemWidget::ThumbnailItemWidget(CustomItemWidget *parent) :
 void ThumbnailItemWidget::paintEvent(QPaintEvent *event)
 {
     QPalette p;
+
+    //  涉及到 主题颜色
     if (m_bPaint) {
-        p.setColor(QPalette::Text, this->palette().highlight().color());
+        p.setColor(QPalette::Text, Qt::blue);
     } else {
         p.setColor(QPalette::Text, Qt::black);
     }
@@ -42,7 +43,7 @@ void ThumbnailItemWidget::initWidget()
     m_pPage->setFixedSize(QSize(140, 30));
     m_pPage->setAlignment(Qt::AlignCenter);
 
-    m_pPicture = new CustomLabel(this);
+    m_pPicture = new CustomLabel();
     m_pPicture->setFixedSize(QSize(140, 168));
     m_pPicture->setAlignment(Qt::AlignCenter);
 
@@ -54,7 +55,7 @@ void ThumbnailItemWidget::initWidget()
     t_vLayout->addWidget(m_pPage);
 
     auto t_hLayout = new QHBoxLayout;
-    t_hLayout->setContentsMargins(0, 0, 0, 0);
+    t_hLayout->setContentsMargins(2, 2, 2, 2);
     t_hLayout->setSpacing(0);
     t_hLayout->addStretch(1);
     t_hLayout->addItem(t_vLayout);

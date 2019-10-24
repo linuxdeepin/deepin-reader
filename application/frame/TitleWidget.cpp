@@ -186,13 +186,13 @@ DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
     QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
 
     DIconButton *btn = new  DIconButton(this);
-    btn->setIcon(QIcon(normalPic));
     btn->setFixedSize(QSize(36, 36));
+    btn->setIcon(QIcon(normalPic));
     btn->setIconSize(QSize(36, 36));
-    // btn->setFlat(true);//设置后背景不自绘
 
     btn->setToolTip(btnName);
     btn->setCheckable(bCheckable);
+
     if (bCheckable) {
         btn->setChecked(false);
     }
@@ -224,7 +224,10 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         emit sigOpenFileOk();
-    } else if (msgType == MSG_OPERATION_FULLSCREEN || msgType == MSG_OPERATION_SLIDE) {
+    } else if (msgType == MSG_OPERATION_FULLSCREEN) {
+        emit sigAppFullScreen();
+        return ConstantMsg::g_effective_res;
+    } else if (msgType == MSG_OPERATION_SLIDE) {
         emit sigAppFullScreen();
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == "Esc") {      //  退出放大镜模式

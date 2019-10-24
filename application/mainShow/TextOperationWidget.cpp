@@ -47,7 +47,7 @@ DPushButton *TextOperationWidget::createBtn(const QString &btnName, const char *
 
 void TextOperationWidget::SlotBtnCopyClicked()
 {
-    sendMsgAndHide(MSG_OPERATION_TEXT_COPY);
+    sendMsgAndHide(MSG_OPERATION_TEXT_COPY, m_strSelectText);
 }
 
 void TextOperationWidget::SlotBtnRemoveHighLightedClicked()

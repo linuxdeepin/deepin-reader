@@ -100,21 +100,7 @@ void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
         return;
     }
 
-    if (m_pFileViewNoteWidget == nullptr) {
-        m_pFileViewNoteWidget = new FileViewNoteWidget(this);
-    }
-
-    int nParentWidth = this->width();
-    int nWidth = m_pFileViewNoteWidget->width();
-
-    QString t_strNote;
-    auto pDocummentProxy = DocummentProxy::instance();
-    pDocummentProxy->getAnnotationText(t_strUUid, t_strNote, t_nPage);
-
-    m_pFileViewNoteWidget->setEditText(t_strNote);
-    m_pFileViewNoteWidget->move(nParentWidth - nWidth - 50, 200);
-    m_pFileViewNoteWidget->show();
-    m_pFileViewNoteWidget->raise();
+    slotOpenNoteWidget(contant + ",,,," + t_strUUid);
 }
 
 void DocShowShellWidget::slotCloseNoteWidget()
@@ -158,11 +144,11 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
             emit sigShowFileFind();
             return ConstantMsg::g_effective_res;
         }
+        break;
     }
-    case MSG_CLOSE_NOTE_WIDGET: {
+    case MSG_CLOSE_NOTE_WIDGET:
         emit sigCloseNoteWidget();
-    }
-    break;
+        break;
     }
 
     return 0;
@@ -170,7 +156,7 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
 
 void DocShowShellWidget::initWidget()
 {
-    QVBoxLayout *layout = new QVBoxLayout;
+    auto layout = new QVBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(new FileViewWidget);

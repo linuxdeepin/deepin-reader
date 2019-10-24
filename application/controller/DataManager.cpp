@@ -13,7 +13,7 @@ DataManager::DataManager(QObject *parent) :
     m_listColor.append((Qt::cyan));
     m_listColor.append((Qt::green));
     m_listColor.append((Qt::yellow));
-    m_listColor.append((Qt::white));
+    m_listColor.append((Qt::gray));
 }
 
 QString DataManager::strOnlyFilePath() const
@@ -61,7 +61,7 @@ void DataManager::setBIsBookMarkState(bool bIsBookMarkState)
 
 QColor DataManager::color(const int &index)
 {
-    if(index < m_listColor.count()){
+    if (index < m_listColor.count()) {
         return  m_listColor.at(index);
     }
 

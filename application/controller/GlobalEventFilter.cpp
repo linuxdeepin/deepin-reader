@@ -32,14 +32,12 @@ GlobalEventFilter::GlobalEventFilter(QObject *parent)
 
 bool GlobalEventFilter::eventFilter(QObject *obj, QEvent *e)
 {
-    int nType = e->type();
-
     Q_UNUSED(obj)
+
+    int nType = e->type();
     if (nType == QEvent::KeyPress) {
         QKeyEvent *event = static_cast<QKeyEvent *>(e);
         QString key = Utils::getKeyshortcut(event);
-
-//        qDebug() << "GlobalEventFilter      eventFilter     " << key;
 
         if (m_pFilterList.contains(key)) {
             NotifySubject::getInstance()->sendMsg(MSG_NOTIFY_KEY_MSG, key);

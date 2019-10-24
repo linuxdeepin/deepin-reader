@@ -9,6 +9,7 @@
 #include <QPrintDialog>
 #include <DMessageBox>
 #include <QPrintPreviewDialog>
+#include <QPrintPreviewWidget>
 #include "translator/Frame.h"
 #include "controller/DataManager.h"
 
@@ -118,7 +119,7 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
         m_nPage = m_pDocummentProxy->pointInWhichPage(m_pStartPoint);
 
         // 判断鼠标点击的地方是否有高亮
-        QString selectText, t_strContant, t_strUUid;
+        QString selectText, t_strUUid;
         bool b_highLight = false;
 
         m_bIsHighLightReleasePoint = false;
@@ -130,8 +131,8 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
             m_strUUid = t_strUUid;
 
             if (DataManager::instance()->stackWidgetIndex() == 2) {
-                t_strContant.clear();
-                t_strContant = m_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight ? 1 : 0)) + QString("%") + QString::number(m_nPage);
+
+                QString t_strContant = m_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight ? 1 : 0)) + QString("%") + QString::number(m_nPage);
                 sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
             }
         }
@@ -172,8 +173,11 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
     CustomWidget::mouseReleaseEvent(event);
 }
 
+//  文档 显示区域 大小变化
 void FileViewWidget::resizeEvent(QResizeEvent *event)
 {
+    sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET);
+
     slotSetWidgetAdapt();
 
     CustomWidget::resizeEvent(event);
@@ -325,13 +329,44 @@ void FileViewWidget::initConnections()
 //  打印
 void FileViewWidget::slotPrintFile()
 {
-    QPrinter printer(QPrinter::HighResolution);
+    QPrinter printer(QPrinter::ScreenResolution);
+    // 创建打印对话框
+    QString printerName = printer.printerName();
+    if ( printerName.size() == 0) {
+        DMessageBox::warning(this, Frame::sPrintError, Frame::sPrintErrorNoDevice);
+        return;
+    }
+
     QPrintPreviewDialog preview(&printer, this);
-
     connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ] (QPrinter * printer) {
-//        currentWrapper()->textEditor()->print(printer);
 
+        int nPageSize = m_pDocummentProxy->getPageSNum();       //  pdf 页数
+        printer->setWinPageSize(nPageSize);
+
+        QPainter painter(printer);
+        painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
+        painter.begin(printer);
+        QRect rect = painter.viewport();
+
+        for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
+            QImage image;
+
+            bool rl = m_pDocummentProxy->getImage(iIndex, image, 800, 1100);
+            if (rl) {
+                QPixmap pixmap = pixmap.fromImage(image);
+
+                QSize size = pixmap.size();
+                size.scale(rect.size(), Qt::KeepAspectRatio);//此处保证图片显示完整
+                painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
+                painter.setWindow(pixmap.rect());
+                painter.drawPixmap(10, 10, 800, 1100, pixmap);
+                if (iIndex < nPageSize - 1)
+                    printer->newPage();
+            }
+        }
+        painter.end();
     });
+
     preview.exec();
 }
 

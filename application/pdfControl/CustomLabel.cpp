@@ -14,13 +14,13 @@ CustomLabel::CustomLabel(QWidget *parent) :
 void CustomLabel::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
-    QRectF rectangle(1, 1, (this->width()-2), (this->height()-2));
+    QRectF rectangle(1, 1, (this->width() - 2), (this->height() - 2));
 
     QPainter painter(this);
     painter.setOpacity(1);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setBrush(Qt::white);
-    painter.drawRoundedRect(rectangle, 15, 15);
+    painter.setBrush(Qt::NoBrush);
+    painter.drawRoundedRect(rectangle, 10, 10);
 
     DLabel::paintEvent(e);
 }
