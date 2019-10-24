@@ -20,7 +20,7 @@ void ThumbnailItemWidget::paintEvent(QPaintEvent *event)
     }
 
     m_pPicture->setPalette(p);
-    m_pPage->setPalette(p);
+    m_pPageNumber->setPalette(p);
     CustomWidget::paintEvent(event);
 }
 
@@ -39,9 +39,9 @@ void ThumbnailItemWidget::setBSelect(const bool &paint)
 // 初始化界面
 void ThumbnailItemWidget::initWidget()
 {
-    m_pPage = new DLabel();
-    m_pPage->setFixedSize(QSize(140, 30));
-    m_pPage->setAlignment(Qt::AlignCenter);
+    m_pPageNumber = new DLabel();
+    m_pPageNumber->setFixedSize(QSize(140, 30));
+    m_pPageNumber->setAlignment(Qt::AlignCenter);
 
     m_pPicture = new CustomLabel();
     m_pPicture->setFixedSize(QSize(140, 168));
@@ -52,7 +52,7 @@ void ThumbnailItemWidget::initWidget()
     t_vLayout->setSpacing(1);
 
     t_vLayout->addWidget(m_pPicture);
-    t_vLayout->addWidget(m_pPage);
+    t_vLayout->addWidget(m_pPageNumber);
 
     auto t_hLayout = new QHBoxLayout;
     t_hLayout->setContentsMargins(2, 2, 2, 2);

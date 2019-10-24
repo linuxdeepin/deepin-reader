@@ -66,6 +66,7 @@ enum MSG_FONT_MENU_TYPE {
     MSG_DOUB_PAGE_VIEW,             //  双页视图
     MSG_SELF_ADAPTE_HEIGHT,         //  自适应高度
     MSG_SELF_ADAPTE_WIDTH,          //  自适应宽度
+    MSG_SELF_ADAPTE_SCALE,          //  自适应宽\高 缩放比例变化
     MSG_FILE_ROTATE,                //  旋转
 };
 

@@ -10,7 +10,6 @@
 #include <QVBoxLayout>
 
 #include "subjectObserver/CustomWidget.h"
-#include "docview/docummentproxy.h"
 
 /**
  * @brief The ThumbnailItemWidget class
@@ -31,7 +30,7 @@ signals:
     void sigJumpToSpecifiedPage(const int &);
     void sigJumpToPrevPage();
     void sigJumpToNextPage();
-    void sigJudgeInputPage(const QString&);
+    void sigJudgeInputPage(const QString &);
 
 public:
     void setTotalPages(int pages);
@@ -41,7 +40,7 @@ private slots:
     void slotPrePage();
     void slotNextPage();
     void slotJumpToSpecifiedPage(const int &);
-    void slotJudgeInputPage(const QString&);
+    void slotJudgeInputPage(const QString &);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;

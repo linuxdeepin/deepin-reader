@@ -18,7 +18,7 @@ FontWidget::FontWidget(CustomWidget *parent):
  * @param msgType
  * @return
  */
-int FontWidget::dealWithData(const int &msgType, const QString &)
+int FontWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     int scale = 0;
     switch (msgType) {
@@ -44,6 +44,10 @@ int FontWidget::dealWithData(const int &msgType, const QString &)
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_OPEN_FILE_OK:
         emit sigOpenFileOk();
+        break;
+    case MSG_SELF_ADAPTE_SCALE:
+        m_pEnlargeSlider->setValue(msgContent.toDouble() * 100);
+        qDebug() << "MSG_SELF_ADAPTE_SCALE          " << msgContent;
         break;
     }
 

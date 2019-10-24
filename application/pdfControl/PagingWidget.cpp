@@ -2,6 +2,7 @@
 #include <QDebug>
 
 #include "translator/PdfControl.h"
+#include "docview/docummentproxy.h"
 
 PagingWidget::PagingWidget(CustomWidget *parent) :
     CustomWidget(QString("PagingWidget"), parent)
@@ -61,8 +62,7 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
 
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
             //过滤掉零开头的输入
-            if(keyEvent->key()==Qt::Key_0&&m_pJumpPageSpinBox->text().isEmpty())
-            {
+            if (keyEvent->key() == Qt::Key_0 && m_pJumpPageSpinBox->text().isEmpty()) {
                 return  true;
             }
             if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
@@ -88,7 +88,7 @@ void PagingWidget::initConnections()
     connect(this, SIGNAL(sigJumpToPrevPage()), this, SLOT(slotPrePage()));
     connect(this, SIGNAL(sigJumpToNextPage()), this, SLOT(slotNextPage()));
     connect(this, SIGNAL(sigJumpToSpecifiedPage(const int &)), this, SLOT(slotJumpToSpecifiedPage(const int &)));
-    connect(this, SIGNAL(sigJudgeInputPage(const QString&)), this, SLOT(slotJudgeInputPage(const QString&)));
+    connect(this, SIGNAL(sigJudgeInputPage(const QString &)), this, SLOT(slotJudgeInputPage(const QString &)));
 }
 
 /**
@@ -139,7 +139,7 @@ int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
         } else if (msgContent == "Down") {
             emit sigJumpToNextPage();
             return ConstantMsg::g_effective_res;
-        }else if (msgContent == "0") {
+        } else if (msgContent == "0") {
             emit slotJudgeInputPage(msgContent);
             qDebug() << "PagingWidget::dealWithData key=" << msgContent;
         }
@@ -179,9 +179,9 @@ void PagingWidget::slotJumpToSpecifiedPage(const int &nPage)
 
 void PagingWidget::slotJudgeInputPage(const QString &)
 {
-   QString t_strPage = QString::number(m_pJumpPageSpinBox->value());
-    if(t_strPage.length() == 1 && m_pJumpPageSpinBox->value() == 0){
-        m_pJumpPageSpinBox->setValue(m_currntPage+1);
+    QString t_strPage = QString::number(m_pJumpPageSpinBox->value());
+    if (t_strPage.length() == 1 && m_pJumpPageSpinBox->value() == 0) {
+        m_pJumpPageSpinBox->setValue(m_currntPage + 1);
     }
 }
 
