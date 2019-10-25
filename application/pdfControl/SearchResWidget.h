@@ -4,7 +4,6 @@
 #include <QVBoxLayout>
 #include <QThread>
 
-#include "translator/Frame.h"
 #include "NotesItemWidget.h"
 #include "subjectObserver/CustomWidget.h"
 #include "docview/docummentproxy.h"
@@ -24,7 +23,7 @@ public:
     LoadSearchResThread(QObject *parent = nullptr);
 
 signals:
-    void sigLoadImage(const int&, const QImage &);
+    void sigLoadImage(const int &, const QImage &);
 
 public:
     inline void setSearchResW(SearchResWidget *searchResW)
@@ -47,7 +46,7 @@ public:
         return m_searchContantList;
     }
 
-    inline void pushSearch(const stSearchRes& search)
+    inline void pushSearch(const stSearchRes &search)
     {
         m_searchContantList.append(search);
     }
@@ -91,7 +90,7 @@ private slots:
     void slotFlushSearchWidget(const QString &);
     void slotGetSearchContant(stSearchRes);
     void slotSearchOver();
-    void slotLoadImage(const int&, const QImage&);
+    void slotLoadImage(const int &, const QImage &);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -100,7 +99,7 @@ private:
     void initConnections();
 
 private:
-    void initSearchList(const QList<stSearchRes>&);
+    void initSearchList(const QList<stSearchRes> &);
     void addSearchsItem(const int &page, const QString &text, const int &resultNum);
 
 private:

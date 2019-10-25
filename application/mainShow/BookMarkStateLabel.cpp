@@ -2,7 +2,6 @@
 #include "subjectObserver/ModuleHeader.h"
 #include "subjectObserver/MsgHeader.h"
 #include "controller/MsgSubject.h"
-#include "translator/PdfControl.h"
 #include "docview/docummentproxy.h"
 #include "controller/DataManager.h"
 
@@ -29,10 +28,10 @@ BookMarkStateLabel::BookMarkStateLabel(DWidget *parent)
 void BookMarkStateLabel::mouseMoveEvent(QMouseEvent *event)
 {
     if (m_bChecked) {
-        setToolTip(PdfControl::DLT_BK);
+        setToolTip(tr("delete bookmark"));
         setPixmapState(ImageModule::g_checked_state);
     } else {
-        setToolTip(PdfControl::ADD_BK);
+        setToolTip(tr("add bookmark"));
         setPixmapState(ImageModule::g_hover_state);
     }
     DLabel::mouseMoveEvent(event);
@@ -76,6 +75,7 @@ void BookMarkStateLabel::setPixmapState(const QString &state)
 void BookMarkStateLabel::initConnections()
 {
     connect(this, SIGNAL(sigSetMarkState(const QString &)), this, SLOT(slotSetMarkState(const QString &)));
+    connect(this, SIGNAL(sigWidgetVisible(const int &)), this, SLOT(slotSetWidgetVisible(const int &)));
 }
 
 void BookMarkStateLabel::slotSetMarkState(const QString &sData)
@@ -91,6 +91,11 @@ void BookMarkStateLabel::slotSetMarkState(const QString &sData)
     DataManager::instance()->setBIsBookMarkState(m_bChecked);
 }
 
+void BookMarkStateLabel::slotSetWidgetVisible(const int &nVis)
+{
+    this->setVisible(false);
+}
+
 bool BookMarkStateLabel::bChecked() const
 {
     return m_bChecked;
@@ -103,6 +108,8 @@ int BookMarkStateLabel::dealWithData(const int &msgType, const QString &msgConte
         return ConstantMsg::g_effective_res;
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
 
+    } else if (msgType == MSG_OPERATION_FULLSCREEN || msgType == MSG_OPERATION_SLIDE) {
+        emit sigWidgetVisible(1);
     }
     return 0;
 }

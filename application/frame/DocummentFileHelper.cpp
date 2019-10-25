@@ -6,7 +6,6 @@
 #include <DFileDialog>
 #include "utils/utils.h"
 #include <QDesktopServices>
-#include "translator/Frame.h"
 #include <DMessageBox>
 #include "subjectObserver/ModuleHeader.h"
 
@@ -31,22 +30,31 @@ DocummentFileHelper::DocummentFileHelper(QObject *parent)
 
 DocummentFileHelper::~DocummentFileHelper()
 {
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
+
+    if (m_pMsgSubject) {
+        m_pMsgSubject->removeObserver(this);
+    }
 //    if (m_pDocummentProxy && m_szFilePath != "") {
 //        m_pDocummentProxy->closeFile();
 //        m_pDocummentProxy->waitThreadAndClearEnd();
 //    }
 }
 
-//  ctrl s  保存文件
-void DocummentFileHelper::slotSaveFileCtrlS()
-{
-    m_pDocummentProxy->save(m_szFilePath, true);
-    DataManager::instance()->setBIsUpdate(false);
-}
+////  ctrl s  保存文件
+//void DocummentFileHelper::slotSaveFileCtrlS()
+//{
+//    m_pDocummentProxy->save(m_szFilePath, true);
+//    DataManager::instance()->setBIsUpdate(false);
+//}
 
 //  保存
 void DocummentFileHelper::slotSaveFile()
 {
+    DataManager::instance()->setBIsUpdate(false);
+
     m_pDocummentProxy->save(m_szFilePath, true);
      DataManager::instance()->setBIsUpdate(false);
 }
@@ -59,9 +67,11 @@ void DocummentFileHelper::slotSaveAsFile()
     if (sFilter != "") {
         DFileDialog dialog;
         dialog.selectFile(m_szFilePath);
-        QString filePath = dialog.getSaveFileName(nullptr, Frame::sSaveFile, m_szFilePath, sFilter);
+        QString filePath = dialog.getSaveFileName(nullptr, tr("Save File"), m_szFilePath, sFilter);
         if (filePath != "") {
             QString sFilePath = getFilePath(filePath);
+
+            DataManager::instance()->setBIsUpdate(false);
 
             m_pDocummentProxy->save(sFilePath, true);
 
@@ -140,7 +150,7 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
         //  是否有操作
         bool rl = DataManager::instance()->bIsUpdate();
         if (rl) {
-            if (QMessageBox::Yes == DMessageBox::question(nullptr, Frame::sSaveFile, Frame::sSaveFileTitle)) {
+            if (QMessageBox::Yes == DMessageBox::question(nullptr, tr("Save File"), tr("Do you need to save the file opened?"))) {
                 m_pDocummentProxy->save(m_szFilePath, true);
             }
         }
@@ -184,14 +194,10 @@ void DocummentFileHelper::setAppShowTitle(const QString &fileName)
 }
 
 //  复制
-void DocummentFileHelper::slotCopySelectContent()
+void DocummentFileHelper::slotCopySelectContent(const QString &sCopy)
 {
-    QString sCopy = "";
-    bool rl = m_pDocummentProxy->getSelectTextString(sCopy);
-    if (rl && sCopy != "") {
-        QClipboard *clipboard = DApplication::clipboard();   //获取系统剪贴板指针
-        clipboard->setText(sCopy);
-    }
+    QClipboard *clipboard = DApplication::clipboard();   //获取系统剪贴板指针
+    clipboard->setText(sCopy);
 }
 
 /**
@@ -201,7 +207,6 @@ void DocummentFileHelper::slotCopySelectContent()
 void DocummentFileHelper::slotFileSlider(const int &nFlag)
 {
     if (nFlag == 1) {
-        QThread::msleep(100);
         bool bSlideModel = m_pDocummentProxy->showSlideModel();    //  开启幻灯片
         if (bSlideModel) {
             DataManager::instance()->setCurShowState(FILE_SLIDE);
@@ -242,8 +247,7 @@ void DocummentFileHelper::initConnections()
     connect(this, SIGNAL(sigSaveFile()), this, SLOT(slotSaveFile()));
     connect(this, SIGNAL(sigSaveAsFile()), this, SLOT(slotSaveAsFile()));
     connect(this, SIGNAL(sigFileSlider(const int &)), this, SLOT(slotFileSlider(const int &)));
-    connect(this, SIGNAL(sigCopySelectContent()), this, SLOT(slotCopySelectContent()));
-    connect(this, SIGNAL(sigSaveFileCtrlS()), this, SLOT(slotSaveFileCtrlS()));
+    connect(this, SIGNAL(sigCopySelectContent(const QString &)), this, SLOT(slotCopySelectContent(const QString &)));
 }
 
 int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgContent)
@@ -259,14 +263,14 @@ int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgCont
         emit sigSaveAsFile();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_COPY:           //  复制
-        emit sigCopySelectContent();
+        emit sigCopySelectContent(msgContent);
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_SLIDE:               //  放映
         emit sigFileSlider(1);
-        return ConstantMsg::g_effective_res;
+        break;
     case MSG_NOTIFY_KEY_MSG :
         if ("Ctrl+S" == msgContent) {
-            emit sigSaveFileCtrlS();
+            emit sigSaveFile();
             return ConstantMsg::g_effective_res;
         }
         if ("Esc" == msgContent) {

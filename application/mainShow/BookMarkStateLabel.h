@@ -25,6 +25,7 @@ public:
 
 signals:
     void sigSetMarkState(const QString &);
+    void sigWidgetVisible(const int &);
 
 public:
     bool bChecked() const;
@@ -41,6 +42,7 @@ private:
 
 private slots:
     void slotSetMarkState(const QString &);
+    void slotSetWidgetVisible(const int &);
 
 private:
     bool            m_bChecked = false;

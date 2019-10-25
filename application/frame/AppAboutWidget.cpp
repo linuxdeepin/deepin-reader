@@ -1,7 +1,6 @@
 #include "AppAboutWidget.h"
 #include <DWidgetUtil>
 #include "subjectObserver/ModuleHeader.h"
-#include "translator/Frame.h"
 
 AppAboutWidget::AppAboutWidget(DWidget *parent)
     : DAboutDialog (parent)
@@ -12,10 +11,10 @@ AppAboutWidget::AppAboutWidget(DWidget *parent)
 void AppAboutWidget::initLabels()
 {
     setProductIcon(QPixmap(":/resources/image/logo/logo_big.svg"));
-    setProductName(Frame::sAppName);
+    setProductName(tr("deepin-reader"));
     setVersion("20191018");
 
-    setDescription(Frame::sDescription);
+//    setDescription(Frame::sDescription);
 
     setAcknowledgementLink(Constant::sAcknowledgementLink);
     setAcknowledgementVisible(false);

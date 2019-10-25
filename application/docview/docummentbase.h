@@ -16,6 +16,7 @@
 #include <QThread>
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
+#include <QTimer>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -121,6 +122,8 @@ public:
         m_searchTask = nullptr;
         bfindnext=true;
         m_bScanningcopy=false;
+        showslidwaittimer = nullptr;
+
     }
 
     ~DocummentBasePrivate()
@@ -187,6 +190,8 @@ public:
     bool bcloseing;
     bool bfindnext;//上一次搜索结果是向前翻还是向后翻
     bool m_bScanningcopy;//当前打开的是否为扫描件
+    QTimer *showslidwaittimer;
+
 
 signals:
     void signal_docummentLoaded();
@@ -216,6 +221,7 @@ public:
         return false;
     }
     virtual QString removeAnnotation(const QPoint &startpos) {}
+
     virtual void removeAnnotation(const QString &struuid,int ipage=-1) {}
     virtual QString addAnnotation(const QPoint &startpos,const QPoint &endpos,QColor color = Qt::yellow) {}
     virtual void search(const QString &strtext, QColor color = Qt::yellow) {}
@@ -229,7 +235,7 @@ public:
     {
         return false;
     }
-    virtual void jumpToHighLight(const QString& uuid,int ipage){};
+    virtual void jumpToHighLight(const QString &uuid, int ipage) {};
     void stopLoadPageThread();
     bool openFile(QString filepath);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
@@ -256,7 +262,7 @@ public:
     //    bool isWordsBeLoad();
     bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3);
     bool showSlideModel();
-    void cacularValueXY(int &xvalue, int &yvalue,int curpage,bool bsearch=true,QRectF rect=QRectF());
+    void cacularValueXY(int &xvalue, int &yvalue, int curpage, bool bsearch = true, QRectF rect = QRectF());
     int pointInWhichPage(QPoint &qpoint);
 
 
@@ -277,7 +283,8 @@ protected slots:
     bool mouseSelectText(QPoint start, QPoint stop);
     void scaleAndShow(double scale, RotateType_EM rotate);
     bool setViewModeAndShow(ViewMode_EM viewmode);
-protected:   
+    void showSlideModelTimerOut();
+protected:
     void showSinglePage();
     void showFacingPage();
     void initConnect();

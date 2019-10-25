@@ -1,5 +1,4 @@
 #include "SearchResWidget.h"
-#include "translator/PdfControl.h"
 
 SearchResWidget::SearchResWidget(CustomWidget *parent) :
     CustomWidget(QString("SearchResWidget"), parent)
@@ -72,7 +71,7 @@ void SearchResWidget::slotFlushSearchWidget(const QString &)
 
 void SearchResWidget::slotGetSearchContant(stSearchRes search)
 {
-    if(search.listtext.size() < 1){
+    if (search.listtext.size() < 1) {
         return;
     }
     m_loadSearchResThread.pushSearch(search);
@@ -80,7 +79,7 @@ void SearchResWidget::slotGetSearchContant(stSearchRes search)
 
 void SearchResWidget::slotSearchOver()
 {
-    if(m_loadSearchResThread.isRunning()){
+    if (m_loadSearchResThread.isRunning()) {
         m_loadSearchResThread.stopThread();
     }
 
@@ -91,10 +90,10 @@ void SearchResWidget::slotSearchOver()
     initSearchList(m_loadSearchResThread.searchList());
 }
 
-void SearchResWidget::slotLoadImage(const int&page, const QImage & image)
+void SearchResWidget::slotLoadImage(const int &page, const QImage &image)
 {
     if (m_pSearchItemWidget) {
-        if(page == m_pSearchItemWidget->nPageIndex()){
+        if (page == m_pSearchItemWidget->nPageIndex()) {
             m_pSearchItemWidget->setLabelImage(image);
         }
     }
@@ -114,17 +113,17 @@ void SearchResWidget::initWidget()
 
 void SearchResWidget::initConnections()
 {
-    connect(&m_loadSearchResThread, SIGNAL(sigLoadImage(const int&, const QImage &)),
-            this, SLOT(slotLoadImage(const int&, const QImage &)));
+    connect(&m_loadSearchResThread, SIGNAL(sigLoadImage(const int &, const QImage &)),
+            this, SLOT(slotLoadImage(const int &, const QImage &)));
 
     connect(this, SIGNAL(sigClearWidget()), this, SLOT(slotClearWidget()));
 //    connect(this, SIGNAL(sigFlushSearchWidget(QVariant)),
 //            this, SLOT(slotFlushSearchList(QVariant)));
-    connect(this, SIGNAL(sigFlushSearchWidget(const QString&)), this, SLOT(slotFlushSearchWidget(const QString&)));
+    connect(this, SIGNAL(sigFlushSearchWidget(const QString &)), this, SLOT(slotFlushSearchWidget(const QString &)));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
 }
 
-void SearchResWidget::initSearchList(const QList<stSearchRes>& list)
+void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
 {
     int resultNum = 0;
     QString strText;
@@ -159,7 +158,7 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
     itemWidget->setNoteSigne(false);
     itemWidget->setLabelPage(page, 1);
     itemWidget->setTextEditText(text);
-    itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + PdfControl::SEARCH_RES_CONT));
+    itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + tr("search res content")));
     itemWidget->setMinimumSize(QSize(190, 80));
 
     QListWidgetItem *item = new QListWidgetItem(m_pNotesList);

@@ -1,7 +1,7 @@
 #include "TitleWidget.h"
-#include "translator/Frame.h"
 #include <QHBoxLayout>
 #include <QBitmap>
+
 TitleWidget::TitleWidget(CustomWidget *parent) :
     CustomWidget("TitleWidget", parent)
 {
@@ -107,9 +107,9 @@ void TitleWidget::on_handleShapeBtn_clicked()
         m_pHandleMenu->setFixedWidth(200);
         connect(m_pHandleMenu, SIGNAL(aboutToHide()), this, SLOT(slotHandleMenuHide()));
 
-        QAction *m_pHandleAction = createAction(Frame::sHandleShape);
+        QAction *m_pHandleAction = createAction(tr("handleShape"));
 
-        QAction *m_pDefaultAction = createAction(Frame::sDefaultShape);
+        QAction *m_pDefaultAction = createAction(tr("defaultShape"));
         m_pDefaultAction->setChecked(true);
 
         QActionGroup *actionGroup = new QActionGroup(this);
@@ -134,12 +134,12 @@ void TitleWidget::slotActionTrigger(QAction *action)
     int nCurrentState = -1;
 
     QString sAction = action->objectName();
-    if (sAction == Frame::sDefaultShape) {
+    if (sAction == tr("defaultShape")) {
         nCurrentState = 0;
-        btnName = Frame::sDefaultShape;
+        btnName = tr("defaultShape");
     } else {
         nCurrentState = 1;
-        btnName = Frame::sHandleShape;
+        btnName = tr("handleShape");
     }
 
     setHandleShapeBtn(btnName);
@@ -166,18 +166,18 @@ void TitleWidget::slotHandleMenuHide()
 
 void TitleWidget::initBtns()
 {
-    m_pThumbnailBtn = createBtn(Frame::sThumbnailTitle, true);
+    m_pThumbnailBtn = createBtn("thumbnail", true);
     connect(m_pThumbnailBtn, SIGNAL(clicked()), this, SLOT(on_thumbnailBtn_clicked()));
 
-    m_pSettingBtn = createBtn(Frame::sSetting);
+    m_pSettingBtn = createBtn("setting");
     connect(m_pSettingBtn, SIGNAL(clicked()), this, SLOT(on_settingBtn_clicked()));
 
-    m_pHandleShapeBtn = createBtn(Frame::sDefaultShape);
+    m_pHandleShapeBtn = createBtn("defaultShape");
     m_pHandleShapeBtn->setFixedSize(QSize(42, 36));
     m_pHandleShapeBtn->setIconSize(QSize(42, 36));
     connect(m_pHandleShapeBtn, SIGNAL(clicked()), this, SLOT(on_handleShapeBtn_clicked()));
 
-    m_pMagnifierBtn = createBtn(Frame::sMagnifier, true);
+    m_pMagnifierBtn = createBtn("magnifier", true);
     connect(m_pMagnifierBtn, SIGNAL(clicked()), this, SLOT(on_magnifyingBtn_clicked()));
 }
 
@@ -186,13 +186,13 @@ DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
     QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
 
     DIconButton *btn = new  DIconButton(this);
-    btn->setIcon(QIcon(normalPic));
     btn->setFixedSize(QSize(36, 36));
+    btn->setIcon(QIcon(normalPic));
     btn->setIconSize(QSize(36, 36));
-    // btn->setFlat(true);//设置后背景不自绘
 
     btn->setToolTip(btnName);
     btn->setCheckable(bCheckable);
+
     if (bCheckable) {
         btn->setChecked(false);
     }

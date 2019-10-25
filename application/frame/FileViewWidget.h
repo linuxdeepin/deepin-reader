@@ -6,7 +6,6 @@
 #include <DMenu>
 
 #include "subjectObserver/CustomWidget.h"
-#include "mainShow/DefaultOperationWidget.h"
 #include "mainShow/TextOperationWidget.h"
 #include "DocummentFileHelper.h"
 
@@ -49,7 +48,6 @@ signals:
     void sigFileAddNote(const QString &);
 
 protected:
-//    void mouseDoubleClickEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
@@ -76,7 +74,6 @@ private:
     int dealWithFileMenuRequest(const int &msgType, const QString &msgContent);
 
 private:
-    DefaultOperationWidget  *m_pDefaultOperationWidget = nullptr;
     TextOperationWidget     *m_pTextOperationWidget = nullptr;
 
     DocummentFileHelper     *m_pDocummentFileHelper = nullptr;

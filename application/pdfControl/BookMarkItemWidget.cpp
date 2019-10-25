@@ -1,5 +1,4 @@
 #include "BookMarkItemWidget.h"
-#include "translator/PdfControl.h"
 
 BookMarkItemWidget::BookMarkItemWidget(CustomItemWidget *parent) :
     CustomItemWidget("BookMarkItemWidget", parent)
@@ -37,7 +36,7 @@ void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
 {
     QMenu *t_menu = new QMenu(this);
 
-    QAction *dltBookMarkAction = t_menu->addAction(PdfControl::DLT_BK);
+    QAction *dltBookMarkAction = t_menu->addAction(tr("delete bookmark"));
     connect(dltBookMarkAction, SIGNAL(triggered()), this, SLOT(slotDltBookMark()));
     t_menu->exec(QCursor::pos());
 }
@@ -48,27 +47,46 @@ void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
  */
 void BookMarkItemWidget::initWidget()
 {
+    QFont font(QString("SourceHanSansSC-Medium"),12);
+    m_pPageNumber = new DLabel(this);
+    m_pPageNumber->setMinimumWidth(31);
+    m_pPageNumber->setFixedHeight(18);
+    m_pPageNumber->setFont(font);
+
+    auto m_pVLayout = new QVBoxLayout;
+    m_pVLayout->setContentsMargins(20, 18, 0, 44);
+//    m_pVLayout->setSpacing(1);
+    m_pVLayout->addWidget(m_pPageNumber);
+//    m_pVLayout->addStretch(1);
+
     m_pPicture = new CustomLabel(this);
     m_pPicture->setFixedSize(QSize(40, 60));
     m_pPicture->setAlignment(Qt::AlignCenter);
 
-    m_pPage = new DLabel(this);
-    auto m_pVLayout = new QVBoxLayout;
-    m_pPage->setFixedSize(102, 80);
-    m_pVLayout->setContentsMargins(1, 1, 1, 0);
-    m_pVLayout->setSpacing(1);
-
-    m_pVLayout->addWidget(m_pPage);
-    m_pVLayout->addStretch(1);
-
     auto m_pHLayout = new QHBoxLayout;
     m_pHLayout->setContentsMargins(1, 0, 1, 0);
     m_pHLayout->setSpacing(1);
-
     m_pHLayout->addWidget(m_pPicture);
-//    m_pHLayout->addWidget(m_pPage);
+
     m_pHLayout->addItem(m_pVLayout);
 
     this->setLayout(m_pHLayout);
+}
+
+void BookMarkItemWidget::paintEvent(QPaintEvent *event)
+{
+    QPalette p(m_pPicture->palette());
+
+    //  涉及到 主题颜色
+    if (m_bPaint) {
+        p.setColor(QPalette::Text, Qt::blue);
+    } else {
+        p.setColor(QPalette::Text, Qt::black);
+    }
+
+    m_pPicture->setPalette(p);
+    CustomWidget::paintEvent(event);
+
+    update();
 }
 

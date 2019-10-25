@@ -1,5 +1,4 @@
 #include "fontWidget.h"
-#include "translator/PdfControl.h"
 
 FontWidget::FontWidget(CustomWidget *parent):
     CustomWidget(QString("FontWidget"), parent)
@@ -18,7 +17,7 @@ FontWidget::FontWidget(CustomWidget *parent):
  * @param msgType
  * @return
  */
-int FontWidget::dealWithData(const int &msgType, const QString &)
+int FontWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     int scale = 0;
     switch (msgType) {
@@ -44,6 +43,10 @@ int FontWidget::dealWithData(const int &msgType, const QString &)
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_OPEN_FILE_OK:
         emit sigOpenFileOk();
+        break;
+    case MSG_SELF_ADAPTE_SCALE:
+        m_pEnlargeSlider->setValue(msgContent.toDouble() * 100);
+        qDebug() << "MSG_SELF_ADAPTE_SCALE          " << msgContent;
         break;
     }
 
@@ -94,10 +97,6 @@ void FontWidget::initWidget()
     t_pHLayout1->addWidget(m_pEnlargeLab);
     t_pHLayout1->setSpacing(1);
 
-//    QStringList t_list;
-//    t_list << QString("0.5") << QString("0.75") << QString("1.0") << QString("1.25") << QString("1.5") << QString("1.75") << QString("2.0")
-//           << QString("2.25") << QString("2.5") << QString("2.75") << QString("3.0");
-
     m_pEnlargeSlider = new DSlider(Qt::Horizontal);
     m_pEnlargeSlider->setMinimum(10);
     m_pEnlargeSlider->setMaximum(500);
@@ -116,7 +115,7 @@ void FontWidget::initWidget()
     t_pHLayout2->addSpacing(1);
 
     m_pDoubPageViewLb = new MenuLab(this);
-    m_pDoubPageViewLb->setText(PdfControl::DOUB_VIEW);
+    m_pDoubPageViewLb->setText(tr("Double View"));
     m_pDoubPageViewLb->setAlignment(Qt::AlignLeft);
     ft.setPointSize(12);
     m_pDoubPageViewLb->setFont(ft);
@@ -130,7 +129,7 @@ void FontWidget::initWidget()
     t_pHLayout3->addWidget(m_pDoubPageViewLab);
 
     m_pSuitHLb = new MenuLab(this);
-    m_pSuitHLb->setText(PdfControl::ADAP_HEIGHT);
+    m_pSuitHLb->setText(tr("Adaptate Height"));
     m_pSuitHLb->setAlignment(Qt::AlignLeft);
     ft.setPointSize(12);
     m_pSuitHLb->setFont(ft);
@@ -143,7 +142,7 @@ void FontWidget::initWidget()
     t_pHLayout4->addWidget(m_pSuitHLab);
 
     m_pSuitWLb = new MenuLab(this);
-    m_pSuitWLb->setText(PdfControl::ADAP_WIDTH);
+    m_pSuitWLb->setText(tr("Adaptate Width"));
     m_pSuitWLb->setAlignment(Qt::AlignLeft);
     ft.setPointSize(12);
     m_pSuitWLb->setFont(ft);
@@ -156,7 +155,7 @@ void FontWidget::initWidget()
     t_pHLayout5->addWidget(m_pSuitWLab);
 
     m_pRotateLeftLb = new MenuLab(this);
-    m_pRotateLeftLb->setText(PdfControl::ROTAT_TO_L);
+    m_pRotateLeftLb->setText(tr("Rotated To Left"));
     m_pRotateLeftLb->setAlignment(Qt::AlignLeft);
     ft.setPointSize(12);
     m_pRotateLeftLb->setFont(ft);
@@ -169,7 +168,7 @@ void FontWidget::initWidget()
     t_pHLayout6->addWidget(m_pRotateLeftLab);
 
     m_pRotateRightLb = new MenuLab(this);
-    m_pRotateRightLb->setText(PdfControl::ROTAT_TO_R);
+    m_pRotateRightLb->setText(tr("Rotated To Right"));
     m_pRotateRightLb->setAlignment(Qt::AlignLeft);
     ft.setPointSize(12);
     m_pRotateRightLb->setFont(ft);

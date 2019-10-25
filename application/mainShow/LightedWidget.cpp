@@ -1,7 +1,7 @@
 #include "LightedWidget.h"
 #include <QButtonGroup>
 #include <DIconButton>
-#include "translator/MainShow.h"
+#include <DPushButton>
 #include "controller/DataManager.h"
 
 LightedWidget::LightedWidget(CustomWidget *parent)
@@ -37,7 +37,7 @@ int LightedWidget::dealWithData(const int &msgType, const QString &)
 
 void LightedWidget::initWidget()
 {
-    DLabel *titleLabel = new DLabel(MainShow::ADD_HIGH_LIGHTED);
+    auto titleLabel = new DLabel(tr("add high lighted"));
 
     auto topLayout = new QHBoxLayout;
     topLayout->setContentsMargins(0, 0, 0, 0);
@@ -49,11 +49,10 @@ void LightedWidget::initWidget()
     bottomLayout->setContentsMargins(0, 6, 0, 6);
     bottomLayout->setSpacing(8);
 
-    QButtonGroup *btnGroup = new QButtonGroup;
+    auto btnGroup = new QButtonGroup;
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(SlotOnBtnGroupClicked(int)));
 
     for (int i = 0; i < 8; i ++ ) {
-        //DIconButton *btn = new DIconButton(this);
         DFloatingButton *btn = new DFloatingButton(this);
         btn->setFixedSize(QSize(16, 16));
         QPalette pa = btn->palette();

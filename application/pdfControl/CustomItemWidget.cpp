@@ -1,5 +1,4 @@
 #include "CustomItemWidget.h"
-#include "translator/PdfControl.h"
 
 CustomItemWidget::CustomItemWidget(const QString &name, CustomWidget *parent)
     : CustomWidget (name, parent)
@@ -29,13 +28,13 @@ void CustomItemWidget::setLabelPage(const int &value,  const int &nShowPage )
 {
     m_nPageIndex = value;
 
-    if (m_pPage) {
+    if (m_pPageNumber) {
         int nnPage = value + 1;
         if (nShowPage == 1) {
-            QString sPageText = PdfControl::PAGE_PREF + QString("%1").arg(nnPage);
-            m_pPage->setText(sPageText);
+            QString sPageText = tr("page") + QString("%1").arg(nnPage);
+            m_pPageNumber->setText(sPageText);
         } else {
-            m_pPage->setText(QString("%1").arg(nnPage));
+            m_pPageNumber->setText(QString("%1").arg(nnPage));
         }
     }
 }

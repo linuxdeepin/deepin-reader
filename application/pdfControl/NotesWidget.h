@@ -12,7 +12,6 @@
 #include "subjectObserver/CustomWidget.h"
 #include "docview/docummentproxy.h"
 #include "CustomListWidget.h"
-#include "translator/PdfControl.h"
 
 class ThreadLoadImageOfNote : public QThread
 {
@@ -36,7 +35,7 @@ public:
         return m_isLoaded;
     }
 
-    inline void setListNoteSt(const QList<stHighlightContent>& list)
+    inline void setListNoteSt(const QList<stHighlightContent> &list)
     {
         m_stListNote = list;
     }
@@ -88,15 +87,16 @@ private slots:
 private:
     void addNotesItem(const QString &text);
     void initConnection();
+    void setSelectItemBackColor(QListWidgetItem *);
 
 private:
     void fillContantToList();
-    bool hasNoteInList(const int &, const QString&);
-    void addNewItem(const stHighlightContent & note);
+    bool hasNoteInList(const int &, const QString &);
+    void addNewItem(const stHighlightContent &note);
     void addNewItem(const QImage &image, const int &page, const QString &uuid, const QString &text);
     void flushNoteItemText(const int &page, const QString &uuid, const QString &text);
-    void removeFromMap(const QString&) const;
-    void addNoteToMap(const stHighlightContent&);
+    void removeFromMap(const QString &) const;
+    void addNoteToMap(const stHighlightContent &);
 
 private:
     CustomListWidget *m_pNotesList = nullptr;

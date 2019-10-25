@@ -24,7 +24,7 @@ void SlidWidget::paintEvent(QPaintEvent *event)
 
 MagnifierWidget::MagnifierWidget(DWidget *parent): DWidget(parent)
 {
-    m_magnifiercolor =Qt::yellow;// Qt::white;
+    m_magnifiercolor = Qt::yellow; // Qt::white;
     m_magnifierringwidth = 10;
     m_magnifierradius = 100;
     m_magnifierscale = 3;
@@ -147,6 +147,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     setWidgetResizable(true);
     d->m_widget = new DWidget(this);
     setWidget(d->m_widget);
+    d->showslidwaittimer = new QTimer(this);
     d->pblankwidget = new DWidget(this);
     d->pblankwidget->setMouseTracking(true);
     d->pblankwidget->hide();
@@ -204,6 +205,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     connect(this->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_hScrollBarValueChanged(int)));
     connect(d, SIGNAL(signal_docummentLoaded()), this, SLOT(slot_docummentLoaded()));
     connect(this, SIGNAL(signal_loadDocumment(QString)), d, SLOT(loadDocumment(QString)));
+    connect(d->showslidwaittimer, SIGNAL(timeout()), this, SLOT(showSlideModelTimerOut()));
 }
 
 DocummentBase::~DocummentBase()
@@ -379,8 +381,8 @@ bool DocummentBase::mouseSelectText(QPoint start, QPoint stop)
             }
         } else if (i == endpagenum) {
             re = d->m_pages.at(i)->pageTextSelections(
-                        pfirst,
-                        qstop);
+                     pfirst,
+                     qstop);
 
         } else {
             re = d->m_pages.at(i)->pageTextSelections(pfirst,
@@ -508,7 +510,7 @@ bool DocummentBase::showMagnifier(QPoint point)
     qDebug() << "showMagnifier pagenum:" << pagenum;
     if (-1 != pagenum) {
         if (pagenum != d->m_lastmagnifierpagenum && -1 != d->m_lastmagnifierpagenum) {
-            qDebug()<<"++++++"<<pagenum<<d->m_lastmagnifierpagenum;
+            qDebug() << "++++++" << pagenum << d->m_lastmagnifierpagenum;
             if (pagenum > d->m_lastmagnifierpagenum && d->m_lastmagnifierpagenum - 3 > 0) {
                 PageBase *ppage = d->m_pages.at(d->m_lastmagnifierpagenum - 3);
                 ppage->clearMagnifierPixmap();
@@ -648,7 +650,7 @@ bool DocummentBase::pageJump(int pagenum)
         d->pslidelabel->show();
 
         if (-1 != d->m_slidepageno) {
-            qDebug() << "bslidemodel pageJump pagenum:" << pagenum;
+//            qDebug() << "bslidemodel pageJump pagenum:" << pagenum;
             if (!d->animationfirst) {
                 delete d->animationfirst;
                 d->animationfirst = nullptr;
@@ -667,14 +669,14 @@ bool DocummentBase::pageJump(int pagenum)
             QRect rectslidelabel = d->pslidelabel->geometry();
             qDebug() << "rectslideanimationlabel:" << rectslideanimationlabel << " rectslidelabel:" << rectslidelabel;
             if (d->m_slidepageno > pagenum) {
-                qDebug() << "pageJump previous pagenum:" << pagenum;
+//                qDebug() << "pageJump previous pagenum:" << pagenum;
                 d->animationfirst->setStartValue(rectslideanimationlabel);
                 d->animationfirst->setEndValue(QRect(d->m_slidewidget->width(), 10, d->pslideanimationlabel->width(), d->pslideanimationlabel->height()));
 
                 d->animationsecond->setStartValue(QRect(-d->m_slidewidget->width(), 10, d->pslidelabel->width(), d->pslidelabel->height()));
                 d->animationsecond->setEndValue(rectslidelabel);
             } else {
-                qDebug() << "pageJump next pagenum:" << pagenum;
+//                qDebug() << "pageJump next pagenum:" << pagenum;
                 d->animationfirst->setStartValue(rectslideanimationlabel);
                 d->animationfirst->setEndValue(QRect(-d->m_slidewidget->width(), 10, d->pslideanimationlabel->width(), d->pslideanimationlabel->height()));
 
@@ -698,14 +700,14 @@ bool DocummentBase::pageJump(int pagenum)
         DScrollBar *scrollBar_Y = verticalScrollBar();
         switch (d->m_viewmode) {
         case ViewMode_SinglePage:
-            qDebug() << "-------pagenum:" << pagenum << " x():" << d->m_widgets.at(pagenum)->x() << " y():" << d->m_widgets.at(pagenum)->y();
+//            qDebug() << "-------pagenum:" << pagenum << " x():" << d->m_widgets.at(pagenum)->x() << " y():" << d->m_widgets.at(pagenum)->y();
             if (scrollBar_X)
                 scrollBar_X->setValue(d->m_widgets.at(pagenum)->x());
             if (scrollBar_Y)
                 scrollBar_Y->setValue(d->m_widgets.at(pagenum)->y());
             break;
         case ViewMode_FacingPage:
-            qDebug() << "-------FacingPage pagenum:" << pagenum << " x():" << d->m_widgets.at(pagenum)->x() << " y():" << d->m_widgets.at(pagenum)->y();
+//            qDebug() << "-------FacingPage pagenum:" << pagenum << " x():" << d->m_widgets.at(pagenum)->x() << " y():" << d->m_widgets.at(pagenum)->y();
             if (scrollBar_X)
                 scrollBar_X->setValue(d->m_widgets.at(pagenum / 2)->x() + d->m_pages.at(pagenum)->x());
             if (scrollBar_Y)
@@ -945,27 +947,34 @@ bool DocummentBase::getSelectTextString(QString &st)
     return bselectexit;
 }
 
+void DocummentBase::showSlideModelTimerOut()
+{
+    Q_D(DocummentBase);
+    d->showslidwaittimer->stop();
+    int curpageno = getCurrentPageNo();
+    if (curpageno < 0) {
+        curpageno = 0;
+    }
+    d->m_bslidemodel = true;
+    if (pageJump(curpageno)) {
+        return;
+    }
+    d->m_slidepageno = -1;
+    d->m_bslidemodel = false;
+    this->show();
+    d->m_slidewidget->hide();
+}
+
 bool DocummentBase::showSlideModel()
 {
     Q_D(DocummentBase);
     if (!bDocummentExist()) {
         return false;
     }
-    int curpageno = getCurrentPageNo();
-    if (curpageno < 0) {
-        curpageno = 0;
-    }
-    d->m_bslidemodel = true;
     this->hide();
     d->m_slidewidget->show();
-    if (pageJump(curpageno)) {
-        return true;
-    }
-    d->m_slidepageno = -1;
-    d->m_bslidemodel = false;
-    this->show();
-    d->m_slidewidget->hide();
-    return false;
+    d->showslidwaittimer->start(100);
+    return true;
 }
 
 void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool bsearch, QRectF rectsource)
@@ -976,12 +985,11 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool b
     PageBase *pagebase = d->m_pages.at(curpage);
     //  d->m_widgets.at(curpage)->layout()->spacing();
     QRectF rectorg;
-    if(bsearch)
-    {
+    if (bsearch) {
         pagebase->setCurSearchShow(true);
-        rectorg= pagebase->setCurHightLight(d->m_cursearch);
-    }else {
-        rectorg=rectsource;
+        rectorg = pagebase->setCurHightLight(d->m_cursearch);
+    } else {
+        rectorg = rectsource;
     }
 
     rectorg = pagebase->translateRect(rectorg, d->m_scale, d->m_rotate);//translateRect执行后返回rect为缩放后的值
@@ -1004,7 +1012,7 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool b
                 }
             }
         }
-            break;
+        break;
         case RotateType_90:
         case RotateType_270: {
             qDebug() << "RotateType_90  RotateType_270";
@@ -1022,10 +1030,10 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool b
                 }
             }
         }
-            break;
+        break;
         }
     } else if (d->m_viewmode == ViewMode_FacingPage) {
-        int index=curpage/2;
+        int index = curpage / 2;
         int ispace = d->m_widgets.at(index)->layout()->spacing();
         switch (d->m_rotate) {
         case RotateType_0:
@@ -1034,51 +1042,48 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool b
             int widgetheight = frameRect().height();
             yvalue = d->m_widgets.at(index)->y() + topspace + rectorg.y() - widgetheight / 2;
 
-            if(0==curpage%2)
-            {
+            if (0 == curpage % 2) {
                 //左侧
-                double leftspace = (d->m_widgets.at(index)->width()-ispace)/2 - curwidth;
+                double leftspace = (d->m_widgets.at(index)->width() - ispace) / 2 - curwidth;
                 //横向有缩放
-                if (frameRect().width() < 2*curwidth) {
+                if (frameRect().width() < 2 * curwidth) {
                     int iwidth = rectorg.x() + leftspace;
-                    xvalue=iwidth-frameRect().width()/2;
+                    xvalue = iwidth - frameRect().width() / 2;
                 }
-            }
-            else {
+            } else {
                 //右侧
-                double leftspace = d->m_widgets.at(index)->width()/2+ispace/2;
-                if (frameRect().width() < 2*curwidth) {
-                    int iwidth=rectorg.x()+leftspace;
-                    xvalue=iwidth-frameRect().width()/2;
+                double leftspace = d->m_widgets.at(index)->width() / 2 + ispace / 2;
+                if (frameRect().width() < 2 * curwidth) {
+                    int iwidth = rectorg.x() + leftspace;
+                    xvalue = iwidth - frameRect().width() / 2;
                 }
             }
         }
-            break;
+        break;
         case RotateType_90:
         case RotateType_270: {
             double topspace = (d->m_widgets.at(index)->height() - curwidth) / 2;
             int widgetheight = frameRect().height();
             yvalue = d->m_widgets.at(index)->y() + topspace + rectorg.y() - widgetheight / 2;
-            if(0==curpage%2)
-            {
+            if (0 == curpage % 2) {
                 //左侧
-                double leftspace = (d->m_widgets.at(index)->width()-ispace)/2 - curheight;
+                double leftspace = (d->m_widgets.at(index)->width() - ispace) / 2 - curheight;
                 //横向有缩放
-                if (frameRect().width() < 2*curheight) {
+                if (frameRect().width() < 2 * curheight) {
                     int iwidth = rectorg.x() + leftspace;
-                    xvalue=iwidth-frameRect().width()/2;
+                    xvalue = iwidth - frameRect().width() / 2;
                 }
-            }
-            else {
+            } else {
                 //右侧
-                double leftspace = d->m_widgets.at(index)->width()/2+ispace/2;
-                if (frameRect().width() < 2*curheight) {
-                    int iwidth=rectorg.x()+leftspace;
-                    xvalue=iwidth-frameRect().width()/2;
+                double leftspace = d->m_widgets.at(index)->width() / 2 + ispace / 2;
+                if (frameRect().width() < 2 * curheight) {
+                    int iwidth = rectorg.x() + leftspace;
+                    xvalue = iwidth - frameRect().width() / 2;
                 }
             }
 
-        } break;
+        }
+        break;
         }
     }
 }
@@ -1205,7 +1210,7 @@ void DocummentBase::findNext()
 {
     Q_D(DocummentBase);
     if (d->m_pagecountsearch.size() <= 0 || d->m_findcurpage < 0) return;
-    qDebug() << "----------findNext--"<<d->m_findcurpage<<"--"<<d->m_pagecountsearch.lastKey();
+    qDebug() << "----------findNext--" << d->m_findcurpage << "--" << d->m_pagecountsearch.lastKey();
     if (d->m_findcurpage == d->m_pagecountsearch.lastKey() &&
             d->m_cursearch >= d->m_pagecountsearch.find(d->m_findcurpage).value()) {
         d->m_findcurpage = d->m_pagecountsearch.firstKey();
@@ -1216,22 +1221,19 @@ void DocummentBase::findNext()
     int curpagecount = d->m_pagecountsearch.find(d->m_findcurpage).value();
     if (curpagecount >= d->m_cursearch) {
 
-        qDebug() << "----------1" << d->m_cursearch<<"--"<<curpagecount;
+        qDebug() << "----------1" << d->m_cursearch << "--" << curpagecount;
         //从上一个切换至下一个，如果findPrev查找的m_cursearch为当前页第一个则此处需要判断是否越界
-        if(!d->bfindnext&&d->m_cursearch<=1)//前一次是向前查找
-        {
-            if(d->m_cursearch+2>curpagecount)
-            {
-                d->bfindnext=true;
-                d->m_cursearch+=2;
+        if (!d->bfindnext && d->m_cursearch <= 1) { //前一次是向前查找
+            if (d->m_cursearch + 2 > curpagecount) {
+                d->bfindnext = true;
+                d->m_cursearch += 2;
                 findNext();
                 return;
-            }
-            else {
-                d->m_cursearch+=2;
+            } else {
+                d->m_cursearch += 2;
             }
         }
-        cacularValueXY(xvalue, yvalue,d->m_findcurpage);
+        cacularValueXY(xvalue, yvalue, d->m_findcurpage);
         QScrollBar *scrollBar_Y = verticalScrollBar();
         if (scrollBar_Y)
             scrollBar_Y->setValue(yvalue);
@@ -1248,7 +1250,7 @@ void DocummentBase::findNext()
         if (++it != d->m_pagecountsearch.end()) {
             d->m_cursearch = 1;
             d->m_findcurpage = it.key();
-            cacularValueXY(xvalue, yvalue,d->m_findcurpage);
+            cacularValueXY(xvalue, yvalue, d->m_findcurpage);
 
             QScrollBar *scrollBar_Y = verticalScrollBar();
             if (scrollBar_Y)
@@ -1280,21 +1282,18 @@ void DocummentBase::findPrev()
         int curpagecount = d->m_pagecountsearch.find(d->m_findcurpage).value();
         qDebug() << "----------" << d->m_cursearch << "--" << curpagecount;
         //从下一个切换至上一个，如果findNext查找的m_cursearch为当前页最后一个则此处需要判断是否越界
-        if(d->bfindnext&&d->m_cursearch >= 1)//前一次是向后查找
-        {
-            if(d->m_cursearch-2>=1)
-            {
-                d->m_cursearch-=2;
-            }
-            else {
+        if (d->bfindnext && d->m_cursearch >= 1) { //前一次是向后查找
+            if (d->m_cursearch - 2 >= 1) {
+                d->m_cursearch -= 2;
+            } else {
 
-                d->bfindnext=false;
-                d->m_cursearch-=2;
+                d->bfindnext = false;
+                d->m_cursearch -= 2;
                 findPrev();
                 return;
             }
         }
-        cacularValueXY(xvalue, yvalue,d->m_findcurpage);
+        cacularValueXY(xvalue, yvalue, d->m_findcurpage);
         QScrollBar *scrollBar_Y = verticalScrollBar();
         if (scrollBar_Y)
             scrollBar_Y->setValue(yvalue);
@@ -1310,7 +1309,7 @@ void DocummentBase::findPrev()
         if (--it != d->m_pagecountsearch.end()) {
             d->m_cursearch = it.value();
             d->m_findcurpage = it.key();
-            cacularValueXY(xvalue, yvalue,d->m_findcurpage);
+            cacularValueXY(xvalue, yvalue, d->m_findcurpage);
             QScrollBar *scrollBar_Y = verticalScrollBar();
             if (scrollBar_Y)
                 scrollBar_Y->setValue(yvalue);

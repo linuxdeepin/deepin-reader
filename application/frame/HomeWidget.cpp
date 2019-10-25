@@ -3,7 +3,6 @@
 #include <DPushButton>
 #include <QVBoxLayout>
 #include <DLabel>
-#include "translator/Frame.h"
 
 HomeWidget::HomeWidget(CustomWidget *parent):
     CustomWidget ("HomeWidget", parent),
@@ -23,7 +22,7 @@ void HomeWidget::initWidget()
     DLabel *iconLabel = new DLabel;
     iconLabel->setPixmap(QPixmap(":/resources/import_photo.svg"));
 
-    DLabel *tipsLabel = new DLabel(Frame::sDragFile);
+    DLabel *tipsLabel = new DLabel(tr("drag Pdf file here"));
     QPalette pe;
     pe.setColor(QPalette::WindowText, QColor("#7a7a7a"));
     tipsLabel->setPalette(pe);
@@ -31,7 +30,7 @@ void HomeWidget::initWidget()
     DLabel *splitLine = new DLabel;
     splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
 
-    auto chooseBtn  = new DPushButton(Frame::sSelectFile);
+    auto chooseBtn  = new DPushButton(tr("Select File"));
     chooseBtn->setFixedSize(QSize(302, 36));
     connect(chooseBtn, &DPushButton::clicked, this, &HomeWidget::slotChooseBtnClicked);
 

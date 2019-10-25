@@ -5,7 +5,6 @@
 #include <DPushButton>
 
 #include <QPalette>
-#include <QDebug>
 #include <QVBoxLayout>
 #include <QThread>
 #include <QTimer>
@@ -29,7 +28,7 @@ class ThreadLoadImage : public QThread
     Q_OBJECT
 public:
     ThreadLoadImage(QObject *parent = nullptr);
-    ~ThreadLoadImage(){
+    ~ThreadLoadImage() Q_DECL_OVERRIDE {
         stopThreadRun();
     }
 
@@ -126,7 +125,6 @@ private:
     int m_totalPages = -1;                                      // 总页码数
     ThreadLoadImage m_ThreadLoadImage;                          // 加载缩略图线程
     bool m_isLoading = false;                                   // 缩略图list是否初始化完毕
-//    QTimer m_loadImageTimer;
 };
 
 #endif // THUMBNAILWIDGET_H

@@ -19,10 +19,8 @@ signals:
     void sigOpenFile(const QString &);
     void sigSaveFile();
     void sigSaveAsFile();
-    void sigCopySelectContent();
+    void sigCopySelectContent(const QString &);
     void sigFileSlider(const int &);
-
-    void sigSaveFileCtrlS();
 
 public:
     void onClickPageLink(Page::Link *pLink);
@@ -39,9 +37,8 @@ private slots:
     void slotOpenFile(const QString &filePaths);
     void slotSaveFile();
     void slotSaveAsFile();
-    void slotCopySelectContent();
+    void slotCopySelectContent(const QString &);
     void slotFileSlider(const int &);
-    void slotSaveFileCtrlS();
 
 private:
     DocummentProxy          *m_pDocummentProxy = nullptr;   //  文档操作代理类

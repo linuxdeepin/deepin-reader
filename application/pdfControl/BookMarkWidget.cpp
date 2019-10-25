@@ -1,5 +1,4 @@
 #include "BookMarkWidget.h"
-#include "translator/PdfControl.h"
 #include "controller/DataManager.h"
 
 BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
@@ -60,7 +59,7 @@ void BookMarkWidget::slotOpenFileOk()
     connect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotDocFilePageChanged(int)), Qt::QueuedConnection);
 
     m_pAllPageList.clear();
-    if(m_pBookMarkListWidget){
+    if (m_pBookMarkListWidget) {
         m_pBookMarkListWidget->clear();
     }
 
@@ -146,8 +145,8 @@ void BookMarkWidget::slotCloseFile()
  */
 void BookMarkWidget::slotLoadImage(const int &page, const QImage &image)
 {
-    if(m_pItemWidget){
-        if(m_pItemWidget->nPageIndex() == page){
+    if (m_pItemWidget) {
+        if (m_pItemWidget->nPageIndex() == page) {
             m_pItemWidget->setLabelImage(image);
         }
     }
@@ -159,34 +158,34 @@ void BookMarkWidget::slotLoadImage(const int &page, const QImage &image)
  */
 void BookMarkWidget::slotDelBkItem()
 {
-    int t_nIndex = DataManager::instance()->stackWidgetIndex();
-    if(t_nIndex == 1){
-        if (m_pIndexItem) {
-            BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(m_pIndexItem));
-            if (t_widget) {
-                int nPageIndex = t_widget->nPageIndex();
+    if (m_pIndexItem) {
+        BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(m_pIndexItem));
+        if (t_widget) {
+            int nPageIndex = t_widget->nPageIndex();
 
-                t_widget->deleteLater();
-                t_widget = nullptr;
+            t_widget->deleteLater();
+            t_widget = nullptr;
 
-                delete  m_pIndexItem;
-                m_pIndexItem = nullptr;
+            delete  m_pIndexItem;
+            m_pIndexItem = nullptr;
 
-                m_pAllPageList.removeOne(nPageIndex);
+            m_pAllPageList.removeOne(nPageIndex);
 
-                slotDocFilePageChanged(nPageIndex);
+            slotDocFilePageChanged(nPageIndex);
 
-                operateDb();
+            operateDb();
 
-                DataManager::instance()->setBIsUpdate(true);
-            }
+            DataManager::instance()->setBIsUpdate(true);
         }
     }
 }
 
 void BookMarkWidget::slotSelectItem(QListWidgetItem *item)
 {
-    m_pIndexItem = item;
+    if(item != nullptr && m_pIndexItem != item){
+        setSelectItemBackColor(item);
+        m_pIndexItem = item;
+    }
 }
 
 /**
@@ -199,7 +198,7 @@ void BookMarkWidget::initWidget()
 
     m_pAddBookMarkBtn = new DPushButton(this);
     m_pAddBookMarkBtn->setMinimumSize(QSize(250, 50));
-    m_pAddBookMarkBtn->setText(PdfControl::ADD_BK);
+    m_pAddBookMarkBtn->setText(tr("add bookmark"));
     connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(slotAddBookMark()));
 
     connect(this, SIGNAL(sigAddBookMark(const int &)), this, SLOT(slotAddBookMark(const int &)));
@@ -218,12 +217,12 @@ void BookMarkWidget::initWidget()
  */
 void BookMarkWidget::initConnection()
 {
-    connect(&m_loadBookMarkThread, SIGNAL(sigLoadImage(const int&, const QImage&)), this, SLOT(slotLoadImage(const int&, const QImage&)));
+    connect(&m_loadBookMarkThread, SIGNAL(sigLoadImage(const int &, const QImage &)), this, SLOT(slotLoadImage(const int &, const QImage &)));
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigDeleteBookItem(const int &)), this, SLOT(slotDeleteBookItem(const int &)));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
     connect(this, SIGNAL(sigDelBKItem()), this, SLOT(slotDelBkItem()));
-    connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem*)), this, SLOT(slotSelectItem(QListWidgetItem*)));
+    connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem *)), this, SLOT(slotSelectItem(QListWidgetItem *)));
 }
 
 /**
@@ -271,6 +270,27 @@ void BookMarkWidget::operateDb()
 }
 
 /**
+ * @brief BookMarkWidget::setSelectItemBackColor
+ * 绘制选中外边框,蓝色
+ */
+void BookMarkWidget::setSelectItemBackColor(QListWidgetItem *item)
+{
+    if(item == nullptr || m_pIndexItem == nullptr){
+        return;
+    }
+
+    BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(m_pIndexItem));
+    if(t_widget){
+        t_widget->setBSelect(false);
+    }
+
+    t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
+    if(t_widget){
+        t_widget->setBSelect(true);
+    }
+}
+
+/**
  * @brief BookMarkWidget::dealWithData
  * 处理全局消息
  * @param msgType:消息类型
@@ -280,7 +300,7 @@ void BookMarkWidget::operateDb()
 int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     //  删除书签消息
-    if (MSG_BOOKMARK_DLTITEM == msgType) {
+    if (MSG_BOOKMARK_DLTITEM == msgType || MSG_OPERATION_DELETE_BOOKMARK == msgType) {
         emit sigDeleteBookItem(msgContent.toInt());
         return ConstantMsg::g_effective_res;
     }
@@ -301,7 +321,7 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigCloseFile();
     }
 
-    if(MSG_NOTIFY_KEY_MSG == msgType){
+    if (MSG_NOTIFY_KEY_MSG == msgType) {
         if (msgContent == QString("Del")) {
             emit sigDelBKItem();
         }
@@ -371,7 +391,7 @@ void LoadBookMarkThread::run()
             QImage image;
             int page = -1;
 
-            if (!m_isRunning){
+            if (!m_isRunning) {
                 break;
             }
 

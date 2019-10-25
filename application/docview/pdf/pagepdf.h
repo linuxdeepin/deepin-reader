@@ -27,7 +27,7 @@ public:
     QString addAnnotation(const QColor &color,const QRect& rect);
     QString removeAnnotation(const QPoint &pos);
     void removeAnnotation(const QString &struuid);
-    bool annotationClicked(const QPoint &pos, QString &strtext,QString& struuid);
+    bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
     Poppler::Page *GetPage();
     stSearchRes search(const QString &text, bool matchCase, bool wholeWords) override;
 
@@ -83,7 +83,8 @@ public:
         if (!m_page)
             return false;
         qDebug() << "getSlideImage width:" << width << " height:" << height;
-        image = m_page->renderToImage(xres * scale, yres * scale);
+        image = m_page->renderToImage(xres * scale * pixelratiof, yres * scale * pixelratiof);
+        image.setDevicePixelRatio(pixelratiof);
         return true;
     }
     bool loadData() override

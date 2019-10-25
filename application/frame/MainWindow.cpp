@@ -79,8 +79,8 @@ void MainWindow::initConnections()
     auto pSigManager = new QSignalMapper(this);
     connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(slotActionTrigger(const QString &)));
 
-    QStringList firstActionList = QStringList() << Frame::sOpenFile << Frame::sSaveFile << Frame::sSaveAsFile
-                                                << Frame::sOpenFolder << Frame::sPrint << Frame::sFileAttr;
+    QStringList firstActionList = QStringList() << tr("Open File") << tr("Save File") << tr("Save As File")
+                                  << tr("Open Folder") << tr("Print") << tr("File Attr");
 
     foreach (const QString &s, firstActionList) {
         QAction *_action = createAction(m_menu, s);
@@ -89,8 +89,9 @@ void MainWindow::initConnections()
     }
     m_menu->addSeparator();
 
-    QStringList secondActionList = QStringList() << Frame::sSearch << Frame::sFullScreen << Frame::sScreening
-                                                 << Frame::sLarger << Frame::sSmaller;
+    QStringList secondActionList = QStringList() << tr("Search") << tr("Full Screen") << tr("Screening")
+                                   << tr("Larger") << tr("Smaller");
+
     foreach (const QString &s, secondActionList) {
         QAction *_action = createAction(m_menu, s);
         connect(_action, SIGNAL(triggered()), pSigManager, SLOT(map()));
@@ -103,7 +104,7 @@ void MainWindow::initConnections()
 
     auto actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
-        if (a->text() == Frame::sOpenFile) {
+        if (a->text() == tr("Open File")) {
             a->setDisabled(false);
             break;
         }
@@ -134,14 +135,12 @@ void MainWindow::onFullScreen()
     slotAppShowState(0);
     DataManager::instance()->setCurShowState(FILE_FULLSCREEN);  //  全屏状态
     sendMsg(MSG_OPERATION_FULLSCREEN);
-    //    sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET, QString(""));
 }
 
 //  放映
 void MainWindow::onScreening()
 {
     slotAppShowState(0);
-    //    sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET, QString(""));
     sendMsg(MSG_OPERATION_SLIDE);
 }
 
@@ -152,7 +151,7 @@ void MainWindow::slotAppExit()
     if (sFilePath != "") {
         bool rl = DataManager::instance()->bIsUpdate();
         if (rl) {
-            if (QMessageBox::Yes == DMessageBox::question(nullptr, Frame::sSaveFile, Frame::sSaveFileTitle)) {
+            if (QMessageBox::Yes == DMessageBox::question(nullptr, tr("Save File"), tr("Do you need to save the file opened?"))) {
                 DocummentProxy::instance()->save(sFilePath, true);
             }
         }
@@ -204,27 +203,27 @@ void MainWindow::slotOpenAppHelp()
 //  点击菜单　发送指令
 void MainWindow::slotActionTrigger(const QString &sAction)
 {
-    if (sAction == Frame::sOpenFile) {
+    if (sAction == tr("Open File")) {
         sendMsg(MSG_OPERATION_OPEN_FILE);
-    } else if (sAction == Frame::sSaveFile) {
+    } else if (sAction == tr("Save File")) {
         sendMsg(MSG_OPERATION_SAVE_FILE);
-    } else if (sAction == Frame::sSaveAsFile) {
+    } else if (sAction == tr("Save As File")) {
         sendMsg(MSG_OPERATION_SAVE_AS_FILE);
-    } else if (sAction == Frame::sOpenFolder) {
+    } else if (sAction == tr("Open Folder")) {
         onOpenFolder();
-    } else if (sAction == Frame::sPrint) {
+    } else if (sAction == tr("Print")) {
         sendMsg(MSG_OPERATION_PRINT);
-    } else if (sAction == Frame::sFileAttr) {
+    } else if (sAction == tr("File Attr")) {
         sendMsg(MSG_OPERATION_ATTR);
-    } else if (sAction == Frame::sSearch) {
+    } else if (sAction == tr("Search")) {
         sendMsg(MSG_OPERATION_FIND);
-    } else if (sAction == Frame::sFullScreen) {
+    } else if (sAction == tr("Full Screen")) {
         onFullScreen();
-    } else if (sAction == Frame::sScreening) {
+    } else if (sAction == tr("Screening")) {
         onScreening();
-    } else if (sAction == Frame::sLarger) {
+    } else if (sAction == tr("Larger")) {
         sendMsg(MSG_OPERATION_LARGER);
-    } else if (sAction == Frame::sSmaller) {
+    } else if (sAction == tr("Smaller")) {
         sendMsg(MSG_OPERATION_SMALLER);
     }
 }

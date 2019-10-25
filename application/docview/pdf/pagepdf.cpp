@@ -27,11 +27,9 @@ stSearchRes PagePdf::search(const QString &text, bool matchCase, bool wholeWords
         QRectF rctext = rec;
         rctext.setX(rctext.x() - 40);
         rctext.setWidth(rctext.width() + 80);
-        if(d->m_page)
-        {
+        if (d->m_page) {
             stres.listtext.push_back(d->m_page->text(rctext));
-        }
-        else {
+        } else {
             break;
         }
     }
@@ -76,6 +74,7 @@ void PagePdf::setPage(Poppler::Page *page, int pageno)
 bool PagePdf::getSlideImage(QImage &image, double &width, double &height)
 {
     Q_D(PagePdf);
+
     return d->getSlideImage(image, width, height);
 }
 
@@ -95,7 +94,7 @@ QString PagePdf::addAnnotation(const QColor &color)
         uniqueName = addHighlightAnnotation(color);
     }
     QImage image;
-    getImage(image,d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
+    getImage(image, d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
     slot_RenderFinish(image);
     return  uniqueName;
 }
@@ -221,7 +220,7 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
         }
     }
     QImage image;
-    getImage(image,d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
+    getImage(image, d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
     slot_RenderFinish(image);
 //    clearImage();
 //    showImage(d->m_scale, d->m_rotate);
@@ -232,14 +231,14 @@ void PagePdf::removeAnnotation(const QString &struuid)
 {
     Q_D(PagePdf);
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
-    int index=0;
+    int index = 0;
     foreach (Poppler::Annotation *annote, listannote) {
         /*annote->subType()==Poppler::Annotation::AHighlight&&*/
-        if (!struuid.isEmpty() && annote->uniqueName().indexOf(struuid)>= 0) { //必须判断
+        if (!struuid.isEmpty() && annote->uniqueName().indexOf(struuid) >= 0) { //必须判断
             removeAnnotation(annote);
             listannote.removeAt(index);
             QImage image;
-            getImage(image,d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
+            getImage(image, d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
             slot_RenderFinish(image);
 //            clearImage();
 //            showImage(d->m_scale, d->m_rotate);
@@ -250,7 +249,7 @@ void PagePdf::removeAnnotation(const QString &struuid)
     qDeleteAll(listannote);
 }
 
-bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext,QString& struuid)
+bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {
     Q_D(PagePdf);
     const double scaleX = d->m_scale;
@@ -272,10 +271,10 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext,QString& str
                 rectbound.setBottomRight( quad.points[3]);
                 qDebug() << "########" << quad.points[0];
                 if (rectbound.contains(ptf)) {
-                    struuid=annote->uniqueName();
-                    strtext=annote->contents();
+                    struuid = annote->uniqueName();
+                    strtext = annote->contents();
                     qDeleteAll(listannote);
-                    qDebug() << "******* contaions***"<<struuid;
+                    qDebug() << "******* contaions***" << struuid;
                     return true;
                 } else {
                     qDebug() << "******* not contains";

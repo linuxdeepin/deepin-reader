@@ -42,8 +42,7 @@ protected:
 public:
 //    ConfigSetter *setter = nullptr;
     DBManager *dbM = nullptr;
-//    Exporter *exporter = nullptr;
-//    Importer *importer = nullptr;
+
 private:
     void initChildren();
     void initI18n();

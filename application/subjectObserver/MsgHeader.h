@@ -9,6 +9,7 @@
 enum MSG_TYPE {
     MSG_SET_MainWindow_TITLE = 0,       //  设置 应用标题
     MSG_SLIDER_SHOW_STATE,              //  侧边栏 显隐消息
+    MSG_BOOKMARK_SHOW_STATE,            //  书签状态 显隐消息
     MSG_MAGNIFYING,                     //  放大镜消息
     MSG_HANDLESHAPE,                    //  手型 消息
     MSG_OPEN_FILE_PATH                  //  打开的文件消息
@@ -31,6 +32,7 @@ enum MSG_MENU_TYPE {
     MSG_OPERATION_EXIT,                 //  退出
 
     MSG_OPERATION_ADD_BOOKMARK,         //  添加书签
+    MSG_OPERATION_DELETE_BOOKMARK,      //  删除书签
     MSG_OPERATION_FIRST_PAGE,           //  第一页
     MSG_OPERATION_PREV_PAGE,            //  上一页
     MSG_OPERATION_NEXT_PAGE,            //  下一页
@@ -42,7 +44,6 @@ enum MSG_MENU_TYPE {
     MSG_OPERATION_TEXT_ADD_BOOKMARK,    //  添加书签
     MSG_OPERATION_TEXT_ADD_ANNOTATION,  //  添加注释
     MSG_OPERATION_TEXT_SHOW_NOTEWIDGET,  //  显示注释窗口
-    MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET //  关闭注释窗口
 };
 
 //  左侧 侧边栏 消息
@@ -57,7 +58,6 @@ enum MSG_LEFT_SLIDER_TYPE {
     MSG_SWITCHLEFTWIDGET,               //  切换左侧窗口(缩略图、书签、注释) 消息
     MSG_BOOKMARK_STATE,                 //  文件页码书签状态
     MSG_CLOSE_FILE,                     //  关闭当前文档　消息
-    MSG_CLOSE_NOTE_WIDGET               //  关闭编辑注释界面
 };
 
 //  字体菜单 消息
@@ -66,6 +66,7 @@ enum MSG_FONT_MENU_TYPE {
     MSG_DOUB_PAGE_VIEW,             //  双页视图
     MSG_SELF_ADAPTE_HEIGHT,         //  自适应高度
     MSG_SELF_ADAPTE_WIDTH,          //  自适应宽度
+    MSG_SELF_ADAPTE_SCALE,          //  自适应宽\高 缩放比例变化
     MSG_FILE_ROTATE,                //  旋转
 };
 
