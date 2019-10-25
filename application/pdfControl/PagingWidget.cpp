@@ -61,9 +61,11 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
 
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
             //过滤掉零开头的输入
-            if(keyEvent->key()==Qt::Key_0&&m_pJumpPageSpinBox->text().isEmpty())
+            if(keyEvent->key()==Qt::Key_0)
             {
-                return  true;
+                QString strvalue=m_pJumpPageSpinBox->text();
+                if(strvalue.isEmpty())
+                    return  true;
             }
             if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
 
@@ -74,6 +76,19 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
                 }
             }
         }
+        if(event->type()==QEvent::KeyRelease)
+        {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            if(keyEvent->key()==Qt::Key_0)
+            {
+                QString strvalue=m_pJumpPageSpinBox->text();
+                if(strvalue.startsWith("0"))
+                {
+                    strvalue=strvalue.right(strvalue.length()-1);
+                    m_pJumpPageSpinBox->setValue(strvalue.toInt());
+                }
+            }
+        }
     }
     return QWidget::eventFilter(watched, event);
 }
@@ -81,6 +96,7 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
 void PagingWidget::keyPressEvent(QKeyEvent *event)
 {
     qDebug() << "PagingWidget::keyPressEvent key:" << event->key();
+
 }
 
 void PagingWidget::initConnections()
@@ -144,7 +160,7 @@ int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
             qDebug() << "PagingWidget::dealWithData key=" << msgContent;
         }
     }
-    break;
+        break;
     }
     return 0;
 }
@@ -179,7 +195,7 @@ void PagingWidget::slotJumpToSpecifiedPage(const int &nPage)
 
 void PagingWidget::slotJudgeInputPage(const QString &)
 {
-   QString t_strPage = QString::number(m_pJumpPageSpinBox->value());
+    QString t_strPage = QString::number(m_pJumpPageSpinBox->value());
     if(t_strPage.length() == 1 && m_pJumpPageSpinBox->value() == 0){
         m_pJumpPageSpinBox->setValue(m_currntPage+1);
     }

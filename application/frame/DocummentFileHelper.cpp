@@ -41,12 +41,14 @@ DocummentFileHelper::~DocummentFileHelper()
 void DocummentFileHelper::slotSaveFileCtrlS()
 {
     m_pDocummentProxy->save(m_szFilePath, true);
+    DataManager::instance()->setBIsUpdate(false);
 }
 
 //  保存
 void DocummentFileHelper::slotSaveFile()
 {
     m_pDocummentProxy->save(m_szFilePath, true);
+     DataManager::instance()->setBIsUpdate(false);
 }
 
 //  另存为

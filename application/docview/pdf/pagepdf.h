@@ -24,6 +24,7 @@ public:
     void setPage(Poppler::Page *page, int pageno);
     //Annotation
     QString addAnnotation(const QColor &color);
+    QString addAnnotation(const QColor &color,const QRect& rect);
     QString removeAnnotation(const QPoint &pos);
     void removeAnnotation(const QString &struuid);
     bool annotationClicked(const QPoint &pos, QString &strtext,QString& struuid);

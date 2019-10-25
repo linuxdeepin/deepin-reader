@@ -526,46 +526,42 @@ bool DocummentBase::showMagnifier(QPoint point)
             }
             PageBase *ppage = nullptr;
             int ipageno = pagenum;
+            double imagewidth=d->m_pages.at(pagenum)->width() *d->m_magnifierwidget->getMagnifierScale()*devicePixelRatioF();
+            double imageheight=d->m_pages.at(pagenum)->height() *d->m_magnifierwidget->getMagnifierScale()*devicePixelRatioF();
             if (ipageno >= 0 && ipageno < d->m_pages.size()) {
                 ppage = d->m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale());
+                ppage->loadMagnifierCacheThreadStart(imagewidth,imageheight);
             }
             ipageno = pagenum + 1;
             if (ipageno >= 0 && ipageno < d->m_pages.size()) {
                 ppage = d->m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale());
+                ppage->loadMagnifierCacheThreadStart(imagewidth,imageheight);
             }
             ipageno = pagenum - 1;
             if (ipageno >= 0 && ipageno < d->m_pages.size()) {
                 ppage = d->m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale());
+                ppage->loadMagnifierCacheThreadStart(imagewidth,imageheight);
             }
             ipageno = pagenum + 2;
             if (ipageno >= 0 && ipageno < d->m_pages.size()) {
                 ppage = d->m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale());
+                ppage->loadMagnifierCacheThreadStart(imagewidth,imageheight);
             }
             ipageno = pagenum - 2;
             if (ipageno >= 0 && ipageno < d->m_pages.size()) {
                 ppage = d->m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale());
+                ppage->loadMagnifierCacheThreadStart(imagewidth,imageheight);
             }
             ipageno = pagenum + 3;
             if (ipageno >= 0 && ipageno < d->m_pages.size()) {
                 ppage = d->m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale());
+                ppage->loadMagnifierCacheThreadStart(imagewidth,imageheight);
             }
             ipageno = pagenum - 3;
             if (ipageno >= 0 && ipageno < d->m_pages.size()) {
                 ppage = d->m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(ppage->width() *d->m_magnifierwidget->getMagnifierScale(), ppage->height() *d->m_magnifierwidget->getMagnifierScale());
+                ppage->loadMagnifierCacheThreadStart(imagewidth,imageheight);
             }
-            //            for (int i = pagenum - 3; i < pagenum + 4; i++) {
-            //                if (i > 0 && i < m_pages.size()) {
-            //                    PageBase *ppage = m_pages.at(i);
-            //                    ppage->loadMagnifierCacheThreadStart(ppage->width() *m_magnifierwidget->getMagnifierScale(), ppage->height() *m_magnifierwidget->getMagnifierScale());
-            //                }
-            //            }
         }
         d->m_lastmagnifierpagenum = pagenum;
         PageBase *ppage = d->m_pages.at(pagenum);
@@ -586,8 +582,6 @@ bool DocummentBase::showMagnifier(QPoint point)
             d->m_magnifierwidget->setPoint(gpoint);
             d->m_magnifierwidget->show();
             d->m_magnifierwidget->update();
-            qDebug()<<"@@@@@@@@@@@@@@@@===========";
-
         }else {
             if (ppage ->getMagnifierPixmap(pixmap, qpoint, d->m_magnifierwidget->getMagnifierRadius(), ppage->width()*d->m_magnifierwidget->getMagnifierScale(), ppage->height()*d->m_magnifierwidget->getMagnifierScale())) {
                 d->m_magnifierwidget->setPixmap(pixmap);
@@ -596,7 +590,7 @@ bool DocummentBase::showMagnifier(QPoint point)
                 d->m_magnifierwidget->show();
                 d->m_magnifierwidget->update();
             }
-     }
+        }
     } else {
         QPixmap pix(d->m_magnifierwidget->getMagnifierRadius() * 2, d->m_magnifierwidget->getMagnifierRadius() * 2);
         pix.fill(Qt::transparent);
@@ -1269,6 +1263,7 @@ void DocummentBase::findNext()
         }
     }
     d->bfindnext=true;
+    d->m_pages.at(d->m_findcurpage)->update();
 }
 
 void DocummentBase::findPrev()
@@ -1329,6 +1324,7 @@ void DocummentBase::findPrev()
         }
     }
     d->bfindnext=false;
+    d->m_pages.at(d->m_findcurpage)->update();
 }
 
 void DocummentBase::initConnect()
@@ -1343,7 +1339,7 @@ void DocummentBase::slot_docummentLoaded()
 {
     Q_D(DocummentBase);
     d->m_widgets.clear();
-    qDebug() << "numPages :" << d->m_pages.size();
+    qDebug() << "slot_docummentLoaded numPages :" << d->m_pages.size();
     for (int i = 0; i < d->m_pages.size(); i++) {
         DWidget *qwidget = new DWidget(this);
         QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);

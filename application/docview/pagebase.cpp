@@ -449,16 +449,26 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPointF point, int radius, do
     double scaley = height / d->m_imageheight;
 
     double relx = qp.x() * scalex, rely = qp.y() * scaley;
-    if (qp.x() * scalex - radius < 0) {
+    if (qp.x() * scalex<= 0) {
         relx = radius;
-    } else if (qp.x() * scalex > width - radius) {
-        relx = width - radius;
+    } else if (qp.x() * scalex >= width) {
+        relx = width;
     }
     if (qp.y() * scaley - radius < 0) {
         rely = radius;
     } else if (qp.y() * scaley > height - radius) {
         rely = height - radius;
     }
+//    if (qp.x() * scalex - radius/2 < 0) {
+//        relx = radius;
+//    } else if (qp.x() * scalex > width - radius/2) {
+//        relx = width - radius;
+//    }
+//    if (qp.y() * scaley - radius < 0) {
+//        rely = radius;
+//    } else if (qp.y() * scaley > height - radius) {
+//        rely = height - radius;
+//    }
     relx*=devicePixelRatioF();
     rely*=devicePixelRatioF();
     // qDebug() << "getMagnifierPixmap scalex:" << scalex << " scaley: " << scaley << " radius: " << radius << " qp: " << qp;
@@ -547,8 +557,7 @@ void PageBase::slot_loadMagnifierPixmapCache(QImage image, double width, double 
 }
 
 void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
-{
-    qDebug()<<"setScaleAndRotate";
+{   
     Q_D(PageBase);
     d->havereander = false;
     d->m_scale = scale;

@@ -60,7 +60,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 }
 
 void MainWindow::initUI()
-{
+{   
     titlebar()->addWidget(new TitleWidget, Qt::AlignLeft);
 
     setCentralWidget(new MainWidget);
@@ -80,7 +80,7 @@ void MainWindow::initConnections()
     connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(slotActionTrigger(const QString &)));
 
     QStringList firstActionList = QStringList() << Frame::sOpenFile << Frame::sSaveFile << Frame::sSaveAsFile
-                                  << Frame::sOpenFolder << Frame::sPrint << Frame::sFileAttr;
+                                                << Frame::sOpenFolder << Frame::sPrint << Frame::sFileAttr;
 
     foreach (const QString &s, firstActionList) {
         QAction *_action = createAction(m_menu, s);
@@ -90,7 +90,7 @@ void MainWindow::initConnections()
     m_menu->addSeparator();
 
     QStringList secondActionList = QStringList() << Frame::sSearch << Frame::sFullScreen << Frame::sScreening
-                                   << Frame::sLarger << Frame::sSmaller;
+                                                 << Frame::sLarger << Frame::sSmaller;
     foreach (const QString &s, secondActionList) {
         QAction *_action = createAction(m_menu, s);
         connect(_action, SIGNAL(triggered()), pSigManager, SLOT(map()));
@@ -134,14 +134,14 @@ void MainWindow::onFullScreen()
     slotAppShowState(0);
     DataManager::instance()->setCurShowState(FILE_FULLSCREEN);  //  全屏状态
     sendMsg(MSG_OPERATION_FULLSCREEN);
-//    sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET, QString(""));
+    //    sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET, QString(""));
 }
 
 //  放映
 void MainWindow::onScreening()
 {
     slotAppShowState(0);
-//    sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET, QString(""));
+    //    sendMsg(MSG_OPERATION_TEXT_CLOSE_NOTEWIDGET, QString(""));
     sendMsg(MSG_OPERATION_SLIDE);
 }
 
@@ -170,7 +170,12 @@ void MainWindow::slotAppShowState(const int &nState)
 {
     titlebar()->setVisible(nState);
     if (nState == 1) {
-        this->setWindowState(Qt::WindowNoState);
+        if(windowState()==Qt::WindowFullScreen)
+        {
+            showNormal();
+            this->setWindowState(Qt::WindowMaximized);
+        }
+
     } else {
         this->setWindowState(Qt::WindowFullScreen);
     }

@@ -120,6 +120,7 @@ public:
         bcloseing = false;
         m_searchTask = nullptr;
         bfindnext=true;
+        m_bScanningcopy=false;
     }
 
     ~DocummentBasePrivate()
@@ -185,6 +186,7 @@ public:
     double m_imageheight;
     bool bcloseing;
     bool bfindnext;//上一次搜索结果是向前翻还是向后翻
+    bool m_bScanningcopy;//当前打开的是否为扫描件
 
 signals:
     void signal_docummentLoaded();
@@ -215,7 +217,7 @@ public:
     }
     virtual QString removeAnnotation(const QPoint &startpos) {}
     virtual void removeAnnotation(const QString &struuid,int ipage=-1) {}
-    virtual QString addAnnotation(const QPoint &startpos,QColor color = Qt::yellow) {}
+    virtual QString addAnnotation(const QPoint &startpos,const QPoint &endpos,QColor color = Qt::yellow) {}
     virtual void search(const QString &strtext, QColor color = Qt::yellow) {}
     virtual void getAllAnnotation(QList<stHighlightContent> &listres) {}
     virtual void clearSearch() {}
@@ -279,6 +281,8 @@ protected:
     void showSinglePage();
     void showFacingPage();
     void initConnect();
+
+
 
 
 

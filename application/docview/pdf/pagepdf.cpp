@@ -93,10 +93,49 @@ QString PagePdf::addAnnotation(const QColor &color)
     QString uniqueName;
     if (d->paintrects.size() > 0) {
         uniqueName = addHighlightAnnotation(color);
-        qDebug()<<"addAnnotation uniquename"<<uniqueName;
-        // clearImage();
-        //showImage(d->m_scale, d->m_rotate);
     }
+    QImage image;
+    getImage(image,d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
+    slot_RenderFinish(image);
+    return  uniqueName;
+}
+
+QString PagePdf::addAnnotation(const QColor &color, const QRect &rect)
+{
+     Q_D(PagePdf);
+    QString uniqueName;
+    Poppler::Annotation::Style style;
+    style.setColor(color);
+    Poppler::Annotation::Popup popup;
+    popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
+
+    Poppler::HighlightAnnotation *annotation = new Poppler::HighlightAnnotation();
+
+    Poppler::HighlightAnnotation::Quad quad;
+    QList<Poppler::HighlightAnnotation::Quad> qlistquad;
+    double curwidth = d->m_imagewidth;
+    double curheight = d->m_imageheight;
+    QRectF boundary;
+    boundary.setTopLeft(QPointF(rect.left() / curwidth,
+                                   rect.top() / curheight));
+    boundary.setTopRight(QPointF(rect.right() / curwidth,
+                                    rect.top() / curheight));
+    boundary.setBottomLeft(QPointF(rect.left() / curwidth,
+                                      rect.bottom() / curheight));
+    boundary.setBottomRight(QPointF(rect.right() / curwidth,
+                                       rect.bottom() / curheight));
+    quad.points[0] = boundary.topLeft();
+    quad.points[1] = boundary.topRight();
+    quad.points[2] = boundary.bottomRight();
+    quad.points[3] = boundary.bottomLeft();
+
+    annotation->setHighlightQuads(QList< Poppler::HighlightAnnotation::Quad >() << quad);
+    annotation->setBoundary(boundary);
+    uniqueName = PublicFunc::getUuid();
+    annotation->setUniqueName(uniqueName);
+    annotation->setStyle(style);
+    annotation->setPopup(popup);
+    d->m_page->addAnnotation(annotation);
     QImage image;
     getImage(image,d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
     slot_RenderFinish(image);
