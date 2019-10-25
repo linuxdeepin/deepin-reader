@@ -48,14 +48,17 @@ void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
  */
 void BookMarkItemWidget::initWidget()
 {
+    QFont font(QString("SourceHanSansSC-Medium"),12);
     m_pPageNumber = new DLabel(this);
-    m_pPageNumber->setFixedSize(102, 80);
+    m_pPageNumber->setMinimumWidth(31);
+    m_pPageNumber->setFixedHeight(18);
+    m_pPageNumber->setFont(font);
 
     auto m_pVLayout = new QVBoxLayout;
-    m_pVLayout->setContentsMargins(1, 1, 1, 0);
-    m_pVLayout->setSpacing(1);
+    m_pVLayout->setContentsMargins(20, 18, 0, 44);
+//    m_pVLayout->setSpacing(1);
     m_pVLayout->addWidget(m_pPageNumber);
-    m_pVLayout->addStretch(1);
+//    m_pVLayout->addStretch(1);
 
     m_pPicture = new CustomLabel(this);
     m_pPicture->setFixedSize(QSize(40, 60));
@@ -69,5 +72,22 @@ void BookMarkItemWidget::initWidget()
     m_pHLayout->addItem(m_pVLayout);
 
     this->setLayout(m_pHLayout);
+}
+
+void BookMarkItemWidget::paintEvent(QPaintEvent *event)
+{
+    QPalette p(m_pPicture->palette());
+
+    //  涉及到 主题颜色
+    if (m_bPaint) {
+        p.setColor(QPalette::Text, Qt::blue);
+    } else {
+        p.setColor(QPalette::Text, Qt::black);
+    }
+
+    m_pPicture->setPalette(p);
+    CustomWidget::paintEvent(event);
+
+    update();
 }
 

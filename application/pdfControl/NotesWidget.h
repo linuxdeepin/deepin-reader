@@ -88,6 +88,7 @@ private slots:
 private:
     void addNotesItem(const QString &text);
     void initConnection();
+    void setSelectItemBackColor(QListWidgetItem *);
 
 private:
     void fillContantToList();

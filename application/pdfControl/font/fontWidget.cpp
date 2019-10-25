@@ -98,10 +98,6 @@ void FontWidget::initWidget()
     t_pHLayout1->addWidget(m_pEnlargeLab);
     t_pHLayout1->setSpacing(1);
 
-//    QStringList t_list;
-//    t_list << QString("0.5") << QString("0.75") << QString("1.0") << QString("1.25") << QString("1.5") << QString("1.75") << QString("2.0")
-//           << QString("2.25") << QString("2.5") << QString("2.75") << QString("3.0");
-
     m_pEnlargeSlider = new DSlider(Qt::Horizontal);
     m_pEnlargeSlider->setMinimum(10);
     m_pEnlargeSlider->setMaximum(500);

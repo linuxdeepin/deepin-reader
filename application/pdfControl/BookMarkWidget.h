@@ -88,12 +88,12 @@ private:
     void initConnection();
     void addBookMarkItem(const int &);
     void operateDb();
+    void setSelectItemBackColor(QListWidgetItem *);
 
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
     int getBookMarkPage(const int &index);
-
 
 private:
     CustomListWidget *m_pBookMarkListWidget = nullptr;

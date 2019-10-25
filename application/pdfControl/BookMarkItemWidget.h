@@ -24,6 +24,10 @@ public:
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    inline void setBSelect(const bool &paint)
+    {
+        m_bPaint = paint;
+    }
 
 private slots:
     void slotDltBookMark();
@@ -31,6 +35,10 @@ private slots:
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+
+private:
+    bool m_bPaint = false;                    // 是否绘制选中item
 };
 
 #endif // BOOKMARKITEMWIDGET_H

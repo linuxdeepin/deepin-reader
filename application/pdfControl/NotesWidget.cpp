@@ -187,6 +187,12 @@ void NotesWidget::slotDelNoteItem()
 
 void NotesWidget::slotSelectItem(QListWidgetItem *item)
 {
+    if(item == nullptr || m_pNoteItem == item){
+        return;
+    }
+
+    setSelectItemBackColor(item);
+
     m_pNoteItem = item;
     if (m_pNoteItem) {
         NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
@@ -198,7 +204,6 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
             pDocProxy->jumpToHighLight(t_uuid, page);
         }
     }
-
 }
 
 /**
@@ -225,8 +230,6 @@ void NotesWidget::addNotesItem(const QString &text)
     }
 
     bool b_has = hasNoteInList(t_nPage, t_strUUid);
-
-//    qDebug() << "b_has:" << b_has << "    t_nPage:" << t_nPage << "  t_strUUid:" << t_strUUid << "  t_strText:" << t_strText;
 
     if (b_has) {
         flushNoteItemText(t_nPage, t_strUUid, t_strText);
@@ -264,6 +267,27 @@ void NotesWidget::initConnection()
             this, SLOT(slotLoadImage(const QImage &)));
     connect(this, SIGNAL(sigDelNoteItem()), this, SLOT(slotDelNoteItem()));
     connect(m_pNotesList, SIGNAL(sigSelectItem(QListWidgetItem *)), this, SLOT(slotSelectItem(QListWidgetItem *)));
+}
+
+/**
+ * @brief BookMarkWidget::setSelectItemBackColor
+ * 绘制选中外边框,蓝色
+ */
+void NotesWidget::setSelectItemBackColor(QListWidgetItem *item)
+{
+    if(item == nullptr || m_pNoteItem == nullptr){
+        return;
+    }
+
+    NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
+    if(t_widget){
+        t_widget->setBSelect(false);
+    }
+
+    t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
+    if(t_widget){
+        t_widget->setBSelect(true);
+    }
 }
 
 /**

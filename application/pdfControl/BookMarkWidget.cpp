@@ -181,10 +181,12 @@ void BookMarkWidget::slotDelBkItem()
     }
 }
 
-
 void BookMarkWidget::slotSelectItem(QListWidgetItem *item)
 {
-    m_pIndexItem = item;
+    if(item != nullptr && m_pIndexItem != item){
+        setSelectItemBackColor(item);
+        m_pIndexItem = item;
+    }
 }
 
 /**
@@ -265,6 +267,27 @@ void BookMarkWidget::operateDb()
         }
 
         dApp->dbM->updateBookMark(sPage);
+    }
+}
+
+/**
+ * @brief BookMarkWidget::setSelectItemBackColor
+ * 绘制选中外边框,蓝色
+ */
+void BookMarkWidget::setSelectItemBackColor(QListWidgetItem *item)
+{
+    if(item == nullptr || m_pIndexItem == nullptr){
+        return;
+    }
+
+    BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(m_pIndexItem));
+    if(t_widget){
+        t_widget->setBSelect(false);
+    }
+
+    t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
+    if(t_widget){
+        t_widget->setBSelect(true);
     }
 }
 

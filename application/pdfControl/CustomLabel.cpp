@@ -20,7 +20,7 @@ void CustomLabel::paintEvent(QPaintEvent *e)
     painter.setOpacity(1);
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setBrush(Qt::NoBrush);
-    painter.drawRoundedRect(rectangle, 10, 10);
+    painter.drawRoundedRect(rectangle, 5, 5);
 
     DLabel::paintEvent(e);
 }
