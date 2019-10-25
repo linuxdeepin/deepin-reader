@@ -3,8 +3,8 @@
 
 #include <DMenu>
 #include <DIconButton>
-#include "subjectObserver/CustomWidget.h"
 
+#include "subjectObserver/CustomWidget.h"
 #include "pdfControl/font/fontWidget.h"
 #include "PublicFunction.h"
 /**

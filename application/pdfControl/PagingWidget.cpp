@@ -1,7 +1,5 @@
 #include "PagingWidget.h"
-#include <QDebug>
 
-#include "translator/PdfControl.h"
 #include "docview/docummentproxy.h"
 
 PagingWidget::PagingWidget(CustomWidget *parent) :
@@ -20,7 +18,7 @@ PagingWidget::PagingWidget(CustomWidget *parent) :
 void PagingWidget::initWidget()
 {
     m_pTotalPagesLab = new DLabel(this);
-    m_pTotalPagesLab->setText(QString("/xxx") + PdfControl::PAGES);
+    m_pTotalPagesLab->setText(QString("/xxx") + tr("pages"));
     m_pTotalPagesLab->setMinimumWidth(80);
 
     m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
@@ -100,7 +98,7 @@ void PagingWidget::setTotalPages(int pages)
 {
     m_totalPage = pages;
     m_currntPage = FIRSTPAGES;
-    m_pTotalPagesLab->setText(QString("/%1").arg(pages) + PdfControl::PAGES);
+    m_pTotalPagesLab->setText(QString("/%1").arg(pages) + tr("pages"));
 
     m_pJumpPageSpinBox->setRange(1, m_totalPage);
 

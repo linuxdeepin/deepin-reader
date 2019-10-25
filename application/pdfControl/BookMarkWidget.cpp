@@ -1,5 +1,4 @@
 #include "BookMarkWidget.h"
-#include "translator/PdfControl.h"
 #include "controller/DataManager.h"
 
 BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
@@ -199,7 +198,7 @@ void BookMarkWidget::initWidget()
 
     m_pAddBookMarkBtn = new DPushButton(this);
     m_pAddBookMarkBtn->setMinimumSize(QSize(250, 50));
-    m_pAddBookMarkBtn->setText(PdfControl::ADD_BK);
+    m_pAddBookMarkBtn->setText(tr("add bookmark"));
     connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(slotAddBookMark()));
 
     connect(this, SIGNAL(sigAddBookMark(const int &)), this, SLOT(slotAddBookMark(const int &)));
@@ -301,7 +300,7 @@ void BookMarkWidget::setSelectItemBackColor(QListWidgetItem *item)
 int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     //  删除书签消息
-    if (MSG_BOOKMARK_DLTITEM == msgType) {
+    if (MSG_BOOKMARK_DLTITEM == msgType || MSG_OPERATION_DELETE_BOOKMARK == msgType) {
         emit sigDeleteBookItem(msgContent.toInt());
         return ConstantMsg::g_effective_res;
     }

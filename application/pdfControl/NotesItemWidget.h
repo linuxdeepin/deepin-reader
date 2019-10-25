@@ -11,7 +11,7 @@
 #include <QAction>
 #include <QContextMenuEvent>
 
-#include "translator/Frame.h"
+
 #include "CustomItemWidget.h"
 #include "docview/docummentproxy.h"
 

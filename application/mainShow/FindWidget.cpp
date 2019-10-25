@@ -23,7 +23,6 @@
 #include "FindWidget.h"
 #include <DFloatingButton>
 #include <QHBoxLayout>
-#include "translator/MainShow.h"
 
 FindWidget::FindWidget(CustomWidget *parent)
     : CustomWidget("FindWidget", parent)
@@ -92,12 +91,12 @@ int FindWidget::dealWithData(const int &msgType, const QString &)
 void FindWidget::initWidget()
 {
     DFloatingButton *findNextButton = new DFloatingButton(DStyle::SP_ArrowNext);
-    findNextButton->setToolTip(MainShow::NEXT_ONE);
+    findNextButton->setToolTip(tr("next one"));
     findNextButton->setFixedSize(QSize(30, 30));
     connect(findNextButton, &DFloatingButton::clicked, this, &FindWidget::slotFindNextBtnClicked);
 
     DFloatingButton *findPrevButton = new DFloatingButton(DStyle::SP_ArrowPrev);
-    findNextButton->setToolTip(MainShow::PREV_ONE);
+    findNextButton->setToolTip(tr("prev one"));
     findPrevButton->setFixedSize(QSize(30, 30));
     connect(findPrevButton, &DFloatingButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
 

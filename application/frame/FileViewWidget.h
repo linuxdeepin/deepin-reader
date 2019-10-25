@@ -6,7 +6,6 @@
 #include <DMenu>
 
 #include "subjectObserver/CustomWidget.h"
-#include "mainShow/DefaultOperationWidget.h"
 #include "mainShow/TextOperationWidget.h"
 #include "DocummentFileHelper.h"
 
@@ -75,7 +74,6 @@ private:
     int dealWithFileMenuRequest(const int &msgType, const QString &msgContent);
 
 private:
-    DefaultOperationWidget  *m_pDefaultOperationWidget = nullptr;
     TextOperationWidget     *m_pTextOperationWidget = nullptr;
 
     DocummentFileHelper     *m_pDocummentFileHelper = nullptr;

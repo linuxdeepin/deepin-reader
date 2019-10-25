@@ -9,6 +9,7 @@
 enum MSG_TYPE {
     MSG_SET_MainWindow_TITLE = 0,       //  设置 应用标题
     MSG_SLIDER_SHOW_STATE,              //  侧边栏 显隐消息
+    MSG_BOOKMARK_SHOW_STATE,            //  书签状态 显隐消息
     MSG_MAGNIFYING,                     //  放大镜消息
     MSG_HANDLESHAPE,                    //  手型 消息
     MSG_OPEN_FILE_PATH                  //  打开的文件消息
@@ -31,6 +32,7 @@ enum MSG_MENU_TYPE {
     MSG_OPERATION_EXIT,                 //  退出
 
     MSG_OPERATION_ADD_BOOKMARK,         //  添加书签
+    MSG_OPERATION_DELETE_BOOKMARK,      //  删除书签
     MSG_OPERATION_FIRST_PAGE,           //  第一页
     MSG_OPERATION_PREV_PAGE,            //  上一页
     MSG_OPERATION_NEXT_PAGE,            //  下一页

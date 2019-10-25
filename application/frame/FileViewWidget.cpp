@@ -9,9 +9,8 @@
 #include <QPrintDialog>
 #include <DMessageBox>
 #include <QPrintPreviewDialog>
-#include <QPrintPreviewWidget>
-#include "translator/Frame.h"
-#include "controller/DataManager.h"
+
+#include "mainShow/DefaultOperationMenu.h"
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
@@ -201,10 +200,8 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 
         m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), m_bIsHighLight, sSelectText, struuid);
     } else {    //  否则弹出 文档操作菜单
-        if (m_pDefaultOperationWidget == nullptr) {
-            m_pDefaultOperationWidget = new DefaultOperationWidget(this);
-        }
-        m_pDefaultOperationWidget->showWidget(tempPoint.x(), tempPoint.y());
+        DefaultOperationMenu *menu = new DefaultOperationMenu(this);
+        menu->execMenu(tempPoint);
     }
 }
 
@@ -307,7 +304,7 @@ void FileViewWidget::slotPrintFile()
     // 创建打印对话框
     QString printerName = printer.printerName();
     if ( printerName.size() == 0) {
-        DMessageBox::warning(this, Frame::sPrintError, Frame::sPrintErrorNoDevice);
+        DMessageBox::warning(this, tr("Print Error"), tr("No Print Device"));
         return;
     }
 

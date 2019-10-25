@@ -1,7 +1,7 @@
 #include "TitleWidget.h"
-#include "translator/Frame.h"
 #include <QHBoxLayout>
 #include <QBitmap>
+
 TitleWidget::TitleWidget(CustomWidget *parent) :
     CustomWidget("TitleWidget", parent)
 {
@@ -107,9 +107,9 @@ void TitleWidget::on_handleShapeBtn_clicked()
         m_pHandleMenu->setFixedWidth(200);
         connect(m_pHandleMenu, SIGNAL(aboutToHide()), this, SLOT(slotHandleMenuHide()));
 
-        QAction *m_pHandleAction = createAction(Frame::sHandleShape);
+        QAction *m_pHandleAction = createAction(tr("handleShape"));
 
-        QAction *m_pDefaultAction = createAction(Frame::sDefaultShape);
+        QAction *m_pDefaultAction = createAction(tr("defaultShape"));
         m_pDefaultAction->setChecked(true);
 
         QActionGroup *actionGroup = new QActionGroup(this);
@@ -134,12 +134,12 @@ void TitleWidget::slotActionTrigger(QAction *action)
     int nCurrentState = -1;
 
     QString sAction = action->objectName();
-    if (sAction == Frame::sDefaultShape) {
+    if (sAction == tr("defaultShape")) {
         nCurrentState = 0;
-        btnName = Frame::sDefaultShape;
+        btnName = tr("defaultShape");
     } else {
         nCurrentState = 1;
-        btnName = Frame::sHandleShape;
+        btnName = tr("handleShape");
     }
 
     setHandleShapeBtn(btnName);
@@ -166,18 +166,18 @@ void TitleWidget::slotHandleMenuHide()
 
 void TitleWidget::initBtns()
 {
-    m_pThumbnailBtn = createBtn(Frame::sThumbnailTitle, true);
+    m_pThumbnailBtn = createBtn("thumbnail", true);
     connect(m_pThumbnailBtn, SIGNAL(clicked()), this, SLOT(on_thumbnailBtn_clicked()));
 
-    m_pSettingBtn = createBtn(Frame::sSetting);
+    m_pSettingBtn = createBtn("setting");
     connect(m_pSettingBtn, SIGNAL(clicked()), this, SLOT(on_settingBtn_clicked()));
 
-    m_pHandleShapeBtn = createBtn(Frame::sDefaultShape);
+    m_pHandleShapeBtn = createBtn("defaultShape");
     m_pHandleShapeBtn->setFixedSize(QSize(42, 36));
     m_pHandleShapeBtn->setIconSize(QSize(42, 36));
     connect(m_pHandleShapeBtn, SIGNAL(clicked()), this, SLOT(on_handleShapeBtn_clicked()));
 
-    m_pMagnifierBtn = createBtn(Frame::sMagnifier, true);
+    m_pMagnifierBtn = createBtn("magnifier", true);
     connect(m_pMagnifierBtn, SIGNAL(clicked()), this, SLOT(on_magnifyingBtn_clicked()));
 }
 
@@ -224,10 +224,7 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         emit sigOpenFileOk();
-    } else if (msgType == MSG_OPERATION_FULLSCREEN) {
-        emit sigAppFullScreen();
-        return ConstantMsg::g_effective_res;
-    } else if (msgType == MSG_OPERATION_SLIDE) {
+    } else if (msgType == MSG_OPERATION_FULLSCREEN || msgType == MSG_OPERATION_SLIDE) {
         emit sigAppFullScreen();
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == "Esc") {      //  退出放大镜模式

@@ -1,5 +1,4 @@
 #include "BookMarkItemWidget.h"
-#include "translator/PdfControl.h"
 
 BookMarkItemWidget::BookMarkItemWidget(CustomItemWidget *parent) :
     CustomItemWidget("BookMarkItemWidget", parent)
@@ -37,7 +36,7 @@ void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
 {
     QMenu *t_menu = new QMenu(this);
 
-    QAction *dltBookMarkAction = t_menu->addAction(PdfControl::DLT_BK);
+    QAction *dltBookMarkAction = t_menu->addAction(tr("delete bookmark"));
     connect(dltBookMarkAction, SIGNAL(triggered()), this, SLOT(slotDltBookMark()));
     t_menu->exec(QCursor::pos());
 }

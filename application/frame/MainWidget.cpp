@@ -37,7 +37,7 @@ void MainWidget::slotOpenFileOk()
 //  文件打开失败
 void MainWidget::slotOpenFileFail(const QString &errorInfo)
 {
-    DMessageBox::warning(nullptr, Frame::sAppName, errorInfo);
+    DMessageBox::warning(nullptr, tr("deepin-reader"), errorInfo);
     qDebug() << "openFileFail       "   <<  errorInfo;
 }
 
@@ -73,9 +73,9 @@ void MainWidget::dropEvent(QDropEvent *event)
 
             QFileInfo info(sFilePath);
             QString sCompleteSuffix = info.completeSuffix();    //  文件后缀
-            qDebug()<<"MainWidget::dropEvent"<<sCompleteSuffix<<sFilePath;
-           // if (sCompleteSuffix == "pdf" || sCompleteSuffix == "tiff")
-            if (sFilePath.endsWith("pdf") || sFilePath.endsWith("tiff")){
+            qDebug() << "MainWidget::dropEvent" << sCompleteSuffix << sFilePath;
+            // if (sCompleteSuffix == "pdf" || sCompleteSuffix == "tiff")
+            if (sFilePath.endsWith("pdf") || sFilePath.endsWith("tiff")) {
                 //  默认打开第一个
                 QString sRes = sFilePath + Constant::sQStringSep;
 

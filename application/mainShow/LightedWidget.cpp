@@ -2,7 +2,6 @@
 #include <QButtonGroup>
 #include <DIconButton>
 #include <DPushButton>
-#include "translator/MainShow.h"
 #include "controller/DataManager.h"
 
 LightedWidget::LightedWidget(CustomWidget *parent)
@@ -38,7 +37,7 @@ int LightedWidget::dealWithData(const int &msgType, const QString &)
 
 void LightedWidget::initWidget()
 {
-    auto titleLabel = new DLabel(MainShow::ADD_HIGH_LIGHTED);
+    auto titleLabel = new DLabel(tr("add high lighted"));
 
     auto topLayout = new QHBoxLayout;
     topLayout->setContentsMargins(0, 0, 0, 0);

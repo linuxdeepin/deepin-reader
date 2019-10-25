@@ -1,7 +1,4 @@
 #include "TextOperationWidget.h"
-#include "translator/PdfControl.h"
-#include "translator/Frame.h"
-#include "translator/MainShow.h"
 #include "docview/docummentproxy.h"
 
 #include "controller/DataManager.h"
@@ -19,10 +16,10 @@ void TextOperationWidget::showWidget(const int &x, const int &y, const bool &bHi
 {
     auto btnList = this->findChildren<DPushButton *>();
     foreach (DPushButton *btn, btnList) {
-        if (btn->objectName() == PdfControl::ADD_BK) {
+        if (btn->objectName() == tr("add bookmark")) {
             bool bBookState = DataManager::instance()->bIsBookMarkState();
             btn->setEnabled(!bBookState);
-        } else if (btn->objectName() == MainShow::REMOVE_HIGH_LIGHTED) {
+        } else if (btn->objectName() == tr("remove high lighted")) {
             btn->setEnabled(bHigh);
         }
     }
@@ -73,7 +70,7 @@ void TextOperationWidget::SlotSetBtnRemoveHighLightedAble()
 {
     auto btnList = this->findChildren<DPushButton *>();
     foreach (DPushButton *btn, btnList) {
-        if (btn->objectName() == MainShow::REMOVE_HIGH_LIGHTED) {
+        if (btn->objectName() == tr("remove high lighted")) {
             btn->setEnabled(true);
             break;
         }
@@ -101,7 +98,7 @@ void TextOperationWidget::initWidget()
     layout->setSpacing(0);
     this->setLayout(layout);
 
-    auto copyBtn = createBtn(MainShow::COPY, SLOT(SlotBtnCopyClicked()));
+    auto copyBtn = createBtn(tr("copy"), SLOT(SlotBtnCopyClicked()));
     layout->addWidget(copyBtn);
 
     auto pLightedWidget = new LightedWidget;
@@ -109,12 +106,12 @@ void TextOperationWidget::initWidget()
     connect(this, SIGNAL(sigRemoveHighLighted()), pLightedWidget, SLOT(SlotRemoveHighLighted()));
     layout->addWidget(pLightedWidget);
 
-    auto removeBtn = createBtn(MainShow::REMOVE_HIGH_LIGHTED, SLOT(SlotBtnRemoveHighLightedClicked()));
+    auto removeBtn = createBtn(tr("remove high lighted"), SLOT(SlotBtnRemoveHighLightedClicked()));
     layout->addWidget(removeBtn);
 
-    auto addAnnoBtn = createBtn(PdfControl::ADD_NOTE, SLOT(SlotBtnAddAnnotationClicked()));
+    auto addAnnoBtn = createBtn(tr("add note"), SLOT(SlotBtnAddAnnotationClicked()));
     layout->addWidget(addAnnoBtn);
 
-    auto AddBookMarkBtn = createBtn(PdfControl::ADD_BK, SLOT(SlotBtnAddBookMarkClicked()));
+    auto AddBookMarkBtn = createBtn(tr("add bookmark"), SLOT(SlotBtnAddBookMarkClicked()));
     layout->addWidget(AddBookMarkBtn);
 }

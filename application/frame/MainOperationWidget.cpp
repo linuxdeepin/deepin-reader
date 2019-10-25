@@ -1,7 +1,5 @@
 #include "MainOperationWidget.h"
-#include "translator/Frame.h"
 #include <QHBoxLayout>
-
 #include <QButtonGroup>
 #include "PublicFunction.h"
 
@@ -22,7 +20,7 @@ void MainOperationWidget::initWidget()
     auto btnGroup = new QButtonGroup;  //  按钮组，　自动实现按钮唯一check属性
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
 
-    QStringList btnStrList = QStringList() << Frame::sThumbnail << Frame::sBookmark << Frame::sAnnotation;
+    QStringList btnStrList = QStringList() << "thumbnail" << "bookmark" << "annotation";
 
     int nSize = btnStrList.size();
     for (int iLoop = 0; iLoop < nSize; iLoop++) {
@@ -41,7 +39,7 @@ void MainOperationWidget::initWidget()
     auto btnList = this->findChildren<DIconButton *>();
     foreach (auto btn, btnList) {
         QString objName = btn->objectName();
-        if (objName == Frame::sThumbnail) {
+        if (objName == "thumbnail") {
             btn->setChecked(true);
             break;
         }
@@ -57,7 +55,6 @@ DIconButton *MainOperationWidget::createBtn(const QString &btnName)
     btn->setIcon(QIcon(normalPic));
     btn->setFixedSize(QSize(36, 36));
     btn->setIconSize(QSize(36, 36));
-    btn->setToolTip(btnName);
     btn->setCheckable(true);
     btn->setChecked(false);
 

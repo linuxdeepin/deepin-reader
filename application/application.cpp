@@ -26,7 +26,6 @@
 #include <QTranslator>
 #include <QDebug>
 #include "frame/AppAboutWidget.h"
-#include "translator/Frame.h"
 #include "subjectObserver/ModuleHeader.h"
 namespace {
 
@@ -41,15 +40,16 @@ Application::Application(int &argc, char **argv)
 
     initI18n();
 
-    setApplicationName(Frame::sAppName);
-    setOrganizationName(Frame::ORGANIZATION_NAME);
+    setApplicationName(tr("deepin-reader"));
+    setOrganizationName(tr("deepin"));
 
-    setApplicationDisplayName(Frame::sAppName);
+    setApplicationDisplayName(tr("deepin-reader"));
     setApplicationVersion(DApplication::buildVersion("20191022"));
     setApplicationAcknowledgementPage(Constant::sAcknowledgementLink);
     setProductIcon(QIcon(":/resources/image/logo/deepin-reader.svg"));
-    setProductName(DApplication::translate("MainWindow", "Deepin Reader"));
-    setApplicationDescription(Frame::sDescription);
+    setApplicationDescription(tr("Document viewer is a document viewer that comes with the deep operating system.\r\n In"
+                                 " addition to opening and reading PDF files, On documents you can also \r\n add"
+                                 " bookmark, annotation and highlight selected text."));
 
     DApplicationSettings savetheme;
 
@@ -74,5 +74,5 @@ void Application::initChildren()
 void Application::initI18n()
 {
     // install translators
-    //    loadTranslator(QList<QLocale>() << QLocale::system());
+    loadTranslator();
 }

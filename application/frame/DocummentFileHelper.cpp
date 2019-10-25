@@ -6,7 +6,6 @@
 #include <DFileDialog>
 #include "utils/utils.h"
 #include <QDesktopServices>
-#include "translator/Frame.h"
 #include <DMessageBox>
 #include "subjectObserver/ModuleHeader.h"
 
@@ -60,7 +59,7 @@ void DocummentFileHelper::slotSaveAsFile()
     if (sFilter != "") {
         DFileDialog dialog;
         dialog.selectFile(m_szFilePath);
-        QString filePath = dialog.getSaveFileName(nullptr, Frame::sSaveFile, m_szFilePath, sFilter);
+        QString filePath = dialog.getSaveFileName(nullptr, tr("Save File"), m_szFilePath, sFilter);
         if (filePath != "") {
             QString sFilePath = getFilePath(filePath);
 
@@ -143,7 +142,7 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
         //  是否有操作
         bool rl = DataManager::instance()->bIsUpdate();
         if (rl) {
-            if (QMessageBox::Yes == DMessageBox::question(nullptr, Frame::sSaveFile, Frame::sSaveFileTitle)) {
+            if (QMessageBox::Yes == DMessageBox::question(nullptr, tr("Save File"), tr("Do you need to save the file opened?"))) {
                 m_pDocummentProxy->save(m_szFilePath, true);
             }
         }
@@ -260,7 +259,7 @@ int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgCont
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_SLIDE:               //  放映
         emit sigFileSlider(1);
-        return ConstantMsg::g_effective_res;
+        break;
     case MSG_NOTIFY_KEY_MSG :
         if ("Ctrl+S" == msgContent) {
             emit sigSaveFile();
