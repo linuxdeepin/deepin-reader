@@ -200,7 +200,6 @@ void DocummentFileHelper::slotCopySelectContent(const QString &sCopy)
 void DocummentFileHelper::slotFileSlider(const int &nFlag)
 {
     if (nFlag == 1) {
-        QThread::msleep(100);
         bool bSlideModel = m_pDocummentProxy->showSlideModel();    //  开启幻灯片
         if (bSlideModel) {
             DataManager::instance()->setCurShowState(FILE_SLIDE);
