@@ -63,7 +63,7 @@ void NotesItemWidget::initWidget()
     QFont font(QString("SourceHanSansSC-Medium"),12);
     QFont fontContant(QString("SourceHanSansSC-Medium"),11);
     auto t_vLayout = new QVBoxLayout;
-    t_vLayout->setContentsMargins(0, 0, 0, 0);
+    t_vLayout->setContentsMargins(20, 0, 0, 0);
     t_vLayout->setSpacing(0);
 
     auto t_hLayout = new QHBoxLayout;
@@ -83,6 +83,11 @@ void NotesItemWidget::initWidget()
     m_pTextLab->setFrameStyle(QFrame::NoFrame);
     m_pTextLab->setWordWrap(true);
 //    m_pTextLab->setTextBackgroundColor(this->palette().highlightedText().color());
+
+    m_pPageNumber->setMinimumWidth(31);
+    m_pPageNumber->setFixedHeight(18);
+    m_pSearchResultNum->setMinimumWidth(31);
+    m_pSearchResultNum->setFixedHeight(18);
 
     m_pPageNumber->setFont(font);
     m_pSearchResultNum->setFont(font);
