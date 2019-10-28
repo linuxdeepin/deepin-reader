@@ -30,9 +30,6 @@ private slots:
     void slotAppFullScreen();
     void slotMagnifierCancel();
 
-    void slotFontWidgetHide();
-    void slotHandleMenuHide();
-
     void on_thumbnailBtn_clicked();
     void on_settingBtn_clicked();
     void on_handleShapeBtn_clicked();
@@ -51,9 +48,8 @@ private:
     void setHandleShapeBtn(const QString &);
 
 private:
-    FontWidget *m_pFontWidget = nullptr;
-
     DMenu   *m_pHandleMenu = nullptr;
+    DMenu   *m_pSettingMenu = nullptr;
 
     DIconButton *m_pThumbnailBtn = nullptr;
     DIconButton *m_pSettingBtn = nullptr;

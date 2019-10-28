@@ -4,7 +4,6 @@
 #include "CustomListWidget.h"
 #include <DPushButton>
 
-#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QMap>
 #include <QStringList>
@@ -29,7 +28,7 @@ public:
     LoadBookMarkThread(QObject *parent = nullptr);
 
 signals:
-    void sigLoadImage(const int&, const QImage&);
+    void sigLoadImage(const int &, const QImage &);
 
 public:
     inline void setBookMark(BookMarkWidget *bookMarkW)
@@ -77,7 +76,7 @@ private slots:
     void slotDocFilePageChanged(int);
     void slotDeleteBookItem(const int &);
     void slotCloseFile();
-    void slotLoadImage(const int&, const QImage&);
+    void slotLoadImage(const int &, const QImage &);
     void slotDelBkItem();
     void slotSelectItem(QListWidgetItem *);
 

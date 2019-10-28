@@ -41,7 +41,7 @@ public:
     bool bIsBookMarkState() const;
     void setBIsBookMarkState(bool bIsBookMarkState);
 
-    QColor color(const int &index);
+    QList<QColor>   getLightColorList();
 
 private:
     QString m_strOnlyFilePath; //  只显示一个pdf 文件

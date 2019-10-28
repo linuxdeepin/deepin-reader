@@ -37,18 +37,7 @@ DocummentFileHelper::~DocummentFileHelper()
     if (m_pMsgSubject) {
         m_pMsgSubject->removeObserver(this);
     }
-//    if (m_pDocummentProxy && m_szFilePath != "") {
-//        m_pDocummentProxy->closeFile();
-//        m_pDocummentProxy->waitThreadAndClearEnd();
-//    }
 }
-
-////  ctrl s  保存文件
-//void DocummentFileHelper::slotSaveFileCtrlS()
-//{
-//    m_pDocummentProxy->save(m_szFilePath, true);
-//    DataManager::instance()->setBIsUpdate(false);
-//}
 
 //  保存
 void DocummentFileHelper::slotSaveFile()
@@ -56,7 +45,7 @@ void DocummentFileHelper::slotSaveFile()
     DataManager::instance()->setBIsUpdate(false);
 
     m_pDocummentProxy->save(m_szFilePath, true);
-     DataManager::instance()->setBIsUpdate(false);
+    DataManager::instance()->setBIsUpdate(false);
 }
 
 //  另存为

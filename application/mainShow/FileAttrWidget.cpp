@@ -23,13 +23,14 @@ FileAttrWidget::FileAttrWidget(CustomWidget *parent)
 //  各个 对应的 label 赋值
 void FileAttrWidget::setFileAttr()
 {
-    stFileInfo fileInfo;
-    DocummentProxy::instance()->docBasicInfo(fileInfo);
-
-    DocummentProxy *dproxy = DocummentProxy::instance();
+    auto dproxy = DocummentProxy::instance();
     if (nullptr == dproxy) {
         return;
     }
+
+    stFileInfo fileInfo;
+    dproxy->docBasicInfo(fileInfo);
+
     QImage image;
     bool rl = dproxy->getImage(0, image, 94, 113);
     if (rl) {
@@ -38,7 +39,7 @@ void FileAttrWidget::setFileAttr()
     QFileInfo info(fileInfo.strFilepath);
 
     QString szTitle = "";
-    DocummentProxy::instance()->title(szTitle);
+    dproxy->title(szTitle);
     if (szTitle == "") {
         szTitle = info.baseName();
     }
@@ -124,7 +125,7 @@ void FileAttrWidget::initWidget()
 //  初始化 所有的label 显示
 void FileAttrWidget::initLabels()
 {
-    QGridLayout *gridLayout = new QGridLayout;
+    auto gridLayout = new QGridLayout;
     gridLayout->setSpacing(6);
 
     labelFileTitle = createLabel(gridLayout, 0, tr("Title") + ":");
@@ -143,8 +144,8 @@ void FileAttrWidget::initLabels()
     labelPaperSize = createLabel(gridLayout, 13, tr("Paper Size") + ":");
     labelSize = createLabel(gridLayout, 14, tr("File Size") + ":");
 
-    DWidget *labelWidget = new DWidget(this);
-    QVBoxLayout *vbLayout = new QVBoxLayout;
+    auto labelWidget = new DWidget(this);
+    auto vbLayout = new QVBoxLayout;
     vbLayout->addWidget(new DLabel(tr("file basic info")));
     vbLayout->addItem(gridLayout);
     labelWidget->setLayout(vbLayout);
@@ -154,10 +155,10 @@ void FileAttrWidget::initLabels()
 
 void FileAttrWidget::initCloseBtn()
 {
-    QHBoxLayout *layout = new QHBoxLayout;
+    auto layout = new QHBoxLayout;
     layout->addStretch(1);
 
-    DIconButton *closeButton = new DIconButton(DStyle::SP_CloseButton, this);
+    auto closeButton = new DIconButton(DStyle::SP_CloseButton, this);
     closeButton->setToolTip(tr("close"));
     connect(closeButton, &DIconButton::clicked, this, &FileAttrWidget::slotBtnCloseClicked);
 
@@ -171,7 +172,7 @@ void FileAttrWidget::initImageLabel()
     labelImage = new DLabel(this);
     labelImage->setFixedSize(QSize(94, 113));
 
-    QHBoxLayout *layout = new QHBoxLayout;
+    auto layout = new QHBoxLayout;
     layout->addStretch(1);
     layout->addWidget(labelImage);
     layout->addStretch(1);
@@ -179,7 +180,7 @@ void FileAttrWidget::initImageLabel()
     labelFileName = new DLabel("", this);
     labelFileName->setAlignment(Qt::AlignCenter);
 
-    QVBoxLayout *vlayout = new QVBoxLayout;
+    auto vlayout = new QVBoxLayout;
     vlayout->addStretch(1);
     vlayout->addItem(layout);
     vlayout->addWidget(labelFileName);

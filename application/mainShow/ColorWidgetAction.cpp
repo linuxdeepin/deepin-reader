@@ -25,14 +25,15 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
     auto btnGroup = new QButtonGroup;
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SIGNAL(sigBtnGroupClicked(int)));
 
-    for (int i = 0; i < 8; i ++ ) {
-        DFloatingButton *btn = new DFloatingButton(pWidget);
+    auto colorList = DataManager::instance()->getLightColorList();
+    for (int iLoop = 0; iLoop < colorList.size(); iLoop++ ) {
+        auto btn = new DFloatingButton(pWidget);
+        btn->setBackgroundRole(QPalette::Button);
         btn->setFixedSize(QSize(16, 16));
         QPalette pa = btn->palette();
-        btn->setBackgroundRole(QPalette::Button);
-        pa.setBrush(QPalette::Button, DataManager::instance()->color(i));
+        pa.setBrush(QPalette::Button, colorList.at(iLoop));
         btn->setPalette(pa);
-        btnGroup->addButton(btn, i);
+        btnGroup->addButton(btn, iLoop);
         buttonLayout->addWidget(btn);
     }
 

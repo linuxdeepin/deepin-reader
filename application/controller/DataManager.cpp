@@ -59,11 +59,7 @@ void DataManager::setBIsBookMarkState(bool bIsBookMarkState)
     m_bIsBookMarkState = bIsBookMarkState;
 }
 
-QColor DataManager::color(const int &index)
+QList<QColor> DataManager::getLightColorList()
 {
-    if (index < m_listColor.count()) {
-        return  m_listColor.at(index);
-    }
-
-    return (Qt::white);
+    return m_listColor;
 }

@@ -5,9 +5,10 @@
 #include "application.h"
 
 #include "docview/docummentproxy.h"
-#include <QPrinter>
-#include <QPrintDialog>
 #include <DMessageBox>
+
+#include <QPrinter>
+#include <QPrinterInfo>
 #include <QPrintPreviewDialog>
 
 #include "mainShow/DefaultOperationMenu.h"
@@ -234,7 +235,7 @@ void FileViewWidget::slotSetHandShape(const QString &data)
 }
 
 //  添加高亮颜色
-void FileViewWidget::slotFileAddAnnotation(const QString &sColor)
+void FileViewWidget::slotFileAddAnnotation(const QString &iIndex)
 {
     bool t_bSame = m_bIsHighLight && m_bIsHighLightReleasePoint;
     if (t_bSame) {
@@ -243,7 +244,7 @@ void FileViewWidget::slotFileAddAnnotation(const QString &sColor)
     }
     DataManager::instance()->setBIsUpdate(true);
 
-    QColor color = DataManager::instance()->color(sColor.toInt());
+    QColor color = DataManager::instance()->getLightColorList().at(iIndex.toInt());
 
     m_strUUid = m_pDocummentProxy->addAnnotation(m_pRightClickPoint, m_pRightClickPoint, color);
     if (!m_strUUid.isEmpty()) {
@@ -402,7 +403,7 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
     case MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED: //  移除高亮显示
         emit sigFileRemoveAnnotation();
         return ConstantMsg::g_effective_res;
-    case MSG_NOTE_ADDCONTANT:                      //  添加注释
+    case MSG_NOTE_ADDCONTANT:                   //  添加注释
         emit sigFileAddNote(msgContent);
         return ConstantMsg::g_effective_res;
     }

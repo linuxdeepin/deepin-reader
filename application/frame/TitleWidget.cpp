@@ -2,6 +2,9 @@
 #include <QHBoxLayout>
 #include <QBitmap>
 
+#include "mainShow/FileShowFormatMenu.h"
+#include <QWidgetAction>
+
 TitleWidget::TitleWidget(CustomWidget *parent) :
     CustomWidget("TitleWidget", parent)
 {
@@ -11,10 +14,7 @@ TitleWidget::TitleWidget(CustomWidget *parent) :
 
 TitleWidget::~TitleWidget()
 {
-    if (m_pFontWidget) {
-        m_pFontWidget->deleteLater();
-        m_pFontWidget = nullptr;
-    }
+
 }
 
 //  打开文件成功
@@ -44,9 +44,6 @@ void TitleWidget::slotMagnifierCancel()
 
 void TitleWidget::initWidget()
 {
-    m_pFontWidget = new FontWidget;
-    connect(m_pFontWidget, SIGNAL(sigWidgetHide()), this, SLOT(slotFontWidgetHide()));
-
     initBtns();
 
     auto m_layout = new QHBoxLayout();
@@ -78,18 +75,23 @@ void TitleWidget::on_thumbnailBtn_clicked()
 //  字体
 void TitleWidget::on_settingBtn_clicked()
 {
-    int nHeight = m_pSettingBtn->height();
-    int nWidth = m_pSettingBtn->width() / 2;
-
     QPoint point = m_pSettingBtn->mapToGlobal(QPoint(0, 0));
     int nOldY = point.y();
-    int nOldX = point.x();
 
-    point.setX(nWidth + nOldX - 100);
-    point.setY(nHeight + nOldY);
+    int nHeight = m_pSettingBtn->height();
+    point.setY(nHeight + nOldY + 2);
 
-    m_pFontWidget->setGeometry(point.x(), point.y(), 200, 250);
-    m_pFontWidget->show();
+    if (m_pSettingMenu == nullptr) {
+        m_pSettingMenu = new DMenu(this);
+
+        auto action = new QWidgetAction(this);
+
+        auto scaleWidget = new FontWidget(this);
+        action->setDefaultWidget(scaleWidget);
+
+        m_pSettingMenu->addAction(action);
+    }
+    m_pSettingMenu->exec(point);
 }
 
 //  手型点击
@@ -104,8 +106,6 @@ void TitleWidget::on_handleShapeBtn_clicked()
 
     if (m_pHandleMenu == nullptr) {
         m_pHandleMenu = new DMenu(this);
-        m_pHandleMenu->setFixedWidth(200);
-        connect(m_pHandleMenu, SIGNAL(aboutToHide()), this, SLOT(slotHandleMenuHide()));
 
         QAction *m_pHandleAction = createAction(tr("handleShape"));
 
@@ -152,16 +152,6 @@ void TitleWidget::setHandleShapeBtn(const QString &btnName)
     QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
 
     m_pHandleShapeBtn->setIcon(QIcon(normalPic));
-}
-
-void TitleWidget::slotFontWidgetHide()
-{
-    m_pSettingBtn->setChecked(false);
-}
-
-void TitleWidget::slotHandleMenuHide()
-{
-    m_pHandleShapeBtn->setChecked(false);
 }
 
 void TitleWidget::initBtns()

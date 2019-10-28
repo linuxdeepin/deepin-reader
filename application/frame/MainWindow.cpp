@@ -60,7 +60,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 }
 
 void MainWindow::initUI()
-{   
+{
     titlebar()->addWidget(new TitleWidget, Qt::AlignLeft);
 
     setCentralWidget(new MainWidget);
@@ -99,7 +99,6 @@ void MainWindow::initConnections()
     }
     m_menu->addSeparator();
 
-    m_menu->setMinimumWidth(ConstantMsg::g_menu_width);
     titlebar()->setMenu(m_menu);
 
     auto actions = this->findChildren<QAction *>();
@@ -169,8 +168,7 @@ void MainWindow::slotAppShowState(const int &nState)
 {
     titlebar()->setVisible(nState);
     if (nState == 1) {
-        if(windowState()==Qt::WindowFullScreen)
-        {
+        if (windowState() == Qt::WindowFullScreen) {
             showNormal();
             this->setWindowState(Qt::WindowMaximized);
         }
