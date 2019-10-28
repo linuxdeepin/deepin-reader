@@ -197,13 +197,14 @@ void FontWidget::initWidget()
  * @brief FontWidget::paintEvent
  * 重写绘制接口
  */
-void FontWidget::paintEvent(QPaintEvent *)
+void FontWidget::paintEvent(QPaintEvent *e)
 {
+    Q_UNUSED(e);
     QRectF rectangle(0.0, 12.0, this->width(), this->height() - 12);
 
     QPainter painter(this);
     painter.setRenderHint( QPainter::Antialiasing, true );
-    painter.setBrush(QBrush(QColor(255, 255, 255)));
+    painter.setBrush(/*QBrush(QColor(255, 255, 255))*/Qt::white);
     painter.drawRoundedRect(rectangle, 14, 12);
 
     const int w = this->width() / 2;

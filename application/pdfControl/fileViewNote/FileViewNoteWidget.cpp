@@ -3,8 +3,11 @@
 FileViewNoteWidget::FileViewNoteWidget(CustomWidget *parent):
     CustomWidget(QString("FileViewNoteWidget"), parent)
 {
+    //设置窗体无边框
+    //setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint|Qt::Tool|Qt::X11BypassWindowManagerHint);
+
     setWindowFlag(Qt::Popup);
-    setFixedSize(QSize(200, 300));
+    setFixedSize(QSize(254, 321));
 
     initWidget();
 }
@@ -44,16 +47,24 @@ void FileViewNoteWidget::initWidget()
     this->setPalette(plt);
 
     m_pCloseLab = new MenuLab;
-    m_pCloseLab->setFixedSize(QSize(30, 30));
+    m_pCloseLab->setFixedSize(QSize(24, 24));
     m_pCloseLab->setPixmap(QPixmap(QString(":/resources/image/close.svg")));
     connect(m_pCloseLab, SIGNAL(clicked()), this, SLOT(slotClosed()));
 
     auto m_pHLayoutClose = new QHBoxLayout;
-    m_pHLayoutClose->setContentsMargins(1, 0, 0, 0);
-    m_pHLayoutClose->addStretch(1);
+    m_pHLayoutClose->setContentsMargins(224, 4, 6, 4);
+    m_pHLayoutClose->addStretch(0);
     m_pHLayoutClose->addWidget(m_pCloseLab);
 
+    auto m_pHLayoutContant = new QHBoxLayout;
+    m_pHLayoutContant->setContentsMargins(25, 0, 24, 0);
+    m_pHLayoutContant->addStretch(0);
+//    auto m_pVLayoutContant = new QVBoxLayout;
+//    m_pVLayoutContant->setContentsMargins(0, 0, 0, 0);
+//    m_pVLayoutContant->addStretch(0);
+
     m_pTextEdit = new DTextEdit;
+    m_pTextEdit->setFixedSize(205, 257);
     //background color
     QPalette pText = m_pTextEdit->palette();
     pText.setColor(QPalette::Base, QColor(255, 251, 225));
@@ -80,13 +91,30 @@ void FileViewNoteWidget::initWidget()
     //line count
     m_pTextEdit->document()->setMaximumBlockCount(10);
 
+    m_pHLayoutContant->addWidget(m_pTextEdit);
+//    m_pVLayoutContant->addItem(m_pHLayoutContant);
+//    m_pVLayoutContant->addSpacing(1);
+
     auto m_pVLayout = new QVBoxLayout;
     m_pVLayout->setContentsMargins(0, 0, 0, 0);
     m_pVLayout->setSpacing(0);
     m_pVLayout->addItem(m_pHLayoutClose);
-    m_pVLayout->addWidget(m_pTextEdit);
+    m_pVLayout->addItem(m_pHLayoutContant);
+//    m_pVLayout->addWidget(m_pTextEdit);
 
     this->setLayout(m_pVLayout);
+}
+
+void FileViewNoteWidget::paintEvent(QPaintEvent *e)
+{
+    Q_UNUSED(e);
+    QRectF rectangle(0, 0, (this->width()), (this->height()));
+
+    QPainter painter(this);
+    painter.setOpacity(1);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setBrush(/*Qt::NoBrush*/QColor(255, 251, 225));
+    painter.drawRoundedRect(rectangle, 6, 6);
 }
 
 // 关闭槽函数

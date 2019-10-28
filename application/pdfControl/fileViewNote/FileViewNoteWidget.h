@@ -50,6 +50,7 @@ public:
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
+    void  paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
 
 private slots:
     void slotClosed();
