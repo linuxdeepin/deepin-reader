@@ -11,6 +11,10 @@
 #include <QSignalMapper>
 #include "controller/DataManager.h"
 
+#include <DGuiApplicationHelper>
+
+DWIDGET_USE_NAMESPACE
+
 MainWindow::MainWindow(DMainWindow *parent)
     : DMainWindow(parent)
 {
@@ -19,6 +23,8 @@ MainWindow::MainWindow(DMainWindow *parent)
     initTitlebar();
 
     initConnections();
+
+    initThemeChanged();
 
     m_pMsgSubject = MsgSubject::getInstance();
     if (m_pMsgSubject) {
@@ -141,6 +147,23 @@ void MainWindow::onScreening()
 {
     slotAppShowState(0);
     sendMsg(MSG_OPERATION_SLIDE);
+}
+
+void MainWindow::initThemeChanged()
+{
+    //  主题变了
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] (DGuiApplicationHelper::ColorType colorType) {
+        QString sTheme = "";
+        if (colorType == DGuiApplicationHelper::UnknownType) {  //  未知
+            sTheme = "0";
+        } else if (colorType == DGuiApplicationHelper::LightType) { //  浅色
+            sTheme = "1";
+        } else if (colorType == DGuiApplicationHelper::DarkType) {  //  深色
+            sTheme = "2";
+        }
+
+        sendMsg(MSG_OPERATION_UPDATE_THEME, sTheme);
+    });
 }
 
 //  退出 应用

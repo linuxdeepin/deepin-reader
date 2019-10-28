@@ -60,8 +60,8 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
 
 void NotesItemWidget::initWidget()
 {
-    QFont font(QString("SourceHanSansSC-Medium"),12);
-    QFont fontContant(QString("SourceHanSansSC-Medium"),11);
+    QFont font(QString("SourceHanSansSC-Medium"), 12);
+    QFont fontContant(QString("SourceHanSansSC-Medium"), 11);
     auto t_vLayout = new QVBoxLayout;
     t_vLayout->setContentsMargins(20, 0, 0, 0);
     t_vLayout->setSpacing(0);
@@ -117,7 +117,7 @@ int NotesItemWidget::dealWithData(const int &, const QString &)
 
 void NotesItemWidget::paintEvent(QPaintEvent *e)
 {
-    if(m_pTextLab){
+    if (m_pTextLab) {
         QString note = m_strNote;
         m_pTextLab->setText(calcText(m_pTextLab->font(), note, m_pTextLab->size()));
     }
@@ -144,76 +144,68 @@ QString NotesItemWidget::calcText(const QFont &font, const QString &note, const 
     QString text = note;
 
     QFontMetrics fontWidth(font);
-        int width = fontWidth.width(note);  //计算字符串宽度
-        if(width>=size.width())  //当字符串宽度大于最大宽度时进行转换
-        {
-            text = fontWidth.elidedText(text,Qt::ElideRight,size.width());  //右部显示省略号
-        }
-        return text;   //返回处理后的字符串
+    int width = fontWidth.width(note);  //计算字符串宽度
+    if (width >= size.width()) { //当字符串宽度大于最大宽度时进行转换
+        text = fontWidth.elidedText(text, Qt::ElideRight, size.width()); //右部显示省略号
+    }
+    return text;   //返回处理后的字符串
 #endif
 
 #if 1
-        QString text;
-        QString tempText;
-        int totalHeight = size.height();
-        int lineWidth = size.width()-12;
+    QString text;
+    QString tempText;
+    int totalHeight = size.height();
+    int lineWidth = size.width() - 12;
 
-        QFontMetrics fm(font);
+    QFontMetrics fm(font);
 
-        int calcHeight = 0;
-        int lineHeight = fm.height();
-        int lineSpace = 0;
-        int lineCount = (totalHeight - lineSpace) / lineHeight;
-        int prevLineCharIndex = 0;
-        for(int charIndex=0; charIndex<note.size() && lineCount >=0; ++charIndex)
-        {
-            int fmWidth = fm.horizontalAdvance(tempText);
-            if(fmWidth > lineWidth)
-            {
-                calcHeight += lineHeight/*+3*/;
-                if (calcHeight + lineHeight > totalHeight) {
-                    QString endString = note.mid(prevLineCharIndex);
-                    const QString &endText = fm.elidedText(endString, Qt::ElideRight, size.width());
-                    text += endText;
+    int calcHeight = 0;
+    int lineHeight = fm.height();
+    int lineSpace = 0;
+    int lineCount = (totalHeight - lineSpace) / lineHeight;
+    int prevLineCharIndex = 0;
+    for (int charIndex = 0; charIndex < note.size() && lineCount >= 0; ++charIndex) {
+        int fmWidth = fm.horizontalAdvance(tempText);
+        if (fmWidth > lineWidth) {
+            calcHeight += lineHeight/*+3*/;
+            if (calcHeight + lineHeight > totalHeight) {
+                QString endString = note.mid(prevLineCharIndex);
+                const QString &endText = fm.elidedText(endString, Qt::ElideRight, size.width());
+                text += endText;
 
-                    lineCount = 0;
-                    break;
-                }
-
-                QChar currChar = tempText.at(tempText.length()-1);
-                QChar nextChar = note.at(note.indexOf(tempText)+tempText.length());
-                if(currChar.isLetter() && nextChar.isLetter())
-                {
-                    tempText += '-';
-                }
-                fmWidth = fm.horizontalAdvance(tempText);
-                if (fmWidth > size.width()) {
-                    --charIndex;
-                    --prevLineCharIndex;
-                    tempText = tempText.remove(tempText.length()-2, 1);
-                }
-                text += tempText;
-
-                --lineCount;
-                if(lineCount > 0)
-                {
-                    text += "\n";
-                }
-                tempText = note.at(charIndex);
-
-                prevLineCharIndex = charIndex;
+                lineCount = 0;
+                break;
             }
-            else
-            {
-                tempText += note.at(charIndex);
-            }
-        }
 
-        if (lineCount > 0)
-        {
+            QChar currChar = tempText.at(tempText.length() - 1);
+            QChar nextChar = note.at(note.indexOf(tempText) + tempText.length());
+            if (currChar.isLetter() && nextChar.isLetter()) {
+                tempText += '-';
+            }
+            fmWidth = fm.horizontalAdvance(tempText);
+            if (fmWidth > size.width()) {
+                --charIndex;
+                --prevLineCharIndex;
+                tempText = tempText.remove(tempText.length() - 2, 1);
+            }
             text += tempText;
-        }
 
-        return text;
+            --lineCount;
+            if (lineCount > 0) {
+                text += "\n";
+            }
+            tempText = note.at(charIndex);
+
+            prevLineCharIndex = charIndex;
+        } else {
+            tempText += note.at(charIndex);
+        }
+    }
+
+    if (lineCount > 0) {
+        text += tempText;
+    }
+
+    return text;
 #endif
 }

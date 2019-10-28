@@ -2,7 +2,6 @@
 #include <QHBoxLayout>
 #include <QBitmap>
 
-#include "mainShow/FileShowFormatMenu.h"
 #include <QWidgetAction>
 
 TitleWidget::TitleWidget(CustomWidget *parent) :

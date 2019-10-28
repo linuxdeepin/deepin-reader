@@ -44,6 +44,8 @@ private:
     void onFullScreen();
     void onScreening();
 
+    void initThemeChanged();
+
 private slots:
     void slotOpenFileOk();
     void slotOpenAppHelp();

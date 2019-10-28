@@ -72,7 +72,7 @@ public:
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
 
 private:
-    QString calcText(const QFont&font, const QString &note, const QSize &size/*const int MaxWidth*/);
+    QString calcText(const QFont &font, const QString &note, const QSize &size/*const int MaxWidth*/);
 
 private:
     DLabel *m_pSearchResultNum = nullptr;

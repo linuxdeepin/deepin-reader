@@ -43,7 +43,6 @@ private:
 private:
     MsgSubject  *m_pMsgSubject = nullptr;
     NotifySubject   *m_pNotifySubject = nullptr;
-
 };
 
 #endif // CUSTOMWIDGET_H
