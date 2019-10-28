@@ -45,6 +45,7 @@ int FontWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigOpenFileOk();
         break;
     case MSG_SELF_ADAPTE_SCALE:
+        m_bIsAdaptMove = true;
         m_pEnlargeSlider->setValue(msgContent.toDouble() * 100);
         qDebug() << "MSG_SELF_ADAPTE_SCALE          " << msgContent;
         break;
@@ -402,7 +403,17 @@ void FontWidget::slotSetChangeVal(int val)
     m_pEnlargeLab->clear();
     m_pEnlargeLab->setText(QString("%1%").arg(val));
 
-    scaleAndRotate(val);
+    if (!m_bIsAdaptMove) {
+        scaleAndRotate(val);
+
+        m_bSuitW = false;
+        m_pSuitWLab->setPixmap(QPixmap(QString("")));
+
+        m_bSuitH = false;
+        m_pSuitHLab->setPixmap(QPixmap(QString("")));
+    }
+
+    m_bIsAdaptMove = false;
 }
 
 /**

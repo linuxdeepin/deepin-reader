@@ -41,22 +41,28 @@ APPICONDIR = $$PREFIX/share/icons/deepin/apps/scalable
 #app_icon.path = /usr/share/icons/hicolor/scalable/apps
 #app_icon.files = $$PWD/resources/image/logo/deepin-reader.svg
 
-isEmpty(BINDIR):BINDIR= $$PREFIX/bin
-isEmpty(APPDIR):APPDIR= $$PREFIX/share/applications
-isEmpty(DSRDIR):DSRDIR= $$PREFIX/share/deepin-reader
 
-target.path = $$BINDIR
+isEmpty(BINDIR):BINDIR=/usr/bin
+isEmpty(APPDIR):APPDIR=/usr/share/applications
+isEmpty(DSRDIR):DSRDIR=/usr/share/deepin-reader
+
+target.path = $$INSTROOT$$BINDIR
 
 desktop.path = $$INSTROOT$$APPDIR
-desktop.files = $$PWD/deepin-reader.desktop
+desktop.files = $$PWD/resources/deepin-reader.desktop
 
 icon_files.path = /usr/share/icons/hicolor/scalable/apps
 icon_files.files = $$PWD/resources/image/logo/deepin-reader.svg
 
-translations.path = DSRDIR/translations
+# Automating generation .qm files from .ts files
+!system($$PWD/translate_generation.sh): error("Failed to generate translation")
+
+translations.path = /usr/share/deepin-reader/translations
 translations.files = $$PWD/translations/*.qm
 
 INSTALLS += target desktop icon_files translations
+
+
 
 
 

@@ -4,32 +4,47 @@
 <context>
     <name>AppAboutWidget</name>
     <message>
-        <location filename="../frame/AppAboutWidget.cpp" line="15"/>
+        <location filename="../frame/AppAboutWidget.cpp" line="14"/>
         <source>deepin-reader</source>
         <translatorcomment>深度文档查看器</translatorcomment>
         <translation>深度文档查看器</translation>
+    </message>
+    <message>
+        <location filename="../frame/AppAboutWidget.cpp" line="17"/>
+        <source>Document viewer is a document viewer that comes with the deep operating system.
+ In addition to opening and reading PDF files, On documents you can also 
+ add bookmark, annotation and highlight selected text.</source>
+        <translatorcomment>文档查看器是随深度操作系统而来的文档查看器。
+除了打开和阅读PDF文件外，您还可以对文档进行添加
+书签、注释和高亮选中的文本。</translatorcomment>
+        <translation>文档查看器是随深度操作系统而来的文档查看器。
+除了打开和阅读PDF文件外，您还可以对文档进行添加
+书签、注释和高亮选中的文本。</translation>
     </message>
 </context>
 <context>
     <name>Application</name>
     <message>
-        <location filename="../application.cpp" line="44"/>
-        <location filename="../application.cpp" line="47"/>
+        <location filename="../application.cpp" line="43"/>
+        <location filename="../application.cpp" line="46"/>
         <source>deepin-reader</source>
         <translatorcomment>深度文档查看器</translatorcomment>
         <translation>深度文档查看器</translation>
     </message>
     <message>
-        <location filename="../application.cpp" line="45"/>
+        <location filename="../application.cpp" line="44"/>
         <source>deepin</source>
         <translatorcomment>深度</translatorcomment>
         <translation>深度</translation>
     </message>
     <message>
-        <location filename="../application.cpp" line="51"/>
+        <location filename="../application.cpp" line="50"/>
         <source>Document viewer is a document viewer that comes with the deep operating system.
  In addition to opening and reading PDF files, On documents you can also 
  add bookmark, annotation and highlight selected text.</source>
+        <translatorcomment>文档查看器是随深度操作系统而来的文档查看器。
+除了打开和阅读PDF文件外，您还可以对文档进行添加
+书签、注释和高亮选中的文本。</translatorcomment>
         <translation>文档查看器是随深度操作系统而来的文档查看器。
 除了打开和阅读PDF文件外，您还可以对文档进行添加
 书签、注释和高亮选中的文本。</translation>
@@ -62,7 +77,7 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="199"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="201"/>
         <source>add bookmark</source>
         <translatorcomment>添加书签</translatorcomment>
         <translation>添加书签</translation>
@@ -126,14 +141,14 @@
 <context>
     <name>DocummentFileHelper</name>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="63"/>
-        <location filename="../frame/DocummentFileHelper.cpp" line="146"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="62"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="145"/>
         <source>Save File</source>
         <translatorcomment>保存</translatorcomment>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="146"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="145"/>
         <source>Do you need to save the file opened?</source>
         <translatorcomment>您是否需要保存已打开的文件?</translatorcomment>
         <translation>您是否需要保存已打开的文件?</translation>
@@ -276,31 +291,31 @@
 <context>
     <name>FontWidget</name>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="122"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="118"/>
         <source>Double View</source>
         <translatorcomment>双页显示</translatorcomment>
         <translation>双页显示</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="136"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="132"/>
         <source>Adaptate Height</source>
         <translatorcomment>自适应高度</translatorcomment>
         <translation>自适应高度</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="149"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="145"/>
         <source>Adaptate Width</source>
         <translatorcomment>自适应宽度</translatorcomment>
         <translation>自适应宽度</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="162"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="158"/>
         <source>Rotated To Left</source>
         <translatorcomment>左旋转</translatorcomment>
         <translation>左旋转</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="175"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="171"/>
         <source>Rotated To Right</source>
         <translatorcomment>右旋转</translatorcomment>
         <translation>右旋转</translation>
@@ -430,13 +445,13 @@
 <context>
     <name>NotesItemWidget</name>
     <message>
-        <location filename="../pdfControl/NotesItemWidget.cpp" line="64"/>
+        <location filename="../pdfControl/NotesItemWidget.cpp" line="54"/>
         <source>copy</source>
         <translatorcomment>复制</translatorcomment>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../pdfControl/NotesItemWidget.cpp" line="65"/>
+        <location filename="../pdfControl/NotesItemWidget.cpp" line="55"/>
         <source>Delete</source>
         <translatorcomment>删除</translatorcomment>
         <translation>删除</translation>

@@ -55,7 +55,7 @@ Application::Application(int &argc, char **argv)
 
     installEventFilter(new GlobalEventFilter);
     //使用这种方式请确保使用dpkg构建后的版本一致（请测试后再使用），否者不要使用
-    // setAboutDialog(new AppAboutWidget);
+    setAboutDialog(new AppAboutWidget);
 
     initChildren();
 }

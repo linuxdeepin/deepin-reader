@@ -4,26 +4,33 @@
 <context>
     <name>AppAboutWidget</name>
     <message>
-        <location filename="../frame/AppAboutWidget.cpp" line="15"/>
+        <location filename="../frame/AppAboutWidget.cpp" line="14"/>
         <source>deepin-reader</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/AppAboutWidget.cpp" line="17"/>
+        <source>Document viewer is a document viewer that comes with the deep operating system.
+ In addition to opening and reading PDF files, On documents you can also 
+ add bookmark, annotation and highlight selected text.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Application</name>
     <message>
-        <location filename="../application.cpp" line="44"/>
-        <location filename="../application.cpp" line="47"/>
+        <location filename="../application.cpp" line="43"/>
+        <location filename="../application.cpp" line="46"/>
         <source>deepin-reader</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../application.cpp" line="45"/>
+        <location filename="../application.cpp" line="44"/>
         <source>deepin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../application.cpp" line="51"/>
+        <location filename="../application.cpp" line="50"/>
         <source>Document viewer is a document viewer that comes with the deep operating system.
  In addition to opening and reading PDF files, On documents you can also 
  add bookmark, annotation and highlight selected text.</source>
@@ -54,7 +61,7 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="199"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="201"/>
         <source>add bookmark</source>
         <translation type="unfinished"></translation>
     </message>
@@ -109,13 +116,13 @@
 <context>
     <name>DocummentFileHelper</name>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="63"/>
-        <location filename="../frame/DocummentFileHelper.cpp" line="146"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="62"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="145"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="146"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="145"/>
         <source>Do you need to save the file opened?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -237,27 +244,27 @@
 <context>
     <name>FontWidget</name>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="122"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="118"/>
         <source>Double View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="136"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="132"/>
         <source>Adaptate Height</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="149"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="145"/>
         <source>Adaptate Width</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="162"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="158"/>
         <source>Rotated To Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="175"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="171"/>
         <source>Rotated To Right</source>
         <translation type="unfinished"></translation>
     </message>
@@ -370,12 +377,12 @@
 <context>
     <name>NotesItemWidget</name>
     <message>
-        <location filename="../pdfControl/NotesItemWidget.cpp" line="64"/>
+        <location filename="../pdfControl/NotesItemWidget.cpp" line="54"/>
         <source>copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pdfControl/NotesItemWidget.cpp" line="65"/>
+        <location filename="../pdfControl/NotesItemWidget.cpp" line="55"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>

@@ -22,6 +22,20 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint)
         m_pBookMark->setText(tr("add bookmark"));
     }
 
+    int nCurPage = DocummentProxy::instance()->currentPageNo();
+    if (nCurPage == 0) {    //  首页
+        m_pFirstPage->setEnabled(false);
+        m_pPrevPage->setEnabled(false);
+    } else {
+        int nPageNum = DocummentProxy::instance()->getPageSNum();
+        nPageNum--;
+
+        if (nCurPage == nPageNum) { //  最后一页
+            m_pNextPage->setEnabled(false);
+            m_pEndPage->setEnabled(false);
+        }
+    }
+
     this->exec(showPoint);
 }
 

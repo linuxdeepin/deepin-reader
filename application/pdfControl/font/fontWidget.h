@@ -93,6 +93,9 @@ private:
     int m_rotateType = RotateType_Normal;    // 旋转类型
     bool m_bSuitH = false;                   // 自适应高度
     bool m_bSuitW = false;                   // 自适应宽度
+
+
+    bool        m_bIsAdaptMove = false;
 };
 
 #endif // FONTWIDGET_H
