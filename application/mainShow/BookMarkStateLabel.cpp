@@ -103,14 +103,14 @@ bool BookMarkStateLabel::bChecked() const
 
 int BookMarkStateLabel::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_BOOKMARK_STATE) {     //  当前页的书签状态
-        emit sigSetMarkState(msgContent);
-        return ConstantMsg::g_effective_res;
-    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
+//    if (msgType == MSG_BOOKMARK_STATE) {     //  当前页的书签状态
+//        emit sigSetMarkState(msgContent);
+//        return ConstantMsg::g_effective_res;
+//    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
 
-    } else if (msgType == MSG_OPERATION_FULLSCREEN || msgType == MSG_OPERATION_SLIDE) {
-        emit sigWidgetVisible(1);
-    }
+//    } else if (msgType == MSG_OPERATION_FULLSCREEN || msgType == MSG_OPERATION_SLIDE) {
+//        emit sigWidgetVisible(1);
+//    }
     return 0;
 }
 

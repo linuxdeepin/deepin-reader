@@ -31,7 +31,7 @@ void DocShowShellWidget::resizeEvent(QResizeEvent *event)
         m_pFileViewNoteWidget->move(nParentWidth - nWidget - 50, 200);
     }
 
-    setBookMarkStateWidget();
+//    setBookMarkStateWidget();
 
     CustomWidget::resizeEvent(event);
 }
@@ -146,10 +146,11 @@ void DocShowShellWidget::initWidget()
 
     this->setLayout(layout);
 
-    setBookMarkStateWidget();
+//    setBookMarkStateWidget();
 }
 
-//  书签状态
+/*
+ * //  书签状态
 void DocShowShellWidget::setBookMarkStateWidget()
 {
     if (m_pBookMarkStateLabel == nullptr) {
@@ -161,6 +162,8 @@ void DocShowShellWidget::setBookMarkStateWidget()
     m_pBookMarkStateLabel->show();
     m_pBookMarkStateLabel->raise();
 }
+
+*/
 
 bool DocShowShellWidget::isShowW(const QString &contant, int &page, QString &uuid)
 {

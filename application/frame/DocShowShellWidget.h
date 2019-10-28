@@ -4,7 +4,7 @@
 #include "subjectObserver/CustomWidget.h"
 #include "mainShow/FindWidget.h"
 #include "mainShow/FileAttrWidget.h"
-#include "mainShow/BookMarkStateLabel.h"
+//#include "mainShow/BookMarkStateLabel.h"
 
 #include "pdfControl/fileViewNote/FileViewNoteWidget.h"
 /**
@@ -44,7 +44,7 @@ private:
     FileAttrWidget          *m_pFileAttrWidget = nullptr;
     FindWidget              *m_pFindWidget = nullptr;
     FileViewNoteWidget      *m_pFileViewNoteWidget = nullptr;
-    BookMarkStateLabel      *m_pBookMarkStateLabel = nullptr;
+//    BookMarkStateLabel      *m_pBookMarkStateLabel = nullptr;
 
     // IObserver interface
 public:
