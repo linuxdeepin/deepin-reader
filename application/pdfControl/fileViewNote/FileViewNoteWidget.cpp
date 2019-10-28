@@ -164,49 +164,46 @@ CustemTextEdit::CustemTextEdit(DWidget *parent) :
 void CustemTextEdit::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
-    QPainter painter(this);
+    DTextEdit::paintEvent(e);
+    QPainter painter(this->viewport());
     painter.setRenderHint( QPainter::Antialiasing, true );
     const int w = this->width();
     const int h = this->height();
-    const int stepH = 19;
-//    QRect rect = this->geometry();
-
-    int x = 0;
-    int y = 0;
+    const int stepH = 28;
 
     QPointF points[] = {
-        QPointF(0+x, 0+y),
-        QPointF(w+x, 0+y),
+        QPointF(0, 0),
+        QPointF(w, 0),
 
-        QPointF(0+x, stepH+y),
-        QPointF(w+x, stepH+y),
+        QPointF(0, stepH),
+        QPointF(w, stepH),
 
-        QPointF(0+x, stepH*2+y),
-        QPointF(w+x, stepH*2+y),
+        QPointF(0, stepH*2-5),
+        QPointF(w, stepH*2-5),
 
-        QPointF(0+x, stepH*3+y),
-        QPointF(w+x, stepH*3+y),
+        QPointF(0, stepH*3-8),
+        QPointF(w, stepH*3-8),
 
-        QPointF(0+x, stepH*4+y),
-        QPointF(w+x, stepH*4+y),
+        QPointF(0, stepH*4-9),
+        QPointF(w, stepH*4-9),
 
-        QPointF(0+x, stepH*5+y),
-        QPointF(w+x, stepH*5+y),
+        QPointF(0, stepH*5-15),
+        QPointF(w, stepH*5-15),
 
-        QPointF(0+x, stepH*6+y),
-        QPointF(w+x, stepH*6+y),
+        QPointF(0, stepH*6-17),
+        QPointF(w, stepH*6-17),
 
-        QPointF(0+x, stepH*7+y),
-        QPointF(w+x, stepH*7+y),
+        QPointF(0, stepH*7-19),
+        QPointF(w, stepH*7-19),
 
-        QPointF(0+x, stepH*8+y),
-        QPointF(w+x, stepH*8+y),
+        QPointF(0, stepH*8-21),
+        QPointF(w, stepH*8-21),
 
-        QPointF(0+x, stepH*9+y),
-        QPointF(w+x, stepH*9+y),
+        QPointF(0, stepH*9-25),
+        QPointF(w, stepH*9-25),
 
-        QPointF(0+x, h+y),
-        QPointF(w+x, h+y)
+        QPointF(0, h),
+        QPointF(w, h)
     };
 
     QPen pen;
@@ -228,9 +225,8 @@ void CustemTextEdit::paintEvent(QPaintEvent *e)
     painter.drawLine(points[16], points[17]);
     painter.drawLine(points[18], points[19]);
 
-    DTextEdit::paintEvent(e);
 
-    this->update();
+//    this->update();
 }
 
 void CustemTextEdit::init()
