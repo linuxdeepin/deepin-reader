@@ -6,7 +6,6 @@
 #include <DMenu>
 
 #include "subjectObserver/CustomWidget.h"
-#include "mainShow/TextOperationWidget.h"
 #include "DocummentFileHelper.h"
 
 //  当前鼠标状态
@@ -74,8 +73,6 @@ private:
     int dealWithFileMenuRequest(const int &msgType, const QString &msgContent);
 
 private:
-    TextOperationWidget     *m_pTextOperationWidget = nullptr;
-
     DocummentFileHelper     *m_pDocummentFileHelper = nullptr;
 
     DocummentProxy          *m_pDocummentProxy = nullptr;

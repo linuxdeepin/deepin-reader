@@ -11,6 +11,7 @@
 #include <QPrintPreviewDialog>
 
 #include "mainShow/DefaultOperationMenu.h"
+#include "mainShow/TextOperationMenu.h"
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
@@ -194,13 +195,10 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 
     if (sSelectText != "" || m_bIsHighLight) {    //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
-        if (m_pTextOperationWidget == nullptr) {
-            m_pTextOperationWidget = new TextOperationWidget(this);
-        }
-
-        m_pTextOperationWidget->showWidget(tempPoint.x(), tempPoint.y(), m_bIsHighLight, sSelectText, struuid);
+        auto menu = new TextOperationMenu(this);
+        menu->execMenu(tempPoint, m_bIsHighLight, sSelectText, struuid);
     } else {    //  否则弹出 文档操作菜单
-        DefaultOperationMenu *menu = new DefaultOperationMenu(this);
+        auto menu = new DefaultOperationMenu(this);
         menu->execMenu(tempPoint);
     }
 }
