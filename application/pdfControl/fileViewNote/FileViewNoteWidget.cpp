@@ -59,9 +59,6 @@ void FileViewNoteWidget::initWidget()
     auto m_pHLayoutContant = new QHBoxLayout;
     m_pHLayoutContant->setContentsMargins(25, 0, 24, 0);
     m_pHLayoutContant->addStretch(0);
-//    auto m_pVLayoutContant = new QVBoxLayout;
-//    m_pVLayoutContant->setContentsMargins(0, 0, 0, 0);
-//    m_pVLayoutContant->addStretch(0);
 
     m_pTextEdit = new DTextEdit;
     m_pTextEdit->setFixedSize(205, 257);
@@ -84,23 +81,24 @@ void FileViewNoteWidget::initWidget()
     textBlockFormat.setLineHeight(19, QTextBlockFormat::FixedHeight);
     //line margin
     textBlockFormat.setBottomMargin(0);
-    format.setFontUnderline(format.fontUnderline() == true ? false : true);
+    format.setFontUnderline(true);
     cursor.mergeCharFormat(format);
     cursor.setBlockFormat(textBlockFormat);
     m_pTextEdit->setTextCursor(cursor);
     //line count
     m_pTextEdit->document()->setMaximumBlockCount(10);
+    m_pTextEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_pTextEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    connect(m_pTextEdit, SIGNAL(textChanged()), this, SLOT(slotTextEditMaxContantNum()));
 
     m_pHLayoutContant->addWidget(m_pTextEdit);
-//    m_pVLayoutContant->addItem(m_pHLayoutContant);
-//    m_pVLayoutContant->addSpacing(1);
 
     auto m_pVLayout = new QVBoxLayout;
     m_pVLayout->setContentsMargins(0, 0, 0, 0);
     m_pVLayout->setSpacing(0);
     m_pVLayout->addItem(m_pHLayoutClose);
     m_pVLayout->addItem(m_pHLayoutContant);
-//    m_pVLayout->addWidget(m_pTextEdit);
 
     this->setLayout(m_pVLayout);
 }
@@ -128,15 +126,24 @@ void FileViewNoteWidget::slotClosed()
     this->close();
 }
 
-/*************************CustomTextEdit************************************/
-
-CustomTextEdit::CustomTextEdit(DWidget *parent):
-    DTextEdit(parent)
+/**
+ * @brief FileViewNoteWidget::slotTextEditMaxContantNum
+ * TextEdit输入允许输入最长字符串的长度
+ */
+void FileViewNoteWidget::slotTextEditMaxContantNum()
 {
+    QString textContent = m_pTextEdit->toPlainText();
 
-}
+    int length = textContent.count();
 
-void CustomTextEdit::initWidget()
-{
-
+    int maxLen = 239;
+    if(length > maxLen)
+     {
+         int position = m_pTextEdit->textCursor().position();
+         QTextCursor textCursor = m_pTextEdit->textCursor();
+         textContent.remove(position - (length - maxLen), length - maxLen);
+         m_pTextEdit->setText(textContent);
+         textCursor.setPosition(position - (length - maxLen));
+         m_pTextEdit->setTextCursor(textCursor);
+     }
 }

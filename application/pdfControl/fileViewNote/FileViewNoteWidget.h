@@ -13,20 +13,6 @@
 #include "../font/fontWidget.h"
 
 /**
- * @brief The CustomTextEdit class
- * 自绘TextEdit
- */
-class CustomTextEdit : public DTextEdit
-{
-    Q_OBJECT
-public:
-    CustomTextEdit(DWidget * parent = nullptr);
-
-private:
-    void initWidget();
-};
-
-/**
  *@brief The FileViewNoteWidget class
  *@brief 添加注释子界面
  */
@@ -54,6 +40,7 @@ protected:
 
 private slots:
     void slotClosed();
+    void slotTextEditMaxContantNum();
 
 private:
     DTextEdit *m_pTextEdit = nullptr;   // 注释
