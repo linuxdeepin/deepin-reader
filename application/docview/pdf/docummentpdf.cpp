@@ -252,9 +252,7 @@ void DocummentPDF::getAllAnnotation(QList<stHighlightContent> &listres)
 }
 
 void DocummentPDF::search(const QString &strtext, QColor color)
-{
-    addAnnotation(QPoint(10,20),QPoint(30,40));
-    return;
+{ 
     Q_D(DocummentPDF);
     clearSearch();
     d->m_searchTask->start(d->m_pages, strtext, false, false, d->m_currentpageno + 1);
@@ -358,7 +356,12 @@ void DocummentPDF::clearSearch()
             d->m_pages.at(key)->clearHighlightRects();
         }
     }
+    if(d->m_currentpageno-1>=0)
+        d->m_pages.at(d->m_currentpageno-1)->update();
+    if(d->m_currentpageno+1<d->m_pages.size())
+        d->m_pages.at(d->m_currentpageno+1)->update();
     d->m_pages.at(d->m_currentpageno)->update();//刷新当前页
+
 }
 
 void DocummentPDF::refreshOnePage(int ipage)

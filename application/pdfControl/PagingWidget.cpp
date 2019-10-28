@@ -73,7 +73,7 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
                 }
             }
         }
-        if(event->type()==QEvent::KeyRelease)
+        if(event->type()==QEvent::KeyRelease&&qobject_cast<DSpinBox*>(watched)==m_pJumpPageSpinBox)
         {
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
             if(keyEvent->key()==Qt::Key_0)
@@ -82,6 +82,13 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
                 if(strvalue.startsWith("0"))
                 {
                     strvalue=strvalue.right(strvalue.length()-1);
+                    if(strvalue.isEmpty())
+                    {
+                       // strvalue=QString("1");
+                        m_pJumpPageSpinBox->clear();
+                        return  true;
+
+                    }
                     m_pJumpPageSpinBox->setValue(strvalue.toInt());
                 }
             }
