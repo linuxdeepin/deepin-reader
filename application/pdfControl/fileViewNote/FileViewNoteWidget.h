@@ -12,6 +12,25 @@
 #include "subjectObserver/CustomWidget.h"
 #include "../font/fontWidget.h"
 
+class CustemTextEdit : public DTextEdit
+{
+    Q_OBJECT
+public:
+    CustemTextEdit(DWidget *parent = nullptr);
+
+protected:
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+
+private:
+    void init();
+
+private slots:
+    void slotTextEditMaxContantNum();
+
+private:
+    int m_nMaxContantLen = 239;    // 允许输入文本最大长度
+};
+
 /**
  *@brief The FileViewNoteWidget class
  *@brief 添加注释子界面
@@ -43,9 +62,9 @@ private slots:
     void slotTextEditMaxContantNum();
 
 private:
-    DTextEdit *m_pTextEdit = nullptr;   // 注释
-    MenuLab *m_pCloseLab = nullptr;     // 关闭
-    QString m_strNote;                  // 注释内容
+    /*CustemTextEdit DTextEdit*/CustemTextEdit *m_pTextEdit = nullptr;   // 注释
+    MenuLab *m_pCloseLab = nullptr;          // 关闭
+    QString m_strNote;                       // 注释内容
 };
 
 #endif // FILEVIEWNOTEWIDGET_H
