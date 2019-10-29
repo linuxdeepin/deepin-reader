@@ -202,7 +202,7 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
             stopword = i;
         }
     }
-    qDebug() << " startword:" << startword << " stopword:" << stopword;
+   // qDebug() << " startword:" << startword << " stopword:" << stopword;
     if (-1 == startword && stopword == -1) {
         int i;
         for (i = 0; i < d->m_words.size(); i++) {

@@ -8,6 +8,7 @@
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 #include <QDebug>
+#include <QFile>
 
 void DocummentPDFPrivate::loadDocumment(QString filepath)
 {
@@ -287,12 +288,6 @@ bool DocummentPDF::save(const QString &filePath, bool withChanges)
     if (!PublicFunc::copyFile(temporaryFile, file)) {
         return false;
     }
-
-    if (withChanges) {
-        // m_bModified = false;//reset modify status
-        //        setBasicInfo(filePath);
-    }
-
     return true;
 }
 
@@ -302,28 +297,40 @@ bool DocummentPDF::saveas(const QString &filePath, bool withChanges)
     QString strsource = d->m_fileinfo->strFilepath;
     bool bsuccess = false;
     if (!strsource.isEmpty()) {
+         qDebug()<<"saveas1 "<<strsource;
         if (!withChanges) {
             if (QFile::copy(strsource, filePath))
                 bsuccess = true;
+            else {
+                 qDebug()<<"saveas5 "<<strsource;
+            }
         } else {
             QString strtmp = strsource.left(strsource.lastIndexOf(QChar('/')) + 1);
             strtmp.append(PublicFunc::getUuid());
             strtmp.append(".pdf");
+            qDebug()<<"saveas2"<<strtmp;
             if (QFile::copy(strsource, strtmp)) {
                 if (save(strsource, true)) {
                     if (QFile::copy(strsource, filePath)) {
                         bsuccess = true;
+                         qDebug()<<"saveas3 "<<strsource;
                         if (QFile::remove(strsource)) {
                             if (QFile::rename(strtmp, strsource))
                                 QFile::remove(strtmp);
                         }
                     } else {
+                         qDebug()<<"saveas6 "<<strtmp;
                         QFile::remove(strtmp);
                     }
                 }
             }
+            else {
+                QFile file(strtmp);
+                if(file.exists())
+                    qDebug()<<"saveas7 file.exists()";
+            }
         }
-    }
+    }    
     return  bsuccess;
 }
 

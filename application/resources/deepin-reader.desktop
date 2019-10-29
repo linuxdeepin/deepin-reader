@@ -5,6 +5,7 @@ StartupNotify=true
 TryExec=deepin-reader
 Type=Application
 Icon=deepin-reader
+MimeType=application/pdf;
 X-Deepin-Vendor=user-custom
 GenericName=Reader
 GenericName[ar]=مُنصب الخطوط

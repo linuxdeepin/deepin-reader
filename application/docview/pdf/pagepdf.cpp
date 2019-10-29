@@ -269,16 +269,16 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext, QString &st
                 rectbound.setTopRight(quad.points[1]);
                 rectbound.setBottomLeft(quad.points[2]);
                 rectbound.setBottomRight( quad.points[3]);
-                qDebug() << "########" << quad.points[0];
+               // qDebug() << "########" << quad.points[0];
                 if (rectbound.contains(ptf)) {
                     struuid = annote->uniqueName();
                     strtext = annote->contents();
                     qDeleteAll(listannote);
-                    qDebug() << "******* contaions***" << struuid;
+                   // qDebug() << "******* contaions***" << struuid;
                     return true;
-                } else {
+                } /*else {
                     qDebug() << "******* not contains";
-                }
+                }*/
             }
         }
     }

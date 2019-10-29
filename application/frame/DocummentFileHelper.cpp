@@ -62,7 +62,7 @@ void DocummentFileHelper::slotSaveAsFile()
 
             DataManager::instance()->setBIsUpdate(false);
 
-            m_pDocummentProxy->save(sFilePath, true);
+            m_pDocummentProxy->saveas(sFilePath, true);
 
             m_szFilePath = sFilePath;
 

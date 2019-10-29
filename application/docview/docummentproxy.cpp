@@ -208,16 +208,18 @@ bool DocummentProxy::save(const QString &filepath, bool withChanges)
 {
     if (!m_documment || bcloseing)
         return false;
-    //qDebug() << "save";
+    qDebug() << "save";
     return m_documment->save(filepath, withChanges);
 }
 
 bool DocummentProxy::saveas(const QString &filepath, bool withChanges)
 {
     if (m_documment && !bcloseing && m_documment->saveas(filepath, withChanges)) {
-        // qDebug() << "saveas";
+         qDebug() << "saveas success";
         return openFile(DocType_PDF, filepath);
     }
+    qDebug() << "saveas failed";
+    return false;
 }
 
 void DocummentProxy::search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color)
