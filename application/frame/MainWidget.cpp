@@ -103,8 +103,11 @@ void MainWidget::initWidget()
     pSplitter->setStretchFactor(0, 1);
 
     pSplitter->addWidget(new DocShowShellWidget);
-    pSplitter->setStretchFactor(1, 9);
-
+    pSplitter->setStretchFactor(1,9);
+    QList<int> list_src;
+    list_src.append(300);
+    list_src.append(1000);
+    pSplitter->setSizes(list_src);
     pStackLayout->addWidget(pSplitter);
 
     pStackLayout->setCurrentIndex(0);
