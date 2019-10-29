@@ -29,8 +29,8 @@ void SearchResWidget::slotFlushSearchList(QVariant value)
         int page = it.key();
         foreach (QString strtext, it.value().listtext) {
 
-            strText += strtext;
-            strText += QString("\n");
+            strText += strtext.trimmed();
+            strText += QString("    ");
 
             ++resultNum;
         }
@@ -133,9 +133,8 @@ void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
         ++pages;
         int page = it.ipage;
         foreach (QString strtext, it.listtext) {
-
-            strText += strtext;
-            strText += QString("\n");
+            strText += strtext.trimmed();
+            strText += QString("    ");
 
             ++resultNum;
         }
