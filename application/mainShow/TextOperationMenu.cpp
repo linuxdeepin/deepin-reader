@@ -15,8 +15,7 @@ TextOperationMenu::TextOperationMenu(DWidget *parent)
 void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, const QString &sSelectText, const QString &sUuid)
 {
     bool bBookState = DataManager::instance()->bIsBookMarkState();
-    m_pAddBookMark->setEnabled(!bBookState);
-
+    m_pAddBookMark->setEnabled(!bBookState);  
     m_strSelectText = sSelectText;
     if (m_strSelectText == "") {
         m_pCopy->setEnabled(false);

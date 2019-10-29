@@ -430,17 +430,17 @@ void DocummentPDF::setAnnotationText(int ipage, const QString &struuid, const QS
 }
 
 void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, int ipage)
-{
+{   
     Q_D(DocummentPDF);
     if (ipage < 0) {
         for (int i = 0; i < d_ptr->m_pages.size(); ++i) {
             Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(i))->GetPage();
             QList<Poppler::Annotation *> plistannote = page->annotations();
             foreach (Poppler::Annotation *annote, plistannote) {
-                QString uniquename = annote->uniqueName();
-                qDebug() << QString("getAnnotationText-%1-%2-%3").arg(uniquename).arg(struuid).arg(ipage);
+                QString uniquename = annote->uniqueName();              
                 if (!uniquename.isEmpty() && uniquename.indexOf(struuid) >= 0) {
                     strtext = annote->contents();
+                     qDebug() << QString("getAnnotationText=%1=%2=%3=%4").arg(uniquename).arg(struuid).arg(ipage).arg(strtext);
                     qDeleteAll(plistannote);
                     return;
                 }
@@ -451,10 +451,10 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, i
         Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(ipage))->GetPage();
         QList<Poppler::Annotation *> plistannote = page->annotations();
         foreach (Poppler::Annotation *annote, plistannote) {
-            QString uniquename = annote->uniqueName();
-            qDebug() << QString("getAnnotationText-%1-%2-%3").arg(uniquename).arg(struuid).arg(ipage);
+            QString uniquename = annote->uniqueName();          
             if (!uniquename.isEmpty() && uniquename.indexOf(struuid) >= 0) {
                 strtext = annote->contents();
+                 qDebug() << QString("getAnnotationText=%1=%2=%3=%4").arg(uniquename).arg(struuid).arg(ipage).arg(strtext);
                 qDeleteAll(plistannote);
                 return;
             }
