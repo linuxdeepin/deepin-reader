@@ -57,6 +57,12 @@ MainWindow::~MainWindow()
     }
 }
 
+void MainWindow::openfile(const QString &filepath)
+{
+   // sendMsg(MSG_OPERATION_OPEN_FILE,filepath);
+    sendMsg(MSG_OPEN_FILE_PATH, filepath);
+}
+
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {

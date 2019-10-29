@@ -22,6 +22,7 @@ class MainWindow : public DMainWindow, public IObserver
 public:
     MainWindow(DMainWindow *parent = nullptr);
     ~MainWindow() Q_DECL_OVERRIDE;
+    void openfile(const QString& filepath);
 
 signals:
     void sigOpenFileOk();

@@ -44,21 +44,22 @@ int main(int argc, char *argv[])
     Dtk::Core::DLogManager::registerFileAppender();
     MainWindow w;
     QCommandLineParser parser;
-        const QCommandLineOption newWindowOption("w", "Open file in new window");
-        const QCommandLineOption helpOption = parser.addHelpOption();
-        parser.addOption(newWindowOption);
-        parser.process(a);
+   // const QCommandLineOption newWindowOption("w", "Open file in new window");
+   // const QCommandLineOption helpOption = parser.addHelpOption();
+  //  parser.addOption(newWindowOption);
+    parser.process(a);
 
-        QStringList urls;
-        QStringList arguments = parser.positionalArguments();
-
-//        for (const QString &path : arguments) {
-//            UrlInfo info(path);
-//            urls << info.url.toLocalFile();
-//        }
-
-
-
+    QStringList urls;
+    QStringList arguments = parser.positionalArguments();
+    QString filepath;
+    for (const QString &path : arguments) {
+        filepath=UrlInfo(path).toLocalFile();
+        if(filepath.endsWith("pdf"))
+        {
+            w.openfile(filepath);
+            break;
+        }
+    }
 
     w.show();
 

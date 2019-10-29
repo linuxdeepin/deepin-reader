@@ -57,7 +57,7 @@ icon_files.files = $$PWD/resources/image/logo/deepin-reader.svg
 # Automating generation .qm files from .ts files
 !system($$PWD/translate_generation.sh): error("Failed to generate translation")
 
-translations.path = DSRDIR/translations
+translations.path = /usr/share/deepin-reader/translations
 translations.files = $$PWD/translations/*.qm
 
 INSTALLS += target desktop icon_files translations
