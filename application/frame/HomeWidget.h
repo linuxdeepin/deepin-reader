@@ -15,25 +15,29 @@ class HomeWidget : public CustomWidget
     Q_OBJECT
 public:
     HomeWidget(CustomWidget *parent = nullptr);
-    ~HomeWidget()
-    {
-        if (m_settings) {
+    ~HomeWidget() Q_DECL_OVERRIDE {
+        if (m_settings)
+        {
             m_settings->deleteLater();
             m_settings = nullptr;
         }
-    };
+    }
 
 signals:
+    void sigUpdateTheme(const QString &);
     void sigOpenFileDialog();
 
 private slots:
     void slotChooseBtnClicked();
+    void slotUpdateTheme(const QString &);
 
 private:
     QStringList getOpenFileList();
+    void initConnections();
 
 private:
     QSettings *m_settings = nullptr;
+    DLabel  *m_pIconLabel = nullptr;
 
     // CustomWidget interface
 protected:

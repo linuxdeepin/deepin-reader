@@ -11,6 +11,3 @@ SOURCES += \
     $$PWD/DefaultOperationMenu.cpp \
     $$PWD/ColorWidgetAction.cpp \
     $$PWD/TextOperationMenu.cpp
-
-RESOURCES += \
-    $$PWD/mainShow.qrc

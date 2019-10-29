@@ -34,6 +34,8 @@ void FileViewWidget::initWidget()
 {
     //  实际文档类  唯一实例化设置 父窗口
     m_pDocummentProxy = DocummentProxy::instance(this);
+    connect(m_pDocummentProxy, SIGNAL(signal_bookMarkStateChange(int, bool )),
+            this, SLOT(slotBookMarkStateChange(int, bool)));
 
     m_pDocummentFileHelper = new DocummentFileHelper(this);
 }
@@ -224,9 +226,11 @@ void FileViewWidget::slotMagnifying(const QString &data)
         m_nCurrentHandelState = Magnifier_State;
         this->setCursor(Qt::BlankCursor);
     } else {
-        m_nCurrentHandelState = Default_State;
-        this->setCursor(Qt::ArrowCursor);
-        m_pDocummentProxy->closeMagnifier();
+        if (m_nCurrentHandelState == Magnifier_State) { //  是 放大镜模式 才取消
+            m_nCurrentHandelState = Default_State;
+            this->setCursor(Qt::ArrowCursor);
+            m_pDocummentProxy->closeMagnifier();
+        }
     }
 }
 
@@ -290,6 +294,16 @@ void FileViewWidget::slotFileAddNote(const QString &note)
     sendMsg(MSG_NOTE_ADDITEM, t_str);
 
     m_pDocummentProxy->setAnnotationText(m_nPage, m_strUUid, note);
+}
+
+//  文档书签状态改变
+void FileViewWidget::slotBookMarkStateChange(int nPage, bool bState)
+{
+    if (!bState) {
+        sendMsg(MSG_OPERATION_DELETE_BOOKMARK, QString("%1").arg(nPage));
+    } else {
+        sendMsg(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(nPage));
+    }
 }
 
 //  信号槽　初始化

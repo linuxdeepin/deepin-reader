@@ -1,7 +1,7 @@
 #include "MainOperationWidget.h"
 #include <QHBoxLayout>
 #include <QButtonGroup>
-#include "PublicFunction.h"
+#include "utils/PublicFunction.h"
 
 MainOperationWidget::MainOperationWidget(CustomWidget *parent):
     CustomWidget ("MainOperationWidget", parent)
@@ -55,11 +55,8 @@ void MainOperationWidget::initWidget()
 
 DIconButton *MainOperationWidget::createBtn(const QString &btnName)
 {
-    QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
-
     auto btn = new DIconButton(this);
     btn->setObjectName(btnName);
-    btn->setIcon(QIcon(normalPic));
     btn->setFixedSize(QSize(36, 36));
     btn->setIconSize(QSize(36, 36));
     btn->setCheckable(true);
@@ -87,12 +84,28 @@ void MainOperationWidget::initConnect()
 {
     connect(this, SIGNAL(sigSearchControl()), this, SLOT(slotSearchControl()));
     connect(this, SIGNAL(sigSearchClosed()), this, SLOT(slotSearchClosed()));
+    connect(this, &MainOperationWidget::sigUpdateTheme, &MainOperationWidget::slotUpdateTheme);
+}
+
+//  主题更新
+void MainOperationWidget::slotUpdateTheme(const QString &sType)
+{
+    QString sThemeName = PF::GetCurThemeName(sType);
+
+    auto btnList = this->findChildren<DIconButton *>();
+    foreach (auto btn, btnList) {
+        QString objName = btn->objectName();
+        if (objName != "") {
+            QString sPixmap = PF::getImagePath(objName, Pri::g_frame, sThemeName);
+            btn->setIcon(QIcon( sPixmap));
+        }
+    }
 }
 
 void MainOperationWidget::slotButtonClicked(int id)
 {
-    sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(id));
     m_nThumbnailIndex = id;
+    sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(id));
 }
 
 /**
@@ -116,18 +129,20 @@ void MainOperationWidget::slotSearchClosed()
         if (objName == findBtnName()) {
             btn->setChecked(true);
             sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(m_nThumbnailIndex));
+            break;
         }
     }
 }
 
-int MainOperationWidget::dealWithData(const int &msgType, const QString &)
+int MainOperationWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_FIND_CONTENT) {        //  查询内容
         emit sigSearchControl();
+    } else if (msgType == MSG_CLEAR_FIND_CONTENT) {
+        emit sigSearchClosed();
+    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+        emit sigUpdateTheme(msgContent);
     }
 
-    if (msgType == MSG_CLEAR_FIND_CONTENT) {
-        emit sigSearchClosed();
-    }
     return 0;
 }

@@ -67,6 +67,8 @@ private slots:
 
     void slotFileAddNote(const QString &);
 
+    void slotBookMarkStateChange(int, bool);
+
 private:
     void initConnections();
 

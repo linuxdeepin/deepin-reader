@@ -1,11 +1,12 @@
 #include "fontWidget.h"
+#include "utils/PublicFunction.h"
 
 FontWidget::FontWidget(CustomWidget *parent):
     CustomWidget("FontWidget", parent)
 {
-    initWidget();
-
     initConnection();
+
+    initWidget();
 }
 
 /**
@@ -45,6 +46,9 @@ int FontWidget::dealWithData(const int &msgType, const QString &msgContent)
         m_bIsAdaptMove = true;
         m_pEnlargeSlider->setValue(msgContent.toDouble() * 100);
         break;
+    case MSG_OPERATION_UPDATE_THEME:
+        emit sigUpdateTheme(msgContent);
+        break;
     }
 
     return 0;
@@ -65,12 +69,10 @@ void FontWidget::initWidget()
 
     auto pRotateLeftLb = new MenuLab(this);
     pRotateLeftLb->setText(tr("Rotated To Left"));
-    pRotateLeftLb->setAlignment(Qt::AlignLeft);
     connect(pRotateLeftLb, SIGNAL(clicked()), this, SLOT(slotSetRotateLeftCheckIcon()));
 
     auto pRotateRightLb = new MenuLab(this);
     pRotateRightLb->setText(tr("Rotated To Right"));
-    pRotateRightLb->setAlignment(Qt::AlignLeft);
     connect(pRotateRightLb, SIGNAL(clicked()), this, SLOT(slotSetRotateRightCheckIcon()));
 
     //  垂直布局
@@ -101,6 +103,17 @@ void FontWidget::initWidget()
     this->setLayout(widgetLayout);
 }
 
+//  主题变了
+void FontWidget::slotUpdateTheme(const QString &sType)
+{
+    QString sThemeName = PF::GetCurThemeName(sType);
+    QString sPixmap = PF::getImagePath("select", Pri::g_pdfControl, sThemeName);
+
+    m_pSuitHLab->setPixmap(QPixmap(sPixmap));
+    m_pSuitWLab->setPixmap(QPixmap(sPixmap));
+    m_pDoubPageViewLab->setPixmap(QPixmap(sPixmap));
+}
+
 /**
  * @brief FontWidget::slotReset
  * 重新打开文件后，复位个控件状态
@@ -110,12 +123,13 @@ void FontWidget::slotReset()
     m_pEnlargeLab->setText(QString("100%"));
     m_pEnlargeSlider->setValue(100);
 
-    m_pDoubPageViewLab->setPixmap(QPixmap(QString("")));
+    m_pDoubPageViewLab->setVisible(false);
 
     m_bSuitH = false;
     m_bSuitW = false;
-    m_pSuitHLab->setPixmap(QPixmap(QString("")));
-    m_pSuitWLab->setPixmap(QPixmap(QString("")));
+
+    m_pSuitHLab->setVisible(false);
+    m_pSuitWLab->setVisible(false);
 
     m_rotate = 0;
     m_rotateType = RotateType_Normal;
@@ -157,7 +171,6 @@ void FontWidget::scaleAndRotate(int ival)
 
     t_rotate += 1;
 
-
     switch (t_rotate) {
     case RotateType_0:
         m_rotate = 0;
@@ -189,14 +202,11 @@ void FontWidget::scaleAndRotate(int ival)
  */
 void FontWidget::setShowSuitHIcon()
 {
+    m_pSuitWLab->setVisible(false);
+    m_pSuitHLab->setVisible(m_bSuitH);
+
     int t_nShow = m_bSuitH ? 1 : 0;
     sendMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(t_nShow));
-
-    if (m_bSuitH) {
-        m_pSuitHLab->setPixmap(QPixmap(QString(":/resources/image/select.svg")));
-    } else {
-        m_pSuitHLab->setPixmap(QPixmap(QString("")));
-    }
 }
 
 /**
@@ -205,14 +215,11 @@ void FontWidget::setShowSuitHIcon()
  */
 void FontWidget::setShowSuitWIcon()
 {
+    m_pSuitWLab->setVisible(m_bSuitW);
+    m_pSuitHLab->setVisible(false);
+
     int t_nShow = m_bSuitW ? 1 : 0;
     sendMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(t_nShow));
-
-    if (m_bSuitW) {
-        m_pSuitWLab->setPixmap(QPixmap(QString(":/resources/image/select.svg")));
-    } else {
-        m_pSuitWLab->setPixmap(QPixmap(QString("")));
-    }
 }
 
 /**
@@ -221,6 +228,7 @@ void FontWidget::setShowSuitWIcon()
  */
 void FontWidget::initConnection()
 {
+    connect(this, &FontWidget::sigUpdateTheme, &FontWidget::slotUpdateTheme);
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotReset()));
 }
 
@@ -250,10 +258,13 @@ void FontWidget::initScaleSlider()
     m_pEnlargeSlider->slider()->setSingleStep(25);
     m_pEnlargeSlider->setPageStep(25);
     m_pEnlargeSlider->slider()->setTickPosition(QSlider::TicksBelow);
-    m_pEnlargeSlider->setLeftIcon(QIcon(":/resources/image/A_small.svg"));
-    m_pEnlargeSlider->setRightIcon(QIcon(":/resources/image/A_big.svg"));
-    connect(m_pEnlargeSlider, SIGNAL(valueChanged(int)), this, SLOT(slotSetChangeVal(int)));
 
+    QString sSmall = PF::getImagePath("A_small", Pri::g_pdfControl);
+    QString sBig = PF::getImagePath("A_big", Pri::g_pdfControl);
+
+    m_pEnlargeSlider->setLeftIcon(QIcon(sSmall));
+    m_pEnlargeSlider->setRightIcon(QIcon(sBig));
+    connect(m_pEnlargeSlider, SIGNAL(valueChanged(int)), this, SLOT(slotSetChangeVal(int)));
 }
 
 void FontWidget::initDowbleShow()
@@ -263,12 +274,17 @@ void FontWidget::initDowbleShow()
     m_pDoubleShowLayout->setSpacing(0);
 
     auto m_pDoubPageViewLb = new MenuLab(this);
+    m_pDoubPageViewLb->setFixedHeight(25);
     m_pDoubPageViewLb->setText(tr("Double View"));
-    m_pDoubPageViewLb->setAlignment(Qt::AlignLeft);
     connect(m_pDoubPageViewLb, SIGNAL(clicked()), this, SLOT(slotSetDoubPageViewCheckIcon()));
     m_pDoubleShowLayout->addWidget(m_pDoubPageViewLb);
 
+    m_pDoubleShowLayout->addStretch(1);
+
     m_pDoubPageViewLab = new MenuLab(this);
+    QString sSelect = PF::getImagePath("select", Pri::g_pdfControl);
+    m_pDoubPageViewLab->setPixmap(QPixmap(sSelect));
+    m_pDoubPageViewLab->hide();
     m_pDoubPageViewLab->setFixedSize(QSize(30, 25));
     connect(m_pDoubPageViewLab, SIGNAL(clicked()), this, SLOT(slotSetDoubPageViewCheckIcon()));
     m_pDoubleShowLayout->addWidget(m_pDoubPageViewLab);
@@ -282,12 +298,16 @@ void FontWidget::initAdaptateHeight()
 
     auto pSuitHLb = new MenuLab(this);
     pSuitHLb->setText(tr("Adaptate Height"));
-    pSuitHLb->setAlignment(Qt::AlignLeft);
     pSuitHLb->setFixedSize(QSize(120, 25));
     connect(pSuitHLb, SIGNAL(clicked()), this, SLOT(slotSetSuitHCheckIcon()));
     m_pAdaptateHeightLayout->addWidget(pSuitHLb);
 
+    m_pAdaptateHeightLayout->addStretch(1);
+
     m_pSuitHLab = new MenuLab(this);
+    QString sSelect = PF::getImagePath("select", Pri::g_pdfControl);
+    m_pSuitHLab->setPixmap(QPixmap(sSelect));
+    m_pSuitHLab->hide();
     m_pSuitHLab->setFixedSize(QSize(30, 25));
     connect(m_pSuitHLab, SIGNAL(clicked()), this, SLOT(slotSetSuitHCheckIcon()));
     m_pAdaptateHeightLayout->addWidget(m_pSuitHLab);
@@ -301,12 +321,16 @@ void FontWidget::initAdaptateWidght()
 
     auto pSuitWLb = new MenuLab(this);
     pSuitWLb->setText(tr("Adaptate Width"));
-    pSuitWLb->setAlignment(Qt::AlignLeft);
     pSuitWLb->setFixedSize(QSize(120, 25));
     connect(pSuitWLb, SIGNAL(clicked()), this, SLOT(slotSetSuitWCheckIcon()));
     m_pAdaptateWidghtLayout->addWidget(pSuitWLb);
 
+    m_pAdaptateWidghtLayout->addStretch(1);
+
     m_pSuitWLab = new MenuLab(this);
+    QString sSelect = PF::getImagePath("select", Pri::g_pdfControl);
+    m_pSuitWLab->setPixmap(QPixmap(sSelect));
+    m_pSuitWLab->hide();
     m_pSuitWLab->setFixedSize(QSize(30, 25));
     connect(m_pSuitWLab, SIGNAL(clicked()), this, SLOT(slotSetSuitWCheckIcon()));
 
@@ -328,10 +352,10 @@ void FontWidget::slotSetChangeVal(int val)
         scaleAndRotate(val);
 
         m_bSuitW = false;
-        m_pSuitWLab->setPixmap(QPixmap(QString("")));
-
         m_bSuitH = false;
-        m_pSuitHLab->setPixmap(QPixmap(QString("")));
+
+        m_pSuitHLab->setVisible(false);
+        m_pSuitWLab->setVisible(false);
     }
 
     m_bIsAdaptMove = false;
@@ -343,15 +367,11 @@ void FontWidget::slotSetChangeVal(int val)
  */
 void FontWidget::slotSetDoubPageViewCheckIcon()
 {
-    static bool t_isDoubPage = false;
-
-    t_isDoubPage = !t_isDoubPage;
-
-    if (t_isDoubPage) {
-        m_pDoubPageViewLab->setPixmap(QPixmap(QString(":/resources/image/select.svg")));
+    m_isDoubPage = !m_isDoubPage;
+    m_pDoubPageViewLab->setVisible(m_isDoubPage);
+    if (m_isDoubPage) {
         DocummentProxy::instance()->setViewModeAndShow(ViewMode_FacingPage);
     } else {
-        m_pDoubPageViewLab->setPixmap(QPixmap(QString("")));
         DocummentProxy::instance()->setViewModeAndShow(ViewMode_SinglePage);
     }
 }
@@ -363,8 +383,6 @@ void FontWidget::slotSetDoubPageViewCheckIcon()
 void FontWidget::slotSetSuitHCheckIcon()
 {
     m_bSuitW = false;
-    m_pSuitWLab->setPixmap(QPixmap(QString("")));
-
     m_bSuitH = !m_bSuitH;
     setShowSuitHIcon();
 }
@@ -376,8 +394,6 @@ void FontWidget::slotSetSuitHCheckIcon()
 void FontWidget::slotSetSuitWCheckIcon()
 {
     m_bSuitH = false;
-    m_pSuitHLab->setPixmap(QPixmap(QString("")));
-
     m_bSuitW = !m_bSuitW;
     setShowSuitWIcon();
 }
@@ -407,7 +423,7 @@ void FontWidget::slotSetRotateRightCheckIcon()
 MenuLab::MenuLab(QWidget *parent):
     DLabel(parent)
 {
-
+    this->setAlignment(Qt::AlignVCenter);
 }
 
 /**
@@ -420,4 +436,5 @@ void MenuLab::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::LeftButton) {
         emit clicked();
     }
+    DLabel::mousePressEvent(event);
 }

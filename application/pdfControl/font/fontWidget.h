@@ -45,6 +45,7 @@ public:
     FontWidget(CustomWidget *parent = nullptr);
 
 signals:
+    void sigUpdateTheme(const QString &);
     void sigWidgetHide();
     void sigOpenFileOk();
 
@@ -55,6 +56,7 @@ protected:
     void initWidget() Q_DECL_OVERRIDE;
 
 private slots:
+    void slotUpdateTheme(const QString &);
     void slotReset();
 
 private:
@@ -95,8 +97,8 @@ private:
     int m_rotateType = RotateType_Normal;    // 旋转类型
     bool m_bSuitH = false;                   // 自适应高度
     bool m_bSuitW = false;                   // 自适应宽度
-
-    bool        m_bIsAdaptMove = false;
+    bool m_isDoubPage = false;                  //  双页显示标志
+    bool m_bIsAdaptMove = false;
 };
 
 #endif // FONTWIDGET_H

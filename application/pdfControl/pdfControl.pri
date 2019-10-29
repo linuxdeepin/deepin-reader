@@ -27,6 +27,3 @@ SOURCES += \
     $$PWD/fileViewNote/FileViewNoteWidget.cpp \
     $$PWD/CustomListWidget.cpp \
     $$PWD/CustomItemWidget.cpp
-
-RESOURCES += \
-    $$PWD/pdfControl.qrc

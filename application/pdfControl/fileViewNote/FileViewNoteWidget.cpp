@@ -1,19 +1,21 @@
 #include "FileViewNoteWidget.h"
+#include "utils/PublicFunction.h"
 
 FileViewNoteWidget::FileViewNoteWidget(CustomWidget *parent):
     CustomWidget(QString("FileViewNoteWidget"), parent)
 {
-    //设置窗体无边框
-    //setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint|Qt::Tool|Qt::X11BypassWindowManagerHint);
-
     setWindowFlag(Qt::Popup);
-    setFixedSize(QSize(254, 321));
+    setFixedSize(QSize(250, 320));
 
     initWidget();
+    initConnections();
 }
 
-int FileViewNoteWidget::dealWithData(const int &, const QString &)
+int FileViewNoteWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {
+        emit sigUpdateTheme(msgContent);
+    }
     return 0;
 }
 
@@ -44,12 +46,15 @@ void FileViewNoteWidget::showWidget(const int &nPos)
 void FileViewNoteWidget::initWidget()
 {
     QPalette plt = this->palette();
-    plt.setColor(QPalette::Background, /*QColor(255, 251, 225)*/QColor(QString("#FFFBE1")));
+    plt.setColor(QPalette::Background, QColor(QString("#FFFBE1")));
     this->setPalette(plt);
 
     m_pCloseLab = new MenuLab;
     m_pCloseLab->setFixedSize(QSize(24, 24));
-    m_pCloseLab->setPixmap(QPixmap(QString(":/resources/image/close.svg")));
+
+    QString sClose = PF::getImagePath("close", Pri::g_pdfControl);
+    m_pCloseLab->setPixmap(QPixmap(sClose));
+
     connect(m_pCloseLab, SIGNAL(clicked()), this, SLOT(slotClosed()));
 
     auto m_pHLayoutClose = new QHBoxLayout;
@@ -119,6 +124,20 @@ void FileViewNoteWidget::paintEvent(QPaintEvent *e)
     CustomWidget::paintEvent(e);
 }
 
+void FileViewNoteWidget::initConnections()
+{
+    connect(this, &FileViewNoteWidget::sigUpdateTheme, &FileViewNoteWidget::slotUpdateTheme);
+}
+
+//  主题变了
+void FileViewNoteWidget::slotUpdateTheme(const QString &sType)
+{
+    QString sThemeName = PF::GetCurThemeName(sType);
+
+    QString sClose = PF::getImagePath("close", Pri::g_pdfControl, sThemeName);
+    m_pCloseLab->setPixmap(QPixmap(sClose));
+}
+
 // 关闭槽函数
 void FileViewNoteWidget::slotClosed()
 {
@@ -141,15 +160,14 @@ void FileViewNoteWidget::slotTextEditMaxContantNum()
     int length = textContent.count();
 
     int maxLen = 239;
-    if(length > maxLen)
-     {
-         int position = m_pTextEdit->textCursor().position();
-         QTextCursor textCursor = m_pTextEdit->textCursor();
-         textContent.remove(position - (length - maxLen), length - maxLen);
-         m_pTextEdit->setText(textContent);
-         textCursor.setPosition(position - (length - maxLen));
-         m_pTextEdit->setTextCursor(textCursor);
-     }
+    if (length > maxLen) {
+        int position = m_pTextEdit->textCursor().position();
+        QTextCursor textCursor = m_pTextEdit->textCursor();
+        textContent.remove(position - (length - maxLen), length - maxLen);
+        m_pTextEdit->setText(textContent);
+        textCursor.setPosition(position - (length - maxLen));
+        m_pTextEdit->setTextCursor(textCursor);
+    }
 }
 
 /**************************CustemTextEdit********************************/
@@ -178,29 +196,29 @@ void CustemTextEdit::paintEvent(QPaintEvent *e)
         QPointF(0, stepH),
         QPointF(w, stepH),
 
-        QPointF(0, stepH*2-5),
-        QPointF(w, stepH*2-5),
+        QPointF(0, stepH * 2 - 5),
+        QPointF(w, stepH * 2 - 5),
 
-        QPointF(0, stepH*3-8),
-        QPointF(w, stepH*3-8),
+        QPointF(0, stepH * 3 - 8),
+        QPointF(w, stepH * 3 - 8),
 
-        QPointF(0, stepH*4-9),
-        QPointF(w, stepH*4-9),
+        QPointF(0, stepH * 4 - 9),
+        QPointF(w, stepH * 4 - 9),
 
-        QPointF(0, stepH*5-15),
-        QPointF(w, stepH*5-15),
+        QPointF(0, stepH * 5 - 15),
+        QPointF(w, stepH * 5 - 15),
 
-        QPointF(0, stepH*6-17),
-        QPointF(w, stepH*6-17),
+        QPointF(0, stepH * 6 - 17),
+        QPointF(w, stepH * 6 - 17),
 
-        QPointF(0, stepH*7-19),
-        QPointF(w, stepH*7-19),
+        QPointF(0, stepH * 7 - 19),
+        QPointF(w, stepH * 7 - 19),
 
-        QPointF(0, stepH*8-21),
-        QPointF(w, stepH*8-21),
+        QPointF(0, stepH * 8 - 21),
+        QPointF(w, stepH * 8 - 21),
 
-        QPointF(0, stepH*9-25),
-        QPointF(w, stepH*9-25),
+        QPointF(0, stepH * 9 - 25),
+        QPointF(w, stepH * 9 - 25),
 
         QPointF(0, h),
         QPointF(w, h)
@@ -272,13 +290,12 @@ void CustemTextEdit::slotTextEditMaxContantNum()
 
     int length = textContent.count();
 
-    if(length > m_nMaxContantLen)
-     {
-         int position = this->textCursor().position();
-         QTextCursor textCursor = this->textCursor();
-         textContent.remove(position - (length - m_nMaxContantLen), length - m_nMaxContantLen);
-         this->setText(textContent);
-         textCursor.setPosition(position - (length - m_nMaxContantLen));
-         this->setTextCursor(textCursor);
-     }
+    if (length > m_nMaxContantLen) {
+        int position = this->textCursor().position();
+        QTextCursor textCursor = this->textCursor();
+        textContent.remove(position - (length - m_nMaxContantLen), length - m_nMaxContantLen);
+        this->setText(textContent);
+        textCursor.setPosition(position - (length - m_nMaxContantLen));
+        this->setTextCursor(textCursor);
+    }
 }

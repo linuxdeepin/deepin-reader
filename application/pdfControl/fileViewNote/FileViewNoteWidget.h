@@ -44,6 +44,9 @@ class FileViewNoteWidget : public CustomWidget
 public:
     FileViewNoteWidget(CustomWidget *parent = nullptr);
 
+signals:
+    void sigUpdateTheme(const QString &);
+
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
@@ -57,12 +60,17 @@ protected:
     void initWidget() Q_DECL_OVERRIDE;
     void  paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
 
+private:
+    void initConnections();
+
 private slots:
+    void slotUpdateTheme(const QString &);
     void slotClosed();
     void slotTextEditMaxContantNum();
 
 private:
-    /*CustemTextEdit DTextEdit*/CustemTextEdit *m_pTextEdit = nullptr;   // 注释
+    /*CustemTextEdit DTextEdit*/
+    CustemTextEdit *m_pTextEdit = nullptr;   // 注释
     MenuLab *m_pCloseLab = nullptr;          // 关闭
     QString m_strNote;                       // 注释内容
 };

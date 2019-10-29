@@ -1,6 +1,5 @@
 #include "TitleWidget.h"
 #include <QHBoxLayout>
-#include <QBitmap>
 
 #include <QWidgetAction>
 
@@ -14,6 +13,30 @@ TitleWidget::TitleWidget(CustomWidget *parent) :
 TitleWidget::~TitleWidget()
 {
 
+}
+
+//  主题变了
+void TitleWidget::slotUpdateTheme(const QString &sType)
+{
+    QString sThemeName = PF::GetCurThemeName(sType);
+
+    auto btnList = this->findChildren<DIconButton *>();
+    foreach (auto btn, btnList) {
+        QString objName = btn->objectName();
+        if (objName != "") {
+            QString sPixmap = PF::getImagePath(objName, Pri::g_frame, sThemeName);
+            btn->setIcon(QIcon( sPixmap));
+        }
+    }
+
+    auto actionList = this->findChildren<QAction *>();
+    foreach (auto action, actionList) {
+        QString objName = action->objectName();
+        if (objName != "") {
+            QString sPixmap = PF::getImagePath(objName, Pri::g_frame, sThemeName);
+            action->setIcon(QIcon( sPixmap));
+        }
+    }
 }
 
 //  打开文件成功
@@ -62,6 +85,7 @@ void TitleWidget::initConnections()
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigMagnifierCancel()), this, SLOT(slotMagnifierCancel()));
     connect(this, SIGNAL(sigAppFullScreen()), this, SLOT(slotAppFullScreen()));
+    connect(this, &TitleWidget::sigUpdateTheme, &TitleWidget::slotUpdateTheme);
 }
 
 //  缩略图 显示
@@ -106,14 +130,14 @@ void TitleWidget::on_handleShapeBtn_clicked()
     if (m_pHandleMenu == nullptr) {
         m_pHandleMenu = new DMenu(this);
 
-        QAction *m_pHandleAction = createAction(tr("handleShape"));
+        QAction *pHandleAction = createAction(tr("handleShape"));
 
-        QAction *m_pDefaultAction = createAction(tr("defaultShape"));
-        m_pDefaultAction->setChecked(true);
+        QAction *pDefaultAction = createAction(tr("defaultShape"));
+        pDefaultAction->setChecked(true);
 
         QActionGroup *actionGroup = new QActionGroup(this);
-        actionGroup->addAction(m_pHandleAction);
-        actionGroup->addAction(m_pDefaultAction);
+        actionGroup->addAction(pHandleAction);
+        actionGroup->addAction(pDefaultAction);
 
         connect(actionGroup, SIGNAL(triggered(QAction *)), this, SLOT(slotActionTrigger(QAction *)));
     }
@@ -148,7 +172,8 @@ void TitleWidget::slotActionTrigger(QAction *action)
 //  设置　手型按钮的图标
 void TitleWidget::setHandleShapeBtn(const QString &btnName)
 {
-    QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
+    m_pHandleShapeBtn->setObjectName(btnName);
+    QString normalPic = PF::getImagePath(btnName, Pri::g_frame);
 
     m_pHandleShapeBtn->setIcon(QIcon(normalPic));
 }
@@ -172,11 +197,9 @@ void TitleWidget::initBtns()
 
 DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 {
-    QString normalPic = PF::getQrcPath(btnName, ImageModule::g_normal_state);
-
     DIconButton *btn = new  DIconButton(this);
+    btn->setObjectName(btnName);
     btn->setFixedSize(QSize(36, 36));
-    btn->setIcon(QIcon(normalPic));
     btn->setIconSize(QSize(36, 36));
 
     btn->setToolTip(btnName);
@@ -195,9 +218,11 @@ DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 QAction *TitleWidget::createAction(const QString &actionName)
 {
     QAction *_action = new QAction(actionName, this);
-    _action->setObjectName(actionName);
+    _action->setObjectName(actionName + "_small");
     _action->setCheckable(true);
-    _action->setIcon(QIcon(QString(":/resources/image/normal/%1_small.svg").arg(actionName)));
+
+    QString sPixmap = PF::getImagePath(_action->objectName(), Pri::g_frame);
+    _action->setIcon(QIcon( sPixmap));
 
     m_pHandleMenu->addAction(_action);
     return _action;
@@ -219,6 +244,8 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
         if (msgContent == "Esc") {      //  退出放大镜模式
             emit sigMagnifierCancel();
         }
+    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+        emit sigUpdateTheme(msgContent);
     }
     return 0;
 }

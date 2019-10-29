@@ -46,7 +46,7 @@ Application::Application(int &argc, char **argv)
     setApplicationDisplayName(tr("deepin-reader"));
     setApplicationVersion(DApplication::buildVersion("20191022"));
     setApplicationAcknowledgementPage(Constant::sAcknowledgementLink);
-    setProductIcon(QIcon(":/resources/image/logo/deepin-reader.svg"));
+    setProductIcon(QIcon(Constant::sLogoPath));
     setApplicationDescription(tr("Document viewer is a document viewer that comes with the deep operating system.\r\n In"
                                  " addition to opening and reading PDF files, On documents you can also \r\n add"
                                  " bookmark, annotation and highlight selected text."));

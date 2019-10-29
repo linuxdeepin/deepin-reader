@@ -25,9 +25,15 @@ BookMarkWidget::~BookMarkWidget()
  */
 void BookMarkWidget::slotAddBookMark()
 {
-    //  书签, 添加当前页
-    int nPage = DocummentProxy::instance()->currentPageNo();
-    slotAddBookMark(nPage);
+    auto proxy = DocummentProxy::instance();
+    if (proxy) {
+        //  书签, 添加当前页
+        int nPage = proxy->currentPageNo();
+        bool bRes = proxy->setBookMarkState(nPage, true);
+        if (bRes) {
+            slotAddBookMark(nPage);
+        }
+    }
 }
 
 //  书签状态 添加指定页
@@ -182,7 +188,7 @@ void BookMarkWidget::slotDelBkItem()
 
 void BookMarkWidget::slotSelectItem(QListWidgetItem *item)
 {
-    if(item != nullptr && m_pIndexItem != item){
+    if (item != nullptr && m_pIndexItem != item) {
         setSelectItemBackColor(item);
         m_pIndexItem = item;
     }
@@ -275,17 +281,17 @@ void BookMarkWidget::operateDb()
  */
 void BookMarkWidget::setSelectItemBackColor(QListWidgetItem *item)
 {
-    if(item == nullptr || m_pIndexItem == nullptr){
+    if (item == nullptr || m_pIndexItem == nullptr) {
         return;
     }
 
     BookMarkItemWidget *t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(m_pIndexItem));
-    if(t_widget){
+    if (t_widget) {
         t_widget->setBSelect(false);
     }
 
     t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
-    if(t_widget){
+    if (t_widget) {
         t_widget->setBSelect(true);
     }
 }

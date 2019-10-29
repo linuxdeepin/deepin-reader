@@ -17,6 +17,12 @@ void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, con
     m_pAddBookMark->setEnabled(!bBookState);
 
     m_strSelectText = sSelectText;
+    if (m_strSelectText == "") {
+        m_pCopy->setEnabled(false);
+    } else {
+        m_pCopy->setEnabled(true);
+    }
+
     m_strNoteUuid = sUuid;
     m_pRemoveHighLight->setEnabled(bHigh);
 
@@ -25,7 +31,7 @@ void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, con
 
 void TextOperationMenu::initMenu()
 {
-    createAction(tr("copy"), SLOT(slotCopyClicked()));
+    m_pCopy = createAction(tr("copy"), SLOT(slotCopyClicked()));
 
     createAction(tr("add high light"), SLOT(slotAddHighLightClicked()));
 

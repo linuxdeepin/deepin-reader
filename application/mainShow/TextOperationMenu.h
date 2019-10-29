@@ -40,6 +40,7 @@ private:
     QString     m_strSelectText = "";       //  选中的文字
     QString     m_strNoteUuid = "";   //  高亮的uuid
 
+    QAction     *m_pCopy = nullptr;
     QAction     *m_pRemoveHighLight = nullptr;
     QAction     *m_pAddBookMark = nullptr;
 };

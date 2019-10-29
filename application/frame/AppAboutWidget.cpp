@@ -10,7 +10,7 @@ AppAboutWidget::AppAboutWidget(DWidget *parent)
 
 void AppAboutWidget::initLabels()
 {
-    setProductIcon(QPixmap(":/resources/image/logo/logo_big.svg"));
+    setProductIcon(QPixmap(Constant::sLogoPath));
     setProductName(tr("deepin-reader"));
     setVersion("20191018");
 

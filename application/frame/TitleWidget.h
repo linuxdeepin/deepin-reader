@@ -6,7 +6,7 @@
 
 #include "subjectObserver/CustomWidget.h"
 #include "pdfControl/font/fontWidget.h"
-#include "PublicFunction.h"
+#include "utils/PublicFunction.h"
 /**
  * @brief The TitleWidget class
  * @brief   标题栏的 按钮操作
@@ -20,12 +20,14 @@ public:
     ~TitleWidget() Q_DECL_OVERRIDE;
 
 signals:
+    void sigUpdateTheme(const QString &);
     void sigOpenFileOk();
     void sigAppFullScreen();
 
     void sigMagnifierCancel();
 
 private slots:
+    void slotUpdateTheme(const QString &);
     void slotOpenFileOk();
     void slotAppFullScreen();
     void slotMagnifierCancel();

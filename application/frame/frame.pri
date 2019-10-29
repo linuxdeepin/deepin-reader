@@ -5,7 +5,6 @@ HEADERS += \
     $$PWD/FileViewWidget.h \
     $$PWD/MainOperationWidget.h \
     $$PWD/TitleWidget.h \
-    $$PWD/PublicFunction.h \
     $$PWD/MainWidget.h \
     $$PWD/AppAboutWidget.h \
     $$PWD/DocummentFileHelper.h \
@@ -22,6 +21,3 @@ SOURCES += \
     $$PWD/AppAboutWidget.cpp \
     $$PWD/DocummentFileHelper.cpp \
     $$PWD/DocShowShellWidget.cpp
-
-RESOURCES += \
-    $$PWD/frametheme.qrc

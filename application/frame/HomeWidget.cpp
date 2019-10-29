@@ -3,6 +3,7 @@
 #include <DPushButton>
 #include <QVBoxLayout>
 #include <DLabel>
+#include "utils/PublicFunction.h"
 
 HomeWidget::HomeWidget(CustomWidget *parent):
     CustomWidget ("HomeWidget", parent),
@@ -10,6 +11,7 @@ HomeWidget::HomeWidget(CustomWidget *parent):
                              QSettings::IniFormat))
 {
     initWidget();
+    initConnections();
 
     // initalize the configuration file.
     if (m_settings->value("dir").toString().isEmpty()) {
@@ -19,16 +21,13 @@ HomeWidget::HomeWidget(CustomWidget *parent):
 
 void HomeWidget::initWidget()
 {
-    DLabel *iconLabel = new DLabel;
-    iconLabel->setPixmap(QPixmap(":/resources/import_photo.svg"));
-
     DLabel *tipsLabel = new DLabel(tr("drag Pdf file here"));
     QPalette pe;
     pe.setColor(QPalette::WindowText, QColor("#7a7a7a"));
     tipsLabel->setPalette(pe);
 
-    DLabel *splitLine = new DLabel;
-    splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
+//    DLabel *splitLine = new DLabel;
+//    splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
 
     auto chooseBtn  = new DPushButton(tr("Select File"));
     chooseBtn->setFixedSize(QSize(302, 36));
@@ -42,9 +41,11 @@ void HomeWidget::initWidget()
 
     layout->addStretch(1);
 
-    layout->addWidget(iconLabel, 0, Qt::AlignCenter);
+    m_pIconLabel = new DLabel;
+    layout->addWidget(m_pIconLabel, 0, Qt::AlignCenter);
+
     layout->addWidget(tipsLabel, 0, Qt::AlignHCenter);
-    layout->addWidget(splitLine, 0, Qt::AlignHCenter);
+//    layout->addWidget(splitLine, 0, Qt::AlignHCenter);
     layout->addWidget(chooseBtn, 0, Qt::AlignHCenter);
 
     layout->addStretch(1);
@@ -65,6 +66,15 @@ void HomeWidget::slotChooseBtnClicked()
 
         sendMsg(MSG_OPEN_FILE_PATH, sRes);
     }
+}
+
+//  主题切换
+void HomeWidget::slotUpdateTheme(const QString &sTheme)
+{
+    QString sThemeName = PF::GetCurThemeName(sTheme);
+
+    QString sPixmap = PF::getImagePath("import_photo", Pri::g_frame, sThemeName);
+    m_pIconLabel->setPixmap(QPixmap(sPixmap));
 }
 
 QStringList HomeWidget::getOpenFileList()
@@ -94,6 +104,11 @@ QStringList HomeWidget::getOpenFileList()
     return fileList;
 }
 
+void HomeWidget::initConnections()
+{
+    connect(this, &HomeWidget::sigUpdateTheme, &HomeWidget::slotUpdateTheme);
+}
+
 int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE) {
@@ -106,6 +121,8 @@ int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
             emit sigOpenFileDialog();
             return ConstantMsg::g_effective_res;
         }
+    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+        emit sigUpdateTheme(msgContent);
     }
     return 0;
 }

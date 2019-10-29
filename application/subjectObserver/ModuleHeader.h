@@ -27,6 +27,17 @@ const QString sPs_Filter = "Ps files (*.ps)";
 const QString sXps_Filter = "Xps files (*.xps)";
 const QString sDjvu_Filter = "Djvu files (*.djvu)";
 const QString sQStringSep = "@#&!@#$";
+
+const QString sLogoPath = ":/resources/logo/deepin-reader.svg";
+}
+
+namespace Pri {
+const QString g_controller = "controller";
+const QString g_docview = "docview";
+const QString g_frame = "frame";
+const QString g_mainShow = "mainShow";
+const QString g_pdfControl = "pdfControl";
+const QString g_subjectObserver = "subjectObserver";
 }
 
 #endif // IMAGEHEADER_H

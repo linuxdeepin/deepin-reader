@@ -124,7 +124,7 @@ void MainWindow::initConnections()
 
 void MainWindow::initTitlebar()
 {
-    titlebar()->setIcon(QIcon(":/resources/image/logo/logo_big.svg"));
+    titlebar()->setIcon(QIcon(Constant::sLogoPath));
     titlebar()->setTitle("");
 }
 
