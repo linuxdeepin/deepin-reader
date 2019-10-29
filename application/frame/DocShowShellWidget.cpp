@@ -25,12 +25,6 @@ void DocShowShellWidget::resizeEvent(QResizeEvent *event)
         m_pFindWidget->move(nParentWidth - nWidget - 20, 20);
     }
 
-    if (m_pFileViewNoteWidget != nullptr) {
-        int nParentWidth = this->width();
-        int nWidget = m_pFileViewNoteWidget->width();
-        m_pFileViewNoteWidget->move(nParentWidth - nWidget - 50, 200);
-    }
-
     CustomWidget::resizeEvent(event);
 }
 
@@ -59,23 +53,18 @@ void DocShowShellWidget::slotShowFindWidget()
 }
 
 //  注释窗口
-void DocShowShellWidget::slotOpenNoteWidget(const QString &sPoint)
+void DocShowShellWidget::slotOpenNoteWidget(const QString &sSelectTextUUid)
 {
     if (m_pFileViewNoteWidget == nullptr) {
         m_pFileViewNoteWidget = new FileViewNoteWidget(this);
     }
     m_pFileViewNoteWidget->setEditText("");
 
-    QStringList ssPointList = sPoint.split(",,,,", QString::SkipEmptyParts);
-    if (ssPointList.size() == 2) {  //  修改
-        QString sSelectTextUUid = ssPointList.at(1); //  选中添加注释的文字UUid
+    auto pDocummentProxy = DocummentProxy::instance();
+    QString contant;
+    pDocummentProxy->getAnnotationText(sSelectTextUUid, contant);
 
-        auto pDocummentProxy = DocummentProxy::instance();
-        QString contant;
-        pDocummentProxy->getAnnotationText(sSelectTextUUid, contant);
-
-        m_pFileViewNoteWidget->setEditText(contant);
-    }
+    m_pFileViewNoteWidget->setEditText(contant);
 
     QRect rrect = this->rect();
     QPoint point = this->mapToGlobal(rrect.bottomRight());
@@ -87,16 +76,11 @@ void DocShowShellWidget::slotOpenNoteWidget(const QString &sPoint)
 //  显示 当前 注释
 void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
 {
-    QString t_strUUid;
-    int t_nPage = -1;
-    bool t_isShow = isShowW(contant, t_nPage, t_strUUid);
-
-    if (!t_isShow) {
-//        slotCloseNoteWidget();
-        return;
+    QStringList t_strList = contant.split(QString("%"), QString::SkipEmptyParts);
+    if (t_strList.count() == 3) {
+        QString t_strUUid = t_strList.at(0);
+        slotOpenNoteWidget(t_strUUid);
     }
-
-    slotOpenNoteWidget(contant + ",,,," + t_strUUid);
 }
 
 void DocShowShellWidget::initConnections()
@@ -143,24 +127,4 @@ void DocShowShellWidget::initWidget()
     layout->addWidget(new FileViewWidget);
 
     this->setLayout(layout);
-}
-
-bool DocShowShellWidget::isShowW(const QString &contant, int &page, QString &uuid)
-{
-    QStringList t_strList = contant.split(QString("%"), QString::SkipEmptyParts);
-    if (t_strList.count() == 3) {
-        uuid = t_strList.at(0);
-        page = t_strList.at(2).toInt();
-        int t_show = t_strList.at(1).toInt();
-        if (t_show) {
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        page = -1;
-        uuid = QString("");
-
-        return false;
-    }
 }

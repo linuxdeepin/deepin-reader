@@ -36,8 +36,7 @@ private slots:
     void slotAddBookMarkClicked();
 
 private:
-    int         m_pLightColor = -1;
-    int         m_nShowY = -1;
+    int         m_pLightColor = 0;
     QString     m_strSelectText = "";       //  选中的文字
     QString     m_strNoteUuid = "";   //  高亮的uuid
 

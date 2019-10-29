@@ -75,7 +75,7 @@ void TextOperationMenu::slotRemoveHighLightClicked()
 void TextOperationMenu::slotAddNoteClicked()
 {
     sendMsgToFrame(MSG_OPERATION_TEXT_ADD_ANNOTATION,
-                   QString("%1,,,,%2").arg(m_nShowY).arg(m_strNoteUuid));
+                   QString("%1").arg(m_strNoteUuid));
 }
 
 void TextOperationMenu::slotAddBookMarkClicked()

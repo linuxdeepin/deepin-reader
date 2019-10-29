@@ -66,11 +66,11 @@ QString MainOperationWidget::findBtnName()
 {
     QString btnName;
 
-    if(0 == m_nThumbnailIndex){
+    if (0 == m_nThumbnailIndex) {
         btnName = "thumbnail";
-    }else if (1 == m_nThumbnailIndex) {
+    } else if (1 == m_nThumbnailIndex) {
         btnName = "bookmark";
-    }else if (2 == m_nThumbnailIndex) {
+    } else if (2 == m_nThumbnailIndex) {
         btnName = "annotation";
     }
 

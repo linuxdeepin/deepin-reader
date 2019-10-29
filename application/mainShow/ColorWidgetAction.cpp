@@ -30,9 +30,11 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
         auto btn = new DFloatingButton(pWidget);
         btn->setBackgroundRole(QPalette::Button);
         btn->setFixedSize(QSize(16, 16));
+
         QPalette pa = btn->palette();
         pa.setBrush(QPalette::Button, colorList.at(iLoop));
         btn->setPalette(pa);
+
         btnGroup->addButton(btn, iLoop);
         buttonLayout->addWidget(btn);
     }

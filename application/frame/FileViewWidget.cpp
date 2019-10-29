@@ -58,7 +58,6 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
             m_pHandleMoveStartPoint = globalPos;
         }
     } else if (m_nCurrentHandelState == Magnifier_State) {  //  当前是放大镜状态
-        qDebug() << "pDocummentProxy->showMagnifier(docGlobalPos)";
         m_pDocummentProxy->showMagnifier(docGlobalPos);
     } else {
         if (m_bSelectOrMove) {  //  鼠标已经按下，　则选中所经过的文字
@@ -88,6 +87,10 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
         return;
     }
 
+    //  放大镜状态， 直接返回
+    if (m_nCurrentHandelState == Magnifier_State)
+        return;
+
     Qt::MouseButton nBtn = event->button();
     QPoint globalPos = event->globalPos();
     if (nBtn == Qt::LeftButton) {
@@ -102,6 +105,7 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 
             if (m_nCurrentHandelState == Handel_State) {
                 m_pHandleMoveStartPoint = globalPos;     //  变成手，　需要的是　相对坐标
+                return;
             } else if (m_nCurrentHandelState == Default_State) {
                 m_pDocummentProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
                 m_pStartPoint = docGlobalPos;
@@ -131,6 +135,10 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     //  处于幻灯片模式下
     if (DataManager::instance()->CurShowState() == FILE_SLIDE)
+        return;
+
+    //  放大镜状态， 直接返回
+    if (m_nCurrentHandelState == Magnifier_State)
         return;
 
     //判断鼠标左键松开的位置有没有高亮

@@ -228,7 +228,7 @@ void FontWidget::initConnection()
 DLabel *FontWidget::getLabelLineH()
 {
     auto labelLine = new DLabel(this);
-    labelLine->setFixedHeight(1);
+    labelLine->setFixedHeight(2);
     labelLine->setFrameShape(QFrame::HLine);
 
     return labelLine;

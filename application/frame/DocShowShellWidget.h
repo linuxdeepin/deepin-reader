@@ -36,7 +36,6 @@ private slots:
 
 private:
     void initConnections();
-    bool isShowW(const QString &, int &page, QString &);
 
 private:
     FileAttrWidget          *m_pFileAttrWidget = nullptr;
