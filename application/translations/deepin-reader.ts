@@ -48,7 +48,7 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="201"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="207"/>
         <source>add bookmark</source>
         <translation></translation>
     </message>
@@ -112,6 +112,16 @@
         <location filename="../frame/DocummentFileHelper.cpp" line="142"/>
         <source>Do you need to save the file opened?</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="../frame/DocummentFileHelper.cpp" line="162"/>
+        <source>File not supported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/DocummentFileHelper.cpp" line="253"/>
+        <source>Please check if the file is damaged</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -205,12 +215,12 @@
 <context>
     <name>FileViewWidget</name>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="314"/>
+        <location filename="../frame/FileViewWidget.cpp" line="333"/>
         <source>Print Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="314"/>
+        <location filename="../frame/FileViewWidget.cpp" line="333"/>
         <source>No Print Device</source>
         <translation></translation>
     </message>
@@ -231,27 +241,27 @@
 <context>
     <name>FontWidget</name>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="266"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="278"/>
         <source>Double View</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="284"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="300"/>
         <source>Adaptate Height</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="303"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="323"/>
         <source>Adaptate Width</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="67"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="71"/>
         <source>Rotated To Left</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="72"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="75"/>
         <source>Rotated To Right</source>
         <translation></translation>
     </message>
@@ -259,12 +269,12 @@
 <context>
     <name>HomeWidget</name>
     <message>
-        <location filename="../frame/HomeWidget.cpp" line="25"/>
+        <location filename="../frame/HomeWidget.cpp" line="24"/>
         <source>drag Pdf file here</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/HomeWidget.cpp" line="33"/>
+        <location filename="../frame/HomeWidget.cpp" line="32"/>
         <source>Select File</source>
         <translation></translation>
     </message>
@@ -280,75 +290,75 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="88"/>
-        <location filename="../frame/MainWindow.cpp" line="112"/>
-        <location filename="../frame/MainWindow.cpp" line="227"/>
+        <location filename="../frame/MainWindow.cpp" line="94"/>
+        <location filename="../frame/MainWindow.cpp" line="118"/>
+        <location filename="../frame/MainWindow.cpp" line="233"/>
         <source>Open File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="88"/>
-        <location filename="../frame/MainWindow.cpp" line="176"/>
-        <location filename="../frame/MainWindow.cpp" line="229"/>
+        <location filename="../frame/MainWindow.cpp" line="94"/>
+        <location filename="../frame/MainWindow.cpp" line="182"/>
+        <location filename="../frame/MainWindow.cpp" line="235"/>
         <source>Save File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="88"/>
-        <location filename="../frame/MainWindow.cpp" line="231"/>
+        <location filename="../frame/MainWindow.cpp" line="94"/>
+        <location filename="../frame/MainWindow.cpp" line="237"/>
         <source>Save As File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="89"/>
-        <location filename="../frame/MainWindow.cpp" line="233"/>
+        <location filename="../frame/MainWindow.cpp" line="95"/>
+        <location filename="../frame/MainWindow.cpp" line="239"/>
         <source>Open Folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="89"/>
-        <location filename="../frame/MainWindow.cpp" line="235"/>
+        <location filename="../frame/MainWindow.cpp" line="95"/>
+        <location filename="../frame/MainWindow.cpp" line="241"/>
         <source>Print</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="89"/>
-        <location filename="../frame/MainWindow.cpp" line="237"/>
+        <location filename="../frame/MainWindow.cpp" line="95"/>
+        <location filename="../frame/MainWindow.cpp" line="243"/>
         <source>File Attr</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="98"/>
-        <location filename="../frame/MainWindow.cpp" line="239"/>
+        <location filename="../frame/MainWindow.cpp" line="104"/>
+        <location filename="../frame/MainWindow.cpp" line="245"/>
         <source>Search</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="98"/>
-        <location filename="../frame/MainWindow.cpp" line="241"/>
+        <location filename="../frame/MainWindow.cpp" line="104"/>
+        <location filename="../frame/MainWindow.cpp" line="247"/>
         <source>Full Screen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="98"/>
-        <location filename="../frame/MainWindow.cpp" line="243"/>
+        <location filename="../frame/MainWindow.cpp" line="104"/>
+        <location filename="../frame/MainWindow.cpp" line="249"/>
         <source>Screening</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="99"/>
-        <location filename="../frame/MainWindow.cpp" line="245"/>
+        <location filename="../frame/MainWindow.cpp" line="105"/>
+        <location filename="../frame/MainWindow.cpp" line="251"/>
         <source>Larger</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="99"/>
-        <location filename="../frame/MainWindow.cpp" line="247"/>
+        <location filename="../frame/MainWindow.cpp" line="105"/>
+        <location filename="../frame/MainWindow.cpp" line="253"/>
         <source>Smaller</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="176"/>
+        <location filename="../frame/MainWindow.cpp" line="182"/>
         <source>Do you need to save the file opened?</source>
         <translation></translation>
     </message>
@@ -386,27 +396,27 @@
 <context>
     <name>TextOperationMenu</name>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="28"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="34"/>
         <source>copy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="30"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="36"/>
         <source>add high light</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="36"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="42"/>
         <source>remove high light</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="37"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="43"/>
         <source>add note</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="38"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="44"/>
         <source>add bookmark</source>
         <translation></translation>
     </message>
@@ -414,15 +424,15 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="109"/>
-        <location filename="../frame/TitleWidget.cpp" line="141"/>
+        <location filename="../frame/TitleWidget.cpp" line="133"/>
+        <location filename="../frame/TitleWidget.cpp" line="165"/>
         <source>handleShape</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="111"/>
-        <location filename="../frame/TitleWidget.cpp" line="136"/>
-        <location filename="../frame/TitleWidget.cpp" line="138"/>
+        <location filename="../frame/TitleWidget.cpp" line="135"/>
+        <location filename="../frame/TitleWidget.cpp" line="160"/>
+        <location filename="../frame/TitleWidget.cpp" line="162"/>
         <source>defaultShape</source>
         <translation></translation>
     </message>
