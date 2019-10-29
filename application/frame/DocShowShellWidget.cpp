@@ -61,8 +61,9 @@ void DocShowShellWidget::slotOpenNoteWidget(const QString &sSelectTextUUid)
     m_pFileViewNoteWidget->setEditText("");
 
     auto pDocummentProxy = DocummentProxy::instance();
+    int nCurPage = pDocummentProxy->currentPageNo();
     QString contant;
-    pDocummentProxy->getAnnotationText(sSelectTextUUid, contant);
+    pDocummentProxy->getAnnotationText(sSelectTextUUid, contant, nCurPage);
 
     m_pFileViewNoteWidget->setEditText(contant);
 
