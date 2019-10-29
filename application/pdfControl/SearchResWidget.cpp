@@ -183,13 +183,7 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
             emit sigFlushSearchWidget(msgContent);
 
             QMap<int, stSearchRes> resMap;
-            DocummentProxy::instance()->search(msgContent, resMap, QColor(255, 0, 0));
-
-            //           QVariant var;
-            //            var.setValue(resMap);
-            //            emit sigFlushSearchWidget(var);
-
-            return ConstantMsg::g_effective_res;
+            DocummentProxy::instance()->search(msgContent, resMap, Qt::red);
         }
     }
 
@@ -206,7 +200,7 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
     if (msgType == MSG_CLEAR_FIND_CONTENT) {
         emit sigClearWidget();
         DocummentProxy::instance()->clearsearch();
-        return ConstantMsg::g_effective_res;
+//        return ConstantMsg::g_effective_res;
     }
 
     //  关闭w文件通知消息

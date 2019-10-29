@@ -7,6 +7,7 @@ MainOperationWidget::MainOperationWidget(CustomWidget *parent):
     CustomWidget ("MainOperationWidget", parent)
 {
     initWidget();
+    initConnect();
 }
 
 void MainOperationWidget::initWidget()
@@ -40,6 +41,7 @@ void MainOperationWidget::initWidget()
         QString objName = btn->objectName();
         if (objName == "thumbnail") {
             btn->setChecked(true);
+            m_nThumbnailIndex = 0;
             break;
         }
     }
@@ -60,12 +62,71 @@ DIconButton *MainOperationWidget::createBtn(const QString &btnName)
     return  btn;
 }
 
+QString MainOperationWidget::findBtnName()
+{
+    QString btnName;
+
+    if(0 == m_nThumbnailIndex){
+        btnName = "thumbnail";
+    }else if (1 == m_nThumbnailIndex) {
+        btnName = "bookmark";
+    }else if (2 == m_nThumbnailIndex) {
+        btnName = "annotation";
+    }
+
+    return btnName;
+}
+
+void MainOperationWidget::initConnect()
+{
+    connect(this, SIGNAL(sigSearchControl()), this, SLOT(slotSearchControl()));
+    connect(this, SIGNAL(sigSearchClosed()), this, SLOT(slotSearchClosed()));
+}
+
 void MainOperationWidget::slotButtonClicked(int id)
 {
     sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(id));
+    m_nThumbnailIndex = id;
 }
 
-int MainOperationWidget::dealWithData(const int &, const QString &)
+/**
+ * @brief MainOperationWidget::slotSearchControl
+ * 搜索内容时，此模块不可用
+ */
+void MainOperationWidget::slotSearchControl()
 {
+    auto btnList = this->findChildren<DIconButton *>();
+    foreach (auto btn, btnList) {
+        btn->setChecked(false);
+        btn->setEnabled(false);
+    }
+}
+
+/**
+ * @brief MainOperationWidget::slotSearchClosed
+ * 搜索结束后，回复结束后的状态
+ */
+void MainOperationWidget::slotSearchClosed()
+{
+    auto btnList = this->findChildren<DIconButton *>();
+    foreach (auto btn, btnList) {
+        QString objName = btn->objectName();
+        if (objName == findBtnName()) {
+            btn->setChecked(true);
+            sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(m_nThumbnailIndex));
+        }
+        btn->setEnabled(true);
+    }
+}
+
+int MainOperationWidget::dealWithData(const int &msgType, const QString &)
+{
+    if (msgType == MSG_FIND_CONTENT) {        //  查询内容
+        emit sigSearchControl();
+    }
+
+    if (msgType == MSG_CLEAR_FIND_CONTENT) {
+        emit sigSearchClosed();
+    }
     return 0;
 }
