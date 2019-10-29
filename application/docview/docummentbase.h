@@ -194,7 +194,7 @@ public:
 
 
 signals:
-    void signal_docummentLoaded();
+    void signal_docummentLoaded(bool);
 protected slots:
     virtual void loadDocumment(QString filepath) {}
 protected:
@@ -273,6 +273,7 @@ signals:
     void signal_searchover();
     void signal_loadDocumment(QString);
     void signal_bookMarkStateChange(int page, bool state);
+    void signal_openResult(bool);
 
 protected slots:
     void slot_vScrollBarValueChanged(int value);
@@ -280,7 +281,7 @@ protected slots:
     void slot_MagnifierPixmapCacheLoaded(int pageno);
     void slot_searchValueAdd(stSearchRes res);
     void slot_searchover();
-    void slot_docummentLoaded();
+    void slot_docummentLoaded(bool result);
     bool pageJump(int pagenum);
     bool mouseSelectText(QPoint start, QPoint stop);
     void scaleAndShow(double scale, RotateType_EM rotate);

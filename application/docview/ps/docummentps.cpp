@@ -19,7 +19,7 @@ void DocummentPSPrivate::loadDocumment(QString filepath)
 
     if (spectre_document_status(document) != SPECTRE_STATUS_SUCCESS) {
         spectre_document_free(document);
-
+        emit signal_docummentLoaded(false);
         return;
     }
 
@@ -39,7 +39,7 @@ void DocummentPSPrivate::loadDocumment(QString filepath)
     }
     setBasicInfo(filepath);
 
-    emit signal_docummentLoaded();
+    emit signal_docummentLoaded(true);
 }
 
 

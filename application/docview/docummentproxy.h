@@ -89,7 +89,7 @@ signals:
     void signal_scaleAndShow(double scale, RotateType_EM rotate);
     bool signal_setViewModeAndShow(ViewMode_EM viewmode);
     void signal_bookMarkStateChange(int page, bool state);
-
+    void signal_openResult(bool);
 private slots:
     void slot_pageChange(int);
 //    bool startOpenFile();

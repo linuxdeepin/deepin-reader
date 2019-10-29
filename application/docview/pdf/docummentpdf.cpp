@@ -14,8 +14,10 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
 {
     Q_Q(DocummentPDF);
     document = Poppler::Document::load(filepath);
-    if (nullptr == document || document->numPages() <= 0)
+    if (nullptr == document || document->numPages() <= 0) {
+        emit signal_docummentLoaded(false);
         return;
+    }
     document->setRenderHint(Poppler::Document::TextAntialiasing, true);
     document->setRenderHint(Poppler::Document::Antialiasing, true);
     document->setRenderHint(Poppler::Document::ThinLineSolid, true);
@@ -31,7 +33,7 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
         m_imageheight = m_pages.at(0)->getOriginalImageHeight();
     }
     setBasicInfo(filepath);
-    emit signal_docummentLoaded();
+    emit signal_docummentLoaded(true);
 }
 
 
@@ -82,23 +84,20 @@ bool DocummentPDF::loadDocumment(QString filepath)
 void DocummentPDF::jumpToHighLight(const QString &uuid, int ipage)
 {
     Q_D(DocummentPDF);
-    if(ipage>=0&&ipage<d->m_pages.size())
-    {
-        Poppler::Page* page= static_cast<PagePdf*>(d->m_pages.at(ipage))->GetPage();
-        QList<Poppler::Annotation*> listannote=page->annotations();
-        foreach(Poppler::Annotation* annote,listannote)
-        {
-            if (annote->subType() == Poppler::Annotation::AHighlight&&annote->uniqueName().indexOf(uuid)>=0) {
+    if (ipage >= 0 && ipage < d->m_pages.size()) {
+        Poppler::Page *page = static_cast<PagePdf *>(d->m_pages.at(ipage))->GetPage();
+        QList<Poppler::Annotation *> listannote = page->annotations();
+        foreach (Poppler::Annotation *annote, listannote) {
+            if (annote->subType() == Poppler::Annotation::AHighlight && annote->uniqueName().indexOf(uuid) >= 0) {
                 QList<Poppler::HighlightAnnotation::Quad> listquad = static_cast<Poppler::HighlightAnnotation *>(annote)->highlightQuads();
-                if(listquad.size()>0)
-                {
+                if (listquad.size() > 0) {
                     QRectF rectbound;
                     rectbound.setTopLeft(listquad.at(0).points[0]);
                     rectbound.setTopRight(listquad.at(0).points[1]);
                     rectbound.setBottomLeft(listquad.at(0).points[2]);
                     rectbound.setBottomRight( listquad.at(0).points[3]);
-                    int xvalue=0,yvalue=0;
-                    cacularValueXY(xvalue,yvalue,ipage,false,rectbound);
+                    int xvalue = 0, yvalue = 0;
+                    cacularValueXY(xvalue, yvalue, ipage, false, rectbound);
                     QScrollBar *scrollBar_Y = verticalScrollBar();
                     if (scrollBar_Y)
                         scrollBar_Y->setValue(yvalue);
@@ -142,14 +141,11 @@ QString DocummentPDF::removeAnnotation(const QPoint &startpos)
 void DocummentPDF::removeAnnotation(const QString &struuid, int ipage)
 {
     Q_D(DocummentPDF);
-    if(ipage<0||ipage>=d->m_pages.size())
-    {
-        for(int i=0;i<d->m_pages.size();++i)
-        {
+    if (ipage < 0 || ipage >= d->m_pages.size()) {
+        for (int i = 0; i < d->m_pages.size(); ++i) {
             static_cast<PagePdf *>(d->m_pages.at(i))->removeAnnotation(struuid);
         }
-    }
-    else {
+    } else {
         static_cast<PagePdf *>(d->m_pages.at(ipage))->removeAnnotation(struuid);
     }
 }
@@ -158,66 +154,59 @@ QString DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos
 {
     Q_D(DocummentPDF);
     QPoint startpt = startpos;
-    QPoint endpt=endpos;
+    QPoint endpt = endpos;
 
     int startpage = pointInWhichPage(startpt);
-    int endpage=pointInWhichPage(endpt);
+    int endpage = pointInWhichPage(endpt);
 
     QString uuid;
-    if(d->m_bScanningcopy)//是否为扫描件
-    {
+    if (d->m_bScanningcopy) { //是否为扫描件
         QRect rect;
-        int iwidth=0,iheight=0;
-        bool bright=true;
-        if(startpt.x()>endpt.x())
-        {
-            bright=false;
-            iwidth=startpt.x()-endpt.x();
-        }else {
-            iwidth=endpt.x()-startpt.x();
+        int iwidth = 0, iheight = 0;
+        bool bright = true;
+        if (startpt.x() > endpt.x()) {
+            bright = false;
+            iwidth = startpt.x() - endpt.x();
+        } else {
+            iwidth = endpt.x() - startpt.x();
         }
-        if(startpage<endpage||startpage>endpage)
-        {
+        if (startpage < endpage || startpage > endpage) {
             //不在同一页，以起始页为准
-            if(startpage>endpage)
-            {
-                iheight=startpt.y();
-                if(bright)
-                    rect=QRect(startpt.x(),0,iwidth,iheight);
+            if (startpage > endpage) {
+                iheight = startpt.y();
+                if (bright)
+                    rect = QRect(startpt.x(), 0, iwidth, iheight);
                 else
-                    rect=QRect(endpt.x(),0,iwidth,iheight);
-            }else {
-                iheight=d->m_pages.at(startpage)->height()-startpt.y();
-                if(bright)
-                     rect=QRect(startpt.x(),startpt.y(),iwidth,iheight);
+                    rect = QRect(endpt.x(), 0, iwidth, iheight);
+            } else {
+                iheight = d->m_pages.at(startpage)->height() - startpt.y();
+                if (bright)
+                    rect = QRect(startpt.x(), startpt.y(), iwidth, iheight);
                 else
-                     rect=QRect(endpt.x(),startpt.y(),iwidth,iheight);
+                    rect = QRect(endpt.x(), startpt.y(), iwidth, iheight);
             }
 
-        }else {
-            if(startpt.y()>endpt.y())
-            {
-                iheight=startpt.y()-endpt.y();
-                if(bright)
-                    rect=QRect(startpt.x(),endpt.y(),iwidth,iheight);
+        } else {
+            if (startpt.y() > endpt.y()) {
+                iheight = startpt.y() - endpt.y();
+                if (bright)
+                    rect = QRect(startpt.x(), endpt.y(), iwidth, iheight);
                 else
-                    rect=QRect(endpt.x(),endpt.y(),iwidth,iheight);
-            }
-            else {
-                iheight=endpt.y()-startpt.y();
-                 if(bright)
-                     rect=QRect(startpt.x(),startpt.y(),iwidth,iheight);
-                 else
-                     rect=QRect(endpt.x(),startpt.y(),iwidth,iheight);
+                    rect = QRect(endpt.x(), endpt.y(), iwidth, iheight);
+            } else {
+                iheight = endpt.y() - startpt.y();
+                if (bright)
+                    rect = QRect(startpt.x(), startpt.y(), iwidth, iheight);
+                else
+                    rect = QRect(endpt.x(), startpt.y(), iwidth, iheight);
             }
         }
         //qDebug()<<"DocummentPDF::addAnnotation";
         //rect=QRect(50,30,100,50);
-         uuid=static_cast<PagePdf *>(d->m_pages.at(startpage))->addAnnotation(color,rect);
-    }
-    else {
-        if (startpage < 0) return "";        
-        uuid=static_cast<PagePdf *>(d->m_pages.at(startpage))->addAnnotation(color);
+        uuid = static_cast<PagePdf *>(d->m_pages.at(startpage))->addAnnotation(color, rect);
+    } else {
+        if (startpage < 0) return "";
+        uuid = static_cast<PagePdf *>(d->m_pages.at(startpage))->addAnnotation(color);
     }
     return uuid;
 }
@@ -253,7 +242,7 @@ void DocummentPDF::getAllAnnotation(QList<stHighlightContent> &listres)
 }
 
 void DocummentPDF::search(const QString &strtext, QColor color)
-{ 
+{
     Q_D(DocummentPDF);
     clearSearch();
     d->m_searchTask->start(d->m_pages, strtext, false, false, d->m_currentpageno + 1);
@@ -297,40 +286,39 @@ bool DocummentPDF::saveas(const QString &filePath, bool withChanges)
     QString strsource = d->m_fileinfo->strFilepath;
     bool bsuccess = false;
     if (!strsource.isEmpty()) {
-         qDebug()<<"saveas1 "<<strsource;
+        qDebug() << "saveas1 " << strsource;
         if (!withChanges) {
             if (QFile::copy(strsource, filePath))
                 bsuccess = true;
             else {
-                 qDebug()<<"saveas5 "<<strsource;
+                qDebug() << "saveas5 " << strsource;
             }
         } else {
             QString strtmp = strsource.left(strsource.lastIndexOf(QChar('/')) + 1);
             strtmp.append(PublicFunc::getUuid());
             strtmp.append(".pdf");
-            qDebug()<<"saveas2"<<strtmp;
+            qDebug() << "saveas2" << strtmp;
             if (QFile::copy(strsource, strtmp)) {
                 if (save(strsource, true)) {
                     if (QFile::copy(strsource, filePath)) {
                         bsuccess = true;
-                         qDebug()<<"saveas3 "<<strsource;
+                        qDebug() << "saveas3 " << strsource;
                         if (QFile::remove(strsource)) {
                             if (QFile::rename(strtmp, strsource))
                                 QFile::remove(strtmp);
                         }
                     } else {
-                         qDebug()<<"saveas6 "<<strtmp;
+                        qDebug() << "saveas6 " << strtmp;
                         QFile::remove(strtmp);
                     }
                 }
-            }
-            else {
+            } else {
                 QFile file(strtmp);
-                if(file.exists())
-                    qDebug()<<"saveas7 file.exists()";
+                if (file.exists())
+                    qDebug() << "saveas7 file.exists()";
             }
         }
-    }    
+    }
     return  bsuccess;
 }
 
@@ -363,10 +351,10 @@ void DocummentPDF::clearSearch()
             d->m_pages.at(key)->clearHighlightRects();
         }
     }
-    if(d->m_currentpageno-1>=0)
-        d->m_pages.at(d->m_currentpageno-1)->update();
-    if(d->m_currentpageno+1<d->m_pages.size())
-        d->m_pages.at(d->m_currentpageno+1)->update();
+    if (d->m_currentpageno - 1 >= 0)
+        d->m_pages.at(d->m_currentpageno - 1)->update();
+    if (d->m_currentpageno + 1 < d->m_pages.size())
+        d->m_pages.at(d->m_currentpageno + 1)->update();
     d->m_pages.at(d->m_currentpageno)->update();//刷新当前页
 
 }

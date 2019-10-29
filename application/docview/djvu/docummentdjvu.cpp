@@ -32,6 +32,7 @@ void DocummentDJVUPrivate::loadDocumment(QString filepath)
     m_context = ddjvu_context_create("deepin_reader");
 
     if (m_context == 0) {
+        emit signal_docummentLoaded(false);
         return;
     }
 
@@ -47,7 +48,7 @@ void DocummentDJVUPrivate::loadDocumment(QString filepath)
 
     if (document == 0) {
         ddjvu_context_release(m_context);
-
+        emit signal_docummentLoaded(false);
         return;
     }
 
@@ -56,7 +57,7 @@ void DocummentDJVUPrivate::loadDocumment(QString filepath)
     if (ddjvu_document_decoding_error(document)) {
         ddjvu_document_release(document);
         ddjvu_context_release(m_context);
-
+        emit signal_docummentLoaded(false);
         return;
     }
     unsigned int mask[] = {0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000};
@@ -75,7 +76,7 @@ void DocummentDJVUPrivate::loadDocumment(QString filepath)
     }
     setBasicInfo(filepath);
 
-    emit signal_docummentLoaded();
+    emit signal_docummentLoaded(true);
 }
 
 

@@ -158,16 +158,19 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
         setCurDocuType(sCompleteSuffix);
 
         bool rl = m_pDocummentProxy->openFile(m_nCurDocType, sPath);
-        if (rl) {
-            m_szFilePath = sPath;
-            DataManager::instance()->setStrOnlyFilePath(sPath);
-            //  通知 其他窗口， 打开文件成功了！！！
-            NotifySubject::getInstance()->sendMsg(MSG_OPERATION_OPEN_FILE_OK);
-
-            setAppShowTitle(info.baseName());
-        } else {
-            sendMsg(MSG_OPERATION_OPEN_FILE_FAIL);
+        if (!rl) {
+            sendMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("File not supported"));
         }
+//        if (rl) {
+//            m_szFilePath = sPath;
+//            DataManager::instance()->setStrOnlyFilePath(sPath);
+//            //  通知 其他窗口， 打开文件成功了！！！
+//            NotifySubject::getInstance()->sendMsg(MSG_OPERATION_OPEN_FILE_OK);
+
+//            setAppShowTitle(info.baseName());
+//        } else {
+//            sendMsg(MSG_OPERATION_OPEN_FILE_FAIL);
+//        }
     }
 }
 
@@ -237,6 +240,19 @@ void DocummentFileHelper::initConnections()
     connect(this, SIGNAL(sigSaveAsFile()), this, SLOT(slotSaveAsFile()));
     connect(this, SIGNAL(sigFileSlider(const int &)), this, SLOT(slotFileSlider(const int &)));
     connect(this, SIGNAL(sigCopySelectContent(const QString &)), this, SLOT(slotCopySelectContent(const QString &)));
+    connect(m_pDocummentProxy, &DocummentProxy::signal_openResult, this, [ = ](bool openresult) {
+        if (openresult) {
+            qDebug() << "signal_openResult result:true";
+            DataManager::instance()->setStrOnlyFilePath(m_szFilePath);
+            //  通知 其他窗口， 打开文件成功了！！！
+            NotifySubject::getInstance()->sendMsg(MSG_OPERATION_OPEN_FILE_OK);
+            QFileInfo info(m_szFilePath);
+            setAppShowTitle(info.baseName());
+        } else {
+            qDebug() << "signal_openResult result:false";
+            sendMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
+        }
+    });
 }
 
 int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgContent)

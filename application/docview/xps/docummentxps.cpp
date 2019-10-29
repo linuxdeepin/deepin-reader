@@ -16,8 +16,10 @@ void DocummentXPSPrivate::loadDocumment(QString filepath)
 
 
     qDebug() << "numDocuments:" << m_xpsFile->numDocuments();
-    if (m_xpsFile->numDocuments() < 1)
+    if (m_xpsFile->numDocuments() < 1) {
+        emit signal_docummentLoaded(false);
         return;
+    }
     setBasicInfo(filepath);
     donotneedreloaddoc = true;
     m_pages.clear();
@@ -33,7 +35,7 @@ void DocummentXPSPrivate::loadDocumment(QString filepath)
 
     setBasicInfo(filepath);
 
-    emit signal_docummentLoaded();
+    emit signal_docummentLoaded(true);
 }
 
 

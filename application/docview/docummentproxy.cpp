@@ -68,6 +68,9 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath)
     connect(m_documment, &DocummentBase::signal_bookMarkStateChange, this, [ = ](int page, bool state) {
         emit signal_bookMarkStateChange(page, state);
     });
+    connect(m_documment, &DocummentBase::signal_openResult, this, [ = ](bool result) {
+        emit signal_openResult(result);
+    });
     bre = m_documment->openFile(m_path);
     bcloseing = false;
     return bre;
@@ -218,7 +221,7 @@ bool DocummentProxy::save(const QString &filepath, bool withChanges)
 bool DocummentProxy::saveas(const QString &filepath, bool withChanges)
 {
     if (m_documment && !bcloseing && m_documment->saveas(filepath, withChanges)) {
-         qDebug() << "saveas success";
+        qDebug() << "saveas success";
         return openFile(DocType_PDF, filepath);
     }
     qDebug() << "saveas failed";

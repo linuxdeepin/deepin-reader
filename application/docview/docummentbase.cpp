@@ -203,7 +203,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
 
     connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_vScrollBarValueChanged(int)));
     connect(this->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_hScrollBarValueChanged(int)));
-    connect(d, SIGNAL(signal_docummentLoaded()), this, SLOT(slot_docummentLoaded()));
+    connect(d, SIGNAL(signal_docummentLoaded(bool)), this, SLOT(slot_docummentLoaded(bool)));
     connect(this, SIGNAL(signal_loadDocumment(QString)), d, SLOT(loadDocumment(QString)));
     connect(d->showslidwaittimer, SIGNAL(timeout()), this, SLOT(showSlideModelTimerOut()));
 }
@@ -1333,8 +1333,12 @@ void DocummentBase::initConnect()
     }
 }
 
-void DocummentBase::slot_docummentLoaded()
+void DocummentBase::slot_docummentLoaded(bool result)
 {
+    if (!result) {
+        emit signal_openResult(false);
+        return;
+    }
     Q_D(DocummentBase);
     d->m_widgets.clear();
     qDebug() << "slot_docummentLoaded numPages :" << d->m_pages.size();
@@ -1358,6 +1362,7 @@ void DocummentBase::slot_docummentLoaded()
     setViewModeAndShow(d->m_viewmode);
     initConnect();
     d->donotneedreloaddoc = false;
+    emit signal_openResult(true);
     loadPages();
 }
 
