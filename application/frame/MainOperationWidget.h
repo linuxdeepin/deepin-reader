@@ -2,7 +2,7 @@
 #define MAINOPERATIONWIDGET_H
 
 #include <DIconButton>
-
+#include <DPushButton>
 #include "subjectObserver/CustomWidget.h"
 
 /**
@@ -29,6 +29,9 @@ private slots:
     void slotButtonClicked(int);
     void slotSearchControl();
     void slotSearchClosed();
+
+private:
+    DPushButton *m_pHideBtn = nullptr;      //  隐藏按钮
 
     // CustomWidget interface
 protected:

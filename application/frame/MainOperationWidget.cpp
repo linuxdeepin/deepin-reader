@@ -31,6 +31,12 @@ void MainOperationWidget::initWidget()
         hboxLayout->addWidget(btn);
     }
 
+    m_pHideBtn = new DPushButton(this);
+    m_pHideBtn->setVisible(false);
+    m_pHideBtn->setCheckable(true);
+    btnGroup->addButton(m_pHideBtn);
+    hboxLayout->addWidget(m_pHideBtn);
+
     hboxLayout->addStretch(1);
 
     this->setLayout(hboxLayout);
@@ -95,11 +101,7 @@ void MainOperationWidget::slotButtonClicked(int id)
  */
 void MainOperationWidget::slotSearchControl()
 {
-    auto btnList = this->findChildren<DIconButton *>();
-    foreach (auto btn, btnList) {
-        btn->setChecked(false);
-        btn->setEnabled(false);
-    }
+    m_pHideBtn->setChecked(true);
 }
 
 /**
@@ -115,7 +117,6 @@ void MainOperationWidget::slotSearchClosed()
             btn->setChecked(true);
             sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(m_nThumbnailIndex));
         }
-        btn->setEnabled(true);
     }
 }
 
