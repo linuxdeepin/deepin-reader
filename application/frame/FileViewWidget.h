@@ -87,8 +87,8 @@ private:
     QPoint      m_pStartPoint;
     QPoint      m_pRightClickPoint;            //   右键菜单点
     QPoint      m_pHandleMoveStartPoint;
-    QPoint      m_pMoveEndPoint;  
-    TextOperationMenu* m_operatemenu;
+    QPoint      m_pMoveEndPoint;
+    TextOperationMenu *m_operatemenu;
 
     QString m_strUUid;                         // 当前添加注释的uuid
     bool m_bIsHighLight = false;               // 判断鼠标点击位置是否有高亮

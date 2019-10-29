@@ -25,7 +25,6 @@ void FileViewNoteWidget::setEditText(const QString &note)
         m_pTextEdit->clear();
         m_pTextEdit->setText(note);
         m_strNote = note;
-        qDebug() << "set TextEdit text:" << note;
     }
 }
 
@@ -40,6 +39,21 @@ void FileViewNoteWidget::showWidget(const int &nPos)
     move(nPos - nWidth - 50, 200);
     show();
     raise();
+}
+
+void FileViewNoteWidget::hideEvent(QHideEvent *event)
+{
+    //  原来是有注释的, 被删除了
+    QString t_contant = m_pTextEdit->toPlainText().trimmed();
+    if (m_strNote != "" && t_contant == "") {
+        sendMsg(MSG_NOTE_DLTNOTECONTANT, m_strNote);
+    } else {
+        QString t_contant = m_pTextEdit->toPlainText().trimmed();
+        if (t_contant != m_strNote) {
+            sendMsg(MSG_NOTE_ADDCONTANT, m_strNote);
+        }
+    }
+    CustomWidget::hideEvent(event);
 }
 
 // 初始化界面

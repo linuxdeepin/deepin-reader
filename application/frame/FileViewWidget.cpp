@@ -16,7 +16,7 @@
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
-    ,m_operatemenu(nullptr)
+    , m_operatemenu(nullptr)
 {
     setMouseTracking(true); //  接受 鼠标滑动事件
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -207,13 +207,12 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 
     if (sSelectText != "" || m_bIsHighLight) {    //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
-        if(nullptr==m_operatemenu)
-        {
-              m_operatemenu = new TextOperationMenu(this);
+        if (nullptr == m_operatemenu) {
+            m_operatemenu = new TextOperationMenu(this);
         }
         m_operatemenu->execMenu(tempPoint, m_bIsHighLight, sSelectText, struuid);
     } else {    //  否则弹出 文档操作菜单
-        auto menu=new DefaultOperationMenu(this);
+        auto menu = new DefaultOperationMenu(this);
         menu->execMenu(tempPoint);
     }
 }
@@ -253,7 +252,7 @@ void FileViewWidget::slotSetHandShape(const QString &data)
 //  添加高亮颜色
 void FileViewWidget::slotFileAddAnnotation(const QString &iIndex)
 {
-    qDebug()<<"FileViewWidget::slotFileAddAnnotation0000000000000"<<iIndex;
+    qDebug() << "FileViewWidget::slotFileAddAnnotation0000000000000" << iIndex;
     bool t_bSame = m_bIsHighLight && m_bIsHighLightReleasePoint;
     if (t_bSame) {
         qDebug() << "be hight light";
@@ -283,6 +282,8 @@ void FileViewWidget::slotFileRemoveAnnotation()
 
 void FileViewWidget::slotFileAddNote(const QString &note)
 {
+    qDebug() << "                               q               ";
+
     if (!m_bIsHighLight) {
         // 添加高亮
         slotFileAddAnnotation(QString::number(0));
@@ -431,6 +432,7 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
         emit sigFileRemoveAnnotation();
         return ConstantMsg::g_effective_res;
     case MSG_NOTE_ADDCONTANT:                   //  添加注释
+        qDebug() << "                       111     ";
         emit sigFileAddNote(msgContent);
         return ConstantMsg::g_effective_res;
     }

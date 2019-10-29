@@ -4,7 +4,7 @@
 #include <DLabel>
 #include <DTextEdit>
 #include <DMessageBox>
-
+#include <QHideEvent>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QMessageBox>
@@ -57,8 +57,9 @@ public:
     void showWidget(const int &);
 
 protected:
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
     void initWidget() Q_DECL_OVERRIDE;
-    void  paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
 
 private:
     void initConnections();
@@ -72,7 +73,7 @@ private:
     /*CustemTextEdit DTextEdit*/
     CustemTextEdit *m_pTextEdit = nullptr;   // 注释
     MenuLab *m_pCloseLab = nullptr;          // 关闭
-    QString m_strNote;                       // 注释内容
+    QString m_strNote = "";                       // 注释内容
 };
 
 #endif // FILEVIEWNOTEWIDGET_H
