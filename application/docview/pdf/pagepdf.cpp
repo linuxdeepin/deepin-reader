@@ -92,6 +92,7 @@ QString PagePdf::addAnnotation(const QColor &color)
     QString uniqueName;
     if (d->paintrects.size() > 0) {
         uniqueName = addHighlightAnnotation(color);
+        d->paintrects.clear();
     }
     QImage image;
     getImage(image, d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);

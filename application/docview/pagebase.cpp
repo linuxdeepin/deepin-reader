@@ -147,7 +147,7 @@ void PageBase::clearPageTextSelections()
 bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
 {
     Q_D(PageBase);
-    qDebug() << "pageTextSelections start:" << start << " end:" << end;
+   // qDebug() << "pageTextSelections start:" << start << " end:" << end;
     //    qDebug() << "pageTextSelections x():" << x() << " y()" << y();
     QPoint startC = QPoint(start.x() - x() - (width() - d->m_scale * d->m_imagewidth ) / 2, start.y() - y() - (height() - d->m_scale * d->m_imageheight ) / 2);
     QPoint endC = QPoint(end.x() - x() - (width() - d->m_scale * d->m_imagewidth ) / 2, end.y() - y() - (height() - d->m_scale * d->m_imageheight ) / 2);
@@ -191,7 +191,7 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
     //    const double scaleY = height() / m_imageheight;
     const double scaleX = d->m_scale ;
     const double scaleY = d->m_scale ;
-    qDebug() << "m_words size:" << d->m_words.size();
+   // qDebug() << "m_words size:" << d->m_words.size();
     for (int i = 0; i < d->m_words.size(); i++) {
         //        qDebug() << "m_words i:" << i << " rect:" << m_words.at(i).rect;
         tmp = d->m_words.at(i).rect;

@@ -16,6 +16,7 @@
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
+    ,m_operatemenu(nullptr)
 {
     setMouseTracking(true); //  接受 鼠标滑动事件
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -204,10 +205,13 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 
     if (sSelectText != "" || m_bIsHighLight) {    //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
-        auto menu = new TextOperationMenu(this);
-        menu->execMenu(tempPoint, m_bIsHighLight, sSelectText, struuid);
+        if(nullptr==m_operatemenu)
+        {
+              m_operatemenu = new TextOperationMenu(this);
+        }
+        m_operatemenu->execMenu(tempPoint, m_bIsHighLight, sSelectText, struuid);
     } else {    //  否则弹出 文档操作菜单
-        auto menu = new DefaultOperationMenu(this);
+        auto menu=new DefaultOperationMenu(this);
         menu->execMenu(tempPoint);
     }
 }
@@ -245,6 +249,7 @@ void FileViewWidget::slotSetHandShape(const QString &data)
 //  添加高亮颜色
 void FileViewWidget::slotFileAddAnnotation(const QString &iIndex)
 {
+    qDebug()<<"FileViewWidget::slotFileAddAnnotation0000000000000"<<iIndex;
     bool t_bSame = m_bIsHighLight && m_bIsHighLightReleasePoint;
     if (t_bSame) {
         qDebug() << "be hight light";

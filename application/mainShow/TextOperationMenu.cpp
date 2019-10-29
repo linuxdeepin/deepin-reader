@@ -53,8 +53,8 @@ void TextOperationMenu::sendMsgToFrame(const int &msgType, const QString &msgCon
 }
 
 void TextOperationMenu::slotSetHighLight(int nColor)
-{
-    m_pLightColor = nColor;
+{   
+    m_pLightColor = nColor;   
 }
 
 void TextOperationMenu::slotCopyClicked()
@@ -64,6 +64,7 @@ void TextOperationMenu::slotCopyClicked()
 
 void TextOperationMenu::slotAddHighLightClicked()
 {
+    qDebug()<<"TextOperationMenu::slotAddHighLightClicked@@@@@@@@@@"<<m_pLightColor;
     sendMsgToFrame(MSG_OPERATION_TEXT_ADD_HIGHLIGHTED, QString("%1").arg(m_pLightColor));
 }
 

@@ -216,7 +216,7 @@ QString DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos
          uuid=static_cast<PagePdf *>(d->m_pages.at(startpage))->addAnnotation(color,rect);
     }
     else {
-        if (startpage < 0) return "";
+        if (startpage < 0) return "";        
         uuid=static_cast<PagePdf *>(d->m_pages.at(startpage))->addAnnotation(color);
     }
     return uuid;
