@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QMutex>
 #include "commonstruct.h"
+#include "bookmarkbutton.h"
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -128,6 +129,7 @@ public:
         m_scale = 1.0;
         havereander = false;
         pixelratiof = 1;
+        bookmarkbtn = nullptr;
         connect(&loadmagnifiercachethread, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)), this, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)));
         connect(&threadreander, SIGNAL(signal_RenderFinish(QImage)), this, SIGNAL(signal_RenderFinish(QImage)));
     }
@@ -172,6 +174,7 @@ public:
     QColor m_searchcolor;
     bool havereander;
     qreal pixelratiof;
+    BookMarkButton *bookmarkbtn;
 //    QMutex m_mutexlockgetimage;
 
     PageBase *q_ptr;
@@ -242,9 +245,11 @@ public:
     void stopThread();
     void waitThread();
     void clearImage();
+    bool setBookMarkState(bool state);
 
 signals:
     void signal_MagnifierPixmapCacheLoaded(int);
+    void signal_bookMarkStateChange(int page, bool state);
     void signal_update();
 protected slots:
     void slot_loadMagnifierPixmapCache(QImage image, double width, double height);

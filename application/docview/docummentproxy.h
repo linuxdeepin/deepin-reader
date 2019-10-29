@@ -61,7 +61,7 @@ public:
     bool pageJump(int pagenum);
     void docBasicInfo(stFileInfo &info);
     QString removeAnnotation(const QPoint &startpos);
-    void removeAnnotation(const QString &struuid,int ipage=-1);
+    void removeAnnotation(const QString &struuid, int ipage = -1);
     bool pageMove(double mvx, double mvy);
     void title(QString &title);
     Page::Link *mouseBeOverLink(QPoint point);
@@ -75,10 +75,11 @@ public:
     void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1);
     double adaptWidthAndShow(double width);
     double adaptHeightAndShow(double height);
-    bool annotationClicked(const QPoint &pos, QString &strtext,QString& struuid);
-    void getAllAnnotation(QList<stHighlightContent>& listres);
+    bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
+    void getAllAnnotation(QList<stHighlightContent> &listres);
     int  pointInWhichPage(QPoint pos);
-    void jumpToHighLight(const QString& uuid,int ipage);
+    void jumpToHighLight(const QString &uuid, int ipage);
+    bool setBookMarkState(int page, bool state);
 signals:
     void signal_pageChange(int);
     bool signal_pageJump(int);
@@ -87,6 +88,7 @@ signals:
     bool signal_mouseSelectText(QPoint start, QPoint stop);
     void signal_scaleAndShow(double scale, RotateType_EM rotate);
     bool signal_setViewModeAndShow(ViewMode_EM viewmode);
+    void signal_bookMarkStateChange(int page, bool state);
 
 private slots:
     void slot_pageChange(int);

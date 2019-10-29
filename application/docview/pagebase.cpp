@@ -18,7 +18,7 @@ void ThreadRenderImage::setRestart()
 
 void ThreadRenderImage::setPage(PageInterface *page, double width, double height)
 {
-    qDebug()<<"ThreadRenderImage::setPage"<<width<<height;
+    qDebug() << "ThreadRenderImage::setPage" << width << height;
     m_page = page;
     m_width = width;
     m_height = height;
@@ -90,11 +90,16 @@ PageBase::PageBase(PageBasePrivate *ptr, DWidget *parent)
     Q_D(PageBase);
     setMouseTracking(true);
     d->pixelratiof = devicePixelRatioF();
+    d->bookmarkbtn = new BookMarkButton(this);
+    d->bookmarkbtn->raise();
     setAlignment(Qt::AlignCenter);
     connect(d, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)), this, SLOT(slot_loadMagnifierPixmapCache(QImage, double, double)));
     connect(d, SIGNAL(signal_RenderFinish(QImage)), this, SLOT(slot_RenderFinish(QImage)));
     connect(this, &PageBase::signal_update, this, [ = ]() {
         this->update();
+    });
+    connect(d->bookmarkbtn, &BookMarkButton::signal_bookMarkStateChange, this, [ = ](bool state) {
+        emit signal_bookMarkStateChange(d->m_pageno, state);
     });
 }
 
@@ -108,6 +113,7 @@ void PageBase::paintEvent(QPaintEvent *event)
 {
     Q_D(PageBase);
     DLabel::paintEvent(event);
+    d->bookmarkbtn->move(this->width() - d->bookmarkbtn->width() - 20, 0);
     QPainter qpainter(this);
     qpainter.setBrush(d->m_paintercolor);
     QPen qpen(d->m_pencolor, d->m_penwidth);
@@ -175,8 +181,8 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
     }
 
     const QRect start_end = (startC.y() < endC.y())
-            ? QRect(startC.x(), startC.y(), endC.x(), endC.y())
-            : QRect(startC.x(), endC.y(), endC.x(), startC.y());
+                            ? QRect(startC.x(), startC.y(), endC.x(), endC.y())
+                            : QRect(startC.x(), endC.y(), endC.x(), startC.y());
 
     QRectF tmp;
     int startword = 0, stopword = -1;
@@ -322,8 +328,8 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
         QRectF tmpafter;
         tmpafter = d->m_words.at(i).rect;
         if ((abs(tmp.y() - tmpafter.y()) < tmp.height() / 5 ||
-             abs(tmp.y() + tmp.height() / 2 - tmpafter.y() + tmpafter.height() / 2) <
-             tmp.height() / 5) &&
+                abs(tmp.y() + tmp.height() / 2 - tmpafter.y() + tmpafter.height() / 2) <
+                tmp.height() / 5) &&
                 abs(tmp.x() + tmp.width() - tmpafter.x()) < tmp.width() / 5) {
             if (tmpafter.y() < tmp.y()) {
                 tmp.setY(tmpafter.y());
@@ -439,7 +445,7 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPointF point, int radius, do
     if (!d->m_magnifierpixmap.isNull()) {
         qpixmap = d->m_magnifierpixmap;
     } else {
-        qDebug()<<"getMagnifierPixmap------------";
+        qDebug() << "getMagnifierPixmap------------";
         loadMagnifierCacheThreadStart(width * d->pixelratiof, height * d->pixelratiof);
         return false;
     }
@@ -449,7 +455,7 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPointF point, int radius, do
     double scaley = height / d->m_imageheight;
 
     double relx = qp.x() * scalex, rely = qp.y() * scaley;
-    if (qp.x() * scalex<= 0) {
+    if (qp.x() * scalex <= 0) {
         relx = radius;
     } else if (qp.x() * scalex >= width) {
         relx = width;
@@ -469,10 +475,10 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPointF point, int radius, do
 //    } else if (qp.y() * scaley > height - radius) {
 //        rely = height - radius;
 //    }
-    relx*=devicePixelRatioF();
-    rely*=devicePixelRatioF();
+    relx *= devicePixelRatioF();
+    rely *= devicePixelRatioF();
     // qDebug() << "getMagnifierPixmap scalex:" << scalex << " scaley: " << scaley << " radius: " << radius << " qp: " << qp;
-    QPixmap qpixmap1 = qpixmap.copy(relx-radius, rely-radius, radius * 2, radius * 2);
+    QPixmap qpixmap1 = qpixmap.copy(relx - radius, rely - radius, radius * 2, radius * 2);
     QMatrix leftmatrix;
     switch (d->m_rotate) {
     case RotateType_90:
@@ -506,7 +512,7 @@ void PageBase::loadMagnifierCacheThreadStart(double width, double height)
 void PageBase::slot_RenderFinish(QImage image)
 {
     Q_D(PageBase);
-    double originwidth=image.width(),originheight=image.height();
+    double originwidth = image.width(), originheight = image.height();
     QMatrix leftmatrix;
     switch (d->m_rotate) {
     case RotateType_90:
@@ -523,7 +529,7 @@ void PageBase::slot_RenderFinish(QImage image)
         break;
     }
     QPixmap map = QPixmap::fromImage(image);
-    map=map.transformed(leftmatrix, Qt::SmoothTransformation);
+    map = map.transformed(leftmatrix, Qt::SmoothTransformation);
     map.setDevicePixelRatio(devicePixelRatioF());
     setPixmap(map);
 
@@ -557,7 +563,7 @@ void PageBase::slot_loadMagnifierPixmapCache(QImage image, double width, double 
 }
 
 void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
-{   
+{
     Q_D(PageBase);
     d->havereander = false;
     d->m_scale = scale;
@@ -672,7 +678,7 @@ bool PageBase::showImage(double scale, RotateType_EM rotate)
     }
     d->m_scale = scale;
     d->m_rotate = rotate;
-    qDebug()<<"PageBase::showImage"<<d->pixelratiof;
+    qDebug() << "PageBase::showImage" << d->pixelratiof;
     d->threadreander.setPage(getInterFace(), d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
     if (!d->threadreander.isRunning()) {
         d->threadreander.start();
@@ -700,4 +706,11 @@ void PageBase::waitThread()
         //        loadmagnifiercachethread.quit();
         d->loadmagnifiercachethread.wait();
     }
+}
+
+bool PageBase::setBookMarkState(bool state)
+{
+    Q_D(PageBase);
+    d->bookmarkbtn->setClickState(state);
+    return true;
 }

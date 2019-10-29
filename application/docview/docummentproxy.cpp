@@ -65,6 +65,9 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath)
     connect(this, SIGNAL(signal_mouseSelectText(QPoint, QPoint)), m_documment, SLOT(mouseSelectText(QPoint, QPoint)));
     connect(this, SIGNAL(signal_scaleAndShow(double, RotateType_EM)), m_documment, SLOT(scaleAndShow(double, RotateType_EM)));
     connect(this, SIGNAL(signal_setViewModeAndShow(ViewMode_EM)), m_documment, SLOT(setViewModeAndShow(ViewMode_EM)));
+    connect(m_documment, &DocummentBase::signal_bookMarkStateChange, this, [ = ](int page, bool state) {
+        emit signal_bookMarkStateChange(page, state);
+    });
     bre = m_documment->openFile(m_path);
     bcloseing = false;
     return bre;
@@ -201,7 +204,7 @@ QString DocummentProxy::addAnnotation(const QPoint &startpos, const QPoint &endp
     if (!m_documment || bcloseing)
         return QString("");
     // qDebug() << "addAnnotation";
-    return m_documment->addAnnotation(startpos,endpos, color);
+    return m_documment->addAnnotation(startpos, endpos, color);
 }
 
 bool DocummentProxy::save(const QString &filepath, bool withChanges)
@@ -276,7 +279,7 @@ void DocummentProxy::removeAnnotation(const QString &struuid, int ipage)
     if (!m_documment || bcloseing)
         return ;
     qDebug() << "removeAnnotation";
-    m_documment->removeAnnotation(struuid,ipage);
+    m_documment->removeAnnotation(struuid, ipage);
 }
 
 void DocummentProxy::slot_pageChange(int pageno)
@@ -406,9 +409,8 @@ int DocummentProxy::pointInWhichPage(QPoint pos)
 
 void DocummentProxy::jumpToHighLight(const QString &uuid, int ipage)
 {
-    if(m_documment)
-    {
-        m_documment->jumpToHighLight(uuid,ipage);
+    if (m_documment) {
+        m_documment->jumpToHighLight(uuid, ipage);
     }
 }
 
@@ -435,7 +437,6 @@ bool DocummentProxy::closeFile()
     return true;
 }
 
-
 void DocummentProxy::closeFileAndWaitThreadClearEnd()
 {
     QMutexLocker locker(&mutexlockgetimage);
@@ -455,4 +456,11 @@ void DocummentProxy::closeFileAndWaitThreadClearEnd()
         delete m_documment;
         m_documment = nullptr;
     }
+}
+
+bool DocummentProxy::setBookMarkState(int page, bool state)
+{
+    if (!m_documment || bcloseing)
+        return false;
+    return m_documment->setBookMarkState(page, state);
 }

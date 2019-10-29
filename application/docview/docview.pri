@@ -21,7 +21,8 @@ HEADERS += \
     $$PWD/xps/docummentxps.h \
     $$PWD/xps/pagexps.h \
     $$PWD/xps/xpsapi.h \
-    $$PWD/searchtask.h
+    $$PWD/searchtask.h \
+    $$PWD/bookmarkbutton.h
 
 
 SOURCES += \
@@ -41,5 +42,9 @@ SOURCES += \
     $$PWD/xps/pagexps.cpp \
     $$PWD/xps/docummentxps.cpp \
     $$PWD/xps/xpsapi.cpp \
-    $$PWD/searchtask.cpp
+    $$PWD/searchtask.cpp \
+    $$PWD/bookmarkbutton.cpp
+
+RESOURCES += \
+    $$PWD/docviewtheme.qrc
 

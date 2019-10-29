@@ -120,8 +120,8 @@ public:
         m_cursearch = 1;
         bcloseing = false;
         m_searchTask = nullptr;
-        bfindnext=true;
-        m_bScanningcopy=false;
+        bfindnext = true;
+        m_bScanningcopy = false;
         showslidwaittimer = nullptr;
 
     }
@@ -222,8 +222,8 @@ public:
     }
     virtual QString removeAnnotation(const QPoint &startpos) {}
 
-    virtual void removeAnnotation(const QString &struuid,int ipage=-1) {}
-    virtual QString addAnnotation(const QPoint &startpos,const QPoint &endpos,QColor color = Qt::yellow) {}
+    virtual void removeAnnotation(const QString &struuid, int ipage = -1) {}
+    virtual QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow) {}
     virtual void search(const QString &strtext, QColor color = Qt::yellow) {}
     virtual void getAllAnnotation(QList<stHighlightContent> &listres) {}
     virtual void clearSearch() {}
@@ -264,6 +264,7 @@ public:
     bool showSlideModel();
     void cacularValueXY(int &xvalue, int &yvalue, int curpage, bool bsearch = true, QRectF rect = QRectF());
     int pointInWhichPage(QPoint &qpoint);
+    bool setBookMarkState(int page, bool state);
 
 
 signals:
@@ -271,6 +272,7 @@ signals:
     void signal_searchRes(stSearchRes);
     void signal_searchover();
     void signal_loadDocumment(QString);
+    void signal_bookMarkStateChange(int page, bool state);
 
 protected slots:
     void slot_vScrollBarValueChanged(int value);

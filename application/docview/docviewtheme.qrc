@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/image/checked/bookmark.svg</file>
+        <file>resources/image/hover/bookmark.svg</file>
+        <file>resources/image/normal/bookmark.svg</file>
+        <file>resources/image/press/bookmark.svg</file>
+    </qresource>
+</RCC>
