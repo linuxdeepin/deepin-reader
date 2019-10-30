@@ -42,10 +42,10 @@ DocummentFileHelper::~DocummentFileHelper()
 //  保存
 void DocummentFileHelper::slotSaveFile()
 {
-    DataManager::instance()->setBIsUpdate(false);
-
-    m_pDocummentProxy->save(m_szFilePath, true);
-    DataManager::instance()->setBIsUpdate(false);
+    bool rl = m_pDocummentProxy->save(m_szFilePath, true);
+    if (rl) {
+        DataManager::instance()->setBIsUpdate(false);
+    }
 }
 
 //  另存为
@@ -60,14 +60,15 @@ void DocummentFileHelper::slotSaveAsFile()
         if (filePath != "") {
             QString sFilePath = getFilePath(filePath);
 
-            DataManager::instance()->setBIsUpdate(false);
+            bool rl = m_pDocummentProxy->saveas(sFilePath, true);
+            if (rl) {
+                DataManager::instance()->setBIsUpdate(false);
 
-            m_pDocummentProxy->saveas(sFilePath, true);
+                m_szFilePath = sFilePath;
 
-            m_szFilePath = sFilePath;
-
-            QFileInfo info(m_szFilePath);
-            setAppShowTitle(info.baseName());
+                QFileInfo info(m_szFilePath);
+                setAppShowTitle(info.baseName());
+            }
         }
     }
 }

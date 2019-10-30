@@ -56,7 +56,6 @@ void NotesWidget::slotDltNoteItem(QString uuid)
 
                     // remove date from map and notify kong yun zhen
                     m_mapUuidAndPage.remove(uuid);
-//                    removeFromMap(uuid);
 
                     auto dproxy = DocummentProxy::instance();
 
@@ -82,12 +81,6 @@ void NotesWidget::slotDltNoteItem(QString uuid)
 void NotesWidget::slotDltNoteContant(QString uuid)
 {
     m_mapUuidAndPage.remove(uuid);
-//    foreach (auto note, m_mapUuidAndPage) {
-//        if (note.contains(uuid)) {
-//            note.remove(uuid);
-//            return;
-//        }
-//    }
 }
 
 void NotesWidget::slotOpenFileOk()
@@ -103,19 +96,16 @@ void NotesWidget::slotOpenFileOk()
         return;
     }
 
-    QList<stHighlightContent> list_note;
-    list_note.clear();
+    m_mapUuidAndPage.clear();
+    m_pNotesList->clear();
 
+    QList<stHighlightContent> list_note;
     t_docPtr->getAllAnnotation(list_note);
 
     if (list_note.count() < 1) {
         return;
     }
 
-    m_mapUuidAndPage.clear();
-    if (m_pNotesList) {
-        m_pNotesList->clear();
-    }
     for (int index = 0; index < list_note.count(); ++index) {
         stHighlightContent st = list_note.at(index);
         if (st.strcontents == QString("")) {
@@ -123,8 +113,6 @@ void NotesWidget::slotOpenFileOk()
         }
         addNewItem(st);
     }
-    qDebug() << m_pNotesList->count();
-
 
     m_ThreadLoadImage.setListNoteSt(list_note);
     m_ThreadLoadImage.setIsLoaded(true);
@@ -224,39 +212,31 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
  */
 void NotesWidget::addNotesItem(const QString &text)
 {
-    QString t_strUUid, t_strText;
-    int t_nPage = -1;
-    QImage image;
-
     QStringList t_strList = text.split(QString("%"));
-
     if (t_strList.count() == 3) {
-        t_strUUid = t_strList.at(0).trimmed();
-        t_strText = t_strList.at(1).trimmed();
-        t_nPage = t_strList.at(2).trimmed().toInt();
-    } else {
-        return;
-    }
+        QString t_strUUid = t_strList.at(0).trimmed();
+        QString t_strText = t_strList.at(1).trimmed();
+        int t_nPage = t_strList.at(2).trimmed().toInt();
 
-    bool b_has = m_mapUuidAndPage.contains(t_strUUid);
+        bool b_has = m_mapUuidAndPage.contains(t_strUUid);
+        if (b_has) {
+            flushNoteItemText(t_nPage, t_strUUid, t_strText);
+        } else {
+            DocummentProxy *dproxy = DocummentProxy::instance();
+            if (nullptr == dproxy) {
+                return;
+            }
+            QImage image;
+            bool rl = dproxy->getImage(t_nPage, image, 28, 50);
+            if (rl) {
+                addNewItem(image, t_nPage, t_strUUid, t_strText);
 
-    if (b_has) {
-        flushNoteItemText(t_nPage, t_strUUid, t_strText);
-    } else {
-        DocummentProxy *dproxy = DocummentProxy::instance();
-        if (nullptr == dproxy) {
-            return;
+                m_mapUuidAndPage.insert(t_strUUid, t_nPage);
+            }
         }
-        dproxy->getImage(t_nPage, image, 28, 50);
-        addNewItem(image, t_nPage, t_strUUid, t_strText);
 
-//        QMap<QString, QString> t_contant;
-//        t_contant.clear();
-//        t_contant.insert(t_strUUid, t_strText);
-        m_mapUuidAndPage.insert(t_strUUid, t_nPage);
+        DataManager::instance()->setBIsUpdate(true);
     }
-
-    DataManager::instance()->setBIsUpdate(true);
 }
 
 /**
@@ -337,6 +317,8 @@ void NotesWidget::addNewItem(const stHighlightContent &note)
 
     m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);
+
+    m_mapUuidAndPage.insert(note.struuid, note.ipage);
 }
 
 /**
@@ -390,31 +372,6 @@ void NotesWidget::flushNoteItemText(const int &page, const QString &uuid, const 
         }
     }
 }
-
-//void NotesWidget::removeFromMap(const QString &uuid) const
-//{
-//    foreach (auto node, m_mapNotes) {
-//        if (node.contains(uuid)) {
-//            node.remove(uuid);
-//        }
-//    }
-//}
-
-//void NotesWidget::addNoteToMap(const stHighlightContent &note)
-//{
-//    int t_page = note.ipage;
-//    QString t_strUUid = note.struuid;
-//    QString t_strContant = note.strcontents;
-//    QMap<QString, QString> t_node;
-
-//    if (m_mapNotes.contains(t_page)) {
-//        t_node = m_mapNotes.value(t_page);
-//        m_mapNotes.remove(t_page);
-//    }
-
-//    t_node.insert(t_strUUid, t_strContant);
-//    m_mapNotes.insert(t_page, t_node);
-//}
 
 /**
  * @brief NotesWidget::dealWithData

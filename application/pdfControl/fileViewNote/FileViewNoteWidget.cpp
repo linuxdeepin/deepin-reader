@@ -49,7 +49,7 @@ void FileViewNoteWidget::hideEvent(QHideEvent *event)
         sendMsg(MSG_NOTE_DLTNOTECONTANT, m_strNote);
     } else {
         QString t_contant = m_pTextEdit->toPlainText().trimmed();       //  注释内容
-        if (t_contant != m_strNote) {
+        if (t_contant != m_strNote) {   //  只有 和 原来已有注释内容不一样, 才会提示 保存
             if (m_pNoteUuid != "") {    //  已经高亮
                 QString msgContent = t_contant  + Constant::sQStringSep + m_pNoteUuid + Constant::sQStringSep + m_pNotePage;
                 sendMsg(MSG_NOTE_ADDCONTANT, msgContent);
@@ -222,7 +222,7 @@ void CustemTextEdit::paintEvent(QPaintEvent *e)
     painter.setRenderHint( QPainter::Antialiasing, true );
     const int w = this->width();
     const int h = this->height();
-    qreal stepH = h/10;
+    qreal stepH = h / 10;
 
     QPointF points[] = {
         QPointF(0, 0),

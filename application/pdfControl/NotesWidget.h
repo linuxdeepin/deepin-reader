@@ -91,17 +91,14 @@ private:
 
 private:
     void fillContantToList();
-//    bool hasNoteInList(const int &, const QString &);
     void addNewItem(const stHighlightContent &note);
     void addNewItem(const QImage &image, const int &page, const QString &uuid, const QString &text);
     void flushNoteItemText(const int &page, const QString &uuid, const QString &text);
-//    void removeFromMap(const QString &) const;
-//    void addNoteToMap(const stHighlightContent &);
+
 
 private:
     CustomListWidget *m_pNotesList = nullptr;
-//    QMap<int, QMap<QString, QString>> m_mapNotes; // 当前注释列表内容
-    QMap<QString, int>      m_mapUuidAndPage;
+    QMap<QString, int>      m_mapUuidAndPage;       //  uuid 和 页码 对应
     ThreadLoadImageOfNote m_ThreadLoadImage;      // 加载注释缩略图线程
     QListWidgetItem *m_pNoteItem = nullptr;       // 当前鼠标左键点击的item
     int m_nIndex = -1;                            // 当前注释列表数
