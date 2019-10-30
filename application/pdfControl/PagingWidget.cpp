@@ -72,8 +72,7 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
                     DocummentProxy::instance()->pageJump(index);
                 }
             }
-        }
-        if (event->type() == QEvent::KeyRelease && qobject_cast<DSpinBox *>(watched) == m_pJumpPageSpinBox) {
+        } else if (event->type() == QEvent::KeyRelease && qobject_cast<DSpinBox *>(watched) == m_pJumpPageSpinBox) {
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
             if (keyEvent->key() == Qt::Key_0) {
                 QString strvalue = m_pJumpPageSpinBox->text();

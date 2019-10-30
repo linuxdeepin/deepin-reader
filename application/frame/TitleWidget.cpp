@@ -218,10 +218,10 @@ DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 QAction *TitleWidget::createAction(const QString &actionName)
 {
     QAction *_action = new QAction(actionName, this);
-    _action->setObjectName(actionName + "_small");
+    _action->setObjectName(actionName);
     _action->setCheckable(true);
 
-    QString sPixmap = PF::getImagePath(_action->objectName(), Pri::g_frame);
+    QString sPixmap = PF::getImagePath(actionName + "_small", Pri::g_frame);
     _action->setIcon(QIcon( sPixmap));
 
     m_pHandleMenu->addAction(_action);
