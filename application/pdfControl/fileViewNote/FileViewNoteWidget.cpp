@@ -201,7 +201,7 @@ void CustemTextEdit::paintEvent(QPaintEvent *e)
     painter.setRenderHint( QPainter::Antialiasing, true );
     const int w = this->width();
     const int h = this->height();
-    const int stepH = 28;
+    qreal stepH = h/10;
 
     QPointF points[] = {
         QPointF(0, 0),
@@ -210,29 +210,29 @@ void CustemTextEdit::paintEvent(QPaintEvent *e)
         QPointF(0, stepH),
         QPointF(w, stepH),
 
-        QPointF(0, stepH * 2 - 5),
-        QPointF(w, stepH * 2 - 5),
+        QPointF(0, stepH * 2),
+        QPointF(w, stepH * 2),
 
-        QPointF(0, stepH * 3 - 8),
-        QPointF(w, stepH * 3 - 8),
+        QPointF(0, stepH * 3),
+        QPointF(w, stepH * 3),
 
-        QPointF(0, stepH * 4 - 9),
-        QPointF(w, stepH * 4 - 9),
+        QPointF(0, stepH * 4),
+        QPointF(w, stepH * 4),
 
-        QPointF(0, stepH * 5 - 15),
-        QPointF(w, stepH * 5 - 15),
+        QPointF(0, stepH * 5),
+        QPointF(w, stepH * 5),
 
-        QPointF(0, stepH * 6 - 17),
-        QPointF(w, stepH * 6 - 17),
+        QPointF(0, stepH * 6),
+        QPointF(w, stepH * 6),
 
-        QPointF(0, stepH * 7 - 19),
-        QPointF(w, stepH * 7 - 19),
+        QPointF(0, stepH * 7),
+        QPointF(w, stepH * 7),
 
-        QPointF(0, stepH * 8 - 21),
-        QPointF(w, stepH * 8 - 21),
+        QPointF(0, stepH * 8),
+        QPointF(w, stepH * 8),
 
-        QPointF(0, stepH * 9 - 25),
-        QPointF(w, stepH * 9 - 25),
+        QPointF(0, stepH * 9),
+        QPointF(w, stepH * 9),
 
         QPointF(0, h),
         QPointF(w, h)
