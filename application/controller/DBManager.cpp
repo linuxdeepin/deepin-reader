@@ -45,31 +45,59 @@ DBManager *DBManager::instance()
     return m_dbManager;
 }
 
-QString DBManager::getBookMarks()
+void DBManager::getBookMarks()
 {
-    QString sData = "";
+    m_pBookMarkList.clear();
+    m_bIsOldHave = false;
+
     const QSqlDatabase db = getDatabase();
-    if (! db.isValid())
-        return sData;
+    if (db.isValid()) {
+        QMutexLocker mutex(&m_mutex);
+        QSqlQuery query( db );
+        query.setForwardOnly(true);
+        query.prepare( "SELECT PageNumber FROM BookMarkTable where FilePath = ? and FileName = ? ORDER BY Time desc");
+        query.addBindValue(m_strFilePath);
+        query.addBindValue(m_strFileName);
+        if ( query.exec()) {
+            QString sData = "";
 
-    QMutexLocker mutex(&m_mutex);
-    QSqlQuery query( db );
-    query.setForwardOnly(true);
-    query.prepare( "SELECT PageNumber FROM BookMarkTable where FilePath = ? and FileName = ? ORDER BY Time desc");
-    query.addBindValue(m_strFilePath);
-    query.addBindValue(m_strFileName);
-    if (! query.exec()) {
-        qWarning() << "Get Data from BookMarkTable failed: " << query.lastError();
-        mutex.unlock();
-        return sData;
+            while (query.next()) {
+                m_bIsOldHave = true;
+                sData = query.value(0).toString();      //  结果
+            }
+            mutex.unlock();
+
+            QStringList sPageList = sData.split(",", QString::SkipEmptyParts);
+            foreach (QString s, sPageList) {
+                int nPage = s.toInt();
+                m_pBookMarkList.append(nPage);
+            }
+        }
     }
+}
 
-    while (query.next()) {
-        sData = query.value(0).toString();
+//  保存数据
+void DBManager::saveBookMark()
+{
+    if (m_pBookMarkList.size() == 0) {
+        deleteBookMark();
+    } else {
+        if (!m_bIsOldHave) {    //  原来没有数据
+            QString sPage = "";
+            foreach (int i, m_pBookMarkList) {
+                sPage += QString::number(i) + ",";
+            }
+            insertBookMark(sPage);
+        } else {
+
+            QString sPage = "";
+            foreach (int i, m_pBookMarkList) {
+                sPage += QString::number(i) + ",";
+            }
+
+            updateBookMark(sPage);
+        }
     }
-    mutex.unlock();
-
-    return sData;
 }
 
 //  新增标签数据
@@ -221,4 +249,14 @@ void DBManager::setStrFilePath(const QString &strFilePath)
     int nLastPos = strFilePath.lastIndexOf('/');
     nLastPos++;
     m_strFileName = strFilePath.mid(nLastPos);
+}
+
+void DBManager::setBookMarkList(const QList<int> &pBookMarkList)
+{
+    m_pBookMarkList = pBookMarkList;
+}
+
+QList<int> DBManager::getBookMarkList() const
+{
+    return m_pBookMarkList;
 }

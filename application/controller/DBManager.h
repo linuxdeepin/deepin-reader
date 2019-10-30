@@ -56,14 +56,23 @@ private:
     };
 
 public:
-    QString getBookMarks();     //  获取给文件 所有标签的页码
+    void getBookMarks();     //  获取给文件 所有标签的页码
+    void saveBookMark();
+
+    QList<int> getBookMarkList() const;
+
+    void setBookMarkList(const QList<int> &pBookMarkList);
+    void setStrFilePath(const QString &strFilePath);
+
+private:
     void insertBookMark(const QString &);
     void updateBookMark(const QString &);
     void deleteBookMark();
 
-    void setStrFilePath(const QString &strFilePath);
-
 private:
+    QList<int>      m_pBookMarkList;
+    bool            m_bIsOldHave = false;   //  原来是否有数据
+
     QString m_connectionName = "";
     QString m_strFilePath = "";
     QString m_strFileName = "";

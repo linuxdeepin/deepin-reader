@@ -59,7 +59,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::openfile(const QString &filepath)
 {
-   // sendMsg(MSG_OPERATION_OPEN_FILE,filepath);
+    // sendMsg(MSG_OPERATION_OPEN_FILE,filepath);
     sendMsg(MSG_OPEN_FILE_PATH, filepath);
 }
 
@@ -185,7 +185,11 @@ void MainWindow::slotAppExit()
         }
         sendMsg(MSG_CLOSE_FILE);
         DocummentProxy::instance()->closeFile();
+
+        //  保存 书签数据
+        dApp->dbM->saveBookMark();
     }
+
     dApp->exit();
 }
 

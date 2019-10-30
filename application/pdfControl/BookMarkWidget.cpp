@@ -39,13 +39,13 @@ void BookMarkWidget::slotAddBookMark()
 //  书签状态 添加指定页
 void BookMarkWidget::slotAddBookMark(const int &nPage)
 {
-    if (m_pAllPageList.contains(nPage)) {
+    QList<int> pageList = dApp->dbM->getBookMarkList();
+    if (pageList.contains(nPage)) {
         return;
     }
 
-    m_pAllPageList.append(nPage);
-
-    operateDb();
+    pageList.append(nPage);
+    dApp->dbM->setBookMarkList(pageList);
 
     addBookMarkItem(nPage);
 
@@ -58,28 +58,22 @@ void BookMarkWidget::slotAddBookMark(const int &nPage)
  * @brief BookMarkWidget::slotOpenFileOk
  *  打开文件成功，　获取该文件的书签数据
  */
-
 void BookMarkWidget::slotOpenFileOk()
 {
     disconnect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotDocFilePageChanged(int)));
     connect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotDocFilePageChanged(int)), Qt::QueuedConnection);
 
-    m_pAllPageList.clear();
     if (m_pBookMarkListWidget) {
         m_pBookMarkListWidget->clear();
     }
 
-    QString sAllPages = dApp->dbM->getBookMarks();
-    QStringList sPageList = sAllPages.split(",", QString::SkipEmptyParts);
-    foreach (QString s, sPageList) {
-        int nPage = s.toInt();
-
-        m_pAllPageList.append(nPage);
-
-        addBookMarkItem(nPage);
+    dApp->dbM->getBookMarks();
+    QList<int> pageList = dApp->dbM->getBookMarkList();
+    foreach (int iPage, pageList) {
+        addBookMarkItem(iPage);
     }
 
-    m_loadBookMarkThread.setBookMarks(m_pAllPageList.count());
+    m_loadBookMarkThread.setBookMarks(pageList.count());
     m_loadBookMarkThread.start();
 
     slotDocFilePageChanged(0);
@@ -91,7 +85,8 @@ void BookMarkWidget::slotOpenFileOk()
  */
 void BookMarkWidget::slotDocFilePageChanged(int page)
 {
-    bool bl = m_pAllPageList.contains(page);
+    QList<int> pageList = dApp->dbM->getBookMarkList();
+    bool bl = pageList.contains(page);
 
     m_pAddBookMarkBtn->setEnabled(!bl);
     sendMsg(MSG_BOOKMARK_STATE, QString("%1").arg(bl));
@@ -146,11 +141,15 @@ void BookMarkWidget::slotDeleteBookItem(const int &nPage)
 
                     delete  pItem;
 
-                    m_pAllPageList.removeOne(nPage);
+                    QList<int> pageList = dApp->dbM->getBookMarkList();
+                    pageList.removeOne(nPage);
+                    dApp->dbM->setBookMarkList(pageList);
 
-                    slotDocFilePageChanged(nPage);
-
-                    operateDb();
+                    auto dproxy = DocummentProxy::instance();
+                    if (nullptr == dproxy) {
+                        return;
+                    }
+                    dproxy->setBookMarkState(nPageIndex, false);
 
                     DataManager::instance()->setBIsUpdate(true);
 
@@ -207,11 +206,15 @@ void BookMarkWidget::slotDelBkItem()
             delete  m_pIndexItem;
             m_pIndexItem = nullptr;
 
-            m_pAllPageList.removeOne(nPageIndex);
+            QList<int> pageList = dApp->dbM->getBookMarkList();
+            pageList.removeOne(nPageIndex);
+            dApp->dbM->setBookMarkList(pageList);
 
-            slotDocFilePageChanged(nPageIndex);
-
-            operateDb();
+            auto dproxy = DocummentProxy::instance();
+            if (nullptr == dproxy) {
+                return;
+            }
+            dproxy->setBookMarkState(nPageIndex, false);
 
             DataManager::instance()->setBIsUpdate(true);
         }
@@ -293,22 +296,6 @@ void BookMarkWidget::addBookMarkItem(const int &page)
     }
 }
 
-void BookMarkWidget::operateDb()
-{
-    if (m_pAllPageList.size() == 0) {
-        dApp->dbM->deleteBookMark();
-    } else if (m_pAllPageList.size() == 1) {
-        dApp->dbM->insertBookMark(QString::number(m_pAllPageList.at(0)));
-    } else {
-        QString sPage = "";
-        foreach (int i, m_pAllPageList) {
-            sPage += QString::number(i) + ",";
-        }
-
-        dApp->dbM->updateBookMark(sPage);
-    }
-}
-
 /**
  * @brief BookMarkWidget::setSelectItemBackColor
  * 绘制选中外边框,蓝色
@@ -387,7 +374,8 @@ int BookMarkWidget::getBookMarkPage(const int &index)
         auto pItemWidget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
         if (pItemWidget) {
             int page = pItemWidget->nPageIndex();
-            if (m_pAllPageList.contains(page)) {
+            QList<int> pageList = dApp->dbM->getBookMarkList();
+            if (pageList.contains(page)) {
                 return page;
             }
         }

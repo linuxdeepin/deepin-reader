@@ -86,7 +86,6 @@ protected:
 private:
     void initConnection();
     void addBookMarkItem(const int &);
-    void operateDb();
     void setSelectItemBackColor(QListWidgetItem *);
 
 public:
@@ -95,12 +94,11 @@ public:
     int getBookMarkPage(const int &index);
 
 private:
-    CustomListWidget *m_pBookMarkListWidget = nullptr;
-    DPushButton *m_pAddBookMarkBtn = nullptr;
-    QList<int>      m_pAllPageList;
-    LoadBookMarkThread m_loadBookMarkThread;
+    CustomListWidget    *m_pBookMarkListWidget = nullptr;
+    DPushButton         *m_pAddBookMarkBtn = nullptr;
+    LoadBookMarkThread  m_loadBookMarkThread;
 
-    QListWidgetItem *m_pIndexItem = nullptr;     // 当前鼠标左键点击的item
+    QListWidgetItem     *m_pIndexItem = nullptr;     // 当前鼠标左键点击的item
 };
 
 #endif // BOOKMARKFORM_H
