@@ -90,6 +90,7 @@ void DocummentPDF::jumpToHighLight(const QString &uuid, int ipage)
         foreach (Poppler::Annotation *annote, listannote) {
             if (annote->subType() == Poppler::Annotation::AHighlight && annote->uniqueName().indexOf(uuid) >= 0) {
                 QList<Poppler::HighlightAnnotation::Quad> listquad = static_cast<Poppler::HighlightAnnotation *>(annote)->highlightQuads();
+
                 if (listquad.size() > 0) {
                     QRectF rectbound;
                     rectbound.setTopLeft(listquad.at(0).points[0]);
@@ -97,7 +98,11 @@ void DocummentPDF::jumpToHighLight(const QString &uuid, int ipage)
                     rectbound.setBottomLeft(listquad.at(0).points[2]);
                     rectbound.setBottomRight( listquad.at(0).points[3]);
                     int xvalue = 0, yvalue = 0;
-                    cacularValueXY(xvalue, yvalue, ipage, false, rectbound);
+                    rectbound.setX(rectbound.x()*d->m_imagewidth);
+                    rectbound.setY(rectbound.y()*d->m_imageheight);
+                    rectbound.setWidth(rectbound.width()*d->m_imagewidth);
+                    rectbound.setHeight(rectbound.height()*d->m_imageheight);
+                    cacularValueXY(xvalue, yvalue, ipage, false, rectbound);                 
                     QScrollBar *scrollBar_Y = verticalScrollBar();
                     if (scrollBar_Y)
                         scrollBar_Y->setValue(yvalue);
