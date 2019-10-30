@@ -50,7 +50,7 @@ void FileViewNoteWidget::hideEvent(QHideEvent *event)
     } else {
         QString t_contant = m_pTextEdit->toPlainText().trimmed();
         if (t_contant != m_strNote) {
-            sendMsg(MSG_NOTE_ADDCONTANT, m_strNote);
+            sendMsg(MSG_NOTE_ADDCONTANT, t_contant);
         }
     }
     CustomWidget::hideEvent(event);
