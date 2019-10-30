@@ -260,7 +260,11 @@ bool DocummentBase::mouseSelectText(QPoint start, QPoint stop)
     }
     QPoint qstart = start;
     QPoint qstop = stop;
-   // qDebug() << "startpoint:" << start << " stoppoint:" << stop;
+//    bool mousedirectiondown = true;
+//    if (stop.y() < start.y()) {
+//        mousedirectiondown = false;
+//    }
+    // qDebug() << "startpoint:" << start << " stoppoint:" << stop;
     int startpagenum = -1, endpagenum = -1;
 
     for (int i = 0; i < d->m_widgets.size(); i++) {

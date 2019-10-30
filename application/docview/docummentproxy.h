@@ -5,24 +5,6 @@
 #include <QObject>
 #include <DWidget>
 
-//class ThreadWaitLoadWordsEnd : public QThread
-//{
-//    Q_OBJECT
-//public:
-//    ThreadWaitLoadWordsEnd();
-//    void setDoc(DocummentBase *doc);
-//    void setRestart();
-
-//signals:
-//    bool startOpenFile();
-//protected:
-//    virtual void run();
-
-//private:
-//    DocummentBase *m_doc;
-//    bool restart;
-//};
-
 enum DocType_EM {
     DocType_NULL = 0,
     DocType_PDF,

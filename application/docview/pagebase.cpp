@@ -147,7 +147,7 @@ void PageBase::clearPageTextSelections()
 bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
 {
     Q_D(PageBase);
-   // qDebug() << "pageTextSelections start:" << start << " end:" << end;
+    // qDebug() << "pageTextSelections start:" << start << " end:" << end;
     //    qDebug() << "pageTextSelections x():" << x() << " y()" << y();
     QPoint startC = QPoint(start.x() - x() - (width() - d->m_scale * d->m_imagewidth ) / 2, start.y() - y() - (height() - d->m_scale * d->m_imageheight ) / 2);
     QPoint endC = QPoint(end.x() - x() - (width() - d->m_scale * d->m_imagewidth ) / 2, end.y() - y() - (height() - d->m_scale * d->m_imageheight ) / 2);
@@ -181,34 +181,36 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
     }
 
     const QRect start_end = (startC.y() < endC.y())
-                            ? QRect(startC.x(), startC.y(), endC.x(), endC.y())
-                            : QRect(startC.x(), endC.y(), endC.x(), startC.y());
+                            ? QRect(startC.x(), startC.y(), endC.x() - startC.x(), endC.y() - startC.y())
+                            : QRect(startC.x(), endC.y(), endC.x() - startC.x(), startC.y() - endC.y());
 
+    QPoint startD = QPoint(start_end.x(), start_end.y());
+    QPoint endD = QPoint(start_end.x() + start_end.width(), start_end.y() + start_end.height());
     QRectF tmp;
-    int startword = 0, stopword = -1;
+    int startword = -1, stopword = -1;
     //    qDebug() << "page width:" << width() << " height:" << height() << " m_imagewidth:" << m_imagewidth << " m_imageheight:" << m_imageheight;
     //    const double scaleX = width() / m_imagewidth;
     //    const double scaleY = height() / m_imageheight;
     const double scaleX = d->m_scale ;
     const double scaleY = d->m_scale ;
-   // qDebug() << "m_words size:" << d->m_words.size();
+    // qDebug() << "m_words size:" << d->m_words.size();
     for (int i = 0; i < d->m_words.size(); i++) {
         //        qDebug() << "m_words i:" << i << " rect:" << m_words.at(i).rect;
         tmp = d->m_words.at(i).rect;
-        if (startC.x() > (tmp.x() * d->m_scale ) &&
-                startC.x() < (tmp.x() * scaleX + tmp.width() * scaleX) &&
-                startC.y() > (tmp.y() * scaleY) &&
-                startC.y() < (tmp.y() * scaleY + tmp.height() * scaleY)) {
+        if (startD.x() > (tmp.x() * d->m_scale ) &&
+                startD.x() < (tmp.x() * scaleX + tmp.width() * scaleX) &&
+                startD.y() > (tmp.y() * scaleY) &&
+                startD.y() < (tmp.y() * scaleY + tmp.height() * scaleY)) {
             startword = i;
         }
-        if (endC.x() > (tmp.x() * scaleX ) &&
-                endC.x() < (tmp.x() * scaleX + tmp.width() * scaleX ) &&
-                endC.y() > (tmp.y() * scaleY ) &&
-                endC.y() < (tmp.y() * scaleY + tmp.height() * scaleY)) {
+        if (endD.x() > (tmp.x() * scaleX ) &&
+                endD.x() < (tmp.x() * scaleX + tmp.width() * scaleX ) &&
+                endD.y() > (tmp.y() * scaleY ) &&
+                endD.y() < (tmp.y() * scaleY + tmp.height() * scaleY)) {
             stopword = i;
         }
     }
-   // qDebug() << " startword:" << startword << " stopword:" << stopword;
+    // qDebug() << " startword:" << startword << " stopword:" << stopword;
     if (-1 == startword && stopword == -1) {
         int i;
         for (i = 0; i < d->m_words.size(); i++) {
@@ -225,96 +227,98 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
             return false;
         }
     }
-    bool selection_two_start = false;
-    if (startword == 0) {
+//    bool selection_two_start = false;
+    if (startword == -1) {
         QRectF rect;
-        if (startC.y() <= endC.y()) {
-            for (int i = 0; i < d->m_words.size(); i++) {
-                tmp = d->m_words.at(i).rect;
-                rect = QRect(tmp.x() * scaleX, tmp.y() * scaleY,
-                             tmp.width() * scaleX, tmp.height() * scaleY);
-                if (rect.y() > startC.y() && rect.x() > startC.x()) {
-                    startword = i;
-                    break;
-                }
-            }
-        } else {
-            selection_two_start = true;
-            int distance = scaleX + scaleY + 100;
-            int count = 0;
-
-            for (int i = 0; i < d->m_words.size(); i++) {
-                tmp = d->m_words.at(i).rect;
-                rect = QRect(tmp.x() * scaleX, tmp.y() * scaleY,
-                             tmp.width() * scaleX, tmp.height() * scaleY);
-
-                if ((rect.y() + rect.height()) < startC.y() &&
-                        (rect.x() + rect.height()) < startC.x()) {
-                    count++;
-                    int xdist, ydist;
-                    xdist = rect.center().x() - startC.x();
-                    ydist = rect.center().y() - startC.y();
-
-                    if (xdist < 0)
-                        xdist = -xdist;
-                    if (ydist < 0)
-                        ydist = -ydist;
-
-                    if ((xdist + ydist) < distance) {
-                        distance = xdist + ydist;
-                        startword = i;
-                    }
-                }
+//        if (startC.y() <= endC.y()) {
+        for (int i = 0; i < d->m_words.size(); i++) {
+            tmp = d->m_words.at(i).rect;
+            rect = QRect(tmp.x() * scaleX, tmp.y() * scaleY,
+                         tmp.width() * scaleX, tmp.height() * scaleY);
+            if (rect.y() + rect.height() > startD.y() && rect.x() + rect.width() > startD.x()) {
+                startword = i;
+                break;
             }
         }
+//        } else {
+//            selection_two_start = true;
+//            int distance = scaleX + scaleY + 100;
+//            int count = 0;
+
+//            for (int i = 0; i < d->m_words.size(); i++) {
+//                tmp = d->m_words.at(i).rect;
+//                rect = QRect(tmp.x() * scaleX, tmp.y() * scaleY,
+//                             tmp.width() * scaleX, tmp.height() * scaleY);
+
+//                if ((rect.y() + rect.height()) < startC.y() &&
+//                        (rect.x() + rect.height()) < startC.x()) {
+//                    count++;
+//                    int xdist, ydist;
+//                    xdist = rect.center().x() - startC.x();
+//                    ydist = rect.center().y() - startC.y();
+
+//                    if (xdist < 0)
+//                        xdist = -xdist;
+//                    if (ydist < 0)
+//                        ydist = -ydist;
+
+//                    if ((xdist + ydist) < distance) {
+//                        distance = xdist + ydist;
+//                        startword = i;
+//                    }
+//                }
+//            }
+//        }
     }
     if (stopword == -1) {
         QRectF rect;
 
-        if (startC.y() <= endC.y()) {
-            for (int i = d->m_words.size() - 1; i >= 0; i--) {
-                tmp = d->m_words.at(i).rect;
-                rect = QRect(tmp.x() * scaleX, tmp.y() * scaleY,
-                             tmp.width() * scaleX, tmp.height() * scaleY);
+//        if (startC.y() <= endC.y()) {
+        for (int i = d->m_words.size() - 1; i >= 0; i--) {
+            tmp = d->m_words.at(i).rect;
+            rect = QRect(tmp.x() * scaleX, tmp.y() * scaleY,
+                         tmp.width() * scaleX, tmp.height() * scaleY);
 
-                if ((rect.y() + rect.height()) < endC.y() && (rect.x() + rect.width()) < endC.x()) {
-                    stopword = i;
-                    break;
-                }
+            if (rect.y() < endD.y() && rect.x() < endD.x()) {
+                stopword = i;
+                break;
             }
         }
+//        }
 
-        else {
-            int distance = scaleX + scaleY + 100;
-            for (int i = d->m_words.size() - 1; i >= 0; i--) {
-                tmp = d->m_words.at(i).rect;
-                rect = QRect(tmp.x() * scaleX, tmp.y() * scaleY,
-                             tmp.width() * scaleX, tmp.height() * scaleY);
-                if (rect.y() > endC.y() && rect.x() > endC.x()) {
-                    int xdist, ydist;
-                    xdist = rect.center().x() - endC.x();
-                    ydist = rect.center().y() - endC.y();
+//        else {
+//            int distance = scaleX + scaleY + 100;
+//            for (int i = d->m_words.size() - 1; i >= 0; i--) {
+//                tmp = d->m_words.at(i).rect;
+//                rect = QRect(tmp.x() * scaleX, tmp.y() * scaleY,
+//                             tmp.width() * scaleX, tmp.height() * scaleY);
+//                if (rect.y() > endC.y() && rect.x() > endC.x()) {
+//                    int xdist, ydist;
+//                    xdist = rect.center().x() - endC.x();
+//                    ydist = rect.center().y() - endC.y();
 
-                    if (xdist < 0)
-                        xdist = -xdist;
-                    if (ydist < 0)
-                        ydist = -ydist;
+//                    if (xdist < 0)
+//                        xdist = -xdist;
+//                    if (ydist < 0)
+//                        ydist = -ydist;
 
-                    if ((xdist + ydist) < distance) {
-                        distance = xdist + ydist;
-                        stopword = i;
-                    }
-                }
-            }
-        }
+//                    if ((xdist + ydist) < distance) {
+//                        distance = xdist + ydist;
+//                        stopword = i;
+//                    }
+//                }
+//            }
+//        }
     }
-    if (-1 == stopword)
+//    if (-1 == stopword || startword == -1)
+//        return false;
+    if (stopword < 0 || startword < 0)
         return false;
-    if (selection_two_start) {
-        if (startword > stopword) {
-            startword = startword - 1;
-        }
-    }
+//    if (selection_two_start) {
+//        if (startword > stopword) {
+//            startword = startword - 1;
+//        }
+//    }
     if (startword > stopword) {
         int im = startword;
         startword = stopword;

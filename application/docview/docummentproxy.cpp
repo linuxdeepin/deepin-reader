@@ -62,7 +62,7 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath)
     connect(this, SIGNAL(signal_pageJump(int)), m_documment, SLOT(pageJump(int)));
     connect(m_documment, SIGNAL(signal_searchRes(stSearchRes)), this, SIGNAL(signal_searchRes(stSearchRes)));
     connect(m_documment, SIGNAL(signal_searchover()), this, SIGNAL(signal_searchover()));
-    connect(this, SIGNAL(signal_mouseSelectText(QPoint, QPoint)), m_documment, SLOT(mouseSelectText(QPoint, QPoint)));
+//    connect(this, SIGNAL(signal_mouseSelectText(QPoint, QPoint)), m_documment, SLOT(mouseSelectText(QPoint, QPoint)));
     connect(this, SIGNAL(signal_scaleAndShow(double, RotateType_EM)), m_documment, SLOT(scaleAndShow(double, RotateType_EM)));
     connect(this, SIGNAL(signal_setViewModeAndShow(ViewMode_EM)), m_documment, SLOT(setViewModeAndShow(ViewMode_EM)));
     connect(m_documment, &DocummentBase::signal_bookMarkStateChange, this, [ = ](int page, bool state) {
@@ -111,9 +111,8 @@ bool DocummentProxy::mouseSelectText(QPoint start, QPoint stop)
     if (!m_documment || bcloseing)
         return false;
     // qDebug() << "mouseSelectText";
-    emit signal_mouseSelectText(start, stop);
-    return true;
-//    return m_documment->mouseSelectText(start, stop);
+    mouseSelectTextClear();
+    return m_documment->mouseSelectText(start, stop);
 }
 
 void DocummentProxy::mouseSelectTextClear()

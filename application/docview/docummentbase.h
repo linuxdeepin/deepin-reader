@@ -265,6 +265,7 @@ public:
     void cacularValueXY(int &xvalue, int &yvalue, int curpage, bool bsearch = true, QRectF rect = QRectF());
     int pointInWhichPage(QPoint &qpoint);
     bool setBookMarkState(int page, bool state);
+    bool mouseSelectText(QPoint start, QPoint stop);
 
 
 signals:
@@ -283,7 +284,6 @@ protected slots:
     void slot_searchover();
     void slot_docummentLoaded(bool result);
     bool pageJump(int pagenum);
-    bool mouseSelectText(QPoint start, QPoint stop);
     void scaleAndShow(double scale, RotateType_EM rotate);
     bool setViewModeAndShow(ViewMode_EM viewmode);
     void showSlideModelTimerOut();
