@@ -60,6 +60,9 @@ void BookMarkWidget::slotAddBookMark(const int &nPage)
  */
 void BookMarkWidget::slotOpenFileOk()
 {
+    if (m_loadBookMarkThread.isRunning()) {
+        m_loadBookMarkThread.stopThreadRun();
+    }
     disconnect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotDocFilePageChanged(int)));
     connect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotDocFilePageChanged(int)), Qt::QueuedConnection);
 
@@ -76,7 +79,7 @@ void BookMarkWidget::slotOpenFileOk()
     m_loadBookMarkThread.setBookMarks(pageList.count());
     m_loadBookMarkThread.start();
 
-    slotDocFilePageChanged(0);
+//    slotDocFilePageChanged(0);
 }
 
 /**
