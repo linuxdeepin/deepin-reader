@@ -96,6 +96,10 @@ void BookMarkWidget::slotDocFilePageChanged(int page)
     m_pAddBookMarkBtn->setEnabled(!bl);
     sendMsg(MSG_BOOKMARK_STATE, QString("%1").arg(bl));
 
+    if(!m_pBookMarkListWidget){
+        return;
+    }
+
     if (m_pIndexItem) {
         auto pItemWidget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(m_pIndexItem));
         if (pItemWidget) {

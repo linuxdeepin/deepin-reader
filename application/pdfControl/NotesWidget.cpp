@@ -112,6 +112,10 @@ void NotesWidget::slotOpenFileOk()
         return;
     }
 
+    m_mapUuidAndPage.clear();
+    if (m_pNotesList) {
+        m_pNotesList->clear();
+    }
     for (int index = 0; index < list_note.count(); ++index) {
         stHighlightContent st = list_note.at(index);
         if (st.strcontents == QString("")) {
@@ -137,6 +141,7 @@ void NotesWidget::slotCloseFile()
         m_ThreadLoadImage.stopThreadRun();
     }
 
+    m_mapUuidAndPage.clear();
     if (m_pNotesList) {
         m_pNotesList->clear();
     }
