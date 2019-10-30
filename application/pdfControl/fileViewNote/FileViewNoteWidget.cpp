@@ -48,9 +48,15 @@ void FileViewNoteWidget::hideEvent(QHideEvent *event)
     if (m_strNote != "" && t_contant == "") {
         sendMsg(MSG_NOTE_DLTNOTECONTANT, m_strNote);
     } else {
-        QString t_contant = m_pTextEdit->toPlainText().trimmed();
+        QString t_contant = m_pTextEdit->toPlainText().trimmed();       //  注释内容
         if (t_contant != m_strNote) {
-            sendMsg(MSG_NOTE_ADDCONTANT, t_contant);
+            if (m_pNoteUuid != "") {    //  已经高亮
+                QString msgContent = t_contant  + Constant::sQStringSep + m_pNoteUuid + Constant::sQStringSep + m_pNotePage;
+                sendMsg(MSG_NOTE_ADDCONTANT, msgContent);
+            } else {
+                QString msgContent = t_contant + Constant::sQStringSep + m_pHighLightPointAndPage;
+                sendMsg(MSG_NOTE_ADDCONTANT, msgContent);
+            }
         }
     }
     CustomWidget::hideEvent(event);
@@ -182,6 +188,21 @@ void FileViewNoteWidget::slotTextEditMaxContantNum()
         textCursor.setPosition(position - (length - maxLen));
         m_pTextEdit->setTextCursor(textCursor);
     }
+}
+
+void FileViewNoteWidget::setNotePage(const QString &pNotePage)
+{
+    m_pNotePage = pNotePage;
+}
+
+void FileViewNoteWidget::setNoteUuid(const QString &pNoteUuid)
+{
+    m_pNoteUuid = pNoteUuid;
+}
+
+void FileViewNoteWidget::setPointAndPage(const QString &pointAndPage)
+{
+    m_pHighLightPointAndPage = pointAndPage;
 }
 
 /**************************CustemTextEdit********************************/

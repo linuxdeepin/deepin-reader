@@ -64,7 +64,7 @@ public:
     NotesWidget(CustomWidget *parent = nullptr);
 
 signals:
-    void sigAddNewNoteItem(QString);
+    void sigAddNewNoteItem(const QString &);
     void sigDltNoteItem(QString);
     void sigDltNoteContant(QString);
     void sigOpenFileOk();
@@ -75,7 +75,7 @@ protected:
     void initWidget() Q_DECL_OVERRIDE;
 
 private slots:
-    void slotAddNoteItem(QString);
+    void slotAddNoteItem(const QString &);
     void slotDltNoteItem(QString);
     void slotDltNoteContant(QString);
     void slotOpenFileOk();
@@ -91,17 +91,17 @@ private:
 
 private:
     void fillContantToList();
-    bool hasNoteInList(const int &, const QString &);
+//    bool hasNoteInList(const int &, const QString &);
     void addNewItem(const stHighlightContent &note);
     void addNewItem(const QImage &image, const int &page, const QString &uuid, const QString &text);
     void flushNoteItemText(const int &page, const QString &uuid, const QString &text);
-    void removeFromMap(const QString &) const;
-    void addNoteToMap(const stHighlightContent &);
+//    void removeFromMap(const QString &) const;
+//    void addNoteToMap(const stHighlightContent &);
 
 private:
     CustomListWidget *m_pNotesList = nullptr;
-    QVBoxLayout *m_pVLayout = nullptr;            // 垂直布局
-    QMap<int, QMap<QString, QString>> m_mapNotes; // 当前注释列表内容
+//    QMap<int, QMap<QString, QString>> m_mapNotes; // 当前注释列表内容
+    QMap<QString, int>      m_mapUuidAndPage;
     ThreadLoadImageOfNote m_ThreadLoadImage;      // 加载注释缩略图线程
     QListWidgetItem *m_pNoteItem = nullptr;       // 当前鼠标左键点击的item
     int m_nIndex = -1;                            // 当前注释列表数

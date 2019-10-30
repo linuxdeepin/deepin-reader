@@ -12,7 +12,6 @@
 #include <QPrintPreviewDialog>
 
 #include "mainShow/DefaultOperationMenu.h"
-#include "mainShow/TextOperationMenu.h"
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
@@ -64,8 +63,7 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
         m_pDocummentProxy->showMagnifier(docGlobalPos);
     } else {
         if (m_bSelectOrMove) {  //  鼠标已经按下，　则选中所经过的文字
-            m_pMoveEndPoint = docGlobalPos;
-            m_pDocummentProxy->mouseSelectText(m_pStartPoint, m_pMoveEndPoint);
+            m_pDocummentProxy->mouseSelectText(m_pStartPoint, docGlobalPos);
         } else {
             //  首先判断文档划过属性
             Page::Link *pLink  = m_pDocummentProxy->mouseBeOverLink(docGlobalPos);
@@ -114,22 +112,6 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
                 m_pStartPoint = docGlobalPos;
             }
         }
-
-        m_nPage = m_pDocummentProxy->pointInWhichPage(m_pStartPoint);
-
-        // 判断鼠标点击的地方是否有高亮
-        QString selectText, t_strUUid;
-
-        m_bIsHighLightReleasePoint = false;
-
-        bool b_highLight = m_pDocummentProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
-        if (b_highLight) {
-            m_bIsHighLight = b_highLight;
-            m_strUUid = t_strUUid;
-
-            QString t_strContant = m_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight ? 1 : 0)) + QString("%") + QString::number(m_nPage);
-            sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
-        }
     }
 }
 
@@ -144,18 +126,19 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
     if (m_nCurrentHandelState == Magnifier_State)
         return;
 
-    //判断鼠标左键松开的位置有没有高亮
-    Qt::MouseButton nBtn = event->button();
-    if (nBtn == Qt::LeftButton) {
-        QPoint globalPos = event->globalPos();
-        QPoint docGlobalPos = m_pDocummentProxy->global2RelativePoint(globalPos);
-        // 判断鼠标点击的地方是否有高亮
-        QString selectText, t_strUUid;
+    if (m_bSelectOrMove) {
+        //判断鼠标左键松开的位置有没有高亮
+        Qt::MouseButton nBtn = event->button();
+        if (nBtn == Qt::LeftButton) {
+            QPoint globalPos = event->globalPos();
+            QPoint docGlobalPos = m_pDocummentProxy->global2RelativePoint(globalPos);
+            // 判断鼠标点击的地方是否有高亮
+            QString selectText, t_strUUid;
 
-        m_bIsHighLightReleasePoint = m_pDocummentProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
-        if (m_bIsHighLight) {
-            if (m_bIsHighLightReleasePoint) {
-                QString t_strContant = t_strUUid.trimmed() + QString("%") + QString::number((m_bIsHighLight ? 1 : 0)) + QString("%") + QString::number(m_nPage);
+            bool bIsHighLightReleasePoint = m_pDocummentProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
+            if (bIsHighLightReleasePoint) {
+                int nPage = m_pDocummentProxy->pointInWhichPage(docGlobalPos);
+                QString t_strContant = t_strUUid.trimmed() + QString("%1%") + QString::number(nPage);
                 sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
             }
         }
@@ -193,24 +176,24 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
     m_pDocummentProxy->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
 
     QPoint tempPoint = this->mapToGlobal(point);
-    m_pRightClickPoint = m_pDocummentProxy->global2RelativePoint(tempPoint);
+    QPoint pRightClickPoint = m_pDocummentProxy->global2RelativePoint(tempPoint);
 
-    m_nPage = m_pDocummentProxy->pointInWhichPage(m_pRightClickPoint);
 
     //  右键鼠标点 是否有高亮区域
     QString sAnnotationText = "", struuid = "";
-    m_bIsHighLight = m_pDocummentProxy->annotationClicked(m_pRightClickPoint, sAnnotationText, struuid);
+    bool bIsHighLight = m_pDocummentProxy->annotationClicked(pRightClickPoint, sAnnotationText, struuid);
 
-    if (m_bIsHighLight) {
-        m_strUUid = struuid;
-    }
-
-    if (sSelectText != "" || m_bIsHighLight) {    //  选中区域 有文字, 弹出 文字操作菜单
+    if (sSelectText != "" || bIsHighLight) {    //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
         if (nullptr == m_operatemenu) {
             m_operatemenu = new TextOperationMenu(this);
         }
-        m_operatemenu->execMenu(tempPoint, m_bIsHighLight, sSelectText, struuid);
+        m_operatemenu->setClickPoint(pRightClickPoint);
+
+        int nPage = m_pDocummentProxy->pointInWhichPage(pRightClickPoint);
+        m_operatemenu->setClickPage(nPage);
+
+        m_operatemenu->execMenu(tempPoint, bIsHighLight, sSelectText, struuid);
     } else {    //  否则弹出 文档操作菜单
         auto menu = new DefaultOperationMenu(this);
         menu->execMenu(tempPoint);
@@ -250,51 +233,76 @@ void FileViewWidget::slotSetHandShape(const QString &data)
 }
 
 //  添加高亮颜色
-void FileViewWidget::slotFileAddAnnotation(const QString &iIndex)
+void FileViewWidget::slotFileAddAnnotation(const QString &msgContent)
 {
-    qDebug() << "FileViewWidget::slotFileAddAnnotation0000000000000" << iIndex;
-    bool t_bSame = m_bIsHighLight && m_bIsHighLightReleasePoint;
-    if (t_bSame) {
-        qDebug() << "be hight light";
-        return;
-    }
-    DataManager::instance()->setBIsUpdate(true);
+    QStringList contentList = msgContent.split(",", QString::SkipEmptyParts);
+    if (contentList.size() == 3) {
+        QString sIndex = contentList.at(0);
+        QString sX = contentList.at(1);
+        QString sY = contentList.at(2);
 
-    QColor color = DataManager::instance()->getLightColorList().at(iIndex.toInt());
+        int iIndex = sIndex.toInt();
+        QColor color = DataManager::instance()->getLightColorList().at(iIndex);
 
-    m_strUUid = m_pDocummentProxy->addAnnotation(m_pRightClickPoint, m_pRightClickPoint, color);
-    if (!m_strUUid.isEmpty()) {
-        m_bIsHighLight = true;
+        QPoint tempPoint(sX.toInt(), sY.toInt());
+
+        QString sUuid = m_pDocummentProxy->addAnnotation(tempPoint, tempPoint, color);
+        if (sUuid != "") {
+            DataManager::instance()->setBIsUpdate(true);
+        }
     }
 }
 
 //  移除高亮, 有注释 则删除注释
-void FileViewWidget::slotFileRemoveAnnotation()
+void FileViewWidget::slotFileRemoveAnnotation(const QString &msgContent)
 {
-    DataManager::instance()->setBIsUpdate(true);
-    QString sUuid = m_pDocummentProxy->removeAnnotation(m_pRightClickPoint);
-    if (sUuid != "") {
-        sendMsg(MSG_NOTE_DLTNOTEITEM, sUuid);
+    QStringList contentList = msgContent.split(",", QString::SkipEmptyParts);
+    if (contentList.size() == 2) {
+        QString sX = contentList.at(0);
+        QString sY = contentList.at(1);
 
-        m_pDocummentProxy->removeAnnotation(sUuid);
+        QPoint tempPoint(sX.toInt(), sY.toInt());
+        QString sUuid = m_pDocummentProxy->removeAnnotation(tempPoint);
+        if (sUuid != "") {
+            sendMsg(MSG_NOTE_DLTNOTEITEM, sUuid);
+
+            m_pDocummentProxy->removeAnnotation(sUuid);
+
+            DataManager::instance()->setBIsUpdate(true);
+        }
     }
 }
 
-void FileViewWidget::slotFileAddNote(const QString &note)
+//  添加注释
+void FileViewWidget::slotFileAddNote(const QString &msgContent)
 {
-    qDebug() << "                               q               ";
+    QString sUuid = "", sNote = "", sPage = "";
 
-    if (!m_bIsHighLight) {
-        // 添加高亮
-        slotFileAddAnnotation(QString::number(0));
+    QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    if (contentList.size() == 3) {
+        sNote = contentList.at(0);
+        sUuid = contentList.at(1);
+        sPage = contentList.at(2);
+    } else if (contentList.size() == 4) {
+        sNote = contentList.at(0);
+        sPage = contentList.at(1);
+        QString sX = contentList.at(2);
+        QString sY = contentList.at(3);
+
+        QColor color = DataManager::instance()->getLightColorList().at(0);
+        QPoint tempPoint(sX.toInt(), sY.toInt());
+
+        sUuid = m_pDocummentProxy->addAnnotation(tempPoint, tempPoint, color);  //  高亮 产生的 uuid
     }
 
-    QString t_str = m_strUUid.trimmed() + QString("%") + note.trimmed() + QString("%%1").arg(m_nPage);
-
-    //send to note list widget on the left
+    if (sUuid == "" || sNote == "" || sPage == "" || sPage == "-1") {
+        return;
+    }
+    QString t_str = sUuid.trimmed() + QString("%") + sNote.trimmed() + QString("%") + sPage;
     sendMsg(MSG_NOTE_ADDITEM, t_str);
+    m_pDocummentProxy->setAnnotationText(sPage.toInt(), sUuid, sNote);
 
-    m_pDocummentProxy->setAnnotationText(m_nPage, m_strUUid, note);
+    DataManager::instance()->setBIsUpdate(true);
 }
 
 //  文档书签状态改变
@@ -319,7 +327,7 @@ void FileViewWidget::initConnections()
     connect(this, SIGNAL(sigPrintFile()), this, SLOT(slotPrintFile()));
 
     connect(this, SIGNAL(sigFileAddAnnotation(const QString &)), this, SLOT(slotFileAddAnnotation(const QString &)));
-    connect(this, SIGNAL(sigFileRemoveAnnotation()), this, SLOT(slotFileRemoveAnnotation()));
+    connect(this, SIGNAL(sigFileRemoveAnnotation(const QString &)), this, SLOT(slotFileRemoveAnnotation(const QString &)));
 
     connect(this, SIGNAL(sigFileAddNote(const QString &)), this, SLOT(slotFileAddNote(const QString &)));
 }
@@ -429,10 +437,9 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
         emit sigFileAddAnnotation(msgContent);
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED: //  移除高亮显示
-        emit sigFileRemoveAnnotation();
+        emit sigFileRemoveAnnotation(msgContent);
         return ConstantMsg::g_effective_res;
     case MSG_NOTE_ADDCONTANT:                   //  添加注释
-        qDebug() << "                       111     ";
         emit sigFileAddNote(msgContent);
         return ConstantMsg::g_effective_res;
     }

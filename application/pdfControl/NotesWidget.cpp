@@ -29,7 +29,7 @@ void NotesWidget::initWidget()
  * @brief NotesWidget::slotAddNoteItem
  * 增加注释缩略图Item槽函数
  */
-void NotesWidget::slotAddNoteItem(QString note)
+void NotesWidget::slotAddNoteItem(const QString &note)
 {
     addNotesItem(note);
 }
@@ -55,7 +55,8 @@ void NotesWidget::slotDltNoteItem(QString uuid)
                     pItem = nullptr;
 
                     // remove date from map and notify kong yun zhen
-                    removeFromMap(uuid);
+                    m_mapUuidAndPage.remove(uuid);
+//                    removeFromMap(uuid);
 
                     auto dproxy = DocummentProxy::instance();
 
@@ -63,6 +64,8 @@ void NotesWidget::slotDltNoteItem(QString uuid)
                         DataManager::instance()->setBIsUpdate(true);
                         dproxy->removeAnnotation(uuid, page);
                     }
+
+                    DataManager::instance()->setBIsUpdate(true);
 
                     break;
                 }
@@ -78,12 +81,13 @@ void NotesWidget::slotDltNoteItem(QString uuid)
  */
 void NotesWidget::slotDltNoteContant(QString uuid)
 {
-    foreach (auto note, m_mapNotes) {
-        if (note.contains(uuid)) {
-            note.remove(uuid);
-            return;
-        }
-    }
+    m_mapUuidAndPage.remove(uuid);
+//    foreach (auto note, m_mapUuidAndPage) {
+//        if (note.contains(uuid)) {
+//            note.remove(uuid);
+//            return;
+//        }
+//    }
 }
 
 void NotesWidget::slotOpenFileOk()
@@ -108,19 +112,12 @@ void NotesWidget::slotOpenFileOk()
         return;
     }
 
-    m_mapNotes.clear();
-    if(m_pNotesList){
-        m_pNotesList->clear();
-    }
-
     for (int index = 0; index < list_note.count(); ++index) {
         stHighlightContent st = list_note.at(index);
         if (st.strcontents == QString("")) {
             continue;
         }
         addNewItem(st);
-
-        addNoteToMap(st);
     }
     qDebug() << m_pNotesList->count();
 
@@ -140,15 +137,13 @@ void NotesWidget::slotCloseFile()
         m_ThreadLoadImage.stopThreadRun();
     }
 
-    m_mapNotes.clear();
-    if(m_pNotesList){
+    if (m_pNotesList) {
         m_pNotesList->clear();
     }
 }
 
 void NotesWidget::slotLoadImage(const QImage &image)
 {
-
     if (m_pNotesList->count() < 1 || m_nIndex >= m_pNotesList->count()) {
         return;
     }
@@ -163,6 +158,7 @@ void NotesWidget::slotLoadImage(const QImage &image)
     ++m_nIndex;
 }
 
+//  按 键盘 Del 删除
 void NotesWidget::slotDelNoteItem()
 {
     if (!m_pNoteItem) {
@@ -181,18 +177,19 @@ void NotesWidget::slotDelNoteItem()
         m_pNoteItem = nullptr;
 
         // remove date from map and notify kong yun zhen
-        removeFromMap(t_uuid);
+        m_mapUuidAndPage.remove(t_uuid);
 
         auto t_pDocummentProxy = DocummentProxy::instance();
         if (t_pDocummentProxy) {
             t_pDocummentProxy->removeAnnotation(t_uuid, page);
+            DataManager::instance()->setBIsUpdate(true);
         }
     }
 }
 
 void NotesWidget::slotSelectItem(QListWidgetItem *item)
 {
-    if(item == nullptr || m_pNoteItem == item){
+    if (item == nullptr || m_pNoteItem == item) {
         return;
     }
 
@@ -207,6 +204,8 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
 
             auto pDocProxy = DocummentProxy::instance();
             pDocProxy->jumpToHighLight(t_uuid, page);
+
+            DataManager::instance()->setBIsUpdate(true);
         }
     }
 }
@@ -234,7 +233,7 @@ void NotesWidget::addNotesItem(const QString &text)
         return;
     }
 
-    bool b_has = hasNoteInList(t_nPage, t_strUUid);
+    bool b_has = m_mapUuidAndPage.contains(t_strUUid);
 
     if (b_has) {
         flushNoteItemText(t_nPage, t_strUUid, t_strText);
@@ -246,10 +245,10 @@ void NotesWidget::addNotesItem(const QString &text)
         dproxy->getImage(t_nPage, image, 28, 50);
         addNewItem(image, t_nPage, t_strUUid, t_strText);
 
-        QMap<QString, QString> t_contant;
-        t_contant.clear();
-        t_contant.insert(t_strUUid, t_strText);
-        m_mapNotes.insert(t_nPage, t_contant);
+//        QMap<QString, QString> t_contant;
+//        t_contant.clear();
+//        t_contant.insert(t_strUUid, t_strText);
+        m_mapUuidAndPage.insert(t_strUUid, t_nPage);
     }
 
     DataManager::instance()->setBIsUpdate(true);
@@ -264,7 +263,7 @@ void NotesWidget::initConnection()
     connect(this, SIGNAL(sigDltNoteItem(QString)), this, SLOT(slotDltNoteItem(QString)));
     connect(this, SIGNAL(sigDltNoteContant(QString)), this, SLOT(slotDltNoteContant(QString)));
 
-    connect(this, SIGNAL(sigAddNewNoteItem(QString)), this, SLOT(slotAddNoteItem(QString)));
+    connect(this, SIGNAL(sigAddNewNoteItem(const QString &)), this, SLOT(slotAddNoteItem(const QString &)));
 
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
@@ -280,17 +279,17 @@ void NotesWidget::initConnection()
  */
 void NotesWidget::setSelectItemBackColor(QListWidgetItem *item)
 {
-    if(item == nullptr || m_pNoteItem == nullptr){
+    if (item == nullptr || m_pNoteItem == nullptr) {
         return;
     }
 
     NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
-    if(t_widget){
+    if (t_widget) {
         t_widget->setBSelect(false);
     }
 
     t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
-    if(t_widget){
+    if (t_widget) {
         t_widget->setBSelect(true);
     }
 }
@@ -302,18 +301,18 @@ void NotesWidget::setSelectItemBackColor(QListWidgetItem *item)
  * @param uuid
  * @return
  */
-bool NotesWidget::hasNoteInList(const int &page, const QString &uuid)
-{
-    if (m_mapNotes.contains(page)) {
-        foreach (auto contant, m_mapNotes) {
-            if (contant.contains(uuid)) {
-                return true;
-            }
-        }
-    }
+//bool NotesWidget::hasNoteInList(const int &page, const QString &uuid)
+//{
+//    if (m_mapNotes.contains(page)) {
+//        foreach (auto contant, m_mapNotes) {
+//            if (contant.contains(uuid)) {
+//                return true;
+//            }
+//        }
+//    }
 
-    return false;
-}
+//    return false;
+//}
 
 void NotesWidget::addNewItem(const stHighlightContent &note)
 {
@@ -380,36 +379,37 @@ void NotesWidget::flushNoteItemText(const int &page, const QString &uuid, const 
             if (t_widget) {
                 if (t_widget->nPageIndex() == page && t_widget->noteUUId() == uuid) {
                     t_widget->setTextEditText(text);
+                    break;
                 }
             }
         }
     }
 }
 
-void NotesWidget::removeFromMap(const QString &uuid) const
-{
-    foreach (auto node, m_mapNotes) {
-        if (node.contains(uuid)) {
-            node.remove(uuid);
-        }
-    }
-}
+//void NotesWidget::removeFromMap(const QString &uuid) const
+//{
+//    foreach (auto node, m_mapNotes) {
+//        if (node.contains(uuid)) {
+//            node.remove(uuid);
+//        }
+//    }
+//}
 
-void NotesWidget::addNoteToMap(const stHighlightContent &note)
-{
-    int t_page = note.ipage;
-    QString t_strUUid = note.struuid;
-    QString t_strContant = note.strcontents;
-    QMap<QString, QString> t_node;
+//void NotesWidget::addNoteToMap(const stHighlightContent &note)
+//{
+//    int t_page = note.ipage;
+//    QString t_strUUid = note.struuid;
+//    QString t_strContant = note.strcontents;
+//    QMap<QString, QString> t_node;
 
-    if (m_mapNotes.contains(t_page)) {
-        t_node = m_mapNotes.value(t_page);
-        m_mapNotes.remove(t_page);
-    }
+//    if (m_mapNotes.contains(t_page)) {
+//        t_node = m_mapNotes.value(t_page);
+//        m_mapNotes.remove(t_page);
+//    }
 
-    t_node.insert(t_strUUid, t_strContant);
-    m_mapNotes.insert(t_page, t_node);
-}
+//    t_node.insert(t_strUUid, t_strContant);
+//    m_mapNotes.insert(t_page, t_node);
+//}
 
 /**
  * @brief NotesWidget::dealWithData

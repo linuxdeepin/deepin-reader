@@ -99,7 +99,7 @@ private:
     DPushButton *m_pAddBookMarkBtn = nullptr;
     QList<int>      m_pAllPageList;
     LoadBookMarkThread m_loadBookMarkThread;
-    BookMarkItemWidget *m_pItemWidget = nullptr; // 当前要填充图片的ItemWidget
+
     QListWidgetItem *m_pIndexItem = nullptr;     // 当前鼠标左键点击的item
 };
 

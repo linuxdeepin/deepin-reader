@@ -8,6 +8,8 @@
 #include "subjectObserver/CustomWidget.h"
 #include "DocummentFileHelper.h"
 
+#include "mainShow/TextOperationMenu.h"
+
 //  当前鼠标状态
 enum Handel_Enum {
     Default_State,
@@ -26,8 +28,6 @@ enum ADAPTE_Enum {
  * @brief The FileViewWidget class
  * @brief   文档显示区域
  */
-class TextOperationMenu;
-
 class FileViewWidget : public CustomWidget
 {
     Q_OBJECT
@@ -43,7 +43,7 @@ signals:
     void sigWidgetAdapt();
 
     void sigFileAddAnnotation(const QString &);
-    void sigFileRemoveAnnotation();
+    void sigFileRemoveAnnotation(const QString &);
 
     void sigFileAddNote(const QString &);
 
@@ -63,7 +63,7 @@ private slots:
     void slotSetWidgetAdapt();
 
     void slotFileAddAnnotation(const QString &);
-    void slotFileRemoveAnnotation();
+    void slotFileRemoveAnnotation(const QString &);
 
     void slotFileAddNote(const QString &);
 
@@ -76,8 +76,8 @@ private:
     int dealWithFileMenuRequest(const int &msgType, const QString &msgContent);
 
 private:
+    TextOperationMenu *m_operatemenu = nullptr;
     DocummentFileHelper     *m_pDocummentFileHelper = nullptr;
-
     DocummentProxy          *m_pDocummentProxy = nullptr;
 
 private:
@@ -85,15 +85,7 @@ private:
     int         m_nAdapteState = Default_State;         //  当前自适应状态
     bool        m_bSelectOrMove = false;      //  是否可以选中文字、移动
     QPoint      m_pStartPoint;
-    QPoint      m_pRightClickPoint;            //   右键菜单点
     QPoint      m_pHandleMoveStartPoint;
-    QPoint      m_pMoveEndPoint;
-    TextOperationMenu *m_operatemenu;
-
-    QString m_strUUid;                         // 当前添加注释的uuid
-    bool m_bIsHighLight = false;               // 判断鼠标点击位置是否有高亮
-    bool m_bIsHighLightReleasePoint = false;   // 判断左键鼠标释放的位置是否有高亮
-    int m_nPage = -1;                          // 鼠标当前点击所在页码数
 
     // CustomWidget interface
 protected:

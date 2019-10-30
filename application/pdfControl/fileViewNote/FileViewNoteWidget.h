@@ -56,6 +56,11 @@ public:
     void closeWidget();
     void showWidget(const int &);
 
+    void setPointAndPage(const QString &);
+
+    void setNoteUuid(const QString &pNoteUuid);
+    void setNotePage(const QString &pNotePage);
+
 protected:
     void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
     void initWidget() Q_DECL_OVERRIDE;
@@ -71,6 +76,10 @@ private slots:
 
 private:
     /*CustemTextEdit DTextEdit*/
+    QString     m_pHighLightPointAndPage = "";
+    QString     m_pNoteUuid = "";
+    QString     m_pNotePage = "";
+
     CustemTextEdit *m_pTextEdit = nullptr;   // 注释
     MenuLab *m_pCloseLab = nullptr;          // 关闭
     QString m_strNote = "";                       // 注释内容

@@ -20,6 +20,9 @@ public:
 
 public:
     void execMenu(const QPoint &, const bool &bHigh, const QString &sSelectText, const QString &sUuid);
+    void setClickPoint(const QPoint &);
+
+    void setClickPage(int nClickPage);
 
 private:
     void initMenu();
@@ -36,13 +39,16 @@ private slots:
     void slotAddBookMarkClicked();
 
 private:
-    int         m_pLightColor=0;
+    int         m_pLightColor = 0;
     QString     m_strSelectText = "";       //  选中的文字
     QString     m_strNoteUuid = "";   //  高亮的uuid
 
     QAction     *m_pCopy = nullptr;
     QAction     *m_pRemoveHighLight = nullptr;
     QAction     *m_pAddBookMark = nullptr;
+
+    QPoint      m_pClickPoint;
+    int         m_nClickPage = -1;
 };
 
 #endif // TEXTOPERATIONMENU_H

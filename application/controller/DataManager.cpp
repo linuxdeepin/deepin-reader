@@ -23,7 +23,11 @@ QString DataManager::strOnlyFilePath() const
 
 void DataManager::setStrOnlyFilePath(const QString &strOnlyFilePath)
 {
-    m_bIsUpdate = false;
+    if (strOnlyFilePath == "") {
+        m_bIsUpdate = true;
+    } else {
+        m_bIsUpdate = false;
+    }
     dApp->dbM->setStrFilePath(strOnlyFilePath);
 
     m_strOnlyFilePath = strOnlyFilePath;

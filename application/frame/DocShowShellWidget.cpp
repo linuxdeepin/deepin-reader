@@ -53,19 +53,15 @@ void DocShowShellWidget::slotShowFindWidget()
 }
 
 //  注释窗口
-void DocShowShellWidget::slotOpenNoteWidget(const QString &sSelectTextUUid)
+void DocShowShellWidget::slotOpenNoteWidget(const QString &msgContent)
 {
     if (m_pFileViewNoteWidget == nullptr) {
         m_pFileViewNoteWidget = new FileViewNoteWidget(this);
     }
     m_pFileViewNoteWidget->setEditText("");
-
-    auto pDocummentProxy = DocummentProxy::instance();
-    int nCurPage = pDocummentProxy->currentPageNo();
-    QString contant;
-    pDocummentProxy->getAnnotationText(sSelectTextUUid, contant, nCurPage);
-
-    m_pFileViewNoteWidget->setEditText(contant);
+    m_pFileViewNoteWidget->setPointAndPage(msgContent);
+    m_pFileViewNoteWidget->setNoteUuid("");
+    m_pFileViewNoteWidget->setNotePage("");
 
     QRect rrect = this->rect();
     QPoint point = this->mapToGlobal(rrect.bottomRight());
@@ -80,7 +76,26 @@ void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
     QStringList t_strList = contant.split(QString("%"), QString::SkipEmptyParts);
     if (t_strList.count() == 3) {
         QString t_strUUid = t_strList.at(0);
-        slotOpenNoteWidget(t_strUUid);
+        QString t_page = t_strList.at(2);
+
+        if (m_pFileViewNoteWidget == nullptr) {
+            m_pFileViewNoteWidget = new FileViewNoteWidget(this);
+        }
+
+        auto pDocummentProxy = DocummentProxy::instance();
+        QString contant;
+        pDocummentProxy->getAnnotationText(t_strUUid, contant, t_page.toInt());
+
+        m_pFileViewNoteWidget->setNoteUuid(t_strUUid);
+        m_pFileViewNoteWidget->setNotePage(t_page);
+        m_pFileViewNoteWidget->setEditText(contant);
+        m_pFileViewNoteWidget->setPointAndPage("");
+
+        QRect rrect = this->rect();
+        QPoint point = this->mapToGlobal(rrect.bottomRight());
+        int nRight = point.x();
+
+        m_pFileViewNoteWidget->showWidget(nRight);
     }
 }
 

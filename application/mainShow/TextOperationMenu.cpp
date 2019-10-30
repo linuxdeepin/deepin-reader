@@ -4,6 +4,7 @@
 #include "controller/MsgSubject.h"
 #include "docview/docummentproxy.h"
 #include "controller/DataManager.h"
+#include "subjectObserver/ModuleHeader.h"
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)
     : DMenu (parent)
@@ -27,6 +28,16 @@ void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, con
     m_pRemoveHighLight->setEnabled(bHigh);
 
     this->exec(showPoint);
+}
+
+void TextOperationMenu::setClickPoint(const QPoint &clickPoint)
+{
+    m_pClickPoint = clickPoint;
+}
+
+void TextOperationMenu::setClickPage(int nClickPage)
+{
+    m_nClickPage = nClickPage;
 }
 
 void TextOperationMenu::initMenu()
@@ -70,18 +81,23 @@ void TextOperationMenu::slotCopyClicked()
 
 void TextOperationMenu::slotAddHighLightClicked()
 {
-    sendMsgToFrame(MSG_OPERATION_TEXT_ADD_HIGHLIGHTED, QString("%1").arg(m_pLightColor));
+    sendMsgToFrame(MSG_OPERATION_TEXT_ADD_HIGHLIGHTED, QString("%1,%2,%3").arg(m_pLightColor).arg(m_pClickPoint.x()).arg(m_pClickPoint.y()));
 }
 
 void TextOperationMenu::slotRemoveHighLightClicked()
 {
-    sendMsgToFrame(MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED);
+    sendMsgToFrame(MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED, QString("%1,%2").arg(m_pClickPoint.x()).arg(m_pClickPoint.y()));
 }
 
 void TextOperationMenu::slotAddNoteClicked()
 {
-    sendMsgToFrame(MSG_OPERATION_TEXT_ADD_ANNOTATION,
-                   QString("%1").arg(m_strNoteUuid));
+    if (m_strNoteUuid == "") {
+        QString msgContent = QString("%1").arg(m_nClickPage) + Constant::sQStringSep + QString("%1").arg(m_pClickPoint.x()) + Constant::sQStringSep + QString("%1").arg(m_pClickPoint.y());
+        sendMsgToFrame(MSG_OPERATION_TEXT_ADD_ANNOTATION, msgContent);
+    } else {
+        QString t_strContant = m_strNoteUuid.trimmed() + QString("%1%") + QString::number(m_nClickPage);
+        sendMsgToFrame(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+    }
 }
 
 void TextOperationMenu::slotAddBookMarkClicked()
