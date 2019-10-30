@@ -18,18 +18,18 @@ protected:
 
     virtual void paintEvent(QPaintEvent *e) override;
 
-    virtual void  enterEvent(QEvent *e) override;
+//    virtual void  enterEvent(QEvent *e) override;
 
-    virtual void  leaveEvent(QEvent *e) override;
+//    virtual void  leaveEvent(QEvent *e) override;
 
-    virtual void  mouseEvent(QMouseEvent *e);
+//    virtual void  mouseEvent(QMouseEvent *e);
 
     virtual void mousePressEvent(QMouseEvent *e) override;
 
     virtual void mouseReleaseEvent(QMouseEvent *e) override;
 
 private:
-    bool  ishovered;
+//    bool  ishovered;
     bool  ispressed;
     bool isclicked;
 };
