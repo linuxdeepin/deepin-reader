@@ -431,7 +431,7 @@ void PageBase::getImagePoint(QPointF &point)
 
 void PageBase::clearHighlightRects()
 {
-    Q_D(PageBase);
+    Q_D(PageBase);   
     d->m_highlights.clear();
 }
 

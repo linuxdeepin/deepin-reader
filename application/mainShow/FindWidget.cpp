@@ -37,7 +37,10 @@ FindWidget::FindWidget(CustomWidget *parent)
 
 void FindWidget::findCancel()
 {
-    this->close();
+     sendMsg(MSG_CLEAR_FIND_CONTENT);
+     m_pSearchEdit->clear();
+     m_pSearchEdit->clearFocus();
+     hide();
 }
 
 void FindWidget::handleContentChanged()
@@ -73,9 +76,7 @@ void FindWidget::slotClearContent()
 
 void FindWidget::hideEvent(QHideEvent *e)
 {
-    m_strOldFindContent = "";
-    sendMsg(MSG_CLEAR_FIND_CONTENT);
-
+    m_strOldFindContent = "";  
     CustomWidget::hideEvent(e);
 }
 
@@ -104,6 +105,7 @@ void FindWidget::initWidget()
     connect(closeButton, &DFloatingButton::clicked, this, &FindWidget::findCancel);
 
     m_pSearchEdit = new DSearchEdit;
+    m_pSearchEdit->setFocusPolicy(Qt::StrongFocus);
 
     connect(m_pSearchEdit, &DSearchEdit::returnPressed, this, &FindWidget::handleContentChanged);
     connect(m_pSearchEdit, &DSearchEdit::textChanged, this, &FindWidget::slotClearContent);

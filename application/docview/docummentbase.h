@@ -230,7 +230,7 @@ public:
     virtual void docBasicInfo(stFileInfo &info) {}
     virtual void title(QString &title) {}
     virtual void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) {}
-    virtual void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1) {}
+    virtual void getAnnotationText(const QString &struuid, QString &strtext, int ipage) {}
     virtual bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
     {
         return false;

@@ -54,7 +54,7 @@ public:
     void findPrev();
     void closeFileAndWaitThreadClearEnd();
     void setAnnotationText(int ipage, const QString &struuid, const QString &strtext);
-    void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1);
+    void getAnnotationText(const QString &struuid, QString &strtext, int ipage);
     double adaptWidthAndShow(double width);
     double adaptHeightAndShow(double height);
     bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid);

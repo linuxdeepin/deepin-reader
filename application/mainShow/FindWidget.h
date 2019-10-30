@@ -42,7 +42,8 @@ private slots:
     void slotClearContent();
 
 protected:
-    void hideEvent(QHideEvent *event);  
+    void hideEvent(QHideEvent *event);
+
 
 private:
     DSearchEdit     *m_pSearchEdit = nullptr;

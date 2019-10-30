@@ -340,16 +340,14 @@ bool DocummentProxy::exitSlideModel()
 
 void DocummentProxy::findNext()
 {
-    if (m_documment || bcloseing) {
-        qDebug() << "findNext";
+    if (m_documment || bcloseing) {   
         m_documment->findNext();
     }
 }
 
 void DocummentProxy::findPrev()
 {
-    if (m_documment || bcloseing) {
-        qDebug() << "findPrev";
+    if (m_documment || bcloseing) {     
         m_documment->findPrev();
     }
 }

@@ -29,7 +29,7 @@ public:
     bool annotationClicked(const QPoint &pos, QString &strtext,QString& struuid) override;
     void title(QString &title) override;
     void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) override;
-    void getAnnotationText(const QString &struuid, QString &strtext, int ipage = -1)override;
+    void getAnnotationText(const QString &struuid, QString &strtext, int ipage)override;
     bool loadDocumment(QString filepath) override;
     void jumpToHighLight(const QString& uuid,int ipage) override;
 
