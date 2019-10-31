@@ -163,7 +163,7 @@ public:
     SlidWidget *m_slidewidget;
     DLabel *pslideanimationlabel;
     DLabel *pslidelabel;
-    DWidget *pblankwidget;
+    DLabel *pblankwidget;
     ViewMode_EM m_viewmode;
     int m_lastmagnifierpagenum;
     int m_magnifierpage;

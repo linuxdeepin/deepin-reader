@@ -148,7 +148,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     d->m_widget = new DWidget(this);
     setWidget(d->m_widget);
     d->showslidwaittimer = new QTimer(this);
-    d->pblankwidget = new DWidget(this);
+    d->pblankwidget = new DLabel(this);
     d->pblankwidget->setMouseTracking(true);
     d->pblankwidget->hide();
     d->m_magnifierwidget = new MagnifierWidget(parent);
@@ -743,7 +743,11 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
 
     d->donotneedreloaddoc = true;
 
+//    for (int i = 0; i < d->m_pages.size(); i++) {
+//        d->m_pages.at(i)->clearImage();
+//    }
     for (int i = 0; i < d->m_pages.size(); i++) {
+        d->m_pages.at(i)->clearImage();
         d->m_pages.at(i)->setScaleAndRotate(d->m_scale, d->m_rotate);
     }
     int rex = d->m_vboxLayout->margin(), rey = d->m_vboxLayout->margin();
@@ -768,7 +772,7 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
         }
         if (d->m_widgets.size() % 2) {
             int reheight = d->m_pages.at(d->m_pages.size() - 1)->height();
-            d->m_widgets.at(d->m_widgets.size() / 2)->setGeometry((width() - rex * 2 - d->m_pages.at(d->m_widgets.size() / 2)->width() * 2) / 2, rey, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + d->m_widgets.at(d->m_widgets.size() / 2)->layout()->spacing() + d->m_pages.at(d->m_pages.size() - 1)->width() * 2, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + reheight);
+            d->m_widgets.at(d->m_widgets.size() / 2)->setGeometry((width() - rex * 2 - d->m_pages.at(d->m_pages.size() - 1)->width() * 2) / 2, rey, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + d->m_widgets.at(d->m_widgets.size() / 2)->layout()->spacing() + d->m_pages.at(d->m_pages.size() - 1)->width() * 2, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + reheight);
         }
         break;
     default:
@@ -870,6 +874,10 @@ void DocummentBase::showFacingPage()
     if (d->m_pages.size() % 2) {
         d->pblankwidget->show();
         d->m_widgets.at(d->m_pages.size() / 2)->layout()->addWidget(d->m_pages.at(d->m_pages.size() - 1));
+        if (d->m_pages.size() > 0) {
+            d->pblankwidget->setMaximumSize(QSize(d->m_pages.at(d->m_pages.size() - 1)->size()));
+            d->pblankwidget->setMinimumSize(QSize(d->m_pages.at(d->m_pages.size() - 1)->size()));
+        }
         d->m_widgets.at(d->m_pages.size() / 2)->layout()->addWidget(d->pblankwidget);
         d->m_widgets.at(d->m_pages.size() / 2)->show();
     }
