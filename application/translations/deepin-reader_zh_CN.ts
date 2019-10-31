@@ -497,31 +497,16 @@
         <location filename="../frame/TitleWidget.cpp" line="133"/>
         <location filename="../frame/TitleWidget.cpp" line="165"/>
         <source>handleShape</source>
-        <translatorcomment>手形模式</translatorcomment>
-        <translation>手形模式</translation>
+        <translatorcomment>手形工具</translatorcomment>
+        <translation>手形工具</translation>
     </message>
     <message>
         <location filename="../frame/TitleWidget.cpp" line="135"/>
         <location filename="../frame/TitleWidget.cpp" line="160"/>
         <location filename="../frame/TitleWidget.cpp" line="162"/>
         <source>defaultShape</source>
-        <translatorcomment>默认模式</translatorcomment>
-        <translation>默认模式</translation>
-    </message>
-    <message>
-        <source>thumbnail</source>
-        <translatorcomment>缩略图</translatorcomment>
-        <translation type="vanished">缩略图</translation>
-    </message>
-    <message>
-        <source>setting</source>
-        <translatorcomment>设置</translatorcomment>
-        <translation type="vanished">设置</translation>
-    </message>
-    <message>
-        <source>magnifier</source>
-        <translatorcomment>放大镜</translatorcomment>
-        <translation type="vanished">放大镜</translation>
+        <translatorcomment>选择工具</translatorcomment>
+        <translation>选择工具</translation>
     </message>
 </context>
 </TS>
