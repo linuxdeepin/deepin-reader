@@ -41,6 +41,13 @@ void FileViewNoteWidget::showWidget(const int &nPos)
     raise();
 }
 
+void FileViewNoteWidget::showWidget(const QPoint &point)
+{
+    move(point);
+    show();
+    raise();
+}
+
 void FileViewNoteWidget::hideEvent(QHideEvent *event)
 {
     //  原来是有注释的, 被删除了

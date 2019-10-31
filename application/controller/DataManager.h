@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QColor>
+#include <QPoint>
 
 /**
  * @brief The DataManager class
@@ -43,12 +44,25 @@ public:
 
     QList<QColor>   getLightColorList();
 
+    inline void mousePressLocal(bool& highLight, QPoint& point)
+    {
+       highLight = m_bIsHighLight;
+       point = m_point;
+    }
+    inline void setMousePressLocal(const bool& highLight, const QPoint& point)
+    {
+        m_bIsHighLight = highLight;
+        m_point = point;
+    }
+
 private:
     QString m_strOnlyFilePath; //  只显示一个pdf 文件
     int     m_nCurShowState = -1;   //  文档当前显示状态
     bool    m_bIsUpdate = false;    //  文档是否有修改
     bool    m_bIsBookMarkState = false;    //  当前页的书签状态
     QList<QColor> m_listColor;             //  color list
+    bool m_bIsHighLight = false;       // 鼠标左键点击位置有没有高亮
+    QPoint m_point;                    // 鼠标左键点击位置
 };
 
 #endif // DATAMANAGER_H

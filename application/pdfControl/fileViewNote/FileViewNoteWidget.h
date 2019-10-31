@@ -55,6 +55,7 @@ public:
     void setEditText(const QString &note);
     void closeWidget();
     void showWidget(const int &);
+    void showWidget(const QPoint &);
 
     void setPointAndPage(const QString &);
 

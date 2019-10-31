@@ -137,6 +137,7 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 
             bool bIsHighLightReleasePoint = m_pDocummentProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
             if (bIsHighLightReleasePoint) {
+                DataManager::instance()->setMousePressLocal(bIsHighLightReleasePoint, globalPos);
                 int nPage = m_pDocummentProxy->pointInWhichPage(docGlobalPos);
                 QString t_strContant = t_strUUid.trimmed() + QString("%1%") + QString::number(nPage);
                 sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
