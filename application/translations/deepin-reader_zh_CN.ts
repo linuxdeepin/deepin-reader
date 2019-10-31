@@ -252,13 +252,13 @@
 <context>
     <name>FileViewWidget</name>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="342"/>
+        <location filename="../frame/FileViewWidget.cpp" line="343"/>
         <source>Print Error</source>
         <translatorcomment>打印错误</translatorcomment>
         <translation>打印错误</translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="342"/>
+        <location filename="../frame/FileViewWidget.cpp" line="343"/>
         <source>No Print Device</source>
         <translatorcomment>没有打印设备</translatorcomment>
         <translation>没有打印设备</translation>
@@ -267,13 +267,13 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../mainShow/FindWidget.cpp" line="93"/>
+        <location filename="../mainShow/FindWidget.cpp" line="94"/>
         <source>next one</source>
         <translatorcomment>下一个</translatorcomment>
         <translation>下一个</translation>
     </message>
     <message>
-        <location filename="../mainShow/FindWidget.cpp" line="98"/>
+        <location filename="../mainShow/FindWidget.cpp" line="99"/>
         <source>prev one</source>
         <translatorcomment>前一个</translatorcomment>
         <translation>前一个</translation>
@@ -461,31 +461,31 @@
 <context>
     <name>TextOperationMenu</name>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="45"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="44"/>
         <source>copy</source>
         <translatorcomment>复制</translatorcomment>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="47"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="46"/>
         <source>add high light</source>
         <translatorcomment>添加高亮</translatorcomment>
         <translation>添加高亮</translation>
     </message>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="53"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="52"/>
         <source>remove high light</source>
         <translatorcomment>移除高亮</translatorcomment>
         <translation>移除高亮</translation>
     </message>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="54"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="53"/>
         <source>add note</source>
         <translatorcomment>添加注释</translatorcomment>
         <translation>添加注释</translation>
     </message>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="55"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="54"/>
         <source>add bookmark</source>
         <translatorcomment>添加书签</translatorcomment>
         <translation>添加书签</translation>
@@ -494,16 +494,13 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="133"/>
-        <location filename="../frame/TitleWidget.cpp" line="165"/>
+        <location filename="../frame/TitleWidget.cpp" line="134"/>
         <source>handleShape</source>
         <translatorcomment>手形工具</translatorcomment>
         <translation>手形工具</translation>
     </message>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="135"/>
-        <location filename="../frame/TitleWidget.cpp" line="160"/>
-        <location filename="../frame/TitleWidget.cpp" line="162"/>
+        <location filename="../frame/TitleWidget.cpp" line="142"/>
         <source>defaultShape</source>
         <translatorcomment>选择工具</translatorcomment>
         <translation>选择工具</translation>

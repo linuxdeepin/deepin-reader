@@ -44,14 +44,14 @@ private:
 
     void initBtns();
     DIconButton *createBtn(const QString &btnName, bool bCheckable = false);
-    QAction *createAction(const QString &iconName);
     void sendMsgToSubject(const int &, const QString &msgCotent = "");
-
-    void setHandleShapeBtn(const QString &);
 
 private:
     DMenu   *m_pHandleMenu = nullptr;
     DMenu   *m_pSettingMenu = nullptr;
+
+    QAction  *m_pHandleAction = nullptr;
+    QAction  *m_pDefaultAction = nullptr;
 
     DIconButton *m_pThumbnailBtn = nullptr;
     DIconButton *m_pSettingBtn = nullptr;

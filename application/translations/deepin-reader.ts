@@ -215,12 +215,12 @@
 <context>
     <name>FileViewWidget</name>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="342"/>
+        <location filename="../frame/FileViewWidget.cpp" line="343"/>
         <source>Print Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="342"/>
+        <location filename="../frame/FileViewWidget.cpp" line="343"/>
         <source>No Print Device</source>
         <translation></translation>
     </message>
@@ -228,12 +228,12 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../mainShow/FindWidget.cpp" line="93"/>
+        <location filename="../mainShow/FindWidget.cpp" line="94"/>
         <source>next one</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FindWidget.cpp" line="98"/>
+        <location filename="../mainShow/FindWidget.cpp" line="99"/>
         <source>prev one</source>
         <translation></translation>
     </message>
@@ -396,27 +396,27 @@
 <context>
     <name>TextOperationMenu</name>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="45"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="44"/>
         <source>copy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="47"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="46"/>
         <source>add high light</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="53"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="52"/>
         <source>remove high light</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="54"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="53"/>
         <source>add note</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="55"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="54"/>
         <source>add bookmark</source>
         <translation></translation>
     </message>
@@ -424,15 +424,12 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="133"/>
-        <location filename="../frame/TitleWidget.cpp" line="165"/>
+        <location filename="../frame/TitleWidget.cpp" line="134"/>
         <source>handleShape</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="135"/>
-        <location filename="../frame/TitleWidget.cpp" line="160"/>
-        <location filename="../frame/TitleWidget.cpp" line="162"/>
+        <location filename="../frame/TitleWidget.cpp" line="142"/>
         <source>defaultShape</source>
         <translation></translation>
     </message>

@@ -2,8 +2,6 @@
 #define FILEVIEWWIDGET_H
 
 #include <QMouseEvent>
-#include <QAction>
-#include <DMenu>
 
 #include "subjectObserver/CustomWidget.h"
 #include "DocummentFileHelper.h"

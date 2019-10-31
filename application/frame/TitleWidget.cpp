@@ -29,13 +29,14 @@ void TitleWidget::slotUpdateTheme(const QString &sType)
         }
     }
 
-    auto actionList = this->findChildren<QAction *>();
-    foreach (auto action, actionList) {
-        QString objName = action->objectName();
-        if (objName != "") {
-            QString sPixmap = PF::getImagePath(objName, Pri::g_frame, sThemeName);
-            action->setIcon(QIcon( sPixmap));
-        }
+    if (m_pHandleAction) {
+        QString sPixmap = PF::getImagePath("handleShape_small", Pri::g_frame, sThemeName);
+        m_pHandleAction->setIcon(QIcon( sPixmap));
+    }
+
+    if (m_pDefaultAction) {
+        QString sPixmap = PF::getImagePath("defaultShape_small", Pri::g_frame, sThemeName);
+        m_pDefaultAction->setIcon(QIcon(sPixmap));
     }
 }
 
@@ -129,15 +130,26 @@ void TitleWidget::on_handleShapeBtn_clicked()
 
     if (m_pHandleMenu == nullptr) {
         m_pHandleMenu = new DMenu(this);
-
-        QAction *pHandleAction = createAction(tr("handleShape"));
-
-        QAction *pDefaultAction = createAction(tr("defaultShape"));
-        pDefaultAction->setChecked(true);
-
+        {
+            m_pHandleAction = new QAction(tr("handleShape"), this);
+            m_pHandleAction->setObjectName("handleShape");
+            m_pHandleAction->setCheckable(true);
+            QString sPixmap = PF::getImagePath("handleShape_small", Pri::g_frame);
+            m_pHandleAction->setIcon(QIcon(sPixmap));
+            m_pHandleMenu->addAction(m_pHandleAction);
+        }
+        {
+            m_pDefaultAction = new QAction(tr("defaultShape"), this);
+            m_pDefaultAction->setObjectName("defaultShape");
+            m_pDefaultAction->setCheckable(true);
+            m_pDefaultAction->setChecked(true);
+            QString sPixmap = PF::getImagePath("defaultShape_small", Pri::g_frame);
+            m_pDefaultAction->setIcon(QIcon(sPixmap));
+            m_pHandleMenu->addAction(m_pDefaultAction);
+        }
         QActionGroup *actionGroup = new QActionGroup(this);
-        actionGroup->addAction(pHandleAction);
-        actionGroup->addAction(pDefaultAction);
+        actionGroup->addAction(m_pHandleAction);
+        actionGroup->addAction(m_pDefaultAction);
 
         connect(actionGroup, SIGNAL(triggered(QAction *)), this, SLOT(slotActionTrigger(QAction *)));
     }
@@ -157,25 +169,18 @@ void TitleWidget::slotActionTrigger(QAction *action)
     int nCurrentState = -1;
 
     QString sAction = action->objectName();
-    if (sAction == tr("defaultShape")) {
+    if (sAction == "defaultShape") {
         nCurrentState = 0;
-        btnName = tr("defaultShape");
+        btnName = "defaultShape";
     } else {
         nCurrentState = 1;
-        btnName = tr("handleShape");
+        btnName = "handleShape";
     }
 
-    setHandleShapeBtn(btnName);
-    sendMsgToSubject(MSG_HANDLESHAPE, QString::number(nCurrentState));
-}
-
-//  设置　手型按钮的图标
-void TitleWidget::setHandleShapeBtn(const QString &btnName)
-{
-    m_pHandleShapeBtn->setObjectName(btnName);
     QString normalPic = PF::getImagePath(btnName, Pri::g_frame);
-
     m_pHandleShapeBtn->setIcon(QIcon(normalPic));
+
+    sendMsgToSubject(MSG_HANDLESHAPE, QString::number(nCurrentState));
 }
 
 void TitleWidget::initBtns()
@@ -212,20 +217,6 @@ DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
     btn->setDisabled(true);
 
     return btn;
-}
-
-//  创建两个按钮菜单， 对应 手型 和 默认鼠标
-QAction *TitleWidget::createAction(const QString &actionName)
-{
-    QAction *_action = new QAction(actionName, this);
-    _action->setObjectName(actionName);
-    _action->setCheckable(true);
-
-    QString sPixmap = PF::getImagePath(actionName + "_small", Pri::g_frame);
-    _action->setIcon(QIcon( sPixmap));
-
-    m_pHandleMenu->addAction(_action);
-    return _action;
 }
 
 void TitleWidget::sendMsgToSubject(const int &msgType, const QString &msgCotent)

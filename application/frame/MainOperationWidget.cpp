@@ -97,7 +97,7 @@ void MainOperationWidget::slotUpdateTheme(const QString &sType)
         QString objName = btn->objectName();
         if (objName != "") {
             QString sPixmap = PF::getImagePath(objName, Pri::g_frame, sThemeName);
-            btn->setIcon(QIcon( sPixmap));
+            btn->setIcon(QIcon(sPixmap));
         }
     }
 }
