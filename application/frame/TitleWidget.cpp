@@ -180,7 +180,7 @@ void TitleWidget::setHandleShapeBtn(const QString &btnName)
 
 void TitleWidget::initBtns()
 {
-    m_pThumbnailBtn = createBtn("thumbnail", true);
+    m_pThumbnailBtn = createBtn("thumbnails", true);
     connect(m_pThumbnailBtn, SIGNAL(clicked()), this, SLOT(on_thumbnailBtn_clicked()));
 
     m_pSettingBtn = createBtn("setting");

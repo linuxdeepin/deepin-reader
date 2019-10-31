@@ -1,8 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>resources/light/frame/import_photo.svg</file>
-        <file>resources/light/frame/thumbnail.svg</file>
-        <file>resources/light/frame/annotation.svg</file>
         <file>resources/light/frame/bookmark.svg</file>
         <file>resources/light/frame/defaultShape_small.svg</file>
         <file>resources/light/frame/handleShape_small.svg</file>
@@ -17,17 +15,21 @@
         <file>resources/logo/deepin-reader.svg</file>
         <file>resources/dark/frame/bookmark.svg</file>
         <file>resources/dark/frame/import_photo.svg</file>
-        <file>resources/dark/frame/thumbnail.svg</file>
         <file>resources/dark/frame/handleShape.svg</file>
         <file>resources/dark/frame/defaultShape.svg</file>
         <file>resources/dark/frame/setting.svg</file>
         <file>resources/dark/frame/magnifier.svg</file>
         <file>resources/dark/frame/defaultShape_small.svg</file>
-        <file>resources/dark/frame/annotation.svg</file>
         <file>resources/dark/frame/handleShape_small.svg</file>
         <file>resources/dark/pdfControl/A _big.svg</file>
         <file>resources/dark/pdfControl/A _small.svg</file>
         <file>resources/dark/pdfControl/select.svg</file>
         <file>resources/dark/pdfControl/close.svg</file>
+        <file>resources/light/frame/thumbnails.svg</file>
+        <file>resources/light/frame/annotation.svg</file>
+        <file>resources/light/frame/thumbnail.svg</file>
+        <file>resources/dark/frame/thumbnails.svg</file>
+        <file>resources/dark/frame/thumbnail.svg</file>
+        <file>resources/dark/frame/annotation.svg</file>
     </qresource>
 </RCC>
