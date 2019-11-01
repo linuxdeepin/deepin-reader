@@ -49,7 +49,12 @@ void BookMarkWidget::slotAddBookMark(const int &nPage)
 
     addBookMarkItem(nPage);
 
-    slotDocFilePageChanged(nPage);
+//    slotDocFilePageChanged(nPage);
+
+    bool bl = pageList.contains(nPage);
+
+    m_pAddBookMarkBtn->setEnabled(!bl);
+    sendMsg(MSG_BOOKMARK_STATE, QString("%1").arg(bl));
 
     DataManager::instance()->setBIsUpdate(true);
 }
@@ -95,6 +100,7 @@ void BookMarkWidget::slotDocFilePageChanged(int page)
     sendMsg(MSG_BOOKMARK_STATE, QString("%1").arg(bl));
 
     if (m_pIndexItem) {
+        qDebug() << m_pBookMarkListWidget;
         auto pItemWidget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(m_pIndexItem));
         if (pItemWidget) {
             pItemWidget->setBSelect(false);
@@ -151,6 +157,7 @@ void BookMarkWidget::slotDeleteBookItem(const int &nPage)
                     dproxy->setBookMarkState(nPageIndex, false);
 
                     DataManager::instance()->setBIsUpdate(true);
+                    m_pAddBookMarkBtn->setEnabled(true);
 
                     break;
                 }
@@ -223,8 +230,8 @@ void BookMarkWidget::slotDelBkItem()
 void BookMarkWidget::slotSelectItem(QListWidgetItem *item)
 {
     if (item != nullptr && m_pIndexItem != item) {
+//        m_pIndexItem = item;
         setSelectItemBackColor(item);
-        m_pIndexItem = item;
     }
 }
 
