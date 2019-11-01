@@ -118,11 +118,14 @@ void ThumbnailWidget::fillContantToList()
     }
 
     if (m_totalPages > 0) {
-        m_pThumbnailListWidget->setCurrentRow(0);
-
         auto item = m_pThumbnailListWidget->item(0);
         if (item) {
-            setSelectItemBackColor(item);
+            m_pThumbnailListWidget->setCurrentItem(item);
+
+            auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
+            if (pWidget) {
+                pWidget->setBSelect(true);
+            }
         }
     }
 
