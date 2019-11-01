@@ -84,6 +84,9 @@ void BookMarkWidget::slotOpenFileOk()
  */
 void BookMarkWidget::slotDocFilePageChanged(int page)
 {
+    if(m_pBookMarkListWidget==nullptr){
+        return;
+    }
     QList<int> pageList = dApp->dbM->getBookMarkList();
     bool bl = pageList.contains(page);
 
@@ -297,7 +300,7 @@ void BookMarkWidget::addBookMarkItem(const int &page)
  */
 void BookMarkWidget::setSelectItemBackColor(QListWidgetItem *item)
 {
-    if (item == nullptr) {
+    if (item == nullptr || m_pBookMarkListWidget == nullptr) {
         return;
     }
 
