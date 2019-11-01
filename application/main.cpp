@@ -59,6 +59,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    w.setSreenRect(a.desktop()->screenGeometry());
     w.show();
 
     return a.exec();

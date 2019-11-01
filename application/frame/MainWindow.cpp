@@ -72,6 +72,12 @@ void MainWindow::openfile(const QString &filepath)
     sendMsg(MSG_OPEN_FILE_PATH, filepath);
 }
 
+void MainWindow::setSreenRect(const QRect &rect)
+{
+    DataManager::instance()->setScreenRect(rect);
+    qDebug() << "screen width:" << rect.width() << "screen height:" << rect.height();
+}
+
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {

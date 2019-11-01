@@ -62,6 +62,34 @@ QList<QColor> DataManager::getLightColorList()
     return m_listColor;
 }
 
+void DataManager::setMousePressLocal(const bool &highLight, const QPoint &point)
+{
+    m_bIsHighLight = highLight;
+
+    QPoint t_point;
+    int t_w = point.x();
+    int t_h = point.y();
+
+    int screenW =  m_screenRect.width();
+    int screenH =  m_screenRect.height();
+
+    int noteWidgetW = m_smallNoteSize.width();
+    int noteWidgetH = m_smallNoteSize.height();
+
+    if(t_h + noteWidgetH > screenH){
+        t_h = screenH - noteWidgetH;
+    }
+
+    if(t_w+noteWidgetW > screenW){
+        t_w -= noteWidgetW;
+    }
+
+    t_point.setX(t_w);
+    t_point.setY(t_h);
+
+    m_point = t_point;
+}
+
 QString DataManager::gettrCurrentTheme() const
 {
     return m_strCurrentTheme;

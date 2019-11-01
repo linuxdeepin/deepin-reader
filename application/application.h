@@ -21,6 +21,7 @@
 
 #include "controller/configsetter.h"
 #include "controller/DBManager.h"
+#include <QDesktopWidget>
 
 #if defined(dApp)
 #undef dApp

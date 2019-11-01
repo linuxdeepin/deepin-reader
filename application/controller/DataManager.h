@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QColor>
 #include <QPoint>
+#include <QRect>
 
 /**
  * @brief The DataManager class
@@ -46,10 +47,16 @@ public:
         highLight = m_bIsHighLight;
         point = m_point;
     }
-    inline void setMousePressLocal(const bool &highLight, const QPoint &point)
+    void setMousePressLocal(const bool &highLight, const QPoint &point);
+
+    inline void setScreenRect(const QRect& rect)
     {
-        m_bIsHighLight = highLight;
-        m_point = point;
+        m_screenRect = rect;
+    }
+
+    inline void setSmallNoteWidgetSize(const QSize&size)
+    {
+        m_smallNoteSize = size;
     }
 
     QString gettrCurrentTheme() const;
@@ -63,6 +70,8 @@ private:
     QList<QColor> m_listColor;             //  color list
     bool m_bIsHighLight = false;       // 鼠标左键点击位置有没有高亮
     QPoint m_point;                    // 鼠标左键点击位置
+    QRect m_screenRect;                // 屏幕的分辨率
+    QSize m_smallNoteSize;             // 注释小窗体的大小
 };
 
 #endif // DATAMANAGER_H

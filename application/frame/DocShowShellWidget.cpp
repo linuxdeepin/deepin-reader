@@ -67,7 +67,7 @@ void DocShowShellWidget::slotOpenNoteWidget(const QString &msgContent)
     QRect rrect = this->rect();
     QPoint point = this->mapToGlobal(rrect.bottomRight());
     int nRight = point.x();
-
+    DataManager::instance()->setSmallNoteWidgetSize(m_pFileViewNoteWidget->size());
     m_pFileViewNoteWidget->showWidget(nRight);
 }
 
@@ -91,6 +91,7 @@ void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
         m_pFileViewNoteWidget->setNotePage(t_page);
         m_pFileViewNoteWidget->setEditText(contant);
         m_pFileViewNoteWidget->setPointAndPage("");
+        DataManager::instance()->setSmallNoteWidgetSize(m_pFileViewNoteWidget->size());
 
         bool t_bHigh = false; // 点击位置是否是高亮
 //        QRect rrect = this->rect();
