@@ -128,7 +128,7 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
 
     //  涉及到 主题颜色
     if (m_bPaint) {
-        p.setColor(QPalette::Text, Qt::blue);
+        p.setColor(QPalette::Text, QColor(QString("#0081FF")));
     } else {
         p.setColor(QPalette::Text, Qt::black);
     }
