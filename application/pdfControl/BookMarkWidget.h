@@ -78,14 +78,13 @@ private slots:
     void slotCloseFile();
     void slotLoadImage(const int &, const QImage &);
     void slotDelBkItem();
-    void slotSelectItem(QListWidgetItem *);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
 
 private:
     void initConnection();
-    void addBookMarkItem(const int &);
+    QListWidgetItem *addBookMarkItem(const int &);
     void setSelectItemBackColor(QListWidgetItem *);
 
 public:
@@ -97,8 +96,6 @@ private:
     CustomListWidget    *m_pBookMarkListWidget = nullptr;
     DPushButton         *m_pAddBookMarkBtn = nullptr;
     LoadBookMarkThread  m_loadBookMarkThread;
-
-    QListWidgetItem     *m_pIndexItem = nullptr;     // 当前鼠标左键点击的item
 };
 
 #endif // BOOKMARKFORM_H

@@ -196,7 +196,7 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
             int page  = t_widget->nPageIndex();
 
             auto pDocProxy = DocummentProxy::instance();
-            qDebug()<<"NotesWidget::slotSelectItem";
+            qDebug() << "NotesWidget::slotSelectItem";
             pDocProxy->jumpToHighLight(t_uuid, page);
 
             DataManager::instance()->setBIsUpdate(true);

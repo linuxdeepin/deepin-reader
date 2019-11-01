@@ -22,8 +22,9 @@ class MainWindow : public DMainWindow, public IObserver
 public:
     MainWindow(DMainWindow *parent = nullptr);
     ~MainWindow() Q_DECL_OVERRIDE;
-    void openfile(const QString& filepath);
-    void setSreenRect(const QRect&);//得到屏幕的分辨率
+
+    void openfile(const QString &filepath);
+    void setSreenRect(const QRect &); //得到屏幕的分辨率
 
 signals:
     void sigOpenFileOk();
@@ -47,6 +48,7 @@ private:
     void onScreening();
 
     void initThemeChanged();
+    void setCurTheme();
 
 private slots:
     void slotOpenFileOk();

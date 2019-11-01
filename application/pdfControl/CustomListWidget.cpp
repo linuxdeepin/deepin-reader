@@ -22,9 +22,9 @@ CustomListWidget::CustomListWidget(DWidget *parent)
  */
 void CustomListWidget::slot_loadImage(const int &row, const QImage &image)
 {
-    QListWidgetItem *item = this->item(row);
+    auto item = this->item(row);
     if (item) {
-        CustomItemWidget *t_ItemWidget = reinterpret_cast<CustomItemWidget *>(this->itemWidget(item));
+        auto t_ItemWidget = reinterpret_cast<CustomItemWidget *>(this->itemWidget(item));
         if (t_ItemWidget) {
             t_ItemWidget->setLabelImage(image);
         }
@@ -38,7 +38,7 @@ void CustomListWidget::slot_loadImage(const int &row, const QImage &image)
  */
 void CustomListWidget::slotShowSelectItem(QListWidgetItem *item)
 {
-    CustomItemWidget *t_ItemWidget = reinterpret_cast<CustomItemWidget *>(this->itemWidget(item));
+    auto t_ItemWidget = reinterpret_cast<CustomItemWidget *>(this->itemWidget(item));
     if (t_ItemWidget) {
         int nJumpPage = t_ItemWidget->nPageIndex();
         int nCurPage = DocummentProxy::instance()->currentPageNo();

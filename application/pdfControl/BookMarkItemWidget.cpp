@@ -47,7 +47,7 @@ void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
  */
 void BookMarkItemWidget::initWidget()
 {
-    QFont font(QString("SourceHanSansSC-Medium"),12);
+    QFont font(QString("SourceHanSansSC-Medium"), 12);
     m_pPageNumber = new DLabel(this);
     m_pPageNumber->setMinimumWidth(31);
     m_pPageNumber->setFixedHeight(18);
@@ -86,7 +86,5 @@ void BookMarkItemWidget::paintEvent(QPaintEvent *event)
 
     m_pPicture->setPalette(p);
     CustomWidget::paintEvent(event);
-
-    update();
 }
 

@@ -8,6 +8,7 @@
 #include <QDesktopServices>
 #include <DMessageBox>
 #include "subjectObserver/ModuleHeader.h"
+#include "application.h"
 
 DocummentFileHelper::DocummentFileHelper(QObject *parent)
     : QObject(parent)
@@ -142,6 +143,9 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
         if (rl) {
             if (QMessageBox::Yes == DMessageBox::question(nullptr, tr("Save File"), tr("Do you need to save the file opened?"))) {
                 m_pDocummentProxy->save(m_szFilePath, true);
+
+                //  保存 书签数据
+                dApp->dbM->saveBookMark();
             }
         }
         m_pDocummentProxy->closeFile();

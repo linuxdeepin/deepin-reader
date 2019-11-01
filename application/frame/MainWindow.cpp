@@ -16,17 +16,7 @@ DWIDGET_USE_NAMESPACE
 MainWindow::MainWindow(DMainWindow *parent)
     : DMainWindow(parent)
 {
-    DGuiApplicationHelper::ColorType colorType = DGuiApplicationHelper::instance()->themeType();
-    QString sTheme = "";
-    if (colorType == DGuiApplicationHelper::UnknownType) {  //  未知
-        sTheme = "Unknown";
-    } else if (colorType == DGuiApplicationHelper::LightType) { //  浅色
-        sTheme = "light";
-    } else if (colorType == DGuiApplicationHelper::DarkType) {  //  深色
-        sTheme = "dark";
-    }
-
-    DataManager::instance()->settrCurrentTheme(sTheme);
+    setCurTheme();
 
     initUI();
 
@@ -173,18 +163,26 @@ void MainWindow::onScreening()
 void MainWindow::initThemeChanged()
 {
     //  主题变了
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] (DGuiApplicationHelper::ColorType colorType) {
-        QString sTheme = "";
-        if (colorType == DGuiApplicationHelper::UnknownType) {  //  未知
-            sTheme = "Unknown";
-        } else if (colorType == DGuiApplicationHelper::LightType) { //  浅色
-            sTheme = "light";
-        } else if (colorType == DGuiApplicationHelper::DarkType) {  //  深色
-            sTheme = "dark";
-        }
-        DataManager::instance()->settrCurrentTheme(sTheme);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] () {
+        setCurTheme();
         sendMsg(MSG_OPERATION_UPDATE_THEME);
     });
+}
+
+//  设置 主题
+void MainWindow::setCurTheme()
+{
+    DGuiApplicationHelper::ColorType colorType = DGuiApplicationHelper::instance()->themeType();
+    QString sTheme = "";
+    if (colorType == DGuiApplicationHelper::UnknownType) {  //  未知
+        sTheme = "Unknown";
+    } else if (colorType == DGuiApplicationHelper::LightType) { //  浅色
+        sTheme = "light";
+    } else if (colorType == DGuiApplicationHelper::DarkType) {  //  深色
+        sTheme = "dark";
+    }
+
+    DataManager::instance()->settrCurrentTheme(sTheme);
 }
 
 //  退出 应用
@@ -196,13 +194,13 @@ void MainWindow::slotAppExit()
         if (rl) {
             if (QMessageBox::Yes == DMessageBox::question(nullptr, tr("Save File"), tr("Do you need to save the file opened?"))) {
                 DocummentProxy::instance()->save(sFilePath, true);
+
+                //  保存 书签数据
+                dApp->dbM->saveBookMark();
             }
         }
         sendMsg(MSG_CLOSE_FILE);
         DocummentProxy::instance()->closeFile();
-
-        //  保存 书签数据
-        dApp->dbM->saveBookMark();
     }
 
     dApp->exit();
