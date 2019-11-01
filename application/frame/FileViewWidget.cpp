@@ -93,8 +93,8 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
         return;
 
     Qt::MouseButton nBtn = event->button();
-    QPoint globalPos = event->globalPos();
     if (nBtn == Qt::LeftButton) {
+        QPoint globalPos = event->globalPos();
         QPoint docGlobalPos = m_pDocummentProxy->global2RelativePoint(globalPos);
 
         //  点击的时候　先判断　点击处　　是否有链接之类
@@ -106,7 +106,6 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 
             if (m_nCurrentHandelState == Handel_State) {
                 m_pHandleMoveStartPoint = globalPos;     //  变成手，　需要的是　相对坐标
-                return;
             } else if (m_nCurrentHandelState == Default_State) {
                 m_pDocummentProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
                 m_pStartPoint = docGlobalPos;
@@ -179,25 +178,23 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
     QPoint tempPoint = this->mapToGlobal(point);
     QPoint pRightClickPoint = m_pDocummentProxy->global2RelativePoint(tempPoint);
 
-
     //  右键鼠标点 是否有高亮区域
     QString sAnnotationText = "", struuid = "";
     bool bIsHighLight = m_pDocummentProxy->annotationClicked(pRightClickPoint, sAnnotationText, struuid);
 
+    int nPage = m_pDocummentProxy->pointInWhichPage(pRightClickPoint);
     if (sSelectText != "" || bIsHighLight) {    //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
         if (nullptr == m_operatemenu) {
             m_operatemenu = new TextOperationMenu(this);
         }
         m_operatemenu->setClickPoint(pRightClickPoint);
-
-        int nPage = m_pDocummentProxy->pointInWhichPage(pRightClickPoint);
         m_operatemenu->setClickPage(nPage);
 
         m_operatemenu->execMenu(tempPoint, bIsHighLight, sSelectText, struuid);
     } else {    //  否则弹出 文档操作菜单
         auto menu = new DefaultOperationMenu(this);
-        menu->execMenu(tempPoint);
+        menu->execMenu(tempPoint, nPage);
     }
 }
 

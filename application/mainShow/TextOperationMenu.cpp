@@ -5,6 +5,7 @@
 #include "docview/docummentproxy.h"
 #include "controller/DataManager.h"
 #include "subjectObserver/ModuleHeader.h"
+#include "application.h"
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)
     : DMenu (parent)
@@ -14,8 +15,10 @@ TextOperationMenu::TextOperationMenu(DWidget *parent)
 
 void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, const QString &sSelectText, const QString &sUuid)
 {
-    bool bBookState = DataManager::instance()->bIsBookMarkState();
-    m_pAddBookMark->setEnabled(!bBookState);  
+    QList<int> pageList = dApp->dbM->getBookMarkList();
+    bool bBookState = pageList.contains(m_nClickPage);
+    m_pAddBookMark->setEnabled(!bBookState);
+
     m_strSelectText = sSelectText;
     if (m_strSelectText == "") {
         m_pCopy->setEnabled(false);

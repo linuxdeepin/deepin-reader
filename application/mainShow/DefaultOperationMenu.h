@@ -18,7 +18,7 @@ public:
     DefaultOperationMenu(DWidget *parent = nullptr);
 
 public:
-    void execMenu(const QPoint &);
+    void execMenu(const QPoint &, const int &);
 
 private:
     void initMenu();

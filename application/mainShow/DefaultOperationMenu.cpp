@@ -4,6 +4,7 @@
 #include "controller/MsgSubject.h"
 #include "subjectObserver/MsgHeader.h"
 #include "docview/docummentproxy.h"
+#include "application.h"
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     : DMenu (parent)
@@ -11,9 +12,10 @@ DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     initMenu();
 }
 
-void DefaultOperationMenu::execMenu(const QPoint &showPoint)
+void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPage)
 {
-    bool bBookState = DataManager::instance()->bIsBookMarkState();
+    QList<int> pageList = dApp->dbM->getBookMarkList();
+    bool bBookState = pageList.contains(nClickPage);
     if (bBookState) {
         m_pBookMark->setProperty("data", 0);
         m_pBookMark->setText(tr("delete bookmark"));

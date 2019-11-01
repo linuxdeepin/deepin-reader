@@ -57,16 +57,6 @@ void DataManager::setBIsUpdate(bool bIsUpdate)
     m_bIsUpdate = bIsUpdate;
 }
 
-bool DataManager::bIsBookMarkState() const
-{
-    return m_bIsBookMarkState;
-}
-
-void DataManager::setBIsBookMarkState(bool bIsBookMarkState)
-{
-    m_bIsBookMarkState = bIsBookMarkState;
-}
-
 QList<QColor> DataManager::getLightColorList()
 {
     return m_listColor;
