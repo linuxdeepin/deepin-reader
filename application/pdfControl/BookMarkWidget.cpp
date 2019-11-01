@@ -47,14 +47,7 @@ void BookMarkWidget::slotAddBookMark(const int &nPage)
     pageList.append(nPage);
     dApp->dbM->setBookMarkList(pageList);
 
-    addBookMarkItem(nPage);
-
-//    slotDocFilePageChanged(nPage);
-
-    bool bl = pageList.contains(nPage);
-
-    m_pAddBookMarkBtn->setEnabled(!bl);
-    sendMsg(MSG_BOOKMARK_STATE, QString("%1").arg(bl));
+   addBookMarkItem(nPage);
 
     DataManager::instance()->setBIsUpdate(true);
 }
@@ -83,8 +76,6 @@ void BookMarkWidget::slotOpenFileOk()
 
     m_loadBookMarkThread.setBookMarks(pageList.count());
     m_loadBookMarkThread.start();
-
-//    slotDocFilePageChanged(0);
 }
 
 /**
@@ -97,7 +88,6 @@ void BookMarkWidget::slotDocFilePageChanged(int page)
     bool bl = pageList.contains(page);
 
     m_pAddBookMarkBtn->setEnabled(!bl);
-    sendMsg(MSG_BOOKMARK_STATE, QString("%1").arg(bl));
 
     if (m_pIndexItem) {
         qDebug() << m_pBookMarkListWidget;
@@ -230,7 +220,6 @@ void BookMarkWidget::slotDelBkItem()
 void BookMarkWidget::slotSelectItem(QListWidgetItem *item)
 {
     if (item != nullptr && m_pIndexItem != item) {
-//        m_pIndexItem = item;
         setSelectItemBackColor(item);
     }
 }
@@ -281,7 +270,7 @@ void BookMarkWidget::addBookMarkItem(const int &page)
 {
     auto dproxy = DocummentProxy::instance();
     if (nullptr == dproxy) {
-        return;
+        return ;
     }
     QImage t_image;
     bool rl = dproxy->getImage(page, t_image, 28, 48);
