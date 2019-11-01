@@ -121,7 +121,6 @@ private slots:
 private:
     CustomListWidget *m_pThumbnailListWidget = nullptr;         // list widget item子界面
     PagingWidget *m_pPageWidget = nullptr;                      // 跳页界面
-    ThumbnailItemWidget *m_pOldThumbnailItemWidget = nullptr;   // 当前选中的项
     int m_totalPages = -1;                                      // 总页码数
     ThreadLoadImage m_ThreadLoadImage;                          // 加载缩略图线程
     bool m_isLoading = false;                                   // 缩略图list是否初始化完毕

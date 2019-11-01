@@ -34,6 +34,7 @@ int ThumbnailItemWidget::dealWithData(const int &, const QString &)
 void ThumbnailItemWidget::setBSelect(const bool &paint)
 {
     m_bPaint = paint;
+    update();
 }
 
 // 初始化界面

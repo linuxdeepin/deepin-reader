@@ -58,17 +58,22 @@ void ThumbnailWidget::initWidget()
 void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 {
     //  先清空之前的选中颜色
-    if (m_pOldThumbnailItemWidget) {
-        m_pOldThumbnailItemWidget->setBSelect(false);
+    auto curItem = m_pThumbnailListWidget->currentItem();
+    if (curItem) {
+        auto itemWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(curItem));
+        if (itemWidget) {
+            itemWidget->setBSelect(false);
+        }
     }
 
     if (item) {
-        m_pOldThumbnailItemWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
-        if (m_pOldThumbnailItemWidget) {
-            m_pOldThumbnailItemWidget->setBSelect(true);
+        m_pThumbnailListWidget->setCurrentItem(item);
+        auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
+        if (pWidget) {
+            pWidget->setBSelect(true);
         }
 
-        int nJumpPage = m_pOldThumbnailItemWidget->nPageIndex();
+        int nJumpPage = pWidget->nPageIndex();
         m_pPageWidget->setCurrentPageValue(nJumpPage);
     }
 }
@@ -76,11 +81,11 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 //  添加项
 void ThumbnailWidget::addThumbnailItem(const int &iIndex)
 {
-    ThumbnailItemWidget *widget = new ThumbnailItemWidget;
+    auto widget = new ThumbnailItemWidget;
     widget->setLabelPage(iIndex);
 //    widget->setMinimumSize(QSize(250, 250));
 
-    QListWidgetItem *item = new QListWidgetItem(m_pThumbnailListWidget);
+    auto item = new QListWidgetItem(m_pThumbnailListWidget);
     item->setFlags(Qt::NoItemFlags);
     item->setSizeHint(QSize(250, 250));
 
@@ -91,10 +96,8 @@ void ThumbnailWidget::addThumbnailItem(const int &iIndex)
 //  文件  当前页变化, 获取与 文档页  对应的 item, 设置 选中该item, 绘制item
 void ThumbnailWidget::slotFileViewToListPage(const int &page)
 {
-    QListWidgetItem *curPageItem = m_pThumbnailListWidget->item(page);
+    auto curPageItem = m_pThumbnailListWidget->item(page);
     if (curPageItem) {
-        m_pThumbnailListWidget->setCurrentRow(page, QItemSelectionModel::NoUpdate);
-
         setSelectItemBackColor(curPageItem);
     }
 }
@@ -115,9 +118,9 @@ void ThumbnailWidget::fillContantToList()
     }
 
     if (m_totalPages > 0) {
-        m_pThumbnailListWidget->setCurrentRow(0, QItemSelectionModel::NoUpdate);
+        m_pThumbnailListWidget->setCurrentRow(0);
 
-        QListWidgetItem *item = m_pThumbnailListWidget->item(0);
+        auto item = m_pThumbnailListWidget->item(0);
         if (item) {
             setSelectItemBackColor(item);
         }
