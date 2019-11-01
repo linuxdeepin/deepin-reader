@@ -25,6 +25,7 @@ bool BookMarkButton::clickState()
 void BookMarkButton::setClickState(bool state)
 {
     isclicked = state;
+    update();
 }
 
 void BookMarkButton::paintEvent(QPaintEvent *e)
