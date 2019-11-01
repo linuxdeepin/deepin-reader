@@ -57,6 +57,9 @@ DIconButton *MainOperationWidget::createBtn(const QString &btnName)
 {
     auto btn = new DIconButton(this);
     btn->setObjectName(btnName);
+    QString sPixmap = PF::getImagePath(btnName, Pri::g_frame);
+    btn->setIcon(QIcon(sPixmap));
+
     btn->setFixedSize(QSize(36, 36));
     btn->setIconSize(QSize(36, 36));
     btn->setCheckable(true);
@@ -88,15 +91,13 @@ void MainOperationWidget::initConnect()
 }
 
 //  主题更新
-void MainOperationWidget::slotUpdateTheme(const QString &sType)
+void MainOperationWidget::slotUpdateTheme()
 {
-    QString sThemeName = PF::GetCurThemeName(sType);
-
     auto btnList = this->findChildren<DIconButton *>();
     foreach (auto btn, btnList) {
         QString objName = btn->objectName();
         if (objName != "") {
-            QString sPixmap = PF::getImagePath(objName, Pri::g_frame, sThemeName);
+            QString sPixmap = PF::getImagePath(objName, Pri::g_frame);
             btn->setIcon(QIcon(sPixmap));
         }
     }
@@ -141,7 +142,7 @@ int MainOperationWidget::dealWithData(const int &msgType, const QString &msgCont
     } else if (msgType == MSG_CLEAR_FIND_CONTENT) {
         emit sigSearchClosed();
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        emit sigUpdateTheme(msgContent);
+        emit sigUpdateTheme();
     }
 
     return 0;

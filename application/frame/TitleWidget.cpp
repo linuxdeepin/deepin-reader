@@ -16,26 +16,24 @@ TitleWidget::~TitleWidget()
 }
 
 //  主题变了
-void TitleWidget::slotUpdateTheme(const QString &sType)
+void TitleWidget::slotUpdateTheme()
 {
-    QString sThemeName = PF::GetCurThemeName(sType);
-
     auto btnList = this->findChildren<DIconButton *>();
     foreach (auto btn, btnList) {
         QString objName = btn->objectName();
         if (objName != "") {
-            QString sPixmap = PF::getImagePath(objName, Pri::g_frame, sThemeName);
+            QString sPixmap = PF::getImagePath(objName, Pri::g_frame);
             btn->setIcon(QIcon( sPixmap));
         }
     }
 
     if (m_pHandleAction) {
-        QString sPixmap = PF::getImagePath("handleShape_small", Pri::g_frame, sThemeName);
+        QString sPixmap = PF::getImagePath("handleShape_small", Pri::g_frame);
         m_pHandleAction->setIcon(QIcon( sPixmap));
     }
 
     if (m_pDefaultAction) {
-        QString sPixmap = PF::getImagePath("defaultShape_small", Pri::g_frame, sThemeName);
+        QString sPixmap = PF::getImagePath("defaultShape_small", Pri::g_frame);
         m_pDefaultAction->setIcon(QIcon(sPixmap));
     }
 }
@@ -207,6 +205,9 @@ DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
     btn->setFixedSize(QSize(36, 36));
     btn->setIconSize(QSize(36, 36));
 
+    QString sPixmap = PF::getImagePath(btnName, Pri::g_frame);
+    btn->setIcon(QIcon(sPixmap));
+
     btn->setToolTip(btnName);
     btn->setCheckable(bCheckable);
 
@@ -236,7 +237,7 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
             emit sigMagnifierCancel();
         }
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        emit sigUpdateTheme(msgContent);
+        emit sigUpdateTheme();
     }
     return 0;
 }

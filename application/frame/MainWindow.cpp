@@ -18,6 +18,18 @@ DWIDGET_USE_NAMESPACE
 MainWindow::MainWindow(DMainWindow *parent)
     : DMainWindow(parent)
 {
+    DGuiApplicationHelper::ColorType colorType = DGuiApplicationHelper::instance()->themeType();
+    QString sTheme = "";
+    if (colorType == DGuiApplicationHelper::UnknownType) {  //  未知
+        sTheme = "Unknown";
+    } else if (colorType == DGuiApplicationHelper::LightType) { //  浅色
+        sTheme = "light";
+    } else if (colorType == DGuiApplicationHelper::DarkType) {  //  深色
+        sTheme = "dark";
+    }
+
+    DataManager::instance()->settrCurrentTheme(sTheme);
+
     initUI();
 
     initTitlebar();
@@ -161,14 +173,16 @@ void MainWindow::initThemeChanged()
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] (DGuiApplicationHelper::ColorType colorType) {
         QString sTheme = "";
         if (colorType == DGuiApplicationHelper::UnknownType) {  //  未知
-            sTheme = "0";
+            sTheme = "Unknown";
         } else if (colorType == DGuiApplicationHelper::LightType) { //  浅色
-            sTheme = "1";
+            sTheme = "light";
         } else if (colorType == DGuiApplicationHelper::DarkType) {  //  深色
-            sTheme = "2";
+            sTheme = "dark";
         }
 
-        sendMsg(MSG_OPERATION_UPDATE_THEME, sTheme);
+        DataManager::instance()->settrCurrentTheme(sTheme);
+
+        sendMsg(MSG_OPERATION_UPDATE_THEME);
     });
 }
 

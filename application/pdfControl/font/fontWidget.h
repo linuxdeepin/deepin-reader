@@ -45,7 +45,7 @@ public:
     FontWidget(CustomWidget *parent = nullptr);
 
 signals:
-    void sigUpdateTheme(const QString &);
+    void sigUpdateTheme();
     void sigWidgetHide();
     void sigOpenFileOk();
 
@@ -56,7 +56,7 @@ protected:
     void initWidget() Q_DECL_OVERRIDE;
 
 private slots:
-    void slotUpdateTheme(const QString &);
+    void slotUpdateTheme();
     void slotReset();
 
 private:

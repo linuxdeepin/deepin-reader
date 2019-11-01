@@ -42,6 +42,8 @@ void HomeWidget::initWidget()
     layout->addStretch(1);
 
     m_pIconLabel = new DLabel;
+    QString sPixmap = PF::getImagePath("import_photo", Pri::g_frame);
+    m_pIconLabel->setPixmap(QPixmap(sPixmap));
     layout->addWidget(m_pIconLabel, 0, Qt::AlignCenter);
 
     layout->addWidget(tipsLabel, 0, Qt::AlignHCenter);
@@ -69,11 +71,9 @@ void HomeWidget::slotChooseBtnClicked()
 }
 
 //  主题切换
-void HomeWidget::slotUpdateTheme(const QString &sTheme)
+void HomeWidget::slotUpdateTheme()
 {
-    QString sThemeName = PF::GetCurThemeName(sTheme);
-
-    QString sPixmap = PF::getImagePath("import_photo", Pri::g_frame, sThemeName);
+    QString sPixmap = PF::getImagePath("import_photo", Pri::g_frame);
     m_pIconLabel->setPixmap(QPixmap(sPixmap));
 }
 
@@ -122,7 +122,7 @@ int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
             return ConstantMsg::g_effective_res;
         }
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        emit sigUpdateTheme(msgContent);
+        emit sigUpdateTheme();
     }
     return 0;
 }

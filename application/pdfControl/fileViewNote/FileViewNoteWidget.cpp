@@ -11,10 +11,10 @@ FileViewNoteWidget::FileViewNoteWidget(CustomWidget *parent):
     initConnections();
 }
 
-int FileViewNoteWidget::dealWithData(const int &msgType, const QString &msgContent)
+int FileViewNoteWidget::dealWithData(const int &msgType, const QString &)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        emit sigUpdateTheme(msgContent);
+        emit sigUpdateTheme();
     }
     return 0;
 }
@@ -157,11 +157,9 @@ void FileViewNoteWidget::initConnections()
 }
 
 //  主题变了
-void FileViewNoteWidget::slotUpdateTheme(const QString &sType)
+void FileViewNoteWidget::slotUpdateTheme()
 {
-    QString sThemeName = PF::GetCurThemeName(sType);
-
-    QString sClose = PF::getImagePath("close", Pri::g_pdfControl, sThemeName);
+    QString sClose = PF::getImagePath("close", Pri::g_pdfControl);
     m_pCloseLab->setPixmap(QPixmap(sClose));
 }
 

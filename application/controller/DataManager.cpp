@@ -1,6 +1,10 @@
 #include "DataManager.h"
 #include "application.h"
 
+#include <DWidget>
+#include <DGuiApplicationHelper>
+DWIDGET_USE_NAMESPACE
+
 DataManager::DataManager(QObject *parent) :
     QObject (parent)
 {
@@ -66,4 +70,14 @@ void DataManager::setBIsBookMarkState(bool bIsBookMarkState)
 QList<QColor> DataManager::getLightColorList()
 {
     return m_listColor;
+}
+
+QString DataManager::gettrCurrentTheme() const
+{
+    return m_strCurrentTheme;
+}
+
+void DataManager::settrCurrentTheme(const QString &strCurrentTheme)
+{
+    m_strCurrentTheme = strCurrentTheme;
 }

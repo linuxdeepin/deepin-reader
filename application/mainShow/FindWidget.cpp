@@ -37,10 +37,10 @@ FindWidget::FindWidget(CustomWidget *parent)
 
 void FindWidget::findCancel()
 {
-     sendMsg(MSG_CLEAR_FIND_CONTENT);
-     m_pSearchEdit->clear();
-     m_pSearchEdit->clearFocus();
-     hide();
+    sendMsg(MSG_CLEAR_FIND_CONTENT);
+    m_pSearchEdit->clear();
+    m_pSearchEdit->clearFocus();
+    hide();
 }
 
 void FindWidget::handleContentChanged()
@@ -76,14 +76,13 @@ void FindWidget::slotClearContent()
 
 void FindWidget::hideEvent(QHideEvent *e)
 {
-    m_strOldFindContent = "";  
+    m_strOldFindContent = "";
     CustomWidget::hideEvent(e);
 }
 
 int FindWidget::dealWithData(const int &msgType, const QString &)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
-        qDebug() << "MSG_OPERATION_UPDATE_THEME MSG_OPERATION_UPDATE_THEME  MSG_OPERATION_UPDATE_THEME";
     }
     return 0;
 }

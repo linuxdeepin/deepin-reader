@@ -47,7 +47,7 @@ int FontWidget::dealWithData(const int &msgType, const QString &msgContent)
         m_pEnlargeSlider->setValue(msgContent.toDouble() * 100);
         break;
     case MSG_OPERATION_UPDATE_THEME:
-        emit sigUpdateTheme(msgContent);
+        emit sigUpdateTheme();
         break;
     }
 
@@ -104,10 +104,9 @@ void FontWidget::initWidget()
 }
 
 //  主题变了
-void FontWidget::slotUpdateTheme(const QString &sType)
+void FontWidget::slotUpdateTheme()
 {
-    QString sThemeName = PF::GetCurThemeName(sType);
-    QString sPixmap = PF::getImagePath("select", Pri::g_pdfControl, sThemeName);
+    QString sPixmap = PF::getImagePath("select", Pri::g_pdfControl);
 
     m_pSuitHLab->setPixmap(QPixmap(sPixmap));
     m_pSuitWLab->setPixmap(QPixmap(sPixmap));

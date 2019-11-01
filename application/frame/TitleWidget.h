@@ -20,14 +20,14 @@ public:
     ~TitleWidget() Q_DECL_OVERRIDE;
 
 signals:
-    void sigUpdateTheme(const QString &);
+    void sigUpdateTheme();
     void sigOpenFileOk();
     void sigAppFullScreen();
 
     void sigMagnifierCancel();
 
 private slots:
-    void slotUpdateTheme(const QString &);
+    void slotUpdateTheme();
     void slotOpenFileOk();
     void slotAppFullScreen();
     void slotMagnifierCancel();

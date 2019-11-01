@@ -1,6 +1,7 @@
 #include "frame/MainWindow.h"
 #include "application.h"
 #include <DLog>
+#include <DApplicationSettings>
 
 DWIDGET_USE_NAMESPACE
 QUrl UrlInfo(QString path)
@@ -39,6 +40,7 @@ int main(int argc, char *argv[])
     Application::loadDXcbPlugin();
 
     Application a(argc, argv);
+    DApplicationSettings savetheme;
 
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
@@ -50,9 +52,8 @@ int main(int argc, char *argv[])
     QStringList arguments = parser.positionalArguments();
     QString filepath;
     for (const QString &path : arguments) {
-        filepath=UrlInfo(path).toLocalFile();
-        if(filepath.endsWith("pdf"))
-        {
+        filepath = UrlInfo(path).toLocalFile();
+        if (filepath.endsWith("pdf")) {
             w.openfile(filepath);
             break;
         }

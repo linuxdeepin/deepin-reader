@@ -24,12 +24,12 @@ public:
     }
 
 signals:
-    void sigUpdateTheme(const QString &);
+    void sigUpdateTheme();
     void sigOpenFileDialog();
 
 private slots:
     void slotChooseBtnClicked();
-    void slotUpdateTheme(const QString &);
+    void slotUpdateTheme();
 
 private:
     QStringList getOpenFileList();

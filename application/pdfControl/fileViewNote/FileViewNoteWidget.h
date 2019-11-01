@@ -45,7 +45,7 @@ public:
     FileViewNoteWidget(CustomWidget *parent = nullptr);
 
 signals:
-    void sigUpdateTheme(const QString &);
+    void sigUpdateTheme();
 
 public:
     // IObserver interface
@@ -71,7 +71,7 @@ private:
     void initConnections();
 
 private slots:
-    void slotUpdateTheme(const QString &);
+    void slotUpdateTheme();
     void slotClosed();
     void slotTextEditMaxContantNum();
 

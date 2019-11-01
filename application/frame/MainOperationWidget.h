@@ -22,12 +22,12 @@ private:
     void initConnect();
 
 signals:
-    void sigUpdateTheme(const QString &);
+    void sigUpdateTheme();
     void sigSearchControl();
     void sigSearchClosed();
 
 private slots:
-    void slotUpdateTheme(const QString &);
+    void slotUpdateTheme();
     void slotButtonClicked(int);
     void slotSearchControl();
     void slotSearchClosed();
