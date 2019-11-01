@@ -203,7 +203,7 @@ DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
     DIconButton *btn = new  DIconButton(this);
     btn->setObjectName(btnName);
     btn->setFixedSize(QSize(36, 36));
-    btn->setIconSize(QSize(36, 36));
+    btn->setIconSize(QSize(36, 36));  
 
     QString sPixmap = PF::getImagePath(btnName, Pri::g_frame);
     btn->setIcon(QIcon(sPixmap));

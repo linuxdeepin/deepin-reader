@@ -1,5 +1,4 @@
 #include "MainWindow.h"
-
 #include "TitleWidget.h"
 #include "MainWidget.h"
 
@@ -10,7 +9,6 @@
 #include <DMessageBox>
 #include <QSignalMapper>
 #include "controller/DataManager.h"
-
 #include <DGuiApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
@@ -71,7 +69,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::openfile(const QString &filepath)
 {
-    // sendMsg(MSG_OPERATION_OPEN_FILE,filepath);
     sendMsg(MSG_OPEN_FILE_PATH, filepath);
 }
 
@@ -179,9 +176,7 @@ void MainWindow::initThemeChanged()
         } else if (colorType == DGuiApplicationHelper::DarkType) {  //  深色
             sTheme = "dark";
         }
-
         DataManager::instance()->settrCurrentTheme(sTheme);
-
         sendMsg(MSG_OPERATION_UPDATE_THEME);
     });
 }
