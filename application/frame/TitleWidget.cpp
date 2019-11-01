@@ -8,6 +8,7 @@ TitleWidget::TitleWidget(CustomWidget *parent) :
 {
     initWidget();
     initConnections();
+    slotUpdateTheme();
 }
 
 TitleWidget::~TitleWidget()
@@ -81,10 +82,10 @@ void TitleWidget::initWidget()
 
 void TitleWidget::initConnections()
 {
-    connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
-    connect(this, SIGNAL(sigMagnifierCancel()), this, SLOT(slotMagnifierCancel()));
-    connect(this, SIGNAL(sigAppFullScreen()), this, SLOT(slotAppFullScreen()));
-    connect(this, &TitleWidget::sigUpdateTheme, &TitleWidget::slotUpdateTheme);
+    connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));
+    connect(this, SIGNAL(sigMagnifierCancel()), SLOT(slotMagnifierCancel()));
+    connect(this, SIGNAL(sigAppFullScreen()), SLOT(slotAppFullScreen()));
+    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
 //  缩略图 显示
@@ -149,7 +150,7 @@ void TitleWidget::on_handleShapeBtn_clicked()
         actionGroup->addAction(m_pHandleAction);
         actionGroup->addAction(m_pDefaultAction);
 
-        connect(actionGroup, SIGNAL(triggered(QAction *)), this, SLOT(slotActionTrigger(QAction *)));
+        connect(actionGroup, SIGNAL(triggered(QAction *)), SLOT(slotActionTrigger(QAction *)));
     }
     m_pHandleMenu->exec(point);
 }
@@ -159,10 +160,27 @@ void TitleWidget::on_magnifyingBtn_clicked()
 {
     bool bCheck = m_pMagnifierBtn->isChecked();
     sendMsgToSubject(MSG_MAGNIFYING, QString::number(bCheck));
+
+    //  开启了放大镜, 需要把选择工具 切换为 选择工具
+    if (bCheck) {
+        if (m_pDefaultAction) {
+            m_pDefaultAction->setChecked(true);
+
+            QString normalPic = PF::getImagePath("defaultShape", Pri::g_frame);
+            m_pHandleShapeBtn->setIcon(QIcon(normalPic));
+        }
+    }
 }
 
 void TitleWidget::slotActionTrigger(QAction *action)
 {
+    //  切换了选择工具, 需要取消放大镜的操作
+    bool bCheck = m_pMagnifierBtn->isChecked();
+    if (bCheck) {
+        m_pMagnifierBtn->setChecked(false);
+        sendMsgToSubject(MSG_MAGNIFYING, "0");
+    }
+
     QString btnName = "";
     int nCurrentState = -1;
 
@@ -184,18 +202,18 @@ void TitleWidget::slotActionTrigger(QAction *action)
 void TitleWidget::initBtns()
 {
     m_pThumbnailBtn = createBtn("thumbnails", true);
-    connect(m_pThumbnailBtn, SIGNAL(clicked()), this, SLOT(on_thumbnailBtn_clicked()));
+    connect(m_pThumbnailBtn, SIGNAL(clicked()), SLOT(on_thumbnailBtn_clicked()));
 
     m_pSettingBtn = createBtn("setting");
-    connect(m_pSettingBtn, SIGNAL(clicked()), this, SLOT(on_settingBtn_clicked()));
+    connect(m_pSettingBtn, SIGNAL(clicked()), SLOT(on_settingBtn_clicked()));
 
     m_pHandleShapeBtn = createBtn("defaultShape");
     m_pHandleShapeBtn->setFixedSize(QSize(42, 36));
     m_pHandleShapeBtn->setIconSize(QSize(42, 36));
-    connect(m_pHandleShapeBtn, SIGNAL(clicked()), this, SLOT(on_handleShapeBtn_clicked()));
+    connect(m_pHandleShapeBtn, SIGNAL(clicked()), SLOT(on_handleShapeBtn_clicked()));
 
     m_pMagnifierBtn = createBtn("magnifier", true);
-    connect(m_pMagnifierBtn, SIGNAL(clicked()), this, SLOT(on_magnifyingBtn_clicked()));
+    connect(m_pMagnifierBtn, SIGNAL(clicked()), SLOT(on_magnifyingBtn_clicked()));
 }
 
 DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
@@ -203,11 +221,7 @@ DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
     DIconButton *btn = new  DIconButton(this);
     btn->setObjectName(btnName);
     btn->setFixedSize(QSize(36, 36));
-    btn->setIconSize(QSize(36, 36));  
-
-    QString sPixmap = PF::getImagePath(btnName, Pri::g_frame);
-    btn->setIcon(QIcon(sPixmap));
-
+    btn->setIconSize(QSize(36, 36));
     btn->setToolTip(btnName);
     btn->setCheckable(bCheckable);
 

@@ -17,6 +17,8 @@ HomeWidget::HomeWidget(CustomWidget *parent):
     if (m_settings->value("dir").toString().isEmpty()) {
         m_settings->setValue("dir", "");
     }
+
+    slotUpdateTheme();
 }
 
 void HomeWidget::initWidget()
@@ -42,8 +44,6 @@ void HomeWidget::initWidget()
     layout->addStretch(1);
 
     m_pIconLabel = new DLabel;
-    QString sPixmap = PF::getImagePath("import_photo", Pri::g_frame);
-    m_pIconLabel->setPixmap(QPixmap(sPixmap));
     layout->addWidget(m_pIconLabel, 0, Qt::AlignCenter);
 
     layout->addWidget(tipsLabel, 0, Qt::AlignHCenter);
@@ -106,7 +106,7 @@ QStringList HomeWidget::getOpenFileList()
 
 void HomeWidget::initConnections()
 {
-    connect(this, &HomeWidget::sigUpdateTheme, &HomeWidget::slotUpdateTheme);
+    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
 int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)

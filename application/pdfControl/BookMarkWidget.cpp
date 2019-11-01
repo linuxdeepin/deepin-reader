@@ -47,7 +47,7 @@ void BookMarkWidget::slotAddBookMark(const int &nPage)
     pageList.append(nPage);
     dApp->dbM->setBookMarkList(pageList);
 
-   addBookMarkItem(nPage);
+    addBookMarkItem(nPage);
 
     DataManager::instance()->setBIsUpdate(true);
 }
@@ -84,7 +84,7 @@ void BookMarkWidget::slotOpenFileOk()
  */
 void BookMarkWidget::slotDocFilePageChanged(int page)
 {
-    if(m_pBookMarkListWidget==nullptr){
+    if (m_pBookMarkListWidget == nullptr) {
         return;
     }
     QList<int> pageList = dApp->dbM->getBookMarkList();

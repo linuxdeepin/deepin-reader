@@ -10,14 +10,14 @@ DataManager::DataManager(QObject *parent) :
 {
     m_strOnlyFilePath = "";
 
-    m_listColor.append((Qt::darkYellow));
-    m_listColor.append((Qt::red));
-    m_listColor.append((Qt::darkMagenta));
-    m_listColor.append((Qt::blue));
-    m_listColor.append((Qt::cyan));
-    m_listColor.append((Qt::green));
-    m_listColor.append((Qt::yellow));
-    m_listColor.append((Qt::gray));
+    m_listColor.append(Qt::darkYellow);
+    m_listColor.append(Qt::red);
+    m_listColor.append(Qt::darkMagenta);
+    m_listColor.append(Qt::blue);
+    m_listColor.append(Qt::cyan);
+    m_listColor.append(Qt::green);
+    m_listColor.append(Qt::yellow);
+    m_listColor.append(Qt::gray);
 }
 
 QString DataManager::strOnlyFilePath() const

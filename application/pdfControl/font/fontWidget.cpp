@@ -4,9 +4,10 @@
 FontWidget::FontWidget(CustomWidget *parent):
     CustomWidget("FontWidget", parent)
 {
+    initWidget();
     initConnection();
 
-    initWidget();
+    slotUpdateTheme();
 }
 
 /**
@@ -111,6 +112,12 @@ void FontWidget::slotUpdateTheme()
     m_pSuitHLab->setPixmap(QPixmap(sPixmap));
     m_pSuitWLab->setPixmap(QPixmap(sPixmap));
     m_pDoubPageViewLab->setPixmap(QPixmap(sPixmap));
+
+    QString sSmall = PF::getImagePath("A_small", Pri::g_pdfControl);
+    QString sBig = PF::getImagePath("A_big", Pri::g_pdfControl);
+
+    m_pEnlargeSlider->setLeftIcon(QIcon(sSmall));
+    m_pEnlargeSlider->setRightIcon(QIcon(sBig));
 }
 
 /**
@@ -227,8 +234,8 @@ void FontWidget::setShowSuitWIcon()
  */
 void FontWidget::initConnection()
 {
-    connect(this, &FontWidget::sigUpdateTheme, &FontWidget::slotUpdateTheme);
-    connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotReset()));
+    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
+    connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotReset()));
 }
 
 //  分割线
@@ -258,11 +265,6 @@ void FontWidget::initScaleSlider()
     m_pEnlargeSlider->setPageStep(25);
     m_pEnlargeSlider->slider()->setTickPosition(QSlider::TicksBelow);
 
-    QString sSmall = PF::getImagePath("A_small", Pri::g_pdfControl);
-    QString sBig = PF::getImagePath("A_big", Pri::g_pdfControl);
-
-    m_pEnlargeSlider->setLeftIcon(QIcon(sSmall));
-    m_pEnlargeSlider->setRightIcon(QIcon(sBig));
     connect(m_pEnlargeSlider, SIGNAL(valueChanged(int)), this, SLOT(slotSetChangeVal(int)));
 }
 
@@ -281,8 +283,6 @@ void FontWidget::initDowbleShow()
     m_pDoubleShowLayout->addStretch(1);
 
     m_pDoubPageViewLab = new MenuLab(this);
-    QString sSelect = PF::getImagePath("select", Pri::g_pdfControl);
-    m_pDoubPageViewLab->setPixmap(QPixmap(sSelect));
     m_pDoubPageViewLab->hide();
     m_pDoubPageViewLab->setFixedSize(QSize(30, 25));
     connect(m_pDoubPageViewLab, SIGNAL(clicked()), this, SLOT(slotSetDoubPageViewCheckIcon()));
@@ -304,8 +304,7 @@ void FontWidget::initAdaptateHeight()
     m_pAdaptateHeightLayout->addStretch(1);
 
     m_pSuitHLab = new MenuLab(this);
-    QString sSelect = PF::getImagePath("select", Pri::g_pdfControl);
-    m_pSuitHLab->setPixmap(QPixmap(sSelect));
+
     m_pSuitHLab->hide();
     m_pSuitHLab->setFixedSize(QSize(30, 25));
     connect(m_pSuitHLab, SIGNAL(clicked()), this, SLOT(slotSetSuitHCheckIcon()));
@@ -327,8 +326,6 @@ void FontWidget::initAdaptateWidght()
     m_pAdaptateWidghtLayout->addStretch(1);
 
     m_pSuitWLab = new MenuLab(this);
-    QString sSelect = PF::getImagePath("select", Pri::g_pdfControl);
-    m_pSuitWLab->setPixmap(QPixmap(sSelect));
     m_pSuitWLab->hide();
     m_pSuitWLab->setFixedSize(QSize(30, 25));
     connect(m_pSuitWLab, SIGNAL(clicked()), this, SLOT(slotSetSuitWCheckIcon()));

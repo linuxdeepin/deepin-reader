@@ -8,6 +8,7 @@ MainOperationWidget::MainOperationWidget(CustomWidget *parent):
 {
     initWidget();
     initConnect();
+    slotUpdateTheme();
 }
 
 void MainOperationWidget::initWidget()
@@ -57,9 +58,6 @@ DIconButton *MainOperationWidget::createBtn(const QString &btnName)
 {
     auto btn = new DIconButton(this);
     btn->setObjectName(btnName);
-    QString sPixmap = PF::getImagePath(btnName, Pri::g_frame);
-    btn->setIcon(QIcon(sPixmap));
-
     btn->setFixedSize(QSize(36, 36));
     btn->setIconSize(QSize(36, 36));
     btn->setCheckable(true);
@@ -85,9 +83,9 @@ QString MainOperationWidget::findBtnName()
 
 void MainOperationWidget::initConnect()
 {
-    connect(this, SIGNAL(sigSearchControl()), this, SLOT(slotSearchControl()));
-    connect(this, SIGNAL(sigSearchClosed()), this, SLOT(slotSearchClosed()));
-    connect(this, &MainOperationWidget::sigUpdateTheme, &MainOperationWidget::slotUpdateTheme);
+    connect(this, SIGNAL(sigSearchControl()), SLOT(slotSearchControl()));
+    connect(this, SIGNAL(sigSearchClosed()), SLOT(slotSearchClosed()));
+    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
 //  主题更新

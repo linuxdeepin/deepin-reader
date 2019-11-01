@@ -24,7 +24,6 @@ public:
     }
 
 signals:
-    void sigUpdateTheme();
     void sigOpenFileDialog();
 
 private slots:

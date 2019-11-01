@@ -45,7 +45,6 @@ public:
     FontWidget(CustomWidget *parent = nullptr);
 
 signals:
-    void sigUpdateTheme();
     void sigWidgetHide();
     void sigOpenFileOk();
 

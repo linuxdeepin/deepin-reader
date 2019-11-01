@@ -22,7 +22,6 @@ private:
     void initConnect();
 
 signals:
-    void sigUpdateTheme();
     void sigSearchControl();
     void sigSearchClosed();
 

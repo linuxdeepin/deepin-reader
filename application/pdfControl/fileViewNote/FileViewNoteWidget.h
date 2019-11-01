@@ -44,9 +44,6 @@ class FileViewNoteWidget : public CustomWidget
 public:
     FileViewNoteWidget(CustomWidget *parent = nullptr);
 
-signals:
-    void sigUpdateTheme();
-
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;

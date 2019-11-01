@@ -20,7 +20,6 @@ public:
     ~TitleWidget() Q_DECL_OVERRIDE;
 
 signals:
-    void sigUpdateTheme();
     void sigOpenFileOk();
     void sigAppFullScreen();
 

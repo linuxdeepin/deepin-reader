@@ -30,6 +30,10 @@ public:
     CustomWidget(const QString &, DWidget *parent = nullptr);
     ~CustomWidget() Q_DECL_OVERRIDE;
 
+    //  主题更新信号
+signals:
+    void sigUpdateTheme();
+
 protected:
     virtual void initWidget() = 0;
 

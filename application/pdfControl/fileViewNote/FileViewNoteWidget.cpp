@@ -9,6 +9,7 @@ FileViewNoteWidget::FileViewNoteWidget(CustomWidget *parent):
 
     initWidget();
     initConnections();
+    slotUpdateTheme();
 }
 
 int FileViewNoteWidget::dealWithData(const int &msgType, const QString &)
@@ -78,10 +79,6 @@ void FileViewNoteWidget::initWidget()
 
     m_pCloseLab = new MenuLab;
     m_pCloseLab->setFixedSize(QSize(24, 24));
-
-    QString sClose = PF::getImagePath("close", Pri::g_pdfControl);
-    m_pCloseLab->setPixmap(QPixmap(sClose));
-
     connect(m_pCloseLab, SIGNAL(clicked()), this, SLOT(slotClosed()));
 
     auto m_pHLayoutClose = new QHBoxLayout;
@@ -153,7 +150,7 @@ void FileViewNoteWidget::paintEvent(QPaintEvent *e)
 
 void FileViewNoteWidget::initConnections()
 {
-    connect(this, &FileViewNoteWidget::sigUpdateTheme, &FileViewNoteWidget::slotUpdateTheme);
+    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
 //  主题变了
