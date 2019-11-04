@@ -11,16 +11,22 @@ ThumbnailItemWidget::ThumbnailItemWidget(CustomItemWidget *parent) :
 void ThumbnailItemWidget::paintEvent(QPaintEvent *event)
 {
     QPalette p;
+    QPalette pPage;
+    QColor color;
 
     //  涉及到 主题颜色
     if (m_bPaint) {
-        p.setColor(QPalette::Text, QColor(QString("#0081FF")));
+        color = QColor(QString("#0081FF"));
+        p.setColor(QPalette::Text, color);
+        pPage.setColor(QPalette::Text, color);
     } else {
-        p.setColor(QPalette::Text, Qt::black);
+        color = QColor::fromRgbF(0, 0, 0, 0.08);
+        p.setColor(QPalette::Text, color);
+        pPage.setColor(QPalette::Text, QColor(QString("#303030")));
     }
 
     m_pPicture->setPalette(p);
-    m_pPageNumber->setPalette(p);
+    m_pPageNumber->setPalette(pPage);
     CustomWidget::paintEvent(event);
 }
 

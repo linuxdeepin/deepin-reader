@@ -91,37 +91,6 @@ void FileViewNoteWidget::initWidget()
     m_pHLayoutContant->addStretch(0);
 
     m_pTextEdit = new CustemTextEdit(this);
-#if 0
-//    m_pTextEdit->setFixedSize(205, 257);
-//    //background color
-//    QPalette pText = m_pTextEdit->palette();
-//    pText.setColor(QPalette::Base, QColor(255, 251, 225));
-//    m_pTextEdit->setPalette(pText);
-//    //font
-//    QFont fontContant(QString("SourceHanSansCN-Normal"), 12);
-//    m_pTextEdit->setFont(fontContant);
-//    //text corlor
-//    m_pTextEdit->setTextColor(QColor(QString("#452B0A")));
-//    //frame style
-//    m_pTextEdit->setFrameStyle(QFrame::NoFrame);
-//    //text under line
-//    QTextCursor cursor(m_pTextEdit->textCursor());
-//    QTextCharFormat format = cursor.charFormat ();
-//    QTextBlockFormat textBlockFormat;
-//    //line height
-//    textBlockFormat.setLineHeight(19, QTextBlockFormat::FixedHeight);
-//    //line margin
-//    textBlockFormat.setBottomMargin(0);
-//    format.setFontUnderline(true);
-//    cursor.mergeCharFormat(format);
-//    cursor.setBlockFormat(textBlockFormat);
-//    m_pTextEdit->setTextCursor(cursor);
-//    //line count
-//    m_pTextEdit->document()->setMaximumBlockCount(10);
-//    m_pTextEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//    m_pTextEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//    connect(m_pTextEdit, SIGNAL(textChanged()), this, SLOT(slotTextEditMaxContantNum()));
-#endif
 
     m_pHLayoutContant->addWidget(m_pTextEdit);
 
@@ -142,7 +111,8 @@ void FileViewNoteWidget::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     painter.setOpacity(1);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setBrush(/*QColor(255, 251, 225)*/QColor(QString("#FFFBE1")));
+    painter.setPen(QPen(QColor::fromRgbF(0, 0, 0, 0.3), 1));
+    painter.setBrush(QColor(QString("#FFFBE1")));
     painter.drawRoundedRect(rectangle, 6, 6);
 
     CustomWidget::paintEvent(e);
