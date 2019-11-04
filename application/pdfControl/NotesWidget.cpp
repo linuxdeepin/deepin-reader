@@ -310,11 +310,11 @@ void NotesWidget::addNewItem(const stHighlightContent &note)
     itemWidget->setNoteUUid(note.struuid);
     itemWidget->setLabelPage(note.ipage, 1);
     itemWidget->setTextEditText(note.strcontents);
-    itemWidget->setMinimumSize(QSize(190, 80));
+    itemWidget->setMinimumSize(QSize(140, 80));
 
     QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
     item->setFlags(Qt::NoItemFlags);
-    item->setSizeHint(QSize(190, 80));
+    item->setSizeHint(QSize(140, 80));
 
     m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);

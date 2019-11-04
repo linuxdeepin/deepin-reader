@@ -272,7 +272,7 @@ void BookMarkWidget::initWidget()
     m_pBookMarkListWidget = new CustomListWidget;
 
     m_pAddBookMarkBtn = new DPushButton(this);
-    m_pAddBookMarkBtn->setMinimumSize(QSize(250, 50));
+    m_pAddBookMarkBtn->setMinimumSize(QSize(226, 50));
     m_pAddBookMarkBtn->setText(tr("add bookmark"));
     connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(slotAddBookMark()));
 
@@ -320,7 +320,7 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
 
         auto item = new QListWidgetItem(m_pBookMarkListWidget);
         item->setFlags(Qt::NoItemFlags);
-        item->setSizeHint(QSize(190, 80));
+        item->setSizeHint(QSize(140, 80));
 
         m_pBookMarkListWidget->addItem(item);
         m_pBookMarkListWidget->setItemWidget(item, t_widget);
