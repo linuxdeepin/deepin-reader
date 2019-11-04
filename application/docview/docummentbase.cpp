@@ -145,6 +145,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     //    d->m_threadloaddoc.setDoc(this);
     //    d->m_threadloadwords.setDoc(this);
     setWidgetResizable(true);
+    d->qwfather = parent;
     d->m_widget = new DWidget(this);
     setWidget(d->m_widget);
     d->showslidwaittimer = new QTimer(this);
@@ -439,6 +440,9 @@ int DocummentBase::pointInWhichPage(QPoint &qpoint)
                 break;
             case ViewMode_FacingPage:
                 //                qpoint = QPoint(qpoint.x() - m_widgets.at(i)->x(), qpoint.y() - m_widgets.at(i)->y());
+                if (2 * i >= d->m_pages.size()) {
+                    return pagenum;
+                }
                 if (qpoint.x() > d->m_pages.at(2 * i)->x() &&
                         qpoint.x() <
                         (d->m_pages.at(2 * i)->width() + d->m_pages.at(2 * i)->x()) &&
@@ -796,6 +800,58 @@ int DocummentBase::getCurrentPageNo()
     return currentPageNo();
 }
 
+int DocummentBase::currentLastPageNo()
+{
+    Q_D(DocummentBase);
+    int pagenum = -1;
+    int x_offset = 0;
+    int y_offset = 0;
+    DScrollBar *scrollBar_X = horizontalScrollBar();
+    if (scrollBar_X)
+        x_offset = scrollBar_X->value() + d->qwfather->width();
+    DScrollBar *scrollBar_Y = verticalScrollBar();
+    if (scrollBar_Y)
+        y_offset = scrollBar_Y->value() + d->qwfather->height();
+    switch (d->m_viewmode) {
+    case ViewMode_SinglePage:
+        for (int i = 0; i < d->m_pages.size(); i++) {
+            if (y_offset < d->m_widgets.at(i)->y() + d->m_widgets.at(i)->height()) {
+                pagenum = i;
+                break;
+            }
+        }
+        break;
+    case ViewMode_FacingPage:
+        for (int i = 0; i < d->m_pages.size() / 2; i++) {
+            if (y_offset < d->m_widgets.at(i)->y() + d->m_widgets.at(i)->height()) {
+                if (x_offset < d->m_widgets.at(i)->x() + d->m_pages.at(i * 2)->x() + d->m_pages.at(i * 2)->width()) {
+                    pagenum = i * 2;
+                } else {
+                    pagenum = i * 2 + 1;
+                }
+                break;
+            }
+        }
+        if (-1 == pagenum && d->m_pages.size() % 2) {
+            if (y_offset < d->m_widgets.at(d->m_pages.size() / 2)->y() + d->m_widgets.at(d->m_pages.size() / 2)->height()) {
+                if (x_offset < d->m_widgets.at(d->m_pages.size() / 2)->x() + d->m_pages.at(d->m_pages.size() - 1)->x() + d->m_pages.at(d->m_pages.size() - 1)->width()) {
+                    pagenum = d->m_pages.size() - 1;
+                } else {
+                    pagenum = d->m_pages.size();
+                }
+                break;
+            }
+        }
+        break;
+    default:
+        break;
+    }
+    if (-1 == pagenum) {
+        pagenum = d->m_pages.size() - 1;
+    }
+    return pagenum;
+}
+
 int DocummentBase::currentPageNo()
 {
     Q_D(DocummentBase);
@@ -1132,32 +1188,31 @@ bool DocummentBase::loadPages()
     for (int i = 0; i < d->m_pages.size(); i++) {
         d->m_pages.at(i)->waitThread();
     }
-    int pagenum  = d->m_currentpageno;
+    int pagenum = 0;
+    int firstpagenum  = d->m_currentpageno;
+    int lastpagenum  = currentLastPageNo();
+    qDebug() << "---------------firstpagenum:" << firstpagenum << " lastpagenum:" << lastpagenum;
+    for (int i = firstpagenum; i < lastpagenum + 1; i++) {
+        if (i >= 0 && i < d->m_pages.size())
+            d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);
+    }
+    pagenum = lastpagenum + 1;
     if (pagenum >= 0 && pagenum < d->m_pages.size())
         d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
-    pagenum = d->m_currentpageno + 1;
+    pagenum = firstpagenum - 1;
     if (pagenum >= 0 && pagenum < d->m_pages.size())
         d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
-    pagenum = d->m_currentpageno - 1;
+    pagenum = lastpagenum + 2;
     if (pagenum >= 0 && pagenum < d->m_pages.size())
         d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
-    pagenum = d->m_currentpageno + 2;
-    if (pagenum >= 0 && pagenum < d->m_pages.size())
-        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
-    pagenum = d->m_currentpageno - 2;
-    if (pagenum >= 0 && pagenum < d->m_pages.size())
-        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
-    pagenum = d->m_currentpageno + 3;
-    if (pagenum >= 0 && pagenum < d->m_pages.size())
-        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
-    pagenum = d->m_currentpageno - 3;
+    pagenum = firstpagenum - 2;
     if (pagenum >= 0 && pagenum < d->m_pages.size())
         d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
 
     for (int i = 0; i < d->m_pages.size(); i++) {
         bool bshow = false;
-        for (int j = 0; j < 7; j++) {
-            if (i == d->m_currentpageno - 3 + j) {
+        for (int j = firstpagenum - 2; j < lastpagenum + 3; j++) {
+            if (i == j) {
                 bshow = true;
                 break;
             }

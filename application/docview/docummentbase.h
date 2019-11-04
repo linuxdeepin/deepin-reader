@@ -123,6 +123,7 @@ public:
         bfindnext = true;
         m_bScanningcopy = false;
         showslidwaittimer = nullptr;
+        qwfather = nullptr;
 
     }
 
@@ -191,6 +192,7 @@ public:
     bool bfindnext;//上一次搜索结果是向前翻还是向后翻
     bool m_bScanningcopy;//当前打开的是否为扫描件
     QTimer *showslidwaittimer;
+    DWidget *qwfather;
 
 
 signals:
@@ -244,6 +246,7 @@ public:
     QPoint global2RelativePoint(QPoint globalpoint);
     bool showMagnifier(QPoint point);
     int getCurrentPageNo();
+    int currentLastPageNo();
     int currentPageNo();
     Page::Link *mouseBeOverLink(QPoint point);
     bool getSelectTextString(QString &st);
