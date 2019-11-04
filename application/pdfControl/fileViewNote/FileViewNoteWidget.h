@@ -28,7 +28,7 @@ private slots:
     void slotTextEditMaxContantNum();
 
 private:
-    int m_nMaxContantLen = 239;    // 允许输入文本最大长度
+    int m_nMaxContantLen = 1000;    // 允许输入文本最大长度
 };
 
 /**

@@ -277,7 +277,7 @@ void CustemTextEdit::init()
     //line count
     this->document()->setMaximumBlockCount(10);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextEditMaxContantNum()));
 }

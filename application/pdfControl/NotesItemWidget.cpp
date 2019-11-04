@@ -138,7 +138,7 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
 
     m_pPicture->setPalette(p);
 
-    update();
+//    update();
 }
 
 QString NotesItemWidget::calcText(const QFont &font, const QString &note, const QSize &size/*const int MaxWidth*/)
