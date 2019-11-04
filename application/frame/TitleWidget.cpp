@@ -19,7 +19,7 @@ TitleWidget::~TitleWidget()
 //  主题变了
 void TitleWidget::slotUpdateTheme()
 {
-    auto btnList = this->findChildren<DIconButton *>();
+    auto btnList = this->findChildren<DToolButton *>();
     foreach (auto btn, btnList) {
         QString objName = btn->objectName();
         if (objName != "") {
@@ -220,9 +220,9 @@ void TitleWidget::initBtns()
     connect(m_pMagnifierBtn, SIGNAL(clicked()), SLOT(on_magnifyingBtn_clicked()));
 }
 
-DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
+DToolButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 {
-    DIconButton *btn = new  DIconButton(this);
+    DToolButton *btn = new  DToolButton(this);
     btn->setFixedSize(QSize(36, 36));
     btn->setIconSize(QSize(36, 36));
     btn->setToolTip(btnName);

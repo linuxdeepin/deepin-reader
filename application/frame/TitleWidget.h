@@ -3,6 +3,7 @@
 
 #include <DMenu>
 #include <DIconButton>
+#include <DToolButton>
 
 #include "subjectObserver/CustomWidget.h"
 #include "pdfControl/font/fontWidget.h"
@@ -42,7 +43,7 @@ private:
     void initConnections();
 
     void initBtns();
-    DIconButton *createBtn(const QString &btnName, bool bCheckable = false);
+    DToolButton *createBtn(const QString &btnName, bool bCheckable = false);
     void sendMsgToSubject(const int &, const QString &msgCotent = "");
 
 private:
@@ -52,10 +53,10 @@ private:
     QAction  *m_pHandleAction = nullptr;
     QAction  *m_pDefaultAction = nullptr;
 
-    DIconButton *m_pThumbnailBtn = nullptr;
-    DIconButton *m_pSettingBtn = nullptr;
-    DIconButton *m_pHandleShapeBtn = nullptr;
-    DIconButton *m_pMagnifierBtn = nullptr;
+    DToolButton *m_pThumbnailBtn = nullptr;
+    DToolButton *m_pSettingBtn = nullptr;
+    DToolButton *m_pHandleShapeBtn = nullptr;
+    DToolButton *m_pMagnifierBtn = nullptr;
 
     // CustomWidget interface
 protected:
