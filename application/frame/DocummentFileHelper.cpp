@@ -228,7 +228,7 @@ void DocummentFileHelper::onClickPageLink(Page::Link *pLink)
     if (linkType == Page::LinkType_NULL) {
 
     } else if (linkType == Page::LinkType_Goto) {
-        int page = pLink->page;
+        int page = pLink->page - 1;
         m_pDocummentProxy->pageJump(page);
     } else if (linkType == Page::LinkType_GotoOtherFile) {
 
