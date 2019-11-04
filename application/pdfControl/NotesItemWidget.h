@@ -56,6 +56,7 @@ public:
     inline void setBSelect(const bool &paint)
     {
         m_bPaint = paint;
+        update();
     }
 
 private slots:

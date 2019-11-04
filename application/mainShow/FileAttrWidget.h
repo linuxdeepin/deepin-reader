@@ -50,7 +50,6 @@ private:
     DLabel *labelImage = nullptr;
     DLabel *labelFileName = nullptr;
 
-    DLabel *labelFileTitle = nullptr;
     DLabel *labelFilePath = nullptr;
     DLabel *labelTheme = nullptr;
     DLabel *labelAuthor = nullptr;

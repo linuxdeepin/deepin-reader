@@ -201,25 +201,28 @@ void TitleWidget::slotActionTrigger(QAction *action)
 
 void TitleWidget::initBtns()
 {
-    m_pThumbnailBtn = createBtn("thumbnails", true);
+    m_pThumbnailBtn = createBtn(tr("thumbnails"), true);
+    m_pThumbnailBtn->setObjectName("thumbnails");
     connect(m_pThumbnailBtn, SIGNAL(clicked()), SLOT(on_thumbnailBtn_clicked()));
 
-    m_pSettingBtn = createBtn("setting");
+    m_pSettingBtn = createBtn(tr("setting"));
+    m_pSettingBtn->setObjectName("setting");
     connect(m_pSettingBtn, SIGNAL(clicked()), SLOT(on_settingBtn_clicked()));
 
-    m_pHandleShapeBtn = createBtn("defaultShape");
+    m_pHandleShapeBtn = createBtn(tr("defaultShape"));
+    m_pHandleShapeBtn->setObjectName("defaultShape");
     m_pHandleShapeBtn->setFixedSize(QSize(42, 36));
     m_pHandleShapeBtn->setIconSize(QSize(42, 36));
     connect(m_pHandleShapeBtn, SIGNAL(clicked()), SLOT(on_handleShapeBtn_clicked()));
 
-    m_pMagnifierBtn = createBtn("magnifier", true);
+    m_pMagnifierBtn = createBtn(tr("magnifier"), true);
+    m_pMagnifierBtn->setObjectName("magnifier");
     connect(m_pMagnifierBtn, SIGNAL(clicked()), SLOT(on_magnifyingBtn_clicked()));
 }
 
 DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 {
     DIconButton *btn = new  DIconButton(this);
-    btn->setObjectName(btnName);
     btn->setFixedSize(QSize(36, 36));
     btn->setIconSize(QSize(36, 36));
     btn->setToolTip(btnName);

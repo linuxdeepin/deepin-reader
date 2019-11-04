@@ -22,12 +22,14 @@ void MainOperationWidget::initWidget()
     auto btnGroup = new QButtonGroup;  //  按钮组，　自动实现按钮唯一check属性
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
 
-    QStringList btnStrList = QStringList() << "thumbnail" << "bookmark" << "annotation";
+    QStringList btnStrList = QStringList() << tr("thumbnail") << tr("bookmark") << tr("annotation");
+    QStringList btnTipList = QStringList() << "thumbnail" << "bookmark" << "annotation";
 
     int nSize = btnStrList.size();
     for (int iLoop = 0; iLoop < nSize; iLoop++) {
         QString sBtn = btnStrList.at(iLoop);
         auto btn = createBtn(sBtn);
+        btn->setObjectName(btnTipList.at(iLoop));
         btnGroup->addButton(btn, iLoop);
         hboxLayout->addWidget(btn);
     }
@@ -57,7 +59,7 @@ void MainOperationWidget::initWidget()
 DIconButton *MainOperationWidget::createBtn(const QString &btnName)
 {
     auto btn = new DIconButton(this);
-    btn->setObjectName(btnName);
+    btn->setToolTip(btnName);
     btn->setFixedSize(QSize(36, 36));
     btn->setIconSize(QSize(36, 36));
     btn->setCheckable(true);

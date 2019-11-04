@@ -45,6 +45,9 @@ void DocummentFileHelper::slotSaveFile()
 {
     bool rl = m_pDocummentProxy->save(m_szFilePath, true);
     if (rl) {
+        //  保存需要保存 数据库记录
+        dApp->dbM->saveBookMark();
+
         DataManager::instance()->setBIsUpdate(false);
     }
 }
@@ -63,12 +66,16 @@ void DocummentFileHelper::slotSaveAsFile()
 
             bool rl = m_pDocummentProxy->saveas(sFilePath, true);
             if (rl) {
+                QFileInfo info(m_szFilePath);
+                setAppShowTitle(info.baseName());
+
+                // 另存为需要保存 数据库记录
+                dApp->dbM->saveAsBookMark(sFilePath, info.baseName());
+
                 DataManager::instance()->setBIsUpdate(false);
 
                 m_szFilePath = sFilePath;
 
-                QFileInfo info(m_szFilePath);
-                setAppShowTitle(info.baseName());
             }
         }
     }

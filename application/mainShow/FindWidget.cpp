@@ -83,6 +83,8 @@ void FindWidget::hideEvent(QHideEvent *e)
 int FindWidget::dealWithData(const int &msgType, const QString &)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
+    } else if ( msgType == MSG_OPERATION_SLIDE) {   //  幻灯片了
+        this->setVisible(false);
     }
     return 0;
 }

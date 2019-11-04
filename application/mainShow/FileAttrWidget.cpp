@@ -36,15 +36,11 @@ void FileAttrWidget::setFileAttr()
     if (rl) {
         labelImage->setPixmap(QPixmap::fromImage(image));
     }
-    QFileInfo info(fileInfo.strFilepath);
 
-    QString szTitle = "";
-    dproxy->title(szTitle);
-    if (szTitle == "") {
-        szTitle = info.baseName();
-    }
+    QFileInfo info(fileInfo.strFilepath);
+    QString szTitle = info.fileName();
+
     labelFileName->setText(szTitle);
-    labelFileTitle->setText(szTitle);
 
     labelFilePath->setText(fileInfo.strFilepath);
     labelFilePath->setWordWrap(true);
@@ -128,21 +124,20 @@ void FileAttrWidget::initLabels()
     auto gridLayout = new QGridLayout;
     gridLayout->setSpacing(6);
 
-    labelFileTitle = createLabel(gridLayout, 0, tr("Title") + ":");
-    labelFilePath = createLabel(gridLayout, 1, tr("Location") + ":");
-    labelTheme = createLabel(gridLayout, 2, tr("Theme") + ":");
-    labelAuthor = createLabel(gridLayout, 3, tr("Author") + ":");
-    labelKeyWord = createLabel(gridLayout, 4, tr("Keywords") + ":");
-    labelProducer = createLabel(gridLayout, 5, tr("Producers") + ":");
-    labelCreator = createLabel(gridLayout, 6, tr("Creator") + ":");
-    labelCreateTime =  createLabel(gridLayout, 7, tr("Create Time") + ":");
-    labelUpdateTime = createLabel(gridLayout, 8, tr("Update Time") + ":");
-    labelFormat = createLabel(gridLayout, 9, tr("Format") + ":");
-    labelPageNumber = createLabel(gridLayout, 10, tr("Page's Number") + ":");
-    labelBetter = createLabel(gridLayout, 11, tr("Optimize") + ":");
-    labelSafe = createLabel(gridLayout, 12, tr("Security") + ":");
-    labelPaperSize = createLabel(gridLayout, 13, tr("Paper Size") + ":");
-    labelSize = createLabel(gridLayout, 14, tr("File Size") + ":");
+    labelFilePath = createLabel(gridLayout, 0, tr("Location") + ":");
+    labelTheme = createLabel(gridLayout, 1, tr("Theme") + ":");
+    labelAuthor = createLabel(gridLayout, 2, tr("Author") + ":");
+    labelKeyWord = createLabel(gridLayout, 3, tr("Keywords") + ":");
+    labelProducer = createLabel(gridLayout, 4, tr("Producers") + ":");
+    labelCreator = createLabel(gridLayout, 5, tr("Creator") + ":");
+    labelCreateTime =  createLabel(gridLayout, 6, tr("Create Time") + ":");
+    labelUpdateTime = createLabel(gridLayout, 7, tr("Update Time") + ":");
+    labelFormat = createLabel(gridLayout, 8, tr("Format") + ":");
+    labelPageNumber = createLabel(gridLayout, 9, tr("Page's Number") + ":");
+    labelBetter = createLabel(gridLayout, 10, tr("Optimize") + ":");
+    labelSafe = createLabel(gridLayout, 11, tr("Security") + ":");
+    labelPaperSize = createLabel(gridLayout, 12, tr("Paper Size") + ":");
+    labelSize = createLabel(gridLayout, 13, tr("File Size") + ":");
 
     auto labelWidget = new DWidget(this);
     auto vbLayout = new QVBoxLayout;
