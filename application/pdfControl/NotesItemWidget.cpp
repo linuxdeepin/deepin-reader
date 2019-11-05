@@ -71,7 +71,7 @@ void NotesItemWidget::initWidget()
     t_hLayout->setSpacing(0);
 
     m_pPicture = new CustomLabel(this);
-    m_pPicture->setFixedSize(QSize(40, 60));
+    m_pPicture->setFixedSize(QSize(42, 62));
     m_pPicture->setAlignment(Qt::AlignCenter);
 
     m_pPageNumber = new DLabel;

@@ -60,7 +60,7 @@ void BookMarkItemWidget::initWidget()
 //    m_pVLayout->addStretch(1);
 
     m_pPicture = new CustomLabel(this);
-    m_pPicture->setFixedSize(QSize(40, 60));
+    m_pPicture->setFixedSize(QSize(42, 62));
     m_pPicture->setAlignment(Qt::AlignCenter);
 
     auto m_pHLayout = new QHBoxLayout;
