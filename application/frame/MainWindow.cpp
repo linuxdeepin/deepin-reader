@@ -284,7 +284,7 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         emit sigOpenFileOk();
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (msgContent == "Esc") {  //  退出全屏模式
+        if (msgContent == "Esc") {  //  退出全屏模式           
             emit sigAppShowState(1);
         } else if (msgContent == "F1") {    //  显示帮助文档
             emit sigOpenAppHelp();

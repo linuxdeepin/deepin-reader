@@ -4,17 +4,15 @@
 <context>
     <name>AppAboutWidget</name>
     <message>
-        <location filename="../frame/AppAboutWidget.cpp" line="14"/>
         <source>deepin-reader</source>
         <translatorcomment>深度文档查看器</translatorcomment>
-        <translation>深度文档查看器</translation>
+        <translation type="vanished">深度文档查看器</translation>
     </message>
     <message>
-        <location filename="../frame/AppAboutWidget.cpp" line="17"/>
         <source>Document viewer is a document viewer that comes with the deep operating system.
  In addition to opening and reading PDF files, On documents you can also 
  add bookmark, annotation and highlight selected text.</source>
-        <translation>文档查看器是随深度操作系统而来的文档查看器。
+        <translation type="obsolete">文档查看器是随深度操作系统而来的文档查看器。
 除了打开和阅读PDF文件外，您还可以对文档进行添加
 书签、注释和高亮选中的文本。</translation>
     </message>
@@ -22,26 +20,29 @@
 <context>
     <name>Application</name>
     <message>
-        <location filename="../application.cpp" line="43"/>
-        <location filename="../application.cpp" line="46"/>
+        <location filename="../application.cpp" line="45"/>
         <source>deepin-reader</source>
         <translatorcomment>深度文档查看器</translatorcomment>
         <translation>深度文档查看器</translation>
     </message>
     <message>
-        <location filename="../application.cpp" line="44"/>
-        <source>deepin</source>
-        <translatorcomment>深度</translatorcomment>
-        <translation>深度</translation>
+        <location filename="../application.cpp" line="49"/>
+        <source>deepin-reader is a document viewer provided by deep system</source>
+        <translation>deepin-reader 是深度系统提供的一个文档查看器</translation>
     </message>
     <message>
-        <location filename="../application.cpp" line="50"/>
         <source>Document viewer is a document viewer that comes with the deep operating system.
  In addition to opening and reading PDF files, On documents you can also 
  add bookmark, annotation and highlight selected text.</source>
-        <translation>文档查看器是随深度操作系统而来的文档查看器。
+        <translation type="obsolete">文档查看器是随深度操作系统而来的文档查看器。
 除了打开和阅读PDF文件外，您还可以对文档进行添加
 书签、注释和高亮选中的文本。</translation>
+    </message>
+    <message>
+        <location filename="../application.cpp" line="43"/>
+        <source>deepin</source>
+        <translatorcomment>深度</translatorcomment>
+        <translation>深度</translation>
     </message>
 </context>
 <context>
@@ -251,13 +252,13 @@
 <context>
     <name>FileViewWidget</name>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="340"/>
+        <location filename="../frame/FileViewWidget.cpp" line="342"/>
         <source>Print Error</source>
         <translatorcomment>打印错误</translatorcomment>
         <translation>打印错误</translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="340"/>
+        <location filename="../frame/FileViewWidget.cpp" line="342"/>
         <source>No Print Device</source>
         <translatorcomment>没有打印设备</translatorcomment>
         <translation>没有打印设备</translation>

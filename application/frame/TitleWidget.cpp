@@ -202,7 +202,7 @@ void TitleWidget::slotActionTrigger(QAction *action)
 void TitleWidget::initBtns()
 {
     m_pThumbnailBtn = createBtn(tr("thumbnails"), true);
-    m_pThumbnailBtn->setObjectName("thumbnails");
+    m_pThumbnailBtn->setObjectName("thumbnails"); 
     connect(m_pThumbnailBtn, SIGNAL(clicked()), SLOT(on_thumbnailBtn_clicked()));
 
     m_pSettingBtn = createBtn(tr("setting"));

@@ -2,39 +2,21 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN" sourcelanguage="en">
 <context>
-    <name>AppAboutWidget</name>
-    <message>
-        <location filename="../frame/AppAboutWidget.cpp" line="14"/>
-        <source>deepin-reader</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../frame/AppAboutWidget.cpp" line="17"/>
-        <source>Document viewer is a document viewer that comes with the deep operating system.
- In addition to opening and reading PDF files, On documents you can also 
- add bookmark, annotation and highlight selected text.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Application</name>
     <message>
-        <location filename="../application.cpp" line="43"/>
-        <location filename="../application.cpp" line="46"/>
+        <location filename="../application.cpp" line="45"/>
         <source>deepin-reader</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../application.cpp" line="44"/>
-        <source>deepin</source>
-        <translation></translation>
+        <location filename="../application.cpp" line="49"/>
+        <source>deepin-reader is a document viewer provided by deep system</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../application.cpp" line="50"/>
-        <source>Document viewer is a document viewer that comes with the deep operating system.
- In addition to opening and reading PDF files, On documents you can also 
- add bookmark, annotation and highlight selected text.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../application.cpp" line="43"/>
+        <source>deepin</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -116,12 +98,12 @@
     <message>
         <location filename="../frame/DocummentFileHelper.cpp" line="180"/>
         <source>File not supported</source>
-        <translation type="unfinished"></translation>
+        <translation>文件格式不支持</translation>
     </message>
     <message>
         <location filename="../frame/DocummentFileHelper.cpp" line="259"/>
         <source>Please check if the file is damaged</source>
-        <translation type="unfinished"></translation>
+        <translation>请检查文件是否已经损坏</translation>
     </message>
 </context>
 <context>
@@ -210,12 +192,12 @@
 <context>
     <name>FileViewWidget</name>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="340"/>
+        <location filename="../frame/FileViewWidget.cpp" line="342"/>
         <source>Print Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="340"/>
+        <location filename="../frame/FileViewWidget.cpp" line="342"/>
         <source>No Print Device</source>
         <translation></translation>
     </message>
@@ -450,17 +432,17 @@
     <message>
         <location filename="../frame/TitleWidget.cpp" line="204"/>
         <source>thumbnails</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../frame/TitleWidget.cpp" line="208"/>
         <source>setting</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../frame/TitleWidget.cpp" line="218"/>
         <source>magnifier</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 </TS>

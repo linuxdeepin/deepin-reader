@@ -6,7 +6,6 @@ HEADERS += \
     $$PWD/MainOperationWidget.h \
     $$PWD/TitleWidget.h \
     $$PWD/MainWidget.h \
-    $$PWD/AppAboutWidget.h \
     $$PWD/DocummentFileHelper.h \
     $$PWD/DocShowShellWidget.h
 
@@ -18,6 +17,5 @@ SOURCES += \
     $$PWD/MainOperationWidget.cpp \
     $$PWD/TitleWidget.cpp \
     $$PWD/MainWidget.cpp \
-    $$PWD/AppAboutWidget.cpp \
     $$PWD/DocummentFileHelper.cpp \
     $$PWD/DocShowShellWidget.cpp
