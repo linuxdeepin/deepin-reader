@@ -3,6 +3,7 @@
 SearchResWidget::SearchResWidget(CustomWidget *parent) :
     CustomWidget(QString("SearchResWidget"), parent)
 {
+    setObjectName("SearchResWidget");
     m_loadSearchResThread.setSearchResW(this);
 
     initWidget();
@@ -197,10 +198,8 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
     }
 
     if (msgType == MSG_CLEAR_FIND_CONTENT) {
-        qDebug()<<"SearchResWidget::dealWithData  clearsearch";
         emit sigClearWidget();
         DocummentProxy::instance()->clearsearch();
-     //  return ConstantMsg::g_effective_res;
     }
 
     //  关闭w文件通知消息

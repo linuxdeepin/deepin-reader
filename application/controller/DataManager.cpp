@@ -98,3 +98,13 @@ void DataManager::settrCurrentTheme(const QString &strCurrentTheme)
 {
     m_strCurrentTheme = strCurrentTheme;
 }
+
+QString DataManager::getStrShowListWidget() const
+{
+    return m_strShowListWidget;
+}
+
+void DataManager::setStrShowListWidget(const QString &strShowListWidget)
+{
+    m_strShowListWidget = strShowListWidget;
+}

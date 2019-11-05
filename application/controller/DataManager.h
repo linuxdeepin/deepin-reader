@@ -49,12 +49,12 @@ public:
     }
     void setMousePressLocal(const bool &highLight, const QPoint &point);
 
-    inline void setScreenRect(const QRect& rect)
+    inline void setScreenRect(const QRect &rect)
     {
         m_screenRect = rect;
     }
 
-    inline void setSmallNoteWidgetSize(const QSize&size)
+    inline void setSmallNoteWidgetSize(const QSize &size)
     {
         m_smallNoteSize = size;
     }
@@ -62,16 +62,20 @@ public:
     QString gettrCurrentTheme() const;
     void settrCurrentTheme(const QString &strCurrentTheme);
 
+    QString getStrShowListWidget() const;
+    void setStrShowListWidget(const QString &strShowListWidget);
+
 private:
-    QString m_strCurrentTheme = ""; //  当前主题
-    QString m_strOnlyFilePath = ""; //  只显示一个pdf 文件
-    int     m_nCurShowState = -1;   //  文档当前显示状态
-    bool    m_bIsUpdate = false;    //  文档是否有修改
-    QList<QColor> m_listColor;             //  color list
-    bool m_bIsHighLight = false;       // 鼠标左键点击位置有没有高亮
-    QPoint m_point;                    // 鼠标左键点击位置
-    QRect m_screenRect;                // 屏幕的分辨率
-    QSize m_smallNoteSize;             // 注释小窗体的大小
+    QString m_strShowListWidget = "";
+    QString m_strCurrentTheme = "";     //  当前主题
+    QString m_strOnlyFilePath = "";     //  只显示一个pdf 文件
+    int     m_nCurShowState = -1;       //  文档当前显示状态
+    bool    m_bIsUpdate = false;        //  文档是否有修改
+    QList<QColor> m_listColor;          //  color list
+    bool m_bIsHighLight = false;        // 鼠标左键点击位置有没有高亮
+    QPoint m_point;                     // 鼠标左键点击位置
+    QRect m_screenRect;                 // 屏幕的分辨率
+    QSize m_smallNoteSize;              // 注释小窗体的大小
 };
 
 #endif // DATAMANAGER_H

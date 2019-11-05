@@ -7,7 +7,6 @@
 #include <QDebug>
 #include <QDesktopServices>
 #include <DMessageBox>
-#include <QSignalMapper>
 #include "controller/DataManager.h"
 #include <DGuiApplicationHelper>
 
@@ -16,6 +15,8 @@ DWIDGET_USE_NAMESPACE
 MainWindow::MainWindow(DMainWindow *parent)
     : DMainWindow(parent)
 {
+    m_strObserverName = "MainWindow";
+
     setCurTheme();
 
     initUI();
@@ -37,7 +38,6 @@ MainWindow::MainWindow(DMainWindow *parent)
     }
 
     setMinimumSize(1000, 680);
-    setObserverName();
 
     //  在屏幕中心显示
     Dtk::Widget::moveToCenter(this);
@@ -65,7 +65,6 @@ void MainWindow::openfile(const QString &filepath)
 void MainWindow::setSreenRect(const QRect &rect)
 {
     DataManager::instance()->setScreenRect(rect);
-    qDebug() << "screen width:" << rect.width() << "screen height:" << rect.height();
 }
 
 //  窗口关闭
@@ -83,6 +82,20 @@ void MainWindow::initUI()
     setCentralWidget(new MainWidget);
 }
 
+void MainWindow::createActionMap(DMenu *m_menu, QSignalMapper *pSigManager,
+                                 const QStringList &actionList, const QStringList &actionObjList)
+{
+    int nFirstSize = actionList.size();
+    for ( int iLoop = 0; iLoop < nFirstSize; iLoop++) {
+        QString sActionName = actionList.at(iLoop);
+        QString sObjName = actionObjList.at(iLoop);
+
+        QAction *_action = createAction(m_menu, sActionName, sObjName);
+        connect(_action, SIGNAL(triggered()), pSigManager, SLOT(map()));
+        pSigManager->setMapping(_action, sObjName);
+    }
+}
+
 void MainWindow::initConnections()
 {
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
@@ -91,36 +104,32 @@ void MainWindow::initConnections()
     connect(this, SIGNAL(sigAppShowState(const int &)), this, SLOT(slotAppShowState(const int &)));
     connect(this, SIGNAL(sigSetAppTitle(const QString &)), this, SLOT(slotSetAppTitle(const QString &)));
 
-    DMenu *m_menu = new DMenu(this);
+    auto m_menu = new DMenu(this);
 
     auto pSigManager = new QSignalMapper(this);
     connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(slotActionTrigger(const QString &)));
 
     QStringList firstActionList = QStringList() << tr("Open File") << tr("Save File") << tr("Save As File")
                                   << tr("Open Folder") << tr("Print") << tr("File Attr");
+    QStringList firstActionObjList = QStringList() << "Open File" << "Save File" << "Save As File"
+                                     << "Open Folder" << "Print" << "File Attr";
 
-    foreach (const QString &s, firstActionList) {
-        QAction *_action = createAction(m_menu, s);
-        connect(_action, SIGNAL(triggered()), pSigManager, SLOT(map()));
-        pSigManager->setMapping(_action, s);
-    }
+    createActionMap(m_menu, pSigManager, firstActionList, firstActionObjList);
     m_menu->addSeparator();
 
     QStringList secondActionList = QStringList() << tr("Search") << tr("Full Screen") << tr("Screening")
                                    << tr("Larger") << tr("Smaller");
+    QStringList secondActionObjList = QStringList() << "Search" << "Full Screen" << "Screening"
+                                      << "Larger" << "Smaller";
 
-    foreach (const QString &s, secondActionList) {
-        QAction *_action = createAction(m_menu, s);
-        connect(_action, SIGNAL(triggered()), pSigManager, SLOT(map()));
-        pSigManager->setMapping(_action, s);
-    }
+    createActionMap(m_menu, pSigManager, secondActionList, secondActionObjList);
     m_menu->addSeparator();
 
     titlebar()->setMenu(m_menu);
 
     auto actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
-        if (a->text() == tr("Open File")) {
+        if (a->objectName() == "Open File") {
             a->setDisabled(false);
             break;
         }
@@ -218,7 +227,6 @@ void MainWindow::slotAppShowState(const int &nState)
             showNormal();
             this->setWindowState(Qt::WindowMaximized);
         }
-
     } else {
         this->setWindowState(Qt::WindowFullScreen);
     }
@@ -247,27 +255,27 @@ void MainWindow::slotOpenAppHelp()
 //  点击菜单　发送指令
 void MainWindow::slotActionTrigger(const QString &sAction)
 {
-    if (sAction == tr("Open File")) {
+    if (sAction == "Open File") {
         sendMsg(MSG_OPERATION_OPEN_FILE);
-    } else if (sAction == tr("Save File")) {
+    } else if (sAction == "Save File") {
         sendMsg(MSG_OPERATION_SAVE_FILE);
-    } else if (sAction == tr("Save As File")) {
+    } else if (sAction == "Save As File") {
         sendMsg(MSG_OPERATION_SAVE_AS_FILE);
-    } else if (sAction == tr("Open Folder")) {
+    } else if (sAction == "Open Folder") {
         onOpenFolder();
-    } else if (sAction == tr("Print")) {
+    } else if (sAction == "Print") {
         sendMsg(MSG_OPERATION_PRINT);
-    } else if (sAction == tr("File Attr")) {
+    } else if (sAction == "File Attr") {
         sendMsg(MSG_OPERATION_ATTR);
-    } else if (sAction == tr("Search")) {
+    } else if (sAction == "Search") {
         sendMsg(MSG_OPERATION_FIND);
-    } else if (sAction == tr("Full Screen")) {
+    } else if (sAction == "Full Screen") {
         onFullScreen();
-    } else if (sAction == tr("Screening")) {
+    } else if (sAction == "Screening") {
         onScreening();
-    } else if (sAction == tr("Larger")) {
+    } else if (sAction == "Larger") {
         sendMsg(MSG_OPERATION_LARGER);
-    } else if (sAction == tr("Smaller")) {
+    } else if (sAction == "Smaller") {
         sendMsg(MSG_OPERATION_SMALLER);
     }
 }
@@ -284,7 +292,7 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         emit sigOpenFileOk();
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (msgContent == "Esc") {  //  退出全屏模式           
+        if (msgContent == "Esc") {  //  退出全屏模式
             emit sigAppShowState(1);
         } else if (msgContent == "F1") {    //  显示帮助文档
             emit sigOpenAppHelp();
@@ -300,14 +308,10 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
     return 0;
 }
 
-void MainWindow::setObserverName()
-{
-    m_strObserverName = "MainWindow";
-}
-
-QAction *MainWindow::createAction(DMenu *menu, const QString &actionName)
+QAction *MainWindow::createAction(DMenu *menu, const QString &actionName, const QString &objName)
 {
     QAction *action = new QAction(actionName, this);
+    action->setObjectName(objName);
     action->setDisabled(true);
     menu->addAction(action);
 

@@ -9,8 +9,8 @@ MsgSubject::MsgSubject(QObject *parent)
     Q_UNUSED(parent);
 
     //  默认启动线程，　只在　mainMainWindow 中　停止运行
-    m_bRunFlag = true;   
-    start();    
+    m_bRunFlag = true;
+    start();
 }
 
 void MsgSubject::addObserver(IObserver *obs)
@@ -47,7 +47,7 @@ int MsgSubject::NotifyObservers(const int &msgType, const QString &msgContent)
      * 如果 该消息 在某一个 观察者中被处理了， 就返回9999  则截断该消息，
      *  若没有处理， 则继续传递给下一个观察者，
      */
-    foreach (IObserver *obs, m_observerList) {
+    foreach (auto obs, m_observerList) {
         int nRes = obs->dealWithData(msgType, msgContent);
         if (nRes == ConstantMsg::g_effective_res) {
 
@@ -68,7 +68,6 @@ void MsgSubject::stopThreadRun()
     m_bRunFlag = false;
     quit();
     wait();         //阻塞等待
-
 }
 
 void MsgSubject::run()
@@ -82,7 +81,7 @@ void MsgSubject::run()
         }
 
         if (msgList.size() > 0) {
-            foreach (const MsgStruct &msg, msgList) {               
+            foreach (auto msg, msgList) {
                 int nRes = NotifyObservers(msg.msgType, msg.msgContent);
                 if (nRes == 0) {
                     break;

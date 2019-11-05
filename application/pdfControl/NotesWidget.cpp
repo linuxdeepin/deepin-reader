@@ -4,6 +4,7 @@
 NotesWidget::NotesWidget(CustomWidget *parent) :
     CustomWidget(QString("NotesWidget"), parent)
 {
+    setObjectName("NotesWidget");
     initWidget();
 
     initConnection();
@@ -41,9 +42,9 @@ void NotesWidget::slotAddNoteItem(const QString &note)
 void NotesWidget::slotDltNoteItem(QString uuid)
 {
     for (int row = 0; row < m_pNotesList->count(); ++row) {
-        QListWidgetItem *pItem = m_pNotesList->item(row);
+        auto pItem = m_pNotesList->item(row);
         if (pItem) {
-            NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
+            auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
             if (t_widget) {
                 QString t_uuid = t_widget->noteUUId();
                 int page = t_widget->nPageIndex();
@@ -154,55 +155,56 @@ void NotesWidget::slotLoadImage(const QImage &image)
 //  按 键盘 Del 删除
 void NotesWidget::slotDelNoteItem()
 {
-    if (!m_pNoteItem) {
-        return;
-    }
+    QString sShowName = DataManager::instance()->getStrShowListWidget();
+    if (sShowName == this->objectName()) {
+        auto curItem = m_pNotesList->currentItem();
+        if (curItem == nullptr)
+            return;
 
-    NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
-    if (t_widget) {
-        QString t_uuid = t_widget->noteUUId();
-        int page  = t_widget->nPageIndex();
+        auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(curItem));
+        if (t_widget) {
+            QString t_uuid = t_widget->noteUUId();
+            int page  = t_widget->nPageIndex();
 
-        delete t_widget;
-        t_widget = nullptr;
+            delete t_widget;
+            t_widget = nullptr;
 
-        delete  m_pNoteItem;
-        m_pNoteItem = nullptr;
+            delete  curItem;
+            curItem = nullptr;
 
-        // remove date from map and notify kong yun zhen
-        m_mapUuidAndPage.remove(t_uuid);
+            // remove date from map and notify kong yun zhen
+            m_mapUuidAndPage.remove(t_uuid);
 
-        auto t_pDocummentProxy = DocummentProxy::instance();
-        if (t_pDocummentProxy) {
-            t_pDocummentProxy->removeAnnotation(t_uuid, page);
-            DataManager::instance()->setBIsUpdate(true);
+            auto t_pDocummentProxy = DocummentProxy::instance();
+            if (t_pDocummentProxy) {
+                t_pDocummentProxy->removeAnnotation(t_uuid, page);
+                DataManager::instance()->setBIsUpdate(true);
+            }
         }
     }
 }
 
 void NotesWidget::slotSelectItem(QListWidgetItem *item)
 {
-    if (item == nullptr || m_pNoteItem == item) {
+    if (item == nullptr) {
         return;
     }
 
     setSelectItemBackColor(item);
 
-    m_pNoteItem = item;
-    if (m_pNoteItem) {
-        NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
-        if (t_widget) {
-            QString t_uuid = t_widget->noteUUId();
-            int page  = t_widget->nPageIndex();
+    auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
+    if (t_widget) {
+        QString t_uuid = t_widget->noteUUId();
+        int page  = t_widget->nPageIndex();
 
-            auto pDocProxy = DocummentProxy::instance();
-            qDebug() << "NotesWidget::slotSelectItem";
+        auto pDocProxy = DocummentProxy::instance();
+        if (pDocProxy) {
             pDocProxy->jumpToHighLight(t_uuid, page);
-
             DataManager::instance()->setBIsUpdate(true);
         }
     }
 }
+
 
 /**
  * @brief NotesWidget::addNotesItem
@@ -265,40 +267,17 @@ void NotesWidget::initConnection()
  */
 void NotesWidget::setSelectItemBackColor(QListWidgetItem *item)
 {
-    if (item == nullptr || m_pNoteItem == nullptr) {
+    if (item == nullptr) {
         return;
     }
 
-    NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
-    if (t_widget) {
-        t_widget->setBSelect(false);
-    }
+    m_pNotesList->setCurrentItem(item);
 
-    t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
+    auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
     if (t_widget) {
         t_widget->setBSelect(true);
     }
 }
-
-/**
- * @brief NotesWidget::hasNoteInList
- * 判断本地是否有该条注释
- * @param page
- * @param uuid
- * @return
- */
-//bool NotesWidget::hasNoteInList(const int &page, const QString &uuid)
-//{
-//    if (m_mapNotes.contains(page)) {
-//        foreach (auto contant, m_mapNotes) {
-//            if (contant.contains(uuid)) {
-//                return true;
-//            }
-//        }
-//    }
-
-//    return false;
-//}
 
 void NotesWidget::addNewItem(const stHighlightContent &note)
 {
@@ -332,14 +311,14 @@ void NotesWidget::addNewItem(const stHighlightContent &note)
  */
 void NotesWidget::addNewItem(const QImage &image, const int &page, const QString &uuid, const QString &text)
 {
-    NotesItemWidget *itemWidget = new NotesItemWidget;
+    auto itemWidget = new NotesItemWidget;
     itemWidget->setLabelImage(image);
     itemWidget->setNoteUUid(uuid);
     itemWidget->setLabelPage(page, 1);
     itemWidget->setTextEditText(text);
     itemWidget->setMinimumSize(QSize(190, 80));
 
-    QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
+    auto item = new QListWidgetItem(m_pNotesList);
     item->setFlags(Qt::NoItemFlags);
     item->setSizeHint(QSize(190, 80));
 
@@ -361,9 +340,9 @@ void NotesWidget::flushNoteItemText(const int &page, const QString &uuid, const 
     }
 
     for (int index = 0; index < m_pNotesList->count(); ++index) {
-        QListWidgetItem *pItem = m_pNotesList->item(index);
+        auto pItem = m_pNotesList->item(index);
         if (pItem) {
-            NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
+            auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
             if (t_widget) {
                 if (t_widget->nPageIndex() == page && t_widget->noteUUId() == uuid) {
                     t_widget->setTextEditText(text);
@@ -396,7 +375,6 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
     // 移除高亮，删除注释内容，删除注释列表item
     if (MSG_NOTE_DLTNOTEITEM == msgType) {
         emit sigDltNoteItem(msgContent);
-//        return ConstantMsg::g_effective_res;
     }
 
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {

@@ -51,9 +51,6 @@ private:
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
     void sendMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
-
-private:
-    void setObserverName() Q_DECL_OVERRIDE;
 };
 
 #endif // DOCUMMENTFILEHELPER_H

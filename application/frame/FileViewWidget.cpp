@@ -70,9 +70,11 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
             if (pLink) {
                 setCursor(QCursor(Qt::PointingHandCursor));
             } else {
-                if (m_pDocummentProxy->mouseBeOverText(docGlobalPos))
+                if (m_pDocummentProxy->mouseBeOverText(docGlobalPos)) {
+                    m_bIsHandleSelect = true;
                     setCursor(QCursor(Qt::IBeamCursor));
-                else {
+                } else {
+                    m_bIsHandleSelect = false;
                     setCursor(QCursor(Qt::ArrowCursor));
                 }
             }
@@ -88,7 +90,7 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
         return;
     }
 
-    if(event->buttons()&Qt::RightButton&&m_nCurrentHandelState == Magnifier_State)
+    if (event->buttons() & Qt::RightButton && m_nCurrentHandelState == Magnifier_State)
         m_pDocummentProxy->closeMagnifier();
     //  放大镜状态， 直接返回
     if (m_nCurrentHandelState == Magnifier_State)
@@ -97,20 +99,26 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
     Qt::MouseButton nBtn = event->button();
     if (nBtn == Qt::LeftButton) {
         QPoint globalPos = event->globalPos();
-        QPoint docGlobalPos = m_pDocummentProxy->global2RelativePoint(globalPos);
 
-        //  点击的时候　先判断　点击处　　是否有链接之类
-        Page::Link *pLink = m_pDocummentProxy->mouseBeOverLink(docGlobalPos);
-        if (pLink) {
-            m_pDocummentFileHelper->onClickPageLink(pLink);
-        } else {
+        //  当前状态是 手, 先 拖动, 之后 在是否是链接之类
+        if (m_nCurrentHandelState == Handel_State) {
+            m_pHandleMoveStartPoint = globalPos;     //  变成手，　需要的是　相对坐标
             m_bSelectOrMove = true;
+        } else {
+            QPoint docGlobalPos = m_pDocummentProxy->global2RelativePoint(globalPos);
 
-            if (m_nCurrentHandelState == Handel_State) {
-                m_pHandleMoveStartPoint = globalPos;     //  变成手，　需要的是　相对坐标
-            } else if (m_nCurrentHandelState == Default_State) {
-                m_pDocummentProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
-                m_pStartPoint = docGlobalPos;
+            //  点击的时候　先判断　点击处　　是否有链接之类
+            Page::Link *pLink = m_pDocummentProxy->mouseBeOverLink(docGlobalPos);
+            if (pLink) {
+                m_pDocummentFileHelper->onClickPageLink(pLink);
+            } else {
+                if (m_nCurrentHandelState == Default_State) {
+                    m_pDocummentProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
+                    if (m_bIsHandleSelect) {
+                        m_bSelectOrMove = true;
+                        m_pStartPoint = docGlobalPos;
+                    }
+                }
             }
         }
     }
@@ -138,9 +146,7 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 
             bool bIsHighLightReleasePoint = m_pDocummentProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
             DataManager::instance()->setMousePressLocal(bIsHighLightReleasePoint, globalPos);
-//            qDebug() << "set small note show point:" << globalPos;
             if (bIsHighLightReleasePoint) {
-//                DataManager::instance()->setMousePressLocal(bIsHighLightReleasePoint, globalPos);
                 int nPage = m_pDocummentProxy->pointInWhichPage(docGlobalPos);
                 QString t_strContant = t_strUUid.trimmed() + QString("%1%") + QString::number(nPage);
                 sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
@@ -207,12 +213,16 @@ void FileViewWidget::slotMagnifying(const QString &data)
 {
     int nRes = data.toInt();
     if (nRes == 1) {
+        m_pDocummentProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
+
         m_nCurrentHandelState = Magnifier_State;
         this->setCursor(Qt::BlankCursor);
     } else {
         if (m_nCurrentHandelState == Magnifier_State) { //  是 放大镜模式 才取消
+
             m_nCurrentHandelState = Default_State;
             this->setCursor(Qt::ArrowCursor);
+
             m_pDocummentProxy->closeMagnifier();
         }
     }

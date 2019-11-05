@@ -104,6 +104,5 @@ void TextOperationMenu::slotAddNoteClicked()
 
 void TextOperationMenu::slotAddBookMarkClicked()
 {
-    int nCurPage = DocummentProxy::instance()->currentPageNo();
-    sendMsgToFrame(MSG_OPERATION_TEXT_ADD_BOOKMARK, QString("%1").arg(nCurPage));
+    sendMsgToFrame(MSG_OPERATION_TEXT_ADD_BOOKMARK, QString("%1").arg(m_nClickPage));
 }

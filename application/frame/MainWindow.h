@@ -4,6 +4,7 @@
 #include "application.h"
 #include <DMainWindow>
 #include <DMenu>
+#include <QSignalMapper>
 
 #include "controller/MsgSubject.h"
 #include "controller/NotifySubject.h"
@@ -40,7 +41,7 @@ private:
     void initUI();
     void initConnections();
     void initTitlebar();
-    QAction *createAction(DMenu *menu, const QString &actionName);
+    QAction *createAction(DMenu *menu, const QString &actionName, const QString & );
 
     void onOpenFile();
     void onOpenFolder();
@@ -71,7 +72,7 @@ public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 
 private:
-    void setObserverName() Q_DECL_OVERRIDE;
+    void createActionMap(DMenu *m_menu, QSignalMapper *pSigManager, const QStringList &firstActionList, const QStringList &firstActionObjList);
 };
 
 #endif // MainWindow_H

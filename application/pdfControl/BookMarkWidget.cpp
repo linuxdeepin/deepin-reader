@@ -4,6 +4,7 @@
 BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
     CustomWidget(QString("BookMarkWidget"), parent)
 {
+    setObjectName("BookMarkWidget");
     initWidget();
 
     initConnection();
@@ -234,31 +235,34 @@ void BookMarkWidget::slotLoadImage(const int &page, const QImage &image)
  */
 void BookMarkWidget::slotDelBkItem()
 {
-    auto pCurItem = m_pBookMarkListWidget->currentItem();
-    if (pCurItem) {
-        auto t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
-        if (t_widget) {
-            int nPageIndex = t_widget->nPageIndex();
+    QString sShowName = DataManager::instance()->getStrShowListWidget();
+    if (sShowName == this->objectName()) {
+        auto pCurItem = m_pBookMarkListWidget->currentItem();
+        if (pCurItem) {
+            auto t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
+            if (t_widget) {
+                int nPageIndex = t_widget->nPageIndex();
 
-            t_widget->deleteLater();
-            t_widget = nullptr;
+                t_widget->deleteLater();
+                t_widget = nullptr;
 
-            delete  pCurItem;
-            pCurItem = nullptr;
+                delete  pCurItem;
+                pCurItem = nullptr;
 
-            QList<int> pageList = dApp->dbM->getBookMarkList();
-            pageList.removeOne(nPageIndex);
-            dApp->dbM->setBookMarkList(pageList);
+                QList<int> pageList = dApp->dbM->getBookMarkList();
+                pageList.removeOne(nPageIndex);
+                dApp->dbM->setBookMarkList(pageList);
 
-            auto dproxy = DocummentProxy::instance();
-            if (nullptr == dproxy) {
-                return;
+                auto dproxy = DocummentProxy::instance();
+                if (nullptr == dproxy) {
+                    return;
+                }
+                dproxy->setBookMarkState(nPageIndex, false);
+
+                m_pAddBookMarkBtn->setEnabled(true);
+
+                DataManager::instance()->setBIsUpdate(true);
             }
-            dproxy->setBookMarkState(nPageIndex, false);
-
-            m_pAddBookMarkBtn->setEnabled(true);
-
-            DataManager::instance()->setBIsUpdate(true);
         }
     }
 }

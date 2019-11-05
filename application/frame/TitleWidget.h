@@ -56,6 +56,7 @@ private:
     DToolButton *m_pHandleShapeBtn = nullptr;
     DToolButton *m_pMagnifierBtn = nullptr;
 
+    int     m_nCurHandleShape = -1;     //  当前的选择工具状态
     // CustomWidget interface
 protected:
     void initWidget() Q_DECL_OVERRIDE;

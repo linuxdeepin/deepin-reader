@@ -41,7 +41,7 @@ private slots:
 private:
     int         m_pLightColor = 0;
     QString     m_strSelectText = "";       //  选中的文字
-    QString     m_strNoteUuid = "";   //  高亮的uuid
+    QString     m_strNoteUuid = "";         //  高亮的uuid
 
     QAction     *m_pCopy = nullptr;
     QAction     *m_pRemoveHighLight = nullptr;

@@ -218,27 +218,21 @@ void DBManager::clearInvalidRecord()
     QMutexLocker mutex(&m_mutex);
     QSqlQuery query( db );
     query.prepare("select FilePath from BookMarkTable");
-    if(query.exec())
-    {
-        QStringList strlist;
+    if (query.exec()) {
         QString strsql;
         while (query.next()) {
-            QString strpath=query.value(0).toString();
-            if(!QFile::exists(strpath))
-            {
+            QString strpath = query.value(0).toString();
+            if (!QFile::exists(strpath)) {
                 strsql.append(QString("delete from BookMarkTable where FilePath='%1';").arg(strpath));
             }
         }
         query.clear();
-        if(!strsql.isEmpty())
-        {
+        if (!strsql.isEmpty()) {
             query.prepare(strsql);
-            if(!query.exec())
-                qDebug()<<query.lastError();
+            if (!query.exec())
+                qDebug() << query.lastError();
         }
-
     }
-    qDebug()<<query.lastError();
 }
 
 DBManager::DBManager(QObject *parent)
@@ -276,14 +270,9 @@ void DBManager::checkDatabase()
 {
     QDir dd(DATABASE_PATH);
     if (! dd.exists()) {
-        qDebug() << "create database paths";
         dd.mkpath(DATABASE_PATH);
         if (dd.exists())
             qDebug() << "create database succeed!";
-        else
-            qDebug() << "create database failed!";
-    } else {
-        qDebug() << "database is exist!";
     }
     const QSqlDatabase db = getDatabase();
     if (! db.isValid()) {
@@ -328,22 +317,20 @@ void DBManager::setStrFilePath(const QString &strFilePath)
 
 bool  DBManager::saveasBookMark(const QString &oldpath, const QString &newpath)
 {
-    bool bsuccess=false;
+    bool bsuccess = false;
     const QSqlDatabase db = getDatabase();
     QMutexLocker mutex(&m_mutex);
     QSqlQuery query( db );
     query.setForwardOnly(true);
     query.prepare("select count(*) from BookMarkTable where FilePath=?");
     query.addBindValue(newpath);
-    if(query.exec())
-    {
+    if (query.exec()) {
         QString strnum;
-        if(query.next()&&query.value(0).toInt()<=0&&m_pBookMarkList.count()>0)
-        {
+        if (query.next() && query.value(0).toInt() <= 0 && m_pBookMarkList.count() > 0) {
             foreach (int i, m_pBookMarkList) {
                 strnum += QString::number(i) + ",";
             }
-            QString strfilename= newpath.mid(newpath.lastIndexOf("/")+1);
+            QString strfilename = newpath.mid(newpath.lastIndexOf("/") + 1);
             query.clear();
             query.exec("START TRANSACTION");
 
@@ -357,11 +344,10 @@ bool  DBManager::saveasBookMark(const QString &oldpath, const QString &newpath)
 
             if (query.exec()) {
                 query.exec("COMMIT");
-                bsuccess=true;
+                bsuccess = true;
             }
         }
     }
-    qDebug()<<"saveasBookMark"<<query.lastError();
     return  bsuccess;
 }
 

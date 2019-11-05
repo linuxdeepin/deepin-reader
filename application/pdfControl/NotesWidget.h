@@ -100,7 +100,7 @@ private:
     CustomListWidget *m_pNotesList = nullptr;
     QMap<QString, int>      m_mapUuidAndPage;       //  uuid 和 页码 对应
     ThreadLoadImageOfNote m_ThreadLoadImage;      // 加载注释缩略图线程
-    QListWidgetItem *m_pNoteItem = nullptr;       // 当前鼠标左键点击的item
+//    QListWidgetItem *m_pNoteItem = nullptr;       // 当前鼠标左键点击的item
     int m_nIndex = -1;                            // 当前注释列表数
 
 public:

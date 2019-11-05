@@ -44,10 +44,6 @@ private slots:
 private:
     QVBoxLayout *m_pVBoxLayout = nullptr;
 
-    bool        m_bClickDown = false;
-    QPoint      mouseStartPoint;
-    QPoint      windowTopLeftPoint;
-
     DLabel *labelImage = nullptr;
     DLabel *labelFileName = nullptr;
 

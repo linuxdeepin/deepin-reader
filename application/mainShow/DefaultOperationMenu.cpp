@@ -14,8 +14,10 @@ DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
 
 void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPage)
 {
+    m_nRightPageNumber = nClickPage;
+
     QList<int> pageList = dApp->dbM->getBookMarkList();
-    bool bBookState = pageList.contains(nClickPage);
+    bool bBookState = pageList.contains(m_nRightPageNumber);
     if (bBookState) {
         m_pBookMark->setProperty("data", 0);
         m_pBookMark->setText(tr("delete bookmark"));
@@ -24,14 +26,14 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
         m_pBookMark->setText(tr("add bookmark"));
     }
 
-    if (nClickPage == 0) {    //  首页
+    if (m_nRightPageNumber == 0) {    //  首页
         m_pFirstPage->setEnabled(false);
         m_pPrevPage->setEnabled(false);
     } else {
         int nPageNum = DocummentProxy::instance()->getPageSNum();
         nPageNum--;
 
-        if (nClickPage == nPageNum) { //  最后一页
+        if (m_nRightPageNumber == nPageNum) { //  最后一页
             m_pNextPage->setEnabled(false);
             m_pEndPage->setEnabled(false);
         }
@@ -73,13 +75,11 @@ void DefaultOperationMenu::slotSearchClicked()
 
 void DefaultOperationMenu::slotBookMarkClicked()
 {
-    int nCurPage = DocummentProxy::instance()->currentPageNo();
-
     int nData = m_pBookMark->property("data").toInt();
     if (nData == 0) {
-        sendMsgToFrame(MSG_OPERATION_DELETE_BOOKMARK, QString("%1").arg(nCurPage));
+        sendMsgToFrame(MSG_OPERATION_DELETE_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
     } else {
-        sendMsgToFrame(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(nCurPage));
+        sendMsgToFrame(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
     }
 }
 

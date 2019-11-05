@@ -42,9 +42,6 @@ protected:
     void showScreenCenter();
 
 private:
-    void setObserverName() Q_DECL_OVERRIDE;
-
-private:
     MsgSubject  *m_pMsgSubject = nullptr;
     NotifySubject   *m_pNotifySubject = nullptr;
 };

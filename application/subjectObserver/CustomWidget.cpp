@@ -39,7 +39,3 @@ void CustomWidget::showScreenCenter()
     Dtk::Widget::moveToCenter(this);
     this->show();
 }
-
-void CustomWidget::setObserverName()
-{
-}

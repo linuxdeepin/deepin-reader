@@ -6,6 +6,8 @@
 ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
     CustomWidget(QString("ThumbnailWidget"), parent)
 {
+    setObjectName("ThumbnailWidget");
+
 //    m_ThreadLoadImage.setParent(this);
     m_ThreadLoadImage.setThumbnail(this);
 

@@ -193,16 +193,20 @@ void TitleWidget::slotActionTrigger(QAction *action)
         btnName = "handleShape";
     }
 
-    QString normalPic = PF::getImagePath(btnName, Pri::g_frame);
-    m_pHandleShapeBtn->setIcon(QIcon(normalPic));
+    if (nCurrentState != m_nCurHandleShape) {
+        m_nCurHandleShape = nCurrentState;
 
-    sendMsgToSubject(MSG_HANDLESHAPE, QString::number(nCurrentState));
+        QString normalPic = PF::getImagePath(btnName, Pri::g_frame);
+        m_pHandleShapeBtn->setIcon(QIcon(normalPic));
+
+        sendMsgToSubject(MSG_HANDLESHAPE, QString::number(nCurrentState));
+    }
 }
 
 void TitleWidget::initBtns()
 {
     m_pThumbnailBtn = createBtn(tr("thumbnails"), true);
-    m_pThumbnailBtn->setObjectName("thumbnails"); 
+    m_pThumbnailBtn->setObjectName("thumbnails");
     connect(m_pThumbnailBtn, SIGNAL(clicked()), SLOT(on_thumbnailBtn_clicked()));
 
     m_pSettingBtn = createBtn(tr("setting"));

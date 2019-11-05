@@ -38,7 +38,6 @@ void MainWidget::slotOpenFileOk()
 void MainWidget::slotOpenFileFail(const QString &errorInfo)
 {
     DMessageBox::warning(nullptr, tr("deepin-reader"), errorInfo);
-    qDebug() << "openFileFail       "   <<  errorInfo;
 }
 
 int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
@@ -70,11 +69,6 @@ void MainWidget::dropEvent(QDropEvent *event)
     if (mimeData->hasUrls()) {
         for (auto url : mimeData->urls()) {
             QString sFilePath =  url.toLocalFile();
-
-            QFileInfo info(sFilePath);
-            QString sCompleteSuffix = info.completeSuffix();    //  文件后缀
-            qDebug() << "MainWidget::dropEvent" << sCompleteSuffix << sFilePath;
-            // if (sCompleteSuffix == "pdf" || sCompleteSuffix == "tiff")
             if (sFilePath.endsWith("pdf") || sFilePath.endsWith("tiff")) {
                 //  默认打开第一个
                 QString sRes = sFilePath + Constant::sQStringSep;
@@ -100,14 +94,13 @@ void MainWidget::initWidget()
     pSplitter->setChildrenCollapsible(false);   //  子部件不可拉伸到 0
 
     pSplitter->addWidget(new LeftSidebarWidget);
-    pSplitter->setStretchFactor(0, 1);
-
     pSplitter->addWidget(new DocShowShellWidget);
-    pSplitter->setStretchFactor(1,9);
+
     QList<int> list_src;
     list_src.append(300);
     list_src.append(1000);
     pSplitter->setSizes(list_src);
+
     pStackLayout->addWidget(pSplitter);
 
     pStackLayout->setCurrentIndex(0);

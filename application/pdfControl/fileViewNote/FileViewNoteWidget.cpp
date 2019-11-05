@@ -309,9 +309,6 @@ void CustemTextEdit::slotTextEditMaxContantNum()
     QString textContent = this->toPlainText();
 
     int length = textContent.toUtf8().size();
-
-    qDebug() << "textContent size:" << length;
-
     if (length > m_nMaxContantLen) {
         int position = this->textCursor().position();
         QTextCursor textCursor = this->textCursor();

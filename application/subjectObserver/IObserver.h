@@ -17,10 +17,6 @@ public:
     virtual int dealWithData(const int &, const QString &) = 0;
     virtual void sendMsg(const int &, const QString &) = 0;
 
-    //  添加订阅者身份，用于具体定位到某个订阅者
-private:
-    virtual void setObserverName() = 0;
-
 public:
     QString getObserverName()
     {

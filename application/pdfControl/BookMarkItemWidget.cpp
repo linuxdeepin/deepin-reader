@@ -55,9 +55,7 @@ void BookMarkItemWidget::initWidget()
 
     auto m_pVLayout = new QVBoxLayout;
     m_pVLayout->setContentsMargins(20, 18, 0, 44);
-//    m_pVLayout->setSpacing(1);
     m_pVLayout->addWidget(m_pPageNumber);
-//    m_pVLayout->addStretch(1);
 
     m_pPicture = new CustomLabel(this);
     m_pPicture->setFixedSize(QSize(42, 62));

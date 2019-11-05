@@ -19,9 +19,9 @@ public:
     int nPageIndex() const;
 
 protected:
-    CustomLabel *m_pPicture = nullptr;   // 承载缩略图的label
-    DLabel      *m_pPageNumber = nullptr;      // 页码label
-    int         m_nPageIndex  = -1;      // 所对应的页码
+    CustomLabel *m_pPicture = nullptr;          // 承载缩略图的label
+    DLabel      *m_pPageNumber = nullptr;       // 页码label
+    int         m_nPageIndex  = -1;             // 所对应的页码
 };
 
 #endif // CUSTOMITEMWIDGET_H

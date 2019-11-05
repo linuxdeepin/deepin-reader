@@ -15,7 +15,7 @@ DocummentFileHelper::DocummentFileHelper(QObject *parent)
     : QObject(parent)
 {
     m_pDocummentProxy = DocummentProxy::instance();
-    setObserverName();
+    m_strObserverName = "DocummentFileHelper";
 
     initConnections();
 
@@ -65,9 +65,9 @@ void DocummentFileHelper::slotSaveAsFile()
             QString sFilePath = getFilePath(filePath);
 
             bool rl = m_pDocummentProxy->saveas(sFilePath, true);
-            if (rl) {           
+            if (rl) {
                 //insert a new bookmark record to bookmarktabel
-                DBManager::instance()->saveasBookMark(m_szFilePath,sFilePath);
+                DBManager::instance()->saveasBookMark(m_szFilePath, sFilePath);
                 DataManager::instance()->setStrOnlyFilePath(sFilePath);
 
                 DataManager::instance()->setBIsUpdate(false);
@@ -152,7 +152,7 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
                 m_pDocummentProxy->save(m_szFilePath, true);
 
                 //  保存 书签数据
-               DBManager::instance()->saveBookMark();
+                DBManager::instance()->saveBookMark();
             }
         }
         m_pDocummentProxy->closeFile();
@@ -255,7 +255,6 @@ void DocummentFileHelper::initConnections()
             QFileInfo info(m_szFilePath);
             setAppShowTitle(info.baseName());
         } else {
-            qDebug() << "signal_openResult result:false";
             sendMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
         }
     });
@@ -294,9 +293,4 @@ int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgCont
 void DocummentFileHelper::sendMsg(const int &msgType, const QString &msgContent)
 {
     m_pMsgSubject->sendMsg(this, msgType, msgContent);
-}
-
-void DocummentFileHelper::setObserverName()
-{
-    m_strObserverName = "DocummentFileHelper";
 }

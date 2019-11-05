@@ -92,12 +92,6 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
     return QWidget::eventFilter(watched, event);
 }
 
-void PagingWidget::keyPressEvent(QKeyEvent *event)
-{
-    qDebug() << "PagingWidget::keyPressEvent key:" << event->key();
-
-}
-
 void PagingWidget::initConnections()
 {
     connect(this, SIGNAL(sigJumpToPrevPage()), this, SLOT(slotPrePage()));
@@ -148,10 +142,10 @@ int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigJumpToSpecifiedPage(m_totalPage - FIRSTPAGES);
         return ConstantMsg::g_effective_res;
     case MSG_NOTIFY_KEY_MSG: {
-        if (msgContent == "Up"||msgContent=="PgUp") {
+        if (msgContent == "Up" || msgContent == "PgUp") {
             emit sigJumpToPrevPage();
             return ConstantMsg::g_effective_res;
-        } else if (msgContent == "Down"||msgContent=="PgDown") {
+        } else if (msgContent == "Down" || msgContent == "PgDown") {
             emit sigJumpToNextPage();
             return ConstantMsg::g_effective_res;
         } else if (msgContent == "0") {
