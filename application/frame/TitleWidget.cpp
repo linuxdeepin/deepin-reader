@@ -24,13 +24,13 @@ void TitleWidget::slotUpdateTheme()
         QString objName = btn->objectName();
         if (objName != "") {
             QString sPixmap = PF::getImagePath(objName, Pri::g_frame);
-            btn->setIcon(QIcon( sPixmap));
+            btn->setIcon(QIcon(sPixmap));
         }
     }
 
     if (m_pHandleAction) {
         QString sPixmap = PF::getImagePath("handleShape_small", Pri::g_frame);
-        m_pHandleAction->setIcon(QIcon( sPixmap));
+        m_pHandleAction->setIcon(QIcon(sPixmap));
     }
 
     if (m_pDefaultAction) {
@@ -222,7 +222,7 @@ void TitleWidget::initBtns()
 
 DToolButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 {
-    DToolButton *btn = new  DToolButton(this);
+    auto btn = new DToolButton(this);
     btn->setFixedSize(QSize(36, 36));
     btn->setIconSize(QSize(36, 36));
     btn->setToolTip(btnName);

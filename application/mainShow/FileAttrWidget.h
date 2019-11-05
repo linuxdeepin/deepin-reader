@@ -4,31 +4,32 @@
 #include <DLabel>
 #include <QVBoxLayout>
 #include <QGridLayout>
-#include <QList>
-#include <QMouseEvent>
-#include "subjectObserver/CustomWidget.h"
+#include <DWidget>
+#include <DWidgetUtil>
 
+#include <DIconButton>
+#include <QFileInfo>
+#include <DFrame>
+
+#include "utils/utils.h"
+
+DWIDGET_USE_NAMESPACE
 /**
  * @brief The FileAttrWidget class
  * @brief   文件属性框
  */
 
-class FileAttrWidget : public CustomWidget
+class FileAttrWidget : public DAbstractDialog
 {
     Q_OBJECT
 public:
-    FileAttrWidget(CustomWidget *parent = nullptr);
+    FileAttrWidget(DWidget *parent = nullptr);
 
 public:
     void showScreenCenter();
 
-protected:
-    //拖拽窗口
-    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-
 private:
+    void initWidget();
     void setFileAttr();
     void initLabels();
     void initCloseBtn();
@@ -64,14 +65,6 @@ private:
     DLabel *labelSafe = nullptr;
     DLabel *labelPaperSize = nullptr;
     DLabel *labelSize = nullptr;
-
-    // CustomWidget interface
-protected:
-    void initWidget() Q_DECL_OVERRIDE;
-
-    // IObserver interface
-public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 };
 
 #endif // FILEATTRWIDGET_H

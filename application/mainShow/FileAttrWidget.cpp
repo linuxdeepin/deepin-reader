@@ -1,19 +1,14 @@
 #include "FileAttrWidget.h"
-#include <DWidgetUtil>
-#include "utils/utils.h"
-#include "docview/docummentproxy.h"
-#include <DIconButton>
-#include <QFileInfo>
 
-FileAttrWidget::FileAttrWidget(CustomWidget *parent)
-    : CustomWidget("FileAttrWidget", parent)
+#include "docview/docummentproxy.h"
+
+FileAttrWidget::FileAttrWidget(DWidget *parent)
+    : DAbstractDialog(parent)
 {
-    setWindowFlags(Qt::FramelessWindowHint);
-    setFixedSize(QSize(400, 600));
     setAttribute(Qt::WA_ShowModal, true); //  模态对话框， 属性设置
 
     m_pVBoxLayout = new QVBoxLayout;
-    m_pVBoxLayout->setContentsMargins(0, 0, 0, 0);
+    m_pVBoxLayout->setContentsMargins(10, 10, 10, 10);
     m_pVBoxLayout->setSpacing(0);
     this->setLayout(m_pVBoxLayout);
 
@@ -74,37 +69,6 @@ void FileAttrWidget::showScreenCenter()
     this->show();
 }
 
-void FileAttrWidget::mousePressEvent(QMouseEvent *event)
-{
-    if (event->button() == Qt::LeftButton) {
-        m_bClickDown = true;
-        //获得鼠标的初始位置
-        mouseStartPoint = event->globalPos();
-        //获得窗口的初始位置
-        windowTopLeftPoint = this->frameGeometry().topLeft();
-    }
-    CustomWidget::mousePressEvent(event);
-}
-
-void FileAttrWidget::mouseMoveEvent(QMouseEvent *event)
-{
-    if (m_bClickDown) {
-        //获得鼠标移动的距离
-        QPoint distance = event->globalPos() - mouseStartPoint;
-        //改变窗口的位置
-        this->move(windowTopLeftPoint + distance);
-    }
-    CustomWidget::mouseMoveEvent(event);
-}
-
-void FileAttrWidget::mouseReleaseEvent(QMouseEvent *event)
-{
-    if (event->button() == Qt::LeftButton) {
-        m_bClickDown = false;
-    }
-    CustomWidget::mouseReleaseEvent(event);
-}
-
 void FileAttrWidget::initWidget()
 {
     m_pVBoxLayout->addStretch(1);
@@ -121,7 +85,7 @@ void FileAttrWidget::initWidget()
 //  初始化 所有的label 显示
 void FileAttrWidget::initLabels()
 {
-    auto gridLayout = new QGridLayout;
+    auto gridLayout = new QGridLayout();
     gridLayout->setSpacing(6);
 
     labelFilePath = createLabel(gridLayout, 0, tr("Location") + ":");
@@ -139,18 +103,19 @@ void FileAttrWidget::initLabels()
     labelPaperSize = createLabel(gridLayout, 12, tr("Paper Size") + ":");
     labelSize = createLabel(gridLayout, 13, tr("File Size") + ":");
 
-    auto labelWidget = new DWidget(this);
     auto vbLayout = new QVBoxLayout;
     vbLayout->addWidget(new DLabel(tr("file basic info")));
     vbLayout->addItem(gridLayout);
-    labelWidget->setLayout(vbLayout);
 
-    m_pVBoxLayout->addWidget(labelWidget);
+    auto childDlg = new DFrame();
+    childDlg->setLayout(vbLayout);
+    m_pVBoxLayout->addWidget(childDlg);
 }
 
 void FileAttrWidget::initCloseBtn()
 {
     auto layout = new QHBoxLayout;
+    layout->setContentsMargins(0, 6, 6, 6);
     layout->addStretch(1);
 
     auto closeButton = new DIconButton(DStyle::SP_CloseButton, this);
@@ -165,21 +130,15 @@ void FileAttrWidget::initCloseBtn()
 void FileAttrWidget::initImageLabel()
 {
     labelImage = new DLabel(this);
-    labelImage->setFixedSize(QSize(94, 113));
-
-    auto layout = new QHBoxLayout;
-    layout->addStretch(1);
-    layout->addWidget(labelImage);
-    layout->addStretch(1);
+    labelImage->setAlignment(Qt::AlignCenter);
 
     labelFileName = new DLabel("", this);
     labelFileName->setAlignment(Qt::AlignCenter);
 
     auto vlayout = new QVBoxLayout;
-    vlayout->addStretch(1);
-    vlayout->addItem(layout);
+    vlayout->setContentsMargins(0, 6, 0, 30);
+    vlayout->addWidget(labelImage);
     vlayout->addWidget(labelFileName);
-    vlayout->addStretch(1);
 
     m_pVBoxLayout->addItem(vlayout);
 }
@@ -215,12 +174,4 @@ void FileAttrWidget::setFileInfoTime(const QDateTime &CreateTime, const QDateTim
 void FileAttrWidget::slotBtnCloseClicked()
 {
     this->close();
-}
-
-int FileAttrWidget::dealWithData(const int &msgType, const QString &)
-{
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
-
-    }
-    return 0;
 }

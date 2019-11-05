@@ -2,7 +2,6 @@
 #define TITLEWIDGET_H
 
 #include <DMenu>
-#include <DIconButton>
 #include <DToolButton>
 
 #include "subjectObserver/CustomWidget.h"
@@ -23,7 +22,6 @@ public:
 signals:
     void sigOpenFileOk();
     void sigAppFullScreen();
-
     void sigMagnifierCancel();
 
 private slots:
