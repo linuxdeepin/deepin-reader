@@ -23,12 +23,13 @@ protected:
 
 private:
     void init();
+    int calcTextSize(const QString&);
 
 private slots:
     void slotTextEditMaxContantNum();
 
 private:
-    int m_nMaxContantLen = 1000;    // 允许输入文本最大长度
+    int m_nMaxContantLen = 1500;    // 允许输入文本最大长度
 };
 
 /**

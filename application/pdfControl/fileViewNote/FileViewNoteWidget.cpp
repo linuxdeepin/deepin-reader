@@ -1,5 +1,6 @@
 #include "FileViewNoteWidget.h"
 #include "utils/PublicFunction.h"
+#include <QTextCodec>
 
 FileViewNoteWidget::FileViewNoteWidget(CustomWidget *parent):
     CustomWidget(QString("FileViewNoteWidget"), parent)
@@ -283,6 +284,23 @@ void CustemTextEdit::init()
 }
 
 /**
+ * @brief CustemTextEdit::calcTextSize
+ * 将Unicode转换成GBK编码计算字节数
+ * @param text
+ * @return
+ */
+int CustemTextEdit::calcTextSize(const QString &text)
+{
+    QByteArray ba = QTextCodec::codecForName(("GBK"))->fromUnicode(text);//unicodezhuangGBK之间的转换器
+
+    const char *str_2 = ba.data();
+
+    int str_len = strlen(str_2);//获取转换长度
+
+    return str_len;
+}
+
+/**
  * @brief CustemTextEdit::slotTextEditMaxContantNum
  * TextEdit输入允许输入最长字符串的长度
  */
@@ -290,7 +308,9 @@ void CustemTextEdit::slotTextEditMaxContantNum()
 {
     QString textContent = this->toPlainText();
 
-    int length = textContent.count();
+    int length = textContent.toUtf8().size();
+
+    qDebug() << "textContent size:" << length;
 
     if (length > m_nMaxContantLen) {
         int position = this->textCursor().position();
