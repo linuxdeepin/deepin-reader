@@ -6,6 +6,7 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
 {
     setAttribute(Qt::WA_ShowModal, true); //  模态对话框， 属性设置
+    setFixedSize(QSize(360, 660));
 
     m_pVBoxLayout = new QVBoxLayout;
     m_pVBoxLayout->setContentsMargins(10, 10, 10, 10);
