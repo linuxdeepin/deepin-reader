@@ -64,11 +64,15 @@ void DocShowShellWidget::slotOpenNoteWidget(const QString &msgContent)
     m_pFileViewNoteWidget->setNoteUuid("");
     m_pFileViewNoteWidget->setNotePage("");
 
-    QRect rrect = this->rect();
-    QPoint point = this->mapToGlobal(rrect.bottomRight());
-    int nRight = point.x();
+//    QRect rrect = this->rect();
+//    QPoint point = this->mapToGlobal(rrect.bottomRight());
+//    int nRight = point.x();
+    QPoint point;
+    bool t_bHigh = false;
     DataManager::instance()->setSmallNoteWidgetSize(m_pFileViewNoteWidget->size());
-    m_pFileViewNoteWidget->showWidget(nRight);
+    DataManager::instance()->mousePressLocal(t_bHigh, point);
+    m_pFileViewNoteWidget->showWidget(point);
+//    qDebug() << "m_pFileViewNoteWidget show Point: " << point;
 }
 
 //  显示 当前 注释
