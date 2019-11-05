@@ -14,7 +14,7 @@ CustomLabel::CustomLabel(QWidget *parent) :
 void CustomLabel::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
-    QRectF rectangle(1, 1, (this->width() - 4), (this->height() - 4));
+    QRectF rectangle(2, 2, (this->width() - 4), (this->height() - 4));
 
     QPainter painter(this);
     painter.setOpacity(1);

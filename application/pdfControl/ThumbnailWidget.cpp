@@ -44,6 +44,7 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &)
 void ThumbnailWidget::initWidget()
 {
     m_pThumbnailListWidget = new CustomListWidget(this);
+    m_pThumbnailListWidget->setSpacing(3);
 
     m_pPageWidget = new PagingWidget(this);
 
@@ -89,7 +90,7 @@ void ThumbnailWidget::addThumbnailItem(const int &iIndex)
 
     auto item = new QListWidgetItem(m_pThumbnailListWidget);
     item->setFlags(Qt::NoItemFlags);
-    item->setSizeHint(QSize(240, 250));
+    item->setSizeHint(QSize(240, 212));
 
     m_pThumbnailListWidget->addItem(item);
     m_pThumbnailListWidget->setItemWidget(item, widget);

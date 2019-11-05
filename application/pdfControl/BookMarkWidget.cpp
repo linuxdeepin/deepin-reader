@@ -274,6 +274,7 @@ void BookMarkWidget::slotDelBkItem()
 void BookMarkWidget::initWidget()
 {
     m_pBookMarkListWidget = new CustomListWidget;
+    m_pBookMarkListWidget->setSpacing(0);
 
     m_pAddBookMarkBtn = new DPushButton(this);
     m_pAddBookMarkBtn->setMinimumSize(QSize(240, 50));

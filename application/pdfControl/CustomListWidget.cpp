@@ -5,8 +5,8 @@
 CustomListWidget::CustomListWidget(DWidget *parent)
     : DListWidget (parent)
 {
-    setFocusPolicy(Qt::NoFocus);
-    setSpacing(5);
+//    setFocusPolicy(Qt::NoFocus);
+    setSpacing(0);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setResizeMode(QListWidget::Adjust);
     setViewMode(QListView::ListMode);

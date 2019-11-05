@@ -47,7 +47,7 @@ void ThumbnailItemWidget::setBSelect(const bool &paint)
 void ThumbnailItemWidget::initWidget()
 {
     m_pPageNumber = new DLabel();
-    m_pPageNumber->setFixedSize(QSize(140, 30));
+    m_pPageNumber->setFixedSize(QSize(140, 18));
     m_pPageNumber->setAlignment(Qt::AlignCenter);
 
     m_pPicture = new CustomLabel();
@@ -56,13 +56,13 @@ void ThumbnailItemWidget::initWidget()
 
     auto t_vLayout = new QVBoxLayout;
     t_vLayout->setContentsMargins(1, 0, 1, 0);
-    t_vLayout->setSpacing(1);
+    t_vLayout->setSpacing(0);
 
     t_vLayout->addWidget(m_pPicture);
     t_vLayout->addWidget(m_pPageNumber);
 
     auto t_hLayout = new QHBoxLayout;
-    t_hLayout->setContentsMargins(2, 2, 2, 2);
+    t_hLayout->setContentsMargins(2, 0, 2, 0);
     t_hLayout->setSpacing(0);
     t_hLayout->addStretch(1);
     t_hLayout->addItem(t_vLayout);

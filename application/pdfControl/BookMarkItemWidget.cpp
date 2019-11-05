@@ -86,6 +86,19 @@ void BookMarkItemWidget::paintEvent(QPaintEvent *event)
     }
 
     m_pPicture->setPalette(p);
+
+    int width = this->width();
+    int height = this->height();
+
+    QPainter painter(this);
+    painter.setPen(QPen(QColor(QString("#D8D8D8")), 1));
+
+    QPoint startP(67, height-1);
+    QPoint endP(width, height-1);
+
+    painter.drawLine(startP, endP);
+
+
     CustomWidget::paintEvent(event);
 }
 
