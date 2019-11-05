@@ -40,7 +40,7 @@ Application::Application(int &argc, char **argv)
 
     initI18n();
 
-    setApplicationName(tr("deepin-reader"));
+    setApplicationName(("deepin-reader"));
     setOrganizationName(tr("deepin"));
 
     setApplicationDisplayName(tr("deepin-reader"));

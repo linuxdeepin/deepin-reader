@@ -24,7 +24,7 @@ void SlidWidget::paintEvent(QPaintEvent *event)
 
 MagnifierWidget::MagnifierWidget(DWidget *parent): DWidget(parent)
 {
-    m_magnifiercolor = Qt::yellow; // Qt::white;
+    m_magnifiercolor = Qt::white;
     m_magnifierringwidth = 10;
     m_magnifierradius = 100;
     m_magnifierscale = 3;

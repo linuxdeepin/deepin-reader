@@ -58,18 +58,22 @@ private:
 public:
     void getBookMarks();     //  获取给文件 所有标签的页码
     void saveBookMark();
-    void saveAsBookMark(const QString &strFilePath, const QString &strFileName);
+   // void saveAsBookMark(const QString &strFilePath, const QString &strFileName);
 
     QList<int> getBookMarkList() const;
 
     void setBookMarkList(const QList<int> &pBookMarkList);
     void setStrFilePath(const QString &strFilePath);
+    bool saveasBookMark(const QString & oldpath,const QString & newpath);
 
 private:
     void insertBookMark(const QString &, const QString &strFilePath = "", const QString &strFileName = "");
     void updateBookMark(const QString &);
     void deleteBookMark();
-    void deleteBookMark(const QString &strFilePath, const QString &strFileName);
+   // void deleteBookMark(const QString &strFilePath, const QString &strFileName);
+
+    void clearInvalidRecord();
+
 
 private:
     QList<int>      m_pBookMarkList;

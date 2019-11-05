@@ -99,20 +99,20 @@ void DBManager::saveBookMark()
     }
 }
 
-//  另存为 需要重新插入数据
-void DBManager::saveAsBookMark(const QString &strFilePath, const QString &strFileName)
-{
-    //  需要将之前的数据清空, 重新插入数据
-    deleteBookMark(strFilePath, strFileName);
+////  另存为 需要重新插入数据
+//void DBManager::saveAsBookMark(const QString &strFilePath, const QString &strFileName)
+//{
+//    //  需要将之前的数据清空, 重新插入数据
+//    deleteBookMark(strFilePath, strFileName);
 
-    if (m_pBookMarkList.size() > 0) {
-        QString sPage = "";
-        foreach (int i, m_pBookMarkList) {
-            sPage += QString::number(i) + ",";
-        }
-        insertBookMark(sPage, strFilePath, strFileName);
-    }
-}
+//    if (m_pBookMarkList.size() > 0) {
+//        QString sPage = "";
+//        foreach (int i, m_pBookMarkList) {
+//            sPage += QString::number(i) + ",";
+//        }
+//        insertBookMark(sPage, strFilePath, strFileName);
+//    }
+//}
 
 //  新增标签数据
 void DBManager::insertBookMark(const QString &pageNumber, const QString &strFilePath, const QString &strFileName)
@@ -191,24 +191,54 @@ void DBManager::deleteBookMark()
     }
 }
 
-//  清空数据
-void DBManager::deleteBookMark(const QString &strFilePath, const QString &strFileName)
+
+////  清空数据
+//void DBManager::deleteBookMark(const QString &strFilePath, const QString &strFileName)
+//{
+//    const QSqlDatabase db = getDatabase();
+
+//    QMutexLocker mutex(&m_mutex);
+//    // delete into BookMarkTable
+//    QSqlQuery query( db );
+//    query.setForwardOnly(true);
+//    query.exec("START TRANSACTION");//开始事务。使用BEGIN也可以
+//    query.prepare( "DELETE FROM BookMarkTable "
+//                   "where FilePath = ? and FileName = ?" );
+//    query.addBindValue(strFilePath);
+//    query.addBindValue(strFileName);
+
+//    if (query.exec()) {
+//        query.exec("COMMIT");
+//    }
+//}
+
+void DBManager::clearInvalidRecord()
 {
     const QSqlDatabase db = getDatabase();
-
     QMutexLocker mutex(&m_mutex);
-    // delete into BookMarkTable
     QSqlQuery query( db );
-    query.setForwardOnly(true);
-    query.exec("START TRANSACTION");//开始事务。使用BEGIN也可以
-    query.prepare( "DELETE FROM BookMarkTable "
-                   "where FilePath = ? and FileName = ?" );
-    query.addBindValue(strFilePath);
-    query.addBindValue(strFileName);
+    query.prepare("select FilePath from BookMarkTable");
+    if(query.exec())
+    {
+        QStringList strlist;
+        QString strsql;
+        while (query.next()) {
+            QString strpath=query.value(0).toString();
+            if(!QFile::exists(strpath))
+            {
+                strsql.append(QString("delete from BookMarkTable where FilePath='%1';").arg(strpath));
+            }
+        }
+        query.clear();
+        if(!strsql.isEmpty())
+        {
+            query.prepare(strsql);
+            if(!query.exec())
+                qDebug()<<query.lastError();
+        }
 
-    if (query.exec()) {
-        query.exec("COMMIT");
     }
+    qDebug()<<query.lastError();
 }
 
 DBManager::DBManager(QObject *parent)
@@ -216,6 +246,7 @@ DBManager::DBManager(QObject *parent)
     , m_connectionName("default_connection")
 {
     checkDatabase();
+    clearInvalidRecord();
 }
 
 
@@ -293,6 +324,45 @@ void DBManager::setStrFilePath(const QString &strFilePath)
     int nLastPos = strFilePath.lastIndexOf('/');
     nLastPos++;
     m_strFileName = strFilePath.mid(nLastPos);
+}
+
+bool  DBManager::saveasBookMark(const QString &oldpath, const QString &newpath)
+{
+    bool bsuccess=false;
+    const QSqlDatabase db = getDatabase();
+    QMutexLocker mutex(&m_mutex);
+    QSqlQuery query( db );
+    query.setForwardOnly(true);
+    query.prepare("select count(*) from BookMarkTable where FilePath=?");
+    query.addBindValue(newpath);
+    if(query.exec())
+    {
+        QString strnum;
+        if(query.next()&&query.value(0).toInt()<=0&&m_pBookMarkList.count()>0)
+        {
+            foreach (int i, m_pBookMarkList) {
+                strnum += QString::number(i) + ",";
+            }
+            QString strfilename= newpath.mid(newpath.lastIndexOf("/")+1);
+            query.clear();
+            query.exec("START TRANSACTION");
+
+            query.prepare( "INSERT INTO BookMarkTable "
+                           "(FilePath, FileName, PageNumber, Time) VALUES (?, ?, ?, ?)" );
+            QString nowTime = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
+            query.addBindValue(newpath);
+            query.addBindValue(strfilename);
+            query.addBindValue(strnum);
+            query.addBindValue(nowTime);
+
+            if (query.exec()) {
+                query.exec("COMMIT");
+                bsuccess=true;
+            }
+        }
+    }
+    qDebug()<<"saveasBookMark"<<query.lastError();
+    return  bsuccess;
 }
 
 void DBManager::setBookMarkList(const QList<int> &pBookMarkList)
