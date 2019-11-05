@@ -340,14 +340,14 @@ bool DocummentProxy::exitSlideModel()
 
 void DocummentProxy::findNext()
 {
-    if (m_documment || bcloseing) {   
+    if (m_documment || bcloseing) {
         m_documment->findNext();
     }
 }
 
 void DocummentProxy::findPrev()
 {
-    if (m_documment || bcloseing) {     
+    if (m_documment || bcloseing) {
         m_documment->findPrev();
     }
 }
@@ -379,15 +379,16 @@ double DocummentProxy::adaptWidthAndShow(double width)
 double DocummentProxy::adaptHeightAndShow(double height)
 {
     if (!m_documment || bcloseing)
-        return -1;  
+        return -1;
     return m_documment->adaptHeightAndShow(height);
 }
 
 bool DocummentProxy::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {
-    if (m_documment) {      
+    if (m_documment) {
         return m_documment->annotationClicked(pos, strtext, struuid);
     }
+    return false;
 }
 
 void DocummentProxy::getAllAnnotation(QList<stHighlightContent> &listres)
@@ -407,7 +408,7 @@ int DocummentProxy::pointInWhichPage(QPoint pos)
 
 void DocummentProxy::jumpToHighLight(const QString &uuid, int ipage)
 {
-    qDebug()<<"DocummentProxy::jumpToHighLight";
+    qDebug() << "DocummentProxy::jumpToHighLight";
     if (m_documment) {
         m_documment->jumpToHighLight(uuid, ipage);
     }

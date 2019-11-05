@@ -149,6 +149,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     d->m_widget = new DWidget(this);
     setWidget(d->m_widget);
     d->showslidwaittimer = new QTimer(this);
+    d->loadpagewaittimer = new QTimer(this);
     d->pblankwidget = new DLabel(this);
     d->pblankwidget->setMouseTracking(true);
     d->pblankwidget->hide();
@@ -207,6 +208,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     connect(d, SIGNAL(signal_docummentLoaded(bool)), this, SLOT(slot_docummentLoaded(bool)));
     connect(this, SIGNAL(signal_loadDocumment(QString)), d, SLOT(loadDocumment(QString)));
     connect(d->showslidwaittimer, SIGNAL(timeout()), this, SLOT(showSlideModelTimerOut()));
+    connect(d->loadpagewaittimer, SIGNAL(timeout()), this, SLOT(loadPageTimerOut()));
 }
 
 DocummentBase::~DocummentBase()
@@ -786,7 +788,8 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     pageJump(currpageno);
     d->donotneedreloaddoc = false;
     d->m_currentpageno = currpageno;
-    loadPages();
+//    loadPages();
+    d->loadpagewaittimer->start(10);
 }
 
 int DocummentBase::getCurrentPageNo()
@@ -814,7 +817,7 @@ int DocummentBase::currentLastPageNo()
         y_offset = scrollBar_Y->value() + d->qwfather->height();
     switch (d->m_viewmode) {
     case ViewMode_SinglePage:
-        for (int i = 0; i < d->m_pages.size(); i++) {
+        for (int i = 0; i < d->m_widgets.size(); i++) {
             if (y_offset < d->m_widgets.at(i)->y() + d->m_widgets.at(i)->height()) {
                 pagenum = i;
                 break;
@@ -822,7 +825,7 @@ int DocummentBase::currentLastPageNo()
         }
         break;
     case ViewMode_FacingPage:
-        for (int i = 0; i < d->m_pages.size() / 2; i++) {
+        for (int i = 0; i < d->m_widgets.size() / 2; i++) {
             if (y_offset < d->m_widgets.at(i)->y() + d->m_widgets.at(i)->height()) {
                 if (x_offset < d->m_widgets.at(i)->x() + d->m_pages.at(i * 2)->x() + d->m_pages.at(i * 2)->width()) {
                     pagenum = i * 2;
@@ -832,7 +835,7 @@ int DocummentBase::currentLastPageNo()
                 break;
             }
         }
-        if (-1 == pagenum && d->m_pages.size() % 2) {
+        if (-1 == pagenum && d->m_widgets.size() % 2) {
             if (y_offset < d->m_widgets.at(d->m_pages.size() / 2)->y() + d->m_widgets.at(d->m_pages.size() / 2)->height()) {
                 if (x_offset < d->m_widgets.at(d->m_pages.size() / 2)->x() + d->m_pages.at(d->m_pages.size() - 1)->x() + d->m_pages.at(d->m_pages.size() - 1)->width()) {
                     pagenum = d->m_pages.size() - 1;
@@ -866,7 +869,7 @@ int DocummentBase::currentPageNo()
         y_offset = scrollBar_Y->value();
     switch (d->m_viewmode) {
     case ViewMode_SinglePage:
-        for (int i = 0; i < d->m_pages.size(); i++) {
+        for (int i = 0; i < d->m_widgets.size(); i++) {
             if (y_offset < d->m_widgets.at(i)->y() + d->m_widgets.at(i)->height()) {
                 pagenum = i;
                 break;
@@ -874,7 +877,7 @@ int DocummentBase::currentPageNo()
         }
         break;
     case ViewMode_FacingPage:
-        for (int i = 0; i < d->m_pages.size() / 2; i++) {
+        for (int i = 0; i < d->m_widgets.size() / 2; i++) {
             if (y_offset < d->m_widgets.at(i)->y() + d->m_widgets.at(i)->height()) {
                 if (x_offset < d->m_widgets.at(i)->x() + d->m_pages.at(i * 2)->x() + d->m_pages.at(i * 2)->width()) {
                     pagenum = i * 2;
@@ -884,7 +887,7 @@ int DocummentBase::currentPageNo()
                 break;
             }
         }
-        if (-1 == pagenum && d->m_pages.size() % 2) {
+        if (-1 == pagenum && d->m_widgets.size() % 2) {
             if (y_offset < d->m_widgets.at(d->m_pages.size() / 2)->y() + d->m_widgets.at(d->m_pages.size() / 2)->height()) {
                 if (x_offset < d->m_widgets.at(d->m_pages.size() / 2)->x() + d->m_pages.at(d->m_pages.size() - 1)->x() + d->m_pages.at(d->m_pages.size() - 1)->width()) {
                     pagenum = d->m_pages.size() - 1;
@@ -1012,6 +1015,13 @@ bool DocummentBase::getSelectTextString(QString &st)
         }
     }
     return bselectexit;
+}
+
+void DocummentBase::loadPageTimerOut()
+{
+    Q_D(DocummentBase);
+    d->loadpagewaittimer->stop();
+    loadPages();
 }
 
 void DocummentBase::showSlideModelTimerOut()
@@ -1174,7 +1184,8 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
     }
     pageJump(currpageno);
     d->donotneedreloaddoc = false;
-    loadPages();
+//    loadPages();
+    d->loadpagewaittimer->start(10);
 
     return true;;
 }
@@ -1189,7 +1200,8 @@ bool DocummentBase::loadPages()
         d->m_pages.at(i)->waitThread();
     }
     int pagenum = 0;
-    int firstpagenum  = d->m_currentpageno;
+//    int firstpagenum  = d->m_currentpageno;
+    int firstpagenum  = currentPageNo();
     int lastpagenum  = currentLastPageNo();
     qDebug() << "---------------firstpagenum:" << firstpagenum << " lastpagenum:" << lastpagenum;
     for (int i = firstpagenum; i < lastpagenum + 1; i++) {

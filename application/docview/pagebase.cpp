@@ -36,6 +36,7 @@ void ThreadRenderImage::run()
         restart = false;
         if (m_width > 0 && m_height > 0) {
             QImage image;
+            qDebug() << "ThreadRenderImage getImage";
             if (m_page->getImage(image, m_width, m_height)) {
                 m_page->loadData();
                 emit signal_RenderFinish(image);
@@ -431,7 +432,7 @@ void PageBase::getImagePoint(QPointF &point)
 
 void PageBase::clearHighlightRects()
 {
-    Q_D(PageBase);   
+    Q_D(PageBase);
     d->m_highlights.clear();
 }
 

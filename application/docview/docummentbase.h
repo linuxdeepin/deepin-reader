@@ -124,6 +124,7 @@ public:
         m_bScanningcopy = false;
         showslidwaittimer = nullptr;
         qwfather = nullptr;
+        loadpagewaittimer = nullptr;
 
     }
 
@@ -193,6 +194,7 @@ public:
     bool m_bScanningcopy;//当前打开的是否为扫描件
     QTimer *showslidwaittimer;
     DWidget *qwfather;
+    QTimer *loadpagewaittimer;
 
 
 signals:
@@ -290,6 +292,7 @@ protected slots:
     void scaleAndShow(double scale, RotateType_EM rotate);
     bool setViewModeAndShow(ViewMode_EM viewmode);
     void showSlideModelTimerOut();
+    void loadPageTimerOut();
 protected:
     void showSinglePage();
     void showFacingPage();
