@@ -158,11 +158,11 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
     itemWidget->setLabelPage(page, 1);
     itemWidget->setTextEditText(text);
     itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + tr("search res content")));
-    itemWidget->setMinimumSize(QSize(140, 80));
+    itemWidget->setMinimumSize(QSize(240, 80));
 
     QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
     item->setFlags(Qt::NoItemFlags);
-    item->setSizeHint(QSize(140, 80));
+    item->setSizeHint(QSize(240, 80));
 
     m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);

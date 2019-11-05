@@ -87,7 +87,7 @@ void ThumbnailWidget::addThumbnailItem(const int &iIndex)
 
     auto item = new QListWidgetItem(m_pThumbnailListWidget);
     item->setFlags(Qt::NoItemFlags);
-    item->setSizeHint(QSize(140, 250));
+    item->setSizeHint(QSize(240, 250));
 
     m_pThumbnailListWidget->addItem(item);
     m_pThumbnailListWidget->setItemWidget(item, widget);
