@@ -90,8 +90,13 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
         return;
     }
 
-    if (event->buttons() & Qt::RightButton && m_nCurrentHandelState == Magnifier_State)
-        m_pDocummentProxy->closeMagnifier();
+//    if(event->buttons()&Qt::RightButton&&m_nCurrentHandelState == Magnifier_State)
+//    {
+//        qDebug()<<"FileViewWidget::mouseReleaseEvent rightbutton clicked";
+//        emit sigMagnifying(QString("0"));
+//        return;
+//    }
+
     //  放大镜状态， 直接返回
     if (m_nCurrentHandelState == Magnifier_State)
         return;
