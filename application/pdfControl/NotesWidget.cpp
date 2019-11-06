@@ -271,11 +271,17 @@ void NotesWidget::setSelectItemBackColor(QListWidgetItem *item)
         return;
     }
 
+    auto t_widget1 = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
+    if (t_widget1) {
+        t_widget1->setBSelect(false);
+    }
+
     m_pNotesList->setCurrentItem(item);
 
     auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
     if (t_widget) {
         t_widget->setBSelect(true);
+        m_pNoteItem = item;
     }
 }
 

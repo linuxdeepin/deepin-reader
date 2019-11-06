@@ -135,6 +135,17 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
     }
 
     m_pPicture->setPalette(p);
+
+    int width = this->width();
+    int height = this->height();
+
+    QPainter painter(this);
+    painter.setPen(QPen(QColor(QString("#D8D8D8")), 1));
+
+    QPoint startP(65, height-1);
+    QPoint endP(width, height-1);
+
+    painter.drawLine(startP, endP);
 }
 
 QString NotesItemWidget::calcText(const QFont &font, const QString &note, const QSize &size/*const int MaxWidth*/)

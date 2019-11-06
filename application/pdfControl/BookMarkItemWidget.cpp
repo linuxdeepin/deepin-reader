@@ -98,7 +98,6 @@ void BookMarkItemWidget::paintEvent(QPaintEvent *event)
 
     painter.drawLine(startP, endP);
 
-
     CustomWidget::paintEvent(event);
 }
 
