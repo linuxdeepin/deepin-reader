@@ -370,17 +370,11 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
         return ConstantMsg::g_effective_res;
     }
 
-    //  打开 文件通知消息
-    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
+    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {    //  打开 文件通知消息
         emit sigOpenFileOk();
-    }
-
-    //  关闭w文件通知消息
-    if (MSG_CLOSE_FILE == msgType) {
+    } else if (MSG_CLOSE_FILE == msgType) {         //  关闭 文件通知消息
         emit sigCloseFile();
-    }
-
-    if (MSG_NOTIFY_KEY_MSG == msgType) {
+    } else if (MSG_NOTIFY_KEY_MSG == msgType) {
         if (msgContent == KeyStr::g_del) {
             emit sigDelBKItem();
         }

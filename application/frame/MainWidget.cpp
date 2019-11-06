@@ -9,7 +9,6 @@
 #include "DocShowShellWidget.h"
 #include "LeftSidebarWidget.h"
 #include <QStackedLayout>
-#include <DStackedWidget>
 
 MainWidget::MainWidget(CustomWidget *parent) :
     CustomWidget ("MainWidget", parent)
@@ -29,9 +28,9 @@ void MainWidget::initConnections()
 //  文件打开成功
 void MainWidget::slotOpenFileOk()
 {
-    auto pWidget = this->findChild<DStackedWidget *>();
-    if (pWidget) {
-        pWidget->setCurrentIndex(1);
+    auto pLayout = this->findChild<QStackedLayout *>();
+    if (pLayout) {
+        pLayout->setCurrentIndex(1);
     }
 }
 
@@ -45,9 +44,7 @@ int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         emit sigOpenFileOk();
-    }
-
-    if (msgType == MSG_OPERATION_OPEN_FILE_FAIL) {
+    } else if (msgType == MSG_OPERATION_OPEN_FILE_FAIL) {
         emit sigOpenFileFail(msgContent);
         return ConstantMsg::g_effective_res;
     }
@@ -84,12 +81,11 @@ void MainWidget::dropEvent(QDropEvent *event)
 
 void MainWidget::initWidget()
 {
-    auto pLayout = new QHBoxLayout(this);
-    pLayout->setContentsMargins(0, 6, 0, 0);
-    pLayout->setSpacing(0);
+    auto pStcakLayout = new QStackedLayout(this);
+    pStcakLayout->setContentsMargins(0, 0, 0, 0);
+    pStcakLayout->setSpacing(0);
 
-    auto pStcakWidget = new DStackedWidget(this);
-    pStcakWidget->addWidget(new HomeWidget);
+    pStcakLayout->addWidget(new HomeWidget);
 
     auto pSplitter = new DSplitter;
     pSplitter->setHandleWidth(5);
@@ -103,6 +99,5 @@ void MainWidget::initWidget()
     list_src.append(1000);
     pSplitter->setSizes(list_src);
 
-    pStcakWidget->addWidget(pSplitter);
-    pLayout->addWidget(pStcakWidget);
+    pStcakLayout->addWidget(pSplitter);
 }

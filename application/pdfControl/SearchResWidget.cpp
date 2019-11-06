@@ -187,10 +187,7 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
 
     if (msgType == MSG_CLEAR_FIND_CONTENT) {
         emit sigClearWidget();
-    }
-
-    //  关闭w文件通知消息
-    if (MSG_CLOSE_FILE == msgType) {
+    } else if (MSG_CLOSE_FILE == msgType) {    //  关闭w文件通知消息
         emit sigCloseFile();
     }
 
