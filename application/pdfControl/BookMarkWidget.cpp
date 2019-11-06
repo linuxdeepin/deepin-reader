@@ -271,7 +271,8 @@ void BookMarkWidget::initWidget()
     m_pBookMarkListWidget->setSpacing(0);
 
     m_pAddBookMarkBtn = new DPushButton(this);
-    m_pAddBookMarkBtn->setMinimumSize(QSize(240, 50));
+    m_pAddBookMarkBtn->setFixedHeight(36);
+    m_pAddBookMarkBtn->setMinimumWidth(170);
     m_pAddBookMarkBtn->setText(tr("add bookmark"));
     connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(slotAddBookMark()));
 
@@ -280,6 +281,7 @@ void BookMarkWidget::initWidget()
     m_pVBoxLayout->setSpacing(0);
     this->setLayout(m_pVBoxLayout);
     m_pVBoxLayout->addWidget(m_pBookMarkListWidget);
+    m_pVBoxLayout->addSpacing(4);
     m_pVBoxLayout->addWidget(m_pAddBookMarkBtn);
 }
 
