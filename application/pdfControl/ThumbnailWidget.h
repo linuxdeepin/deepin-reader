@@ -116,6 +116,7 @@ private slots:
     void slotLoadThumbnailImage();
     void slotFileViewToListPage(const int &);
     void slotCloseFile();
+    void slotUpdateTheme();
 
 private:
     CustomListWidget *m_pThumbnailListWidget = nullptr;         // list widget item子界面

@@ -260,12 +260,25 @@ void BookMarkWidget::slotDelBkItem()
     }
 }
 
+void BookMarkWidget::slotUpdateTheme()
+{
+    DPalette plt=DGuiApplicationHelper::instance()->applicationPalette();
+    plt.setColor(QPalette::Background, plt.color(QPalette::Base));
+    setAutoFillBackground(true);
+    setPalette(plt);
+}
+
 /**
  * @brief BookMarkWidget::initWidget
  * 初始化书签窗体
  */
 void BookMarkWidget::initWidget()
 {
+    DPalette plt=DGuiApplicationHelper::instance()->applicationPalette();
+    plt.setColor(QPalette::Background, plt.color(QPalette::Base));
+    setAutoFillBackground(true);
+    setPalette(plt);
+
     m_pBookMarkListWidget = new CustomListWidget;
     m_pBookMarkListWidget->setSpacing(0);
 
@@ -297,6 +310,7 @@ void BookMarkWidget::initConnection()
     connect(this, SIGNAL(sigDeleteBookItem(const int &)), this, SLOT(slotDeleteBookItem(const int &)));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
     connect(this, SIGNAL(sigDelBKItem()), this, SLOT(slotDelBkItem()));
+    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
 /**
@@ -380,6 +394,9 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
         }
     }
 
+   if (msgType == MSG_OPERATION_UPDATE_THEME) {
+           emit sigUpdateTheme();
+       }
     return 0;
 }
 

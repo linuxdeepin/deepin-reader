@@ -15,6 +15,7 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
 
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
+     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
 ThumbnailWidget::~ThumbnailWidget()
@@ -32,6 +33,8 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &)
         emit sigOpenFileOk();
     } else if (MSG_CLOSE_FILE == msgType) {
         emit sigCloseFile();
+    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+        emit sigUpdateTheme();
     }
 
     return 0;
@@ -40,6 +43,11 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &)
 // 初始化界面
 void ThumbnailWidget::initWidget()
 {
+    DPalette plt=DGuiApplicationHelper::instance()->applicationPalette();
+    plt.setColor(QPalette::Background, plt.color(QPalette::Base));
+    setAutoFillBackground(true);
+    setPalette(plt);
+
     m_pThumbnailListWidget = new CustomListWidget(this);
     m_pThumbnailListWidget->setSpacing(3);
 
@@ -50,7 +58,7 @@ void ThumbnailWidget::initWidget()
     m_pvBoxLayout->addWidget(m_pPageWidget);
 
     m_pvBoxLayout->setContentsMargins(0, 0, 0, 0);
-    m_pvBoxLayout->setSpacing(0);
+    m_pvBoxLayout->setSpacing(6);
     this->setLayout(m_pvBoxLayout);
 }
 
@@ -109,6 +117,14 @@ void ThumbnailWidget::slotCloseFile()
     }
 }
 
+void ThumbnailWidget::slotUpdateTheme()
+{
+    DPalette plt=DGuiApplicationHelper::instance()->applicationPalette();
+    plt.setColor(QPalette::Background, plt.color(QPalette::Base));
+    setAutoFillBackground(true);
+    setPalette(plt);
+}
+
 // 初始化缩略图列表list，无缩略图
 void ThumbnailWidget::fillContantToList()
 {
@@ -151,11 +167,11 @@ void ThumbnailWidget::slotOpenFileOk()
     if (m_pPageWidget) {
         m_pPageWidget->setTotalPages(m_totalPages);
     }
-//    int counter = m_pThumbnailListWidget->count();
-//    for (int index = 0; index < counter; index++) {
-//        QListWidgetItem *item = m_pThumbnailListWidget->takeItem(0);
-//        delete item;
-//    }
+    //    int counter = m_pThumbnailListWidget->count();
+    //    for (int index = 0; index < counter; index++) {
+    //        QListWidgetItem *item = m_pThumbnailListWidget->takeItem(0);
+    //        delete item;
+    //    }
     m_pThumbnailListWidget->clear();
     fillContantToList();
 
@@ -170,10 +186,10 @@ void ThumbnailWidget::slotOpenFileOk()
 // 启动加载缩略图线程
 void ThumbnailWidget::slotLoadThumbnailImage()
 {
-//    if (m_ThreadLoadImage.endPage() == ( m_totalPages - 1)) {
-//        m_loadImageTimer.stop();
-//        m_ThreadLoadImage.setIsLoaded(false);
-//    }
+    //    if (m_ThreadLoadImage.endPage() == ( m_totalPages - 1)) {
+    //        m_loadImageTimer.stop();
+    //        m_ThreadLoadImage.setIsLoaded(false);
+    //    }
     if (!m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.start();
     }
@@ -191,7 +207,7 @@ void ThreadLoadImage::stopThreadRun()
 {
     m_isLoaded = false;
     quit();
-//    terminate();    //终止线程
+    //    terminate();    //终止线程
     wait();         //阻塞等待
 }
 
@@ -212,7 +228,7 @@ void ThreadLoadImage::run()
             m_nStartPage = 0;
         }
         if (m_nEndPage >= m_pages) {
-//            m_isLoaded = true;
+            //            m_isLoaded = true;
             m_nEndPage = m_pages - 1;
         }
 

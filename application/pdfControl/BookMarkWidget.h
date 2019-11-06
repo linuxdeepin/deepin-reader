@@ -78,6 +78,7 @@ private slots:
     void slotCloseFile();
     void slotLoadImage(const int &, const QImage &);
     void slotDelBkItem();
+    void slotUpdateTheme();
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;

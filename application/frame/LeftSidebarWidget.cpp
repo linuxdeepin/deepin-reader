@@ -35,10 +35,19 @@ void LeftSidebarWidget::slotWidgetVisible(const int &nVis)
     this->setVisible(nVis);
 }
 
+void LeftSidebarWidget::slotUpdateTheme()
+{
+    DPalette plt=DGuiApplicationHelper::instance()->applicationPalette();
+    plt.setColor(QPalette::Background, plt.color(QPalette::Base));
+    setAutoFillBackground(true);
+    setPalette(plt);
+}
+
 void LeftSidebarWidget::initConnections()
 {
     connect(this, SIGNAL(sigStackSetCurIndex(const int &)), this, SLOT(slotStackSetCurIndex(const int &)));
     connect(this, SIGNAL(sigWidgetVisible(const int &)), this, SLOT(slotWidgetVisible(const int &)));
+    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
 void LeftSidebarWidget::initWidget()

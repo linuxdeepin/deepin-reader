@@ -21,6 +21,7 @@ signals:
 private slots:
     void slotStackSetCurIndex(const int &);
     void slotWidgetVisible(const int &);
+    void slotUpdateTheme();
 
 private:
     void initConnections();
