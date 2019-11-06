@@ -1,14 +1,9 @@
 #include "DataManager.h"
 #include "application.h"
 
-#include <DWidget>
-#include <DGuiApplicationHelper>
-DWIDGET_USE_NAMESPACE
-
 DataManager::DataManager(QObject *parent) :
     QObject (parent)
 {
-    m_strOnlyFilePath = "";
     m_listColor.append(QColor("#FFA503"));
     m_listColor.append(QColor("#FF1C49"));
     m_listColor.append(QColor("#9023FC"));
@@ -75,11 +70,11 @@ void DataManager::setMousePressLocal(const bool &highLight, const QPoint &point)
     int noteWidgetW = m_smallNoteSize.width();
     int noteWidgetH = m_smallNoteSize.height();
 
-    if(t_h + noteWidgetH > screenH){
+    if (t_h + noteWidgetH > screenH) {
         t_h = screenH - noteWidgetH;
     }
 
-    if(t_w+noteWidgetW > screenW){
+    if (t_w + noteWidgetW > screenW) {
         t_w -= noteWidgetW;
     }
 
@@ -97,14 +92,4 @@ QString DataManager::gettrCurrentTheme() const
 void DataManager::settrCurrentTheme(const QString &strCurrentTheme)
 {
     m_strCurrentTheme = strCurrentTheme;
-}
-
-QString DataManager::getStrShowListWidget() const
-{
-    return m_strShowListWidget;
-}
-
-void DataManager::setStrShowListWidget(const QString &strShowListWidget)
-{
-    m_strShowListWidget = strShowListWidget;
 }

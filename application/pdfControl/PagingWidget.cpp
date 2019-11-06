@@ -142,10 +142,10 @@ int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigJumpToSpecifiedPage(m_totalPage - FIRSTPAGES);
         return ConstantMsg::g_effective_res;
     case MSG_NOTIFY_KEY_MSG: {
-        if (msgContent == "Up" || msgContent == "PgUp") {
+        if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup) {
             emit sigJumpToPrevPage();
             return ConstantMsg::g_effective_res;
-        } else if (msgContent == "Down" || msgContent == "PgDown") {
+        } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown) {
             emit sigJumpToNextPage();
             return ConstantMsg::g_effective_res;
         } else if (msgContent == "0") {

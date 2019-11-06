@@ -9,13 +9,22 @@ BookMarkItemWidget::BookMarkItemWidget(CustomItemWidget *parent) :
 
     initWidget();
 }
+
 /**
  * @brief BookMarkItemWidget::dealWithData
  * 处理全局消息接口
  * @return
  */
-int BookMarkItemWidget::dealWithData(const int &, const QString &)
+int BookMarkItemWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
+    if (MSG_NOTIFY_KEY_MSG == msgType) {
+        if (msgContent == KeyStr::g_del) {
+            bool bFocus = this->hasFocus();
+            if (bFocus) {
+                emit sigDeleleteItem(m_nPageIndex);
+            }
+        }
+    }
     return 0;
 }
 
@@ -93,8 +102,8 @@ void BookMarkItemWidget::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setPen(QPen(QColor(QString("#D8D8D8")), 1));
 
-    QPoint startP(67, height-1);
-    QPoint endP(width, height-1);
+    QPoint startP(67, height - 1);
+    QPoint endP(width, height - 1);
 
     painter.drawLine(startP, endP);
 

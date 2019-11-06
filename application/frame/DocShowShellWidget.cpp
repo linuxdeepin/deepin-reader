@@ -128,7 +128,7 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
         emit sigShowNoteWidget(msgContent);
         return ConstantMsg::g_effective_res;
     case MSG_NOTIFY_KEY_MSG : {    //  最后一个处理通知消息
-        if ("Ctrl+F" == msgContent) {
+        if (KeyStr::g_ctrl_f == msgContent) {
             emit sigShowFileFind();
             return ConstantMsg::g_effective_res;
         }

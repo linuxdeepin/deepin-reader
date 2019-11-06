@@ -17,7 +17,7 @@ public:
     MainOperationWidget(CustomWidget *parent = nullptr);
 
 private:
-    DIconButton *createBtn(const QString &btnName);
+    DIconButton *createBtn(const QString &btnName, const QString &objName);
     QString findBtnName();
     void initConnect();
 

@@ -7,7 +7,6 @@
 #include <QStringList>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QButtonGroup>
 #include <QPixmap>
 #include <QPainter>
 #include <QRectF>

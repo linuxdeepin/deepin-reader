@@ -9,6 +9,7 @@
 #include "DocShowShellWidget.h"
 #include "LeftSidebarWidget.h"
 #include <QStackedLayout>
+#include <DStackedWidget>
 
 MainWidget::MainWidget(CustomWidget *parent) :
     CustomWidget ("MainWidget", parent)
@@ -28,9 +29,9 @@ void MainWidget::initConnections()
 //  文件打开成功
 void MainWidget::slotOpenFileOk()
 {
-    auto pLayout = this->findChild<QStackedLayout *>();
-    if (pLayout) {
-        pLayout->setCurrentIndex(1);
+    auto pWidget = this->findChild<DStackedWidget *>();
+    if (pWidget) {
+        pWidget->setCurrentIndex(1);
     }
 }
 
@@ -83,11 +84,12 @@ void MainWidget::dropEvent(QDropEvent *event)
 
 void MainWidget::initWidget()
 {
-    auto pStackLayout = new QStackedLayout(this);
-    pStackLayout->setContentsMargins(0, 0, 0, 0);
-    pStackLayout->setSpacing(0);
+    auto pLayout = new QHBoxLayout(this);
+    pLayout->setContentsMargins(0, 6, 0, 0);
+    pLayout->setSpacing(0);
 
-    pStackLayout->addWidget(new HomeWidget);
+    auto pStcakWidget = new DStackedWidget(this);
+    pStcakWidget->addWidget(new HomeWidget);
 
     auto pSplitter = new DSplitter;
     pSplitter->setHandleWidth(5);
@@ -101,7 +103,6 @@ void MainWidget::initWidget()
     list_src.append(1000);
     pSplitter->setSizes(list_src);
 
-    pStackLayout->addWidget(pSplitter);
-
-    pStackLayout->setCurrentIndex(0);
+    pStcakWidget->addWidget(pSplitter);
+    pLayout->addWidget(pStcakWidget);
 }

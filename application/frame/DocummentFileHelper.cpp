@@ -279,11 +279,11 @@ int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgCont
         emit sigFileSlider(1);
         break;
     case MSG_NOTIFY_KEY_MSG :
-        if ("Ctrl+S" == msgContent) {
+        if (KeyStr::g_ctrl_s == msgContent) {
             emit sigSaveFile();
             return ConstantMsg::g_effective_res;
         }
-        if ("Esc" == msgContent) {
+        if (KeyStr::g_esc == msgContent) {
             emit sigFileSlider(0);
         }
     }

@@ -48,7 +48,7 @@ Application::Application(int &argc, char **argv)
     setProductIcon(QIcon(Constant::sLogoPath));
     setApplicationDescription(tr("deepin-reader is a document viewer provided by deep system"));
 
-    installEventFilter(new GlobalEventFilter);
+    installEventFilter(new GlobalEventFilter(this));
 
     initChildren();
 }

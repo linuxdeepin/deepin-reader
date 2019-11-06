@@ -135,9 +135,10 @@ void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
     m_loadSearchResThread.setRunning(true);
     m_loadSearchResThread.start();
 
+
     //  当前显示不是自己, 则需要发送切换 ListWidget 显示
-    QString sCurShow = DataManager::instance()->getStrShowListWidget();
-    if (sCurShow != this->objectName()) {
+    bool bFocus = this->hasFocus();
+    if (bFocus) {
         sendMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
     }
 }

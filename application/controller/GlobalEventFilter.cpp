@@ -16,8 +16,7 @@
  */
 #include "GlobalEventFilter.h"
 #include <QDebug>
-#include <QEvent>
-#include <QWindowStateChangeEvent>
+
 #include "utils/utils.h"
 #include "subjectObserver/ModuleHeader.h"
 
@@ -27,12 +26,17 @@
 GlobalEventFilter::GlobalEventFilter(QObject *parent)
     : QObject(parent)
 {
-    m_pFilterList = QStringList() << "Esc" << "F1" << "Up" << "Down" << "Ctrl+S" << "Ctrl+O" << "Ctrl+F" << "Del" << "PgUp" << "PgDown";
+    m_pFilterList = QStringList() << KeyStr::g_esc << KeyStr::g_f1 << KeyStr::g_f11 << KeyStr::g_up
+                    << KeyStr::g_down << KeyStr::g_del << KeyStr::g_pgup << KeyStr::g_pgdown
+                    << KeyStr::g_ctrl_a << KeyStr::g_ctrl_c << KeyStr::g_ctrl_f << KeyStr::g_ctrl_o
+                    << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_v << KeyStr::g_ctrl_x
+                    << KeyStr::g_ctrl_z
+                    << KeyStr::g_ctrl_alt_f << KeyStr::g_ctrl_shift_slash << KeyStr::g_ctrl_shift_s;
 }
 
 bool GlobalEventFilter::eventFilter(QObject *obj, QEvent *e)
 {
-    Q_UNUSED(obj)
+    Q_UNUSED(obj);
 
     int nType = e->type();
     if (nType == QEvent::KeyPress) {

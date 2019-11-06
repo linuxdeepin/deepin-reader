@@ -40,4 +40,27 @@ const QString g_pdfControl = "pdfControl";
 const QString g_subjectObserver = "subjectObserver";
 }
 
+namespace KeyStr {
+const QString g_esc = "Esc";
+const QString g_f1 = "F1";
+const QString g_f11 = "F11";
+const QString g_up = "Up";
+const QString g_down = "Down";
+const QString g_del = "Del";
+const QString g_pgup = "PgUp";
+const QString g_pgdown = "PgDown";
+const QString g_ctrl_s = "Ctrl+S";
+const QString g_ctrl_o = "Ctrl+O";
+const QString g_ctrl_f = "Ctrl+F";
+const QString g_ctrl_p = "Ctrl+P";
+const QString g_ctrl_c = "Ctrl+C";
+const QString g_ctrl_x = "Ctrl+X";
+const QString g_ctrl_v = "Ctrl+V";
+const QString g_ctrl_z = "Ctrl+Z";
+const QString g_ctrl_a = "Ctrl+A";
+const QString g_ctrl_alt_f = "Ctrl+Alt+F";
+const QString g_ctrl_shift_slash = "Ctrl+Shift+/";
+const QString g_ctrl_shift_s = "Ctrl+Shift+S";
+}
+
 #endif // IMAGEHEADER_H

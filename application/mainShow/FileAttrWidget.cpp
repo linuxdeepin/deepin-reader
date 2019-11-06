@@ -6,7 +6,7 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
 {
     setAttribute(Qt::WA_ShowModal, true); //  模态对话框， 属性设置
-    setFixedSize(QSize(360, 660));
+    setFixedSize(QSize(360, 650));
 
     m_pVBoxLayout = new QVBoxLayout;
     m_pVBoxLayout->setContentsMargins(10, 10, 10, 10);
@@ -116,7 +116,7 @@ void FileAttrWidget::initLabels()
 void FileAttrWidget::initCloseBtn()
 {
     auto layout = new QHBoxLayout;
-    layout->setContentsMargins(0, 6, 6, 6);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->addStretch(1);
 
     auto closeButton = new DIconButton(DStyle::SP_CloseButton, this);
@@ -161,9 +161,18 @@ DLabel *FileAttrWidget::createLabel(QGridLayout *layout, const int &index, const
 //  文件时间设置
 void FileAttrWidget::setFileInfoTime(const QDateTime &CreateTime, const QDateTime &ChangeTime)
 {
-    QString sDate = CreateTime.toString("yyyy年MM月dd日");
+    QString sYearText = tr("year"), sMonthText = tr("month"), sDayText = tr("day");
+    QString sHourText = tr("hour"), sMinText = tr("minute"), sSecondText = tr("second");
+
+    QString sYear = CreateTime.toString("yyyy"), sMonth = CreateTime.toString("MM"), sDay = CreateTime.toString("dd");
     QString sWeekday = CreateTime.toString("ddd");
-    QString sTime = CreateTime.toString("HH时mm分ss秒");
+    QString sHour = CreateTime.toString("HH"), sMin = CreateTime.toString("mm"), sSec = CreateTime.toString("ss");
+
+    QString sDate = sYear + sYearText + sMonth + sMonthText + sDay + sDayText;
+    QString sTime = sHour + sHourText + sMin + sMinText + sSec + sSecondText;
+
+    sDate = CreateTime.toString("yyyy年MM月dd日");
+    sTime = CreateTime.toString("HH时mm分ss秒");
     labelCreateTime->setText(QString("%1 %2 %3").arg(sDate).arg(sWeekday).arg(sTime));
 
     sDate = ChangeTime.toString("yyyy年MM月dd日");

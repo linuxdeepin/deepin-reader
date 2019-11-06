@@ -4,7 +4,6 @@
 BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
     CustomWidget(QString("BookMarkWidget"), parent)
 {
-    setObjectName("BookMarkWidget");
     initWidget();
 
     initConnection();
@@ -241,8 +240,8 @@ void BookMarkWidget::slotLoadImage(const int &page, const QImage &image)
 void BookMarkWidget::slotDelBkItem()
 {
     //  按Del键删除, 当前显示的List 必须是 自己 才可以进行删除
-    QString sShowName = DataManager::instance()->getStrShowListWidget();
-    if (sShowName == this->objectName()) {
+    bool bFocus = this->hasFocus();
+    if (bFocus) {
         auto pCurItem = m_pBookMarkListWidget->currentItem();
         if (pCurItem) {
             auto t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
@@ -315,6 +314,7 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
     bool rl = dproxy->getImage(page, t_image, 28, 48);
     if (rl) {
         auto t_widget = new BookMarkItemWidget;
+        connect(t_widget, SIGNAL(sigDeleleteItem(const int &)), this, SLOT(slotDeleteBookItem(const int &)));
         t_widget->setLabelImage(t_image);
         t_widget->setLabelPage(page, 1);
         t_widget->setMinimumSize(QSize(240, 80));
@@ -381,7 +381,7 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
     }
 
     if (MSG_NOTIFY_KEY_MSG == msgType) {
-        if (msgContent == QString("Del")) {
+        if (msgContent == KeyStr::g_del) {
             emit sigDelBKItem();
         }
     }

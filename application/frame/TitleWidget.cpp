@@ -129,14 +129,7 @@ void TitleWidget::on_handleShapeBtn_clicked()
 
     if (m_pHandleMenu == nullptr) {
         m_pHandleMenu = new DMenu(this);
-        {
-            m_pHandleAction = new QAction(tr("handleShape"), this);
-            m_pHandleAction->setObjectName("handleShape");
-            m_pHandleAction->setCheckable(true);
-            QString sPixmap = PF::getImagePath("handleShape_small", Pri::g_frame);
-            m_pHandleAction->setIcon(QIcon(sPixmap));
-            m_pHandleMenu->addAction(m_pHandleAction);
-        }
+
         {
             m_pDefaultAction = new QAction(tr("defaultShape"), this);
             m_pDefaultAction->setObjectName("defaultShape");
@@ -146,6 +139,16 @@ void TitleWidget::on_handleShapeBtn_clicked()
             m_pDefaultAction->setIcon(QIcon(sPixmap));
             m_pHandleMenu->addAction(m_pDefaultAction);
         }
+
+        {
+            m_pHandleAction = new QAction(tr("handleShape"), this);
+            m_pHandleAction->setObjectName("handleShape");
+            m_pHandleAction->setCheckable(true);
+            QString sPixmap = PF::getImagePath("handleShape_small", Pri::g_frame);
+            m_pHandleAction->setIcon(QIcon(sPixmap));
+            m_pHandleMenu->addAction(m_pHandleAction);
+        }
+
         QActionGroup *actionGroup = new QActionGroup(this);
         actionGroup->addAction(m_pHandleAction);
         actionGroup->addAction(m_pDefaultAction);
@@ -254,7 +257,7 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (msgType == MSG_OPERATION_FULLSCREEN || msgType == MSG_OPERATION_SLIDE) {
         emit sigAppFullScreen();
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (msgContent == "Esc") {      //  退出放大镜模式
+        if (msgContent == KeyStr::g_esc) {      //  退出放大镜模式
             emit sigMagnifierCancel();
         }
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {

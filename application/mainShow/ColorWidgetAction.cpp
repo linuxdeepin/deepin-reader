@@ -22,7 +22,7 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
     buttonLayout->setContentsMargins(20, 6, 20, 6);
     buttonLayout->setSpacing(8);
 
-    auto btnGroup = new QButtonGroup;
+    auto btnGroup = new QButtonGroup(this);
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SIGNAL(sigBtnGroupClicked(int)));
 
     auto colorList = DataManager::instance()->getLightColorList();

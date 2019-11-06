@@ -18,8 +18,12 @@
 class BookMarkItemWidget : public CustomItemWidget
 {
     Q_OBJECT
+
 public:
     BookMarkItemWidget(CustomItemWidget *parent = nullptr);
+
+signals:
+    void sigDeleleteItem(const int &);
 
 public:
     // IObserver interface

@@ -22,7 +22,7 @@
 <context>
     <name>BookMarkItemWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkItemWidget.cpp" line="39"/>
+        <location filename="../pdfControl/BookMarkItemWidget.cpp" line="48"/>
         <source>delete bookmark</source>
         <translation></translation>
     </message>
@@ -30,7 +30,7 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="280"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="275"/>
         <source>add bookmark</source>
         <translation></translation>
     </message>
@@ -188,16 +188,46 @@
         <source>close</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="164"/>
+        <source>year</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="164"/>
+        <source>month</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="164"/>
+        <source>day</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="165"/>
+        <source>hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="165"/>
+        <source>minute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="165"/>
+        <source>second</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileViewWidget</name>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="354"/>
+        <location filename="../frame/FileViewWidget.cpp" line="359"/>
         <source>Print Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="354"/>
+        <location filename="../frame/FileViewWidget.cpp" line="359"/>
         <source>No Print Device</source>
         <translation></translation>
     </message>
@@ -251,7 +281,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/HomeWidget.cpp" line="34"/>
+        <location filename="../frame/HomeWidget.cpp" line="29"/>
         <source>Select File</source>
         <translation></translation>
     </message>
@@ -277,7 +307,7 @@
 <context>
     <name>MainWidget</name>
     <message>
-        <location filename="../frame/MainWidget.cpp" line="40"/>
+        <location filename="../frame/MainWidget.cpp" line="41"/>
         <source>deepin-reader</source>
         <translation></translation>
     </message>
@@ -371,7 +401,7 @@
 <context>
     <name>SearchResWidget</name>
     <message>
-        <location filename="../pdfControl/SearchResWidget.cpp" line="161"/>
+        <location filename="../pdfControl/SearchResWidget.cpp" line="152"/>
         <source>search res content</source>
         <translation></translation>
     </message>
@@ -407,28 +437,28 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="133"/>
+        <location filename="../frame/TitleWidget.cpp" line="144"/>
         <source>handleShape</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="141"/>
-        <location filename="../frame/TitleWidget.cpp" line="216"/>
+        <location filename="../frame/TitleWidget.cpp" line="134"/>
+        <location filename="../frame/TitleWidget.cpp" line="219"/>
         <source>defaultShape</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="208"/>
+        <location filename="../frame/TitleWidget.cpp" line="211"/>
         <source>thumbnails</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="212"/>
+        <location filename="../frame/TitleWidget.cpp" line="215"/>
         <source>setting</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="222"/>
+        <location filename="../frame/TitleWidget.cpp" line="225"/>
         <source>magnifier</source>
         <translation></translation>
     </message>

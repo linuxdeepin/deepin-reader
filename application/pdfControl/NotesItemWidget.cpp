@@ -108,8 +108,16 @@ void NotesItemWidget::initWidget()
     this->setLayout(m_pHLayout);
 }
 
-int NotesItemWidget::dealWithData(const int &, const QString &)
+int NotesItemWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
+    if (MSG_NOTIFY_KEY_MSG == msgType) {
+        if (msgContent == KeyStr::g_del) {
+            bool bFocus = this->hasFocus();
+            if (bFocus) {
+                slotDltNoteContant();
+            }
+        }
+    }
     return 0;
 }
 
@@ -142,8 +150,8 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     painter.setPen(QPen(QColor(QString("#D8D8D8")), 1));
 
-    QPoint startP(65, height-1);
-    QPoint endP(width, height-1);
+    QPoint startP(65, height - 1);
+    QPoint endP(width, height - 1);
 
     painter.drawLine(startP, endP);
 }

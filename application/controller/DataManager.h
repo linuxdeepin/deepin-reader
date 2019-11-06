@@ -62,11 +62,7 @@ public:
     QString gettrCurrentTheme() const;
     void settrCurrentTheme(const QString &strCurrentTheme);
 
-    QString getStrShowListWidget() const;
-    void setStrShowListWidget(const QString &strShowListWidget);
-
 private:
-    QString m_strShowListWidget = "";
     QString m_strCurrentTheme = "";     //  当前主题
     QString m_strOnlyFilePath = "";     //  只显示一个pdf 文件
     int     m_nCurShowState = -1;       //  文档当前显示状态

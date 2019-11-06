@@ -5,6 +5,9 @@ CustomWidget::CustomWidget(const QString &name, DWidget *parent)
     : DWidget (parent)
 {
     m_strObserverName = name;
+    setWindowFlags(Qt::FramelessWindowHint);
+    setFocusPolicy(Qt::StrongFocus);
+    setObjectName(name);
 
     m_pMsgSubject = MsgSubject::getInstance();
     if (m_pMsgSubject) {

@@ -23,19 +23,12 @@ HomeWidget::HomeWidget(CustomWidget *parent):
 
 void HomeWidget::initWidget()
 {
-    DLabel *tipsLabel = new DLabel(tr("drag Pdf file here"));
-    QPalette pe;
-    pe.setColor(QPalette::WindowText, QColor("#7a7a7a"));
-    tipsLabel->setPalette(pe);
+    auto tipsLabel = new DLabel(tr("drag Pdf file here"));
+    tipsLabel->setAlignment(Qt::AlignHCenter);
 
-//    DLabel *splitLine = new DLabel;
-//    splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
-
-    auto chooseBtn  = new DPushButton(tr("Select File"));
+    auto chooseBtn = new DPushButton(tr("Select File"));
     chooseBtn->setFixedSize(QSize(302, 36));
     connect(chooseBtn, &DPushButton::clicked, this, &HomeWidget::slotChooseBtnClicked);
-
-    connect(this, SIGNAL(sigOpenFileDialog()), this, SLOT(slotChooseBtnClicked()));
 
     auto layout = new QVBoxLayout;
     layout->setSpacing(8);
@@ -44,10 +37,10 @@ void HomeWidget::initWidget()
     layout->addStretch(1);
 
     m_pIconLabel = new DLabel;
-    layout->addWidget(m_pIconLabel, 0, Qt::AlignCenter);
+    m_pIconLabel->setAlignment(Qt::AlignCenter);
+    layout->addWidget(m_pIconLabel);
 
-    layout->addWidget(tipsLabel, 0, Qt::AlignHCenter);
-//    layout->addWidget(splitLine, 0, Qt::AlignHCenter);
+    layout->addWidget(tipsLabel);
     layout->addWidget(chooseBtn, 0, Qt::AlignHCenter);
 
     layout->addStretch(1);
@@ -106,6 +99,7 @@ QStringList HomeWidget::getOpenFileList()
 
 void HomeWidget::initConnections()
 {
+    connect(this, SIGNAL(sigOpenFileDialog()), SLOT(slotChooseBtnClicked()));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
@@ -117,7 +111,7 @@ int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
     }
 
     if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (msgContent == "Ctrl+O") {   //  Ctrl+O 打开文档
+        if (msgContent == KeyStr::g_ctrl_o) {   //  Ctrl+O 打开文档
             emit sigOpenFileDialog();
             return ConstantMsg::g_effective_res;
         }

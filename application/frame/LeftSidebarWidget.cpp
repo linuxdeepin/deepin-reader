@@ -27,9 +27,6 @@ void LeftSidebarWidget::slotStackSetCurIndex(const int &iIndex)
     auto pWidget = this->findChild<DStackedWidget *>();
     if (pWidget) {
         pWidget->setCurrentIndex(iIndex);
-
-        auto pShowWidget = pWidget->widget(iIndex);
-        DataManager::instance()->setStrShowListWidget(pShowWidget->objectName());
     }
 }
 
@@ -57,8 +54,6 @@ void LeftSidebarWidget::initWidget()
     pStackedWidget->insertWidget(2, new NotesWidget);
     pStackedWidget->insertWidget(3, new SearchResWidget);
     pStackedWidget->setCurrentIndex(0);
-
-    DataManager::instance()->setStrShowListWidget("ThumbnailWidget");
 
     pVBoxLayout->addWidget(pStackedWidget);
     pVBoxLayout->addWidget(new MainOperationWidget, 0, Qt::AlignBottom);

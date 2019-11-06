@@ -4,7 +4,6 @@
 NotesWidget::NotesWidget(CustomWidget *parent) :
     CustomWidget(QString("NotesWidget"), parent)
 {
-    setObjectName("NotesWidget");
     initWidget();
 
     initConnection();
@@ -155,8 +154,8 @@ void NotesWidget::slotLoadImage(const QImage &image)
 //  按 键盘 Del 删除
 void NotesWidget::slotDelNoteItem()
 {
-    QString sShowName = DataManager::instance()->getStrShowListWidget();
-    if (sShowName == this->objectName()) {
+    bool bFocus = this->hasFocus();
+    if (bFocus) {
         auto curItem = m_pNotesList->currentItem();
         if (curItem == nullptr)
             return;
@@ -381,16 +380,12 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
     // 移除高亮，删除注释内容，删除注释列表item
     if (MSG_NOTE_DLTNOTEITEM == msgType) {
         emit sigDltNoteItem(msgContent);
-    }
-
-    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
+    } else if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
         emit sigOpenFileOk();
     } else if (MSG_CLOSE_FILE == msgType) {
         emit sigCloseFile();
-    }
-
-    if (MSG_NOTIFY_KEY_MSG == msgType) {
-        if (msgContent == QString("Del")) {
+    } else if (MSG_NOTIFY_KEY_MSG == msgType) {
+        if (msgContent == KeyStr::g_del) {
             emit sigDelNoteItem();
         }
     }

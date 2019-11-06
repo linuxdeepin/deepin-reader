@@ -25,7 +25,7 @@
 <context>
     <name>BookMarkItemWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkItemWidget.cpp" line="39"/>
+        <location filename="../pdfControl/BookMarkItemWidget.cpp" line="48"/>
         <source>delete bookmark</source>
         <translatorcomment>删除书签</translatorcomment>
         <translation>删除书签</translation>
@@ -34,7 +34,7 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="280"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="275"/>
         <source>add bookmark</source>
         <translatorcomment>添加书签</translatorcomment>
         <translation>添加书签</translation>
@@ -125,11 +125,6 @@
 </context>
 <context>
     <name>FileAttrWidget</name>
-    <message>
-        <source>Title</source>
-        <translatorcomment>标题</translatorcomment>
-        <translation type="vanished">标题</translation>
-    </message>
     <message>
         <location filename="../mainShow/FileAttrWidget.cpp" line="92"/>
         <source>Location</source>
@@ -225,17 +220,47 @@
         <translatorcomment>关闭</translatorcomment>
         <translation>关闭</translation>
     </message>
+    <message>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="164"/>
+        <source>year</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="164"/>
+        <source>month</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="164"/>
+        <source>day</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="165"/>
+        <source>hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="165"/>
+        <source>minute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="165"/>
+        <source>second</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileViewWidget</name>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="354"/>
+        <location filename="../frame/FileViewWidget.cpp" line="359"/>
         <source>Print Error</source>
         <translatorcomment>打印错误</translatorcomment>
         <translation>打印错误</translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="354"/>
+        <location filename="../frame/FileViewWidget.cpp" line="359"/>
         <source>No Print Device</source>
         <translatorcomment>没有打印设备</translatorcomment>
         <translation>没有打印设备</translation>
@@ -298,7 +323,7 @@
         <translation>拖拽Pdf格式文件到这里</translation>
     </message>
     <message>
-        <location filename="../frame/HomeWidget.cpp" line="34"/>
+        <location filename="../frame/HomeWidget.cpp" line="29"/>
         <source>Select File</source>
         <translatorcomment>选择文件</translatorcomment>
         <translation>选择文件</translation>
@@ -328,7 +353,7 @@
 <context>
     <name>MainWidget</name>
     <message>
-        <location filename="../frame/MainWidget.cpp" line="40"/>
+        <location filename="../frame/MainWidget.cpp" line="41"/>
         <source>deepin-reader</source>
         <translatorcomment>深度文档查看器</translatorcomment>
         <translation>深度文档查看器</translation>
@@ -438,7 +463,7 @@
 <context>
     <name>SearchResWidget</name>
     <message>
-        <location filename="../pdfControl/SearchResWidget.cpp" line="161"/>
+        <location filename="../pdfControl/SearchResWidget.cpp" line="152"/>
         <source>search res content</source>
         <translatorcomment>搜索结果</translatorcomment>
         <translation>搜索结果</translation>
@@ -480,32 +505,32 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="133"/>
+        <location filename="../frame/TitleWidget.cpp" line="144"/>
         <source>handleShape</source>
-        <translatorcomment>手形工具</translatorcomment>
-        <translation>手形工具</translation>
+        <translatorcomment>手型工具</translatorcomment>
+        <translation>手型工具</translation>
     </message>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="141"/>
-        <location filename="../frame/TitleWidget.cpp" line="216"/>
+        <location filename="../frame/TitleWidget.cpp" line="134"/>
+        <location filename="../frame/TitleWidget.cpp" line="219"/>
         <source>defaultShape</source>
         <translatorcomment>选择工具</translatorcomment>
         <translation>选择工具</translation>
     </message>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="208"/>
+        <location filename="../frame/TitleWidget.cpp" line="211"/>
         <source>thumbnails</source>
         <translatorcomment>缩略图</translatorcomment>
         <translation>缩略图</translation>
     </message>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="212"/>
+        <location filename="../frame/TitleWidget.cpp" line="215"/>
         <source>setting</source>
         <translatorcomment>设置</translatorcomment>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="222"/>
+        <location filename="../frame/TitleWidget.cpp" line="225"/>
         <source>magnifier</source>
         <translatorcomment>放大镜</translatorcomment>
         <translation>放大镜</translation>

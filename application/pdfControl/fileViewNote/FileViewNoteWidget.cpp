@@ -186,6 +186,7 @@ void CustemTextEdit::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
     DTextEdit::paintEvent(e);
+
     QPainter painter(this->viewport());
     painter.setRenderHint( QPainter::Antialiasing, true );
     const int w = this->width();
@@ -256,13 +257,17 @@ void CustemTextEdit::init()
     QPalette pText = this->palette();
     pText.setColor(QPalette::Base, QColor(255, 251, 225));
     this->setPalette(pText);
+
     //font
     QFont fontContant(QString("SourceHanSansCN-Normal"), 12);
     this->setFont(fontContant);
+
     //text corlor
     this->setTextColor(QColor(QString("#452B0A")));
+
     //frame style
     this->setFrameStyle(QFrame::NoFrame);
+
     //text under line
     QTextCursor cursor(this->textCursor());
     QTextCharFormat format = cursor.charFormat ();

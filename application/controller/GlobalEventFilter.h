@@ -18,16 +18,18 @@
 #define GLOBALEVENTFILTER_H
 
 #include <QObject>
+#include <QEvent>
 
 /**
  * @brief The GlobalEventFilter class
- * @brief   事件过滤器
+ * @brief   全局 事件过滤器
  */
 
 
 class GlobalEventFilter : public QObject
 {
     Q_OBJECT
+
 public:
     explicit GlobalEventFilter(QObject *parent = nullptr);
 
