@@ -89,14 +89,6 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
     if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
         return;
     }
-
-//    if(event->buttons()&Qt::RightButton&&m_nCurrentHandelState == Magnifier_State)
-//    {
-//        qDebug()<<"FileViewWidget::mouseReleaseEvent rightbutton clicked";
-//        emit sigMagnifying(QString("0"));
-//        return;
-//    }
-
     //  放大镜状态， 直接返回
     if (m_nCurrentHandelState == Magnifier_State)
         return;
@@ -136,6 +128,11 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
     if (DataManager::instance()->CurShowState() == FILE_SLIDE)
         return;
 
+    if(event->button()==Qt::RightButton&&m_nCurrentHandelState == Magnifier_State)
+    {
+        emit sigMagnifying(QString("0"));
+        return;
+    }
     //  放大镜状态， 直接返回
     if (m_nCurrentHandelState == Magnifier_State)
         return;

@@ -2,6 +2,7 @@
 #include <QHBoxLayout>
 #include <QButtonGroup>
 #include "utils/PublicFunction.h"
+#include <DGuiApplicationHelper>
 
 MainOperationWidget::MainOperationWidget(CustomWidget *parent):
     CustomWidget ("MainOperationWidget", parent)
@@ -102,6 +103,10 @@ void MainOperationWidget::slotUpdateTheme()
             btn->setIcon(QIcon(sPixmap));
         }
     }
+    DPalette plt=DGuiApplicationHelper::instance()->applicationPalette();
+    plt.setColor(QPalette::Background, plt.color(QPalette::Base));
+    setAutoFillBackground(true);
+    setPalette(plt);
 }
 
 void MainOperationWidget::slotButtonClicked(int id)

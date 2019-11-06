@@ -68,6 +68,8 @@ int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgConten
     if (msgType == MSG_SLIDER_SHOW_STATE) { //  控制 侧边栏显隐
         emit sigWidgetVisible(msgContent.toInt());
         return  ConstantMsg::g_effective_res;
+    }else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+        emit sigUpdateTheme();
     }
 
     return 0;
