@@ -60,11 +60,10 @@ void BookMarkWidget::slotAddBookMark(const int &nPage)
                 m_pBookMarkListWidget->setCurrentItem(item);
             }
         }
+        m_pAddBookMarkBtn->setEnabled(false);
+
+        DataManager::instance()->setBIsUpdate(true);
     }
-
-    m_pAddBookMarkBtn->setEnabled(false);
-
-    DataManager::instance()->setBIsUpdate(true);
 }
 
 /**
@@ -173,24 +172,30 @@ void BookMarkWidget::slotDeleteBookItem(const int &nPage)
                     t_widget = nullptr;
 
                     delete  pItem;
+                    pItem = nullptr;
 
-                    QList<int> pageList = dApp->dbM->getBookMarkList();
-                    pageList.removeOne(nPage);
-                    dApp->dbM->setBookMarkList(pageList);
-
-                    auto dproxy = DocummentProxy::instance();
-                    if (nullptr == dproxy) {
-                        return;
-                    }
-                    dproxy->setBookMarkState(nPageIndex, false);
-
-                    DataManager::instance()->setBIsUpdate(true);
-                    m_pAddBookMarkBtn->setEnabled(true);
+                    deleteIndexPage(nPageIndex);
 
                     break;
                 }
             }
         }
+    }
+}
+
+//  删除指定页
+void BookMarkWidget::deleteIndexPage(const int &pageIndex)
+{
+    QList<int> pageList = dApp->dbM->getBookMarkList();
+    pageList.removeOne(pageIndex);
+    dApp->dbM->setBookMarkList(pageList);
+
+    auto dproxy = DocummentProxy::instance();
+    if (dproxy) {
+        dproxy->setBookMarkState(pageIndex, false);
+
+        DataManager::instance()->setBIsUpdate(true);
+        m_pAddBookMarkBtn->setEnabled(true);
     }
 }
 
@@ -235,6 +240,7 @@ void BookMarkWidget::slotLoadImage(const int &page, const QImage &image)
  */
 void BookMarkWidget::slotDelBkItem()
 {
+    //  按Del键删除, 当前显示的List 必须是 自己 才可以进行删除
     QString sShowName = DataManager::instance()->getStrShowListWidget();
     if (sShowName == this->objectName()) {
         auto pCurItem = m_pBookMarkListWidget->currentItem();
@@ -249,19 +255,7 @@ void BookMarkWidget::slotDelBkItem()
                 delete  pCurItem;
                 pCurItem = nullptr;
 
-                QList<int> pageList = dApp->dbM->getBookMarkList();
-                pageList.removeOne(nPageIndex);
-                dApp->dbM->setBookMarkList(pageList);
-
-                auto dproxy = DocummentProxy::instance();
-                if (nullptr == dproxy) {
-                    return;
-                }
-                dproxy->setBookMarkState(nPageIndex, false);
-
-                m_pAddBookMarkBtn->setEnabled(true);
-
-                DataManager::instance()->setBIsUpdate(true);
+                deleteIndexPage(nPageIndex);
             }
         }
     }
@@ -281,8 +275,6 @@ void BookMarkWidget::initWidget()
     m_pAddBookMarkBtn->setText(tr("add bookmark"));
     connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(slotAddBookMark()));
 
-    connect(this, SIGNAL(sigAddBookMark(const int &)), this, SLOT(slotAddBookMark(const int &)));
-
     auto m_pVBoxLayout = new QVBoxLayout;
     m_pVBoxLayout->setContentsMargins(0, 0, 0, 0);
     m_pVBoxLayout->setSpacing(0);
@@ -298,6 +290,8 @@ void BookMarkWidget::initWidget()
 void BookMarkWidget::initConnection()
 {
     connect(&m_loadBookMarkThread, SIGNAL(sigLoadImage(const int &, const QImage &)), this, SLOT(slotLoadImage(const int &, const QImage &)));
+
+    connect(this, SIGNAL(sigAddBookMark(const int &)), this, SLOT(slotAddBookMark(const int &)));
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigDeleteBookItem(const int &)), this, SLOT(slotDeleteBookItem(const int &)));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));

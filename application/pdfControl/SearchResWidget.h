@@ -78,13 +78,11 @@ public:
     ~SearchResWidget() Q_DECL_OVERRIDE;
 
 signals:
-    void sigFlushSearchWidget(QVariant);
     void sigClearWidget();
     void sigCloseFile();
     void sigFlushSearchWidget(const QString &);
 
 private slots:
-    void slotFlushSearchList(QVariant);
     void slotClearWidget();
     void slotCloseFile();
     void slotFlushSearchWidget(const QString &);
@@ -97,14 +95,12 @@ protected:
 
 private:
     void initConnections();
-
-private:
     void initSearchList(const QList<stSearchRes> &);
     void addSearchsItem(const int &page, const QString &text, const int &resultNum);
 
 private:
-    CustomListWidget *m_pNotesList            = nullptr; // 搜索结果列表
-    NotesItemWidget *m_pSearchItemWidget = nullptr;      // 缩略图子窗体
+    CustomListWidget *m_pNotesList          = nullptr; // 搜索结果列表
+    NotesItemWidget *m_pSearchItemWidget    = nullptr;      // 缩略图子窗体
     LoadSearchResThread m_loadSearchResThread;           // 加载搜索缩略图线程
 
 public:

@@ -86,7 +86,6 @@ void ThumbnailWidget::addThumbnailItem(const int &iIndex)
 {
     auto widget = new ThumbnailItemWidget;
     widget->setLabelPage(iIndex);
-//    widget->setMinimumSize(QSize(250, 250));
 
     auto item = new QListWidgetItem(m_pThumbnailListWidget);
     item->setFlags(Qt::NoItemFlags);
@@ -155,11 +154,11 @@ void ThumbnailWidget::slotOpenFileOk()
     if (m_pPageWidget) {
         m_pPageWidget->setTotalPages(m_totalPages);
     }
-    int counter = m_pThumbnailListWidget->count();
-    for (int index = 0; index < counter; index++) {
-        QListWidgetItem *item = m_pThumbnailListWidget->takeItem(0);
-        delete item;
-    }
+//    int counter = m_pThumbnailListWidget->count();
+//    for (int index = 0; index < counter; index++) {
+//        QListWidgetItem *item = m_pThumbnailListWidget->takeItem(0);
+//        delete item;
+//    }
     m_pThumbnailListWidget->clear();
     fillContantToList();
 
@@ -174,10 +173,10 @@ void ThumbnailWidget::slotOpenFileOk()
 // 启动加载缩略图线程
 void ThumbnailWidget::slotLoadThumbnailImage()
 {
-    if (m_ThreadLoadImage.endPage() == ( m_totalPages - 1)) {
+//    if (m_ThreadLoadImage.endPage() == ( m_totalPages - 1)) {
 //        m_loadImageTimer.stop();
 //        m_ThreadLoadImage.setIsLoaded(false);
-    }
+//    }
     if (!m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.start();
     }

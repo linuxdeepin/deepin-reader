@@ -86,6 +86,7 @@ private:
     void initConnection();
     QListWidgetItem *addBookMarkItem(const int &);
     void setSelectItemBackColor(QListWidgetItem *);
+    void deleteIndexPage(const int &pageIndex);
 
 public:
     // IObserver interface

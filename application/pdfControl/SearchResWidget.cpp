@@ -1,4 +1,5 @@
 #include "SearchResWidget.h"
+#include "controller/DataManager.h"
 
 SearchResWidget::SearchResWidget(CustomWidget *parent) :
     CustomWidget(QString("SearchResWidget"), parent)
@@ -18,39 +19,11 @@ SearchResWidget::~SearchResWidget()
     }
 }
 
-void SearchResWidget::slotFlushSearchList(QVariant value)
-{
-    QMap<int, stSearchRes> m_resMap = value.value<QMap<int, stSearchRes>>();
-    m_pNotesList->clear();
-
-    int resultNum = 0;
-    QString strText;
-
-    for (auto it = m_resMap.begin(); it != m_resMap.end(); ++it) {
-        int page = it.key();
-        foreach (QString strtext, it.value().listtext) {
-
-            strText += strtext.trimmed();
-            strText += QString("    ");
-
-            ++resultNum;
-        }
-
-        addSearchsItem(page, strText, resultNum);
-        resultNum = 0;
-        strText.clear();
-    }
-
-    m_loadSearchResThread.setPages(m_resMap.count());
-    m_loadSearchResThread.setRunning(true);
-    m_loadSearchResThread.start();
-
-    sendMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
-}
-
 void SearchResWidget::slotClearWidget()
 {
-    m_pNotesList->clear();
+    if (m_pNotesList) {
+        m_pNotesList->clear();
+    }
 }
 
 void SearchResWidget::slotCloseFile()
@@ -59,14 +32,14 @@ void SearchResWidget::slotCloseFile()
         m_loadSearchResThread.stopThread();
     }
 
-    if (m_pNotesList) {
-        m_pNotesList->clear();
-    }
+    slotClearWidget();
 }
 
 void SearchResWidget::slotFlushSearchWidget(const QString &)
 {
     connect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this, SLOT(slotGetSearchContant(stSearchRes)));
+
+    disconnect(DocummentProxy::instance(), SIGNAL(signal_searchover()), this, SLOT(slotSearchOver()));
     connect(DocummentProxy::instance(), SIGNAL(signal_searchover()), this, SLOT(slotSearchOver()));
 }
 
@@ -118,23 +91,22 @@ void SearchResWidget::initConnections()
             this, SLOT(slotLoadImage(const int &, const QImage &)));
 
     connect(this, SIGNAL(sigClearWidget()), this, SLOT(slotClearWidget()));
-//    connect(this, SIGNAL(sigFlushSearchWidget(QVariant)),
-//            this, SLOT(slotFlushSearchList(QVariant)));
     connect(this, SIGNAL(sigFlushSearchWidget(const QString &)), this, SLOT(slotFlushSearchWidget(const QString &)));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
 }
 
 void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
 {
+    //  插入之前 先清空原有数据
+    slotClearWidget();
+
     int resultNum = 0;
-    QString strText;
-    int pages;
+    QString strText = "";
 
     foreach (stSearchRes it, list) {
-        ++pages;
         int page = it.ipage;
-        foreach (QString strtext, it.listtext) {
-            strText += strtext.trimmed();
+        foreach (QString s, it.listtext) {
+            strText += s.trimmed();
             strText += QString("    ");
 
             ++resultNum;
@@ -149,19 +121,23 @@ void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
     m_loadSearchResThread.setRunning(true);
     m_loadSearchResThread.start();
 
-    sendMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
+    //  当前显示不是自己, 则需要发送切换 ListWidget 显示
+    QString sCurShow = DataManager::instance()->getStrShowListWidget();
+    if (sCurShow != this->objectName()) {
+        sendMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
+    }
 }
 
 void SearchResWidget::addSearchsItem(const int &page, const QString &text, const int &resultNum)
 {
-    NotesItemWidget *itemWidget = new NotesItemWidget;
+    auto itemWidget = new NotesItemWidget;
     itemWidget->setNoteSigne(false);
     itemWidget->setLabelPage(page, 1);
     itemWidget->setTextEditText(text);
     itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + tr("search res content")));
     itemWidget->setMinimumSize(QSize(240, 80));
 
-    QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
+    auto item = new QListWidgetItem(m_pNotesList);
     item->setFlags(Qt::NoItemFlags);
     item->setSizeHint(QSize(240, 80));
 

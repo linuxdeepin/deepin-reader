@@ -14,7 +14,6 @@
 #include "PagingWidget.h"
 #include "docview/docummentproxy.h"
 #include "CustomListWidget.h"
-//const int FIRST_LOAD_PAGES = 20;
 
 /**
  * @brief The ThreadLoadImage class

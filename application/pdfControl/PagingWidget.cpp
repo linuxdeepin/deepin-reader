@@ -62,8 +62,8 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
             //过滤掉零开头的输入
             if (keyEvent->key() == Qt::Key_0 && m_pJumpPageSpinBox->text().isEmpty()) {
                 return  true;
-
             }
+
             if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
 
                 int index = m_pJumpPageSpinBox->value() - 1;

@@ -135,7 +135,7 @@ void MainOperationWidget::slotSearchClosed()
     }
 }
 
-int MainOperationWidget::dealWithData(const int &msgType, const QString &msgContent)
+int MainOperationWidget::dealWithData(const int &msgType, const QString &)
 {
     if (msgType == MSG_FIND_CONTENT) {        //  查询内容
         emit sigSearchControl();

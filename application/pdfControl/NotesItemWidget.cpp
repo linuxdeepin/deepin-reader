@@ -62,40 +62,38 @@ void NotesItemWidget::initWidget()
 {
     QFont font(QString("SourceHanSansSC-Medium"), 12);
     QFont fontContant(QString("SourceHanSansSC-Medium"), 11);
-    auto t_vLayout = new QVBoxLayout;
-    t_vLayout->setContentsMargins(20, 0, 0, 0);
-    t_vLayout->setSpacing(0);
-
-    auto t_hLayout = new QHBoxLayout;
-    t_hLayout->setContentsMargins(0, 0, 0, 0);
-    t_hLayout->setSpacing(0);
 
     m_pPicture = new CustomLabel(this);
     m_pPicture->setFixedSize(QSize(42, 62));
     m_pPicture->setAlignment(Qt::AlignCenter);
 
-    m_pPageNumber = new DLabel;
-    m_pSearchResultNum = new DLabel;
     m_pTextLab = new DLabel;
     m_pTextLab->setEnabled(false);
     m_pTextLab->setFixedHeight(51);
     m_pTextLab->setMinimumWidth(102);
     m_pTextLab->setFrameStyle(QFrame::NoFrame);
     m_pTextLab->setWordWrap(true);
-//    m_pTextLab->setTextBackgroundColor(this->palette().highlightedText().color());
-
-    m_pPageNumber->setMinimumWidth(31);
-    m_pPageNumber->setFixedHeight(18);
-    m_pSearchResultNum->setMinimumWidth(31);
-    m_pSearchResultNum->setFixedHeight(18);
-
-    m_pPageNumber->setFont(font);
-    m_pSearchResultNum->setFont(font);
     m_pTextLab->setFont(fontContant);
 
+    m_pPageNumber = new DLabel;
+    m_pPageNumber->setMinimumWidth(31);
+    m_pPageNumber->setFixedHeight(18);
+    m_pPageNumber->setFont(font);
+
+    m_pSearchResultNum = new DLabel;
+    m_pSearchResultNum->setMinimumWidth(31);
+    m_pSearchResultNum->setFixedHeight(18);
+    m_pSearchResultNum->setFont(font);
+
+    auto t_hLayout = new QHBoxLayout;
+    t_hLayout->setContentsMargins(0, 0, 0, 0);
+    t_hLayout->setSpacing(0);
     t_hLayout->addWidget(m_pPageNumber);
     t_hLayout->addWidget(m_pSearchResultNum);
 
+    auto t_vLayout = new QVBoxLayout;
+    t_vLayout->setContentsMargins(20, 0, 0, 0);
+    t_vLayout->setSpacing(0);
     t_vLayout->addItem(t_hLayout);
     t_vLayout->addWidget(m_pTextLab);
 
@@ -137,8 +135,6 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
     }
 
     m_pPicture->setPalette(p);
-
-//    update();
 }
 
 QString NotesItemWidget::calcText(const QFont &font, const QString &note, const QSize &size/*const int MaxWidth*/)
