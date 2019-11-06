@@ -276,7 +276,7 @@ void CustemTextEdit::init()
     cursor.setBlockFormat(textBlockFormat);
     this->setTextCursor(cursor);
     //line count
-    this->document()->setMaximumBlockCount(10);
+//    this->document()->setMaximumBlockCount(10);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 //    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
