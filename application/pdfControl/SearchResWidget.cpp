@@ -21,6 +21,7 @@ SearchResWidget::~SearchResWidget()
 
 void SearchResWidget::slotClearWidget()
 {
+    DocummentProxy::instance()->clearsearch();
     if (m_pNotesList) {
         m_pNotesList->clear();
     }
@@ -35,10 +36,11 @@ void SearchResWidget::slotCloseFile()
     slotClearWidget();
 }
 
-void SearchResWidget::slotFlushSearchWidget(const QString &)
+void SearchResWidget::slotFlushSearchWidget(const QString &msgContent)
 {
     connect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this, SLOT(slotGetSearchContant(stSearchRes)));
-
+    QMap<int, stSearchRes> resMap;
+    DocummentProxy::instance()->search(msgContent, resMap, Qt::red);
     disconnect(DocummentProxy::instance(), SIGNAL(signal_searchover()), this, SLOT(slotSearchOver()));
     connect(DocummentProxy::instance(), SIGNAL(signal_searchover()), this, SLOT(slotSearchOver()));
 }
@@ -73,6 +75,16 @@ void SearchResWidget::slotLoadImage(const int &page, const QImage &image)
     }
 }
 
+void SearchResWidget::slotFindPrev()
+{
+    DocummentProxy::instance()->findPrev();
+}
+
+void SearchResWidget::slotFindNext()
+{
+    DocummentProxy::instance()->findNext();
+}
+
 void SearchResWidget::initWidget()
 {
     auto m_pVLayout  = new QVBoxLayout;
@@ -93,6 +105,8 @@ void SearchResWidget::initConnections()
     connect(this, SIGNAL(sigClearWidget()), this, SLOT(slotClearWidget()));
     connect(this, SIGNAL(sigFlushSearchWidget(const QString &)), this, SLOT(slotFlushSearchWidget(const QString &)));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
+    connect(this, SIGNAL(sigFindPrev()), this, SLOT(slotFindPrev()));
+    connect(this, SIGNAL(sigFindNext()), this, SLOT(slotFindNext()));
 }
 
 void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
@@ -157,25 +171,21 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
     if (msgType == MSG_FIND_CONTENT) {        //  查询内容
         if (msgContent != QString("")) {
             emit sigFlushSearchWidget(msgContent);
-
-            QMap<int, stSearchRes> resMap;
-            DocummentProxy::instance()->search(msgContent, resMap, Qt::red);
         }
     }
 
     if (msgType == MSG_FIND_PREV) {
-        DocummentProxy::instance()->findPrev();
+        emit sigFindPrev();
         return ConstantMsg::g_effective_res;
     }
 
     if (msgType == MSG_FIND_NEXT) {
-        DocummentProxy::instance()->findNext();
+        emit sigFindNext();
         return ConstantMsg::g_effective_res;
     }
 
     if (msgType == MSG_CLEAR_FIND_CONTENT) {
         emit sigClearWidget();
-        DocummentProxy::instance()->clearsearch();
     }
 
     //  关闭w文件通知消息
