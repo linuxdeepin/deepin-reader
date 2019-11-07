@@ -5,6 +5,7 @@
 BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
     CustomWidget(QString("BookMarkWidget"), parent)
 {
+    setFocusPolicy(Qt::ClickFocus);
     initWidget();
 
     initConnection();
@@ -268,6 +269,13 @@ void BookMarkWidget::slotUpdateTheme()
     setPalette(plt);
 }
 
+void BookMarkWidget::slotFilpOver()
+{
+    if(m_pBookMarkListWidget){
+        qDebug() << "book mark list current row:" << m_pBookMarkListWidget->currentRow();
+    }
+}
+
 /**
  * @brief BookMarkWidget::initWidget
  * 初始化书签窗体
@@ -310,8 +318,9 @@ void BookMarkWidget::initConnection()
     connect(this, SIGNAL(sigDeleteBookItem(const int &)), this, SLOT(slotDeleteBookItem(const int &)));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
     connect(this, SIGNAL(sigDelBKItem()), this, SLOT(slotDelBkItem()));
-    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
+    connect(this, SIGNAL(sigUpdateTheme()), this, SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigFilePageChanged(const QString &)), SLOT(slotDocFilePageChanged(const QString &)));
+    connect(this, SIGNAL(sigFilpOver()), this, SLOT(slotFilpOver()));
 }
 
 /**
@@ -407,6 +416,10 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (MSG_NOTIFY_KEY_MSG == msgType) {         //  按键通知消息
         if (msgContent == KeyStr::g_del) {
             emit sigDelBKItem();
+        }else if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_down) {
+            if(hasFocus()){
+                emit sigFilpOver();
+            }
         }
     }
     return 0;
@@ -432,6 +445,15 @@ int BookMarkWidget::getBookMarkPage(const int &index)
     }
 
     return -1;
+}
+
+bool BookMarkWidget::hasClickFoucs()
+{
+    if(m_pBookMarkListWidget){
+        return m_pBookMarkListWidget->hasFocus();
+    }
+
+    return false;
 }
 
 

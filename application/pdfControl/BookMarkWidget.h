@@ -69,6 +69,7 @@ signals:
     void sigAddBookMark(const int &);
     void sigCloseFile();
     void sigDelBKItem();
+    void sigFilpOver();
 
 private slots:
     void slotAddBookMark();
@@ -80,6 +81,7 @@ private slots:
     void slotLoadImage(const int &, const QImage &);
     void slotDelBkItem();
     void slotUpdateTheme();
+    void slotFilpOver();
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -94,6 +96,7 @@ public:
     // IObserver interface
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
     int getBookMarkPage(const int &index);
+    bool hasClickFoucs();
 
 private:
     CustomListWidget    *m_pBookMarkListWidget = nullptr;
