@@ -1,15 +1,16 @@
 #ifndef BOOKMARKBUTTON_H
 #define BOOKMARKBUTTON_H
 
-#include<QPushButton>
 #include<QPaintEvent>
 #include<QMouseEvent>
+#include<DPushButton>
+DWIDGET_USE_NAMESPACE
 
-class BookMarkButton : public QPushButton
+class BookMarkButton : public DPushButton
 {
     Q_OBJECT
 public:
-    BookMarkButton(QWidget *parent = nullptr);
+    BookMarkButton(DWidget *parent = nullptr);
     bool clickState();
     void setClickState(bool state);
 signals:
@@ -18,9 +19,9 @@ protected:
 
     virtual void paintEvent(QPaintEvent *e) override;
 
-//    virtual void  enterEvent(QEvent *e) override;
+    virtual void  enterEvent(QEvent *e) override;
 
-//    virtual void  leaveEvent(QEvent *e) override;
+    virtual void  leaveEvent(QEvent *e) override;
 
 //    virtual void  mouseEvent(QMouseEvent *e);
 
@@ -29,7 +30,7 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent *e) override;
 
 private:
-//    bool  ishovered;
+    bool  ishovered;
     bool  ispressed;
     bool isclicked;
 };

@@ -1,19 +1,19 @@
 #include "bookmarkbutton.h"
 
-#include <DApplicationHelper>
 #include<QColor>
 #include<QBrush>
 #include<QPen>
 #include<QPoint>
 #include<QPainter>
+#include <DApplicationHelper>
 
-BookMarkButton::BookMarkButton(QWidget *parent)
-    : QPushButton(parent),
-//      ishovered(false),
+BookMarkButton::BookMarkButton(DWidget *parent)
+    : DPushButton(parent),
+      ishovered(false),
       ispressed(false),
       isclicked(false)
 {
-    setFixedSize(QSize(32, 32));
+    setFixedSize(QSize(30, 30));
     setMouseTracking(true);
 }
 
@@ -45,31 +45,33 @@ void BookMarkButton::paintEvent(QPaintEvent *e)
         if (ispressed) {
             ssPath += "/press/bookmarkbig_press_light.svg";
         } else {
-//            if (ishovered) {
-            ssPath += "/hover/bookmarkbig_hover_light.svg";
-//            }
+            if (ishovered) {
+                ssPath += "/hover/bookmarkbig_hover_light.svg";
+            }
         }
     }
     QPixmap pixmap(ssPath);
     const qreal ratio = qApp->devicePixelRatio();
     pixmap.setDevicePixelRatio(ratio);
+//    pixmap = pixmap.scaled(this->width(), this->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    painter.setRenderHints(QPainter::SmoothPixmapTransform);
     painter.drawPixmap(0, 0, this->width(), this->height(), pixmap);
     painter.end();
 }
 
-//void BookMarkButton::enterEvent(QEvent *e)
+void BookMarkButton::enterEvent(QEvent *e)
 
-//{
-//    ishovered = true;
-//    repaint();
-//}
+{
+    ishovered = true;
+    repaint();
+}
 
-//void BookMarkButton::leaveEvent(QEvent *e)
+void BookMarkButton::leaveEvent(QEvent *e)
 
-//{
-//    ishovered = false;
-//    repaint();
-//}
+{
+    ishovered = false;
+    repaint();
+}
 
 
 void BookMarkButton::mousePressEvent(QMouseEvent *e)
