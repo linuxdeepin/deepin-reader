@@ -4,17 +4,17 @@
 <context>
     <name>Application</name>
     <message>
-        <location filename="../application.cpp" line="45"/>
+        <location filename="../application.cpp" line="43"/>
         <source>deepin-reader</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../application.cpp" line="49"/>
+        <location filename="../application.cpp" line="47"/>
         <source>deepin-reader is a document viewer provided by deep system</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../application.cpp" line="43"/>
+        <location filename="../application.cpp" line="41"/>
         <source>deepin</source>
         <translation></translation>
     </message>
@@ -46,38 +46,38 @@
 <context>
     <name>DefaultOperationMenu</name>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="23"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="24"/>
         <source>delete bookmark</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="26"/>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="48"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="27"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="49"/>
         <source>add bookmark</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="47"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="48"/>
         <source>Search</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="49"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="50"/>
         <source>first page</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="50"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="51"/>
         <source>prev page</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="51"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="52"/>
         <source>next page</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="52"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="53"/>
         <source>end page</source>
         <translation></translation>
     </message>
@@ -85,23 +85,23 @@
 <context>
     <name>DocummentFileHelper</name>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="63"/>
-        <location filename="../frame/DocummentFileHelper.cpp" line="151"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="81"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="168"/>
         <source>Save File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="151"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="168"/>
         <source>Do you need to save the file opened?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="180"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="197"/>
         <source>File not supported</source>
         <translation>文件格式不支持</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="258"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="250"/>
         <source>Please check if the file is damaged</source>
         <translation>请检查文件是否已经损坏</translation>
     </message>
@@ -222,12 +222,12 @@
 <context>
     <name>FileViewWidget</name>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="356"/>
+        <location filename="../frame/FileViewWidget.cpp" line="370"/>
         <source>Print Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="356"/>
+        <location filename="../frame/FileViewWidget.cpp" line="370"/>
         <source>No Print Device</source>
         <translation></translation>
     </message>
@@ -248,27 +248,27 @@
 <context>
     <name>FontWidget</name>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="279"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="280"/>
         <source>Double View</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="299"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="300"/>
         <source>Adaptate Height</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="321"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="322"/>
         <source>Adaptate Width</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="72"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="73"/>
         <source>Rotated To Left</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="76"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="77"/>
         <source>Rotated To Right</source>
         <translation></translation>
     </message>
@@ -315,63 +315,63 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="112"/>
+        <location filename="../frame/MainWindow.cpp" line="146"/>
         <source>Open File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="112"/>
-        <location filename="../frame/MainWindow.cpp" line="204"/>
+        <location filename="../frame/MainWindow.cpp" line="146"/>
+        <location filename="../frame/MainWindow.cpp" line="238"/>
         <source>Save File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="112"/>
+        <location filename="../frame/MainWindow.cpp" line="146"/>
         <source>Save As File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="113"/>
+        <location filename="../frame/MainWindow.cpp" line="147"/>
         <source>Open Folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="113"/>
+        <location filename="../frame/MainWindow.cpp" line="147"/>
         <source>Print</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="113"/>
+        <location filename="../frame/MainWindow.cpp" line="147"/>
         <source>File Attr</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="120"/>
+        <location filename="../frame/MainWindow.cpp" line="154"/>
         <source>Search</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="120"/>
+        <location filename="../frame/MainWindow.cpp" line="154"/>
         <source>Full Screen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="120"/>
+        <location filename="../frame/MainWindow.cpp" line="154"/>
         <source>Screening</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="121"/>
+        <location filename="../frame/MainWindow.cpp" line="155"/>
         <source>Larger</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="121"/>
+        <location filename="../frame/MainWindow.cpp" line="155"/>
         <source>Smaller</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="204"/>
+        <location filename="../frame/MainWindow.cpp" line="238"/>
         <source>Do you need to save the file opened?</source>
         <translation></translation>
     </message>

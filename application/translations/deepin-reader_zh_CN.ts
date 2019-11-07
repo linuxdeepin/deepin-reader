@@ -4,19 +4,19 @@
 <context>
     <name>Application</name>
     <message>
-        <location filename="../application.cpp" line="45"/>
+        <location filename="../application.cpp" line="43"/>
         <source>deepin-reader</source>
         <translatorcomment>深度文档查看器</translatorcomment>
         <translation>深度文档查看器</translation>
     </message>
     <message>
-        <location filename="../application.cpp" line="49"/>
+        <location filename="../application.cpp" line="47"/>
         <source>deepin-reader is a document viewer provided by deep system</source>
         <translatorcomment>deepin-reader 是深度系统提供的一个文档查看器</translatorcomment>
         <translation>deepin-reader 是深度系统提供的一个文档查看器</translation>
     </message>
     <message>
-        <location filename="../application.cpp" line="43"/>
+        <location filename="../application.cpp" line="41"/>
         <source>deepin</source>
         <translatorcomment>深度</translatorcomment>
         <translation>深度</translation>
@@ -52,44 +52,44 @@
 <context>
     <name>DefaultOperationMenu</name>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="23"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="24"/>
         <source>delete bookmark</source>
         <translatorcomment>删除书签</translatorcomment>
         <translation>删除书签</translation>
     </message>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="26"/>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="48"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="27"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="49"/>
         <source>add bookmark</source>
         <translatorcomment>添加书签</translatorcomment>
         <translation>添加书签</translation>
     </message>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="47"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="48"/>
         <source>Search</source>
         <translatorcomment>搜索</translatorcomment>
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="49"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="50"/>
         <source>first page</source>
         <translatorcomment>第一页</translatorcomment>
         <translation>第一页</translation>
     </message>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="50"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="51"/>
         <source>prev page</source>
         <translatorcomment>前一页</translatorcomment>
         <translation>前一页</translation>
     </message>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="51"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="52"/>
         <source>next page</source>
         <translatorcomment>下一页</translatorcomment>
         <translation>下一页</translation>
     </message>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="52"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="53"/>
         <source>end page</source>
         <translatorcomment>最后一页</translatorcomment>
         <translation>最后一页</translation>
@@ -98,26 +98,26 @@
 <context>
     <name>DocummentFileHelper</name>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="63"/>
-        <location filename="../frame/DocummentFileHelper.cpp" line="151"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="81"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="168"/>
         <source>Save File</source>
         <translatorcomment>保存</translatorcomment>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="151"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="168"/>
         <source>Do you need to save the file opened?</source>
         <translatorcomment>您是否需要保存已打开的文件?</translatorcomment>
         <translation>您是否需要保存已打开的文件?</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="180"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="197"/>
         <source>File not supported</source>
         <translatorcomment>不支持的文件格式</translatorcomment>
         <translation>不支持的文件格式</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="258"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="250"/>
         <source>Please check if the file is damaged</source>
         <translatorcomment>请检查文件是否损坏</translatorcomment>
         <translation>请检查文件是否损坏</translation>
@@ -223,44 +223,44 @@
     <message>
         <location filename="../mainShow/FileAttrWidget.cpp" line="164"/>
         <source>year</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../mainShow/FileAttrWidget.cpp" line="164"/>
         <source>month</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../mainShow/FileAttrWidget.cpp" line="164"/>
         <source>day</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../mainShow/FileAttrWidget.cpp" line="165"/>
         <source>hour</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../mainShow/FileAttrWidget.cpp" line="165"/>
         <source>minute</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../mainShow/FileAttrWidget.cpp" line="165"/>
         <source>second</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>FileViewWidget</name>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="356"/>
+        <location filename="../frame/FileViewWidget.cpp" line="370"/>
         <source>Print Error</source>
         <translatorcomment>打印错误</translatorcomment>
         <translation>打印错误</translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="356"/>
+        <location filename="../frame/FileViewWidget.cpp" line="370"/>
         <source>No Print Device</source>
         <translatorcomment>没有打印设备</translatorcomment>
         <translation>没有打印设备</translation>
@@ -284,31 +284,31 @@
 <context>
     <name>FontWidget</name>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="279"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="280"/>
         <source>Double View</source>
         <translatorcomment>双页显示</translatorcomment>
         <translation>双页显示</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="299"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="300"/>
         <source>Adaptate Height</source>
         <translatorcomment>自适应高度</translatorcomment>
         <translation>自适应高度</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="321"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="322"/>
         <source>Adaptate Width</source>
         <translatorcomment>自适应宽度</translatorcomment>
         <translation>自适应宽度</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="72"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="73"/>
         <source>Rotated To Left</source>
         <translatorcomment>左旋转</translatorcomment>
         <translation>左旋转</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="76"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="77"/>
         <source>Rotated To Right</source>
         <translatorcomment>右旋转</translatorcomment>
         <translation>右旋转</translation>
@@ -324,7 +324,7 @@
     <message>
         <location filename="../frame/HomeWidget.cpp" line="27"/>
         <source>drag Pdf or other format file to here</source>
-        <translation type="unfinished">拖拽Pdf或其它格式文件到此</translation>
+        <translation>拖拽Pdf或其它格式文件到此</translation>
     </message>
     <message>
         <location filename="../frame/HomeWidget.cpp" line="30"/>
@@ -366,74 +366,74 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="112"/>
+        <location filename="../frame/MainWindow.cpp" line="146"/>
         <source>Open File</source>
         <translatorcomment>打开</translatorcomment>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="112"/>
-        <location filename="../frame/MainWindow.cpp" line="204"/>
+        <location filename="../frame/MainWindow.cpp" line="146"/>
+        <location filename="../frame/MainWindow.cpp" line="238"/>
         <source>Save File</source>
         <translatorcomment>保存</translatorcomment>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="112"/>
+        <location filename="../frame/MainWindow.cpp" line="146"/>
         <source>Save As File</source>
         <translatorcomment>另存为</translatorcomment>
         <translation>另存为</translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="113"/>
+        <location filename="../frame/MainWindow.cpp" line="147"/>
         <source>Open Folder</source>
         <translatorcomment>打开所在目录</translatorcomment>
         <translation>打开所在目录</translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="113"/>
+        <location filename="../frame/MainWindow.cpp" line="147"/>
         <source>Print</source>
         <translatorcomment>打印</translatorcomment>
         <translation>打印</translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="113"/>
+        <location filename="../frame/MainWindow.cpp" line="147"/>
         <source>File Attr</source>
         <translatorcomment>属性</translatorcomment>
         <translation>属性</translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="120"/>
+        <location filename="../frame/MainWindow.cpp" line="154"/>
         <source>Search</source>
         <translatorcomment>搜索</translatorcomment>
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="120"/>
+        <location filename="../frame/MainWindow.cpp" line="154"/>
         <source>Full Screen</source>
         <translatorcomment>全屏</translatorcomment>
         <translation>全屏</translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="120"/>
+        <location filename="../frame/MainWindow.cpp" line="154"/>
         <source>Screening</source>
         <translatorcomment>放映</translatorcomment>
         <translation>放映</translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="121"/>
+        <location filename="../frame/MainWindow.cpp" line="155"/>
         <source>Larger</source>
         <translatorcomment>放大</translatorcomment>
         <translation>放大</translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="121"/>
+        <location filename="../frame/MainWindow.cpp" line="155"/>
         <source>Smaller</source>
         <translatorcomment>缩小</translatorcomment>
         <translation>缩小</translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="204"/>
+        <location filename="../frame/MainWindow.cpp" line="238"/>
         <source>Do you need to save the file opened?</source>
         <translatorcomment>您是否保存已打开的文件?</translatorcomment>
         <translation>您是否保存已打开的文件?</translation>
