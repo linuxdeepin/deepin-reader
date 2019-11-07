@@ -237,8 +237,9 @@ void ThreadLoadImage::run()
                 break;
             }
             QImage image;
-            bool bl = dproxy->getImage(page, image, 134, 152);
+            bool bl = dproxy->getImage(page, image, 134, 160/*134, 152*/);
             if (bl) {
+                image = DocummentFileHelper::instance()->roundImage(QPixmap::fromImage(image), 8);
                 emit signal_loadImage(page, image);
             }
         }

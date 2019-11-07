@@ -311,6 +311,25 @@ bool DocummentFileHelper::getImage(int pagenum, QImage &image, double width, dou
     return m_pDocummentProxy->getImage(pagenum, image, width, height);
 }
 
+QImage DocummentFileHelper::roundImage(const QPixmap &img_in, int radius)
+{
+    if (img_in.isNull())
+    {
+        return QPixmap().toImage();
+    }
+    QSize size(img_in.size());
+    QBitmap mask(size);
+    QPainter painter(&mask);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+    painter.fillRect(mask.rect(), Qt::white);
+    painter.setBrush(QColor(0, 0, 0));
+    painter.drawRoundedRect(mask.rect(), radius, radius);
+    QPixmap image = img_in;
+    image.setMask(mask);
+    return image.toImage();
+}
+
 bool DocummentFileHelper::showMagnifier(QPoint point)
 {
     return  m_pDocummentProxy->showMagnifier(point);

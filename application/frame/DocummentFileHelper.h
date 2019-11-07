@@ -2,6 +2,7 @@
 #define DOCUMMENTFILEHELPER_H
 
 #include <QObject>
+#include <QBitmap>
 
 #include "docview/docummentproxy.h"
 
@@ -45,6 +46,7 @@ public:
     int currentPageNo();
     bool pageJump(int pagenum);
     bool getImage(int pagenum, QImage &image, double width, double height);
+    QImage roundImage(const QPixmap& img_in, int radius);
 
 public:
     bool showMagnifier(QPoint point);
