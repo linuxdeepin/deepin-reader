@@ -1,7 +1,6 @@
 #ifndef FILEVIEWNOTEWIDGET_H
 #define FILEVIEWNOTEWIDGET_H
 
-#include <DLabel>
 #include <DTextEdit>
 #include <DMessageBox>
 #include <QHideEvent>
@@ -9,7 +8,7 @@
 #include <QHBoxLayout>
 #include <QMessageBox>
 
-#include "subjectObserver/CustomWidget.h"
+#include "CustomControl/CustomWidget.h"
 #include "../font/fontWidget.h"
 
 class CustemTextEdit : public DTextEdit
@@ -23,7 +22,7 @@ protected:
 
 private:
     void init();
-    int calcTextSize(const QString&);
+    int calcTextSize(const QString &);
 
 private slots:
     void slotTextEditMaxContantNum();
@@ -37,7 +36,7 @@ private:
  *@brief 添加注释子界面
  */
 
-class MenuLab;
+class CustomClickLabel;
 
 class FileViewNoteWidget : public CustomWidget
 {
@@ -80,7 +79,7 @@ private:
     QString     m_pNotePage = "";
 
     CustemTextEdit *m_pTextEdit = nullptr;   // 注释
-    MenuLab *m_pCloseLab = nullptr;          // 关闭
+    CustomClickLabel *m_pCloseLab = nullptr;          // 关闭
     QString m_strNote = "";                       // 注释内容
 };
 

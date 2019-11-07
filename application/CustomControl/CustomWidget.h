@@ -3,11 +3,11 @@
 
 #include <DWidget>
 
-#include "IObserver.h"
+#include "subjectObserver/IObserver.h"
 #include "controller/MsgSubject.h"
 #include "controller/NotifySubject.h"
-#include "MsgHeader.h"
-#include "ModuleHeader.h"
+#include "subjectObserver/MsgHeader.h"
+#include "subjectObserver/ModuleHeader.h"
 #include "utils/utils.h"
 
 #include <QDebug>

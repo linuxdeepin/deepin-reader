@@ -1,7 +1,7 @@
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
-#include "subjectObserver/CustomWidget.h"
+#include "CustomControl/CustomWidget.h"
 
 /**
  * @brief The MainWidget class

@@ -29,6 +29,8 @@ void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, con
     m_strNoteUuid = sUuid;
     m_pRemoveHighLight->setEnabled(bHigh);
 
+    m_pColorWidgetAction->setBtnAddLightState(bHigh);
+
     this->exec(showPoint);
 }
 
@@ -45,15 +47,20 @@ void TextOperationMenu::setClickPage(int nClickPage)
 void TextOperationMenu::initMenu()
 {
     m_pCopy = createAction(tr("copy"), SLOT(slotCopyClicked()));
+    this->addSeparator();
 
-    createAction(tr("add high light"), SLOT(slotAddHighLightClicked()));
-
-    auto colorAction = new ColorWidgetAction(this);
-    connect(colorAction, SIGNAL(sigBtnGroupClicked(int)), this, SLOT(slotSetHighLight(int)));
-    this->addAction(colorAction);
+    m_pColorWidgetAction = new ColorWidgetAction(this);
+    connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked(int)), this, SLOT(slotSetHighLight(int)));
+    connect(m_pColorWidgetAction, SIGNAL(sigBtnDefaultClicked()), this, SLOT(slotAddHighLightClicked()));
+    this->addAction(m_pColorWidgetAction);
+    this->addSeparator();
 
     m_pRemoveHighLight = createAction(tr("remove high light"), SLOT(slotRemoveHighLightClicked()));
+    this->addSeparator();
+
     createAction(tr("add note"), SLOT(slotAddNoteClicked()));
+    this->addSeparator();
+
     m_pAddBookMark = createAction(tr("add bookmark"), SLOT(slotAddBookMarkClicked()));
 }
 
@@ -74,6 +81,7 @@ void TextOperationMenu::sendMsgToFrame(const int &msgType, const QString &msgCon
 void TextOperationMenu::slotSetHighLight(int nColor)
 {
     m_pLightColor = nColor;
+    sendMsgToFrame(MSG_OPERATION_TEXT_ADD_HIGHLIGHTED, QString("%1,%2,%3").arg(m_pLightColor).arg(m_pClickPoint.x()).arg(m_pClickPoint.y()));
 }
 
 void TextOperationMenu::slotCopyClicked()

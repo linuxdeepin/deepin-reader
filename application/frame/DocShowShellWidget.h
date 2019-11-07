@@ -1,7 +1,7 @@
 #ifndef DOCSHOWSHELLWIDGET_H
 #define DOCSHOWSHELLWIDGET_H
 
-#include "subjectObserver/CustomWidget.h"
+#include "CustomControl/CustomWidget.h"
 #include "mainShow/FindWidget.h"
 #include "mainShow/FileAttrWidget.h"
 

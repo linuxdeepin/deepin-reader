@@ -3,7 +3,7 @@
 
 #include <QMouseEvent>
 
-#include "subjectObserver/CustomWidget.h"
+#include "CustomControl/CustomWidget.h"
 #include "DocummentFileHelper.h"
 
 #include "mainShow/TextOperationMenu.h"

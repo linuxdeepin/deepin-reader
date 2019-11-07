@@ -1,7 +1,6 @@
 #ifndef THUMBNAILWIDGET_H
 #define THUMBNAILWIDGET_H
 
-#include <DLabel>
 #include <DPushButton>
 
 #include <QPalette>
@@ -10,7 +9,7 @@
 #include <QTimer>
 
 #include "pdfControl/ThumbnailItemWidget.h"
-#include "subjectObserver/CustomWidget.h"
+#include "CustomControl/CustomWidget.h"
 #include "PagingWidget.h"
 #include "docview/docummentproxy.h"
 #include "CustomListWidget.h"

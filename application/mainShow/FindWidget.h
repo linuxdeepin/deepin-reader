@@ -23,7 +23,7 @@
 #ifndef FINDWIDGET_H
 #define FINDWIDGET_H
 
-#include "subjectObserver/CustomWidget.h"
+#include "CustomControl/CustomWidget.h"
 #include <DSearchEdit>
 #include <DFloatingButton>
 

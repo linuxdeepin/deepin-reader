@@ -3,7 +3,7 @@
 
 #include <QSettings>
 
-#include "subjectObserver/CustomWidget.h"
+#include "CustomControl/CustomWidget.h"
 
 /**
  *  @brief  支持拖拽

@@ -1,7 +1,7 @@
 #ifndef LEFTSIDEBARWIDGET_H
 #define LEFTSIDEBARWIDGET_H
 
-#include "subjectObserver/CustomWidget.h"
+#include "CustomControl/CustomWidget.h"
 
 /**
  * @brief The LeftShowWidget class

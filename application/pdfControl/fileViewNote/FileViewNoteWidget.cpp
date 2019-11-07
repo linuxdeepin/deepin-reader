@@ -78,7 +78,7 @@ void FileViewNoteWidget::initWidget()
     plt.setColor(QPalette::Background, QColor(QString("#FFFBE1")));
     this->setPalette(plt);
 
-    m_pCloseLab = new MenuLab;
+    m_pCloseLab = new CustomClickLabel("");
     m_pCloseLab->setFixedSize(QSize(24, 24));
     connect(m_pCloseLab, SIGNAL(clicked()), this, SLOT(slotClosed()));
 

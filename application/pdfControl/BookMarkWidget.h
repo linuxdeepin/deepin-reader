@@ -10,7 +10,7 @@
 #include <QThread>
 
 #include "BookMarkItemWidget.h"
-#include "subjectObserver/CustomWidget.h"
+#include "CustomControl/CustomWidget.h"
 #include "docview/docummentproxy.h"
 #include "application.h"
 

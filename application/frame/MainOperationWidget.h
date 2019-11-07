@@ -3,7 +3,7 @@
 
 #include <DIconButton>
 #include <DPushButton>
-#include "subjectObserver/CustomWidget.h"
+#include "CustomControl/CustomWidget.h"
 
 /**
  * @brief The MainOperationWidget class

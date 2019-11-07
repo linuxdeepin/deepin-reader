@@ -1,8 +1,7 @@
 #include "ColorWidgetAction.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <DPushButton>
-#include <DLabel>
+
 #include <QButtonGroup>
 #include "controller/DataManager.h"
 #include <DFloatingButton>
@@ -13,10 +12,18 @@ ColorWidgetAction::ColorWidgetAction(DWidget *pParent)
     initWidget(pParent);
 }
 
+void ColorWidgetAction::setBtnAddLightState(const bool &bState)
+{
+    m_pClickLabel->setEnabled(!bState);
+}
+
 void ColorWidgetAction::initWidget(DWidget *pParent)
 {
     auto pWidget = new DWidget(pParent);
     setDefaultWidget(pWidget);
+
+    m_pClickLabel = new CustomClickLabel(tr("add high light"));
+    connect(m_pClickLabel, SIGNAL(clicked()), this, SIGNAL(sigBtnDefaultClicked()));
 
     auto buttonLayout = new QHBoxLayout;
     buttonLayout->setContentsMargins(20, 6, 20, 6);
@@ -41,5 +48,9 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
 
     buttonLayout->addStretch(1);
 
-    pWidget->setLayout(buttonLayout);
+    auto mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(m_pClickLabel);
+    mainLayout->addItem(buttonLayout);
+
+    pWidget->setLayout(mainLayout);
 }

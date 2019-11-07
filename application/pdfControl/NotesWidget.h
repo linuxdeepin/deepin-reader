@@ -9,7 +9,7 @@
 #include <QList>
 
 #include "NotesItemWidget.h"
-#include "subjectObserver/CustomWidget.h"
+#include "CustomControl/CustomWidget.h"
 #include "docview/docummentproxy.h"
 #include "CustomListWidget.h"
 

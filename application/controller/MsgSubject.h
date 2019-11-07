@@ -21,7 +21,7 @@ private:
 public:
     static MsgSubject *getInstance()
     {
-        static MsgSubject subject;      
+        static MsgSubject subject;
         return &subject;
     }
 

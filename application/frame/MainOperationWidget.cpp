@@ -14,7 +14,7 @@ MainOperationWidget::MainOperationWidget(CustomWidget *parent):
 
 void MainOperationWidget::initWidget()
 {
-    DPalette plt=DGuiApplicationHelper::instance()->applicationPalette();
+    DPalette plt = DGuiApplicationHelper::instance()->applicationPalette();
     plt.setColor(QPalette::Background, plt.color(QPalette::Base));
     setAutoFillBackground(true);
     setPalette(plt);
@@ -107,7 +107,7 @@ void MainOperationWidget::slotUpdateTheme()
             btn->setIcon(QIcon(sPixmap));
         }
     }
-    DPalette plt=DGuiApplicationHelper::instance()->applicationPalette();
+    DPalette plt = DGuiApplicationHelper::instance()->applicationPalette();
     plt.setColor(QPalette::Background, plt.color(QPalette::Base));
     setAutoFillBackground(true);
     setPalette(plt);

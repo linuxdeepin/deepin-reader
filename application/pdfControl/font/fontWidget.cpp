@@ -69,12 +69,10 @@ void FontWidget::initWidget()
     initAdaptateHeight();
     initAdaptateWidght();
 
-    auto pRotateLeftLb = new MenuLab(this);
-    pRotateLeftLb->setText(tr("Rotated To Left"));
+    auto pRotateLeftLb = new CustomClickLabel(tr("Rotated To Left"), this);
     connect(pRotateLeftLb, SIGNAL(clicked()), this, SLOT(slotSetRotateLeftCheckIcon()));
 
-    auto pRotateRightLb = new MenuLab(this);
-    pRotateRightLb->setText(tr("Rotated To Right"));
+    auto pRotateRightLb = new CustomClickLabel(tr("Rotated To Right"), this);
     connect(pRotateRightLb, SIGNAL(clicked()), this, SLOT(slotSetRotateRightCheckIcon()));
 
     //  垂直布局
@@ -275,15 +273,14 @@ void FontWidget::initDowbleShow()
     m_pDoubleShowLayout->setContentsMargins(0, 0, 0, 0);
     m_pDoubleShowLayout->setSpacing(0);
 
-    auto m_pDoubPageViewLb = new MenuLab(this);
+    auto m_pDoubPageViewLb = new CustomClickLabel(tr("Double View"), this);
     m_pDoubPageViewLb->setFixedHeight(25);
-    m_pDoubPageViewLb->setText(tr("Double View"));
     connect(m_pDoubPageViewLb, SIGNAL(clicked()), this, SLOT(slotSetDoubPageViewCheckIcon()));
     m_pDoubleShowLayout->addWidget(m_pDoubPageViewLb);
 
     m_pDoubleShowLayout->addStretch(1);
 
-    m_pDoubPageViewLab = new MenuLab(this);
+    m_pDoubPageViewLab = new CustomClickLabel("", this);
     m_pDoubPageViewLab->hide();
     m_pDoubPageViewLab->setFixedSize(QSize(30, 25));
     connect(m_pDoubPageViewLab, SIGNAL(clicked()), this, SLOT(slotSetDoubPageViewCheckIcon()));
@@ -296,15 +293,14 @@ void FontWidget::initAdaptateHeight()
     m_pAdaptateHeightLayout->setContentsMargins(0, 0, 0, 0);
     m_pAdaptateHeightLayout->setSpacing(0);
 
-    auto pSuitHLb = new MenuLab(this);
-    pSuitHLb->setText(tr("Adaptate Height"));
+    auto pSuitHLb = new CustomClickLabel(tr("Adaptate Height"), this);
     pSuitHLb->setFixedSize(QSize(120, 25));
     connect(pSuitHLb, SIGNAL(clicked()), this, SLOT(slotSetSuitHCheckIcon()));
     m_pAdaptateHeightLayout->addWidget(pSuitHLb);
 
     m_pAdaptateHeightLayout->addStretch(1);
 
-    m_pSuitHLab = new MenuLab(this);
+    m_pSuitHLab = new CustomClickLabel("", this);
 
     m_pSuitHLab->hide();
     m_pSuitHLab->setFixedSize(QSize(30, 25));
@@ -318,15 +314,14 @@ void FontWidget::initAdaptateWidght()
     m_pAdaptateWidghtLayout->setContentsMargins(0, 0, 0, 0);
     m_pAdaptateWidghtLayout->setSpacing(0);
 
-    auto pSuitWLb = new MenuLab(this);
-    pSuitWLb->setText(tr("Adaptate Width"));
+    auto pSuitWLb = new CustomClickLabel(tr("Adaptate Width"), this);
     pSuitWLb->setFixedSize(QSize(120, 25));
     connect(pSuitWLb, SIGNAL(clicked()), this, SLOT(slotSetSuitWCheckIcon()));
     m_pAdaptateWidghtLayout->addWidget(pSuitWLb);
 
     m_pAdaptateWidghtLayout->addStretch(1);
 
-    m_pSuitWLab = new MenuLab(this);
+    m_pSuitWLab = new CustomClickLabel("", this);
     m_pSuitWLab->hide();
     m_pSuitWLab->setFixedSize(QSize(30, 25));
     connect(m_pSuitWLab, SIGNAL(clicked()), this, SLOT(slotSetSuitWCheckIcon()));
@@ -411,27 +406,4 @@ void FontWidget::slotSetRotateLeftCheckIcon()
 void FontWidget::slotSetRotateRightCheckIcon()
 {
     rotateFileView(true);
-}
-
-
-/*********************自定义label**************************************/
-/*********************MenuLab*****××××********************************/
-
-MenuLab::MenuLab(QWidget *parent):
-    DLabel(parent)
-{
-    this->setAlignment(Qt::AlignVCenter);
-}
-
-/**
- * @brief MenuLab::mousePressEvent
- * 自定义label点击事件
- * @param event
- */
-void MenuLab::mousePressEvent(QMouseEvent *event)
-{
-    if (event->button() == Qt::LeftButton) {
-        emit clicked();
-    }
-    DLabel::mousePressEvent(event);
 }

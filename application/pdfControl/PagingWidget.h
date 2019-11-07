@@ -9,7 +9,7 @@
 #include <QKeyEvent>
 #include <QVBoxLayout>
 
-#include "subjectObserver/CustomWidget.h"
+#include "CustomControl/CustomWidget.h"
 
 /**
  * @brief The ThumbnailItemWidget class

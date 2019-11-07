@@ -15,6 +15,7 @@ include (pdfControl/pdfControl.pri)
 include (docview/docview.pri)
 include (subjectObserver/subjectObserver.pri)
 include (mainShow/mainShow.pri)
+include (CustomControl/CustomControl.pri)
 
 SOURCES += \
         main.cpp \

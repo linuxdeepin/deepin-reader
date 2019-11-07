@@ -4,7 +4,7 @@
 #include <DMenu>
 #include <DToolButton>
 
-#include "subjectObserver/CustomWidget.h"
+#include "CustomControl/CustomWidget.h"
 #include "pdfControl/font/fontWidget.h"
 #include "utils/PublicFunction.h"
 /**

@@ -4,6 +4,7 @@
 
 #include <DMenu>
 #include <QAction>
+#include "ColorWidgetAction.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -46,6 +47,8 @@ private:
     QAction     *m_pCopy = nullptr;
     QAction     *m_pRemoveHighLight = nullptr;
     QAction     *m_pAddBookMark = nullptr;
+
+    ColorWidgetAction   *m_pColorWidgetAction = nullptr;
 
     QPoint      m_pClickPoint;
     int         m_nClickPage = -1;

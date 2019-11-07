@@ -1,6 +1,7 @@
 #include "FileAttrWidget.h"
 
 #include "frame/DocummentFileHelper.h"
+#include <DWindowCloseButton>
 
 FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
@@ -119,9 +120,11 @@ void FileAttrWidget::initCloseBtn()
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addStretch(1);
 
-    auto closeButton = new DIconButton(DStyle::SP_CloseButton, this);
+    auto closeButton = new DWindowCloseButton(this);
+    closeButton->setFixedSize(QSize(40, 40));
+    closeButton->setIconSize(QSize(40, 40));
     closeButton->setToolTip(tr("close"));
-    connect(closeButton, &DIconButton::clicked, this, &FileAttrWidget::slotBtnCloseClicked);
+    connect(closeButton, &DWindowCloseButton::clicked, this, &FileAttrWidget::slotBtnCloseClicked);
 
     layout->addWidget(closeButton);
 

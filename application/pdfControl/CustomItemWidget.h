@@ -1,7 +1,7 @@
 #ifndef CUSTOMITEMWIDGET_H
 #define CUSTOMITEMWIDGET_H
 
-#include "subjectObserver/CustomWidget.h"
+#include "CustomControl/CustomWidget.h"
 #include "CustomLabel.h"
 
 //  统一设置 image 的widget 抽象类, 相对应的页码
