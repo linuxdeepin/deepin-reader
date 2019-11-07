@@ -9,6 +9,7 @@
 #include <DMessageBox>
 #include "controller/DataManager.h"
 #include <DGuiApplicationHelper>
+#include "DocummentFileHelper.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -26,6 +27,15 @@ MainWindow::MainWindow(DMainWindow *parent)
     initConnections();
 
     initThemeChanged();
+
+    m_pFilterList = QStringList() << KeyStr::g_esc << KeyStr::g_f1 << KeyStr::g_f11 << KeyStr::g_up
+                    << KeyStr::g_down << KeyStr::g_del << KeyStr::g_pgup << KeyStr::g_pgdown
+                    << KeyStr::g_ctrl_a << KeyStr::g_ctrl_c << KeyStr::g_ctrl_f << KeyStr::g_ctrl_o
+                    << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_v << KeyStr::g_ctrl_x
+                    << KeyStr::g_ctrl_z
+                    << KeyStr::g_ctrl_alt_f << KeyStr::g_ctrl_shift_slash << KeyStr::g_ctrl_shift_s;
+
+    installEventFilter(this);
 
     m_pMsgSubject = MsgSubject::getInstance();
     if (m_pMsgSubject) {
@@ -73,6 +83,30 @@ void MainWindow::closeEvent(QCloseEvent *event)
     slotAppExit();
 
     DMainWindow::closeEvent(event);
+}
+
+//  事件 过滤器
+bool MainWindow::eventFilter(QObject *obj, QEvent *e)
+{
+    int nType = e->type();
+    if (nType == QEvent::KeyPress) {
+        QKeyEvent *event = static_cast<QKeyEvent *>(e);
+        QString key = Utils::getKeyshortcut(event);
+        if (m_pFilterList.contains(key)) {
+
+            //  没有打开文件, 只能 执行 ctrl+o, f1
+            QString sFilePath = DataManager::instance()->strOnlyFilePath();
+            if (sFilePath == "") {
+                if (key == KeyStr::g_f1 || key == KeyStr::g_ctrl_o) {
+                    sendMsg(MSG_NOTIFY_KEY_MSG, key);
+                }
+            } else {
+                sendMsg(MSG_NOTIFY_KEY_MSG, key);
+            }
+            return true;
+        }
+    }
+    return DMainWindow::eventFilter(obj, e);
 }
 
 void MainWindow::initUI()
@@ -202,14 +236,14 @@ void MainWindow::slotAppExit()
         bool rl = DataManager::instance()->bIsUpdate();
         if (rl) {
             if (QMessageBox::Yes == DMessageBox::question(nullptr, tr("Save File"), tr("Do you need to save the file opened?"))) {
-                DocummentProxy::instance()->save(sFilePath, true);
+                DocummentFileHelper::instance()->save(sFilePath, true);
 
                 //  保存 书签数据
                 dApp->dbM->saveBookMark();
             }
         }
         sendMsg(MSG_CLOSE_FILE);
-        DocummentProxy::instance()->closeFile();
+        DocummentFileHelper::instance()->closeFile();
     }
 
     dApp->exit();
@@ -292,7 +326,7 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         emit sigOpenFileOk();
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (msgContent == KeyStr::g_esc) {  //  退出全屏模式
+        if (msgContent == KeyStr::g_esc) {          //  退出全屏模式
             emit sigAppShowState(1);
         } else if (msgContent == KeyStr::g_f1) {    //  显示帮助文档
             emit sigOpenAppHelp();

@@ -2,6 +2,7 @@
 #include <QVBoxLayout>
 #include "FileViewWidget.h"
 #include "controller/DataManager.h"
+#include "DocummentFileHelper.h"
 
 DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
     : CustomWidget ("DocShowShellWidget", parent)
@@ -83,13 +84,16 @@ void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
             m_pFileViewNoteWidget = new FileViewNoteWidget(this);
         }
 
-        auto pDocummentProxy = DocummentProxy::instance();
-        QString contant;
-        pDocummentProxy->getAnnotationText(t_strUUid, contant, t_page.toInt());
+        QString sContant = "";
+
+        auto pHelper = DocummentFileHelper::instance();
+        if (pHelper) {
+            pHelper->getAnnotationText(t_strUUid, sContant, t_page.toInt());
+        }
 
         m_pFileViewNoteWidget->setNoteUuid(t_strUUid);
         m_pFileViewNoteWidget->setNotePage(t_page);
-        m_pFileViewNoteWidget->setEditText(contant);
+        m_pFileViewNoteWidget->setEditText(sContant);
         m_pFileViewNoteWidget->setPointAndPage("");
         DataManager::instance()->setSmallNoteWidgetSize(m_pFileViewNoteWidget->size());
 
@@ -112,13 +116,23 @@ void DocShowShellWidget::initConnections()
     connect(this, SIGNAL(sigShowNoteWidget(const QString &)), this, SLOT(slotShowNoteWidget(const QString &)));
 }
 
+//  集中处理 按键通知消息
+int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
+{
+    if (KeyStr::g_ctrl_f == msgContent) {    //  搜索
+        emit sigShowFileFind();
+        return ConstantMsg::g_effective_res;
+    }
+    return 0;
+}
+
 int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
-    case MSG_OPERATION_ATTR:        //  打开该文件的属性信息
+    case MSG_OPERATION_ATTR:                    //  打开该文件的属性信息
         emit sigShowFileAttr();
         return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_FIND:        //  搜索
+    case MSG_OPERATION_FIND:                    //  搜索
         emit sigShowFileFind();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_ADD_ANNOTATION:     //  添加注释
@@ -127,12 +141,8 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
     case MSG_OPERATION_TEXT_SHOW_NOTEWIDGET:    //  显示注释窗口
         emit sigShowNoteWidget(msgContent);
         return ConstantMsg::g_effective_res;
-    case MSG_NOTIFY_KEY_MSG : {    //  最后一个处理通知消息
-        if (KeyStr::g_ctrl_f == msgContent) {
-            emit sigShowFileFind();
-            return ConstantMsg::g_effective_res;
-        }
-        break;
+    case MSG_NOTIFY_KEY_MSG : {                 //  最后一个处理通知消息
+        return dealWithNotifyMsg(msgContent);
     }
     }
 
@@ -144,6 +154,7 @@ void DocShowShellWidget::initWidget()
     auto layout = new QVBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
+
     layout->addWidget(new FileViewWidget);
 
     this->setLayout(layout);

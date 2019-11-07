@@ -1,5 +1,6 @@
 #include "SearchResWidget.h"
 #include "controller/DataManager.h"
+#include "frame/DocummentFileHelper.h"
 
 SearchResWidget::SearchResWidget(CustomWidget *parent) :
     CustomWidget(QString("SearchResWidget"), parent)
@@ -21,7 +22,7 @@ SearchResWidget::~SearchResWidget()
 
 void SearchResWidget::slotClearWidget()
 {
-    DocummentProxy::instance()->clearsearch();
+    DocummentFileHelper::instance()->clearsearch();
     if (m_pNotesList) {
         m_pNotesList->clear();
     }
@@ -40,7 +41,7 @@ void SearchResWidget::slotFlushSearchWidget(const QString &msgContent)
 {
     connect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this, SLOT(slotGetSearchContant(stSearchRes)));
     QMap<int, stSearchRes> resMap;
-    DocummentProxy::instance()->search(msgContent, resMap, Qt::red);
+    DocummentFileHelper::instance()->search(msgContent, resMap, Qt::red);
     disconnect(DocummentProxy::instance(), SIGNAL(signal_searchover()), this, SLOT(slotSearchOver()));
     connect(DocummentProxy::instance(), SIGNAL(signal_searchover()), this, SLOT(slotSearchOver()));
 }
@@ -77,12 +78,12 @@ void SearchResWidget::slotLoadImage(const int &page, const QImage &image)
 
 void SearchResWidget::slotFindPrev()
 {
-    DocummentProxy::instance()->findPrev();
+    DocummentFileHelper::instance()->findPrev();
 }
 
 void SearchResWidget::slotFindNext()
 {
-    DocummentProxy::instance()->findNext();
+    DocummentFileHelper::instance()->findNext();
 }
 
 void SearchResWidget::initWidget()
@@ -138,7 +139,7 @@ void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
     //  当前显示不是自己, 则需要发送切换 ListWidget 显示
 //    bool bFocus = this->hasFocus();
 //    if (bFocus) {
-        sendMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
+    sendMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
 //    }
 }
 
@@ -168,12 +169,6 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
  */
 int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_FIND_CONTENT) {        //  查询内容
-        if (msgContent != QString("")) {
-            emit sigFlushSearchWidget(msgContent);
-        }
-    }
-
     if (msgType == MSG_FIND_PREV) {
         emit sigFindPrev();
         return ConstantMsg::g_effective_res;
@@ -184,7 +179,11 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
         return ConstantMsg::g_effective_res;
     }
 
-    if (msgType == MSG_CLEAR_FIND_CONTENT) {
+    if (msgType == MSG_FIND_CONTENT) {        //  查询内容
+        if (msgContent != QString("")) {
+            emit sigFlushSearchWidget(msgContent);
+        }
+    } else if (msgType == MSG_CLEAR_FIND_CONTENT) {
         emit sigClearWidget();
     } else if (MSG_CLOSE_FILE == msgType) {    //  关闭w文件通知消息
         emit sigCloseFile();
@@ -270,7 +269,7 @@ void LoadSearchResThread::run()
             if (page == -1) {
                 continue;
             }
-            DocummentProxy *dproxy = DocummentProxy::instance();
+            auto dproxy = DocummentFileHelper::instance();
             if (nullptr == dproxy) {
                 break;
             }

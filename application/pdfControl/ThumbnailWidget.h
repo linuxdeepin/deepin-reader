@@ -91,6 +91,7 @@ public:
     ~ThumbnailWidget() Q_DECL_OVERRIDE;
 
 signals:
+    void sigFilePageChanged(const QString &);
     void sigOpenFileOk();
     void sigCloseFile();
 
@@ -114,7 +115,7 @@ private:
 private slots:
     void slotOpenFileOk();
     void slotLoadThumbnailImage();
-    void slotFileViewToListPage(const int &);
+    void slotDocFilePageChanged(const QString &);
     void slotCloseFile();
     void slotUpdateTheme();
 

@@ -36,6 +36,7 @@ signals:
 
 protected:
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *obj, QEvent *e) Q_DECL_OVERRIDE;
 
 private:
     void initUI();
@@ -66,6 +67,8 @@ private:
 private:
     MsgSubject      *m_pMsgSubject = nullptr;
     NotifySubject   *m_pNotifySubject = nullptr;
+
+    QStringList     m_pFilterList;
 
     // IObserver interface
 public:

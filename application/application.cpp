@@ -16,8 +16,6 @@
  */
 #include "application.h"
 
-#include "controller/GlobalEventFilter.h"
-
 #include "controller/MsgSubject.h"
 #include "subjectObserver/MsgHeader.h"
 
@@ -47,8 +45,6 @@ Application::Application(int &argc, char **argv)
     setApplicationAcknowledgementPage(Constant::sAcknowledgementLink);
     setProductIcon(QIcon(Constant::sLogoPath));
     setApplicationDescription(tr("deepin-reader is a document viewer provided by deep system"));
-
-    installEventFilter(new GlobalEventFilter(this));
 
     initChildren();
 }

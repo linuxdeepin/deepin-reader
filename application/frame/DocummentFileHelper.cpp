@@ -1,44 +1,62 @@
 #include "DocummentFileHelper.h"
 #include <DApplication>
 #include <QClipboard>
+#include <QDesktopServices>
 #include "subjectObserver/MsgHeader.h"
 #include "controller/DataManager.h"
 #include <DFileDialog>
 #include "utils/utils.h"
-#include <QDesktopServices>
 #include <DMessageBox>
 #include "subjectObserver/ModuleHeader.h"
 #include "controller/DBManager.h"
-
+#include "controller/MsgSubject.h"
 
 DocummentFileHelper::DocummentFileHelper(QObject *parent)
     : QObject(parent)
 {
     m_pDocummentProxy = DocummentProxy::instance();
-    m_strObserverName = "DocummentFileHelper";
 
     initConnections();
-
-    m_pMsgSubject = MsgSubject::getInstance();
-    if (m_pMsgSubject) {
-        m_pMsgSubject->addObserver(this);
-    }
-
-    m_pNotifySubject = NotifySubject::getInstance();
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
 }
 
-DocummentFileHelper::~DocummentFileHelper()
+bool DocummentFileHelper::save(const QString &filepath, bool withChanges)
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    return m_pDocummentProxy->save(filepath, withChanges);
+}
 
-    if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
-    }
+bool DocummentFileHelper::closeFile()
+{
+    return m_pDocummentProxy->closeFile();
+}
+
+void DocummentFileHelper::docBasicInfo(stFileInfo &info)
+{
+    m_pDocummentProxy->docBasicInfo(info);
+}
+
+bool DocummentFileHelper::mouseSelectText(QPoint start, QPoint stop)
+{
+    return m_pDocummentProxy->mouseSelectText(start, stop);
+}
+
+bool DocummentFileHelper::mouseBeOverText(QPoint point)
+{
+    return m_pDocummentProxy->mouseBeOverText(point);
+}
+
+Page::Link *DocummentFileHelper::mouseBeOverLink(QPoint point)
+{
+    return m_pDocummentProxy->mouseBeOverLink(point);
+}
+
+void DocummentFileHelper::mouseSelectTextClear()
+{
+    m_pDocummentProxy->mouseSelectTextClear();
+}
+
+bool DocummentFileHelper::getSelectTextString(QString &st)
+{
+    return m_pDocummentProxy->getSelectTextString(st);
 }
 
 //  保存
@@ -75,7 +93,6 @@ void DocummentFileHelper::slotSaveAsFile()
                 m_szFilePath = sFilePath;
                 QFileInfo info(m_szFilePath);
                 setAppShowTitle(info.baseName());
-
             }
         }
     }
@@ -221,6 +238,25 @@ void DocummentFileHelper::slotFileSlider(const int &nFlag)
     }
 }
 
+void DocummentFileHelper::initConnections()
+{
+    connect(m_pDocummentProxy, &DocummentProxy::signal_openResult, this, [ = ](bool openresult) {
+        if (openresult) {
+            //  通知 其他窗口， 打开文件成功了！！！
+            sendMsg(MSG_OPERATION_OPEN_FILE_OK);
+            QFileInfo info(m_szFilePath);
+            setAppShowTitle(info.baseName());
+        } else {
+            sendMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
+        }
+    });
+}
+
+void DocummentFileHelper::sendMsg(const int &msgType, const QString &msgContent)
+{
+    MsgSubject::getInstance()->sendMsg(nullptr, msgType, msgContent);
+}
+
 //  文档　跳转页码　．　打开浏览器
 void DocummentFileHelper::onClickPageLink(Page::Link *pLink)
 {
@@ -240,57 +276,132 @@ void DocummentFileHelper::onClickPageLink(Page::Link *pLink)
     }
 }
 
-
-void DocummentFileHelper::initConnections()
+QPoint DocummentFileHelper::global2RelativePoint(QPoint globalpoint)
 {
-    connect(this, SIGNAL(sigOpenFile(const QString &)), this, SLOT(slotOpenFile(const QString &)));
-    connect(this, SIGNAL(sigSaveFile()), this, SLOT(slotSaveFile()));
-    connect(this, SIGNAL(sigSaveAsFile()), this, SLOT(slotSaveAsFile()));
-    connect(this, SIGNAL(sigFileSlider(const int &)), this, SLOT(slotFileSlider(const int &)));
-    connect(this, SIGNAL(sigCopySelectContent(const QString &)), this, SLOT(slotCopySelectContent(const QString &)));
-    connect(m_pDocummentProxy, &DocummentProxy::signal_openResult, this, [ = ](bool openresult) {
-        if (openresult) {
-            //  通知 其他窗口， 打开文件成功了！！！
-            NotifySubject::getInstance()->sendMsg(MSG_OPERATION_OPEN_FILE_OK);
-            QFileInfo info(m_szFilePath);
-            setAppShowTitle(info.baseName());
-        } else {
-            sendMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
-        }
-    });
+    return  m_pDocummentProxy->global2RelativePoint(globalpoint);
 }
 
-int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgContent)
+bool DocummentFileHelper::pageMove(double mvx, double mvy)
 {
-    switch (msgType) {
-    case MSG_OPEN_FILE_PATH:                //  打开文件
-        emit sigOpenFile(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_SAVE_FILE :          //  保存文件
-        emit sigSaveFile();
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_SAVE_AS_FILE:        //  另存为文件
-        emit sigSaveAsFile();
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_TEXT_COPY:           //  复制
-        emit sigCopySelectContent(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_SLIDE:               //  放映
-        emit sigFileSlider(1);
-        break;
-    case MSG_NOTIFY_KEY_MSG :
-        if (KeyStr::g_ctrl_s == msgContent) {
-            emit sigSaveFile();
-            return ConstantMsg::g_effective_res;
-        }
-        if (KeyStr::g_esc == msgContent) {
-            emit sigFileSlider(0);
-        }
-    }
-    return 0;
+    return m_pDocummentProxy->pageMove(mvx, mvy);
 }
 
-void DocummentFileHelper::sendMsg(const int &msgType, const QString &msgContent)
+int DocummentFileHelper::pointInWhichPage(QPoint pos)
 {
-    m_pMsgSubject->sendMsg(this, msgType, msgContent);
+    return m_pDocummentProxy->pointInWhichPage(pos);
+}
+
+int DocummentFileHelper::getPageSNum()
+{
+    return m_pDocummentProxy->getPageSNum();
+}
+
+int DocummentFileHelper::currentPageNo()
+{
+    return m_pDocummentProxy->currentPageNo();
+}
+
+bool DocummentFileHelper::pageJump(int pagenum)
+{
+    return m_pDocummentProxy->pageJump(pagenum);
+}
+
+bool DocummentFileHelper::getImage(int pagenum, QImage &image, double width, double height)
+{
+    return m_pDocummentProxy->getImage(pagenum, image, width, height);
+}
+
+bool DocummentFileHelper::showMagnifier(QPoint point)
+{
+    return  m_pDocummentProxy->showMagnifier(point);
+}
+
+bool DocummentFileHelper::closeMagnifier()
+{
+    return m_pDocummentProxy->closeMagnifier();
+}
+
+bool DocummentFileHelper::setBookMarkState(int page, bool state)
+{
+    return m_pDocummentProxy->setBookMarkState(page, state);
+}
+
+bool DocummentFileHelper::setViewModeAndShow(ViewMode_EM viewmode)
+{
+    return m_pDocummentProxy->setViewModeAndShow(viewmode);
+}
+
+void DocummentFileHelper::scaleRotateAndShow(double scale, RotateType_EM rotate)
+{
+    m_pDocummentProxy->scaleRotateAndShow(scale, rotate);
+}
+
+double DocummentFileHelper::adaptWidthAndShow(const double &width)
+{
+    return m_pDocummentProxy->adaptWidthAndShow(width);
+}
+
+double DocummentFileHelper::adaptHeightAndShow(const double &height)
+{
+    return m_pDocummentProxy->adaptHeightAndShow(height);
+}
+
+void DocummentFileHelper::clearsearch()
+{
+    m_pDocummentProxy->clearsearch();
+}
+
+void DocummentFileHelper::getAllAnnotation(QList<stHighlightContent> &listres)
+{
+    m_pDocummentProxy->getAllAnnotation(listres);
+}
+
+QString DocummentFileHelper::addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color)
+{
+    return m_pDocummentProxy->addAnnotation(startpos, endpos, color);
+}
+
+bool DocummentFileHelper::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
+{
+    return m_pDocummentProxy->annotationClicked(pos, strtext, struuid);
+}
+
+void DocummentFileHelper::removeAnnotation(const QString &struuid, int ipage)
+{
+    m_pDocummentProxy->removeAnnotation(struuid, ipage);
+}
+
+QString DocummentFileHelper::removeAnnotation(const QPoint &pos)
+{
+    return m_pDocummentProxy->removeAnnotation(pos);
+}
+
+void DocummentFileHelper::setAnnotationText(int ipage, const QString &struuid, const QString &strtext)
+{
+    m_pDocummentProxy->setAnnotationText(ipage, struuid, strtext);
+}
+
+void DocummentFileHelper::getAnnotationText(const QString &struuid, QString &strtext, int ipage)
+{
+    m_pDocummentProxy->getAnnotationText(struuid, strtext, ipage);
+}
+
+void DocummentFileHelper::jumpToHighLight(const QString &uuid, int ipage)
+{
+    m_pDocummentProxy->jumpToHighLight(uuid, ipage);
+}
+
+void DocummentFileHelper::search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color)
+{
+    m_pDocummentProxy->search(strtext, resmap, color);
+}
+
+void DocummentFileHelper::findNext()
+{
+    m_pDocummentProxy->findNext();
+}
+
+void DocummentFileHelper::findPrev()
+{
+    m_pDocummentProxy->findPrev();
 }

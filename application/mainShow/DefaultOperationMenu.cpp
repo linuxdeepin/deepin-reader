@@ -5,6 +5,7 @@
 #include "subjectObserver/MsgHeader.h"
 #include "docview/docummentproxy.h"
 #include "application.h"
+#include "frame/DocummentFileHelper.h"
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     : DMenu (parent)
@@ -30,7 +31,7 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
         m_pFirstPage->setEnabled(false);
         m_pPrevPage->setEnabled(false);
     } else {
-        int nPageNum = DocummentProxy::instance()->getPageSNum();
+        int nPageNum = DocummentFileHelper::instance()->getPageSNum();
         nPageNum--;
 
         if (m_nRightPageNumber == nPageNum) { //  最后一页

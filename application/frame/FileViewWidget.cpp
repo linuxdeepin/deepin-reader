@@ -32,11 +32,18 @@ FileViewWidget::~FileViewWidget()
 void FileViewWidget::initWidget()
 {
     //  实际文档类  唯一实例化设置 父窗口
-    m_pDocummentProxy = DocummentProxy::instance(this);
+    auto m_pDocummentProxy = DocummentProxy::instance(this);
     connect(m_pDocummentProxy, SIGNAL(signal_bookMarkStateChange(int, bool )),
             this, SLOT(slotBookMarkStateChange(int, bool)));
+    connect(m_pDocummentProxy, SIGNAL(signal_pageChange(int)),
+            this, SLOT(slotDocFilePageChanged(int)));
 
-    m_pDocummentFileHelper = new DocummentFileHelper(this);
+    m_pDocummentFileHelper = DocummentFileHelper::instance();
+    connect(this, SIGNAL(sigOpenFile(const QString &)), m_pDocummentFileHelper, SLOT(slotOpenFile(const QString &)));
+    connect(this, SIGNAL(sigSaveFile()), m_pDocummentFileHelper, SLOT(slotSaveFile()));
+    connect(this, SIGNAL(sigSaveAsFile()), m_pDocummentFileHelper, SLOT(slotSaveAsFile()));
+    connect(this, SIGNAL(sigFileSlider(const int &)), m_pDocummentFileHelper, SLOT(slotFileSlider(const int &)));
+    connect(this, SIGNAL(sigCopySelectContent(const QString &)), m_pDocummentFileHelper, SLOT(slotCopySelectContent(const QString &)));
 }
 
 //  鼠标移动
@@ -48,29 +55,29 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
     }
 
     QPoint globalPos = event->globalPos();
-    QPoint docGlobalPos = m_pDocummentProxy->global2RelativePoint(globalPos);
+    QPoint docGlobalPos = m_pDocummentFileHelper->global2RelativePoint(globalPos);
     if (m_nCurrentHandelState == Handel_State) {    //   手型状态下， 按住鼠标左键 位置进行移动
         if (m_bSelectOrMove) {
             QPoint mvPoint = m_pHandleMoveStartPoint - globalPos;
             int mvX = mvPoint.x();
             int mvY = mvPoint.y();
 
-            m_pDocummentProxy->pageMove(mvX, mvY);
+            m_pDocummentFileHelper->pageMove(mvX, mvY);
 
             m_pHandleMoveStartPoint = globalPos;
         }
     } else if (m_nCurrentHandelState == Magnifier_State) {  //  当前是放大镜状态
-        m_pDocummentProxy->showMagnifier(docGlobalPos);
+        m_pDocummentFileHelper->showMagnifier(docGlobalPos);
     } else {
         if (m_bSelectOrMove) {  //  鼠标已经按下，　则选中所经过的文字
-            m_pDocummentProxy->mouseSelectText(m_pStartPoint, docGlobalPos);
+            m_pDocummentFileHelper->mouseSelectText(m_pStartPoint, docGlobalPos);
         } else {
             //  首先判断文档划过属性
-            Page::Link *pLink  = m_pDocummentProxy->mouseBeOverLink(docGlobalPos);
+            Page::Link *pLink  = m_pDocummentFileHelper->mouseBeOverLink(docGlobalPos);
             if (pLink) {
                 setCursor(QCursor(Qt::PointingHandCursor));
             } else {
-                if (m_pDocummentProxy->mouseBeOverText(docGlobalPos)) {
+                if (m_pDocummentFileHelper->mouseBeOverText(docGlobalPos)) {
                     m_bIsHandleSelect = true;
                     setCursor(QCursor(Qt::IBeamCursor));
                 } else {
@@ -102,15 +109,15 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
             m_pHandleMoveStartPoint = globalPos;     //  变成手，　需要的是　相对坐标
             m_bSelectOrMove = true;
         } else {
-            QPoint docGlobalPos = m_pDocummentProxy->global2RelativePoint(globalPos);
+            QPoint docGlobalPos = m_pDocummentFileHelper->global2RelativePoint(globalPos);
 
             //  点击的时候　先判断　点击处　　是否有链接之类
-            Page::Link *pLink = m_pDocummentProxy->mouseBeOverLink(docGlobalPos);
+            Page::Link *pLink = m_pDocummentFileHelper->mouseBeOverLink(docGlobalPos);
             if (pLink) {
                 m_pDocummentFileHelper->onClickPageLink(pLink);
             } else {
                 if (m_nCurrentHandelState == Default_State) {
-                    m_pDocummentProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
+                    m_pDocummentFileHelper->mouseSelectTextClear();  //  清除之前选中的文字高亮
                     if (m_bIsHandleSelect) {
                         m_bSelectOrMove = true;
                         m_pStartPoint = docGlobalPos;
@@ -121,6 +128,8 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
     }
 }
 
+
+
 //  鼠标松开
 void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 {
@@ -128,8 +137,7 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
     if (DataManager::instance()->CurShowState() == FILE_SLIDE)
         return;
 
-    if(event->button()==Qt::RightButton&&m_nCurrentHandelState == Magnifier_State)
-    {
+    if (event->button() == Qt::RightButton && m_nCurrentHandelState == Magnifier_State) {
         emit sigMagnifying(QString("0"));
         return;
     }
@@ -142,14 +150,14 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
         Qt::MouseButton nBtn = event->button();
         if (nBtn == Qt::LeftButton) {
             QPoint globalPos = event->globalPos();
-            QPoint docGlobalPos = m_pDocummentProxy->global2RelativePoint(globalPos);
+            QPoint docGlobalPos = m_pDocummentFileHelper->global2RelativePoint(globalPos);
             // 判断鼠标点击的地方是否有高亮
             QString selectText, t_strUUid;
 
-            bool bIsHighLightReleasePoint = m_pDocummentProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
+            bool bIsHighLightReleasePoint = m_pDocummentFileHelper->annotationClicked(docGlobalPos, selectText, t_strUUid);
             DataManager::instance()->setMousePressLocal(bIsHighLightReleasePoint, globalPos);
             if (bIsHighLightReleasePoint) {
-                int nPage = m_pDocummentProxy->pointInWhichPage(docGlobalPos);
+                int nPage = m_pDocummentFileHelper->pointInWhichPage(docGlobalPos);
                 QString t_strContant = t_strUUid.trimmed() + QString("%1%") + QString::number(nPage);
                 sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
             }
@@ -185,16 +193,16 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 
 
     QString sSelectText =  "";
-    m_pDocummentProxy->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
+    m_pDocummentFileHelper->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
 
     QPoint tempPoint = this->mapToGlobal(point);
-    QPoint pRightClickPoint = m_pDocummentProxy->global2RelativePoint(tempPoint);
+    QPoint pRightClickPoint = m_pDocummentFileHelper->global2RelativePoint(tempPoint);
 
     //  右键鼠标点 是否有高亮区域
     QString sAnnotationText = "", struuid = "";
-    bool bIsHighLight = m_pDocummentProxy->annotationClicked(pRightClickPoint, sAnnotationText, struuid);
+    bool bIsHighLight = m_pDocummentFileHelper->annotationClicked(pRightClickPoint, sAnnotationText, struuid);
 
-    int nPage = m_pDocummentProxy->pointInWhichPage(pRightClickPoint);
+    int nPage = m_pDocummentFileHelper->pointInWhichPage(pRightClickPoint);
     if (sSelectText != "" || bIsHighLight) {    //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
         if (nullptr == m_operatemenu) {
@@ -215,7 +223,7 @@ void FileViewWidget::slotMagnifying(const QString &data)
 {
     int nRes = data.toInt();
     if (nRes == 1) {
-        m_pDocummentProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
+        m_pDocummentFileHelper->mouseSelectTextClear();  //  清除之前选中的文字高亮
 
         m_nCurrentHandelState = Magnifier_State;
         this->setCursor(Qt::BlankCursor);
@@ -225,7 +233,7 @@ void FileViewWidget::slotMagnifying(const QString &data)
             m_nCurrentHandelState = Default_State;
             this->setCursor(Qt::ArrowCursor);
 
-            m_pDocummentProxy->closeMagnifier();
+            m_pDocummentFileHelper->closeMagnifier();
         }
     }
 }
@@ -243,7 +251,7 @@ void FileViewWidget::slotSetHandShape(const QString &data)
     }
 
     //  手型 切换 也需要将之前选中的文字清除 选中样式
-    m_pDocummentProxy->mouseSelectTextClear();
+    m_pDocummentFileHelper->mouseSelectTextClear();
 }
 
 //  添加高亮颜色
@@ -260,7 +268,7 @@ void FileViewWidget::slotFileAddAnnotation(const QString &msgContent)
 
         QPoint tempPoint(sX.toInt(), sY.toInt());
 
-        QString sUuid = m_pDocummentProxy->addAnnotation(tempPoint, tempPoint, color);
+        QString sUuid = m_pDocummentFileHelper->addAnnotation(tempPoint, tempPoint, color);
         if (sUuid != "") {
             DataManager::instance()->setBIsUpdate(true);
         }
@@ -276,11 +284,11 @@ void FileViewWidget::slotFileRemoveAnnotation(const QString &msgContent)
         QString sY = contentList.at(1);
 
         QPoint tempPoint(sX.toInt(), sY.toInt());
-        QString sUuid = m_pDocummentProxy->removeAnnotation(tempPoint);
+        QString sUuid = m_pDocummentFileHelper->removeAnnotation(tempPoint);
         if (sUuid != "") {
             sendMsg(MSG_NOTE_DLTNOTEITEM, sUuid);
 
-            m_pDocummentProxy->removeAnnotation(sUuid);
+            m_pDocummentFileHelper->removeAnnotation(sUuid);
 
             DataManager::instance()->setBIsUpdate(true);
         }
@@ -306,7 +314,7 @@ void FileViewWidget::slotFileAddNote(const QString &msgContent)
         QColor color = DataManager::instance()->getLightColorList().at(0);
         QPoint tempPoint(sX.toInt(), sY.toInt());
 
-        sUuid = m_pDocummentProxy->addAnnotation(tempPoint, tempPoint, color);  //  高亮 产生的 uuid
+        sUuid = m_pDocummentFileHelper->addAnnotation(tempPoint, tempPoint, color);  //  高亮 产生的 uuid
     }
 
     if (sUuid == "" || sNote == "" || sPage == "" || sPage == "-1") {
@@ -314,7 +322,7 @@ void FileViewWidget::slotFileAddNote(const QString &msgContent)
     }
     QString t_str = sUuid.trimmed() + QString("%") + sNote.trimmed() + QString("%") + sPage;
     sendMsg(MSG_NOTE_ADDITEM, t_str);
-    m_pDocummentProxy->setAnnotationText(sPage.toInt(), sUuid, sNote);
+    m_pDocummentFileHelper->setAnnotationText(sPage.toInt(), sUuid, sNote);
 
     DataManager::instance()->setBIsUpdate(true);
 }
@@ -327,6 +335,12 @@ void FileViewWidget::slotBookMarkStateChange(int nPage, bool bState)
     } else {
         sendMsg(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(nPage));
     }
+}
+
+//  文档页变化了
+void FileViewWidget::slotDocFilePageChanged(int page)
+{
+    sendMsg(MSG_FILE_PAGE_CHANGE, QString("%1").arg(page));
 }
 
 //  信号槽　初始化
@@ -360,7 +374,7 @@ void FileViewWidget::slotPrintFile()
     QPrintPreviewDialog preview(&printer, this);
     connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ] (QPrinter * printer) {
 
-        int nPageSize = m_pDocummentProxy->getPageSNum();       //  pdf 页数
+        int nPageSize = m_pDocummentFileHelper->getPageSNum();       //  pdf 页数
         printer->setWinPageSize(nPageSize);
 
         QPainter painter(printer);
@@ -371,7 +385,7 @@ void FileViewWidget::slotPrintFile()
         for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
             QImage image;
 
-            bool rl = m_pDocummentProxy->getImage(iIndex, image, 800, 1100);
+            bool rl = m_pDocummentFileHelper->getImage(iIndex, image, 800, 1100);
             if (rl) {
                 QPixmap pixmap = pixmap.fromImage(image);
 
@@ -396,10 +410,10 @@ void FileViewWidget::slotSetWidgetAdapt()
     double nScale = 0.0;
     if (m_nAdapteState == WIDGET_State) {
         int nWidth = this->width();
-        nScale = m_pDocummentProxy->adaptWidthAndShow(nWidth);
+        nScale = m_pDocummentFileHelper->adaptWidthAndShow(nWidth);
     } else if (m_nAdapteState == HEIGHT_State) {
         int nHeight = this->height();
-        nScale = m_pDocummentProxy->adaptHeightAndShow(nHeight);
+        nScale = m_pDocummentFileHelper->adaptHeightAndShow(nHeight);
     }
 
     if (nScale != 0.0) {
@@ -433,9 +447,6 @@ int FileViewWidget::dealWithTitleRequest(const int &msgType, const QString &msgC
             m_nAdapteState = Default_State;
         }
         return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_PRINT :      //  打印
-        emit sigPrintFile();
-        return  ConstantMsg::g_effective_res;
     case MSG_FILE_ROTATE:           //  文档旋转了
         emit sigWidgetAdapt();
         return ConstantMsg::g_effective_res;
@@ -447,6 +458,24 @@ int FileViewWidget::dealWithTitleRequest(const int &msgType, const QString &msgC
 int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
+    case MSG_OPEN_FILE_PATH:                    //  打开文件
+        emit sigOpenFile(msgContent);
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_SAVE_FILE :              //  保存文件
+        emit sigSaveFile();
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_SAVE_AS_FILE:            //  另存为文件
+        emit sigSaveAsFile();
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_TEXT_COPY:               //  复制
+        emit sigCopySelectContent(msgContent);
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_SLIDE:                   //  放映
+        emit sigFileSlider(1);
+        break;
+    case MSG_OPERATION_PRINT :                  //  打印
+        emit sigPrintFile();
+        return  ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_ADD_HIGHLIGHTED:    //  高亮显示
         emit sigFileAddAnnotation(msgContent);
         return ConstantMsg::g_effective_res;
@@ -460,6 +489,31 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
     return 0;
 }
 
+//  集中处理 按键通知消息
+int FileViewWidget::dealWithNotifyMsg(const QString &msgContent)
+{
+    if (KeyStr::g_ctrl_s == msgContent) {
+        emit sigSaveFile();
+        return ConstantMsg::g_effective_res;
+    }
+
+    if (msgContent == KeyStr::g_ctrl_p) {
+        emit sigPrintFile();
+        return ConstantMsg::g_effective_res;
+    }
+
+    if (msgContent == KeyStr::g_ctrl_shift_s) {
+        emit sigSaveAsFile();
+        return ConstantMsg::g_effective_res;
+    }
+
+    if (KeyStr::g_esc == msgContent) {
+        emit sigFileSlider(0);
+    }
+
+    return 0;
+}
+
 //  消息 数据 处理
 int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
@@ -468,9 +522,11 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
 
         nRes = dealWithFileMenuRequest(msgType, msgContent);
         if (nRes != ConstantMsg::g_effective_res) {
-
+            if (msgType == MSG_NOTIFY_KEY_MSG) {
+                nRes = dealWithNotifyMsg(msgContent);
+            }
         }
     }
 
-    return 0;
+    return nRes;
 }

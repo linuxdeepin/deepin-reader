@@ -1,6 +1,7 @@
 #include "CustomListWidget.h"
 #include "CustomItemWidget.h"
 #include "docview/docummentproxy.h"
+#include "frame/DocummentFileHelper.h"
 
 CustomListWidget::CustomListWidget(DWidget *parent)
     : DListWidget (parent)
@@ -42,10 +43,10 @@ void CustomListWidget::slotShowSelectItem(QListWidgetItem *item)
     auto t_ItemWidget = reinterpret_cast<CustomItemWidget *>(this->itemWidget(item));
     if (t_ItemWidget) {
         int nJumpPage = t_ItemWidget->nPageIndex();
-        int nCurPage = DocummentProxy::instance()->currentPageNo();
+        int nCurPage = DocummentFileHelper::instance()->currentPageNo();
         if (nCurPage != nJumpPage) {
             //  页跳转
-            DocummentProxy::instance()->pageJump(nJumpPage);
+            DocummentFileHelper::instance()->pageJump(nJumpPage);
         }
         emit sigSelectItem(item);
     }

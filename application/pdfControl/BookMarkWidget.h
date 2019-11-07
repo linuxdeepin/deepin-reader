@@ -63,6 +63,7 @@ public:
     ~BookMarkWidget() Q_DECL_OVERRIDE;
 
 signals:
+    void sigFilePageChanged(const QString &);
     void sigOpenFileOk();
     void sigDeleteBookItem(const int &);
     void sigAddBookMark(const int &);
@@ -73,7 +74,7 @@ private slots:
     void slotAddBookMark();
     void slotAddBookMark(const int &);
     void slotOpenFileOk();
-    void slotDocFilePageChanged(int);
+    void slotDocFilePageChanged(const QString &);
     void slotDeleteBookItem(const int &);
     void slotCloseFile();
     void slotLoadImage(const int &, const QImage &);

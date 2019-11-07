@@ -1,5 +1,6 @@
 #include "NotesWidget.h"
 #include "controller/DataManager.h"
+#include "frame/DocummentFileHelper.h"
 
 NotesWidget::NotesWidget(CustomWidget *parent) :
     CustomWidget(QString("NotesWidget"), parent)
@@ -57,7 +58,7 @@ void NotesWidget::slotDltNoteItem(QString uuid)
                     // remove date from map and notify kong yun zhen
                     m_mapUuidAndPage.remove(uuid);
 
-                    auto dproxy = DocummentProxy::instance();
+                    auto dproxy = DocummentFileHelper::instance();
 
                     if (dproxy) {
                         DataManager::instance()->setBIsUpdate(true);
@@ -91,7 +92,7 @@ void NotesWidget::slotOpenFileOk()
         m_ThreadLoadImage.stopThreadRun();
     }
 
-    auto t_docPtr = DocummentProxy::instance();
+    auto t_docPtr = DocummentFileHelper::instance();
     if (!t_docPtr) {
         return;
     }
@@ -174,7 +175,7 @@ void NotesWidget::slotDelNoteItem()
             // remove date from map and notify kong yun zhen
             m_mapUuidAndPage.remove(t_uuid);
 
-            auto t_pDocummentProxy = DocummentProxy::instance();
+            auto t_pDocummentProxy = DocummentFileHelper::instance();
             if (t_pDocummentProxy) {
                 t_pDocummentProxy->removeAnnotation(t_uuid, page);
                 DataManager::instance()->setBIsUpdate(true);
@@ -196,7 +197,7 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
         QString t_uuid = t_widget->noteUUId();
         int page  = t_widget->nPageIndex();
 
-        auto pDocProxy = DocummentProxy::instance();
+        auto pDocProxy = DocummentFileHelper::instance();
         if (pDocProxy) {
             pDocProxy->jumpToHighLight(t_uuid, page);
             DataManager::instance()->setBIsUpdate(true);
@@ -224,7 +225,7 @@ void NotesWidget::addNotesItem(const QString &text)
         if (b_has) {
             flushNoteItemText(t_nPage, t_strUUid, t_strText);
         } else {
-            DocummentProxy *dproxy = DocummentProxy::instance();
+            auto dproxy = DocummentFileHelper::instance();
             if (nullptr == dproxy) {
                 return;
             }
@@ -421,7 +422,7 @@ void ThreadLoadImageOfNote::run()
         for (int page = 0; page < m_stListNote.count(); page++) {
             if (!m_isLoaded)
                 break;
-            auto dproxy = DocummentProxy::instance();
+            auto dproxy = DocummentFileHelper::instance();
             if (nullptr == dproxy) {
                 break;
             }

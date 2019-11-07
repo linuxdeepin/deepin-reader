@@ -1,6 +1,6 @@
 #include "FileAttrWidget.h"
 
-#include "docview/docummentproxy.h"
+#include "frame/DocummentFileHelper.h"
 
 FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
@@ -19,7 +19,7 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
 //  各个 对应的 label 赋值
 void FileAttrWidget::setFileAttr()
 {
-    auto dproxy = DocummentProxy::instance();
+    auto dproxy = DocummentFileHelper::instance();
     if (nullptr == dproxy) {
         return;
     }

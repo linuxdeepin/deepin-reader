@@ -1,7 +1,7 @@
 #include "ThumbnailWidget.h"
 #include <QStringListModel>
 #include <QStandardItemModel>
-
+#include "frame/DocummentFileHelper.h"
 
 ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
     CustomWidget(QString("ThumbnailWidget"), parent)
@@ -15,7 +15,8 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
 
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
-     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
+    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
+    connect(this, SIGNAL(sigFilePageChanged(const QString &)), SLOT(slotDocFilePageChanged(const QString &)));
 }
 
 ThumbnailWidget::~ThumbnailWidget()
@@ -27,7 +28,7 @@ ThumbnailWidget::~ThumbnailWidget()
 }
 
 // 处理消息事件
-int ThumbnailWidget::dealWithData(const int &msgType, const QString &)
+int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
         emit sigOpenFileOk();
@@ -35,6 +36,8 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &)
         emit sigCloseFile();
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
+    } else if (MSG_FILE_PAGE_CHANGE == msgType) {
+        emit sigFilePageChanged(msgContent);
     }
 
     return 0;
@@ -43,7 +46,7 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &)
 // 初始化界面
 void ThumbnailWidget::initWidget()
 {
-    DPalette plt=DGuiApplicationHelper::instance()->applicationPalette();
+    DPalette plt = DGuiApplicationHelper::instance()->applicationPalette();
     plt.setColor(QPalette::Background, plt.color(QPalette::Base));
     setAutoFillBackground(true);
     setPalette(plt);
@@ -101,8 +104,9 @@ void ThumbnailWidget::addThumbnailItem(const int &iIndex)
 }
 
 //  文件  当前页变化, 获取与 文档页  对应的 item, 设置 选中该item, 绘制item
-void ThumbnailWidget::slotFileViewToListPage(const int &page)
+void ThumbnailWidget::slotDocFilePageChanged(const QString &sPage)
 {
+    int page = sPage.toInt();
     auto curPageItem = m_pThumbnailListWidget->item(page);
     if (curPageItem) {
         setSelectItemBackColor(curPageItem);
@@ -119,7 +123,7 @@ void ThumbnailWidget::slotCloseFile()
 
 void ThumbnailWidget::slotUpdateTheme()
 {
-    DPalette plt=DGuiApplicationHelper::instance()->applicationPalette();
+    DPalette plt = DGuiApplicationHelper::instance()->applicationPalette();
     plt.setColor(QPalette::Background, plt.color(QPalette::Base));
     setAutoFillBackground(true);
     setPalette(plt);
@@ -157,21 +161,14 @@ void ThumbnailWidget::slotOpenFileOk()
         m_ThreadLoadImage.stopThreadRun();
     }
 
-    disconnect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotFileViewToListPage(int)));
-    connect(DocummentProxy::instance(), SIGNAL(signal_pageChange(int)), this, SLOT(slotFileViewToListPage(int)), Qt::QueuedConnection);
-
-    int pages = DocummentProxy::instance()->getPageSNum();
+    int pages = DocummentFileHelper::instance()->getPageSNum();
 
     m_totalPages = pages;
 
     if (m_pPageWidget) {
         m_pPageWidget->setTotalPages(m_totalPages);
     }
-    //    int counter = m_pThumbnailListWidget->count();
-    //    for (int index = 0; index < counter; index++) {
-    //        QListWidgetItem *item = m_pThumbnailListWidget->takeItem(0);
-    //        delete item;
-    //    }
+
     m_pThumbnailListWidget->clear();
     fillContantToList();
 
@@ -235,13 +232,12 @@ void ThreadLoadImage::run()
         for (int page = m_nStartPage; page <= m_nEndPage; page++) {
             if (!m_isLoaded)
                 break;
-            DocummentProxy *dproxy = DocummentProxy::instance();
+            auto dproxy = DocummentFileHelper::instance();
             if (nullptr == dproxy) {
                 break;
             }
             QImage image;
             bool bl = dproxy->getImage(page, image, 134, 152);
-
             if (bl) {
                 emit signal_loadImage(page, image);
             }

@@ -34,10 +34,16 @@ public:
     ~FileViewWidget() Q_DECL_OVERRIDE;
 
 signals:
+    void sigOpenFile(const QString &);
+    void sigPrintFile();
+    void sigSaveFile();
+    void sigSaveAsFile();
+    void sigCopySelectContent(const QString &);
+    void sigFileSlider(const int &);
+
     void sigSetHandShape(const QString &);
     void sigMagnifying(const QString &);
 
-    void sigPrintFile();
     void sigWidgetAdapt();
 
     void sigFileAddAnnotation(const QString &);
@@ -66,17 +72,19 @@ private slots:
     void slotFileAddNote(const QString &);
 
     void slotBookMarkStateChange(int, bool);
+    void slotDocFilePageChanged(int);
 
 private:
     void initConnections();
+    void onClickPageLink(Page::Link *pLink);
 
     int dealWithTitleRequest(const int &msgType, const QString &msgContent);
     int dealWithFileMenuRequest(const int &msgType, const QString &msgContent);
+    int dealWithNotifyMsg(const QString &msgContent);
 
 private:
-    TextOperationMenu *m_operatemenu = nullptr;
+    TextOperationMenu       *m_operatemenu = nullptr;
     DocummentFileHelper     *m_pDocummentFileHelper = nullptr;
-    DocummentProxy          *m_pDocummentProxy = nullptr;
 
 private:
     int         m_nCurrentHandelState = Default_State;  //  当前鼠标状态

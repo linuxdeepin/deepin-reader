@@ -6,11 +6,11 @@
 #include "mainShow/FileAttrWidget.h"
 
 #include "pdfControl/fileViewNote/FileViewNoteWidget.h"
+
 /**
  * @brief The DocShowShellWidget class
  * @brief   文档　显示外壳
  */
-
 
 class DocShowShellWidget : public CustomWidget
 {
@@ -36,6 +36,7 @@ private slots:
 
 private:
     void initConnections();
+    int dealWithNotifyMsg(const QString &);
 
 private:
     FileAttrWidget          *m_pFileAttrWidget = nullptr;

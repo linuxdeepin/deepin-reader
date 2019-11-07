@@ -44,12 +44,9 @@ private slots:
 protected:
     void hideEvent(QHideEvent *event);
 
-
 private:
     DSearchEdit     *m_pSearchEdit = nullptr;
-
     QString     m_strOldFindContent = "";
-
 
     // IObserver interface
 public:

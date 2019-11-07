@@ -1,5 +1,6 @@
 #include "fontWidget.h"
 #include "utils/PublicFunction.h"
+#include "frame/DocummentFileHelper.h"
 
 FontWidget::FontWidget(CustomWidget *parent):
     CustomWidget("FontWidget", parent)
@@ -181,23 +182,23 @@ void FontWidget::scaleAndRotate(int ival)
     case RotateType_0:
         m_rotate = 0;
         m_rotateType = RotateType_0;
-        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_0);
+        DocummentFileHelper::instance()->scaleRotateAndShow((ival * 0.01), RotateType_0);
         break;
     case RotateType_90:
         m_rotateType = RotateType_90;
-        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_90);
+        DocummentFileHelper::instance()->scaleRotateAndShow((ival * 0.01), RotateType_90);
         break;
     case RotateType_180:
         m_rotateType = RotateType_180;
-        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_180);
+        DocummentFileHelper::instance()->scaleRotateAndShow((ival * 0.01), RotateType_180);
         break;
     case RotateType_270:
         m_rotateType = RotateType_270;
-        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_270);
+        DocummentFileHelper::instance()->scaleRotateAndShow((ival * 0.01), RotateType_270);
         break;
     default:
         m_rotateType = RotateType_Normal;
-        DocummentProxy::instance()->scaleRotateAndShow((ival * 0.01), RotateType_Normal);
+        DocummentFileHelper::instance()->scaleRotateAndShow((ival * 0.01), RotateType_Normal);
         break;
     }
 }
@@ -366,9 +367,9 @@ void FontWidget::slotSetDoubPageViewCheckIcon()
     m_isDoubPage = !m_isDoubPage;
     m_pDoubPageViewLab->setVisible(m_isDoubPage);
     if (m_isDoubPage) {
-        DocummentProxy::instance()->setViewModeAndShow(ViewMode_FacingPage);
+        DocummentFileHelper::instance()->setViewModeAndShow(ViewMode_FacingPage);
     } else {
-        DocummentProxy::instance()->setViewModeAndShow(ViewMode_SinglePage);
+        DocummentFileHelper::instance()->setViewModeAndShow(ViewMode_SinglePage);
     }
 }
 

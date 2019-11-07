@@ -1,6 +1,6 @@
 #include "PagingWidget.h"
 
-#include "docview/docummentproxy.h"
+#include "frame/DocummentFileHelper.h"
 
 PagingWidget::PagingWidget(CustomWidget *parent) :
     CustomWidget(QString("PagingWidget"), parent)
@@ -69,7 +69,7 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
                 int index = m_pJumpPageSpinBox->value() - 1;
                 if (m_preRow != index) {
                     m_preRow = index;
-                    DocummentProxy::instance()->pageJump(index);
+                    DocummentFileHelper::instance()->pageJump(index);
                 }
             }
         } else if (event->type() == QEvent::KeyRelease && qobject_cast<DSpinBox *>(watched) == m_pJumpPageSpinBox) {
@@ -161,7 +161,7 @@ int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
 //  上一页
 void PagingWidget::slotPrePage()
 {
-    int nCurPage = DocummentProxy::instance()->currentPageNo();
+    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
     nCurPage--;
     slotJumpToSpecifiedPage(nCurPage);
 }
@@ -169,7 +169,7 @@ void PagingWidget::slotPrePage()
 //  下一页
 void PagingWidget::slotNextPage()
 {
-    int nCurPage = DocummentProxy::instance()->currentPageNo();
+    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
     nCurPage++;
     slotJumpToSpecifiedPage(nCurPage);
 }
@@ -178,12 +178,12 @@ void PagingWidget::slotNextPage()
 void PagingWidget::slotJumpToSpecifiedPage(const int &nPage)
 {
     //  跳转的页码 必须 大于0, 且 小于 总页码数
-    int nPageSize = DocummentProxy::instance()->getPageSNum();
+    int nPageSize = DocummentFileHelper::instance()->getPageSNum();
     if (nPage < 0 || nPage == nPageSize) {
         return;
     }
 
-    DocummentProxy::instance()->pageJump(nPage);
+    DocummentFileHelper::instance()->pageJump(nPage);
 }
 
 void PagingWidget::slotJudgeInputPage(const QString &)
