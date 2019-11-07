@@ -63,8 +63,10 @@ bool DocummentFileHelper::getSelectTextString(QString &st)
 void DocummentFileHelper::slotSaveFile()
 {
     bool rl = m_pDocummentProxy->save(m_szFilePath, true);
+    qDebug()<<"slotSaveFile"<<rl;
     if (rl) {
         //  保存需要保存 数据库记录
+        qDebug()<<"DocummentFileHelper::slotSaveFile saveBookMark";
         DBManager::instance()->saveBookMark();
         DataManager::instance()->setBIsUpdate(false);
     }

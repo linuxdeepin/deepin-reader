@@ -139,7 +139,7 @@ void MainWindow::initConnections()
     connect(this, SIGNAL(sigSetAppTitle(const QString &)), this, SLOT(slotSetAppTitle(const QString &)));
 
     auto m_menu = new DMenu(this);
-
+    //m_menu->setFixedWidth();
     auto pSigManager = new QSignalMapper(this);
     connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(slotActionTrigger(const QString &)));
 
