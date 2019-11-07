@@ -135,12 +135,11 @@ void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
     m_loadSearchResThread.setRunning(true);
     m_loadSearchResThread.start();
 
-
     //  当前显示不是自己, 则需要发送切换 ListWidget 显示
-    bool bFocus = this->hasFocus();
-    if (bFocus) {
+//    bool bFocus = this->hasFocus();
+//    if (bFocus) {
         sendMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
-    }
+//    }
 }
 
 void SearchResWidget::addSearchsItem(const int &page, const QString &text, const int &resultNum)
