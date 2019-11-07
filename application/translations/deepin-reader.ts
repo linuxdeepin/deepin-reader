@@ -30,7 +30,7 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="288"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="296"/>
         <source>add bookmark</source>
         <translation></translation>
     </message>
@@ -276,12 +276,12 @@
 <context>
     <name>HomeWidget</name>
     <message>
-        <location filename="../frame/HomeWidget.cpp" line="27"/>
+        <location filename="../frame/HomeWidget.cpp" line="30"/>
         <source>drag Pdf or other format file to here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/HomeWidget.cpp" line="30"/>
+        <location filename="../frame/HomeWidget.cpp" line="39"/>
         <source>Select File</source>
         <translation></translation>
     </message>
@@ -454,8 +454,8 @@
     </message>
     <message>
         <location filename="../frame/TitleWidget.cpp" line="215"/>
-        <source>setting</source>
-        <translation></translation>
+        <source>viewchange</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frame/TitleWidget.cpp" line="225"/>
