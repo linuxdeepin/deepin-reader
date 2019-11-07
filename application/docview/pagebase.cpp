@@ -450,7 +450,6 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPointF point, int radius, do
     if (!d->m_magnifierpixmap.isNull()) {
         qpixmap = d->m_magnifierpixmap;
     } else {
-        qDebug() << "getMagnifierPixmap------------";
         loadMagnifierCacheThreadStart(width * d->pixelratiof, height * d->pixelratiof);
         return false;
     }
@@ -507,10 +506,8 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPointF point, int radius, do
 void PageBase::loadMagnifierCacheThreadStart(double width, double height)
 {
     Q_D(PageBase);
-    qDebug() << "loadMagnifierCacheThreadStart page num:" << d->m_pageno;
     if ((d->m_magnifierwidth != width || d->m_magnifierheight != height || d->m_magnifierpixmap.isNull()) &&
             !d->loadmagnifiercachethread.isRunning()) {
-        qDebug() << "loadMagnifierCacheThreadStart in page num:" << d->m_pageno;
         d->loadmagnifiercachethread.setPage(getInterFace(), width, height);
         d->loadmagnifiercachethread.start();
     }
@@ -519,7 +516,7 @@ void PageBase::loadMagnifierCacheThreadStart(double width, double height)
 void PageBase::slot_RenderFinish(QImage image)
 {
     Q_D(PageBase);
-    double originwidth = image.width(), originheight = image.height();
+//    double originwidth = image.width(), originheight = image.height();
     QMatrix leftmatrix;
     switch (d->m_rotate) {
     case RotateType_90:

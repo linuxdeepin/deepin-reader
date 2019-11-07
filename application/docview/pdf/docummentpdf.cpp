@@ -10,6 +10,42 @@
 #include <QDebug>
 #include <QFile>
 
+
+class DocummentPDFPrivate: public DocummentBasePrivate
+{
+//    Q_OBJECT
+public:
+    DocummentPDFPrivate(DocummentPDF *parent): DocummentBasePrivate(parent)
+    {
+        document = nullptr;
+        m_fileinfo = new stFileInfo;
+    }
+
+    ~DocummentPDFPrivate() override
+    {
+//        qDebug() << "~DocummentPDFPrivate";
+        qDeleteAll(m_pages);
+        m_pages.clear();
+        if (nullptr != document) {
+            delete document;
+            document = nullptr;
+        }
+        if (nullptr != m_fileinfo) {
+            delete m_fileinfo;
+            m_fileinfo = nullptr;
+        }
+    }
+
+    Poppler::Document *document;
+    stFileInfo *m_fileinfo;
+
+    Q_DECLARE_PUBLIC(DocummentPDF)
+protected slots:
+    void loadDocumment(QString filepath) override;
+private:
+    void setBasicInfo(const QString &filepath);
+};
+
 void DocummentPDFPrivate::loadDocumment(QString filepath)
 {
     Q_Q(DocummentPDF);
@@ -102,7 +138,7 @@ void DocummentPDF::jumpToHighLight(const QString &uuid, int ipage)
                     rectbound.setY(rectbound.y()*d->m_imageheight);
                     rectbound.setWidth(rectbound.width()*d->m_imagewidth);
                     rectbound.setHeight(rectbound.height()*d->m_imageheight);
-                    cacularValueXY(xvalue, yvalue, ipage, false, rectbound);                 
+                    cacularValueXY(xvalue, yvalue, ipage, false, rectbound);
                     QScrollBar *scrollBar_Y = verticalScrollBar();
                     if (scrollBar_Y)
                         scrollBar_Y->setValue(yvalue);
@@ -435,15 +471,14 @@ void DocummentPDF::setAnnotationText(int ipage, const QString &struuid, const QS
 }
 
 void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, int ipage)
-{   
+{
     Q_D(DocummentPDF);
-    if(ipage>=0&&ipage<d->m_pages.size())
-    {
+    if (ipage >= 0 && ipage < d->m_pages.size()) {
         Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(ipage))->GetPage();
         QList<Poppler::Annotation *> plistannote = page->annotations();
         foreach (Poppler::Annotation *annote, plistannote) {
             QString uniquename = annote->uniqueName();
-            if (!uniquename.isEmpty() && uniquename.indexOf(struuid) >= 0&&!struuid.isEmpty()) {
+            if (!uniquename.isEmpty() && uniquename.indexOf(struuid) >= 0 && !struuid.isEmpty()) {
                 strtext = annote->contents();
                 qDebug() << QString("getAnnotationText=%1=%2=%3=%4").arg(uniquename).arg(struuid).arg(ipage).arg(strtext);
                 qDeleteAll(plistannote);

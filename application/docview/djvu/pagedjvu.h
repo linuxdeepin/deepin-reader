@@ -23,35 +23,4 @@ private:
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), PageDJVU)
 };
 
-class PageDJVUPrivate: public PageBasePrivate, public  PageInterface
-{
-    Q_OBJECT
-public:
-    PageDJVUPrivate(PageDJVU *parent): PageBasePrivate(parent),
-        m_parent(nullptr),
-        m_resolution(0)
-    {
-    }
-
-    ~PageDJVUPrivate() override
-    {
-    }
-    bool getImage(QImage &image, double width, double height) override;
-    bool getSlideImage(QImage &image, double &width, double &height) override;
-    bool loadData() override
-    {
-        loadWords();
-        loadLinks();
-        return true;
-    }
-
-    void setPage(int pageno);
-    DocummentDJVU *m_parent;
-    int m_resolution;
-private:
-
-    bool loadWords();
-    bool loadLinks();
-};
-
 #endif // PAGEDJVU_H

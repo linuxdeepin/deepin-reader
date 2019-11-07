@@ -21,28 +21,4 @@ private:
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), DocummentXPS)
 };
 
-
-class DocummentXPSPrivate: public DocummentBasePrivate
-{
-    Q_OBJECT
-public:
-    DocummentXPSPrivate(DocummentXPS *parent): DocummentBasePrivate(parent)
-    {
-        m_xpsFile = new XpsFile();
-    }
-
-    ~DocummentXPSPrivate() override
-    {
-        delete m_xpsFile;
-    }
-
-    stFileInfo m_fileinfo;
-    XpsFile *m_xpsFile;
-    Q_DECLARE_PUBLIC(DocummentXPS)
-protected slots:
-    void loadDocumment(QString filepath) override;
-private:
-    void setBasicInfo(const QString &filepath);
-};
-
 #endif // DOCUMMENTXPS_H
