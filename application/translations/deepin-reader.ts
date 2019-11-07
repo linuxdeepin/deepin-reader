@@ -30,7 +30,7 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="275"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="288"/>
         <source>add bookmark</source>
         <translation></translation>
     </message>
@@ -222,12 +222,12 @@
 <context>
     <name>FileViewWidget</name>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="359"/>
+        <location filename="../frame/FileViewWidget.cpp" line="356"/>
         <source>Print Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="359"/>
+        <location filename="../frame/FileViewWidget.cpp" line="356"/>
         <source>No Print Device</source>
         <translation></translation>
     </message>
@@ -276,12 +276,12 @@
 <context>
     <name>HomeWidget</name>
     <message>
-        <location filename="../frame/HomeWidget.cpp" line="26"/>
-        <source>drag Pdf file here</source>
-        <translation></translation>
+        <location filename="../frame/HomeWidget.cpp" line="27"/>
+        <source>drag Pdf or other format file to here</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/HomeWidget.cpp" line="29"/>
+        <location filename="../frame/HomeWidget.cpp" line="30"/>
         <source>Select File</source>
         <translation></translation>
     </message>
@@ -289,17 +289,17 @@
 <context>
     <name>MainOperationWidget</name>
     <message>
-        <location filename="../frame/MainOperationWidget.cpp" line="25"/>
+        <location filename="../frame/MainOperationWidget.cpp" line="30"/>
         <source>thumbnail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainOperationWidget.cpp" line="25"/>
+        <location filename="../frame/MainOperationWidget.cpp" line="30"/>
         <source>bookmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainOperationWidget.cpp" line="25"/>
+        <location filename="../frame/MainOperationWidget.cpp" line="30"/>
         <source>annotation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -307,7 +307,7 @@
 <context>
     <name>MainWidget</name>
     <message>
-        <location filename="../frame/MainWidget.cpp" line="41"/>
+        <location filename="../frame/MainWidget.cpp" line="40"/>
         <source>deepin-reader</source>
         <translation></translation>
     </message>

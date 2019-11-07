@@ -34,7 +34,7 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="275"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="288"/>
         <source>add bookmark</source>
         <translatorcomment>添加书签</translatorcomment>
         <translation>添加书签</translation>
@@ -254,13 +254,13 @@
 <context>
     <name>FileViewWidget</name>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="359"/>
+        <location filename="../frame/FileViewWidget.cpp" line="356"/>
         <source>Print Error</source>
         <translatorcomment>打印错误</translatorcomment>
         <translation>打印错误</translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="359"/>
+        <location filename="../frame/FileViewWidget.cpp" line="356"/>
         <source>No Print Device</source>
         <translatorcomment>没有打印设备</translatorcomment>
         <translation>没有打印设备</translation>
@@ -317,13 +317,17 @@
 <context>
     <name>HomeWidget</name>
     <message>
-        <location filename="../frame/HomeWidget.cpp" line="26"/>
         <source>drag Pdf file here</source>
         <translatorcomment>拖拽Pdf格式文件到这里</translatorcomment>
-        <translation>拖拽Pdf格式文件到这里</translation>
+        <translation type="vanished">拖拽Pdf格式文件到这里</translation>
     </message>
     <message>
-        <location filename="../frame/HomeWidget.cpp" line="29"/>
+        <location filename="../frame/HomeWidget.cpp" line="27"/>
+        <source>drag Pdf or other format file to here</source>
+        <translation type="unfinished">拖拽Pdf或其它格式文件到此</translation>
+    </message>
+    <message>
+        <location filename="../frame/HomeWidget.cpp" line="30"/>
         <source>Select File</source>
         <translatorcomment>选择文件</translatorcomment>
         <translation>选择文件</translation>
@@ -332,19 +336,19 @@
 <context>
     <name>MainOperationWidget</name>
     <message>
-        <location filename="../frame/MainOperationWidget.cpp" line="25"/>
+        <location filename="../frame/MainOperationWidget.cpp" line="30"/>
         <source>thumbnail</source>
         <translatorcomment>缩略图</translatorcomment>
         <translation>缩略图</translation>
     </message>
     <message>
-        <location filename="../frame/MainOperationWidget.cpp" line="25"/>
+        <location filename="../frame/MainOperationWidget.cpp" line="30"/>
         <source>bookmark</source>
         <translatorcomment>书签</translatorcomment>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../frame/MainOperationWidget.cpp" line="25"/>
+        <location filename="../frame/MainOperationWidget.cpp" line="30"/>
         <source>annotation</source>
         <translatorcomment>注释</translatorcomment>
         <translation>注释</translation>
@@ -353,7 +357,7 @@
 <context>
     <name>MainWidget</name>
     <message>
-        <location filename="../frame/MainWidget.cpp" line="41"/>
+        <location filename="../frame/MainWidget.cpp" line="40"/>
         <source>deepin-reader</source>
         <translatorcomment>深度文档查看器</translatorcomment>
         <translation>深度文档查看器</translation>

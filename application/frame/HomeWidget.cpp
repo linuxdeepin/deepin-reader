@@ -1,6 +1,7 @@
 #include "HomeWidget.h"
 #include <DFileDialog>
 #include <DPushButton>
+#include <DSuggestButton>
 #include <QVBoxLayout>
 #include <DLabel>
 #include "utils/PublicFunction.h"
@@ -23,10 +24,10 @@ HomeWidget::HomeWidget(CustomWidget *parent):
 
 void HomeWidget::initWidget()
 {
-    auto tipsLabel = new DLabel(tr("drag Pdf file here"));
+    auto tipsLabel = new DLabel(tr("drag Pdf or other format file to here"));
     tipsLabel->setAlignment(Qt::AlignHCenter);
 
-    auto chooseBtn = new DPushButton(tr("Select File"));
+    auto chooseBtn = new DSuggestButton(tr("Select File"));
     chooseBtn->setFixedSize(QSize(302, 36));
     connect(chooseBtn, &DPushButton::clicked, this, &HomeWidget::slotChooseBtnClicked);
 
