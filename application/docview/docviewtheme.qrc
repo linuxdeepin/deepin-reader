@@ -6,5 +6,6 @@
         <file>resources/image/light/press/bookmarkbig_press_light.svg</file>
         <file>resources/image/dark/checked/bookmarkbig_checked_light.svg</file>
         <file>resources/image/dark/press/bookmarkbig_press_light.svg</file>
+        <file>resources/image/maganifier.svg</file>
     </qresource>
 </RCC>

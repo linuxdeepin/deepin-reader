@@ -72,6 +72,9 @@ private:
     QPixmap m_magnifierpixmap;
     double m_magnifierscale;
     bool bStartShow;
+    int m_magnifiermapradius;
+    int m_magnifierringmapwidth;
+//    int m_magnifiershadowwidth;
 };
 
 class SlidWidget: public DWidget
