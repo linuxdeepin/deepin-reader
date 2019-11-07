@@ -37,7 +37,7 @@ private:
 private:
     QSettings *m_settings = nullptr;
     DLabel  *m_pIconLabel = nullptr;
-
+    DLabel* m_tipsLabel=nullptr;
     // CustomWidget interface
 protected:
     void initWidget() Q_DECL_OVERRIDE;

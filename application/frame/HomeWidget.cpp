@@ -1,9 +1,12 @@
 #include "HomeWidget.h"
+#include <DGuiApplicationHelper>
+#include <DPalette>
 #include <DFileDialog>
 #include <DPushButton>
 #include <DSuggestButton>
 #include <QVBoxLayout>
 #include <DLabel>
+
 #include "utils/PublicFunction.h"
 
 HomeWidget::HomeWidget(CustomWidget *parent):
@@ -24,27 +27,34 @@ HomeWidget::HomeWidget(CustomWidget *parent):
 
 void HomeWidget::initWidget()
 {
-    auto tipsLabel = new DLabel(tr("drag Pdf or other format file to here"));
-    tipsLabel->setAlignment(Qt::AlignHCenter);
+    m_tipsLabel = new DLabel(tr("drag Pdf or other format file to here"));
+    m_tipsLabel->setAlignment(Qt::AlignHCenter);
+    QFont font;
+    font.setPixelSize(12);
+    m_tipsLabel->setFont(font);
+    Dtk::Gui::DPalette plt=Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
+    plt.setColor(Dtk::Gui::DPalette::WindowText, plt.color(Dtk::Gui::DPalette::TextTips));
+    m_tipsLabel->setPalette(plt);
 
     auto chooseBtn = new DSuggestButton(tr("Select File"));
     chooseBtn->setFixedSize(QSize(302, 36));
     connect(chooseBtn, &DPushButton::clicked, this, &HomeWidget::slotChooseBtnClicked);
 
     auto layout = new QVBoxLayout;
-    layout->setSpacing(8);
+    layout->setSpacing(0);
     layout->setContentsMargins(0, 0, 0, 0);
-
-    layout->addStretch(1);
-
+    layout->setAlignment(Qt::AlignCenter);
+    layout->addStretch();
     m_pIconLabel = new DLabel;
+
     m_pIconLabel->setAlignment(Qt::AlignCenter);
+
     layout->addWidget(m_pIconLabel);
-
-    layout->addWidget(tipsLabel);
+    layout->addSpacing(10);
+    layout->addWidget(m_tipsLabel);
+    layout->addSpacing(14);
     layout->addWidget(chooseBtn, 0, Qt::AlignHCenter);
-
-    layout->addStretch(1);
+    layout->addStretch();
 
     this->setLayout(layout);
 }
@@ -66,9 +76,13 @@ void HomeWidget::slotChooseBtnClicked()
 
 //  主题切换
 void HomeWidget::slotUpdateTheme()
-{
+{   
     QString sPixmap = PF::getImagePath("import_photo", Pri::g_frame);
     m_pIconLabel->setPixmap(QPixmap(sPixmap));
+
+    Dtk::Gui::DPalette plt=Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
+    plt.setColor(Dtk::Gui::DPalette::WindowText, plt.color(Dtk::Gui::DPalette::TextTips));
+    m_tipsLabel->setPalette(plt);
 }
 
 QStringList HomeWidget::getOpenFileList()
