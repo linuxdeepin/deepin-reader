@@ -6,8 +6,8 @@
     <message>
         <location filename="../application.cpp" line="43"/>
         <source>deepin-reader</source>
-        <translatorcomment>深度文档查看器</translatorcomment>
-        <translation>深度文档查看器</translation>
+        <translatorcomment>文档查看器</translatorcomment>
+        <translation>文档查看器</translation>
     </message>
     <message>
         <location filename="../application.cpp" line="47"/>
@@ -34,7 +34,7 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="288"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="296"/>
         <source>add bookmark</source>
         <translatorcomment>添加书签</translatorcomment>
         <translation>添加书签</translation>
@@ -322,12 +322,12 @@
         <translation type="vanished">拖拽Pdf格式文件到这里</translation>
     </message>
     <message>
-        <location filename="../frame/HomeWidget.cpp" line="27"/>
+        <location filename="../frame/HomeWidget.cpp" line="30"/>
         <source>drag Pdf or other format file to here</source>
         <translation>拖拽Pdf或其它格式文件到此</translation>
     </message>
     <message>
-        <location filename="../frame/HomeWidget.cpp" line="30"/>
+        <location filename="../frame/HomeWidget.cpp" line="39"/>
         <source>Select File</source>
         <translatorcomment>选择文件</translatorcomment>
         <translation>选择文件</translation>
@@ -529,9 +529,13 @@
     </message>
     <message>
         <location filename="../frame/TitleWidget.cpp" line="215"/>
+        <source>viewchange</source>
+        <translation>视图调整</translation>
+    </message>
+    <message>
         <source>setting</source>
         <translatorcomment>设置</translatorcomment>
-        <translation>设置</translation>
+        <translation type="vanished">设置</translation>
     </message>
     <message>
         <location filename="../frame/TitleWidget.cpp" line="225"/>

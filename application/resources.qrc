@@ -6,7 +6,6 @@
         <file>resources/light/frame/handleShape_small.svg</file>
         <file>resources/light/frame/defaultShape.svg</file>
         <file>resources/light/frame/handleShape.svg</file>
-        <file>resources/light/frame/setting.svg</file>
         <file>resources/light/frame/magnifier.svg</file>
         <file>resources/light/pdfControl/A_small.svg</file>
         <file>resources/light/pdfControl/close.svg</file>
@@ -17,7 +16,6 @@
         <file>resources/dark/frame/import_photo.svg</file>
         <file>resources/dark/frame/handleShape.svg</file>
         <file>resources/dark/frame/defaultShape.svg</file>
-        <file>resources/dark/frame/setting.svg</file>
         <file>resources/dark/frame/magnifier.svg</file>
         <file>resources/dark/frame/defaultShape_small.svg</file>
         <file>resources/dark/frame/handleShape_small.svg</file>
@@ -31,5 +29,7 @@
         <file>resources/dark/frame/thumbnails.svg</file>
         <file>resources/dark/frame/thumbnail.svg</file>
         <file>resources/dark/frame/annotation.svg</file>
+        <file>resources/dark/frame/viewchange.svg</file>
+        <file>resources/light/frame/viewchange.svg</file>
     </qresource>
 </RCC>

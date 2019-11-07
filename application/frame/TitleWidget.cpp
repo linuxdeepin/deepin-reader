@@ -212,8 +212,8 @@ void TitleWidget::initBtns()
     m_pThumbnailBtn->setObjectName("thumbnails");
     connect(m_pThumbnailBtn, SIGNAL(clicked()), SLOT(on_thumbnailBtn_clicked()));
 
-    m_pSettingBtn = createBtn(tr("setting"));
-    m_pSettingBtn->setObjectName("setting");
+    m_pSettingBtn = createBtn(tr("viewchange"));
+    m_pSettingBtn->setObjectName("viewchange");
     connect(m_pSettingBtn, SIGNAL(clicked()), SLOT(on_settingBtn_clicked()));
 
     m_pHandleShapeBtn = createBtn(tr("defaultShape"));
