@@ -10,8 +10,9 @@ ThumbnailItemWidget::ThumbnailItemWidget(CustomItemWidget *parent) :
 // 绘制  给label填充颜色
 void ThumbnailItemWidget::paintEvent(QPaintEvent *event)
 {
-    QPalette p;
-    QPalette pPage;
+    CustomWidget::paintEvent(event);
+    QPalette p(m_pPicture->palette());
+    QPalette pPage(m_pPageNumber->palette());
     QColor color;
 
     //  涉及到 主题颜色
@@ -27,7 +28,6 @@ void ThumbnailItemWidget::paintEvent(QPaintEvent *event)
 
     m_pPicture->setPalette(p);
     m_pPageNumber->setPalette(pPage);
-    CustomWidget::paintEvent(event);
 }
 
 // 处理消息接口

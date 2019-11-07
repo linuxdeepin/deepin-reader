@@ -14,6 +14,7 @@ CustomLabel::CustomLabel(QWidget *parent) :
 void CustomLabel::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
+    DLabel::paintEvent(e);
     QRectF rectangle(2, 2, (this->width() - 4), (this->height() - 4));
 
     QPainter painter(this);
@@ -23,5 +24,4 @@ void CustomLabel::paintEvent(QPaintEvent *e)
 //    painter.setPen(QPen(QColor(QString("#0081FF")), 3));
     painter.drawRoundedRect(rectangle, 8, 8);
 
-    DLabel::paintEvent(e);
 }
