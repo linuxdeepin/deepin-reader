@@ -19,7 +19,7 @@ public:
     CustemTextEdit(DWidget *parent = nullptr);
 
 protected:
-    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    //void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
 
 private:
     void init();
