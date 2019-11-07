@@ -635,6 +635,7 @@ bool DocummentBase::showMagnifier(QPoint point)
         }
         d->m_lastmagnifierpagenum = pagenum;
         PageBase *ppage = d->m_pages.at(pagenum);
+//        ppage = d->m_pages.at(pagenum);
         QPixmap pixmap;
         d->m_magnifierpage = pagenum;
 

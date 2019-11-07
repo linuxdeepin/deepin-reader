@@ -507,8 +507,10 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPointF point, int radius, do
 void PageBase::loadMagnifierCacheThreadStart(double width, double height)
 {
     Q_D(PageBase);
+    qDebug() << "loadMagnifierCacheThreadStart page num:" << d->m_pageno;
     if ((d->m_magnifierwidth != width || d->m_magnifierheight != height || d->m_magnifierpixmap.isNull()) &&
             !d->loadmagnifiercachethread.isRunning()) {
+        qDebug() << "loadMagnifierCacheThreadStart in page num:" << d->m_pageno;
         d->loadmagnifiercachethread.setPage(getInterFace(), width, height);
         d->loadmagnifiercachethread.start();
     }
@@ -552,6 +554,7 @@ void PageBase::clearImage()
     d->paintrects.clear();
     d->m_words.clear();
     d->havereander = false;
+    clearMagnifierPixmap();
 }
 
 void PageBase::slot_loadMagnifierPixmapCache(QImage image, double width, double height)
@@ -678,7 +681,7 @@ QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
 bool PageBase::showImage(double scale, RotateType_EM rotate)
 {
     Q_D(PageBase);
-    if ((d->m_scale - scale) < EPSINON && d->m_rotate == rotate && d->havereander) {
+    if (((d->m_scale - scale) < EPSINON && (scale - d->m_scale) < EPSINON) && d->m_rotate == rotate && d->havereander) {
         return false;
     }
     d->m_scale = scale;
