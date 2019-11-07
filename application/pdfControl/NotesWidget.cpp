@@ -230,7 +230,8 @@ void NotesWidget::addNotesItem(const QString &text)
                 return;
             }
             QImage image;
-            bool rl = dproxy->getImage(t_nPage, image, 28, 50);
+            bool rl = dproxy->getImage(t_nPage, image, 36, 56/*28, 50*/);
+            image = DocummentFileHelper::instance()->roundImage(QPixmap::fromImage(image), 8);
             if (rl) {
                 addNewItem(image, t_nPage, t_strUUid, t_strText);
 
@@ -432,13 +433,14 @@ void ThreadLoadImageOfNote::run()
 
             if (t_page != m_stListNote.at(page).ipage) {
                 t_page = m_stListNote.at(page).ipage;
-                bl = dproxy->getImage(t_page, image, 28, 50);
+                bl = dproxy->getImage(t_page, image, 36, 56/*28, 50*/);
             }
 
             t_strUUid = m_stListNote.at(page).struuid;
             t_noteContant = m_stListNote.at(page).strcontents;
 
             if (bl) {
+                image = DocummentFileHelper::instance()->roundImage(QPixmap::fromImage(image), 8);
                 emit sigLoadImage(image);
             }
 
