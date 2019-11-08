@@ -274,9 +274,8 @@ void LoadSearchResThread::run()
                 break;
             }
 
-
             QImage image;
-            bool bl = dproxy ->getImage(page, image, 36, 56/*28, 50*/);
+            bool bl = dproxy ->getImage(page, image, 34, 54/*28, 48*/);
             if (bl) {
                 image = DocummentFileHelper::instance()->roundImage(QPixmap::fromImage(image), 8);
                 emit sigLoadImage(page, image);

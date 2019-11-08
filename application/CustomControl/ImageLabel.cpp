@@ -22,9 +22,9 @@ void ImageLabel::paintEvent(QPaintEvent *e)
     qreal heigh = 0;
 
     if (m_bSelect) {
-        local = 3;
-        width = this->width() - 6;
-        heigh = this->height() - 6;
+        local = 1;
+        width = this->width() - 2;
+        heigh = this->height() - 2;
     } else {
         local = 0;
         width = this->width() - 0;
