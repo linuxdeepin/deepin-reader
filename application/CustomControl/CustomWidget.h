@@ -42,7 +42,7 @@ protected:
     void showScreenCenter();
 
 private:
-    MsgSubject  *m_pMsgSubject = nullptr;
+    MsgSubject      *m_pMsgSubject = nullptr;
     NotifySubject   *m_pNotifySubject = nullptr;
 };
 

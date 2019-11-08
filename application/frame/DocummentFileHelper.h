@@ -2,7 +2,6 @@
 #define DOCUMMENTFILEHELPER_H
 
 #include <QObject>
-#include <QBitmap>
 
 #include "docview/docummentproxy.h"
 
@@ -46,7 +45,9 @@ public:
     int currentPageNo();
     bool pageJump(int pagenum);
     bool getImage(int pagenum, QImage &image, double width, double height);
-    QImage roundImage(const QPixmap& img_in, int radius);
+
+private:
+    QImage roundImage(const QPixmap &img_in, int radius);
 
 public:
     bool showMagnifier(QPoint point);
@@ -83,10 +84,6 @@ public:
 private:
     void setAppShowTitle(const QString &);
     void initConnections();
-    QString getFileFilter();
-    QString getFilePath(const QString &inputPath);
-
-    void setCurDocuType(const QString &);
 
     void sendMsg(const int &msgType, const QString &msgContent = "");
 

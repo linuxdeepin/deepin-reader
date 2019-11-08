@@ -271,7 +271,7 @@ void BookMarkWidget::slotUpdateTheme()
 
 void BookMarkWidget::slotFilpOver()
 {
-    if(m_pBookMarkListWidget){
+    if (m_pBookMarkListWidget) {
         qDebug() << "book mark list current row:" << m_pBookMarkListWidget->currentRow();
     }
 }
@@ -344,7 +344,6 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
     }
     QImage t_image;
     bool rl = dproxy->getImage(page, t_image, 34, 54/*28, 48*/);
-    t_image = DocummentFileHelper::instance()->roundImage(QPixmap::fromImage(t_image), 8);
     if (rl) {
         auto t_widget = new BookMarkItemWidget;
         connect(t_widget, SIGNAL(sigDeleleteItem(const int &)), this, SLOT(slotDeleteBookItem(const int &)));
@@ -417,8 +416,8 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (MSG_NOTIFY_KEY_MSG == msgType) {         //  按键通知消息
         if (msgContent == KeyStr::g_del) {
             emit sigDelBKItem();
-        }else if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_down) {
-            if(hasFocus()){
+        } else if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_down) {
+            if (hasFocus()) {
                 emit sigFilpOver();
             }
         }
@@ -450,7 +449,7 @@ int BookMarkWidget::getBookMarkPage(const int &index)
 
 bool BookMarkWidget::hasClickFoucs()
 {
-    if(m_pBookMarkListWidget){
+    if (m_pBookMarkListWidget) {
         return m_pBookMarkListWidget->hasFocus();
     }
 
@@ -515,7 +514,6 @@ void LoadBookMarkThread::run()
 
             bool bl = DocummentFileHelper::instance()->getImage(page, image, 34, 54/*28, 48*/);
             if (bl) {
-                image = DocummentFileHelper::instance()->roundImage(QPixmap::fromImage(image), 8);
                 emit sigLoadImage(page, image);
             }
 

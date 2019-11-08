@@ -7,7 +7,8 @@ HEADERS += \
     $$PWD/TitleWidget.h \
     $$PWD/MainWidget.h \
     $$PWD/DocummentFileHelper.h \
-    $$PWD/DocShowShellWidget.h
+    $$PWD/DocShowShellWidget.h \
+    $$PWD/FileFormatHelper.h
 
 SOURCES += \
     $$PWD/MainWindow.cpp \

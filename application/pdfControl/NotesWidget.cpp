@@ -230,7 +230,6 @@ void NotesWidget::addNotesItem(const QString &text)
             }
             QImage image;
             bool rl = dproxy->getImage(t_nPage, image, 34, 54/*28, 48*/);
-            image = DocummentFileHelper::instance()->roundImage(QPixmap::fromImage(image), 8);
             if (rl) {
                 addNewItem(image, t_nPage, t_strUUid, t_strText);
 
@@ -412,7 +411,7 @@ void ThreadLoadImageOfNote::run()
 {
     while (m_isLoaded) {
         int t_page = -1;
-        QString t_strUUid(""), t_noteContant("");
+//        QString t_strUUid(""), t_noteContant("");
         QImage image;
         bool bl = false;
 
@@ -423,23 +422,24 @@ void ThreadLoadImageOfNote::run()
             if (nullptr == dproxy) {
                 break;
             }
-            if (m_stListNote.at(page).strcontents == QString("")) {
+
+            stHighlightContent highContent = m_stListNote.at(page);
+
+            if (highContent.strcontents == QString("")) {
                 continue;
             }
 
-            if (t_page != m_stListNote.at(page).ipage) {
-                t_page = m_stListNote.at(page).ipage;
+            if (t_page != highContent.ipage) {
+                t_page = highContent.ipage;
                 bl = dproxy->getImage(t_page, image, 34, 54/*28, 48*/);
+                if (bl) {
+
+//                    t_strUUid = m_stListNote.at(page).struuid;
+//                    t_noteContant = m_stListNote.at(page).strcontents;
+
+                    emit sigLoadImage(image);
+                }
             }
-
-            t_strUUid = m_stListNote.at(page).struuid;
-            t_noteContant = m_stListNote.at(page).strcontents;
-
-            if (bl) {
-                image = DocummentFileHelper::instance()->roundImage(QPixmap::fromImage(image), 8);
-                emit sigLoadImage(image);
-            }
-
             msleep(20);
         }
 

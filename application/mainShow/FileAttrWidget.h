@@ -7,7 +7,6 @@
 #include <DWidget>
 #include <DWidgetUtil>
 
-#include <DIconButton>
 #include <QFileInfo>
 #include <DFrame>
 

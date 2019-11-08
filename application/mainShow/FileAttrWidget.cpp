@@ -29,7 +29,7 @@ void FileAttrWidget::setFileAttr()
     dproxy->docBasicInfo(fileInfo);
 
     QImage image;
-    bool rl = dproxy->getImage(0, image, 94, 113);
+    bool rl = dproxy->getImage(0, image, 94, 114);
     if (rl) {
         labelImage->setPixmap(QPixmap::fromImage(image));
     }

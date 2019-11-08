@@ -7,9 +7,11 @@
 #include <DFileDialog>
 #include "utils/utils.h"
 #include <DMessageBox>
+#include <QBitmap>
 #include "subjectObserver/ModuleHeader.h"
 #include "controller/DBManager.h"
 #include "controller/MsgSubject.h"
+#include "FileFormatHelper.h"
 
 DocummentFileHelper::DocummentFileHelper(QObject *parent)
     : QObject(parent)
@@ -63,10 +65,10 @@ bool DocummentFileHelper::getSelectTextString(QString &st)
 void DocummentFileHelper::slotSaveFile()
 {
     bool rl = m_pDocummentProxy->save(m_szFilePath, true);
-    qDebug()<<"slotSaveFile"<<rl;
+    qDebug() << "slotSaveFile" << rl;
     if (rl) {
         //  保存需要保存 数据库记录
-        qDebug()<<"DocummentFileHelper::slotSaveFile saveBookMark";
+        qDebug() << "DocummentFileHelper::slotSaveFile saveBookMark";
         DBManager::instance()->saveBookMark();
         DataManager::instance()->setBIsUpdate(false);
     }
@@ -75,14 +77,14 @@ void DocummentFileHelper::slotSaveFile()
 //  另存为
 void DocummentFileHelper::slotSaveAsFile()
 {
-    QString sFilter = getFileFilter();
+    QString sFilter = FFH::getFileFilter(m_nCurDocType);
 
     if (sFilter != "") {
         DFileDialog dialog;
         dialog.selectFile(m_szFilePath);
         QString filePath = dialog.getSaveFileName(nullptr, tr("Save File"), m_szFilePath, sFilter);
         if (filePath != "") {
-            QString sFilePath = getFilePath(filePath);
+            QString sFilePath = FFH::getFilePath(filePath, m_nCurDocType);
 
             bool rl = m_pDocummentProxy->saveas(sFilePath, true);
             if (rl) {
@@ -97,65 +99,6 @@ void DocummentFileHelper::slotSaveAsFile()
                 setAppShowTitle(info.baseName());
             }
         }
-    }
-}
-
-QString DocummentFileHelper::getFileFilter()
-{
-    QString sFilter = "";
-    if (m_nCurDocType == DocType_PDF) {
-        sFilter = Constant::sPdf_Filter;
-    } else if (m_nCurDocType == DocType_TIFF) {
-        sFilter = Constant::sTiff_Filter;
-    } else if (m_nCurDocType == DocType_PS) {
-        sFilter = Constant::sPs_Filter;
-    } else if (m_nCurDocType == DocType_XPS) {
-        sFilter = Constant::sXps_Filter;
-    } else if (m_nCurDocType == DocType_DJVU) {
-        sFilter = Constant::sDjvu_Filter;
-    }
-    return sFilter;
-}
-
-QString DocummentFileHelper::getFilePath(const QString &inputPath)
-{
-    QString filePath = inputPath;
-    if (m_nCurDocType == DocType_PDF) {
-        if (!filePath.endsWith(".pdf")) {
-            filePath += ".pdf";
-        }
-    } else if (m_nCurDocType == DocType_TIFF) {
-        if (!filePath.endsWith(".tiff")) {
-            filePath += ".tiff";
-        }
-    } else if (m_nCurDocType == DocType_PS) {
-        if (!filePath.endsWith(".ps")) {
-            filePath += ".ps";
-        }
-    } else if (m_nCurDocType == DocType_XPS) {
-        if (!filePath.endsWith(".xps")) {
-            filePath += ".xps";
-        }
-    } else if (m_nCurDocType == DocType_DJVU) {
-        if (!filePath.endsWith(".djvu")) {
-            filePath += ".djvu";
-        }
-    }
-    return filePath;
-}
-
-void DocummentFileHelper::setCurDocuType(const QString &sCompleteSuffix)
-{
-    if (sCompleteSuffix == "pdf" || sCompleteSuffix.endsWith("pdf")) {
-        m_nCurDocType = DocType_PDF;
-    } else if (sCompleteSuffix == "tiff" || sCompleteSuffix.endsWith("tiff")) {
-        m_nCurDocType = DocType_TIFF;
-    } else if (sCompleteSuffix == "ps" || sCompleteSuffix.endsWith("ps")) {
-        m_nCurDocType = DocType_PS;
-    } else if (sCompleteSuffix == "xps" || sCompleteSuffix.endsWith("xps")) {
-        m_nCurDocType = DocType_XPS;
-    } else if (sCompleteSuffix == "djvu" || sCompleteSuffix.endsWith("djvu")) {
-        m_nCurDocType = DocType_DJVU;
     }
 }
 
@@ -186,7 +129,7 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
         QFileInfo info(sPath);
 
         QString sCompleteSuffix = info.completeSuffix();
-        setCurDocuType(sCompleteSuffix);
+        m_nCurDocType = FFH::setCurDocuType(sCompleteSuffix);
 
         m_szFilePath = sPath;
         DataManager::instance()->setStrOnlyFilePath(sPath);
@@ -310,7 +253,11 @@ bool DocummentFileHelper::pageJump(int pagenum)
 
 bool DocummentFileHelper::getImage(int pagenum, QImage &image, double width, double height)
 {
-    return m_pDocummentProxy->getImage(pagenum, image, width, height);
+    bool rl = m_pDocummentProxy->getImage(pagenum, image, width, height);
+    if (rl) {
+        image = roundImage(QPixmap::fromImage(image), 8);
+    }
+    return rl;
 }
 
 QImage DocummentFileHelper::roundImage(const QPixmap &img_in, int radius)
@@ -321,8 +268,7 @@ QImage DocummentFileHelper::roundImage(const QPixmap &img_in, int radius)
     QSize size(img_in.size());
     QBitmap mask(size);
     QPainter painter(&mask);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     painter.fillRect(mask.rect(), Qt::white);
     painter.setBrush(QColor(0, 0, 0));
     painter.drawRoundedRect(mask.rect(), radius, radius);
