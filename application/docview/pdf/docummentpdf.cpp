@@ -384,6 +384,7 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
 
 void DocummentPDF::clearSearch()
 {
+    qDebug()<<"DocummentPDF::clearSearch";
     Q_D(DocummentPDF);
     d->m_searchTask->cancel();
     d->m_searchTask->wait();

@@ -21,6 +21,7 @@ SearchResWidget::~SearchResWidget()
 
 void SearchResWidget::slotClearWidget()
 {
+    qDebug()<<"SearchResWidget::slotClearWidget";
     DocummentFileHelper::instance()->clearsearch();
     if (m_pNotesList) {
         m_pNotesList->clear();
@@ -183,7 +184,7 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
             emit sigFlushSearchWidget(msgContent);
         }
     } else if (msgType == MSG_CLEAR_FIND_CONTENT) {
-        emit sigClearWidget();
+        emit sigClearWidget();qDebug()<<"SearchResWidget::dealWithData emit sigClearWidget";
     } else if (MSG_CLOSE_FILE == msgType) {    //  关闭w文件通知消息
         emit sigCloseFile();
     }
