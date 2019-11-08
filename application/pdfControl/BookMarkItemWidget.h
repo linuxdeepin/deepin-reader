@@ -28,11 +28,7 @@ signals:
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
-    inline void setBSelect(const bool &paint)
-    {
-        m_bPaint = paint;
-        update();
-    }
+    void setBSelect(const bool &paint);
 
 private slots:
     void slotDltBookMark();

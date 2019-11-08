@@ -53,11 +53,7 @@ public:
         m_strNote = note;
     }
 
-    inline void setBSelect(const bool &paint)
-    {
-        m_bPaint = paint;
-        update();
-    }
+    void setBSelect(const bool &paint);
 
 private slots:
     void slotDltNoteContant();

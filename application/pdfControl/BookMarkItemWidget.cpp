@@ -28,6 +28,15 @@ int BookMarkItemWidget::dealWithData(const int &msgType, const QString &msgConte
     return 0;
 }
 
+void BookMarkItemWidget::setBSelect(const bool &paint)
+{
+    if(m_pPicture){
+        m_pPicture->setSelect(paint);
+    }
+    m_bPaint = paint;
+    update();
+}
+
 /**
  * @brief BookMarkItemWidget::slotDltBookMark
  * 删除当前书签，并发送删除书签全局消息

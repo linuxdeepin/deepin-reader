@@ -29,6 +29,15 @@ void NotesItemWidget::setSerchResultText(const QString &result)
     }
 }
 
+void NotesItemWidget::setBSelect(const bool &paint)
+{
+    if(m_pPicture){
+        m_pPicture->setSelect(paint);
+    }
+    m_bPaint = paint;
+    update();
+}
+
 void NotesItemWidget::slotDltNoteContant()
 {
     sendMsg(MSG_NOTE_DLTNOTEITEM, m_strUUid);

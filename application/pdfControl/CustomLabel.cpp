@@ -30,9 +30,9 @@ void CustomLabel::paintEvent(QPaintEvent *e)
         width = this->width() - 6;
         heigh = this->height() - 6;
     }else{
-        local = 1;
-        width = this->width() - 2;
-        heigh = this->height() - 2;
+        local = 0;
+        width = this->width() - 0;
+        heigh = this->height() - 0;
     }
     QRectF rectangle(local, local, width, heigh);
 
