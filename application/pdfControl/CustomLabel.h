@@ -23,8 +23,14 @@ class CustomLabel : public DLabel
 public:
     CustomLabel(QWidget *parent = nullptr);
 
+public:
+    void setSelect(const bool select);
+
 protected:
     void  paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+
+private:
+    bool m_bSelect = false;       //  是否被选中
 };
 
 #endif // CUSTOMLABEL_H

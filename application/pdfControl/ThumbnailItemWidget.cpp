@@ -39,6 +39,9 @@ int ThumbnailItemWidget::dealWithData(const int &, const QString &)
 // 是否被选中，选中就就填充颜色
 void ThumbnailItemWidget::setBSelect(const bool &paint)
 {
+    if(m_pPicture){
+        m_pPicture->setSelect(paint);
+    }
     m_bPaint = paint;
     update();
 }

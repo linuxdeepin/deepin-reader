@@ -3,7 +3,13 @@
 CustomLabel::CustomLabel(QWidget *parent) :
     DLabel(parent)
 {
+    setAttribute(Qt::WA_TranslucentBackground);
+}
 
+void CustomLabel::setSelect(const bool select)
+{
+    m_bSelect = select;
+    update();
 }
 
 /**
@@ -15,7 +21,20 @@ void CustomLabel::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
     DLabel::paintEvent(e);
-    QRectF rectangle(2, 2, (this->width() - 4), (this->height() - 4));
+    qreal local = 0;
+    qreal width = 0;
+    qreal heigh = 0;
+
+    if(m_bSelect){
+        local = 3;
+        width = this->width() - 6;
+        heigh = this->height() - 6;
+    }else{
+        local = 1;
+        width = this->width() - 2;
+        heigh = this->height() - 2;
+    }
+    QRectF rectangle(local, local, width, heigh);
 
     QPainter painter(this);
     painter.setOpacity(1);
