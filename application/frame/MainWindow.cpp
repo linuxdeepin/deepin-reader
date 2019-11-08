@@ -89,7 +89,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 bool MainWindow::eventFilter(QObject *obj, QEvent *e)
 {
     int nType = e->type();
-    if (nType == QEvent::KeyPress) {
+    if (nType == QEvent::KeyPress) {    //  按下
         QKeyEvent *event = static_cast<QKeyEvent *>(e);
         QString key = Utils::getKeyshortcut(event);
         if (m_pFilterList.contains(key)) {
@@ -97,7 +97,8 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
             //  没有打开文件, 只能 执行 ctrl+o, f1
             QString sFilePath = DataManager::instance()->strOnlyFilePath();
             if (sFilePath == "") {
-                if (key == KeyStr::g_f1 || key == KeyStr::g_ctrl_o) {
+                if (key == KeyStr::g_f1 || key == KeyStr::g_ctrl_o
+                        || key == KeyStr::g_ctrl_alt_f || key == KeyStr::g_ctrl_shift_slash) {
                     sendMsg(MSG_NOTIFY_KEY_MSG, key);
                 }
             } else {
@@ -325,19 +326,23 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         emit sigOpenFileOk();
+    }  else if (msgType == MSG_OPERATION_OPEN_FILE_TITLE) {
+        emit sigSetAppTitle(msgContent);
+        return ConstantMsg::g_effective_res;
+    } else if (msgType == MSG_OPERATION_EXIT) {
+        emit sigAppExit();
+        return ConstantMsg::g_effective_res;
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == KeyStr::g_esc) {          //  退出全屏模式
             emit sigAppShowState(1);
         } else if (msgContent == KeyStr::g_f1) {    //  显示帮助文档
             emit sigOpenAppHelp();
             return ConstantMsg::g_effective_res;
+        } else if (msgContent == KeyStr::g_ctrl_alt_f) {    //  窗口大小切换
+            return ConstantMsg::g_effective_res;
+        } else if (msgContent == KeyStr::g_ctrl_shift_slash) {    //  显示快捷键预览
+            return ConstantMsg::g_effective_res;
         }
-    } else if (msgType == MSG_OPERATION_OPEN_FILE_TITLE) {
-        emit sigSetAppTitle(msgContent);
-        return ConstantMsg::g_effective_res;
-    } else if (msgType == MSG_OPERATION_EXIT) {
-        emit sigAppExit();
-        return ConstantMsg::g_effective_res;
     }
     return 0;
 }

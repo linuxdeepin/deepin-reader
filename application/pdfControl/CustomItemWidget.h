@@ -3,6 +3,7 @@
 
 #include "CustomControl/CustomWidget.h"
 #include "CustomControl/ImageLabel.h"
+#include "CustomControl/PageNumberLabel.h"
 
 //  统一设置 image 的widget 抽象类, 相对应的页码
 
@@ -19,9 +20,9 @@ public:
     int nPageIndex() const;
 
 protected:
-    ImageLabel *m_pPicture = nullptr;          // 承载缩略图的label
-    DLabel      *m_pPageNumber = nullptr;       // 页码label
-    int         m_nPageIndex  = -1;             // 所对应的页码
+    ImageLabel          *m_pPicture = nullptr;          // 承载缩略图的label
+    PageNumberLabel     *m_pPageNumber = nullptr;       // 页码label
+    int                 m_nPageIndex  = -1;             // 所对应的页码
 };
 
 #endif // CUSTOMITEMWIDGET_H

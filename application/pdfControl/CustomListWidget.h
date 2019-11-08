@@ -20,8 +20,6 @@ signals:
 
 private slots:
     void slot_loadImage(const int &row, const QImage &image);
-
-private slots:
     void slotShowSelectItem(QListWidgetItem *);
 };
 

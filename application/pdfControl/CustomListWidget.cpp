@@ -1,6 +1,5 @@
 #include "CustomListWidget.h"
 #include "CustomItemWidget.h"
-#include "docview/docummentproxy.h"
 #include "frame/DocummentFileHelper.h"
 
 CustomListWidget::CustomListWidget(DWidget *parent)

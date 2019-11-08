@@ -3,7 +3,6 @@
 
 #include <DLabel>
 #include <QVBoxLayout>
-#include <QPainter>
 
 #include "CustomItemWidget.h"
 
@@ -17,9 +16,6 @@ class ThumbnailItemWidget  : public CustomItemWidget
     Q_OBJECT
 public:
     ThumbnailItemWidget(CustomItemWidget *parent = nullptr);
-
-protected:
-    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 public:
     // IObserver interface

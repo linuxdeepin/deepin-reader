@@ -7,29 +7,6 @@ ThumbnailItemWidget::ThumbnailItemWidget(CustomItemWidget *parent) :
     initWidget();
 }
 
-// 绘制  给label填充颜色
-void ThumbnailItemWidget::paintEvent(QPaintEvent *event)
-{
-    CustomWidget::paintEvent(event);
-    QPalette p(m_pPicture->palette());
-    QPalette pPage(m_pPageNumber->palette());
-    QColor color;
-
-    //  涉及到 主题颜色
-    if (m_bPaint) {
-        color = QColor(QString("#0081FF"));
-        p.setColor(QPalette::Text, color);
-        pPage.setColor(QPalette::Text, color);
-    } else {
-        color = QColor::fromRgbF(0, 0, 0, 0.08);
-        p.setColor(QPalette::Text, color);
-        pPage.setColor(QPalette::Text, QColor(QString("#303030")));
-    }
-
-//    m_pPicture->setPalette(p);
-    m_pPageNumber->setPalette(pPage);
-}
-
 // 处理消息接口
 int ThumbnailItemWidget::dealWithData(const int &, const QString &)
 {
@@ -42,14 +19,16 @@ void ThumbnailItemWidget::setBSelect(const bool &paint)
     if (m_pPicture) {
         m_pPicture->setSelect(paint);
     }
-    m_bPaint = paint;
-    update();
+
+    if (m_pPageNumber) {
+        m_pPageNumber->setSelect(paint);
+    }
 }
 
 // 初始化界面
 void ThumbnailItemWidget::initWidget()
 {
-    m_pPageNumber = new DLabel();
+    m_pPageNumber = new PageNumberLabel();
     m_pPageNumber->setFixedSize(QSize(140, 18));
     m_pPageNumber->setAlignment(Qt::AlignCenter);
 

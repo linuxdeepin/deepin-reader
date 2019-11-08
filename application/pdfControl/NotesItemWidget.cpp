@@ -84,7 +84,7 @@ void NotesItemWidget::initWidget()
     m_pTextLab->setWordWrap(true);
     m_pTextLab->setFont(fontContant);
 
-    m_pPageNumber = new DLabel;
+    m_pPageNumber = new PageNumberLabel;
     m_pPageNumber->setMinimumWidth(31);
     m_pPageNumber->setFixedHeight(18);
     m_pPageNumber->setFont(font);
