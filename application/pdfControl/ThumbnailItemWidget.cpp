@@ -26,7 +26,7 @@ void ThumbnailItemWidget::paintEvent(QPaintEvent *event)
         pPage.setColor(QPalette::Text, QColor(QString("#303030")));
     }
 
-    m_pPicture->setPalette(p);
+//    m_pPicture->setPalette(p);
     m_pPageNumber->setPalette(pPage);
 }
 

@@ -21,21 +21,25 @@ void ImageLabel::paintEvent(QPaintEvent *e)
     qreal width = 0;
     qreal heigh = 0;
 
-    if (m_bSelect) {
-        local = 1;
-        width = this->width() - 2;
-        heigh = this->height() - 2;
-    } else {
-        local = 0;
-        width = this->width() - 0;
-        heigh = this->height() - 0;
-    }
-    QRectF rectangle(local, local, width, heigh);
-
     QPainter painter(this);
     painter.setOpacity(1.0);
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setBrush(Qt::NoBrush);
+
+    if (m_bSelect) {
+        local = 1;
+        width = this->width() - 2;
+        heigh = this->height() - 2;
+
+        painter.setPen(QPen(QColor(QString("#0081FF")), 3, Qt::SolidLine));
+    } else {
+        local = 0;
+        width = this->width() - 0;
+        heigh = this->height() - 0;
+        painter.setPen(QPen(QColor::fromRgbF(0,0,0,0.05), 1, Qt::SolidLine));
+    }
+    QRectF rectangle(local, local, width, heigh);
+
     painter.drawRoundedRect(rectangle, 8, 8);
 
     DLabel::paintEvent(e);
