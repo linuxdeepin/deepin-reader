@@ -26,4 +26,5 @@ void PageNumberLabel::paintEvent(QPaintEvent *e)
     }
 
     this->setPalette(pPage);
+    DLabel::paintEvent(e);
 }
