@@ -33,10 +33,9 @@ void ImageLabel::paintEvent(QPaintEvent *e)
     QRectF rectangle(local, local, width, heigh);
 
     QPainter painter(this);
-    painter.setOpacity(1);
+    painter.setOpacity(1.0);
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setBrush(Qt::NoBrush);
-//    painter.setPen(QPen(QColor(QString("#0081FF")), 3));
     painter.drawRoundedRect(rectangle, 8, 8);
 
     DLabel::paintEvent(e);
