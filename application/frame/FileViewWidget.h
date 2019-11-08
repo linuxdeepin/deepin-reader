@@ -89,7 +89,7 @@ private:
 private:
     int         m_nCurrentHandelState = Default_State;  //  当前鼠标状态
     int         m_nAdapteState = Default_State;         //  当前自适应状态
-    bool        m_bSelectOrMove = false;      //  是否可以选中文字、移动
+    bool        m_bSelectOrMove = false;        //  是否可以选中文字、移动
     bool        m_bIsHandleSelect = false;      //  是否可以选中
 
     QPoint      m_pStartPoint;

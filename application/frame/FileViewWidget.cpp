@@ -73,7 +73,7 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
             m_pDocummentFileHelper->mouseSelectText(m_pStartPoint, docGlobalPos);
         } else {
             //  首先判断文档划过属性
-            Page::Link *pLink  = m_pDocummentFileHelper->mouseBeOverLink(docGlobalPos);
+            auto pLink  = m_pDocummentFileHelper->mouseBeOverLink(docGlobalPos);
             if (pLink) {
                 setCursor(QCursor(Qt::PointingHandCursor));
             } else {
@@ -112,7 +112,7 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
             QPoint docGlobalPos = m_pDocummentFileHelper->global2RelativePoint(globalPos);
 
             //  点击的时候　先判断　点击处　　是否有链接之类
-            Page::Link *pLink = m_pDocummentFileHelper->mouseBeOverLink(docGlobalPos);
+            auto pLink = m_pDocummentFileHelper->mouseBeOverLink(docGlobalPos);
             if (pLink) {
                 m_pDocummentFileHelper->onClickPageLink(pLink);
             } else {
@@ -286,11 +286,7 @@ void FileViewWidget::slotFileRemoveAnnotation(const QString &msgContent)
         QPoint tempPoint(sX.toInt(), sY.toInt());
         QString sUuid = m_pDocummentFileHelper->removeAnnotation(tempPoint);
         if (sUuid != "") {
-            sendMsg(MSG_NOTE_DLTNOTEITEM, sUuid);
-
-            m_pDocummentFileHelper->removeAnnotation(sUuid);
-
-            DataManager::instance()->setBIsUpdate(true);
+            sendMsg(MSG_NOTE_DLTNOTEITEM, sUuid);   //  notesWidget 处理该消息
         }
     }
 }

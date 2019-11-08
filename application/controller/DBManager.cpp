@@ -25,9 +25,11 @@
 #include <QSqlError>
 #include <QSqlQuery>
 
+#include <QStandardPaths>
+
 namespace {
 
-const QString DATABASE_PATH = QDir::homePath() + "/.local/share/deepin/deepin-reader/";
+const QString DATABASE_PATH = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 const QString DATABASE_NAME = "deepinreader.db";
 //const QString EMPTY_HASH_STR = utils::base::hash(QString(" "));
 
@@ -237,7 +239,11 @@ void DBManager::checkDatabase()
         dd.mkpath(DATABASE_PATH);
         if (dd.exists())
             qDebug() << __LINE__ << "   " << __FUNCTION__ << "  create database succeed!";
+        else
+            qDebug() << __LINE__ << "   " << __FUNCTION__ << "  111 create database succeed!";
     }
+    QString sssDb = dd.absolutePath();//        qDebug() << __LINE__ << "   " << __FUNCTION__ << "  111 create database succeed!";
+
     const QSqlDatabase db = getDatabase();
     if (! db.isValid()) {
         return;

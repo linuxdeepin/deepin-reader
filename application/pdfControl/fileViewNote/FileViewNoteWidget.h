@@ -36,7 +36,7 @@ private:
  *@brief 添加注释子界面
  */
 
-class CustomClickLabel;
+class CustomLabel;
 
 class FileViewNoteWidget : public CustomWidget
 {

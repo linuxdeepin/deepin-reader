@@ -59,7 +59,6 @@ void NotesWidget::slotDltNoteItem(QString uuid)
                     m_mapUuidAndPage.remove(uuid);
 
                     auto dproxy = DocummentFileHelper::instance();
-
                     if (dproxy) {
                         DataManager::instance()->setBIsUpdate(true);
                         dproxy->removeAnnotation(uuid, page);
@@ -342,12 +341,9 @@ void NotesWidget::addNewItem(const QImage &image, const int &page, const QString
  */
 void NotesWidget::flushNoteItemText(const int &page, const QString &uuid, const QString &text)
 {
-    if (m_pNotesList->count() < 1) {
-        return;
-    }
-
-    for (int index = 0; index < m_pNotesList->count(); ++index) {
-        auto pItem = m_pNotesList->item(index);
+    int iCount = m_pNotesList->count();
+    for (int iLoop = 0; iLoop < iCount; iLoop++) {
+        auto pItem = m_pNotesList->item(iLoop);
         if (pItem) {
             auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
             if (t_widget) {

@@ -39,7 +39,7 @@ int ThumbnailItemWidget::dealWithData(const int &, const QString &)
 // 是否被选中，选中就就填充颜色
 void ThumbnailItemWidget::setBSelect(const bool &paint)
 {
-    if(m_pPicture){
+    if (m_pPicture) {
         m_pPicture->setSelect(paint);
     }
     m_bPaint = paint;
@@ -53,7 +53,7 @@ void ThumbnailItemWidget::initWidget()
     m_pPageNumber->setFixedSize(QSize(140, 18));
     m_pPageNumber->setAlignment(Qt::AlignCenter);
 
-    m_pPicture = new CustomLabel();
+    m_pPicture = new ImageLabel();
     m_pPicture->setFixedSize(QSize(140, 168));
     m_pPicture->setAlignment(Qt::AlignCenter);
 

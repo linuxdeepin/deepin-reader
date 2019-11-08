@@ -1,12 +1,10 @@
 #ifndef THUMBNAILITEMWIDGET_H
 #define THUMBNAILITEMWIDGET_H
 
-
 #include <DLabel>
 #include <QVBoxLayout>
 #include <QPainter>
 
-#include "CustomLabel.h"
 #include "CustomItemWidget.h"
 
 /**

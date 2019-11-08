@@ -7,7 +7,6 @@ HEADERS += \
     $$PWD/BookMarkItemWidget.h \
     $$PWD/NotesItemWidget.h \
     $$PWD/font/fontWidget.h \
-    $$PWD/CustomLabel.h \
     $$PWD/SearchResWidget.h \
     $$PWD/fileViewNote/FileViewNoteWidget.h \
     $$PWD/CustomListWidget.h \
@@ -22,7 +21,6 @@ SOURCES += \
     $$PWD/BookMarkItemWidget.cpp \
     $$PWD/NotesItemWidget.cpp \
     $$PWD/font/fontWidget.cpp \
-    $$PWD/CustomLabel.cpp \
     $$PWD/SearchResWidget.cpp \
     $$PWD/fileViewNote/FileViewNoteWidget.cpp \
     $$PWD/CustomListWidget.cpp \

@@ -6,8 +6,16 @@ CustomClickLabel::CustomClickLabel(const QString &text, DWidget *parent, Qt::Win
 
 }
 
+//  设置 主题颜色
+void CustomClickLabel::setThemePalette()
+{
+    Dtk::Gui::DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
+    plt.setColor(Dtk::Gui::DPalette::WindowText, plt.color(Dtk::Gui::DPalette::TextTips));
+    setPalette(plt);
+}
+
 /**
-* @brief CustomClickLabel::mousePressEvent
+* @brief CustomLabel::mousePressEvent
 * 自定义label点击事件
 * @param event
 */

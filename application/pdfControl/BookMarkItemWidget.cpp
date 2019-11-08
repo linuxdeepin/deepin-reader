@@ -30,7 +30,7 @@ int BookMarkItemWidget::dealWithData(const int &msgType, const QString &msgConte
 
 void BookMarkItemWidget::setBSelect(const bool &paint)
 {
-    if(m_pPicture){
+    if (m_pPicture) {
         m_pPicture->setSelect(paint);
     }
     m_bPaint = paint;
@@ -75,7 +75,7 @@ void BookMarkItemWidget::initWidget()
     m_pVLayout->setContentsMargins(20, 18, 0, 44);
     m_pVLayout->addWidget(m_pPageNumber);
 
-    m_pPicture = new CustomLabel(this);
+    m_pPicture = new ImageLabel(this);
     m_pPicture->setFixedSize(QSize(42, 62));
     m_pPicture->setAlignment(Qt::AlignCenter);
 

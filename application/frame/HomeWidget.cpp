@@ -27,14 +27,11 @@ HomeWidget::HomeWidget(CustomWidget *parent):
 
 void HomeWidget::initWidget()
 {
-    m_tipsLabel = new DLabel(tr("drag Pdf or other format file to here"));
+    m_tipsLabel = new CustomClickLabel(tr("drag Pdf or other format file to here"), this);
     m_tipsLabel->setAlignment(Qt::AlignHCenter);
     QFont font;
     font.setPixelSize(12);
     m_tipsLabel->setFont(font);
-    Dtk::Gui::DPalette plt=Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
-    plt.setColor(Dtk::Gui::DPalette::WindowText, plt.color(Dtk::Gui::DPalette::TextTips));
-    m_tipsLabel->setPalette(plt);
 
     auto chooseBtn = new DSuggestButton(tr("Select File"));
     chooseBtn->setFixedSize(QSize(302, 36));
@@ -76,13 +73,11 @@ void HomeWidget::slotChooseBtnClicked()
 
 //  主题切换
 void HomeWidget::slotUpdateTheme()
-{   
+{
     QString sPixmap = PF::getImagePath("import_photo", Pri::g_frame);
     m_pIconLabel->setPixmap(QPixmap(sPixmap));
 
-    Dtk::Gui::DPalette plt=Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
-    plt.setColor(Dtk::Gui::DPalette::WindowText, plt.color(Dtk::Gui::DPalette::TextTips));
-    m_tipsLabel->setPalette(plt);
+    m_tipsLabel->setThemePalette();
 }
 
 QStringList HomeWidget::getOpenFileList()

@@ -315,8 +315,7 @@ bool DocummentFileHelper::getImage(int pagenum, QImage &image, double width, dou
 
 QImage DocummentFileHelper::roundImage(const QPixmap &img_in, int radius)
 {
-    if (img_in.isNull())
-    {
+    if (img_in.isNull()) {
         return QPixmap().toImage();
     }
     QSize size(img_in.size());

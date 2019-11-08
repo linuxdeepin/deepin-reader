@@ -31,7 +31,7 @@ void NotesItemWidget::setSerchResultText(const QString &result)
 
 void NotesItemWidget::setBSelect(const bool &paint)
 {
-    if(m_pPicture){
+    if (m_pPicture) {
         m_pPicture->setSelect(paint);
     }
     m_bPaint = paint;
@@ -72,7 +72,7 @@ void NotesItemWidget::initWidget()
     QFont font(QString("SourceHanSansSC-Medium"), 12);
     QFont fontContant(QString("SourceHanSansSC-Medium"), 11);
 
-    m_pPicture = new CustomLabel(this);
+    m_pPicture = new ImageLabel(this);
     m_pPicture->setFixedSize(QSize(42, 62));
     m_pPicture->setAlignment(Qt::AlignCenter);
 
