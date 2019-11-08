@@ -6,9 +6,11 @@ BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
     CustomWidget(QString("BookMarkWidget"), parent)
 {
     setFocusPolicy(Qt::ClickFocus);
-    initWidget();
+    setAutoFillBackground(true);
 
+    initWidget();
     initConnection();
+    slotUpdateTheme();
 }
 /**
  * @brief BookMarkWidget::~BookMarkWidget
@@ -33,8 +35,16 @@ void BookMarkWidget::slotAddBookMark()
         int nPage = proxy->currentPageNo();
         bool bRes = proxy->setBookMarkState(nPage, true);
         if (bRes) {
-            slotAddBookMark(nPage);
-            m_pAddBookMarkBtn->setEnabled(false);
+            auto item = addBookMarkItem(nPage);
+            if (item) {
+                QList<int> pageList = dApp->dbM->getBookMarkList();
+
+                pageList.append(nPage);
+                dApp->dbM->setBookMarkList(pageList);
+
+                DataManager::instance()->setBIsUpdate(true);
+                m_pAddBookMarkBtn->setEnabled(false);
+            }
         }
     }
 }
@@ -52,18 +62,13 @@ void BookMarkWidget::slotAddBookMark(const int &nPage)
 
     auto item = addBookMarkItem(nPage);
     if (item) {
-        auto pItemWidget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
-        if (pItemWidget) {
-            int nWidgetPage = pItemWidget->nPageIndex();
-            if (nWidgetPage == nPage) {
-                pItemWidget->setBSelect(true);
-
-                m_pBookMarkListWidget->setCurrentItem(item);
+        auto dproxy = DocummentFileHelper::instance();
+        if (dproxy) {
+            int nCurPage = dproxy->currentPageNo();
+            if (nCurPage == nPage) {    //  是当前页
+                m_pAddBookMarkBtn->setEnabled(false);
             }
         }
-        m_pAddBookMarkBtn->setEnabled(false);
-
-        DataManager::instance()->setBIsUpdate(true);
     }
 }
 
@@ -83,6 +88,14 @@ void BookMarkWidget::slotOpenFileOk()
     QList<int> pageList = dApp->dbM->getBookMarkList();
     foreach (int iPage, pageList) {
         addBookMarkItem(iPage);
+    }
+
+    auto pCurItem = m_pBookMarkListWidget->currentItem();
+    if (pCurItem) {
+        auto pItemWidget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
+        if (pItemWidget) {
+            pItemWidget->setBSelect(false);
+        }
     }
 
     //  第一页 就是书签, 添加书签按钮 不能点
@@ -193,8 +206,8 @@ void BookMarkWidget::deleteIndexPage(const int &pageIndex)
     auto dproxy = DocummentFileHelper::instance();
     if (dproxy) {
         dproxy->setBookMarkState(pageIndex, false);
-
         DataManager::instance()->setBIsUpdate(true);
+
         m_pAddBookMarkBtn->setEnabled(true);
     }
 }
@@ -265,7 +278,6 @@ void BookMarkWidget::slotUpdateTheme()
 {
     DPalette plt = DGuiApplicationHelper::instance()->applicationPalette();
     plt.setColor(QPalette::Background, plt.color(QPalette::Base));
-    setAutoFillBackground(true);
     setPalette(plt);
 }
 
@@ -282,11 +294,6 @@ void BookMarkWidget::slotFilpOver()
  */
 void BookMarkWidget::initWidget()
 {
-    DPalette plt = DGuiApplicationHelper::instance()->applicationPalette();
-    plt.setColor(QPalette::Background, plt.color(QPalette::Base));
-    setAutoFillBackground(true);
-    setPalette(plt);
-
     m_pBookMarkListWidget = new CustomListWidget;
     m_pBookMarkListWidget->setSpacing(0);
 
@@ -330,6 +337,7 @@ void BookMarkWidget::initConnection()
  */
 QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
 {
+    //  先将当前的item 选中取消
     auto pCurItem = m_pBookMarkListWidget->currentItem();
     if (pCurItem) {
         auto pItemWidget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
@@ -400,7 +408,7 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
     }
 
     //  增加书签消息
-    if (MSG_BOOKMARK_ADDITEM == msgType || MSG_OPERATION_ADD_BOOKMARK == msgType || MSG_OPERATION_TEXT_ADD_BOOKMARK == msgType) {
+    if (MSG_OPERATION_ADD_BOOKMARK == msgType || MSG_OPERATION_TEXT_ADD_BOOKMARK == msgType) {
         emit sigAddBookMark(msgContent.toInt());
         return ConstantMsg::g_effective_res;
     }

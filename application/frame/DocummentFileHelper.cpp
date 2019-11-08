@@ -324,7 +324,11 @@ void DocummentFileHelper::getAllAnnotation(QList<stHighlightContent> &listres)
 
 QString DocummentFileHelper::addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color)
 {
-    return m_pDocummentProxy->addAnnotation(startpos, endpos, color);
+    QString strUuid = m_pDocummentProxy->addAnnotation(startpos, endpos, color);
+    if (strUuid != "") {
+        DataManager::instance()->setBIsUpdate(true);
+    }
+    return strUuid;
 }
 
 bool DocummentFileHelper::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
@@ -334,6 +338,7 @@ bool DocummentFileHelper::annotationClicked(const QPoint &pos, QString &strtext,
 
 void DocummentFileHelper::removeAnnotation(const QString &struuid, int ipage)
 {
+    DataManager::instance()->setBIsUpdate(true);
     m_pDocummentProxy->removeAnnotation(struuid, ipage);
 }
 
@@ -344,6 +349,7 @@ QString DocummentFileHelper::removeAnnotation(const QPoint &pos)
 
 void DocummentFileHelper::setAnnotationText(int ipage, const QString &struuid, const QString &strtext)
 {
+    DataManager::instance()->setBIsUpdate(true);
     m_pDocummentProxy->setAnnotationText(ipage, struuid, strtext);
 }
 
@@ -354,6 +360,7 @@ void DocummentFileHelper::getAnnotationText(const QString &struuid, QString &str
 
 void DocummentFileHelper::jumpToHighLight(const QString &uuid, int ipage)
 {
+    DataManager::instance()->setBIsUpdate(true);
     m_pDocummentProxy->jumpToHighLight(uuid, ipage);
 }
 

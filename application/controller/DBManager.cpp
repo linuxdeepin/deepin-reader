@@ -29,7 +29,7 @@
 
 namespace {
 
-const QString DATABASE_PATH = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+const QString DATABASE_PATH = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/deep-reader";
 const QString DATABASE_NAME = "deepinreader.db";
 //const QString EMPTY_HASH_STR = utils::base::hash(QString(" "));
 
@@ -50,8 +50,7 @@ DBManager *DBManager::instance()
 void DBManager::getBookMarks()
 {
     m_pBookMarkList.clear();
-    m_bIsOldHave = false;
-
+    m_nDbType = -1;
     const QSqlDatabase db = getDatabase();
     if (db.isValid()) {
         QMutexLocker mutex(&m_mutex);
@@ -64,7 +63,7 @@ void DBManager::getBookMarks()
             QString sData = "";
 
             while (query.next()) {
-                m_bIsOldHave = true;
+                m_nDbType = 0;
                 sData = query.value(0).toString();      //  结果
             }
             mutex.unlock();
@@ -84,7 +83,7 @@ void DBManager::saveBookMark()
     if (m_pBookMarkList.size() == 0) {
         deleteBookMark();
     } else {
-        if (m_bIsOldHave) {    //  原来没有数据
+        if (m_nDbType == -1) {    //  原来没有数据
             QString sPage = "";
             foreach (int i, m_pBookMarkList) {
                 sPage += QString::number(i) + ",";

@@ -268,10 +268,7 @@ void FileViewWidget::slotFileAddAnnotation(const QString &msgContent)
 
         QPoint tempPoint(sX.toInt(), sY.toInt());
 
-        QString sUuid = m_pDocummentFileHelper->addAnnotation(tempPoint, tempPoint, color);
-        if (sUuid != "") {
-            DataManager::instance()->setBIsUpdate(true);
-        }
+        m_pDocummentFileHelper->addAnnotation(tempPoint, tempPoint, color);
     }
 }
 
@@ -319,8 +316,6 @@ void FileViewWidget::slotFileAddNote(const QString &msgContent)
     QString t_str = sUuid.trimmed() + QString("%") + sNote.trimmed() + QString("%") + sPage;
     sendMsg(MSG_NOTE_ADDITEM, t_str);
     m_pDocummentFileHelper->setAnnotationText(sPage.toInt(), sUuid, sNote);
-
-    DataManager::instance()->setBIsUpdate(true);
 }
 
 //  文档书签状态改变
@@ -331,6 +326,7 @@ void FileViewWidget::slotBookMarkStateChange(int nPage, bool bState)
     } else {
         sendMsg(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(nPage));
     }
+    DataManager::instance()->setBIsUpdate(true);
 }
 
 //  文档页变化了

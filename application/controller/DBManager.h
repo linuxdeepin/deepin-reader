@@ -74,7 +74,7 @@ private:
 
 private:
     QList<int>      m_pBookMarkList;
-    bool            m_bIsOldHave = false;   //  原来是否有数据
+    int             m_nDbType = -1;   //  原来是否有数据
 
     QString m_connectionName = "";
     QString m_strFilePath = "";

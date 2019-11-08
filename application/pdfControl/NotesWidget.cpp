@@ -60,11 +60,8 @@ void NotesWidget::slotDltNoteItem(QString uuid)
 
                     auto dproxy = DocummentFileHelper::instance();
                     if (dproxy) {
-                        DataManager::instance()->setBIsUpdate(true);
                         dproxy->removeAnnotation(uuid, page);
                     }
-
-                    DataManager::instance()->setBIsUpdate(true);
 
                     break;
                 }
@@ -177,7 +174,6 @@ void NotesWidget::slotDelNoteItem()
             auto t_pDocummentProxy = DocummentFileHelper::instance();
             if (t_pDocummentProxy) {
                 t_pDocummentProxy->removeAnnotation(t_uuid, page);
-                DataManager::instance()->setBIsUpdate(true);
             }
         }
     }
@@ -199,7 +195,6 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
         auto pDocProxy = DocummentFileHelper::instance();
         if (pDocProxy) {
             pDocProxy->jumpToHighLight(t_uuid, page);
-            DataManager::instance()->setBIsUpdate(true);
         }
     }
 }
@@ -236,8 +231,6 @@ void NotesWidget::addNotesItem(const QString &text)
                 m_mapUuidAndPage.insert(t_strUUid, t_nPage);
             }
         }
-
-        DataManager::instance()->setBIsUpdate(true);
     }
 }
 
