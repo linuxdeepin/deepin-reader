@@ -10,7 +10,7 @@
     </message>
     <message>
         <location filename="../application.cpp" line="47"/>
-        <source>deepin-reader is a document viewer provided by deep system</source>
+        <source>Document viewer a reading tool for PDF documents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -33,6 +33,14 @@
         <location filename="../pdfControl/BookMarkWidget.cpp" line="296"/>
         <source>add bookmark</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>ColorWidgetAction</name>
+    <message>
+        <location filename="../mainShow/ColorWidgetAction.cpp" line="25"/>
+        <source>add high light</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -85,23 +93,23 @@
 <context>
     <name>DocummentFileHelper</name>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="81"/>
-        <location filename="../frame/DocummentFileHelper.cpp" line="168"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="83"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="170"/>
         <source>Save File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="168"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="170"/>
         <source>Do you need to save the file opened?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="197"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="199"/>
         <source>File not supported</source>
         <translation>文件格式不支持</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="250"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="252"/>
         <source>Please check if the file is damaged</source>
         <translation>请检查文件是否已经损坏</translation>
     </message>
@@ -109,112 +117,112 @@
 <context>
     <name>FileAttrWidget</name>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="92"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="93"/>
         <source>Location</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="93"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="94"/>
         <source>Theme</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="94"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="95"/>
         <source>Author</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="95"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="96"/>
         <source>Keywords</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="96"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="97"/>
         <source>Producers</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="97"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="98"/>
         <source>Creator</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="98"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="99"/>
         <source>Create Time</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="99"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="100"/>
         <source>Update Time</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="100"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="101"/>
         <source>Format</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="101"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="102"/>
         <source>Page&apos;s Number</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="102"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="103"/>
         <source>Optimize</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="103"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="104"/>
         <source>Security</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="104"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="105"/>
         <source>Paper Size</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="105"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="106"/>
         <source>File Size</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="108"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="109"/>
         <source>file basic info</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="123"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="126"/>
         <source>close</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="164"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="167"/>
         <source>year</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="164"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="167"/>
         <source>month</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="164"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="167"/>
         <source>day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="165"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="168"/>
         <source>hour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="165"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="168"/>
         <source>minute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="165"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="168"/>
         <source>second</source>
         <translation type="unfinished"></translation>
     </message>
@@ -248,27 +256,27 @@
 <context>
     <name>FontWidget</name>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="280"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="276"/>
         <source>Double View</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="300"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="296"/>
         <source>Adaptate Height</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="322"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="317"/>
         <source>Adaptate Width</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="73"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="72"/>
         <source>Rotated To Left</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="77"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="75"/>
         <source>Rotated To Right</source>
         <translation></translation>
     </message>
@@ -409,27 +417,22 @@
 <context>
     <name>TextOperationMenu</name>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="47"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="49"/>
         <source>copy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="49"/>
-        <source>add high light</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="55"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="58"/>
         <source>remove high light</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="56"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="61"/>
         <source>add note</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="57"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="64"/>
         <source>add bookmark</source>
         <translation></translation>
     </message>

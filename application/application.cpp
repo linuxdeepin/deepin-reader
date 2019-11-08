@@ -44,8 +44,7 @@ Application::Application(int &argc, char **argv)
     setApplicationVersion(DApplication::buildVersion("20191022"));
     setApplicationAcknowledgementPage(Constant::sAcknowledgementLink);
     setProductIcon(QIcon(Constant::sLogoPath));
-    setApplicationDescription(tr("deepin-reader is a document viewer provided by deep system"));
-
+    setApplicationDescription(tr("Document viewer a reading tool for PDF documents."));
     initChildren();
 }
 

@@ -234,6 +234,7 @@ public:
     void setScaleAndRotate(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     Page::Link *ifMouseMoveOverLink(const QPoint point);
     bool getSelectTextString(QString &st);
+    void clearSelectText();
     QRectF translateRect(QRectF &rect, double scale, RotateType_EM rotate);
     void clearHighlightRects();
     void setCurSearchShow(bool bshow)

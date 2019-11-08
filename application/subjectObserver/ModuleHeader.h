@@ -28,7 +28,7 @@ const QString sXps_Filter = "Xps files (*.xps)";
 const QString sDjvu_Filter = "Djvu files (*.djvu)";
 const QString sQStringSep = "@#&!@#$";
 
-const QString sLogoPath = ":/resources/logo/deepin-reader.svg";
+const QString sLogoPath =":/resources/logo/deepin-reader.svg";
 }
 
 namespace Pri {

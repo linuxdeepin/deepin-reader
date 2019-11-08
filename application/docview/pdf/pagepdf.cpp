@@ -287,6 +287,7 @@ QString PagePdf::addAnnotation(const QColor &color)
         uniqueName = addHighlightAnnotation(color);
         d->paintrects.clear();
     }
+    clearSelectText();
     QImage image;
     getImage(image, d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
     slot_RenderFinish(image);
@@ -468,7 +469,7 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext, QString &st
                     struuid = annote->uniqueName();
                     strtext = annote->contents();
                     qDeleteAll(listannote);
-                    // qDebug() << "******* contaions***" << struuid;
+                   //  qDebug() << "******* contaions***" << struuid;
                     return true;
                 } /*else {
                     qDebug() << "******* not contains";

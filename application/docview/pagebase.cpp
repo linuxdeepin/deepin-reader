@@ -634,6 +634,13 @@ bool PageBase::getSelectTextString(QString &st)
     return true;
 }
 
+void PageBase::clearSelectText()
+{
+    Q_D(PageBase);
+    d->m_selecttextstartword=-1;
+    d->m_selecttextendword=-1;
+}
+
 QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
 {
     Q_D(PageBase);
