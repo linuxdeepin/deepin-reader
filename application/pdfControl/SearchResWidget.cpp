@@ -113,7 +113,7 @@ void SearchResWidget::initConnections()
 void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
 {
     //  插入之前 先清空原有数据
-   // slotClearWidget();
+    slotClearWidget();
 
     int resultNum = 0;
     QString strText = "";
@@ -278,7 +278,7 @@ void LoadSearchResThread::run()
             bool bl = dproxy ->getImage(page, image, 34, 54/*28, 48*/);
             if (bl) {
                 emit sigLoadImage(page, image);
-                msleep(10);
+                msleep(50);
             }
         }
 
