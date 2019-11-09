@@ -68,18 +68,18 @@ private:
     QHBoxLayout     *m_pAdaptateHeightLayout = nullptr;
     QHBoxLayout     *m_pAdaptateWidghtLayout = nullptr;
 
-    DLabel *m_pEnlargeLab = nullptr;         // 缩放比例
+    CustomClickLabel *m_pEnlargeLab = nullptr;         // 缩放比例
     DSlider *m_pEnlargeSlider = nullptr;     // 缩放比例slider
 
-    CustomClickLabel *m_pDoubPageViewLab = nullptr;    // 双页显示ICON标签
-    CustomClickLabel *m_pSuitHLab = nullptr;           // 自适应高度ICON标签
-    CustomClickLabel *m_pSuitWLab = nullptr;           // 自适应宽度ICON标签
+    CustomClickLabel      *m_pDoubPageViewLabelIcon = nullptr;    // 双页显示ICON标签
+    CustomClickLabel      *m_pSuitHLabelIcon = nullptr;           // 自适应高度ICON标签
+    CustomClickLabel      *m_pSuitWLabelIcon = nullptr;           // 自适应宽度ICON标签
 
     int m_rotate = 0;                        // 旋转角度
     int m_rotateType = RotateType_Normal;    // 旋转类型
     bool m_bSuitH = false;                   // 自适应高度
     bool m_bSuitW = false;                   // 自适应宽度
-    bool m_isDoubPage = false;                  //  双页显示标志
+    bool m_isDoubPage = false;               //  双页显示标志
     bool m_bIsAdaptMove = false;
 };
 

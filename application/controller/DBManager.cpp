@@ -238,10 +238,7 @@ void DBManager::checkDatabase()
         dd.mkpath(DATABASE_PATH);
         if (dd.exists())
             qDebug() << __LINE__ << "   " << __FUNCTION__ << "  create database succeed!";
-        else
-            qDebug() << __LINE__ << "   " << __FUNCTION__ << "  111 create database succeed!";
     }
-    QString sssDb = dd.absolutePath();//        qDebug() << __LINE__ << "   " << __FUNCTION__ << "  111 create database succeed!";
 
     const QSqlDatabase db = getDatabase();
     if (! db.isValid()) {

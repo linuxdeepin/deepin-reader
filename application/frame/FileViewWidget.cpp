@@ -18,7 +18,6 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
     , m_operatemenu(nullptr)
 {
     setMouseTracking(true); //  接受 鼠标滑动事件
-    setContextMenuPolicy(Qt::CustomContextMenu);
 
     initWidget();
     initConnections();
@@ -137,13 +136,11 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
     if (DataManager::instance()->CurShowState() == FILE_SLIDE)
         return;
 
+    //  放大镜状态， 右键则取消放大镜 并且 直接返回
     if (event->button() == Qt::RightButton && m_nCurrentHandelState == Magnifier_State) {
-        emit sigMagnifying(QString("0"));
+        slotMagnifying("0");
         return;
     }
-    //  放大镜状态， 直接返回
-    if (m_nCurrentHandelState == Magnifier_State)
-        return;
 
     if (m_bSelectOrMove) {
         //判断鼠标左键松开的位置有没有高亮

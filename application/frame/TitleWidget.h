@@ -41,15 +41,14 @@ private:
     void initConnections();
 
     void initBtns();
+    void initMenus();
+
     DToolButton *createBtn(const QString &btnName, bool bCheckable = false);
     void sendMsgToSubject(const int &, const QString &msgCotent = "");
 
 private:
     DMenu   *m_pHandleMenu = nullptr;
     DMenu   *m_pSettingMenu = nullptr;
-
-    QAction  *m_pHandleAction = nullptr;
-    QAction  *m_pDefaultAction = nullptr;
 
     DToolButton *m_pThumbnailBtn = nullptr;
     DToolButton *m_pSettingBtn = nullptr;

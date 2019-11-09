@@ -3,7 +3,6 @@
 BookMarkItemWidget::BookMarkItemWidget(CustomItemWidget *parent) :
     CustomItemWidget("BookMarkItemWidget", parent)
 {
-    this->setContextMenuPolicy(Qt::CustomContextMenu);//让widget支持右键菜单事件
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(slotShowContextMenu(const QPoint &)));
 

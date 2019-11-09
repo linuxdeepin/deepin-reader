@@ -42,8 +42,8 @@ void HomeWidget::initWidget()
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setAlignment(Qt::AlignCenter);
     layout->addStretch();
-    m_pIconLabel = new DLabel;
 
+    m_pIconLabel = new DLabel;
     m_pIconLabel->setAlignment(Qt::AlignCenter);
 
     layout->addWidget(m_pIconLabel);

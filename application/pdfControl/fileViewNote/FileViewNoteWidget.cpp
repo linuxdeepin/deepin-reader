@@ -59,13 +59,13 @@ void FileViewNoteWidget::hideEvent(QHideEvent *event)
     } else {
         QString t_contant = m_pTextEdit->toPlainText().trimmed();       //  注释内容
         if (t_contant != m_strNote) {   //  只有 和 原来已有注释内容不一样, 才会提示 保存
+            QString msgContent = "";
             if (m_pNoteUuid != "") {    //  已经高亮
-                QString msgContent = t_contant  + Constant::sQStringSep + m_pNoteUuid + Constant::sQStringSep + m_pNotePage;
-                sendMsg(MSG_NOTE_ADDCONTANT, msgContent);
+                msgContent = t_contant  + Constant::sQStringSep + m_pNoteUuid + Constant::sQStringSep + m_pNotePage;
             } else {
-                QString msgContent = t_contant + Constant::sQStringSep + m_pHighLightPointAndPage;
-                sendMsg(MSG_NOTE_ADDCONTANT, msgContent);
+                msgContent = t_contant + Constant::sQStringSep + m_pHighLightPointAndPage;
             }
+            sendMsg(MSG_NOTE_ADDCONTANT, msgContent);
         }
     }
     CustomWidget::hideEvent(event);
@@ -106,7 +106,6 @@ void FileViewNoteWidget::initWidget()
 
 void FileViewNoteWidget::paintEvent(QPaintEvent *e)
 {
-    Q_UNUSED(e);
     QRectF rectangle(0, 0, (this->width()), (this->height()));
 
     QPainter painter(this);

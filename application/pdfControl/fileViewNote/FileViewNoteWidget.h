@@ -35,9 +35,6 @@ private:
  *@brief The FileViewNoteWidget class
  *@brief 添加注释子界面
  */
-
-class CustomLabel;
-
 class FileViewNoteWidget : public CustomWidget
 {
     Q_OBJECT

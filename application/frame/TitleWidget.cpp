@@ -28,14 +28,13 @@ void TitleWidget::slotUpdateTheme()
         }
     }
 
-    if (m_pHandleAction) {
-        QString sPixmap = PF::getImagePath("handleShape_small", Pri::g_frame);
-        m_pHandleAction->setIcon(QIcon(sPixmap));
-    }
-
-    if (m_pDefaultAction) {
-        QString sPixmap = PF::getImagePath("defaultShape_small", Pri::g_frame);
-        m_pDefaultAction->setIcon(QIcon(sPixmap));
+    auto actionList = this->findChildren<QAction *>();
+    foreach (auto a, actionList) {
+        QString objName = a->objectName();
+        if (objName != "") {
+            QString sPixmap = PF::getImagePath(objName + "_small", Pri::g_frame);
+            a->setIcon(QIcon(sPixmap));
+        }
     }
 }
 
@@ -67,6 +66,8 @@ void TitleWidget::slotMagnifierCancel()
 void TitleWidget::initWidget()
 {
     initBtns();
+
+    initMenus();
 
     auto m_layout = new QHBoxLayout();
     m_layout->setContentsMargins(5, 0, 0, 0);
@@ -104,16 +105,6 @@ void TitleWidget::on_settingBtn_clicked()
     int nHeight = m_pSettingBtn->height();
     point.setY(nHeight + nOldY + 2);
 
-    if (m_pSettingMenu == nullptr) {
-        m_pSettingMenu = new DMenu(this);
-
-        auto action = new QWidgetAction(this);
-
-        auto scaleWidget = new FontWidget(this);
-        action->setDefaultWidget(scaleWidget);
-
-        m_pSettingMenu->addAction(action);
-    }
     m_pSettingMenu->exec(point);
 }
 
@@ -126,35 +117,6 @@ void TitleWidget::on_handleShapeBtn_clicked()
     int nOldY = point.y();
 
     point.setY(nHeight + nOldY + 2);
-
-    if (m_pHandleMenu == nullptr) {
-        m_pHandleMenu = new DMenu(this);
-
-        {
-            m_pDefaultAction = new QAction(tr("defaultShape"), this);
-            m_pDefaultAction->setObjectName("defaultShape");
-            m_pDefaultAction->setCheckable(true);
-            m_pDefaultAction->setChecked(true);
-            QString sPixmap = PF::getImagePath("defaultShape_small", Pri::g_frame);
-            m_pDefaultAction->setIcon(QIcon(sPixmap));
-            m_pHandleMenu->addAction(m_pDefaultAction);
-        }
-
-        {
-            m_pHandleAction = new QAction(tr("handleShape"), this);
-            m_pHandleAction->setObjectName("handleShape");
-            m_pHandleAction->setCheckable(true);
-            QString sPixmap = PF::getImagePath("handleShape_small", Pri::g_frame);
-            m_pHandleAction->setIcon(QIcon(sPixmap));
-            m_pHandleMenu->addAction(m_pHandleAction);
-        }
-
-        QActionGroup *actionGroup = new QActionGroup(this);
-        actionGroup->addAction(m_pHandleAction);
-        actionGroup->addAction(m_pDefaultAction);
-
-        connect(actionGroup, SIGNAL(triggered(QAction *)), SLOT(slotActionTrigger(QAction *)));
-    }
     m_pHandleMenu->exec(point);
 }
 
@@ -166,12 +128,16 @@ void TitleWidget::on_magnifyingBtn_clicked()
 
     //  开启了放大镜, 需要把选择工具 切换为 选择工具
     if (bCheck) {
-        if (m_pDefaultAction) {
-            m_pDefaultAction->setChecked(true);
-
-            QString normalPic = PF::getImagePath("defaultShape", Pri::g_frame);
-            m_pHandleShapeBtn->setIcon(QIcon(normalPic));
+        auto actionList = this->findChildren<QAction *>();
+        foreach (auto a, actionList) {
+            QString objName = a->objectName();
+            if (objName == "defaultShape") {
+                a->setChecked(true);
+                break;
+            }
         }
+        QString normalPic = PF::getImagePath("defaultShape", Pri::g_frame);
+        m_pHandleShapeBtn->setIcon(QIcon(normalPic));
     }
 }
 
@@ -225,6 +191,44 @@ void TitleWidget::initBtns()
     m_pMagnifierBtn = createBtn(tr("magnifier"), true);
     m_pMagnifierBtn->setObjectName("magnifier");
     connect(m_pMagnifierBtn, SIGNAL(clicked()), SLOT(on_magnifyingBtn_clicked()));
+}
+
+void TitleWidget::initMenus()
+{
+    m_pSettingMenu = new DMenu(this);
+
+    auto action = new QWidgetAction(this);
+    auto scaleWidget = new FontWidget(this);
+
+    action->setDefaultWidget(scaleWidget);
+
+    m_pSettingMenu->addAction(action);
+
+    if (m_pHandleMenu == nullptr) {
+        m_pHandleMenu = new DMenu(this);
+
+        QActionGroup *actionGroup = new QActionGroup(this);
+
+        {
+            auto m_pDefaultAction = new QAction(tr("defaultShape"), this);
+            m_pDefaultAction->setObjectName("defaultShape");
+            m_pDefaultAction->setCheckable(true);
+            m_pDefaultAction->setChecked(true);
+
+            actionGroup->addAction(m_pDefaultAction);
+            m_pHandleMenu->addAction(m_pDefaultAction);
+        }
+
+        {
+            auto m_pHandleAction = new QAction(tr("handleShape"), this);
+            m_pHandleAction->setObjectName("handleShape");
+            m_pHandleAction->setCheckable(true);
+            actionGroup->addAction(m_pHandleAction);
+            m_pHandleMenu->addAction(m_pHandleAction);
+        }
+
+        connect(actionGroup, SIGNAL(triggered(QAction *)), SLOT(slotActionTrigger(QAction *)));
+    }
 }
 
 DToolButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)

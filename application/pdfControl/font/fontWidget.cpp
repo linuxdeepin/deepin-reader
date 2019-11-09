@@ -107,16 +107,20 @@ void FontWidget::initWidget()
 void FontWidget::slotUpdateTheme()
 {
     QString sPixmap = PF::getImagePath("select", Pri::g_pdfControl);
-
-    m_pSuitHLab->setPixmap(QPixmap(sPixmap));
-    m_pSuitWLab->setPixmap(QPixmap(sPixmap));
-    m_pDoubPageViewLab->setPixmap(QPixmap(sPixmap));
+    m_pSuitHLabelIcon->setPixmap(QPixmap(sPixmap));
+    m_pSuitWLabelIcon->setPixmap(QPixmap(sPixmap));
+    m_pDoubPageViewLabelIcon->setPixmap(QPixmap(sPixmap));
 
     QString sSmall = PF::getImagePath("A_small", Pri::g_pdfControl);
-    QString sBig = PF::getImagePath("A_big", Pri::g_pdfControl);
-
     m_pEnlargeSlider->setLeftIcon(QIcon(sSmall));
+
+    QString sBig = PF::getImagePath("A_big", Pri::g_pdfControl);
     m_pEnlargeSlider->setRightIcon(QIcon(sBig));
+
+//    auto customClickLabelList = this->findChildren<CustomClickLabel *>();
+//    foreach (auto l, customClickLabelList) {
+//        l->setThemePalette();
+//    }
 }
 
 /**
@@ -128,13 +132,13 @@ void FontWidget::slotReset()
     m_pEnlargeLab->setText(QString("100%"));
     m_pEnlargeSlider->setValue(100);
 
-    m_pDoubPageViewLab->setVisible(false);
+    m_pDoubPageViewLabelIcon->setVisible(false);
 
     m_bSuitH = false;
     m_bSuitW = false;
 
-    m_pSuitHLab->setVisible(false);
-    m_pSuitWLab->setVisible(false);
+    m_pSuitHLabelIcon->setVisible(false);
+    m_pSuitWLabelIcon->setVisible(false);
 
     m_rotate = 0;
     m_rotateType = RotateType_Normal;
@@ -207,8 +211,8 @@ void FontWidget::scaleAndRotate(int ival)
  */
 void FontWidget::setShowSuitHIcon()
 {
-    m_pSuitWLab->setVisible(false);
-    m_pSuitHLab->setVisible(m_bSuitH);
+    m_pSuitWLabelIcon->setVisible(false);
+    m_pSuitHLabelIcon->setVisible(m_bSuitH);
 
     int t_nShow = m_bSuitH ? 1 : 0;
     sendMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(t_nShow));
@@ -220,8 +224,8 @@ void FontWidget::setShowSuitHIcon()
  */
 void FontWidget::setShowSuitWIcon()
 {
-    m_pSuitWLab->setVisible(m_bSuitW);
-    m_pSuitHLab->setVisible(false);
+    m_pSuitWLabelIcon->setVisible(m_bSuitW);
+    m_pSuitHLabelIcon->setVisible(false);
 
     int t_nShow = m_bSuitW ? 1 : 0;
     sendMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(t_nShow));
@@ -249,8 +253,7 @@ DLabel *FontWidget::getLabelLineH()
 
 void FontWidget::initScaleLabel()
 {
-    m_pEnlargeLab = new DLabel;
-    m_pEnlargeLab->setText(QString("100%"));
+    m_pEnlargeLab = new CustomClickLabel("100%");
     m_pEnlargeLab->setAlignment(Qt::AlignCenter);
 }
 
@@ -273,18 +276,18 @@ void FontWidget::initDowbleShow()
     m_pDoubleShowLayout->setContentsMargins(0, 0, 0, 0);
     m_pDoubleShowLayout->setSpacing(0);
 
-    auto m_pDoubPageViewLb = new CustomClickLabel(tr("Double View"), this);
-    m_pDoubPageViewLb->setFixedHeight(25);
-    connect(m_pDoubPageViewLb, SIGNAL(clicked()), this, SLOT(slotSetDoubPageViewCheckIcon()));
-    m_pDoubleShowLayout->addWidget(m_pDoubPageViewLb);
+    auto pDoubPageViewLabel = new CustomClickLabel(tr("Double View"), this);
+    pDoubPageViewLabel->setFixedHeight(25);
+    connect(pDoubPageViewLabel, SIGNAL(clicked()), this, SLOT(slotSetDoubPageViewCheckIcon()));
+    m_pDoubleShowLayout->addWidget(pDoubPageViewLabel);
 
     m_pDoubleShowLayout->addStretch(1);
 
-    m_pDoubPageViewLab = new CustomClickLabel("", this);
-    m_pDoubPageViewLab->hide();
-    m_pDoubPageViewLab->setFixedSize(QSize(30, 25));
-    connect(m_pDoubPageViewLab, SIGNAL(clicked()), this, SLOT(slotSetDoubPageViewCheckIcon()));
-    m_pDoubleShowLayout->addWidget(m_pDoubPageViewLab);
+    m_pDoubPageViewLabelIcon = new CustomClickLabel("", this);
+    m_pDoubPageViewLabelIcon->hide();
+    m_pDoubPageViewLabelIcon->setFixedSize(QSize(30, 25));
+    connect(m_pDoubPageViewLabelIcon, SIGNAL(clicked()), this, SLOT(slotSetDoubPageViewCheckIcon()));
+    m_pDoubleShowLayout->addWidget(m_pDoubPageViewLabelIcon);
 }
 
 void FontWidget::initAdaptateHeight()
@@ -300,12 +303,12 @@ void FontWidget::initAdaptateHeight()
 
     m_pAdaptateHeightLayout->addStretch(1);
 
-    m_pSuitHLab = new CustomClickLabel("", this);
+    m_pSuitHLabelIcon = new CustomClickLabel("", this);
 
-    m_pSuitHLab->hide();
-    m_pSuitHLab->setFixedSize(QSize(30, 25));
-    connect(m_pSuitHLab, SIGNAL(clicked()), this, SLOT(slotSetSuitHCheckIcon()));
-    m_pAdaptateHeightLayout->addWidget(m_pSuitHLab);
+    m_pSuitHLabelIcon->hide();
+    m_pSuitHLabelIcon->setFixedSize(QSize(30, 25));
+    connect(m_pSuitHLabelIcon, SIGNAL(clicked()), this, SLOT(slotSetSuitHCheckIcon()));
+    m_pAdaptateHeightLayout->addWidget(m_pSuitHLabelIcon);
 }
 
 void FontWidget::initAdaptateWidght()
@@ -321,12 +324,12 @@ void FontWidget::initAdaptateWidght()
 
     m_pAdaptateWidghtLayout->addStretch(1);
 
-    m_pSuitWLab = new CustomClickLabel("", this);
-    m_pSuitWLab->hide();
-    m_pSuitWLab->setFixedSize(QSize(30, 25));
-    connect(m_pSuitWLab, SIGNAL(clicked()), this, SLOT(slotSetSuitWCheckIcon()));
+    m_pSuitWLabelIcon = new CustomClickLabel("", this);
+    m_pSuitWLabelIcon->hide();
+    m_pSuitWLabelIcon->setFixedSize(QSize(30, 25));
+    connect(m_pSuitWLabelIcon, SIGNAL(clicked()), this, SLOT(slotSetSuitWCheckIcon()));
 
-    m_pAdaptateWidghtLayout->addWidget(m_pSuitWLab);
+    m_pAdaptateWidghtLayout->addWidget(m_pSuitWLabelIcon);
 }
 
 
@@ -346,8 +349,8 @@ void FontWidget::slotSetChangeVal(int val)
         m_bSuitW = false;
         m_bSuitH = false;
 
-        m_pSuitHLab->setVisible(false);
-        m_pSuitWLab->setVisible(false);
+        m_pSuitHLabelIcon->setVisible(false);
+        m_pSuitWLabelIcon->setVisible(false);
     }
 
     m_bIsAdaptMove = false;
@@ -360,7 +363,7 @@ void FontWidget::slotSetChangeVal(int val)
 void FontWidget::slotSetDoubPageViewCheckIcon()
 {
     m_isDoubPage = !m_isDoubPage;
-    m_pDoubPageViewLab->setVisible(m_isDoubPage);
+    m_pDoubPageViewLabelIcon->setVisible(m_isDoubPage);
     if (m_isDoubPage) {
         DocummentFileHelper::instance()->setViewModeAndShow(ViewMode_FacingPage);
     } else {

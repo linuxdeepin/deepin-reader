@@ -6,7 +6,6 @@
 NotesItemWidget::NotesItemWidget(CustomItemWidget *parent) :
     CustomItemWidget(QString("NotesItemWidget"), parent)
 {
-    this->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(slotShowContextMenu(const QPoint &)));
 

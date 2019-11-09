@@ -15,7 +15,7 @@ void CustomClickLabel::setThemePalette()
 }
 
 /**
-* @brief CustomLabel::mousePressEvent
+* @brief CustomClickLabel::mousePressEvent
 * 自定义label点击事件
 * @param event
 */

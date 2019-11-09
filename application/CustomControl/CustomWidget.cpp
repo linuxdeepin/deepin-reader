@@ -9,6 +9,8 @@ CustomWidget::CustomWidget(const QString &name, DWidget *parent)
     setFocusPolicy(Qt::StrongFocus);
     setObjectName(name);
 
+    setContextMenuPolicy(Qt::CustomContextMenu);//让widget支持右键菜单事件
+
     m_pMsgSubject = MsgSubject::getInstance();
     if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
