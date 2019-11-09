@@ -232,7 +232,7 @@ void DocummentProxy::search(const QString &strtext, QMap<int, stSearchRes> &resm
     if (!m_documment || bcloseing)
         return ;
     qDebug() << "search";
-    m_documment->search(strtext, color);
+    m_documment->search(strtext, color);  
 }
 
 void DocummentProxy::clearsearch()

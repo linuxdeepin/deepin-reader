@@ -234,12 +234,15 @@ void PagePdf::changeAnnotationColor(const QString uuid, const QColor &color)
     Q_D(PagePdf);
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
     foreach (Poppler::Annotation *annote, listannote) {
-        if (annote->subType() == Poppler::Annotation::AHighlight) {
+        if (annote->subType() == Poppler::Annotation::AHighlight) {         
             if(annote->uniqueName().indexOf(uuid)>=0&&!uuid.isEmpty())
-            {
+            {               
                   Poppler::Annotation::Style style=annote->style();
                   style.setColor(color);
                   annote->setStyle(style);
+                  QImage image;
+                  getImage(image, d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
+                  slot_RenderFinish(image);
                   break;
             }
         }
@@ -252,10 +255,7 @@ void PagePdf::paintEvent(QPaintEvent *event)
 {
     Q_D(PagePdf);
     PageBase::paintEvent(event);
-if(d->m_bcursearchshow)
-    qDebug()<<"PagePdf::paintEvent"<<d_ptr->m_highlights.size();
-    for (int i = 0; i < d_ptr->m_highlights.size(); i++) {
-        qDebug()<<"PagePdf::paintEvent"<<d_ptr->m_highlights.size()<<d->m_bcursearchshow<<d->m_icurhightlight<<i<<d_ptr->m_searchcolor;
+    for (int i = 0; i < d_ptr->m_highlights.size(); i++) {     
         if (d->m_icurhightlight == i && d->m_bcursearchshow) {
             QPainter qpainter(this);
             d_ptr->m_searchcolor.setAlpha(100);
