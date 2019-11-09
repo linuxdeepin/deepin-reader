@@ -46,11 +46,6 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
 // 初始化界面
 void ThumbnailWidget::initWidget()
 {
-    DPalette plt = DGuiApplicationHelper::instance()->applicationPalette();
-    plt.setColor(QPalette::Background, plt.color(QPalette::Base));
-    setAutoFillBackground(true);
-    setPalette(plt);
-
     m_pThumbnailListWidget = new CustomListWidget(this);
     m_pThumbnailListWidget->setSpacing(3);
 
@@ -123,10 +118,7 @@ void ThumbnailWidget::slotCloseFile()
 
 void ThumbnailWidget::slotUpdateTheme()
 {
-    DPalette plt = DGuiApplicationHelper::instance()->applicationPalette();
-    plt.setColor(QPalette::Background, plt.color(QPalette::Base));
-    setAutoFillBackground(true);
-    setPalette(plt);
+    updateWidgetTheme();
 }
 
 // 初始化缩略图列表list，无缩略图

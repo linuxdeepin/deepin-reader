@@ -195,19 +195,20 @@ void TitleWidget::initBtns()
 
 void TitleWidget::initMenus()
 {
-    m_pSettingMenu = new DMenu(this);
+    {
+        m_pSettingMenu = new DMenu(this);
 
-    auto action = new QWidgetAction(this);
-    auto scaleWidget = new FontWidget(this);
+        auto action = new QWidgetAction(this);
+        auto scaleWidget = new FontWidget(this);
 
-    action->setDefaultWidget(scaleWidget);
+        action->setDefaultWidget(scaleWidget);
 
-    m_pSettingMenu->addAction(action);
-
-    if (m_pHandleMenu == nullptr) {
+        m_pSettingMenu->addAction(action);
+    }
+    {
         m_pHandleMenu = new DMenu(this);
 
-        QActionGroup *actionGroup = new QActionGroup(this);
+        auto actionGroup = new QActionGroup(this);
 
         {
             auto m_pDefaultAction = new QAction(tr("defaultShape"), this);

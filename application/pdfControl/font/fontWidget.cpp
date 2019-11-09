@@ -69,12 +69,6 @@ void FontWidget::initWidget()
     initAdaptateHeight();
     initAdaptateWidght();
 
-    auto pRotateLeftLb = new CustomClickLabel(tr("Rotated To Left"), this);
-    connect(pRotateLeftLb, SIGNAL(clicked()), this, SLOT(slotSetRotateLeftCheckIcon()));
-
-    auto pRotateRightLb = new CustomClickLabel(tr("Rotated To Right"), this);
-    connect(pRotateRightLb, SIGNAL(clicked()), this, SLOT(slotSetRotateRightCheckIcon()));
-
     //  垂直布局
     auto widgetLayout = new QVBoxLayout();
     widgetLayout->setContentsMargins(5, 0, 5, 0);
@@ -96,6 +90,11 @@ void FontWidget::initWidget()
 
     widgetLayout->addWidget(getLabelLineH());
 
+    auto pRotateLeftLb = new CustomClickLabel(tr("Rotated To Left"), this);
+    connect(pRotateLeftLb, SIGNAL(clicked()), this, SLOT(slotSetRotateLeftCheckIcon()));
+
+    auto pRotateRightLb = new CustomClickLabel(tr("Rotated To Right"), this);
+    connect(pRotateRightLb, SIGNAL(clicked()), this, SLOT(slotSetRotateRightCheckIcon()));
     //  旋转
     widgetLayout->addWidget(pRotateLeftLb);
     widgetLayout->addWidget(pRotateRightLb);
@@ -184,25 +183,22 @@ void FontWidget::scaleAndRotate(int ival)
     case RotateType_0:
         m_rotate = 0;
         m_rotateType = RotateType_0;
-        DocummentFileHelper::instance()->scaleRotateAndShow((ival * 0.01), RotateType_0);
         break;
     case RotateType_90:
         m_rotateType = RotateType_90;
-        DocummentFileHelper::instance()->scaleRotateAndShow((ival * 0.01), RotateType_90);
         break;
     case RotateType_180:
         m_rotateType = RotateType_180;
-        DocummentFileHelper::instance()->scaleRotateAndShow((ival * 0.01), RotateType_180);
         break;
     case RotateType_270:
         m_rotateType = RotateType_270;
-        DocummentFileHelper::instance()->scaleRotateAndShow((ival * 0.01), RotateType_270);
         break;
     default:
         m_rotateType = RotateType_Normal;
-        DocummentFileHelper::instance()->scaleRotateAndShow((ival * 0.01), RotateType_Normal);
         break;
     }
+
+    DocummentFileHelper::instance()->scaleRotateAndShow((ival * 0.01), m_rotateType);
 }
 
 /**
@@ -304,7 +300,6 @@ void FontWidget::initAdaptateHeight()
     m_pAdaptateHeightLayout->addStretch(1);
 
     m_pSuitHLabelIcon = new CustomClickLabel("", this);
-
     m_pSuitHLabelIcon->hide();
     m_pSuitHLabelIcon->setFixedSize(QSize(30, 25));
     connect(m_pSuitHLabelIcon, SIGNAL(clicked()), this, SLOT(slotSetSuitHCheckIcon()));

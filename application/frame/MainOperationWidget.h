@@ -31,9 +31,6 @@ private slots:
     void slotSearchControl();
     void slotSearchClosed();
 
-private:
-    DPushButton *m_pHideBtn = nullptr;      //  隐藏按钮
-
     // CustomWidget interface
 protected:
     void initWidget() Q_DECL_OVERRIDE;

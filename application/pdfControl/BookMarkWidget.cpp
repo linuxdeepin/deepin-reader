@@ -6,7 +6,6 @@ BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
     CustomWidget(QString("BookMarkWidget"), parent)
 {
     setFocusPolicy(Qt::ClickFocus);
-    setAutoFillBackground(true);
 
     initWidget();
     initConnection();
@@ -276,9 +275,7 @@ void BookMarkWidget::slotDelBkItem()
 
 void BookMarkWidget::slotUpdateTheme()
 {
-    DPalette plt = DGuiApplicationHelper::instance()->applicationPalette();
-    plt.setColor(QPalette::Background, plt.color(QPalette::Base));
-    setPalette(plt);
+    updateWidgetTheme();
 }
 
 void BookMarkWidget::slotFilpOver()

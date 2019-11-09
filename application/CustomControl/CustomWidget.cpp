@@ -8,7 +8,7 @@ CustomWidget::CustomWidget(const QString &name, DWidget *parent)
     setWindowFlags(Qt::FramelessWindowHint);
     setFocusPolicy(Qt::StrongFocus);
     setObjectName(name);
-
+    setAutoFillBackground(true);
     setContextMenuPolicy(Qt::CustomContextMenu);//让widget支持右键菜单事件
 
     m_pMsgSubject = MsgSubject::getInstance();
@@ -30,6 +30,13 @@ CustomWidget::~CustomWidget()
     if (m_pNotifySubject) {
         m_pNotifySubject->removeObserver(this);
     }
+}
+
+void CustomWidget::updateWidgetTheme()
+{
+    auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
+    plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
+    setPalette(plt);
 }
 
 void CustomWidget::sendMsg(const int &msgType, const QString &msgContent)

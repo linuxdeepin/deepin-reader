@@ -7,6 +7,7 @@
 #include <QVBoxLayout>
 #include <DLabel>
 
+#include "CustomControl/CustomClickLabel.h"
 #include "utils/PublicFunction.h"
 
 HomeWidget::HomeWidget(CustomWidget *parent):
@@ -27,11 +28,11 @@ HomeWidget::HomeWidget(CustomWidget *parent):
 
 void HomeWidget::initWidget()
 {
-    m_tipsLabel = new CustomClickLabel(tr("drag Pdf or other format file to here"), this);
-    m_tipsLabel->setAlignment(Qt::AlignHCenter);
+    auto tipsLabel = new CustomClickLabel(tr("drag Pdf or other format file to here"), this);
+    tipsLabel->setAlignment(Qt::AlignHCenter);
     QFont font;
     font.setPixelSize(12);
-    m_tipsLabel->setFont(font);
+    tipsLabel->setFont(font);
 
     auto chooseBtn = new DSuggestButton(tr("Select File"));
     chooseBtn->setFixedSize(QSize(302, 36));
@@ -43,12 +44,13 @@ void HomeWidget::initWidget()
     layout->setAlignment(Qt::AlignCenter);
     layout->addStretch();
 
-    m_pIconLabel = new DLabel;
-    m_pIconLabel->setAlignment(Qt::AlignCenter);
+    auto iconLabel = new DLabel;
+    iconLabel->setObjectName("iconLabel");
+    iconLabel->setAlignment(Qt::AlignCenter);
 
-    layout->addWidget(m_pIconLabel);
+    layout->addWidget(iconLabel);
     layout->addSpacing(10);
-    layout->addWidget(m_tipsLabel);
+    layout->addWidget(tipsLabel);
     layout->addSpacing(14);
     layout->addWidget(chooseBtn, 0, Qt::AlignHCenter);
     layout->addStretch();
@@ -74,10 +76,16 @@ void HomeWidget::slotChooseBtnClicked()
 //  主题切换
 void HomeWidget::slotUpdateTheme()
 {
-    QString sPixmap = PF::getImagePath("import_photo", Pri::g_frame);
-    m_pIconLabel->setPixmap(QPixmap(sPixmap));
+    auto iconLabel = this->findChild<DLabel *>("iconLabel");
+    if (iconLabel) {
+        QString sPixmap = PF::getImagePath("import_photo", Pri::g_frame);
+        iconLabel->setPixmap(QPixmap(sPixmap));
+    }
 
-    m_tipsLabel->setThemePalette();
+    auto customClickLabelList = this->findChildren<CustomClickLabel *>();
+    foreach (auto l, customClickLabelList) {
+        l->setThemePalette();
+    }
 }
 
 QStringList HomeWidget::getOpenFileList()

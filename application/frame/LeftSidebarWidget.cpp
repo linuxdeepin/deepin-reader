@@ -20,6 +20,7 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent):
     initConnections();
 
     slotWidgetVisible(0); //  默认 隐藏
+    slotUpdateTheme();
 }
 
 void LeftSidebarWidget::slotStackSetCurIndex(const int &iIndex)
@@ -37,10 +38,7 @@ void LeftSidebarWidget::slotWidgetVisible(const int &nVis)
 
 void LeftSidebarWidget::slotUpdateTheme()
 {
-    DPalette plt=DGuiApplicationHelper::instance()->applicationPalette();
-    plt.setColor(QPalette::Background, plt.color(QPalette::Base));
-    setAutoFillBackground(true);
-    setPalette(plt);
+    updateWidgetTheme();
 }
 
 void LeftSidebarWidget::initConnections()
@@ -77,7 +75,7 @@ int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgConten
     if (msgType == MSG_SLIDER_SHOW_STATE) { //  控制 侧边栏显隐
         emit sigWidgetVisible(msgContent.toInt());
         return  ConstantMsg::g_effective_res;
-    }else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
     }
 

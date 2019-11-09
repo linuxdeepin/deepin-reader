@@ -2,7 +2,7 @@
 #include <QHBoxLayout>
 #include <QButtonGroup>
 #include "utils/PublicFunction.h"
-#include <DGuiApplicationHelper>
+//#include <DGuiApplicationHelper>
 
 MainOperationWidget::MainOperationWidget(CustomWidget *parent):
     CustomWidget ("MainOperationWidget", parent)
@@ -14,10 +14,6 @@ MainOperationWidget::MainOperationWidget(CustomWidget *parent):
 
 void MainOperationWidget::initWidget()
 {
-    DPalette plt = DGuiApplicationHelper::instance()->applicationPalette();
-    plt.setColor(QPalette::Background, plt.color(QPalette::Base));
-    setAutoFillBackground(true);
-    setPalette(plt);
     auto hboxLayout = new QHBoxLayout;
     hboxLayout->setContentsMargins(2, 0, 2, 0);
     hboxLayout->setSpacing(10);
@@ -39,11 +35,12 @@ void MainOperationWidget::initWidget()
         hboxLayout->addWidget(btn);
     }
 
-    m_pHideBtn = new DPushButton(this);
-    m_pHideBtn->setVisible(false);
-    m_pHideBtn->setCheckable(true);
-    btnGroup->addButton(m_pHideBtn);
-    hboxLayout->addWidget(m_pHideBtn);
+    auto pHideBtn = new DPushButton(this);
+    pHideBtn->setObjectName("hideBtn");
+    pHideBtn->setVisible(false);
+    pHideBtn->setCheckable(true);
+    btnGroup->addButton(pHideBtn);
+    hboxLayout->addWidget(pHideBtn);
 
     hboxLayout->addStretch(1);
 
@@ -76,7 +73,7 @@ DIconButton *MainOperationWidget::createBtn(const QString &btnName, const QStrin
 
 QString MainOperationWidget::findBtnName()
 {
-    QString btnName;
+    QString btnName = "";
 
     if (0 == m_nThumbnailIndex) {
         btnName = "thumbnail";
@@ -99,6 +96,8 @@ void MainOperationWidget::initConnect()
 //  主题更新
 void MainOperationWidget::slotUpdateTheme()
 {
+    updateWidgetTheme();
+
     auto btnList = this->findChildren<DIconButton *>();
     foreach (auto btn, btnList) {
         QString objName = btn->objectName();
@@ -107,10 +106,6 @@ void MainOperationWidget::slotUpdateTheme()
             btn->setIcon(QIcon(sPixmap));
         }
     }
-    DPalette plt = DGuiApplicationHelper::instance()->applicationPalette();
-    plt.setColor(QPalette::Background, plt.color(QPalette::Base));
-    setAutoFillBackground(true);
-    setPalette(plt);
 }
 
 void MainOperationWidget::slotButtonClicked(int id)
@@ -125,7 +120,10 @@ void MainOperationWidget::slotButtonClicked(int id)
  */
 void MainOperationWidget::slotSearchControl()
 {
-    m_pHideBtn->setChecked(true);
+    auto hideBtn = this->findChild<DPushButton *>("hideBtn");
+    if (hideBtn) {
+        hideBtn->setChecked(true);
+    }
 }
 
 /**

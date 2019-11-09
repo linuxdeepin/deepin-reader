@@ -2,6 +2,8 @@
 #define CUSTOMWIDGET_H
 
 #include <DWidget>
+#include <DGuiApplicationHelper>
+#include <DPalette>
 
 #include "subjectObserver/IObserver.h"
 #include "controller/MsgSubject.h"
@@ -36,6 +38,7 @@ signals:
 
 protected:
     virtual void initWidget() = 0;
+    void updateWidgetTheme();
 
 protected:
     void sendMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;

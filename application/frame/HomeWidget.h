@@ -4,7 +4,6 @@
 #include <QSettings>
 
 #include "CustomControl/CustomWidget.h"
-#include "CustomControl/CustomClickLabel.h"
 
 /**
  *  @brief  支持拖拽
@@ -37,8 +36,7 @@ private:
 
 private:
     QSettings *m_settings = nullptr;
-    DLabel  *m_pIconLabel = nullptr;
-    CustomClickLabel *m_tipsLabel = nullptr;
+
     // CustomWidget interface
 protected:
     void initWidget() Q_DECL_OVERRIDE;
