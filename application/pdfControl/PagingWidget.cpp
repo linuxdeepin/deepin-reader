@@ -143,6 +143,7 @@ int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigJumpToSpecifiedPage(m_totalPage - FIRSTPAGES);
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_UPDATE_THEME:            //  颜色主题切换
+        emit sigUpdateTheme();
         break;
     case MSG_NOTIFY_KEY_MSG: {
         if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup) {
