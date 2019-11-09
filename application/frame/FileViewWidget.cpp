@@ -204,6 +204,7 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
         if (nullptr == m_operatemenu) {
             m_operatemenu = new TextOperationMenu(this);
+            m_operatemenu->setFixedWidth(304);
         }
         m_operatemenu->setClickPoint(pRightClickPoint);
         m_operatemenu->setClickPage(nPage);
@@ -211,6 +212,7 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         m_operatemenu->execMenu(tempPoint, bIsHighLight, sSelectText, struuid);
     } else {    //  否则弹出 文档操作菜单
         auto menu = new DefaultOperationMenu(this);
+        menu->setFixedWidth(182);
         menu->execMenu(tempPoint, nPage);
     }
 }

@@ -22,12 +22,15 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
     auto pWidget = new DWidget(pParent);
     setDefaultWidget(pWidget);
 
-    m_pClickLabel = new CustomClickLabel(tr("add high light"));
+    m_pClickLabel = new CustomClickLabel(QString("        %1").arg(tr("add high light")));
+    QFont font;
+    font.setPixelSize(14);
+    m_pClickLabel->setFont(font);
     connect(m_pClickLabel, SIGNAL(clicked()), this, SIGNAL(sigBtnDefaultClicked()));
 
     auto buttonLayout = new QHBoxLayout;
-    buttonLayout->setContentsMargins(20, 6, 20, 6);
-    buttonLayout->setSpacing(8);
+    buttonLayout->setContentsMargins(25, 6, 20, 6);
+    buttonLayout->setSpacing(12);
 
     auto btnGroup = new QButtonGroup(this);
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SIGNAL(sigBtnGroupClicked(int)));

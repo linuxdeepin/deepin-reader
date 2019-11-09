@@ -24,7 +24,7 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
         m_pBookMark->setText(tr("delete bookmark"));
     } else {
         m_pBookMark->setProperty("data", 1);
-        m_pBookMark->setText(tr("add bookmark"));
+        m_pBookMark->setText(QString("       %1").arg(tr("add bookmark")));
     }
 
     if (m_nRightPageNumber == 0) {    //  首页
@@ -45,6 +45,9 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
 
 void DefaultOperationMenu::initMenu()
 {
+    QFont font;
+    font.setPixelSize(14);
+    setFont(font);
     createAction(tr("Search"), SLOT(slotSearchClicked()));
     m_pBookMark = createAction(tr("add bookmark"), SLOT(slotBookMarkClicked()));
     m_pFirstPage = createAction(tr("first page"), SLOT(slotFirstPageClicked()));
@@ -55,7 +58,7 @@ void DefaultOperationMenu::initMenu()
 
 QAction *DefaultOperationMenu::createAction(const QString &name, const char *member)
 {
-    auto action = new QAction(name);
+    auto action = new QAction(QString("       %1").arg(name));
 
     connect(action, SIGNAL(triggered()), member);
 

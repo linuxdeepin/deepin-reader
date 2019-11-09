@@ -10,7 +10,7 @@
 TextOperationMenu::TextOperationMenu(DWidget *parent)
     : DMenu (parent)
 {
-    initMenu();
+    initMenu();   
 }
 
 void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, const QString &sSelectText, const QString &sUuid)
@@ -45,7 +45,10 @@ void TextOperationMenu::setClickPage(int nClickPage)
 }
 
 void TextOperationMenu::initMenu()
-{
+{  
+    QFont font;
+    font.setPixelSize(14);
+    setFont(font);
     m_pCopy = createAction(tr("copy"), SLOT(slotCopyClicked()));
     this->addSeparator();
 
@@ -61,12 +64,16 @@ void TextOperationMenu::initMenu()
     createAction(tr("add note"), SLOT(slotAddNoteClicked()));
     this->addSeparator();
 
-    m_pAddBookMark = createAction(tr("add bookmark"), SLOT(slotAddBookMarkClicked()));
+    m_pAddBookMark = createAction(tr("add bookmark"), SLOT(slotAddBookMarkClicked()));   
 }
 
 QAction *TextOperationMenu::createAction(const QString &text, const char *member)
 {
-    auto action = new  QAction(text, this);
+//    QPixmap pixmap(QSize(32,20));
+//    pixmap.fill(Qt::transparent);
+//    QIcon icon(pixmap);
+//    auto action = new  QAction(icon,text, this);
+    auto action = new  QAction(QString("       %1").arg(text), this);
     connect(action, SIGNAL(triggered()), member);
     this->addAction(action);
 

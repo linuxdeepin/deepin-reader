@@ -229,6 +229,24 @@ stSearchRes PagePdf::search(const QString &text, bool matchCase, bool wholeWords
     return stres;
 }
 
+void PagePdf::changeAnnotationColor(const QString uuid, const QColor &color)
+{
+    Q_D(PagePdf);
+    QList<Poppler::Annotation *> listannote = d->m_page->annotations();
+    foreach (Poppler::Annotation *annote, listannote) {
+        if (annote->subType() == Poppler::Annotation::AHighlight) {
+            if(annote->uniqueName().indexOf(uuid)>=0&&!uuid.isEmpty())
+            {
+                  Poppler::Annotation::Style style=annote->style();
+                  style.setColor(color);
+                  annote->setStyle(style);
+                  break;
+            }
+        }
+    }
+    qDeleteAll(listannote);
+}
+
 
 void PagePdf::paintEvent(QPaintEvent *event)
 {

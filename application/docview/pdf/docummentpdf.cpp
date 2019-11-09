@@ -156,6 +156,13 @@ void DocummentPDF::jumpToHighLight(const QString &uuid, int ipage)
     }
 }
 
+void DocummentPDF::changeAnnotationColor(int ipage,const QString uuid, const QColor& color)
+{
+    Q_D(DocummentPDF);
+    if (!d->document||ipage<0||ipage>d->m_pages.size())return;
+    static_cast<PagePdf *>(d->m_pages.at(ipage))->changeAnnotationColor(uuid,color);
+}
+
 void DocummentPDF::removeAllAnnotation()
 {
     Q_D(DocummentPDF);

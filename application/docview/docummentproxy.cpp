@@ -464,3 +464,9 @@ bool DocummentProxy::setBookMarkState(int page, bool state)
         return false;
     return m_documment->setBookMarkState(page, state);
 }
+
+void DocummentProxy::changeAnnotationColor(int ipage, const QString uuid, const QColor &color)
+{
+     if (m_documment)
+         m_documment->changeAnnotationColor(ipage,uuid,color);
+}

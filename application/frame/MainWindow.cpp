@@ -163,12 +163,18 @@ void MainWindow::initConnections()
     titlebar()->setMenu(m_menu);
 
     auto actions = this->findChildren<QAction *>();
-    foreach (QAction *a, actions) {
+    foreach (QAction *a, actions) {      
         if (a->objectName() == "Open File") {
             a->setDisabled(false);
             break;
         }
     }
+
+//    titlebar()->menu()->setFixedWidth(162);
+//    QFont font;
+//    font.setPixelSize(14);
+//    titlebar()->menu()->setFont(font);
+
 }
 
 void MainWindow::initTitlebar()
