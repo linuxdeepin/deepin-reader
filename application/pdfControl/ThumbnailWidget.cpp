@@ -1,6 +1,4 @@
 #include "ThumbnailWidget.h"
-#include <QStringListModel>
-#include <QStandardItemModel>
 #include "frame/DocummentFileHelper.h"
 
 ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
@@ -156,10 +154,7 @@ void ThumbnailWidget::slotOpenFileOk()
     int pages = DocummentFileHelper::instance()->getPageSNum();
 
     m_totalPages = pages;
-
-    if (m_pPageWidget) {
-        m_pPageWidget->setTotalPages(m_totalPages);
-    }
+    m_pPageWidget->setTotalPages(m_totalPages);
 
     m_pThumbnailListWidget->clear();
     fillContantToList();
@@ -170,18 +165,6 @@ void ThumbnailWidget::slotOpenFileOk()
     m_ThreadLoadImage.setPages(m_totalPages);
     m_ThreadLoadImage.setIsLoaded(true);
     m_ThreadLoadImage.start();
-}
-
-// 启动加载缩略图线程
-void ThumbnailWidget::slotLoadThumbnailImage()
-{
-    //    if (m_ThreadLoadImage.endPage() == ( m_totalPages - 1)) {
-    //        m_loadImageTimer.stop();
-    //        m_ThreadLoadImage.setIsLoaded(false);
-    //    }
-    if (!m_ThreadLoadImage.isRunning()) {
-        m_ThreadLoadImage.start();
-    }
 }
 
 /*******************************ThreadLoadImage*************************************************/
@@ -221,13 +204,14 @@ void ThreadLoadImage::run()
             m_nEndPage = m_pages - 1;
         }
 
+        auto dproxy = DocummentFileHelper::instance();
+        if (nullptr == dproxy) {
+            break;
+        }
+
         for (int page = m_nStartPage; page <= m_nEndPage; page++) {
             if (!m_isLoaded)
                 break;
-            auto dproxy = DocummentFileHelper::instance();
-            if (nullptr == dproxy) {
-                break;
-            }
             QImage image;
             bool bl = dproxy->getImage(page, image, 132, 160/*134, 152*/);
             if (bl) {

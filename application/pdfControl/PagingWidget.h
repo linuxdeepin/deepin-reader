@@ -1,7 +1,6 @@
 #ifndef PAGINGWIDGET_H
 #define PAGINGWIDGET_H
 
-#include <DLabel>
 #include <DSpinBox>
 #include <DIconButton>
 
@@ -10,6 +9,7 @@
 #include <QVBoxLayout>
 
 #include "CustomControl/CustomWidget.h"
+#include "CustomControl/CustomClickLabel.h"
 
 /**
  * @brief The ThumbnailItemWidget class
@@ -41,6 +41,7 @@ private slots:
     void slotNextPage();
     void slotJumpToSpecifiedPage(const int &);
     void slotJudgeInputPage(const QString &);
+    void slotUpdateTheme();
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -50,7 +51,7 @@ private:
     void initConnections();
 
 private:
-    DLabel *m_pTotalPagesLab = nullptr;        // 当前文档总页数标签
+    CustomClickLabel *m_pTotalPagesLab = nullptr;        // 当前文档总页数标签
     DIconButton *m_pPrePageBtn = nullptr;      // 按钮 前一页
     DIconButton *m_pNextPageBtn = nullptr;     // 按钮 后一页
     DSpinBox *m_pJumpPageSpinBox = nullptr;    // 输入框 跳转页码

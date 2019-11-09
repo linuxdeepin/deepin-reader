@@ -94,7 +94,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
         QString key = Utils::getKeyshortcut(event);
         if (m_pFilterList.contains(key)) {
 
-            //  没有打开文件, 只能 执行 ctrl+o, f1
+            //  没有打开文件
             QString sFilePath = DataManager::instance()->strOnlyFilePath();
             if (sFilePath == "") {
                 if (key == KeyStr::g_f1 || key == KeyStr::g_ctrl_o

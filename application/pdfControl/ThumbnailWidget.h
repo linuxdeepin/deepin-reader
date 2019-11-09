@@ -8,10 +8,9 @@
 #include <QThread>
 #include <QTimer>
 
-#include "pdfControl/ThumbnailItemWidget.h"
+#include "ThumbnailItemWidget.h"
 #include "CustomControl/CustomWidget.h"
 #include "PagingWidget.h"
-#include "docview/docummentproxy.h"
 #include "CustomListWidget.h"
 
 /**
@@ -113,7 +112,6 @@ private:
 
 private slots:
     void slotOpenFileOk();
-    void slotLoadThumbnailImage();
     void slotDocFilePageChanged(const QString &);
     void slotCloseFile();
     void slotUpdateTheme();

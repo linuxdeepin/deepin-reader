@@ -59,8 +59,8 @@ protected:
 private:
     SearchResWidget *m_pSearchResWidget = nullptr; // 左侧搜索结果缩略图页面
     bool m_isRunning                    = false;   // 线程是否在运行
-    int m_nStartIndex                   = 0;       //　每次加载开始页
-    int m_nEndIndex                     = 19;      //　每次加载结束页
+//    int m_nStartIndex                   = 0;       //　每次加载开始页
+//    int m_nEndIndex                     = 19;      //　每次加载结束页
     int m_pages                         = -1;      //  搜索内容总页数
     QList<stSearchRes> m_searchContantList;        // 搜索全部内容
 };

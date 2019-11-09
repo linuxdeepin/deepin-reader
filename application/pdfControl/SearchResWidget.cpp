@@ -5,7 +5,6 @@
 SearchResWidget::SearchResWidget(CustomWidget *parent) :
     CustomWidget(QString("SearchResWidget"), parent)
 {
-    setObjectName("SearchResWidget");
     m_loadSearchResThread.setSearchResW(this);
 
     initWidget();
@@ -200,12 +199,13 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
  */
 int SearchResWidget::getSearchPage(const int &index)
 {
-    QListWidgetItem *pItem = m_pNotesList->item(index);
-    m_pSearchItemWidget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
-    if (m_pSearchItemWidget) {
-        return m_pSearchItemWidget->nPageIndex();
+    auto pItem = m_pNotesList->item(index);
+    if (pItem) {
+        m_pSearchItemWidget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
+        if (m_pSearchItemWidget) {
+            return m_pSearchItemWidget->nPageIndex();
+        }
     }
-
     return -1;
 }
 
@@ -240,8 +240,8 @@ void LoadSearchResThread::run()
     m_pages = m_searchContantList.count();
     m_searchContantList.clear();
 
-    m_nStartIndex = 0;
-    m_nEndIndex = 19;
+    int m_nStartIndex = 0;
+    int m_nEndIndex = 19;
 
     while (m_isRunning) {
 
@@ -254,24 +254,22 @@ void LoadSearchResThread::run()
 
         int page = -1;
 
-        for (int index = m_nStartIndex; index <= m_nEndIndex; index++) {
+        if (!m_pSearchResWidget) {
+            break;
+        }
+        auto dproxy = DocummentFileHelper::instance();
+        if (nullptr == dproxy) {
+            break;
+        }
 
+        for (int index = m_nStartIndex; index <= m_nEndIndex; index++) {
             if (!m_isRunning) {
                 break;
             }
-
-            if (!m_pSearchResWidget) {
-                break;
-            }
-
             page = m_pSearchResWidget->getSearchPage(index);
 
             if (page == -1) {
                 continue;
-            }
-            auto dproxy = DocummentFileHelper::instance();
-            if (nullptr == dproxy) {
-                break;
             }
 
             QImage image;

@@ -9,6 +9,7 @@ PagingWidget::PagingWidget(CustomWidget *parent) :
     initWidget();
 
     initConnections();
+    slotUpdateTheme();
 }
 
 /**
@@ -17,8 +18,7 @@ PagingWidget::PagingWidget(CustomWidget *parent) :
  */
 void PagingWidget::initWidget()
 {
-    m_pTotalPagesLab = new DLabel(this);
-    m_pTotalPagesLab->setText(QString("/xxx") + tr("pages"));
+    m_pTotalPagesLab = new CustomClickLabel(QString("/xxx") + tr("pages"), this);
     m_pTotalPagesLab->setMinimumWidth(80);
 
     m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
@@ -98,6 +98,7 @@ void PagingWidget::initConnections()
     connect(this, SIGNAL(sigJumpToNextPage()), this, SLOT(slotNextPage()));
     connect(this, SIGNAL(sigJumpToSpecifiedPage(const int &)), this, SLOT(slotJumpToSpecifiedPage(const int &)));
     connect(this, SIGNAL(sigJudgeInputPage(const QString &)), this, SLOT(slotJudgeInputPage(const QString &)));
+    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
 /**
@@ -141,6 +142,8 @@ int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
     case MSG_OPERATION_END_PAGE:                //  最后一页
         emit sigJumpToSpecifiedPage(m_totalPage - FIRSTPAGES);
         return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_UPDATE_THEME:            //  颜色主题切换
+        break;
     case MSG_NOTIFY_KEY_MSG: {
         if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup) {
             emit sigJumpToPrevPage();
@@ -192,6 +195,11 @@ void PagingWidget::slotJudgeInputPage(const QString &)
     if (t_strPage.length() == 1 && m_pJumpPageSpinBox->value() == 0) {
         m_pJumpPageSpinBox->setValue(m_currntPage + 1);
     }
+}
+
+void PagingWidget::slotUpdateTheme()
+{
+    m_pTotalPagesLab->setThemePalette();
 }
 
 //  设置当前页码, 进行比对,是否可以 上一页\下一页
