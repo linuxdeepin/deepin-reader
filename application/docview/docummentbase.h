@@ -209,6 +209,7 @@ protected:
     Q_DECLARE_PUBLIC(DocummentBase)
 };
 
+
 class DocummentBase: public DScrollArea
 {
     Q_OBJECT
@@ -309,5 +310,6 @@ protected:
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), DocummentBase)
 
 };
+
 
 #endif // DOCUMMENTBASE_H

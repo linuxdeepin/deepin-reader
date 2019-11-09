@@ -1,6 +1,7 @@
 #include "docummentxps.h"
 #include "pagexps.h"
 #include "docview/publicfunc.h"
+//#include "../docummentbase.cpp"
 #include <QImage>
 #include <QTemporaryFile>
 #include <QFileInfo>

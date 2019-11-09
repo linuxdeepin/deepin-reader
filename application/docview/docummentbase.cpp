@@ -10,7 +10,6 @@
 #include <poppler-qt5.h>
 #include <qglobal.h>
 
-
 SlidWidget::SlidWidget(DWidget *parent): DWidget(parent)
 {
     setMouseTracking(true);

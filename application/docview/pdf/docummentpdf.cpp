@@ -2,6 +2,7 @@
 #include "pagepdf.h"
 #include "../searchtask.h"
 #include "docview/publicfunc.h"
+//#include "../docummentbase.cpp"
 #include <DScrollBar>
 #include <QImage>
 #include <QTemporaryFile>

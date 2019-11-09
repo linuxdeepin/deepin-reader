@@ -1,6 +1,7 @@
 #include "docummentdjvu.h"
 #include "pagedjvu.h"
 #include "docview/publicfunc.h"
+//#include "../docummentbase.cpp"
 #include <DScrollBar>
 #include <QImage>
 #include <QTemporaryFile>
