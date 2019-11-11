@@ -264,6 +264,7 @@ void FileViewWidget::slotFileAddAnnotation(const QString &msgContent)
 
         int iIndex = sIndex.toInt();
         QColor color = DataManager::instance()->getLightColorList().at(iIndex);
+        DataManager::instance()->setSelectColor(color);
 
         QPoint tempPoint(sX.toInt(), sY.toInt());
 
@@ -303,7 +304,7 @@ void FileViewWidget::slotFileAddNote(const QString &msgContent)
         QString sX = contentList.at(2);
         QString sY = contentList.at(3);
 
-        QColor color = DataManager::instance()->getLightColorList().at(0);
+        QColor color = DataManager::instance()->selectColor();
         QPoint tempPoint(sX.toInt(), sY.toInt());
 
         sUuid = m_pDocummentFileHelper->addAnnotation(tempPoint, tempPoint, color);  //  高亮 产生的 uuid

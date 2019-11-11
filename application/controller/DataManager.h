@@ -62,6 +62,15 @@ public:
     QString gettrCurrentTheme() const;
     void settrCurrentTheme(const QString &strCurrentTheme);
 
+    inline QColor selectColor()
+    {
+        return m_selectColor;
+    }
+    inline void setSelectColor(const QColor&color)
+    {
+        m_selectColor = color;
+    }
+
 private:
     QString m_strCurrentTheme = "";     //  当前主题
     QString m_strOnlyFilePath = "";     //  只显示一个pdf 文件
@@ -72,6 +81,7 @@ private:
     QPoint m_point;                     // 鼠标左键点击位置
     QRect m_screenRect;                 // 屏幕的分辨率
     QSize m_smallNoteSize;              // 注释小窗体的大小
+    QColor m_selectColor;               // 高亮颜色
 };
 
 #endif // DATAMANAGER_H

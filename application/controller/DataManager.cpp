@@ -12,6 +12,8 @@ DataManager::DataManager(QObject *parent) :
     m_listColor.append(QColor("#05EA6B"));
     m_listColor.append(QColor("#FEF144"));
     m_listColor.append(QColor("#D5D5D1"));
+
+    m_selectColor = m_listColor.at(0);
 }
 
 QString DataManager::strOnlyFilePath() const
