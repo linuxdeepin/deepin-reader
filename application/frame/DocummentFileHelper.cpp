@@ -134,6 +134,7 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
         m_szFilePath = sPath;
         DataManager::instance()->setStrOnlyFilePath(sPath);
 
+        sendMsg(MSG_OPERATION_OPEN_FILE_START);
         bool rl = m_pDocummentProxy->openFile(m_nCurDocType, sPath);
         if (!rl) {
             m_szFilePath = "";

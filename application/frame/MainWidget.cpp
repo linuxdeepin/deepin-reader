@@ -22,6 +22,7 @@ MainWidget::MainWidget(CustomWidget *parent) :
 void MainWidget::initConnections()
 {
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
+    connect(this, SIGNAL(sigOpenFileStart()), this, SLOT(slotOpenFileStart()));
     connect(this, SIGNAL(sigOpenFileFail(const QString &)), this, SLOT(slotOpenFileFail(const QString &)));
 }
 
@@ -34,10 +35,22 @@ void MainWidget::slotOpenFileOk()
     }
 }
 
+void MainWidget::slotOpenFileStart()
+{
+    auto pLayout = this->findChild<QStackedLayout *>();
+    if (pLayout) {
+        pLayout->setCurrentIndex(2);
+    }
+}
+
 //  文件打开失败
 void MainWidget::slotOpenFileFail(const QString &errorInfo)
 {
     DMessageBox::warning(nullptr, tr("deepin-reader"), errorInfo);
+    auto pLayout = this->findChild<QStackedLayout *>();
+    if (pLayout) {
+        pLayout->setCurrentIndex(0);
+    }
 }
 
 int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
@@ -47,6 +60,8 @@ int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (msgType == MSG_OPERATION_OPEN_FILE_FAIL) {
         emit sigOpenFileFail(msgContent);
         return ConstantMsg::g_effective_res;
+    } else if (msgType == MSG_OPERATION_OPEN_FILE_START) {
+        emit sigOpenFileStart();
     }
 
     return 0;
@@ -101,4 +116,14 @@ void MainWidget::initWidget()
     pSplitter->setSizes(list_src);
 
     pStcakLayout->addWidget(pSplitter);
+
+
+    auto pSpinnerWidget = new DWidget;
+    QGridLayout *gridlyout = new QGridLayout(pSpinnerWidget);
+    gridlyout->setAlignment(Qt::AlignCenter);
+    m_spinner = new DSpinner;
+    m_spinner->setFixedSize(60, 60);
+    gridlyout->addWidget(m_spinner);
+    m_spinner->start();
+    pStcakLayout->addWidget(pSpinnerWidget);
 }

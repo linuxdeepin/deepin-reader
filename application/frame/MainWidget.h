@@ -3,6 +3,8 @@
 
 #include "CustomControl/CustomWidget.h"
 
+#include <DSpinner>
+
 /**
  * @brief The MainWidget class
  * @brief   采用　栈式　显示窗口，　当前只显示某一特定窗口
@@ -16,6 +18,7 @@ public:
     MainWidget(CustomWidget *parent = nullptr);
 
 signals:
+    void sigOpenFileStart();
     void sigOpenFileOk();
     void sigOpenFileFail(const QString &);
 
@@ -26,8 +29,10 @@ protected:
 private slots:
     void slotOpenFileFail(const QString &);
     void slotOpenFileOk();
+    void slotOpenFileStart();
 
 private:
+    DSpinner *m_spinner;
     void initConnections();
 
     // IObserver interface

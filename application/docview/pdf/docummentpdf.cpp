@@ -156,11 +156,11 @@ void DocummentPDF::jumpToHighLight(const QString &uuid, int ipage)
     }
 }
 
-void DocummentPDF::changeAnnotationColor(int ipage,const QString uuid, const QColor& color)
+void DocummentPDF::changeAnnotationColor(int ipage, const QString uuid, const QColor &color)
 {
     Q_D(DocummentPDF);
-    if (!d->document||ipage<0||ipage>d->m_pages.size())return; 
-    static_cast<PagePdf *>(d->m_pages.at(ipage))->changeAnnotationColor(uuid,color);
+    if (!d->document || ipage < 0 || ipage > d->m_pages.size())return;
+    static_cast<PagePdf *>(d->m_pages.at(ipage))->changeAnnotationColor(uuid, color);
 }
 
 void DocummentPDF::removeAllAnnotation()
@@ -391,7 +391,7 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
 
 void DocummentPDF::clearSearch()
 {
-    qDebug()<<"DocummentPDF::clearSearch";
+    qDebug() << "DocummentPDF::clearSearch";
     Q_D(DocummentPDF);
     d->m_searchTask->cancel();
     d->m_searchTask->wait();
@@ -406,7 +406,6 @@ void DocummentPDF::clearSearch()
     if (d->m_currentpageno + 1 < d->m_pages.size())
         d->m_pages.at(d->m_currentpageno + 1)->update();
     d->m_pages.at(d->m_currentpageno)->update();//刷新当前页
-
 }
 
 void DocummentPDF::refreshOnePage(int ipage)
