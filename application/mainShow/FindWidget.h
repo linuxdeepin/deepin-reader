@@ -23,16 +23,24 @@
 #ifndef FINDWIDGET_H
 #define FINDWIDGET_H
 
-#include "CustomControl/CustomWidget.h"
+#include <DWidget>
+#include <DFloatingWidget>
 #include <DSearchEdit>
-#include <DFloatingButton>
 
-class FindWidget : public CustomWidget
+#include "subjectObserver/IObserver.h"
+#include "controller/MsgSubject.h"
+#include "controller/NotifySubject.h"
+
+DWIDGET_USE_NAMESPACE
+
+class FindWidget : public DFloatingWidget, public IObserver
 {
     Q_OBJECT
 
 public:
-    FindWidget(CustomWidget *parent = nullptr);
+    FindWidget(DWidget *parent = nullptr);
+    ~FindWidget() Q_DECL_OVERRIDE;
+
 
 private slots:
     void findCancel();
@@ -42,19 +50,22 @@ private slots:
     void slotClearContent();
 
 protected:
-    void hideEvent(QHideEvent *event);
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
+
+private:
+    void initWidget();
 
 private:
     DSearchEdit     *m_pSearchEdit = nullptr;
     QString     m_strOldFindContent = "";
+    NotifySubject   *m_pNotifySubject = nullptr;
+    MsgSubject      *m_pMsgSubject = nullptr;
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &);
-
-    // CustomWidget interface
-protected:
-    void initWidget();
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    void sendMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
+    void notifyMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
 };
 
 #endif

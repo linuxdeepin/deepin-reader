@@ -69,7 +69,7 @@ void HomeWidget::slotChooseBtnClicked()
             sRes += s + Constant::sQStringSep;
         }
 
-        sendMsg(MSG_OPEN_FILE_PATH, sRes);
+        notifyMsg(MSG_OPEN_FILE_PATH, sRes);
     }
 }
 

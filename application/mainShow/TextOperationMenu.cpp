@@ -2,6 +2,7 @@
 #include "ColorWidgetAction.h"
 #include "subjectObserver/MsgHeader.h"
 #include "controller/MsgSubject.h"
+#include "controller/NotifySubject.h"
 #include "docview/docummentproxy.h"
 #include "controller/DataManager.h"
 #include "subjectObserver/ModuleHeader.h"
@@ -82,6 +83,12 @@ void TextOperationMenu::sendMsgToFrame(const int &msgType, const QString &msgCon
     this->hide();
 }
 
+void TextOperationMenu::notifyMsgToFrame(const int &msgType, const QString &msgContent)
+{
+    NotifySubject::getInstance()->notifyMsg(msgType, msgContent);
+    this->hide();
+}
+
 void TextOperationMenu::slotSetHighLight(int nColor)
 {
     m_pLightColor = nColor;
@@ -96,7 +103,7 @@ void TextOperationMenu::slotSetHighLight(int nColor)
 
 void TextOperationMenu::slotCopyClicked()
 {
-    sendMsgToFrame(MSG_OPERATION_TEXT_COPY, m_strSelectText);
+    notifyMsgToFrame(MSG_OPERATION_TEXT_COPY, m_strSelectText);
 }
 
 void TextOperationMenu::slotAddHighLightClicked()
@@ -113,10 +120,10 @@ void TextOperationMenu::slotAddNoteClicked()
 {
     if (m_strNoteUuid == "") {
         QString msgContent = QString("%1").arg(m_nClickPage) + Constant::sQStringSep + QString("%1").arg(m_pClickPoint.x()) + Constant::sQStringSep + QString("%1").arg(m_pClickPoint.y());
-        sendMsgToFrame(MSG_OPERATION_TEXT_ADD_ANNOTATION, msgContent);
+        notifyMsgToFrame(MSG_OPERATION_TEXT_ADD_ANNOTATION, msgContent);
     } else {
         QString t_strContant = m_strNoteUuid.trimmed() + QString("%1%") + QString::number(m_nClickPage);
-        sendMsgToFrame(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+        notifyMsgToFrame(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
     }
 }
 

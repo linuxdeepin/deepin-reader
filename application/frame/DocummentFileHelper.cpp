@@ -11,6 +11,7 @@
 #include "subjectObserver/ModuleHeader.h"
 #include "controller/DBManager.h"
 #include "controller/MsgSubject.h"
+#include "controller/NotifySubject.h"
 #include "FileFormatHelper.h"
 
 DocummentFileHelper::DocummentFileHelper(QObject *parent)
@@ -118,7 +119,7 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
             }
         }
         m_pDocummentProxy->closeFile();
-        sendMsg(MSG_CLOSE_FILE);
+        notifyMsg(MSG_CLOSE_FILE);
     }
 
     QStringList fileList = filePaths.split(Constant::sQStringSep,  QString::SkipEmptyParts);
@@ -140,7 +141,7 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
             m_szFilePath = "";
             DataManager::instance()->setStrOnlyFilePath("");
 
-            sendMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("File not supported"));
+            notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("File not supported"));
         }
     }
 }
@@ -153,7 +154,7 @@ void DocummentFileHelper::setAppShowTitle(const QString &fileName)
     if (sTitle == "") {
         sTitle = fileName;
     }
-    sendMsg(MSG_OPERATION_OPEN_FILE_TITLE, sTitle);
+    notifyMsg(MSG_OPERATION_OPEN_FILE_TITLE, sTitle);
 }
 
 //  复制
@@ -189,21 +190,28 @@ void DocummentFileHelper::initConnections()
     connect(m_pDocummentProxy, &DocummentProxy::signal_openResult, this, [ = ](bool openresult) {
         if (openresult) {
             //  通知 其他窗口， 打开文件成功了！！！
-            sendMsg(MSG_OPERATION_OPEN_FILE_OK);
+            notifyMsg(MSG_OPERATION_OPEN_FILE_OK);
             QFileInfo info(m_szFilePath);
             setAppShowTitle(info.baseName());
         } else {
             m_szFilePath = "";
             DataManager::instance()->setStrOnlyFilePath("");
 
-            sendMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
+            notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
         }
     });
 }
 
+//  发送 操作消息
 void DocummentFileHelper::sendMsg(const int &msgType, const QString &msgContent)
 {
     MsgSubject::getInstance()->sendMsg(msgType, msgContent);
+}
+
+//  通知消息, 不需要撤回
+void DocummentFileHelper::notifyMsg(const int &msgType, const QString &msgContent)
+{
+    NotifySubject::getInstance()->notifyMsg(msgType, msgContent);
 }
 
 //  文档　跳转页码　．　打开浏览器

@@ -45,6 +45,7 @@ private:
 
     DToolButton *createBtn(const QString &btnName, bool bCheckable = false);
     void sendMsgToSubject(const int &, const QString &msgCotent = "");
+    void notifyMsgToSubject(const int &, const QString &msgCotent = "");
 
 private:
     DMenu   *m_pHandleMenu = nullptr;

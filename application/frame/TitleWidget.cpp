@@ -53,14 +53,14 @@ void TitleWidget::slotAppFullScreen()
     m_pThumbnailBtn->setChecked(false);
 
     //  侧边栏 隐藏
-    sendMsgToSubject(MSG_SLIDER_SHOW_STATE, "0");
+    notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, "0");
 }
 
 //  退出放大鏡
 void TitleWidget::slotMagnifierCancel()
 {
     m_pMagnifierBtn->setChecked(false);
-    sendMsgToSubject(MSG_MAGNIFYING, "0");
+    notifyMsgToSubject(MSG_MAGNIFYING, "0");
 }
 
 void TitleWidget::initWidget()
@@ -93,7 +93,7 @@ void TitleWidget::initConnections()
 void TitleWidget::on_thumbnailBtn_clicked()
 {
     bool rl = m_pThumbnailBtn->isChecked();
-    sendMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(rl));
+    notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(rl));
 }
 
 //  字体
@@ -124,7 +124,7 @@ void TitleWidget::on_handleShapeBtn_clicked()
 void TitleWidget::on_magnifyingBtn_clicked()
 {
     bool bCheck = m_pMagnifierBtn->isChecked();
-    sendMsgToSubject(MSG_MAGNIFYING, QString::number(bCheck));
+    notifyMsgToSubject(MSG_MAGNIFYING, QString::number(bCheck));
 
     //  开启了放大镜, 需要把选择工具 切换为 选择工具
     if (bCheck) {
@@ -147,7 +147,7 @@ void TitleWidget::slotActionTrigger(QAction *action)
     bool bCheck = m_pMagnifierBtn->isChecked();
     if (bCheck) {
         m_pMagnifierBtn->setChecked(false);
-        sendMsgToSubject(MSG_MAGNIFYING, "0");
+        notifyMsgToSubject(MSG_MAGNIFYING, "0");
     }
 
     QString btnName = "";
@@ -168,7 +168,7 @@ void TitleWidget::slotActionTrigger(QAction *action)
         QString normalPic = PF::getImagePath(btnName, Pri::g_frame);
         m_pHandleShapeBtn->setIcon(QIcon(normalPic));
 
-        sendMsgToSubject(MSG_HANDLESHAPE, QString::number(nCurrentState));
+        notifyMsgToSubject(MSG_HANDLESHAPE, QString::number(nCurrentState));
     }
 }
 
@@ -252,6 +252,11 @@ DToolButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 void TitleWidget::sendMsgToSubject(const int &msgType, const QString &msgCotent)
 {
     sendMsg(msgType, msgCotent);
+}
+
+void TitleWidget::notifyMsgToSubject(const int &msgType, const QString &msgCotent)
+{
+    notifyMsg(msgType, msgCotent);
 }
 
 //  处理 推送消息

@@ -16,7 +16,7 @@ protected:
 public:
     virtual int dealWithData(const int &, const QString &) = 0;
     virtual void sendMsg(const int &, const QString &) = 0;
-    virtual void notifyMsg(const int &msgType, const QString &msgContent = "") = 0;
+    virtual void notifyMsg(const int &, const QString &) = 0;
 
 public:
     QString getObserverName()

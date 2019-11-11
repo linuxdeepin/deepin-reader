@@ -21,11 +21,13 @@
  */
 
 #include "FindWidget.h"
-#include <DFloatingButton>
 #include <QHBoxLayout>
+#include <DIconButton>
+#include <DDialogCloseButton>
+#include "subjectObserver/MsgHeader.h"
 
-FindWidget::FindWidget(CustomWidget *parent)
-    : CustomWidget("FindWidget", parent)
+FindWidget::FindWidget(DWidget *parent)
+    : DFloatingWidget(parent)
 {
     setFixedSize(QSize(410, 40));
     setWindowFlags(windowFlags() |  Qt::WindowStaysOnTopHint);
@@ -33,11 +35,32 @@ FindWidget::FindWidget(CustomWidget *parent)
     initWidget();
 
     setVisible(false);
+
+    m_pNotifySubject = NotifySubject::getInstance();
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+
+    m_pMsgSubject = MsgSubject::getInstance();
+    if (m_pMsgSubject) {
+        m_pMsgSubject->removeObserver(this);
+    }
+}
+
+FindWidget::~FindWidget()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
+
+    if (m_pMsgSubject) {
+        m_pMsgSubject->removeObserver(this);
+    }
 }
 
 void FindWidget::findCancel()
 {
-    sendMsg(MSG_CLEAR_FIND_CONTENT);
+    notifyMsg(MSG_CLEAR_FIND_CONTENT);
     m_pSearchEdit->clear();
     m_pSearchEdit->clearFocus();
     hide();
@@ -48,19 +71,19 @@ void FindWidget::handleContentChanged()
     QString strNewFind = m_pSearchEdit->text();
     if (strNewFind != m_strOldFindContent) {
         m_strOldFindContent = strNewFind;
-        sendMsg(MSG_FIND_CONTENT, m_strOldFindContent);
+        notifyMsg(MSG_FIND_CONTENT, m_strOldFindContent);
     }
 }
 
 void FindWidget::slotFindNextBtnClicked()
 {
-    sendMsg(MSG_FIND_NEXT);
+    notifyMsg(MSG_FIND_NEXT);
     this->raise();
 }
 
 void FindWidget::slotFindPrevBtnClicked()
 {
-    sendMsg(MSG_FIND_PREV);
+    notifyMsg(MSG_FIND_PREV);
     this->raise();
 }
 
@@ -70,14 +93,14 @@ void FindWidget::slotClearContent()
     QString strNewFind = m_pSearchEdit->text();
     if (strNewFind == "") {
         m_strOldFindContent = "";
-        sendMsg(MSG_CLEAR_FIND_CONTENT);
+        notifyMsg(MSG_CLEAR_FIND_CONTENT);
     }
 }
 
 void FindWidget::hideEvent(QHideEvent *e)
 {
     m_strOldFindContent = "";
-    CustomWidget::hideEvent(e);
+    DFloatingWidget::hideEvent(e);
 }
 
 int FindWidget::dealWithData(const int &msgType, const QString &)
@@ -89,21 +112,31 @@ int FindWidget::dealWithData(const int &msgType, const QString &)
     return 0;
 }
 
+void FindWidget::sendMsg(const int &msgType, const QString &msgContent)
+{
+    m_pMsgSubject->sendMsg(msgType, msgContent);
+}
+
+void FindWidget::notifyMsg(const int &msgType, const QString &msgContent)
+{
+    m_pNotifySubject->notifyMsg(msgType, msgContent);
+}
+
 void FindWidget::initWidget()
 {
-    auto findNextButton = new DFloatingButton(DStyle::SP_ArrowNext);
+    auto findNextButton = new DIconButton(DStyle::SP_ArrowDown);
     findNextButton->setToolTip(tr("next one"));
     findNextButton->setFixedSize(QSize(30, 30));
-    connect(findNextButton, &DFloatingButton::clicked, this, &FindWidget::slotFindNextBtnClicked);
+    connect(findNextButton, &DIconButton::clicked, this, &FindWidget::slotFindNextBtnClicked);
 
-    auto findPrevButton = new DFloatingButton(DStyle::SP_ArrowPrev);
+    auto findPrevButton = new DIconButton(DStyle::SP_ArrowUp);
     findNextButton->setToolTip(tr("prev one"));
     findPrevButton->setFixedSize(QSize(30, 30));
-    connect(findPrevButton, &DFloatingButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
+    connect(findPrevButton, &DIconButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
 
-    auto closeButton = new DFloatingButton(DStyle::SP_CloseButton);
-    closeButton->setFixedSize(QSize(30, 30));
-    connect(closeButton, &DFloatingButton::clicked, this, &FindWidget::findCancel);
+    auto closeButton = new DDialogCloseButton;
+    closeButton->setIconSize(QSize(30, 30));
+    connect(closeButton, &DDialogCloseButton::clicked, this, &FindWidget::findCancel);
 
     m_pSearchEdit = new DSearchEdit;
     m_pSearchEdit->setFocusPolicy(Qt::StrongFocus);

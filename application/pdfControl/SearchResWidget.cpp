@@ -137,7 +137,7 @@ void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
     //  当前显示不是自己, 则需要发送切换 ListWidget 显示
 //    bool bFocus = this->hasFocus();
 //    if (bFocus) {
-    sendMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
+    notifyMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
 //    }
 }
 

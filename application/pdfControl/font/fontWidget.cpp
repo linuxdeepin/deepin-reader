@@ -161,7 +161,7 @@ void FontWidget::rotateFileView(bool isRight)
     m_rotate = (m_rotate < 0) ? (m_rotate + 360) : m_rotate;
 
     scaleAndRotate(ival);
-    sendMsg(MSG_FILE_ROTATE, QString(""));
+    notifyMsg(MSG_FILE_ROTATE, QString(""));
 }
 
 /**
@@ -211,7 +211,7 @@ void FontWidget::setShowSuitHIcon()
     m_pSuitHLabelIcon->setVisible(m_bSuitH);
 
     int t_nShow = m_bSuitH ? 1 : 0;
-    sendMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(t_nShow));
+    notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(t_nShow));
 }
 
 /**
@@ -224,7 +224,7 @@ void FontWidget::setShowSuitWIcon()
     m_pSuitHLabelIcon->setVisible(false);
 
     int t_nShow = m_bSuitW ? 1 : 0;
-    sendMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(t_nShow));
+    notifyMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(t_nShow));
 }
 
 /**

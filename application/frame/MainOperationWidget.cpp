@@ -111,7 +111,7 @@ void MainOperationWidget::slotUpdateTheme()
 void MainOperationWidget::slotButtonClicked(int id)
 {
     m_nThumbnailIndex = id;
-    sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(id));
+    notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(id));
 }
 
 /**
@@ -137,7 +137,7 @@ void MainOperationWidget::slotSearchClosed()
         QString objName = btn->objectName();
         if (objName == findBtnName()) {
             btn->setChecked(true);
-            sendMsg(MSG_SWITCHLEFTWIDGET, QString::number(m_nThumbnailIndex));
+            notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(m_nThumbnailIndex));
             break;
         }
     }

@@ -47,9 +47,12 @@ void MainWidget::slotOpenFileStart()
 void MainWidget::slotOpenFileFail(const QString &errorInfo)
 {
     DMessageBox::warning(nullptr, tr("deepin-reader"), errorInfo);
+    //  文档打开失败, 切换回首页
     auto pLayout = this->findChild<QStackedLayout *>();
     if (pLayout) {
-        pLayout->setCurrentIndex(0);
+        if (pLayout->currentIndex() != 0) {
+            pLayout->setCurrentIndex(0);
+        }
     }
 }
 
@@ -87,7 +90,7 @@ void MainWidget::dropEvent(QDropEvent *event)
                 //  默认打开第一个
                 QString sRes = sFilePath + Constant::sQStringSep;
 
-                sendMsg(MSG_OPEN_FILE_PATH, sRes);
+                notifyMsg(MSG_OPEN_FILE_PATH, sRes);
 
                 break;
             }

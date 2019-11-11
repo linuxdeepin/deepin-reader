@@ -2,6 +2,7 @@
 #include <DPushButton>
 #include "controller/DataManager.h"
 #include "controller/MsgSubject.h"
+#include "controller/NotifySubject.h"
 #include "subjectObserver/MsgHeader.h"
 #include "docview/docummentproxy.h"
 #include "application.h"
@@ -72,9 +73,14 @@ void DefaultOperationMenu::sendMsgToFrame(const int &msgType, const QString &msg
     MsgSubject::getInstance()->sendMsg(msgType, msgContent);
 }
 
+void DefaultOperationMenu::notifyMsgToFrame(const int &msgType, const QString &msgContent)
+{
+    NotifySubject::getInstance()->notifyMsg(msgType, msgContent);
+}
+
 void DefaultOperationMenu::slotSearchClicked()
 {
-    sendMsgToFrame(MSG_OPERATION_FIND);
+    notifyMsgToFrame(MSG_OPERATION_FIND);
 }
 
 void DefaultOperationMenu::slotBookMarkClicked()
@@ -89,20 +95,20 @@ void DefaultOperationMenu::slotBookMarkClicked()
 
 void DefaultOperationMenu::slotFirstPageClicked()
 {
-    sendMsgToFrame(MSG_OPERATION_FIRST_PAGE);
+    notifyMsgToFrame(MSG_OPERATION_FIRST_PAGE);
 }
 
 void DefaultOperationMenu::slotPrevPageClicked()
 {
-    sendMsgToFrame(MSG_OPERATION_PREV_PAGE);
+    notifyMsgToFrame(MSG_OPERATION_PREV_PAGE);
 }
 
 void DefaultOperationMenu::slotNextPageClicked()
 {
-    sendMsgToFrame(MSG_OPERATION_NEXT_PAGE);
+    notifyMsgToFrame(MSG_OPERATION_NEXT_PAGE);
 }
 
 void DefaultOperationMenu::slotEndPageClicked()
 {
-    sendMsgToFrame(MSG_OPERATION_END_PAGE);
+    notifyMsgToFrame(MSG_OPERATION_END_PAGE);
 }

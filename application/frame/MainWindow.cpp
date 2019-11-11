@@ -165,12 +165,6 @@ void MainWindow::initConnections()
             break;
         }
     }
-
-//    titlebar()->menu()->setFixedWidth(162);
-//    QFont font;
-//    font.setPixelSize(14);
-//    titlebar()->menu()->setFont(font);
-
 }
 
 void MainWindow::initTitlebar()
@@ -238,7 +232,7 @@ void MainWindow::slotAppExit()
     if (sFilePath != "") {
         bool rl = DataManager::instance()->bIsUpdate();
         if (rl) {
-            if (QMessageBox::Yes == DMessageBox::question(nullptr, tr("Save File"), tr("Do you need to save the file opened?"))) {
+            if (QMessageBox::Yes == DMessageBox::question(nullptr, tr("Save File"), tr("Do you need to save the file opened?"), QMessageBox::Close | QMessageBox::Cancel | DMessageBox::Save)) {
                 DocummentFileHelper::instance()->save(sFilePath, true);
 
                 //  保存 书签数据

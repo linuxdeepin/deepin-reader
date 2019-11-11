@@ -156,7 +156,7 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
             if (bIsHighLightReleasePoint) {
                 int nPage = m_pDocummentFileHelper->pointInWhichPage(docGlobalPos);
                 QString t_strContant = t_strUUid.trimmed() + QString("%1%") + QString::number(nPage);
-                sendMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+                notifyMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
             }
         }
     }
@@ -348,7 +348,7 @@ void FileViewWidget::slotBookMarkStateChange(int nPage, bool bState)
 //  文档页变化了
 void FileViewWidget::slotDocFilePageChanged(int page)
 {
-    sendMsg(MSG_FILE_PAGE_CHANGE, QString("%1").arg(page));
+    notifyMsg(MSG_FILE_PAGE_CHANGE, QString("%1").arg(page));
 }
 
 //  信号槽　初始化
@@ -426,7 +426,7 @@ void FileViewWidget::slotSetWidgetAdapt()
     }
 
     if (nScale != 0.0) {
-        sendMsg(MSG_SELF_ADAPTE_SCALE, QString::number(nScale));
+        notifyMsg(MSG_SELF_ADAPTE_SCALE, QString::number(nScale));
     }
 }
 

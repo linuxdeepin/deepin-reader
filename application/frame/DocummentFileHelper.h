@@ -87,6 +87,7 @@ private:
     void initConnections();
 
     void sendMsg(const int &msgType, const QString &msgContent = "");
+    void notifyMsg(const int &msgType, const QString &msgContent = "");
 
 private slots:
     void slotOpenFile(const QString &filePaths);
