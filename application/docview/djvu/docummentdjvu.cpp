@@ -14,17 +14,22 @@ class DocummentDJVUPrivate: public DocummentBasePrivate
 public:
     DocummentDJVUPrivate(DocummentDJVU *parent): DocummentBasePrivate(parent),
         document(nullptr),
-        m_fileinfo(),
         m_pageByName(),
         m_titleByIndex()
     {
+        document = nullptr;
+        m_context = nullptr;
+        m_format = nullptr;
     }
 
     ~DocummentDJVUPrivate() override
     {
-        ddjvu_document_release(document);
-        ddjvu_context_release(m_context);
-        ddjvu_format_release(m_format);
+        if (document != nullptr)
+            ddjvu_document_release(document);
+        if (m_context != nullptr)
+            ddjvu_context_release(m_context);
+        if (m_format != nullptr)
+            ddjvu_format_release(m_format);
     }
 
     ddjvu_document_t *document;
@@ -32,7 +37,7 @@ public:
     ddjvu_format_t *m_format;
     QHash< QString, int > m_pageByName;
     QHash< int, QString > m_titleByIndex;
-    stFileInfo m_fileinfo;
+//    stFileInfo m_fileinfo;
     Q_DECLARE_PUBLIC(DocummentDJVU)
 protected slots:
     void loadDocumment(QString filepath) override;
@@ -107,6 +112,10 @@ void DocummentDJVUPrivate::loadDocumment(QString filepath)
         page->setPage(i);
         m_pages.append((PageBase *)page);
     }
+    if (m_pages.size() > 0) {
+        m_imagewidth = m_pages.at(0)->getOriginalImageWidth();
+        m_imageheight = m_pages.at(0)->getOriginalImageHeight();
+    }
     setBasicInfo(filepath);
 
     emit signal_docummentLoaded(true);
@@ -116,15 +125,15 @@ void DocummentDJVUPrivate::loadDocumment(QString filepath)
 void DocummentDJVUPrivate::setBasicInfo(const QString &filepath)
 {
     QFileInfo info(filepath);
-    m_fileinfo.size = info.size();
-    m_fileinfo.CreateTime = info.birthTime();
-    m_fileinfo.ChangeTime = info.lastModified();
-    m_fileinfo.strAuther = info.owner();
-    m_fileinfo.strFilepath = info.filePath();
+    m_fileinfo->size = info.size();
+    m_fileinfo->CreateTime = info.birthTime();
+    m_fileinfo->ChangeTime = info.lastModified();
+    m_fileinfo->strAuther = info.owner();
+    m_fileinfo->strFilepath = info.filePath();
     if (document) {
-        int major, minor;
+        int major = 0, minor = 0;
         //document->getPdfVersion(&major, &minor);
-        m_fileinfo.strFormat.arg("PDF v.%1.%2", major, minor);
+        m_fileinfo->strFormat.arg("DJVU v.%1.%2", major, minor);
 //        m_fileinfo.strKeyword = document->info(QStringLiteral("Keywords"));
 //        m_fileinfo.strTheme = document->title();
 //        m_fileinfo.strProducter = document->producer();
@@ -185,17 +194,25 @@ bool DocummentDJVU::bDocummentExist()
     return true;
 }
 
-bool DocummentDJVU::getImage(int pagenum, QImage &image, double width, double height)
-{
-    Q_D(DocummentDJVU);
-    return d->m_pages.at(pagenum)->getInterFace()->getImage(image, width, height);
-}
+//bool DocummentDJVU::getImage(int pagenum, QImage &image, double width, double height)
+//{
+//    Q_D(DocummentDJVU);
+//    if (pagenum < 0 || pagenum >= d->m_pages.size()) {
+//        return false;
+//    }
+//    qreal pixelratiof = d->m_pages.at(pagenum)->devicePixelRatioF();
+//    if (!d->m_pages.at(pagenum)->getImage(image, width * pixelratiof, height * pixelratiof)) {
+//        return false;
+//    }
+//    image.setDevicePixelRatio(d->m_pages.at(pagenum)->devicePixelRatioF());
+//    return true;
+//}
 
-void DocummentDJVU::docBasicInfo(stFileInfo &info)
-{
-    Q_D(DocummentDJVU);
-    info = d->m_fileinfo;
-}
+//void DocummentDJVU::docBasicInfo(stFileInfo &info)
+//{
+//    Q_D(DocummentDJVU);
+//    info = d->m_fileinfo;
+//}
 
 //bool DocummentDJVU::annotationClicked(const QPoint &pos, QString &strtext)
 //{

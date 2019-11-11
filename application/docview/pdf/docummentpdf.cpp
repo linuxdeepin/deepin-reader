@@ -19,7 +19,7 @@ public:
     DocummentPDFPrivate(DocummentPDF *parent): DocummentBasePrivate(parent)
     {
         document = nullptr;
-        m_fileinfo = new stFileInfo;
+//        m_fileinfo = new stFileInfo;
     }
 
     ~DocummentPDFPrivate() override
@@ -31,14 +31,14 @@ public:
             delete document;
             document = nullptr;
         }
-        if (nullptr != m_fileinfo) {
-            delete m_fileinfo;
-            m_fileinfo = nullptr;
-        }
+//        if (nullptr != m_fileinfo) {
+//            delete m_fileinfo;
+//            m_fileinfo = nullptr;
+//        }
     }
 
     Poppler::Document *document;
-    stFileInfo *m_fileinfo;
+//    stFileInfo *m_fileinfo;
 
     Q_DECLARE_PUBLIC(DocummentPDF)
 protected slots:
@@ -83,7 +83,7 @@ void DocummentPDFPrivate::setBasicInfo(const QString &filepath)
     m_fileinfo->strAuther = info.owner();
     m_fileinfo->strFilepath = info.filePath();
     if (document) {
-        int major, minor;
+        int major = 0, minor = 0;
         document->getPdfVersion(&major, &minor);
         m_fileinfo->strFormat = QString("PDF v.%1.%2").arg(major).arg(minor);
         m_fileinfo->boptimization = document->isLinearized();
@@ -440,11 +440,11 @@ bool DocummentPDF::getImage(int pagenum, QImage &image, double width, double hei
     return true;
 }
 
-void DocummentPDF::docBasicInfo(stFileInfo &info)
-{
-    Q_D(DocummentPDF);
-    info = *(d->m_fileinfo);
-}
+//void DocummentPDF::docBasicInfo(stFileInfo &info)
+//{
+//    Q_D(DocummentPDF);
+//    info = *(d->m_fileinfo);
+//}
 
 bool DocummentPDF::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {

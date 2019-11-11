@@ -384,7 +384,8 @@ double DocummentProxy::adaptHeightAndShow(double height)
 }
 
 bool DocummentProxy::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
-{qDebug()<<"DocummentProxy::annotationClicked"<<pos;
+{
+    qDebug() << "DocummentProxy::annotationClicked" << pos;
     if (m_documment) {
         return m_documment->annotationClicked(pos, strtext, struuid);
     }
@@ -416,7 +417,6 @@ void DocummentProxy::jumpToHighLight(const QString &uuid, int ipage)
 
 bool DocummentProxy::closeFile()
 {
-
     QMutexLocker locker(&mutexlockgetimage);
     qDebug() << "closeFile";
     if (!m_documment || bcloseing)

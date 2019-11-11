@@ -15,9 +15,9 @@ public:
     DocummentDJVU(DWidget *parent = nullptr);
     ~DocummentDJVU() override;
     bool bDocummentExist() override;
-    bool getImage(int pagenum, QImage &image, double width, double height) override;
+//    bool getImage(int pagenum, QImage &image, double width, double height) override;
     bool loadDocumment(QString filepath) override;
-    void docBasicInfo(stFileInfo &info) override;
+//    void docBasicInfo(stFileInfo &info) override;
     ddjvu_document_t *getDocument();
     ddjvu_context_t *getContext();
     ddjvu_format_t *getFormat();
@@ -25,5 +25,6 @@ public:
 private:
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), DocummentDJVU)
 };
+
 
 #endif // DOCUMMENTDJVU_H

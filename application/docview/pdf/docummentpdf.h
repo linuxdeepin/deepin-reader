@@ -14,7 +14,7 @@ public:
     ~DocummentPDF() override;
     bool bDocummentExist() override;
     bool getImage(int pagenum, QImage &image, double width, double height) override;
-    void docBasicInfo(stFileInfo &info) override;
+//    void docBasicInfo(stFileInfo &info) override;
     bool save(const QString &filePath, bool withChanges) override;
     bool saveas(const QString &filePath, bool withChanges) override;
     void removeAllAnnotation();

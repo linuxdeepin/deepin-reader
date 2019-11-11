@@ -1607,3 +1607,23 @@ bool DocummentBase::setBookMarkState(int page, bool state)
     return d->m_pages.at(page)->setBookMarkState(state);
 }
 
+
+bool DocummentBase::getImage(int pagenum, QImage &image, double width, double height)
+{
+    Q_D(DocummentBase);
+    if (pagenum < 0 || pagenum >= d->m_pages.size()) {
+        return false;
+    }
+    qreal pixelratiof = d->m_pages.at(pagenum)->devicePixelRatioF();
+    if (!d->m_pages.at(pagenum)->getImage(image, width * pixelratiof, height * pixelratiof)) {
+        return false;
+    }
+    image.setDevicePixelRatio(d->m_pages.at(pagenum)->devicePixelRatioF());
+    return true;
+}
+
+void DocummentBase::docBasicInfo(stFileInfo &info)
+{
+    Q_D(DocummentBase);
+    info = *(d->m_fileinfo);
+}

@@ -22,7 +22,7 @@ public:
         delete m_xpsFile;
     }
 
-    stFileInfo m_fileinfo;
+//    stFileInfo m_fileinfo;
     XpsFile *m_xpsFile;
     Q_DECLARE_PUBLIC(DocummentXPS)
 protected slots:
@@ -55,7 +55,10 @@ void DocummentXPSPrivate::loadDocumment(QString filepath)
             m_pages.append((PageBase *)page);
         }
     }
-
+    if (m_pages.size() > 0) {
+        m_imagewidth = m_pages.at(0)->getOriginalImageWidth();
+        m_imageheight = m_pages.at(0)->getOriginalImageHeight();
+    }
     setBasicInfo(filepath);
 
     emit signal_docummentLoaded(true);
@@ -65,15 +68,15 @@ void DocummentXPSPrivate::loadDocumment(QString filepath)
 void DocummentXPSPrivate::setBasicInfo(const QString &filepath)
 {
     QFileInfo info(filepath);
-    m_fileinfo.size = info.size();
-    m_fileinfo.CreateTime = info.birthTime();
-    m_fileinfo.ChangeTime = info.lastModified();
-    m_fileinfo.strAuther = info.owner();
-    m_fileinfo.strFilepath = info.filePath();
+    m_fileinfo->size = info.size();
+    m_fileinfo->CreateTime = info.birthTime();
+    m_fileinfo->ChangeTime = info.lastModified();
+    m_fileinfo->strAuther = info.owner();
+    m_fileinfo->strFilepath = info.filePath();
     if (m_xpsFile) {
-        int major, minor;
+        int major = 0, minor = 0;
         //document->getPdfVersion(&major, &minor);
-        m_fileinfo.strFormat.arg("PDF v.%1.%2", major, minor);
+        m_fileinfo->strFormat.arg("XPS v.%1.%2", major, minor);
 
     }
 }
@@ -102,14 +105,14 @@ bool DocummentXPS::bDocummentExist()
     return true;
 }
 
-bool DocummentXPS::getImage(int pagenum, QImage &image, double width, double height)
-{
-    Q_D(DocummentXPS);
-    return d->m_pages.at(pagenum)->getInterFace()->getImage(image, width, height);
-}
+//bool DocummentXPS::getImage(int pagenum, QImage &image, double width, double height)
+//{
+//    Q_D(DocummentXPS);
+//    return d->m_pages.at(pagenum)->getInterFace()->getImage(image, width, height);
+//}
 
-void DocummentXPS::docBasicInfo(stFileInfo &info)
-{
-    Q_D(DocummentXPS);
-    info = d->m_fileinfo;
-}
+//void DocummentXPS::docBasicInfo(stFileInfo &info)
+//{
+//    Q_D(DocummentXPS);
+//    info = d->m_fileinfo;
+//}

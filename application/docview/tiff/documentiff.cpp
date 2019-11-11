@@ -2,7 +2,6 @@
 #include "pagetiff.h"
 #include <QFileInfo>
 
-
 tsize_t tiffReadProc( thandle_t handle, tdata_t buf, tsize_t size )
 {
     QIODevice *device = static_cast< QIODevice * >( handle );
@@ -75,19 +74,43 @@ static void adaptSizeToResolution( TIFF *tiff, ttag_t whichres, double dpi, uint
     }
 }
 
-DocumenTiff::DocumenTiff(DWidget *parent): DocummentBase(parent), document()
+class DocummentTiffPrivate: public DocummentBasePrivate
 {
+//    Q_OBJECT
+public:
+    DocummentTiffPrivate(DocummentTiff *parent): DocummentBasePrivate(parent)
+    {
+        document = nullptr;
+    }
 
-}
+    ~DocummentTiffPrivate()
+    {
+        if (nullptr != document) {
+            TIFFClose(document);
+            document = nullptr;
+        }
+    }
 
-bool DocumenTiff::loadDocumment(QString filepath)
+//    stFileInfo m_fileinfo;
+    TIFF *document;
+    Q_DECLARE_PUBLIC(DocummentTiff)
+protected slots:
+    void loadDocumment(QString filepath) override;
+private:
+    void setBasicInfo(const QString &filepath);
+};
+
+void DocummentTiffPrivate::loadDocumment(QString filepath)
 {
+    Q_Q(DocummentTiff);
+
     m_pages.clear();
     QFile *qfile = new QFile( filepath );
-    if (!qfile->open( QIODevice::ReadOnly)) return  false;
+    if (!qfile->open( QIODevice::ReadOnly)) return;
 
     QIODevice *dev = qfile;
     QByteArray data = QFile::encodeName( QFileInfo( *qfile ).fileName());
+    setBasicInfo(filepath);
     document = TIFFClientOpen( data.constData(), "r", dev,
                                tiffReadProc, tiffWriteProc, tiffSeekProc,
                                tiffCloseProc, tiffSizeProc,
@@ -95,14 +118,69 @@ bool DocumenTiff::loadDocumment(QString filepath)
     if (document) {
         tdir_t dirs = TIFFNumberOfDirectories(document);
         for (int i = 0; i < dirs; i++) {
-            PageTiff *page = new PageTiff(this);
+            PageTiff *page = new PageTiff(q);
             page->setPage(i, document);
             m_pages.append((PageBase *)page);
         }
     }
+
+    if (m_pages.size() > 0) {
+        m_imagewidth = m_pages.at(0)->getOriginalImageWidth();
+        m_imageheight = m_pages.at(0)->getOriginalImageHeight();
+    }
+    setBasicInfo(filepath);
+    emit signal_docummentLoaded(true);
+}
+
+
+void DocummentTiffPrivate::setBasicInfo(const QString &filepath)
+{
+    QFileInfo info(filepath);
+    m_fileinfo->size = info.size();
+    m_fileinfo->CreateTime = info.birthTime();
+    m_fileinfo->ChangeTime = info.lastModified();
+    m_fileinfo->strAuther = info.owner();
+    m_fileinfo->strFilepath = info.filePath();
+    if (document) {
+        int major = 0, minor = 0;
+        m_fileinfo->strFormat.arg("Tiff v.%1.%2", major, minor);
+    }
+}
+
+
+DocummentTiff::DocummentTiff(DWidget *parent):
+    DocummentBase(new DocummentTiffPrivate(this), parent)
+{
+
+}
+
+bool DocummentTiff::loadDocumment(QString filepath)
+{
+
+    emit signal_loadDocumment(filepath);
     return true;
 }
 
+bool DocummentTiff::bDocummentExist()
+{
+    Q_D(DocummentTiff);
+    if (!d->document) {
+        return false;
+    }
+    return true;
+}
+
+//bool DocummentTiff::getImage(int pagenum, QImage &image, double width, double height)
+//{
+//    Q_D(DocummentTiff);
+//    return d->m_pages.at(pagenum)->getInterFace()->getImage(image, width, height);
+//}
+
+//void DocummentTiff::docBasicInfo(stFileInfo &info)
+//{
+//    Q_D(DocummentTiff);
+//    info = d->m_fileinfo;
+//}
 //bool DocumenTiff::openFile(QString filepath)
 //{
 //    m_pages.clear();

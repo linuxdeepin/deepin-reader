@@ -2,6 +2,7 @@
 #define PAGEBASE_H
 #include <DObject>
 #include <DLabel>
+#include <DSpinner>
 #include <DGuiApplicationHelper>
 #include <QThread>
 #include <QDebug>
@@ -130,6 +131,7 @@ public:
         havereander = false;
         pixelratiof = 1;
         bookmarkbtn = nullptr;
+        m_spinner = nullptr;
         connect(&loadmagnifiercachethread, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)), this, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)));
         connect(&threadreander, SIGNAL(signal_RenderFinish(QImage)), this, SIGNAL(signal_RenderFinish(QImage)));
     }
@@ -175,6 +177,7 @@ public:
     bool havereander;
     qreal pixelratiof;
     BookMarkButton *bookmarkbtn;
+    DSpinner *m_spinner;
 //    QMutex m_mutexlockgetimage;
 
     PageBase *q_ptr;

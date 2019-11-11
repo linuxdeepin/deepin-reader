@@ -37,7 +37,7 @@ public:
 
     SpectreDocument *document;
     SpectreRenderContext *m_renderContext;
-    stFileInfo m_fileinfo;
+//    stFileInfo m_fileinfo;
     QSettings *m_settings;
     Q_DECLARE_PUBLIC(DocummentPS)
 protected slots:
@@ -65,7 +65,6 @@ void DocummentPSPrivate::loadDocumment(QString filepath)
     spectre_render_context_set_antialias_bits(m_renderContext,
                                               m_settings->value("graphicsAntialiasBits", graphicsAntialiasBits).toInt(),
                                               m_settings->value("textAntialiasBits", textAntialiasBits).toInt());
-    setBasicInfo(filepath);
     donotneedreloaddoc = true;
     m_pages.clear();
     qDebug() << "djvu numPages :" << spectre_document_get_n_pages(document);
@@ -73,6 +72,10 @@ void DocummentPSPrivate::loadDocumment(QString filepath)
         PagePS *page = new PagePS(q);
         page->setPage(spectre_document_get_page(document, i), m_renderContext, i);
         m_pages.append((PageBase *)page);
+    }
+    if (m_pages.size() > 0) {
+        m_imagewidth = m_pages.at(0)->getOriginalImageWidth();
+        m_imageheight = m_pages.at(0)->getOriginalImageHeight();
     }
     setBasicInfo(filepath);
 
@@ -83,15 +86,14 @@ void DocummentPSPrivate::loadDocumment(QString filepath)
 void DocummentPSPrivate::setBasicInfo(const QString &filepath)
 {
     QFileInfo info(filepath);
-    m_fileinfo.size = info.size();
-    m_fileinfo.CreateTime = info.birthTime();
-    m_fileinfo.ChangeTime = info.lastModified();
-    m_fileinfo.strAuther = info.owner();
-    m_fileinfo.strFilepath = info.filePath();
+    m_fileinfo->size = info.size();
+    m_fileinfo->CreateTime = info.birthTime();
+    m_fileinfo->ChangeTime = info.lastModified();
+    m_fileinfo->strAuther = info.owner();
+    m_fileinfo->strFilepath = info.filePath();
     if (document) {
-        int major, minor;
-        m_fileinfo.strFormat.arg("PDF v.%1.%2", major, minor);
-
+        int major = 0, minor = 0;
+        m_fileinfo->strFormat.arg("PS v.%1.%2", major, minor);
     }
 }
 
@@ -121,14 +123,19 @@ bool DocummentPS::bDocummentExist()
     return true;
 }
 
-bool DocummentPS::getImage(int pagenum, QImage &image, double width, double height)
-{
-    Q_D(DocummentPS);
-    return d->m_pages.at(pagenum)->getInterFace()->getImage(image, width, height);
-}
+//bool DocummentPS::getImage(int pagenum, QImage &image, double width, double height)
+//{
+//    Q_D(DocummentPS);
+//    qreal pixelratiof = d->m_pages.at(pagenum)->devicePixelRatioF();
+//    if (!d->m_pages.at(pagenum)->getImage(image, width * pixelratiof, height * pixelratiof)) {
+//        return false;
+//    }
+//    image.setDevicePixelRatio(d->m_pages.at(pagenum)->devicePixelRatioF());
+//    return true;
+//}
 
-void DocummentPS::docBasicInfo(stFileInfo &info)
-{
-    Q_D(DocummentPS);
-    info = d->m_fileinfo;
-}
+//void DocummentPS::docBasicInfo(stFileInfo &info)
+//{
+//    Q_D(DocummentPS);
+//    info = d->m_fileinfo;
+//}

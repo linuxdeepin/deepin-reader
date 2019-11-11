@@ -128,6 +128,7 @@ public:
         showslidwaittimer = nullptr;
         qwfather = nullptr;
         loadpagewaittimer = nullptr;
+        m_fileinfo = new stFileInfo;
 
     }
 
@@ -157,6 +158,10 @@ public:
         if (m_slidewidget) {
             m_slidewidget->deleteLater();
             m_slidewidget = nullptr;
+        }
+        if (nullptr != m_fileinfo) {
+            delete m_fileinfo;
+            m_fileinfo = nullptr;
         }
     }
 
@@ -198,6 +203,7 @@ public:
     QTimer *showslidwaittimer;
     DWidget *qwfather;
     QTimer *loadpagewaittimer;
+    stFileInfo *m_fileinfo;
 
 
 signals:
@@ -218,7 +224,7 @@ public:
     ~DocummentBase();
     virtual bool loadDocumment(QString filepath) = 0;
     virtual bool bDocummentExist() = 0;
-    virtual bool getImage(int pagenum, QImage &image, double width, double height) = 0;
+    virtual bool getImage(int pagenum, QImage &image, double width, double height);
     virtual bool save(const QString &filePath, bool withChanges)
     {
         //        qDebug() << "do nothing";
@@ -235,7 +241,7 @@ public:
     virtual void search(const QString &strtext, QColor color = Qt::yellow) {}
     virtual void getAllAnnotation(QList<stHighlightContent> &listres) {}
     virtual void clearSearch() {}
-    virtual void docBasicInfo(stFileInfo &info) {}
+    virtual void docBasicInfo(stFileInfo &info);
     virtual void title(QString &title) {}
     virtual void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) {}
     virtual void getAnnotationText(const QString &struuid, QString &strtext, int ipage) {}

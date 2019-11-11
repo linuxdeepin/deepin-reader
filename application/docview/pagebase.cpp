@@ -93,6 +93,9 @@ PageBase::PageBase(PageBasePrivate *ptr, DWidget *parent)
     d->pixelratiof = devicePixelRatioF();
     d->bookmarkbtn = new BookMarkButton(this);
     d->bookmarkbtn->raise();
+    d->m_spinner = new DSpinner(this);
+    d->m_spinner->setFixedSize(40, 40);
+    d->m_spinner->hide();
     setAlignment(Qt::AlignCenter);
     connect(d, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)), this, SLOT(slot_loadMagnifierPixmapCache(QImage, double, double)));
     connect(d, SIGNAL(signal_RenderFinish(QImage)), this, SLOT(slot_RenderFinish(QImage)));
@@ -536,6 +539,8 @@ void PageBase::slot_RenderFinish(QImage image)
     map = map.transformed(leftmatrix, Qt::SmoothTransformation);
     map.setDevicePixelRatio(devicePixelRatioF());
     setPixmap(map);
+    d->m_spinner->stop();
+    d->m_spinner->hide();
 
     d->havereander = true;
 }
@@ -637,8 +642,8 @@ bool PageBase::getSelectTextString(QString &st)
 void PageBase::clearSelectText()
 {
     Q_D(PageBase);
-    d->m_selecttextstartword=-1;
-    d->m_selecttextendword=-1;
+    d->m_selecttextstartword = -1;
+    d->m_selecttextendword = -1;
 }
 
 QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
@@ -697,6 +702,8 @@ bool PageBase::showImage(double scale, RotateType_EM rotate)
     } else {
         d->threadreander.setRestart();
     }
+    d->m_spinner->show();
+    d->m_spinner->start();
     return true;
 }
 
@@ -718,6 +725,8 @@ void PageBase::waitThread()
         //        loadmagnifiercachethread.quit();
         d->loadmagnifiercachethread.wait();
     }
+    d->m_spinner->stop();
+    d->m_spinner->hide();
 }
 
 bool PageBase::setBookMarkState(bool state)

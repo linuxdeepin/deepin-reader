@@ -67,7 +67,8 @@ void MainWidget::dropEvent(QDropEvent *event)
     if (mimeData->hasUrls()) {
         for (auto url : mimeData->urls()) {
             QString sFilePath =  url.toLocalFile();
-            if (sFilePath.endsWith("pdf") || sFilePath.endsWith("tiff")) {
+            if (sFilePath.endsWith("pdf") || sFilePath.endsWith("tiff") || sFilePath.endsWith("ps") || sFilePath.endsWith("xps") || sFilePath.endsWith("djvu")
+               ) {
                 //  默认打开第一个
                 QString sRes = sFilePath + Constant::sQStringSep;
 
