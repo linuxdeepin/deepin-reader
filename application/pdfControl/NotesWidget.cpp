@@ -47,8 +47,9 @@ void NotesWidget::slotDltNoteItem(QString uuid)
             auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
             if (t_widget) {
                 QString t_uuid = t_widget->noteUUId();
-                int page = t_widget->nPageIndex();
                 if (t_uuid == uuid) {
+                    int page = t_widget->nPageIndex();
+
                     delete t_widget;
                     t_widget = nullptr;
 

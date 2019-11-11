@@ -10,7 +10,7 @@
 TextOperationMenu::TextOperationMenu(DWidget *parent)
     : DMenu (parent)
 {
-    initMenu();   
+    initMenu();
 }
 
 void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, const QString &sSelectText, const QString &sUuid)
@@ -45,7 +45,7 @@ void TextOperationMenu::setClickPage(int nClickPage)
 }
 
 void TextOperationMenu::initMenu()
-{  
+{
     QFont font;
     font.setPixelSize(14);
     setFont(font);
@@ -64,15 +64,11 @@ void TextOperationMenu::initMenu()
     createAction(tr("add note"), SLOT(slotAddNoteClicked()));
     this->addSeparator();
 
-    m_pAddBookMark = createAction(tr("add bookmark"), SLOT(slotAddBookMarkClicked()));   
+    m_pAddBookMark = createAction(tr("add bookmark"), SLOT(slotAddBookMarkClicked()));
 }
 
 QAction *TextOperationMenu::createAction(const QString &text, const char *member)
 {
-//    QPixmap pixmap(QSize(32,20));
-//    pixmap.fill(Qt::transparent);
-//    QIcon icon(pixmap);
-//    auto action = new  QAction(icon,text, this);
     auto action = new  QAction(QString("       %1").arg(text), this);
     connect(action, SIGNAL(triggered()), member);
     this->addAction(action);
@@ -83,12 +79,19 @@ QAction *TextOperationMenu::createAction(const QString &text, const char *member
 void TextOperationMenu::sendMsgToFrame(const int &msgType, const QString &msgContent)
 {
     MsgSubject::getInstance()->sendMsg(nullptr, msgType, msgContent);
+    this->hide();
 }
 
 void TextOperationMenu::slotSetHighLight(int nColor)
 {
     m_pLightColor = nColor;
-    sendMsgToFrame(MSG_OPERATION_TEXT_ADD_HIGHLIGHTED, QString("%1,%2,%3").arg(m_pLightColor).arg(m_pClickPoint.x()).arg(m_pClickPoint.y()));
+
+    bool bEnable = m_pRemoveHighLight->isEnabled();
+    if (bEnable) {  //  移除高亮可以点,说明已有高亮, 点击操作 是 更新高亮
+        sendMsgToFrame(MSG_OPERATION_TEXT_UPDATE_HIGHLIGHTED, QString("%1,%2,%3").arg(m_pLightColor).arg(m_strNoteUuid).arg(m_nClickPage));
+    } else {    //  移除高亮不可点,说明没有高亮, 点击操作 是 添加高亮
+        sendMsgToFrame(MSG_OPERATION_TEXT_ADD_HIGHLIGHTED, QString("%1,%2,%3").arg(m_pLightColor).arg(m_pClickPoint.x()).arg(m_pClickPoint.y()));
+    }
 }
 
 void TextOperationMenu::slotCopyClicked()

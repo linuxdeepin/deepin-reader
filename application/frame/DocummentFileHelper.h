@@ -69,6 +69,7 @@ public:
 public:
     void getAllAnnotation(QList<stHighlightContent> &listres);
     QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow);
+    void changeAnnotationColor(const int &ipage, const QString &uuid, const QColor &color);
     bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
     void removeAnnotation(const QString &struuid, int ipage = -1);
     QString removeAnnotation(const QPoint &pos);

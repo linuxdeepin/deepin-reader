@@ -331,6 +331,11 @@ QString DocummentFileHelper::addAnnotation(const QPoint &startpos, const QPoint 
     return strUuid;
 }
 
+void DocummentFileHelper::changeAnnotationColor(const int &ipage, const QString &uuid, const QColor &color)
+{
+    m_pDocummentProxy->changeAnnotationColor(ipage, uuid, color);
+}
+
 bool DocummentFileHelper::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {
     return m_pDocummentProxy->annotationClicked(pos, strtext, struuid);

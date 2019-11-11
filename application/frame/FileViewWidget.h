@@ -47,6 +47,7 @@ signals:
     void sigWidgetAdapt();
 
     void sigFileAddAnnotation(const QString &);
+    void sigFileUpdateAnnotation(const QString &);
     void sigFileRemoveAnnotation(const QString &);
 
     void sigFileAddNote(const QString &);
@@ -67,6 +68,7 @@ private slots:
     void slotSetWidgetAdapt();
 
     void slotFileAddAnnotation(const QString &);
+    void slotFileUpdateAnnotation(const QString &);
     void slotFileRemoveAnnotation(const QString &);
 
     void slotFileAddNote(const QString &);

@@ -272,6 +272,22 @@ void FileViewWidget::slotFileAddAnnotation(const QString &msgContent)
     }
 }
 
+//  更新高亮颜色
+void FileViewWidget::slotFileUpdateAnnotation(const QString &msgContent)
+{
+    QStringList contentList = msgContent.split(",", QString::SkipEmptyParts);
+    if (contentList.size() == 3) {
+        QString sIndex = contentList.at(0);
+        QString sUuid = contentList.at(1);
+        QString sPage = contentList.at(2);
+
+        int iIndex = sIndex.toInt();
+        QColor color = DataManager::instance()->getLightColorList().at(iIndex);
+
+        m_pDocummentFileHelper->changeAnnotationColor(sPage.toInt(), sUuid, color);
+    }
+}
+
 //  移除高亮, 有注释 则删除注释
 void FileViewWidget::slotFileRemoveAnnotation(const QString &msgContent)
 {
@@ -339,17 +355,18 @@ void FileViewWidget::slotDocFilePageChanged(int page)
 void FileViewWidget::initConnections()
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
-            this, SLOT(slotCustomContextMenuRequested(const QPoint &)));
+            SLOT(slotCustomContextMenuRequested(const QPoint &)));
 
-    connect(this, SIGNAL(sigSetHandShape(const QString &)), this, SLOT(slotSetHandShape(const QString &)));
-    connect(this, SIGNAL(sigMagnifying(const QString &)), this, SLOT(slotMagnifying(const QString &)));
-    connect(this, SIGNAL(sigWidgetAdapt()), this, SLOT(slotSetWidgetAdapt()));
-    connect(this, SIGNAL(sigPrintFile()), this, SLOT(slotPrintFile()));
+    connect(this, SIGNAL(sigSetHandShape(const QString &)), SLOT(slotSetHandShape(const QString &)));
+    connect(this, SIGNAL(sigMagnifying(const QString &)), SLOT(slotMagnifying(const QString &)));
+    connect(this, SIGNAL(sigWidgetAdapt()), SLOT(slotSetWidgetAdapt()));
+    connect(this, SIGNAL(sigPrintFile()), SLOT(slotPrintFile()));
 
-    connect(this, SIGNAL(sigFileAddAnnotation(const QString &)), this, SLOT(slotFileAddAnnotation(const QString &)));
-    connect(this, SIGNAL(sigFileRemoveAnnotation(const QString &)), this, SLOT(slotFileRemoveAnnotation(const QString &)));
+    connect(this, SIGNAL(sigFileAddAnnotation(const QString &)), SLOT(slotFileAddAnnotation(const QString &)));
+    connect(this, SIGNAL(sigFileUpdateAnnotation(const QString &)), SLOT(slotFileUpdateAnnotation(const QString &)));
+    connect(this, SIGNAL(sigFileRemoveAnnotation(const QString &)), SLOT(slotFileRemoveAnnotation(const QString &)));
 
-    connect(this, SIGNAL(sigFileAddNote(const QString &)), this, SLOT(slotFileAddNote(const QString &)));
+    connect(this, SIGNAL(sigFileAddNote(const QString &)), SLOT(slotFileAddNote(const QString &)));
 }
 
 //  打印
@@ -470,6 +487,9 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
         return  ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_ADD_HIGHLIGHTED:    //  高亮显示
         emit sigFileAddAnnotation(msgContent);
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_TEXT_UPDATE_HIGHLIGHTED: //  更新高亮颜色显示
+        emit sigFileUpdateAnnotation(msgContent);
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED: //  移除高亮显示
         emit sigFileRemoveAnnotation(msgContent);

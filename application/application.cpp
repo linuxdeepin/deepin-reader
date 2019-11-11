@@ -16,7 +16,7 @@
  */
 #include "application.h"
 
-#include "controller/MsgSubject.h"
+#include "controller/NotifySubject.h"
 #include "subjectObserver/MsgHeader.h"
 
 #include <DApplicationSettings>
@@ -50,7 +50,7 @@ Application::Application(int &argc, char **argv)
 
 void Application::handleQuitAction()
 {
-    MsgSubject::getInstance()->sendMsg(nullptr, MSG_OPERATION_EXIT, "");
+    NotifySubject::getInstance()->sendMsg(MSG_OPERATION_EXIT);
 }
 
 void Application::initChildren()

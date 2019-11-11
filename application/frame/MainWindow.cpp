@@ -38,9 +38,6 @@ MainWindow::MainWindow(DMainWindow *parent)
     installEventFilter(this);
 
     m_pMsgSubject = MsgSubject::getInstance();
-    if (m_pMsgSubject) {
-        m_pMsgSubject->addObserver(this);
-    }
 
     m_pNotifySubject = NotifySubject::getInstance();
     if (m_pNotifySubject) {
@@ -57,7 +54,6 @@ MainWindow::~MainWindow()
 {
     // We don't need clean pointers because application has exit here.
     if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
         m_pMsgSubject->stopThreadRun();
     }
 
@@ -163,7 +159,7 @@ void MainWindow::initConnections()
     titlebar()->setMenu(m_menu);
 
     auto actions = this->findChildren<QAction *>();
-    foreach (QAction *a, actions) {      
+    foreach (QAction *a, actions) {
         if (a->objectName() == "Open File") {
             a->setDisabled(false);
             break;
@@ -323,8 +319,8 @@ void MainWindow::slotActionTrigger(const QString &sAction)
 
 void MainWindow::sendMsg(const int &msgType, const QString &msgContent)
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(this, msgType, msgContent);
+    if (m_pNotifySubject) {
+        m_pNotifySubject->sendMsg(msgType, msgContent);
     }
 }
 
