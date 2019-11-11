@@ -65,7 +65,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::openfile(const QString &filepath)
 {
-    sendMsg(MSG_OPEN_FILE_PATH, filepath);
+    notifyMsg(MSG_OPEN_FILE_PATH, filepath);
 }
 
 void MainWindow::setSreenRect(const QRect &rect)
@@ -95,10 +95,10 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
             if (sFilePath == "") {
                 if (key == KeyStr::g_f1 || key == KeyStr::g_ctrl_o
                         || key == KeyStr::g_ctrl_alt_f || key == KeyStr::g_ctrl_shift_slash) {
-                    sendMsg(MSG_NOTIFY_KEY_MSG, key);
+                    notifyMsg(MSG_NOTIFY_KEY_MSG, key);
                 }
             } else {
-                sendMsg(MSG_NOTIFY_KEY_MSG, key);
+                notifyMsg(MSG_NOTIFY_KEY_MSG, key);
             }
             return true;
         }
@@ -196,14 +196,14 @@ void MainWindow::onFullScreen()
 {
     slotAppShowState(0);
     DataManager::instance()->setCurShowState(FILE_FULLSCREEN);  //  全屏状态
-    sendMsg(MSG_OPERATION_FULLSCREEN);
+    notifyMsg(MSG_OPERATION_FULLSCREEN);
 }
 
 //  放映
 void MainWindow::onScreening()
 {
     slotAppShowState(0);
-    sendMsg(MSG_OPERATION_SLIDE);
+    notifyMsg(MSG_OPERATION_SLIDE);
 }
 
 void MainWindow::initThemeChanged()
@@ -211,7 +211,7 @@ void MainWindow::initThemeChanged()
     //  主题变了
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] () {
         setCurTheme();
-        sendMsg(MSG_OPERATION_UPDATE_THEME);
+        notifyMsg(MSG_OPERATION_UPDATE_THEME);
     });
 }
 
@@ -245,7 +245,7 @@ void MainWindow::slotAppExit()
                 dApp->dbM->saveBookMark();
             }
         }
-        sendMsg(MSG_CLOSE_FILE);
+        notifyMsg(MSG_CLOSE_FILE);
         DocummentFileHelper::instance()->closeFile();
     }
 
@@ -293,27 +293,27 @@ void MainWindow::slotOpenAppHelp()
 void MainWindow::slotActionTrigger(const QString &sAction)
 {
     if (sAction == "Open File") {
-        sendMsg(MSG_OPERATION_OPEN_FILE);
+        notifyMsg(MSG_OPERATION_OPEN_FILE);
     } else if (sAction == "Save File") {
-        sendMsg(MSG_OPERATION_SAVE_FILE);
+        notifyMsg(MSG_OPERATION_SAVE_FILE);
     } else if (sAction == "Save As File") {
-        sendMsg(MSG_OPERATION_SAVE_AS_FILE);
+        notifyMsg(MSG_OPERATION_SAVE_AS_FILE);
     } else if (sAction == "Open Folder") {
         onOpenFolder();
     } else if (sAction == "Print") {
-        sendMsg(MSG_OPERATION_PRINT);
+        notifyMsg(MSG_OPERATION_PRINT);
     } else if (sAction == "File Attr") {
-        sendMsg(MSG_OPERATION_ATTR);
+        notifyMsg(MSG_OPERATION_ATTR);
     } else if (sAction == "Search") {
-        sendMsg(MSG_OPERATION_FIND);
+        notifyMsg(MSG_OPERATION_FIND);
     } else if (sAction == "Full Screen") {
         onFullScreen();
     } else if (sAction == "Screening") {
         onScreening();
     } else if (sAction == "Larger") {
-        sendMsg(MSG_OPERATION_LARGER);
+        notifyMsg(MSG_OPERATION_LARGER);
     } else if (sAction == "Smaller") {
-        sendMsg(MSG_OPERATION_SMALLER);
+        notifyMsg(MSG_OPERATION_SMALLER);
     }
 }
 
