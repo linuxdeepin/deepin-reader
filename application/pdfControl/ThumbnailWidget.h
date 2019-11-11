@@ -92,6 +92,8 @@ signals:
     void sigFilePageChanged(const QString &);
     void sigOpenFileOk();
     void sigCloseFile();
+    void sigJumpToPrevPage();
+    void sigJumpToNextPage();
 
 public:
     // IObserver interface
@@ -109,12 +111,16 @@ protected:
 private:
     void setSelectItemBackColor(QListWidgetItem *);
     void addThumbnailItem(const int &);
+    void initConnection();
+    void jumpToSpecifiedPage(const int &);
 
 private slots:
     void slotOpenFileOk();
     void slotDocFilePageChanged(const QString &);
     void slotCloseFile();
     void slotUpdateTheme();
+    void slotJumpToPrevPage();
+    void slotJumpToNextPage();
 
 private:
     CustomListWidget *m_pThumbnailListWidget = nullptr;         // list widget item子界面

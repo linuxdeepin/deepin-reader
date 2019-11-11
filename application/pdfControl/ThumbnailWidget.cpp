@@ -1,5 +1,6 @@
 #include "ThumbnailWidget.h"
 #include "frame/DocummentFileHelper.h"
+#include "controller/DataManager.h"
 
 ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
     CustomWidget(QString("ThumbnailWidget"), parent)
@@ -8,13 +9,7 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
 
     initWidget();
 
-    connect(&m_ThreadLoadImage, SIGNAL(signal_loadImage(const int &, const QImage &)),
-            m_pThumbnailListWidget, SLOT(slot_loadImage(const int &, const QImage &)));
-
-    connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
-    connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
-    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
-    connect(this, SIGNAL(sigFilePageChanged(const QString &)), SLOT(slotDocFilePageChanged(const QString &)));
+    initConnection();
 }
 
 ThumbnailWidget::~ThumbnailWidget()
@@ -36,6 +31,17 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigUpdateTheme();
     } else if (MSG_FILE_PAGE_CHANGE == msgType) {
         emit sigFilePageChanged(msgContent);
+    }else if(MSG_NOTIFY_KEY_MSG == msgType){
+        if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup) {
+            if(hasFocus()) emit sigJumpToPrevPage();
+            return ConstantMsg::g_effective_res;
+        } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown) {
+            if(hasFocus()) emit sigJumpToNextPage();
+            return ConstantMsg::g_effective_res;
+        } /*else if (msgContent == "0") {
+            emit slotJudgeInputPage(msgContent);
+            qDebug() << "PagingWidget::dealWithData key=" << msgContent;
+        }*/
     }
 
     return 0;
@@ -96,6 +102,35 @@ void ThumbnailWidget::addThumbnailItem(const int &iIndex)
     m_pThumbnailListWidget->setItemWidget(item, widget);
 }
 
+void ThumbnailWidget::initConnection()
+{
+    connect(&m_ThreadLoadImage, SIGNAL(signal_loadImage(const int &, const QImage &)),
+            m_pThumbnailListWidget, SLOT(slot_loadImage(const int &, const QImage &)));
+
+    connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
+    connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
+    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
+    connect(this, SIGNAL(sigFilePageChanged(const QString &)), SLOT(slotDocFilePageChanged(const QString &)));
+    connect(this, &ThumbnailWidget::sigJumpToPrevPage, this, &ThumbnailWidget::slotJumpToPrevPage);
+    connect(this, &ThumbnailWidget::sigJumpToNextPage, this, &ThumbnailWidget::slotJumpToNextPage);
+}
+
+/**
+ * @brief ThumbnailWidget::jumpToSpecifiedPage
+ * 跳转到指定页
+ * @param page
+ */
+void ThumbnailWidget::jumpToSpecifiedPage(const int &page)
+{
+    //  跳转的页码 必须 大于0, 且 小于 总页码数
+    int nPageSize = DocummentFileHelper::instance()->getPageSNum();
+    if (page < 0 || page == nPageSize) {
+        return;
+    }
+
+    DocummentFileHelper::instance()->pageJump(page);
+}
+
 //  文件  当前页变化, 获取与 文档页  对应的 item, 设置 选中该item, 绘制item
 void ThumbnailWidget::slotDocFilePageChanged(const QString &sPage)
 {
@@ -117,6 +152,28 @@ void ThumbnailWidget::slotCloseFile()
 void ThumbnailWidget::slotUpdateTheme()
 {
     updateWidgetTheme();
+}
+
+/**
+ * @brief ThumbnailWidget::slotJumpToPrevPage
+ *上一页
+ */
+void ThumbnailWidget::slotJumpToPrevPage()
+{
+    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
+    nCurPage--;
+    jumpToSpecifiedPage(nCurPage);
+}
+
+/**
+ * @brief ThumbnailWidget::slotJumpToNextPage
+ *下一页
+ */
+void ThumbnailWidget::slotJumpToNextPage()
+{
+    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
+    nCurPage++;
+    jumpToSpecifiedPage(nCurPage);
 }
 
 // 初始化缩略图列表list，无缩略图

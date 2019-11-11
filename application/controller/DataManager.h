@@ -18,6 +18,14 @@ enum File_Show_Enum {
     FILE_SLIDE,         //  幻灯片
 };
 
+// 窗口类型
+enum Widget_Type{
+    WIDGET_THUMBNAIL,   //  缩略图
+    WIDGET_BOOKMARK,    //  书签
+    WIDGET_NOTE,        //  注释
+    WIDGET_SEARCH,      //  搜索
+};
+
 class DataManager : public QObject
 {
     Q_OBJECT
@@ -71,6 +79,15 @@ public:
         m_selectColor = color;
     }
 
+    inline int currentWidget()
+    {
+        return m_nCurrentWidget;
+    }
+    inline void setCurrentWidget(const int&index)
+    {
+        m_nCurrentWidget = index;
+    }
+
 private:
     QString m_strCurrentTheme = "";     //  当前主题
     QString m_strOnlyFilePath = "";     //  只显示一个pdf 文件
@@ -82,6 +99,7 @@ private:
     QRect m_screenRect;                 // 屏幕的分辨率
     QSize m_smallNoteSize;              // 注释小窗体的大小
     QColor m_selectColor;               // 高亮颜色
+    int m_nCurrentWidget = WIDGET_THUMBNAIL; // 当前焦点处于那个窗体上（左侧缩略图）
 };
 
 #endif // DATAMANAGER_H
