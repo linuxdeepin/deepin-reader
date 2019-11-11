@@ -36,17 +36,17 @@ void DocummentFileHelper::docBasicInfo(stFileInfo &info)
     m_pDocummentProxy->docBasicInfo(info);
 }
 
-bool DocummentFileHelper::mouseSelectText(QPoint start, QPoint stop)
+bool DocummentFileHelper::mouseSelectText(const QPoint &start, const QPoint &stop)
 {
     return m_pDocummentProxy->mouseSelectText(start, stop);
 }
 
-bool DocummentFileHelper::mouseBeOverText(QPoint point)
+bool DocummentFileHelper::mouseBeOverText(const QPoint &point)
 {
     return m_pDocummentProxy->mouseBeOverText(point);
 }
 
-Page::Link *DocummentFileHelper::mouseBeOverLink(QPoint point)
+Page::Link *DocummentFileHelper::mouseBeOverLink(const QPoint &point)
 {
     return m_pDocummentProxy->mouseBeOverLink(point);
 }
@@ -192,6 +192,9 @@ void DocummentFileHelper::initConnections()
             QFileInfo info(m_szFilePath);
             setAppShowTitle(info.baseName());
         } else {
+            m_szFilePath = "";
+            DataManager::instance()->setStrOnlyFilePath("");
+
             sendMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
         }
     });
@@ -199,7 +202,7 @@ void DocummentFileHelper::initConnections()
 
 void DocummentFileHelper::sendMsg(const int &msgType, const QString &msgContent)
 {
-    MsgSubject::getInstance()->sendMsg(nullptr, msgType, msgContent);
+    MsgSubject::getInstance()->sendMsg(msgType, msgContent);
 }
 
 //  文档　跳转页码　．　打开浏览器
@@ -221,17 +224,17 @@ void DocummentFileHelper::onClickPageLink(Page::Link *pLink)
     }
 }
 
-QPoint DocummentFileHelper::global2RelativePoint(QPoint globalpoint)
+QPoint DocummentFileHelper::global2RelativePoint(const QPoint &globalpoint)
 {
     return  m_pDocummentProxy->global2RelativePoint(globalpoint);
 }
 
-bool DocummentFileHelper::pageMove(double mvx, double mvy)
+bool DocummentFileHelper::pageMove(const double &mvx, const double &mvy)
 {
     return m_pDocummentProxy->pageMove(mvx, mvy);
 }
 
-int DocummentFileHelper::pointInWhichPage(QPoint pos)
+int DocummentFileHelper::pointInWhichPage(const QPoint &pos)
 {
     return m_pDocummentProxy->pointInWhichPage(pos);
 }
@@ -246,12 +249,12 @@ int DocummentFileHelper::currentPageNo()
     return m_pDocummentProxy->currentPageNo();
 }
 
-bool DocummentFileHelper::pageJump(int pagenum)
+bool DocummentFileHelper::pageJump(const int &pagenum)
 {
     return m_pDocummentProxy->pageJump(pagenum);
 }
 
-bool DocummentFileHelper::getImage(int pagenum, QImage &image, double width, double height)
+bool DocummentFileHelper::getImage(const int &pagenum, QImage &image, const double &width, const double &height)
 {
     bool rl = m_pDocummentProxy->getImage(pagenum, image, width, height);
     if (rl) {
@@ -260,7 +263,7 @@ bool DocummentFileHelper::getImage(int pagenum, QImage &image, double width, dou
     return rl;
 }
 
-QImage DocummentFileHelper::roundImage(const QPixmap &img_in, int radius)
+QImage DocummentFileHelper::roundImage(const QPixmap &img_in, const int &radius)
 {
     if (img_in.isNull()) {
         return QPixmap().toImage();
@@ -277,7 +280,7 @@ QImage DocummentFileHelper::roundImage(const QPixmap &img_in, int radius)
     return image.toImage();
 }
 
-bool DocummentFileHelper::showMagnifier(QPoint point)
+bool DocummentFileHelper::showMagnifier(const QPoint &point)
 {
     return  m_pDocummentProxy->showMagnifier(point);
 }
@@ -287,17 +290,17 @@ bool DocummentFileHelper::closeMagnifier()
     return m_pDocummentProxy->closeMagnifier();
 }
 
-bool DocummentFileHelper::setBookMarkState(int page, bool state)
+bool DocummentFileHelper::setBookMarkState(const int &page, const bool &state)
 {
     return m_pDocummentProxy->setBookMarkState(page, state);
 }
 
-bool DocummentFileHelper::setViewModeAndShow(ViewMode_EM viewmode)
+bool DocummentFileHelper::setViewModeAndShow(const ViewMode_EM &viewmode)
 {
     return m_pDocummentProxy->setViewModeAndShow(viewmode);
 }
 
-void DocummentFileHelper::scaleRotateAndShow(double scale, RotateType_EM rotate)
+void DocummentFileHelper::scaleRotateAndShow(const double &scale, const RotateType_EM &rotate)
 {
     m_pDocummentProxy->scaleRotateAndShow(scale, rotate);
 }
@@ -322,7 +325,7 @@ void DocummentFileHelper::getAllAnnotation(QList<stHighlightContent> &listres)
     m_pDocummentProxy->getAllAnnotation(listres);
 }
 
-QString DocummentFileHelper::addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color)
+QString DocummentFileHelper::addAnnotation(const QPoint &startpos, const QPoint &endpos, const QColor &color)
 {
     QString strUuid = m_pDocummentProxy->addAnnotation(startpos, endpos, color);
     if (strUuid != "") {
@@ -341,7 +344,7 @@ bool DocummentFileHelper::annotationClicked(const QPoint &pos, QString &strtext,
     return m_pDocummentProxy->annotationClicked(pos, strtext, struuid);
 }
 
-void DocummentFileHelper::removeAnnotation(const QString &struuid, int ipage)
+void DocummentFileHelper::removeAnnotation(const QString &struuid, const int &ipage)
 {
     DataManager::instance()->setBIsUpdate(true);
     m_pDocummentProxy->removeAnnotation(struuid, ipage);
@@ -352,18 +355,18 @@ QString DocummentFileHelper::removeAnnotation(const QPoint &pos)
     return m_pDocummentProxy->removeAnnotation(pos);
 }
 
-void DocummentFileHelper::setAnnotationText(int ipage, const QString &struuid, const QString &strtext)
+void DocummentFileHelper::setAnnotationText(const int &ipage, const QString &struuid, const QString &strtext)
 {
     DataManager::instance()->setBIsUpdate(true);
     m_pDocummentProxy->setAnnotationText(ipage, struuid, strtext);
 }
 
-void DocummentFileHelper::getAnnotationText(const QString &struuid, QString &strtext, int ipage)
+void DocummentFileHelper::getAnnotationText(const QString &struuid, QString &strtext, const int &ipage)
 {
     m_pDocummentProxy->getAnnotationText(struuid, strtext, ipage);
 }
 
-void DocummentFileHelper::jumpToHighLight(const QString &uuid, int ipage)
+void DocummentFileHelper::jumpToHighLight(const QString &uuid, const int &ipage)
 {
     DataManager::instance()->setBIsUpdate(true);
     m_pDocummentProxy->jumpToHighLight(uuid, ipage);

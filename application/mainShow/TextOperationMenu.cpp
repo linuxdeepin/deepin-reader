@@ -78,7 +78,7 @@ QAction *TextOperationMenu::createAction(const QString &text, const char *member
 
 void TextOperationMenu::sendMsgToFrame(const int &msgType, const QString &msgContent)
 {
-    MsgSubject::getInstance()->sendMsg(nullptr, msgType, msgContent);
+    MsgSubject::getInstance()->sendMsg(msgType, msgContent);
     this->hide();
 }
 

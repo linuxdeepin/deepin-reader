@@ -35,7 +35,7 @@ protected:
     void run() Q_DECL_OVERRIDE;
 
 public:
-    void sendMsg(IObserver *, const int &, const QString &msgContent);
+    void sendMsg(const int &, const QString &msgContent);
     void stopThreadRun();
 
 private:

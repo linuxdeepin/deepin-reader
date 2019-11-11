@@ -23,23 +23,19 @@ void MsgSubject::removeObserver(IObserver *obs)
     m_observerList.removeOne(obs);
 }
 
-void MsgSubject::sendMsg(IObserver *obs, const int &msgType, const QString &msgContent)
+void MsgSubject::sendMsg(const int &msgType, const QString &msgContent)
 {
     QMutexLocker locker(&m_mutex);
 
     MsgStruct msg;
-    msg.obs = obs;
     msg.msgType = msgType;
     msg.msgContent = msgContent;
 
     m_msgList.append(msg);
 
-    QString sName = obs ? obs->getObserverName() : "MainWindow";
-
     qDebug() << __LINE__ << "   " << __FUNCTION__
              << "   " << msgType
-             << "   " << msgContent
-             << "   " << sName;
+             << "   " << msgContent;
 }
 
 int MsgSubject::NotifyObservers(const int &msgType, const QString &msgContent)

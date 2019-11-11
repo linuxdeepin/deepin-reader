@@ -30,34 +30,34 @@ public:
     void docBasicInfo(stFileInfo &info);
 
 public:
-    bool mouseSelectText(QPoint start, QPoint stop);
-    bool mouseBeOverText(QPoint point);
-    Page::Link *mouseBeOverLink(QPoint point);
+    bool mouseSelectText(const QPoint &start, const QPoint &stop);
+    bool mouseBeOverText(const QPoint &point);
+    Page::Link *mouseBeOverLink(const QPoint &point);
     void mouseSelectTextClear();
     bool getSelectTextString(QString &st);
 
 public:
     void onClickPageLink(Page::Link *pLink);
-    QPoint global2RelativePoint(QPoint globalpoint);
-    bool pageMove(double mvx, double mvy);
-    int  pointInWhichPage(QPoint pos);
+    QPoint global2RelativePoint(const QPoint &globalpoint);
+    bool pageMove(const double &mvx, const double &mvy);
+    int  pointInWhichPage(const QPoint &pos);
     int  getPageSNum();
     int currentPageNo();
-    bool pageJump(int pagenum);
-    bool getImage(int pagenum, QImage &image, double width, double height);
+    bool pageJump(const int &pagenum);
+    bool getImage(const int &pagenum, QImage &image, const double &width, const double &height);
 
 private:
-    QImage roundImage(const QPixmap &img_in, int radius);
+    QImage roundImage(const QPixmap &img_in, const int &radius);
 
 public:
-    bool showMagnifier(QPoint point);
+    bool showMagnifier(const QPoint &point);
     bool closeMagnifier();
 
-    bool setBookMarkState(int page, bool state);
+    bool setBookMarkState(const int &page, const bool &state);
 
 public:
-    bool setViewModeAndShow(ViewMode_EM viewmode);
-    void scaleRotateAndShow(double scale, RotateType_EM rotate);
+    bool setViewModeAndShow(const ViewMode_EM &viewmode);
+    void scaleRotateAndShow(const double &scale, const RotateType_EM &rotate);
 
 public:
     double adaptWidthAndShow(const double &width);
@@ -68,14 +68,14 @@ public:
 
 public:
     void getAllAnnotation(QList<stHighlightContent> &listres);
-    QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow);
+    QString addAnnotation(const QPoint &startpos, const QPoint &endpos, const QColor &color = Qt::yellow);
     void changeAnnotationColor(const int &ipage, const QString &uuid, const QColor &color);
     bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
-    void removeAnnotation(const QString &struuid, int ipage = -1);
+    void removeAnnotation(const QString &struuid, const int &ipage = -1);
     QString removeAnnotation(const QPoint &pos);
-    void setAnnotationText(int ipage, const QString &struuid, const QString &strtext);
-    void getAnnotationText(const QString &struuid, QString &strtext, int ipage);
-    void jumpToHighLight(const QString &uuid, int ipage);
+    void setAnnotationText(const int &ipage, const QString &struuid, const QString &strtext);
+    void getAnnotationText(const QString &struuid, QString &strtext, const int &ipage);
+    void jumpToHighLight(const QString &uuid, const int &ipage);
 
 public:
     void search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color);

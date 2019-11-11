@@ -317,10 +317,15 @@ void MainWindow::slotActionTrigger(const QString &sAction)
     }
 }
 
-void MainWindow::sendMsg(const int &msgType, const QString &msgContent)
+void MainWindow::sendMsg(const int &, const QString &)
+{
+
+}
+
+void MainWindow::notifyMsg(const int &msgType, const QString &msgContent)
 {
     if (m_pNotifySubject) {
-        m_pNotifySubject->sendMsg(msgType, msgContent);
+        m_pNotifySubject->notifyMsg(msgType, msgContent);
     }
 }
 

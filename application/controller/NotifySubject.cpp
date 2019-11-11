@@ -46,7 +46,7 @@ void NotifySubject::stopThreadRun()
     wait();         //阻塞等待
 }
 
-void NotifySubject::sendMsg(const int &msgType, const QString &msgContent)
+void NotifySubject::notifyMsg(const int &msgType, const QString &msgContent)
 {
     QMutexLocker locker(&m_mutex);
 

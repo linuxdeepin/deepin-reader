@@ -42,6 +42,7 @@ protected:
 
 protected:
     void sendMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
+    void notifyMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
     void showScreenCenter();
 
 private:

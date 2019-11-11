@@ -39,10 +39,19 @@ void CustomWidget::updateWidgetTheme()
     setPalette(plt);
 }
 
+//  操作 消息
 void CustomWidget::sendMsg(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgSubject) {
-        m_pMsgSubject->sendMsg(this, msgType, msgContent);
+        m_pMsgSubject->sendMsg(msgType, msgContent);
+    }
+}
+
+//  通知消息
+void CustomWidget::notifyMsg(const int &msgType, const QString &msgContent)
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->notifyMsg(msgType, msgContent);
     }
 }
 

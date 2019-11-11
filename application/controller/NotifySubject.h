@@ -35,7 +35,7 @@ protected:
 
 public:
     void stopThreadRun();
-    void sendMsg(const int &, const QString &msgContent = "");
+    void notifyMsg(const int &, const QString &msgContent = "");
 
 private:
     void NotifyObservers(const int &, const QString &);

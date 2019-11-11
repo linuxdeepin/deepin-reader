@@ -63,6 +63,7 @@ private slots:
 
 private:
     void sendMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
+    void notifyMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
 
 private:
     MsgSubject      *m_pMsgSubject = nullptr;
