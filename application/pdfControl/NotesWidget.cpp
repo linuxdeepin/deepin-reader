@@ -404,7 +404,6 @@ void ThreadLoadImageOfNote::run()
 {
     while (m_isLoaded) {
         int t_page = -1;
-//        QString t_strUUid(""), t_noteContant("");
         QImage image;
         bool bl = false;
 
@@ -424,14 +423,10 @@ void ThreadLoadImageOfNote::run()
 
             if (t_page != highContent.ipage) {
                 t_page = highContent.ipage;
-                bl = dproxy->getImage(t_page, image, 34, 54/*28, 48*/);
-                if (bl) {
-
-//                    t_strUUid = m_stListNote.at(page).struuid;
-//                    t_noteContant = m_stListNote.at(page).strcontents;
-
-                    emit sigLoadImage(image);
-                }
+                bl = dproxy->getImage(t_page, image, 34, 54);
+            }
+            if (bl) {
+                emit sigLoadImage(image);
             }
             msleep(20);
         }
