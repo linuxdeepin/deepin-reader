@@ -33,11 +33,11 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigFilePageChanged(msgContent);
     }else if(MSG_NOTIFY_KEY_MSG == msgType){
         if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup) {
-            if(hasFocus()) emit sigJumpToPrevPage();
-            return ConstantMsg::g_effective_res;
+             emit sigJumpToPrevPage();
+//            return ConstantMsg::g_effective_res;
         } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown) {
-            if(hasFocus()) emit sigJumpToNextPage();
-            return ConstantMsg::g_effective_res;
+             emit sigJumpToNextPage();
+//            return ConstantMsg::g_effective_res;
         } /*else if (msgContent == "0") {
             emit slotJudgeInputPage(msgContent);
             qDebug() << "PagingWidget::dealWithData key=" << msgContent;
@@ -160,6 +160,9 @@ void ThumbnailWidget::slotUpdateTheme()
  */
 void ThumbnailWidget::slotJumpToPrevPage()
 {
+    if(DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL){
+        return;
+    }
     int nCurPage = DocummentFileHelper::instance()->currentPageNo();
     nCurPage--;
     jumpToSpecifiedPage(nCurPage);
@@ -171,6 +174,9 @@ void ThumbnailWidget::slotJumpToPrevPage()
  */
 void ThumbnailWidget::slotJumpToNextPage()
 {
+    if(DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL){
+        return;
+    }
     int nCurPage = DocummentFileHelper::instance()->currentPageNo();
     nCurPage++;
     jumpToSpecifiedPage(nCurPage);
