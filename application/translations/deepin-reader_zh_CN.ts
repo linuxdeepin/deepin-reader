@@ -113,46 +113,58 @@
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="91"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="43"/>
+        <source>basic information</source>
+        <translatorcomment>基本信息</translatorcomment>
+        <translation>基本信息</translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="110"/>
         <source>Yes</source>
         <translatorcomment>是</translatorcomment>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="91"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="110"/>
         <source>No</source>
         <translatorcomment>否</translatorcomment>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="100"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="119"/>
         <source>year</source>
-        <translation></translation>
+        <translatorcomment>年</translatorcomment>
+        <translation>年</translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="100"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="119"/>
         <source>month</source>
-        <translation></translation>
+        <translatorcomment>月</translatorcomment>
+        <translation>月</translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="100"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="119"/>
         <source>day</source>
-        <translation></translation>
+        <translatorcomment>日</translatorcomment>
+        <translation>日</translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="101"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="120"/>
         <source>hour</source>
-        <translation></translation>
+        <translatorcomment>时</translatorcomment>
+        <translation>时</translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="101"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="120"/>
         <source>minute</source>
-        <translation></translation>
+        <translatorcomment>分</translatorcomment>
+        <translation>分</translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="101"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="120"/>
         <source>second</source>
-        <translation></translation>
+        <translatorcomment>秒</translatorcomment>
+        <translation>秒</translation>
     </message>
 </context>
 <context>
@@ -268,7 +280,7 @@
 <context>
     <name>FileAttrWidget</name>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="70"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="72"/>
         <source>close</source>
         <translatorcomment>关闭</translatorcomment>
         <translation>关闭</translation>

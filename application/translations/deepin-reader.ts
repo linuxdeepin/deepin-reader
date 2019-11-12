@@ -92,42 +92,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="91"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="43"/>
+        <source>basic information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="110"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="91"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="110"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="100"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="119"/>
         <source>year</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="100"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="119"/>
         <source>month</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="100"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="119"/>
         <source>day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="101"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="120"/>
         <source>hour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="101"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="120"/>
         <source>minute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="101"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="120"/>
         <source>second</source>
         <translation type="unfinished"></translation>
     </message>
@@ -230,7 +235,7 @@
 <context>
     <name>FileAttrWidget</name>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="70"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="72"/>
         <source>close</source>
         <translation></translation>
     </message>

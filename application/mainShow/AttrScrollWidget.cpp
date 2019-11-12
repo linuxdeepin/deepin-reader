@@ -40,7 +40,7 @@ AttrScrollWidget::AttrScrollWidget(DWidget *parent)
     auto vLayout = new QVBoxLayout;
 
     QFont font("SourceHanSansSC-Medium", 14);
-    auto basicLabel = new DLabel("basic information");
+    auto basicLabel = new DLabel(tr("basic information"));
     basicLabel->setFont(font);
     vLayout->addWidget(basicLabel);
 
