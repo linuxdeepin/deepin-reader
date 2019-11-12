@@ -69,7 +69,8 @@ signals:
     void sigAddBookMark(const int &);
     void sigCloseFile();
     void sigDelBKItem();
-    void sigFilpOver();
+    void sigJumpToPrevItem();
+    void sigJumpToNextItem();
 
 private slots:
     void slotAddBookMark();
@@ -81,7 +82,8 @@ private slots:
     void slotLoadImage(const int &, const QImage &);
     void slotDelBkItem();
     void slotUpdateTheme();
-    void slotFilpOver();
+    void slotJumpToPrevItem();
+    void slotJumpToNextItem();
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -91,6 +93,7 @@ private:
     QListWidgetItem *addBookMarkItem(const int &);
     void setSelectItemBackColor(QListWidgetItem *);
     void deleteIndexPage(const int &pageIndex);
+    void clearItemColor();
 
 public:
     // IObserver interface
@@ -102,6 +105,7 @@ private:
     CustomListWidget    *m_pBookMarkListWidget = nullptr;
     DPushButton         *m_pAddBookMarkBtn = nullptr;
     LoadBookMarkThread  m_loadBookMarkThread;
+//    QListWidgetItem *m_currentItem = nullptr;
 };
 
 #endif // BOOKMARKFORM_H
