@@ -13,10 +13,7 @@ DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
 
 DocShowShellWidget::~DocShowShellWidget()
 {
-    if (m_pFileAttrWidget) {
-        m_pFileAttrWidget->deleteLater();
-        m_pFileAttrWidget = nullptr;
-    }
+
 }
 
 void DocShowShellWidget::resizeEvent(QResizeEvent *event)
@@ -33,10 +30,8 @@ void DocShowShellWidget::resizeEvent(QResizeEvent *event)
 //  获取文件的基本数据，　进行展示
 void DocShowShellWidget::slotShowFileAttr()
 {
-    if (m_pFileAttrWidget == nullptr) {
-        m_pFileAttrWidget = new FileAttrWidget;
-    }
-    m_pFileAttrWidget->showScreenCenter();
+    auto pFileAttrWidget = new FileAttrWidget;
+    pFileAttrWidget->showScreenCenter();
 }
 
 //  搜索框

@@ -7,9 +7,6 @@
 #include <DWidget>
 #include <DWidgetUtil>
 
-#include <QFileInfo>
-#include <DFrame>
-
 #include "utils/utils.h"
 
 DWIDGET_USE_NAMESPACE
@@ -30,12 +27,8 @@ public:
 private:
     void initWidget();
     void setFileAttr();
-    void initLabels();
     void initCloseBtn();
     void initImageLabel();
-    DLabel *createLabel(QGridLayout *, const int &, const QString &);
-
-    void setFileInfoTime(const QDateTime &, const QDateTime &);
 
 private slots:
     void slotBtnCloseClicked();
@@ -45,21 +38,6 @@ private:
 
     DLabel *labelImage = nullptr;
     DLabel *labelFileName = nullptr;
-
-    DLabel *labelFilePath = nullptr;
-    DLabel *labelTheme = nullptr;
-    DLabel *labelAuthor = nullptr;
-    DLabel *labelKeyWord = nullptr;
-    DLabel *labelCreator = nullptr;
-    DLabel *labelProducer = nullptr;
-    DLabel *labelCreateTime = nullptr;
-    DLabel *labelUpdateTime = nullptr;
-    DLabel *labelFormat = nullptr;
-    DLabel *labelPageNumber = nullptr;
-    DLabel *labelBetter = nullptr;
-    DLabel *labelSafe = nullptr;
-    DLabel *labelPaperSize = nullptr;
-    DLabel *labelSize = nullptr;
 };
 
 #endif // FILEATTRWIDGET_H

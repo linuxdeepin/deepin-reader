@@ -20,6 +20,119 @@
     </message>
 </context>
 <context>
+    <name>AttrScrollWidget</name>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="23"/>
+        <source>Location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="24"/>
+        <source>Theme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="25"/>
+        <source>Author</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="26"/>
+        <source>Keywords</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="27"/>
+        <source>Producers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="28"/>
+        <source>Creator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="29"/>
+        <source>Create Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="30"/>
+        <source>Update Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="31"/>
+        <source>Format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="32"/>
+        <source>Page&apos;s Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="33"/>
+        <source>Optimize</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="34"/>
+        <source>Security</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="37"/>
+        <source>Paper Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="39"/>
+        <source>File Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="88"/>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="88"/>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="97"/>
+        <source>year</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="97"/>
+        <source>month</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="97"/>
+        <source>day</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="98"/>
+        <source>hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="98"/>
+        <source>minute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="98"/>
+        <source>second</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BookMarkItemWidget</name>
     <message>
         <location filename="../pdfControl/BookMarkItemWidget.cpp" line="56"/>
@@ -30,7 +143,7 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="300"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="366"/>
         <source>add bookmark</source>
         <translation></translation>
     </message>
@@ -54,38 +167,38 @@
 <context>
     <name>DefaultOperationMenu</name>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="24"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="25"/>
         <source>delete bookmark</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="27"/>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="49"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="28"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="53"/>
         <source>add bookmark</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="48"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="52"/>
         <source>Search</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="50"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="54"/>
         <source>first page</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="51"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="55"/>
         <source>prev page</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="52"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="56"/>
         <source>next page</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/DefaultOperationMenu.cpp" line="53"/>
+        <location filename="../mainShow/DefaultOperationMenu.cpp" line="57"/>
         <source>end page</source>
         <translation></translation>
     </message>
@@ -93,23 +206,23 @@
 <context>
     <name>DocummentFileHelper</name>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="85"/>
-        <location filename="../frame/DocummentFileHelper.cpp" line="113"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="86"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="114"/>
         <source>Save File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="113"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="114"/>
         <source>Do you need to save the file opened?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="142"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="144"/>
         <source>File not supported</source>
         <translation>文件格式不支持</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="195"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="200"/>
         <source>Please check if the file is damaged</source>
         <translation>请检查文件是否已经损坏</translation>
     </message>
@@ -117,125 +230,20 @@
 <context>
     <name>FileAttrWidget</name>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="93"/>
-        <source>Location</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="94"/>
-        <source>Theme</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="95"/>
-        <source>Author</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="96"/>
-        <source>Keywords</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="97"/>
-        <source>Producers</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="98"/>
-        <source>Creator</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="99"/>
-        <source>Create Time</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="100"/>
-        <source>Update Time</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="101"/>
-        <source>Format</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="102"/>
-        <source>Page&apos;s Number</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="103"/>
-        <source>Optimize</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="104"/>
-        <source>Security</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="105"/>
-        <source>Paper Size</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="106"/>
-        <source>File Size</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="109"/>
-        <source>file basic info</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="126"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="70"/>
         <source>close</source>
         <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="167"/>
-        <source>year</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="167"/>
-        <source>month</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="167"/>
-        <source>day</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="168"/>
-        <source>hour</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="168"/>
-        <source>minute</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="168"/>
-        <source>second</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>FileViewWidget</name>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="359"/>
+        <location filename="../frame/FileViewWidget.cpp" line="379"/>
         <source>Print Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="359"/>
+        <location filename="../frame/FileViewWidget.cpp" line="379"/>
         <source>No Print Device</source>
         <translation></translation>
     </message>
@@ -243,12 +251,12 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../mainShow/FindWidget.cpp" line="95"/>
+        <location filename="../mainShow/FindWidget.cpp" line="128"/>
         <source>next one</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FindWidget.cpp" line="100"/>
+        <location filename="../mainShow/FindWidget.cpp" line="133"/>
         <source>prev one</source>
         <translation></translation>
     </message>
@@ -315,7 +323,7 @@
 <context>
     <name>MainWidget</name>
     <message>
-        <location filename="../frame/MainWidget.cpp" line="40"/>
+        <location filename="../frame/MainWidget.cpp" line="49"/>
         <source>deepin-reader</source>
         <translation></translation>
     </message>
@@ -323,63 +331,63 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="147"/>
+        <location filename="../frame/MainWindow.cpp" line="143"/>
         <source>Open File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="147"/>
-        <location filename="../frame/MainWindow.cpp" line="239"/>
+        <location filename="../frame/MainWindow.cpp" line="143"/>
+        <location filename="../frame/MainWindow.cpp" line="235"/>
         <source>Save File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="147"/>
+        <location filename="../frame/MainWindow.cpp" line="143"/>
         <source>Save As File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="148"/>
+        <location filename="../frame/MainWindow.cpp" line="144"/>
         <source>Open Folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="148"/>
+        <location filename="../frame/MainWindow.cpp" line="144"/>
         <source>Print</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="148"/>
+        <location filename="../frame/MainWindow.cpp" line="144"/>
         <source>File Attr</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="155"/>
+        <location filename="../frame/MainWindow.cpp" line="151"/>
         <source>Search</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="155"/>
+        <location filename="../frame/MainWindow.cpp" line="151"/>
         <source>Full Screen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="155"/>
+        <location filename="../frame/MainWindow.cpp" line="151"/>
         <source>Screening</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="156"/>
+        <location filename="../frame/MainWindow.cpp" line="152"/>
         <source>Larger</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="156"/>
+        <location filename="../frame/MainWindow.cpp" line="152"/>
         <source>Smaller</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="239"/>
+        <location filename="../frame/MainWindow.cpp" line="235"/>
         <source>Do you need to save the file opened?</source>
         <translation></translation>
     </message>
@@ -409,7 +417,7 @@
 <context>
     <name>SearchResWidget</name>
     <message>
-        <location filename="../pdfControl/SearchResWidget.cpp" line="151"/>
+        <location filename="../pdfControl/SearchResWidget.cpp" line="150"/>
         <source>search res content</source>
         <translation></translation>
     </message>
@@ -417,22 +425,22 @@
 <context>
     <name>TextOperationMenu</name>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="49"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="53"/>
         <source>copy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="58"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="62"/>
         <source>remove high light</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="61"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="65"/>
         <source>add note</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/TextOperationMenu.cpp" line="64"/>
+        <location filename="../mainShow/TextOperationMenu.cpp" line="68"/>
         <source>add bookmark</source>
         <translation></translation>
     </message>

@@ -39,7 +39,6 @@ private:
     int dealWithNotifyMsg(const QString &);
 
 private:
-    FileAttrWidget          *m_pFileAttrWidget = nullptr;
     FindWidget              *m_pFindWidget = nullptr;
     FileViewNoteWidget      *m_pFileViewNoteWidget = nullptr;
 
