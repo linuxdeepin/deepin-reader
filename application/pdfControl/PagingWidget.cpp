@@ -183,9 +183,11 @@ void PagingWidget::slotJumpToSpecifiedPage(const int &nPage)
 {
     //  跳转的页码 必须 大于0, 且 小于 总页码数
     int nPageSize = DocummentFileHelper::instance()->getPageSNum();
-    if (nPage < 0 || nPage == nPageSize) {
+    if (nPage < 0 || nPage >= nPageSize) {
         return;
     }
+
+    m_preRow = nPage;
 
     DocummentFileHelper::instance()->pageJump(nPage);
 }
@@ -217,6 +219,8 @@ void PagingWidget::setCurrentPageValue(const int &inputData)
         m_pPrePageBtn->setEnabled(true);
         m_pNextPageBtn->setEnabled(true);
     }
+
+    m_preRow = inputData;
 
     m_pJumpPageSpinBox->setValue(currntPage);
 }
