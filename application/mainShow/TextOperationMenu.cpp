@@ -122,7 +122,7 @@ void TextOperationMenu::slotAddNoteClicked()
         QString msgContent = QString("%1").arg(m_nClickPage) + Constant::sQStringSep + QString("%1").arg(m_pClickPoint.x()) + Constant::sQStringSep + QString("%1").arg(m_pClickPoint.y());
         notifyMsgToFrame(MSG_OPERATION_TEXT_ADD_ANNOTATION, msgContent);
     } else {
-        QString t_strContant = m_strNoteUuid.trimmed() + QString("%1%") + QString::number(m_nClickPage);
+        QString t_strContant = m_strNoteUuid.trimmed() + QString("%none%") + QString::number(m_nClickPage);
         notifyMsgToFrame(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
     }
 }

@@ -209,6 +209,8 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         m_operatemenu->setClickPoint(pRightClickPoint);
         m_operatemenu->setClickPage(nPage);
 
+        DataManager::instance()->setMousePressLocal(bIsHighLight, tempPoint);
+
         m_operatemenu->execMenu(tempPoint, bIsHighLight, sSelectText, struuid);
     } else {    //  否则弹出 文档操作菜单
         auto menu = new DefaultOperationMenu(this);
