@@ -10,7 +10,6 @@
 AttrScrollWidget::AttrScrollWidget(DWidget *parent)
     : DScrollArea (parent)
 {
-    setFixedSize(QSize(286, 382));
     setFrameShape(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -38,10 +37,19 @@ AttrScrollWidget::AttrScrollWidget(DWidget *parent)
 
     createLabel(gridLayout, 13, tr("File Size"), Utils::getInputDataSize(fileInfo.size));
 
+    auto vLayout = new QVBoxLayout;
+
+    QFont font("SourceHanSansSC-Medium", 14);
+    auto basicLabel = new DLabel("file basic info");
+    basicLabel->setFont(font);
+    vLayout->addWidget(basicLabel);
+
+    vLayout->addItem(gridLayout);
+
     auto frame = new DFrame;
     frame->setMinimumWidth(278);
     this->setWidget(frame);
-    frame->setLayout(gridLayout);
+    frame->setLayout(vLayout);
     frame->adjustSize();
 }
 
@@ -49,11 +57,11 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
 {
     DLabel *label = new DLabel(objName, this);
     label->setAlignment(Qt::AlignTop);
-    label->setFixedWidth(60);
+    label->setMinimumWidth(60);
     layout->addWidget(label, index, 0);
 
     DLabel *labelText = new DLabel(this);
-    labelText->setFixedWidth(218);
+    labelText->setMaximumWidth(200);
     labelText->setText(sData);
     labelText->setAlignment(Qt::AlignTop);
     labelText->setWordWrap(true);
@@ -64,11 +72,11 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
 {
     DLabel *label = new DLabel(objName, this);
     label->setAlignment(Qt::AlignTop);
-    label->setFixedWidth(60);
+    label->setMinimumWidth(60);
     layout->addWidget(label, index, 0);
 
     DLabel *labelText = new DLabel(this);
-    labelText->setFixedWidth(218);
+    labelText->setMaximumWidth(200);
     QString strText = getTime(sData);
     labelText->setText(strText);
     labelText->setAlignment(Qt::AlignTop);
@@ -80,11 +88,11 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
 {
     DLabel *label = new DLabel(objName, this);
     label->setAlignment(Qt::AlignTop);
-    label->setFixedWidth(60);
+    label->setMinimumWidth(60);
     layout->addWidget(label, index, 0);
 
     DLabel *labelText = new DLabel(this);
-    labelText->setFixedWidth(218);
+    labelText->setMaximumWidth(200);
     labelText->setText(bData ? tr("Yes") : tr("No"));
     labelText->setAlignment(Qt::AlignTop);
     labelText->setWordWrap(true);
