@@ -314,11 +314,19 @@ void CustemTextEdit::slotTextEditMaxContantNum()
 
     int length = textContent.toUtf8().size();
     if (length > m_nMaxContantLen) {
-        int position = this->textCursor().position();
-        QTextCursor textCursor = this->textCursor();
-        textContent.remove(position - (length - m_nMaxContantLen), length - m_nMaxContantLen);
-        this->setText(textContent);
-        textCursor.setPosition(position - (length - m_nMaxContantLen));
-        this->setTextCursor(textCursor);
+//        int position = this->textCursor().position();
+//        QTextCursor textCursor = this->textCursor();
+//        textContent.remove(position - (length - m_nMaxContantLen), length - m_nMaxContantLen);
+//        this->setText(textContent);
+//        textCursor.setPosition(position - (length - m_nMaxContantLen));
+//        this->setTextCursor(textCursor);
+        QTextCursor cursor = textCursor();
+                cursor.movePosition(QTextCursor::End);
+                if(cursor.hasSelection()) {
+                    cursor.clearSelection();
+                }
+                cursor.deletePreviousChar();
+                //设置当前的光标为更改后的光标
+                setTextCursor(cursor);
     }
 }
