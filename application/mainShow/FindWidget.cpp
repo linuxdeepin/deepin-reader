@@ -29,8 +29,8 @@
 FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)
 {
-    setFixedSize(QSize(410, 40));
-    setWindowFlags(windowFlags() |  Qt::WindowStaysOnTopHint);
+    setFixedSize(QSize(414, 50));
+    setWindowFlags(Qt::WindowStaysOnTopHint);
 
     initWidget();
 
@@ -126,29 +126,35 @@ void FindWidget::initWidget()
 {
     auto findNextButton = new DIconButton(DStyle::SP_ArrowDown);
     findNextButton->setToolTip(tr("next one"));
-    findNextButton->setFixedSize(QSize(30, 30));
+    findNextButton->setFixedSize(QSize(36, 36));
+    findNextButton->setIconSize(QSize(12, 12));
     connect(findNextButton, &DIconButton::clicked, this, &FindWidget::slotFindNextBtnClicked);
 
     auto findPrevButton = new DIconButton(DStyle::SP_ArrowUp);
-    findNextButton->setToolTip(tr("prev one"));
-    findPrevButton->setFixedSize(QSize(30, 30));
+    findPrevButton->setToolTip(tr("prev one"));
+    findPrevButton->setFixedSize(QSize(36, 36));
+    findPrevButton->setIconSize(QSize(12, 12));
     connect(findPrevButton, &DIconButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
 
     auto closeButton = new DDialogCloseButton;
-    closeButton->setIconSize(QSize(30, 30));
+    closeButton->setIconSize(QSize(20, 20));
+    closeButton->setFixedSize(QSize(22, 22));
     connect(closeButton, &DDialogCloseButton::clicked, this, &FindWidget::findCancel);
 
     m_pSearchEdit = new DSearchEdit;
+    m_pSearchEdit->setFixedSize(QSize(270, 36));
     m_pSearchEdit->setFocusPolicy(Qt::StrongFocus);
 
     connect(m_pSearchEdit, &DSearchEdit::returnPressed, this, &FindWidget::handleContentChanged);
     connect(m_pSearchEdit, &DSearchEdit::textChanged, this, &FindWidget::slotClearContent);
 
     auto layout = new QHBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(6);
+    layout->setContentsMargins(0, 1, 0, 1);
+    layout->setSpacing(5);
+    layout->addStretch(1);
     layout->addWidget(m_pSearchEdit);
-    layout->addWidget(findNextButton);
     layout->addWidget(findPrevButton);
+    layout->addWidget(findNextButton);
     layout->addWidget(closeButton);
+    layout->addStretch(1);
 }
