@@ -105,7 +105,6 @@ private:
     CustomListWidget    *m_pBookMarkListWidget = nullptr;
     DPushButton         *m_pAddBookMarkBtn = nullptr;
     LoadBookMarkThread  m_loadBookMarkThread;
-//    QListWidgetItem *m_currentItem = nullptr;
 };
 
 #endif // BOOKMARKFORM_H

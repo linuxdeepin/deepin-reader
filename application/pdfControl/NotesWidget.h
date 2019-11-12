@@ -70,6 +70,8 @@ signals:
     void sigOpenFileOk();
     void sigCloseFile();
     void sigDelNoteItem();
+    void sigJumpToPrevItem();
+    void sigJumpToNextItem();
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -83,11 +85,14 @@ private slots:
     void slotLoadImage(const QImage &);
     void slotDelNoteItem();
     void slotSelectItem(QListWidgetItem *);
+    void slotJumpToPrevItem();
+    void slotJumpToNextItem();
 
 private:
     void addNotesItem(const QString &text);
     void initConnection();
     void setSelectItemBackColor(QListWidgetItem *);
+    void clearItemColor();
 
 private:
     void fillContantToList();

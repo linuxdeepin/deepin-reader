@@ -112,6 +112,8 @@ void NotesWidget::slotOpenFileOk()
         addNewItem(st);
     }
 
+    m_pNoteItem = m_pNotesList->item(0);
+
     m_ThreadLoadImage.setListNoteSt(list_note);
     m_ThreadLoadImage.setIsLoaded(true);
     if (!m_ThreadLoadImage.isRunning()) {
@@ -130,6 +132,7 @@ void NotesWidget::slotCloseFile()
     m_mapUuidAndPage.clear();
     if (m_pNotesList) {
         m_pNotesList->clear();
+        m_pNoteItem = nullptr;
     }
 }
 
@@ -169,6 +172,8 @@ void NotesWidget::slotDelNoteItem()
             delete  curItem;
             curItem = nullptr;
 
+            m_pNotesList->update();
+
             // remove date from map and notify kong yun zhen
             m_mapUuidAndPage.remove(t_uuid);
 
@@ -176,6 +181,9 @@ void NotesWidget::slotDelNoteItem()
             if (t_pDocummentProxy) {
                 t_pDocummentProxy->removeAnnotation(t_uuid, page);
             }
+        }
+        if(m_pNotesList->count() > 0){
+            m_pNoteItem = m_pNotesList->item(0);
         }
     }
 }
@@ -196,6 +204,60 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
         auto pDocProxy = DocummentFileHelper::instance();
         if (pDocProxy) {
             pDocProxy->jumpToHighLight(t_uuid, page);
+        }
+    }
+}
+
+void NotesWidget::slotJumpToPrevItem()
+{
+    if(DataManager::instance()->currentWidget() != WIDGET_NOTE || m_pNotesList == nullptr){
+        return;
+    }
+
+    if(m_pNotesList->count() <= 0){
+        return;
+    }
+
+    int t_index = -1;
+    if (m_pNoteItem) {
+        t_index = m_pNotesList->row(m_pNoteItem);
+        if(--t_index < 0) return;
+        auto item = m_pNotesList->item(t_index);
+        if(item == nullptr) return;
+        auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
+        if (t_widget) {
+            clearItemColor();
+            m_pNotesList->setCurrentItem(item);
+            DocummentFileHelper::instance()->pageJump(t_widget->nPageIndex());
+            m_pNoteItem = item;
+            t_widget->setBSelect(true);
+        }
+    }
+}
+
+void NotesWidget::slotJumpToNextItem()
+{
+    if(DataManager::instance()->currentWidget() != WIDGET_NOTE || m_pNotesList == nullptr){
+        return;
+    }
+
+    if(m_pNotesList->count() <= 0){
+        return;
+    }
+
+    int t_index = -1;
+    if (m_pNoteItem) {
+        t_index = m_pNotesList->row(m_pNoteItem);
+        if(++t_index < 0) return;
+        auto item = m_pNotesList->item(t_index);
+        if(item == nullptr) return;
+        auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
+        if (t_widget) {
+            clearItemColor();
+            m_pNotesList->setCurrentItem(item);
+            DocummentFileHelper::instance()->pageJump(t_widget->nPageIndex());
+            m_pNoteItem = item;
+            t_widget->setBSelect(true);
         }
     }
 }
@@ -252,6 +314,8 @@ void NotesWidget::initConnection()
             this, SLOT(slotLoadImage(const QImage &)));
     connect(this, SIGNAL(sigDelNoteItem()), this, SLOT(slotDelNoteItem()));
     connect(m_pNotesList, SIGNAL(sigSelectItem(QListWidgetItem *)), this, SLOT(slotSelectItem(QListWidgetItem *)));
+    connect(this, SIGNAL(sigJumpToPrevItem()), this, SLOT(slotJumpToPrevItem()));
+    connect(this, SIGNAL(sigJumpToNextItem()), this, SLOT(slotJumpToNextItem()));
 }
 
 /**
@@ -264,10 +328,11 @@ void NotesWidget::setSelectItemBackColor(QListWidgetItem *item)
         return;
     }
 
-    auto t_widget1 = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
-    if (t_widget1) {
-        t_widget1->setBSelect(false);
-    }
+//    auto t_widget1 = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
+//    if (t_widget1) {
+//        t_widget1->setBSelect(false);
+//    }
+    clearItemColor();
 
     m_pNotesList->setCurrentItem(item);
 
@@ -275,6 +340,18 @@ void NotesWidget::setSelectItemBackColor(QListWidgetItem *item)
     if (t_widget) {
         t_widget->setBSelect(true);
         m_pNoteItem = item;
+    }
+}
+
+void NotesWidget::clearItemColor()
+{
+    if(m_pNotesList == nullptr) return;
+    auto pCurItem = m_pNotesList->currentItem();
+    if (pCurItem) {
+        auto pItemWidget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
+        if (pItemWidget) {
+            pItemWidget->setBSelect(false);
+        }
     }
 }
 
@@ -296,6 +373,7 @@ void NotesWidget::addNewItem(const stHighlightContent &note)
 
     m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);
+    m_pNoteItem = item;
 
     m_mapUuidAndPage.insert(note.struuid, note.ipage);
 }
@@ -323,6 +401,7 @@ void NotesWidget::addNewItem(const QImage &image, const int &page, const QString
 
     m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);
+    m_pNoteItem = item;
 }
 
 /**
@@ -378,7 +457,11 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (MSG_NOTIFY_KEY_MSG == msgType) {
         if (msgContent == KeyStr::g_del) {
             emit sigDelNoteItem();
-        }
+        }else if(msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup) {
+            emit sigJumpToPrevItem();
+       }else if(msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown) {
+            emit sigJumpToNextItem();
+       }
     }
 
     return 0;
