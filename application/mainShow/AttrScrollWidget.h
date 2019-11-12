@@ -23,6 +23,7 @@ private:
     void createLabel(QGridLayout *layout, const int &index, const QString &objName, const QString &sData);
     void createLabel(QGridLayout *layout, const int &index, const QString &objName, const QDateTime &sData);
     void createLabel(QGridLayout *layout, const int &index, const QString &objName, const bool &bData);
+
     QString getTime(const QDateTime &CreateTime);
 };
 

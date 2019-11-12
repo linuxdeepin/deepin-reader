@@ -40,7 +40,9 @@ void FileAttrWidget::setFileAttr()
 
     labelFileName->setText(szTitle);
 
-    m_pVBoxLayout->addWidget(new AttrScrollWidget);
+    auto aa = new AttrScrollWidget;
+    aa->setGeometry(244, 316, 280, 382);
+    m_pVBoxLayout->addWidget(aa);
 }
 
 void FileAttrWidget::showScreenCenter()

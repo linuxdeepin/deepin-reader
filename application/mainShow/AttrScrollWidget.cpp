@@ -40,7 +40,7 @@ AttrScrollWidget::AttrScrollWidget(DWidget *parent)
     auto vLayout = new QVBoxLayout;
 
     QFont font("SourceHanSansSC-Medium", 14);
-    auto basicLabel = new DLabel("file basic info");
+    auto basicLabel = new DLabel("basic information");
     basicLabel->setFont(font);
     vLayout->addWidget(basicLabel);
 
@@ -55,12 +55,18 @@ AttrScrollWidget::AttrScrollWidget(DWidget *parent)
 
 void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const QString &objName, const QString &sData)
 {
+    QFont font("SourceHanSansSC-Normal", 12);
+
     DLabel *label = new DLabel(objName, this);
+    label->setFont(font);
+
     label->setAlignment(Qt::AlignTop);
     label->setMinimumWidth(60);
     layout->addWidget(label, index, 0);
 
     DLabel *labelText = new DLabel(this);
+    labelText->setFont(font);
+
     labelText->setMaximumWidth(200);
     labelText->setText(sData);
     labelText->setAlignment(Qt::AlignTop);
@@ -70,12 +76,16 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
 
 void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const QString &objName, const QDateTime &sData)
 {
+    QFont font("SourceHanSansSC-Normal", 12);
+
     DLabel *label = new DLabel(objName, this);
+    label->setFont(font);
     label->setAlignment(Qt::AlignTop);
     label->setMinimumWidth(60);
     layout->addWidget(label, index, 0);
 
     DLabel *labelText = new DLabel(this);
+    labelText->setFont(font);
     labelText->setMaximumWidth(200);
     QString strText = getTime(sData);
     labelText->setText(strText);
@@ -86,12 +96,16 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
 
 void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const QString &objName, const bool &bData)
 {
+    QFont font("SourceHanSansSC-Normal", 12);
+
     DLabel *label = new DLabel(objName, this);
+    label->setFont(font);
     label->setAlignment(Qt::AlignTop);
     label->setMinimumWidth(60);
     layout->addWidget(label, index, 0);
 
     DLabel *labelText = new DLabel(this);
+    labelText->setFont(font);
     labelText->setMaximumWidth(200);
     labelText->setText(bData ? tr("Yes") : tr("No"));
     labelText->setAlignment(Qt::AlignTop);
@@ -112,7 +126,7 @@ QString AttrScrollWidget::getTime(const QDateTime &inTime)
     QString sDate = sYear + sYearText + sMonth + sMonthText + sDay + sDayText;
     QString sTime = sHour + sHourText + sMin + sMinText + sSec + sSecondText;
 
-    sDate = inTime.toString("yyyy年MM月dd日");
-    sTime = inTime.toString("HH时mm分ss秒");
+//    sDate = inTime.toString("yyyy年MM月dd日");
+//    sTime = inTime.toString("HH时mm分ss秒");
     return QString("%1 %2 %3").arg(sDate).arg(sWeekday).arg(sTime);
 }

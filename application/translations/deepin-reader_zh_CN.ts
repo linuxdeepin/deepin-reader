@@ -187,8 +187,8 @@
     <message>
         <location filename="../pdfControl/CustomItemWidget.cpp" line="34"/>
         <source>page</source>
-        <translatorcomment>页</translatorcomment>
-        <translation>页</translation>
+        <translatorcomment>页面</translatorcomment>
+        <translation>页面</translation>
     </message>
 </context>
 <context>
@@ -267,80 +267,6 @@
 </context>
 <context>
     <name>FileAttrWidget</name>
-    <message>
-        <source>Location</source>
-        <translation type="vanished">位置</translation>
-    </message>
-    <message>
-        <source>Theme</source>
-        <translatorcomment>主题</translatorcomment>
-        <translation type="vanished">主题</translation>
-    </message>
-    <message>
-        <source>Author</source>
-        <translatorcomment>作者</translatorcomment>
-        <translation type="vanished">作者</translation>
-    </message>
-    <message>
-        <source>Keywords</source>
-        <translatorcomment>关键词</translatorcomment>
-        <translation type="vanished">关键词</translation>
-    </message>
-    <message>
-        <source>Producers</source>
-        <translatorcomment>制作者</translatorcomment>
-        <translation type="vanished">制作者</translation>
-    </message>
-    <message>
-        <source>Creator</source>
-        <translatorcomment>创建者</translatorcomment>
-        <translation type="vanished">创建者</translation>
-    </message>
-    <message>
-        <source>Create Time</source>
-        <translatorcomment>创建于</translatorcomment>
-        <translation type="vanished">创建于</translation>
-    </message>
-    <message>
-        <source>Update Time</source>
-        <translatorcomment>修改于</translatorcomment>
-        <translation type="vanished">修改于</translation>
-    </message>
-    <message>
-        <source>Format</source>
-        <translatorcomment>格式</translatorcomment>
-        <translation type="vanished">格式</translation>
-    </message>
-    <message>
-        <source>Page&apos;s Number</source>
-        <translatorcomment>页数</translatorcomment>
-        <translation type="vanished">页数</translation>
-    </message>
-    <message>
-        <source>Optimize</source>
-        <translatorcomment>优化</translatorcomment>
-        <translation type="vanished">优化</translation>
-    </message>
-    <message>
-        <source>Security</source>
-        <translatorcomment>安全性</translatorcomment>
-        <translation type="vanished">安全性</translation>
-    </message>
-    <message>
-        <source>Paper Size</source>
-        <translatorcomment>纸张大小</translatorcomment>
-        <translation type="vanished">纸张大小</translation>
-    </message>
-    <message>
-        <source>File Size</source>
-        <translatorcomment>大小</translatorcomment>
-        <translation type="vanished">大小</translation>
-    </message>
-    <message>
-        <source>file basic info</source>
-        <translatorcomment>基本信息</translatorcomment>
-        <translation type="vanished">基本信息</translation>
-    </message>
     <message>
         <location filename="../mainShow/FileAttrWidget.cpp" line="70"/>
         <source>close</source>
