@@ -10,7 +10,6 @@
         <file>resources/light/pdfControl/A_small.svg</file>
         <file>resources/light/pdfControl/close.svg</file>
         <file>resources/light/pdfControl/A_big.svg</file>
-        <file>resources/light/pdfControl/select.svg</file>
         <file>resources/logo/deepin-reader.svg</file>
         <file>resources/dark/frame/bookmark.svg</file>
         <file>resources/dark/frame/import_photo.svg</file>
@@ -21,7 +20,6 @@
         <file>resources/dark/frame/handleShape_small.svg</file>
         <file>resources/dark/pdfControl/A _big.svg</file>
         <file>resources/dark/pdfControl/A _small.svg</file>
-        <file>resources/dark/pdfControl/select.svg</file>
         <file>resources/dark/pdfControl/close.svg</file>
         <file>resources/light/frame/thumbnails.svg</file>
         <file>resources/light/frame/annotation.svg</file>
@@ -31,5 +29,7 @@
         <file>resources/dark/frame/annotation.svg</file>
         <file>resources/dark/frame/viewchange.svg</file>
         <file>resources/light/frame/viewchange.svg</file>
+        <file>resources/light/pdfControl/select.svg</file>
+        <file>resources/dark/pdfControl/select.svg</file>
     </qresource>
 </RCC>

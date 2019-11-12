@@ -235,7 +235,7 @@
 <context>
     <name>FileAttrWidget</name>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="72"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="73"/>
         <source>close</source>
         <translation></translation>
     </message>
@@ -261,7 +261,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FindWidget.cpp" line="133"/>
+        <location filename="../mainShow/FindWidget.cpp" line="134"/>
         <source>prev one</source>
         <translation></translation>
     </message>
@@ -269,27 +269,27 @@
 <context>
     <name>FontWidget</name>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="275"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="289"/>
         <source>Double View</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="295"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="310"/>
         <source>Adaptate Height</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="315"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="331"/>
         <source>Adaptate Width</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="93"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="94"/>
         <source>Rotated To Left</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="96"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="104"/>
         <source>Rotated To Right</source>
         <translation></translation>
     </message>
@@ -453,13 +453,13 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="224"/>
+        <location filename="../frame/TitleWidget.cpp" line="227"/>
         <source>handleShape</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../frame/TitleWidget.cpp" line="185"/>
-        <location filename="../frame/TitleWidget.cpp" line="214"/>
+        <location filename="../frame/TitleWidget.cpp" line="217"/>
         <source>defaultShape</source>
         <translation></translation>
     </message>

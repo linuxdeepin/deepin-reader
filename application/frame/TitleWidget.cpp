@@ -197,7 +197,10 @@ void TitleWidget::initMenus()
 {
     {
         m_pSettingMenu = new DMenu(this);
-
+        m_pSettingMenu->setFixedWidth(220);
+        QFont font;
+        font.setPixelSize(14);
+        m_pSettingMenu->setFont(font);
         auto action = new QWidgetAction(this);
         auto scaleWidget = new FontWidget(this);
 

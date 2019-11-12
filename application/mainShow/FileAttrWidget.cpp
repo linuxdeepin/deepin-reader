@@ -12,6 +12,7 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
     setAttribute(Qt::WA_ShowModal, true); //  模态对话框， 属性设置
     setFixedSize(QSize(300, 642));
 
+
     m_pVBoxLayout = new QVBoxLayout;
     m_pVBoxLayout->setContentsMargins(10, 10, 10, 10);
     m_pVBoxLayout->setSpacing(0);

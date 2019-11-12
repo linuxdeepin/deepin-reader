@@ -22,7 +22,7 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
     bool bBookState = pageList.contains(m_nRightPageNumber);
     if (bBookState) {
         m_pBookMark->setProperty("data", 0);
-        m_pBookMark->setText(tr("delete bookmark"));
+        m_pBookMark->setText(QString("       %1").arg(tr("delete bookmark")));
     } else {
         m_pBookMark->setProperty("data", 1);
         m_pBookMark->setText(QString("       %1").arg(tr("add bookmark")));

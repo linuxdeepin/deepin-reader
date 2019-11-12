@@ -47,7 +47,7 @@ private:
     void setShowSuitWIcon();
     void initConnection();
 
-    DLabel *getLabelLineH();
+    DLabel *getLabelLineH(int fixheight=2);
 
     void initScaleLabel();
     void initScaleSlider();
@@ -67,6 +67,7 @@ private:
     QHBoxLayout     *m_pDoubleShowLayout = nullptr;
     QHBoxLayout     *m_pAdaptateHeightLayout = nullptr;
     QHBoxLayout     *m_pAdaptateWidghtLayout = nullptr;
+    QHBoxLayout     *m_pEnlargeSliderLayout=nullptr;
 
     CustomClickLabel *m_pEnlargeLab = nullptr;         // 缩放比例
     DSlider *m_pEnlargeSlider = nullptr;     // 缩放比例slider

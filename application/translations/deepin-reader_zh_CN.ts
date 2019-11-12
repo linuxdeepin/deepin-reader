@@ -280,7 +280,7 @@
 <context>
     <name>FileAttrWidget</name>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="72"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="73"/>
         <source>close</source>
         <translatorcomment>关闭</translatorcomment>
         <translation>关闭</translation>
@@ -310,7 +310,7 @@
         <translation>下一个</translation>
     </message>
     <message>
-        <location filename="../mainShow/FindWidget.cpp" line="133"/>
+        <location filename="../mainShow/FindWidget.cpp" line="134"/>
         <source>prev one</source>
         <translatorcomment>前一个</translatorcomment>
         <translation>前一个</translation>
@@ -319,31 +319,31 @@
 <context>
     <name>FontWidget</name>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="275"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="289"/>
         <source>Double View</source>
         <translatorcomment>双页显示</translatorcomment>
         <translation>双页显示</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="295"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="310"/>
         <source>Adaptate Height</source>
         <translatorcomment>自适应高度</translatorcomment>
         <translation>自适应高度</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="315"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="331"/>
         <source>Adaptate Width</source>
         <translatorcomment>自适应宽度</translatorcomment>
         <translation>自适应宽度</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="93"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="94"/>
         <source>Rotated To Left</source>
         <translatorcomment>左旋转</translatorcomment>
         <translation>左旋转</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="96"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="104"/>
         <source>Rotated To Right</source>
         <translatorcomment>右旋转</translatorcomment>
         <translation>右旋转</translation>
@@ -543,14 +543,14 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="224"/>
+        <location filename="../frame/TitleWidget.cpp" line="227"/>
         <source>handleShape</source>
         <translatorcomment>手型工具</translatorcomment>
         <translation>手型工具</translation>
     </message>
     <message>
         <location filename="../frame/TitleWidget.cpp" line="185"/>
-        <location filename="../frame/TitleWidget.cpp" line="214"/>
+        <location filename="../frame/TitleWidget.cpp" line="217"/>
         <source>defaultShape</source>
         <translatorcomment>选择工具</translatorcomment>
         <translation>选择工具</translation>
