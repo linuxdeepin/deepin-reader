@@ -203,6 +203,7 @@ void MagnifierWidget::paintEvent(QPaintEvent *event)
     tr.scale(1.0, 1.0);
     QBrush brush(m_magnifierpixmap);
     brush.setTransform(tr);
+    qpainter.setPen(QPen(QColor(255, 255, 255), 0));
     qpainter.setBrush(brush);
     qpainter.drawEllipse(smallcirclex, smallcircley, m_magnifiermapradius * 2, m_magnifiermapradius * 2);
 
