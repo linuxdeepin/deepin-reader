@@ -19,9 +19,9 @@ void PageNumberLabel::paintEvent(QPaintEvent *e)
     //  涉及到 主题颜色
     if (m_bSelect) {
         color = QColor(QString("#0081FF"));
-        pPage.setColor(QPalette::Text, color);
+        pPage.setColor(QPalette::Text, pPage.highlight().color());
     } else {
-        color = QColor::fromRgbF(0, 0, 0, 0.08);
+//        color = QColor::fromRgbF(0, 0, 0, 0.08);
         pPage.setColor(QPalette::Text, QColor(QString("#303030")));
     }
 
