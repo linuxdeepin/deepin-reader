@@ -36,7 +36,7 @@ void ThreadRenderImage::run()
         restart = false;
         if (m_width > 0 && m_height > 0) {
             QImage image;
-            qDebug() << "ThreadRenderImage getImage";
+            qDebug() << "ThreadRenderImage getImage ID:" << currentThreadId();
             if (m_page->getImage(image, m_width, m_height)) {
 //                m_page->loadData();
                 emit signal_RenderFinish(image);

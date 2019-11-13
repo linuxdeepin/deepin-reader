@@ -234,16 +234,15 @@ void PagePdf::changeAnnotationColor(const QString uuid, const QColor &color)
     Q_D(PagePdf);
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
     foreach (Poppler::Annotation *annote, listannote) {
-        if (annote->subType() == Poppler::Annotation::AHighlight) {         
-            if(annote->uniqueName().indexOf(uuid)>=0&&!uuid.isEmpty())
-            {               
-                  Poppler::Annotation::Style style=annote->style();
-                  style.setColor(color);
-                  annote->setStyle(style);
-                  QImage image;
-                  getImage(image, d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
-                  slot_RenderFinish(image);
-                  break;
+        if (annote->subType() == Poppler::Annotation::AHighlight) {
+            if (annote->uniqueName().indexOf(uuid) >= 0 && !uuid.isEmpty()) {
+                Poppler::Annotation::Style style = annote->style();
+                style.setColor(color);
+                annote->setStyle(style);
+                QImage image;
+                getImage(image, d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
+                slot_RenderFinish(image);
+                break;
             }
         }
     }
@@ -255,7 +254,7 @@ void PagePdf::paintEvent(QPaintEvent *event)
 {
     Q_D(PagePdf);
     PageBase::paintEvent(event);
-    for (int i = 0; i < d_ptr->m_highlights.size(); i++) {     
+    for (int i = 0; i < d_ptr->m_highlights.size(); i++) {
         if (d->m_icurhightlight == i && d->m_bcursearchshow) {
             QPainter qpainter(this);
             d_ptr->m_searchcolor.setAlpha(100);
@@ -263,7 +262,7 @@ void PagePdf::paintEvent(QPaintEvent *event)
             qpainter.drawRect(translateRect(d_ptr->m_highlights[i], d_ptr->m_scale, d_ptr->m_rotate));
         } else {
             QPainter qpainter(this);
-          //  d_ptr->m_searchcolor.setAlpha(100);
+            //  d_ptr->m_searchcolor.setAlpha(100);
             qpainter.setBrush(d_ptr->m_searchcolor);
             QPen qpen(d_ptr->m_pencolor);
             qpainter.setPen(qpen);
@@ -489,7 +488,7 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext, QString &st
                     struuid = annote->uniqueName();
                     strtext = annote->contents();
                     qDeleteAll(listannote);
-                   //  qDebug() << "******* contaions***" << struuid;
+                    //  qDebug() << "******* contaions***" << struuid;
                     return true;
                 } /*else {
                     qDebug() << "******* not contains";

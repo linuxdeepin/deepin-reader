@@ -11,38 +11,38 @@
 #include <qglobal.h>
 static QMutex mutexlockloaddata;
 
-ThreadLoadDocumment::ThreadLoadDocumment()
-{
-    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
-    m_doc = nullptr;
-    restart = false;
-}
+//ThreadLoadDocumment::ThreadLoadDocumment()
+//{
+//    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
+//    m_doc = nullptr;
+//    restart = false;
+//}
 
-void ThreadLoadDocumment::setDoc(DocummentBase *doc, QString path)
-{
-    m_doc = doc;
-    m_path = path;
-}
+//void ThreadLoadDocumment::setDoc(DocummentBase *doc, QString path)
+//{
+//    m_doc = doc;
+//    m_path = path;
+//}
 
-void ThreadLoadDocumment::setRestart()
-{
-    restart = true;
-}
+//void ThreadLoadDocumment::setRestart()
+//{
+//    restart = true;
+//}
 
-void ThreadLoadDocumment::run()
-{
-    QMutexLocker locker(&mutexlockloaddata);
-    if (!m_doc) {
-        emit signal_docLoaded(false);
-        return;
-    }
-    restart = true;
-    while (restart) {
-        restart = false;
-        m_doc->loadDoc(m_path);
-    }
-    emit signal_docLoaded(true);
-}
+//void ThreadLoadDocumment::run()
+//{
+//    QMutexLocker locker(&mutexlockloaddata);
+//    if (!m_doc) {
+//        emit signal_docLoaded(false);
+//        return;
+//    }
+//    restart = true;
+//    while (restart) {
+//        restart = false;
+//        m_doc->loadDoc(m_path);
+//    }
+//    emit signal_docLoaded(true);
+//}
 
 
 ThreadLoadData::ThreadLoadData()
@@ -328,17 +328,17 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
 
     connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_vScrollBarValueChanged(int)));
     connect(this->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_hScrollBarValueChanged(int)));
-//    connect(d, SIGNAL(signal_docummentLoaded(bool)), this, SLOT(slot_docummentLoaded(bool)));
-//    connect(this, SIGNAL(signal_loadDocumment(QString)), d, SLOT(loadDocumment(QString)));
-    connect(&d->threadloaddoc, SIGNAL(signal_docLoaded(bool)), this, SLOT(slot_docummentLoaded(bool)));
-    connect(this, &DocummentBase::signal_loadDocumment, this, [ = ](QString path) {
-        if (d->threadloaddoc.isRunning()) {
-            d->threadloaddoc.requestInterruption();
-            d->threadloaddoc.wait();
-        }
-        d->threadloaddoc.setDoc(this, path);
-        d->threadloaddoc.start();
-    });
+    connect(d, SIGNAL(signal_docummentLoaded(bool)), this, SLOT(slot_docummentLoaded(bool)));
+    connect(this, SIGNAL(signal_loadDocumment(QString)), d, SLOT(loadDocumment(QString)));
+//    connect(&d->threadloaddoc, SIGNAL(signal_docLoaded(bool)), this, SLOT(slot_docummentLoaded(bool)));
+//    connect(this, &DocummentBase::signal_loadDocumment, this, [ = ](QString path) {
+//        if (d->threadloaddoc.isRunning()) {
+//            d->threadloaddoc.requestInterruption();
+//            d->threadloaddoc.wait();
+//        }
+//        d->threadloaddoc.setDoc(this, path);
+//        d->threadloaddoc.start();
+//    });
     connect(&d->threadloaddata, SIGNAL(signal_dataLoaded(bool)), this, SLOT(slot_dataLoaded(bool)));
     connect(d->showslidwaittimer, SIGNAL(timeout()), this, SLOT(showSlideModelTimerOut()));
     connect(d->loadpagewaittimer, SIGNAL(timeout()), this, SLOT(loadPageTimerOut()));
@@ -1063,6 +1063,7 @@ void DocummentBase::showFacingPage()
         d->m_widgets.at(i)->layout()->addWidget(d->m_pages.at(i * 2));
         d->m_widgets.at(i)->layout()->addWidget(d->m_pages.at(i * 2 + 1));
         d->m_widgets.at(i)->show();
+        QCoreApplication::processEvents();
     }
     if (d->m_pages.size() % 2) {
         d->pblankwidget->show();
@@ -1337,7 +1338,7 @@ bool DocummentBase::loadPages()
 //    int firstpagenum  = d->m_currentpageno;
     int firstpagenum  = currentPageNo();
     int lastpagenum  = currentLastPageNo();
-    qDebug() << "---------------firstpagenum:" << firstpagenum << " lastpagenum:" << lastpagenum;
+    qDebug() << "---------------firstpagenum:" << firstpagenum << " lastpagenum:" << lastpagenum << " pagesize:" ;
     for (int i = firstpagenum; i < lastpagenum + 1; i++) {
         if (i >= 0 && i < d->m_pages.size())
             d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);
@@ -1542,6 +1543,10 @@ void DocummentBase::initConnect()
 {
     Q_D(DocummentBase);
     for (int i = 0; i < d->m_pages.size(); i++) {
+        d->m_pages.at(i)->setScaleAndRotate(d->m_scale, d->m_rotate);
+        connect(d->m_pages.at(i), &PageBase::signal_bookMarkStateChange, this, [ = ](int page, bool state) {
+            emit signal_bookMarkStateChange(page, state);
+        });
         connect(d->m_pages.at(i), SIGNAL(signal_MagnifierPixmapCacheLoaded(int)), this, SLOT(slot_MagnifierPixmapCacheLoaded(int)));
     }
 }
@@ -1555,7 +1560,13 @@ void DocummentBase::slot_docummentLoaded(bool result)
 {
     Q_D(DocummentBase);
     if (!result) {
-        emit signal_openResult(false);
+//        emit signal_openResult(false);
+        if (d->threadloaddata.isRunning()) {
+            d->threadloaddata.requestInterruption();
+            d->threadloaddata.wait();
+        }
+        d->threadloaddata.setDoc(this);
+        d->threadloaddata.start();
         return;
     }
     d->m_widgets.clear();
@@ -1571,14 +1582,14 @@ void DocummentBase::slot_docummentLoaded(bool result)
         d->m_widgets.append(qwidget);
     }
 
-    for (int i = 0; i < d->m_pages.size(); i++) {
-        d->m_pages.at(i)->setScaleAndRotate(d->m_scale, d->m_rotate);
-        connect(d->m_pages.at(i), &PageBase::signal_bookMarkStateChange, this, [ = ](int page, bool state) {
-            emit signal_bookMarkStateChange(page, state);
-        });
-    }
-    setViewModeAndShow(d->m_viewmode);
     initConnect();
+//    for (int i = 0; i < d->m_pages.size(); i++) {
+//        d->m_pages.at(i)->setScaleAndRotate(d->m_scale, d->m_rotate);
+//        connect(d->m_pages.at(i), &PageBase::signal_bookMarkStateChange, this, [ = ](int page, bool state) {
+//            emit signal_bookMarkStateChange(page, state);
+//        });
+//    }
+    setViewModeAndShow(d->m_viewmode);
     d->donotneedreloaddoc = false;
 //    emit signal_openResult(true);
     if (d->threadloaddata.isRunning()) {
@@ -1684,10 +1695,10 @@ void DocummentBase::stopLoadPageThread()
         d->threadloaddata.requestInterruption();
         d->threadloaddata.wait();
     }
-    if (d->threadloaddoc.isRunning()) {
-        d->threadloaddoc.requestInterruption();
-        d->threadloaddoc.wait();
-    }
+//    if (d->threadloaddoc.isRunning()) {
+//        d->threadloaddoc.requestInterruption();
+//        d->threadloaddoc.wait();
+//    }
     d->m_searchTask->wait();
     for (int i = 0; i < d->m_pages.size(); i++) {
         d->m_pages.at(i)->waitThread();

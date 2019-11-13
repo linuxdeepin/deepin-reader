@@ -30,23 +30,23 @@ enum ViewMode_EM {
 class SearchTask;
 class DocummentBase;
 class DocummentBasePrivate;
-class ThreadLoadDocumment : public QThread
-{
-    Q_OBJECT
-public:
-    ThreadLoadDocumment();
-    void setDoc(DocummentBase *doc, QString path);
-    void setRestart();
-signals:
-    void signal_docLoaded(bool);
-protected:
-    virtual void run();
+//class ThreadLoadDocumment : public QThread
+//{
+//    Q_OBJECT
+//public:
+//    ThreadLoadDocumment();
+//    void setDoc(DocummentBase *doc, QString path);
+//    void setRestart();
+//signals:
+//    void signal_docLoaded(bool);
+//protected:
+//    virtual void run();
 
-private:
-    DocummentBase *m_doc;
-    QString m_path;
-    bool restart;
-};
+//private:
+//    DocummentBase *m_doc;
+//    QString m_path;
+//    bool restart;
+//};
 class ThreadLoadData : public QThread
 {
     Q_OBJECT
@@ -223,7 +223,7 @@ public:
     DWidget *qwfather;
     QTimer *loadpagewaittimer;
     stFileInfo *m_fileinfo;
-    ThreadLoadDocumment threadloaddoc;
+//    ThreadLoadDocumment threadloaddoc;
     ThreadLoadData threadloaddata;
 
 

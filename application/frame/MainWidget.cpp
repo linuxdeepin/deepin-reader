@@ -130,4 +130,5 @@ void MainWidget::initWidget()
     gridlyout->addWidget(m_spinner);
     m_spinner->start();
     pStcakLayout->addWidget(pSpinnerWidget);
+    qDebug() << "---------MainWidget ID:" << QThread::currentThreadId();
 }
