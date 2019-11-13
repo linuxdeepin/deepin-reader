@@ -232,7 +232,7 @@ void DocummentProxy::search(const QString &strtext, QMap<int, stSearchRes> &resm
     if (!m_documment || bcloseing)
         return ;
     qDebug() << "search";
-    m_documment->search(strtext, color);  
+    m_documment->search(strtext, color);
 }
 
 void DocummentProxy::clearsearch()
@@ -385,7 +385,7 @@ double DocummentProxy::adaptHeightAndShow(double height)
 
 bool DocummentProxy::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {
-    qDebug() << "DocummentProxy::annotationClicked" << pos;
+//    qDebug() << "DocummentProxy::annotationClicked" << pos;
     if (m_documment) {
         return m_documment->annotationClicked(pos, strtext, struuid);
     }
@@ -467,6 +467,6 @@ bool DocummentProxy::setBookMarkState(int page, bool state)
 
 void DocummentProxy::changeAnnotationColor(int ipage, const QString uuid, const QColor &color)
 {
-     if (m_documment)
-         m_documment->changeAnnotationColor(ipage,uuid,color);
+    if (m_documment)
+        m_documment->changeAnnotationColor(ipage, uuid, color);
 }

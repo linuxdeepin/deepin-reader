@@ -360,7 +360,7 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         emit sigOpenFileOk();
-    }  else if (msgType == MSG_OPERATION_OPEN_FILE_TITLE) {
+    } else if (msgType == MSG_OPERATION_OPEN_FILE_TITLE) {
         emit sigSetAppTitle(msgContent);
         return ConstantMsg::g_effective_res;
     } else if (msgType == MSG_OPERATION_EXIT) {

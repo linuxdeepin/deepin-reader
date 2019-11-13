@@ -1339,7 +1339,7 @@ bool DocummentBase::loadPages()
 //    int firstpagenum  = d->m_currentpageno;
     int firstpagenum  = currentPageNo();
     int lastpagenum  = currentLastPageNo();
-    qDebug() << "---------------firstpagenum:" << firstpagenum << " lastpagenum:" << lastpagenum << " pagesize:" ;
+//    qDebug() << "---------------firstpagenum:" << firstpagenum << " lastpagenum:" << lastpagenum << " pagesize:" ;
     for (int i = firstpagenum; i < lastpagenum + 1; i++) {
         if (i >= 0 && i < d->m_pages.size())
             d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);
