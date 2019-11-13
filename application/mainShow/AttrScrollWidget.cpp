@@ -61,7 +61,7 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
     label->setFont(font);
 
     label->setAlignment(Qt::AlignTop);
-    label->setMinimumWidth(60);
+//    label->setMinimumWidth(60);
     layout->addWidget(label, index, 0);
 
     DLabel *labelText = new DLabel(this);
@@ -80,7 +80,6 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
     DLabel *label = new DLabel(objName, this);
     label->setFont(font);
     label->setAlignment(Qt::AlignTop);
-    label->setMinimumWidth(60);
     layout->addWidget(label, index, 0);
 
     DLabel *labelText = new DLabel(this);
@@ -100,15 +99,12 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
     DLabel *label = new DLabel(objName, this);
     label->setFont(font);
     label->setAlignment(Qt::AlignTop);
-    label->setMinimumWidth(60);
     layout->addWidget(label, index, 0);
 
     DLabel *labelText = new DLabel(this);
     labelText->setFont(font);
-    labelText->setMaximumWidth(200);
     labelText->setText(bData ? tr("Yes") : tr("No"));
     labelText->setAlignment(Qt::AlignTop);
-    labelText->setWordWrap(true);
     layout->addWidget(labelText, index, 1);
 }
 

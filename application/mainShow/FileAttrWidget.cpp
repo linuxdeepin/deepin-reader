@@ -12,7 +12,6 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
     setAttribute(Qt::WA_ShowModal, true); //  模态对话框， 属性设置
     setFixedSize(QSize(300, 642));
 
-
     m_pVBoxLayout = new QVBoxLayout;
     m_pVBoxLayout->setContentsMargins(10, 10, 10, 10);
     m_pVBoxLayout->setSpacing(0);
@@ -41,9 +40,7 @@ void FileAttrWidget::setFileAttr()
 
     labelFileName->setText(szTitle);
 
-    auto aa = new AttrScrollWidget;
-    aa->setGeometry(244, 316, 280, 382);
-    m_pVBoxLayout->addWidget(aa);
+    m_pVBoxLayout->addWidget(new AttrScrollWidget);
 }
 
 void FileAttrWidget::showScreenCenter()

@@ -77,8 +77,30 @@ void MainWindow::setSreenRect(const QRect &rect)
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    slotAppExit();
+    QString sFilePath = DataManager::instance()->strOnlyFilePath();
+    if (sFilePath != "") {
+        bool rl = DataManager::instance()->bIsUpdate();
+        if (rl) {
+            DDialog dlg(tr("Save File"), tr("Do you need to save the file opened?"));
+            dlg.setIcon(QIcon::fromTheme("deepin-reader"));
+            dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Not Save") <<  tr("Save"));
+            int nRes = dlg.exec();
+            if (nRes <= 0) {
+                event->ignore();
+                return;
+            }
 
+            if (nRes == 2) {
+                //  保存
+                DocummentFileHelper::instance()->save(sFilePath, true);
+                //  保存 书签数据
+                dApp->dbM->saveBookMark();
+            }
+
+            notifyMsg(MSG_CLOSE_FILE);
+            DocummentFileHelper::instance()->closeFile();
+        }
+    }
     DMainWindow::closeEvent(event);
 }
 
@@ -235,9 +257,14 @@ void MainWindow::slotAppExit()
         if (rl) {
             DDialog dlg(tr("Save File"), tr("Do you need to save the file opened?"));
             dlg.setIcon(QIcon::fromTheme("deepin-reader"));
-            dlg.addButtons(QStringList() <<  tr("Not Save") <<  tr("Save"));
+            dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Not Save") <<  tr("Save"));
             int nRes = dlg.exec();
-            if (nRes == 1) {    //  保存
+            if (nRes <= 0) {
+                return;
+            }
+
+            if (nRes == 2) {
+                //  保存
                 DocummentFileHelper::instance()->save(sFilePath, true);
                 //  保存 书签数据
                 dApp->dbM->saveBookMark();

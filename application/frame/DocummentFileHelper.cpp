@@ -371,6 +371,7 @@ void DocummentFileHelper::removeAnnotation(const QString &struuid, const int &ip
 
 QString DocummentFileHelper::removeAnnotation(const QPoint &pos)
 {
+    DataManager::instance()->setBIsUpdate(true);
     return m_pDocummentProxy->removeAnnotation(pos);
 }
 
