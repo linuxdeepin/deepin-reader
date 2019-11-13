@@ -2,6 +2,7 @@
 #include "TitleWidget.h"
 #include "MainWidget.h"
 
+#include <DDialog>
 #include <DTitlebar>
 #include <DWidgetUtil>
 #include <QDebug>
@@ -232,18 +233,21 @@ void MainWindow::slotAppExit()
     if (sFilePath != "") {
         bool rl = DataManager::instance()->bIsUpdate();
         if (rl) {
-            if (QMessageBox::Yes == DMessageBox::question(nullptr, tr("Save File"), tr("Do you need to save the file opened?"), QMessageBox::Close | QMessageBox::Cancel | DMessageBox::Save)) {
+            DDialog dlg(tr("Save File"), tr("Do you need to save the file opened?"));
+            dlg.setIcon(QIcon::fromTheme("deepin-reader"));
+            dlg.addButtons(QStringList() <<  tr("Not Save") <<  tr("Save"));
+            int nRes = dlg.exec();
+            if (nRes == 1) {    //  保存
                 DocummentFileHelper::instance()->save(sFilePath, true);
-
                 //  保存 书签数据
                 dApp->dbM->saveBookMark();
             }
-        }
-        notifyMsg(MSG_CLOSE_FILE);
-        DocummentFileHelper::instance()->closeFile();
-    }
 
-    dApp->exit();
+            notifyMsg(MSG_CLOSE_FILE);
+            DocummentFileHelper::instance()->closeFile();
+        }
+    }
+    dApp->exit(0);
 }
 
 /**
@@ -253,6 +257,8 @@ void MainWindow::slotAppExit()
 void MainWindow::slotAppShowState(const int &nState)
 {
     titlebar()->setVisible(nState);
+    setTitlebarShadowEnabled(nState);
+
     if (nState == 1) {
         if (windowState() == Qt::WindowFullScreen) {
             showNormal();

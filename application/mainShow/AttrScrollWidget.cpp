@@ -66,7 +66,6 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
 
     DLabel *labelText = new DLabel(this);
     labelText->setFont(font);
-
     labelText->setMaximumWidth(200);
     labelText->setText(sData);
     labelText->setAlignment(Qt::AlignTop);

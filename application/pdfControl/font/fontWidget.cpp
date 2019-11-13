@@ -72,7 +72,7 @@ void FontWidget::initWidget()
     //  垂直布局
     auto widgetLayout = new QVBoxLayout();
     widgetLayout->setContentsMargins(0, 0, 0, 0);
-   // widgetLayout->setSpacing(3);
+    // widgetLayout->setSpacing(3);
 
     widgetLayout->addWidget(m_pEnlargeLab);
     widgetLayout->addItem(m_pEnlargeSliderLayout);
@@ -86,35 +86,35 @@ void FontWidget::initWidget()
     widgetLayout->addWidget(getLabelLineH());
     widgetLayout->addItem(m_pAdaptateWidghtLayout);
 
-   widgetLayout->addWidget(getLabelLineH());
+    widgetLayout->addWidget(getLabelLineH());
     //左旋转
-    QHBoxLayout* lrlayout=new QHBoxLayout;
+    QHBoxLayout *lrlayout = new QHBoxLayout;
     lrlayout->setContentsMargins(0, 0, 0, 0);
     lrlayout->addSpacing(32);
     auto pRotateLeftLb = new CustomClickLabel(tr("Rotated To Left"), this);
-    pRotateLeftLb->setFixedSize(QSize(188,28));
+    pRotateLeftLb->setFixedSize(QSize(188, 28));
     lrlayout->addWidget(pRotateLeftLb);
     widgetLayout->addItem(lrlayout);
     connect(pRotateLeftLb, SIGNAL(clicked()), this, SLOT(slotSetRotateLeftCheckIcon()));
     widgetLayout->addWidget(getLabelLineH(3));
     //右旋转
-    QHBoxLayout* rrlayout=new QHBoxLayout;
+    QHBoxLayout *rrlayout = new QHBoxLayout;
     rrlayout->setContentsMargins(0, 0, 0, 0);
     rrlayout->addSpacing(32);
     auto pRotateRightLb = new CustomClickLabel(tr("Rotated To Right"), this);
-    pRotateRightLb->setFixedSize(QSize(188,28));
+    pRotateRightLb->setFixedSize(QSize(188, 28));
     rrlayout->addWidget(pRotateRightLb);
     widgetLayout->addItem(rrlayout);
     connect(pRotateRightLb, SIGNAL(clicked()), this, SLOT(slotSetRotateRightCheckIcon()));
-widgetLayout->addStretch();
+    widgetLayout->addStretch();
     this->setLayout(widgetLayout);
 }
 
 //  主题变了
 void FontWidget::slotUpdateTheme()
 {
-    QString sPixmap= PF::getImagePath("select", Pri::g_pdfControl);
-    QPixmap px=Utils::renderSVG(sPixmap,QSize(28,28));
+    QString sPixmap = PF::getImagePath("select", Pri::g_pdfControl);
+    QPixmap px = Utils::renderSVG(sPixmap, QSize(28, 28));
     m_pSuitHLabelIcon->setPixmap(px);
     m_pSuitWLabelIcon->setPixmap(px);
     m_pDoubPageViewLabelIcon->setPixmap(px);
@@ -264,7 +264,7 @@ void FontWidget::initScaleLabel()
 
 void FontWidget::initScaleSlider()
 {
-    m_pEnlargeSliderLayout=new QHBoxLayout;
+    m_pEnlargeSliderLayout = new QHBoxLayout;
     m_pEnlargeSlider = new DSlider(Qt::Horizontal);
     m_pEnlargeSliderLayout->addSpacing(24);
     m_pEnlargeSliderLayout->addWidget(m_pEnlargeSlider);
@@ -286,7 +286,7 @@ void FontWidget::initDowbleShow()
     m_pDoubleShowLayout->setContentsMargins(0, 0, 10, 0);
     m_pDoubleShowLayout->setSpacing(0);
 
-    auto pDoubPageViewLabel = new CustomClickLabel(tr("Double View"), this);  
+    auto pDoubPageViewLabel = new CustomClickLabel(tr("Double View"), this);
     pDoubPageViewLabel->setFixedSize(QSize(140, 28));
     connect(pDoubPageViewLabel, SIGNAL(clicked()), this, SLOT(slotSetDoubPageViewCheckIcon()));
     m_pDoubleShowLayout->addWidget(pDoubPageViewLabel);

@@ -1,6 +1,6 @@
 #include "MainWidget.h"
 #include <DSplitter>
-
+#include <DSpinner>
 #include <QFileInfo>
 #include <QMimeData>
 #include <QUrl>
@@ -121,11 +121,10 @@ void MainWidget::initWidget()
 
     pStcakLayout->addWidget(pSplitter);
 
-
     auto pSpinnerWidget = new DWidget;
     QGridLayout *gridlyout = new QGridLayout(pSpinnerWidget);
     gridlyout->setAlignment(Qt::AlignCenter);
-    m_spinner = new DSpinner;
+    auto m_spinner = new DSpinner;
     m_spinner->setFixedSize(60, 60);
     gridlyout->addWidget(m_spinner);
     m_spinner->start();

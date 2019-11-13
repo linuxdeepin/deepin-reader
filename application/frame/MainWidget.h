@@ -3,8 +3,6 @@
 
 #include "CustomControl/CustomWidget.h"
 
-#include <DSpinner>
-
 /**
  * @brief The MainWidget class
  * @brief   采用　栈式　显示窗口，　当前只显示某一特定窗口
@@ -32,7 +30,6 @@ private slots:
     void slotOpenFileStart();
 
 private:
-    DSpinner *m_spinner;
     void initConnections();
 
     // IObserver interface

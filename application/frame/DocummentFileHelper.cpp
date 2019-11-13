@@ -6,7 +6,7 @@
 #include "controller/DataManager.h"
 #include <DFileDialog>
 #include "utils/utils.h"
-#include <DMessageBox>
+#include <DDialog>
 #include <QBitmap>
 #include "subjectObserver/ModuleHeader.h"
 #include "controller/DBManager.h"
@@ -106,15 +106,21 @@ void DocummentFileHelper::slotSaveAsFile()
 //  打开　文件路径
 void DocummentFileHelper::slotOpenFile(const QString &filePaths)
 {
-    sendMsg(MSG_OPERATION_OPEN_FILE_START);
     //  已经打开了文件，　询问是否需要保存当前打开的文件
     if (m_szFilePath != "") {
         //  是否有操作
         bool rl = DataManager::instance()->bIsUpdate();
         if (rl) {
-            if (QMessageBox::Yes == DMessageBox::question(nullptr, tr("Save File"), tr("Do you need to save the file opened?"))) {
-                m_pDocummentProxy->save(m_szFilePath, true);
+            DDialog dlg(tr("Save File"), tr("Do you need to save the file opened?"));
+            dlg.setIcon(QIcon::fromTheme("deepin-reader"));
+            dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Not Save") <<  tr("Save"));
+            int nRes = dlg.exec();
+            if (nRes == 0) {    //  取消打开该文件
+                return;
+            }
 
+            if (nRes == 2) {    // 保存已打开文件
+                m_pDocummentProxy->save(m_szFilePath, true);
                 //  保存 书签数据
                 DBManager::instance()->saveBookMark();
             }
@@ -135,6 +141,8 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
 
         m_szFilePath = sPath;
         DataManager::instance()->setStrOnlyFilePath(sPath);
+
+        sendMsg(MSG_OPERATION_OPEN_FILE_START);
 
         bool rl = m_pDocummentProxy->openFile(m_nCurDocType, sPath);
         if (!rl) {
@@ -346,6 +354,7 @@ QString DocummentFileHelper::addAnnotation(const QPoint &startpos, const QPoint 
 
 void DocummentFileHelper::changeAnnotationColor(const int &ipage, const QString &uuid, const QColor &color)
 {
+    DataManager::instance()->setBIsUpdate(true);
     m_pDocummentProxy->changeAnnotationColor(ipage, uuid, color);
 }
 
