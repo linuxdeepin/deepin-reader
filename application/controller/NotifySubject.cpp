@@ -1,5 +1,6 @@
 #include "NotifySubject.h"
 #include "subjectObserver/MsgHeader.h"
+#include <QDebug>
 
 NotifySubject::NotifySubject(QObject *parent)
 {
@@ -55,6 +56,10 @@ void NotifySubject::notifyMsg(const int &msgType, const QString &msgContent)
     msg.msgContent = msgContent;
 
     m_msgList.append(msg);
+
+    qDebug() << __LINE__ << "   " << __FUNCTION__
+             << "   " << msgType
+             << "   " << msgContent;
 }
 
 void NotifySubject::NotifyObservers(const int &msgType, const QString &msgContent)
@@ -62,6 +67,9 @@ void NotifySubject::NotifyObservers(const int &msgType, const QString &msgConten
     foreach (IObserver *obs, m_observerList) {
         int nRes = obs->dealWithData(msgType, msgContent);
         if (nRes == ConstantMsg::g_effective_res) {
+            qDebug() << __LINE__ << "   " << __FUNCTION__
+                     << "   " << msgType
+                     << "   " << msgContent;
             break;
         }
     }
