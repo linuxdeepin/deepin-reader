@@ -9,6 +9,73 @@
 #include <QParallelAnimationGroup>
 #include <poppler-qt5.h>
 #include <qglobal.h>
+static QMutex mutexlockloaddata;
+
+ThreadLoadDocumment::ThreadLoadDocumment()
+{
+    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
+    m_doc = nullptr;
+    restart = false;
+}
+
+void ThreadLoadDocumment::setDoc(DocummentBase *doc, QString path)
+{
+    m_doc = doc;
+    m_path = path;
+}
+
+void ThreadLoadDocumment::setRestart()
+{
+    restart = true;
+}
+
+void ThreadLoadDocumment::run()
+{
+    QMutexLocker locker(&mutexlockloaddata);
+    if (!m_doc) {
+        emit signal_docLoaded(false);
+        return;
+    }
+    restart = true;
+    while (restart) {
+        restart = false;
+        m_doc->loadDoc(m_path);
+    }
+    emit signal_docLoaded(true);
+}
+
+
+ThreadLoadData::ThreadLoadData()
+{
+    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
+    m_doc = nullptr;
+    restart = false;
+}
+
+void ThreadLoadData::setDoc(DocummentBase *doc)
+{
+    m_doc = doc;
+}
+
+void ThreadLoadData::setRestart()
+{
+    restart = true;
+}
+
+void ThreadLoadData::run()
+{
+    QMutexLocker locker(&mutexlockloaddata);
+    if (!m_doc) {
+        emit signal_dataLoaded(false);
+        return;
+    }
+    restart = true;
+    while (restart) {
+        restart = false;
+        m_doc->loadData();
+    }
+    emit signal_dataLoaded(true);
+}
 
 SlidWidget::SlidWidget(DWidget *parent): DWidget(parent)
 {
@@ -199,7 +266,6 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     qRegisterMetaType<stSearchRes>("&stSearchRes");
     Q_D(DocummentBase);
 
-    //    d->m_threadloaddoc.setDoc(this);
     //    d->m_threadloadwords.setDoc(this);
     setWidgetResizable(true);
     d->qwfather = parent;
@@ -262,8 +328,18 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
 
     connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_vScrollBarValueChanged(int)));
     connect(this->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_hScrollBarValueChanged(int)));
-    connect(d, SIGNAL(signal_docummentLoaded(bool)), this, SLOT(slot_docummentLoaded(bool)));
-    connect(this, SIGNAL(signal_loadDocumment(QString)), d, SLOT(loadDocumment(QString)));
+//    connect(d, SIGNAL(signal_docummentLoaded(bool)), this, SLOT(slot_docummentLoaded(bool)));
+//    connect(this, SIGNAL(signal_loadDocumment(QString)), d, SLOT(loadDocumment(QString)));
+    connect(&d->threadloaddoc, SIGNAL(signal_docLoaded(bool)), this, SLOT(slot_docummentLoaded(bool)));
+    connect(this, &DocummentBase::signal_loadDocumment, this, [ = ](QString path) {
+        if (d->threadloaddoc.isRunning()) {
+            d->threadloaddoc.requestInterruption();
+            d->threadloaddoc.wait();
+        }
+        d->threadloaddoc.setDoc(this, path);
+        d->threadloaddoc.start();
+    });
+    connect(&d->threadloaddata, SIGNAL(signal_dataLoaded(bool)), this, SLOT(slot_dataLoaded(bool)));
     connect(d->showslidwaittimer, SIGNAL(timeout()), this, SLOT(showSlideModelTimerOut()));
     connect(d->loadpagewaittimer, SIGNAL(timeout()), this, SLOT(loadPageTimerOut()));
 }
@@ -1470,13 +1546,18 @@ void DocummentBase::initConnect()
     }
 }
 
+void DocummentBase::slot_dataLoaded(bool result)
+{
+    emit signal_openResult(result);
+}
+
 void DocummentBase::slot_docummentLoaded(bool result)
 {
+    Q_D(DocummentBase);
     if (!result) {
         emit signal_openResult(false);
         return;
     }
-    Q_D(DocummentBase);
     d->m_widgets.clear();
     qDebug() << "slot_docummentLoaded numPages :" << d->m_pages.size();
     for (int i = 0; i < d->m_pages.size(); i++) {
@@ -1499,13 +1580,20 @@ void DocummentBase::slot_docummentLoaded(bool result)
     setViewModeAndShow(d->m_viewmode);
     initConnect();
     d->donotneedreloaddoc = false;
-    emit signal_openResult(true);
+//    emit signal_openResult(true);
+    if (d->threadloaddata.isRunning()) {
+        d->threadloaddata.requestInterruption();
+        d->threadloaddata.wait();
+    }
+    d->threadloaddata.setDoc(this);
+    d->threadloaddata.start();
     loadPages();
 }
 
 bool DocummentBase::openFile(QString filepath)
 {
     Q_D(DocummentBase);
+    QMutexLocker locker(&mutexlockloaddata);
     d->donotneedreloaddoc = true;
     if (!loadDocumment(filepath))
         return false;
@@ -1592,6 +1680,14 @@ void DocummentBase::stopLoadPageThread()
     for (int i = 0; i < d->m_pages.size(); i++) {
         d->m_pages.at(i)->stopThread();
     }
+    if (d->threadloaddata.isRunning()) {
+        d->threadloaddata.requestInterruption();
+        d->threadloaddata.wait();
+    }
+    if (d->threadloaddoc.isRunning()) {
+        d->threadloaddoc.requestInterruption();
+        d->threadloaddoc.wait();
+    }
     d->m_searchTask->wait();
     for (int i = 0; i < d->m_pages.size(); i++) {
         d->m_pages.at(i)->waitThread();
@@ -1626,4 +1722,32 @@ void DocummentBase::docBasicInfo(stFileInfo &info)
 {
     Q_D(DocummentBase);
     info = *(d->m_fileinfo);
+}
+
+
+bool DocummentBase::loadData()
+{
+    Q_D(DocummentBase);
+    if (!bDocummentExist())
+        return false;
+    qDebug() << "loadWords start";
+    for (int i = 0; i < d->m_pages.size(); i++) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
+        d->m_pages.at(i)->getInterFace()->loadData();
+    }
+
+    qDebug() << "loadWords end";
+    return true;
+}
+
+
+bool DocummentBase::loadDoc(QString path)
+{
+    Q_D(DocummentBase);
+    if (!bDocummentExist())
+        return false;
+    d->loadDocumment(path);
+    return true;
 }

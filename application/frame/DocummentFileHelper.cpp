@@ -106,6 +106,7 @@ void DocummentFileHelper::slotSaveAsFile()
 //  打开　文件路径
 void DocummentFileHelper::slotOpenFile(const QString &filePaths)
 {
+    sendMsg(MSG_OPERATION_OPEN_FILE_START);
     //  已经打开了文件，　询问是否需要保存当前打开的文件
     if (m_szFilePath != "") {
         //  是否有操作
@@ -135,7 +136,6 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
         m_szFilePath = sPath;
         DataManager::instance()->setStrOnlyFilePath(sPath);
 
-        sendMsg(MSG_OPERATION_OPEN_FILE_START);
         bool rl = m_pDocummentProxy->openFile(m_nCurDocType, sPath);
         if (!rl) {
             m_szFilePath = "";
@@ -193,6 +193,7 @@ void DocummentFileHelper::initConnections()
             notifyMsg(MSG_OPERATION_OPEN_FILE_OK);
             QFileInfo info(m_szFilePath);
             setAppShowTitle(info.baseName());
+            sendMsg(MSG_OPERATION_OPEN_FILE_OK);
         } else {
             m_szFilePath = "";
             DataManager::instance()->setStrOnlyFilePath("");

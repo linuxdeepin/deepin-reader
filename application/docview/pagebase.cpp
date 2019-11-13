@@ -38,7 +38,7 @@ void ThreadRenderImage::run()
             QImage image;
             qDebug() << "ThreadRenderImage getImage";
             if (m_page->getImage(image, m_width, m_height)) {
-                m_page->loadData();
+//                m_page->loadData();
                 emit signal_RenderFinish(image);
             }
         }
@@ -551,10 +551,10 @@ void PageBase::clearImage()
     stopThread();
     waitThread();
     clear();
-    qDeleteAll(d->m_links);
-    d->m_links.clear();
+//    qDeleteAll(d->m_links);
+//    d->m_links.clear();
     d->paintrects.clear();
-    d->m_words.clear();
+//    d->m_words.clear();
     d->havereander = false;
     clearMagnifierPixmap();
 }

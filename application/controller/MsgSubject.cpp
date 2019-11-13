@@ -77,7 +77,6 @@ void MsgSubject::run()
             msgList = m_msgList;
             m_msgList.clear();
         }
-
         if (msgList.size() > 0) {
             foreach (auto msg, msgList) {
                 int nRes = NotifyObservers(msg.msgType, msg.msgContent);

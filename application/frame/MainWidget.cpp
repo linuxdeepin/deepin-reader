@@ -46,7 +46,6 @@ void MainWidget::slotOpenFileStart()
 //  文件打开失败
 void MainWidget::slotOpenFileFail(const QString &errorInfo)
 {
-    DMessageBox::warning(nullptr, tr("deepin-reader"), errorInfo);
     //  文档打开失败, 切换回首页
     auto pLayout = this->findChild<QStackedLayout *>();
     if (pLayout) {
@@ -54,6 +53,7 @@ void MainWidget::slotOpenFileFail(const QString &errorInfo)
             pLayout->setCurrentIndex(0);
         }
     }
+    DMessageBox::warning(nullptr, tr("deepin-reader"), errorInfo);
 }
 
 int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
@@ -65,6 +65,7 @@ int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
         return ConstantMsg::g_effective_res;
     } else if (msgType == MSG_OPERATION_OPEN_FILE_START) {
         emit sigOpenFileStart();
+        return ConstantMsg::g_effective_res;
     }
 
     return 0;

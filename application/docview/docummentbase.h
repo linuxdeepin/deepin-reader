@@ -30,20 +30,39 @@ enum ViewMode_EM {
 class SearchTask;
 class DocummentBase;
 class DocummentBasePrivate;
-//class ThreadLoadWords : public QThread
-//{
-//public:
-//    ThreadLoadWords();
-//    void setDoc(DocummentBase *doc);
-//    void setRestart();
+class ThreadLoadDocumment : public QThread
+{
+    Q_OBJECT
+public:
+    ThreadLoadDocumment();
+    void setDoc(DocummentBase *doc, QString path);
+    void setRestart();
+signals:
+    void signal_docLoaded(bool);
+protected:
+    virtual void run();
 
-//protected:
-//    virtual void run();
+private:
+    DocummentBase *m_doc;
+    QString m_path;
+    bool restart;
+};
+class ThreadLoadData : public QThread
+{
+    Q_OBJECT
+public:
+    ThreadLoadData();
+    void setDoc(DocummentBase *doc);
+    void setRestart();
+signals:
+    void signal_dataLoaded(bool);
+protected:
+    virtual void run();
 
-//private:
-//    DocummentBase *m_doc;
-//    bool restart;
-//};
+private:
+    DocummentBase *m_doc;
+    bool restart;
+};
 
 class MagnifierWidget: public DWidget
 {
@@ -204,6 +223,8 @@ public:
     DWidget *qwfather;
     QTimer *loadpagewaittimer;
     stFileInfo *m_fileinfo;
+    ThreadLoadDocumment threadloaddoc;
+    ThreadLoadData threadloaddata;
 
 
 signals:
@@ -250,7 +271,7 @@ public:
         return false;
     }
     virtual void jumpToHighLight(const QString &uuid, int ipage) {}
-    virtual void changeAnnotationColor(int ipage,const QString uuid, const QColor& color){}
+    virtual void changeAnnotationColor(int ipage, const QString uuid, const QColor &color) {}
     void stopLoadPageThread();
     bool openFile(QString filepath);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
@@ -268,7 +289,8 @@ public:
     double adaptHeightAndShow(double height);
     void findNext();
     void findPrev();
-    //    bool loadWords();
+    bool loadData();
+    bool loadDoc(QString);
     int getPageSNum();
     bool exitSlideModel();
     QVector<PageBase *> *getPages();
@@ -299,6 +321,7 @@ protected slots:
     void slot_searchValueAdd(stSearchRes res);
     void slot_searchover();
     void slot_docummentLoaded(bool result);
+    void slot_dataLoaded(bool result);
     bool pageJump(int pagenum);
     void scaleAndShow(double scale, RotateType_EM rotate);
     bool setViewModeAndShow(ViewMode_EM viewmode);
