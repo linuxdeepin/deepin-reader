@@ -49,7 +49,7 @@ Application::Application(int &argc, char **argv)
 }
 
 void Application::handleQuitAction()
-{
+{   
     NotifySubject::getInstance()->notifyMsg(MSG_OPERATION_EXIT);
 }
 

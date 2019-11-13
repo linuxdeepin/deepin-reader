@@ -157,9 +157,11 @@ void TitleWidget::slotActionTrigger(QAction *action)
     if (sAction == "defaultShape") {
         nCurrentState = 0;
         btnName = "defaultShape";
+        m_pHandleShapeBtn->setToolTip(tr("defaultShape"));
     } else {
         nCurrentState = 1;
         btnName = "handleShape";
+         m_pHandleShapeBtn->setToolTip(tr("handleShape"));
     }
 
     if (nCurrentState != m_nCurHandleShape) {
