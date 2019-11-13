@@ -1,5 +1,6 @@
 #include "ImageLabel.h"
 #include <QPainter>
+#include <QPalette>
 
 ImageLabel::ImageLabel(DWidget *parent)
     : DLabel (parent)
@@ -19,6 +20,7 @@ void ImageLabel::paintEvent(QPaintEvent *e)
     int width = this->width();
     int heigh = this->height();
 
+    QPalette p(this->palette());
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
@@ -27,10 +29,10 @@ void ImageLabel::paintEvent(QPaintEvent *e)
         width -= 2;
         heigh -= 2;
 
-        painter.setPen(QPen(QColor(QString("#0081FF")), 3, Qt::SolidLine));
+        painter.setPen(QPen(/*QColor(QString("#0081FF"))*/p.highlight().color(), 3, Qt::SolidLine));
     } else {
 
-        painter.setPen(QPen(QColor::fromRgbF(0, 0, 0, 0.05), 1, Qt::SolidLine));
+        painter.setPen(QPen(/*QColor::fromRgbF(0, 0, 0, 0.05)*/p.shadow().color(), 1, Qt::SolidLine));
     }
     QRectF rectangle(local, local, width, heigh);
     painter.drawRoundedRect(rectangle, 8, 8);

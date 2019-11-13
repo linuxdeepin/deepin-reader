@@ -146,8 +146,8 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
         color = QColor(QString("#0081FF"));
         p.setColor(QPalette::Text, color);
     } else {
-        color = QColor::fromRgbF(0, 0, 0, 0.08);
-        p.setColor(QPalette::Text, color);
+//        color = QColor::fromRgbF(0, 0, 0, 0.05);
+        p.setColor(QPalette::Text, p.shadow().color());
     }
 
     m_pPicture->setPalette(p);
