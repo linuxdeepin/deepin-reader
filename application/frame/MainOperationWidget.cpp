@@ -15,10 +15,10 @@ MainOperationWidget::MainOperationWidget(CustomWidget *parent):
 void MainOperationWidget::initWidget()
 {
     auto hboxLayout = new QHBoxLayout;
-    hboxLayout->setContentsMargins(2, 0, 2, 0);
-    hboxLayout->setSpacing(10);
+    hboxLayout->setContentsMargins(19, 0, 19, 0);
+   // hboxLayout->setSpacing(10);
 
-    hboxLayout->addStretch(1);
+    hboxLayout->addStretch();
 
     auto btnGroup = new QButtonGroup(this);  //  按钮组，　自动实现按钮唯一check属性
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
@@ -33,6 +33,7 @@ void MainOperationWidget::initWidget()
         auto btn = createBtn(sBtn, sObj);
         btnGroup->addButton(btn, iLoop);
         hboxLayout->addWidget(btn);
+        hboxLayout->addSpacing(40);
     }
 
     auto pHideBtn = new DPushButton(this);
@@ -42,7 +43,7 @@ void MainOperationWidget::initWidget()
     btnGroup->addButton(pHideBtn);
     hboxLayout->addWidget(pHideBtn);
 
-    hboxLayout->addStretch(1);
+    hboxLayout->addStretch();
 
     this->setLayout(hboxLayout);
 

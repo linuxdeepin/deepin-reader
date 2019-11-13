@@ -115,8 +115,9 @@ void MainWidget::initWidget()
     pSplitter->addWidget(new DocShowShellWidget);
 
     QList<int> list_src;
-    list_src.append(300);
+    list_src.append(226);
     list_src.append(1000);
+
     pSplitter->setSizes(list_src);
 
     pStcakLayout->addWidget(pSplitter);
