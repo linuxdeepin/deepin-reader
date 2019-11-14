@@ -72,7 +72,9 @@ void ThreadLoadData::run()
     restart = true;
     while (restart) {
         restart = false;
-        m_doc->loadData();
+        if (m_doc->loadData()) {
+
+        }
     }
     emit signal_dataLoaded(true);
 }
@@ -1566,7 +1568,7 @@ void DocummentBase::slot_docummentLoaded(bool result)
             d->threadloaddata.requestInterruption();
             d->threadloaddata.wait();
         }
-        d->threadloaddata.setDoc(this);
+        d->threadloaddata.setDoc(nullptr);
         d->threadloaddata.start();
         return;
     }
