@@ -1,6 +1,7 @@
 #include "PagingWidget.h"
 
 #include "frame/DocummentFileHelper.h"
+#include "utils/utils.h"
 
 PagingWidget::PagingWidget(CustomWidget *parent) :
     CustomWidget(QString("PagingWidget"), parent)
@@ -18,8 +19,10 @@ PagingWidget::PagingWidget(CustomWidget *parent) :
  */
 void PagingWidget::initWidget()
 {
+    QFont font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 14);
     m_pTotalPagesLab = new CustomClickLabel(QString("/xxx") + tr("pages"), this);
     m_pTotalPagesLab->setMinimumWidth(80);
+    m_pTotalPagesLab->setFont(font);
 
     m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
     m_pPrePageBtn->setFixedSize(QSize(40, 40));
@@ -37,6 +40,7 @@ void PagingWidget::initWidget()
     m_pJumpPageSpinBox->installEventFilter(this);
     m_pJumpPageSpinBox->setWrapping(true);
     m_pJumpPageSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
+    m_pJumpPageSpinBox->setFont(font);
 
     auto hLayout = new QHBoxLayout;
     hLayout->addWidget(m_pJumpPageSpinBox);
