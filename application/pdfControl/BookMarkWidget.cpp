@@ -431,12 +431,12 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
         connect(t_widget, SIGNAL(sigDeleleteItem(const int &)), this, SLOT(slotDeleteBookItem(const int &)));
         t_widget->setLabelImage(t_image);
         t_widget->setLabelPage(page, 1);
-        t_widget->setMinimumSize(QSize(240, 80));
+        t_widget->setMinimumSize(QSize(230, 80));
         t_widget->setBSelect(true);
 
         auto item = new QListWidgetItem(m_pBookMarkListWidget);
         item->setFlags(Qt::NoItemFlags);
-        item->setSizeHint(QSize(240, 80));
+        item->setSizeHint(QSize(230, 80));
 
         m_pBookMarkListWidget->addItem(item);
         m_pBookMarkListWidget->setItemWidget(item, t_widget);
