@@ -96,10 +96,10 @@ void BookMarkItemWidget::paintEvent(QPaintEvent *event)
     //  涉及到 主题颜色
     if (m_bPaint) {
         color = QColor(QString("#0081FF"));
-        p.setColor(QPalette::Text, color);
+        p.setColor(QPalette::Text, p.highlight().color());
     } else {
-//        color = QColor::fromRgbF(0, 0, 0, 0.08);
-        p.setColor(QPalette::Text, p.shadow().color());
+        color = QColor::fromRgbF(0, 0, 0, 0.08);
+        p.setColor(QPalette::Text, color);
     }
 
     m_pPicture->setPalette(p);

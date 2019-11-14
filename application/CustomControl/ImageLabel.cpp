@@ -29,7 +29,7 @@ void ImageLabel::paintEvent(QPaintEvent *e)
         width -= 2;
         heigh -= 2;
 
-        painter.setPen(QPen(QColor(QString("#0081FF"))/*p.highlight().color()*/, 3, Qt::SolidLine));
+        painter.setPen(QPen(/*QColor(QString("#0081FF"))*/p.highlight().color(), 3, Qt::SolidLine));
     } else {
         local = 3;
         width -= 6;
