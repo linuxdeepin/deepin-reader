@@ -72,13 +72,14 @@ void NotesItemWidget::initWidget()
     QFont fontContant(QString("SourceHanSansSC-Medium"), 11);
 
     m_pPicture = new ImageLabel(this);
-    m_pPicture->setFixedSize(QSize(42, 62));
+    m_pPicture->setFixedSize(QSize(48, 68));
     m_pPicture->setAlignment(Qt::AlignCenter);
 
     m_pTextLab = new DLabel;
     m_pTextLab->setEnabled(false);
     m_pTextLab->setMinimumHeight(51);
     m_pTextLab->setMinimumWidth(102);
+    m_pTextLab->setMaximumWidth(349);
     m_pTextLab->setFrameStyle(QFrame::NoFrame);
     m_pTextLab->setWordWrap(true);
     m_pTextLab->setFont(fontContant);

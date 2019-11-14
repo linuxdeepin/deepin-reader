@@ -75,7 +75,7 @@ void BookMarkItemWidget::initWidget()
     m_pVLayout->addWidget(m_pPageNumber);
 
     m_pPicture = new ImageLabel(this);
-    m_pPicture->setFixedSize(QSize(42, 62));
+    m_pPicture->setFixedSize(QSize(48, 68));
     m_pPicture->setAlignment(Qt::AlignCenter);
 
     auto m_pHLayout = new QHBoxLayout;

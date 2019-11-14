@@ -31,7 +31,9 @@ void ImageLabel::paintEvent(QPaintEvent *e)
 
         painter.setPen(QPen(/*QColor(QString("#0081FF"))*/p.highlight().color(), 3, Qt::SolidLine));
     } else {
-
+        local = 3;
+        width -= 6;
+        heigh -= 6;
         painter.setPen(QPen(QColor::fromRgbF(0, 0, 0, 0.08)/*p.shadow().color()*/, 1, Qt::SolidLine));
     }
     QRectF rectangle(local, local, width, heigh);
