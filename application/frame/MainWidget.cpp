@@ -40,7 +40,6 @@ void MainWidget::slotOpenFileStart()
     auto pLayout = this->findChild<QStackedLayout *>();
     if (pLayout) {
         pLayout->setCurrentIndex(2);
-//        m_spinner->start();
     }
 }
 
