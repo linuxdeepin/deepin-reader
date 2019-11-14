@@ -107,11 +107,11 @@ void FileViewNoteWidget::initWidget()
 
 void FileViewNoteWidget::paintEvent(QPaintEvent *e)
 {
-    QRectF rectangle(0, 0, (this->width()), (this->height()));
+    QRectF rectangle(1, 1, (this->width()-2), (this->height()-2));
 
     QPainter painter(this);
     painter.setOpacity(1);
-    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     painter.setPen(QPen(QColor::fromRgbF(0, 0, 0, 0.3), 1));
     painter.setBrush(QColor(QString("#FFFBE1")));
     painter.drawRoundedRect(rectangle, 6, 6);
