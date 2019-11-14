@@ -8,6 +8,7 @@
 #include "HomeWidget.h"
 #include "DocShowShellWidget.h"
 #include "LeftSidebarWidget.h"
+#include "DocummentFileHelper.h"
 #include <QStackedLayout>
 
 MainWidget::MainWidget(CustomWidget *parent) :

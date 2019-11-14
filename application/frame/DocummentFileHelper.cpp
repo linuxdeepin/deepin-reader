@@ -128,9 +128,10 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
         sendMsg(MSG_OPERATION_OPEN_FILE_START);
         m_pDocummentProxy->closeFile();
         notifyMsg(MSG_CLOSE_FILE);
+    } else {
+        sendMsg(MSG_OPERATION_OPEN_FILE_START);
     }
 
-    sendMsg(MSG_OPERATION_OPEN_FILE_START);
     QStringList fileList = filePaths.split(Constant::sQStringSep,  QString::SkipEmptyParts);
     int nSize = fileList.size();
     if (nSize > 0) {
@@ -197,11 +198,10 @@ void DocummentFileHelper::initConnections()
 {
     connect(m_pDocummentProxy, &DocummentProxy::signal_openResult, this, [ = ](bool openresult) {
         if (openresult) {
-            //  通知 其他窗口， 打开文件成功了！！！
             notifyMsg(MSG_OPERATION_OPEN_FILE_OK);
+            //  通知 其他窗口， 打开文件成功了！！！
             QFileInfo info(m_szFilePath);
             setAppShowTitle(info.baseName());
-            sendMsg(MSG_OPERATION_OPEN_FILE_OK);
         } else {
             m_szFilePath = "";
             DataManager::instance()->setStrOnlyFilePath("");

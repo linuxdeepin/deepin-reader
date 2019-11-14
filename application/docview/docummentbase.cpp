@@ -5,6 +5,7 @@
 #include <QGridLayout>
 #include <QPainter>
 #include <QPoint>
+#include <QApplication>
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 #include <poppler-qt5.h>
@@ -72,9 +73,7 @@ void ThreadLoadData::run()
     restart = true;
     while (restart) {
         restart = false;
-        if (m_doc->loadData()) {
-
-        }
+        m_doc->loadData();
     }
     emit signal_dataLoaded(true);
 }
@@ -1551,12 +1550,17 @@ void DocummentBase::initConnect()
             emit signal_bookMarkStateChange(page, state);
         });
         connect(d->m_pages.at(i), SIGNAL(signal_MagnifierPixmapCacheLoaded(int)), this, SLOT(slot_MagnifierPixmapCacheLoaded(int)));
+        QApplication::processEvents();
     }
 }
 
 void DocummentBase::slot_dataLoaded(bool result)
 {
+    Q_D(DocummentBase);
     emit signal_openResult(result);
+//    if (result) {
+//        setViewModeAndShow(d->m_viewmode);
+//    }
 }
 
 void DocummentBase::slot_docummentLoaded(bool result)
@@ -1583,16 +1587,10 @@ void DocummentBase::slot_docummentLoaded(bool result)
         d->m_vboxLayout->setAlignment(d->m_widget, Qt::AlignCenter);
         qwidget->setMouseTracking(true);
         d->m_widgets.append(qwidget);
+        QApplication::processEvents();
     }
 
     initConnect();
-//    for (int i = 0; i < d->m_pages.size(); i++) {
-//        d->m_pages.at(i)->setScaleAndRotate(d->m_scale, d->m_rotate);
-//        connect(d->m_pages.at(i), &PageBase::signal_bookMarkStateChange, this, [ = ](int page, bool state) {
-//            emit signal_bookMarkStateChange(page, state);
-//        });
-//    }
-    setViewModeAndShow(d->m_viewmode);
     d->donotneedreloaddoc = false;
 //    emit signal_openResult(true);
     if (d->threadloaddata.isRunning()) {
@@ -1601,7 +1599,8 @@ void DocummentBase::slot_docummentLoaded(bool result)
     }
     d->threadloaddata.setDoc(this);
     d->threadloaddata.start();
-    loadPages();
+//    loadPages();
+    setViewModeAndShow(d->m_viewmode);
 }
 
 bool DocummentBase::openFile(QString filepath)
