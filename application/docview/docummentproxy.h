@@ -62,7 +62,8 @@ public:
     int  pointInWhichPage(QPoint pos);
     void jumpToHighLight(const QString &uuid, int ipage);
     bool setBookMarkState(int page, bool state);
-    void changeAnnotationColor(int ipage,const QString uuid, const QColor& color);
+    void changeAnnotationColor(int ipage, const QString uuid, const QColor &color);
+    void selectAllText();
 signals:
     void signal_pageChange(int);
     bool signal_pageJump(int);

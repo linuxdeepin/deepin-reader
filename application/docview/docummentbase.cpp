@@ -1763,3 +1763,13 @@ bool DocummentBase::loadDoc(QString path)
     d->loadDocumment(path);
     return true;
 }
+
+void DocummentBase::selectAllText()
+{
+    Q_D(DocummentBase);
+    if (!bDocummentExist())
+        return;
+    for (int i = 0; i < d->m_pages.size(); i++) {
+        d->m_pages.at(i)->selectAllText();
+    }
+}

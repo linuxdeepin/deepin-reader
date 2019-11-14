@@ -304,7 +304,7 @@ public:
     int pointInWhichPage(QPoint &qpoint);
     bool setBookMarkState(int page, bool state);
     bool mouseSelectText(QPoint start, QPoint stop);
-
+    void selectAllText();
 
 signals:
     void signal_pageChange(int);

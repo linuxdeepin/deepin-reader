@@ -470,3 +470,9 @@ void DocummentProxy::changeAnnotationColor(int ipage, const QString uuid, const 
     if (m_documment)
         m_documment->changeAnnotationColor(ipage, uuid, color);
 }
+
+void DocummentProxy::selectAllText()
+{
+    if (m_documment)
+        m_documment->selectAllText();
+}

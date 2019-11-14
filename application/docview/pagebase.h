@@ -238,6 +238,7 @@ public:
     Page::Link *ifMouseMoveOverLink(const QPoint point);
     bool getSelectTextString(QString &st);
     void clearSelectText();
+    void selectAllText();
     QRectF translateRect(QRectF &rect, double scale, RotateType_EM rotate);
     void clearHighlightRects();
     void setCurSearchShow(bool bshow)
@@ -262,6 +263,7 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 protected:
     void getImagePoint(QPointF &point);
+    void setSelectTextRects();
 
     PageBasePrivate *d_ptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), PageBase)
