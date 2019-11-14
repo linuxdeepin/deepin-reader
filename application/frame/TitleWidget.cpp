@@ -166,7 +166,6 @@ void TitleWidget::slotActionTrigger(QAction *action)
 
     if (nCurrentState != m_nCurHandleShape) {
         m_nCurHandleShape = nCurrentState;
-        QString ss = tr("111");
         QString normalPic = PF::getImagePath(btnName, Pri::g_frame);
         m_pHandleShapeBtn->setIcon(QIcon(normalPic));
 
