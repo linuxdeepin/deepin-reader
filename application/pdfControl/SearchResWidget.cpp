@@ -21,11 +21,11 @@ SearchResWidget::~SearchResWidget()
 
 void SearchResWidget::slotClearWidget()
 {
-    qDebug() << "SearchResWidget::slotClearWidget";
-    if (m_pNotesList->count() > 0) {
+//    qDebug() << "SearchResWidget::slotClearWidget";
+    if (m_pSearchList->count() > 0) {
         DocummentFileHelper::instance()->clearsearch();
 
-        m_pNotesList->clear();
+        m_pSearchList->clear();
     }
 }
 
@@ -94,9 +94,10 @@ void SearchResWidget::initWidget()
     m_pVLayout->setSpacing(0);
     this->setLayout(m_pVLayout);
 
-    m_pNotesList = new CustomListWidget;
+    m_pSearchList = new CustomListWidget;
+    m_pSearchList->setSpacing(2);
 
-    m_pVLayout->addWidget(m_pNotesList);
+    m_pVLayout->addWidget(m_pSearchList);
 }
 
 void SearchResWidget::initConnections()
@@ -150,12 +151,12 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
     itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + tr("search res content")));
     itemWidget->setMinimumSize(QSize(240, 80));
 
-    auto item = new QListWidgetItem(m_pNotesList);
+    auto item = new QListWidgetItem(m_pSearchList);
     item->setFlags(Qt::NoItemFlags);
     item->setSizeHint(QSize(240, 80));
 
-    m_pNotesList->addItem(item);
-    m_pNotesList->setItemWidget(item, itemWidget);
+    m_pSearchList->addItem(item);
+    m_pSearchList->setItemWidget(item, itemWidget);
 }
 
 /**
@@ -183,7 +184,7 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
         }
     } else if (msgType == MSG_CLEAR_FIND_CONTENT) {
         emit sigClearWidget();
-        qDebug() << "SearchResWidget::dealWithData emit sigClearWidget";
+//        qDebug() << "SearchResWidget::dealWithData emit sigClearWidget";
     } else if (MSG_CLOSE_FILE == msgType) {    //  关闭w文件通知消息
         emit sigCloseFile();
     }
@@ -199,9 +200,9 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
  */
 int SearchResWidget::getSearchPage(const int &index)
 {
-    auto pItem = m_pNotesList->item(index);
+    auto pItem = m_pSearchList->item(index);
     if (pItem) {
-        m_pSearchItemWidget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
+        m_pSearchItemWidget = reinterpret_cast<NotesItemWidget *>(m_pSearchList->itemWidget(pItem));
         if (m_pSearchItemWidget) {
             return m_pSearchItemWidget->nPageIndex();
         }

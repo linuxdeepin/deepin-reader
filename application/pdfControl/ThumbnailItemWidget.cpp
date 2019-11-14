@@ -29,11 +29,11 @@ void ThumbnailItemWidget::setBSelect(const bool &paint)
 void ThumbnailItemWidget::initWidget()
 {
     m_pPageNumber = new PageNumberLabel();
-    m_pPageNumber->setFixedSize(QSize(140, 18));
+    m_pPageNumber->setFixedSize(QSize(146, 18));
     m_pPageNumber->setAlignment(Qt::AlignCenter);
 
     m_pPicture = new ImageLabel();
-    m_pPicture->setFixedSize(QSize(140, 168));
+    m_pPicture->setFixedSize(QSize(146, 174));
     m_pPicture->setAlignment(Qt::AlignCenter);
 
     auto t_vLayout = new QVBoxLayout;
