@@ -103,7 +103,7 @@ private:
     void addSearchsItem(const int &page, const QString &text, const int &resultNum);
 
 private:
-    CustomListWidget *m_pNotesList          = nullptr; // 搜索结果列表
+    CustomListWidget *m_pSearchList         = nullptr; // 搜索结果列表
     NotesItemWidget *m_pSearchItemWidget    = nullptr;      // 缩略图子窗体
     LoadSearchResThread m_loadSearchResThread;           // 加载搜索缩略图线程
 

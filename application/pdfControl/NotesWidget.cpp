@@ -22,6 +22,7 @@ void NotesWidget::initWidget()
     this->setLayout(m_pVLayout);
 
     m_pNotesList = new CustomListWidget;
+    m_pNotesList->setSpacing(2);
 
     m_pVLayout->addWidget(m_pNotesList);
 }
