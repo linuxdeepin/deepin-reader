@@ -1,13 +1,18 @@
 #include "FileViewNoteWidget.h"
 #include "utils/PublicFunction.h"
-#include <QTextCodec>
 #include "utils/utils.h"
+#include <QTextCodec>
+#include <DPlatformWindowHandle>
+
 
 FileViewNoteWidget::FileViewNoteWidget(CustomWidget *parent):
     CustomWidget(QString("FileViewNoteWidget"), parent)
 {
     setWindowFlag(Qt::Popup);
     setFixedSize(QSize(250, 320));
+    DPlatformWindowHandle handle(this);
+    int radius = 16;
+    handle.setWindowRadius(radius);
 
     initWidget();
     initConnections();
@@ -105,20 +110,6 @@ void FileViewNoteWidget::initWidget()
     this->setLayout(m_pVLayout);
 }
 
-void FileViewNoteWidget::paintEvent(QPaintEvent *e)
-{
-    QRectF rectangle(1, 1, (this->width()-2), (this->height()-2));
-
-    QPainter painter(this);
-    painter.setOpacity(1);
-    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-    painter.setPen(QPen(QColor::fromRgbF(0, 0, 0, 0.3), 1));
-    painter.setBrush(QColor(QString("#FFFBE1")));
-    painter.drawRoundedRect(rectangle, 6, 6);
-
-    CustomWidget::paintEvent(e);
-}
-
 void FileViewNoteWidget::initConnections()
 {
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
@@ -128,7 +119,7 @@ void FileViewNoteWidget::initConnections()
 void FileViewNoteWidget::slotUpdateTheme()
 {
     QString sClose = PF::getImagePath("close", Pri::g_pdfControl);
-    m_pCloseLab->setPixmap(QPixmap(sClose));
+    m_pCloseLab->setPixmap(Utils::renderSVG(sClose,QSize(24,24)));
 }
 
 // 关闭槽函数

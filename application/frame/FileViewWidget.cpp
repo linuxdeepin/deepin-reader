@@ -246,9 +246,13 @@ void FileViewWidget::slotSetHandShape(const QString &data)
     if (nRes == 1) { //  手形
         m_nCurrentHandelState = Handel_State;
         this->setCursor(Qt::OpenHandCursor);
+      //setCursor(Qt::OpenHandCursor);
+        qDebug()<<__FUNCTION__<<"current cursor"<<cursor();
+
     } else {
-        m_nCurrentHandelState = Default_State;
-        this->setCursor(Qt::ArrowCursor);
+        m_nCurrentHandelState = Default_State;   
+       this->setCursor(Qt::ArrowCursor);
+        //setCursor(Qt::ArrowCursor);
     }
 
     //  手型 切换 也需要将之前选中的文字清除 选中样式

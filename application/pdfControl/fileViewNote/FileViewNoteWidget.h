@@ -58,8 +58,7 @@ public:
 
 protected:
     void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
-    void initWidget() Q_DECL_OVERRIDE;
-    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    void initWidget() Q_DECL_OVERRIDE;   
 
 private:
     void initConnections();
