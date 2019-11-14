@@ -76,7 +76,6 @@ void NotesItemWidget::initWidget()
     m_pPicture->setAlignment(Qt::AlignCenter);
 
     m_pTextLab = new DLabel;
-    m_pTextLab->setEnabled(false);
     m_pTextLab->setMinimumHeight(51);
     m_pTextLab->setMinimumWidth(102);
     m_pTextLab->setMaximumWidth(349);
@@ -85,11 +84,13 @@ void NotesItemWidget::initWidget()
     m_pTextLab->setFont(fontContant);
 
     m_pPageNumber = new PageNumberLabel;
+    m_pPageNumber->setEnabled(false);
     m_pPageNumber->setMinimumWidth(31);
     m_pPageNumber->setFixedHeight(18);
     m_pPageNumber->setFont(font);
 
     m_pSearchResultNum = new DLabel;
+    m_pSearchResultNum->setEnabled(false);
     m_pSearchResultNum->setMinimumWidth(31);
     m_pSearchResultNum->setFixedHeight(18);
     m_pSearchResultNum->setFont(font);
@@ -139,13 +140,23 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
 
     CustomItemWidget::paintEvent(e);
 
+    QPalette text(m_pTextLab->palette());
+    text.setColor(QPalette::Text, QColor(QString("#303030")));
+    m_pTextLab->setPalette(text);
+    QPalette page(m_pPageNumber->palette());
+    page.setColor(QPalette::Text, QColor(QString("#7587A7")));
+    m_pPageNumber->setPalette(page);
+    QPalette reslt(m_pSearchResultNum->palette());
+    reslt.setColor(QPalette::Text, QColor(QString("#7587A7")));
+    m_pSearchResultNum->setPalette(reslt);
+
     QPalette p(m_pPicture->palette());
-    QColor color;
+//    QColor color;
 
     //  涉及到 主题颜色
     if (m_bPaint) {
-        color = QColor(QString("#0081FF"));
-        p.setColor(QPalette::Text, color);
+//        color = QColor(QString("#0081FF"));
+        p.setColor(QPalette::Text, p.highlight().color());
     } else {
 //        color = QColor::fromRgbF(0, 0, 0, 0.05);
         p.setColor(QPalette::Text, p.shadow().color());

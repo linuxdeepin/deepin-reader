@@ -153,7 +153,7 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
 
     auto item = new QListWidgetItem(m_pSearchList);
     item->setFlags(Qt::NoItemFlags);
-    item->setSizeHint(QSize(240, 80));
+    item->setSizeHint(QSize(240, 85));
 
     m_pSearchList->addItem(item);
     m_pSearchList->setItemWidget(item, itemWidget);

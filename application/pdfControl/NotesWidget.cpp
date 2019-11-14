@@ -370,7 +370,7 @@ void NotesWidget::addNewItem(const stHighlightContent &note)
 
     QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
     item->setFlags(Qt::NoItemFlags);
-    item->setSizeHint(QSize(240, 87));
+    item->setSizeHint(QSize(240, 90));
 
     m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);
