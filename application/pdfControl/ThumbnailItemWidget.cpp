@@ -35,6 +35,7 @@ void ThumbnailItemWidget::initWidget()
     m_pPicture = new ImageLabel();
     m_pPicture->setFixedSize(QSize(146, 174));
     m_pPicture->setAlignment(Qt::AlignCenter);
+    m_pPicture->setRadius(10);
 
     auto t_vLayout = new QVBoxLayout;
     t_vLayout->setContentsMargins(1, 0, 1, 0);

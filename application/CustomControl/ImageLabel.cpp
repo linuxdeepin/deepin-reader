@@ -37,7 +37,7 @@ void ImageLabel::paintEvent(QPaintEvent *e)
         painter.setPen(QPen(QColor::fromRgbF(0, 0, 0, 0.08)/*p.shadow().color()*/, 1, Qt::SolidLine));
     }
     QRectF rectangle(local, local, width, heigh);
-    painter.drawRoundedRect(rectangle, 8, 8);
+    painter.drawRoundedRect(rectangle, m_nRadius, m_nRadius);
 
     DLabel::paintEvent(e);
 }
