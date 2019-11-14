@@ -50,17 +50,27 @@ void TitleWidget::slotOpenFileOk()
 // 应用全屏显示
 void TitleWidget::slotAppFullScreen()
 {
-    m_pThumbnailBtn->setChecked(false);
+    //  显示了侧边栏, 则隐藏
+    bool bCheck = m_pThumbnailBtn->isChecked();
+    if (bCheck) {
+        m_pThumbnailBtn->setChecked(!bCheck);
 
-    //  侧边栏 隐藏
-    notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, "0");
+        //  侧边栏 隐藏
+        notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, "0");
+    }
 }
 
 //  退出放大鏡
 void TitleWidget::slotMagnifierCancel()
 {
-    m_pMagnifierBtn->setChecked(false);
-    notifyMsgToSubject(MSG_MAGNIFYING, "0");
+    //  如果开启了, 放大镜 则取消
+    bool bCheck = m_pMagnifierBtn->isChecked();
+    if (bCheck) {
+        m_pMagnifierBtn->setChecked(!bCheck);
+
+        //  取消放大镜
+        notifyMsgToSubject(MSG_MAGNIFYING, "0");
+    }
 }
 
 void TitleWidget::initWidget()
@@ -89,14 +99,14 @@ void TitleWidget::initConnections()
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
-//  缩略图 显示
+//  缩略图
 void TitleWidget::on_thumbnailBtn_clicked()
 {
     bool rl = m_pThumbnailBtn->isChecked();
     notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(rl));
 }
 
-//  字体
+//  文档显示
 void TitleWidget::on_settingBtn_clicked()
 {
     QPoint point = m_pSettingBtn->mapToGlobal(QPoint(0, 0));
@@ -120,7 +130,7 @@ void TitleWidget::on_handleShapeBtn_clicked()
     m_pHandleMenu->exec(point);
 }
 
-//  放大镜 功能
+//  放大镜
 void TitleWidget::on_magnifyingBtn_clicked()
 {
     bool bCheck = m_pMagnifierBtn->isChecked();
@@ -144,11 +154,7 @@ void TitleWidget::on_magnifyingBtn_clicked()
 void TitleWidget::slotActionTrigger(QAction *action)
 {
     //  切换了选择工具, 需要取消放大镜的操作
-    bool bCheck = m_pMagnifierBtn->isChecked();
-    if (bCheck) {
-        m_pMagnifierBtn->setChecked(false);
-        notifyMsgToSubject(MSG_MAGNIFYING, "0");
-    }
+    slotMagnifierCancel();
 
     QString btnName = "";
     int nCurrentState = -1;
@@ -161,11 +167,12 @@ void TitleWidget::slotActionTrigger(QAction *action)
     } else {
         nCurrentState = 1;
         btnName = "handleShape";
-         m_pHandleShapeBtn->setToolTip(tr("handleShape"));
+        m_pHandleShapeBtn->setToolTip(tr("handleShape"));
     }
 
     if (nCurrentState != m_nCurHandleShape) {
         m_nCurHandleShape = nCurrentState;
+
         QString normalPic = PF::getImagePath(btnName, Pri::g_frame);
         m_pHandleShapeBtn->setIcon(QIcon(normalPic));
 
@@ -215,21 +222,22 @@ void TitleWidget::initMenus()
         auto actionGroup = new QActionGroup(this);
 
         {
-            auto m_pDefaultAction = new QAction(tr("defaultShape"), this);
-            m_pDefaultAction->setObjectName("defaultShape");
-            m_pDefaultAction->setCheckable(true);
-            m_pDefaultAction->setChecked(true);
+            auto action = new QAction(tr("defaultShape"), this);
+            action->setObjectName("defaultShape");
+            action->setCheckable(true);
+            action->setChecked(true);
 
-            actionGroup->addAction(m_pDefaultAction);
-            m_pHandleMenu->addAction(m_pDefaultAction);
+            actionGroup->addAction(action);
+            m_pHandleMenu->addAction(action);
         }
 
         {
-            auto m_pHandleAction = new QAction(tr("handleShape"), this);
-            m_pHandleAction->setObjectName("handleShape");
-            m_pHandleAction->setCheckable(true);
-            actionGroup->addAction(m_pHandleAction);
-            m_pHandleMenu->addAction(m_pHandleAction);
+            auto action = new QAction(tr("handleShape"), this);
+            action->setObjectName("handleShape");
+            action->setCheckable(true);
+
+            actionGroup->addAction(action);
+            m_pHandleMenu->addAction(action);
         }
 
         connect(actionGroup, SIGNAL(triggered(QAction *)), SLOT(slotActionTrigger(QAction *)));
