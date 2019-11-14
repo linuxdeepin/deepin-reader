@@ -11,7 +11,7 @@ FileViewNoteWidget::FileViewNoteWidget(CustomWidget *parent):
     setWindowFlag(Qt::Popup);
     setFixedSize(QSize(250, 320));
     DPlatformWindowHandle handle(this);
-    int radius = 16;
+    int radius =18;
     handle.setWindowRadius(radius);
 
     initWidget();
