@@ -151,12 +151,12 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
     m_pSearchResultNum->setPalette(reslt);
 
     QPalette p(m_pPicture->palette());
-//    QColor color;
+    QColor color;
 
     //  涉及到 主题颜色
     if (m_bPaint) {
-//        color = QColor(QString("#0081FF"));
-        p.setColor(QPalette::Text, p.highlight().color());
+        color = QColor(QString("#0081FF"));
+        p.setColor(QPalette::Text, /*p.highlight().color()*/color);
     } else {
 //        color = QColor::fromRgbF(0, 0, 0, 0.05);
         p.setColor(QPalette::Text, p.shadow().color());
