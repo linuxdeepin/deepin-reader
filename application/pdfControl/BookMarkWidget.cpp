@@ -360,19 +360,29 @@ void BookMarkWidget::initWidget()
     m_pBookMarkListWidget = new CustomListWidget;
     m_pBookMarkListWidget->setSpacing(0);
 
+    QFont font;
+    font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 14);
+
+    auto m_pHBoxLayout = new QHBoxLayout;
+
     m_pAddBookMarkBtn = new DPushButton(this);
     m_pAddBookMarkBtn->setFixedHeight(36);
     m_pAddBookMarkBtn->setMinimumWidth(170);
     m_pAddBookMarkBtn->setText(tr("add bookmark"));
+    m_pAddBookMarkBtn->setFont(font);
     connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(slotAddBookMark()));
+
+    m_pHBoxLayout->setContentsMargins(10, 6, 10, 6);
+    m_pHBoxLayout->addWidget(m_pAddBookMarkBtn);
 
     auto m_pVBoxLayout = new QVBoxLayout;
     m_pVBoxLayout->setContentsMargins(0, 0, 0, 0);
     m_pVBoxLayout->setSpacing(0);
     this->setLayout(m_pVBoxLayout);
     m_pVBoxLayout->addWidget(m_pBookMarkListWidget);
-    m_pVBoxLayout->addSpacing(4);
-    m_pVBoxLayout->addWidget(m_pAddBookMarkBtn);
+//    m_pVBoxLayout->addSpacing(4);
+//    m_pVBoxLayout->addWidget(m_pAddBookMarkBtn);
+    m_pVBoxLayout->addItem(m_pHBoxLayout);
 }
 
 /**

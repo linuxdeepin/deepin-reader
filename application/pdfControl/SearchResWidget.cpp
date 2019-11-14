@@ -21,7 +21,6 @@ SearchResWidget::~SearchResWidget()
 
 void SearchResWidget::slotClearWidget()
 {
-//    qDebug() << "SearchResWidget::slotClearWidget";
     if (m_pSearchList->count() > 0) {
         DocummentFileHelper::instance()->clearsearch();
 
@@ -95,7 +94,7 @@ void SearchResWidget::initWidget()
     this->setLayout(m_pVLayout);
 
     m_pSearchList = new CustomListWidget;
-    m_pSearchList->setSpacing(2);
+    m_pSearchList->setSpacing(1);
 
     m_pVLayout->addWidget(m_pSearchList);
 }
@@ -153,7 +152,7 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
 
     auto item = new QListWidgetItem(m_pSearchList);
     item->setFlags(Qt::NoItemFlags);
-    item->setSizeHint(QSize(240, 85));
+    item->setSizeHint(QSize(240, 80));
 
     m_pSearchList->addItem(item);
     m_pSearchList->setItemWidget(item, itemWidget);
@@ -184,7 +183,6 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
         }
     } else if (msgType == MSG_CLEAR_FIND_CONTENT) {
         emit sigClearWidget();
-//        qDebug() << "SearchResWidget::dealWithData emit sigClearWidget";
     } else if (MSG_CLOSE_FILE == msgType) {    //  关闭w文件通知消息
         emit sigCloseFile();
     }

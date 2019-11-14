@@ -68,6 +68,7 @@ public:
     static QIcon getActionIcon(const QString &);
 
     static QString getInputDataSize(const qint64 &);
+    static QFont getPixFont(const QString&, const int&);
 };
 
 #endif // UTILS_H

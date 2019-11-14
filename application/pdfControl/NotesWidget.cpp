@@ -22,7 +22,7 @@ void NotesWidget::initWidget()
     this->setLayout(m_pVLayout);
 
     m_pNotesList = new CustomListWidget;
-    m_pNotesList->setSpacing(2);
+    m_pNotesList->setSpacing(1);
 
     m_pVLayout->addWidget(m_pNotesList);
 }
@@ -366,11 +366,11 @@ void NotesWidget::addNewItem(const stHighlightContent &note)
     itemWidget->setNoteUUid(note.struuid);
     itemWidget->setLabelPage(note.ipage, 1);
     itemWidget->setTextEditText(note.strcontents);
-    itemWidget->setMinimumSize(QSize(240, 87));
+    itemWidget->setMinimumSize(QSize(240, 83));
 
     QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
     item->setFlags(Qt::NoItemFlags);
-    item->setSizeHint(QSize(240, 90));
+    item->setSizeHint(QSize(240, 83));
 
     m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);
@@ -394,11 +394,11 @@ void NotesWidget::addNewItem(const QImage &image, const int &page, const QString
     itemWidget->setNoteUUid(uuid);
     itemWidget->setLabelPage(page, 1);
     itemWidget->setTextEditText(text);
-    itemWidget->setMinimumSize(QSize(190, 85));
+    itemWidget->setMinimumSize(QSize(190, 80));
 
     auto item = new QListWidgetItem(m_pNotesList);
     item->setFlags(Qt::NoItemFlags);
-    item->setSizeHint(QSize(190, 85));
+    item->setSizeHint(QSize(190, 80));
 
     m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);

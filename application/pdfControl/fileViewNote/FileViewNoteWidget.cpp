@@ -1,6 +1,7 @@
 #include "FileViewNoteWidget.h"
 #include "utils/PublicFunction.h"
 #include <QTextCodec>
+#include "utils/utils.h"
 
 FileViewNoteWidget::FileViewNoteWidget(CustomWidget *parent):
     CustomWidget(QString("FileViewNoteWidget"), parent)
@@ -258,7 +259,7 @@ void CustemTextEdit::init()
     this->setPalette(pText);
 
     //font
-    QFont fontContant(QString("SourceHanSansCN-Normal"), 12);
+    QFont fontContant = Utils::getPixFont(QString("SourceHanSansCN-Normal"), 12);
     this->setFont(fontContant);
 
     //text corlor
@@ -275,14 +276,10 @@ void CustemTextEdit::init()
     textBlockFormat.setLineHeight(19, QTextBlockFormat::FixedHeight);
     //line margin
     textBlockFormat.setBottomMargin(0);
-//    format.setFontUnderline(true);
     cursor.mergeCharFormat(format);
     cursor.setBlockFormat(textBlockFormat);
     this->setTextCursor(cursor);
-    //line count
-//    this->document()->setMaximumBlockCount(10);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextEditMaxContantNum()));
 }

@@ -1,4 +1,5 @@
 #include "BookMarkItemWidget.h"
+#include "utils/utils.h"
 
 BookMarkItemWidget::BookMarkItemWidget(CustomItemWidget *parent) :
     CustomItemWidget("BookMarkItemWidget", parent)
@@ -64,7 +65,8 @@ void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
  */
 void BookMarkItemWidget::initWidget()
 {
-    QFont font(QString("SourceHanSansSC-Medium"), 12);
+    QFont font;
+    font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 12);
     m_pPageNumber = new PageNumberLabel(this);
     m_pPageNumber->setMinimumWidth(31);
     m_pPageNumber->setFixedHeight(18);

@@ -2,6 +2,7 @@
 #include <DApplication>
 #include <QClipboard>
 #include <QTextLayout>
+#include "utils/utils.h"
 
 NotesItemWidget::NotesItemWidget(CustomItemWidget *parent) :
     CustomItemWidget(QString("NotesItemWidget"), parent)
@@ -68,32 +69,34 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
 
 void NotesItemWidget::initWidget()
 {
-    QFont font(QString("SourceHanSansSC-Medium"), 12);
-    QFont fontContant(QString("SourceHanSansSC-Medium"), 11);
 
     m_pPicture = new ImageLabel(this);
     m_pPicture->setFixedSize(QSize(48, 68));
     m_pPicture->setAlignment(Qt::AlignCenter);
 
-    m_pTextLab = new DLabel;
-    m_pTextLab->setFixedHeight(69);
-    m_pTextLab->setMinimumWidth(102);
-    m_pTextLab->setMaximumWidth(349);
-    m_pTextLab->setFrameStyle(QFrame::NoFrame);
-    m_pTextLab->setWordWrap(true);
-    m_pTextLab->setFont(fontContant);
+    QFont font;
+    font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 12);
 
     m_pPageNumber = new PageNumberLabel;
     m_pPageNumber->setEnabled(false);
     m_pPageNumber->setMinimumWidth(31);
-    m_pPageNumber->setFixedHeight(/*18*/20);
+    m_pPageNumber->setFixedHeight(18);
     m_pPageNumber->setFont(font);
 
     m_pSearchResultNum = new DLabel;
     m_pSearchResultNum->setEnabled(false);
     m_pSearchResultNum->setMinimumWidth(31);
-    m_pSearchResultNum->setFixedHeight(/*18*/20);
+    m_pSearchResultNum->setFixedHeight(18);
     m_pSearchResultNum->setFont(font);
+
+    font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 11);
+    m_pTextLab = new DLabel;
+    m_pTextLab->setFixedHeight(51);
+    m_pTextLab->setMinimumWidth(102);
+    m_pTextLab->setMaximumWidth(349);
+    m_pTextLab->setFrameStyle(QFrame::NoFrame);
+    m_pTextLab->setWordWrap(true);
+    m_pTextLab->setFont(font);
 
     auto t_hLayout = new QHBoxLayout;
     t_hLayout->setContentsMargins(0, 0, 0, 0);

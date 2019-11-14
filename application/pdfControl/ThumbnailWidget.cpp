@@ -34,14 +34,9 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
     }else if(MSG_NOTIFY_KEY_MSG == msgType){
         if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup) {
              emit sigJumpToPrevPage();
-//            return ConstantMsg::g_effective_res;
         } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown) {
              emit sigJumpToNextPage();
-//            return ConstantMsg::g_effective_res;
-        } /*else if (msgContent == "0") {
-            emit slotJudgeInputPage(msgContent);
-            qDebug() << "PagingWidget::dealWithData key=" << msgContent;
-        }*/
+        }
     }
 
     return 0;

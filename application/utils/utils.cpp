@@ -684,3 +684,11 @@ QString Utils::getInputDataSize(const qint64 &dSize)
     double d = dSize / 1024.0 / 1024.0 / 1024.0;
     return QString::number(d, 'f', 1) + " GB";
 }
+
+QFont Utils::getPixFont(const QString &fontFamily, const int &fontSize)
+{
+    QFont font(fontFamily);
+    font.setPixelSize(fontSize);
+
+    return font;
+}
