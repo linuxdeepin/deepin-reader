@@ -458,9 +458,9 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (MSG_NOTIFY_KEY_MSG == msgType) {
         if (msgContent == KeyStr::g_del) {
             emit sigDelNoteItem();
-        } else if (msgContent == KeyStr::g_pgup) {
+        } else if (msgContent == KeyStr::g_pgup || msgContent == KeyStr::g_up) {
             emit sigJumpToPrevItem();
-        } else if (msgContent == KeyStr::g_pgdown) {
+        } else if (msgContent == KeyStr::g_pgdown || msgContent == KeyStr::g_down) {
             emit sigJumpToNextItem();
         }
     }

@@ -33,7 +33,7 @@ MainWindow::MainWindow(DMainWindow *parent)
                     << KeyStr::g_pgup << KeyStr::g_pgdown << KeyStr::g_ctrl_f << KeyStr::g_ctrl_o
                     << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_smaller
                     << KeyStr::g_alt_1 << KeyStr::g_alt_2 << KeyStr::g_m << KeyStr::g_z
-                    << KeyStr::g_ctrl_alt_f << KeyStr::g_ctrl_shift_s;
+                    << KeyStr::g_ctrl_alt_f << KeyStr::g_ctrl_shift_s << KeyStr::g_down << KeyStr::g_up;
 
     installEventFilter(this);
 
