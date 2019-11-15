@@ -53,6 +53,8 @@ private:
     void onOpenAppHelp();
     void onChangeWindowState();
     void dealWithKeyEvent(const QString &);
+    void displayShortcuts();
+
 
 private slots:
     void slotOpenFileOk();

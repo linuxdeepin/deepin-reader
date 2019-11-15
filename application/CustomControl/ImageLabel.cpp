@@ -38,6 +38,5 @@ void ImageLabel::paintEvent(QPaintEvent *e)
     }
     QRectF rectangle(local, local, width, heigh);
     painter.drawRoundedRect(rectangle, m_nRadius, m_nRadius);
-
     DLabel::paintEvent(e);
 }
