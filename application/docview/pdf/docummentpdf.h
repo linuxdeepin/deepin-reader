@@ -13,7 +13,7 @@ public:
     DocummentPDF(DWidget *parent = nullptr);
     ~DocummentPDF() override;
     bool bDocummentExist() override;
-    bool getImage(int pagenum, QImage &image, double width, double height) override;
+//    bool getImage(int pagenum, QImage &image, double width, double height) override;
 //    void docBasicInfo(stFileInfo &info) override;
     bool save(const QString &filePath, bool withChanges) override;
     bool saveas(const QString &filePath, bool withChanges) override;
@@ -30,7 +30,7 @@ public:
     void getAnnotationText(const QString &struuid, QString &strtext, int ipage)override;
     bool loadDocumment(QString filepath) override;
     void jumpToHighLight(const QString &uuid, int ipage) override;
-    void changeAnnotationColor(int ipage,const QString uuid, const QColor& color) override;
+    void changeAnnotationColor(int ipage, const QString uuid, const QColor &color) override;
 
 private:
     bool pdfsave(const QString &filePath, bool withChanges);

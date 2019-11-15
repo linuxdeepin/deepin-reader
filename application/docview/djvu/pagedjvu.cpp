@@ -281,7 +281,7 @@ bool PageDJVUPrivate::getSlideImage(QImage &image, double &width, double &height
     clearMessageQueue(m_parent->getContext(), false);
 
     ddjvu_page_release(page);
-//        return true;
+    return true;
 }
 
 void PageDJVUPrivate::setPage(int pageno)

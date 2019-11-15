@@ -333,12 +333,8 @@ protected:
     void initConnect();
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
 
-
-
-
     DocummentBasePrivate *d_ptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), DocummentBase)
-
 };
 
 

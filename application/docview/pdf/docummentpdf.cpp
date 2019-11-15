@@ -425,19 +425,19 @@ bool DocummentPDF::bDocummentExist()
     return true;
 }
 
-bool DocummentPDF::getImage(int pagenum, QImage &image, double width, double height)
-{
-    Q_D(DocummentPDF);
-    if (pagenum < 0 || pagenum >= d->m_pages.size()) {
-        return false;
-    }
-    qreal pixelratiof = d->m_pages.at(pagenum)->devicePixelRatioF();
-    if (!d->m_pages.at(pagenum)->getImage(image, width * pixelratiof, height * pixelratiof)) {
-        return false;
-    }
-    image.setDevicePixelRatio(d->m_pages.at(pagenum)->devicePixelRatioF());
-    return true;
-}
+//bool DocummentPDF::getImage(int pagenum, QImage &image, double width, double height)
+//{
+//    Q_D(DocummentPDF);
+//    if (pagenum < 0 || pagenum >= d->m_pages.size()) {
+//        return false;
+//    }
+//    qreal pixelratiof = d->m_pages.at(pagenum)->devicePixelRatioF();
+//    if (!d->m_pages.at(pagenum)->getImage(image, width * pixelratiof, height * pixelratiof)) {
+//        return false;
+//    }
+//    image.setDevicePixelRatio(d->m_pages.at(pagenum)->devicePixelRatioF());
+//    return true;
+//}
 
 //void DocummentPDF::docBasicInfo(stFileInfo &info)
 //{

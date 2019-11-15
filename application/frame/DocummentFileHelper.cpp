@@ -205,7 +205,6 @@ void DocummentFileHelper::initConnections()
         } else {
             m_szFilePath = "";
             DataManager::instance()->setStrOnlyFilePath("");
-
             notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
         }
     });
