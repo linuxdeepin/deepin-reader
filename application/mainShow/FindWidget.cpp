@@ -29,7 +29,7 @@
 FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)
 {
-    setFixedSize(QSize(414, 50));
+    setFixedSize(QSize(414, 54));
     setWindowFlags(Qt::WindowStaysOnTopHint);
 
     initWidget();

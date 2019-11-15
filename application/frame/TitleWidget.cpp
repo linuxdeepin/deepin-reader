@@ -273,6 +273,11 @@ void TitleWidget::initMenus()
 
 void TitleWidget::setDefaultShape()
 {
+    auto action = this->findChild<QAction *>("defaultShape");
+    if (action) {
+        action->setChecked(true);
+    }
+
     m_pHandleShapeBtn->setToolTip(tr("defaultShape"));
 
     m_nCurHandleShape = 0;
@@ -285,6 +290,11 @@ void TitleWidget::setDefaultShape()
 
 void TitleWidget::setHandleShape()
 {
+    auto action = this->findChild<QAction *>("handleShape");
+    if (action) {
+        action->setChecked(true);
+    }
+
     m_pHandleShapeBtn->setToolTip(tr("handleShape"));
 
     m_nCurHandleShape = 1;
