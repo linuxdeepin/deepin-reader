@@ -23,6 +23,7 @@ signals:
     void sigOpenFileOk();
     void sigAppFullScreen();
     void sigMagnifierCancel();
+    void sigDealWithShortKey(const QString &);
 
 private slots:
     void slotUpdateTheme();
@@ -36,12 +37,16 @@ private slots:
     void on_magnifyingBtn_clicked();
 
     void slotActionTrigger(QAction *);
+    void slotDealWithShortKey(const QString &);
 
 private:
     void initConnections();
 
     void initBtns();
     void initMenus();
+
+    void setDefaultShape();
+    void setHandleShape();
 
     DToolButton *createBtn(const QString &btnName, bool bCheckable = false);
     void sendMsgToSubject(const int &, const QString &msgCotent = "");

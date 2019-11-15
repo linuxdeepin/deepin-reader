@@ -97,6 +97,7 @@ void TitleWidget::initConnections()
     connect(this, SIGNAL(sigMagnifierCancel()), SLOT(slotMagnifierCancel()));
     connect(this, SIGNAL(sigAppFullScreen()), SLOT(slotAppFullScreen()));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
+    connect(this, SIGNAL(sigDealWithShortKey(const QString &)), SLOT(slotDealWithShortKey(const QString &)));
 }
 
 //  缩略图
@@ -156,27 +157,53 @@ void TitleWidget::slotActionTrigger(QAction *action)
     //  切换了选择工具, 需要取消放大镜的操作
     slotMagnifierCancel();
 
-    QString btnName = "";
-    int nCurrentState = -1;
-
     QString sAction = action->objectName();
     if (sAction == "defaultShape") {
-        nCurrentState = 0;
-        btnName = "defaultShape";
-        m_pHandleShapeBtn->setToolTip(tr("defaultShape"));
+        setDefaultShape();
     } else {
-        nCurrentState = 1;
-        btnName = "handleShape";
-        m_pHandleShapeBtn->setToolTip(tr("handleShape"));
+        setHandleShape();
     }
+}
 
-    if (nCurrentState != m_nCurHandleShape) {
-        m_nCurHandleShape = nCurrentState;
+//  处理 快捷键
+void TitleWidget::slotDealWithShortKey(const QString &sKey)
+{
+    if (sKey == KeyStr::g_alt_1) {          //  选择工具
+        slotMagnifierCancel();
 
-        QString normalPic = PF::getImagePath(btnName, Pri::g_frame);
-        m_pHandleShapeBtn->setIcon(QIcon(normalPic));
+        if (0 != m_nCurHandleShape) {
+            setDefaultShape();
+        }
+    } else if (sKey == KeyStr::g_alt_2) {   //  手型工具
+        slotMagnifierCancel();
 
-        notifyMsgToSubject(MSG_HANDLESHAPE, QString::number(nCurrentState));
+        if (1 != m_nCurHandleShape) {
+            setHandleShape();
+        }
+    } else if ( sKey == KeyStr::g_m) {      //  显示缩略图
+        bool rl = m_pThumbnailBtn->isChecked();
+        if (!rl) {
+            m_pThumbnailBtn->setChecked(true);
+            notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(1));
+        }
+    } else if ( sKey == KeyStr::g_z) {      //  开启放大镜
+        bool bCheck = m_pMagnifierBtn->isChecked();
+        if (!bCheck) {
+            m_pMagnifierBtn->setChecked(true);
+            notifyMsgToSubject(MSG_MAGNIFYING, QString::number(1));
+
+            //  开启了放大镜, 需要把选择工具 切换为 选择工具
+            auto actionList = this->findChildren<QAction *>();
+            foreach (auto a, actionList) {
+                QString objName = a->objectName();
+                if (objName == "defaultShape") {
+                    a->setChecked(true);
+                    break;
+                }
+            }
+            QString normalPic = PF::getImagePath("defaultShape", Pri::g_frame);
+            m_pHandleShapeBtn->setIcon(QIcon(normalPic));
+        }
     }
 }
 
@@ -223,7 +250,6 @@ void TitleWidget::initMenus()
 
         {
             auto action = new QAction(tr("defaultShape"), this);
-//            action->setShortcuts(KeyStr::g_alt_1);
             action->setObjectName("defaultShape");
             action->setCheckable(true);
             action->setChecked(true);
@@ -243,6 +269,30 @@ void TitleWidget::initMenus()
 
         connect(actionGroup, SIGNAL(triggered(QAction *)), SLOT(slotActionTrigger(QAction *)));
     }
+}
+
+void TitleWidget::setDefaultShape()
+{
+    m_pHandleShapeBtn->setToolTip(tr("defaultShape"));
+
+    m_nCurHandleShape = 0;
+    QString btnName = "defaultShape";
+    QString normalPic = PF::getImagePath(btnName, Pri::g_frame);
+    m_pHandleShapeBtn->setIcon(QIcon(normalPic));
+
+    notifyMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurHandleShape));
+}
+
+void TitleWidget::setHandleShape()
+{
+    m_pHandleShapeBtn->setToolTip(tr("handleShape"));
+
+    m_nCurHandleShape = 1;
+    QString btnName = "handleShape";
+    QString normalPic = PF::getImagePath(btnName, Pri::g_frame);
+    m_pHandleShapeBtn->setIcon(QIcon(normalPic));
+
+    notifyMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurHandleShape));
 }
 
 DToolButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
@@ -279,12 +329,16 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigOpenFileOk();
     } else if (msgType == MSG_OPERATION_FULLSCREEN || msgType == MSG_OPERATION_SLIDE) {
         emit sigAppFullScreen();
+    }  else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+        emit sigUpdateTheme();
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == KeyStr::g_esc) {      //  退出放大镜模式
             emit sigMagnifierCancel();
+        } else if (msgContent == KeyStr::g_alt_1 || msgContent == KeyStr::g_alt_2
+                   || msgContent == KeyStr::g_m || msgContent == KeyStr::g_z) { //  选择工具
+            emit sigDealWithShortKey(msgContent);
+            return ConstantMsg::g_effective_res;
         }
-    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        emit sigUpdateTheme();
     }
     return 0;
 }
