@@ -286,6 +286,8 @@ void MainWindow::dealWithKeyEvent(const QString &key)
                 notifyMsg(MSG_OPERATION_LARGER);
             } else if (key == KeyStr::g_ctrl_smaller) {
                 notifyMsg(MSG_OPERATION_SMALLER);
+            } else if (key == KeyStr::g_f11) {
+                onFullScreen();
             } else {
                 notifyMsg(MSG_NOTIFY_KEY_MSG, key);
             }
