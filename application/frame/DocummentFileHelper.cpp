@@ -125,11 +125,11 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
                 DBManager::instance()->saveBookMark();
             }
         }
-        sendMsg(MSG_OPERATION_OPEN_FILE_START);
+        notifyMsg(MSG_OPERATION_OPEN_FILE_START);
         m_pDocummentProxy->closeFile();
         notifyMsg(MSG_CLOSE_FILE);
     } else {
-        sendMsg(MSG_OPERATION_OPEN_FILE_START);
+        notifyMsg(MSG_OPERATION_OPEN_FILE_START);
     }
 
     QStringList fileList = filePaths.split(Constant::sQStringSep,  QString::SkipEmptyParts);

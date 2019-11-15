@@ -223,6 +223,7 @@ void TitleWidget::initMenus()
 
         {
             auto action = new QAction(tr("defaultShape"), this);
+//            action->setShortcuts(KeyStr::g_alt_1);
             action->setObjectName("defaultShape");
             action->setCheckable(true);
             action->setChecked(true);

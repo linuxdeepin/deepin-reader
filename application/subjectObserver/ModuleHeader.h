@@ -28,7 +28,7 @@ const QString sXps_Filter = "Xps files (*.xps)";
 const QString sDjvu_Filter = "Djvu files (*.djvu)";
 const QString sQStringSep = "@#&!@#$";
 
-const QString sLogoPath =":/resources/logo/deepin-reader.svg";
+const QString sLogoPath = ":/resources/logo/deepin-reader.svg";
 }
 
 namespace Pri {
@@ -41,26 +41,52 @@ const QString g_subjectObserver = "subjectObserver";
 }
 
 namespace KeyStr {
-const QString g_esc = "Esc";
-const QString g_f1 = "F1";
-const QString g_f11 = "F11";
+const QString g_ctrl_alt_f = "Ctrl+Alt+F";          //  窗口大小切换
+const QString g_f11 = "F11";        //  全屏
+const QString g_esc = "Esc";        //  退出全屏\退出放映\退出放大镜
+const QString g_f1 = "F1";          //  帮助
+const QString g_ctrl_f = "Ctrl+F";  //  搜索
+
+const QString g_pgup = "PgUp";      //  上一页
+const QString g_pgdown = "PgDown";  //  下一页
+const QString g_ctrl_o = "Ctrl+O";  //  打开
+const QString g_ctrl_larger = "Ctrl+=";  //  放大
+const QString g_ctrl_smaller = "Ctrl+-";  //  缩小
+
+const QString g_ctrl_shift_s = "Ctrl+Shift+S";      //  另存为
+const QString g_ctrl_e = "Ctrl+E";  //  导出
+const QString g_ctrl_p = "Ctrl+P";  //  打印
+const QString g_ctrl_s = "Ctrl+S";  //  保存
+const QString g_m = "M";  //  打开目标缩略图
+
+const QString g_ctrl_1 = "Ctrl+1";  //  适合页面状态
+const QString g_ctrl_2 = "Ctrl+2";  //  适合高度
+const QString g_ctrl_3 = "Ctrl+3";  //  适合宽度
+const QString g_ctrl_r = "Ctrl+R";  //  左旋转
+const QString g_ctrl_shift_r = "Ctrl+Shift+R";  //  右旋转
+
+const QString g_alt_1 = "Alt+1";  //    选择工具
+const QString g_alt_2 = "Alt+2";  //    手型工具
+
+const QString g_ctrl_b = "Ctrl+B";  //    添加书签
+const QString g_ctrl_i = "Ctrl+I";  //    添加注释
+const QString g_ctrl_l = "Ctrl+L";  //    添加高亮
+const QString g_del = "Del";        //  删除书签\注释\高亮
+
+const QString g_z = "Z";            //  放大镜
+
+
+
 const QString g_up = "Up";
 const QString g_down = "Down";
-const QString g_del = "Del";
-const QString g_pgup = "PgUp";
-const QString g_pgdown = "PgDown";
-const QString g_ctrl_s = "Ctrl+S";
-const QString g_ctrl_o = "Ctrl+O";
-const QString g_ctrl_f = "Ctrl+F";
-const QString g_ctrl_p = "Ctrl+P";
+
+
 const QString g_ctrl_c = "Ctrl+C";
 const QString g_ctrl_x = "Ctrl+X";
 const QString g_ctrl_v = "Ctrl+V";
 const QString g_ctrl_z = "Ctrl+Z";
 const QString g_ctrl_a = "Ctrl+A";
-const QString g_ctrl_alt_f = "Ctrl+Alt+F";
 const QString g_ctrl_shift_slash = "Ctrl+Shift+/";
-const QString g_ctrl_shift_s = "Ctrl+Shift+S";
 }
 
 #endif // IMAGEHEADER_H

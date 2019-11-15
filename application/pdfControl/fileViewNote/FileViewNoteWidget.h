@@ -2,11 +2,9 @@
 #define FILEVIEWNOTEWIDGET_H
 
 #include <DTextEdit>
-#include <DMessageBox>
 #include <QHideEvent>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QMessageBox>
 
 #include "CustomControl/CustomWidget.h"
 #include "../font/fontWidget.h"
@@ -58,7 +56,7 @@ public:
 
 protected:
     void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
-    void initWidget() Q_DECL_OVERRIDE;   
+    void initWidget() Q_DECL_OVERRIDE;
 
 private:
     void initConnections();

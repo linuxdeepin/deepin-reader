@@ -2,6 +2,7 @@
 #include "utils/PublicFunction.h"
 #include "frame/DocummentFileHelper.h"
 #include "utils/utils.h"
+
 FontWidget::FontWidget(CustomWidget *parent):
     CustomWidget("FontWidget", parent)
 {
@@ -51,6 +52,14 @@ int FontWidget::dealWithData(const int &msgType, const QString &msgContent)
     case MSG_OPERATION_UPDATE_THEME:
         emit sigUpdateTheme();
         break;
+    case MSG_NOTIFY_KEY_MSG : {
+        if (msgContent == KeyStr::g_ctrl_1 || msgContent == KeyStr::g_ctrl_2 || msgContent == KeyStr::g_ctrl_3
+                || msgContent == KeyStr::g_ctrl_r || msgContent == KeyStr::g_ctrl_shift_r) {
+            emit sigDealWithKey(msgContent);
+            return ConstantMsg::g_effective_res;
+        }
+        break;
+    }
     }
 
     return 0;
@@ -97,6 +106,7 @@ void FontWidget::initWidget()
     widgetLayout->addItem(lrlayout);
     connect(pRotateLeftLb, SIGNAL(clicked()), this, SLOT(slotSetRotateLeftCheckIcon()));
     widgetLayout->addWidget(getLabelLineH(3));
+
     //右旋转
     QHBoxLayout *rrlayout = new QHBoxLayout;
     rrlayout->setContentsMargins(0, 0, 0, 0);
@@ -108,6 +118,22 @@ void FontWidget::initWidget()
     connect(pRotateRightLb, SIGNAL(clicked()), this, SLOT(slotSetRotateRightCheckIcon()));
     widgetLayout->addStretch();
     this->setLayout(widgetLayout);
+}
+
+//  快捷键处理
+void FontWidget::slotDealWithKey(const QString &sKey)
+{
+    if (sKey == KeyStr::g_ctrl_1) {
+
+    } else if (sKey == KeyStr::g_ctrl_2) {
+        slotSetSuitHCheckIcon();
+    } else if (sKey == KeyStr::g_ctrl_3) {
+        slotSetSuitWCheckIcon();
+    } else if (sKey == KeyStr::g_ctrl_r) {
+        slotSetRotateLeftCheckIcon();
+    } else {
+        slotSetRotateRightCheckIcon();
+    }
 }
 
 //  主题变了
@@ -124,11 +150,6 @@ void FontWidget::slotUpdateTheme()
 
     QString sBig = PF::getImagePath("A_big", Pri::g_pdfControl);
     m_pEnlargeSlider->setRightIcon(QIcon(sBig));
-
-//    auto customClickLabelList = this->findChildren<CustomClickLabel *>();
-//    foreach (auto l, customClickLabelList) {
-//        l->setThemePalette();
-//    }
 }
 
 /**
@@ -244,6 +265,7 @@ void FontWidget::initConnection()
 {
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotReset()));
+    connect(this, SIGNAL(sigDealWithKey(const QString &)), SLOT(slotDealWithKey(const QString &)));
 }
 
 //  分割线

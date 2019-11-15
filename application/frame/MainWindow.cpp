@@ -7,7 +7,6 @@
 #include <DWidgetUtil>
 #include <QDebug>
 #include <QDesktopServices>
-#include <DMessageBox>
 #include "controller/DataManager.h"
 #include <DGuiApplicationHelper>
 #include "DocummentFileHelper.h"
@@ -29,12 +28,11 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     initThemeChanged();
 
-    m_pFilterList = QStringList() << KeyStr::g_esc << KeyStr::g_f1 << KeyStr::g_f11 << KeyStr::g_up
-                    << KeyStr::g_down << KeyStr::g_del << KeyStr::g_pgup << KeyStr::g_pgdown
-                    << KeyStr::g_ctrl_a << KeyStr::g_ctrl_c << KeyStr::g_ctrl_f << KeyStr::g_ctrl_o
-                    << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_v << KeyStr::g_ctrl_x
-                    << KeyStr::g_ctrl_z
-                    << KeyStr::g_ctrl_alt_f << KeyStr::g_ctrl_shift_slash << KeyStr::g_ctrl_shift_s;
+    m_pFilterList = QStringList() << KeyStr::g_esc << KeyStr::g_f1 << KeyStr::g_f11 << KeyStr::g_del
+                    << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r
+                    << KeyStr::g_pgup << KeyStr::g_pgdown << KeyStr::g_ctrl_f << KeyStr::g_ctrl_o
+                    << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_smaller
+                    << KeyStr::g_ctrl_alt_f << KeyStr::g_ctrl_shift_s;
 
     installEventFilter(this);
 
@@ -111,21 +109,31 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
     if (nType == QEvent::KeyPress) {    //  按下
         QKeyEvent *event = static_cast<QKeyEvent *>(e);
         QString key = Utils::getKeyshortcut(event);
-        if (m_pFilterList.contains(key)) {
 
-            //  没有打开文件
-            QString sFilePath = DataManager::instance()->strOnlyFilePath();
-            if (sFilePath == "") {
-                if (key == KeyStr::g_f1 || key == KeyStr::g_ctrl_o
-                        || key == KeyStr::g_ctrl_alt_f || key == KeyStr::g_ctrl_shift_slash) {
-                    notifyMsg(MSG_NOTIFY_KEY_MSG, key);
-                }
-            } else {
-                notifyMsg(MSG_NOTIFY_KEY_MSG, key);
-            }
+        qDebug() << __FUNCTION__ << "       " << key;
+
+        if (m_pFilterList.contains(key)) {
+            dealWithKeyEvent(key);
             return true;
         }
+    } else if (nType == QEvent::Wheel) {
+        QWheelEvent *event = static_cast<QWheelEvent *>(e);
+        if ( QApplication::keyboardModifiers () == Qt::ControlModifier) {
+            QString sFilePath = DataManager::instance()->strOnlyFilePath();
+            if (sFilePath != "") {
+
+                qDebug() << __FUNCTION__ << "           " <<   event->delta();
+
+                return true;
+//                if (event->delta() > 0) {
+//                    notifyMsg(MSG_OPERATION_LARGER);
+//                } else {
+//                    notifyMsg(MSG_OPERATION_SMALLER);
+//                }
+            }
+        }
     }
+
     return DMainWindow::eventFilter(obj, e);
 }
 
@@ -145,6 +153,7 @@ void MainWindow::createActionMap(DMenu *m_menu, QSignalMapper *pSigManager,
         QString sObjName = actionObjList.at(iLoop);
 
         QAction *_action = createAction(m_menu, sActionName, sObjName);
+        _action->setShortcut(QKeySequence::Open);
         connect(_action, SIGNAL(triggered()), pSigManager, SLOT(map()));
         pSigManager->setMapping(_action, sObjName);
     }
@@ -153,7 +162,6 @@ void MainWindow::createActionMap(DMenu *m_menu, QSignalMapper *pSigManager,
 void MainWindow::initConnections()
 {
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
-    connect(this, SIGNAL(sigOpenAppHelp()), this, SLOT(slotOpenAppHelp()));
     connect(this, SIGNAL(sigAppExit()), this, SLOT(slotAppExit()));
     connect(this, SIGNAL(sigAppShowState(const int &)), this, SLOT(slotAppShowState(const int &)));
     connect(this, SIGNAL(sigSetAppTitle(const QString &)), this, SLOT(slotSetAppTitle(const QString &)));
@@ -248,6 +256,42 @@ void MainWindow::setCurTheme()
     DataManager::instance()->settrCurrentTheme(sTheme);
 }
 
+//  显示帮助文档
+void MainWindow::onOpenAppHelp()
+{
+    QDesktopServices::openUrl(QUrl(Constant::sAcknowledgementLink));
+}
+
+//  切换窗口大小
+void MainWindow::onChangeWindowState()
+{
+    if (windowState() == Qt::WindowMaximized) {
+        this->setWindowState(Qt::WindowNoState);
+    } else {
+        this->setWindowState(Qt::WindowMaximized);
+    }
+}
+
+void MainWindow::dealWithKeyEvent(const QString &key)
+{
+    if (key == KeyStr::g_f1) {
+        onOpenAppHelp();
+    } else if (key == KeyStr::g_ctrl_alt_f) {
+        onChangeWindowState();
+    } else {
+        QString sFilePath = DataManager::instance()->strOnlyFilePath();
+        if (sFilePath != "") {
+            if (key == KeyStr::g_ctrl_larger) {
+                notifyMsg(MSG_OPERATION_LARGER);
+            } else if (key == KeyStr::g_ctrl_smaller) {
+                notifyMsg(MSG_OPERATION_SMALLER);
+            } else {
+                notifyMsg(MSG_NOTIFY_KEY_MSG, key);
+            }
+        }
+    }
+}
+
 //  退出 应用
 void MainWindow::slotAppExit()
 {
@@ -310,12 +354,6 @@ void MainWindow::slotOpenFileOk()
     }
 }
 
-//  打开帮助文档
-void MainWindow::slotOpenAppHelp()
-{
-    QDesktopServices::openUrl(QUrl(Constant::sAcknowledgementLink));
-}
-
 //  点击菜单　发送指令
 void MainWindow::slotActionTrigger(const QString &sAction)
 {
@@ -369,13 +407,6 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == KeyStr::g_esc) {          //  退出全屏模式
             emit sigAppShowState(1);
-        } else if (msgContent == KeyStr::g_f1) {    //  显示帮助文档
-            emit sigOpenAppHelp();
-            return ConstantMsg::g_effective_res;
-        } else if (msgContent == KeyStr::g_ctrl_alt_f) {    //  窗口大小切换
-            return ConstantMsg::g_effective_res;
-        } else if (msgContent == KeyStr::g_ctrl_shift_slash) {    //  显示快捷键预览
-            return ConstantMsg::g_effective_res;
         }
     }
     return 0;

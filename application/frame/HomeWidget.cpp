@@ -68,7 +68,6 @@ void HomeWidget::slotChooseBtnClicked()
         foreach (const QString &s, fileList) {
             sRes += s + Constant::sQStringSep;
         }
-
         notifyMsg(MSG_OPEN_FILE_PATH, sRes);
     }
 }

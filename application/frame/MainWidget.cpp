@@ -10,6 +10,7 @@
 #include "LeftSidebarWidget.h"
 #include "DocummentFileHelper.h"
 #include <QStackedLayout>
+#include <DDialog>
 
 MainWidget::MainWidget(CustomWidget *parent) :
     CustomWidget ("MainWidget", parent)
@@ -54,7 +55,10 @@ void MainWidget::slotOpenFileFail(const QString &errorInfo)
             pLayout->setCurrentIndex(0);
         }
     }
-    DMessageBox::warning(nullptr, tr("deepin-reader"), errorInfo);
+    DDialog dlg("", errorInfo);
+    dlg.setIcon(QIcon::fromTheme("deepin-reader"));
+    dlg.addButtons(QStringList() << tr("Ok"));
+    dlg.exec();
 }
 
 int MainWidget::dealWithData(const int &msgType, const QString &msgContent)

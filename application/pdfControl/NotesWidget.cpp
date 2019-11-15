@@ -183,7 +183,7 @@ void NotesWidget::slotDelNoteItem()
                 t_pDocummentProxy->removeAnnotation(t_uuid, page);
             }
         }
-        if(m_pNotesList->count() > 0){
+        if (m_pNotesList->count() > 0) {
             m_pNoteItem = m_pNotesList->item(0);
         }
     }
@@ -211,20 +211,20 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
 
 void NotesWidget::slotJumpToPrevItem()
 {
-    if(DataManager::instance()->currentWidget() != WIDGET_NOTE || m_pNotesList == nullptr){
+    if (DataManager::instance()->currentWidget() != WIDGET_NOTE || m_pNotesList == nullptr) {
         return;
     }
 
-    if(m_pNotesList->count() <= 0){
+    if (m_pNotesList->count() <= 0) {
         return;
     }
 
     int t_index = -1;
     if (m_pNoteItem) {
         t_index = m_pNotesList->row(m_pNoteItem);
-        if(--t_index < 0) return;
+        if (--t_index < 0) return;
         auto item = m_pNotesList->item(t_index);
-        if(item == nullptr) return;
+        if (item == nullptr) return;
         auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
         if (t_widget) {
             clearItemColor();
@@ -238,20 +238,20 @@ void NotesWidget::slotJumpToPrevItem()
 
 void NotesWidget::slotJumpToNextItem()
 {
-    if(DataManager::instance()->currentWidget() != WIDGET_NOTE || m_pNotesList == nullptr){
+    if (DataManager::instance()->currentWidget() != WIDGET_NOTE || m_pNotesList == nullptr) {
         return;
     }
 
-    if(m_pNotesList->count() <= 0){
+    if (m_pNotesList->count() <= 0) {
         return;
     }
 
     int t_index = -1;
     if (m_pNoteItem) {
         t_index = m_pNotesList->row(m_pNoteItem);
-        if(++t_index < 0) return;
+        if (++t_index < 0) return;
         auto item = m_pNotesList->item(t_index);
-        if(item == nullptr) return;
+        if (item == nullptr) return;
         auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
         if (t_widget) {
             clearItemColor();
@@ -346,7 +346,7 @@ void NotesWidget::setSelectItemBackColor(QListWidgetItem *item)
 
 void NotesWidget::clearItemColor()
 {
-    if(m_pNotesList == nullptr) return;
+    if (m_pNotesList == nullptr) return;
     auto pCurItem = m_pNotesList->currentItem();
     if (pCurItem) {
         auto pItemWidget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
@@ -458,11 +458,11 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (MSG_NOTIFY_KEY_MSG == msgType) {
         if (msgContent == KeyStr::g_del) {
             emit sigDelNoteItem();
-        }else if(msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup) {
+        } else if (msgContent == KeyStr::g_pgup) {
             emit sigJumpToPrevItem();
-       }else if(msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown) {
+        } else if (msgContent == KeyStr::g_pgdown) {
             emit sigJumpToNextItem();
-       }
+        }
     }
 
     return 0;

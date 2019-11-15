@@ -29,7 +29,6 @@ public:
 
 signals:
     void sigOpenFileOk();
-    void sigOpenAppHelp();
     void sigAppExit();
     void sigAppShowState(const int &);
     void sigSetAppTitle(const QString &);
@@ -51,10 +50,12 @@ private:
 
     void initThemeChanged();
     void setCurTheme();
+    void onOpenAppHelp();
+    void onChangeWindowState();
+    void dealWithKeyEvent(const QString &);
 
 private slots:
     void slotOpenFileOk();
-    void slotOpenAppHelp();
     void slotAppExit();
     void slotAppShowState(const int &);
     void slotSetAppTitle(const QString &);

@@ -29,6 +29,7 @@ public:
 signals:
     void sigWidgetHide();
     void sigOpenFileOk();
+    void sigDealWithKey(const QString &);
 
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
@@ -37,25 +38,10 @@ protected:
     void initWidget() Q_DECL_OVERRIDE;
 
 private slots:
+    void slotDealWithKey(const QString &);
     void slotUpdateTheme();
     void slotReset();
 
-private:
-    void rotateFileView(bool isRight = true);
-    void scaleAndRotate(int);
-    void setShowSuitHIcon();
-    void setShowSuitWIcon();
-    void initConnection();
-
-    DLabel *getLabelLineH(int fixheight=2);
-
-    void initScaleLabel();
-    void initScaleSlider();
-    void initDowbleShow();
-    void initAdaptateHeight();
-    void initAdaptateWidght();
-
-private slots:
     void slotSetChangeVal(int);
     void slotSetDoubPageViewCheckIcon();
     void slotSetSuitHCheckIcon();
@@ -64,10 +50,25 @@ private slots:
     void slotSetRotateRightCheckIcon();
 
 private:
+    void rotateFileView(bool isRight = true);
+    void scaleAndRotate(int);
+    void setShowSuitHIcon();
+    void setShowSuitWIcon();
+    void initConnection();
+
+    DLabel *getLabelLineH(int fixheight = 2);
+
+    void initScaleLabel();
+    void initScaleSlider();
+    void initDowbleShow();
+    void initAdaptateHeight();
+    void initAdaptateWidght();
+
+private:
     QHBoxLayout     *m_pDoubleShowLayout = nullptr;
     QHBoxLayout     *m_pAdaptateHeightLayout = nullptr;
     QHBoxLayout     *m_pAdaptateWidghtLayout = nullptr;
-    QHBoxLayout     *m_pEnlargeSliderLayout=nullptr;
+    QHBoxLayout     *m_pEnlargeSliderLayout = nullptr;
 
     CustomClickLabel *m_pEnlargeLab = nullptr;         // 缩放比例
     DSlider *m_pEnlargeSlider = nullptr;     // 缩放比例slider

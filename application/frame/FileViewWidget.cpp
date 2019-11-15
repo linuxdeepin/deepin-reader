@@ -5,7 +5,7 @@
 #include "application.h"
 
 #include "docview/docummentproxy.h"
-#include <DMessageBox>
+#include <DDialog>
 
 #include <QPrinter>
 #include <QPrinterInfo>
@@ -242,21 +242,21 @@ void FileViewWidget::slotMagnifying(const QString &data)
 //  手势控制
 void FileViewWidget::slotSetHandShape(const QString &data)
 {
+    //  手型 切换 也需要将之前选中的文字清除 选中样式
+    m_pDocummentFileHelper->mouseSelectTextClear();
+
     int nRes = data.toInt();
     if (nRes == 1) { //  手形
         m_nCurrentHandelState = Handel_State;
         this->setCursor(Qt::OpenHandCursor);
-      //setCursor(Qt::OpenHandCursor);
-        qDebug()<<__FUNCTION__<<"current cursor"<<cursor();
+        //setCursor(Qt::OpenHandCursor);
+        qDebug() << __FUNCTION__ << "current cursor" << cursor();
 
     } else {
-        m_nCurrentHandelState = Default_State;   
-       this->setCursor(Qt::ArrowCursor);
+        m_nCurrentHandelState = Default_State;
+        this->setCursor(Qt::ArrowCursor);
         //setCursor(Qt::ArrowCursor);
     }
-
-    //  手型 切换 也需要将之前选中的文字清除 选中样式
-    m_pDocummentFileHelper->mouseSelectTextClear();
 }
 
 //  添加高亮颜色
@@ -382,7 +382,9 @@ void FileViewWidget::slotPrintFile()
     // 创建打印对话框
     QString printerName = printer.printerName();
     if ( printerName.size() == 0) {
-        DMessageBox::warning(this, tr("Print Error"), tr("No Print Device"));
+        DDialog dlg(tr("Print Error"), tr("No Print Device"));
+        dlg.addButtons(QStringList() << tr("Ok"));
+        dlg.exec();
         return;
     }
 
