@@ -275,6 +275,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     setWidget(d->m_widget);
     d->showslidwaittimer = new QTimer(this);
     d->loadpagewaittimer = new QTimer(this);
+    d->autoplayslidtimer = new QTimer(this);
     d->pblankwidget = new DLabel(this);
     d->pblankwidget->setMouseTracking(true);
     d->pblankwidget->hide();
@@ -344,6 +345,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     connect(&d->threadloaddata, SIGNAL(signal_dataLoaded(bool)), this, SLOT(slot_dataLoaded(bool)));
     connect(d->showslidwaittimer, SIGNAL(timeout()), this, SLOT(showSlideModelTimerOut()));
     connect(d->loadpagewaittimer, SIGNAL(timeout()), this, SLOT(loadPageTimerOut()));
+    connect(d->autoplayslidtimer, SIGNAL(timeout()), this, SLOT(autoplayslidTimerOut()));
 }
 
 DocummentBase::~DocummentBase()
@@ -1161,6 +1163,16 @@ void DocummentBase::loadPageTimerOut()
     loadPages();
 }
 
+void DocummentBase::autoplayslidTimerOut()
+{
+    Q_D(DocummentBase);
+    if (d->m_bslidemodel) {
+        pageJump(getCurrentPageNo() + 1);
+    } else {
+        d->autoplayslidtimer->stop();
+    }
+}
+
 void DocummentBase::showSlideModelTimerOut()
 {
     Q_D(DocummentBase);
@@ -1171,6 +1183,9 @@ void DocummentBase::showSlideModelTimerOut()
     }
     d->m_bslidemodel = true;
     if (pageJump(curpageno)) {
+        d->autoplayslidtimer->stop();
+        if (d->bautoplayslide)
+            d->autoplayslidtimer->start(d->m_autoplayslidmsec);
         return;
     }
     d->m_slidepageno = -1;
@@ -1631,6 +1646,7 @@ int DocummentBase::getPageSNum()
 bool DocummentBase::exitSlideModel()
 {
     Q_D(DocummentBase);
+    d->autoplayslidtimer->stop();
     d->m_slidewidget->hide();
     this->show();
     d->m_bslidemodel = false;
@@ -1782,4 +1798,22 @@ void DocummentBase::selectAllText()
     for (int i = 0; i < d->m_pages.size(); i++) {
         d->m_pages.at(i)->selectAllText();
     }
+}
+
+void DocummentBase::setAutoPlaySlide(bool autoplay, int timemsec)
+{
+    Q_D(DocummentBase);
+    d->bautoplayslide = autoplay;
+    d->m_autoplayslidmsec = timemsec;
+    if (d->m_bslidemodel) {
+        d->autoplayslidtimer->stop();
+        if (d->bautoplayslide)
+            d->autoplayslidtimer->start(timemsec);
+    }
+}
+
+bool DocummentBase::getAutoPlaySlideStatu()
+{
+    Q_D(DocummentBase);
+    return d->bautoplayslide;
 }

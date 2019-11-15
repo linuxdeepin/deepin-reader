@@ -77,27 +77,6 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath)
 //    return startOpenFile();
 }
 
-//bool DocummentProxy::startOpenFile()
-//{
-//    if (nullptr != m_documment) {
-//        delete m_documment;
-//        m_documment = nullptr;
-//    }
-//    bcloseing = false;
-//    if (bclosefile) {
-//        return false;
-//    }
-//    m_documment = DocummentFactory::creatDocumment(m_type, qwfather);
-//    connect(m_documment, SIGNAL(signal_pageChange(int)), this, SLOT(slot_pageChange(int)));
-//    connect(this, SIGNAL(signal_pageJump(int)), m_documment, SLOT(pageJump(int)));
-//    connect(m_documment, SIGNAL(signal_searchRes(stSearchRes)), this, SIGNAL(signal_searchRes(stSearchRes)));
-//    connect(this, SIGNAL(signal_mouseSelectText(QPoint, QPoint)), m_documment, SLOT(mouseSelectText(QPoint, QPoint)));
-//    connect(this, SIGNAL(signal_scaleAndShow(double, RotateType_EM)), m_documment, SLOT(scaleAndShow(double, RotateType_EM)));
-//    connect(this, SIGNAL(signal_setViewModeAndShow(ViewMode_EM)), m_documment, SLOT(setViewModeAndShow(ViewMode_EM)));
-
-//    return m_documment->openFile(m_path);
-//}
-
 bool DocummentProxy::setSelectTextStyle(QColor paintercolor, QColor pencolor, int penwidth)
 {
     if (!m_documment || bcloseing)
@@ -475,4 +454,18 @@ void DocummentProxy::selectAllText()
 {
     if (m_documment)
         m_documment->selectAllText();
+}
+
+
+void DocummentProxy::setAutoPlaySlide(bool autoplay, int timemsec)
+{
+    if (!m_documment || bcloseing)
+        return;
+    return m_documment->setAutoPlaySlide(autoplay, timemsec);
+}
+bool DocummentProxy::getAutoPlaySlideStatu()
+{
+    if (!m_documment || bcloseing)
+        return false;
+    return m_documment->getAutoPlaySlideStatu();
 }

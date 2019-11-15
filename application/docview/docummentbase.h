@@ -148,6 +148,9 @@ public:
         qwfather = nullptr;
         loadpagewaittimer = nullptr;
         m_fileinfo = new stFileInfo;
+        bautoplayslide = false;
+        autoplayslidtimer = nullptr;
+        m_autoplayslidmsec = 0;
 
     }
 
@@ -225,6 +228,9 @@ public:
     stFileInfo *m_fileinfo;
 //    ThreadLoadDocumment threadloaddoc;
     ThreadLoadData threadloaddata;
+    bool bautoplayslide;
+    QTimer *autoplayslidtimer;
+    int m_autoplayslidmsec;
 
 
 signals:
@@ -305,6 +311,8 @@ public:
     bool setBookMarkState(int page, bool state);
     bool mouseSelectText(QPoint start, QPoint stop);
     void selectAllText();
+    void setAutoPlaySlide(bool autoplay, int timemsec);
+    bool getAutoPlaySlideStatu();
 
 signals:
     void signal_pageChange(int);
@@ -327,6 +335,7 @@ protected slots:
     bool setViewModeAndShow(ViewMode_EM viewmode);
     void showSlideModelTimerOut();
     void loadPageTimerOut();
+    void autoplayslidTimerOut();
 protected:
     void showSinglePage();
     void showFacingPage();

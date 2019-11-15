@@ -182,6 +182,7 @@ void DocummentFileHelper::slotFileSlider(const int &nFlag)
     if (nFlag == 1) {
         bool bSlideModel = m_pDocummentProxy->showSlideModel();    //  开启幻灯片
         if (bSlideModel) {
+            m_pDocummentProxy->setAutoPlaySlide(true);
             DataManager::instance()->setCurShowState(FILE_SLIDE);
         }
     } else {

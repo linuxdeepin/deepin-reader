@@ -64,6 +64,8 @@ public:
     bool setBookMarkState(int page, bool state);
     void changeAnnotationColor(int ipage, const QString uuid, const QColor &color);
     void selectAllText();
+    void setAutoPlaySlide(bool autoplay, int timemsec = 3000);
+    bool getAutoPlaySlideStatu();
 signals:
     void signal_pageChange(int);
     bool signal_pageJump(int);
