@@ -91,8 +91,8 @@ void MainWidget::dropEvent(QDropEvent *event)
     if (mimeData->hasUrls()) {
         for (auto url : mimeData->urls()) {
             QString sFilePath =  url.toLocalFile();
-            if (sFilePath.endsWith("pdf") || sFilePath.endsWith("tiff") || sFilePath.endsWith("ps") || sFilePath.endsWith("xps") || sFilePath.endsWith("djvu")
-               ) {
+//            if (sFilePath.endsWith("pdf") || sFilePath.endsWith("tiff") || sFilePath.endsWith("ps") || sFilePath.endsWith("xps") || sFilePath.endsWith("djvu")
+            if (sFilePath.endsWith("pdf") ) {
                 //  默认打开第一个
                 QString sRes = sFilePath + Constant::sQStringSep;
 
@@ -135,5 +135,4 @@ void MainWidget::initWidget()
     gridlyout->addWidget(m_spinner);
     m_spinner->start();
     pStcakLayout->addWidget(pSpinnerWidget);
-//    qDebug() << "---------MainWidget ID:" << QThread::currentThreadId();
 }

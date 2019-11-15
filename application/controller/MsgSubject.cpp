@@ -33,9 +33,7 @@ void MsgSubject::sendMsg(const int &msgType, const QString &msgContent)
 
     m_msgList.append(msg);
 
-    qDebug() << __LINE__ << "   " << __FUNCTION__
-             << "   " << msgType
-             << "   " << msgContent;
+    qInfo() << "msgType = " << msgType << ",   msgContent = " << msgContent;
 }
 
 int MsgSubject::NotifyObservers(const int &msgType, const QString &msgContent)
@@ -50,10 +48,9 @@ int MsgSubject::NotifyObservers(const int &msgType, const QString &msgContent)
 
             QString sName = obs ? obs->getObserverName() : "MainWindow";
 
-            qDebug() << __LINE__ << "   " << __FUNCTION__
-                     << "   " << msgType
-                     << "   " << msgContent
-                     << "   " << sName;
+            qInfo()  << "msgType = " << msgType
+                     << ",  msgContent = " << msgContent
+                     << ",  sName = " << sName;
 
             return 0;
         }

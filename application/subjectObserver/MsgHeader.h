@@ -12,6 +12,7 @@ enum MSG_TYPE {
     MSG_BOOKMARK_SHOW_STATE,            //  书签状态 显隐消息
     MSG_FILE_PAGE_CHANGE,               //  文档 页码变化消息
     MSG_MAGNIFYING,                     //  放大镜消息
+    MSG_MAGNIFYING_CANCEL,              //  取消放大镜消息
     MSG_HANDLESHAPE,                    //  手型 消息
     MSG_OPEN_FILE_PATH                  //  打开的文件消息
 };

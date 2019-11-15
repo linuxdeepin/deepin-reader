@@ -502,7 +502,7 @@
         <location filename="../frame/MainWindow.cpp" line="381"/>
         <source>Do you need to save the file opened?</source>
         <translatorcomment>您是否需要保存已打开的文件?</translatorcomment>
-        <translation type="unfinished">您是否需要保存已打开的文件?</translation>
+        <translation>您是否需要保存已打开的文件?</translation>
     </message>
 </context>
 <context>

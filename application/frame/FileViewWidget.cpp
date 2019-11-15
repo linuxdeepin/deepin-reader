@@ -138,7 +138,7 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 
     //  放大镜状态， 右键则取消放大镜 并且 直接返回
     if (event->button() == Qt::RightButton && m_nCurrentHandelState == Magnifier_State) {
-        slotMagnifying("0");
+        notifyMsg(MSG_MAGNIFYING_CANCEL);
         return;
     }
 
@@ -250,7 +250,7 @@ void FileViewWidget::slotSetHandShape(const QString &data)
         m_nCurrentHandelState = Handel_State;
         this->setCursor(Qt::OpenHandCursor);
         //setCursor(Qt::OpenHandCursor);
-        qDebug() << __FUNCTION__ << "current cursor" << cursor();
+        qDebug() << "current cursor" << cursor();
 
     } else {
         m_nCurrentHandelState = Default_State;

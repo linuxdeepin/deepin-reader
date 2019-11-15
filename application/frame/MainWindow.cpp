@@ -111,7 +111,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
         QKeyEvent *event = static_cast<QKeyEvent *>(e);
         QString key = Utils::getKeyshortcut(event);
 
-        qDebug() << __FUNCTION__ << "       " << key;
+        qDebug() << "key = " << key;
 
         if (m_pFilterList.contains(key)) {
             dealWithKeyEvent(key);
@@ -122,9 +122,6 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
         if ( QApplication::keyboardModifiers () == Qt::ControlModifier) {
             QString sFilePath = DataManager::instance()->strOnlyFilePath();
             if (sFilePath != "") {
-
-                qDebug() << __FUNCTION__ << "           " <<   event->delta();
-
                 return true;
 //                if (event->delta() > 0) {
 //                    notifyMsg(MSG_OPERATION_LARGER);
