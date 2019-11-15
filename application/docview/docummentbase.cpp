@@ -1554,6 +1554,15 @@ void DocummentBase::initConnect()
     }
 }
 
+void DocummentBase::wheelEvent(QWheelEvent *e)
+{
+    if ( QApplication::keyboardModifiers () == Qt::ControlModifier) {
+        e->ignore();
+        return;
+    }
+    DScrollArea::wheelEvent(e);
+}
+
 void DocummentBase::slot_dataLoaded(bool result)
 {
     Q_D(DocummentBase);

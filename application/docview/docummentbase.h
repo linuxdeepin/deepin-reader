@@ -331,7 +331,7 @@ protected:
     void showSinglePage();
     void showFacingPage();
     void initConnect();
-
+    void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
 
 
 

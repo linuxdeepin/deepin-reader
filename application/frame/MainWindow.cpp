@@ -122,12 +122,12 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
         if ( QApplication::keyboardModifiers () == Qt::ControlModifier) {
             QString sFilePath = DataManager::instance()->strOnlyFilePath();
             if (sFilePath != "") {
+                if (event->delta() > 0) {
+                    notifyMsg(MSG_OPERATION_LARGER);
+                } else {
+                    notifyMsg(MSG_OPERATION_SMALLER);
+                }
                 return true;
-//                if (event->delta() > 0) {
-//                    notifyMsg(MSG_OPERATION_LARGER);
-//                } else {
-//                    notifyMsg(MSG_OPERATION_SMALLER);
-//                }
             }
         }
     }

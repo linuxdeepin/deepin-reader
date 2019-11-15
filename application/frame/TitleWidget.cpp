@@ -331,7 +331,7 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigAppFullScreen();
     }  else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
-    } else if (msgType == MSG_MAGNIFYING_CANCEL) {
+    } else if (msgType == MSG_MAGNIFYING_CANCEL) {  //  右键取消放大镜
         emit sigMagnifierCancel();
         return ConstantMsg::g_effective_res;
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
