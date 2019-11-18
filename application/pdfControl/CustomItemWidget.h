@@ -1,6 +1,8 @@
 #ifndef CUSTOMITEMWIDGET_H
 #define CUSTOMITEMWIDGET_H
 
+#include <DHorizontalLine>
+
 #include "CustomControl/CustomWidget.h"
 #include "CustomControl/ImageLabel.h"
 #include "CustomControl/PageNumberLabel.h"

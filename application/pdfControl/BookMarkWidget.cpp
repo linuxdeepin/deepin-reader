@@ -360,6 +360,8 @@ void BookMarkWidget::initWidget()
     m_pBookMarkListWidget = new CustomListWidget;
     m_pBookMarkListWidget->setSpacing(0);
 
+    auto hLine = new DHorizontalLine;
+
     QFont font;
     font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 14);
 
@@ -380,8 +382,7 @@ void BookMarkWidget::initWidget()
     m_pVBoxLayout->setSpacing(0);
     this->setLayout(m_pVBoxLayout);
     m_pVBoxLayout->addWidget(m_pBookMarkListWidget);
-//    m_pVBoxLayout->addSpacing(4);
-//    m_pVBoxLayout->addWidget(m_pAddBookMarkBtn);
+    m_pVBoxLayout->addWidget(hLine);
     m_pVBoxLayout->addItem(m_pHBoxLayout);
 }
 
