@@ -79,6 +79,8 @@ const QString g_z = "Z";            //  放大镜
 
 const QString g_up = "Up";
 const QString g_down = "Down";
+const QString g_left = "Left";
+const QString g_right = "Right";
 
 
 const QString g_ctrl_c = "Ctrl+C";

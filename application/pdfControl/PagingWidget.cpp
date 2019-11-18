@@ -60,18 +60,17 @@ void PagingWidget::initWidget()
 bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_pJumpPageSpinBox) {
-        if (event->type() == QEvent::KeyPress) {           
+        if (event->type() == QEvent::KeyPress) {
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
             //过滤掉零开头的输入
             if (keyEvent->key() == Qt::Key_0 && m_pJumpPageSpinBox->text().isEmpty()) {
                 return  true;
             }
 
-            if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {                
+            if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
                 int index = m_pJumpPageSpinBox->value() - 1;
 
-                if (m_preRow != index)
-                {
+                if (m_preRow != index) {
                     m_preRow = index;
                     DocummentFileHelper::instance()->pageJump(index);
                 }
@@ -131,7 +130,7 @@ void PagingWidget::setTotalPages(int pages)
  * @param msgType
  * @return
  */
-int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
+int PagingWidget::dealWithData(const int &msgType, const QString &)
 {
     switch (msgType) {
     case MSG_OPERATION_FIRST_PAGE:              //  第一页
@@ -149,19 +148,8 @@ int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
     case MSG_OPERATION_UPDATE_THEME:            //  颜色主题切换
         emit sigUpdateTheme();
         break;
-//    case MSG_NOTIFY_KEY_MSG: {
-//        if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup) {
-//            emit sigJumpToPrevPage();
-//            return ConstantMsg::g_effective_res;
-//        } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown) {
-//            emit sigJumpToNextPage();
-//            return ConstantMsg::g_effective_res;
-//        } else if (msgContent == "0") {
-//            emit slotJudgeInputPage(msgContent);
-//            qDebug() << "PagingWidget::dealWithData key=" << msgContent;
-//        }
-//    }
-    break;
+    default:
+        break;
     }
     return 0;
 }
