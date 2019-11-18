@@ -110,7 +110,7 @@ void BookMarkItemWidget::paintEvent(QPaintEvent *event)
     int height = this->height() - 1;
 
     QPainter painter(this);
-    color = QColor::fromRgbF(208,208,208,0.0);
+    color = QColor::fromRgbF(216,216,216,0.0);
     painter.setPen(QPen(QColor(QString("#D8D8D8")), 1));
 
     QPoint startP(67, height);
