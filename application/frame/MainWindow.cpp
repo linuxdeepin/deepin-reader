@@ -308,70 +308,44 @@ void MainWindow::displayShortcuts()
                rect.y() + rect.height() / 2);
 
     QStringList shortcutnames;
-    shortcutnames  << KeyStr::g_ctrl_alt_f<< KeyStr::g_f11 << KeyStr::g_esc  << KeyStr::g_f1  << KeyStr::g_del
-                    << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r
-                    << KeyStr::g_pgup << KeyStr::g_pgdown << KeyStr::g_ctrl_f << KeyStr::g_ctrl_o
-                    << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_smaller
-                   << KeyStr::g_ctrl_shift_s<<KeyStr::g_ctrl_shift_slash;
     QStringList windowKeymaps;
+    windowKeymaps<< KeyStr::g_ctrl_alt_f<< KeyStr::g_f11 << KeyStr::g_esc<<KeyStr::g_alt_f4<< KeyStr::g_f1
+                   << KeyStr::g_ctrl_f<< KeyStr::g_pgup << KeyStr::g_pgdown<< KeyStr::g_ctrl_o<< KeyStr::g_ctrl_larger
+                   << KeyStr::g_ctrl_smaller<<KeyStr::g_ctrl_wheel<< KeyStr::g_ctrl_shift_s<<KeyStr::g_ctrl_e
+                   << KeyStr::g_ctrl_p<< KeyStr::g_ctrl_s<<KeyStr::g_m<< KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2
+                   << KeyStr::g_ctrl_3<< KeyStr::g_ctrl_r<< KeyStr::g_ctrl_shift_r<<KeyStr::g_alt_1<<KeyStr::g_alt_2
+                   <<KeyStr::g_ctrl_b<<KeyStr::g_ctrl_i<<KeyStr::g_ctrl_l<< KeyStr::g_del<<KeyStr::g_z<<KeyStr::g_ctrl_shift_slash;
 
-    windowKeymaps << tr("Restore") << tr("FullScreen")<< tr("Escape")<<tr("Quit")<<tr("Help")
+
+
+    shortcutnames<< tr("Restore") << tr("FullScreen")<< tr("Escape")<<tr("Quit")<<tr("Help")
                   <<tr("Search")<<tr("PageUp")<<tr("PageDown")<<tr("Open")<<tr("Enlarge")
                  <<tr("Narrow")<<tr("PageScale")<<tr("SaveAs")<<tr("Export")<<tr("Print")
                 <<tr("Save")<<tr("OpenThumbnail")<<tr("AdaptePage")<<tr("AdapteHeight")
-               <<tr("AdapteWidth")<<tr("LeftRotation")<<tr("RightRotation")<<tr("SelectToll")
-              <<tr("HandTool")<<tr("AddBookMark")<<tr("AddAnnotation")<<tr("AddHighlight")
-             <<tr("Delete")<<tr("Magnifier");
+               <<tr("AdapteWidth")<<tr("LeftRotation")<<tr("RightRotation")<<tr("SelectTool")
+              <<tr("HandTool")<<tr("AddBookMark")<<tr("AddNote")<<tr("AddHighlight")
+             <<tr("Delete")<<tr("Magnifier")<<tr("ShortcutPreview");
 
    // windowKeymaps=m_pFilterList;
     QJsonObject shortcutObj;
     QJsonArray jsonGroups;
 
     QJsonObject windowJsonGroup;
- //   windowJsonGroup.insert("groupName", QObject::tr("Window"));
+   windowJsonGroup.insert("groupName", QObject::tr("Window"));
     QJsonArray windowJsonItems;
 
-    for (const QString &keymap : windowKeymaps) {
+    int index=0;
+    for (const QString &shortcutname :shortcutnames ) {
 
         QJsonObject jsonItem;
-        jsonItem.insert("name", QObject::tr(keymap.toStdString().c_str()));
-        jsonItem.insert("value", "1111");
+        jsonItem.insert("name", shortcutname);
+        jsonItem.insert("value", windowKeymaps.at(index));
         windowJsonItems.append(jsonItem);
+        index++;
     }
 
     windowJsonGroup.insert("groupItems", windowJsonItems);
     jsonGroups.append(windowJsonGroup);
-
-   // QStringList editorKeymaps;
-//    editorKeymaps << "indentline" << "backindentline" << "forwardchar"
-//                  << "backwardchar" << "forwardword" << "backwardword"
-//                  << "nextline" << "prevline" << "newline" << "opennewlineabove"
-//                  << "opennewlinebelow" << "duplicateline" << "killline"
-//                  << "killcurrentline" << "swaplineup" << "swaplinedown"
-//                  << "scrolllineup" << "scrolllinedown" << "scrollup"
-//                  << "scrolldown" << "movetoendofline" << "movetostartofline"
-//                  << "movetoend" << "movetostart" << "movetolineindentation"
-//                  << "upcaseword" << "downcaseword" << "capitalizeword"
-//                  << "killbackwardword" << "killforwardword" << "forwardpair"
-//                  << "backwardpair" << "selectall" << "copy" << "cut"
-//                  << "paste" << "transposechar" << "setmark" << "exchangemark"
-//                  << "copylines" << "cutlines" << "joinlines" << "togglereadonlymode"
-//                  << "togglecomment" << "undo" << "redo";
-
- //   QJsonObject editorJsonGroup;
- //   editorJsonGroup.insert("groupName", tr("Editor"));
-//    QJsonArray editorJsonItems;
-
-//    for (const QString &keymap : editorKeymaps) {
-
-//        QJsonObject jsonItem;
-//        jsonItem.insert("name", QObject::tr("sbkebcmj"));
-//        jsonItem.insert("value","222");
-//        editorJsonItems.append(jsonItem);
-//    }
-  //  editorJsonGroup.insert("groupItems", editorJsonItems);
-   // jsonGroups.append(editorJsonGroup);
-
     shortcutObj.insert("shortcut", jsonGroups);
 
     QJsonDocument doc(shortcutObj);

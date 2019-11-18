@@ -44,6 +44,7 @@ namespace KeyStr {
 const QString g_ctrl_alt_f = "Ctrl+Alt+F";          //  窗口大小切换
 const QString g_f11 = "F11";        //  全屏
 const QString g_esc = "Esc";        //  退出全屏\退出放映\退出放大镜
+const QString g_alt_f4="Alt+F4";    //  退出应用程序
 const QString g_f1 = "F1";          //  帮助
 const QString g_ctrl_f = "Ctrl+F";  //  搜索
 
@@ -52,6 +53,7 @@ const QString g_pgdown = "PgDown";  //  下一页
 const QString g_ctrl_o = "Ctrl+O";  //  打开
 const QString g_ctrl_larger = "Ctrl+=";  //  放大
 const QString g_ctrl_smaller = "Ctrl+-";  //  缩小
+const QString g_ctrl_wheel="Ctrl+wheel";  //ctrl+滚轮放大缩小
 
 const QString g_ctrl_shift_s = "Ctrl+Shift+S";      //  另存为
 const QString g_ctrl_e = "Ctrl+E";  //  导出
