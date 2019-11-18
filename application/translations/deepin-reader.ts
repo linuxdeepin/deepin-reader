@@ -258,17 +258,17 @@
 <context>
     <name>FileViewWidget</name>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="385"/>
+        <location filename="../frame/FileViewWidget.cpp" line="382"/>
         <source>Print Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="385"/>
+        <location filename="../frame/FileViewWidget.cpp" line="382"/>
         <source>No Print Device</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="386"/>
+        <location filename="../frame/FileViewWidget.cpp" line="383"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
@@ -356,83 +356,221 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="175"/>
+        <location filename="../frame/MainWindow.cpp" line="179"/>
         <source>Open File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="83"/>
-        <location filename="../frame/MainWindow.cpp" line="175"/>
-        <location filename="../frame/MainWindow.cpp" line="381"/>
+        <location filename="../frame/MainWindow.cpp" line="90"/>
+        <location filename="../frame/MainWindow.cpp" line="179"/>
+        <location filename="../frame/MainWindow.cpp" line="370"/>
         <source>Save File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="85"/>
-        <location filename="../frame/MainWindow.cpp" line="383"/>
+        <location filename="../frame/MainWindow.cpp" line="92"/>
+        <location filename="../frame/MainWindow.cpp" line="372"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="85"/>
-        <location filename="../frame/MainWindow.cpp" line="383"/>
+        <location filename="../frame/MainWindow.cpp" line="92"/>
+        <location filename="../frame/MainWindow.cpp" line="372"/>
         <source>Not Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="85"/>
-        <location filename="../frame/MainWindow.cpp" line="383"/>
+        <location filename="../frame/MainWindow.cpp" line="92"/>
+        <location filename="../frame/MainWindow.cpp" line="322"/>
+        <location filename="../frame/MainWindow.cpp" line="372"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="175"/>
+        <location filename="../frame/MainWindow.cpp" line="179"/>
         <source>Save As File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="176"/>
+        <location filename="../frame/MainWindow.cpp" line="180"/>
         <source>Open Folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="176"/>
+        <location filename="../frame/MainWindow.cpp" line="180"/>
+        <location filename="../frame/MainWindow.cpp" line="321"/>
         <source>Print</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="176"/>
+        <location filename="../frame/MainWindow.cpp" line="180"/>
         <source>File Attr</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="183"/>
+        <location filename="../frame/MainWindow.cpp" line="187"/>
+        <location filename="../frame/MainWindow.cpp" line="320"/>
         <source>Search</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="183"/>
+        <location filename="../frame/MainWindow.cpp" line="187"/>
         <source>Full Screen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="183"/>
+        <location filename="../frame/MainWindow.cpp" line="187"/>
         <source>Screening</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="184"/>
+        <location filename="../frame/MainWindow.cpp" line="188"/>
         <source>Larger</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="184"/>
+        <location filename="../frame/MainWindow.cpp" line="188"/>
         <source>Smaller</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="83"/>
-        <location filename="../frame/MainWindow.cpp" line="381"/>
+        <location filename="../frame/MainWindow.cpp" line="319"/>
+        <source>Restore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="319"/>
+        <source>FullScreen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="319"/>
+        <source>Escape</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="319"/>
+        <source>Quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="319"/>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="320"/>
+        <source>PageUp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="320"/>
+        <source>PageDown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="320"/>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="320"/>
+        <source>Enlarge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="321"/>
+        <source>Narrow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="321"/>
+        <source>PageScale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="321"/>
+        <source>SaveAs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="321"/>
+        <source>Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="322"/>
+        <source>OpenThumbnail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="322"/>
+        <source>AdaptePage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="322"/>
+        <source>AdapteHeight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="323"/>
+        <source>AdapteWidth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="323"/>
+        <source>LeftRotation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="323"/>
+        <source>RightRotation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="323"/>
+        <source>SelectTool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="324"/>
+        <source>HandTool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="324"/>
+        <source>AddBookMark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="324"/>
+        <source>AddNote</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="324"/>
+        <source>AddHighlight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="325"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="325"/>
+        <source>Magnifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="325"/>
+        <source>ShortcutPreview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="90"/>
+        <location filename="../frame/MainWindow.cpp" line="370"/>
         <source>Do you need to save the file opened?</source>
         <translation></translation>
     </message>
@@ -454,7 +592,7 @@
     <name>PagingWidget</name>
     <message>
         <location filename="../pdfControl/PagingWidget.cpp" line="23"/>
-        <location filename="../pdfControl/PagingWidget.cpp" line="117"/>
+        <location filename="../pdfControl/PagingWidget.cpp" line="116"/>
         <source>pages</source>
         <translation></translation>
     </message>
@@ -494,14 +632,14 @@
     <name>TitleWidget</name>
     <message>
         <location filename="../frame/TitleWidget.cpp" line="262"/>
-        <location filename="../frame/TitleWidget.cpp" line="288"/>
+        <location filename="../frame/TitleWidget.cpp" line="298"/>
         <source>handleShape</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../frame/TitleWidget.cpp" line="220"/>
         <location filename="../frame/TitleWidget.cpp" line="252"/>
-        <location filename="../frame/TitleWidget.cpp" line="276"/>
+        <location filename="../frame/TitleWidget.cpp" line="281"/>
         <source>defaultShape</source>
         <translation></translation>
     </message>
