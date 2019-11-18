@@ -106,14 +106,15 @@ void BookMarkItemWidget::paintEvent(QPaintEvent *event)
 
     m_pPicture->setPalette(p);
 
-    int width = this->width();
-    int height = this->height();
+    int width = this->width() - 10;
+    int height = this->height() - 1;
 
     QPainter painter(this);
+    color = QColor::fromRgbF(208,208,208,0.0);
     painter.setPen(QPen(QColor(QString("#D8D8D8")), 1));
 
-    QPoint startP(67, height - 1);
-    QPoint endP(width, height - 1);
+    QPoint startP(67, height);
+    QPoint endP(width, height);
 
     painter.drawLine(startP, endP);
 

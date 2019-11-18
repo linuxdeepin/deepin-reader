@@ -167,14 +167,16 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
 
     m_pPicture->setPalette(p);
 
-    int width = this->width();
-    int height = this->height();
+    int width = this->width() - 10;
+    int height = this->height() - 1;
+
+    int sPoint = width - m_pTextLab->width() + 5;
 
     QPainter painter(this);
     painter.setPen(QPen(QColor(QString("#D8D8D8")), 1));
 
-    QPoint startP(65, height - 1);
-    QPoint endP(width, height - 1);
+    QPoint startP(sPoint, height);
+    QPoint endP(width, height);
 
     painter.drawLine(startP, endP);
 }
