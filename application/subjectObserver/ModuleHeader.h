@@ -88,7 +88,7 @@ const QString g_ctrl_x = "Ctrl+X";
 const QString g_ctrl_v = "Ctrl+V";
 const QString g_ctrl_z = "Ctrl+Z";
 const QString g_ctrl_a = "Ctrl+A";
-const QString g_ctrl_shift_slash = "Ctrl+Shift+/";
+const QString g_ctrl_shift_slash = "Ctrl+Shift+?";
 }
 
 #endif // IMAGEHEADER_H

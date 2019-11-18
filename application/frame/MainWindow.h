@@ -5,7 +5,6 @@
 #include <DMainWindow>
 #include <DMenu>
 #include <QSignalMapper>
-
 #include "controller/MsgSubject.h"
 #include "controller/NotifySubject.h"
 #include <QCloseEvent>
@@ -72,7 +71,7 @@ private:
     MsgSubject      *m_pMsgSubject = nullptr;
     NotifySubject   *m_pNotifySubject = nullptr;
 
-    QStringList     m_pFilterList;
+    QStringList     m_pFilterList;   
 
     // IObserver interface
 public:

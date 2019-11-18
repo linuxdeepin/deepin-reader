@@ -7,6 +7,10 @@
 #include <DWidgetUtil>
 #include <QDebug>
 #include <QDesktopServices>
+#include <QProcess>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonDocument>
 #include "controller/DataManager.h"
 #include <DGuiApplicationHelper>
 #include "DocummentFileHelper.h"
@@ -14,7 +18,7 @@
 DWIDGET_USE_NAMESPACE
 
 MainWindow::MainWindow(DMainWindow *parent)
-    : DMainWindow(parent)
+    : DMainWindow(parent)   
 {
     m_strObserverName = "MainWindow";
 
@@ -35,7 +39,8 @@ MainWindow::MainWindow(DMainWindow *parent)
                     << KeyStr::g_alt_1 << KeyStr::g_alt_2 << KeyStr::g_m << KeyStr::g_z
                     << KeyStr::g_ctrl_alt_f << KeyStr::g_ctrl_shift_s
                     << KeyStr::g_down << KeyStr::g_up << KeyStr::g_left << KeyStr::g_right
-                    << KeyStr::g_ctrl_e << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l;
+                    << KeyStr::g_ctrl_e << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l<<KeyStr::g_ctrl_shift_slash;
+
 
     installEventFilter(this);
 
@@ -274,11 +279,14 @@ void MainWindow::onChangeWindowState()
 
 void MainWindow::dealWithKeyEvent(const QString &key)
 {
+    qDebug()<<__FUNCTION__<<key;
     if (key == KeyStr::g_f1) {
         onOpenAppHelp();
     } else if (key == KeyStr::g_ctrl_alt_f) {
         onChangeWindowState();
-    } else {
+    } else if (key==KeyStr::g_ctrl_shift_slash) {
+        displayShortcuts();
+    }    else {
         QString sFilePath = DataManager::instance()->strOnlyFilePath();
         if (sFilePath != "") {
             if (key == KeyStr::g_ctrl_larger) {
@@ -295,38 +303,46 @@ void MainWindow::dealWithKeyEvent(const QString &key)
 }
 void MainWindow::displayShortcuts()
 {
-//    QRect rect = window()->geometry();
-//    QPoint pos(rect.x() + rect.width() / 2,
-//               rect.y() + rect.height() / 2);
+    QRect rect = window()->geometry();
+    QPoint pos(rect.x() + rect.width() / 2,
+               rect.y() + rect.height() / 2);
 
-//    QStringList windowKeymaps;
-//    windowKeymaps << "addblanktab" << "newwindow" << "savefile"
-//                  << "saveasfile" << "selectnexttab" << "selectprevtab"
-//                  << "closetab" << "closeothertabs" << "restoretab"
-//                  << "openfile" << "incrementfontsize" << "decrementfontsize"
-//                  << "resetfontsize" << "togglefullscreen" << "find" << "replace"
-//                  << "jumptoline" << "saveposition" << "restoreposition"
-//                  << "escape" << "displayshortcuts" << "print";
+    QStringList shortcutnames;
+    shortcutnames  << KeyStr::g_ctrl_alt_f<< KeyStr::g_f11 << KeyStr::g_esc  << KeyStr::g_f1  << KeyStr::g_del
+                    << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r
+                    << KeyStr::g_pgup << KeyStr::g_pgdown << KeyStr::g_ctrl_f << KeyStr::g_ctrl_o
+                    << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_smaller
+                   << KeyStr::g_ctrl_shift_s<<KeyStr::g_ctrl_shift_slash;
+    QStringList windowKeymaps;
 
-//    QJsonObject shortcutObj;
-//    QJsonArray jsonGroups;
+    windowKeymaps << tr("Restore") << tr("FullScreen")<< tr("Escape")<<tr("Quit")<<tr("Help")
+                  <<tr("Search")<<tr("PageUp")<<tr("PageDown")<<tr("Open")<<tr("Enlarge")
+                 <<tr("Narrow")<<tr("PageScale")<<tr("SaveAs")<<tr("Export")<<tr("Print")
+                <<tr("Save")<<tr("OpenThumbnail")<<tr("AdaptePage")<<tr("AdapteHeight")
+               <<tr("AdapteWidth")<<tr("LeftRotation")<<tr("RightRotation")<<tr("SelectToll")
+              <<tr("HandTool")<<tr("AddBookMark")<<tr("AddAnnotation")<<tr("AddHighlight")
+             <<tr("Delete")<<tr("Magnifier");
 
-//    QJsonObject windowJsonGroup;
-//    windowJsonGroup.insert("groupName", QObject::tr("Window"));
-//    QJsonArray windowJsonItems;
+   // windowKeymaps=m_pFilterList;
+    QJsonObject shortcutObj;
+    QJsonArray jsonGroups;
 
-//    for (const QString &keymap : windowKeymaps) {
-//        auto option = m_settings->settings->group("shortcuts.window")->option(QString("shortcuts.window.%1").arg(keymap));
-//        QJsonObject jsonItem;
-//        jsonItem.insert("name", QObject::tr(option->name().toUtf8().data()));
-//        jsonItem.insert("value", option->value().toString().replace("Meta", "Super"));
-//        windowJsonItems.append(jsonItem);
-//    }
+    QJsonObject windowJsonGroup;
+ //   windowJsonGroup.insert("groupName", QObject::tr("Window"));
+    QJsonArray windowJsonItems;
 
-//    windowJsonGroup.insert("groupItems", windowJsonItems);
-//    jsonGroups.append(windowJsonGroup);
+    for (const QString &keymap : windowKeymaps) {
 
-//    QStringList editorKeymaps;
+        QJsonObject jsonItem;
+        jsonItem.insert("name", QObject::tr(keymap.toStdString().c_str()));
+        jsonItem.insert("value", "1111");
+        windowJsonItems.append(jsonItem);
+    }
+
+    windowJsonGroup.insert("groupItems", windowJsonItems);
+    jsonGroups.append(windowJsonGroup);
+
+   // QStringList editorKeymaps;
 //    editorKeymaps << "indentline" << "backindentline" << "forwardchar"
 //                  << "backwardchar" << "forwardword" << "backwardword"
 //                  << "nextline" << "prevline" << "newline" << "opennewlineabove"
@@ -342,33 +358,34 @@ void MainWindow::displayShortcuts()
 //                  << "copylines" << "cutlines" << "joinlines" << "togglereadonlymode"
 //                  << "togglecomment" << "undo" << "redo";
 
-//    QJsonObject editorJsonGroup;
-//    editorJsonGroup.insert("groupName", tr("Editor"));
+ //   QJsonObject editorJsonGroup;
+ //   editorJsonGroup.insert("groupName", tr("Editor"));
 //    QJsonArray editorJsonItems;
 
 //    for (const QString &keymap : editorKeymaps) {
-//        auto option = m_settings->settings->group("shortcuts.editor")->option(QString("shortcuts.editor.%1").arg(keymap));
+
 //        QJsonObject jsonItem;
-//        jsonItem.insert("name", QObject::tr(option->name().toUtf8().data()));
-//        jsonItem.insert("value", option->value().toString().replace("Meta", "Super"));
+//        jsonItem.insert("name", QObject::tr("sbkebcmj"));
+//        jsonItem.insert("value","222");
 //        editorJsonItems.append(jsonItem);
 //    }
-//    editorJsonGroup.insert("groupItems", editorJsonItems);
-//    jsonGroups.append(editorJsonGroup);
+  //  editorJsonGroup.insert("groupItems", editorJsonItems);
+   // jsonGroups.append(editorJsonGroup);
 
-//    shortcutObj.insert("shortcut", jsonGroups);
+    shortcutObj.insert("shortcut", jsonGroups);
 
-//    QJsonDocument doc(shortcutObj);
+    QJsonDocument doc(shortcutObj);
 
-//    QStringList shortcutString;
-//    QString param1 = "-j=" + QString(doc.toJson().data());
-//    QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
-//    shortcutString << param1 << param2;
+    QStringList shortcutString;
+    QString param1 = "-j=" + QString(doc.toJson().data());
+    QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
 
-//    QProcess* shortcutViewProcess = new QProcess();
-//    shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
+    shortcutString << param1 << param2;
 
-//    connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
+    QProcess* shortcutViewProcess = new QProcess();
+    shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
+
+    connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
 
 }
 

@@ -248,14 +248,11 @@ void FileViewWidget::slotSetHandShape(const QString &data)
     int nRes = data.toInt();
     if (nRes == 1) { //  手形
         m_nCurrentHandelState = Handel_State;
-        this->setCursor(Qt::OpenHandCursor);
-        //setCursor(Qt::OpenHandCursor);
-        qDebug() << "current cursor" << cursor();
-
+        this->setCursor(Qt::OpenHandCursor);      
+        qDebug() << __FUNCTION__ << "current cursor" << cursor();
     } else {
         m_nCurrentHandelState = Default_State;
-        this->setCursor(Qt::ArrowCursor);
-        //setCursor(Qt::ArrowCursor);
+        this->setCursor(Qt::ArrowCursor);       
     }
 }
 
