@@ -3,6 +3,7 @@
 
 #include "CustomListWidget.h"
 #include <DPushButton>
+#include <DHorizontalLine>
 
 #include <QVBoxLayout>
 #include <QMap>

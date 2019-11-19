@@ -98,6 +98,8 @@ void NotesItemWidget::initWidget()
     m_pTextLab->setWordWrap(true);
     m_pTextLab->setFont(font);
 
+    auto hLine = new DHorizontalLine;
+
     auto t_hLayout = new QHBoxLayout;
     t_hLayout->setContentsMargins(0, 0, 0, 0);
     t_hLayout->setSpacing(0);
@@ -109,6 +111,7 @@ void NotesItemWidget::initWidget()
     t_vLayout->setSpacing(0);
     t_vLayout->addItem(t_hLayout);
     t_vLayout->addWidget(m_pTextLab);
+    t_vLayout->addWidget(hLine);
 
     auto m_pHLayout = new QHBoxLayout;
 
@@ -167,18 +170,18 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
 
     m_pPicture->setPalette(p);
 
-    int width = this->width() - 10;
-    int height = this->height() - 1;
+//    int width = this->width() - 10;
+//    int height = this->height() - 1;
 
-    int sPoint = width - m_pTextLab->width() + 5;
+//    int sPoint = width - m_pTextLab->width() + 5;
 
-    QPainter painter(this);
-    painter.setPen(QPen(QColor(QString("#D8D8D8")), 1));
+//    QPainter painter(this);
+//    painter.setPen(QPen(QColor(QString("#D8D8D8")), 1));
 
-    QPoint startP(sPoint, height);
-    QPoint endP(width, height);
+//    QPoint startP(sPoint, height);
+//    QPoint endP(width, height);
 
-    painter.drawLine(startP, endP);
+//    painter.drawLine(startP, endP);
 }
 
 QString NotesItemWidget::calcText(const QFont &font, const QString &note, const QSize &size/*const int MaxWidth*/)

@@ -10,6 +10,8 @@
 #include "CustomControl/CustomClickLabel.h"
 #include "utils/PublicFunction.h"
 
+#include <QSvgWidget>
+
 HomeWidget::HomeWidget(CustomWidget *parent):
     CustomWidget ("HomeWidget", parent),
     m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
@@ -44,15 +46,15 @@ void HomeWidget::initWidget()
     layout->setAlignment(Qt::AlignCenter);
     layout->addStretch();
 
-    auto iconLabel = new DLabel;
-    iconLabel->setObjectName("iconLabel");
-    iconLabel->setAlignment(Qt::AlignCenter);
+    auto iconSvg = new QSvgWidget;
+    iconSvg->setFixedSize(QSize(128, 128));
+    iconSvg->setObjectName("iconSvg");
 
-    layout->addWidget(iconLabel);
+    layout->addWidget(iconSvg, 0, Qt::AlignHCenter);
     layout->addSpacing(10);
     layout->addWidget(tipsLabel);
     layout->addSpacing(14);
-    layout->addWidget(chooseBtn, 0, Qt::AlignHCenter);
+    layout->addWidget(chooseBtn, 1, Qt::AlignHCenter);
     layout->addStretch();
 
     this->setLayout(layout);
@@ -75,10 +77,10 @@ void HomeWidget::slotChooseBtnClicked()
 //  主题切换
 void HomeWidget::slotUpdateTheme()
 {
-    auto iconLabel = this->findChild<DLabel *>("iconLabel");
-    if (iconLabel) {
+    auto iconSvg = this->findChild<QSvgWidget *>("iconSvg");
+    if (iconSvg) {
         QString sPixmap = PF::getImagePath("import_photo", Pri::g_frame);
-        iconLabel->setPixmap(QPixmap(sPixmap));
+        iconSvg->load(sPixmap);
     }
 
     auto customClickLabelList = this->findChildren<CustomClickLabel *>();

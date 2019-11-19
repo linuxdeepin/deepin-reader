@@ -49,12 +49,14 @@ void ThumbnailWidget::initWidget()
     m_pThumbnailListWidget->setSpacing(3);
 
     m_pPageWidget = new PagingWidget(this);
+    auto hLine = new DHorizontalLine(this);
 
     auto m_pvBoxLayout = new QVBoxLayout(this);
     m_pvBoxLayout->addWidget(m_pThumbnailListWidget);
     m_pvBoxLayout->addWidget(m_pPageWidget);
+    m_pvBoxLayout->addWidget(hLine);
 
-    m_pvBoxLayout->setContentsMargins(0, 0, 0, 0);
+    m_pvBoxLayout->setContentsMargins(0, 0, 0, 8);
     m_pvBoxLayout->setSpacing(6);
     this->setLayout(m_pvBoxLayout);
 }

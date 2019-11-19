@@ -18,7 +18,7 @@
 DWIDGET_USE_NAMESPACE
 
 MainWindow::MainWindow(DMainWindow *parent)
-    : DMainWindow(parent)   
+    : DMainWindow(parent)
 {
     m_strObserverName = "MainWindow";
 
@@ -39,7 +39,7 @@ MainWindow::MainWindow(DMainWindow *parent)
                     << KeyStr::g_alt_1 << KeyStr::g_alt_2 << KeyStr::g_m << KeyStr::g_z
                     << KeyStr::g_ctrl_alt_f << KeyStr::g_ctrl_shift_s
                     << KeyStr::g_down << KeyStr::g_up << KeyStr::g_left << KeyStr::g_right
-                    << KeyStr::g_ctrl_e << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l<<KeyStr::g_ctrl_shift_slash;
+                    << KeyStr::g_ctrl_e << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l << KeyStr::g_ctrl_shift_slash;
 
 
     installEventFilter(this);
@@ -279,12 +279,12 @@ void MainWindow::onChangeWindowState()
 
 void MainWindow::dealWithKeyEvent(const QString &key)
 {
-    qDebug()<<__FUNCTION__<<key;
+    qDebug() << __FUNCTION__ << key;
     if (key == KeyStr::g_f1) {
         onOpenAppHelp();
     } else if (key == KeyStr::g_ctrl_alt_f) {
         onChangeWindowState();
-    } else if (key==KeyStr::g_ctrl_shift_slash) {
+    } else if (key == KeyStr::g_ctrl_shift_slash) {
         displayShortcuts();
     }    else {
         QString sFilePath = DataManager::instance()->strOnlyFilePath();
@@ -309,33 +309,31 @@ void MainWindow::displayShortcuts()
 
     QStringList shortcutnames;
     QStringList windowKeymaps;
-    windowKeymaps<< KeyStr::g_ctrl_alt_f<< KeyStr::g_f11 << KeyStr::g_esc<<KeyStr::g_alt_f4<< KeyStr::g_f1
-                   << KeyStr::g_ctrl_f<< KeyStr::g_pgup << KeyStr::g_pgdown<< KeyStr::g_ctrl_o<< KeyStr::g_ctrl_larger
-                   << KeyStr::g_ctrl_smaller<<KeyStr::g_ctrl_wheel<< KeyStr::g_ctrl_shift_s<<KeyStr::g_ctrl_e
-                   << KeyStr::g_ctrl_p<< KeyStr::g_ctrl_s<<KeyStr::g_m<< KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2
-                   << KeyStr::g_ctrl_3<< KeyStr::g_ctrl_r<< KeyStr::g_ctrl_shift_r<<KeyStr::g_alt_1<<KeyStr::g_alt_2
-                   <<KeyStr::g_ctrl_b<<KeyStr::g_ctrl_i<<KeyStr::g_ctrl_l<< KeyStr::g_del<<KeyStr::g_z<<KeyStr::g_ctrl_shift_slash;
+    windowKeymaps << KeyStr::g_ctrl_alt_f << KeyStr::g_f11 << KeyStr::g_esc << KeyStr::g_alt_f4 << KeyStr::g_f1
+                  << KeyStr::g_ctrl_f << KeyStr::g_pgup << KeyStr::g_pgdown << KeyStr::g_ctrl_o << KeyStr::g_ctrl_larger
+                  << KeyStr::g_ctrl_smaller << KeyStr::g_ctrl_wheel << KeyStr::g_ctrl_shift_s << KeyStr::g_ctrl_e
+                  << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_m << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2
+                  << KeyStr::g_ctrl_3 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r << KeyStr::g_alt_1 << KeyStr::g_alt_2
+                  << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l << KeyStr::g_del << KeyStr::g_z << KeyStr::g_ctrl_shift_slash;
 
+    shortcutnames << tr("Restore") << tr("FullScreen") << tr("Escape") << tr("Quit") << tr("Help")
+                  << tr("Search") << tr("PageUp") << tr("PageDown") << tr("Open") << tr("Enlarge")
+                  << tr("Narrow") << tr("PageScale") << tr("SaveAs") << tr("Export") << tr("Print")
+                  << tr("Save") << tr("OpenThumbnail") << tr("AdaptePage") << tr("AdapteHeight")
+                  << tr("AdapteWidth") << tr("LeftRotation") << tr("RightRotation") << tr("SelectTool")
+                  << tr("HandTool") << tr("AddBookMark") << tr("AddNote") << tr("AddHighlight")
+                  << tr("Delete") << tr("Magnifier") << tr("ShortcutPreview");
 
-
-    shortcutnames<< tr("Restore") << tr("FullScreen")<< tr("Escape")<<tr("Quit")<<tr("Help")
-                  <<tr("Search")<<tr("PageUp")<<tr("PageDown")<<tr("Open")<<tr("Enlarge")
-                 <<tr("Narrow")<<tr("PageScale")<<tr("SaveAs")<<tr("Export")<<tr("Print")
-                <<tr("Save")<<tr("OpenThumbnail")<<tr("AdaptePage")<<tr("AdapteHeight")
-               <<tr("AdapteWidth")<<tr("LeftRotation")<<tr("RightRotation")<<tr("SelectTool")
-              <<tr("HandTool")<<tr("AddBookMark")<<tr("AddNote")<<tr("AddHighlight")
-             <<tr("Delete")<<tr("Magnifier")<<tr("ShortcutPreview");
-
-   // windowKeymaps=m_pFilterList;
+    // windowKeymaps=m_pFilterList;
     QJsonObject shortcutObj;
     QJsonArray jsonGroups;
 
     QJsonObject windowJsonGroup;
-   windowJsonGroup.insert("groupName", QObject::tr("Window"));
+    windowJsonGroup.insert("groupName", "Window");
     QJsonArray windowJsonItems;
 
-    int index=0;
-    for (const QString &shortcutname :shortcutnames ) {
+    int index = 0;
+    for (const QString &shortcutname : shortcutnames ) {
 
         QJsonObject jsonItem;
         jsonItem.insert("name", shortcutname);
@@ -356,11 +354,10 @@ void MainWindow::displayShortcuts()
 
     shortcutString << param1 << param2;
 
-    QProcess* shortcutViewProcess = new QProcess();
+    QProcess *shortcutViewProcess = new QProcess();
     shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
 
     connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
-
 }
 
 //  退出 应用

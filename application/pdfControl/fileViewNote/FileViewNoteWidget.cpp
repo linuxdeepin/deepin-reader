@@ -3,7 +3,7 @@
 #include "utils/utils.h"
 #include <QTextCodec>
 #include <DPlatformWindowHandle>
-
+#include <DFloatingMessage>
 
 FileViewNoteWidget::FileViewNoteWidget(CustomWidget *parent):
     CustomWidget(QString("FileViewNoteWidget"), parent)
@@ -292,6 +292,16 @@ int CustemTextEdit::calcTextSize(const QString &text)
     return str_len;
 }
 
+void CustemTextEdit::showTipsWidget()
+{
+    auto tipsWidget = new DFloatingMessage(DFloatingMessage::MessageType::TransientType);
+    tipsWidget->setWindowFlags(Qt::X11BypassWindowManagerHint
+                               | Qt::WindowStaysOnTopHint
+                               | Qt::FramelessWindowHint );
+    tipsWidget->setMessage(tr("输入已达上限"));
+    tipsWidget->show();
+}
+
 /**
  * @brief CustemTextEdit::slotTextEditMaxContantNum
  * TextEdit输入允许输入最长字符串的长度
@@ -308,6 +318,9 @@ void CustemTextEdit::slotTextEditMaxContantNum()
 //        this->setText(textContent);
 //        textCursor.setPosition(position - (length - m_nMaxContantLen));
 //        this->setTextCursor(textCursor);
+
+//        showTipsWidget();
+
         QTextCursor cursor = textCursor();
                 cursor.movePosition(QTextCursor::End);
                 if(cursor.hasSelection()) {

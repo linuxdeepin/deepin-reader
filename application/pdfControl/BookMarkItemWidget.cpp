@@ -72,9 +72,16 @@ void BookMarkItemWidget::initWidget()
     m_pPageNumber->setFixedHeight(18);
     m_pPageNumber->setFont(font);
 
-    auto m_pVLayout = new QVBoxLayout;
-    m_pVLayout->setContentsMargins(20, 18, 0, 44);
-    m_pVLayout->addWidget(m_pPageNumber);
+    auto hLine = new DHorizontalLine;
+    auto m_pRightVLayout = new QVBoxLayout;
+
+    auto m_pPageVLayout = new QHBoxLayout;
+    m_pPageVLayout->setContentsMargins(0, 18, 0, 44);
+    m_pPageVLayout->addWidget(m_pPageNumber);
+
+    m_pRightVLayout->addItem(m_pPageVLayout);
+    m_pRightVLayout->addWidget(hLine);
+    m_pRightVLayout->setContentsMargins(20, 0, 10, 0);
 
     m_pPicture = new ImageLabel(this);
     m_pPicture->setFixedSize(QSize(48, 68));
@@ -84,8 +91,7 @@ void BookMarkItemWidget::initWidget()
     m_pHLayout->setContentsMargins(1, 0, 1, 0);
     m_pHLayout->setSpacing(1);
     m_pHLayout->addWidget(m_pPicture);
-
-    m_pHLayout->addItem(m_pVLayout);
+    m_pHLayout->addItem(m_pRightVLayout);
 
     this->setLayout(m_pHLayout);
 }
@@ -106,17 +112,17 @@ void BookMarkItemWidget::paintEvent(QPaintEvent *event)
 
     m_pPicture->setPalette(p);
 
-    int width = this->width() - 10;
-    int height = this->height() - 1;
+//    int width = this->width() - 10;
+//    int height = this->height() - 1;
 
-    QPainter painter(this);
-    color = QColor::fromRgbF(208,208,208,0.0);
-    painter.setPen(QPen(QColor(QString("#D8D8D8")), 1));
+//    QPainter painter(this);
+//    color = QColor::fromRgbF(216,216,216,0.0);
+//    painter.setPen(QPen(QColor(QString("#D8D8D8")), 1));
 
-    QPoint startP(67, height);
-    QPoint endP(width, height);
+//    QPoint startP(67, height);
+//    QPoint endP(width, height);
 
-    painter.drawLine(startP, endP);
+//    painter.drawLine(startP, endP);
 
     CustomWidget::paintEvent(event);
 }

@@ -21,6 +21,7 @@ protected:
 private:
     void init();
     int calcTextSize(const QString &);
+    void showTipsWidget();
 
 private slots:
     void slotTextEditMaxContantNum();
