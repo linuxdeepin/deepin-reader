@@ -33,6 +33,7 @@ private slots:
     void slotPrevPageClicked();
     void slotNextPageClicked();
     void slotEndPageClicked();
+    void slotExitFullScreenClicked();
 
 private:
     int     m_nRightPageNumber = -1;
@@ -41,6 +42,7 @@ private:
     QAction *m_pPrevPage = nullptr;
     QAction *m_pNextPage = nullptr;
     QAction *m_pEndPage = nullptr;
+    QAction *m_pExitFullScreen = nullptr;
 };
 
 #endif // DEFAULTOPERATIONMENU_H

@@ -8,6 +8,7 @@
 #include "application.h"
 #include "frame/DocummentFileHelper.h"
 #include <DFontSizeManager>
+#include "subjectObserver/ModuleHeader.h"
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     : DMenu (parent)
@@ -42,14 +43,18 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
         }
     }
 
+    //  当前显示状态状态
+    int nState = DataManager::instance()->CurShowState();
+    if ( nState == FILE_FULLSCREEN) {
+        m_pExitFullScreen->setVisible(true);
+    } else {
+        m_pExitFullScreen->setVisible(false);
+    }
     this->exec(showPoint);
 }
 
 void DefaultOperationMenu::initMenu()
 {
-//    QFont font;
-//    font.setPixelSize(14);
-//    setFont(font);
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
     createAction(tr("Search"), SLOT(slotSearchClicked()));
     m_pBookMark = createAction(tr("add bookmark"), SLOT(slotBookMarkClicked()));
@@ -57,6 +62,7 @@ void DefaultOperationMenu::initMenu()
     m_pPrevPage = createAction(tr("prev page"), SLOT(slotPrevPageClicked()));
     m_pNextPage = createAction(tr("next page"), SLOT(slotNextPageClicked()));
     m_pEndPage = createAction(tr("end page"), SLOT(slotEndPageClicked()));
+    m_pExitFullScreen = createAction(tr("exit fullscreen"), SLOT(slotExitFullScreenClicked()));
 }
 
 QAction *DefaultOperationMenu::createAction(const QString &name, const char *member)
@@ -113,4 +119,9 @@ void DefaultOperationMenu::slotNextPageClicked()
 void DefaultOperationMenu::slotEndPageClicked()
 {
     notifyMsgToFrame(MSG_OPERATION_END_PAGE);
+}
+
+void DefaultOperationMenu::slotExitFullScreenClicked()
+{
+    notifyMsgToFrame(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
 }

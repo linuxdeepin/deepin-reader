@@ -39,6 +39,7 @@ private slots:
     void slotRemoveHighLightClicked();
     void slotAddNoteClicked();
     void slotAddBookMarkClicked();
+    void slotExitFullScreenClicked();
 
 private:
     int         m_pLightColor = 0;
@@ -48,6 +49,7 @@ private:
     QAction     *m_pCopy = nullptr;
     QAction     *m_pRemoveHighLight = nullptr;
     QAction     *m_pAddBookMark = nullptr;
+    QAction     *m_pExitFullScreen = nullptr;
 
     ColorWidgetAction   *m_pColorWidgetAction = nullptr;
 

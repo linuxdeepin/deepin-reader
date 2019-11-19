@@ -12,7 +12,7 @@ FileViewNoteWidget::FileViewNoteWidget(CustomWidget *parent):
     setWindowFlag(Qt::Popup);
     setFixedSize(QSize(250, 320));
     DPlatformWindowHandle handle(this);
-    int radius =18;
+    int radius = 18;
     handle.setWindowRadius(radius);
 
     initWidget();
@@ -121,7 +121,7 @@ void FileViewNoteWidget::initConnections()
 void FileViewNoteWidget::slotUpdateTheme()
 {
     QString sClose = PF::getImagePath("close", Pri::g_pdfControl);
-    m_pCloseLab->setPixmap(Utils::renderSVG(sClose,QSize(24,24)));
+    m_pCloseLab->setPixmap(Utils::renderSVG(sClose, QSize(24, 24)));
 }
 
 // 关闭槽函数
@@ -153,7 +153,7 @@ void FileViewNoteWidget::slotTextEditMaxContantNum()
 
 void FileViewNoteWidget::slotShowTips()
 {
-    notifyMsg(MSG_OPERATION_TEXT_SHOW_TIPS, tr("输入已达上限"));
+    notifyMsg(MSG_OPERATION_TEXT_SHOW_TIPS, tr("input limit reached"));
 }
 
 void FileViewNoteWidget::setNotePage(const QString &pNotePage)
@@ -250,12 +250,12 @@ void CustemTextEdit::slotTextEditMaxContantNum()
         emit sigShowTips();
 
         QTextCursor cursor = textCursor();
-                cursor.movePosition(QTextCursor::End);
-                if(cursor.hasSelection()) {
-                    cursor.clearSelection();
-                }
-                cursor.deletePreviousChar();
-                //设置当前的光标为更改后的光标
-                setTextCursor(cursor);
+        cursor.movePosition(QTextCursor::End);
+        if (cursor.hasSelection()) {
+            cursor.clearSelection();
+        }
+        cursor.deletePreviousChar();
+        //设置当前的光标为更改后的光标
+        setTextCursor(cursor);
     }
 }

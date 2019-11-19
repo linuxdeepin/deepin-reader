@@ -414,6 +414,7 @@ void MainWindow::slotAppShowState(const int &nState)
 
     if (nState == 1) {
         if (windowState() == Qt::WindowFullScreen) {
+            DataManager::instance()->setCurShowState(FILE_NORMAL);  //  正常状态
             showNormal();
             this->setWindowState(Qt::WindowMaximized);
         }
@@ -467,13 +468,13 @@ void MainWindow::slotActionTrigger(const QString &sAction)
 void MainWindow::slotShowTips(const QString &contant)
 {
     auto tipsWidget = new DFloatingMessage(
-                DFloatingMessage::MessageType::TransientType, this);
+        DFloatingMessage::MessageType::TransientType, this);
 //    tipsWidget->setWindowFlags(Qt::X11BypassWindowManagerHint
 //                               | Qt::WindowStaysOnTopHint
 //                               | Qt::FramelessWindowHint );
     tipsWidget->setMessage(contant);
 //    tipsWidget->adjustSize();
-    tipsWidget->setGeometry((width()-150)/2, height() - 50, 150, 50);
+    tipsWidget->setGeometry((width() - 150) / 2, height() - 50, 150, 50);
     tipsWidget->show();
 }
 
@@ -509,7 +510,7 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
                 emit sigSpacePressed();
             }
         }
-    }else if (msgType == MSG_OPERATION_TEXT_SHOW_TIPS) {
+    } else if (msgType == MSG_OPERATION_TEXT_SHOW_TIPS) {
         emit sigShowTips(msgContent);
     }
     return 0;

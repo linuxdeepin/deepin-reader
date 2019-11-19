@@ -33,6 +33,14 @@ void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, con
 
     m_pColorWidgetAction->setBtnAddLightState(bHigh);
 
+    //  当前显示状态状态
+    int nState = DataManager::instance()->CurShowState();
+    if ( nState == FILE_FULLSCREEN) {
+        m_pExitFullScreen->setVisible(true);
+    } else {
+        m_pExitFullScreen->setVisible(false);
+    }
+
     this->exec(showPoint);
 }
 
@@ -48,9 +56,6 @@ void TextOperationMenu::setClickPage(int nClickPage)
 
 void TextOperationMenu::initMenu()
 {
-//    QFont font;
-//    font.setPixelSize(14);
-//    setFont(font);
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
     m_pCopy = createAction(tr("copy"), SLOT(slotCopyClicked()));
     this->addSeparator();
@@ -68,6 +73,7 @@ void TextOperationMenu::initMenu()
     this->addSeparator();
 
     m_pAddBookMark = createAction(tr("add bookmark"), SLOT(slotAddBookMarkClicked()));
+    m_pExitFullScreen = createAction(tr("exit fullscreen"), SLOT(slotExitFullScreenClicked()));
 }
 
 QAction *TextOperationMenu::createAction(const QString &text, const char *member)
@@ -132,4 +138,9 @@ void TextOperationMenu::slotAddNoteClicked()
 void TextOperationMenu::slotAddBookMarkClicked()
 {
     sendMsgToFrame(MSG_OPERATION_TEXT_ADD_BOOKMARK, QString("%1").arg(m_nClickPage));
+}
+
+void TextOperationMenu::slotExitFullScreenClicked()
+{
+    notifyMsgToFrame(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
 }
