@@ -79,8 +79,34 @@ void NotesWidget::slotDltNoteItem(QString uuid)
  */
 void NotesWidget::slotDltNoteContant(QString uuid)
 {
-//    m_mapUuidAndPage.remove(uuid);
-    slotDltNoteItem(uuid);
+    for (int row = 0; row < m_pNotesList->count(); ++row) {
+        auto pItem = m_pNotesList->item(row);
+        if (pItem) {
+            auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
+            if (t_widget) {
+                QString t_uuid = t_widget->noteUUId();
+                if (t_uuid == uuid) {
+                    int page = t_widget->nPageIndex();
+
+                    delete t_widget;
+                    t_widget = nullptr;
+
+                    delete  pItem;
+                    pItem = nullptr;
+
+                    // remove date from map and notify kong yun zhen
+                    m_mapUuidAndPage.remove(uuid);
+
+                    auto dproxy = DocummentFileHelper::instance();
+                    if (dproxy) {
+                        dproxy->setAnnotationText(page, uuid, "");
+                    }
+
+                    break;
+                }
+            }
+        }
+    }
 }
 
 void NotesWidget::slotOpenFileOk()
