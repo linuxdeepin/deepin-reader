@@ -53,11 +53,15 @@ void BookMarkItemWidget::slotDltBookMark()
  */
 void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
 {
-    QMenu *t_menu = new QMenu(this);
+    if(m_menu == nullptr){
+        m_menu = new DMenu(this);
+        QAction *dltBookMarkAction = m_menu->addAction(tr("delete bookmark"));
+        connect(dltBookMarkAction, SIGNAL(triggered()), this, SLOT(slotDltBookMark()));
+    }
 
-    QAction *dltBookMarkAction = t_menu->addAction(tr("delete bookmark"));
-    connect(dltBookMarkAction, SIGNAL(triggered()), this, SLOT(slotDltBookMark()));
-    t_menu->exec(QCursor::pos());
+    if(m_menu){
+        m_menu->exec(QCursor::pos());
+    }
 }
 
 /**

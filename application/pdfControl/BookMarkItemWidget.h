@@ -40,6 +40,7 @@ protected:
 
 private:
     bool m_bPaint = false;                    // 是否绘制选中item
+    DMenu *m_menu = nullptr;
 };
 
 #endif // BOOKMARKITEMWIDGET_H
