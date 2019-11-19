@@ -3,7 +3,7 @@
 #include "utils/utils.h"
 #include <QTextCodec>
 #include <DPlatformWindowHandle>
-#include <DFloatingMessage>
+#include "frame/DocummentFileHelper.h"
 
 FileViewNoteWidget::FileViewNoteWidget(CustomWidget *parent):
     CustomWidget(QString("FileViewNoteWidget"), parent)
@@ -98,6 +98,7 @@ void FileViewNoteWidget::initWidget()
     m_pHLayoutContant->addStretch(0);
 
     m_pTextEdit = new CustemTextEdit(this);
+    connect(m_pTextEdit, &CustemTextEdit::sigShowTips, this, &FileViewNoteWidget::slotShowTips);
 
     m_pHLayoutContant->addWidget(m_pTextEdit);
 
@@ -149,6 +150,11 @@ void FileViewNoteWidget::slotTextEditMaxContantNum()
     }
 }
 
+void FileViewNoteWidget::slotShowTips()
+{
+    notifyMsg(MSG_OPERATION_TEXT_SHOW_TIPS, tr("输入已达上限"));
+}
+
 void FileViewNoteWidget::setNotePage(const QString &pNotePage)
 {
     m_pNotePage = pNotePage;
@@ -172,76 +178,6 @@ CustemTextEdit::CustemTextEdit(DWidget *parent) :
     setFixedSize(205, 257);
     init();
 }
-
-//void CustemTextEdit::paintEvent(QPaintEvent *e)
-//{
-//    Q_UNUSED(e);
-//    DTextEdit::paintEvent(e);
-
-//    QPainter painter(this->viewport());
-//    painter.setRenderHint( QPainter::Antialiasing, true );
-//    const int w = this->width();
-//    const int h = this->height();
-//    qreal stepH = h / 10;
-
-//    QPointF points[] = {
-//        QPointF(0, 0),
-//        QPointF(w, 0),
-
-//        QPointF(0, stepH),
-//        QPointF(w, stepH),
-
-//        QPointF(0, stepH * 2),
-//        QPointF(w, stepH * 2),
-
-//        QPointF(0, stepH * 3),
-//        QPointF(w, stepH * 3),
-
-//        QPointF(0, stepH * 4),
-//        QPointF(w, stepH * 4),
-
-//        QPointF(0, stepH * 5),
-//        QPointF(w, stepH * 5),
-
-//        QPointF(0, stepH * 6),
-//        QPointF(w, stepH * 6),
-
-//        QPointF(0, stepH * 7),
-//        QPointF(w, stepH * 7),
-
-//        QPointF(0, stepH * 8),
-//        QPointF(w, stepH * 8),
-
-//        QPointF(0, stepH * 9),
-//        QPointF(w, stepH * 9),
-
-//        QPointF(0, h),
-//        QPointF(w, h)
-//    };
-
-//    QPen pen;
-//    pen.setColor(QColor(QString("#DBBD77")));
-//    pen.setWidth(2);
-//    painter.setPen(pen);
-//    painter.drawLine(points[0], points[1]);
-//    painter.drawLine(points[20], points[21]);
-
-//    pen.setWidth(1);
-//    painter.setPen(pen);
-//    painter.drawLine(points[2], points[3]);
-//    painter.drawLine(points[4], points[5]);
-//    painter.drawLine(points[6], points[7]);
-//    painter.drawLine(points[8], points[9]);
-//    painter.drawLine(points[10], points[11]);
-//    painter.drawLine(points[12], points[13]);
-//    painter.drawLine(points[14], points[15]);
-//    painter.drawLine(points[16], points[17]);
-//    painter.drawLine(points[18], points[19]);
-
-
-////    this->update();
-//}
-
 void CustemTextEdit::init()
 {
     //background color
@@ -292,16 +228,6 @@ int CustemTextEdit::calcTextSize(const QString &text)
     return str_len;
 }
 
-void CustemTextEdit::showTipsWidget()
-{
-    auto tipsWidget = new DFloatingMessage(DFloatingMessage::MessageType::TransientType);
-    tipsWidget->setWindowFlags(Qt::X11BypassWindowManagerHint
-                               | Qt::WindowStaysOnTopHint
-                               | Qt::FramelessWindowHint );
-    tipsWidget->setMessage(tr("输入已达上限"));
-    tipsWidget->show();
-}
-
 /**
  * @brief CustemTextEdit::slotTextEditMaxContantNum
  * TextEdit输入允许输入最长字符串的长度
@@ -319,7 +245,7 @@ void CustemTextEdit::slotTextEditMaxContantNum()
 //        textCursor.setPosition(position - (length - m_nMaxContantLen));
 //        this->setTextCursor(textCursor);
 
-//        showTipsWidget();
+        emit sigShowTips();
 
         QTextCursor cursor = textCursor();
                 cursor.movePosition(QTextCursor::End);

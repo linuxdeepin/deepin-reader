@@ -15,13 +15,15 @@ class CustemTextEdit : public DTextEdit
 public:
     CustemTextEdit(DWidget *parent = nullptr);
 
+signals:
+    void sigShowTips();
+
 protected:
     //void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
 
 private:
     void init();
     int calcTextSize(const QString &);
-    void showTipsWidget();
 
 private slots:
     void slotTextEditMaxContantNum();
@@ -66,6 +68,7 @@ private slots:
     void slotUpdateTheme();
     void slotClosed();
     void slotTextEditMaxContantNum();
+    void slotShowTips();
 
 private:
     /*CustemTextEdit DTextEdit*/

@@ -5,6 +5,7 @@
 #include <DDialog>
 #include <DTitlebar>
 #include <DWidgetUtil>
+#include <DFloatingMessage>
 #include <QDebug>
 #include <QDesktopServices>
 #include <QProcess>
@@ -170,6 +171,7 @@ void MainWindow::initConnections()
     connect(this, SIGNAL(sigAppExit()), this, SLOT(slotAppExit()));
     connect(this, SIGNAL(sigAppShowState(const int &)), this, SLOT(slotAppShowState(const int &)));
     connect(this, SIGNAL(sigSetAppTitle(const QString &)), this, SLOT(slotSetAppTitle(const QString &)));
+    connect(this, SIGNAL(sigShowTips(const QString &)), this, SLOT(slotShowTips(const QString &)));
 
     auto m_menu = new DMenu(this);
     //m_menu->setFixedWidth();
@@ -450,6 +452,19 @@ void MainWindow::slotActionTrigger(const QString &sAction)
     }
 }
 
+void MainWindow::slotShowTips(const QString &contant)
+{
+    auto tipsWidget = new DFloatingMessage(
+                DFloatingMessage::MessageType::TransientType, this);
+//    tipsWidget->setWindowFlags(Qt::X11BypassWindowManagerHint
+//                               | Qt::WindowStaysOnTopHint
+//                               | Qt::FramelessWindowHint );
+    tipsWidget->setMessage(contant);
+//    tipsWidget->adjustSize();
+    tipsWidget->setGeometry((width()-150)/2, height() - 50, 150, 50);
+    tipsWidget->show();
+}
+
 void MainWindow::sendMsg(const int &, const QString &)
 {
 
@@ -476,6 +491,8 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
         if (msgContent == KeyStr::g_esc) {          //  退出全屏模式
             emit sigAppShowState(1);
         }
+    }else if (msgType == MSG_OPERATION_TEXT_SHOW_TIPS) {
+        emit sigShowTips(msgContent);
     }
     return 0;
 }

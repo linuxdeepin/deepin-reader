@@ -31,6 +31,7 @@ signals:
     void sigAppExit();
     void sigAppShowState(const int &);
     void sigSetAppTitle(const QString &);
+    void sigShowTips(const QString &);
 
 protected:
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
@@ -62,6 +63,7 @@ private slots:
     void slotSetAppTitle(const QString &);
 
     void slotActionTrigger(const QString &);
+    void slotShowTips(const QString &);
 
 private:
     void sendMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;

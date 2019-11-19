@@ -47,6 +47,7 @@ enum MSG_MENU_TYPE {
     MSG_OPERATION_TEXT_ADD_BOOKMARK,    //  添加书签
     MSG_OPERATION_TEXT_ADD_ANNOTATION,  //  添加注释
     MSG_OPERATION_TEXT_SHOW_NOTEWIDGET,  //  显示注释窗口
+    MSG_OPERATION_TEXT_SHOW_TIPS,        //  显示提示窗口
 };
 
 //  左侧 侧边栏 消息
