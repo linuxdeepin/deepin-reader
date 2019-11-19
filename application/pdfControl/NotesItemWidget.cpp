@@ -63,6 +63,7 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
     if(m_menu == nullptr){
         m_menu = new DMenu(this);
         QAction *copyAction = m_menu->addAction(tr("copy"));
+        m_menu->addSeparator();
         QAction *dltItemAction = m_menu->addAction(tr("Delete"));
         connect(dltItemAction, SIGNAL(triggered()), this, SLOT(slotDltNoteContant()));
         connect(copyAction, SIGNAL(triggered()), this, SLOT(slotCopyContant()));
