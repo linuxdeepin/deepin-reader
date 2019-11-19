@@ -173,11 +173,9 @@ void MainWindow::initConnections()
     connect(this, SIGNAL(sigAppShowState(const int &)), this, SLOT(slotAppShowState(const int &)));
     connect(this, SIGNAL(sigSetAppTitle(const QString &)), this, SLOT(slotSetAppTitle(const QString &)));
     connect(this, SIGNAL(sigShowTips(const QString &)), this, SLOT(slotShowTips(const QString &)));
-    connect(this,&MainWindow::sigSpacePressed,this,[](){
-        qDebug()<<"initConnections";
+    connect(this,&MainWindow::sigSpacePressed,this,[](){        
         if(DocummentProxy::instance())
-        {
-            qDebug()<<"initConnections---------------------";
+        {      
             if(DocummentProxy::instance()->getAutoPlaySlideStatu())
             {
                 DocummentProxy::instance()->setAutoPlaySlide(false);
