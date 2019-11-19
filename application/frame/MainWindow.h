@@ -32,6 +32,8 @@ signals:
     void sigAppShowState(const int &);
     void sigSetAppTitle(const QString &);
     void sigShowTips(const QString &);
+    void sigSpacePressed();
+
 
 protected:
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;

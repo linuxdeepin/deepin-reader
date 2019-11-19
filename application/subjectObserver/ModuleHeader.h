@@ -83,7 +83,7 @@ const QString g_up = "Up";
 const QString g_down = "Down";
 const QString g_left = "Left";
 const QString g_right = "Right";
-
+const QString g_space = "Space";        //空格用于停止启动幻灯片播放
 
 const QString g_ctrl_c = "Ctrl+C";
 const QString g_ctrl_x = "Ctrl+X";

@@ -40,7 +40,8 @@ MainWindow::MainWindow(DMainWindow *parent)
                     << KeyStr::g_alt_1 << KeyStr::g_alt_2 << KeyStr::g_m << KeyStr::g_z
                     << KeyStr::g_ctrl_alt_f << KeyStr::g_ctrl_shift_s
                     << KeyStr::g_down << KeyStr::g_up << KeyStr::g_left << KeyStr::g_right
-                    << KeyStr::g_ctrl_e << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l << KeyStr::g_ctrl_shift_slash;
+                    << KeyStr::g_ctrl_e << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l << KeyStr::g_ctrl_shift_slash
+                    << KeyStr::g_space;
 
 
     installEventFilter(this);
@@ -172,6 +173,19 @@ void MainWindow::initConnections()
     connect(this, SIGNAL(sigAppShowState(const int &)), this, SLOT(slotAppShowState(const int &)));
     connect(this, SIGNAL(sigSetAppTitle(const QString &)), this, SLOT(slotSetAppTitle(const QString &)));
     connect(this, SIGNAL(sigShowTips(const QString &)), this, SLOT(slotShowTips(const QString &)));
+    connect(this,&MainWindow::sigSpacePressed,this,[](){
+        qDebug()<<"initConnections";
+        if(DocummentProxy::instance())
+        {
+            qDebug()<<"initConnections---------------------";
+            if(DocummentProxy::instance()->getAutoPlaySlideStatu())
+            {
+                DocummentProxy::instance()->setAutoPlaySlide(false);
+            }else  {
+                DocummentProxy::instance()->setAutoPlaySlide(true);
+            }
+        }
+    });
 
     auto m_menu = new DMenu(this);
     //m_menu->setFixedWidth();
@@ -490,6 +504,12 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == KeyStr::g_esc) {          //  退出全屏模式
             emit sigAppShowState(1);
+        }else if (msgContent==KeyStr::g_space) {
+            qDebug()<<__FUNCTION__<<"------";
+            if(DataManager::instance()->CurShowState() == FILE_SLIDE)
+            { qDebug()<<__FUNCTION__<<"+++++++++++";
+                emit sigSpacePressed();
+            }
         }
     }else if (msgType == MSG_OPERATION_TEXT_SHOW_TIPS) {
         emit sigShowTips(msgContent);

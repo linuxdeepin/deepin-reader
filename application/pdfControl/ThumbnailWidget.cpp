@@ -35,7 +35,7 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
         if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup||msgContent==KeyStr::g_left) {
              emit sigJumpToPrevPage();
         } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown||msgContent==KeyStr::g_right) {
-             emit sigJumpToNextPage();
+            emit sigJumpToNextPage();
         }
     }
 
@@ -160,9 +160,22 @@ void ThumbnailWidget::slotJumpToPrevPage()
     if(DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL){
         return;
     }
+    bool bstart=false;
+    if(nullptr!=DocummentProxy::instance()&&DocummentProxy::instance()->getAutoPlaySlideStatu())
+    {
+        qDebug()<<__FUNCTION__<<"stop autoplay";
+        DocummentProxy::instance()->setAutoPlaySlide(false);
+        bstart=true;
+    }
     int nCurPage = DocummentFileHelper::instance()->currentPageNo();
     nCurPage--;
     jumpToSpecifiedPage(nCurPage);
+    if(bstart&&nullptr!=DocummentProxy::instance())
+    {
+        qDebug()<<__FUNCTION__<<"start autoplay";
+        DocummentProxy::instance()->setAutoPlaySlide(true);
+        bstart=false;
+    }
 }
 
 /**
@@ -174,9 +187,22 @@ void ThumbnailWidget::slotJumpToNextPage()
     if(DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL){
         return;
     }
+    bool bstart=false;
+    if(nullptr!=DocummentProxy::instance()&&DocummentProxy::instance()->getAutoPlaySlideStatu())
+    {
+        qDebug()<<__FUNCTION__<<"stop autoplay";
+        DocummentProxy::instance()->setAutoPlaySlide(false);
+        bstart=true;
+    }
     int nCurPage = DocummentFileHelper::instance()->currentPageNo();
     nCurPage++;
     jumpToSpecifiedPage(nCurPage);
+    if(bstart&&nullptr!=DocummentProxy::instance())
+    {
+        qDebug()<<__FUNCTION__<<"start autoplay";
+        DocummentProxy::instance()->setAutoPlaySlide(true);
+        bstart=false;
+    }
 }
 
 // 初始化缩略图列表list，无缩略图
