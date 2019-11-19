@@ -160,7 +160,6 @@ void MainWindow::createActionMap(DMenu *m_menu, QSignalMapper *pSigManager,
         QString sObjName = actionObjList.at(iLoop);
 
         QAction *_action = createAction(m_menu, sActionName, sObjName);
-        _action->setShortcut(QKeySequence::Open);
         connect(_action, SIGNAL(triggered()), pSigManager, SLOT(map()));
         pSigManager->setMapping(_action, sObjName);
     }
@@ -173,13 +172,11 @@ void MainWindow::initConnections()
     connect(this, SIGNAL(sigAppShowState(const int &)), this, SLOT(slotAppShowState(const int &)));
     connect(this, SIGNAL(sigSetAppTitle(const QString &)), this, SLOT(slotSetAppTitle(const QString &)));
     connect(this, SIGNAL(sigShowTips(const QString &)), this, SLOT(slotShowTips(const QString &)));
-    connect(this,&MainWindow::sigSpacePressed,this,[](){        
-        if(DocummentProxy::instance())
-        {      
-            if(DocummentProxy::instance()->getAutoPlaySlideStatu())
-            {
+    connect(this, &MainWindow::sigSpacePressed, this, []() {
+        if (DocummentProxy::instance()) {
+            if (DocummentProxy::instance()->getAutoPlaySlideStatu()) {
                 DocummentProxy::instance()->setAutoPlaySlide(false);
-            }else  {
+            } else  {
                 DocummentProxy::instance()->setAutoPlaySlide(true);
             }
         }
@@ -503,15 +500,15 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == KeyStr::g_esc) {          //  退出全屏模式
             emit sigAppShowState(1);
-        }else if (msgContent==KeyStr::g_space) {
-            qDebug()<<__FUNCTION__<<"------";
-            if(DataManager::instance()->CurShowState() == FILE_SLIDE)
-            { qDebug()<<__FUNCTION__<<"+++++++++++";
+        } else if (msgContent == KeyStr::g_space) {
+            if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
+                qDebug() << __FUNCTION__ << "+++++++++++";
                 emit sigSpacePressed();
             }
         }
     } else if (msgType == MSG_OPERATION_TEXT_SHOW_TIPS) {
         emit sigShowTips(msgContent);
+        return ConstantMsg::g_effective_res;
     }
     return 0;
 }
