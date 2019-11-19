@@ -7,6 +7,7 @@
 #include "controller/DataManager.h"
 #include "subjectObserver/ModuleHeader.h"
 #include "application.h"
+#include <DFontSizeManager>
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)
     : DMenu (parent)
@@ -47,9 +48,10 @@ void TextOperationMenu::setClickPage(int nClickPage)
 
 void TextOperationMenu::initMenu()
 {
-    QFont font;
-    font.setPixelSize(14);
-    setFont(font);
+//    QFont font;
+//    font.setPixelSize(14);
+//    setFont(font);
+    DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
     m_pCopy = createAction(tr("copy"), SLOT(slotCopyClicked()));
     this->addSeparator();
 

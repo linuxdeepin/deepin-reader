@@ -4,6 +4,7 @@
 #include <QTextCodec>
 #include <DPlatformWindowHandle>
 #include "frame/DocummentFileHelper.h"
+#include <DFontSizeManager>
 
 FileViewNoteWidget::FileViewNoteWidget(CustomWidget *parent):
     CustomWidget(QString("FileViewNoteWidget"), parent)
@@ -186,8 +187,9 @@ void CustemTextEdit::init()
     this->setPalette(pText);
 
     //font
-    QFont fontContant = Utils::getPixFont(QString("SourceHanSansCN-Normal"), 12);
-    this->setFont(fontContant);
+//    QFont fontContant = Utils::getPixFont(QString("SourceHanSansCN-Normal"), 12);
+//    this->setFont(fontContant);
+    DFontSizeManager::instance()->bind(this, DFontSizeManager::T8);
 
     //text corlor
     this->setTextColor(QColor(QString("#452B0A")));

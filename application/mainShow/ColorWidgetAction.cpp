@@ -5,6 +5,7 @@
 #include <QButtonGroup>
 #include "controller/DataManager.h"
 #include <DFloatingButton>
+#include <DFontSizeManager>
 
 ColorWidgetAction::ColorWidgetAction(DWidget *pParent)
     : QWidgetAction(pParent)
@@ -23,9 +24,10 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
     setDefaultWidget(pWidget);
 
     m_pClickLabel = new CustomClickLabel(QString("        %1").arg(tr("add high light")));
-    QFont font;
-    font.setPixelSize(14);
-    m_pClickLabel->setFont(font);
+//    QFont font;
+//    font.setPixelSize(14);
+//    m_pClickLabel->setFont(font);
+    DFontSizeManager::instance()->bind(m_pClickLabel, DFontSizeManager::T6);
     connect(m_pClickLabel, SIGNAL(clicked()), this, SIGNAL(sigBtnDefaultClicked()));
 
     auto buttonLayout = new QHBoxLayout;

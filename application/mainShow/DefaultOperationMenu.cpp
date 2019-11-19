@@ -7,6 +7,7 @@
 #include "docview/docummentproxy.h"
 #include "application.h"
 #include "frame/DocummentFileHelper.h"
+#include <DFontSizeManager>
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     : DMenu (parent)
@@ -46,9 +47,10 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
 
 void DefaultOperationMenu::initMenu()
 {
-    QFont font;
-    font.setPixelSize(14);
-    setFont(font);
+//    QFont font;
+//    font.setPixelSize(14);
+//    setFont(font);
+    DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
     createAction(tr("Search"), SLOT(slotSearchClicked()));
     m_pBookMark = createAction(tr("add bookmark"), SLOT(slotBookMarkClicked()));
     m_pFirstPage = createAction(tr("first page"), SLOT(slotFirstPageClicked()));

@@ -1,5 +1,6 @@
 #include "BookMarkItemWidget.h"
 #include "utils/utils.h"
+#include <DFontSizeManager>
 
 BookMarkItemWidget::BookMarkItemWidget(CustomItemWidget *parent) :
     CustomItemWidget("BookMarkItemWidget", parent)
@@ -65,12 +66,13 @@ void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
  */
 void BookMarkItemWidget::initWidget()
 {
-    QFont font;
-    font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 12);
+//    QFont font;
+//    font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 12);
     m_pPageNumber = new PageNumberLabel(this);
     m_pPageNumber->setMinimumWidth(31);
     m_pPageNumber->setFixedHeight(18);
-    m_pPageNumber->setFont(font);
+//    m_pPageNumber->setFont(font);
+    DFontSizeManager::instance()->bind(m_pPageNumber, DFontSizeManager::T8);
 
     auto hLine = new DHorizontalLine;
     auto m_pRightVLayout = new QVBoxLayout;

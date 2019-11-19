@@ -1,6 +1,7 @@
 #include "BookMarkWidget.h"
 #include "controller/DataManager.h"
 #include "frame/DocummentFileHelper.h"
+#include <DFontSizeManager>
 
 BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
     CustomWidget(QString("BookMarkWidget"), parent)
@@ -362,8 +363,8 @@ void BookMarkWidget::initWidget()
 
     auto hLine = new DHorizontalLine;
 
-    QFont font;
-    font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 14);
+//    QFont font;
+//    font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 14);
 
     auto m_pHBoxLayout = new QHBoxLayout;
 
@@ -371,7 +372,8 @@ void BookMarkWidget::initWidget()
     m_pAddBookMarkBtn->setFixedHeight(36);
     m_pAddBookMarkBtn->setMinimumWidth(170);
     m_pAddBookMarkBtn->setText(tr("add bookmark"));
-    m_pAddBookMarkBtn->setFont(font);
+//    m_pAddBookMarkBtn->setFont(font);
+    DFontSizeManager::instance()->bind(m_pAddBookMarkBtn, DFontSizeManager::T6);
     connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(slotAddBookMark()));
 
     m_pHBoxLayout->setContentsMargins(10, 6, 10, 6);

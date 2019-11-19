@@ -6,7 +6,7 @@
 #include <DSuggestButton>
 #include <QVBoxLayout>
 #include <DLabel>
-
+#include <DFontSizeManager>
 #include "CustomControl/CustomClickLabel.h"
 #include "utils/PublicFunction.h"
 
@@ -32,9 +32,10 @@ void HomeWidget::initWidget()
 {
     auto tipsLabel = new CustomClickLabel(tr("drag Pdf or other format file to here"), this);
     tipsLabel->setAlignment(Qt::AlignHCenter);
-    QFont font;
-    font.setPixelSize(12);
-    tipsLabel->setFont(font);
+//    QFont font;
+//    font.setPixelSize(12);
+//    tipsLabel->setFont(font);
+    DFontSizeManager::instance()->bind(tipsLabel, DFontSizeManager::T8);
 
     auto chooseBtn = new DSuggestButton(tr("Select File"));
     chooseBtn->setFixedSize(QSize(302, 36));

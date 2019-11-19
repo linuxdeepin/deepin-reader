@@ -1,5 +1,6 @@
 #include "NotesItemWidget.h"
 #include <DApplication>
+#include <DFontSizeManager>
 #include <QClipboard>
 #include <QTextLayout>
 #include "utils/utils.h"
@@ -74,29 +75,32 @@ void NotesItemWidget::initWidget()
     m_pPicture->setFixedSize(QSize(48, 68));
     m_pPicture->setAlignment(Qt::AlignCenter);
 
-    QFont font;
-    font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 12);
+//    QFont font;
+//    font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 12);
 
     m_pPageNumber = new PageNumberLabel;
     m_pPageNumber->setEnabled(false);
     m_pPageNumber->setMinimumWidth(31);
     m_pPageNumber->setFixedHeight(18);
-    m_pPageNumber->setFont(font);
+//    m_pPageNumber->setFont(font);
+    DFontSizeManager::instance()->bind(m_pPageNumber, DFontSizeManager::T8);
 
     m_pSearchResultNum = new DLabel;
     m_pSearchResultNum->setEnabled(false);
     m_pSearchResultNum->setMinimumWidth(31);
     m_pSearchResultNum->setFixedHeight(18);
-    m_pSearchResultNum->setFont(font);
+//    m_pSearchResultNum->setFont(font);
+    DFontSizeManager::instance()->bind(m_pSearchResultNum, DFontSizeManager::T8);
 
-    font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 11);
+//    font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 11);
     m_pTextLab = new DLabel;
     m_pTextLab->setFixedHeight(51);
     m_pTextLab->setMinimumWidth(102);
     m_pTextLab->setMaximumWidth(349);
     m_pTextLab->setFrameStyle(QFrame::NoFrame);
     m_pTextLab->setWordWrap(true);
-    m_pTextLab->setFont(font);
+//    m_pTextLab->setFont(font);
+    DFontSizeManager::instance()->bind(m_pTextLab, DFontSizeManager::T9);
 
     auto hLine = new DHorizontalLine;
 
