@@ -372,11 +372,25 @@ QString PagePdf::addHighlightAnnotation(const QColor &color)
     QRectF rec, recboundary;
     double curwidth = d->m_imagewidth;
     double curheight = d->m_imageheight;
-    if (d->m_selecttextendword < 1 || d->m_selecttextendword < 0)return "";
+    if (d->m_selecttextendword < 1 || d->m_selecttextendword < 0||d->m_selecttextendword>d->m_words.size()||
+            d->m_selecttextstartword>d->m_words.size())return "";
+
+    QRectF recttem=d->m_words.at(d->m_selecttextstartword).rect;
+     for (int i = d->m_selecttextstartword; i <= d->m_selecttextendword; ++i)
+     {
+         if(d->m_words.at(i).rect.height()<recttem.height())
+             recttem=d->m_words.at(i).rect;
+     }
+
     for (int i = d->m_selecttextstartword; i <= d->m_selecttextendword; ++i) {
 
         rec = d->m_words.at(i).rect;
-
+        //处理高亮文字矩形大小不一致问题，统一采用最小矩形
+        if(rec.height()>recttem.height())
+        {
+            rec.setY(recttem.y());
+            rec.setHeight(recttem.height());
+        }
         recboundary.setTopLeft(QPointF(rec.left() / curwidth,
                                        rec.top() / curheight));
         recboundary.setTopRight(QPointF(rec.right() / curwidth,

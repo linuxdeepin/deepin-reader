@@ -32,9 +32,9 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (MSG_FILE_PAGE_CHANGE == msgType) {
         emit sigFilePageChanged(msgContent);
     }else if(MSG_NOTIFY_KEY_MSG == msgType){
-        if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup) {
+        if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup||msgContent==KeyStr::g_left) {
              emit sigJumpToPrevPage();
-        } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown) {
+        } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown||msgContent==KeyStr::g_right) {
              emit sigJumpToNextPage();
         }
     }
@@ -42,7 +42,7 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
     return 0;
 }
 
-// 初始化界面
+// 初始化界面s
 void ThumbnailWidget::initWidget()
 {
     m_pThumbnailListWidget = new CustomListWidget(this);
