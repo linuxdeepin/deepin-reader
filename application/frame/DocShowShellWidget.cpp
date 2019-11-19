@@ -39,6 +39,11 @@ void DocShowShellWidget::slotShowFindWidget()
 {
     if (m_pFindWidget == nullptr) {
         m_pFindWidget = new FindWidget(this);
+
+//        DAnchors<FindWidget> anchors_findbar(m_pFindWidget);
+//        anchors_findbar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
+//        anchors_findbar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
+//        anchors_findbar.setBottomMargin(5);
     }
 
     int nParentWidth = this->width();

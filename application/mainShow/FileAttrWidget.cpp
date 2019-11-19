@@ -5,6 +5,9 @@
 #include <DWindowCloseButton>
 #include <QFileInfo>
 #include "controller/DataManager.h"
+#include <DFontSizeManager>
+#include <QMdiArea>
+#include <DFrame>
 
 FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
@@ -13,8 +16,7 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
     setFixedSize(QSize(300, 642));
 
     m_pVBoxLayout = new QVBoxLayout;
-    m_pVBoxLayout->setContentsMargins(10, 10, 10, 10);
-    m_pVBoxLayout->setSpacing(0);
+    m_pVBoxLayout->setContentsMargins(0, 0, 0, 0);
     this->setLayout(m_pVBoxLayout);
 
     initWidget();
@@ -29,7 +31,7 @@ void FileAttrWidget::setFileAttr()
     }
 
     QImage image;
-    bool rl = dproxy->getImage(0, image, 94, 114);
+    bool rl = dproxy->getImage(0, image, 94, 113);
     if (rl) {
         labelImage->setPixmap(QPixmap::fromImage(image));
     }
@@ -40,7 +42,12 @@ void FileAttrWidget::setFileAttr()
 
     labelFileName->setText(szTitle);
 
-    m_pVBoxLayout->addWidget(new AttrScrollWidget);
+    auto hLayout = new QHBoxLayout;
+    hLayout->setContentsMargins(10, 35, 10, 10);
+
+    hLayout->addWidget(new AttrScrollWidget(this));
+
+    m_pVBoxLayout->addItem(hLayout);
 }
 
 void FileAttrWidget::showScreenCenter()
@@ -81,10 +88,12 @@ void FileAttrWidget::initImageLabel()
     labelImage->setAlignment(Qt::AlignCenter);
 
     labelFileName = new DLabel("", this);
+    labelFileName->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
     labelFileName->setAlignment(Qt::AlignCenter);
 
     auto vlayout = new QVBoxLayout;
     vlayout->setContentsMargins(0, 6, 0, 30);
+    vlayout->setSpacing(10);
     vlayout->addWidget(labelImage);
     vlayout->addWidget(labelFileName);
 

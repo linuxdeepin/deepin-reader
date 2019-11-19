@@ -2,7 +2,7 @@
 #include <DFrame>
 #include <QDebug>
 #include <DTextBrowser>
-
+#include <DFontSizeManager>
 #include "docview/commonstruct.h"
 #include "frame/DocummentFileHelper.h"
 #include "utils/utils.h"
@@ -15,7 +15,8 @@ AttrScrollWidget::AttrScrollWidget(DWidget *parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     auto gridLayout = new QGridLayout;
-    gridLayout->setContentsMargins(0, 0, 0, 0);
+    gridLayout->setContentsMargins(0, 6, 0, 6);
+    gridLayout->setSpacing(3);
 
     stFileInfo fileInfo;
     DocummentFileHelper::instance()->docBasicInfo(fileInfo);
@@ -39,38 +40,32 @@ AttrScrollWidget::AttrScrollWidget(DWidget *parent)
     createLabel(gridLayout, 13, tr("File Size"), Utils::getInputDataSize(fileInfo.size));
 
     auto vLayout = new QVBoxLayout;
+    vLayout->setContentsMargins(10, 0, 10, 0);
 
-//    QFont font("SourceHanSansSC-Medium", 14);
     auto basicLabel = new DLabel(tr("basic information"));
-//    basicLabel->setFont(font);
     DFontSizeManager::instance()->bind(basicLabel, DFontSizeManager::T6);
     vLayout->addWidget(basicLabel);
 
     vLayout->addItem(gridLayout);
 
-    auto frame = new DFrame;
-    frame->setMinimumWidth(278);
-    this->setWidget(frame);
-    frame->setLayout(vLayout);
-    frame->adjustSize();
+    vLayout->addStretch(1);
+
+    this->setLayout(vLayout);
 }
 
 void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const QString &objName, const QString &sData)
 {
-//    QFont font("SourceHanSansSC-Normal", 12);
-
     DLabel *label = new DLabel(objName, this);
-//    label->setFont(font);
     DFontSizeManager::instance()->bind(label, DFontSizeManager::T8);
 
+    label->setMaximumWidth(60);
+
     label->setAlignment(Qt::AlignTop);
-//    label->setMinimumWidth(60);
     layout->addWidget(label, index, 0);
 
     DLabel *labelText = new DLabel(this);
-//    labelText->setFont(font);
     DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
-    labelText->setMaximumWidth(200);
+    labelText->setMaximumWidth(390-60);
     labelText->setText(sData);
     labelText->setAlignment(Qt::AlignTop);
     labelText->setWordWrap(true);
@@ -79,18 +74,14 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
 
 void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const QString &objName, const QDateTime &sData)
 {
-//    QFont font("SourceHanSansSC-Normal", 12);
-
     DLabel *label = new DLabel(objName, this);
-//    label->setFont(font);
     DFontSizeManager::instance()->bind(label, DFontSizeManager::T8);
     label->setAlignment(Qt::AlignTop);
     layout->addWidget(label, index, 0);
 
     DLabel *labelText = new DLabel(this);
-//    labelText->setFont(font);
     DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
-    labelText->setMaximumWidth(200);
+//    labelText->setMaximumWidth(200);
     QString strText = getTime(sData);
     labelText->setText(strText);
     labelText->setAlignment(Qt::AlignTop);
@@ -100,16 +91,12 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
 
 void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const QString &objName, const bool &bData)
 {
-//    QFont font("SourceHanSansSC-Normal", 12);
-
     DLabel *label = new DLabel(objName, this);
-//    label->setFont(font);
     DFontSizeManager::instance()->bind(label, DFontSizeManager::T8);
     label->setAlignment(Qt::AlignTop);
     layout->addWidget(label, index, 0);
 
     DLabel *labelText = new DLabel(this);
-//    labelText->setFont(font);
     DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
     labelText->setText(bData ? tr("Yes") : tr("No"));
     labelText->setAlignment(Qt::AlignTop);

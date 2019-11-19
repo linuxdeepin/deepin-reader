@@ -1,6 +1,6 @@
 #include "TitleWidget.h"
 #include <QHBoxLayout>
-
+#include <DFontSizeManager>
 #include <QWidgetAction>
 #include <DFontSizeManager>
 
@@ -234,10 +234,8 @@ void TitleWidget::initMenus()
     {
         m_pSettingMenu = new DMenu(this);
         m_pSettingMenu->setFixedWidth(220);
-//        QFont font;
-//        font.setPixelSize(14);
-//        m_pSettingMenu->setFont(font);
         DFontSizeManager::instance()->bind(m_pSettingMenu, DFontSizeManager::T6);
+
         auto action = new QWidgetAction(this);
         auto scaleWidget = new FontWidget(this);
 

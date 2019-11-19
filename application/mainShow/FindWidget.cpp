@@ -126,13 +126,13 @@ void FindWidget::initWidget()
 {
     auto findNextButton = new DIconButton(DStyle::SP_ArrowDown);
     findNextButton->setToolTip(tr("next one"));
-    findNextButton->setFixedSize(QSize(36, 36));
+    findNextButton->setFixedSize(QSize(34, 34));
     findNextButton->setIconSize(QSize(12, 12));
     connect(findNextButton, &DIconButton::clicked, this, &FindWidget::slotFindNextBtnClicked);
 
     auto findPrevButton = new DIconButton(DStyle::SP_ArrowUp);
     findPrevButton->setToolTip(tr("prev one"));
-    findPrevButton->setFixedSize(QSize(36, 36));
+    findPrevButton->setFixedSize(QSize(34, 34));
     findPrevButton->setIconSize(QSize(12, 12));
     connect(findPrevButton, &DIconButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
 
@@ -142,7 +142,7 @@ void FindWidget::initWidget()
     connect(closeButton, &DDialogCloseButton::clicked, this, &FindWidget::findCancel);
 
     m_pSearchEdit = new DSearchEdit;
-    m_pSearchEdit->setFixedSize(QSize(270, 36));
+    m_pSearchEdit->setFixedSize(QSize(270, 34));
     m_pSearchEdit->setFocusPolicy(Qt::StrongFocus);
 
     connect(m_pSearchEdit, &DSearchEdit::returnPressed, this, &FindWidget::handleContentChanged);

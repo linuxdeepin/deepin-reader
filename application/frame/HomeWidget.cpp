@@ -11,6 +11,7 @@
 #include "utils/PublicFunction.h"
 
 #include <QSvgWidget>
+#include <DFontSizeManager>
 
 HomeWidget::HomeWidget(CustomWidget *parent):
     CustomWidget ("HomeWidget", parent),
@@ -32,9 +33,6 @@ void HomeWidget::initWidget()
 {
     auto tipsLabel = new CustomClickLabel(tr("drag Pdf or other format file to here"), this);
     tipsLabel->setAlignment(Qt::AlignHCenter);
-//    QFont font;
-//    font.setPixelSize(12);
-//    tipsLabel->setFont(font);
     DFontSizeManager::instance()->bind(tipsLabel, DFontSizeManager::T8);
 
     auto chooseBtn = new DSuggestButton(tr("Select File"));

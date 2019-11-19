@@ -24,9 +24,6 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
     setDefaultWidget(pWidget);
 
     m_pClickLabel = new CustomClickLabel(QString("        %1").arg(tr("add high light")));
-//    QFont font;
-//    font.setPixelSize(14);
-//    m_pClickLabel->setFont(font);
     DFontSizeManager::instance()->bind(m_pClickLabel, DFontSizeManager::T6);
     connect(m_pClickLabel, SIGNAL(clicked()), this, SIGNAL(sigBtnDefaultClicked()));
 
