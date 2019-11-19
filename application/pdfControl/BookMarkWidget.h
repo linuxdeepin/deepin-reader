@@ -72,6 +72,7 @@ signals:
     void sigDelBKItem();
     void sigJumpToPrevItem();
     void sigJumpToNextItem();
+    void sigCtrlBAddBookMark();
 
 private slots:
     void slotAddBookMark();
