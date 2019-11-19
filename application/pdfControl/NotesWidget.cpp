@@ -79,7 +79,8 @@ void NotesWidget::slotDltNoteItem(QString uuid)
  */
 void NotesWidget::slotDltNoteContant(QString uuid)
 {
-    m_mapUuidAndPage.remove(uuid);
+//    m_mapUuidAndPage.remove(uuid);
+    slotDltNoteItem(uuid);
 }
 
 void NotesWidget::slotOpenFileOk()

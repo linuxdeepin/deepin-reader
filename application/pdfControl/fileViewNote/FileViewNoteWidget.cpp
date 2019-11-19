@@ -62,7 +62,8 @@ void FileViewNoteWidget::hideEvent(QHideEvent *event)
     //  原来是有注释的, 被删除了
     QString t_contant = m_pTextEdit->toPlainText().trimmed();
     if (m_strNote != "" && t_contant == "") {
-        sendMsg(MSG_NOTE_DLTNOTECONTANT, m_strNote);
+        sendMsg(MSG_NOTE_DLTNOTECONTANT, m_pNoteUuid);
+        m_strNote = t_contant;
     } else {
         QString t_contant = m_pTextEdit->toPlainText().trimmed();       //  注释内容
         if (t_contant != m_strNote) {   //  只有 和 原来已有注释内容不一样, 才会提示 保存
