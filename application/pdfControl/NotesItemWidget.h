@@ -78,6 +78,7 @@ private:
     bool m_isNote = true;// 是否是注释窗体,如果不是则不显示右键菜单
     QString m_strNote;   // 注释内容
     bool m_bPaint = false;
+    DMenu *m_menu = nullptr;
 };
 
 #endif // NOTESITEMWIDGET_H

@@ -60,12 +60,17 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
     if (!m_isNote) {
         return;
     }
-    QMenu *t_menu = new QMenu(this);
-    QAction *copyAction = t_menu->addAction(tr("copy"));
-    QAction *dltItemAction = t_menu->addAction(tr("Delete"));
-    connect(dltItemAction, SIGNAL(triggered()), this, SLOT(slotDltNoteContant()));
-    connect(copyAction, SIGNAL(triggered()), this, SLOT(slotCopyContant()));
-    t_menu->exec(QCursor::pos());
+    if(m_menu == nullptr){
+        m_menu = new DMenu(this);
+        QAction *copyAction = m_menu->addAction(tr("copy"));
+        QAction *dltItemAction = m_menu->addAction(tr("Delete"));
+        connect(dltItemAction, SIGNAL(triggered()), this, SLOT(slotDltNoteContant()));
+        connect(copyAction, SIGNAL(triggered()), this, SLOT(slotCopyContant()));
+    }
+
+    if(m_menu){
+        m_menu->exec(QCursor::pos());
+    }
 }
 
 void NotesItemWidget::initWidget()
