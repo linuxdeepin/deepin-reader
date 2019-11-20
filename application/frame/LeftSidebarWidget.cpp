@@ -35,6 +35,7 @@ void LeftSidebarWidget::slotStackSetCurIndex(const int &iIndex)
 void LeftSidebarWidget::slotWidgetVisible(const int &nVis)
 {
     this->setVisible(nVis);
+    DataManager::instance()->setBThumbnIsShow(nVis);
 }
 
 void LeftSidebarWidget::slotUpdateTheme()

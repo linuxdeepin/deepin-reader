@@ -65,6 +65,11 @@ void SearchResWidget::slotSearchOver()
     //生成左侧搜索列表
     //to do and send flush thumbnail and contant
     initSearchList(m_loadSearchResThread.searchList());
+
+    bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
+    if(!t_bTnumbnIsShow){
+        notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(!t_bTnumbnIsShow));
+    }
 }
 
 void SearchResWidget::slotLoadImage(const int &page, const QImage &image)

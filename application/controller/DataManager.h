@@ -88,6 +88,15 @@ public:
         m_nCurrentWidget = index;
     }
 
+    inline bool bThumbnIsShow() const
+    {
+        return m_bThumbnIsShow;
+    }
+    inline void setBThumbnIsShow(const bool show)
+    {
+        m_bThumbnIsShow = show;
+    }
+
 private:
     QString m_strCurrentTheme = "";     //  当前主题
     QString m_strOnlyFilePath = "";     //  只显示一个pdf 文件
@@ -100,6 +109,7 @@ private:
     QSize m_smallNoteSize;              // 注释小窗体的大小
     QColor m_selectColor;               // 高亮颜色
     int m_nCurrentWidget = WIDGET_THUMBNAIL; // 当前焦点处于那个窗体上（左侧缩略图）
+    bool m_bThumbnIsShow = false;       // 左侧缩略图是否展开
 };
 
 #endif // DATAMANAGER_H
