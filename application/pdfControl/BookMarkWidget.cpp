@@ -181,6 +181,8 @@ void BookMarkWidget::slotDeleteBookItem(const int &nPage)
 
                     deleteIndexPage(nPageIndex);
 
+                    notifyMsg(MSG_OPERATION_TEXT_SHOW_TIPS, tr("Deleted bookmark"));
+
                     break;
                 }
             }
@@ -276,6 +278,7 @@ void BookMarkWidget::slotDelBkItem()
                 pCurItem = nullptr;
 
                 deleteIndexPage(nPageIndex);
+                notifyMsg(MSG_OPERATION_TEXT_SHOW_TIPS, tr("Deleted bookmark"));
             }
         }
 
