@@ -23,7 +23,7 @@ void PagingWidget::initWidget()
 {
 //    QFont font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 14);
     m_pTotalPagesLab = new CustomClickLabel(QString("/xxx") + tr("pages"), this);
-    m_pTotalPagesLab->setMinimumWidth(80);
+    m_pTotalPagesLab->setFixedWidth(70);
 //    m_pTotalPagesLab->setFont(font);
     DFontSizeManager::instance()->bind(m_pTotalPagesLab, DFontSizeManager::T6);
 
@@ -39,7 +39,7 @@ void PagingWidget::initWidget()
     m_pJumpPageSpinBox->setMinimum(1);
     m_pJumpPageSpinBox->setRange(1, 100);
     m_pJumpPageSpinBox->setValue(1);
-    m_pJumpPageSpinBox->setMinimumWidth(50);
+    m_pJumpPageSpinBox->setFixedWidth(60);
     m_pJumpPageSpinBox->installEventFilter(this);
     m_pJumpPageSpinBox->setWrapping(true);
     m_pJumpPageSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
@@ -47,10 +47,12 @@ void PagingWidget::initWidget()
     DFontSizeManager::instance()->bind(m_pJumpPageSpinBox, DFontSizeManager::T6);
 
     auto hLayout = new QHBoxLayout;
+    hLayout->addStretch(1);
     hLayout->addWidget(m_pJumpPageSpinBox);
     hLayout->addWidget(m_pTotalPagesLab);
     hLayout->addWidget(m_pPrePageBtn);
     hLayout->addWidget(m_pNextPageBtn);
+    hLayout->addStretch(1);
     this->setLayout(hLayout);
 }
 
