@@ -464,15 +464,18 @@ void MainWindow::slotActionTrigger(const QString &sAction)
 
 void MainWindow::slotShowTips(const QString &contant)
 {
-    auto tipsWidget = new DFloatingMessage(
-        DFloatingMessage::MessageType::TransientType, this);
+    if(m_tipsWidget == nullptr){
+        m_tipsWidget = new DFloatingMessage(
+            DFloatingMessage::MessageType::TransientType, this);
+    }
 //    tipsWidget->setWindowFlags(Qt::X11BypassWindowManagerHint
 //                               | Qt::WindowStaysOnTopHint
-//                               | Qt::FramelessWindowHint );
-    tipsWidget->setMessage(contant);
-//    tipsWidget->adjustSize();
-    tipsWidget->setGeometry((width() - 150) / 2, height() - 50, 150, 50);
-    tipsWidget->show();
+//                               | Qt::FramelessWindowHint );afiidfia
+    m_tipsWidget->setMessage(contant);
+    m_tipsWidget->setIcon(QIcon(QString(":/resources/light/pdfControl/ok.svg")));
+    m_tipsWidget->adjustSize();
+    m_tipsWidget->setGeometry((width() - 150) / 2, height() - 50, 150, 50);
+    m_tipsWidget->show();
 }
 
 void MainWindow::sendMsg(const int &, const QString &)

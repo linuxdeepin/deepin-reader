@@ -75,7 +75,8 @@ private:
     MsgSubject      *m_pMsgSubject = nullptr;
     NotifySubject   *m_pNotifySubject = nullptr;
 
-    QStringList     m_pFilterList;   
+    QStringList     m_pFilterList;
+    DFloatingMessage *m_tipsWidget = nullptr;
 
     // IObserver interface
 public:
