@@ -302,7 +302,7 @@ void FileViewWidget::slotFileRemoveAnnotation(const QString &msgContent)
         QPoint tempPoint(sX.toInt(), sY.toInt());
         QString sUuid = m_pDocummentFileHelper->removeAnnotation(tempPoint);
         if (sUuid != "") {
-            sendMsg(MSG_NOTE_DLTNOTEITEM, sUuid);   //  notesWidget 处理该消息
+            sendMsg(MSG_NOTE_DLTNOTEITEM, sUuid);   //  notesWidget 处理该消息        
         }
     }
 }

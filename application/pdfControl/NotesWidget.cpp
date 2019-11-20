@@ -62,7 +62,7 @@ void NotesWidget::slotDltNoteItem(QString uuid)
 
                     auto dproxy = DocummentFileHelper::instance();
                     if (dproxy) {
-                        dproxy->removeAnnotation(uuid, page);
+                        dproxy->removeAnnotation(uuid, page);                       
                     }
 
                     break;
@@ -70,6 +70,8 @@ void NotesWidget::slotDltNoteItem(QString uuid)
             }
         }
     }
+    //some highlight no contents not contain by m_pNotesList,so call the func out of for loop
+     notifyMsg(MSG_OPERATION_TEXT_SHOW_TIPS, tr("Deleted Note"));
 }
 
 /**
@@ -208,6 +210,7 @@ void NotesWidget::slotDelNoteItem()
             auto t_pDocummentProxy = DocummentFileHelper::instance();
             if (t_pDocummentProxy) {
                 t_pDocummentProxy->removeAnnotation(t_uuid, page);
+                notifyMsg(MSG_OPERATION_TEXT_SHOW_TIPS, tr("Deleted Note"));
             }
         }
         if (m_pNotesList->count() > 0) {
