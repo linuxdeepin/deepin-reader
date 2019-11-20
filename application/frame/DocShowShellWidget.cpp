@@ -39,11 +39,6 @@ void DocShowShellWidget::slotShowFindWidget()
 {
     if (m_pFindWidget == nullptr) {
         m_pFindWidget = new FindWidget(this);
-
-//        DAnchors<FindWidget> anchors_findbar(m_pFindWidget);
-//        anchors_findbar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
-//        anchors_findbar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
-//        anchors_findbar.setBottomMargin(5);
     }
 
     int nParentWidth = this->width();
@@ -109,11 +104,11 @@ void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
 
 void DocShowShellWidget::initConnections()
 {
-    connect(this, SIGNAL(sigShowFileAttr()), this, SLOT(slotShowFileAttr()));
-    connect(this, SIGNAL(sigShowFileFind()), this, SLOT(slotShowFindWidget()));
+    connect(this, SIGNAL(sigShowFileAttr()), SLOT(slotShowFileAttr()));
+    connect(this, SIGNAL(sigShowFileFind()), SLOT(slotShowFindWidget()));
 
-    connect(this, SIGNAL(sigOpenNoteWidget(const QString &)), this, SLOT(slotOpenNoteWidget(const QString &)));
-    connect(this, SIGNAL(sigShowNoteWidget(const QString &)), this, SLOT(slotShowNoteWidget(const QString &)));
+    connect(this, SIGNAL(sigOpenNoteWidget(const QString &)), SLOT(slotOpenNoteWidget(const QString &)));
+    connect(this, SIGNAL(sigShowNoteWidget(const QString &)), SLOT(slotShowNoteWidget(const QString &)));
 }
 
 //  集中处理 按键通知消息

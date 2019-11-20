@@ -83,6 +83,9 @@ void DBManager::saveBookMark()
     if (m_pBookMarkList.size() == 0) {
         deleteBookMark();
     } else {
+
+        qSort(m_pBookMarkList.begin(), m_pBookMarkList.end());
+
         if (m_nDbType == -1) {    //  原来没有数据
             QString sPage = "";
             foreach (int i, m_pBookMarkList) {

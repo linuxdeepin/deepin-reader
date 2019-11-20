@@ -6,7 +6,6 @@
 
 #include "docview/docummentproxy.h"
 #include <DDialog>
-
 #include <QPrinter>
 #include <QPrinterInfo>
 #include <QPrintPreviewDialog>
@@ -79,7 +78,13 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
                 if (m_pDocummentFileHelper->mouseBeOverText(docGlobalPos)) {
                     m_bIsHandleSelect = true;
                     setCursor(QCursor(Qt::IBeamCursor));
+
+                    onShowNoteTipWidget(docGlobalPos, event->pos());
                 } else {
+                    if (m_pNoteTipWidget && m_pNoteTipWidget->isVisible()) {
+                        m_pNoteTipWidget->hide();
+                    }
+
                     m_bIsHandleSelect = false;
                     setCursor(QCursor(Qt::ArrowCursor));
                 }
@@ -154,6 +159,11 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
             bool bIsHighLightReleasePoint = m_pDocummentFileHelper->annotationClicked(docGlobalPos, selectText, t_strUUid);
             DataManager::instance()->setMousePressLocal(bIsHighLightReleasePoint, globalPos);
             if (bIsHighLightReleasePoint) {
+
+                if (m_pNoteTipWidget && m_pNoteTipWidget->isVisible()) {
+                    m_pNoteTipWidget->hide();
+                }
+
                 int nPage = m_pDocummentFileHelper->pointInWhichPage(docGlobalPos);
                 QString t_strContant = t_strUUid.trimmed() + QString("%1%") + QString::number(nPage);
                 notifyMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
@@ -187,7 +197,6 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
     //  手型状态， 直接返回
     if (m_nCurrentHandelState == Handel_State)
         return;
-
 
     QString sSelectText =  "";
     m_pDocummentFileHelper->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
@@ -248,11 +257,11 @@ void FileViewWidget::slotSetHandShape(const QString &data)
     int nRes = data.toInt();
     if (nRes == 1) { //  手形
         m_nCurrentHandelState = Handel_State;
-        this->setCursor(Qt::OpenHandCursor);      
+        this->setCursor(Qt::OpenHandCursor);
         qDebug() << __FUNCTION__ << "current cursor" << cursor();
     } else {
         m_nCurrentHandelState = Default_State;
-        this->setCursor(Qt::ArrowCursor);       
+        this->setCursor(Qt::ArrowCursor);
     }
 }
 
@@ -370,6 +379,27 @@ void FileViewWidget::initConnections()
     connect(this, SIGNAL(sigFileRemoveAnnotation(const QString &)), SLOT(slotFileRemoveAnnotation(const QString &)));
 
     connect(this, SIGNAL(sigFileAddNote(const QString &)), SLOT(slotFileAddNote(const QString &)));
+}
+
+//  显示 注释内容Tip
+void FileViewWidget::onShowNoteTipWidget(const QPoint &docPos, const QPoint &showPos)
+{
+    QString selectText, t_strUUid;
+    bool bIsHighLightReleasePoint = m_pDocummentFileHelper->annotationClicked(docPos, selectText, t_strUUid);
+    if (bIsHighLightReleasePoint) {
+        int nPage = m_pDocummentFileHelper->pointInWhichPage(docPos);
+        QString sContant = "";
+        m_pDocummentFileHelper->getAnnotationText(t_strUUid, sContant, nPage);
+        if (sContant != "") {
+            if (m_pNoteTipWidget == nullptr) {
+                m_pNoteTipWidget = new NoteTipWidget(this);
+            }
+            m_pNoteTipWidget->setTipContent(sContant);
+            QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 10);
+            m_pNoteTipWidget->move(showRealPos);
+            m_pNoteTipWidget->show();
+        }
+    }
 }
 
 //  打印

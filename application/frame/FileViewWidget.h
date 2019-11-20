@@ -5,7 +5,7 @@
 
 #include "CustomControl/CustomWidget.h"
 #include "DocummentFileHelper.h"
-
+#include "NoteTipWidget.h"
 #include "mainShow/TextOperationMenu.h"
 
 //  当前鼠标状态
@@ -79,6 +79,7 @@ private slots:
 private:
     void initConnections();
     void onClickPageLink(Page::Link *pLink);
+    void onShowNoteTipWidget(const QPoint &docPos, const QPoint &showPos);
 
     int dealWithTitleRequest(const int &msgType, const QString &msgContent);
     int dealWithFileMenuRequest(const int &msgType, const QString &msgContent);
@@ -87,6 +88,7 @@ private:
 private:
     TextOperationMenu       *m_operatemenu = nullptr;
     DocummentFileHelper     *m_pDocummentFileHelper = nullptr;
+    NoteTipWidget           *m_pNoteTipWidget = nullptr;
 
 private:
     int         m_nCurrentHandelState = Default_State;  //  当前鼠标状态
