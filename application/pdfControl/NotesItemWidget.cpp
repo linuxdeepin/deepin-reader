@@ -100,7 +100,7 @@ void NotesItemWidget::initWidget()
 
 //    font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 11);
     m_pTextLab = new DLabel;
-    m_pTextLab->setFixedHeight(51);
+    m_pTextLab->setFixedHeight(54);
     m_pTextLab->setMinimumWidth(102);
     m_pTextLab->setMaximumWidth(349);
     m_pTextLab->setFrameStyle(QFrame::NoFrame);
