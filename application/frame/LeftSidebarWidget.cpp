@@ -27,7 +27,9 @@ void LeftSidebarWidget::slotStackSetCurIndex(const int &iIndex)
 {
     auto pWidget = this->findChild<DStackedWidget *>();
     if (pWidget) {
-        DataManager::instance()->setCurrentWidget(iIndex);
+        if(WIDGET_SEARCH != iIndex){
+            DataManager::instance()->setCurrentWidget(iIndex);
+        }
         pWidget->setCurrentIndex(iIndex);
     }
 }

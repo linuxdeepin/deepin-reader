@@ -54,7 +54,7 @@ void MainOperationWidget::initWidget()
         QString objName = btn->objectName();
         if (objName == "thumbnail") {
             btn->setChecked(true);
-            m_nThumbnailIndex = 0;
+            m_nThumbnailIndex = WIDGET_THUMBNAIL;
             break;
         }
     }
@@ -78,11 +78,11 @@ QString MainOperationWidget::findBtnName()
 {
     QString btnName = "";
 
-    if (0 == m_nThumbnailIndex) {
+    if (WIDGET_THUMBNAIL == m_nThumbnailIndex) {
         btnName = "thumbnail";
-    } else if (1 == m_nThumbnailIndex) {
+    } else if (WIDGET_BOOKMARK == m_nThumbnailIndex) {
         btnName = "bookmark";
-    } else if (2 == m_nThumbnailIndex) {
+    } else if (WIDGET_NOTE == m_nThumbnailIndex) {
         btnName = "annotation";
     }
 
