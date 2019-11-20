@@ -1,6 +1,7 @@
 #include "MainOperationWidget.h"
 #include <QHBoxLayout>
 #include <QButtonGroup>
+#include <DToolButton>
 #include "utils/PublicFunction.h"
 //#include <DGuiApplicationHelper>
 
@@ -59,9 +60,10 @@ void MainOperationWidget::initWidget()
     }
 }
 
-DIconButton *MainOperationWidget::createBtn(const QString &btnName, const QString &objName)
+DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QString &objName)
 {
-    auto btn = new DIconButton(this);
+    //auto btn = new DIconButton(this);
+    auto btn = new DToolButton(this);
     btn->setToolTip(btnName);
     btn->setObjectName(objName);
     btn->setFixedSize(QSize(36, 36));
@@ -99,7 +101,7 @@ void MainOperationWidget::slotUpdateTheme()
 {
     updateWidgetTheme();
 
-    auto btnList = this->findChildren<DIconButton *>();
+    auto btnList = this->findChildren<DToolButton *>();
     foreach (auto btn, btnList) {
         QString objName = btn->objectName();
         if (objName != "") {

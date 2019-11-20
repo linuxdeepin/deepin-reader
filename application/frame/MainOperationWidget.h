@@ -3,6 +3,7 @@
 
 #include <DIconButton>
 #include <DPushButton>
+#include <DToolButton>
 #include "CustomControl/CustomWidget.h"
 
 /**
@@ -17,7 +18,7 @@ public:
     MainOperationWidget(CustomWidget *parent = nullptr);
 
 private:
-    DIconButton *createBtn(const QString &btnName, const QString &objName);
+    DToolButton *createBtn(const QString &btnName, const QString &objName);
     QString findBtnName();
     void initConnect();
 

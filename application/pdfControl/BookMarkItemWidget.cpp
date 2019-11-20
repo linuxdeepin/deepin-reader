@@ -55,7 +55,9 @@ void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
 {
     if(m_menu == nullptr){
         m_menu = new DMenu(this);
-        QAction *dltBookMarkAction = m_menu->addAction(tr("delete bookmark"));
+        m_menu->setFixedWidth(182);
+        DFontSizeManager::instance()->bind(m_menu, DFontSizeManager::T6);
+        QAction *dltBookMarkAction = m_menu->addAction(QString("      %1").arg(tr("delete bookmark")));
         connect(dltBookMarkAction, SIGNAL(triggered()), this, SLOT(slotDltBookMark()));
     }
 
