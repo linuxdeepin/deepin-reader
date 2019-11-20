@@ -1103,21 +1103,24 @@ void DocummentBase::showFacingPage()
         d->m_widgets.at(d->m_pages.size() / 2)->layout()->addWidget(d->pblankwidget);
         d->m_widgets.at(d->m_pages.size() / 2)->show();
     }
-    int rex = d->m_vboxLayout->margin(), rey = d->m_vboxLayout->margin();
-    for (int i = 0; i < d->m_widgets.size() / 2; i++) {
-        int reheight = 0;
-        if (d->m_pages.at(i * 2)->height() < d->m_pages.at(i * 2 + 1)->height()) {
-            reheight = d->m_pages.at(i * 2 + 1)->height();
-        } else {
-            reheight = d->m_pages.at(i * 2)->height();
-        }
-        d->m_widgets.at(i)->setGeometry(rex, rey, d->m_widgets.at(i)->layout()->margin() * 2 + d->m_widgets.at(i)->layout()->spacing() + d->m_pages.at(i * 2)->width() + d->m_pages.at(i * 2 + 1)->width(), d->m_widgets.at(i)->layout()->margin() * 2 + reheight);
-        rey += d->m_widgets.at(i)->layout()->margin() * 2 + reheight + d->m_vboxLayout->spacing();
-    }
-    if (d->m_pages.size() % 2) {
-        int reheight = d->m_pages.at(d->m_pages.size() - 1)->height();
-        d->m_widgets.at(d->m_widgets.size() / 2)->setGeometry(rex, rey, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + d->m_widgets.at(d->m_widgets.size() / 2)->layout()->spacing() + d->m_pages.at(d->m_pages.size() - 1)->width() * 2, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + reheight);
-    }
+    //下面代码留作备用，如果开启的话会导致双页切换的时候，页面整个左偏
+//    int rex = d->m_vboxLayout->margin(), rey = d->m_vboxLayout->margin();
+//    for (int i = 0; i < d->m_widgets.size() / 2; i++) {
+//        int reheight = 0;
+//        if (d->m_pages.at(i * 2)->height() < d->m_pages.at(i * 2 + 1)->height()) {
+//            reheight = d->m_pages.at(i * 2 + 1)->height();
+//        } else {
+//            reheight = d->m_pages.at(i * 2)->height();
+//        }
+//        d->m_widgets.at(i)->setGeometry(rex, rey, d->m_widgets.at(i)->layout()->margin() * 2 + d->m_widgets.at(i)->layout()->spacing() + d->m_pages.at(i * 2)->width() + d->m_pages.at(i * 2 + 1)->width(), d->m_widgets.at(i)->layout()->margin() * 2 + reheight);
+//        rey += d->m_widgets.at(i)->layout()->margin() * 2 + reheight + d->m_vboxLayout->spacing();
+//        QCoreApplication::processEvents();
+//    }
+//    if (d->m_pages.size() % 2) {
+//        int reheight = d->m_pages.at(d->m_pages.size() - 1)->height();
+//        d->m_widgets.at(d->m_widgets.size() / 2)->setGeometry(rex, rey, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + d->m_widgets.at(d->m_widgets.size() / 2)->layout()->spacing() + d->m_pages.at(d->m_pages.size() - 1)->width() * 2, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + reheight);
+//    }
+
 }
 
 Page::Link *DocummentBase::mouseBeOverLink(QPoint point)
