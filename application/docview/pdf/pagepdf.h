@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <QObject>
 
-class PagePdf;
+//class PagePdf;
 class PagePdfPrivate;
 class PagePdf: public PageBase
 {

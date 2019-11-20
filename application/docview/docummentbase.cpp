@@ -720,27 +720,51 @@ bool DocummentBase::showMagnifier(QPoint point)
 
         double curwidth = d->m_scale * d->m_imagewidth;
         double curheight = d->m_scale * d->m_imageheight;
-        double left = (d->m_widgets.at(pagenum)->width() - curwidth) / 2;
-        double topspace = (d->m_widgets.at(pagenum)->height() - curheight) / 2;
-
-        qDebug() << "showMagnifier" << qpoint << gpoint << d->m_widgets.at(0)->width() << frameRect().width() << curwidth << curheight << left << topspace;
-        if (qpoint.x() < left - d->m_magnifierwidget->getMagnifierRadius() || qpoint.x() > curwidth + left + d->m_magnifierwidget->getMagnifierRadius()) {
-            QPixmap pix(d->m_magnifierwidget->getMagnifierRadius() * 2, d->m_magnifierwidget->getMagnifierRadius() * 2);
-            pix.fill(Qt::transparent);
-            d->m_magnifierwidget->setPixmap(pix);
-            d->m_magnifierwidget->setPoint(gpoint);
-            d->m_magnifierwidget->show();
-            d->m_magnifierwidget->update();
-        } else {
-            if (ppage ->getMagnifierPixmap(pixmap, qpoint, d->m_magnifierwidget->getMagnifierRadius(), ppage->width()*d->m_magnifierwidget->getMagnifierScale(), ppage->height()*d->m_magnifierwidget->getMagnifierScale())) {
-                d->m_magnifierwidget->setPixmap(pixmap);
+        double topspace = (d->m_widgets.at(pagenum)->height() - curheight) / 2.0;
+        double left=0.0;
+        if(d->m_viewmode==ViewMode_SinglePage){
+            left= (d->m_widgets.at(pagenum)->width() - curwidth) / 2.0;
+            qDebug() << "showMagnifier" << qpoint << gpoint << d->m_widgets.at(0)->width() << frameRect().width() << curwidth << curheight << left << topspace;
+            if (qpoint.x() < left - d->m_magnifierwidget->getMagnifierRadius() || qpoint.x() > curwidth + left + d->m_magnifierwidget->getMagnifierRadius()) {
+                QPixmap pix(d->m_magnifierwidget->getMagnifierRadius() * 2, d->m_magnifierwidget->getMagnifierRadius() * 2);
+                pix.fill(Qt::transparent);
+                d->m_magnifierwidget->setPixmap(pix);
                 d->m_magnifierwidget->setPoint(gpoint);
-                d->m_magnifierwidget->startShow();
                 d->m_magnifierwidget->show();
                 d->m_magnifierwidget->update();
+            } else {
+                if (ppage ->getMagnifierPixmap(pixmap, qpoint, d->m_magnifierwidget->getMagnifierRadius(), ppage->width()*d->m_magnifierwidget->getMagnifierScale(), ppage->height()*d->m_magnifierwidget->getMagnifierScale())) {
+                    d->m_magnifierwidget->setPixmap(pixmap);
+                    d->m_magnifierwidget->setPoint(gpoint);
+                    d->m_magnifierwidget->startShow();
+                    d->m_magnifierwidget->show();
+                    d->m_magnifierwidget->update();
+                }
             }
+        }else {
+            double curitemwidth=d->m_widgets.at(pagenum)->width();
+             left= (curitemwidth - curwidth*2.0-(curitemwidth - curwidth*2.0)/3.0) / 2.0;
+             qDebug() << "showMagnifier" << qpoint << gpoint << d->m_widgets.at(0)->width() << frameRect().width() << curwidth << curheight << left << topspace;
+             if ((qpoint.x() < left - d->m_magnifierwidget->getMagnifierRadius() ||
+                     (qpoint.x() > curwidth + left + d->m_magnifierwidget->getMagnifierRadius()&&qpoint.x()<curwidth + 2.0*left + d->m_magnifierwidget->getMagnifierRadius())||
+                     qpoint.x()>curwidth*2.0+curwidth*2.0+d->m_magnifierwidget->getMagnifierRadius())&&qpoint.x()>0&&qpoint.x()<d->m_widgets.at(pagenum)->width()) {
+                 QPixmap pix(d->m_magnifierwidget->getMagnifierRadius() * 2, d->m_magnifierwidget->getMagnifierRadius() * 2);
+                 pix.fill(Qt::transparent);
+                 d->m_magnifierwidget->setPixmap(pix);
+                 d->m_magnifierwidget->setPoint(gpoint);
+                 d->m_magnifierwidget->show();
+                 d->m_magnifierwidget->update();
+             } else {
+                 if (ppage ->getMagnifierPixmap(pixmap, qpoint, d->m_magnifierwidget->getMagnifierRadius(), ppage->width()*d->m_magnifierwidget->getMagnifierScale(), ppage->height()*d->m_magnifierwidget->getMagnifierScale())) {
+                     d->m_magnifierwidget->setPixmap(pixmap);
+                     d->m_magnifierwidget->setPoint(gpoint);
+                     d->m_magnifierwidget->startShow();
+                     d->m_magnifierwidget->show();
+                     d->m_magnifierwidget->update();
+                 }
+             }
         }
-    } else {
+    } else {       
         QPixmap pix(d->m_magnifierwidget->getMagnifierRadius() * 2, d->m_magnifierwidget->getMagnifierRadius() * 2);
         pix.fill(Qt::transparent);
         d->m_magnifierwidget->setPixmap(pix);
