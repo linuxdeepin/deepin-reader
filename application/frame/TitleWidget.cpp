@@ -3,6 +3,7 @@
 #include <DFontSizeManager>
 #include <QWidgetAction>
 #include <DFontSizeManager>
+#include "controller/DataManager.h"
 
 TitleWidget::TitleWidget(CustomWidget *parent) :
     CustomWidget("TitleWidget", parent)
@@ -106,6 +107,7 @@ void TitleWidget::on_thumbnailBtn_clicked()
 {
     bool rl = m_pThumbnailBtn->isChecked();
     notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(rl));
+    DataManager::instance()->setBThumbnIsShow(rl);
 }
 
 //  文档显示

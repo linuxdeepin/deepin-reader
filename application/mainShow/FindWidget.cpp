@@ -25,6 +25,7 @@
 #include <DIconButton>
 #include <DDialogCloseButton>
 #include "subjectObserver/MsgHeader.h"
+#include "controller/DataManager.h"
 
 FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)
@@ -94,6 +95,7 @@ void FindWidget::slotClearContent()
     if (strNewFind == "") {
         m_strOldFindContent = "";
         notifyMsg(MSG_CLEAR_FIND_CONTENT);
+
     }
 }
 
