@@ -16,15 +16,17 @@ void PageNumberLabel::paintEvent(QPaintEvent *e)
 {
 //    QPalette pPage(this->palette());
 //    QColor color;
-//    //  涉及到 主题颜色
-//    if (m_bSelect) {
+    DLabel::paintEvent(e);
+    //  涉及到 主题颜色
+    if (m_bSelect) {
 //        color = QColor(QString("#0081FF"));
 //        pPage.setColor(QPalette::Text, pPage.highlight().color());
-//    } else {
-////        color = QColor::fromRgbF(0, 0, 0, 0.08);
+        setForegroundRole(DPalette::Highlight);
+    } else {
+//        color = QColor::fromRgbF(0, 0, 0, 0.08);
 //        pPage.setColor(QPalette::Text, QColor(QString("#303030")));
-//    }
+        setForegroundRole(DPalette::TextTips);
+    }
 
 //    this->setPalette(pPage);
-    DLabel::paintEvent(e);
 }

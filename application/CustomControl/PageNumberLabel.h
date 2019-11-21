@@ -1,7 +1,6 @@
 #ifndef PAGENUMBERLABEL_H
 #define PAGENUMBERLABEL_H
 
-
 #include <DWidget>
 #include <DLabel>
 
