@@ -47,7 +47,6 @@ enum MSG_MENU_TYPE {
     MSG_OPERATION_TEXT_ADD_BOOKMARK,    //  添加书签
     MSG_OPERATION_TEXT_ADD_ANNOTATION,  //  添加注释
     MSG_OPERATION_TEXT_SHOW_NOTEWIDGET,  //  显示注释窗口
-    MSG_OPERATION_TEXT_SHOW_TIPS,        //  显示提示窗口
 };
 
 //  左侧 侧边栏 消息
@@ -89,7 +88,8 @@ enum MSG_OPERATION_RES_TYPE {
     MSG_OPERATION_OPEN_FILE_TITLE,          //  打开文件成功, 文件标题
     MSG_OPERATION_OPEN_FILE_FAIL,           //  打开文件失败
     MSG_OPERATION_UPDATE_THEME,             //  主题变了
-    MSG_NOTIFY_KEY_MSG                      //  按键通知消息
+    MSG_NOTIFY_KEY_MSG,                      //  按键通知消息
+    MSG_NOTIFY_SHOW_TIP,        //  显示提示窗口
 };
 
 namespace ConstantMsg {

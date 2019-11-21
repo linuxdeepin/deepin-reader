@@ -19,6 +19,7 @@ signals:
     void sigOpenFileStart();
     void sigOpenFileOk();
     void sigOpenFileFail(const QString &);
+    void sigShowTips(const QString &);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
@@ -28,6 +29,7 @@ private slots:
     void slotOpenFileFail(const QString &);
     void slotOpenFileOk();
     void slotOpenFileStart();
+    void slotShowTips(const QString &contant);
 
 private:
     void initConnections();

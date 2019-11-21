@@ -16,7 +16,6 @@
 #include "controller/DataManager.h"
 #include <DGuiApplicationHelper>
 #include "DocummentFileHelper.h"
-#include <DMessageManager>
 
 DWIDGET_USE_NAMESPACE
 
@@ -94,7 +93,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             DDialog dlg("", tr("Do you need to save the file opened?"));
             dlg.setIcon(QIcon::fromTheme("deepin-reader"));
             dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Not Save"));
-            dlg.addButton(tr("Save"),true,DDialog::ButtonRecommend);
+            dlg.addButton(tr("Save"), true, DDialog::ButtonRecommend);
 
             int nRes = dlg.exec();
             if (nRes <= 0) {
@@ -173,7 +172,7 @@ void MainWindow::initConnections()
     connect(this, SIGNAL(sigAppExit()), this, SLOT(slotAppExit()));
     connect(this, SIGNAL(sigAppShowState(const int &)), this, SLOT(slotAppShowState(const int &)));
     connect(this, SIGNAL(sigSetAppTitle(const QString &)), this, SLOT(slotSetAppTitle(const QString &)));
-    connect(this, SIGNAL(sigShowTips(const QString &)), this, SLOT(slotShowTips(const QString &)));
+
     connect(this, &MainWindow::sigSpacePressed, this, []() {
         if (DocummentProxy::instance()) {
             if (DocummentProxy::instance()->getAutoPlaySlideStatu()) {
@@ -463,11 +462,6 @@ void MainWindow::slotActionTrigger(const QString &sAction)
     }
 }
 
-void MainWindow::slotShowTips(const QString &contant)
-{
-    DMessageManager::instance()->sendMessage(this, QIcon(":/resources/light/pdfControl/ok.svg"), contant);
-}
-
 void MainWindow::sendMsg(const int &, const QString &)
 {
 
@@ -499,9 +493,6 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
                 emit sigSpacePressed();
             }
         }
-    } else if (msgType == MSG_OPERATION_TEXT_SHOW_TIPS) {
-        emit sigShowTips(msgContent);
-        return ConstantMsg::g_effective_res;
     }
     return 0;
 }

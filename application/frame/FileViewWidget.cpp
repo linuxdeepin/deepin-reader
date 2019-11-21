@@ -294,6 +294,7 @@ void FileViewWidget::slotFileAddAnnotation()
     int nEy = m_pEndSelectPoint.y();
 
     if (nSx == nEx && nSy == nEy) {
+        notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("please select the text."));
         return;
     }
     QString selectText = "", t_strUUid = "";
@@ -303,6 +304,8 @@ void FileViewWidget::slotFileAddAnnotation()
         QColor color = DataManager::instance()->selectColor();
 
         m_pDocummentFileHelper->addAnnotation(m_pEndSelectPoint, m_pEndSelectPoint, color);
+    } else {
+        notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("please select the text."));
     }
 }
 

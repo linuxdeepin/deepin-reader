@@ -11,6 +11,7 @@
 #include "DocummentFileHelper.h"
 #include <QStackedLayout>
 #include <DDialog>
+#include <DMessageManager>
 
 MainWidget::MainWidget(CustomWidget *parent) :
     CustomWidget ("MainWidget", parent)
@@ -23,9 +24,10 @@ MainWidget::MainWidget(CustomWidget *parent) :
 
 void MainWidget::initConnections()
 {
-    connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
-    connect(this, SIGNAL(sigOpenFileStart()), this, SLOT(slotOpenFileStart()));
-    connect(this, SIGNAL(sigOpenFileFail(const QString &)), this, SLOT(slotOpenFileFail(const QString &)));
+    connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));
+    connect(this, SIGNAL(sigOpenFileStart()), SLOT(slotOpenFileStart()));
+    connect(this, SIGNAL(sigOpenFileFail(const QString &)), SLOT(slotOpenFileFail(const QString &)));
+    connect(this, SIGNAL(sigShowTips(const QString &)), SLOT(slotShowTips(const QString &)));
 }
 
 //  文件打开成功
@@ -61,6 +63,11 @@ void MainWidget::slotOpenFileFail(const QString &errorInfo)
     dlg.exec();
 }
 
+void MainWidget::slotShowTips(const QString &contant)
+{
+    DMessageManager::instance()->sendMessage(this, QIcon(":/resources/light/pdfControl/ok.svg"), contant);
+}
+
 int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
@@ -70,6 +77,9 @@ int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
         return ConstantMsg::g_effective_res;
     } else if (msgType == MSG_OPERATION_OPEN_FILE_START) {
         emit sigOpenFileStart();
+        return ConstantMsg::g_effective_res;
+    } else if (msgType == MSG_NOTIFY_SHOW_TIP) {
+        emit sigShowTips(msgContent);
         return ConstantMsg::g_effective_res;
     }
 
