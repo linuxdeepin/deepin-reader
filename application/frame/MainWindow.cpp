@@ -91,12 +91,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
     if (sFilePath != "") {
         bool rl = DataManager::instance()->bIsUpdate();
         if (rl) {
-            DDialog dlg(tr("Save File"), tr("Do you need to save the file opened?"));
+            DDialog dlg("", tr("Do you need to save the file opened?"));
             dlg.setIcon(QIcon::fromTheme("deepin-reader"));
-            dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Not Save") <<  tr("Save"));
-              QList<QAbstractButton*> lbtn= dlg.getButtons();
-//              int index=0;
-//              lbtn.at(2)->setFocus();
+            dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Not Save"));
+            dlg.addButton(tr("Save"),true,DDialog::ButtonRecommend);
 
             int nRes = dlg.exec();
             if (nRes <= 0) {
