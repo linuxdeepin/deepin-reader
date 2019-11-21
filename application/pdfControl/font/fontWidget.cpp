@@ -124,7 +124,14 @@ void FontWidget::initWidget()
 void FontWidget::slotDealWithKey(const QString &sKey)
 {
     if (sKey == KeyStr::g_ctrl_1) {
+        //  单页显示
+        DocummentFileHelper::instance()->setViewModeAndShow(ViewMode_SinglePage);
 
+        //  缩放比为1, 不旋转
+        DocummentFileHelper::instance()->scaleRotateAndShow(1.0, RotateType_0);
+
+        //  恢复 初始化
+        slotReset();
     } else if (sKey == KeyStr::g_ctrl_2) {
         slotSetSuitHCheckIcon();
     } else if (sKey == KeyStr::g_ctrl_3) {
