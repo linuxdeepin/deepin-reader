@@ -47,6 +47,7 @@ signals:
     void sigWidgetAdapt();
 
     void sigFileAddAnnotation(const QString &);
+    void sigFileAddAnnotation();
     void sigFileUpdateAnnotation(const QString &);
     void sigFileRemoveAnnotation(const QString &);
 
@@ -68,6 +69,7 @@ private slots:
     void slotSetWidgetAdapt();
 
     void slotFileAddAnnotation(const QString &);
+    void slotFileAddAnnotation();
     void slotFileUpdateAnnotation(const QString &);
     void slotFileRemoveAnnotation(const QString &);
 
@@ -79,7 +81,7 @@ private slots:
 private:
     void initConnections();
     void onClickPageLink(Page::Link *pLink);
-    void onShowNoteTipWidget(const QPoint &docPos, const QPoint &showPos);
+    void onShowNoteTipWidget(const QPoint &docPos);
 
     int dealWithTitleRequest(const int &msgType, const QString &msgContent);
     int dealWithFileMenuRequest(const int &msgType, const QString &msgContent);
@@ -97,6 +99,7 @@ private:
     bool        m_bIsHandleSelect = false;      //  是否可以选中
 
     QPoint      m_pStartPoint;
+    QPoint      m_pEndSelectPoint;
     QPoint      m_pHandleMoveStartPoint;
 
     // CustomWidget interface

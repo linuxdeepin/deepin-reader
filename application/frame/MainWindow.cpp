@@ -122,8 +122,6 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
         QKeyEvent *event = static_cast<QKeyEvent *>(e);
         QString key = Utils::getKeyshortcut(event);
 
-        qDebug() << "key = " << key;
-
         if (m_pFilterList.contains(key)) {
             dealWithKeyEvent(key);
             return true;
@@ -292,7 +290,6 @@ void MainWindow::onChangeWindowState()
 
 void MainWindow::dealWithKeyEvent(const QString &key)
 {
-    qDebug() << __FUNCTION__ << key;
     if (key == KeyStr::g_f1) {
         onOpenAppHelp();
     } else if (key == KeyStr::g_ctrl_alt_f) {

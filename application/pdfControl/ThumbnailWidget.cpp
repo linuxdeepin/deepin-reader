@@ -31,10 +31,10 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigUpdateTheme();
     } else if (MSG_FILE_PAGE_CHANGE == msgType) {
         emit sigFilePageChanged(msgContent);
-    }else if(MSG_NOTIFY_KEY_MSG == msgType){
-        if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup||msgContent==KeyStr::g_left) {
-             emit sigJumpToPrevPage();
-        } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown||msgContent==KeyStr::g_right) {
+    } else if (MSG_NOTIFY_KEY_MSG == msgType) {
+        if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup || msgContent == KeyStr::g_left) {
+            emit sigJumpToPrevPage();
+        } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown || msgContent == KeyStr::g_right) {
             emit sigJumpToNextPage();
         }
     }
@@ -157,24 +157,22 @@ void ThumbnailWidget::slotUpdateTheme()
  */
 void ThumbnailWidget::slotJumpToPrevPage()
 {
-    if(DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL){
+    if (DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL) {
         return;
     }
-    bool bstart=false;
-    if(nullptr!=DocummentProxy::instance()&&DocummentProxy::instance()->getAutoPlaySlideStatu())
-    {
-        qDebug()<<__FUNCTION__<<"stop autoplay";
+    bool bstart = false;
+    if (nullptr != DocummentProxy::instance() && DocummentProxy::instance()->getAutoPlaySlideStatu()) {
+        qDebug() << __FUNCTION__ << "stop autoplay";
         DocummentProxy::instance()->setAutoPlaySlide(false);
-        bstart=true;
+        bstart = true;
     }
     int nCurPage = DocummentFileHelper::instance()->currentPageNo();
     nCurPage--;
     jumpToSpecifiedPage(nCurPage);
-    if(bstart&&nullptr!=DocummentProxy::instance())
-    {
-        qDebug()<<__FUNCTION__<<"start autoplay";
+    if (bstart && nullptr != DocummentProxy::instance()) {
+        qDebug() << __FUNCTION__ << "start autoplay";
         DocummentProxy::instance()->setAutoPlaySlide(true);
-        bstart=false;
+        bstart = false;
     }
 }
 
@@ -184,24 +182,22 @@ void ThumbnailWidget::slotJumpToPrevPage()
  */
 void ThumbnailWidget::slotJumpToNextPage()
 {
-    if(DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL){
+    if (DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL) {
         return;
     }
-    bool bstart=false;
-    if(nullptr!=DocummentProxy::instance()&&DocummentProxy::instance()->getAutoPlaySlideStatu())
-    {
-        qDebug()<<__FUNCTION__<<"stop autoplay";
+    bool bstart = false;
+    if (nullptr != DocummentProxy::instance() && DocummentProxy::instance()->getAutoPlaySlideStatu()) {
+        qDebug() << __FUNCTION__ << "stop autoplay";
         DocummentProxy::instance()->setAutoPlaySlide(false);
-        bstart=true;
+        bstart = true;
     }
     int nCurPage = DocummentFileHelper::instance()->currentPageNo();
     nCurPage++;
     jumpToSpecifiedPage(nCurPage);
-    if(bstart&&nullptr!=DocummentProxy::instance())
-    {
-        qDebug()<<__FUNCTION__<<"start autoplay";
+    if (bstart && nullptr != DocummentProxy::instance()) {
+        qDebug() << __FUNCTION__ << "start autoplay";
         DocummentProxy::instance()->setAutoPlaySlide(true);
-        bstart=false;
+        bstart = false;
     }
 }
 

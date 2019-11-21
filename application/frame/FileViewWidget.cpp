@@ -68,7 +68,8 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
         m_pDocummentFileHelper->showMagnifier(docGlobalPos);
     } else {
         if (m_bSelectOrMove) {  //  鼠标已经按下，　则选中所经过的文字
-            m_pDocummentFileHelper->mouseSelectText(m_pStartPoint, docGlobalPos);
+            m_pEndSelectPoint = docGlobalPos;
+            m_pDocummentFileHelper->mouseSelectText(m_pStartPoint, m_pEndSelectPoint);
         } else {
             //  首先判断文档划过属性
             auto pLink  = m_pDocummentFileHelper->mouseBeOverLink(docGlobalPos);
@@ -79,7 +80,7 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
                     m_bIsHandleSelect = true;
                     setCursor(QCursor(Qt::IBeamCursor));
 
-                    onShowNoteTipWidget(docGlobalPos, event->pos());
+                    onShowNoteTipWidget(docGlobalPos);
                 } else {
                     if (m_pNoteTipWidget && m_pNoteTipWidget->isVisible()) {
                         m_pNoteTipWidget->hide();
@@ -122,9 +123,15 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
             } else {
                 if (m_nCurrentHandelState == Default_State) {
                     m_pDocummentFileHelper->mouseSelectTextClear();  //  清除之前选中的文字高亮
+
+                    if (m_pNoteTipWidget && m_pNoteTipWidget->isVisible()) {
+                        m_pNoteTipWidget->hide();
+                    }
+
                     if (m_bIsHandleSelect) {
                         m_bSelectOrMove = true;
                         m_pStartPoint = docGlobalPos;
+                        m_pEndSelectPoint = m_pStartPoint;
                     }
                 }
             }
@@ -265,6 +272,40 @@ void FileViewWidget::slotSetHandShape(const QString &data)
     }
 }
 
+//  添加高亮颜色  快捷键
+void FileViewWidget::slotFileAddAnnotation()
+{
+    //  处于幻灯片模式下
+    if (DataManager::instance()->CurShowState() == FILE_SLIDE)
+        return;
+
+    //  放大镜状态， 直接返回
+    if (m_nCurrentHandelState == Magnifier_State)
+        return;
+
+    //  手型状态， 直接返回
+    if (m_nCurrentHandelState == Handel_State)
+        return;
+
+    int nSx = m_pStartPoint.x();
+    int nSy = m_pStartPoint.y();
+
+    int nEx = m_pEndSelectPoint.x();
+    int nEy = m_pEndSelectPoint.y();
+
+    if (nSx == nEx && nSy == nEy) {
+        return;
+    }
+    QString selectText = "", t_strUUid = "";
+    bool bIsHighLightReleasePoint = m_pDocummentFileHelper->annotationClicked(m_pEndSelectPoint, selectText, t_strUUid);
+    if (!bIsHighLightReleasePoint) {
+
+        QColor color = DataManager::instance()->selectColor();
+
+        m_pDocummentFileHelper->addAnnotation(m_pEndSelectPoint, m_pEndSelectPoint, color);
+    }
+}
+
 //  添加高亮颜色
 void FileViewWidget::slotFileAddAnnotation(const QString &msgContent)
 {
@@ -311,7 +352,7 @@ void FileViewWidget::slotFileRemoveAnnotation(const QString &msgContent)
         QPoint tempPoint(sX.toInt(), sY.toInt());
         QString sUuid = m_pDocummentFileHelper->removeAnnotation(tempPoint);
         if (sUuid != "") {
-            sendMsg(MSG_NOTE_DLTNOTEITEM, sUuid);   //  notesWidget 处理该消息        
+            sendMsg(MSG_NOTE_DLTNOTEITEM, sUuid);   //  notesWidget 处理该消息
         }
     }
 }
@@ -374,6 +415,7 @@ void FileViewWidget::initConnections()
     connect(this, SIGNAL(sigWidgetAdapt()), SLOT(slotSetWidgetAdapt()));
     connect(this, SIGNAL(sigPrintFile()), SLOT(slotPrintFile()));
 
+    connect(this, SIGNAL(sigFileAddAnnotation()), SLOT(slotFileAddAnnotation()));
     connect(this, SIGNAL(sigFileAddAnnotation(const QString &)), SLOT(slotFileAddAnnotation(const QString &)));
     connect(this, SIGNAL(sigFileUpdateAnnotation(const QString &)), SLOT(slotFileUpdateAnnotation(const QString &)));
     connect(this, SIGNAL(sigFileRemoveAnnotation(const QString &)), SLOT(slotFileRemoveAnnotation(const QString &)));
@@ -382,7 +424,7 @@ void FileViewWidget::initConnections()
 }
 
 //  显示 注释内容Tip
-void FileViewWidget::onShowNoteTipWidget(const QPoint &docPos, const QPoint &showPos)
+void FileViewWidget::onShowNoteTipWidget(const QPoint &docPos)
 {
     QString selectText, t_strUUid;
     bool bIsHighLightReleasePoint = m_pDocummentFileHelper->annotationClicked(docPos, selectText, t_strUUid);
@@ -544,12 +586,17 @@ int FileViewWidget::dealWithNotifyMsg(const QString &msgContent)
         return ConstantMsg::g_effective_res;
     }
 
-    if (msgContent == KeyStr::g_ctrl_p) {
+    if (KeyStr::g_ctrl_p == msgContent) {
         emit sigPrintFile();
         return ConstantMsg::g_effective_res;
     }
 
-    if (msgContent == KeyStr::g_ctrl_shift_s) {
+    if (KeyStr::g_ctrl_l == msgContent) {   //  添加高亮
+        emit sigFileAddAnnotation();
+        return ConstantMsg::g_effective_res;
+    }
+
+    if (KeyStr::g_ctrl_shift_s == msgContent) {
         emit sigSaveAsFile();
         return ConstantMsg::g_effective_res;
     }
