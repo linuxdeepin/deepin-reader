@@ -95,8 +95,7 @@ bool DocummentProxy::mouseSelectText(QPoint start, QPoint stop)
 }
 
 void DocummentProxy::mouseSelectTextClear()
-{
-    qDebug() << "mouseSelectTextClear";
+{ 
     m_documment->mouseSelectTextClear();
 }
 

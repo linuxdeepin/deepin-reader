@@ -245,10 +245,11 @@ void PagePdf::changeAnnotationColor(const QString uuid, const QColor &color)
                 break;
             }
         }
-    }
+    }  
+    d->paintrects.clear();
+    clearSelectText();
     qDeleteAll(listannote);
 }
-
 
 void PagePdf::paintEvent(QPaintEvent *event)
 {
@@ -375,21 +376,24 @@ QString PagePdf::addHighlightAnnotation(const QColor &color)
     if (d->m_selecttextendword < 1 || d->m_selecttextendword < 0||d->m_selecttextendword>d->m_words.size()||
             d->m_selecttextstartword>d->m_words.size())return "";
 
-    QRectF recttem=d->m_words.at(d->m_selecttextstartword).rect;
+    qreal averangeheight=d->m_words.at(d->m_selecttextstartword).rect.height();
      for (int i = d->m_selecttextstartword; i <= d->m_selecttextendword; ++i)
      {
-         if(d->m_words.at(i).rect.height()<recttem.height())
-             recttem=d->m_words.at(i).rect;
+         if(d->m_words.at(i).rect.height()<averangeheight&&d->m_words.at(i).rect.height()>0)
+         {
+             averangeheight=d->m_words.at(i).rect.height();
+         }
      }
 
     for (int i = d->m_selecttextstartword; i <= d->m_selecttextendword; ++i) {
 
         rec = d->m_words.at(i).rect;
         //处理高亮文字矩形大小不一致问题，统一采用最小矩形
-        if(rec.height()>recttem.height())
+
+        if(rec.height()>averangeheight)
         {
-            rec.setY(recttem.y());
-            rec.setHeight(recttem.height());
+            rec.setY(rec.y()+(rec.height()-averangeheight)/2.0);
+            rec.setHeight(averangeheight);
         }
         recboundary.setTopLeft(QPointF(rec.left() / curwidth,
                                        rec.top() / curheight));

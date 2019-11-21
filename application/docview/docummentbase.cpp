@@ -1181,6 +1181,12 @@ void DocummentBase::autoplayslidTimerOut()
     Q_D(DocummentBase);
     if (d->m_bslidemodel) {
         pageJump(getCurrentPageNo() + 1);
+        qDebug()<<__FUNCTION__<<getCurrentPageNo()<<d->m_pages.size()<<d->m_slidepageno;
+        if(getCurrentPageNo()+1>=d->m_pages.size())
+        {
+            d->autoplayslidtimer->stop();
+           d->bautoplayslide=false;
+        }
     } else {
         d->autoplayslidtimer->stop();
     }
