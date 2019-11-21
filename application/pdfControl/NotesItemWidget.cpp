@@ -97,6 +97,7 @@ void NotesItemWidget::initWidget()
     m_pSearchResultNum->setEnabled(false);
     m_pSearchResultNum->setMinimumWidth(31);
     m_pSearchResultNum->setFixedHeight(18);
+    m_pSearchResultNum->setEnabled(false);
 //    m_pSearchResultNum->setFont(font);
     DFontSizeManager::instance()->bind(m_pSearchResultNum, DFontSizeManager::T8);
 
@@ -158,15 +159,15 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
 
     CustomItemWidget::paintEvent(e);
 
-    QPalette text(m_pTextLab->palette());
-    text.setColor(QPalette::Text, QColor(QString("#303030")));
-    m_pTextLab->setPalette(text);
-    QPalette page(m_pPageNumber->palette());
-    page.setColor(QPalette::Text, QColor(QString("#7587A7")));
-    m_pPageNumber->setPalette(page);
-    QPalette reslt(m_pSearchResultNum->palette());
-    reslt.setColor(QPalette::Text, QColor(QString("#7587A7")));
-    m_pSearchResultNum->setPalette(reslt);
+//    QPalette text(m_pTextLab->palette());
+//    text.setColor(QPalette::Text, QColor(QString("#303030")));
+//    m_pTextLab->setPalette(text);
+//    QPalette page(m_pPageNumber->palette());
+//    page.setColor(QPalette::Text, QColor(QString("#7587A7")));
+//    m_pPageNumber->setPalette(page);
+//    QPalette reslt(m_pSearchResultNum->palette());
+//    reslt.setColor(QPalette::Text, QColor(QString("#7587A7")));
+//    m_pSearchResultNum->setPalette(reslt);
 
     QPalette p(m_pPicture->palette());
     QColor color;
