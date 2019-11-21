@@ -4,6 +4,7 @@
 #include <QClipboard>
 #include <QTextLayout>
 #include "utils/utils.h"
+#include <DApplicationHelper>
 
 NotesItemWidget::NotesItemWidget(CustomItemWidget *parent) :
     CustomItemWidget(QString("NotesItemWidget"), parent)
@@ -90,6 +91,9 @@ void NotesItemWidget::initWidget()
     m_pPageNumber->setEnabled(false);
     m_pPageNumber->setMinimumWidth(31);
     m_pPageNumber->setFixedHeight(18);
+    DPalette pa = DApplicationHelper::instance()->palette(m_pPageNumber);
+    pa.setColor(DPalette::WindowText, QColor(DPalette::TextTitle));
+    DApplicationHelper::instance()->setPalette(m_pPageNumber, pa);
 //    m_pPageNumber->setFont(font);
     DFontSizeManager::instance()->bind(m_pPageNumber, DFontSizeManager::T8);
 
@@ -97,7 +101,10 @@ void NotesItemWidget::initWidget()
     m_pSearchResultNum->setEnabled(false);
     m_pSearchResultNum->setMinimumWidth(31);
     m_pSearchResultNum->setFixedHeight(18);
-    m_pSearchResultNum->setEnabled(false);
+    pa = DApplicationHelper::instance()->palette(m_pSearchResultNum);
+    pa.setColor(DPalette::WindowText, QColor(DPalette::TextTips));
+    DApplicationHelper::instance()->setPalette(m_pSearchResultNum, pa);
+//    m_pSearchResultNum->setEnabled(false);
 //    m_pSearchResultNum->setFont(font);
     DFontSizeManager::instance()->bind(m_pSearchResultNum, DFontSizeManager::T8);
 
@@ -108,6 +115,9 @@ void NotesItemWidget::initWidget()
     m_pTextLab->setMaximumWidth(349);
     m_pTextLab->setFrameStyle(QFrame::NoFrame);
     m_pTextLab->setWordWrap(true);
+    pa = DApplicationHelper::instance()->palette(m_pTextLab);
+    pa.setColor(DPalette::WindowText, QColor(DPalette::BrightText));
+    DApplicationHelper::instance()->setPalette(m_pTextLab, pa);
 //    m_pTextLab->setFont(font);
     DFontSizeManager::instance()->bind(m_pTextLab, DFontSizeManager::T9);
 
@@ -124,6 +134,7 @@ void NotesItemWidget::initWidget()
     t_vLayout->setSpacing(0);
     t_vLayout->addItem(t_hLayout);
     t_vLayout->addWidget(m_pTextLab);
+    t_vLayout->addStretch(1);
     t_vLayout->addWidget(hLine);
 
     auto m_pHLayout = new QHBoxLayout;
