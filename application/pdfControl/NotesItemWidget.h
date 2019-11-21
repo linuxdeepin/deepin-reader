@@ -59,6 +59,7 @@ private slots:
     void slotDltNoteContant();
     void slotCopyContant();
     void slotShowContextMenu(const QPoint &);
+    void slotUpdateTheme();
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;

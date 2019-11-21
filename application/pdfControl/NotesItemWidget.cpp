@@ -11,7 +11,7 @@ NotesItemWidget::NotesItemWidget(CustomItemWidget *parent) :
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(slotShowContextMenu(const QPoint &)));
-
+connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     initWidget();
 }
 
@@ -77,6 +77,15 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
     }
 }
 
+void NotesItemWidget::slotUpdateTheme()
+{
+    qDebug()<<__FUNCTION__;
+    Dtk::Gui::DPalette pltorg=m_pPageNumber->palette();
+    Dtk::Gui::DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
+    pltorg.setColor(Dtk::Gui::DPalette::Text, plt.color(Dtk::Gui::DPalette::TextTips));
+    m_pPageNumber->setPalette(pltorg);
+}
+
 void NotesItemWidget::initWidget()
 {
 
@@ -92,9 +101,12 @@ void NotesItemWidget::initWidget()
     m_pPageNumber->setMinimumWidth(31);
     m_pPageNumber->setFixedHeight(18);
     DPalette pa = DApplicationHelper::instance()->palette(m_pPageNumber);
-    pa.setColor(DPalette::WindowText, QColor(DPalette::TextTitle));
-    DApplicationHelper::instance()->setPalette(m_pPageNumber, pa);
-//    m_pPageNumber->setFont(font);
+//    pa.setColor(DPalette::Text, QColor(DPalette::TextTitle));
+//    DApplicationHelper::instance()->setPalette(m_pPageNumber, pa);
+    Dtk::Gui::DPalette pltorg=m_pPageNumber->palette();
+    Dtk::Gui::DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
+    pltorg.setColor(Dtk::Gui::DPalette::Text, plt.color(Dtk::Gui::DPalette::TextTips));
+    m_pPageNumber->setPalette(pltorg);
     DFontSizeManager::instance()->bind(m_pPageNumber, DFontSizeManager::T8);
 
     m_pSearchResultNum = new DLabel;
@@ -157,6 +169,8 @@ int NotesItemWidget::dealWithData(const int &msgType, const QString &msgContent)
                 slotDltNoteContant();
             }
         }
+    }else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+        emit sigUpdateTheme();
     }
     return 0;
 }

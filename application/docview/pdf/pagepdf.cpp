@@ -263,7 +263,7 @@ void PagePdf::paintEvent(QPaintEvent *event)
             qpainter.drawRect(translateRect(d_ptr->m_highlights[i], d_ptr->m_scale, d_ptr->m_rotate));
         } else {
             QPainter qpainter(this);
-            //  d_ptr->m_searchcolor.setAlpha(100);
+            d_ptr->m_searchcolor.setAlpha(100);
             qpainter.setBrush(d_ptr->m_searchcolor);
             QPen qpen(d_ptr->m_pencolor);
             qpainter.setPen(qpen);
