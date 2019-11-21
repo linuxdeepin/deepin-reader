@@ -73,15 +73,10 @@ void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
  */
 void BookMarkItemWidget::initWidget()
 {
-//    QFont font;
-//    font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 12);
     m_pPageNumber = new PageNumberLabel(this);
     m_pPageNumber->setMinimumWidth(31);
     m_pPageNumber->setFixedHeight(18);
-//    DPalette pa = DApplicationHelper::instance()->palette(m_pPageNumber);
-//    pa.setColor(DPalette::WindowText, QColor(DPalette::TextTitle));
-//    DApplicationHelper::instance()->setPalette(m_pPageNumber, pa);
-//    m_pPageNumber->setFont(font);
+    m_pPageNumber->setForegroundRole(DPalette::TextTitle);
     DFontSizeManager::instance()->bind(m_pPageNumber, DFontSizeManager::T8);
 
     auto hLine = new DHorizontalLine;
@@ -110,6 +105,8 @@ void BookMarkItemWidget::initWidget()
 
 void BookMarkItemWidget::paintEvent(QPaintEvent *event)
 {
+    CustomWidget::paintEvent(event);
+
     QPalette p(m_pPicture->palette());
     QColor color;
 
@@ -124,18 +121,5 @@ void BookMarkItemWidget::paintEvent(QPaintEvent *event)
 
     m_pPicture->setPalette(p);
 
-//    int width = this->width() - 10;
-//    int height = this->height() - 1;
-
-//    QPainter painter(this);
-//    color = QColor::fromRgbF(216,216,216,0.0);
-//    painter.setPen(QPen(QColor(QString("#D8D8D8")), 1));
-
-//    QPoint startP(67, height);
-//    QPoint endP(width, height);
-
-//    painter.drawLine(startP, endP);
-
-    CustomWidget::paintEvent(event);
 }
 

@@ -16,10 +16,10 @@ public:
     void setSelect(const bool &select);
 
 protected:
-    void  paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+//    void  paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
 
 private:
-    bool m_bSelect = false;
+//    bool m_bSelect = false;
 };
 
 #endif // PAGENUMBERLABEL_H

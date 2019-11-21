@@ -92,44 +92,24 @@ void NotesItemWidget::initWidget()
     m_pPicture->setFixedSize(QSize(48, 68));
     m_pPicture->setAlignment(Qt::AlignCenter);
 
-//    QFont font;
-//    font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 12);
-
     m_pPageNumber = new PageNumberLabel;
-    m_pPageNumber->setEnabled(false);
     m_pPageNumber->setMinimumWidth(31);
     m_pPageNumber->setFixedHeight(18);
-//    DPalette pa = DApplicationHelper::instance()->palette(m_pPageNumber);
-//    pa.setColor(DPalette::Text, QColor(DPalette::TextTitle));
-//    DApplicationHelper::instance()->setPalette(m_pPageNumber, pa);
-//    Dtk::Gui::DPalette pltorg=m_pPageNumber->palette();
-//    Dtk::Gui::DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
-//    pltorg.setColor(Dtk::Gui::DPalette::Text, plt.color(Dtk::Gui::DPalette::TextTips));
-//    m_pPageNumber->setPalette(pltorg);
+    m_pPageNumber->setForegroundRole(DPalette::TextTitle);
     DFontSizeManager::instance()->bind(m_pPageNumber, DFontSizeManager::T8);
 
     m_pSearchResultNum = new DLabel;
-    m_pSearchResultNum->setEnabled(false);
     m_pSearchResultNum->setMinimumWidth(31);
     m_pSearchResultNum->setFixedHeight(18);
-//    pa = DApplicationHelper::instance()->palette(m_pSearchResultNum);
-//    pa.setColor(DPalette::WindowText, QColor(DPalette::TextTips));
-//    DApplicationHelper::instance()->setPalette(m_pSearchResultNum, pa);
-//    m_pSearchResultNum->setEnabled(false);
-//    m_pSearchResultNum->setFont(font);
+    m_pSearchResultNum->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(m_pSearchResultNum, DFontSizeManager::T8);
 
-//    font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 11);
     m_pTextLab = new DLabel;
     m_pTextLab->setFixedHeight(54);
     m_pTextLab->setMinimumWidth(102);
     m_pTextLab->setMaximumWidth(349);
     m_pTextLab->setFrameStyle(QFrame::NoFrame);
     m_pTextLab->setWordWrap(true);
-//    pa = DApplicationHelper::instance()->palette(m_pTextLab);
-//    pa.setColor(DPalette::WindowText, QColor(DPalette::BrightText));
-//    DApplicationHelper::instance()->setPalette(m_pTextLab, pa);
-//    m_pTextLab->setFont(font);
     DFontSizeManager::instance()->bind(m_pTextLab, DFontSizeManager::T9);
 
     auto hLine = new DHorizontalLine;
@@ -183,16 +163,6 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
 
     CustomItemWidget::paintEvent(e);
 
-//    QPalette text(m_pTextLab->palette());
-//    text.setColor(QPalette::Text, QColor(QString("#303030")));
-//    m_pTextLab->setPalette(text);
-//    QPalette page(m_pPageNumber->palette());
-//    page.setColor(QPalette::Text, QColor(QString("#7587A7")));
-//    m_pPageNumber->setPalette(page);
-//    QPalette reslt(m_pSearchResultNum->palette());
-//    reslt.setColor(QPalette::Text, QColor(QString("#7587A7")));
-//    m_pSearchResultNum->setPalette(reslt);
-
     QPalette p(m_pPicture->palette());
     QColor color;
 
@@ -206,19 +176,6 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
     }
 
     m_pPicture->setPalette(p);
-
-//    int width = this->width() - 10;
-//    int height = this->height() - 1;
-
-//    int sPoint = width - m_pTextLab->width() + 5;
-
-//    QPainter painter(this);
-//    painter.setPen(QPen(QColor(QString("#D8D8D8")), 1));
-
-//    QPoint startP(sPoint, height);
-//    QPoint endP(width, height);
-
-//    painter.drawLine(startP, endP);
 }
 
 QString NotesItemWidget::calcText(const QFont &font, const QString &note, const QSize &size/*const int MaxWidth*/)
