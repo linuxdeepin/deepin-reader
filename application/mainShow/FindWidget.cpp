@@ -151,12 +151,12 @@ void FindWidget::initWidget()
     connect(m_pSearchEdit, &DSearchEdit::textChanged, this, &FindWidget::slotClearContent);
 
     auto layout = new QHBoxLayout(this);
-    layout->setContentsMargins(0, 1, 0, 1);
-    layout->setSpacing(5);
-    layout->addStretch(1);
+    layout->setContentsMargins(3, 1, 3, 1);
+//    layout->setSpacing(1);
+//    layout->addStretch(1);
     layout->addWidget(m_pSearchEdit);
     layout->addWidget(findPrevButton);
     layout->addWidget(findNextButton);
     layout->addWidget(closeButton);
-    layout->addStretch(1);
+//    layout->addStretch(1);
 }
