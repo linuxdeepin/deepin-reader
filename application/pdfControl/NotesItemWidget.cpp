@@ -88,7 +88,6 @@ void NotesItemWidget::slotUpdateTheme()
 
 void NotesItemWidget::initWidget()
 {
-
     m_pPicture = new ImageLabel(this);
     m_pPicture->setFixedSize(QSize(48, 68));
     m_pPicture->setAlignment(Qt::AlignCenter);

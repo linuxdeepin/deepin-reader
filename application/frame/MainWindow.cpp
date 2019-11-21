@@ -94,6 +94,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
             DDialog dlg(tr("Save File"), tr("Do you need to save the file opened?"));
             dlg.setIcon(QIcon::fromTheme("deepin-reader"));
             dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Not Save") <<  tr("Save"));
+              QList<QAbstractButton*> lbtn= dlg.getButtons();
+//              int index=0;
+//              lbtn.at(2)->setFocus();
+
             int nRes = dlg.exec();
             if (nRes <= 0) {
                 event->ignore();

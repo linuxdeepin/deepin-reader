@@ -1,9 +1,9 @@
 #include "CustomClickLabel.h"
 
 CustomClickLabel::CustomClickLabel(const QString &text, DWidget *parent, Qt::WindowFlags f)
-    : DLabel (text, parent, f)
+    : DLabel (text, parent)
 {
-
+//setWindowFlag();
 }
 
 //  设置 主题颜色
