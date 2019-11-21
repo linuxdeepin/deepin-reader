@@ -120,7 +120,7 @@ void NotesItemWidget::initWidget()
     t_hLayout->addWidget(m_pSearchResultNum);
 
     auto t_vLayout = new QVBoxLayout;
-    t_vLayout->setContentsMargins(20, 0, 0, 0);
+    t_vLayout->setContentsMargins(15, 0, 0, 0);
     t_vLayout->setSpacing(0);
     t_vLayout->addItem(t_hLayout);
     t_vLayout->addWidget(m_pTextLab);
@@ -239,7 +239,7 @@ QString NotesItemWidget::calcText(const QFont &font, const QString &note, const 
             QChar currChar = tempText.at(tempText.length() - 1);
             QChar nextChar = note.at(note.indexOf(tempText) + tempText.length());
             if (currChar.isLetter() && nextChar.isLetter()) {
-                tempText += '-';
+//                tempText += '-';
             }
             fmWidth = fm.horizontalAdvance(tempText);
             if (fmWidth > size.width()) {

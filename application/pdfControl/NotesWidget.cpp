@@ -424,11 +424,11 @@ void NotesWidget::addNewItem(const QImage &image, const int &page, const QString
     itemWidget->setNoteUUid(uuid);
     itemWidget->setLabelPage(page, 1);
     itemWidget->setTextEditText(text);
-    itemWidget->setMinimumSize(QSize(230, 80));
+    itemWidget->setMinimumSize(QSize(220, 80));
 
     auto item = new QListWidgetItem(m_pNotesList);
     item->setFlags(Qt::NoItemFlags);
-    item->setSizeHint(QSize(230, 80));
+    item->setSizeHint(QSize(225, 80));
 
     m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);

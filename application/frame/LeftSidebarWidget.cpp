@@ -13,7 +13,7 @@
 LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent):
     CustomWidget ("LeftSidebarWidget", parent)
 {
-    setMinimumWidth(240);
+    setMinimumWidth(250);
     setMaximumWidth(280);//double max thumbnail width
 
     initWidget();
