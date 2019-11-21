@@ -78,9 +78,9 @@ void BookMarkItemWidget::initWidget()
     m_pPageNumber = new PageNumberLabel(this);
     m_pPageNumber->setMinimumWidth(31);
     m_pPageNumber->setFixedHeight(18);
-    DPalette pa = DApplicationHelper::instance()->palette(m_pPageNumber);
-    pa.setColor(DPalette::WindowText, QColor(DPalette::TextTitle));
-    DApplicationHelper::instance()->setPalette(m_pPageNumber, pa);
+//    DPalette pa = DApplicationHelper::instance()->palette(m_pPageNumber);
+//    pa.setColor(DPalette::WindowText, QColor(DPalette::TextTitle));
+//    DApplicationHelper::instance()->setPalette(m_pPageNumber, pa);
 //    m_pPageNumber->setFont(font);
     DFontSizeManager::instance()->bind(m_pPageNumber, DFontSizeManager::T8);
 

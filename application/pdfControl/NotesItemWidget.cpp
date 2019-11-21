@@ -100,22 +100,22 @@ void NotesItemWidget::initWidget()
     m_pPageNumber->setEnabled(false);
     m_pPageNumber->setMinimumWidth(31);
     m_pPageNumber->setFixedHeight(18);
-    DPalette pa = DApplicationHelper::instance()->palette(m_pPageNumber);
+//    DPalette pa = DApplicationHelper::instance()->palette(m_pPageNumber);
 //    pa.setColor(DPalette::Text, QColor(DPalette::TextTitle));
 //    DApplicationHelper::instance()->setPalette(m_pPageNumber, pa);
-    Dtk::Gui::DPalette pltorg=m_pPageNumber->palette();
-    Dtk::Gui::DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
-    pltorg.setColor(Dtk::Gui::DPalette::Text, plt.color(Dtk::Gui::DPalette::TextTips));
-    m_pPageNumber->setPalette(pltorg);
+//    Dtk::Gui::DPalette pltorg=m_pPageNumber->palette();
+//    Dtk::Gui::DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
+//    pltorg.setColor(Dtk::Gui::DPalette::Text, plt.color(Dtk::Gui::DPalette::TextTips));
+//    m_pPageNumber->setPalette(pltorg);
     DFontSizeManager::instance()->bind(m_pPageNumber, DFontSizeManager::T8);
 
     m_pSearchResultNum = new DLabel;
     m_pSearchResultNum->setEnabled(false);
     m_pSearchResultNum->setMinimumWidth(31);
     m_pSearchResultNum->setFixedHeight(18);
-    pa = DApplicationHelper::instance()->palette(m_pSearchResultNum);
-    pa.setColor(DPalette::WindowText, QColor(DPalette::TextTips));
-    DApplicationHelper::instance()->setPalette(m_pSearchResultNum, pa);
+//    pa = DApplicationHelper::instance()->palette(m_pSearchResultNum);
+//    pa.setColor(DPalette::WindowText, QColor(DPalette::TextTips));
+//    DApplicationHelper::instance()->setPalette(m_pSearchResultNum, pa);
 //    m_pSearchResultNum->setEnabled(false);
 //    m_pSearchResultNum->setFont(font);
     DFontSizeManager::instance()->bind(m_pSearchResultNum, DFontSizeManager::T8);
@@ -127,9 +127,9 @@ void NotesItemWidget::initWidget()
     m_pTextLab->setMaximumWidth(349);
     m_pTextLab->setFrameStyle(QFrame::NoFrame);
     m_pTextLab->setWordWrap(true);
-    pa = DApplicationHelper::instance()->palette(m_pTextLab);
-    pa.setColor(DPalette::WindowText, QColor(DPalette::BrightText));
-    DApplicationHelper::instance()->setPalette(m_pTextLab, pa);
+//    pa = DApplicationHelper::instance()->palette(m_pTextLab);
+//    pa.setColor(DPalette::WindowText, QColor(DPalette::BrightText));
+//    DApplicationHelper::instance()->setPalette(m_pTextLab, pa);
 //    m_pTextLab->setFont(font);
     DFontSizeManager::instance()->bind(m_pTextLab, DFontSizeManager::T9);
 
