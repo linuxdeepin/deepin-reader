@@ -58,21 +58,23 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath)
 //        return false;
 //    }
     m_documment = DocummentFactory::creatDocumment(m_type, qwfather);
-    connect(m_documment, SIGNAL(signal_pageChange(int)), this, SLOT(slot_pageChange(int)));
-    connect(this, SIGNAL(signal_pageJump(int)), m_documment, SLOT(pageJump(int)));
-    connect(m_documment, SIGNAL(signal_searchRes(stSearchRes)), this, SIGNAL(signal_searchRes(stSearchRes)));
-    connect(m_documment, SIGNAL(signal_searchover()), this, SIGNAL(signal_searchover()));
+    if (m_documment) {
+        connect(m_documment, SIGNAL(signal_pageChange(int)), this, SLOT(slot_pageChange(int)));
+        connect(this, SIGNAL(signal_pageJump(int)), m_documment, SLOT(pageJump(int)));
+        connect(m_documment, SIGNAL(signal_searchRes(stSearchRes)), this, SIGNAL(signal_searchRes(stSearchRes)));
+        connect(m_documment, SIGNAL(signal_searchover()), this, SIGNAL(signal_searchover()));
 //    connect(this, SIGNAL(signal_mouseSelectText(QPoint, QPoint)), m_documment, SLOT(mouseSelectText(QPoint, QPoint)));
-    connect(this, SIGNAL(signal_setScaleRotateViewModeAndShow(double, RotateType_EM, ViewMode_EM)), m_documment, SLOT(setScaleRotateViewModeAndShow(double, RotateType_EM, ViewMode_EM)));
-    connect(this, SIGNAL(signal_scaleAndShow(double, RotateType_EM)), m_documment, SLOT(scaleAndShow(double, RotateType_EM)));
-    connect(this, SIGNAL(signal_setViewModeAndShow(ViewMode_EM)), m_documment, SLOT(setViewModeAndShow(ViewMode_EM)));
-    connect(m_documment, &DocummentBase::signal_bookMarkStateChange, this, [ = ](int page, bool state) {
-        emit signal_bookMarkStateChange(page, state);
-    });
-    connect(m_documment, &DocummentBase::signal_openResult, this, [ = ](bool result) {
-        emit signal_openResult(result);
-    });
-    bre = m_documment->openFile(m_path);
+        connect(this, SIGNAL(signal_setScaleRotateViewModeAndShow(double, RotateType_EM, ViewMode_EM)), m_documment, SLOT(setScaleRotateViewModeAndShow(double, RotateType_EM, ViewMode_EM)));
+        connect(this, SIGNAL(signal_scaleAndShow(double, RotateType_EM)), m_documment, SLOT(scaleAndShow(double, RotateType_EM)));
+        connect(this, SIGNAL(signal_setViewModeAndShow(ViewMode_EM)), m_documment, SLOT(setViewModeAndShow(ViewMode_EM)));
+        connect(m_documment, &DocummentBase::signal_bookMarkStateChange, this, [ = ](int page, bool state) {
+            emit signal_bookMarkStateChange(page, state);
+        });
+        connect(m_documment, &DocummentBase::signal_openResult, this, [ = ](bool result) {
+            emit signal_openResult(result);
+        });
+        bre = m_documment->openFile(m_path);
+    }
     bcloseing = false;
     return bre;
 //    return startOpenFile();
@@ -96,7 +98,7 @@ bool DocummentProxy::mouseSelectText(QPoint start, QPoint stop)
 }
 
 void DocummentProxy::mouseSelectTextClear()
-{ 
+{
     m_documment->mouseSelectTextClear();
 }
 

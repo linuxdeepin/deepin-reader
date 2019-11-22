@@ -13,7 +13,7 @@ DocummentFactory::DocummentFactory()
 
 DocummentBase *DocummentFactory::creatDocumment(DocType_EM type, DWidget *father)
 {
-    DocummentBase *documment;
+    DocummentBase *documment = nullptr;
     switch (type) {
     case DocType_PDF:
         documment = new DocummentPDF(father);

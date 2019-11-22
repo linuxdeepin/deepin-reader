@@ -14,7 +14,7 @@
 #include <DMessageManager>
 
 MainWidget::MainWidget(CustomWidget *parent) :
-    CustomWidget ("MainWidget", parent)
+    CustomWidget("MainWidget", parent)
 {
     setAcceptDrops(true);
 
@@ -99,17 +99,42 @@ void MainWidget::dropEvent(QDropEvent *event)
 {
     auto mimeData = event->mimeData();
     if (mimeData->hasUrls()) {
+
+        QStringList noOpenFileList;
+        QStringList canOpenFileList;
+
         for (auto url : mimeData->urls()) {
             QString sFilePath =  url.toLocalFile();
-//            if (sFilePath.endsWith("pdf") || sFilePath.endsWith("tiff") || sFilePath.endsWith("ps") || sFilePath.endsWith("xps") || sFilePath.endsWith("djvu")
-            if (sFilePath.endsWith("pdf") ) {
-                //  默认打开第一个
-                QString sRes = sFilePath + Constant::sQStringSep;
 
-                notifyMsg(MSG_OPEN_FILE_PATH, sRes);
-
-                break;
+            QFileInfo file(sFilePath);
+            if (file.isFile()) {
+                QString sSuffix = file.completeSuffix();
+                if (sSuffix == "pdf") {      //  打开第一个pdf文件
+                    canOpenFileList.append(sFilePath);
+                } else {
+                    if (!noOpenFileList.contains(sSuffix)) {
+                        noOpenFileList.append(sSuffix);
+                    }
+                }
             }
+        }
+
+        foreach (auto s, noOpenFileList) {
+            QString msgType = s;
+            if (msgType == "") {
+                msgType = tr("unknown type");
+            }
+            QString msgContent = QString("%1 is not supported.").arg(msgType);
+            slotShowTips(msgContent);
+        }
+
+        foreach (auto s, canOpenFileList) {
+            //  目前只打开第一个
+            QString sRes = s + Constant::sQStringSep;
+
+            notifyMsg(MSG_OPEN_FILE_PATH, sRes);
+
+            break;
         }
     }
 }

@@ -377,6 +377,11 @@
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../frame/MainWidget.cpp" line="125"/>
+        <source>unknown type</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -625,7 +630,7 @@
     <name>PagingWidget</name>
     <message>
         <location filename="../pdfControl/PagingWidget.cpp" line="25"/>
-        <location filename="../pdfControl/PagingWidget.cpp" line="123"/>
+        <location filename="../pdfControl/PagingWidget.cpp" line="122"/>
         <source>pages</source>
         <translation></translation>
     </message>

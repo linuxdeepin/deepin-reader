@@ -424,6 +424,12 @@
         <translatorcomment>确定</translatorcomment>
         <translation>确定</translation>
     </message>
+    <message>
+        <location filename="../frame/MainWidget.cpp" line="125"/>
+        <source>unknown type</source>
+        <translatorcomment>未知类型</translatorcomment>
+        <translation>未知类型</translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -717,7 +723,7 @@
     <name>PagingWidget</name>
     <message>
         <location filename="../pdfControl/PagingWidget.cpp" line="25"/>
-        <location filename="../pdfControl/PagingWidget.cpp" line="123"/>
+        <location filename="../pdfControl/PagingWidget.cpp" line="122"/>
         <source>pages</source>
         <translatorcomment>页</translatorcomment>
         <translation>页</translation>
