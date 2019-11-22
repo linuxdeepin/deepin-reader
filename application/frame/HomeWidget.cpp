@@ -33,6 +33,7 @@ void HomeWidget::initWidget()
 {
     auto tipsLabel = new CustomClickLabel(tr("drag Pdf or other format file to here"), this);
     tipsLabel->setAlignment(Qt::AlignHCenter);
+    tipsLabel->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(tipsLabel, DFontSizeManager::T8);
 
     auto chooseBtn = new DSuggestButton(tr("Select File"));
