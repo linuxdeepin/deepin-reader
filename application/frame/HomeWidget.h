@@ -1,9 +1,8 @@
 #ifndef HOMEWIDGET_H
 #define HOMEWIDGET_H
 
-#include <QSettings>
-
 #include "CustomControl/CustomWidget.h"
+#include "controller/AppSetting.h"
 
 /**
  *  @brief  支持拖拽
@@ -35,7 +34,7 @@ private:
     void initConnections();
 
 private:
-    QSettings *m_settings = nullptr;
+    AppSetting *m_settings = nullptr;
 
     // CustomWidget interface
 protected:

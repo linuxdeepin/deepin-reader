@@ -3,9 +3,13 @@
 #include "FileViewWidget.h"
 #include "controller/DataManager.h"
 #include "DocummentFileHelper.h"
+#include <DDialogCloseButton>
+#include "utils/PublicFunction.h"
+#include "mainShow/FindWidget.h"
+#include "pdfControl/fileViewNote/FileViewNoteWidget.h"
 
 DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
-    : CustomWidget ("DocShowShellWidget", parent)
+    : CustomWidget("DocShowShellWidget", parent)
 {
     initWidget();
     initConnections();
@@ -18,13 +22,58 @@ DocShowShellWidget::~DocShowShellWidget()
 
 void DocShowShellWidget::resizeEvent(QResizeEvent *event)
 {
-    if (m_pFindWidget != nullptr) {
-        int nParentWidth = this->width();
-        int nWidget = m_pFindWidget->width();
-        m_pFindWidget->move(nParentWidth - nWidget - 20, 20);
+    int nParentWidth = this->width();
+
+    auto findWidget = this->findChild<FindWidget *>();
+    if (findWidget) {
+        int nWidget = findWidget->width();
+        findWidget->move(nParentWidth - nWidget - 20, 20);
+    }
+
+    auto closeBtn = this->findChild<DDialogCloseButton *>();
+    if (closeBtn) {
+        int nWidget = closeBtn->width();
+        closeBtn->move(nParentWidth - nWidget - 10, 10);
     }
 
     CustomWidget::resizeEvent(event);
+}
+
+//  全屏 \ 幻灯片放映, 显示 关闭按钮
+void DocShowShellWidget::slotShowCloseBtn(const int &iFlag)
+{
+    auto closeBtn = this->findChild<DIconButton *>();
+    if (closeBtn == nullptr) {
+        closeBtn = new DIconButton(this);
+
+        connect(closeBtn, &DIconButton::clicked, this, &DocShowShellWidget::slotBtnCloseClicked);
+
+        closeBtn->setIconSize(QSize(50, 50));
+        closeBtn->setFixedSize(QSize(50, 50));
+    }
+
+    if (iFlag == 1) {
+        closeBtn->setIcon(QIcon(":/resources/exit_slider.svg"));
+        closeBtn->setObjectName("slider");
+    } else {
+        QString sIcon = PF::getImagePath("exit_fullscreen", Pri::g_frame);
+        closeBtn->setIcon(QIcon(sIcon));
+        closeBtn->setObjectName("fullscreen");
+    }
+
+    int nParentWidth = this->width();
+    closeBtn->move(nParentWidth - 50, 0);
+
+    closeBtn->show();
+    closeBtn->raise();
+}
+
+void DocShowShellWidget::slotHideCloseBtn()
+{
+    auto closeBtn = this->findChild<DIconButton *>();
+    if (closeBtn != nullptr && closeBtn->isVisible()) {
+        closeBtn->hide();
+    }
 }
 
 //  获取文件的基本数据，　进行展示
@@ -37,34 +86,36 @@ void DocShowShellWidget::slotShowFileAttr()
 //  搜索框
 void DocShowShellWidget::slotShowFindWidget()
 {
-    if (m_pFindWidget == nullptr) {
-        m_pFindWidget = new FindWidget(this);
+    auto findWidget = this->findChild<FindWidget *>();
+    if (!findWidget) {
+        findWidget = new FindWidget(this);
     }
 
     int nParentWidth = this->width();
-    int nWidget = m_pFindWidget->width();
-    m_pFindWidget->move(nParentWidth - nWidget - 20, 20);
+    int nWidget = findWidget->width();
+    findWidget->move(nParentWidth - nWidget - 20, 20);
 
-    m_pFindWidget->show();
-    m_pFindWidget->raise();
+    findWidget->show();
+    findWidget->raise();
 }
 
 //  注释窗口
 void DocShowShellWidget::slotOpenNoteWidget(const QString &msgContent)
 {
-    if (m_pFileViewNoteWidget == nullptr) {
-        m_pFileViewNoteWidget = new FileViewNoteWidget(this);
+    auto pWidget = this->findChild<FileViewNoteWidget *>();
+    if (pWidget == nullptr) {
+        pWidget = new FileViewNoteWidget(this);
     }
-    m_pFileViewNoteWidget->setEditText("");
-    m_pFileViewNoteWidget->setPointAndPage(msgContent);
-    m_pFileViewNoteWidget->setNoteUuid("");
-    m_pFileViewNoteWidget->setNotePage("");
+    pWidget->setEditText("");
+    pWidget->setPointAndPage(msgContent);
+    pWidget->setNoteUuid("");
+    pWidget->setNotePage("");
 
     QPoint point;
     bool t_bHigh = false;
-    DataManager::instance()->setSmallNoteWidgetSize(m_pFileViewNoteWidget->size());
+    DataManager::instance()->setSmallNoteWidgetSize(pWidget->size());
     DataManager::instance()->mousePressLocal(t_bHigh, point);
-    m_pFileViewNoteWidget->showWidget(point);
+    pWidget->showWidget(point);
 }
 
 //  显示 当前 注释
@@ -75,10 +126,6 @@ void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
         QString t_strUUid = t_strList.at(0);
         QString t_page = t_strList.at(2);
 
-        if (m_pFileViewNoteWidget == nullptr) {
-            m_pFileViewNoteWidget = new FileViewNoteWidget(this);
-        }
-
         QString sContant = "";
 
         auto pHelper = DocummentFileHelper::instance();
@@ -86,18 +133,38 @@ void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
             pHelper->getAnnotationText(t_strUUid, sContant, t_page.toInt());
         }
 
-        m_pFileViewNoteWidget->setNoteUuid(t_strUUid);
-        m_pFileViewNoteWidget->setNotePage(t_page);
-        m_pFileViewNoteWidget->setEditText(sContant);
-        m_pFileViewNoteWidget->setPointAndPage("");
-        DataManager::instance()->setSmallNoteWidgetSize(m_pFileViewNoteWidget->size());
+        auto pWidget = this->findChild<FileViewNoteWidget *>();
+        if (pWidget == nullptr) {
+            pWidget = new FileViewNoteWidget(this);
+        }
+        pWidget->setNoteUuid(t_strUUid);
+        pWidget->setNotePage(t_page);
+        pWidget->setEditText(sContant);
+        pWidget->setPointAndPage("");
+        DataManager::instance()->setSmallNoteWidgetSize(pWidget->size());
 
         bool t_bHigh = false; // 点击位置是否是高亮
         QPoint point;// = this->mapToGlobal(rrect.bottomRight());// 鼠标点击位置
 
         DataManager::instance()->mousePressLocal(t_bHigh, point);
         if (t_bHigh) {
-            m_pFileViewNoteWidget->showWidget(point);
+            pWidget->showWidget(point);
+        }
+    }
+}
+
+void DocShowShellWidget::slotBtnCloseClicked()
+{
+    notifyMsg(MSG_NOTIFY_KEY_MSG, "Esc");
+}
+
+void DocShowShellWidget::slotUpdateTheme()
+{
+    auto closeBtn = this->findChild<DIconButton *>();
+    if (!closeBtn) {
+        if (closeBtn->objectName() == "fullscreen") {
+            QString sIcon = PF::getImagePath("exit_fullscreen", Pri::g_frame);
+            closeBtn->setIcon(QIcon(sIcon));
         }
     }
 }
@@ -106,6 +173,9 @@ void DocShowShellWidget::initConnections()
 {
     connect(this, SIGNAL(sigShowFileAttr()), SLOT(slotShowFileAttr()));
     connect(this, SIGNAL(sigShowFileFind()), SLOT(slotShowFindWidget()));
+    connect(this, SIGNAL(sigShowCloseBtn(const int &)), SLOT(slotShowCloseBtn(const int &)));
+    connect(this, SIGNAL(sigHideCloseBtn()), SLOT(slotHideCloseBtn()));
+    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 
     connect(this, SIGNAL(sigOpenNoteWidget(const QString &)), SLOT(slotOpenNoteWidget(const QString &)));
     connect(this, SIGNAL(sigShowNoteWidget(const QString &)), SLOT(slotShowNoteWidget(const QString &)));
@@ -117,6 +187,10 @@ int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
     if (KeyStr::g_ctrl_f == msgContent) {    //  搜索
         emit sigShowFileFind();
         return ConstantMsg::g_effective_res;
+    }
+
+    if (KeyStr::g_esc == msgContent) {   //  退出   幻灯片\全屏
+        emit sigHideCloseBtn();
     }
     return 0;
 }
@@ -136,6 +210,12 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
     case MSG_OPERATION_TEXT_SHOW_NOTEWIDGET:    //  显示注释窗口
         emit sigShowNoteWidget(msgContent);
         return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_SLIDE :                  //  幻灯片模式
+        emit sigShowCloseBtn(1);
+        break;
+    case MSG_OPERATION_FULLSCREEN :             //  全屏
+        emit sigShowCloseBtn(0);
+        break;
     case MSG_NOTIFY_KEY_MSG : {                 //  最后一个处理通知消息
         return dealWithNotifyMsg(msgContent);
     }
@@ -146,7 +226,7 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
 
 void DocShowShellWidget::initWidget()
 {
-    auto layout = new QVBoxLayout;
+    auto layout = new QHBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
 

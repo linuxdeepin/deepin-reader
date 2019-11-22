@@ -2,10 +2,7 @@
 #define DOCSHOWSHELLWIDGET_H
 
 #include "CustomControl/CustomWidget.h"
-#include "mainShow/FindWidget.h"
 #include "mainShow/FileAttrWidget.h"
-
-#include "pdfControl/fileViewNote/FileViewNoteWidget.h"
 
 /**
  * @brief The DocShowShellWidget class
@@ -20,6 +17,8 @@ public:
     ~DocShowShellWidget() Q_DECL_OVERRIDE;
 
 signals:
+    void sigShowCloseBtn(const int &);
+    void sigHideCloseBtn();
     void sigShowFileAttr();
     void sigShowFileFind();
     void sigOpenNoteWidget(const QString &);
@@ -29,18 +28,18 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
+    void slotShowCloseBtn(const int &);
+    void slotHideCloseBtn();
     void slotShowFileAttr();
     void slotShowFindWidget();
     void slotOpenNoteWidget(const QString &);
     void slotShowNoteWidget(const QString &);
+    void slotBtnCloseClicked();
+    void slotUpdateTheme();
 
 private:
     void initConnections();
     int dealWithNotifyMsg(const QString &);
-
-private:
-    FindWidget              *m_pFindWidget = nullptr;
-    FileViewNoteWidget      *m_pFileViewNoteWidget = nullptr;
 
     // IObserver interface
 public:

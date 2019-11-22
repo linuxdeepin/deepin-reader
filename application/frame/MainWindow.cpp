@@ -14,6 +14,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include "controller/DataManager.h"
+#include "controller/AppSetting.h"
 #include <DGuiApplicationHelper>
 #include "DocummentFileHelper.h"
 
@@ -112,6 +113,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
             DocummentFileHelper::instance()->closeFile();
         }
     }
+
+//    AppSetting::instance()->setKeyValue();
+
     DMainWindow::closeEvent(event);
 }
 
@@ -129,7 +133,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
         }
     } else if (nType == QEvent::Wheel) {
         QWheelEvent *event = static_cast<QWheelEvent *>(e);
-        if ( QApplication::keyboardModifiers () == Qt::ControlModifier) {
+        if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
             QString sFilePath = DataManager::instance()->strOnlyFilePath();
             if (sFilePath != "") {
                 if (event->delta() > 0) {
@@ -156,7 +160,7 @@ void MainWindow::createActionMap(DMenu *m_menu, QSignalMapper *pSigManager,
                                  const QStringList &actionList, const QStringList &actionObjList)
 {
     int nFirstSize = actionList.size();
-    for ( int iLoop = 0; iLoop < nFirstSize; iLoop++) {
+    for (int iLoop = 0; iLoop < nFirstSize; iLoop++) {
         QString sActionName = actionList.at(iLoop);
         QString sObjName = actionObjList.at(iLoop);
 
@@ -251,7 +255,7 @@ void MainWindow::onScreening()
 void MainWindow::initThemeChanged()
 {
     //  主题变了
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] () {
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ]() {
         setCurTheme();
         notifyMsg(MSG_OPERATION_UPDATE_THEME);
     });
@@ -312,6 +316,7 @@ void MainWindow::dealWithKeyEvent(const QString &key)
         }
     }
 }
+
 void MainWindow::displayShortcuts()
 {
     QRect rect = window()->geometry();
@@ -344,7 +349,7 @@ void MainWindow::displayShortcuts()
     QJsonArray windowJsonItems;
 
     int index = 0;
-    for (const QString &shortcutname : shortcutnames ) {
+    for (const QString &shortcutname : shortcutnames) {
 
         QJsonObject jsonItem;
         jsonItem.insert("name", shortcutname);

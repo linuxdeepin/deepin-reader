@@ -14,17 +14,14 @@
 #include <DFontSizeManager>
 
 HomeWidget::HomeWidget(CustomWidget *parent):
-    CustomWidget ("HomeWidget", parent),
-    m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
-                             QSettings::IniFormat))
+    CustomWidget("HomeWidget", parent)
 {
     initWidget();
     initConnections();
 
+    m_settings = AppSetting::instance();
     // initalize the configuration file.
-    if (m_settings->value("dir").toString().isEmpty()) {
-        m_settings->setValue("dir", "");
-    }
+    m_settings->setKeyValue("dir", "");
 
     slotUpdateTheme();
 }
@@ -97,7 +94,7 @@ QStringList HomeWidget::getOpenFileList()
     dialog.setFileMode(DFileDialog::ExistingFile);
     dialog.setNameFilter(Utils::getSuffixList());
 
-    QString historyDir = m_settings->value("dir").toString();
+    QString historyDir = m_settings->getKeyValue("dir");
     if (historyDir.isEmpty()) {
         historyDir = QDir::homePath();
     }
@@ -106,7 +103,7 @@ QStringList HomeWidget::getOpenFileList()
     const int mode = dialog.exec();
 
     // save the directory string to config file.
-    m_settings->setValue("dir", dialog.directoryUrl().toLocalFile());
+    m_settings->setKeyValue("dir", dialog.directoryUrl().toLocalFile());
 
     // if click cancel button or close button.
     if (mode != QDialog::Accepted) {
