@@ -380,8 +380,8 @@
     <message>
         <location filename="../frame/HomeWidget.cpp" line="34"/>
         <source>drag Pdf or other format file to here</source>
-        <translatorcomment>拖拽Pdf格式文件到这里</translatorcomment>
-        <translation>拖拽Pdf格式文件到这里</translation>
+        <translatorcomment>拖拽PDF或其他格式文件到此</translatorcomment>
+        <translation>拖拽PDF或其他格式文件到此</translation>
     </message>
     <message>
         <location filename="../frame/HomeWidget.cpp" line="38"/>
@@ -717,7 +717,7 @@
     <name>PagingWidget</name>
     <message>
         <location filename="../pdfControl/PagingWidget.cpp" line="25"/>
-        <location filename="../pdfControl/PagingWidget.cpp" line="122"/>
+        <location filename="../pdfControl/PagingWidget.cpp" line="123"/>
         <source>pages</source>
         <translatorcomment>页</translatorcomment>
         <translation>页</translation>

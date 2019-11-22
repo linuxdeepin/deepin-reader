@@ -625,7 +625,7 @@
     <name>PagingWidget</name>
     <message>
         <location filename="../pdfControl/PagingWidget.cpp" line="25"/>
-        <location filename="../pdfControl/PagingWidget.cpp" line="122"/>
+        <location filename="../pdfControl/PagingWidget.cpp" line="123"/>
         <source>pages</source>
         <translation></translation>
     </message>
