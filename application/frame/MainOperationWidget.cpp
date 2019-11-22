@@ -3,7 +3,7 @@
 #include <QButtonGroup>
 #include <DToolButton>
 #include "utils/PublicFunction.h"
-//#include <DGuiApplicationHelper>
+#include "controller/DataManager.h"
 
 MainOperationWidget::MainOperationWidget(CustomWidget *parent):
     CustomWidget ("MainOperationWidget", parent)
@@ -113,7 +113,10 @@ void MainOperationWidget::slotUpdateTheme()
 
 void MainOperationWidget::slotButtonClicked(int id)
 {
-    m_nThumbnailIndex = id;
+//    m_nThumbnailIndex = id;
+    if(WIDGET_SEARCH != id){
+        DataManager::instance()->setCurrentWidget(id);
+    }
     notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(id));
 }
 
@@ -140,7 +143,8 @@ void MainOperationWidget::slotSearchClosed()
         QString objName = btn->objectName();
         if (objName == findBtnName()) {
             btn->setChecked(true);
-            notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(m_nThumbnailIndex));
+            int index = DataManager::instance()->currentWidget();
+            notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(index));
             break;
         }
     }

@@ -32,8 +32,8 @@ void SearchResWidget::slotClearWidget()
     if(!bShowThunmb){
         //  侧边栏 隐藏
         notifyMsg(MSG_SLIDER_SHOW_STATE, "0");
-        notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(DataManager::instance()->currentWidget()));
     }
+    notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(DataManager::instance()->currentWidget()));
 }
 
 void SearchResWidget::slotCloseFile()
