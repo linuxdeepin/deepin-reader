@@ -1,4 +1,5 @@
 #include "ThumbnailItemWidget.h"
+#include "controller/DataManager.h"
 
 ThumbnailItemWidget::ThumbnailItemWidget(CustomItemWidget *parent) :
     CustomItemWidget ("ThumbnailItemWidget", parent)
@@ -35,7 +36,7 @@ void ThumbnailItemWidget::initWidget()
     m_pPicture = new ImageLabel();
     m_pPicture->setFixedSize(QSize(146, 174));
     m_pPicture->setAlignment(Qt::AlignCenter);
-    m_pPicture->setRadius(10);
+    m_pPicture->setRadius(ICON_BIG);
 
     auto t_vLayout = new QVBoxLayout;
     t_vLayout->setContentsMargins(1, 0, 1, 0);

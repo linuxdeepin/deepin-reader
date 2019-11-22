@@ -26,6 +26,11 @@ enum Widget_Type{
     WIDGET_SEARCH,      //  搜索
 };
 
+enum ICON_RADIUS{
+    ICON_SMALL = 8,     // 小图标圆角
+    ICON_BIG = 10       // 大图标圆角
+};
+
 class DataManager : public QObject
 {
     Q_OBJECT
