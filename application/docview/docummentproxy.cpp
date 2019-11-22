@@ -63,6 +63,7 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath)
     connect(m_documment, SIGNAL(signal_searchRes(stSearchRes)), this, SIGNAL(signal_searchRes(stSearchRes)));
     connect(m_documment, SIGNAL(signal_searchover()), this, SIGNAL(signal_searchover()));
 //    connect(this, SIGNAL(signal_mouseSelectText(QPoint, QPoint)), m_documment, SLOT(mouseSelectText(QPoint, QPoint)));
+    connect(this, SIGNAL(signal_setScaleRotateViewModeAndShow(double, RotateType_EM, ViewMode_EM)), m_documment, SLOT(setScaleRotateViewModeAndShow(double, RotateType_EM, ViewMode_EM)));
     connect(this, SIGNAL(signal_scaleAndShow(double, RotateType_EM)), m_documment, SLOT(scaleAndShow(double, RotateType_EM)));
     connect(this, SIGNAL(signal_setViewModeAndShow(ViewMode_EM)), m_documment, SLOT(setViewModeAndShow(ViewMode_EM)));
     connect(m_documment, &DocummentBase::signal_bookMarkStateChange, this, [ = ](int page, bool state) {
@@ -107,6 +108,13 @@ bool DocummentProxy::mouseBeOverText(QPoint point)
     return m_documment->mouseBeOverText(point);
 }
 
+void DocummentProxy::setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode)
+{
+    if (!m_documment || bcloseing)
+        return;
+    mouseSelectTextClear();
+    emit signal_setScaleRotateViewModeAndShow(scale, rotate, viewmode);
+}
 void DocummentProxy::scaleRotateAndShow(double scale, RotateType_EM rotate)
 {
     if (!m_documment || bcloseing)
@@ -121,7 +129,6 @@ QPoint DocummentProxy::global2RelativePoint(QPoint globalpoint)
 {
     if (!m_documment || bcloseing)
         return QPoint();
-    //qDebug() << "global2RelativePoint";
     return m_documment->global2RelativePoint(globalpoint);
 }
 
@@ -318,21 +325,21 @@ bool DocummentProxy::exitSlideModel()
 
 void DocummentProxy::findNext()
 {
-    if (m_documment || bcloseing) {
+    if (m_documment || !bcloseing) {
         m_documment->findNext();
     }
 }
 
 void DocummentProxy::findPrev()
 {
-    if (m_documment || bcloseing) {
+    if (m_documment || !bcloseing) {
         m_documment->findPrev();
     }
 }
 
 void DocummentProxy::setAnnotationText(int ipage, const QString &struuid, const QString &strtext)
 {
-    if (m_documment || bcloseing) {
+    if (m_documment || !bcloseing) {
         qDebug() << "setAnnotationText";
         m_documment->setAnnotationText(ipage, struuid, strtext);
     }
@@ -340,7 +347,7 @@ void DocummentProxy::setAnnotationText(int ipage, const QString &struuid, const 
 
 void DocummentProxy::getAnnotationText(const QString &struuid, QString &strtext, int ipage)
 {
-    if (m_documment || bcloseing) {
+    if (m_documment || !bcloseing) {
         qDebug() << "getAnnotationText";
         m_documment->getAnnotationText(struuid, strtext, ipage);
     }

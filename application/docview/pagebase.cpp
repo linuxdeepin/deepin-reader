@@ -31,15 +31,20 @@ void ThreadRenderImage::run()
     restart = true;
     while (restart) {
         if (QThread::currentThread()->isInterruptionRequested()) {
-            break;
+            return;
         }
         restart = false;
         if (m_width > 0 && m_height > 0) {
             QImage image;
             qDebug() << "ThreadRenderImage getImage ID:" << currentThreadId();
             if (m_page->getImage(image, m_width, m_height)) {
+                if (QThread::currentThread()->isInterruptionRequested()) {
+                    return;
+                }
 //                m_page->loadData();
                 emit signal_RenderFinish(image);
+            } else {
+                qDebug() << "ThreadRenderImage getImage ID:" << currentThreadId() << " fail!";
             }
         }
     }
@@ -523,7 +528,8 @@ void PageBase::slot_loadMagnifierPixmapCache(QImage image, double width, double 
 void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
 {
     Q_D(PageBase);
-    d->havereander = false;
+//    d->havereander = false;
+    clearImage();
     d->m_scale = scale;
     d->m_rotate = rotate;
     switch (rotate) {

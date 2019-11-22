@@ -892,6 +892,13 @@ bool DocummentBase::pageJump(int pagenum)
     return true;
 }
 
+void DocummentBase::setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode)
+{
+    Q_D(DocummentBase);
+    d->m_viewmode = viewmode;
+    scaleAndShow(scale, rotate);
+}
+
 void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
 {
     Q_D(DocummentBase);
@@ -904,41 +911,39 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
         return;
     }
 
-    d->m_scale = scale;
+    if (scale > 0)
+        d->m_scale = scale;
 
     if (rotate != RotateType_Normal)
         d->m_rotate = rotate;
 
     d->donotneedreloaddoc = true;
 
-//    for (int i = 0; i < d->m_pages.size(); i++) {
-//        d->m_pages.at(i)->clearImage();
-//    }
-
     for (int i = 0; i < d->m_pages.size(); i++) {
-        d->m_pages.at(i)->clearImage();
+//        d->m_pages.at(i)->clearImage();
         d->m_pages.at(i)->setScaleAndRotate(d->m_scale, d->m_rotate);
     }
 
-    switch (d->m_viewmode) {
-    case ViewMode_SinglePage:
-        showSinglePage();
-        break;
-    case ViewMode_FacingPage:
-        if (d->m_pages.size() % 2) {
-            showSinglePage(); //为了防止缩放的时候最后一页位置偏离
-        }
-        showFacingPage();
-        break;
-    default:
-        break;
-    }
+    setViewModeAndShow(d->m_viewmode);
+//    switch (d->m_viewmode) {
+//    case ViewMode_SinglePage:
+//        showSinglePage();
+//        break;
+//    case ViewMode_FacingPage:
+//        if (d->m_pages.size() % 2) {
+//            showSinglePage(); //为了防止缩放的时候最后一页位置偏离
+//        }
+//        showFacingPage();
+//        break;
+//    default:
+//        break;
+//    }
 
-    pageJump(currpageno);
-    d->donotneedreloaddoc = false;
+//    pageJump(currpageno);
+//    d->donotneedreloaddoc = false;
+////    loadPages();
+//    d->loadpagewaittimer->start(10);
     d->m_currentpageno = currpageno;
-//    loadPages();
-    d->loadpagewaittimer->start(10);
 }
 
 int DocummentBase::getCurrentPageNo()
@@ -964,6 +969,7 @@ int DocummentBase::currentLastPageNo()
     DScrollBar *scrollBar_Y = verticalScrollBar();
     if (scrollBar_Y)
         y_offset = scrollBar_Y->value() + d->qwfather->height();
+    qDebug() << "-----y_offset:" << y_offset;
     switch (d->m_viewmode) {
     case ViewMode_SinglePage:
         for (int i = 0; i < d->m_widgets.size(); i++) {
@@ -972,6 +978,8 @@ int DocummentBase::currentLastPageNo()
                 break;
             }
         }
+        if (-1 == pagenum)
+            qDebug() << "-----pagenum -1 value:" << d->m_widgets.at(d->m_widgets.size() - 1)->y()/* + d->m_widgets.at(d->m_widgets.size() - 1)->height()*/;
         break;
     case ViewMode_FacingPage:
         for (int i = 0; i < d->m_widgets.size() / 2; i++) {
@@ -999,7 +1007,8 @@ int DocummentBase::currentLastPageNo()
         break;
     }
     if (-1 == pagenum) {
-        pagenum = d->m_pages.size() - 1;
+        if (d->m_widgets.at(d->m_widgets.size() - 1)->y() > 0 && (d->m_widgets.at(d->m_widgets.size() - 1)->y() + d->m_widgets.at(d->m_widgets.size() - 1)->height()) < y_offset)//规避刚打开文档导致所有文档都打开的情况
+            pagenum = d->m_pages.size() - 1;
     }
     return pagenum;
 }
@@ -1347,6 +1356,9 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
         showSinglePage();
         break;
     case ViewMode_FacingPage:
+        if (d->m_pages.size() % 2) {
+            showSinglePage(); //为了防止缩放的时候最后一页位置偏离
+        }
         showFacingPage();
         break;
     default:
@@ -1366,7 +1378,7 @@ bool DocummentBase::loadPages()
     Q_D(DocummentBase);
     if (!bDocummentExist())
         return false;
-    // qDebug() << "loadPages";
+    qDebug() << "-----loadPages-----";
     for (int i = 0; i < d->m_pages.size(); i++) {
         d->m_pages.at(i)->waitThread();
     }
@@ -1374,7 +1386,9 @@ bool DocummentBase::loadPages()
 //    int firstpagenum  = d->m_currentpageno;
     int firstpagenum  = currentPageNo();
     int lastpagenum  = currentLastPageNo();
-//    qDebug() << "---------------firstpagenum:" << firstpagenum << " lastpagenum:" << lastpagenum << " pagesize:" ;
+    if (lastpagenum < 0)
+        lastpagenum  = firstpagenum;
+    qDebug() << "---------------firstpagenum:" << firstpagenum << " lastpagenum:" << lastpagenum << " pagesize:" << d->m_pages.size();
     for (int i = firstpagenum; i < lastpagenum + 1; i++) {
         if (i >= 0 && i < d->m_pages.size())
             d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);
@@ -1635,8 +1649,7 @@ void DocummentBase::slot_docummentLoaded(bool result)
 
     initConnect();
     d->donotneedreloaddoc = false;
-    setViewModeAndShow(d->m_viewmode);
-//    emit signal_openResult(true);
+    scaleAndShow(0, d->m_rotate);
     if (d->threadloaddata.isRunning()) {
         d->threadloaddata.requestInterruption();
         d->threadloaddata.wait();

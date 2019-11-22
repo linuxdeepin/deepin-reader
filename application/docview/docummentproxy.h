@@ -27,6 +27,7 @@ public:
     bool mouseSelectText(QPoint start, QPoint stop);
     void mouseSelectTextClear();
     bool mouseBeOverText(QPoint point);
+    void setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode);
     void scaleRotateAndShow(double scale, RotateType_EM rotate);
     bool getImage(int pagenum, QImage &image, double width, double height);
     int  getPageSNum();
@@ -72,6 +73,7 @@ signals:
     void signal_searchRes(stSearchRes);
     void signal_searchover();
     bool signal_mouseSelectText(QPoint start, QPoint stop);
+    void signal_setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode);
     void signal_scaleAndShow(double scale, RotateType_EM rotate);
     bool signal_setViewModeAndShow(ViewMode_EM viewmode);
     void signal_bookMarkStateChange(int page, bool state);
