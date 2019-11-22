@@ -454,8 +454,11 @@ void FileViewWidget::slotPrintFile()
     // 创建打印对话框
     QString printerName = printer.printerName();
     if ( printerName.size() == 0) {
-        DDialog dlg(tr("Print Error"), tr("No Print Device"));
+        DDialog dlg("",tr("No Print Device"));
+        dlg.setIcon(QIcon(":/resources/exception-logo.svg"));
         dlg.addButtons(QStringList() << tr("Ok"));
+        QMargins mar(0,0,0,30);
+        dlg.setContentLayoutContentsMargins(mar);
         dlg.exec();
         return;
     }

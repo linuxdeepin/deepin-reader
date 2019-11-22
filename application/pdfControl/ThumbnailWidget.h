@@ -104,6 +104,7 @@ public:
     {
         return m_isLoading;
     }
+   void showItemBookMark(int ipage=-1);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;

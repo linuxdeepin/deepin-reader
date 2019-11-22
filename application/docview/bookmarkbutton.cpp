@@ -1,5 +1,5 @@
 #include "bookmarkbutton.h"
-
+#include "utils/utils.h"
 #include<QColor>
 #include<QBrush>
 #include<QPen>
@@ -13,7 +13,7 @@ BookMarkButton::BookMarkButton(DWidget *parent)
       ispressed(false),
       isclicked(false)
 {
-    setFixedSize(QSize(30, 30));
+    setFixedSize(QSize(36, 36));
     setMouseTracking(true);
 }
 
@@ -29,7 +29,6 @@ void BookMarkButton::setClickState(bool state)
 }
 
 void BookMarkButton::paintEvent(QPaintEvent *e)
-
 {
     QPainter painter;
     painter.begin(this);
@@ -50,10 +49,7 @@ void BookMarkButton::paintEvent(QPaintEvent *e)
             }
         }
     }
-    QPixmap pixmap(ssPath);
-    const qreal ratio = qApp->devicePixelRatio();
-    pixmap.setDevicePixelRatio(ratio);
-//    pixmap = pixmap.scaled(this->width(), this->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QPixmap pixmap(Utils::renderSVG(ssPath,QSize(36,36)));
     painter.setRenderHints(QPainter::SmoothPixmapTransform);
     painter.drawPixmap(0, 0, this->width(), this->height(), pixmap);
     painter.end();

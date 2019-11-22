@@ -18,6 +18,10 @@ public:
     {
         m_nRadius = radius;
     }
+    inline void setBookMarkStatus(bool bshow)
+    {
+        m_bshowbookmark=bshow;
+    }
 
 protected:
     void  paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
@@ -25,6 +29,7 @@ protected:
 private:
     bool m_bSelect = false;
     int m_nRadius = 8;         // 圆角
+    bool m_bshowbookmark=false;       //显示书签
 };
 
 #endif // IMAGELABEL_H

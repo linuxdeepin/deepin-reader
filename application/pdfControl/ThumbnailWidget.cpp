@@ -1,6 +1,7 @@
 #include "ThumbnailWidget.h"
 #include "frame/DocummentFileHelper.h"
 #include "controller/DataManager.h"
+#include "controller/DBManager.h"
 
 ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
     CustomWidget(QString("ThumbnailWidget"), parent)
@@ -209,6 +210,7 @@ void ThumbnailWidget::fillContantToList()
     }
 
     if (m_totalPages > 0) {
+      showItemBookMark();
         auto item = m_pThumbnailListWidget->item(0);
         if (item) {
             m_pThumbnailListWidget->setCurrentItem(item);
@@ -221,6 +223,22 @@ void ThumbnailWidget::fillContantToList()
     }
 
     m_isLoading = false;
+}
+
+void ThumbnailWidget::showItemBookMark(int ipage)
+{
+    if(ipage>=0)
+    {
+        auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget( m_pThumbnailListWidget->item(ipage)));
+        pWidget->slotBookMarkShowStatus(true);
+    }else {
+        DBManager::instance()->getBookMarks();
+        QList<int> pageList = DBManager::instance()->getBookMarkList();
+        foreach (int index, pageList) {
+               auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget( m_pThumbnailListWidget->item(index)));
+               pWidget->slotBookMarkShowStatus(true);
+        }
+    }
 }
 
 // 关联成功打开文件槽函数

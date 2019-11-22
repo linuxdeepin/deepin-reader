@@ -2,7 +2,8 @@
 #include "controller/DataManager.h"
 #include "frame/DocummentFileHelper.h"
 #include <DFontSizeManager>
-
+#include <DStackedWidget>
+#include "ThumbnailWidget.h"
 BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
     CustomWidget(QString("BookMarkWidget"), parent)
 {
@@ -32,7 +33,15 @@ void BookMarkWidget::slotAddBookMark()
     if (!m_pAddBookMarkBtn->isEnabled()) {
         return;
     }
-
+    auto pwidget=(qobject_cast<DStackedWidget*>(this->parent()))->widget(0);
+     if(pwidget->objectName().compare(QString("ThumbnailWidget"))==0)
+     {
+         auto dproxy = DocummentFileHelper::instance();
+         if (dproxy) {
+             int nCurPage = dproxy->currentPageNo();
+             qobject_cast<ThumbnailWidget*>(pwidget)->showItemBookMark(nCurPage);
+         }
+     }
     auto proxy = DocummentFileHelper::instance();
     if (proxy) {
         //  书签, 添加当前页
@@ -465,13 +474,13 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
     //  删除书签消息
     if (MSG_BOOKMARK_DLTITEM == msgType || MSG_OPERATION_DELETE_BOOKMARK == msgType) {
         emit sigDeleteBookItem(msgContent.toInt());
-        return ConstantMsg::g_effective_res;
+       // return ConstantMsg::g_effective_res;
     }
 
     //  增加书签消息
     if (MSG_OPERATION_ADD_BOOKMARK == msgType || MSG_OPERATION_TEXT_ADD_BOOKMARK == msgType) {
         emit sigAddBookMark(msgContent.toInt());
-        return ConstantMsg::g_effective_res;
+        //return ConstantMsg::g_effective_res;
     }
 
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {    //  打开 文件通知消息

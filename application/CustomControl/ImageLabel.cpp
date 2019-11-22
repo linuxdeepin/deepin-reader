@@ -1,7 +1,9 @@
 #include "ImageLabel.h"
+#include "utils/utils.h"
 #include <QPainter>
 #include <QPalette>
-
+#include <DGuiApplicationHelper>
+#include <QDebug>
 ImageLabel::ImageLabel(DWidget *parent)
     : DLabel (parent)
 {
@@ -40,5 +42,23 @@ void ImageLabel::paintEvent(QPaintEvent *e)
 
     QRectF rectangle(local, local, width, heigh);
     painter.drawRoundedRect(rectangle, m_nRadius, m_nRadius);
+
+
     DLabel::paintEvent(e);
+    if(m_bshowbookmark)
+    {
+        QString ssPath = ":/resources/image/";
+        DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
+        if (themeType == DGuiApplicationHelper::LightType)
+            ssPath += "light";
+        else if (themeType == DGuiApplicationHelper::DarkType)
+            ssPath += "dark";
+
+        ssPath += "/checked/bookmarkbig_checked_light.svg";
+        QPixmap pixmap(Utils::renderSVG(ssPath,/*QSize(16,16)*/QSize(36,36)));
+        QPainter painter1(this);
+        painter1.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+        painter1.drawPixmap(this->width()-36-6,0, 36,36, pixmap);
+    }
+
 }

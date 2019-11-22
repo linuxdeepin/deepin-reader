@@ -6,11 +6,26 @@ ThumbnailItemWidget::ThumbnailItemWidget(CustomItemWidget *parent) :
 {
     setWindowFlags (Qt::FramelessWindowHint);
     initWidget();
+    connect(this,SIGNAL(sigBookMarkStatusChanged(bool)),SLOT(slotBookMarkShowStatus(bool)));
 }
 
 // 处理消息接口
-int ThumbnailItemWidget::dealWithData(const int &, const QString &)
+int ThumbnailItemWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
+    //  删除书签消息
+    if (MSG_BOOKMARK_DLTITEM == msgType || MSG_OPERATION_DELETE_BOOKMARK == msgType) {
+        if(m_nPageIndex==msgContent.toInt())
+        {
+             emit sigBookMarkStatusChanged(false);
+        }
+    }
+    //  增加书签消息
+    if (MSG_OPERATION_ADD_BOOKMARK == msgType || MSG_OPERATION_TEXT_ADD_BOOKMARK == msgType) {
+        if(m_nPageIndex==msgContent.toInt())
+        {
+            emit sigBookMarkStatusChanged(true);
+        }
+    }
     return 0;
 }
 
@@ -24,6 +39,12 @@ void ThumbnailItemWidget::setBSelect(const bool &paint)
     if (m_pPageNumber) {
         m_pPageNumber->setSelect(paint);
     }
+}
+
+void ThumbnailItemWidget::slotBookMarkShowStatus(bool bshow)
+{
+    m_pPicture->setBookMarkStatus(bshow);
+    m_pPicture->update();
 }
 
 // 初始化界面

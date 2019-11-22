@@ -34,5 +34,6 @@
         <file>resources/light/pdfControl/ok.svg</file>
         <file>resources/exit_slider.svg</file>
         <file>resources/light/frame/exit_fullscreen.svg</file>
+        <file>resources/exception-logo.svg</file>
     </qresource>
 </RCC>
