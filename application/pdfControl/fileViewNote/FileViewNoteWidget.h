@@ -24,6 +24,7 @@ protected:
 private:
     void init();
     int calcTextSize(const QString &);
+    QString getMaxLenStr(QString) const;
 
 private slots:
     void slotTextEditMaxContantNum();

@@ -231,6 +231,30 @@ int CustemTextEdit::calcTextSize(const QString &text)
     return str_len;
 }
 
+QString CustemTextEdit::getMaxLenStr(QString text) const
+{
+    QString qstrChinese = "";
+
+//    for(int index = 0; index < text.count(); ++index)
+//    {
+//        qstrChinese.append(text.at(index));
+
+//        if(qstrChinese.toUtf8().size() >= m_nMaxContantLen){
+//            return qstrChinese;
+//        }
+//    }
+    foreach(QChar ch, text)
+    {
+        qstrChinese.append(ch);
+
+        if(qstrChinese.toUtf8().size() >= m_nMaxContantLen){
+            return qstrChinese;
+        }
+    }
+
+    return qstrChinese;
+}
+
 /**
  * @brief CustemTextEdit::slotTextEditMaxContantNum
  * TextEdit输入允许输入最长字符串的长度
@@ -240,7 +264,24 @@ void CustemTextEdit::slotTextEditMaxContantNum()
     QString textContent = this->toPlainText();
 
     int length = textContent.toUtf8().size();
+
     if (length > m_nMaxContantLen) {
+        QString text = getMaxLenStr(textContent);
+
+        setText(text);
+
+        emit sigShowTips();
+
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::End);
+
+        if (cursor.hasSelection()) {
+            cursor.clearSelection();
+        }
+
+        //设置当前的光标为更改后的光标
+        setTextCursor(cursor);
+        #if 0
 //        int position = this->textCursor().position();
 //        QTextCursor textCursor = this->textCursor();
 //        textContent.remove(position - (length - m_nMaxContantLen), length - m_nMaxContantLen);
@@ -258,5 +299,6 @@ void CustemTextEdit::slotTextEditMaxContantNum()
         cursor.deletePreviousChar();
         //设置当前的光标为更改后的光标
         setTextCursor(cursor);
+#endif
     }
 }
