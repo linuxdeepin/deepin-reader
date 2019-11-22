@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QPoint>
 #include <QApplication>
+#include <QThreadPool>
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 #include <poppler-qt5.h>
@@ -274,7 +275,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     d->m_widget = new DWidget(this);
     setWidget(d->m_widget);
     d->showslidwaittimer = new QTimer(this);
-    d->loadpagewaittimer = new QTimer(this);
+//    d->loadpagewaittimer = new QTimer(this);
     d->autoplayslidtimer = new QTimer(this);
     d->pblankwidget = new DLabel(this);
     d->pblankwidget->setMouseTracking(true);
@@ -344,7 +345,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
 //    });
     connect(&d->threadloaddata, SIGNAL(signal_dataLoaded(bool)), this, SLOT(slot_dataLoaded(bool)));
     connect(d->showslidwaittimer, SIGNAL(timeout()), this, SLOT(showSlideModelTimerOut()));
-    connect(d->loadpagewaittimer, SIGNAL(timeout()), this, SLOT(loadPageTimerOut()));
+//    connect(d->loadpagewaittimer, SIGNAL(timeout()), this, SLOT(loadPageTimerOut()));
     connect(d->autoplayslidtimer, SIGNAL(timeout()), this, SLOT(autoplayslidTimerOut()));
 }
 
@@ -1178,23 +1179,22 @@ bool DocummentBase::getSelectTextString(QString &st)
     return bselectexit;
 }
 
-void DocummentBase::loadPageTimerOut()
-{
-    Q_D(DocummentBase);
-    d->loadpagewaittimer->stop();
-    loadPages();
-}
+//void DocummentBase::loadPageTimerOut()
+//{
+//    Q_D(DocummentBase);
+//    d->loadpagewaittimer->stop();
+//    loadPages();
+//}
 
 void DocummentBase::autoplayslidTimerOut()
 {
     Q_D(DocummentBase);
     if (d->m_bslidemodel) {
         pageJump(getCurrentPageNo() + 1);
-        qDebug()<<__FUNCTION__<<getCurrentPageNo()<<d->m_pages.size()<<d->m_slidepageno;
-        if(getCurrentPageNo()+1>=d->m_pages.size())
-        {
+        qDebug() << __FUNCTION__ << getCurrentPageNo() << d->m_pages.size() << d->m_slidepageno;
+        if (getCurrentPageNo() + 1 >= d->m_pages.size()) {
             d->autoplayslidtimer->stop();
-           d->bautoplayslide=false;
+            d->bautoplayslide = false;
         }
     } else {
         d->autoplayslidtimer->stop();
@@ -1365,10 +1365,15 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
         return false;
         break;
     }
+    QEventLoop loop;
+    QTimer::singleShot(20, &loop, SLOT(quit()));
+    loop.exec();
     pageJump(currpageno);
+    QTimer::singleShot(20, &loop, SLOT(quit()));
+    loop.exec();
+    loadPages();
     d->donotneedreloaddoc = false;
-//    loadPages();
-    d->loadpagewaittimer->start(10);
+//    d->loadpagewaittimer->start(10);
 
     return true;;
 }
@@ -1382,6 +1387,7 @@ bool DocummentBase::loadPages()
     for (int i = 0; i < d->m_pages.size(); i++) {
         d->m_pages.at(i)->waitThread();
     }
+    QThreadPool::globalInstance()->waitForDone();
     int pagenum = 0;
 //    int firstpagenum  = d->m_currentpageno;
     int firstpagenum  = currentPageNo();
@@ -1762,6 +1768,7 @@ void DocummentBase::stopLoadPageThread()
     for (int i = 0; i < d->m_pages.size(); i++) {
         d->m_pages.at(i)->waitThread();
     }
+    QThreadPool::globalInstance()->waitForDone();
 }
 
 bool DocummentBase::setBookMarkState(int page, bool state)

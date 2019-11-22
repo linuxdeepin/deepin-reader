@@ -1,7 +1,56 @@
 #include "pagebase.h"
 #include "publicfunc.h"
 #include <QPainter>
+#include <QThreadPool>
 #include <QDebug>
+//ThreadRenderImage::ThreadRenderImage()
+//{
+//    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
+//    m_page = nullptr;
+//    restart = false;
+//    m_width = 0;
+//    m_height = 0;
+//}
+
+//void ThreadRenderImage::setRestart()
+//{
+//    restart = true;
+//}
+
+//void ThreadRenderImage::setPage(PageInterface *page, double width, double height)
+//{
+//    qDebug() << "ThreadRenderImage::setPage" << width << height;
+//    m_page = page;
+//    m_width = width;
+//    m_height = height;
+//}
+
+//void ThreadRenderImage::run()
+//{
+//    if (!m_page)
+//        return;
+//    restart = true;
+//    while (restart) {
+//        if (QThread::currentThread()->isInterruptionRequested()) {
+//            return;
+//        }
+//        restart = false;
+//        if (m_width > 0 && m_height > 0) {
+//            QImage image;
+//            qDebug() << "ThreadRenderImage getImage ID:" << currentThreadId();
+//            if (m_page->getImage(image, m_width, m_height)) {
+//                if (QThread::currentThread()->isInterruptionRequested()) {
+//                    return;
+//                }
+////                m_page->loadData();
+//                emit signal_RenderFinish(image);
+//            } else {
+//                qDebug() << "ThreadRenderImage getImage ID:" << currentThreadId() << " fail!";
+//            }
+//        }
+//    }
+//}
+
 ThreadRenderImage::ThreadRenderImage()
 {
     //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
@@ -9,6 +58,8 @@ ThreadRenderImage::ThreadRenderImage()
     restart = false;
     m_width = 0;
     m_height = 0;
+    b_running = false;
+    setAutoDelete(false);
 }
 
 void ThreadRenderImage::setRestart()
@@ -24,31 +75,46 @@ void ThreadRenderImage::setPage(PageInterface *page, double width, double height
     m_height = height;
 }
 
+bool ThreadRenderImage::isRunning()
+{
+    return b_running;
+}
+
+void ThreadRenderImage::setRunningTrue()
+{
+    b_running = true;
+}
+
 void ThreadRenderImage::run()
 {
     if (!m_page)
         return;
     restart = true;
+    b_running = true;
     while (restart) {
         if (QThread::currentThread()->isInterruptionRequested()) {
+            b_running = false;
             return;
         }
         restart = false;
         if (m_width > 0 && m_height > 0) {
             QImage image;
-            qDebug() << "ThreadRenderImage getImage ID:" << currentThreadId();
+            qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId();
             if (m_page->getImage(image, m_width, m_height)) {
                 if (QThread::currentThread()->isInterruptionRequested()) {
+                    b_running = false;
                     return;
                 }
 //                m_page->loadData();
                 emit signal_RenderFinish(image);
             } else {
-                qDebug() << "ThreadRenderImage getImage ID:" << currentThreadId() << " fail!";
+                qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " fail!";
             }
         }
     }
+    b_running = false;
 }
+
 ThreadLoadMagnifierCache::ThreadLoadMagnifierCache()
 {
     //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
@@ -510,6 +576,7 @@ void PageBase::clearImage()
 //    d->m_words.clear();
     d->havereander = false;
     clearMagnifierPixmap();
+//    QThreadPool::globalInstance()->waitForDone();
 }
 
 void PageBase::slot_loadMagnifierPixmapCache(QImage image, double width, double height)
@@ -663,7 +730,9 @@ bool PageBase::showImage(double scale, RotateType_EM rotate)
     qDebug() << "PageBase::showImage" << d->pixelratiof;
     d->threadreander.setPage(getInterFace(), d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
     if (!d->threadreander.isRunning()) {
-        d->threadreander.start();
+//        d->threadreander.start();
+        d->threadreander.setRunningTrue();
+        QThreadPool::globalInstance()->start(&d->threadreander);
     } else {
         d->threadreander.setRestart();
     }
@@ -675,17 +744,17 @@ bool PageBase::showImage(double scale, RotateType_EM rotate)
 void PageBase::stopThread()
 {
     Q_D(PageBase);
-    d->threadreander.requestInterruption();
+//    d->threadreander.requestInterruption();
     d->loadmagnifiercachethread.requestInterruption();
 }
 
 void PageBase::waitThread()
 {
     Q_D(PageBase);
-    if (d->threadreander.isRunning()) {
-        //        threadreander.quit();
-        d->threadreander.wait();
-    }
+//    if (d->threadreander.isRunning()) {
+//        //        threadreander.quit();
+//        d->threadreander.wait();
+//    }
     if (d->loadmagnifiercachethread.isRunning()) {
         //        loadmagnifiercachethread.quit();
         d->loadmagnifiercachethread.wait();

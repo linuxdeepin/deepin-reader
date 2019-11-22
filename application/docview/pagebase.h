@@ -7,6 +7,7 @@
 #include <QThread>
 #include <QDebug>
 #include <QMutex>
+#include <QRunnable>
 #include "commonstruct.h"
 #include "bookmarkbutton.h"
 
@@ -58,13 +59,34 @@ enum RotateType_EM {
 class PageBase;
 class PageInterface;
 class PageBasePrivate;
-class ThreadRenderImage : public QThread
+//class ThreadRenderImage : public QThread
+//{
+//    Q_OBJECT
+//public:
+//    ThreadRenderImage();
+//    void setPage(PageInterface *page, double width, double height);
+//    void setRestart();
+
+//protected:
+//    virtual void run();
+
+//signals:
+//    void signal_RenderFinish(QImage);
+//private:
+//    PageInterface *m_page;
+//    bool restart;
+//    double m_width;
+//    double m_height;
+//};
+class ThreadRenderImage : public QObject, public QRunnable
 {
     Q_OBJECT
 public:
     ThreadRenderImage();
     void setPage(PageInterface *page, double width, double height);
     void setRestart();
+    bool isRunning();
+    void setRunningTrue();
 
 protected:
     virtual void run();
@@ -76,6 +98,7 @@ private:
     bool restart;
     double m_width;
     double m_height;
+    bool b_running;
 };
 class ThreadLoadMagnifierCache : public QThread
 {
@@ -145,11 +168,12 @@ public:
             loadmagnifiercachethread.quit();
             loadmagnifiercachethread.wait();
         }
-        if (threadreander.isRunning()) {
-            threadreander.requestInterruption();
-            threadreander.quit();
-            threadreander.wait();
-        }
+//        if (threadreander.isRunning()) {
+//            threadreander.requestInterruption();
+//            threadreander.quit();
+//            threadreander.wait();
+//        }
+        threadreander.setAutoDelete(true);
     }
 
     QColor m_paintercolor;

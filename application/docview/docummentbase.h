@@ -146,7 +146,7 @@ public:
         m_bScanningcopy = false;
         showslidwaittimer = nullptr;
         qwfather = nullptr;
-        loadpagewaittimer = nullptr;
+//        loadpagewaittimer = nullptr;
         m_fileinfo = new stFileInfo;
         bautoplayslide = false;
         autoplayslidtimer = nullptr;
@@ -224,7 +224,7 @@ public:
     bool m_bScanningcopy;//当前打开的是否为扫描件
     QTimer *showslidwaittimer;
     DWidget *qwfather;
-    QTimer *loadpagewaittimer;
+//    QTimer *loadpagewaittimer;
     stFileInfo *m_fileinfo;
 //    ThreadLoadDocumment threadloaddoc;
     ThreadLoadData threadloaddata;
@@ -335,7 +335,7 @@ protected slots:
     void scaleAndShow(double scale, RotateType_EM rotate);
     bool setViewModeAndShow(ViewMode_EM viewmode);
     void showSlideModelTimerOut();
-    void loadPageTimerOut();
+//    void loadPageTimerOut();
     void autoplayslidTimerOut();
 protected:
     void showSinglePage();
