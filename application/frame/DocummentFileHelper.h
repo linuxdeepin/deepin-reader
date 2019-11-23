@@ -56,8 +56,9 @@ public:
     bool setBookMarkState(const int &page, const bool &state);
 
 public:
-    bool setViewModeAndShow(const ViewMode_EM &viewmode);
-    void scaleRotateAndShow(const double &scale, const RotateType_EM &rotate);
+    void setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode);
+//    bool setViewModeAndShow(const ViewMode_EM &viewmode);
+//    void scaleRotateAndShow(const double &scale, const RotateType_EM &rotate);
 
 public:
     double adaptWidthAndShow(const double &width);

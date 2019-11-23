@@ -11,6 +11,7 @@
 #include <QPrintPreviewDialog>
 
 #include "mainShow/DefaultOperationMenu.h"
+#include "controller/AppSetting.h"
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
@@ -31,7 +32,7 @@ void FileViewWidget::initWidget()
 {
     //  实际文档类  唯一实例化设置 父窗口
     auto m_pDocummentProxy = DocummentProxy::instance(this);
-    connect(m_pDocummentProxy, SIGNAL(signal_bookMarkStateChange(int, bool )),
+    connect(m_pDocummentProxy, SIGNAL(signal_bookMarkStateChange(int, bool)),
             this, SLOT(slotBookMarkStateChange(int, bool)));
     connect(m_pDocummentProxy, SIGNAL(signal_pageChange(int)),
             this, SLOT(slotDocFilePageChanged(int)));
@@ -138,8 +139,6 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
         }
     }
 }
-
-
 
 //  鼠标松开
 void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
@@ -404,6 +403,8 @@ void FileViewWidget::slotBookMarkStateChange(int nPage, bool bState)
 //  文档页变化了
 void FileViewWidget::slotDocFilePageChanged(int page)
 {
+    AppSetting::instance()->setKeyValue(KEY_PAGENUM, QString("%1").arg(page));
+
     notifyMsg(MSG_FILE_PAGE_CHANGE, QString("%1").arg(page));
 }
 
@@ -453,18 +454,19 @@ void FileViewWidget::slotPrintFile()
     QPrinter printer(QPrinter::ScreenResolution);
     // 创建打印对话框
     QString printerName = printer.printerName();
-    if ( printerName.size() == 0) {
-        DDialog dlg("",tr("No Print Device"));
+
+    if (printerName.size() == 0) {
+        DDialog dlg("", tr("No Print Device"));
         dlg.setIcon(QIcon(":/resources/exception-logo.svg"));
         dlg.addButtons(QStringList() << tr("Ok"));
-        QMargins mar(0,0,0,30);
+        QMargins mar(0, 0, 0, 30);
         dlg.setContentLayoutContentsMargins(mar);
         dlg.exec();
         return;
     }
 
     QPrintPreviewDialog preview(&printer, this);
-    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ] (QPrinter * printer) {
+    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ](QPrinter * printer) {
 
         int nPageSize = m_pDocummentFileHelper->getPageSNum();       //  pdf 页数
         printer->setWinPageSize(nPageSize);

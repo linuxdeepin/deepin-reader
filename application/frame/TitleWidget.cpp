@@ -4,6 +4,7 @@
 #include <QWidgetAction>
 #include <DFontSizeManager>
 #include "controller/DataManager.h"
+#include "controller/AppSetting.h"
 
 TitleWidget::TitleWidget(CustomWidget *parent) :
     CustomWidget("TitleWidget", parent)
@@ -107,6 +108,9 @@ void TitleWidget::on_thumbnailBtn_clicked()
 {
     bool rl = m_pThumbnailBtn->isChecked();
     notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(rl));
+
+    AppSetting::instance()->setKeyValue(KEY_M, QString("%1").arg(rl));
+
     DataManager::instance()->setBThumbnIsShow(rl);
 }
 
@@ -183,13 +187,13 @@ void TitleWidget::slotDealWithShortKey(const QString &sKey)
         if (1 != m_nCurHandleShape) {
             setHandleShape();
         }
-    } else if ( sKey == KeyStr::g_m) {      //  显示缩略图
+    } else if (sKey == KeyStr::g_m) {      //  显示缩略图
         bool rl = m_pThumbnailBtn->isChecked();
         if (!rl) {
             m_pThumbnailBtn->setChecked(true);
             notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(1));
         }
-    } else if ( sKey == KeyStr::g_z) {      //  开启放大镜
+    } else if (sKey == KeyStr::g_z) {       //  开启放大镜
         bool bCheck = m_pMagnifierBtn->isChecked();
         if (!bCheck) {
             m_pMagnifierBtn->setChecked(true);
@@ -342,7 +346,7 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigOpenFileOk();
     } else if (msgType == MSG_OPERATION_FULLSCREEN || msgType == MSG_OPERATION_SLIDE) {
         emit sigAppFullScreen();
-    }  else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
     } else if (msgType == MSG_MAGNIFYING_CANCEL) {  //  右键取消放大镜
         emit sigMagnifierCancel();

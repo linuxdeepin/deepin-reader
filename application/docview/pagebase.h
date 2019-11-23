@@ -1,6 +1,7 @@
 #ifndef PAGEBASE_H
 #define PAGEBASE_H
-#include <DObject>
+
+#include <QObject>
 #include <DLabel>
 #include <DSpinner>
 #include <DGuiApplicationHelper>

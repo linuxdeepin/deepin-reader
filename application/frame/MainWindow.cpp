@@ -2,6 +2,8 @@
 #include "TitleWidget.h"
 #include "MainWidget.h"
 
+#include <QFileInfo>
+
 #include <DDialog>
 #include <DTitlebar>
 #include <DWidgetUtil>
@@ -110,13 +112,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
                 //  保存 书签数据
                 dApp->dbM->saveBookMark();
             }
-
-            notifyMsg(MSG_CLOSE_FILE);
-            DocummentFileHelper::instance()->closeFile();
         }
-    }
 
-//    AppSetting::instance()->setKeyValue();
+        notifyMsg(MSG_CLOSE_FILE);
+        DocummentFileHelper::instance()->closeFile();
+    }
 
     DMainWindow::closeEvent(event);
 }
@@ -401,11 +401,12 @@ void MainWindow::slotAppExit()
                 //  保存 书签数据
                 dApp->dbM->saveBookMark();
             }
-
-            notifyMsg(MSG_CLOSE_FILE);
-            DocummentFileHelper::instance()->closeFile();
         }
+
+        notifyMsg(MSG_CLOSE_FILE);
+        DocummentFileHelper::instance()->closeFile();
     }
+
     dApp->exit(0);
 }
 
@@ -429,9 +430,25 @@ void MainWindow::slotAppShowState(const int &nState)
     }
 }
 
+//  设置 文档标题
 void MainWindow::slotSetAppTitle(const QString &sData)
 {
     titlebar()->setTitle(sData);
+
+    QString sPageNum = AppSetting::instance()->getKeyValue(KEY_PAGENUM);
+    if (sPageNum != "") {
+        DocummentFileHelper::instance()->pageJump(sPageNum.toInt());
+
+        QString sM = AppSetting::instance()->getKeyValue(KEY_M);
+        if (sM == "1") {
+            notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_m);
+
+            QString sWidget = AppSetting::instance()->getKeyValue(KEY_WIDGET);
+            if (sWidget != "") {
+                notifyMsg(MSG_SWITCHLEFTWIDGET, sWidget);
+            }
+        }
+    }
 }
 
 //  文件打开成，　功能性　菜单才能点击

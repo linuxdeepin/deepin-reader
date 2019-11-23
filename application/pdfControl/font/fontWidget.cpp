@@ -236,7 +236,7 @@ void FontWidget::scaleAndRotate(int ival)
         break;
     }
 
-    DocummentFileHelper::instance()->scaleRotateAndShow((ival * 0.01), m_rotateType);
+//    DocummentFileHelper::instance()->scaleRotateAndShow((ival * 0.01), m_rotateType);
 }
 
 /**
@@ -407,9 +407,9 @@ void FontWidget::slotSetDoubPageViewCheckIcon()
     m_isDoubPage = !m_isDoubPage;
     m_pDoubPageViewLabelIcon->setVisible(m_isDoubPage);
     if (m_isDoubPage) {
-        DocummentFileHelper::instance()->setViewModeAndShow(ViewMode_FacingPage);
+//        DocummentFileHelper::instance()->setViewModeAndShow(ViewMode_FacingPage);
     } else {
-        DocummentFileHelper::instance()->setViewModeAndShow(ViewMode_SinglePage);
+//        DocummentFileHelper::instance()->setViewModeAndShow(ViewMode_SinglePage);
     }
 }
 

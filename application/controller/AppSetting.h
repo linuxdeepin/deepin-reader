@@ -8,6 +8,12 @@
  * 配置项数据
  */
 
+enum KeyType {
+    KEY_DIR,
+    KEY_PAGENUM,
+    KEY_M,
+    KEY_WIDGET
+};
 
 class AppSetting : public QObject
 {
@@ -25,8 +31,8 @@ public:
     }
 
 public:
-    void setKeyValue(const QString &, const QString &);
-    QString getKeyValue(const QString &) const;
+    void setKeyValue(const int &, const QString &);
+    QString getKeyValue(const int &) const;
 
 private:
     QSettings   *m_pSettings = nullptr;

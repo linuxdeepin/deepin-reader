@@ -9,9 +9,10 @@
 #include "controller/DataManager.h"
 
 #include "MainOperationWidget.h"
+#include "controller/AppSetting.h"
 
 LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent):
-    CustomWidget ("LeftSidebarWidget", parent)
+    CustomWidget("LeftSidebarWidget", parent)
 {
     setMinimumWidth(226);
     setMaximumWidth(452);
@@ -25,9 +26,11 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent):
 
 void LeftSidebarWidget::slotStackSetCurIndex(const int &iIndex)
 {
+    AppSetting::instance()->setKeyValue(KEY_WIDGET, QString("%1").arg(iIndex));
+
     auto pWidget = this->findChild<DStackedWidget *>();
     if (pWidget) {
-        if(WIDGET_SEARCH != iIndex){
+        if (WIDGET_SEARCH != iIndex) {
             DataManager::instance()->setCurrentWidget(iIndex);
         }
         pWidget->setCurrentIndex(iIndex);

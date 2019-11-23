@@ -20,8 +20,6 @@ HomeWidget::HomeWidget(CustomWidget *parent):
     initConnections();
 
     m_settings = AppSetting::instance();
-    // initalize the configuration file.
-    m_settings->setKeyValue("dir", "");
 
     slotUpdateTheme();
 }
@@ -94,7 +92,7 @@ QStringList HomeWidget::getOpenFileList()
     dialog.setFileMode(DFileDialog::ExistingFile);
     dialog.setNameFilter(Utils::getSuffixList());
 
-    QString historyDir = m_settings->getKeyValue("dir");
+    QString historyDir = m_settings->getKeyValue(KEY_DIR);
     if (historyDir.isEmpty()) {
         historyDir = QDir::homePath();
     }
@@ -103,7 +101,7 @@ QStringList HomeWidget::getOpenFileList()
     const int mode = dialog.exec();
 
     // save the directory string to config file.
-    m_settings->setKeyValue("dir", dialog.directoryUrl().toLocalFile());
+    m_settings->setKeyValue(KEY_DIR, dialog.directoryUrl().toLocalFile());
 
     // if click cancel button or close button.
     if (mode != QDialog::Accepted) {

@@ -108,6 +108,17 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
 {
     //  已经打开了文件，　询问是否需要保存当前打开的文件
     if (m_szFilePath != "") {
+
+        QStringList fileList = filePaths.split(Constant::sQStringSep,  QString::SkipEmptyParts);
+        int nSize = fileList.size();
+        if (nSize > 0) {
+            QString sPath = fileList.at(0);
+
+            if (m_szFilePath == sPath) {
+                notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("file is opened."));
+                return;
+            }
+        }
         //  是否有操作
         bool rl = DataManager::instance()->bIsUpdate();
         if (rl) {
@@ -313,15 +324,20 @@ bool DocummentFileHelper::setBookMarkState(const int &page, const bool &state)
     return m_pDocummentProxy->setBookMarkState(page, state);
 }
 
-bool DocummentFileHelper::setViewModeAndShow(const ViewMode_EM &viewmode)
+void DocummentFileHelper::setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode)
 {
-    return m_pDocummentProxy->setViewModeAndShow(viewmode);
+    m_pDocummentProxy->setScaleRotateViewModeAndShow(scale, rotate, viewmode);
 }
 
-void DocummentFileHelper::scaleRotateAndShow(const double &scale, const RotateType_EM &rotate)
-{
-    m_pDocummentProxy->scaleRotateAndShow(scale, rotate);
-}
+//bool DocummentFileHelper::setViewModeAndShow(const ViewMode_EM &viewmode)
+//{
+//    return m_pDocummentProxy->setViewModeAndShow(viewmode);
+//}
+
+//void DocummentFileHelper::scaleRotateAndShow(const double &scale, const RotateType_EM &rotate)
+//{
+//    m_pDocummentProxy->scaleRotateAndShow(scale, rotate);
+//}
 
 double DocummentFileHelper::adaptWidthAndShow(const double &width)
 {

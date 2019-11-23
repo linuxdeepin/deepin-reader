@@ -4,9 +4,11 @@
 #include <DToolButton>
 #include "utils/PublicFunction.h"
 #include "controller/DataManager.h"
+#include "frame/DocummentFileHelper.h"
+#include "controller/AppSetting.h"
 
 MainOperationWidget::MainOperationWidget(CustomWidget *parent):
-    CustomWidget ("MainOperationWidget", parent)
+    CustomWidget("MainOperationWidget", parent)
 {
     initWidget();
     initConnect();
@@ -17,7 +19,7 @@ void MainOperationWidget::initWidget()
 {
     auto hboxLayout = new QHBoxLayout;
     hboxLayout->setContentsMargins(19, 0, 19, 0);
-   // hboxLayout->setSpacing(10);
+    // hboxLayout->setSpacing(10);
 
     hboxLayout->addStretch();
 
@@ -114,7 +116,7 @@ void MainOperationWidget::slotUpdateTheme()
 void MainOperationWidget::slotButtonClicked(int id)
 {
 //    m_nThumbnailIndex = id;
-    if(WIDGET_SEARCH != id){
+    if (WIDGET_SEARCH != id) {
         DataManager::instance()->setCurrentWidget(id);
     }
     notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(id));
