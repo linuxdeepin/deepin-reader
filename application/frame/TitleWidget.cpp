@@ -258,6 +258,7 @@ void TitleWidget::initMenus()
 
             actionGroup->addAction(action);
             m_pHandleMenu->addAction(action);
+            m_pHandleMenu->addSeparator();
         }
 
         {
