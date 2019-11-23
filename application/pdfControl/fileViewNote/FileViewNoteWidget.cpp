@@ -265,34 +265,27 @@ void CustemTextEdit::slotTextEditMaxContantNum()
 {
     QString textContent = this->toPlainText();
 
-    int length = textContent.toUtf8().size();
+    int length = textContent.count();//textContent.toUtf8().size();
 
     if (length > m_nMaxContantLen) {
-//        QString text = getMaxLenStr(textContent);
-
-        setText(m_str);
-
+        int position = this->textCursor().position();
+        QTextCursor textCursor = this->textCursor();
+        textContent.remove(position - (length - m_nMaxContantLen), length - m_nMaxContantLen);
+        this->setText(textContent);
+        textCursor.setPosition(position - (length - m_nMaxContantLen));
+        this->setTextCursor(textCursor);
         emit sigShowTips();
-
+//        QString text = getMaxLenStr(textContent);
+//        setText(m_str);
+//        emit sigShowTips();
 //        QTextCursor cursor = textCursor();
 //        cursor.movePosition(QTextCursor::End);
-
 //        if (cursor.hasSelection()) {
 //            cursor.clearSelection();
 //        }
-
 //        //设置当前的光标为更改后的光标
 //        setTextCursor(cursor);
-        #if 0
-//        int position = this->textCursor().position();
-//        QTextCursor textCursor = this->textCursor();
-//        textContent.remove(position - (length - m_nMaxContantLen), length - m_nMaxContantLen);
-//        this->setText(textContent);
-//        textCursor.setPosition(position - (length - m_nMaxContantLen));
-//        this->setTextCursor(textCursor);
-
-        emit sigShowTips();
-
+#if 0
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::End);
         if (cursor.hasSelection()) {
@@ -302,7 +295,5 @@ void CustemTextEdit::slotTextEditMaxContantNum()
         //设置当前的光标为更改后的光标
         setTextCursor(cursor);
 #endif
-    }else {
-        m_str = toPlainText();
     }
 }
