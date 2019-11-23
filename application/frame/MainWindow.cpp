@@ -169,7 +169,9 @@ void MainWindow::createActionMap(DMenu *m_menu, QSignalMapper *pSigManager,
         QAction *_action = createAction(m_menu, sActionName, sObjName);
         connect(_action, SIGNAL(triggered()), pSigManager, SLOT(map()));
         pSigManager->setMapping(_action, sObjName);
+        m_menu->addSeparator();
     }
+    m_menu->addSeparator();
 }
 
 void MainWindow::initConnections()
@@ -200,7 +202,7 @@ void MainWindow::initConnections()
                                      << "Open Folder" << "Print" << "File Attr";
 
     createActionMap(m_menu, pSigManager, firstActionList, firstActionObjList);
-    m_menu->addSeparator();
+//    m_menu->addSeparator();
 
     QStringList secondActionList = QStringList() << tr("Search") << tr("Full Screen") << tr("Screening")
                                    << tr("Larger") << tr("Smaller");
@@ -208,7 +210,7 @@ void MainWindow::initConnections()
                                       << "Larger" << "Smaller";
 
     createActionMap(m_menu, pSigManager, secondActionList, secondActionObjList);
-    m_menu->addSeparator();
+//    m_menu->addSeparator();
 
     titlebar()->setMenu(m_menu);
 

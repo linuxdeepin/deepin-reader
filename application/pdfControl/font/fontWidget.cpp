@@ -2,6 +2,7 @@
 #include "utils/PublicFunction.h"
 #include "frame/DocummentFileHelper.h"
 #include "utils/utils.h"
+#include <DHorizontalLine>
 
 FontWidget::FontWidget(CustomWidget *parent):
     CustomWidget("FontWidget", parent)
@@ -85,17 +86,17 @@ void FontWidget::initWidget()
 
     widgetLayout->addWidget(m_pEnlargeLab);
     widgetLayout->addItem(m_pEnlargeSliderLayout);
-    widgetLayout->addWidget(getLabelLineH(4));
+    widgetLayout->addWidget(new DHorizontalLine);//getLabelLineH(4));
 
     widgetLayout->addItem(m_pDoubleShowLayout);
-    widgetLayout->addWidget(getLabelLineH());
+    widgetLayout->addWidget(new DHorizontalLine);//getLabelLineH());
 
     //  自适应高\宽
     widgetLayout->addItem(m_pAdaptateHeightLayout);
-    widgetLayout->addWidget(getLabelLineH());
+    widgetLayout->addWidget(new DHorizontalLine);//getLabelLineH());
     widgetLayout->addItem(m_pAdaptateWidghtLayout);
 
-    widgetLayout->addWidget(getLabelLineH());
+    widgetLayout->addWidget(new DHorizontalLine);//getLabelLineH());
     //左旋转
     QHBoxLayout *lrlayout = new QHBoxLayout;
     lrlayout->setContentsMargins(0, 0, 0, 0);
@@ -105,7 +106,7 @@ void FontWidget::initWidget()
     lrlayout->addWidget(pRotateLeftLb);
     widgetLayout->addItem(lrlayout);
     connect(pRotateLeftLb, SIGNAL(clicked()), this, SLOT(slotSetRotateLeftCheckIcon()));
-    widgetLayout->addWidget(getLabelLineH(3));
+    widgetLayout->addWidget(new DHorizontalLine);//getLabelLineH(3));
 
     //右旋转
     QHBoxLayout *rrlayout = new QHBoxLayout;
