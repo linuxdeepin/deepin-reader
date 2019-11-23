@@ -110,7 +110,7 @@ void MainWidget::dropEvent(QDropEvent *event)
             QFileInfo file(sFilePath);
             if (file.isFile()) {
                 QString sSuffix = file.completeSuffix();
-                if (sSuffix == "pdf") {      //  打开第一个pdf文件
+                if (sSuffix == "pdf"||sFilePath.endsWith(QString(".pdf"))) {      //  打开第一个pdf文件
                     canOpenFileList.append(sFilePath);
                 } else {
                     if (!noOpenFileList.contains(sSuffix)) {
