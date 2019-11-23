@@ -89,7 +89,7 @@ QStringList HomeWidget::getOpenFileList()
     QStringList fileList;
 
     DFileDialog dialog;
-    dialog.setFileMode(DFileDialog::ExistingFile);
+    dialog.setFileMode(DFileDialog::ExistingFiles);
     dialog.setNameFilter(Utils::getSuffixList());
 
     QString historyDir = m_settings->getKeyValue(KEY_DIR);

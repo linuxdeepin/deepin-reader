@@ -9,11 +9,8 @@
 #include <DFontSizeManager>
 
 AttrScrollWidget::AttrScrollWidget(DWidget *parent)
-    : DScrollArea (parent)
+    : DFrame(parent)
 {
-    setFrameShape(QFrame::NoFrame);
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
     auto gridLayout = new QGridLayout;
     gridLayout->setContentsMargins(0, 6, 0, 6);
     gridLayout->setSpacing(3);
@@ -57,15 +54,13 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
 {
     DLabel *label = new DLabel(objName, this);
     DFontSizeManager::instance()->bind(label, DFontSizeManager::T8);
-
-    label->setMaximumWidth(60);
-
     label->setAlignment(Qt::AlignTop);
+    label->setMaximumWidth(120);
     layout->addWidget(label, index, 0);
 
     DLabel *labelText = new DLabel(this);
     DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
-    labelText->setMaximumWidth(390-60);
+    labelText->setMaximumWidth(280);
     labelText->setText(sData);
     labelText->setAlignment(Qt::AlignTop);
     labelText->setWordWrap(true);
@@ -81,7 +76,7 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
 
     DLabel *labelText = new DLabel(this);
     DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
-//    labelText->setMaximumWidth(200);
+    labelText->setMaximumWidth(280);
     QString strText = getTime(sData);
     labelText->setText(strText);
     labelText->setAlignment(Qt::AlignTop);

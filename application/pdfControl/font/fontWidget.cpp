@@ -132,7 +132,7 @@ void FontWidget::slotDealWithKey(const QString &sKey)
 //        DocummentFileHelper::instance()->scaleRotateAndShow(1.0, RotateType_0);
 
         //  恢复 初始化
-//        slotReset();
+        slotReset();
     } else if (sKey == KeyStr::g_ctrl_2) {
         slotSetSuitHCheckIcon();
     } else if (sKey == KeyStr::g_ctrl_3) {
@@ -188,8 +188,6 @@ void FontWidget::slotReset()
  */
 void FontWidget::rotateFileView(bool isRight)
 {
-    int ival = m_pEnlargeSlider->value();
-
     if (isRight) {
         m_rotate += 90;
     } else {
@@ -198,7 +196,8 @@ void FontWidget::rotateFileView(bool isRight)
 
     m_rotate = (m_rotate < 0) ? (m_rotate + 360) : m_rotate;
 
-    scaleAndRotate(ival);
+    scaleAndRotate();
+
     notifyMsg(MSG_FILE_ROTATE, QString(""));
 }
 
@@ -207,7 +206,7 @@ void FontWidget::rotateFileView(bool isRight)
  * 右侧页面旋转函数
  * @param ival
  */
-void FontWidget::scaleAndRotate(int ival)
+void FontWidget::scaleAndRotate()
 {
     int t_rotate = 0;
 
@@ -236,7 +235,7 @@ void FontWidget::scaleAndRotate(int ival)
         break;
     }
 
-//    DocummentFileHelper::instance()->scaleRotateAndShow((ival * 0.01), m_rotateType);
+    setScaleRotateViewModeAndShow();
 }
 
 /**
@@ -374,6 +373,17 @@ void FontWidget::initAdaptateWidght()
 
 }
 
+void FontWidget::setScaleRotateViewModeAndShow()
+{
+    int ival = m_pEnlargeSlider->value();
+    double scale = (ival * 0.01);
+    ViewMode_EM viewmode = ViewMode_SinglePage;
+    if (m_isDoubPage) {
+        viewmode = ViewMode_FacingPage;
+    }
+    DocummentFileHelper::instance()->setScaleRotateViewModeAndShow(scale, m_rotateType, viewmode);
+}
+
 
 /**
  * @brief FontWidget::slotSetChangeVal
@@ -386,7 +396,7 @@ void FontWidget::slotSetChangeVal(int val)
     m_pEnlargeLab->setText(QString("%1%").arg(val));
 
     if (!m_bIsAdaptMove) {
-        scaleAndRotate(val);
+        scaleAndRotate();
 
         m_bSuitW = false;
         m_bSuitH = false;
@@ -406,11 +416,8 @@ void FontWidget::slotSetDoubPageViewCheckIcon()
 {
     m_isDoubPage = !m_isDoubPage;
     m_pDoubPageViewLabelIcon->setVisible(m_isDoubPage);
-    if (m_isDoubPage) {
-//        DocummentFileHelper::instance()->setViewModeAndShow(ViewMode_FacingPage);
-    } else {
-//        DocummentFileHelper::instance()->setViewModeAndShow(ViewMode_SinglePage);
-    }
+
+    setScaleRotateViewModeAndShow();
 }
 
 /**

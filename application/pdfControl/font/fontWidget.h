@@ -51,7 +51,7 @@ private slots:
 
 private:
     void rotateFileView(bool isRight = true);
-    void scaleAndRotate(int);
+    void scaleAndRotate();
     void setShowSuitHIcon();
     void setShowSuitWIcon();
     void initConnection();
@@ -63,6 +63,8 @@ private:
     void initDowbleShow();
     void initAdaptateHeight();
     void initAdaptateWidght();
+
+    void setScaleRotateViewModeAndShow();
 
 private:
     QHBoxLayout     *m_pDoubleShowLayout = nullptr;
@@ -78,7 +80,7 @@ private:
     CustomClickLabel      *m_pSuitWLabelIcon = nullptr;           // 自适应宽度ICON标签
 
     int m_rotate = 0;                        // 旋转角度
-    RotateType_EM m_rotateType = RotateType_Normal;    // 旋转类型
+    RotateType_EM m_rotateType = RotateType_0;    // 旋转类型
     bool m_bSuitH = false;                   // 自适应高度
     bool m_bSuitW = false;                   // 自适应宽度
     bool m_isDoubPage = false;               //  双页显示标志

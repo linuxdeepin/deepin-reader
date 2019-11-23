@@ -1,7 +1,8 @@
 #ifndef ATTRSCROLLWIDGET_H
 #define ATTRSCROLLWIDGET_H
 
-#include <DScrollArea>
+#include <DFrame>
+#include <DWidget>
 #include <DLabel>
 #include <QGridLayout>
 
@@ -13,7 +14,7 @@ DWIDGET_USE_NAMESPACE
  */
 
 
-class AttrScrollWidget : public DScrollArea
+class AttrScrollWidget : public DFrame
 {
     Q_OBJECT
 public:

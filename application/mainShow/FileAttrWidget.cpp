@@ -13,7 +13,7 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
 {
     setAttribute(Qt::WA_ShowModal, true); //  模态对话框， 属性设置
-    setFixedSize(QSize(300, 642));
+    setFixedSize(QSize(400, 642));
 
     m_pVBoxLayout = new QVBoxLayout;
     m_pVBoxLayout->setContentsMargins(0, 0, 0, 0);
@@ -45,7 +45,12 @@ void FileAttrWidget::setFileAttr()
     auto hLayout = new QHBoxLayout;
     hLayout->setContentsMargins(10, 35, 10, 10);
 
-    hLayout->addWidget(new AttrScrollWidget(this));
+    auto sss = new AttrScrollWidget(this);
+    auto scrollArea = new QScrollArea(this);
+    scrollArea->setBackgroundRole(QPalette::Dark);
+    scrollArea->setWidget(sss);
+    scrollArea->setWidgetResizable(true);
+    hLayout->addWidget(scrollArea);
 
     m_pVBoxLayout->addItem(hLayout);
 }
