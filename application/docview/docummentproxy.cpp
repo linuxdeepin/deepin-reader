@@ -477,3 +477,11 @@ bool DocummentProxy::getAutoPlaySlideStatu()
         return false;
     return m_documment->getAutoPlaySlideStatu();
 }
+
+bool DocummentProxy::isOpendFile()
+{
+    bool bopen=false;
+    if(m_documment)
+        bopen=true;
+    return  bopen;
+}

@@ -31,6 +31,8 @@ public:
     // CustomWidget interface
 protected:
     void initWidget();
+private:
+    int m_iwidth;
 };
 
 #endif // NOTETIPWIDGET_H

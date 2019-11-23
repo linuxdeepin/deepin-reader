@@ -9,6 +9,7 @@
 #include "DocShowShellWidget.h"
 #include "LeftSidebarWidget.h"
 #include "DocummentFileHelper.h"
+#include "utils/utils.h"
 #include <QStackedLayout>
 #include <DDialog>
 #include <DMessageManager>
@@ -127,14 +128,21 @@ void MainWidget::dropEvent(QDropEvent *event)
             QString msgContent = QString("%1 is not supported.").arg(msgType);
             slotShowTips(msgContent);
         }
+         bool bisopen=false;
+        foreach (auto s, canOpenFileList) {           
+            QString sRes = s + Constant::sQStringSep;            
+            if(nullptr!=DocummentProxy::instance()&&!DocummentProxy::instance()->isOpendFile())
+            {
+                if(!bisopen)
+                 notifyMsg(MSG_OPEN_FILE_PATH, sRes);
+                else
+                    Utils::runApp(s);
 
-        foreach (auto s, canOpenFileList) {
-            //  目前只打开第一个
-            QString sRes = s + Constant::sQStringSep;
+                bisopen=true;
 
-            notifyMsg(MSG_OPEN_FILE_PATH, sRes);
-
-            break;
+            }else {
+                Utils::runApp(s);
+            }
         }
     }
 }

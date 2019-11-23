@@ -1,4 +1,5 @@
 #include "HomeWidget.h"
+#include "docview/docummentproxy.h"
 #include <DGuiApplicationHelper>
 #include <DPalette>
 #include <DFileDialog>
@@ -62,10 +63,23 @@ void HomeWidget::slotChooseBtnClicked()
 
         QString sRes = "";
 
-        foreach (const QString &s, fileList) {
-            sRes += s + Constant::sQStringSep;
+        bool bisopen=false;
+        foreach (auto filepath, fileList) {
+
+            QString sRes = filepath + Constant::sQStringSep;
+
+            if(nullptr!=DocummentProxy::instance()&&!DocummentProxy::instance()->isOpendFile())
+            {
+                if(!bisopen)
+                    notifyMsg(MSG_OPEN_FILE_PATH, sRes);
+                else
+                    Utils::runApp(filepath);
+
+                bisopen=true;
+            }else {
+                Utils::runApp(filepath);
+            }
         }
-        notifyMsg(MSG_OPEN_FILE_PATH, sRes);
     }
 }
 

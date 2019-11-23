@@ -417,7 +417,7 @@ void MainWindow::slotAppExit()
 void MainWindow::slotAppShowState(const int &nState)
 {
     titlebar()->setVisible(nState);
-    setTitlebarShadowEnabled(nState);
+  // setTitlebarShadowEnabled(nState);
 
     if (nState == 1) {
         if (windowState() == Qt::WindowFullScreen) {
@@ -514,8 +514,7 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
         if (msgContent == KeyStr::g_esc) {          //  退出全屏模式
             emit sigAppShowState(1);
         } else if (msgContent == KeyStr::g_space) {
-            if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
-                qDebug() << __FUNCTION__ << "+++++++++++";
+            if (DataManager::instance()->CurShowState() == FILE_SLIDE) {              
                 emit sigSpacePressed();
             }
         }

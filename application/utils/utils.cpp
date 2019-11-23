@@ -41,7 +41,7 @@
 //#include <KEncodingProber>
 #include <QTextCodec>
 #include <QImageReader>
-
+#include <QProcess>
 #include "subjectObserver/ModuleHeader.h"
 
 QT_BEGIN_NAMESPACE
@@ -691,4 +691,10 @@ QFont Utils::getPixFont(const QString &fontFamily, const int &fontSize)
     font.setPixelSize(fontSize);
 
     return font;
+}
+
+bool Utils::runApp(const QString&args)
+{
+    QProcess app;
+    return  app.startDetached(QString("deepin-reader  %1").arg(args));
 }

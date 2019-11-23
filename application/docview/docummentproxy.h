@@ -67,6 +67,7 @@ public:
     void selectAllText();
     void setAutoPlaySlide(bool autoplay, int timemsec = 3000);
     bool getAutoPlaySlideStatu();
+    bool isOpendFile();
 signals:
     void signal_pageChange(int);
     bool signal_pageJump(int);

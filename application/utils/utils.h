@@ -69,6 +69,7 @@ public:
 
     static QString getInputDataSize(const qint64 &);
     static QFont getPixFont(const QString&, const int&);
+    static bool runApp(const QString &args);
 };
 
 #endif // UTILS_H
