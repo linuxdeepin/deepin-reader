@@ -310,6 +310,7 @@
     <message>
         <location filename="../frame/FileViewWidget.cpp" line="296"/>
         <location filename="../frame/FileViewWidget.cpp" line="307"/>
+        <location filename="../frame/FileViewWidget.cpp" line="413"/>
         <source>please select the text.</source>
         <translatorcomment>请选择文本.</translatorcomment>
         <translation>请选择文本.</translation>
@@ -320,13 +321,13 @@
         <translation type="vanished">打印错误</translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="459"/>
+        <location filename="../frame/FileViewWidget.cpp" line="490"/>
         <source>No Print Device</source>
         <translatorcomment>没有打印设备</translatorcomment>
         <translation>没有打印设备</translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="461"/>
+        <location filename="../frame/FileViewWidget.cpp" line="492"/>
         <source>Ok</source>
         <translatorcomment>确定</translatorcomment>
         <translation>确定</translation>

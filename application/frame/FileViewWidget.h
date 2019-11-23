@@ -52,6 +52,7 @@ signals:
     void sigFileRemoveAnnotation(const QString &);
 
     void sigFileAddNote(const QString &);
+    void sigFileAddNote();
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
@@ -73,6 +74,7 @@ private slots:
     void slotFileUpdateAnnotation(const QString &);
     void slotFileRemoveAnnotation(const QString &);
 
+    void slotFileAddNote();
     void slotFileAddNote(const QString &);
 
     void slotBookMarkStateChange(int, bool);

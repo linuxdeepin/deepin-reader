@@ -389,6 +389,36 @@ void FileViewWidget::slotFileAddNote(const QString &msgContent)
     m_pDocummentFileHelper->setAnnotationText(sPage.toInt(), sUuid, sNote);
 }
 
+void FileViewWidget::slotFileAddNote()
+{
+    //  处于幻灯片模式下
+    if (DataManager::instance()->CurShowState() == FILE_SLIDE)
+        return;
+
+    //  放大镜状态， 直接返回
+    if (m_nCurrentHandelState == Magnifier_State)
+        return;
+
+    //  手型状态， 直接返回
+    if (m_nCurrentHandelState == Handel_State)
+        return;
+
+    int nSx = m_pStartPoint.x();
+    int nSy = m_pStartPoint.y();
+
+    int nEx = m_pEndSelectPoint.x();
+    int nEy = m_pEndSelectPoint.y();
+
+    if (nSx == nEx && nSy == nEy) {
+        notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("please select the text."));
+        return;
+    }
+
+    int nPage = m_pDocummentFileHelper->pointInWhichPage(m_pEndSelectPoint);
+    QString msgContent = QString("%1").arg(nPage) + Constant::sQStringSep + QString("%1").arg(m_pEndSelectPoint.x()) + Constant::sQStringSep + QString("%1").arg(m_pEndSelectPoint.y());
+    notifyMsg(MSG_OPERATION_TEXT_ADD_ANNOTATION, msgContent);
+}
+
 //  文档书签状态改变
 void FileViewWidget::slotBookMarkStateChange(int nPage, bool bState)
 {
@@ -424,6 +454,7 @@ void FileViewWidget::initConnections()
     connect(this, SIGNAL(sigFileUpdateAnnotation(const QString &)), SLOT(slotFileUpdateAnnotation(const QString &)));
     connect(this, SIGNAL(sigFileRemoveAnnotation(const QString &)), SLOT(slotFileRemoveAnnotation(const QString &)));
 
+    connect(this, SIGNAL(sigFileAddNote()), SLOT(slotFileAddNote()));
     connect(this, SIGNAL(sigFileAddNote(const QString &)), SLOT(slotFileAddNote(const QString &)));
 }
 
@@ -601,6 +632,11 @@ int FileViewWidget::dealWithNotifyMsg(const QString &msgContent)
 
     if (KeyStr::g_ctrl_l == msgContent) {   //  添加高亮
         emit sigFileAddAnnotation();
+        return ConstantMsg::g_effective_res;
+    }
+
+    if (KeyStr::g_ctrl_i == msgContent) {  //  添加注释
+        emit sigFileAddNote();
         return ConstantMsg::g_effective_res;
     }
 

@@ -284,16 +284,17 @@
     <message>
         <location filename="../frame/FileViewWidget.cpp" line="296"/>
         <location filename="../frame/FileViewWidget.cpp" line="307"/>
+        <location filename="../frame/FileViewWidget.cpp" line="413"/>
         <source>please select the text.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="459"/>
+        <location filename="../frame/FileViewWidget.cpp" line="490"/>
         <source>No Print Device</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="461"/>
+        <location filename="../frame/FileViewWidget.cpp" line="492"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
