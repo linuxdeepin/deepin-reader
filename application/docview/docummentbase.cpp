@@ -894,8 +894,11 @@ bool DocummentBase::pageJump(int pagenum)
 void DocummentBase::setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode)
 {
     Q_D(DocummentBase);
+    double dscale = scale;
+    if (viewmode != d->m_viewmode && (scale - d->m_scale < EPSINON && scale - d->m_scale > -EPSINON))
+        dscale = 0;
     d->m_viewmode = viewmode;
-    scaleAndShow(scale, rotate);
+    scaleAndShow(dscale, rotate);
 }
 
 void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
