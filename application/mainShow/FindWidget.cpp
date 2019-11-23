@@ -30,8 +30,9 @@
 FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)
 {
-    setFixedSize(QSize(414, 54));
+    setMinimumSize(QSize(414, 60));
     setWindowFlags(Qt::WindowStaysOnTopHint);
+    setBlurBackgroundEnabled(true);
 
     initWidget();
 
@@ -128,13 +129,13 @@ void FindWidget::initWidget()
 {
     auto findNextButton = new DIconButton(DStyle::SP_ArrowDown);
     findNextButton->setToolTip(tr("next one"));
-    findNextButton->setFixedSize(QSize(34, 34));
+    findNextButton->setFixedSize(QSize(36, 36));
     findNextButton->setIconSize(QSize(12, 12));
     connect(findNextButton, &DIconButton::clicked, this, &FindWidget::slotFindNextBtnClicked);
 
     auto findPrevButton = new DIconButton(DStyle::SP_ArrowUp);
     findPrevButton->setToolTip(tr("prev one"));
-    findPrevButton->setFixedSize(QSize(34, 34));
+    findPrevButton->setFixedSize(QSize(36, 36));
     findPrevButton->setIconSize(QSize(12, 12));
     connect(findPrevButton, &DIconButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
 
@@ -144,14 +145,14 @@ void FindWidget::initWidget()
     connect(closeButton, &DDialogCloseButton::clicked, this, &FindWidget::findCancel);
 
     m_pSearchEdit = new DSearchEdit;
-    m_pSearchEdit->setFixedSize(QSize(270, 34));
+    m_pSearchEdit->setFixedSize(QSize(270, 36));
     m_pSearchEdit->setFocusPolicy(Qt::StrongFocus);
 
     connect(m_pSearchEdit, &DSearchEdit::returnPressed, this, &FindWidget::handleContentChanged);
     connect(m_pSearchEdit, &DSearchEdit::textChanged, this, &FindWidget::slotClearContent);
 
     auto layout = new QHBoxLayout(this);
-    layout->setContentsMargins(3, 1, 3, 1);
+    layout->setContentsMargins(0, 0, 0, 0);
 //    layout->setSpacing(1);
 //    layout->addStretch(1);
     layout->addWidget(m_pSearchEdit);
@@ -159,4 +160,5 @@ void FindWidget::initWidget()
     layout->addWidget(findNextButton);
     layout->addWidget(closeButton);
 //    layout->addStretch(1);
+    this->setLayout(layout);
 }
