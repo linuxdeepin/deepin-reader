@@ -15,6 +15,11 @@ class CustemTextEdit : public DTextEdit
 public:
     CustemTextEdit(DWidget *parent = nullptr);
 
+    inline void setContantText(QString text)
+    {
+        m_str = text;
+    }
+
 signals:
     void sigShowTips();
 
@@ -24,13 +29,14 @@ protected:
 private:
     void init();
     int calcTextSize(const QString &);
-    QString getMaxLenStr(QString) const;
+    QString getMaxLenStr(QString);
 
 private slots:
     void slotTextEditMaxContantNum();
 
 private:
     int m_nMaxContantLen = 1500;    // 允许输入文本最大长度
+    QString m_str = "";             // 当前文本内容
 };
 
 /**

@@ -231,9 +231,10 @@ int CustemTextEdit::calcTextSize(const QString &text)
     return str_len;
 }
 
-QString CustemTextEdit::getMaxLenStr(QString text) const
+QString CustemTextEdit::getMaxLenStr(QString text)
 {
     QString qstrChinese = "";
+     QString qstrText =  text;
 
 //    for(int index = 0; index < text.count(); ++index)
 //    {
@@ -243,8 +244,9 @@ QString CustemTextEdit::getMaxLenStr(QString text) const
 //            return qstrChinese;
 //        }
 //    }
-    foreach(QChar ch, text)
+    foreach(QChar ch, qstrText)
     {
+        qDebug() << ch;
         qstrChinese.append(ch);
 
         if(qstrChinese.toUtf8().size() >= m_nMaxContantLen){
@@ -266,21 +268,21 @@ void CustemTextEdit::slotTextEditMaxContantNum()
     int length = textContent.toUtf8().size();
 
     if (length > m_nMaxContantLen) {
-        QString text = getMaxLenStr(textContent);
+//        QString text = getMaxLenStr(textContent);
 
-        setText(text);
+        setText(m_str);
 
         emit sigShowTips();
 
-        QTextCursor cursor = textCursor();
-        cursor.movePosition(QTextCursor::End);
+//        QTextCursor cursor = textCursor();
+//        cursor.movePosition(QTextCursor::End);
 
-        if (cursor.hasSelection()) {
-            cursor.clearSelection();
-        }
+//        if (cursor.hasSelection()) {
+//            cursor.clearSelection();
+//        }
 
-        //设置当前的光标为更改后的光标
-        setTextCursor(cursor);
+//        //设置当前的光标为更改后的光标
+//        setTextCursor(cursor);
         #if 0
 //        int position = this->textCursor().position();
 //        QTextCursor textCursor = this->textCursor();
@@ -300,5 +302,7 @@ void CustemTextEdit::slotTextEditMaxContantNum()
         //设置当前的光标为更改后的光标
         setTextCursor(cursor);
 #endif
+    }else {
+        m_str = toPlainText();
     }
 }
