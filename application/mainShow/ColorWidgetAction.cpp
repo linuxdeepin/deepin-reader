@@ -35,7 +35,7 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SIGNAL(sigBtnGroupClicked(int)));
 
     auto colorList = DataManager::instance()->getLightColorList();
-    for (int iLoop = 0; iLoop < colorList.size(); iLoop++ ) {
+    for (int iLoop = 0; iLoop < colorList.size(); iLoop++) {
         auto btn = new DFloatingButton(pWidget);
         btn->setBackgroundRole(QPalette::Button);
         btn->setFixedSize(QSize(20, 20));

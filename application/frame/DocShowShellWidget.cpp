@@ -7,6 +7,7 @@
 #include "utils/PublicFunction.h"
 #include "mainShow/FindWidget.h"
 #include "pdfControl/fileViewNote/FileViewNoteWidget.h"
+#include "application.h"
 
 DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
     : CustomWidget("DocShowShellWidget", parent)
@@ -30,10 +31,11 @@ void DocShowShellWidget::resizeEvent(QResizeEvent *event)
         findWidget->move(nParentWidth - nWidget - 20, 20);
     }
 
-    auto closeBtn = this->findChild<DDialogCloseButton *>();
+
+    auto closeBtn = this->findChild<DIconButton *>();
     if (closeBtn) {
-        int nWidget = closeBtn->width();
-        closeBtn->move(nParentWidth - nWidget - 10, 10);
+
+        closeBtn->move(nParentWidth - 50, 0);
     }
 
     CustomWidget::resizeEvent(event);

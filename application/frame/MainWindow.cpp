@@ -244,9 +244,12 @@ void MainWindow::onOpenFolder()
 //  全屏
 void MainWindow::onFullScreen()
 {
-    slotAppShowState(0);
-    DataManager::instance()->setCurShowState(FILE_FULLSCREEN);  //  全屏状态
-    notifyMsg(MSG_OPERATION_FULLSCREEN);
+    int nCurState = DataManager::instance()->CurShowState();
+    if (nCurState != FILE_FULLSCREEN) {
+        slotAppShowState(0);
+        DataManager::instance()->setCurShowState(FILE_FULLSCREEN);  //  全屏状态
+        notifyMsg(MSG_OPERATION_FULLSCREEN);
+    }
 }
 
 //  放映

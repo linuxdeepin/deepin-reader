@@ -110,7 +110,7 @@ void MainWidget::dropEvent(QDropEvent *event)
             QFileInfo file(sFilePath);
             if (file.isFile()) {
                 QString sSuffix = file.completeSuffix();
-                if (sSuffix == "pdf"||sFilePath.endsWith(QString(".pdf"))) {      //  打开第一个pdf文件
+                if (sSuffix == "pdf" || sFilePath.endsWith(QString(".pdf"))) {    //  打开第一个pdf文件
                     canOpenFileList.append(sFilePath);
                 } else {
                     if (!noOpenFileList.contains(sSuffix)) {
@@ -125,22 +125,22 @@ void MainWidget::dropEvent(QDropEvent *event)
             if (msgType == "") {
                 msgType = tr("unknown type");
             }
-            QString msgContent = QString("%1 is not supported.").arg(msgType);
+            QString msgTitle = QString("%1").arg(msgType);
+            QString msgContent = msgTitle + tr(" is not supported.");
             slotShowTips(msgContent);
         }
-         bool bisopen=false;
-        foreach (auto s, canOpenFileList) {           
-            QString sRes = s + Constant::sQStringSep;            
-            if(nullptr!=DocummentProxy::instance()&&!DocummentProxy::instance()->isOpendFile())
-            {
-                if(!bisopen)
-                 notifyMsg(MSG_OPEN_FILE_PATH, sRes);
+        bool bisopen = false;
+        foreach (auto s, canOpenFileList) {
+            QString sRes = s + Constant::sQStringSep;
+            if (nullptr != DocummentProxy::instance() && !DocummentProxy::instance()->isOpendFile()) {
+                if (!bisopen)
+                    notifyMsg(MSG_OPEN_FILE_PATH, sRes);
                 else
                     Utils::runApp(s);
 
-                bisopen=true;
+                bisopen = true;
 
-            }else {
+            } else {
                 Utils::runApp(s);
             }
         }
