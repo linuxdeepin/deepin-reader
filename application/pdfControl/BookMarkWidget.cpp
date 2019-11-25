@@ -397,11 +397,12 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
     QImage t_image;
     bool rl = dproxy->getImage(page, t_image, 42, 62/*28, 48*/);
     if (rl) {
+        QImage img = Utils::roundImage(QPixmap::fromImage(t_image), ICON_SMALL);
         auto item = m_pBookMarkListWidget->insertWidgetItem(page);
 
         auto t_widget = new BookMarkItemWidget;
         connect(t_widget, SIGNAL(sigDeleleteItem(const int &)), this, SLOT(slotDeleteBookItem(const int &)));
-        t_widget->setLabelImage(t_image);
+        t_widget->setLabelImage(img);
         t_widget->setLabelPage(page, 1);
         t_widget->setMinimumSize(QSize(230, 80));
         t_widget->setBSelect(true);
@@ -564,7 +565,8 @@ void LoadBookMarkThread::run()
 
             bool bl = DocummentFileHelper::instance()->getImage(page, image, 42, 62/*28, 48*/);
             if (bl) {
-                emit sigLoadImage(page, image);
+                QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_SMALL);
+                emit sigLoadImage(page, img);
             }
 
             msleep(10);

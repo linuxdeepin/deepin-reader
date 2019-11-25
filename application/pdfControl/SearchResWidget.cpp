@@ -287,7 +287,8 @@ void LoadSearchResThread::run()
             QImage image;
             bool bl = dproxy ->getImage(page, image, 42, 62/*34, 54*/);
             if (bl) {
-                emit sigLoadImage(page, image);
+                QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_SMALL);
+                emit sigLoadImage(page, img);
                 msleep(50);
             }
         }

@@ -1,6 +1,7 @@
 #include "CustomListWidget.h"
 #include "CustomItemWidget.h"
 #include "frame/DocummentFileHelper.h"
+#include "utils/utils.h"
 
 CustomListWidget::CustomListWidget(DWidget *parent)
     : DListWidget(parent)

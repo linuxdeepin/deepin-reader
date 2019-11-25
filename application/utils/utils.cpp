@@ -42,6 +42,8 @@
 #include <QTextCodec>
 #include <QImageReader>
 #include <QProcess>
+#include <QPixmap>
+#include <QBitmap>
 #include "subjectObserver/ModuleHeader.h"
 
 QT_BEGIN_NAMESPACE
@@ -697,4 +699,23 @@ bool Utils::runApp(const QString&args)
 {
     QProcess app;
     return  app.startDetached(QString("deepin-reader  %1").arg(args));
+}
+
+QImage Utils::roundImage(const QPixmap& img_in, int radius)
+{
+    if (img_in.isNull())
+    {
+        return QPixmap().toImage();
+    }
+    QSize size(img_in.size());
+    QBitmap mask(size);
+    QPainter painter(&mask);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+    painter.fillRect(mask.rect(), Qt::white);
+    painter.setBrush(Qt::black);
+    painter.drawRoundedRect(mask.rect(), radius, radius);
+    QPixmap image = img_in;// .scaled(size);
+    image.setMask(mask);
+    return image.toImage();
 }

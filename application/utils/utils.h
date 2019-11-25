@@ -70,6 +70,7 @@ public:
     static QString getInputDataSize(const qint64 &);
     static QFont getPixFont(const QString&, const int&);
     static bool runApp(const QString &args);
+    static QImage roundImage(const QPixmap& img_in, int radius);
 };
 
 #endif // UTILS_H
