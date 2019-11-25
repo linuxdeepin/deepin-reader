@@ -14,6 +14,10 @@ NoteTipWidget::NoteTipWidget(CustomWidget *parnet)
     DPlatformWindowHandle handle(this);
     int radius = 8;
     handle.setWindowRadius(radius);
+   // setWindowOpacity(0.1);
+//        QPalette palette=this->palette();
+//        palette.setColor(QPalette::Background, QColor(192,253,123,200)); // 最后一项为透明度
+//        this->setPalette(palette);
     initWidget();
     initConnection();
     slotUpdateTheme();
@@ -64,6 +68,10 @@ int NoteTipWidget::dealWithData(const int &msgType, const QString &)
 void NoteTipWidget::initWidget()
 {
     auto label = new DTextEdit(this);
+//    QPalette palette=label->palette();
+//    palette.setColor(QPalette::Background, QColor(192,253,123,200)); // 最后一项为透明度
+//    label->setPalette(palette);
+
     label->setFrameShape(QFrame::NoFrame);
     label->setReadOnly(true);
     label->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
