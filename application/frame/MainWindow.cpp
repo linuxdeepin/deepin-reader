@@ -225,7 +225,7 @@ void MainWindow::initConnections()
 
 void MainWindow::initTitlebar()
 {
-    titlebar()->setIcon(QIcon(Constant::sLogoPath));
+    titlebar()->setIcon(QIcon::fromTheme("deepin-reader"));
     titlebar()->setTitle("");
 }
 

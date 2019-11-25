@@ -427,6 +427,8 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
     QString uniqueName;
     QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
+    int index = 0;
+    bool bok=false;
     foreach (Poppler::Annotation *annote, listannote) {
         if (annote->subType() == Poppler::Annotation::AHighlight) { //必须判断
             QList<Poppler::HighlightAnnotation::Quad> listquad = static_cast<Poppler::HighlightAnnotation *>(annote)->highlightQuads();
@@ -445,12 +447,19 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
                 if (rectbound.contains(ptf)) {
                     uniqueName = annote->uniqueName();
                     removeAnnotation(annote);
+                    listannote.removeAt(index);
+                    bok=true;
+                    break;
                 } /*else {
                     qDebug() << "******* not contains";
                 }*/
             }
         }
+        ++index;
+        if(bok)
+            break;
     }
+    qDeleteAll(listannote);
     QImage image;
     getImage(image, d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
     slot_RenderFinish(image);

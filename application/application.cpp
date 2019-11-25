@@ -15,7 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "application.h"
-
 #include "controller/NotifySubject.h"
 #include "subjectObserver/MsgHeader.h"
 
@@ -43,7 +42,7 @@ Application::Application(int &argc, char **argv)
     setApplicationDisplayName(tr("deepin-reader"));
     setApplicationVersion(DApplication::buildVersion("20191022"));
     setApplicationAcknowledgementPage(Constant::sAcknowledgementLink);
-    setProductIcon(QIcon(Constant::sLogoPath));
+    setProductIcon(QIcon::fromTheme("deepin-reader"));
     setApplicationDescription(tr("Document viewer a reading tool for PDF documents."));
     initChildren();
 }
