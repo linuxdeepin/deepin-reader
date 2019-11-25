@@ -18,6 +18,9 @@ public:
 signals:
     void sigSelectItem(QListWidgetItem *);
 
+public:
+    QListWidgetItem *insertWidgetItem(const int &);
+
 private slots:
     void slot_loadImage(const int &row, const QImage &image);
     void slotShowSelectItem(QListWidgetItem *);

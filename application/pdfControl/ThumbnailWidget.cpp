@@ -210,7 +210,7 @@ void ThumbnailWidget::fillContantToList()
     }
 
     if (m_totalPages > 0) {
-      showItemBookMark();
+        showItemBookMark();
         auto item = m_pThumbnailListWidget->item(0);
         if (item) {
             m_pThumbnailListWidget->setCurrentItem(item);
@@ -227,16 +227,15 @@ void ThumbnailWidget::fillContantToList()
 
 void ThumbnailWidget::showItemBookMark(int ipage)
 {
-    if(ipage>=0)
-    {
-        auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget( m_pThumbnailListWidget->item(ipage)));
+    if (ipage >= 0) {
+        auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(ipage)));
         pWidget->slotBookMarkShowStatus(true);
-    }else {
+    } else {
         DBManager::instance()->getBookMarks();
         QList<int> pageList = DBManager::instance()->getBookMarkList();
         foreach (int index, pageList) {
-               auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget( m_pThumbnailListWidget->item(index)));
-               pWidget->slotBookMarkShowStatus(true);
+            auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(index)));
+            pWidget->slotBookMarkShowStatus(true);
         }
     }
 }
@@ -270,7 +269,7 @@ void ThumbnailWidget::slotOpenFileOk()
 /*******************************ThreadLoadImage*************************************************/
 
 ThreadLoadImage::ThreadLoadImage(QObject *parent)
-    : QThread (parent)
+    : QThread(parent)
 {
 
 }

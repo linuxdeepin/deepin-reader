@@ -3,7 +3,7 @@
 #include "frame/DocummentFileHelper.h"
 
 CustomListWidget::CustomListWidget(DWidget *parent)
-    : DListWidget (parent)
+    : DListWidget(parent)
 {
     setSpacing(0);
     setFrameShape(QFrame::NoFrame);
@@ -11,8 +11,41 @@ CustomListWidget::CustomListWidget(DWidget *parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setResizeMode(QListWidget::Adjust);
     setViewMode(QListView::ListMode);
+    sortItems(Qt::AscendingOrder);
 
     connect(this, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
+}
+
+//  插入 实现排序
+QListWidgetItem *CustomListWidget::insertWidgetItem(const int &iData)
+{
+    int iInsertIndex = 0;
+
+    //  计算 新增的书签  插入位置
+    int nCount = this->count();
+    while (nCount > 0) {
+
+        nCount--;
+
+        auto nextItem = this->item(nCount);
+        if (nextItem) {
+            int nextItemData = nextItem->data(Qt::UserRole + 1).toInt();
+            if (nextItemData < iData) {
+                nCount++;
+                break;
+            }
+        }
+    }
+
+    iInsertIndex = nCount;
+    auto item = new QListWidgetItem;
+    item->setData(Qt::UserRole + 1, iData);
+    item->setFlags(Qt::NoItemFlags);
+    item->setSizeHint(QSize(230, 80));
+
+    this->insertItem(iInsertIndex, item);
+
+    return item;
 }
 
 /**

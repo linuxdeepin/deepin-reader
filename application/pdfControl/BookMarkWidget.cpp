@@ -33,32 +33,10 @@ void BookMarkWidget::slotAddBookMark()
     if (!m_pAddBookMarkBtn->isEnabled()) {
         return;
     }
-    auto pwidget=(qobject_cast<DStackedWidget*>(this->parent()))->widget(0);
-     if(pwidget->objectName().compare(QString("ThumbnailWidget"))==0)
-     {
-         auto dproxy = DocummentFileHelper::instance();
-         if (dproxy) {
-             int nCurPage = dproxy->currentPageNo();
-             qobject_cast<ThumbnailWidget*>(pwidget)->showItemBookMark(nCurPage);
-         }
-     }
     auto proxy = DocummentFileHelper::instance();
     if (proxy) {
-        //  书签, 添加当前页
         int nPage = proxy->currentPageNo();
-        bool bRes = proxy->setBookMarkState(nPage, true);
-        if (bRes) {
-            auto item = addBookMarkItem(nPage);
-            if (item) {
-                QList<int> pageList = dApp->dbM->getBookMarkList();
-
-                pageList.append(nPage);
-                dApp->dbM->setBookMarkList(pageList);
-
-                DataManager::instance()->setBIsUpdate(true);
-                m_pAddBookMarkBtn->setEnabled(false);
-            }
-        }
+        sendMsg(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(nPage));
     }
 }
 
@@ -360,12 +338,7 @@ void BookMarkWidget::slotJumpToNextItem()
  */
 void BookMarkWidget::initWidget()
 {
-    m_pBookMarkListWidget = new CustomListWidget;
-    m_pBookMarkListWidget->setSpacing(0);
-
-    auto hLine = new DHorizontalLine;
-
-    auto m_pHBoxLayout = new QHBoxLayout;
+    m_pBookMarkListWidget = new CustomListWidget(this);
 
     m_pAddBookMarkBtn = new DPushButton(this);
     m_pAddBookMarkBtn->setFixedHeight(36);
@@ -374,6 +347,7 @@ void BookMarkWidget::initWidget()
     DFontSizeManager::instance()->bind(m_pAddBookMarkBtn, DFontSizeManager::T6);
     connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(slotAddBookMark()));
 
+    auto m_pHBoxLayout = new QHBoxLayout;
     m_pHBoxLayout->setContentsMargins(10, 6, 10, 6);
     m_pHBoxLayout->addWidget(m_pAddBookMarkBtn);
 
@@ -382,7 +356,7 @@ void BookMarkWidget::initWidget()
     m_pVBoxLayout->setSpacing(0);
     this->setLayout(m_pVBoxLayout);
     m_pVBoxLayout->addWidget(m_pBookMarkListWidget);
-    m_pVBoxLayout->addWidget(hLine);
+    m_pVBoxLayout->addWidget(new DHorizontalLine(this));
     m_pVBoxLayout->addItem(m_pHBoxLayout);
 }
 
@@ -423,6 +397,8 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
     QImage t_image;
     bool rl = dproxy->getImage(page, t_image, 34, 54/*28, 48*/);
     if (rl) {
+        auto item = m_pBookMarkListWidget->insertWidgetItem(page);
+
         auto t_widget = new BookMarkItemWidget;
         connect(t_widget, SIGNAL(sigDeleleteItem(const int &)), this, SLOT(slotDeleteBookItem(const int &)));
         t_widget->setLabelImage(t_image);
@@ -430,11 +406,6 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
         t_widget->setMinimumSize(QSize(230, 80));
         t_widget->setBSelect(true);
 
-        auto item = new QListWidgetItem(m_pBookMarkListWidget);
-        item->setFlags(Qt::NoItemFlags);
-        item->setSizeHint(QSize(230, 80));
-
-        m_pBookMarkListWidget->addItem(item);
         m_pBookMarkListWidget->setItemWidget(item, t_widget);
 
         m_pBookMarkListWidget->setCurrentItem(item);
@@ -474,13 +445,11 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
     //  删除书签消息
     if (MSG_BOOKMARK_DLTITEM == msgType || MSG_OPERATION_DELETE_BOOKMARK == msgType) {
         emit sigDeleteBookItem(msgContent.toInt());
-       // return ConstantMsg::g_effective_res;
     }
 
     //  增加书签消息
     if (MSG_OPERATION_ADD_BOOKMARK == msgType || MSG_OPERATION_TEXT_ADD_BOOKMARK == msgType) {
         emit sigAddBookMark(msgContent.toInt());
-        //return ConstantMsg::g_effective_res;
     }
 
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {    //  打开 文件通知消息
@@ -498,7 +467,7 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
             emit sigJumpToPrevItem();
         } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown) {
             emit sigJumpToNextItem();
-        } else if ( msgContent == KeyStr::g_ctrl_b) {
+        } else if (msgContent == KeyStr::g_ctrl_b) {
             emit sigCtrlBAddBookMark();
             return ConstantMsg::g_effective_res;
         }
@@ -542,7 +511,7 @@ bool BookMarkWidget::hasClickFoucs()
 /*************************************加载书签列表线程******************************************/
 
 LoadBookMarkThread::LoadBookMarkThread(QObject *parent)
-    : QThread (parent)
+    : QThread(parent)
 {
 
 }

@@ -47,9 +47,9 @@ void FileAttrWidget::setFileAttr()
 
     auto sss = new AttrScrollWidget(this);
     auto scrollArea = new QScrollArea(this);
-    scrollArea->setBackgroundRole(QPalette::Dark);
     scrollArea->setWidget(sss);
     scrollArea->setWidgetResizable(true);
+
     hLayout->addWidget(scrollArea);
 
     m_pVBoxLayout->addItem(hLayout);
