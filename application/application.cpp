@@ -30,7 +30,7 @@ namespace {
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
 {
-    setAttribute(Qt::AA_UseHighDpiPixmaps);
+//    setAttribute(Qt::AA_UseHighDpiPixmaps);
     // setAttribute(Qt::AA_EnableHighDpiScaling);
     // setAttribute(Qt::AA_ForceRasterWidgets);
 
