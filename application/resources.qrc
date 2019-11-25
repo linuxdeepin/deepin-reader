@@ -35,5 +35,6 @@
         <file>resources/exit_slider.svg</file>
         <file>resources/light/frame/exit_fullscreen.svg</file>
         <file>resources/exception-logo.svg</file>
+        <file>resources/dark/frame/exit_fullscreen.svg</file>
     </qresource>
 </RCC>

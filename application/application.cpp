@@ -40,7 +40,7 @@ Application::Application(int &argc, char **argv)
     setOrganizationName(tr("deepin"));
     setWindowIcon(QIcon::fromTheme("deepin-reader"));
     setApplicationDisplayName(tr("deepin-reader"));
-    setApplicationVersion(DApplication::buildVersion("20191022"));
+    setApplicationVersion(DApplication::buildVersion("20191125"));
     setApplicationAcknowledgementPage(Constant::sAcknowledgementLink);
   // setProductIcon(QIcon::fromTheme("deepin-reader"));
     QPixmap px(QIcon::fromTheme("deepin-reader").pixmap(256*qApp->devicePixelRatio(),256*qApp->devicePixelRatio()));
@@ -53,7 +53,7 @@ Application::Application(int &argc, char **argv)
 }
 
 void Application::handleQuitAction()
-{   
+{
     NotifySubject::getInstance()->notifyMsg(MSG_OPERATION_EXIT);
 }
 
