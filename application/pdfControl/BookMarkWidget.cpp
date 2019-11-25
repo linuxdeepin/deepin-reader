@@ -395,7 +395,7 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
         return nullptr;
     }
     QImage t_image;
-    bool rl = dproxy->getImage(page, t_image, 34, 54/*28, 48*/);
+    bool rl = dproxy->getImage(page, t_image, 42, 62/*28, 48*/);
     if (rl) {
         auto item = m_pBookMarkListWidget->insertWidgetItem(page);
 
@@ -562,7 +562,7 @@ void LoadBookMarkThread::run()
                 continue;
             }
 
-            bool bl = DocummentFileHelper::instance()->getImage(page, image, 34, 54/*28, 48*/);
+            bool bl = DocummentFileHelper::instance()->getImage(page, image, 42, 62/*28, 48*/);
             if (bl) {
                 emit sigLoadImage(page, image);
             }

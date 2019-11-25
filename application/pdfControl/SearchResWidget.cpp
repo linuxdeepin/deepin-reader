@@ -285,7 +285,7 @@ void LoadSearchResThread::run()
             }
 
             QImage image;
-            bool bl = dproxy ->getImage(page, image, 34, 54/*28, 48*/);
+            bool bl = dproxy ->getImage(page, image, 42, 62/*34, 54*/);
             if (bl) {
                 emit sigLoadImage(page, image);
                 msleep(50);

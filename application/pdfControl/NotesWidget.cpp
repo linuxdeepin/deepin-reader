@@ -319,7 +319,7 @@ void NotesWidget::addNotesItem(const QString &text)
                 return;
             }
             QImage image;
-            bool rl = dproxy->getImage(t_nPage, image, 34, 54/*28, 48*/);
+            bool rl = dproxy->getImage(t_nPage, image, 42, 62/*34, 54*/);
             if (rl) {
                 addNewItem(image, t_nPage, t_strUUid, t_strText);
 
@@ -539,7 +539,7 @@ void ThreadLoadImageOfNote::run()
 
             if (t_page != highContent.ipage) {
                 t_page = highContent.ipage;
-                bl = dproxy->getImage(t_page, image, 34, 54);
+                bl = dproxy->getImage(t_page, image, 42, 62/*34, 54*/);
             }
             if (bl) {
                 emit sigLoadImage(image);
