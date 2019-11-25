@@ -286,9 +286,9 @@ bool DocummentFileHelper::pageJump(const int &pagenum)
 bool DocummentFileHelper::getImage(const int &pagenum, QImage &image, const double &width, const double &height)
 {
     bool rl = m_pDocummentProxy->getImage(pagenum, image, width, height);
-    if (rl) {
-        image = roundImage(QPixmap::fromImage(image), 8);
-    }
+//    if (rl) {
+//        image = roundImage(QPixmap::fromImage(image), 8);
+//    }
     return rl;
 }
 
