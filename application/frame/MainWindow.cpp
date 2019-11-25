@@ -93,11 +93,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
     if (sFilePath != "") {
         bool rl = DataManager::instance()->bIsUpdate();
         if (rl) {
-            DDialog dlg("",tr("Do you need to save the file opened?"));
+            DDialog dlg("", tr("Do you need to save the file opened?"));
             dlg.setIcon(QIcon::fromTheme("deepin-reader"));
             dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Not Save"));
-            dlg.addButton(tr("Save"),true,DDialog::ButtonRecommend);
-            QMargins mar(0,0,0,30);
+            dlg.addButton(tr("Save"), true, DDialog::ButtonRecommend);
+            QMargins mar(0, 0, 0, 30);
             dlg.setContentLayoutContentsMargins(mar);
 
             int nRes = dlg.exec();
@@ -417,7 +417,7 @@ void MainWindow::slotAppExit()
 void MainWindow::slotAppShowState(const int &nState)
 {
     titlebar()->setVisible(nState);
-  // setTitlebarShadowEnabled(nState);
+    // setTitlebarShadowEnabled(nState);
 
     if (nState == 1) {
         if (windowState() == Qt::WindowFullScreen) {
@@ -438,18 +438,19 @@ void MainWindow::slotSetAppTitle(const QString &sData)
     QString sPageNum = AppSetting::instance()->getKeyValue(KEY_PAGENUM);
     if (sPageNum != "") {
         DocummentFileHelper::instance()->pageJump(sPageNum.toInt());
+    }
 
-        QString sM = AppSetting::instance()->getKeyValue(KEY_M);
-        if (sM == "1") {
-            notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_m);
+    QString sM = AppSetting::instance()->getKeyValue(KEY_M);
+    if (sM == "1") {
+        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_m);
 
-            QString sWidget = AppSetting::instance()->getKeyValue(KEY_WIDGET);
-            if (sWidget != "") {
-                notifyMsg(MSG_SWITCHLEFTWIDGET, sWidget);
-            }
+        QString sWidget = AppSetting::instance()->getKeyValue(KEY_WIDGET);
+        if (sWidget != "") {
+            notifyMsg(MSG_SWITCHLEFTWIDGET, sWidget);
         }
     }
 }
+
 
 //  文件打开成，　功能性　菜单才能点击
 void MainWindow::slotOpenFileOk()
@@ -514,7 +515,7 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
         if (msgContent == KeyStr::g_esc) {          //  退出全屏模式
             emit sigAppShowState(1);
         } else if (msgContent == KeyStr::g_space) {
-            if (DataManager::instance()->CurShowState() == FILE_SLIDE) {              
+            if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
                 emit sigSpacePressed();
             }
         }

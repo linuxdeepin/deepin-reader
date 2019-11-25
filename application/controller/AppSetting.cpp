@@ -9,6 +9,26 @@ AppSetting::AppSetting(QObject *parent)
     m_pSettings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"), QSettings::IniFormat, parent);
 }
 
+void AppSetting::setFileKeyValue(const QString &sValue)
+{
+    // initalize the configuration file.
+    QString sKey = QString("%1").arg(KEY_DIR);
+
+    if (sValue == "") {
+        m_pSettings->remove(sKey);
+    } else {
+        QString ssValue = QString("%1").arg(sValue);
+        m_pSettings->setValue(sKey, ssValue);
+    }
+}
+
+QString AppSetting::getFileKeyValue() const
+{
+    // initalize the configuration file.
+    QString sKey = QString("%1").arg(KEY_DIR);
+    return m_pSettings->value(sKey).toString();
+}
+
 void AppSetting::setKeyValue(const int &iKey, const QString &sValue)
 {
     // initalize the configuration file.

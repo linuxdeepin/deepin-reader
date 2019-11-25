@@ -63,20 +63,19 @@ void HomeWidget::slotChooseBtnClicked()
 
         QString sRes = "";
 
-        bool bisopen=false;
+        bool bisopen = false;
         foreach (auto filepath, fileList) {
 
             QString sRes = filepath + Constant::sQStringSep;
 
-            if(nullptr!=DocummentProxy::instance()&&!DocummentProxy::instance()->isOpendFile())
-            {
-                if(!bisopen)
+            if (nullptr != DocummentProxy::instance() && !DocummentProxy::instance()->isOpendFile()) {
+                if (!bisopen)
                     notifyMsg(MSG_OPEN_FILE_PATH, sRes);
                 else
                     Utils::runApp(filepath);
 
-                bisopen=true;
-            }else {
+                bisopen = true;
+            } else {
                 Utils::runApp(filepath);
             }
         }
@@ -115,7 +114,7 @@ QStringList HomeWidget::getOpenFileList()
     const int mode = dialog.exec();
 
     // save the directory string to config file.
-    m_settings->setKeyValue(KEY_DIR, dialog.directoryUrl().toLocalFile());
+    m_settings->setFileKeyValue(dialog.directoryUrl().toLocalFile());
 
     // if click cancel button or close button.
     if (mode != QDialog::Accepted) {

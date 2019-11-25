@@ -31,6 +31,9 @@ public:
     }
 
 public:
+    void setFileKeyValue(const QString &);
+    QString getFileKeyValue() const;
+
     void setKeyValue(const int &, const QString &);
     QString getKeyValue(const int &) const;
 
