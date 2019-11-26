@@ -105,6 +105,8 @@ void ThreadRenderImage::run()
                     b_running = false;
                     return;
                 }
+                if (restart)
+                    continue;
 //                m_page->loadData();
                 emit signal_RenderFinish(image);
             } else {

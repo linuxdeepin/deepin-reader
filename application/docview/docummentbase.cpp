@@ -724,7 +724,7 @@ bool DocummentBase::showMagnifier(QPoint point)
         double topspace = (d->m_widgets.at(pagenum)->height() - curheight) / 2.0;
         double left = 0.0;
         if (d->m_viewmode == ViewMode_SinglePage) {
-            left = (d->m_widgets.at(pagenum)->width() - curwidth) / 2.0;           
+            left = (d->m_widgets.at(pagenum)->width() - curwidth) / 2.0;
             if (qpoint.x() < left - d->m_magnifierwidget->getMagnifierRadius() || qpoint.x() > curwidth + left + d->m_magnifierwidget->getMagnifierRadius()) {
                 QPixmap pix(d->m_magnifierwidget->getMagnifierRadius() * 2, d->m_magnifierwidget->getMagnifierRadius() * 2);
                 pix.fill(Qt::transparent);
@@ -742,18 +742,18 @@ bool DocummentBase::showMagnifier(QPoint point)
                 }
             }
         } else {
-            double curitemwidth = d->m_widgets.at(pagenum)->width();        
+            double curitemwidth = d->m_widgets.at(pagenum)->width();
             left = (curitemwidth - curwidth * 2.0) / 3.0;
             if ((qpoint.x() < left - d->m_magnifierwidget->getMagnifierRadius() ||
-                    (qpoint.x() > curwidth + left+ d->m_magnifierwidget->getMagnifierRadius()&& qpoint.x() < curwidth + 2.0 * left) ||
-                    qpoint.x() >  curwidth * 2.0 +left*2+ d->m_magnifierwidget->getMagnifierRadius()) && qpoint.x() > 0 && qpoint.x() < d->m_widgets.at(pagenum)->width()) {
+                    (qpoint.x() > curwidth + left + d->m_magnifierwidget->getMagnifierRadius() && qpoint.x() < curwidth + 2.0 * left) ||
+                    qpoint.x() >  curwidth * 2.0 + left * 2 + d->m_magnifierwidget->getMagnifierRadius()) && qpoint.x() > 0 && qpoint.x() < d->m_widgets.at(pagenum)->width()) {
                 QPixmap pix(d->m_magnifierwidget->getMagnifierRadius() * 2, d->m_magnifierwidget->getMagnifierRadius() * 2);
                 pix.fill(Qt::transparent);
                 d->m_magnifierwidget->setPixmap(pix);
                 d->m_magnifierwidget->setPoint(gpoint);
                 d->m_magnifierwidget->show();
                 d->m_magnifierwidget->update();
-            } else {             
+            } else {
                 if (ppage ->getMagnifierPixmap(pixmap, qpoint, d->m_magnifierwidget->getMagnifierRadius(), ppage->width()*d->m_magnifierwidget->getMagnifierScale(), ppage->height()*d->m_magnifierwidget->getMagnifierScale())) {
                     d->m_magnifierwidget->setPixmap(pixmap);
                     d->m_magnifierwidget->setPoint(gpoint);
@@ -763,7 +763,7 @@ bool DocummentBase::showMagnifier(QPoint point)
                 }
             }
         }
-    } else {               
+    } else {
         QPixmap pix(d->m_magnifierwidget->getMagnifierRadius() * 2, d->m_magnifierwidget->getMagnifierRadius() * 2);
         pix.fill(Qt::transparent);
         d->m_magnifierwidget->setPixmap(pix);
@@ -1385,10 +1385,10 @@ bool DocummentBase::loadPages()
     if (!bDocummentExist())
         return false;
     qDebug() << "-----loadPages-----";
-    for (int i = 0; i < d->m_pages.size(); i++) {
-        d->m_pages.at(i)->waitThread();
-    }
-    QThreadPool::globalInstance()->waitForDone();
+//    for (int i = 0; i < d->m_pages.size(); i++) {
+//        d->m_pages.at(i)->waitThread();
+//    }
+//    QThreadPool::globalInstance()->waitForDone();
     int pagenum = 0;
 //    int firstpagenum  = d->m_currentpageno;
     int firstpagenum  = currentPageNo();
