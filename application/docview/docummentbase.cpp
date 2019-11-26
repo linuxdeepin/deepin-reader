@@ -887,6 +887,7 @@ bool DocummentBase::pageJump(int pagenum)
             break;
         }
         d->m_currentpageno = pagenum;
+        emit signal_pageChange(d->m_currentpageno);
     }
     return true;
 }
