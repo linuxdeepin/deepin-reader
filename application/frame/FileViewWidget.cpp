@@ -259,7 +259,6 @@ void FileViewWidget::slotSetHandShape(const QString &data)
 {
     //  手型 切换 也需要将之前选中的文字清除 选中样式
     m_pDocummentFileHelper->mouseSelectTextClear();
-
     int nRes = data.toInt();
     if (nRes == 1) { //  手形
         m_nCurrentHandelState = Handel_State;

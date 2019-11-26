@@ -31,7 +31,7 @@ Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
 {
     setAttribute(Qt::AA_UseHighDpiPixmaps);
-   // setAttribute(Qt::AA_EnableHighDpiScaling);
+    // setAttribute(Qt::AA_EnableHighDpiScaling);
     // setAttribute(Qt::AA_ForceRasterWidgets);
 
     initI18n();
@@ -42,8 +42,8 @@ Application::Application(int &argc, char **argv)
     setApplicationDisplayName(tr("deepin-reader"));
     setApplicationVersion(DApplication::buildVersion("20191125"));
     setApplicationAcknowledgementPage(Constant::sAcknowledgementLink);
-  // setProductIcon(QIcon::fromTheme("deepin-reader"));
-    QPixmap px(QIcon::fromTheme("deepin-reader").pixmap(256*qApp->devicePixelRatio(),256*qApp->devicePixelRatio()));
+    // setProductIcon(QIcon::fromTheme("deepin-reader"));
+    QPixmap px(QIcon::fromTheme("deepin-reader").pixmap(256 * qApp->devicePixelRatio(), 256 * qApp->devicePixelRatio()));
     px.setDevicePixelRatio(qApp->devicePixelRatio());
     setProductIcon(QIcon(px));
 

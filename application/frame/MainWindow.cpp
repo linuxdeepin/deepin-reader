@@ -57,7 +57,9 @@ MainWindow::MainWindow(DMainWindow *parent)
         m_pNotifySubject->addObserver(this);
     }
 
-    setMinimumSize(1000, 680);
+    QRect rect = DApplication::desktop()->geometry();
+    setMinimumSize(rect.width() * 0.8, rect.height() * 0.8);
+    // setMinimumSize(1000, 680);
 
     //  在屏幕中心显示
     Dtk::Widget::moveToCenter(this);
@@ -154,7 +156,6 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
 void MainWindow::initUI()
 {
     titlebar()->addWidget(new TitleWidget, Qt::AlignLeft);
-
     setCentralWidget(new MainWidget);
 }
 

@@ -49,15 +49,18 @@ int main(int argc, char *argv[])
 
     QStringList urls;
     QStringList arguments = parser.positionalArguments();
+
     QString filepath;
     for (const QString &path : arguments) {
         filepath = UrlInfo(path).toLocalFile();
         if (filepath.endsWith("pdf")) {
             w.openfile(filepath);
+            qDebug() << __FUNCTION__ << "++++++++++++++" << path << arguments;
             break;
         }
     }
 
+    QApplication::desktop()->geometry();
     w.setSreenRect(a.desktop()->screenGeometry());
     w.show();
 

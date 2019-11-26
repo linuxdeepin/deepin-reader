@@ -135,11 +135,12 @@ void MainWidget::dropEvent(QDropEvent *event)
             if (nullptr != DocummentProxy::instance() && !DocummentProxy::instance()->isOpendFile()) {
                 if (!bisopen)
                     notifyMsg(MSG_OPEN_FILE_PATH, sRes);
-                else
-                    Utils::runApp(s);
+                else {
+                    if (!Utils::runApp(s))
+                        qDebug() << __FUNCTION__ << "process start deepin-reader failed";
+                }
 
                 bisopen = true;
-
             } else {
                 Utils::runApp(s);
             }

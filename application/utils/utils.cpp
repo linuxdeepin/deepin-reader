@@ -697,8 +697,9 @@ QString Utils::getInputDataSize(const qint64 &dSize)
 
 bool Utils::runApp(const QString &args)
 {
+    //qDebug() << __FUNCTION__ << QString("deepin-reader  \"%1\"").arg(args) << "--" << args;
     QProcess app;
-    return  app.startDetached(QString("deepin-reader  %1").arg(args));
+    return  app.startDetached(QString("deepin-reader  \"%1\"").arg(args));
 }
 
 QImage Utils::roundImage(const QPixmap &img_in, int radius)
