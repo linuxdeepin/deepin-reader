@@ -188,8 +188,6 @@ void CustemTextEdit::init()
     this->setPalette(pText);
 
     //font
-//    QFont fontContant = Utils::getPixFont(QString("SourceHanSansCN-Normal"), 12);
-//    this->setFont(fontContant);
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T8);
 
     //text corlor
@@ -200,7 +198,7 @@ void CustemTextEdit::init()
 
     //text under line
     QTextCursor cursor(this->textCursor());
-    QTextCharFormat format = cursor.charFormat ();
+    QTextCharFormat format = cursor.charFormat();
     QTextBlockFormat textBlockFormat;
     //line height
     textBlockFormat.setLineHeight(19, QTextBlockFormat::FixedHeight);
@@ -234,7 +232,7 @@ int CustemTextEdit::calcTextSize(const QString &text)
 QString CustemTextEdit::getMaxLenStr(QString text)
 {
     QString qstrChinese = "";
-     QString qstrText =  text;
+    QString qstrText =  text;
 
 //    for(int index = 0; index < text.count(); ++index)
 //    {
@@ -244,12 +242,11 @@ QString CustemTextEdit::getMaxLenStr(QString text)
 //            return qstrChinese;
 //        }
 //    }
-    foreach(QChar ch, qstrText)
-    {
+    foreach (QChar ch, qstrText) {
         qDebug() << ch;
         qstrChinese.append(ch);
 
-        if(qstrChinese.toUtf8().size() >= m_nMaxContantLen){
+        if (qstrChinese.toUtf8().size() >= m_nMaxContantLen) {
             return qstrChinese;
         }
     }

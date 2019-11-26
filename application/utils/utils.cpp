@@ -577,54 +577,54 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
     return false;
 }
 
-bool Utils::isDraftFile(const QString &filepath)
-{
-    QString draftDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first())
-                       .filePath("blank-files");
-    QString dir = QFileInfo(filepath).dir().absolutePath();
+//bool Utils::isDraftFile(const QString &filepath)
+//{
+//    QString draftDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first())
+//                       .filePath("blank-files");
+//    QString dir = QFileInfo(filepath).dir().absolutePath();
 
-    return draftDir == dir;
-}
+//    return draftDir == dir;
+//}
 
-void Utils::toast(const QString &message, QWidget *parent)
-{
-    /*
-       Toast *toast = new Toast(parent);
-       int avaliableHeight = parent->height() - toast->height();
-       int toastPaddingBottom = qMin(avaliableHeight / 2, 100);
+//void Utils::toast(const QString &message, QWidget *parent)
+//{
+/*
+   Toast *toast = new Toast(parent);
+   int avaliableHeight = parent->height() - toast->height();
+   int toastPaddingBottom = qMin(avaliableHeight / 2, 100);
 
-       QObject::connect(toast, &Toast::visibleChanged, parent, [toast] (bool visible) {
-           if (visible == false) {
-               toast->deleteLater();
-           }
-       });
+   QObject::connect(toast, &Toast::visibleChanged, parent, [toast] (bool visible) {
+       if (visible == false) {
+           toast->deleteLater();
+       }
+   });
 
-       toast->setText(message);
-       toast->setIcon(Utils::getQrcPath("logo_24.svg"));
-       toast->pop();
+   toast->setText(message);
+   toast->setIcon(Utils::getQrcPath("logo_24.svg"));
+   toast->pop();
 
-       toast->move((parent->width() - toast->width()) / 2,
-                   avaliableHeight - toastPaddingBottom);*/
-}
+   toast->move((parent->width() - toast->width()) / 2,
+               avaliableHeight - toastPaddingBottom);*/
+//}
 
-const QStringList Utils::getEncodeList()
-{
-    QStringList encodeList;
+//const QStringList Utils::getEncodeList()
+//{
+//    QStringList encodeList;
 
-    for (int mib : QTextCodec::availableMibs()) {
-        QTextCodec *codec = QTextCodec::codecForMib(mib);
-        QString encodeName = QString(codec->name()).toUpper();
+//    for (int mib : QTextCodec::availableMibs()) {
+//        QTextCodec *codec = QTextCodec::codecForMib(mib);
+//        QString encodeName = QString(codec->name()).toUpper();
 
-        if (encodeName != "UTF-8" && !encodeList.contains(encodeName)) {
-            encodeList.append(encodeName);
-        }
-    }
+//        if (encodeName != "UTF-8" && !encodeList.contains(encodeName)) {
+//            encodeList.append(encodeName);
+//        }
+//    }
 
-    encodeList.sort();
-    encodeList.prepend("UTF-8");
+//    encodeList.sort();
+//    encodeList.prepend("UTF-8");
 
-    return encodeList;
-}
+//    return encodeList;
+//}
 
 QPixmap Utils::renderSVG(const QString &filePath, const QSize &size)
 {
@@ -660,15 +660,15 @@ QString Utils::getSuffixList()
 }
 
 //  获取 action 图标
-QIcon Utils::getActionIcon(const QString &iconName)
-{
-    QIcon icon = QIcon::fromTheme(iconName);
+//QIcon Utils::getActionIcon(const QString &iconName)
+//{
+//    QIcon icon = QIcon::fromTheme(iconName);
 
-    if (icon.isNull()) {
-        icon = QIcon(QLatin1String(":icons/") + iconName);
-    }
-    return  icon;
-}
+//    if (icon.isNull()) {
+//        icon = QIcon(QLatin1String(":icons/") + iconName);
+//    }
+//    return  icon;
+//}
 
 QString Utils::getInputDataSize(const qint64 &dSize)
 {
@@ -687,31 +687,29 @@ QString Utils::getInputDataSize(const qint64 &dSize)
     return QString::number(d, 'f', 1) + " GB";
 }
 
-QFont Utils::getPixFont(const QString &fontFamily, const int &fontSize)
-{
-    QFont font(fontFamily);
-    font.setPixelSize(fontSize);
+//QFont Utils::getPixFont(const QString &fontFamily, const int &fontSize)
+//{
+//    QFont font(fontFamily);
+//    font.setPixelSize(fontSize);
 
-    return font;
-}
+//    return font;
+//}
 
-bool Utils::runApp(const QString&args)
+bool Utils::runApp(const QString &args)
 {
     QProcess app;
     return  app.startDetached(QString("deepin-reader  %1").arg(args));
 }
 
-QImage Utils::roundImage(const QPixmap& img_in, int radius)
+QImage Utils::roundImage(const QPixmap &img_in, int radius)
 {
-    if (img_in.isNull())
-    {
+    if (img_in.isNull()) {
         return QPixmap().toImage();
     }
     QSize size(img_in.size());
     QBitmap mask(size);
     QPainter painter(&mask);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     painter.fillRect(mask.rect(), Qt::white);
     painter.setBrush(Qt::black);
     painter.drawRoundedRect(mask.rect(), radius, radius);

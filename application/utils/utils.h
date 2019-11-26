@@ -58,19 +58,19 @@ public:
     static qreal easeOutQuint(qreal x);
     static QVariantMap getThemeMapFromPath(const QString &filepath);
     static bool isMimeTypeSupport(const QString &filepath);
-    static bool isDraftFile(const QString &filepath);
-    static void toast(const QString &message, QWidget *parent = nullptr);
-    static const QStringList getEncodeList();
+//    static bool isDraftFile(const QString &filepath);
+//    static void toast(const QString &message, QWidget *parent = nullptr);
+//    static const QStringList getEncodeList();
     static QPixmap renderSVG(const QString &filePath, const QSize &size);
 
     static QString getConfigPath();
     static QString getSuffixList();
-    static QIcon getActionIcon(const QString &);
+//    static QIcon getActionIcon(const QString &);
 
     static QString getInputDataSize(const qint64 &);
-    static QFont getPixFont(const QString&, const int&);
+//    static QFont getPixFont(const QString &, const int &);
     static bool runApp(const QString &args);
-    static QImage roundImage(const QPixmap& img_in, int radius);
+    static QImage roundImage(const QPixmap &img_in, int radius);
 };
 
 #endif // UTILS_H

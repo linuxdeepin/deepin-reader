@@ -179,8 +179,8 @@
     <message>
         <location filename="../pdfControl/CustomItemWidget.cpp" line="34"/>
         <source>page</source>
-        <translatorcomment>页码</translatorcomment>
-        <translation>页码</translation>
+        <translatorcomment>页面</translatorcomment>
+        <translation>页面</translation>
     </message>
 </context>
 <context>

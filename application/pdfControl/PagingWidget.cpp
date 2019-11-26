@@ -21,10 +21,8 @@ PagingWidget::PagingWidget(CustomWidget *parent) :
  */
 void PagingWidget::initWidget()
 {
-//    QFont font = Utils::getPixFont(QString("SourceHanSansSC-Medium"), 14);
     m_pTotalPagesLab = new CustomClickLabel(QString("/xxx") + tr("pages"), this);
     m_pTotalPagesLab->setFixedWidth(70);
-//    m_pTotalPagesLab->setFont(font);
     DFontSizeManager::instance()->bind(m_pTotalPagesLab, DFontSizeManager::T6);
 
     m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
@@ -43,7 +41,6 @@ void PagingWidget::initWidget()
     m_pJumpPageSpinBox->installEventFilter(this);
     m_pJumpPageSpinBox->setWrapping(true);
     m_pJumpPageSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
-//    m_pJumpPageSpinBox->setFont(font);
     DFontSizeManager::instance()->bind(m_pJumpPageSpinBox, DFontSizeManager::T6);
 
     auto hLayout = new QHBoxLayout;
