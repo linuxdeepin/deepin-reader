@@ -200,7 +200,7 @@ bool DocummentProxy::save(const QString &filepath, bool withChanges)
 {
     if (!m_documment || bcloseing)
         return false;
-//    qDebug() << "save";
+
     return m_documment->save(filepath, withChanges);
 }
 

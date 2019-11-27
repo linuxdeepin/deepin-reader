@@ -301,13 +301,15 @@ bool DocummentPDF::save(const QString &filePath, bool withChanges)
 {
     // Save document to temporary file...
     QTemporaryFile temporaryFile;
-    temporaryFile.setFileTemplate(temporaryFile.fileTemplate() + QLatin1String(".") + QFileInfo(filePath).suffix());
+    QString strtemfile = temporaryFile.fileTemplate() + QLatin1String(".") + QFileInfo(filePath).suffix();
+    qDebug() << __FUNCTION__ << strtemfile;
+    temporaryFile.setFileTemplate(strtemfile);
     if (!temporaryFile.open()) {
         return false;
     }
 
     temporaryFile.close();
-
+    qDebug() << __FUNCTION__ << temporaryFile.fileName();
     if (!pdfsave(temporaryFile.fileName(), withChanges)) {
         return false;
     }
@@ -374,10 +376,9 @@ bool DocummentPDF::saveas(const QString &filePath, bool withChanges)
 bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
 {
     Q_D(DocummentPDF);
-    QScopedPointer< Poppler::PDFConverter > pdfConverter(d->document->pdfConverter());
-
+    QScopedPointer< Poppler::PDFConverter > pdfConverter(d->document->pdfConverter()); d->document->toc()->toByteArray();
     pdfConverter->setOutputFileName(filePath);
-
+    qDebug() << __FUNCTION__ << filePath << &d->document;
     Poppler::PDFConverter::PDFOptions options = pdfConverter->pdfOptions();
 
     if (withChanges) {
@@ -385,8 +386,18 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
     }
 
     pdfConverter->setPDFOptions(options);
+    bool bres = pdfConverter->convert();
+//    if (!bres) {
+//        qDebug() << __FUNCTION__ << pdfConverter->lastError();
+//        d->document->toc()->toByteArray();
+//        QFile file("/home/archermind/Desktop/kyz.pdf");
+//        if (file.open(QIODevice::ReadWrite)) {
 
-    return pdfConverter->convert();
+//            file.write(d->document->toc()->toByteArray());
+//        }
+//    }
+
+    return bres;
 }
 
 void DocummentPDF::clearSearch()

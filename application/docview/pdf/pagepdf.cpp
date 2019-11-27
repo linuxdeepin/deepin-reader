@@ -255,18 +255,27 @@ void PagePdf::paintEvent(QPaintEvent *event)
 {
     Q_D(PagePdf);
     PageBase::paintEvent(event);
+    QPainter qpainter(this);
+    QPen qpen(d_ptr->m_pencolor);
+    qpainter.setPen(qpen);
     for (int i = 0; i < d_ptr->m_highlights.size(); i++) {
         if (d->m_icurhightlight == i && d->m_bcursearchshow) {
-            QPainter qpainter(this);
-            d_ptr->m_searchcolor.setAlpha(100);
-            qpainter.setBrush(d_ptr->m_searchcolor);
+
+            d_ptr->m_cursearchfocuscolor.setAlpha(100);
+            qpainter.setBrush(d_ptr->m_cursearchfocuscolor);
             qpainter.drawRect(translateRect(d_ptr->m_highlights[i], d_ptr->m_scale, d_ptr->m_rotate));
+
+//            qpainter.setBrush(d_ptr->m_searchcolor);
+//            d_ptr->m_searchcolor.setAlpha(100);
+//<<<<<<< HEAD
+//            qpainter.setBrush(d_ptr->m_searchcolor);
+//=======
+//>>>>>>> chore:change search current select text color
+//            qpainter.drawRect(translateRect(d_ptr->m_highlights[i], d_ptr->m_scale, d_ptr->m_rotate));
         } else {
-            QPainter qpainter(this);
             d_ptr->m_searchcolor.setAlpha(100);
             qpainter.setBrush(d_ptr->m_searchcolor);
-            QPen qpen(d_ptr->m_pencolor);
-            qpainter.setPen(qpen);
+
             qpainter.drawRect(translateRect(d_ptr->m_highlights[i], d_ptr->m_scale, d_ptr->m_rotate));
         }
     }

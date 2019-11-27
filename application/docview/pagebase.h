@@ -140,8 +140,11 @@ public:
         m_imagewidth = 0.01;
         m_imageheight = 0.01;
         m_paintercolor = QColor(72, 118, 255, 100);
+        m_cursearchfocuscolor = QColor("#62AD31");
+        m_cursearchfocuscolor.setAlpha(100);
         m_pencolor = QColor(72, 118, 255, 0);
-        m_searchcolor = Qt::yellow;
+        m_searchcolor = QColor(254, 241, 68, 100); //Qt::yellow;
+        m_searchcolor.setAlpha(100);
         m_penwidth = 0;
         m_selecttextstartword = -1;
         m_selecttextendword = -1;
@@ -199,6 +202,7 @@ public:
     mutable QList<QRectF> m_highlights;
     int m_icurhightlight;
     QColor m_searchcolor;
+    QColor m_cursearchfocuscolor;
     bool havereander;
     qreal pixelratiof;
     BookMarkButton *bookmarkbtn;
