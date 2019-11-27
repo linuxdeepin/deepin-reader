@@ -5,8 +5,8 @@
     <name>Application</name>
     <message>
         <location filename="../application.cpp" line="42"/>
-        <source>deepin-reader</source>
-        <translation></translation>
+        <source>reader</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../application.cpp" line="51"/>
@@ -22,122 +22,122 @@
 <context>
     <name>AttrScrollWidget</name>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="34"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="23"/>
         <source>Location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="35"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="24"/>
         <source>Theme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="36"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="25"/>
         <source>Author</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="37"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="26"/>
         <source>Keywords</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="38"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="27"/>
         <source>Producers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="39"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="28"/>
         <source>Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="40"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="29"/>
         <source>Create Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="41"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="30"/>
         <source>Update Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="42"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="31"/>
         <source>Format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="43"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="32"/>
         <source>Page&apos;s Number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="44"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="33"/>
         <source>Optimize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="45"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="34"/>
         <source>Security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="48"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="37"/>
         <source>Paper Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="50"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="39"/>
         <source>File Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="55"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="44"/>
         <source>basic information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="79"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="70"/>
         <source>unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="114"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="106"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="114"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="106"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="122"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="114"/>
         <source>year</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="122"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="114"/>
         <source>month</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="122"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="114"/>
         <source>day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="123"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="115"/>
         <source>hour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="123"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="115"/>
         <source>minute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="123"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="115"/>
         <source>second</source>
         <translation type="unfinished"></translation>
     </message>
@@ -271,7 +271,7 @@
 <context>
     <name>FileAttrWidget</name>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="83"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="90"/>
         <source>close</source>
         <translation></translation>
     </message>
