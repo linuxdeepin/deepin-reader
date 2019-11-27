@@ -132,12 +132,16 @@ void BookMarkWidget::slotDocFilePageChanged(const QString &sPage)
                 auto pItemWidget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
                 if (pItemWidget) {
                     int nWidgetPage = pItemWidget->nPageIndex();
-                    if (nWidgetPage == page) {
-                        pItemWidget->setBSelect(bl);
+                    auto dproxy = DocummentFileHelper::instance();
+                    if (dproxy) {
+                        int nCurPage = dproxy->currentPageNo();
+                        if (nWidgetPage == nCurPage) {
+                            pItemWidget->setBSelect(bl);
 
-                        m_pBookMarkListWidget->setCurrentItem(item);
+                            m_pBookMarkListWidget->setCurrentItem(item);
 
-                        break;
+                            break;
+                        }
                     }
                 }
             }
@@ -192,7 +196,10 @@ void BookMarkWidget::deleteIndexPage(const int &pageIndex)
         dproxy->setBookMarkState(pageIndex, false);
         DataManager::instance()->setBIsUpdate(true);
 
-        m_pAddBookMarkBtn->setEnabled(true);
+        int nCurPage = dproxy->currentPageNo();
+        if (nCurPage == pageIndex) {    //  当前页被删了
+            m_pAddBookMarkBtn->setEnabled(true);
+        }
     }
 }
 
@@ -387,9 +394,6 @@ void BookMarkWidget::initConnection()
  */
 QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
 {
-    //  先将当前的item 选中取消
-    clearItemColor();
-
     auto dproxy = DocummentFileHelper::instance();
     if (nullptr == dproxy) {
         return nullptr;
@@ -405,12 +409,18 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
         t_widget->setLabelImage(img);
         t_widget->setLabelPage(page, 1);
         t_widget->setMinimumSize(QSize(230, 80));
-        t_widget->setBSelect(true);
 
         m_pBookMarkListWidget->setItemWidget(item, t_widget);
 
-        m_pBookMarkListWidget->setCurrentItem(item);
+        int nCurPage = dproxy->currentPageNo();
+        if (nCurPage == page) {
+            //  先将当前的item 选中取消
+            clearItemColor();
 
+            t_widget->setBSelect(true);
+
+            m_pBookMarkListWidget->setCurrentItem(item);
+        }
         dproxy->setBookMarkState(page, true);
 
         return item;
