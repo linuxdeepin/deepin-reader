@@ -28,7 +28,7 @@ protected:
 
 private:
     bool m_bSelect = false;
-    int m_nRadius = 8;         // 圆角
+    int m_nRadius = 6;         // 圆角
     bool m_bshowbookmark=false;       //显示书签
 };
 
