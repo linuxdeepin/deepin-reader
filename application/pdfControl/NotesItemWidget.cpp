@@ -11,7 +11,7 @@ NotesItemWidget::NotesItemWidget(CustomItemWidget *parent) :
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(slotShowContextMenu(const QPoint &)));
-    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
+    //connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     initWidget();
 }
 
@@ -79,10 +79,10 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
 
 void NotesItemWidget::slotUpdateTheme()
 {
-    Dtk::Gui::DPalette pltorg = m_pPageNumber->palette();
-    Dtk::Gui::DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
-    pltorg.setColor(Dtk::Gui::DPalette::Text, plt.color(Dtk::Gui::DPalette::TextTips));
-    m_pPageNumber->setPalette(pltorg);
+//    Dtk::Gui::DPalette pltorg = m_pPageNumber->palette();
+//    Dtk::Gui::DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
+//    pltorg.setColor(Dtk::Gui::DPalette::Text, plt.color(Dtk::Gui::DPalette::TextTips));
+//    m_pPageNumber->setPalette(pltorg);
 }
 
 void NotesItemWidget::initWidget()
@@ -148,7 +148,7 @@ int NotesItemWidget::dealWithData(const int &msgType, const QString &msgContent)
             }
         }
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        emit sigUpdateTheme();
+//        emit sigUpdateTheme();
     }
     return 0;
 }

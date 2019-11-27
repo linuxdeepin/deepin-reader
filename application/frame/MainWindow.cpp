@@ -35,7 +35,7 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     initConnections();
 
-    initThemeChanged();
+//    initThemeChanged();
 
     m_pFilterList = QStringList() << KeyStr::g_esc << KeyStr::g_f1 << KeyStr::g_f11 << KeyStr::g_del
                     << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r

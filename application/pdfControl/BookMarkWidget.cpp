@@ -458,7 +458,7 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (MSG_CLOSE_FILE == msgType) {         //  关闭 文件通知消息
         emit sigCloseFile();
     }  else if (msgType == MSG_OPERATION_UPDATE_THEME) {    //  主题变更消息
-        emit sigUpdateTheme();
+//        emit sigUpdateTheme();
     } else if (MSG_FILE_PAGE_CHANGE == msgType) {       //  文档页变化消息
         emit sigFilePageChanged(msgContent);
     } else if (MSG_NOTIFY_KEY_MSG == msgType) {         //  按键通知消息

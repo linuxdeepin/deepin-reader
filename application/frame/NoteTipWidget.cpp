@@ -17,7 +17,7 @@ NoteTipWidget::NoteTipWidget(CustomWidget *parnet)
     setWindowOpacity(0.97);
 
     initWidget();
-    initConnection();
+//    initConnection();
     slotUpdateTheme();
 }
 
@@ -57,7 +57,7 @@ void NoteTipWidget::slotUpdateTheme()
 int NoteTipWidget::dealWithData(const int &msgType, const QString &)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        emit sigUpdateTheme();
+//        emit sigUpdateTheme();
     }
     return 0;
 }
