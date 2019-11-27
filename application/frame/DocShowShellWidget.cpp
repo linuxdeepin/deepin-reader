@@ -23,19 +23,13 @@ DocShowShellWidget::~DocShowShellWidget()
 
 void DocShowShellWidget::resizeEvent(QResizeEvent *event)
 {
-    int nParentWidth = this->width();
-
-    auto findWidget = this->findChild<FindWidget *>();
-    if (findWidget) {
-        int nWidget = findWidget->width();
-        findWidget->move(nParentWidth - nWidget - 20, 20);
-    }
-
-
-    auto closeBtn = this->findChild<DIconButton *>();
-    if (closeBtn) {
-
-        closeBtn->move(nParentWidth - 50, 0);
+    int nState = DataManager::instance()->CurShowState();
+    if (nState == FILE_NORMAL) {
+        auto findWidget = this->findChild<FindWidget *>();
+        if (findWidget && findWidget->isVisible()) {
+            int nParentWidth = this->width();
+            findWidget->showPosition(nParentWidth);
+        }
     }
 
     CustomWidget::resizeEvent(event);
@@ -44,7 +38,16 @@ void DocShowShellWidget::resizeEvent(QResizeEvent *event)
 //  全屏 \ 幻灯片放映, 显示 关闭按钮
 void DocShowShellWidget::slotShowCloseBtn(const int &iFlag)
 {
-    auto closeBtn = this->findChild<DIconButton *>();
+    DIconButton *closeBtn = nullptr;
+
+    auto iconBtnList = this->findChildren<DIconButton *>();
+    foreach (auto btn, iconBtnList) {
+        if (btn->objectName() == "slider" || btn->objectName() == "fullscreen") {
+            closeBtn = btn;
+            break;
+        }
+    }
+
     if (closeBtn == nullptr) {
         closeBtn = new DIconButton(this);
 
@@ -54,7 +57,7 @@ void DocShowShellWidget::slotShowCloseBtn(const int &iFlag)
         closeBtn->setFixedSize(QSize(50, 50));
     }
 
-    if (iFlag == 1) {
+    if (iFlag == 2) {
         closeBtn->setIcon(QIcon(":/resources/exit_slider.svg"));
         closeBtn->setObjectName("slider");
     } else {
@@ -63,8 +66,8 @@ void DocShowShellWidget::slotShowCloseBtn(const int &iFlag)
         closeBtn->setObjectName("fullscreen");
     }
 
-    int nParentWidth = this->width();
-    closeBtn->move(nParentWidth - 50, 0);
+    int nScreenWidth = qApp->desktop()->geometry().width();
+    closeBtn->move(nScreenWidth - 50, 0);
 
     closeBtn->show();
     closeBtn->raise();
@@ -72,7 +75,16 @@ void DocShowShellWidget::slotShowCloseBtn(const int &iFlag)
 
 void DocShowShellWidget::slotHideCloseBtn()
 {
-    auto closeBtn = this->findChild<DIconButton *>();
+    DIconButton *closeBtn = nullptr;
+
+    auto iconBtnList = this->findChildren<DIconButton *>();
+    foreach (auto btn, iconBtnList) {
+        if (btn->objectName() == "slider" || btn->objectName() == "fullscreen") {
+            closeBtn = btn;
+            break;
+        }
+    }
+
     if (closeBtn != nullptr && closeBtn->isVisible()) {
         closeBtn->hide();
     }
@@ -94,11 +106,7 @@ void DocShowShellWidget::slotShowFindWidget()
     }
 
     int nParentWidth = this->width();
-    int nWidget = findWidget->width();
-    findWidget->move(nParentWidth - nWidget - 20, 20);
-
-    findWidget->show();
-    findWidget->raise();
+    findWidget->showPosition(nParentWidth);
 }
 
 //  注释窗口

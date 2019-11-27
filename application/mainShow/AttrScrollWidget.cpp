@@ -1,5 +1,5 @@
 #include "AttrScrollWidget.h"
-#include <DFrame>
+
 #include <QDebug>
 #include <DTextBrowser>
 #include <DFontSizeManager>
@@ -11,6 +11,19 @@
 AttrScrollWidget::AttrScrollWidget(DWidget *parent)
     : DFrame(parent)
 {
+//    auto hLayout = new QHBoxLayout();
+//    hLayout->setContentsMargins(10, 0, 10, 0);
+//    hLayout->setSpacing(0);
+//    this->setLayout(hLayout);
+
+//    auto attrFrame = new DFrame;
+//    hLayout->addWidget(attrFrame);
+
+//    auto scroll = new DScrollArea;
+//    scroll->setCornerWidget(attrFrame);
+//    scroll->setWidgetResizable(true);
+//    hLayout->addWidget(scroll);
+
     auto gridLayout = new QGridLayout;
     gridLayout->setContentsMargins(0, 6, 0, 6);
     gridLayout->setSpacing(3);
@@ -37,7 +50,7 @@ AttrScrollWidget::AttrScrollWidget(DWidget *parent)
     createLabel(gridLayout, 13, tr("File Size"), Utils::getInputDataSize(fileInfo.size));
 
     auto vLayout = new QVBoxLayout;
-    vLayout->setContentsMargins(10, 0, 10, 0);
+    vLayout->setContentsMargins(0, 0, 0, 0);
 
     auto basicLabel = new DLabel(tr("basic information"));
     DFontSizeManager::instance()->bind(basicLabel, DFontSizeManager::T6);
@@ -61,7 +74,12 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
     DLabel *labelText = new DLabel(this);
     DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
     labelText->setMaximumWidth(280);
-    labelText->setText(sData);
+
+    if (sData == "") {
+        labelText->setText(tr("unknown"));
+    } else {
+        labelText->setText(sData);
+    }
     labelText->setAlignment(Qt::AlignTop);
     labelText->setWordWrap(true);
     layout->addWidget(labelText, index, 1);

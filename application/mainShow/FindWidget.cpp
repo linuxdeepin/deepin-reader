@@ -26,6 +26,9 @@
 #include <DDialogCloseButton>
 #include "subjectObserver/MsgHeader.h"
 #include "controller/DataManager.h"
+#include "application.h"
+#include <QDebug>
+
 
 FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)
@@ -58,6 +61,14 @@ FindWidget::~FindWidget()
     if (m_pMsgSubject) {
         m_pMsgSubject->removeObserver(this);
     }
+}
+
+void FindWidget::showPosition(const int &nParentWidth)
+{
+    int nWidget = this->width();
+    this->move(nParentWidth - nWidget - 20, 20);
+    this->show();
+    this->raise();
 }
 
 void FindWidget::findCancel()
@@ -96,7 +107,6 @@ void FindWidget::slotClearContent()
     if (strNewFind == "") {
         m_strOldFindContent = "";
         notifyMsg(MSG_CLEAR_FIND_CONTENT);
-
     }
 }
 
@@ -109,7 +119,7 @@ void FindWidget::hideEvent(QHideEvent *e)
 int FindWidget::dealWithData(const int &msgType, const QString &)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
-    } else if ( msgType == MSG_OPERATION_SLIDE) {   //  幻灯片了
+    } else if (msgType == MSG_OPERATION_SLIDE || msgType == MSG_OPERATION_FULLSCREEN) {    //  幻灯片了
         this->setVisible(false);
     }
     return 0;
@@ -153,12 +163,9 @@ void FindWidget::initWidget()
 
     auto layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-//    layout->setSpacing(1);
-//    layout->addStretch(1);
     layout->addWidget(m_pSearchEdit);
     layout->addWidget(findPrevButton);
     layout->addWidget(findNextButton);
     layout->addWidget(closeButton);
-//    layout->addStretch(1);
     this->setLayout(layout);
 }

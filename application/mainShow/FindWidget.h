@@ -38,9 +38,11 @@ class FindWidget : public DFloatingWidget, public IObserver
     Q_OBJECT
 
 public:
-    FindWidget(DWidget *parent = nullptr);
+    explicit FindWidget(DWidget *parent = nullptr);
     ~FindWidget() Q_DECL_OVERRIDE;
 
+public:
+    void showPosition(const int &);
 
 private slots:
     void findCancel();
@@ -57,7 +59,7 @@ private:
 
 private:
     DSearchEdit     *m_pSearchEdit = nullptr;
-    QString     m_strOldFindContent = "";
+    QString         m_strOldFindContent = "";
     NotifySubject   *m_pNotifySubject = nullptr;
     MsgSubject      *m_pMsgSubject = nullptr;
 

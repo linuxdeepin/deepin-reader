@@ -37,6 +37,7 @@ private slots:
 
 private:
     int     m_nRightPageNumber = -1;
+    QAction *m_pSearch = nullptr;
     QAction *m_pBookMark = nullptr;
     QAction *m_pFirstPage = nullptr;
     QAction *m_pPrevPage = nullptr;

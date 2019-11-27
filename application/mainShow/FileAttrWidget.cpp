@@ -45,12 +45,13 @@ void FileAttrWidget::setFileAttr()
     auto hLayout = new QHBoxLayout;
     hLayout->setContentsMargins(10, 35, 10, 10);
 
-    auto sss = new AttrScrollWidget(this);
-    auto scrollArea = new QScrollArea(this);
-    scrollArea->setWidget(sss);
-    scrollArea->setWidgetResizable(true);
+    auto scroll = new DScrollArea(this);
+    scroll->setFrameShape(QFrame::NoFrame);
+    scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scroll->setWidget(new AttrScrollWidget);
+    scroll->setWidgetResizable(true);
 
-    hLayout->addWidget(scrollArea);
+    hLayout->addWidget(scroll);
 
     m_pVBoxLayout->addItem(hLayout);
 }
@@ -93,8 +94,10 @@ void FileAttrWidget::initImageLabel()
     labelImage->setAlignment(Qt::AlignCenter);
 
     labelFileName = new DLabel("", this);
-    labelFileName->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
+    DFontSizeManager::instance()->bind(labelFileName, DFontSizeManager::T8);
     labelFileName->setAlignment(Qt::AlignCenter);
+    labelFileName->setWordWrap(true);
+    labelFileName->setMaximumWidth(400);
 
     auto vlayout = new QVBoxLayout;
     vlayout->setContentsMargins(0, 6, 0, 30);

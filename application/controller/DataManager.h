@@ -19,14 +19,14 @@ enum File_Show_Enum {
 };
 
 // 窗口类型
-enum Widget_Type{
+enum Widget_Type {
     WIDGET_THUMBNAIL,   //  缩略图
     WIDGET_BOOKMARK,    //  书签
     WIDGET_NOTE,        //  注释
     WIDGET_SEARCH,      //  搜索
 };
 
-enum ICON_RADIUS{
+enum ICON_RADIUS {
     ICON_SMALL = 6,     // 小图标圆角
     ICON_BIG = 10       // 大图标圆角
 };
@@ -79,7 +79,7 @@ public:
     {
         return m_selectColor;
     }
-    inline void setSelectColor(const QColor&color)
+    inline void setSelectColor(const QColor &color)
     {
         m_selectColor = color;
     }
@@ -88,7 +88,7 @@ public:
     {
         return m_nCurrentWidget;
     }
-    inline void setCurrentWidget(const int&index)
+    inline void setCurrentWidget(const int &index)
     {
         m_nCurrentWidget = index;
     }
@@ -105,7 +105,7 @@ public:
 private:
     QString m_strCurrentTheme = "";     //  当前主题
     QString m_strOnlyFilePath = "";     //  只显示一个pdf 文件
-    int     m_nCurShowState = -1;       //  文档当前显示状态
+    int     m_nCurShowState = FILE_NORMAL;       //  文档当前显示状态
     bool    m_bIsUpdate = false;        //  文档是否有修改
     QList<QColor> m_listColor;          //  color list
     bool m_bIsHighLight = false;        // 鼠标左键点击位置有没有高亮

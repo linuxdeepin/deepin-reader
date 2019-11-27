@@ -11,7 +11,7 @@
 #include "subjectObserver/ModuleHeader.h"
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
-    : DMenu (parent)
+    : DMenu(parent)
 {
     initMenu();
 }
@@ -45,10 +45,12 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
 
     //  当前显示状态状态
     int nState = DataManager::instance()->CurShowState();
-    if ( nState == FILE_FULLSCREEN) {
+    if (nState == FILE_FULLSCREEN) {
         m_pExitFullScreen->setVisible(true);
+        m_pSearch->setVisible(false);
     } else {
         m_pExitFullScreen->setVisible(false);
+        m_pSearch->setVisible(true);
     }
     this->exec(showPoint);
 }
@@ -56,7 +58,7 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
 void DefaultOperationMenu::initMenu()
 {
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
-    createAction(tr("Search"), SLOT(slotSearchClicked()));
+    m_pSearch = createAction(tr("Search"), SLOT(slotSearchClicked()));
     addSeparator();
     m_pBookMark = createAction(tr("add bookmark"), SLOT(slotBookMarkClicked()));
     addSeparator();
