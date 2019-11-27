@@ -163,7 +163,6 @@ void ThumbnailWidget::slotJumpToPrevPage()
     }
     bool bstart = false;
     if (nullptr != DocummentProxy::instance() && DocummentProxy::instance()->getAutoPlaySlideStatu()) {
-        qDebug() << __FUNCTION__ << "stop autoplay";
         DocummentProxy::instance()->setAutoPlaySlide(false);
         bstart = true;
     }
@@ -171,7 +170,6 @@ void ThumbnailWidget::slotJumpToPrevPage()
     nCurPage--;
     jumpToSpecifiedPage(nCurPage);
     if (bstart && nullptr != DocummentProxy::instance()) {
-        qDebug() << __FUNCTION__ << "start autoplay";
         DocummentProxy::instance()->setAutoPlaySlide(true);
         bstart = false;
     }
@@ -188,7 +186,6 @@ void ThumbnailWidget::slotJumpToNextPage()
     }
     bool bstart = false;
     if (nullptr != DocummentProxy::instance() && DocummentProxy::instance()->getAutoPlaySlideStatu()) {
-        qDebug() << __FUNCTION__ << "stop autoplay";
         DocummentProxy::instance()->setAutoPlaySlide(false);
         bstart = true;
     }
@@ -196,7 +193,6 @@ void ThumbnailWidget::slotJumpToNextPage()
     nCurPage++;
     jumpToSpecifiedPage(nCurPage);
     if (bstart && nullptr != DocummentProxy::instance()) {
-        qDebug() << __FUNCTION__ << "start autoplay";
         DocummentProxy::instance()->setAutoPlaySlide(true);
         bstart = false;
     }

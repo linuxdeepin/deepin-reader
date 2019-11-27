@@ -11,7 +11,7 @@ NotesItemWidget::NotesItemWidget(CustomItemWidget *parent) :
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(slotShowContextMenu(const QPoint &)));
-connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
+    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     initWidget();
 }
 
@@ -61,7 +61,7 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
     if (!m_isNote) {
         return;
     }
-    if(m_menu == nullptr){
+    if (m_menu == nullptr) {
         m_menu = new DMenu(this);
         m_menu->setFixedWidth(182);
         QAction *copyAction = m_menu->addAction(QString("      %1").arg(tr("copy")));
@@ -72,15 +72,14 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
         connect(copyAction, SIGNAL(triggered()), this, SLOT(slotCopyContant()));
     }
 
-    if(m_menu){
+    if (m_menu) {
         m_menu->exec(QCursor::pos());
     }
 }
 
 void NotesItemWidget::slotUpdateTheme()
 {
-    qDebug()<<__FUNCTION__;
-    Dtk::Gui::DPalette pltorg=m_pPageNumber->palette();
+    Dtk::Gui::DPalette pltorg = m_pPageNumber->palette();
     Dtk::Gui::DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
     pltorg.setColor(Dtk::Gui::DPalette::Text, plt.color(Dtk::Gui::DPalette::TextTips));
     m_pPageNumber->setPalette(pltorg);
@@ -148,7 +147,7 @@ int NotesItemWidget::dealWithData(const int &msgType, const QString &msgContent)
                 slotDltNoteContant();
             }
         }
-    }else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
     }
     return 0;

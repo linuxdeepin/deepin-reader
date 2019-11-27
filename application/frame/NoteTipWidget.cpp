@@ -28,7 +28,7 @@ void NoteTipWidget::setTipContent(const QString &content)
         QFontMetrics fm(label->font());
         int pixelsWide = fm.horizontalAdvance(content);
         int pixelsHigh = fm.height();
-        qDebug() << pixelsWide << pixelsHigh << fm.lineSpacing();
+//        qDebug() << pixelsWide << pixelsHigh << fm.lineSpacing();
         QString strcontent;
         //判断是否超过十行
         if (pixelsWide > (m_iwidth - 16) * 10) {

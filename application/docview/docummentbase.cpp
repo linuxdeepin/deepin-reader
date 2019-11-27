@@ -655,10 +655,10 @@ bool DocummentBase::showMagnifier(QPoint point)
         y_offset = scrollBar_Y->value();
     QPoint gpoint = d->m_magnifierwidget->mapFromGlobal(mapToGlobal(QPoint(point.x() - x_offset, point.y() - y_offset)));
     pagenum = pointInWhichPage(qpoint);
-    qDebug() << "showMagnifier pagenum:" << pagenum;
+//    qDebug() << "showMagnifier pagenum:" << pagenum;
     if (-1 != pagenum) {
         if (pagenum != d->m_lastmagnifierpagenum && -1 != d->m_lastmagnifierpagenum) {
-            qDebug() << "++++++" << pagenum << d->m_lastmagnifierpagenum;
+//            qDebug() << "++++++" << pagenum << d->m_lastmagnifierpagenum;
             if (pagenum > d->m_lastmagnifierpagenum && d->m_lastmagnifierpagenum - 3 > 0) {
                 PageBase *ppage = d->m_pages.at(d->m_lastmagnifierpagenum - 3);
                 ppage->clearMagnifierPixmap();
@@ -669,7 +669,7 @@ bool DocummentBase::showMagnifier(QPoint point)
             } else if (pagenum < d->m_lastmagnifierpagenum && d->m_lastmagnifierpagenum + 3 < d->m_pages.size()) {
                 PageBase *ppage = d->m_pages.at(d->m_lastmagnifierpagenum + 3);
                 ppage->clearMagnifierPixmap();
-                if ( d->m_lastmagnifierpagenum - pagenum > 1) {
+                if (d->m_lastmagnifierpagenum - pagenum > 1) {
                     ppage = d->m_pages.at(d->m_lastmagnifierpagenum + 2);
                     ppage->clearMagnifierPixmap();
                 }
@@ -837,7 +837,7 @@ bool DocummentBase::pageJump(int pagenum)
 
             QRect rectslideanimationlabel = d->pslideanimationlabel->geometry();
             QRect rectslidelabel = d->pslidelabel->geometry();
-            qDebug() << "rectslideanimationlabel:" << rectslideanimationlabel << " rectslidelabel:" << rectslidelabel;
+//            qDebug() << "rectslideanimationlabel:" << rectslideanimationlabel << " rectslidelabel:" << rectslidelabel;
             if (d->m_slidepageno > pagenum) {
 //                qDebug() << "pageJump previous pagenum:" << pagenum;
                 d->animationfirst->setStartValue(rectslideanimationlabel);
@@ -972,7 +972,7 @@ int DocummentBase::currentLastPageNo()
     DScrollBar *scrollBar_Y = verticalScrollBar();
     if (scrollBar_Y)
         y_offset = scrollBar_Y->value() + d->qwfather->height();
-    qDebug() << "-----y_offset:" << y_offset;
+//    qDebug() << "-----y_offset:" << y_offset;
     switch (d->m_viewmode) {
     case ViewMode_SinglePage:
         for (int i = 0; i < d->m_widgets.size(); i++) {
@@ -982,8 +982,8 @@ int DocummentBase::currentLastPageNo()
             }
         }
         if (-1 == pagenum)
-            qDebug() << "-----pagenum -1 value:" << d->m_widgets.at(d->m_widgets.size() - 1)->y()/* + d->m_widgets.at(d->m_widgets.size() - 1)->height()*/;
-        break;
+//            qDebug() << "-----pagenum -1 value:" << d->m_widgets.at(d->m_widgets.size() - 1)->y()/* + d->m_widgets.at(d->m_widgets.size() - 1)->height()*/;
+            break;
     case ViewMode_FacingPage:
         for (int i = 0; i < d->m_widgets.size() / 2; i++) {
             if (y_offset < d->m_widgets.at(i)->y() + d->m_widgets.at(i)->height()) {
@@ -1193,7 +1193,7 @@ void DocummentBase::autoplayslidTimerOut()
     Q_D(DocummentBase);
     if (d->m_bslidemodel) {
         pageJump(getCurrentPageNo() + 1);
-        qDebug() << __FUNCTION__ << getCurrentPageNo() << d->m_pages.size() << d->m_slidepageno;
+//        qDebug() << __FUNCTION__ << getCurrentPageNo() << d->m_pages.size() << d->m_slidepageno;
         if (getCurrentPageNo() + 1 >= d->m_pages.size()) {
             d->autoplayslidtimer->stop();
             d->bautoplayslide = false;
@@ -1256,7 +1256,7 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool b
         switch (d->m_rotate) {
         case RotateType_0:
         case RotateType_180: {
-            qDebug() << "RotateType_0 RotateType_180";
+//            qDebug() << "RotateType_0 RotateType_180";
             double topspace = (d->m_widgets.at(curpage)->height() - curheight) / 2;
             double leftspace = (d->m_widgets.at(curpage)->width() - curwidth) / 2;
             int widgetheight = frameRect().height();
@@ -1274,7 +1274,7 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool b
         break;
         case RotateType_90:
         case RotateType_270: {
-            qDebug() << "RotateType_90  RotateType_270";
+//            qDebug() << "RotateType_90  RotateType_270";
             double topspace = (d->m_widgets.at(curpage)->height() - curwidth) / 2;
             double leftspace = (d->m_widgets.at(curpage)->width() - curheight) / 2;
             int widgetheight = frameRect().height();
@@ -1385,7 +1385,7 @@ bool DocummentBase::loadPages()
     Q_D(DocummentBase);
     if (!bDocummentExist())
         return false;
-    qDebug() << "-----loadPages-----";
+//    qDebug() << "-----loadPages-----";
 //    for (int i = 0; i < d->m_pages.size(); i++) {
 //        d->m_pages.at(i)->waitThread();
 //    }
@@ -1396,7 +1396,7 @@ bool DocummentBase::loadPages()
     int lastpagenum  = currentLastPageNo();
     if (lastpagenum < 0)
         lastpagenum  = firstpagenum;
-    qDebug() << "---------------firstpagenum:" << firstpagenum << " lastpagenum:" << lastpagenum << " pagesize:" << d->m_pages.size();
+//    qDebug() << "---------------firstpagenum:" << firstpagenum << " lastpagenum:" << lastpagenum << " pagesize:" << d->m_pages.size();
     for (int i = firstpagenum; i < lastpagenum + 1; i++) {
         if (i >= 0 && i < d->m_pages.size())
             d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);
@@ -1458,7 +1458,7 @@ double DocummentBase::adaptWidthAndShow(double width)
 double DocummentBase::adaptHeightAndShow(double height)
 {
     Q_D(DocummentBase);
-    qDebug() << "adaptHeightAndShow height:" << height;
+//    qDebug() << "adaptHeightAndShow height:" << height;
     if (!bDocummentExist() && d->m_pages.size() > 0)
         return -1;
     if (height < EPSINON) {
@@ -1472,7 +1472,7 @@ double DocummentBase::adaptHeightAndShow(double height)
     scale = height / imageoriginalheight;
     if (RotateType_90 == docrotatetype || RotateType_270 == docrotatetype)
         scale = height / imageoriginalwidth;
-    qDebug() << "adaptHeightAndShow scale:" << scale;
+//    qDebug() << "adaptHeightAndShow scale:" << scale;
     scaleAndShow(scale, RotateType_Normal);
     return scale;
 }
@@ -1481,7 +1481,7 @@ void DocummentBase::findNext()
 {
     Q_D(DocummentBase);
     if (d->m_pagecountsearch.size() <= 0 || d->m_findcurpage < 0) return;
-    qDebug() << "----------findNext--" << d->m_findcurpage << "--" << d->m_pagecountsearch.lastKey();
+//    qDebug() << "----------findNext--" << d->m_findcurpage << "--" << d->m_pagecountsearch.lastKey();
     if (d->m_findcurpage == d->m_pagecountsearch.lastKey() &&
             d->m_cursearch >= d->m_pagecountsearch.find(d->m_findcurpage).value()) {
         d->m_findcurpage = d->m_pagecountsearch.firstKey();
@@ -1492,7 +1492,7 @@ void DocummentBase::findNext()
     int curpagecount = d->m_pagecountsearch.find(d->m_findcurpage).value();
     if (curpagecount >= d->m_cursearch) {
 
-        qDebug() << "----------1" << d->m_cursearch << "--" << curpagecount;
+//        qDebug() << "----------1" << d->m_cursearch << "--" << curpagecount;
         //从上一个切换至下一个，如果findPrev查找的m_cursearch为当前页第一个则此处需要判断是否越界
         if (!d->bfindnext && d->m_cursearch <= 1) { //前一次是向前查找
             if (d->m_cursearch + 2 > curpagecount) {
@@ -1515,7 +1515,7 @@ void DocummentBase::findNext()
         }
         d->m_cursearch++;
     } else {
-        qDebug() << "----------2" << d->m_cursearch;
+//        qDebug() << "----------2" << d->m_cursearch;
         d->m_pages.at(d->m_findcurpage)->setCurSearchShow(false);
         QMap<int, int>::const_iterator it = d->m_pagecountsearch.find(d->m_findcurpage);
         if (++it != d->m_pagecountsearch.end()) {
@@ -1551,7 +1551,7 @@ void DocummentBase::findPrev()
     int xvalue = 0, yvalue = 0;
     if (d->m_cursearch >= 1) {
         int curpagecount = d->m_pagecountsearch.find(d->m_findcurpage).value();
-        qDebug() << "----------" << d->m_cursearch << "--" << curpagecount;
+//        qDebug() << "----------" << d->m_cursearch << "--" << curpagecount;
         //从下一个切换至上一个，如果findNext查找的m_cursearch为当前页最后一个则此处需要判断是否越界
         if (d->bfindnext && d->m_cursearch >= 1) { //前一次是向后查找
             if (d->m_cursearch - 2 >= 1) {
@@ -1612,7 +1612,7 @@ void DocummentBase::initConnect()
 
 void DocummentBase::wheelEvent(QWheelEvent *e)
 {
-    if ( QApplication::keyboardModifiers () == Qt::ControlModifier) {
+    if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
         e->ignore();
         return;
     }
@@ -1642,7 +1642,7 @@ void DocummentBase::slot_docummentLoaded(bool result)
         return;
     }
     d->m_widgets.clear();
-    qDebug() << "slot_docummentLoaded numPages :" << d->m_pages.size();
+//    qDebug() << "slot_docummentLoaded numPages :" << d->m_pages.size();
     for (int i = 0; i < d->m_pages.size(); i++) {
         DWidget *qwidget = new DWidget(this);
         QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
@@ -1809,7 +1809,7 @@ bool DocummentBase::loadData()
     Q_D(DocummentBase);
     if (!bDocummentExist())
         return false;
-    qDebug() << "loadWords start";
+//    qDebug() << "loadWords start";
     for (int i = 0; i < d->m_pages.size(); i++) {
         if (QThread::currentThread()->isInterruptionRequested()) {
             break;
@@ -1817,7 +1817,7 @@ bool DocummentBase::loadData()
         d->m_pages.at(i)->getInterFace()->loadData();
     }
 
-    qDebug() << "loadWords end";
+//    qDebug() << "loadWords end";
     return true;
 }
 

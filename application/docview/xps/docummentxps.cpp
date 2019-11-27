@@ -35,10 +35,10 @@ void DocummentXPSPrivate::loadDocumment(QString filepath)
 {
     Q_Q(DocummentXPS);
 
-    m_xpsFile->loadDocument( filepath );
+    m_xpsFile->loadDocument(filepath);
 
 
-    qDebug() << "numDocuments:" << m_xpsFile->numDocuments();
+//    qDebug() << "numDocuments:" << m_xpsFile->numDocuments();
     if (m_xpsFile->numDocuments() < 1) {
         emit signal_docummentLoaded(false);
         return;
@@ -46,9 +46,9 @@ void DocummentXPSPrivate::loadDocumment(QString filepath)
     setBasicInfo(filepath);
     donotneedreloaddoc = true;
     m_pages.clear();
-    for (int docNum = 0; docNum < m_xpsFile->numDocuments(); ++docNum ) {
-        XpsDocument *document = m_xpsFile->document( docNum );
-        qDebug() << "xps numPages :" << document->numPages();
+    for (int docNum = 0; docNum < m_xpsFile->numDocuments(); ++docNum) {
+        XpsDocument *document = m_xpsFile->document(docNum);
+//        qDebug() << "xps numPages :" << document->numPages();
         for (int i = 0; i < document->numPages(); i++) {
             PageXPS *page = new PageXPS(q);
             page->setPage(document->page(i), i);

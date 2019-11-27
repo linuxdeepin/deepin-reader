@@ -133,7 +133,7 @@ void DocummentPDF::jumpToHighLight(const QString &uuid, int ipage)
                     rectbound.setTopLeft(listquad.at(0).points[0]);
                     rectbound.setTopRight(listquad.at(0).points[1]);
                     rectbound.setBottomLeft(listquad.at(0).points[2]);
-                    rectbound.setBottomRight( listquad.at(0).points[3]);
+                    rectbound.setBottomRight(listquad.at(0).points[3]);
                     int xvalue = 0, yvalue = 0;
                     rectbound.setX(rectbound.x()*d->m_imagewidth);
                     rectbound.setY(rectbound.y()*d->m_imageheight);
@@ -181,9 +181,9 @@ QString DocummentPDF::removeAnnotation(const QPoint &startpos)
     Q_D(DocummentPDF);
     QPoint pt = startpos;
     int page = pointInWhichPage(pt);
-    qDebug() << "removeAnnotation start";
+//    qDebug() << "removeAnnotation start";
     if (page < 0) return "";
-    qDebug() << "removeAnnotation end";
+//    qDebug() << "removeAnnotation end";
     return static_cast<PagePdf *>(d->m_pages.at(page))->removeAnnotation(pt);
 }
 
@@ -335,29 +335,29 @@ bool DocummentPDF::saveas(const QString &filePath, bool withChanges)
     QString strsource = d->m_fileinfo->strFilepath;
     bool bsuccess = false;
     if (!strsource.isEmpty()) {
-        qDebug() << "saveas1 " << strsource;
+//        qDebug() << "saveas1 " << strsource;
         if (!withChanges) {
             if (QFile::copy(strsource, filePath))
                 bsuccess = true;
             else {
-                qDebug() << "saveas5 " << strsource;
+//                qDebug() << "saveas5 " << strsource;
             }
         } else {
             QString strtmp = strsource.left(strsource.lastIndexOf(QChar('/')) + 1);
             strtmp.append(PublicFunc::getUuid());
             strtmp.append(".pdf");
-            qDebug() << "saveas2" << strtmp;
+//            qDebug() << "saveas2" << strtmp;
             if (QFile::copy(strsource, strtmp)) {
                 if (save(strsource, true)) {
                     if (QFile::copy(strsource, filePath)) {
                         bsuccess = true;
-                        qDebug() << "saveas3 " << strsource;
+//                        qDebug() << "saveas3 " << strsource;
                         if (QFile::remove(strsource)) {
                             if (QFile::rename(strtmp, strsource))
                                 QFile::remove(strtmp);
                         }
                     } else {
-                        qDebug() << "saveas6 " << strtmp;
+//                        qDebug() << "saveas6 " << strtmp;
                         QFile::remove(strtmp);
                     }
                 }
@@ -391,7 +391,7 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
 
 void DocummentPDF::clearSearch()
 {
-    qDebug() << "DocummentPDF::clearSearch";
+//    qDebug() << "DocummentPDF::clearSearch";
     Q_D(DocummentPDF);
     d->m_searchTask->cancel();
     d->m_searchTask->wait();
@@ -461,17 +461,17 @@ void DocummentPDF::title(QString &title)
 }
 void DocummentPDF::setAnnotationText(int ipage, const QString &struuid, const QString &strtext)
 {
-    qDebug() << "setAnnotationText********************";
+//    qDebug() << "setAnnotationText********************";
     Q_D(DocummentPDF);
     if (ipage >= 0 && ipage < d_ptr->m_pages.size()) {
         Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(ipage))->GetPage();
         QList<Poppler::Annotation *> plistannote = page->annotations();
         foreach (Poppler::Annotation *annote, plistannote) {
             QString uniquename = annote->uniqueName();
-            qDebug() << "setAnnotationText--" << uniquename << struuid;
+//            qDebug() << "setAnnotationText--" << uniquename << struuid;
             if (!uniquename.isEmpty() && uniquename.indexOf(struuid) >= 0) {
                 annote->setContents(strtext);
-                qDebug() << "setAnnotationText++" << annote->contents();
+//                qDebug() << "setAnnotationText++" << annote->contents();
             }
         }
         qDeleteAll(plistannote);
@@ -488,7 +488,7 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, i
             QString uniquename = annote->uniqueName();
             if (!uniquename.isEmpty() && uniquename.indexOf(struuid) >= 0 && !struuid.isEmpty()) {
                 strtext = annote->contents();
-                qDebug() << QString("getAnnotationText=%1=%2=%3=%4").arg(uniquename).arg(struuid).arg(ipage).arg(strtext);
+//                qDebug() << QString("getAnnotationText=%1=%2=%3=%4").arg(uniquename).arg(struuid).arg(ipage).arg(strtext);
                 qDeleteAll(plistannote);
                 return;
             }

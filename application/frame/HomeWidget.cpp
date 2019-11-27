@@ -62,7 +62,7 @@ void HomeWidget::slotChooseBtnClicked()
     if (fileList.size() > 0) {
 
         QString sRes = "";
- qDebug()<<__FUNCTION__<<fileList;
+// qDebug()<<__FUNCTION__<<fileList;
         bool bisopen = false;
         foreach (auto filepath, fileList) {
 
@@ -71,16 +71,15 @@ void HomeWidget::slotChooseBtnClicked()
             if (nullptr != DocummentProxy::instance() && !DocummentProxy::instance()->isOpendFile()) {
                 if (!bisopen)
                     notifyMsg(MSG_OPEN_FILE_PATH, sRes);
-                else
-                {
-                    if(!Utils::runApp(filepath))
-                        qDebug()<<__FUNCTION__<<"process start deepin-reader failed";
+                else {
+                    if (!Utils::runApp(filepath))
+                        qDebug() << __FUNCTION__ << "process start deepin-reader failed";
                 }
 
                 bisopen = true;
             } else {
-                if(!Utils::runApp(filepath))
-                    qDebug()<<__FUNCTION__<<"process start deepin-reader failed";
+                if (!Utils::runApp(filepath))
+                    qDebug() << __FUNCTION__ << "process start deepin-reader failed";
             }
         }
     }

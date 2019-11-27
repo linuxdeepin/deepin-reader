@@ -33,7 +33,7 @@ DocummentProxy *DocummentProxy::instance(QObject *parent)
 
 bool DocummentProxy::openFile(DocType_EM type, QString filepath)
 {
-    qDebug() << "openFile";
+//    qDebug() << "openFile";
     QMutexLocker locker(&mutexlockgetimage);
     bool bre = false;
     m_type = type;
@@ -200,17 +200,17 @@ bool DocummentProxy::save(const QString &filepath, bool withChanges)
 {
     if (!m_documment || bcloseing)
         return false;
-    qDebug() << "save";
+//    qDebug() << "save";
     return m_documment->save(filepath, withChanges);
 }
 
 bool DocummentProxy::saveas(const QString &filepath, bool withChanges)
 {
     if (m_documment && !bcloseing && m_documment->saveas(filepath, withChanges)) {
-        qDebug() << "saveas success";
+//        qDebug() << "saveas success";
         return openFile(DocType_PDF, filepath);
     }
-    qDebug() << "saveas failed";
+//    qDebug() << "saveas failed";
     return false;
 }
 
@@ -218,7 +218,7 @@ void DocummentProxy::search(const QString &strtext, QMap<int, stSearchRes> &resm
 {
     if (!m_documment || bcloseing)
         return ;
-    qDebug() << "search";
+//    qDebug() << "search";
     m_documment->search(strtext, color);
 }
 
@@ -242,7 +242,7 @@ bool DocummentProxy::pageJump(int pagenum)
 {
     if (!m_documment || bcloseing)
         return false;
-    qDebug() << "pageJump";
+//    qDebug() << "pageJump";
     emit signal_pageJump(pagenum);
     return true;
 }
@@ -267,7 +267,7 @@ void DocummentProxy::removeAnnotation(const QString &struuid, int ipage)
 {
     if (!m_documment || bcloseing)
         return ;
-    qDebug() << "removeAnnotation";
+//    qDebug() << "removeAnnotation";
     m_documment->removeAnnotation(struuid, ipage);
 }
 
@@ -289,7 +289,7 @@ void DocummentProxy::title(QString &title)
 {
     if (!m_documment || bcloseing)
         return;
-    qDebug() << "title";
+//    qDebug() << "title";
     m_documment->title(title);
 }
 
@@ -314,14 +314,14 @@ bool DocummentProxy::showSlideModel()
 {
     if (!m_documment || bcloseing)
         return false;
-    qDebug() << "showSlideModel";
+//    qDebug() << "showSlideModel";
     return m_documment->showSlideModel();
 }
 bool DocummentProxy::exitSlideModel()
 {
     if (!m_documment || bcloseing)
         return false;
-    qDebug() << "exitSlideModel";
+//    qDebug() << "exitSlideModel";
     return m_documment->exitSlideModel();
 }
 
@@ -342,7 +342,7 @@ void DocummentProxy::findPrev()
 void DocummentProxy::setAnnotationText(int ipage, const QString &struuid, const QString &strtext)
 {
     if (m_documment || !bcloseing) {
-        qDebug() << "setAnnotationText";
+//        qDebug() << "setAnnotationText";
         m_documment->setAnnotationText(ipage, struuid, strtext);
     }
 }
@@ -350,7 +350,7 @@ void DocummentProxy::setAnnotationText(int ipage, const QString &struuid, const 
 void DocummentProxy::getAnnotationText(const QString &struuid, QString &strtext, int ipage)
 {
     if (m_documment || !bcloseing) {
-        qDebug() << "getAnnotationText";
+//        qDebug() << "getAnnotationText";
         m_documment->getAnnotationText(struuid, strtext, ipage);
     }
 }
@@ -359,7 +359,7 @@ double DocummentProxy::adaptWidthAndShow(double width)
 {
     if (!m_documment || bcloseing)
         return -1;
-    qDebug() << "adaptWidthAndShow width:" << width;
+//    qDebug() << "adaptWidthAndShow width:" << width;
     return m_documment->adaptWidthAndShow(width);
 }
 
@@ -396,7 +396,7 @@ int DocummentProxy::pointInWhichPage(QPoint pos)
 
 void DocummentProxy::jumpToHighLight(const QString &uuid, int ipage)
 {
-    qDebug() << "DocummentProxy::jumpToHighLight";
+//    qDebug() << "DocummentProxy::jumpToHighLight";
     if (m_documment) {
         m_documment->jumpToHighLight(uuid, ipage);
     }
@@ -405,7 +405,7 @@ void DocummentProxy::jumpToHighLight(const QString &uuid, int ipage)
 bool DocummentProxy::closeFile()
 {
     QMutexLocker locker(&mutexlockgetimage);
-    qDebug() << "closeFile";
+//    qDebug() << "closeFile";
     if (!m_documment || bcloseing)
         return false;
     bcloseing = true;
@@ -480,8 +480,8 @@ bool DocummentProxy::getAutoPlaySlideStatu()
 
 bool DocummentProxy::isOpendFile()
 {
-    bool bopen=false;
-    if(m_documment)
-        bopen=true;
+    bool bopen = false;
+    if (m_documment)
+        bopen = true;
     return  bopen;
 }

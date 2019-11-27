@@ -46,7 +46,7 @@ public:
         height = m_imageheight * scale;
         if (!m_page)
             return false;
-        qDebug() << "getSlideImage width:" << width << " height:" << height;
+//        qDebug() << "getSlideImage width:" << width << " height:" << height;
         image = m_page->renderToImage(xres * scale * pixelratiof, yres * scale * pixelratiof);
         image.setDevicePixelRatio(pixelratiof);
         return true;
@@ -245,7 +245,7 @@ void PagePdf::changeAnnotationColor(const QString uuid, const QColor &color)
                 break;
             }
         }
-    }  
+    }
     d->paintrects.clear();
     clearSelectText();
     qDeleteAll(listannote);
@@ -259,7 +259,7 @@ void PagePdf::paintEvent(QPaintEvent *event)
         if (d->m_icurhightlight == i && d->m_bcursearchshow) {
             QPainter qpainter(this);
             d_ptr->m_searchcolor.setAlpha(100);
-            qpainter.setBrush( d_ptr->m_searchcolor);
+            qpainter.setBrush(d_ptr->m_searchcolor);
             qpainter.drawRect(translateRect(d_ptr->m_highlights[i], d_ptr->m_scale, d_ptr->m_rotate));
         } else {
             QPainter qpainter(this);
@@ -373,26 +373,23 @@ QString PagePdf::addHighlightAnnotation(const QColor &color)
     QRectF rec, recboundary;
     double curwidth = d->m_imagewidth;
     double curheight = d->m_imageheight;
-    if (d->m_selecttextendword < 1 || d->m_selecttextendword < 0||d->m_selecttextendword>d->m_words.size()||
-            d->m_selecttextstartword>d->m_words.size())return "";
+    if (d->m_selecttextendword < 1 || d->m_selecttextendword < 0 || d->m_selecttextendword > d->m_words.size() ||
+            d->m_selecttextstartword > d->m_words.size())return "";
 
-    qreal averangeheight=d->m_words.at(d->m_selecttextstartword).rect.height();
-     for (int i = d->m_selecttextstartword; i <= d->m_selecttextendword; ++i)
-     {
-         if(d->m_words.at(i).rect.height()<averangeheight&&d->m_words.at(i).rect.height()>0)
-         {
-             averangeheight=d->m_words.at(i).rect.height();
-         }
-     }
+    qreal averangeheight = d->m_words.at(d->m_selecttextstartword).rect.height();
+    for (int i = d->m_selecttextstartword; i <= d->m_selecttextendword; ++i) {
+        if (d->m_words.at(i).rect.height() < averangeheight && d->m_words.at(i).rect.height() > 0) {
+            averangeheight = d->m_words.at(i).rect.height();
+        }
+    }
 
     for (int i = d->m_selecttextstartword; i <= d->m_selecttextendword; ++i) {
 
         rec = d->m_words.at(i).rect;
         //处理高亮文字矩形大小不一致问题，统一采用最小矩形
 
-        if(rec.height()>averangeheight)
-        {
-            rec.setY(rec.y()+(rec.height()-averangeheight)/2.0);
+        if (rec.height() > averangeheight) {
+            rec.setY(rec.y() + (rec.height() - averangeheight) / 2.0);
             rec.setHeight(averangeheight);
         }
         recboundary.setTopLeft(QPointF(rec.left() / curwidth,
@@ -428,7 +425,7 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
     QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
     int index = 0;
-    bool bok=false;
+    bool bok = false;
     foreach (Poppler::Annotation *annote, listannote) {
         if (annote->subType() == Poppler::Annotation::AHighlight) { //必须判断
             QList<Poppler::HighlightAnnotation::Quad> listquad = static_cast<Poppler::HighlightAnnotation *>(annote)->highlightQuads();
@@ -437,7 +434,7 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
                 rectbound.setTopLeft(quad.points[0]);
                 rectbound.setTopRight(quad.points[1]);
                 rectbound.setBottomLeft(quad.points[2]);
-                rectbound.setBottomRight( quad.points[3]);
+                rectbound.setBottomRight(quad.points[3]);
                 if (d->m_rotate == RotateType_180) {
                     rectbound.setTop(1 - rectbound.top());
                     rectbound.setBottom(1 - rectbound.bottom());
@@ -448,7 +445,7 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
                     uniqueName = annote->uniqueName();
                     removeAnnotation(annote);
                     listannote.removeAt(index);
-                    bok=true;
+                    bok = true;
                     break;
                 } /*else {
                     qDebug() << "******* not contains";
@@ -456,7 +453,7 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
             }
         }
         ++index;
-        if(bok)
+        if (bok)
             break;
     }
     qDeleteAll(listannote);
@@ -509,7 +506,7 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext, QString &st
                 rectbound.setTopLeft(quad.points[0]);
                 rectbound.setTopRight(quad.points[1]);
                 rectbound.setBottomLeft(quad.points[2]);
-                rectbound.setBottomRight( quad.points[3]);
+                rectbound.setBottomRight(quad.points[3]);
                 // qDebug() << "########" << quad.points[0];
                 if (rectbound.contains(ptf)) {
                     struuid = annote->uniqueName();
