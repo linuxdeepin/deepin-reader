@@ -194,7 +194,6 @@ void SearchResWidget::showTips()
     auto vLayout = new QVBoxLayout;
     auto tipWidget = new DWidget;
     auto tipLab = new DLabel(tr("no result"));
-    tipLab->setFixedSize(100, 30);
     tipLab->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(tipLab, DFontSizeManager::T6);
 
