@@ -101,6 +101,7 @@ private:
     void initConnections();
     void initSearchList(const QList<stSearchRes> &);
     void addSearchsItem(const int &page, const QString &text, const int &resultNum);
+    void showTips();
 
 private:
     CustomListWidget *m_pSearchList         = nullptr; // 搜索结果列表

@@ -1,6 +1,7 @@
 #include "SearchResWidget.h"
 #include "controller/DataManager.h"
 #include "frame/DocummentFileHelper.h"
+#include <DFontSizeManager>
 
 SearchResWidget::SearchResWidget(CustomWidget *parent) :
     CustomWidget(QString("SearchResWidget"), parent)
@@ -68,11 +69,23 @@ void SearchResWidget::slotSearchOver()
         m_loadSearchResThread.stopThread();
     }
 
+    if(m_pSearchList == nullptr) return;
+
+    m_pSearchList->clear();
+
     disconnect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this, SLOT(slotGetSearchContant(stSearchRes)));
 
-    //生成左侧搜索列表
-    //to do and send flush thumbnail and contant
-    initSearchList(m_loadSearchResThread.searchList());
+    QList<stSearchRes> list = m_loadSearchResThread.searchList();
+
+    if(list.size() <= 0){
+        showTips();
+    }else {
+        //生成左侧搜索列表
+        //to do and send flush thumbnail and contant
+        initSearchList(list);
+    }
+
+    notifyMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
 
     bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
     if(!t_bTnumbnIsShow){
@@ -150,7 +163,7 @@ void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
     //  当前显示不是自己, 则需要发送切换 ListWidget 显示
 //    bool bFocus = this->hasFocus();
 //    if (bFocus) {
-    notifyMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
+//    notifyMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
 //    }
 }
 
@@ -169,6 +182,38 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
 
     m_pSearchList->addItem(item);
     m_pSearchList->setItemWidget(item, itemWidget);
+}
+
+void SearchResWidget::showTips()
+{
+    if(m_pSearchList == nullptr){
+        return;
+    }
+
+    auto hLayout = new QHBoxLayout;
+    auto vLayout = new QVBoxLayout;
+    auto tipWidget = new DWidget;
+    auto tipLab = new DLabel(tr("no result"));
+    tipLab->setFixedSize(100, 30);
+    tipLab->setForegroundRole(DPalette::TextTips);
+    DFontSizeManager::instance()->bind(tipLab, DFontSizeManager::T6);
+
+    qDebug() << this->size();
+
+    tipWidget->setMinimumSize(QSize(226, 528));
+
+    hLayout->addStretch(1);
+    hLayout->addWidget(tipLab);
+    hLayout->addStretch(1);
+    vLayout->addStretch(1);
+    vLayout->addItem(hLayout);
+    vLayout->addStretch(1);
+    tipWidget->setLayout(vLayout);
+
+    auto item = new QListWidgetItem;
+    item->setSizeHint(QSize(226, 528));
+    m_pSearchList->addItem(item);
+    m_pSearchList->setItemWidget(item, tipWidget);
 }
 
 /**
