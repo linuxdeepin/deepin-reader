@@ -1,8 +1,6 @@
 #include "TitleWidget.h"
 #include <QHBoxLayout>
-#include <DFontSizeManager>
 #include <QWidgetAction>
-#include <DFontSizeManager>
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
 

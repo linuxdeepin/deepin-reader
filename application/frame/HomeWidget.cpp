@@ -1,18 +1,14 @@
 #include "HomeWidget.h"
 #include "docview/docummentproxy.h"
-#include <DGuiApplicationHelper>
-#include <DPalette>
 #include <DFileDialog>
 #include <DPushButton>
 #include <DSuggestButton>
 #include <QVBoxLayout>
 #include <DLabel>
-#include <DFontSizeManager>
 #include "CustomControl/CustomClickLabel.h"
 #include "utils/PublicFunction.h"
 
 #include <QSvgWidget>
-#include <DFontSizeManager>
 
 HomeWidget::HomeWidget(CustomWidget *parent):
     CustomWidget("HomeWidget", parent)

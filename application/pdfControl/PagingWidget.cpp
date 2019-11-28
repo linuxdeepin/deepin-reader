@@ -3,8 +3,6 @@
 #include "frame/DocummentFileHelper.h"
 #include "utils/utils.h"
 
-#include <DFontSizeManager>
-
 PagingWidget::PagingWidget(CustomWidget *parent) :
     CustomWidget(QString("PagingWidget"), parent)
 {

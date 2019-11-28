@@ -12,6 +12,7 @@ CustomListWidget::CustomListWidget(DWidget *parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setResizeMode(QListWidget::Adjust);
     setViewMode(QListView::ListMode);
+    setSelectionMode(QAbstractItemView::SingleSelection);
     sortItems(Qt::AscendingOrder);
 
     connect(this, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));

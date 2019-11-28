@@ -1,6 +1,5 @@
 #include "BookMarkItemWidget.h"
 #include "utils/utils.h"
-#include <DFontSizeManager>
 #include <DApplicationHelper>
 
 BookMarkItemWidget::BookMarkItemWidget(CustomItemWidget *parent) :
@@ -54,7 +53,7 @@ void BookMarkItemWidget::slotDltBookMark()
  */
 void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
 {
-    if(m_menu == nullptr){
+    if (m_menu == nullptr) {
         m_menu = new DMenu(this);
         m_menu->setFixedWidth(182);
         DFontSizeManager::instance()->bind(m_menu, DFontSizeManager::T6);
@@ -62,7 +61,7 @@ void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
         connect(dltBookMarkAction, SIGNAL(triggered()), this, SLOT(slotDltBookMark()));
     }
 
-    if(m_menu){
+    if (m_menu) {
         m_menu->exec(QCursor::pos());
     }
 }

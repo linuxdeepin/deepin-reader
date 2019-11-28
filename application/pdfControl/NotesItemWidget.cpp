@@ -1,6 +1,5 @@
 #include "NotesItemWidget.h"
 #include <DApplication>
-#include <DFontSizeManager>
 #include <QClipboard>
 #include <QTextLayout>
 #include "utils/utils.h"

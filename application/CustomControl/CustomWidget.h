@@ -4,6 +4,7 @@
 #include <DWidget>
 #include <DGuiApplicationHelper>
 #include <DPalette>
+#include <DFontSizeManager>
 
 #include "subjectObserver/IObserver.h"
 #include "controller/MsgSubject.h"

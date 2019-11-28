@@ -1,7 +1,6 @@
 #include "SearchResWidget.h"
 #include "controller/DataManager.h"
 #include "frame/DocummentFileHelper.h"
-#include <DFontSizeManager>
 
 SearchResWidget::SearchResWidget(CustomWidget *parent) :
     CustomWidget(QString("SearchResWidget"), parent)
@@ -30,7 +29,7 @@ void SearchResWidget::slotClearWidget()
 
     bool bShowThunmb = DataManager::instance()->bThumbnIsShow();
 
-    if(!bShowThunmb){
+    if (!bShowThunmb) {
         //  侧边栏 隐藏
         notifyMsg(MSG_SLIDER_SHOW_STATE, "0");
     }
@@ -69,7 +68,7 @@ void SearchResWidget::slotSearchOver()
         m_loadSearchResThread.stopThread();
     }
 
-    if(m_pSearchList == nullptr) return;
+    if (m_pSearchList == nullptr) return;
 
     m_pSearchList->clear();
 
@@ -77,9 +76,9 @@ void SearchResWidget::slotSearchOver()
 
     QList<stSearchRes> list = m_loadSearchResThread.searchList();
 
-    if(list.size() <= 0){
+    if (list.size() <= 0) {
         showTips();
-    }else {
+    } else {
         //生成左侧搜索列表
         //to do and send flush thumbnail and contant
         initSearchList(list);
@@ -88,7 +87,7 @@ void SearchResWidget::slotSearchOver()
     notifyMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
 
     bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
-    if(!t_bTnumbnIsShow){
+    if (!t_bTnumbnIsShow) {
         notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(!t_bTnumbnIsShow));
     }
 }
@@ -186,7 +185,7 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
     itemWidget->setNoteSigne(false);
     itemWidget->setLabelPage(page, 1);
     itemWidget->setTextEditText(text);
-    itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + tr("search res content")));
+    itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + tr("search results")));
     itemWidget->setMinimumSize(QSize(230, 80));
 
     auto item = new QListWidgetItem(m_pSearchList);
@@ -199,7 +198,7 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
 
 void SearchResWidget::showTips()
 {
-    if(m_pSearchList == nullptr){
+    if (m_pSearchList == nullptr) {
         return;
     }
 

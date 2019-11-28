@@ -4,7 +4,6 @@
 #include <QTextCodec>
 #include <DPlatformWindowHandle>
 #include "frame/DocummentFileHelper.h"
-#include <DFontSizeManager>
 
 FileViewNoteWidget::FileViewNoteWidget(CustomWidget *parent):
     CustomWidget(QString("FileViewNoteWidget"), parent)

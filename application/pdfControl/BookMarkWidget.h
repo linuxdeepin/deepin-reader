@@ -7,13 +7,9 @@
 
 #include <QVBoxLayout>
 #include <QMap>
-#include <QStringList>
 #include <QThread>
 
-#include "BookMarkItemWidget.h"
 #include "CustomControl/CustomWidget.h"
-#include "docview/docummentproxy.h"
-#include "application.h"
 
 /**
  * @brief The BookMarkWidget class

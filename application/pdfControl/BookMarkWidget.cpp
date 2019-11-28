@@ -1,9 +1,12 @@
 #include "BookMarkWidget.h"
 #include "controller/DataManager.h"
 #include "frame/DocummentFileHelper.h"
-#include <DFontSizeManager>
-#include <DStackedWidget>
+
 #include "ThumbnailWidget.h"
+#include "application.h"
+#include <QStringList>
+#include "BookMarkItemWidget.h"
+
 BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
     CustomWidget(QString("BookMarkWidget"), parent)
 {
@@ -48,17 +51,17 @@ void BookMarkWidget::slotAddBookMark(const int &nPage)
         return;
     }
 
-    pageList.append(nPage);
-    dApp->dbM->setBookMarkList(pageList);
-
     auto item = addBookMarkItem(nPage);
     if (item) {
-        auto dproxy = DocummentFileHelper::instance();
-        if (dproxy) {
-            int nCurPage = dproxy->currentPageNo();
-            if (nCurPage == nPage) {    //  是当前页
-                m_pAddBookMarkBtn->setEnabled(false);
-            }
+        pageList.append(nPage);
+        dApp->dbM->setBookMarkList(pageList);
+    }
+
+    auto dproxy = DocummentFileHelper::instance();
+    if (dproxy) {
+        int nCurPage = dproxy->currentPageNo();
+        if (nCurPage == nPage) {    //  是当前页
+            m_pAddBookMarkBtn->setEnabled(false);
         }
     }
 }
