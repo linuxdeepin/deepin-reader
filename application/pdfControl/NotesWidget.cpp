@@ -33,6 +33,7 @@ void NotesWidget::initWidget()
  */
 void NotesWidget::slotAddNoteItem(const QString &note)
 {
+    clearItemColor();
     addNotesItem(note);
 }
 
@@ -361,10 +362,6 @@ void NotesWidget::setSelectItemBackColor(QListWidgetItem *item)
         return;
     }
 
-//    auto t_widget1 = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
-//    if (t_widget1) {
-//        t_widget1->setBSelect(false);
-//    }
     clearItemColor();
 
     m_pNotesList->setCurrentItem(item);
@@ -427,6 +424,7 @@ void NotesWidget::addNewItem(const QImage &image, const int &page, const QString
     itemWidget->setLabelPage(page, 1);
     itemWidget->setTextEditText(text);
     itemWidget->setMinimumSize(QSize(220, 80));
+    itemWidget->setBSelect(true);
 
     auto item = new QListWidgetItem(m_pNotesList);
     item->setFlags(Qt::NoItemFlags);
@@ -453,7 +451,9 @@ void NotesWidget::flushNoteItemText(const int &page, const QString &uuid, const 
             auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
             if (t_widget) {
                 if (t_widget->nPageIndex() == page && t_widget->noteUUId() == uuid) {
+                    t_widget->setBSelect(true);
                     t_widget->setTextEditText(text);
+                    m_pNoteItem = pItem;
                     break;
                 }
             }

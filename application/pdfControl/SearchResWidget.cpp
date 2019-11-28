@@ -112,6 +112,15 @@ void SearchResWidget::slotFindNext()
     DocummentFileHelper::instance()->findNext();
 }
 
+void SearchResWidget::slotSelectItem(QListWidgetItem *item)
+{
+    if (item == nullptr) {
+        return;
+    }
+
+    setSelectItemBackColor(item);
+}
+
 void SearchResWidget::initWidget()
 {
     auto m_pVLayout  = new QVBoxLayout;
@@ -135,6 +144,7 @@ void SearchResWidget::initConnections()
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
     connect(this, SIGNAL(sigFindPrev()), this, SLOT(slotFindPrev()));
     connect(this, SIGNAL(sigFindNext()), this, SLOT(slotFindNext()));
+    connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this, SLOT(slotSelectItem(QListWidgetItem *)));
 }
 
 void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
@@ -156,15 +166,18 @@ void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
         strText.clear();
     }
 
+//    if(m_pSearchList && m_pSearchList->count() > 0){
+//        auto pItem = m_pSearchList->item(0);
+//        auto pWidget = reinterpret_cast<NotesItemWidget *>(m_pSearchList->itemWidget(pItem));
+//        if(pWidget){
+//            pWidget->setBSelect(true);
+//            m_pSearchItem = pItem;
+//        }
+//    }
+
     //开始填充缩略图线程
     m_loadSearchResThread.setRunning(true);
     m_loadSearchResThread.start();
-
-    //  当前显示不是自己, 则需要发送切换 ListWidget 显示
-//    bool bFocus = this->hasFocus();
-//    if (bFocus) {
-//    notifyMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
-//    }
 }
 
 void SearchResWidget::addSearchsItem(const int &page, const QString &text, const int &resultNum)
@@ -213,6 +226,35 @@ void SearchResWidget::showTips()
     item->setSizeHint(QSize(226, 528));
     m_pSearchList->addItem(item);
     m_pSearchList->setItemWidget(item, tipWidget);
+}
+
+void SearchResWidget::setSelectItemBackColor(QListWidgetItem *item)
+{
+    if (item == nullptr) {
+        return;
+    }
+
+    clearItemColor();
+
+    m_pSearchList->setCurrentItem(item);
+
+    auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pSearchList->itemWidget(item));
+    if (t_widget) {
+        t_widget->setBSelect(true);
+        m_pSearchItem = item;
+    }
+}
+
+void SearchResWidget::clearItemColor()
+{
+    if (m_pSearchList == nullptr) return;
+    auto pCurItem = m_pSearchList->currentItem();
+    if (pCurItem) {
+        auto pItemWidget = reinterpret_cast<NotesItemWidget *>(m_pSearchList->itemWidget(m_pSearchItem));
+        if (pItemWidget) {
+            pItemWidget->setBSelect(false);
+        }
+    }
 }
 
 /**
@@ -333,7 +375,7 @@ void LoadSearchResThread::run()
             if (bl) {
                 QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_SMALL);
                 emit sigLoadImage(page, img);
-                msleep(50);
+                msleep(60);
             }
         }
 

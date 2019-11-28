@@ -93,6 +93,7 @@ private slots:
     void slotLoadImage(const int &, const QImage &);
     void slotFindPrev();
     void slotFindNext();
+    void slotSelectItem(QListWidgetItem *);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -102,11 +103,14 @@ private:
     void initSearchList(const QList<stSearchRes> &);
     void addSearchsItem(const int &page, const QString &text, const int &resultNum);
     void showTips();
+    void setSelectItemBackColor(QListWidgetItem *);
+    void clearItemColor();
 
 private:
     CustomListWidget *m_pSearchList         = nullptr; // 搜索结果列表
     NotesItemWidget *m_pSearchItemWidget    = nullptr;      // 缩略图子窗体
     LoadSearchResThread m_loadSearchResThread;           // 加载搜索缩略图线程
+    QListWidgetItem *m_pSearchItem = nullptr;       // 当前鼠标左键点击的item
 
 public:
     // IObserver interface

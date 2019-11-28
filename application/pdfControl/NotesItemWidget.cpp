@@ -162,19 +162,21 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
 
     CustomItemWidget::paintEvent(e);
 
-    QPalette p(m_pPicture->palette());
-    QColor color;
+//    QPalette p(m_pPicture->palette());
+//    QColor color;
 
     //  涉及到 主题颜色
     if (m_bPaint) {
-        color = QColor(QString("#0081FF"));
-        p.setColor(QPalette::Text, p.highlight().color());
+//        color = QColor(QString("#0081FF"));
+//        p.setColor(QPalette::Text, p.highlight().color());
+        m_pPicture->setForegroundRole(DPalette::Highlight);
     } else {
-        color = QColor::fromRgbF(0, 0, 0, 0.08);
-        p.setColor(QPalette::Text, /*p.shadow().color()*/color);
+//        color = QColor::fromRgbF(0, 0, 0, 0.08);
+//        p.setColor(QPalette::Text, /*p.shadow().color()*/color);
+        m_pPicture->setForegroundRole(QPalette::Shadow);
     }
 
-    m_pPicture->setPalette(p);
+//    m_pPicture->setPalette(p);
 }
 
 QString NotesItemWidget::calcText(const QFont &font, const QString &note, const QSize &size/*const int MaxWidth*/)
