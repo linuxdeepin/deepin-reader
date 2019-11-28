@@ -108,6 +108,7 @@ void NotesItemWidget::initWidget()
     m_pTextLab->setMaximumWidth(349);
     m_pTextLab->setFrameStyle(QFrame::NoFrame);
     m_pTextLab->setWordWrap(true);
+    m_pTextLab->setForegroundRole(QPalette::BrightText);
     DFontSizeManager::instance()->bind(m_pTextLab, DFontSizeManager::T9);
 
     auto hLine = new DHorizontalLine;
