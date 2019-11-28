@@ -1,12 +1,9 @@
 <RCC>
     <qresource prefix="/">
         <file>resources/light/frame/import_photo.svg</file>
-        <file>resources/light/frame/bookmark.svg</file>
         <file>resources/light/frame/defaultShape_small.svg</file>
         <file>resources/light/frame/handleShape_small.svg</file>
-        <file>resources/light/frame/defaultShape.svg</file>
         <file>resources/light/frame/handleShape.svg</file>
-        <file>resources/light/frame/magnifier.svg</file>
         <file>resources/light/pdfControl/A_small.svg</file>
         <file>resources/light/pdfControl/close.svg</file>
         <file>resources/light/pdfControl/A_big.svg</file>
@@ -19,14 +16,10 @@
         <file>resources/dark/frame/defaultShape_small.svg</file>
         <file>resources/dark/frame/handleShape_small.svg</file>
         <file>resources/dark/pdfControl/close.svg</file>
-        <file>resources/light/frame/thumbnails.svg</file>
-        <file>resources/light/frame/annotation.svg</file>
-        <file>resources/light/frame/thumbnail.svg</file>
         <file>resources/dark/frame/thumbnails.svg</file>
         <file>resources/dark/frame/thumbnail.svg</file>
         <file>resources/dark/frame/annotation.svg</file>
         <file>resources/dark/frame/viewchange.svg</file>
-        <file>resources/light/frame/viewchange.svg</file>
         <file>resources/light/pdfControl/select.svg</file>
         <file>resources/dark/pdfControl/select.svg</file>
         <file>resources/dark/pdfControl/A_small.svg</file>
@@ -36,5 +29,12 @@
         <file>resources/light/frame/exit_fullscreen.svg</file>
         <file>resources/exception-logo.svg</file>
         <file>resources/dark/frame/exit_fullscreen.svg</file>
+        <file>resources/light/frame/thumbnails.svg</file>
+        <file>resources/light/frame/viewchange.svg</file>
+        <file>resources/light/frame/defaultShape.svg</file>
+        <file>resources/light/frame/magnifier.svg</file>
+        <file>resources/light/frame/thumbnail.svg</file>
+        <file>resources/light/frame/bookmark.svg</file>
+        <file>resources/light/frame/annotation.svg</file>
     </qresource>
 </RCC>
