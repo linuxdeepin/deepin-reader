@@ -12,13 +12,11 @@
         <file>resources/dark/frame/import_photo.svg</file>
         <file>resources/dark/frame/handleShape.svg</file>
         <file>resources/dark/frame/defaultShape.svg</file>
-        <file>resources/dark/frame/magnifier.svg</file>
         <file>resources/dark/frame/defaultShape_small.svg</file>
         <file>resources/dark/frame/handleShape_small.svg</file>
         <file>resources/dark/pdfControl/close.svg</file>
         <file>resources/dark/frame/thumbnails.svg</file>
         <file>resources/dark/frame/thumbnail.svg</file>
-        <file>resources/dark/frame/annotation.svg</file>
         <file>resources/dark/frame/viewchange.svg</file>
         <file>resources/light/pdfControl/select.svg</file>
         <file>resources/dark/pdfControl/select.svg</file>
@@ -36,5 +34,7 @@
         <file>resources/light/frame/thumbnail.svg</file>
         <file>resources/light/frame/bookmark.svg</file>
         <file>resources/light/frame/annotation.svg</file>
+        <file>resources/dark/frame/annotation.svg</file>
+        <file>resources/dark/frame/magnifier.svg</file>
     </qresource>
 </RCC>
