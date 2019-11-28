@@ -263,7 +263,6 @@ void FileViewWidget::slotSetHandShape(const QString &data)
     if (nRes == 1) { //  手形
         m_nCurrentHandelState = Handel_State;
         this->setCursor(Qt::OpenHandCursor);
-//        qDebug() << __FUNCTION__ << "current cursor" << cursor();
     } else {
         m_nCurrentHandelState = Default_State;
         this->setCursor(Qt::ArrowCursor);
@@ -437,6 +436,16 @@ void FileViewWidget::slotDocFilePageChanged(int page)
     notifyMsg(MSG_FILE_PAGE_CHANGE, QString("%1").arg(page));
 }
 
+void FileViewWidget::slotFileCtrlContent()
+{
+    QString sSelectText =  "";
+    m_pDocummentFileHelper->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
+
+    if (sSelectText != "") {
+        sigCopySelectContent(sSelectText);
+    }
+}
+
 //  信号槽　初始化
 void FileViewWidget::initConnections()
 {
@@ -455,6 +464,8 @@ void FileViewWidget::initConnections()
 
     connect(this, SIGNAL(sigFileAddNote()), SLOT(slotFileAddNote()));
     connect(this, SIGNAL(sigFileAddNote(const QString &)), SLOT(slotFileAddNote(const QString &)));
+
+    connect(this, SIGNAL(sigFileCtrlContent()), SLOT(slotFileCtrlContent()));
 }
 
 //  显示 注释内容Tip
@@ -646,6 +657,10 @@ int FileViewWidget::dealWithNotifyMsg(const QString &msgContent)
 
     if (KeyStr::g_esc == msgContent) {
         emit sigFileSlider(0);
+    }
+
+    if (KeyStr::g_ctrl_c == msgContent) {
+        emit slotFileCtrlContent();
     }
 
     return 0;

@@ -45,7 +45,7 @@ MainWindow::MainWindow(DMainWindow *parent)
                     << KeyStr::g_ctrl_alt_f << KeyStr::g_ctrl_shift_s
                     << KeyStr::g_down << KeyStr::g_up << KeyStr::g_left << KeyStr::g_right
                     << KeyStr::g_ctrl_e << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l << KeyStr::g_ctrl_shift_slash
-                    << KeyStr::g_space;
+                    << KeyStr::g_space << KeyStr::g_ctrl_c;
 
 
     installEventFilter(this);

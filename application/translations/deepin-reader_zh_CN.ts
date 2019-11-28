@@ -740,11 +740,6 @@
 <context>
     <name>SearchResWidget</name>
     <message>
-        <source>search res content</source>
-        <translatorcomment>搜索结果</translatorcomment>
-        <translation type="vanished">搜索结果</translation>
-    </message>
-    <message>
         <location filename="../pdfControl/SearchResWidget.cpp" line="175"/>
         <source>search results</source>
         <translatorcomment>个结果</translatorcomment>

@@ -54,6 +54,8 @@ signals:
     void sigFileAddNote(const QString &);
     void sigFileAddNote();
 
+    void sigFileCtrlContent();
+
 protected:
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
@@ -80,6 +82,7 @@ private slots:
     void slotBookMarkStateChange(int, bool);
     void slotDocFilePageChanged(int);
 
+    void slotFileCtrlContent();
 private:
     void initConnections();
     void onClickPageLink(Page::Link *pLink);
