@@ -320,6 +320,8 @@ bool DocummentPDF::save(const QString &filePath, bool withChanges)
     if (!temporaryFile.open()) {
         return false;
     }
+    if (temporaryFile.size() <= 1)
+        return  false;
 
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         return false;
@@ -376,9 +378,9 @@ bool DocummentPDF::saveas(const QString &filePath, bool withChanges)
 bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
 {
     Q_D(DocummentPDF);
-    QScopedPointer< Poppler::PDFConverter > pdfConverter(d->document->pdfConverter()); d->document->toc()->toByteArray();
+    QScopedPointer< Poppler::PDFConverter > pdfConverter(d->document->pdfConverter());
     pdfConverter->setOutputFileName(filePath);
-    qDebug() << __FUNCTION__ << filePath << &d->document;
+    //qDebug() << __FUNCTION__ << filePath << &d->document;
     Poppler::PDFConverter::PDFOptions options = pdfConverter->pdfOptions();
 
     if (withChanges) {
@@ -387,15 +389,14 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
 
     pdfConverter->setPDFOptions(options);
     bool bres = pdfConverter->convert();
-//    if (!bres) {
-//        qDebug() << __FUNCTION__ << pdfConverter->lastError();
-//        d->document->toc()->toByteArray();
+    if (!bres) {
+        qDebug() << __FUNCTION__ << pdfConverter->lastError();
 //        QFile file("/home/archermind/Desktop/kyz.pdf");
-//        if (file.open(QIODevice::ReadWrite)) {
+//        if (file.open(QIODevice::WriteOnly)) {
 
 //            file.write(d->document->toc()->toByteArray());
 //        }
-//    }
+    }
 
     return bres;
 }

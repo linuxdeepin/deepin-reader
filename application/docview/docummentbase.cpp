@@ -655,7 +655,6 @@ bool DocummentBase::showMagnifier(QPoint point)
         y_offset = scrollBar_Y->value();
     QPoint gpoint = d->m_magnifierwidget->mapFromGlobal(mapToGlobal(QPoint(point.x() - x_offset, point.y() - y_offset)));
     pagenum = pointInWhichPage(qpoint);
-//    qDebug() << "showMagnifier pagenum:" << pagenum;
     if (-1 != pagenum) {
         if (pagenum != d->m_lastmagnifierpagenum && -1 != d->m_lastmagnifierpagenum) {
 //            qDebug() << "++++++" << pagenum << d->m_lastmagnifierpagenum;
@@ -1497,9 +1496,10 @@ void DocummentBase::findNext()
 {
     Q_D(DocummentBase);
     if (d->m_pagecountsearch.size() <= 0 || d->m_findcurpage < 0) return;
-//    qDebug() << "----------findNext--" << d->m_findcurpage << "--" << d->m_pagecountsearch.lastKey();
+    // qDebug() << "----------findNext--" << d->m_findcurpage << "--" << d->m_pagecountsearch.lastKey();
     if (d->m_findcurpage == d->m_pagecountsearch.lastKey() &&
-            d->m_cursearch >= d->m_pagecountsearch.find(d->m_findcurpage).value()) {
+            /* d->m_cursearch >= d->m_pagecountsearch.find(d->m_findcurpage).value()*/
+            d->m_cursearch > d->m_pagecountsearch.find(d->m_findcurpage).value()) {
         d->m_findcurpage = d->m_pagecountsearch.firstKey();
         d->m_cursearch = 1;
     }
@@ -1507,10 +1507,9 @@ void DocummentBase::findNext()
     int xvalue = 0, yvalue = 0;
     int curpagecount = d->m_pagecountsearch.find(d->m_findcurpage).value();
     if (curpagecount >= d->m_cursearch) {
-
-//        qDebug() << "----------1" << d->m_cursearch << "--" << curpagecount;
+        // qDebug() << "----------1" << d->m_cursearch << "--" << curpagecount;
         //从上一个切换至下一个，如果findPrev查找的m_cursearch为当前页第一个则此处需要判断是否越界
-        if (!d->bfindnext && d->m_cursearch <= 1) { //前一次是向前查找
+        if (!d->bfindnext && (d->m_cursearch <= 1 || d->m_cursearch + 2 > curpagecount)) { //前一次是向前查找
             if (d->m_cursearch + 2 > curpagecount) {
                 d->bfindnext = true;
                 d->m_cursearch += 2;
@@ -1520,6 +1519,7 @@ void DocummentBase::findNext()
                 d->m_cursearch += 2;
             }
         }
+
         cacularValueXY(xvalue, yvalue, d->m_findcurpage);
         QScrollBar *scrollBar_Y = verticalScrollBar();
         if (scrollBar_Y)
@@ -1549,6 +1549,8 @@ void DocummentBase::findNext()
                     scrollBar_X->setValue(xvalue);
             }
             d->m_cursearch++;
+        } else {
+            qDebug() << __FUNCTION__ << "the end page";
         }
     }
     d->bfindnext = true;
@@ -1559,6 +1561,7 @@ void DocummentBase::findPrev()
 {
     Q_D(DocummentBase);
     if (d->m_pagecountsearch.size() <= 0 || d->m_findcurpage < 0) return;
+    qDebug() << d->m_pagecountsearch.size() << d->m_findcurpage << d->m_pagecountsearch.firstKey();
     if (d->m_findcurpage <= d->m_pagecountsearch.firstKey() &&
             d->m_cursearch < 1) {
         d->m_findcurpage = d->m_pagecountsearch.lastKey();
@@ -1607,6 +1610,8 @@ void DocummentBase::findPrev()
                     scrollBar_X->setValue(xvalue);
             }
             d->m_cursearch--;
+        } else {
+            qDebug() << __FUNCTION__ << "the first page";
         }
     }
     d->bfindnext = false;
