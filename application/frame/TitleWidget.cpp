@@ -17,6 +17,15 @@ TitleWidget::~TitleWidget()
 
 }
 
+void TitleWidget::slotShowFindContent()
+{
+    //  显示了侧边栏, 则隐藏
+    bool bCheck = m_pThumbnailBtn->isChecked();
+    if (!bCheck) {
+        m_pThumbnailBtn->setChecked(!bCheck);
+    }
+}
+
 //  主题变了
 void TitleWidget::slotUpdateTheme()
 {
@@ -94,6 +103,7 @@ void TitleWidget::initWidget()
 
 void TitleWidget::initConnections()
 {
+    connect(this, SIGNAL(sigShowFindContent()), SLOT(slotShowFindContent()));
     connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigMagnifierCancel()), SLOT(slotMagnifierCancel()));
     connect(this, SIGNAL(sigAppFullScreen()), SLOT(slotAppFullScreen()));
@@ -340,7 +350,9 @@ void TitleWidget::notifyMsgToSubject(const int &msgType, const QString &msgCoten
 //  处理 推送消息
 int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+    if (msgType == MSG_FIND_CONTENT) {
+        emit sigShowFindContent();
+    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         emit sigOpenFileOk();
     } else if (msgType == MSG_OPERATION_FULLSCREEN || msgType == MSG_OPERATION_SLIDE) {
         emit sigAppFullScreen();
