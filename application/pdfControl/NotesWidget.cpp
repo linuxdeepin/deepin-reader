@@ -17,7 +17,7 @@ NotesWidget::NotesWidget(CustomWidget *parent) :
 void NotesWidget::initWidget()
 {
     auto m_pVLayout = new QVBoxLayout;
-    m_pVLayout->setContentsMargins(0, 0, 0, 0);
+    m_pVLayout->setContentsMargins(0, 8, 0, 0);
     m_pVLayout->setSpacing(0);
     this->setLayout(m_pVLayout);
 

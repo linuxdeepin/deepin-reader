@@ -57,7 +57,7 @@ void ThumbnailWidget::initWidget()
     m_pvBoxLayout->addWidget(m_pPageWidget);
     m_pvBoxLayout->addWidget(hLine);
 
-    m_pvBoxLayout->setContentsMargins(0, 0, 0, 8);
+    m_pvBoxLayout->setContentsMargins(0, 2, 0, 8);
     m_pvBoxLayout->setSpacing(6);
     this->setLayout(m_pvBoxLayout);
 }

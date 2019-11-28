@@ -362,7 +362,7 @@ void BookMarkWidget::initWidget()
     m_pHBoxLayout->addWidget(m_pAddBookMarkBtn);
 
     auto m_pVBoxLayout = new QVBoxLayout;
-    m_pVBoxLayout->setContentsMargins(0, 0, 0, 0);
+    m_pVBoxLayout->setContentsMargins(0, 10, 0, 0);
     m_pVBoxLayout->setSpacing(0);
     this->setLayout(m_pVBoxLayout);
     m_pVBoxLayout->addWidget(m_pBookMarkListWidget);
