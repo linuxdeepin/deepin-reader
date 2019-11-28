@@ -77,8 +77,10 @@ void SearchResWidget::slotSearchOver()
     QList<stSearchRes> list = m_loadSearchResThread.searchList();
 
     if (list.size() <= 0) {
+        disconnect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this, SLOT(slotSelectItem(QListWidgetItem *)));
         showTips();
     } else {
+        connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this, SLOT(slotSelectItem(QListWidgetItem *)));
         //生成左侧搜索列表
         //to do and send flush thumbnail and contant
         initSearchList(list);
@@ -209,8 +211,6 @@ void SearchResWidget::showTips()
     tipLab->setForegroundRole(/*DPalette::TextTips*/QPalette::ToolTipText);
     DFontSizeManager::instance()->bind(tipLab, DFontSizeManager::T6);
 
-    qDebug() << this->size();
-
     tipWidget->setMinimumSize(QSize(226, 528));
 
     hLayout->addStretch(1);
@@ -223,6 +223,7 @@ void SearchResWidget::showTips()
 
     auto item = new QListWidgetItem;
     item->setSizeHint(QSize(226, 528));
+    item->setFlags(Qt::NoItemFlags);
     m_pSearchList->addItem(item);
     m_pSearchList->setItemWidget(item, tipWidget);
 }
