@@ -1367,12 +1367,12 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
         return false;
         break;
     }
-    QEventLoop loop;
-    QTimer::singleShot(20, &loop, SLOT(quit()));
-    loop.exec();
+//    QEventLoop loop;
+//    QTimer::singleShot(20, &loop, SLOT(quit()));
+//    loop.exec();
     pageJump(currpageno);
-    QTimer::singleShot(20, &loop, SLOT(quit()));
-    loop.exec();
+//    QTimer::singleShot(20, &loop, SLOT(quit()));
+//    loop.exec();
     loadPages();
     d->donotneedreloaddoc = false;
 //    d->loadpagewaittimer->start(10);
@@ -1401,22 +1401,38 @@ bool DocummentBase::loadPages()
         if (i >= 0 && i < d->m_pages.size())
             d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);
     }
-    pagenum = lastpagenum + 1;
-    if (pagenum >= 0 && pagenum < d->m_pages.size())
-        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
-    pagenum = firstpagenum - 1;
-    if (pagenum >= 0 && pagenum < d->m_pages.size())
-        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
-    pagenum = lastpagenum + 2;
-    if (pagenum >= 0 && pagenum < d->m_pages.size())
-        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
-    pagenum = firstpagenum - 2;
-    if (pagenum >= 0 && pagenum < d->m_pages.size())
-        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
+    int moreshow = 2;
+    if (ViewMode_FacingPage == d->m_viewmode) {
+        moreshow = 3;
+    }
+    for (int i = 0; i < moreshow; i++) {
+        pagenum = lastpagenum + 1 + i;
+        if (pagenum >= 0 && pagenum < d->m_pages.size())
+            d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
+    }
+//    pagenum = lastpagenum + 1;
+//    if (pagenum >= 0 && pagenum < d->m_pages.size())
+//        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
+//    pagenum = firstpagenum - 1;
+//    if (pagenum >= 0 && pagenum < d->m_pages.size())
+//        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
+//    pagenum = lastpagenum + 2;
+//    if (pagenum >= 0 && pagenum < d->m_pages.size())
+//        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
+//    pagenum = firstpagenum - 2;
+//    if (pagenum >= 0 && pagenum < d->m_pages.size())
+//        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
+//    pagenum = lastpagenum + 3;
+//    if (pagenum >= 0 && pagenum < d->m_pages.size())
+//        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
+//    pagenum = firstpagenum - 3;
+//    if (pagenum >= 0 && pagenum < d->m_pages.size())
+//        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
 
     for (int i = 0; i < d->m_pages.size(); i++) {
         bool bshow = false;
-        for (int j = firstpagenum - 2; j < lastpagenum + 3; j++) {
+//        for (int j = firstpagenum - 2; j < lastpagenum + 3; j++) {
+        for (int j = firstpagenum - moreshow; j < lastpagenum + moreshow + 1; j++) {
             if (i == j) {
                 bshow = true;
                 break;

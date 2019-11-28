@@ -114,6 +114,7 @@ void DocummentProxy::setScaleRotateViewModeAndShow(double scale, RotateType_EM r
 {
     if (!m_documment || bcloseing)
         return;
+    qDebug() << "setScaleRotateViewModeAndShow";
     mouseSelectTextClear();
     emit signal_setScaleRotateViewModeAndShow(scale, rotate, viewmode);
 }
@@ -123,7 +124,7 @@ void DocummentProxy::scaleRotateAndShow(double scale, RotateType_EM rotate)
         return;
     mouseSelectTextClear();
 //    m_documment->scaleAndShow(scale, rotate);
-    // qDebug() << "scaleRotateAndShow";
+    qDebug() << "scaleRotateAndShow";
     emit signal_scaleAndShow(scale, rotate);
 }
 
@@ -159,7 +160,7 @@ bool DocummentProxy::setViewModeAndShow(ViewMode_EM viewmode)
     if (!m_documment || bcloseing)
         return false;
     mouseSelectTextClear();
-    // qDebug() << "setViewModeAndShow";
+    qDebug() << "setViewModeAndShow";
     emit signal_setViewModeAndShow(viewmode);
     return true;
 }
@@ -359,7 +360,7 @@ double DocummentProxy::adaptWidthAndShow(double width)
 {
     if (!m_documment || bcloseing)
         return -1;
-//    qDebug() << "adaptWidthAndShow width:" << width;
+    qDebug() << "adaptWidthAndShow width:" << width;
     return m_documment->adaptWidthAndShow(width);
 }
 
@@ -367,6 +368,7 @@ double DocummentProxy::adaptHeightAndShow(double height)
 {
     if (!m_documment || bcloseing)
         return -1;
+    qDebug() << "adaptWidthAndShow height:" << height;
     return m_documment->adaptHeightAndShow(height);
 }
 
