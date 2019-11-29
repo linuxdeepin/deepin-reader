@@ -30,7 +30,7 @@ void ImageLabel::paintEvent(QPaintEvent *e)
         local = 1;
         width -= 2;
         heigh -= 2;
-        penwidth=3;
+        penwidth=5;
         painter.setPen(QPen(p.highlight().color(), penwidth, Qt::SolidLine));
     } else {
         local = 2;
