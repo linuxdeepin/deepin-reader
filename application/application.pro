@@ -4,6 +4,9 @@ QT += xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+#private
+QT       += gui-private
+
 TARGET = deepin-reader
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig

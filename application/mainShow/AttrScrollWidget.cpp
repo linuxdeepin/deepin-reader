@@ -7,22 +7,16 @@
 #include "frame/DocummentFileHelper.h"
 #include "utils/utils.h"
 #include <DFontSizeManager>
+#include "CustomControl/DFMGlobal.h"
+
+#define LAEBL_TEXT_WIDTH    280
 
 AttrScrollWidget::AttrScrollWidget(DWidget *parent)
     : DFrame(parent)
 {
-//    auto hLayout = new QHBoxLayout();
-//    hLayout->setContentsMargins(10, 0, 10, 0);
-//    hLayout->setSpacing(0);
-//    this->setLayout(hLayout);
-
-//    auto attrFrame = new DFrame;
-//    hLayout->addWidget(attrFrame);
-
-//    auto scroll = new DScrollArea;
-//    scroll->setCornerWidget(attrFrame);
-//    scroll->setWidgetResizable(true);
-//    hLayout->addWidget(scroll);
+    QPalette palette = this->palette();
+    palette.setBrush(QPalette::Background, Qt::NoBrush);;
+    this->setPalette(palette);
 
     auto gridLayout = new QGridLayout;
     gridLayout->setContentsMargins(0, 6, 0, 6);
@@ -50,7 +44,7 @@ AttrScrollWidget::AttrScrollWidget(DWidget *parent)
     createLabel(gridLayout, 13, tr("File Size"), Utils::getInputDataSize(fileInfo.size));
 
     auto vLayout = new QVBoxLayout;
-    vLayout->setContentsMargins(0, 0, 0, 0);
+    vLayout->setContentsMargins(10, 10, 10, 10);
 
     auto basicLabel = new DLabel(tr("basic information"));
     DFontSizeManager::instance()->bind(basicLabel, DFontSizeManager::T6);
@@ -71,18 +65,16 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
     label->setMaximumWidth(120);
     layout->addWidget(label, index, 0);
 
-    DLabel *labelText = new DLabel(this);
-    DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
-    labelText->setMaximumWidth(280);
-
     if (sData == "") {
+        DLabel *labelText = new DLabel(this);
+        DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
         labelText->setText(tr("unknown"));
+        layout->addWidget(labelText, index, 1);
     } else {
-        labelText->setText(sData);
+        DFrame *frame = addTitleFrame(sData);
+        frame->setFrameShape(QFrame::NoFrame);
+        layout->addWidget(frame, index, 1);
     }
-    labelText->setAlignment(Qt::AlignTop);
-    labelText->setWordWrap(true);
-    layout->addWidget(labelText, index, 1);
 }
 
 void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const QString &objName, const QDateTime &sData)
@@ -115,6 +107,67 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
     labelText->setAlignment(Qt::AlignTop);
     layout->addWidget(labelText, index, 1);
 }
+
+DFrame *AttrScrollWidget::addTitleFrame(const QString &sData)
+{
+    DFrame *m_textShowFrame = new DFrame(this);
+
+    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T8);
+    QString t = DFMGlobal::elideText(sData, QSize(LAEBL_TEXT_WIDTH, 60), QTextOption::WrapAnywhere, font, Qt::ElideMiddle, 0);
+    QStringList labelTexts = t.split("\n");
+    const int maxLineCount = 3;
+
+    int textHeight = 0;
+
+    QVBoxLayout *hLayout = new QVBoxLayout;
+    for (int i = 0; i < labelTexts.length(); i++) {
+        if (i > (maxLineCount - 1)) {
+            break;
+        }
+        QString labelText = labelTexts.at(i);
+        QLabel *label = new QLabel(labelText, m_textShowFrame);
+        DFontSizeManager::instance()->bind(label, DFontSizeManager::T8);
+
+        label->setAlignment(Qt::AlignLeft);
+
+        textHeight += label->fontInfo().pixelSize() + 10;
+
+        hLayout->addWidget(label);
+        if (i < (labelTexts.length() - 1) && i != (maxLineCount - 1)) {
+            if (label->fontMetrics().width(labelText) > (LAEBL_TEXT_WIDTH - 10)) {
+                label->setFixedWidth(LAEBL_TEXT_WIDTH);
+            }
+        } else {
+            // the final line of file name label, with a edit btn.
+            if (labelTexts.length() >= maxLineCount) {
+                for (int idx = i + 1; idx < labelTexts.length(); idx++) {
+                    labelText += labelTexts.at(idx);
+                }
+            }
+
+            if (label->fontMetrics().width(labelText) > LAEBL_TEXT_WIDTH && labelTexts.length() >= maxLineCount) {
+                labelText = label->fontMetrics().elidedText(labelText, Qt::ElideMiddle, LAEBL_TEXT_WIDTH);
+            }
+            label->setText(labelText);
+        }
+    }
+    hLayout->addStretch(1);
+
+    QHBoxLayout *textShowLayout = new QHBoxLayout;
+    textShowLayout->setContentsMargins(0, 0, 0, 0);
+    textShowLayout->setSpacing(0);
+
+    m_textShowFrame->setLayout(textShowLayout);
+
+    textShowLayout->addLayout(hLayout);
+
+    textShowLayout->addStretch(1);
+
+    m_textShowFrame->setFixedHeight(textHeight);
+
+    return m_textShowFrame;
+}
+
 
 //  文件时间设置
 QString AttrScrollWidget::getTime(const QDateTime &inTime)

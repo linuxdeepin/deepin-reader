@@ -26,6 +26,7 @@ private:
     void createLabel(QGridLayout *layout, const int &index, const QString &objName, const bool &bData);
 
     QString getTime(const QDateTime &CreateTime);
+    DFrame *addTitleFrame(const QString &sData);
 };
 
 #endif // ATTRSCROLLWIDGET_H
