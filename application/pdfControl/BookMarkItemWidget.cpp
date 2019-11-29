@@ -7,8 +7,8 @@ BookMarkItemWidget::BookMarkItemWidget(CustomItemWidget *parent) :
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(slotShowContextMenu(const QPoint &)));
-    setMinimumWidth(LEFTMINWIDTH);
-    setMaximumWidth(LEFTMAXWIDTH);
+    setMinimumWidth(LEFTMINWIDTH-5);
+    setMaximumWidth(LEFTMAXWIDTH-5);
     initWidget();
 }
 
