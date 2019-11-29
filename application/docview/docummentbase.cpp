@@ -13,6 +13,7 @@
 #include <poppler-qt5.h>
 #include <qglobal.h>
 static QMutex mutexlockloaddata;
+static QMutex mutexlocksshow;
 
 //ThreadLoadDocumment::ThreadLoadDocumment()
 //{
@@ -908,6 +909,7 @@ void DocummentBase::setScaleRotateViewModeAndShow(double scale, RotateType_EM ro
 void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
 {
     Q_D(DocummentBase);
+    QMutexLocker locker(&mutexlocksshow);
     int currpageno = d->m_currentpageno;
     if (d->m_pages.size() < 1) {
         return;
@@ -916,7 +918,8 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     if (scale - d->m_scale < EPSINON && scale - d->m_scale > -EPSINON && (rotate == RotateType_Normal || d->m_rotate == rotate)) {
         return;
     }
-
+    QThreadPool::globalInstance()->waitForDone();
+//    qDebug() << "------------scaleAndShow scale:" << scale << " rotate:" << rotate;
     if (scale > 0)
         d->m_scale = scale;
 
@@ -1399,7 +1402,7 @@ bool DocummentBase::loadPages()
     int lastpagenum  = currentLastPageNo();
     if (lastpagenum < 0)
         lastpagenum  = firstpagenum;
-//    qDebug() << "---------------firstpagenum:" << firstpagenum << " lastpagenum:" << lastpagenum << " pagesize:" << d->m_pages.size();
+    qDebug() << "loadPages firstpagenum:" << firstpagenum << " lastpagenum:" << lastpagenum << " pagesize:" << d->m_pages.size();
     for (int i = firstpagenum; i < lastpagenum + 1; i++) {
         if (i >= 0 && i < d->m_pages.size())
             d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);
@@ -1410,6 +1413,9 @@ bool DocummentBase::loadPages()
     }
     for (int i = 0; i < moreshow; i++) {
         pagenum = lastpagenum + 1 + i;
+        if (pagenum >= 0 && pagenum < d->m_pages.size())
+            d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
+        pagenum = firstpagenum - 1 - i;
         if (pagenum >= 0 && pagenum < d->m_pages.size())
             d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
     }

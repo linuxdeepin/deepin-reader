@@ -100,6 +100,7 @@ void ThreadRenderImage::run()
         if (m_width > 0 && m_height > 0) {
             QImage image;
 //            qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId();
+            qDebug() << "ThreadRenderImage getImage width:" << m_width << " height:" << m_height;
             if (m_page->getImage(image, m_width, m_height)) {
                 if (QThread::currentThread()->isInterruptionRequested()) {
                     b_running = false;
@@ -539,6 +540,8 @@ void PageBase::loadMagnifierCacheThreadStart(double width, double height)
 void PageBase::slot_RenderFinish(QImage image)
 {
     Q_D(PageBase);
+//    qDebug() << "page RenderFinish pagenum:" << d->m_pageno;
+    d->havereander = true;
 //    double originwidth = image.width(), originheight = image.height();
     QMatrix leftmatrix;
     switch (d->m_rotate) {
@@ -563,14 +566,16 @@ void PageBase::slot_RenderFinish(QImage image)
     d->m_spinner->stop();
     d->m_spinner->hide();
 
-    d->havereander = true;
 }
 
 void PageBase::clearImage()
 {
     Q_D(PageBase);
+//    qDebug() << "page clearImage pagenum:" << d->m_pageno;
+    disconnect(d, SIGNAL(signal_RenderFinish(QImage)), this, SLOT(slot_RenderFinish(QImage)));//防止页面频繁切换，页面有概率会不刷新的问题
     stopThread();
     waitThread();
+//    QThreadPool::globalInstance()->waitForDone();
     clear();
 //    qDeleteAll(d->m_links);
 //    d->m_links.clear();
@@ -578,7 +583,6 @@ void PageBase::clearImage()
 //    d->m_words.clear();
     d->havereander = false;
     clearMagnifierPixmap();
-//    QThreadPool::globalInstance()->waitForDone();
 }
 
 void PageBase::slot_loadMagnifierPixmapCache(QImage image, double width, double height)
@@ -597,7 +601,9 @@ void PageBase::slot_loadMagnifierPixmapCache(QImage image, double width, double 
 void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
 {
     Q_D(PageBase);
+//    qDebug() << "---------------setScaleAndRotate pagenum:" << d->m_pageno;
 //    d->havereander = false;
+    QThreadPool::globalInstance()->waitForDone();
     clearImage();
     d->m_scale = scale;
     d->m_rotate = rotate;
@@ -724,6 +730,7 @@ QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
 bool PageBase::showImage(double scale, RotateType_EM rotate)
 {
     Q_D(PageBase);
+    qDebug() << "PageBase in showImage";
     if (((d->m_scale - scale) < EPSINON && (scale - d->m_scale) < EPSINON) && d->m_rotate == rotate && d->havereander) {
         return false;
     }
@@ -731,6 +738,7 @@ bool PageBase::showImage(double scale, RotateType_EM rotate)
     d->m_rotate = rotate;
     qDebug() << "PageBase::showImage" << d->pixelratiof;
     d->threadreander.setPage(getInterFace(), d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
+    connect(d, SIGNAL(signal_RenderFinish(QImage)), this, SLOT(slot_RenderFinish(QImage)));
     if (!d->threadreander.isRunning()) {
 //        d->threadreander.start();
         d->threadreander.setRunningTrue();
