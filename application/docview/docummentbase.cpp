@@ -1016,7 +1016,7 @@ int DocummentBase::currentLastPageNo()
         break;
     }
     if (-1 == pagenum) {
-        if (d->m_widgets.at(d->m_widgets.size() - 1)->y() > 0 && (d->m_widgets.at(d->m_widgets.size() - 1)->y() + d->m_widgets.at(d->m_widgets.size() - 1)->height()) < y_offset)//规避刚打开文档导致所有文档都打开的情况
+        if (((verticalScrollBar()->value() == verticalScrollBar()->maximum() && verticalScrollBar()->maximum() > 0) || verticalScrollBar()->maximum() == 0) && this->height() > 50)
             pagenum = d->m_pages.size() - 1;
     }
     return pagenum;
