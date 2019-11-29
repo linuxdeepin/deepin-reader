@@ -308,10 +308,10 @@ void ThreadLoadImage::run()
             if (!m_isLoaded)
                 break;
             QImage image;
-            bool bl = dproxy->getImage(page, image, 138, 166/*132, 160*/);
+            bool bl = dproxy->getImage(page, image, 146, 174/*138, 166*/);
             if (bl) {
-                QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_BIG);
-                emit signal_loadImage(page, img);
+//                QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_BIG);
+                emit signal_loadImage(page, image);
             }
         }
         m_nStartPage += FIRST_LOAD_PAGES;

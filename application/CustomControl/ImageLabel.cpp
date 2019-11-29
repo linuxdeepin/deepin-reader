@@ -31,18 +31,26 @@ void ImageLabel::paintEvent(QPaintEvent *e)
         width -= 2;
         heigh -= 2;
         penwidth=3;
-        painter.setPen(QPen(/*QColor(QString("#0081FF"))*/p.highlight().color(), penwidth, Qt::SolidLine));
+        painter.setPen(QPen(p.highlight().color(), penwidth, Qt::SolidLine));
     } else {
         local = 2;
         width -= 4;
         heigh -= 4;
         penwidth=1;
-        painter.setPen(QPen(QColor::fromRgbF(0, 0, 0, 0.08)/*p.shadow().color()*/, penwidth, Qt::SolidLine));
+        painter.setPen(QPen(p.shadow().color(), penwidth, Qt::SolidLine));
     }
 
-    QRectF rectangle(local, local, width, heigh);
-    painter.drawRoundedRect(rectangle, m_nRadius, m_nRadius);
-
+    if(m_bSetBp){
+        //填充图片
+        QPainterPath path;
+        QRectF pixrectangle(local, local, width, heigh);
+        path.addRoundedRect(pixrectangle, m_nRadius, m_nRadius);
+        painter.setClipPath(path);
+        QRect bprectangle(local, local, width, heigh);
+        painter.drawPixmap(bprectangle, m_background);
+        QRectF rectangle(local, local, width, heigh);
+        painter.drawRoundedRect(rectangle, m_nRadius, m_nRadius);
+    }
 
     DLabel::paintEvent(e);
     if(m_bshowbookmark)
@@ -60,5 +68,4 @@ void ImageLabel::paintEvent(QPaintEvent *e)
         painter1.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
         painter1.drawPixmap(this->width()-36-6,0, 36,36, pixmap);
     }
-
 }

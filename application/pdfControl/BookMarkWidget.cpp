@@ -576,10 +576,10 @@ void LoadBookMarkThread::run()
                 continue;
             }
 
-            bool bl = DocummentFileHelper::instance()->getImage(page, image, 42, 62/*28, 48*/);
+            bool bl = DocummentFileHelper::instance()->getImage(page, image, 48, 68/*42, 62*/);
             if (bl) {
-                QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_SMALL);
-                emit sigLoadImage(page, img);
+//                QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_SMALL);
+                emit sigLoadImage(page, image);
             }
 
             msleep(10);

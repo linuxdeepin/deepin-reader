@@ -23,6 +23,12 @@ public:
         m_bshowbookmark=bshow;
     }
 
+    inline void setBackgroundPix(QPixmap pixmap)
+    {
+        m_background = pixmap;
+        m_bSetBp = true;
+    }
+
 protected:
     void  paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
 
@@ -30,6 +36,9 @@ private:
     bool m_bSelect = false;
     int m_nRadius = 6;         // 圆角
     bool m_bshowbookmark=false;       //显示书签
+
+    QPixmap m_background;        // 缩略图
+    bool m_bSetBp = false;       // 是否设置缩略图
 };
 
 #endif // IMAGELABEL_H

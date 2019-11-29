@@ -540,11 +540,11 @@ void ThreadLoadImageOfNote::run()
 
             if (t_page != highContent.ipage) {
                 t_page = highContent.ipage;
-                bl = dproxy->getImage(t_page, image, 42, 62/*34, 54*/);
+                bl = dproxy->getImage(t_page, image, 48, 68/*42, 62*/);
             }
             if (bl) {
-                QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_SMALL);
-                emit sigLoadImage(img);
+//                QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_SMALL);
+                emit sigLoadImage(image);
             }
             msleep(20);
         }
