@@ -7,6 +7,8 @@ CustomTextEdit::CustomTextEdit(DWidget *parent): DTextEdit(parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setWordWrapMode(QTextOption::WrapAnywhere /*WordWrap*/);
+
+    setAttribute(Qt::WA_TranslucentBackground);
 }
 
 CustomTextEdit::~CustomTextEdit()
@@ -23,7 +25,7 @@ void CustomTextEdit::setContent(const QString &content, int iline, int iwidth, Q
 
     if (pixelsWide > iwidth * iline) {
         setFixedHeight(pixelsHigh * iline + iline);
-        strcontent = fontMetrics().elidedText(content, mode, (iwidth - 16) * 10, Qt::TextWordWrap);
+        strcontent = fontMetrics().elidedText(content, mode, (iwidth - 10) * iline, Qt::TextWordWrap);
     } else {
         setFixedHeight(pixelsHigh * iline + iline);
         strcontent = content;
@@ -31,6 +33,11 @@ void CustomTextEdit::setContent(const QString &content, int iline, int iwidth, Q
     setFixedWidth(iwidth);
     setText(strcontent);
 
+}
+
+void CustomTextEdit::paintEvent(QPaintEvent *event)
+{
+    DTextEdit::paintEvent(event);
 }
 
 

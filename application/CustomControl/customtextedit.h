@@ -9,6 +9,8 @@ public:
     CustomTextEdit(DWidget *parent = nullptr);
     ~CustomTextEdit();
     void setContent(const QString &content, int iline, int iwidth, Qt::TextElideMode mode = Qt::ElideRight);
+protected:
+    void paintEvent(QPaintEvent *event);
 };
 
 #endif // CUSTOMTEXTEDIT_H

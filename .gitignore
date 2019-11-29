@@ -1,4 +1,4 @@
 *.user
 .build
 .qmake.stash
-.qm
+*.qm

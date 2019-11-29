@@ -411,6 +411,7 @@ void DocummentPDF::clearSearch()
 
         foreach (int key, d->m_pagecountsearch.keys()) {
             d->m_pages.at(key)->clearHighlightRects();
+            d->m_pages.at(key)->setCurSearchShow(false);
         }
     }
     if (d->m_currentpageno - 1 >= 0)
