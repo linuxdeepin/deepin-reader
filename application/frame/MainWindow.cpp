@@ -25,6 +25,8 @@ DWIDGET_USE_NAMESPACE
 MainWindow::MainWindow(DMainWindow *parent)
     : DMainWindow(parent)
 {
+    setTitlebarShadowEnabled(true);
+
     m_strObserverName = "MainWindow";
 
     setCurTheme();
