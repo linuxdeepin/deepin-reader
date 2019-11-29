@@ -10,7 +10,7 @@
 #include <DFontSizeManager>
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)
-    : DMenu (parent)
+    : DMenu(parent)
 {
     initMenu();
 }
@@ -35,7 +35,7 @@ void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, con
 
     //  当前显示状态状态
     int nState = DataManager::instance()->CurShowState();
-    if ( nState == FILE_FULLSCREEN) {
+    if (nState == FILE_FULLSCREEN) {
         m_pExitFullScreen->setVisible(true);
     } else {
         m_pExitFullScreen->setVisible(false);
@@ -78,7 +78,7 @@ void TextOperationMenu::initMenu()
 
 QAction *TextOperationMenu::createAction(const QString &text, const char *member)
 {
-    auto action = new  QAction(QString("       %1").arg(text), this);
+    auto action = new  QAction(text, this);
     connect(action, SIGNAL(triggered()), member);
     this->addAction(action);
 

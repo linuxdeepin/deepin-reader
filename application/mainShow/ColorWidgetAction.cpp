@@ -23,12 +23,12 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
     auto pWidget = new DWidget(pParent);
     setDefaultWidget(pWidget);
 
-    m_pClickLabel = new CustomClickLabel(QString("        %1").arg(tr("add high light")));
+    m_pClickLabel = new CustomClickLabel(tr("add high light"));
     DFontSizeManager::instance()->bind(m_pClickLabel, DFontSizeManager::T6);
     connect(m_pClickLabel, SIGNAL(clicked()), this, SIGNAL(sigBtnDefaultClicked()));
 
     auto buttonLayout = new QHBoxLayout;
-    buttonLayout->setContentsMargins(25, 6, 20, 6);
+    buttonLayout->setContentsMargins(20, 6, 20, 6);
     buttonLayout->setSpacing(12);
 
     auto btnGroup = new QButtonGroup(this);
@@ -50,8 +50,13 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
 
     buttonLayout->addStretch(1);
 
+    QHBoxLayout *playout = new QHBoxLayout;
+    playout->setContentsMargins(20, 0, 0, 0);
+    playout->addWidget(m_pClickLabel);
+
     auto mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(m_pClickLabel);
+    // mainLayout->addWidget(m_pClickLabel);
+    mainLayout->addItem(playout);
     mainLayout->addItem(buttonLayout);
 
     pWidget->setLayout(mainLayout);

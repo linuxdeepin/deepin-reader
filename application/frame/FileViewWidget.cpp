@@ -181,6 +181,14 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
     CustomWidget::mouseReleaseEvent(event);
 }
 
+void FileViewWidget::leaveEvent(QEvent *event)
+{
+    if (m_pNoteTipWidget && m_pNoteTipWidget->isVisible()) {
+        m_pNoteTipWidget->hide();
+    }
+    CustomWidget::leaveEvent(event);
+}
+
 //  文档 显示区域 大小变化
 void FileViewWidget::resizeEvent(QResizeEvent *event)
 {

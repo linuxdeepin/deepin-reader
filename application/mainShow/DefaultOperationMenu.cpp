@@ -24,10 +24,10 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
     bool bBookState = pageList.contains(m_nRightPageNumber);
     if (bBookState) {
         m_pBookMark->setProperty("data", 0);
-        m_pBookMark->setText(QString("       %1").arg(tr("delete bookmark")));
+        m_pBookMark->setText(tr("delete bookmark"));
     } else {
         m_pBookMark->setProperty("data", 1);
-        m_pBookMark->setText(QString("       %1").arg(tr("add bookmark")));
+        m_pBookMark->setText(tr("add bookmark"));
     }
 
     if (m_nRightPageNumber == 0) {    //  首页
@@ -75,7 +75,7 @@ void DefaultOperationMenu::initMenu()
 
 QAction *DefaultOperationMenu::createAction(const QString &name, const char *member)
 {
-    auto action = new QAction(QString("       %1").arg(name));
+    auto action = new QAction(name);
 
     connect(action, SIGNAL(triggered()), member);
 
