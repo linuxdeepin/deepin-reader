@@ -13,7 +13,7 @@
 #include <poppler-qt5.h>
 #include <qglobal.h>
 static QMutex mutexlockloaddata;
-static QMutex mutexlocksshow;
+//static QMutex mutexlocksshow;
 
 //ThreadLoadDocumment::ThreadLoadDocumment()
 //{
@@ -909,7 +909,7 @@ void DocummentBase::setScaleRotateViewModeAndShow(double scale, RotateType_EM ro
 void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
 {
     Q_D(DocummentBase);
-    QMutexLocker locker(&mutexlocksshow);
+//    QMutexLocker locker(&mutexlocksshow);
     int currpageno = d->m_currentpageno;
     if (d->m_pages.size() < 1) {
         return;
