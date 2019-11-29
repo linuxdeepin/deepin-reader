@@ -34,9 +34,9 @@ CustomWidget::~CustomWidget()
 
 void CustomWidget::updateWidgetTheme()
 {
-//    auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
-//    plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
-//    setPalette(plt);
+    auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
+    plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
+    setPalette(plt);
 }
 
 //  操作 消息
