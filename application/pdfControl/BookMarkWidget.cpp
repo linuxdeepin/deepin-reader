@@ -11,7 +11,8 @@ BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
     CustomWidget(QString("BookMarkWidget"), parent)
 {
     setFocusPolicy(Qt::ClickFocus);
-
+    setMinimumWidth(LEFTMINWIDTH);
+    setMaximumWidth(LEFTMAXWIDTH);
     initWidget();
     initConnection();
     slotUpdateTheme();
@@ -402,7 +403,7 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
         return nullptr;
     }
     QImage t_image;
-    bool rl = dproxy->getImage(page, t_image, 42, 62/*28, 48*/);
+    bool rl = dproxy->getImage(page, t_image, 48, 68/*42, 62*/);
     if (rl) {
         QImage img = Utils::roundImage(QPixmap::fromImage(t_image), ICON_SMALL);
         auto item = m_pBookMarkListWidget->insertWidgetItem(page);
@@ -411,7 +412,7 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
         connect(t_widget, SIGNAL(sigDeleleteItem(const int &)), this, SLOT(slotDeleteBookItem(const int &)));
         t_widget->setLabelImage(img);
         t_widget->setLabelPage(page, 1);
-        t_widget->setMinimumSize(QSize(230, 80));
+//        t_widget->setMinimumSize(QSize(230, 80));
 
         m_pBookMarkListWidget->setItemWidget(item, t_widget);
 

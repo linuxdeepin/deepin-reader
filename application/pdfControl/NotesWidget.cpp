@@ -320,7 +320,7 @@ void NotesWidget::addNotesItem(const QString &text)
                 return;
             }
             QImage image;
-            bool rl = dproxy->getImage(t_nPage, image, 42, 62/*34, 54*/);
+            bool rl = dproxy->getImage(t_nPage, image, 48, 68/*42, 62*/);
             if (rl) {
                 QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_SMALL);
                 addNewItem(img, t_nPage, t_strUUid, t_strText);
