@@ -60,8 +60,9 @@ MainWindow::MainWindow(DMainWindow *parent)
     }
 
     QRect rect = DApplication::desktop()->geometry();
-    setMinimumSize(rect.width() * 0.8, rect.height() * 0.8);
-    // setMinimumSize(1000, 680);
+//    setMinimumSize(rect.width() * 0.8, rect.height() * 0.8);
+     resize(1000, 680);
+     setMinimumSize(752, 178);
 
     //  在屏幕中心显示
     Dtk::Widget::moveToCenter(this);

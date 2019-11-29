@@ -8,6 +8,9 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent) :
 {
     m_ThreadLoadImage.setThumbnail(this);
 
+    setMinimumWidth(LEFTMINWIDTH);
+    setMaximumWidth(LEFTMAXWIDTH);
+
     initWidget();
 
     initConnection();

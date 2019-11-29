@@ -7,6 +7,8 @@ PagingWidget::PagingWidget(CustomWidget *parent) :
     CustomWidget(QString("PagingWidget"), parent)
 {
     resize(250, 20);
+    setMinimumWidth(LEFTMINWIDTH);
+    setMaximumWidth(LEFTMAXWIDTH);
     initWidget();
 
     initConnections();
@@ -35,7 +37,8 @@ void PagingWidget::initWidget()
     m_pJumpPageSpinBox->setMinimum(1);
     m_pJumpPageSpinBox->setRange(1, 100);
     m_pJumpPageSpinBox->setValue(1);
-    m_pJumpPageSpinBox->setFixedWidth(60);
+    m_pJumpPageSpinBox->setMinimumWidth(40);
+    m_pJumpPageSpinBox->setMinimumHeight(40);
     m_pJumpPageSpinBox->installEventFilter(this);
     m_pJumpPageSpinBox->setWrapping(true);
     m_pJumpPageSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);

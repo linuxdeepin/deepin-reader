@@ -14,8 +14,10 @@
 LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent):
     CustomWidget("LeftSidebarWidget", parent)
 {
-    setMinimumWidth(226);
-    setMaximumWidth(452);
+//    setMinimumWidth(226);
+//    setMaximumWidth(452);
+    setMinimumWidth(LEFTMINWIDTH);
+    setMaximumWidth(LEFTMAXWIDTH);
 
     initWidget();
     initConnections();
