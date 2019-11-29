@@ -1,5 +1,6 @@
 #include "docummentbase.h"
 #include "publicfunc.h"
+#include "utils/utils.h"
 #include "pagebase.h"
 #include <QHBoxLayout>
 #include <QGridLayout>
@@ -181,7 +182,6 @@ void MagnifierWidget::paintEvent(QPaintEvent *event)
     //贴图方式实现
     DWidget::paintEvent(event);
     QPainter qpainter(this);
-    //    qpainter.save();
     if (!bStartShow || m_magnifierpixmap.isNull())
         return;
     int radius = m_magnifiermapradius + m_magnifierringmapwidth;
@@ -208,6 +208,10 @@ void MagnifierWidget::paintEvent(QPaintEvent *event)
     qpainter.setPen(QPen(QColor(255, 255, 255), 0));
     qpainter.setBrush(brush);
     qpainter.drawEllipse(smallcirclex, smallcircley, m_magnifiermapradius * 2, m_magnifiermapradius * 2);
+//    m_magnifierpixmap = m_magnifierpixmap.transformed(tr);
+//    m_magnifierpixmap = Utils::roundQPixmap(m_magnifierpixmap, m_magnifiermapradius);
+//    qpainter.setPen(QPen(QColor(255, 255, 255), 0));
+//    qpainter.drawPixmap(smallcirclex, smallcircley, m_magnifiermapradius * 2, m_magnifiermapradius * 2, m_magnifierpixmap);
 
     QPixmap pix(":/resources/image/maganifier.svg");
     const qreal ratio = qApp->devicePixelRatio();

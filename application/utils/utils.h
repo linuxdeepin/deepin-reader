@@ -71,6 +71,7 @@ public:
 //    static QFont getPixFont(const QString &, const int &);
     static bool runApp(const QString &args);
     static QImage roundImage(const QPixmap &img_in, int radius);
+    static QPixmap roundQPixmap(const QPixmap &img_in, int radius);
 };
 
 #endif // UTILS_H

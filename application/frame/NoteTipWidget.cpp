@@ -40,6 +40,7 @@ void NoteTipWidget::setTipContent(const QString &content)
             setFixedHeight(pixelsHigh * line + 8);
             strcontent = content;
         }
+        label->setFixedWidth(m_iwidth - 16);
         label->setText(strcontent);
     }
 }

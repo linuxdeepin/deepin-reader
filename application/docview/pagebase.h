@@ -140,11 +140,11 @@ public:
         m_imagewidth = 0.01;
         m_imageheight = 0.01;
         m_paintercolor = QColor(72, 118, 255, 100);
-        m_cursearchfocuscolor = QColor(62, 173, 31, 200);
+        m_cursearchfocuscolor = QColor("#3B9401");
+        m_cursearchfocuscolor.setAlpha(100);
         m_pencolor = QColor(72, 118, 255, 0);
-        // m_searchcolor = QColor(254, 241, 68, 160); //Qt::yellow;
-        m_searchcolor = QColor(Qt::yellow);
-        m_searchcolor.setAlpha(130);
+        m_searchcolor = QColor("#EEDE00");
+        m_searchcolor.setAlpha(100);
         m_penwidth = 0;
         m_selecttextstartword = -1;
         m_selecttextendword = -1;

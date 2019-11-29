@@ -718,3 +718,20 @@ QImage Utils::roundImage(const QPixmap &img_in, int radius)
     image.setMask(mask);
     return image.toImage();
 }
+
+QPixmap Utils::roundQPixmap(const QPixmap &img_in, int radius)
+{
+    if (img_in.isNull()) {
+        return QPixmap();
+    }
+    QSize size(img_in.size());
+    QBitmap mask(size);
+    QPainter painter(&mask);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    painter.fillRect(mask.rect(), Qt::white);
+    painter.setBrush(Qt::black);
+    painter.drawRoundedRect(mask.rect(), radius, radius);
+    QPixmap image = img_in;// .scaled(size);
+    image.setMask(mask);
+    return image;
+}
