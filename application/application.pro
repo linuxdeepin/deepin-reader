@@ -1,4 +1,4 @@
-QT += core gui svg sql printsupport
+QT += core gui svg sql printsupport #gui-private
 QT += dtkwidget
 QT += xml
 
