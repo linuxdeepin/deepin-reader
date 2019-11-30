@@ -918,7 +918,7 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     if (scale - d->m_scale < EPSINON && scale - d->m_scale > -EPSINON && (rotate == RotateType_Normal || d->m_rotate == rotate)) {
         return;
     }
-    QThreadPool::globalInstance()->waitForDone();
+//    QThreadPool::globalInstance()->waitForDone();
 //    qDebug() << "------------scaleAndShow scale:" << scale << " rotate:" << rotate;
     if (scale > 0)
         d->m_scale = scale;
@@ -1096,7 +1096,7 @@ void DocummentBase::showFacingPage()
         d->m_widgets.at(i)->layout()->addWidget(d->m_pages.at(i * 2));
         d->m_widgets.at(i)->layout()->addWidget(d->m_pages.at(i * 2 + 1));
         d->m_widgets.at(i)->show();
-        QCoreApplication::processEvents();
+//        QCoreApplication::processEvents();
     }
     if (d->m_pages.size() % 2) {
         d->pblankwidget->show();
