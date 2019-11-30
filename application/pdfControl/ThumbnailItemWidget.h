@@ -14,8 +14,10 @@
 class ThumbnailItemWidget  : public CustomItemWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(ThumbnailItemWidget)
+
 public:
-    ThumbnailItemWidget(CustomItemWidget *parent = nullptr);
+    explicit ThumbnailItemWidget(CustomItemWidget *parent = nullptr);
 
 public:
     // IObserver interface

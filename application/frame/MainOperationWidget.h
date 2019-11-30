@@ -15,8 +15,10 @@
 class MainOperationWidget : public CustomWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(MainOperationWidget)
+
 public:
-    MainOperationWidget(CustomWidget *parent = nullptr);
+    explicit MainOperationWidget(CustomWidget *parent = nullptr);
 
 private:
     DToolButton *createBtn(const QString &btnName, const QString &objName);

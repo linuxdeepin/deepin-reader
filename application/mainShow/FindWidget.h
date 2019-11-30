@@ -36,6 +36,7 @@ DWIDGET_USE_NAMESPACE
 class FindWidget : public DFloatingWidget, public IObserver
 {
     Q_OBJECT
+    Q_DISABLE_COPY(FindWidget)
 
 public:
     explicit FindWidget(DWidget *parent = nullptr);

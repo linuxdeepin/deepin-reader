@@ -12,8 +12,10 @@
 class HomeWidget : public CustomWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(HomeWidget)
+
 public:
-    HomeWidget(CustomWidget *parent = nullptr);
+    explicit HomeWidget(CustomWidget *parent = nullptr);
     ~HomeWidget() Q_DECL_OVERRIDE {
         if (m_settings)
         {

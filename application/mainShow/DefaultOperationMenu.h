@@ -14,8 +14,10 @@ DWIDGET_USE_NAMESPACE
 class DefaultOperationMenu : public DMenu
 {
     Q_OBJECT
+    Q_DISABLE_COPY(DefaultOperationMenu)
+
 public:
-    DefaultOperationMenu(DWidget *parent = nullptr);
+    explicit DefaultOperationMenu(DWidget *parent = nullptr);
 
 public:
     void execMenu(const QPoint &, const int &);

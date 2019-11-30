@@ -11,6 +11,8 @@ DWIDGET_USE_NAMESPACE
 class CustomClickLabel : public DLabel
 {
     Q_OBJECT
+    Q_DISABLE_COPY(CustomClickLabel)
+
 public:
     CustomClickLabel(const QString &text, DWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 

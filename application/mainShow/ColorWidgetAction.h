@@ -10,8 +10,10 @@ DWIDGET_USE_NAMESPACE
 class ColorWidgetAction : public QWidgetAction
 {
     Q_OBJECT
+    Q_DISABLE_COPY(ColorWidgetAction)
+
 public:
-    ColorWidgetAction(DWidget *pParent = nullptr);
+    explicit ColorWidgetAction(DWidget *pParent = nullptr);
 
 public:
     void setBtnAddLightState(const bool &);

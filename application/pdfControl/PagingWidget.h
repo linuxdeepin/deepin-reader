@@ -22,9 +22,10 @@ const int FIRSTPAGES = 1;
 class PagingWidget : public CustomWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(PagingWidget)
 
 public:
-    PagingWidget(CustomWidget *parent = nullptr);
+    explicit PagingWidget(CustomWidget *parent = nullptr);
 
 signals:
     void sigJumpToSpecifiedPage(const int &);

@@ -13,7 +13,7 @@ class CustemTextEdit : public DTextEdit
 {
     Q_OBJECT
 public:
-    CustemTextEdit(DWidget *parent = nullptr);
+    explicit CustemTextEdit(DWidget *parent = nullptr);
 
 signals:
     void sigShowTips();
@@ -40,8 +40,10 @@ private:
 class FileViewNoteWidget : public CustomWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(FileViewNoteWidget)
+
 public:
-    FileViewNoteWidget(CustomWidget *parent = nullptr);
+    explicit FileViewNoteWidget(CustomWidget *parent = nullptr);
 
 public:
     // IObserver interface

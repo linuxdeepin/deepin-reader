@@ -31,6 +31,8 @@ const int LEFTMAXWIDTH = 380;
 class CustomWidget : public DWidget, public IObserver
 {
     Q_OBJECT
+    Q_DISABLE_COPY(CustomWidget)
+
 public:
     CustomWidget(const QString &, DWidget *parent = nullptr);
     ~CustomWidget() Q_DECL_OVERRIDE;

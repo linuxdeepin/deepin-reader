@@ -12,6 +12,8 @@
 class CustomItemWidget : public CustomWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(CustomItemWidget)
+
 public:
     CustomItemWidget(const QString &, CustomWidget *parent = nullptr);
 

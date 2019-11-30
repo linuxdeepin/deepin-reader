@@ -12,8 +12,10 @@
 class DocShowShellWidget : public CustomWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(DocShowShellWidget)
+
 public:
-    DocShowShellWidget(CustomWidget *parent = nullptr);
+    explicit DocShowShellWidget(CustomWidget *parent = nullptr);
     ~DocShowShellWidget() Q_DECL_OVERRIDE;
 
 signals:

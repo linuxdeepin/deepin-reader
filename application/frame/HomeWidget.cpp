@@ -1,5 +1,5 @@
 #include "HomeWidget.h"
-#include "docview/docummentproxy.h"
+
 #include <DFileDialog>
 #include <DPushButton>
 #include <DSuggestButton>
@@ -58,20 +58,19 @@ void HomeWidget::slotChooseBtnClicked()
     if (fileList.size() > 0) {
 
         QString sRes = "";
-// qDebug()<<__FUNCTION__<<fileList;
+
         bool bisopen = false;
         foreach (auto filepath, fileList) {
 
             QString sRes = filepath + Constant::sQStringSep;
 
-            if (nullptr != DocummentProxy::instance() && !DocummentProxy::instance()->isOpendFile()) {
-                if (!bisopen)
+            if (!bisopen) {
+                if ("" == DataManager::instance()->strOnlyFilePath())
                     notifyMsg(MSG_OPEN_FILE_PATH, sRes);
                 else {
                     if (!Utils::runApp(filepath))
                         qDebug() << __FUNCTION__ << "process start deepin-reader failed";
                 }
-
                 bisopen = true;
             } else {
                 if (!Utils::runApp(filepath))

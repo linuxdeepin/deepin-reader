@@ -16,8 +16,11 @@
 class MsgSubject : public QThread, public ISubject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(MsgSubject)
+
 private:
-    MsgSubject(QObject *parent = nullptr);
+    explicit MsgSubject(QObject *parent = nullptr);
+
 public:
     static MsgSubject *getInstance()
     {

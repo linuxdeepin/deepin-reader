@@ -1,13 +1,13 @@
 #ifndef DFMGLOBAL_H
 #define DFMGLOBAL_H
 
-
-#include <QKeyEvent>
 #include <QTextLayout>
 
 class DFMGlobal : public QObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(DFMGlobal)
+
 public:
     static DFMGlobal *instance();
 

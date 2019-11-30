@@ -18,9 +18,10 @@
 class BookMarkItemWidget : public CustomItemWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(BookMarkItemWidget)
 
 public:
-    BookMarkItemWidget(CustomItemWidget *parent = nullptr);
+    explicit BookMarkItemWidget(CustomItemWidget *parent = nullptr);
 
 signals:
     void sigDeleleteItem(const int &);

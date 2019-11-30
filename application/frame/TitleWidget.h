@@ -15,8 +15,10 @@
 class TitleWidget : public CustomWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(TitleWidget)
+
 public:
-    TitleWidget(CustomWidget *parent = nullptr);
+    explicit TitleWidget(CustomWidget *parent = nullptr);
     ~TitleWidget() Q_DECL_OVERRIDE;
 
 signals:

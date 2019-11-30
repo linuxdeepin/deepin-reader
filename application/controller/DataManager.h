@@ -34,8 +34,10 @@ enum ICON_RADIUS {
 class DataManager : public QObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(DataManager)
+
 private:
-    DataManager(QObject *parent = nullptr);
+    explicit DataManager(QObject *parent = nullptr);
 
 public:
     static DataManager *instance()

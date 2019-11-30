@@ -17,8 +17,10 @@ DWIDGET_USE_NAMESPACE
 class AttrScrollWidget : public DFrame
 {
     Q_OBJECT
+    Q_DISABLE_COPY(AttrScrollWidget)
+
 public:
-    AttrScrollWidget(DWidget *parent  = nullptr);
+    explicit AttrScrollWidget(DWidget *parent  = nullptr);
 
 private:
     void createLabel(QGridLayout *layout, const int &index, const QString &objName, const QString &sData);

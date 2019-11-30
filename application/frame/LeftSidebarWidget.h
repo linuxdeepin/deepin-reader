@@ -11,8 +11,10 @@
 class LeftSidebarWidget : public CustomWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(LeftSidebarWidget)
+
 public:
-    LeftSidebarWidget(CustomWidget *parent = nullptr);
+    explicit LeftSidebarWidget(CustomWidget *parent = nullptr);
 
 signals:
     void sigStackSetCurIndex(const int &);

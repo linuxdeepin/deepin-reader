@@ -1,7 +1,6 @@
 #ifndef DOCUMMENTBASE_H
 #define DOCUMMENTBASE_H
 
-#include "pagebase.h"
 #include "docview/commonstruct.h"
 #include "searchtask.h"
 #include <DWidget>

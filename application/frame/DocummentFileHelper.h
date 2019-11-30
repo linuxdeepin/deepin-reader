@@ -14,6 +14,8 @@
 class DocummentFileHelper : public QObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(DocummentFileHelper)
+
 private:
     explicit DocummentFileHelper(QObject *parent = nullptr);
 

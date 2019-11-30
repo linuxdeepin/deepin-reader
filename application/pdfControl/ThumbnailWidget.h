@@ -23,8 +23,10 @@ class ThumbnailWidget;
 class ThreadLoadImage : public QThread
 {
     Q_OBJECT
+    Q_DISABLE_COPY(ThreadLoadImage)
+
 public:
-    ThreadLoadImage(QObject *parent = nullptr);
+    explicit ThreadLoadImage(QObject *parent = nullptr);
     ~ThreadLoadImage() Q_DECL_OVERRIDE {
         stopThreadRun();
     }
@@ -83,9 +85,10 @@ private:
 class ThumbnailWidget : public CustomWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(ThumbnailWidget)
 
 public:
-    ThumbnailWidget(CustomWidget *parent = nullptr);
+    explicit ThumbnailWidget(CustomWidget *parent = nullptr);
     ~ThumbnailWidget() Q_DECL_OVERRIDE;
 
 signals:
@@ -104,7 +107,7 @@ public:
     {
         return m_isLoading;
     }
-   void showItemBookMark(int ipage=-1);
+    void showItemBookMark(int ipage = -1);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;

@@ -19,8 +19,10 @@ DWIDGET_USE_NAMESPACE
 class MainWindow : public DMainWindow, public IObserver
 {
     Q_OBJECT
+    Q_DISABLE_COPY(MainWindow)
+
 public:
-    MainWindow(DMainWindow *parent = nullptr);
+    explicit MainWindow(DMainWindow *parent = nullptr);
     ~MainWindow() Q_DECL_OVERRIDE;
 
     void openfile(const QString &filepath);
@@ -41,7 +43,7 @@ private:
     void initUI();
     void initConnections();
     void initTitlebar();
-    QAction *createAction(DMenu *menu, const QString &actionName, const QString & );
+    QAction *createAction(DMenu *menu, const QString &actionName, const QString &);
 
     void onOpenFile();
     void onOpenFolder();

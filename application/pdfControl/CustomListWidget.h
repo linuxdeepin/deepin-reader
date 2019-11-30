@@ -12,8 +12,10 @@ DWIDGET_USE_NAMESPACE
 class CustomListWidget : public DListWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(CustomListWidget)
+
 public:
-    CustomListWidget(DWidget *parent = nullptr);
+    explicit CustomListWidget(DWidget *parent = nullptr);
 
 signals:
     void sigSelectItem(QListWidgetItem *);

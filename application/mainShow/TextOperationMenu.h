@@ -16,8 +16,10 @@ DWIDGET_USE_NAMESPACE
 class TextOperationMenu : public DMenu
 {
     Q_OBJECT
+    Q_DISABLE_COPY(TextOperationMenu)
+
 public:
-    TextOperationMenu(DWidget *parent = nullptr);
+    explicit TextOperationMenu(DWidget *parent = nullptr);
 
 public:
     void execMenu(const QPoint &, const bool &bHigh, const QString &sSelectText, const QString &sUuid);

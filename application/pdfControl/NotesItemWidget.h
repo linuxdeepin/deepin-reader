@@ -11,9 +11,7 @@
 #include <QAction>
 #include <QContextMenuEvent>
 
-
 #include "CustomItemWidget.h"
-#include "docview/docummentproxy.h"
 
 /**
  * @brief The ThumbnailItemWidget class
@@ -23,9 +21,10 @@
 class NotesItemWidget : public CustomItemWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(NotesItemWidget)
 
 public:
-    NotesItemWidget(CustomItemWidget *parent = nullptr);
+    explicit NotesItemWidget(CustomItemWidget *parent = nullptr);
 
 public:
     void setTextEditText(const QString &);

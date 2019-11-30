@@ -15,8 +15,11 @@
 class NotifySubject : public QThread, public ISubject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(NotifySubject)
+
 private:
-    NotifySubject(QObject *parent = nullptr);
+    explicit NotifySubject(QObject *parent = nullptr);
+
 public:
     static NotifySubject *getInstance()
     {

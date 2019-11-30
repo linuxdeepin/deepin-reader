@@ -23,8 +23,10 @@
 class FontWidget : public CustomWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(FontWidget)
+
 public:
-    FontWidget(CustomWidget *parent = nullptr);
+    explicit FontWidget(CustomWidget *parent = nullptr);
 
 signals:
     void sigWidgetHide();

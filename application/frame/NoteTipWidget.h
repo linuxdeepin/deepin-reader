@@ -12,8 +12,10 @@
 class NoteTipWidget : public CustomWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(NoteTipWidget)
+
 public:
-    NoteTipWidget(CustomWidget *parnet = nullptr);
+    explicit NoteTipWidget(CustomWidget *parnet = nullptr);
 
 public:
     void setTipContent(const QString &);

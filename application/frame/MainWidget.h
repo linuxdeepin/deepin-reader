@@ -12,8 +12,10 @@
 class MainWidget : public CustomWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(MainWidget)
+
 public:
-    MainWidget(CustomWidget *parent = nullptr);
+    explicit MainWidget(CustomWidget *parent = nullptr);
 
 signals:
     void sigOpenFileStart();

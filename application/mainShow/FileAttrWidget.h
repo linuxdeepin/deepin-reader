@@ -19,8 +19,10 @@ DWIDGET_USE_NAMESPACE
 class FileAttrWidget : public DAbstractDialog
 {
     Q_OBJECT
+    Q_DISABLE_COPY(FileAttrWidget)
+
 public:
-    FileAttrWidget(DWidget *parent = nullptr);
+    explicit FileAttrWidget(DWidget *parent = nullptr);
 
 public:
     void showScreenCenter();

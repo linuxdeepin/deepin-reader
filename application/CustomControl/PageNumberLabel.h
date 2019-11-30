@@ -9,8 +9,10 @@ DWIDGET_USE_NAMESPACE
 class PageNumberLabel : public DLabel
 {
     Q_OBJECT
+    Q_DISABLE_COPY(PageNumberLabel)
+
 public:
-    PageNumberLabel(DWidget *parent = nullptr);
+    explicit PageNumberLabel(DWidget *parent = nullptr);
 
 public:
     void setSelect(const bool &select);

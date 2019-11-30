@@ -19,8 +19,10 @@ class SearchResWidget;
 class LoadSearchResThread : public QThread
 {
     Q_OBJECT
+    Q_DISABLE_COPY(LoadSearchResThread)
+
 public:
-    LoadSearchResThread(QObject *parent = nullptr);
+    explicit LoadSearchResThread(QObject *parent = nullptr);
 
 signals:
     void sigLoadImage(const int &, const QImage &);
@@ -72,9 +74,10 @@ private:
 class SearchResWidget : public CustomWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(SearchResWidget)
 
 public:
-    SearchResWidget(CustomWidget *parent = nullptr);
+    explicit SearchResWidget(CustomWidget *parent = nullptr);
     ~SearchResWidget() Q_DECL_OVERRIDE;
 
 signals:

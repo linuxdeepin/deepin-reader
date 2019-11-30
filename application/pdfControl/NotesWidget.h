@@ -16,8 +16,10 @@
 class ThreadLoadImageOfNote : public QThread
 {
     Q_OBJECT
+    Q_DISABLE_COPY(ThreadLoadImageOfNote)
+
 public:
-    ThreadLoadImageOfNote(QObject *parent = nullptr);
+    explicit ThreadLoadImageOfNote(QObject *parent = nullptr);
     ~ThreadLoadImageOfNote() Q_DECL_OVERRIDE{
         stopThreadRun();
     }
@@ -59,9 +61,10 @@ private:
 class NotesWidget : public CustomWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(NotesWidget)
 
 public:
-    NotesWidget(CustomWidget *parent = nullptr);
+    explicit NotesWidget(CustomWidget *parent = nullptr);
 
 signals:
     void sigAddNewNoteItem(const QString &);

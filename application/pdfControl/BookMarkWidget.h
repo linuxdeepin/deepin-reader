@@ -21,8 +21,10 @@ class BookMarkWidget;
 class LoadBookMarkThread : public QThread
 {
     Q_OBJECT
+    Q_DISABLE_COPY(LoadBookMarkThread)
+
 public:
-    LoadBookMarkThread(QObject *parent = nullptr);
+    explicit LoadBookMarkThread(QObject *parent = nullptr);
 
 signals:
     void sigLoadImage(const int &, const QImage &);
@@ -54,9 +56,10 @@ private:
 class BookMarkWidget : public CustomWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(BookMarkWidget)
 
 public:
-    BookMarkWidget(CustomWidget *parent = nullptr);
+    explicit BookMarkWidget(CustomWidget *parent = nullptr);
     ~BookMarkWidget() Q_DECL_OVERRIDE;
 
 signals:
