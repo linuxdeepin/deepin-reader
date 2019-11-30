@@ -178,7 +178,11 @@ void FontWidget::slotReset()
     m_pSuitWLabelIcon->setVisible(false);
 
     m_rotate = 0;
-    m_rotateType = RotateType_Normal;
+    m_rotateType = RotateType_0;
+
+    m_isDoubPage = false;
+
+    setScaleRotateViewModeAndShow();
 }
 
 /**
