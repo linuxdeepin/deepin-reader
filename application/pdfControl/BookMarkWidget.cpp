@@ -292,7 +292,7 @@ void BookMarkWidget::slotUpdateTheme()
     plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
     setPalette(plt);
     m_pAddBookMarkBtn->setPalette(plt);
-    updateWidgetTheme();
+    //  updateWidgetTheme();
 }
 
 void BookMarkWidget::slotJumpToPrevItem()
