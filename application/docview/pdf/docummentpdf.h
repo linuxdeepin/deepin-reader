@@ -4,7 +4,7 @@
 #include "../docummentbase.h"
 #include <poppler-qt5.h>
 #include <QFileInfo>
-class DocummentPDF;
+
 class DocummentPDFPrivate;
 class DocummentPDF: public DocummentBase
 {

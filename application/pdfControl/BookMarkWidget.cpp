@@ -11,8 +11,8 @@ BookMarkWidget::BookMarkWidget(CustomWidget *parent) :
     CustomWidget(QString("BookMarkWidget"), parent)
 {
     setFocusPolicy(Qt::ClickFocus);
-    setMinimumWidth(LEFTMINWIDTH-5);
-    setMaximumWidth(LEFTMAXWIDTH-5);
+    setMinimumWidth(LEFTMINWIDTH - 5);
+    setMaximumWidth(LEFTMAXWIDTH - 5);
     initWidget();
     initConnection();
     slotUpdateTheme();
@@ -288,6 +288,10 @@ void BookMarkWidget::slotDelBkItem()
 
 void BookMarkWidget::slotUpdateTheme()
 {
+    auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
+    plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
+    setPalette(plt);
+    m_pAddBookMarkBtn->setPalette(plt);
     updateWidgetTheme();
 }
 
@@ -389,6 +393,9 @@ void BookMarkWidget::initConnection()
     connect(this, SIGNAL(sigJumpToPrevItem()), this, SLOT(slotJumpToPrevItem()));
     connect(this, SIGNAL(sigJumpToNextItem()), this, SLOT(slotJumpToNextItem()));
     connect(this, SIGNAL(sigCtrlBAddBookMark()), SLOT(slotAddBookMark()));
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ]() {
+        slotUpdateTheme();
+    });
 }
 
 /**

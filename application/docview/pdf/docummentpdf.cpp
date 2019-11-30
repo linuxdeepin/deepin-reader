@@ -46,11 +46,16 @@ protected slots:
 private:
     void setBasicInfo(const QString &filepath);
 };
-
+void debugfunc(const QString &message, const QVariant &closure)
+{
+    qDebug() << __FUNCTION__ << message << closure;
+}
 void DocummentPDFPrivate::loadDocumment(QString filepath)
 {
     Q_Q(DocummentPDF);
     document = Poppler::Document::load(filepath);
+//    QVariant cloursemsg;
+//    Poppler::setDebugErrorFunction(debugfunc, cloursemsg);
     if (nullptr == document || document->numPages() <= 0) {
         emit signal_docummentLoaded(false);
         return;

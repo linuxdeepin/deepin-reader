@@ -51,7 +51,7 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
     buttonLayout->addStretch(1);
 
     QHBoxLayout *playout = new QHBoxLayout;
-    playout->setContentsMargins(20, 0, 0, 0);
+    playout->setContentsMargins(23, 0, 0, 0);
     playout->addWidget(m_pClickLabel);
 
     auto mainLayout = new QVBoxLayout;
