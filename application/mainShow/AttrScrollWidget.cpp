@@ -14,10 +14,6 @@
 AttrScrollWidget::AttrScrollWidget(DWidget *parent)
     : DFrame(parent)
 {
-    QPalette palette = this->palette();
-    palette.setBrush(QPalette::Background, Qt::NoBrush);;
-    this->setPalette(palette);
-
     auto gridLayout = new QGridLayout;
     gridLayout->setContentsMargins(0, 6, 0, 6);
     gridLayout->setSpacing(3);

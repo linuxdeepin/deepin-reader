@@ -46,22 +46,28 @@ void FileAttrWidget::setFileAttr()
 
     m_pVBoxLayout->addSpacing(35);
 
-    auto hLayout = new QHBoxLayout;
-    hLayout->setContentsMargins(10, 0, 10, 10);
+    QFrame *infoframe = new QFrame(this);
+    QVBoxLayout *scrollWidgetLayout = new QVBoxLayout;
+    scrollWidgetLayout->setContentsMargins(10, 10, 10, 10);
+    infoframe->setLayout(scrollWidgetLayout);
 
-    auto scroll = new DScrollArea(this);
+    auto scroll = new DScrollArea;
     QPalette palette = scroll->viewport()->palette();
     palette.setBrush(QPalette::Background, Qt::NoBrush);
     scroll->viewport()->setPalette(palette);
+    scroll->viewport()->setContentsMargins(0, 0, 0, 0);
     scroll->setFrameShape(QFrame::NoFrame);
-    scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    scroll->setWidget(new AttrScrollWidget);
+    scroll->setWidget(infoframe);
     scroll->setWidgetResizable(true);
 
-    hLayout->addWidget(scroll);
+    QVBoxLayout *scrolllayout = new QVBoxLayout;
+    scrolllayout->setContentsMargins(0, 5, 10, 5);
+    scrolllayout->addWidget(scroll);
 
-    m_pVBoxLayout->addItem(hLayout);
+    qobject_cast<QVBoxLayout *>(scroll->widget()->layout())->insertWidget(0, new AttrScrollWidget);
+
+    m_pVBoxLayout->addLayout(scrolllayout, 1);
 }
 
 void FileAttrWidget::addTitleFrame(const QString &sData)

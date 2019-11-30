@@ -9,6 +9,7 @@
 #include <DWidgetUtil>
 
 #include "utils/utils.h"
+#include <DDialog>
 
 DWIDGET_USE_NAMESPACE
 /**
