@@ -9,12 +9,9 @@
 #include <DWidgetUtil>
 #include <DFloatingMessage>
 #include <DMessageManager>
-#include <QDebug>
 #include <QDesktopServices>
-#include <QProcess>
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QJsonDocument>
+#include <QDebug>
+
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
 #include <DGuiApplicationHelper>
@@ -39,19 +36,6 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     initThemeChanged();
 
-    m_pFilterList = QStringList() << KeyStr::g_esc << KeyStr::g_f1 << KeyStr::g_f11 << KeyStr::g_del
-                    << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r
-                    << KeyStr::g_pgup << KeyStr::g_pgdown << KeyStr::g_ctrl_f << KeyStr::g_ctrl_o
-                    << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_smaller
-                    << KeyStr::g_alt_1 << KeyStr::g_alt_2 << KeyStr::g_m << KeyStr::g_z
-                    << KeyStr::g_ctrl_alt_f << KeyStr::g_ctrl_shift_s
-                    << KeyStr::g_down << KeyStr::g_up << KeyStr::g_left << KeyStr::g_right
-                    << KeyStr::g_ctrl_e << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l << KeyStr::g_ctrl_shift_slash
-                    << KeyStr::g_space << KeyStr::g_ctrl_c;
-
-
-    installEventFilter(this);
-
     m_pMsgSubject = MsgSubject::getInstance();
 
     m_pNotifySubject = NotifySubject::getInstance();
@@ -59,10 +43,10 @@ MainWindow::MainWindow(DMainWindow *parent)
         m_pNotifySubject->addObserver(this);
     }
 
-    QRect rect = DApplication::desktop()->geometry();
+//    QRect rect = DApplication::desktop()->geometry();
 //    setMinimumSize(rect.width() * 0.8, rect.height() * 0.8);
-     resize(1000, 680);
-     setMinimumSize(752, 178);
+    resize(1000, 680);
+    setMinimumSize(752, 178);
 
     //  在屏幕中心显示
     Dtk::Widget::moveToCenter(this);
@@ -91,6 +75,13 @@ void MainWindow::setSreenRect(const QRect &rect)
     DataManager::instance()->setScreenRect(rect);
 }
 
+//  临时 添加 焦点
+void MainWindow::showEvent(QShowEvent *ev)
+{
+    this->setFocus();
+    DMainWindow::showEvent(ev);
+}
+
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
@@ -99,7 +90,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         bool rl = DataManager::instance()->bIsUpdate();
         if (rl) {
             DDialog dlg("", tr("Do you need to save the file opened?"));
-            dlg.setIcon(QIcon::fromTheme("deepin-reader"));
+            dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
             dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Not Save"));
             dlg.addButton(tr("Save"), true, DDialog::ButtonRecommend);
             QMargins mar(0, 0, 0, 30);
@@ -126,36 +117,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
     DMainWindow::closeEvent(event);
 }
 
-//  事件 过滤器
-bool MainWindow::eventFilter(QObject *obj, QEvent *e)
-{
-    int nType = e->type();
-    if (nType == QEvent::KeyPress) {    //  按下
-        QKeyEvent *event = static_cast<QKeyEvent *>(e);
-        QString key = Utils::getKeyshortcut(event);
-
-        if (m_pFilterList.contains(key)) {
-            dealWithKeyEvent(key);
-            return true;
-        }
-    } else if (nType == QEvent::Wheel) {
-        QWheelEvent *event = static_cast<QWheelEvent *>(e);
-        if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
-            QString sFilePath = DataManager::instance()->strOnlyFilePath();
-            if (sFilePath != "") {
-                if (event->delta() > 0) {
-                    notifyMsg(MSG_OPERATION_LARGER);
-                } else {
-                    notifyMsg(MSG_OPERATION_SMALLER);
-                }
-                return true;
-            }
-        }
-    }
-
-    return DMainWindow::eventFilter(obj, e);
-}
-
 void MainWindow::initUI()
 {
     titlebar()->addWidget(new TitleWidget, Qt::AlignLeft);
@@ -180,10 +141,11 @@ void MainWindow::createActionMap(DMenu *m_menu, QSignalMapper *pSigManager,
 
 void MainWindow::initConnections()
 {
-    connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
-    connect(this, SIGNAL(sigAppExit()), this, SLOT(slotAppExit()));
-    connect(this, SIGNAL(sigAppShowState(const int &)), this, SLOT(slotAppShowState(const int &)));
-    connect(this, SIGNAL(sigSetAppTitle(const QString &)), this, SLOT(slotSetAppTitle(const QString &)));
+    connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));
+    connect(this, SIGNAL(sigAppExit()), SLOT(slotAppExit()));
+    connect(this, SIGNAL(sigFullScreen()), SLOT(slotFullScreen()));
+    connect(this, SIGNAL(sigAppShowState(const int &)), SLOT(slotAppShowState(const int &)));
+    connect(this, SIGNAL(sigSetAppTitle(const QString &)), SLOT(slotSetAppTitle(const QString &)));
 
     connect(this, &MainWindow::sigSpacePressed, this, []() {
         if (DocummentProxy::instance()) {
@@ -229,7 +191,7 @@ void MainWindow::initConnections()
 
 void MainWindow::initTitlebar()
 {
-    titlebar()->setIcon(QIcon::fromTheme("deepin-reader"));
+    titlebar()->setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
     titlebar()->setTitle("");
 }
 
@@ -242,17 +204,6 @@ void MainWindow::onOpenFolder()
         strFilePath = strFilePath.mid(0, nLastPos);
         strFilePath = QString("file://") + strFilePath;
         QDesktopServices::openUrl(QUrl(strFilePath));
-    }
-}
-
-//  全屏
-void MainWindow::onFullScreen()
-{
-    int nCurState = DataManager::instance()->CurShowState();
-    if (nCurState != FILE_FULLSCREEN) {
-        slotAppShowState(0);
-        DataManager::instance()->setCurShowState(FILE_FULLSCREEN);  //  全屏状态
-        notifyMsg(MSG_OPERATION_FULLSCREEN);
     }
 }
 
@@ -288,107 +239,6 @@ void MainWindow::setCurTheme()
     DataManager::instance()->settrCurrentTheme(sTheme);
 }
 
-//  显示帮助文档
-void MainWindow::onOpenAppHelp()
-{
-    QDesktopServices::openUrl(QUrl(Constant::sAcknowledgementLink));
-}
-
-//  切换窗口大小
-void MainWindow::onChangeWindowState()
-{
-    if (windowState() == Qt::WindowMaximized) {
-        this->setWindowState(Qt::WindowNoState);
-    } else {
-        this->setWindowState(Qt::WindowMaximized);
-    }
-}
-
-void MainWindow::dealWithKeyEvent(const QString &key)
-{
-    if (key == KeyStr::g_f1) {
-        onOpenAppHelp();
-    } else if (key == KeyStr::g_ctrl_alt_f) {
-        //onChangeWindowState();
-    } else if (key == KeyStr::g_ctrl_shift_slash) {
-        displayShortcuts();
-    }    else {
-        QString sFilePath = DataManager::instance()->strOnlyFilePath();
-        if (sFilePath != "") {
-            if (key == KeyStr::g_ctrl_larger) {
-                notifyMsg(MSG_OPERATION_LARGER);
-            } else if (key == KeyStr::g_ctrl_smaller) {
-                notifyMsg(MSG_OPERATION_SMALLER);
-            } else if (key == KeyStr::g_f11) {
-                onFullScreen();
-            } else {
-                notifyMsg(MSG_NOTIFY_KEY_MSG, key);
-            }
-        }
-    }
-}
-
-void MainWindow::displayShortcuts()
-{
-    QRect rect = window()->geometry();
-    QPoint pos(rect.x() + rect.width() / 2,
-               rect.y() + rect.height() / 2);
-
-    QStringList shortcutnames;
-    QStringList windowKeymaps;
-    windowKeymaps << KeyStr::g_f11 << KeyStr::g_esc  << KeyStr::g_f1
-                  << KeyStr::g_ctrl_f << KeyStr::g_pgup << KeyStr::g_pgdown << KeyStr::g_ctrl_o << KeyStr::g_ctrl_larger
-                  << KeyStr::g_ctrl_smaller << KeyStr::g_ctrl_shift_s << KeyStr::g_ctrl_e
-                  << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_m << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2
-                  << KeyStr::g_ctrl_3 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r << KeyStr::g_alt_1 << KeyStr::g_alt_2
-                  << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l << KeyStr::g_del << KeyStr::g_z
-                  << KeyStr::g_ctrl_c << KeyStr::g_ctrl_x << KeyStr::g_ctrl_v << KeyStr::g_ctrl_z << KeyStr::g_ctrl_a << KeyStr::g_ctrl_shift_slash;
-
-    shortcutnames << tr("FullScreen") << tr("Escape") << tr("Help")
-                  << tr("Search") << tr("PageUp") << tr("PageDown") << tr("Open") << tr("Enlarge")
-                  << tr("Narrow")  << tr("SaveAs") << tr("Export") << tr("Print")
-                  << tr("Save") << tr("OpenThumbnail") << tr("AdaptePage") << tr("AdapteHeight")
-                  << tr("AdapteWidth") << tr("LeftRotation") << tr("RightRotation") << tr("SelectTool")
-                  << tr("HandTool") << tr("AddBookMark") << tr("AddNote") << tr("AddHighlight")
-                  << tr("Delete") << tr("Magnifier") << tr("Copy") << tr("Cut") << tr("Paste")
-                  << tr("Undo") << tr("Select all") << tr("ShortcutPreview");
-
-    // windowKeymaps=m_pFilterList;
-    QJsonObject shortcutObj;
-    QJsonArray jsonGroups;
-
-    QJsonObject windowJsonGroup;
-    windowJsonGroup.insert("groupName", "Window");
-    QJsonArray windowJsonItems;
-
-    int index = 0;
-    for (const QString &shortcutname : shortcutnames) {
-
-        QJsonObject jsonItem;
-        jsonItem.insert("name", shortcutname);
-        jsonItem.insert("value", windowKeymaps.at(index));
-        windowJsonItems.append(jsonItem);
-        index++;
-    }
-
-    windowJsonGroup.insert("groupItems", windowJsonItems);
-    jsonGroups.append(windowJsonGroup);
-    shortcutObj.insert("shortcut", jsonGroups);
-
-    QJsonDocument doc(shortcutObj);
-
-    QStringList shortcutString;
-    QString param1 = "-j=" + QString(doc.toJson().data());
-    QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
-
-    shortcutString << param1 << param2;
-
-    QProcess *shortcutViewProcess = new QProcess();
-    shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
-
-    connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
-}
-
 //  退出 应用
 void MainWindow::slotAppExit()
 {
@@ -397,7 +247,7 @@ void MainWindow::slotAppExit()
         bool rl = DataManager::instance()->bIsUpdate();
         if (rl) {
             DDialog dlg(tr("Save File"), tr("Do you need to save the file opened?"));
-            dlg.setIcon(QIcon::fromTheme("deepin-reader"));
+            dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
             dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Not Save") <<  tr("Save"));
             int nRes = dlg.exec();
             if (nRes <= 0) {
@@ -417,6 +267,17 @@ void MainWindow::slotAppExit()
     }
 
     dApp->exit(0);
+}
+
+//  全屏
+void MainWindow::slotFullScreen()
+{
+    int nCurState = DataManager::instance()->CurShowState();
+    if (nCurState != FILE_FULLSCREEN) {
+        slotAppShowState(0);
+        DataManager::instance()->setCurShowState(FILE_FULLSCREEN);  //  全屏状态
+        notifyMsg(MSG_OPERATION_FULLSCREEN);
+    }
 }
 
 /**
@@ -488,7 +349,7 @@ void MainWindow::slotActionTrigger(const QString &sAction)
     } else if (sAction == "Search") {
         notifyMsg(MSG_OPERATION_FIND);
     } else if (sAction == "Full Screen") {
-        onFullScreen();
+        slotFullScreen();
     } else if (sAction == "Screening") {
         onScreening();
     } else if (sAction == "Larger") {
@@ -521,7 +382,9 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
         emit sigAppExit();
         return ConstantMsg::g_effective_res;
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (msgContent == KeyStr::g_esc) {          //  退出全屏模式
+        if (msgContent == KeyStr::g_f11) {
+            emit sigFullScreen();
+        } else if (msgContent == KeyStr::g_esc) {        //  退出全屏模式
             emit sigAppShowState(1);
         } else if (msgContent == KeyStr::g_space) {
             if (DataManager::instance()->CurShowState() == FILE_SLIDE) {

@@ -23,6 +23,9 @@
 #include <QTranslator>
 #include <QDebug>
 #include "subjectObserver/ModuleHeader.h"
+
+#include "controller/ObjectEventFilter.h"
+
 namespace {
 
 }  // namespace
@@ -36,19 +39,22 @@ Application::Application(int &argc, char **argv)
 
     initI18n();
 
-    setApplicationName(("deepin-reader"));
+    setApplicationName(ConstantMsg::g_app_name);
     setOrganizationName(tr("deepin"));
-    setWindowIcon(QIcon::fromTheme("deepin-reader"));
+    setWindowIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
     setApplicationDisplayName(tr("reader"));
     setApplicationVersion(DApplication::buildVersion("20191125"));
     setApplicationAcknowledgementPage(Constant::sAcknowledgementLink);
     // setProductIcon(QIcon::fromTheme("deepin-reader"));
-    QPixmap px(QIcon::fromTheme("deepin-reader").pixmap(256 * qApp->devicePixelRatio(), 256 * qApp->devicePixelRatio()));
+    QPixmap px(QIcon::fromTheme(ConstantMsg::g_app_name).pixmap(256 * qApp->devicePixelRatio(), 256 * qApp->devicePixelRatio()));
     px.setDevicePixelRatio(qApp->devicePixelRatio());
     setProductIcon(QIcon(px));
 
 
     setApplicationDescription(tr("Document viewer a reading tool for PDF documents."));
+
+    installEventFilter(new ObjectEventFilter(this));
+
     initChildren();
 }
 

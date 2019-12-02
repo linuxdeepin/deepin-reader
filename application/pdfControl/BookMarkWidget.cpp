@@ -486,6 +486,7 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
         if (msgContent == KeyStr::g_del) {
             emit sigDelBKItem();
         } else if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup) {
+            qDebug() << __FUNCTION__ << "               11      ";
             emit sigJumpToPrevItem();
         } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown) {
             emit sigJumpToNextItem();

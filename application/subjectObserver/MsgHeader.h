@@ -1,6 +1,8 @@
 #ifndef MSGHEADER_H
 #define MSGHEADER_H
 
+#include <QString>
+
 /**
  *  消息类型 定义
  */
@@ -93,6 +95,7 @@ enum MSG_OPERATION_RES_TYPE {
 };
 
 namespace ConstantMsg {
+static QString g_app_name = "deepin-reader";
 static int g_effective_res = 9999;  //  表明 消息已被处理
 static int g_menu_width = 150;      //  菜单的宽度
 }

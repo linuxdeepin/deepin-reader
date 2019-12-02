@@ -59,7 +59,7 @@ void MainWidget::slotOpenFileFail(const QString &errorInfo)
         }
     }
     DDialog dlg("", errorInfo);
-    dlg.setIcon(QIcon::fromTheme("deepin-reader"));
+    dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
     dlg.addButtons(QStringList() << tr("Ok"));
     dlg.exec();
 }

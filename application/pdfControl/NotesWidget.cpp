@@ -491,6 +491,7 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
         if (msgContent == KeyStr::g_del) {
             emit sigDelNoteItem();
         } else if (msgContent == KeyStr::g_pgup || msgContent == KeyStr::g_up) {
+            qDebug() << __FUNCTION__ << "               11111      ";
             emit sigJumpToPrevItem();
         } else if (msgContent == KeyStr::g_pgdown || msgContent == KeyStr::g_down) {
             emit sigJumpToNextItem();

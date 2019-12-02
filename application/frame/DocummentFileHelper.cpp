@@ -123,7 +123,7 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
         bool rl = DataManager::instance()->bIsUpdate();
         if (rl) {
             DDialog dlg(tr("Save File"), tr("Do you need to save the file opened?"));
-            dlg.setIcon(QIcon::fromTheme("deepin-reader"));
+            dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
             dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Not Save") <<  tr("Save"));
             int nRes = dlg.exec();
             if (nRes == 0) {    //  取消打开该文件

@@ -32,12 +32,13 @@ signals:
     void sigOpenFileOk();
     void sigAppExit();
     void sigAppShowState(const int &);
+    void sigFullScreen();
     void sigSetAppTitle(const QString &);
     void sigSpacePressed();
 
 protected:
+    void showEvent(QShowEvent *ev) Q_DECL_OVERRIDE;
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
-    bool eventFilter(QObject *obj, QEvent *e) Q_DECL_OVERRIDE;
 
 private:
     void initUI();
@@ -47,20 +48,16 @@ private:
 
     void onOpenFile();
     void onOpenFolder();
-    void onFullScreen();
+
     void onScreening();
 
     void initThemeChanged();
     void setCurTheme();
-    void onOpenAppHelp();
-    void onChangeWindowState();
-    void dealWithKeyEvent(const QString &);
-    void displayShortcuts();
-
 
 private slots:
     void slotOpenFileOk();
     void slotAppExit();
+    void slotFullScreen();
     void slotAppShowState(const int &);
     void slotSetAppTitle(const QString &);
 
@@ -73,9 +70,6 @@ private:
 private:
     MsgSubject      *m_pMsgSubject = nullptr;
     NotifySubject   *m_pNotifySubject = nullptr;
-
-    QStringList     m_pFilterList;
-//    DFloatingMessage *m_tipsWidget = nullptr;
 
     // IObserver interface
 public:
