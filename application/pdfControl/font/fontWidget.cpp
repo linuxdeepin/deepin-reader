@@ -7,6 +7,9 @@
 FontWidget::FontWidget(CustomWidget *parent):
     CustomWidget("FontWidget", parent)
 {
+    shortKeyList = QStringList() << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2
+                   << KeyStr::g_ctrl_3 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r
+                   << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_smaller;
     initWidget();
     initConnection();
 
@@ -21,41 +24,24 @@ FontWidget::FontWidget(CustomWidget *parent):
  */
 int FontWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    int scale = 0;
     switch (msgType) {
-    case MSG_OPERATION_LARGER:      //  放大
-        scale = m_pEnlargeSlider->value();
-        if (scale < 500) {
-            scale += 25;
-            if (scale > 500) {
-                scale = 500;
-            }
-            m_pEnlargeSlider->setValue(scale);
-        }
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_SMALLER:     //  缩小
-        scale = m_pEnlargeSlider->value();
-        if (scale > 10) {
-            scale -= 25;
-            if (scale <= 10) {
-                scale = 10;
-            }
-            m_pEnlargeSlider->setValue(scale);
-        }
-        return ConstantMsg::g_effective_res;
+//    case MSG_OPERATION_LARGER:      //  放大
+//        emit sigKeyLargerOrSmaller(1);
+//        return ConstantMsg::g_effective_res;
+//    case MSG_OPERATION_SMALLER:     //  缩小
+//        emit sigKeyLargerOrSmaller(0);
+//        return ConstantMsg::g_effective_res;
     case MSG_OPERATION_OPEN_FILE_OK:
         emit sigOpenFileOk();
         break;
     case MSG_SELF_ADAPTE_SCALE:
-        m_bIsAdaptMove = true;
-        m_pEnlargeSlider->setValue(msgContent.toDouble() * 100);
+        emit sigSetCurScale(msgContent);
         break;
     case MSG_OPERATION_UPDATE_THEME:
         emit sigUpdateTheme();
         break;
     case MSG_NOTIFY_KEY_MSG : {
-        if (msgContent == KeyStr::g_ctrl_1 || msgContent == KeyStr::g_ctrl_2 || msgContent == KeyStr::g_ctrl_3
-                || msgContent == KeyStr::g_ctrl_r || msgContent == KeyStr::g_ctrl_shift_r) {
+        if (shortKeyList.contains(msgContent)) {
             emit sigDealWithKey(msgContent);
             return ConstantMsg::g_effective_res;
         }
@@ -121,17 +107,34 @@ void FontWidget::initWidget()
     this->setLayout(widgetLayout);
 }
 
+//  缩放, iFlag > 0, 放大, 否则 缩放
+void FontWidget::setFileLargerOrSmaller(const int &iFlag)
+{
+    if (iFlag > 0) {
+        int scale = m_pEnlargeSlider->value();
+        if (scale < 500) {
+            scale += 25;
+            if (scale > 500) {
+                scale = 500;
+            }
+            m_pEnlargeSlider->setValue(scale);
+        }
+    } else {
+        int scale = m_pEnlargeSlider->value();
+        if (scale > 10) {
+            scale -= 25;
+            if (scale <= 10) {
+                scale = 10;
+            }
+            m_pEnlargeSlider->setValue(scale);
+        }
+    }
+}
+
 //  快捷键处理
 void FontWidget::slotDealWithKey(const QString &sKey)
 {
     if (sKey == KeyStr::g_ctrl_1) {
-        //  单页显示
-//        DocummentFileHelper::instance()->setViewModeAndShow(ViewMode_SinglePage);
-
-        //  缩放比为1, 不旋转
-//        DocummentFileHelper::instance()->scaleRotateAndShow(1.0, RotateType_0);
-
-        //  恢复 初始化
         slotReset();
     } else if (sKey == KeyStr::g_ctrl_2) {
         slotSetSuitHCheckIcon();
@@ -141,6 +144,10 @@ void FontWidget::slotDealWithKey(const QString &sKey)
         slotSetRotateLeftCheckIcon();
     } else if (sKey == KeyStr::g_ctrl_shift_r) {
         slotSetRotateRightCheckIcon();
+    } else if (sKey == KeyStr::g_ctrl_smaller) {
+        setFileLargerOrSmaller(0);
+    } else if (sKey == KeyStr::g_ctrl_larger) {
+        setFileLargerOrSmaller(1);
     }
 }
 
@@ -183,6 +190,12 @@ void FontWidget::slotReset()
     m_isDoubPage = false;
 
     setScaleRotateViewModeAndShow();
+}
+
+void FontWidget::slotSetCurScale(const QString &sData)
+{
+    m_bIsAdaptMove = true;
+    m_pEnlargeSlider->setValue(sData.toDouble() * 100);
 }
 
 /**
@@ -274,8 +287,10 @@ void FontWidget::setShowSuitWIcon()
  */
 void FontWidget::initConnection()
 {
+//    connect(this, SIGNAL(sigKeyLargerOrSmaller(const int &)), SLOT(slotKeyLargerOrSmaller(const int &)));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotReset()));
+    connect(this, SIGNAL(sigSetCurScale(const QString &)), SLOT(slotSetCurScale(const QString &)));
     connect(this, SIGNAL(sigDealWithKey(const QString &)), SLOT(slotDealWithKey(const QString &)));
 }
 

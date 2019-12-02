@@ -11,6 +11,7 @@
 enum MSG_TYPE {
     MSG_SET_MainWindow_TITLE = 0,       //  设置 应用标题
     MSG_SLIDER_SHOW_STATE,              //  侧边栏 显隐消息
+    MSG_HIDE_FIND_WIDGET,               //  侧边栏 显隐消息
     MSG_BOOKMARK_SHOW_STATE,            //  书签状态 显隐消息
     MSG_FILE_PAGE_CHANGE,               //  文档 页码变化消息
     MSG_MAGNIFYING,                     //  放大镜消息

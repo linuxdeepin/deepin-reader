@@ -353,9 +353,9 @@ void MainWindow::slotActionTrigger(const QString &sAction)
     } else if (sAction == "Screening") {
         onScreening();
     } else if (sAction == "Larger") {
-        notifyMsg(MSG_OPERATION_LARGER);
+        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_larger);
     } else if (sAction == "Smaller") {
-        notifyMsg(MSG_OPERATION_SMALLER);
+        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_smaller);
     }
 }
 

@@ -7,6 +7,8 @@
 TitleWidget::TitleWidget(CustomWidget *parent) :
     CustomWidget("TitleWidget", parent)
 {
+    shortKeyList = QStringList() << KeyStr::g_alt_1 << KeyStr::g_alt_2 << KeyStr::g_m
+                   << KeyStr::g_z;
     initWidget();
     initConnections();
     slotUpdateTheme();
@@ -17,12 +19,13 @@ TitleWidget::~TitleWidget()
 
 }
 
-void TitleWidget::slotShowFindContent()
+//  显示了侧边栏, 则隐藏
+void TitleWidget::slotSetFindWidget(const int &iFlag)
 {
-    //  显示了侧边栏, 则隐藏
-    bool bCheck = m_pThumbnailBtn->isChecked();
-    if (!bCheck) {
-        m_pThumbnailBtn->setChecked(!bCheck);
+    if (iFlag == 1) {
+        m_pThumbnailBtn->setChecked(true);
+    } else {
+        slotAppFullScreen();
     }
 }
 
@@ -61,14 +64,12 @@ void TitleWidget::slotOpenFileOk()
 void TitleWidget::slotAppFullScreen()
 {
     //  显示了侧边栏, 则隐藏
-    bool bCheck = m_pThumbnailBtn->isChecked();
-    if (bCheck) {
-        m_pThumbnailBtn->setChecked(!bCheck);
+    m_pThumbnailBtn->setChecked(false);
 
-        //  侧边栏 隐藏
-        notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, "0");
-    }
+    //  侧边栏 隐藏
+    notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, "0");
 }
+
 
 //  退出放大鏡
 void TitleWidget::slotMagnifierCancel()
@@ -103,11 +104,11 @@ void TitleWidget::initWidget()
 
 void TitleWidget::initConnections()
 {
-    connect(this, SIGNAL(sigShowFindContent()), SLOT(slotShowFindContent()));
+    connect(this, SIGNAL(sigSetFindWidget(const int &)), SLOT(slotSetFindWidget(const int &)));
     connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigMagnifierCancel()), SLOT(slotMagnifierCancel()));
     connect(this, SIGNAL(sigAppFullScreen()), SLOT(slotAppFullScreen()));
-    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
+
     connect(this, SIGNAL(sigDealWithShortKey(const QString &)), SLOT(slotDealWithShortKey(const QString &)));
 }
 
@@ -118,7 +119,6 @@ void TitleWidget::on_thumbnailBtn_clicked()
     notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(rl));
 
     AppSetting::instance()->setKeyValue(KEY_M, QString("%1").arg(rl));
-
     DataManager::instance()->setBThumbnIsShow(rl);
 }
 
@@ -183,7 +183,7 @@ void TitleWidget::slotActionTrigger(QAction *action)
 //  处理 快捷键
 void TitleWidget::slotDealWithShortKey(const QString &sKey)
 {
-    if (sKey == KeyStr::g_alt_1) {          //  选择工具
+    if (sKey == KeyStr::g_alt_1) {         //  选择工具
         slotMagnifierCancel();
 
         if (0 != m_nCurHandleShape) {
@@ -195,12 +195,10 @@ void TitleWidget::slotDealWithShortKey(const QString &sKey)
         if (1 != m_nCurHandleShape) {
             setHandleShape();
         }
-    } else if (sKey == KeyStr::g_m) {      //  显示缩略图
-        bool rl = m_pThumbnailBtn->isChecked();
-        if (!rl) {
-            m_pThumbnailBtn->setChecked(true);
-            notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(1));
-        }
+    } else if (sKey == KeyStr::g_m) {       //  显示缩略图
+        m_pThumbnailBtn->setChecked(true);
+        notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(1));
+        DataManager::instance()->setBThumbnIsShow(1);
     } else if (sKey == KeyStr::g_z) {       //  开启放大镜
         bool bCheck = m_pMagnifierBtn->isChecked();
         if (!bCheck) {
@@ -351,7 +349,7 @@ void TitleWidget::notifyMsgToSubject(const int &msgType, const QString &msgCoten
 int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_FIND_CONTENT) {
-        emit sigShowFindContent();
+        emit sigSetFindWidget(1);
     } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         emit sigOpenFileOk();
     } else if (msgType == MSG_OPERATION_FULLSCREEN || msgType == MSG_OPERATION_SLIDE) {
@@ -361,13 +359,16 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (msgType == MSG_MAGNIFYING_CANCEL) {  //  右键取消放大镜
         emit sigMagnifierCancel();
         return ConstantMsg::g_effective_res;
+    } else if (msgType == MSG_HIDE_FIND_WIDGET) {
+        emit sigSetFindWidget(0);
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (msgContent == KeyStr::g_esc) {      //  退出放大镜模式
-            emit sigMagnifierCancel();
-        } else if (msgContent == KeyStr::g_alt_1 || msgContent == KeyStr::g_alt_2
-                   || msgContent == KeyStr::g_m || msgContent == KeyStr::g_z) { //  选择工具
-            emit sigDealWithShortKey(msgContent);
-            return ConstantMsg::g_effective_res;
+        if (msgContent == KeyStr::g_esc) {
+            emit sigMagnifierCancel();  //  退出放大镜模式
+        } else {
+            if (shortKeyList.contains(msgContent)) {
+                emit sigDealWithShortKey(msgContent);
+                return  ConstantMsg::g_effective_res;
+            }
         }
     }
     return 0;

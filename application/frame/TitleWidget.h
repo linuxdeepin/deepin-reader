@@ -22,14 +22,15 @@ public:
     ~TitleWidget() Q_DECL_OVERRIDE;
 
 signals:
-    void sigShowFindContent();
+    void sigSetFindWidget(const int &);
     void sigOpenFileOk();
     void sigAppFullScreen();
     void sigMagnifierCancel();
+
     void sigDealWithShortKey(const QString &);
 
 private slots:
-    void slotShowFindContent();
+    void slotSetFindWidget(const int &);
     void slotUpdateTheme();
     void slotOpenFileOk();
     void slotAppFullScreen();
@@ -56,7 +57,11 @@ private:
     void sendMsgToSubject(const int &, const QString &msgCotent = "");
     void notifyMsgToSubject(const int &, const QString &msgCotent = "");
 
+
+
 private:
+    QStringList     shortKeyList;
+
     DMenu   *m_pHandleMenu = nullptr;
     DMenu   *m_pSettingMenu = nullptr;
 

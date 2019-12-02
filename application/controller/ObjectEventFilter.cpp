@@ -48,9 +48,9 @@ bool ObjectEventFilter::eventFilter(QObject *obj, QEvent *e)
             QString sFilePath = DataManager::instance()->strOnlyFilePath();
             if (sFilePath != "") {
                 if (event->delta() > 0) {
-                    notifyMsg(MSG_OPERATION_LARGER);
+                    notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_larger);
                 } else {
-                    notifyMsg(MSG_OPERATION_SMALLER);
+                    notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_smaller);
                 }
                 return true;
             }

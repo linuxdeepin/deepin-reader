@@ -31,6 +31,7 @@ public:
 signals:
     void sigWidgetHide();
     void sigOpenFileOk();
+    void sigSetCurScale(const QString &);
     void sigDealWithKey(const QString &);
 
 public:
@@ -43,6 +44,8 @@ private slots:
     void slotDealWithKey(const QString &);
     void slotUpdateTheme();
     void slotReset();
+
+    void slotSetCurScale(const QString &);
 
     void slotSetChangeVal(int);
     void slotSetDoubPageViewCheckIcon();
@@ -67,8 +70,11 @@ private:
     void initAdaptateWidght();
 
     void setScaleRotateViewModeAndShow();
+    void setFileLargerOrSmaller(const int &);
 
 private:
+    QStringList     shortKeyList;
+
     QHBoxLayout     *m_pDoubleShowLayout = nullptr;
     QHBoxLayout     *m_pAdaptateHeightLayout = nullptr;
     QHBoxLayout     *m_pAdaptateWidghtLayout = nullptr;

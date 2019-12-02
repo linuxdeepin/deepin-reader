@@ -28,10 +28,9 @@ void SearchResWidget::slotClearWidget()
     }
 
     bool bShowThunmb = DataManager::instance()->bThumbnIsShow();
-
     if (!bShowThunmb) {
         //  侧边栏 隐藏
-        notifyMsg(MSG_SLIDER_SHOW_STATE, "0");
+        notifyMsg(MSG_HIDE_FIND_WIDGET);
     }
     notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(DataManager::instance()->currentWidget()));
 }
