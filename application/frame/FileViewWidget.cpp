@@ -604,9 +604,6 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
     case MSG_OPEN_FILE_PATH:                    //  打开文件
         emit sigOpenFile(msgContent);
         return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_SAVE_FILE :              //  保存文件
-        emit sigSaveFile();
-        return ConstantMsg::g_effective_res;
     case MSG_OPERATION_SAVE_AS_FILE:            //  另存为文件
         emit sigSaveAsFile();
         return ConstantMsg::g_effective_res;
@@ -616,9 +613,6 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
     case MSG_OPERATION_SLIDE:                   //  放映
         emit sigFileSlider(1);
         break;
-//    case MSG_OPERATION_PRINT :                  //  打印
-//        emit sigPrintFile();
-//        return  ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_ADD_HIGHLIGHTED:    //  高亮显示
         emit sigFileAddAnnotation(msgContent);
         return ConstantMsg::g_effective_res;
@@ -638,7 +632,7 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
 //  集中处理 按键通知消息
 int FileViewWidget::dealWithNotifyMsg(const QString &msgContent)
 {
-    if (KeyStr::g_ctrl_s == msgContent) {
+    if (KeyStr::g_ctrl_s == msgContent) {   //  保存文件
         emit sigSaveFile();
         return ConstantMsg::g_effective_res;
     }

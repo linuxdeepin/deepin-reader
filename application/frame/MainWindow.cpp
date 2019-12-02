@@ -335,9 +335,9 @@ void MainWindow::slotOpenFileOk()
 void MainWindow::slotActionTrigger(const QString &sAction)
 {
     if (sAction == "Open File") {
-        notifyMsg(MSG_OPERATION_OPEN_FILE);
+        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_o);
     } else if (sAction == "Save File") {
-        notifyMsg(MSG_OPERATION_SAVE_FILE);
+        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_s);
     } else if (sAction == "Save As File") {
         notifyMsg(MSG_OPERATION_SAVE_AS_FILE);
     } else if (sAction == "Open Folder") {

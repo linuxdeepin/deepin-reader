@@ -130,17 +130,14 @@ void HomeWidget::initConnections()
 
 int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_OPEN_FILE) {
-        emit sigOpenFileDialog();
-        return ConstantMsg::g_effective_res;
-    }
-
     if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == KeyStr::g_ctrl_o) {   //  Ctrl+O 打开文档
             emit sigOpenFileDialog();
             return ConstantMsg::g_effective_res;
         }
-    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+    }
+
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
     }
     return 0;

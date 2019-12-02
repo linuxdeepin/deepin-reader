@@ -9,10 +9,10 @@
 
 //  消息类型
 enum MSG_TYPE {
-    MSG_SET_MainWindow_TITLE = 0,       //  设置 应用标题
-    MSG_SLIDER_SHOW_STATE,              //  侧边栏 显隐消息
+//    MSG_SET_MainWindow_TITLE = 0,       //  设置 应用标题
+    MSG_SLIDER_SHOW_STATE = 0,              //  侧边栏 显隐消息
     MSG_HIDE_FIND_WIDGET,               //  侧边栏 显隐消息
-    MSG_BOOKMARK_SHOW_STATE,            //  书签状态 显隐消息
+//    MSG_BOOKMARK_SHOW_STATE,            //  书签状态 显隐消息
     MSG_FILE_PAGE_CHANGE,               //  文档 页码变化消息
     MSG_MAGNIFYING,                     //  放大镜消息
     MSG_MAGNIFYING_CANCEL,              //  取消放大镜消息
@@ -22,11 +22,11 @@ enum MSG_TYPE {
 
 //  右键菜单消息类型
 enum MSG_MENU_TYPE {
-    MSG_OPERATION_OPEN_FILE = 50,       //  打开文件
-    MSG_OPERATION_SAVE_FILE,            //  保存文件
-    MSG_OPERATION_SAVE_AS_FILE,         //  另存为文件
+//    MSG_OPERATION_OPEN_FILE = 50,       //  打开文件
+//    MSG_OPERATION_SAVE_FILE,            //  保存文件
+    MSG_OPERATION_SAVE_AS_FILE = 50,         //  另存为文件
     MSG_OPERATION_OPEN_FOLDER,          //  打开文件所处文件夹
-    MSG_OPERATION_PRINT,                //  打印
+//    MSG_OPERATION_PRINT,                //  打印
     MSG_OPERATION_ATTR,                 //  属性
     MSG_OPERATION_FIND,                 //  搜索
 //    MSG_OPERATION_FULLSCREEN,           //  全屏
