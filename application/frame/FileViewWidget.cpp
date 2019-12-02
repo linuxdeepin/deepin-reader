@@ -616,9 +616,9 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
     case MSG_OPERATION_SLIDE:                   //  放映
         emit sigFileSlider(1);
         break;
-    case MSG_OPERATION_PRINT :                  //  打印
-        emit sigPrintFile();
-        return  ConstantMsg::g_effective_res;
+//    case MSG_OPERATION_PRINT :                  //  打印
+//        emit sigPrintFile();
+//        return  ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_ADD_HIGHLIGHTED:    //  高亮显示
         emit sigFileAddAnnotation(msgContent);
         return ConstantMsg::g_effective_res;
@@ -643,7 +643,7 @@ int FileViewWidget::dealWithNotifyMsg(const QString &msgContent)
         return ConstantMsg::g_effective_res;
     }
 
-    if (KeyStr::g_ctrl_p == msgContent) {
+    if (KeyStr::g_ctrl_p == msgContent) {   //  打印
         emit sigPrintFile();
         return ConstantMsg::g_effective_res;
     }

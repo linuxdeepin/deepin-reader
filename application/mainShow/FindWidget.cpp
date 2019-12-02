@@ -28,6 +28,7 @@
 #include "controller/DataManager.h"
 #include "application.h"
 #include <QDebug>
+#include "subjectObserver/ModuleHeader.h"
 
 
 FindWidget::FindWidget(DWidget *parent)
@@ -38,8 +39,9 @@ FindWidget::FindWidget(DWidget *parent)
     setBlurBackgroundEnabled(true);
 
     initWidget();
+    initConnection();
 
-    setVisible(false);
+    slotSetVisible();
 
     m_pNotifySubject = NotifySubject::getInstance();
     if (m_pNotifySubject) {
@@ -69,6 +71,11 @@ void FindWidget::showPosition(const int &nParentWidth)
     this->move(nParentWidth - nWidget - 20, 20);
     this->show();
     this->raise();
+}
+
+void FindWidget::slotSetVisible()
+{
+    this->setVisible(false);
 }
 
 void FindWidget::findCancel()
@@ -116,11 +123,15 @@ void FindWidget::hideEvent(QHideEvent *e)
     DFloatingWidget::hideEvent(e);
 }
 
-int FindWidget::dealWithData(const int &msgType, const QString &)
+int FindWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
-    } else if (msgType == MSG_OPERATION_SLIDE || msgType == MSG_OPERATION_FULLSCREEN) {    //  幻灯片了
-        this->setVisible(false);
+    } else if (msgType == MSG_OPERATION_SLIDE) {    //  幻灯片了
+        emit sigSetVisible();
+    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
+        if (msgContent == KeyStr::g_f11) {
+            emit sigSetVisible();
+        }
     }
     return 0;
 }
@@ -168,4 +179,9 @@ void FindWidget::initWidget()
     layout->addWidget(findNextButton);
     layout->addWidget(closeButton);
     this->setLayout(layout);
+}
+
+void FindWidget::initConnection()
+{
+    connect(this, SIGNAL(sigSetVisible()), SLOT(slotSetVisible()));
 }

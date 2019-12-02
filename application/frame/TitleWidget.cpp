@@ -352,7 +352,7 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigSetFindWidget(1);
     } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         emit sigOpenFileOk();
-    } else if (msgType == MSG_OPERATION_FULLSCREEN || msgType == MSG_OPERATION_SLIDE) {
+    } else if (msgType == MSG_OPERATION_SLIDE) {
         emit sigAppFullScreen();
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
@@ -364,6 +364,8 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == KeyStr::g_esc) {
             emit sigMagnifierCancel();  //  退出放大镜模式
+        } else if (msgContent == KeyStr::g_f11) {
+            emit sigAppFullScreen();
         } else {
             if (shortKeyList.contains(msgContent)) {
                 emit sigDealWithShortKey(msgContent);

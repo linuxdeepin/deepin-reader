@@ -42,10 +42,14 @@ public:
     explicit FindWidget(DWidget *parent = nullptr);
     ~FindWidget() Q_DECL_OVERRIDE;
 
+signals:
+    void sigSetVisible();
+
 public:
     void showPosition(const int &);
 
 private slots:
+    void slotSetVisible();
     void findCancel();
     void handleContentChanged();
     void slotFindNextBtnClicked();
@@ -57,6 +61,7 @@ protected:
 
 private:
     void initWidget();
+    void initConnection();
 
 private:
     DSearchEdit     *m_pSearchEdit = nullptr;

@@ -276,7 +276,7 @@ void MainWindow::slotFullScreen()
     if (nCurState != FILE_FULLSCREEN) {
         slotAppShowState(0);
         DataManager::instance()->setCurShowState(FILE_FULLSCREEN);  //  全屏状态
-        notifyMsg(MSG_OPERATION_FULLSCREEN);
+        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_f11);
     }
 }
 
@@ -343,7 +343,7 @@ void MainWindow::slotActionTrigger(const QString &sAction)
     } else if (sAction == "Open Folder") {
         onOpenFolder();
     } else if (sAction == "Print") {
-        notifyMsg(MSG_OPERATION_PRINT);
+        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_p);
     } else if (sAction == "File Attr") {
         notifyMsg(MSG_OPERATION_ATTR);
     } else if (sAction == "Search") {

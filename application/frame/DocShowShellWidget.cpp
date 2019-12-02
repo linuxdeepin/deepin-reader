@@ -199,6 +199,10 @@ int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
         return ConstantMsg::g_effective_res;
     }
 
+    if (KeyStr::g_f11 == msgContent) {    //  搜索
+        emit sigShowCloseBtn(0);
+        return ConstantMsg::g_effective_res;
+    }
     if (KeyStr::g_esc == msgContent) {   //  退出   幻灯片\全屏
         emit sigHideCloseBtn();
     }
@@ -222,9 +226,6 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_SLIDE :                  //  幻灯片模式
         emit sigShowCloseBtn(1);
-        break;
-    case MSG_OPERATION_FULLSCREEN :             //  全屏
-        emit sigShowCloseBtn(0);
         break;
     case MSG_NOTIFY_KEY_MSG : {                 //  最后一个处理通知消息
         return dealWithNotifyMsg(msgContent);
