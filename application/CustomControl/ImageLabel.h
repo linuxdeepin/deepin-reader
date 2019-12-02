@@ -1,8 +1,8 @@
 #ifndef IMAGELABEL_H
 #define IMAGELABEL_H
 
-#include <DWidget>
 #include <DLabel>
+#include <DWidget>
 
 DWIDGET_USE_NAMESPACE
 
@@ -16,14 +16,8 @@ public:
 
 public:
     void setSelect(const bool &select);
-    inline void setRadius(const int radius)
-    {
-        m_nRadius = radius;
-    }
-    inline void setBookMarkStatus(bool bshow)
-    {
-        m_bshowbookmark = bshow;
-    }
+    inline void setRadius(const int radius) { m_nRadius = radius; }
+    inline void setBookMarkStatus(bool bshow) { m_bshowbookmark = bshow; }
 
     inline void setBackgroundPix(QPixmap pixmap)
     {
@@ -32,15 +26,16 @@ public:
     }
 
 protected:
-    void  paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
 
 private:
     bool m_bSelect = false;
-    int m_nRadius = 8;         // 圆角
-    bool m_bshowbookmark = false;     //显示书签
+    int m_nRadius = 8;             // 圆角
+    bool m_bshowbookmark = false;  //显示书签
 
-    QPixmap m_background;        // 缩略图
-    bool m_bSetBp = false;       // 是否设置缩略图
+    QPixmap m_background;           // 缩略图
+    bool m_bSetBp = false;          // 是否设置缩略图
+    int m_nHighLightLineWidth = 0;  // 高亮边框宽度
 };
 
-#endif // IMAGELABEL_H
+#endif  // IMAGELABEL_H
