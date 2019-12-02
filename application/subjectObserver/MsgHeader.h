@@ -17,7 +17,8 @@ enum MSG_TYPE {
     MSG_MAGNIFYING,                     //  放大镜消息
     MSG_MAGNIFYING_CANCEL,              //  取消放大镜消息
     MSG_HANDLESHAPE,                    //  手型 消息
-    MSG_OPEN_FILE_PATH                  //  打开的文件消息
+    MSG_OPEN_FILE_PATH,                  //  打开的文件消息
+    MSG_OPEN_FILE_PATH_S                  //  打开的文件消息
 };
 
 //  右键菜单消息类型
@@ -28,7 +29,7 @@ enum MSG_MENU_TYPE {
     MSG_OPERATION_OPEN_FOLDER,          //  打开文件所处文件夹
 //    MSG_OPERATION_PRINT,                //  打印
     MSG_OPERATION_ATTR,                 //  属性
-    MSG_OPERATION_FIND,                 //  搜索
+//    MSG_OPERATION_FIND,                 //  搜索
 //    MSG_OPERATION_FULLSCREEN,           //  全屏
     MSG_OPERATION_SLIDE,                //  放映
 //    MSG_OPERATION_LARGER,               //  放大
@@ -91,12 +92,13 @@ enum MSG_OPERATION_RES_TYPE {
     MSG_OPERATION_OPEN_FILE_TITLE,          //  打开文件成功, 文件标题
     MSG_OPERATION_OPEN_FILE_FAIL,           //  打开文件失败
     MSG_OPERATION_UPDATE_THEME,             //  主题变了
-    MSG_NOTIFY_KEY_MSG,                      //  按键通知消息
-    MSG_NOTIFY_SHOW_TIP,        //  显示提示窗口
+    MSG_NOTIFY_KEY_MSG,                     //  按键通知消息
+    MSG_NOTIFY_SHOW_TIP,                    //  显示提示窗口
 };
 
 namespace ConstantMsg {
 static QString g_app_name = "deepin-reader";
+
 static int g_effective_res = 9999;  //  表明 消息已被处理
 static int g_menu_width = 150;      //  菜单的宽度
 }

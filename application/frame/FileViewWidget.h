@@ -37,6 +37,7 @@ public:
 
 signals:
     void sigOpenFile(const QString &);
+    void sigOpenFiles(const QString &);
     void sigPrintFile();
     void sigSaveFile();
     void sigSaveAsFile();

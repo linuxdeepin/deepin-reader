@@ -94,6 +94,7 @@ private:
 
 private slots:
     void slotOpenFile(const QString &filePaths);
+    void slotOpenFiles(const QString &filePaths);
     void slotSaveFile();
     void slotSaveAsFile();
     void slotCopySelectContent(const QString &);

@@ -26,7 +26,7 @@ const QString sTiff_Filter = "Tiff files (*.tiff)";
 const QString sPs_Filter = "Ps files (*.ps)";
 const QString sXps_Filter = "Xps files (*.xps)";
 const QString sDjvu_Filter = "Djvu files (*.djvu)";
-const QString sQStringSep = "@#&!@#$";
+const QString sQStringSep = "@#$!!#$$@@#&!@#$";
 
 const QString sLogoPath = ":/resources/logo/deepin-reader.svg";
 }

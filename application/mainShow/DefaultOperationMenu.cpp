@@ -96,7 +96,7 @@ void DefaultOperationMenu::notifyMsgToFrame(const int &msgType, const QString &m
 
 void DefaultOperationMenu::slotSearchClicked()
 {
-    notifyMsgToFrame(MSG_OPERATION_FIND);
+    notifyMsgToFrame(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_f);
 }
 
 void DefaultOperationMenu::slotBookMarkClicked()

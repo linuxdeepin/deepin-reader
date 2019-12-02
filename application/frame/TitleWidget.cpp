@@ -365,6 +365,7 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
         if (msgContent == KeyStr::g_esc) {
             emit sigMagnifierCancel();  //  退出放大镜模式
         } else if (msgContent == KeyStr::g_f11) {
+            qDebug() << "           ";
             emit sigAppFullScreen();
         } else {
             if (shortKeyList.contains(msgContent)) {

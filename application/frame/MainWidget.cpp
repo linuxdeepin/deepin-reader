@@ -14,6 +14,8 @@
 #include <DDialog>
 #include <DMessageManager>
 
+#include "controller/DataManager.h"
+
 MainWidget::MainWidget(CustomWidget *parent) :
     CustomWidget("MainWidget", parent)
 {
@@ -129,22 +131,14 @@ void MainWidget::dropEvent(QDropEvent *event)
             QString msgContent = msgTitle + tr(" is not supported.");
             slotShowTips(msgContent);
         }
-        bool bisopen = false;
-        foreach (auto s, canOpenFileList) {
-            QString sRes = s + Constant::sQStringSep;
-            if (nullptr != DocummentProxy::instance() && !DocummentProxy::instance()->isOpendFile()) {
-                if (!bisopen)
-                    notifyMsg(MSG_OPEN_FILE_PATH, sRes);
-                else {
-                    if (!Utils::runApp(s))
-                        qDebug() << __FUNCTION__ << "process start deepin-reader failed";
-                }
 
-                bisopen = true;
-            } else {
-                Utils::runApp(s);
-            }
+        QString sRes = "";
+
+        foreach (auto s, canOpenFileList) {
+            sRes += s + Constant::sQStringSep;
         }
+
+        notifyMsg(MSG_OPEN_FILE_PATH_S, sRes);
     }
 }
 

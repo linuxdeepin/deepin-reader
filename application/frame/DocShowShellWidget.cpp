@@ -165,7 +165,7 @@ void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
 
 void DocShowShellWidget::slotBtnCloseClicked()
 {
-    notifyMsg(MSG_NOTIFY_KEY_MSG, "Esc");
+    notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
 }
 
 void DocShowShellWidget::slotUpdateTheme()
@@ -199,10 +199,10 @@ int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
         return ConstantMsg::g_effective_res;
     }
 
-    if (KeyStr::g_f11 == msgContent) {    //  搜索
+    if (KeyStr::g_f11 == msgContent) {    //  全屏
         emit sigShowCloseBtn(0);
-        return ConstantMsg::g_effective_res;
     }
+
     if (KeyStr::g_esc == msgContent) {   //  退出   幻灯片\全屏
         emit sigHideCloseBtn();
     }
@@ -214,9 +214,6 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
     switch (msgType) {
     case MSG_OPERATION_ATTR:                    //  打开该文件的属性信息
         emit sigShowFileAttr();
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_FIND:                    //  搜索
-        emit sigShowFileFind();
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_TEXT_ADD_ANNOTATION:     //  添加注释
         emit sigOpenNoteWidget(msgContent);

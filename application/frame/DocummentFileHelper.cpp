@@ -108,7 +108,6 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
 {
     //  已经打开了文件，　询问是否需要保存当前打开的文件
     if (m_szFilePath != "") {
-
         QStringList fileList = filePaths.split(Constant::sQStringSep,  QString::SkipEmptyParts);
         int nSize = fileList.size();
         if (nSize > 0) {
@@ -162,6 +161,34 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
             DataManager::instance()->setStrOnlyFilePath("");
 
             notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("File not supported"));
+        }
+    }
+}
+
+void DocummentFileHelper::slotOpenFiles(const QString &filePaths)
+{
+    bool bisopen = false;
+    QStringList canOpenFileList = filePaths.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    foreach (auto s, canOpenFileList) {
+        QString sOpenPath = DataManager::instance()->strOnlyFilePath();
+        if (s == sOpenPath) {
+            notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("file is opened."));
+        } else {
+            QString sRes = s + Constant::sQStringSep;
+            QString sOpenPath = DataManager::instance()->strOnlyFilePath(); //  打开文档为空
+            if (sOpenPath == "") {
+                if (!bisopen)
+                    notifyMsg(MSG_OPEN_FILE_PATH, sRes);
+                else {
+                    if (!Utils::runApp(s))
+                        qDebug() << __FUNCTION__ << "process start deepin-reader failed";
+                }
+
+                bisopen = true;
+            } else {
+                if (!Utils::runApp(s))
+                    qDebug() << __FUNCTION__ << "process start deepin-reader failed";
+            }
         }
     }
 }

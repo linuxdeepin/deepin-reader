@@ -37,6 +37,9 @@ MainWindow::MainWindow(DMainWindow *parent)
     initThemeChanged();
 
     m_pMsgSubject = MsgSubject::getInstance();
+    if (m_pMsgSubject) {
+        m_pMsgSubject->addObserver(this);
+    }
 
     m_pNotifySubject = NotifySubject::getInstance();
     if (m_pNotifySubject) {
@@ -56,6 +59,7 @@ MainWindow::~MainWindow()
 {
     // We don't need clean pointers because application has exit here.
     if (m_pMsgSubject) {
+        m_pMsgSubject->stopThreadRun();
         m_pMsgSubject->stopThreadRun();
     }
 
@@ -276,7 +280,6 @@ void MainWindow::slotFullScreen()
     if (nCurState != FILE_FULLSCREEN) {
         slotAppShowState(0);
         DataManager::instance()->setCurShowState(FILE_FULLSCREEN);  //  全屏状态
-        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_f11);
     }
 }
 
@@ -347,9 +350,9 @@ void MainWindow::slotActionTrigger(const QString &sAction)
     } else if (sAction == "File Attr") {
         notifyMsg(MSG_OPERATION_ATTR);
     } else if (sAction == "Search") {
-        notifyMsg(MSG_OPERATION_FIND);
+        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_f);
     } else if (sAction == "Full Screen") {
-        slotFullScreen();
+        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_f11);
     } else if (sAction == "Screening") {
         onScreening();
     } else if (sAction == "Larger") {
