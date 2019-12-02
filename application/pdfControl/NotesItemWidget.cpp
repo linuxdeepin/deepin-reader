@@ -1,16 +1,16 @@
 #include "NotesItemWidget.h"
 #include <DApplication>
+#include <DApplicationHelper>
 #include <QClipboard>
 #include <QTextLayout>
 #include "utils/utils.h"
-#include <DApplicationHelper>
 
-NotesItemWidget::NotesItemWidget(CustomItemWidget *parent) :
-    CustomItemWidget(QString("NotesItemWidget"), parent)
+NotesItemWidget::NotesItemWidget(CustomItemWidget *parent)
+    : CustomItemWidget(QString("NotesItemWidget"), parent)
 {
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
-            this, SLOT(slotShowContextMenu(const QPoint &)));
-    //connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this,
+            SLOT(slotShowContextMenu(const QPoint &)));
+    // connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     initWidget();
 }
 
@@ -49,7 +49,7 @@ void NotesItemWidget::slotCopyContant()
     if (m_pTextLab) {
         QString str = m_pTextLab->text();
         if (str != QString("")) {
-            QClipboard *clipboard = DApplication::clipboard();   //获取系统剪贴板指针
+            QClipboard *clipboard = DApplication::clipboard();  //获取系统剪贴板指针
             clipboard->setText(str);
         }
     }
@@ -78,10 +78,11 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
 
 void NotesItemWidget::slotUpdateTheme()
 {
-//    Dtk::Gui::DPalette pltorg = m_pPageNumber->palette();
-//    Dtk::Gui::DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
-//    pltorg.setColor(Dtk::Gui::DPalette::Text, plt.color(Dtk::Gui::DPalette::TextTips));
-//    m_pPageNumber->setPalette(pltorg);
+    //    Dtk::Gui::DPalette pltorg = m_pPageNumber->palette();
+    //    Dtk::Gui::DPalette plt =
+    //    Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
+    //    pltorg.setColor(Dtk::Gui::DPalette::Text, plt.color(Dtk::Gui::DPalette::TextTips));
+    //    m_pPageNumber->setPalette(pltorg);
 }
 
 void NotesItemWidget::initWidget()
@@ -148,38 +149,39 @@ int NotesItemWidget::dealWithData(const int &msgType, const QString &msgContent)
             }
         }
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
-//        emit sigUpdateTheme();
+        //        emit sigUpdateTheme();
     }
     return 0;
 }
 
 void NotesItemWidget::paintEvent(QPaintEvent *e)
 {
+    CustomItemWidget::paintEvent(e);
+
     if (m_pTextLab) {
         QString note = m_strNote;
         m_pTextLab->setText(calcText(m_pTextLab->font(), note, m_pTextLab->size()));
     }
 
-    CustomItemWidget::paintEvent(e);
-
-//    QPalette p(m_pPicture->palette());
-//    QColor color;
+    //    QPalette p(m_pPicture->palette());
+    //    QColor color;
 
     //  涉及到 主题颜色
     if (m_bPaint) {
-//        color = QColor(QString("#0081FF"));
-//        p.setColor(QPalette::Text, p.highlight().color());
+        //        color = QColor(QString("#0081FF"));
+        //        p.setColor(QPalette::Text, p.highlight().color());
         m_pPicture->setForegroundRole(DPalette::Highlight);
     } else {
-//        color = QColor::fromRgbF(0, 0, 0, 0.08);
-//        p.setColor(QPalette::Text, /*p.shadow().color()*/color);
+        //        color = QColor::fromRgbF(0, 0, 0, 0.08);
+        //        p.setColor(QPalette::Text, /*p.shadow().color()*/color);
         m_pPicture->setForegroundRole(QPalette::Shadow);
     }
 
-//    m_pPicture->setPalette(p);
+    //    m_pPicture->setPalette(p);
 }
 
-QString NotesItemWidget::calcText(const QFont &font, const QString &note, const QSize &size/*const int MaxWidth*/)
+QString NotesItemWidget::calcText(const QFont &font, const QString &note,
+                                  const QSize &size /*const int MaxWidth*/)
 {
 #if 0
     QString text = note;
@@ -208,7 +210,7 @@ QString NotesItemWidget::calcText(const QFont &font, const QString &note, const 
     for (int charIndex = 0; charIndex < note.size() && lineCount >= 0; ++charIndex) {
         int fmWidth = fm.horizontalAdvance(tempText);
         if (fmWidth > lineWidth) {
-            calcHeight += lineHeight/*+3*/;
+            calcHeight += lineHeight /*+3*/;
             if (calcHeight + lineHeight > totalHeight) {
                 QString endString = note.mid(prevLineCharIndex);
                 const QString &endText = fm.elidedText(endString, Qt::ElideRight, size.width());
@@ -221,7 +223,7 @@ QString NotesItemWidget::calcText(const QFont &font, const QString &note, const 
             QChar currChar = tempText.at(tempText.length() - 1);
             QChar nextChar = note.at(note.indexOf(tempText) + tempText.length());
             if (currChar.isLetter() && nextChar.isLetter()) {
-//                tempText += '-';
+                //                tempText += '-';
             }
             fmWidth = fm.horizontalAdvance(tempText);
             if (fmWidth > size.width()) {

@@ -2,8 +2,8 @@
 #include "controller/DataManager.h"
 #include "frame/DocummentFileHelper.h"
 
-NotesWidget::NotesWidget(CustomWidget *parent) :
-    CustomWidget(QString("NotesWidget"), parent)
+NotesWidget::NotesWidget(CustomWidget *parent)
+    : CustomWidget(QString("NotesWidget"), parent)
 {
     initWidget();
 
@@ -55,7 +55,7 @@ void NotesWidget::slotDltNoteItem(QString uuid)
                     delete t_widget;
                     t_widget = nullptr;
 
-                    delete  pItem;
+                    delete pItem;
                     pItem = nullptr;
 
                     // remove date from map and notify kong yun zhen
@@ -66,7 +66,8 @@ void NotesWidget::slotDltNoteItem(QString uuid)
                         dproxy->removeAnnotation(uuid, page);
                     }
 
-                    //some highlight no contents not contain by m_pNotesList,so call the func out of for loop
+                    // some highlight no contents not contain by m_pNotesList,so call the func out
+                    // of for loop
                     notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Deleted Note"));
 
                     break;
@@ -95,7 +96,7 @@ void NotesWidget::slotDltNoteContant(QString uuid)
                     delete t_widget;
                     t_widget = nullptr;
 
-                    delete  pItem;
+                    delete pItem;
                     pItem = nullptr;
 
                     // remove date from map and notify kong yun zhen
@@ -176,7 +177,8 @@ void NotesWidget::slotLoadImage(const QImage &image)
 
     QListWidgetItem *pItem = m_pNotesList->item(m_nIndex);
     if (pItem) {
-        NotesItemWidget *t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
+        NotesItemWidget *t_widget =
+            reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
         if (t_widget) {
             t_widget->setLabelImage(image);
         }
@@ -196,12 +198,12 @@ void NotesWidget::slotDelNoteItem()
         auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(curItem));
         if (t_widget) {
             QString t_uuid = t_widget->noteUUId();
-            int page  = t_widget->nPageIndex();
+            int page = t_widget->nPageIndex();
 
             delete t_widget;
             t_widget = nullptr;
 
-            delete  curItem;
+            delete curItem;
             curItem = nullptr;
 
             m_pNotesList->update();
@@ -232,7 +234,7 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
     auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
     if (t_widget) {
         QString t_uuid = t_widget->noteUUId();
-        int page  = t_widget->nPageIndex();
+        int page = t_widget->nPageIndex();
 
         auto pDocProxy = DocummentFileHelper::instance();
         if (pDocProxy) {
@@ -254,9 +256,11 @@ void NotesWidget::slotJumpToPrevItem()
     int t_index = -1;
     if (m_pNoteItem) {
         t_index = m_pNotesList->row(m_pNoteItem);
-        if (--t_index < 0) return;
+        if (--t_index < 0)
+            return;
         auto item = m_pNotesList->item(t_index);
-        if (item == nullptr) return;
+        if (item == nullptr)
+            return;
         auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
         if (t_widget) {
             clearItemColor();
@@ -281,9 +285,11 @@ void NotesWidget::slotJumpToNextItem()
     int t_index = -1;
     if (m_pNoteItem) {
         t_index = m_pNotesList->row(m_pNoteItem);
-        if (++t_index < 0) return;
+        if (++t_index < 0)
+            return;
         auto item = m_pNotesList->item(t_index);
-        if (item == nullptr) return;
+        if (item == nullptr)
+            return;
         auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
         if (t_widget) {
             clearItemColor();
@@ -294,7 +300,6 @@ void NotesWidget::slotJumpToNextItem()
         }
     }
 }
-
 
 /**
  * @brief NotesWidget::addNotesItem
@@ -320,7 +325,7 @@ void NotesWidget::addNotesItem(const QString &text)
                 return;
             }
             QImage image;
-            bool rl = dproxy->getImage(t_nPage, image, 48, 68/*42, 62*/);
+            bool rl = dproxy->getImage(t_nPage, image, 48, 68 /*42, 62*/);
             if (rl) {
                 QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_SMALL);
                 addNewItem(img, t_nPage, t_strUUid, t_strText);
@@ -340,14 +345,16 @@ void NotesWidget::initConnection()
     connect(this, SIGNAL(sigDltNoteItem(QString)), this, SLOT(slotDltNoteItem(QString)));
     connect(this, SIGNAL(sigDltNoteContant(QString)), this, SLOT(slotDltNoteContant(QString)));
 
-    connect(this, SIGNAL(sigAddNewNoteItem(const QString &)), this, SLOT(slotAddNoteItem(const QString &)));
+    connect(this, SIGNAL(sigAddNewNoteItem(const QString &)), this,
+            SLOT(slotAddNoteItem(const QString &)));
 
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
-    connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const QImage &)),
-            this, SLOT(slotLoadImage(const QImage &)));
+    connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const QImage &)), this,
+            SLOT(slotLoadImage(const QImage &)));
     connect(this, SIGNAL(sigDelNoteItem()), this, SLOT(slotDelNoteItem()));
-    connect(m_pNotesList, SIGNAL(sigSelectItem(QListWidgetItem *)), this, SLOT(slotSelectItem(QListWidgetItem *)));
+    connect(m_pNotesList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
+            SLOT(slotSelectItem(QListWidgetItem *)));
     connect(this, SIGNAL(sigJumpToPrevItem()), this, SLOT(slotJumpToPrevItem()));
     connect(this, SIGNAL(sigJumpToNextItem()), this, SLOT(slotJumpToNextItem()));
 }
@@ -375,10 +382,12 @@ void NotesWidget::setSelectItemBackColor(QListWidgetItem *item)
 
 void NotesWidget::clearItemColor()
 {
-    if (m_pNotesList == nullptr) return;
-    auto pCurItem = m_pNotesList->currentItem();
-    if (pCurItem) {
-        auto pItemWidget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
+    if (m_pNotesList == nullptr)
+        return;
+    //    auto pCurItem = m_pNotesList->currentItem();
+    if (m_pNoteItem) {
+        auto pItemWidget =
+            reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
         if (pItemWidget) {
             pItemWidget->setBSelect(false);
         }
@@ -416,7 +425,8 @@ void NotesWidget::addNewItem(const stHighlightContent &note)
  * @param uuid
  * @param text
  */
-void NotesWidget::addNewItem(const QImage &image, const int &page, const QString &uuid, const QString &text)
+void NotesWidget::addNewItem(const QImage &image, const int &page, const QString &uuid,
+                             const QString &text)
 {
     auto itemWidget = new NotesItemWidget;
     itemWidget->setLabelImage(image);
@@ -504,10 +514,9 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
 /*********************class ThreadLoadImageOfNote***********************/
 /**********************加载注释列表***************************************/
 
-ThreadLoadImageOfNote::ThreadLoadImageOfNote(QObject *parent):
-    QThread(parent)
+ThreadLoadImageOfNote::ThreadLoadImageOfNote(QObject *parent)
+    : QThread(parent)
 {
-
 }
 
 void ThreadLoadImageOfNote::stopThreadRun()
@@ -541,10 +550,11 @@ void ThreadLoadImageOfNote::run()
 
             if (t_page != highContent.ipage) {
                 t_page = highContent.ipage;
-                bl = dproxy->getImage(t_page, image, 48, 68/*42, 62*/);
+                bl = dproxy->getImage(t_page, image, 48, 68 /*42, 62*/);
             }
             if (bl) {
-//                QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_SMALL);
+                //                QImage img = Utils::roundImage(QPixmap::fromImage(image),
+                //                ICON_SMALL);
                 emit sigLoadImage(image);
             }
             msleep(20);
