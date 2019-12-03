@@ -72,6 +72,14 @@ void LeftSidebarWidget::initWidget()
     pStackedWidget->insertWidget(3, new SearchResWidget);
     pStackedWidget->setCurrentIndex(0);
 
+    for (int index = 0; index < pStackedWidget->count(); ++index) {
+        auto widget = pStackedWidget->widget(index);
+        if (widget) {
+            widget->setMinimumWidth(LEFTMINWIDTH);
+            widget->setMaximumWidth(LEFTMAXWIDTH);
+        }
+    }
+
     pVBoxLayout->addWidget(pStackedWidget);
     pVBoxLayout->addWidget(new MainOperationWidget, 0, Qt::AlignBottom);
 }
