@@ -388,7 +388,7 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
     //qDebug() << __FUNCTION__ << filePath << &d->document;
     Poppler::PDFConverter::PDFOptions options = pdfConverter->pdfOptions();
 
-    if (withChanges) {
+    if (withChanges & Poppler::PDFConverter::WithChanges) {
         options |= Poppler::PDFConverter::WithChanges;
     }
 
@@ -396,11 +396,7 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
     bool bres = pdfConverter->convert();
     if (!bres) {
         qDebug() << __FUNCTION__ << pdfConverter->lastError();
-//        QFile file("/home/archermind/Desktop/kyz.pdf");
-//        if (file.open(QIODevice::WriteOnly)) {
 
-//            file.write(d->document->toc()->toByteArray());
-//        }
     }
 
     return bres;
