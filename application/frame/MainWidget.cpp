@@ -1,23 +1,23 @@
 #include "MainWidget.h"
-#include <DSplitter>
 #include <DSpinner>
+#include <DSplitter>
 #include <QFileInfo>
 #include <QMimeData>
 #include <QUrl>
 
-#include "HomeWidget.h"
-#include "DocShowShellWidget.h"
-#include "LeftSidebarWidget.h"
-#include "DocummentFileHelper.h"
-#include "utils/utils.h"
-#include <QStackedLayout>
 #include <DDialog>
 #include <DMessageManager>
+#include <QStackedLayout>
+#include "DocShowShellWidget.h"
+#include "DocummentFileHelper.h"
+#include "HomeWidget.h"
+#include "LeftSidebarWidget.h"
+#include "utils/utils.h"
 
 #include "controller/DataManager.h"
 
-MainWidget::MainWidget(CustomWidget *parent) :
-    CustomWidget("MainWidget", parent)
+MainWidget::MainWidget(CustomWidget *parent)
+    : CustomWidget("MainWidget", parent)
 {
     setAcceptDrops(true);
 
@@ -29,8 +29,27 @@ void MainWidget::initConnections()
 {
     connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigOpenFileStart()), SLOT(slotOpenFileStart()));
-    connect(this, SIGNAL(sigOpenFileFail(const QString &)), SLOT(slotOpenFileFail(const QString &)));
+    connect(this, SIGNAL(sigOpenFileFail(const QString &)),
+            SLOT(slotOpenFileFail(const QString &)));
     connect(this, SIGNAL(sigShowTips(const QString &)), SLOT(slotShowTips(const QString &)));
+    connect(this, &MainWidget::sigStartFind, [=] {
+        auto spinner = this->findChild<DSpinner *>();
+        if (spinner) {
+            spinner->start();
+            spinner->show();
+
+            qDebug() << "        " << __FUNCTION__;
+        }
+    });
+    connect(this, &MainWidget::sigStopFind, [=] {
+        auto spinner = this->findChild<DSpinner *>();
+        if (spinner) {
+            spinner->stop();
+            spinner->hide();
+
+            qDebug() << "        " << __FUNCTION__;
+        }
+    });
 }
 
 //  文件打开成功
@@ -68,7 +87,8 @@ void MainWidget::slotOpenFileFail(const QString &errorInfo)
 
 void MainWidget::slotShowTips(const QString &contant)
 {
-    DMessageManager::instance()->sendMessage(this, QIcon(":/resources/light/pdfControl/ok.svg"), contant);
+    DMessageManager::instance()->sendMessage(this, QIcon(":/resources/light/pdfControl/ok.svg"),
+                                             contant);
 }
 
 int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
@@ -84,6 +104,10 @@ int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (msgType == MSG_NOTIFY_SHOW_TIP) {
         emit sigShowTips(msgContent);
         return ConstantMsg::g_effective_res;
+    } else if (msgType == MSG_FIND_STOP) {
+        emit sigStopFind();
+    } else if (msgType == MSG_FIND_START) {
+        emit sigStartFind();
     }
 
     return 0;
@@ -102,17 +126,17 @@ void MainWidget::dropEvent(QDropEvent *event)
 {
     auto mimeData = event->mimeData();
     if (mimeData->hasUrls()) {
-
         QStringList noOpenFileList;
         QStringList canOpenFileList;
 
         for (auto url : mimeData->urls()) {
-            QString sFilePath =  url.toLocalFile();
+            QString sFilePath = url.toLocalFile();
 
             QFileInfo file(sFilePath);
             if (file.isFile()) {
                 QString sSuffix = file.completeSuffix();
-                if (sSuffix == "pdf" || sFilePath.endsWith(QString(".pdf"))) {    //  打开第一个pdf文件
+                if (sSuffix == "pdf" ||
+                    sFilePath.endsWith(QString(".pdf"))) {  //  打开第一个pdf文件
                     canOpenFileList.append(sFilePath);
                 } else {
                     if (!noOpenFileList.contains(sSuffix)) {
@@ -152,7 +176,7 @@ void MainWidget::initWidget()
 
     auto pSplitter = new DSplitter;
     pSplitter->setHandleWidth(5);
-    pSplitter->setChildrenCollapsible(false);   //  子部件不可拉伸到 0
+    pSplitter->setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
     pSplitter->addWidget(new LeftSidebarWidget);
     pSplitter->addWidget(new DocShowShellWidget);
@@ -168,7 +192,7 @@ void MainWidget::initWidget()
     auto pSpinnerWidget = new DWidget;
     QGridLayout *gridlyout = new QGridLayout(pSpinnerWidget);
     gridlyout->setAlignment(Qt::AlignCenter);
-    auto m_spinner = new DSpinner;
+    auto m_spinner = new DSpinner(this);
     m_spinner->setFixedSize(60, 60);
     gridlyout->addWidget(m_spinner);
     m_spinner->start();

@@ -8,7 +8,6 @@
  * @brief   采用　栈式　显示窗口，　当前只显示某一特定窗口
  */
 
-
 class MainWidget : public CustomWidget
 {
     Q_OBJECT
@@ -22,6 +21,8 @@ signals:
     void sigOpenFileOk();
     void sigOpenFileFail(const QString &);
     void sigShowTips(const QString &);
+    void sigStartFind();
+    void sigStopFind();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
@@ -45,4 +46,4 @@ protected:
     void initWidget() Q_DECL_OVERRIDE;
 };
 
-#endif // MAINSTACKWIDGET_H
+#endif  // MAINSTACKWIDGET_H

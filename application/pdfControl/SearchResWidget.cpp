@@ -74,6 +74,8 @@ void SearchResWidget::slotSearchOver()
 
     m_pSearchList->clear();
 
+    notifyMsg(MSG_FIND_START, QString(""));
+
     disconnect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this,
                SLOT(slotGetSearchContant(stSearchRes)));
 
@@ -91,12 +93,12 @@ void SearchResWidget::slotSearchOver()
         initSearchList(list);
     }
 
-    notifyMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
+    //    notifyMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
 
-    bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
-    if (!t_bTnumbnIsShow) {
-        notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(!t_bTnumbnIsShow));
-    }
+    //    bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
+    //    if (!t_bTnumbnIsShow) {
+    //        notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(!t_bTnumbnIsShow));
+    //    }
 }
 
 void SearchResWidget::slotLoadImage(const int &page, const QImage &image)
@@ -127,6 +129,17 @@ void SearchResWidget::slotSelectItem(QListWidgetItem *item)
     setSelectItemBackColor(item);
 }
 
+void SearchResWidget::slotStopFind()
+{
+    notifyMsg(MSG_FIND_STOP, QString(""));
+    notifyMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
+
+    bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
+    if (!t_bTnumbnIsShow) {
+        notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(!t_bTnumbnIsShow));
+    }
+}
+
 void SearchResWidget::initWidget()
 {
     auto m_pVLayout = new QVBoxLayout;
@@ -153,6 +166,8 @@ void SearchResWidget::initConnections()
     connect(this, SIGNAL(sigFindNext()), this, SLOT(slotFindNext()));
     connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
             SLOT(slotSelectItem(QListWidgetItem *)));
+    connect(&m_loadSearchResThread, &LoadSearchResThread::sigStopFind, this,
+            &SearchResWidget::slotStopFind);
 }
 
 void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
@@ -383,20 +398,22 @@ void LoadSearchResThread::run()
                 //                QImage img = Utils::roundImage(QPixmap::fromImage(image),
                 //                ICON_SMALL);
                 emit sigLoadImage(page, image);
-                qDebug() << __FUNCTION__ << "load image page num:" << page + 1;
-                msleep(50);
+                //                qDebug() << __FUNCTION__ << "load image page num:" << page + 1;
+                msleep(90);
             }
         }
 
-        qDebug() << "===================================================";
+        //        qDebug() << "===================================================";
 
         if (m_nEndIndex >= m_pages - 1) {
+            m_isRunning = false;
+            emit sigStopFind();
             break;
         }
 
         m_nStartIndex += FIRST_LOAD_PAGES;
         m_nEndIndex += FIRST_LOAD_PAGES;
 
-        msleep(30);
+        //        msleep(30);
     }
 }
