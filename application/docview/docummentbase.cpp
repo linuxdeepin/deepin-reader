@@ -934,24 +934,6 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     }
 
     setViewModeAndShow(d->m_viewmode);
-//    switch (d->m_viewmode) {
-//    case ViewMode_SinglePage:
-//        showSinglePage();
-//        break;
-//    case ViewMode_FacingPage:
-//        if (d->m_pages.size() % 2) {
-//            showSinglePage(); //为了防止缩放的时候最后一页位置偏离
-//        }
-//        showFacingPage();
-//        break;
-//    default:
-//        break;
-//    }
-
-//    pageJump(currpageno);
-//    d->donotneedreloaddoc = false;
-////    loadPages();
-//    d->loadpagewaittimer->start(10);
     d->m_currentpageno = currpageno;
 }
 

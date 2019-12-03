@@ -205,7 +205,7 @@ bool DocummentProxy::save(const QString &filepath, bool withChanges)
     if (!m_documment->save(filepath, withChanges)) {
         return false;
     }
-    return m_documment->freshFile();
+    return m_documment->freshFile(m_path);
 //        return m_documment->save(filepath, withChanges);
 }
 
@@ -213,7 +213,8 @@ bool DocummentProxy::saveas(const QString &filepath, bool withChanges)
 {
     if (m_documment && !bcloseing && m_documment->saveas(filepath, withChanges)) {
 //        qDebug() << "saveas success";
-        return openFile(DocType_PDF, filepath);
+//        return openFile(DocType_PDF, filepath);
+        return m_documment->freshFile(filepath);
     }
 //    qDebug() << "saveas failed";
     return false;

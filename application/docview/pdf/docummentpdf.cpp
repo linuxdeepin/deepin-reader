@@ -515,7 +515,7 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, i
     }
 }
 
-bool DocummentPDF::freshFile()
+bool DocummentPDF::freshFile(QString file)
 {
     Q_D(DocummentPDF);
     for (int i = 0; i < d->m_pages.size(); i++) {
@@ -525,7 +525,7 @@ bool DocummentPDF::freshFile()
         delete d->document;
         d->document = nullptr;
     }
-    d->document = Poppler::Document::load(d->m_fileinfo->strFilepath);
+    d->document = Poppler::Document::load(file);
 //    QVariant cloursemsg;
 //    Poppler::setDebugErrorFunction(debugfunc, cloursemsg);
     if (nullptr == d->document || d->document->numPages() <= 0) {

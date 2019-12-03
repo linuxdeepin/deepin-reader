@@ -275,7 +275,7 @@ public:
     {
         return false;
     }
-    virtual bool freshFile()
+    virtual bool freshFile(QString file)
     {
         return false;
     }

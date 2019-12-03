@@ -31,7 +31,7 @@ public:
     bool loadDocumment(QString filepath) override;
     void jumpToHighLight(const QString &uuid, int ipage) override;
     void changeAnnotationColor(int ipage, const QString uuid, const QColor &color) override;
-    bool freshFile() override;
+    bool freshFile(QString file) override;
 
 private:
     bool pdfsave(const QString &filePath, bool withChanges);
