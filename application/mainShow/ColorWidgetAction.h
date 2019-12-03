@@ -1,8 +1,8 @@
 #ifndef COLORWIDGETACTION_H
 #define COLORWIDGETACTION_H
 
-#include <QWidgetAction>
 #include <DWidget>
+#include <QWidgetAction>
 #include "CustomControl/CustomClickLabel.h"
 
 DWIDGET_USE_NAMESPACE
@@ -22,6 +22,9 @@ signals:
     void sigBtnGroupClicked(int);
     void sigBtnDefaultClicked();
 
+private slots:
+    void slotSetButtonFocus(int);
+
 private:
     void initWidget(DWidget *pParent);
 
@@ -29,4 +32,4 @@ private:
     CustomClickLabel *m_pClickLabel = nullptr;
 };
 
-#endif // COLORWIDGETACTION_H
+#endif  // COLORWIDGETACTION_H

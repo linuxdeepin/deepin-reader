@@ -2,10 +2,10 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-#include <QButtonGroup>
-#include "controller/DataManager.h"
 #include <DFloatingButton>
 #include <DFontSizeManager>
+#include <QButtonGroup>
+#include "controller/DataManager.h"
 
 ColorWidgetAction::ColorWidgetAction(DWidget *pParent)
     : QWidgetAction(pParent)
@@ -16,6 +16,17 @@ ColorWidgetAction::ColorWidgetAction(DWidget *pParent)
 void ColorWidgetAction::setBtnAddLightState(const bool &bState)
 {
     m_pClickLabel->setEnabled(!bState);
+}
+
+void ColorWidgetAction::slotSetButtonFocus(int index)
+{
+    auto btnGroup = this->findChild<QButtonGroup *>();
+    if (btnGroup) {
+        auto btn = btnGroup->button(index);
+        if (btn) {
+            btn->setFocus(Qt::ActiveWindowFocusReason);
+        }
+    }
 }
 
 void ColorWidgetAction::initWidget(DWidget *pParent)
@@ -33,15 +44,16 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
 
     auto btnGroup = new QButtonGroup(this);
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SIGNAL(sigBtnGroupClicked(int)));
+    connect(btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotSetButtonFocus(int)));
 
     auto colorList = DataManager::instance()->getLightColorList();
     for (int iLoop = 0; iLoop < colorList.size(); iLoop++) {
         auto btn = new DFloatingButton(pWidget);
-        btn->setBackgroundRole(QPalette::Button);
+        btn->setBackgroundRole(DPalette::Button);
         btn->setFixedSize(QSize(20, 20));
 
         QPalette pa = btn->palette();
-        pa.setBrush(QPalette::Button, colorList.at(iLoop));
+        pa.setBrush(DPalette::Button, colorList.at(iLoop));
         btn->setPalette(pa);
 
         btnGroup->addButton(btn, iLoop);
