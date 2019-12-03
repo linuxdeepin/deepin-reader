@@ -2,8 +2,8 @@
 #include "controller/DataManager.h"
 #include "frame/DocummentFileHelper.h"
 
-SearchResWidget::SearchResWidget(CustomWidget *parent) :
-    CustomWidget(QString("SearchResWidget"), parent)
+SearchResWidget::SearchResWidget(CustomWidget *parent)
+    : CustomWidget(QString("SearchResWidget"), parent)
 {
     m_loadSearchResThread.setSearchResW(this);
 
@@ -46,10 +46,12 @@ void SearchResWidget::slotCloseFile()
 
 void SearchResWidget::slotFlushSearchWidget(const QString &msgContent)
 {
-    connect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this, SLOT(slotGetSearchContant(stSearchRes)));
+    connect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this,
+            SLOT(slotGetSearchContant(stSearchRes)));
     QMap<int, stSearchRes> resMap;
     DocummentFileHelper::instance()->search(msgContent, resMap, Qt::red);
-    disconnect(DocummentProxy::instance(), SIGNAL(signal_searchover()), this, SLOT(slotSearchOver()));
+    disconnect(DocummentProxy::instance(), SIGNAL(signal_searchover()), this,
+               SLOT(slotSearchOver()));
     connect(DocummentProxy::instance(), SIGNAL(signal_searchover()), this, SLOT(slotSearchOver()));
 }
 
@@ -67,21 +69,25 @@ void SearchResWidget::slotSearchOver()
         m_loadSearchResThread.stopThread();
     }
 
-    if (m_pSearchList == nullptr) return;
+    if (m_pSearchList == nullptr)
+        return;
 
     m_pSearchList->clear();
 
-    disconnect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this, SLOT(slotGetSearchContant(stSearchRes)));
+    disconnect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this,
+               SLOT(slotGetSearchContant(stSearchRes)));
 
     QList<stSearchRes> list = m_loadSearchResThread.searchList();
 
     if (list.size() <= 0) {
-        disconnect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this, SLOT(slotSelectItem(QListWidgetItem *)));
+        disconnect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
+                   SLOT(slotSelectItem(QListWidgetItem *)));
         showTips();
     } else {
-        connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this, SLOT(slotSelectItem(QListWidgetItem *)));
+        connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
+                SLOT(slotSelectItem(QListWidgetItem *)));
         //生成左侧搜索列表
-        //to do and send flush thumbnail and contant
+        // to do and send flush thumbnail and contant
         initSearchList(list);
     }
 
@@ -123,7 +129,7 @@ void SearchResWidget::slotSelectItem(QListWidgetItem *item)
 
 void SearchResWidget::initWidget()
 {
-    auto m_pVLayout  = new QVBoxLayout;
+    auto m_pVLayout = new QVBoxLayout;
     m_pVLayout->setContentsMargins(0, 8, 0, 0);
     m_pVLayout->setSpacing(0);
     this->setLayout(m_pVLayout);
@@ -136,15 +142,17 @@ void SearchResWidget::initWidget()
 
 void SearchResWidget::initConnections()
 {
-    connect(&m_loadSearchResThread, SIGNAL(sigLoadImage(const int &, const QImage &)),
-            this, SLOT(slotLoadImage(const int &, const QImage &)));
+    connect(&m_loadSearchResThread, SIGNAL(sigLoadImage(const int &, const QImage &)), this,
+            SLOT(slotLoadImage(const int &, const QImage &)));
 
     connect(this, SIGNAL(sigClearWidget()), this, SLOT(slotClearWidget()));
-    connect(this, SIGNAL(sigFlushSearchWidget(const QString &)), this, SLOT(slotFlushSearchWidget(const QString &)));
+    connect(this, SIGNAL(sigFlushSearchWidget(const QString &)), this,
+            SLOT(slotFlushSearchWidget(const QString &)));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
     connect(this, SIGNAL(sigFindPrev()), this, SLOT(slotFindPrev()));
     connect(this, SIGNAL(sigFindNext()), this, SLOT(slotFindNext()));
-    connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this, SLOT(slotSelectItem(QListWidgetItem *)));
+    connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
+            SLOT(slotSelectItem(QListWidgetItem *)));
 }
 
 void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
@@ -166,14 +174,14 @@ void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
         strText.clear();
     }
 
-//    if(m_pSearchList && m_pSearchList->count() > 0){
-//        auto pItem = m_pSearchList->item(0);
-//        auto pWidget = reinterpret_cast<NotesItemWidget *>(m_pSearchList->itemWidget(pItem));
-//        if(pWidget){
-//            pWidget->setBSelect(true);
-//            m_pSearchItem = pItem;
-//        }
-//    }
+    //    if(m_pSearchList && m_pSearchList->count() > 0){
+    //        auto pItem = m_pSearchList->item(0);
+    //        auto pWidget = reinterpret_cast<NotesItemWidget *>(m_pSearchList->itemWidget(pItem));
+    //        if(pWidget){
+    //            pWidget->setBSelect(true);
+    //            m_pSearchItem = pItem;
+    //        }
+    //    }
 
     //开始填充缩略图线程
     m_loadSearchResThread.setRunning(true);
@@ -207,7 +215,7 @@ void SearchResWidget::showTips()
     auto vLayout = new QVBoxLayout;
     auto tipWidget = new DWidget;
     auto tipLab = new DLabel(tr("no result"));
-    tipLab->setForegroundRole(/*DPalette::TextTips*/QPalette::ToolTipText);
+    tipLab->setForegroundRole(/*DPalette::TextTips*/ QPalette::ToolTipText);
     DFontSizeManager::instance()->bind(tipLab, DFontSizeManager::T6);
 
     tipWidget->setMinimumSize(QSize(226, 528));
@@ -246,10 +254,12 @@ void SearchResWidget::setSelectItemBackColor(QListWidgetItem *item)
 
 void SearchResWidget::clearItemColor()
 {
-    if (m_pSearchList == nullptr) return;
+    if (m_pSearchList == nullptr)
+        return;
     auto pCurItem = m_pSearchList->currentItem();
     if (pCurItem) {
-        auto pItemWidget = reinterpret_cast<NotesItemWidget *>(m_pSearchList->itemWidget(m_pSearchItem));
+        auto pItemWidget =
+            reinterpret_cast<NotesItemWidget *>(m_pSearchList->itemWidget(m_pSearchItem));
         if (pItemWidget) {
             pItemWidget->setBSelect(false);
         }
@@ -275,13 +285,13 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
         return ConstantMsg::g_effective_res;
     }
 
-    if (msgType == MSG_FIND_CONTENT) {        //  查询内容
+    if (msgType == MSG_FIND_CONTENT) {  //  查询内容
         if (msgContent != QString("")) {
             emit sigFlushSearchWidget(msgContent);
         }
     } else if (msgType == MSG_CLEAR_FIND_CONTENT) {
         emit sigClearWidget();
-    } else if (MSG_CLOSE_FILE == msgType) {    //  关闭w文件通知消息
+    } else if (MSG_CLOSE_FILE == msgType) {  //  关闭w文件通知消息
         emit sigCloseFile();
     }
 
@@ -309,10 +319,9 @@ int SearchResWidget::getSearchPage(const int &index)
 /************************************LoadSearchResList*******************************************************/
 /************************************加载搜索列表缩略图*********************************************************/
 
-LoadSearchResThread::LoadSearchResThread(QObject *parent):
-    QThread(parent)
+LoadSearchResThread::LoadSearchResThread(QObject *parent)
+    : QThread(parent)
 {
-
 }
 
 /**
@@ -324,8 +333,8 @@ void LoadSearchResThread::stopThread()
     m_isRunning = false;
 
     quit();
-//    terminate();    //终止线程
-    wait();         //阻塞等待
+    //    terminate();    //终止线程
+    wait();  //阻塞等待
 }
 
 /**
@@ -341,7 +350,6 @@ void LoadSearchResThread::run()
     int m_nEndIndex = 19;
 
     while (m_isRunning) {
-
         if (m_nStartIndex < 0) {
             m_nStartIndex = 0;
         }
@@ -370,16 +378,24 @@ void LoadSearchResThread::run()
             }
 
             QImage image;
-            bool bl = dproxy ->getImage(page, image, 48, 68/*42, 62*/);
+            bool bl = dproxy->getImage(page, image, 48, 68 /*42, 62*/);
             if (bl) {
-//                QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_SMALL);
+                //                QImage img = Utils::roundImage(QPixmap::fromImage(image),
+                //                ICON_SMALL);
                 emit sigLoadImage(page, image);
-                msleep(60);
+                qDebug() << __FUNCTION__ << "load image page num:" << page + 1;
+                msleep(50);
             }
         }
 
+        qDebug() << "===================================================";
+
+        if (m_nEndIndex >= m_pages - 1) {
+            break;
+        }
+
         m_nStartIndex += FIRST_LOAD_PAGES;
-        m_nEndIndex   += FIRST_LOAD_PAGES;
+        m_nEndIndex += FIRST_LOAD_PAGES;
 
         msleep(30);
     }

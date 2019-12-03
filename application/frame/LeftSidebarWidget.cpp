@@ -2,27 +2,27 @@
 #include <DStackedWidget>
 #include <QVBoxLayout>
 
+#include "controller/DataManager.h"
 #include "pdfControl/BookMarkWidget.h"
 #include "pdfControl/NotesWidget.h"
-#include "pdfControl/ThumbnailWidget.h"
 #include "pdfControl/SearchResWidget.h"
-#include "controller/DataManager.h"
+#include "pdfControl/ThumbnailWidget.h"
 
 #include "MainOperationWidget.h"
 #include "controller/AppSetting.h"
 
-LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent):
-    CustomWidget("LeftSidebarWidget", parent)
+LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
+    : CustomWidget("LeftSidebarWidget", parent)
 {
-//    setMinimumWidth(226);
-//    setMaximumWidth(452);
+    //    setMinimumWidth(226);
+    //    setMaximumWidth(452);
     setMinimumWidth(LEFTMINWIDTH);
     setMaximumWidth(LEFTMAXWIDTH);
 
     initWidget();
     initConnections();
 
-    slotWidgetVisible(0); //  默认 隐藏
+    slotWidgetVisible(0);  //  默认 隐藏
     slotUpdateTheme();
 }
 
@@ -51,8 +51,10 @@ void LeftSidebarWidget::slotUpdateTheme()
 
 void LeftSidebarWidget::initConnections()
 {
-    connect(this, SIGNAL(sigStackSetCurIndex(const int &)), this, SLOT(slotStackSetCurIndex(const int &)));
-    connect(this, SIGNAL(sigWidgetVisible(const int &)), this, SLOT(slotWidgetVisible(const int &)));
+    connect(this, SIGNAL(sigStackSetCurIndex(const int &)), this,
+            SLOT(slotStackSetCurIndex(const int &)));
+    connect(this, SIGNAL(sigWidgetVisible(const int &)), this,
+            SLOT(slotWidgetVisible(const int &)));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
@@ -76,13 +78,13 @@ void LeftSidebarWidget::initWidget()
 
 int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_SWITCHLEFTWIDGET) {    //切换页面
+    if (msgType == MSG_SWITCHLEFTWIDGET) {  //切换页面
         emit sigStackSetCurIndex(msgContent.toInt());
         return ConstantMsg::g_effective_res;
     }
-    if (msgType == MSG_SLIDER_SHOW_STATE) { //  控制 侧边栏显隐
+    if (msgType == MSG_SLIDER_SHOW_STATE) {  //  控制 侧边栏显隐
         emit sigWidgetVisible(msgContent.toInt());
-        return  ConstantMsg::g_effective_res;
+        return ConstantMsg::g_effective_res;
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
     }
