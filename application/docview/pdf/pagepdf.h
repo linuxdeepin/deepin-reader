@@ -30,7 +30,9 @@ public:
     bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
     Poppler::Page *GetPage();
     stSearchRes search(const QString &text, bool matchCase, bool wholeWords) override;
-    void changeAnnotationColor(const QString uuid, const QColor& color);
+    void changeAnnotationColor(const QString uuid, const QColor &color);
+    void deletePage();
+    void freshPage(Poppler::Page *page);
 
 protected:
     void paintEvent(QPaintEvent *event) override;

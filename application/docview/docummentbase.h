@@ -275,6 +275,10 @@ public:
     {
         return false;
     }
+    virtual bool freshFile()
+    {
+        return false;
+    }
     virtual void jumpToHighLight(const QString &uuid, int ipage) {}
     virtual void changeAnnotationColor(int ipage, const QString uuid, const QColor &color) {}
     void stopLoadPageThread();

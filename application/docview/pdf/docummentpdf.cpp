@@ -515,3 +515,29 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, i
     }
 }
 
+bool DocummentPDF::freshFile()
+{
+    Q_D(DocummentPDF);
+    for (int i = 0; i < d->m_pages.size(); i++) {
+        ((PagePdf *)d->m_pages.at(i))->deletePage();
+    }
+    if (nullptr != d->document) {
+        delete d->document;
+        d->document = nullptr;
+    }
+    d->document = Poppler::Document::load(d->m_fileinfo->strFilepath);
+//    QVariant cloursemsg;
+//    Poppler::setDebugErrorFunction(debugfunc, cloursemsg);
+    if (nullptr == d->document || d->document->numPages() <= 0) {
+        return false;
+    }
+    d->document->setRenderHint(Poppler::Document::TextAntialiasing, true);
+    d->document->setRenderHint(Poppler::Document::Antialiasing, true);
+    d->document->setRenderHint(Poppler::Document::ThinLineSolid, true);
+    d->document->setRenderHint(Poppler::Document::ThinLineShape, true);
+    for (int i = 0; i < d->m_pages.size(); i++) {
+        ((PagePdf *)d->m_pages.at(i))->freshPage(d->document->page(i));
+    }
+    return true;
+}
+

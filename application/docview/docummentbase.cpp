@@ -1889,3 +1889,4 @@ bool DocummentBase::getAutoPlaySlideStatu()
     Q_D(DocummentBase);
     return d->bautoplayslide;
 }
+

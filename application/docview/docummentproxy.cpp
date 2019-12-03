@@ -63,7 +63,7 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath)
         connect(this, SIGNAL(signal_pageJump(int)), m_documment, SLOT(pageJump(int)));
         connect(m_documment, SIGNAL(signal_searchRes(stSearchRes)), this, SIGNAL(signal_searchRes(stSearchRes)));
         connect(m_documment, SIGNAL(signal_searchover()), this, SIGNAL(signal_searchover()));
-//    connect(this, SIGNAL(signal_mouseSelectText(QPoint, QPoint)), m_documment, SLOT(mouseSelectText(QPoint, QPoint)));
+//      connect(this, SIGNAL(signal_mouseSelectText(QPoint, QPoint)), m_documment, SLOT(mouseSelectText(QPoint, QPoint)));
         connect(this, SIGNAL(signal_setScaleRotateViewModeAndShow(double, RotateType_EM, ViewMode_EM)), m_documment, SLOT(setScaleRotateViewModeAndShow(double, RotateType_EM, ViewMode_EM)));
         connect(this, SIGNAL(signal_scaleAndShow(double, RotateType_EM)), m_documment, SLOT(scaleAndShow(double, RotateType_EM)));
         connect(this, SIGNAL(signal_setViewModeAndShow(ViewMode_EM)), m_documment, SLOT(setViewModeAndShow(ViewMode_EM)));
@@ -202,7 +202,11 @@ bool DocummentProxy::save(const QString &filepath, bool withChanges)
     if (!m_documment || bcloseing)
         return false;
 
-    return m_documment->save(filepath, withChanges);
+    if (!m_documment->save(filepath, withChanges)) {
+        return false;
+    }
+    return m_documment->freshFile();
+//        return m_documment->save(filepath, withChanges);
 }
 
 bool DocummentProxy::saveas(const QString &filepath, bool withChanges)

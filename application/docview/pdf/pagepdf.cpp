@@ -533,3 +533,18 @@ PageInterface *PagePdf::getInterFace()
     Q_D(PagePdf);
     return d;
 }
+
+void PagePdf::deletePage()
+{
+    Q_D(PagePdf);
+    if (nullptr != d->m_page) {
+        delete d->m_page;
+        d->m_page = nullptr;
+    }
+}
+
+void PagePdf::freshPage(Poppler::Page *page)
+{
+    Q_D(PagePdf);
+    d->m_page = page;
+}
