@@ -85,6 +85,13 @@ void SearchResWidget::slotSearchOver()
         disconnect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
                    SLOT(slotSelectItem(QListWidgetItem *)));
         showTips();
+        notifyMsg(MSG_FIND_STOP, QString(""));
+        notifyMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
+
+        bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
+        if (!t_bTnumbnIsShow) {
+            notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(!t_bTnumbnIsShow));
+        }
     } else {
         connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
                 SLOT(slotSelectItem(QListWidgetItem *)));
@@ -92,13 +99,6 @@ void SearchResWidget::slotSearchOver()
         // to do and send flush thumbnail and contant
         initSearchList(list);
     }
-
-    //    notifyMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
-
-    //    bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
-    //    if (!t_bTnumbnIsShow) {
-    //        notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(!t_bTnumbnIsShow));
-    //    }
 }
 
 void SearchResWidget::slotLoadImage(const int &page, const QImage &image)
@@ -399,7 +399,7 @@ void LoadSearchResThread::run()
                 //                ICON_SMALL);
                 emit sigLoadImage(page, image);
                 //                qDebug() << __FUNCTION__ << "load image page num:" << page + 1;
-                msleep(90);
+                msleep(80);
             }
         }
 

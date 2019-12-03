@@ -38,7 +38,7 @@ void MainWidget::initConnections()
             spinner->start();
             spinner->show();
 
-            qDebug() << "        " << __FUNCTION__;
+            qDebug() << "        " << __FUNCTION__ << " find start";
         }
     });
     connect(this, &MainWidget::sigStopFind, [=] {
@@ -47,7 +47,7 @@ void MainWidget::initConnections()
             spinner->stop();
             spinner->hide();
 
-            qDebug() << "        " << __FUNCTION__;
+            qDebug() << "        " << __FUNCTION__ << " find stop";
         }
     });
 }
