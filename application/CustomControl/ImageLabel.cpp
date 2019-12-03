@@ -19,7 +19,7 @@ void ImageLabel::setSelect(const bool &select)
         if (m_nRadius == 8) {
             m_nHighLightLineWidth = 4;
         } else if (m_nRadius == 10) {
-            m_nHighLightLineWidth = 8;
+            m_nHighLightLineWidth = 6;
         }
     }
     update();
