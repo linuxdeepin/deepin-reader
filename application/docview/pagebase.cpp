@@ -603,7 +603,7 @@ void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
     Q_D(PageBase);
 //    qDebug() << "---------------setScaleAndRotate pagenum:" << d->m_pageno;
 //    d->havereander = false;
-    QThreadPool::globalInstance()->waitForDone();
+//    QThreadPool::globalInstance()->waitForDone();
     clearImage();
     d->m_scale = scale;
     d->m_rotate = rotate;
