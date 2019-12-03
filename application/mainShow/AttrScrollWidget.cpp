@@ -9,17 +9,26 @@
 #include <DFontSizeManager>
 #include "CustomControl/DFMGlobal.h"
 
-#define LAEBL_TEXT_WIDTH    280
+#define LAEBL_TEXT_WIDTH    180
 
 AttrScrollWidget::AttrScrollWidget(DWidget *parent)
     : DFrame(parent)
+    , m_leftminwidth(60)
 {
+    installEventFilter(this);
     auto gridLayout = new QGridLayout;
     gridLayout->setContentsMargins(0, 6, 0, 6);
     gridLayout->setSpacing(3);
 
     stFileInfo fileInfo;
     DocummentFileHelper::instance()->docBasicInfo(fileInfo);
+    QLocale locale;
+    QFontMetrics fm(font());
+    if (locale.language() == QLocale::English) {
+        m_leftminwidth = fm.horizontalAdvance(("Page's Number"));
+    } else if (locale.language() == QLocale::Chinese) {
+        m_leftminwidth = fm.horizontalAdvance("纸张大小");
+    }
 
     createLabel(gridLayout, 0, tr("Location"), fileInfo.strFilepath);
     createLabel(gridLayout, 1, tr("Theme"), fileInfo.strTheme);
@@ -53,12 +62,21 @@ AttrScrollWidget::AttrScrollWidget(DWidget *parent)
     this->setLayout(vLayout);
 }
 
+bool AttrScrollWidget::eventFilter(QObject *obj, QEvent *e)
+{
+    if (e->type() == QEvent::FontChange) {
+        qDebug() << __FUNCTION__ << "FontChange";
+    }
+    return  DFrame::eventFilter(obj, e);
+}
+
 void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const QString &objName, const QString &sData)
 {
     DLabel *label = new DLabel(objName, this);
     DFontSizeManager::instance()->bind(label, DFontSizeManager::T8);
     label->setAlignment(Qt::AlignTop);
-    label->setMaximumWidth(120);
+    label->setMaximumWidth(160);
+    label->setMinimumWidth(m_leftminwidth + 10);
     layout->addWidget(label, index, 0);
 
     if (sData == "") {

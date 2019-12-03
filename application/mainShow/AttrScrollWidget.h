@@ -21,7 +21,8 @@ class AttrScrollWidget : public DFrame
 
 public:
     explicit AttrScrollWidget(DWidget *parent  = nullptr);
-
+protected:
+    bool eventFilter(QObject *obj, QEvent *e) Q_DECL_OVERRIDE;
 private:
     void createLabel(QGridLayout *layout, const int &index, const QString &objName, const QString &sData);
     void createLabel(QGridLayout *layout, const int &index, const QString &objName, const QDateTime &sData);
@@ -29,6 +30,7 @@ private:
 
     QString getTime(const QDateTime &CreateTime);
     DFrame *addTitleFrame(const QString &sData);
+    int m_leftminwidth;
 };
 
 #endif // ATTRSCROLLWIDGET_H

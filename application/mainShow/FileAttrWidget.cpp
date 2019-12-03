@@ -15,7 +15,7 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
 {
     setAttribute(Qt::WA_ShowModal, true); //  模态对话框， 属性设置
     setAttribute(Qt::WA_DeleteOnClose);
-    setFixedSize(QSize(400, 642));
+    setFixedSize(QSize(300, 642));
 
     m_pVBoxLayout = new QVBoxLayout;
     m_pVBoxLayout->setContentsMargins(0, 0, 0, 0);
@@ -62,12 +62,12 @@ void FileAttrWidget::setFileAttr()
     scroll->setWidgetResizable(true);
 
     QVBoxLayout *scrolllayout = new QVBoxLayout;
-    scrolllayout->setContentsMargins(0, 5, 10, 5);
+    scrolllayout->setContentsMargins(0, 5, 5, 5);
     scrolllayout->addWidget(scroll);
 
     qobject_cast<QVBoxLayout *>(scroll->widget()->layout())->insertWidget(0, new AttrScrollWidget);
 
-    m_pVBoxLayout->addLayout(scrolllayout, 1);
+    m_pVBoxLayout->addLayout(scrolllayout, 10);
 }
 
 void FileAttrWidget::addTitleFrame(const QString &sData)
