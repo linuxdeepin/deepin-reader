@@ -33,21 +33,37 @@ void MainWidget::initConnections()
             SLOT(slotOpenFileFail(const QString &)));
     connect(this, SIGNAL(sigShowTips(const QString &)), SLOT(slotShowTips(const QString &)));
     connect(this, &MainWidget::sigStartFind, [=] {
-        auto spinner = this->findChild<DSpinner *>();
-        if (spinner) {
-            spinner->start();
-            spinner->show();
+        //        auto spinner = this->findChild<DSpinner *>();
+        //        if (spinner) {
+        //            auto pStcakLayout = this->findChild<QStackedLayout *>();
+        //            if (pStcakLayout) {
+        //                pStcakLayout->setCurrentIndex(2);
+        //            }
+        //            spinner->start();
+        //            spinner->show();
 
-            qDebug() << "        " << __FUNCTION__ << " find start";
+        //            qDebug() << "        " << __FUNCTION__ << " find start";
+        //        }
+        auto pStcakLayout = this->findChild<QStackedLayout *>();
+        if (pStcakLayout) {
+            pStcakLayout->setCurrentIndex(2);
         }
     });
     connect(this, &MainWidget::sigStopFind, [=] {
-        auto spinner = this->findChild<DSpinner *>();
-        if (spinner) {
-            spinner->stop();
-            spinner->hide();
+        //        auto spinner = this->findChild<DSpinner *>();
+        //        if (spinner) {
+        //            auto pStcakLayout = this->findChild<QStackedLayout *>();
+        //            if (pStcakLayout) {
+        //                pStcakLayout->setCurrentIndex(1);
+        //            }
+        //            spinner->stop();
+        //            spinner->hide();
 
-            qDebug() << "        " << __FUNCTION__ << " find stop";
+        //            qDebug() << "        " << __FUNCTION__ << " find stop";
+        //        }
+        auto pStcakLayout = this->findChild<QStackedLayout *>();
+        if (pStcakLayout) {
+            pStcakLayout->setCurrentIndex(1);
         }
     });
 }
@@ -192,7 +208,7 @@ void MainWidget::initWidget()
     auto pSpinnerWidget = new DWidget;
     QGridLayout *gridlyout = new QGridLayout(pSpinnerWidget);
     gridlyout->setAlignment(Qt::AlignCenter);
-    auto m_spinner = new DSpinner(this);
+    auto m_spinner = new DSpinner;
     m_spinner->setFixedSize(60, 60);
     gridlyout->addWidget(m_spinner);
     m_spinner->start();
