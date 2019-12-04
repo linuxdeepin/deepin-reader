@@ -210,7 +210,7 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
     itemWidget->setLabelPage(page, 1);
     itemWidget->setTextEditText(text);
     itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + tr(" results")));
-    itemWidget->setMinimumSize(QSize(LEFTMINWIDTH, 80));
+    itemWidget->setMinimumSize(QSize(LEFTMINWIDTH - 5, 80));
 
     auto item = new QListWidgetItem(m_pSearchList);
     item->setFlags(Qt::NoItemFlags);

@@ -105,8 +105,8 @@ void NotesItemWidget::initWidget()
 
     m_pTextLab = new DLabel;
     m_pTextLab->setFixedHeight(54);
-    m_pTextLab->setMinimumWidth(102);
-    m_pTextLab->setMaximumWidth(349);
+    m_pTextLab->setMinimumWidth(80);
+    //    m_pTextLab->setMaximumWidth(349);
     m_pTextLab->setFrameStyle(QFrame::NoFrame);
     m_pTextLab->setWordWrap(true);
     m_pTextLab->setForegroundRole(QPalette::BrightText);
