@@ -24,6 +24,7 @@ AttrScrollWidget::AttrScrollWidget(DWidget *parent)
     DocummentFileHelper::instance()->docBasicInfo(fileInfo);
     QLocale locale;
     QFontMetrics fm(font());
+    //用最长字符来计算左侧最小宽度
     if (locale.language() == QLocale::English) {
         m_leftminwidth = fm.horizontalAdvance(("Page's Number"));
     } else if (locale.language() == QLocale::Chinese) {

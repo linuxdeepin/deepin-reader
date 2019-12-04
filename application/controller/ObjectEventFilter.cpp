@@ -92,7 +92,7 @@ void ObjectEventFilter::displayShortcuts()
     QStringList windowKeymaps;
     windowKeymaps << KeyStr::g_f11 << KeyStr::g_esc  << KeyStr::g_f1
                   << KeyStr::g_ctrl_f << KeyStr::g_pgup << KeyStr::g_pgdown << KeyStr::g_ctrl_o << KeyStr::g_ctrl_larger
-                  << KeyStr::g_ctrl_smaller << KeyStr::g_ctrl_shift_s << KeyStr::g_ctrl_e
+                  << KeyStr::g_ctrl_smaller << KeyStr::g_ctrl_shift_s
                   << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_m << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2
                   << KeyStr::g_ctrl_3 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r << KeyStr::g_alt_1 << KeyStr::g_alt_2
                   << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l << KeyStr::g_del << KeyStr::g_z
@@ -100,7 +100,7 @@ void ObjectEventFilter::displayShortcuts()
 
     shortcutnames << tr("FullScreen") << tr("Escape") << tr("Help")
                   << tr("Search") << tr("PageUp") << tr("PageDown") << tr("Open") << tr("Enlarge")
-                  << tr("Narrow")  << tr("SaveAs") << tr("Export") << tr("Print")
+                  << tr("Narrow")  << tr("SaveAs") << tr("Print")
                   << tr("Save") << tr("OpenThumbnail") << tr("AdaptePage") << tr("AdapteHeight")
                   << tr("AdapteWidth") << tr("LeftRotation") << tr("RightRotation") << tr("SelectTool")
                   << tr("HandTool") << tr("AddBookMark") << tr("AddNote") << tr("AddHighlight")
