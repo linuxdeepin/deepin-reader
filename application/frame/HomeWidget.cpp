@@ -38,7 +38,7 @@ void HomeWidget::initWidget()
     layout->setAlignment(Qt::AlignCenter);
     layout->addStretch();
 
-    auto iconSvg = new QSvgWidget;
+    auto iconSvg = new DLabel;
     iconSvg->setFixedSize(QSize(128, 128));
     iconSvg->setObjectName("iconSvg");
 
@@ -69,10 +69,13 @@ void HomeWidget::slotChooseBtnClicked()
 //  主题切换
 void HomeWidget::slotUpdateTheme()
 {
-    auto iconSvg = this->findChild<QSvgWidget *>("iconSvg");
+    auto iconSvg = this->findChild<DLabel *>("iconSvg");
     if (iconSvg) {
+        auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
+        plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
+        iconSvg->setPalette(plt);
         QString sPixmap = PF::getImagePath("import_photo", Pri::g_frame);
-        iconSvg->load(sPixmap);
+        iconSvg->setPixmap(Utils::renderSVG(sPixmap, QSize(128, 128)));
     }
 
     auto customClickLabelList = this->findChildren<CustomClickLabel *>();
