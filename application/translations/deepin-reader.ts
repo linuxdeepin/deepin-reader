@@ -232,49 +232,54 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="79"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="78"/>
+        <source>Save Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/DocummentFileHelper.cpp" line="81"/>
         <source>Not Changed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="91"/>
-        <location filename="../frame/DocummentFileHelper.cpp" line="129"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="93"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="131"/>
         <source>Save File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="122"/>
-        <location filename="../frame/DocummentFileHelper.cpp" line="180"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="124"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="182"/>
         <source>file is opened.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="129"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="131"/>
         <source>Do you need to save the file opened?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="131"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="133"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="131"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="133"/>
         <source>Not Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="131"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="133"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="168"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="170"/>
         <source>File not supported</source>
         <translation>文件格式不支持</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="252"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="254"/>
         <source>Please check if the file is damaged</source>
         <translation>请检查文件是否已经损坏</translation>
     </message>

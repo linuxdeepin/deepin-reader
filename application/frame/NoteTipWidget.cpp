@@ -36,7 +36,8 @@ void NoteTipWidget::setTipContent(const QString &content)
             strcontent = label->fontMetrics().elidedText(content, Qt::ElideRight, (m_iwidth - 16) * 10, Qt::TextWordWrap);
         } else {
             int line = pixelsWide / (m_iwidth - 16);
-            line = line > 2 ? line + 2 : 3;
+            // line = line > 2 ? line + 2 : 3;
+            line = line < 1 ? 1 : line + 1;
             setFixedHeight(pixelsHigh * line + 8);
             strcontent = content;
         }

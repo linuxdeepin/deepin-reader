@@ -249,56 +249,61 @@
         <translation>保存成功</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="79"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="78"/>
+        <source>Save Failed</source>
+        <translation>保存失败</translation>
+    </message>
+    <message>
+        <location filename="../frame/DocummentFileHelper.cpp" line="81"/>
         <source>Not Changed</source>
         <translation>文件未修改</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="91"/>
-        <location filename="../frame/DocummentFileHelper.cpp" line="129"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="93"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="131"/>
         <source>Save File</source>
         <translatorcomment>保存</translatorcomment>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="122"/>
-        <location filename="../frame/DocummentFileHelper.cpp" line="180"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="124"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="182"/>
         <source>file is opened.</source>
         <translatorcomment>文件已打开.</translatorcomment>
         <translation>文件已打开.</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="129"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="131"/>
         <source>Do you need to save the file opened?</source>
         <translatorcomment>您是否需要保存已打开的文件?</translatorcomment>
         <translation>您是否需要保存已打开的文件?</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="131"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="133"/>
         <source>Cancel</source>
         <translatorcomment>取消</translatorcomment>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="131"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="133"/>
         <source>Not Save</source>
         <translatorcomment>不保存</translatorcomment>
         <translation>不保存</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="131"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="133"/>
         <source>Save</source>
         <translatorcomment>保存</translatorcomment>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="168"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="170"/>
         <source>File not supported</source>
         <translatorcomment>不支持的文件格式</translatorcomment>
         <translation>不支持的文件格式</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="252"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="254"/>
         <source>Please check if the file is damaged</source>
         <translatorcomment>请检查文件是否损坏</translatorcomment>
         <translation>请检查文件是否损坏</translation>

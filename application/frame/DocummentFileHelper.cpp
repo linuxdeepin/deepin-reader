@@ -74,6 +74,8 @@ void DocummentFileHelper::slotSaveFile()
             DBManager::instance()->saveBookMark();
             DataManager::instance()->setBIsUpdate(false);
             notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Save Success"));
+        } else {
+            notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Save Failed"));
         }
     } else {
         notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Not Changed"));
