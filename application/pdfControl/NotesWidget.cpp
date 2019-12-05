@@ -43,6 +43,9 @@ void NotesWidget::slotAddNoteItem(const QString &note)
  */
 void NotesWidget::slotDltNoteItem(QString uuid)
 {
+    if (m_pNotesList == nullptr) {
+        return;
+    }
     for (int row = 0; row < m_pNotesList->count(); ++row) {
         auto pItem = m_pNotesList->item(row);
         if (pItem) {
@@ -70,6 +73,9 @@ void NotesWidget::slotDltNoteItem(QString uuid)
                     // of for loop
                     notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Deleted Note"));
 
+                    if (m_pNotesList->count() > 0) {
+                        m_pNotesList->setCurrentRow(0);
+                    }
                     break;
                 }
             }
@@ -84,6 +90,9 @@ void NotesWidget::slotDltNoteItem(QString uuid)
  */
 void NotesWidget::slotDltNoteContant(QString uuid)
 {
+    if (m_pNotesList == nullptr) {
+        return;
+    }
     for (int row = 0; row < m_pNotesList->count(); ++row) {
         auto pItem = m_pNotesList->item(row);
         if (pItem) {
@@ -107,8 +116,11 @@ void NotesWidget::slotDltNoteContant(QString uuid)
                         dproxy->setAnnotationText(page, uuid, "");
                     }
 
-                    m_pNoteItem = nullptr;
-
+                    //                    m_pNoteItem = nullptr;
+                    //                    m_pNotesList->setCurrentRow(0);
+                    if (m_pNotesList->count() > 0) {
+                        m_pNotesList->setCurrentRow(0);
+                    }
                     break;
                 }
             }
@@ -147,7 +159,8 @@ void NotesWidget::slotOpenFileOk()
         addNewItem(st);
     }
 
-    m_pNoteItem = m_pNotesList->item(0);
+    //    m_pNoteItem = m_pNotesList->item(0);
+    m_pNotesList->setCurrentRow(0);
 
     m_ThreadLoadImage.setListNoteSt(list_note);
     m_ThreadLoadImage.setIsLoaded(true);
@@ -167,7 +180,7 @@ void NotesWidget::slotCloseFile()
     m_mapUuidAndPage.clear();
     if (m_pNotesList) {
         m_pNotesList->clear();
-        m_pNoteItem = nullptr;
+        //        m_pNoteItem = nullptr;
     }
 }
 
@@ -219,10 +232,11 @@ void NotesWidget::slotDelNoteItem()
                 notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Deleted Note"));
             }
         }
-        m_pNoteItem = nullptr;
-        //        if (m_pNotesList->count() > 0) {
-        //            m_pNoteItem = m_pNotesList->item(0);
-        //        }
+        //        m_pNoteItem = nullptr;
+        if (m_pNotesList->count() > 0) {
+            //                    m_pNoteItem = m_pNotesList->item(0);
+            m_pNotesList->setCurrentRow(0);
+        }
     }
 }
 
@@ -387,10 +401,10 @@ void NotesWidget::clearItemColor()
 {
     if (m_pNotesList == nullptr)
         return;
-    //    auto pCurItem = m_pNotesList->currentItem();
-    if (m_pNoteItem) {
-        auto pItemWidget =
-            reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNoteItem));
+    auto pCurItem = m_pNotesList->currentItem();
+    if (pCurItem) {
+        qDebug() << __FUNCTION__ << "  m_pNoteItem address:" << m_pNoteItem;
+        auto pItemWidget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pCurItem));
         if (pItemWidget) {
             pItemWidget->setBSelect(false);
         }
@@ -415,7 +429,7 @@ void NotesWidget::addNewItem(const stHighlightContent &note)
 
     m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);
-    m_pNoteItem = item;
+    //    m_pNoteItem = item;
 
     m_mapUuidAndPage.insert(note.struuid, note.ipage);
 }
@@ -445,7 +459,8 @@ void NotesWidget::addNewItem(const QImage &image, const int &page, const QString
 
     m_pNotesList->addItem(item);
     m_pNotesList->setItemWidget(item, itemWidget);
-    m_pNoteItem = item;
+    m_pNotesList->setCurrentItem(item);
+    //    m_pNoteItem = item;
 }
 
 /**
