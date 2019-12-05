@@ -109,6 +109,8 @@ void NotesItemWidget::initWidget()
     //    m_pTextLab->setMaximumWidth(349);
     m_pTextLab->setFrameStyle(QFrame::NoFrame);
     m_pTextLab->setWordWrap(true);
+    m_pTextLab->setAlignment(Qt::AlignLeft);
+    m_pTextLab->setAlignment(Qt::AlignTop);
     m_pTextLab->setForegroundRole(QPalette::BrightText);
     DFontSizeManager::instance()->bind(m_pTextLab, DFontSizeManager::T9);
 

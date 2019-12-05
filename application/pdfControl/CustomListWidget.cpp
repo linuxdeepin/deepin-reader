@@ -15,7 +15,8 @@ CustomListWidget::CustomListWidget(DWidget *parent)
     setSelectionMode(QAbstractItemView::SingleSelection);
     sortItems(Qt::AscendingOrder);
 
-    connect(this, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotShowSelectItem(QListWidgetItem *)));
+    connect(this, SIGNAL(itemClicked(QListWidgetItem *)), this,
+            SLOT(slotShowSelectItem(QListWidgetItem *)));
 }
 
 //  插入 实现排序
@@ -26,7 +27,6 @@ QListWidgetItem *CustomListWidget::insertWidgetItem(const int &iData)
     //  计算 新增的书签  插入位置
     int nCount = this->count();
     while (nCount > 0) {
-
         nCount--;
 
         auto nextItem = this->item(nCount);
@@ -74,6 +74,9 @@ void CustomListWidget::slot_loadImage(const int &row, const QImage &image)
  */
 void CustomListWidget::slotShowSelectItem(QListWidgetItem *item)
 {
+    if (item == nullptr) {
+        return;
+    }
     auto t_ItemWidget = reinterpret_cast<CustomItemWidget *>(this->itemWidget(item));
     if (t_ItemWidget) {
         int nJumpPage = t_ItemWidget->nPageIndex();
@@ -85,4 +88,3 @@ void CustomListWidget::slotShowSelectItem(QListWidgetItem *item)
         emit sigSelectItem(item);
     }
 }
-

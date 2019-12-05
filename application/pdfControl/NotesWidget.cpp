@@ -107,6 +107,8 @@ void NotesWidget::slotDltNoteContant(QString uuid)
                         dproxy->setAnnotationText(page, uuid, "");
                     }
 
+                    m_pNoteItem = nullptr;
+
                     break;
                 }
             }
@@ -217,9 +219,10 @@ void NotesWidget::slotDelNoteItem()
                 notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Deleted Note"));
             }
         }
-        if (m_pNotesList->count() > 0) {
-            m_pNoteItem = m_pNotesList->item(0);
-        }
+        m_pNoteItem = nullptr;
+        //        if (m_pNotesList->count() > 0) {
+        //            m_pNoteItem = m_pNotesList->item(0);
+        //        }
     }
 }
 
