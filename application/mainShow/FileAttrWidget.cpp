@@ -1,19 +1,19 @@
 #include "FileAttrWidget.h"
 
-#include "frame/DocummentFileHelper.h"
-#include "AttrScrollWidget.h"
-#include <DWindowCloseButton>
-#include <QFileInfo>
-#include "controller/DataManager.h"
 #include <DFontSizeManager>
 #include <DFrame>
+#include <DWindowCloseButton>
+#include <QFileInfo>
+#include "AttrScrollWidget.h"
+#include "controller/DataManager.h"
+#include "frame/DocummentFileHelper.h"
 
 #include "CustomControl/DFMGlobal.h"
 
 FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
 {
-    setAttribute(Qt::WA_ShowModal, true); //  模态对话框， 属性设置
+    setAttribute(Qt::WA_ShowModal, true);  //  模态对话框， 属性设置
     setAttribute(Qt::WA_DeleteOnClose);
     setFixedSize(QSize(300, 642));
 
@@ -33,9 +33,12 @@ void FileAttrWidget::setFileAttr()
     }
 
     QImage image;
-    bool rl = dproxy->getImage(0, image, 94, 113);
+    bool rl = dproxy->getImage(0, image, 92, 111);
     if (rl) {
-        labelImage->setPixmap(QPixmap::fromImage(image));
+        //        labelImage->setPixmap(QPixmap::fromImage(image));
+        if (frameImage) {
+            frameImage->setBackgroundPix(QPixmap::fromImage(image));
+        }
     }
 
     QString filePath = DataManager::instance()->strOnlyFilePath();
@@ -75,7 +78,8 @@ void FileAttrWidget::addTitleFrame(const QString &sData)
     QFrame *m_textShowFrame = new QFrame(this);
 
     QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T8);
-    QString t = DFMGlobal::elideText(sData, QSize(300, 60), QTextOption::WrapAnywhere, font, Qt::ElideMiddle, 0);
+    QString t = DFMGlobal::elideText(sData, QSize(300, 60), QTextOption::WrapAnywhere, font,
+                                     Qt::ElideMiddle, 0);
     QStringList labelTexts = t.split("\n");
     const int maxLineCount = 3;
 
@@ -109,7 +113,8 @@ void FileAttrWidget::addTitleFrame(const QString &sData)
                 }
             }
 
-            if (label->fontMetrics().width(labelText) > 300 && labelTexts.length() >= maxLineCount) {
+            if (label->fontMetrics().width(labelText) > 300 &&
+                labelTexts.length() >= maxLineCount) {
                 labelText = label->fontMetrics().elidedText(labelText, Qt::ElideMiddle, 300);
             }
             label->setText(labelText);
@@ -163,17 +168,19 @@ void FileAttrWidget::initCloseBtn()
 
 void FileAttrWidget::initImageLabel()
 {
-    labelImage = new DLabel(this);
-    labelImage->setAlignment(Qt::AlignCenter);
+    //    labelImage = new DLabel(this);
+    //    labelImage->setAlignment(Qt::AlignCenter);
+
+    frameImage = new ImageFrame(this);
+    frameImage->setFixedSize(94, 113);
 
     auto vlayout = new QVBoxLayout;
-    vlayout->setContentsMargins(0, 6, 0, 30);
-    vlayout->setSpacing(10);
-    vlayout->addWidget(labelImage);
+    vlayout->setContentsMargins(104, 6, 0, 30);
+    //    vlayout->setSpacing(10);
+    vlayout->addWidget(/*labelImage*/ frameImage);
 
     m_pVBoxLayout->addItem(vlayout);
 }
-
 
 void FileAttrWidget::slotBtnCloseClicked()
 {

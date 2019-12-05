@@ -4,7 +4,8 @@ HEADERS += \
     $$PWD/ImageLabel.h \
     $$PWD/PageNumberLabel.h \
     $$PWD/ColorMenu.h \
-    $$PWD/DFMGlobal.h
+    $$PWD/DFMGlobal.h \
+    $$PWD/ImageFrame.h
 
 SOURCES += \
     $$PWD/CustomWidget.cpp \
@@ -12,4 +13,5 @@ SOURCES += \
     $$PWD/ImageLabel.cpp \
     $$PWD/PageNumberLabel.cpp \
     $$PWD/ColorMenu.cpp \
-    $$PWD/DFMGlobal.cpp
+    $$PWD/DFMGlobal.cpp \
+    $$PWD/ImageFrame.cpp

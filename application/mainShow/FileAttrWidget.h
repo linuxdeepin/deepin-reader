@@ -3,13 +3,15 @@
 
 #include <DLabel>
 #include <DTextEdit>
-#include <QVBoxLayout>
-#include <QGridLayout>
 #include <DWidget>
 #include <DWidgetUtil>
+#include <QGridLayout>
+#include <QVBoxLayout>
 
-#include "utils/utils.h"
 #include <DDialog>
+#include "utils/utils.h"
+
+#include "CustomControl/ImageFrame.h"
 
 DWIDGET_USE_NAMESPACE
 /**
@@ -42,6 +44,7 @@ private:
     QVBoxLayout *m_pVBoxLayout = nullptr;
 
     DLabel *labelImage = nullptr;
+    ImageFrame *frameImage = nullptr;
 };
 
-#endif // FILEATTRWIDGET_H
+#endif  // FILEATTRWIDGET_H
