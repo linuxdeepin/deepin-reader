@@ -32,40 +32,40 @@ void MainWidget::initConnections()
     connect(this, SIGNAL(sigOpenFileFail(const QString &)),
             SLOT(slotOpenFileFail(const QString &)));
     connect(this, SIGNAL(sigShowTips(const QString &)), SLOT(slotShowTips(const QString &)));
-    connect(this, &MainWidget::sigStartFind, [=] {
-        //        auto spinner = this->findChild<DSpinner *>();
-        //        if (spinner) {
-        //            auto pStcakLayout = this->findChild<QStackedLayout *>();
-        //            if (pStcakLayout) {
-        //                pStcakLayout->setCurrentIndex(2);
-        //            }
-        //            spinner->start();
-        //            spinner->show();
+    //    connect(this, &MainWidget::sigStartFind, [=] {
+    //        //        auto spinner = this->findChild<DSpinner *>();
+    //        //        if (spinner) {
+    //        //            auto pStcakLayout = this->findChild<QStackedLayout *>();
+    //        //            if (pStcakLayout) {
+    //        //                pStcakLayout->setCurrentIndex(2);
+    //        //            }
+    //        //            spinner->start();
+    //        //            spinner->show();
 
-        //            qDebug() << "        " << __FUNCTION__ << " find start";
-        //        }
-        auto pStcakLayout = this->findChild<QStackedLayout *>();
-        if (pStcakLayout) {
-            pStcakLayout->setCurrentIndex(2);
-        }
-    });
-    connect(this, &MainWidget::sigStopFind, [=] {
-        //        auto spinner = this->findChild<DSpinner *>();
-        //        if (spinner) {
-        //            auto pStcakLayout = this->findChild<QStackedLayout *>();
-        //            if (pStcakLayout) {
-        //                pStcakLayout->setCurrentIndex(1);
-        //            }
-        //            spinner->stop();
-        //            spinner->hide();
+    //        //            qDebug() << "        " << __FUNCTION__ << " find start";
+    //        //        }
+    //        auto pStcakLayout = this->findChild<QStackedLayout *>();
+    //        if (pStcakLayout) {
+    //            pStcakLayout->setCurrentIndex(2);
+    //        }
+    //    });
+    //    connect(this, &MainWidget::sigStopFind, [=] {
+    //        //        auto spinner = this->findChild<DSpinner *>();
+    //        //        if (spinner) {
+    //        //            auto pStcakLayout = this->findChild<QStackedLayout *>();
+    //        //            if (pStcakLayout) {
+    //        //                pStcakLayout->setCurrentIndex(1);
+    //        //            }
+    //        //            spinner->stop();
+    //        //            spinner->hide();
 
-        //            qDebug() << "        " << __FUNCTION__ << " find stop";
-        //        }
-        auto pStcakLayout = this->findChild<QStackedLayout *>();
-        if (pStcakLayout) {
-            pStcakLayout->setCurrentIndex(1);
-        }
-    });
+    //        //            qDebug() << "        " << __FUNCTION__ << " find stop";
+    //        //        }
+    //        auto pStcakLayout = this->findChild<QStackedLayout *>();
+    //        if (pStcakLayout) {
+    //            pStcakLayout->setCurrentIndex(1);
+    //        }
+    //    });
 }
 
 //  文件打开成功
@@ -120,11 +120,11 @@ int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (msgType == MSG_NOTIFY_SHOW_TIP) {
         emit sigShowTips(msgContent);
         return ConstantMsg::g_effective_res;
-    } else if (msgType == MSG_FIND_STOP) {
+    } /*else if (msgType == MSG_FIND_STOP) {
         emit sigStopFind();
     } else if (msgType == MSG_FIND_START) {
         emit sigStartFind();
-    }
+    }*/
 
     return 0;
 }

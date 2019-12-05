@@ -19,6 +19,8 @@ public:
 signals:
     void sigStackSetCurIndex(const int &);
     void sigWidgetVisible(const int &);
+    void sigStopFind();
+    void sigStartFind();
 
 private slots:
     void slotStackSetCurIndex(const int &);
@@ -37,4 +39,4 @@ public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 };
 
-#endif // LEFTSHOWWIDGET_H
+#endif  // LEFTSHOWWIDGET_H

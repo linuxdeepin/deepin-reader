@@ -21,15 +21,14 @@
  */
 
 #include "FindWidget.h"
-#include <QHBoxLayout>
-#include <DIconButton>
 #include <DDialogCloseButton>
-#include "subjectObserver/MsgHeader.h"
-#include "controller/DataManager.h"
-#include "application.h"
+#include <DIconButton>
 #include <QDebug>
+#include <QHBoxLayout>
+#include "application.h"
+#include "controller/DataManager.h"
 #include "subjectObserver/ModuleHeader.h"
-
+#include "subjectObserver/MsgHeader.h"
 
 FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)
@@ -126,7 +125,7 @@ void FindWidget::hideEvent(QHideEvent *e)
 int FindWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
-    } else if (msgType == MSG_OPERATION_SLIDE) {    //  幻灯片了
+    } else if (msgType == MSG_OPERATION_SLIDE) {  //  幻灯片了
         emit sigSetVisible();
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == KeyStr::g_f11) {
@@ -161,8 +160,8 @@ void FindWidget::initWidget()
     connect(findPrevButton, &DIconButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
 
     auto closeButton = new DDialogCloseButton;
-    closeButton->setIconSize(QSize(20, 20));
-    closeButton->setFixedSize(QSize(22, 22));
+    closeButton->setIconSize(QSize(30, 30 /*20, 20*/));
+    closeButton->setFixedSize(QSize(32, 32 /*22, 22*/));
     connect(closeButton, &DDialogCloseButton::clicked, this, &FindWidget::findCancel);
 
     m_pSearchEdit = new DSearchEdit;

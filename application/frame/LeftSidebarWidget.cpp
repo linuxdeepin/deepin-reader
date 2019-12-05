@@ -4,6 +4,7 @@
 
 #include "controller/DataManager.h"
 #include "pdfControl/BookMarkWidget.h"
+#include "pdfControl/BufferWidget.h"
 #include "pdfControl/NotesWidget.h"
 #include "pdfControl/SearchResWidget.h"
 #include "pdfControl/ThumbnailWidget.h"
@@ -32,7 +33,7 @@ void LeftSidebarWidget::slotStackSetCurIndex(const int &iIndex)
 
     auto pWidget = this->findChild<DStackedWidget *>();
     if (pWidget) {
-        if (WIDGET_SEARCH != iIndex) {
+        if (WIDGET_SEARCH > iIndex) {
             DataManager::instance()->setCurrentWidget(iIndex);
         }
         pWidget->setCurrentIndex(iIndex);
@@ -66,10 +67,11 @@ void LeftSidebarWidget::initWidget()
     this->setLayout(pVBoxLayout);
 
     auto pStackedWidget = new DStackedWidget;
-    pStackedWidget->insertWidget(0, new ThumbnailWidget);
-    pStackedWidget->insertWidget(1, new BookMarkWidget);
-    pStackedWidget->insertWidget(2, new NotesWidget);
-    pStackedWidget->insertWidget(3, new SearchResWidget);
+    pStackedWidget->insertWidget(0, new ThumbnailWidget(this));
+    pStackedWidget->insertWidget(1, new BookMarkWidget(this));
+    pStackedWidget->insertWidget(2, new NotesWidget(this));
+    pStackedWidget->insertWidget(3, new SearchResWidget(this));
+    pStackedWidget->insertWidget(4, new BufferWidget(this));
     pStackedWidget->setCurrentIndex(0);
 
     for (int index = 0; index < pStackedWidget->count(); ++index) {

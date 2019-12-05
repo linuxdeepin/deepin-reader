@@ -74,7 +74,8 @@ void SearchResWidget::slotSearchOver()
 
     m_pSearchList->clear();
 
-    notifyMsg(MSG_FIND_START, QString(""));
+    notifyMsg(MSG_FIND_START /*, QString("")*/);
+    notifyMsg(MSG_SWITCHLEFTWIDGET, QString("4"));
 
     disconnect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this,
                SLOT(slotGetSearchContant(stSearchRes)));
@@ -85,7 +86,7 @@ void SearchResWidget::slotSearchOver()
         disconnect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
                    SLOT(slotSelectItem(QListWidgetItem *)));
         showTips();
-        notifyMsg(MSG_FIND_STOP, QString(""));
+        notifyMsg(MSG_FIND_STOP /*, QString("")*/);
         notifyMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
 
         bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();

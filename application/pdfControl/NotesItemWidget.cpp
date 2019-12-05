@@ -101,7 +101,7 @@ void NotesItemWidget::initWidget()
     m_pSearchResultNum->setMinimumWidth(31);
     m_pSearchResultNum->setFixedHeight(18);
     m_pSearchResultNum->setForegroundRole(DPalette::TextTips);
-    DFontSizeManager::instance()->bind(m_pSearchResultNum, DFontSizeManager::T8);
+    DFontSizeManager::instance()->bind(m_pSearchResultNum, DFontSizeManager::T10);
 
     m_pTextLab = new DLabel;
     m_pTextLab->setFixedHeight(54);

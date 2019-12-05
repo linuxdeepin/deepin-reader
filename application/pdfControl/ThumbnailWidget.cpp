@@ -97,7 +97,7 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 //  添加项
 void ThumbnailWidget::addThumbnailItem(const int &iIndex)
 {
-    auto widget = new ThumbnailItemWidget;
+    auto widget = new ThumbnailItemWidget();
     widget->setLabelPage(iIndex);
 
     auto item = new QListWidgetItem(m_pThumbnailListWidget);

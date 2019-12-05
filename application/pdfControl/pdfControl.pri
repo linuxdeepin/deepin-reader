@@ -10,7 +10,8 @@ HEADERS += \
     $$PWD/SearchResWidget.h \
     $$PWD/fileViewNote/FileViewNoteWidget.h \
     $$PWD/CustomListWidget.h \
-    $$PWD/CustomItemWidget.h
+    $$PWD/CustomItemWidget.h \
+    $$PWD/BufferWidget.h
 
 SOURCES += \
     $$PWD/PagingWidget.cpp \
@@ -24,4 +25,5 @@ SOURCES += \
     $$PWD/SearchResWidget.cpp \
     $$PWD/fileViewNote/FileViewNoteWidget.cpp \
     $$PWD/CustomListWidget.cpp \
-    $$PWD/CustomItemWidget.cpp
+    $$PWD/CustomItemWidget.cpp \
+    $$PWD/BufferWidget.cpp
