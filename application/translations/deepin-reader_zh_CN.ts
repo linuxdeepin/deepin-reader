@@ -500,8 +500,8 @@
     <message>
         <location filename="../frame/MainWindow.cpp" line="170"/>
         <source>Open Folder</source>
-        <translatorcomment>打开所在目录</translatorcomment>
-        <translation>打开所在目录</translation>
+        <translatorcomment>打开所在文件夹</translatorcomment>
+        <translation>打开所在文件夹</translation>
     </message>
     <message>
         <location filename="../frame/MainWindow.cpp" line="170"/>

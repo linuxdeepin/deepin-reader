@@ -58,18 +58,20 @@ const QString g_pgdown = "PgDown";        //  下一页
 const QString g_ctrl_o = "Ctrl+O";        //  打开
 const QString g_ctrl_larger = "Ctrl+=";   //  放大
 const QString g_ctrl_smaller = "Ctrl+-";  //  缩小
-// const QString g_ctrl_wheel = "Ctrl+wheel"; //ctrl+滚轮放大缩小
 
-const QString g_ctrl_shift_s = "Ctrl+Shift+S";  //  另存为
-const QString g_ctrl_e = "Ctrl+E";              //  导出
-const QString g_ctrl_p = "Ctrl+P";              //  打印
-const QString g_ctrl_s = "Ctrl+S";              //  保存
-const QString g_m = "M";                        //  打开目标缩略图
+//const QString g_ctrl_wheel = "Ctrl+wheel"; //ctrl+滚轮放大缩小
 
-const QString g_ctrl_1 = "Ctrl+1";              //  适合页面状态
-const QString g_ctrl_2 = "Ctrl+2";              //  适合高度
-const QString g_ctrl_3 = "Ctrl+3";              //  适合宽度
-const QString g_ctrl_r = "Ctrl+R";              //  左旋转
+const QString g_ctrl_shift_s = "Ctrl+Shift+S";      //  另存为
+const QString g_ctrl_e = "Ctrl+E";  //  导出
+const QString g_ctrl_p = "Ctrl+P";  //  打印
+const QString g_ctrl_s = "Ctrl+S";  //  保存
+const QString g_ctrl_m = "Ctrl+M";  //  打开目标缩略图
+
+const QString g_ctrl_1 = "Ctrl+1";  //  适合页面状态
+const QString g_ctrl_2 = "Ctrl+2";  //  适合高度
+const QString g_ctrl_3 = "Ctrl+3";  //  适合宽度
+const QString g_ctrl_r = "Ctrl+R";  //  左旋转
+
 const QString g_ctrl_shift_r = "Ctrl+Shift+R";  //  右旋转
 
 const QString g_alt_1 = "Alt+1";  //    选择工具
@@ -80,8 +82,8 @@ const QString g_ctrl_i = "Ctrl+I";  //    添加注释
 const QString g_ctrl_l = "Ctrl+L";  //    添加高亮
 const QString g_del = "Del";        //  删除书签\注释\高亮
 
-const QString g_z = "Z";  //  放大镜
 
+const QString g_alt_z = "Alt+Z";            //  放大镜
 const QString g_up = "Up";
 const QString g_down = "Down";
 const QString g_left = "Left";

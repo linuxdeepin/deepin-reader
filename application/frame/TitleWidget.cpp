@@ -7,8 +7,8 @@
 TitleWidget::TitleWidget(CustomWidget *parent)
     : CustomWidget("TitleWidget", parent)
 {
-    shortKeyList = QStringList() << KeyStr::g_alt_1 << KeyStr::g_alt_2 << KeyStr::g_m
-                                 << KeyStr::g_z;
+    shortKeyList = QStringList() << KeyStr::g_alt_1 << KeyStr::g_alt_2 << KeyStr::g_ctrl_m
+                   << KeyStr::g_alt_z;
     initWidget();
     initConnections();
     slotUpdateTheme();
@@ -192,11 +192,12 @@ void TitleWidget::slotDealWithShortKey(const QString &sKey)
         if (1 != m_nCurHandleShape) {
             setHandleShape();
         }
-    } else if (sKey == KeyStr::g_m) {  //  显示缩略图
+    } else if (sKey == KeyStr::g_ctrl_m) {       //  显示缩略图
         m_pThumbnailBtn->setChecked(true);
         notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(1));
         DataManager::instance()->setBThumbnIsShow(1);
-    } else if (sKey == KeyStr::g_z) {  //  开启放大镜
+    } else if (sKey == KeyStr::g_alt_z) {       //  开启放大镜
+
         bool bCheck = m_pMagnifierBtn->isChecked();
         if (!bCheck) {
             m_pMagnifierBtn->setChecked(true);
