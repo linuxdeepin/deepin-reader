@@ -1,17 +1,17 @@
 #include "HomeWidget.h"
 
 #include <DFileDialog>
+#include <DLabel>
 #include <DPushButton>
 #include <DSuggestButton>
 #include <QVBoxLayout>
-#include <DLabel>
 #include "CustomControl/CustomClickLabel.h"
 #include "utils/PublicFunction.h"
 
 #include <QSvgWidget>
 
-HomeWidget::HomeWidget(CustomWidget *parent):
-    CustomWidget("HomeWidget", parent)
+HomeWidget::HomeWidget(CustomWidget *parent)
+    : CustomWidget("HomeWidget", parent)
 {
     initWidget();
     initConnections();
@@ -74,7 +74,7 @@ void HomeWidget::slotUpdateTheme()
         auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
         plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
         iconSvg->setPalette(plt);
-        QString sPixmap = PF::getImagePath("import_photo", Pri::g_frame);
+        QString sPixmap = PF::getImagePath("import_photo", Pri::g_actions);
         iconSvg->setPixmap(Utils::renderSVG(sPixmap, QSize(128, 128)));
     }
 
@@ -120,7 +120,7 @@ void HomeWidget::initConnections()
 int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (msgContent == KeyStr::g_ctrl_o) {   //  Ctrl+O 打开文档
+        if (msgContent == KeyStr::g_ctrl_o) {  //  Ctrl+O 打开文档
             emit sigOpenFileDialog();
             return ConstantMsg::g_effective_res;
         }

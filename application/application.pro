@@ -24,7 +24,8 @@ SOURCES += \
         main.cpp \
     application.cpp\
 
-RESOURCES +=         resources.qrc
+RESOURCES +=         resources.qrc \
+    icons.qrc
 
 HEADERS +=\
     application.h

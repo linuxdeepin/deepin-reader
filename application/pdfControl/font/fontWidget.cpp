@@ -1,15 +1,15 @@
 #include "fontWidget.h"
-#include "utils/PublicFunction.h"
-#include "frame/DocummentFileHelper.h"
-#include "utils/utils.h"
 #include <DHorizontalLine>
+#include "frame/DocummentFileHelper.h"
+#include "utils/PublicFunction.h"
+#include "utils/utils.h"
 
-FontWidget::FontWidget(CustomWidget *parent):
-    CustomWidget("FontWidget", parent)
+FontWidget::FontWidget(CustomWidget *parent)
+    : CustomWidget("FontWidget", parent)
 {
-    shortKeyList = QStringList() << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2
-                   << KeyStr::g_ctrl_3 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r
-                   << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_smaller;
+    shortKeyList = QStringList() << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3
+                                 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r
+                                 << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_smaller;
     initWidget();
     initConnection();
 
@@ -25,28 +25,28 @@ FontWidget::FontWidget(CustomWidget *parent):
 int FontWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
-//    case MSG_OPERATION_LARGER:      //  放大
-//        emit sigKeyLargerOrSmaller(1);
-//        return ConstantMsg::g_effective_res;
-//    case MSG_OPERATION_SMALLER:     //  缩小
-//        emit sigKeyLargerOrSmaller(0);
-//        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_OPEN_FILE_OK:
-        emit sigOpenFileOk();
-        break;
-    case MSG_SELF_ADAPTE_SCALE:
-        emit sigSetCurScale(msgContent);
-        break;
-    case MSG_OPERATION_UPDATE_THEME:
-        emit sigUpdateTheme();
-        break;
-    case MSG_NOTIFY_KEY_MSG : {
-        if (shortKeyList.contains(msgContent)) {
-            emit sigDealWithKey(msgContent);
-            return ConstantMsg::g_effective_res;
+            //    case MSG_OPERATION_LARGER:      //  放大
+            //        emit sigKeyLargerOrSmaller(1);
+            //        return ConstantMsg::g_effective_res;
+            //    case MSG_OPERATION_SMALLER:     //  缩小
+            //        emit sigKeyLargerOrSmaller(0);
+            //        return ConstantMsg::g_effective_res;
+        case MSG_OPERATION_OPEN_FILE_OK:
+            emit sigOpenFileOk();
+            break;
+        case MSG_SELF_ADAPTE_SCALE:
+            emit sigSetCurScale(msgContent);
+            break;
+        case MSG_OPERATION_UPDATE_THEME:
+            emit sigUpdateTheme();
+            break;
+        case MSG_NOTIFY_KEY_MSG: {
+            if (shortKeyList.contains(msgContent)) {
+                emit sigDealWithKey(msgContent);
+                return ConstantMsg::g_effective_res;
+            }
+            break;
         }
-        break;
-    }
     }
 
     return 0;
@@ -72,17 +72,17 @@ void FontWidget::initWidget()
 
     widgetLayout->addWidget(m_pEnlargeLab);
     widgetLayout->addItem(m_pEnlargeSliderLayout);
-    widgetLayout->addWidget(new DHorizontalLine);//getLabelLineH(4));
+    widgetLayout->addWidget(new DHorizontalLine);  // getLabelLineH(4));
 
     widgetLayout->addItem(m_pDoubleShowLayout);
-    widgetLayout->addWidget(new DHorizontalLine);//getLabelLineH());
+    widgetLayout->addWidget(new DHorizontalLine);  // getLabelLineH());
 
     //  自适应高\宽
     widgetLayout->addItem(m_pAdaptateHeightLayout);
-    widgetLayout->addWidget(new DHorizontalLine);//getLabelLineH());
+    widgetLayout->addWidget(new DHorizontalLine);  // getLabelLineH());
     widgetLayout->addItem(m_pAdaptateWidghtLayout);
 
-    widgetLayout->addWidget(new DHorizontalLine);//getLabelLineH());
+    widgetLayout->addWidget(new DHorizontalLine);  // getLabelLineH());
     //左旋转
     QHBoxLayout *lrlayout = new QHBoxLayout;
     lrlayout->setContentsMargins(0, 0, 0, 0);
@@ -92,7 +92,7 @@ void FontWidget::initWidget()
     lrlayout->addWidget(pRotateLeftLb);
     widgetLayout->addItem(lrlayout);
     connect(pRotateLeftLb, SIGNAL(clicked()), this, SLOT(slotSetRotateLeftCheckIcon()));
-    widgetLayout->addWidget(new DHorizontalLine);//getLabelLineH(3));
+    widgetLayout->addWidget(new DHorizontalLine);  // getLabelLineH(3));
 
     //右旋转
     QHBoxLayout *rrlayout = new QHBoxLayout;
@@ -154,16 +154,16 @@ void FontWidget::slotDealWithKey(const QString &sKey)
 //  主题变了
 void FontWidget::slotUpdateTheme()
 {
-    QString sPixmap = PF::getImagePath("select", Pri::g_pdfControl);
+    QString sPixmap = PF::getImagePath("select", Pri::g_icons);
     QPixmap px = Utils::renderSVG(sPixmap, QSize(28, 28));
     m_pSuitHLabelIcon->setPixmap(px);
     m_pSuitWLabelIcon->setPixmap(px);
     m_pDoubPageViewLabelIcon->setPixmap(px);
 
-    QString sSmall = PF::getImagePath("A_small", Pri::g_pdfControl);
+    QString sSmall = PF::getImagePath("A_small", Pri::g_icons);
     m_pEnlargeSlider->setLeftIcon(QIcon(sSmall));
 
-    QString sBig = PF::getImagePath("A_big", Pri::g_pdfControl);
+    QString sBig = PF::getImagePath("A_big", Pri::g_icons);
     m_pEnlargeSlider->setRightIcon(QIcon(sBig));
 }
 
@@ -234,22 +234,22 @@ void FontWidget::scaleAndRotate()
     t_rotate += 1;
 
     switch (t_rotate) {
-    case RotateType_0:
-        m_rotate = 0;
-        m_rotateType = RotateType_0;
-        break;
-    case RotateType_90:
-        m_rotateType = RotateType_90;
-        break;
-    case RotateType_180:
-        m_rotateType = RotateType_180;
-        break;
-    case RotateType_270:
-        m_rotateType = RotateType_270;
-        break;
-    default:
-        m_rotateType = RotateType_Normal;
-        break;
+        case RotateType_0:
+            m_rotate = 0;
+            m_rotateType = RotateType_0;
+            break;
+        case RotateType_90:
+            m_rotateType = RotateType_90;
+            break;
+        case RotateType_180:
+            m_rotateType = RotateType_180;
+            break;
+        case RotateType_270:
+            m_rotateType = RotateType_270;
+            break;
+        default:
+            m_rotateType = RotateType_Normal;
+            break;
     }
 
     setScaleRotateViewModeAndShow();
@@ -287,7 +287,8 @@ void FontWidget::setShowSuitWIcon()
  */
 void FontWidget::initConnection()
 {
-//    connect(this, SIGNAL(sigKeyLargerOrSmaller(const int &)), SLOT(slotKeyLargerOrSmaller(const int &)));
+    //    connect(this, SIGNAL(sigKeyLargerOrSmaller(const int &)),
+    //    SLOT(slotKeyLargerOrSmaller(const int &)));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotReset()));
     connect(this, SIGNAL(sigSetCurScale(const QString &)), SLOT(slotSetCurScale(const QString &)));
@@ -344,7 +345,8 @@ void FontWidget::initDowbleShow()
     m_pDoubPageViewLabelIcon = new CustomClickLabel("", this);
     m_pDoubPageViewLabelIcon->hide();
     m_pDoubPageViewLabelIcon->setFixedSize(QSize(28, 28));
-    connect(m_pDoubPageViewLabelIcon, SIGNAL(clicked()), this, SLOT(slotSetDoubPageViewCheckIcon()));
+    connect(m_pDoubPageViewLabelIcon, SIGNAL(clicked()), this,
+            SLOT(slotSetDoubPageViewCheckIcon()));
     m_pDoubleShowLayout->addWidget(m_pDoubPageViewLabelIcon);
 }
 
@@ -389,7 +391,6 @@ void FontWidget::initAdaptateWidght()
     connect(m_pSuitWLabelIcon, SIGNAL(clicked()), this, SLOT(slotSetSuitWCheckIcon()));
 
     m_pAdaptateWidghtLayout->addWidget(m_pSuitWLabelIcon);
-
 }
 
 void FontWidget::setScaleRotateViewModeAndShow()
@@ -402,7 +403,6 @@ void FontWidget::setScaleRotateViewModeAndShow()
     }
     DocummentFileHelper::instance()->setScaleRotateViewModeAndShow(scale, m_rotateType, viewmode);
 }
-
 
 /**
  * @brief FontWidget::slotSetChangeVal

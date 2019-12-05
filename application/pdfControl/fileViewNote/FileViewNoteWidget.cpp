@@ -1,12 +1,12 @@
 #include "FileViewNoteWidget.h"
+#include <DPlatformWindowHandle>
+#include <QTextCodec>
+#include "frame/DocummentFileHelper.h"
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
-#include <QTextCodec>
-#include <DPlatformWindowHandle>
-#include "frame/DocummentFileHelper.h"
 
-FileViewNoteWidget::FileViewNoteWidget(CustomWidget *parent):
-    CustomWidget(QString("FileViewNoteWidget"), parent)
+FileViewNoteWidget::FileViewNoteWidget(CustomWidget *parent)
+    : CustomWidget(QString("FileViewNoteWidget"), parent)
 {
     setWindowFlag(Qt::Popup);
     setFixedSize(QSize(250, 320));
@@ -64,11 +64,12 @@ void FileViewNoteWidget::hideEvent(QHideEvent *event)
         sendMsg(MSG_NOTE_DLTNOTECONTANT, m_pNoteUuid);
         m_strNote = t_contant;
     } else {
-        QString t_contant = m_pTextEdit->toPlainText().trimmed();       //  注释内容
-        if (t_contant != m_strNote) {   //  只有 和 原来已有注释内容不一样, 才会提示 保存
+        QString t_contant = m_pTextEdit->toPlainText().trimmed();  //  注释内容
+        if (t_contant != m_strNote) {  //  只有 和 原来已有注释内容不一样, 才会提示 保存
             QString msgContent = "";
-            if (m_pNoteUuid != "") {    //  已经高亮
-                msgContent = t_contant  + Constant::sQStringSep + m_pNoteUuid + Constant::sQStringSep + m_pNotePage;
+            if (m_pNoteUuid != "") {  //  已经高亮
+                msgContent = t_contant + Constant::sQStringSep + m_pNoteUuid +
+                             Constant::sQStringSep + m_pNotePage;
             } else {
                 msgContent = t_contant + Constant::sQStringSep + m_pHighLightPointAndPage;
             }
@@ -120,7 +121,7 @@ void FileViewNoteWidget::initConnections()
 //  主题变了
 void FileViewNoteWidget::slotUpdateTheme()
 {
-    QString sClose = PF::getImagePath("close", Pri::g_pdfControl);
+    QString sClose = PF::getImagePath("close", Pri::g_icons);
     m_pCloseLab->setPixmap(Utils::renderSVG(sClose, QSize(24, 24)));
 }
 
@@ -173,35 +174,35 @@ void FileViewNoteWidget::setPointAndPage(const QString &pointAndPage)
 
 /**************************CustemTextEdit********************************/
 
-CustemTextEdit::CustemTextEdit(DWidget *parent) :
-    DTextEdit(parent)
+CustemTextEdit::CustemTextEdit(DWidget *parent)
+    : DTextEdit(parent)
 {
     setFixedSize(205, 257);
     init();
 }
 void CustemTextEdit::init()
 {
-    //background color
+    // background color
     QPalette pText = this->palette();
     pText.setColor(QPalette::Base, QColor(255, 251, 225));
     this->setPalette(pText);
 
-    //font
+    // font
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T8);
 
-    //text corlor
+    // text corlor
     this->setTextColor(QColor(QString("#452B0A")));
 
-    //frame style
+    // frame style
     this->setFrameStyle(QFrame::NoFrame);
 
-    //text under line
+    // text under line
     QTextCursor cursor(this->textCursor());
     QTextCharFormat format = cursor.charFormat();
     QTextBlockFormat textBlockFormat;
-    //line height
+    // line height
     textBlockFormat.setLineHeight(19, QTextBlockFormat::FixedHeight);
-    //line margin
+    // line margin
     textBlockFormat.setBottomMargin(0);
     cursor.mergeCharFormat(format);
     cursor.setBlockFormat(textBlockFormat);
@@ -219,11 +220,12 @@ void CustemTextEdit::init()
  */
 int CustemTextEdit::calcTextSize(const QString &text)
 {
-    QByteArray ba = QTextCodec::codecForName(("GBK"))->fromUnicode(text);//unicodezhuangGBK之间的转换器
+    QByteArray ba =
+        QTextCodec::codecForName(("GBK"))->fromUnicode(text);  // unicodezhuangGBK之间的转换器
 
     const char *str_2 = ba.data();
 
-    int str_len = strlen(str_2);//获取转换长度
+    int str_len = strlen(str_2);  //获取转换长度
 
     return str_len;
 }
@@ -231,16 +233,16 @@ int CustemTextEdit::calcTextSize(const QString &text)
 QString CustemTextEdit::getMaxLenStr(QString text)
 {
     QString qstrChinese = "";
-    QString qstrText =  text;
+    QString qstrText = text;
 
-//    for(int index = 0; index < text.count(); ++index)
-//    {
-//        qstrChinese.append(text.at(index));
+    //    for(int index = 0; index < text.count(); ++index)
+    //    {
+    //        qstrChinese.append(text.at(index));
 
-//        if(qstrChinese.toUtf8().size() >= m_nMaxContantLen){
-//            return qstrChinese;
-//        }
-//    }
+    //        if(qstrChinese.toUtf8().size() >= m_nMaxContantLen){
+    //            return qstrChinese;
+    //        }
+    //    }
     foreach (QChar ch, qstrText) {
         qDebug() << ch;
         qstrChinese.append(ch);
@@ -261,7 +263,7 @@ void CustemTextEdit::slotTextEditMaxContantNum()
 {
     QString textContent = this->toPlainText();
 
-    int length = textContent.count();//textContent.toUtf8().size();
+    int length = textContent.count();  // textContent.toUtf8().size();
 
     if (length > m_nMaxContantLen) {
         int position = this->textCursor().position();

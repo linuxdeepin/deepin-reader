@@ -1,14 +1,14 @@
 #include "MainOperationWidget.h"
-#include <QHBoxLayout>
-#include <QButtonGroup>
 #include <DToolButton>
-#include "utils/PublicFunction.h"
+#include <QButtonGroup>
+#include <QHBoxLayout>
+#include "controller/AppSetting.h"
 #include "controller/DataManager.h"
 #include "frame/DocummentFileHelper.h"
-#include "controller/AppSetting.h"
+#include "utils/PublicFunction.h"
 
-MainOperationWidget::MainOperationWidget(CustomWidget *parent):
-    CustomWidget("MainOperationWidget", parent)
+MainOperationWidget::MainOperationWidget(CustomWidget *parent)
+    : CustomWidget("MainOperationWidget", parent)
 {
     initWidget();
     initConnect();
@@ -27,7 +27,9 @@ void MainOperationWidget::initWidget()
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
 
     QStringList btnStrList = QStringList() << tr("thumbnail") << tr("bookmark") << tr("annotation");
-    QStringList btnObjList = QStringList() << "thumbnail" << "bookmark" << "annotation";
+    QStringList btnObjList = QStringList() << "thumbnail"
+                                           << "bookmark"
+                                           << "annotation";
 
     int nSize = btnStrList.size();
     for (int iLoop = 0; iLoop < nSize; iLoop++) {
@@ -64,7 +66,7 @@ void MainOperationWidget::initWidget()
 
 DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QString &objName)
 {
-    //auto btn = new DIconButton(this);
+    // auto btn = new DIconButton(this);
     auto btn = new DToolButton(this);
     btn->setToolTip(btnName);
     btn->setObjectName(objName);
@@ -73,7 +75,7 @@ DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QStrin
     btn->setCheckable(true);
     btn->setChecked(false);
 
-    return  btn;
+    return btn;
 }
 
 QString MainOperationWidget::findBtnName()
@@ -107,7 +109,7 @@ void MainOperationWidget::slotUpdateTheme()
     foreach (auto btn, btnList) {
         QString objName = btn->objectName();
         if (objName != "") {
-            QString sPixmap = PF::getImagePath(objName, Pri::g_frame);
+            QString sPixmap = PF::getImagePath(objName, /*Pri::g_frame*/ Pri::g_actions);
             btn->setIcon(QIcon(sPixmap));
         }
     }
@@ -115,7 +117,7 @@ void MainOperationWidget::slotUpdateTheme()
 
 void MainOperationWidget::slotButtonClicked(int id)
 {
-//    m_nThumbnailIndex = id;
+    //    m_nThumbnailIndex = id;
     if (WIDGET_SEARCH != id) {
         DataManager::instance()->setCurrentWidget(id);
     }
@@ -154,7 +156,7 @@ void MainOperationWidget::slotSearchClosed()
 
 int MainOperationWidget::dealWithData(const int &msgType, const QString &)
 {
-    if (msgType == MSG_FIND_CONTENT) {        //  查询内容
+    if (msgType == MSG_FIND_CONTENT) {  //  查询内容
         emit sigSearchControl();
     } else if (msgType == MSG_CLEAR_FIND_CONTENT) {
         emit sigSearchClosed();

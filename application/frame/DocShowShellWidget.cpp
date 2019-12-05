@@ -1,13 +1,13 @@
 #include "DocShowShellWidget.h"
-#include <QVBoxLayout>
-#include "FileViewWidget.h"
-#include "controller/DataManager.h"
-#include "DocummentFileHelper.h"
 #include <DDialogCloseButton>
-#include "utils/PublicFunction.h"
+#include <QVBoxLayout>
+#include "DocummentFileHelper.h"
+#include "FileViewWidget.h"
+#include "application.h"
+#include "controller/DataManager.h"
 #include "mainShow/FindWidget.h"
 #include "pdfControl/fileViewNote/FileViewNoteWidget.h"
-#include "application.h"
+#include "utils/PublicFunction.h"
 
 DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
     : CustomWidget("DocShowShellWidget", parent)
@@ -16,10 +16,7 @@ DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
     initConnections();
 }
 
-DocShowShellWidget::~DocShowShellWidget()
-{
-
-}
+DocShowShellWidget::~DocShowShellWidget() {}
 
 void DocShowShellWidget::resizeEvent(QResizeEvent *event)
 {
@@ -58,10 +55,11 @@ void DocShowShellWidget::slotShowCloseBtn(const int &iFlag)
     }
 
     if (iFlag == 2) {
-        closeBtn->setIcon(QIcon(":/resources/exit_slider.svg"));
+        QString sIcon = PF::getImagePath("exit_slider", Pri::g_actions);
+        closeBtn->setIcon(QIcon(sIcon));
         closeBtn->setObjectName("slider");
     } else {
-        QString sIcon = PF::getImagePath("exit_fullscreen", Pri::g_frame);
+        QString sIcon = PF::getImagePath("exit_fullscreen", Pri::g_actions);
         closeBtn->setIcon(QIcon(sIcon));
         closeBtn->setObjectName("fullscreen");
     }
@@ -153,8 +151,8 @@ void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
         pWidget->setPointAndPage("");
         DataManager::instance()->setSmallNoteWidgetSize(pWidget->size());
 
-        bool t_bHigh = false; // 点击位置是否是高亮
-        QPoint point;// = this->mapToGlobal(rrect.bottomRight());// 鼠标点击位置
+        bool t_bHigh = false;  // 点击位置是否是高亮
+        QPoint point;          // = this->mapToGlobal(rrect.bottomRight());// 鼠标点击位置
 
         DataManager::instance()->mousePressLocal(t_bHigh, point);
         if (t_bHigh) {
@@ -173,7 +171,7 @@ void DocShowShellWidget::slotUpdateTheme()
     auto closeBtn = this->findChild<DIconButton *>();
     if (!closeBtn) {
         if (closeBtn->objectName() == "fullscreen") {
-            QString sIcon = PF::getImagePath("exit_fullscreen", Pri::g_frame);
+            QString sIcon = PF::getImagePath("exit_fullscreen", Pri::g_actions);
             closeBtn->setIcon(QIcon(sIcon));
         }
     }
@@ -187,23 +185,25 @@ void DocShowShellWidget::initConnections()
     connect(this, SIGNAL(sigHideCloseBtn()), SLOT(slotHideCloseBtn()));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 
-    connect(this, SIGNAL(sigOpenNoteWidget(const QString &)), SLOT(slotOpenNoteWidget(const QString &)));
-    connect(this, SIGNAL(sigShowNoteWidget(const QString &)), SLOT(slotShowNoteWidget(const QString &)));
+    connect(this, SIGNAL(sigOpenNoteWidget(const QString &)),
+            SLOT(slotOpenNoteWidget(const QString &)));
+    connect(this, SIGNAL(sigShowNoteWidget(const QString &)),
+            SLOT(slotShowNoteWidget(const QString &)));
 }
 
 //  集中处理 按键通知消息
 int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
 {
-    if (KeyStr::g_ctrl_f == msgContent) {    //  搜索
+    if (KeyStr::g_ctrl_f == msgContent) {  //  搜索
         emit sigShowFileFind();
         return ConstantMsg::g_effective_res;
     }
 
-    if (KeyStr::g_f11 == msgContent) {    //  全屏
+    if (KeyStr::g_f11 == msgContent) {  //  全屏
         emit sigShowCloseBtn(0);
     }
 
-    if (KeyStr::g_esc == msgContent) {   //  退出   幻灯片\全屏
+    if (KeyStr::g_esc == msgContent) {  //  退出   幻灯片\全屏
         emit sigHideCloseBtn();
     }
     return 0;
@@ -212,21 +212,21 @@ int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
 int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
-    case MSG_OPERATION_ATTR:                    //  打开该文件的属性信息
-        emit sigShowFileAttr();
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_TEXT_ADD_ANNOTATION:     //  添加注释
-        emit sigOpenNoteWidget(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_TEXT_SHOW_NOTEWIDGET:    //  显示注释窗口
-        emit sigShowNoteWidget(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_SLIDE :                  //  幻灯片模式
-        emit sigShowCloseBtn(1);
-        break;
-    case MSG_NOTIFY_KEY_MSG : {                 //  最后一个处理通知消息
-        return dealWithNotifyMsg(msgContent);
-    }
+        case MSG_OPERATION_ATTR:  //  打开该文件的属性信息
+            emit sigShowFileAttr();
+            return ConstantMsg::g_effective_res;
+        case MSG_OPERATION_TEXT_ADD_ANNOTATION:  //  添加注释
+            emit sigOpenNoteWidget(msgContent);
+            return ConstantMsg::g_effective_res;
+        case MSG_OPERATION_TEXT_SHOW_NOTEWIDGET:  //  显示注释窗口
+            emit sigShowNoteWidget(msgContent);
+            return ConstantMsg::g_effective_res;
+        case MSG_OPERATION_SLIDE:  //  幻灯片模式
+            emit sigShowCloseBtn(1);
+            break;
+        case MSG_NOTIFY_KEY_MSG: {  //  最后一个处理通知消息
+            return dealWithNotifyMsg(msgContent);
+        }
     }
 
     return 0;

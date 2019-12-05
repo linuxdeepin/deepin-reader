@@ -1,23 +1,20 @@
 #include "TitleWidget.h"
 #include <QHBoxLayout>
 #include <QWidgetAction>
-#include "controller/DataManager.h"
 #include "controller/AppSetting.h"
+#include "controller/DataManager.h"
 
-TitleWidget::TitleWidget(CustomWidget *parent) :
-    CustomWidget("TitleWidget", parent)
+TitleWidget::TitleWidget(CustomWidget *parent)
+    : CustomWidget("TitleWidget", parent)
 {
     shortKeyList = QStringList() << KeyStr::g_alt_1 << KeyStr::g_alt_2 << KeyStr::g_m
-                   << KeyStr::g_z;
+                                 << KeyStr::g_z;
     initWidget();
     initConnections();
     slotUpdateTheme();
 }
 
-TitleWidget::~TitleWidget()
-{
-
-}
+TitleWidget::~TitleWidget() {}
 
 //  显示了侧边栏, 则隐藏
 void TitleWidget::slotSetFindWidget(const int &iFlag)
@@ -36,7 +33,7 @@ void TitleWidget::slotUpdateTheme()
     foreach (auto btn, btnList) {
         QString objName = btn->objectName();
         if (objName != "") {
-            QString sPixmap = PF::getImagePath(objName, Pri::g_frame);
+            QString sPixmap = PF::getImagePath(objName, Pri::g_actions);
             btn->setIcon(QIcon(sPixmap));
         }
     }
@@ -45,7 +42,7 @@ void TitleWidget::slotUpdateTheme()
     foreach (auto a, actionList) {
         QString objName = a->objectName();
         if (objName != "") {
-            QString sPixmap = PF::getImagePath(objName + "_small", Pri::g_frame);
+            QString sPixmap = PF::getImagePath(objName + "_small", Pri::g_actions);
             a->setIcon(QIcon(sPixmap));
         }
     }
@@ -69,7 +66,6 @@ void TitleWidget::slotAppFullScreen()
     //  侧边栏 隐藏
     notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, "0");
 }
-
 
 //  退出放大鏡
 void TitleWidget::slotMagnifierCancel()
@@ -109,7 +105,8 @@ void TitleWidget::initConnections()
     connect(this, SIGNAL(sigMagnifierCancel()), SLOT(slotMagnifierCancel()));
     connect(this, SIGNAL(sigAppFullScreen()), SLOT(slotAppFullScreen()));
 
-    connect(this, SIGNAL(sigDealWithShortKey(const QString &)), SLOT(slotDealWithShortKey(const QString &)));
+    connect(this, SIGNAL(sigDealWithShortKey(const QString &)),
+            SLOT(slotDealWithShortKey(const QString &)));
 }
 
 //  缩略图
@@ -162,7 +159,7 @@ void TitleWidget::on_magnifyingBtn_clicked()
                 break;
             }
         }
-        QString normalPic = PF::getImagePath("defaultShape", Pri::g_frame);
+        QString normalPic = PF::getImagePath("defaultShape", Pri::g_actions);
         m_pHandleShapeBtn->setIcon(QIcon(normalPic));
     }
 }
@@ -183,23 +180,23 @@ void TitleWidget::slotActionTrigger(QAction *action)
 //  处理 快捷键
 void TitleWidget::slotDealWithShortKey(const QString &sKey)
 {
-    if (sKey == KeyStr::g_alt_1) {         //  选择工具
+    if (sKey == KeyStr::g_alt_1) {  //  选择工具
         slotMagnifierCancel();
 
         if (0 != m_nCurHandleShape) {
             setDefaultShape();
         }
-    } else if (sKey == KeyStr::g_alt_2) {   //  手型工具
+    } else if (sKey == KeyStr::g_alt_2) {  //  手型工具
         slotMagnifierCancel();
 
         if (1 != m_nCurHandleShape) {
             setHandleShape();
         }
-    } else if (sKey == KeyStr::g_m) {       //  显示缩略图
+    } else if (sKey == KeyStr::g_m) {  //  显示缩略图
         m_pThumbnailBtn->setChecked(true);
         notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(1));
         DataManager::instance()->setBThumbnIsShow(1);
-    } else if (sKey == KeyStr::g_z) {       //  开启放大镜
+    } else if (sKey == KeyStr::g_z) {  //  开启放大镜
         bool bCheck = m_pMagnifierBtn->isChecked();
         if (!bCheck) {
             m_pMagnifierBtn->setChecked(true);
@@ -214,7 +211,7 @@ void TitleWidget::slotDealWithShortKey(const QString &sKey)
                     break;
                 }
             }
-            QString normalPic = PF::getImagePath("defaultShape", Pri::g_frame);
+            QString normalPic = PF::getImagePath("defaultShape", Pri::g_actions);
             m_pHandleShapeBtn->setIcon(QIcon(normalPic));
         }
     }
@@ -295,7 +292,7 @@ void TitleWidget::setDefaultShape()
 
     m_nCurHandleShape = 0;
     QString btnName = "defaultShape";
-    QString normalPic = PF::getImagePath(btnName, Pri::g_frame);
+    QString normalPic = PF::getImagePath(btnName, Pri::g_actions);
     m_pHandleShapeBtn->setIcon(QIcon(normalPic));
 
     notifyMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurHandleShape));
@@ -312,7 +309,7 @@ void TitleWidget::setHandleShape()
 
     m_nCurHandleShape = 1;
     QString btnName = "handleShape";
-    QString normalPic = PF::getImagePath(btnName, Pri::g_frame);
+    QString normalPic = PF::getImagePath(btnName, Pri::g_actions);
     m_pHandleShapeBtn->setIcon(QIcon(normalPic));
 
     notifyMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurHandleShape));
@@ -370,7 +367,7 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
         } else {
             if (shortKeyList.contains(msgContent)) {
                 emit sigDealWithShortKey(msgContent);
-                return  ConstantMsg::g_effective_res;
+                return ConstantMsg::g_effective_res;
             }
         }
     }

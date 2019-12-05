@@ -1,49 +1,51 @@
 #include "FileViewWidget.h"
-#include <QGridLayout>
 #include <QClipboard>
-#include "controller/DataManager.h"
+#include <QGridLayout>
 #include "application.h"
+#include "controller/DataManager.h"
 
-#include "docview/docummentproxy.h"
 #include <DDialog>
+#include <QPrintPreviewDialog>
 #include <QPrinter>
 #include <QPrinterInfo>
-#include <QPrintPreviewDialog>
+#include "docview/docummentproxy.h"
 
-#include "mainShow/DefaultOperationMenu.h"
 #include "controller/AppSetting.h"
+#include "frame/DocummentFileHelper.h"
+#include "mainShow/DefaultOperationMenu.h"
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
     , m_operatemenu(nullptr)
 {
-    setMouseTracking(true); //  接受 鼠标滑动事件
+    setMouseTracking(true);  //  接受 鼠标滑动事件
 
     initWidget();
     initConnections();
 }
 
-FileViewWidget::~FileViewWidget()
-{
-
-}
+FileViewWidget::~FileViewWidget() {}
 
 void FileViewWidget::initWidget()
 {
     //  实际文档类  唯一实例化设置 父窗口
     auto m_pDocummentProxy = DocummentProxy::instance(this);
-    connect(m_pDocummentProxy, SIGNAL(signal_bookMarkStateChange(int, bool)),
-            this, SLOT(slotBookMarkStateChange(int, bool)));
-    connect(m_pDocummentProxy, SIGNAL(signal_pageChange(int)),
-            this, SLOT(slotDocFilePageChanged(int)));
+    connect(m_pDocummentProxy, SIGNAL(signal_bookMarkStateChange(int, bool)), this,
+            SLOT(slotBookMarkStateChange(int, bool)));
+    connect(m_pDocummentProxy, SIGNAL(signal_pageChange(int)), this,
+            SLOT(slotDocFilePageChanged(int)));
 
     m_pDocummentFileHelper = DocummentFileHelper::instance();
-    connect(this, SIGNAL(sigOpenFile(const QString &)), m_pDocummentFileHelper, SLOT(slotOpenFile(const QString &)));
-    connect(this, SIGNAL(sigOpenFiles(const QString &)), m_pDocummentFileHelper, SLOT(slotOpenFiles(const QString &)));
+    connect(this, SIGNAL(sigOpenFile(const QString &)), m_pDocummentFileHelper,
+            SLOT(slotOpenFile(const QString &)));
+    connect(this, SIGNAL(sigOpenFiles(const QString &)), m_pDocummentFileHelper,
+            SLOT(slotOpenFiles(const QString &)));
     connect(this, SIGNAL(sigSaveFile()), m_pDocummentFileHelper, SLOT(slotSaveFile()));
     connect(this, SIGNAL(sigSaveAsFile()), m_pDocummentFileHelper, SLOT(slotSaveAsFile()));
-    connect(this, SIGNAL(sigFileSlider(const int &)), m_pDocummentFileHelper, SLOT(slotFileSlider(const int &)));
-    connect(this, SIGNAL(sigCopySelectContent(const QString &)), m_pDocummentFileHelper, SLOT(slotCopySelectContent(const QString &)));
+    connect(this, SIGNAL(sigFileSlider(const int &)), m_pDocummentFileHelper,
+            SLOT(slotFileSlider(const int &)));
+    connect(this, SIGNAL(sigCopySelectContent(const QString &)), m_pDocummentFileHelper,
+            SLOT(slotCopySelectContent(const QString &)));
 }
 
 //  鼠标移动
@@ -56,7 +58,7 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
 
     QPoint globalPos = event->globalPos();
     QPoint docGlobalPos = m_pDocummentFileHelper->global2RelativePoint(globalPos);
-    if (m_nCurrentHandelState == Handel_State) {    //   手型状态下， 按住鼠标左键 位置进行移动
+    if (m_nCurrentHandelState == Handel_State) {  //   手型状态下， 按住鼠标左键 位置进行移动
         if (m_bSelectOrMove) {
             QPoint mvPoint = m_pHandleMoveStartPoint - globalPos;
             int mvX = mvPoint.x();
@@ -74,7 +76,7 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
             m_pDocummentFileHelper->mouseSelectText(m_pStartPoint, m_pEndSelectPoint);
         } else {
             //  首先判断文档划过属性
-            auto pLink  = m_pDocummentFileHelper->mouseBeOverLink(docGlobalPos);
+            auto pLink = m_pDocummentFileHelper->mouseBeOverLink(docGlobalPos);
             if (pLink) {
                 setCursor(QCursor(Qt::PointingHandCursor));
             } else {
@@ -113,7 +115,7 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 
         //  当前状态是 手, 先 拖动, 之后 在是否是链接之类
         if (m_nCurrentHandelState == Handel_State) {
-            m_pHandleMoveStartPoint = globalPos;     //  变成手，　需要的是　相对坐标
+            m_pHandleMoveStartPoint = globalPos;  //  变成手，　需要的是　相对坐标
             m_bSelectOrMove = true;
         } else {
             QPoint docGlobalPos = m_pDocummentFileHelper->global2RelativePoint(globalPos);
@@ -163,16 +165,17 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
             // 判断鼠标点击的地方是否有高亮
             QString selectText, t_strUUid;
 
-            bool bIsHighLightReleasePoint = m_pDocummentFileHelper->annotationClicked(docGlobalPos, selectText, t_strUUid);
+            bool bIsHighLightReleasePoint =
+                m_pDocummentFileHelper->annotationClicked(docGlobalPos, selectText, t_strUUid);
             DataManager::instance()->setMousePressLocal(bIsHighLightReleasePoint, globalPos);
             if (bIsHighLightReleasePoint) {
-
                 if (m_pNoteTipWidget && m_pNoteTipWidget->isVisible()) {
                     m_pNoteTipWidget->hide();
                 }
 
                 int nPage = m_pDocummentFileHelper->pointInWhichPage(docGlobalPos);
-                QString t_strContant = t_strUUid.trimmed() + QString("%1%") + QString::number(nPage);
+                QString t_strContant =
+                    t_strUUid.trimmed() + QString("%1%") + QString::number(nPage);
                 notifyMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
             }
         }
@@ -213,7 +216,7 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
     if (m_nCurrentHandelState == Handel_State)
         return;
 
-    QString sSelectText =  "";
+    QString sSelectText = "";
     m_pDocummentFileHelper->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
 
     QPoint tempPoint = this->mapToGlobal(point);
@@ -221,10 +224,11 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 
     //  右键鼠标点 是否有高亮区域
     QString sAnnotationText = "", struuid = "";
-    bool bIsHighLight = m_pDocummentFileHelper->annotationClicked(pRightClickPoint, sAnnotationText, struuid);
+    bool bIsHighLight =
+        m_pDocummentFileHelper->annotationClicked(pRightClickPoint, sAnnotationText, struuid);
 
     int nPage = m_pDocummentFileHelper->pointInWhichPage(pRightClickPoint);
-    if (sSelectText != "" || bIsHighLight) {    //  选中区域 有文字, 弹出 文字操作菜单
+    if (sSelectText != "" || bIsHighLight) {  //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
         if (nullptr == m_operatemenu) {
             m_operatemenu = new TextOperationMenu(this);
@@ -236,7 +240,7 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         DataManager::instance()->setMousePressLocal(bIsHighLight, tempPoint);
 
         m_operatemenu->execMenu(tempPoint, bIsHighLight, sSelectText, struuid);
-    } else {    //  否则弹出 文档操作菜单
+    } else {  //  否则弹出 文档操作菜单
         auto menu = new DefaultOperationMenu(this);
         menu->setFixedWidth(182);
         menu->execMenu(tempPoint, nPage);
@@ -253,7 +257,7 @@ void FileViewWidget::slotMagnifying(const QString &data)
         m_nCurrentHandelState = Magnifier_State;
         this->setCursor(Qt::BlankCursor);
     } else {
-        if (m_nCurrentHandelState == Magnifier_State) { //  是 放大镜模式 才取消
+        if (m_nCurrentHandelState == Magnifier_State) {  //  是 放大镜模式 才取消
 
             m_nCurrentHandelState = Default_State;
             this->setCursor(Qt::ArrowCursor);
@@ -269,7 +273,7 @@ void FileViewWidget::slotSetHandShape(const QString &data)
     //  手型 切换 也需要将之前选中的文字清除 选中样式
     m_pDocummentFileHelper->mouseSelectTextClear();
     int nRes = data.toInt();
-    if (nRes == 1) { //  手形
+    if (nRes == 1) {  //  手形
         m_nCurrentHandelState = Handel_State;
         this->setCursor(Qt::OpenHandCursor);
     } else {
@@ -304,9 +308,9 @@ void FileViewWidget::slotFileAddAnnotation()
         return;
     }
     QString selectText = "", t_strUUid = "";
-    bool bIsHighLightReleasePoint = m_pDocummentFileHelper->annotationClicked(m_pEndSelectPoint, selectText, t_strUUid);
+    bool bIsHighLightReleasePoint =
+        m_pDocummentFileHelper->annotationClicked(m_pEndSelectPoint, selectText, t_strUUid);
     if (!bIsHighLightReleasePoint) {
-
         QColor color = DataManager::instance()->selectColor();
 
         m_pDocummentFileHelper->addAnnotation(m_pEndSelectPoint, m_pEndSelectPoint, color);
@@ -361,7 +365,7 @@ void FileViewWidget::slotFileRemoveAnnotation(const QString &msgContent)
         QPoint tempPoint(sX.toInt(), sY.toInt());
         QString sUuid = m_pDocummentFileHelper->removeAnnotation(tempPoint);
         if (sUuid != "") {
-            sendMsg(MSG_NOTE_DLTNOTEITEM, sUuid);   //  notesWidget 处理该消息
+            sendMsg(MSG_NOTE_DLTNOTEITEM, sUuid);  //  notesWidget 处理该消息
         }
     }
 }
@@ -385,7 +389,8 @@ void FileViewWidget::slotFileAddNote(const QString &msgContent)
         QColor color = DataManager::instance()->selectColor();
         QPoint tempPoint(sX.toInt(), sY.toInt());
 
-        sUuid = m_pDocummentFileHelper->addAnnotation(tempPoint, tempPoint, color);  //  高亮 产生的 uuid
+        sUuid = m_pDocummentFileHelper->addAnnotation(tempPoint, tempPoint,
+                                                      color);  //  高亮 产生的 uuid
     }
 
     if (sUuid == "" || sNote == "" || sPage == "" || sPage == "-1") {
@@ -422,7 +427,9 @@ void FileViewWidget::slotFileAddNote()
     }
 
     int nPage = m_pDocummentFileHelper->pointInWhichPage(m_pEndSelectPoint);
-    QString msgContent = QString("%1").arg(nPage) + Constant::sQStringSep + QString("%1").arg(m_pEndSelectPoint.x()) + Constant::sQStringSep + QString("%1").arg(m_pEndSelectPoint.y());
+    QString msgContent = QString("%1").arg(nPage) + Constant::sQStringSep +
+                         QString("%1").arg(m_pEndSelectPoint.x()) + Constant::sQStringSep +
+                         QString("%1").arg(m_pEndSelectPoint.y());
     notifyMsg(MSG_OPERATION_TEXT_ADD_ANNOTATION, msgContent);
 }
 
@@ -447,7 +454,7 @@ void FileViewWidget::slotDocFilePageChanged(int page)
 
 void FileViewWidget::slotFileCtrlContent()
 {
-    QString sSelectText =  "";
+    QString sSelectText = "";
     m_pDocummentFileHelper->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
 
     if (sSelectText != "") {
@@ -461,15 +468,19 @@ void FileViewWidget::initConnections()
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             SLOT(slotCustomContextMenuRequested(const QPoint &)));
 
-    connect(this, SIGNAL(sigSetHandShape(const QString &)), SLOT(slotSetHandShape(const QString &)));
+    connect(this, SIGNAL(sigSetHandShape(const QString &)),
+            SLOT(slotSetHandShape(const QString &)));
     connect(this, SIGNAL(sigMagnifying(const QString &)), SLOT(slotMagnifying(const QString &)));
     connect(this, SIGNAL(sigWidgetAdapt()), SLOT(slotSetWidgetAdapt()));
     connect(this, SIGNAL(sigPrintFile()), SLOT(slotPrintFile()));
 
     connect(this, SIGNAL(sigFileAddAnnotation()), SLOT(slotFileAddAnnotation()));
-    connect(this, SIGNAL(sigFileAddAnnotation(const QString &)), SLOT(slotFileAddAnnotation(const QString &)));
-    connect(this, SIGNAL(sigFileUpdateAnnotation(const QString &)), SLOT(slotFileUpdateAnnotation(const QString &)));
-    connect(this, SIGNAL(sigFileRemoveAnnotation(const QString &)), SLOT(slotFileRemoveAnnotation(const QString &)));
+    connect(this, SIGNAL(sigFileAddAnnotation(const QString &)),
+            SLOT(slotFileAddAnnotation(const QString &)));
+    connect(this, SIGNAL(sigFileUpdateAnnotation(const QString &)),
+            SLOT(slotFileUpdateAnnotation(const QString &)));
+    connect(this, SIGNAL(sigFileRemoveAnnotation(const QString &)),
+            SLOT(slotFileRemoveAnnotation(const QString &)));
 
     connect(this, SIGNAL(sigFileAddNote()), SLOT(slotFileAddNote()));
     connect(this, SIGNAL(sigFileAddNote(const QString &)), SLOT(slotFileAddNote(const QString &)));
@@ -481,7 +492,8 @@ void FileViewWidget::initConnections()
 void FileViewWidget::onShowNoteTipWidget(const QPoint &docPos)
 {
     QString selectText, t_strUUid;
-    bool bIsHighLightReleasePoint = m_pDocummentFileHelper->annotationClicked(docPos, selectText, t_strUUid);
+    bool bIsHighLightReleasePoint =
+        m_pDocummentFileHelper->annotationClicked(docPos, selectText, t_strUUid);
     if (bIsHighLightReleasePoint) {
         int nPage = m_pDocummentFileHelper->pointInWhichPage(docPos);
         QString sContant = "";
@@ -507,6 +519,7 @@ void FileViewWidget::slotPrintFile()
 
     if (printerName.size() == 0) {
         DDialog dlg("", tr("No Print Device"));
+        //        QString sPixmap = PF::getImagePath(objName, /*Pri::g_frame*/ Pri::g_actions);
         dlg.setIcon(QIcon(":/resources/exception-logo.svg"));
         dlg.addButtons(QStringList() << tr("Ok"));
         QMargins mar(0, 0, 0, 30);
@@ -516,9 +529,8 @@ void FileViewWidget::slotPrintFile()
     }
 
     QPrintPreviewDialog preview(&printer, this);
-    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ](QPrinter * printer) {
-
-        int nPageSize = m_pDocummentFileHelper->getPageSNum();       //  pdf 页数
+    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter *printer) {
+        int nPageSize = m_pDocummentFileHelper->getPageSNum();  //  pdf 页数
         printer->setWinPageSize(nPageSize);
 
         QPainter painter(printer);
@@ -534,7 +546,7 @@ void FileViewWidget::slotPrintFile()
                 QPixmap pixmap = pixmap.fromImage(image);
 
                 QSize size = pixmap.size();
-                size.scale(rect.size(), Qt::KeepAspectRatio);//此处保证图片显示完整
+                size.scale(rect.size(), Qt::KeepAspectRatio);  //此处保证图片显示完整
                 painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
                 painter.setWindow(pixmap.rect());
                 painter.drawPixmap(10, 10, 800, 1100, pixmap);
@@ -569,31 +581,31 @@ void FileViewWidget::slotSetWidgetAdapt()
 int FileViewWidget::dealWithTitleRequest(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
-    case MSG_MAGNIFYING:            //  放大镜信号
-        emit sigMagnifying(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_HANDLESHAPE:           //  手势 信号
-        emit sigSetHandShape(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_SELF_ADAPTE_HEIGHT:    //  自适应　高度
-        if (msgContent == "1") {
-            m_nAdapteState = HEIGHT_State ;
+        case MSG_MAGNIFYING:  //  放大镜信号
+            emit sigMagnifying(msgContent);
+            return ConstantMsg::g_effective_res;
+        case MSG_HANDLESHAPE:  //  手势 信号
+            emit sigSetHandShape(msgContent);
+            return ConstantMsg::g_effective_res;
+        case MSG_SELF_ADAPTE_HEIGHT:  //  自适应　高度
+            if (msgContent == "1") {
+                m_nAdapteState = HEIGHT_State;
+                emit sigWidgetAdapt();
+            } else {
+                m_nAdapteState = Default_State;
+            }
+            return ConstantMsg::g_effective_res;
+        case MSG_SELF_ADAPTE_WIDTH:  //   自适应宽度
+            if (msgContent == "1") {
+                m_nAdapteState = WIDGET_State;
+                emit sigWidgetAdapt();
+            } else {
+                m_nAdapteState = Default_State;
+            }
+            return ConstantMsg::g_effective_res;
+        case MSG_FILE_ROTATE:  //  文档旋转了
             emit sigWidgetAdapt();
-        } else {
-            m_nAdapteState = Default_State;
-        }
-        return ConstantMsg::g_effective_res;
-    case MSG_SELF_ADAPTE_WIDTH:    //   自适应宽度
-        if (msgContent == "1") {
-            m_nAdapteState = WIDGET_State;
-            emit sigWidgetAdapt();
-        } else {
-            m_nAdapteState = Default_State;
-        }
-        return ConstantMsg::g_effective_res;
-    case MSG_FILE_ROTATE:           //  文档旋转了
-        emit sigWidgetAdapt();
-        return ConstantMsg::g_effective_res;
+            return ConstantMsg::g_effective_res;
     }
     return 0;
 }
@@ -602,33 +614,33 @@ int FileViewWidget::dealWithTitleRequest(const int &msgType, const QString &msgC
 int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
-    case MSG_OPEN_FILE_PATH:                    //  打开文件
-        emit sigOpenFile(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_OPEN_FILE_PATH_S:                    //  打开文件
-        emit sigOpenFiles(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_SAVE_AS_FILE:            //  另存为文件
-        emit sigSaveAsFile();
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_TEXT_COPY:               //  复制
-        emit sigCopySelectContent(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_SLIDE:                   //  放映
-        emit sigFileSlider(1);
-        break;
-    case MSG_OPERATION_TEXT_ADD_HIGHLIGHTED:    //  高亮显示
-        emit sigFileAddAnnotation(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_TEXT_UPDATE_HIGHLIGHTED: //  更新高亮颜色显示
-        emit sigFileUpdateAnnotation(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED: //  移除高亮显示
-        emit sigFileRemoveAnnotation(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_NOTE_ADDCONTANT:                   //  添加注释
-        emit sigFileAddNote(msgContent);
-        return ConstantMsg::g_effective_res;
+        case MSG_OPEN_FILE_PATH:  //  打开文件
+            emit sigOpenFile(msgContent);
+            return ConstantMsg::g_effective_res;
+        case MSG_OPEN_FILE_PATH_S:  //  打开文件
+            emit sigOpenFiles(msgContent);
+            return ConstantMsg::g_effective_res;
+        case MSG_OPERATION_SAVE_AS_FILE:  //  另存为文件
+            emit sigSaveAsFile();
+            return ConstantMsg::g_effective_res;
+        case MSG_OPERATION_TEXT_COPY:  //  复制
+            emit sigCopySelectContent(msgContent);
+            return ConstantMsg::g_effective_res;
+        case MSG_OPERATION_SLIDE:  //  放映
+            emit sigFileSlider(1);
+            break;
+        case MSG_OPERATION_TEXT_ADD_HIGHLIGHTED:  //  高亮显示
+            emit sigFileAddAnnotation(msgContent);
+            return ConstantMsg::g_effective_res;
+        case MSG_OPERATION_TEXT_UPDATE_HIGHLIGHTED:  //  更新高亮颜色显示
+            emit sigFileUpdateAnnotation(msgContent);
+            return ConstantMsg::g_effective_res;
+        case MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED:  //  移除高亮显示
+            emit sigFileRemoveAnnotation(msgContent);
+            return ConstantMsg::g_effective_res;
+        case MSG_NOTE_ADDCONTANT:  //  添加注释
+            emit sigFileAddNote(msgContent);
+            return ConstantMsg::g_effective_res;
     }
     return 0;
 }
@@ -636,17 +648,17 @@ int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &m
 //  集中处理 按键通知消息
 int FileViewWidget::dealWithNotifyMsg(const QString &msgContent)
 {
-    if (KeyStr::g_ctrl_s == msgContent) {   //  保存文件
+    if (KeyStr::g_ctrl_s == msgContent) {  //  保存文件
         emit sigSaveFile();
         return ConstantMsg::g_effective_res;
     }
 
-    if (KeyStr::g_ctrl_p == msgContent) {   //  打印
+    if (KeyStr::g_ctrl_p == msgContent) {  //  打印
         emit sigPrintFile();
         return ConstantMsg::g_effective_res;
     }
 
-    if (KeyStr::g_ctrl_l == msgContent) {   //  添加高亮
+    if (KeyStr::g_ctrl_l == msgContent) {  //  添加高亮
         emit sigFileAddAnnotation();
         return ConstantMsg::g_effective_res;
     }
@@ -677,7 +689,6 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     int nRes = dealWithTitleRequest(msgType, msgContent);
     if (nRes != ConstantMsg::g_effective_res) {
-
         nRes = dealWithFileMenuRequest(msgType, msgContent);
         if (nRes != ConstantMsg::g_effective_res) {
             if (msgType == MSG_NOTIFY_KEY_MSG) {
