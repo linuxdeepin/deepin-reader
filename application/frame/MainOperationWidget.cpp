@@ -74,6 +74,7 @@ DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QStrin
     btn->setIconSize(QSize(36, 36));
     btn->setCheckable(true);
     btn->setChecked(false);
+    //    btn->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonIconOnly);
 
     return btn;
 }

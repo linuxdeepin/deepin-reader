@@ -80,6 +80,7 @@ void LeftSidebarWidget::initWidget()
             widget->setMinimumWidth(LEFTMINWIDTH);
             widget->setMaximumWidth(LEFTMAXWIDTH);
             widget->adjustSize();
+            widget->resize(226, this->height());
         }
     }
 
