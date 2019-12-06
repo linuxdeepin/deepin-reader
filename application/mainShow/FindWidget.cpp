@@ -160,8 +160,8 @@ void FindWidget::initWidget()
     connect(findPrevButton, &DIconButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
 
     auto closeButton = new DDialogCloseButton;
-    closeButton->setIconSize(QSize(30, 30 /*20, 20*/));
-    closeButton->setFixedSize(QSize(32, 32 /*22, 22*/));
+    closeButton->setIconSize(QSize(28, 28 /*20, 20*/));
+    closeButton->setFixedSize(QSize(30, 30 /*22, 22*/));
     connect(closeButton, &DDialogCloseButton::clicked, this, &FindWidget::findCancel);
 
     m_pSearchEdit = new DSearchEdit;

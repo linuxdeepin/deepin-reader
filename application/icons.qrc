@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/deepin/builtin"/>
+    <qresource prefix="/d"/>
     <qresource prefix="/">
         <file>icons/deepin/builtin/dark/actions/defaultShape.svg</file>
         <file>icons/deepin/builtin/dark/actions/defaultShape_small.svg</file>
