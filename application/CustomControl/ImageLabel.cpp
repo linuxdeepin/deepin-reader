@@ -37,6 +37,7 @@ void ImageLabel::rotateImage(int angle)
     //    m_bRotate = rotate;
 
     setFixedSize(height(), width());
+    resize(10, 10);
 
     update();
 }
@@ -74,13 +75,13 @@ void ImageLabel::paintEvent(QPaintEvent *e)
     }
 
     QPixmap map = m_background;
-    if (true) {
-        QMatrix leftmatrix;
-        leftmatrix.rotate(m_nRotate);
-        map = m_background.transformed(leftmatrix, Qt::SmoothTransformation);
-        map.setDevicePixelRatio(devicePixelRatioF());
-        qDebug() << __FUNCTION__ << "  rotate angle:" << m_nRotate;
-    }
+    //    if (true) {
+    QMatrix leftmatrix;
+    leftmatrix.rotate(m_nRotate);
+    map = m_background.transformed(leftmatrix, Qt::SmoothTransformation);
+    map.setDevicePixelRatio(devicePixelRatioF());
+    //    qDebug() << __FUNCTION__ << "  rotate angle:" << m_nRotate;
+    //}
 
     if (m_bSetBp) {
         //填充图片

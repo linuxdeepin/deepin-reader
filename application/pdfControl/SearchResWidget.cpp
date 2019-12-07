@@ -21,6 +21,9 @@ SearchResWidget::~SearchResWidget()
 
 void SearchResWidget::slotClearWidget()
 {
+    if (m_loadSearchResThread.isRunning()) {
+        m_loadSearchResThread.stopThread();
+    }
     if (m_pSearchList->count() > 0) {
         DocummentFileHelper::instance()->clearsearch();
 
@@ -46,6 +49,8 @@ void SearchResWidget::slotCloseFile()
 
 void SearchResWidget::slotFlushSearchWidget(const QString &msgContent)
 {
+    notifyMsg(MSG_SWITCHLEFTWIDGET, QString("4"));
+    notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(1));
     connect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this,
             SLOT(slotGetSearchContant(stSearchRes)));
     QMap<int, stSearchRes> resMap;
@@ -74,8 +79,8 @@ void SearchResWidget::slotSearchOver()
 
     m_pSearchList->clear();
 
-    notifyMsg(MSG_FIND_START /*, QString("")*/);
-    notifyMsg(MSG_SWITCHLEFTWIDGET, QString("4"));
+    //    notifyMsg(MSG_SWITCHLEFTWIDGET, QString("4"));
+    //    notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(1));
 
     disconnect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this,
                SLOT(slotGetSearchContant(stSearchRes)));
@@ -86,7 +91,7 @@ void SearchResWidget::slotSearchOver()
         disconnect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
                    SLOT(slotSelectItem(QListWidgetItem *)));
         showTips();
-        notifyMsg(MSG_FIND_STOP /*, QString("")*/);
+        //        notifyMsg(MSG_FIND_STOP /*, QString("")*/);
         notifyMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
 
         bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
@@ -400,7 +405,7 @@ void LoadSearchResThread::run()
                 //                ICON_SMALL);
                 emit sigLoadImage(page, image);
                 //                qDebug() << __FUNCTION__ << "load image page num:" << page + 1;
-                msleep(50);
+                msleep(20);
             }
         }
 
