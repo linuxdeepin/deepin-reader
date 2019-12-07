@@ -25,6 +25,32 @@ void ImageLabel::setSelect(const bool &select)
     update();
 }
 
+void ImageLabel::rotateImage(int angle, bool rotate)
+{
+    if (rotate == false) {
+        return;
+    }
+
+    if (angle > 360) {
+        angle %= 360;
+    }
+
+    m_nRotate = angle;
+    m_bRotate = rotate;
+
+    setFixedSize(height(), width());
+
+    update();
+}
+
+void ImageLabel::rotateImage(QPainter &painter)
+{
+    painter.translate(width() / 2, height() / 2);
+    painter.rotate(m_nRotate);
+    painter.translate(-width() / 2, -height() / 2);
+    painter.save();
+}
+
 void ImageLabel::paintEvent(QPaintEvent *e)
 {
     DLabel::paintEvent(e);
@@ -36,6 +62,10 @@ void ImageLabel::paintEvent(QPaintEvent *e)
     QPalette p(this->palette());
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+
+    if (m_bRotate) {
+        rotateImage(painter);
+    }
 
     penwidth = m_nHighLightLineWidth;
 
@@ -83,4 +113,6 @@ void ImageLabel::paintEvent(QPaintEvent *e)
         painter1.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
         painter1.drawPixmap(this->width() - 36 - 6, 0, 36, 36, pixmap);
     }
+
+    m_bRotate = false;
 }

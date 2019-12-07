@@ -1,4 +1,5 @@
 #include "fontWidget.h"
+#include <DApplicationHelper>
 #include <DHorizontalLine>
 #include "frame/DocummentFileHelper.h"
 #include "utils/PublicFunction.h"
@@ -88,6 +89,7 @@ void FontWidget::initWidget()
     lrlayout->setContentsMargins(0, 0, 0, 0);
     lrlayout->addSpacing(32);
     auto pRotateLeftLb = new CustomClickLabel(tr("Rotated To Left"), this);
+    DFontSizeManager::instance()->bind(pRotateLeftLb, DFontSizeManager::T6);
     pRotateLeftLb->setFixedSize(QSize(188, 28));
     lrlayout->addWidget(pRotateLeftLb);
     widgetLayout->addItem(lrlayout);
@@ -99,6 +101,7 @@ void FontWidget::initWidget()
     rrlayout->setContentsMargins(0, 0, 0, 0);
     rrlayout->addSpacing(32);
     auto pRotateRightLb = new CustomClickLabel(tr("Rotated To Right"), this);
+    DFontSizeManager::instance()->bind(pRotateRightLb, DFontSizeManager::T6);
     pRotateRightLb->setFixedSize(QSize(188, 28));
     rrlayout->addWidget(pRotateRightLb);
     widgetLayout->addItem(rrlayout);
@@ -307,8 +310,9 @@ DLabel *FontWidget::getLabelLineH(int fixheight)
 
 void FontWidget::initScaleLabel()
 {
-    m_pEnlargeLab = new CustomClickLabel("100%");
+    m_pEnlargeLab = new CustomClickLabel("100%", this);
     m_pEnlargeLab->setAlignment(Qt::AlignCenter);
+    DFontSizeManager::instance()->bind(m_pEnlargeLab, DFontSizeManager::T5);
 }
 
 void FontWidget::initScaleSlider()
@@ -358,6 +362,7 @@ void FontWidget::initAdaptateHeight()
     m_pAdaptateHeightLayout->setSpacing(0);
 
     auto pSuitHLb = new CustomClickLabel(tr("Adaptate Height"), this);
+    DFontSizeManager::instance()->bind(pSuitHLb, DFontSizeManager::T6);
     pSuitHLb->setFixedSize(QSize(150, 28));
     connect(pSuitHLb, SIGNAL(clicked()), this, SLOT(slotSetSuitHCheckIcon()));
     m_pAdaptateHeightLayout->addWidget(pSuitHLb);
@@ -379,6 +384,7 @@ void FontWidget::initAdaptateWidght()
     m_pAdaptateWidghtLayout->setSpacing(0);
 
     auto pSuitWLb = new CustomClickLabel(tr("Adaptate Width"), this);
+    DFontSizeManager::instance()->bind(pSuitWLb, DFontSizeManager::T6);
     pSuitWLb->setFixedSize(QSize(150, 28));
     connect(pSuitWLb, SIGNAL(clicked()), this, SLOT(slotSetSuitWCheckIcon()));
     m_pAdaptateWidghtLayout->addWidget(pSuitWLb);
