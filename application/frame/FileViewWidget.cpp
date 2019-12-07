@@ -605,7 +605,7 @@ int FileViewWidget::dealWithTitleRequest(const int &msgType, const QString &msgC
             return ConstantMsg::g_effective_res;
         case MSG_FILE_ROTATE:  //  文档旋转了
             emit sigWidgetAdapt();
-            return ConstantMsg::g_effective_res;
+            //            return ConstantMsg::g_effective_res;
     }
     return 0;
 }

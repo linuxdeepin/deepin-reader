@@ -1,12 +1,12 @@
 #include "ThumbnailItemWidget.h"
 #include "controller/DataManager.h"
 
-ThumbnailItemWidget::ThumbnailItemWidget(CustomItemWidget *parent) :
-    CustomItemWidget ("ThumbnailItemWidget", parent)
+ThumbnailItemWidget::ThumbnailItemWidget(CustomItemWidget *parent)
+    : CustomItemWidget("ThumbnailItemWidget", parent)
 {
-    setWindowFlags (Qt::FramelessWindowHint);
+    setWindowFlags(Qt::FramelessWindowHint);
     initWidget();
-    connect(this,SIGNAL(sigBookMarkStatusChanged(bool)),SLOT(slotBookMarkShowStatus(bool)));
+    connect(this, SIGNAL(sigBookMarkStatusChanged(bool)), SLOT(slotBookMarkShowStatus(bool)));
 }
 
 // 处理消息接口
@@ -14,15 +14,13 @@ int ThumbnailItemWidget::dealWithData(const int &msgType, const QString &msgCont
 {
     //  删除书签消息
     if (MSG_BOOKMARK_DLTITEM == msgType || MSG_OPERATION_DELETE_BOOKMARK == msgType) {
-        if(m_nPageIndex==msgContent.toInt())
-        {
-             emit sigBookMarkStatusChanged(false);
+        if (m_nPageIndex == msgContent.toInt()) {
+            emit sigBookMarkStatusChanged(false);
         }
     }
     //  增加书签消息
     if (MSG_OPERATION_ADD_BOOKMARK == msgType || MSG_OPERATION_TEXT_ADD_BOOKMARK == msgType) {
-        if(m_nPageIndex==msgContent.toInt())
-        {
+        if (m_nPageIndex == msgContent.toInt()) {
             emit sigBookMarkStatusChanged(true);
         }
     }
@@ -38,6 +36,14 @@ void ThumbnailItemWidget::setBSelect(const bool &paint)
 
     if (m_pPageNumber) {
         m_pPageNumber->setSelect(paint);
+    }
+}
+
+void ThumbnailItemWidget::rotateThumbnail(int angle)
+{
+    auto imageLabel = this->findChild<ImageLabel *>();
+    if (imageLabel) {
+        imageLabel->rotateImage(angle, true);
     }
 }
 

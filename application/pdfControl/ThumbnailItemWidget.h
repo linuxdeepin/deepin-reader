@@ -11,7 +11,7 @@
  * @brief   缩略图中的item
  */
 
-class ThumbnailItemWidget  : public CustomItemWidget
+class ThumbnailItemWidget : public CustomItemWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(ThumbnailItemWidget)
@@ -23,8 +23,10 @@ public:
     // IObserver interface
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
     void setBSelect(const bool &paint);
+    void rotateThumbnail(int);
+
 signals:
-    void  sigBookMarkStatusChanged(bool);
+    void sigBookMarkStatusChanged(bool);
 public slots:
     void slotBookMarkShowStatus(bool bshow);
 
@@ -32,7 +34,7 @@ protected:
     void initWidget() Q_DECL_OVERRIDE;
 
 private:
-    bool m_bPaint = false;                    // 是否绘制选中item
+    bool m_bPaint = false;  // 是否绘制选中item
 };
 
-#endif // THUMBNAILITEMWIDGET_H
+#endif  // THUMBNAILITEMWIDGET_H

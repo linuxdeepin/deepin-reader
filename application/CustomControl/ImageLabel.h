@@ -28,7 +28,7 @@ public:
     void rotateImage(int angle, bool rotate);
 
 private:
-    void rotateImage(QPainter &);
+    void rotateImage(QPainter &painter);
 
 protected:
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;

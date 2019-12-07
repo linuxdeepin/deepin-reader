@@ -44,8 +44,9 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
                    msgContent == KeyStr::g_right) {
             emit sigJumpToNextPage();
         }
+    } else if (msgType == MSG_FILE_ROTATE) {  //  文档旋转了
+        // emit sigRotateThumbnail(msgContent.toInt());
     }
-
     return 0;
 }
 
@@ -120,6 +121,7 @@ void ThumbnailWidget::initConnection()
             SLOT(slotDocFilePageChanged(const QString &)));
     connect(this, &ThumbnailWidget::sigJumpToPrevPage, this, &ThumbnailWidget::slotJumpToPrevPage);
     connect(this, &ThumbnailWidget::sigJumpToNextPage, this, &ThumbnailWidget::slotJumpToNextPage);
+    connect(this, SIGNAL(sigRotateThumbnail(int)), this, SLOT(slotRotateThumbnail(int)));
 }
 
 /**
@@ -208,6 +210,19 @@ void ThumbnailWidget::slotJumpToNextPage()
     if (bstart && nullptr != DocummentProxy::instance()) {
         DocummentProxy::instance()->setAutoPlaySlide(true);
         bstart = false;
+    }
+}
+
+void ThumbnailWidget::slotRotateThumbnail(int angle)
+{
+    if (m_pThumbnailListWidget) {
+        auto item = m_pThumbnailListWidget->currentItem();
+        auto pWidget =
+            reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
+        if (pWidget) {
+            pWidget->rotateThumbnail(angle);
+            qDebug() << __FUNCTION__ << "  rotate angle:" << angle;
+        }
     }
 }
 

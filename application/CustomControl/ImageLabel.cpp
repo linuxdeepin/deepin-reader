@@ -63,9 +63,9 @@ void ImageLabel::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
-    if (m_bRotate) {
-        rotateImage(painter);
-    }
+    //    if (m_bRotate) {
+    //        rotateImage(painter);
+    //    }
 
     penwidth = m_nHighLightLineWidth;
 
