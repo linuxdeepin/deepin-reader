@@ -321,16 +321,22 @@ void FontWidget::initScaleLabel()
 void FontWidget::initScaleSlider()
 {
     m_pEnlargeSliderLayout = new QHBoxLayout;
+    m_pEnlargeSliderLayout->setContentsMargins(19, 0, 19, 0);
     m_pEnlargeSlider = new DSlider(Qt::Horizontal);
-    m_pEnlargeSliderLayout->addSpacing(24);
+    QString sSmall = PF::getImagePath("A_small", Pri::g_icons);
+    m_pEnlargeSlider->setLeftIcon(QIcon(sSmall));
+    QString sBig = PF::getImagePath("A_big", Pri::g_icons);
+    m_pEnlargeSlider->setRightIcon(QIcon(sBig));
+    //    m_pEnlargeSliderLayout->addSpacing(24);
     m_pEnlargeSliderLayout->addWidget(m_pEnlargeSlider);
-    m_pEnlargeSliderLayout->addSpacing(21);
+    //    m_pEnlargeSliderLayout->addSpacing(21);
+    m_pEnlargeSliderLayout->setAlignment(Qt::AlignCenter);
     m_pEnlargeSlider->setMinimum(10);
     m_pEnlargeSlider->setMaximum(500);
     m_pEnlargeSlider->setValue(100);
     m_pEnlargeSlider->slider()->setSingleStep(25);
     m_pEnlargeSlider->setPageStep(25);
-    m_pEnlargeSlider->slider()->setTickPosition(QSlider::TicksBelow);
+    //    m_pEnlargeSlider->slider()->setTickPosition(QSlider::TicksBelow);
 
     connect(m_pEnlargeSlider, SIGNAL(valueChanged(int)), this, SLOT(slotSetChangeVal(int)));
 }
