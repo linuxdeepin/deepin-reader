@@ -106,6 +106,7 @@ void DocummentPDFPrivate::setBasicInfo(const QString &filepath)
 DocummentPDF::DocummentPDF(DWidget *parent):
     DocummentBase(new DocummentPDFPrivate(this), parent)
 {
+
 }
 
 DocummentPDF::~DocummentPDF()

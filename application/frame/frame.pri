@@ -9,7 +9,8 @@ HEADERS += \
     $$PWD/DocummentFileHelper.h \
     $$PWD/DocShowShellWidget.h \
     $$PWD/FileFormatHelper.h \
-    $$PWD/NoteTipWidget.h
+    $$PWD/NoteTipWidget.h \
+    $$PWD/PlayControlWidget.h
 
 SOURCES += \
     $$PWD/MainWindow.cpp \
@@ -21,4 +22,5 @@ SOURCES += \
     $$PWD/MainWidget.cpp \
     $$PWD/DocummentFileHelper.cpp \
     $$PWD/DocShowShellWidget.cpp \
-    $$PWD/NoteTipWidget.cpp
+    $$PWD/NoteTipWidget.cpp \
+    $$PWD/PlayControlWidget.cpp

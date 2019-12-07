@@ -8,9 +8,11 @@
 #include "mainShow/FindWidget.h"
 #include "pdfControl/fileViewNote/FileViewNoteWidget.h"
 #include "utils/PublicFunction.h"
+#include "PlayControlWidget.h"
 
 DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
     : CustomWidget("DocShowShellWidget", parent)
+    , m_pctrlwidget(new PlayControlWidget(this))
 {
     initWidget();
     initConnections();
@@ -177,18 +179,35 @@ void DocShowShellWidget::slotUpdateTheme()
     }
 }
 
+void DocShowShellWidget::slotChangePlayCtrlShow(bool bshow)
+{
+//    if (bshow) {
+
+//        int nScreenWidth = qApp->desktop()->geometry().width();
+//        int inScreenHeght = qApp->desktop()->geometry().height();
+//        m_pctrlwidget->move((nScreenWidth - m_pctrlwidget->width()) / 2, inScreenHeght - 100);
+//        m_pctrlwidget->activeshow();
+//    } else {
+//        qDebug() << __FUNCTION__ << "m_pctrlwidget->hide()";
+//        disconnect(m_pfileviwewidget, SIGNAL(sigShowPlayCtrl(bool)), this, SLOT(slotChangePlayCtrlShow(bool)));
+//        m_pctrlwidget->killshow();
+//    }
+}
+
 void DocShowShellWidget::initConnections()
 {
     connect(this, SIGNAL(sigShowFileAttr()), SLOT(slotShowFileAttr()));
     connect(this, SIGNAL(sigShowFileFind()), SLOT(slotShowFindWidget()));
     connect(this, SIGNAL(sigShowCloseBtn(const int &)), SLOT(slotShowCloseBtn(const int &)));
     connect(this, SIGNAL(sigHideCloseBtn()), SLOT(slotHideCloseBtn()));
+    connect(this, SIGNAL(sigChangePlayCtrlShow(bool)), SLOT(slotChangePlayCtrlShow(bool)));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 
     connect(this, SIGNAL(sigOpenNoteWidget(const QString &)),
             SLOT(slotOpenNoteWidget(const QString &)));
     connect(this, SIGNAL(sigShowNoteWidget(const QString &)),
             SLOT(slotShowNoteWidget(const QString &)));
+    connect(m_pfileviwewidget, SIGNAL(sigShowPlayCtrl(bool)), this, SLOT(slotChangePlayCtrlShow(bool)));
 }
 
 //  集中处理 按键通知消息
@@ -205,6 +224,7 @@ int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
 
     if (KeyStr::g_esc == msgContent) {  //  退出   幻灯片\全屏
         emit sigHideCloseBtn();
+        emit sigChangePlayCtrlShow(false);
     }
     return 0;
 }
@@ -212,21 +232,23 @@ int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
 int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
-        case MSG_OPERATION_ATTR:  //  打开该文件的属性信息
-            emit sigShowFileAttr();
-            return ConstantMsg::g_effective_res;
-        case MSG_OPERATION_TEXT_ADD_ANNOTATION:  //  添加注释
-            emit sigOpenNoteWidget(msgContent);
-            return ConstantMsg::g_effective_res;
-        case MSG_OPERATION_TEXT_SHOW_NOTEWIDGET:  //  显示注释窗口
-            emit sigShowNoteWidget(msgContent);
-            return ConstantMsg::g_effective_res;
-        case MSG_OPERATION_SLIDE:  //  幻灯片模式
-            emit sigShowCloseBtn(1);
-            break;
-        case MSG_NOTIFY_KEY_MSG: {  //  最后一个处理通知消息
-            return dealWithNotifyMsg(msgContent);
-        }
+    case MSG_OPERATION_ATTR:  //  打开该文件的属性信息
+        emit sigShowFileAttr();
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_TEXT_ADD_ANNOTATION:  //  添加注释
+        emit sigOpenNoteWidget(msgContent);
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_TEXT_SHOW_NOTEWIDGET:  //  显示注释窗口
+        emit sigShowNoteWidget(msgContent);
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_SLIDE: { //  幻灯片模式
+        emit sigShowCloseBtn(1);
+        emit sigChangePlayCtrlShow(true);
+    }
+    break;
+    case MSG_NOTIFY_KEY_MSG: {  //  最后一个处理通知消息
+        return dealWithNotifyMsg(msgContent);
+    }
     }
 
     return 0;
@@ -237,8 +259,8 @@ void DocShowShellWidget::initWidget()
     auto layout = new QHBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-
-    layout->addWidget(new FileViewWidget);
+    m_pfileviwewidget = new FileViewWidget;
+    layout->addWidget(m_pfileviwewidget);
 
     this->setLayout(layout);
 }

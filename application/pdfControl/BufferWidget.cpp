@@ -6,7 +6,10 @@ BufferWidget::BufferWidget(CustomWidget *parent)
     initWidget();
 }
 
-int BufferWidget::dealWithData(const int &, const QString &) {}
+int BufferWidget::dealWithData(const int &, const QString &)
+{
+    return 0;
+}
 
 void BufferWidget::initWidget()
 {

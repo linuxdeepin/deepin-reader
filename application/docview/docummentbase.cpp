@@ -273,9 +273,9 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
 {
     qRegisterMetaType<stSearchRes>("&stSearchRes");
     Q_D(DocummentBase);
-
     //    d->m_threadloadwords.setDoc(this);
     setWidgetResizable(true);
+    setFrameShape(QFrame::NoFrame);
     d->qwfather = parent;
     d->m_widget = new DWidget(this);
     setWidget(d->m_widget);
@@ -318,7 +318,6 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     d->pslideanimationlabel->setMouseTracking(true);
 
     setMouseTracking(true);
-
 
 
     QPalette pal(d->m_slidewidget->palette());

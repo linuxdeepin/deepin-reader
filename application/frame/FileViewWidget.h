@@ -58,6 +58,7 @@ signals:
     void sigFileAddNote();
 
     void sigFileCtrlContent();
+    void sigShowPlayCtrl(bool bshow);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;

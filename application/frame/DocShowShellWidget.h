@@ -8,7 +8,8 @@
  * @brief The DocShowShellWidget class
  * @brief   文档　显示外壳
  */
-
+class PlayControlWidget;
+class FileViewWidget;
 class DocShowShellWidget : public CustomWidget
 {
     Q_OBJECT
@@ -25,6 +26,7 @@ signals:
     void sigShowFileFind();
     void sigOpenNoteWidget(const QString &);
     void sigShowNoteWidget(const QString &);
+    void sigChangePlayCtrlShow(bool bshow);
 
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
@@ -38,6 +40,7 @@ private slots:
     void slotShowNoteWidget(const QString &);
     void slotBtnCloseClicked();
     void slotUpdateTheme();
+    void slotChangePlayCtrlShow(bool bshow);
 
 private:
     void initConnections();
@@ -50,6 +53,10 @@ public:
     // CustomWidget interface
 protected:
     void initWidget() Q_DECL_OVERRIDE;
+
+private:
+    PlayControlWidget *m_pctrlwidget;
+    FileViewWidget *m_pfileviwewidget;
 };
 
 #endif // DOCSHOWSHELLWIDGET_H

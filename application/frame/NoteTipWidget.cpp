@@ -23,9 +23,9 @@ NoteTipWidget::NoteTipWidget(CustomWidget *parnet)
 
 void NoteTipWidget::setTipContent(const QString &content)
 {
-    DTextEdit *label = this->findChild<DTextEdit *>();
-    if (label) {
-        QFontMetrics fm(label->font());
+    DTextEdit *pedit = this->findChild<DTextEdit *>();
+    if (pedit) {
+        QFontMetrics fm(pedit->font());
         int pixelsWide = fm.horizontalAdvance(content);
         int pixelsHigh = fm.height();
 //        qDebug() << pixelsWide << pixelsHigh << fm.lineSpacing();
@@ -33,7 +33,7 @@ void NoteTipWidget::setTipContent(const QString &content)
         //判断是否超过十行
         if (pixelsWide > (m_iwidth - 16) * 10) {
             setFixedHeight(pixelsHigh * 11 + 8);
-            strcontent = label->fontMetrics().elidedText(content, Qt::ElideRight, (m_iwidth - 16) * 10, Qt::TextWordWrap);
+            strcontent = pedit->fontMetrics().elidedText(content, Qt::ElideRight, (m_iwidth - 16) * 10, Qt::TextWordWrap);
         } else {
             int line = pixelsWide / (m_iwidth - 16);
             // line = line > 2 ? line + 2 : 3;
@@ -41,8 +41,8 @@ void NoteTipWidget::setTipContent(const QString &content)
             setFixedHeight(pixelsHigh * line + 8);
             strcontent = content;
         }
-        label->setFixedWidth(m_iwidth - 16);
-        label->setText(strcontent);
+        pedit->setFixedWidth(m_iwidth - 16);
+        pedit->setText(strcontent);
     }
 }
 
@@ -66,15 +66,15 @@ int NoteTipWidget::dealWithData(const int &msgType, const QString &)
 
 void NoteTipWidget::initWidget()
 {
-    auto label = new DTextEdit(this);
-    label->setFrameShape(QFrame::NoFrame);
-    label->setReadOnly(true);
-    label->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    label->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    label->setWordWrapMode(QTextOption::WrapAnywhere /*WordWrap*/);
+    auto pedit = new DTextEdit(this);
+    pedit->setFrameShape(QFrame::NoFrame);
+    pedit->setReadOnly(true);
+    pedit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    pedit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    pedit->setWordWrapMode(QTextOption::WrapAnywhere /*WordWrap*/);
     auto layout = new QHBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(label);
+    layout->addWidget(pedit);
 
     this->setLayout(layout);
 }

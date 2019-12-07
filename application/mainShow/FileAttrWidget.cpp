@@ -50,14 +50,16 @@ void FileAttrWidget::setFileAttr()
     m_pVBoxLayout->addSpacing(35);
 
     QFrame *infoframe = new QFrame(this);
+    infoframe->setFrameShape(QFrame::NoFrame);
     QVBoxLayout *scrollWidgetLayout = new QVBoxLayout;
-    scrollWidgetLayout->setContentsMargins(10, 10, 10, 10);
+    scrollWidgetLayout->setContentsMargins(10, 0, 10, 10);
     infoframe->setLayout(scrollWidgetLayout);
 
     auto scroll = new DScrollArea;
     QPalette palette = scroll->viewport()->palette();
     palette.setBrush(QPalette::Background, Qt::NoBrush);
     scroll->viewport()->setPalette(palette);
+
     scroll->viewport()->setContentsMargins(0, 0, 0, 0);
     scroll->setFrameShape(QFrame::NoFrame);
     scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -65,12 +67,13 @@ void FileAttrWidget::setFileAttr()
     scroll->setWidgetResizable(true);
 
     QVBoxLayout *scrolllayout = new QVBoxLayout;
-    scrolllayout->setContentsMargins(0, 5, 5, 5);
+    scrolllayout->setContentsMargins(0, 0, 3, 0);
     scrolllayout->addWidget(scroll);
 
     qobject_cast<QVBoxLayout *>(scroll->widget()->layout())->insertWidget(0, new AttrScrollWidget);
 
     m_pVBoxLayout->addLayout(scrolllayout, 10);
+
 }
 
 void FileAttrWidget::addTitleFrame(const QString &sData)
@@ -114,7 +117,7 @@ void FileAttrWidget::addTitleFrame(const QString &sData)
             }
 
             if (label->fontMetrics().width(labelText) > 300 &&
-                labelTexts.length() >= maxLineCount) {
+                    labelTexts.length() >= maxLineCount) {
                 labelText = label->fontMetrics().elidedText(labelText, Qt::ElideMiddle, 300);
             }
             label->setText(labelText);
@@ -175,7 +178,7 @@ void FileAttrWidget::initImageLabel()
     frameImage->setFixedSize(94, 113);
 
     auto vlayout = new QVBoxLayout;
-    vlayout->setContentsMargins(104, 6, 0, 30);
+    vlayout->setContentsMargins(104, 6, 0, 14);
     //    vlayout->setSpacing(10);
     vlayout->addWidget(/*labelImage*/ frameImage);
 

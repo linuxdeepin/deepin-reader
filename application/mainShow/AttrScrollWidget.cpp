@@ -9,7 +9,7 @@
 #include <DFontSizeManager>
 #include "CustomControl/DFMGlobal.h"
 
-#define LAEBL_TEXT_WIDTH    180
+#define LAEBL_TEXT_WIDTH    189
 
 AttrScrollWidget::AttrScrollWidget(DWidget *parent)
     : DFrame(parent)
@@ -83,7 +83,7 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
     if (sData == "") {
         DLabel *labelText = new DLabel(this);
         DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
-        labelText->setText(tr("unknown"));
+        labelText->setText(tr("unknown")); /*labelText->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);*/
         layout->addWidget(labelText, index, 1);
     } else {
         DFrame *frame = addTitleFrame(sData);

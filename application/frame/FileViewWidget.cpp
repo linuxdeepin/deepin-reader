@@ -19,7 +19,6 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
     , m_operatemenu(nullptr)
 {
     setMouseTracking(true);  //  接受 鼠标滑动事件
-
     initWidget();
     initConnections();
 }
@@ -53,7 +52,9 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
 {
     //  处于幻灯片模式下
     if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
-        return;
+        emit(sigShowPlayCtrl(true));
+        qDebug() << __FUNCTION__ << "FILE_SLIDE mousemove ========";
+        return ;
     }
 
     QPoint globalPos = event->globalPos();
@@ -529,7 +530,7 @@ void FileViewWidget::slotPrintFile()
     }
 
     QPrintPreviewDialog preview(&printer, this);
-    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter *printer) {
+    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ](QPrinter * printer) {
         int nPageSize = m_pDocummentFileHelper->getPageSNum();  //  pdf 页数
         printer->setWinPageSize(nPageSize);
 
@@ -581,31 +582,31 @@ void FileViewWidget::slotSetWidgetAdapt()
 int FileViewWidget::dealWithTitleRequest(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
-        case MSG_MAGNIFYING:  //  放大镜信号
-            emit sigMagnifying(msgContent);
-            return ConstantMsg::g_effective_res;
-        case MSG_HANDLESHAPE:  //  手势 信号
-            emit sigSetHandShape(msgContent);
-            return ConstantMsg::g_effective_res;
-        case MSG_SELF_ADAPTE_HEIGHT:  //  自适应　高度
-            if (msgContent == "1") {
-                m_nAdapteState = HEIGHT_State;
-                emit sigWidgetAdapt();
-            } else {
-                m_nAdapteState = Default_State;
-            }
-            return ConstantMsg::g_effective_res;
-        case MSG_SELF_ADAPTE_WIDTH:  //   自适应宽度
-            if (msgContent == "1") {
-                m_nAdapteState = WIDGET_State;
-                emit sigWidgetAdapt();
-            } else {
-                m_nAdapteState = Default_State;
-            }
-            return ConstantMsg::g_effective_res;
-        case MSG_FILE_ROTATE:  //  文档旋转了
+    case MSG_MAGNIFYING:  //  放大镜信号
+        emit sigMagnifying(msgContent);
+        return ConstantMsg::g_effective_res;
+    case MSG_HANDLESHAPE:  //  手势 信号
+        emit sigSetHandShape(msgContent);
+        return ConstantMsg::g_effective_res;
+    case MSG_SELF_ADAPTE_HEIGHT:  //  自适应　高度
+        if (msgContent == "1") {
+            m_nAdapteState = HEIGHT_State;
             emit sigWidgetAdapt();
-            //            return ConstantMsg::g_effective_res;
+        } else {
+            m_nAdapteState = Default_State;
+        }
+        return ConstantMsg::g_effective_res;
+    case MSG_SELF_ADAPTE_WIDTH:  //   自适应宽度
+        if (msgContent == "1") {
+            m_nAdapteState = WIDGET_State;
+            emit sigWidgetAdapt();
+        } else {
+            m_nAdapteState = Default_State;
+        }
+        return ConstantMsg::g_effective_res;
+    case MSG_FILE_ROTATE:  //  文档旋转了
+        emit sigWidgetAdapt();
+        return ConstantMsg::g_effective_res;
     }
     return 0;
 }
@@ -614,33 +615,33 @@ int FileViewWidget::dealWithTitleRequest(const int &msgType, const QString &msgC
 int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
-        case MSG_OPEN_FILE_PATH:  //  打开文件
-            emit sigOpenFile(msgContent);
-            return ConstantMsg::g_effective_res;
-        case MSG_OPEN_FILE_PATH_S:  //  打开文件
-            emit sigOpenFiles(msgContent);
-            return ConstantMsg::g_effective_res;
-        case MSG_OPERATION_SAVE_AS_FILE:  //  另存为文件
-            emit sigSaveAsFile();
-            return ConstantMsg::g_effective_res;
-        case MSG_OPERATION_TEXT_COPY:  //  复制
-            emit sigCopySelectContent(msgContent);
-            return ConstantMsg::g_effective_res;
-        case MSG_OPERATION_SLIDE:  //  放映
-            emit sigFileSlider(1);
-            break;
-        case MSG_OPERATION_TEXT_ADD_HIGHLIGHTED:  //  高亮显示
-            emit sigFileAddAnnotation(msgContent);
-            return ConstantMsg::g_effective_res;
-        case MSG_OPERATION_TEXT_UPDATE_HIGHLIGHTED:  //  更新高亮颜色显示
-            emit sigFileUpdateAnnotation(msgContent);
-            return ConstantMsg::g_effective_res;
-        case MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED:  //  移除高亮显示
-            emit sigFileRemoveAnnotation(msgContent);
-            return ConstantMsg::g_effective_res;
-        case MSG_NOTE_ADDCONTANT:  //  添加注释
-            emit sigFileAddNote(msgContent);
-            return ConstantMsg::g_effective_res;
+    case MSG_OPEN_FILE_PATH:  //  打开文件
+        emit sigOpenFile(msgContent);
+        return ConstantMsg::g_effective_res;
+    case MSG_OPEN_FILE_PATH_S:  //  打开文件
+        emit sigOpenFiles(msgContent);
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_SAVE_AS_FILE:  //  另存为文件
+        emit sigSaveAsFile();
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_TEXT_COPY:  //  复制
+        emit sigCopySelectContent(msgContent);
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_SLIDE:  //  放映
+        emit sigFileSlider(1);
+        break;
+    case MSG_OPERATION_TEXT_ADD_HIGHLIGHTED:  //  高亮显示
+        emit sigFileAddAnnotation(msgContent);
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_TEXT_UPDATE_HIGHLIGHTED:  //  更新高亮颜色显示
+        emit sigFileUpdateAnnotation(msgContent);
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED:  //  移除高亮显示
+        emit sigFileRemoveAnnotation(msgContent);
+        return ConstantMsg::g_effective_res;
+    case MSG_NOTE_ADDCONTANT:  //  添加注释
+        emit sigFileAddNote(msgContent);
+        return ConstantMsg::g_effective_res;
     }
     return 0;
 }

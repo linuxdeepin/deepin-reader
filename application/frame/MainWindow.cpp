@@ -385,7 +385,7 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
         emit sigAppExit();
         return ConstantMsg::g_effective_res;
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (msgContent == KeyStr::g_f11) {
+        if (msgContent == KeyStr::g_f11 && DataManager::instance()->CurShowState() != FILE_SLIDE) {
             emit sigFullScreen();
         } else if (msgContent == KeyStr::g_esc) {        //  退出全屏模式
             emit sigAppShowState(1);
