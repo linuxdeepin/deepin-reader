@@ -25,14 +25,16 @@ void ImageLabel::setSelect(const bool &select)
     update();
 }
 
-void ImageLabel::rotateImage(int angle, bool rotate)
+void ImageLabel::rotateImage(int angle)
 {
-    if (rotate == false) {
-        return;
+    if (ROTATE_LEFT == angle) {
+        m_nRotate -= 90;
+    } else if (ROTATE_RIGHT == angle) {
+        m_nRotate += 90;
     }
 
-    m_nRotate = angle;
-    m_bRotate = rotate;
+    m_nRotate = (m_nRotate < 0) ? (m_nRotate + 360) : m_nRotate;
+    //    m_bRotate = rotate;
 
     setFixedSize(height(), width());
 
@@ -72,10 +74,10 @@ void ImageLabel::paintEvent(QPaintEvent *e)
     }
 
     QPixmap map = m_background;
-    if (m_bRotate) {
+    if (true) {
         QMatrix leftmatrix;
         leftmatrix.rotate(m_nRotate);
-        map = map.transformed(leftmatrix, Qt::SmoothTransformation);
+        map = m_background.transformed(leftmatrix, Qt::SmoothTransformation);
         map.setDevicePixelRatio(devicePixelRatioF());
         qDebug() << __FUNCTION__ << "  rotate angle:" << m_nRotate;
     }
@@ -107,5 +109,5 @@ void ImageLabel::paintEvent(QPaintEvent *e)
         painter1.drawPixmap(this->width() - 36 - 6, 0, 36, 36, pixmap);
     }
 
-    m_bRotate = false;
+    //    m_bRotate = false;
 }

@@ -220,7 +220,7 @@ void FontWidget::rotateFileView(bool isRight)
 
     scaleAndRotate();
 
-    notifyMsg(MSG_FILE_ROTATE, QString::number(m_rotate));
+    notifyMsg(MSG_FILE_ROTATE, QString::number(isRight ? 1 : 0));
 }
 
 /**

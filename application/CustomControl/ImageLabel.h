@@ -6,6 +6,8 @@
 
 DWIDGET_USE_NAMESPACE
 
+enum ROTATE_DIRECTION { ROTATE_LEFT = 0, ROTATE_RIGHT };
+
 class ImageLabel : public DLabel
 {
     Q_OBJECT
@@ -25,7 +27,7 @@ public:
         m_bSetBp = true;
     }
 
-    void rotateImage(int angle, bool rotate);
+    void rotateImage(int angle);
 
 protected:
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
@@ -40,7 +42,7 @@ private:
     int m_nHighLightLineWidth = 0;  // 高亮边框宽度
 
     int m_nRotate = 0;  // 缩略图旋转度数
-    bool m_bRotate = false;
+    //    bool m_bRotate = false;
 };
 
 #endif  // IMAGELABEL_H
