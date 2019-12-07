@@ -405,7 +405,7 @@ void LoadSearchResThread::run()
                 //                ICON_SMALL);
                 emit sigLoadImage(page, image);
                 //                qDebug() << __FUNCTION__ << "load image page num:" << page + 1;
-                msleep(20);
+                msleep(30);
             }
         }
 
