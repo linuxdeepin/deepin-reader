@@ -31,24 +31,12 @@ void ImageLabel::rotateImage(int angle, bool rotate)
         return;
     }
 
-    if (angle > 360) {
-        angle %= 360;
-    }
-
     m_nRotate = angle;
     m_bRotate = rotate;
 
     setFixedSize(height(), width());
 
     update();
-}
-
-void ImageLabel::rotateImage(QPainter &painter)
-{
-    painter.translate(width() / 2, height() / 2);
-    painter.rotate(m_nRotate);
-    painter.translate(-width() / 2, -height() / 2);
-    painter.save();
 }
 
 void ImageLabel::paintEvent(QPaintEvent *e)
@@ -62,10 +50,6 @@ void ImageLabel::paintEvent(QPaintEvent *e)
     QPalette p(this->palette());
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-
-    //    if (m_bRotate) {
-    //        rotateImage(painter);
-    //    }
 
     penwidth = m_nHighLightLineWidth;
 
@@ -87,6 +71,15 @@ void ImageLabel::paintEvent(QPaintEvent *e)
             penwidth, Qt::SolidLine));
     }
 
+    QPixmap map = m_background;
+    if (m_bRotate) {
+        QMatrix leftmatrix;
+        leftmatrix.rotate(m_nRotate);
+        map = map.transformed(leftmatrix, Qt::SmoothTransformation);
+        map.setDevicePixelRatio(devicePixelRatioF());
+        qDebug() << __FUNCTION__ << "  rotate angle:" << m_nRotate;
+    }
+
     if (m_bSetBp) {
         //填充图片
         QPainterPath path;
@@ -94,7 +87,7 @@ void ImageLabel::paintEvent(QPaintEvent *e)
         path.addRoundedRect(pixrectangle, m_nRadius, m_nRadius);
         painter.setClipPath(path);
         QRect bprectangle(local, local, width, heigh);
-        painter.drawPixmap(bprectangle, m_background);
+        painter.drawPixmap(bprectangle, /*m_background*/ map);
         QRectF rectangle(local, local, width, heigh);
         painter.drawRoundedRect(rectangle, m_nRadius, m_nRadius);
     }

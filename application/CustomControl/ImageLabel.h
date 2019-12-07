@@ -27,9 +27,6 @@ public:
 
     void rotateImage(int angle, bool rotate);
 
-private:
-    void rotateImage(QPainter &painter);
-
 protected:
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
 
@@ -42,8 +39,8 @@ private:
     bool m_bSetBp = false;          // 是否设置缩略图
     int m_nHighLightLineWidth = 0;  // 高亮边框宽度
 
-    int m_nRotate = 0;       // 旋转角度
-    bool m_bRotate = false;  // 旋转缩略图
+    int m_nRotate = 0;  // 缩略图旋转度数
+    bool m_bRotate = false;
 };
 
 #endif  // IMAGELABEL_H

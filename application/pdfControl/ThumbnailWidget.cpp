@@ -45,7 +45,7 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
             emit sigJumpToNextPage();
         }
     } else if (msgType == MSG_FILE_ROTATE) {  //  文档旋转了
-        // emit sigRotateThumbnail(msgContent.toInt());
+        emit sigRotateThumbnail(msgContent.toInt());
     }
     return 0;
 }
@@ -221,7 +221,7 @@ void ThumbnailWidget::slotRotateThumbnail(int angle)
             reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
         if (pWidget) {
             pWidget->rotateThumbnail(angle);
-            qDebug() << __FUNCTION__ << "  rotate angle:" << angle;
+            //            qDebug() << __FUNCTION__ << "  rotate angle:" << angle;
         }
     }
 }
