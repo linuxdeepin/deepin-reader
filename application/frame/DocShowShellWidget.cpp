@@ -41,7 +41,7 @@ void DocShowShellWidget::slotShowCloseBtn(const int &iFlag)
 
     auto iconBtnList = this->findChildren<DIconButton *>();
     foreach (auto btn, iconBtnList) {
-        if (btn->objectName() == "slider" || btn->objectName() == "fullscreen") {
+        if (/*btn->objectName() == "slider" ||*/ btn->objectName() == "fullscreen") {
             closeBtn = btn;
             break;
         }
@@ -56,11 +56,11 @@ void DocShowShellWidget::slotShowCloseBtn(const int &iFlag)
         closeBtn->setFixedSize(QSize(50, 50));
     }
 
-    if (iFlag == 2) {
-        QString sIcon = PF::getImagePath("exit_slider", Pri::g_actions);
-        closeBtn->setIcon(QIcon(sIcon));
-        closeBtn->setObjectName("slider");
-    } else {
+    /* if (iFlag == 2) {
+         QString sIcon = PF::getImagePath("exit_slider", Pri::g_actions);
+         closeBtn->setIcon(QIcon(sIcon));
+         closeBtn->setObjectName("slider");
+     } else */{
         QString sIcon = PF::getImagePath("exit_fullscreen", Pri::g_actions);
         closeBtn->setIcon(QIcon(sIcon));
         closeBtn->setObjectName("fullscreen");
@@ -79,7 +79,7 @@ void DocShowShellWidget::slotHideCloseBtn()
 
     auto iconBtnList = this->findChildren<DIconButton *>();
     foreach (auto btn, iconBtnList) {
-        if (btn->objectName() == "slider" || btn->objectName() == "fullscreen") {
+        if (/*btn->objectName() == "slider" || */btn->objectName() == "fullscreen") {
             closeBtn = btn;
             break;
         }
@@ -181,17 +181,13 @@ void DocShowShellWidget::slotUpdateTheme()
 
 void DocShowShellWidget::slotChangePlayCtrlShow(bool bshow)
 {
-//    if (bshow) {
-
-//        int nScreenWidth = qApp->desktop()->geometry().width();
-//        int inScreenHeght = qApp->desktop()->geometry().height();
-//        m_pctrlwidget->move((nScreenWidth - m_pctrlwidget->width()) / 2, inScreenHeght - 100);
-//        m_pctrlwidget->activeshow();
-//    } else {
-//        qDebug() << __FUNCTION__ << "m_pctrlwidget->hide()";
-//        disconnect(m_pfileviwewidget, SIGNAL(sigShowPlayCtrl(bool)), this, SLOT(slotChangePlayCtrlShow(bool)));
-//        m_pctrlwidget->killshow();
-//    }
+    if (bshow && m_pctrlwidget->canShow()) {
+        int nScreenWidth = qApp->desktop()->geometry().width();
+        int inScreenHeght = qApp->desktop()->geometry().height();
+        m_pctrlwidget->activeshow((nScreenWidth - m_pctrlwidget->width()) / 2, inScreenHeght - 100);
+    } else {
+        m_pctrlwidget->killshow();
+    }
 }
 
 void DocShowShellWidget::initConnections()
@@ -224,8 +220,10 @@ int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
 
     if (KeyStr::g_esc == msgContent) {  //  退出   幻灯片\全屏
         emit sigHideCloseBtn();
+        m_pctrlwidget->setCanShow(false);
         emit sigChangePlayCtrlShow(false);
     }
+
     return 0;
 }
 
@@ -242,7 +240,8 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
         emit sigShowNoteWidget(msgContent);
         return ConstantMsg::g_effective_res;
     case MSG_OPERATION_SLIDE: { //  幻灯片模式
-        emit sigShowCloseBtn(1);
+        // emit sigShowCloseBtn(1);
+        m_pctrlwidget->setCanShow(true);
         emit sigChangePlayCtrlShow(true);
     }
     break;

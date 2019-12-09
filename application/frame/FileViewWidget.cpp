@@ -53,7 +53,6 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
     //  处于幻灯片模式下
     if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
         emit(sigShowPlayCtrl(true));
-        qDebug() << __FUNCTION__ << "FILE_SLIDE mousemove ========";
         return ;
     }
 

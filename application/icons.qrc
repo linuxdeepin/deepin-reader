@@ -39,5 +39,10 @@
         <file>icons/deepin/builtin/dark/actions/annotation.svg</file>
         <file>icons/deepin/builtin/dark/actions/bookmark.svg</file>
         <file>icons/deepin/builtin/dark/actions/thumbnail.svg</file>
+        <file>icons/deepin/builtout/exit_normal.svg</file>
+        <file>icons/deepin/builtout/next_normal.svg</file>
+        <file>icons/deepin/builtout/play_normal.svg</file>
+        <file>icons/deepin/builtout/previous_normal.svg</file>
+        <file>icons/deepin/builtout/suspend_normal.svg</file>
     </qresource>
 </RCC>

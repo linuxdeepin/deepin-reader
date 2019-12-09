@@ -1,54 +1,82 @@
 #include "PlayControlWidget.h"
+#include "subjectObserver/MsgHeader.h"
+#include "subjectObserver/ModuleHeader.h"
 #include <DPlatformWindowHandle>
 #include <QTimer>
 #include <QHBoxLayout>
 
-PlayControlWidget::PlayControlWidget(CustomWidget *parnet)
-    : CustomWidget("PlayControlWidget", parnet)
+PlayControlWidget::PlayControlWidget(DWidget *parnet)
+    : DFloatingWidget(parnet)
 {
-    setWindowFlags(Qt::ToolTip);
-    setFixedSize(250, 70);
-    DPlatformWindowHandle handle(this);
-    int radius = 18;
-    handle.setWindowRadius(radius);
-
-    //  setAttribute(Qt::WA_TranslucentBackground);
-
-    // setWindowOpacity(0.98);
-//    QPalette pa = palette();
-//    pa.setColor(QPalette::Background, QColor(230, 130, 230, 30));
-//    setPalette(pa);
-//    setAutoFillBackground(true);
+    m_bcanshow = false;
+    m_bautoplaying = true;
+    setWindowFlags(Qt::WindowStaysOnTopHint);
+    setBlurBackgroundEnabled(true);
+    setFramRadius(18);
+    setFixedSize(260, 80);//DFloatingWidget有问题设置尺寸比实际显示尺寸宽高小10
 
     m_ptimer = new QTimer(this);
     m_ptimer->setInterval(3000);
     initWidget();
     initConnections();
+
+    m_pNotifySubject = NotifySubject::getInstance();
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+
+    m_pMsgSubject = MsgSubject::getInstance();
+    if (m_pMsgSubject) {
+        m_pMsgSubject->removeObserver(this);
+    }
 }
 
 PlayControlWidget::~PlayControlWidget()
 {
     m_ptimer->stop();
     m_ptimer->deleteLater();
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
+
+    if (m_pMsgSubject) {
+        m_pMsgSubject->removeObserver(this);
+    }
 }
 
-int PlayControlWidget::dealWithData(const int &, const QString &)
+int PlayControlWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-
+    if (MSG_NOTIFY_KEY_MSG == msgType) {
+        if (KeyStr::g_space == msgContent) {
+            changePlayStatus();
+        }
+    }
     return  0;
 }
 
-void PlayControlWidget::activeshow()
+void PlayControlWidget::sendMsg(const int &msgType, const QString &msgContent)
+{
+    m_pMsgSubject->sendMsg(msgType, msgContent);
+}
+
+void PlayControlWidget::notifyMsg(const int &msgType, const QString &msgContent)
+{
+    m_pMsgSubject->sendMsg(msgType, msgContent);
+}
+
+void PlayControlWidget::activeshow(int ix, int iy)
 {
     if (m_ptimer->isActive())
         m_ptimer->stop();
     m_ptimer->start();
+    move(ix, iy);
     raise();
     show();
 }
 
 void PlayControlWidget::killshow()
 {
+    m_bautoplaying = true;
     m_ptimer->stop();
     hide();
 }
@@ -58,10 +86,10 @@ void PlayControlWidget::initWidget()
     QHBoxLayout *playout = new QHBoxLayout(this);
     playout->setContentsMargins(10, 10, 10, 10);
     playout->setSpacing(10);
-    m_pbtnpre = createBtn();
-    m_pbtnplay = createBtn();
-    m_pbtnnext = createBtn();
-    m_pbtnexit = createBtn();
+    m_pbtnpre = createBtn(QString("previous_normal"));
+    m_pbtnplay = createBtn(QString("suspend_normal"));
+    m_pbtnnext = createBtn(QString("next_normal"));
+    m_pbtnexit = createBtn(QString("exit_normal"));
     playout->addWidget(m_pbtnpre);
     playout->addWidget(m_pbtnplay);
     playout->addWidget(m_pbtnnext);
@@ -78,28 +106,43 @@ void PlayControlWidget::initConnections()
     connect(m_pbtnexit, &DIconButton::clicked, this, &PlayControlWidget::slotExitClicked);
 }
 
-DIconButton *PlayControlWidget::createBtn(const QString &strobjname)
+DIconButton *PlayControlWidget::createBtn(const QString &strname)
 {
-    DIconButton *btn = new  DIconButton(QStyle::SP_ArrowBack, this);
+    DIconButton *btn = new  DIconButton(this);
     btn->setFixedSize(QSize(50, 50));
+    btn->setIcon(QIcon(QString(":/icons/deepin/builtout/%1.svg").arg(strname)));
+    btn->setIconSize(QSize(36, 36));
     return  btn;
 }
 
-void PlayControlWidget::showEvent(QShowEvent *event)
+void PlayControlWidget::changePlayStatus()
 {
-//    if (m_ptimer->isActive())
-//        m_ptimer->stop();
-//    m_ptimer->start();
+    m_bautoplaying = m_bautoplaying ? false : true;
+    if (m_bautoplaying)
+        m_pbtnplay->setIcon(QIcon(QString(":/icons/deepin/builtout/suspend_normal.svg")));
+    else {
+        m_pbtnplay->setIcon(QIcon(QString(":/icons/deepin/builtout/play_normal.svg")));
+    }
+    m_pbtnplay->setFixedSize(QSize(50, 50));
+    m_pbtnplay->setIconSize(QSize(36, 36));
 }
 
-void PlayControlWidget::hideEvent(QHideEvent *hideEvent)
+void PlayControlWidget::enterEvent(QEvent *event)
 {
-//    m_ptimer->stop();
-//    hide();
+    m_ptimer->stop();
+    show();
+    DFloatingWidget::enterEvent(event);
+}
+
+void PlayControlWidget::leaveEvent(QEvent *event)
+{
+    m_ptimer->start();
+    DFloatingWidget::enterEvent(event);
 }
 
 void PlayControlWidget::slotUpdateTheme()
 {
+
 
 }
 
@@ -110,6 +153,8 @@ void PlayControlWidget::slotPreClicked()
 
 void PlayControlWidget::slotPlayClicked()
 {
+
+    changePlayStatus();
     notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_space);
 }
 
