@@ -369,6 +369,7 @@ void LoadSearchResThread::run()
 
     int m_nStartIndex = 0;
     int m_nEndIndex = 19;
+    bool t_bSendMSG = true;
 
     while (m_isRunning) {
         if (m_nStartIndex < 0) {
@@ -401,25 +402,27 @@ void LoadSearchResThread::run()
             QImage image;
             bool bl = dproxy->getImage(page, image, 48, 68 /*42, 62*/);
             if (bl) {
-                //                QImage img = Utils::roundImage(QPixmap::fromImage(image),
-                //                ICON_SMALL);
                 emit sigLoadImage(page, image);
-                //                qDebug() << __FUNCTION__ << "load image page num:" << page + 1;
                 msleep(30);
             }
         }
 
-        //        qDebug() << "===================================================";
+        if ((m_nEndIndex >= m_pages - 1) && t_bSendMSG) {
+            emit sigStopFind();
+            t_bSendMSG = false;
+        }
+
+        if ((m_nEndIndex <= FIRST_LOAD_PAGES) && t_bSendMSG) {
+            emit sigStopFind();
+            t_bSendMSG = false;
+        }
 
         if (m_nEndIndex >= m_pages - 1) {
             m_isRunning = false;
-            emit sigStopFind();
             break;
         }
 
         m_nStartIndex += FIRST_LOAD_PAGES;
         m_nEndIndex += FIRST_LOAD_PAGES;
-
-        //        msleep(30);
     }
 }
