@@ -37,6 +37,7 @@ void FileAttrWidget::setFileAttr()
     if (rl) {
         //        labelImage->setPixmap(QPixmap::fromImage(image));
         if (frameImage) {
+            //            frameImage->setBackgroundPix(QPixmap::fromImage(image));
             frameImage->setBackgroundPix(QPixmap::fromImage(image));
         }
     }
@@ -73,7 +74,6 @@ void FileAttrWidget::setFileAttr()
     qobject_cast<QVBoxLayout *>(scroll->widget()->layout())->insertWidget(0, new AttrScrollWidget);
 
     m_pVBoxLayout->addLayout(scrolllayout, 10);
-
 }
 
 void FileAttrWidget::addTitleFrame(const QString &sData)
@@ -117,7 +117,7 @@ void FileAttrWidget::addTitleFrame(const QString &sData)
             }
 
             if (label->fontMetrics().width(labelText) > 300 &&
-                    labelTexts.length() >= maxLineCount) {
+                labelTexts.length() >= maxLineCount) {
                 labelText = label->fontMetrics().elidedText(labelText, Qt::ElideMiddle, 300);
             }
             label->setText(labelText);
@@ -171,10 +171,7 @@ void FileAttrWidget::initCloseBtn()
 
 void FileAttrWidget::initImageLabel()
 {
-    //    labelImage = new DLabel(this);
-    //    labelImage->setAlignment(Qt::AlignCenter);
-
-    frameImage = new ImageFrame(this);
+    frameImage = new /*ImageFrame*/ ImageLabel(this);
     frameImage->setFixedSize(94, 113);
 
     auto vlayout = new QVBoxLayout;

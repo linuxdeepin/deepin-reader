@@ -12,6 +12,7 @@
 #include "utils/utils.h"
 
 #include "CustomControl/ImageFrame.h"
+#include "CustomControl/ImageLabel.h"
 
 DWIDGET_USE_NAMESPACE
 /**
@@ -43,8 +44,8 @@ private slots:
 private:
     QVBoxLayout *m_pVBoxLayout = nullptr;
 
-    DLabel *labelImage = nullptr;
-    ImageFrame *frameImage = nullptr;
+    //    DLabel *labelImage = nullptr;
+    /*ImageFrame*/ ImageLabel *frameImage = nullptr;
 };
 
 #endif  // FILEATTRWIDGET_H
