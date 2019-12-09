@@ -1,8 +1,8 @@
 #include "NoteTipWidget.h"
-#include "CustomControl/CustomClickLabel.h"
-#include <QHBoxLayout>
-#include <DTextEdit>
 #include <DPlatformWindowHandle>
+#include <DTextEdit>
+#include <QHBoxLayout>
+#include "CustomControl/CustomClickLabel.h"
 
 NoteTipWidget::NoteTipWidget(CustomWidget *parnet)
     : CustomWidget("NoteTipWidget", parnet)
@@ -17,7 +17,7 @@ NoteTipWidget::NoteTipWidget(CustomWidget *parnet)
     setWindowOpacity(0.97);
 
     initWidget();
-//    initConnection();
+    initConnection();
     slotUpdateTheme();
 }
 
@@ -28,12 +28,13 @@ void NoteTipWidget::setTipContent(const QString &content)
         QFontMetrics fm(pedit->font());
         int pixelsWide = fm.horizontalAdvance(content);
         int pixelsHigh = fm.height();
-//        qDebug() << pixelsWide << pixelsHigh << fm.lineSpacing();
+        //        qDebug() << pixelsWide << pixelsHigh << fm.lineSpacing();
         QString strcontent;
         //判断是否超过十行
         if (pixelsWide > (m_iwidth - 16) * 10) {
             setFixedHeight(pixelsHigh * 11 + 8);
-            strcontent = pedit->fontMetrics().elidedText(content, Qt::ElideRight, (m_iwidth - 16) * 10, Qt::TextWordWrap);
+            strcontent = pedit->fontMetrics().elidedText(content, Qt::ElideRight,
+                                                         (m_iwidth - 16) * 10, Qt::TextWordWrap);
         } else {
             int line = pixelsWide / (m_iwidth - 16);
             // line = line > 2 ? line + 2 : 3;
@@ -59,7 +60,7 @@ void NoteTipWidget::slotUpdateTheme()
 int NoteTipWidget::dealWithData(const int &msgType, const QString &)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
-//        emit sigUpdateTheme();
+        emit sigUpdateTheme();
     }
     return 0;
 }
