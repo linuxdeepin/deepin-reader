@@ -10,6 +10,7 @@ ImageLabel::ImageLabel(DWidget *parent)
     : DLabel(parent)
 {
     setAttribute(Qt::WA_TranslucentBackground);
+    setScaledContents(true);
 }
 
 void ImageLabel::setSelect(const bool &select)
@@ -37,7 +38,6 @@ void ImageLabel::rotateImage(int angle)
     //    m_bRotate = rotate;
 
     setFixedSize(height(), width());
-    resize(10, 10);
 
     update();
 }
