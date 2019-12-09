@@ -214,7 +214,7 @@ int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
         return ConstantMsg::g_effective_res;
     }
 
-    if (KeyStr::g_f11 == msgContent) {  //  全屏
+    if (KeyStr::g_f11 == msgContent && DataManager::instance()->CurShowState() != FILE_SLIDE) { //  全屏
         emit sigShowCloseBtn(0);
     }
 
