@@ -425,4 +425,9 @@ void LoadSearchResThread::run()
         m_nStartIndex += FIRST_LOAD_PAGES;
         m_nEndIndex += FIRST_LOAD_PAGES;
     }
+
+    if (t_bSendMSG) {
+        emit sigStopFind();
+        t_bSendMSG = false;
+    }
 }
