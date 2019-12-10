@@ -147,8 +147,12 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     //  处于幻灯片模式下
-    if (DataManager::instance()->CurShowState() == FILE_SLIDE)
+    if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
+
+        if (event->button() == Qt::RightButton)
+            notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
         return;
+    }
 
     //  放大镜状态， 右键则取消放大镜 并且 直接返回
     if (event->button() == Qt::RightButton && m_nCurrentHandelState == Magnifier_State) {

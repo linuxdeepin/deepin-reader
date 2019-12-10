@@ -223,7 +223,6 @@ int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
         m_pctrlwidget->setCanShow(false);
         emit sigChangePlayCtrlShow(false);
     }
-
     return 0;
 }
 

@@ -10,9 +10,9 @@
 
 #include <DDialog>
 #include "utils/utils.h"
-
 #include "CustomControl/ImageFrame.h"
 #include "CustomControl/ImageLabel.h"
+#include "subjectObserver/IObserver.h"
 
 DWIDGET_USE_NAMESPACE
 /**
@@ -20,16 +20,20 @@ DWIDGET_USE_NAMESPACE
  * @brief   文件属性框
  */
 
-class FileAttrWidget : public DAbstractDialog
+class FileAttrWidget : public DAbstractDialog, public IObserver
 {
     Q_OBJECT
     Q_DISABLE_COPY(FileAttrWidget)
 
 public:
     explicit FileAttrWidget(DWidget *parent = nullptr);
+    ~FileAttrWidget();
+    void showScreenCenter();
 
 public:
-    void showScreenCenter();
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    void sendMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
+    void notifyMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
 
 private:
     void initWidget();

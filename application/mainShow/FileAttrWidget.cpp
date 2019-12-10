@@ -7,8 +7,11 @@
 #include "AttrScrollWidget.h"
 #include "controller/DataManager.h"
 #include "frame/DocummentFileHelper.h"
-
 #include "CustomControl/DFMGlobal.h"
+#include "subjectObserver/ModuleHeader.h"
+#include "subjectObserver/MsgHeader.h"
+#include "controller/NotifySubject.h"
+#include"controller/MsgSubject.h"
 
 FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
@@ -22,6 +25,18 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
     this->setLayout(m_pVBoxLayout);
 
     initWidget();
+    if (NotifySubject::getInstance())
+        NotifySubject::getInstance()->addObserver(this);
+    if (MsgSubject::getInstance())
+        MsgSubject::getInstance()->addObserver(this);
+}
+
+FileAttrWidget::~FileAttrWidget()
+{
+    if (NotifySubject::getInstance())
+        NotifySubject::getInstance()->removeObserver(this);
+    if (MsgSubject::getInstance())
+        MsgSubject::getInstance()->removeObserver(this);
 }
 
 //  各个 对应的 label 赋值
@@ -143,6 +158,24 @@ void FileAttrWidget::showScreenCenter()
 
     Dtk::Widget::moveToCenter(this);
     this->show();
+}
+
+int FileAttrWidget::dealWithData(const int &msgType, const QString &msgContent)
+{
+    qDebug() << __FUNCTION__ << "ssssssssssssss";
+    if (MSG_NOTIFY_KEY_MSG == msgType && KeyStr::g_esc == msgContent)
+        close();
+    return 0;
+}
+
+void FileAttrWidget::sendMsg(const int &, const QString &msgContent)
+{
+
+}
+
+void FileAttrWidget::notifyMsg(const int &, const QString &msgContent)
+{
+
 }
 
 void FileAttrWidget::initWidget()

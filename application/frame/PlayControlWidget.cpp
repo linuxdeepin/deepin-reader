@@ -13,6 +13,7 @@ PlayControlWidget::PlayControlWidget(DWidget *parnet)
     setWindowFlags(Qt::WindowStaysOnTopHint);
     setBlurBackgroundEnabled(true);
     setFramRadius(18);
+
     setFixedSize(260, 80);//DFloatingWidget有问题设置尺寸比实际显示尺寸宽高小10
 
     m_ptimer = new QTimer(this);
@@ -83,6 +84,8 @@ void PlayControlWidget::killshow()
 
 void PlayControlWidget::initWidget()
 {
+//    QWidget *pwidget = new QWidget;
+//    this->setWidget(pwidget);
     QHBoxLayout *playout = new QHBoxLayout(this);
     playout->setContentsMargins(10, 10, 10, 10);
     playout->setSpacing(10);
@@ -94,6 +97,8 @@ void PlayControlWidget::initWidget()
     playout->addWidget(m_pbtnplay);
     playout->addWidget(m_pbtnnext);
     playout->addWidget(m_pbtnexit);
+
+    // this->setLayout(playout);
 
 }
 
