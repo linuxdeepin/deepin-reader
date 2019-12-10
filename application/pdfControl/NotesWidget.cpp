@@ -321,6 +321,23 @@ void NotesWidget::slotJumpToNextItem()
     }
 }
 
+void NotesWidget::slotRightSelectItem(QString uuid)
+{
+    if (m_pNotesList == nullptr) {
+        return;
+    }
+
+    for (int index = 0; index < m_pNotesList->count(); ++index) {
+        auto item = m_pNotesList->item(index);
+        auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
+        if (t_widget) {
+            if (t_widget->noteUUId() == uuid) {
+                slotSelectItem(item);
+            }
+        }
+    }
+}
+
 /**
  * @brief NotesWidget::addNotesItem
  * 给新节点填充内容（包括文字、缩略图等内容）
@@ -377,6 +394,7 @@ void NotesWidget::initConnection()
             SLOT(slotSelectItem(QListWidgetItem *)));
     connect(this, SIGNAL(sigJumpToPrevItem()), this, SLOT(slotJumpToPrevItem()));
     connect(this, SIGNAL(sigJumpToNextItem()), this, SLOT(slotJumpToNextItem()));
+    connect(this, SIGNAL(sigRightSelectItem(QString)), this, SLOT(slotRightSelectItem(QString)));
 }
 
 /**
@@ -509,6 +527,9 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
     if (MSG_NOTE_DLTNOTECONTANT == msgType) {
         emit sigDltNoteContant(msgContent);
         return ConstantMsg::g_effective_res;
+    }
+    if (MSG_NOTE_SELECTITEM == msgType) {
+        emit sigRightSelectItem(msgContent);
     }
 
     // 移除高亮，删除注释内容，删除注释列表item

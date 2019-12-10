@@ -60,6 +60,8 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
     if (!m_isNote) {
         return;
     }
+    notifyMsg(MSG_NOTE_SELECTITEM, m_strUUid);
+
     if (m_menu == nullptr) {
         m_menu = new DMenu(this);
         m_menu->setFixedWidth(182);

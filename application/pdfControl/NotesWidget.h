@@ -64,6 +64,7 @@ signals:
     void sigDelNoteItem();
     void sigJumpToPrevItem();
     void sigJumpToNextItem();
+    void sigRightSelectItem(QString);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -79,6 +80,7 @@ private slots:
     void slotSelectItem(QListWidgetItem *);
     void slotJumpToPrevItem();
     void slotJumpToNextItem();
+    void slotRightSelectItem(QString);
 
 private:
     void addNotesItem(const QString &text);
