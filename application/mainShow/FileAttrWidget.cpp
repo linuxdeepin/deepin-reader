@@ -48,7 +48,7 @@ void FileAttrWidget::setFileAttr()
     }
 
     QImage image;
-    bool rl = dproxy->getImage(0, image, 92, 111);
+    bool rl = dproxy->getImage(0, image, 94, 113);
     if (rl) {
         if (frameImage) {
             QPixmap pixmap = QPixmap::fromImage(image);
@@ -62,12 +62,12 @@ void FileAttrWidget::setFileAttr()
 
     addTitleFrame(szTitle);
 
-    m_pVBoxLayout->addSpacing(35);
+    m_pVBoxLayout->addSpacing(40);
 
     QFrame *infoframe = new QFrame(this);
     infoframe->setFrameShape(QFrame::NoFrame);
     QVBoxLayout *scrollWidgetLayout = new QVBoxLayout;
-    scrollWidgetLayout->setContentsMargins(10, 0, 10, 10);
+    scrollWidgetLayout->setContentsMargins(10, 0, 10, 0);
     infoframe->setLayout(scrollWidgetLayout);
 
     auto scroll = new DScrollArea;
@@ -131,7 +131,7 @@ void FileAttrWidget::addTitleFrame(const QString &sData)
             }
 
             if (label->fontMetrics().width(labelText) > 300 &&
-                labelTexts.length() >= maxLineCount) {
+                    labelTexts.length() >= maxLineCount) {
                 labelText = label->fontMetrics().elidedText(labelText, Qt::ElideMiddle, 300);
             }
             label->setText(labelText);
@@ -141,10 +141,10 @@ void FileAttrWidget::addTitleFrame(const QString &sData)
         hLayout->addStretch(1);
     }
 
-    textShowLayout->setContentsMargins(0, 0, 0, 0);
+    textShowLayout->setContentsMargins(0, 6, 0, 0);
     textShowLayout->setSpacing(0);
     m_textShowFrame->setLayout(textShowLayout);
-    textShowLayout->addStretch(1);
+    textShowLayout->addStretch();
 
     m_textShowFrame->setFixedHeight(textHeight);
 
@@ -188,7 +188,7 @@ void FileAttrWidget::initCloseBtn()
 {
     auto layout = new QHBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->addStretch(1);
+    layout->addStretch(0);
 
     auto closeButton = new DWindowCloseButton(this);
     closeButton->setFixedSize(QSize(50, 50));
@@ -204,10 +204,11 @@ void FileAttrWidget::initCloseBtn()
 void FileAttrWidget::initImageLabel()
 {
     frameImage = new /*ImageFrame*/ ImageLabel(this);
-    frameImage->setFixedSize(94, 113);
+    frameImage->setFixedSize(98, 117);
 
     auto vlayout = new QVBoxLayout;
-    vlayout->setContentsMargins(104, 6, 0, 14);
+    vlayout->setAlignment(Qt::AlignCenter);
+    vlayout->setContentsMargins(0, 0, 0, 0);
     //    vlayout->setSpacing(10);
     vlayout->addWidget(/*labelImage*/ frameImage);
 

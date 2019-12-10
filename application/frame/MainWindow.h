@@ -39,11 +39,13 @@ signals:
 protected:
     void showEvent(QShowEvent *ev) Q_DECL_OVERRIDE;
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *obj, QEvent *e)Q_DECL_OVERRIDE;
 
 private:
     void initUI();
     void initConnections();
     void initTitlebar();
+    void initFilterList();
     QAction *createAction(DMenu *menu, const QString &actionName, const QString &);
 
     void onOpenFile();
@@ -53,6 +55,9 @@ private:
 
     void initThemeChanged();
     void setCurTheme();
+    void dealWithKeyEvent(const QString &key);
+    void onOpenAppHelp();
+    void displayShortcuts();
 
 private slots:
     void slotOpenFileOk();
@@ -70,6 +75,7 @@ private:
 private:
     MsgSubject      *m_pMsgSubject = nullptr;
     NotifySubject   *m_pNotifySubject = nullptr;
+    QStringList     m_pFilterList;
 
     // IObserver interface
 public:

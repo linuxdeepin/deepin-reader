@@ -52,8 +52,8 @@ Application::Application(int &argc, char **argv)
 
 
     setApplicationDescription(tr("Document viewer a reading tool for PDF documents."));
-
-    installEventFilter(new ObjectEventFilter(this));
+    //kyz 2019-12-10 不允许在此处安装事件过滤
+    // installEventFilter(new ObjectEventFilter(this));
 
     initChildren();
 }
