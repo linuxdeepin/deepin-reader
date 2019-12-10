@@ -50,10 +50,9 @@ void FileAttrWidget::setFileAttr()
     QImage image;
     bool rl = dproxy->getImage(0, image, 92, 111);
     if (rl) {
-        //        labelImage->setPixmap(QPixmap::fromImage(image));
         if (frameImage) {
-            //            frameImage->setBackgroundPix(QPixmap::fromImage(image));
-            frameImage->setBackgroundPix(QPixmap::fromImage(image));
+            QPixmap pixmap = QPixmap::fromImage(image);
+            frameImage->setBackgroundPix(pixmap);
         }
     }
 

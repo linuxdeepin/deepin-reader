@@ -21,11 +21,12 @@ public:
     inline void setRadius(const int radius) { m_nRadius = radius; }
     inline void setBookMarkStatus(bool bshow) { m_bshowbookmark = bshow; }
 
-    inline void setBackgroundPix(QPixmap pixmap)
-    {
-        m_background = pixmap;
-        m_bSetBp = true;
-    }
+    void setBackgroundPix(QPixmap &pixmap);
+    //    {
+    //        m_background = pixmap;
+    //        m_bSetBp = true;
+    //        m_thumbPix = pixmap;
+    //    }
 
     void rotateImage(int angle);
 
@@ -38,6 +39,7 @@ private:
     bool m_bshowbookmark = false;  //显示书签
 
     QPixmap m_background;           // 缩略图
+    QPixmap m_thumbPix;             // 显示缩略图
     bool m_bSetBp = false;          // 是否设置缩略图
     int m_nHighLightLineWidth = 0;  // 高亮边框宽度
 

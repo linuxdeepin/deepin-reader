@@ -1,9 +1,8 @@
 #include "CustomItemWidget.h"
 
 CustomItemWidget::CustomItemWidget(const QString &name, CustomWidget *parent)
-    : CustomWidget (name, parent)
+    : CustomWidget(name, parent)
 {
-
 }
 
 /**
@@ -14,8 +13,8 @@ CustomItemWidget::CustomItemWidget(const QString &name, CustomWidget *parent)
 void CustomItemWidget::setLabelImage(const QImage &image)
 {
     if (m_pPicture != nullptr) {
-//        m_pPicture->setPixmap(QPixmap::fromImage(image));
-        m_pPicture->setBackgroundPix(QPixmap::fromImage(image));
+        QPixmap pixmap = QPixmap::fromImage(image);
+        m_pPicture->setBackgroundPix(pixmap);
     }
 }
 
@@ -25,7 +24,7 @@ void CustomItemWidget::setLabelImage(const QImage &image)
  * @param value
  * @param nShowPage
  */
-void CustomItemWidget::setLabelPage(const int &value,  const int &nShowPage )
+void CustomItemWidget::setLabelPage(const int &value, const int &nShowPage)
 {
     m_nPageIndex = value;
 

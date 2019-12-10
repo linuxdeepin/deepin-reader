@@ -26,16 +26,22 @@ void ImageLabel::setSelect(const bool &select)
     update();
 }
 
+void ImageLabel::setBackgroundPix(QPixmap &pixmap)
+{
+    m_background = pixmap;
+    m_bSetBp = true;
+    m_thumbPix = pixmap;
+}
+
 void ImageLabel::rotateImage(int angle)
 {
-    if (ROTATE_LEFT == angle) {
-        m_nRotate -= 90;
-    } else if (ROTATE_RIGHT == angle) {
-        m_nRotate += 90;
-    }
+    m_nRotate = (angle < 0) ? (angle + 360) : angle;
 
-    m_nRotate = (m_nRotate < 0) ? (m_nRotate + 360) : m_nRotate;
-    //    m_bRotate = rotate;
+    m_thumbPix = m_background;
+    QMatrix leftmatrix;
+    leftmatrix.rotate(m_nRotate);
+    m_thumbPix = m_background.transformed(leftmatrix, Qt::SmoothTransformation);
+    m_thumbPix.setDevicePixelRatio(devicePixelRatioF());
 
     setFixedSize(height(), width());
 
@@ -90,7 +96,7 @@ void ImageLabel::paintEvent(QPaintEvent *e)
         path.addRoundedRect(pixrectangle, m_nRadius, m_nRadius);
         painter.setClipPath(path);
         QRect bprectangle(local, local, width, heigh);
-        painter.drawPixmap(bprectangle, /*m_background*/ map);
+        painter.drawPixmap(bprectangle, /*m_background*/ m_thumbPix);
         QRectF rectangle(local, local, width, heigh);
         painter.drawRoundedRect(rectangle, m_nRadius, m_nRadius);
     }
