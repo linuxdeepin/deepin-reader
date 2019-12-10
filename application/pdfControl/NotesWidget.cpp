@@ -271,8 +271,10 @@ void NotesWidget::slotJumpToPrevItem()
     }
 
     int t_index = -1;
-    if (m_pNoteItem) {
-        t_index = m_pNotesList->row(m_pNoteItem);
+
+    auto current_item = m_pNotesList->currentItem();
+    if (current_item) {
+        t_index = m_pNotesList->row(current_item);
         if (--t_index < 0)
             return;
         auto item = m_pNotesList->item(t_index);
@@ -300,8 +302,9 @@ void NotesWidget::slotJumpToNextItem()
     }
 
     int t_index = -1;
-    if (m_pNoteItem) {
-        t_index = m_pNotesList->row(m_pNoteItem);
+    auto current_item = m_pNotesList->currentItem();
+    if (current_item) {
+        t_index = m_pNotesList->row(current_item);
         if (++t_index < 0)
             return;
         auto item = m_pNotesList->item(t_index);
