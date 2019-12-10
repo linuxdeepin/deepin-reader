@@ -31,6 +31,8 @@ void ImageLabel::setBackgroundPix(QPixmap &pixmap)
     m_background = pixmap;
     m_bSetBp = true;
     m_thumbPix = pixmap;
+
+    rotateImage(m_nRotate);
 }
 
 void ImageLabel::rotateImage(int angle)
@@ -43,7 +45,20 @@ void ImageLabel::rotateImage(int angle)
     m_thumbPix = m_background.transformed(leftmatrix, Qt::SmoothTransformation);
     m_thumbPix.setDevicePixelRatio(devicePixelRatioF());
 
-    setFixedSize(height(), width());
+    int w = this->width();
+    int h = this->height();
+
+    if (m_nRotate % 180 == 0) {
+        if (w > h) {
+            w = this->height();
+            h = this->width();
+        }
+    } else {
+        w = this->height();
+        h = this->width();
+    }
+
+    setFixedSize(w, h);
 
     update();
 }
@@ -79,15 +94,6 @@ void ImageLabel::paintEvent(QPaintEvent *e)
             DGuiApplicationHelper::instance()->applicationPalette().frameShadowBorder().color(),
             penwidth, Qt::SolidLine));
     }
-
-    QPixmap map = m_background;
-    //    if (true) {
-    QMatrix leftmatrix;
-    leftmatrix.rotate(m_nRotate);
-    map = m_background.transformed(leftmatrix, Qt::SmoothTransformation);
-    map.setDevicePixelRatio(devicePixelRatioF());
-    //    qDebug() << __FUNCTION__ << "  rotate angle:" << m_nRotate;
-    //}
 
     if (m_bSetBp) {
         //填充图片

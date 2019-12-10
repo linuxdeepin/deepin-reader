@@ -22,6 +22,10 @@ ThumbnailWidget::~ThumbnailWidget()
     if (m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();
     }
+
+    if (m_threadRotateImage.isRunning()) {
+        m_threadRotateImage.stopThreadRun();
+    }
 }
 
 // 处理消息事件
@@ -45,7 +49,7 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
             emit sigJumpToNextPage();
         }
     } else if (msgType == MSG_FILE_ROTATE) {  //  文档旋转了
-        emit sigRotateThumbnail(msgContent.toInt());
+        emit sigSetRotate(msgContent.toInt());
     }
     return 0;
 }
@@ -121,7 +125,9 @@ void ThumbnailWidget::initConnection()
             SLOT(slotDocFilePageChanged(const QString &)));
     connect(this, &ThumbnailWidget::sigJumpToPrevPage, this, &ThumbnailWidget::slotJumpToPrevPage);
     connect(this, &ThumbnailWidget::sigJumpToNextPage, this, &ThumbnailWidget::slotJumpToNextPage);
-    connect(this, SIGNAL(sigRotateThumbnail(int)), this, SLOT(slotRotateThumbnail(int)));
+    connect(this, SIGNAL(sigSetRotate(int)), this, SLOT(slotSetRotate(int)));
+    connect(&m_threadRotateImage, SIGNAL(sigRotateImage(int)), this,
+            SLOT(slotRotateThumbnail(int)));
 }
 
 /**
@@ -213,15 +219,29 @@ void ThumbnailWidget::slotJumpToNextPage()
     }
 }
 
-void ThumbnailWidget::slotRotateThumbnail(int angle)
+void ThumbnailWidget::slotSetRotate(int angle)
+{
+    m_nRotate = angle;
+    if (m_threadRotateImage.isRunning()) {
+        m_threadRotateImage.stopThreadRun();
+    }
+    m_threadRotateImage.setPages(m_totalPages);
+    m_threadRotateImage.setLoadOver();
+    m_threadRotateImage.start();
+}
+
+void ThumbnailWidget::slotRotateThumbnail(int index)
 {
     if (m_pThumbnailListWidget) {
-        auto item = m_pThumbnailListWidget->currentItem();
+        if (index >= m_pThumbnailListWidget->count()) {
+            return;
+        }
+        auto item = m_pThumbnailListWidget->item(index);
         auto pWidget =
             reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
         if (pWidget) {
-            pWidget->rotateThumbnail(angle);
-            //            qDebug() << __FUNCTION__ << "  rotate angle:" << angle;
+            pWidget->rotateThumbnail(m_nRotate);
+            //            qDebug() << __FUNCTION__ << "  rotate angle:" << m_nRotate;
         }
     }
 }
@@ -349,4 +369,47 @@ void ThreadLoadImage::run()
 
         msleep(50);
     }
+}
+
+/************************旋转缩略图线程****************************/
+
+ThreadRotateImage::ThreadRotateImage(QObject *parent) {}
+
+void ThreadRotateImage::stopThreadRun()
+{
+    m_bLoading = false;
+    quit();
+    wait();  //阻塞等待
+}
+
+void ThreadRotateImage::run()
+{
+    m_nFirstIndex = 0;
+    m_nEndIndex = FIRST_LOAD_PAGES - 1;
+
+    while (m_bLoading) {
+        if (m_nFirstIndex < 0) {
+            m_nFirstIndex = 0;
+        }
+        if (m_nEndIndex >= m_nPages) {
+            m_nEndIndex = m_nPages - 1;
+        }
+
+        for (int index = m_nFirstIndex; index <= m_nEndIndex; index++) {
+            emit sigRotateImage(index);
+            msleep(30);
+        }
+
+        if (m_nEndIndex >= m_nPages) {
+            m_bLoading = false;
+            break;
+        }
+        m_nFirstIndex += FIRST_LOAD_PAGES;
+        m_nEndIndex += FIRST_LOAD_PAGES;
+
+        msleep(50);
+    }
+
+    m_nFirstIndex = 0;
+    m_nEndIndex = FIRST_LOAD_PAGES - 1;
 }

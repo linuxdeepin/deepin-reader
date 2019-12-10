@@ -13,6 +13,35 @@
 #include "PagingWidget.h"
 #include "ThumbnailItemWidget.h"
 
+class ThreadRotateImage : public QThread
+{
+    Q_OBJECT
+    Q_DISABLE_COPY(ThreadRotateImage)
+
+public:
+    explicit ThreadRotateImage(QObject *parent = nullptr);
+    ~ThreadRotateImage() Q_DECL_OVERRIDE { stopThreadRun(); }
+
+public:
+    void stopThreadRun();
+    inline void setPages(const int &page) { m_nPages = page; }
+
+signals:
+    void sigRotateImage(const int &index);
+
+public:
+    inline void setLoadOver() { m_bLoading = true; }
+
+protected:
+    void run() Q_DECL_OVERRIDE;
+
+private:
+    int m_nFirstIndex = 0;
+    int m_nEndIndex = 19;
+    int m_nPages = 0;         // 总页数
+    bool m_bLoading = false;  // 大缩略是否还在加载
+};
+
 /**
  * @brief The ThreadLoadImage class
  * @brief   加载缩略图线程
@@ -80,7 +109,7 @@ signals:
     void sigCloseFile();
     void sigJumpToPrevPage();
     void sigJumpToNextPage();
-    void sigRotateThumbnail(int);
+    void sigSetRotate(int);
 
 public:
     // IObserver interface
@@ -106,6 +135,7 @@ private slots:
     void slotUpdateTheme();
     void slotJumpToPrevPage();
     void slotJumpToNextPage();
+    void slotSetRotate(int);
     void slotRotateThumbnail(int);
 
 private:
@@ -114,6 +144,8 @@ private:
     int m_totalPages = -1;                               // 总页码数
     ThreadLoadImage m_ThreadLoadImage;                   // 加载缩略图线程
     bool m_isLoading = false;                            // 缩略图list是否初始化完毕
+    ThreadRotateImage m_threadRotateImage;               // 旋转缩略图
+    int m_nRotate = 0;                                   // 旋转度数
 };
 
 #endif  // THUMBNAILWIDGET_H
