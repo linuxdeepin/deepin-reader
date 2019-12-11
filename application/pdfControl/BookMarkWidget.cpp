@@ -37,6 +37,7 @@ void BookMarkWidget::slotAddBookMark()
     if (!m_pAddBookMarkBtn->isEnabled()) {
         return;
     }
+    clearItemColor();
     auto proxy = DocummentFileHelper::instance();
     if (proxy) {
         int nPage = proxy->currentPageNo();
@@ -51,6 +52,8 @@ void BookMarkWidget::slotAddBookMark(const int &nPage)
     if (pageList.contains(nPage)) {
         return;
     }
+
+    clearItemColor();
 
     auto item = addBookMarkItem(nPage);
     if (item) {
@@ -219,6 +222,8 @@ void BookMarkWidget::clearItemColor()
         auto pItemWidget =
             reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
         if (pItemWidget) {
+            //            qDebug() << __FUNCTION__ << " clear status page:" <<
+            //            pItemWidget->nPageIndex();
             pItemWidget->setBSelect(false);
         }
     }
@@ -362,6 +367,28 @@ void BookMarkWidget::slotJumpToNextItem()
     }
 }
 
+void BookMarkWidget::slotRightSelectItem(QString page)
+{
+    if (m_pBookMarkListWidget == nullptr) {
+        return;
+    }
+
+    int nSize = m_pBookMarkListWidget->count();
+    for (int iLoop = 0; iLoop < nSize; iLoop++) {
+        auto pItem = m_pBookMarkListWidget->item(iLoop);
+        if (pItem) {
+            auto t_widget =
+                reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
+            if (t_widget) {
+                int nPageIndex = t_widget->nPageIndex();
+                if (nPageIndex == page.toInt()) {
+                    slotSelectItemBackColor(pItem);
+                }
+            }
+        }
+    }
+}
+
 /**
  * @brief BookMarkWidget::initWidget
  * 初始化书签窗体
@@ -413,6 +440,9 @@ void BookMarkWidget::initConnection()
     connect(this, SIGNAL(sigCtrlBAddBookMark()), SLOT(slotAddBookMark()));
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this,
             [=]() { slotUpdateTheme(); });
+    connect(this, SIGNAL(sigRightSelectItem(QString)), this, SLOT(slotRightSelectItem(QString)));
+    connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
+            SLOT(slotSelectItemBackColor(QListWidgetItem *)));
 }
 
 /**
@@ -445,7 +475,7 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
         int nCurPage = dproxy->currentPageNo();
         if (nCurPage == page) {
             //  先将当前的item 选中取消
-            clearItemColor();
+            //            clearItemColor();
 
             t_widget->setBSelect(true);
 
@@ -459,14 +489,17 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
 }
 
 /**
- * @brief BookMarkWidget::setSelectItemBackColor
+ * @brief BookMarkWidget::slotSelectItemBackColor
  * 绘制选中外边框,蓝色
  */
-void BookMarkWidget::setSelectItemBackColor(QListWidgetItem *item)
+void BookMarkWidget::slotSelectItemBackColor(QListWidgetItem *item)
 {
     if (item == nullptr) {
         return;
     }
+
+    clearItemColor();
+    m_pBookMarkListWidget->setCurrentItem(item);
 
     auto pItemWidget =
         reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
@@ -492,6 +525,10 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
     //  增加书签消息
     if (MSG_OPERATION_ADD_BOOKMARK == msgType || MSG_OPERATION_TEXT_ADD_BOOKMARK == msgType) {
         emit sigAddBookMark(msgContent.toInt());
+    }
+
+    if (MSG_OPERATION_RIGHT_SELECT_BOOKMARK == msgType) {
+        emit sigRightSelectItem(msgContent);
     }
 
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {  //  打开 文件通知消息

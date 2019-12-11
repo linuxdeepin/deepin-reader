@@ -1,14 +1,14 @@
 #include "BookMarkItemWidget.h"
-#include "utils/utils.h"
 #include <DApplicationHelper>
+#include "utils/utils.h"
 
-BookMarkItemWidget::BookMarkItemWidget(CustomItemWidget *parent) :
-    CustomItemWidget("BookMarkItemWidget", parent)
+BookMarkItemWidget::BookMarkItemWidget(CustomItemWidget *parent)
+    : CustomItemWidget("BookMarkItemWidget", parent)
 {
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
-            this, SLOT(slotShowContextMenu(const QPoint &)));
-    setMinimumWidth(LEFTMINWIDTH-5);
-    setMaximumWidth(LEFTMAXWIDTH-5);
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this,
+            SLOT(slotShowContextMenu(const QPoint &)));
+    setMinimumWidth(LEFTMINWIDTH - 5);
+    setMaximumWidth(LEFTMAXWIDTH - 5);
     initWidget();
 }
 
@@ -54,11 +54,14 @@ void BookMarkItemWidget::slotDltBookMark()
  */
 void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
 {
+    sendMsg(MSG_OPERATION_RIGHT_SELECT_BOOKMARK, QString::number(m_nPageIndex));
+
     if (m_menu == nullptr) {
         m_menu = new DMenu(this);
         m_menu->setFixedWidth(182);
         DFontSizeManager::instance()->bind(m_menu, DFontSizeManager::T6);
-        QAction *dltBookMarkAction = m_menu->addAction(QString("      %1").arg(tr("delete bookmark")));
+        QAction *dltBookMarkAction =
+            m_menu->addAction(QString("      %1").arg(tr("delete bookmark")));
         connect(dltBookMarkAction, SIGNAL(triggered()), this, SLOT(slotDltBookMark()));
     }
 
@@ -107,21 +110,19 @@ void BookMarkItemWidget::paintEvent(QPaintEvent *event)
 {
     CustomWidget::paintEvent(event);
 
-//    QPalette p(m_pPicture->palette());
-//    QColor color;
+    //    QPalette p(m_pPicture->palette());
+    //    QColor color;
 
     //  涉及到 主题颜色
     if (m_bPaint) {
-//        color = QColor(QString("#0081FF"));
-//        p.setColor(QPalette::Text, p.highlight().color());
+        //        color = QColor(QString("#0081FF"));
+        //        p.setColor(QPalette::Text, p.highlight().color());
         m_pPicture->setForegroundRole(DPalette::Highlight);
     } else {
-//        color = QColor::fromRgbF(0, 0, 0, 0.08);
-//        p.setColor(QPalette::Text, color);
+        //        color = QColor::fromRgbF(0, 0, 0, 0.08);
+        //        p.setColor(QPalette::Text, color);
         m_pPicture->setForegroundRole(QPalette::Shadow);
     }
 
-//    m_pPicture->setPalette(p);
-
+    //    m_pPicture->setPalette(p);
 }
-

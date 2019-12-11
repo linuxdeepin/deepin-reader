@@ -37,12 +37,13 @@ enum MSG_MENU_TYPE {
                                       //    MSG_OPERATION_HELP,                 //  帮助
     MSG_OPERATION_EXIT,               //  退出
 
-    MSG_OPERATION_ADD_BOOKMARK,     //  添加书签
-    MSG_OPERATION_DELETE_BOOKMARK,  //  删除书签
-    MSG_OPERATION_FIRST_PAGE,       //  第一页
-    MSG_OPERATION_PREV_PAGE,        //  上一页
-    MSG_OPERATION_NEXT_PAGE,        //  下一页
-    MSG_OPERATION_END_PAGE,         //  最后一页
+    MSG_OPERATION_ADD_BOOKMARK,           //  添加书签
+    MSG_OPERATION_DELETE_BOOKMARK,        //  删除书签
+    MSG_OPERATION_RIGHT_SELECT_BOOKMARK,  //  右键选择书签
+    MSG_OPERATION_FIRST_PAGE,             //  第一页
+    MSG_OPERATION_PREV_PAGE,              //  上一页
+    MSG_OPERATION_NEXT_PAGE,              //  下一页
+    MSG_OPERATION_END_PAGE,               //  最后一页
 
     MSG_OPERATION_TEXT_COPY,                //  复制
     MSG_OPERATION_TEXT_ADD_HIGHLIGHTED,     //  添加 高亮显示

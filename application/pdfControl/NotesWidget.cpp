@@ -424,7 +424,7 @@ void NotesWidget::clearItemColor()
         return;
     auto pCurItem = m_pNotesList->currentItem();
     if (pCurItem) {
-        qDebug() << __FUNCTION__ << "  m_pNoteItem address:" << m_pNoteItem;
+        //        qDebug() << __FUNCTION__ << "  m_pNoteItem address:" << m_pNoteItem;
         auto pItemWidget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pCurItem));
         if (pItemWidget) {
             pItemWidget->setBSelect(false);

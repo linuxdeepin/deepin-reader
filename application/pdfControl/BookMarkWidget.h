@@ -1,13 +1,13 @@
 #ifndef BOOKMARKFORM_H
 #define BOOKMARKFORM_H
 
-#include "CustomListWidget.h"
-#include <DPushButton>
 #include <DHorizontalLine>
+#include <DPushButton>
+#include "CustomListWidget.h"
 
-#include <QVBoxLayout>
 #include <QMap>
 #include <QThread>
+#include <QVBoxLayout>
 
 #include "CustomControl/CustomWidget.h"
 
@@ -30,15 +30,9 @@ signals:
     void sigLoadImage(const int &, const QImage &);
 
 public:
-    inline void setBookMark(BookMarkWidget *bookMarkW)
-    {
-        m_pBookMarkWidget = bookMarkW;
-    }
+    inline void setBookMark(BookMarkWidget *bookMarkW) { m_pBookMarkWidget = bookMarkW; }
 
-    inline void setBookMarks(const int &count)
-    {
-        m_bookMarks = count;
-    }
+    inline void setBookMarks(const int &count) { m_bookMarks = count; }
 
     void stopThreadRun();
 
@@ -47,10 +41,10 @@ protected:
 
 private:
     BookMarkWidget *m_pBookMarkWidget = nullptr;
-    int m_bookMarks   = 0;   // 书签总数
-    int m_nStartIndex = 0;   // 加载图片起始位置
-    int m_nEndIndex   = 19;  // 加载图片结束位置
-    bool m_isRunning = true; // 运行状态
+    int m_bookMarks = 0;      // 书签总数
+    int m_nStartIndex = 0;    // 加载图片起始位置
+    int m_nEndIndex = 19;     // 加载图片结束位置
+    bool m_isRunning = true;  // 运行状态
 };
 
 class BookMarkWidget : public CustomWidget
@@ -72,6 +66,7 @@ signals:
     void sigJumpToPrevItem();
     void sigJumpToNextItem();
     void sigCtrlBAddBookMark();
+    void sigRightSelectItem(QString);
 
 private slots:
     void slotAddBookMark();
@@ -85,6 +80,8 @@ private slots:
     void slotUpdateTheme();
     void slotJumpToPrevItem();
     void slotJumpToNextItem();
+    void slotRightSelectItem(QString);
+    void slotSelectItemBackColor(QListWidgetItem *);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -92,7 +89,7 @@ protected:
 private:
     void initConnection();
     QListWidgetItem *addBookMarkItem(const int &);
-    void setSelectItemBackColor(QListWidgetItem *);
+    //    void setSelectItemBackColor(QListWidgetItem *);
     void deleteIndexPage(const int &pageIndex);
     void clearItemColor();
 
@@ -103,9 +100,9 @@ public:
     bool hasClickFoucs();
 
 private:
-    CustomListWidget    *m_pBookMarkListWidget = nullptr;
-    DPushButton         *m_pAddBookMarkBtn = nullptr;
-    LoadBookMarkThread  m_loadBookMarkThread;
+    CustomListWidget *m_pBookMarkListWidget = nullptr;
+    DPushButton *m_pAddBookMarkBtn = nullptr;
+    LoadBookMarkThread m_loadBookMarkThread;
 };
 
-#endif // BOOKMARKFORM_H
+#endif  // BOOKMARKFORM_H
