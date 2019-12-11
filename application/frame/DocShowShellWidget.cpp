@@ -215,7 +215,11 @@ int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
     }
 
     if (KeyStr::g_f11 == msgContent && DataManager::instance()->CurShowState() != FILE_SLIDE) { //  全屏
-        emit sigShowCloseBtn(0);
+        if (DataManager::instance()->CurShowState() == FILE_FULLSCREEN)
+            emit sigHideCloseBtn();
+        else {
+            emit sigShowCloseBtn(0);
+        }
     }
 
     if (KeyStr::g_esc == msgContent) {  //  退出   幻灯片\全屏

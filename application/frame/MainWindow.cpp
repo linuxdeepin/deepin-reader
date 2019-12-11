@@ -521,7 +521,11 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
         return ConstantMsg::g_effective_res;
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == KeyStr::g_f11 && DataManager::instance()->CurShowState() != FILE_SLIDE) {
-            emit sigFullScreen();
+            if (DataManager::instance()->CurShowState() == FILE_FULLSCREEN)
+                emit sigAppShowState(1);
+            else {
+                emit sigFullScreen();
+            }
         } else if (msgContent == KeyStr::g_esc) {        //  退出全屏模式
             emit sigAppShowState(1);
         } else if (msgContent == KeyStr::g_space) {
