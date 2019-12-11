@@ -21,7 +21,7 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
     setFixedSize(QSize(300, 642));
 
     m_pVBoxLayout = new QVBoxLayout;
-    m_pVBoxLayout->setContentsMargins(0, 0, 0, 0);
+    m_pVBoxLayout->setContentsMargins(0, 0, 0, 10);
     this->setLayout(m_pVBoxLayout);
 
     initWidget();
@@ -161,7 +161,6 @@ void FileAttrWidget::showScreenCenter()
 
 int FileAttrWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    qDebug() << __FUNCTION__ << "ssssssssssssss";
     if (MSG_NOTIFY_KEY_MSG == msgType && KeyStr::g_esc == msgContent)
         close();
     return 0;
