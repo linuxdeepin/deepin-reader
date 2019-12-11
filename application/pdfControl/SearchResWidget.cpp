@@ -118,11 +118,17 @@ void SearchResWidget::slotLoadImage(const int &page, const QImage &image)
 
 void SearchResWidget::slotFindPrev()
 {
+    if (DataManager::instance()->bThumbnIsShow() == false) {
+        return;
+    }
     DocummentFileHelper::instance()->findPrev();
 }
 
 void SearchResWidget::slotFindNext()
 {
+    if (DataManager::instance()->bThumbnIsShow() == false) {
+        return;
+    }
     DocummentFileHelper::instance()->findNext();
 }
 

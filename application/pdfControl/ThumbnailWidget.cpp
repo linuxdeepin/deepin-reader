@@ -42,7 +42,7 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (MSG_NOTIFY_KEY_MSG == msgType) {
         if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup ||
             msgContent == KeyStr::g_left) {
-            qDebug() << __FUNCTION__ << "                   " << 1;
+            //            qDebug() << __FUNCTION__ << "                   " << 1;
             emit sigJumpToPrevPage();
         } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown ||
                    msgContent == KeyStr::g_right) {
@@ -175,7 +175,8 @@ void ThumbnailWidget::slotUpdateTheme()
  */
 void ThumbnailWidget::slotJumpToPrevPage()
 {
-    if (DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL) {
+    if (DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL ||
+        (DataManager::instance()->bThumbnIsShow() == false)) {
         return;
     }
     bool bstart = false;
@@ -199,9 +200,10 @@ void ThumbnailWidget::slotJumpToPrevPage()
  */
 void ThumbnailWidget::slotJumpToNextPage()
 {
-    qDebug() << __FUNCTION__ << "               ";
+    //    qDebug() << __FUNCTION__ << "               ";
 
-    if (DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL) {
+    if (DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL ||
+        (DataManager::instance()->bThumbnIsShow() == false)) {
         return;
     }
     bool bstart = false;

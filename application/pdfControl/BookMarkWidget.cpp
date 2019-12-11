@@ -310,7 +310,7 @@ void BookMarkWidget::slotUpdateTheme()
 void BookMarkWidget::slotJumpToPrevItem()
 {
     if (DataManager::instance()->currentWidget() != WIDGET_BOOKMARK ||
-        m_pBookMarkListWidget == nullptr) {
+        m_pBookMarkListWidget == nullptr || DataManager::instance()->bThumbnIsShow() == false) {
         return;
     }
 
@@ -340,7 +340,7 @@ void BookMarkWidget::slotJumpToPrevItem()
 void BookMarkWidget::slotJumpToNextItem()
 {
     if (DataManager::instance()->currentWidget() != WIDGET_BOOKMARK ||
-        m_pBookMarkListWidget == nullptr) {
+        m_pBookMarkListWidget == nullptr || DataManager::instance()->bThumbnIsShow() == false) {
         return;
     }
 
@@ -543,7 +543,7 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
         if (msgContent == KeyStr::g_del) {
             emit sigDelBKItem();
         } else if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup) {
-            qDebug() << __FUNCTION__ << "               11      ";
+            //            qDebug() << __FUNCTION__ << "               11      ";
             emit sigJumpToPrevItem();
         } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown) {
             emit sigJumpToNextItem();

@@ -262,7 +262,8 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
 
 void NotesWidget::slotJumpToPrevItem()
 {
-    if (DataManager::instance()->currentWidget() != WIDGET_NOTE || m_pNotesList == nullptr) {
+    if (DataManager::instance()->currentWidget() != WIDGET_NOTE || m_pNotesList == nullptr ||
+        DataManager::instance()->bThumbnIsShow() == false) {
         return;
     }
 
@@ -293,7 +294,8 @@ void NotesWidget::slotJumpToPrevItem()
 
 void NotesWidget::slotJumpToNextItem()
 {
-    if (DataManager::instance()->currentWidget() != WIDGET_NOTE || m_pNotesList == nullptr) {
+    if (DataManager::instance()->currentWidget() != WIDGET_NOTE || m_pNotesList == nullptr ||
+        DataManager::instance()->bThumbnIsShow() == false) {
         return;
     }
 
