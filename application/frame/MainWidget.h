@@ -2,6 +2,7 @@
 #define MAINWIDGET_H
 
 #include "CustomControl/CustomWidget.h"
+#include <DSpinner>
 
 /**
  * @brief The MainWidget class
@@ -36,6 +37,7 @@ private slots:
 
 private:
     void initConnections();
+    DSpinner *m_spinner = nullptr;
 
     // IObserver interface
 public:

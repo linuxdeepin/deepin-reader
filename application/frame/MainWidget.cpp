@@ -1,5 +1,4 @@
 #include "MainWidget.h"
-#include <DSpinner>
 #include <DSplitter>
 #include <QFileInfo>
 #include <QMimeData>
@@ -40,6 +39,7 @@ void MainWidget::slotOpenFileOk()
     auto pLayout = this->findChild<QStackedLayout *>();
     if (pLayout) {
         pLayout->setCurrentIndex(1);
+        m_spinner->stop();
     }
 }
 
@@ -47,6 +47,7 @@ void MainWidget::slotOpenFileStart()
 {
     auto pLayout = this->findChild<QStackedLayout *>();
     if (pLayout) {
+        m_spinner->start();
         pLayout->setCurrentIndex(2);
     }
 }
@@ -170,9 +171,10 @@ void MainWidget::initWidget()
     auto pSpinnerWidget = new DWidget;
     QGridLayout *gridlyout = new QGridLayout(pSpinnerWidget);
     gridlyout->setAlignment(Qt::AlignCenter);
-    auto m_spinner = new DSpinner;
+    m_spinner = new DSpinner;
     m_spinner->setFixedSize(60, 60);
     gridlyout->addWidget(m_spinner);
-    m_spinner->start();
+    m_spinner->stop();
+//    m_spinner->start();
     pStcakLayout->addWidget(pSpinnerWidget);
 }
