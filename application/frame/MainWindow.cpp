@@ -298,12 +298,14 @@ void MainWindow::setCurTheme()
 
 void MainWindow::dealWithKeyEvent(const QString &key)
 {
-    if (key == KeyStr::g_f1) {
+    if (key == KeyStr::g_f1) {                      //  打开帮助文档
         onOpenAppHelp();
     } else if (key == KeyStr::g_ctrl_alt_f) {       //  dtk 应用实现
         //onChangeWindowState();
-    } else if (key == KeyStr::g_ctrl_shift_slash) {
+    } else if (key == KeyStr::g_ctrl_shift_slash) { //  显示快捷键预览
         displayShortcuts();
+    } else if (key == KeyStr::g_ctrl_o) {   //  打开文件
+        notifyMsg(MSG_NOTIFY_KEY_MSG, key);
     } else {
         QString sFilePath = DataManager::instance()->strOnlyFilePath();
         if (sFilePath != "") {
