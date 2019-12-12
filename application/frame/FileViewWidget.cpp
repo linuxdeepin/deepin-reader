@@ -523,7 +523,6 @@ void FileViewWidget::slotPrintFile()
 
     if (printerName.size() == 0) {
         DDialog dlg("", tr("No Print Device"));
-        //        QString sPixmap = PF::getImagePath(objName, /*Pri::g_frame*/ Pri::g_actions);
         dlg.setIcon(QIcon(":/resources/exception-logo.svg"));
         dlg.addButtons(QStringList() << tr("Ok"));
         QMargins mar(0, 0, 0, 30);

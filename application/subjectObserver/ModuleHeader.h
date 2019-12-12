@@ -31,19 +31,12 @@ const QString sQStringSep = "@#$!!#$$@@#&!@#$";
 const QString sLogoPath = ":/resources/logo/deepin-reader.svg";
 }  // namespace Constant
 
-namespace Pri {
-const QString g_controller = "controller";
-const QString g_docview = "docview";
-const QString g_frame = "frame";
-const QString g_mainShow = "mainShow";
-const QString g_pdfControl = "pdfControl";
-const QString g_subjectObserver = "subjectObserver";
-
 // 图标类型
+namespace Pri {
 const QString g_icons = "icons";
 const QString g_texts = "texts";
 const QString g_actions = "actions";
-}  // namespace Pri
+}
 
 namespace KeyStr {
 const QString g_ctrl_alt_f = "Ctrl+Alt+F";  //  窗口大小切换
