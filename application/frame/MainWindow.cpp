@@ -135,7 +135,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
     if (nType == QEvent::KeyPress) {    //  按下
         QKeyEvent *event = static_cast<QKeyEvent *>(e);
         QString key = Utils::getKeyshortcut(event);
-
+        qDebug() << __FUNCTION__ << key;
         if (m_pFilterList.contains(key)) {
             dealWithKeyEvent(key);
             return true;
