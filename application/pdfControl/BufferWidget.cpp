@@ -13,9 +13,9 @@ int BufferWidget::dealWithData(const int &, const QString &)
 
 void BufferWidget::initWidget()
 {
-    m_pVLayout = new QVBoxLayout(this);  // 承载spinner的垂直布局
-    m_pHLayout = new QHBoxLayout(this);  // 承载spinner的水平布局
-    m_pSpinner = new DSpinner(this);     // 缓冲动画
+    auto m_pVLayout = new QVBoxLayout();  // 承载spinner的垂直布局
+    auto m_pHLayout = new QHBoxLayout();  // 承载spinner的水平布局
+    auto m_pSpinner = new DSpinner();     // 缓冲动画
 
     m_pVLayout->setContentsMargins(0, 0, 0, 0);
     m_pHLayout->setContentsMargins(0, 0, 0, 0);

@@ -21,11 +21,6 @@ public:
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
-
-private:
-    QVBoxLayout *m_pVLayout = nullptr;  // 承载spinner的垂直布局
-    QHBoxLayout *m_pHLayout = nullptr;  // 承载spinner的水平布局
-    DSpinner *m_pSpinner = nullptr;     // 缓冲动画
 };
 
 #endif  // BUFFERWIDGET_H
