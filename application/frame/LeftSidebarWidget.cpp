@@ -52,10 +52,8 @@ void LeftSidebarWidget::slotUpdateTheme()
 
 void LeftSidebarWidget::initConnections()
 {
-    connect(this, SIGNAL(sigStackSetCurIndex(const int &)), this,
-            SLOT(slotStackSetCurIndex(const int &)));
-    connect(this, SIGNAL(sigWidgetVisible(const int &)), this,
-            SLOT(slotWidgetVisible(const int &)));
+    connect(this, SIGNAL(sigStackSetCurIndex(const int &)), SLOT(slotStackSetCurIndex(const int &)));
+    connect(this, SIGNAL(sigWidgetVisible(const int &)), SLOT(slotWidgetVisible(const int &)));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
