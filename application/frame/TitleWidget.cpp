@@ -8,7 +8,7 @@ TitleWidget::TitleWidget(CustomWidget *parent)
     : CustomWidget("TitleWidget", parent)
 {
     shortKeyList = QStringList() << KeyStr::g_alt_1 << KeyStr::g_alt_2 << KeyStr::g_ctrl_m
-                   << KeyStr::g_alt_z;
+                                 << KeyStr::g_alt_z;
     initWidget();
     initConnections();
     slotUpdateTheme();
@@ -29,7 +29,7 @@ void TitleWidget::slotSetFindWidget(const int &iFlag)
 //  主题变了
 void TitleWidget::slotUpdateTheme()
 {
-    auto btnList = this->findChildren<DToolButton *>();
+    auto btnList = this->findChildren<DIconButton *>();
     foreach (auto btn, btnList) {
         QString objName = btn->objectName();
         if (objName != "") {
@@ -44,7 +44,6 @@ void TitleWidget::slotUpdateTheme()
         if (objName != "") {
             QString sPixmap = PF::getImagePath(objName + "_small", Pri::g_actions);
             a->setIcon(QIcon(sPixmap));
-
         }
     }
 }
@@ -193,11 +192,11 @@ void TitleWidget::slotDealWithShortKey(const QString &sKey)
         if (1 != m_nCurHandleShape) {
             setHandleShape();
         }
-    } else if (sKey == KeyStr::g_ctrl_m) {       //  显示缩略图
+    } else if (sKey == KeyStr::g_ctrl_m) {  //  显示缩略图
         m_pThumbnailBtn->setChecked(true);
         notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(1));
         DataManager::instance()->setBThumbnIsShow(1);
-    } else if (sKey == KeyStr::g_alt_z) {       //  开启放大镜
+    } else if (sKey == KeyStr::g_alt_z) {  //  开启放大镜
 
         bool bCheck = m_pMagnifierBtn->isChecked();
         if (!bCheck) {
@@ -317,9 +316,9 @@ void TitleWidget::setHandleShape()
     notifyMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurHandleShape));
 }
 
-DToolButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
+DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 {
-    auto btn = new DToolButton(this);
+    auto btn = new DIconButton(this);
     btn->setFixedSize(QSize(36, 36));
     btn->setIconSize(QSize(36, 36));
     btn->setToolTip(btnName);

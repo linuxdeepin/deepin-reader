@@ -1,6 +1,7 @@
 ﻿#ifndef TITLEWIDGET_H
 #define TITLEWIDGET_H
 
+#include <DIconButton>
 #include <DMenu>
 #include <DToolButton>
 
@@ -53,24 +54,22 @@ private:
     void setDefaultShape();
     void setHandleShape();
 
-    DToolButton *createBtn(const QString &btnName, bool bCheckable = false);
+    DIconButton *createBtn(const QString &btnName, bool bCheckable = false);
     void sendMsgToSubject(const int &, const QString &msgCotent = "");
     void notifyMsgToSubject(const int &, const QString &msgCotent = "");
 
-
-
 private:
-    QStringList     shortKeyList;
+    QStringList shortKeyList;
 
-    DMenu   *m_pHandleMenu = nullptr;
-    DMenu   *m_pSettingMenu = nullptr;
+    DMenu *m_pHandleMenu = nullptr;
+    DMenu *m_pSettingMenu = nullptr;
 
-    DToolButton *m_pThumbnailBtn = nullptr;
-    DToolButton *m_pSettingBtn = nullptr;
-    DToolButton *m_pHandleShapeBtn = nullptr;
-    DToolButton *m_pMagnifierBtn = nullptr;
+    DIconButton *m_pThumbnailBtn = nullptr;
+    DIconButton *m_pSettingBtn = nullptr;
+    DIconButton *m_pHandleShapeBtn = nullptr;
+    DIconButton *m_pMagnifierBtn = nullptr;
 
-    int     m_nCurHandleShape = -1;     //  当前的选择工具状态
+    int m_nCurHandleShape = -1;  //  当前的选择工具状态
     // CustomWidget interface
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -80,4 +79,4 @@ public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 };
 
-#endif // TITLEWIDGET_H
+#endif  // TITLEWIDGET_H
