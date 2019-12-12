@@ -80,6 +80,7 @@ void TitleWidget::slotMagnifierCancel()
         //  取消放大镜
         notifyMsgToSubject(MSG_MAGNIFYING, "0");
     }
+    m_pMagnifierBtn->setStatus(m_pMagnifierBtn->isChecked());
 }
 
 void TitleWidget::initWidget()
