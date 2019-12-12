@@ -409,7 +409,7 @@ void LoadSearchResThread::run()
             bool bl = dproxy->getImage(page, image, 48, 68 /*42, 62*/);
             if (bl) {
                 emit sigLoadImage(page, image);
-                msleep(30);
+                msleep(50);
             }
         }
 
