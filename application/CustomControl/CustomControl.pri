@@ -5,7 +5,8 @@ HEADERS += \
     $$PWD/PageNumberLabel.h \
     $$PWD/ColorMenu.h \
     $$PWD/DFMGlobal.h \
-    $$PWD/ImageFrame.h
+    $$PWD/ImageFrame.h \
+    $$PWD/CustemIconButton.h
 
 SOURCES += \
     $$PWD/CustomWidget.cpp \
@@ -14,4 +15,5 @@ SOURCES += \
     $$PWD/PageNumberLabel.cpp \
     $$PWD/ColorMenu.cpp \
     $$PWD/DFMGlobal.cpp \
-    $$PWD/ImageFrame.cpp
+    $$PWD/ImageFrame.cpp \
+    $$PWD/CustemIconButton.cpp

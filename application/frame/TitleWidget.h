@@ -5,6 +5,7 @@
 #include <DMenu>
 #include <DToolButton>
 
+#include "CustomControl/CustemIconButton.h"
 #include "CustomControl/CustomWidget.h"
 #include "pdfControl/font/fontWidget.h"
 #include "utils/PublicFunction.h"
@@ -54,7 +55,7 @@ private:
     void setDefaultShape();
     void setHandleShape();
 
-    DIconButton *createBtn(const QString &btnName, bool bCheckable = false);
+    CustemIconButton *createBtn(const QString &btnName, bool bCheckable = false);
     void sendMsgToSubject(const int &, const QString &msgCotent = "");
     void notifyMsgToSubject(const int &, const QString &msgCotent = "");
 
@@ -64,10 +65,10 @@ private:
     DMenu *m_pHandleMenu = nullptr;
     DMenu *m_pSettingMenu = nullptr;
 
-    DIconButton *m_pThumbnailBtn = nullptr;
-    DIconButton *m_pSettingBtn = nullptr;
-    DIconButton *m_pHandleShapeBtn = nullptr;
-    DIconButton *m_pMagnifierBtn = nullptr;
+    CustemIconButton *m_pThumbnailBtn = nullptr;
+    CustemIconButton *m_pSettingBtn = nullptr;
+    CustemIconButton *m_pHandleShapeBtn = nullptr;
+    CustemIconButton *m_pMagnifierBtn = nullptr;
 
     int m_nCurHandleShape = -1;  //  当前的选择工具状态
     // CustomWidget interface

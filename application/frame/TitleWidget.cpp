@@ -24,12 +24,14 @@ void TitleWidget::slotSetFindWidget(const int &iFlag)
     } else {
         slotAppFullScreen();
     }
+
+    m_pThumbnailBtn->setStatus(m_pThumbnailBtn->isChecked());
 }
 
 //  主题变了
 void TitleWidget::slotUpdateTheme()
 {
-    auto btnList = this->findChildren<DIconButton *>();
+    auto btnList = this->findChildren<CustemIconButton *>();
     foreach (auto btn, btnList) {
         QString objName = btn->objectName();
         if (objName != "") {
@@ -316,13 +318,14 @@ void TitleWidget::setHandleShape()
     notifyMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurHandleShape));
 }
 
-DIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
+CustemIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 {
-    auto btn = new DIconButton(this);
+    auto btn = new CustemIconButton(this);
     btn->setFixedSize(QSize(36, 36));
     btn->setIconSize(QSize(36, 36));
     btn->setToolTip(btnName);
     btn->setCheckable(bCheckable);
+    btn->setFlat(true);
 
     if (bCheckable) {
         btn->setChecked(false);
