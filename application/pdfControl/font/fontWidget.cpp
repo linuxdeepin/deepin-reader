@@ -1,6 +1,7 @@
 #include "fontWidget.h"
 #include <DApplicationHelper>
 #include <DHorizontalLine>
+#include "controller/AppSetting.h"
 #include "frame/DocummentFileHelper.h"
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
@@ -200,7 +201,7 @@ void FontWidget::slotReset()
 void FontWidget::slotSetCurScale(const QString &sData)
 {
     m_bIsAdaptMove = true;
-    m_pEnlargeSlider->setValue(sData.toDouble() * 100);
+    m_pEnlargeSlider->setValue(sData.toInt() * 100);
 }
 
 /**
@@ -270,6 +271,9 @@ void FontWidget::setShowSuitHIcon()
     m_pSuitHLabelIcon->setVisible(m_bSuitH);
 
     int t_nShow = m_bSuitH ? 1 : 0;
+
+    AppSetting::instance()->setKeyValue(KEY_ADAPTATH, QString::number(m_bSuitH ? 1 : 0));
+    AppSetting::instance()->setKeyValue(KEY_ADAPTATH, QString::number(m_bSuitH ? 1 : 0));
     notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(t_nShow));
 }
 
@@ -433,6 +437,8 @@ void FontWidget::slotSetChangeVal(int val)
     m_pEnlargeLab->clear();
     m_pEnlargeLab->setText(QString("%1%").arg(val));
 
+    AppSetting::instance()->setKeyValue(KEY_PERCENTAGE, QString::number(val));
+
     if (!m_bIsAdaptMove) {
         scaleAndRotate();
 
@@ -454,6 +460,8 @@ void FontWidget::slotSetDoubPageViewCheckIcon()
 {
     m_isDoubPage = !m_isDoubPage;
     m_pDoubPageViewLabelIcon->setVisible(m_isDoubPage);
+
+    AppSetting::instance()->setKeyValue(KEY_DOUBPAGE, QString::number(m_isDoubPage ? 1 : 0));
 
     setScaleRotateViewModeAndShow();
 }

@@ -12,7 +12,12 @@ enum KeyType {
     KEY_DIR,
     KEY_PAGENUM,
     KEY_M,
-    KEY_WIDGET
+    KEY_WIDGET,
+    KEY_PERCENTAGE,
+    KEY_DOUBPAGE,
+    KEY_ADAPTATW,
+    KEY_ADAPTATH,
+    KEY_ROTATE
 };
 
 class AppSetting : public QObject
@@ -38,7 +43,7 @@ public:
     QString getKeyValue(const int &) const;
 
 private:
-    QSettings   *m_pSettings = nullptr;
+    QSettings *m_pSettings = nullptr;
 };
 
-#endif // APPSETTING_H
+#endif  // APPSETTING_H
