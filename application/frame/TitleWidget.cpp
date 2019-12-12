@@ -24,7 +24,6 @@ void TitleWidget::slotSetFindWidget(const int &iFlag)
     } else {
         slotAppFullScreen();
     }
-
     m_pThumbnailBtn->setStatus(m_pThumbnailBtn->isChecked());
 }
 
@@ -196,7 +195,9 @@ void TitleWidget::slotDealWithShortKey(const QString &sKey)
             setHandleShape();
         }
     } else if (sKey == KeyStr::g_ctrl_m) {  //  显示缩略图
+        m_pThumbnailBtn->setFlat(false);
         m_pThumbnailBtn->setChecked(true);
+        m_pThumbnailBtn->setStatus(m_pThumbnailBtn->isChecked());
         notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(1));
         DataManager::instance()->setBThumbnIsShow(1);
     } else if (sKey == KeyStr::g_alt_z) {  //  开启放大镜
