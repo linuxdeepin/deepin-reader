@@ -221,7 +221,6 @@ int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
             emit sigShowCloseBtn(0);
         }
     }
-
     if (KeyStr::g_esc == msgContent) {  //  退出   幻灯片\全屏
         emit sigHideCloseBtn();
         m_pctrlwidget->setCanShow(false);

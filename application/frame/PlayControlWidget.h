@@ -27,6 +27,7 @@ protected:
     void initWidget();
     void initConnections();
     DIconButton *createBtn(const QString &strname = QString());
+    void pagejump(bool bpre = true);
     void changePlayStatus();
     void enterEvent(QEvent *)Q_DECL_OVERRIDE;
     void leaveEvent(QEvent *)Q_DECL_OVERRIDE;
@@ -41,6 +42,9 @@ private:
     DIconButton *m_pbtnexit;
     bool m_bcanshow;
     bool m_bautoplaying;
+    //  主题更新信号
+signals:
+    void sigUpdateTheme();
 private slots:
     void slotUpdateTheme();
     void slotPreClicked();

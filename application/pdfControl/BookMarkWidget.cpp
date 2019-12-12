@@ -310,7 +310,8 @@ void BookMarkWidget::slotUpdateTheme()
 void BookMarkWidget::slotJumpToPrevItem()
 {
     if (DataManager::instance()->currentWidget() != WIDGET_BOOKMARK ||
-        m_pBookMarkListWidget == nullptr || DataManager::instance()->bThumbnIsShow() == false) {
+            m_pBookMarkListWidget == nullptr || DataManager::instance()->bThumbnIsShow() == false ||
+            DataManager::instance()->CurShowState() != FILE_NORMAL) {
         return;
     }
 
@@ -340,7 +341,8 @@ void BookMarkWidget::slotJumpToPrevItem()
 void BookMarkWidget::slotJumpToNextItem()
 {
     if (DataManager::instance()->currentWidget() != WIDGET_BOOKMARK ||
-        m_pBookMarkListWidget == nullptr || DataManager::instance()->bThumbnIsShow() == false) {
+            m_pBookMarkListWidget == nullptr || DataManager::instance()->bThumbnIsShow() == false
+            || DataManager::instance()->CurShowState() != FILE_NORMAL) {
         return;
     }
 
@@ -439,7 +441,7 @@ void BookMarkWidget::initConnection()
     connect(this, SIGNAL(sigJumpToNextItem()), this, SLOT(slotJumpToNextItem()));
     connect(this, SIGNAL(sigCtrlBAddBookMark()), SLOT(slotAddBookMark()));
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this,
-            [=]() { slotUpdateTheme(); });
+    [ = ]() { slotUpdateTheme(); });
     connect(this, SIGNAL(sigRightSelectItem(QString)), this, SLOT(slotRightSelectItem(QString)));
     connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
             SLOT(slotSelectItemBackColor(QListWidgetItem *)));
@@ -536,7 +538,7 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (MSG_CLOSE_FILE == msgType) {  //  关闭 文件通知消息
         emit sigCloseFile();
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更消息
-                                                         //        emit sigUpdateTheme();
+        //        emit sigUpdateTheme();
     } else if (MSG_FILE_PAGE_CHANGE == msgType) {        //  文档页变化消息
         emit sigFilePageChanged(msgContent);
     } else if (MSG_NOTIFY_KEY_MSG == msgType) {  //  按键通知消息

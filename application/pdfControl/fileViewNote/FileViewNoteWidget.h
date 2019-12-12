@@ -5,7 +5,6 @@
 #include <QHideEvent>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-
 #include "CustomControl/CustomWidget.h"
 #include "../font/fontWidget.h"
 

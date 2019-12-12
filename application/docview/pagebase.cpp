@@ -505,8 +505,8 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPointF point, int radius, do
 //    }
     relx *= devicePixelRatioF();
     rely *= devicePixelRatioF();
-    // qDebug() << "getMagnifierPixmap scalex:" << scalex << " scaley: " << scaley << " radius: " << radius << " qp: " << qp;
     QPixmap qpixmap1 = qpixmap.copy(relx - radius, rely - radius, radius * 2, radius * 2);
+    qDebug() << __FUNCTION__ << "$$$$$$" << qpixmap1.size();
     QMatrix leftmatrix;
     switch (d->m_rotate) {
     case RotateType_90:

@@ -204,6 +204,7 @@ void MagnifierWidget::paintEvent(QPaintEvent *event)
     QTransform tr;
     tr.translate(smallcirclex, smallcircley);
     tr.scale(1.0, 1.0);
+    qDebug() << __FUNCTION__ << "%%%%%%%%%%%" << m_magnifierpixmap.size();
     QBrush brush(m_magnifierpixmap);
     brush.setTransform(tr);
     qpainter.setPen(QPen(QColor(255, 255, 255), 0));
@@ -737,6 +738,32 @@ bool DocummentBase::showMagnifier(QPoint point)
                 d->m_magnifierwidget->update();
             } else {
                 if (ppage ->getMagnifierPixmap(pixmap, qpoint, d->m_magnifierwidget->getMagnifierRadius(), ppage->width()*d->m_magnifierwidget->getMagnifierScale(), ppage->height()*d->m_magnifierwidget->getMagnifierScale())) {
+                    if (pixmap.size().width() < d->m_magnifierwidget->getMagnifierRadius() * 2) {
+                        left = (d->m_widgets.at(pagenum)->width() - curwidth) / 2.0;
+                        int ileft = qpoint.x() - left;
+                        int iright = left + curwidth - qpoint.x();
+
+                        int iwidth = d->m_magnifierwidget->getMagnifierRadius() * 2;
+                        QPixmap pixres(QSize(iwidth, iwidth));
+                        pixres.fill(Qt::transparent);
+                        qDebug() << __FUNCTION__ << "############$$$$$" << pixres.size() << pixmap.size();
+                        QPainter painter(&pixres);
+                        {
+                            //在右边
+                            if (iright < 0 || ileft > iright) {
+                                painter.drawPixmap(pixmap.rect(), pixmap);
+
+                            } else {
+                                int iorgwidth = pixmap.rect().width();
+                                int iorgheight = pixmap.rect().height();
+                                QRect rect(iwidth - iorgwidth, iwidth - iorgheight, iorgwidth, iorgheight);
+                                painter.drawPixmap(rect, pixmap);
+                            }
+                        }
+
+                        pixmap = pixres;
+                    }
+                    qDebug() << __FUNCTION__ << "############" << pixmap.size() << d->m_magnifierwidget->getMagnifierRadius();
                     d->m_magnifierwidget->setPixmap(pixmap);
                     d->m_magnifierwidget->setPoint(gpoint);
                     d->m_magnifierwidget->startShow();

@@ -39,10 +39,15 @@
         <file>icons/deepin/builtin/dark/actions/annotation.svg</file>
         <file>icons/deepin/builtin/dark/actions/bookmark.svg</file>
         <file>icons/deepin/builtin/dark/actions/thumbnail.svg</file>
-        <file>icons/deepin/builtout/exit_normal.svg</file>
-        <file>icons/deepin/builtout/next_normal.svg</file>
-        <file>icons/deepin/builtout/play_normal.svg</file>
-        <file>icons/deepin/builtout/previous_normal.svg</file>
-        <file>icons/deepin/builtout/suspend_normal.svg</file>
+        <file>icons/deepin/builtin/dark/icons/exit_normal.svg</file>
+        <file>icons/deepin/builtin/dark/icons/next_normal.svg</file>
+        <file>icons/deepin/builtin/dark/icons/play_normal.svg</file>
+        <file>icons/deepin/builtin/dark/icons/previous_normal.svg</file>
+        <file>icons/deepin/builtin/dark/icons/suspend_normal.svg</file>
+        <file>icons/deepin/builtin/light/icons/suspend_normal.svg</file>
+        <file>icons/deepin/builtin/light/icons/previous_normal.svg</file>
+        <file>icons/deepin/builtin/light/icons/play_normal.svg</file>
+        <file>icons/deepin/builtin/light/icons/next_normal.svg</file>
+        <file>icons/deepin/builtin/light/icons/exit_normal.svg</file>
     </qresource>
 </RCC>

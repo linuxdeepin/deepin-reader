@@ -1,9 +1,13 @@
 #include "PlayControlWidget.h"
 #include "subjectObserver/MsgHeader.h"
 #include "subjectObserver/ModuleHeader.h"
+#include "utils/PublicFunction.h"
+#include "utils/utils.h"
+#include "docview/docummentproxy.h"
 #include <DPlatformWindowHandle>
 #include <QTimer>
 #include <QHBoxLayout>
+#include <QtDebug>
 
 PlayControlWidget::PlayControlWidget(DWidget *parnet)
     : DFloatingWidget(parnet)
@@ -13,7 +17,6 @@ PlayControlWidget::PlayControlWidget(DWidget *parnet)
     setWindowFlags(Qt::WindowStaysOnTopHint);
     setBlurBackgroundEnabled(true);
     setFramRadius(18);
-
     setFixedSize(260, 80);//DFloatingWidget有问题设置尺寸比实际显示尺寸宽高小10
 
     m_ptimer = new QTimer(this);
@@ -52,6 +55,9 @@ int PlayControlWidget::dealWithData(const int &msgType, const QString &msgConten
             changePlayStatus();
         }
     }
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {
+        emit sigUpdateTheme();
+    }
     return  0;
 }
 
@@ -84,9 +90,9 @@ void PlayControlWidget::killshow()
 
 void PlayControlWidget::initWidget()
 {
-//    QWidget *pwidget = new QWidget;
-//    this->setWidget(pwidget);
-    QHBoxLayout *playout = new QHBoxLayout(this);
+    QWidget *pwidget = new QWidget;
+    this->setWidget(pwidget);
+    QHBoxLayout *playout = new QHBoxLayout(pwidget);
     playout->setContentsMargins(10, 10, 10, 10);
     playout->setSpacing(10);
     m_pbtnpre = createBtn(QString("previous_normal"));
@@ -98,6 +104,7 @@ void PlayControlWidget::initWidget()
     playout->addWidget(m_pbtnnext);
     playout->addWidget(m_pbtnexit);
 
+    setWidget(pwidget);
     // this->setLayout(playout);
 
 }
@@ -109,24 +116,52 @@ void PlayControlWidget::initConnections()
     connect(m_pbtnplay, &DIconButton::clicked, this, &PlayControlWidget::slotPlayClicked);
     connect(m_pbtnnext, &DIconButton::clicked, this, &PlayControlWidget::slotNextClicked);
     connect(m_pbtnexit, &DIconButton::clicked, this, &PlayControlWidget::slotExitClicked);
+    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
 DIconButton *PlayControlWidget::createBtn(const QString &strname)
 {
     DIconButton *btn = new  DIconButton(this);
+    btn->setObjectName(strname);
     btn->setFixedSize(QSize(50, 50));
-    btn->setIcon(QIcon(QString(":/icons/deepin/builtout/%1.svg").arg(strname)));
+    btn->setIcon(QIcon(Utils::renderSVG(PF::getImagePath(strname, Pri::g_icons), QSize(36, 36))));
     btn->setIconSize(QSize(36, 36));
     return  btn;
+}
+
+void PlayControlWidget::pagejump(bool bpre)
+{
+    bool bstart = false;
+    if (nullptr != DocummentProxy::instance() &&
+            DocummentProxy::instance()->getAutoPlaySlideStatu()) {
+        DocummentProxy::instance()->setAutoPlaySlide(false);
+        bstart = true;
+    }
+    int nCurPage = DocummentProxy::instance()->currentPageNo();
+    if (bpre)
+        nCurPage--;
+    else
+        nCurPage++;
+
+    int nPageSize = DocummentProxy::instance()->getPageSNum();
+    if (nCurPage < 0 || nCurPage == nPageSize) {
+        return;
+    }
+
+    DocummentProxy::instance()->pageJump(nCurPage);
+    if (bstart && nullptr != DocummentProxy::instance()) {
+        DocummentProxy::instance()->setAutoPlaySlide(true);
+        bstart = false;
+    }
 }
 
 void PlayControlWidget::changePlayStatus()
 {
     m_bautoplaying = m_bautoplaying ? false : true;
     if (m_bautoplaying)
-        m_pbtnplay->setIcon(QIcon(QString(":/icons/deepin/builtout/suspend_normal.svg")));
+        m_pbtnplay->setIcon(QIcon(Utils::renderSVG(PF::getImagePath("suspend_normal", Pri::g_icons), QSize(36, 36))));
     else {
-        m_pbtnplay->setIcon(QIcon(QString(":/icons/deepin/builtout/play_normal.svg")));
+        m_pbtnplay->setIcon(QIcon(Utils::renderSVG(PF::getImagePath("play_normal", Pri::g_icons), QSize(36, 36))));
     }
     m_pbtnplay->setFixedSize(QSize(50, 50));
     m_pbtnplay->setIconSize(QSize(36, 36));
@@ -147,25 +182,36 @@ void PlayControlWidget::leaveEvent(QEvent *event)
 
 void PlayControlWidget::slotUpdateTheme()
 {
-
-
+    QList<DIconButton *> plist = findChildren<DIconButton *>();
+    foreach (DIconButton *btn, plist) {
+        if (btn == m_pbtnplay) {
+            if (m_bautoplaying) {
+                m_pbtnplay->setIcon(QIcon(Utils::renderSVG(PF::getImagePath("suspend_normal", Pri::g_icons), QSize(36, 36))));
+            } else {
+                m_pbtnplay->setIcon(QIcon(Utils::renderSVG(PF::getImagePath("play_normal", Pri::g_icons), QSize(36, 36))));
+            }
+        } else {
+            btn->setIcon(QIcon(Utils::renderSVG(PF::getImagePath(btn->objectName(), Pri::g_icons), QSize(36, 36))));
+        }
+    }
 }
 
 void PlayControlWidget::slotPreClicked()
 {
-    notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_pgup);
+    // notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_pgup);
+    pagejump(true);
 }
 
 void PlayControlWidget::slotPlayClicked()
 {
-
     changePlayStatus();
     notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_space);
 }
 
 void PlayControlWidget::slotNextClicked()
 {
-    notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_pgdown);
+    // notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_pgdown);
+    pagejump(false);
 }
 
 void PlayControlWidget::slotExitClicked()
