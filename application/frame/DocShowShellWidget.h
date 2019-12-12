@@ -55,8 +55,7 @@ protected:
     void initWidget() Q_DECL_OVERRIDE;
 
 private:
-    PlayControlWidget *m_pctrlwidget;
-    FileViewWidget *m_pfileviwewidget;
+    PlayControlWidget *m_pctrlwidget = nullptr;
 };
 
 #endif // DOCSHOWSHELLWIDGET_H

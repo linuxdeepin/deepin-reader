@@ -203,7 +203,7 @@ void DocShowShellWidget::initConnections()
             SLOT(slotOpenNoteWidget(const QString &)));
     connect(this, SIGNAL(sigShowNoteWidget(const QString &)),
             SLOT(slotShowNoteWidget(const QString &)));
-    connect(m_pfileviwewidget, SIGNAL(sigShowPlayCtrl(bool)), this, SLOT(slotChangePlayCtrlShow(bool)));
+
 }
 
 //  集中处理 按键通知消息
@@ -260,7 +260,10 @@ void DocShowShellWidget::initWidget()
     auto layout = new QHBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    m_pfileviwewidget = new FileViewWidget;
+
+    auto m_pfileviwewidget = new FileViewWidget(this);
+    connect(m_pfileviwewidget, SIGNAL(sigShowPlayCtrl(bool)), this, SLOT(slotChangePlayCtrlShow(bool)));
+
     layout->addWidget(m_pfileviwewidget);
 
     this->setLayout(layout);
