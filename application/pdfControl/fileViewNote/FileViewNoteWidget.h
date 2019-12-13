@@ -2,13 +2,14 @@
 #define FILEVIEWNOTEWIDGET_H
 
 #include <DTextEdit>
-#include <QHideEvent>
-#include <QVBoxLayout>
 #include <QHBoxLayout>
-#include "CustomControl/CustomWidget.h"
+#include <QHideEvent>
+#include <QTextEdit>
+#include <QVBoxLayout>
 #include "../font/fontWidget.h"
+#include "CustomControl/CustomWidget.h"
 
-class CustemTextEdit : public DTextEdit
+class CustemTextEdit : public QTextEdit
 {
     Q_OBJECT
 public:
@@ -18,7 +19,7 @@ signals:
     void sigShowTips();
 
 protected:
-    //void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    // void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
 
 private:
     void init();
@@ -29,7 +30,7 @@ private slots:
     void slotTextEditMaxContantNum();
 
 private:
-    int m_nMaxContantLen = 1500;    // 允许输入文本最大长度
+    int m_nMaxContantLen = 1500;  // 允许输入文本最大长度
 };
 
 /**
@@ -74,13 +75,13 @@ private slots:
 
 private:
     /*CustemTextEdit DTextEdit*/
-    QString     m_pHighLightPointAndPage = "";
-    QString     m_pNoteUuid = "";
-    QString     m_pNotePage = "";
+    QString m_pHighLightPointAndPage = "";
+    QString m_pNoteUuid = "";
+    QString m_pNotePage = "";
 
-    CustemTextEdit *m_pTextEdit = nullptr;   // 注释
-    CustomClickLabel *m_pCloseLab = nullptr;          // 关闭
-    QString m_strNote = "";                       // 注释内容
+    CustemTextEdit *m_pTextEdit = nullptr;    // 注释
+    CustomClickLabel *m_pCloseLab = nullptr;  // 关闭
+    QString m_strNote = "";                   // 注释内容
 };
 
-#endif // FILEVIEWNOTEWIDGET_H
+#endif  // FILEVIEWNOTEWIDGET_H
