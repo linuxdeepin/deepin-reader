@@ -5,16 +5,16 @@
 
 namespace ImageModule {
 
-//const QString g_normal_state = "normal";
-//const QString g_hover_state = "hover";
-//const QString g_press_state = "press";
-//const QString g_checked_state = "checked";
-//const QString g_focus_state = "focus";
-//const QString g_disable_state = "disable";
+// const QString g_normal_state = "normal";
+// const QString g_hover_state = "hover";
+// const QString g_press_state = "press";
+// const QString g_checked_state = "checked";
+// const QString g_focus_state = "focus";
+// const QString g_disable_state = "disable";
 
-//const QString g_dark_theme = "dark";
-//const QString g_light_theme = "light";
-//const QString g_system_theme = "system";
+// const QString g_dark_theme = "dark";
+// const QString g_light_theme = "light";
+// const QString g_system_theme = "system";
 
 }  // namespace ImageModule
 
@@ -36,7 +36,8 @@ namespace Pri {
 const QString g_icons = "icons";
 const QString g_texts = "texts";
 const QString g_actions = "actions";
-} // namespace Pri
+const QString g_module = "dr_";
+}  // namespace Pri
 
 namespace KeyStr {
 const QString g_ctrl_alt_f = "Ctrl+Alt+F";  //  窗口大小切换
@@ -52,13 +53,13 @@ const QString g_ctrl_o = "Ctrl+O";        //  打开
 const QString g_ctrl_larger = "Ctrl++";   //  放大
 const QString g_ctrl_smaller = "Ctrl+-";  //  缩小
 
-//const QString g_ctrl_wheel = "Ctrl+wheel"; //ctrl+滚轮放大缩小
+// const QString g_ctrl_wheel = "Ctrl+wheel"; //ctrl+滚轮放大缩小
 
-const QString g_ctrl_shift_s = "Ctrl+Shift+S";      //  另存为
-const QString g_ctrl_e = "Ctrl+E";  //  导出
-const QString g_ctrl_p = "Ctrl+P";  //  打印
-const QString g_ctrl_s = "Ctrl+S";  //  保存
-const QString g_ctrl_m = "Ctrl+M";  //  打开目标缩略图
+const QString g_ctrl_shift_s = "Ctrl+Shift+S";  //  另存为
+const QString g_ctrl_e = "Ctrl+E";              //  导出
+const QString g_ctrl_p = "Ctrl+P";              //  打印
+const QString g_ctrl_s = "Ctrl+S";              //  保存
+const QString g_ctrl_m = "Ctrl+M";              //  打开目标缩略图
 
 const QString g_ctrl_1 = "Ctrl+1";  //  适合页面状态
 const QString g_ctrl_2 = "Ctrl+2";  //  适合高度
@@ -75,8 +76,7 @@ const QString g_ctrl_i = "Ctrl+I";  //    添加注释
 const QString g_ctrl_l = "Ctrl+L";  //    添加高亮
 const QString g_del = "Del";        //  删除书签\注释\高亮
 
-
-const QString g_alt_z = "Alt+Z";            //  放大镜
+const QString g_alt_z = "Alt+Z";  //  放大镜
 const QString g_up = "Up";
 const QString g_down = "Down";
 const QString g_left = "Left";

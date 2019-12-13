@@ -24,18 +24,20 @@ void TitleWidget::slotSetFindWidget(const int &iFlag)
     } else {
         slotAppFullScreen();
     }
-    m_pThumbnailBtn->setStatus(m_pThumbnailBtn->isChecked());
+    //    m_pThumbnailBtn->setStatus(m_pThumbnailBtn->isChecked());
 }
 
 //  主题变了
 void TitleWidget::slotUpdateTheme()
 {
-    auto btnList = this->findChildren<CustemIconButton *>();
+    QIcon icon;
+    auto btnList = this->findChildren<DPushButton *>();
     foreach (auto btn, btnList) {
         QString objName = btn->objectName();
         if (objName != "") {
-            QString sPixmap = PF::getImagePath(objName, Pri::g_actions);
-            btn->setIcon(QIcon(sPixmap));
+            //            QString sPixmap = PF::getImagePath(objName, Pri::g_actions);
+            icon = PF::getIcon(Pri::g_module + objName);
+            btn->setIcon(icon /*QIcon(sPixmap)*/);
         }
     }
 
@@ -43,8 +45,9 @@ void TitleWidget::slotUpdateTheme()
     foreach (auto a, actionList) {
         QString objName = a->objectName();
         if (objName != "") {
-            QString sPixmap = PF::getImagePath(objName + "_small", Pri::g_actions);
-            a->setIcon(QIcon(sPixmap));
+            //            QString sPixmap = PF::getImagePath(objName + "_small", Pri::g_actions);
+            icon = PF::getIcon(Pri::g_module + objName + "_small");
+            a->setIcon(icon /*QIcon(sPixmap)*/);
         }
     }
 }
@@ -79,7 +82,7 @@ void TitleWidget::slotMagnifierCancel()
         //  取消放大镜
         notifyMsgToSubject(MSG_MAGNIFYING, "0");
     }
-    m_pMagnifierBtn->setStatus(m_pMagnifierBtn->isChecked());
+    //    m_pMagnifierBtn->setStatus(m_pMagnifierBtn->isChecked());
 }
 
 void TitleWidget::initWidget()
@@ -156,13 +159,14 @@ void TitleWidget::on_magnifyingBtn_clicked()
         auto actionList = this->findChildren<QAction *>();
         foreach (auto a, actionList) {
             QString objName = a->objectName();
-            if (objName == "defaultShape") {
+            if (objName == "defaultshape") {
                 a->setChecked(true);
                 break;
             }
         }
-        QString normalPic = PF::getImagePath("defaultShape", Pri::g_actions);
-        m_pHandleShapeBtn->setIcon(QIcon(normalPic));
+        //        QString normalPic = PF::getImagePath("defaultShape", Pri::g_actions);
+        QIcon icon = PF::getIcon(Pri::g_module + "defaultshape");
+        m_pHandleShapeBtn->setIcon(icon /*QIcon(normalPic)*/);
     }
 }
 
@@ -172,7 +176,7 @@ void TitleWidget::slotActionTrigger(QAction *action)
     slotMagnifierCancel();
 
     QString sAction = action->objectName();
-    if (sAction == "defaultShape") {
+    if (sAction == "defaultshape") {
         setDefaultShape();
     } else {
         setHandleShape();
@@ -195,9 +199,9 @@ void TitleWidget::slotDealWithShortKey(const QString &sKey)
             setHandleShape();
         }
     } else if (sKey == KeyStr::g_ctrl_m) {  //  显示缩略图
-        m_pThumbnailBtn->setFlat(false);
+                                            //        m_pThumbnailBtn->setFlat(true);
         m_pThumbnailBtn->setChecked(true);
-        m_pThumbnailBtn->setStatus(m_pThumbnailBtn->isChecked());
+        //        m_pThumbnailBtn->setStatus(m_pThumbnailBtn->isChecked());
         notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(1));
         DataManager::instance()->setBThumbnIsShow(1);
     } else if (sKey == KeyStr::g_alt_z) {  //  开启放大镜
@@ -211,13 +215,14 @@ void TitleWidget::slotDealWithShortKey(const QString &sKey)
             auto actionList = this->findChildren<QAction *>();
             foreach (auto a, actionList) {
                 QString objName = a->objectName();
-                if (objName == "defaultShape") {
+                if (objName == "defaultshape") {
                     a->setChecked(true);
                     break;
                 }
             }
-            QString normalPic = PF::getImagePath("defaultShape", Pri::g_actions);
-            m_pHandleShapeBtn->setIcon(QIcon(normalPic));
+            //            QString normalPic = PF::getImagePath("defaultShape", Pri::g_actions);
+            QIcon icon = PF::getIcon("defaultshape");
+            m_pHandleShapeBtn->setIcon(icon /*QIcon(normalPic)*/);
         }
     }
 }
@@ -232,8 +237,8 @@ void TitleWidget::initBtns()
     m_pSettingBtn->setObjectName("viewchange");
     connect(m_pSettingBtn, SIGNAL(clicked()), SLOT(on_settingBtn_clicked()));
 
-    m_pHandleShapeBtn = createBtn(tr("defaultShape"));
-    m_pHandleShapeBtn->setObjectName("defaultShape");
+    m_pHandleShapeBtn = createBtn(tr("defaultshape"));
+    m_pHandleShapeBtn->setObjectName("defaultshape");
     m_pHandleShapeBtn->setFixedSize(QSize(42, 36));
     m_pHandleShapeBtn->setIconSize(QSize(42, 36));
     connect(m_pHandleShapeBtn, SIGNAL(clicked()), SLOT(on_handleShapeBtn_clicked()));
@@ -263,8 +268,8 @@ void TitleWidget::initMenus()
         auto actionGroup = new QActionGroup(this);
 
         {
-            auto action = new QAction(tr("defaultShape"), this);
-            action->setObjectName("defaultShape");
+            auto action = new QAction(tr("defaultshape"), this);
+            action->setObjectName("defaultshape");
             action->setCheckable(true);
             action->setChecked(true);
 
@@ -274,8 +279,8 @@ void TitleWidget::initMenus()
         }
 
         {
-            auto action = new QAction(tr("handleShape"), this);
-            action->setObjectName("handleShape");
+            auto action = new QAction(tr("handleshape"), this);
+            action->setObjectName("handleshape");
             action->setCheckable(true);
 
             actionGroup->addAction(action);
@@ -288,46 +293,48 @@ void TitleWidget::initMenus()
 
 void TitleWidget::setDefaultShape()
 {
-    auto action = this->findChild<QAction *>("defaultShape");
+    auto action = this->findChild<QAction *>("defaultshape");
     if (action) {
         action->setChecked(true);
     }
 
-    m_pHandleShapeBtn->setToolTip(tr("defaultShape"));
+    m_pHandleShapeBtn->setToolTip(tr("defaultshape"));
 
     m_nCurHandleShape = 0;
-    QString btnName = "defaultShape";
-    QString normalPic = PF::getImagePath(btnName, Pri::g_actions);
-    m_pHandleShapeBtn->setIcon(QIcon(normalPic));
+    QString btnName = "defaultshape";
+    //    QString normalPic = PF::getImagePath(btnName, Pri::g_actions);
+    QIcon icon = PF::getIcon(Pri::g_module + btnName + "_small");
+    m_pHandleShapeBtn->setIcon(icon /*QIcon(normalPic)*/);
 
     notifyMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurHandleShape));
 }
 
 void TitleWidget::setHandleShape()
 {
-    auto action = this->findChild<QAction *>("handleShape");
+    auto action = this->findChild<QAction *>("handleshape");
     if (action) {
         action->setChecked(true);
     }
 
-    m_pHandleShapeBtn->setToolTip(tr("handleShape"));
+    m_pHandleShapeBtn->setToolTip(tr("handleshape"));
 
     m_nCurHandleShape = 1;
-    QString btnName = "handleShape";
-    QString normalPic = PF::getImagePath(btnName, Pri::g_actions);
-    m_pHandleShapeBtn->setIcon(QIcon(normalPic));
+    QString btnName = "handleshape";
+    //    QString normalPic = PF::getImagePath(btnName, Pri::g_actions);
+    QIcon icon = PF::getIcon(Pri::g_module + btnName + "_small");
+    m_pHandleShapeBtn->setIcon(icon /*QIcon(normalPic)*/);
 
     notifyMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurHandleShape));
 }
 
-CustemIconButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
+DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 {
-    auto btn = new CustemIconButton(this);
+    auto btn = new DPushButton(this);
     btn->setFixedSize(QSize(36, 36));
     btn->setIconSize(QSize(36, 36));
     btn->setToolTip(btnName);
     btn->setCheckable(bCheckable);
-    btn->setFlat(true);
+    //    btn->setFlat(true);
 
     if (bCheckable) {
         btn->setChecked(false);

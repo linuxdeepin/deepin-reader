@@ -160,17 +160,21 @@ void FontWidget::slotDealWithKey(const QString &sKey)
 //  主题变了
 void FontWidget::slotUpdateTheme()
 {
-    QString sPixmap = PF::getImagePath("select", Pri::g_icons);
+    //    QString sPixmap = PF::getImagePath("select", Pri::g_icons);
+    QString sPixmap = PF::getIconPath("select");
     QPixmap px = Utils::renderSVG(sPixmap, QSize(28, 28));
     m_pSuitHLabelIcon->setPixmap(px);
     m_pSuitWLabelIcon->setPixmap(px);
     m_pDoubPageViewLabelIcon->setPixmap(px);
 
-    QString sSmall = PF::getImagePath("A_small", Pri::g_icons);
-    m_pEnlargeSlider->setLeftIcon(QIcon(sSmall));
+    //    QString sSmall = PF::getImagePath("a_small", Pri::g_icons);
+    QIcon icon;
+    icon = PF::getIcon(Pri::g_module + "a_small");
+    m_pEnlargeSlider->setLeftIcon(icon /*QIcon(sSmall)*/);
 
-    QString sBig = PF::getImagePath("A_big", Pri::g_icons);
-    m_pEnlargeSlider->setRightIcon(QIcon(sBig));
+    //    QString sBig = PF::getImagePath("a_big", Pri::g_icons);
+    icon = PF::getIcon(Pri::g_module + "a_big");
+    m_pEnlargeSlider->setRightIcon(icon /*QIcon(sBig)*/);
 }
 
 /**
@@ -327,10 +331,13 @@ void FontWidget::initScaleSlider()
     m_pEnlargeSliderLayout = new QHBoxLayout;
     m_pEnlargeSliderLayout->setContentsMargins(19, 0, 19, 0);
     m_pEnlargeSlider = new DSlider(Qt::Horizontal);
-    QString sSmall = PF::getImagePath("A_small", Pri::g_icons);
-    m_pEnlargeSlider->setLeftIcon(QIcon(sSmall));
-    QString sBig = PF::getImagePath("A_big", Pri::g_icons);
-    m_pEnlargeSlider->setRightIcon(QIcon(sBig));
+    QIcon icon;
+    icon = PF::getIcon(Pri::g_module + "a_small");
+    //    QString sSmall = PF::getImagePath("A_small", Pri::g_icons);
+    m_pEnlargeSlider->setLeftIcon(icon /*QIcon(sSmall)*/);
+    //    QString sBig = PF::getImagePath("A_big", Pri::g_icons);
+    icon = PF::getIcon(Pri::g_module + "a_big");
+    m_pEnlargeSlider->setRightIcon(icon /*QIcon(sBig)*/);
     //    m_pEnlargeSliderLayout->addSpacing(24);
     m_pEnlargeSliderLayout->addWidget(m_pEnlargeSlider);
     //    m_pEnlargeSliderLayout->addSpacing(21);

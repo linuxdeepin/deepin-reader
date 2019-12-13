@@ -28,8 +28,8 @@ void MainOperationWidget::initWidget()
 
     QStringList btnStrList = QStringList() << tr("thumbnail") << tr("bookmark") << tr("annotation");
     QStringList btnObjList = QStringList() << "thumbnail"
-                             << "bookmark"
-                             << "annotation";
+                                           << "bookmark"
+                                           << "annotation";
 
     int nSize = btnStrList.size();
     for (int iLoop = 0; iLoop < nSize; iLoop++) {
@@ -106,12 +106,13 @@ void MainOperationWidget::slotUpdateTheme()
 {
     updateWidgetTheme();
 
+    QIcon icon;
     auto btnList = this->findChildren<DToolButton *>();
     foreach (auto btn, btnList) {
         QString objName = btn->objectName();
         if (objName != "") {
-            QString sPixmap = PF::getImagePath(objName, Pri::g_actions);
-            btn->setIcon(QIcon(sPixmap));
+            icon = PF::getIcon(Pri::g_module + objName);
+            btn->setIcon(icon /*QIcon(sPixmap)*/);
         }
     }
 }

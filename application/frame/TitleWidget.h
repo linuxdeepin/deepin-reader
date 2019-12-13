@@ -1,8 +1,8 @@
 ﻿#ifndef TITLEWIDGET_H
 #define TITLEWIDGET_H
 
-#include <DIconButton>
 #include <DMenu>
+#include <DPushButton>
 #include <DToolButton>
 
 #include "CustomControl/CustemIconButton.h"
@@ -55,7 +55,7 @@ private:
     void setDefaultShape();
     void setHandleShape();
 
-    CustemIconButton *createBtn(const QString &btnName, bool bCheckable = false);
+    DPushButton *createBtn(const QString &btnName, bool bCheckable = false);
     void sendMsgToSubject(const int &, const QString &msgCotent = "");
     void notifyMsgToSubject(const int &, const QString &msgCotent = "");
 
@@ -65,10 +65,10 @@ private:
     DMenu *m_pHandleMenu = nullptr;
     DMenu *m_pSettingMenu = nullptr;
 
-    CustemIconButton *m_pThumbnailBtn = nullptr;
-    CustemIconButton *m_pSettingBtn = nullptr;
-    CustemIconButton *m_pHandleShapeBtn = nullptr;
-    CustemIconButton *m_pMagnifierBtn = nullptr;
+    DPushButton *m_pThumbnailBtn = nullptr;
+    DPushButton *m_pSettingBtn = nullptr;
+    DPushButton *m_pHandleShapeBtn = nullptr;
+    DPushButton *m_pMagnifierBtn = nullptr;
 
     int m_nCurHandleShape = -1;  //  当前的选择工具状态
     // CustomWidget interface

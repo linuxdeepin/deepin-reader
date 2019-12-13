@@ -1,53 +1,50 @@
 <RCC>
     <qresource prefix="/d"/>
     <qresource prefix="/">
-        <file>icons/deepin/builtin/dark/actions/defaultShape.svg</file>
-        <file>icons/deepin/builtin/dark/actions/defaultShape_small.svg</file>
-        <file>icons/deepin/builtin/dark/actions/exit_fullscreen.svg</file>
-        <file>icons/deepin/builtin/dark/actions/handleShape.svg</file>
-        <file>icons/deepin/builtin/dark/actions/handleShape_small.svg</file>
-        <file>icons/deepin/builtin/dark/actions/import_photo.svg</file>
-        <file>icons/deepin/builtin/dark/actions/magnifier.svg</file>
-        <file>icons/deepin/builtin/dark/actions/thumbnails.svg</file>
-        <file>icons/deepin/builtin/dark/actions/viewchange.svg</file>
-        <file>icons/deepin/builtin/dark/icons/A_big.svg</file>
-        <file>icons/deepin/builtin/dark/icons/A_small.svg</file>
-        <file>icons/deepin/builtin/dark/icons/close.svg</file>
-        <file>icons/deepin/builtin/dark/icons/ok.svg</file>
-        <file>icons/deepin/builtin/dark/icons/select.svg</file>
-        <file>icons/deepin/builtin/light/actions/defaultShape.svg</file>
-        <file>icons/deepin/builtin/light/actions/defaultShape_small.svg</file>
-        <file>icons/deepin/builtin/light/actions/exit_fullscreen.svg</file>
-        <file>icons/deepin/builtin/light/actions/handleShape.svg</file>
-        <file>icons/deepin/builtin/light/actions/handleShape_small.svg</file>
+        <file>icons/deepin/builtin/light/actions/dr_annotation_36px.svg</file>
+        <file>icons/deepin/builtin/light/actions/dr_bookmark_36px.svg</file>
+        <file>icons/deepin/builtin/light/actions/dr_magnifier_36px.svg</file>
+        <file>icons/deepin/builtin/light/actions/dr_thumbnail_36px.svg</file>
+        <file>icons/deepin/builtin/light/actions/dr_thumbnails_36px.svg</file>
+        <file>icons/deepin/builtin/light/actions/dr_viewchange_36px.svg</file>
+        <file>icons/deepin/builtin/light/icons/dr_exit_slider_36px.svg</file>
+        <file>icons/deepin/builtin/light/actions/dr_defaultshape_36px.svg</file>
+        <file>icons/deepin/builtin/light/actions/dr_handleshape_36px.svg</file>
+        <file>icons/deepin/builtin/light/actions/dr_defaultshape_small_24px.svg</file>
+        <file>icons/deepin/builtin/light/actions/dr_handleshape_small_24px.svg</file>
+        <file>icons/deepin/builtin/light/icons/dr_a_big_14px.svg</file>
+        <file>icons/deepin/builtin/light/icons/dr_a_small_14px.svg</file>
+        <file>icons/deepin/builtin/select.svg</file>
+        <file>icons/deepin/builtin/exception-logo.svg</file>
+        <file>icons/deepin/builtin/ok.svg</file>
+        <file>icons/deepin/builtin/dark/icons/dr_a_big_14px.svg</file>
+        <file>icons/deepin/builtin/dark/icons/dr_a_small_14px.svg</file>
+        <file>icons/deepin/builtin/dark/icons/dr_exit_slider_36px.svg</file>
+        <file>icons/deepin/builtin/dark/actions/dr_annotation_36px.svg</file>
+        <file>icons/deepin/builtin/dark/actions/dr_bookmark_36px.svg</file>
+        <file>icons/deepin/builtin/dark/actions/dr_defaultshape_36px.svg</file>
+        <file>icons/deepin/builtin/dark/actions/dr_defaultshape_small_24px.svg</file>
+        <file>icons/deepin/builtin/dark/actions/dr_handleshape_36px.svg</file>
+        <file>icons/deepin/builtin/dark/actions/dr_handleshape_small_24px.svg</file>
+        <file>icons/deepin/builtin/dark/actions/dr_magnifier_36px.svg</file>
+        <file>icons/deepin/builtin/dark/actions/dr_thumbnail_36px.svg</file>
+        <file>icons/deepin/builtin/dark/actions/dr_thumbnails_36px.svg</file>
+        <file>icons/deepin/builtin/dark/actions/dr_viewchange_36px.svg</file>
         <file>icons/deepin/builtin/light/actions/import_photo.svg</file>
-        <file>icons/deepin/builtin/light/actions/magnifier.svg</file>
-        <file>icons/deepin/builtin/light/actions/viewchange.svg</file>
-        <file>icons/deepin/builtin/light/icons/A_big.svg</file>
-        <file>icons/deepin/builtin/light/icons/A_small.svg</file>
+        <file>icons/deepin/builtin/dark/actions/import_photo.svg</file>
         <file>icons/deepin/builtin/light/icons/close.svg</file>
-        <file>icons/deepin/builtin/light/icons/ok.svg</file>
-        <file>icons/deepin/builtin/light/icons/select.svg</file>
-        <file>icons/deepin/builtin/light/icons/exit_slider.svg</file>
-        <file>icons/deepin/builtin/dark/icons/exit_slider.svg</file>
-        <file>icons/deepin/builtin/dark/icons/exception-logo.svg</file>
-        <file>icons/deepin/builtin/light/icons/exception-logo.svg</file>
-        <file>icons/deepin/builtin/light/actions/annotation.svg</file>
-        <file>icons/deepin/builtin/light/actions/bookmark.svg</file>
-        <file>icons/deepin/builtin/light/actions/thumbnail.svg</file>
-        <file>icons/deepin/builtin/light/actions/thumbnails.svg</file>
-        <file>icons/deepin/builtin/dark/actions/annotation.svg</file>
-        <file>icons/deepin/builtin/dark/actions/bookmark.svg</file>
-        <file>icons/deepin/builtin/dark/actions/thumbnail.svg</file>
-        <file>icons/deepin/builtin/dark/icons/exit_normal.svg</file>
-        <file>icons/deepin/builtin/dark/icons/next_normal.svg</file>
-        <file>icons/deepin/builtin/dark/icons/play_normal.svg</file>
-        <file>icons/deepin/builtin/dark/icons/previous_normal.svg</file>
-        <file>icons/deepin/builtin/dark/icons/suspend_normal.svg</file>
+        <file>icons/deepin/builtin/dark/icons/close.svg</file>
         <file>icons/deepin/builtin/light/icons/suspend_normal.svg</file>
         <file>icons/deepin/builtin/light/icons/previous_normal.svg</file>
         <file>icons/deepin/builtin/light/icons/play_normal.svg</file>
         <file>icons/deepin/builtin/light/icons/next_normal.svg</file>
+        <file>icons/deepin/builtin/dark/icons/suspend_normal.svg</file>
+        <file>icons/deepin/builtin/dark/icons/previous_normal.svg</file>
+        <file>icons/deepin/builtin/dark/icons/play_normal.svg</file>
+        <file>icons/deepin/builtin/dark/icons/next_normal.svg</file>
+        <file>icons/deepin/builtin/dark/icons/exit_normal.svg</file>
         <file>icons/deepin/builtin/light/icons/exit_normal.svg</file>
+        <file>icons/deepin/builtin/dark/actions/exit_fullscreen.svg</file>
+        <file>icons/deepin/builtin/light/actions/exit_fullscreen.svg</file>
     </qresource>
 </RCC>
