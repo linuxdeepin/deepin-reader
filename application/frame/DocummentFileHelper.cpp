@@ -13,6 +13,7 @@
 #include "controller/MsgSubject.h"
 #include "controller/NotifySubject.h"
 #include "FileFormatHelper.h"
+#include "utils/PublicFunction.h"
 
 DocummentFileHelper::DocummentFileHelper(QObject *parent)
     : QObject(parent)
@@ -66,7 +67,7 @@ bool DocummentFileHelper::getSelectTextString(QString &st)
 void DocummentFileHelper::slotSaveFile()
 {
     if (DataManager::instance()->bIsUpdate()) {
-        bool rl = m_pDocummentProxy->save(m_szFilePath, true);
+        bool rl = save(m_szFilePath, true);
         qDebug() << "slotSaveFile" << rl;
         if (rl) {
             //  保存需要保存 数据库记录
@@ -90,7 +91,18 @@ void DocummentFileHelper::slotSaveAsFile()
     if (sFilter != "") {
         DFileDialog dialog;
         dialog.selectFile(m_szFilePath);
-        QString filePath = dialog.getSaveFileName(nullptr, tr("Save File"), m_szFilePath, sFilter);
+        QString filePath = dialog.getSaveFileName(nullptr, tr("Save As File"), m_szFilePath, sFilter);
+
+        if (filePath.endsWith("/.pdf")) {
+            DDialog dlg("", tr("Filepath error!"));
+            QIcon icon(PF::getIconPath("exception-logo"));
+            dlg.setIcon(icon /*QIcon(":/resources/exception-logo.svg")*/);
+            dlg.addButtons(QStringList() << tr("Ok"));
+            QMargins mar(0, 0, 0, 30);
+            dlg.setContentLayoutContentsMargins(mar);
+            dlg.exec();
+            return;
+        }
         if (filePath != "") {
             QString sFilePath = FFH::getFilePath(filePath, m_nCurDocType);
 
@@ -137,7 +149,7 @@ void DocummentFileHelper::slotOpenFile(const QString &filePaths)
             }
 
             if (nRes == 2) {    // 保存已打开文件
-                m_pDocummentProxy->save(m_szFilePath, true);
+                save(m_szFilePath, true);
                 //  保存 书签数据
                 DBManager::instance()->saveBookMark();
             }
