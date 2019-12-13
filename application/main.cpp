@@ -57,6 +57,8 @@ int main(int argc, char *argv[])
             w.openfile(filepath);
             qDebug() << __FUNCTION__ << "++++++++++++++" << path << arguments;
             break;
+        } else {
+            return a.exec();
         }
     }
 

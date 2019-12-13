@@ -126,9 +126,11 @@ void SearchResWidget::slotFindPrev()
 
 void SearchResWidget::slotFindNext()
 {
+    qDebug() << __FUNCTION__ << "SearchResWidget========";
     if (DataManager::instance()->bThumbnIsShow() == false) {
         return;
     }
+    qDebug() << __FUNCTION__ << "SearchResWidget+++++++++++";
     DocummentFileHelper::instance()->findNext();
 }
 

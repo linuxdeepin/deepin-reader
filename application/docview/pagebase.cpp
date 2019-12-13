@@ -483,8 +483,11 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPointF point, int radius, do
     double scaley = height / d->m_imageheight;
 
     double relx = qp.x() * scalex, rely = qp.y() * scaley;
+    // qDebug() << __FUNCTION__ << "=========" << qp << relx << rely;
     if (qp.x() * scalex <= 0) {
         relx = radius;
+    } else if (relx < 2 * radius && relx > 0) {
+        relx = relx + radius;
     } else if (qp.x() * scalex >= width) {
         relx = width;
     }
@@ -493,20 +496,34 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPointF point, int radius, do
     } else if (qp.y() * scaley > height - radius) {
         rely = height - radius;
     }
-//    if (qp.x() * scalex - radius/2 < 0) {
+
+    relx *= devicePixelRatioF();
+    rely *= devicePixelRatioF();
+    QPixmap qpixmap1;
+    if (relx - radius <= 0) {
+        qpixmap1 = qpixmap.copy(relx - radius, rely - radius, radius, radius * 2);
+    } else if (relx - radius > 0 && relx - radius < radius) {
+        qpixmap1 = qpixmap.copy(relx - radius, rely - radius, relx, radius * 2);
+        // qDebug() << __FUNCTION__ << "&&&&&&&&&&&&" << qpixmap1.size();
+    } else {
+        qpixmap1 = qpixmap.copy(relx - radius, rely - radius, radius * 2, radius * 2);
+    }
+
+//    if (qp.x() * scalex <= 0) {
 //        relx = radius;
-//    } else if (qp.x() * scalex > width - radius/2) {
-//        relx = width - radius;
+//    } else if (qp.x() * scalex >= width) {
+//        relx = width;
 //    }
 //    if (qp.y() * scaley - radius < 0) {
 //        rely = radius;
 //    } else if (qp.y() * scaley > height - radius) {
 //        rely = height - radius;
 //    }
-    relx *= devicePixelRatioF();
-    rely *= devicePixelRatioF();
-    QPixmap qpixmap1 = qpixmap.copy(relx - radius, rely - radius, radius * 2, radius * 2);
-    qDebug() << __FUNCTION__ << "$$$$$$" << qpixmap1.size();
+
+//    relx *= devicePixelRatioF();
+//    rely *= devicePixelRatioF();
+//    qpixmap1 = qpixmap.copy(relx - radius, rely - radius, radius * 2, radius * 2);
+
     QMatrix leftmatrix;
     switch (d->m_rotate) {
     case RotateType_90:

@@ -421,6 +421,7 @@ void DocummentPDF::clearSearch()
     if (d->m_currentpageno + 1 < d->m_pages.size())
         d->m_pages.at(d->m_currentpageno + 1)->update();
     d->m_pages.at(d->m_currentpageno)->update();//刷新当前页
+    d->m_pagecountsearch.clear();
 }
 
 void DocummentPDF::refreshOnePage(int ipage)

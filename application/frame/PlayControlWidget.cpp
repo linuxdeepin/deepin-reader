@@ -17,13 +17,13 @@ PlayControlWidget::PlayControlWidget(DWidget *parnet)
     setWindowFlags(Qt::WindowStaysOnTopHint);
     setBlurBackgroundEnabled(true);
     setFramRadius(18);
-    setFixedSize(260, 80);//DFloatingWidget有问题设置尺寸比实际显示尺寸宽高小10
+    // setFixedSize(260, 80);//DFloatingWidget有问题设置尺寸比实际显示尺寸宽高小10
 
     m_ptimer = new QTimer(this);
     m_ptimer->setInterval(3000);
     initWidget();
     initConnections();
-
+    adjustSize();
     m_pNotifySubject = NotifySubject::getInstance();
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
@@ -99,6 +99,11 @@ void PlayControlWidget::initWidget()
     m_pbtnplay = createBtn(QString("suspend_normal"));
     m_pbtnnext = createBtn(QString("next_normal"));
     m_pbtnexit = createBtn(QString("exit_normal"));
+//    m_pbtnpre = new  DIconButton(DStyle::SP_ArrowLeft, this); m_pbtnpre->setFixedSize(50, 50);
+//    m_pbtnplay = new  DIconButton(DStyle::SP_MediaStop, this); m_pbtnplay->setFixedSize(50, 50);
+//    m_pbtnnext = new  DIconButton(DStyle::SP_ArrowRight, this); m_pbtnnext->setFixedSize(50, 50);
+//    m_pbtnexit = new  DIconButton(DStyle::SP_DialogCloseButton, this); m_pbtnexit->setFixedSize(50, 50);
+
     playout->addWidget(m_pbtnpre);
     playout->addWidget(m_pbtnplay);
     playout->addWidget(m_pbtnnext);
@@ -165,6 +170,14 @@ void PlayControlWidget::changePlayStatus()
     }
     m_pbtnplay->setFixedSize(QSize(50, 50));
     m_pbtnplay->setIconSize(QSize(36, 36));
+
+//    m_bautoplaying = m_bautoplaying ? false : true;
+//    if (m_bautoplaying) {
+//        m_pbtnplay->setIcon(DStyle::SP_MediaStop);
+//    } else {
+
+//        m_pbtnplay->setIcon(DStyle::SP_MediaPlay);
+//    }
 }
 
 void PlayControlWidget::enterEvent(QEvent *event)
