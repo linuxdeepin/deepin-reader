@@ -14,10 +14,10 @@ PlayControlWidget::PlayControlWidget(DWidget *parnet)
 {
     m_bcanshow = false;
     m_bautoplaying = true;
+    m_bfirstshow = true;
     setWindowFlags(Qt::WindowStaysOnTopHint);
     setBlurBackgroundEnabled(true);
     setFramRadius(18);
-    // setFixedSize(260, 80);//DFloatingWidget有问题设置尺寸比实际显示尺寸宽高小10
 
     m_ptimer = new QTimer(this);
     m_ptimer->setInterval(3000);
@@ -73,6 +73,10 @@ void PlayControlWidget::notifyMsg(const int &msgType, const QString &msgContent)
 
 void PlayControlWidget::activeshow(int ix, int iy)
 {
+    if (m_bfirstshow) {
+        m_bfirstshow = false;
+        connect(DocummentProxy::instance(), &DocummentProxy::signale_autoplaytoend, this, [this] {this->changePlayStatus(); qDebug() << "$$$%%%%$$####%$";});
+    }
     if (m_ptimer->isActive())
         m_ptimer->stop();
     m_ptimer->start();

@@ -73,6 +73,7 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath)
         connect(m_documment, &DocummentBase::signal_openResult, this, [ = ](bool result) {
             emit signal_openResult(result);
         });
+        connect(m_documment, &DocummentBase::signale_autoplaytoend, this, &DocummentProxy::signale_autoplaytoend);
         bre = m_documment->openFile(m_path);
     }
     bcloseing = false;

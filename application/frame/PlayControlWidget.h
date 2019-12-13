@@ -42,6 +42,7 @@ private:
     DIconButton *m_pbtnexit;
     bool m_bcanshow;
     bool m_bautoplaying;
+    bool m_bfirstshow;
     //  主题更新信号
 signals:
     void sigUpdateTheme();

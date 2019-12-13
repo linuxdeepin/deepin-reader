@@ -324,6 +324,7 @@ signals:
     void signal_loadDocumment(QString);
     void signal_bookMarkStateChange(int page, bool state);
     void signal_openResult(bool);
+    void signale_autoplaytoend();
 
 protected slots:
     void slot_vScrollBarValueChanged(int value);
