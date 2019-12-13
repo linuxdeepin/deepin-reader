@@ -1,22 +1,21 @@
 #ifndef CUSTOMWIDGET_H
 #define CUSTOMWIDGET_H
 
-#include <DWidget>
+#include <DFontSizeManager>
 #include <DGuiApplicationHelper>
 #include <DPalette>
-#include <DFontSizeManager>
+#include <DWidget>
 
-#include "subjectObserver/IObserver.h"
 #include "controller/MsgSubject.h"
 #include "controller/NotifySubject.h"
-#include "subjectObserver/MsgHeader.h"
+#include "subjectObserver/IObserver.h"
 #include "subjectObserver/ModuleHeader.h"
+#include "subjectObserver/MsgHeader.h"
 #include "utils/utils.h"
 
 #include <QDebug>
 
 DWIDGET_USE_NAMESPACE
-
 
 /**
  * @brief The CustomWidget class
@@ -51,8 +50,8 @@ protected:
     void showScreenCenter();
 
 private:
-    MsgSubject      *m_pMsgSubject = nullptr;
-    NotifySubject   *m_pNotifySubject = nullptr;
+    MsgSubject *m_pMsgSubject = nullptr;
+    NotifySubject *m_pNotifySubject = nullptr;
 };
 
-#endif // CUSTOMWIDGET_H
+#endif  // CUSTOMWIDGET_H

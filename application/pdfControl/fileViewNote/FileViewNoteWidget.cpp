@@ -175,7 +175,7 @@ void FileViewNoteWidget::setPointAndPage(const QString &pointAndPage)
 /**************************CustemTextEdit********************************/
 
 CustemTextEdit::CustemTextEdit(DWidget *parent)
-    : DTextEdit(parent)
+    : QTextEdit(parent)
 {
     setFixedSize(205, 257);
     init();

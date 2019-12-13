@@ -205,7 +205,7 @@ void FontWidget::slotReset()
 void FontWidget::slotSetCurScale(const QString &sData)
 {
     m_bIsAdaptMove = true;
-    m_pEnlargeSlider->setValue(sData.toInt() * 100);
+    m_pEnlargeSlider->setValue(sData.toDouble() * 100);
 }
 
 /**
