@@ -38,8 +38,9 @@ Application::Application(int &argc, char **argv)
     // setAttribute(Qt::AA_ForceRasterWidgets);
 
     initI18n();
+    //(ConstantMsg::g_app_name);
 
-    setApplicationName(ConstantMsg::g_app_name);
+    setApplicationName("deepin-reader");
     setOrganizationName(tr("deepin"));
     setWindowIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
     setApplicationDisplayName(tr("reader"));

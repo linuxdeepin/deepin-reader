@@ -563,14 +563,11 @@ void FileViewWidget::slotPrintFile()
 //  设置　窗口　自适应　宽＼高　度
 void FileViewWidget::slotSetWidgetAdapt()
 {
-    qDebug() << "FileViewWidget::slotSetWidgetAdapt";
     double nScale = 0.0;
     if (m_nAdapteState == WIDGET_State) {
-        qDebug() << "FileViewWidget::slotSetWidgetAdapt111111111";
         int nWidth = this->width();
         nScale = m_pDocummentFileHelper->adaptWidthAndShow(nWidth);
     } else if (m_nAdapteState == HEIGHT_State) {
-        qDebug() << "FileViewWidget::slotSetWidgetAdapt222222222";
         int nHeight = this->height();
         nScale = m_pDocummentFileHelper->adaptHeightAndShow(nHeight);
     }

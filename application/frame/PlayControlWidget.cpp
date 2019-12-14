@@ -88,6 +88,7 @@ void PlayControlWidget::activeshow(int ix, int iy)
 void PlayControlWidget::killshow()
 {
     m_bautoplaying = true;
+    m_pbtnplay->setIcon(QIcon(Utils::renderSVG(PF::getImagePath("suspend_normal", Pri::g_icons), QSize(36, 36))));
     m_ptimer->stop();
     hide();
 }
@@ -106,7 +107,7 @@ void PlayControlWidget::initWidget()
 //    m_pbtnpre = new  DIconButton(DStyle::SP_ArrowLeft, this); m_pbtnpre->setFixedSize(50, 50);
 //    m_pbtnplay = new  DIconButton(DStyle::SP_MediaStop, this); m_pbtnplay->setFixedSize(50, 50);
 //    m_pbtnnext = new  DIconButton(DStyle::SP_ArrowRight, this); m_pbtnnext->setFixedSize(50, 50);
-//    m_pbtnexit = new  DIconButton(DStyle::SP_DialogCloseButton, this); m_pbtnexit->setFixedSize(50, 50);
+//    m_pbtnexit = new  DIconButton(DStyle::SP_ForkElement /*SP_DialogCloseButton*/, this); m_pbtnexit->setFixedSize(50, 50);
 
     playout->addWidget(m_pbtnpre);
     playout->addWidget(m_pbtnplay);

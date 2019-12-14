@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
             qDebug() << __FUNCTION__ << "++++++++++++++" << path << arguments;
             break;
         } else {
-            return a.exec();
+            return 0;
         }
     }
 

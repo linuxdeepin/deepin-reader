@@ -95,14 +95,13 @@ void FileAttrWidget::addTitleFrame(const QString &sData)
     QFrame *m_textShowFrame = new QFrame(this);
 
     QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T8);
-    QString t = DFMGlobal::elideText(sData, QSize(300, 60), QTextOption::WrapAnywhere, font,
+    QString t = DFMGlobal::elideText(sData, QSize(260, 60), QTextOption::WrapAnywhere, font,
                                      Qt::ElideMiddle, 0);
     QStringList labelTexts = t.split("\n");
     const int maxLineCount = 3;
 
     int textHeight = 0;
     QVBoxLayout *textShowLayout = new QVBoxLayout;
-
     for (int i = 0; i < labelTexts.length(); i++) {
         if (i > (maxLineCount - 1)) {
             break;
@@ -132,7 +131,7 @@ void FileAttrWidget::addTitleFrame(const QString &sData)
 
             if (label->fontMetrics().width(labelText) > 300 &&
                     labelTexts.length() >= maxLineCount) {
-                labelText = label->fontMetrics().elidedText(labelText, Qt::ElideMiddle, 300);
+                labelText = label->fontMetrics().elidedText(labelText, Qt::ElideMiddle, 260);
             }
             label->setText(labelText);
             hLayout->addSpacing(2);

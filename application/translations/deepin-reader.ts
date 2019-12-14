@@ -4,17 +4,17 @@
 <context>
     <name>Application</name>
     <message>
-        <location filename="../application.cpp" line="45"/>
+        <location filename="../application.cpp" line="46"/>
         <source>reader</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../application.cpp" line="54"/>
+        <location filename="../application.cpp" line="55"/>
         <source>Document viewer a reading tool for PDF documents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../application.cpp" line="43"/>
+        <location filename="../application.cpp" line="44"/>
         <source>deepin</source>
         <translation></translation>
     </message>
@@ -227,59 +227,73 @@
 <context>
     <name>DocummentFileHelper</name>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="76"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="77"/>
         <source>Save Success</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="78"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="79"/>
         <source>Save Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="81"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="82"/>
         <source>Not Changed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="93"/>
-        <location filename="../frame/DocummentFileHelper.cpp" line="131"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="94"/>
+        <source>Save As</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/DocummentFileHelper.cpp" line="143"/>
         <source>Save File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="124"/>
-        <location filename="../frame/DocummentFileHelper.cpp" line="182"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="136"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="194"/>
         <source>file is opened.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="131"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="97"/>
+        <source>Filepath error! Save as file failed!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/DocummentFileHelper.cpp" line="100"/>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/DocummentFileHelper.cpp" line="143"/>
         <source>Do you need to save the file opened?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="133"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="145"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="133"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="145"/>
         <source>Not Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="133"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="145"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="170"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="182"/>
         <source>File not supported</source>
         <translation>文件格式不支持</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="254"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="266"/>
         <source>Please check if the file is damaged</source>
         <translation>请检查文件是否已经损坏</translation>
     </message>
@@ -287,7 +301,7 @@
 <context>
     <name>FileAttrWidget</name>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="195"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="194"/>
         <source>close</source>
         <translation></translation>
     </message>
@@ -315,7 +329,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="527"/>
+        <location filename="../frame/FileViewWidget.cpp" line="529"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
@@ -323,12 +337,12 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../mainShow/FindWidget.cpp" line="151"/>
+        <location filename="../mainShow/FindWidget.cpp" line="154"/>
         <source>next one</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainShow/FindWidget.cpp" line="157"/>
+        <location filename="../mainShow/FindWidget.cpp" line="160"/>
         <source>prev one</source>
         <translation></translation>
     </message>
@@ -336,17 +350,17 @@
 <context>
     <name>FontWidget</name>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="355"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="362"/>
         <source>Double View</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="379"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="386"/>
         <source>Adaptate Height</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="402"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="409"/>
         <source>Adaptate Width</source>
         <translation></translation>
     </message>
@@ -817,23 +831,14 @@
     </message>
 </context>
 <context>
-    <name>PagingWidget</name>
-    <message>
-        <location filename="../pdfControl/PagingWidget.cpp" line="24"/>
-        <location filename="../pdfControl/PagingWidget.cpp" line="120"/>
-        <source>pages</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>SearchResWidget</name>
     <message>
-        <location filename="../pdfControl/SearchResWidget.cpp" line="224"/>
+        <location filename="../pdfControl/SearchResWidget.cpp" line="226"/>
         <source> results</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pdfControl/SearchResWidget.cpp" line="244"/>
+        <location filename="../pdfControl/SearchResWidget.cpp" line="246"/>
         <source>no result</source>
         <translation type="unfinished"></translation>
     </message>
@@ -869,32 +874,32 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="277"/>
-        <location filename="../frame/TitleWidget.cpp" line="313"/>
-        <source>handleShape</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../frame/TitleWidget.cpp" line="235"/>
-        <location filename="../frame/TitleWidget.cpp" line="266"/>
-        <location filename="../frame/TitleWidget.cpp" line="296"/>
-        <source>defaultShape</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../frame/TitleWidget.cpp" line="227"/>
+        <location filename="../frame/TitleWidget.cpp" line="232"/>
         <source>thumbnails</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="231"/>
+        <location filename="../frame/TitleWidget.cpp" line="236"/>
         <source>viewchange</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="241"/>
+        <location filename="../frame/TitleWidget.cpp" line="240"/>
+        <location filename="../frame/TitleWidget.cpp" line="271"/>
+        <location filename="../frame/TitleWidget.cpp" line="301"/>
+        <source>defaultshape</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/TitleWidget.cpp" line="246"/>
         <source>magnifier</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="../frame/TitleWidget.cpp" line="282"/>
+        <location filename="../frame/TitleWidget.cpp" line="319"/>
+        <source>handleshape</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
