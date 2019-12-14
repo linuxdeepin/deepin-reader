@@ -36,9 +36,6 @@ private:
     void onOpenFileFail(const QString &);
     void onShowTips(const QString &);
 
-private:
-    QList<int>   m_pMsgList;        //  单独需要处理的消息列表
-
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;

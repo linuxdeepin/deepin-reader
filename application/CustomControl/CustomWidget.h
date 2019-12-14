@@ -49,6 +49,9 @@ protected:
     void notifyMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
     void showScreenCenter();
 
+protected:
+    QList<int>      m_pMsgList;     //  需要处理的消息列表
+
 private:
     MsgSubject *m_pMsgSubject = nullptr;
     NotifySubject *m_pNotifySubject = nullptr;
