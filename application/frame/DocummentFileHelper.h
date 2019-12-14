@@ -4,14 +4,16 @@
 #include <QObject>
 
 #include "docview/docummentproxy.h"
-
+#include "subjectObserver/IObserver.h"
+#include "controller/MsgSubject.h"
+#include "controller/NotifySubject.h"
 
 /**
  * @brief The DocummentFileHelper class
  * 封装 DocView 函数调用
  */
 
-class DocummentFileHelper : public QObject
+class DocummentFileHelper : public QObject, public IObserver
 {
     Q_OBJECT
     Q_DISABLE_COPY(DocummentFileHelper)
@@ -25,6 +27,8 @@ public:
         static DocummentFileHelper subject;
         return &subject;
     }
+
+    ~DocummentFileHelper() Q_DECL_OVERRIDE;
 
 public:
     bool save(const QString &filepath, bool withChanges);
@@ -89,8 +93,9 @@ private:
     void setAppShowTitle(const QString &);
     void initConnections();
 
-    void sendMsg(const int &msgType, const QString &msgContent = "");
-    void notifyMsg(const int &msgType, const QString &msgContent = "");
+    // IObserver interface
+    void sendMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
+    void notifyMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
 
 private slots:
     void slotOpenFile(const QString &filePaths);
@@ -102,9 +107,15 @@ private slots:
 
 private:
     DocummentProxy          *m_pDocummentProxy = nullptr;   //  文档操作代理类
+    MsgSubject              *m_pMsgSubject = nullptr;
+    NotifySubject           *m_pNotifySubject = nullptr;
 
     QString                 m_szFilePath = "";
     DocType_EM              m_nCurDocType = DocType_NULL;
+
+    // IObserver interface
+public:
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 };
 
 #endif // DOCUMMENTFILEHELPER_H

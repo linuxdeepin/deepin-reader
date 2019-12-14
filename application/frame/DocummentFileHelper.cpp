@@ -21,6 +21,27 @@ DocummentFileHelper::DocummentFileHelper(QObject *parent)
     m_pDocummentProxy = DocummentProxy::instance();
 
     initConnections();
+
+    m_pMsgSubject = MsgSubject::getInstance();
+    if (m_pMsgSubject) {
+        m_pMsgSubject->addObserver(this);
+    }
+
+    m_pNotifySubject = NotifySubject::getInstance();
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+}
+
+DocummentFileHelper::~DocummentFileHelper()
+{
+    if (m_pMsgSubject) {
+        m_pMsgSubject->addObserver(this);
+    }
+
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
 }
 
 bool DocummentFileHelper::save(const QString &filepath, bool withChanges)
@@ -250,6 +271,12 @@ void DocummentFileHelper::slotFileSlider(const int &nFlag)
             }
         }
     }
+}
+
+//  处理 应用推送的消息数据
+int DocummentFileHelper::dealWithData(const int &, const QString &)
+{
+    return 0;
 }
 
 void DocummentFileHelper::initConnections()
