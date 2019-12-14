@@ -65,8 +65,8 @@ void ThumbnailWidget::initWidget()
 
     auto m_pvBoxLayout = new QVBoxLayout(this);
     m_pvBoxLayout->addWidget(m_pThumbnailListWidget);
-    m_pvBoxLayout->addWidget(m_pPageWidget);
     m_pvBoxLayout->addWidget(hLine);
+    m_pvBoxLayout->addWidget(m_pPageWidget);
 
     m_pvBoxLayout->setContentsMargins(0, 2, 0, 8);
     m_pvBoxLayout->setSpacing(6);
