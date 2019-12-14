@@ -6,6 +6,7 @@
 #include "application.h"
 #include "controller/DataManager.h"
 #include "mainShow/FindWidget.h"
+#include "mainShow/FileAttrWidget.h"
 #include "pdfControl/fileViewNote/FileViewNoteWidget.h"
 #include "utils/PublicFunction.h"
 #include "PlayControlWidget.h"

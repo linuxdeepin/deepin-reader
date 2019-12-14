@@ -2,14 +2,13 @@
 #define DOCSHOWSHELLWIDGET_H
 
 #include "CustomControl/CustomWidget.h"
-#include "mainShow/FileAttrWidget.h"
 
 /**
  * @brief The DocShowShellWidget class
  * @brief   文档　显示外壳
  */
 class PlayControlWidget;
-class FileViewWidget;
+
 class DocShowShellWidget : public CustomWidget
 {
     Q_OBJECT
