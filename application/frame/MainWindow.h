@@ -30,11 +30,11 @@ public:
 
 signals:
     void sigOpenFileOk();
-    void sigAppExit();
     void sigAppShowState(const int &);
     void sigFullScreen();
-    void sigSetAppTitle(const QString &);
     void sigSpacePressed();
+
+    void sigDealWithData(const int &, const QString &);
 
 protected:
     void showEvent(QShowEvent *ev) Q_DECL_OVERRIDE;
@@ -50,8 +50,9 @@ private:
 
     void onOpenFile();
     void onOpenFolder();
-
     void onScreening();
+    void onSetAppTitle(const QString &);
+    void onAppExit();
 
     void initThemeChanged();
     void setCurTheme();
@@ -59,30 +60,30 @@ private:
     void onOpenAppHelp();
     void displayShortcuts();
 
-private slots:
-    void slotOpenFileOk();
-    void slotAppExit();
-    void slotFullScreen();
-    void slotAppShowState(const int &);
-    void slotSetAppTitle(const QString &);
+    void createActionMap(DMenu *m_menu, QSignalMapper *pSigManager, const QStringList &firstActionList, const QStringList &firstActionObjList);
 
-    void slotActionTrigger(const QString &);
-
-private:
+    // IObserver interface
     void sendMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
     void notifyMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
+
+private slots:
+    void slotOpenFileOk();
+    void slotFullScreen();
+    void slotAppShowState(const int &);
+
+    void slotActionTrigger(const QString &);
+    void slotDealWithData(const int &, const QString &);
 
 private:
     MsgSubject      *m_pMsgSubject = nullptr;
     NotifySubject   *m_pNotifySubject = nullptr;
     QStringList     m_pFilterList;
 
+    QList<int>      m_pMsgList;
+
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
-
-private:
-    void createActionMap(DMenu *m_menu, QSignalMapper *pSigManager, const QStringList &firstActionList, const QStringList &firstActionObjList);
 };
 
 #endif // MainWindow_H

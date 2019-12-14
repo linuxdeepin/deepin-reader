@@ -140,7 +140,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
             dealWithKeyEvent(key);
             return true;
         }
-    } else if (nType == QEvent::Wheel) {
+    }/* else if (nType == QEvent::Wheel) {
         QWheelEvent *event = static_cast<QWheelEvent *>(e);
         if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
             QString sFilePath = DataManager::instance()->strOnlyFilePath();
@@ -153,7 +153,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
                 return true;
             }
         }
-    }
+    }*/
 
     return DMainWindow::eventFilter(obj, e);
 
@@ -184,10 +184,10 @@ void MainWindow::createActionMap(DMenu *m_menu, QSignalMapper *pSigManager,
 void MainWindow::initConnections()
 {
     connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));
-    connect(this, SIGNAL(sigAppExit()), SLOT(slotAppExit()));
     connect(this, SIGNAL(sigFullScreen()), SLOT(slotFullScreen()));
     connect(this, SIGNAL(sigAppShowState(const int &)), SLOT(slotAppShowState(const int &)));
-    connect(this, SIGNAL(sigSetAppTitle(const QString &)), SLOT(slotSetAppTitle(const QString &)));
+    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
+            SLOT(slotDealWithData(const int &, const QString &)));
 
     connect(this, &MainWindow::sigSpacePressed, this, []() {
         if (DocummentProxy::instance()) {
@@ -239,6 +239,8 @@ void MainWindow::initTitlebar()
 
 void MainWindow::initFilterList()
 {
+    m_pMsgList = {MSG_OPERATION_OPEN_FILE_TITLE, MSG_OPERATION_EXIT};
+
     m_pFilterList = QStringList() << KeyStr::g_esc << KeyStr::g_f1 << KeyStr::g_f11 << KeyStr::g_del
                     << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3
                     << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r
@@ -381,7 +383,7 @@ void MainWindow::displayShortcuts()
 }
 
 //  退出 应用
-void MainWindow::slotAppExit()
+void MainWindow::onAppExit()
 {
     QString sFilePath = DataManager::instance()->strOnlyFilePath();
     if (sFilePath != "") {
@@ -441,7 +443,7 @@ void MainWindow::slotAppShowState(const int &nState)
 }
 
 //  设置 文档标题
-void MainWindow::slotSetAppTitle(const QString &sData)
+void MainWindow::onSetAppTitle(const QString &sData)
 {
     titlebar()->setTitle(sData);
 
@@ -499,6 +501,15 @@ void MainWindow::slotActionTrigger(const QString &sAction)
     }
 }
 
+void MainWindow::slotDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_OPERATION_OPEN_FILE_TITLE) {
+        onSetAppTitle(msgContent);
+    } else if (msgType == MSG_OPERATION_EXIT) {
+        onAppExit();
+    }
+}
+
 void MainWindow::sendMsg(const int &, const QString &)
 {
 
@@ -513,14 +524,13 @@ void MainWindow::notifyMsg(const int &msgType, const QString &msgContent)
 
 int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
 {
+    if (m_pMsgList.contains(msgType)) {
+        emit sigDealWithData(msgType, msgContent);
+        return ConstantMsg::g_effective_res;
+    }
+
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         emit sigOpenFileOk();
-    } else if (msgType == MSG_OPERATION_OPEN_FILE_TITLE) {
-        emit sigSetAppTitle(msgContent);
-        return ConstantMsg::g_effective_res;
-    } else if (msgType == MSG_OPERATION_EXIT) {
-        emit sigAppExit();
-        return ConstantMsg::g_effective_res;
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == KeyStr::g_f11 && DataManager::instance()->CurShowState() != FILE_SLIDE) {
             if (DataManager::instance()->CurShowState() == FILE_FULLSCREEN)
