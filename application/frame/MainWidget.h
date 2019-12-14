@@ -18,26 +18,26 @@ public:
     explicit MainWidget(CustomWidget *parent = nullptr);
 
 signals:
-    void sigOpenFileStart();
     void sigOpenFileOk();
-    void sigOpenFileFail(const QString &);
-    void sigShowTips(const QString &);
-    void sigStartFind();
-    void sigStopFind();
+    void sigDealWithData(const int &, const QString &);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
     void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    void slotOpenFileFail(const QString &);
     void slotOpenFileOk();
-    void slotOpenFileStart();
-    void slotShowTips(const QString &contant);
+    void slotDealWithData(const int &, const QString &msgContent = "");
 
 private:
     void initConnections();
-    DSpinner *m_spinner = nullptr;
+
+    void onOpenFileStart();
+    void onOpenFileFail(const QString &);
+    void onShowTips(const QString &);
+
+private:
+    QList<int>   m_pMsgList;        //  单独需要处理的消息列表
 
     // IObserver interface
 public:
