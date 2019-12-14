@@ -22,7 +22,7 @@ DocummentFileHelper::DocummentFileHelper(QObject *parent)
 
     initConnections();
 
-    m_pMsgList = {MSG_OPEN_FILE_PATH, MSG_OPEN_FILE_PATH_S};
+    m_pMsgList = {MSG_OPEN_FILE_PATH, MSG_OPEN_FILE_PATH_S, MSG_OPERATION_SAVE_AS_FILE};
 
     m_pMsgSubject = MsgSubject::getInstance();
     if (m_pMsgSubject) {
