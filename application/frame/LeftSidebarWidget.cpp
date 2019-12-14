@@ -16,8 +16,7 @@
 LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
     : CustomWidget("LeftSidebarWidget", parent)
 {
-    //    setMinimumWidth(226);
-    //    setMaximumWidth(452);
+    resize(LEFTNORMALWIDTH, this->height());
     setMinimumWidth(LEFTMINWIDTH);
     setMaximumWidth(LEFTMAXWIDTH);
 
@@ -112,4 +111,11 @@ int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgConten
     }
 
     return 0;
+}
+
+void LeftSidebarWidget::resizeEvent(QResizeEvent *event)
+{
+    CustomWidget::resizeEvent(event);
+
+    update();
 }

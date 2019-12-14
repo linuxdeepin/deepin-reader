@@ -8,9 +8,6 @@ ThumbnailWidget::ThumbnailWidget(CustomWidget *parent)
 {
     m_ThreadLoadImage.setThumbnail(this);
 
-    //    setMinimumWidth(LEFTMINWIDTH - 5);
-    //    setMaximumWidth(LEFTMAXWIDTH - 5);
-
     initWidget();
 
     initConnection();
@@ -72,8 +69,6 @@ void ThumbnailWidget::initWidget()
     m_pvBoxLayout->setSpacing(6);
     this->setLayout(m_pvBoxLayout);
 }
-
-
 
 //  画 选中项的背景颜色
 void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)

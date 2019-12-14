@@ -37,6 +37,10 @@ protected:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+
+    // QWidget interface
+protected:
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 };
 
 #endif  // LEFTSHOWWIDGET_H

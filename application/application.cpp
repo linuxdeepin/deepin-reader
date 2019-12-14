@@ -41,7 +41,7 @@ Application::Application(int &argc, char **argv)
     //(ConstantMsg::g_app_name);
 
     setApplicationName("deepin-reader");
-    setOrganizationName(tr("deepin"));
+    setOrganizationName(/*tr*/("deepin"));
     setWindowIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
     setApplicationDisplayName(tr("reader"));
     setApplicationVersion(DApplication::buildVersion("20191125"));

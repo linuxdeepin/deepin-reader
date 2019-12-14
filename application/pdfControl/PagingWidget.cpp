@@ -6,7 +6,7 @@
 PagingWidget::PagingWidget(CustomWidget *parent)
     : CustomWidget(QString("PagingWidget"), parent)
 {
-    resize(250, 36);
+    resize(LEFTNORMALWIDTH, 56);
     setMinimumWidth(LEFTMINWIDTH);
     setMaximumWidth(LEFTMAXWIDTH);
     initWidget();
@@ -22,7 +22,7 @@ PagingWidget::PagingWidget(CustomWidget *parent)
 void PagingWidget::initWidget()
 {
     m_pTotalPagesLab = new CustomClickLabel(QString("/xxx"), this);
-    m_pTotalPagesLab->setMinimumWidth(50);
+    m_pTotalPagesLab->setFixedSize(60, 36);//setMinimumWidth(50);
     DFontSizeManager::instance()->bind(m_pTotalPagesLab, DFontSizeManager::T6);
 
     m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
@@ -37,8 +37,8 @@ void PagingWidget::initWidget()
     m_pJumpPageSpinBox->setMinimum(1);
     m_pJumpPageSpinBox->setRange(1, 100);
     m_pJumpPageSpinBox->setValue(1);
-    m_pJumpPageSpinBox->setMinimumWidth(50);
-    m_pJumpPageSpinBox->setMinimumHeight(36);
+    m_pJumpPageSpinBox->setFixedSize(60, 36);
+//    m_pJumpPageSpinBox->setMinimumHeight(36);
     m_pJumpPageSpinBox->installEventFilter(this);
     m_pJumpPageSpinBox->setWrapping(true);
     m_pJumpPageSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
@@ -139,23 +139,23 @@ void PagingWidget::setTotalPages(int pages)
 int PagingWidget::dealWithData(const int &msgType, const QString &)
 {
     switch (msgType) {
-        case MSG_OPERATION_FIRST_PAGE:  //  第一页
-            emit sigJumpToSpecifiedPage(0);
-            return ConstantMsg::g_effective_res;
-        case MSG_OPERATION_PREV_PAGE:  //  上一页
-            emit sigJumpToPrevPage();
-            return ConstantMsg::g_effective_res;
-        case MSG_OPERATION_NEXT_PAGE:  //  下一页
-            emit sigJumpToNextPage();
-            return ConstantMsg::g_effective_res;
-        case MSG_OPERATION_END_PAGE:  //  最后一页
-            emit sigJumpToSpecifiedPage(m_totalPage - FIRSTPAGES);
-            return ConstantMsg::g_effective_res;
-        case MSG_OPERATION_UPDATE_THEME:  //  颜色主题切换
-            emit sigUpdateTheme();
-            break;
-        default:
-            break;
+    case MSG_OPERATION_FIRST_PAGE:  //  第一页
+        emit sigJumpToSpecifiedPage(0);
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_PREV_PAGE:  //  上一页
+        emit sigJumpToPrevPage();
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_NEXT_PAGE:  //  下一页
+        emit sigJumpToNextPage();
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_END_PAGE:  //  最后一页
+        emit sigJumpToSpecifiedPage(m_totalPage - FIRSTPAGES);
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_UPDATE_THEME:  //  颜色主题切换
+        emit sigUpdateTheme();
+        break;
+    default:
+        break;
     }
     return 0;
 }
