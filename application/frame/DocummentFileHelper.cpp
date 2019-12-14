@@ -22,7 +22,7 @@ DocummentFileHelper::DocummentFileHelper(QObject *parent)
 
     initConnections();
 
-    m_pMsgList = {MSG_OPEN_FILE_PATH};
+    m_pMsgList = {MSG_OPEN_FILE_PATH, MSG_OPEN_FILE_PATH_S};
 
     m_pMsgSubject = MsgSubject::getInstance();
     if (m_pMsgSubject) {
@@ -44,6 +44,57 @@ DocummentFileHelper::~DocummentFileHelper()
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
     }
+}
+
+void DocummentFileHelper::initConnections()
+{
+    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
+            SLOT(slotDealWithData(const int &, const QString &)));
+
+    connect(m_pDocummentProxy, &DocummentProxy::signal_openResult, this, [ = ](bool openresult) {
+        if (openresult) {
+            notifyMsg(MSG_OPERATION_OPEN_FILE_OK);
+            //  通知 其他窗口， 打开文件成功了！！！
+            QFileInfo info(m_szFilePath);
+            setAppShowTitle(info.baseName());
+        } else {
+            m_szFilePath = "";
+            DataManager::instance()->setStrOnlyFilePath("");
+            notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
+        }
+    });
+}
+
+//  处理 应用推送的消息数据
+int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgContent)
+{
+    if (m_pMsgList.contains(msgType)) {
+        emit sigDealWithData(msgType, msgContent);
+        return  ConstantMsg::g_effective_res;
+    }
+    return 0;
+}
+
+void DocummentFileHelper::slotDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_OPEN_FILE_PATH) {
+        onOpenFile(msgContent);
+    } else if (msgType == MSG_OPEN_FILE_PATH_S) {
+        onOpenFiles(msgContent);
+    }
+}
+
+
+//  发送 操作消息
+void DocummentFileHelper::sendMsg(const int &msgType, const QString &msgContent)
+{
+    m_pMsgSubject->sendMsg(msgType, msgContent);
+}
+
+//  通知消息, 不需要撤回
+void DocummentFileHelper::notifyMsg(const int &msgType, const QString &msgContent)
+{
+    m_pNotifySubject->notifyMsg(msgType, msgContent);
 }
 
 bool DocummentFileHelper::save(const QString &filepath, bool withChanges)
@@ -207,7 +258,7 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
     }
 }
 
-void DocummentFileHelper::slotOpenFiles(const QString &filePaths)
+void DocummentFileHelper::onOpenFiles(const QString &filePaths)
 {
     bool bisopen = false;
     QStringList canOpenFileList = filePaths.split(Constant::sQStringSep, QString::SkipEmptyParts);
@@ -275,53 +326,6 @@ void DocummentFileHelper::slotFileSlider(const int &nFlag)
     }
 }
 
-//  处理 应用推送的消息数据
-int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgContent)
-{
-    if (m_pMsgList.contains(msgType)) {
-        emit sigDealWithData(msgType, msgContent);
-        return  ConstantMsg::g_effective_res;
-    }
-    return 0;
-}
-
-void DocummentFileHelper::initConnections()
-{
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
-            SLOT(slotDealWithData(const int &, const QString &)));
-
-    connect(m_pDocummentProxy, &DocummentProxy::signal_openResult, this, [ = ](bool openresult) {
-        if (openresult) {
-            notifyMsg(MSG_OPERATION_OPEN_FILE_OK);
-            //  通知 其他窗口， 打开文件成功了！！！
-            QFileInfo info(m_szFilePath);
-            setAppShowTitle(info.baseName());
-        } else {
-            m_szFilePath = "";
-            DataManager::instance()->setStrOnlyFilePath("");
-            notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
-        }
-    });
-}
-
-//  发送 操作消息
-void DocummentFileHelper::sendMsg(const int &msgType, const QString &msgContent)
-{
-    m_pMsgSubject->sendMsg(msgType, msgContent);
-}
-
-//  通知消息, 不需要撤回
-void DocummentFileHelper::notifyMsg(const int &msgType, const QString &msgContent)
-{
-    m_pNotifySubject->notifyMsg(msgType, msgContent);
-}
-
-void DocummentFileHelper::slotDealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_OPEN_FILE_PATH) {
-        onOpenFile(msgContent);
-    }
-}
 
 //  文档　跳转页码　．　打开浏览器
 void DocummentFileHelper::onClickPageLink(Page::Link *pLink)

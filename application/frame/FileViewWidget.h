@@ -36,7 +36,6 @@ public:
     ~FileViewWidget() Q_DECL_OVERRIDE;
 
 signals:
-    void sigOpenFiles(const QString &);
     void sigPrintFile();
     void sigSaveFile();
     void sigSaveAsFile();

@@ -96,6 +96,7 @@ private:
     void setAppShowTitle(const QString &);
     void initConnections();
     void onOpenFile(const QString &filePaths);
+    void onOpenFiles(const QString &filePaths);
 
     // IObserver interface
     void sendMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
@@ -105,7 +106,6 @@ private slots:
     void slotDealWithData(const int &, const QString &);
 
 
-    void slotOpenFiles(const QString &filePaths);
     void slotSaveFile();
     void slotSaveAsFile();
     void slotCopySelectContent(const QString &);
