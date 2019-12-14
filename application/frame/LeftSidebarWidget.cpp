@@ -1,5 +1,6 @@
 #include "LeftSidebarWidget.h"
 #include <DStackedWidget>
+#include <QButtonGroup>
 #include <QVBoxLayout>
 
 #include "controller/DataManager.h"
@@ -35,6 +36,16 @@ void LeftSidebarWidget::slotStackSetCurIndex(const int &iIndex)
     if (pWidget) {
         if (WIDGET_SEARCH > iIndex) {
             DataManager::instance()->setCurrentWidget(iIndex);
+            auto opWidget = this->findChild<MainOperationWidget *>();
+            if (opWidget) {
+                auto btnBox = opWidget->findChild<QButtonGroup *>();
+                if (btnBox) {
+                    auto btn = btnBox->button(iIndex);
+                    if (btn) {
+                        btn->setChecked(true);
+                    }
+                }
+            }
         }
         pWidget->setCurrentIndex(iIndex);
     }
@@ -52,7 +63,8 @@ void LeftSidebarWidget::slotUpdateTheme()
 
 void LeftSidebarWidget::initConnections()
 {
-    connect(this, SIGNAL(sigStackSetCurIndex(const int &)), SLOT(slotStackSetCurIndex(const int &)));
+    connect(this, SIGNAL(sigStackSetCurIndex(const int &)),
+            SLOT(slotStackSetCurIndex(const int &)));
     connect(this, SIGNAL(sigWidgetVisible(const int &)), SLOT(slotWidgetVisible(const int &)));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
