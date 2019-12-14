@@ -22,11 +22,10 @@ public:
 signals:
     void sigShowCloseBtn(const int &);
     void sigHideCloseBtn();
-    void sigShowFileAttr();
     void sigShowFileFind();
-    void sigOpenNoteWidget(const QString &);
-    void sigShowNoteWidget(const QString &);
     void sigChangePlayCtrlShow(bool bshow);
+
+    void sigDealWithData(const int &, const QString &);
 
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
@@ -34,17 +33,20 @@ protected:
 private slots:
     void slotShowCloseBtn(const int &);
     void slotHideCloseBtn();
-    void slotShowFileAttr();
     void slotShowFindWidget();
-    void slotOpenNoteWidget(const QString &);
-    void slotShowNoteWidget(const QString &);
     void slotBtnCloseClicked();
     void slotUpdateTheme();
     void slotChangePlayCtrlShow(bool bshow);
 
+    void slotDealWithData(const int &, const QString &msgContent = "");
+
 private:
     void initConnections();
     int dealWithNotifyMsg(const QString &);
+
+    void onShowFileAttr();
+    void onOpenNoteWidget(const QString &);
+    void onShowNoteWidget(const QString &);
 
     // IObserver interface
 public:

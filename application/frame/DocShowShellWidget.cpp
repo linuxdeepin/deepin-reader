@@ -16,6 +16,10 @@ DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
 {
     initWidget();
     initConnections();
+
+    m_pMsgList = {MSG_OPERATION_ATTR, MSG_OPERATION_TEXT_ADD_ANNOTATION,
+                  MSG_OPERATION_TEXT_SHOW_NOTEWIDGET
+                 };
 }
 
 DocShowShellWidget::~DocShowShellWidget() {}
@@ -91,7 +95,7 @@ void DocShowShellWidget::slotHideCloseBtn()
 }
 
 //  获取文件的基本数据，　进行展示
-void DocShowShellWidget::slotShowFileAttr()
+void DocShowShellWidget::onShowFileAttr()
 {
     auto pFileAttrWidget = new FileAttrWidget;
     pFileAttrWidget->showScreenCenter();
@@ -110,7 +114,7 @@ void DocShowShellWidget::slotShowFindWidget()
 }
 
 //  注释窗口
-void DocShowShellWidget::slotOpenNoteWidget(const QString &msgContent)
+void DocShowShellWidget::onOpenNoteWidget(const QString &msgContent)
 {
     auto pWidget = this->findChild<FileViewNoteWidget *>();
     if (pWidget == nullptr) {
@@ -129,7 +133,7 @@ void DocShowShellWidget::slotOpenNoteWidget(const QString &msgContent)
 }
 
 //  显示 当前 注释
-void DocShowShellWidget::slotShowNoteWidget(const QString &contant)
+void DocShowShellWidget::onShowNoteWidget(const QString &contant)
 {
     QStringList t_strList = contant.split(QString("%"), QString::SkipEmptyParts);
     if (t_strList.count() == 3) {
@@ -190,20 +194,27 @@ void DocShowShellWidget::slotChangePlayCtrlShow(bool bshow)
     }
 }
 
+void DocShowShellWidget::slotDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_OPERATION_ATTR) { //  打开该文件的属性信息
+        onShowFileAttr();
+    } else if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {   //  添加注释
+        onOpenNoteWidget(msgContent);
+    } else if (msgType ==  MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) { //  显示注释窗口
+        onShowNoteWidget(msgContent);
+    }
+}
+
 void DocShowShellWidget::initConnections()
 {
-    connect(this, SIGNAL(sigShowFileAttr()), SLOT(slotShowFileAttr()));
     connect(this, SIGNAL(sigShowFileFind()), SLOT(slotShowFindWidget()));
     connect(this, SIGNAL(sigShowCloseBtn(const int &)), SLOT(slotShowCloseBtn(const int &)));
     connect(this, SIGNAL(sigHideCloseBtn()), SLOT(slotHideCloseBtn()));
     connect(this, SIGNAL(sigChangePlayCtrlShow(bool)), SLOT(slotChangePlayCtrlShow(bool)));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 
-    connect(this, SIGNAL(sigOpenNoteWidget(const QString &)),
-            SLOT(slotOpenNoteWidget(const QString &)));
-    connect(this, SIGNAL(sigShowNoteWidget(const QString &)),
-            SLOT(slotShowNoteWidget(const QString &)));
-
+    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
+            SLOT(slotDealWithData(const int &, const QString &)));
 }
 
 //  集中处理 按键通知消息
@@ -231,25 +242,17 @@ int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
 
 int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    switch (msgType) {
-    case MSG_OPERATION_ATTR:  //  打开该文件的属性信息
-        emit sigShowFileAttr();
+    if (m_pMsgList.contains(msgType)) {
+        emit sigDealWithData(msgType, msgContent);
         return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_TEXT_ADD_ANNOTATION:  //  添加注释
-        emit sigOpenNoteWidget(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_TEXT_SHOW_NOTEWIDGET:  //  显示注释窗口
-        emit sigShowNoteWidget(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_SLIDE: { //  幻灯片模式
-        // emit sigShowCloseBtn(1);
+    }
+
+    if (msgType == MSG_OPERATION_SLIDE) {
         m_pctrlwidget->setCanShow(true);
         emit sigChangePlayCtrlShow(true);
-    }
-    break;
-    case MSG_NOTIFY_KEY_MSG: {  //  最后一个处理通知消息
+    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
+        //  最后一个处理通知消息
         return dealWithNotifyMsg(msgContent);
-    }
     }
 
     return 0;
