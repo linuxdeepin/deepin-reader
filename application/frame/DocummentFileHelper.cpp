@@ -22,6 +22,8 @@ DocummentFileHelper::DocummentFileHelper(QObject *parent)
 
     initConnections();
 
+    m_pMsgList = {MSG_OPEN_FILE_PATH};
+
     m_pMsgSubject = MsgSubject::getInstance();
     if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
@@ -144,7 +146,7 @@ void DocummentFileHelper::slotSaveAsFile()
 }
 
 //  打开　文件路径
-void DocummentFileHelper::slotOpenFile(const QString &filePaths)
+void DocummentFileHelper::onOpenFile(const QString &filePaths)
 {
     //  已经打开了文件，　询问是否需要保存当前打开的文件
     if (m_szFilePath != "") {
@@ -274,13 +276,20 @@ void DocummentFileHelper::slotFileSlider(const int &nFlag)
 }
 
 //  处理 应用推送的消息数据
-int DocummentFileHelper::dealWithData(const int &, const QString &)
+int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgContent)
 {
+    if (m_pMsgList.contains(msgType)) {
+        emit sigDealWithData(msgType, msgContent);
+        return  ConstantMsg::g_effective_res;
+    }
     return 0;
 }
 
 void DocummentFileHelper::initConnections()
 {
+    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
+            SLOT(slotDealWithData(const int &, const QString &)));
+
     connect(m_pDocummentProxy, &DocummentProxy::signal_openResult, this, [ = ](bool openresult) {
         if (openresult) {
             notifyMsg(MSG_OPERATION_OPEN_FILE_OK);
@@ -298,13 +307,20 @@ void DocummentFileHelper::initConnections()
 //  发送 操作消息
 void DocummentFileHelper::sendMsg(const int &msgType, const QString &msgContent)
 {
-    MsgSubject::getInstance()->sendMsg(msgType, msgContent);
+    m_pMsgSubject->sendMsg(msgType, msgContent);
 }
 
 //  通知消息, 不需要撤回
 void DocummentFileHelper::notifyMsg(const int &msgType, const QString &msgContent)
 {
-    NotifySubject::getInstance()->notifyMsg(msgType, msgContent);
+    m_pNotifySubject->notifyMsg(msgType, msgContent);
+}
+
+void DocummentFileHelper::slotDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_OPEN_FILE_PATH) {
+        onOpenFile(msgContent);
+    }
 }
 
 //  文档　跳转页码　．　打开浏览器

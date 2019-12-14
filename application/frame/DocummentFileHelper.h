@@ -30,6 +30,9 @@ public:
 
     ~DocummentFileHelper() Q_DECL_OVERRIDE;
 
+signals:
+    void sigDealWithData(const int &, const QString &);
+
 public:
     bool save(const QString &filepath, bool withChanges);
     bool closeFile();
@@ -92,13 +95,16 @@ public:
 private:
     void setAppShowTitle(const QString &);
     void initConnections();
+    void onOpenFile(const QString &filePaths);
 
     // IObserver interface
     void sendMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
     void notifyMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
 
 private slots:
-    void slotOpenFile(const QString &filePaths);
+    void slotDealWithData(const int &, const QString &);
+
+
     void slotOpenFiles(const QString &filePaths);
     void slotSaveFile();
     void slotSaveAsFile();
@@ -110,6 +116,7 @@ private:
     MsgSubject              *m_pMsgSubject = nullptr;
     NotifySubject           *m_pNotifySubject = nullptr;
 
+    QList<int>              m_pMsgList;
     QString                 m_szFilePath = "";
     DocType_EM              m_nCurDocType = DocType_NULL;
 
