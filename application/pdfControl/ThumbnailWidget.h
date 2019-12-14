@@ -146,6 +146,7 @@ private:
     bool m_isLoading = false;                            // 缩略图list是否初始化完毕
     ThreadRotateImage m_threadRotateImage;               // 旋转缩略图
     int m_nRotate = 0;                                   // 旋转度数
+    int m_nCurrentPage = 0;                              // 当前页码index(从0开始)
 };
 
 #endif  // THUMBNAILWIDGET_H

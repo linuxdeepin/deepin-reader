@@ -3,6 +3,7 @@
 CustomItemWidget::CustomItemWidget(const QString &name, CustomWidget *parent)
     : CustomWidget(name, parent)
 {
+    setFocusPolicy(Qt::NoFocus);
 }
 
 /**

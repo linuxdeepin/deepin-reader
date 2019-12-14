@@ -41,7 +41,7 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigFilePageChanged(msgContent);
     } else if (MSG_NOTIFY_KEY_MSG == msgType) {
         if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup ||
-                msgContent == KeyStr::g_left) {
+            msgContent == KeyStr::g_left) {
             //            qDebug() << __FUNCTION__ << "                   " << 1;
             emit sigJumpToPrevPage();
         } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown ||
@@ -77,7 +77,7 @@ void ThumbnailWidget::initWidget()
 void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 {
     //  先清空之前的选中颜色
-    auto curItem = m_pThumbnailListWidget->currentItem();
+    auto curItem = m_pThumbnailListWidget->item(m_nCurrentPage);
     if (curItem) {
         auto itemWidget =
             reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(curItem));
@@ -87,7 +87,9 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
     }
 
     if (item) {
-        m_pThumbnailListWidget->setCurrentItem(item);
+        //        m_pThumbnailListWidget->setCurrentItem(item);
+        m_nCurrentPage = m_pThumbnailListWidget->row(item);
+        m_pThumbnailListWidget->setCurrentRow(m_nCurrentPage, QItemSelectionModel::NoUpdate);
         auto pWidget =
             reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
         if (pWidget) {
@@ -107,6 +109,7 @@ void ThumbnailWidget::addThumbnailItem(const int &iIndex)
 
     auto item = new QListWidgetItem(m_pThumbnailListWidget);
     item->setFlags(Qt::NoItemFlags);
+
     item->setSizeHint(QSize(LEFTMINWIDTH, 212));
 
     m_pThumbnailListWidget->addItem(item);
@@ -178,7 +181,7 @@ void ThumbnailWidget::slotJumpToPrevPage()
     if (DataManager::instance()->CurShowState() != FILE_NORMAL) {
         bool bstart = false;
         if (nullptr != DocummentProxy::instance() &&
-                DocummentProxy::instance()->getAutoPlaySlideStatu()) {
+            DocummentProxy::instance()->getAutoPlaySlideStatu()) {
             DocummentProxy::instance()->setAutoPlaySlide(false);
             bstart = true;
         }
@@ -192,7 +195,7 @@ void ThumbnailWidget::slotJumpToPrevPage()
         return;
     }
     if (DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL ||
-            (DataManager::instance()->bThumbnIsShow() == false)) {
+        (DataManager::instance()->bThumbnIsShow() == false)) {
         return;
     }
     int nCurPage = DocummentFileHelper::instance()->currentPageNo();
@@ -209,7 +212,7 @@ void ThumbnailWidget::slotJumpToNextPage()
     if (DataManager::instance()->CurShowState() != FILE_NORMAL) {
         bool bstart = false;
         if (nullptr != DocummentProxy::instance() &&
-                DocummentProxy::instance()->getAutoPlaySlideStatu()) {
+            DocummentProxy::instance()->getAutoPlaySlideStatu()) {
             DocummentProxy::instance()->setAutoPlaySlide(false);
             bstart = true;
         }
@@ -223,7 +226,7 @@ void ThumbnailWidget::slotJumpToNextPage()
         return;
     }
     if (DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL ||
-            (DataManager::instance()->bThumbnIsShow() == false)) {
+        (DataManager::instance()->bThumbnIsShow() == false)) {
         return;
     }
 
@@ -270,8 +273,8 @@ void ThumbnailWidget::fillContantToList()
         showItemBookMark();
         auto item = m_pThumbnailListWidget->item(0);
         if (item) {
-            m_pThumbnailListWidget->setCurrentItem(item);
-
+            //            m_pThumbnailListWidget->setCurrentItem(item);
+            m_nCurrentPage = 0;
             auto pWidget =
                 reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
             if (pWidget) {
@@ -287,14 +290,14 @@ void ThumbnailWidget::showItemBookMark(int ipage)
 {
     if (ipage >= 0) {
         auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(
-                           m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(ipage)));
+            m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(ipage)));
         pWidget->slotBookMarkShowStatus(true);
     } else {
         DBManager::instance()->getBookMarks();
         QList<int> pageList = DBManager::instance()->getBookMarkList();
         foreach (int index, pageList) {
             auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(
-                               m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(index)));
+                m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(index)));
             pWidget->slotBookMarkShowStatus(true);
         }
     }

@@ -5,6 +5,7 @@ ThumbnailItemWidget::ThumbnailItemWidget(CustomItemWidget *parent)
     : CustomItemWidget("ThumbnailItemWidget", parent)
 {
     setWindowFlags(Qt::FramelessWindowHint);
+
     initWidget();
     connect(this, SIGNAL(sigBookMarkStatusChanged(bool)), SLOT(slotBookMarkShowStatus(bool)));
 }
