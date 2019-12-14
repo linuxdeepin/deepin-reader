@@ -41,7 +41,7 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigFilePageChanged(msgContent);
     } else if (MSG_NOTIFY_KEY_MSG == msgType) {
         if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup ||
-            msgContent == KeyStr::g_left) {
+                msgContent == KeyStr::g_left) {
             //            qDebug() << __FUNCTION__ << "                   " << 1;
             emit sigJumpToPrevPage();
         } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown ||
@@ -72,6 +72,8 @@ void ThumbnailWidget::initWidget()
     m_pvBoxLayout->setSpacing(6);
     this->setLayout(m_pvBoxLayout);
 }
+
+
 
 //  画 选中项的背景颜色
 void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
@@ -181,7 +183,7 @@ void ThumbnailWidget::slotJumpToPrevPage()
     if (DataManager::instance()->CurShowState() != FILE_NORMAL) {
         bool bstart = false;
         if (nullptr != DocummentProxy::instance() &&
-            DocummentProxy::instance()->getAutoPlaySlideStatu()) {
+                DocummentProxy::instance()->getAutoPlaySlideStatu()) {
             DocummentProxy::instance()->setAutoPlaySlide(false);
             bstart = true;
         }
@@ -195,7 +197,7 @@ void ThumbnailWidget::slotJumpToPrevPage()
         return;
     }
     if (DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL ||
-        (DataManager::instance()->bThumbnIsShow() == false)) {
+            (DataManager::instance()->bThumbnIsShow() == false)) {
         return;
     }
     int nCurPage = DocummentFileHelper::instance()->currentPageNo();
@@ -212,7 +214,7 @@ void ThumbnailWidget::slotJumpToNextPage()
     if (DataManager::instance()->CurShowState() != FILE_NORMAL) {
         bool bstart = false;
         if (nullptr != DocummentProxy::instance() &&
-            DocummentProxy::instance()->getAutoPlaySlideStatu()) {
+                DocummentProxy::instance()->getAutoPlaySlideStatu()) {
             DocummentProxy::instance()->setAutoPlaySlide(false);
             bstart = true;
         }
@@ -226,7 +228,7 @@ void ThumbnailWidget::slotJumpToNextPage()
         return;
     }
     if (DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL ||
-        (DataManager::instance()->bThumbnIsShow() == false)) {
+            (DataManager::instance()->bThumbnIsShow() == false)) {
         return;
     }
 
@@ -290,14 +292,14 @@ void ThumbnailWidget::showItemBookMark(int ipage)
 {
     if (ipage >= 0) {
         auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(
-            m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(ipage)));
+                           m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(ipage)));
         pWidget->slotBookMarkShowStatus(true);
     } else {
         DBManager::instance()->getBookMarks();
         QList<int> pageList = DBManager::instance()->getBookMarkList();
         foreach (int index, pageList) {
             auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(
-                m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(index)));
+                               m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(index)));
             pWidget->slotBookMarkShowStatus(true);
         }
     }
