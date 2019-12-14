@@ -302,17 +302,17 @@ void FileViewWidget::slotFileAddAnnotation()
     int nEx = m_pEndSelectPoint.x();
     int nEy = m_pEndSelectPoint.y();
 
+    qDebug() << "fuck +++++" << m_pStartPoint << m_pEndSelectPoint << nSx << nSy << nEx << nEy;
     if (nSx == nEx && nSy == nEy) {
         notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("please select the text."));
         return;
     }
     QString selectText = "", t_strUUid = "";
-    bool bIsHighLightReleasePoint =
-        m_pDocummentFileHelper->annotationClicked(m_pEndSelectPoint, selectText, t_strUUid);
-    if (!bIsHighLightReleasePoint && selectText != "") {
+    m_pDocummentFileHelper->getSelectTextString(selectText);
+    if (selectText != "") {
         QColor color = DataManager::instance()->selectColor();
 
-        m_pDocummentFileHelper->addAnnotation(m_pEndSelectPoint, m_pEndSelectPoint, color);
+        m_pDocummentFileHelper->addAnnotation(m_pStartPoint, m_pEndSelectPoint, color);
     } else {
         notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("please select the text."));
     }
@@ -332,8 +332,9 @@ void FileViewWidget::slotFileAddAnnotation(const QString &msgContent)
         DataManager::instance()->setSelectColor(color);
 
         QPoint tempPoint(sX.toInt(), sY.toInt());
-
-        m_pDocummentFileHelper->addAnnotation(tempPoint, tempPoint, color);
+        qDebug() << "fuck ------" << m_pStartPoint << m_pEndSelectPoint;
+        m_pDocummentFileHelper->addAnnotation(m_pStartPoint, m_pEndSelectPoint, color);
+        // m_pDocummentFileHelper->addAnnotation(tempPoint, tempPoint, color);
     }
 }
 
@@ -387,7 +388,7 @@ void FileViewWidget::slotFileAddNote(const QString &msgContent)
 
         QColor color = DataManager::instance()->selectColor();
         QPoint tempPoint(sX.toInt(), sY.toInt());
-
+        qDebug() << "fuck *********";
         sUuid = m_pDocummentFileHelper->addAnnotation(tempPoint, tempPoint,
                                                       color);  //  高亮 产生的 uuid
     }

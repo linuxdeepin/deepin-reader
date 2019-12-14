@@ -261,7 +261,13 @@ QString DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos
         uuid = static_cast<PagePdf *>(d->m_pages.at(startpage))->addAnnotation(color, rect);
     } else {
         if (startpage < 0) return "";
+        qDebug() << __FUNCTION__ << startpage << endpage;
         uuid = static_cast<PagePdf *>(d->m_pages.at(startpage))->addAnnotation(color);
+        for (int i = startpage; i <= endpage; i++) {
+//            static_cast<PagePdf *>(d->m_pages.at(i))->addAnnotation(color);
+//            if (i = endpage)
+            uuid = static_cast<PagePdf *>(d->m_pages.at(i))->addAnnotation(color);
+        }
     }
     return uuid;
 }
