@@ -70,8 +70,7 @@ void MainWidget::slotOpenFileFail(const QString &errorInfo)
 
 void MainWidget::slotShowTips(const QString &contant)
 {
-    DMessageManager::instance()->sendMessage(this, QIcon(":/resources/light/pdfControl/ok.svg"),
-                                             contant);
+    DMessageManager::instance()->sendMessage(this, QIcon(":/icons/deepin/builtin/ok.svg"), contant);
 }
 
 int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
@@ -115,7 +114,7 @@ void MainWidget::dropEvent(QDropEvent *event)
             if (file.isFile()) {
                 QString sSuffix = file.completeSuffix();
                 if (sSuffix == "pdf" ||
-                        sFilePath.endsWith(QString(".pdf"))) {  //  打开第一个pdf文件
+                    sFilePath.endsWith(QString(".pdf"))) {  //  打开第一个pdf文件
                     canOpenFileList.append(sFilePath);
                 } else {
                     if (!noOpenFileList.contains(sSuffix)) {
@@ -175,6 +174,6 @@ void MainWidget::initWidget()
     m_spinner->setFixedSize(60, 60);
     gridlyout->addWidget(m_spinner);
     m_spinner->stop();
-//    m_spinner->start();
+    //    m_spinner->start();
     pStcakLayout->addWidget(pSpinnerWidget);
 }
