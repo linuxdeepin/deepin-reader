@@ -37,7 +37,6 @@ void FileViewWidget::initWidget()
 
     m_pDocummentFileHelper = DocummentFileHelper::instance();
     connect(this, SIGNAL(sigSaveFile()), m_pDocummentFileHelper, SLOT(slotSaveFile()));
-    connect(this, SIGNAL(sigSaveAsFile()), m_pDocummentFileHelper, SLOT(slotSaveAsFile()));
     connect(this, SIGNAL(sigFileSlider(const int &)), m_pDocummentFileHelper,
             SLOT(slotFileSlider(const int &)));
     connect(this, SIGNAL(sigCopySelectContent(const QString &)), m_pDocummentFileHelper,
@@ -618,9 +617,7 @@ int FileViewWidget::dealWithTitleRequest(const int &msgType, const QString &msgC
 int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
-    case MSG_OPERATION_SAVE_AS_FILE:  //  另存为文件
-        emit sigSaveAsFile();
-        return ConstantMsg::g_effective_res;
+
     case MSG_OPERATION_TEXT_COPY:  //  复制
         emit sigCopySelectContent(msgContent);
         return ConstantMsg::g_effective_res;
@@ -663,11 +660,6 @@ int FileViewWidget::dealWithNotifyMsg(const QString &msgContent)
 
     if (KeyStr::g_ctrl_i == msgContent) {  //  添加注释
         emit sigFileAddNote();
-        return ConstantMsg::g_effective_res;
-    }
-
-    if (KeyStr::g_ctrl_shift_s == msgContent) {
-        emit sigSaveAsFile();
         return ConstantMsg::g_effective_res;
     }
 

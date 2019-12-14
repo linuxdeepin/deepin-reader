@@ -50,6 +50,7 @@ void DocummentFileHelper::initConnections()
 {
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
             SLOT(slotDealWithData(const int &, const QString &)));
+    connect(this, SIGNAL(sigSaveAsFile()), SLOT(slotSaveAsFile()));
 
     connect(m_pDocummentProxy, &DocummentProxy::signal_openResult, this, [ = ](bool openresult) {
         if (openresult) {
@@ -72,15 +73,23 @@ int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgCont
         emit sigDealWithData(msgType, msgContent);
         return  ConstantMsg::g_effective_res;
     }
+    if (msgType == MSG_NOTIFY_KEY_MSG) {
+        if (KeyStr::g_ctrl_shift_s == msgContent) {
+            emit sigSaveAsFile();
+            return ConstantMsg::g_effective_res;
+        }
+    }
     return 0;
 }
 
 void DocummentFileHelper::slotDealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPEN_FILE_PATH) {
+    if (msgType == MSG_OPEN_FILE_PATH) {            //  打开单个文件
         onOpenFile(msgContent);
-    } else if (msgType == MSG_OPEN_FILE_PATH_S) {
+    } else if (msgType == MSG_OPEN_FILE_PATH_S) {   //  打开多个文件
         onOpenFiles(msgContent);
+    } else if (msgType == MSG_OPERATION_SAVE_AS_FILE) { //  另存为文件
+        slotSaveAsFile();
     }
 }
 

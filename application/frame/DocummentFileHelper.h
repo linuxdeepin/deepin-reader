@@ -32,6 +32,7 @@ public:
 
 signals:
     void sigDealWithData(const int &, const QString &);
+    void sigSaveAsFile();
 
 public:
     bool save(const QString &filepath, bool withChanges);

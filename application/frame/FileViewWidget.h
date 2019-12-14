@@ -38,7 +38,6 @@ public:
 signals:
     void sigPrintFile();
     void sigSaveFile();
-    void sigSaveAsFile();
     void sigCopySelectContent(const QString &);
     void sigFileSlider(const int &);
 
