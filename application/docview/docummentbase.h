@@ -104,6 +104,16 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 };
 
+//class DocMainWidget: public DWidget
+//{
+//    Q_OBJECT
+//public:
+//    DocMainWidget(DWidget *parent = nullptr);
+//protected:
+//    void paintEvent(QPaintEvent *event) override;
+//signals:
+//    void paintEventEnd();
+//};
 
 class DocummentBasePrivate: public QObject
 {
@@ -188,7 +198,9 @@ public:
 
     QVector<PageBase *> m_pages;
     QList<DWidget *>m_widgets;
+    QList<QRect>m_widgetrects;
     DWidget *m_widget;
+//    DocMainWidget *m_widget;
     QVBoxLayout *m_vboxLayout;
     MagnifierWidget *m_magnifierwidget;
     SlidWidget *m_slidewidget;
@@ -290,6 +302,8 @@ public:
     bool showMagnifier(QPoint point);
     int getCurrentPageNo();
     int currentLastPageNo();
+    int fromFirstGetLastPageNo(int pagenum);
+    int fromLastPageGetFirstPageNo();
     int currentPageNo();
     Page::Link *mouseBeOverLink(QPoint point);
     bool getSelectTextString(QString &st);
@@ -346,6 +360,8 @@ protected:
     void showFacingPage();
     void initConnect();
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
+//    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+//    void resizeEvent(QResizeEvent *e) override;
 
     DocummentBasePrivate *d_ptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), DocummentBase)
