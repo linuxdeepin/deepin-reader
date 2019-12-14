@@ -21,6 +21,7 @@ SearchResWidget::~SearchResWidget()
 
 void SearchResWidget::slotClearWidget()
 {
+    m_bShowList = false;
     if (m_loadSearchResThread.isRunning()) {
         m_loadSearchResThread.stopThread();
     }
@@ -40,6 +41,7 @@ void SearchResWidget::slotClearWidget()
 
 void SearchResWidget::slotCloseFile()
 {
+    m_bShowList = false;
     if (m_loadSearchResThread.isRunning()) {
         m_loadSearchResThread.stopThread();
     }
@@ -51,6 +53,7 @@ void SearchResWidget::slotFlushSearchWidget(const QString &msgContent)
 {
     notifyMsg(MSG_SWITCHLEFTWIDGET, QString("4"));
     notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(1));
+    m_bShowList = true;
     connect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this,
             SLOT(slotGetSearchContant(stSearchRes)));
     QMap<int, stSearchRes> resMap;
@@ -146,11 +149,13 @@ void SearchResWidget::slotSelectItem(QListWidgetItem *item)
 void SearchResWidget::slotStopFind()
 {
     notifyMsg(MSG_FIND_STOP, QString(""));
-    notifyMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
+    if (m_bShowList) {
+        notifyMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
 
-    bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
-    if (!t_bTnumbnIsShow) {
-        notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(!t_bTnumbnIsShow));
+        bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
+        if (!t_bTnumbnIsShow) {
+            notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(!t_bTnumbnIsShow));
+        }
     }
 }
 
@@ -380,6 +385,7 @@ void LoadSearchResThread::run()
     bool t_bSendMSG = true;
 
     while (m_isRunning) {
+        msleep(50);
         if (m_nStartIndex < 0) {
             m_nStartIndex = 0;
         }

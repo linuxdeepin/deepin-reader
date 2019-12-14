@@ -264,7 +264,8 @@ void NotesWidget::slotJumpToPrevItem()
 {
     qDebug() << __FUNCTION__ << "**";
     if (DataManager::instance()->currentWidget() != WIDGET_NOTE || m_pNotesList == nullptr ||
-            DataManager::instance()->bThumbnIsShow() == false || DataManager::instance()->CurShowState() != FILE_NORMAL) {
+        DataManager::instance()->bThumbnIsShow() == false ||
+        DataManager::instance()->CurShowState() != FILE_NORMAL) {
         return;
     }
     qDebug() << __FUNCTION__ << "**11";
@@ -296,7 +297,8 @@ void NotesWidget::slotJumpToPrevItem()
 void NotesWidget::slotJumpToNextItem()
 {
     if (DataManager::instance()->currentWidget() != WIDGET_NOTE || m_pNotesList == nullptr ||
-            DataManager::instance()->bThumbnIsShow() == false || DataManager::instance()->CurShowState() != FILE_NORMAL) {
+        DataManager::instance()->bThumbnIsShow() == false ||
+        DataManager::instance()->CurShowState() != FILE_NORMAL) {
         return;
     }
 
@@ -575,6 +577,8 @@ void ThreadLoadImageOfNote::stopThreadRun()
 void ThreadLoadImageOfNote::run()
 {
     while (m_isLoaded) {
+        msleep(50);
+
         int t_page = -1;
         QImage image;
         bool bl = false;
@@ -602,7 +606,7 @@ void ThreadLoadImageOfNote::run()
                 //                ICON_SMALL);
                 emit sigLoadImage(image);
             }
-            msleep(20);
+            msleep(50);
         }
 
         m_isLoaded = false;

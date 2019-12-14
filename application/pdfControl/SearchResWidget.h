@@ -101,6 +101,7 @@ private:
     NotesItemWidget *m_pSearchItemWidget = nullptr;  // 缩略图子窗体
     LoadSearchResThread m_loadSearchResThread;       // 加载搜索缩略图线程
     QListWidgetItem *m_pSearchItem = nullptr;        // 当前鼠标左键点击的item
+    bool m_bShowList = false;                        // 是否显示搜索列表
 
 public:
     // IObserver interface

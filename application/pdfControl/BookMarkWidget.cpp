@@ -310,8 +310,8 @@ void BookMarkWidget::slotUpdateTheme()
 void BookMarkWidget::slotJumpToPrevItem()
 {
     if (DataManager::instance()->currentWidget() != WIDGET_BOOKMARK ||
-            m_pBookMarkListWidget == nullptr || DataManager::instance()->bThumbnIsShow() == false ||
-            DataManager::instance()->CurShowState() != FILE_NORMAL) {
+        m_pBookMarkListWidget == nullptr || DataManager::instance()->bThumbnIsShow() == false ||
+        DataManager::instance()->CurShowState() != FILE_NORMAL) {
         return;
     }
 
@@ -341,8 +341,8 @@ void BookMarkWidget::slotJumpToPrevItem()
 void BookMarkWidget::slotJumpToNextItem()
 {
     if (DataManager::instance()->currentWidget() != WIDGET_BOOKMARK ||
-            m_pBookMarkListWidget == nullptr || DataManager::instance()->bThumbnIsShow() == false
-            || DataManager::instance()->CurShowState() != FILE_NORMAL) {
+        m_pBookMarkListWidget == nullptr || DataManager::instance()->bThumbnIsShow() == false ||
+        DataManager::instance()->CurShowState() != FILE_NORMAL) {
         return;
     }
 
@@ -441,7 +441,7 @@ void BookMarkWidget::initConnection()
     connect(this, SIGNAL(sigJumpToNextItem()), this, SLOT(slotJumpToNextItem()));
     connect(this, SIGNAL(sigCtrlBAddBookMark()), SLOT(slotAddBookMark()));
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this,
-    [ = ]() { slotUpdateTheme(); });
+            [=]() { slotUpdateTheme(); });
     connect(this, SIGNAL(sigRightSelectItem(QString)), this, SLOT(slotRightSelectItem(QString)));
     connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
             SLOT(slotSelectItemBackColor(QListWidgetItem *)));
@@ -539,7 +539,7 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigCloseFile();
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更消息
         //        emit sigUpdateTheme();
-    } else if (MSG_FILE_PAGE_CHANGE == msgType) {        //  文档页变化消息
+    } else if (MSG_FILE_PAGE_CHANGE == msgType) {  //  文档页变化消息
         emit sigFilePageChanged(msgContent);
     } else if (MSG_NOTIFY_KEY_MSG == msgType) {  //  按键通知消息
         if (msgContent == KeyStr::g_del) {
@@ -617,6 +617,7 @@ void LoadBookMarkThread::stopThreadRun()
 void LoadBookMarkThread::run()
 {
     while (m_isRunning) {
+        msleep(50);
         if (m_nStartIndex < 0) {
             m_nStartIndex = 0;
         }
@@ -649,12 +650,10 @@ void LoadBookMarkThread::run()
                 emit sigLoadImage(page, image);
             }
 
-            msleep(10);
+            msleep(50);
         }
 
         m_nStartIndex += FIRST_LOAD_PAGES;
         m_nEndIndex += FIRST_LOAD_PAGES;
-
-        msleep(30);
     }
 }

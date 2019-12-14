@@ -404,6 +404,7 @@ void ThreadRotateImage::run()
     m_nEndIndex = FIRST_LOAD_PAGES - 1;
 
     while (m_bLoading) {
+        msleep(50);
         if (m_nFirstIndex < 0) {
             m_nFirstIndex = 0;
         }
@@ -422,8 +423,6 @@ void ThreadRotateImage::run()
         }
         m_nFirstIndex += FIRST_LOAD_PAGES;
         m_nEndIndex += FIRST_LOAD_PAGES;
-
-        msleep(50);
     }
 
     m_nFirstIndex = 0;
