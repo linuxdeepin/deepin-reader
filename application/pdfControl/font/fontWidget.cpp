@@ -10,8 +10,8 @@ FontWidget::FontWidget(CustomWidget *parent)
     : CustomWidget("FontWidget", parent)
 {
     shortKeyList = QStringList() << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3
-                                 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r
-                                 << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_smaller;
+                   << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r
+                   << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_smaller;
     initWidget();
     initConnection();
 
@@ -27,28 +27,28 @@ FontWidget::FontWidget(CustomWidget *parent)
 int FontWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
-            //    case MSG_OPERATION_LARGER:      //  放大
-            //        emit sigKeyLargerOrSmaller(1);
-            //        return ConstantMsg::g_effective_res;
-            //    case MSG_OPERATION_SMALLER:     //  缩小
-            //        emit sigKeyLargerOrSmaller(0);
-            //        return ConstantMsg::g_effective_res;
-        case MSG_OPERATION_OPEN_FILE_OK:
-            emit sigOpenFileOk();
-            break;
-        case MSG_SELF_ADAPTE_SCALE:
-            emit sigSetCurScale(msgContent);
-            break;
-        case MSG_OPERATION_UPDATE_THEME:
-            emit sigUpdateTheme();
-            break;
-        case MSG_NOTIFY_KEY_MSG: {
-            if (shortKeyList.contains(msgContent)) {
-                emit sigDealWithKey(msgContent);
-                return ConstantMsg::g_effective_res;
-            }
-            break;
+    //    case MSG_OPERATION_LARGER:      //  放大
+    //        emit sigKeyLargerOrSmaller(1);
+    //        return ConstantMsg::g_effective_res;
+    //    case MSG_OPERATION_SMALLER:     //  缩小
+    //        emit sigKeyLargerOrSmaller(0);
+    //        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_OPEN_FILE_OK:
+        emit sigOpenFileOk();
+        break;
+    case MSG_SELF_ADAPTE_SCALE:
+        emit sigSetCurScale(msgContent);
+        break;
+    case MSG_OPERATION_UPDATE_THEME:
+        emit sigUpdateTheme();
+        break;
+    case MSG_NOTIFY_KEY_MSG: {
+        if (shortKeyList.contains(msgContent)) {
+            emit sigDealWithKey(msgContent);
+            return ConstantMsg::g_effective_res;
         }
+        break;
+    }
     }
 
     return 0;
@@ -137,6 +137,57 @@ void FontWidget::setFileLargerOrSmaller(const int &iFlag)
     }
 }
 
+/**
+ * @brief FontWidget::setAppSetAdaptateHAndW
+ * 设置要保存的自适应宽高标志位
+ */
+void FontWidget::setAppSetAdaptateHAndW()
+{
+    AppSetting::instance()->setKeyValue(KEY_ADAPTATW, QString::number(m_bSuitW ? 1 : 0));
+    AppSetting::instance()->setKeyValue(KEY_ADAPTATH, QString::number(m_bSuitH ? 1 : 0));
+}
+
+/**
+ * @brief FontWidget::setFrameValue
+ * 将文件中保存的值显示到相应控件中
+ */
+void FontWidget::setFrameValue()
+{
+    int value = 0;
+
+    //缩放比例
+    value = AppSetting::instance()->getKeyValue(KEY_PERCENTAGE).toInt();
+    m_pEnlargeSlider->setValue(value);
+
+    //单双页
+    value = AppSetting::instance()->getKeyValue(KEY_DOUBPAGE).toInt();
+    m_isDoubPage = (value == 1) ? true : false;
+    m_pDoubPageViewLabelIcon->setVisible(m_isDoubPage);
+    setScaleRotateViewModeAndShow();
+
+    //自适应宽/高
+    int adaptatW = 0;
+    int adaptatH = 0;
+    adaptatW = AppSetting::instance()->getKeyValue(KEY_ADAPTATW).toInt();
+    adaptatH = AppSetting::instance()->getKeyValue(KEY_ADAPTATH).toInt();
+    m_bSuitH = (adaptatH == 1) ? true : false;
+    m_bSuitW = (adaptatW == 1) ? true : false;
+    if (!m_bSuitH && !m_bSuitW) {
+        setShowSuitHIcon();
+        setShowSuitWIcon();
+    } else if (m_bSuitH && !m_bSuitW) {
+        setShowSuitHIcon();
+    } else if (!m_bSuitH && m_bSuitW) {
+        setShowSuitWIcon();
+    }
+
+    //旋转度数
+    m_rotate = AppSetting::instance()->getKeyValue(KEY_ROTATE).toInt();
+    m_rotate %= 360;
+    scaleAndRotate();
+    notifyMsg(MSG_FILE_ROTATE, QString::number(m_rotate));
+}
+
 //  快捷键处理
 void FontWidget::slotDealWithKey(const QString &sKey)
 {
@@ -199,7 +250,10 @@ void FontWidget::slotReset()
 
     m_isDoubPage = false;
 
-    setScaleRotateViewModeAndShow();
+//    setScaleRotateViewModeAndShow();
+
+    //将文件之前设置显示出来
+    setFrameValue();
 }
 
 void FontWidget::slotSetCurScale(const QString &sData)
@@ -225,6 +279,8 @@ void FontWidget::rotateFileView(bool isRight)
 
     scaleAndRotate();
 
+    AppSetting::instance()->setKeyValue(KEY_ROTATE, QString::number(m_rotate));
+
     notifyMsg(MSG_FILE_ROTATE, QString::number(/*isRight ? 1 : 0*/ m_rotate));
 }
 
@@ -244,22 +300,22 @@ void FontWidget::scaleAndRotate()
     t_rotate += 1;
 
     switch (t_rotate) {
-        case RotateType_0:
-            m_rotate = 0;
-            m_rotateType = RotateType_0;
-            break;
-        case RotateType_90:
-            m_rotateType = RotateType_90;
-            break;
-        case RotateType_180:
-            m_rotateType = RotateType_180;
-            break;
-        case RotateType_270:
-            m_rotateType = RotateType_270;
-            break;
-        default:
-            m_rotateType = RotateType_Normal;
-            break;
+    case RotateType_0:
+        m_rotate = 0;
+        m_rotateType = RotateType_0;
+        break;
+    case RotateType_90:
+        m_rotateType = RotateType_90;
+        break;
+    case RotateType_180:
+        m_rotateType = RotateType_180;
+        break;
+    case RotateType_270:
+        m_rotateType = RotateType_270;
+        break;
+    default:
+        m_rotateType = RotateType_Normal;
+        break;
     }
 
     setScaleRotateViewModeAndShow();
@@ -276,8 +332,7 @@ void FontWidget::setShowSuitHIcon()
 
     int t_nShow = m_bSuitH ? 1 : 0;
 
-    AppSetting::instance()->setKeyValue(KEY_ADAPTATH, QString::number(m_bSuitH ? 1 : 0));
-    AppSetting::instance()->setKeyValue(KEY_ADAPTATH, QString::number(m_bSuitH ? 1 : 0));
+    setAppSetAdaptateHAndW();
     notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(t_nShow));
 }
 
@@ -291,6 +346,7 @@ void FontWidget::setShowSuitWIcon()
     m_pSuitHLabelIcon->setVisible(false);
 
     int t_nShow = m_bSuitW ? 1 : 0;
+    setAppSetAdaptateHAndW();
     notifyMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(t_nShow));
 }
 
@@ -302,8 +358,8 @@ void FontWidget::initConnection()
 {
     //    connect(this, SIGNAL(sigKeyLargerOrSmaller(const int &)),
     //    SLOT(slotKeyLargerOrSmaller(const int &)));
-    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
-    connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotReset()));
+    connect(this, SIGNAL(sigUpdateTheme()), this, SLOT(slotUpdateTheme()));
+    connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotReset()));
     connect(this, SIGNAL(sigSetCurScale(const QString &)), SLOT(slotSetCurScale(const QString &)));
     connect(this, SIGNAL(sigDealWithKey(const QString &)), SLOT(slotDealWithKey(const QString &)));
 }

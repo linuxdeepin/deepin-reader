@@ -68,9 +68,10 @@ private:
     void initDowbleShow();
     void initAdaptateHeight();
     void initAdaptateWidght();
-
     void setScaleRotateViewModeAndShow();
     void setFileLargerOrSmaller(const int &);
+    void setAppSetAdaptateHAndW();
+    void setFrameValue();
 
 private:
     QStringList     shortKeyList;
