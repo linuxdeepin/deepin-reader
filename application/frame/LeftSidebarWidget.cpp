@@ -37,13 +37,7 @@ void LeftSidebarWidget::slotStackSetCurIndex(const int &iIndex)
             DataManager::instance()->setCurrentWidget(iIndex);
             auto opWidget = this->findChild<MainOperationWidget *>();
             if (opWidget) {
-                auto btnBox = opWidget->findChild<QButtonGroup *>();
-                if (btnBox) {
-                    auto btn = btnBox->button(iIndex);
-                    if (btn) {
-                        btn->setChecked(true);
-                    }
-                }
+                opWidget->setOperatAction(iIndex);
             }
         }
         pWidget->setCurrentIndex(iIndex);

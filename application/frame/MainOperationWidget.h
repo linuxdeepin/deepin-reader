@@ -20,6 +20,8 @@ class MainOperationWidget : public CustomWidget
 public:
     explicit MainOperationWidget(CustomWidget *parent = nullptr);
 
+    void setOperatAction(const int &index);
+
 private:
     DToolButton *createBtn(const QString &btnName, const QString &objName);
     QString findBtnName();

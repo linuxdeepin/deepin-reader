@@ -15,6 +15,22 @@ MainOperationWidget::MainOperationWidget(CustomWidget *parent)
     slotUpdateTheme();
 }
 
+/**
+ * @brief MainOperationWidget::setOperatAction
+ * 打开文档，展示上次按钮状态
+ * @param index
+ */
+void MainOperationWidget::setOperatAction(const int &index)
+{
+    auto btnBox = this->findChild<QButtonGroup *>();
+    if (btnBox) {
+        auto btn = btnBox->button(index);
+        if (btn) {
+            btn->setChecked(true);
+        }
+    }
+}
+
 void MainOperationWidget::initWidget()
 {
     auto hboxLayout = new QHBoxLayout;
@@ -28,8 +44,8 @@ void MainOperationWidget::initWidget()
 
     QStringList btnStrList = QStringList() << tr("thumbnail") << tr("bookmark") << tr("annotation");
     QStringList btnObjList = QStringList() << "thumbnail"
-                                           << "bookmark"
-                                           << "annotation";
+                             << "bookmark"
+                             << "annotation";
 
     int nSize = btnStrList.size();
     for (int iLoop = 0; iLoop < nSize; iLoop++) {
