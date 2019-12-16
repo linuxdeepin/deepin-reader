@@ -125,10 +125,11 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
                     m_pDocummentFileHelper->mouseSelectTextClear();  //  清除之前选中的文字高亮
 
                     if (m_pNoteTipWidget && m_pNoteTipWidget->isVisible()) {
-                        m_pNoteTipWidget->hide();
+                        m_pNoteTipWidget->hide(); qDebug() << "0000000001111111111111+++++++++++++";
                     }
 
                     if (m_bIsHandleSelect) {
+                        qDebug() << "0000000001111111111111----------";
                         m_bSelectOrMove = true;
                         m_pStartPoint = docGlobalPos;
                         m_pEndSelectPoint = m_pStartPoint;
@@ -158,9 +159,11 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
     if (m_bSelectOrMove) {
         //判断鼠标左键松开的位置有没有高亮
         Qt::MouseButton nBtn = event->button();
-        if (nBtn == Qt::LeftButton) {
-            QPoint globalPos = event->globalPos();
-            QPoint docGlobalPos = m_pDocummentFileHelper->global2RelativePoint(globalPos);
+        qDebug() << __FUNCTION__ << m_pDocummentFileHelper->global2RelativePoint(event->globalPos()) << m_pStartPoint;
+        QPoint globalPos = event->globalPos();
+        QPoint docGlobalPos = m_pDocummentFileHelper->global2RelativePoint(globalPos);
+        //添加其实结束point是否为同一个，不是同一个说明不是点击可能是选择文字
+        if (nBtn == Qt::LeftButton && docGlobalPos == m_pStartPoint) {
             // 判断鼠标点击的地方是否有高亮
             QString selectText, t_strUUid;
 
@@ -302,7 +305,6 @@ void FileViewWidget::slotFileAddAnnotation()
     int nEx = m_pEndSelectPoint.x();
     int nEy = m_pEndSelectPoint.y();
 
-    qDebug() << "fuck +++++" << m_pStartPoint << m_pEndSelectPoint << nSx << nSy << nEx << nEy;
     if (nSx == nEx && nSy == nEy) {
         notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("please select the text."));
         return;
@@ -332,9 +334,8 @@ void FileViewWidget::slotFileAddAnnotation(const QString &msgContent)
         DataManager::instance()->setSelectColor(color);
 
         QPoint tempPoint(sX.toInt(), sY.toInt());
-        qDebug() << "fuck ------" << m_pStartPoint << m_pEndSelectPoint;
+        qDebug() << "FileViewWidget::slotFileAddAnnotation" << m_pStartPoint << m_pEndSelectPoint;
         m_pDocummentFileHelper->addAnnotation(m_pStartPoint, m_pEndSelectPoint, color);
-        // m_pDocummentFileHelper->addAnnotation(tempPoint, tempPoint, color);
     }
 }
 
@@ -388,9 +389,10 @@ void FileViewWidget::slotFileAddNote(const QString &msgContent)
 
         QColor color = DataManager::instance()->selectColor();
         QPoint tempPoint(sX.toInt(), sY.toInt());
-        qDebug() << "fuck *********";
-        sUuid = m_pDocummentFileHelper->addAnnotation(tempPoint, tempPoint,
+        sUuid = m_pDocummentFileHelper->addAnnotation(m_pStartPoint, m_pEndSelectPoint,
                                                       color);  //  高亮 产生的 uuid
+//        sUuid = m_pDocummentFileHelper->addAnnotation(tempPoint, tempPoint,
+//                                                      color);  //  高亮 产生的 uuid
     }
 
     if (sUuid == "" || sNote == "" || sPage == "" || sPage == "-1") {
