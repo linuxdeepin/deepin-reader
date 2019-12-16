@@ -157,7 +157,9 @@ void FontWidget::setFrameValue()
 
     //缩放比例
     value = AppSetting::instance()->getKeyValue(KEY_PERCENTAGE).toInt();
-    m_pEnlargeSlider->setValue(value);
+    if (value > 0) {
+        m_pEnlargeSlider->setValue(value);
+    }
 
     //单双页
     value = AppSetting::instance()->getKeyValue(KEY_DOUBPAGE).toInt();
