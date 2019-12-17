@@ -303,8 +303,8 @@ void TitleWidget::setDefaultShape()
     m_nCurHandleShape = 0;
     QString btnName = "defaultshape";
     //    QString normalPic = PF::getImagePath(btnName, Pri::g_actions);
-    QIcon icon = PF::getIcon(Pri::g_module + btnName + "_small");
-//    m_pHandleShapeBtn->setIcon(icon /*QIcon(normalPic)*/);
+    QIcon icon = PF::getIcon(Pri::g_module + btnName);
+    m_pHandleShapeBtn->setIcon(icon /*QIcon(normalPic)*/);
 
     notifyMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurHandleShape));
 }
@@ -321,8 +321,8 @@ void TitleWidget::setHandleShape()
     m_nCurHandleShape = 1;
     QString btnName = "handleshape";
     //    QString normalPic = PF::getImagePath(btnName, Pri::g_actions);
-    QIcon icon = PF::getIcon(Pri::g_module + btnName + "_small");
-//    m_pHandleShapeBtn->setIcon(icon /*QIcon(normalPic)*/);
+    QIcon icon = PF::getIcon(Pri::g_module + btnName);
+    m_pHandleShapeBtn->setIcon(icon /*QIcon(normalPic)*/);
 
     notifyMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurHandleShape));
 }
