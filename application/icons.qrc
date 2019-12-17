@@ -10,8 +10,6 @@
         <file>icons/deepin/builtin/light/icons/dr_exit_slider_36px.svg</file>
         <file>icons/deepin/builtin/light/actions/dr_defaultshape_36px.svg</file>
         <file>icons/deepin/builtin/light/actions/dr_handleshape_36px.svg</file>
-        <file>icons/deepin/builtin/light/actions/dr_defaultshape_small_24px.svg</file>
-        <file>icons/deepin/builtin/light/actions/dr_handleshape_small_24px.svg</file>
         <file>icons/deepin/builtin/light/icons/dr_a_big_14px.svg</file>
         <file>icons/deepin/builtin/light/icons/dr_a_small_14px.svg</file>
         <file>icons/deepin/builtin/select.svg</file>
@@ -23,9 +21,7 @@
         <file>icons/deepin/builtin/dark/actions/dr_annotation_36px.svg</file>
         <file>icons/deepin/builtin/dark/actions/dr_bookmark_36px.svg</file>
         <file>icons/deepin/builtin/dark/actions/dr_defaultshape_36px.svg</file>
-        <file>icons/deepin/builtin/dark/actions/dr_defaultshape_small_24px.svg</file>
         <file>icons/deepin/builtin/dark/actions/dr_handleshape_36px.svg</file>
-        <file>icons/deepin/builtin/dark/actions/dr_handleshape_small_24px.svg</file>
         <file>icons/deepin/builtin/dark/actions/dr_magnifier_36px.svg</file>
         <file>icons/deepin/builtin/dark/actions/dr_thumbnail_36px.svg</file>
         <file>icons/deepin/builtin/dark/actions/dr_thumbnails_36px.svg</file>
@@ -46,5 +42,9 @@
         <file>icons/deepin/builtin/light/icons/exit_normal.svg</file>
         <file>icons/deepin/builtin/dark/actions/exit_fullscreen.svg</file>
         <file>icons/deepin/builtin/light/actions/exit_fullscreen.svg</file>
+        <file>icons/deepin/builtin/dark/actions/dr_defaultshape_small_16px.svg</file>
+        <file>icons/deepin/builtin/dark/actions/dr_handleshape_small_16px.svg</file>
+        <file>icons/deepin/builtin/light/actions/dr_defaultshape_small_16px.svg</file>
+        <file>icons/deepin/builtin/light/actions/dr_handleshape_small_16px.svg</file>
     </qresource>
 </RCC>

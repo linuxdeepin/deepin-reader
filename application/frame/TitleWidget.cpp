@@ -8,7 +8,7 @@ TitleWidget::TitleWidget(CustomWidget *parent)
     : CustomWidget("TitleWidget", parent)
 {
     shortKeyList = QStringList() << KeyStr::g_alt_1 << KeyStr::g_alt_2 << KeyStr::g_ctrl_m
-                                 << KeyStr::g_alt_z;
+                   << KeyStr::g_alt_z;
     initWidget();
     initConnections();
     slotUpdateTheme();
@@ -199,7 +199,7 @@ void TitleWidget::slotDealWithShortKey(const QString &sKey)
             setHandleShape();
         }
     } else if (sKey == KeyStr::g_ctrl_m) {  //  显示缩略图
-                                            //        m_pThumbnailBtn->setFlat(true);
+        //        m_pThumbnailBtn->setFlat(true);
         m_pThumbnailBtn->setChecked(true);
         //        m_pThumbnailBtn->setStatus(m_pThumbnailBtn->isChecked());
         notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(1));
@@ -304,7 +304,7 @@ void TitleWidget::setDefaultShape()
     QString btnName = "defaultshape";
     //    QString normalPic = PF::getImagePath(btnName, Pri::g_actions);
     QIcon icon = PF::getIcon(Pri::g_module + btnName + "_small");
-    m_pHandleShapeBtn->setIcon(icon /*QIcon(normalPic)*/);
+//    m_pHandleShapeBtn->setIcon(icon /*QIcon(normalPic)*/);
 
     notifyMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurHandleShape));
 }
@@ -322,7 +322,7 @@ void TitleWidget::setHandleShape()
     QString btnName = "handleshape";
     //    QString normalPic = PF::getImagePath(btnName, Pri::g_actions);
     QIcon icon = PF::getIcon(Pri::g_module + btnName + "_small");
-    m_pHandleShapeBtn->setIcon(icon /*QIcon(normalPic)*/);
+//    m_pHandleShapeBtn->setIcon(icon /*QIcon(normalPic)*/);
 
     notifyMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurHandleShape));
 }
