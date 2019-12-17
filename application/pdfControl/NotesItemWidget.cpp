@@ -125,7 +125,7 @@ void NotesItemWidget::initWidget()
     t_hLayout->addWidget(m_pSearchResultNum);
 
     auto t_vLayout = new QVBoxLayout;
-    t_vLayout->setContentsMargins(15, 0, 0, 0);
+    t_vLayout->setContentsMargins(15, 0, 10, 0);
     t_vLayout->setSpacing(0);
     t_vLayout->addItem(t_hLayout);
     t_vLayout->addWidget(m_pTextLab);
@@ -135,7 +135,7 @@ void NotesItemWidget::initWidget()
     auto m_pHLayout = new QHBoxLayout;
 
     m_pHLayout->setSpacing(1);
-    m_pHLayout->setContentsMargins(1, 0, 1, 0);
+    m_pHLayout->setContentsMargins(0, 0, 0, 0);
     m_pHLayout->addWidget(m_pPicture);
     m_pHLayout->addItem(t_vLayout);
     m_pHLayout->setSpacing(1);
