@@ -361,7 +361,7 @@ protected:
     void initConnect();
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
 //    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
-//    void resizeEvent(QResizeEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
 
     DocummentBasePrivate *d_ptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), DocummentBase)

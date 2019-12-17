@@ -957,40 +957,11 @@ bool DocummentBase::showMagnifier(QPoint point)
 //    pageJump(d->m_currentpageno);
 //}
 
-//void DocummentBase::resizeEvent(QResizeEvent *e)
-//{
-//    DScrollArea::resizeEvent(e);
-//    Q_D(DocummentBase);
-//    qDebug() << "---------DocummentBase::resizeEvent";
-//    DScrollBar *scrollBar_X = horizontalScrollBar();
-//    DScrollBar *scrollBar_Y = verticalScrollBar();
-//    if (d->m_widgetrects.size() <= d->m_currentpageno || d->m_currentpageno < 0) {
-//        return;
-//    }
-////    d->donotneedreloaddoc = false;
-//    switch (d->m_viewmode) {
-//    case ViewMode_SinglePage:
-////            qDebug() << "-------pagenum:" << pagenum << " x():" << d->m_widgets.at(pagenum)->x() << " y():" << d->m_widgets.at(pagenum)->y();
-//        if (scrollBar_X)
-//            scrollBar_X->setValue(d->m_widgetrects.at(d->m_currentpageno).x());
-//        if (scrollBar_Y)
-//            scrollBar_Y->setValue(d->m_widgetrects.at(d->m_currentpageno).y());
-////        qDebug() << "-------scrollBar_X setValue:" << d->m_widgetrects.at(d->m_currentpageno).x() << " scrollBar_Y setValue:" << d->m_widgetrects.at(pagenum).y();
-//        break;
-//    case ViewMode_FacingPage:
-////            qDebug() << "-------FacingPage pagenum:" << pagenum << " x():" << d->m_widgets.at(pagenum)->x() << " y():" << d->m_widgets.at(pagenum)->y();
-//        if (scrollBar_X)
-//            scrollBar_X->setValue(d->m_widgetrects.at(d->m_currentpageno / 2).x() + d->m_pages.at(d->m_currentpageno)->x());
-//        if (scrollBar_Y)
-//            scrollBar_Y->setValue(d->m_widgetrects.at(d->m_currentpageno / 2).y());
-////        qDebug() << "-------scrollBar_X setValue:" << d->m_widgetrects.at(d->m_currentpageno / 2).x() + d->m_pages.at(d->m_currentpageno)->x() << " scrollBar_Y setValue:" << d->m_widgetrects.at(d->m_currentpageno / 2).y();
-//        break;
-//    default:
-//        break;
-//    }
-////    d->donotneedreloaddoc = true;
-//    loadPages();
-//}
+void DocummentBase::resizeEvent(QResizeEvent *e)
+{
+    DScrollArea::resizeEvent(e);
+    loadPages(); //主要目的是解决文档刚加载的时候qwfather获取的尺寸不对，导致界面少显示页面的问题
+}
 
 bool DocummentBase::pageJump(int pagenum)
 {
@@ -1189,6 +1160,7 @@ int DocummentBase::fromFirstGetLastPageNo(int pagenum)
     default:
         break;
     }
+    qDebug() << "";
 //    long height = 0;
     for (int i = rewidgetnum; i < d->m_widgetrects.size(); i++) {
 //        height += d->m_widgetrects.at(i).height();
