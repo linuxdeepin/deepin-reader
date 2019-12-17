@@ -54,12 +54,45 @@ void LeftSidebarWidget::slotUpdateTheme()
     updateWidgetTheme();
 }
 
+//  上一页
+void LeftSidebarWidget::slotJumpToPrevPage(const QString &msgContent)
+{
+    qDebug() << __FUNCTION__ << "           " << msgContent;
+    bool bl = this->isVisible();
+    if (bl) {
+        auto pWidget = this->findChild<DStackedWidget *>();
+        if (pWidget) {
+            int iIndex = pWidget->currentIndex();
+
+            emit sigJumpToPrevPage(iIndex, msgContent);
+        }
+    }
+}
+
+//  下一页
+void LeftSidebarWidget::slotJumpToNextPage(const QString &msgContent)
+{
+    qDebug() << __FUNCTION__ << "           " << msgContent;
+    bool bl = this->isVisible();
+    if (bl) {
+        auto pWidget = this->findChild<DStackedWidget *>();
+        if (pWidget) {
+            int iIndex = pWidget->currentIndex();
+
+            emit sigJumpToNextPage(iIndex, msgContent);
+        }
+    }
+}
+
 void LeftSidebarWidget::initConnections()
 {
     connect(this, SIGNAL(sigStackSetCurIndex(const int &)),
             SLOT(slotStackSetCurIndex(const int &)));
     connect(this, SIGNAL(sigWidgetVisible(const int &)), SLOT(slotWidgetVisible(const int &)));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
+
+    connect(this, SIGNAL(sigJumpToPrevPage(const QString &)), SLOT(slotJumpToPrevPage(const QString &)));
+    connect(this, SIGNAL(sigJumpToNextPage(const QString &)), SLOT(slotJumpToNextPage(const QString &)));
 }
 
 void LeftSidebarWidget::initWidget()
@@ -102,6 +135,15 @@ int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgConten
         return ConstantMsg::g_effective_res;
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
+    } else if (MSG_NOTIFY_KEY_MSG == msgType) {
+        //  上 下 一页 由左侧栏进行转发
+        if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup ||
+                msgContent == KeyStr::g_left) {
+            emit sigJumpToPrevPage(msgContent);
+        } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown ||
+                   msgContent == KeyStr::g_right) {
+            emit sigJumpToNextPage(msgContent);
+        }
     }
 
     return 0;

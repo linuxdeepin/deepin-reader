@@ -19,13 +19,20 @@ public:
 signals:
     void sigStackSetCurIndex(const int &);
     void sigWidgetVisible(const int &);
-    void sigStopFind();
-    void sigStartFind();
+    void sigJumpToPrevPage(const QString &);
+    void sigJumpToNextPage(const QString &);
+
+    void sigJumpToPrevPage(const int &, const QString &);
+    void sigJumpToNextPage(const int &, const QString &);
 
 private slots:
     void slotStackSetCurIndex(const int &);
     void slotWidgetVisible(const int &);
     void slotUpdateTheme();
+
+
+    void slotJumpToPrevPage(const QString &);
+    void slotJumpToNextPage(const QString &);
 
 private:
     void initConnections();
