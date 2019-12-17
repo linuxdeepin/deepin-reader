@@ -1155,7 +1155,7 @@ int DocummentBase::fromLastPageGetFirstPageNo()
     int allheight = d->m_widgetrects.at(rewidgetnum).height();
     for (int i = rewidgetnum; i >= 0; i--) {
         if (ViewMode_SinglePage == d->m_viewmode) {
-            repagenum = i - 1;
+            repagenum = i - 1 - 1;//多减1是因为缩放最小的时候，拉到最底层往上拖的时候有一页最上层会空半页不显示
         } else if (ViewMode_FacingPage == d->m_viewmode) {
             repagenum = (i - 1) * 2;
         }
