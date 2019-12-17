@@ -1,5 +1,6 @@
 #include "pagebase.h"
 #include "publicfunc.h"
+#include "utils/utils.h"
 #include <QPainter>
 #include <QThreadPool>
 #include <QDebug>
@@ -201,6 +202,8 @@ void PageBase::paintEvent(QPaintEvent *event)
     for (int i = 0; i < d->paintrects.size(); i++) {
         qpainter.drawRect(d->paintrects[i]);
     }
+//    QPixmap pixtag(Utils::renderSVG(":/icons/deepin/builtin/ok.svg", QSize(24, 24)));
+//    qpainter.drawPixmap(12, 12, 24, 24, pixtag);
 }
 
 bool PageBase::setSelectTextStyle(QColor paintercolor, QColor pencolor, int penwidth)

@@ -162,6 +162,7 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
         qDebug() << __FUNCTION__ << m_pDocummentFileHelper->global2RelativePoint(event->globalPos()) << m_pStartPoint;
         QPoint globalPos = event->globalPos();
         QPoint docGlobalPos = m_pDocummentFileHelper->global2RelativePoint(globalPos);
+        DataManager::instance()->setMousePressLocal(false, globalPos);
         //添加其实结束point是否为同一个，不是同一个说明不是点击可能是选择文字
         if (nBtn == Qt::LeftButton && docGlobalPos == m_pStartPoint) {
             // 判断鼠标点击的地方是否有高亮
@@ -375,15 +376,17 @@ void FileViewWidget::slotFileRemoveAnnotation(const QString &msgContent)
 void FileViewWidget::slotFileAddNote(const QString &msgContent)
 {
     QString sUuid = "", sNote = "", sPage = "";
-
+    int ipage = 0;
     QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (contentList.size() == 3) {
         sNote = contentList.at(0);
         sUuid = contentList.at(1);
         sPage = contentList.at(2);
+        ipage = sPage.toInt();
     } else if (contentList.size() == 4) {
         sNote = contentList.at(0);
         sPage = contentList.at(1);
+        ipage = sPage.toInt();
         QString sX = contentList.at(2);
         QString sY = contentList.at(3);
 
@@ -391,8 +394,10 @@ void FileViewWidget::slotFileAddNote(const QString &msgContent)
         QPoint tempPoint(sX.toInt(), sY.toInt());
         sUuid = m_pDocummentFileHelper->addAnnotation(m_pStartPoint, m_pEndSelectPoint,
                                                       color);  //  高亮 产生的 uuid
-//        sUuid = m_pDocummentFileHelper->addAnnotation(tempPoint, tempPoint,
-//                                                      color);  //  高亮 产生的 uuid
+        //此判断是针对跨页选择多行并且是page页码从高到低
+        if (m_pStartPoint.y() > m_pEndSelectPoint.y()) {
+            ipage = m_pDocummentFileHelper->pointInWhichPage(m_pStartPoint);
+        }
     }
 
     if (sUuid == "" || sNote == "" || sPage == "" || sPage == "-1") {
@@ -400,7 +405,7 @@ void FileViewWidget::slotFileAddNote(const QString &msgContent)
     }
     QString t_str = sUuid.trimmed() + QString("%") + sNote.trimmed() + QString("%") + sPage;
     sendMsg(MSG_NOTE_ADDITEM, t_str);
-    m_pDocummentFileHelper->setAnnotationText(sPage.toInt(), sUuid, sNote);
+    m_pDocummentFileHelper->setAnnotationText(ipage, sUuid, sNote);
 }
 
 void FileViewWidget::slotFileAddNote()

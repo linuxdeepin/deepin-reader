@@ -11,7 +11,7 @@ FontWidget::FontWidget(CustomWidget *parent)
 {
     shortKeyList = QStringList() << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3
                    << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r
-                   << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_smaller;
+                   << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_equal << KeyStr::g_ctrl_smaller;
     initWidget();
     initConnection();
 
@@ -205,7 +205,7 @@ void FontWidget::slotDealWithKey(const QString &sKey)
         slotSetRotateRightCheckIcon();
     } else if (sKey == KeyStr::g_ctrl_smaller) {
         setFileLargerOrSmaller(0);
-    } else if (sKey == KeyStr::g_ctrl_larger) {
+    } else if (sKey == KeyStr::g_ctrl_larger || sKey == KeyStr::g_ctrl_equal) {
         setFileLargerOrSmaller(1);
     }
 }

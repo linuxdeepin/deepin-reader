@@ -47,7 +47,7 @@ void TitleWidget::slotUpdateTheme()
         if (objName != "") {
             //            QString sPixmap = PF::getImagePath(objName + "_small", Pri::g_actions);
             icon = PF::getIcon(Pri::g_module + objName + "_small");
-            a->setIcon(icon /*QIcon(sPixmap)*/);
+            a->setIcon(icon);
         }
     }
 }

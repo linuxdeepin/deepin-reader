@@ -51,6 +51,7 @@ const QString g_pgup = "PgUp";            //  上一页
 const QString g_pgdown = "PgDown";        //  下一页
 const QString g_ctrl_o = "Ctrl+O";        //  打开
 const QString g_ctrl_larger = "Ctrl++";   //  放大
+const QString g_ctrl_equal = "Ctrl+=";   //  放大
 const QString g_ctrl_smaller = "Ctrl+-";  //  缩小
 
 // const QString g_ctrl_wheel = "Ctrl+wheel"; //ctrl+滚轮放大缩小

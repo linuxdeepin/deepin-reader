@@ -177,7 +177,7 @@ void DocummentFileHelper::slotSaveAsFile()
         QString filePath = dialog.getSaveFileName(nullptr, tr("Save As"), m_szFilePath, sFilter);
 
         if (filePath.endsWith("/.pdf")) {
-            DDialog dlg("", tr("Filepath error! Save as file failed!"));
+            DDialog dlg("", tr("Not support save file with illegal name"));
             QIcon icon(PF::getIconPath("exception-logo"));
             dlg.setIcon(icon /*QIcon(":/resources/exception-logo.svg")*/);
             dlg.addButtons(QStringList() << tr("Ok"));
