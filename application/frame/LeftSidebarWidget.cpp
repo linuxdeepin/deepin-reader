@@ -57,6 +57,8 @@ void LeftSidebarWidget::slotUpdateTheme()
 //  上一页
 void LeftSidebarWidget::slotJumpToPrevPage(const QString &msgContent)
 {
+    //  1.需要判断当前的模式, 是正常显示 还是幻灯片模式
+    //  2.若不是幻灯片模式, 则正常进行处理
     qDebug() << __FUNCTION__ << "           " << msgContent;
     bool bl = this->isVisible();
     if (bl) {
@@ -72,6 +74,8 @@ void LeftSidebarWidget::slotJumpToPrevPage(const QString &msgContent)
 //  下一页
 void LeftSidebarWidget::slotJumpToNextPage(const QString &msgContent)
 {
+    //  1.需要判断当前的模式, 是正常显示 还是幻灯片模式
+    //  2.若不是幻灯片模式, 则正常进行处理
     qDebug() << __FUNCTION__ << "           " << msgContent;
     bool bl = this->isVisible();
     if (bl) {
