@@ -10,7 +10,7 @@ NotesItemWidget::NotesItemWidget(CustomItemWidget *parent)
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this,
             SLOT(slotShowContextMenu(const QPoint &)));
-    // connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
+    connect(this, SIGNAL(sigUpdateTheme()), this, SLOT(slotUpdateTheme()));
     initWidget();
 }
 
@@ -80,11 +80,20 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
 
 void NotesItemWidget::slotUpdateTheme()
 {
-    //    Dtk::Gui::DPalette pltorg = m_pPageNumber->palette();
-    //    Dtk::Gui::DPalette plt =
-    //    Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
-    //    pltorg.setColor(Dtk::Gui::DPalette::Text, plt.color(Dtk::Gui::DPalette::TextTips));
-    //    m_pPageNumber->setPalette(pltorg);
+//    Dtk::Gui::DPalette pltorg = m_pPageNumber->palette();
+//    Dtk::Gui::DPalette plt =
+//        Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
+//    pltorg.setColor(Dtk::Gui::DPalette::Text, plt.color(Dtk::Gui::DPalette::TextTips));
+//    m_pPageNumber->setPalette(pltorg);
+    if (m_pPageNumber) {
+        m_pPageNumber->setForegroundRole(DPalette::TextTitle);
+    }
+    if (m_pTextLab) {
+        m_pTextLab->setForegroundRole(QPalette::BrightText);
+    }
+    if (m_pSearchResultNum) {
+        m_pSearchResultNum->setForegroundRole(DPalette::TextTips);
+    }
 }
 
 void NotesItemWidget::initWidget()
@@ -153,7 +162,7 @@ int NotesItemWidget::dealWithData(const int &msgType, const QString &msgContent)
             }
         }
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        //        emit sigUpdateTheme();
+        emit sigUpdateTheme();
     }
     return 0;
 }
@@ -167,21 +176,12 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
         m_pTextLab->setText(calcText(m_pTextLab->font(), note, m_pTextLab->size()));
     }
 
-    //    QPalette p(m_pPicture->palette());
-    //    QColor color;
-
     //  涉及到 主题颜色
     if (m_bPaint) {
-        //        color = QColor(QString("#0081FF"));
-        //        p.setColor(QPalette::Text, p.highlight().color());
         m_pPicture->setForegroundRole(DPalette::Highlight);
     } else {
-        //        color = QColor::fromRgbF(0, 0, 0, 0.08);
-        //        p.setColor(QPalette::Text, /*p.shadow().color()*/color);
         m_pPicture->setForegroundRole(QPalette::Shadow);
     }
-
-    //    m_pPicture->setPalette(p);
 }
 
 QString NotesItemWidget::calcText(const QFont &font, const QString &note,
