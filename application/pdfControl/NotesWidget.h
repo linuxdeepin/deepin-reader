@@ -2,6 +2,7 @@
 #define NOTESFORM_H
 
 #include <DIconButton>
+#include <DPushButton>
 
 #include <QList>
 #include <QMap>
@@ -85,6 +86,7 @@ private slots:
     void slotJumpToPrevItem();
     void slotJumpToNextItem();
     void slotRightSelectItem(QString);
+    void slotAddAnnotation();
 
 private:
     void addNotesItem(const QString &text);
@@ -104,6 +106,7 @@ private:
     ThreadLoadImageOfNote m_ThreadLoadImage;  // 加载注释缩略图线程
     QListWidgetItem *m_pNoteItem = nullptr;   // 当前鼠标左键点击的item
     int m_nIndex = -1;                        // 当前注释列表数
+    DPushButton *m_pAddAnnotationBtn = nullptr ;   // 添加注释
 
 public:
     // IObserver interface

@@ -210,9 +210,11 @@ int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgConten
         if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup ||
                 msgContent == KeyStr::g_left) {
             emit sigJumpToPrevPage(msgContent);
+            return ConstantMsg::g_effective_res;
         } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown ||
                    msgContent == KeyStr::g_right) {
             emit sigJumpToNextPage(msgContent);
+            return ConstantMsg::g_effective_res;
         }
     }
 

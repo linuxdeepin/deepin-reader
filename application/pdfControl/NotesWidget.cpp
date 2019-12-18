@@ -42,6 +42,13 @@ void NotesWidget::initWidget()
     m_pNotesList = new CustomListWidget;
     m_pNotesList->setSpacing(1);
 
+//    m_pAddAnnotationBtn = new DPushButton(this);
+//    m_pAddAnnotationBtn->setFixedHeight(36);
+//    m_pAddAnnotationBtn->setMinimumWidth(170);
+//    m_pAddAnnotationBtn->setText(tr("Add annotation"));
+//    DFontSizeManager::instance()->bind(m_pAddAnnotationBtn, DFontSizeManager::T6);
+//    connect(m_pAddAnnotationBtn, SIGNAL(clicked()), this, SLOT(slotAddAnnotation()));
+
     m_pVLayout->addWidget(m_pNotesList);
 }
 
@@ -351,6 +358,15 @@ void NotesWidget::slotRightSelectItem(QString uuid)
             }
         }
     }
+}
+
+/**
+ * @brief NotesWidget::slotAddAnnotation
+ * 添加注释按钮
+ */
+void NotesWidget::slotAddAnnotation()
+{
+    //add annotation   signal
 }
 
 /**
