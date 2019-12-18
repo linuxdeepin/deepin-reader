@@ -22,6 +22,10 @@ signals:
     void sigJumpToPrevPage(const QString &);
     void sigJumpToNextPage(const QString &);
 
+    /**
+     * @brief sigJumpToPrevPage
+     * 待废弃
+     */
     void sigJumpToPrevPage(const int &, const QString &);
     void sigJumpToNextPage(const int &, const QString &);
 
@@ -36,6 +40,11 @@ private slots:
 
 private:
     void initConnections();
+
+    void doPrevPage(const int &index);
+    void doNextPage(const int &index);
+
+    void forScreenPageing(bool);
 
     // CustomWidget interface
 protected:

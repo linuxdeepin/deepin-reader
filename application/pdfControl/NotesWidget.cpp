@@ -11,6 +11,24 @@ NotesWidget::NotesWidget(CustomWidget *parent)
 }
 
 /**
+ * @brief NotesWidget::prevPage
+ * 上一页
+ */
+void NotesWidget::prevPage()
+{
+    slotJumpToPrevItem();
+}
+
+/**
+ * @brief NotesWidget::nextPage
+ * 下一页
+ */
+void NotesWidget::nextPage()
+{
+    slotJumpToNextItem();
+}
+
+/**
  * @brief NotesWidget::initWidget
  * 初始化界面
  */
@@ -116,8 +134,6 @@ void NotesWidget::slotDltNoteContant(QString uuid)
                         dproxy->setAnnotationText(page, uuid, "");
                     }
 
-                    //                    m_pNoteItem = nullptr;
-                    //                    m_pNotesList->setCurrentRow(0);
                     if (m_pNotesList->count() > 0) {
                         m_pNotesList->setCurrentRow(0);
                     }
@@ -159,7 +175,6 @@ void NotesWidget::slotOpenFileOk()
         addNewItem(st);
     }
 
-    //    m_pNoteItem = m_pNotesList->item(0);
     m_pNotesList->setCurrentRow(0);
 
     m_ThreadLoadImage.setListNoteSt(list_note);
@@ -232,9 +247,7 @@ void NotesWidget::slotDelNoteItem()
                 notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Deleted Note"));
             }
         }
-        //        m_pNoteItem = nullptr;
         if (m_pNotesList->count() > 0) {
-            //                    m_pNoteItem = m_pNotesList->item(0);
             m_pNotesList->setCurrentRow(0);
         }
     }
@@ -262,17 +275,14 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
 
 void NotesWidget::slotJumpToPrevItem()
 {
-    qDebug() << __FUNCTION__ << "**";
     if (DataManager::instance()->currentWidget() != WIDGET_NOTE || m_pNotesList == nullptr ||
-        DataManager::instance()->bThumbnIsShow() == false ||
-        DataManager::instance()->CurShowState() != FILE_NORMAL) {
+            DataManager::instance()->bThumbnIsShow() == false ||
+            DataManager::instance()->CurShowState() != FILE_NORMAL) {
         return;
     }
-    qDebug() << __FUNCTION__ << "**11";
     if (m_pNotesList->count() <= 0) {
         return;
     }
-    qDebug() << __FUNCTION__ << "**22";
     int t_index = -1;
 
     auto current_item = m_pNotesList->currentItem();
@@ -297,8 +307,8 @@ void NotesWidget::slotJumpToPrevItem()
 void NotesWidget::slotJumpToNextItem()
 {
     if (DataManager::instance()->currentWidget() != WIDGET_NOTE || m_pNotesList == nullptr ||
-        DataManager::instance()->bThumbnIsShow() == false ||
-        DataManager::instance()->CurShowState() != FILE_NORMAL) {
+            DataManager::instance()->bThumbnIsShow() == false ||
+            DataManager::instance()->CurShowState() != FILE_NORMAL) {
         return;
     }
 
@@ -397,8 +407,6 @@ void NotesWidget::initConnection()
     connect(this, SIGNAL(sigDelNoteItem()), this, SLOT(slotDelNoteItem()));
     connect(m_pNotesList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
             SLOT(slotSelectItem(QListWidgetItem *)));
-    connect(this, SIGNAL(sigJumpToPrevItem()), this, SLOT(slotJumpToPrevItem()));
-    connect(this, SIGNAL(sigJumpToNextItem()), this, SLOT(slotJumpToNextItem()));
     connect(this, SIGNAL(sigRightSelectItem(QString)), this, SLOT(slotRightSelectItem(QString)));
 }
 
@@ -429,7 +437,6 @@ void NotesWidget::clearItemColor()
         return;
     auto pCurItem = m_pNotesList->currentItem();
     if (pCurItem) {
-        //        qDebug() << __FUNCTION__ << "  m_pNoteItem address:" << m_pNoteItem;
         auto pItemWidget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pCurItem));
         if (pItemWidget) {
             pItemWidget->setBSelect(false);
@@ -547,11 +554,6 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (MSG_NOTIFY_KEY_MSG == msgType) {
         if (msgContent == KeyStr::g_del) {
             emit sigDelNoteItem();
-        } else if (msgContent == KeyStr::g_pgup || msgContent == KeyStr::g_up) {
-            qDebug() << __FUNCTION__ << "               11111      ";
-            emit sigJumpToPrevItem();
-        } else if (msgContent == KeyStr::g_pgdown || msgContent == KeyStr::g_down) {
-            emit sigJumpToNextItem();
         }
     }
 

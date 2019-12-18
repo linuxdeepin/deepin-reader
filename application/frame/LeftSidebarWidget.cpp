@@ -65,9 +65,11 @@ void LeftSidebarWidget::slotJumpToPrevPage(const QString &msgContent)
         auto pWidget = this->findChild<DStackedWidget *>();
         if (pWidget) {
             int iIndex = pWidget->currentIndex();
-
-            emit sigJumpToPrevPage(iIndex, msgContent);
+            doPrevPage(iIndex);
+//            emit sigJumpToPrevPage(iIndex, msgContent);
         }
+    } else {
+        forScreenPageing(false);
     }
 }
 
@@ -82,9 +84,11 @@ void LeftSidebarWidget::slotJumpToNextPage(const QString &msgContent)
         auto pWidget = this->findChild<DStackedWidget *>();
         if (pWidget) {
             int iIndex = pWidget->currentIndex();
-
-            emit sigJumpToNextPage(iIndex, msgContent);
+            doNextPage(iIndex);
+//            emit sigJumpToNextPage(iIndex, msgContent);
         }
+    } else {
+        forScreenPageing(true);
     }
 }
 
@@ -95,8 +99,70 @@ void LeftSidebarWidget::initConnections()
     connect(this, SIGNAL(sigWidgetVisible(const int &)), SLOT(slotWidgetVisible(const int &)));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 
-    connect(this, SIGNAL(sigJumpToPrevPage(const QString &)), SLOT(slotJumpToPrevPage(const QString &)));
-    connect(this, SIGNAL(sigJumpToNextPage(const QString &)), SLOT(slotJumpToNextPage(const QString &)));
+    connect(this, SIGNAL(sigJumpToPrevPage(const QString &)), this, SLOT(slotJumpToPrevPage(const QString &)));
+    connect(this, SIGNAL(sigJumpToNextPage(const QString &)), this, SLOT(slotJumpToNextPage(const QString &)));
+}
+
+/**
+ * @brief LeftSidebarWidget::doPrevPage
+ * 上一页
+ * @param index
+ */
+void LeftSidebarWidget::doPrevPage(const int &index)
+{
+    if (index == WIDGET_THUMBNAIL) {
+        auto widget = this->findChild<ThumbnailWidget *>();
+        if (widget) {
+            widget->prevPage();
+        }
+    }  else if (index == WIDGET_BOOKMARK) {
+        auto widget = this->findChild<BookMarkWidget *>();
+        if (widget) {
+            widget->prevPage();
+        }
+    } else if (index == WIDGET_NOTE) {
+        auto widget = this->findChild<NotesWidget *>();
+        if (widget) {
+            widget->prevPage();
+        }
+    }
+}
+
+/**
+ * @brief LeftSidebarWidget::doNextPage
+ * 下一页
+ * @param index
+ */
+void LeftSidebarWidget::doNextPage(const int &index)
+{
+    if (index == WIDGET_THUMBNAIL) {
+        auto widget = this->findChild<ThumbnailWidget *>();
+        if (widget) {
+            widget->nextPage();
+        }
+    }  else if (index == WIDGET_BOOKMARK) {
+        auto widget = this->findChild<BookMarkWidget *>();
+        if (widget) {
+            widget->nextPage();
+        }
+    } else if (index == WIDGET_NOTE) {
+        auto widget = this->findChild<NotesWidget *>();
+        if (widget) {
+            widget->nextPage();
+        }
+    }
+}
+
+/**
+ * @brief LeftSidebarWidget::forScreenPageing
+ * 全屏和放映时快捷键切换页 true:向下翻页  false:向上翻页
+ */
+void LeftSidebarWidget::forScreenPageing(bool direction)
+{
+    auto widget = this->findChild<ThumbnailWidget *>();
+    if (widget) {
+        widget->forScreenPageing(direction);
+    }
 }
 
 void LeftSidebarWidget::initWidget()
@@ -107,12 +173,12 @@ void LeftSidebarWidget::initWidget()
     this->setLayout(pVBoxLayout);
 
     auto pStackedWidget = new DStackedWidget;
-    pStackedWidget->insertWidget(0, new ThumbnailWidget(this));
-    pStackedWidget->insertWidget(1, new BookMarkWidget(this));
-    pStackedWidget->insertWidget(2, new NotesWidget(this));
-    pStackedWidget->insertWidget(3, new SearchResWidget(this));
-    pStackedWidget->insertWidget(4, new BufferWidget(this));
-    pStackedWidget->setCurrentIndex(0);
+    pStackedWidget->insertWidget(WIDGET_THUMBNAIL, new ThumbnailWidget(this));
+    pStackedWidget->insertWidget(WIDGET_BOOKMARK, new BookMarkWidget(this));
+    pStackedWidget->insertWidget(WIDGET_NOTE, new NotesWidget(this));
+    pStackedWidget->insertWidget(WIDGET_SEARCH, new SearchResWidget(this));
+    pStackedWidget->insertWidget(WIDGET_BUFFER, new BufferWidget(this));
+    pStackedWidget->setCurrentIndex(WIDGET_THUMBNAIL);
 
     for (int index = 0; index < pStackedWidget->count(); ++index) {
         auto widget = pStackedWidget->widget(index);

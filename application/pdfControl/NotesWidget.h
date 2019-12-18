@@ -55,6 +55,10 @@ class NotesWidget : public CustomWidget
 public:
     explicit NotesWidget(CustomWidget *parent = nullptr);
 
+
+    void prevPage();
+    void nextPage();
+
 signals:
     void sigAddNewNoteItem(const QString &);
     void sigDltNoteItem(QString);
@@ -62,8 +66,8 @@ signals:
     void sigOpenFileOk();
     void sigCloseFile();
     void sigDelNoteItem();
-    void sigJumpToPrevItem();
-    void sigJumpToNextItem();
+//    void sigJumpToPrevItem();
+//    void sigJumpToNextItem();
     void sigRightSelectItem(QString);
 
 protected:

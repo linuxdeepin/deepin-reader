@@ -24,6 +24,7 @@ enum Widget_Type {
     WIDGET_BOOKMARK,    //  书签
     WIDGET_NOTE,        //  注释
     WIDGET_SEARCH,      //  搜索
+    WIDGET_BUFFER       //  缓冲
 };
 
 enum ICON_RADIUS {

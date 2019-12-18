@@ -11,8 +11,6 @@ BookMarkWidget::BookMarkWidget(CustomWidget *parent)
     : CustomWidget(QString("BookMarkWidget"), parent)
 {
     setFocusPolicy(Qt::ClickFocus);
-    //    setMinimumWidth(LEFTMINWIDTH - 5);
-    //    setMaximumWidth(LEFTMAXWIDTH - 5);
     initWidget();
     initConnection();
     slotUpdateTheme();
@@ -26,6 +24,24 @@ BookMarkWidget::~BookMarkWidget()
     if (m_loadBookMarkThread.isRunning()) {
         m_loadBookMarkThread.stopThreadRun();
     }
+}
+
+/**
+ * @brief BookMarkWidget::prevPage
+ * 上一页
+ */
+void BookMarkWidget::prevPage()
+{
+    slotJumpToPrevItem();
+}
+
+/**
+ * @brief BookMarkWidget::nextPage
+ * 下一页
+ */
+void BookMarkWidget::nextPage()
+{
+    slotJumpToNextItem();
 }
 
 /**
@@ -222,8 +238,6 @@ void BookMarkWidget::clearItemColor()
         auto pItemWidget =
             reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
         if (pItemWidget) {
-            //            qDebug() << __FUNCTION__ << " clear status page:" <<
-            //            pItemWidget->nPageIndex();
             pItemWidget->setBSelect(false);
         }
     }
@@ -310,8 +324,8 @@ void BookMarkWidget::slotUpdateTheme()
 void BookMarkWidget::slotJumpToPrevItem()
 {
     if (DataManager::instance()->currentWidget() != WIDGET_BOOKMARK ||
-        m_pBookMarkListWidget == nullptr || DataManager::instance()->bThumbnIsShow() == false ||
-        DataManager::instance()->CurShowState() != FILE_NORMAL) {
+            m_pBookMarkListWidget == nullptr || DataManager::instance()->bThumbnIsShow() == false ||
+            DataManager::instance()->CurShowState() != FILE_NORMAL) {
         return;
     }
 
@@ -341,8 +355,8 @@ void BookMarkWidget::slotJumpToPrevItem()
 void BookMarkWidget::slotJumpToNextItem()
 {
     if (DataManager::instance()->currentWidget() != WIDGET_BOOKMARK ||
-        m_pBookMarkListWidget == nullptr || DataManager::instance()->bThumbnIsShow() == false ||
-        DataManager::instance()->CurShowState() != FILE_NORMAL) {
+            m_pBookMarkListWidget == nullptr || DataManager::instance()->bThumbnIsShow() == false ||
+            DataManager::instance()->CurShowState() != FILE_NORMAL) {
         return;
     }
 
@@ -437,11 +451,9 @@ void BookMarkWidget::initConnection()
     connect(this, SIGNAL(sigUpdateTheme()), this, SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigFilePageChanged(const QString &)),
             SLOT(slotDocFilePageChanged(const QString &)));
-    connect(this, SIGNAL(sigJumpToPrevItem()), this, SLOT(slotJumpToPrevItem()));
-    connect(this, SIGNAL(sigJumpToNextItem()), this, SLOT(slotJumpToNextItem()));
     connect(this, SIGNAL(sigCtrlBAddBookMark()), SLOT(slotAddBookMark()));
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this,
-            [=]() { slotUpdateTheme(); });
+    [ = ]() { slotUpdateTheme(); });
     connect(this, SIGNAL(sigRightSelectItem(QString)), this, SLOT(slotRightSelectItem(QString)));
     connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
             SLOT(slotSelectItemBackColor(QListWidgetItem *)));
@@ -470,14 +482,11 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
                 SLOT(slotDeleteBookItem(const int &)));
         t_widget->setLabelImage(img);
         t_widget->setLabelPage(page, 1);
-        //        t_widget->setMinimumSize(QSize(230, 80));
 
         m_pBookMarkListWidget->setItemWidget(item, t_widget);
 
         int nCurPage = dproxy->currentPageNo();
         if (nCurPage == page) {
-            //  先将当前的item 选中取消
-            //            clearItemColor();
 
             t_widget->setBSelect(true);
 
@@ -544,11 +553,6 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (MSG_NOTIFY_KEY_MSG == msgType) {  //  按键通知消息
         if (msgContent == KeyStr::g_del) {
             emit sigDelBKItem();
-        } else if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup) {
-            //            qDebug() << __FUNCTION__ << "               11      ";
-            emit sigJumpToPrevItem();
-        } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown) {
-            emit sigJumpToNextItem();
         } else if (msgContent == KeyStr::g_ctrl_b) {
             emit sigCtrlBAddBookMark();
             return ConstantMsg::g_effective_res;
@@ -645,8 +649,6 @@ void LoadBookMarkThread::run()
 
             bool bl = DocummentFileHelper::instance()->getImage(page, image, 48, 68 /*42, 62*/);
             if (bl) {
-                //                QImage img = Utils::roundImage(QPixmap::fromImage(image),
-                //                ICON_SMALL);
                 emit sigLoadImage(page, image);
             }
 

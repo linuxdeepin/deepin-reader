@@ -107,8 +107,6 @@ signals:
     void sigFilePageChanged(const QString &);
     void sigOpenFileOk();
     void sigCloseFile();
-    void sigJumpToPrevPage();
-    void sigJumpToNextPage();
     void sigSetRotate(int);
 
 public:
@@ -118,6 +116,11 @@ public:
 
     inline bool isLoading() { return m_isLoading; }
     void showItemBookMark(int ipage = -1);
+
+    void prevPage();
+    void nextPage();
+
+    void forScreenPageing(bool);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;

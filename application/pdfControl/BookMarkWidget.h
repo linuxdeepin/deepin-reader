@@ -56,6 +56,9 @@ public:
     explicit BookMarkWidget(CustomWidget *parent = nullptr);
     ~BookMarkWidget() Q_DECL_OVERRIDE;
 
+    void prevPage();
+    void nextPage();
+
 signals:
     void sigFilePageChanged(const QString &);
     void sigOpenFileOk();
@@ -63,8 +66,6 @@ signals:
     void sigAddBookMark(const int &);
     void sigCloseFile();
     void sigDelBKItem();
-    void sigJumpToPrevItem();
-    void sigJumpToNextItem();
     void sigCtrlBAddBookMark();
     void sigRightSelectItem(QString);
 
@@ -89,7 +90,6 @@ protected:
 private:
     void initConnection();
     QListWidgetItem *addBookMarkItem(const int &);
-    //    void setSelectItemBackColor(QListWidgetItem *);
     void deleteIndexPage(const int &pageIndex);
     void clearItemColor();
 
