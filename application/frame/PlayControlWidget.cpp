@@ -3,7 +3,7 @@
 #include "subjectObserver/ModuleHeader.h"
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
-#include "docview/docummentproxy.h"
+#include "frame/DocummentFileHelper.h"
 #include <DPlatformWindowHandle>
 #include <QTimer>
 #include <QHBoxLayout>
@@ -141,27 +141,29 @@ DIconButton *PlayControlWidget::createBtn(const QString &strname)
 
 void PlayControlWidget::pagejump(bool bpre)
 {
-    bool bstart = false;
-    if (nullptr != DocummentProxy::instance() &&
-            DocummentProxy::instance()->getAutoPlaySlideStatu()) {
-        DocummentProxy::instance()->setAutoPlaySlide(false);
-        bstart = true;
-    }
-    int nCurPage = DocummentProxy::instance()->currentPageNo();
-    if (bpre)
-        nCurPage--;
-    else
-        nCurPage++;
+    auto helper = DocummentFileHelper::instance();
+    if (helper) {
+        bool bstart = false;
+        if (helper->getAutoPlaySlideStatu()) {
+            helper->setAutoPlaySlide(false);
+            bstart = true;
+        }
+        int nCurPage = helper->currentPageNo();
+        if (bpre)
+            nCurPage--;
+        else
+            nCurPage++;
 
-    int nPageSize = DocummentProxy::instance()->getPageSNum();
-    if (nCurPage < 0 || nCurPage == nPageSize) {
-        return;
-    }
+        int nPageSize = helper->getPageSNum();
+        if (nCurPage < 0 || nCurPage == nPageSize) {
+            return;
+        }
 
-    DocummentProxy::instance()->pageJump(nCurPage);
-    if (bstart && nullptr != DocummentProxy::instance()) {
-        DocummentProxy::instance()->setAutoPlaySlide(true);
-        bstart = false;
+        helper->pageJump(nCurPage);
+        if (bstart) {
+            helper->setAutoPlaySlide(true);
+            bstart = false;
+        }
     }
 }
 

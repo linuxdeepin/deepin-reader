@@ -520,3 +520,13 @@ void DocummentFileHelper::findPrev()
 {
     m_pDocummentProxy->findPrev();
 }
+
+bool DocummentFileHelper::getAutoPlaySlideStatu()
+{
+    return m_pDocummentProxy->getAutoPlaySlideStatu();
+}
+
+void DocummentFileHelper::setAutoPlaySlide(const bool &autoplay, const int &timemsec)
+{
+    m_pDocummentProxy->setAutoPlaySlide(autoplay, timemsec);
+}

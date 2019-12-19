@@ -190,11 +190,12 @@ void MainWindow::initConnections()
             SLOT(slotDealWithData(const int &, const QString &)));
 
     connect(this, &MainWindow::sigSpacePressed, this, []() {
-        if (DocummentProxy::instance()) {
-            if (DocummentProxy::instance()->getAutoPlaySlideStatu()) {
-                DocummentProxy::instance()->setAutoPlaySlide(false);
+        auto helper = DocummentFileHelper::instance();
+        if (helper) {
+            if (helper->getAutoPlaySlideStatu()) {
+                helper->setAutoPlaySlide(false);
             } else  {
-                DocummentProxy::instance()->setAutoPlaySlide(true);
+                helper->setAutoPlaySlide(true);
             }
         }
     });

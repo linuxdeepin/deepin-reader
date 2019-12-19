@@ -93,6 +93,10 @@ public:
     void findNext();
     void findPrev();
 
+public:
+    bool getAutoPlaySlideStatu();
+    void setAutoPlaySlide(const bool &autoplay, const int &timemsec = 3000);
+
 private:
     void setAppShowTitle(const QString &);
     void initConnections();
