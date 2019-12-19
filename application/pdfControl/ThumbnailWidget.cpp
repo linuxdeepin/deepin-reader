@@ -164,22 +164,6 @@ void ThumbnailWidget::slotUpdateTheme()
  */
 void ThumbnailWidget::slotJumpToPrevPage()
 {
-//    if (DataManager::instance()->CurShowState() != FILE_NORMAL) {
-//        bool bstart = false;
-//        if (nullptr != DocummentProxy::instance() &&
-//                DocummentProxy::instance()->getAutoPlaySlideStatu()) {
-//            DocummentProxy::instance()->setAutoPlaySlide(false);
-//            bstart = true;
-//        }
-//        int nCurPage = DocummentFileHelper::instance()->currentPageNo();
-//        nCurPage--;
-//        jumpToSpecifiedPage(nCurPage);
-//        if (bstart && nullptr != DocummentProxy::instance()) {
-//            DocummentProxy::instance()->setAutoPlaySlide(true);
-//            bstart = false;
-//        }
-//        return;
-//    }
     if (DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL ||
             (DataManager::instance()->bThumbnIsShow() == false)) {
         return;
@@ -195,22 +179,6 @@ void ThumbnailWidget::slotJumpToPrevPage()
  */
 void ThumbnailWidget::slotJumpToNextPage()
 {
-//    if (DataManager::instance()->CurShowState() != FILE_NORMAL) {
-//        bool bstart = false;
-//        if (nullptr != DocummentProxy::instance() &&
-//                DocummentProxy::instance()->getAutoPlaySlideStatu()) {
-//            DocummentProxy::instance()->setAutoPlaySlide(false);
-//            bstart = true;
-//        }
-//        int nCurPage = DocummentFileHelper::instance()->currentPageNo();
-//        nCurPage++;
-//        jumpToSpecifiedPage(nCurPage);
-//        if (bstart && nullptr != DocummentProxy::instance()) {
-//            DocummentProxy::instance()->setAutoPlaySlide(true);
-//            bstart = false;
-//        }
-//        return;
-//    }
     if (DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL ||
             (DataManager::instance()->bThumbnIsShow() == false)) {
         return;
@@ -313,20 +281,22 @@ void ThumbnailWidget::nextPage()
 void ThumbnailWidget::forScreenPageing(bool direction)
 {
     if (DataManager::instance()->CurShowState() != FILE_NORMAL) {
-        bool bstart = false;
-        if (nullptr != DocummentProxy::instance() &&
-                DocummentProxy::instance()->getAutoPlaySlideStatu()) {
-            DocummentProxy::instance()->setAutoPlaySlide(false);
-            bstart = true;
+
+        auto helper = DocummentFileHelper::instance();
+        if (helper) {
+            bool bstart = false;
+            if (helper->getAutoPlaySlideStatu()) {
+                helper->setAutoPlaySlide(false);
+                bstart = true;
+            }
+            int nCurPage = helper->currentPageNo();
+            direction ? nCurPage++ : nCurPage--;
+            jumpToSpecifiedPage(nCurPage);
+            if (bstart) {
+                helper->setAutoPlaySlide(true);
+                bstart = false;
+            }
         }
-        int nCurPage = DocummentFileHelper::instance()->currentPageNo();
-        direction ? nCurPage++ : nCurPage--;
-        jumpToSpecifiedPage(nCurPage);
-        if (bstart && nullptr != DocummentProxy::instance()) {
-            DocummentProxy::instance()->setAutoPlaySlide(true);
-            bstart = false;
-        }
-        return;
     }
 }
 
