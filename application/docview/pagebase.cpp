@@ -203,8 +203,15 @@ void PageBase::paintEvent(QPaintEvent *event)
     for (int i = 0; i < d->paintrects.size(); i++) {
         qpainter.drawRect(d->paintrects[i]);
     }
-//    QPixmap pixtag(Utils::renderSVG(":/icons/deepin/builtin/ok.svg", QSize(24, 24)));
-//    qpainter.drawPixmap(12, 12, 24, 24, pixtag);
+
+    foreach (ICONANNOTATION annote, d->m_iconannotationlist) {
+        double rx = annote.position.x() * d->m_scale * d->m_imagewidth - ICONANNOTE_WIDTH / 2;
+        double ry = annote.position.y() * d->m_scale * d->m_imageheight - ICONANNOTE_HEIGHT / 2;
+        QPointF pt(rx, ry);
+
+        QPixmap pixtag(Utils::renderSVG(":/icons/deepin/builtin/ok.svg", QSize(24, 24)));
+        qpainter.drawPixmap(pt, pixtag);
+    }
 }
 
 bool PageBase::setSelectTextStyle(QColor paintercolor, QColor pencolor, int penwidth)
@@ -803,4 +810,52 @@ bool PageBase::setBookMarkState(bool state)
     Q_D(PageBase);
     d->bookmarkbtn->setClickState(state);
     return true;
+}
+
+QString PageBase::addIconAnnotation(const QPoint &pos)
+{
+    Q_D(PageBase);
+    double curwidth = d->m_imagewidth * d->m_scale;
+    double curheight = d->m_imageheight * d->m_scale;
+    QString uuid("");
+    uuid = PublicFunc::getUuid();
+    ICONANNOTATION annote;
+    annote.position.setX(pos.x() / curwidth);
+    annote.position.setY(pos.y() / curheight);
+    annote.uuid = uuid;
+    d->m_iconannotationlist.push_back(annote);
+    update(QRect(pos.x() - 100, pos.y() - 100, 200, 200));
+    return  uuid;
+}
+
+bool PageBase::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
+{
+    Q_D(PageBase);
+    bool bsuccess = false;
+    foreach (ICONANNOTATION annote, d->m_iconannotationlist) {
+        double rx = annote.position.x() * d->m_scale * d->m_imagewidth;
+        double ry = annote.position.y() * d->m_scale * d->m_imageheight;
+        QRectF rect(rx - ICONANNOTE_WIDTH / 2, ry - ICONANNOTE_HEIGHT / 2, ICONANNOTE_WIDTH, ICONANNOTE_HEIGHT);
+        qDebug() << "PageBase::iconAnnotationClicked " << pos << rect;
+        if (rect.contains(pos.x(), pos.y())) {
+            bsuccess = true;
+            qDebug() << "PageBase::iconAnnotationClicked =true ^^^^^^^^";
+            break;
+        }
+    }
+    return bsuccess;
+}
+
+void PageBase::moveIconAnnotation(const QString &uuid, const QPoint &pos)
+{
+    Q_D(PageBase);
+    for (int i = 0; i < d->m_iconannotationlist.size(); i++) {
+        if (d->m_iconannotationlist.at(i).uuid == uuid) {
+            d->m_iconannotationlist.takeAt(i).position.setX(pos.x() / d->m_scale * d->m_imagewidth);
+            d->m_iconannotationlist.takeAt(i).position.setY(pos.y() / d->m_scale * d->m_imageheight);
+            QRect rect(pos.x() - ICONANNOTE_WIDTH / 2, pos.y() / ICONANNOTE_HEIGHT / 2, 100, 100);
+            update(rect);
+            break;
+        }
+    }
 }

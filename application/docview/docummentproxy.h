@@ -68,6 +68,11 @@ public:
     void setAutoPlaySlide(bool autoplay, int timemsec = 3000);
     bool getAutoPlaySlideStatu();
     bool isOpendFile();
+    void setViewFocus();
+    //icon annotation
+    QString addIconAnnotation(const QPoint &pos);
+    void moveIconAnnotation(const QString &uuid, const QPoint &pos);
+    bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
 signals:
     void signal_pageChange(int);
     bool signal_pageJump(int);

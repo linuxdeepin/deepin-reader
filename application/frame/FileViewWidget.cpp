@@ -110,6 +110,16 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
     if (m_nCurrentHandelState == Magnifier_State)
         return;
 
+    //begin>>kyz 2019-12-18 测试
+//    QPoint pt = m_pDocummentFileHelper->global2RelativePoint(event->globalPos());
+//    if (event->button() == Qt::RightButton)
+//        DocummentProxy::instance()->addIconAnnotation(pt);
+//    else {
+//        QString strtext, struid;
+//        DocummentProxy::instance()->iconAnnotationClicked(pt, strtext, struid);
+//    }
+    //<<end
+
     Qt::MouseButton nBtn = event->button();
     if (nBtn == Qt::LeftButton) {
         QPoint globalPos = event->globalPos();
@@ -130,11 +140,10 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
                     m_pDocummentFileHelper->mouseSelectTextClear();  //  清除之前选中的文字高亮
 
                     if (m_pNoteTipWidget && m_pNoteTipWidget->isVisible()) {
-                        m_pNoteTipWidget->hide(); qDebug() << "0000000001111111111111+++++++++++++";
+                        m_pNoteTipWidget->hide();
                     }
 
                     if (m_bIsHandleSelect) {
-                        qDebug() << "0000000001111111111111----------";
                         m_bSelectOrMove = true;
                         m_pStartPoint = docGlobalPos;
                         m_pEndSelectPoint = m_pStartPoint;

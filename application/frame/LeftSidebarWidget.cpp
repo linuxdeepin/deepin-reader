@@ -9,7 +9,7 @@
 #include "pdfControl/NotesWidget.h"
 #include "pdfControl/SearchResWidget.h"
 #include "pdfControl/ThumbnailWidget.h"
-
+#include "docview/docummentproxy.h"
 #include "MainOperationWidget.h"
 #include "controller/AppSetting.h"
 
@@ -47,6 +47,8 @@ void LeftSidebarWidget::slotStackSetCurIndex(const int &iIndex)
 void LeftSidebarWidget::slotWidgetVisible(const int &nVis)
 {
     this->setVisible(nVis);
+    if (!nVis && DocummentProxy::instance())
+        DocummentProxy::instance()->setViewFocus();
 }
 
 void LeftSidebarWidget::slotUpdateTheme()

@@ -14,7 +14,8 @@
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
-
+#define ICONANNOTE_WIDTH    24
+#define ICONANNOTE_HEIGHT   24
 namespace Page {
 enum LinkType_EM {
     LinkType_NULL = 0,
@@ -159,6 +160,7 @@ public:
         pixelratiof = 1;
         bookmarkbtn = nullptr;
         m_spinner = nullptr;
+        m_iconannotationlist.clear();
         connect(&loadmagnifiercachethread, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)), this, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)));
         connect(&threadreander, SIGNAL(signal_RenderFinish(QImage)), this, SIGNAL(signal_RenderFinish(QImage)));
     }
@@ -207,6 +209,7 @@ public:
     qreal pixelratiof;
     BookMarkButton *bookmarkbtn;
     DSpinner *m_spinner;
+    QList<ICONANNOTATION> m_iconannotationlist;//注释图标列表
 //    QMutex m_mutexlockgetimage;
 
     PageBase *q_ptr;
@@ -280,6 +283,9 @@ public:
     void waitThread();
     void clearImage();
     bool setBookMarkState(bool state);
+    QString addIconAnnotation(const QPoint &pos);
+    bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
+    void moveIconAnnotation(const QString &uuid, const QPoint &pos);
 
 signals:
     void signal_MagnifierPixmapCacheLoaded(int);

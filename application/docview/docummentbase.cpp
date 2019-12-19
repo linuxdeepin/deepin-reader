@@ -1493,13 +1493,19 @@ void DocummentBase::autoplayslidTimerOut()
 {
     Q_D(DocummentBase);
     if (d->m_bslidemodel) {
-        pageJump(getCurrentPageNo() + 1);
-        // qDebug() << __FUNCTION__ << getCurrentPageNo() << d->m_pages.size() << d->m_slidepageno;
-        if (getCurrentPageNo() + 1 >= d->m_pages.size()) {
-            qDebug() << __FUNCTION__ << "emit signale_autoplaytoend()" << getCurrentPageNo() << d->m_pages.size() << d->m_slidepageno;
-            d->autoplayslidtimer->stop();
-            d->bautoplayslide = false;
-            emit signale_autoplaytoend();
+        if (d->m_bautoplayslidreset && getCurrentPageNo() + 1 >= d->m_pages.size()) {
+            pageJump(0);
+            d->m_bautoplayslidreset = false;
+        } else {
+            pageJump(getCurrentPageNo() + 1);
+            if (getCurrentPageNo() + 1 >= d->m_pages.size()) {
+
+                qDebug() << __FUNCTION__ << "emit signale_autoplaytoend()" << getCurrentPageNo() << d->m_pages.size() << d->m_slidepageno;
+                d->autoplayslidtimer->stop();
+                d->bautoplayslide = false;
+                emit signale_autoplaytoend();
+                d->m_bautoplayslidreset = true;
+            }
         }
     } else {
         d->autoplayslidtimer->stop();
@@ -1703,7 +1709,7 @@ bool DocummentBase::loadPages()
 //    }
     int firstpagenum  = d->m_currentpageno;
     int lastpagenum  = fromFirstGetLastPageNo(firstpagenum);
-    if ((lastpagenum + 1) == d->m_pages.size() ) {
+    if ((lastpagenum + 1) == d->m_pages.size()) {
         firstpagenum = fromLastPageGetFirstPageNo();
     }
 //    int firstpagenum  = currentPageNo();
@@ -2198,4 +2204,77 @@ bool DocummentBase::getAutoPlaySlideStatu()
     Q_D(DocummentBase);
     return d->bautoplayslide;
 }
+
+void DocummentBase::setViewFocus()
+{
+    viewport()->setFocus();
+}
+
+QString DocummentBase::addIconAnnotation(const QPoint &pos)
+{
+    Q_D(DocummentBase);
+    QPoint pt = pos;
+    int ipage = pointInWhichPage(pt);
+    QString uuid("");
+    if (ipage < d->m_pages.size() || ipage >= 0) {
+
+        double curwidth = d->m_imagewidth * d->m_scale;
+        double curheight = d->m_imageheight * d->m_scale;
+        double leftspace = (d->m_widgets.at(ipage)->width() - curwidth) / 2;
+        double topspace = (d->m_widgets.at(ipage)->height() - curheight) / 2;
+        qDebug() << __FUNCTION__ << "$$##" << pos << curwidth << curheight << leftspace << topspace;
+        if (pos.x() > leftspace && pos.x() < curwidth + leftspace && pos.y() > topspace && pos.y() < topspace + curheight) {
+            pt.setX(pos.x() - leftspace);
+            pt.setY(pos.y() - topspace);
+            uuid = d->m_pages.at(ipage)->addIconAnnotation(pt);
+        }
+    }
+    return  uuid;
+}
+
+void DocummentBase::moveIconAnnotation(const QString &uuid, const QPoint &pos)
+{
+    Q_D(DocummentBase);
+    QPoint pt = pos;
+    int ipage = pointInWhichPage(pt);
+    if (ipage < d->m_pages.size() || ipage >= 0) {
+        double curwidth = d->m_imagewidth * d->m_scale;
+        double curheight = d->m_imageheight * d->m_scale;
+        double leftspace = (d->m_widgets.at(ipage)->width() - curwidth) / 2;
+        double topspace = (d->m_widgets.at(ipage)->height() - curheight) / 2;
+
+        if (pos.x() > leftspace && pos.x() < curwidth + leftspace && pos.y() > topspace && pos.y() < topspace + curheight) {
+            pt.setX(pos.x() - leftspace);
+            pt.setY(pos.y() - topspace);
+            d->m_pages.at(ipage)->moveIconAnnotation(uuid, pt);
+        }
+    }
+}
+
+bool DocummentBase::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
+{
+    Q_D(DocummentBase);
+
+    QPoint pt = pos;
+    int ipage = pointInWhichPage(pt);
+    qDebug() << "DocummentBase::iconAnnotationClicked    1111=========" << ipage << pt;
+    bool bsucess = false;
+    if (ipage < d->m_pages.size() || ipage >= 0) {
+        double curwidth = d->m_imagewidth * d->m_scale;
+        double curheight = d->m_imageheight * d->m_scale;
+        double leftspace = (d->m_widgets.at(ipage)->width() - curwidth) / 2;
+        double topspace = (d->m_widgets.at(ipage)->height() - curheight) / 2;
+
+        if (pos.x() > leftspace && pos.x() < curwidth + leftspace && pos.y() > topspace && pos.y() < topspace + curheight) {
+
+            pt.setX(pos.x() - leftspace);
+            pt.setY(pos.y() - topspace);
+            qDebug() << "DocummentBase::iconAnnotationClicked    22222222" << pt;
+            bsucess = d->m_pages.at(ipage)->iconAnnotationClicked(pt, strtext, struuid);
+        }
+    }
+    return bsucess;
+}
+
+
 

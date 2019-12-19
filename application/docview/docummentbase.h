@@ -160,6 +160,7 @@ public:
         bautoplayslide = false;
         autoplayslidtimer = nullptr;
         m_autoplayslidmsec = 0;
+        m_bautoplayslidreset = false;
 
     }
 
@@ -242,6 +243,7 @@ public:
     bool bautoplayslide;
     QTimer *autoplayslidtimer;
     int m_autoplayslidmsec;
+    bool m_bautoplayslidreset;//播放到最后一页重置状态从头可以从头开始播放
 
 
 signals:
@@ -330,6 +332,10 @@ public:
     void selectAllText();
     void setAutoPlaySlide(bool autoplay, int timemsec);
     bool getAutoPlaySlideStatu();
+    void setViewFocus();
+    QString addIconAnnotation(const QPoint &pos);
+    void moveIconAnnotation(const QString &uuid, const QPoint &pos);
+    bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
 
 signals:
     void signal_pageChange(int);

@@ -198,6 +198,28 @@ QString DocummentProxy::addAnnotation(const QPoint &startpos, const QPoint &endp
     return m_documment->addAnnotation(startpos, endpos, color);
 }
 
+QString DocummentProxy::addIconAnnotation(const QPoint &pos)
+{
+    if (!m_documment || bcloseing)
+        return QString("");
+
+    return m_documment->addIconAnnotation(pos);
+}
+
+void DocummentProxy::moveIconAnnotation(const QString &uuid, const QPoint &pos)
+{
+    if (!m_documment || bcloseing)
+        return ;
+    m_documment->moveIconAnnotation(uuid, pos);
+}
+
+bool DocummentProxy::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
+{
+    if (!m_documment || bcloseing)
+        return false;
+    return m_documment->iconAnnotationClicked(pos, strtext, struuid);
+}
+
 bool DocummentProxy::save(const QString &filepath, bool withChanges)
 {
     if (!m_documment || bcloseing)
@@ -492,4 +514,10 @@ bool DocummentProxy::isOpendFile()
     if (m_documment)
         bopen = true;
     return  bopen;
+}
+
+void DocummentProxy::setViewFocus()
+{
+    if (m_documment)
+        m_documment->setViewFocus();
 }

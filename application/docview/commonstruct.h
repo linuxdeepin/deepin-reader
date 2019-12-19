@@ -20,19 +20,18 @@ typedef struct SEARCH_RESULT {
 
 Q_DECLARE_METATYPE(stSearchRes)
 
-typedef struct HIGHLIGHT_CONTENTS
-{
+typedef struct HIGHLIGHT_CONTENTS {
     unsigned int ipage;
     QString strcontents;
     QString struuid;
     HIGHLIGHT_CONTENTS()
     {
-        ipage=0;
+        ipage = 0;
         strcontents.clear();
         struuid.clear();
     }
 
-}stHighlightContent;
+} stHighlightContent;
 
 typedef struct FILE_INFO {
     QString strFilepath;
@@ -59,5 +58,19 @@ typedef struct FILE_INFO {
 
 
 } stFileInfo;
+
+typedef struct ICONANNOTATION {
+    QString uuid;
+    QPointF position;
+    QString strnote;
+
+    ICONANNOTATION()
+    {
+        uuid.clear();
+        position = QPointF(0.0, 0.0);
+        strnote.clear();
+    }
+
+} stIconAnnotation;
 
 #endif // COMMONSTRUCT_H
