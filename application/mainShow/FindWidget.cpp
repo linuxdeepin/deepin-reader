@@ -155,6 +155,7 @@ int FindWidget::dealWithData(const int &msgType, const QString &msgContent)
         }
     } else if (msgType == MSG_FIND_NONE) {
         emit sigFindNone(1);
+        return ConstantMsg::g_effective_res;
     }
     return 0;
 }

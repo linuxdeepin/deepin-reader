@@ -24,7 +24,8 @@ PagingWidget::PagingWidget(CustomWidget *parent)
 void PagingWidget::initWidget()
 {
     m_pTotalPagesLab = new CustomClickLabel(QString("/xxx"), this);
-    m_pTotalPagesLab->setFixedSize(60, 36);//setMinimumWidth(50);
+    m_pTotalPagesLab->setMinimumWidth(70);//setMinimumWidth(50);
+    m_pTotalPagesLab->setFixedHeight(36);
     DFontSizeManager::instance()->bind(m_pTotalPagesLab, DFontSizeManager::T6);
 
     m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
@@ -39,8 +40,9 @@ void PagingWidget::initWidget()
     m_pJumpPageSpinBox->setMinimum(1);
     m_pJumpPageSpinBox->setRange(1, 100);
     m_pJumpPageSpinBox->setValue(1);
-    m_pJumpPageSpinBox->setFixedSize(60, 36);
-//    m_pJumpPageSpinBox->setMinimumHeight(36);
+//    m_pJumpPageSpinBox->setFixedSize(60, 36);
+    m_pJumpPageSpinBox->setMinimumWidth(60);
+    m_pJumpPageSpinBox->setFixedHeight(36);
     m_pJumpPageSpinBox->installEventFilter(this);
     m_pJumpPageSpinBox->setWrapping(true);
     m_pJumpPageSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
