@@ -22,7 +22,10 @@ DocummentFileHelper::DocummentFileHelper(QObject *parent)
 
     initConnections();
 
-    m_pMsgList = {MSG_OPEN_FILE_PATH, MSG_OPEN_FILE_PATH_S, MSG_OPERATION_SAVE_AS_FILE};
+    m_pMsgList = { MSG_OPEN_FILE_PATH, MSG_OPEN_FILE_PATH_S, MSG_OPERATION_SAVE_AS_FILE,
+                   MSG_OPERATION_TEXT_COPY
+                 };
+    m_pKeyMsgList = {KeyStr::g_ctrl_s, KeyStr::g_ctrl_shift_s};
 
     m_pMsgSubject = MsgSubject::getInstance();
     if (m_pMsgSubject) {
@@ -50,7 +53,13 @@ void DocummentFileHelper::initConnections()
 {
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
             SLOT(slotDealWithData(const int &, const QString &)));
-    connect(this, SIGNAL(sigSaveAsFile()), SLOT(slotSaveAsFile()));
+    connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)),
+            SLOT(slotDealWithKeyMsg(const QString &)));
+
+    connect(this, SIGNAL(sigFileSlider(const int &)), SLOT(slotFileSlider(const int &)));
+    connect(this, SIGNAL(sigFileCtrlContent()), SLOT(slotFileCtrlContent()));
+
+//    connect(this, SIGNAL(sigSaveAsFile()), SLOT(slotSaveAsFile()));
 
     connect(m_pDocummentProxy, &DocummentProxy::signal_openResult, this, [ = ](bool openresult) {
         if (openresult) {
@@ -73,11 +82,21 @@ int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgCont
         emit sigDealWithData(msgType, msgContent);
         return  ConstantMsg::g_effective_res;
     }
-    if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (KeyStr::g_ctrl_shift_s == msgContent) {
-            emit sigSaveAsFile();
+
+    if (msgType == MSG_OPERATION_SLIDE) {
+        emit sigFileSlider(1);
+    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
+        if (m_pKeyMsgList.contains(msgContent)) {
+            emit sigDealWithKeyMsg(msgContent);
             return ConstantMsg::g_effective_res;
         }
+
+        if (KeyStr::g_esc == msgContent) {
+            emit sigFileSlider(0);
+        } else if (KeyStr::g_ctrl_c == msgContent) {
+            emit sigFileCtrlContent();
+        }
+
     }
     return 0;
 }
@@ -89,7 +108,18 @@ void DocummentFileHelper::slotDealWithData(const int &msgType, const QString &ms
     } else if (msgType == MSG_OPEN_FILE_PATH_S) {   //  打开多个文件
         onOpenFiles(msgContent);
     } else if (msgType == MSG_OPERATION_SAVE_AS_FILE) { //  另存为文件
-        slotSaveAsFile();
+        onSaveAsFile();
+    } else if (msgType == MSG_OPERATION_TEXT_COPY) {    //  复制
+        slotCopySelectContent(msgContent);
+    }
+}
+
+void DocummentFileHelper::slotDealWithKeyMsg(const QString &msgContent)
+{
+    if (msgContent == KeyStr::g_ctrl_s) {
+        onSaveFile();
+    } else if (msgContent == KeyStr::g_ctrl_shift_s) {
+        onSaveAsFile();
     }
 }
 
@@ -147,7 +177,7 @@ bool DocummentFileHelper::getSelectTextString(QString &st)
 }
 
 //  保存
-void DocummentFileHelper::slotSaveFile()
+void DocummentFileHelper::onSaveFile()
 {
     if (DataManager::instance()->bIsUpdate()) {
         bool rl = save(m_szFilePath, true);
@@ -167,7 +197,7 @@ void DocummentFileHelper::slotSaveFile()
 }
 
 //  另存为
-void DocummentFileHelper::slotSaveAsFile()
+void DocummentFileHelper::onSaveAsFile()
 {
     QString sFilter = FFH::getFileFilter(m_nCurDocType);
 
@@ -332,6 +362,16 @@ void DocummentFileHelper::slotFileSlider(const int &nFlag)
                 DataManager::instance()->setCurShowState(FILE_NORMAL);
             }
         }
+    }
+}
+
+void DocummentFileHelper::slotFileCtrlContent()
+{
+    QString sSelectText = "";
+    getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
+
+    if (sSelectText != "") {
+        slotCopySelectContent(sSelectText);
     }
 }
 

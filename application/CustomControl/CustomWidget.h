@@ -51,7 +51,8 @@ protected:
     void showScreenCenter();
 
 protected:
-    QList<int>      m_pMsgList;     //  需要处理的消息列表
+    QList<int>          m_pMsgList;     //  需要处理的消息列表
+    QList<QString>      m_pKeyMsgList;     //  需要处理的按键消息列表
 
 private:
     MsgSubject *m_pMsgSubject = nullptr;

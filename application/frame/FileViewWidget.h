@@ -37,26 +37,8 @@ public:
 
 signals:
     void sigDealWithData(const int &, const QString &);
+    void sigDealWithKeyMsg(const QString &);
 
-    void sigPrintFile();
-    void sigSaveFile();
-    void sigCopySelectContent(const QString &);
-    void sigFileSlider(const int &);
-
-//    void sigSetHandShape(const QString &);
-//    void sigMagnifying(const QString &);
-
-//    void sigWidgetAdapt();
-
-//    void sigFileAddAnnotation(const QString &);
-    void sigFileAddAnnotation();
-//    void sigFileUpdateAnnotation(const QString &);
-//    void sigFileRemoveAnnotation(const QString &);
-
-//    void sigFileAddNote(const QString &);
-    void sigFileAddNote();
-
-    void sigFileCtrlContent();
     void sigShowPlayCtrl(bool bshow);
 
 protected:
@@ -68,19 +50,12 @@ protected:
 
 private slots:
     void slotDealWithData(const int &, const QString &);
+    void slotDealWithKeyMsg(const QString &);
 
     void slotCustomContextMenuRequested(const QPoint &);
 
-    void slotPrintFile();
-
-    void slotFileAddAnnotation();
-
-    void slotFileAddNote();
-
     void slotBookMarkStateChange(int, bool);
     void slotDocFilePageChanged(int);
-
-    void slotFileCtrlContent();
 
 private:
     void initConnections();
@@ -97,8 +72,10 @@ private:
 
     void onFileAddNote(const QString &);
 
-    int dealWithFileMenuRequest(const int &msgType, const QString &msgContent);
-    int dealWithNotifyMsg(const QString &msgContent);
+private:
+    void onPrintFile();
+    void onFileAddAnnotation();
+    void onFileAddNote();
 
 private:
     TextOperationMenu       *m_operatemenu = nullptr;

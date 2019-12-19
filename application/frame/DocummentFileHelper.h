@@ -32,7 +32,10 @@ public:
 
 signals:
     void sigDealWithData(const int &, const QString &);
-    void sigSaveAsFile();
+    void sigDealWithKeyMsg(const QString &);
+    void sigFileSlider(const int &);
+
+    void sigFileCtrlContent();
 
 public:
     bool save(const QString &filepath, bool withChanges);
@@ -103,18 +106,20 @@ private:
     void onOpenFile(const QString &filePaths);
     void onOpenFiles(const QString &filePaths);
 
+    void onSaveFile();
+    void onSaveAsFile();
+
     // IObserver interface
     void sendMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
     void notifyMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
 
 private slots:
     void slotDealWithData(const int &, const QString &);
+    void slotDealWithKeyMsg(const QString &);
 
-
-    void slotSaveFile();
-    void slotSaveAsFile();
     void slotCopySelectContent(const QString &);
     void slotFileSlider(const int &);
+    void slotFileCtrlContent();
 
 private:
     DocummentProxy          *m_pDocummentProxy = nullptr;   //  文档操作代理类
@@ -122,6 +127,7 @@ private:
     NotifySubject           *m_pNotifySubject = nullptr;
 
     QList<int>              m_pMsgList;
+    QList<QString>          m_pKeyMsgList;
     QString                 m_szFilePath = "";
     DocType_EM              m_nCurDocType = DocType_NULL;
 
