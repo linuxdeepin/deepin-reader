@@ -97,8 +97,11 @@ void SearchResWidget::slotSearchOver()
         disconnect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
                    SLOT(slotSelectItem(QListWidgetItem *)));
         showTips();
-        //        notifyMsg(MSG_FIND_STOP /*, QString("")*/);
+
+        //显示无结果窗口
         notifyMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
+        //让搜索框变粉红色
+        notifyMsg(MSG_FIND_NONE);
 
         bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
         if (!t_bTnumbnIsShow) {
@@ -198,7 +201,7 @@ void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
     QString strText = "";
 
     foreach (stSearchRes it, list) {
-        int page = it.ipage;
+        int page = static_cast<int>(it.ipage);
         foreach (QString s, it.listtext) {
             strText += s.trimmed();
             strText += QString("    ");

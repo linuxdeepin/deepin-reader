@@ -80,6 +80,7 @@ void FindWidget::slotSetVisible()
 
 void FindWidget::findCancel()
 {
+    slotFindNone(0);
     notifyMsg(MSG_CLEAR_FIND_CONTENT);
     m_pSearchEdit->clear();
     m_pSearchEdit->clearFocus();
@@ -115,7 +116,25 @@ void FindWidget::slotClearContent()
     QString strNewFind = m_pSearchEdit->text();
     if (strNewFind == "") {
         m_strOldFindContent = "";
+        slotFindNone(0);
         notifyMsg(MSG_CLEAR_FIND_CONTENT);
+    }
+}
+
+/**
+ * @brief FindWidget::slotFindNone
+ * 搜索无果时，搜索框变成粉红色
+ * @param status
+ * 0:恢复正常颜色 1:变成粉红色
+ */
+void FindWidget::slotFindNone(int status)
+{
+    bool alert = false;
+
+    alert = (status == 1) ? true : false;
+
+    if (m_pSearchEdit) {
+        m_pSearchEdit->setAlert(alert);
     }
 }
 
@@ -134,6 +153,8 @@ int FindWidget::dealWithData(const int &msgType, const QString &msgContent)
         if (msgContent == KeyStr::g_f11) {
             emit sigSetVisible();
         }
+    } else if (msgType == MSG_FIND_NONE) {
+        emit sigFindNone(1);
     }
     return 0;
 }
@@ -186,4 +207,5 @@ void FindWidget::initWidget()
 void FindWidget::initConnection()
 {
     connect(this, SIGNAL(sigSetVisible()), SLOT(slotSetVisible()));
+    connect(this, SIGNAL(sigFindNone(int)), this, SLOT(slotFindNone(int)));
 }

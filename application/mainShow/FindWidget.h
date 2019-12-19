@@ -44,6 +44,7 @@ public:
 
 signals:
     void sigSetVisible();
+    void sigFindNone(int);
 
 public:
     void showPosition(const int &);
@@ -55,6 +56,7 @@ private slots:
     void slotFindNextBtnClicked();
     void slotFindPrevBtnClicked();
     void slotClearContent();
+    void slotFindNone(int);
 
 protected:
     void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
