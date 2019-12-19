@@ -13,12 +13,21 @@
 HomeWidget::HomeWidget(CustomWidget *parent)
     : CustomWidget("HomeWidget", parent)
 {
+    m_pKeyMsgList = {KeyStr::g_ctrl_o};
+
     initWidget();
     initConnections();
 
     m_settings = AppSetting::instance();
 
     slotUpdateTheme();
+}
+
+void HomeWidget::slotDealWithKeyMsg(const QString &msgContent)
+{
+    if (msgContent == KeyStr::g_ctrl_o) {
+        slotChooseBtnClicked();
+    }
 }
 
 void HomeWidget::initWidget()
@@ -113,21 +122,21 @@ QStringList HomeWidget::getOpenFileList()
 
 void HomeWidget::initConnections()
 {
-    connect(this, SIGNAL(sigOpenFileDialog()), SLOT(slotChooseBtnClicked()));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
+    connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)), SLOT(slotDealWithKeyMsg(const QString &)));
 }
 
 int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (msgContent == KeyStr::g_ctrl_o) {  //  Ctrl+O 打开文档
-            emit sigOpenFileDialog();
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {
+        emit sigUpdateTheme();
+    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
+        if (m_pKeyMsgList.contains(msgContent)) {
+            emit sigDealWithKeyMsg(msgContent);
             return ConstantMsg::g_effective_res;
         }
     }
 
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        emit sigUpdateTheme();
-    }
+
     return 0;
 }

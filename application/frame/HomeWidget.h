@@ -25,9 +25,10 @@ public:
     }
 
 signals:
-    void sigOpenFileDialog();
+    void sigDealWithKeyMsg(const QString &);
 
 private slots:
+    void slotDealWithKeyMsg(const QString &);
     void slotChooseBtnClicked();
     void slotUpdateTheme();
 
