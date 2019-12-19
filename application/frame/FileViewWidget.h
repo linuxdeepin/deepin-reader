@@ -87,7 +87,8 @@ private:
     int         m_nAdapteState = NO_ADAPTE_State;       //  当前自适应状态
     bool        m_bSelectOrMove = false;                //  是否可以选中文字、移动
     bool        m_bIsHandleSelect = false;              //  是否可以选中
-
+    bool        m_bmousepressed = false;                //  鼠标是否被按住
+    QString         struidtmp;
     QPoint      m_pStartPoint;
     QPoint      m_pEndSelectPoint;
     QPoint      m_pHandleMoveStartPoint;

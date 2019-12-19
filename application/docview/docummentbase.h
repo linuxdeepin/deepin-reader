@@ -336,6 +336,7 @@ public:
     QString addIconAnnotation(const QPoint &pos);
     void moveIconAnnotation(const QString &uuid, const QPoint &pos);
     bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
+    bool removeIconAnnotation(const QString &uuid, int ipage);
 
 signals:
     void signal_pageChange(int);

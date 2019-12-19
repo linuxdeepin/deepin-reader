@@ -836,10 +836,11 @@ bool PageBase::iconAnnotationClicked(const QPoint &pos, QString &strtext, QStrin
         double rx = annote.position.x() * d->m_scale * d->m_imagewidth;
         double ry = annote.position.y() * d->m_scale * d->m_imageheight;
         QRectF rect(rx - ICONANNOTE_WIDTH / 2, ry - ICONANNOTE_HEIGHT / 2, ICONANNOTE_WIDTH, ICONANNOTE_HEIGHT);
-        qDebug() << "PageBase::iconAnnotationClicked " << pos << rect;
         if (rect.contains(pos.x(), pos.y())) {
+            qDebug() << "PageBase::iconAnnotationClicked success ^^^^^^^start" << annote.position ;
+            strtext = annote.strnote;
+            struuid = annote.uuid;
             bsuccess = true;
-            qDebug() << "PageBase::iconAnnotationClicked =true ^^^^^^^^";
             break;
         }
     }
@@ -851,11 +852,30 @@ void PageBase::moveIconAnnotation(const QString &uuid, const QPoint &pos)
     Q_D(PageBase);
     for (int i = 0; i < d->m_iconannotationlist.size(); i++) {
         if (d->m_iconannotationlist.at(i).uuid == uuid) {
-            d->m_iconannotationlist.takeAt(i).position.setX(pos.x() / d->m_scale * d->m_imagewidth);
-            d->m_iconannotationlist.takeAt(i).position.setY(pos.y() / d->m_scale * d->m_imageheight);
-            QRect rect(pos.x() - ICONANNOTE_WIDTH / 2, pos.y() / ICONANNOTE_HEIGHT / 2, 100, 100);
-            update(rect);
+            ICONANNOTATION annote = d->m_iconannotationlist.takeAt(i);
+            qDebug() << "PageBase::moveIconAnnotation success ^^^^^^^start" << annote.position ;
+            annote.position.setX(pos.x() / (d->m_scale * d->m_imagewidth));
+            annote.position.setY(pos.y() / (d->m_scale * d->m_imageheight));
+            d->m_iconannotationlist.push_back(annote);
+            update();
+            qDebug() << "PageBase::moveIconAnnotation success ^^^^^^^end" << annote.position ;
             break;
         }
     }
+}
+
+bool PageBase::removeIconAnnotation(const QString &uuid)
+{
+    Q_D(PageBase);
+    bool bsuccess = false;
+    int index = 0;
+    foreach (ICONANNOTATION annote, d->m_iconannotationlist) {
+        if (annote.uuid == uuid) {
+            bsuccess = true;
+            d->m_iconannotationlist.removeAt(index);
+            break;
+        }
+        index++;
+    }
+    return  bsuccess;
 }

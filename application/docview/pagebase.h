@@ -286,6 +286,7 @@ public:
     QString addIconAnnotation(const QPoint &pos);
     bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
     void moveIconAnnotation(const QString &uuid, const QPoint &pos);
+    bool removeIconAnnotation(const QString &uuid);
 
 signals:
     void signal_MagnifierPixmapCacheLoaded(int);

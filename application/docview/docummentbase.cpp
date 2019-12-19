@@ -2216,13 +2216,12 @@ QString DocummentBase::addIconAnnotation(const QPoint &pos)
     QPoint pt = pos;
     int ipage = pointInWhichPage(pt);
     QString uuid("");
-    if (ipage < d->m_pages.size() || ipage >= 0) {
+    if (ipage < d->m_pages.size() && ipage >= 0) {
 
         double curwidth = d->m_imagewidth * d->m_scale;
         double curheight = d->m_imageheight * d->m_scale;
         double leftspace = (d->m_widgets.at(ipage)->width() - curwidth) / 2;
         double topspace = (d->m_widgets.at(ipage)->height() - curheight) / 2;
-        qDebug() << __FUNCTION__ << "$$##" << pos << curwidth << curheight << leftspace << topspace;
         if (pos.x() > leftspace && pos.x() < curwidth + leftspace && pos.y() > topspace && pos.y() < topspace + curheight) {
             pt.setX(pos.x() - leftspace);
             pt.setY(pos.y() - topspace);
@@ -2237,7 +2236,7 @@ void DocummentBase::moveIconAnnotation(const QString &uuid, const QPoint &pos)
     Q_D(DocummentBase);
     QPoint pt = pos;
     int ipage = pointInWhichPage(pt);
-    if (ipage < d->m_pages.size() || ipage >= 0) {
+    if (ipage < d->m_pages.size() && ipage >= 0) {
         double curwidth = d->m_imagewidth * d->m_scale;
         double curheight = d->m_imageheight * d->m_scale;
         double leftspace = (d->m_widgets.at(ipage)->width() - curwidth) / 2;
@@ -2246,6 +2245,7 @@ void DocummentBase::moveIconAnnotation(const QString &uuid, const QPoint &pos)
         if (pos.x() > leftspace && pos.x() < curwidth + leftspace && pos.y() > topspace && pos.y() < topspace + curheight) {
             pt.setX(pos.x() - leftspace);
             pt.setY(pos.y() - topspace);
+
             d->m_pages.at(ipage)->moveIconAnnotation(uuid, pt);
         }
     }
@@ -2254,26 +2254,32 @@ void DocummentBase::moveIconAnnotation(const QString &uuid, const QPoint &pos)
 bool DocummentBase::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {
     Q_D(DocummentBase);
-
     QPoint pt = pos;
     int ipage = pointInWhichPage(pt);
-    qDebug() << "DocummentBase::iconAnnotationClicked    1111=========" << ipage << pt;
-    bool bsucess = false;
-    if (ipage < d->m_pages.size() || ipage >= 0) {
+    bool bsuccess = false;
+    if (ipage < d->m_pages.size() && ipage >= 0) {
         double curwidth = d->m_imagewidth * d->m_scale;
         double curheight = d->m_imageheight * d->m_scale;
         double leftspace = (d->m_widgets.at(ipage)->width() - curwidth) / 2;
         double topspace = (d->m_widgets.at(ipage)->height() - curheight) / 2;
 
         if (pos.x() > leftspace && pos.x() < curwidth + leftspace && pos.y() > topspace && pos.y() < topspace + curheight) {
-
             pt.setX(pos.x() - leftspace);
             pt.setY(pos.y() - topspace);
-            qDebug() << "DocummentBase::iconAnnotationClicked    22222222" << pt;
-            bsucess = d->m_pages.at(ipage)->iconAnnotationClicked(pt, strtext, struuid);
+            bsuccess = d->m_pages.at(ipage)->iconAnnotationClicked(pt, strtext, struuid);
         }
     }
-    return bsucess;
+    return bsuccess;
+}
+
+bool DocummentBase::removeIconAnnotation(const QString &uuid, int ipage)
+{
+    Q_D(DocummentBase);
+    bool bsuccess = false;
+    if (ipage < d->m_pages.size() && ipage >= 0) {
+        bsuccess = d->m_pages.at(ipage)->removeIconAnnotation(uuid);
+    }
+    return  bsuccess;
 }
 
 

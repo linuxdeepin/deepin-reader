@@ -220,6 +220,13 @@ bool DocummentProxy::iconAnnotationClicked(const QPoint &pos, QString &strtext, 
     return m_documment->iconAnnotationClicked(pos, strtext, struuid);
 }
 
+bool DocummentProxy::removeIconAnnotation(const QString &uuid, int ipage)
+{
+    if (!m_documment || bcloseing)
+        return  false;
+    return  m_documment->removeIconAnnotation(uuid, ipage);
+}
+
 bool DocummentProxy::save(const QString &filepath, bool withChanges)
 {
     if (!m_documment || bcloseing)
