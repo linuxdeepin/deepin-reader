@@ -20,14 +20,40 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
     setMinimumWidth(LEFTMINWIDTH);
     setMaximumWidth(LEFTMAXWIDTH);
 
+    m_pMsgList = {MSG_SWITCHLEFTWIDGET, MSG_SLIDER_SHOW_STATE};
+    m_pKeyMsgList = {KeyStr::g_up, KeyStr::g_pgup, KeyStr::g_left,
+                     KeyStr::g_down, KeyStr::g_pgdown, KeyStr::g_right
+                    };
+
     initWidget();
     initConnections();
 
-    slotWidgetVisible(0);  //  默认 隐藏
+    onSetWidgetVisible(0);  //  默认 隐藏
     slotUpdateTheme();
 }
 
-void LeftSidebarWidget::slotStackSetCurIndex(const int &iIndex)
+void LeftSidebarWidget::slotDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_SWITCHLEFTWIDGET) {  //  切换页面
+        onSetStackCurIndex(msgContent.toInt());
+    } else if (msgType == MSG_SLIDER_SHOW_STATE) {//  控制 侧边栏显隐
+        onSetWidgetVisible(msgContent.toInt());
+    }
+}
+
+void LeftSidebarWidget::slotDealWithKeyMsg(const QString &msgContent)
+{
+    //  上 下 一页 由左侧栏进行转发
+    if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup ||
+            msgContent == KeyStr::g_left) {
+        onJumpToPrevPage();
+    } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown ||
+               msgContent == KeyStr::g_right) {
+        onJumpToNextPage();
+    }
+}
+
+void LeftSidebarWidget::onSetStackCurIndex(const int &iIndex)
 {
     AppSetting::instance()->setKeyValue(KEY_WIDGET, QString("%1").arg(iIndex));
 
@@ -44,7 +70,7 @@ void LeftSidebarWidget::slotStackSetCurIndex(const int &iIndex)
     }
 }
 
-void LeftSidebarWidget::slotWidgetVisible(const int &nVis)
+void LeftSidebarWidget::onSetWidgetVisible(const int &nVis)
 {
     this->setVisible(nVis);
     if (!nVis && DocummentProxy::instance())
@@ -57,18 +83,16 @@ void LeftSidebarWidget::slotUpdateTheme()
 }
 
 //  上一页
-void LeftSidebarWidget::slotJumpToPrevPage(const QString &msgContent)
+void LeftSidebarWidget::onJumpToPrevPage()
 {
     //  1.需要判断当前的模式, 是正常显示 还是幻灯片模式
     //  2.若不是幻灯片模式, 则正常进行处理
-    qDebug() << __FUNCTION__ << "           " << msgContent;
     bool bl = this->isVisible();
     if (bl) {
         auto pWidget = this->findChild<DStackedWidget *>();
         if (pWidget) {
             int iIndex = pWidget->currentIndex();
             doPrevPage(iIndex);
-//            emit sigJumpToPrevPage(iIndex, msgContent);
         }
     } else {
         forScreenPageing(false);
@@ -76,18 +100,16 @@ void LeftSidebarWidget::slotJumpToPrevPage(const QString &msgContent)
 }
 
 //  下一页
-void LeftSidebarWidget::slotJumpToNextPage(const QString &msgContent)
+void LeftSidebarWidget::onJumpToNextPage()
 {
     //  1.需要判断当前的模式, 是正常显示 还是幻灯片模式
     //  2.若不是幻灯片模式, 则正常进行处理
-    qDebug() << __FUNCTION__ << "           " << msgContent;
     bool bl = this->isVisible();
     if (bl) {
         auto pWidget = this->findChild<DStackedWidget *>();
         if (pWidget) {
             int iIndex = pWidget->currentIndex();
             doNextPage(iIndex);
-//            emit sigJumpToNextPage(iIndex, msgContent);
         }
     } else {
         forScreenPageing(true);
@@ -96,13 +118,10 @@ void LeftSidebarWidget::slotJumpToNextPage(const QString &msgContent)
 
 void LeftSidebarWidget::initConnections()
 {
-    connect(this, SIGNAL(sigStackSetCurIndex(const int &)),
-            SLOT(slotStackSetCurIndex(const int &)));
-    connect(this, SIGNAL(sigWidgetVisible(const int &)), SLOT(slotWidgetVisible(const int &)));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 
-    connect(this, SIGNAL(sigJumpToPrevPage(const QString &)), this, SLOT(slotJumpToPrevPage(const QString &)));
-    connect(this, SIGNAL(sigJumpToNextPage(const QString &)), this, SLOT(slotJumpToNextPage(const QString &)));
+    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
+    connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)), SLOT(slotDealWithKeyMsg(const QString &)));
 }
 
 /**
@@ -198,24 +217,17 @@ void LeftSidebarWidget::initWidget()
 
 int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_SWITCHLEFTWIDGET) {  //切换页面
-        emit sigStackSetCurIndex(msgContent.toInt());
+    if (m_pMsgList.contains(msgType)) {
+        emit sigDealWithData(msgType, msgContent);
         return ConstantMsg::g_effective_res;
     }
-    if (msgType == MSG_SLIDER_SHOW_STATE) {  //  控制 侧边栏显隐
-        emit sigWidgetVisible(msgContent.toInt());
-        return ConstantMsg::g_effective_res;
-    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+
+
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
     } else if (MSG_NOTIFY_KEY_MSG == msgType) {
-        //  上 下 一页 由左侧栏进行转发
-        if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup ||
-                msgContent == KeyStr::g_left) {
-            emit sigJumpToPrevPage(msgContent);
-            return ConstantMsg::g_effective_res;
-        } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown ||
-                   msgContent == KeyStr::g_right) {
-            emit sigJumpToNextPage(msgContent);
+        if (m_pKeyMsgList.contains(msgContent)) {
+            emit sigDealWithKeyMsg(msgContent);
             return ConstantMsg::g_effective_res;
         }
     }

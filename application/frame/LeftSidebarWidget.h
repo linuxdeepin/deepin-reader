@@ -17,29 +17,22 @@ public:
     explicit LeftSidebarWidget(CustomWidget *parent = nullptr);
 
 signals:
-    void sigStackSetCurIndex(const int &);
-    void sigWidgetVisible(const int &);
-    void sigJumpToPrevPage(const QString &);
-    void sigJumpToNextPage(const QString &);
-
-    /**
-     * @brief sigJumpToPrevPage
-     * 待废弃
-     */
-    void sigJumpToPrevPage(const int &, const QString &);
-    void sigJumpToNextPage(const int &, const QString &);
+    void sigDealWithData(const int &, const QString &);
+    void sigDealWithKeyMsg(const QString &);
 
 private slots:
-    void slotStackSetCurIndex(const int &);
-    void slotWidgetVisible(const int &);
+    void slotDealWithData(const int &, const QString &);
+    void slotDealWithKeyMsg(const QString &);
+
     void slotUpdateTheme();
-
-
-    void slotJumpToPrevPage(const QString &);
-    void slotJumpToNextPage(const QString &);
 
 private:
     void initConnections();
+    void onSetStackCurIndex(const int &);
+    void onSetWidgetVisible(const int &);
+
+    void onJumpToPrevPage();
+    void onJumpToNextPage();
 
     void doPrevPage(const int &index);
     void doNextPage(const int &index);
