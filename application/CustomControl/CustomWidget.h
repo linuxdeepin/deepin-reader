@@ -24,7 +24,7 @@ DWIDGET_USE_NAMESPACE
  */
 
 const int FIRST_LOAD_PAGES = 20;
-const int LEFTMINWIDTH = 190;
+const int LEFTMINWIDTH = 226;
 const int LEFTMAXWIDTH = 380;
 const int LEFTNORMALWIDTH = 226;
 

@@ -172,8 +172,8 @@ void MainWidget::initWidget()
     pSplitter->setHandleWidth(5);
     pSplitter->setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
-    pSplitter->addWidget(new LeftSidebarWidget);
-    pSplitter->addWidget(new DocShowShellWidget);
+    pSplitter->addWidget(new LeftSidebarWidget(this));
+    pSplitter->addWidget(new DocShowShellWidget(this));
 
     QList<int> list_src;
     list_src.append(LEFTNORMALWIDTH);

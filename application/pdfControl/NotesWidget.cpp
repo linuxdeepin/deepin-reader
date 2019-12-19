@@ -5,6 +5,9 @@
 NotesWidget::NotesWidget(CustomWidget *parent)
     : CustomWidget(QString("NotesWidget"), parent)
 {
+    this->setMinimumWidth(LEFTMINWIDTH);
+    this->setMaximumWidth(LEFTMAXWIDTH);
+    resize(LEFTMINWIDTH, this->height());
     initWidget();
 
     initConnection();
@@ -468,7 +471,7 @@ void NotesWidget::addNewItem(const stHighlightContent &note)
 
     NotesItemWidget *itemWidget = new NotesItemWidget;
     itemWidget->setNoteUUid(note.struuid);
-    itemWidget->setLabelPage(note.ipage, 1);  // reinterpret_cast
+    itemWidget->setLabelPage(static_cast<int>(note.ipage), 1);  // reinterpret_cast
     itemWidget->setTextEditText(note.strcontents);
     itemWidget->setMinimumSize(QSize(LEFTMINWIDTH - 5, 80));
 
@@ -480,7 +483,7 @@ void NotesWidget::addNewItem(const stHighlightContent &note)
     m_pNotesList->setItemWidget(item, itemWidget);
     //    m_pNoteItem = item;
 
-    m_mapUuidAndPage.insert(note.struuid, note.ipage);
+    m_mapUuidAndPage.insert(note.struuid, static_cast<int>(note.ipage));
 }
 
 /**
@@ -499,7 +502,7 @@ void NotesWidget::addNewItem(const QImage &image, const int &page, const QString
     itemWidget->setNoteUUid(uuid);
     itemWidget->setLabelPage(page, 1);
     itemWidget->setTextEditText(text);
-    itemWidget->setMinimumSize(QSize(LEFTMINWIDTH - 5, 80));
+    itemWidget->setMinimumSize(QSize(LEFTMINWIDTH, 80));
     itemWidget->setBSelect(true);
 
     auto item = new QListWidgetItem(m_pNotesList);
@@ -615,13 +618,11 @@ void ThreadLoadImageOfNote::run()
                 continue;
             }
 
-            if (t_page != highContent.ipage) {
-                t_page = highContent.ipage;
+            if (t_page != static_cast<int>(highContent.ipage)) {
+                t_page = static_cast<int>(highContent.ipage);
                 bl = dproxy->getImage(t_page, image, 48, 68 /*42, 62*/);
             }
             if (bl) {
-                //                QImage img = Utils::roundImage(QPixmap::fromImage(image),
-                //                ICON_SMALL);
                 emit sigLoadImage(image);
             }
             msleep(50);

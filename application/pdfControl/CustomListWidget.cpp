@@ -6,6 +6,10 @@
 CustomListWidget::CustomListWidget(DWidget *parent)
     : DListWidget(parent)
 {
+    this->setMinimumWidth(LEFTMINWIDTH);
+    this->setMaximumWidth(LEFTMAXWIDTH);
+    resize(LEFTMINWIDTH, this->height());
+
     setSpacing(0);
     setFrameShape(QFrame::NoFrame);
     setFocusPolicy(Qt::NoFocus);

@@ -3,6 +3,9 @@
 BufferWidget::BufferWidget(CustomWidget *parent)
     : CustomWidget(QString("BufferWidget"), parent)
 {
+    this->setMinimumWidth(LEFTMINWIDTH);
+    this->setMaximumWidth(LEFTMAXWIDTH);
+    resize(LEFTMINWIDTH, this->height());
     initWidget();
 }
 

@@ -5,6 +5,9 @@
 SearchResWidget::SearchResWidget(CustomWidget *parent)
     : CustomWidget(QString("SearchResWidget"), parent)
 {
+    this->setMinimumWidth(LEFTMINWIDTH);
+    this->setMaximumWidth(LEFTMAXWIDTH);
+    resize(LEFTMINWIDTH, this->height());
     m_loadSearchResThread.setSearchResW(this);
 
     initWidget();

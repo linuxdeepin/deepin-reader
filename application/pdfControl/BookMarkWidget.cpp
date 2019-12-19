@@ -11,6 +11,10 @@ BookMarkWidget::BookMarkWidget(CustomWidget *parent)
     : CustomWidget(QString("BookMarkWidget"), parent)
 {
     setFocusPolicy(Qt::ClickFocus);
+    this->setMinimumWidth(LEFTMINWIDTH);
+    this->setMaximumWidth(LEFTMAXWIDTH);
+    resize(LEFTMINWIDTH, this->height());
+
     initWidget();
     initConnection();
     slotUpdateTheme();

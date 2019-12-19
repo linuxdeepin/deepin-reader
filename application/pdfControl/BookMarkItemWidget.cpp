@@ -5,10 +5,12 @@
 BookMarkItemWidget::BookMarkItemWidget(CustomItemWidget *parent)
     : CustomItemWidget("BookMarkItemWidget", parent)
 {
+    this->setMinimumWidth(LEFTMINWIDTH);
+    this->setMaximumWidth(LEFTMAXWIDTH);
+    resize(LEFTMINWIDTH, this->height());
+
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this,
             SLOT(slotShowContextMenu(const QPoint &)));
-    setMinimumWidth(LEFTMINWIDTH - 5);
-    setMaximumWidth(LEFTMAXWIDTH - 5);
     initWidget();
 }
 
@@ -82,7 +84,7 @@ void BookMarkItemWidget::initWidget()
     m_pPageNumber->setForegroundRole(DPalette::TextTitle);
     DFontSizeManager::instance()->bind(m_pPageNumber, DFontSizeManager::T8);
 
-    auto hLine = new DHorizontalLine;
+    auto hLine = new DHorizontalLine(this);
     auto m_pRightVLayout = new QVBoxLayout;
 
     auto m_pPageVLayout = new QHBoxLayout;

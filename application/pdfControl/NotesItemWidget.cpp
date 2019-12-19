@@ -8,6 +8,10 @@
 NotesItemWidget::NotesItemWidget(CustomItemWidget *parent)
     : CustomItemWidget(QString("NotesItemWidget"), parent)
 {
+    this->setMinimumWidth(LEFTMINWIDTH);
+    this->setMaximumWidth(LEFTMAXWIDTH);
+    resize(LEFTMINWIDTH, this->height());
+
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this,
             SLOT(slotShowContextMenu(const QPoint &)));
     connect(this, SIGNAL(sigUpdateTheme()), this, SLOT(slotUpdateTheme()));
@@ -102,19 +106,19 @@ void NotesItemWidget::initWidget()
     m_pPicture->setFixedSize(QSize(48, 68));
     m_pPicture->setAlignment(Qt::AlignCenter);
 
-    m_pPageNumber = new PageNumberLabel;
+    m_pPageNumber = new PageNumberLabel(this);
     m_pPageNumber->setMinimumWidth(31);
     m_pPageNumber->setFixedHeight(18);
     m_pPageNumber->setForegroundRole(DPalette::TextTitle);
     DFontSizeManager::instance()->bind(m_pPageNumber, DFontSizeManager::T8);
 
-    m_pSearchResultNum = new DLabel;
+    m_pSearchResultNum = new DLabel(this);
     m_pSearchResultNum->setMinimumWidth(31);
     m_pSearchResultNum->setFixedHeight(18);
     m_pSearchResultNum->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(m_pSearchResultNum, DFontSizeManager::T10);
 
-    m_pTextLab = new DLabel;
+    m_pTextLab = new DLabel(this);
     m_pTextLab->setFixedHeight(54);
     m_pTextLab->setMinimumWidth(80);
     //    m_pTextLab->setMaximumWidth(349);
@@ -125,7 +129,7 @@ void NotesItemWidget::initWidget()
     m_pTextLab->setForegroundRole(QPalette::BrightText);
     DFontSizeManager::instance()->bind(m_pTextLab, DFontSizeManager::T9);
 
-    auto hLine = new DHorizontalLine;
+    auto hLine = new DHorizontalLine(this);
 
     auto t_hLayout = new QHBoxLayout;
     t_hLayout->setContentsMargins(0, 0, 0, 0);

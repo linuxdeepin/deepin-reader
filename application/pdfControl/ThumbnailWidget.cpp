@@ -6,6 +6,9 @@
 ThumbnailWidget::ThumbnailWidget(CustomWidget *parent)
     : CustomWidget(QString("ThumbnailWidget"), parent)
 {
+    this->setMinimumWidth(LEFTMINWIDTH);
+    this->setMaximumWidth(LEFTMAXWIDTH);
+    resize(LEFTMINWIDTH, this->height());
     m_ThreadLoadImage.setThumbnail(this);
 
     initWidget();

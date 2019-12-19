@@ -5,6 +5,9 @@ ThumbnailItemWidget::ThumbnailItemWidget(CustomItemWidget *parent)
     : CustomItemWidget("ThumbnailItemWidget", parent)
 {
     setWindowFlags(Qt::FramelessWindowHint);
+    this->setMinimumWidth(LEFTMINWIDTH);
+    this->setMaximumWidth(LEFTMAXWIDTH);
+    resize(LEFTMINWIDTH, this->height());
 
     initWidget();
     connect(this, SIGNAL(sigBookMarkStatusChanged(bool)), SLOT(slotBookMarkShowStatus(bool)));
@@ -57,25 +60,25 @@ void ThumbnailItemWidget::slotBookMarkShowStatus(bool bshow)
 // 初始化界面
 void ThumbnailItemWidget::initWidget()
 {
-    m_pPageNumber = new PageNumberLabel();
-    m_pPageNumber->setFixedSize(QSize(146, 18));
+    m_pPageNumber = new PageNumberLabel(this);
+    m_pPageNumber->setMinimumSize(QSize(146, 18));
     m_pPageNumber->setAlignment(Qt::AlignCenter);
 
-    m_pPicture = new ImageLabel();
+    m_pPicture = new ImageLabel(this);
     m_pPicture->setFixedSize(QSize(146, 174));
     m_pPicture->setAlignment(Qt::AlignCenter);
     m_pPicture->setRadius(ICON_BIG);
 
     auto t_vLayout = new QVBoxLayout;
-    t_vLayout->setContentsMargins(1, 0, 1, 0);
+    t_vLayout->setContentsMargins(0, 0, 0, 0);
     t_vLayout->setSpacing(0);
 
     t_vLayout->addWidget(m_pPicture);
     t_vLayout->addWidget(m_pPageNumber);
 
     auto t_hLayout = new QHBoxLayout;
-    t_hLayout->setContentsMargins(2, 0, 2, 0);
-    t_hLayout->setSpacing(0);
+    t_hLayout->setContentsMargins(43, 0, 43, 0);
+//    t_hLayout->setSpacing(0);
     t_hLayout->addStretch(1);
     t_hLayout->addItem(t_vLayout);
     t_hLayout->addStretch(1);
