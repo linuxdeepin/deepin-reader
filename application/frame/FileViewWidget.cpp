@@ -58,10 +58,10 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
     QPoint globalPos = event->globalPos();
     QPoint docGlobalPos = m_pDocummentFileHelper->global2RelativePoint(globalPos);
     //begin>>kyz 2019-12-19 注释图标移动测试
-    if (m_bmousepressed && event->buttons()&Qt::LeftButton && !struidtmp.isEmpty()) {
+//    if (m_bmousepressed && event->buttons()&Qt::LeftButton && !struidtmp.isEmpty()) {
 
-        DocummentProxy::instance()->moveIconAnnotation(struidtmp, docGlobalPos);
-    }
+//        DocummentProxy::instance()->moveIconAnnotation(struidtmp, docGlobalPos);
+//    }
     //end<<
     if (m_nCurrentHandelState == Handel_State) {  //   手型状态下， 按住鼠标左键 位置进行移动
         if (m_bSelectOrMove) {
@@ -116,13 +116,13 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
         return;
 
     //begin>>kyz 2019-12-18 测试
-    QPoint pt = m_pDocummentFileHelper->global2RelativePoint(event->globalPos());
-    if (event->button() == Qt::RightButton)
-        DocummentProxy::instance()->addIconAnnotation(pt);
-    else {
-        QString strtext, struid;
-        DocummentProxy::instance()->iconAnnotationClicked(pt, strtext, struidtmp);
-    }
+//    QPoint pt = m_pDocummentFileHelper->global2RelativePoint(event->globalPos());
+//    if (event->button() == Qt::RightButton)
+//        DocummentProxy::instance()->addIconAnnotation(pt);
+//    else {
+//        QString strtext, struid;
+//        DocummentProxy::instance()->iconAnnotationClicked(pt, strtext, struidtmp);
+//    }
     //<<end
 
     Qt::MouseButton nBtn = event->button();
