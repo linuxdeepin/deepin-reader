@@ -36,22 +36,24 @@ public:
     ~FileViewWidget() Q_DECL_OVERRIDE;
 
 signals:
+    void sigDealWithData(const int &, const QString &);
+
     void sigPrintFile();
     void sigSaveFile();
     void sigCopySelectContent(const QString &);
     void sigFileSlider(const int &);
 
-    void sigSetHandShape(const QString &);
-    void sigMagnifying(const QString &);
+//    void sigSetHandShape(const QString &);
+//    void sigMagnifying(const QString &);
 
-    void sigWidgetAdapt();
+//    void sigWidgetAdapt();
 
-    void sigFileAddAnnotation(const QString &);
+//    void sigFileAddAnnotation(const QString &);
     void sigFileAddAnnotation();
-    void sigFileUpdateAnnotation(const QString &);
-    void sigFileRemoveAnnotation(const QString &);
+//    void sigFileUpdateAnnotation(const QString &);
+//    void sigFileRemoveAnnotation(const QString &);
 
-    void sigFileAddNote(const QString &);
+//    void sigFileAddNote(const QString &);
     void sigFileAddNote();
 
     void sigFileCtrlContent();
@@ -65,31 +67,36 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
+    void slotDealWithData(const int &, const QString &);
+
     void slotCustomContextMenuRequested(const QPoint &);
 
-    void slotSetHandShape(const QString &);
-    void slotMagnifying(const QString &);
     void slotPrintFile();
-    void slotSetWidgetAdapt();
 
-    void slotFileAddAnnotation(const QString &);
     void slotFileAddAnnotation();
-    void slotFileUpdateAnnotation(const QString &);
-    void slotFileRemoveAnnotation(const QString &);
 
     void slotFileAddNote();
-    void slotFileAddNote(const QString &);
 
     void slotBookMarkStateChange(int, bool);
     void slotDocFilePageChanged(int);
 
     void slotFileCtrlContent();
+
 private:
     void initConnections();
     void onClickPageLink(Page::Link *pLink);
     void onShowNoteTipWidget(const QPoint &docPos);
 
-    int dealWithTitleRequest(const int &msgType, const QString &msgContent);
+    void onMagnifying(const QString &);
+    void onSetHandShape(const QString &);
+    void onSetWidgetAdapt();
+
+    void onFileAddAnnotation(const QString &);
+    void onFileUpdateAnnotation(const QString &);
+    void onFileRemoveAnnotation(const QString &);
+
+    void onFileAddNote(const QString &);
+
     int dealWithFileMenuRequest(const int &msgType, const QString &msgContent);
     int dealWithNotifyMsg(const QString &msgContent);
 
@@ -100,9 +107,9 @@ private:
 
 private:
     int         m_nCurrentHandelState = Default_State;  //  当前鼠标状态
-    int         m_nAdapteState = Default_State;         //  当前自适应状态
-    bool        m_bSelectOrMove = false;        //  是否可以选中文字、移动
-    bool        m_bIsHandleSelect = false;      //  是否可以选中
+    int         m_nAdapteState = NO_ADAPTE_State;       //  当前自适应状态
+    bool        m_bSelectOrMove = false;                //  是否可以选中文字、移动
+    bool        m_bIsHandleSelect = false;              //  是否可以选中
 
     QPoint      m_pStartPoint;
     QPoint      m_pEndSelectPoint;

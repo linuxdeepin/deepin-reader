@@ -19,6 +19,11 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
     , m_operatemenu(nullptr)
 {
+    m_pMsgList = { MSG_MAGNIFYING, MSG_HANDLESHAPE, MSG_SELF_ADAPTE_HEIGHT, MSG_SELF_ADAPTE_WIDTH,
+                   MSG_FILE_ROTATE, MSG_OPERATION_TEXT_COPY, MSG_OPERATION_TEXT_ADD_HIGHLIGHTED,
+                   MSG_OPERATION_TEXT_UPDATE_HIGHLIGHTED, MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED,
+                   MSG_NOTE_ADDCONTANT
+                 };
     setMouseTracking(true);  //  接受 鼠标滑动事件
     initWidget();
     initConnections();
@@ -199,9 +204,55 @@ void FileViewWidget::leaveEvent(QEvent *event)
 //  文档 显示区域 大小变化
 void FileViewWidget::resizeEvent(QResizeEvent *event)
 {
-    slotSetWidgetAdapt();
+    onSetWidgetAdapt();
 
     CustomWidget::resizeEvent(event);
+}
+
+void FileViewWidget::slotDealWithData(const int &msgType, const QString &msgContent)
+{
+    switch (msgType) {
+    case MSG_MAGNIFYING:            //  放大镜信号
+        onMagnifying(msgContent);
+        break;
+    case MSG_HANDLESHAPE:           //  手势 信号
+        onSetHandShape(msgContent);
+        break;
+    case MSG_SELF_ADAPTE_HEIGHT:    //  自适应 高度
+        if (msgContent == "1") {
+            m_nAdapteState = HEIGHT_State;
+            onSetWidgetAdapt();
+        } else {
+            m_nAdapteState = Default_State;
+        }
+        break;
+    case MSG_SELF_ADAPTE_WIDTH:     //  自适应宽度
+        if (msgContent == "1") {
+            m_nAdapteState = WIDGET_State;
+            onSetWidgetAdapt();
+        } else {
+            m_nAdapteState = Default_State;
+        }
+        break;
+    case MSG_FILE_ROTATE:           //  文档旋转了
+        onSetWidgetAdapt();
+        break;
+    case MSG_OPERATION_TEXT_COPY:   //  复制
+        emit sigCopySelectContent(msgContent);
+        break;
+    case MSG_OPERATION_TEXT_ADD_HIGHLIGHTED:    //  高亮显示
+        onFileAddAnnotation(msgContent);
+        break;
+    case MSG_OPERATION_TEXT_UPDATE_HIGHLIGHTED: //  更新高亮颜色
+        onFileUpdateAnnotation(msgContent);
+        break;
+    case MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED: //  移除高亮颜色
+        onFileRemoveAnnotation(msgContent);
+        break;
+    case MSG_NOTE_ADDCONTANT:                   //  添加注释
+        onFileAddNote(msgContent);
+        break;
+    }
 }
 
 //  弹出 自定义 菜单
@@ -251,7 +302,7 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 }
 
 //  放大镜　控制
-void FileViewWidget::slotMagnifying(const QString &data)
+void FileViewWidget::onMagnifying(const QString &data)
 {
     int nRes = data.toInt();
     if (nRes == 1) {
@@ -271,7 +322,7 @@ void FileViewWidget::slotMagnifying(const QString &data)
 }
 
 //  手势控制
-void FileViewWidget::slotSetHandShape(const QString &data)
+void FileViewWidget::onSetHandShape(const QString &data)
 {
     //  手型 切换 也需要将之前选中的文字清除 选中样式
     m_pDocummentFileHelper->mouseSelectTextClear();
@@ -322,7 +373,7 @@ void FileViewWidget::slotFileAddAnnotation()
 }
 
 //  添加高亮颜色
-void FileViewWidget::slotFileAddAnnotation(const QString &msgContent)
+void FileViewWidget::onFileAddAnnotation(const QString &msgContent)
 {
     QStringList contentList = msgContent.split(",", QString::SkipEmptyParts);
     if (contentList.size() == 3) {
@@ -341,7 +392,7 @@ void FileViewWidget::slotFileAddAnnotation(const QString &msgContent)
 }
 
 //  更新高亮颜色
-void FileViewWidget::slotFileUpdateAnnotation(const QString &msgContent)
+void FileViewWidget::onFileUpdateAnnotation(const QString &msgContent)
 {
     QStringList contentList = msgContent.split(",", QString::SkipEmptyParts);
     if (contentList.size() == 3) {
@@ -357,7 +408,7 @@ void FileViewWidget::slotFileUpdateAnnotation(const QString &msgContent)
 }
 
 //  移除高亮, 有注释 则删除注释
-void FileViewWidget::slotFileRemoveAnnotation(const QString &msgContent)
+void FileViewWidget::onFileRemoveAnnotation(const QString &msgContent)
 {
     QStringList contentList = msgContent.split(",", QString::SkipEmptyParts);
     if (contentList.size() == 2) {
@@ -373,7 +424,7 @@ void FileViewWidget::slotFileRemoveAnnotation(const QString &msgContent)
 }
 
 //  添加注释
-void FileViewWidget::slotFileAddNote(const QString &msgContent)
+void FileViewWidget::onFileAddNote(const QString &msgContent)
 {
     QString sUuid = "", sNote = "", sPage = "";
     int ipage = 0;
@@ -475,24 +526,25 @@ void FileViewWidget::initConnections()
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             SLOT(slotCustomContextMenuRequested(const QPoint &)));
 
-    connect(this, SIGNAL(sigSetHandShape(const QString &)),
-            SLOT(slotSetHandShape(const QString &)));
-    connect(this, SIGNAL(sigMagnifying(const QString &)), SLOT(slotMagnifying(const QString &)));
-    connect(this, SIGNAL(sigWidgetAdapt()), SLOT(slotSetWidgetAdapt()));
+//    connect(this, SIGNAL(sigSetHandShape(const QString &)),
+//            SLOT(slotSetHandShape(const QString &)));
+//    connect(this, SIGNAL(sigMagnifying(const QString &)), SLOT(slotMagnifying(const QString &)));
+//    connect(this, SIGNAL(sigWidgetAdapt()), SLOT(slotSetWidgetAdapt()));
     connect(this, SIGNAL(sigPrintFile()), SLOT(slotPrintFile()));
 
     connect(this, SIGNAL(sigFileAddAnnotation()), SLOT(slotFileAddAnnotation()));
-    connect(this, SIGNAL(sigFileAddAnnotation(const QString &)),
-            SLOT(slotFileAddAnnotation(const QString &)));
-    connect(this, SIGNAL(sigFileUpdateAnnotation(const QString &)),
-            SLOT(slotFileUpdateAnnotation(const QString &)));
-    connect(this, SIGNAL(sigFileRemoveAnnotation(const QString &)),
-            SLOT(slotFileRemoveAnnotation(const QString &)));
+//    connect(this, SIGNAL(sigFileAddAnnotation(const QString &)),
+//            SLOT(slotFileAddAnnotation(const QString &)));
+//    connect(this, SIGNAL(sigFileUpdateAnnotation(const QString &)),
+//            SLOT(slotFileUpdateAnnotation(const QString &)));
+//    connect(this, SIGNAL(sigFileRemoveAnnotation(const QString &)),
+//            SLOT(slotFileRemoveAnnotation(const QString &)));
 
     connect(this, SIGNAL(sigFileAddNote()), SLOT(slotFileAddNote()));
-    connect(this, SIGNAL(sigFileAddNote(const QString &)), SLOT(slotFileAddNote(const QString &)));
+//    connect(this, SIGNAL(sigFileAddNote(const QString &)), SLOT(slotFileAddNote(const QString &)));
 
     connect(this, SIGNAL(sigFileCtrlContent()), SLOT(slotFileCtrlContent()));
+    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
 }
 
 //  显示 注释内容Tip
@@ -569,7 +621,7 @@ void FileViewWidget::slotPrintFile()
 }
 
 //  设置　窗口　自适应　宽＼高　度
-void FileViewWidget::slotSetWidgetAdapt()
+void FileViewWidget::onSetWidgetAdapt()
 {
     double nScale = 0.0;
     if (m_nAdapteState == WIDGET_State) {
@@ -585,62 +637,29 @@ void FileViewWidget::slotSetWidgetAdapt()
     }
 }
 
-//  标题栏的菜单消息处理
-int FileViewWidget::dealWithTitleRequest(const int &msgType, const QString &msgContent)
-{
-    switch (msgType) {
-    case MSG_MAGNIFYING:  //  放大镜信号
-        emit sigMagnifying(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_HANDLESHAPE:  //  手势 信号
-        emit sigSetHandShape(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_SELF_ADAPTE_HEIGHT:  //  自适应　高度
-        if (msgContent == "1") {
-            m_nAdapteState = HEIGHT_State;
-            emit sigWidgetAdapt();
-        } else {
-            m_nAdapteState = Default_State;
-        }
-        return ConstantMsg::g_effective_res;
-    case MSG_SELF_ADAPTE_WIDTH:  //   自适应宽度
-        if (msgContent == "1") {
-            m_nAdapteState = WIDGET_State;
-            emit sigWidgetAdapt();
-        } else {
-            m_nAdapteState = Default_State;
-        }
-        return ConstantMsg::g_effective_res;
-    case MSG_FILE_ROTATE:  //  文档旋转了
-        emit sigWidgetAdapt();
-        return ConstantMsg::g_effective_res;
-    }
-    return 0;
-}
-
 //  文档右键菜单请求处理
 int FileViewWidget::dealWithFileMenuRequest(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
 
-    case MSG_OPERATION_TEXT_COPY:  //  复制
-        emit sigCopySelectContent(msgContent);
-        return ConstantMsg::g_effective_res;
+//    case MSG_OPERATION_TEXT_COPY:  //  复制
+//        emit sigCopySelectContent(msgContent);
+//        return ConstantMsg::g_effective_res;
     case MSG_OPERATION_SLIDE:  //  放映
         emit sigFileSlider(1);
         break;
-    case MSG_OPERATION_TEXT_ADD_HIGHLIGHTED:  //  高亮显示
-        emit sigFileAddAnnotation(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_TEXT_UPDATE_HIGHLIGHTED:  //  更新高亮颜色显示
-        emit sigFileUpdateAnnotation(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED:  //  移除高亮显示
-        emit sigFileRemoveAnnotation(msgContent);
-        return ConstantMsg::g_effective_res;
-    case MSG_NOTE_ADDCONTANT:  //  添加注释
-        emit sigFileAddNote(msgContent);
-        return ConstantMsg::g_effective_res;
+//    case MSG_OPERATION_TEXT_ADD_HIGHLIGHTED:  //  高亮显示
+//        emit sigFileAddAnnotation(msgContent);
+//        return ConstantMsg::g_effective_res;
+//    case MSG_OPERATION_TEXT_UPDATE_HIGHLIGHTED:  //  更新高亮颜色显示
+//        emit sigFileUpdateAnnotation(msgContent);
+//        return ConstantMsg::g_effective_res;
+//    case MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED:  //  移除高亮显示
+//        emit sigFileRemoveAnnotation(msgContent);
+//        return ConstantMsg::g_effective_res;
+//    case MSG_NOTE_ADDCONTANT:  //  添加注释
+//        emit sigFileAddNote(msgContent);
+//        return ConstantMsg::g_effective_res;
     }
     return 0;
 }
@@ -682,13 +701,15 @@ int FileViewWidget::dealWithNotifyMsg(const QString &msgContent)
 //  消息 数据 处理
 int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    int nRes = dealWithTitleRequest(msgType, msgContent);
+    if (m_pMsgList.contains(msgType)) {
+        emit sigDealWithData(msgType, msgContent);
+        return ConstantMsg::g_effective_res;
+    }
+
+    int nRes = dealWithFileMenuRequest(msgType, msgContent);
     if (nRes != ConstantMsg::g_effective_res) {
-        nRes = dealWithFileMenuRequest(msgType, msgContent);
-        if (nRes != ConstantMsg::g_effective_res) {
-            if (msgType == MSG_NOTIFY_KEY_MSG) {
-                nRes = dealWithNotifyMsg(msgContent);
-            }
+        if (msgType == MSG_NOTIFY_KEY_MSG) {
+            nRes = dealWithNotifyMsg(msgContent);
         }
     }
 
