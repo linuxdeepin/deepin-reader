@@ -7,6 +7,16 @@
 
 #include <QMetaType>
 
+enum DocType_EM {
+    DocType_NULL = 0,
+    DocType_PDF,
+    DocType_DJVU,
+    DocType_TIFF,
+    DocType_PS,
+    DocType_XPS
+
+};
+
 typedef struct SEARCH_RESULT {
     unsigned int ipage;
     QList<QString> listtext;
