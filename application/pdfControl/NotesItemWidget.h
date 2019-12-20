@@ -52,6 +52,7 @@ public:
         m_strNote = note;
     }
 
+    bool bSelect();
     void setBSelect(const bool &paint);
 
 private slots:

@@ -297,16 +297,18 @@ void BookMarkWidget::slotDelBkItem()
             auto t_widget =
                 reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
             if (t_widget) {
-                int nPageIndex = t_widget->nPageIndex();
+                if (t_widget->bSelect()) {
+                    int nPageIndex = t_widget->nPageIndex();
 
-                t_widget->deleteLater();
-                t_widget = nullptr;
+                    t_widget->deleteLater();
+                    t_widget = nullptr;
 
-                delete pCurItem;
-                pCurItem = nullptr;
+                    delete pCurItem;
+                    pCurItem = nullptr;
 
-                deleteIndexPage(nPageIndex);
-                notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Deleted bookmark"));
+                    deleteIndexPage(nPageIndex);
+                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Deleted bookmark"));
+                }
             }
         }
 

@@ -237,24 +237,27 @@ void NotesWidget::slotDelNoteItem()
 
         auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(curItem));
         if (t_widget) {
-            QString t_uuid = t_widget->noteUUId();
-            int page = t_widget->nPageIndex();
+            if (t_widget->bSelect()) {
 
-            delete t_widget;
-            t_widget = nullptr;
+                QString t_uuid = t_widget->noteUUId();
+                int page = t_widget->nPageIndex();
 
-            delete curItem;
-            curItem = nullptr;
+                delete t_widget;
+                t_widget = nullptr;
 
-            m_pNotesList->update();
+                delete curItem;
+                curItem = nullptr;
 
-            // remove date from map and notify kong yun zhen
-            m_mapUuidAndPage.remove(t_uuid);
+                m_pNotesList->update();
 
-            auto t_pDocummentProxy = DocummentFileHelper::instance();
-            if (t_pDocummentProxy) {
-                t_pDocummentProxy->removeAnnotation(t_uuid, page);
-                notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Deleted Note"));
+                // remove date from map and notify kong yun zhen
+                m_mapUuidAndPage.remove(t_uuid);
+
+                auto t_pDocummentProxy = DocummentFileHelper::instance();
+                if (t_pDocummentProxy) {
+                    t_pDocummentProxy->removeAnnotation(t_uuid, page);
+                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Deleted Note"));
+                }
             }
         }
         if (m_pNotesList->count() > 0) {
