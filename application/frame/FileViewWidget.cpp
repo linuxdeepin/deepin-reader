@@ -38,12 +38,15 @@ void FileViewWidget::initWidget()
 {
     //  实际文档类  唯一实例化设置 父窗口
     auto m_pDocummentProxy = DocummentProxy::instance(this);
-    connect(m_pDocummentProxy, SIGNAL(signal_bookMarkStateChange(int, bool)), this,
-            SLOT(slotBookMarkStateChange(int, bool)));
-    connect(m_pDocummentProxy, SIGNAL(signal_pageChange(int)), this,
-            SLOT(slotDocFilePageChanged(int)));
+    if (m_pDocummentProxy) {
+        connect(m_pDocummentProxy, SIGNAL(signal_bookMarkStateChange(int, bool)), this,
+                SLOT(slotBookMarkStateChange(int, bool)));
+        connect(m_pDocummentProxy, SIGNAL(signal_pageChange(int)), this,
+                SLOT(slotDocFilePageChanged(int)));
 
-    m_pDocummentFileHelper = DocummentFileHelper::instance();
+        m_pDocummentFileHelper = DocummentFileHelper::instance();
+        m_pDocummentFileHelper->setDocProxy(m_pDocummentProxy);     //  唯一设置 文档类入口
+    }
 }
 
 //  鼠标移动

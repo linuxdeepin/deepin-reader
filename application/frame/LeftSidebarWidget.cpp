@@ -3,15 +3,18 @@
 #include <QButtonGroup>
 #include <QVBoxLayout>
 
-#include "controller/DataManager.h"
 #include "pdfControl/BookMarkWidget.h"
 #include "pdfControl/BufferWidget.h"
 #include "pdfControl/NotesWidget.h"
 #include "pdfControl/SearchResWidget.h"
 #include "pdfControl/ThumbnailWidget.h"
-#include "docview/docummentproxy.h"
+
 #include "MainOperationWidget.h"
+
+#include "controller/DataManager.h"
 #include "controller/AppSetting.h"
+
+#include "frame/DocummentFileHelper.h"
 
 LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
     : CustomWidget("LeftSidebarWidget", parent)
@@ -73,8 +76,8 @@ void LeftSidebarWidget::onSetStackCurIndex(const int &iIndex)
 void LeftSidebarWidget::onSetWidgetVisible(const int &nVis)
 {
     this->setVisible(nVis);
-    if (!nVis && DocummentProxy::instance())
-        DocummentProxy::instance()->setViewFocus();
+    if (!nVis && DocummentFileHelper::instance())
+        DocummentFileHelper::instance()->setViewFocus();
 }
 
 void LeftSidebarWidget::slotUpdateTheme()

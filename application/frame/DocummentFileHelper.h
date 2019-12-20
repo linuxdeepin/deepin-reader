@@ -30,6 +30,9 @@ public:
 
     ~DocummentFileHelper() Q_DECL_OVERRIDE;
 
+public:
+    void setDocProxy(DocummentProxy *);
+
 signals:
     void sigDealWithData(const int &, const QString &);
     void sigDealWithKeyMsg(const QString &);
@@ -41,6 +44,7 @@ public:
     bool save(const QString &filepath, bool withChanges);
     bool closeFile();
     void docBasicInfo(stFileInfo &info);
+    void setViewFocus();
 
 public:
     bool mouseSelectText(const QPoint &start, const QPoint &stop);

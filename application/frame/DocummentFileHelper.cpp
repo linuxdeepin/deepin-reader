@@ -18,8 +18,6 @@
 DocummentFileHelper::DocummentFileHelper(QObject *parent)
     : QObject(parent)
 {
-    m_pDocummentProxy = DocummentProxy::instance();
-
     initConnections();
 
     m_pMsgList = { MSG_OPEN_FILE_PATH, MSG_OPEN_FILE_PATH_S, MSG_OPERATION_SAVE_AS_FILE,
@@ -49,17 +47,9 @@ DocummentFileHelper::~DocummentFileHelper()
     }
 }
 
-void DocummentFileHelper::initConnections()
+void DocummentFileHelper::setDocProxy(DocummentProxy *p)
 {
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
-            SLOT(slotDealWithData(const int &, const QString &)));
-    connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)),
-            SLOT(slotDealWithKeyMsg(const QString &)));
-
-    connect(this, SIGNAL(sigFileSlider(const int &)), SLOT(slotFileSlider(const int &)));
-    connect(this, SIGNAL(sigFileCtrlContent()), SLOT(slotFileCtrlContent()));
-
-//    connect(this, SIGNAL(sigSaveAsFile()), SLOT(slotSaveAsFile()));
+    m_pDocummentProxy = p;
 
     connect(m_pDocummentProxy, &DocummentProxy::signal_openResult, this, [ = ](bool openresult) {
         if (openresult) {
@@ -73,6 +63,17 @@ void DocummentFileHelper::initConnections()
             notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
         }
     });
+}
+
+void DocummentFileHelper::initConnections()
+{
+    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
+            SLOT(slotDealWithData(const int &, const QString &)));
+    connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)),
+            SLOT(slotDealWithKeyMsg(const QString &)));
+
+    connect(this, SIGNAL(sigFileSlider(const int &)), SLOT(slotFileSlider(const int &)));
+    connect(this, SIGNAL(sigFileCtrlContent()), SLOT(slotFileCtrlContent()));
 }
 
 //  处理 应用推送的消息数据
@@ -138,41 +139,82 @@ void DocummentFileHelper::notifyMsg(const int &msgType, const QString &msgConten
 
 bool DocummentFileHelper::save(const QString &filepath, bool withChanges)
 {
+    if (!m_pDocummentProxy) {
+        return false;
+    }
+
     return m_pDocummentProxy->save(filepath, withChanges);
 }
 
 bool DocummentFileHelper::closeFile()
 {
+    if (!m_pDocummentProxy) {
+        return false;
+    }
+
     return m_pDocummentProxy->closeFile();
 }
 
 void DocummentFileHelper::docBasicInfo(stFileInfo &info)
 {
+    if (!m_pDocummentProxy) {
+        return ;
+    }
+
     m_pDocummentProxy->docBasicInfo(info);
+}
+
+void DocummentFileHelper::setViewFocus()
+{
+    if (!m_pDocummentProxy) {
+        return ;
+    }
+
+    m_pDocummentProxy->setViewFocus();
 }
 
 bool DocummentFileHelper::mouseSelectText(const QPoint &start, const QPoint &stop)
 {
+    if (!m_pDocummentProxy) {
+        return false;
+    }
+
     return m_pDocummentProxy->mouseSelectText(start, stop);
 }
 
 bool DocummentFileHelper::mouseBeOverText(const QPoint &point)
 {
+    if (!m_pDocummentProxy) {
+        return false;
+    }
+
     return m_pDocummentProxy->mouseBeOverText(point);
 }
 
 Page::Link *DocummentFileHelper::mouseBeOverLink(const QPoint &point)
 {
+    if (!m_pDocummentProxy) {
+        return nullptr;
+    }
+
     return m_pDocummentProxy->mouseBeOverLink(point);
 }
 
 void DocummentFileHelper::mouseSelectTextClear()
 {
+    if (!m_pDocummentProxy) {
+        return ;
+    }
+
     m_pDocummentProxy->mouseSelectTextClear();
 }
 
 bool DocummentFileHelper::getSelectTextString(QString &st)
 {
+    if (!m_pDocummentProxy) {
+        return false;
+    }
+
     return m_pDocummentProxy->getSelectTextString(st);
 }
 
@@ -199,6 +241,9 @@ void DocummentFileHelper::onSaveFile()
 //  另存为
 void DocummentFileHelper::onSaveAsFile()
 {
+    if (!m_pDocummentProxy) {
+        return;
+    }
     QString sFilter = FFH::getFileFilter(m_nCurDocType);
 
     if (sFilter != "") {
@@ -238,6 +283,10 @@ void DocummentFileHelper::onSaveAsFile()
 //  打开　文件路径
 void DocummentFileHelper::onOpenFile(const QString &filePaths)
 {
+    if (!m_pDocummentProxy) {
+        return;
+    }
+
     //  已经打开了文件，　询问是否需要保存当前打开的文件
     if (m_szFilePath != "") {
         QStringList fileList = filePaths.split(Constant::sQStringSep,  QString::SkipEmptyParts);
@@ -328,6 +377,10 @@ void DocummentFileHelper::onOpenFiles(const QString &filePaths)
 //  设置  应用显示名称
 void DocummentFileHelper::setAppShowTitle(const QString &fileName)
 {
+    if (!m_pDocummentProxy) {
+        return;
+    }
+
     QString sTitle = "";
     m_pDocummentProxy->title(sTitle);
     if (sTitle == "") {
@@ -349,6 +402,10 @@ void DocummentFileHelper::slotCopySelectContent(const QString &sCopy)
  */
 void DocummentFileHelper::slotFileSlider(const int &nFlag)
 {
+    if (!m_pDocummentProxy) {
+        return;
+    }
+
     if (nFlag == 1) {
         bool bSlideModel = m_pDocummentProxy->showSlideModel();    //  开启幻灯片
         if (bSlideModel) {
@@ -379,6 +436,9 @@ void DocummentFileHelper::slotFileCtrlContent()
 //  文档　跳转页码　．　打开浏览器
 void DocummentFileHelper::onClickPageLink(Page::Link *pLink)
 {
+    if (!m_pDocummentProxy) {
+        return;
+    }
     Page::LinkType_EM linkType = pLink->type;
     if (linkType == Page::LinkType_NULL) {
 
@@ -397,36 +457,57 @@ void DocummentFileHelper::onClickPageLink(Page::Link *pLink)
 
 QPoint DocummentFileHelper::global2RelativePoint(const QPoint &globalpoint)
 {
+    if (!m_pDocummentProxy) {
+        return QPoint(0, 0);
+    }
     return  m_pDocummentProxy->global2RelativePoint(globalpoint);
 }
 
 bool DocummentFileHelper::pageMove(const double &mvx, const double &mvy)
 {
+    if (!m_pDocummentProxy) {
+        return false;
+    }
     return m_pDocummentProxy->pageMove(mvx, mvy);
 }
 
 int DocummentFileHelper::pointInWhichPage(const QPoint &pos)
 {
+    if (!m_pDocummentProxy) {
+        return -1;
+    }
     return m_pDocummentProxy->pointInWhichPage(pos);
 }
 
 int DocummentFileHelper::getPageSNum()
 {
+    if (!m_pDocummentProxy) {
+        return -1;
+    }
     return m_pDocummentProxy->getPageSNum();
 }
 
 int DocummentFileHelper::currentPageNo()
 {
+    if (!m_pDocummentProxy) {
+        return -1;
+    }
     return m_pDocummentProxy->currentPageNo();
 }
 
 bool DocummentFileHelper::pageJump(const int &pagenum)
 {
+    if (!m_pDocummentProxy) {
+        return false;
+    }
     return m_pDocummentProxy->pageJump(pagenum);
 }
 
 bool DocummentFileHelper::getImage(const int &pagenum, QImage &image, const double &width, const double &height)
 {
+    if (!m_pDocummentProxy) {
+        return false;
+    }
     return  m_pDocummentProxy->getImage(pagenum, image, width, height);
 }
 
@@ -449,21 +530,33 @@ QImage DocummentFileHelper::roundImage(const QPixmap &img_in, const int &radius)
 
 bool DocummentFileHelper::showMagnifier(const QPoint &point)
 {
+    if (!m_pDocummentProxy) {
+        return false;
+    }
     return  m_pDocummentProxy->showMagnifier(point);
 }
 
 bool DocummentFileHelper::closeMagnifier()
 {
+    if (!m_pDocummentProxy) {
+        return false;
+    }
     return m_pDocummentProxy->closeMagnifier();
 }
 
 bool DocummentFileHelper::setBookMarkState(const int &page, const bool &state)
 {
+    if (!m_pDocummentProxy) {
+        return false;
+    }
     return m_pDocummentProxy->setBookMarkState(page, state);
 }
 
 void DocummentFileHelper::setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode)
 {
+    if (!m_pDocummentProxy) {
+        return ;
+    }
     m_pDocummentProxy->setScaleRotateViewModeAndShow(scale, rotate, viewmode);
 }
 
@@ -479,26 +572,41 @@ void DocummentFileHelper::setScaleRotateViewModeAndShow(double scale, RotateType
 
 double DocummentFileHelper::adaptWidthAndShow(const double &width)
 {
+    if (!m_pDocummentProxy) {
+        return 0.0;
+    }
     return m_pDocummentProxy->adaptWidthAndShow(width);
 }
 
 double DocummentFileHelper::adaptHeightAndShow(const double &height)
 {
+    if (!m_pDocummentProxy) {
+        return 0.0;
+    }
     return m_pDocummentProxy->adaptHeightAndShow(height);
 }
 
 void DocummentFileHelper::clearsearch()
 {
+    if (!m_pDocummentProxy) {
+        return ;
+    }
     m_pDocummentProxy->clearsearch();
 }
 
 void DocummentFileHelper::getAllAnnotation(QList<stHighlightContent> &listres)
 {
+    if (!m_pDocummentProxy) {
+        return ;
+    }
     m_pDocummentProxy->getAllAnnotation(listres);
 }
 
 QString DocummentFileHelper::addAnnotation(const QPoint &startpos, const QPoint &endpos, const QColor &color)
 {
+    if (!m_pDocummentProxy) {
+        return "";
+    }
     QString strUuid = m_pDocummentProxy->addAnnotation(startpos, endpos, color);
     if (strUuid != "") {
         DataManager::instance()->setBIsUpdate(true);
@@ -508,65 +616,101 @@ QString DocummentFileHelper::addAnnotation(const QPoint &startpos, const QPoint 
 
 void DocummentFileHelper::changeAnnotationColor(const int &ipage, const QString &uuid, const QColor &color)
 {
+    if (!m_pDocummentProxy) {
+        return ;
+    }
     DataManager::instance()->setBIsUpdate(true);
     m_pDocummentProxy->changeAnnotationColor(ipage, uuid, color);
 }
 
 bool DocummentFileHelper::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {
+    if (!m_pDocummentProxy) {
+        return false;
+    }
     return m_pDocummentProxy->annotationClicked(pos, strtext, struuid);
 }
 
 void DocummentFileHelper::removeAnnotation(const QString &struuid, const int &ipage)
 {
+    if (!m_pDocummentProxy) {
+        return ;
+    }
     DataManager::instance()->setBIsUpdate(true);
     m_pDocummentProxy->removeAnnotation(struuid, ipage);
 }
 
 QString DocummentFileHelper::removeAnnotation(const QPoint &pos)
 {
+    if (!m_pDocummentProxy) {
+        return "";
+    }
     DataManager::instance()->setBIsUpdate(true);
     return m_pDocummentProxy->removeAnnotation(pos);
 }
 
 void DocummentFileHelper::setAnnotationText(const int &ipage, const QString &struuid, const QString &strtext)
 {
+    if (!m_pDocummentProxy) {
+        return;
+    }
     DataManager::instance()->setBIsUpdate(true);
     m_pDocummentProxy->setAnnotationText(ipage, struuid, strtext);
 }
 
 void DocummentFileHelper::getAnnotationText(const QString &struuid, QString &strtext, const int &ipage)
 {
+    if (!m_pDocummentProxy) {
+        return;
+    }
     m_pDocummentProxy->getAnnotationText(struuid, strtext, ipage);
 }
 
 void DocummentFileHelper::jumpToHighLight(const QString &uuid, const int &ipage)
 {
+    if (!m_pDocummentProxy) {
+        return ;
+    }
     DataManager::instance()->setBIsUpdate(true);
     m_pDocummentProxy->jumpToHighLight(uuid, ipage);
 }
 
 void DocummentFileHelper::search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color)
 {
+    if (!m_pDocummentProxy) {
+        return ;
+    }
     m_pDocummentProxy->search(strtext, resmap, color);
 }
 
 void DocummentFileHelper::findNext()
 {
+    if (!m_pDocummentProxy) {
+        return ;
+    }
     m_pDocummentProxy->findNext();
 }
 
 void DocummentFileHelper::findPrev()
 {
+    if (!m_pDocummentProxy) {
+        return ;
+    }
     m_pDocummentProxy->findPrev();
 }
 
 bool DocummentFileHelper::getAutoPlaySlideStatu()
 {
+    if (!m_pDocummentProxy) {
+        return false;
+    }
     return m_pDocummentProxy->getAutoPlaySlideStatu();
 }
 
 void DocummentFileHelper::setAutoPlaySlide(const bool &autoplay, const int &timemsec)
 {
+    if (!m_pDocummentProxy) {
+        return ;
+    }
     m_pDocummentProxy->setAutoPlaySlide(autoplay, timemsec);
 }
