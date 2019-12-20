@@ -3,7 +3,7 @@
 #include "subjectObserver/MsgHeader.h"
 #include "controller/MsgSubject.h"
 #include "controller/NotifySubject.h"
-#include "docview/docummentproxy.h"
+
 #include "controller/DataManager.h"
 #include "subjectObserver/ModuleHeader.h"
 #include "application.h"

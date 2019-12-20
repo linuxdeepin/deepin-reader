@@ -17,6 +17,14 @@ enum DocType_EM {
 
 };
 
+enum RotateType_EM {
+    RotateType_Normal = 0,
+    RotateType_0,
+    RotateType_90,
+    RotateType_180,
+    RotateType_270
+};
+
 typedef struct SEARCH_RESULT {
     unsigned int ipage;
     QList<QString> listtext;
@@ -82,5 +90,10 @@ typedef struct ICONANNOTATION {
     }
 
 } stIconAnnotation;
+
+struct stWord {
+    QString s;
+    QRectF rect;
+};
 
 #endif // COMMONSTRUCT_H

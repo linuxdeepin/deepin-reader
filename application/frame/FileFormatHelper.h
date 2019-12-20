@@ -3,7 +3,7 @@
 
 #include <QString>
 #include "subjectObserver/ModuleHeader.h"
-#include "docview/docummentproxy.h"
+#include "docview/commonstruct.h"
 
 namespace  FFH {
 QString getFileFilter(const int &nCurDocType)

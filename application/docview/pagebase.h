@@ -46,17 +46,7 @@ struct Link {
 
 };
 }
-struct stWord {
-    QString s;
-    QRectF rect;
-};
-enum RotateType_EM {
-    RotateType_Normal = 0,
-    RotateType_0,
-    RotateType_90,
-    RotateType_180,
-    RotateType_270
-};
+
 
 class PageBase;
 class PageInterface;

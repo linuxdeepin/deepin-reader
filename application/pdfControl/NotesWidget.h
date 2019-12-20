@@ -12,7 +12,7 @@
 #include "CustomControl/CustomWidget.h"
 #include "CustomListWidget.h"
 #include "NotesItemWidget.h"
-#include "docview/docummentproxy.h"
+#include "docview/commonstruct.h"
 
 class ThreadLoadImageOfNote : public QThread
 {

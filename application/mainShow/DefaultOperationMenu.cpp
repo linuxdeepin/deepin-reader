@@ -4,7 +4,6 @@
 #include "controller/MsgSubject.h"
 #include "controller/NotifySubject.h"
 #include "subjectObserver/MsgHeader.h"
-#include "docview/docummentproxy.h"
 #include "application.h"
 #include "frame/DocummentFileHelper.h"
 #include <DFontSizeManager>

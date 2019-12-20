@@ -14,7 +14,7 @@
 
 #include "CustomControl/CustomWidget.h"
 #include "CustomControl/CustomClickLabel.h"
-#include "docview/docummentproxy.h"
+#include "docview/commonstruct.h"
 
 /**
  * @brief The FontWidget class
