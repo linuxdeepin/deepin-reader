@@ -34,6 +34,14 @@ void NotesItemWidget::setSerchResultText(const QString &result)
     }
 }
 
+bool NotesItemWidget::bSelect()
+{
+    if (m_pPicture) {
+        return m_pPicture->bSelect();
+    }
+    return false;
+}
+
 void NotesItemWidget::setBSelect(const bool &paint)
 {
     if (m_pPicture) {

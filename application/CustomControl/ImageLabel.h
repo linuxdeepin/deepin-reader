@@ -17,6 +17,10 @@ public:
     explicit ImageLabel(DWidget *parent = nullptr);
 
 public:
+    inline bool bSelect()
+    {
+        return m_bSelect;
+    }
     void setSelect(const bool &select);
     inline void setRadius(const int radius) { m_nRadius = radius; }
     inline void setBookMarkStatus(bool bshow) { m_bshowbookmark = bshow; }
