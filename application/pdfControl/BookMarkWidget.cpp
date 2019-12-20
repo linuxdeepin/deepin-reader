@@ -515,7 +515,13 @@ void BookMarkWidget::slotSelectItemBackColor(QListWidgetItem *item)
         return;
     }
 
+    auto curItem = m_pBookMarkListWidget->currentItem();
+    if (curItem == item) {
+        return;
+    }
+
     clearItemColor();
+
     m_pBookMarkListWidget->setCurrentItem(item);
 
     auto pItemWidget =

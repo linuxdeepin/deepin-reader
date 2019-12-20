@@ -68,7 +68,7 @@ void ThumbnailWidget::initWidget()
 void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 {
     //  先清空之前的选中颜色
-    auto curItem = m_pThumbnailListWidget->item(m_nCurrentPage);
+    auto curItem = m_pThumbnailListWidget->currentItem();
     if (curItem) {
         auto itemWidget =
             reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(curItem));
@@ -78,9 +78,7 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
     }
 
     if (item) {
-        //        m_pThumbnailListWidget->setCurrentItem(item);
-        m_nCurrentPage = m_pThumbnailListWidget->row(item);
-        m_pThumbnailListWidget->setCurrentRow(m_nCurrentPage, QItemSelectionModel::NoUpdate);
+        m_pThumbnailListWidget->setCurrentItem(item);
         auto pWidget =
             reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
         if (pWidget) {
@@ -144,6 +142,10 @@ void ThumbnailWidget::slotDocFilePageChanged(const QString &sPage)
     int page = sPage.toInt();
     auto curPageItem = m_pThumbnailListWidget->item(page);
     if (curPageItem) {
+        auto curItem = m_pThumbnailListWidget->currentItem();
+        if (curItem == curPageItem)
+            return;
+
         setSelectItemBackColor(curPageItem);
     }
 }
@@ -229,8 +231,7 @@ void ThumbnailWidget::fillContantToList()
         showItemBookMark();
         auto item = m_pThumbnailListWidget->item(0);
         if (item) {
-            //            m_pThumbnailListWidget->setCurrentItem(item);
-            m_nCurrentPage = 0;
+            m_pThumbnailListWidget->setCurrentItem(item);
             auto pWidget =
                 reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
             if (pWidget) {

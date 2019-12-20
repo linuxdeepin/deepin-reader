@@ -81,6 +81,9 @@ void CustomListWidget::slotShowSelectItem(QListWidgetItem *item)
     if (item == nullptr) {
         return;
     }
+
+    emit sigSelectItem(item);
+
     auto t_ItemWidget = reinterpret_cast<CustomItemWidget *>(this->itemWidget(item));
     if (t_ItemWidget) {
         int nJumpPage = t_ItemWidget->nPageIndex();
@@ -89,6 +92,5 @@ void CustomListWidget::slotShowSelectItem(QListWidgetItem *item)
             //  页跳转
             DocummentFileHelper::instance()->pageJump(nJumpPage);
         }
-        emit sigSelectItem(item);
     }
 }
