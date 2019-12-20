@@ -380,7 +380,8 @@ QString PagePdf::addHighlightAnnotation(const QColor &color)
             averangeheight = d->m_words.at(i).rect.height();
         }
     }
-
+    double smallestrx = 1.0, largestx = 0.0;
+    double smallestry = 1.0, largestry = 0.0;
     for (int i = d->m_selecttextstartword; i <= d->m_selecttextendword; ++i) {
 
         rec = d->m_words.at(i).rect;
@@ -404,7 +405,18 @@ QString PagePdf::addHighlightAnnotation(const QColor &color)
         quad.points[2] = recboundary.bottomRight();
         quad.points[3] = recboundary.bottomLeft();
         qlistquad.append(quad);
+        smallestrx = smallestrx > recboundary.x() ? recboundary.x() : smallestrx;
+        smallestry = smallestry > recboundary.y() ? recboundary.y() : smallestry;
+        largestx = largestx < recboundary.x() ? recboundary.x() : largestx;
+        largestry = largestry < recboundary.y() ? recboundary.y() : largestry;
     }
+    //如果需要在其它文档中查看注释必须调用setBoundary(recboundary)设置点击范围
+    recboundary.setX(smallestrx);
+    recboundary.setY(smallestry);
+    recboundary.setWidth(largestx - smallestrx);
+    recboundary.setHeight(largestry - smallestrx);
+    annotation->setBoundary(recboundary);
+    qDebug() << "PagePdf::addHighlightAnnotation" << recboundary;
     annotation->setHighlightQuads(qlistquad);
     uniqueName = PublicFunc::getUuid();
     annotation->setUniqueName(uniqueName);

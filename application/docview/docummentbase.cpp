@@ -1057,8 +1057,13 @@ bool DocummentBase::pageJump(int pagenum)
         default:
             break;
         }
-        d->m_currentpageno = pagenum;
-        emit signal_pageChange(d->m_currentpageno);
+//        d->m_currentpageno = pagenum;
+//        emit signal_pageChange(d->m_currentpageno);
+
+        if (d->m_currentpageno != pagenum) {
+            d->m_currentpageno = pagenum;
+            emit signal_pageChange(d->m_currentpageno);
+        }
     }
     return true;
 }
@@ -1445,6 +1450,7 @@ void DocummentBase::slot_vScrollBarValueChanged(int value)
         int pageno = currentPageNo();
         if (d->m_currentpageno != pageno) {
             d->m_currentpageno = pageno;
+            qDebug() << "DocummentBase::slot_hScrollBarValueChanged^^^^^^^^^^";
             emit signal_pageChange(d->m_currentpageno);
         }
         loadPages();
@@ -1458,6 +1464,7 @@ void DocummentBase::slot_hScrollBarValueChanged(int value)
         int pageno = currentPageNo();
         if (d->m_currentpageno != pageno) {
             d->m_currentpageno = pageno;
+            qDebug() << "DocummentBase::slot_hScrollBarValueChanged********";
             emit signal_pageChange(d->m_currentpageno);
         }
         loadPages();

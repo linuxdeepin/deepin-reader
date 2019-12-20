@@ -277,7 +277,12 @@ void FileViewWidget::slotDealWithKeyMsg(const QString &msgContent)
     } else if (msgContent == KeyStr::g_ctrl_l) {
         onFileAddAnnotation();
     } else if (msgContent == KeyStr::g_ctrl_i) {
-        onFileAddNote();
+        QString selectText;
+        if (m_pDocummentFileHelper->getSelectTextString(selectText))
+            onFileAddNote();
+        else {
+            notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("please select the text."));
+        }
     }
 }
 
@@ -505,7 +510,7 @@ void FileViewWidget::onFileAddNote()
     int nEx = m_pEndSelectPoint.x();
     int nEy = m_pEndSelectPoint.y();
 
-    if (nSx == nEx && nSy == nEy) {
+    if ((nSx == nEx && nSy == nEy)) {
         notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("please select the text."));
         return;
     }
