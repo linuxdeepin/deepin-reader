@@ -58,7 +58,6 @@ void TextOperationMenu::initMenu()
 {
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
     m_pCopy = createAction(tr("copy"), SLOT(slotCopyClicked()));
-    this->addSeparator();
 
     m_pColorWidgetAction = new ColorWidgetAction(this);
     connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked(int)), this, SLOT(slotSetHighLight(int)));
@@ -67,10 +66,7 @@ void TextOperationMenu::initMenu()
     this->addSeparator();
 
     m_pRemoveHighLight = createAction(tr("remove high light"), SLOT(slotRemoveHighLightClicked()));
-    this->addSeparator();
-
     createAction(tr("add note"), SLOT(slotAddNoteClicked()));
-    this->addSeparator();
 
     m_pAddBookMark = createAction(tr("add bookmark"), SLOT(slotAddBookMarkClicked()));
     m_pExitFullScreen = createAction(tr("exit fullscreen"), SLOT(slotExitFullScreenClicked()));
@@ -81,6 +77,7 @@ QAction *TextOperationMenu::createAction(const QString &text, const char *member
     auto action = new  QAction(text, this);
     connect(action, SIGNAL(triggered()), member);
     this->addAction(action);
+    this->addSeparator();
 
     return action;
 }

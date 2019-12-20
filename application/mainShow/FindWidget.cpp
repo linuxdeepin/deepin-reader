@@ -127,11 +127,9 @@ void FindWidget::slotClearContent()
  * @param status
  * 0:恢复正常颜色 1:变成粉红色
  */
-void FindWidget::slotFindNone(int status)
+void FindWidget::slotFindNone(const int &status)
 {
-    bool alert = false;
-
-    alert = (status == 1) ? true : false;
+    bool alert = (status == 1) ? true : false;
 
     if (m_pSearchEdit) {
         m_pSearchEdit->setAlert(alert);
@@ -208,5 +206,5 @@ void FindWidget::initWidget()
 void FindWidget::initConnection()
 {
     connect(this, SIGNAL(sigSetVisible()), SLOT(slotSetVisible()));
-    connect(this, SIGNAL(sigFindNone(int)), this, SLOT(slotFindNone(int)));
+    connect(this, SIGNAL(sigFindNone(const int &)), SLOT(slotFindNone(const int &)));
 }

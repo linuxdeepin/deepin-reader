@@ -58,17 +58,17 @@ void DefaultOperationMenu::initMenu()
 {
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
     m_pSearch = createAction(tr("Search"), SLOT(slotSearchClicked()));
-    addSeparator();
+
     m_pBookMark = createAction(tr("add bookmark"), SLOT(slotBookMarkClicked()));
-    addSeparator();
+
     m_pFirstPage = createAction(tr("first page"), SLOT(slotFirstPageClicked()));
-    addSeparator();
+
     m_pPrevPage = createAction(tr("prev page"), SLOT(slotPrevPageClicked()));
-    addSeparator();
+
     m_pNextPage = createAction(tr("next page"), SLOT(slotNextPageClicked()));
-    addSeparator();
+
     m_pEndPage = createAction(tr("end page"), SLOT(slotEndPageClicked()));
-    addSeparator();
+
     m_pExitFullScreen = createAction(tr("exit fullscreen"), SLOT(slotExitFullScreenClicked()));
 }
 
@@ -79,6 +79,7 @@ QAction *DefaultOperationMenu::createAction(const QString &name, const char *mem
     connect(action, SIGNAL(triggered()), member);
 
     this->addAction(action);
+    this->addSeparator();
 
     return action;
 }
