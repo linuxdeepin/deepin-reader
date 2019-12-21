@@ -185,6 +185,7 @@ void BookMarkWidget::slotDocFilePageChanged(const QString &sPage)
  */
 void BookMarkWidget::slotDeleteBookItem(const int &nPage)
 {
+    clearItemColor();
     int nSize = m_pBookMarkListWidget->count();
     for (int iLoop = 0; iLoop < nSize; iLoop++) {
         auto pItem = m_pBookMarkListWidget->item(iLoop);
