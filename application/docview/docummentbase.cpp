@@ -92,18 +92,6 @@ void SlidWidget::paintEvent(QPaintEvent *event)
     update();
 }
 
-//DocMainWidget::DocMainWidget(DWidget *parent): DWidget(parent)
-//{
-//    setMouseTracking(true);
-//}
-
-//void DocMainWidget::paintEvent(QPaintEvent *event)
-//{
-//    DWidget::paintEvent(event);
-////    qDebug() << "---------DocMainWidget::paintEvent";
-////    emit paintEventEnd();
-//}
-
 MagnifierWidget::MagnifierWidget(DWidget *parent): DWidget(parent)
 {
     m_magnifiercolor = Qt::white;
@@ -135,63 +123,6 @@ bool MagnifierWidget::showState()
 
 void MagnifierWidget::paintEvent(QPaintEvent *event)
 {
-    //自绘实现
-//    DWidget::paintEvent(event);
-//    QPainter qpainter(this);
-//    qpainter.setRenderHints(QPainter::Antialiasing);
-//    //    qpainter.save();
-//    if (!bStartShow || m_magnifierpixmap.isNull())
-//        return;
-//    int radius = m_magnifierradius + m_magnifierringwidth;
-//    int bigcirclex = m_magnifierpoint.x() - radius;
-//    int bigcircley = m_magnifierpoint.y() - radius;
-//    if (bigcirclex < 0) {
-//        bigcirclex = 0;
-//    } else if (bigcirclex > width() - radius * 2) {
-//        bigcirclex = width() - radius * 2;
-//    }
-//    if (bigcircley < 0) {
-//        bigcircley = 0;
-//    } else if (bigcircley > height() - radius * 2) {
-//        bigcircley = height() - radius * 2;
-//    }
-//    QPainterPath bigCircle;
-//    bigCircle.addEllipse(bigcirclex, bigcircley, radius * 2, radius * 2);
-////    QColor shadowcolor(0, 0, 0, 40);
-////    for (int i = 1; i < 4; i++) {
-////        shadowcolor.setAlpha(40 - i * 10);
-////        qpainter.setPen(QPen(shadowcolor, 1, Qt::SolidLine));
-////        qpainter.drawEllipse(bigcirclex - i, bigcircley - i, radius * 2 + i * 2, radius * 2 + i * 2);
-////    }
-//    radius = m_magnifierradius;
-//    int smallcirclex = bigcirclex + m_magnifierringwidth;
-//    int smallcircley = bigcircley + m_magnifierringwidth;
-//    QPainterPath smallCircle;
-//    smallCircle.addEllipse(smallcirclex, smallcircley, radius * 2, radius * 2);
-
-//    QPainterPath path = bigCircle - smallCircle;
-//    qpainter.setBrush(m_magnifiercolor);
-//    qpainter.setPen(m_magnifiercolor);
-//    qpainter.drawPath(path);
-
-//    // qpainter.restore();
-//    QTransform tr;
-//    tr.translate(smallcirclex, smallcircley);
-//    tr.scale(1.0, 1.0);
-//    QBrush brush(m_magnifierpixmap);
-//    brush.setTransform(tr);
-//    qpainter.setBrush(brush);
-//    qpainter.drawEllipse(smallcirclex, smallcircley, m_magnifierradius * 2, m_magnifierradius * 2);
-////    shadowcolor.setAlpha(40);
-////    qpainter.setPen(QPen(shadowcolor, 1, Qt::SolidLine));
-////    qpainter.drawEllipse(smallcirclex + 1, smallcircley + 1, radius * 2 -  2, radius * 2 - 2);
-////    shadowcolor.setAlpha(20);
-////    qpainter.setPen(QPen(shadowcolor, 10, Qt::SolidLine));
-////    qpainter.drawEllipse(smallcirclex + 10, smallcircley + 10, radius * 2 -  20, radius * 2 - 20);
-////    shadowcolor.setAlpha(10);
-////    qpainter.setPen(QPen(shadowcolor, 3, Qt::SolidLine));
-////    qpainter.drawEllipse(smallcirclex + 3, smallcircley + 3, radius * 2 -  6, radius * 2 - 6);
-
     //贴图方式实现
     DWidget::paintEvent(event);
     QPainter qpainter(this);
@@ -216,17 +147,11 @@ void MagnifierWidget::paintEvent(QPaintEvent *event)
     QTransform tr;
     tr.translate(smallcirclex, smallcircley);
     tr.scale(1.0, 1.0);
-    qDebug() << __FUNCTION__ << "%%%%%%%%%%%" << m_magnifierpixmap.size();
     QBrush brush(m_magnifierpixmap);
     brush.setTransform(tr);
     qpainter.setPen(QPen(QColor(255, 255, 255), 0));
     qpainter.setBrush(brush);
     qpainter.drawEllipse(smallcirclex, smallcircley, m_magnifiermapradius * 2, m_magnifiermapradius * 2);
-//    m_magnifierpixmap = m_magnifierpixmap.transformed(tr);
-//    m_magnifierpixmap = Utils::roundQPixmap(m_magnifierpixmap, m_magnifiermapradius);
-//    qpainter.setPen(QPen(QColor(255, 255, 255), 0));
-//    qpainter.drawPixmap(smallcirclex, smallcircley, m_magnifiermapradius * 2, m_magnifiermapradius * 2, m_magnifierpixmap);
-
     QPixmap pix(":/resources/image/maganifier.svg");
     const qreal ratio = qApp->devicePixelRatio();
     pix.setDevicePixelRatio(ratio);
@@ -2287,6 +2212,12 @@ bool DocummentBase::removeIconAnnotation(const QString &uuid, int ipage)
         bsuccess = d->m_pages.at(ipage)->removeIconAnnotation(uuid);
     }
     return  bsuccess;
+}
+
+double DocummentBase::getMaxZoomratio()
+{
+    Q_D(DocummentBase);
+    return  d->m_maxzoomratio;
 }
 
 

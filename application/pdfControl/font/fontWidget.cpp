@@ -113,6 +113,14 @@ void FontWidget::initWidget()
     this->setLayout(widgetLayout);
 }
 
+void FontWidget::showEvent(QShowEvent *event)
+{
+    CustomWidget::showEvent(event);
+
+    if (DocummentProxy::instance() && m_pEnlargeSlider->maximum() != DocummentProxy::instance()->getMaxZoomratio() * 100)
+        m_pEnlargeSlider->setMaximum(DocummentProxy::instance()->getMaxZoomratio() * 100);
+}
+
 //  缩放, iFlag > 0, 放大, 否则 缩放
 void FontWidget::setFileLargerOrSmaller(const int &iFlag)
 {

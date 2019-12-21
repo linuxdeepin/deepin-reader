@@ -528,3 +528,10 @@ void DocummentProxy::setViewFocus()
     if (m_documment)
         m_documment->setViewFocus();
 }
+
+double DocummentProxy::getMaxZoomratio()
+{
+    if (m_documment)
+        return   m_documment->getMaxZoomratio();
+    return  0.0;
+}

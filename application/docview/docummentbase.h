@@ -20,6 +20,8 @@
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
+#define     MAXPAGEHEIGHT       20000
+
 enum ViewMode_EM {
     ViewMode_SinglePage = 0,
     ViewMode_FacingPage
@@ -104,17 +106,6 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 };
 
-//class DocMainWidget: public DWidget
-//{
-//    Q_OBJECT
-//public:
-//    DocMainWidget(DWidget *parent = nullptr);
-//protected:
-//    void paintEvent(QPaintEvent *event) override;
-//signals:
-//    void paintEventEnd();
-//};
-
 class DocummentBasePrivate: public QObject
 {
     Q_OBJECT
@@ -136,6 +127,7 @@ public:
         m_slidepageno = -1;
         m_currentpageno = 0;
         m_scale = 1.0;
+        m_maxzoomratio = 5.0;
         m_rotate = RotateType_0;
         donotneedreloaddoc = false;
         m_magnifierpage = -1;
@@ -214,6 +206,7 @@ public:
     int m_slidepageno;
     int m_currentpageno;
     double m_scale;
+    double m_maxzoomratio;//最大放大比例
     mutable bool m_bModified;
     bool m_bslidemodel;
     //    ThreadLoadWords m_threadloadwords;
@@ -337,6 +330,7 @@ public:
     void moveIconAnnotation(const QString &uuid, const QPoint &pos);
     bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
     bool removeIconAnnotation(const QString &uuid, int ipage);
+    double getMaxZoomratio();
 
 signals:
     void signal_pageChange(int);

@@ -39,6 +39,7 @@ public:
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent *)Q_DECL_OVERRIDE;
 
 private slots:
     void slotDealWithKey(const QString &);

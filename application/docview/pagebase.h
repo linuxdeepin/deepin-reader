@@ -234,7 +234,6 @@ public:
             d->m_icurhightlight = index - 1;
             rect = d->m_highlights.at(d->m_icurhightlight);
         }
-//        qDebug() << "PageBase setCurHightLight " << d->m_highlights.size();
         return  rect;
     }
     double getOriginalImageWidth()

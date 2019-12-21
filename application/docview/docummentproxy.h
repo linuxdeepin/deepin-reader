@@ -59,6 +59,7 @@ public:
     bool getAutoPlaySlideStatu();
     bool isOpendFile();
     void setViewFocus();
+    double getMaxZoomratio();
     //icon annotation
     QString addIconAnnotation(const QPoint &pos);
     void moveIconAnnotation(const QString &uuid, const QPoint &pos);

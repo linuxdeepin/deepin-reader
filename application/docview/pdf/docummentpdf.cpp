@@ -46,16 +46,11 @@ protected slots:
 private:
     void setBasicInfo(const QString &filepath);
 };
-void debugfunc(const QString &message, const QVariant &closure)
-{
-    qDebug() << __FUNCTION__ << message << closure;
-}
+
 void DocummentPDFPrivate::loadDocumment(QString filepath)
 {
     Q_Q(DocummentPDF);
     document = Poppler::Document::load(filepath);
-//    QVariant cloursemsg;
-//    Poppler::setDebugErrorFunction(debugfunc, cloursemsg);
     if (nullptr == document || document->numPages() <= 0) {
         emit signal_docummentLoaded(false);
         return;
@@ -73,6 +68,10 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
     if (m_pages.size() > 0) {
         m_imagewidth = m_pages.at(0)->getOriginalImageWidth();
         m_imageheight = m_pages.at(0)->getOriginalImageHeight();
+        double sz = m_imageheight > m_imagewidth ? m_imageheight : m_imagewidth;
+        m_maxzoomratio = MAXPAGEHEIGHT / sz;
+        m_maxzoomratio = m_maxzoomratio > 5.0 ? 5.0 : m_maxzoomratio;
+        m_scale = m_scale > m_maxzoomratio ? m_maxzoomratio : m_scale;
     }
     setBasicInfo(filepath);
     emit signal_docummentLoaded(true);
