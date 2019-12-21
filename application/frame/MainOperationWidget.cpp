@@ -42,10 +42,8 @@ void MainOperationWidget::initWidget()
     auto btnGroup = new QButtonGroup(this);  //  按钮组，　自动实现按钮唯一check属性
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
 
-    QStringList btnStrList = QStringList() << tr("thumbnail") << tr("bookmark") << tr("annotation");
-    QStringList btnObjList = QStringList() << "thumbnail"
-                             << "bookmark"
-                             << "annotation";
+    QStringList btnStrList = QStringList() << tr("Thumbnails") << tr("Bookmarks") << tr("Annotations");
+    QStringList btnObjList = QStringList() << "thumbnail" << "bookmark" << "annotation";
 
     int nSize = btnStrList.size();
     for (int iLoop = 0; iLoop < nSize; iLoop++) {

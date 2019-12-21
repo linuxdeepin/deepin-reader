@@ -42,19 +42,22 @@ int MsgSubject::NotifyObservers(const int &msgType, const QString &msgContent)
      * 如果 该消息 在某一个 观察者中被处理了， 就返回9999  则截断该消息，
      *  若没有处理， 则继续传递给下一个观察者，
      */
-    foreach (auto obs, m_observerList) {
-        int nRes = obs->dealWithData(msgType, msgContent);
-        if (nRes == ConstantMsg::g_effective_res) {
+    QListIterator<IObserver *> iter(m_observerList);
+    while (iter.hasNext()) {
+        auto obs = iter.next();
+        if (obs) {
+            int nRes = obs->dealWithData(msgType, msgContent);
+            if (nRes == ConstantMsg::g_effective_res) {
+                QString sName = obs ? obs->getObserverName() : "MainWindow";
 
-            QString sName = obs ? obs->getObserverName() : "MainWindow";
-
-            qInfo()  << "msgType = " << msgType
-                     << ",  msgContent = " << msgContent
-                     << ",  sName = " << sName;
-
-            return 0;
+                qInfo()  << "msgType = " << msgType
+                         << ",  msgContent = " << msgContent
+                         << ",  sName = " << sName;
+                return 0;
+            }
         }
     }
+
     return -1;
 }
 
@@ -74,12 +77,13 @@ void MsgSubject::run()
             msgList = m_msgList;
             m_msgList.clear();
         }
-        if (msgList.size() > 0) {
-            foreach (auto msg, msgList) {
-                int nRes = NotifyObservers(msg.msgType, msg.msgContent);
-                if (nRes == 0) {
-                    break;
-                }
+
+        QListIterator<MsgStruct> iter(msgList);
+        while (iter.hasNext()) {
+            auto ms = iter.next();
+            int nRes = NotifyObservers(ms.msgType, ms.msgContent);
+            if (nRes == 0) {
+                break;
             }
         }
         msleep(50);

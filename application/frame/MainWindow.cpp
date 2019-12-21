@@ -101,9 +101,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
     if (sFilePath != "") {
         bool rl = DataManager::instance()->bIsUpdate();
         if (rl) {
-            DDialog dlg("", tr("Do you need to save the file opened?"));
+            DDialog dlg("", tr("Do you want to save the changes?"));
             dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
-            dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Not Save"));
+            dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Discard"));
             dlg.addButton(tr("Save"), true, DDialog::ButtonRecommend);
             QMargins mar(0, 0, 0, 30);
             dlg.setContentLayoutContentsMargins(mar);
@@ -205,17 +205,17 @@ void MainWindow::initConnections()
     auto pSigManager = new QSignalMapper(this);
     connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(slotActionTrigger(const QString &)));
 
-    QStringList firstActionList = QStringList() << tr("Open File") << tr("Save File") << tr("Save As File")
-                                  << tr("Open Folder") << tr("Print") << tr("File Attr");
-    QStringList firstActionObjList = QStringList() << "Open File" << "Save File" << "Save As File"
-                                     << "Open Folder" << "Print" << "File Attr";
+    QStringList firstActionList = QStringList() << tr("Open") << tr("Save") << tr("Save as")
+                                  << tr("Display in file manager") << tr("Print") << tr("Document info");
+    QStringList firstActionObjList = QStringList() << "Open" << "Save" << "Save as"
+                                     << "Display in file manager" << "Print" << "Document info";
 
     createActionMap(m_menu, pSigManager, firstActionList, firstActionObjList);
 //    m_menu->addSeparator();
 
-    QStringList secondActionList = QStringList() << tr("Search") << tr("Full Screen") << tr("Screening")
+    QStringList secondActionList = QStringList() << tr("Search") << tr("Fullscreen") << tr("Slide show")
                                    << tr("Larger") << tr("Smaller");
-    QStringList secondActionObjList = QStringList() << "Search" << "Full Screen" << "Screening"
+    QStringList secondActionObjList = QStringList() << "Search" << "Fullscreen" << "Slide show"
                                       << "Larger" << "Smaller";
 
     createActionMap(m_menu, pSigManager, secondActionList, secondActionObjList);
@@ -225,7 +225,7 @@ void MainWindow::initConnections()
 
     auto actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
-        if (a->objectName() == "Open File") {
+        if (a->objectName() == "Open") {
             a->setDisabled(false);
             break;
         }
@@ -338,12 +338,12 @@ void MainWindow::displayShortcuts()
                   << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l << KeyStr::g_del << KeyStr::g_alt_z
                   << KeyStr::g_ctrl_c << KeyStr::g_ctrl_x << KeyStr::g_ctrl_v << KeyStr::g_ctrl_z << KeyStr::g_ctrl_a << KeyStr::g_ctrl_shift_slash;
 
-    shortcutnames << tr("FullScreen") << tr("Escape") << tr("Help")
+    shortcutnames << tr("Fullscreen") << tr("Escape") << tr("Help")
                   << tr("Search") << tr("PageUp") << tr("PageDown") << tr("Open") << tr("Enlarge")
-                  << tr("Narrow")  << tr("SaveAs") << tr("Print")
-                  << tr("Save") << tr("OpenThumbnail") << tr("AdaptePage") << tr("AdapteHeight")
-                  << tr("AdapteWidth") << tr("LeftRotation") << tr("RightRotation") << tr("SelectTool")
-                  << tr("HandTool") << tr("AddBookMark") << tr("AddNote") << tr("AddHighlight")
+                  << tr("Narrow")  << tr("Save as") << tr("Print")
+                  << tr("Save") << tr("Open Thumbnail") << tr("Adapte Page") << tr("Fit Height")
+                  << tr("Fit Width") << tr("Rotate Left") << tr("Rotate Right") << tr("Select Text")
+                  << tr("Hand Tool") << tr("Add bookmark") << tr("Add note") << tr("Highlight")
                   << tr("Delete") << tr("Magnifier") << tr("Copy") << tr("Cut") << tr("Paste")
                   << tr("Undo") << tr("Select all") << tr("ShortcutPreview");
 
@@ -390,9 +390,9 @@ void MainWindow::onAppExit()
     if (sFilePath != "") {
         bool rl = DataManager::instance()->bIsUpdate();
         if (rl) {
-            DDialog dlg(tr("Save File"), tr("Do you need to save the file opened?"));
+            DDialog dlg(tr("Save"), tr("Do you want to save the changes?"));
             dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
-            dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Not Save") <<  tr("Save"));
+            dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Discard") <<  tr("Save"));
             int nRes = dlg.exec();
             if (nRes <= 0) {
                 return;
@@ -477,23 +477,23 @@ void MainWindow::slotOpenFileOk()
 //  点击菜单　发送指令
 void MainWindow::slotActionTrigger(const QString &sAction)
 {
-    if (sAction == "Open File") {
+    if (sAction == "Open") {
         notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_o);
-    } else if (sAction == "Save File") {
+    } else if (sAction == "Save") {
         notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_s);
-    } else if (sAction == "Save As File") {
+    } else if (sAction == "Save as") {
         notifyMsg(MSG_OPERATION_SAVE_AS_FILE);
-    } else if (sAction == "Open Folder") {
+    } else if (sAction == "Display in file manager") {
         onOpenFolder();
     } else if (sAction == "Print") {
         notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_p);
-    } else if (sAction == "File Attr") {
+    } else if (sAction == "Document info") {
         notifyMsg(MSG_OPERATION_ATTR);
     } else if (sAction == "Search") {
         notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_f);
-    } else if (sAction == "Full Screen") {
+    } else if (sAction == "Fullscreen") {
         notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_f11);
-    } else if (sAction == "Screening") {
+    } else if (sAction == "Slide show") {
         onScreening();
     } else if (sAction == "Larger") {
         notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_larger);

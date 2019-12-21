@@ -171,13 +171,13 @@ void FindWidget::notifyMsg(const int &msgType, const QString &msgContent)
 void FindWidget::initWidget()
 {
     auto findNextButton = new DIconButton(DStyle::SP_ArrowDown);
-    findNextButton->setToolTip(tr("next one"));
+    findNextButton->setToolTip(tr("Next"));
     findNextButton->setFixedSize(QSize(36, 36));
     findNextButton->setIconSize(QSize(12, 12));
     connect(findNextButton, &DIconButton::clicked, this, &FindWidget::slotFindNextBtnClicked);
 
     auto findPrevButton = new DIconButton(DStyle::SP_ArrowUp);
-    findPrevButton->setToolTip(tr("prev one"));
+    findPrevButton->setToolTip(tr("Previous"));
     findPrevButton->setFixedSize(QSize(36, 36));
     findPrevButton->setIconSize(QSize(12, 12));
     connect(findPrevButton, &DIconButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);

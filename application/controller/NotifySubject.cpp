@@ -31,11 +31,12 @@ void NotifySubject::run()
             m_msgList.clear();
         }
 
-        if (msgList.size() > 0) {
-            foreach (const MsgStruct &msg, msgList) {
-                NotifyObservers(msg.msgType, msg.msgContent);
-            }
+        QListIterator<MsgStruct> iter(msgList);
+        while (iter.hasNext()) {
+            auto ms = iter.next();
+            NotifyObservers(ms.msgType, ms.msgContent);
         }
+
         msleep(50);
     }
 }
@@ -62,11 +63,15 @@ void NotifySubject::notifyMsg(const int &msgType, const QString &msgContent)
 
 void NotifySubject::NotifyObservers(const int &msgType, const QString &msgContent)
 {
-    foreach (IObserver *obs, m_observerList) {
-        int nRes = obs->dealWithData(msgType, msgContent);
-        if (nRes == ConstantMsg::g_effective_res) {
-            qInfo() << "msgType = " << msgType << ",   msgContent = " << msgContent;
-            break;
+    QListIterator<IObserver *> iter(m_observerList);
+    while (iter.hasNext()) {
+        auto obs = iter.next();
+        if (obs) {
+            int nRes = obs->dealWithData(msgType, msgContent);
+            if (nRes == ConstantMsg::g_effective_res) {
+                qInfo() << "msgType = " << msgType << ",   msgContent = " << msgContent;
+                break;
+            }
         }
     }
 }

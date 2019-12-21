@@ -99,7 +99,7 @@ void NotesWidget::slotDltNoteItem(QString uuid)
 
                     // some highlight no contents not contain by m_pNotesList,so call the func out
                     // of for loop
-                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Deleted Note"));
+                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The annotation has been removed"));
 
                     if (m_pNotesList->count() > 0) {
                         m_pNotesList->setCurrentRow(0);
@@ -256,7 +256,7 @@ void NotesWidget::slotDelNoteItem()
                 auto t_pDocummentProxy = DocummentFileHelper::instance();
                 if (t_pDocummentProxy) {
                     t_pDocummentProxy->removeAnnotation(t_uuid, page);
-                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Deleted Note"));
+                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The annotation has been removed"));
                 }
             }
         }

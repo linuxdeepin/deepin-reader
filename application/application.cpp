@@ -41,18 +41,18 @@ Application::Application(int &argc, char **argv)
     //(ConstantMsg::g_app_name);
 
     setApplicationName("deepin-reader");
-    setOrganizationName(/*tr*/("deepin"));
+    setOrganizationName("deepin");
     setWindowIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
-    setApplicationDisplayName(tr("reader"));
-    setApplicationVersion(DApplication::buildVersion("20191125"));
+    setApplicationDisplayName(tr("Document Viewer"));
+    setApplicationVersion(DApplication::buildVersion("20191221"));
     setApplicationAcknowledgementPage(Constant::sAcknowledgementLink);
-    // setProductIcon(QIcon::fromTheme("deepin-reader"));
+
     QPixmap px(QIcon::fromTheme(ConstantMsg::g_app_name).pixmap(256 * qApp->devicePixelRatio(), 256 * qApp->devicePixelRatio()));
     px.setDevicePixelRatio(qApp->devicePixelRatio());
     setProductIcon(QIcon(px));
 
-
-    setApplicationDescription(tr("Document viewer a reading tool for PDF documents."));
+    //  wzx 2019-12-21 根据石墨文案修改
+    setApplicationDescription(tr("Document Viewer is a simple PDF reader, supporting bookmarks, highlights and annotations."));
     //kyz 2019-12-10 不允许在此处安装事件过滤
     // installEventFilter(new ObjectEventFilter(this));
 

@@ -229,9 +229,9 @@ void DocummentFileHelper::onSaveFile()
             qDebug() << "DocummentFileHelper::slotSaveFile saveBookMark";
             DBManager::instance()->saveBookMark();
             DataManager::instance()->setBIsUpdate(false);
-            notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Save Success"));
+            notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Saved successfully"));
         } else {
-            notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Save Failed"));
+            notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Saved failed"));
         }
     } else {
         notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Not Changed"));
@@ -249,7 +249,7 @@ void DocummentFileHelper::onSaveAsFile()
     if (sFilter != "") {
         DFileDialog dialog;
         dialog.selectFile(m_szFilePath);
-        QString filePath = dialog.getSaveFileName(nullptr, tr("Save As"), m_szFilePath, sFilter);
+        QString filePath = dialog.getSaveFileName(nullptr, tr("Save as"), m_szFilePath, sFilter);
 
         if (filePath.endsWith("/.pdf")) {
             DDialog dlg("", tr("Not support save file with illegal name"));
@@ -295,16 +295,16 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
             QString sPath = fileList.at(0);
 
             if (m_szFilePath == sPath) {
-                notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("file is opened."));
+                notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("File is opened."));
                 return;
             }
         }
         //  是否有操作
         bool rl = DataManager::instance()->bIsUpdate();
         if (rl) {
-            DDialog dlg(tr("Save File"), tr("Do you need to save the file opened?"));
+            DDialog dlg(tr("Save"), tr("Do you want to save the changes?"));
             dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
-            dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Not Save") <<  tr("Save"));
+            dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Discard") <<  tr("Save"));
             int nRes = dlg.exec();
             if (nRes == 0) {    //  取消打开该文件
                 return;
@@ -353,7 +353,7 @@ void DocummentFileHelper::onOpenFiles(const QString &filePaths)
     foreach (auto s, canOpenFileList) {
         QString sOpenPath = DataManager::instance()->strOnlyFilePath();
         if (s == sOpenPath) {
-            notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("file is opened."));
+            notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("File is opened."));
         } else {
             QString sRes = s + Constant::sQStringSep;
             QString sOpenPath = DataManager::instance()->strOnlyFilePath(); //  打开文档为空

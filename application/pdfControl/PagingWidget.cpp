@@ -123,7 +123,7 @@ void PagingWidget::setTotalPages(int pages)
 {
     m_totalPage = pages;
     m_currntPage = FIRSTPAGES;
-    m_pTotalPagesLab->setText(QString("/%1").arg(pages) /* + tr("pages")*/);
+    m_pTotalPagesLab->setText(QString("/%1").arg(pages));
 
     m_pJumpPageSpinBox->setRange(1, m_totalPage);
 

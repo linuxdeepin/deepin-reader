@@ -234,7 +234,7 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
     itemWidget->setNoteSigne(false);
     itemWidget->setLabelPage(page, 1);
     itemWidget->setTextEditText(text);
-    itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + tr(" results")));
+    itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + tr(" items found")));
     itemWidget->setMinimumSize(QSize(LEFTMINWIDTH - 5, 80));
 
     auto item = new QListWidgetItem(m_pSearchList);
@@ -254,7 +254,7 @@ void SearchResWidget::showTips()
     auto hLayout = new QHBoxLayout;
     auto vLayout = new QVBoxLayout;
     auto tipWidget = new DWidget;
-    auto tipLab = new DLabel(tr("no result"));
+    auto tipLab = new DLabel(tr("No search results"));
     tipLab->setForegroundRole(/*DPalette::TextTips*/ QPalette::ToolTipText);
     DFontSizeManager::instance()->bind(tipLab, DFontSizeManager::T6);
 

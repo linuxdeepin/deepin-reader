@@ -32,7 +32,7 @@ void HomeWidget::slotDealWithKeyMsg(const QString &msgContent)
 
 void HomeWidget::initWidget()
 {
-    auto tipsLabel = new CustomClickLabel(tr("drag Pdf or other format file to here"), this);
+    auto tipsLabel = new CustomClickLabel(tr("Drag PDF files here"), this);
     tipsLabel->setAlignment(Qt::AlignHCenter);
     tipsLabel->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(tipsLabel, DFontSizeManager::T8);

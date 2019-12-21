@@ -89,7 +89,7 @@ void FontWidget::initWidget()
     QHBoxLayout *lrlayout = new QHBoxLayout;
     lrlayout->setContentsMargins(0, 0, 0, 0);
     lrlayout->addSpacing(32);
-    auto pRotateLeftLb = new CustomClickLabel(tr("Rotated To Left"), this);
+    auto pRotateLeftLb = new CustomClickLabel(tr("Rotate Left"), this);
     pRotateLeftLb->setForegroundRole(DPalette::ToolTipText);
     DFontSizeManager::instance()->bind(pRotateLeftLb, DFontSizeManager::T6);
     pRotateLeftLb->setFixedSize(QSize(188, 28));
@@ -102,7 +102,7 @@ void FontWidget::initWidget()
     QHBoxLayout *rrlayout = new QHBoxLayout;
     rrlayout->setContentsMargins(0, 0, 0, 0);
     rrlayout->addSpacing(32);
-    auto pRotateRightLb = new CustomClickLabel(tr("Rotated To Right"), this);
+    auto pRotateRightLb = new CustomClickLabel(tr("Rotate Right"), this);
     pRotateRightLb->setForegroundRole(DPalette::ToolTipText);
     DFontSizeManager::instance()->bind(pRotateRightLb, DFontSizeManager::T6);
     pRotateRightLb->setFixedSize(QSize(188, 28));
@@ -417,7 +417,7 @@ void FontWidget::initDowbleShow()
     m_pDoubleShowLayout->setContentsMargins(0, 0, 10, 0);
     m_pDoubleShowLayout->setSpacing(0);
 
-    auto pDoubPageViewLabel = new CustomClickLabel(tr("Double View"), this);
+    auto pDoubPageViewLabel = new CustomClickLabel(tr("Two-Page View"), this);
     DFontSizeManager::instance()->bind(pDoubPageViewLabel, DFontSizeManager::T6);
     pDoubPageViewLabel->setForegroundRole(DPalette::ToolTipText);
     pDoubPageViewLabel->setFixedSize(QSize(140, 28));
@@ -441,7 +441,7 @@ void FontWidget::initAdaptateHeight()
     m_pAdaptateHeightLayout->addSpacing(32);
     m_pAdaptateHeightLayout->setSpacing(0);
 
-    auto pSuitHLb = new CustomClickLabel(tr("Adaptate Height"), this);
+    auto pSuitHLb = new CustomClickLabel(tr("Fit Height"), this);
     pSuitHLb->setForegroundRole(DPalette::ToolTipText);
     DFontSizeManager::instance()->bind(pSuitHLb, DFontSizeManager::T6);
     pSuitHLb->setFixedSize(QSize(150, 28));
@@ -464,7 +464,7 @@ void FontWidget::initAdaptateWidght()
     m_pAdaptateWidghtLayout->addSpacing(32);
     m_pAdaptateWidghtLayout->setSpacing(0);
 
-    auto pSuitWLb = new CustomClickLabel(tr("Adaptate Width"), this);
+    auto pSuitWLb = new CustomClickLabel(tr("Fit Width"), this);
     pSuitWLb->setForegroundRole(DPalette::ToolTipText);
     DFontSizeManager::instance()->bind(pSuitWLb, DFontSizeManager::T6);
     pSuitWLb->setFixedSize(QSize(150, 28));

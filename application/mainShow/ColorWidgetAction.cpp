@@ -34,7 +34,7 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
     auto pWidget = new DWidget(pParent);
     setDefaultWidget(pWidget);
 
-    m_pClickLabel = new CustomClickLabel(tr("add high light"));
+    m_pClickLabel = new CustomClickLabel(tr("Highlight"));
     DFontSizeManager::instance()->bind(m_pClickLabel, DFontSizeManager::T6);
     connect(m_pClickLabel, SIGNAL(clicked()), this, SIGNAL(sigBtnDefaultClicked()));
 

@@ -143,7 +143,7 @@ void MainWidget::dropEvent(QDropEvent *event)
         foreach (auto s, noOpenFileList) {
             QString msgType = s;
             if (msgType == "") {
-                msgType = tr("unknown type");
+                msgType = tr("Unknown type");
             }
             QString msgTitle = QString("%1").arg(msgType);
             QString msgContent = msgTitle + tr(" is not supported.");

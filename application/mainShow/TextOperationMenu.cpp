@@ -57,7 +57,7 @@ void TextOperationMenu::setClickPage(int nClickPage)
 void TextOperationMenu::initMenu()
 {
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
-    m_pCopy = createAction(tr("copy"), SLOT(slotCopyClicked()));
+    m_pCopy = createAction(tr("Copy"), SLOT(slotCopyClicked()));
 
     m_pColorWidgetAction = new ColorWidgetAction(this);
     connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked(int)), this, SLOT(slotSetHighLight(int)));
@@ -65,11 +65,11 @@ void TextOperationMenu::initMenu()
     this->addAction(m_pColorWidgetAction);
     this->addSeparator();
 
-    m_pRemoveHighLight = createAction(tr("remove high light"), SLOT(slotRemoveHighLightClicked()));
-    createAction(tr("add note"), SLOT(slotAddNoteClicked()));
+    m_pRemoveHighLight = createAction(tr("Remove highlight"), SLOT(slotRemoveHighLightClicked()));
+    createAction(tr("Add note"), SLOT(slotAddNoteClicked()));
 
-    m_pAddBookMark = createAction(tr("add bookmark"), SLOT(slotAddBookMarkClicked()));
-    m_pExitFullScreen = createAction(tr("exit fullscreen"), SLOT(slotExitFullScreenClicked()));
+    m_pAddBookMark = createAction(tr("Add bookmark"), SLOT(slotAddBookMarkClicked()));
+    m_pExitFullScreen = createAction(tr("Exit fullscreen"), SLOT(slotExitFullScreenClicked()));
 }
 
 QAction *TextOperationMenu::createAction(const QString &text, const char *member)

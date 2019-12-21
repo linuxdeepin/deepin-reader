@@ -23,10 +23,10 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
     bool bBookState = pageList.contains(m_nRightPageNumber);
     if (bBookState) {
         m_pBookMark->setProperty("data", 0);
-        m_pBookMark->setText(tr("delete bookmark"));
+        m_pBookMark->setText(tr("Remove bookmark"));
     } else {
         m_pBookMark->setProperty("data", 1);
-        m_pBookMark->setText(tr("add bookmark"));
+        m_pBookMark->setText(tr("Add bookmark"));
     }
 
     if (m_nRightPageNumber == 0) {    //  首页
@@ -59,17 +59,17 @@ void DefaultOperationMenu::initMenu()
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
     m_pSearch = createAction(tr("Search"), SLOT(slotSearchClicked()));
 
-    m_pBookMark = createAction(tr("add bookmark"), SLOT(slotBookMarkClicked()));
+    m_pBookMark = createAction(tr("Add bookmark"), SLOT(slotBookMarkClicked()));
 
-    m_pFirstPage = createAction(tr("first page"), SLOT(slotFirstPageClicked()));
+    m_pFirstPage = createAction(tr("First page"), SLOT(slotFirstPageClicked()));
 
-    m_pPrevPage = createAction(tr("prev page"), SLOT(slotPrevPageClicked()));
+    m_pPrevPage = createAction(tr("Previous page"), SLOT(slotPrevPageClicked()));
 
-    m_pNextPage = createAction(tr("next page"), SLOT(slotNextPageClicked()));
+    m_pNextPage = createAction(tr("Next page"), SLOT(slotNextPageClicked()));
 
-    m_pEndPage = createAction(tr("end page"), SLOT(slotEndPageClicked()));
+    m_pEndPage = createAction(tr("Last page"), SLOT(slotEndPageClicked()));
 
-    m_pExitFullScreen = createAction(tr("exit fullscreen"), SLOT(slotExitFullScreenClicked()));
+    m_pExitFullScreen = createAction(tr("Exit fullscreen"), SLOT(slotExitFullScreenClicked()));
 }
 
 QAction *DefaultOperationMenu::createAction(const QString &name, const char *member)

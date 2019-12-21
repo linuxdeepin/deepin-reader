@@ -202,7 +202,7 @@ void BookMarkWidget::slotDeleteBookItem(const int &nPage)
 
                     deleteIndexPage(nPageIndex);
 
-                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Deleted bookmark"));
+                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The bookmark has been removed"));
 
                     break;
                 }
@@ -307,7 +307,7 @@ void BookMarkWidget::slotDelBkItem()
                     pCurItem = nullptr;
 
                     deleteIndexPage(nPageIndex);
-                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Deleted bookmark"));
+                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The bookmark has been removed"));
                 }
             }
         }
@@ -422,7 +422,7 @@ void BookMarkWidget::initWidget()
     m_pAddBookMarkBtn = new DPushButton(this);
     m_pAddBookMarkBtn->setFixedHeight(36);
     m_pAddBookMarkBtn->setMinimumWidth(170);
-    m_pAddBookMarkBtn->setText(tr("add bookmark"));
+    m_pAddBookMarkBtn->setText(tr("Add bookmark"));
     DFontSizeManager::instance()->bind(m_pAddBookMarkBtn, DFontSizeManager::T6);
     connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(slotAddBookMark()));
 

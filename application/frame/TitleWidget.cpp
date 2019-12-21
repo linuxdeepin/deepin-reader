@@ -226,21 +226,21 @@ void TitleWidget::slotDealWithShortKey(const QString &sKey)
 
 void TitleWidget::initBtns()
 {
-    m_pThumbnailBtn = createBtn(tr("thumbnails"), true);
+    m_pThumbnailBtn = createBtn(tr("Thumbnails"), true);
     m_pThumbnailBtn->setObjectName("thumbnails");
     connect(m_pThumbnailBtn, SIGNAL(clicked()), SLOT(on_thumbnailBtn_clicked()));
 
-    m_pSettingBtn = createBtn(tr("viewchange"));
+    m_pSettingBtn = createBtn(tr("Page Display"));
     m_pSettingBtn->setObjectName("viewchange");
     connect(m_pSettingBtn, SIGNAL(clicked()), SLOT(on_settingBtn_clicked()));
 
-    m_pHandleShapeBtn = createBtn(tr("defaultshape"));
+    m_pHandleShapeBtn = createBtn(tr("Select Text"));
     m_pHandleShapeBtn->setObjectName("defaultshape");
     m_pHandleShapeBtn->setFixedSize(QSize(42, 36));
     m_pHandleShapeBtn->setIconSize(QSize(42, 36));
     connect(m_pHandleShapeBtn, SIGNAL(clicked()), SLOT(on_handleShapeBtn_clicked()));
 
-    m_pMagnifierBtn = createBtn(tr("magnifier"), true);
+    m_pMagnifierBtn = createBtn(tr("Magnifier"), true);
     m_pMagnifierBtn->setObjectName("magnifier");
     connect(m_pMagnifierBtn, SIGNAL(clicked()), SLOT(on_magnifyingBtn_clicked()));
 }
@@ -265,7 +265,7 @@ void TitleWidget::initMenus()
         auto actionGroup = new QActionGroup(this);
 
         {
-            auto action = new QAction(tr("defaultshape"), this);
+            auto action = new QAction(tr("Select Text"), this);
             action->setObjectName("defaultshape");
             action->setCheckable(true);
             action->setChecked(true);
@@ -276,7 +276,7 @@ void TitleWidget::initMenus()
         }
 
         {
-            auto action = new QAction(tr("handleshape"), this);
+            auto action = new QAction(tr("Hand Tool"), this);
             action->setObjectName("handleshape");
             action->setCheckable(true);
 
@@ -297,7 +297,7 @@ void TitleWidget::setDefaultShape()
         action->setChecked(true);
     }
 
-    m_pHandleShapeBtn->setToolTip(tr("defaultshape"));
+    m_pHandleShapeBtn->setToolTip(tr("Select Text"));
 
     m_nCurHandleShape = 0;
 
@@ -315,7 +315,7 @@ void TitleWidget::setHandleShape()
         action->setChecked(true);
     }
 
-    m_pHandleShapeBtn->setToolTip(tr("handleshape"));
+    m_pHandleShapeBtn->setToolTip(tr("Hand Tool"));
 
     m_nCurHandleShape = 1;
 
