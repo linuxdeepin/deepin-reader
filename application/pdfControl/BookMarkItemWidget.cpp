@@ -85,7 +85,7 @@ void BookMarkItemWidget::initWidget()
     m_pPageNumber = new PageNumberLabel(this);
     m_pPageNumber->setMinimumWidth(31);
     m_pPageNumber->setFixedHeight(18);
-    m_pPageNumber->setForegroundRole(DPalette::TextTitle);
+    m_pPageNumber->setForegroundRole(DPalette::WindowText);
     DFontSizeManager::instance()->bind(m_pPageNumber, DFontSizeManager::T8);
 
     auto hLine = new DHorizontalLine(this);

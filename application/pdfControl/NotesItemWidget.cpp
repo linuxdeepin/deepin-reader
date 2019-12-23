@@ -112,7 +112,7 @@ void NotesItemWidget::initWidget()
     m_pPageNumber = new PageNumberLabel(this);
     m_pPageNumber->setMinimumWidth(31);
     m_pPageNumber->setFixedHeight(18);
-    m_pPageNumber->setForegroundRole(DPalette::TextTitle);
+    m_pPageNumber->setForegroundRole(DPalette::WindowText);
     DFontSizeManager::instance()->bind(m_pPageNumber, DFontSizeManager::T8);
 
     m_pSearchResultNum = new DLabel(this);
@@ -129,7 +129,7 @@ void NotesItemWidget::initWidget()
     m_pTextLab->setWordWrap(true);
     m_pTextLab->setAlignment(Qt::AlignLeft);
     m_pTextLab->setAlignment(Qt::AlignTop);
-    m_pTextLab->setForegroundRole(QPalette::BrightText);
+    m_pTextLab->setForegroundRole(DPalette::BrightText);
     DFontSizeManager::instance()->bind(m_pTextLab, DFontSizeManager::T9);
 
     auto hLine = new DHorizontalLine(this);

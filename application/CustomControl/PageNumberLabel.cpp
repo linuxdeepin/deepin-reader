@@ -11,7 +11,7 @@ void PageNumberLabel::setSelect(const bool &select)
     if (select) {
         setForegroundRole(DPalette::Highlight);
     } else {
-        setForegroundRole(DPalette::TextTitle);
+        setForegroundRole(DPalette::WindowText);
     }
     update();
 }
