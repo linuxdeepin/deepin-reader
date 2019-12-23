@@ -76,7 +76,7 @@ void PlayControlWidget::activeshow(int ix, int iy)
 {
     if (m_bfirstshow) {
         m_bfirstshow = false;
-        connect(DocummentProxy::instance(), &DocummentProxy::signale_autoplaytoend, this, [this] {this->changePlayStatus(); qDebug() << "$$$%%%%$$####%$";});
+        connect(DocummentProxy::instance(), &DocummentProxy::signal_autoplaytoend, this, [this] {this->changePlayStatus(); qDebug() << "$$$%%%%$$####%$";});
     }
     if (m_ptimer->isActive())
         m_ptimer->stop();

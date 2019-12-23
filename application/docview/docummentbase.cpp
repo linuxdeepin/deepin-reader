@@ -216,7 +216,6 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     setFrameShape(QFrame::NoFrame);
     d->qwfather = parent;
     d->m_widget = new DWidget(this);
-//    d->m_widget = new DocMainWidget(this);
     setWidget(d->m_widget);
     d->showslidwaittimer = new QTimer(this);
 //    d->loadpagewaittimer = new QTimer(this);
@@ -270,37 +269,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
 
 
     d->m_searchTask = new SearchTask(this);
-//    connect(d->m_widget, &DocMainWidget::paintEventEnd, this, [ = ]() {
 
-//        Q_D(DocummentBase);
-//        DScrollBar *scrollBar_X = horizontalScrollBar();
-//        DScrollBar *scrollBar_Y = verticalScrollBar();
-//        if (d->m_widgetrects.size() <= d->m_currentpageno || d->m_currentpageno < 0) {
-//            return;
-//        }
-////        d->donotneedreloaddoc = false;
-//        switch (d->m_viewmode) {
-//        case ViewMode_SinglePage:
-//            //            qDebug() << "-------pagenum:" << pagenum << " x():" << d->m_widgets.at(pagenum)->x() << " y():" << d->m_widgets.at(pagenum)->y();
-//            if (scrollBar_X)
-//                scrollBar_X->setValue(d->m_widgetrects.at(d->m_currentpageno).x());
-//            if (scrollBar_Y)
-//                scrollBar_Y->setValue(d->m_widgetrects.at(d->m_currentpageno).y());
-//            //        qDebug() << "-------scrollBar_X setValue:" << d->m_widgetrects.at(d->m_currentpageno).x() << " scrollBar_Y setValue:" << d->m_widgetrects.at(pagenum).y();
-//            break;
-//        case ViewMode_FacingPage:
-//            //            qDebug() << "-------FacingPage pagenum:" << pagenum << " x():" << d->m_widgets.at(pagenum)->x() << " y():" << d->m_widgets.at(pagenum)->y();
-//            if (scrollBar_X)
-//                scrollBar_X->setValue(d->m_widgetrects.at(d->m_currentpageno / 2).x() + d->m_pages.at(d->m_currentpageno)->x());
-//            if (scrollBar_Y)
-//                scrollBar_Y->setValue(d->m_widgetrects.at(d->m_currentpageno / 2).y());
-//            //        qDebug() << "-------scrollBar_X setValue:" << d->m_widgetrects.at(d->m_currentpageno / 2).x() + d->m_pages.at(d->m_currentpageno)->x() << " scrollBar_Y setValue:" << d->m_widgetrects.at(d->m_currentpageno / 2).y();
-//            break;
-//        default:
-//            break;
-//        }
-////        d->donotneedreloaddoc = true;void rangeChanged(int min, int max);
-//    });
     connect(this->verticalScrollBar(), &QScrollBar::rangeChanged, this, [ = ](int min, int max) {
         qDebug() << "-------verticalScrollBar QScrollBar::rangeChanged min:" << min << " max:" << max;
         Q_D(DocummentBase);
@@ -312,17 +281,10 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
         d->donotneedreloaddoc = true;
         switch (d->m_viewmode) {
         case ViewMode_SinglePage:
-            //            qDebug() << "-------pagenum:" << pagenum << " x():" << d->m_widgets.at(pagenum)->x() << " y():" << d->m_widgets.at(pagenum)->y();
-//            if (scrollBar_X)
-//                scrollBar_X->setValue(d->m_widgetrects.at(d->m_currentpageno).x());
             if (scrollBar_Y)
                 scrollBar_Y->setValue(d->m_widgetrects.at(d->m_currentpageno).y());
-            //        qDebug() << "-------scrollBar_X setValue:" << d->m_widgetrects.at(d->m_currentpageno).x() << " scrollBar_Y setValue:" << d->m_widgetrects.at(pagenum).y();
             break;
         case ViewMode_FacingPage:
-            //            qDebug() << "-------FacingPage pagenum:" << pagenum << " x():" << d->m_widgets.at(pagenum)->x() << " y():" << d->m_widgets.at(pagenum)->y();
-//            if (scrollBar_X)
-//                scrollBar_X->setValue(d->m_widgetrects.at(d->m_currentpageno / 2).x() + d->m_pages.at(d->m_currentpageno)->x());
             if (scrollBar_Y)
                 scrollBar_Y->setValue(d->m_widgetrects.at(d->m_currentpageno / 2).y());
             qDebug() << "-------scrollBar_Y setValue:" << d->m_widgetrects.at(d->m_currentpageno / 2).y();
@@ -343,19 +305,12 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
         d->donotneedreloaddoc = true;
         switch (d->m_viewmode) {
         case ViewMode_SinglePage:
-            //            qDebug() << "-------pagenum:" << pagenum << " x():" << d->m_widgets.at(pagenum)->x() << " y():" << d->m_widgets.at(pagenum)->y();
             if (scrollBar_X)
                 scrollBar_X->setValue(d->m_widgetrects.at(d->m_currentpageno).x());
-//            if (scrollBar_Y)
-//                scrollBar_Y->setValue(d->m_widgetrects.at(d->m_currentpageno).y());
-            //        qDebug() << "-------scrollBar_X setValue:" << d->m_widgetrects.at(d->m_currentpageno).x() << " scrollBar_Y setValue:" << d->m_widgetrects.at(pagenum).y();
             break;
         case ViewMode_FacingPage:
-            //            qDebug() << "-------FacingPage pagenum:" << pagenum << " x():" << d->m_widgets.at(pagenum)->x() << " y():" << d->m_widgets.at(pagenum)->y();
             if (scrollBar_X)
                 scrollBar_X->setValue(d->m_widgetrects.at(d->m_currentpageno / 2).x() + d->m_pages.at(d->m_currentpageno)->x());
-//            if (scrollBar_Y)
-//                scrollBar_Y->setValue(d->m_widgetrects.at(d->m_currentpageno / 2).y());
             qDebug() << "-------scrollBar_X setValue:" << d->m_widgetrects.at(d->m_currentpageno / 2).x() + d->m_pages.at(d->m_currentpageno)->x();
             break;
         default:
@@ -1085,8 +1040,6 @@ int DocummentBase::fromFirstGetLastPageNo(int pagenum)
     }
 
     for (int i = rewidgetnum; i < d->m_widgetrects.size(); i++) {
-//        height += d->m_widgetrects.at(i).height();
-//        qDebug() << "------------fromFirstGetLastPageNo i:" << i << " rect::" << d->m_widgetrects.at(i);
         if (ViewMode_SinglePage == d->m_viewmode) {
             repagenum = i;
         } else if (ViewMode_FacingPage == d->m_viewmode) {
@@ -1255,58 +1208,10 @@ void DocummentBase::showSinglePage()
         d->m_widgets.at(i)->setGeometry(rex, rey, d->m_widgets.at(i)->layout()->margin() * 2 + d->m_pages.at(i)->width(), d->m_widgets.at(i)->layout()->margin() * 2 + d->m_pages.at(i)->height());
         rey += d->m_widgets.at(i)->layout()->margin() * 2 + d->m_pages.at(i)->height() + d->m_vboxLayout->spacing();
     }
-
-//    d->m_widget->setFixedSize(d->qwfather->width(), d->m_widgetrects.at(d->m_widgetrects.size() - 1).y() + d->m_widgetrects.at(d->m_widgetrects.size() - 1).height());
-//    int rex = d->m_vboxLayout->margin(), rey = d->m_vboxLayout->margin();
-//    for (int i = 0; i < d->m_widgets.size(); i++) {
-//        d->m_widgets.at(i)->setGeometry(rex, rey, d->m_widgets.at(i)->layout()->margin() * 2 + d->m_pages.at(i)->width(), d->m_widgets.at(i)->layout()->margin() * 2 + d->m_pages.at(i)->height());
-//        rey += d->m_widgets.at(i)->layout()->margin() * 2 + d->m_pages.at(i)->height() + d->m_vboxLayout->spacing();
-//    }
 }
 void DocummentBase::showFacingPage()
 {
     Q_D(DocummentBase);
-//    for (int i = 0; i < d->m_widgets.size(); i++) {
-//        d->m_widgets.at(i)->hide();
-//    }
-//    d->pblankwidget->hide();
-//    for (int i = 0; i < d->m_pages.size() / 2; i++) {
-//        d->m_widgets.at(i)->layout()->addWidget(d->m_pages.at(i * 2));
-//        d->m_widgets.at(i)->layout()->addWidget(d->m_pages.at(i * 2 + 1));
-//        d->m_widgets.at(i)->show();
-////        QCoreApplication::processEvents();
-//    }
-//    if (d->m_pages.size() % 2) {
-//        d->pblankwidget->show();
-//        d->m_widgets.at(d->m_pages.size() / 2)->layout()->addWidget(d->m_pages.at(d->m_pages.size() - 1));
-//        if (d->m_pages.size() > 0) {
-//            d->pblankwidget->setMaximumSize(QSize(d->m_pages.at(d->m_pages.size() - 1)->size()));
-//            d->pblankwidget->setMinimumSize(QSize(d->m_pages.at(d->m_pages.size() - 1)->size()));
-//        }
-//        d->m_widgets.at(d->m_pages.size() / 2)->layout()->addWidget(d->pblankwidget);
-//        d->m_widgets.at(d->m_pages.size() / 2)->show();
-//    }
-
-
-//    //下面代码留作备用，如果开启的话会导致双页切换的时候，页面整个左偏
-//    int rex = d->m_vboxLayout->margin(), rey = d->m_vboxLayout->margin();
-//    for (int i = 0; i < d->m_widgets.size() / 2; i++) {
-//        int reheight = 0;
-//        if (d->m_pages.at(i * 2)->height() < d->m_pages.at(i * 2 + 1)->height()) {
-//            reheight = d->m_pages.at(i * 2 + 1)->height();
-//        } else {
-//            reheight = d->m_pages.at(i * 2)->height();
-//        }
-//        d->m_widgets.at(i)->setGeometry(rex, rey, d->m_widgets.at(i)->layout()->margin() * 2 + d->m_widgets.at(i)->layout()->spacing() + d->m_pages.at(i * 2)->width() + d->m_pages.at(i * 2 + 1)->width(), d->m_widgets.at(i)->layout()->margin() * 2 + reheight);
-//        rey += d->m_widgets.at(i)->layout()->margin() * 2 + reheight + d->m_vboxLayout->spacing();
-//        QCoreApplication::processEvents();
-//    }
-//    if (d->m_pages.size() % 2) {
-//        int reheight = d->m_pages.at(d->m_pages.size() - 1)->height();
-//        d->m_widgets.at(d->m_widgets.size() / 2)->setGeometry(rex, rey, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + d->m_widgets.at(d->m_widgets.size() / 2)->layout()->spacing() + d->m_pages.at(d->m_pages.size() - 1)->width() * 2, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + reheight);
-//    }
-
-
     d->m_widgetrects.clear();
     int rex = d->m_vboxLayout->margin(), rey = d->m_vboxLayout->margin();
     for (int i = 0; i < d->m_widgets.size(); i++) {
@@ -1324,11 +1229,10 @@ void DocummentBase::showFacingPage()
         } else {
             reheight = d->m_pages.at(i * 2)->height();
         }
-//        qDebug() << "showFacingPage ---------------------- i:" << i << " set rect:" << QRect(rex, rey, d->m_widgets.at(i)->layout()->margin() * 2 + d->m_widgets.at(i)->layout()->spacing() + d->m_pages.at(i * 2)->width() + d->m_pages.at(i * 2 + 1)->width(), d->m_widgets.at(i)->layout()->margin() * 2 + reheight);
         d->m_widgets.at(i)->setGeometry(rex, rey, d->m_widgets.at(i)->layout()->margin() * 2 + d->m_widgets.at(i)->layout()->spacing() + d->m_pages.at(i * 2)->width() + d->m_pages.at(i * 2 + 1)->width(), d->m_widgets.at(i)->layout()->margin() * 2 + reheight);
         d->m_widgetrects.append(QRect(rex, rey, d->m_widgets.at(i)->layout()->margin() * 2 + d->m_widgets.at(i)->layout()->spacing() + d->m_pages.at(i * 2)->width() + d->m_pages.at(i * 2 + 1)->width(), d->m_widgets.at(i)->layout()->margin() * 2 + reheight));
         rey += d->m_widgets.at(i)->layout()->margin() * 2 + reheight + d->m_vboxLayout->spacing();
-//        qDebug() << "showFacingPage ---------------------- i:" << i << " rect:" << d->m_widgets.at(i)->rect();
+
     }
     if (d->m_pages.size() % 2) {
         if (d->m_pages.size() > 0) {
@@ -1342,9 +1246,7 @@ void DocummentBase::showFacingPage()
         int reheight = d->m_pages.at(d->m_pages.size() - 1)->height();
         d->m_widgetrects.append(QRect(rex, rey, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + d->m_widgets.at(d->m_widgets.size() / 2)->layout()->spacing() + d->m_pages.at(d->m_pages.size() - 1)->width() * 2, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + reheight));
         d->m_widgets.at(d->m_widgets.size() / 2)->setGeometry(rex, rey, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + d->m_widgets.at(d->m_widgets.size() / 2)->layout()->spacing() + d->m_pages.at(d->m_pages.size() - 1)->width() * 2, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + reheight);
-
     }
-//    d->m_widget->setFixedSize(d->qwfather->width(), d->m_widgetrects.at(d->m_widgetrects.size() - 1).y() + d->m_widgetrects.at(d->m_widgetrects.size() - 1).height());
 }
 
 Page::Link *DocummentBase::mouseBeOverLink(QPoint point)
@@ -1409,13 +1311,6 @@ bool DocummentBase::getSelectTextString(QString &st)
     return bselectexit;
 }
 
-//void DocummentBase::loadPageTimerOut()
-//{
-//    Q_D(DocummentBase);
-//    d->loadpagewaittimer->stop();
-//    loadPages();
-//}
-
 void DocummentBase::autoplayslidTimerOut()
 {
     Q_D(DocummentBase);
@@ -1427,10 +1322,10 @@ void DocummentBase::autoplayslidTimerOut()
             pageJump(getCurrentPageNo() + 1);
             if (getCurrentPageNo() + 1 >= d->m_pages.size()) {
 
-                qDebug() << __FUNCTION__ << "emit signale_autoplaytoend()" << getCurrentPageNo() << d->m_pages.size() << d->m_slidepageno;
+                qDebug() << __FUNCTION__ << "emit signal_autoplaytoend()" << getCurrentPageNo() << d->m_pages.size() << d->m_slidepageno;
                 d->autoplayslidtimer->stop();
                 d->bautoplayslide = false;
-                emit signale_autoplaytoend();
+                emit signal_autoplaytoend();
                 d->m_bautoplayslidreset = true;
             }
         }

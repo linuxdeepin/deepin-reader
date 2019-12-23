@@ -73,7 +73,7 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath)
         connect(m_documment, &DocummentBase::signal_openResult, this, [ = ](bool result) {
             emit signal_openResult(result);
         });
-        connect(m_documment, &DocummentBase::signale_autoplaytoend, this, &DocummentProxy::signale_autoplaytoend);
+        connect(m_documment, &DocummentBase::signal_autoplaytoend, this, &DocummentProxy::signal_autoplaytoend);
         bre = m_documment->openFile(m_path);
     }
     bcloseing = false;
@@ -143,7 +143,6 @@ bool DocummentProxy::getImage(int pagenum, QImage &image, double width, double h
     if (!m_documment || bcloseing) {
         return bre;
     }
-    //qDebug() << "getImage";
     bre = m_documment->getImage(pagenum, image, width, height);
     return bre;
 }

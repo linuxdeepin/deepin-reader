@@ -76,7 +76,7 @@ signals:
     bool signal_setViewModeAndShow(ViewMode_EM viewmode);
     void signal_bookMarkStateChange(int page, bool state);
     void signal_openResult(bool);
-    void signale_autoplaytoend();
+    void signal_autoplaytoend();
 private slots:
     void slot_pageChange(int);
 //    bool startOpenFile();

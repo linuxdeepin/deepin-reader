@@ -257,16 +257,15 @@ public:
     virtual bool loadDocumment(QString filepath) = 0;
     virtual bool bDocummentExist() = 0;
     virtual bool getImage(int pagenum, QImage &image, double width, double height);
-    virtual bool save(const QString &filePath, bool withChanges)
-    {
-        //        qDebug() << "do nothing";
-        return false;
-    }
-    virtual bool saveas(const QString &filePath, bool withChanges)
+    virtual bool save(const QString &, bool)
     {
         return false;
     }
-    virtual QString removeAnnotation(const QPoint &startpos) {}
+    virtual bool saveas(const QString &, bool)
+    {
+        return false;
+    }
+    virtual QString removeAnnotation(const QPoint &) {}
 
     virtual void removeAnnotation(const QString &struuid, int ipage = -1) {}
     virtual QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow) {}
@@ -338,7 +337,7 @@ signals:
     void signal_loadDocumment(QString);
     void signal_bookMarkStateChange(int page, bool state);
     void signal_openResult(bool);
-    void signale_autoplaytoend();
+    void signal_autoplaytoend();
 
 protected slots:
     void slot_vScrollBarValueChanged(int value);
