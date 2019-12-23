@@ -38,7 +38,7 @@ FindWidget::FindWidget(DWidget *parent)
     setWindowFlags(Qt::WindowStaysOnTopHint);
     setBlurBackgroundEnabled(true);
 
-    m_pMsgList = {MSG_FIND_EXIT, MSG_FIND_NONE};
+    m_pMsgList = {MSG_FIND_NONE};
     initWidget();
     initConnection();
 

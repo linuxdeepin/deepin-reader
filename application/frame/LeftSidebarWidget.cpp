@@ -95,7 +95,7 @@ void LeftSidebarWidget::slotSetStackCurIndex(const int &iIndex)
         pWidget->setCurrentIndex(iIndex);
     }
 
-    notifyMsg(MSG_FIND_EXIT);
+//    notifyMsg(MSG_FIND_EXIT);
 }
 
 //  上一页
