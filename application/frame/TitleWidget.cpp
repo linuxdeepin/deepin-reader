@@ -249,7 +249,7 @@ void TitleWidget::initMenus()
 {
     {
         m_pSettingMenu = new DMenu(this);
-        m_pSettingMenu->setFixedWidth(220);
+//        m_pSettingMenu->setFixedWidth(220);
         DFontSizeManager::instance()->bind(m_pSettingMenu, DFontSizeManager::T6);
 
         auto action = new QWidgetAction(this);
