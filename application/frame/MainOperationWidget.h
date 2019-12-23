@@ -30,6 +30,7 @@ private:
 signals:
     void sigSearchControl();
     void sigSearchClosed();
+    void sigShowStackWidget(const int &);
 
 private slots:
     void slotUpdateTheme();

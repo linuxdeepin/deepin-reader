@@ -25,6 +25,7 @@ private slots:
     void slotDealWithKeyMsg(const QString &);
 
     void slotUpdateTheme();
+    void slotSetStackCurIndex(const int &);
 
 private:
     void initConnections();

@@ -44,7 +44,7 @@ public:
 
 signals:
     void sigSetVisible();
-    void sigFindNone(const int &);
+    void sigDealWithData(const int &, const QString &);
 
 public:
     void showPosition(const int &);
@@ -56,7 +56,7 @@ private slots:
     void slotFindNextBtnClicked();
     void slotFindPrevBtnClicked();
     void slotClearContent();
-    void slotFindNone(const int &);
+    void slotDealWithData(const int &, const QString &);
 
 protected:
     void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
@@ -65,11 +65,16 @@ private:
     void initWidget();
     void initConnection();
 
+    void onFindExit();
+    void onSetAlert(const int &);
+
 private:
     DSearchEdit     *m_pSearchEdit = nullptr;
     QString         m_strOldFindContent = "";
     NotifySubject   *m_pNotifySubject = nullptr;
     MsgSubject      *m_pMsgSubject = nullptr;
+
+    QList<int>      m_pMsgList;
 
     // IObserver interface
 public:

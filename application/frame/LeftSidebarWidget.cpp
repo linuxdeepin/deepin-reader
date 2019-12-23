@@ -58,7 +58,7 @@ void LeftSidebarWidget::slotDealWithKeyMsg(const QString &msgContent)
 
 void LeftSidebarWidget::onSetStackCurIndex(const int &iIndex)
 {
-    AppSetting::instance()->setKeyValue(KEY_WIDGET, QString("%1").arg(iIndex));
+//    AppSetting::instance()->setKeyValue(KEY_WIDGET, QString("%1").arg(iIndex));
 
     auto pWidget = this->findChild<DStackedWidget *>();
     if (pWidget) {
@@ -83,6 +83,19 @@ void LeftSidebarWidget::onSetWidgetVisible(const int &nVis)
 void LeftSidebarWidget::slotUpdateTheme()
 {
     updateWidgetTheme();
+}
+
+//  按钮 按键显示对应 widget
+void LeftSidebarWidget::slotSetStackCurIndex(const int &iIndex)
+{
+    AppSetting::instance()->setKeyValue(KEY_WIDGET, QString("%1").arg(iIndex));
+
+    auto pWidget = this->findChild<DStackedWidget *>();
+    if (pWidget) {
+        pWidget->setCurrentIndex(iIndex);
+    }
+
+    notifyMsg(MSG_FIND_EXIT);
 }
 
 //  上一页
@@ -204,18 +217,22 @@ void LeftSidebarWidget::initWidget()
     pStackedWidget->insertWidget(WIDGET_BUFFER, new BufferWidget(this));
     pStackedWidget->setCurrentIndex(WIDGET_THUMBNAIL);
 
-    for (int index = 0; index < pStackedWidget->count(); ++index) {
-        auto widget = pStackedWidget->widget(index);
-        if (widget) {
-            widget->setMinimumWidth(LEFTMINWIDTH);
-            widget->setMaximumWidth(LEFTMAXWIDTH);
-            widget->adjustSize();
+//    for (int index = 0; index < pStackedWidget->count(); ++index) {
+//        auto widget = pStackedWidget->widget(index);
+//        if (widget) {
+//            widget->setMinimumWidth(LEFTMINWIDTH);
+//            widget->setMaximumWidth(LEFTMAXWIDTH);
+//            widget->adjustSize();
 //            widget->resize(226, this->height());
-        }
-    }
+//        }
+//    }
 
     pVBoxLayout->addWidget(pStackedWidget);
-    pVBoxLayout->addWidget(new MainOperationWidget, 0, Qt::AlignBottom);
+
+    auto mainOperation = new MainOperationWidget;
+    connect(mainOperation, SIGNAL(sigShowStackWidget(const int &)), SLOT(slotSetStackCurIndex(const int &)));
+
+    pVBoxLayout->addWidget(mainOperation, 0, Qt::AlignBottom);
 }
 
 int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgContent)

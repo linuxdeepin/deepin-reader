@@ -38,6 +38,7 @@ FindWidget::FindWidget(DWidget *parent)
     setWindowFlags(Qt::WindowStaysOnTopHint);
     setBlurBackgroundEnabled(true);
 
+    m_pMsgList = {MSG_FIND_EXIT, MSG_FIND_NONE};
     initWidget();
     initConnection();
 
@@ -80,8 +81,10 @@ void FindWidget::slotSetVisible()
 
 void FindWidget::findCancel()
 {
-    slotFindNone(0);
+    onSetAlert(0);
+
     notifyMsg(MSG_CLEAR_FIND_CONTENT);
+
     m_pSearchEdit->clear();
     m_pSearchEdit->clearFocus();
     hide();
@@ -116,23 +119,17 @@ void FindWidget::slotClearContent()
     QString strNewFind = m_pSearchEdit->text();
     if (strNewFind == "") {
         m_strOldFindContent = "";
-        slotFindNone(0);
+        onSetAlert(0);
         notifyMsg(MSG_CLEAR_FIND_CONTENT);
     }
 }
 
-/**
- * @brief FindWidget::slotFindNone
- * 搜索无果时，搜索框变成粉红色
- * @param status
- * 0:恢复正常颜色 1:变成粉红色
- */
-void FindWidget::slotFindNone(const int &status)
+void FindWidget::slotDealWithData(const int &msgType, const QString &msgContent)
 {
-    bool alert = (status == 1) ? true : false;
-
-    if (m_pSearchEdit) {
-        m_pSearchEdit->setAlert(alert);
+    if (msgType == MSG_FIND_EXIT) {
+        onFindExit();
+    } else if (msgType == MSG_FIND_NONE) {
+        onSetAlert(1);
     }
 }
 
@@ -144,6 +141,10 @@ void FindWidget::hideEvent(QHideEvent *e)
 
 int FindWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
+    if (m_pMsgList.contains(msgType)) {
+        emit sigDealWithData(msgType, msgContent);
+        return ConstantMsg::g_effective_res;
+    }
     if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
     } else if (msgType == MSG_OPERATION_SLIDE) {  //  幻灯片了
         emit sigSetVisible();
@@ -151,21 +152,22 @@ int FindWidget::dealWithData(const int &msgType, const QString &msgContent)
         if (msgContent == KeyStr::g_f11) {
             emit sigSetVisible();
         }
-    } else if (msgType == MSG_FIND_NONE) {
-        emit sigFindNone(1);
-        return ConstantMsg::g_effective_res;
     }
     return 0;
 }
 
 void FindWidget::sendMsg(const int &msgType, const QString &msgContent)
 {
-    m_pMsgSubject->sendMsg(msgType, msgContent);
+    if (this->isVisible()) {
+        m_pMsgSubject->sendMsg(msgType, msgContent);
+    }
 }
 
 void FindWidget::notifyMsg(const int &msgType, const QString &msgContent)
 {
-    m_pNotifySubject->notifyMsg(msgType, msgContent);
+    if (this->isVisible()) {
+        m_pNotifySubject->notifyMsg(msgType, msgContent);
+    }
 }
 
 void FindWidget::initWidget()
@@ -207,4 +209,25 @@ void FindWidget::initConnection()
 {
     connect(this, SIGNAL(sigSetVisible()), SLOT(slotSetVisible()));
     connect(this, SIGNAL(sigFindNone(const int &)), SLOT(slotFindNone(const int &)));
+    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
+}
+
+//  退出查询
+void FindWidget::onFindExit()
+{
+    this->setVisible(false);
+
+    if (m_pSearchEdit) {
+        m_pSearchEdit->setText("");
+    }
+}
+
+//  设置 提醒红色
+void FindWidget::onSetAlert(const int &iFlag)
+{
+    bool alert = (iFlag == 1) ? true : false;
+
+    if (m_pSearchEdit) {
+        m_pSearchEdit->setAlert(alert);
+    }
 }

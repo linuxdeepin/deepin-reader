@@ -133,11 +133,9 @@ void MainOperationWidget::slotUpdateTheme()
 
 void MainOperationWidget::slotButtonClicked(int id)
 {
-    //    m_nThumbnailIndex = id;
-    if (WIDGET_SEARCH != id) {
-        DataManager::instance()->setCurrentWidget(id);
-    }
-    notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(id));
+    DataManager::instance()->setCurrentWidget(id);
+
+    emit sigShowStackWidget(id);
 }
 
 /**
