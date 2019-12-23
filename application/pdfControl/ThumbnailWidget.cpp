@@ -49,7 +49,7 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
 void ThumbnailWidget::initWidget()
 {
     m_pThumbnailListWidget = new CustomListWidget(this);
-    m_pThumbnailListWidget->setSpacing(3);
+    m_pThumbnailListWidget->setSpacing(8);
 
     m_pPageWidget = new PagingWidget(this);
     auto hLine = new DHorizontalLine(this);

@@ -173,7 +173,6 @@ void SearchResWidget::initWidget()
     this->setLayout(m_pVLayout);
 
     m_pSearchList = new CustomListWidget;
-    m_pSearchList->setSpacing(1);
 
     m_pVLayout->addWidget(m_pSearchList);
 }

@@ -10,7 +10,7 @@ CustomListWidget::CustomListWidget(DWidget *parent)
     this->setMaximumWidth(LEFTMAXWIDTH);
     resize(LEFTMINWIDTH, this->height());
 
-    setSpacing(0);
+    setSpacing(3);
     setFrameShape(QFrame::NoFrame);
     setFocusPolicy(Qt::NoFocus);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

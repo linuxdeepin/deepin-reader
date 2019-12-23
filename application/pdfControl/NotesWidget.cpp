@@ -43,7 +43,6 @@ void NotesWidget::initWidget()
     this->setLayout(m_pVLayout);
 
     m_pNotesList = new CustomListWidget;
-    m_pNotesList->setSpacing(1);
 
 //    m_pAddAnnotationBtn = new DPushButton(this);
 //    m_pAddAnnotationBtn->setFixedHeight(36);
@@ -101,9 +100,9 @@ void NotesWidget::slotDltNoteItem(QString uuid)
                     // of for loop
                     notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The annotation has been removed"));
 
-                    if (m_pNotesList->count() > 0) {
-                        m_pNotesList->setCurrentRow(0);
-                    }
+//                    if (m_pNotesList->count() > 0) {
+//                        m_pNotesList->setCurrentRow(0);
+//                    }
                     break;
                 }
             }
