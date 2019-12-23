@@ -81,6 +81,9 @@ private:
 
     QList<int>      m_pMsgList;
 
+
+    Qt::WindowStates    m_nOldState = Qt::WindowNoState;        //  旧的窗口状态
+
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
