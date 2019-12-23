@@ -2,10 +2,12 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-#include <DFloatingButton>
 #include <DFontSizeManager>
-#include <QButtonGroup>
+#include <QSignalMapper>
+#include <QDebug>
+
 #include "controller/DataManager.h"
+#include "CustomControl/RoundColorWidget.h"
 
 ColorWidgetAction::ColorWidgetAction(DWidget *pParent)
     : QWidgetAction(pParent)
@@ -18,15 +20,38 @@ void ColorWidgetAction::setBtnAddLightState(const bool &bState)
     m_pClickLabel->setEnabled(!bState);
 }
 
-void ColorWidgetAction::slotSetButtonFocus(int index)
+void ColorWidgetAction::slotBtnClicked(int index)
 {
-    auto btnGroup = this->findChild<QButtonGroup *>();
-    if (btnGroup) {
-        auto btn = btnGroup->button(index);
-        if (btn) {
-            btn->setFocus(Qt::ActiveWindowFocusReason);
+    auto btnList = this->defaultWidget()->findChildren<RoundColorWidget *>();
+    foreach (auto btn, btnList) {
+        int btnIndex = btn->objectName().toInt();
+        if (btnIndex == index) {
+            btn->setSelected(true);
+
+            emit sigBtnGroupClicked(index);
+        } else {
+            btn->setSelected(false);
         }
     }
+}
+
+void ColorWidgetAction::slotBtnDefaultClicked()
+{
+    int iIndex = -1;
+
+    auto btnList = this->defaultWidget()->findChildren<RoundColorWidget *>();
+    foreach (auto btn, btnList) {
+        if (btn->isSelected()) {
+            iIndex = btn->objectName().toInt();
+            break;
+        }
+    }
+
+    if (iIndex == -1) {
+        iIndex = 0;
+    }
+
+    emit sigBtnGroupClicked(iIndex);
 }
 
 void ColorWidgetAction::initWidget(DWidget *pParent)
@@ -36,29 +61,26 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
 
     m_pClickLabel = new CustomClickLabel(tr("Highlight"));
     DFontSizeManager::instance()->bind(m_pClickLabel, DFontSizeManager::T6);
-    connect(m_pClickLabel, SIGNAL(clicked()), this, SIGNAL(sigBtnDefaultClicked()));
+    connect(m_pClickLabel, SIGNAL(clicked()), SLOT(slotBtnDefaultClicked()));
 
     auto buttonLayout = new QHBoxLayout;
     buttonLayout->setContentsMargins(20, 6, 20, 6);
     buttonLayout->setSpacing(12);
 
-    auto btnGroup = new QButtonGroup(this);
-    connect(btnGroup, SIGNAL(buttonClicked(int)), this, SIGNAL(sigBtnGroupClicked(int)));
-    connect(btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotSetButtonFocus(int)));
+    auto sigMap = new QSignalMapper(this);
 
     auto colorList = DataManager::instance()->getLightColorList();
     for (int iLoop = 0; iLoop < colorList.size(); iLoop++) {
-        auto btn = new DFloatingButton(pWidget);
-        btn->setBackgroundRole(DPalette::Button);
-        btn->setFixedSize(QSize(20, 20));
+        auto btn = new RoundColorWidget(colorList.at(iLoop), pWidget);
+        btn->setObjectName(QString("%1").arg(iLoop));
+        btn->setFixedSize(QSize(25, 25));
 
-        QPalette pa = btn->palette();
-        pa.setBrush(DPalette::Button, colorList.at(iLoop));
-        btn->setPalette(pa);
+        connect(btn, SIGNAL(clicked()), sigMap, SLOT(map()));
+        sigMap->setMapping(btn, iLoop);
 
-        btnGroup->addButton(btn, iLoop);
         buttonLayout->addWidget(btn);
     }
+    connect(sigMap, SIGNAL(mapped(int)), SLOT(slotBtnClicked(int)));
 
     buttonLayout->addStretch(1);
 
@@ -67,7 +89,6 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
     playout->addWidget(m_pClickLabel);
 
     auto mainLayout = new QVBoxLayout;
-    // mainLayout->addWidget(m_pClickLabel);
     mainLayout->addItem(playout);
     mainLayout->addItem(buttonLayout);
 

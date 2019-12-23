@@ -34,10 +34,9 @@ private:
     void notifyMsgToFrame(const int &, const QString &msgContent = "");
 
 private slots:
-    void slotSetHighLight(int);
+    void slotSetHighLight(const int &);
 
     void slotCopyClicked();
-    void slotAddHighLightClicked();
     void slotRemoveHighLightClicked();
     void slotAddNoteClicked();
     void slotAddBookMarkClicked();

@@ -19,11 +19,11 @@ public:
     void setBtnAddLightState(const bool &);
 
 signals:
-    void sigBtnGroupClicked(int);
-    void sigBtnDefaultClicked();
+    void sigBtnGroupClicked(const int &);
 
 private slots:
-    void slotSetButtonFocus(int);
+    void slotBtnClicked(int);
+    void slotBtnDefaultClicked();
 
 private:
     void initWidget(DWidget *pParent);

@@ -60,8 +60,8 @@ void TextOperationMenu::initMenu()
     m_pCopy = createAction(tr("Copy"), SLOT(slotCopyClicked()));
 
     m_pColorWidgetAction = new ColorWidgetAction(this);
-    connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked(int)), this, SLOT(slotSetHighLight(int)));
-    connect(m_pColorWidgetAction, SIGNAL(sigBtnDefaultClicked()), this, SLOT(slotAddHighLightClicked()));
+    connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked(const int &)), this, SLOT(slotSetHighLight(const int &)));
+//    connect(m_pColorWidgetAction, SIGNAL(sigBtnDefaultClicked()), this, SLOT(slotAddHighLightClicked()));
     this->addAction(m_pColorWidgetAction);
     this->addSeparator();
 
@@ -94,7 +94,7 @@ void TextOperationMenu::notifyMsgToFrame(const int &msgType, const QString &msgC
     this->hide();
 }
 
-void TextOperationMenu::slotSetHighLight(int nColor)
+void TextOperationMenu::slotSetHighLight(const int &nColor)
 {
     m_pLightColor = nColor;
 
@@ -109,11 +109,6 @@ void TextOperationMenu::slotSetHighLight(int nColor)
 void TextOperationMenu::slotCopyClicked()
 {
     notifyMsgToFrame(MSG_OPERATION_TEXT_COPY, m_strSelectText);
-}
-
-void TextOperationMenu::slotAddHighLightClicked()
-{
-    sendMsgToFrame(MSG_OPERATION_TEXT_ADD_HIGHLIGHTED, QString("%1,%2,%3").arg(m_pLightColor).arg(m_pClickPoint.x()).arg(m_pClickPoint.y()));
 }
 
 void TextOperationMenu::slotRemoveHighLightClicked()
