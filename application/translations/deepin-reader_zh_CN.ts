@@ -166,7 +166,7 @@
 <context>
     <name>BookMarkItemWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkItemWidget.cpp" line="75"/>
+        <location filename="../pdfControl/BookMarkItemWidget.cpp" line="70"/>
         <source>Remove bookmark</source>
         <translatorcomment>删除书签</translatorcomment>
         <translation>删除书签</translation>
@@ -175,14 +175,14 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="206"/>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="311"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="241"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="343"/>
         <source>The bookmark has been removed</source>
         <translatorcomment>已删除书签</translatorcomment>
         <translation>已删除书签</translation>
     </message>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="426"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="392"/>
         <source>Add bookmark</source>
         <translatorcomment>添加书签</translatorcomment>
         <translation>添加书签</translation>
@@ -191,7 +191,7 @@
 <context>
     <name>ColorWidgetAction</name>
     <message>
-        <location filename="../mainShow/ColorWidgetAction.cpp" line="37"/>
+        <location filename="../mainShow/ColorWidgetAction.cpp" line="62"/>
         <source>Highlight</source>
         <translatorcomment>高亮</translatorcomment>
         <translation>高亮</translation>
@@ -200,7 +200,7 @@
 <context>
     <name>CustomItemWidget</name>
     <message>
-        <location filename="../pdfControl/CustomItemWidget.cpp" line="38"/>
+        <location filename="../pdfControl/CustomItemWidget.cpp" line="35"/>
         <source>page</source>
         <translatorcomment>页</translatorcomment>
         <translation>页</translation>
@@ -745,13 +745,13 @@
 <context>
     <name>NotesItemWidget</name>
     <message>
-        <location filename="../pdfControl/NotesItemWidget.cpp" line="80"/>
+        <location filename="../pdfControl/NotesItemWidget.cpp" line="75"/>
         <source>Copy</source>
         <translatorcomment>复制</translatorcomment>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../pdfControl/NotesItemWidget.cpp" line="83"/>
+        <location filename="../pdfControl/NotesItemWidget.cpp" line="78"/>
         <source>Remove annotation</source>
         <translatorcomment>删除注释</translatorcomment>
         <translation>删除注释</translation>
@@ -760,8 +760,8 @@
 <context>
     <name>NotesWidget</name>
     <message>
-        <location filename="../pdfControl/NotesWidget.cpp" line="102"/>
-        <location filename="../pdfControl/NotesWidget.cpp" line="259"/>
+        <location filename="../pdfControl/NotesWidget.cpp" line="98"/>
+        <location filename="../pdfControl/NotesWidget.cpp" line="255"/>
         <source>The annotation has been removed</source>
         <translatorcomment>已删除注释</translatorcomment>
         <translation>已删除注释</translation>
@@ -770,13 +770,13 @@
 <context>
     <name>SearchResWidget</name>
     <message>
-        <location filename="../pdfControl/SearchResWidget.cpp" line="237"/>
+        <location filename="../pdfControl/SearchResWidget.cpp" line="233"/>
         <source> items found</source>
         <translatorcomment> 个搜索结果</translatorcomment>
         <translation> 个搜索结果</translation>
     </message>
     <message>
-        <location filename="../pdfControl/SearchResWidget.cpp" line="257"/>
+        <location filename="../pdfControl/SearchResWidget.cpp" line="253"/>
         <source>No search results</source>
         <translatorcomment>无搜索结果</translatorcomment>
         <translation>无搜索结果</translation>

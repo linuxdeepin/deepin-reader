@@ -140,7 +140,7 @@
 <context>
     <name>BookMarkItemWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkItemWidget.cpp" line="75"/>
+        <location filename="../pdfControl/BookMarkItemWidget.cpp" line="70"/>
         <source>Remove bookmark</source>
         <translation></translation>
     </message>
@@ -148,13 +148,13 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="206"/>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="311"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="241"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="343"/>
         <source>The bookmark has been removed</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="426"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="392"/>
         <source>Add bookmark</source>
         <translation></translation>
     </message>
@@ -162,7 +162,7 @@
 <context>
     <name>ColorWidgetAction</name>
     <message>
-        <location filename="../mainShow/ColorWidgetAction.cpp" line="37"/>
+        <location filename="../mainShow/ColorWidgetAction.cpp" line="62"/>
         <source>Highlight</source>
         <translation></translation>
     </message>
@@ -170,7 +170,7 @@
 <context>
     <name>CustomItemWidget</name>
     <message>
-        <location filename="../pdfControl/CustomItemWidget.cpp" line="38"/>
+        <location filename="../pdfControl/CustomItemWidget.cpp" line="35"/>
         <source>page</source>
         <translation></translation>
     </message>
@@ -629,12 +629,12 @@
 <context>
     <name>NotesItemWidget</name>
     <message>
-        <location filename="../pdfControl/NotesItemWidget.cpp" line="80"/>
+        <location filename="../pdfControl/NotesItemWidget.cpp" line="75"/>
         <source>Copy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/NotesItemWidget.cpp" line="83"/>
+        <location filename="../pdfControl/NotesItemWidget.cpp" line="78"/>
         <source>Remove annotation</source>
         <translation></translation>
     </message>
@@ -642,8 +642,8 @@
 <context>
     <name>NotesWidget</name>
     <message>
-        <location filename="../pdfControl/NotesWidget.cpp" line="102"/>
-        <location filename="../pdfControl/NotesWidget.cpp" line="259"/>
+        <location filename="../pdfControl/NotesWidget.cpp" line="98"/>
+        <location filename="../pdfControl/NotesWidget.cpp" line="255"/>
         <source>The annotation has been removed</source>
         <translation></translation>
     </message>
@@ -651,12 +651,12 @@
 <context>
     <name>SearchResWidget</name>
     <message>
-        <location filename="../pdfControl/SearchResWidget.cpp" line="237"/>
+        <location filename="../pdfControl/SearchResWidget.cpp" line="233"/>
         <source> items found</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/SearchResWidget.cpp" line="257"/>
+        <location filename="../pdfControl/SearchResWidget.cpp" line="253"/>
         <source>No search results</source>
         <translation></translation>
     </message>
