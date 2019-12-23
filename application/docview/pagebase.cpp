@@ -100,10 +100,9 @@ void ThreadRenderImage::run()
         restart = false;
         if (m_width > 0 && m_height > 0) {
             QImage image;
-//            qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId();
-            qDebug() << "ThreadRenderImage getImage width:" << m_width << " height:" << m_height;
+            // qDebug() << "ThreadRenderImage getImage width:" << m_width << " height:" << m_height;
             if (m_page->getImage(image, m_width, m_height)) {
-                qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " get suc!";
+                //  qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " get suc!";
                 if (QThread::currentThread()->isInterruptionRequested()) {
                     b_running = false;
                     return;
@@ -111,7 +110,7 @@ void ThreadRenderImage::run()
                 if (restart)
                     continue;
 //                m_page->loadData();
-                qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " emit render!";
+                // qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " emit render!";
                 emit signal_RenderFinish(image);
             } else {
                 qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " get fail!";

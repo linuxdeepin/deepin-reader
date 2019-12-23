@@ -193,7 +193,6 @@ public:
     QList<DWidget *>m_widgets;
     QList<QRect>m_widgetrects;
     DWidget *m_widget;
-//    DocMainWidget *m_widget;
     QVBoxLayout *m_vboxLayout;
     MagnifierWidget *m_magnifierwidget;
     SlidWidget *m_slidewidget;
@@ -361,7 +360,6 @@ protected:
     void showFacingPage();
     void initConnect();
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
-//    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
     void resizeEvent(QResizeEvent *e) override;
 
     DocummentBasePrivate *d_ptr;

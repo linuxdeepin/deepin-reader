@@ -874,17 +874,10 @@ bool DocummentBase::showMagnifier(QPoint point)
     return true;
 }
 
-//void DocummentBase::paintEvent(QPaintEvent *event)
-//{
-//    DScrollArea::paintEvent(event);
-//    Q_D(DocummentBase);
-//    qDebug() << "---------DocummentBase::paintEvent m_currentpageno:" << d->m_currentpageno;
-//    pageJump(d->m_currentpageno);
-//}
-
 void DocummentBase::resizeEvent(QResizeEvent *e)
 {
     DScrollArea::resizeEvent(e);
+    qDebug() << "DocummentBase::resizeEvent";
     loadPages(); //主要目的是解决文档刚加载的时候qwfather获取的尺寸不对，导致界面少显示页面的问题
 }
 
@@ -1090,8 +1083,7 @@ int DocummentBase::fromFirstGetLastPageNo(int pagenum)
     default:
         break;
     }
-    qDebug() << "";
-//    long height = 0;
+
     for (int i = rewidgetnum; i < d->m_widgetrects.size(); i++) {
 //        height += d->m_widgetrects.at(i).height();
 //        qDebug() << "------------fromFirstGetLastPageNo i:" << i << " rect::" << d->m_widgetrects.at(i);
@@ -1106,6 +1098,8 @@ int DocummentBase::fromFirstGetLastPageNo(int pagenum)
     }
     if (repagenum >= d->m_pages.size())
         repagenum = d->m_pages.size() - 1;
+
+    qDebug() << "DocummentBase::fromFirstGetLastPageNo*****" << pagenum << repagenum;
     return repagenum;
 }
 
@@ -1319,6 +1313,7 @@ void DocummentBase::showFacingPage()
         d->m_widgets.at(i)->hide();
     }
     d->pblankwidget->hide();
+    qDebug() << "========DocummentBase::showFacingPage双页显示";
     for (int i = 0; i < d->m_pages.size() / 2; i++) {
         d->m_widgets.at(i)->layout()->addWidget(d->m_pages.at(i * 2));
         d->m_widgets.at(i)->layout()->addWidget(d->m_pages.at(i * 2 + 1));
@@ -1617,6 +1612,7 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
 //    QTimer::singleShot(20, &loop, SLOT(quit()));
 //    loop.exec();
 
+    qDebug() << "DocummentBase::setViewModeAndShow loadPages";
     loadPages();
 
     d->donotneedreloaddoc = false;
