@@ -12,8 +12,8 @@
     <message>
         <location filename="../application.cpp" line="55"/>
         <source>Document Viewer is a simple PDF reader, supporting bookmarks, highlights and annotations.</source>
-        <translatorcomment>文档查看器一款为了方便查看PDF格式文档的阅读工具。</translatorcomment>
-        <translation>文档查看器一款为了方便查看PDF格式文档的阅读工具。</translation>
+        <translatorcomment>文档查看器是一款为了方便查看PDF格式文档的阅读工具。</translatorcomment>
+        <translation>文档查看器是一款为了方便查看PDF格式文档的阅读工具。</translation>
     </message>
 </context>
 <context>
@@ -175,14 +175,14 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="205"/>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="310"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="206"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="311"/>
         <source>The bookmark has been removed</source>
         <translatorcomment>已删除书签</translatorcomment>
         <translation>已删除书签</translation>
     </message>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="425"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="426"/>
         <source>Add bookmark</source>
         <translatorcomment>添加书签</translatorcomment>
         <translation>添加书签</translation>
@@ -413,19 +413,19 @@
         <translation>右旋转</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="420"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="428"/>
         <source>Two-Page View</source>
         <translatorcomment>双页显示</translatorcomment>
         <translation>双页显示</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="444"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="452"/>
         <source>Fit Height</source>
         <translatorcomment>适应高度</translatorcomment>
         <translation>适应高度</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="467"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="475"/>
         <source>Fit Width</source>
         <translatorcomment>适应宽度</translatorcomment>
         <translation>适应宽度</translation>
@@ -848,7 +848,7 @@
         <location filename="../frame/TitleWidget.cpp" line="318"/>
         <source>Hand Tool</source>
         <translatorcomment>手形工具</translatorcomment>
-        <translation type="unfinished">手形工具</translation>
+        <translation>手形工具</translation>
     </message>
 </context>
 </TS>

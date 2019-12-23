@@ -148,13 +148,13 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="205"/>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="310"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="206"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="311"/>
         <source>The bookmark has been removed</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="425"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="426"/>
         <source>Add bookmark</source>
         <translation></translation>
     </message>
@@ -352,17 +352,17 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="420"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="428"/>
         <source>Two-Page View</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="444"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="452"/>
         <source>Fit Height</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="467"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="475"/>
         <source>Fit Width</source>
         <translation></translation>
     </message>
