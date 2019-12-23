@@ -418,7 +418,6 @@ void MainWindow::slotFullScreen()
 {
     int nCurState = DataManager::instance()->CurShowState();
     if (nCurState != FILE_FULLSCREEN) {
-        m_nOldState = this->windowState();      //  全屏之前 保存当前状态     2019-12-23  wzx
         slotAppShowState(0);
         DataManager::instance()->setCurShowState(FILE_FULLSCREEN);  //  全屏状态
     }
@@ -436,14 +435,17 @@ void MainWindow::slotAppShowState(const int &nState)
     if (nState == 1) {
         if (windowState() == Qt::WindowFullScreen) {
             DataManager::instance()->setCurShowState(FILE_NORMAL);  //  正常状态
-            if (m_nOldState == Qt::WindowNoState) {
-                showNormal();
-            } else if (m_nOldState == Qt::WindowMaximized) {
+
+            showNormal();
+
+            if (m_nOldState == Qt::WindowMaximized) {
                 showMaximized();
             }
+
             m_nOldState = Qt::WindowNoState;        // 状态恢复     2019-12-23  wzx
         }
     } else {
+        m_nOldState = this->windowState();      //  全屏之前 保存当前状态     2019-12-23  wzx
         this->setWindowState(Qt::WindowFullScreen);
     }
 }
