@@ -5,11 +5,7 @@
 BookMarkItemWidget::BookMarkItemWidget(CustomItemWidget *parent)
     : CustomItemWidget("BookMarkItemWidget", parent)
 {
-    this->setMinimumWidth(LEFTMINWIDTH);
-    this->setMaximumWidth(LEFTMAXWIDTH);
-    resize(LEFTMINWIDTH, this->height());
-
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this,
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             SLOT(slotShowContextMenu(const QPoint &)));
     initWidget();
 }
@@ -69,7 +65,6 @@ void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
 
     if (m_menu == nullptr) {
         m_menu = new DMenu(this);
-        m_menu->setFixedWidth(182);
         DFontSizeManager::instance()->bind(m_menu, DFontSizeManager::T6);
         QAction *dltBookMarkAction =
             m_menu->addAction(QString("      %1").arg(tr("Remove bookmark")));

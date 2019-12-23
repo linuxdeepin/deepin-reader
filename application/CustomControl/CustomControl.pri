@@ -6,7 +6,8 @@ HEADERS += \
     $$PWD/ColorMenu.h \
     $$PWD/DFMGlobal.h \
     $$PWD/ImageFrame.h \
-    $$PWD/CustemIconButton.h
+    $$PWD/CustemIconButton.h \
+    $$PWD/RoundColorWidget.h
 
 SOURCES += \
     $$PWD/CustomWidget.cpp \
@@ -16,4 +17,5 @@ SOURCES += \
     $$PWD/ColorMenu.cpp \
     $$PWD/DFMGlobal.cpp \
     $$PWD/ImageFrame.cpp \
-    $$PWD/CustemIconButton.cpp
+    $$PWD/CustemIconButton.cpp \
+    $$PWD/RoundColorWidget.cpp

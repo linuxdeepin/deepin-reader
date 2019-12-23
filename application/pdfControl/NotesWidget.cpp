@@ -5,9 +5,6 @@
 NotesWidget::NotesWidget(CustomWidget *parent)
     : CustomWidget(QString("NotesWidget"), parent)
 {
-    this->setMinimumWidth(LEFTMINWIDTH);
-    this->setMaximumWidth(LEFTMAXWIDTH);
-    resize(LEFTMINWIDTH, this->height());
     initWidget();
 
     initConnection();
@@ -561,12 +558,10 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigDltNoteContant(msgContent);
         return ConstantMsg::g_effective_res;
     }
+
     if (MSG_NOTE_SELECTITEM == msgType) {
         emit sigRightSelectItem(msgContent);
-    }
-
-    // 移除高亮，删除注释内容，删除注释列表item
-    if (MSG_NOTE_DLTNOTEITEM == msgType) {
+    } else if (MSG_NOTE_DLTNOTEITEM == msgType) {  // 移除高亮，删除注释内容，删除注释列表item
         emit sigDltNoteItem(msgContent);
     } else if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
         emit sigOpenFileOk();

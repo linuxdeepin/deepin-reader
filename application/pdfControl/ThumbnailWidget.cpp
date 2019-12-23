@@ -6,9 +6,6 @@
 ThumbnailWidget::ThumbnailWidget(CustomWidget *parent)
     : CustomWidget(QString("ThumbnailWidget"), parent)
 {
-    this->setMinimumWidth(LEFTMINWIDTH);
-    this->setMaximumWidth(LEFTMAXWIDTH);
-    resize(LEFTMINWIDTH, this->height());
     m_ThreadLoadImage.setThumbnail(this);
 
     initWidget();
@@ -54,7 +51,7 @@ void ThumbnailWidget::initWidget()
     m_pPageWidget = new PagingWidget(this);
     auto hLine = new DHorizontalLine(this);
 
-    auto m_pvBoxLayout = new QVBoxLayout(this);
+    auto m_pvBoxLayout = new QVBoxLayout;
     m_pvBoxLayout->addWidget(m_pThumbnailListWidget);
     m_pvBoxLayout->addWidget(hLine);
     m_pvBoxLayout->addWidget(m_pPageWidget);
@@ -163,37 +160,6 @@ void ThumbnailWidget::slotUpdateTheme()
     updateWidgetTheme();
 }
 
-/**
- * @brief ThumbnailWidget::slotJumpToPrevPage
- *上一页
- */
-void ThumbnailWidget::slotJumpToPrevPage()
-{
-    if (DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL ||
-            (DataManager::instance()->bThumbnIsShow() == false)) {
-        return;
-    }
-    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
-    nCurPage--;
-    jumpToSpecifiedPage(nCurPage);
-}
-
-/**
- * @brief ThumbnailWidget::slotJumpToNextPage
- *下一页
- */
-void ThumbnailWidget::slotJumpToNextPage()
-{
-    if (DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL ||
-            (DataManager::instance()->bThumbnIsShow() == false)) {
-        return;
-    }
-
-    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
-    nCurPage++;
-    jumpToSpecifiedPage(nCurPage);
-}
-
 void ThumbnailWidget::slotSetRotate(int angle)
 {
     m_nRotate = angle;
@@ -266,7 +232,14 @@ void ThumbnailWidget::showItemBookMark(int ipage)
  */
 void ThumbnailWidget::prevPage()
 {
-    slotJumpToPrevPage();
+    if (DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL ||
+            (DataManager::instance()->bThumbnIsShow() == false)) {
+        return;
+    }
+
+    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
+    nCurPage--;
+    jumpToSpecifiedPage(nCurPage);
 }
 
 /**
@@ -275,7 +248,14 @@ void ThumbnailWidget::prevPage()
  */
 void ThumbnailWidget::nextPage()
 {
-    slotJumpToNextPage();
+    if (DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL ||
+            (DataManager::instance()->bThumbnIsShow() == false)) {
+        return;
+    }
+
+    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
+    nCurPage++;
+    jumpToSpecifiedPage(nCurPage);
 }
 
 /**
@@ -387,7 +367,8 @@ void ThreadLoadImage::run()
 
 /************************旋转缩略图线程****************************/
 
-ThreadRotateImage::ThreadRotateImage(QObject *parent) {}
+ThreadRotateImage::ThreadRotateImage(QObject *parent)
+    : QThread(parent) {}
 
 void ThreadRotateImage::stopThreadRun()
 {

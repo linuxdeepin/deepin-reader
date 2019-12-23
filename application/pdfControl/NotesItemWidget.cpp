@@ -8,10 +8,6 @@
 NotesItemWidget::NotesItemWidget(CustomItemWidget *parent)
     : CustomItemWidget(QString("NotesItemWidget"), parent)
 {
-    this->setMinimumWidth(LEFTMINWIDTH);
-    this->setMaximumWidth(LEFTMAXWIDTH);
-    resize(LEFTMINWIDTH, this->height());
-
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this,
             SLOT(slotShowContextMenu(const QPoint &)));
     connect(this, SIGNAL(sigUpdateTheme()), this, SLOT(slotUpdateTheme()));
@@ -76,7 +72,6 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
 
     if (m_menu == nullptr) {
         m_menu = new DMenu(this);
-        m_menu->setFixedWidth(182);
         QAction *copyAction = m_menu->addAction(QString("      %1").arg(tr("Copy")));
         DFontSizeManager::instance()->bind(m_menu, DFontSizeManager::T6);
         m_menu->addSeparator();

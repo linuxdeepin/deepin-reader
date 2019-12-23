@@ -6,13 +6,9 @@
 PagingWidget::PagingWidget(CustomWidget *parent)
     : CustomWidget(QString("PagingWidget"), parent)
 {
-    this->setMinimumWidth(LEFTMINWIDTH);
-    this->setMaximumWidth(LEFTMAXWIDTH);
     resize(LEFTNORMALWIDTH, 56);
-//    setMinimumWidth(LEFTMINWIDTH);
-//    setMaximumWidth(LEFTMAXWIDTH);
-    initWidget();
 
+    initWidget();
     initConnections();
     slotUpdateTheme();
 }

@@ -136,8 +136,7 @@ private slots:
     void slotDocFilePageChanged(const QString &);
     void slotCloseFile();
     void slotUpdateTheme();
-    void slotJumpToPrevPage();
-    void slotJumpToNextPage();
+
     void slotSetRotate(int);
     void slotRotateThumbnail(int);
 

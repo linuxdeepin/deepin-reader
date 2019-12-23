@@ -3,9 +3,6 @@
 BufferWidget::BufferWidget(CustomWidget *parent)
     : CustomWidget(QString("BufferWidget"), parent)
 {
-    this->setMinimumWidth(LEFTMINWIDTH);
-    this->setMaximumWidth(LEFTMAXWIDTH);
-    resize(LEFTMINWIDTH, this->height());
     initWidget();
 }
 
@@ -16,7 +13,7 @@ int BufferWidget::dealWithData(const int &, const QString &)
 
 void BufferWidget::initWidget()
 {
-    auto m_pVLayout = new QVBoxLayout(this);  // 承载spinner的垂直布局
+    auto m_pVLayout = new QVBoxLayout;  // 承载spinner的垂直布局
     auto m_pHLayout = new QHBoxLayout();      // 承载spinner的水平布局
     auto m_pSpinner = new DSpinner(this);     // 缓冲动画
 

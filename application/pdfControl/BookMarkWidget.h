@@ -79,8 +79,6 @@ private slots:
     void slotLoadImage(const int &, const QImage &);
     void slotDelBkItem();
     void slotUpdateTheme();
-    void slotJumpToPrevItem();
-    void slotJumpToNextItem();
     void slotRightSelectItem(QString);
     void slotSelectItemBackColor(QListWidgetItem *);
 

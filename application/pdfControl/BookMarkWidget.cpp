@@ -2,18 +2,13 @@
 #include "controller/DataManager.h"
 #include "frame/DocummentFileHelper.h"
 
-#include <QStringList>
 #include "BookMarkItemWidget.h"
-#include "ThumbnailWidget.h"
 #include "application.h"
 
 BookMarkWidget::BookMarkWidget(CustomWidget *parent)
     : CustomWidget(QString("BookMarkWidget"), parent)
 {
     setFocusPolicy(Qt::ClickFocus);
-    this->setMinimumWidth(LEFTMINWIDTH);
-    this->setMaximumWidth(LEFTMAXWIDTH);
-    resize(LEFTMINWIDTH, this->height());
 
     initWidget();
     initConnection();
@@ -36,7 +31,28 @@ BookMarkWidget::~BookMarkWidget()
  */
 void BookMarkWidget::prevPage()
 {
-    slotJumpToPrevItem();
+    if (DataManager::instance()->currentWidget() != WIDGET_BOOKMARK ||
+            m_pBookMarkListWidget == nullptr ||
+            DataManager::instance()->bThumbnIsShow() == false ||
+            DataManager::instance()->CurShowState() != FILE_NORMAL) {
+        return;
+    }
+
+    if (m_pBookMarkListWidget->count() <= 0) {
+        return;
+    }
+
+    int nCurIndex  = m_pBookMarkListWidget->currentRow();
+    nCurIndex--;
+    if (nCurIndex < 0)
+        return;
+    auto pCurItem = m_pBookMarkListWidget->item(nCurIndex);
+    if (pCurItem != nullptr) {
+        auto t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
+        if (t_widget) {
+            DocummentFileHelper::instance()->pageJump(t_widget->nPageIndex());
+        }
+    }
 }
 
 /**
@@ -45,8 +61,30 @@ void BookMarkWidget::prevPage()
  */
 void BookMarkWidget::nextPage()
 {
-    slotJumpToNextItem();
+    if (DataManager::instance()->currentWidget() != WIDGET_BOOKMARK ||
+            m_pBookMarkListWidget == nullptr ||
+            DataManager::instance()->bThumbnIsShow() == false ||
+            DataManager::instance()->CurShowState() != FILE_NORMAL) {
+        return;
+    }
+
+    if (m_pBookMarkListWidget->count() <= 0) {
+        return;
+    }
+
+    int curIndex = m_pBookMarkListWidget->currentRow();
+    curIndex++;
+    if (curIndex >= m_pBookMarkListWidget->count())
+        return;
+    auto pCurItem = m_pBookMarkListWidget->item(curIndex);
+    if (pCurItem) {
+        auto t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
+        if (t_widget) {
+            DocummentFileHelper::instance()->pageJump(t_widget->nPageIndex());
+        }
+    }
 }
+
 
 /**
  * @brief BookMarkWidget::slotAddBookMark
@@ -57,7 +95,7 @@ void BookMarkWidget::slotAddBookMark()
     if (!m_pAddBookMarkBtn->isEnabled()) {
         return;
     }
-    clearItemColor();
+
     auto proxy = DocummentFileHelper::instance();
     if (proxy) {
         int nPage = proxy->currentPageNo();
@@ -72,8 +110,6 @@ void BookMarkWidget::slotAddBookMark(const int &nPage)
     if (pageList.contains(nPage)) {
         return;
     }
-
-    clearItemColor();
 
     auto item = addBookMarkItem(nPage);
     if (item) {
@@ -185,7 +221,6 @@ void BookMarkWidget::slotDocFilePageChanged(const QString &sPage)
  */
 void BookMarkWidget::slotDeleteBookItem(const int &nPage)
 {
-    clearItemColor();
     int nSize = m_pBookMarkListWidget->count();
     for (int iLoop = 0; iLoop < nSize; iLoop++) {
         auto pItem = m_pBookMarkListWidget->item(iLoop);
@@ -209,9 +244,6 @@ void BookMarkWidget::slotDeleteBookItem(const int &nPage)
                 }
             }
         }
-    }
-    if (nSize > 0) {
-        m_pBookMarkListWidget->setCurrentRow(0);
     }
 }
 
@@ -312,10 +344,6 @@ void BookMarkWidget::slotDelBkItem()
                 }
             }
         }
-
-        if (m_pBookMarkListWidget->count() > 0) {
-            m_pBookMarkListWidget->setCurrentRow(0);
-        }
     }
 }
 
@@ -326,68 +354,6 @@ void BookMarkWidget::slotUpdateTheme()
     setPalette(plt);
     m_pAddBookMarkBtn->setPalette(plt);
     //  updateWidgetTheme();
-}
-
-void BookMarkWidget::slotJumpToPrevItem()
-{
-    if (DataManager::instance()->currentWidget() != WIDGET_BOOKMARK ||
-            m_pBookMarkListWidget == nullptr || DataManager::instance()->bThumbnIsShow() == false ||
-            DataManager::instance()->CurShowState() != FILE_NORMAL) {
-        return;
-    }
-
-    if (m_pBookMarkListWidget->count() <= 0) {
-        return;
-    }
-
-    int t_index = -1;
-    auto pCurItem = m_pBookMarkListWidget->currentItem();
-    if (pCurItem) {
-        t_index = m_pBookMarkListWidget->row(pCurItem);
-        if (--t_index < 0)
-            return;
-        pCurItem = m_pBookMarkListWidget->item(t_index);
-        if (pCurItem == nullptr)
-            return;
-        auto t_widget =
-            reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
-        if (t_widget) {
-            clearItemColor();
-            m_pBookMarkListWidget->setCurrentItem(pCurItem);
-            DocummentFileHelper::instance()->pageJump(t_widget->nPageIndex());
-        }
-    }
-}
-
-void BookMarkWidget::slotJumpToNextItem()
-{
-    if (DataManager::instance()->currentWidget() != WIDGET_BOOKMARK ||
-            m_pBookMarkListWidget == nullptr || DataManager::instance()->bThumbnIsShow() == false ||
-            DataManager::instance()->CurShowState() != FILE_NORMAL) {
-        return;
-    }
-
-    if (m_pBookMarkListWidget->count() <= 0) {
-        return;
-    }
-
-    int t_index = -1;
-    auto pCurItem = m_pBookMarkListWidget->currentItem();
-    if (pCurItem) {
-        t_index = m_pBookMarkListWidget->row(pCurItem);
-        if (++t_index >= m_pBookMarkListWidget->count())
-            return;
-        pCurItem = m_pBookMarkListWidget->item(t_index);
-        if (pCurItem == nullptr)
-            return;
-        auto t_widget =
-            reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
-        if (t_widget) {
-            clearItemColor();
-            m_pBookMarkListWidget->setCurrentItem(pCurItem);
-            DocummentFileHelper::instance()->pageJump(t_widget->nPageIndex());
-        }
-    }
 }
 
 void BookMarkWidget::slotRightSelectItem(QString page)
@@ -459,10 +425,8 @@ void BookMarkWidget::initConnection()
     connect(this, SIGNAL(sigFilePageChanged(const QString &)),
             SLOT(slotDocFilePageChanged(const QString &)));
     connect(this, SIGNAL(sigCtrlBAddBookMark()), SLOT(slotAddBookMark()));
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this,
-    [ = ]() { slotUpdateTheme(); });
-    connect(this, SIGNAL(sigRightSelectItem(QString)), this, SLOT(slotRightSelectItem(QString)));
-    connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
+    connect(this, SIGNAL(sigRightSelectItem(QString)), SLOT(slotRightSelectItem(QString)));
+    connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem *)),
             SLOT(slotSelectItemBackColor(QListWidgetItem *)));
 }
 
@@ -485,8 +449,7 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
         item->setSizeHint(QSize(LEFTMINWIDTH, 80));
 
         auto t_widget = new BookMarkItemWidget;
-        connect(t_widget, SIGNAL(sigDeleleteItem(const int &)), this,
-                SLOT(slotDeleteBookItem(const int &)));
+        connect(t_widget, SIGNAL(sigDeleleteItem(const int &)), SLOT(slotDeleteBookItem(const int &)));
         t_widget->setLabelImage(img);
         t_widget->setLabelPage(page, 1);
 
@@ -541,26 +504,18 @@ void BookMarkWidget::slotSelectItemBackColor(QListWidgetItem *item)
  */
 int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    //  删除书签消息
-    if (MSG_BOOKMARK_DLTITEM == msgType || MSG_OPERATION_DELETE_BOOKMARK == msgType) {
+    if (MSG_BOOKMARK_DLTITEM == msgType || MSG_OPERATION_DELETE_BOOKMARK == msgType) {   //  删除书签消息
         emit sigDeleteBookItem(msgContent.toInt());
-    }
-
-    //  增加书签消息
-    if (MSG_OPERATION_ADD_BOOKMARK == msgType || MSG_OPERATION_TEXT_ADD_BOOKMARK == msgType) {
+    } else if (MSG_OPERATION_ADD_BOOKMARK == msgType || MSG_OPERATION_TEXT_ADD_BOOKMARK == msgType) {  //  增加书签消息
         emit sigAddBookMark(msgContent.toInt());
-    }
-
-    if (MSG_OPERATION_RIGHT_SELECT_BOOKMARK == msgType) {
+    } else if (MSG_OPERATION_RIGHT_SELECT_BOOKMARK == msgType) {
         emit sigRightSelectItem(msgContent);
-    }
-
-    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {  //  打开 文件通知消息
+    } else  if (MSG_OPERATION_OPEN_FILE_OK == msgType) {  //  打开 文件通知消息
         emit sigOpenFileOk();
-    } else if (MSG_CLOSE_FILE == msgType) {  //  关闭 文件通知消息
+    } else if (MSG_CLOSE_FILE == msgType) {                 //  关闭 文件通知消息
         emit sigCloseFile();
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更消息
-        //        emit sigUpdateTheme();
+        emit sigUpdateTheme();
     } else if (MSG_FILE_PAGE_CHANGE == msgType) {  //  文档页变化消息
         emit sigFilePageChanged(msgContent);
     } else if (MSG_NOTIFY_KEY_MSG == msgType) {  //  按键通知消息
@@ -623,7 +578,6 @@ void LoadBookMarkThread::stopThreadRun()
     m_isRunning = false;
 
     quit();
-    //    terminate();    //终止线程
     wait();  //阻塞等待
 }
 

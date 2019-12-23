@@ -4,9 +4,6 @@ CustomItemWidget::CustomItemWidget(const QString &name, CustomWidget *parent)
     : CustomWidget(name, parent)
 {
     setFocusPolicy(Qt::NoFocus);
-    this->setMinimumWidth(LEFTMINWIDTH);
-    this->setMaximumWidth(LEFTMAXWIDTH);
-    resize(LEFTMINWIDTH, this->height());
 }
 
 /**
