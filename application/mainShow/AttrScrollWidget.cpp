@@ -9,12 +9,14 @@
 #include <DFontSizeManager>
 #include "CustomControl/DFMGlobal.h"
 
-#define LAEBL_TEXT_WIDTH    189
+#define LAEBL_TEXT_WIDTH   165
 
 AttrScrollWidget::AttrScrollWidget(DWidget *parent)
     : DFrame(parent)
     , m_leftminwidth(60)
 {
+    setFrameShape(QFrame::NoFrame);
+
     installEventFilter(this);
     auto gridLayout = new QGridLayout;
     gridLayout->setContentsMargins(0, 6, 0, 6);
@@ -28,7 +30,7 @@ AttrScrollWidget::AttrScrollWidget(DWidget *parent)
     if (locale.language() == QLocale::English) {
         m_leftminwidth = fm.horizontalAdvance(("Time modified"));
     } else if (locale.language() == QLocale::Chinese) {
-        m_leftminwidth = fm.horizontalAdvance("纸张大小");
+        m_leftminwidth = fm.horizontalAdvance("页面大小");
     }
 
     createLabel(gridLayout, 0, tr("Location"), fileInfo.strFilepath);
@@ -76,7 +78,7 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
     DLabel *label = new DLabel(objName, this);
     DFontSizeManager::instance()->bind(label, DFontSizeManager::T8);
     label->setAlignment(Qt::AlignTop);
-    label->setMaximumWidth(160);
+    label->setMaximumWidth(140);
     label->setMinimumWidth(m_leftminwidth + 10);
     layout->addWidget(label, index, 0);
 
@@ -101,7 +103,7 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
 
     DLabel *labelText = new DLabel(this);
     DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
-    labelText->setMaximumWidth(280);
+    labelText->setMaximumWidth(260);
     QString strText = getTime(sData);
     labelText->setText(strText);
     labelText->setAlignment(Qt::AlignTop);

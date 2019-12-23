@@ -27,7 +27,7 @@ class FileAttrWidget : public DAbstractDialog, public IObserver
 
 public:
     explicit FileAttrWidget(DWidget *parent = nullptr);
-    ~FileAttrWidget();
+    ~FileAttrWidget() Q_DECL_OVERRIDE;
     void showScreenCenter();
 
 public:
