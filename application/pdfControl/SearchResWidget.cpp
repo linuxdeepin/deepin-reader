@@ -1,6 +1,7 @@
 #include "SearchResWidget.h"
 #include "controller/DataManager.h"
 #include "frame/DocummentFileHelper.h"
+#include "frame/LeftSidebarWidget.h"
 
 SearchResWidget::SearchResWidget(CustomWidget *parent)
     : CustomWidget(QString("SearchResWidget"), parent)
@@ -36,7 +37,6 @@ void SearchResWidget::slotClearWidget()
         //  侧边栏 隐藏
         notifyMsg(MSG_HIDE_FIND_WIDGET);
     }
-    notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(DataManager::instance()->currentWidget()));
 }
 
 void SearchResWidget::slotCloseFile()
@@ -82,9 +82,6 @@ void SearchResWidget::slotSearchOver()
 
     m_pSearchList->clear();
 
-    //    notifyMsg(MSG_SWITCHLEFTWIDGET, QString("4"));
-    //    notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(1));
-
     disconnect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this,
                SLOT(slotGetSearchContant(stSearchRes)));
 
@@ -96,7 +93,7 @@ void SearchResWidget::slotSearchOver()
         showTips();
 
         //显示无结果窗口
-        notifyMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
+        notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(WIDGET_SEARCH));
         //让搜索框变粉红色
         notifyMsg(MSG_FIND_NONE);
 
@@ -132,11 +129,11 @@ void SearchResWidget::slotFindPrev()
 
 void SearchResWidget::slotFindNext()
 {
-    qDebug() << __FUNCTION__ << "SearchResWidget========";
+//    qDebug() << __FUNCTION__ << "SearchResWidget========";
     if (DataManager::instance()->bThumbnIsShow() == false) {
         return;
     }
-    qDebug() << __FUNCTION__ << "SearchResWidget+++++++++++";
+//    qDebug() << __FUNCTION__ << "SearchResWidget+++++++++++";
     DocummentFileHelper::instance()->findNext();
 }
 
@@ -209,15 +206,6 @@ void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
         resultNum = 0;
         strText.clear();
     }
-
-    //    if(m_pSearchList && m_pSearchList->count() > 0){
-    //        auto pItem = m_pSearchList->item(0);
-    //        auto pWidget = reinterpret_cast<NotesItemWidget *>(m_pSearchList->itemWidget(pItem));
-    //        if(pWidget){
-    //            pWidget->setBSelect(true);
-    //            m_pSearchItem = pItem;
-    //        }
-    //    }
 
     //开始填充缩略图线程
     m_loadSearchResThread.setRunning(true);
@@ -369,7 +357,6 @@ void LoadSearchResThread::stopThread()
     m_isRunning = false;
 
     quit();
-    //    terminate();    //终止线程
     wait();  //阻塞等待
 }
 

@@ -232,11 +232,6 @@ void ThumbnailWidget::showItemBookMark(int ipage)
  */
 void ThumbnailWidget::prevPage()
 {
-    if (DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL ||
-            (DataManager::instance()->bThumbnIsShow() == false)) {
-        return;
-    }
-
     int nCurPage = DocummentFileHelper::instance()->currentPageNo();
     nCurPage--;
     jumpToSpecifiedPage(nCurPage);
@@ -248,11 +243,6 @@ void ThumbnailWidget::prevPage()
  */
 void ThumbnailWidget::nextPage()
 {
-    if (DataManager::instance()->currentWidget() != WIDGET_THUMBNAIL ||
-            (DataManager::instance()->bThumbnIsShow() == false)) {
-        return;
-    }
-
     int nCurPage = DocummentFileHelper::instance()->currentPageNo();
     nCurPage++;
     jumpToSpecifiedPage(nCurPage);

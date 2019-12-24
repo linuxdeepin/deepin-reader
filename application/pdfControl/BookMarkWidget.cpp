@@ -31,8 +31,7 @@ BookMarkWidget::~BookMarkWidget()
  */
 void BookMarkWidget::prevPage()
 {
-    if (DataManager::instance()->currentWidget() != WIDGET_BOOKMARK ||
-            m_pBookMarkListWidget == nullptr ||
+    if (m_pBookMarkListWidget == nullptr ||
             DataManager::instance()->bThumbnIsShow() == false ||
             DataManager::instance()->CurShowState() != FILE_NORMAL) {
         return;
@@ -61,9 +60,7 @@ void BookMarkWidget::prevPage()
  */
 void BookMarkWidget::nextPage()
 {
-    if (DataManager::instance()->currentWidget() != WIDGET_BOOKMARK ||
-            m_pBookMarkListWidget == nullptr ||
-            DataManager::instance()->bThumbnIsShow() == false ||
+    if (DataManager::instance()->bThumbnIsShow() == false ||
             DataManager::instance()->CurShowState() != FILE_NORMAL) {
         return;
     }

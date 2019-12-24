@@ -56,14 +56,15 @@ void LeftSidebarWidget::slotDealWithKeyMsg(const QString &msgContent)
     }
 }
 
+/**
+ * @brief LeftSidebarWidget::onSetStackCurIndex
+ * @param iIndex
+ */
 void LeftSidebarWidget::onSetStackCurIndex(const int &iIndex)
 {
-//    AppSetting::instance()->setKeyValue(KEY_WIDGET, QString("%1").arg(iIndex));
-
     auto pWidget = this->findChild<DStackedWidget *>();
     if (pWidget) {
         if (WIDGET_SEARCH > iIndex) {
-            DataManager::instance()->setCurrentWidget(iIndex);
             auto opWidget = this->findChild<MainOperationWidget *>();
             if (opWidget) {
                 opWidget->setOperatAction(iIndex);
@@ -94,8 +95,6 @@ void LeftSidebarWidget::slotSetStackCurIndex(const int &iIndex)
     if (pWidget) {
         pWidget->setCurrentIndex(iIndex);
     }
-
-//    notifyMsg(MSG_FIND_EXIT);
 }
 
 //  上一页
@@ -217,16 +216,6 @@ void LeftSidebarWidget::initWidget()
     pStackedWidget->insertWidget(WIDGET_BUFFER, new BufferWidget(this));
     pStackedWidget->setCurrentIndex(WIDGET_THUMBNAIL);
 
-//    for (int index = 0; index < pStackedWidget->count(); ++index) {
-//        auto widget = pStackedWidget->widget(index);
-//        if (widget) {
-//            widget->setMinimumWidth(LEFTMINWIDTH);
-//            widget->setMaximumWidth(LEFTMAXWIDTH);
-//            widget->adjustSize();
-//            widget->resize(226, this->height());
-//        }
-//    }
-
     pVBoxLayout->addWidget(pStackedWidget);
 
     auto mainOperation = new MainOperationWidget;
@@ -241,7 +230,6 @@ int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgConten
         emit sigDealWithData(msgType, msgContent);
         return ConstantMsg::g_effective_res;
     }
-
 
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();

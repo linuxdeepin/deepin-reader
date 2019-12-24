@@ -7,6 +7,14 @@
  * @brief The LeftShowWidget class
  * @brief   侧边栏显示
  */
+// 窗口类型
+enum Widget_Type {
+    WIDGET_THUMBNAIL,   //  缩略图
+    WIDGET_BOOKMARK,    //  书签
+    WIDGET_NOTE,        //  注释
+    WIDGET_SEARCH,      //  搜索
+    WIDGET_BUFFER       //  缓冲
+};
 
 class LeftSidebarWidget : public CustomWidget
 {

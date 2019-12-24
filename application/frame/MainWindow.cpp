@@ -464,13 +464,13 @@ void MainWindow::onSetAppTitle(const QString &sData)
     if (sM == "1") {
         notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_m);
 
-        QString sWidget = AppSetting::instance()->getKeyValue(KEY_WIDGET);
-        if (sWidget != "") {
-            notifyMsg(MSG_SWITCHLEFTWIDGET, sWidget);
-        }
+    }
+
+    QString sWidget = AppSetting::instance()->getKeyValue(KEY_WIDGET);
+    if (sWidget != "") {
+        notifyMsg(MSG_SWITCHLEFTWIDGET, sWidget);
     }
 }
-
 
 //  文件打开成，　功能性　菜单才能点击
 void MainWindow::slotOpenFileOk()

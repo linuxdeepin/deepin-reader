@@ -97,9 +97,6 @@ void NotesWidget::slotDltNoteItem(QString uuid)
                     // of for loop
                     notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The annotation has been removed"));
 
-//                    if (m_pNotesList->count() > 0) {
-//                        m_pNotesList->setCurrentRow(0);
-//                    }
                     break;
                 }
             }
@@ -284,7 +281,7 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
 
 void NotesWidget::slotJumpToPrevItem()
 {
-    if (DataManager::instance()->currentWidget() != WIDGET_NOTE || m_pNotesList == nullptr ||
+    if (m_pNotesList == nullptr ||
             DataManager::instance()->bThumbnIsShow() == false ||
             DataManager::instance()->CurShowState() != FILE_NORMAL) {
         return;
@@ -315,7 +312,7 @@ void NotesWidget::slotJumpToPrevItem()
 
 void NotesWidget::slotJumpToNextItem()
 {
-    if (DataManager::instance()->currentWidget() != WIDGET_NOTE || m_pNotesList == nullptr ||
+    if (m_pNotesList == nullptr ||
             DataManager::instance()->bThumbnIsShow() == false ||
             DataManager::instance()->CurShowState() != FILE_NORMAL) {
         return;

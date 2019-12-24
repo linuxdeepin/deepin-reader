@@ -45,9 +45,6 @@ protected:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
-
-private:
-    int m_nThumbnailIndex = WIDGET_THUMBNAIL;     // 左侧缩略图在当前哪个位置0：全缩图1：书签2：注释
 };
 
 #endif // MAINOPERATIONWIDGET_H

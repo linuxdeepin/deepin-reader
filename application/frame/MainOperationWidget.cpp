@@ -35,7 +35,6 @@ void MainOperationWidget::initWidget()
 {
     auto hboxLayout = new QHBoxLayout;
     hboxLayout->setContentsMargins(19, 0, 19, 0);
-    // hboxLayout->setSpacing(10);
 
     hboxLayout->addStretch();
 
@@ -72,7 +71,6 @@ void MainOperationWidget::initWidget()
         QString objName = btn->objectName();
         if (objName == "thumbnail") {
             btn->setChecked(true);
-            m_nThumbnailIndex = WIDGET_THUMBNAIL;
             break;
         }
     }
@@ -88,24 +86,8 @@ DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QStrin
     btn->setIconSize(QSize(36, 36));
     btn->setCheckable(true);
     btn->setChecked(false);
-    //    btn->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonIconOnly);
 
     return btn;
-}
-
-QString MainOperationWidget::findBtnName()
-{
-    QString btnName = "";
-
-    if (WIDGET_THUMBNAIL == m_nThumbnailIndex) {
-        btnName = "thumbnail";
-    } else if (WIDGET_BOOKMARK == m_nThumbnailIndex) {
-        btnName = "bookmark";
-    } else if (WIDGET_NOTE == m_nThumbnailIndex) {
-        btnName = "annotation";
-    }
-
-    return btnName;
 }
 
 void MainOperationWidget::initConnect()
@@ -126,15 +108,13 @@ void MainOperationWidget::slotUpdateTheme()
         QString objName = btn->objectName();
         if (objName != "") {
             icon = PF::getIcon(Pri::g_module + objName);
-            btn->setIcon(icon /*QIcon(sPixmap)*/);
+            btn->setIcon(icon);
         }
     }
 }
 
 void MainOperationWidget::slotButtonClicked(int id)
 {
-    DataManager::instance()->setCurrentWidget(id);
-
     emit sigShowStackWidget(id);
 }
 
@@ -156,16 +136,7 @@ void MainOperationWidget::slotSearchControl()
  */
 void MainOperationWidget::slotSearchClosed()
 {
-    auto btnList = this->findChildren<DIconButton *>();
-    foreach (auto btn, btnList) {
-        QString objName = btn->objectName();
-        if (objName == findBtnName()) {
-            btn->setChecked(true);
-            int index = DataManager::instance()->currentWidget();
-            notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(index));
-            break;
-        }
-    }
+    emit sigShowStackWidget(AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt());
 }
 
 int MainOperationWidget::dealWithData(const int &msgType, const QString &)

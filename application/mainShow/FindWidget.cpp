@@ -101,14 +101,12 @@ void FindWidget::handleContentChanged()
 
 void FindWidget::slotFindNextBtnClicked()
 {
-    //notifyMsg(MSG_FIND_NEXT);
     DocummentFileHelper::instance()->findNext();
     this->raise();
 }
 
 void FindWidget::slotFindPrevBtnClicked()
 {
-    // notifyMsg(MSG_FIND_PREV);
     DocummentFileHelper::instance()->findPrev();
     this->raise();
 }
