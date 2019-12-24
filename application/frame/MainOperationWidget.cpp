@@ -136,7 +136,13 @@ void MainOperationWidget::slotSearchControl()
  */
 void MainOperationWidget::slotSearchClosed()
 {
-    emit sigShowStackWidget(AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt());
+    int indexWidget = 0;
+
+    indexWidget = AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt();
+
+    emit sigShowStackWidget(indexWidget);
+
+    setOperatAction(indexWidget);
 }
 
 int MainOperationWidget::dealWithData(const int &msgType, const QString &)

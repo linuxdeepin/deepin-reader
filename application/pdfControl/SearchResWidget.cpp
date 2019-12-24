@@ -51,7 +51,7 @@ void SearchResWidget::slotCloseFile()
 
 void SearchResWidget::slotFlushSearchWidget(const QString &msgContent)
 {
-    notifyMsg(MSG_SWITCHLEFTWIDGET, QString("4"));
+    notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(WIDGET_BUFFER));
     notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(1));
     m_bShowList = true;
     connect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this,
@@ -148,9 +148,9 @@ void SearchResWidget::slotSelectItem(QListWidgetItem *item)
 
 void SearchResWidget::slotStopFind()
 {
-    notifyMsg(MSG_FIND_STOP, QString(""));
+    notifyMsg(MSG_FIND_STOP);
     if (m_bShowList) {
-        notifyMsg(MSG_SWITCHLEFTWIDGET, QString("3"));
+        notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(WIDGET_SEARCH));
 
         bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
         if (!t_bTnumbnIsShow) {

@@ -58,6 +58,7 @@ void LeftSidebarWidget::slotDealWithKeyMsg(const QString &msgContent)
 
 /**
  * @brief LeftSidebarWidget::onSetStackCurIndex
+ * 切换页面
  * @param iIndex
  */
 void LeftSidebarWidget::onSetStackCurIndex(const int &iIndex)
@@ -89,7 +90,7 @@ void LeftSidebarWidget::slotUpdateTheme()
 //  按钮 按键显示对应 widget
 void LeftSidebarWidget::slotSetStackCurIndex(const int &iIndex)
 {
-    AppSetting::instance()->setKeyValue(KEY_WIDGET, QString("%1").arg(iIndex));
+    AppSetting::instance()->setKeyValue(KEY_WIDGET, QString::number(iIndex));
 
     auto pWidget = this->findChild<DStackedWidget *>();
     if (pWidget) {
