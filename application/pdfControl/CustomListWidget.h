@@ -19,6 +19,7 @@ public:
 
 signals:
     void sigSelectItem(QListWidgetItem *);
+    void sigValueChanged(int);
 
 public:
     QListWidgetItem *insertWidgetItem(const int &);

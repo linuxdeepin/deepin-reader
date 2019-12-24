@@ -18,6 +18,7 @@ CustomListWidget::CustomListWidget(DWidget *parent)
 
     connect(this, SIGNAL(itemClicked(QListWidgetItem *)), this,
             SLOT(slotShowSelectItem(QListWidgetItem *)));
+    connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SIGNAL(sigValueChanged(int)));
 }
 
 //  插入 实现排序

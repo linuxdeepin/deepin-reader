@@ -71,11 +71,11 @@ public:
 
     inline void setThumbnail(ThumbnailWidget *thumbnail) { m_pThumbnailWidget = thumbnail; }
 
-    inline void setStartAndEndIndex()
-    {
-        m_nStartPage = 0;  // 加载图片起始页码
-        m_nEndPage = 19;   // 加载图片结束页码
-    }
+    bool inLoading(int);
+
+    void setStartAndEndIndex(int startIndex, int endIndex);
+
+    inline void clearList() {m_listLoad.clear();}
 
 signals:
     void signal_loadImage(const int &, const QImage &);
@@ -89,6 +89,7 @@ private:
     ThumbnailWidget *m_pThumbnailWidget = nullptr;
     int m_nStartPage = 0;  // 加载图片起始页码
     int m_nEndPage = 19;   // 加载图片结束页码
+    QList<int> m_listLoad; // 加载过来的缩略图
 };
 
 /*
@@ -139,6 +140,7 @@ private slots:
 
     void slotSetRotate(int);
     void slotRotateThumbnail(int);
+    void slotLoadThumbnail(int);
 
 private:
     CustomListWidget *m_pThumbnailListWidget = nullptr;  // list widget item子界面
@@ -148,6 +150,7 @@ private:
     bool m_isLoading = false;                            // 缩略图list是否初始化完毕
     ThreadRotateImage m_threadRotateImage;               // 旋转缩略图
     int m_nRotate = 0;                                   // 旋转度数
+    int m_nValuePreIndex = 0;                            // 每一个item所占scrollbar的大小
 };
 
 #endif  // THUMBNAILWIDGET_H

@@ -18,6 +18,7 @@ ThumbnailWidget::~ThumbnailWidget()
     // 等待子线程退出
     if (m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();
+        m_ThreadLoadImage.clearList();
     }
 
     if (m_threadRotateImage.isRunning()) {
@@ -115,6 +116,8 @@ void ThumbnailWidget::initConnection()
     connect(this, SIGNAL(sigSetRotate(int)), this, SLOT(slotSetRotate(int)));
     connect(&m_threadRotateImage, SIGNAL(sigRotateImage(int)), this,
             SLOT(slotRotateThumbnail(int)));
+    connect(m_pThumbnailListWidget, SIGNAL(sigValueChanged(int)), this, SLOT(slotLoadThumbnail(int)));
+
 }
 
 /**
@@ -151,6 +154,7 @@ void ThumbnailWidget::slotDocFilePageChanged(const QString &sPage)
 void ThumbnailWidget::slotCloseFile()
 {
     if (m_ThreadLoadImage.isRunning()) {
+        m_ThreadLoadImage.clearList();
         m_ThreadLoadImage.stopThreadRun();
     }
 }
@@ -186,6 +190,35 @@ void ThumbnailWidget::slotRotateThumbnail(int index)
     }
 }
 
+/**
+ * @brief ThumbnailWidget::slotLoadThumbnail
+ * 根据纵向滚动条来加载缩略图
+ * value 为当前滚动条移动的数值,最小是0，最大是滚动条的最大值
+ */
+void ThumbnailWidget::slotLoadThumbnail(int value)
+{
+    int loadStart = 0;
+    int loadEnd = 0;
+    int indexPage = 0;
+
+    indexPage = value / m_nValuePreIndex;
+
+    if (value < 0 || m_nValuePreIndex <= 0 || indexPage < 0 || indexPage > m_totalPages || m_ThreadLoadImage.inLoading(indexPage)) {
+        return;
+    }
+
+    loadStart = (indexPage - (FIRST_LOAD_PAGES / 2)) < 0 ? 0 : (indexPage - (FIRST_LOAD_PAGES / 2));
+    loadEnd = (indexPage + (FIRST_LOAD_PAGES / 2)) > m_totalPages ? m_totalPages : (indexPage + (FIRST_LOAD_PAGES / 2));
+    qDebug() << __FUNCTION__ << "      loadStart:" << loadStart;
+    qDebug() << __FUNCTION__ << "      loadEnd:" << loadEnd;
+    if (m_ThreadLoadImage.isRunning()) {
+        m_ThreadLoadImage.stopThreadRun();
+    }
+    m_ThreadLoadImage.setStartAndEndIndex(loadStart, loadEnd);
+    m_ThreadLoadImage.setIsLoaded(true);
+    m_ThreadLoadImage.start();
+}
+
 // 初始化缩略图列表list，无缩略图
 void ThumbnailWidget::fillContantToList()
 {
@@ -204,6 +237,13 @@ void ThumbnailWidget::fillContantToList()
                 pWidget->setBSelect(true);
             }
         }
+        /**
+         * @brief listCount
+         * 计算每个item的大小
+         */
+        int listCount = 0;
+        listCount = m_pThumbnailListWidget->count();
+        m_nValuePreIndex = m_pThumbnailListWidget->verticalScrollBar()->maximum() / listCount;
     }
 
     m_isLoading = false;
@@ -290,10 +330,12 @@ void ThumbnailWidget::slotOpenFileOk()
     m_pPageWidget->setTotalPages(m_totalPages);
 
     m_pThumbnailListWidget->clear();
+    m_nValuePreIndex = 0;
     fillContantToList();
 
     if (!m_ThreadLoadImage.isRunning()) {
-        m_ThreadLoadImage.setStartAndEndIndex();
+        m_ThreadLoadImage.clearList();
+        m_ThreadLoadImage.setStartAndEndIndex(0, FIRST_LOAD_PAGES - 1);
     }
     m_ThreadLoadImage.setPages(m_totalPages);
     m_ThreadLoadImage.setIsLoaded(true);
@@ -315,16 +357,33 @@ void ThreadLoadImage::stopThreadRun()
     wait();  //阻塞等待
 }
 
+bool ThreadLoadImage::inLoading(int index)
+{
+    if (index >=  m_nStartPage && index <= m_nEndPage) {
+        return true;
+    }
+
+    return false;
+}
+
+void ThreadLoadImage::setStartAndEndIndex(int startIndex, int endIndex)
+{
+    m_nStartPage = startIndex;  // 加载图片起始页码
+    m_nEndPage = endIndex;   // 加载图片结束页码
+}
+
 // 加载缩略图线程
 void ThreadLoadImage::run()
 {
-    while (m_isLoaded) {
+    do {
+        msleep(50);
+
         if (!m_pThumbnailWidget) {
-            continue;
+            break;
         }
 
         if (m_pThumbnailWidget->isLoading()) {
-            continue;
+            break;
         }
 
         if (m_nStartPage < 0) {
@@ -342,17 +401,20 @@ void ThreadLoadImage::run()
         for (int page = m_nStartPage; page <= m_nEndPage; page++) {
             if (!m_isLoaded)
                 break;
+            if (m_listLoad.contains(page)) {
+                continue;
+            }
             QImage image;
             bool bl = dproxy->getImage(page, image, 146, 174 /*138, 166*/);
             if (bl) {
+                m_listLoad.append(page);
                 emit signal_loadImage(page, image);
+                qDebug() << " loading page:" << page << " thumbnail";
+                msleep(50);
             }
         }
-        m_nStartPage += FIRST_LOAD_PAGES;
-        m_nEndPage += FIRST_LOAD_PAGES;
 
-        msleep(50);
-    }
+    } while (0);
 }
 
 /************************旋转缩略图线程****************************/
@@ -383,7 +445,7 @@ void ThreadRotateImage::run()
 
         for (int index = m_nFirstIndex; index <= m_nEndIndex; index++) {
             emit sigRotateImage(index);
-            msleep(30);
+            msleep(50);
         }
 
         if (m_nEndIndex >= m_nPages) {
