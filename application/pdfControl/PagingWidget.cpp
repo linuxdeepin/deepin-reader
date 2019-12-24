@@ -8,6 +8,10 @@ PagingWidget::PagingWidget(CustomWidget *parent)
 {
     resize(LEFTNORMALWIDTH, 56);
 
+    m_pMsgList = { MSG_OPERATION_FIRST_PAGE, MSG_OPERATION_PREV_PAGE,
+                   MSG_OPERATION_NEXT_PAGE, MSG_OPERATION_END_PAGE
+                 };
+
     initWidget();
     initConnections();
     slotUpdateTheme();
@@ -101,12 +105,9 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
 
 void PagingWidget::initConnections()
 {
-    connect(this, SIGNAL(sigJumpToPrevPage()), this, SLOT(slotPrePage()));
-    connect(this, SIGNAL(sigJumpToNextPage()), this, SLOT(slotNextPage()));
-    connect(this, SIGNAL(sigJumpToSpecifiedPage(const int &)), this,
-            SLOT(slotJumpToSpecifiedPage(const int &)));
-    connect(this, SIGNAL(sigJudgeInputPage(const QString &)), this,
-            SLOT(slotJudgeInputPage(const QString &)));
+    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
+            SLOT(slotDealWithData(const int &, const QString &)));
+
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
@@ -118,7 +119,6 @@ void PagingWidget::initConnections()
 void PagingWidget::setTotalPages(int pages)
 {
     m_totalPage = pages;
-    m_currntPage = FIRSTPAGES;
     m_pTotalPagesLab->setText(QString("/%1").arg(pages));
 
     m_pJumpPageSpinBox->setRange(1, m_totalPage);
@@ -136,48 +136,38 @@ void PagingWidget::setTotalPages(int pages)
  * @param msgType
  * @return
  */
-int PagingWidget::dealWithData(const int &msgType, const QString &)
+int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    switch (msgType) {
-    case MSG_OPERATION_FIRST_PAGE:  //  第一页
-        emit sigJumpToSpecifiedPage(0);
+    if (m_pMsgList.contains(msgType)) {
+        emit sigDealWithData(msgType, msgContent);
         return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_PREV_PAGE:  //  上一页
-        emit sigJumpToPrevPage();
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_NEXT_PAGE:  //  下一页
-        emit sigJumpToNextPage();
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_END_PAGE:  //  最后一页
-        emit sigJumpToSpecifiedPage(m_totalPage - FIRSTPAGES);
-        return ConstantMsg::g_effective_res;
-    case MSG_OPERATION_UPDATE_THEME:  //  颜色主题切换
-        emit sigUpdateTheme();
-        break;
-    default:
-        break;
     }
+
+    if (msgType == MSG_OPERATION_UPDATE_THEME) { //  颜色主题切换
+        emit sigUpdateTheme();
+    }
+
     return 0;
 }
 
 //  上一页
-void PagingWidget::slotPrePage()
+void PagingWidget::onPrePage()
 {
     int nCurPage = DocummentFileHelper::instance()->currentPageNo();
     nCurPage--;
-    slotJumpToSpecifiedPage(nCurPage);
+    onJumpToSpecifiedPage(nCurPage);
 }
 
 //  下一页
-void PagingWidget::slotNextPage()
+void PagingWidget::onNextPage()
 {
     int nCurPage = DocummentFileHelper::instance()->currentPageNo();
     nCurPage++;
-    slotJumpToSpecifiedPage(nCurPage);
+    onJumpToSpecifiedPage(nCurPage);
 }
 
 //  跳转 指定页
-void PagingWidget::slotJumpToSpecifiedPage(const int &nPage)
+void PagingWidget::onJumpToSpecifiedPage(const int &nPage)
 {
     //  跳转的页码 必须 大于0, 且 小于 总页码数
     int nPageSize = DocummentFileHelper::instance()->getPageSNum();
@@ -188,14 +178,6 @@ void PagingWidget::slotJumpToSpecifiedPage(const int &nPage)
     m_preRow = nPage;
 
     DocummentFileHelper::instance()->pageJump(nPage);
-}
-
-void PagingWidget::slotJudgeInputPage(const QString &)
-{
-    QString t_strPage = QString::number(m_pJumpPageSpinBox->value());
-    if (t_strPage.length() == 1 && m_pJumpPageSpinBox->value() == 0) {
-        m_pJumpPageSpinBox->setValue(m_currntPage + 1);
-    }
 }
 
 void PagingWidget::slotUpdateTheme()
@@ -221,4 +203,24 @@ void PagingWidget::setCurrentPageValue(const int &inputData)
     m_preRow = inputData;
 
     m_pJumpPageSpinBox->setValue(currntPage);
+}
+
+void PagingWidget::slotDealWithData(const int &msgType, const QString &)
+{
+    switch (msgType) {
+    case MSG_OPERATION_FIRST_PAGE:  //  第一页
+        onJumpToSpecifiedPage(0);
+        break;
+    case MSG_OPERATION_PREV_PAGE:  //  上一页
+        onPrePage();
+        break;
+    case MSG_OPERATION_NEXT_PAGE:  //  下一页
+        onNextPage();
+        break;
+    case MSG_OPERATION_END_PAGE:  //  最后一页
+        onJumpToSpecifiedPage(m_totalPage - FIRSTPAGES);
+        break;
+    default:
+        break;
+    }
 }

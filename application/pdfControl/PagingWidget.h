@@ -28,20 +28,14 @@ public:
     explicit PagingWidget(CustomWidget *parent = nullptr);
 
 signals:
-    void sigJumpToSpecifiedPage(const int &);
-    void sigJumpToPrevPage();
-    void sigJumpToNextPage();
-    void sigJudgeInputPage(const QString &);
+    void sigDealWithData(const int &, const QString &);
 
 public:
     void setTotalPages(int pages);
     void setCurrentPageValue(const int &);
 
 private slots:
-    void slotPrePage();
-    void slotNextPage();
-    void slotJumpToSpecifiedPage(const int &);
-    void slotJudgeInputPage(const QString &);
+    void slotDealWithData(const int &, const QString &);
     void slotUpdateTheme();
 
 protected:
@@ -50,13 +44,16 @@ protected:
 
 private:
     void initConnections();
+    void onPrePage();
+    void onNextPage();
+    void onJumpToSpecifiedPage(const int &);
+
 
 private:
     CustomClickLabel *m_pTotalPagesLab = nullptr;        // 当前文档总页数标签
     DIconButton *m_pPrePageBtn = nullptr;      // 按钮 前一页
     DIconButton *m_pNextPageBtn = nullptr;     // 按钮 后一页
     DSpinBox *m_pJumpPageSpinBox = nullptr;    // 输入框 跳转页码
-    int m_currntPage = 0;                      // 当前页码数减一
     int m_totalPage = 0;                       // 当前文档页码总数
     int m_preRow = -1;                         // 当前页码所在list中的行
 
