@@ -1,7 +1,6 @@
 #include "PagingWidget.h"
 
 #include "frame/DocummentFileHelper.h"
-#include "utils/utils.h"
 
 PagingWidget::PagingWidget(CustomWidget *parent)
     : CustomWidget(QString("PagingWidget"), parent)
@@ -38,12 +37,10 @@ void PagingWidget::initWidget()
 
     m_pJumpPageSpinBox = new DSpinBox(this);
     m_pJumpPageSpinBox->setMinimum(1);
-    m_pJumpPageSpinBox->setRange(1, 100);
     m_pJumpPageSpinBox->setValue(1);
     m_pJumpPageSpinBox->setMinimumWidth(60);
     m_pJumpPageSpinBox->setFixedHeight(36);
     m_pJumpPageSpinBox->installEventFilter(this);
-    m_pJumpPageSpinBox->setWrapping(true);
     m_pJumpPageSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
     DFontSizeManager::instance()->bind(m_pJumpPageSpinBox, DFontSizeManager::T6);
 
@@ -121,7 +118,7 @@ void PagingWidget::setTotalPages(int pages)
     m_totalPage = pages;
     m_pTotalPagesLab->setText(QString("/%1").arg(pages));
 
-    m_pJumpPageSpinBox->setRange(1, m_totalPage);
+    m_pJumpPageSpinBox->setMaximum(m_totalPage);
 
     m_pPrePageBtn->setEnabled(false);
 

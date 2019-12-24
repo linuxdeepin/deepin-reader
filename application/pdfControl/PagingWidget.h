@@ -48,7 +48,6 @@ private:
     void onNextPage();
     void onJumpToSpecifiedPage(const int &);
 
-
 private:
     CustomClickLabel *m_pTotalPagesLab = nullptr;        // 当前文档总页数标签
     DIconButton *m_pPrePageBtn = nullptr;      // 按钮 前一页

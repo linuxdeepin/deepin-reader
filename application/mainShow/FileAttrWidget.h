@@ -14,6 +14,9 @@
 #include "CustomControl/ImageLabel.h"
 #include "subjectObserver/IObserver.h"
 
+#include "controller/NotifySubject.h"
+#include "controller/MsgSubject.h"
+
 DWIDGET_USE_NAMESPACE
 /**
  * @brief The FileAttrWidget class
@@ -47,6 +50,8 @@ private slots:
 
 private:
     QVBoxLayout *m_pVBoxLayout = nullptr;
+    NotifySubject   *m_pNotifySubject = nullptr;
+    MsgSubject      *m_pMsgSubject = nullptr;
 
     //    DLabel *labelImage = nullptr;
     /*ImageFrame*/ ImageLabel *frameImage = nullptr;

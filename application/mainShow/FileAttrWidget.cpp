@@ -10,8 +10,6 @@
 #include "CustomControl/DFMGlobal.h"
 #include "subjectObserver/ModuleHeader.h"
 #include "subjectObserver/MsgHeader.h"
-#include "controller/NotifySubject.h"
-#include"controller/MsgSubject.h"
 
 FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
@@ -25,18 +23,27 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
     this->setLayout(m_pVBoxLayout);
 
     initWidget();
-    if (NotifySubject::getInstance())
-        NotifySubject::getInstance()->addObserver(this);
-    if (MsgSubject::getInstance())
-        MsgSubject::getInstance()->addObserver(this);
+
+    m_pNotifySubject = NotifySubject::getInstance();
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+
+    m_pMsgSubject = MsgSubject::getInstance();
+    if (m_pMsgSubject) {
+        m_pMsgSubject->addObserver(this);
+    }
 }
 
 FileAttrWidget::~FileAttrWidget()
 {
-    if (NotifySubject::getInstance())
-        NotifySubject::getInstance()->removeObserver(this);
-    if (MsgSubject::getInstance())
-        MsgSubject::getInstance()->removeObserver(this);
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
+
+    if (m_pMsgSubject) {
+        m_pMsgSubject->removeObserver(this);
+    }
 }
 
 //  各个 对应的 label 赋值
@@ -168,12 +175,12 @@ int FileAttrWidget::dealWithData(const int &msgType, const QString &msgContent)
     return 0;
 }
 
-void FileAttrWidget::sendMsg(const int &, const QString &msgContent)
+void FileAttrWidget::sendMsg(const int &, const QString &)
 {
 
 }
 
-void FileAttrWidget::notifyMsg(const int &, const QString &msgContent)
+void FileAttrWidget::notifyMsg(const int &, const QString &)
 {
 
 }
