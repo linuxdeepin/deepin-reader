@@ -103,10 +103,11 @@ enum MSG_OPERATION_RES_TYPE {
 };
 
 namespace ConstantMsg {
-static QString g_app_name = "deepin-reader";
 
-static int g_effective_res = 9999;  //  表明 消息已被处理
-static int g_menu_width = 150;      //  菜单的宽度
+const QString g_app_name = "deepin-reader";
+
+const int g_effective_res = 9999;  //  表明 消息已被处理
+const int g_menu_width = 150;      //  菜单的宽度
 }  // namespace ConstantMsg
 
 #endif  // MSGHEADER_H

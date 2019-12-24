@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     QStringList arguments = parser.positionalArguments();
 
     QString filepath;
-    for (const QString &path : arguments) {
+    foreach (const QString &path, arguments) {
         filepath = UrlInfo(path).toLocalFile();
         if (filepath.endsWith("pdf")) {
             w.openfile(filepath);
