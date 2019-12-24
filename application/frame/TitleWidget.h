@@ -59,6 +59,8 @@ private:
     void sendMsgToSubject(const int &, const QString &msgCotent = "");
     void notifyMsgToSubject(const int &, const QString &msgCotent = "");
 
+    void setMagnifierState();
+
 private:
     QStringList shortKeyList;
 

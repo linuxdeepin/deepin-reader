@@ -58,9 +58,6 @@ private slots:
     void slotClearContent();
     void slotDealWithData(const int &, const QString &);
 
-protected:
-    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
-
 private:
     void initWidget();
     void initConnection();
@@ -70,7 +67,6 @@ private:
 
 private:
     DSearchEdit     *m_pSearchEdit = nullptr;
-    QString         m_strOldFindContent = "";
     NotifySubject   *m_pNotifySubject = nullptr;
     MsgSubject      *m_pMsgSubject = nullptr;
 

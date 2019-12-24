@@ -92,11 +92,9 @@ void FindWidget::findCancel()
 
 void FindWidget::handleContentChanged()
 {
-    QString strNewFind = m_pSearchEdit->text();
-    if (strNewFind != m_strOldFindContent) {
-        m_strOldFindContent = strNewFind;
-        notifyMsg(MSG_FIND_CONTENT, m_strOldFindContent);
-    }
+    QString strFind = m_pSearchEdit->text();
+
+    notifyMsg(MSG_FIND_CONTENT, strFind);
 }
 
 void FindWidget::slotFindNextBtnClicked()
@@ -116,7 +114,6 @@ void FindWidget::slotClearContent()
 {
     QString strNewFind = m_pSearchEdit->text();
     if (strNewFind == "") {
-        m_strOldFindContent = "";
         onSetAlert(0);
         notifyMsg(MSG_CLEAR_FIND_CONTENT);
     }
@@ -129,12 +126,6 @@ void FindWidget::slotDealWithData(const int &msgType, const QString &msgContent)
     } else if (msgType == MSG_FIND_NONE) {
         onSetAlert(1);
     }
-}
-
-void FindWidget::hideEvent(QHideEvent *e)
-{
-    m_strOldFindContent = "";
-    DFloatingWidget::hideEvent(e);
 }
 
 int FindWidget::dealWithData(const int &msgType, const QString &msgContent)

@@ -202,25 +202,7 @@ void TitleWidget::slotDealWithShortKey(const QString &sKey)
         notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(1));
         DataManager::instance()->setBThumbnIsShow(1);
     } else if (sKey == KeyStr::g_alt_z) {  //  开启放大镜
-
-        bool bCheck = m_pMagnifierBtn->isChecked();
-        if (!bCheck) {
-            m_pMagnifierBtn->setChecked(true);
-            notifyMsgToSubject(MSG_MAGNIFYING, QString::number(1));
-
-            //  开启了放大镜, 需要把选择工具 切换为 选择工具
-            auto actionList = this->findChildren<QAction *>();
-            foreach (auto a, actionList) {
-                QString objName = a->objectName();
-                if (objName == "defaultshape") {
-                    a->setChecked(true);
-                    break;
-                }
-            }
-
-            QIcon icon = PF::getIcon(Pri::g_module + "defaultshape");
-            m_pHandleShapeBtn->setIcon(icon);
-        }
+        setMagnifierState();
     }
 }
 
@@ -351,6 +333,29 @@ void TitleWidget::sendMsgToSubject(const int &msgType, const QString &msgCotent)
 void TitleWidget::notifyMsgToSubject(const int &msgType, const QString &msgCotent)
 {
     notifyMsg(msgType, msgCotent);
+}
+
+//  开启放大镜
+void TitleWidget::setMagnifierState()
+{
+    bool bCheck = m_pMagnifierBtn->isChecked();
+    if (!bCheck) {
+        m_pMagnifierBtn->setChecked(true);
+        notifyMsgToSubject(MSG_MAGNIFYING, QString::number(1));
+
+        //  开启了放大镜, 需要把选择工具 切换为 选择工具
+        auto actionList = this->findChildren<QAction *>();
+        foreach (auto a, actionList) {
+            QString objName = a->objectName();
+            if (objName == "defaultshape") {
+                a->setChecked(true);
+                break;
+            }
+        }
+
+        QIcon icon = PF::getIcon(Pri::g_module + "defaultshape");
+        m_pHandleShapeBtn->setIcon(icon);
+    }
 }
 
 //  处理 推送消息
