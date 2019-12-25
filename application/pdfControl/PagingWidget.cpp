@@ -147,22 +147,6 @@ int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
     return 0;
 }
 
-//  上一页
-void PagingWidget::onPrePage()
-{
-    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
-    nCurPage--;
-    onJumpToSpecifiedPage(nCurPage);
-}
-
-//  下一页
-void PagingWidget::onNextPage()
-{
-    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
-    nCurPage++;
-    onJumpToSpecifiedPage(nCurPage);
-}
-
 //  跳转 指定页
 void PagingWidget::onJumpToSpecifiedPage(const int &nPage)
 {
@@ -209,10 +193,10 @@ void PagingWidget::slotDealWithData(const int &msgType, const QString &)
         onJumpToSpecifiedPage(0);
         break;
     case MSG_OPERATION_PREV_PAGE:  //  上一页
-        onPrePage();
+        slotPrePage();
         break;
     case MSG_OPERATION_NEXT_PAGE:  //  下一页
-        onNextPage();
+        slotNextPage();
         break;
     case MSG_OPERATION_END_PAGE:  //  最后一页
         onJumpToSpecifiedPage(m_totalPage - FIRSTPAGES);
@@ -220,4 +204,20 @@ void PagingWidget::slotDealWithData(const int &msgType, const QString &)
     default:
         break;
     }
+}
+
+//  按钮点击 上一页
+void PagingWidget::slotPrePage()
+{
+    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
+    nCurPage--;
+    onJumpToSpecifiedPage(nCurPage);
+}
+
+//  按钮点击 下一页
+void PagingWidget::slotNextPage()
+{
+    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
+    nCurPage++;
+    onJumpToSpecifiedPage(nCurPage);
 }

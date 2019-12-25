@@ -36,6 +36,8 @@ public:
 
 private slots:
     void slotDealWithData(const int &, const QString &);
+    void slotPrePage();
+    void slotNextPage();
     void slotUpdateTheme();
 
 protected:
@@ -44,8 +46,7 @@ protected:
 
 private:
     void initConnections();
-    void onPrePage();
-    void onNextPage();
+
     void onJumpToSpecifiedPage(const int &);
 
 private:
