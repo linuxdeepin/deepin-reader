@@ -20,6 +20,27 @@ void ColorWidgetAction::setBtnAddLightState(const bool &bState)
     m_pClickLabel->setEnabled(!bState);
 }
 
+void ColorWidgetAction::setcolor(const QColor &color)
+{
+    QPalette plt = m_pClickLabel->palette();
+    plt.setColor(QPalette::ToolTipText, color);
+    m_pClickLabel->setPalette(plt);
+
+}
+
+void ColorWidgetAction::setPalette(const QPalette &pal)
+{
+    QPalette plt = m_pClickLabel->palette();
+    plt.setColor(QPalette::ToolTipText, pal.color(QPalette::ToolTipText));
+    plt.setColor(QPalette::WindowText, pal.color(QPalette::WindowText));
+    // plt.setColor(QPalette::Foreground, DPalette::TextTips);
+    m_pClickLabel->setPalette(plt);
+
+
+
+    // m_pClickLabel->setForegroundRole(DPalette::TextTips);
+}
+
 void ColorWidgetAction::slotBtnClicked(int index)
 {
     auto btnList = this->defaultWidget()->findChildren<RoundColorWidget *>();

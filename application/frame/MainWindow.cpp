@@ -390,9 +390,13 @@ void MainWindow::onAppExit()
     if (sFilePath != "") {
         bool rl = DataManager::instance()->bIsUpdate();
         if (rl) {
-            DDialog dlg(tr("Save"), tr("Do you want to save the changes?"));
+            DDialog dlg(tr(""), tr("Do you want to save the changes?"));
             dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
-            dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Discard") <<  tr("Save"));
+            dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Discard"));
+            dlg.addButton(tr("Save"), true, DDialog::ButtonRecommend);
+            QMargins mar(0, 0, 0, 30);
+            dlg.setContentLayoutContentsMargins(mar);
+
             int nRes = dlg.exec();
             if (nRes <= 0) {
                 return;
