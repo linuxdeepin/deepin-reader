@@ -354,9 +354,10 @@ void ThumbnailWidget::slotOpenFileOk()
     m_nValuePreIndex = 0;
     fillContantToList();
 
+    int currentPage = DocummentFileHelper::instance()->currentPageNo();
     if (!m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.clearList();
-        m_ThreadLoadImage.setStartAndEndIndex(0, FIRST_LOAD_PAGES - 1);
+        m_ThreadLoadImage.setStartAndEndIndex(currentPage - (FIRST_LOAD_PAGES / 2), currentPage + (FIRST_LOAD_PAGES / 2));
     }
     m_ThreadLoadImage.setPages(m_totalPages);
     m_ThreadLoadImage.setIsLoaded(true);
@@ -391,6 +392,13 @@ void ThreadLoadImage::setStartAndEndIndex(int startIndex, int endIndex)
 {
     m_nStartPage = startIndex;  // 加载图片起始页码
     m_nEndPage = endIndex;   // 加载图片结束页码
+
+    if (m_nStartPage < 0) {
+        m_nStartPage = 0;
+    }
+    if (m_nEndPage >= m_pages) {
+        m_nEndPage = m_pages - 1;
+    }
 }
 
 // 加载缩略图线程
@@ -428,11 +436,11 @@ void ThreadLoadImage::run()
                 continue;
             }
             QImage image;
-            bool bl = dproxy->getImage(page, image, 146, 174 /*138, 166*/);
+            bool bl = dproxy->getImage(page, image, 146, 174);
             if (bl) {
                 m_listLoad.append(page);
                 emit sigLoadImage(page, image);
-                qDebug() << " loading page:" << page << " thumbnail";
+//                qDebug() << " loading page:" << page << " thumbnail";
                 msleep(50);
             }
         }
