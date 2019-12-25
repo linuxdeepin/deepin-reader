@@ -355,11 +355,11 @@ void ThumbnailWidget::slotOpenFileOk()
     fillContantToList();
 
     int currentPage = DocummentFileHelper::instance()->currentPageNo();
+    m_ThreadLoadImage.setPages(m_totalPages);
     if (!m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.clearList();
         m_ThreadLoadImage.setStartAndEndIndex(currentPage - (FIRST_LOAD_PAGES / 2), currentPage + (FIRST_LOAD_PAGES / 2));
     }
-    m_ThreadLoadImage.setPages(m_totalPages);
     m_ThreadLoadImage.setIsLoaded(true);
     m_ThreadLoadImage.start();
 }
