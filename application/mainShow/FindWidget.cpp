@@ -124,7 +124,7 @@ void FindWidget::slotDealWithData(const int &msgType, const QString &msgContent)
     if (msgType == MSG_FIND_EXIT) {
         onFindExit();
     } else if (msgType == MSG_FIND_NONE) {
-        onSetAlert(1);
+        onSetAlert(msgContent.toInt());
     }
 }
 

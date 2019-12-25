@@ -31,13 +31,14 @@ void ImageLabel::setBackgroundPix(QPixmap &pixmap)
     m_background = pixmap;
     m_bSetBp = true;
     m_thumbPix = pixmap;
+    setHasThumbnail(true);
 
-    rotateImage(m_nRotate);
+    rotateImage();
 }
 
-void ImageLabel::rotateImage(int angle)
+void ImageLabel::rotateImage()
 {
-    m_nRotate = (angle < 0) ? (angle + 360) : angle;
+//    m_nRotate = (angle < 0) ? (angle + 360) : angle;
 
     m_thumbPix = m_background;
     QMatrix leftmatrix;
@@ -91,8 +92,8 @@ void ImageLabel::paintEvent(QPaintEvent *e)
         heigh -= 4;
         penwidth = 1;
         painter.setPen(QPen(
-            DGuiApplicationHelper::instance()->applicationPalette().frameShadowBorder().color(),
-            penwidth, Qt::SolidLine));
+                           DGuiApplicationHelper::instance()->applicationPalette().frameShadowBorder().color(),
+                           penwidth, Qt::SolidLine));
     }
 
     if (m_bSetBp) {

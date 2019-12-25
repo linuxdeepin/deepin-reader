@@ -95,7 +95,7 @@ void SearchResWidget::slotSearchOver()
         //显示无结果窗口
         notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(WIDGET_SEARCH));
         //让搜索框变粉红色
-        notifyMsg(MSG_FIND_NONE);
+        notifyMsg(MSG_FIND_NONE, "1");
 
         bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
         if (!t_bTnumbnIsShow) {
@@ -104,6 +104,8 @@ void SearchResWidget::slotSearchOver()
     } else {
         connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
                 SLOT(slotSelectItem(QListWidgetItem *)));
+        //让搜索框回复正常
+        notifyMsg(MSG_FIND_NONE, "0");
         //生成左侧搜索列表
         // to do and send flush thumbnail and contant
         initSearchList(list);

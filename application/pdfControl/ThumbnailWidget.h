@@ -78,7 +78,8 @@ public:
     inline void clearList() {m_listLoad.clear();}
 
 signals:
-    void signal_loadImage(const int &, const QImage &);
+    void sigLoadImage(const int &, const QImage &);
+    void sigRotateImage(const int &index);
 
 protected:
     void run() Q_DECL_OVERRIDE;
@@ -141,6 +142,7 @@ private slots:
     void slotSetRotate(int);
     void slotRotateThumbnail(int);
     void slotLoadThumbnail(int);
+    void slotLoadImage(const int &row, const QImage &image);
 
 private:
     CustomListWidget *m_pThumbnailListWidget = nullptr;  // list widget item子界面

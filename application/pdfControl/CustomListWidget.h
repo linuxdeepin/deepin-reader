@@ -23,10 +23,14 @@ signals:
 
 public:
     QListWidgetItem *insertWidgetItem(const int &);
+//    inline void setRotateAngele(const int &angle) {m_nRotate = angle;}
 
 private slots:
     void slot_loadImage(const int &row, const QImage &image);
     void slotShowSelectItem(QListWidgetItem *);
+
+//private:
+//    int m_nRotate = 0;           // 缩略图旋转角度
 };
 
 #endif // CUSTOMLISTWIDGET_H

@@ -26,13 +26,12 @@ public:
     inline void setBookMarkStatus(bool bshow) { m_bshowbookmark = bshow; }
 
     void setBackgroundPix(QPixmap &pixmap);
-    //    {
-    //        m_background = pixmap;
-    //        m_bSetBp = true;
-    //        m_thumbPix = pixmap;
-    //    }
 
-    void rotateImage(int angle);
+    void rotateImage();
+
+    inline void setHasThumbnail(const bool has) {m_bHasThumbnail = has;}
+    inline bool hasThumbnail() {return m_bHasThumbnail;}
+    inline void setRotateAngle(const int &angle) {m_nRotate = angle;}
 
 protected:
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
@@ -48,7 +47,7 @@ private:
     int m_nHighLightLineWidth = 0;  // 高亮边框宽度
 
     int m_nRotate = 0;  // 缩略图旋转度数
-    //    bool m_bRotate = false;
+    bool m_bHasThumbnail = false;   // 时候加载过缩略图
 };
 
 #endif  // IMAGELABEL_H

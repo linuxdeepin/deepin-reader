@@ -57,7 +57,7 @@ desktop.path = $$INSTROOT$$APPDIR
 desktop.files = $$PWD/deepin-reader.desktop
 
 icon_files.path = /usr/share/icons/hicolor/scalable/apps
-icon_files.files = $$PWD/resources/logo/deepin-reader.svg
+icon_files.files = $$PWD/icons/deepin/builtin/deepin-reader.svg
 
 # Automating generation .qm files from .ts files
 !system($$PWD/translate_generation.sh): error("Failed to generate translation")

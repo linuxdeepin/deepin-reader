@@ -105,8 +105,8 @@ void ThumbnailWidget::addThumbnailItem(const int &iIndex)
 
 void ThumbnailWidget::initConnection()
 {
-    connect(&m_ThreadLoadImage, SIGNAL(signal_loadImage(const int &, const QImage &)),
-            m_pThumbnailListWidget, SLOT(slot_loadImage(const int &, const QImage &)));
+    connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const int &, const QImage &)),
+            this, SLOT(slotLoadImage(const int &, const QImage &)));
 
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
@@ -114,7 +114,7 @@ void ThumbnailWidget::initConnection()
     connect(this, SIGNAL(sigFilePageChanged(const QString &)),
             SLOT(slotDocFilePageChanged(const QString &)));
     connect(this, SIGNAL(sigSetRotate(int)), this, SLOT(slotSetRotate(int)));
-    connect(&m_threadRotateImage, SIGNAL(sigRotateImage(int)), this,
+    connect(&m_ThreadLoadImage, SIGNAL(sigRotateImage(int)), this,
             SLOT(slotRotateThumbnail(int)));
     connect(m_pThumbnailListWidget, SIGNAL(sigValueChanged(int)), this, SLOT(slotLoadThumbnail(int)));
 
@@ -167,12 +167,12 @@ void ThumbnailWidget::slotUpdateTheme()
 void ThumbnailWidget::slotSetRotate(int angle)
 {
     m_nRotate = angle;
-    if (m_threadRotateImage.isRunning()) {
-        m_threadRotateImage.stopThreadRun();
-    }
-    m_threadRotateImage.setPages(m_totalPages);
-    m_threadRotateImage.setLoadOver();
-    m_threadRotateImage.start();
+//    if (m_threadRotateImage.isRunning()) {
+//        m_threadRotateImage.stopThreadRun();
+//    }
+//    m_threadRotateImage.setPages(m_totalPages);
+//    m_threadRotateImage.setLoadOver();
+//    m_threadRotateImage.start();
 }
 
 void ThumbnailWidget::slotRotateThumbnail(int index)
@@ -217,6 +217,21 @@ void ThumbnailWidget::slotLoadThumbnail(int value)
     m_ThreadLoadImage.setStartAndEndIndex(loadStart, loadEnd);
     m_ThreadLoadImage.setIsLoaded(true);
     m_ThreadLoadImage.start();
+}
+
+void ThumbnailWidget::slotLoadImage(const int &row, const QImage &image)
+{
+    if (!m_pThumbnailListWidget) {
+        return;
+    }
+    auto item = m_pThumbnailListWidget->item(row);
+    if (item) {
+        auto t_ItemWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
+        if (t_ItemWidget) {
+            t_ItemWidget->rotateThumbnail(m_nRotate);
+            t_ItemWidget->setLabelImage(image);
+        }
+    }
 }
 
 // 初始化缩略图列表list，无缩略图
@@ -402,13 +417,15 @@ void ThreadLoadImage::run()
             if (!m_isLoaded)
                 break;
             if (m_listLoad.contains(page)) {
+                emit sigRotateImage(page);
+                msleep(50);
                 continue;
             }
             QImage image;
             bool bl = dproxy->getImage(page, image, 146, 174 /*138, 166*/);
             if (bl) {
                 m_listLoad.append(page);
-                emit signal_loadImage(page, image);
+                emit sigLoadImage(page, image);
                 qDebug() << " loading page:" << page << " thumbnail";
                 msleep(50);
             }
