@@ -1,66 +1,37 @@
 #ifndef NOTETIPWIDGET_H
 #define NOTETIPWIDGET_H
 
-#include "CustomControl/CustomWidget.h"
+#include <DWidget>
+
+DWIDGET_USE_NAMESPACE
 
 /**
  * @brief The NoteTipWidget class
  *  显示注释内容
  */
-
-
-//class NoteTipWidget : public CustomWidget
-//{
-//    Q_OBJECT
-//    Q_DISABLE_COPY(NoteTipWidget)
-
-//public:
-//    explicit NoteTipWidget(CustomWidget *parnet = nullptr);
-
-//public:
-//    void setTipContent(const QString &);
-
-//private:
-//    void initConnection();
-
-//private slots:
-//    void slotUpdateTheme();
-
-//    // IObserver interface
-//public:
-//    int dealWithData(const int &, const QString &);
-
-//    // CustomWidget interface
-//protected:
-//    void initWidget();
-//private:
-//    int m_iwidth;
-//};
 class QTextEdit;
-class NoteTipWidget : public QWidget
+class NoteTipWidget : public DWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(NoteTipWidget)
 
 public:
-    explicit NoteTipWidget(CustomWidget *parnet = nullptr);
+    explicit NoteTipWidget(DWidget *parnet = nullptr);
 
 public:
     void setTipContent(const QString &);
 
 private:
     void initConnection();
+    void initWidget();
 
 private slots:
     void slotUpdateTheme();
 
-protected:
-    void initWidget();
 private:
-    int m_iwidth;
-    NotifySubject   *m_pNotifySubject;
-    MsgSubject      *m_pMsgSubject;
-    QTextEdit       *pedit;
+    int m_iwidth = -1;
+
+    QTextEdit       *pedit = nullptr;
 };
 
 
