@@ -15,12 +15,6 @@
 
 class NotifySubject : public QThread, public ISubject
 {
-    Q_OBJECT
-    Q_DISABLE_COPY(NotifySubject)
-
-public:
-    explicit NotifySubject(QObject *parent = nullptr);
-
     // ISubject interface
 public:
     void addObserver(IObserver *obs);

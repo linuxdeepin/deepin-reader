@@ -17,10 +17,6 @@
 
 class MsgSubject : public QThread, public ISubject
 {
-    Q_OBJECT
-
-public:
-    explicit MsgSubject(QObject *parent = nullptr);
 
     // ISubject interface
 public:
@@ -48,6 +44,6 @@ private:
     bool    m_bRunFlag = false;
 };
 
-typedef CSingleton<MsgSubject > g_MsgSubject;
+typedef CSingleton<MsgSubject> g_MsgSubject;
 
 #endif // MSGSUBJECT_H

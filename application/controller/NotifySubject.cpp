@@ -2,19 +2,17 @@
 #include "subjectObserver/MsgHeader.h"
 #include <QDebug>
 
-NotifySubject::NotifySubject(QObject *parent)
+void NotifySubject::startThreadRun()
 {
-    Q_UNUSED(parent);
+    m_bRunFlag = true;
+    start();
 }
 
-void NotifySubject::addObserver(IObserver *obs)
+void NotifySubject::stopThreadRun()
 {
-    m_observerList.append(obs);
-}
-
-void NotifySubject::removeObserver(IObserver *obs)
-{
-    m_observerList.removeOne(obs);
+    m_bRunFlag = false;
+    quit();
+    wait();         //阻塞等待
 }
 
 void NotifySubject::run()
@@ -37,17 +35,14 @@ void NotifySubject::run()
     }
 }
 
-void NotifySubject::startThreadRun()
+void NotifySubject::addObserver(IObserver *obs)
 {
-    m_bRunFlag = true;
-    start();
+    m_observerList.append(obs);
 }
 
-void NotifySubject::stopThreadRun()
+void NotifySubject::removeObserver(IObserver *obs)
 {
-    m_bRunFlag = false;
-    quit();
-    wait();         //阻塞等待
+    m_observerList.removeOne(obs);
 }
 
 void NotifySubject::notifyMsg(const int &msgType, const QString &msgContent)
