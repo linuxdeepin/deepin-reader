@@ -54,7 +54,7 @@ isEmpty(DSRDIR):DSRDIR=/usr/share/deepin-reader
 target.path = $$INSTROOT$$BINDIR
 
 desktop.path = $$INSTROOT$$APPDIR
-desktop.files = $$PWD/resources/deepin-reader.desktop
+desktop.files = $$PWD/deepin-reader.desktop
 
 icon_files.path = /usr/share/icons/hicolor/scalable/apps
 icon_files.files = $$PWD/resources/logo/deepin-reader.svg
