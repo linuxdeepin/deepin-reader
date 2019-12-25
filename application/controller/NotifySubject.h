@@ -2,6 +2,7 @@
 #define NOTIFYSUBJECT_H
 
 #include "subjectObserver/ISubject.h"
+#include "subjectObserver/Singleton.h"
 #include <QThread>
 #include "SubjectHeader.h"
 #include <QMutex>
@@ -17,15 +18,8 @@ class NotifySubject : public QThread, public ISubject
     Q_OBJECT
     Q_DISABLE_COPY(NotifySubject)
 
-private:
-    explicit NotifySubject(QObject *parent = nullptr);
-
 public:
-    static NotifySubject *getInstance()
-    {
-        static NotifySubject subject;
-        return &subject;
-    }
+    explicit NotifySubject(QObject *parent = nullptr);
 
     // ISubject interface
 public:
@@ -37,6 +31,7 @@ protected:
     void run();
 
 public:
+    void startThreadRun();
     void stopThreadRun();
     void notifyMsg(const int &, const QString &msgContent = "");
 
@@ -50,5 +45,7 @@ private:
 
     QMutex              m_mutex;
 };
+
+typedef CSingleton<NotifySubject> g_NotifySubject;
 
 #endif // NOTIFYSUBJECT_H

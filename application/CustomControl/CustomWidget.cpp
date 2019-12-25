@@ -2,7 +2,7 @@
 #include <DWidgetUtil>
 
 CustomWidget::CustomWidget(const QString &name, DWidget *parent)
-    : DWidget (parent)
+    : DWidget(parent)
 {
     m_strObserverName = name;
     setWindowFlags(Qt::FramelessWindowHint);
@@ -11,12 +11,12 @@ CustomWidget::CustomWidget(const QString &name, DWidget *parent)
     setAutoFillBackground(true);
     setContextMenuPolicy(Qt::CustomContextMenu);//让widget支持右键菜单事件
 
-    m_pMsgSubject = MsgSubject::getInstance();
+    m_pMsgSubject = g_MsgSubject::getInstance();
     if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
     }
 
-    m_pNotifySubject = NotifySubject::getInstance();
+    m_pNotifySubject = g_NotifySubject::getInstance();
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
     }

@@ -36,6 +36,7 @@ class Application : public DApplication
 
 public:
     Application(int &argc, char **argv);
+    ~Application() Q_DECL_OVERRIDE;
 
 protected:
     void handleQuitAction() Q_DECL_OVERRIDE;

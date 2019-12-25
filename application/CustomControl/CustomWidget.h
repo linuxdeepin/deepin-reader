@@ -55,8 +55,8 @@ protected:
     QList<QString>      m_pKeyMsgList;     //  需要处理的按键消息列表
 
 private:
-    MsgSubject *m_pMsgSubject = nullptr;
-    NotifySubject *m_pNotifySubject = nullptr;
+    MsgSubject      *m_pMsgSubject = nullptr;
+    NotifySubject   *m_pNotifySubject = nullptr;
 };
 
 #endif  // CUSTOMWIDGET_H

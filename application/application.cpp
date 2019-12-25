@@ -26,6 +26,9 @@
 
 #include "controller/ObjectEventFilter.h"
 
+#include "controller/MsgSubject.h"
+#include "controller/NotifySubject.h"
+
 namespace {
 
 }  // namespace
@@ -57,11 +60,20 @@ Application::Application(int &argc, char **argv)
     // installEventFilter(new ObjectEventFilter(this));
 
     initChildren();
+
+    g_MsgSubject::getInstance()->startThreadRun();
+    g_NotifySubject::getInstance()->startThreadRun();
+}
+
+Application::~Application()
+{
+    g_MsgSubject::getInstance()->stopThreadRun();
+    g_NotifySubject::getInstance()->stopThreadRun();
 }
 
 void Application::handleQuitAction()
 {
-    NotifySubject::getInstance()->notifyMsg(MSG_OPERATION_EXIT);
+    g_NotifySubject::getInstance()->notifyMsg(MSG_OPERATION_EXIT);
 }
 
 void Application::initChildren()

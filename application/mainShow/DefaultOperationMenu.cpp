@@ -86,12 +86,12 @@ QAction *DefaultOperationMenu::createAction(const QString &name, const char *mem
 
 void DefaultOperationMenu::sendMsgToFrame(const int &msgType, const QString &msgContent)
 {
-    MsgSubject::getInstance()->sendMsg(msgType, msgContent);
+    g_MsgSubject::getInstance()->sendMsg(msgType, msgContent);
 }
 
 void DefaultOperationMenu::notifyMsgToFrame(const int &msgType, const QString &msgContent)
 {
-    NotifySubject::getInstance()->notifyMsg(msgType, msgContent);
+    g_NotifySubject::getInstance()->notifyMsg(msgType, msgContent);
 }
 
 void DefaultOperationMenu::slotSearchClicked()

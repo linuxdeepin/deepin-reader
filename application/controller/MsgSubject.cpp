@@ -7,21 +7,15 @@
 MsgSubject::MsgSubject(QObject *parent)
 {
     Q_UNUSED(parent);
-
-    //  默认启动线程，　只在　mainMainWindow 中　停止运行
-    m_bRunFlag = true;
-    start();
 }
 
 void MsgSubject::addObserver(IObserver *obs)
 {
-    QMutexLocker locker(&m_obMutex);
     m_observerList.append(obs);
 }
 
 void MsgSubject::removeObserver(IObserver *obs)
 {
-    QMutexLocker locker(&m_obMutex);
     m_observerList.removeOne(obs);
 }
 
@@ -36,6 +30,12 @@ void MsgSubject::sendMsg(const int &msgType, const QString &msgContent)
     m_msgList.append(msg);
 
     qInfo() << "msgType = " << msgType << ",   msgContent = " << msgContent;
+}
+
+void MsgSubject::startThreadRun()
+{
+    m_bRunFlag = true;
+    start();
 }
 
 int MsgSubject::NotifyObservers(const int &msgType, const QString &msgContent)

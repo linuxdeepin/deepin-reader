@@ -86,13 +86,13 @@ QAction *TextOperationMenu::createAction(const QString &text, const char *member
 
 void TextOperationMenu::sendMsgToFrame(const int &msgType, const QString &msgContent)
 {
-    MsgSubject::getInstance()->sendMsg(msgType, msgContent);
+    g_MsgSubject::getInstance()->sendMsg(msgType, msgContent);
     this->hide();
 }
 
 void TextOperationMenu::notifyMsgToFrame(const int &msgType, const QString &msgContent)
 {
-    NotifySubject::getInstance()->notifyMsg(msgType, msgContent);
+    g_NotifySubject::getInstance()->notifyMsg(msgType, msgContent);
     this->hide();
 }
 

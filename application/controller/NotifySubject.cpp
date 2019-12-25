@@ -5,10 +5,6 @@
 NotifySubject::NotifySubject(QObject *parent)
 {
     Q_UNUSED(parent);
-
-    //  默认启动线程，　只在　mainMainWindow 中　停止运行
-    m_bRunFlag = true;
-    start();
 }
 
 void NotifySubject::addObserver(IObserver *obs)
@@ -39,6 +35,12 @@ void NotifySubject::run()
 
         msleep(10);
     }
+}
+
+void NotifySubject::startThreadRun()
+{
+    m_bRunFlag = true;
+    start();
 }
 
 void NotifySubject::stopThreadRun()

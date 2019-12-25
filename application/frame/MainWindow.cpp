@@ -44,12 +44,12 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     installEventFilter(this);
 
-    m_pMsgSubject = MsgSubject::getInstance();
+    m_pMsgSubject = g_MsgSubject::getInstance();
     if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
     }
 
-    m_pNotifySubject = NotifySubject::getInstance();
+    m_pNotifySubject = g_NotifySubject::getInstance();
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
     }
@@ -68,12 +68,10 @@ MainWindow::~MainWindow()
     // We don't need clean pointers because application has exit here.
     if (m_pMsgSubject) {
         m_pMsgSubject->removeObserver(this);
-        m_pMsgSubject->stopThreadRun();
     }
 
     if (m_pNotifySubject) {
         m_pNotifySubject->removeObserver(this);
-        m_pNotifySubject->stopThreadRun();
     }
 }
 

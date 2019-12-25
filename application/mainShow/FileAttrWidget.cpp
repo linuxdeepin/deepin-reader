@@ -24,12 +24,12 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
 
     initWidget();
 
-    m_pNotifySubject = NotifySubject::getInstance();
+    m_pNotifySubject = g_NotifySubject::getInstance();
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
     }
 
-    m_pMsgSubject = MsgSubject::getInstance();
+    m_pMsgSubject = g_MsgSubject::getInstance();
     if (m_pMsgSubject) {
         m_pMsgSubject->addObserver(this);
     }

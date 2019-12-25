@@ -2,6 +2,8 @@
 #define MSGSUBJECT_H
 
 #include "subjectObserver/ISubject.h"
+#include "subjectObserver/Singleton.h"
+
 #include <QList>
 #include <QThread>
 #include <QObject>
@@ -16,17 +18,9 @@
 class MsgSubject : public QThread, public ISubject
 {
     Q_OBJECT
-    Q_DISABLE_COPY(MsgSubject)
-
-private:
-    explicit MsgSubject(QObject *parent = nullptr);
 
 public:
-    static MsgSubject *getInstance()
-    {
-        static MsgSubject subject;
-        return &subject;
-    }
+    explicit MsgSubject(QObject *parent = nullptr);
 
     // ISubject interface
 public:
@@ -39,6 +33,7 @@ protected:
 
 public:
     void sendMsg(const int &, const QString &msgContent);
+    void startThreadRun();
     void stopThreadRun();
 
 private:
@@ -52,5 +47,7 @@ private:
 
     bool    m_bRunFlag = false;
 };
+
+typedef CSingleton<MsgSubject > g_MsgSubject;
 
 #endif // MSGSUBJECT_H
