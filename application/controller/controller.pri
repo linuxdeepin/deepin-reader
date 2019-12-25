@@ -4,7 +4,8 @@ HEADERS += \
     $$PWD/NotifySubject.h \
     $$PWD/SubjectHeader.h \
     $$PWD/DBManager.h \
-    $$PWD/AppSetting.h
+    $$PWD/AppSetting.h \
+    $$PWD/SubjectThread.h
 
 SOURCES += \
     $$PWD/DataManager.cpp \
