@@ -1,6 +1,5 @@
 #include "BookMarkItemWidget.h"
 #include <DApplicationHelper>
-#include "utils/utils.h"
 
 BookMarkItemWidget::BookMarkItemWidget(CustomItemWidget *parent)
     : CustomItemWidget("BookMarkItemWidget", parent)
@@ -114,7 +113,7 @@ void BookMarkItemWidget::initWidget()
 
 void BookMarkItemWidget::paintEvent(QPaintEvent *event)
 {
-    CustomWidget::paintEvent(event);
+    CustomItemWidget::paintEvent(event);
 
     //    QPalette p(m_pPicture->palette());
     //    QColor color;

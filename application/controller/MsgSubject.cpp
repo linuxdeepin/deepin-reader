@@ -15,11 +15,13 @@ MsgSubject::MsgSubject(QObject *parent)
 
 void MsgSubject::addObserver(IObserver *obs)
 {
+    QMutexLocker locker(&m_obMutex);
     m_observerList.append(obs);
 }
 
 void MsgSubject::removeObserver(IObserver *obs)
 {
+    QMutexLocker locker(&m_obMutex);
     m_observerList.removeOne(obs);
 }
 
@@ -86,6 +88,6 @@ void MsgSubject::run()
                 break;
             }
         }
-        msleep(50);
+        msleep(10);
     }
 }

@@ -48,6 +48,7 @@ private:
     QList<IObserver *> m_observerList;
     QList<MsgStruct> m_msgList;
     QMutex      m_mutex;
+    QMutex      m_obMutex;
 
     bool    m_bRunFlag = false;
 };
