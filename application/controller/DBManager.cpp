@@ -221,7 +221,7 @@ const QSqlDatabase DBManager::getDatabase() const
     } else {
         //if database not open, open it.
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);//not dbConnection
-        db.setDatabaseName(DATABASE_PATH + DATABASE_NAME);
+        db.setDatabaseName(DATABASE_PATH + "/" + DATABASE_NAME);
         if (! db.open()) {
             qWarning() << "Open database error:" << db.lastError();
             mutex.unlock();
