@@ -41,10 +41,9 @@ void ThumbnailItemWidget::rotateThumbnail(int angle)
 {
     auto imageLabel = this->findChild<ImageLabel *>();
     if (imageLabel) {
+        imageLabel->setRotateAngle(angle);
         if (imageLabel->hasThumbnail()) {
             imageLabel->rotateImage();
-        } else {
-            imageLabel->setRotateAngle(angle);
         }
     }
 }

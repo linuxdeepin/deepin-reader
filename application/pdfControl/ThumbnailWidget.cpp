@@ -167,6 +167,12 @@ void ThumbnailWidget::slotUpdateTheme()
 void ThumbnailWidget::slotSetRotate(int angle)
 {
     m_nRotate = angle;
+    if (m_ThreadLoadImage.isRunning()) {
+        m_ThreadLoadImage.stopThreadRun();
+    }
+
+    m_ThreadLoadImage.setIsLoaded(true);
+    m_ThreadLoadImage.start();
 //    if (m_threadRotateImage.isRunning()) {
 //        m_threadRotateImage.stopThreadRun();
 //    }
@@ -209,8 +215,8 @@ void ThumbnailWidget::slotLoadThumbnail(int value)
 
     loadStart = (indexPage - (FIRST_LOAD_PAGES / 2)) < 0 ? 0 : (indexPage - (FIRST_LOAD_PAGES / 2));
     loadEnd = (indexPage + (FIRST_LOAD_PAGES / 2)) > m_totalPages ? m_totalPages : (indexPage + (FIRST_LOAD_PAGES / 2));
-    qDebug() << __FUNCTION__ << "      loadStart:" << loadStart;
-    qDebug() << __FUNCTION__ << "      loadEnd:" << loadEnd;
+//    qDebug() << __FUNCTION__ << "      loadStart:" << loadStart;
+//    qDebug() << __FUNCTION__ << "      loadEnd:" << loadEnd;
     if (m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();
     }

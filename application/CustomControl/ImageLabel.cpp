@@ -38,8 +38,6 @@ void ImageLabel::setBackgroundPix(QPixmap &pixmap)
 
 void ImageLabel::rotateImage()
 {
-//    m_nRotate = (angle < 0) ? (angle + 360) : angle;
-
     m_thumbPix = m_background;
     QMatrix leftmatrix;
     leftmatrix.rotate(m_nRotate);
@@ -55,8 +53,10 @@ void ImageLabel::rotateImage()
             h = this->width();
         }
     } else {
-        w = this->height();
-        h = this->width();
+        if (w < h) {
+            w = this->height();
+            h = this->width();
+        }
     }
 
     setFixedSize(w, h);
