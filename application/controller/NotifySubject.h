@@ -31,7 +31,7 @@ public:
     void notifyMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
 
 private:
-    void NotifyObservers(const int &, const QString &);
+    int NotifyObservers(const int &, const QString &);
 
 private:
     QList<IObserver *>  m_observerList;

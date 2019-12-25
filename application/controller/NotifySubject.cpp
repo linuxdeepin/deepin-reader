@@ -28,7 +28,10 @@ void NotifySubject::run()
         QListIterator<MsgStruct> iter(msgList);
         while (iter.hasNext()) {
             auto ms = iter.next();
-            NotifyObservers(ms.msgType, ms.msgContent);
+            int nRes = NotifyObservers(ms.msgType, ms.msgContent);
+            if (nRes == ConstantMsg::g_effective_res) {
+                break;
+            }
         }
 
         msleep(10);
@@ -55,20 +58,25 @@ void NotifySubject::notifyMsg(const int &msgType, const QString &msgContent)
 
     m_msgList.append(msg);
 
-    qInfo() << "msgType = " << msgType << ",   msgContent = " << msgContent;
+    qInfo() << "begin       msgType = " << msgType << ",   msgContent = " << msgContent;
 }
 
-void NotifySubject::NotifyObservers(const int &msgType, const QString &msgContent)
+int NotifySubject::NotifyObservers(const int &msgType, const QString &msgContent)
 {
+    int nRes = -1;
     QListIterator<IObserver *> iter(m_observerList);
     while (iter.hasNext()) {
         auto obs = iter.next();
         if (obs) {
-            int nRes = obs->dealWithData(msgType, msgContent);
+            nRes = obs->dealWithData(msgType, msgContent);
             if (nRes == ConstantMsg::g_effective_res) {
-                qInfo() << "msgType = " << msgType << ",   msgContent = " << msgContent;
+                qInfo() << "msgType = " << msgType
+                        << ",   msgContent = " << msgContent
+                        << ",   deal = " << obs->getObserverName()
+                        <<  "   end ";
                 break;
             }
         }
     }
+    return nRes;
 }
