@@ -1,7 +1,7 @@
 #ifndef NOTIFYSUBJECT_H
 #define NOTIFYSUBJECT_H
 
-#include "subjectObserver/ISubject.h"
+#include "SubjectThread.h"
 #include "subjectObserver/Singleton.h"
 #include <QThread>
 #include "SubjectHeader.h"
@@ -13,21 +13,22 @@
  */
 
 
-class NotifySubject : public QThread, public ISubject
+class NotifySubject : public SubjectThread
 {
     // ISubject interface
 public:
-    void addObserver(IObserver *obs);
-    void removeObserver(IObserver *obs);
+    void addObserver(IObserver *obs) Q_DECL_OVERRIDE;
+    void removeObserver(IObserver *obs) Q_DECL_OVERRIDE;
 
     // QThread interface
 protected:
-    void run();
+    void run() Q_DECL_OVERRIDE;
 
+    // SubjectThread interface
 public:
-    void startThreadRun();
-    void stopThreadRun();
-    void notifyMsg(const int &, const QString &msgContent = "");
+    void startThreadRun() Q_DECL_OVERRIDE;
+    void stopThreadRun() Q_DECL_OVERRIDE;
+    void notifyMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
 
 private:
     void NotifyObservers(const int &, const QString &);

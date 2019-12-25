@@ -11,7 +11,7 @@
 
 class SubjectThread : public QThread, public ISubject
 {
-protected:
+public:
     virtual void startThreadRun() = 0;
     virtual void stopThreadRun() = 0;
     virtual void notifyMsg(const int &, const QString &) = 0;
