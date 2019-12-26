@@ -202,8 +202,8 @@
     <message>
         <location filename="../pdfControl/CustomItemWidget.cpp" line="35"/>
         <source>page</source>
-        <translatorcomment>页</translatorcomment>
-        <translation>页</translation>
+        <translatorcomment>页面</translatorcomment>
+        <translation>页面</translation>
     </message>
 </context>
 <context>
