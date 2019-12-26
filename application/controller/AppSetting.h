@@ -17,7 +17,9 @@ enum KeyType {
     KEY_DOUBPAGE,
     KEY_ADAPTATW,
     KEY_ADAPTATH,
-    KEY_ROTATE
+    KEY_ROTATE,
+    KEY_APP_WIDTH,
+    KEY_APP_HEIGHT
 };
 
 class AppSetting : public QObject
@@ -41,6 +43,9 @@ public:
 
     void setKeyValue(const int &, const QString &);
     QString getKeyValue(const int &) const;
+
+    void setAppKeyValue(const int &, const QString &);
+    QString getAppKeyValue(const int &) const;
 
 private:
     QSettings *m_pSettings = nullptr;

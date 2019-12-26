@@ -8,6 +8,7 @@
 #include "controller/MsgSubject.h"
 #include "controller/NotifySubject.h"
 #include <QCloseEvent>
+#include <QResizeEvent>
 
 DWIDGET_USE_NAMESPACE
 
@@ -36,6 +37,7 @@ signals:
 
     void sigDealWithData(const int &, const QString &);
 
+    // QWidget interface
 protected:
     void showEvent(QShowEvent *ev) Q_DECL_OVERRIDE;
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
@@ -66,6 +68,8 @@ private:
     void sendMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
     void notifyMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
 
+    void showDefaultSize();
+
 private slots:
     void slotOpenFileOk();
     void slotFullScreen();
@@ -87,6 +91,7 @@ private:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+
 };
 
 #endif // MainWindow_H

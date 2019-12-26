@@ -2,6 +2,7 @@
 #include "utils/utils.h"
 #include <QDir>
 #include "DataManager.h"
+#include <QDebug>
 
 AppSetting::AppSetting(QObject *parent)
     : QObject(parent)
@@ -59,4 +60,27 @@ QString AppSetting::getKeyValue(const int &iKey) const
     }
 
     return "";
+}
+
+void AppSetting::setAppKeyValue(const int &iKey, const QString &sValue)
+{
+    // initalize the configuration file.
+    qDebug() << "   key = " << iKey << "    ,   value = " << sValue;
+    QString sKey = QString("%1").arg(iKey);
+
+    QString ssValue = QString("%1").arg(sValue);
+
+    if (sValue == "") {
+        m_pSettings->remove(sKey);
+    } else {
+        m_pSettings->setValue(sKey, ssValue);
+    }
+}
+
+QString AppSetting::getAppKeyValue(const int &iKey) const
+{
+    // initalize the configuration file.
+    QString sKey = QString("%1").arg(iKey);
+
+    return m_pSettings->value(sKey).toString();
 }

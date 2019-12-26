@@ -54,10 +54,9 @@ MainWindow::MainWindow(DMainWindow *parent)
         m_pNotifySubject->addObserver(this);
     }
 
-//    QRect rect = DApplication::desktop()->geometry();
-//    setMinimumSize(rect.width() * 0.8, rect.height() * 0.8);
-    resize(1000, 680);
-    setMinimumSize(752, 178);
+    setMinimumSize(752, 500);
+
+    showDefaultSize();
 
     //  在屏幕中心显示
     Dtk::Widget::moveToCenter(this);
@@ -123,6 +122,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
         notifyMsg(MSG_CLOSE_FILE);
         DocummentFileHelper::instance()->closeFile();
     }
+
+    AppSetting::instance()->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
+    AppSetting::instance()->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
 
     DMainWindow::closeEvent(event);
 }
@@ -384,35 +386,7 @@ void MainWindow::displayShortcuts()
 //  退出 应用
 void MainWindow::onAppExit()
 {
-    QString sFilePath = DataManager::instance()->strOnlyFilePath();
-    if (sFilePath != "") {
-        bool rl = DataManager::instance()->bIsUpdate();
-        if (rl) {
-            DDialog dlg(tr(""), tr("Do you want to save the changes?"));
-            dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
-            dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Discard"));
-            dlg.addButton(tr("Save"), true, DDialog::ButtonRecommend);
-            QMargins mar(0, 0, 0, 30);
-            dlg.setContentLayoutContentsMargins(mar);
-
-            int nRes = dlg.exec();
-            if (nRes <= 0) {
-                return;
-            }
-
-            if (nRes == 2) {
-                //  保存
-                DocummentFileHelper::instance()->save(sFilePath, true);
-                //  保存 书签数据
-                dApp->dbM->saveBookMark();
-            }
-        }
-
-        notifyMsg(MSG_CLOSE_FILE);
-        DocummentFileHelper::instance()->closeFile();
-    }
-
-    dApp->exit(0);
+    close();
 }
 
 //  全屏
@@ -529,6 +503,22 @@ void MainWindow::notifyMsg(const int &msgType, const QString &msgContent)
 {
     if (m_pNotifySubject) {
         m_pNotifySubject->notifyMsg(msgType, msgContent);
+    }
+}
+
+//  窗口显示默认大小
+void MainWindow::showDefaultSize()
+{
+    int nWidth = AppSetting::instance()->getAppKeyValue(KEY_APP_WIDTH).toInt();
+    int nHeight = AppSetting::instance()->getAppKeyValue(KEY_APP_HEIGHT).toInt();
+
+    if (nWidth == 0 || nHeight == 0) {
+        resize(1000, 680);
+
+        AppSetting::instance()->setAppKeyValue(KEY_APP_WIDTH, "1000");
+        AppSetting::instance()->setAppKeyValue(KEY_APP_HEIGHT, "680");
+    } else {
+        resize(nWidth, nHeight);
     }
 }
 
