@@ -30,7 +30,6 @@ public:
 private:
     void initMenu();
     QAction *createAction(const QString &, const char *member);
-    void sendMsgToFrame(const int &, const QString &msgContent = "");
     void notifyMsgToFrame(const int &, const QString &msgContent = "");
 
 private slots:

@@ -1,12 +1,13 @@
 #include "DefaultOperationMenu.h"
 #include <DPushButton>
+#include "application.h"
+#include <DFontSizeManager>
+
+#include "frame/DocummentFileHelper.h"
+
 #include "controller/DataManager.h"
-#include "controller/MsgSubject.h"
 #include "controller/NotifySubject.h"
 #include "subjectObserver/MsgHeader.h"
-#include "application.h"
-#include "frame/DocummentFileHelper.h"
-#include <DFontSizeManager>
 #include "subjectObserver/ModuleHeader.h"
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
@@ -84,11 +85,6 @@ QAction *DefaultOperationMenu::createAction(const QString &name, const char *mem
     return action;
 }
 
-void DefaultOperationMenu::sendMsgToFrame(const int &msgType, const QString &msgContent)
-{
-    g_MsgSubject::getInstance()->sendMsg(msgType, msgContent);
-}
-
 void DefaultOperationMenu::notifyMsgToFrame(const int &msgType, const QString &msgContent)
 {
     g_NotifySubject::getInstance()->notifyMsg(msgType, msgContent);
@@ -103,9 +99,9 @@ void DefaultOperationMenu::slotBookMarkClicked()
 {
     int nData = m_pBookMark->property("data").toInt();
     if (nData == 0) {
-        sendMsgToFrame(MSG_OPERATION_DELETE_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
+        notifyMsgToFrame(MSG_OPERATION_DELETE_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
     } else {
-        sendMsgToFrame(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
+        notifyMsgToFrame(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
     }
 }
 
