@@ -58,7 +58,9 @@ void NotifySubject::notifyMsg(const int &msgType, const QString &msgContent)
 
     m_msgList.append(msg);
 
-    qInfo() << "begin       msgType = " << msgType << ",   msgContent = " << msgContent;
+#ifdef QT_DEBUG
+    qInfo() << "debug   begin       msgType = " << msgType << ",   msgContent = " << msgContent;
+#endif
 }
 
 int NotifySubject::NotifyObservers(const int &msgType, const QString &msgContent)
@@ -70,10 +72,13 @@ int NotifySubject::NotifyObservers(const int &msgType, const QString &msgContent
         if (obs) {
             nRes = obs->dealWithData(msgType, msgContent);
             if (nRes == ConstantMsg::g_effective_res) {
+
+#ifdef QT_DEBUG
                 qInfo() << "msgType = " << msgType
                         << ",   msgContent = " << msgContent
                         << ",   deal = " << obs->getObserverName()
                         <<  "   end ";
+#endif
                 break;
             }
         }

@@ -65,7 +65,6 @@ QString AppSetting::getKeyValue(const int &iKey) const
 void AppSetting::setAppKeyValue(const int &iKey, const QString &sValue)
 {
     // initalize the configuration file.
-    qDebug() << "   key = " << iKey << "    ,   value = " << sValue;
     QString sKey = QString("%1").arg(iKey);
 
     QString ssValue = QString("%1").arg(sValue);
