@@ -2,6 +2,7 @@
 #include "application.h"
 #include <DLog>
 #include <DApplicationSettings>
+#include <QDesktopWidget>
 
 DWIDGET_USE_NAMESPACE
 QUrl UrlInfo(QString path)

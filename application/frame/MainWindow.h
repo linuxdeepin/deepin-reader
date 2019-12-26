@@ -5,7 +5,6 @@
 #include <DMainWindow>
 #include <DMenu>
 #include <QSignalMapper>
-#include "controller/MsgSubject.h"
 #include "controller/NotifySubject.h"
 #include <QCloseEvent>
 #include <QResizeEvent>
@@ -79,8 +78,8 @@ private slots:
     void slotDealWithData(const int &, const QString &);
 
 private:
-    MsgSubject      *m_pMsgSubject = nullptr;
-    NotifySubject   *m_pNotifySubject = nullptr;
+    SubjectThread   *m_pNotifySubject = nullptr;
+
     QStringList     m_pFilterList;
 
     QList<int>      m_pMsgList;

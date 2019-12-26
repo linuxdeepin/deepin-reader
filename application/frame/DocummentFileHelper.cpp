@@ -10,7 +10,7 @@
 #include <QBitmap>
 #include "subjectObserver/ModuleHeader.h"
 #include "controller/DBManager.h"
-#include "controller/MsgSubject.h"
+
 #include "controller/NotifySubject.h"
 #include "FileFormatHelper.h"
 #include "utils/PublicFunction.h"
@@ -25,11 +25,6 @@ DocummentFileHelper::DocummentFileHelper(QObject *parent)
                  };
     m_pKeyMsgList = {KeyStr::g_ctrl_s, KeyStr::g_ctrl_shift_s};
 
-    m_pMsgSubject = g_MsgSubject::getInstance();
-    if (m_pMsgSubject) {
-        m_pMsgSubject->addObserver(this);
-    }
-
     m_pNotifySubject = g_NotifySubject::getInstance();
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
@@ -38,10 +33,6 @@ DocummentFileHelper::DocummentFileHelper(QObject *parent)
 
 DocummentFileHelper::~DocummentFileHelper()
 {
-    if (m_pMsgSubject) {
-        m_pMsgSubject->addObserver(this);
-    }
-
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
     }
@@ -128,7 +119,7 @@ void DocummentFileHelper::slotDealWithKeyMsg(const QString &msgContent)
 //  发送 操作消息
 void DocummentFileHelper::sendMsg(const int &msgType, const QString &msgContent)
 {
-    m_pMsgSubject->sendMsg(msgType, msgContent);
+    notifyMsg(msgType, msgContent);
 }
 
 //  通知消息, 不需要撤回

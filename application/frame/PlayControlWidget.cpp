@@ -95,13 +95,13 @@ void PlayControlWidget::initWidget()
     playout->setContentsMargins(10, 10, 10, 10);
     playout->setSpacing(10);
     m_pbtnpre = createBtn(QString("previous_normal"));
+
     m_pbtnplay = createBtn(QString("suspend_normal"));
+    m_pbtnplay->setFixedSize(QSize(50, 50));
+    m_pbtnplay->setIconSize(QSize(36, 36));
+
     m_pbtnnext = createBtn(QString("next_normal"));
     m_pbtnexit = createBtn(QString("exit_normal"));
-//    m_pbtnpre = new  DIconButton(DStyle::SP_ArrowLeft, this); m_pbtnpre->setFixedSize(50, 50);
-//    m_pbtnplay = new  DIconButton(DStyle::SP_MediaStop, this); m_pbtnplay->setFixedSize(50, 50);
-//    m_pbtnnext = new  DIconButton(DStyle::SP_ArrowRight, this); m_pbtnnext->setFixedSize(50, 50);
-//    m_pbtnexit = new  DIconButton(DStyle::SP_ForkElement /*SP_DialogCloseButton*/, this); m_pbtnexit->setFixedSize(50, 50);
 
     playout->addWidget(m_pbtnpre);
     playout->addWidget(m_pbtnplay);
@@ -169,16 +169,6 @@ void PlayControlWidget::changePlayStatus()
     else {
         m_pbtnplay->setIcon(QIcon(Utils::renderSVG(PF::getImagePath("play_normal", Pri::g_icons), QSize(36, 36))));
     }
-    m_pbtnplay->setFixedSize(QSize(50, 50));
-    m_pbtnplay->setIconSize(QSize(36, 36));
-
-//    m_bautoplaying = m_bautoplaying ? false : true;
-//    if (m_bautoplaying) {
-//        m_pbtnplay->setIcon(DStyle::SP_MediaStop);
-//    } else {
-
-//        m_pbtnplay->setIcon(DStyle::SP_MediaPlay);
-//    }
 }
 
 void PlayControlWidget::enterEvent(QEvent *event)
@@ -212,7 +202,6 @@ void PlayControlWidget::slotUpdateTheme()
 
 void PlayControlWidget::slotPreClicked()
 {
-    // notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_pgup);
     pagejump(true);
 }
 
@@ -223,7 +212,6 @@ void PlayControlWidget::slotPlayClicked()
 
 void PlayControlWidget::slotNextClicked()
 {
-    // notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_pgdown);
     pagejump(false);
 }
 

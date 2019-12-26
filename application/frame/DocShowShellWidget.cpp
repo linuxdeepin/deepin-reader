@@ -1,5 +1,6 @@
 #include "DocShowShellWidget.h"
 #include <DDialogCloseButton>
+#include <QDesktopWidget>
 #include <QVBoxLayout>
 #include "DocummentFileHelper.h"
 #include "FileViewWidget.h"

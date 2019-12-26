@@ -5,7 +5,7 @@
 
 #include "docview/docummentproxy.h"
 #include "subjectObserver/IObserver.h"
-#include "controller/MsgSubject.h"
+
 #include "controller/NotifySubject.h"
 
 /**
@@ -127,8 +127,8 @@ private slots:
 
 private:
     DocummentProxy          *m_pDocummentProxy = nullptr;   //  文档操作代理类
-    MsgSubject              *m_pMsgSubject = nullptr;
-    NotifySubject           *m_pNotifySubject = nullptr;
+
+    SubjectThread           *m_pNotifySubject = nullptr;
 
     QList<int>              m_pMsgList;
     QList<QString>          m_pKeyMsgList;

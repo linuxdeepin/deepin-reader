@@ -15,18 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "application.h"
-#include "controller/NotifySubject.h"
-#include "subjectObserver/MsgHeader.h"
-#include "utils/utils.h"
-#include <DApplicationSettings>
+
 #include <QIcon>
 #include <QTranslator>
 #include <QDebug>
+
 #include "subjectObserver/ModuleHeader.h"
-
-#include "controller/ObjectEventFilter.h"
-
-#include "controller/MsgSubject.h"
+#include "subjectObserver/MsgHeader.h"
 #include "controller/NotifySubject.h"
 
 namespace {
@@ -61,13 +56,11 @@ Application::Application(int &argc, char **argv)
 
     initChildren();
 
-    g_MsgSubject::getInstance()->startThreadRun();
     g_NotifySubject::getInstance()->startThreadRun();
 }
 
 Application::~Application()
 {
-    g_MsgSubject::getInstance()->stopThreadRun();
     g_NotifySubject::getInstance()->stopThreadRun();
 }
 
