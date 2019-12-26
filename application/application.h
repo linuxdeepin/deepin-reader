@@ -40,7 +40,6 @@ protected:
     void handleQuitAction() Q_DECL_OVERRIDE;
 
 public:
-//    ConfigSetter *setter = nullptr;
     DBManager *dbM = nullptr;
 
 private:

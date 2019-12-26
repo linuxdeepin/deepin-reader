@@ -27,9 +27,11 @@
 
 #include <QStandardPaths>
 
+#include "subjectObserver/MsgHeader.h"
+
 namespace {
 
-const QString DATABASE_PATH = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/deep-reader";
+const QString DATABASE_PATH = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + ConstantMsg::g_app_name;
 const QString DATABASE_NAME = "deepinreader.db";
 //const QString EMPTY_HASH_STR = utils::base::hash(QString(" "));
 

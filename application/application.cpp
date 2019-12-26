@@ -36,13 +36,12 @@ Application::Application(int &argc, char **argv)
     // setAttribute(Qt::AA_ForceRasterWidgets);
 
     initI18n();
-    //(ConstantMsg::g_app_name);
 
-    setApplicationName("deepin-reader");
+    setApplicationName(ConstantMsg::g_app_name);
     setOrganizationName("deepin");
     setWindowIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
     setApplicationDisplayName(tr("Document Viewer"));
-    setApplicationVersion(DApplication::buildVersion("20191221"));
+    setApplicationVersion(DApplication::buildVersion("20191227"));
     setApplicationAcknowledgementPage(Constant::sAcknowledgementLink);
 
     QPixmap px(QIcon::fromTheme(ConstantMsg::g_app_name).pixmap(256 * qApp->devicePixelRatio(), 256 * qApp->devicePixelRatio()));
@@ -72,7 +71,6 @@ void Application::handleQuitAction()
 void Application::initChildren()
 {
     dbM = DBManager::instance();
-    //   setter = ConfigSetter::instance();
 }
 
 void Application::initI18n()

@@ -27,8 +27,6 @@ const QString sPs_Filter = "Ps files (*.ps)";
 const QString sXps_Filter = "Xps files (*.xps)";
 const QString sDjvu_Filter = "Djvu files (*.djvu)";
 const QString sQStringSep = "@#$!!#$$@@#&!@#$";
-
-const QString sLogoPath = ":/resources/logo/deepin-reader.svg";
 }  // namespace Constant
 
 // 图标类型
