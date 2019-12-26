@@ -3,7 +3,7 @@
 #include "controller/DataManager.h"
 #include "frame/DocummentFileHelper.h"
 
-ThumbnailWidget::ThumbnailWidget(CustomWidget *parent)
+ThumbnailWidget::ThumbnailWidget(DWidget *parent)
     : CustomWidget(QString("ThumbnailWidget"), parent)
 {
     m_ThreadLoadImage.setThumbnail(this);
@@ -92,7 +92,7 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 //  添加项
 void ThumbnailWidget::addThumbnailItem(const int &iIndex)
 {
-    auto widget = new ThumbnailItemWidget();
+    auto widget = new ThumbnailItemWidget(this);
     widget->setLabelPage(iIndex);
 
     auto item = new QListWidgetItem(m_pThumbnailListWidget);

@@ -17,7 +17,7 @@ class ThumbnailItemWidget : public CustomItemWidget
     Q_DISABLE_COPY(ThumbnailItemWidget)
 
 public:
-    explicit ThumbnailItemWidget(CustomItemWidget *parent = nullptr);
+    explicit ThumbnailItemWidget(DWidget *parent = nullptr);
 
 public:
     // IObserver interface

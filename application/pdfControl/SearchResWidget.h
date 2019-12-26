@@ -63,7 +63,7 @@ class SearchResWidget : public CustomWidget
     Q_DISABLE_COPY(SearchResWidget)
 
 public:
-    explicit SearchResWidget(CustomWidget *parent = nullptr);
+    explicit SearchResWidget(DWidget *parent = nullptr);
     ~SearchResWidget() Q_DECL_OVERRIDE;
 
 signals:

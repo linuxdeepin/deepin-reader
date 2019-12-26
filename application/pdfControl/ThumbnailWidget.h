@@ -102,7 +102,7 @@ class ThumbnailWidget : public CustomWidget
     Q_DISABLE_COPY(ThumbnailWidget)
 
 public:
-    explicit ThumbnailWidget(CustomWidget *parent = nullptr);
+    explicit ThumbnailWidget(DWidget *parent = nullptr);
     ~ThumbnailWidget() Q_DECL_OVERRIDE;
 
 signals:

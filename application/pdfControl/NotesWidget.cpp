@@ -2,7 +2,7 @@
 #include "controller/DataManager.h"
 #include "frame/DocummentFileHelper.h"
 
-NotesWidget::NotesWidget(QWidget *parent)
+NotesWidget::NotesWidget(DWidget *parent)
     : CustomWidget(QString("NotesWidget"), parent)
 {
     initWidget();

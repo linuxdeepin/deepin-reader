@@ -54,7 +54,7 @@ class NotesWidget : public CustomWidget
     Q_DISABLE_COPY(NotesWidget)
 
 public:
-    explicit NotesWidget(QWidget *parent = nullptr);
+    explicit NotesWidget(DWidget *parent = nullptr);
 
 
     void prevPage();

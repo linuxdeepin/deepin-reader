@@ -53,7 +53,7 @@ class BookMarkWidget : public CustomWidget
     Q_DISABLE_COPY(BookMarkWidget)
 
 public:
-    explicit BookMarkWidget(QWidget *parent = nullptr);
+    explicit BookMarkWidget(DWidget *parent = nullptr);
     ~BookMarkWidget() Q_DECL_OVERRIDE;
 
     void prevPage();

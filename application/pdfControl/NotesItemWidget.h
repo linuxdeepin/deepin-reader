@@ -24,7 +24,7 @@ class NotesItemWidget : public CustomItemWidget
     Q_DISABLE_COPY(NotesItemWidget)
 
 public:
-    explicit NotesItemWidget(QWidget *parent = nullptr);
+    explicit NotesItemWidget(DWidget *parent = nullptr);
 
 public:
     void setTextEditText(const QString &);

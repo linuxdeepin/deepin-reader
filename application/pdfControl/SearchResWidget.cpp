@@ -3,7 +3,7 @@
 #include "frame/DocummentFileHelper.h"
 #include "frame/LeftSidebarWidget.h"
 
-SearchResWidget::SearchResWidget(CustomWidget *parent)
+SearchResWidget::SearchResWidget(DWidget *parent)
     : CustomWidget(QString("SearchResWidget"), parent)
 {
     m_loadSearchResThread.setSearchResW(this);
@@ -216,7 +216,7 @@ void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
 
 void SearchResWidget::addSearchsItem(const int &page, const QString &text, const int &resultNum)
 {
-    auto itemWidget = new NotesItemWidget;
+    auto itemWidget = new NotesItemWidget(this);
     itemWidget->setNoteSigne(false);
     itemWidget->setLabelPage(page, 1);
     itemWidget->setTextEditText(text);

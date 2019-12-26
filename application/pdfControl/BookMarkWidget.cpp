@@ -5,7 +5,7 @@
 #include "BookMarkItemWidget.h"
 #include "application.h"
 
-BookMarkWidget::BookMarkWidget(QWidget *parent)
+BookMarkWidget::BookMarkWidget(DWidget *parent)
     : CustomWidget(QString("BookMarkWidget"), parent)
 {
     setFocusPolicy(Qt::ClickFocus);

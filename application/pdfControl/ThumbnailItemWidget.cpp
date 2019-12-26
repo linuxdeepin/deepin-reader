@@ -1,7 +1,7 @@
 #include "ThumbnailItemWidget.h"
 #include "controller/DataManager.h"
 
-ThumbnailItemWidget::ThumbnailItemWidget(CustomItemWidget *parent)
+ThumbnailItemWidget::ThumbnailItemWidget(DWidget *parent)
     : CustomItemWidget("ThumbnailItemWidget", parent)
 {
     setWindowFlags(Qt::FramelessWindowHint);
