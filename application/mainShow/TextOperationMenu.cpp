@@ -36,8 +36,7 @@ void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, con
     m_pRemoveHighLight->setEnabled(bHigh);
 
     m_pColorWidgetAction->setBtnAddLightState(bHigh);
-    // m_pColorWidgetAction->setPalette(palette());
-    //m_pColorWidgetAction->setcolor(DGuiApplicationHelper::instance()->applicationPalette().color(QPalette::ToolTipText));
+
     //  当前显示状态状态
     int nState = DataManager::instance()->CurShowState();
     if (nState == FILE_FULLSCREEN) {
