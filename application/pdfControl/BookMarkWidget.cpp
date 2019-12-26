@@ -110,6 +110,7 @@ void BookMarkWidget::slotAddBookMark(const int &nPage)
 
     auto item = addBookMarkItem(nPage);
     if (item) {
+        DataManager::instance()->setBIsUpdate(true);
         pageList.append(nPage);
         dApp->dbM->setBookMarkList(pageList);
     }
@@ -253,8 +254,8 @@ void BookMarkWidget::deleteIndexPage(const int &pageIndex)
 
     auto dproxy = DocummentFileHelper::instance();
     if (dproxy) {
-        dproxy->setBookMarkState(pageIndex, false);
         DataManager::instance()->setBIsUpdate(true);
+        dproxy->setBookMarkState(pageIndex, false);
 
         int nCurPage = dproxy->currentPageNo();
         if (nCurPage == pageIndex) {  //  当前页被删了
