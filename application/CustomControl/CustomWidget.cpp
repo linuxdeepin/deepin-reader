@@ -34,8 +34,7 @@ void CustomWidget::updateWidgetTheme()
 //  操作 消息
 void CustomWidget::sendMsg(const int &msgType, const QString &msgContent)
 {
-    Q_UNUSED(msgType);
-    Q_UNUSED(msgContent);
+    notifyMsg(msgType, msgContent);
 }
 
 //  通知消息

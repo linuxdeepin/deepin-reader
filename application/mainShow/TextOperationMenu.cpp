@@ -1,13 +1,17 @@
 #include "TextOperationMenu.h"
-#include "ColorWidgetAction.h"
-#include "subjectObserver/MsgHeader.h"
-#include "controller/NotifySubject.h"
 
-#include "controller/DataManager.h"
-#include "subjectObserver/ModuleHeader.h"
-#include "application.h"
 #include <DFontSizeManager>
 #include <DGuiApplicationHelper>
+
+#include "application.h"
+
+#include "controller/NotifySubject.h"
+#include "controller/DataManager.h"
+
+#include "ColorWidgetAction.h"
+
+#include "subjectObserver/MsgHeader.h"
+#include "subjectObserver/ModuleHeader.h"
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)
     : DMenu(parent)
