@@ -35,6 +35,10 @@ protected:
 
 private:
     bool m_bPaint = false;  // 是否绘制选中item
+
+    // QWidget interface
+protected:
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 };
 
 #endif  // THUMBNAILITEMWIDGET_H

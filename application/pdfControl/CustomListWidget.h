@@ -31,6 +31,10 @@ private slots:
 
 //private:
 //    int m_nRotate = 0;           // 缩略图旋转角度
+
+    // QWidget interface
+protected:
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 };
 
 #endif // CUSTOMLISTWIDGET_H

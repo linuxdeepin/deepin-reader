@@ -15,7 +15,7 @@ class CustomItemWidget : public CustomWidget
     Q_DISABLE_COPY(CustomItemWidget)
 
 public:
-    CustomItemWidget(const QString &, CustomWidget *parent = nullptr);
+    CustomItemWidget(const QString &, QWidget *parent = nullptr);
 
 public:
     void setLabelImage(const QImage &);

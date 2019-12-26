@@ -5,7 +5,7 @@
 #include <QTextLayout>
 #include "utils/utils.h"
 
-NotesItemWidget::NotesItemWidget(CustomItemWidget *parent)
+NotesItemWidget::NotesItemWidget(QWidget *parent)
     : CustomItemWidget(QString("NotesItemWidget"), parent)
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this,

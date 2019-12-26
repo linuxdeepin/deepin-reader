@@ -43,7 +43,7 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
     return 0;
 }
 
-// 初始化界面s
+// 初始化界面
 void ThumbnailWidget::initWidget()
 {
     m_pThumbnailListWidget = new CustomListWidget(this);

@@ -92,3 +92,14 @@ void CustomListWidget::slotShowSelectItem(QListWidgetItem *item)
         }
     }
 }
+
+void CustomListWidget::resizeEvent(QResizeEvent *event)
+{
+    DListWidget::resizeEvent(event);
+
+    auto parentWidget = reinterpret_cast<DWidget *>(this->parent());
+    if (parentWidget) {
+        resize(parentWidget->width(), this->height());
+//        qDebug() << "  CustomListWidget  width:" << this->width() << "  height:" << this->height();
+    }
+}

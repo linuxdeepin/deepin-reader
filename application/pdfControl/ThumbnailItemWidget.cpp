@@ -82,3 +82,14 @@ void ThumbnailItemWidget::initWidget()
 
     this->setLayout(t_hLayout);
 }
+
+void ThumbnailItemWidget::resizeEvent(QResizeEvent *event)
+{
+    CustomItemWidget::resizeEvent(event);
+
+    auto parentWidget = reinterpret_cast<DWidget *>(this->parent());
+    if (parentWidget) {
+        resize(parentWidget->width(), this->height());
+//        qDebug() << "  ThumbnailItemWidget  width:" << this->width() << "  height:" << this->height();
+    }
+}
