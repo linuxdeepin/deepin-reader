@@ -53,6 +53,7 @@ void ThumbnailWidget::initWidget()
     auto hLine = new DHorizontalLine(this);
 
     auto m_pvBoxLayout = new QVBoxLayout;
+    m_pvBoxLayout->setContentsMargins(0, 0, 0, 0);
     m_pvBoxLayout->addWidget(m_pThumbnailListWidget);
     m_pvBoxLayout->addWidget(hLine);
     m_pvBoxLayout->addWidget(m_pPageWidget);

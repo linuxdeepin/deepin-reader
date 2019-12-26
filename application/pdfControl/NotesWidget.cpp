@@ -465,7 +465,7 @@ void NotesWidget::addNewItem(const stHighlightContent &note)
         return;
     }
 
-    NotesItemWidget *itemWidget = new NotesItemWidget();
+    NotesItemWidget *itemWidget = new NotesItemWidget(this);
     itemWidget->setNoteUUid(note.struuid);
     itemWidget->setLabelPage(static_cast<int>(note.ipage), 1);  // reinterpret_cast
     itemWidget->setTextEditText(note.strcontents);
@@ -493,7 +493,7 @@ void NotesWidget::addNewItem(const stHighlightContent &note)
 void NotesWidget::addNewItem(const QImage &image, const int &page, const QString &uuid,
                              const QString &text)
 {
-    auto itemWidget = new NotesItemWidget();
+    auto itemWidget = new NotesItemWidget(this);
     itemWidget->setLabelImage(image);
     itemWidget->setNoteUUid(uuid);
     itemWidget->setLabelPage(page, 1);

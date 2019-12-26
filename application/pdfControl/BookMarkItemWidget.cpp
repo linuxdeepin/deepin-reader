@@ -1,7 +1,7 @@
 #include "BookMarkItemWidget.h"
 #include <DApplicationHelper>
 
-BookMarkItemWidget::BookMarkItemWidget(CustomItemWidget *parent)
+BookMarkItemWidget::BookMarkItemWidget(QWidget *parent)
     : CustomItemWidget("BookMarkItemWidget", parent)
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
@@ -103,7 +103,7 @@ void BookMarkItemWidget::initWidget()
     m_pPicture->setAlignment(Qt::AlignCenter);
 
     auto m_pHLayout = new QHBoxLayout;
-    m_pHLayout->setContentsMargins(1, 0, 1, 0);
+    m_pHLayout->setContentsMargins(0, 0, 10, 0);
     m_pHLayout->setSpacing(1);
     m_pHLayout->addWidget(m_pPicture);
     m_pHLayout->addItem(m_pRightVLayout);
@@ -115,19 +115,20 @@ void BookMarkItemWidget::paintEvent(QPaintEvent *event)
 {
     CustomItemWidget::paintEvent(event);
 
-    //    QPalette p(m_pPicture->palette());
-    //    QColor color;
-
     //  涉及到 主题颜色
     if (m_bPaint) {
-        //        color = QColor(QString("#0081FF"));
-        //        p.setColor(QPalette::Text, p.highlight().color());
         m_pPicture->setForegroundRole(DPalette::Highlight);
     } else {
-        //        color = QColor::fromRgbF(0, 0, 0, 0.08);
-        //        p.setColor(QPalette::Text, color);
         m_pPicture->setForegroundRole(QPalette::Shadow);
     }
+}
 
-    //    m_pPicture->setPalette(p);
+void BookMarkItemWidget::resizeEvent(QResizeEvent *event)
+{
+    CustomItemWidget::resizeEvent(event);
+
+    auto parentWidget = reinterpret_cast<QWidget *>(this->parent());
+    if (parentWidget) {
+        resize(parentWidget->width(), this->height());
+    }
 }

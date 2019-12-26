@@ -5,7 +5,7 @@
 #include "BookMarkItemWidget.h"
 #include "application.h"
 
-BookMarkWidget::BookMarkWidget(CustomWidget *parent)
+BookMarkWidget::BookMarkWidget(QWidget *parent)
     : CustomWidget(QString("BookMarkWidget"), parent)
 {
     setFocusPolicy(Qt::ClickFocus);
@@ -445,7 +445,7 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
         auto item = m_pBookMarkListWidget->insertWidgetItem(page);
         item->setSizeHint(QSize(LEFTMINWIDTH, 80));
 
-        auto t_widget = new BookMarkItemWidget;
+        auto t_widget = new BookMarkItemWidget(this);
         connect(t_widget, SIGNAL(sigDeleleteItem(const int &)), SLOT(slotDeleteBookItem(const int &)));
         t_widget->setLabelImage(img);
         t_widget->setLabelPage(page, 1);

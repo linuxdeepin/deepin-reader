@@ -39,7 +39,7 @@ void PagingWidget::initWidget()
     m_pJumpPageSpinBox->setMinimum(1);
     m_pJumpPageSpinBox->setValue(1);
     m_pJumpPageSpinBox->setMinimumWidth(60);
-    m_pJumpPageSpinBox->setFixedHeight(36);
+    m_pJumpPageSpinBox->setFixedHeight(38);
     m_pJumpPageSpinBox->installEventFilter(this);
     m_pJumpPageSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
     DFontSizeManager::instance()->bind(m_pJumpPageSpinBox, DFontSizeManager::T6);

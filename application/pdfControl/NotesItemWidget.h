@@ -80,6 +80,10 @@ private:
     QString m_strNote;   // 注释内容
     bool m_bPaint = false;
     DMenu *m_menu = nullptr;
+
+    // QWidget interface
+protected:
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 };
 
 #endif // NOTESITEMWIDGET_H

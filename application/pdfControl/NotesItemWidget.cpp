@@ -155,7 +155,7 @@ void NotesItemWidget::initWidget()
     auto m_pHLayout = new QHBoxLayout;
 
     m_pHLayout->setSpacing(1);
-    m_pHLayout->setContentsMargins(0, 0, 0, 0);
+    m_pHLayout->setContentsMargins(0, 0, 10, 0);
 //    m_pHLayout->addWidget(m_pPicture);
     m_pHLayout->addItem(t_vLayoutPicture);
     m_pHLayout->addItem(t_vLayout);
@@ -267,4 +267,14 @@ QString NotesItemWidget::calcText(const QFont &font, const QString &note,
 
     return text;
 #endif
+}
+
+void NotesItemWidget::resizeEvent(QResizeEvent *event)
+{
+    CustomItemWidget::resizeEvent(event);
+
+    auto parentWidget = reinterpret_cast<QWidget *>(this->parent());
+    if (parentWidget) {
+        resize(parentWidget->width(), this->height());
+    }
 }

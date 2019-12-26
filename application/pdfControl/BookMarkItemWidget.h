@@ -21,7 +21,7 @@ class BookMarkItemWidget : public CustomItemWidget
     Q_DISABLE_COPY(BookMarkItemWidget)
 
 public:
-    explicit BookMarkItemWidget(CustomItemWidget *parent = nullptr);
+    explicit BookMarkItemWidget(QWidget *parent = nullptr);
 
 signals:
     void sigDeleleteItem(const int &);
@@ -43,6 +43,10 @@ protected:
 private:
     bool m_bPaint = false;                    // 是否绘制选中item
     DMenu *m_menu = nullptr;
+
+    // QWidget interface
+protected:
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 };
 
 #endif // BOOKMARKITEMWIDGET_H
