@@ -6,7 +6,6 @@
 #include <DPalette>
 #include <DWidget>
 
-#include "controller/MsgSubject.h"
 #include "controller/NotifySubject.h"
 #include "subjectObserver/IObserver.h"
 #include "subjectObserver/ModuleHeader.h"
@@ -55,8 +54,7 @@ protected:
     QList<QString>      m_pKeyMsgList;     //  需要处理的按键消息列表
 
 private:
-    MsgSubject      *m_pMsgSubject = nullptr;
-    NotifySubject   *m_pNotifySubject = nullptr;
+    SubjectThread   *m_pNotifySubject = nullptr;
 };
 
 #endif  // CUSTOMWIDGET_H
