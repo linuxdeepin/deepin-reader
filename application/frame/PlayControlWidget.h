@@ -5,7 +5,7 @@
 #include <DFloatingWidget>
 #include <DIconButton>
 #include "subjectObserver/IObserver.h"
-#include "controller/MsgSubject.h"
+
 #include "controller/NotifySubject.h"
 
 DWIDGET_USE_NAMESPACE
@@ -33,16 +33,16 @@ protected:
     void leaveEvent(QEvent *)Q_DECL_OVERRIDE;
 
 private:
-    NotifySubject   *m_pNotifySubject;
-    MsgSubject      *m_pMsgSubject;
-    QTimer *m_ptimer;
-    DIconButton *m_pbtnpre;
-    DIconButton *m_pbtnplay;
-    DIconButton *m_pbtnnext;
-    DIconButton *m_pbtnexit;
-    bool m_bcanshow;
-    bool m_bautoplaying;
-    bool m_bfirstshow;
+    SubjectThread   *m_pNotifySubject = nullptr;
+
+    QTimer *m_ptimer = nullptr;
+    DIconButton *m_pbtnpre = nullptr;
+    DIconButton *m_pbtnplay = nullptr;
+    DIconButton *m_pbtnnext = nullptr;
+    DIconButton *m_pbtnexit = nullptr;
+    bool m_bcanshow = false;
+    bool m_bautoplaying = false;
+    bool m_bfirstshow = false;
     //  主题更新信号
 signals:
     void sigUpdateTheme();

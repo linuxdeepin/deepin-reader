@@ -30,11 +30,6 @@ PlayControlWidget::PlayControlWidget(DWidget *parnet)
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
     }
-
-    m_pMsgSubject = g_MsgSubject::getInstance();
-    if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
-    }
 }
 
 PlayControlWidget::~PlayControlWidget()
@@ -44,10 +39,6 @@ PlayControlWidget::~PlayControlWidget()
     if (m_pNotifySubject) {
         m_pNotifySubject->removeObserver(this);
     }
-
-    if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
-    }
 }
 
 int PlayControlWidget::dealWithData(const int &msgType, const QString &msgContent)
@@ -56,8 +47,7 @@ int PlayControlWidget::dealWithData(const int &msgType, const QString &msgConten
         if (KeyStr::g_space == msgContent) {
             changePlayStatus();
         }
-    }
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {
+    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
     }
     return  0;
@@ -65,19 +55,23 @@ int PlayControlWidget::dealWithData(const int &msgType, const QString &msgConten
 
 void PlayControlWidget::sendMsg(const int &msgType, const QString &msgContent)
 {
-    m_pMsgSubject->sendMsg(msgType, msgContent);
+    notifyMsg(msgType, msgContent);
 }
 
 void PlayControlWidget::notifyMsg(const int &msgType, const QString &msgContent)
 {
-    m_pMsgSubject->sendMsg(msgType, msgContent);
+    if (m_pNotifySubject) {
+        m_pNotifySubject->notifyMsg(msgType, msgContent);
+    }
 }
 
 void PlayControlWidget::activeshow(int ix, int iy)
 {
     if (m_bfirstshow) {
         m_bfirstshow = false;
-        connect(DocummentProxy::instance(), &DocummentProxy::signal_autoplaytoend, this, [this] {this->changePlayStatus(); qDebug() << "$$$%%%%$$####%$";});
+        connect(DocummentProxy::instance(), &DocummentProxy::signal_autoplaytoend, this, [this] {
+            this->changePlayStatus(); qDebug() << "$$$%%%%$$####%$";
+        });
     }
     if (m_ptimer->isActive())
         m_ptimer->stop();
@@ -97,9 +91,7 @@ void PlayControlWidget::killshow()
 
 void PlayControlWidget::initWidget()
 {
-    QWidget *pwidget = new QWidget;
-    this->setWidget(pwidget);
-    QHBoxLayout *playout = new QHBoxLayout(pwidget);
+    QHBoxLayout *playout = new QHBoxLayout;
     playout->setContentsMargins(10, 10, 10, 10);
     playout->setSpacing(10);
     m_pbtnpre = createBtn(QString("previous_normal"));
@@ -116,9 +108,9 @@ void PlayControlWidget::initWidget()
     playout->addWidget(m_pbtnnext);
     playout->addWidget(m_pbtnexit);
 
-    setWidget(pwidget);
-    // this->setLayout(playout);
-
+    DWidget *pwidget = new DWidget;
+    pwidget->setLayout(playout);
+    this->setWidget(pwidget);
 }
 
 void PlayControlWidget::initConnections()
@@ -226,7 +218,6 @@ void PlayControlWidget::slotPreClicked()
 
 void PlayControlWidget::slotPlayClicked()
 {
-    changePlayStatus();
     notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_space);
 }
 
