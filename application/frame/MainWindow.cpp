@@ -50,7 +50,8 @@ MainWindow::MainWindow(DMainWindow *parent)
         m_pNotifySubject->addObserver(this);
     }
 
-    setMinimumSize(752, 500);
+    //暂定752*356，后期根据最合适效果设定
+    setMinimumSize(752, 356);
 
     showDefaultSize();
 
