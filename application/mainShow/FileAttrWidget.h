@@ -15,7 +15,6 @@
 #include "subjectObserver/IObserver.h"
 
 #include "controller/NotifySubject.h"
-#include "controller/MsgSubject.h"
 
 DWIDGET_USE_NAMESPACE
 /**
@@ -49,9 +48,8 @@ private slots:
     void slotBtnCloseClicked();
 
 private:
-    QVBoxLayout *m_pVBoxLayout = nullptr;
-    NotifySubject   *m_pNotifySubject = nullptr;
-    MsgSubject      *m_pMsgSubject = nullptr;
+    QVBoxLayout     *m_pVBoxLayout = nullptr;
+    SubjectThread   *m_pNotifySubject = nullptr;
 
     //    DLabel *labelImage = nullptr;
     /*ImageFrame*/ ImageLabel *frameImage = nullptr;

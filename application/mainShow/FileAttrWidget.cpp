@@ -28,21 +28,12 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
     }
-
-    m_pMsgSubject = g_MsgSubject::getInstance();
-    if (m_pMsgSubject) {
-        m_pMsgSubject->addObserver(this);
-    }
 }
 
 FileAttrWidget::~FileAttrWidget()
 {
     if (m_pNotifySubject) {
         m_pNotifySubject->removeObserver(this);
-    }
-
-    if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
     }
 }
 
