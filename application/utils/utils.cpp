@@ -426,11 +426,6 @@ QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
     return keys.join("+");
 }
 
-QString Utils::getKeyshortcutFromKeymap(Settings *settings, const QString &keyCategory, const QString &keyName)
-{
-    return settings->settings->option(QString("shortcuts.%1.%2").arg(keyCategory).arg(keyName))->value().toString();
-}
-
 QPixmap Utils::dropShadow(const QPixmap &source, qreal radius, const QColor &color, const QPoint &offset)
 {
     QImage shadow = dropShadow(source, radius, color);
@@ -577,55 +572,6 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
     return false;
 }
 
-//bool Utils::isDraftFile(const QString &filepath)
-//{
-//    QString draftDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first())
-//                       .filePath("blank-files");
-//    QString dir = QFileInfo(filepath).dir().absolutePath();
-
-//    return draftDir == dir;
-//}
-
-//void Utils::toast(const QString &message, QWidget *parent)
-//{
-/*
-   Toast *toast = new Toast(parent);
-   int avaliableHeight = parent->height() - toast->height();
-   int toastPaddingBottom = qMin(avaliableHeight / 2, 100);
-
-   QObject::connect(toast, &Toast::visibleChanged, parent, [toast] (bool visible) {
-       if (visible == false) {
-           toast->deleteLater();
-       }
-   });
-
-   toast->setText(message);
-   toast->setIcon(Utils::getQrcPath("logo_24.svg"));
-   toast->pop();
-
-   toast->move((parent->width() - toast->width()) / 2,
-               avaliableHeight - toastPaddingBottom);*/
-//}
-
-//const QStringList Utils::getEncodeList()
-//{
-//    QStringList encodeList;
-
-//    for (int mib : QTextCodec::availableMibs()) {
-//        QTextCodec *codec = QTextCodec::codecForMib(mib);
-//        QString encodeName = QString(codec->name()).toUpper();
-
-//        if (encodeName != "UTF-8" && !encodeList.contains(encodeName)) {
-//            encodeList.append(encodeName);
-//        }
-//    }
-
-//    encodeList.sort();
-//    encodeList.prepend("UTF-8");
-
-//    return encodeList;
-//}
-
 QPixmap Utils::renderSVG(const QString &filePath, const QSize &size)
 {
     QImageReader reader;
@@ -659,17 +605,6 @@ QString Utils::getSuffixList()
     return QString("%1;;%2;;%3;;%4;;%5").arg(Constant::sPdf_Filter).arg(Constant::sTiff_Filter).arg(Constant::sPs_Filter).arg(Constant::sXps_Filter).arg(Constant::sDjvu_Filter);
 }
 
-//  获取 action 图标
-//QIcon Utils::getActionIcon(const QString &iconName)
-//{
-//    QIcon icon = QIcon::fromTheme(iconName);
-
-//    if (icon.isNull()) {
-//        icon = QIcon(QLatin1String(":icons/") + iconName);
-//    }
-//    return  icon;
-//}
-
 QString Utils::getInputDataSize(const qint64 &dSize)
 {
     if (dSize < 1024) {
@@ -687,13 +622,6 @@ QString Utils::getInputDataSize(const qint64 &dSize)
     return QString::number(d, 'f', 1) + " GB";
 }
 
-//QFont Utils::getPixFont(const QString &fontFamily, const int &fontSize)
-//{
-//    QFont font(fontFamily);
-//    font.setPixelSize(fontSize);
-
-//    return font;
-//}
 
 bool Utils::runApp(const QString &args)
 {

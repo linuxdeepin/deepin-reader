@@ -23,7 +23,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include "controller/settings.h"
 #include <QKeyEvent>
 #include <QObject>
 #include <QPainter>
@@ -42,7 +41,7 @@ public:
     static void setFontSize(QPainter &painter, int textSize);
     static void applyQss(QWidget *widget, const QString &qssName);
     static QString getKeyshortcut(QKeyEvent *keyEvent);
-    static QString getKeyshortcutFromKeymap(Settings *settings, const QString &keyCategory, const QString &keyName);
+
     static bool fileExists(const QString &path);
     static bool fileIsWritable(const QString &path);
     static bool fileIsHome(const QString &path);
@@ -58,17 +57,14 @@ public:
     static qreal easeOutQuint(qreal x);
     static QVariantMap getThemeMapFromPath(const QString &filepath);
     static bool isMimeTypeSupport(const QString &filepath);
-//    static bool isDraftFile(const QString &filepath);
-//    static void toast(const QString &message, QWidget *parent = nullptr);
-//    static const QStringList getEncodeList();
+
     static QPixmap renderSVG(const QString &filePath, const QSize &size);
 
     static QString getConfigPath();
     static QString getSuffixList();
-//    static QIcon getActionIcon(const QString &);
 
     static QString getInputDataSize(const qint64 &);
-//    static QFont getPixFont(const QString &, const int &);
+
     static bool runApp(const QString &args);
     static QImage roundImage(const QPixmap &img_in, int radius);
     static QPixmap roundQPixmap(const QPixmap &img_in, int radius);

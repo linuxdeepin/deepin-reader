@@ -1,0 +1,10 @@
+[main]
+host = https://www.transifex.com
+minimum_perc = 80
+mode = developer
+
+[deepin-reader.dwidget]
+file_filter = translations/deepin-reader_<lang>.ts
+source_file = translations/deepin-reader_en_US.ts
+source_lang = en
+type = QT
