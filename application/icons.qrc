@@ -3,7 +3,6 @@
     <qresource prefix="/">
         <file>icons/deepin/builtin/light/actions/dr_annotation_36px.svg</file>
         <file>icons/deepin/builtin/light/actions/dr_bookmark_36px.svg</file>
-        <file>icons/deepin/builtin/light/actions/dr_magnifier_36px.svg</file>
         <file>icons/deepin/builtin/light/actions/dr_thumbnail_36px.svg</file>
         <file>icons/deepin/builtin/light/actions/dr_thumbnails_36px.svg</file>
         <file>icons/deepin/builtin/light/actions/dr_viewchange_36px.svg</file>
@@ -22,7 +21,6 @@
         <file>icons/deepin/builtin/dark/actions/dr_bookmark_36px.svg</file>
         <file>icons/deepin/builtin/dark/actions/dr_defaultshape_36px.svg</file>
         <file>icons/deepin/builtin/dark/actions/dr_handleshape_36px.svg</file>
-        <file>icons/deepin/builtin/dark/actions/dr_magnifier_36px.svg</file>
         <file>icons/deepin/builtin/dark/actions/dr_thumbnail_36px.svg</file>
         <file>icons/deepin/builtin/dark/actions/dr_thumbnails_36px.svg</file>
         <file>icons/deepin/builtin/dark/actions/dr_viewchange_36px.svg</file>
@@ -47,5 +45,7 @@
         <file>icons/deepin/builtin/light/actions/dr_defaultshape_small_16px.svg</file>
         <file>icons/deepin/builtin/light/actions/dr_handleshape_small_16px.svg</file>
         <file>icons/deepin/builtin/deepin-reader.svg</file>
+        <file>icons/deepin/builtin/light/actions/dr_magnifier_36px.svg</file>
+        <file>icons/deepin/builtin/dark/actions/dr_magnifier_36px.svg</file>
     </qresource>
 </RCC>
