@@ -1,4 +1,4 @@
-QT += core gui svg sql printsupport #gui-private
+QT += core gui svg sql printsupport
 QT += dtkwidget
 QT += xml
 
@@ -31,7 +31,7 @@ HEADERS +=\
     application.h
 
 TRANSLATIONS += \
-    translations/deepin-reader.ts\
+    translations/deepin-reader_en_US.ts\
     translations/deepin-reader_zh_CN.ts
 
 DISTFILES += \
@@ -42,10 +42,6 @@ DISTFILES += \
     themes/deepin.theme
 
 APPICONDIR = $$PREFIX/share/icons/deepin/apps/scalable
-
-#app_icon.path = /usr/share/icons/hicolor/scalable/apps
-#app_icon.files = $$PWD/resources/image/logo/deepin-reader.svg
-
 
 isEmpty(BINDIR):BINDIR=/usr/bin
 isEmpty(APPDIR):APPDIR=/usr/share/applications
@@ -59,13 +55,19 @@ desktop.files = $$PWD/deepin-reader.desktop
 icon_files.path = /usr/share/icons/hicolor/scalable/apps
 icon_files.files = $$PWD/icons/deepin/builtin/deepin-reader.svg
 
-# Automating generation .qm files from .ts files
-!system($$PWD/translate_generation.sh): error("Failed to generate translation")
+CONFIG(release, debug|release) {
+    #遍历目录中的ts文件，调用lrelease将其生成为qm文件
+    for(tsfile, TRANSLATIONS) {
+        qmfile = $$replace(tsfile, .ts$, .qm)
+        system(lrelease $$tsfile -qm $$qmfile) | error("Failed to lrelease")
+    }
+    #将qm文件添加到安装包
+    dtk_translations.path = /usr/share/$$TARGET/translations
+    dtk_translations.files = $$PWD/translations/*.qm
+    INSTALLS += dtk_translations
+}
 
-translations.path = /usr/share/deepin-reader/translations
-translations.files = $$PWD/translations/*.qm
-
-INSTALLS += target desktop icon_files translations
+INSTALLS += target desktop icon_files
 
 
 
