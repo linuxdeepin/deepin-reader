@@ -594,7 +594,6 @@ void PageBase::slot_RenderFinish(QImage image)
     setSelectTextRects();
     d->m_spinner->stop();
     d->m_spinner->hide();
-
 }
 
 void PageBase::clearImage()
