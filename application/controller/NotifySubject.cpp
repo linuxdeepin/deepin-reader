@@ -25,6 +25,7 @@ void NotifySubject::run()
             m_msgList.clear();
         }
 
+        //  保证所有的消息 都被处理
         foreach (auto ms, msgList) {
             NotifyObservers(ms.msgType, ms.msgContent);
         }
@@ -58,14 +59,13 @@ void NotifySubject::notifyMsg(const int &msgType, const QString &msgContent)
 #endif
 }
 
-int NotifySubject::NotifyObservers(const int &msgType, const QString &msgContent)
+void NotifySubject::NotifyObservers(const int &msgType, const QString &msgContent)
 {
-    int nRes = -1;
     QListIterator<IObserver *> iter(m_observerList);
     while (iter.hasNext()) {
         auto obs = iter.next();
         if (obs) {
-            nRes = obs->dealWithData(msgType, msgContent);
+            int nRes = obs->dealWithData(msgType, msgContent);
             if (nRes == ConstantMsg::g_effective_res) {
 
 #ifdef QT_DEBUG
@@ -78,5 +78,4 @@ int NotifySubject::NotifyObservers(const int &msgType, const QString &msgContent
             }
         }
     }
-    return nRes;
 }
