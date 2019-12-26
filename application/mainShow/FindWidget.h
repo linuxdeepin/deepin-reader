@@ -28,7 +28,6 @@
 #include <DSearchEdit>
 
 #include "subjectObserver/IObserver.h"
-#include "controller/MsgSubject.h"
 #include "controller/NotifySubject.h"
 
 DWIDGET_USE_NAMESPACE
@@ -67,8 +66,7 @@ private:
 
 private:
     DSearchEdit     *m_pSearchEdit = nullptr;
-    NotifySubject   *m_pNotifySubject = nullptr;
-    MsgSubject      *m_pMsgSubject = nullptr;
+    SubjectThread   *m_pNotifySubject = nullptr;
 
     QList<int>      m_pMsgList;
 

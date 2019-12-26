@@ -48,21 +48,12 @@ FindWidget::FindWidget(DWidget *parent)
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
     }
-
-    m_pMsgSubject = g_MsgSubject::getInstance();
-    if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
-    }
 }
 
 FindWidget::~FindWidget()
 {
     if (m_pNotifySubject) {
         m_pNotifySubject->removeObserver(this);
-    }
-
-    if (m_pMsgSubject) {
-        m_pMsgSubject->removeObserver(this);
     }
 }
 
@@ -145,11 +136,9 @@ int FindWidget::dealWithData(const int &msgType, const QString &msgContent)
     return 0;
 }
 
-void FindWidget::sendMsg(const int &msgType, const QString &msgContent)
+void FindWidget::sendMsg(const int &, const QString &)
 {
-    if (this->isVisible()) {
-        m_pMsgSubject->sendMsg(msgType, msgContent);
-    }
+
 }
 
 void FindWidget::notifyMsg(const int &msgType, const QString &msgContent)
