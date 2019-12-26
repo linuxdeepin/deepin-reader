@@ -25,13 +25,8 @@ void NotifySubject::run()
             m_msgList.clear();
         }
 
-        QListIterator<MsgStruct> iter(msgList);
-        while (iter.hasNext()) {
-            auto ms = iter.next();
-            int nRes = NotifyObservers(ms.msgType, ms.msgContent);
-            if (nRes == ConstantMsg::g_effective_res) {
-                break;
-            }
+        foreach (auto ms, msgList) {
+            NotifyObservers(ms.msgType, ms.msgContent);
         }
 
         msleep(10);
