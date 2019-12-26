@@ -18,28 +18,38 @@ ColorWidgetAction::ColorWidgetAction(DWidget *pParent)
 void ColorWidgetAction::setBtnAddLightState(const bool &bState)
 {
     m_pClickLabel->setEnabled(!bState);
+    if (!bState)
+        setcolor(true);
+    else {
+        setcolor(false);
+    }
 }
 
-void ColorWidgetAction::setcolor(const QColor &color)
+void ColorWidgetAction::setcolor(bool benable)
 {
     QPalette plt = m_pClickLabel->palette();
-    plt.setColor(QPalette::ToolTipText, color);
+    if (benable) {
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
+            plt.setColor(QPalette::WindowText, QColor("#E0E6F4"));
+        } else {
+            plt.setColor(QPalette::WindowText, QColor(0, 0, 0));
+        }
+    } else {
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
+            QColor color("#CECEDE");
+            color.setAlpha(100);
+            plt.setColor(QPalette::WindowText, color);
+        } else {
+            QColor color("#000000");
+            color.setAlpha(100);
+            plt.setColor(QPalette::WindowText, color);
+        }
+    }
+
     m_pClickLabel->setPalette(plt);
 
 }
 
-void ColorWidgetAction::setPalette(const QPalette &pal)
-{
-    QPalette plt = m_pClickLabel->palette();
-    plt.setColor(QPalette::ToolTipText, pal.color(QPalette::ToolTipText));
-    plt.setColor(QPalette::WindowText, pal.color(QPalette::WindowText));
-    // plt.setColor(QPalette::Foreground, DPalette::TextTips);
-    m_pClickLabel->setPalette(plt);
-
-
-
-    // m_pClickLabel->setForegroundRole(DPalette::TextTips);
-}
 
 void ColorWidgetAction::slotBtnClicked(int index)
 {

@@ -105,9 +105,13 @@ void NotesItemWidget::slotUpdateTheme()
 
 void NotesItemWidget::initWidget()
 {
+    auto t_vLayoutPicture = new QVBoxLayout;
+    t_vLayoutPicture->setContentsMargins(0, 3, 0, 0);
     m_pPicture = new ImageLabel(this);
     m_pPicture->setFixedSize(QSize(48, 68));
     m_pPicture->setAlignment(Qt::AlignCenter);
+    t_vLayoutPicture->addWidget(m_pPicture);
+    t_vLayoutPicture->addStretch(1);
 
     m_pPageNumber = new PageNumberLabel(this);
     m_pPageNumber->setMinimumWidth(31);
@@ -152,7 +156,8 @@ void NotesItemWidget::initWidget()
 
     m_pHLayout->setSpacing(1);
     m_pHLayout->setContentsMargins(0, 0, 0, 0);
-    m_pHLayout->addWidget(m_pPicture);
+//    m_pHLayout->addWidget(m_pPicture);
+    m_pHLayout->addItem(t_vLayoutPicture);
     m_pHLayout->addItem(t_vLayout);
     m_pHLayout->setSpacing(1);
 

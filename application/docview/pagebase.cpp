@@ -656,10 +656,7 @@ void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
 //        setMinimumSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale));
         break;
     default:
-        //        resize(m_imagewidth * scale, m_imageheight * scale);
         setFixedSize(QSize(d->m_imagewidth * scale, d->m_imageheight * scale));
-//        setMaximumSize(QSize(d->m_imagewidth * scale, d->m_imageheight * scale));
-//        setMinimumSize(QSize(d->m_imagewidth * scale, d->m_imageheight * scale));
         break;
     }
     emit signal_update();

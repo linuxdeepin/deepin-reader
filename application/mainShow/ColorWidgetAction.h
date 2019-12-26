@@ -17,8 +17,7 @@ public:
 
 public:
     void setBtnAddLightState(const bool &);
-    void setcolor(const QColor &color);
-    void setPalette(const QPalette &pal);
+    void setcolor(bool benable);
 
 signals:
     void sigBtnGroupClicked(const int &);

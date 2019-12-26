@@ -254,16 +254,11 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     d->m_widget->setMouseTracking(true);
     d->pslidelabel->setMouseTracking(true);
     d->pslideanimationlabel->setMouseTracking(true);
-
     setMouseTracking(true);
 
-
-    QPalette pal(d->m_slidewidget->palette());
-
     //设置背景黑色
+    QPalette pal(d->m_slidewidget->palette());
     pal.setColor(QPalette::Background, Qt::black);
-
-
     d->m_slidewidget->setAutoFillBackground(true);
     d->m_slidewidget->setPalette(pal);
 
@@ -271,7 +266,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     d->m_searchTask = new SearchTask(this);
 
     connect(this->verticalScrollBar(), &QScrollBar::rangeChanged, this, [ = ](int min, int max) {
-        qDebug() << "-------verticalScrollBar QScrollBar::rangeChanged min:" << min << " max:" << max;
+        qDebug() << "-------verticalScrollBar QScrollBar::rangeChanged min:" << min << " max:" << max << "curpage" << d->m_currentpageno;
         Q_D(DocummentBase);
 //        DScrollBar *scrollBar_X = horizontalScrollBar();
         DScrollBar *scrollBar_Y = verticalScrollBar();
@@ -295,10 +290,9 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
         d->donotneedreloaddoc = false;
     });
     connect(this->horizontalScrollBar(), &QScrollBar::rangeChanged, this, [ = ](int min, int max) {
-        qDebug() << "-------horizontalScrollBar QScrollBar::rangeChanged min:" << min << " max:" << max;
+        qDebug() << "-------horizontalScrollBar QScrollBar::rangeChanged min:" << min << " max:" << max << "curpage" << d->m_currentpageno;;
         Q_D(DocummentBase);
         DScrollBar *scrollBar_X = horizontalScrollBar();
-//        DScrollBar *scrollBar_Y = verticalScrollBar();
         if (d->m_currentpageno < 0) {
             return;
         }
@@ -325,15 +319,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     connect(this->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_hScrollBarValueChanged(int)));
     connect(d, SIGNAL(signal_docummentLoaded(bool)), this, SLOT(slot_docummentLoaded(bool)));
     connect(this, SIGNAL(signal_loadDocumment(QString)), d, SLOT(loadDocumment(QString)));
-//    connect(&d->threadloaddoc, SIGNAL(signal_docLoaded(bool)), this, SLOT(slot_docummentLoaded(bool)));
-//    connect(this, &DocummentBase::signal_loadDocumment, this, [ = ](QString path) {
-//        if (d->threadloaddoc.isRunning()) {
-//            d->threadloaddoc.requestInterruption();
-//            d->threadloaddoc.wait();
-//        }
-//        d->threadloaddoc.setDoc(this, path);
-//        d->threadloaddoc.start();
-//    });
+
     connect(&d->threadloaddata, SIGNAL(signal_dataLoaded(bool)), this, SLOT(slot_dataLoaded(bool)));
     connect(d->showslidwaittimer, SIGNAL(timeout()), this, SLOT(showSlideModelTimerOut()));
 //    connect(d->loadpagewaittimer, SIGNAL(timeout()), this, SLOT(loadPageTimerOut()));
@@ -1521,22 +1507,14 @@ bool DocummentBase::loadPages()
     Q_D(DocummentBase);
     if (!bDocummentExist())
         return false;
-//    qDebug() << "-----loadPages-----";
-//    for (int i = 0; i < d->m_pages.size(); i++) {
-//        d->m_pages.at(i)->waitThread();
-//    }
-//    QThreadPool::globalInstance()->waitForDone();
     int pagenum = 0;
-//    if (currentPageNo() != d->m_currentpageno) {
-//        pageJump(d->m_currentpageno);
-//    }
     int firstpagenum  = d->m_currentpageno;
     int lastpagenum  = fromFirstGetLastPageNo(firstpagenum);
+    qDebug() << "DocummentBase::loadPages-----firstpagenum=" << firstpagenum << "lastpagenum" << lastpagenum;
     if ((lastpagenum + 1) == d->m_pages.size()) {
         firstpagenum = fromLastPageGetFirstPageNo();
     }
-//    int firstpagenum  = currentPageNo();
-//    int lastpagenum  = currentLastPageNo();
+
     if (lastpagenum < 0)
         lastpagenum  = firstpagenum;
     qDebug() << "loadPages firstpagenum:" << firstpagenum << " lastpagenum:" << lastpagenum << " pagesize:" << d->m_pages.size();
@@ -1556,28 +1534,9 @@ bool DocummentBase::loadPages()
         if (pagenum >= 0 && pagenum < d->m_pages.size())
             d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
     }
-//    pagenum = lastpagenum + 1;
-//    if (pagenum >= 0 && pagenum < d->m_pages.size())
-//        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
-//    pagenum = firstpagenum - 1;
-//    if (pagenum >= 0 && pagenum < d->m_pages.size())
-//        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
-//    pagenum = lastpagenum + 2;
-//    if (pagenum >= 0 && pagenum < d->m_pages.size())
-//        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
-//    pagenum = firstpagenum - 2;
-//    if (pagenum >= 0 && pagenum < d->m_pages.size())
-//        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
-//    pagenum = lastpagenum + 3;
-//    if (pagenum >= 0 && pagenum < d->m_pages.size())
-//        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
-//    pagenum = firstpagenum - 3;
-//    if (pagenum >= 0 && pagenum < d->m_pages.size())
-//        d->m_pages.at(pagenum)->showImage(d->m_scale, d->m_rotate);
 
     for (int i = 0; i < d->m_pages.size(); i++) {
         bool bshow = false;
-//        for (int j = firstpagenum - 2; j < lastpagenum + 3; j++) {
         for (int j = firstpagenum - moreshow; j < lastpagenum + moreshow + 1; j++) {
             if (i == j) {
                 bshow = true;

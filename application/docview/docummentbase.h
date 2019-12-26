@@ -276,14 +276,8 @@ public:
     virtual void title(QString &title) {}
     virtual void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) {}
     virtual void getAnnotationText(const QString &struuid, QString &strtext, int ipage) {}
-    virtual bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
-    {
-        return false;
-    }
-    virtual bool freshFile(QString file)
-    {
-        return false;
-    }
+    virtual bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid) {return false; }
+    virtual bool freshFile(QString file) {return false;}
     virtual void jumpToHighLight(const QString &uuid, int ipage) {}
     virtual void changeAnnotationColor(int ipage, const QString uuid, const QColor &color) {}
     void stopLoadPageThread();
