@@ -63,8 +63,6 @@ AttrScrollWidget::AttrScrollWidget(DWidget *parent)
     vLayout->addStretch(1);
 
     this->setLayout(vLayout);
-
-    updateTheme();
 }
 
 bool AttrScrollWidget::eventFilter(QObject *obj, QEvent *e)
@@ -125,20 +123,6 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
     labelText->setText(bData ? tr("Yes") : tr("No"));
     labelText->setAlignment(Qt::AlignTop);
     layout->addWidget(labelText, index, 1);
-}
-
-/**
- * @brief AttrScrollWidget::updateTheme
- * 根据主题变换颜色
- */
-void AttrScrollWidget::updateTheme()
-{
-    auto labelList = this->findChildren<DLabel *>();
-    foreach (auto lable, labelList) {
-        if (lable) {
-            lable->setForegroundRole(DPalette::Text);
-        }
-    }
 }
 
 DFrame *AttrScrollWidget::addTitleFrame(const QString &sData)
@@ -210,7 +194,7 @@ QString AttrScrollWidget::getTime(const QDateTime &inTime)
     QString sYear = inTime.toString("yyyy"), sMonth = inTime.toString("MM"), sDay = inTime.toString("dd");
     QString sHour = inTime.toString("HH"), sMin = inTime.toString("mm"), sSec = inTime.toString("ss");
 
-    QString sDate = sYear + sDateSymbol + sMonth + sDateSymbol + sDay + " ";
+    QString sDate = sYear + sDateSymbol + sMonth + sDateSymbol + sDay;
     QString sTime = sHour + sDaySymbol + sMin + sDaySymbol + sSec;
 
     return QString("%1 %2").arg(sDate).arg(sTime);
