@@ -76,9 +76,6 @@ void Application::handleQuitAction()
 void Application::initCfgPath()
 {
     QString sDbPath = Utils::getConfigPath();
-
-    qDebug() << "           " << sDbPath;
-
     QDir dd(sDbPath);
     if (! dd.exists()) {
         dd.mkpath(sDbPath);
