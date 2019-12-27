@@ -137,6 +137,5 @@ int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
         }
     }
 
-
     return 0;
 }

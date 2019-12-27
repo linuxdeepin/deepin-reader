@@ -108,8 +108,9 @@ void FileAttrWidget::addTitleFrame(const QString &sData)
             break;
         }
         QString labelText = labelTexts.at(i);
-        QLabel *label = new QLabel(labelText, m_textShowFrame);
+        DLabel *label = new DLabel(labelText, m_textShowFrame);
         DFontSizeManager::instance()->bind(label, DFontSizeManager::T8);
+        label->setForegroundRole(DPalette::BrightText);
 
         label->setAlignment(Qt::AlignHCenter);
         QHBoxLayout *hLayout = new QHBoxLayout;
