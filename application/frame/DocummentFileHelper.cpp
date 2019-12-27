@@ -238,7 +238,7 @@ void DocummentFileHelper::onSaveAsFile()
     QString sFilter = FFH::getFileFilter(m_nCurDocType);
 
     if (sFilter != "") {
-        DFileDialog dialog;
+        QFileDialog dialog;
         dialog.selectFile(m_szFilePath);
         QString filePath = dialog.getSaveFileName(nullptr, tr("Save as"), m_szFilePath, sFilter);
 
@@ -253,19 +253,23 @@ void DocummentFileHelper::onSaveAsFile()
             return;
         }
         if (filePath != "") {
-            QString sFilePath = FFH::getFilePath(filePath, m_nCurDocType);
+            if (m_szFilePath == filePath) {
+                onSaveFile();
+            } else {
+                QString sFilePath = FFH::getFilePath(filePath, m_nCurDocType);
 
-            bool rl = m_pDocummentProxy->saveas(sFilePath, true);
-            if (rl) {
-                //insert a new bookmark record to bookmarktabel
-                DBManager::instance()->saveasBookMark(m_szFilePath, sFilePath);
-                DataManager::instance()->setStrOnlyFilePath(sFilePath);
+                bool rl = m_pDocummentProxy->saveas(sFilePath, true);
+                if (rl) {
+                    //insert a new bookmark record to bookmarktabel
+                    DBManager::instance()->saveasBookMark(m_szFilePath, sFilePath);
+                    DataManager::instance()->setStrOnlyFilePath(sFilePath);
 
-                DataManager::instance()->setBIsUpdate(false);
+                    DataManager::instance()->setBIsUpdate(false);
 
-                m_szFilePath = sFilePath;
-                QFileInfo info(m_szFilePath);
-                setAppShowTitle(info.baseName());
+                    m_szFilePath = sFilePath;
+                    QFileInfo info(m_szFilePath);
+                    setAppShowTitle(info.baseName());
+                }
             }
         }
     }

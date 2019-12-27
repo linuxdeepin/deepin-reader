@@ -355,7 +355,6 @@ bool DocummentPDF::saveas(const QString &filePath, bool withChanges)
     QString strsource = d->m_fileinfo->strFilepath;
     bool bsuccess = false;
     if (!strsource.isEmpty()) {
-//        qDebug() << "saveas1 " << strsource;
         if (!withChanges) {
             if (QFile::copy(strsource, filePath))
                 bsuccess = true;

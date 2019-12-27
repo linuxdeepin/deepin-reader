@@ -1515,24 +1515,38 @@ bool DocummentBase::loadPages()
     icount = icount > 0 ? icount + 2 : 2;
 
     if (d->m_viewmode == ViewMode_SinglePage) {
-        firstpagenum = d->m_currentpageno - 1 >= 0 ? d->m_currentpageno - 1 : d->m_currentpageno;
-        if (icount > 2) {
+        if (icount > 3 && icount <= 4) {
+            firstpagenum = d->m_currentpageno - 2 >= 0 ? d->m_currentpageno - 2 : 0;
+            lastpagenum = d->m_currentpageno + 2;
+        } else if (icount > 4) {
+            firstpagenum = d->m_currentpageno - (icount - 2) >= 0 ? d->m_currentpageno - (icount - 2) : 0;
             lastpagenum = d->m_currentpageno + icount;
         } else {
+            firstpagenum = d->m_currentpageno - 1 >= 0 ? d->m_currentpageno - 1 : d->m_currentpageno;
             lastpagenum = d->m_currentpageno + icount - 1;
         }
     } else if (d->m_viewmode == ViewMode_FacingPage) {
         //当前显示比例较小或者视窗较大，因此可以多加载几页
-        if (icount > 2) {
-            firstpagenum = d->m_currentpageno - 2 >= 0 ? d->m_currentpageno - 2 : d->m_currentpageno;
+        if (icount > 3 && icount <= 4) {
+            firstpagenum = d->m_currentpageno - 2 * 2 >= 0 ? d->m_currentpageno - (icount - 2) * 2 : 0;
             lastpagenum = d->m_currentpageno + icount * 2;
-
+        } else if (icount > 4) {
+            firstpagenum = d->m_currentpageno - (icount - 2) * 2 >= 0 ? d->m_currentpageno - (icount - 2) * 2 : 0;
+            lastpagenum = d->m_currentpageno + icount * 2;
         } else {
-            firstpagenum = d->m_currentpageno - 2 >= 0 ? d->m_currentpageno - 2 : d->m_currentpageno;
+            firstpagenum = d->m_currentpageno - 2 >= 0 ? d->m_currentpageno - 2 : 0;
             lastpagenum = d->m_currentpageno + (icount - 1) * 2 + 1;
         }
+
+//   if (icount > 4) {
+//        firstpagenum = d->m_currentpageno - (icount - 2) * 2 >= 0 ? d->m_currentpageno - (icount - 2) * 2 : 0;
+//        lastpagenum = d->m_currentpageno + icount * 2;
+//    } else {
+//        firstpagenum = d->m_currentpageno - 2 >= 0 ? d->m_currentpageno - 2 : d->m_currentpageno;
+//        lastpagenum = d->m_currentpageno + (icount - 1) * 2 + 1;
+//    }
     }
-    qDebug() << "DocummentBase::loadPages" << d->m_pages.at(d->m_currentpageno)->rect() << viewport()->rect() << curheight << icount << firstpagenum << lastpagenum;
+    qDebug() << "DocummentBase::loadPages" << d->m_pages.at(d->m_currentpageno)->rect() << viewport()->rect() << d->m_currentpageno << curheight << icount << firstpagenum << lastpagenum;
     for (int i = firstpagenum; i <= lastpagenum ; i++) {
         if (i >= 0 && i < d->m_pages.size())
             d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);
