@@ -205,17 +205,13 @@ DFrame *AttrScrollWidget::addTitleFrame(const QString &sData)
 //  文件时间设置
 QString AttrScrollWidget::getTime(const QDateTime &inTime)
 {
-    QString sYearText = tr("year"), sMonthText = tr("month"), sDayText = tr("day");
-    QString sHourText = tr("hour"), sMinText = tr("minute"), sSecondText = tr("second");
+    QString sDateSymbol = "/", sDaySymbol = ":";
 
     QString sYear = inTime.toString("yyyy"), sMonth = inTime.toString("MM"), sDay = inTime.toString("dd");
-    QString sWeekday = inTime.toString("ddd");
     QString sHour = inTime.toString("HH"), sMin = inTime.toString("mm"), sSec = inTime.toString("ss");
 
-    QString sDate = sYear + sYearText + sMonth + sMonthText + sDay + sDayText;
-    QString sTime = sHour + sHourText + sMin + sMinText + sSec + sSecondText;
+    QString sDate = sYear + sDateSymbol + sMonth + sDateSymbol + sDay + " ";
+    QString sTime = sHour + sDaySymbol + sMin + sDaySymbol + sSec;
 
-//    sDate = inTime.toString("yyyy年MM月dd日");
-//    sTime = inTime.toString("HH时mm分ss秒");
-    return QString("%1 %2 %3").arg(sDate).arg(sWeekday).arg(sTime);
+    return QString("%1 %2").arg(sDate).arg(sTime);
 }
