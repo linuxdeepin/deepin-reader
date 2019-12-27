@@ -47,7 +47,7 @@ void HomeWidget::initWidget()
     layout->setAlignment(Qt::AlignCenter);
     layout->addStretch();
 
-    auto iconSvg = new DLabel;
+    auto iconSvg = new DLabel(this);
     iconSvg->setFixedSize(QSize(128, 128));
     iconSvg->setObjectName("iconSvg");
 
@@ -89,7 +89,7 @@ void HomeWidget::slotUpdateTheme()
 
     auto customClickLabelList = this->findChildren<CustomClickLabel *>();
     foreach (auto l, customClickLabelList) {
-        l->setThemePalette();
+        l->setForegroundRole(DPalette::TextTips);
     }
 }
 
