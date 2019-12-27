@@ -4,13 +4,13 @@
 <context>
     <name>Application</name>
     <message>
-        <location filename="../application.cpp" line="44"/>
+        <location filename="../application.cpp" line="45"/>
         <source>Document Viewer</source>
         <translatorcomment>文档查看器</translatorcomment>
         <translation>文档查看器</translation>
     </message>
     <message>
-        <location filename="../application.cpp" line="53"/>
+        <location filename="../application.cpp" line="54"/>
         <source>Document Viewer is a simple PDF reader, supporting bookmarks, highlights and annotations.</source>
         <translatorcomment>文档查看器是一款为了方便查看PDF格式文档的阅读工具。</translatorcomment>
         <translation>文档查看器是一款为了方便查看PDF格式文档的阅读工具。</translation>
@@ -109,58 +109,22 @@
         <translation>基本信息</translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="88"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="90"/>
         <source>Unknown</source>
         <translatorcomment>未知</translatorcomment>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="123"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="125"/>
         <source>Yes</source>
         <translatorcomment>是</translatorcomment>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="123"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="125"/>
         <source>No</source>
         <translatorcomment>否</translatorcomment>
         <translation>否</translation>
-    </message>
-    <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="192"/>
-        <source>year</source>
-        <translatorcomment>年</translatorcomment>
-        <translation>年</translation>
-    </message>
-    <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="192"/>
-        <source>month</source>
-        <translatorcomment>月</translatorcomment>
-        <translation>月</translation>
-    </message>
-    <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="192"/>
-        <source>day</source>
-        <translatorcomment>日</translatorcomment>
-        <translation>日</translation>
-    </message>
-    <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="193"/>
-        <source>hour</source>
-        <translatorcomment>时</translatorcomment>
-        <translation>时</translation>
-    </message>
-    <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="193"/>
-        <source>minute</source>
-        <translatorcomment>分</translatorcomment>
-        <translation>分</translation>
-    </message>
-    <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="193"/>
-        <source>second</source>
-        <translatorcomment>秒</translatorcomment>
-        <translation>秒</translation>
     </message>
 </context>
 <context>
@@ -303,39 +267,39 @@
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="289"/>
-        <location filename="../frame/DocummentFileHelper.cpp" line="347"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="293"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="351"/>
         <source>File is opened.</source>
         <translatorcomment>文档已打开.</translatorcomment>
         <translation>文档已打开.</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="296"/>
-        <location filename="../frame/DocummentFileHelper.cpp" line="298"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="300"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="302"/>
         <source>Save</source>
         <translatorcomment>保存</translatorcomment>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="296"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="300"/>
         <source>Do you want to save the changes?</source>
         <translatorcomment>是否保存已编辑的文档？</translatorcomment>
         <translation>是否保存已编辑的文档？</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="298"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="302"/>
         <source>Cancel</source>
         <translatorcomment>取消</translatorcomment>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="298"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="302"/>
         <source>Discard</source>
         <translatorcomment>不保存</translatorcomment>
         <translation>不保存</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="335"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="339"/>
         <source>File not supported</source>
         <translatorcomment>文档不支持</translatorcomment>
         <translation>文档不支持</translation>
@@ -344,7 +308,7 @@
 <context>
     <name>FileAttrWidget</name>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="195"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="196"/>
         <source>close</source>
         <translatorcomment>关闭</translatorcomment>
         <translation>关闭</translation>
@@ -377,7 +341,7 @@
         <translation>没有打印设备</translation>
     </message>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="590"/>
+        <location fileattrname="../frame/FileViewWidget.cpp" line="590"/>
         <source>Ok</source>
         <translatorcomment>确定</translatorcomment>
         <translation>确定</translation>

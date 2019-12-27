@@ -4,12 +4,12 @@
 <context>
     <name>Application</name>
     <message>
-        <location filename="../application.cpp" line="44"/>
+        <location filename="../application.cpp" line="45"/>
         <source>Document Viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../application.cpp" line="53"/>
+        <location filename="../application.cpp" line="54"/>
         <source>Document Viewer is a simple PDF reader, supporting bookmarks, highlights and annotations.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -92,48 +92,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="88"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="90"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="123"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="125"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="123"/>
+        <location filename="../mainShow/AttrScrollWidget.cpp" line="125"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="192"/>
-        <source>year</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="192"/>
-        <source>month</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="192"/>
-        <source>day</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="193"/>
-        <source>hour</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="193"/>
-        <source>minute</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainShow/AttrScrollWidget.cpp" line="193"/>
-        <source>second</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -257,34 +227,34 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="289"/>
-        <location filename="../frame/DocummentFileHelper.cpp" line="347"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="293"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="351"/>
         <source>File is opened.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="296"/>
-        <location filename="../frame/DocummentFileHelper.cpp" line="298"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="300"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="302"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="296"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="300"/>
         <source>Do you want to save the changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="298"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="302"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="298"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="302"/>
         <source>Discard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="335"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="339"/>
         <source>File not supported</source>
         <translation type="unfinished"></translation>
     </message>
@@ -292,7 +262,7 @@
 <context>
     <name>FileAttrWidget</name>
     <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="195"/>
+        <location filename="../mainShow/FileAttrWidget.cpp" line="196"/>
         <source>close</source>
         <translation type="unfinished"></translation>
     </message>
