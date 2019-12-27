@@ -595,10 +595,7 @@ QPixmap Utils::renderSVG(const QString &filePath, const QSize &size)
 
 QString Utils::getConfigPath()
 {
-    QDir dir(QDir(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first())
-             .filePath(qApp->organizationName()));
-
-    return dir.filePath(qApp->applicationName());
+    return  QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 }
 
 QString Utils::getSuffixList()

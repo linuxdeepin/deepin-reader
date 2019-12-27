@@ -105,6 +105,8 @@ enum MSG_OPERATION_RES_TYPE {
 namespace ConstantMsg {
 
 const QString g_app_name = "deepin-reader";
+const QString g_db_name = "deepinreader.db";
+const QString g_cfg_name = "config.conf";
 
 const int g_effective_res = 9999;  //  表明 消息已被处理
 const int g_menu_width = 150;      //  菜单的宽度

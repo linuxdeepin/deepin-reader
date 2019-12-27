@@ -3,11 +3,12 @@
 #include <QDir>
 #include "DataManager.h"
 #include <QDebug>
+#include "subjectObserver/MsgHeader.h"
 
 AppSetting::AppSetting(QObject *parent)
     : QObject(parent)
 {
-    m_pSettings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"), QSettings::IniFormat, parent);
+    m_pSettings = new QSettings(QDir(Utils::getConfigPath()).filePath(ConstantMsg::g_cfg_name), QSettings::IniFormat, parent);
 }
 
 void AppSetting::setFileKeyValue(const QString &sValue)

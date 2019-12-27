@@ -19,10 +19,12 @@
 #include <QIcon>
 #include <QTranslator>
 #include <QDebug>
+#include <QDir>
 
 #include "subjectObserver/ModuleHeader.h"
 #include "subjectObserver/MsgHeader.h"
 #include "controller/NotifySubject.h"
+#include "utils/utils.h"
 
 namespace {
 
@@ -53,6 +55,8 @@ Application::Application(int &argc, char **argv)
     //kyz 2019-12-10 不允许在此处安装事件过滤
     // installEventFilter(new ObjectEventFilter(this));
 
+    initCfgPath();
+
     initChildren();
 
     g_NotifySubject::getInstance()->startThreadRun();
@@ -66,6 +70,21 @@ Application::~Application()
 void Application::handleQuitAction()
 {
     g_NotifySubject::getInstance()->notifyMsg(MSG_OPERATION_EXIT);
+}
+
+//  初始化 deepin-reader 的配置文件目录, 包含 数据库, conf.cfg
+void Application::initCfgPath()
+{
+    QString sDbPath = Utils::getConfigPath();
+
+    qDebug() << "           " << sDbPath;
+
+    QDir dd(sDbPath);
+    if (! dd.exists()) {
+        dd.mkpath(sDbPath);
+        if (dd.exists())
+            qDebug() << __FUNCTION__ << "  create app dir succeed!";
+    }
 }
 
 void Application::initChildren()

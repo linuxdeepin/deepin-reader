@@ -28,14 +28,7 @@
 #include <QStandardPaths>
 
 #include "subjectObserver/MsgHeader.h"
-
-namespace {
-
-const QString DATABASE_PATH = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + ConstantMsg::g_app_name;
-const QString DATABASE_NAME = "deepinreader.db";
-//const QString EMPTY_HASH_STR = utils::base::hash(QString(" "));
-
-}  // namespace
+#include "utils/utils.h"
 
 DBManager *DBManager::m_dbManager = nullptr;
 DBManager::DBManagerRelease DBManager::DBManagerRelease::release;
@@ -223,7 +216,8 @@ const QSqlDatabase DBManager::getDatabase() const
     } else {
         //if database not open, open it.
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);//not dbConnection
-        db.setDatabaseName(DATABASE_PATH + "/" + DATABASE_NAME);
+        QString sDbPath = Utils::getConfigPath();
+        db.setDatabaseName(sDbPath + "/" + ConstantMsg::g_db_name);
         if (! db.open()) {
             qWarning() << "Open database error:" << db.lastError();
             mutex.unlock();
@@ -237,13 +231,6 @@ const QSqlDatabase DBManager::getDatabase() const
 
 void DBManager::checkDatabase()
 {
-    QDir dd(DATABASE_PATH);
-    if (! dd.exists()) {
-        dd.mkpath(DATABASE_PATH);
-        if (dd.exists())
-            qDebug() << __LINE__ << "   " << __FUNCTION__ << "  create database succeed!";
-    }
-
     const QSqlDatabase db = getDatabase();
     if (! db.isValid()) {
         return;

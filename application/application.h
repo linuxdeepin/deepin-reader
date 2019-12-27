@@ -43,6 +43,7 @@ public:
     DBManager *dbM = nullptr;
 
 private:
+    void initCfgPath();
     void initChildren();
     void initI18n();
 };
