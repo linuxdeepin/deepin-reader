@@ -69,7 +69,7 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
         m_imagewidth = m_pages.at(0)->getOriginalImageWidth();
         m_imageheight = m_pages.at(0)->getOriginalImageHeight();
         double sz = m_imageheight > m_imagewidth ? m_imageheight : m_imagewidth;
-        m_maxzoomratio = MAXPAGEHEIGHT / sz;
+        m_maxzoomratio = MAXPAGEHEIGHT / (sz * qApp->devicePixelRatio());
         m_maxzoomratio = m_maxzoomratio > 5.0 ? 5.0 : m_maxzoomratio;
         m_scale = m_scale > m_maxzoomratio ? m_maxzoomratio : m_scale;
     }

@@ -569,7 +569,7 @@ void PageBase::loadMagnifierCacheThreadStart(double width, double height)
 void PageBase::slot_RenderFinish(QImage image)
 {
     Q_D(PageBase);
-//    qDebug() << "page RenderFinish pagenum:" << d->m_pageno;
+    qDebug() << "page RenderFinish pagenum:" << d->m_pageno;
     d->havereander = true;
 //    double originwidth = image.width(), originheight = image.height();
     QMatrix leftmatrix;
@@ -590,6 +590,7 @@ void PageBase::slot_RenderFinish(QImage image)
     QPixmap map = QPixmap::fromImage(image);
     map = map.transformed(leftmatrix, Qt::SmoothTransformation);
     map.setDevicePixelRatio(devicePixelRatioF());
+    qDebug() << "PageBase::slot_RenderFinish to setPixmap" << map.rect();
     setPixmap(map);
     setSelectTextRects();
     d->m_spinner->stop();
