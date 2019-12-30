@@ -1481,6 +1481,7 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
         return false;
         break;
     }
+    d->m_vboxLayout->update();
 //    QEventLoop loop;
 //    QTimer::singleShot(20, &loop, SLOT(quit()));
 //    loop.exec();
