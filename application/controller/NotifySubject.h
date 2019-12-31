@@ -39,6 +39,7 @@ private:
     bool                m_bRunFlag = false;
 
     QMutex              m_mutex;
+    QMutex              m_obsMutex;
 };
 
 typedef CSingleton<NotifySubject> g_NotifySubject;
