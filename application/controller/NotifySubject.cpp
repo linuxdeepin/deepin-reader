@@ -36,11 +36,13 @@ void NotifySubject::run()
 
 void NotifySubject::addObserver(IObserver *obs)
 {
+    QMutexLocker locker(&m_obsMutex);
     m_observerList.append(obs);
 }
 
 void NotifySubject::removeObserver(IObserver *obs)
 {
+    QMutexLocker locker(&m_obsMutex);
     m_observerList.removeOne(obs);
 }
 
@@ -61,6 +63,7 @@ void NotifySubject::notifyMsg(const int &msgType, const QString &msgContent)
 
 void NotifySubject::NotifyObservers(const int &msgType, const QString &msgContent)
 {
+    QMutexLocker locker(&m_obsMutex);
     QListIterator<IObserver *> iter(m_observerList);
     while (iter.hasNext()) {
         auto obs = iter.next();
