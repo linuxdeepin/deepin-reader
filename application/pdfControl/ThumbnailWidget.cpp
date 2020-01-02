@@ -382,7 +382,7 @@ void ThreadLoadImage::stopThreadRun()
 
 bool ThreadLoadImage::inLoading(int index)
 {
-    if (index >=  m_nStartPage && index <= m_nEndPage) {
+    if (index >=  m_nStartPage && index < m_nEndPage) {
         return true;
     }
 
