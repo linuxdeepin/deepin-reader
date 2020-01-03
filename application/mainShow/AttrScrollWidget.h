@@ -31,7 +31,6 @@ private:
     void updateTheme();
 
 private:
-    QString getTime(const QDateTime &CreateTime);
     DFrame *addTitleFrame(const QString &sData);
     int m_leftminwidth;
 };
