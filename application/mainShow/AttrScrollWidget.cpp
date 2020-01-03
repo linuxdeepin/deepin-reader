@@ -104,7 +104,7 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
     DLabel *labelText = new DLabel(this);
     DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
     labelText->setMaximumWidth(260);
-    QString strText = getTime(sData);
+    QString strText = sData.toString("yyyy/MM/dd HH:mm:ss");
     labelText->setText(strText);
     labelText->setAlignment(Qt::AlignTop);
     labelText->setWordWrap(true);
@@ -183,19 +183,4 @@ DFrame *AttrScrollWidget::addTitleFrame(const QString &sData)
     m_textShowFrame->setFixedHeight(textHeight);
 
     return m_textShowFrame;
-}
-
-
-//  文件时间设置
-QString AttrScrollWidget::getTime(const QDateTime &inTime)
-{
-    QString sDateSymbol = "/", sDaySymbol = ":";
-
-    QString sYear = inTime.toString("yyyy"), sMonth = inTime.toString("MM"), sDay = inTime.toString("dd");
-    QString sHour = inTime.toString("HH"), sMin = inTime.toString("mm"), sSec = inTime.toString("ss");
-
-    QString sDate = sYear + sDateSymbol + sMonth + sDateSymbol + sDay;
-    QString sTime = sHour + sDaySymbol + sMin + sDaySymbol + sSec;
-
-    return QString("%1 %2").arg(sDate).arg(sTime);
 }
