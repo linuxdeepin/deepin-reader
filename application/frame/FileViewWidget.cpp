@@ -229,6 +229,21 @@ void FileViewWidget::resizeEvent(QResizeEvent *event)
     CustomWidget::resizeEvent(event);
 }
 
+void FileViewWidget::wheelEvent(QWheelEvent *event)
+{
+    CustomWidget::wheelEvent(event);
+    if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
+        QString sFilePath = DataManager::instance()->strOnlyFilePath();
+        if (sFilePath != "") {
+            if (event->delta() > 0) {
+                notifyMsg(MSG_OPERATION_LARGER);
+            } else {
+                notifyMsg(MSG_OPERATION_SMALLER);
+            }
+        }
+    }
+}
+
 void FileViewWidget::slotDealWithData(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {

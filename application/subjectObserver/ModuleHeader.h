@@ -52,7 +52,7 @@ const QString g_ctrl_larger = "Ctrl++";   //  放大
 const QString g_ctrl_equal = "Ctrl+=";   //  放大
 const QString g_ctrl_smaller = "Ctrl+-";  //  缩小
 
-// const QString g_ctrl_wheel = "Ctrl+wheel"; //ctrl+滚轮放大缩小
+const QString g_ctrl_wheel = "Ctrl+wheel"; //ctrl+滚轮放大缩小
 
 const QString g_ctrl_shift_s = "Ctrl+Shift+S";  //  另存为
 const QString g_ctrl_e = "Ctrl+E";              //  导出
