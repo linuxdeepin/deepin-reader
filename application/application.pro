@@ -34,6 +34,7 @@ TRANSLATIONS += \
     translations/deepin-reader_en_US.ts\
     translations/deepin-reader_zh_CN.ts
 
+
 DISTFILES += \
     themes/solarized_light.theme \
     themes/atom_dark.theme \

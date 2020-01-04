@@ -29,14 +29,13 @@ DocShowShellWidget::~DocShowShellWidget() {}
 void DocShowShellWidget::resizeEvent(QResizeEvent *event)
 {
     int nState = DataManager::instance()->CurShowState();
-    if (nState == FILE_NORMAL) {
+    if (nState == FILE_NORMAL || nState == FILE_FULLSCREEN) {
         auto findWidget = this->findChild<FindWidget *>();
         if (findWidget && findWidget->isVisible()) {
             int nParentWidth = this->width();
             findWidget->showPosition(nParentWidth);
         }
     }
-
     CustomWidget::resizeEvent(event);
 }
 
@@ -113,6 +112,7 @@ void DocShowShellWidget::slotShowFindWidget()
 
     int nParentWidth = this->width();
     findWidget->showPosition(nParentWidth);
+    findWidget->setSearchEditFocus();
 }
 
 //  注释窗口
@@ -222,7 +222,7 @@ void DocShowShellWidget::initConnections()
 //  集中处理 按键通知消息
 int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
 {
-    if (KeyStr::g_ctrl_f == msgContent) {  //  搜索
+    if (KeyStr::g_ctrl_f == msgContent && DataManager::instance()->CurShowState() != FILE_SLIDE) { //  搜索
         emit sigShowFileFind();
         return ConstantMsg::g_effective_res;
     }

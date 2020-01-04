@@ -27,12 +27,12 @@ FontWidget::FontWidget(CustomWidget *parent)
 int FontWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     switch (msgType) {
-    //    case MSG_OPERATION_LARGER:      //  放大
-    //        emit sigKeyLargerOrSmaller(1);
-    //        return ConstantMsg::g_effective_res;
-    //    case MSG_OPERATION_SMALLER:     //  缩小
-    //        emit sigKeyLargerOrSmaller(0);
-    //        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_LARGER:      //  放大
+        emit sigKeyLargerOrSmaller(1);
+        return ConstantMsg::g_effective_res;
+    case MSG_OPERATION_SMALLER:     //  缩小
+        emit sigKeyLargerOrSmaller(0);
+        return ConstantMsg::g_effective_res;
     case MSG_OPERATION_OPEN_FILE_OK:
         emit sigOpenFileOk();
         break;
@@ -260,7 +260,7 @@ void FontWidget::slotReset()
 
     m_isDoubPage = false;
 
-//    setScaleRotateViewModeAndShow();
+    //setScaleRotateViewModeAndShow();
 
     //将文件之前设置显示出来
     setFrameValue();
@@ -366,8 +366,8 @@ void FontWidget::setShowSuitWIcon()
  */
 void FontWidget::initConnection()
 {
-    //    connect(this, SIGNAL(sigKeyLargerOrSmaller(const int &)),
-    //    SLOT(slotKeyLargerOrSmaller(const int &)));
+    connect(this, SIGNAL(sigKeyLargerOrSmaller(int)),
+            SLOT(slotKeyLargerOrSmaller(int)));
     connect(this, SIGNAL(sigUpdateTheme()), this, SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotReset()));
     connect(this, SIGNAL(sigSetCurScale(const QString &)), SLOT(slotSetCurScale(const QString &)));
@@ -507,6 +507,7 @@ void FontWidget::setScaleRotateViewModeAndShow()
  */
 void FontWidget::slotSetChangeVal(int val)
 {
+    qDebug() << "fuck================" << val;
     m_pEnlargeLab->clear();
     m_pEnlargeLab->setText(QString("%1%").arg(val));
 
@@ -514,7 +515,7 @@ void FontWidget::slotSetChangeVal(int val)
 
     if (!m_bIsAdaptMove) {
         scaleAndRotate();
-
+        qDebug() << "fuck^^^^^^^^^^^^^^";
         m_bSuitW = false;
         m_bSuitH = false;
 
@@ -577,4 +578,14 @@ void FontWidget::slotSetRotateLeftCheckIcon()
 void FontWidget::slotSetRotateRightCheckIcon()
 {
     rotateFileView(true);
+}
+
+void FontWidget::slotKeyLargerOrSmaller(int itype)
+{
+    if (itype == 1) {
+        setFileLargerOrSmaller(1);
+    } else {
+        setFileLargerOrSmaller(0);
+    }
+
 }

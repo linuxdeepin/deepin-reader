@@ -170,9 +170,9 @@ void MainWindow::initConnections()
 
     createActionMap(m_menu, pSigManager, firstActionList, firstActionObjList);
 
-    QStringList secondActionList = QStringList() << tr("Search") << tr("Fullscreen") << tr("Slide show")
+    QStringList secondActionList = QStringList() << tr("Search") /*<< tr("Fullscreen")*/ << tr("Slide show")
                                    << tr("Larger") << tr("Smaller");
-    QStringList secondActionObjList = QStringList() << "Search" << "Fullscreen" << "Slide show"
+    QStringList secondActionObjList = QStringList() << "Search" /*<< "Fullscreen" */ << "Slide show"
                                       << "Larger" << "Smaller";
 
     createActionMap(m_menu, pSigManager, secondActionList, secondActionObjList);
@@ -249,7 +249,7 @@ void MainWindow::displayShortcuts()
 {
     QStringList shortcutnames;
     QStringList windowKeymaps;
-    windowKeymaps << KeyStr::g_f11 << KeyStr::g_esc  << KeyStr::g_f1
+    windowKeymaps << /*KeyStr::g_f11 << */KeyStr::g_esc  << KeyStr::g_f1
                   << KeyStr::g_ctrl_f << KeyStr::g_pgup << KeyStr::g_pgdown << KeyStr::g_ctrl_o << KeyStr::g_ctrl_larger
                   << KeyStr::g_ctrl_smaller << KeyStr::g_ctrl_shift_s
                   << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_m << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2
@@ -257,7 +257,7 @@ void MainWindow::displayShortcuts()
                   << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l << KeyStr::g_del << KeyStr::g_alt_z
                   << KeyStr::g_ctrl_c << KeyStr::g_ctrl_x << KeyStr::g_ctrl_v << KeyStr::g_ctrl_z << KeyStr::g_ctrl_a << KeyStr::g_ctrl_shift_slash;
 
-    shortcutnames << tr("Fullscreen") << tr("Escape") << tr("Help")
+    shortcutnames << /*tr("Fullscreen") << */tr("Escape") << tr("Help")
                   << tr("Search") << tr("PageUp") << tr("PageDown") << tr("Open") << tr("Enlarge")
                   << tr("Narrow")  << tr("Save as") << tr("Print")
                   << tr("Save") << tr("Open Thumbnail") << tr("Adapte Page") << tr("Fit Height")
