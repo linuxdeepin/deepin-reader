@@ -21,9 +21,9 @@ ThumbnailWidget::~ThumbnailWidget()
         m_ThreadLoadImage.clearList();
     }
 
-    if (m_threadRotateImage.isRunning()) {
-        m_threadRotateImage.stopThreadRun();
-    }
+//    if (m_threadRotateImage.isRunning()) {
+//        m_threadRotateImage.stopThreadRun();
+//    }
 }
 
 // 处理消息事件
@@ -450,7 +450,7 @@ void ThreadLoadImage::run()
 }
 
 /************************旋转缩略图线程****************************/
-
+/*
 ThreadRotateImage::ThreadRotateImage(QObject *parent)
     : QThread(parent) {}
 
@@ -491,3 +491,4 @@ void ThreadRotateImage::run()
     m_nFirstIndex = 0;
     m_nEndIndex = FIRST_LOAD_PAGES - 1;
 }
+*/
