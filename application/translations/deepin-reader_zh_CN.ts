@@ -326,7 +326,7 @@
 <context>
     <name>FileViewWidget</name>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="+286"/>
+        <location filename="../frame/FileViewWidget.cpp" line="+301"/>
         <location line="+108"/>
         <location line="+10"/>
         <location line="+112"/>
@@ -576,6 +576,12 @@
         <source>Narrow</source>
         <translatorcomment>缩小</translatorcomment>
         <translation>缩小</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Enlarge/Narrow</source>
+        <translatorcomment>放大/缩小 </translatorcomment>
+        <translation>放大/缩小 </translation>
     </message>
     <message>
         <location line="+1"/>

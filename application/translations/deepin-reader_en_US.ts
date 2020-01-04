@@ -278,10 +278,10 @@
 <context>
     <name>FileViewWidget</name>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="286"/>
-        <location filename="../frame/FileViewWidget.cpp" line="394"/>
-        <location filename="../frame/FileViewWidget.cpp" line="404"/>
-        <location filename="../frame/FileViewWidget.cpp" line="516"/>
+        <location filename="../frame/FileViewWidget.cpp" line="301"/>
+        <location filename="../frame/FileViewWidget.cpp" line="409"/>
+        <location filename="../frame/FileViewWidget.cpp" line="419"/>
+        <location filename="../frame/FileViewWidget.cpp" line="531"/>
         <source>Please select the text.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -477,6 +477,11 @@
     <message>
         <location filename="../frame/MainWindow.cpp" line="262"/>
         <source>Narrow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/MainWindow.cpp" line="262"/>
+        <source>Enlarge/Narrow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
