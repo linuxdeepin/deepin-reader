@@ -292,18 +292,21 @@ void DocummentProxy::docBasicInfo(stFileInfo &info)
 
 QString DocummentProxy::removeAnnotation(const QPoint &startpos)
 {
+    qDebug() << "DocummentProxy::removeAnnotation";
     if (!m_documment || bcloseing)
         return "";
     // qDebug() << "removeAnnotation";
-    return m_documment->removeAnnotation(startpos);
+    QString uuid = m_documment->removeAnnotation(startpos);
+    return uuid;
 }
 
 void DocummentProxy::removeAnnotation(const QString &struuid, int ipage)
 {
     if (!m_documment || bcloseing)
         return ;
-//    qDebug() << "removeAnnotation";
+    qDebug() << "removeAnnotation ========start";
     m_documment->removeAnnotation(struuid, ipage);
+    qDebug() << "removeAnnotation ========end";
 }
 
 void DocummentProxy::slot_pageChange(int pageno)

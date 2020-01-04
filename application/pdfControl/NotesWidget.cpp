@@ -566,7 +566,6 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigDealWithData(msgType, msgContent);
         return ConstantMsg::g_effective_res;;
     }
-
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
         emit sigOpenFileOk();
     } else if (MSG_CLOSE_FILE == msgType) {
