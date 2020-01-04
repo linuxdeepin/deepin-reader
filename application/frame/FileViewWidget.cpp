@@ -15,6 +15,8 @@
 #include "mainShow/DefaultOperationMenu.h"
 #include "utils/PublicFunction.h"
 
+#include "dialog/PrintManager.h"
+
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
     , m_operatemenu(nullptr)
@@ -578,52 +580,8 @@ void FileViewWidget::onShowNoteTipWidget(const QPoint &docPos)
 //  打印
 void FileViewWidget::onPrintFile()
 {
-    QPrinter printer(QPrinter::ScreenResolution);
-    // 创建打印对话框
-    QString printerName = printer.printerName();
-
-    if (printerName.size() == 0) {
-        DDialog dlg("", tr("No Print Device"));
-        //        QString sPixmap = PF::getImagePath(objName, /*Pri::g_frame*/ Pri::g_actions);
-        QIcon icon(PF::getIconPath("exception-logo"));
-        dlg.setIcon(icon /*QIcon(":/resources/exception-logo.svg")*/);
-        dlg.addButtons(QStringList() << tr("Ok"));
-        QMargins mar(0, 0, 0, 30);
-        dlg.setContentLayoutContentsMargins(mar);
-        dlg.exec();
-        return;
-    }
-
-    QPrintPreviewDialog preview(&printer, this);
-    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ](QPrinter * printer) {
-        int nPageSize = m_pDocummentFileHelper->getPageSNum();  //  pdf 页数
-        printer->setWinPageSize(nPageSize);
-
-        QPainter painter(printer);
-        painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
-        painter.begin(printer);
-        QRect rect = painter.viewport();
-
-        for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
-            QImage image;
-
-            bool rl = m_pDocummentFileHelper->getImage(iIndex, image, 800, 1100);
-            if (rl) {
-                QPixmap pixmap = pixmap.fromImage(image);
-
-                QSize size = pixmap.size();
-                size.scale(rect.size(), Qt::KeepAspectRatio);  //此处保证图片显示完整
-                painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
-                painter.setWindow(pixmap.rect());
-                painter.drawPixmap(10, 10, 800, 1100, pixmap);
-                if (iIndex < nPageSize - 1)
-                    printer->newPage();
-            }
-        }
-        painter.end();
-    });
-
-    preview.exec();
+    PrintManager p;
+    p.showPrintDialog(this);
 }
 
 //  设置　窗口　自适应　宽＼高　度
