@@ -11,7 +11,8 @@ HEADERS += \
     $$PWD/FileFormatHelper.h \
     $$PWD/NoteTipWidget.h \
     $$PWD/PlayControlWidget.h \
-    $$PWD/dialog/PrintManager.h
+    $$PWD/dialog/PrintManager.h \
+    $$PWD/dialog/ShortCutShow.h
 
 SOURCES += \
     $$PWD/MainWindow.cpp \
@@ -25,4 +26,5 @@ SOURCES += \
     $$PWD/DocShowShellWidget.cpp \
     $$PWD/NoteTipWidget.cpp \
     $$PWD/PlayControlWidget.cpp \
-    $$PWD/dialog/PrintManager.cpp
+    $$PWD/dialog/PrintManager.cpp \
+    $$PWD/dialog/ShortCutShow.cpp

@@ -10,17 +10,14 @@
 #include <DFloatingMessage>
 #include <DMessageManager>
 #include <QDesktopServices>
-#include <QDesktopWidget>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QProcess>
 #include <QDebug>
 
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
 #include <DGuiApplicationHelper>
 #include "DocummentFileHelper.h"
+
+#include "dialog/ShortCutShow.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -247,12 +244,9 @@ void MainWindow::onOpenAppHelp()
     QDesktopServices::openUrl(QUrl(Constant::sAcknowledgementLink));
 }
 
+//  显示快捷键
 void MainWindow::displayShortcuts()
 {
-    QRect rect = qApp->desktop()->geometry();
-    QPoint pos(rect.x() + rect.width() / 2,
-               rect.y() + rect.height() / 2);
-
     QStringList shortcutnames;
     QStringList windowKeymaps;
     windowKeymaps << KeyStr::g_f11 << KeyStr::g_esc  << KeyStr::g_f1
@@ -272,38 +266,8 @@ void MainWindow::displayShortcuts()
                   << tr("Delete") << tr("Magnifier") << tr("Copy") << tr("Cut") << tr("Paste")
                   << tr("Undo") << tr("Select all") << tr("ShortcutPreview");
 
-    // windowKeymaps=m_pFilterList;
-    QJsonObject shortcutObj;
-    QJsonArray jsonGroups;
-
-    QJsonObject windowJsonGroup;
-    windowJsonGroup.insert("groupName", "Window");
-    QJsonArray windowJsonItems;
-
-    int index = 0;
-    for (const QString &shortcutname : shortcutnames) {
-
-        QJsonObject jsonItem;
-        jsonItem.insert("name", shortcutname);
-        jsonItem.insert("value", windowKeymaps.at(index));
-        windowJsonItems.append(jsonItem);
-        index++;
-    }
-
-    windowJsonGroup.insert("groupItems", windowJsonItems);
-    jsonGroups.append(windowJsonGroup);
-    shortcutObj.insert("shortcut", jsonGroups);
-
-    QJsonDocument doc(shortcutObj);
-
-    QStringList shortcutString;
-    QString param1 = "-j=" + QString(doc.toJson().data());
-    QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
-
-    shortcutString << param1 << param2;
-
-    QProcess shortcutViewProcess;
-    shortcutViewProcess.startDetached("deepin-shortcut-viewer", shortcutString);
+    ShortCutShow show;
+    show.show(shortcutnames, windowKeymaps);
 }
 
 //  退出 应用
