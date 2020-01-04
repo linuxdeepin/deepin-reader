@@ -47,6 +47,7 @@ signals:
 
 public:
     void showPosition(const int &);
+    void setSearchEditFocus();
 
 private slots:
     void slotSetVisible();

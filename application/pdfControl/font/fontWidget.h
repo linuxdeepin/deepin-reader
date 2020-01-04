@@ -33,6 +33,7 @@ signals:
     void sigOpenFileOk();
     void sigSetCurScale(const QString &);
     void sigDealWithKey(const QString &);
+    void sigKeyLargerOrSmaller(int);
 
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
@@ -54,6 +55,7 @@ private slots:
     void slotSetSuitWCheckIcon();
     void slotSetRotateLeftCheckIcon();
     void slotSetRotateRightCheckIcon();
+    void slotKeyLargerOrSmaller(int itype);
 
 private:
     void rotateFileView(bool isRight = true);

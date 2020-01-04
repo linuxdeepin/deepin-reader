@@ -25,6 +25,7 @@
 #include <DIconButton>
 #include <QDebug>
 #include <QHBoxLayout>
+#include <QDesktopWidget>
 #include "application.h"
 #include "controller/DataManager.h"
 #include "subjectObserver/ModuleHeader.h"
@@ -63,6 +64,11 @@ void FindWidget::showPosition(const int &nParentWidth)
     this->move(nParentWidth - nWidget - 20, 20);
     this->show();
     this->raise();
+}
+
+void FindWidget::setSearchEditFocus()
+{
+    m_pSearchEdit->lineEdit()->setFocus();
 }
 
 void FindWidget::slotSetVisible()
