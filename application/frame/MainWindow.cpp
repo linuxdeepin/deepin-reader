@@ -432,7 +432,6 @@ void MainWindow::onSetAppTitle(const QString &sData)
     QString sM = AppSetting::instance()->getKeyValue(KEY_M);
     if (sM == "1") {
         notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_m);
-
     }
 
     QString sWidget = AppSetting::instance()->getKeyValue(KEY_WIDGET);

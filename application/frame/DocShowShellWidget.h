@@ -57,6 +57,10 @@ protected:
 
 private:
     PlayControlWidget *m_pctrlwidget = nullptr;
+
+    // QWidget interface
+protected:
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
 };
 
 #endif // DOCSHOWSHELLWIDGET_H
