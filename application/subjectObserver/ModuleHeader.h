@@ -38,7 +38,7 @@ const QString g_module = "dr_";
 }  // namespace Pri
 
 namespace KeyStr {
-const QString g_ctrl_alt_f = "Ctrl+Alt+F";  //  窗口大小切换
+//const QString g_ctrl_alt_f = "Ctrl+Alt+F";  //  窗口大小切换
 const QString g_f11 = "F11";                //  全屏
 const QString g_esc = "Esc";                //  退出全屏\退出放映\退出放大镜
 const QString g_alt_f4 = "Alt+F4";          //  退出应用程序
@@ -87,7 +87,7 @@ const QString g_ctrl_x = "Ctrl+X";
 const QString g_ctrl_v = "Ctrl+V";
 const QString g_ctrl_z = "Ctrl+Z";
 const QString g_ctrl_a = "Ctrl+A";
-const QString g_ctrl_shift_slash = "Ctrl+Shift+?";
+const QString g_ctrl_shift_slash = "Ctrl+Shift+/";
 }  // namespace KeyStr
 
 #endif  // IMAGEHEADER_H

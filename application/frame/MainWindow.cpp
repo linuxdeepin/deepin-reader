@@ -30,6 +30,7 @@ MainWindow::MainWindow(DMainWindow *parent)
     setTitlebarShadowEnabled(true);
 
     m_strObserverName = "MainWindow";
+    m_pMsgList = {MSG_OPERATION_OPEN_FILE_TITLE, MSG_OPERATION_EXIT};
 
     setCurTheme();
 
@@ -39,11 +40,9 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     initConnections();
 
+    initShortCut();
+
     initThemeChanged();
-
-    initFilterList();
-
-    installEventFilter(this);
 
     m_pNotifySubject = g_NotifySubject::getInstance();
     if (m_pNotifySubject) {
@@ -122,36 +121,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
     DMainWindow::closeEvent(event);
 }
 
-bool MainWindow::eventFilter(QObject *obj, QEvent *e)
-{
-    int nType = e->type();
-    if (nType == QEvent::KeyPress) {    //  按下
-        QKeyEvent *event = static_cast<QKeyEvent *>(e);
-        QString key = Utils::getKeyshortcut(event);
-        qDebug() << __FUNCTION__ << key;
-        if (m_pFilterList.contains(key)) {
-            dealWithKeyEvent(key);
-            return true;
-        }
-    }/* else if (nType == QEvent::Wheel) {
-        QWheelEvent *event = static_cast<QWheelEvent *>(e);
-        if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
-            QString sFilePath = DataManager::instance()->strOnlyFilePath();
-            if (sFilePath != "") {
-                if (event->delta() > 0) {
-                    // notifyMsg(MSG_OPERATION_LARGER);
-                } else {
-                    //notifyMsg(MSG_OPERATION_SMALLER);
-                }
-                return true;
-            }
-        }
-    }*/
-
-    return DMainWindow::eventFilter(obj, e);
-
-}
-
 void MainWindow::initUI()
 {
     titlebar()->addWidget(new TitleWidget, Qt::AlignLeft);
@@ -194,7 +163,6 @@ void MainWindow::initConnections()
     });
 
     auto m_menu = new DMenu(this);
-    //m_menu->setFixedWidth();
     auto pSigManager = new QSignalMapper(this);
     connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(slotActionTrigger(const QString &)));
 
@@ -204,7 +172,6 @@ void MainWindow::initConnections()
                                      << "Display in file manager" << "Print" << "Document info";
 
     createActionMap(m_menu, pSigManager, firstActionList, firstActionObjList);
-//    m_menu->addSeparator();
 
     QStringList secondActionList = QStringList() << tr("Search") << tr("Fullscreen") << tr("Slide show")
                                    << tr("Larger") << tr("Smaller");
@@ -212,12 +179,12 @@ void MainWindow::initConnections()
                                       << "Larger" << "Smaller";
 
     createActionMap(m_menu, pSigManager, secondActionList, secondActionObjList);
-//    m_menu->addSeparator();
 
     titlebar()->setMenu(m_menu);
 
-    auto actions = this->findChildren<QAction *>();
+    auto actions = m_menu->findChildren<QAction *>();
     foreach (QAction *a, actions) {
+        qDebug() << a->objectName();
         if (a->objectName() == "Open") {
             a->setDisabled(false);
             break;
@@ -229,23 +196,6 @@ void MainWindow::initTitlebar()
 {
     titlebar()->setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
     titlebar()->setTitle("");
-}
-
-void MainWindow::initFilterList()
-{
-    m_pMsgList = {MSG_OPERATION_OPEN_FILE_TITLE, MSG_OPERATION_EXIT};
-
-    m_pFilterList = QStringList() << KeyStr::g_esc << KeyStr::g_f1 << KeyStr::g_f11 << KeyStr::g_del
-                    << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3
-                    << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r
-                    << KeyStr::g_pgup << KeyStr::g_pgdown << KeyStr::g_ctrl_f << KeyStr::g_ctrl_o
-                    << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_equal << KeyStr::g_ctrl_smaller
-                    << KeyStr::g_alt_1 << KeyStr::g_alt_2 << KeyStr::g_ctrl_m << KeyStr::g_alt_z
-                    << KeyStr::g_ctrl_alt_f << KeyStr::g_ctrl_shift_s
-                    << KeyStr::g_down << KeyStr::g_up << KeyStr::g_left << KeyStr::g_right
-                    << KeyStr::g_ctrl_e << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l
-                    << KeyStr::g_ctrl_shift_slash
-                    << KeyStr::g_space << KeyStr::g_ctrl_c;
 }
 
 //  打开 所在文件夹
@@ -290,24 +240,6 @@ void MainWindow::setCurTheme()
     }
 
     DataManager::instance()->settrCurrentTheme(sTheme);
-}
-
-void MainWindow::dealWithKeyEvent(const QString &key)
-{
-    if (key == KeyStr::g_f1) {                      //  打开帮助文档
-        onOpenAppHelp();
-    } else if (key == KeyStr::g_ctrl_alt_f) {       //  dtk 应用实现
-        //onChangeWindowState();
-    } else if (key == KeyStr::g_ctrl_shift_slash) { //  显示快捷键预览
-        displayShortcuts();
-    } else if (key == KeyStr::g_ctrl_o) {   //  打开文件
-        notifyMsg(MSG_NOTIFY_KEY_MSG, key);
-    } else {
-        QString sFilePath = DataManager::instance()->strOnlyFilePath();
-        if (sFilePath != "") {
-            notifyMsg(MSG_NOTIFY_KEY_MSG, key);
-        }
-    }
 }
 
 void MainWindow::onOpenAppHelp()
@@ -370,10 +302,8 @@ void MainWindow::displayShortcuts()
 
     shortcutString << param1 << param2;
 
-    QProcess *shortcutViewProcess = new QProcess();
-    shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
-
-    connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
+    QProcess shortcutViewProcess;
+    shortcutViewProcess.startDetached("deepin-shortcut-viewer", shortcutString);
 }
 
 //  退出 应用
@@ -443,7 +373,7 @@ void MainWindow::onSetAppTitle(const QString &sData)
 //  文件打开成，　功能性　菜单才能点击
 void MainWindow::slotOpenFileOk()
 {
-    auto actions = this->findChildren<QAction *>();
+    auto actions = titlebar()->menu()->findChildren<QAction *>();
     foreach (QAction *a, actions) {
         a->setDisabled(false);
     }
@@ -486,6 +416,23 @@ void MainWindow::slotDealWithData(const int &msgType, const QString &msgContent)
     }
 }
 
+//  快捷键 实现
+void MainWindow::slotShortCut(const QString &key)
+{
+    if (key == KeyStr::g_f1) {
+        onOpenAppHelp();
+    } else if (key == KeyStr::g_ctrl_shift_slash) { //  显示快捷键预览
+        displayShortcuts();
+    } else if (key == KeyStr::g_ctrl_o) {   //  打开文件
+        notifyMsg(MSG_NOTIFY_KEY_MSG, key);
+    } else {
+        QString sFilePath = DataManager::instance()->strOnlyFilePath();     //  没有打开的文件
+        if (sFilePath != "") {
+            notifyMsg(MSG_NOTIFY_KEY_MSG, key);
+        }
+    }
+}
+
 void MainWindow::sendMsg(const int &, const QString &)
 {
 
@@ -511,6 +458,23 @@ void MainWindow::showDefaultSize()
         AppSetting::instance()->setAppKeyValue(KEY_APP_HEIGHT, "680");
     } else {
         resize(nWidth, nHeight);
+    }
+}
+
+//  初始化 快捷键操作
+void MainWindow::initShortCut()
+{
+    auto pSigManager = new QSignalMapper(this);
+    connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(slotShortCut(const QString &)));
+
+    auto keyList = DataManager::instance()->getPKeyList();
+    foreach (auto key, keyList) {
+        auto action = new QAction;
+        action->setShortcut(key);
+        this->addAction(action);
+
+        connect(action, SIGNAL(triggered()), pSigManager, SLOT(map()));
+        pSigManager->setMapping(action, key.toString());
     }
 }
 
@@ -543,7 +507,7 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
 
 QAction *MainWindow::createAction(DMenu *menu, const QString &actionName, const QString &objName)
 {
-    QAction *action = new QAction(actionName, this);
+    QAction *action = new QAction(actionName, menu);
     action->setObjectName(objName);
     action->setDisabled(true);
     menu->addAction(action);

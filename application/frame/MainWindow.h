@@ -40,13 +40,12 @@ signals:
 protected:
     void showEvent(QShowEvent *ev) Q_DECL_OVERRIDE;
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
-    bool eventFilter(QObject *obj, QEvent *e)Q_DECL_OVERRIDE;
 
 private:
     void initUI();
     void initConnections();
     void initTitlebar();
-    void initFilterList();
+
     QAction *createAction(DMenu *menu, const QString &actionName, const QString &);
 
     void onOpenFile();
@@ -57,7 +56,6 @@ private:
 
     void initThemeChanged();
     void setCurTheme();
-    void dealWithKeyEvent(const QString &key);
     void onOpenAppHelp();
     void displayShortcuts();
 
@@ -69,6 +67,8 @@ private:
 
     void showDefaultSize();
 
+    void initShortCut();
+
 private slots:
     void slotOpenFileOk();
     void slotFullScreen();
@@ -77,13 +77,12 @@ private slots:
     void slotActionTrigger(const QString &);
     void slotDealWithData(const int &, const QString &);
 
+    void slotShortCut(const QString &);
+
 private:
     SubjectThread   *m_pNotifySubject = nullptr;
 
-    QStringList     m_pFilterList;
-
     QList<int>      m_pMsgList;
-
 
     Qt::WindowStates    m_nOldState = Qt::WindowNoState;        //  旧的窗口状态
 
