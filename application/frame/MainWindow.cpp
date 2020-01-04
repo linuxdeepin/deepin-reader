@@ -251,7 +251,7 @@ void MainWindow::displayShortcuts()
     QStringList windowKeymaps;
     windowKeymaps << /*KeyStr::g_f11 << */KeyStr::g_esc  << KeyStr::g_f1
                   << KeyStr::g_ctrl_f << KeyStr::g_pgup << KeyStr::g_pgdown << KeyStr::g_ctrl_o << KeyStr::g_ctrl_larger
-                  << KeyStr::g_ctrl_smaller << KeyStr::g_ctrl_shift_s
+                  << KeyStr::g_ctrl_smaller << KeyStr::g_ctrl_wheel << KeyStr::g_ctrl_shift_s
                   << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_m << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2
                   << KeyStr::g_ctrl_3 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r << KeyStr::g_alt_1 << KeyStr::g_alt_2
                   << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l << KeyStr::g_del << KeyStr::g_alt_z
@@ -259,7 +259,7 @@ void MainWindow::displayShortcuts()
 
     shortcutnames << /*tr("Fullscreen") << */tr("Escape") << tr("Help")
                   << tr("Search") << tr("PageUp") << tr("PageDown") << tr("Open") << tr("Enlarge")
-                  << tr("Narrow")  << tr("Save as") << tr("Print")
+                  << tr("Narrow") << tr("Enlarge/Narrow") << tr("Save as") << tr("Print")
                   << tr("Save") << tr("Open Thumbnail") << tr("Adapte Page") << tr("Fit Height")
                   << tr("Fit Width") << tr("Rotate Left") << tr("Rotate Right") << tr("Select Text")
                   << tr("Hand Tool") << tr("Add bookmark") << tr("Add note") << tr("Highlight")
