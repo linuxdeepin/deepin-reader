@@ -1,6 +1,7 @@
 #include "ThumbnailWidget.h"
 #include "controller/DBManager.h"
 #include "controller/DataManager.h"
+#include "controller/AppSetting.h"
 #include "frame/DocummentFileHelper.h"
 
 ThumbnailWidget::ThumbnailWidget(DWidget *parent)
@@ -354,6 +355,11 @@ void ThumbnailWidget::slotOpenFileOk()
     m_pThumbnailListWidget->clear();
     m_nValuePreIndex = 0;
     fillContantToList();
+    m_nRotate = AppSetting::instance()->getKeyValue(KEY_ROTATE).toInt();
+    if (m_nRotate < 0) {
+        m_nRotate = qAbs(m_nRotate);
+    }
+    m_nRotate %= 360;
 
     int currentPage = DocummentFileHelper::instance()->currentPageNo();
     m_ThreadLoadImage.setPages(m_totalPages);
