@@ -5,6 +5,9 @@
 NotesWidget::NotesWidget(DWidget *parent)
     : CustomWidget(QString("NotesWidget"), parent)
 {
+    m_pMsgList = {MSG_NOTE_ADDITEM, MSG_NOTE_DLTNOTECONTANT, MSG_NOTE_DLTNOTEITEM,
+                  MSG_NOTE_SELECTITEM
+                 };
     initWidget();
 
     initConnection();
@@ -49,6 +52,19 @@ void NotesWidget::initWidget()
 //    connect(m_pAddAnnotationBtn, SIGNAL(clicked()), this, SLOT(slotAddAnnotation()));
 
     m_pVLayout->addWidget(m_pNotesList);
+}
+
+void NotesWidget::slotDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (MSG_NOTE_DLTNOTEITEM == msgType) {
+        slotDltNoteItem(msgContent);
+    } else if (MSG_NOTE_ADDITEM == msgType) {
+        slotAddNoteItem(msgContent);
+    } else if (MSG_NOTE_DLTNOTECONTANT == msgType) {
+        slotDltNoteContant(msgContent);
+    } else if (MSG_NOTE_SELECTITEM == msgType) {
+        slotRightSelectItem(msgContent);
+    }
 }
 
 /**
@@ -409,6 +425,8 @@ void NotesWidget::addNotesItem(const QString &text)
  */
 void NotesWidget::initConnection()
 {
+    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
+
     connect(this, SIGNAL(sigDltNoteItem(QString)), this, SLOT(slotDltNoteItem(QString)));
     connect(this, SIGNAL(sigDltNoteContant(QString)), this, SLOT(slotDltNoteContant(QString)));
 
@@ -544,23 +562,12 @@ void NotesWidget::flushNoteItemText(const int &page, const QString &uuid, const 
  */
 int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    //  增加注释消息
-    if (MSG_NOTE_ADDITEM == msgType) {
-        emit sigAddNewNoteItem(msgContent);
-        return ConstantMsg::g_effective_res;
+    if (m_pMsgList.contains(msgType)) {
+        emit sigDealWithData(msgType, msgContent);
+        return ConstantMsg::g_effective_res;;
     }
 
-    //  删除注释内容
-    if (MSG_NOTE_DLTNOTECONTANT == msgType) {
-        emit sigDltNoteContant(msgContent);
-        return ConstantMsg::g_effective_res;
-    }
-
-    if (MSG_NOTE_SELECTITEM == msgType) {
-        emit sigRightSelectItem(msgContent);
-    } else if (MSG_NOTE_DLTNOTEITEM == msgType) {  // 移除高亮，删除注释内容，删除注释列表item
-        emit sigDltNoteItem(msgContent);
-    } else if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
+    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
         emit sigOpenFileOk();
     } else if (MSG_CLOSE_FILE == msgType) {
         emit sigCloseFile();

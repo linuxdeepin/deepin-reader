@@ -71,10 +71,14 @@ signals:
 //    void sigJumpToNextItem();
     void sigRightSelectItem(QString);
 
+    void sigDealWithData(const int &, const QString &);
+
+
 protected:
     void initWidget() Q_DECL_OVERRIDE;
 
 private slots:
+    void slotDealWithData(const int &, const QString &);
     void slotAddNoteItem(const QString &);
     void slotDltNoteItem(QString);
     void slotDltNoteContant(QString);
