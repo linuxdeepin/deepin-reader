@@ -57,12 +57,12 @@ void DataManager::initKeyList()
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Slash));
 
     //  上下左右键
-    m_pLeftKeyList.append(QKeySequence(Qt::Key_PageUp));
-    m_pLeftKeyList.append(QKeySequence(Qt::Key_PageDown));
-    m_pLeftKeyList.append(QKeySequence(Qt::Key_Down));
-    m_pLeftKeyList.append(QKeySequence(Qt::Key_Up));
-    m_pLeftKeyList.append(QKeySequence(Qt::Key_Left));
-    m_pLeftKeyList.append(QKeySequence(Qt::Key_Right));
+//    m_pLeftKeyList.append(QKeySequence(Qt::Key_PageUp));
+//    m_pLeftKeyList.append(QKeySequence(Qt::Key_PageDown));
+//    m_pLeftKeyList.append(QKeySequence(Qt::Key_Down));
+//    m_pLeftKeyList.append(QKeySequence(Qt::Key_Up));
+//    m_pLeftKeyList.append(QKeySequence(Qt::Key_Left));
+//    m_pLeftKeyList.append(QKeySequence(Qt::Key_Right));
 }
 
 QString DataManager::strOnlyFilePath() const
