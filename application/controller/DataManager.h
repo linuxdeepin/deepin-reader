@@ -5,6 +5,8 @@
 #include <QColor>
 #include <QPoint>
 #include <QRect>
+#include <QMap>
+#include <QKeySequence>
 
 /**
  * @brief The DataManager class
@@ -32,6 +34,8 @@ class DataManager : public QObject
 
 private:
     explicit DataManager(QObject *parent = nullptr);
+
+    void initKeyList();
 
 public:
     static DataManager *instance()
@@ -89,6 +93,8 @@ public:
         m_bThumbnIsShow = show;
     }
 
+    QList<QKeySequence> getPKeyList() const;
+
 private:
     QString m_strCurrentTheme = "";     //  当前主题
     QString m_strOnlyFilePath = "";     //  只显示一个pdf 文件
@@ -101,6 +107,8 @@ private:
     QSize m_smallNoteSize;              // 注释小窗体的大小
     QColor m_selectColor;               // 高亮颜色
     bool m_bThumbnIsShow = false;       // 左侧缩略图是否展开
+
+    QList<QKeySequence>     m_pKeyList;      //  快捷键对应
 };
 
 #endif // DATAMANAGER_H
