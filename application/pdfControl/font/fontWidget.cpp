@@ -151,8 +151,15 @@ void FontWidget::setFileLargerOrSmaller(const int &iFlag)
  */
 void FontWidget::setAppSetAdaptateHAndW()
 {
-    AppSetting::instance()->setKeyValue(KEY_ADAPTATW, QString::number(m_bSuitW ? 1 : 0));
-    AppSetting::instance()->setKeyValue(KEY_ADAPTATH, QString::number(m_bSuitH ? 1 : 0));
+    int iValue = 0;
+
+    if (m_bSuitW) {
+        iValue = 1;
+    } else if (m_bSuitH) {
+        iValue = 10;
+    }
+
+    AppSetting::instance()->setKeyValue(KEY_ADAPTAT, QString::number(iValue));
 }
 
 /**
@@ -173,23 +180,17 @@ void FontWidget::setFrameValue()
     value = AppSetting::instance()->getKeyValue(KEY_DOUBPAGE).toInt();
     m_isDoubPage = (value == 1) ? true : false;
     m_pDoubPageViewLabelIcon->setVisible(m_isDoubPage);
-    setScaleRotateViewModeAndShow();
 
     //自适应宽/高
-    int adaptatW = 0;
-    int adaptatH = 0;
-    adaptatW = AppSetting::instance()->getKeyValue(KEY_ADAPTATW).toInt();
-    adaptatH = AppSetting::instance()->getKeyValue(KEY_ADAPTATH).toInt();
-    m_bSuitH = (adaptatH == 1) ? true : false;
-    m_bSuitW = (adaptatW == 1) ? true : false;
-    if (!m_bSuitH && !m_bSuitW) {
-        setShowSuitHIcon();
-        setShowSuitWIcon();
-    } else if (m_bSuitH && !m_bSuitW) {
-        setShowSuitHIcon();
-    } else if (!m_bSuitH && m_bSuitW) {
-        setShowSuitWIcon();
+    int adaptat = AppSetting::instance()->getKeyValue(KEY_ADAPTAT).toInt();
+    if (adaptat == 1) {
+        m_bSuitW = true;
+    } else if (adaptat == 10) {
+        m_bSuitH = true;
     }
+
+    m_pSuitWLabelIcon->setVisible(m_bSuitW);
+    m_pSuitHLabelIcon->setVisible(m_bSuitH);
 
     //旋转度数
     m_rotate = AppSetting::instance()->getKeyValue(KEY_ROTATE).toInt();
@@ -507,7 +508,6 @@ void FontWidget::setScaleRotateViewModeAndShow()
  */
 void FontWidget::slotSetChangeVal(int val)
 {
-    qDebug() << "fuck================" << val;
     m_pEnlargeLab->clear();
     m_pEnlargeLab->setText(QString("%1%").arg(val));
 
@@ -515,12 +515,12 @@ void FontWidget::slotSetChangeVal(int val)
 
     if (!m_bIsAdaptMove) {
         scaleAndRotate();
-        qDebug() << "fuck^^^^^^^^^^^^^^";
+
         m_bSuitW = false;
         m_bSuitH = false;
 
-        m_pSuitHLabelIcon->setVisible(false);
-        m_pSuitWLabelIcon->setVisible(false);
+        m_pSuitHLabelIcon->setVisible(m_bSuitW);
+        m_pSuitWLabelIcon->setVisible(m_bSuitH);
     }
 
     m_bIsAdaptMove = false;

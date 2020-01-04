@@ -37,7 +37,7 @@ private slots:
 
 private:
     void initConnections();
-    void initShortCut();
+//    void initShortCut();
     void onSetStackCurIndex(const int &);
     void onSetWidgetVisible(const int &);
 
@@ -62,8 +62,8 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
     // QWidget interface
-protected:
-    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
+//protected:
+//    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
 };
 
 #endif  // LEFTSHOWWIDGET_H
