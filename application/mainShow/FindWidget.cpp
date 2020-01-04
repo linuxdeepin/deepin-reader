@@ -192,7 +192,6 @@ void FindWidget::initWidget()
 void FindWidget::initConnection()
 {
     connect(this, SIGNAL(sigSetVisible()), SLOT(slotSetVisible()));
-    connect(this, SIGNAL(sigFindNone(const int &)), SLOT(slotFindNone(const int &)));
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
 }
 
