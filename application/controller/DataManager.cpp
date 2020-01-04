@@ -33,12 +33,6 @@ void DataManager::initKeyList()
     m_pKeyList.append(QKeySequence(Qt::Key_Space));
     m_pKeyList.append(QKeySequence(Qt::Key_F11));
     m_pKeyList.append(QKeySequence(Qt::Key_Escape));
-    m_pKeyList.append(QKeySequence(Qt::Key_PageUp));
-    m_pKeyList.append(QKeySequence(Qt::Key_PageDown));
-    m_pKeyList.append(QKeySequence(Qt::Key_Down));
-    m_pKeyList.append(QKeySequence(Qt::Key_Up));
-    m_pKeyList.append(QKeySequence(Qt::Key_Left));
-    m_pKeyList.append(QKeySequence(Qt::Key_Right));
 
     m_pKeyList.append(QKeySequence(Qt::ALT | Qt::Key_1));
     m_pKeyList.append(QKeySequence(Qt::ALT | Qt::Key_2));
@@ -61,6 +55,14 @@ void DataManager::initKeyList()
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Slash));
+
+    //  上下左右键
+    m_pLeftKeyList.append(QKeySequence(Qt::Key_PageUp));
+    m_pLeftKeyList.append(QKeySequence(Qt::Key_PageDown));
+    m_pLeftKeyList.append(QKeySequence(Qt::Key_Down));
+    m_pLeftKeyList.append(QKeySequence(Qt::Key_Up));
+    m_pLeftKeyList.append(QKeySequence(Qt::Key_Left));
+    m_pLeftKeyList.append(QKeySequence(Qt::Key_Right));
 }
 
 QString DataManager::strOnlyFilePath() const
@@ -146,4 +148,9 @@ void DataManager::settrCurrentTheme(const QString &strCurrentTheme)
 QList<QKeySequence> DataManager::getPKeyList() const
 {
     return m_pKeyList;
+}
+
+QList<QKeySequence> DataManager::getPLeftKeyList() const
+{
+    return m_pLeftKeyList;
 }

@@ -95,6 +95,8 @@ public:
 
     QList<QKeySequence> getPKeyList() const;
 
+    QList<QKeySequence> getPLeftKeyList() const;
+
 private:
     QString m_strCurrentTheme = "";     //  当前主题
     QString m_strOnlyFilePath = "";     //  只显示一个pdf 文件
@@ -109,6 +111,7 @@ private:
     bool m_bThumbnIsShow = false;       // 左侧缩略图是否展开
 
     QList<QKeySequence>     m_pKeyList;      //  快捷键对应
+    QList<QKeySequence>     m_pLeftKeyList;      // left 快捷键对应
 };
 
 #endif // DATAMANAGER_H

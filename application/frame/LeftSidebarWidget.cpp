@@ -140,6 +140,12 @@ void LeftSidebarWidget::initConnections()
     connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)), SLOT(slotDealWithKeyMsg(const QString &)));
 }
 
+//  初始化 快捷键
+void LeftSidebarWidget::initShortCut()
+{
+
+}
+
 /**
  * @brief LeftSidebarWidget::doPrevPage
  * 上一页
@@ -249,4 +255,12 @@ void LeftSidebarWidget::resizeEvent(QResizeEvent *event)
     CustomWidget::resizeEvent(event);
 
     update();
+}
+
+void LeftSidebarWidget::enterEvent(QEvent *event)
+{
+    qDebug() << "11112314141";
+    this->setFocus();
+
+    CustomWidget::enterEvent(event);
 }
