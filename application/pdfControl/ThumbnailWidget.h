@@ -13,6 +13,7 @@
 #include "PagingWidget.h"
 #include "ThumbnailItemWidget.h"
 
+/*
 class ThreadRotateImage : public QThread
 {
     Q_OBJECT
@@ -41,6 +42,7 @@ private:
     int m_nPages = 0;         // 总页数
     bool m_bLoading = false;  // 大缩略是否还在加载
 };
+*/
 
 /**
  * @brief The ThreadLoadImage class
@@ -150,7 +152,7 @@ private:
     int m_totalPages = -1;                               // 总页码数
     ThreadLoadImage m_ThreadLoadImage;                   // 加载缩略图线程
     bool m_isLoading = false;                            // 缩略图list是否初始化完毕
-    ThreadRotateImage m_threadRotateImage;               // 旋转缩略图
+//    ThreadRotateImage m_threadRotateImage;               // 旋转缩略图
     int m_nRotate = 0;                                   // 旋转度数
     int m_nValuePreIndex = 0;                            // 每一个item所占scrollbar的大小
 };
