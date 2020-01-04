@@ -273,3 +273,17 @@ void DocShowShellWidget::initWidget()
 
     this->setLayout(layout);
 }
+
+/**
+ * @brief DocShowShellWidget::enterEvent
+ * 鼠标进入时自动获取焦点
+ * @param event
+ */
+void DocShowShellWidget::enterEvent(QEvent *event)
+{
+    CustomWidget::enterEvent(event);
+
+    if (DocummentFileHelper::instance()) {
+        DocummentFileHelper::instance()->setViewFocus();
+    }
+}
