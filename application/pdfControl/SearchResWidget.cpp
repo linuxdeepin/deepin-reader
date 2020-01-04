@@ -216,19 +216,25 @@ void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
 
 void SearchResWidget::addSearchsItem(const int &page, const QString &text, const int &resultNum)
 {
-    auto itemWidget = new NotesItemWidget(this);
-    itemWidget->setNoteSigne(false);
-    itemWidget->setLabelPage(page, 1);
-    itemWidget->setTextEditText(text);
-    itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + tr(" items found")));
-    itemWidget->setMinimumSize(QSize(LEFTMINWIDTH - 5, 80));
+    auto item = m_pSearchList->insertWidgetItem(page);
+    if (item) {
+        item->setFlags(Qt::NoItemFlags);
+        item->setSizeHint(QSize(LEFTMINWIDTH, 80));
 
-    auto item = new QListWidgetItem(m_pSearchList);
-    item->setFlags(Qt::NoItemFlags);
-    item->setSizeHint(QSize(LEFTMINWIDTH, 80));
+        auto itemWidget = new NotesItemWidget(this);
+        itemWidget->setNoteSigne(false);
+        itemWidget->setLabelPage(page, 1);
+        itemWidget->setTextEditText(text);
+        itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + tr(" items found")));
+        itemWidget->setMinimumSize(QSize(LEFTMINWIDTH - 5, 80));
 
-    m_pSearchList->addItem(item);
-    m_pSearchList->setItemWidget(item, itemWidget);
+//    auto item = new QListWidgetItem(m_pSearchList);
+//    item->setFlags(Qt::NoItemFlags);
+//    item->setSizeHint(QSize(LEFTMINWIDTH, 80));
+
+//        m_pSearchList->addItem(item);
+        m_pSearchList->setItemWidget(item, itemWidget);
+    }
 }
 
 void SearchResWidget::showTips()
