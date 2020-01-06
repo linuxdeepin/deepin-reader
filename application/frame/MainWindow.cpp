@@ -255,10 +255,10 @@ void MainWindow::setCurTheme()
     DataManager::instance()->settrCurrentTheme(sTheme);
 }
 
-void MainWindow::onOpenAppHelp()
-{
-    QDesktopServices::openUrl(QUrl(Constant::sAcknowledgementLink));
-}
+//void MainWindow::onOpenAppHelp()
+//{
+//    QDesktopServices::openUrl(QUrl(Constant::sAcknowledgementLink));
+//}
 
 //void MainWindow::dealWithKeyEvent(const QString &key)
 //{
@@ -409,9 +409,10 @@ void MainWindow::slotDealWithData(const int &msgType, const QString &msgContent)
 //  快捷键 实现
 void MainWindow::slotShortCut(const QString &key)
 {
-    if (key == KeyStr::g_f1) {
-        onOpenAppHelp();
-    } else if (key == KeyStr::g_ctrl_shift_slash) { //  显示快捷键预览
+//    if (key == KeyStr::g_f1) {
+//        onOpenAppHelp();
+//    } else
+    if (key == KeyStr::g_ctrl_shift_slash) { //  显示快捷键预览
         displayShortcuts();
     } else if (key == KeyStr::g_ctrl_o) {   //  打开文件
         notifyMsg(MSG_NOTIFY_KEY_MSG, key);

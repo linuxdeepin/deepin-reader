@@ -49,7 +49,7 @@ private:
 
     QAction *createAction(DMenu *menu, const QString &actionName, const QString &);
 
-    void onOpenFile();
+//    void onOpenFile();
     void onOpenFolder();
     void onScreening();
     void onSetAppTitle(const QString &);
@@ -58,7 +58,7 @@ private:
     void initThemeChanged();
     void setCurTheme();
 //    void dealWithKeyEvent(const QString &key);
-    void onOpenAppHelp();
+//    void onOpenAppHelp();
     void displayShortcuts();
 
     void createActionMap(DMenu *m_menu, QSignalMapper *pSigManager, const QStringList &firstActionList, const QStringList &firstActionObjList);
