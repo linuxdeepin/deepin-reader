@@ -74,7 +74,7 @@ void ThumbnailItemWidget::initWidget()
     t_vLayout->addWidget(m_pPageNumber);
 
     auto t_hLayout = new QHBoxLayout;
-    t_hLayout->setContentsMargins(0, 0, 0, 0);
+    t_hLayout->setContentsMargins(0, 0, 32, 0);
 //    t_hLayout->setSpacing(0);
     t_hLayout->addStretch(1);
     t_hLayout->addItem(t_vLayout);
