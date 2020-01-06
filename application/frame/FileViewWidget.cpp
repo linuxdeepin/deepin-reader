@@ -298,7 +298,7 @@ void FileViewWidget::slotDealWithKeyMsg(const QString &msgContent)
         if (m_pDocummentFileHelper->getSelectTextString(selectText))
             onFileAddNote();
         else {
-            notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Please select the text."));
+            notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Please select the text"));
         }
     }
 }
@@ -406,7 +406,7 @@ void FileViewWidget::onFileAddAnnotation()
     int nEy = m_pEndSelectPoint.y();
 
     if (nSx == nEx && nSy == nEy) {
-        notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Please select the text."));
+        notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Please select the text"));
         return;
     }
     QString selectText = "", t_strUUid = "";
@@ -416,7 +416,7 @@ void FileViewWidget::onFileAddAnnotation()
 
         m_pDocummentFileHelper->addAnnotation(m_pStartPoint, m_pEndSelectPoint, color);
     } else {
-        notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Please select the text."));
+        notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Please select the text"));
     }
 }
 
@@ -528,7 +528,7 @@ void FileViewWidget::onFileAddNote()
     int nEy = m_pEndSelectPoint.y();
 
     if ((nSx == nEx && nSy == nEy)) {
-        notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Please select the text."));
+        notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Please select the text"));
         return;
     }
 

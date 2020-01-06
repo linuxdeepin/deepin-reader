@@ -30,34 +30,125 @@
 ShortCutShow::ShortCutShow(QObject *parent)
     : QObject(parent)
 {
-
+    initData();
 }
 
-void ShortCutShow::show(const QStringList &shortcutnames, const QStringList &windowKeymaps)
+void ShortCutShow::show()
 {
+    QStringList shortcutnames, windowKeymaps;
     QRect rect = qApp->desktop()->geometry();
     QPoint pos(rect.x() + rect.width() / 2,
                rect.y() + rect.height() / 2);
 
     QJsonObject shortcutObj;
     QJsonArray jsonGroups;
+    QString strvalue;
+    //Settings
+    QJsonObject settingsJsonGroup;
+    settingsJsonGroup.insert("groupName", tr("Settings"));
+    QJsonArray settingsJsonItems;
 
-    QJsonObject windowJsonGroup;
-    windowJsonGroup.insert("groupName", "Window");
-    QJsonArray windowJsonItems;
-
-    int index = 0;
-    for (const QString &shortcutname : shortcutnames) {
-
+    for (const QString &shortcutname : Settingsnames) {
+        auto it = shortcutmap.find(shortcutname);
+        if (it != shortcutmap.end())
+            strvalue = *it;
+        else {
+            continue;
+        }
         QJsonObject jsonItem;
         jsonItem.insert("name", shortcutname);
-        jsonItem.insert("value", windowKeymaps.at(index));
-        windowJsonItems.append(jsonItem);
-        index++;
+        jsonItem.insert("value", strvalue);
+        settingsJsonItems.append(jsonItem);
     }
 
-    windowJsonGroup.insert("groupItems", windowJsonItems);
-    jsonGroups.append(windowJsonGroup);
+    settingsJsonGroup.insert("groupItems", settingsJsonItems);
+    jsonGroups.append(settingsJsonGroup);
+
+    //Files
+    QJsonObject filesJsonGroup;
+    filesJsonGroup.insert("groupName", tr("Files"));
+    QJsonArray filesJsonItems;
+
+    for (const QString &shortcutname : Filesnames) {
+        auto it = shortcutmap.find(shortcutname);
+        if (it != shortcutmap.end())
+            strvalue = *it;
+        else {
+            continue;
+        }
+        QJsonObject jsonItem;
+        jsonItem.insert("name", shortcutname);
+        jsonItem.insert("value", strvalue);
+        filesJsonItems.append(jsonItem);
+    }
+
+    filesJsonGroup.insert("groupItems", filesJsonItems);
+    jsonGroups.append(filesJsonGroup);
+
+    //Display
+    QJsonObject displayJsonGroup;
+    displayJsonGroup.insert("groupName", tr("Display"));
+    QJsonArray displayJsonItems;
+    for (const QString &shortcutname : Displaynames) {
+        auto it = shortcutmap.find(shortcutname);
+        if (it != shortcutmap.end())
+            strvalue = *it;
+        else {
+            continue;
+        }
+        QJsonObject jsonItem;
+        jsonItem.insert("name", shortcutname);
+        jsonItem.insert("value", strvalue);
+        displayJsonItems.append(jsonItem);
+    }
+
+    displayJsonGroup.insert("groupItems", displayJsonItems);
+    jsonGroups.append(displayJsonGroup);
+
+    //Tools
+    QJsonObject toolJsonGroup;
+    toolJsonGroup.insert("groupName", tr("Tools"));
+    QJsonArray toolJsonItems;
+
+    for (const QString &shortcutname : Toolsnames) {
+
+        auto it = shortcutmap.find(shortcutname);
+        if (it != shortcutmap.end())
+            strvalue = *it;
+        else {
+            continue;
+        }
+        QJsonObject jsonItem;
+        jsonItem.insert("name", shortcutname);
+        jsonItem.insert("value", strvalue);
+        toolJsonItems.append(jsonItem);
+    }
+
+    toolJsonGroup.insert("groupItems", toolJsonItems);
+    jsonGroups.append(toolJsonGroup);
+
+    //Edit
+    QJsonObject editorJsonGroup;
+    editorJsonGroup.insert("groupName", tr("Edit"));
+    QJsonArray editorJsonItems;
+    for (const QString &shortcutname : Editnames) {
+
+        auto it = shortcutmap.find(shortcutname);
+        if (it != shortcutmap.end())
+            strvalue = *it;
+        else {
+            continue;
+        }
+        QJsonObject jsonItem;
+        jsonItem.insert("name", shortcutname);
+        jsonItem.insert("value", strvalue);
+        editorJsonItems.append(jsonItem);
+    }
+
+    editorJsonGroup.insert("groupItems", editorJsonItems);
+    jsonGroups.append(editorJsonGroup);
+
+
     shortcutObj.insert("shortcut", jsonGroups);
 
     QJsonDocument doc(shortcutObj);
@@ -70,4 +161,46 @@ void ShortCutShow::show(const QStringList &shortcutnames, const QStringList &win
 
     QProcess shortcutViewProcess;
     shortcutViewProcess.startDetached("deepin-shortcut-viewer", shortcutString);
+}
+
+void ShortCutShow::initData()
+{
+    windowKeymaps.clear();
+    shortcutnames.clear();
+    Settingsnames.clear();
+    Filesnames.clear();
+    Displaynames.clear();
+    Toolsnames.clear();
+    Editnames.clear();
+
+    windowKeymaps << /*KeyStr::g_f11 << */KeyStr::g_esc  << KeyStr::g_f1
+                  << KeyStr::g_ctrl_f << KeyStr::g_pgup << KeyStr::g_pgdown << KeyStr::g_ctrl_o << KeyStr::g_ctrl_larger
+                  << KeyStr::g_ctrl_smaller << KeyStr::g_ctrl_wheel << KeyStr::g_ctrl_shift_s
+                  << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_m << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2
+                  << KeyStr::g_ctrl_3 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r << KeyStr::g_alt_1 << KeyStr::g_alt_2
+                  << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l << KeyStr::g_del << KeyStr::g_alt_z
+                  << KeyStr::g_ctrl_c << KeyStr::g_ctrl_x << KeyStr::g_ctrl_v << KeyStr::g_ctrl_z << KeyStr::g_ctrl_a << KeyStr::g_ctrl_shift_slash;
+
+    shortcutnames << /*tr("Fullscreen") << */tr("Exit") << tr("Help")
+                  << tr("Search") << tr("Page up") << tr("Page down") << tr("Open") << tr("Zoom in")
+                  << tr("Zoom out") << tr("Zoom in/Zoom out") << tr("Save as") << tr("Print")
+                  << tr("Save") << tr("Thumbnails") << tr("Fit page") << tr("Fit height")
+                  << tr("Fit width") << tr("Rotate left") << tr("Rotate right") << tr("Select text")
+                  << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight")
+                  << tr("Delete") << tr("Magnifier") << tr("Copy") << tr("Cut") << tr("Paste")
+                  << tr("Undo") << tr("Select all") << tr("Display shortcuts");
+
+    Settingsnames << tr("Help") << tr("Display shortcuts");
+    Filesnames << tr("Open") << tr("Save as") << tr("Print") << tr("Save");
+    Displaynames << tr("Thumbnails") << tr("Fit page") << tr("Fit height") << tr("Fit width") << tr("Rotate left") << tr("Rotate right")
+                 << tr("Zoom in") << tr("Zoom out") << tr("Zoom in/Zoom out") << tr("Page up") << tr("Page down") /*<< tr("Fullscreen")*/ << tr("Exit") ;
+    Toolsnames << tr("Select text") << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete")
+               << tr("Magnifier") << tr("Search");
+    Editnames << tr("Copy") << tr("Cut") << tr("Paste") << tr("Delete") << tr("Delete") << tr("Save") << tr("Undo") << tr("Select all");
+
+    int index = 0;
+    foreach (QString strname, shortcutnames) {
+        shortcutmap.insert(strname, windowKeymaps.at(index));
+        index++;
+    }
 }

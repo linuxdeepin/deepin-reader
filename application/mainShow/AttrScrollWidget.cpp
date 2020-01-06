@@ -47,9 +47,9 @@ AttrScrollWidget::AttrScrollWidget(DWidget *parent)
     createLabel(gridLayout, 11, tr("Security"), fileInfo.bsafe);
 
     QString sPaperSize = QString("%1*%2mm").arg(fileInfo.iWidth).arg(fileInfo.iHeight);
-    createLabel(gridLayout, 12, tr("Page Size"), sPaperSize);
+    createLabel(gridLayout, 12, tr("Page size"), sPaperSize);
 
-    createLabel(gridLayout, 13, tr("File Size"), Utils::getInputDataSize(fileInfo.size));
+    createLabel(gridLayout, 13, tr("File size"), Utils::getInputDataSize(fileInfo.size));
 
     auto vLayout = new QVBoxLayout;
     vLayout->setContentsMargins(10, 10, 10, 10);

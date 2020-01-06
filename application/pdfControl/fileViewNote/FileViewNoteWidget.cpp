@@ -154,7 +154,7 @@ void FileViewNoteWidget::slotTextEditMaxContantNum()
 
 void FileViewNoteWidget::slotShowTips()
 {
-    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("input limit reached"));
+    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Input limit reached"));
 }
 
 void FileViewNoteWidget::setNotePage(const QString &pNotePage)

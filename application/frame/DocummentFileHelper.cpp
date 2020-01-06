@@ -225,7 +225,7 @@ void DocummentFileHelper::onSaveFile()
             notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Saved failed"));
         }
     } else {
-        notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Not Changed"));
+        notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("No changes"));
     }
 }
 
@@ -243,7 +243,7 @@ void DocummentFileHelper::onSaveAsFile()
         QString filePath = dialog.getSaveFileName(nullptr, tr("Save as"), m_szFilePath, sFilter);
 
         if (filePath.endsWith("/.pdf")) {
-            DDialog dlg("", tr("Not support save file with illegal name"));
+            DDialog dlg("", tr("Invalid file name"));
             QIcon icon(PF::getIconPath("exception-logo"));
             dlg.setIcon(icon /*QIcon(":/resources/exception-logo.svg")*/);
             dlg.addButtons(QStringList() << tr("Ok"));
@@ -290,7 +290,7 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
             QString sPath = fileList.at(0);
 
             if (m_szFilePath == sPath) {
-                notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("File is opened."));
+                notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The file is already open"));
                 return;
             }
         }
@@ -348,7 +348,7 @@ void DocummentFileHelper::onOpenFiles(const QString &filePaths)
     foreach (auto s, canOpenFileList) {
         QString sOpenPath = DataManager::instance()->strOnlyFilePath();
         if (s == sOpenPath) {
-            notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("File is opened."));
+            notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The file is already open"));
         } else {
             QString sRes = s + Constant::sQStringSep;
             QString sOpenPath = DataManager::instance()->strOnlyFilePath(); //  打开文档为空

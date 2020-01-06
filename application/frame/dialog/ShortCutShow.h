@@ -20,7 +20,7 @@
 #define SHORTCUTSHOW_H
 
 #include <QObject>
-
+#include <QMap>
 
 /**
  * @brief The ShortCutShow class
@@ -35,8 +35,14 @@ public:
 
 
 public:
-    void show(const QStringList &shortcutnames, const QStringList &windowKeymaps);
+    void show();
 
+private:
+    void initData();
+
+private:
+    QStringList Settingsnames, Filesnames, Displaynames, Toolsnames, Editnames,  shortcutnames, windowKeymaps;
+    QMap<QString, QString> shortcutmap;
 };
 
 #endif // SHORTCUTSHOW_H

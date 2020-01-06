@@ -78,12 +78,12 @@
     </message>
     <message>
         <location filename="../mainShow/AttrScrollWidget.cpp" line="50"/>
-        <source>Page Size</source>
+        <source>Page size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainShow/AttrScrollWidget.cpp" line="52"/>
-        <source>File Size</source>
+        <source>File size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -207,18 +207,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="228"/>
-        <source>Not Changed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../frame/DocummentFileHelper.cpp" line="243"/>
         <source>Save as</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="246"/>
-        <source>Not support save file with illegal name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -227,9 +217,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../frame/DocummentFileHelper.cpp" line="228"/>
+        <source>No changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/DocummentFileHelper.cpp" line="246"/>
+        <source>Invalid file name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../frame/DocummentFileHelper.cpp" line="293"/>
         <location filename="../frame/DocummentFileHelper.cpp" line="351"/>
-        <source>File is opened.</source>
+        <source>The file is already open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -260,18 +260,10 @@
     </message>
 </context>
 <context>
-    <name>FileAttrWidget</name>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="196"/>
-        <source>close</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>FileViewNoteWidget</name>
     <message>
         <location filename="../pdfControl/fileViewNote/FileViewNoteWidget.cpp" line="157"/>
-        <source>input limit reached</source>
+        <source>Input limit reached</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -282,7 +274,7 @@
         <location filename="../frame/FileViewWidget.cpp" line="409"/>
         <location filename="../frame/FileViewWidget.cpp" line="419"/>
         <location filename="../frame/FileViewWidget.cpp" line="531"/>
-        <source>Please select the text.</source>
+        <source>Please select the text</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -312,17 +304,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="428"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="429"/>
         <source>Two-Page View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="452"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="453"/>
         <source>Fit Height</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="475"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="476"/>
         <source>Fit Width</source>
         <translation type="unfinished"></translation>
     </message>
@@ -372,211 +364,76 @@
     </message>
     <message>
         <location filename="../frame/MainWidget.cpp" line="149"/>
-        <source> is not supported.</source>
+        <source>is not supported</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="90"/>
+        <location filename="../frame/MainWindow.cpp" line="97"/>
         <source>Do you want to save the changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="92"/>
+        <location filename="../frame/MainWindow.cpp" line="99"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="92"/>
+        <location filename="../frame/MainWindow.cpp" line="99"/>
         <source>Discard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="93"/>
-        <location filename="../frame/MainWindow.cpp" line="166"/>
-        <location filename="../frame/MainWindow.cpp" line="263"/>
+        <location filename="../frame/MainWindow.cpp" line="100"/>
+        <location filename="../frame/MainWindow.cpp" line="188"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="166"/>
-        <location filename="../frame/MainWindow.cpp" line="261"/>
+        <location filename="../frame/MainWindow.cpp" line="188"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="166"/>
-        <location filename="../frame/MainWindow.cpp" line="262"/>
+        <location filename="../frame/MainWindow.cpp" line="188"/>
         <source>Save as</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="167"/>
+        <location filename="../frame/MainWindow.cpp" line="189"/>
         <source>Display in file manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="167"/>
-        <location filename="../frame/MainWindow.cpp" line="262"/>
+        <location filename="../frame/MainWindow.cpp" line="189"/>
         <source>Print</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="167"/>
+        <location filename="../frame/MainWindow.cpp" line="189"/>
         <source>Document info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="173"/>
-        <location filename="../frame/MainWindow.cpp" line="261"/>
+        <location filename="../frame/MainWindow.cpp" line="195"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="173"/>
+        <location filename="../frame/MainWindow.cpp" line="195"/>
         <source>Slide show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="174"/>
-        <source>Larger</source>
+        <location filename="../frame/MainWindow.cpp" line="196"/>
+        <source>Zoom in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="174"/>
-        <source>Smaller</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="260"/>
-        <source>Escape</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="260"/>
-        <source>Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="261"/>
-        <source>PageUp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="261"/>
-        <source>PageDown</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="261"/>
-        <source>Enlarge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="262"/>
-        <source>Narrow</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="262"/>
-        <source>Enlarge/Narrow</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="263"/>
-        <source>Open Thumbnail</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="263"/>
-        <source>Adapte Page</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="263"/>
-        <source>Fit Height</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="264"/>
-        <source>Fit Width</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="264"/>
-        <source>Rotate Left</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="264"/>
-        <source>Rotate Right</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="264"/>
-        <source>Select Text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="265"/>
-        <source>Hand Tool</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="265"/>
-        <source>Add bookmark</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="265"/>
-        <source>Add note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="265"/>
-        <source>Highlight</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="266"/>
-        <source>Delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="266"/>
-        <source>Magnifier</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="266"/>
-        <source>Copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="266"/>
-        <source>Cut</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="266"/>
-        <source>Paste</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="267"/>
-        <source>Undo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="267"/>
-        <source>Select all</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWindow.cpp" line="267"/>
-        <source>ShortcutPreview</source>
+        <location filename="../frame/MainWindow.cpp" line="196"/>
+        <source>Zoom out</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -596,8 +453,8 @@
 <context>
     <name>NotesWidget</name>
     <message>
-        <location filename="../pdfControl/NotesWidget.cpp" line="98"/>
-        <location filename="../pdfControl/NotesWidget.cpp" line="252"/>
+        <location filename="../pdfControl/NotesWidget.cpp" line="114"/>
+        <location filename="../pdfControl/NotesWidget.cpp" line="268"/>
         <source>The annotation has been removed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -606,7 +463,7 @@
     <name>PrintManager</name>
     <message>
         <location filename="../frame/dialog/PrintManager.cpp" line="43"/>
-        <source>No Print Device</source>
+        <source>No printer found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -625,6 +482,222 @@
     <message>
         <location filename="../pdfControl/SearchResWidget.cpp" line="249"/>
         <source>No search results</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ShortCutShow</name>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="48"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="69"/>
+        <source>Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="90"/>
+        <source>Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="110"/>
+        <source>Tools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="132"/>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="184"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="196"/>
+        <source>Exit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="184"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="193"/>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="185"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="198"/>
+        <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="185"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="196"/>
+        <source>Page up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="185"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="196"/>
+        <source>Page down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="185"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="194"/>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="185"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="196"/>
+        <source>Zoom in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="186"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="196"/>
+        <source>Zoom out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="186"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="196"/>
+        <source>Zoom in/Zoom out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="186"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="194"/>
+        <source>Save as</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="186"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="194"/>
+        <source>Print</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="187"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="194"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="199"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="187"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="195"/>
+        <source>Thumbnails</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="187"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="195"/>
+        <source>Fit page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="187"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="195"/>
+        <source>Fit height</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="188"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="195"/>
+        <source>Fit width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="188"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="195"/>
+        <source>Rotate left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="188"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="195"/>
+        <source>Rotate right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="188"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="197"/>
+        <source>Select text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="189"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="197"/>
+        <source>Hand tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="189"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="197"/>
+        <source>Add bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="189"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="197"/>
+        <source>Add annotation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="189"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="197"/>
+        <source>Highlight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="190"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="197"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="199"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="190"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="198"/>
+        <source>Magnifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="190"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="199"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="190"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="199"/>
+        <source>Cut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="190"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="199"/>
+        <source>Paste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="191"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="199"/>
+        <source>Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="191"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="199"/>
+        <source>Select all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="191"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="193"/>
+        <source>Display shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

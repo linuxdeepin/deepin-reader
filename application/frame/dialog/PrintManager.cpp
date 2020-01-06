@@ -40,7 +40,7 @@ void PrintManager::showPrintDialog(DWidget *widget)
     QString printerName = printer.printerName();
 
     if (printerName.size() == 0) {
-        DDialog dlg("", tr("No Print Device"));
+        DDialog dlg("", tr("No printer found"));
         dlg.setIcon(QIcon(PF::getIconPath("exception-logo")));
         dlg.addButtons(QStringList() << tr("Ok"));
         QMargins mar(0, 0, 0, 30);

@@ -188,7 +188,7 @@ void CentralWidget::dropEvent(QDropEvent *event)
                 msgType = tr("Unknown type");
             }
             QString msgTitle = QString("%1").arg(msgType);
-            QString msgContent = msgTitle + tr(" is not supported.");
+            QString msgContent = msgTitle + tr("is not supported");
             onShowTips(msgContent);
         }
 

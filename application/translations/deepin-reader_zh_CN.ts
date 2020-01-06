@@ -92,14 +92,12 @@
     </message>
     <message>
         <location line="+3"/>
-        <source>Page Size</source>
-        <translatorcomment>页面大小</translatorcomment>
+        <source>Page size</source>
         <translation>页面大小</translation>
     </message>
     <message>
         <location line="+2"/>
-        <source>File Size</source>
-        <translatorcomment>文件大小</translatorcomment>
+        <source>File size</source>
         <translation>文件大小</translation>
     </message>
     <message>
@@ -243,35 +241,32 @@
         <translation>保存失败</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>Not Changed</source>
-        <translatorcomment>文档未修改</translatorcomment>
-        <translation>文档未修改</translation>
-    </message>
-    <message>
-        <location line="+15"/>
+        <location line="+18"/>
         <source>Save as</source>
         <translatorcomment>另存为</translatorcomment>
         <translation>另存为</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>Not support save file with illegal name</source>
-        <translatorcomment>不支持使用非法名称保存文件</translatorcomment>
-        <translation>不支持使用非法名称保存文件</translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+6"/>
         <source>Ok</source>
         <translatorcomment>确定</translatorcomment>
         <translation>确定</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="-21"/>
+        <source>No changes</source>
+        <translation>文档未修改</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Invalid file name</source>
+        <translation>请输入有效的文件名</translation>
+    </message>
+    <message>
+        <location line="+47"/>
         <location line="+58"/>
-        <source>File is opened.</source>
-        <translatorcomment>文档已打开.</translatorcomment>
-        <translation>文档已打开.</translation>
+        <source>The file is already open</source>
+        <translation>文档已打开</translation>
     </message>
     <message>
         <location line="-51"/>
@@ -306,21 +301,11 @@
     </message>
 </context>
 <context>
-    <name>FileAttrWidget</name>
-    <message>
-        <location filename="../mainShow/FileAttrWidget.cpp" line="+196"/>
-        <source>close</source>
-        <translatorcomment>关闭</translatorcomment>
-        <translation>关闭</translation>
-    </message>
-</context>
-<context>
     <name>FileViewNoteWidget</name>
     <message>
         <location filename="../pdfControl/fileViewNote/FileViewNoteWidget.cpp" line="+157"/>
-        <source>input limit reached</source>
-        <translatorcomment>输入已达上限</translatorcomment>
-        <translation>输入已达上限</translation>
+        <source>Input limit reached</source>
+        <translation>添加注释,输入已达上限</translation>
     </message>
 </context>
 <context>
@@ -330,19 +315,8 @@
         <location line="+108"/>
         <location line="+10"/>
         <location line="+112"/>
-        <source>Please select the text.</source>
-        <translatorcomment>请选择文本.</translatorcomment>
-        <translation>请选择文本.</translation>
-    </message>
-    <message>
-        <source>No Print Device</source>
-        <translatorcomment>没有打印设备</translatorcomment>
-        <translation type="vanished">没有打印设备</translation>
-    </message>
-    <message>
-        <source>Ok</source>
-        <translatorcomment>确定</translatorcomment>
-        <translation type="vanished">确定</translation>
+        <source>Please select the text</source>
+        <translation>请选择文本</translation>
     </message>
 </context>
 <context>
@@ -375,7 +349,7 @@
         <translation>右旋转</translation>
     </message>
     <message>
-        <location line="+323"/>
+        <location line="+324"/>
         <source>Two-Page View</source>
         <translatorcomment>双页显示</translatorcomment>
         <translation>双页显示</translation>
@@ -445,15 +419,14 @@
     </message>
     <message>
         <location line="+3"/>
-        <source> is not supported.</source>
-        <translatorcomment> 不支持.</translatorcomment>
-        <translation> 不支持.</translation>
+        <source>is not supported</source>
+        <translation>不支持</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="+90"/>
+        <location filename="../frame/MainWindow.cpp" line="+97"/>
         <source>Do you want to save the changes?</source>
         <translatorcomment>是否保存已编辑的文档？</translatorcomment>
         <translation>是否保存已编辑的文档？</translation>
@@ -472,230 +445,62 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+73"/>
-        <location line="+97"/>
+        <location line="+88"/>
         <source>Save</source>
         <translatorcomment>保存</translatorcomment>
         <translation>保存</translation>
     </message>
     <message>
-        <location line="-97"/>
-        <location line="+95"/>
+        <location line="+0"/>
         <source>Open</source>
         <translatorcomment>打开</translatorcomment>
         <translation>打开</translation>
     </message>
     <message>
-        <location line="-95"/>
-        <location line="+96"/>
+        <location line="+0"/>
         <source>Save as</source>
         <translatorcomment>另存为</translatorcomment>
         <translation>另存为</translation>
     </message>
     <message>
-        <location line="-95"/>
+        <location line="+1"/>
         <source>Display in file manager</source>
         <translatorcomment>在文件管理器中显示</translatorcomment>
         <translation>在文件管理器中显示</translation>
     </message>
     <message>
         <location line="+0"/>
-        <location line="+95"/>
         <source>Print</source>
         <translatorcomment>打印</translatorcomment>
         <translation>打印</translation>
     </message>
     <message>
-        <location line="-95"/>
+        <location line="+0"/>
         <source>Document info</source>
         <translatorcomment>文档信息</translatorcomment>
         <translation>文档信息</translation>
     </message>
     <message>
         <location line="+6"/>
-        <location line="+88"/>
         <source>Search</source>
         <translatorcomment>搜索</translatorcomment>
         <translation>搜索</translation>
     </message>
     <message>
-        <source>Fullscreen</source>
-        <translatorcomment>全屏</translatorcomment>
-        <translation type="vanished">全屏</translation>
-    </message>
-    <message>
-        <location line="-88"/>
+        <location line="+0"/>
         <source>Slide show</source>
         <translatorcomment>幻灯片放映</translatorcomment>
         <translation>幻灯片放映</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Larger</source>
-        <translatorcomment>放大</translatorcomment>
+        <source>Zoom in</source>
         <translation>放大</translation>
     </message>
     <message>
         <location line="+0"/>
-        <source>Smaller</source>
-        <translatorcomment>缩小</translatorcomment>
+        <source>Zoom out</source>
         <translation>缩小</translation>
-    </message>
-    <message>
-        <location line="+86"/>
-        <source>Escape</source>
-        <translatorcomment>Esc键</translatorcomment>
-        <translation>Esc键</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Help</source>
-        <translatorcomment>帮助</translatorcomment>
-        <translation>帮助</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>PageUp</source>
-        <translatorcomment>上一页</translatorcomment>
-        <translation>上一页</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>PageDown</source>
-        <translatorcomment>下一页</translatorcomment>
-        <translation>下一页</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Enlarge</source>
-        <translatorcomment>放大</translatorcomment>
-        <translation>放大</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Narrow</source>
-        <translatorcomment>缩小</translatorcomment>
-        <translation>缩小</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Enlarge/Narrow</source>
-        <translatorcomment>放大/缩小 </translatorcomment>
-        <translation>放大/缩小 </translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Open Thumbnail</source>
-        <translatorcomment>打开缩略图</translatorcomment>
-        <translation>打开缩略图</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Adapte Page</source>
-        <translatorcomment>适应页面</translatorcomment>
-        <translation>适应页面</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Fit Height</source>
-        <translatorcomment>适应高度</translatorcomment>
-        <translation>适应高度</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Fit Width</source>
-        <translatorcomment>适应宽度</translatorcomment>
-        <translation>适应宽度</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Rotate Left</source>
-        <translatorcomment>左旋转</translatorcomment>
-        <translation>左旋转</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Rotate Right</source>
-        <translatorcomment>右旋转</translatorcomment>
-        <translation>右旋转</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Select Text</source>
-        <translatorcomment>选择工具</translatorcomment>
-        <translation>选择工具</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Hand Tool</source>
-        <translatorcomment>手形工具</translatorcomment>
-        <translation>手形工具</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Add bookmark</source>
-        <translatorcomment>添加书签</translatorcomment>
-        <translation>添加书签</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Add note</source>
-        <translatorcomment>添加注释</translatorcomment>
-        <translation>添加注释</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Highlight</source>
-        <translatorcomment>高亮</translatorcomment>
-        <translation>高亮</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Delete</source>
-        <translatorcomment>删除</translatorcomment>
-        <translation>删除</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Magnifier</source>
-        <translatorcomment>放大镜</translatorcomment>
-        <translation>放大镜</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Copy</source>
-        <translatorcomment>复制</translatorcomment>
-        <translation>复制</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Cut</source>
-        <translatorcomment>剪切</translatorcomment>
-        <translation>剪切</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Paste</source>
-        <translatorcomment>粘贴</translatorcomment>
-        <translation>粘贴</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Undo</source>
-        <translatorcomment>撤销</translatorcomment>
-        <translation>撤销</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Select all</source>
-        <translatorcomment>全选</translatorcomment>
-        <translation>全选</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>ShortcutPreview</source>
-        <translatorcomment>快捷键预览</translatorcomment>
-        <translation>快捷键预览</translation>
     </message>
 </context>
 <context>
@@ -716,7 +521,7 @@
 <context>
     <name>NotesWidget</name>
     <message>
-        <location filename="../pdfControl/NotesWidget.cpp" line="+98"/>
+        <location filename="../pdfControl/NotesWidget.cpp" line="+114"/>
         <location line="+154"/>
         <source>The annotation has been removed</source>
         <translatorcomment>已删除注释</translatorcomment>
@@ -727,8 +532,8 @@
     <name>PrintManager</name>
     <message>
         <location filename="../frame/dialog/PrintManager.cpp" line="+43"/>
-        <source>No Print Device</source>
-        <translation>没有打印设备</translation>
+        <source>No printer found</source>
+        <translation>无打印设备</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -749,6 +554,222 @@
         <source>No search results</source>
         <translatorcomment>无搜索结果</translatorcomment>
         <translation>无搜索结果</translation>
+    </message>
+</context>
+<context>
+    <name>ShortCutShow</name>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="+48"/>
+        <source>Settings</source>
+        <translation>设置</translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Files</source>
+        <translation>文件</translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Display</source>
+        <translation>视图</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Tools</source>
+        <translation>工具</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Edit</source>
+        <translation>编辑</translation>
+    </message>
+    <message>
+        <location line="+52"/>
+        <location line="+12"/>
+        <source>Exit</source>
+        <translation>退出全屏/退出放映/退出放大镜</translation>
+    </message>
+    <message>
+        <location line="-12"/>
+        <location line="+9"/>
+        <source>Help</source>
+        <translation>帮助</translation>
+    </message>
+    <message>
+        <location line="-8"/>
+        <location line="+13"/>
+        <source>Search</source>
+        <translation>搜索</translation>
+    </message>
+    <message>
+        <location line="-13"/>
+        <location line="+11"/>
+        <source>Page up</source>
+        <translation>上一页</translation>
+    </message>
+    <message>
+        <location line="-11"/>
+        <location line="+11"/>
+        <source>Page down</source>
+        <translation>下一页</translation>
+    </message>
+    <message>
+        <location line="-11"/>
+        <location line="+9"/>
+        <source>Open</source>
+        <translation>打开</translation>
+    </message>
+    <message>
+        <location line="-9"/>
+        <location line="+11"/>
+        <source>Zoom in</source>
+        <translation>放大</translation>
+    </message>
+    <message>
+        <location line="-10"/>
+        <location line="+10"/>
+        <source>Zoom out</source>
+        <translation>缩小</translation>
+    </message>
+    <message>
+        <location line="-10"/>
+        <location line="+10"/>
+        <source>Zoom in/Zoom out</source>
+        <translation>放大/缩小</translation>
+    </message>
+    <message>
+        <location line="-10"/>
+        <location line="+8"/>
+        <source>Save as</source>
+        <translation>另存为</translation>
+    </message>
+    <message>
+        <location line="-8"/>
+        <location line="+8"/>
+        <source>Print</source>
+        <translation>打印</translation>
+    </message>
+    <message>
+        <location line="-7"/>
+        <location line="+7"/>
+        <location line="+5"/>
+        <source>Save</source>
+        <translation>保存</translation>
+    </message>
+    <message>
+        <location line="-12"/>
+        <location line="+8"/>
+        <source>Thumbnails</source>
+        <translation>缩略图</translation>
+    </message>
+    <message>
+        <location line="-8"/>
+        <location line="+8"/>
+        <source>Fit page</source>
+        <translation>适合页面</translation>
+    </message>
+    <message>
+        <location line="-8"/>
+        <location line="+8"/>
+        <source>Fit height</source>
+        <translation>适应高度</translation>
+    </message>
+    <message>
+        <location line="-7"/>
+        <location line="+7"/>
+        <source>Fit width</source>
+        <translation>适应宽度</translation>
+    </message>
+    <message>
+        <location line="-7"/>
+        <location line="+7"/>
+        <source>Rotate left</source>
+        <translation>左旋转</translation>
+    </message>
+    <message>
+        <location line="-7"/>
+        <location line="+7"/>
+        <source>Rotate right</source>
+        <translation>右旋转</translation>
+    </message>
+    <message>
+        <location line="-7"/>
+        <location line="+9"/>
+        <source>Select text</source>
+        <translation>选择工具</translation>
+    </message>
+    <message>
+        <location line="-8"/>
+        <location line="+8"/>
+        <source>Hand tool</source>
+        <translation>手形工具</translation>
+    </message>
+    <message>
+        <location line="-8"/>
+        <location line="+8"/>
+        <source>Add bookmark</source>
+        <translation>添加书签</translation>
+    </message>
+    <message>
+        <location line="-8"/>
+        <location line="+8"/>
+        <source>Add annotation</source>
+        <translation>添加注释</translation>
+    </message>
+    <message>
+        <location line="-8"/>
+        <location line="+8"/>
+        <source>Highlight</source>
+        <translation>高亮</translation>
+    </message>
+    <message>
+        <location line="-7"/>
+        <location line="+7"/>
+        <location line="+2"/>
+        <source>Delete</source>
+        <translation>删除</translation>
+    </message>
+    <message>
+        <location line="-9"/>
+        <location line="+8"/>
+        <source>Magnifier</source>
+        <translation>放大镜</translation>
+    </message>
+    <message>
+        <location line="-8"/>
+        <location line="+9"/>
+        <source>Copy</source>
+        <translation>复制</translation>
+    </message>
+    <message>
+        <location line="-9"/>
+        <location line="+9"/>
+        <source>Cut</source>
+        <translation>剪切</translation>
+    </message>
+    <message>
+        <location line="-9"/>
+        <location line="+9"/>
+        <source>Paste</source>
+        <translation>粘贴</translation>
+    </message>
+    <message>
+        <location line="-8"/>
+        <location line="+8"/>
+        <source>Undo</source>
+        <translation>撤销</translation>
+    </message>
+    <message>
+        <location line="-8"/>
+        <location line="+8"/>
+        <source>Select all</source>
+        <translation>全选</translation>
+    </message>
+    <message>
+        <location line="-8"/>
+        <location line="+2"/>
+        <source>Display shortcuts</source>
+        <translation>显示快捷键预览</translation>
     </message>
 </context>
 <context>

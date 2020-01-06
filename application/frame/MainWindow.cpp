@@ -188,9 +188,9 @@ void MainWindow::initConnections()
     createActionMap(m_menu, pSigManager, firstActionList, firstActionObjList);
 
     QStringList secondActionList = QStringList() << tr("Search") /*<< tr("Fullscreen")*/ << tr("Slide show")
-                                   << tr("Larger") << tr("Smaller");
+                                   << tr("Zoom in") << tr("Zoom out");
     QStringList secondActionObjList = QStringList() << "Search" /*<< "Fullscreen" */ << "Slide show"
-                                      << "Larger" << "Smaller";
+                                      << "Zoom in" << "Zoom out";
 
     createActionMap(m_menu, pSigManager, secondActionList, secondActionObjList);
 
@@ -273,27 +273,8 @@ void MainWindow::setCurTheme()
 //  显示快捷键
 void MainWindow::displayShortcuts()
 {
-    QStringList shortcutnames;
-    QStringList windowKeymaps;
-    windowKeymaps << /*KeyStr::g_f11 << */KeyStr::g_esc  << KeyStr::g_f1
-                  << KeyStr::g_ctrl_f << KeyStr::g_pgup << KeyStr::g_pgdown << KeyStr::g_ctrl_o << KeyStr::g_ctrl_larger
-                  << KeyStr::g_ctrl_smaller << KeyStr::g_ctrl_wheel << KeyStr::g_ctrl_shift_s
-                  << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_m << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2
-                  << KeyStr::g_ctrl_3 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r << KeyStr::g_alt_1 << KeyStr::g_alt_2
-                  << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l << KeyStr::g_del << KeyStr::g_alt_z
-                  << KeyStr::g_ctrl_c << KeyStr::g_ctrl_x << KeyStr::g_ctrl_v << KeyStr::g_ctrl_z << KeyStr::g_ctrl_a << KeyStr::g_ctrl_shift_slash;
-
-    shortcutnames << /*tr("Fullscreen") << */tr("Escape") << tr("Help")
-                  << tr("Search") << tr("PageUp") << tr("PageDown") << tr("Open") << tr("Enlarge")
-                  << tr("Narrow") << tr("Enlarge/Narrow") << tr("Save as") << tr("Print")
-                  << tr("Save") << tr("Open Thumbnail") << tr("Adapte Page") << tr("Fit Height")
-                  << tr("Fit Width") << tr("Rotate Left") << tr("Rotate Right") << tr("Select Text")
-                  << tr("Hand Tool") << tr("Add bookmark") << tr("Add note") << tr("Highlight")
-                  << tr("Delete") << tr("Magnifier") << tr("Copy") << tr("Cut") << tr("Paste")
-                  << tr("Undo") << tr("Select all") << tr("ShortcutPreview");
-
     ShortCutShow show;
-    show.show(shortcutnames, windowKeymaps);
+    show.show();
 }
 
 //  退出 应用
@@ -390,9 +371,9 @@ void MainWindow::slotActionTrigger(const QString &sAction)
         notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_f11);
     } else if (sAction == "Slide show") {
         onScreening();
-    } else if (sAction == "Larger") {
+    } else if (sAction == "Zoom in") {
         notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_larger);
-    } else if (sAction == "Smaller") {
+    } else if (sAction == "Zoom out") {
         notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_smaller);
     }
 }
