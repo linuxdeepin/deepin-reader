@@ -59,9 +59,12 @@ void CentralWidget::slotOpenFileOk()
     if (pLayout) {
         pLayout->setCurrentIndex(1);
 
-        auto spinner = this->findChild<DSpinner *>();
-        if (spinner) {
-            spinner->stop();
+        auto spinnerList = this->findChildren<DSpinner *>();
+        foreach (auto sp, spinnerList) {
+            if (sp->objectName() == "home_spinner") {
+                sp->stop();
+                break;
+            }
         }
     }
 }
@@ -83,9 +86,12 @@ void CentralWidget::onOpenFileStart()
     if (pLayout) {
         pLayout->setCurrentIndex(2);
 
-        auto spinner = this->findChild<DSpinner *>();
-        if (spinner) {
-            spinner->start();
+        auto spinnerList = this->findChildren<DSpinner *>();
+        foreach (auto sp, spinnerList) {
+            if (sp->objectName() == "home_spinner") {
+                sp->start();
+                break;
+            }
         }
     }
 }
@@ -206,6 +212,7 @@ void CentralWidget::initWidget()
     QGridLayout *gridlyout = new QGridLayout(pSpinnerWidget);
     gridlyout->setAlignment(Qt::AlignCenter);
     auto m_spinner = new DSpinner(this);
+    m_spinner->setObjectName("home_spinner");
     m_spinner->setFixedSize(60, 60);
     gridlyout->addWidget(m_spinner);
     m_spinner->stop();
