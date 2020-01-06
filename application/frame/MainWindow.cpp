@@ -1,6 +1,6 @@
 #include "MainWindow.h"
 #include "TitleWidget.h"
-#include "MainWidget.h"
+#include "CentralWidget.h"
 
 #include <QFileInfo>
 
@@ -128,7 +128,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::initUI()
 {
     titlebar()->addWidget(new TitleWidget, Qt::AlignLeft);
-    setCentralWidget(new MainWidget);
+    setCentralWidget(new CentralWidget);
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *e)

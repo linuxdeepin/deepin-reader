@@ -1,4 +1,23 @@
-#include "MainWidget.h"
+/*
+ * Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
+ *
+ * Author:     wangzhxiaun
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "CentralWidget.h"
 #include <DSplitter>
 #include <QFileInfo>
 #include <QMimeData>
@@ -15,8 +34,8 @@
 
 #include "controller/DataManager.h"
 
-MainWidget::MainWidget(CustomWidget *parent)
-    : CustomWidget("MainWidget", parent)
+CentralWidget::CentralWidget(CustomWidget *parent)
+    : CustomWidget("CentralWidget", parent)
 {
     setAcceptDrops(true);
 
@@ -25,7 +44,7 @@ MainWidget::MainWidget(CustomWidget *parent)
     initConnections();
 }
 
-void MainWidget::initConnections()
+void CentralWidget::initConnections()
 {
     connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));
 
@@ -34,7 +53,7 @@ void MainWidget::initConnections()
 }
 
 //  文件打开成功
-void MainWidget::slotOpenFileOk()
+void CentralWidget::slotOpenFileOk()
 {
     auto pLayout = this->findChild<QStackedLayout *>();
     if (pLayout) {
@@ -47,7 +66,7 @@ void MainWidget::slotOpenFileOk()
     }
 }
 
-void MainWidget::slotDealWithData(const int &msgType, const QString &msgContent)
+void CentralWidget::slotDealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_FAIL) {
         onOpenFileFail(msgContent);
@@ -58,7 +77,7 @@ void MainWidget::slotDealWithData(const int &msgType, const QString &msgContent)
     }
 }
 
-void MainWidget::onOpenFileStart()
+void CentralWidget::onOpenFileStart()
 {
     auto pLayout = this->findChild<QStackedLayout *>();
     if (pLayout) {
@@ -72,7 +91,7 @@ void MainWidget::onOpenFileStart()
 }
 
 //  文件打开失败
-void MainWidget::onOpenFileFail(const QString &errorInfo)
+void CentralWidget::onOpenFileFail(const QString &errorInfo)
 {
     //  文档打开失败, 切换回首页
     auto pLayout = this->findChild<QStackedLayout *>();
@@ -88,12 +107,12 @@ void MainWidget::onOpenFileFail(const QString &errorInfo)
 }
 
 
-void MainWidget::onShowTips(const QString &contant)
+void CentralWidget::onShowTips(const QString &contant)
 {
     DMessageManager::instance()->sendMessage(this, QIcon(":/icons/deepin/builtin/ok.svg"), contant);
 }
 
-int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
+int CentralWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgList.contains(msgType)) {
         emit sigDealWithData(msgType, msgContent);
@@ -107,7 +126,7 @@ int MainWidget::dealWithData(const int &msgType, const QString &msgContent)
     return 0;
 }
 
-void MainWidget::dragEnterEvent(QDragEnterEvent *event)
+void CentralWidget::dragEnterEvent(QDragEnterEvent *event)
 {
     // Accept drag event if mime type is url.
     auto mimeData = event->mimeData();
@@ -116,7 +135,7 @@ void MainWidget::dragEnterEvent(QDragEnterEvent *event)
     }
 }
 
-void MainWidget::dropEvent(QDropEvent *event)
+void CentralWidget::dropEvent(QDropEvent *event)
 {
     auto mimeData = event->mimeData();
     if (mimeData->hasUrls()) {
@@ -160,7 +179,7 @@ void MainWidget::dropEvent(QDropEvent *event)
     }
 }
 
-void MainWidget::initWidget()
+void CentralWidget::initWidget()
 {
     auto pStcakLayout = new QStackedLayout(this);
     pStcakLayout->setContentsMargins(0, 0, 0, 0);
