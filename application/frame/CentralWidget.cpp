@@ -44,6 +44,23 @@ CentralWidget::CentralWidget(CustomWidget *parent)
     initConnections();
 }
 
+void CentralWidget::keyPressEvent(QKeyEvent *event)
+{
+    //  暂未想出好的处理方法  王志轩, 左侧栏 和 文档区域 上下键 功能不相同
+    QStringList pFilterList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown
+                              << KeyStr::g_down << KeyStr::g_up
+                              << KeyStr::g_left << KeyStr::g_right;
+    QString key = Utils::getKeyshortcut(event);
+    if (pFilterList.contains(key)) {
+        QString sFilePath = DataManager::instance()->strOnlyFilePath();
+        if (sFilePath != "") {
+            notifyMsg(MSG_NOTIFY_KEY_MSG, key);
+        }
+    }
+
+    CustomWidget::keyPressEvent(event);
+}
+
 void CentralWidget::initConnections()
 {
     connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));

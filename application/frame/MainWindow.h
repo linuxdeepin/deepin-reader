@@ -40,7 +40,7 @@ signals:
 protected:
     void showEvent(QShowEvent *ev) Q_DECL_OVERRIDE;
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
-    bool eventFilter(QObject *obj, QEvent *e) Q_DECL_OVERRIDE;
+//    bool eventFilter(QObject *obj, QEvent *e) Q_DECL_OVERRIDE;
 
 private:
     void initUI();
@@ -57,7 +57,7 @@ private:
 
     void initThemeChanged();
     void setCurTheme();
-    void dealWithKeyEvent(const QString &key);
+//    void dealWithKeyEvent(const QString &key);
     void onOpenAppHelp();
     void displayShortcuts();
 
@@ -85,7 +85,7 @@ private:
     SubjectThread   *m_pNotifySubject = nullptr;
 
     QList<int>      m_pMsgList;
-    QStringList     m_pFilterList;
+//    QStringList     m_pFilterList;
     Qt::WindowStates    m_nOldState = Qt::WindowNoState;        //  旧的窗口状态
 
     // IObserver interface

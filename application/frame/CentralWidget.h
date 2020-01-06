@@ -39,7 +39,9 @@ signals:
     void sigOpenFileOk();
     void sigDealWithData(const int &, const QString &);
 
+    // QWidget interface
 protected:
+    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
     void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
 

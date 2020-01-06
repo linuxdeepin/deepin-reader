@@ -29,11 +29,6 @@ MainWindow::MainWindow(DMainWindow *parent)
     m_strObserverName = "MainWindow";
     m_pMsgList = {MSG_OPERATION_OPEN_FILE_TITLE, MSG_OPERATION_EXIT};
 
-    //  暂未想出好的处理方法  王志轩, 左侧栏 和 文档区域 上下键 功能不相同
-    m_pFilterList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown
-                    << KeyStr::g_down << KeyStr::g_up
-                    << KeyStr::g_left << KeyStr::g_right;
-
     setCurTheme();
 
     initUI();
@@ -46,7 +41,7 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     initShortCut();
 
-    installEventFilter(this);
+//    installEventFilter(this);
 
     m_pNotifySubject = g_NotifySubject::getInstance();
     if (m_pNotifySubject) {
@@ -131,19 +126,19 @@ void MainWindow::initUI()
     setCentralWidget(new CentralWidget);
 }
 
-bool MainWindow::eventFilter(QObject *obj, QEvent *e)
-{
-    int nType = e->type();
-    if (nType == QEvent::KeyPress) {    //  按下
-        QKeyEvent *event = static_cast<QKeyEvent *>(e);
-        QString key = Utils::getKeyshortcut(event);
-        if (m_pFilterList.contains(key)) {
-            dealWithKeyEvent(key);
-            return true;
-        }
-    }
-    return DMainWindow::eventFilter(obj, e);
-}
+//bool MainWindow::eventFilter(QObject *obj, QEvent *e)
+//{
+//    int nType = e->type();
+//    if (nType == QEvent::KeyPress) {    //  按下
+//        QKeyEvent *event = static_cast<QKeyEvent *>(e);
+//        QString key = Utils::getKeyshortcut(event);
+//        if (m_pFilterList.contains(key)) {
+//            dealWithKeyEvent(key);
+//            return true;
+//        }
+//    }
+//    return DMainWindow::eventFilter(obj, e);
+//}
 
 
 void MainWindow::createActionMap(DMenu *m_menu, QSignalMapper *pSigManager,
@@ -265,14 +260,14 @@ void MainWindow::onOpenAppHelp()
     QDesktopServices::openUrl(QUrl(Constant::sAcknowledgementLink));
 }
 
-void MainWindow::dealWithKeyEvent(const QString &key)
-{
-    qDebug() << "           1";
-    QString sFilePath = DataManager::instance()->strOnlyFilePath();
-    if (sFilePath != "") {
-        notifyMsg(MSG_NOTIFY_KEY_MSG, key);
-    }
-}
+//void MainWindow::dealWithKeyEvent(const QString &key)
+//{
+//    qDebug() << "           1";
+//    QString sFilePath = DataManager::instance()->strOnlyFilePath();
+//    if (sFilePath != "") {
+//        notifyMsg(MSG_NOTIFY_KEY_MSG, key);
+//    }
+//}
 
 
 //  显示快捷键
