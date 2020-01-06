@@ -26,6 +26,7 @@ void PagingWidget::initWidget()
     m_pTotalPagesLab->setMinimumWidth(60);
     m_pTotalPagesLab->setFixedHeight(36);
     DFontSizeManager::instance()->bind(m_pTotalPagesLab, DFontSizeManager::T6);
+    m_pTotalPagesLab->setForegroundRole(DPalette::Text);
 
     m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
     m_pPrePageBtn->setFixedSize(QSize(36, 36));
@@ -43,6 +44,7 @@ void PagingWidget::initWidget()
     m_pJumpPageSpinBox->installEventFilter(this);
     m_pJumpPageSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
     DFontSizeManager::instance()->bind(m_pJumpPageSpinBox, DFontSizeManager::T6);
+    m_pJumpPageSpinBox->setForegroundRole(DPalette::Text);
 
     auto hLayout = new QHBoxLayout;
     hLayout->setContentsMargins(7, 0, 7, 0);
@@ -163,7 +165,13 @@ void PagingWidget::onJumpToSpecifiedPage(const int &nPage)
 
 void PagingWidget::slotUpdateTheme()
 {
-    m_pTotalPagesLab->setThemePalette();
+//    m_pTotalPagesLab->setThemePalette();
+    if (m_pTotalPagesLab) {
+        m_pTotalPagesLab->setForegroundRole(DPalette::Text);
+    }
+    if (m_pJumpPageSpinBox) {
+        m_pJumpPageSpinBox->setForegroundRole(DPalette::Text);
+    }
 }
 
 //  设置当前页码, 进行比对,是否可以 上一页\下一页
