@@ -48,24 +48,22 @@ public:
 
 signals:
     void sigWidgetHide();
-    void sigOpenFileOk(const int &);
-//    void sigSetCurScale(const QString &);
+    void sigOpenFileOk();
     void sigDealWithKey(const QString &);
     void sigDealWithData(const int &, const QString &);
-//    void sigKeyLargerOrSmaller(int);
 
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
-    void showEvent(QShowEvent *)Q_DECL_OVERRIDE;
 
 private slots:
     void slotDealWithKey(const QString &);
     void slotDealWithData(const int &, const QString &);
     void slotUpdateTheme();
-    void slotReset(const int &);
+
+    void slotOpenFileOk();
 
     void slotSetChangeVal(int);
     void slotSetDoubPageViewCheckIcon();
@@ -73,16 +71,12 @@ private slots:
     void slotSetSuitWCheckIcon();
     void slotSetRotateLeftCheckIcon();
     void slotSetRotateRightCheckIcon();
-//    void slotKeyLargerOrSmaller(int itype);
 
 private:
     void rotateFileView(bool isRight = true);
     void scaleAndRotate();
-//    void setShowSuitHIcon();
-//    void setShowSuitWIcon();
+    void SetDataByCtrl1();
     void initConnection();
-
-    DLabel *getLabelLineH(int fixheight = 2);
 
     void initScaleLabel();
     void initScaleSlider();
@@ -92,9 +86,9 @@ private:
     void setScaleRotateViewModeAndShow();
     void setFileLargerOrSmaller(const int &);
     void setAppSetAdaptateHAndW();
-    void setFrameValue();
 
     void SetCurScale(const QString &);
+    void SetSliderMaxValue();
 
 private:
     QStringList     shortKeyList;

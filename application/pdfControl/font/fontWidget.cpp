@@ -53,19 +53,11 @@ int FontWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigDealWithData(msgType, msgContent);
         return ConstantMsg::g_effective_res;
     }
+
     switch (msgType) {
-//    case MSG_OPERATION_LARGER:      //  放大
-//        emit sigKeyLargerOrSmaller(1);
-//        return ConstantMsg::g_effective_res;
-//    case MSG_OPERATION_SMALLER:     //  缩小
-//        emit sigKeyLargerOrSmaller(0);
-//        return ConstantMsg::g_effective_res;
     case MSG_OPERATION_OPEN_FILE_OK:
-        emit sigOpenFileOk(0);
+        emit sigOpenFileOk();
         break;
-//    case MSG_SELF_ADAPTE_SCALE:
-//        emit sigSetCurScale(msgContent);
-//        break;
     case MSG_OPERATION_UPDATE_THEME:
         emit sigUpdateTheme();
         break;
@@ -140,14 +132,6 @@ void FontWidget::initWidget()
     this->setLayout(widgetLayout);
 }
 
-void FontWidget::showEvent(QShowEvent *event)
-{
-    CustomWidget::showEvent(event);
-
-    if (DocummentProxy::instance() && m_pEnlargeSlider->maximum() != DocummentProxy::instance()->getMaxZoomratio() * 100)
-        m_pEnlargeSlider->setMaximum(DocummentProxy::instance()->getMaxZoomratio() * 100);
-}
-
 //  缩放, iFlag > 0, 放大, 否则 缩放
 void FontWidget::setFileLargerOrSmaller(const int &iFlag)
 {
@@ -172,12 +156,55 @@ void FontWidget::setFileLargerOrSmaller(const int &iFlag)
     }
 }
 
-/**
- * @brief FontWidget::setFrameValue
- * 将文件中保存的值显示到相应控件中
- */
-void FontWidget::setFrameValue()
+//  快捷键处理
+void FontWidget::slotDealWithKey(const QString &sKey)
 {
+    if (sKey == KeyStr::g_ctrl_1) {
+        SetDataByCtrl1();
+    } else if (sKey == KeyStr::g_ctrl_2) {
+        slotSetSuitHCheckIcon();
+    } else if (sKey == KeyStr::g_ctrl_3) {
+        slotSetSuitWCheckIcon();
+    } else if (sKey == KeyStr::g_ctrl_r) {
+        slotSetRotateLeftCheckIcon();
+    } else if (sKey == KeyStr::g_ctrl_shift_r) {
+        slotSetRotateRightCheckIcon();
+    } else if (sKey == KeyStr::g_ctrl_smaller) {
+        setFileLargerOrSmaller(0);
+    } else if (sKey == KeyStr::g_ctrl_larger || sKey == KeyStr::g_ctrl_equal) {
+        setFileLargerOrSmaller(1);
+    }
+}
+
+void FontWidget::slotDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_SELF_ADAPTE_SCALE) {      //  设置当前缩放比
+        SetCurScale(msgContent);
+    }
+}
+
+//  主题变了
+void FontWidget::slotUpdateTheme()
+{
+    QString sPixmap = PF::getIconPath("select");
+    QPixmap px = Utils::renderSVG(sPixmap, QSize(28, 28));
+    m_pSuitHLabelIcon->setPixmap(px);
+    m_pSuitWLabelIcon->setPixmap(px);
+    m_pDoubPageViewLabelIcon->setPixmap(px);
+
+    QIcon icon;
+    icon = PF::getIcon(Pri::g_module + "a_small");
+    m_pEnlargeSlider->setLeftIcon(icon);
+
+    icon = PF::getIcon(Pri::g_module + "a_big");
+    m_pEnlargeSlider->setRightIcon(icon /*QIcon(sBig)*/);
+}
+
+//  打开文档成功, 加载上一次的状态
+void FontWidget::slotOpenFileOk()
+{
+    SetSliderMaxValue();    //  获取 最大的缩放值
+
     int value = 0;
 
     //缩放比例
@@ -187,6 +214,8 @@ void FontWidget::setFrameValue()
         m_pEnlargeSlider->setValue(value);
         m_pEnlargeSlider->blockSignals(false);
     }
+
+    m_pEnlargeLab->setText(QString("%1%").arg(value));
 
     //单双页
     value = AppSetting::instance()->getKeyValue(KEY_DOUBPAGE).toInt();
@@ -213,88 +242,6 @@ void FontWidget::setFrameValue()
     notifyMsg(MSG_FILE_ROTATE, QString::number(m_rotate));
 }
 
-//  快捷键处理
-void FontWidget::slotDealWithKey(const QString &sKey)
-{
-    if (sKey == KeyStr::g_ctrl_1) {
-        slotReset(1);
-    } else if (sKey == KeyStr::g_ctrl_2) {
-        slotSetSuitHCheckIcon();
-    } else if (sKey == KeyStr::g_ctrl_3) {
-        slotSetSuitWCheckIcon();
-    } else if (sKey == KeyStr::g_ctrl_r) {
-        slotSetRotateLeftCheckIcon();
-    } else if (sKey == KeyStr::g_ctrl_shift_r) {
-        slotSetRotateRightCheckIcon();
-    } else if (sKey == KeyStr::g_ctrl_smaller) {
-        setFileLargerOrSmaller(0);
-    } else if (sKey == KeyStr::g_ctrl_larger || sKey == KeyStr::g_ctrl_equal) {
-        setFileLargerOrSmaller(1);
-    }
-}
-
-void FontWidget::slotDealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_SELF_ADAPTE_SCALE) {      //  设置当前缩放比
-        SetCurScale(msgContent);
-    }
-}
-
-//  主题变了
-void FontWidget::slotUpdateTheme()
-{
-    //    QString sPixmap = PF::getImagePath("select", Pri::g_icons);
-    QString sPixmap = PF::getIconPath("select");
-    QPixmap px = Utils::renderSVG(sPixmap, QSize(28, 28));
-    m_pSuitHLabelIcon->setPixmap(px);
-    m_pSuitWLabelIcon->setPixmap(px);
-    m_pDoubPageViewLabelIcon->setPixmap(px);
-
-    //    QString sSmall = PF::getImagePath("a_small", Pri::g_icons);
-    QIcon icon;
-    icon = PF::getIcon(Pri::g_module + "a_small");
-    m_pEnlargeSlider->setLeftIcon(icon /*QIcon(sSmall)*/);
-
-    //    QString sBig = PF::getImagePath("a_big", Pri::g_icons);
-    icon = PF::getIcon(Pri::g_module + "a_big");
-    m_pEnlargeSlider->setRightIcon(icon /*QIcon(sBig)*/);
-}
-
-/**
- * @brief FontWidget::slotReset
- * 重新打开文件后，复位个控件状态
- */
-void FontWidget::slotReset(const int &iFlag)
-{
-    m_pEnlargeLab->setText(QString("100%"));
-    m_pEnlargeSlider->setValue(100);
-
-    m_pDoubPageViewLabelIcon->setVisible(false);
-
-    m_bSuitH = false;
-    m_bSuitW = false;
-
-    m_pSuitHLabelIcon->setVisible(false);
-    m_pSuitWLabelIcon->setVisible(false);
-
-    m_rotate = 0;
-    m_rotateType = RotateType_0;
-
-    m_isDoubPage = false;
-
-    if (iFlag == 1) {   //  恢复 默认值
-        AppSetting::instance()->setKeyValue(KEY_PERCENTAGE, QString::number(100));
-        AppSetting::instance()->setKeyValue(KEY_ROTATE, QString::number(0));
-        AppSetting::instance()->setKeyValue(KEY_DOUBPAGE, QString::number(0));      //  单双页
-        AppSetting::instance()->setKeyValue(KEY_ADAPTAT, QString::number(0));       //  适应宽\高
-
-        setScaleRotateViewModeAndShow();
-    } else {
-        //将文件之前设置显示出来
-        setFrameValue();
-    }
-}
-
 //  设置 当前的缩放比, 不要触发滑动条值变化信号
 void FontWidget::SetCurScale(const QString &sData)
 {
@@ -307,6 +254,13 @@ void FontWidget::SetCurScale(const QString &sData)
     m_pEnlargeSlider->blockSignals(true);
     m_pEnlargeSlider->setValue(sData.toDouble() * 100);
     m_pEnlargeSlider->blockSignals(false);
+}
+
+void FontWidget::SetSliderMaxValue()
+{
+    if (DocummentProxy::instance() && m_pEnlargeSlider->maximum() != DocummentProxy::instance()->getMaxZoomratio() * 100) {
+        m_pEnlargeSlider->setMaximum(DocummentProxy::instance()->getMaxZoomratio() * 100);
+    }
 }
 
 /**
@@ -369,34 +323,31 @@ void FontWidget::scaleAndRotate()
 }
 
 /**
- * @brief FontWidget::setShowSuitHIcon
- * 自适应高函数
+ * @brief   ctrl 1  取消宽高, 并且文档原始大小
  */
-//void FontWidget::setShowSuitHIcon()
-//{
-//    m_pSuitWLabelIcon->setVisible(false);
-//    m_pSuitHLabelIcon->setVisible(m_bSuitH);
+void FontWidget::SetDataByCtrl1()
+{
+    if (m_bSuitH) {
+        notifyMsg(MSG_SELF_ADAPTE_HEIGHT, "0");
+    } else if (m_bSuitW) {
+        notifyMsg(MSG_SELF_ADAPTE_WIDTH, "0");
+    }
 
-//    setAppSetAdaptateHAndW();
+    m_bSuitH = m_bSuitW = false;
+    m_pSuitWLabelIcon->setVisible(false);
+    m_pSuitHLabelIcon->setVisible(false);
 
-//    int t_nShow = m_bSuitH ? 1 : 0;
-//    notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(t_nShow));
-//}
+    m_pEnlargeLab->setText("100%");
+    m_pEnlargeSlider->blockSignals(true);
+    m_pEnlargeSlider->setValue(100);
+    m_pEnlargeSlider->blockSignals(false);
 
-/**
- * @brief FontWidget::setShowSuitWIcon
- * 自适应宽函数
- */
-//void FontWidget::setShowSuitWIcon()
-//{
-//    m_pSuitWLabelIcon->setVisible(m_bSuitW);
-//    m_pSuitHLabelIcon->setVisible(false);
+    setScaleRotateViewModeAndShow();
 
-//    setAppSetAdaptateHAndW();
+    AppSetting::instance()->setKeyValue(KEY_PERCENTAGE, "100");
+    AppSetting::instance()->setKeyValue(KEY_ADAPTAT, "0");       //  适应宽\高
+}
 
-//    int t_nShow = m_bSuitW ? 1 : 0;
-//    notifyMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(t_nShow));
-//}
 
 /**
  * @brief FontWidget::initConnection
@@ -404,24 +355,10 @@ void FontWidget::scaleAndRotate()
  */
 void FontWidget::initConnection()
 {
-//    connect(this, SIGNAL(sigKeyLargerOrSmaller(int)),
-//            SLOT(slotKeyLargerOrSmaller(int)));
-//    connect(this, SIGNAL(sigSetCurScale(const QString &)), SLOT(slotSetCurScale(const QString &)));
-
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
-    connect(this, SIGNAL(sigOpenFileOk(const int &)), SLOT(slotReset(const int &)));
+    connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigDealWithKey(const QString &)), SLOT(slotDealWithKey(const QString &)));
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
-}
-
-//  分割线
-DLabel *FontWidget::getLabelLineH(int fixheight)
-{
-    auto labelLine = new DLabel(this);
-    labelLine->setFixedHeight(fixheight);
-    labelLine->setFrameShape(QFrame::HLine);
-
-    return labelLine;
 }
 
 void FontWidget::initScaleLabel()
@@ -554,11 +491,19 @@ void FontWidget::slotSetChangeVal(int val)
 
     if (!m_bIsAdaptMove) {
         scaleAndRotate();
-        m_bSuitW = false;
-        m_bSuitH = false;
 
+        //拖动缩放比例, 取消 自适应宽/高
+        if (m_bSuitW) {
+            notifyMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(0));
+        } else if (m_bSuitH) {
+            notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(0));
+        }
+
+        m_bSuitW = m_bSuitH = false;
         m_pSuitHLabelIcon->setVisible(m_bSuitW);
         m_pSuitWLabelIcon->setVisible(m_bSuitH);
+
+        AppSetting::instance()->setKeyValue(KEY_ADAPTAT, QString::number(0));       //  适应宽\高
     }
 
     m_bIsAdaptMove = false;
@@ -586,7 +531,7 @@ void FontWidget::slotSetSuitHCheckIcon()
     m_bSuitW = false;
     m_bSuitH = !m_bSuitH;
 
-    m_pSuitWLabelIcon->setVisible(false);
+    m_pSuitWLabelIcon->setVisible(m_bSuitW);
     m_pSuitHLabelIcon->setVisible(m_bSuitH);
 
     int t_nShow = m_bSuitH ? 1 : 0;
@@ -604,7 +549,7 @@ void FontWidget::slotSetSuitWCheckIcon()
     m_bSuitW = !m_bSuitW;
 
     m_pSuitWLabelIcon->setVisible(m_bSuitW);
-    m_pSuitHLabelIcon->setVisible(false);
+    m_pSuitHLabelIcon->setVisible(m_bSuitH);
 
     int t_nShow = m_bSuitW ? 1 : 0;
     setAppSetAdaptateHAndW();
@@ -645,13 +590,3 @@ void FontWidget::slotSetRotateRightCheckIcon()
 {
     rotateFileView(true);
 }
-
-//void FontWidget::slotKeyLargerOrSmaller(int itype)
-//{
-//    if (itype == 1) {
-//        setFileLargerOrSmaller(1);
-//    } else {
-//        setFileLargerOrSmaller(0);
-//    }
-
-//}
