@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_CN">
 <context>
     <name>Application</name>
     <message>
@@ -310,27 +312,27 @@
 <context>
     <name>FontWidget</name>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="92"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="119"/>
         <source>Rotate Left</source>
         <translation>左旋转</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="105"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="132"/>
         <source>Rotate Right</source>
         <translation>右旋转</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="429"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="468"/>
         <source>Two-Page View</source>
         <translation>双页显示</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="453"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="492"/>
         <source>Fit Height</source>
         <translation>适应高度</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="476"/>
+        <location filename="../pdfControl/font/fontWidget.cpp" line="515"/>
         <source>Fit Width</source>
         <translation>适应宽度</translation>
     </message>

@@ -35,13 +35,6 @@ TRANSLATIONS += \
     translations/deepin-reader_zh_CN.ts
 
 
-DISTFILES += \
-    themes/solarized_light.theme \
-    themes/atom_dark.theme \
-    themes/deepin_dark.theme \
-    themes/solarized_dark.theme \
-    themes/deepin.theme
-
 APPICONDIR = $$PREFIX/share/icons/deepin/apps/scalable
 
 isEmpty(BINDIR):BINDIR=/usr/bin
@@ -58,7 +51,8 @@ icon_files.files = $$PWD/icons/deepin/builtin/deepin-reader.svg
 
 CONFIG(release, debug|release) {
     #遍历目录中的ts文件，调用lrelease将其生成为qm文件
-    for(tsfile, TRANSLATIONS) {
+    TRANSLATIONFILES= $$files($$PWD/translations/*.ts)
+    for(tsfile, TRANSLATIONFILES) {
         qmfile = $$replace(tsfile, .ts$, .qm)
         system(lrelease $$tsfile -qm $$qmfile) | error("Failed to lrelease")
     }

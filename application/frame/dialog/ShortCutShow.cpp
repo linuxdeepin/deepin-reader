@@ -196,7 +196,7 @@ void ShortCutShow::initData()
                  << tr("Zoom in") << tr("Zoom out") /*<< tr("Zoom in/Zoom out") */ << tr("Page up") << tr("Page down") /*<< tr("Fullscreen")*/ << tr("Exit") ;
     Toolsnames << tr("Select text") << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete")
                << tr("Magnifier") << tr("Search");
-    Editnames << tr("Copy") << tr("Cut") << tr("Paste") << tr("Delete") << tr("Delete") << tr("Save") << tr("Undo") << tr("Select all");
+    Editnames << tr("Copy") << tr("Cut") << tr("Paste") << tr("Delete") << tr("Save") << tr("Undo") << tr("Select all");
 
     int index = 0;
     foreach (QString strname, shortcutnames) {

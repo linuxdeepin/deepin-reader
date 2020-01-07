@@ -41,7 +41,7 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     initShortCut();
 
-//    installEventFilter(this);
+    //installEventFilter(this);
 
     m_pNotifySubject = g_NotifySubject::getInstance();
     if (m_pNotifySubject) {
