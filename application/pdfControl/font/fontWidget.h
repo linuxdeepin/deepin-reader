@@ -1,4 +1,22 @@
-﻿#ifndef FONTWIDGET_H
+﻿/*
+ * Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
+ *
+ * Author:     duanxiaohui
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#ifndef FONTWIDGET_H
 #define FONTWIDGET_H
 
 #include <DLabel>
@@ -30,10 +48,11 @@ public:
 
 signals:
     void sigWidgetHide();
-    void sigOpenFileOk();
-    void sigSetCurScale(const QString &);
+    void sigOpenFileOk(const int &);
+//    void sigSetCurScale(const QString &);
     void sigDealWithKey(const QString &);
-    void sigKeyLargerOrSmaller(int);
+    void sigDealWithData(const int &, const QString &);
+//    void sigKeyLargerOrSmaller(int);
 
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
@@ -44,10 +63,9 @@ protected:
 
 private slots:
     void slotDealWithKey(const QString &);
+    void slotDealWithData(const int &, const QString &);
     void slotUpdateTheme();
-    void slotReset();
-
-    void slotSetCurScale(const QString &);
+    void slotReset(const int &);
 
     void slotSetChangeVal(int);
     void slotSetDoubPageViewCheckIcon();
@@ -55,13 +73,13 @@ private slots:
     void slotSetSuitWCheckIcon();
     void slotSetRotateLeftCheckIcon();
     void slotSetRotateRightCheckIcon();
-    void slotKeyLargerOrSmaller(int itype);
+//    void slotKeyLargerOrSmaller(int itype);
 
 private:
     void rotateFileView(bool isRight = true);
     void scaleAndRotate();
-    void setShowSuitHIcon();
-    void setShowSuitWIcon();
+//    void setShowSuitHIcon();
+//    void setShowSuitWIcon();
     void initConnection();
 
     DLabel *getLabelLineH(int fixheight = 2);
@@ -75,6 +93,8 @@ private:
     void setFileLargerOrSmaller(const int &);
     void setAppSetAdaptateHAndW();
     void setFrameValue();
+
+    void SetCurScale(const QString &);
 
 private:
     QStringList     shortKeyList;

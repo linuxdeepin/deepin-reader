@@ -32,8 +32,8 @@ enum MSG_MENU_TYPE {
     //    MSG_OPERATION_FIND,                 //  搜索
     //    MSG_OPERATION_FULLSCREEN,           //  全屏
     MSG_OPERATION_SLIDE,              //  放映
-    MSG_OPERATION_LARGER,               //  放大
-    MSG_OPERATION_SMALLER,              //  缩小
+//    MSG_OPERATION_LARGER,               //  放大
+//    MSG_OPERATION_SMALLER,              //  缩小
     //    MSG_OPERATION_HELP,                 //  帮助
     MSG_OPERATION_EXIT,               //  退出
 
