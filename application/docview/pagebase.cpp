@@ -196,6 +196,7 @@ void PageBase::paintEvent(QPaintEvent *event)
     d->bookmarkbtn->move(this->width() - d->bookmarkbtn->width() - 20, 0);
     d->m_spinner->move(this->width() / 2, this->height() / 2);
     QPainter qpainter(this);
+    // qpainter.drawPixmap(this->rect(), d->m_pixmapshow);
     qpainter.setBrush(d->m_paintercolor);
     QPen qpen(d->m_pencolor, d->m_penwidth);
     qpainter.setPen(qpen);
@@ -569,6 +570,8 @@ void PageBase::loadMagnifierCacheThreadStart(double width, double height)
 void PageBase::slot_RenderFinish(QImage image)
 {
     Q_D(PageBase);
+    QTime  time;
+    time.start();
     qDebug() << "page RenderFinish pagenum:" << d->m_pageno;
     d->havereander = true;
 //    double originwidth = image.width(), originheight = image.height();
@@ -592,9 +595,16 @@ void PageBase::slot_RenderFinish(QImage image)
     map.setDevicePixelRatio(devicePixelRatioF());
     qDebug() << "PageBase::slot_RenderFinish to setPixmap" << map.rect();
     setPixmap(map);
+
+//    d->m_pixmapshow = QPixmap::fromImage(image);
+//    d->m_pixmapshow = d->m_pixmapshow.transformed(leftmatrix, Qt::SmoothTransformation);
+//    d->m_pixmapshow.setDevicePixelRatio(devicePixelRatioF());
+//    qDebug() << "PageBase::slot_RenderFinish to setPixmap" << d->m_pixmapshow.rect();
+//    update();
     setSelectTextRects();
     d->m_spinner->stop();
     d->m_spinner->hide();
+    qDebug() << "PageBase::slot_RenderFinish over time elapsed=" << time.elapsed();
 }
 
 void PageBase::clearImage()

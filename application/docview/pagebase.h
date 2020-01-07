@@ -201,6 +201,7 @@ public:
     DSpinner *m_spinner;
     QList<ICONANNOTATION> m_iconannotationlist;//注释图标列表
 //    QMutex m_mutexlockgetimage;
+    QPixmap m_pixmapshow;//当前页文档图片
 
     PageBase *q_ptr;
     Q_DECLARE_PUBLIC(PageBase)

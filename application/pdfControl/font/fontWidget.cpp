@@ -547,7 +547,6 @@ void FontWidget::setScaleRotateViewModeAndShow()
  */
 void FontWidget::slotSetChangeVal(int val)
 {
-//    qDebug() << "fuck================" << val;
     m_pEnlargeLab->clear();
     m_pEnlargeLab->setText(QString("%1%").arg(val));
 
@@ -555,7 +554,6 @@ void FontWidget::slotSetChangeVal(int val)
 
     if (!m_bIsAdaptMove) {
         scaleAndRotate();
-//        qDebug() << "fuck^^^^^^^^^^^^^^";
         m_bSuitW = false;
         m_bSuitH = false;
 
