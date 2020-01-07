@@ -246,7 +246,7 @@ void DocummentFileHelper::onSaveAsFile()
             DDialog dlg("", tr("Invalid file name"));
             QIcon icon(PF::getIconPath("exception-logo"));
             dlg.setIcon(icon /*QIcon(":/resources/exception-logo.svg")*/);
-            dlg.addButtons(QStringList() << tr("Ok"));
+            dlg.addButtons(QStringList() << tr("OK"));
             QMargins mar(0, 0, 0, 30);
             dlg.setContentLayoutContentsMargins(mar);
             dlg.exec();

@@ -151,6 +151,24 @@
     </message>
 </context>
 <context>
+    <name>CentralWidget</name>
+    <message>
+        <location filename="../frame/CentralWidget.cpp" line="+128"/>
+        <source>OK</source>
+        <translation>确定</translation>
+    </message>
+    <message>
+        <location line="+60"/>
+        <source>Unknown type</source>
+        <translation>未知类型</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>is not supported</source>
+        <translation>不支持</translation>
+    </message>
+</context>
+<context>
     <name>ColorWidgetAction</name>
     <message>
         <location filename="../mainShow/ColorWidgetAction.cpp" line="+93"/>
@@ -247,13 +265,7 @@
         <translation>另存为</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>Ok</source>
-        <translatorcomment>确定</translatorcomment>
-        <translation>确定</translation>
-    </message>
-    <message>
-        <location line="-21"/>
+        <location line="-15"/>
         <source>No changes</source>
         <translation>文档未修改</translation>
     </message>
@@ -263,7 +275,12 @@
         <translation>请输入有效的文件名</translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+3"/>
+        <source>OK</source>
+        <translation>确定</translation>
+    </message>
+    <message>
+        <location line="+44"/>
         <location line="+58"/>
         <source>The file is already open</source>
         <translation>文档已打开</translation>
@@ -404,29 +421,9 @@
     </message>
 </context>
 <context>
-    <name>MainWidget</name>
-    <message>
-        <location filename="../frame/MainWidget.cpp" line="+86"/>
-        <source>Ok</source>
-        <translatorcomment>确定</translatorcomment>
-        <translation>确定</translation>
-    </message>
-    <message>
-        <location line="+60"/>
-        <source>Unknown type</source>
-        <translatorcomment>未知类型</translatorcomment>
-        <translation>未知类型</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>is not supported</source>
-        <translation>不支持</translation>
-    </message>
-</context>
-<context>
     <name>MainWindow</name>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="+97"/>
+        <location filename="../frame/MainWindow.cpp" line="+92"/>
         <source>Do you want to save the changes?</source>
         <translatorcomment>是否保存已编辑的文档？</translatorcomment>
         <translation>是否保存已编辑的文档？</translation>
@@ -537,7 +534,7 @@
     </message>
     <message>
         <location line="+2"/>
-        <source>Ok</source>
+        <source>OK</source>
         <translation>确定</translation>
     </message>
 </context>
@@ -633,12 +630,11 @@
     </message>
     <message>
         <location line="-10"/>
-        <location line="+10"/>
         <source>Zoom in/Zoom out</source>
         <translation>放大/缩小</translation>
     </message>
     <message>
-        <location line="-10"/>
+        <location line="+0"/>
         <location line="+8"/>
         <source>Save as</source>
         <translation>另存为</translation>

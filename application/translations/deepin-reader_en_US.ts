@@ -130,6 +130,24 @@
     </message>
 </context>
 <context>
+    <name>CentralWidget</name>
+    <message>
+        <location filename="../frame/CentralWidget.cpp" line="128"/>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/CentralWidget.cpp" line="188"/>
+        <source>Unknown type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/CentralWidget.cpp" line="191"/>
+        <source>is not supported</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ColorWidgetAction</name>
     <message>
         <location filename="../mainShow/ColorWidgetAction.cpp" line="93"/>
@@ -212,11 +230,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="249"/>
-        <source>Ok</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../frame/DocummentFileHelper.cpp" line="228"/>
         <source>No changes</source>
         <translation type="unfinished"></translation>
@@ -224,6 +237,11 @@
     <message>
         <location filename="../frame/DocummentFileHelper.cpp" line="246"/>
         <source>Invalid file name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frame/DocummentFileHelper.cpp" line="249"/>
+        <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -351,88 +369,70 @@
     </message>
 </context>
 <context>
-    <name>MainWidget</name>
-    <message>
-        <location filename="../frame/MainWidget.cpp" line="86"/>
-        <source>Ok</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWidget.cpp" line="146"/>
-        <source>Unknown type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frame/MainWidget.cpp" line="149"/>
-        <source>is not supported</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>MainWindow</name>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="97"/>
+        <location filename="../frame/MainWindow.cpp" line="92"/>
         <source>Do you want to save the changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="99"/>
+        <location filename="../frame/MainWindow.cpp" line="94"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="99"/>
+        <location filename="../frame/MainWindow.cpp" line="94"/>
         <source>Discard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="100"/>
-        <location filename="../frame/MainWindow.cpp" line="188"/>
+        <location filename="../frame/MainWindow.cpp" line="95"/>
+        <location filename="../frame/MainWindow.cpp" line="183"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="188"/>
+        <location filename="../frame/MainWindow.cpp" line="183"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="188"/>
+        <location filename="../frame/MainWindow.cpp" line="183"/>
         <source>Save as</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="189"/>
+        <location filename="../frame/MainWindow.cpp" line="184"/>
         <source>Display in file manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="189"/>
+        <location filename="../frame/MainWindow.cpp" line="184"/>
         <source>Print</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="189"/>
+        <location filename="../frame/MainWindow.cpp" line="184"/>
         <source>Document info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="195"/>
+        <location filename="../frame/MainWindow.cpp" line="190"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="195"/>
+        <location filename="../frame/MainWindow.cpp" line="190"/>
         <source>Slide show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="196"/>
+        <location filename="../frame/MainWindow.cpp" line="191"/>
         <source>Zoom in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/MainWindow.cpp" line="196"/>
+        <location filename="../frame/MainWindow.cpp" line="191"/>
         <source>Zoom out</source>
         <translation type="unfinished"></translation>
     </message>
@@ -468,7 +468,7 @@
     </message>
     <message>
         <location filename="../frame/dialog/PrintManager.cpp" line="45"/>
-        <source>Ok</source>
+        <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -562,7 +562,6 @@
     </message>
     <message>
         <location filename="../frame/dialog/ShortCutShow.cpp" line="186"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="196"/>
         <source>Zoom in/Zoom out</source>
         <translation type="unfinished"></translation>
     </message>

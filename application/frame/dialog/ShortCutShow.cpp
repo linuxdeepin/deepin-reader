@@ -193,7 +193,7 @@ void ShortCutShow::initData()
     Settingsnames << tr("Help") << tr("Display shortcuts");
     Filesnames << tr("Open") << tr("Save as") << tr("Print") << tr("Save");
     Displaynames << tr("Thumbnails") << tr("Fit page") << tr("Fit height") << tr("Fit width") << tr("Rotate left") << tr("Rotate right")
-                 << tr("Zoom in") << tr("Zoom out") << tr("Zoom in/Zoom out") << tr("Page up") << tr("Page down") /*<< tr("Fullscreen")*/ << tr("Exit") ;
+                 << tr("Zoom in") << tr("Zoom out") /*<< tr("Zoom in/Zoom out") */ << tr("Page up") << tr("Page down") /*<< tr("Fullscreen")*/ << tr("Exit") ;
     Toolsnames << tr("Select text") << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete")
                << tr("Magnifier") << tr("Search");
     Editnames << tr("Copy") << tr("Cut") << tr("Paste") << tr("Delete") << tr("Delete") << tr("Save") << tr("Undo") << tr("Select all");

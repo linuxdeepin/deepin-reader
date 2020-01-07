@@ -125,7 +125,7 @@ void CentralWidget::onOpenFileFail(const QString &errorInfo)
     }
     DDialog dlg("", errorInfo);
     dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
-    dlg.addButtons(QStringList() << tr("Ok"));
+    dlg.addButtons(QStringList() << tr("OK"));
     dlg.exec();
 }
 
