@@ -8,6 +8,7 @@
 #include "pdfControl/NotesWidget.h"
 #include "pdfControl/SearchResWidget.h"
 #include "pdfControl/ThumbnailWidget.h"
+#include "pdfControl/CatalogWidget.h"
 
 #include "MainOperationWidget.h"
 
@@ -222,6 +223,7 @@ void LeftSidebarWidget::initWidget()
 
     auto pStackedWidget = new DStackedWidget;
     pStackedWidget->insertWidget(WIDGET_THUMBNAIL, new ThumbnailWidget(this));
+    pStackedWidget->insertWidget(WIDGET_catalog, new CatalogWidget(this));
     pStackedWidget->insertWidget(WIDGET_BOOKMARK, new BookMarkWidget(this));
     pStackedWidget->insertWidget(WIDGET_NOTE, new NotesWidget(this));
     pStackedWidget->insertWidget(WIDGET_SEARCH, new SearchResWidget(this));

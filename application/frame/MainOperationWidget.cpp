@@ -52,8 +52,8 @@ void MainOperationWidget::initWidget()
     auto btnGroup = new QButtonGroup(this);  //  按钮组，　自动实现按钮唯一check属性
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
 
-    QStringList btnStrList = QStringList() << tr("Thumbnails") << tr("Bookmarks") << tr("Annotations");
-    QStringList btnObjList = QStringList() << "thumbnail" << "bookmark" << "annotation";
+    QStringList btnStrList = QStringList() << tr("Thumbnails") << tr("Catalog") << tr("Bookmarks") << tr("Annotations");
+    QStringList btnObjList = QStringList() << "thumbnail" << "catalog" << "bookmark" << "annotation";
 
     int nSize = btnStrList.size();
     for (int iLoop = 0; iLoop < nSize; iLoop++) {
@@ -147,9 +147,7 @@ void MainOperationWidget::slotSearchControl()
  */
 void MainOperationWidget::slotSearchClosed()
 {
-    int indexWidget = 0;
-
-    indexWidget = AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt();
+    int indexWidget = AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt();
 
     emit sigShowStackWidget(indexWidget);
 
