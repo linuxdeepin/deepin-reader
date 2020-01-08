@@ -251,6 +251,8 @@ bool DocummentProxy::saveas(const QString &filepath, bool withChanges)
 
 void DocummentProxy::search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color)
 {
+    outline();
+    return;
     if (!m_documment || bcloseing)
         return ;
 //    qDebug() << "search";
@@ -536,4 +538,11 @@ double DocummentProxy::getMaxZoomratio()
     if (m_documment)
         return   m_documment->getMaxZoomratio();
     return  0.0;
+}
+
+Outline DocummentProxy::outline()
+{
+    if (!m_documment || bcloseing)
+        return Outline();
+    return  m_documment->outline();
 }

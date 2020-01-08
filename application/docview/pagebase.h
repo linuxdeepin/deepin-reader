@@ -47,6 +47,16 @@ struct Link {
 };
 }
 
+struct Section;
+
+typedef QVector< Section > Outline;
+
+struct Section {
+    QString title;
+    Page::Link link;
+    Outline children;
+};
+
 
 class PageBase;
 class PageInterface;

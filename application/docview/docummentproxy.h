@@ -60,6 +60,7 @@ public:
     bool isOpendFile();
     void setViewFocus();
     double getMaxZoomratio();
+    Outline outline();
     //icon annotation
     QString addIconAnnotation(const QPoint &pos);
     void moveIconAnnotation(const QString &uuid, const QPoint &pos);

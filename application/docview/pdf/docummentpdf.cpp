@@ -549,3 +549,84 @@ bool DocummentPDF::freshFile(QString file)
     return true;
 }
 
+Outline DocummentPDF::outline()
+{
+    Q_D(DocummentPDF);
+
+    Outline outline;
+
+    QScopedPointer< QDomDocument > toc(d->document->toc());
+
+    if (toc) {
+        outline = loadOutline(*toc, d->document);
+    }
+
+    return outline;
+}
+
+Outline DocummentPDF::loadOutline(const QDomNode &parent, Poppler::Document *document)
+{
+    Outline outline;
+
+    const QDomNodeList nodes = parent.childNodes();
+
+    outline.reserve(nodes.size());
+
+    for (int index = 0, count = nodes.size(); index < count; ++index) {
+        const QDomNode node = nodes.at(index);
+        const QDomElement element = node.toElement();
+
+        outline.push_back(Section());
+        Section &section = outline.back();
+        section.title = element.tagName();
+
+        QScopedPointer< Poppler::LinkDestination > destination;
+
+        if (element.hasAttribute("Destination")) {
+            destination.reset(new Poppler::LinkDestination(element.attribute("Destination")));
+        } else if (element.hasAttribute("DestinationName")) {
+            destination.reset(document->linkDestination(element.attribute("DestinationName")));
+        }
+
+        if (destination) {
+            int page = destination->pageNumber();
+            qreal left = qQNaN();
+            qreal top = qQNaN();
+
+            page = page >= 1 ? page : 1;
+            page = page <= document->numPages() ? page : document->numPages();
+
+            if (destination->isChangeLeft()) {
+                left = destination->left();
+
+                left = left >= 0.0 ? left : 0.0;
+                left = left <= 1.0 ? left : 1.0;
+            }
+
+            if (destination->isChangeTop()) {
+                top = destination->top();
+
+                top = top >= 0.0 ? top : 0.0;
+                top = top <= 1.0 ? top : 1.0;
+            }
+
+            Page::Link &link = section.link;
+            link.page = page;
+            link.left = left;
+            link.top = top;
+
+            const QString fileName = element.attribute("ExternalFileName");
+
+            if (!fileName.isEmpty()) {
+                link.urlOrFileName = fileName;
+            }
+        }
+
+        if (node.hasChildNodes()) {
+            section.children = loadOutline(node, document);
+        }
+    }
+
+    return outline;
+}
+

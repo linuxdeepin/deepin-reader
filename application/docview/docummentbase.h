@@ -280,6 +280,7 @@ public:
     virtual bool freshFile(QString file) {return false;}
     virtual void jumpToHighLight(const QString &uuid, int ipage) {}
     virtual void changeAnnotationColor(int ipage, const QString uuid, const QColor &color) {}
+    virtual Outline outline() { return Outline(); }
     void stopLoadPageThread();
     bool openFile(QString filepath);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
