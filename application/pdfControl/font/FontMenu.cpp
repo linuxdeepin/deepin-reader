@@ -22,6 +22,7 @@ void FontMenu::setScaleVal(const int &scale)
     //设置 当前的缩放比, 不要触发滑动条值变化信号
 //    m_pEnlargeSlider->blockSignals(true);
     m_pEnlargeSlider->setValue(scale);
+    m_bIsAdaptMove = false;
     //    m_pEnlargeSlider->blockSignals(false);
 }
 
@@ -42,6 +43,7 @@ void FontMenu::setDefaultValOpenFileOk()
         m_bIsAdaptMove = true;
 //        m_nScale = value;
         m_pEnlargeSlider->setValue(value);
+        m_bIsAdaptMove = false;
 //        m_pEnlargeSlider->blockSignals(false);
 //        m_pEnlargeLab->setText(QString("%1%").arg(value));
     }
@@ -75,10 +77,10 @@ void FontMenu::setDefaultValOpenFileOk()
 
     scaleAndRotate();
 
-    qDebug() << "   open file ok  scale:" << m_nScale;
-    qDebug() << "                 m_bFiteWAndH:" << (m_bFiteW ? "m_bFiteW" : (m_bFiteH ? "m_bFiteH" : ""));
-    qDebug() << "                 m_nRotate:" << m_nRotate;
-    qDebug() << "                 m_bDoubPage:" << m_bDoubPage;
+//    qDebug() << "   open file ok  scale:" << m_nScale;
+//    qDebug() << "                 m_bFiteWAndH:" << (m_bFiteW ? "m_bFiteW" : (m_bFiteH ? "m_bFiteH" : ""));
+//    qDebug() << "                 m_nRotate:" << m_nRotate;
+//    qDebug() << "                 m_bDoubPage:" << m_bDoubPage;
 }
 
 /**
@@ -119,6 +121,14 @@ void FontMenu::dealKeyLargerOrSmaller(const QString &keyType)
 void FontMenu::resetAdaptive()
 {
     resetFiteHAndW();
+
+    m_bIsAdaptMove = true;
+    if (m_pEnlargeSlider) {
+        m_pEnlargeSlider->setValue(100);
+    }
+    if (m_pEnlargeLab) {
+        m_pEnlargeLab->setText(QString("%1%").arg(m_nScale));
+    }
 
     setScaleRotateViewModeAndShow();
 
