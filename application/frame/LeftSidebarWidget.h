@@ -23,6 +23,7 @@ class LeftSidebarWidget : public CustomWidget
 
 public:
     explicit LeftSidebarWidget(CustomWidget *parent = nullptr);
+    ~LeftSidebarWidget() Q_DECL_OVERRIDE;
 
 signals:
     void sigDealWithData(const int &, const QString &);

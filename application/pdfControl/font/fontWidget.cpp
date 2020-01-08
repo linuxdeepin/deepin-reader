@@ -39,6 +39,17 @@ FontWidget::FontWidget(CustomWidget *parent)
     initConnection();
 
     slotUpdateTheme();
+
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+}
+
+FontWidget::~FontWidget()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
 }
 
 /**

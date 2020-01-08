@@ -12,17 +12,17 @@ CustomWidget::CustomWidget(const QString &name, DWidget *parent)
     setContextMenuPolicy(Qt::CustomContextMenu);//让widget支持右键菜单事件
 
     m_pNotifySubject = g_NotifySubject::getInstance();
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+//    if (m_pNotifySubject) {
+//        m_pNotifySubject->addObserver(this);
+//    }
 }
 
-CustomWidget::~CustomWidget()
-{
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
-}
+//CustomWidget::~CustomWidget()
+//{
+//    if (m_pNotifySubject) {
+//        m_pNotifySubject->removeObserver(this);
+//    }
+//}
 
 void CustomWidget::updateWidgetTheme()
 {

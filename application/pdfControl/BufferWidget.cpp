@@ -4,6 +4,17 @@ BufferWidget::BufferWidget(CustomWidget *parent)
     : CustomWidget(QString("BufferWidget"), parent)
 {
     initWidget();
+
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+}
+
+BufferWidget::~BufferWidget()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
 }
 
 int BufferWidget::dealWithData(const int &, const QString &)

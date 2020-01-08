@@ -22,6 +22,7 @@ class BookMarkItemWidget : public CustomItemWidget
 
 public:
     explicit BookMarkItemWidget(QWidget *parent = nullptr);
+    ~BookMarkItemWidget() Q_DECL_OVERRIDE;
 
 signals:
     void sigDeleleteItem(const int &);

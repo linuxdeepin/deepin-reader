@@ -45,6 +45,7 @@ class FontWidget : public CustomWidget
 
 public:
     explicit FontWidget(CustomWidget *parent = nullptr);
+    ~FontWidget() Q_DECL_OVERRIDE;
 
 signals:
     void sigWidgetHide();

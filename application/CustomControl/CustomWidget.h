@@ -34,7 +34,7 @@ class CustomWidget : public DWidget, public IObserver
 
 public:
     CustomWidget(const QString &, DWidget *parent = nullptr);
-    ~CustomWidget() Q_DECL_OVERRIDE;
+//    ~CustomWidget() Q_DECL_OVERRIDE;
 
     //  主题更新信号
 signals:
@@ -53,7 +53,7 @@ protected:
     QList<int>          m_pMsgList;     //  需要处理的消息列表
     QList<QString>      m_pKeyMsgList;     //  需要处理的按键消息列表
 
-private:
+protected:
     SubjectThread   *m_pNotifySubject = nullptr;
 };
 

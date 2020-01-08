@@ -13,6 +13,10 @@ BookMarkWidget::BookMarkWidget(DWidget *parent)
     initWidget();
     initConnection();
     slotUpdateTheme();
+
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
 }
 /**
  * @brief BookMarkWidget::~BookMarkWidget
@@ -20,6 +24,10 @@ BookMarkWidget::BookMarkWidget(DWidget *parent)
  */
 BookMarkWidget::~BookMarkWidget()
 {
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
+
     if (m_loadBookMarkThread.isRunning()) {
         m_loadBookMarkThread.stopThreadRun();
     }

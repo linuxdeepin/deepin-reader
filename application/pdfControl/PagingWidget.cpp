@@ -14,6 +14,17 @@ PagingWidget::PagingWidget(CustomWidget *parent)
     initWidget();
     initConnections();
     slotUpdateTheme();
+
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+}
+
+PagingWidget::~PagingWidget()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
 }
 
 /**

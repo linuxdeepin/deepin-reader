@@ -12,10 +12,18 @@ ThumbnailWidget::ThumbnailWidget(DWidget *parent)
     initWidget();
 
     initConnection();
+
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
 }
 
 ThumbnailWidget::~ThumbnailWidget()
 {
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
+
     // 等待子线程退出
     if (m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();

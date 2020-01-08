@@ -34,6 +34,7 @@ class CentralWidget : public CustomWidget
 
 public:
     explicit CentralWidget(CustomWidget *parent = nullptr);
+    ~CentralWidget() Q_DECL_OVERRIDE;
 
 signals:
     void sigOpenFileOk();

@@ -26,6 +26,7 @@ class PagingWidget : public CustomWidget
 
 public:
     explicit PagingWidget(CustomWidget *parent = nullptr);
+    ~PagingWidget() Q_DECL_OVERRIDE;
 
 signals:
     void sigDealWithData(const int &, const QString &);

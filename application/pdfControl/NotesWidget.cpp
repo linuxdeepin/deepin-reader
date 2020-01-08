@@ -11,6 +11,17 @@ NotesWidget::NotesWidget(DWidget *parent)
     initWidget();
 
     initConnection();
+
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+}
+
+NotesWidget::~NotesWidget()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
 }
 
 /**

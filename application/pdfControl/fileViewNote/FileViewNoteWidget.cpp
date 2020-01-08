@@ -17,6 +17,17 @@ FileViewNoteWidget::FileViewNoteWidget(CustomWidget *parent)
     initWidget();
     initConnections();
     slotUpdateTheme();
+
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+}
+
+FileViewNoteWidget::~FileViewNoteWidget()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
 }
 
 int FileViewNoteWidget::dealWithData(const int &msgType, const QString &)

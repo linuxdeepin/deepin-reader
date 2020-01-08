@@ -19,6 +19,7 @@ class MainOperationWidget : public CustomWidget
 
 public:
     explicit MainOperationWidget(CustomWidget *parent = nullptr);
+    ~MainOperationWidget() Q_DECL_OVERRIDE;
 
     void setOperatAction(const int &index);
 

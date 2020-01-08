@@ -12,6 +12,17 @@ NotesItemWidget::NotesItemWidget(DWidget *parent)
             SLOT(slotShowContextMenu(const QPoint &)));
     connect(this, SIGNAL(sigUpdateTheme()), this, SLOT(slotUpdateTheme()));
     initWidget();
+
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+}
+
+NotesItemWidget::~NotesItemWidget()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
 }
 
 void NotesItemWidget::setTextEditText(const QString &contant)

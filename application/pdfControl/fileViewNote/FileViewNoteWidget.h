@@ -44,6 +44,7 @@ class FileViewNoteWidget : public CustomWidget
 
 public:
     explicit FileViewNoteWidget(CustomWidget *parent = nullptr);
+    ~FileViewNoteWidget() Q_DECL_OVERRIDE;
 
 public:
     // IObserver interface

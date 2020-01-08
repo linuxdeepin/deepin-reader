@@ -8,6 +8,17 @@ ThumbnailItemWidget::ThumbnailItemWidget(DWidget *parent)
 
     initWidget();
     connect(this, SIGNAL(sigBookMarkStatusChanged(bool)), SLOT(slotBookMarkShowStatus(bool)));
+
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+}
+
+ThumbnailItemWidget::~ThumbnailItemWidget()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
 }
 
 // 处理消息接口

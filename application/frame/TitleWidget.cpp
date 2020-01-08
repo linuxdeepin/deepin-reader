@@ -12,9 +12,18 @@ TitleWidget::TitleWidget(CustomWidget *parent)
     initWidget();
     initConnections();
     slotUpdateTheme();
+
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
 }
 
-TitleWidget::~TitleWidget() {}
+TitleWidget::~TitleWidget()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
+}
 
 //  显示了侧边栏, 则隐藏
 void TitleWidget::slotSetFindWidget(const int &iFlag)

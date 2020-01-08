@@ -7,6 +7,17 @@ BookMarkItemWidget::BookMarkItemWidget(QWidget *parent)
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             SLOT(slotShowContextMenu(const QPoint &)));
     initWidget();
+
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+}
+
+BookMarkItemWidget::~BookMarkItemWidget()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
 }
 
 /**

@@ -13,6 +13,17 @@ MainOperationWidget::MainOperationWidget(CustomWidget *parent)
     initWidget();
     initConnect();
     slotUpdateTheme();
+
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+}
+
+MainOperationWidget::~MainOperationWidget()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
 }
 
 /**

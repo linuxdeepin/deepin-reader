@@ -18,9 +18,25 @@ HomeWidget::HomeWidget(CustomWidget *parent)
     initWidget();
     initConnections();
 
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+
     m_settings = AppSetting::instance();
 
     slotUpdateTheme();
+}
+
+HomeWidget::~HomeWidget()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
+
+    if (m_settings) {
+        m_settings->deleteLater();
+        m_settings = nullptr;
+    }
 }
 
 void HomeWidget::slotDealWithKeyMsg(const QString &msgContent)

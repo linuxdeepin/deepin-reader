@@ -18,6 +18,7 @@ class ThumbnailItemWidget : public CustomItemWidget
 
 public:
     explicit ThumbnailItemWidget(DWidget *parent = nullptr);
+    ~ThumbnailItemWidget() Q_DECL_OVERRIDE;
 
 public:
     // IObserver interface

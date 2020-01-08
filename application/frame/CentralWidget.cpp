@@ -42,6 +42,17 @@ CentralWidget::CentralWidget(CustomWidget *parent)
     m_pMsgList = {MSG_OPERATION_OPEN_FILE_FAIL, MSG_OPERATION_OPEN_FILE_START, MSG_NOTIFY_SHOW_TIP};
     initWidget();
     initConnections();
+
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+}
+
+CentralWidget::~CentralWidget()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
 }
 
 void CentralWidget::keyPressEvent(QKeyEvent *event)

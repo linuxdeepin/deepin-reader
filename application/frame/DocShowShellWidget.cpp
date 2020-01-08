@@ -19,12 +19,21 @@ DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
     initWidget();
     initConnections();
 
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+
     m_pMsgList = {MSG_OPERATION_ATTR, MSG_OPERATION_TEXT_ADD_ANNOTATION,
                   MSG_OPERATION_TEXT_SHOW_NOTEWIDGET
                  };
 }
 
-DocShowShellWidget::~DocShowShellWidget() {}
+DocShowShellWidget::~DocShowShellWidget()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
+}
 
 void DocShowShellWidget::resizeEvent(QResizeEvent *event)
 {

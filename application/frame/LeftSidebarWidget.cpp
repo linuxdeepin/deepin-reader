@@ -33,6 +33,17 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
 
     onSetWidgetVisible(0);  //  默认 隐藏
     slotUpdateTheme();
+
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+}
+
+LeftSidebarWidget::~LeftSidebarWidget()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
 }
 
 void LeftSidebarWidget::slotDealWithData(const int &msgType, const QString &msgContent)

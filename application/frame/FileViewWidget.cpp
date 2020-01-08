@@ -32,9 +32,18 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
     setMouseTracking(true);  //  接受 鼠标滑动事件
     initWidget();
     initConnections();
+
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
 }
 
-FileViewWidget::~FileViewWidget() {}
+FileViewWidget::~FileViewWidget()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
+}
 
 void FileViewWidget::initWidget()
 {

@@ -25,6 +25,7 @@ class NotesItemWidget : public CustomItemWidget
 
 public:
     explicit NotesItemWidget(DWidget *parent = nullptr);
+    ~NotesItemWidget() Q_DECL_OVERRIDE;
 
 public:
     void setTextEditText(const QString &);

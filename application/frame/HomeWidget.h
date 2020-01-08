@@ -16,13 +16,7 @@ class HomeWidget : public CustomWidget
 
 public:
     explicit HomeWidget(CustomWidget *parent = nullptr);
-    ~HomeWidget() Q_DECL_OVERRIDE {
-        if (m_settings)
-        {
-            m_settings->deleteLater();
-            m_settings = nullptr;
-        }
-    }
+    ~HomeWidget() Q_DECL_OVERRIDE;
 
 signals:
     void sigDealWithKeyMsg(const QString &);

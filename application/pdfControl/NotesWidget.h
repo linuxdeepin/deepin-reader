@@ -55,7 +55,7 @@ class NotesWidget : public CustomWidget
 
 public:
     explicit NotesWidget(DWidget *parent = nullptr);
-
+    ~NotesWidget() Q_DECL_OVERRIDE;
 
     void prevPage();
     void nextPage();

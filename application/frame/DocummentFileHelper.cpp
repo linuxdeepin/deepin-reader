@@ -34,7 +34,7 @@ DocummentFileHelper::DocummentFileHelper(QObject *parent)
 DocummentFileHelper::~DocummentFileHelper()
 {
     if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
+        m_pNotifySubject->removeObserver(this);
     }
 }
 
