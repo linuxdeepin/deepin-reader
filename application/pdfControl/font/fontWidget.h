@@ -36,7 +36,7 @@
 
 /**
  * @brief The FontWidget class
- * 字体调整窗体
+ * 字体调整窗体          (等FontMenu实现好弃用FontWidget)
  */
 class FontWidget : public CustomWidget
 {

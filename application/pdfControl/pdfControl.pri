@@ -11,7 +11,8 @@ HEADERS += \
     $$PWD/fileViewNote/FileViewNoteWidget.h \
     $$PWD/CustomListWidget.h \
     $$PWD/CustomItemWidget.h \
-    $$PWD/BufferWidget.h
+    $$PWD/BufferWidget.h \
+    $$PWD/font/FontMenu.h
 
 SOURCES += \
     $$PWD/PagingWidget.cpp \
@@ -26,4 +27,5 @@ SOURCES += \
     $$PWD/fileViewNote/FileViewNoteWidget.cpp \
     $$PWD/CustomListWidget.cpp \
     $$PWD/CustomItemWidget.cpp \
-    $$PWD/BufferWidget.cpp
+    $$PWD/BufferWidget.cpp \
+    $$PWD/font/FontMenu.cpp

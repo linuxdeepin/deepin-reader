@@ -8,7 +8,9 @@ TitleWidget::TitleWidget(CustomWidget *parent)
     : CustomWidget("TitleWidget", parent)
 {
     shortKeyList = QStringList() << KeyStr::g_alt_1 << KeyStr::g_alt_2 << KeyStr::g_ctrl_m
-                   << KeyStr::g_alt_z;
+                   << KeyStr::g_alt_z << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3
+                   << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r
+                   << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_equal << KeyStr::g_ctrl_smaller;;
     initWidget();
     initConnections();
     slotUpdateTheme();
@@ -65,6 +67,10 @@ void TitleWidget::slotOpenFileOk()
     m_pSettingBtn->setDisabled(false);
     m_pHandleShapeBtn->setDisabled(false);
     m_pMagnifierBtn->setDisabled(false);
+
+    if (m_pFontMenu) {
+        m_pFontMenu->setDefaultValOpenFileOk();
+    }
 }
 
 // 应用全屏显示
@@ -118,6 +124,7 @@ void TitleWidget::initConnections()
 
     connect(this, SIGNAL(sigDealWithShortKey(const QString &)),
             SLOT(slotDealWithShortKey(const QString &)));
+    connect(this, SIGNAL(sigSetCurScale(const QString &)), this, SLOT(slotSetCurScale(const QString &)));
 }
 
 //  缩略图
@@ -139,7 +146,9 @@ void TitleWidget::on_settingBtn_clicked()
     int nHeight = m_pSettingBtn->height();
     point.setY(nHeight + nOldY + 2);
 
-    m_pSettingMenu->exec(point);
+//    m_pSettingMenu->exec(point);
+    if (m_pFontMenu)
+        m_pFontMenu->exec(point);
 }
 
 //  手型点击
@@ -213,6 +222,23 @@ void TitleWidget::slotDealWithShortKey(const QString &sKey)
     } else if (sKey == KeyStr::g_alt_z) {  //  开启放大镜
         setMagnifierState();
     }
+
+    //fontMenu
+    if (m_pFontMenu) {
+        m_pFontMenu->dealKeyLargerOrSmaller(sKey);
+    }
+}
+
+/**
+ * @brief TitleWidget::slotSetCurScale
+ * 根据自适应宽高设置缩放比例scale
+ */
+void TitleWidget::slotSetCurScale(const QString &scale)
+{
+    if (m_pFontMenu) {
+        qDebug() << __FUNCTION__ << "  scale:" << QString::number(scale.toDouble() * 100);
+        m_pFontMenu->setScaleVal(static_cast<int>(scale.toDouble() * 100));
+    }
 }
 
 void TitleWidget::initBtns()
@@ -239,17 +265,33 @@ void TitleWidget::initBtns()
 void TitleWidget::initMenus()
 {
     {
-        m_pSettingMenu = new DMenu(this);
-//        m_pSettingMenu->setFixedWidth(220);
-        DFontSizeManager::instance()->bind(m_pSettingMenu, DFontSizeManager::T6);
-
-        auto action = new QWidgetAction(this);
-        auto scaleWidget = new FontWidget(this);
-
-        action->setDefaultWidget(scaleWidget);
-
-        m_pSettingMenu->addAction(action);
+        //字号调整菜单
+        m_pFontMenu = new FontMenu(this);
+        connect(m_pFontMenu, &FontMenu::sigFiteH, this, [ = ](QString fiteH) {
+            qDebug() << __FUNCTION__ << "   fiteH:" << fiteH;
+            notifyMsg(MSG_SELF_ADAPTE_HEIGHT, fiteH);
+        });
+        connect(m_pFontMenu, &FontMenu::sigFiteW, this, [ = ](QString fiteW) {
+            qDebug() << __FUNCTION__ << "   fiteW:" << fiteW;
+            notifyMsg(MSG_SELF_ADAPTE_WIDTH, fiteW);
+        });
+        connect(m_pFontMenu, &FontMenu::sigRotate, this, [ = ](const QString & rotate) {
+            qDebug() << __FUNCTION__ << "   rotate:" << rotate;
+            notifyMsg(MSG_FILE_ROTATE, rotate);
+        });
     }
+//    {
+//        m_pSettingMenu = new DMenu(this);
+////        m_pSettingMenu->setFixedWidth(220);
+//        DFontSizeManager::instance()->bind(m_pSettingMenu, DFontSizeManager::T6);
+
+//        auto action = new QWidgetAction(this);
+//        auto scaleWidget = new FontWidget(this);
+
+//        action->setDefaultWidget(scaleWidget);
+
+//        m_pSettingMenu->addAction(action);
+//    }
     {
         m_pHandleMenu = new DMenu(this);
 
@@ -394,6 +436,8 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
                 return ConstantMsg::g_effective_res;
             }
         }
+    } else if (msgType == MSG_SELF_ADAPTE_SCALE) {
+        emit sigSetCurScale(msgContent);
     }
     return 0;
 }

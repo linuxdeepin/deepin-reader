@@ -287,7 +287,7 @@ void FontWidget::rotateFileView(bool isRight)
         m_rotate -= 90;
     }
 
-    m_rotate = (m_rotate < 0) ? (m_rotate + 360) : m_rotate;
+    m_rotate = (m_rotate < 0) ? (m_rotate + 360) : (m_rotate / 360);
 
     AppSetting::instance()->setKeyValue(KEY_ROTATE, QString::number(m_rotate));
 
@@ -502,6 +502,11 @@ void FontWidget::slotSetChangeVal(int val)
 
     if (!m_bIsAdaptMove) {
         scaleAndRotate();
+//<<<<<<< Updated upstream
+//=======
+//        m_bSuitW = false;
+//        m_bSuitH = false;
+//>>>>>>> Stashed changes
 
         //拖动缩放比例, 取消 自适应宽/高
         if (m_bSuitW) {

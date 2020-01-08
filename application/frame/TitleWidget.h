@@ -9,6 +9,7 @@
 #include "CustomControl/CustomWidget.h"
 #include "pdfControl/font/fontWidget.h"
 #include "utils/PublicFunction.h"
+#include "pdfControl/font/FontMenu.h"
 /**
  * @brief The TitleWidget class
  * @brief   标题栏的 按钮操作
@@ -28,7 +29,7 @@ signals:
     void sigOpenFileOk();
     void sigAppFullScreen();
     void sigMagnifierCancel();
-
+    void sigSetCurScale(const QString &);
     void sigDealWithShortKey(const QString &);
 
 private slots:
@@ -45,6 +46,7 @@ private slots:
 
     void slotActionTrigger(QAction *);
     void slotDealWithShortKey(const QString &);
+    void slotSetCurScale(const QString &);
 
 private:
     void initConnections();
@@ -65,7 +67,8 @@ private:
     QStringList shortKeyList;
 
     DMenu *m_pHandleMenu = nullptr;
-    DMenu *m_pSettingMenu = nullptr;
+//    DMenu *m_pSettingMenu = nullptr;
+    FontMenu *m_pFontMenu = nullptr;
 
     DPushButton *m_pThumbnailBtn = nullptr;
     DPushButton *m_pSettingBtn = nullptr;
