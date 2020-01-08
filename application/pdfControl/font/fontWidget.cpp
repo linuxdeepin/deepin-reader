@@ -224,9 +224,9 @@ void FontWidget::slotOpenFileOk()
         m_pEnlargeSlider->blockSignals(true);
         m_pEnlargeSlider->setValue(value);
         m_pEnlargeSlider->blockSignals(false);
-    }
 
-    m_pEnlargeLab->setText(QString("%1%").arg(value));
+        m_pEnlargeLab->setText(QString("%1%").arg(value));
+    }
 
     //单双页
     value = AppSetting::instance()->getKeyValue(KEY_DOUBPAGE).toInt();
@@ -502,11 +502,6 @@ void FontWidget::slotSetChangeVal(int val)
 
     if (!m_bIsAdaptMove) {
         scaleAndRotate();
-//<<<<<<< Updated upstream
-//=======
-//        m_bSuitW = false;
-//        m_bSuitH = false;
-//>>>>>>> Stashed changes
 
         //拖动缩放比例, 取消 自适应宽/高
         if (m_bSuitW) {

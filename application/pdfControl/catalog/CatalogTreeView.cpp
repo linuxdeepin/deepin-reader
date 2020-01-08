@@ -20,6 +20,7 @@
 
 #include <QHeaderView>
 #include <QVariant>
+#include <QStandardItemModel>
 
 //#include "CatalogDelegate.h"
 //#include "TreeViewItemModel.h"

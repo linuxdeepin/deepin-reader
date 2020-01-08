@@ -20,13 +20,12 @@
 #define CATALOGTREEVIEW_H
 
 #include <DTreeView>
-#include <QStandardItemModel>
-#include <QKeyEvent>
+//#include <QKeyEvent>
 
 DWIDGET_USE_NAMESPACE
 
-class CatalogDelegate;
-class TreeViewItemModel;
+//class CatalogDelegate;
+//class TreeViewItemModel;
 
 // tree view
 

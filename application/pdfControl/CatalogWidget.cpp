@@ -54,8 +54,8 @@ void CatalogWidget::initWidget()
     auto mainLayout = new QVBoxLayout;
     mainLayout->addWidget(titleLabel);
 
-    auto tree = new CatalogTreeView;
-    tree->addRootItem("aasd", "1");
+    auto tree = new CatalogTreeView(1);
+//    tree->addRootItem("aasd", "1");
 //    tree->setFrameShape(QFrame::NoFrame);
 //    tree->header()->setHidden(true);
 
