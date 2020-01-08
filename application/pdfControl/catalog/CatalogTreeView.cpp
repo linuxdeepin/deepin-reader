@@ -21,9 +21,9 @@
 #include <QHeaderView>
 #include <QVariant>
 
-#include "CatalogDelegate.h"
+//#include "CatalogDelegate.h"
 //#include "TreeViewItemModel.h"
-#include "TreeItemData.h"
+//#include "TreeItemData.h"
 
 
 CatalogTreeView::CatalogTreeView(int expansionRole, DWidget *parent)
