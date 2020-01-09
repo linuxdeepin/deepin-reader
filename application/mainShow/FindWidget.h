@@ -57,6 +57,7 @@ private slots:
     void slotFindPrevBtnClicked();
     void slotClearContent();
     void slotDealWithData(const int &, const QString &);
+    void slotEditAborted();
 
 private:
     void initWidget();

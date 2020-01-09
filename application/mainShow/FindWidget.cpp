@@ -112,7 +112,6 @@ void FindWidget::slotClearContent()
     QString strNewFind = m_pSearchEdit->text();
     if (strNewFind == "") {
         onSetAlert(0);
-        notifyMsg(MSG_CLEAR_FIND_CONTENT);
     }
 }
 
@@ -123,6 +122,12 @@ void FindWidget::slotDealWithData(const int &msgType, const QString &msgContent)
     } else if (msgType == MSG_FIND_NONE) {
         onSetAlert(msgContent.toInt());
     }
+}
+
+void FindWidget::slotEditAborted()
+{
+    qDebug() << "====we999";
+    notifyMsg(MSG_CLEAR_FIND_CONTENT);
 }
 
 int FindWidget::dealWithData(const int &msgType, const QString &msgContent)
@@ -180,6 +185,7 @@ void FindWidget::initWidget()
     connect(m_pSearchEdit, &DSearchEdit::returnPressed, this, &FindWidget::handleContentChanged);
     connect(m_pSearchEdit, &DSearchEdit::textChanged, this, &FindWidget::slotClearContent);
 
+
     auto layout = new QHBoxLayout;
     layout->setContentsMargins(8, 0, 6, 0);
     layout->addWidget(m_pSearchEdit);
@@ -193,6 +199,7 @@ void FindWidget::initConnection()
 {
     connect(this, SIGNAL(sigSetVisible()), SLOT(slotSetVisible()));
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
+    connect(m_pSearchEdit,  &DSearchEdit::searchAborted, this, &FindWidget::slotEditAborted);
 }
 
 //  退出查询

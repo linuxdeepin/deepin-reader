@@ -33,7 +33,6 @@ DocummentProxy *DocummentProxy::instance(QObject *parent)
 
 bool DocummentProxy::openFile(DocType_EM type, QString filepath)
 {
-//    qDebug() << "openFile";
     QMutexLocker locker(&mutexlockgetimage);
     bool bre = false;
     m_type = type;
@@ -251,8 +250,6 @@ bool DocummentProxy::saveas(const QString &filepath, bool withChanges)
 
 void DocummentProxy::search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color)
 {
-    outline();
-    return;
     if (!m_documment || bcloseing)
         return ;
 //    qDebug() << "search";
