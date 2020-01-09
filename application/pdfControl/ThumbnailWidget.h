@@ -31,37 +31,6 @@
 #include "PagingWidget.h"
 #include "ThumbnailItemWidget.h"
 
-/*
-class ThreadRotateImage : public QThread
-{
-    Q_OBJECT
-    Q_DISABLE_COPY(ThreadRotateImage)
-
-public:
-    explicit ThreadRotateImage(QObject *parent = nullptr);
-    ~ThreadRotateImage() Q_DECL_OVERRIDE { stopThreadRun(); }
-
-public:
-    void stopThreadRun();
-    inline void setPages(const int &page) { m_nPages = page; }
-
-signals:
-    void sigRotateImage(const int &index);
-
-public:
-    inline void setLoadOver() { m_bLoading = true; }
-
-protected:
-    void run() Q_DECL_OVERRIDE;
-
-private:
-    int m_nFirstIndex = 0;
-    int m_nEndIndex = 19;
-    int m_nPages = 0;         // 总页数
-    bool m_bLoading = false;  // 大缩略是否还在加载
-};
-*/
-
 /**
  * @brief The ThreadLoadImage class
  * @brief   加载缩略图线程

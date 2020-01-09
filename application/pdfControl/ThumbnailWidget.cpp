@@ -47,10 +47,6 @@ ThumbnailWidget::~ThumbnailWidget()
         m_ThreadLoadImage.stopThreadRun();
         m_ThreadLoadImage.clearList();
     }
-
-//    if (m_threadRotateImage.isRunning()) {
-//        m_threadRotateImage.stopThreadRun();
-//    }
 }
 
 // 处理消息事件
@@ -201,12 +197,6 @@ void ThumbnailWidget::slotSetRotate(int angle)
 
     m_ThreadLoadImage.setIsLoaded(true);
     m_ThreadLoadImage.start();
-//    if (m_threadRotateImage.isRunning()) {
-//        m_threadRotateImage.stopThreadRun();
-//    }
-//    m_threadRotateImage.setPages(m_totalPages);
-//    m_threadRotateImage.setLoadOver();
-//    m_threadRotateImage.start();
 }
 
 void ThumbnailWidget::slotRotateThumbnail(int index)
@@ -243,8 +233,6 @@ void ThumbnailWidget::slotLoadThumbnail(int value)
 
     loadStart = (indexPage - (FIRST_LOAD_PAGES / 2)) < 0 ? 0 : (indexPage - (FIRST_LOAD_PAGES / 2));
     loadEnd = (indexPage + (FIRST_LOAD_PAGES / 2)) > m_totalPages ? m_totalPages : (indexPage + (FIRST_LOAD_PAGES / 2));
-//    qDebug() << __FUNCTION__ << "      loadStart:" << loadStart;
-//    qDebug() << __FUNCTION__ << "      loadEnd:" << loadEnd;
     if (m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();
     }
@@ -470,58 +458,12 @@ void ThreadLoadImage::run()
             }
             QImage image;
             bool bl = dproxy->getImage(page, image, 146, 174);
-//            qDebug() << " loading page getImage:" << page << " thumbnail" << m_nStartPage << m_nEndPage;
             if (bl) {
                 m_listLoad.append(page);
                 emit sigLoadImage(page, image);
-//                qDebug() << " loading page getImage:" << page << " thumbnail success";
                 msleep(50);
             }
         }
 
     } while (0);
 }
-
-/************************旋转缩略图线程****************************/
-/*
-ThreadRotateImage::ThreadRotateImage(QObject *parent)
-    : QThread(parent) {}
-
-void ThreadRotateImage::stopThreadRun()
-{
-    m_bLoading = false;
-    quit();
-    wait();  //阻塞等待
-}
-
-void ThreadRotateImage::run()
-{
-    m_nFirstIndex = 0;
-    m_nEndIndex = FIRST_LOAD_PAGES - 1;
-
-    while (m_bLoading) {
-        msleep(50);
-        if (m_nFirstIndex < 0) {
-            m_nFirstIndex = 0;
-        }
-        if (m_nEndIndex >= m_nPages) {
-            m_nEndIndex = m_nPages - 1;
-        }
-
-        for (int index = m_nFirstIndex; index <= m_nEndIndex; index++) {
-            emit sigRotateImage(index);
-            msleep(50);
-        }
-
-        if (m_nEndIndex >= m_nPages) {
-            m_bLoading = false;
-            break;
-        }
-        m_nFirstIndex += FIRST_LOAD_PAGES;
-        m_nEndIndex += FIRST_LOAD_PAGES;
-    }
-
-    m_nFirstIndex = 0;
-    m_nEndIndex = FIRST_LOAD_PAGES - 1;
-}
-*/
