@@ -284,7 +284,7 @@ void FontMenu::slotFileOpenOk()
     m_nRotate = AppSetting::instance()->getKeyValue(KEY_ROTATE).toInt();
     m_nRotate %= 360;
 
-    scaleAndRotate();
+//    scaleAndRotate();
 }
 
 /**

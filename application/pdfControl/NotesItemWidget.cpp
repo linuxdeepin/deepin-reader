@@ -196,6 +196,10 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
 
     if (m_pTextLab) {
         QString note = m_strNote;
+
+        note.replace(QChar('\n'), QString(""));
+        note.replace(QChar('\t'), QString(""));
+        note.replace(QChar(' '), QString(""));
         m_pTextLab->setText(calcText(m_pTextLab->font(), note, m_pTextLab->size()));
     }
 
