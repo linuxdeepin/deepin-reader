@@ -110,7 +110,7 @@
 <context>
     <name>BookMarkItemWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkItemWidget.cpp" line="69"/>
+        <location filename="../pdfControl/BookMarkItemWidget.cpp" line="80"/>
         <source>Remove bookmark</source>
         <translation>Remove bookmark</translation>
     </message>
@@ -118,13 +118,13 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="239"/>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="341"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="247"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="349"/>
         <source>The bookmark has been removed</source>
         <translation>The bookmark has been removed</translation>
     </message>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="390"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="398"/>
         <source>Add bookmark</source>
         <translation>Add bookmark</translation>
     </message>
@@ -132,17 +132,17 @@
 <context>
     <name>CentralWidget</name>
     <message>
-        <location filename="../frame/CentralWidget.cpp" line="128"/>
+        <location filename="../frame/CentralWidget.cpp" line="139"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../frame/CentralWidget.cpp" line="188"/>
+        <location filename="../frame/CentralWidget.cpp" line="199"/>
         <source>Unknown type</source>
         <translation>Unknown type</translation>
     </message>
     <message>
-        <location filename="../frame/CentralWidget.cpp" line="191"/>
+        <location filename="../frame/CentralWidget.cpp" line="202"/>
         <source>is not supported</source>
         <translation>is not supported</translation>
     </message>
@@ -210,69 +210,69 @@
 <context>
     <name>DocummentFileHelper</name>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="54"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="55"/>
         <source>Please check if the file is damaged</source>
         <translation>Please check if the file is damaged</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="223"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="224"/>
         <source>Saved successfully</source>
         <translation>Saved successfully</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="225"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="226"/>
         <source>Saved failed</source>
         <translation>Saved failed</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="243"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="244"/>
         <source>Save as</source>
         <translation>Save as</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="228"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="229"/>
         <source>No changes</source>
         <translation>No changes</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="246"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="247"/>
         <source>Invalid file name</source>
         <translation>Invalid file name</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="249"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="250"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="293"/>
-        <location filename="../frame/DocummentFileHelper.cpp" line="351"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="294"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="358"/>
         <source>The file is already open</source>
         <translation>The file is already open</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="300"/>
-        <location filename="../frame/DocummentFileHelper.cpp" line="302"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="301"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="303"/>
         <source>Save</source>
         <translation>Save</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="300"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="301"/>
         <source>Do you want to save the changes?</source>
         <translation>Do you want to save the changes?</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="302"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="303"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="302"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="303"/>
         <source>Discard</source>
         <translation>Discard</translation>
     </message>
     <message>
-        <location filename="../frame/DocummentFileHelper.cpp" line="339"/>
+        <location filename="../frame/DocummentFileHelper.cpp" line="346"/>
         <source>File not supported</source>
         <translation>File not supported</translation>
     </message>
@@ -280,7 +280,7 @@
 <context>
     <name>FileViewNoteWidget</name>
     <message>
-        <location filename="../pdfControl/fileViewNote/FileViewNoteWidget.cpp" line="157"/>
+        <location filename="../pdfControl/fileViewNote/FileViewNoteWidget.cpp" line="168"/>
         <source>Input limit reached</source>
         <translation>Input limit reached</translation>
     </message>
@@ -288,10 +288,10 @@
 <context>
     <name>FileViewWidget</name>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="301"/>
-        <location filename="../frame/FileViewWidget.cpp" line="409"/>
-        <location filename="../frame/FileViewWidget.cpp" line="419"/>
-        <location filename="../frame/FileViewWidget.cpp" line="531"/>
+        <location filename="../frame/FileViewWidget.cpp" line="310"/>
+        <location filename="../frame/FileViewWidget.cpp" line="418"/>
+        <location filename="../frame/FileViewWidget.cpp" line="428"/>
+        <location filename="../frame/FileViewWidget.cpp" line="540"/>
         <source>Please select the text</source>
         <translation>Please select the text</translation>
     </message>
@@ -299,53 +299,76 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../mainShow/FindWidget.cpp" line="160"/>
+        <location filename="../mainShow/FindWidget.cpp" line="165"/>
         <source>Next</source>
         <translation>Next</translation>
     </message>
     <message>
-        <location filename="../mainShow/FindWidget.cpp" line="166"/>
+        <location filename="../mainShow/FindWidget.cpp" line="171"/>
         <source>Previous</source>
         <translation>Previous</translation>
     </message>
 </context>
 <context>
+    <name>FontMenu</name>
+    <message>
+        <location filename="../pdfControl/font/FontMenu.cpp" line="354"/>
+        <source>Two-Page View</source>
+        <translation type="unfinished">Two-Page View</translation>
+    </message>
+    <message>
+        <location filename="../pdfControl/font/FontMenu.cpp" line="357"/>
+        <source>Fit Height</source>
+        <translation type="unfinished">Fit Height</translation>
+    </message>
+    <message>
+        <location filename="../pdfControl/font/FontMenu.cpp" line="360"/>
+        <source>Fit Width</source>
+        <translation type="unfinished">Fit Width</translation>
+    </message>
+    <message>
+        <location filename="../pdfControl/font/FontMenu.cpp" line="363"/>
+        <source>Rotate Left</source>
+        <translation type="unfinished">Rotate Left</translation>
+    </message>
+    <message>
+        <location filename="../pdfControl/font/FontMenu.cpp" line="366"/>
+        <source>Rotate Right</source>
+        <translation type="unfinished">Rotate Right</translation>
+    </message>
+</context>
+<context>
     <name>FontWidget</name>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="119"/>
         <source>Rotate Left</source>
-        <translation>Rotate Left</translation>
+        <translation type="vanished">Rotate Left</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="132"/>
         <source>Rotate Right</source>
-        <translation>Rotate Right</translation>
+        <translation type="vanished">Rotate Right</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="468"/>
         <source>Two-Page View</source>
-        <translation>Two-Page View</translation>
+        <translation type="vanished">Two-Page View</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="492"/>
         <source>Fit Height</source>
-        <translation>Fit Height</translation>
+        <translation type="vanished">Fit Height</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/fontWidget.cpp" line="515"/>
         <source>Fit Width</source>
-        <translation>Fit Width</translation>
+        <translation type="vanished">Fit Width</translation>
     </message>
 </context>
 <context>
     <name>HomeWidget</name>
     <message>
-        <location filename="../frame/HomeWidget.cpp" line="35"/>
+        <location filename="../frame/HomeWidget.cpp" line="51"/>
         <source>Drag PDF files here</source>
         <translation>Drag PDF files here</translation>
     </message>
     <message>
-        <location filename="../frame/HomeWidget.cpp" line="40"/>
+        <location filename="../frame/HomeWidget.cpp" line="56"/>
         <source>Select File</source>
         <translation>Select File</translation>
     </message>
@@ -353,19 +376,24 @@
 <context>
     <name>MainOperationWidget</name>
     <message>
-        <location filename="../frame/MainOperationWidget.cpp" line="44"/>
+        <location filename="../frame/MainOperationWidget.cpp" line="55"/>
         <source>Thumbnails</source>
         <translation>Thumbnails</translation>
     </message>
     <message>
-        <location filename="../frame/MainOperationWidget.cpp" line="44"/>
+        <location filename="../frame/MainOperationWidget.cpp" line="55"/>
         <source>Bookmarks</source>
         <translation>Bookmarks</translation>
     </message>
     <message>
-        <location filename="../frame/MainOperationWidget.cpp" line="44"/>
+        <location filename="../frame/MainOperationWidget.cpp" line="55"/>
         <source>Annotations</source>
         <translation>Annotations</translation>
+    </message>
+    <message>
+        <location filename="../frame/MainOperationWidget.cpp" line="55"/>
+        <source>Catalog</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -440,12 +468,12 @@
 <context>
     <name>NotesItemWidget</name>
     <message>
-        <location filename="../pdfControl/NotesItemWidget.cpp" line="75"/>
+        <location filename="../pdfControl/NotesItemWidget.cpp" line="86"/>
         <source>Copy</source>
         <translation>Copy</translation>
     </message>
     <message>
-        <location filename="../pdfControl/NotesItemWidget.cpp" line="78"/>
+        <location filename="../pdfControl/NotesItemWidget.cpp" line="89"/>
         <source>Remove annotation</source>
         <translation>Remove annotation</translation>
     </message>
@@ -453,8 +481,8 @@
 <context>
     <name>NotesWidget</name>
     <message>
-        <location filename="../pdfControl/NotesWidget.cpp" line="114"/>
-        <location filename="../pdfControl/NotesWidget.cpp" line="268"/>
+        <location filename="../pdfControl/NotesWidget.cpp" line="125"/>
+        <location filename="../pdfControl/NotesWidget.cpp" line="279"/>
         <source>The annotation has been removed</source>
         <translation>The annotation has been removed</translation>
     </message>
@@ -475,12 +503,12 @@
 <context>
     <name>SearchResWidget</name>
     <message>
-        <location filename="../pdfControl/SearchResWidget.cpp" line="228"/>
+        <location filename="../pdfControl/SearchResWidget.cpp" line="235"/>
         <source> items found</source>
         <translation> items found</translation>
     </message>
     <message>
-        <location filename="../pdfControl/SearchResWidget.cpp" line="249"/>
+        <location filename="../pdfControl/SearchResWidget.cpp" line="256"/>
         <source>No search results</source>
         <translation>No search results</translation>
     </message>
@@ -731,30 +759,30 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="211"/>
+        <location filename="../frame/TitleWidget.cpp" line="223"/>
         <source>Thumbnails</source>
         <translation>Thumbnails</translation>
     </message>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="215"/>
+        <location filename="../frame/TitleWidget.cpp" line="227"/>
         <source>Page Display</source>
         <translation>Page Display</translation>
     </message>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="219"/>
-        <location filename="../frame/TitleWidget.cpp" line="250"/>
-        <location filename="../frame/TitleWidget.cpp" line="282"/>
+        <location filename="../frame/TitleWidget.cpp" line="231"/>
+        <location filename="../frame/TitleWidget.cpp" line="266"/>
+        <location filename="../frame/TitleWidget.cpp" line="298"/>
         <source>Select Text</source>
         <translation>Select Text</translation>
     </message>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="225"/>
+        <location filename="../frame/TitleWidget.cpp" line="237"/>
         <source>Magnifier</source>
         <translation>Magnifier</translation>
     </message>
     <message>
-        <location filename="../frame/TitleWidget.cpp" line="261"/>
-        <location filename="../frame/TitleWidget.cpp" line="300"/>
+        <location filename="../frame/TitleWidget.cpp" line="277"/>
+        <location filename="../frame/TitleWidget.cpp" line="316"/>
         <source>Hand Tool</source>
         <translation>Hand Tool</translation>
     </message>
