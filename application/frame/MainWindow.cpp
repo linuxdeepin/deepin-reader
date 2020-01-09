@@ -338,6 +338,8 @@ void MainWindow::onSetAppTitle(const QString &sData)
     QString sWidget = AppSetting::instance()->getKeyValue(KEY_WIDGET);
     if (sWidget != "") {
         notifyMsg(MSG_SWITCHLEFTWIDGET, sWidget);
+    } else {
+        notifyMsg(MSG_SWITCHLEFTWIDGET, "0");
     }
 }
 
