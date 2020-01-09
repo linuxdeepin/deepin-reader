@@ -332,7 +332,7 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
         m_szFilePath = sPath;
         DataManager::instance()->setStrOnlyFilePath(sPath);
         int iscale = AppSetting::instance()->getKeyValue(KEY_PERCENTAGE).toInt();
-        iscale = (iscale > 500 ? 500 : iscale) < 0 ? 100 : iscale;
+        iscale = (iscale > 500 ? 500 : iscale) <= 0 ? 100 : iscale;
         double scale = iscale / 100.0;
         RotateType_EM rotatetype = (RotateType_EM)AppSetting::instance()->getKeyValue(KEY_ROTATE).toInt();
         ViewMode_EM viewmode = (ViewMode_EM)AppSetting::instance()->getKeyValue(KEY_DOUBPAGE).toInt();
