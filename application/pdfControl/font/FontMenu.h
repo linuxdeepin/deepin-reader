@@ -15,34 +15,49 @@
 
 #include "CustomControl/CustomClickLabel.h"
 #include "docview/commonstruct.h"
+#include "subjectObserver/IObserver.h"
+#include "controller/NotifySubject.h"
+#include "subjectObserver/ModuleHeader.h"
+#include "subjectObserver/MsgHeader.h"
 
 DWIDGET_USE_NAMESPACE
 
-class FontMenu : public DMenu
+class FontMenu : public DMenu, public IObserver
 {
     Q_OBJECT
     Q_DISABLE_COPY(FontMenu)
 
 public:
     explicit FontMenu(QWidget *parent = nullptr);
+    ~FontMenu() Q_DECL_OVERRIDE;
 
 signals:
-    void sigWidgetHide();
+    // 准备弃用
+//    void sigWidgetHide();
+//    void sigDealWithKey(const QString &);
+//    void sigKeyLargerOrSmaller(const int &);
+//    void sigFiteH(QString);
+//    void sigFiteW(QString);
+//    void sigRotate(const QString &);
+
+    //新增
+    void sigFileOpenOk();
+    void sigDealWithShortKey(const QString &);
     void sigSetCurScale(const QString &);
-    void sigDealWithKey(const QString &);
-    void sigKeyLargerOrSmaller(const int &);
-    void sigFiteH(QString);
-    void sigFiteW(QString);
-    void sigRotate(const QString &);
 
 public:
-    void setScaleVal(const int &scale);
-    void setDefaultValOpenFileOk();
-    void dealKeyLargerOrSmaller(const QString &keyType);
+//    void setScaleVal(const int &scale);
+//    void setDefaultValOpenFileOk();
+//    void dealKeyLargerOrSmaller(const QString &keyType);
 
-    // QWidget interface
+    // IObserver interface
+public:
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    void sendMsg(const int &, const QString &) Q_DECL_OVERRIDE;
+    void notifyMsg(const int &, const QString &) Q_DECL_OVERRIDE;
+
 protected:
-    void showEvent(QShowEvent *ev) Q_DECL_OVERRIDE;
+    SubjectThread   *m_pNotifySubject = nullptr;
 
 private slots:
     void slotTwoPage();
@@ -52,9 +67,15 @@ private slots:
     void slotRotateR();
     void slotScaleValChanged(int);
 
+    //新增
+    void slotFileOpenOk();
+    void slotDealWithShortKey(const QString &);
+    void slotSetCurScale(const QString &);
+
 private:
     void initMenu();
     void initScale();
+    void initConnection();
     QAction *createAction(const QString &objName, const char *, bool checked = false);
     void rotateThumbnail(bool);
     void scaleAndRotate();

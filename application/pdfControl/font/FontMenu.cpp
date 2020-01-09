@@ -9,108 +9,69 @@
 FontMenu::FontMenu(QWidget *parent):
     DMenu(parent)
 {
+    shortKeyList << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3
+                 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r
+                 << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_equal << KeyStr::g_ctrl_smaller;
+
+    m_pNotifySubject = g_NotifySubject::getInstance();
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+
     initMenu();
+
+    initConnection();
+}
+
+FontMenu::~FontMenu()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
 }
 
 /**
- * @brief FontMenu::setScaleVal 自适应宽高，缩放比例有可能会变化
- * @param scale                 缩放比例（文档）
+ * @brief FontMenu::dealWithData
+ * 处理全局消息
+ * @param msgType     消息类型
+ * @param msgContent  消息内容
+ * @return            处理消息状态
  */
-void FontMenu::setScaleVal(const int &scale)
+int FontMenu::dealWithData(const int &msgType, const QString &msgContent)
 {
-    m_bIsAdaptMove = true;
-    //设置 当前的缩放比, 不要触发滑动条值变化信号
-//    m_pEnlargeSlider->blockSignals(true);
-    m_pEnlargeSlider->setValue(scale);
-    m_bIsAdaptMove = false;
-    //    m_pEnlargeSlider->blockSignals(false);
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        emit sigFileOpenOk();
+    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
+        if (shortKeyList.contains(msgContent)) {
+            emit sigDealWithShortKey(msgContent);
+            return ConstantMsg::g_effective_res;
+        }
+    } else if (msgType == MSG_SELF_ADAPTE_SCALE) {
+        emit sigSetCurScale(msgContent);
+    }
+    return 0;
+}
+
+// 不用此接口
+void FontMenu::sendMsg(const int &, const QString &)
+{
+    return;
 }
 
 /**
- * @brief FontMenu::setDefaultValOpenFileOk
- * 打开文件成功后加载文档上一次的参数
+ * @brief FontMenu::notifyMsg
+ * 分发全局消息
+ * @param msgType     消息类型
+ * @param msgContent  消息内容
  */
-void FontMenu::setDefaultValOpenFileOk()
+void FontMenu::notifyMsg(const int &msgType, const QString &msgContent)
 {
-    setSliderMaxValue();
-
-    int value = 0;
-
-    //缩放比例
-    value = AppSetting::instance()->getKeyValue(KEY_PERCENTAGE).toInt();
-    if (value > 0) {
-//        m_pEnlargeSlider->blockSignals(true);
-        m_bIsAdaptMove = true;
-//        m_nScale = value;
-        m_pEnlargeSlider->setValue(value);
-        m_bIsAdaptMove = false;
-//        m_pEnlargeSlider->blockSignals(false);
-//        m_pEnlargeLab->setText(QString("%1%").arg(value));
+    if (m_pNotifySubject == nullptr) {
+        m_pNotifySubject = g_NotifySubject::getInstance();
     }
 
-    //单双页
-    value = AppSetting::instance()->getKeyValue(KEY_DOUBPAGE).toInt();
-    m_bDoubPage = (value == 1) ? true : false;
-    if (m_pTwoPageAction) {
-        m_pTwoPageAction->setChecked(m_bDoubPage);
-    }
-
-    //自适应宽/高
-    int adaptat = AppSetting::instance()->getKeyValue(KEY_ADAPTAT).toInt();
-    if (adaptat == 1) {
-        m_bFiteW = true;
-        m_bFiteH = false;
-        m_pFiteWAction->setChecked(m_bFiteW);
-        m_pFiteHAction->setChecked(m_bFiteH);
-        emit sigFiteW(QString::number(1));
-    } else if (adaptat == 10) {
-        m_bFiteH = true;
-        m_bFiteW = false;
-        m_pFiteWAction->setChecked(m_bFiteW);
-        m_pFiteHAction->setChecked(m_bFiteH);
-        emit sigFiteH(QString::number(1));
-    }
-
-    //旋转度数
-    m_nRotate = AppSetting::instance()->getKeyValue(KEY_ROTATE).toInt();
-    m_nRotate %= 360;
-
-    scaleAndRotate();
-
-//    qDebug() << "   open file ok  scale:" << m_nScale;
-//    qDebug() << "                 m_bFiteWAndH:" << (m_bFiteW ? "m_bFiteW" : (m_bFiteH ? "m_bFiteH" : ""));
-//    qDebug() << "                 m_nRotate:" << m_nRotate;
-//    qDebug() << "                 m_bDoubPage:" << m_bDoubPage;
-}
-
-/**
- * @brief FontMenu::dealKeyLargerOrSmaller
- * 处理键盘事件
- * @param keyType
- */
-void FontMenu::dealKeyLargerOrSmaller(const QString &keyType)
-{
-    if (keyType == KeyStr::g_ctrl_1) {
-        //还原
-        resetAdaptive();
-    } else if (keyType == KeyStr::g_ctrl_2) {
-        //自适应高
-        slotFiteH();
-    } else if (keyType == KeyStr::g_ctrl_3) {
-        //自适应宽
-        slotFiteW();
-    } else if (keyType == KeyStr::g_ctrl_r) {
-        //左旋转
-        rotateThumbnail(false);
-    } else if (keyType == KeyStr::g_ctrl_shift_r) {
-        //右旋转
-        rotateThumbnail(true);
-    } else if (keyType == KeyStr::g_ctrl_smaller) {
-        //缩放
-        setFileViewScale(false);
-    } else if (keyType == KeyStr::g_ctrl_larger || keyType == KeyStr::g_ctrl_equal) {
-        //放大
-        setFileViewScale(true);
+    if (m_pNotifySubject != nullptr) {
+        m_pNotifySubject->notifyMsg(msgType, msgContent);
     }
 }
 
@@ -171,18 +132,14 @@ void FontMenu::setFileViewScale(bool larger)
  */
 void FontMenu::setSliderMaxValue()
 {
-    if (DocummentProxy::instance() && m_pEnlargeSlider->maximum() != DocummentProxy::instance()->getMaxZoomratio() * 100) {
+    int maxZoomRatio = 100;
+    maxZoomRatio = static_cast<int>(DocummentProxy::instance()->getMaxZoomratio() * 100);
+
+    if (DocummentProxy::instance() && m_pEnlargeSlider->maximum() != maxZoomRatio) {
         int maxVal = 500;
         maxVal = static_cast<int>(DocummentProxy::instance()->getMaxZoomratio() * 100);
         m_pEnlargeSlider->setMaximum(maxVal);
     }
-}
-
-void FontMenu::showEvent(QShowEvent *event)
-{
-    Q_ASSERT(event);
-
-    DMenu::showEvent(event);
 }
 
 /**
@@ -195,9 +152,9 @@ void FontMenu::slotTwoPage()
 
     scaleAndRotate();
     if (m_bFiteW) {
-        emit sigFiteW(QString::number(1));
+        notifyMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(1));  //emit sigFiteW(QString::number(1));
     } else if (m_bFiteH) {
-        emit sigFiteH(QString::number(1));
+        notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(1));  //emit sigFiteH(QString::number(1));
     }
 
     AppSetting::instance()->setKeyValue(KEY_DOUBPAGE, QString::number(m_bDoubPage));
@@ -217,7 +174,7 @@ void FontMenu::slotFiteH()
     setAppSetFiteHAndW();
     int t_nShow = m_bFiteH ? 1 : 0;
 
-    emit sigFiteH(QString::number(t_nShow));
+    notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(t_nShow));  //emit sigFiteH(QString::number(t_nShow));
 
     AppSetting::instance()->setKeyValue(KEY_ADAPTAT, QString::number(m_bFiteH ? 10 : (m_bFiteW ? 1 : 0)));
 }
@@ -236,7 +193,7 @@ void FontMenu::slotFiteW()
     setAppSetFiteHAndW();
     int t_nShow = m_bFiteW ? 1 : 0;
 
-    emit sigFiteW(QString::number(t_nShow));
+    notifyMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(t_nShow));  //emit sigFiteW(QString::number(t_nShow));
 
     AppSetting::instance()->setKeyValue(KEY_ADAPTAT, QString::number(m_bFiteH ? 10 : (m_bFiteW ? 1 : 0)));
 }
@@ -280,6 +237,107 @@ void FontMenu::slotScaleValChanged(int scale)
     }
 
     m_bIsAdaptMove = false;
+}
+
+/**
+ * @brief FontMenu::slotFileOpenOk
+ * 打开文件，加载参数
+ */
+void FontMenu::slotFileOpenOk()
+{
+    setSliderMaxValue();
+
+    int value = 0;
+
+    //缩放比例
+    value = AppSetting::instance()->getKeyValue(KEY_PERCENTAGE).toInt();
+    if (value > 0) {
+        m_bIsAdaptMove = true;
+        m_pEnlargeSlider->setValue(value);
+        m_bIsAdaptMove = false;
+    }
+
+    //单双页
+    value = AppSetting::instance()->getKeyValue(KEY_DOUBPAGE).toInt();
+    m_bDoubPage = (value == 1) ? true : false;
+    if (m_pTwoPageAction) {
+        m_pTwoPageAction->setChecked(m_bDoubPage);
+    }
+
+    //自适应宽/高
+    int adaptat = AppSetting::instance()->getKeyValue(KEY_ADAPTAT).toInt();
+    if (adaptat == 1) {
+        m_bFiteW = true;
+        m_bFiteH = false;
+        m_pFiteWAction->setChecked(m_bFiteW);
+        m_pFiteHAction->setChecked(m_bFiteH);
+        notifyMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(1));          //emit sigFiteW(QString::number(1));
+    } else if (adaptat == 10) {
+        m_bFiteH = true;
+        m_bFiteW = false;
+        m_pFiteWAction->setChecked(m_bFiteW);
+        m_pFiteHAction->setChecked(m_bFiteH);
+        notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(1));          //emit sigFiteH(QString::number(1));
+    }
+
+    //旋转度数
+    m_nRotate = AppSetting::instance()->getKeyValue(KEY_ROTATE).toInt();
+    m_nRotate %= 360;
+
+    scaleAndRotate();
+}
+
+/**
+ * @brief FontMenu::slotDealWithShortKey
+ * 处理键盘事件
+ * @param keyType  事件内容
+ */
+void FontMenu::slotDealWithShortKey(const QString &keyType)
+{
+    if (keyType == KeyStr::g_ctrl_1) {
+        //还原
+        resetAdaptive();
+    } else if (keyType == KeyStr::g_ctrl_2) {
+        //自适应高
+        slotFiteH();
+    } else if (keyType == KeyStr::g_ctrl_3) {
+        //自适应宽
+        slotFiteW();
+    } else if (keyType == KeyStr::g_ctrl_r) {
+        //左旋转
+        rotateThumbnail(false);
+    } else if (keyType == KeyStr::g_ctrl_shift_r) {
+        //右旋转
+        rotateThumbnail(true);
+    } else if (keyType == KeyStr::g_ctrl_smaller) {
+        //缩放
+        setFileViewScale(false);
+    } else if (keyType == KeyStr::g_ctrl_larger || keyType == KeyStr::g_ctrl_equal) {
+        //放大
+        setFileViewScale(true);
+    } else {
+        return;
+    }
+}
+
+/**
+ * @brief FontMenu::slotSetCurScale
+ * 根据自适应宽高设置缩放比例scale
+ * @param scale   缩放比例
+ */
+void FontMenu::slotSetCurScale(const QString &scale)
+{
+//    setScaleVal(static_cast<int>(scale.toDouble() * 100));
+    int nScale = 100;
+
+    nScale = static_cast<int>(scale.toDouble() * 100);
+
+    m_bIsAdaptMove = true;
+    //设置 当前的缩放比, 不要触发滑动条值变化信号
+    //m_pEnlargeSlider->blockSignals(true);
+    m_pEnlargeSlider->setValue(nScale);
+    m_bIsAdaptMove = false;
+    //m_pEnlargeSlider->blockSignals(false);
 }
 
 /**
@@ -364,6 +422,18 @@ void FontMenu::initScale()
 }
 
 /**
+ * @brief FontMenu::initConnection
+ * 初始化信号槽
+ */
+void FontMenu::initConnection()
+{
+    connect(this, SIGNAL(sigFileOpenOk()), this, SLOT(slotFileOpenOk()));
+    connect(this, SIGNAL(sigDealWithShortKey(const QString &))
+            , this, SLOT(slotDealWithShortKey(const QString &)));
+    connect(this, SIGNAL(sigSetCurScale(const QString &)), this, SLOT(slotSetCurScale(const QString &)));
+}
+
+/**
  * @brief FontMenu::createAction   创建菜单action
  * @param objName                  action名称
  * @param member                   action所关联的响应函数
@@ -410,7 +480,7 @@ void FontMenu::rotateThumbnail(bool direct)
 
     AppSetting::instance()->setKeyValue(KEY_ROTATE, QString::number(m_nRotate));
 
-    emit sigRotate(QString::number(m_nRotate));
+    notifyMsg(MSG_FILE_ROTATE, QString::number(m_nRotate));  //emit sigRotate(QString::number(m_nRotate));
 }
 
 /**
@@ -481,6 +551,7 @@ void FontMenu::setScaleRotateViewModeAndShow()
 /**
  * @brief FontMenu::setAppSetFiteHAndW
  * 记录文档属性,下次加载时使用
+ * 0:都不自适应  1:自适应宽  10:自适应高
  */
 void FontMenu::setAppSetFiteHAndW()
 {
@@ -503,9 +574,9 @@ void FontMenu::resetFiteHAndW()
 {
     //缩放比例, 取消 自适应宽/高
     if (m_bFiteW) {
-        emit sigFiteW(QString::number(0));
+        notifyMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(0));  //emit sigFiteW(QString::number(0));
     } else if (m_bFiteH) {
-        emit sigFiteH(QString::number(0));
+        notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(0));  //emit sigFiteH(QString::number(0));
     }
 
     m_bFiteH = false;

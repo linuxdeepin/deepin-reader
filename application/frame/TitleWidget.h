@@ -28,7 +28,6 @@ signals:
     void sigOpenFileOk();
     void sigAppFullScreen();
     void sigMagnifierCancel();
-    void sigSetCurScale(const QString &);
     void sigDealWithShortKey(const QString &);
 
 private slots:
@@ -45,7 +44,6 @@ private slots:
 
     void slotActionTrigger(QAction *);
     void slotDealWithShortKey(const QString &);
-    void slotSetCurScale(const QString &);
 
 private:
     void initConnections();
