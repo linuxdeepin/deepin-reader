@@ -7,6 +7,11 @@
 
 #include <QMetaType>
 
+enum ViewMode_EM {
+    ViewMode_SinglePage = 0,
+    ViewMode_FacingPage
+};
+
 enum DocType_EM {
     DocType_NULL = 0,
     DocType_PDF,

@@ -22,10 +22,6 @@ DGUI_USE_NAMESPACE
 
 #define     MAXPAGEHEIGHT       20000
 
-enum ViewMode_EM {
-    ViewMode_SinglePage = 0,
-    ViewMode_FacingPage
-};
 #include <QtDebug>
 
 class SearchTask;
@@ -282,16 +278,13 @@ public:
     virtual void changeAnnotationColor(int ipage, const QString uuid, const QColor &color) {}
     virtual Outline outline() { return Outline(); }
     void stopLoadPageThread();
-    bool openFile(QString filepath);
+    bool openFile(QString filepath, unsigned int ipage = 0, RotateType_EM rotatetype = RotateType_0, double scale = 1.0, ViewMode_EM viewmode = ViewMode_SinglePage);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
     void mouseSelectTextClear();
     bool mouseBeOverText(QPoint point);
     QPoint global2RelativePoint(QPoint globalpoint);
     bool showMagnifier(QPoint point);
     int getCurrentPageNo();
-    int currentLastPageNo();
-    int fromFirstGetLastPageNo(int pagenum);
-    int fromLastPageGetFirstPageNo();
     int currentPageNo();
     Page::Link *mouseBeOverLink(QPoint point);
     bool getSelectTextString(QString &st);

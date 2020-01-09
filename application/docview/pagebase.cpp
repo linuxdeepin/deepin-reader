@@ -640,30 +640,18 @@ void PageBase::slot_loadMagnifierPixmapCache(QImage image, double width, double 
 void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
 {
     Q_D(PageBase);
-//    qDebug() << "---------------setScaleAndRotate pagenum:" << d->m_pageno;
-//    d->havereander = false;
-//    QThreadPool::globalInstance()->waitForDone();
     clearImage();
     d->m_scale = scale;
     d->m_rotate = rotate;
     switch (rotate) {
     case RotateType_90:
-        //        resize(m_imageheight * scale, m_imagewidth * scale);
         setFixedSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale));
-//        setMaximumSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale));
-//        setMinimumSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale));
         break;
     case RotateType_180:
-        //        resize(m_imagewidth * scale, m_imageheight * scale);
         setFixedSize(QSize(d->m_imagewidth * scale, d->m_imageheight * scale));
-//        setMaximumSize(QSize(d->m_imagewidth * scale, d->m_imageheight * scale));
-//        setMinimumSize(QSize(d->m_imagewidth * scale, d->m_imageheight * scale));
         break;
     case RotateType_270:
-        //        resize(m_imageheight * scale, m_imagewidth * scale);
         setFixedSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale));
-//        setMaximumSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale));
-//        setMinimumSize(QSize(d->m_imageheight * scale, d->m_imagewidth * scale));
         break;
     default:
         setFixedSize(QSize(d->m_imagewidth * scale, d->m_imageheight * scale));

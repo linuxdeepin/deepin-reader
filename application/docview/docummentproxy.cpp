@@ -31,7 +31,7 @@ DocummentProxy *DocummentProxy::instance(QObject *parent)
     return  s_pDocProxy;
 }
 
-bool DocummentProxy::openFile(DocType_EM type, QString filepath)
+bool DocummentProxy::openFile(DocType_EM type, QString filepath, unsigned int ipage, RotateType_EM rotatetype, double scale, ViewMode_EM viewmode)
 {
     QMutexLocker locker(&mutexlockgetimage);
     bool bre = false;
@@ -73,7 +73,7 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath)
             emit signal_openResult(result);
         });
         connect(m_documment, &DocummentBase::signal_autoplaytoend, this, &DocummentProxy::signal_autoplaytoend);
-        bre = m_documment->openFile(m_path);
+        bre = m_documment->openFile(m_path, ipage, rotatetype, scale, viewmode);
     }
     bcloseing = false;
     return bre;

@@ -55,7 +55,7 @@ int FontMenu::dealWithData(const int &msgType, const QString &msgContent)
 // 不用此接口
 void FontMenu::sendMsg(const int &, const QString &)
 {
-    return;
+
 }
 
 /**

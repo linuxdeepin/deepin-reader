@@ -14,6 +14,7 @@
 #include "controller/NotifySubject.h"
 #include "FileFormatHelper.h"
 #include "utils/PublicFunction.h"
+#include "controller/AppSetting.h"
 
 DocummentFileHelper::DocummentFileHelper(QObject *parent)
     : QObject(parent)
@@ -330,8 +331,14 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
 
         m_szFilePath = sPath;
         DataManager::instance()->setStrOnlyFilePath(sPath);
-
-        bool rl = m_pDocummentProxy->openFile(m_nCurDocType, sPath);
+        int iscale = AppSetting::instance()->getKeyValue(KEY_PERCENTAGE).toInt();
+        iscale = (iscale > 500 ? 500 : iscale) < 0 ? 100 : iscale;
+        double scale = iscale / 100.0;
+        RotateType_EM rotatetype = (RotateType_EM)AppSetting::instance()->getKeyValue(KEY_ROTATE).toInt();
+        ViewMode_EM viewmode = (ViewMode_EM)AppSetting::instance()->getKeyValue(KEY_DOUBPAGE).toInt();
+        int ipage = AppSetting::instance()->getKeyValue(KEY_PAGENUM).toInt();
+        qDebug() << ipage;
+        bool rl = m_pDocummentProxy->openFile(m_nCurDocType, sPath, ipage, rotatetype, scale, viewmode);
         if (!rl) {
             m_szFilePath = "";
             DataManager::instance()->setStrOnlyFilePath("");

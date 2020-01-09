@@ -269,8 +269,9 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
         qDebug() << "-------verticalScrollBar QScrollBar::rangeChanged min:" << min << " max:" << max << "curpage" << d->m_currentpageno;
         Q_D(DocummentBase);
 //        DScrollBar *scrollBar_X = horizontalScrollBar();
+        qDebug() << d->m_widgetrects.size() << d->m_currentpageno;
         DScrollBar *scrollBar_Y = verticalScrollBar();
-        if (d->m_currentpageno < 0) {
+        if (d->m_currentpageno < 0 || d->m_widgetrects.size() <= 0) {
             return;
         }
         d->donotneedreloaddoc = true;
@@ -940,7 +941,6 @@ void DocummentBase::setScaleRotateViewModeAndShow(double scale, RotateType_EM ro
 void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
 {
     Q_D(DocummentBase);
-//    QMutexLocker locker(&mutexlocksshow);
     int currpageno = d->m_currentpageno;
     if (d->m_pages.size() < 1) {
         return;
@@ -949,8 +949,6 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     if (scale - d->m_scale < EPSINON && scale - d->m_scale > -EPSINON && (rotate == RotateType_Normal || d->m_rotate == rotate)) {
         return;
     }
-//    QThreadPool::globalInstance()->waitForDone();
-//    qDebug() << "------------scaleAndShow scale:" << scale << " rotate:" << rotate;
     if (scale > 0)
         d->m_scale = scale;
 
@@ -960,7 +958,6 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     d->donotneedreloaddoc = true;
 
     for (int i = 0; i < d->m_pages.size(); i++) {
-//        d->m_pages.at(i)->clearImage();
         d->m_pages.at(i)->setScaleAndRotate(d->m_scale, d->m_rotate);
     }
 
@@ -977,131 +974,6 @@ int DocummentBase::getCurrentPageNo()
     if (d->m_currentpageno >= 0)
         return d->m_currentpageno;
     return currentPageNo();
-}
-
-int DocummentBase::fromLastPageGetFirstPageNo()
-{
-    Q_D(DocummentBase);
-    if (d->m_widgetrects.size() < 1) {
-        return 0;
-    }
-    int repagenum = d->m_pages.size() - 1;
-    int rewidgetnum = d->m_widgetrects.size() - 1;
-    int allheight = d->m_widgetrects.at(rewidgetnum).height();
-    for (int i = rewidgetnum; i >= 0; i--) {
-        if (ViewMode_SinglePage == d->m_viewmode) {
-            repagenum = i - 1 - 1;//多减1是因为缩放最小的时候，拉到最底层往上拖的时候有一页最上层会空半页不显示
-        } else if (ViewMode_FacingPage == d->m_viewmode) {
-            repagenum = (i - 1) * 2;
-        }
-        allheight += d->m_widgetrects.at(i).height();
-        if (allheight > d->qwfather->height()) {
-            break;
-        }
-    }
-    if (repagenum < 0) {
-        repagenum = 0;
-    }
-    return repagenum;
-}
-
-int DocummentBase::fromFirstGetLastPageNo(int pagenum)
-{
-    Q_D(DocummentBase);
-    if (pagenum >= d->m_pages.size())
-        return 0;
-    if (pagenum + 1 == d->m_pages.size())
-        return pagenum;
-    int repagenum = pagenum + 1;
-    int rewidgetnum = 0;
-    switch (d->m_viewmode) {
-    case ViewMode_SinglePage:
-        rewidgetnum = pagenum + 1;
-        break;
-    case ViewMode_FacingPage:
-        rewidgetnum = pagenum / 2;
-        break;
-    default:
-        break;
-    }
-
-    for (int i = rewidgetnum; i < d->m_widgetrects.size(); i++) {
-        if (ViewMode_SinglePage == d->m_viewmode) {
-            repagenum = i;
-        } else if (ViewMode_FacingPage == d->m_viewmode) {
-            repagenum = i * 2 + 1;
-        }
-        if ((d->m_widgetrects.at(i).y() - d->m_widgetrects.at(rewidgetnum).y() - d->m_widgetrects.at(rewidgetnum).height()) > d->qwfather->height()) {
-            break;
-        }
-    }
-    if (repagenum >= d->m_pages.size())
-        repagenum = d->m_pages.size() - 1;
-
-    qDebug() << "DocummentBase::fromFirstGetLastPageNo*****" << pagenum << repagenum;
-    return repagenum;
-}
-
-int DocummentBase::currentLastPageNo()
-{
-    Q_D(DocummentBase);
-    int pagenum = -1;
-    int x_offset = 0;
-    int y_offset = 0;
-    DScrollBar *scrollBar_X = horizontalScrollBar();
-    if (scrollBar_X)
-        x_offset = scrollBar_X->value() + d->qwfather->width();
-    DScrollBar *scrollBar_Y = verticalScrollBar();
-    if (scrollBar_Y)
-        y_offset = scrollBar_Y->value() + d->qwfather->height();
-//    qDebug() << "-----y_offset:" << y_offset;
-    switch (d->m_viewmode) {
-    case ViewMode_SinglePage:
-//        for (int i = 0; i < d->m_widgets.size(); i++) {
-//            if (y_offset < d->m_widgets.at(i)->y() + d->m_widgets.at(i)->height()) {
-//                pagenum = i;
-//                break;
-//            }
-//        }
-        for (int i = 0; i < d->m_widgets.size(); i++) {
-            if (y_offset < d->m_widgetrects.at(i).y() + d->m_widgetrects.at(i).height()) {
-                pagenum = i;
-                break;
-            }
-        }
-//        if (-1 == pagenum)
-//            qDebug() << "-----pagenum -1 value:" << d->m_widgets.at(d->m_widgets.size() - 1)->y()/* + d->m_widgets.at(d->m_widgets.size() - 1)->height()*/;
-        break;
-    case ViewMode_FacingPage:
-        for (int i = 0; i < d->m_widgets.size() / 2; i++) {
-            if (y_offset < d->m_widgetrects.at(i).y() + d->m_widgetrects.at(i).height()) {
-                if (x_offset < d->m_widgetrects.at(i).x() + d->m_pages.at(i * 2)->x() + d->m_pages.at(i * 2)->width()) {
-                    pagenum = i * 2;
-                } else {
-                    pagenum = i * 2 + 1;
-                }
-                break;
-            }
-        }
-        if (-1 == pagenum && d->m_widgets.size() % 2) {
-            if (y_offset < d->m_widgetrects.at(d->m_pages.size() / 2).y() + d->m_widgetrects.at(d->m_pages.size() / 2).height()) {
-                if (x_offset < d->m_widgetrects.at(d->m_pages.size() / 2).x() + d->m_pages.at(d->m_pages.size() - 1)->x() + d->m_pages.at(d->m_pages.size() - 1)->width()) {
-                    pagenum = d->m_pages.size() - 1;
-                } else {
-                    pagenum = d->m_pages.size();
-                }
-                break;
-            }
-        }
-        break;
-    default:
-        break;
-    }
-    if (-1 == pagenum) {
-        if (((verticalScrollBar()->value() == verticalScrollBar()->maximum() && verticalScrollBar()->maximum() > 0) || verticalScrollBar()->maximum() == 0) && this->height() > 50)
-            pagenum = d->m_pages.size() - 1;
-    }
-    return pagenum;
 }
 
 int DocummentBase::currentPageNo()
@@ -1482,14 +1354,8 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
         break;
     }
     d->m_vboxLayout->update();
-//    QEventLoop loop;
-//    QTimer::singleShot(20, &loop, SLOT(quit()));
-//    loop.exec();
 
     pageJump(currpageno);
-
-//    QTimer::singleShot(20, &loop, SLOT(quit()));
-//    loop.exec();
 
     qDebug() << "DocummentBase::setViewModeAndShow loadPages";
     loadPages();
@@ -1815,16 +1681,6 @@ void DocummentBase::slot_docummentLoaded(bool result)
 //    loadPages();
 }
 
-bool DocummentBase::openFile(QString filepath)
-{
-    Q_D(DocummentBase);
-    QMutexLocker locker(&mutexlockloaddata);
-    d->donotneedreloaddoc = true;
-    if (!loadDocumment(filepath))
-        return false;
-    return true;
-}
-
 int DocummentBase::getPageSNum()
 {
     Q_D(DocummentBase);
@@ -1919,6 +1775,21 @@ void DocummentBase::stopLoadPageThread()
         d->m_pages.at(i)->waitThread();
     }
     QThreadPool::globalInstance()->waitForDone();
+}
+
+bool DocummentBase::openFile(QString filepath, unsigned int ipage, RotateType_EM rotatetype, double scale, ViewMode_EM viewmode)
+{
+    Q_D(DocummentBase);
+    QMutexLocker locker(&mutexlockloaddata);
+    d->m_scale = scale;
+    d->m_rotate = rotatetype;
+    d->m_viewmode = viewmode;
+    d->m_currentpageno = ipage;
+    qDebug() << scale << rotatetype << viewmode;
+    d->donotneedreloaddoc = true;
+    if (!loadDocumment(filepath))
+        return false;
+    return true;
 }
 
 bool DocummentBase::setBookMarkState(int page, bool state)
