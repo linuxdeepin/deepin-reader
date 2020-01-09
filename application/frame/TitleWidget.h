@@ -7,7 +7,6 @@
 
 #include "CustomControl/CustemIconButton.h"
 #include "CustomControl/CustomWidget.h"
-#include "pdfControl/font/fontWidget.h"
 #include "utils/PublicFunction.h"
 #include "pdfControl/font/FontMenu.h"
 /**
