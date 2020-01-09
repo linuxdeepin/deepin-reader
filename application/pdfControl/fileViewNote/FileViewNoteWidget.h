@@ -6,7 +6,7 @@
 #include <QHideEvent>
 #include <QTextEdit>
 #include <QVBoxLayout>
-#include "../font/fontWidget.h"
+#include "CustomControl/CustomClickLabel.h"
 #include "CustomControl/CustomWidget.h"
 
 class CustemTextEdit : public QTextEdit
