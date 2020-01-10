@@ -376,6 +376,8 @@ void ThumbnailWidget::slotOpenFileOk()
     m_nRotate %= 360;
 
     int currentPage = DocummentFileHelper::instance()->currentPageNo();
+
+    qDebug() << "     currentPage:" << currentPage;
     m_ThreadLoadImage.setPages(m_totalPages);
     if (!m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.clearList();;
@@ -383,6 +385,7 @@ void ThumbnailWidget::slotOpenFileOk()
     }
     m_ThreadLoadImage.setIsLoaded(true);
     m_ThreadLoadImage.start();
+    slotDocFilePageChanged(QString::number(currentPage));
 }
 
 /*******************************ThreadLoadImage*************************************************/
