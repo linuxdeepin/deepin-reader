@@ -9,7 +9,7 @@
  */
 // 窗口类型
 enum Widget_Type {
-    WIDGET_THUMBNAIL,   //  缩略图
+    WIDGET_THUMBNAIL = 0, //  缩略图
     WIDGET_catalog,     //  目录
     WIDGET_BOOKMARK,    //  书签
     WIDGET_NOTE,        //  注释

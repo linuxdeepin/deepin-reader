@@ -29,7 +29,7 @@ int BookMarkItemWidget::dealWithData(const int &msgType, const QString &msgConte
 {
     if (MSG_NOTIFY_KEY_MSG == msgType) {
         if (msgContent == KeyStr::g_del) {
-            bool bFocus = this->hasFocus();
+            bool bFocus = bSelect();//this->hasFocus();
             if (bFocus) {
                 emit sigDeleleteItem(m_nPageIndex);
             }

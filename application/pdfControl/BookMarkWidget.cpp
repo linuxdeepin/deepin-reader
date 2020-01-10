@@ -4,6 +4,7 @@
 
 #include "BookMarkItemWidget.h"
 #include "application.h"
+#include "controller/AppSetting.h"
 
 BookMarkWidget::BookMarkWidget(DWidget *parent)
     : CustomWidget(QString("BookMarkWidget"), parent)
@@ -227,26 +228,32 @@ void BookMarkWidget::slotDocFilePageChanged(const QString &sPage)
  */
 void BookMarkWidget::slotDeleteBookItem(const int &nPage)
 {
-    int nSize = m_pBookMarkListWidget->count();
-    for (int iLoop = 0; iLoop < nSize; iLoop++) {
-        auto pItem = m_pBookMarkListWidget->item(iLoop);
-        if (pItem) {
-            auto t_widget =
-                reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
-            if (t_widget) {
-                int nPageIndex = t_widget->nPageIndex();
-                if (nPageIndex == nPage) {
-                    t_widget->deleteLater();
-                    t_widget = nullptr;
+    int leftShow = 0;
+    int widgetIndex = 0;
+    leftShow = AppSetting::instance()->getKeyValue(KEY_M).toInt();
+    widgetIndex = AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt();
+    if (leftShow == 1 && widgetIndex == 2) {
+        int nSize = m_pBookMarkListWidget->count();
+        for (int iLoop = 0; iLoop < nSize; iLoop++) {
+            auto pItem = m_pBookMarkListWidget->item(iLoop);
+            if (pItem) {
+                auto t_widget =
+                    reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
+                if (t_widget) {
+                    int nPageIndex = t_widget->nPageIndex();
+                    if (nPageIndex == nPage) {
+                        t_widget->deleteLater();
+                        t_widget = nullptr;
 
-                    delete pItem;
-                    pItem = nullptr;
+                        delete pItem;
+                        pItem = nullptr;
 
-                    deleteIndexPage(nPageIndex);
+                        deleteIndexPage(nPageIndex);
 
-                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The bookmark has been removed"));
+                        notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The bookmark has been removed"));
 
-                    break;
+                        break;
+                    }
                 }
             }
         }

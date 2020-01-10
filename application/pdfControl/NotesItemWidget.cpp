@@ -4,14 +4,16 @@
 #include <QClipboard>
 #include <QTextLayout>
 #include "utils/utils.h"
+#include "controller/AppSetting.h"
 
 NotesItemWidget::NotesItemWidget(DWidget *parent)
     : CustomItemWidget(QString("NotesItemWidget"), parent)
 {
+    initWidget();
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this,
             SLOT(slotShowContextMenu(const QPoint &)));
     connect(this, SIGNAL(sigUpdateTheme()), this, SLOT(slotUpdateTheme()));
-    initWidget();
+    connect(this, SIGNAL(sigDltNoteItemByKey()), this, SLOT(slotDltNoteItemByKey()));
 
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
@@ -114,6 +116,22 @@ void NotesItemWidget::slotUpdateTheme()
     }
 }
 
+/**
+ * brief NotesItemWidget::slotDltNoteItemByKey
+ * delete键删除注释item
+ */
+void NotesItemWidget::slotDltNoteItemByKey()
+{
+    int leftShow = 0;
+    int widgetIndex = 0;
+    leftShow = AppSetting::instance()->getKeyValue(KEY_M).toInt();
+    widgetIndex = AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt();
+    if ((leftShow == 1) && (widgetIndex == 3) && bSelect()) {
+        slotDltNoteContant();
+    }
+    return;
+}
+
 void NotesItemWidget::initWidget()
 {
     auto t_vLayoutPicture = new QVBoxLayout;
@@ -179,10 +197,11 @@ int NotesItemWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_NOTIFY_KEY_MSG == msgType) {
         if (msgContent == KeyStr::g_del) {
-            bool bFocus = this->hasFocus();
-            if (bFocus) {
-                slotDltNoteContant();
-            }
+//            bool bFocus = this->hasFocus();
+//            if (bFocus) {
+//                slotDltNoteContant();
+//            }
+            sigDltNoteItemByKey();
         }
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
