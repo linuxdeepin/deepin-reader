@@ -819,8 +819,8 @@ bool DocummentBase::showMagnifier(QPoint point)
 void DocummentBase::resizeEvent(QResizeEvent *e)
 {
     DScrollArea::resizeEvent(e);
-    qDebug() << "DocummentBase::resizeEvent";
-    loadPages(); //主要目的是解决文档刚加载的时候qwfather获取的尺寸不对，导致界面少显示页面的问题
+    qDebug() << "DocummentBase::resizeEvent" << rect();
+    // loadPages(); //主要目的是解决文档刚加载的时候qwfather获取的尺寸不对，导致界面少显示页面的问题
 }
 
 bool DocummentBase::pageJump(int pagenum)
@@ -897,6 +897,7 @@ bool DocummentBase::pageJump(int pagenum)
     } else {
         DScrollBar *scrollBar_X = horizontalScrollBar();
         DScrollBar *scrollBar_Y = verticalScrollBar();
+        qDebug() << "-------pagenum:" << pagenum << " x():" << scrollBar_X->value() << " y():" << scrollBar_Y->value();
         switch (d->m_viewmode) {
         case ViewMode_SinglePage:
 //            qDebug() << "-------pagenum:" << pagenum << " x():" << d->m_widgets.at(pagenum)->x() << " y():" << d->m_widgets.at(pagenum)->y();
@@ -907,7 +908,6 @@ bool DocummentBase::pageJump(int pagenum)
             qDebug() << "-------scrollBar_X setValue:" << d->m_widgetrects.at(pagenum).x() << " scrollBar_Y setValue:" << d->m_widgetrects.at(pagenum).y();
             break;
         case ViewMode_FacingPage:
-//            qDebug() << "-------FacingPage pagenum:" << pagenum << " x():" << d->m_widgets.at(pagenum)->x() << " y():" << d->m_widgets.at(pagenum)->y();
             if (scrollBar_X)
                 scrollBar_X->setValue(d->m_widgetrects.at(pagenum / 2).x() + d->m_pages.at(pagenum)->x());
             if (scrollBar_Y)
@@ -1357,7 +1357,7 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
 
     pageJump(currpageno);
 
-    qDebug() << "DocummentBase::setViewModeAndShow loadPages";
+    qDebug() << "DocummentBase::setViewModeAndShow loadPages" << d->m_widget->rect();
     loadPages();
 
     d->donotneedreloaddoc = false;
@@ -1668,7 +1668,6 @@ void DocummentBase::slot_docummentLoaded(bool result)
         d->m_widgets.append(qwidget);
         QApplication::processEvents();
     }
-
     initConnect();
     d->donotneedreloaddoc = false;
     scaleAndShow(0, d->m_rotate);

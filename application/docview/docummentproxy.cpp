@@ -159,7 +159,7 @@ bool DocummentProxy::setViewModeAndShow(ViewMode_EM viewmode)
     if (!m_documment || bcloseing)
         return false;
     mouseSelectTextClear();
-    qDebug() << "setViewModeAndShow";
+    qDebug() << "DocummentProxy::setViewModeAndShow";
     emit signal_setViewModeAndShow(viewmode);
     return true;
 }

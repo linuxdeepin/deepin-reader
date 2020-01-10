@@ -101,8 +101,10 @@ void ThreadRenderImage::run()
         if (m_width > 0 && m_height > 0) {
             QImage image;
             qDebug() << "ThreadRenderImage getImage width:" << m_width << " height:" << m_height;
+            QTime timecost;
+            timecost.start();
             if (m_page->getImage(image, m_width, m_height)) {
-                qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " get suc!";
+                qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " get suc!" << timecost.elapsed();
                 if (QThread::currentThread()->isInterruptionRequested()) {
                     b_running = false;
                     return;
@@ -166,7 +168,7 @@ PageBase::PageBase(PageBasePrivate *ptr, DWidget *parent)
 {
     Q_D(PageBase);
     setMouseTracking(true);
-    d->pixelratiof = devicePixelRatioF();
+    d->pixelratiof = devicePixelRatioF(); setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->bookmarkbtn = new BookMarkButton(this);
     d->bookmarkbtn->raise();
     d->m_spinner = new DSpinner(this);
@@ -570,6 +572,8 @@ void PageBase::loadMagnifierCacheThreadStart(double width, double height)
 void PageBase::slot_RenderFinish(QImage image)
 {
     Q_D(PageBase);
+    d->m_spinner->stop();
+    d->m_spinner->hide();
     QTime  time;
     time.start();
     qDebug() << "page RenderFinish pagenum:" << d->m_pageno;
@@ -602,8 +606,7 @@ void PageBase::slot_RenderFinish(QImage image)
 //    qDebug() << "PageBase::slot_RenderFinish to setPixmap" << d->m_pixmapshow.rect();
 //    update();
     setSelectTextRects();
-    d->m_spinner->stop();
-    d->m_spinner->hide();
+
     qDebug() << "PageBase::slot_RenderFinish over time elapsed=" << time.elapsed();
 }
 
