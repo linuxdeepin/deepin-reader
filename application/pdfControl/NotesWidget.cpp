@@ -422,9 +422,10 @@ void NotesWidget::addNotesItem(const QString &text)
             bool rl = dproxy->getImage(t_nPage, image, 48, 68 /*42, 62*/);
             if (rl) {
                 QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_SMALL);
-                addNewItem(img, t_nPage, t_strUUid, t_strText);
-
-                m_mapUuidAndPage.insert(t_strUUid, t_nPage);
+                auto item = addNewItem(img, t_nPage, t_strUUid, t_strText);
+                if (item) {
+                    m_mapUuidAndPage.insert(t_strUUid, t_nPage);
+                }
             }
         }
     }
@@ -494,21 +495,29 @@ void NotesWidget::addNewItem(const stHighlightContent &note)
         return;
     }
 
-    NotesItemWidget *itemWidget = new NotesItemWidget(this);
-    itemWidget->setNoteUUid(note.struuid);
-    itemWidget->setLabelPage(static_cast<int>(note.ipage), 1);  // reinterpret_cast
-    itemWidget->setTextEditText(note.strcontents);
-    itemWidget->setMinimumSize(QSize(LEFTMINWIDTH - 5, 80));
+    int page = static_cast<int>(note.ipage);
+    QString uuid = note.struuid;
+    QString contant = note.strcontents;
 
-    QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
-    item->setFlags(Qt::NoItemFlags);
-    item->setSizeHint(QSize(LEFTMINWIDTH, 80));
+    auto item = m_pNotesList->insertWidgetItem(page);
 
-    m_pNotesList->addItem(item);
-    m_pNotesList->setItemWidget(item, itemWidget);
-    //    m_pNoteItem = item;
+    if (item) {
+        NotesItemWidget *itemWidget = new NotesItemWidget(this);
+        itemWidget->setNoteUUid(uuid);
+        itemWidget->setLabelPage(page, 1);  // reinterpret_cast
+        itemWidget->setTextEditText(contant);
+        itemWidget->setMinimumSize(QSize(LEFTMINWIDTH - 5, 80));
 
-    m_mapUuidAndPage.insert(note.struuid, static_cast<int>(note.ipage));
+//        QListWidgetItem *item = new QListWidgetItem(m_pNotesList);
+        item->setFlags(Qt::NoItemFlags);
+        item->setSizeHint(QSize(LEFTMINWIDTH, 80));
+
+//        m_pNotesList->addItem(item);
+        m_pNotesList->setItemWidget(item, itemWidget);
+        //    m_pNoteItem = item;
+
+        m_mapUuidAndPage.insert(note.struuid, static_cast<int>(note.ipage));
+    }
 }
 
 /**
@@ -519,25 +528,32 @@ void NotesWidget::addNewItem(const stHighlightContent &note)
  * @param uuid
  * @param text
  */
-void NotesWidget::addNewItem(const QImage &image, const int &page, const QString &uuid,
-                             const QString &text)
+QListWidgetItem *NotesWidget::addNewItem(const QImage &image, const int &page, const QString &uuid,
+                                         const QString &text)
 {
-    auto itemWidget = new NotesItemWidget(this);
-    itemWidget->setLabelImage(image);
-    itemWidget->setNoteUUid(uuid);
-    itemWidget->setLabelPage(page, 1);
-    itemWidget->setTextEditText(text);
-    itemWidget->setMinimumSize(QSize(LEFTMINWIDTH, 80));
-    itemWidget->setBSelect(true);
+    auto item = m_pNotesList->insertWidgetItem(page);
+    if (item) {
+        auto itemWidget = new NotesItemWidget(this);
+        itemWidget->setLabelImage(image);
+        itemWidget->setNoteUUid(uuid);
+        itemWidget->setLabelPage(page, 1);
+        itemWidget->setTextEditText(text);
+        itemWidget->setMinimumSize(QSize(LEFTMINWIDTH, 80));
+        itemWidget->setBSelect(true);
 
-    auto item = new QListWidgetItem(m_pNotesList);
-    item->setFlags(Qt::NoItemFlags);
-    item->setSizeHint(QSize(LEFTMINWIDTH, 80));
+//        auto item = new QListWidgetItem(m_pNotesList);
+        item->setFlags(Qt::NoItemFlags);
+        item->setSizeHint(QSize(LEFTMINWIDTH, 80));
 
-    m_pNotesList->addItem(item);
-    m_pNotesList->setItemWidget(item, itemWidget);
-    m_pNotesList->setCurrentItem(item);
+//        m_pNotesList->addItem(item);
+        m_pNotesList->setItemWidget(item, itemWidget);
+        m_pNotesList->setCurrentItem(item);
+
+        return item;
+    }
     //    m_pNoteItem = item;
+
+    return nullptr;
 }
 
 /**

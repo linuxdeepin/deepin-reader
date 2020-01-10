@@ -34,7 +34,7 @@ QListWidgetItem *CustomListWidget::insertWidgetItem(const int &iData)
         auto nextItem = this->item(nCount);
         if (nextItem) {
             int nextItemData = nextItem->data(Qt::UserRole + 1).toInt();
-            if (nextItemData < iData) {
+            if (nextItemData <= iData) {
                 nCount++;
                 break;
             }

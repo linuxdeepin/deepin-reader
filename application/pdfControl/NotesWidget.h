@@ -101,7 +101,7 @@ private:
 private:
     void fillContantToList();
     void addNewItem(const stHighlightContent &note);
-    void addNewItem(const QImage &image, const int &page, const QString &uuid, const QString &text);
+    QListWidgetItem *addNewItem(const QImage &image, const int &page, const QString &uuid, const QString &text);
     void flushNoteItemText(const int &page, const QString &uuid, const QString &text);
 
 private:
