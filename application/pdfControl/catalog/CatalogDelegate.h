@@ -16,18 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef TREEITEMDATA_H
-#define TREEITEMDATA_H
+#ifndef CATALOGDELEGATE_H
+#define CATALOGDELEGATE_H
 
-#include <QString>
-#include <QMetaType>
+#include <DStyledItemDelegate>
+#include <DWidget>
+DWIDGET_USE_NAMESPACE
 
-struct StructItemData {
-    QString itemText;
-    QString itemPageNumber;
+class CatalogDelegate : public DStyledItemDelegate
+{
+    Q_OBJECT
+public:
+    CatalogDelegate(QAbstractItemView *parent = nullptr);
+
+    // QAbstractItemDelegate interface
+public:
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE;
 };
 
-Q_DECLARE_METATYPE(StructItemData)
-
-
-#endif // TREEITEMDATA_H
+#endif // CATALOGDELEGATE_H

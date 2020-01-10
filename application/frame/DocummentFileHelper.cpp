@@ -389,6 +389,7 @@ void DocummentFileHelper::setAppShowTitle(const QString &fileName)
         sTitle = fileName;
     }
     notifyMsg(MSG_OPERATION_OPEN_FILE_TITLE, sTitle);
+    notifyMsg(MSG_CATALOG_FILE_TITLE, sTitle);
 }
 
 //  复制
@@ -715,4 +716,12 @@ void DocummentFileHelper::setAutoPlaySlide(const bool &autoplay, const int &time
         return ;
     }
     m_pDocummentProxy->setAutoPlaySlide(autoplay, timemsec);
+}
+
+Outline DocummentFileHelper::outline()
+{
+    if (!m_pDocummentProxy) {
+        return Outline();
+    }
+    return  m_pDocummentProxy->outline();
 }

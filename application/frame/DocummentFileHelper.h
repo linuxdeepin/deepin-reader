@@ -104,6 +104,7 @@ public:
     bool getAutoPlaySlideStatu();
     void setAutoPlaySlide(const bool &autoplay, const int &timemsec = 3000);
 
+    Outline outline();
 private:
     void setAppShowTitle(const QString &);
     void initConnections();

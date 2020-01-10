@@ -20,48 +20,46 @@
 #define CATALOGTREEVIEW_H
 
 #include <DTreeView>
-//#include <QKeyEvent>
+#include <QMouseEvent>
+#include <QStandardItemModel>
+
+#include "subjectObserver/IObserver.h"
+#include "docview/pagebase.h"
+
+class SubjectThread;
 
 DWIDGET_USE_NAMESPACE
 
-//class CatalogDelegate;
-//class TreeViewItemModel;
-
-// tree view
-
-class CatalogTreeView : public DTreeView
+class CatalogTreeView : public DTreeView, public IObserver
 {
     Q_OBJECT
     Q_DISABLE_COPY(CatalogTreeView)
 
 public:
-    explicit CatalogTreeView(int expansionRole, DWidget *parent = nullptr);
+    explicit CatalogTreeView(DWidget *parent = nullptr);
+    ~CatalogTreeView() Q_DECL_OVERRIDE;
 
-public slots:
-    void expandAbove(const QModelIndex &child);
-
-    void expandAll(const QModelIndex &index = QModelIndex());
-    void collapseAll(const QModelIndex &index = QModelIndex());
-
-    int expandedDepth(const QModelIndex &index);
-
-    void expandToDepth(const QModelIndex &index, int depth);
-    void collapseFromDepth(const QModelIndex &index, int depth);
-
-    void restoreExpansion(const QModelIndex &index = QModelIndex());
-
-protected:
-//    void keyPressEvent(QKeyEvent *event);
-//    void wheelEvent(QWheelEvent *event);
-
-//    void contextMenuEvent(QContextMenuEvent *event);
-
-protected slots:
-    void on_expanded(const QModelIndex &index);
-    void on_collapsed(const QModelIndex &index);
+signals:
+    void sigOpenFileOk();
+    // IObserver interface
+public:
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    void sendMsg(const int &, const QString &) Q_DECL_OVERRIDE;
+    void notifyMsg(const int &, const QString &) Q_DECL_OVERRIDE;
 
 private:
-    int m_expansionRole = -1;
+    void initConnections();
+    void parseCatalogData(const Section &, QStandardItem *);
+
+    QList<QStandardItem *>   getItemList(const QString &, const int &);
+
+private slots:
+    void SlotOpenFileOk();
+    void SlotClicked(const QModelIndex &);
+
+private:
+    SubjectThread       *m_pSubjectThread = nullptr;
+
 };
 
 #endif // CATALOGTREEVIEW_H

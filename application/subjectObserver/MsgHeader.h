@@ -100,6 +100,7 @@ enum MSG_OPERATION_RES_TYPE {
     MSG_OPERATION_UPDATE_THEME,         //  主题变了
     MSG_NOTIFY_KEY_MSG,                 //  按键通知消息
     MSG_NOTIFY_SHOW_TIP,                //  显示提示窗口
+    MSG_CATALOG_FILE_TITLE,             //  打开文件成功, 目录标题
 };
 
 namespace ConstantMsg {

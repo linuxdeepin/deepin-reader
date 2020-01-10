@@ -18,16 +18,19 @@
  */
 #include "CatalogWidget.h"
 
-#include <DLabel>
 #include <QVBoxLayout>
-#include <DTreeWidget>
-#include <QHeaderView>
+
 #include "catalog/CatalogTreeView.h"
+
+#include "CustomControl/CustomClickLabel.h"
 
 CatalogWidget::CatalogWidget(DWidget *parent)
     : CustomWidget("CatalogWidget", parent)
 {
     initWidget();
+    initConnections();
+
+    m_pMsgList = { MSG_CATALOG_FILE_TITLE };
 
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
@@ -41,34 +44,50 @@ CatalogWidget::~CatalogWidget()
     }
 }
 
-int CatalogWidget::dealWithData(const int &, const QString &)
+int CatalogWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
+    if (m_pMsgList.contains(msgType)) {
+        emit sigDealWithData(msgType, msgContent);
+        return ConstantMsg::g_effective_res;
+    }
     return 0;
 }
 
 void CatalogWidget::initWidget()
 {
-    auto titleLabel = new DLabel("XXXXXXXX");
+    titleLabel = new CustomClickLabel("");
     titleLabel->setAlignment(Qt::AlignCenter);
 
     auto mainLayout = new QVBoxLayout;
+
     mainLayout->addWidget(titleLabel);
 
-    auto tree = new CatalogTreeView(1);
-//    tree->addRootItem("aasd", "1");
-//    tree->setFrameShape(QFrame::NoFrame);
-//    tree->header()->setHidden(true);
+    auto tree = new CatalogTreeView(this);
 
-//    auto rootItem = new QTreeWidgetItem;
-//    rootItem->setText(0, "123441");
-//    tree->addTopLevelItem(rootItem);
-
-//    for (int i = 0; i < 10; i++) {
-//        auto item = new QTreeWidgetItem;
-//        item->setText(0, QString("%1").arg(i));
-//        rootItem->addChild(item);
-//    }
+    auto pModel = new QStandardItemModel;
+    pModel->setColumnCount(3);
+    tree->setModel(pModel);
 
     mainLayout->addWidget(tree);
+
     this->setLayout(mainLayout);
+}
+
+void CatalogWidget::initConnections()
+{
+    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
+}
+
+void CatalogWidget::SlotDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_CATALOG_FILE_TITLE) {
+        setCatalogTitle(msgContent);
+    }
+}
+
+void CatalogWidget::setCatalogTitle(const QString &msgContent)
+{
+    if (titleLabel) {
+        titleLabel->setText(msgContent);
+    }
 }

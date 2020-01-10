@@ -21,6 +21,7 @@
 
 #include "CustomControl/CustomWidget.h"
 
+#include <DLabel>
 
 /**
  * @brief The CatalogWidget class
@@ -36,6 +37,9 @@ public:
     explicit CatalogWidget(DWidget *parent = nullptr);
     ~CatalogWidget() Q_DECL_OVERRIDE;
 
+signals:
+    void sigDealWithData(const int &, const QString &);
+
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
@@ -43,6 +47,19 @@ public:
     // CustomWidget interface
 protected:
     void initWidget() Q_DECL_OVERRIDE;
+
+private:
+    void initConnections();
+
+private slots:
+    void SlotDealWithData(const int &, const QString &);
+
+private:
+    void setCatalogTitle(const QString &);
+
+private:
+    DLabel  *titleLabel = nullptr;
 };
+
 
 #endif // CATALOGWIDGET_H
