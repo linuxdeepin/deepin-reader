@@ -274,7 +274,7 @@ void DocShowShellWidget::initWidget()
     auto layout = new QHBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-
+    qDebug() << rect();
     auto m_pfileviwewidget = new FileViewWidget(this);
     connect(m_pfileviwewidget, SIGNAL(sigShowPlayCtrl(bool)), this, SLOT(slotChangePlayCtrlShow(bool)));
 

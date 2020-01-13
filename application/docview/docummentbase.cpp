@@ -214,7 +214,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     //    d->m_threadloadwords.setDoc(this);
     setWidgetResizable(true);
     setFrameShape(QFrame::NoFrame);
-    d->qwfather = parent;
+    d->qwfather = parent; parent->setMinimumSize(400, 500);
     d->m_widget = new DWidget(this);
     setWidget(d->m_widget);
     d->showslidwaittimer = new QTimer(this);
@@ -230,6 +230,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     d->pslidelabel->setGeometry(-200, -200, 100, 100);
     d->pslideanimationlabel->setGeometry(-200, -200, 100, 100);
     delete parent->layout();
+
     QGridLayout *gridlyout = new QGridLayout(parent);
 
     parent->setLayout(gridlyout);
@@ -240,6 +241,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     gridlyout->addWidget(d->m_slidewidget, 0, 0);
     gridlyout->setMargin(0);
 
+
     //    d->pslidelabel->lower();
     //    d->pslideanimationlabel->lower();
     //    d->m_slidewidget->lower();
@@ -247,7 +249,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     d->m_slidewidget->hide();
     //    d->m_magnifierwidget->raise();
     d->m_magnifierwidget->hide();
-    d->m_vboxLayout = new QVBoxLayout(d->m_widget);
+    d->m_vboxLayout = new QVBoxLayout; //d->m_vboxLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     d->m_widget->setLayout(d->m_vboxLayout);
     d->m_vboxLayout->setMargin(0);
     d->m_vboxLayout->setSpacing(0);
@@ -268,7 +270,6 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     connect(this->verticalScrollBar(), &QScrollBar::rangeChanged, this, [ = ](int min, int max) {
         qDebug() << "-------verticalScrollBar QScrollBar::rangeChanged min:" << min << " max:" << max << "curpage" << d->m_currentpageno;
         Q_D(DocummentBase);
-//        DScrollBar *scrollBar_X = horizontalScrollBar();
         qDebug() << d->m_widgetrects.size() << d->m_currentpageno;
         DScrollBar *scrollBar_Y = verticalScrollBar();
         if (d->m_currentpageno < 0 || d->m_widgetrects.size() <= 0) {
@@ -819,8 +820,8 @@ bool DocummentBase::showMagnifier(QPoint point)
 void DocummentBase::resizeEvent(QResizeEvent *e)
 {
     DScrollArea::resizeEvent(e);
-    qDebug() << "DocummentBase::resizeEvent" << rect();
-    // loadPages(); //主要目的是解决文档刚加载的时候qwfather获取的尺寸不对，导致界面少显示页面的问题
+    qDebug() << "DocummentBase::resizeEvent******" << rect();
+    loadPages(); //主要目的是解决文档刚加载的时候qwfather获取的尺寸不对，导致界面少显示页面的问题
 }
 
 bool DocummentBase::pageJump(int pagenum)
@@ -960,7 +961,10 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     for (int i = 0; i < d->m_pages.size(); i++) {
         d->m_pages.at(i)->setScaleAndRotate(d->m_scale, d->m_rotate);
     }
-
+    QTime tresize;
+    tresize.start();
+    QCoreApplication::processEvents();
+    qDebug() << "DocummentBase::scaleAndShow" << tresize.elapsed();
     setViewModeAndShow(d->m_viewmode);
     d->m_currentpageno = currpageno;
 }
@@ -1354,7 +1358,7 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
         break;
     }
     d->m_vboxLayout->update();
-
+    QCoreApplication::processEvents();
     pageJump(currpageno);
 
     qDebug() << "DocummentBase::setViewModeAndShow loadPages" << d->m_widget->rect();
@@ -1378,6 +1382,7 @@ bool DocummentBase::loadPages()
     } else {
         curheight = d->m_scale * d->m_imagewidth;
     }
+    qDebug() << rect() << viewport()->rect() << d->qwfather->rect();
     int icount = viewport()->rect().height() / (curheight); //当前页一共能显示多少个
     icount = icount > 0 ? icount + 2 : 2;
 
@@ -1785,7 +1790,7 @@ bool DocummentBase::openFile(QString filepath, unsigned int ipage, RotateType_EM
     d->m_viewmode = viewmode;
     d->m_currentpageno = ipage;
     qDebug() << scale << rotatetype << viewmode;
-    d->donotneedreloaddoc = true;
+    d->donotneedreloaddoc = true; qDebug() << rect();
     if (!loadDocumment(filepath))
         return false;
     return true;

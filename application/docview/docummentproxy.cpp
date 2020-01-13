@@ -17,7 +17,6 @@ DocummentProxy::DocummentProxy(QObject *parent)
       bcloseing(false)
 {
     qwfather = (DWidget *)parent;
-//    connect(&threadwaitloadwordsend, SIGNAL(startOpenFile()), this, SLOT(startOpenFile()));
 }
 
 DocummentProxy *DocummentProxy::instance(QObject *parent)
