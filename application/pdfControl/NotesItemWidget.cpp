@@ -215,10 +215,6 @@ int NotesItemWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_NOTIFY_KEY_MSG == msgType) {
         if (msgContent == KeyStr::g_del) {
-//            bool bFocus = this->hasFocus();
-//            if (bFocus) {
-//                slotDltNoteContant();
-//            }
             emit sigDltNoteItemByKey();
         }
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
