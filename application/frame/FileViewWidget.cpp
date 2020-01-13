@@ -30,6 +30,7 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
     m_pKeyMsgList = {KeyStr::g_ctrl_p, KeyStr::g_ctrl_l, KeyStr::g_ctrl_i};
 
     setMouseTracking(true);  //  接受 鼠标滑动事件
+
     initWidget();
     initConnections();
 

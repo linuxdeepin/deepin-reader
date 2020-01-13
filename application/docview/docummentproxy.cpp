@@ -17,7 +17,6 @@ DocummentProxy::DocummentProxy(QObject *parent)
       bcloseing(false)
 {
     qwfather = (DWidget *)parent;
-//    connect(&threadwaitloadwordsend, SIGNAL(startOpenFile()), this, SLOT(startOpenFile()));
 }
 
 DocummentProxy *DocummentProxy::instance(QObject *parent)
@@ -159,7 +158,7 @@ bool DocummentProxy::setViewModeAndShow(ViewMode_EM viewmode)
     if (!m_documment || bcloseing)
         return false;
     mouseSelectTextClear();
-    qDebug() << "setViewModeAndShow";
+    qDebug() << "DocummentProxy::setViewModeAndShow";
     emit signal_setViewModeAndShow(viewmode);
     return true;
 }

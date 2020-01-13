@@ -101,8 +101,10 @@ void ThreadRenderImage::run()
         if (m_width > 0 && m_height > 0) {
             QImage image;
             qDebug() << "ThreadRenderImage getImage width:" << m_width << " height:" << m_height;
+            QTime timecost;
+            timecost.start();
             if (m_page->getImage(image, m_width, m_height)) {
-                qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " get suc!";
+                qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " get suc!" << timecost.elapsed();
                 if (QThread::currentThread()->isInterruptionRequested()) {
                     b_running = false;
                     return;
@@ -167,6 +169,7 @@ PageBase::PageBase(PageBasePrivate *ptr, DWidget *parent)
     Q_D(PageBase);
     setMouseTracking(true);
     d->pixelratiof = devicePixelRatioF();
+    //setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->bookmarkbtn = new BookMarkButton(this);
     d->bookmarkbtn->raise();
     d->m_spinner = new DSpinner(this);
@@ -570,6 +573,8 @@ void PageBase::loadMagnifierCacheThreadStart(double width, double height)
 void PageBase::slot_RenderFinish(QImage image)
 {
     Q_D(PageBase);
+    d->m_spinner->stop();
+    d->m_spinner->hide();
     QTime  time;
     time.start();
     qDebug() << "page RenderFinish pagenum:" << d->m_pageno;
@@ -602,8 +607,7 @@ void PageBase::slot_RenderFinish(QImage image)
 //    qDebug() << "PageBase::slot_RenderFinish to setPixmap" << d->m_pixmapshow.rect();
 //    update();
     setSelectTextRects();
-    d->m_spinner->stop();
-    d->m_spinner->hide();
+
     qDebug() << "PageBase::slot_RenderFinish over time elapsed=" << time.elapsed();
 }
 
@@ -657,7 +661,7 @@ void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
         setFixedSize(QSize(d->m_imagewidth * scale, d->m_imageheight * scale));
         break;
     }
-    emit signal_update();
+    //  emit signal_update();
 }
 
 Page::Link *PageBase::ifMouseMoveOverLink(const QPoint point)
@@ -754,13 +758,13 @@ QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
 bool PageBase::showImage(double scale, RotateType_EM rotate)
 {
     Q_D(PageBase);
-    qDebug() << "PageBase in showImage";
-    if (((d->m_scale - scale) < EPSINON && (scale - d->m_scale) < EPSINON) && d->m_rotate == rotate && d->havereander) {
+    qDebug() << "PageBase in showImage" << scale << d->m_scale;
+    if (((d->m_scale - scale) < EPSINON || (scale - d->m_scale) < EPSINON) && d->m_rotate == rotate && d->havereander) {
         return false;
     }
     d->m_scale = scale;
     d->m_rotate = rotate;
-    qDebug() << "PageBase::showImage" << d->pixelratiof;
+    qDebug() << "PageBase::showImage*****" << d->m_pageno;
     d->threadreander.setPage(getInterFace(), d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
     connect(d, SIGNAL(signal_RenderFinish(QImage)), this, SLOT(slot_RenderFinish(QImage)));
     if (!d->threadreander.isRunning()) {
@@ -770,6 +774,7 @@ bool PageBase::showImage(double scale, RotateType_EM rotate)
     } else {
         d->threadreander.setRestart();
     }
+    d->havereander = true;
     d->m_spinner->show();
     d->m_spinner->start();
     return true;

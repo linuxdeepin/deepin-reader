@@ -337,7 +337,7 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
         RotateType_EM rotatetype = (RotateType_EM)AppSetting::instance()->getKeyValue(KEY_ROTATE).toInt();
         ViewMode_EM viewmode = (ViewMode_EM)AppSetting::instance()->getKeyValue(KEY_DOUBPAGE).toInt();
         int ipage = AppSetting::instance()->getKeyValue(KEY_PAGENUM).toInt();
-        qDebug() << ipage;
+        qDebug()  << ipage << AppSetting::instance()->getKeyValue(KEY_ROTATE).toInt() << AppSetting::instance()->getKeyValue(KEY_DOUBPAGE).toInt();
         bool rl = m_pDocummentProxy->openFile(m_nCurDocType, sPath, ipage, rotatetype, scale, viewmode);
         if (!rl) {
             m_szFilePath = "";

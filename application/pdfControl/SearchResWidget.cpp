@@ -121,7 +121,8 @@ void SearchResWidget::slotSearchOver()
         notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(WIDGET_SEARCH));
         //让搜索框变粉红色
         notifyMsg(MSG_FIND_NONE, "1");
-
+        //发送提示消息
+        notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("No search results") + ConstantMsg::g_warningtip_suffix);
         bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
         if (!t_bTnumbnIsShow) {
             notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(!t_bTnumbnIsShow));

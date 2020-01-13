@@ -143,7 +143,21 @@ void CentralWidget::onOpenFileFail(const QString &errorInfo)
 
 void CentralWidget::onShowTips(const QString &contant)
 {
-    DMessageManager::instance()->sendMessage(this, QIcon(":/icons/deepin/builtin/ok.svg"), contant);
+    int position = contant.indexOf("##**");
+    if (!contant.isEmpty() && position > 0) {
+        QString strright = contant.mid(position + QString("##**").length());
+        QString contents = contant.left(position);
+        QString iconname(":/icons/deepin/builtin/%1.svg");
+        if (strright == "warning ") {
+            iconname = iconname.arg(strright);
+        } else {
+            iconname = iconname.arg(strright);
+        }
+        DMessageManager::instance()->sendMessage(this, QIcon(iconname), contents);
+
+    } else {
+        DMessageManager::instance()->sendMessage(this, QIcon(":/icons/deepin/builtin/ok.svg"), contant);
+    }
 }
 
 int CentralWidget::dealWithData(const int &msgType, const QString &msgContent)
