@@ -179,6 +179,7 @@ void ShortCutShow::initData()
                   << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_m << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2
                   << KeyStr::g_ctrl_3 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r << KeyStr::g_alt_1 << KeyStr::g_alt_2
                   << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l << KeyStr::g_del << KeyStr::g_alt_z
+                  << KeyStr::g_ctrl_h
                   << KeyStr::g_ctrl_c << KeyStr::g_ctrl_x << KeyStr::g_ctrl_v << KeyStr::g_ctrl_z << KeyStr::g_ctrl_a << KeyStr::g_ctrl_shift_slash;
 
     shortcutnames << /*tr("Fullscreen") << */tr("Exit") << tr("Help")
@@ -195,7 +196,7 @@ void ShortCutShow::initData()
     Displaynames << tr("Thumbnails") << tr("Fit page") << tr("Fit height") << tr("Fit width") << tr("Rotate left") << tr("Rotate right")
                  << tr("Zoom in") << tr("Zoom out") /*<< tr("Zoom in/Zoom out") */ << tr("Page up") << tr("Page down") /*<< tr("Fullscreen")*/ << tr("Exit") ;
     Toolsnames << tr("Select text") << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete")
-               << tr("Magnifier") << tr("Search");
+               << tr("Magnifier") << tr("Search") << tr("Slide show");
     Editnames << tr("Copy") << tr("Cut") << tr("Paste") << tr("Delete") << tr("Save") << tr("Undo") << tr("Select all");
 
     int index = 0;

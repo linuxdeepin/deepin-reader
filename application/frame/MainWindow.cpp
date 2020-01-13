@@ -226,8 +226,13 @@ void MainWindow::onOpenFolder()
 //  放映
 void MainWindow::onScreening()
 {
+    //  已经是幻灯片了
+    if (FILE_SLIDE == DataManager::instance()->CurShowState()) {
+        return;
+    }
     slotAppShowState(0);
     notifyMsg(MSG_OPERATION_SLIDE);
+
 }
 
 void MainWindow::initThemeChanged()
@@ -402,7 +407,11 @@ void MainWindow::slotShortCut(const QString &key)
     } else {
         QString sFilePath = DataManager::instance()->strOnlyFilePath();     //  没有打开的文件
         if (sFilePath != "") {
-            notifyMsg(MSG_NOTIFY_KEY_MSG, key);
+            if (key == KeyStr::g_ctrl_h) {  //  播放幻灯片
+                onScreening();
+            } else {
+                notifyMsg(MSG_NOTIFY_KEY_MSG, key);
+            }
         }
     }
 }

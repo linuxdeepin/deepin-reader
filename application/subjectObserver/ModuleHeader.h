@@ -71,6 +71,7 @@ const QString g_alt_1 = "Alt+1";  //    选择工具
 const QString g_alt_2 = "Alt+2";  //    手型工具
 
 const QString g_ctrl_b = "Ctrl+B";  //    添加书签
+const QString g_ctrl_h = "Ctrl+H";  //    播放幻灯片     2020-01-13  wzx
 const QString g_ctrl_i = "Ctrl+I";  //    添加注释
 const QString g_ctrl_l = "Ctrl+L";  //    添加高亮
 const QString g_del = "Del";        //  删除书签\注释\高亮
