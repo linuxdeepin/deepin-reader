@@ -219,7 +219,7 @@ int NotesItemWidget::dealWithData(const int &msgType, const QString &msgContent)
 //            if (bFocus) {
 //                slotDltNoteContant();
 //            }
-            sigDltNoteItemByKey();
+            emit sigDltNoteItemByKey();
         }
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
@@ -236,7 +236,7 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
 
         note.replace(QChar('\n'), QString(""));
         note.replace(QChar('\t'), QString(""));
-        note.replace(QChar(' '), QString(""));
+//        note.replace(QChar(' '), QString(""));
         m_pTextLab->setText(calcText(m_pTextLab->font(), note, m_pTextLab->size()));
     }
 
