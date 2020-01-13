@@ -87,10 +87,14 @@ void CentralWidget::slotOpenFileOk()
     if (pLayout) {
         pLayout->setCurrentIndex(1);
 
+        //  打开成功, 删除转圈圈
         auto spinnerList = this->findChildren<DSpinner *>();
         foreach (auto sp, spinnerList) {
             if (sp->objectName() == "home_spinner") {
-                sp->stop();
+
+                delete  sp;
+                sp = nullptr;
+
                 break;
             }
         }
@@ -112,21 +116,39 @@ void CentralWidget::onOpenFileStart()
 {
     auto pLayout = this->findChild<QStackedLayout *>();
     if (pLayout) {
-        pLayout->setCurrentIndex(2);
 
-        auto spinnerList = this->findChildren<DSpinner *>();
-        foreach (auto sp, spinnerList) {
-            if (sp->objectName() == "home_spinner") {
-                sp->start();
-                break;
-            }
-        }
+        //  开始的时候  new 转圈圈
+        auto pSpinnerWidget = new DWidget;
+        QGridLayout *gridlyout = new QGridLayout(pSpinnerWidget);
+        gridlyout->setAlignment(Qt::AlignCenter);
+        auto m_spinner = new DSpinner(this);
+        m_spinner->setObjectName("home_spinner");
+        m_spinner->setFixedSize(60, 60);
+        gridlyout->addWidget(m_spinner);
+        m_spinner->start();
+
+        pLayout->addWidget(pSpinnerWidget);
+
+        pLayout->setCurrentIndex(2);
     }
 }
 
 //  文件打开失败
 void CentralWidget::onOpenFileFail(const QString &errorInfo)
 {
+    //  打开失败, 停止转圈圈, 并且删除
+    auto spinnerList = this->findChildren<DSpinner *>();
+    foreach (auto sp, spinnerList) {
+        if (sp->objectName() == "home_spinner") {
+            sp->stop();
+
+            delete sp;
+            sp = nullptr;
+
+            break;
+        }
+    }
+
     //  文档打开失败, 切换回首页
     auto pLayout = this->findChild<QStackedLayout *>();
     if (pLayout) {
@@ -249,15 +271,4 @@ void CentralWidget::initWidget()
     pSplitter->setSizes(list_src);
 
     pStcakLayout->addWidget(pSplitter);
-
-    auto pSpinnerWidget = new DWidget;
-    QGridLayout *gridlyout = new QGridLayout(pSpinnerWidget);
-    gridlyout->setAlignment(Qt::AlignCenter);
-    auto m_spinner = new DSpinner(this);
-    m_spinner->setObjectName("home_spinner");
-    m_spinner->setFixedSize(60, 60);
-    gridlyout->addWidget(m_spinner);
-    m_spinner->stop();
-    //    m_spinner->start();
-    pStcakLayout->addWidget(pSpinnerWidget);
 }
