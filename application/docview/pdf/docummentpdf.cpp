@@ -616,7 +616,7 @@ Outline DocummentPDF::loadOutline(const QDomNode &parent, Poppler::Document *doc
             link.top = top;
 
             const QString fileName = element.attribute("ExternalFileName");
-            qDebug() << fileName << node.nodeName() << element.tagName();
+            // qDebug() << fileName << node.nodeName() << element.tagName();
             if (!fileName.isEmpty()) {
                 link.urlOrFileName = fileName;
             }

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
 <context>
     <name>Application</name>
     <message>
@@ -314,50 +312,27 @@
     <message>
         <location filename="../pdfControl/font/FontMenu.cpp" line="354"/>
         <source>Two-Page View</source>
-        <translation type="unfinished">Two-Page View</translation>
+        <translation>Two-Page View</translation>
     </message>
     <message>
         <location filename="../pdfControl/font/FontMenu.cpp" line="357"/>
         <source>Fit Height</source>
-        <translation type="unfinished">Fit Height</translation>
+        <translation>Fit Height</translation>
     </message>
     <message>
         <location filename="../pdfControl/font/FontMenu.cpp" line="360"/>
         <source>Fit Width</source>
-        <translation type="unfinished">Fit Width</translation>
+        <translation>Fit Width</translation>
     </message>
     <message>
         <location filename="../pdfControl/font/FontMenu.cpp" line="363"/>
         <source>Rotate Left</source>
-        <translation type="unfinished">Rotate Left</translation>
+        <translation>Rotate Left</translation>
     </message>
     <message>
         <location filename="../pdfControl/font/FontMenu.cpp" line="366"/>
         <source>Rotate Right</source>
-        <translation type="unfinished">Rotate Right</translation>
-    </message>
-</context>
-<context>
-    <name>FontWidget</name>
-    <message>
-        <source>Rotate Left</source>
-        <translation type="vanished">Rotate Left</translation>
-    </message>
-    <message>
-        <source>Rotate Right</source>
-        <translation type="vanished">Rotate Right</translation>
-    </message>
-    <message>
-        <source>Two-Page View</source>
-        <translation type="vanished">Two-Page View</translation>
-    </message>
-    <message>
-        <source>Fit Height</source>
-        <translation type="vanished">Fit Height</translation>
-    </message>
-    <message>
-        <source>Fit Width</source>
-        <translation type="vanished">Fit Width</translation>
+        <translation>Rotate Right</translation>
     </message>
 </context>
 <context>
@@ -393,7 +368,7 @@
     <message>
         <location filename="../frame/MainOperationWidget.cpp" line="55"/>
         <source>Catalog</source>
-        <translation type="unfinished"></translation>
+        <translation>Catalog</translation>
     </message>
 </context>
 <context>

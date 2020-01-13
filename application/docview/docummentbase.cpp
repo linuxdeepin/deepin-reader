@@ -73,12 +73,13 @@ void ThreadLoadData::run()
         emit signal_dataLoaded(false);
         return;
     }
+
     restart = true;
     while (restart) {
         restart = false;
         m_doc->loadData();
     }
-    emit signal_dataLoaded(true);
+    // emit signal_dataLoaded(true);
 }
 
 SlidWidget::SlidWidget(DWidget *parent): DWidget(parent)
@@ -821,7 +822,7 @@ void DocummentBase::resizeEvent(QResizeEvent *e)
 {
     DScrollArea::resizeEvent(e);
     qDebug() << "DocummentBase::resizeEvent******" << rect();
-    loadPages(); //主要目的是解决文档刚加载的时候qwfather获取的尺寸不对，导致界面少显示页面的问题
+    // loadPages(); //主要目的是解决文档刚加载的时候qwfather获取的尺寸不对，导致界面少显示页面的问题
 }
 
 bool DocummentBase::pageJump(int pagenum)
@@ -961,10 +962,6 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     for (int i = 0; i < d->m_pages.size(); i++) {
         d->m_pages.at(i)->setScaleAndRotate(d->m_scale, d->m_rotate);
     }
-    QTime tresize;
-    tresize.start();
-    QCoreApplication::processEvents();
-    qDebug() << "DocummentBase::scaleAndShow" << tresize.elapsed();
     setViewModeAndShow(d->m_viewmode);
     d->m_currentpageno = currpageno;
 }
@@ -1832,15 +1829,22 @@ bool DocummentBase::loadData()
     Q_D(DocummentBase);
     if (!bDocummentExist())
         return false;
-//    qDebug() << "loadWords start";
+    qDebug() << "loadWords start";
+    QTime loadtime;
+    loadtime.start();
+    bool bfirst = true;
     for (int i = 0; i < d->m_pages.size(); i++) {
         if (QThread::currentThread()->isInterruptionRequested()) {
             break;
         }
         d->m_pages.at(i)->getInterFace()->loadData();
+        if (bfirst && (i > 10 || d->m_pages.size() <= 10)) {
+            bfirst = false;
+            emit signal_openResult(true);
+        }
     }
 
-//    qDebug() << "loadWords end";
+    qDebug() << "loadWords end" << loadtime.elapsed();
     return true;
 }
 

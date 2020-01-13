@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>Application</name>
     <message>
@@ -160,7 +158,7 @@
     <message>
         <location filename="../pdfControl/CustomItemWidget.cpp" line="35"/>
         <source>page</source>
-        <translation>页数</translation>
+        <translation>页面</translation>
     </message>
 </context>
 <context>
@@ -338,6 +336,29 @@
     </message>
 </context>
 <context>
+    <name>FontWidget</name>
+    <message>
+        <source>Rotate Left</source>
+        <translation type="vanished">左旋转</translation>
+    </message>
+    <message>
+        <source>Rotate Right</source>
+        <translation type="vanished">右旋转</translation>
+    </message>
+    <message>
+        <source>Two-Page View</source>
+        <translation type="vanished">双页显示</translation>
+    </message>
+    <message>
+        <source>Fit Height</source>
+        <translation type="vanished">适应高度</translation>
+    </message>
+    <message>
+        <source>Fit Width</source>
+        <translation type="vanished">适应宽度</translation>
+    </message>
+</context>
+<context>
     <name>HomeWidget</name>
     <message>
         <location filename="../frame/HomeWidget.cpp" line="51"/>
@@ -370,7 +391,7 @@
     <message>
         <location filename="../frame/MainOperationWidget.cpp" line="55"/>
         <source>Catalog</source>
-        <translation type="unfinished"></translation>
+        <translation>目录</translation>
     </message>
 </context>
 <context>
