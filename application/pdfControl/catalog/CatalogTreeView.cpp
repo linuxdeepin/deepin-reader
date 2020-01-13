@@ -37,6 +37,7 @@ CatalogTreeView::CatalogTreeView(DWidget *parent)
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     this->header()->setHidden(true);
     this->viewport()->setAutoFillBackground(false);
@@ -86,31 +87,41 @@ void CatalogTreeView::initConnections()
     connect(this, SIGNAL(clicked(const QModelIndex &)), SLOT(SlotClicked(const QModelIndex &)));
 }
 
+//  递归解析
 void CatalogTreeView::parseCatalogData(const Section &ol, QStandardItem *parentItem)
 {
-    foreach (auto s, ol.children) {
+    foreach (auto s, ol.children) { //  2级显示
+        if (s.link.page > 0) {
+            auto itemList = getItemList(s.title, s.link.page);
 
-        auto itemList = getItemList(s.title, s.link.page);
+            parentItem->appendRow(itemList);
 
-        parentItem->appendRow(itemList);
+            foreach (auto s1, s.children) { //  3级显示
+                if (s1.link.page > 0) {
+                    auto itemList1 = getItemList(s1.title, s1.link.page);
 
-        parseCatalogData(s, itemList.at(0));
+                    itemList.at(0)->appendRow(itemList1);
+                }
+            }
+        }
     }
 }
 
 //  获取 一行的 三列数据
 QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const int &page)
 {
+    int dataPage = page - 1;
+
     auto item = new QStandardItem(title);
-    item->setData(page);
+    item->setData(dataPage);
 
     item->setTextAlignment(Qt::AlignLeft);
 
     auto item1 = new QStandardItem();
-    item1->setData(page);
+    item1->setData(dataPage);
 
     auto item2 = new QStandardItem(QString::number(page));
-    item2->setData(page);
+    item2->setData(dataPage);
 
     item2->setTextAlignment(Qt::AlignRight);
 
@@ -124,12 +135,14 @@ void CatalogTreeView::SlotOpenFileOk()
         model->clear();
 
         Outline ol = DocummentFileHelper::instance()->outline();
-        foreach (const Section &s, ol) {
-            auto itemList = getItemList(s.title, s.link.page);
+        foreach (const Section &s, ol) {   //  1 级显示
+            if (s.link.page > 0) {
+                auto itemList = getItemList(s.title, s.link.page);
 
-            model->appendRow(itemList);
+                model->appendRow(itemList);
 
-            parseCatalogData(s, itemList.at(0));
+                parseCatalogData(s, itemList.at(0));
+            }
         }
     }
 }
@@ -139,7 +152,17 @@ void CatalogTreeView::SlotClicked(const QModelIndex &index)
 {
     int nPage = index.data(Qt::UserRole + 1).toInt();
     int nCurPage = DocummentFileHelper::instance()->currentPageNo();
-    if (nPage != nCurPage) {
+    if (nPage != nCurPage) {    //  两页 不一样, 再跳转
         DocummentFileHelper::instance()->pageJump(nPage);
     }
+}
+
+//  窗口大小变化, 列的宽度随之变化
+void CatalogTreeView::resizeEvent(QResizeEvent *event)
+{
+    setColumnWidth(0, this->width() - 100);
+    setColumnWidth(1, 22);
+    setColumnWidth(2, 28);
+
+    DTreeView::resizeEvent(event);
 }

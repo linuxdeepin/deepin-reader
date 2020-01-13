@@ -59,6 +59,7 @@ private:
 
 private:
     DLabel  *titleLabel = nullptr;
+
 };
 
 

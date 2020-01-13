@@ -118,7 +118,6 @@ void CatalogDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     if (index.column() == 0) {
         painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, text);
     } else if (index.column() == 2) {
-        textRect.setWidth(28);
         painter->drawText(textRect, Qt::AlignRight | Qt::AlignVCenter, text);
     }
 

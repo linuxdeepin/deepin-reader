@@ -57,6 +57,7 @@ void CatalogWidget::initWidget()
 {
     titleLabel = new CustomClickLabel("");
     titleLabel->setAlignment(Qt::AlignCenter);
+    DFontSizeManager::instance()->bind(titleLabel, DFontSizeManager::T8);
 
     auto mainLayout = new QVBoxLayout;
 

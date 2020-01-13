@@ -41,11 +41,16 @@ public:
 
 signals:
     void sigOpenFileOk();
+
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
     void sendMsg(const int &, const QString &) Q_DECL_OVERRIDE;
     void notifyMsg(const int &, const QString &) Q_DECL_OVERRIDE;
+
+    // QWidget interface
+protected:
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
     void initConnections();
@@ -59,7 +64,6 @@ private slots:
 
 private:
     SubjectThread       *m_pSubjectThread = nullptr;
-
 };
 
 #endif // CATALOGTREEVIEW_H
