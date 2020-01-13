@@ -109,6 +109,9 @@ const QString g_app_name = "deepin-reader";
 const QString g_db_name = "deepinreader.db";
 const QString g_cfg_name = "config.conf";
 
+const QString g_warningtip_suffix = "##**warning";
+const QString g_errortip_suffix = "##**error";
+
 const int g_effective_res = 9999;  //  表明 消息已被处理
 const int g_menu_width = 150;      //  菜单的宽度
 }  // namespace ConstantMsg

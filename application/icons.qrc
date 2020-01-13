@@ -49,5 +49,6 @@
         <file>icons/deepin/builtin/dark/texts/dr_viewchange_36px.svg</file>
         <file>icons/deepin/builtin/dark/texts/dr_catalog_36px.svg</file>
         <file>icons/deepin/builtin/light/texts/dr_catalog_36px.svg</file>
+        <file>icons/deepin/builtin/warning.svg</file>
     </qresource>
 </RCC>
