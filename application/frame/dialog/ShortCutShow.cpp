@@ -188,7 +188,7 @@ void ShortCutShow::initData()
                   << tr("Save") << tr("Thumbnails") << tr("Fit page") << tr("Fit height")
                   << tr("Fit width") << tr("Rotate left") << tr("Rotate right") << tr("Select text")
                   << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight")
-                  << tr("Delete") << tr("Magnifier") << tr("Copy") << tr("Cut") << tr("Paste")
+                  << tr("Delete") << tr("Magnifier") << tr("Slide show") << tr("Copy") << tr("Cut") << tr("Paste")
                   << tr("Undo") << tr("Select all") << tr("Display shortcuts");
 
     Settingsnames << tr("Help") << tr("Display shortcuts");
