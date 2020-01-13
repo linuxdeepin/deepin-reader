@@ -822,7 +822,7 @@ void DocummentBase::resizeEvent(QResizeEvent *e)
 {
     DScrollArea::resizeEvent(e);
     qDebug() << "DocummentBase::resizeEvent******" << rect();
-    // loadPages(); //主要目的是解决文档刚加载的时候qwfather获取的尺寸不对，导致界面少显示页面的问题
+    loadPages(); //主要目的是解决文档刚加载的时候qwfather获取的尺寸不对，导致界面少显示页面的问题
 }
 
 bool DocummentBase::pageJump(int pagenum)
@@ -1838,7 +1838,7 @@ bool DocummentBase::loadData()
             break;
         }
         d->m_pages.at(i)->getInterFace()->loadData();
-        if (bfirst && (i > 10 || d->m_pages.size() <= 10)) {
+        if (bfirst && (i > 3 || d->m_pages.size() <= 3)) {
             bfirst = false;
             emit signal_openResult(true);
         }
