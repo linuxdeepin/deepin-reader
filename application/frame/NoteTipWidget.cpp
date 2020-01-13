@@ -26,22 +26,28 @@ void NoteTipWidget::setTipContent(const QString &content)
 {
     DTextEdit *pedit = this->findChild<DTextEdit *>();
     if (pedit) {
+
+        QString strContent = content;
+
+        strContent.replace('\n', "");
+        strContent.replace('\t', "");
+
         QFontMetrics fm(pedit->font());
-        int pixelsWide = fm.horizontalAdvance(content);
+        int pixelsWide = fm.horizontalAdvance(strContent);
         int pixelsHigh = fm.height();
         //        qDebug() << pixelsWide << pixelsHigh << fm.lineSpacing();
         QString strcontent;
         //判断是否超过十行
         if (pixelsWide > (m_iwidth - 30) * 10) {
             setFixedHeight(pixelsHigh * 10 + 8);
-            strcontent = pedit->fontMetrics().elidedText(content, Qt::ElideRight,
+            strcontent = pedit->fontMetrics().elidedText(strContent, Qt::ElideRight,
                                                          (m_iwidth - 30) * 10, Qt::TextWordWrap);
         } else {
             int line = pixelsWide / (m_iwidth - 16);
             // line = line > 2 ? line + 2 : 3;
             line = line < 1 ? 1 : line + 1;
             setFixedHeight(pixelsHigh * line + 8);
-            strcontent = content;
+            strcontent = strContent;
         }
         pedit->setFixedWidth(m_iwidth - 16);
         pedit->setText(strcontent);
