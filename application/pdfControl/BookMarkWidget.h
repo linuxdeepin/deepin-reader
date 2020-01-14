@@ -86,6 +86,7 @@ signals:
     void sigDelBKItem();
     void sigCtrlBAddBookMark();
     void sigRightSelectItem(QString);
+    void sigDealWithShurtKey(const QString &);
 
 private slots:
     void slotAddBookMark();
@@ -99,6 +100,7 @@ private slots:
     void slotUpdateTheme();
     void slotRightSelectItem(QString);
     void slotSelectItemBackColor(QListWidgetItem *);
+    void slotDealWithShurtKey(const QString &);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -108,6 +110,7 @@ private:
     QListWidgetItem *addBookMarkItem(const int &);
     void deleteIndexPage(const int &pageIndex);
     void clearItemColor();
+    bool bOperationBK();
 
 public:
     // IObserver interface

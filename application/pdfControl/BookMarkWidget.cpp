@@ -109,21 +109,28 @@ void BookMarkWidget::nextPage()
     }
 }
 
-
 /**
  * @brief BookMarkWidget::slotAddBookMark
  * @brief 点击按钮添加 当前页 为 书签
  */
 void BookMarkWidget::slotAddBookMark()
 {
-    if (!m_pAddBookMarkBtn->isEnabled()) {
-        return;
-    }
+    int leftShow = 0;
+    int widgetIndex = 0;
+    leftShow = AppSetting::instance()->getKeyValue(KEY_M).toInt();
+    widgetIndex = AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt();
 
-    auto proxy = DocummentFileHelper::instance();
-    if (proxy) {
-        int nPage = proxy->currentPageNo();
-        sendMsg(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(nPage));
+    if (leftShow == 1 && widgetIndex == 2) {
+
+        if (!m_pAddBookMarkBtn->isEnabled()) {
+            return;
+        }
+
+        auto proxy = DocummentFileHelper::instance();
+        if (proxy) {
+            int nPage = proxy->currentPageNo();
+            sendMsg(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(nPage));
+        }
     }
 }
 
@@ -149,6 +156,7 @@ void BookMarkWidget::slotAddBookMark(const int &nPage)
             m_pAddBookMarkBtn->setEnabled(false);
         }
     }
+//}
 }
 
 /**
@@ -246,32 +254,26 @@ void BookMarkWidget::slotDocFilePageChanged(const QString &sPage)
  */
 void BookMarkWidget::slotDeleteBookItem(const int &nPage)
 {
-    int leftShow = 0;
-    int widgetIndex = 0;
-    leftShow = AppSetting::instance()->getKeyValue(KEY_M).toInt();
-    widgetIndex = AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt();
-    if (leftShow == 1 && widgetIndex == 2) {
-        int nSize = m_pBookMarkListWidget->count();
-        for (int iLoop = 0; iLoop < nSize; iLoop++) {
-            auto pItem = m_pBookMarkListWidget->item(iLoop);
-            if (pItem) {
-                auto t_widget =
-                    reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
-                if (t_widget) {
-                    int nPageIndex = t_widget->nPageIndex();
-                    if (nPageIndex == nPage) {
-                        t_widget->deleteLater();
-                        t_widget = nullptr;
+    int nSize = m_pBookMarkListWidget->count();
+    for (int iLoop = 0; iLoop < nSize; iLoop++) {
+        auto pItem = m_pBookMarkListWidget->item(iLoop);
+        if (pItem) {
+            auto t_widget =
+                reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
+            if (t_widget) {
+                int nPageIndex = t_widget->nPageIndex();
+                if (nPageIndex == nPage) {
+                    t_widget->deleteLater();
+                    t_widget = nullptr;
 
-                        delete pItem;
-                        pItem = nullptr;
+                    delete pItem;
+                    pItem = nullptr;
 
-                        deleteIndexPage(nPageIndex);
+                    deleteIndexPage(nPageIndex);
 
-                        notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The bookmark has been removed"));
+                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The bookmark has been removed"));
 
-                        break;
-                    }
+                    break;
                 }
             }
         }
@@ -309,6 +311,20 @@ void BookMarkWidget::clearItemColor()
             pItemWidget->setBSelect(false);
         }
     }
+}
+
+bool BookMarkWidget::bOperationBK()
+{
+    int leftShow = 0;
+    int widgetIndex = 0;
+    leftShow = AppSetting::instance()->getKeyValue(KEY_M).toInt();
+    widgetIndex = AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt();
+
+    if (leftShow == 1 && widgetIndex == 2) {
+        return true;
+    }
+
+    return false;
 }
 
 /**
@@ -353,6 +369,7 @@ void BookMarkWidget::slotLoadImage(const int &page, const QImage &image)
  */
 void BookMarkWidget::slotDelBkItem()
 {
+    qDebug() << __FUNCTION__ << "  111111111111111 ";
     //  按Del键删除, 当前显示的List 必须是 自己 才可以进行删除
     bool bFocus = this->hasFocus();
     if (bFocus) {
@@ -459,6 +476,8 @@ void BookMarkWidget::initConnection()
     connect(this, SIGNAL(sigRightSelectItem(QString)), SLOT(slotRightSelectItem(QString)));
     connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem *)),
             SLOT(slotSelectItemBackColor(QListWidgetItem *)));
+    connect(this, SIGNAL(sigDealWithShurtKey(const QString &)),
+            this, SLOT(slotDealWithShurtKey(const QString &)));
 }
 
 /**
@@ -527,6 +546,22 @@ void BookMarkWidget::slotSelectItemBackColor(QListWidgetItem *item)
 }
 
 /**
+ * @brief BookMarkWidget::slotDealWithShurtKey
+ * 处理键盘事件
+ * @param msgContent    事件内容
+ */
+void BookMarkWidget::slotDealWithShurtKey(const QString &msgContent)
+{
+    if (msgContent == KeyStr::g_del) {
+        if (bOperationBK()) {
+            emit sigDelBKItem();
+        }
+    } else if (msgContent == KeyStr::g_ctrl_b) {
+        emit sigCtrlBAddBookMark();
+    }
+}
+
+/**
  * @brief BookMarkWidget::dealWithData
  * 处理全局消息
  * @param msgType:消息类型
@@ -536,6 +571,8 @@ void BookMarkWidget::slotSelectItemBackColor(QListWidgetItem *item)
 int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_BOOKMARK_DLTITEM == msgType || MSG_OPERATION_DELETE_BOOKMARK == msgType) {   //  删除书签消息
+        emit sigDeleteBookItem(msgContent.toInt());
+    } else if (MSG_BOOKMARK_DLTITEM == msgType || MSG_OPERATION_DELETE_BOOKMARK == msgType) {   //  删除书签消息
         emit sigDeleteBookItem(msgContent.toInt());
     } else if (MSG_OPERATION_ADD_BOOKMARK == msgType || MSG_OPERATION_TEXT_ADD_BOOKMARK == msgType) {  //  增加书签消息
         emit sigAddBookMark(msgContent.toInt());
@@ -550,12 +587,13 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (MSG_FILE_PAGE_CHANGE == msgType) {  //  文档页变化消息
         emit sigFilePageChanged(msgContent);
     } else if (MSG_NOTIFY_KEY_MSG == msgType) {  //  按键通知消息
-        if (msgContent == KeyStr::g_del) {
-            emit sigDelBKItem();
-        } else if (msgContent == KeyStr::g_ctrl_b) {
-            emit sigCtrlBAddBookMark();
-            return ConstantMsg::g_effective_res;
-        }
+        emit sigDealWithShurtKey(msgContent);
+//        if (msgContent == KeyStr::g_del) {
+//            emit sigDelBKItem();
+//        } else if (msgContent == KeyStr::g_ctrl_b) {
+//            emit sigCtrlBAddBookMark();
+//            return ConstantMsg::g_effective_res;
+//        }
     }
     return 0;
 }

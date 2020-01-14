@@ -60,6 +60,9 @@ protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private:
+    bool bOperationBK();
+
+private:
     bool m_bPaint = false;                    // 是否绘制选中item
     DMenu *m_menu = nullptr;
 

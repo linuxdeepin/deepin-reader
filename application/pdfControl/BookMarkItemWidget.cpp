@@ -18,6 +18,7 @@
  */
 #include "BookMarkItemWidget.h"
 #include <DApplicationHelper>
+#include "controller/AppSetting.h"
 
 BookMarkItemWidget::BookMarkItemWidget(QWidget *parent)
     : CustomItemWidget("BookMarkItemWidget", parent)
@@ -47,8 +48,8 @@ int BookMarkItemWidget::dealWithData(const int &msgType, const QString &msgConte
 {
     if (MSG_NOTIFY_KEY_MSG == msgType) {
         if (msgContent == KeyStr::g_del) {
-            bool bFocus = bSelect();//this->hasFocus();
-            if (bFocus) {
+            bool bFocus = bSelect();
+            if (bOperationBK() && bFocus) {
                 emit sigDeleleteItem(m_nPageIndex);
             }
         }
@@ -150,6 +151,20 @@ void BookMarkItemWidget::paintEvent(QPaintEvent *event)
     } else {
         m_pPicture->setForegroundRole(QPalette::Shadow);
     }
+}
+
+bool BookMarkItemWidget::bOperationBK()
+{
+    int leftShow = 0;
+    int widgetIndex = 0;
+    leftShow = AppSetting::instance()->getKeyValue(KEY_M).toInt();
+    widgetIndex = AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt();
+
+    if (leftShow == 1 && widgetIndex == 2) {
+        return true;
+    }
+
+    return false;
 }
 
 void BookMarkItemWidget::resizeEvent(QResizeEvent *event)
