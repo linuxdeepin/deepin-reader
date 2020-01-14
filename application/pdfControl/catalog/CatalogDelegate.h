@@ -32,6 +32,9 @@ public:
     // QAbstractItemDelegate interface
 public:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE;
+
+private:
+    QAbstractItemView    *parent = nullptr;
 };
 
 #endif // CATALOGDELEGATE_H

@@ -20,7 +20,7 @@
 #define CATALOGTREEVIEW_H
 
 #include <DTreeView>
-#include <QMouseEvent>
+
 #include <QStandardItemModel>
 
 #include "subjectObserver/IObserver.h"
@@ -41,6 +41,7 @@ public:
 
 signals:
     void sigOpenFileOk();
+    void sigFilePageChanged(const QString &);
 
     // IObserver interface
 public:
@@ -60,7 +61,12 @@ private:
 
 private slots:
     void SlotOpenFileOk();
+
     void SlotClicked(const QModelIndex &);
+    void SlotFilePageChanged(const QString &);
+
+    void SlotCollapsed(const QModelIndex &);
+    void SlotExpanded(const QModelIndex &);
 
 private:
     SubjectThread       *m_pSubjectThread = nullptr;

@@ -26,7 +26,7 @@
 CatalogDelegate::CatalogDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
 {
-
+    this->parent = parent;
 }
 
 void CatalogDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -61,12 +61,11 @@ void CatalogDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     }
 
     forground.setColor(palette.color(cg, DPalette::Text));
-    if (opt.state & QStyle::State_Enabled) {
-        if (opt.state & QStyle::State_Selected) {
-            background = palette.color(cg, DPalette::Highlight);
-            forground.setColor(palette.color(cg, DPalette::HighlightedText));
-        }
+    if (opt.state & QStyle::State_Selected) {
+        background = palette.color(cg, DPalette::Highlight);
+        forground.setColor(palette.color(cg, DPalette::HighlightedText));
     }
+
     painter->setPen(forground);
 
     QRect rect = opt.rect;
