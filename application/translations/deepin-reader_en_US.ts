@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
 <context>
     <name>Application</name>
     <message>
@@ -144,7 +142,7 @@
     <message>
         <location filename="../frame/CentralWidget.cpp" line="238"/>
         <source>%1 is not supported</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 is not supported</translation>
     </message>
     <message>
         <source>is not supported</source>
@@ -168,7 +166,7 @@
     <message>
         <location filename="../pdfControl/CustomItemWidget.cpp" line="53"/>
         <source>Page %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Page %1</translation>
     </message>
 </context>
 <context>
@@ -500,7 +498,7 @@
     <message>
         <location filename="../pdfControl/SearchResWidget.cpp" line="254"/>
         <source>%1 items found</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 items found</translation>
     </message>
 </context>
 <context>
@@ -703,7 +701,7 @@
         <location filename="../frame/dialog/ShortCutShow.cpp" line="191"/>
         <location filename="../frame/dialog/ShortCutShow.cpp" line="199"/>
         <source>Slide show</source>
-        <translation type="unfinished">Slide show</translation>
+        <translation>Slide show</translation>
     </message>
     <message>
         <location filename="../frame/dialog/ShortCutShow.cpp" line="192"/>

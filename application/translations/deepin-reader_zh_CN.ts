@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>Application</name>
     <message>
@@ -144,7 +142,7 @@
     <message>
         <location filename="../frame/CentralWidget.cpp" line="238"/>
         <source>%1 is not supported</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>is not supported</source>
@@ -168,7 +166,7 @@
     <message>
         <location filename="../pdfControl/CustomItemWidget.cpp" line="53"/>
         <source>Page %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -346,29 +344,6 @@
     </message>
 </context>
 <context>
-    <name>FontWidget</name>
-    <message>
-        <source>Rotate Left</source>
-        <translation type="vanished">左旋转</translation>
-    </message>
-    <message>
-        <source>Rotate Right</source>
-        <translation type="vanished">右旋转</translation>
-    </message>
-    <message>
-        <source>Two-Page View</source>
-        <translation type="vanished">双页显示</translation>
-    </message>
-    <message>
-        <source>Fit Height</source>
-        <translation type="vanished">适应高度</translation>
-    </message>
-    <message>
-        <source>Fit Width</source>
-        <translation type="vanished">适应宽度</translation>
-    </message>
-</context>
-<context>
     <name>HomeWidget</name>
     <message>
         <location filename="../frame/HomeWidget.cpp" line="51"/>
@@ -523,7 +498,7 @@
     <message>
         <location filename="../pdfControl/SearchResWidget.cpp" line="254"/>
         <source>%1 items found</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -726,7 +701,7 @@
         <location filename="../frame/dialog/ShortCutShow.cpp" line="191"/>
         <location filename="../frame/dialog/ShortCutShow.cpp" line="199"/>
         <source>Slide show</source>
-        <translation>幻灯片放映</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/dialog/ShortCutShow.cpp" line="192"/>
