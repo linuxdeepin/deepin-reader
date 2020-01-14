@@ -84,6 +84,8 @@ void LeftSidebarWidget::onSetStackCurIndex(const int &iIndex)
             }
         }
         pWidget->setCurrentIndex(iIndex);
+
+        emit sigSearchWidgetState(iIndex);
     }
 }
 
@@ -227,7 +229,11 @@ void LeftSidebarWidget::initWidget()
     pStackedWidget->insertWidget(WIDGET_BOOKMARK, new BookMarkWidget(this));
     pStackedWidget->insertWidget(WIDGET_NOTE, new NotesWidget(this));
     pStackedWidget->insertWidget(WIDGET_SEARCH, new SearchResWidget(this));
-    pStackedWidget->insertWidget(WIDGET_BUFFER, new BufferWidget(this));
+
+    auto buffWidget = new BufferWidget(this);
+    connect(this, SIGNAL(sigSearchWidgetState(const int &)), buffWidget, SLOT(SlotSetSpinnerState(const int &)));
+
+    pStackedWidget->insertWidget(WIDGET_BUFFER, buffWidget);
     pStackedWidget->setCurrentIndex(WIDGET_THUMBNAIL);
 
     pVBoxLayout->addWidget(pStackedWidget);

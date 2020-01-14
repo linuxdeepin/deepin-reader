@@ -44,13 +44,13 @@ void BufferWidget::initWidget()
 {
     auto m_pVLayout = new QVBoxLayout;  // 承载spinner的垂直布局
     auto m_pHLayout = new QHBoxLayout();      // 承载spinner的水平布局
-    auto m_pSpinner = new DSpinner(this);     // 缓冲动画
+    m_pSpinner = new DSpinner(this);     // 缓冲动画
 
     m_pVLayout->setContentsMargins(0, 0, 0, 0);
     m_pHLayout->setContentsMargins(0, 0, 0, 0);
 
     m_pSpinner->setFixedSize(50, 50);
-    m_pSpinner->start();
+    m_pSpinner->stop();
 
     m_pHLayout->addStretch(1);
     m_pHLayout->addWidget(m_pSpinner);
@@ -61,4 +61,15 @@ void BufferWidget::initWidget()
     m_pVLayout->addStretch(1);
 
     this->setLayout(m_pVLayout);
+}
+
+void BufferWidget::SlotSetSpinnerState(const int &iState)
+{
+    if (m_pSpinner) {
+        if (iState == WIDGET_BUFFER) {
+            m_pSpinner->start();
+        } else {
+            m_pSpinner->stop();
+        }
+    }
 }

@@ -40,6 +40,12 @@ public:
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
+
+private slots:
+    void SlotSetSpinnerState(const int &);
+
+private:
+    DSpinner        *m_pSpinner = nullptr;
 };
 
 #endif  // BUFFERWIDGET_H
