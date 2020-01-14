@@ -85,7 +85,10 @@ void LeftSidebarWidget::onSetStackCurIndex(const int &iIndex)
         }
         pWidget->setCurrentIndex(iIndex);
 
-        emit sigSearchWidgetState(iIndex);
+        //  前一个是 出来搜索结果了, 后一个是正在搜索
+        if (iIndex == WIDGET_SEARCH || iIndex == WIDGET_BUFFER) {
+            emit sigSearchWidgetState(iIndex);
+        }
     }
 }
 
