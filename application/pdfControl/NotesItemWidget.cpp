@@ -103,10 +103,10 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
 
     if (m_menu == nullptr) {
         m_menu = new DMenu(this);
-        QAction *copyAction = m_menu->addAction(QString("      %1").arg(tr("Copy")));
+        QAction *copyAction = m_menu->addAction(tr("Copy"));
         DFontSizeManager::instance()->bind(m_menu, DFontSizeManager::T6);
         m_menu->addSeparator();
-        QAction *dltItemAction = m_menu->addAction(QString("      %1").arg(tr("Remove annotation")));
+        QAction *dltItemAction = m_menu->addAction(tr("Remove annotation"));
         connect(dltItemAction, SIGNAL(triggered()), this, SLOT(slotDltNoteContant()));
         connect(copyAction, SIGNAL(triggered()), this, SLOT(slotCopyContant()));
     }

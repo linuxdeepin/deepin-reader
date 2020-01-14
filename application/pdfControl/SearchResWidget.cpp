@@ -122,7 +122,7 @@ void SearchResWidget::slotSearchOver()
         //让搜索框变粉红色
         notifyMsg(MSG_FIND_NONE, "1");
         //发送提示消息
-        notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("No search results") + ConstantMsg::g_warningtip_suffix);
+        // notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("No search results") + ConstantMsg::g_warningtip_suffix);
         bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
         if (!t_bTnumbnIsShow) {
             notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(!t_bTnumbnIsShow));
@@ -251,7 +251,7 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
         itemWidget->setNoteSigne(false);
         itemWidget->setLabelPage(page, 1);
         itemWidget->setTextEditText(text);
-        itemWidget->setSerchResultText((QString("   %1").arg(resultNum) + tr(" items found")));
+        itemWidget->setSerchResultText(tr("%1 items found").arg(resultNum));
         itemWidget->setMinimumSize(QSize(LEFTMINWIDTH - 5, 80));
 
 //    auto item = new QListWidgetItem(m_pSearchList);

@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_CN">
 <context>
     <name>Application</name>
     <message>
@@ -108,7 +110,7 @@
 <context>
     <name>BookMarkItemWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkItemWidget.cpp" line="80"/>
+        <location filename="../pdfControl/BookMarkItemWidget.cpp" line="98"/>
         <source>Remove bookmark</source>
         <translation>删除书签</translation>
     </message>
@@ -116,13 +118,13 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="247"/>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="349"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="271"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="374"/>
         <source>The bookmark has been removed</source>
         <translation>已删除书签</translation>
     </message>
     <message>
-        <location filename="../pdfControl/BookMarkWidget.cpp" line="398"/>
+        <location filename="../pdfControl/BookMarkWidget.cpp" line="423"/>
         <source>Add bookmark</source>
         <translation>添加书签</translation>
     </message>
@@ -130,19 +132,23 @@
 <context>
     <name>CentralWidget</name>
     <message>
-        <location filename="../frame/CentralWidget.cpp" line="139"/>
+        <location filename="../frame/CentralWidget.cpp" line="161"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="../frame/CentralWidget.cpp" line="199"/>
+        <location filename="../frame/CentralWidget.cpp" line="235"/>
         <source>Unknown type</source>
         <translation>文件类型未知</translation>
     </message>
     <message>
-        <location filename="../frame/CentralWidget.cpp" line="202"/>
+        <location filename="../frame/CentralWidget.cpp" line="238"/>
+        <source>%1 is not supported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>is not supported</source>
-        <translation>不支持</translation>
+        <translation type="vanished">不支持</translation>
     </message>
 </context>
 <context>
@@ -156,9 +162,13 @@
 <context>
     <name>CustomItemWidget</name>
     <message>
-        <location filename="../pdfControl/CustomItemWidget.cpp" line="35"/>
         <source>page</source>
-        <translation>页面</translation>
+        <translation type="vanished">页面</translation>
+    </message>
+    <message>
+        <location filename="../pdfControl/CustomItemWidget.cpp" line="53"/>
+        <source>Page %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -278,7 +288,7 @@
 <context>
     <name>FileViewNoteWidget</name>
     <message>
-        <location filename="../pdfControl/fileViewNote/FileViewNoteWidget.cpp" line="168"/>
+        <location filename="../pdfControl/fileViewNote/FileViewNoteWidget.cpp" line="186"/>
         <source>Input limit reached</source>
         <translation>输入已达上限</translation>
     </message>
@@ -286,10 +296,10 @@
 <context>
     <name>FileViewWidget</name>
     <message>
-        <location filename="../frame/FileViewWidget.cpp" line="310"/>
-        <location filename="../frame/FileViewWidget.cpp" line="418"/>
-        <location filename="../frame/FileViewWidget.cpp" line="428"/>
-        <location filename="../frame/FileViewWidget.cpp" line="540"/>
+        <location filename="../frame/FileViewWidget.cpp" line="311"/>
+        <location filename="../frame/FileViewWidget.cpp" line="419"/>
+        <location filename="../frame/FileViewWidget.cpp" line="429"/>
+        <location filename="../frame/FileViewWidget.cpp" line="541"/>
         <source>Please select the text</source>
         <translation>请选择文本</translation>
     </message>
@@ -310,27 +320,27 @@
 <context>
     <name>FontMenu</name>
     <message>
-        <location filename="../pdfControl/font/FontMenu.cpp" line="354"/>
+        <location filename="../pdfControl/font/FontMenu.cpp" line="372"/>
         <source>Two-Page View</source>
         <translation>双页显示</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/FontMenu.cpp" line="357"/>
+        <location filename="../pdfControl/font/FontMenu.cpp" line="375"/>
         <source>Fit Height</source>
         <translation>适应高度</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/FontMenu.cpp" line="360"/>
+        <location filename="../pdfControl/font/FontMenu.cpp" line="378"/>
         <source>Fit Width</source>
         <translation>适应宽度</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/FontMenu.cpp" line="363"/>
+        <location filename="../pdfControl/font/FontMenu.cpp" line="381"/>
         <source>Rotate Left</source>
         <translation>左旋转</translation>
     </message>
     <message>
-        <location filename="../pdfControl/font/FontMenu.cpp" line="366"/>
+        <location filename="../pdfControl/font/FontMenu.cpp" line="384"/>
         <source>Rotate Right</source>
         <translation>右旋转</translation>
     </message>
@@ -466,12 +476,12 @@
 <context>
     <name>NotesItemWidget</name>
     <message>
-        <location filename="../pdfControl/NotesItemWidget.cpp" line="86"/>
+        <location filename="../pdfControl/NotesItemWidget.cpp" line="106"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../pdfControl/NotesItemWidget.cpp" line="89"/>
+        <location filename="../pdfControl/NotesItemWidget.cpp" line="109"/>
         <source>Remove annotation</source>
         <translation>删除注释</translation>
     </message>
@@ -479,8 +489,8 @@
 <context>
     <name>NotesWidget</name>
     <message>
-        <location filename="../pdfControl/NotesWidget.cpp" line="125"/>
-        <location filename="../pdfControl/NotesWidget.cpp" line="279"/>
+        <location filename="../pdfControl/NotesWidget.cpp" line="143"/>
+        <location filename="../pdfControl/NotesWidget.cpp" line="297"/>
         <source>The annotation has been removed</source>
         <translation>已删除注释</translation>
     </message>
@@ -501,14 +511,19 @@
 <context>
     <name>SearchResWidget</name>
     <message>
-        <location filename="../pdfControl/SearchResWidget.cpp" line="235"/>
         <source> items found</source>
-        <translation>个搜索结果</translation>
+        <translation type="vanished">个搜索结果</translation>
     </message>
     <message>
-        <location filename="../pdfControl/SearchResWidget.cpp" line="256"/>
+        <location filename="../pdfControl/SearchResWidget.cpp" line="125"/>
+        <location filename="../pdfControl/SearchResWidget.cpp" line="275"/>
         <source>No search results</source>
         <translation>无搜索结果</translation>
+    </message>
+    <message>
+        <location filename="../pdfControl/SearchResWidget.cpp" line="254"/>
+        <source>%1 items found</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -539,189 +554,195 @@
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="184"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="196"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="185"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="197"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="184"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="193"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="185"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="194"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="185"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="198"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="186"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="199"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="185"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="196"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="186"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="197"/>
         <source>Page up</source>
         <translation>上一页</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="185"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="196"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="186"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="197"/>
         <source>Page down</source>
         <translation>下一页</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="185"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="194"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="186"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="195"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="185"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="196"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="186"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="197"/>
         <source>Zoom in</source>
         <translation>页面放大</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="186"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="196"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="187"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="197"/>
         <source>Zoom out</source>
         <translation>页面缩小</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="186"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="187"/>
         <source>Zoom in/Zoom out</source>
         <translation>页面放大/缩小</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="186"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="194"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="187"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="195"/>
         <source>Save as</source>
         <translation>另存为</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="186"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="194"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="187"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="195"/>
         <source>Print</source>
         <translation>打印</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="187"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="194"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="199"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="188"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="195"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="200"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="187"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="195"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="188"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="196"/>
         <source>Thumbnails</source>
         <translation>打开目录缩略图</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="187"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="195"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="188"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="196"/>
         <source>Fit page</source>
         <translation>适合页面</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="187"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="195"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="188"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="196"/>
         <source>Fit height</source>
         <translation>适合高度</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="188"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="195"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="189"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="196"/>
         <source>Fit width</source>
         <translation>适合宽度</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="188"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="195"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="189"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="196"/>
         <source>Rotate left</source>
         <translation>左旋转</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="188"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="195"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="189"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="196"/>
         <source>Rotate right</source>
         <translation>右旋转</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="188"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="197"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="189"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="198"/>
         <source>Select text</source>
         <translation>选择工具</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="189"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="197"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="190"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="198"/>
         <source>Hand tool</source>
         <translation>手形工具</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="189"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="197"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="190"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="198"/>
         <source>Add bookmark</source>
         <translation>添加书签</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="189"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="197"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="190"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="198"/>
         <source>Add annotation</source>
         <translation>添加注释</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="189"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="197"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="190"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="198"/>
         <source>Highlight</source>
         <translation>高亮</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="190"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="197"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="199"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="191"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="198"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="200"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="190"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="198"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="191"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="199"/>
         <source>Magnifier</source>
         <translation>放大镜</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="190"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="199"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="191"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="200"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="190"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="199"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="191"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="200"/>
         <source>Cut</source>
         <translation>剪切</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="190"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="199"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="191"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="200"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
         <location filename="../frame/dialog/ShortCutShow.cpp" line="191"/>
         <location filename="../frame/dialog/ShortCutShow.cpp" line="199"/>
+        <source>Slide show</source>
+        <translation>幻灯片放映</translation>
+    </message>
+    <message>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="192"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="200"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="191"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="199"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="192"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="200"/>
         <source>Select all</source>
         <translation>全选</translation>
     </message>
     <message>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="191"/>
-        <location filename="../frame/dialog/ShortCutShow.cpp" line="193"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="192"/>
+        <location filename="../frame/dialog/ShortCutShow.cpp" line="194"/>
         <source>Display shortcuts</source>
         <translation>显示快捷键预览</translation>
     </message>
