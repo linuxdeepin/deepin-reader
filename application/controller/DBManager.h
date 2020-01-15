@@ -23,6 +23,14 @@
 //TEXT primari key   | TEXT     | TEXT       | TEXT  //
 ///////////////////////////////////////////////////////
 
+
+// FileFontTable
+////////////////////////////////////////////////////////////////////////
+//FilePath           | FileScale | FileDoubPage | FileFit | FileRotate//
+//TEXT primari key   | TEXT      | TEXT         | TEXT    | TEXT      //
+////////////////////////////////////////////////////////////////////////
+
+
 #include <QSqlDatabase>
 #include <QObject>
 #include <QDateTime>
@@ -67,12 +75,22 @@ public:
     void setStrFilePath(const QString &strFilePath);
     bool saveasBookMark(const QString &oldpath, const QString &newpath);
 
+    //FileFontTable
+    void insertFileFontMsg(const QString &, const QString &, const QString &, const QString &, const QString filePath = "");
+    void updateFileFontMsg(const QString &, const QString &, const QString &, const QString &, const QString filePath = "");
+    void deleteFileFontMsg();
+    void saveFileFontMsg();
+    bool saveAsFileFontMsg(const QString &, const QString &, const QString &, const QString &, const QString newFilePath = "");
+    void getFileFontMsg(QString &, QString &, QString &, QString &);
+
 private:
     void insertBookMark(const QString &, const QString &strFilePath = "", const QString &strFileName = "");
     void updateBookMark(const QString &);
     void deleteBookMark();
 
     void clearInvalidRecord();
+
+    bool hasFilePathDB(const QString &);
 
 private:
     QList<int>      m_pBookMarkList;

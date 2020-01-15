@@ -24,6 +24,11 @@ MainOperationWidget::~MainOperationWidget()
     if (m_pNotifySubject) {
         m_pNotifySubject->removeObserver(this);
     }
+
+    if (m_pRefinedAbstractionA) {
+        delete m_pRefinedAbstractionA;
+        m_pRefinedAbstractionA = nullptr;
+    }
 }
 
 /**
@@ -44,6 +49,8 @@ void MainOperationWidget::setOperatAction(const int &index)
 
 void MainOperationWidget::initWidget()
 {
+    m_pRefinedAbstractionA = new RefinedAbstractionA(new ConcreteAbstractionImplementA(this));
+
     auto hboxLayout = new QHBoxLayout;
     hboxLayout->setContentsMargins(19, 0, 19, 0);
 
@@ -126,6 +133,9 @@ void MainOperationWidget::slotUpdateTheme()
 
 void MainOperationWidget::slotButtonClicked(int id)
 {
+    if (m_pRefinedAbstractionA) {
+        m_pRefinedAbstractionA->Operation(QString::number(id));
+    }
     emit sigShowStackWidget(id);
 }
 

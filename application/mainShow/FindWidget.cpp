@@ -90,8 +90,9 @@ void FindWidget::findCancel()
 void FindWidget::handleContentChanged()
 {
     QString strFind = m_pSearchEdit->text();
-
-    notifyMsg(MSG_FIND_CONTENT, strFind);
+    if (strFind != "") {
+        notifyMsg(MSG_FIND_CONTENT, strFind);
+    }
 }
 
 void FindWidget::slotFindNextBtnClicked()

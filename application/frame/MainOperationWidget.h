@@ -7,6 +7,9 @@
 #include "CustomControl/CustomWidget.h"
 #include "controller/DataManager.h"
 
+#include "controller/DBOperation/Abstraction.h"
+#include "controller/DBOperation/AbstractImplement.h"
+
 /**
  * @brief The MainOperationWidget class
  * @brief   缩略图、书签、注释 操作widget
@@ -46,6 +49,9 @@ protected:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+
+private:
+    RefinedAbstractionA *m_pRefinedAbstractionA = nullptr;
 };
 
 #endif // MAINOPERATIONWIDGET_H

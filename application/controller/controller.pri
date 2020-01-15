@@ -4,10 +4,14 @@ HEADERS += \
     $$PWD/SubjectHeader.h \
     $$PWD/DBManager.h \
     $$PWD/AppSetting.h \
-    $$PWD/SubjectThread.h
+    $$PWD/SubjectThread.h \
+    $$PWD/DBOperation/AbstractImplement.h \
+    $$PWD/DBOperation/Abstraction.h
 
 SOURCES += \
     $$PWD/DataManager.cpp \
     $$PWD/NotifySubject.cpp \
     $$PWD/DBManager.cpp \
-    $$PWD/AppSetting.cpp
+    $$PWD/AppSetting.cpp \
+    $$PWD/DBOperation/AbstractImplement.cpp \
+    $$PWD/DBOperation/Abstraction.cpp

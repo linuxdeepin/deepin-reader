@@ -220,6 +220,7 @@ void DocummentFileHelper::onSaveFile()
             //  保存需要保存 数据库记录
             qDebug() << "DocummentFileHelper::slotSaveFile saveBookMark";
             DBManager::instance()->saveBookMark();
+//            DBManager::instance()->insertFileFontMsg();
             DataManager::instance()->setBIsUpdate(false);
             notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Saved successfully"));
         } else {
