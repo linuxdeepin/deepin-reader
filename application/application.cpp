@@ -64,6 +64,9 @@ Application::Application(int &argc, char **argv)
 
 Application::~Application()
 {
+    dbM->deleteLater();
+    dbM = nullptr;
+
     g_NotifySubject::getInstance()->stopThreadRun();
 }
 

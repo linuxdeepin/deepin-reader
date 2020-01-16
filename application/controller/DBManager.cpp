@@ -31,7 +31,6 @@
 #include "utils/utils.h"
 
 DBManager *DBManager::m_dbManager = nullptr;
-DBManager::DBManagerRelease DBManager::DBManagerRelease::release;
 
 DBManager *DBManager::instance()
 {

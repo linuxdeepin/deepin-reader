@@ -52,18 +52,6 @@ private:
     void checkDatabase();
 
     static DBManager *m_dbManager;
-    class DBManagerRelease // 它的唯一工作就是在析构函数中删除实例
-    {
-    public:
-        ~DBManagerRelease()
-        {
-            if (DBManager::m_dbManager) {
-                delete DBManager::m_dbManager;
-                DBManager::m_dbManager = nullptr;
-            }
-        }
-        static DBManagerRelease release;
-    };
 
 public:
     void getBookMarks();     //  获取给文件 所有标签的页码

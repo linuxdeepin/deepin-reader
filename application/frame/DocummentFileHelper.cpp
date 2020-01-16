@@ -9,12 +9,14 @@
 #include <DDialog>
 #include <QBitmap>
 #include "subjectObserver/ModuleHeader.h"
-#include "controller/DBManager.h"
 
+#include "controller/DBManager.h"
 #include "controller/NotifySubject.h"
 #include "FileFormatHelper.h"
 #include "utils/PublicFunction.h"
 #include "controller/AppSetting.h"
+
+#include "application.h"
 
 DocummentFileHelper::DocummentFileHelper(QObject *parent)
     : QObject(parent)
@@ -219,7 +221,7 @@ void DocummentFileHelper::onSaveFile()
         if (rl) {
             //  保存需要保存 数据库记录
             qDebug() << "DocummentFileHelper::slotSaveFile saveBookMark";
-            DBManager::instance()->saveBookMark();
+            dApp->dbM->saveBookMark();
             //insert msg to FileFontTable
             saveFileFontMsg("");
 
@@ -265,7 +267,7 @@ void DocummentFileHelper::onSaveAsFile()
                 bool rl = m_pDocummentProxy->saveas(sFilePath, true);
                 if (rl) {
                     //insert a new bookmark record to bookmarktabel
-                    DBManager::instance()->saveasBookMark(m_szFilePath, sFilePath);
+                    dApp->dbM->saveasBookMark(m_szFilePath, sFilePath);
                     DataManager::instance()->setStrOnlyFilePath(sFilePath);
                     //insert msg to FileFontTable
                     saveFileFontMsg(filePath);
@@ -297,7 +299,7 @@ void DocummentFileHelper::saveFileFontMsg(const QString &filePath)
     fit = DataManager::instance()->getFontFit();//AppSetting::instance()->getKeyValue(KEY_ADAPTAT);
     rotate = DataManager::instance()->getFontRotate();//AppSetting::instance()->getKeyValue(KEY_ROTATE);
 
-    DBManager::instance()->insertFileFontMsg(scale, doubPage, fit, rotate, filePath);
+    dApp->dbM->insertFileFontMsg(scale, doubPage, fit, rotate, filePath);
 }
 
 /**
@@ -311,7 +313,7 @@ void DocummentFileHelper::setDBFileFontMsgToAppSet(const QString &filePath)
     QString fit = "";
     QString rotate = "";
 
-    DBManager::instance()->getFileFontMsg(scale, doubPage, fit, rotate, filePath);
+    dApp->dbM->getFileFontMsg(scale, doubPage, fit, rotate, filePath);
 
     qDebug() << __FUNCTION__ << " scale:" << scale
              << "  doubPage:" << doubPage
@@ -357,7 +359,7 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
             if (nRes == 2) {    // 保存已打开文件
                 save(m_szFilePath, true);
                 //  保存 书签数据
-                DBManager::instance()->saveBookMark();
+                dApp->dbM->saveBookMark();
                 //insert msg to FileFontTable
                 saveFileFontMsg("");
             }
@@ -388,7 +390,7 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
         QString fit = "";
         QString rotate = "";
 
-        DBManager::instance()->getFileFontMsg(ssscale, doubPage, fit, rotate, sPath);
+        dApp->dbM->getFileFontMsg(ssscale, doubPage, fit, rotate, sPath);
 
         qDebug() << __FUNCTION__ << " scale:" << ssscale
                  << "  doubPage:" << doubPage
