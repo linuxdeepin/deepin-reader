@@ -85,14 +85,16 @@ public:
     ~SearchResWidget() Q_DECL_OVERRIDE;
 
 signals:
-    void sigClearWidget();
+    void sigDealWithData(const int &, const QString &);
+//    void sigClearWidget();
     void sigCloseFile();
     void sigFlushSearchWidget(const QString &);
 //    void sigFindPrev();
 //    void sigFindNext();
 
 private slots:
-    void slotClearWidget();
+    void SlotDealWithData(const int &, const QString &);
+
     void slotCloseFile();
     void slotFlushSearchWidget(const QString &);
     void slotGetSearchContant(stSearchRes);
@@ -107,6 +109,7 @@ protected:
     void initWidget() Q_DECL_OVERRIDE;
 
 private:
+    void __ClearSearchContent();
     void initConnections();
     void initSearchList(const QList<stSearchRes> &);
     void addSearchsItem(const int &page, const QString &text, const int &resultNum);
@@ -120,6 +123,7 @@ private:
     LoadSearchResThread m_loadSearchResThread;       // 加载搜索缩略图线程
     QListWidgetItem *m_pSearchItem = nullptr;        // 当前鼠标左键点击的item
     bool m_bShowList = false;                        // 是否显示搜索列表
+    bool    m_isSearch = false;                     //  是否开启了搜索 , 标志位
 
 public:
     // IObserver interface

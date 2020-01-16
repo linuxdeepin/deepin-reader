@@ -34,7 +34,7 @@ private:
 signals:
     void sigDealWithData(const int &, const QString &);
 //    void sigSearchControl();
-    void sigSearchClosed();
+//    void sigSearchClosed();
     void sigShowStackWidget(const int &);
 
 private slots:
@@ -42,7 +42,6 @@ private slots:
     void slotUpdateTheme();
     void slotButtonClicked(int);
 //    void slotSearchControl();
-    void slotSearchClosed();
 
     // CustomWidget interface
 protected:
@@ -51,6 +50,7 @@ protected:
 private:
     DPushButton *__CreateHideBtn();
     void __SetBtnCheckById(const int &);
+    void __SearchExit();
 
     // IObserver interface
 public:

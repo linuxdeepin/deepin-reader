@@ -26,9 +26,11 @@ SearchResWidget::SearchResWidget(DWidget *parent)
 {
     m_loadSearchResThread.setSearchResW(this);
 
-    initWidget();
+    m_pMsgList = {MSG_CLEAR_FIND_CONTENT};
 
+    initWidget();
     initConnections();
+
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
     }
@@ -45,8 +47,17 @@ SearchResWidget::~SearchResWidget()
     }
 }
 
-void SearchResWidget::slotClearWidget()
+void SearchResWidget::SlotDealWithData(const int &msgType, const QString &)
 {
+    if (MSG_CLEAR_FIND_CONTENT == msgType) {
+        __ClearSearchContent();
+    }
+}
+
+void SearchResWidget::__ClearSearchContent()
+{
+    m_isSearch = false;
+
     m_bShowList = false;
     if (m_loadSearchResThread.isRunning()) {
         m_loadSearchResThread.stopThread();
@@ -61,21 +72,27 @@ void SearchResWidget::slotClearWidget()
     if (!bShowThunmb) {
         //  侧边栏 隐藏
         notifyMsg(MSG_HIDE_FIND_WIDGET);
+    } else {
+        notifyMsg(MSG_FIND_EXIT);       //  查询结束
     }
 }
 
+//  关闭应用
 void SearchResWidget::slotCloseFile()
 {
     m_bShowList = false;
-    if (m_loadSearchResThread.isRunning()) {
-        m_loadSearchResThread.stopThread();
-    }
 
-    slotClearWidget();
+    if (m_pSearchList->count() > 0) {
+        DocummentFileHelper::instance()->clearsearch();
+
+        m_pSearchList->clear();
+    }
 }
 
 void SearchResWidget::slotFlushSearchWidget(const QString &msgContent)
 {
+    m_isSearch = true;  //  开始搜索,  标志位 为 true
+
     notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(WIDGET_BUFFER));    //  窗口 显示 转圈圈
     notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(1));
     m_bShowList = true;
@@ -98,6 +115,10 @@ void SearchResWidget::slotGetSearchContant(stSearchRes search)
 
 void SearchResWidget::slotSearchOver()
 {
+    if (!m_isSearch) {      //  不搜索了, 不要搜索结果了
+        return;
+    }
+
     if (m_loadSearchResThread.isRunning()) {
         m_loadSearchResThread.stopThread();
     }
@@ -204,7 +225,10 @@ void SearchResWidget::initConnections()
     connect(&m_loadSearchResThread, SIGNAL(sigLoadImage(const int &, const QImage &)), this,
             SLOT(slotLoadImage(const int &, const QImage &)));
 
-    connect(this, SIGNAL(sigClearWidget()), this, SLOT(slotClearWidget()));
+    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
+            SLOT(SlotDealWithData(const int &, const QString &)));
+
+//    connect(this, SIGNAL(sigClearWidget()), this, SLOT(slotClearWidget()));
     connect(this, SIGNAL(sigFlushSearchWidget(const QString &)), this,
             SLOT(slotFlushSearchWidget(const QString &)));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
@@ -343,13 +367,16 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
 //        return ConstantMsg::g_effective_res;
 //    }
 
+    if (m_pMsgList.contains(msgType)) {
+        emit sigDealWithData(msgType, msgContent);
+        return  ConstantMsg::g_effective_res;
+    }
+
     if (msgType == MSG_FIND_START) {  //  查询内容
         if (msgContent != QString("")) {
             emit sigFlushSearchWidget(msgContent);
         }
-    } else if (msgType == MSG_CLEAR_FIND_CONTENT) {
-        emit sigClearWidget();
-    } else if (MSG_CLOSE_FILE == msgType) {  //  关闭w文件通知消息
+    }  else if (MSG_CLOSE_FILE == msgType) {  //  关闭w文件通知消息
         emit sigCloseFile();
     }
 

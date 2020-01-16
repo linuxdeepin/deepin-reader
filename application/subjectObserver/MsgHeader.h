@@ -91,7 +91,7 @@ enum MSG_FIND_TYPE {
 //    MSG_FIND_NEXT,                //  下一个
 //    MSG_FIND_STOP,                //  结束查询
     MSG_FIND_NONE,                  //  查询无果
-//    MSG_FIND_EXIT                 //  退出查询
+    MSG_FIND_EXIT                   //  退出查询
 };
 
 //  菜单操作结果 消息

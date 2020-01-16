@@ -14,7 +14,7 @@ MainOperationWidget::MainOperationWidget(CustomWidget *parent)
     initConnect();
     slotUpdateTheme();
 
-    m_pMsgList = {MSG_SWITCHLEFTWIDGET};
+    m_pMsgList = {MSG_SWITCHLEFTWIDGET, MSG_FIND_EXIT};
 
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
@@ -113,6 +113,18 @@ void MainOperationWidget::__SetBtnCheckById(const int &id)
     }
 }
 
+void MainOperationWidget::__SearchExit()
+{
+    int nId = 0;
+
+    QString sWidget = AppSetting::instance()->getKeyValue(KEY_WIDGET);
+    if (sWidget != "") {
+        nId = sWidget.toInt();
+    }
+
+    __SetBtnCheckById(nId);
+}
+
 DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QString &objName)
 {
     // auto btn = new DIconButton(this);
@@ -130,7 +142,7 @@ DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QStrin
 void MainOperationWidget::initConnect()
 {
 //    connect(this, SIGNAL(sigSearchControl()), SLOT(slotSearchControl()));
-    connect(this, SIGNAL(sigSearchClosed()), SLOT(slotSearchClosed()));
+//    connect(this, SIGNAL(sigSearchClosed()), SLOT(slotSearchClosed()));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
 }
@@ -139,6 +151,8 @@ void MainOperationWidget::SlotDealWithData(const int &msgType, const QString &ms
 {
     if (msgType == MSG_SWITCHLEFTWIDGET) {
         __SetBtnCheckById(msgContent.toInt());
+    } else if (msgType == MSG_FIND_EXIT) {
+        __SearchExit();
     }
 }
 
@@ -183,17 +197,17 @@ void MainOperationWidget::slotButtonClicked(int id)
  * @brief MainOperationWidget::slotSearchClosed
  * 搜索结束后，回复结束后的状态
  */
-void MainOperationWidget::slotSearchClosed()
-{
-    int nId = 0;
+//void MainOperationWidget::slotSearchClosed()
+//{
+//    int nId = 0;
 
-    QString sWidget = AppSetting::instance()->getKeyValue(KEY_WIDGET);
-    if (sWidget != "") {
-        nId = sWidget.toInt();
-    }
+//    QString sWidget = AppSetting::instance()->getKeyValue(KEY_WIDGET);
+//    if (sWidget != "") {
+//        nId = sWidget.toInt();
+//    }
 
-    __SetBtnCheckById(nId);
-}
+//    __SetBtnCheckById(nId);
+//}
 
 int MainOperationWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
@@ -202,11 +216,7 @@ int MainOperationWidget::dealWithData(const int &msgType, const QString &msgCont
         return ConstantMsg::g_effective_res;
     }
 
-    /* if (msgType == MSG_FIND_START) {  //  查询内容
-         emit sigSearchControl();
-     } else*/ if (msgType == MSG_CLEAR_FIND_CONTENT) {
-        emit sigSearchClosed();
-    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
     }
 

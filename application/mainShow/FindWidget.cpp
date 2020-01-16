@@ -118,17 +118,16 @@ void FindWidget::slotClearContent()
 
 void FindWidget::slotDealWithData(const int &msgType, const QString &msgContent)
 {
-//    if (msgType == MSG_FIND_EXIT) {
-//        onFindExit();
-//    } else
     if (msgType == MSG_FIND_NONE) {
         onSetEditAlert(1);
     }
 }
 
+//  点击 搜索框 里面 的 x
 void FindWidget::slotEditAborted()
 {
     qDebug() << __FUNCTION__;
+    onSetEditAlert(0);
     notifyMsg(MSG_CLEAR_FIND_CONTENT);
 }
 
