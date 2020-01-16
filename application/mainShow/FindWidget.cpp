@@ -78,19 +78,19 @@ void FindWidget::slotSetVisible()
 
 void FindWidget::findCancel()
 {
-    onSetAlert(0);
+    m_pSearchEdit->setText("");
+
+    onSetEditAlert(0);
 
     notifyMsg(MSG_CLEAR_FIND_CONTENT);
-
-    m_pSearchEdit->clear();
-    m_pSearchEdit->clearFocus();
-    hide();
+    this->close();
 }
 
 void FindWidget::handleContentChanged()
 {
     QString strFind = m_pSearchEdit->text();
     if (strFind != "") {
+        onSetEditAlert(0);
         notifyMsg(MSG_FIND_CONTENT, strFind);
     }
 }
@@ -107,12 +107,12 @@ void FindWidget::slotFindPrevBtnClicked()
     this->raise();
 }
 
-//  清空搜索内容
+//  文本内容变化, 为空, 则取消红色提示
 void FindWidget::slotClearContent()
 {
     QString strNewFind = m_pSearchEdit->text();
     if (strNewFind == "") {
-        onSetAlert(0);
+        onSetEditAlert(0);
     }
 }
 
@@ -122,13 +122,13 @@ void FindWidget::slotDealWithData(const int &msgType, const QString &msgContent)
 //        onFindExit();
 //    } else
     if (msgType == MSG_FIND_NONE) {
-        onSetAlert(msgContent.toInt());
+        onSetEditAlert(1);
     }
 }
 
 void FindWidget::slotEditAborted()
 {
-    qDebug() << "====we999";
+    qDebug() << __FUNCTION__;
     notifyMsg(MSG_CLEAR_FIND_CONTENT);
 }
 
@@ -186,7 +186,7 @@ void FindWidget::initWidget()
 
     connect(m_pSearchEdit, &DSearchEdit::returnPressed, this, &FindWidget::handleContentChanged);
     connect(m_pSearchEdit, &DSearchEdit::textChanged, this, &FindWidget::slotClearContent);
-
+    connect(m_pSearchEdit,  &DSearchEdit::searchAborted, this, &FindWidget::slotEditAborted);
 
     auto layout = new QHBoxLayout;
     layout->setContentsMargins(8, 0, 6, 0);
@@ -201,7 +201,6 @@ void FindWidget::initConnection()
 {
     connect(this, SIGNAL(sigSetVisible()), SLOT(slotSetVisible()));
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
-    connect(m_pSearchEdit,  &DSearchEdit::searchAborted, this, &FindWidget::slotEditAborted);
 }
 
 ////  退出查询
@@ -215,11 +214,12 @@ void FindWidget::initConnection()
 //}
 
 //  设置 提醒红色
-void FindWidget::onSetAlert(const int &iFlag)
+void FindWidget::onSetEditAlert(const int &iFlag)
 {
-    bool alert = (iFlag == 1) ? true : false;
-
     if (m_pSearchEdit) {
-        m_pSearchEdit->setAlert(alert);
+
+        bool bAlert = iFlag == 1 ? true : false;
+
+        m_pSearchEdit->setAlert(bAlert);
     }
 }

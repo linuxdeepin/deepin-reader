@@ -64,7 +64,7 @@ private:
     void initConnection();
 
 //    void onFindExit();
-    void onSetAlert(const int &);
+    void onSetEditAlert(const int &iFlag);
 
 private:
     DSearchEdit     *m_pSearchEdit = nullptr;
