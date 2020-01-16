@@ -206,11 +206,13 @@ bool DBManager::hasFilePathDB(const QString &filePath)
     const QSqlDatabase db = getDatabase();
     QMutexLocker mutex(&m_mutex);
     QSqlQuery query(db);
-    query.prepare("select FileScale from FileFontTable where FilePath=?");
+    query.prepare("select FilePath from FileFontTable where FilePath = ?");
     query.addBindValue(filePath);
     if (query.exec()) {
-        if (query.size() > 0) {
-            return true;
+        while (query.next()) {
+            qDebug() << "  FilePath:" << query.value(0).toString();
+            if (query.value(0).toString() != "")
+                return true;
         }
     }
     return false;
@@ -370,7 +372,7 @@ void DBManager::insertFileFontMsg(const QString &scale, const QString &doubPage,
         query.setForwardOnly(true);
         query.exec("START TRANSACTION");//开始事务。使用BEGIN也可以
         query.prepare("INSERT INTO FileFontTable "
-                      "(FilePath, FileScale, FileDoubPage, FileFit, FileRotate) VALUES (?, ?, ?, ?)");
+                      "(FilePath, FileScale, FileDoubPage, FileFit, FileRotate) VALUES (?, ?, ?, ?, ?)");
         if (t_strFilePath != "") {
             query.addBindValue(t_strFilePath);
         } else {
@@ -385,6 +387,7 @@ void DBManager::insertFileFontMsg(const QString &scale, const QString &doubPage,
         if (query.exec()) {
             query.exec("COMMIT");
         } else {
+            qDebug() << " insert FileFontTable error:" << query.lastError();
             query.exec("ROLLBACK");//回滚
         }
         mutex.unlock();
@@ -509,7 +512,7 @@ void DBManager::getFileFontMsg(QString &scale, QString &doubPage, QString &fit, 
         query.addBindValue(filePath);
 
         if (query.exec()) {
-            if (query.size() == 1) {
+            while (query.next()) {
                 scale = query.value(0).toString();      //  缩放
                 doubPage = query.value(1).toString();   //  是否是双页
                 fit = query.value(2).toString();        //  自适应宽/高

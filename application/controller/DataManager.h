@@ -27,6 +27,20 @@ enum ICON_RADIUS {
     ICON_BIG = 10       // 大图标圆角
 };
 
+typedef struct FileFontMsg {
+    QString m_strScale;//缩放比例
+    QString m_strDoubPage;//单双页
+    QString m_strFit;//自适应宽/高
+    QString m_strRotate;//旋转角度
+    FileFontMsg()
+    {
+        m_strScale = "";//缩放比例
+        m_strDoubPage = "";//单双页
+        m_strFit = "";//自适应宽/高
+        m_strRotate = "";//旋转角度
+    }
+} st_fileFontMsg;
+
 class DataManager : public QObject
 {
     Q_OBJECT
@@ -93,6 +107,40 @@ public:
         m_bThumbnIsShow = show;
     }
 
+    //文档字号信息数据接口
+    inline QString getFontScale() const
+    {
+        return m_fontMsg.m_strScale;
+    }
+    inline void setFontScale(const QString &scale)
+    {
+        m_fontMsg.m_strScale = scale;
+    }
+    inline QString getFontDoubPage() const
+    {
+        return m_fontMsg.m_strDoubPage;
+    }
+    inline void setFontDoubPage(const QString &doubPage)
+    {
+        m_fontMsg.m_strDoubPage = doubPage;
+    }
+    inline QString getFontFit() const
+    {
+        return m_fontMsg.m_strFit;
+    }
+    inline void setFontFit(const QString &fit)
+    {
+        m_fontMsg.m_strFit = fit;
+    }
+    inline QString getFontRotate() const
+    {
+        return m_fontMsg.m_strRotate;
+    }
+    inline void setFontRotate(const QString &rotate)
+    {
+        m_fontMsg.m_strRotate = rotate;
+    }
+
     QList<QKeySequence> getPKeyList() const;
 
     QList<QKeySequence> getPLeftKeyList() const;
@@ -112,6 +160,7 @@ private:
 
     QList<QKeySequence>     m_pKeyList;      //  快捷键对应
     QList<QKeySequence>     m_pLeftKeyList;      // left 快捷键对应
+    st_fileFontMsg m_fontMsg;           // 文档字号信息
 };
 
 #endif // DATAMANAGER_H

@@ -292,10 +292,10 @@ void DocummentFileHelper::saveFileFontMsg(const QString &filePath)
     QString fit = "";
     QString rotate = "";
 
-    scale = AppSetting::instance()->getKeyValue(KEY_PERCENTAGE);
-    doubPage = AppSetting::instance()->getKeyValue(KEY_DOUBPAGE);
-    fit = AppSetting::instance()->getKeyValue(KEY_ADAPTAT);
-    rotate = AppSetting::instance()->getKeyValue(KEY_ROTATE);
+    scale = DataManager::instance()->getFontScale();//AppSetting::instance()->getKeyValue(KEY_PERCENTAGE);
+    doubPage = DataManager::instance()->getFontDoubPage();//AppSetting::instance()->getKeyValue(KEY_DOUBPAGE);
+    fit = DataManager::instance()->getFontFit();//AppSetting::instance()->getKeyValue(KEY_ADAPTAT);
+    rotate = DataManager::instance()->getFontRotate();//AppSetting::instance()->getKeyValue(KEY_ROTATE);
 
     DBManager::instance()->insertFileFontMsg(scale, doubPage, fit, rotate, filePath);
 }
@@ -382,15 +382,32 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
         m_szFilePath = sPath;
         DataManager::instance()->setStrOnlyFilePath(sPath);
         //从数据库中获取文件的字号信息
-        setDBFileFontMsgToAppSet(sPath);
-        int iscale = AppSetting::instance()->getKeyValue(KEY_PERCENTAGE).toInt();
+//        setDBFileFontMsgToAppSet(sPath);
+        QString ssscale = "";
+        QString doubPage = "";
+        QString fit = "";
+        QString rotate = "";
+
+        DBManager::instance()->getFileFontMsg(ssscale, doubPage, fit, rotate, sPath);
+
+        qDebug() << __FUNCTION__ << " scale:" << ssscale
+                 << "  doubPage:" << doubPage
+                 << "  fit:" << fit
+                 << "  rotate:" << rotate;
+
+        DataManager::instance()->setFontScale(ssscale);
+        DataManager::instance()->setFontDoubPage(doubPage);
+        DataManager::instance()->setFontFit(fit);
+        DataManager::instance()->setFontRotate(rotate);
+
+        int iscale = ssscale.toInt();
         iscale = (iscale > 500 ? 500 : iscale) <= 0 ? 100 : iscale;
         double scale = iscale / 100.0;
-        RotateType_EM rotatetype = (RotateType_EM)AppSetting::instance()->getKeyValue(KEY_ROTATE).toInt();
-        ViewMode_EM viewmode = (ViewMode_EM)AppSetting::instance()->getKeyValue(KEY_DOUBPAGE).toInt();
+        RotateType_EM rotatetype = static_cast<RotateType_EM>(rotate.toInt() / 90);
+        ViewMode_EM viewmode = static_cast<ViewMode_EM>(doubPage.toInt());
         int ipage = AppSetting::instance()->getKeyValue(KEY_PAGENUM).toInt();
         qDebug()  << ipage << AppSetting::instance()->getKeyValue(KEY_ROTATE).toInt() << AppSetting::instance()->getKeyValue(KEY_DOUBPAGE).toInt();
-        bool rl = m_pDocummentProxy->openFile(m_nCurDocType, sPath, ipage, rotatetype, scale, viewmode);
+        bool rl = m_pDocummentProxy->openFile(m_nCurDocType, sPath, static_cast<unsigned int>(ipage), rotatetype, scale, viewmode);
         if (!rl) {
             m_szFilePath = "";
             DataManager::instance()->setStrOnlyFilePath("");
