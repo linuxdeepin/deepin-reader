@@ -76,7 +76,7 @@ void SearchResWidget::slotCloseFile()
 
 void SearchResWidget::slotFlushSearchWidget(const QString &msgContent)
 {
-    notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(WIDGET_BUFFER));
+    notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(WIDGET_BUFFER));    //  窗口 显示 转圈圈
     notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(1));
     m_bShowList = true;
     connect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this,
@@ -343,7 +343,7 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
 //        return ConstantMsg::g_effective_res;
 //    }
 
-    if (msgType == MSG_FIND_CONTENT) {  //  查询内容
+    if (msgType == MSG_FIND_START) {  //  查询内容
         if (msgContent != QString("")) {
             emit sigFlushSearchWidget(msgContent);
         }

@@ -377,7 +377,7 @@ void TitleWidget::setMagnifierState()
 //  处理 推送消息
 int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_FIND_CONTENT) {
+    if (msgType == MSG_FIND_START) {
         emit sigSetFindWidget(1);
     } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         emit sigOpenFileOk();

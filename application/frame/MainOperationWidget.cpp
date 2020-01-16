@@ -129,7 +129,7 @@ DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QStrin
 
 void MainOperationWidget::initConnect()
 {
-    connect(this, SIGNAL(sigSearchControl()), SLOT(slotSearchControl()));
+//    connect(this, SIGNAL(sigSearchControl()), SLOT(slotSearchControl()));
     connect(this, SIGNAL(sigSearchClosed()), SLOT(slotSearchClosed()));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
@@ -171,13 +171,13 @@ void MainOperationWidget::slotButtonClicked(int id)
  * @brief MainOperationWidget::slotSearchControl
  * 搜索内容时，此模块不可用
  */
-void MainOperationWidget::slotSearchControl()
-{
-    auto hideBtn = this->findChild<DPushButton *>("hideBtn");
-    if (hideBtn) {
-        hideBtn->setChecked(true);
-    }
-}
+//void MainOperationWidget::slotSearchControl()
+//{
+//    auto hideBtn = this->findChild<DPushButton *>("hideBtn");
+//    if (hideBtn) {
+//        hideBtn->setChecked(true);
+//    }
+//}
 
 /**
  * @brief MainOperationWidget::slotSearchClosed
@@ -185,14 +185,14 @@ void MainOperationWidget::slotSearchControl()
  */
 void MainOperationWidget::slotSearchClosed()
 {
-    int indexWidget = AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt();
-    if (indexWidget > 0 && indexWidget < WIDGET_SEARCH) {
-        __SetBtnCheckById(indexWidget);
+    int nId = 0;
+
+    QString sWidget = AppSetting::instance()->getKeyValue(KEY_WIDGET);
+    if (sWidget != "") {
+        nId = sWidget.toInt();
     }
 
-//    emit sigShowStackWidget(indexWidget);
-
-//    setOperatAction(indexWidget);
+    __SetBtnCheckById(nId);
 }
 
 int MainOperationWidget::dealWithData(const int &msgType, const QString &msgContent)
@@ -202,9 +202,9 @@ int MainOperationWidget::dealWithData(const int &msgType, const QString &msgCont
         return ConstantMsg::g_effective_res;
     }
 
-    if (msgType == MSG_FIND_CONTENT) {  //  查询内容
-        emit sigSearchControl();
-    } else if (msgType == MSG_CLEAR_FIND_CONTENT) {
+    /* if (msgType == MSG_FIND_START) {  //  查询内容
+         emit sigSearchControl();
+     } else*/ if (msgType == MSG_CLEAR_FIND_CONTENT) {
         emit sigSearchClosed();
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();

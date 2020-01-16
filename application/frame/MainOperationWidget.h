@@ -33,7 +33,7 @@ private:
 
 signals:
     void sigDealWithData(const int &, const QString &);
-    void sigSearchControl();
+//    void sigSearchControl();
     void sigSearchClosed();
     void sigShowStackWidget(const int &);
 
@@ -41,7 +41,7 @@ private slots:
     void SlotDealWithData(const int &, const QString &);
     void slotUpdateTheme();
     void slotButtonClicked(int);
-    void slotSearchControl();
+//    void slotSearchControl();
     void slotSearchClosed();
 
     // CustomWidget interface

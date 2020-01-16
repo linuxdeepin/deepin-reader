@@ -85,14 +85,13 @@ enum MSG_FONT_MENU_TYPE {
 
 //  搜索菜单 消息
 enum MSG_FIND_TYPE {
-    MSG_FIND_CONTENT = 200,     //  查询内容
-    MSG_CLEAR_FIND_CONTENT,     //  清除查询内容
-//    MSG_FIND_PREV,              //  上一个
-//    MSG_FIND_NEXT,              //  下一个
-//    MSG_FIND_START,             //  开始查询
-//    MSG_FIND_STOP,              //  结束查询
-    MSG_FIND_NONE,              //  查询无果
-//    MSG_FIND_EXIT               //  退出查询
+    MSG_FIND_START = 200,           //  开始查询
+    MSG_CLEAR_FIND_CONTENT,         //  清除查询内容
+//    MSG_FIND_PREV,                //  上一个
+//    MSG_FIND_NEXT,                //  下一个
+//    MSG_FIND_STOP,                //  结束查询
+    MSG_FIND_NONE,                  //  查询无果
+//    MSG_FIND_EXIT                 //  退出查询
 };
 
 //  菜单操作结果 消息
