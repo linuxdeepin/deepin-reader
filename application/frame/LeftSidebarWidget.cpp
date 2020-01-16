@@ -24,7 +24,7 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
     setMinimumWidth(LEFTMINWIDTH);
     setMaximumWidth(LEFTMAXWIDTH);
 
-    m_pMsgList = {MSG_SWITCHLEFTWIDGET, MSG_SLIDER_SHOW_STATE};
+    m_pMsgList = {MSG_SLIDER_SHOW_STATE};
     m_pKeyMsgList = {KeyStr::g_up, KeyStr::g_pgup, KeyStr::g_left,
                      KeyStr::g_down, KeyStr::g_pgdown, KeyStr::g_right
                     };
@@ -49,9 +49,7 @@ LeftSidebarWidget::~LeftSidebarWidget()
 
 void LeftSidebarWidget::slotDealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_SWITCHLEFTWIDGET) {  //  切换页面
-        onSetStackCurIndex(msgContent.toInt());
-    } else if (msgType == MSG_SLIDER_SHOW_STATE) {//  控制 侧边栏显隐
+    if (msgType == MSG_SLIDER_SHOW_STATE) {//  控制 侧边栏显隐
         onSetWidgetVisible(msgContent.toInt());
     }
 }
@@ -65,30 +63,6 @@ void LeftSidebarWidget::slotDealWithKeyMsg(const QString &msgContent)
     } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown ||
                msgContent == KeyStr::g_right) {
         onJumpToNextPage();
-    }
-}
-
-/**
- * @brief LeftSidebarWidget::onSetStackCurIndex
- * 切换页面
- * @param iIndex
- */
-void LeftSidebarWidget::onSetStackCurIndex(const int &iIndex)
-{
-    auto pWidget = this->findChild<DStackedWidget *>();
-    if (pWidget) {
-        if (WIDGET_SEARCH > iIndex) {
-            auto opWidget = this->findChild<MainOperationWidget *>();
-            if (opWidget) {
-                opWidget->setOperatAction(iIndex);
-            }
-        }
-        pWidget->setCurrentIndex(iIndex);
-
-        //  前一个是 出来搜索结果了, 后一个是正在搜索
-        if (iIndex == WIDGET_SEARCH || iIndex == WIDGET_BUFFER) {
-            emit sigSearchWidgetState(iIndex);
-        }
     }
 }
 
@@ -107,11 +81,16 @@ void LeftSidebarWidget::slotUpdateTheme()
 //  按钮 按键显示对应 widget
 void LeftSidebarWidget::slotSetStackCurIndex(const int &iIndex)
 {
-    AppSetting::instance()->setKeyValue(KEY_WIDGET, QString::number(iIndex));
-
     auto pWidget = this->findChild<DStackedWidget *>();
     if (pWidget) {
         pWidget->setCurrentIndex(iIndex);
+    }
+
+    //  前一个是 出来搜索结果了, 后一个是正在搜索, 两个都不需要保存在记录中
+    if (iIndex == WIDGET_SEARCH || iIndex == WIDGET_BUFFER) {
+        emit sigSearchWidgetState(iIndex);
+    } else {
+        AppSetting::instance()->setKeyValue(KEY_WIDGET, QString::number(iIndex));
     }
 }
 
@@ -272,12 +251,3 @@ void LeftSidebarWidget::resizeEvent(QResizeEvent *event)
 
     update();
 }
-
-
-//void LeftSidebarWidget::enterEvent(QEvent *event)
-//{
-//    qDebug() << "11112314141";
-//    this->setFocus();
-
-//    CustomWidget::enterEvent(event);
-//}

@@ -24,7 +24,7 @@ public:
     explicit MainOperationWidget(CustomWidget *parent = nullptr);
     ~MainOperationWidget() Q_DECL_OVERRIDE;
 
-    void setOperatAction(const int &index);
+//    void setOperatAction(const int &index);
 
 private:
     DToolButton *createBtn(const QString &btnName, const QString &objName);
@@ -32,11 +32,13 @@ private:
     void initConnect();
 
 signals:
+    void sigDealWithData(const int &, const QString &);
     void sigSearchControl();
     void sigSearchClosed();
     void sigShowStackWidget(const int &);
 
 private slots:
+    void SlotDealWithData(const int &, const QString &);
     void slotUpdateTheme();
     void slotButtonClicked(int);
     void slotSearchControl();
@@ -45,6 +47,10 @@ private slots:
     // CustomWidget interface
 protected:
     void initWidget() Q_DECL_OVERRIDE;
+
+private:
+    DPushButton *__CreateHideBtn();
+    void __SetBtnCheckById(const int &);
 
     // IObserver interface
 public:

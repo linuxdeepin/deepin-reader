@@ -33,7 +33,6 @@ private slots:
 private:
     void initConnections();
 
-    void onSetStackCurIndex(const int &);
     void onSetWidgetVisible(const int &);
 
     void onJumpToPrevPage();
