@@ -107,6 +107,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
                 DocummentFileHelper::instance()->save(sFilePath, true);
                 //  保存 书签数据r
                 dApp->dbM->saveBookMark();
+                //  保存文档字号参数信息
+                DocummentFileHelper::instance()->saveFileFontMsg("");
             }
         }
 

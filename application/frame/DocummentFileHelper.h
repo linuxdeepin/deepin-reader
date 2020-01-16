@@ -105,6 +105,7 @@ public:
     void setAutoPlaySlide(const bool &autoplay, const int &timemsec = 3000);
 
     Outline outline();
+    void saveFileFontMsg(const QString &filePath);
 private:
     void setAppShowTitle(const QString &);
     void initConnections();
@@ -113,6 +114,8 @@ private:
 
     void onSaveFile();
     void onSaveAsFile();
+
+    void setDBFileFontMsgToAppSet(const QString &filePath);
 
     // IObserver interface
     void sendMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;

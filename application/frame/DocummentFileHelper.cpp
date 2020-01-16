@@ -220,7 +220,9 @@ void DocummentFileHelper::onSaveFile()
             //  保存需要保存 数据库记录
             qDebug() << "DocummentFileHelper::slotSaveFile saveBookMark";
             DBManager::instance()->saveBookMark();
-//            DBManager::instance()->insertFileFontMsg();
+            //insert msg to FileFontTable
+            saveFileFontMsg("");
+
             DataManager::instance()->setBIsUpdate(false);
             notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Saved successfully"));
         } else {
@@ -265,7 +267,8 @@ void DocummentFileHelper::onSaveAsFile()
                     //insert a new bookmark record to bookmarktabel
                     DBManager::instance()->saveasBookMark(m_szFilePath, sFilePath);
                     DataManager::instance()->setStrOnlyFilePath(sFilePath);
-
+                    //insert msg to FileFontTable
+                    saveFileFontMsg(filePath);
                     DataManager::instance()->setBIsUpdate(false);
 
                     m_szFilePath = sFilePath;
@@ -275,6 +278,50 @@ void DocummentFileHelper::onSaveAsFile()
             }
         }
     }
+}
+
+/**
+ * @brief DocummentFileHelper::saveFileFontMsg
+ * 存储文件的字号信息到表FileFontTable
+ * @param filePath
+ */
+void DocummentFileHelper::saveFileFontMsg(const QString &filePath)
+{
+    QString scale = "";
+    QString doubPage = "";
+    QString fit = "";
+    QString rotate = "";
+
+    scale = AppSetting::instance()->getKeyValue(KEY_PERCENTAGE);
+    doubPage = AppSetting::instance()->getKeyValue(KEY_DOUBPAGE);
+    fit = AppSetting::instance()->getKeyValue(KEY_ADAPTAT);
+    rotate = AppSetting::instance()->getKeyValue(KEY_ROTATE);
+
+    DBManager::instance()->insertFileFontMsg(scale, doubPage, fit, rotate, filePath);
+}
+
+/**
+ * brief DocummentFileHelper::setDBFileFontMsgToAppSet
+ * 取数据库中文件的字号信息，保存到全局数据类中
+ */
+void DocummentFileHelper::setDBFileFontMsgToAppSet(const QString &filePath)
+{
+    QString scale = "";
+    QString doubPage = "";
+    QString fit = "";
+    QString rotate = "";
+
+    DBManager::instance()->getFileFontMsg(scale, doubPage, fit, rotate, filePath);
+
+    qDebug() << __FUNCTION__ << " scale:" << scale
+             << "  doubPage:" << doubPage
+             << "  fit:" << fit
+             << "  rotate:" << rotate;
+
+    AppSetting::instance()->setAppKeyValue(KEY_PERCENTAGE, scale);
+    AppSetting::instance()->setAppKeyValue(KEY_DOUBPAGE, doubPage);
+    AppSetting::instance()->setAppKeyValue(KEY_ADAPTAT, fit);
+    AppSetting::instance()->setAppKeyValue(KEY_ROTATE, rotate);
 }
 
 //  打开　文件路径
@@ -311,6 +358,8 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
                 save(m_szFilePath, true);
                 //  保存 书签数据
                 DBManager::instance()->saveBookMark();
+                //insert msg to FileFontTable
+                saveFileFontMsg("");
             }
         }
         notifyMsg(MSG_OPERATION_OPEN_FILE_START);
@@ -332,6 +381,8 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
 
         m_szFilePath = sPath;
         DataManager::instance()->setStrOnlyFilePath(sPath);
+        //从数据库中获取文件的字号信息
+        setDBFileFontMsgToAppSet(sPath);
         int iscale = AppSetting::instance()->getKeyValue(KEY_PERCENTAGE).toInt();
         iscale = (iscale > 500 ? 500 : iscale) <= 0 ? 100 : iscale;
         double scale = iscale / 100.0;

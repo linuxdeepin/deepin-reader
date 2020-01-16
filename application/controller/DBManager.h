@@ -81,7 +81,7 @@ public:
     void deleteFileFontMsg();
     void saveFileFontMsg();
     bool saveAsFileFontMsg(const QString &, const QString &, const QString &, const QString &, const QString newFilePath = "");
-    void getFileFontMsg(QString &, QString &, QString &, QString &);
+    void getFileFontMsg(QString &, QString &, QString &, QString &, const QString &);
 
 private:
     void insertBookMark(const QString &, const QString &strFilePath = "", const QString &strFileName = "");

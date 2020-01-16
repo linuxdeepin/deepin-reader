@@ -371,8 +371,8 @@ void DBManager::insertFileFontMsg(const QString &scale, const QString &doubPage,
         query.exec("START TRANSACTION");//开始事务。使用BEGIN也可以
         query.prepare("INSERT INTO FileFontTable "
                       "(FilePath, FileScale, FileDoubPage, FileFit, FileRotate) VALUES (?, ?, ?, ?)");
-        if (strFilePath != "") {
-            query.addBindValue(strFilePath);
+        if (t_strFilePath != "") {
+            query.addBindValue(t_strFilePath);
         } else {
             query.addBindValue(m_strFilePath);
         }
@@ -498,7 +498,7 @@ bool DBManager::saveAsFileFontMsg(const QString &scale, const QString &doubPage,
  * @brief DBManager::getFileFontMsg
  * 获取文件对应的字号菜单数据
  */
-void DBManager::getFileFontMsg(QString &scale, QString &doubPage, QString &fit, QString &rotate)
+void DBManager::getFileFontMsg(QString &scale, QString &doubPage, QString &fit, QString &rotate, const QString &filePath)
 {
     const QSqlDatabase db = getDatabase();
     if (db.isValid()) {
@@ -506,17 +506,14 @@ void DBManager::getFileFontMsg(QString &scale, QString &doubPage, QString &fit, 
         QSqlQuery query(db);
         query.setForwardOnly(true);
         query.prepare("SELECT FileScale, FileDoubPage, FileFit, FileRotate FROM FileFontTable where FilePath = ?");
-        query.addBindValue(m_strFilePath);
+        query.addBindValue(filePath);
 
         if (query.exec()) {
             if (query.size() == 1) {
-//                while (query.next())
-                {
-                    scale = query.value(0).toString();      //  缩放
-                    doubPage = query.value(1).toString();   //  是否是双页
-                    fit = query.value(2).toString();        //  自适应宽/高
-                    rotate = query.value(3).toString();     //  文档旋转角度
-                }
+                scale = query.value(0).toString();      //  缩放
+                doubPage = query.value(1).toString();   //  是否是双页
+                fit = query.value(2).toString();        //  自适应宽/高
+                rotate = query.value(3).toString();     //  文档旋转角度
             }
         }
         mutex.unlock();
