@@ -50,7 +50,7 @@ void NoteTipWidget::setTipContent(const QString &content)
             strcontent = strContent;
         }
         pedit->setFixedWidth(m_iwidth - 16);
-        pedit->setText(strcontent);
+        pedit->setPlainText(strcontent);
     }
 }
 

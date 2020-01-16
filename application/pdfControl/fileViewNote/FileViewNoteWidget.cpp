@@ -60,7 +60,8 @@ void FileViewNoteWidget::setEditText(const QString &note)
 {
     if (m_pTextEdit) {
         m_pTextEdit->clear();
-        m_pTextEdit->setText(note);
+        //m_pTextEdit->setText(note);
+        m_pTextEdit->setPlainText(note);
         m_strNote = note;
     }
 }
@@ -175,7 +176,8 @@ void FileViewNoteWidget::slotTextEditMaxContantNum()
         int position = m_pTextEdit->textCursor().position();
         QTextCursor textCursor = m_pTextEdit->textCursor();
         textContent.remove(position - (length - maxLen), length - maxLen);
-        m_pTextEdit->setText(textContent);
+        // m_pTextEdit->setText(textContent);
+        m_pTextEdit->setPlainText(textContent);
         textCursor.setPosition(position - (length - maxLen));
         m_pTextEdit->setTextCursor(textCursor);
     }
