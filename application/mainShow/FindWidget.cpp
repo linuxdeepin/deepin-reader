@@ -118,9 +118,10 @@ void FindWidget::slotClearContent()
 
 void FindWidget::slotDealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_FIND_EXIT) {
-        onFindExit();
-    } else if (msgType == MSG_FIND_NONE) {
+//    if (msgType == MSG_FIND_EXIT) {
+//        onFindExit();
+//    } else
+    if (msgType == MSG_FIND_NONE) {
         onSetAlert(msgContent.toInt());
     }
 }
@@ -203,15 +204,15 @@ void FindWidget::initConnection()
     connect(m_pSearchEdit,  &DSearchEdit::searchAborted, this, &FindWidget::slotEditAborted);
 }
 
-//  退出查询
-void FindWidget::onFindExit()
-{
-    this->setVisible(false);
+////  退出查询
+//void FindWidget::onFindExit()
+//{
+//    this->setVisible(false);
 
-    if (m_pSearchEdit) {
-        m_pSearchEdit->setText("");
-    }
-}
+//    if (m_pSearchEdit) {
+//        m_pSearchEdit->setText("");
+//    }
+//}
 
 //  设置 提醒红色
 void FindWidget::onSetAlert(const int &iFlag)

@@ -147,23 +147,23 @@ void SearchResWidget::slotLoadImage(const int &page, const QImage &image)
     }
 }
 
-void SearchResWidget::slotFindPrev()
-{
-    if (DataManager::instance()->bThumbnIsShow() == false) {
-        return;
-    }
-    DocummentFileHelper::instance()->findPrev();
-}
+//void SearchResWidget::slotFindPrev()
+//{
+//    if (DataManager::instance()->bThumbnIsShow() == false) {
+//        return;
+//    }
+//    DocummentFileHelper::instance()->findPrev();
+//}
 
-void SearchResWidget::slotFindNext()
-{
-//    qDebug() << __FUNCTION__ << "SearchResWidget========";
-    if (DataManager::instance()->bThumbnIsShow() == false) {
-        return;
-    }
-//    qDebug() << __FUNCTION__ << "SearchResWidget+++++++++++";
-    DocummentFileHelper::instance()->findNext();
-}
+//void SearchResWidget::slotFindNext()
+//{
+////    qDebug() << __FUNCTION__ << "SearchResWidget========";
+//    if (DataManager::instance()->bThumbnIsShow() == false) {
+//        return;
+//    }
+////    qDebug() << __FUNCTION__ << "SearchResWidget+++++++++++";
+//    DocummentFileHelper::instance()->findNext();
+//}
 
 void SearchResWidget::slotSelectItem(QListWidgetItem *item)
 {
@@ -176,7 +176,7 @@ void SearchResWidget::slotSelectItem(QListWidgetItem *item)
 
 void SearchResWidget::slotStopFind()
 {
-    notifyMsg(MSG_FIND_STOP);
+//    notifyMsg(MSG_FIND_STOP);
     if (m_bShowList) {
         notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(WIDGET_SEARCH));
 
@@ -208,8 +208,8 @@ void SearchResWidget::initConnections()
     connect(this, SIGNAL(sigFlushSearchWidget(const QString &)), this,
             SLOT(slotFlushSearchWidget(const QString &)));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
-    connect(this, SIGNAL(sigFindPrev()), this, SLOT(slotFindPrev()));
-    connect(this, SIGNAL(sigFindNext()), this, SLOT(slotFindNext()));
+//    connect(this, SIGNAL(sigFindPrev()), this, SLOT(slotFindPrev()));
+//    connect(this, SIGNAL(sigFindNext()), this, SLOT(slotFindNext()));
     connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
             SLOT(slotSelectItem(QListWidgetItem *)));
     connect(&m_loadSearchResThread, &LoadSearchResThread::sigStopFind, this,
@@ -333,15 +333,15 @@ void SearchResWidget::clearItemColor()
  */
 int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_FIND_PREV) {
-        emit sigFindPrev();
-        return ConstantMsg::g_effective_res;
-    }
+//    if (msgType == MSG_FIND_PREV) {
+//        emit sigFindPrev();
+//        return ConstantMsg::g_effective_res;
+//    }
 
-    if (msgType == MSG_FIND_NEXT) {
-        emit sigFindNext();
-        return ConstantMsg::g_effective_res;
-    }
+//    if (msgType == MSG_FIND_NEXT) {
+//        emit sigFindNext();
+//        return ConstantMsg::g_effective_res;
+//    }
 
     if (msgType == MSG_FIND_CONTENT) {  //  查询内容
         if (msgContent != QString("")) {

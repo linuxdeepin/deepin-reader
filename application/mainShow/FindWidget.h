@@ -63,7 +63,7 @@ private:
     void initWidget();
     void initConnection();
 
-    void onFindExit();
+//    void onFindExit();
     void onSetAlert(const int &);
 
 private:

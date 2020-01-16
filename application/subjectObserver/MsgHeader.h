@@ -7,6 +7,10 @@
  *  消息类型 定义
  */
 
+namespace {
+
+
+
 //  消息类型
 enum MSG_TYPE {
     //    MSG_SET_MainWindow_TITLE = 0,       //  设置 应用标题
@@ -83,12 +87,12 @@ enum MSG_FONT_MENU_TYPE {
 enum MSG_FIND_TYPE {
     MSG_FIND_CONTENT = 200,     //  查询内容
     MSG_CLEAR_FIND_CONTENT,     //  清除查询内容
-    MSG_FIND_PREV,              //  上一个
-    MSG_FIND_NEXT,              //  下一个
-    MSG_FIND_START,             //  开始查询
-    MSG_FIND_STOP,              //  结束查询
+//    MSG_FIND_PREV,              //  上一个
+//    MSG_FIND_NEXT,              //  下一个
+//    MSG_FIND_START,             //  开始查询
+//    MSG_FIND_STOP,              //  结束查询
     MSG_FIND_NONE,              //  查询无果
-    MSG_FIND_EXIT               //  退出查询
+//    MSG_FIND_EXIT               //  退出查询
 };
 
 //  菜单操作结果 消息
@@ -102,6 +106,7 @@ enum MSG_OPERATION_RES_TYPE {
     MSG_NOTIFY_SHOW_TIP,                //  显示提示窗口
     MSG_CATALOG_FILE_TITLE,             //  打开文件成功, 目录标题
 };
+}
 
 namespace ConstantMsg {
 
