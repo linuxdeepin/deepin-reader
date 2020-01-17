@@ -57,6 +57,7 @@ private slots:
 
     void slotBookMarkStateChange(int, bool);
     void slotDocFilePageChanged(int);
+    void SlotDocFileOpenResult(bool);
 
 private:
     void initConnections();

@@ -56,6 +56,8 @@ void FileViewWidget::initWidget()
         connect(m_pDocummentProxy, SIGNAL(signal_pageChange(int)), this,
                 SLOT(slotDocFilePageChanged(int)));
 
+        connect(m_pDocummentProxy, SIGNAL(signal_openResult(bool)), SLOT(SlotDocFileOpenResult(bool)));
+
         m_pDocummentFileHelper = DocummentFileHelper::instance();
         m_pDocummentFileHelper->setDocProxy(m_pDocummentProxy);     //  唯一设置 文档类入口
     }
@@ -566,6 +568,19 @@ void FileViewWidget::slotDocFilePageChanged(int page)
     AppSetting::instance()->setKeyValue(KEY_PAGENUM, QString("%1").arg(page));
 
     notifyMsg(MSG_FILE_PAGE_CHANGE, QString("%1").arg(page));
+}
+
+//  打开文档结果
+void FileViewWidget::SlotDocFileOpenResult(bool openresult)
+{
+    //  通知 其他窗口， 打开文件成功了！！！
+    if (openresult) {
+        DocummentFileHelper::instance()->setAppShowTitle();
+    } else {
+        DocummentFileHelper::instance()->setSzFilePath("");
+        DataManager::instance()->setStrOnlyFilePath("");
+        notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
+    }
 }
 
 //  信号槽　初始化

@@ -46,18 +46,18 @@ void DocummentFileHelper::setDocProxy(DocummentProxy *p)
 {
     m_pDocummentProxy = p;
 
-    connect(m_pDocummentProxy, &DocummentProxy::signal_openResult, this, [ = ](bool openresult) {
-        if (openresult) {
-            notifyMsg(MSG_OPERATION_OPEN_FILE_OK);
-            //  通知 其他窗口， 打开文件成功了！！！
-            QFileInfo info(m_szFilePath);
-            setAppShowTitle(info.baseName());
-        } else {
-            m_szFilePath = "";
-            DataManager::instance()->setStrOnlyFilePath("");
-            notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
-        }
-    });
+//    connect(m_pDocummentProxy, &DocummentProxy::signal_openResult, this, [ = ](bool openresult) {
+//        if (openresult) {
+//            notifyMsg(MSG_OPERATION_OPEN_FILE_OK);
+//            //  通知 其他窗口， 打开文件成功了！！！
+//            QFileInfo info(m_szFilePath);
+//            setAppShowTitle(info.baseName());
+//        } else {
+//            m_szFilePath = "";
+//            DataManager::instance()->setStrOnlyFilePath("");
+//            notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
+//        }
+//    });
 }
 
 void DocummentFileHelper::initConnections()
@@ -280,8 +280,8 @@ void DocummentFileHelper::onSaveAsFile()
                     DataManager::instance()->setBIsUpdate(false);
 
                     m_szFilePath = sFilePath;
-                    QFileInfo info(m_szFilePath);
-                    setAppShowTitle(info.baseName());
+
+                    setAppShowTitle();
                 }
             }
         }
@@ -490,7 +490,7 @@ void DocummentFileHelper::onOpenFiles(const QString &filePaths)
 }
 
 //  设置  应用显示名称
-void DocummentFileHelper::setAppShowTitle(const QString &fileName)
+void DocummentFileHelper::setAppShowTitle()
 {
     if (!m_pDocummentProxy) {
         return;
@@ -499,8 +499,10 @@ void DocummentFileHelper::setAppShowTitle(const QString &fileName)
     QString sTitle = "";
     m_pDocummentProxy->title(sTitle);
     if (sTitle == "") {
-        sTitle = fileName;
+        QFileInfo info(m_szFilePath);
+        sTitle = info.baseName();
     }
+    notifyMsg(MSG_OPERATION_OPEN_FILE_OK, sTitle);
     notifyMsg(MSG_OPERATION_OPEN_FILE_TITLE, sTitle);
     notifyMsg(MSG_CATALOG_FILE_TITLE, sTitle);
 }
@@ -546,6 +548,11 @@ void DocummentFileHelper::slotFileCtrlContent()
     if (sSelectText != "") {
         slotCopySelectContent(sSelectText);
     }
+}
+
+void DocummentFileHelper::setSzFilePath(const QString &szFilePath)
+{
+    m_szFilePath = szFilePath;
 }
 
 DocummentProxy *DocummentFileHelper::getDocummentProxy() const

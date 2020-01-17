@@ -107,10 +107,14 @@ public:
 
 //    Outline outline();
     void saveFileFontMsg(const QString &filePath);
+
+    void setAppShowTitle();
+    void setSzFilePath(const QString &szFilePath);
+
 private:
     void __PageJump(const int &pagenum);
     void __PageJumpByMsg(const int &);
-    void setAppShowTitle(const QString &);
+
     void initConnections();
     void onOpenFile(const QString &filePaths);
     void onOpenFiles(const QString &filePaths);
