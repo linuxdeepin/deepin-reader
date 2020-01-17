@@ -35,7 +35,10 @@ PrintManager::PrintManager(QObject *parent)
 
 void PrintManager::showPrintDialog(DWidget *widget)
 {
-    QPrinter printer(QPrinter::ScreenResolution);
+    QPrinter printer;
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setColorMode(QPrinter::Color);
+
     // 创建打印对话框
     QString printerName = printer.printerName();
 
@@ -61,25 +64,19 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
     DocummentFileHelper::instance()->docBasicInfo(fileInfo);
 
     int nPageSize = DocummentFileHelper::instance()->getPageSNum();  //  pdf 页数
-    printer->setWinPageSize(nPageSize);
 
     QPainter painter(printer);
     painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::Antialiasing);
     painter.begin(printer);
+
     QRect rect = painter.viewport();
 
     for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
         QImage image;
 
-        bool rl = DocummentFileHelper::instance()->getImage(iIndex, image, fileInfo.iWidth, fileInfo.iHeight);
+        bool rl = DocummentFileHelper::instance()->getImage(iIndex, image, rect.width(), rect.height());
         if (rl) {
-            QPixmap pixmap = pixmap.fromImage(image);
-
-            QSize size = pixmap.size();
-            size.scale(rect.size(), Qt::KeepAspectRatio);  //此处保证图片显示完整
-            painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
-            painter.setWindow(pixmap.rect());
-            painter.drawPixmap(0, 0, fileInfo.iWidth, fileInfo.iHeight, pixmap);
+            painter.drawPixmap(0, 0, QPixmap::fromImage(image));
             if (iIndex < nPageSize - 1)
                 printer->newPage();
         }
