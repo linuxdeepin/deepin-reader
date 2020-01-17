@@ -30,6 +30,7 @@ void TitleWidget::slotSetFindWidget(const int &iFlag)
 {
     if (iFlag == 1) {
         m_pThumbnailBtn->setChecked(true);
+        DataManager::instance()->setShowLeft(QString::number(1));
     } else {
         slotAppFullScreen();
     }
@@ -72,6 +73,7 @@ void TitleWidget::slotAppFullScreen()
 {
     //  显示了侧边栏, 则隐藏
     m_pThumbnailBtn->setChecked(false);
+    DataManager::instance()->setShowLeft(QString::number(0));
 
     //  侧边栏 隐藏
     notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, "0");
@@ -126,8 +128,9 @@ void TitleWidget::on_thumbnailBtn_clicked()
     bool rl = m_pThumbnailBtn->isChecked();
     notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(rl));
 
-    AppSetting::instance()->setKeyValue(KEY_M, QString("%1").arg(rl));
+//    AppSetting::instance()->setKeyValue(KEY_M, QString("%1").arg(rl));
     DataManager::instance()->setBThumbnIsShow(rl);
+    DataManager::instance()->setShowLeft(QString::number(rl));
 }
 
 //  文档显示
@@ -213,6 +216,7 @@ void TitleWidget::slotDealWithShortKey(const QString &sKey)
         //        m_pThumbnailBtn->setStatus(m_pThumbnailBtn->isChecked());
         notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(1));
         DataManager::instance()->setBThumbnIsShow(1);
+        DataManager::instance()->setShowLeft(QString::number(1));
     } else if (sKey == KeyStr::g_alt_z) {  //  开启放大镜
         setMagnifierState();
     }

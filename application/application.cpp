@@ -90,7 +90,7 @@ void Application::initCfgPath()
 void Application::initChildren()
 {
     dbM = new DBManager(this);
-    histroyDb = new HistroyDB;
+    histroyDb = new HistroyDB(this);
 }
 
 void Application::initI18n()

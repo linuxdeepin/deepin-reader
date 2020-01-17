@@ -108,7 +108,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
                 //  保存 书签数据r
                 dApp->dbM->saveBookMark();
                 //  保存文档字号参数信息
-                DocummentFileHelper::instance()->saveFileFontMsg("");
+                DocummentFileHelper::instance()->saveFileFontMsg(sFilePath);
             }
         }
 
@@ -328,17 +328,17 @@ void MainWindow::onSetAppTitle(const QString &sData)
 {
     titlebar()->setTitle(sData);
 
-    QString sPageNum = AppSetting::instance()->getKeyValue(KEY_PAGENUM);
+    QString sPageNum = DataManager::instance()->getCurPage();//AppSetting::instance()->getKeyValue(KEY_PAGENUM);
     if (sPageNum != "") {
         notifyMsg(MSG_DOC_JUMP_PAGE, sPageNum);
     }
 
-    QString sM = AppSetting::instance()->getKeyValue(KEY_M);
+    QString sM = DataManager::instance()->getShowLeft();//AppSetting::instance()->getKeyValue(KEY_M);
     if (sM == "1") {
         notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_m);
     }
 
-    QString sWidget = AppSetting::instance()->getKeyValue(KEY_WIDGET);
+    QString sWidget = DataManager::instance()->getListIndex();//AppSetting::instance()->getKeyValue(KEY_WIDGET);
     if (sWidget != "") {
         notifyMsg(MSG_SWITCHLEFTWIDGET, sWidget);
     } else {

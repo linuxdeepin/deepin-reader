@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,13 +17,16 @@
 #ifndef CONTROLLER_HISTROYDB_H
 #define CONTROLLER_HISTROYDB_H
 
-// FileFontTable
-////////////////////////////////////////////////////////////////////////
-//FilePath           | FileScale | FileDoubPage | FileFit | FileRotate//
-//TEXT primari key   | TEXT      | TEXT         | TEXT    | TEXT      //
-////////////////////////////////////////////////////////////////////////
+// FilesTable
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//FilePath           | FileScale | FileDoubPage | FileFit  | FileRotate | FileShowLeft | ListIndex | CurPage //
+//TEXT primari key   | TEXT      | TEXT         | TEXT     | TEXT       | TEXT         | TEXT      | TEXT    //
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#include <QObject>
 
 #include "DBManager.h"
+#include "DataManager.h"
 
 class HistroyDB : public DBManager
 {
@@ -31,21 +34,19 @@ class HistroyDB : public DBManager
     Q_DISABLE_COPY(HistroyDB)
 
 public:
-    explicit HistroyDB(DBManager *parent = nullptr);
+    explicit HistroyDB(QObject *parent = nullptr);
 
 private:
-    void checkDatabase();
-    void clearInvalidRecord();
+    void checkDatabases();
+    void clearInvalidRecords();
 
 public:
-
-    //FileFontTable
-    void insertFileFontMsg(const QString &, const QString &, const QString &, const QString &, const QString &, const QString filePath = "");
-    void updateFileFontMsg(const QString &, const QString &, const QString &, const QString &, const QString &, const QString filePath = "");
-//    void deleteFileFontMsg();
-    void saveFileFontMsg();
-    bool saveAsFileFontMsg(const QString &, const QString &, const QString &, const QString &, const QString &, const QString newFilePath = "");
-    void getFileFontMsg(QString &, QString &, QString &, QString &, QString &, const QString &);
+    //FilesTable
+    void insertFileFontMsg(const st_fileHistoryMsg &, const QString filePath = "");
+    void updateFileFontMsg(const st_fileHistoryMsg &, const QString filePath = "");
+    void saveFileFontMsg(const st_fileHistoryMsg &, const QString filePath = "");
+    void saveAsFileFontMsg(const st_fileHistoryMsg &, const QString filePath = "");
+    void getFileFontMsg(st_fileHistoryMsg &, const QString filePath = "");
 };
 
 #endif // CONTROLLER_HISTROYDB_H

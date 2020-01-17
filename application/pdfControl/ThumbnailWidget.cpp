@@ -109,8 +109,10 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
             pWidget->setBSelect(true);
         }
 
-//        int nJumpPage = pWidget->nPageIndex();
+        int nJumpPage = pWidget->nPageIndex();
 //        m_pPageWidget->setCurrentPageValue(nJumpPage);
+
+        DataManager::instance()->setCurPage(QString::number(nJumpPage));
     }
 }
 
@@ -368,7 +370,7 @@ void ThumbnailWidget::slotOpenFileOk()
     m_pThumbnailListWidget->clear();
     m_nValuePreIndex = 0;
     fillContantToList();
-    m_nRotate = AppSetting::instance()->getKeyValue(KEY_ROTATE).toInt();
+    m_nRotate = DataManager::instance()->getFontRotate().toInt();
     if (m_nRotate < 0) {
         m_nRotate = qAbs(m_nRotate);
     }
@@ -376,7 +378,7 @@ void ThumbnailWidget::slotOpenFileOk()
 
     int currentPage = DocummentFileHelper::instance()->currentPageNo();
 
-    qDebug() << "     currentPage:" << currentPage;
+    qDebug() << "     currentPage:" << currentPage << "  m_nRotate:" << m_nRotate;
     m_ThreadLoadImage.setPages(m_totalPages);
     if (!m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.clearList();;

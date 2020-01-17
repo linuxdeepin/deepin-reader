@@ -18,7 +18,7 @@
  */
 #include "BookMarkItemWidget.h"
 #include <DApplicationHelper>
-#include "controller/AppSetting.h"
+#include "controller/DataManager.h"
 
 BookMarkItemWidget::BookMarkItemWidget(QWidget *parent)
     : CustomItemWidget("BookMarkItemWidget", parent)
@@ -157,8 +157,8 @@ bool BookMarkItemWidget::bOperationBK()
 {
     int leftShow = 0;
     int widgetIndex = 0;
-    leftShow = AppSetting::instance()->getKeyValue(KEY_M).toInt();
-    widgetIndex = AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt();
+    leftShow = DataManager::instance()->getShowLeft().toInt();//AppSetting::instance()->getKeyValue(KEY_M).toInt();
+    widgetIndex = DataManager::instance()->getListIndex().toInt();//AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt();
 
     if (leftShow == 1 && widgetIndex == 2) {
         return true;

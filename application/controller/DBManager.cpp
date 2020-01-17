@@ -192,9 +192,10 @@ bool DBManager::hasFilePathDB(const QString &filePath)
     const QSqlDatabase db = getDatabase();
     QMutexLocker mutex(&m_mutex);
     QSqlQuery query(db);
-    query.prepare("select FilePath from FileFontTable where FilePath = ?");
-    query.addBindValue(filePath);
-    if (query.exec()) {
+    QString sql = QString("select FilePath from FilesTable where FilePath = '%1'").arg(filePath);
+//    query.prepare("select FilePath from FileFontTable where FilePath = ?");
+//    query.addBindValue(filePath);
+    if (query.exec(sql)) {
         while (query.next()) {
             qDebug() << "  FilePath:" << query.value(0).toString();
             if (query.value(0).toString() != "")
@@ -210,6 +211,11 @@ DBManager::DBManager(QObject *parent)
 {
     checkDatabase();
     clearInvalidRecord();
+}
+
+DBManager::~DBManager()
+{
+
 }
 
 
@@ -309,174 +315,6 @@ bool  DBManager::saveasBookMark(const QString &oldpath, const QString &newpath)
         }
     }
     return  bsuccess;
-}
-
-/**
- * @brief DBManager::insertFileFontMsg
- * 插入一条新数据
- */
-void DBManager::insertFileFontMsg(const QString &scale, const QString &doubPage, const QString &fit, const QString &rotate, const QString strFilePath)
-{
-    QString t_strFilePath = "";
-    (strFilePath != "") ? (t_strFilePath = strFilePath) : (t_strFilePath = m_strFilePath);
-    if (hasFilePathDB(t_strFilePath)) {
-        updateFileFontMsg(scale, doubPage, fit, rotate, t_strFilePath);
-    } else {
-        const QSqlDatabase db = getDatabase();
-
-        QMutexLocker mutex(&m_mutex);
-        // Insert into FileFontTable
-        QSqlQuery query(db);
-        query.setForwardOnly(true);
-        query.exec("START TRANSACTION");//开始事务。使用BEGIN也可以
-        query.prepare("INSERT INTO FileFontTable "
-                      "(FilePath, FileScale, FileDoubPage, FileFit, FileRotate) VALUES (?, ?, ?, ?, ?)");
-        if (t_strFilePath != "") {
-            query.addBindValue(t_strFilePath);
-        } else {
-            query.addBindValue(m_strFilePath);
-        }
-
-        query.addBindValue(scale);
-        query.addBindValue(doubPage);
-        query.addBindValue(fit);
-        query.addBindValue(rotate);
-
-        if (query.exec()) {
-            query.exec("COMMIT");
-        } else {
-            qDebug() << " insert FileFontTable error:" << query.lastError();
-            query.exec("ROLLBACK");//回滚
-        }
-    }
-}
-
-/**
- * @brief DBManager::updateFileFontMsg
- * 更新已有数据库
- */
-void DBManager::updateFileFontMsg(const QString &scale, const QString &doubPage, const QString &fit, const QString &rotate, const QString strFilePath)
-{
-    const QSqlDatabase db = getDatabase();
-
-    QMutexLocker mutex(&m_mutex);
-    // update FileFontTable
-    QSqlQuery query(db);
-    query.setForwardOnly(true);
-    query.exec("START TRANSACTION");//开始事务。使用BEGIN也可以
-    query.prepare("UPDATE FileFontTable "
-                  "set FileScale = ?, FileDoubPage = ?, FileFit = ?, FileRotate = ? where FilePath = ?");
-
-    query.addBindValue(scale);
-    query.addBindValue(doubPage);
-    query.addBindValue(fit);
-    query.addBindValue(rotate);
-    if (strFilePath != "") {
-        query.addBindValue(strFilePath);
-    } else {
-        query.addBindValue(m_strFilePath);
-    }
-
-    if (query.exec()) {
-        query.exec("COMMIT");
-    }
-}
-
-/**
- * @brief DBManager::deleteFileFontMsg
- * 删除无用数据
- */
-void DBManager::deleteFileFontMsg()
-{
-    const QSqlDatabase db = getDatabase();
-    QMutexLocker mutex(&m_mutex);
-    QSqlQuery query(db);
-    query.prepare("select FilePath from FileFontTable");
-    if (query.exec()) {
-        QString strsql;
-        while (query.next()) {
-            QString strpath = query.value(0).toString();
-            if (!QFile::exists(strpath)) {
-                strsql.append(QString("delete from FileFontTable where FilePath='%1';").arg(strpath));
-            }
-        }
-        query.clear();
-        if (!strsql.isEmpty()) {
-            query.prepare(strsql);
-            if (!query.exec())
-                qDebug() << __LINE__ << "   " << __FUNCTION__ << "   " << query.lastError();
-        }
-    }
-}
-
-/**
- * @brief DBManager::saveFileFontMsg
- * 保存文件字号菜单数据
- */
-void DBManager::saveFileFontMsg()
-{
-
-}
-
-/**
- * @brief DBManager::saveAsFileFontMsg
- * 另存文件字号菜单数据
- */
-bool DBManager::saveAsFileFontMsg(const QString &scale, const QString &doubPage, const QString &fit, const QString &rotate, const QString newpath)
-{
-    bool bsuccess = false;
-    const QSqlDatabase db = getDatabase();
-    QMutexLocker mutex(&m_mutex);
-    QSqlQuery query(db);
-    query.setForwardOnly(true);
-    query.prepare("select count(*) from FileFontTable where FilePath=?");
-    query.addBindValue(newpath);
-    if (query.exec()) {
-        if (query.next() && query.value(0).toInt() <= 0) {
-
-            query.clear();
-            query.exec("START TRANSACTION");
-            query.prepare("INSERT INTO FileFontTable "
-                          "(FilePath, FileScale, FileDoubPage, FileFit, FileRotate) VALUES (?, ?, ?, ?)");
-
-            query.addBindValue(newpath);
-            query.addBindValue(scale);
-            query.addBindValue(doubPage);
-            query.addBindValue(fit);
-            query.addBindValue(rotate);
-
-            if (query.exec()) {
-                query.exec("COMMIT");
-                bsuccess = true;
-            }
-        }
-    }
-    return  bsuccess;
-}
-
-/**
- * @brief DBManager::getFileFontMsg
- * 获取文件对应的字号菜单数据
- */
-void DBManager::getFileFontMsg(QString &scale, QString &doubPage, QString &fit, QString &rotate, const QString &filePath)
-{
-    const QSqlDatabase db = getDatabase();
-    if (db.isValid()) {
-        QMutexLocker mutex(&m_mutex);
-        QSqlQuery query(db);
-        query.setForwardOnly(true);
-        query.prepare("SELECT FileScale, FileDoubPage, FileFit, FileRotate FROM FileFontTable where FilePath = ?");
-        query.addBindValue(filePath);
-
-        if (query.exec()) {
-            while (query.next()) {
-                scale = query.value(0).toString();      //  缩放
-                doubPage = query.value(1).toString();   //  是否是双页
-                fit = query.value(2).toString();        //  自适应宽/高
-                rotate = query.value(3).toString();     //  文档旋转角度
-            }
-        }
-    }
 }
 
 void DBManager::setBookMarkList(const QList<int> &pBookMarkList)

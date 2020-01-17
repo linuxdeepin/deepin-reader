@@ -7,6 +7,7 @@
 #include <QRect>
 #include <QMap>
 #include <QKeySequence>
+#include <QDebug>
 
 /**
  * @brief The DataManager class
@@ -21,25 +22,30 @@ enum File_Show_Enum {
 };
 
 
-
 enum ICON_RADIUS {
     ICON_SMALL = 8,     // 小图标圆角
     ICON_BIG = 10       // 大图标圆角
 };
 
-typedef struct FileFontMsg {
+typedef struct FileHistoryMsg {
     QString m_strScale;//缩放比例
     QString m_strDoubPage;//单双页
     QString m_strFit;//自适应宽/高
     QString m_strRotate;//旋转角度
-    FileFontMsg()
+    QString m_strShowLeft;//list widget是否显示
+    QString m_strListIndex;//左侧处于哪个列表
+    QString m_strCurPage;//文档当前页
+    FileHistoryMsg()
     {
         m_strScale = "";//缩放比例
         m_strDoubPage = "";//单双页
         m_strFit = "";//自适应宽/高
         m_strRotate = "";//旋转角度
+        m_strShowLeft = "";//list widget是否显示
+        m_strListIndex = "";//左侧处于哪个列表
+        m_strCurPage = "";//文档当前页
     }
-} st_fileFontMsg;
+} st_fileHistoryMsg;
 
 class DataManager : public QObject
 {
@@ -110,35 +116,53 @@ public:
     //文档字号信息数据接口
     inline QString getFontScale() const
     {
-        return m_fontMsg.m_strScale;
+        return m_historyMsg.m_strScale;
     }
-    inline void setFontScale(const QString &scale)
-    {
-        m_fontMsg.m_strScale = scale;
-    }
+    void setFontScale(const QString &scale);
+
     inline QString getFontDoubPage() const
     {
-        return m_fontMsg.m_strDoubPage;
+        return m_historyMsg.m_strDoubPage;
     }
-    inline void setFontDoubPage(const QString &doubPage)
-    {
-        m_fontMsg.m_strDoubPage = doubPage;
-    }
+    void setFontDoubPage(const QString &doubPage);
+
     inline QString getFontFit() const
     {
-        return m_fontMsg.m_strFit;
+        return m_historyMsg.m_strFit;
     }
-    inline void setFontFit(const QString &fit)
-    {
-        m_fontMsg.m_strFit = fit;
-    }
+    void setFontFit(const QString &fit);
+
     inline QString getFontRotate() const
     {
-        return m_fontMsg.m_strRotate;
+        return m_historyMsg.m_strRotate;
     }
-    inline void setFontRotate(const QString &rotate)
+    void setFontRotate(const QString &rotate);
+
+    inline QString getShowLeft() const
     {
-        m_fontMsg.m_strRotate = rotate;
+        return m_historyMsg.m_strShowLeft;
+    }
+    void setShowLeft(const QString &showLeft);
+
+    inline QString getListIndex() const
+    {
+        return m_historyMsg.m_strListIndex;
+    }
+    void setListIndex(const QString &listIndex);
+
+    inline QString getCurPage() const
+    {
+        return m_historyMsg.m_strCurPage;
+    }
+    void setCurPage(const QString &curPage);
+
+    inline st_fileHistoryMsg getHistoryMsg() const
+    {
+        return m_historyMsg;
+    }
+    inline void setHistoryMsg(const st_fileHistoryMsg &historyMsg)
+    {
+        m_historyMsg = historyMsg;
     }
 
     QList<QKeySequence> getPKeyList() const;
@@ -160,7 +184,7 @@ private:
 
     QList<QKeySequence>     m_pKeyList;      //  快捷键对应
     QList<QKeySequence>     m_pLeftKeyList;      // left 快捷键对应
-    st_fileFontMsg m_fontMsg;           // 文档字号信息
+    st_fileHistoryMsg       m_historyMsg;// 文档字号信息
 };
 
 #endif // DATAMANAGER_H

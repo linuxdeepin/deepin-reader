@@ -295,13 +295,13 @@ void FontMenu::slotFileOpenOk()
         m_bFiteH = false;
         m_pFiteWAction->setChecked(m_bFiteW);
         m_pFiteHAction->setChecked(m_bFiteH);
-        notifyMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(1));          //emit sigFiteW(QString::number(1));
+//        notifyMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(1));          //emit sigFiteW(QString::number(1));
     } else if (adaptat == 10) {
         m_bFiteH = true;
         m_bFiteW = false;
         m_pFiteWAction->setChecked(m_bFiteW);
         m_pFiteHAction->setChecked(m_bFiteH);
-        notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(1));          //emit sigFiteH(QString::number(1));
+//        notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(1));          //emit sigFiteH(QString::number(1));
     }
 
     //旋转度数

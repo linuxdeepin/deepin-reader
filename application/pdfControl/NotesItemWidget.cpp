@@ -22,7 +22,8 @@
 #include <QClipboard>
 #include <QTextLayout>
 #include "utils/utils.h"
-#include "controller/AppSetting.h"
+//#include "controller/AppSetting.h"
+#include "controller/DataManager.h"
 
 NotesItemWidget::NotesItemWidget(DWidget *parent)
     : CustomItemWidget(QString("NotesItemWidget"), parent)
@@ -142,8 +143,8 @@ void NotesItemWidget::slotDltNoteItemByKey()
 {
     int leftShow = 0;
     int widgetIndex = 0;
-    leftShow = AppSetting::instance()->getKeyValue(KEY_M).toInt();
-    widgetIndex = AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt();
+    leftShow = DataManager::instance()->getShowLeft().toInt();//AppSetting::instance()->getKeyValue(KEY_M).toInt();
+    widgetIndex = DataManager::instance()->getListIndex().toInt();//AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt();
     if ((leftShow == 1) && (widgetIndex == 3) && bSelect()) {
         slotDltNoteContant();
     }

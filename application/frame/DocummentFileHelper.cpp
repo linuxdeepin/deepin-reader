@@ -3,7 +3,6 @@
 #include <QClipboard>
 #include <QDesktopServices>
 #include "subjectObserver/MsgHeader.h"
-#include "controller/DataManager.h"
 #include <DFileDialog>
 #include "utils/utils.h"
 #include <DDialog>
@@ -229,7 +228,7 @@ void DocummentFileHelper::onSaveFile()
             qDebug() << "DocummentFileHelper::slotSaveFile saveBookMark";
             dApp->dbM->saveBookMark();
             //insert msg to FileFontTable
-            saveFileFontMsg("");
+            saveFileFontMsg(m_szFilePath);
 
             DataManager::instance()->setBIsUpdate(false);
             notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Saved successfully"));
@@ -295,17 +294,9 @@ void DocummentFileHelper::onSaveAsFile()
  */
 void DocummentFileHelper::saveFileFontMsg(const QString &filePath)
 {
-    QString scale = "";
-    QString doubPage = "";
-    QString fit = "";
-    QString rotate = "";
-
-    scale = DataManager::instance()->getFontScale();//AppSetting::instance()->getKeyValue(KEY_PERCENTAGE);
-    doubPage = DataManager::instance()->getFontDoubPage();//AppSetting::instance()->getKeyValue(KEY_DOUBPAGE);
-    fit = DataManager::instance()->getFontFit();//AppSetting::instance()->getKeyValue(KEY_ADAPTAT);
-    rotate = DataManager::instance()->getFontRotate();//AppSetting::instance()->getKeyValue(KEY_ROTATE);
-
-    dApp->dbM->insertFileFontMsg(scale, doubPage, fit, rotate, filePath);
+    st_fileHistoryMsg msg;
+    msg = DataManager::instance()->getHistoryMsg();
+    dApp->histroyDb->insertFileFontMsg(msg, filePath);
 }
 
 //  跳转页面
@@ -348,24 +339,11 @@ void DocummentFileHelper::__PageJumpByMsg(const int &iType)
  * brief DocummentFileHelper::setDBFileFontMsgToAppSet
  * 取数据库中文件的字号信息，保存到全局数据类中
  */
-void DocummentFileHelper::setDBFileFontMsgToAppSet(const QString &filePath)
+void DocummentFileHelper::setDBFilesMsgToAppSet(st_fileHistoryMsg &historyMsg, const QString &filePath)
 {
-    QString scale = "";
-    QString doubPage = "";
-    QString fit = "";
-    QString rotate = "";
+    dApp->histroyDb->getFileFontMsg(historyMsg, filePath);
 
-    dApp->dbM->getFileFontMsg(scale, doubPage, fit, rotate, filePath);
-
-    qDebug() << __FUNCTION__ << " scale:" << scale
-             << "  doubPage:" << doubPage
-             << "  fit:" << fit
-             << "  rotate:" << rotate;
-
-    AppSetting::instance()->setAppKeyValue(KEY_PERCENTAGE, scale);
-    AppSetting::instance()->setAppKeyValue(KEY_DOUBPAGE, doubPage);
-    AppSetting::instance()->setAppKeyValue(KEY_ADAPTAT, fit);
-    AppSetting::instance()->setAppKeyValue(KEY_ROTATE, rotate);
+    DataManager::instance()->setHistoryMsg(historyMsg);
 }
 
 //  打开　文件路径
@@ -403,7 +381,7 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
                 //  保存 书签数据
                 dApp->dbM->saveBookMark();
                 //insert msg to FileFontTable
-                saveFileFontMsg("");
+                saveFileFontMsg(m_szFilePath);
             }
         }
         notifyMsg(MSG_OPERATION_OPEN_FILE_START);
@@ -426,32 +404,38 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
         m_szFilePath = sPath;
         DataManager::instance()->setStrOnlyFilePath(sPath);
         //从数据库中获取文件的字号信息
-//        setDBFileFontMsgToAppSet(sPath);
         QString ssscale = "";
         QString doubPage = "";
         QString fit = "";
         QString rotate = "";
+        QString curPage = "";
 
-        dApp->dbM->getFileFontMsg(ssscale, doubPage, fit, rotate, sPath);
+        st_fileHistoryMsg historyMsg;
+
+        setDBFilesMsgToAppSet(historyMsg, sPath);
+
+        ssscale = historyMsg.m_strScale;
+        doubPage = historyMsg.m_strDoubPage;
+        fit = historyMsg.m_strFit;
+        rotate = historyMsg.m_strRotate;
+        curPage = historyMsg.m_strCurPage;
 
         qDebug() << __FUNCTION__ << " scale:" << ssscale
                  << "  doubPage:" << doubPage
                  << "  fit:" << fit
-                 << "  rotate:" << rotate;
-
-        DataManager::instance()->setFontScale(ssscale);
-        DataManager::instance()->setFontDoubPage(doubPage);
-        DataManager::instance()->setFontFit(fit);
-        DataManager::instance()->setFontRotate(rotate);
+                 << "  rotate:" << rotate
+                 << "  curPage:" << curPage;
 
         int iscale = ssscale.toInt();
         iscale = (iscale > 500 ? 500 : iscale) <= 0 ? 100 : iscale;
         double scale = iscale / 100.0;
-        RotateType_EM rotatetype = static_cast<RotateType_EM>(rotate.toInt() / 90);
+        RotateType_EM rotatetype = static_cast<RotateType_EM>((rotate.toInt() / 90) + 1);
         ViewMode_EM viewmode = static_cast<ViewMode_EM>(doubPage.toInt());
-        int ipage = AppSetting::instance()->getKeyValue(KEY_PAGENUM).toInt();
-        qDebug()  << ipage << AppSetting::instance()->getKeyValue(KEY_ROTATE).toInt() << AppSetting::instance()->getKeyValue(KEY_DOUBPAGE).toInt();
+
+        int ipage = curPage.toInt();//AppSetting::instance()->getKeyValue(KEY_PAGENUM).toInt();
+//        qDebug()  << ipage << AppSetting::instance()->getKeyValue(KEY_ROTATE).toInt() << AppSetting::instance()->getKeyValue(KEY_DOUBPAGE).toInt();
         bool rl = DocummentProxy::instance()->openFile(m_nCurDocType, sPath, static_cast<unsigned int>(ipage), rotatetype, scale, viewmode);
+
         if (!rl) {
             m_szFilePath = "";
             DataManager::instance()->setStrOnlyFilePath("");

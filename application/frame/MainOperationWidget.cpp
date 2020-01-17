@@ -117,7 +117,7 @@ void MainOperationWidget::__SearchExit()
 {
     int nId = 0;
 
-    QString sWidget = AppSetting::instance()->getKeyValue(KEY_WIDGET);
+    QString sWidget = DataManager::instance()->getListIndex();//AppSetting::instance()->getKeyValue(KEY_WIDGET);
     if (sWidget != "") {
         nId = sWidget.toInt();
     }
@@ -179,6 +179,8 @@ void MainOperationWidget::slotButtonClicked(int id)
     }
 
     emit sigShowStackWidget(id);
+
+    DataManager::instance()->setListIndex(QString::number(id));
 }
 
 /**

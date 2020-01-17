@@ -5,7 +5,7 @@
 
 #include "docview/docummentproxy.h"
 #include "subjectObserver/IObserver.h"
-
+#include "controller/DataManager.h"
 #include "controller/NotifySubject.h"
 
 /**
@@ -122,7 +122,7 @@ private:
     void onSaveFile();
     void onSaveAsFile();
 
-    void setDBFileFontMsgToAppSet(const QString &filePath);
+    void setDBFilesMsgToAppSet(st_fileHistoryMsg &historyMsg, const QString &filePath);
 
     // IObserver interface
     void sendMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;

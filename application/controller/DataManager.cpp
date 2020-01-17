@@ -146,6 +146,62 @@ void DataManager::settrCurrentTheme(const QString &strCurrentTheme)
     m_strCurrentTheme = strCurrentTheme;
 }
 
+void DataManager::setFontScale(const QString &scale)
+{
+    if (m_historyMsg.m_strScale != scale) {
+        m_historyMsg.m_strScale = scale;
+        m_bIsUpdate = true;
+    }
+}
+
+void DataManager::setFontDoubPage(const QString &doubPage)
+{
+    if (m_historyMsg.m_strDoubPage != doubPage) {
+        m_historyMsg.m_strDoubPage = doubPage;
+        m_bIsUpdate = true;
+    }
+}
+
+void DataManager::setFontFit(const QString &fit)
+{
+    if (m_historyMsg.m_strFit != fit) {
+        m_historyMsg.m_strFit = fit;
+        m_bIsUpdate = true;
+    }
+}
+
+void DataManager::setFontRotate(const QString &rotate)
+{
+    if (m_historyMsg.m_strRotate != rotate) {
+        m_historyMsg.m_strRotate = rotate;
+        m_bIsUpdate = true;
+    }
+}
+
+void DataManager::setShowLeft(const QString &showLeft)
+{
+    if (m_historyMsg.m_strShowLeft != showLeft) {
+        m_historyMsg.m_strShowLeft = showLeft;
+        m_bIsUpdate = true;
+    }
+}
+
+void DataManager::setListIndex(const QString &listIndex)
+{
+    if (m_historyMsg.m_strListIndex != listIndex) {
+        m_historyMsg.m_strListIndex = listIndex;
+        m_bIsUpdate = true;
+    }
+}
+
+void DataManager::setCurPage(const QString &curPage)
+{
+    if (m_historyMsg.m_strCurPage != curPage) {
+        m_historyMsg.m_strCurPage = curPage;
+        m_bIsUpdate = true;
+    }
+}
+
 QList<QKeySequence> DataManager::getPKeyList() const
 {
     return m_pKeyList;

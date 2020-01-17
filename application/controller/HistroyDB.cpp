@@ -20,14 +20,14 @@
 #include <QSqlError>
 #include <QFile>
 
-HistroyDB::HistroyDB(DBManager *parent)
+HistroyDB::HistroyDB(QObject *parent)
     : DBManager(parent)
 {
-    checkDatabase();
-    clearInvalidRecord();
+    checkDatabases();
+    clearInvalidRecords();
 }
 
-void HistroyDB::checkDatabase()
+void HistroyDB::checkDatabases()
 {
     const QSqlDatabase db = getDatabase();
     if (! db.isValid()) {
@@ -39,41 +39,43 @@ void HistroyDB::checkDatabase()
     query.setForwardOnly(true);
 
     query.prepare("SELECT name FROM sqlite_master "
-                  "WHERE type=\"table\" AND name = \"FileFontTable\"");
+                  "WHERE type=\"table\" AND name = \"FilesTable\"");
     if (query.exec() && query.first()) {
         tableExist = !query.value(0).toString().isEmpty();
     }
 
-    //if FileFontTable not exist, create it.
+    //if FilesTable not exist, create it.
     if (!tableExist) {
         QSqlQuery query(db);
-        // FileFontTable
-        ////////////////////////////////////////////////////////////////////////
-        //FilePath           | FileScale | CurPage      | FileDoubPage  | FileFit | FileRotate//
-        //TEXT primari key   | TEXT      | TEXT         | TEXT          | TEXT    | TEXT      //
-        ////////////////////////////////////////////////////////////////////////
-        query.exec(QString("CREATE TABLE IF NOT EXISTS FileFontTable ( "
+        // FileFontTable  >> FilesTable
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //FilePath           | FileScale | FileDoubPage | FileFit  | FileRotate | FileShowLeft | ListIndex | CurPage //
+        //TEXT primari key   | TEXT      | TEXT         | TEXT     | TEXT       | TEXT         | TEXT      | TEXT    //
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        query.exec(QString("CREATE TABLE IF NOT EXISTS FilesTable ( "
                            "FilePath TEXT primary key, "
-                           "CurPage TEXT, "
                            "FileScale TEXT, "
                            "FileDoubPage TEXT, "
                            "FileFit TEXT, "
-                           "FileRotate TEXT )"));
+                           "FileRotate TEXT, "
+                           "FileShowLeft TEXT, "
+                           "ListIndex TEXT, "
+                           "CurPage TEXT )"));
     }
 }
 
-void HistroyDB::clearInvalidRecord()
+void HistroyDB::clearInvalidRecords()
 {
     const QSqlDatabase db = getDatabase();
     QMutexLocker mutex(&m_mutex);
     QSqlQuery query(db);
-    query.prepare("select FilePath from FileFontTable");
+    query.prepare("select FilePath from FilesTable");
     if (query.exec()) {
         QString strsql;
         while (query.next()) {
             QString strpath = query.value(0).toString();
             if (!QFile::exists(strpath)) {
-                strsql.append(QString("delete from FileFontTable where FilePath='%1';").arg(strpath));
+                strsql.append(QString("delete from FilesTable where FilePath='%1';").arg(strpath));
             }
         }
         query.clear();
@@ -85,70 +87,73 @@ void HistroyDB::clearInvalidRecord()
     }
 }
 
-/**
- * @brief HistroyDB::insertFileFontMsg
- * 插入一条新数据
- */
-void HistroyDB::insertFileFontMsg(const QString &sPage, const QString &scale, const QString &doubPage, const QString &fit, const QString &rotate, const QString strFilePath)
+void HistroyDB::insertFileFontMsg(const st_fileHistoryMsg &msg, const QString filePath)
 {
     QString t_strFilePath = "";
-    (strFilePath != "") ? (t_strFilePath = strFilePath) : (t_strFilePath = m_strFilePath);
+    (filePath != "") ? (t_strFilePath = filePath) : (t_strFilePath = m_strFilePath);
     if (hasFilePathDB(t_strFilePath)) {
-        updateFileFontMsg(sPage, scale, doubPage, fit, rotate, t_strFilePath);
+        updateFileFontMsg(msg, t_strFilePath);
     } else {
         const QSqlDatabase db = getDatabase();
 
         QMutexLocker mutex(&m_mutex);
-        // Insert into FileFontTable
+        // Insert into FilesTable
         QSqlQuery query(db);
         query.setForwardOnly(true);
         query.exec("START TRANSACTION");//开始事务。使用BEGIN也可以
-        query.prepare("INSERT INTO FileFontTable "
-                      "(FilePath, CurPage, FileScale, FileDoubPage, FileFit, FileRotate) VALUES (?, ?, ?, ?, ?, ?)");
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //FilePath           | FileScale | FileDoubPage | FileFit  | FileRotate | FileShowLeft | ListIndex | CurPage //
+        //TEXT primari key   | TEXT      | TEXT         | TEXT     | TEXT       | TEXT         | TEXT      | TEXT    //
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        query.prepare("INSERT INTO FilesTable "
+                      "(FilePath, FileScale, FileDoubPage, FileFit, FileRotate, FileShowLeft, ListIndex, CurPage) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         if (t_strFilePath != "") {
             query.addBindValue(t_strFilePath);
         } else {
             query.addBindValue(m_strFilePath);
         }
 
-        query.addBindValue(sPage);
-        query.addBindValue(scale);
-        query.addBindValue(doubPage);
-        query.addBindValue(fit);
-        query.addBindValue(rotate);
+        query.addBindValue(msg.m_strScale);//scale
+        query.addBindValue(msg.m_strDoubPage);//doubPage
+        query.addBindValue(msg.m_strFit);//fit
+        query.addBindValue(msg.m_strRotate);//rotate
+        query.addBindValue(msg.m_strShowLeft);//ShowLeft
+        query.addBindValue(msg.m_strListIndex);//ListIndex
+        query.addBindValue(msg.m_strCurPage);//CurPage
 
         if (query.exec()) {
             query.exec("COMMIT");
         } else {
-            qDebug() << " insert FileFontTable error:" << query.lastError();
             query.exec("ROLLBACK");//回滚
         }
     }
 }
 
-/**
- * @brief HistroyDB::updateFileFontMsg
- * 更新已有数据库
- */
-void HistroyDB::updateFileFontMsg(const QString &sPage, const QString &scale, const QString &doubPage, const QString &fit, const QString &rotate, const QString strFilePath)
+void HistroyDB::updateFileFontMsg(const st_fileHistoryMsg &msg, const QString filePath)
 {
     const QSqlDatabase db = getDatabase();
 
     QMutexLocker mutex(&m_mutex);
-    // update FileFontTable
+    // update FilesTable
     QSqlQuery query(db);
     query.setForwardOnly(true);
     query.exec("START TRANSACTION");//开始事务。使用BEGIN也可以
-    query.prepare("UPDATE FileFontTable "
-                  "set CurPage = ?, FileScale = ?, FileDoubPage = ?, FileFit = ?, FileRotate = ? where FilePath = ?");
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //FilePath           | FileScale | FileDoubPage | FileFit  | FileRotate | FileShowLeft | ListIndex | CurPage //
+    //TEXT primari key   | TEXT      | TEXT         | TEXT     | TEXT       | TEXT         | TEXT      | TEXT    //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    query.prepare("UPDATE FilesTable "
+                  "set FileScale = ?, FileDoubPage = ?, FileFit = ?, FileRotate = ?, FileShowLeft = ?, ListIndex = ?, CurPage = ? where FilePath = ?");
 
-    query.addBindValue(sPage);
-    query.addBindValue(scale);
-    query.addBindValue(doubPage);
-    query.addBindValue(fit);
-    query.addBindValue(rotate);
-    if (strFilePath != "") {
-        query.addBindValue(strFilePath);
+    query.addBindValue(msg.m_strScale);
+    query.addBindValue(msg.m_strDoubPage);
+    query.addBindValue(msg.m_strFit);
+    query.addBindValue(msg.m_strRotate);
+    query.addBindValue(msg.m_strShowLeft);
+    query.addBindValue(msg.m_strListIndex);
+    query.addBindValue(msg.m_strCurPage);
+    if (filePath != "") {
+        query.addBindValue(filePath);
     } else {
         query.addBindValue(m_strFilePath);
     }
@@ -157,101 +162,40 @@ void HistroyDB::updateFileFontMsg(const QString &sPage, const QString &scale, co
         query.exec("COMMIT");
     }
 }
-
-/**
- * @brief HistroyDB::deleteFileFontMsg
- * 删除无用数据
- */
-//void HistroyDB::deleteFileFontMsg()
-//{
-//    const QSqlDatabase db = getDatabase();
-//    QMutexLocker mutex(&m_mutex);
-//    QSqlQuery query(db);
-//    query.prepare("select FilePath from FileFontTable");
-//    if (query.exec()) {
-//        QString strsql;
-//        while (query.next()) {
-//            QString strpath = query.value(0).toString();
-//            if (!QFile::exists(strpath)) {
-//                strsql.append(QString("delete from FileFontTable where FilePath='%1';").arg(strpath));
-//            }
-//        }
-//        query.clear();
-//        if (!strsql.isEmpty()) {
-//            query.prepare(strsql);
-//            if (!query.exec())
-//                qDebug() << __LINE__ << "   " << __FUNCTION__ << "   " << query.lastError();
-//        }
-//    }
-//}
-
 /**
  * @brief HistroyDB::saveFileFontMsg
- * 保存文件字号菜单数据
+ *         废弃
+ * @param msg
+ * @param filePath
  */
-void HistroyDB::saveFileFontMsg()
+void HistroyDB::saveFileFontMsg(const st_fileHistoryMsg &, const QString)
 {
 
 }
 
-/**
- * @brief HistroyDB::saveAsFileFontMsg
- * 另存文件字号菜单数据
- */
-bool HistroyDB::saveAsFileFontMsg(const QString &sPage, const QString &scale, const QString &doubPage, const QString &fit, const QString &rotate, const QString newpath)
+void HistroyDB::saveAsFileFontMsg(const st_fileHistoryMsg &msg, const QString filePath)
 {
-    bool bsuccess = false;
-    const QSqlDatabase db = getDatabase();
-    QMutexLocker mutex(&m_mutex);
-    QSqlQuery query(db);
-    query.setForwardOnly(true);
-    query.prepare("select count(*) from FileFontTable where FilePath=?");
-    query.addBindValue(newpath);
-    if (query.exec()) {
-        if (query.next() && query.value(0).toInt() <= 0) {
-
-            query.clear();
-            query.exec("START TRANSACTION");
-            query.prepare("INSERT INTO FileFontTable "
-                          "(FilePath, CurPage, FileScale, FileDoubPage, FileFit, FileRotate) VALUES (?, ?, ?, ?)");
-
-            query.addBindValue(newpath);
-            query.addBindValue(sPage);
-            query.addBindValue(scale);
-            query.addBindValue(doubPage);
-            query.addBindValue(fit);
-            query.addBindValue(rotate);
-
-            if (query.exec()) {
-                query.exec("COMMIT");
-                bsuccess = true;
-            }
-        }
-    }
-    return  bsuccess;
+    insertFileFontMsg(msg, filePath);
 }
 
-/**
- * @brief HistroyDB::getFileFontMsg
- * 获取文件对应的字号菜单数据
- */
-void HistroyDB::getFileFontMsg(QString &sPage, QString &scale, QString &doubPage, QString &fit, QString &rotate, const QString &filePath)
+void HistroyDB::getFileFontMsg(st_fileHistoryMsg &msg, const QString filePath)
 {
     const QSqlDatabase db = getDatabase();
     if (db.isValid()) {
         QMutexLocker mutex(&m_mutex);
         QSqlQuery query(db);
         query.setForwardOnly(true);
-        query.prepare("SELECT CurPage, FileScale, FileDoubPage, FileFit, FileRotate FROM FileFontTable where FilePath = ?");
-        query.addBindValue(filePath);
+        QString sql = QString("SELECT FileScale, FileDoubPage, FileFit, FileRotate, FileShowLeft, ListIndex, CurPage FROM FilesTable where FilePath = '%1'").arg(filePath);
 
-        if (query.exec()) {
+        if (query.exec(sql)) {
             while (query.next()) {
-                sPage = query.value(0).toString();      //  缩放
-                scale = query.value(1).toString();      //  缩放
-                doubPage = query.value(2).toString();   //  是否是双页
-                fit = query.value(3).toString();        //  自适应宽/高
-                rotate = query.value(4).toString();     //  文档旋转角度
+                msg.m_strScale = query.value(0).toString();       // 缩放
+                msg.m_strDoubPage = query.value(1).toString();    // 是否是双页
+                msg.m_strFit = query.value(2).toString();         // 自适应宽/高
+                msg.m_strRotate = query.value(3).toString();      // 文档旋转角度(0~360)
+                msg.m_strShowLeft = query.value(4).toString();    //  左侧列表窗口是否显示
+                msg.m_strListIndex = query.value(5).toString();   // 在哪个列表
+                msg.m_strCurPage = query.value(6).toString();     // 文档当前页
             }
         }
     }
