@@ -94,6 +94,13 @@ enum MSG_FIND_TYPE {
     MSG_FIND_EXIT                   //  退出查询
 };
 
+//  文档操作消息
+enum E_DOC_MSG {
+    MSG_DOC_JUMP_PAGE = 250,            //  请求跳转页面
+
+};
+
+
 //  菜单操作结果 消息
 enum MSG_OPERATION_RES_TYPE {
     MSG_OPERATION_OPEN_FILE_OK = 1000,  //  打开文件成功, 要告诉所有人
@@ -105,6 +112,7 @@ enum MSG_OPERATION_RES_TYPE {
     MSG_NOTIFY_SHOW_TIP,                //  显示提示窗口
     MSG_CATALOG_FILE_TITLE,             //  打开文件成功, 目录标题
 };
+
 }
 
 namespace ConstantMsg {

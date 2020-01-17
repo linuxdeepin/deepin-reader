@@ -24,7 +24,7 @@ DocummentFileHelper::DocummentFileHelper(QObject *parent)
     initConnections();
 
     m_pMsgList = { MSG_OPEN_FILE_PATH, MSG_OPEN_FILE_PATH_S, MSG_OPERATION_SAVE_AS_FILE,
-                   MSG_OPERATION_TEXT_COPY
+                   MSG_OPERATION_TEXT_COPY, MSG_DOC_JUMP_PAGE
                  };
     m_pKeyMsgList = {KeyStr::g_ctrl_s, KeyStr::g_ctrl_shift_s};
 
@@ -106,6 +106,8 @@ void DocummentFileHelper::slotDealWithData(const int &msgType, const QString &ms
         onSaveAsFile();
     } else if (msgType == MSG_OPERATION_TEXT_COPY) {    //  复制
         slotCopySelectContent(msgContent);
+    } else if (msgType == MSG_DOC_JUMP_PAGE) {              //  请求跳转页面
+        __PageJump(msgContent.toInt());
     }
 }
 
@@ -300,6 +302,20 @@ void DocummentFileHelper::saveFileFontMsg(const QString &filePath)
     rotate = DataManager::instance()->getFontRotate();//AppSetting::instance()->getKeyValue(KEY_ROTATE);
 
     dApp->dbM->insertFileFontMsg(scale, doubPage, fit, rotate, filePath);
+}
+
+//  跳转页面
+void DocummentFileHelper::__PageJump(const int &pagenum)
+{
+    int nPageSize = getPageSNum();      //  总页数
+    if (pagenum < 0 || pagenum == nPageSize) {
+        return;
+    }
+
+    int nCurPage = currentPageNo();
+    if (nCurPage != pagenum) {
+        m_pDocummentProxy->pageJump(pagenum);
+    }
 }
 
 /**
@@ -523,7 +539,7 @@ void DocummentFileHelper::onClickPageLink(Page::Link *pLink)
 
     } else if (linkType == Page::LinkType_Goto) {
         int page = pLink->page - 1;
-        m_pDocummentProxy->pageJump(page);
+        __PageJump(page);
     } else if (linkType == Page::LinkType_GotoOtherFile) {
 
     } else if (linkType == Page::LinkType_Browse) {
@@ -794,10 +810,10 @@ void DocummentFileHelper::setAutoPlaySlide(const bool &autoplay, const int &time
     m_pDocummentProxy->setAutoPlaySlide(autoplay, timemsec);
 }
 
-Outline DocummentFileHelper::outline()
-{
-    if (!m_pDocummentProxy) {
-        return Outline();
-    }
-    return  m_pDocummentProxy->outline();
-}
+//Outline DocummentFileHelper::outline()
+//{
+//    if (!m_pDocummentProxy) {
+//        return Outline();
+//    }
+//    return  m_pDocummentProxy->outline();
+//}

@@ -151,16 +151,16 @@ void ThumbnailWidget::initConnection()
  * 跳转到指定页
  * @param page
  */
-void ThumbnailWidget::jumpToSpecifiedPage(const int &page)
-{
-    //  跳转的页码 必须 大于0, 且 小于 总页码数
-    int nPageSize = DocummentFileHelper::instance()->getPageSNum();
-    if (page < 0 || page == nPageSize) {
-        return;
-    }
+//void ThumbnailWidget::jumpToSpecifiedPage(const int &page)
+//{
+//    //  跳转的页码 必须 大于0, 且 小于 总页码数
+//    int nPageSize = DocummentFileHelper::instance()->getPageSNum();
+//    if (page < 0 || page == nPageSize) {
+//        return;
+//    }
 
-    DocummentFileHelper::instance()->pageJump(page);
-}
+//    DocummentFileHelper::instance()->pageJump(page);
+//}
 
 //  文件  当前页变化, 获取与 文档页  对应的 item, 设置 选中该item, 绘制item
 void ThumbnailWidget::slotDocFilePageChanged(const QString &sPage)
@@ -313,7 +313,9 @@ void ThumbnailWidget::prevPage()
 {
     int nCurPage = DocummentFileHelper::instance()->currentPageNo();
     nCurPage--;
-    jumpToSpecifiedPage(nCurPage);
+    notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
+
+//    jumpToSpecifiedPage(nCurPage);
 }
 
 /**
@@ -324,7 +326,8 @@ void ThumbnailWidget::nextPage()
 {
     int nCurPage = DocummentFileHelper::instance()->currentPageNo();
     nCurPage++;
-    jumpToSpecifiedPage(nCurPage);
+    notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
+//    jumpToSpecifiedPage(nCurPage);
 }
 
 /**
@@ -344,7 +347,8 @@ void ThumbnailWidget::forScreenPageing(bool direction)
             }
             int nCurPage = helper->currentPageNo();
             direction ? nCurPage++ : nCurPage--;
-            jumpToSpecifiedPage(nCurPage);
+            notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
+//            jumpToSpecifiedPage(nCurPage);
             if (bstart) {
                 helper->setAutoPlaySlide(true);
                 bstart = false;

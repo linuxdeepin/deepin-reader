@@ -105,9 +105,10 @@ public:
     bool getAutoPlaySlideStatu();
     void setAutoPlaySlide(const bool &autoplay, const int &timemsec = 3000);
 
-    Outline outline();
+//    Outline outline();
     void saveFileFontMsg(const QString &filePath);
 private:
+    void __PageJump(const int &pagenum);
     void setAppShowTitle(const QString &);
     void initConnections();
     void onOpenFile(const QString &filePaths);

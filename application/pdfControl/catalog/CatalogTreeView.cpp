@@ -72,9 +72,11 @@ void CatalogTreeView::sendMsg(const int &, const QString &)
 
 }
 
-void CatalogTreeView::notifyMsg(const int &, const QString &)
+void CatalogTreeView::notifyMsg(const int &msgType, const QString &msgContent)
 {
-
+    if (m_pSubjectThread) {
+        m_pSubjectThread->notifyMsg(msgType, msgContent);
+    }
 }
 
 void CatalogTreeView::initConnections()
@@ -134,7 +136,7 @@ void CatalogTreeView::SlotOpenFileOk()
     if (model) {
         model->clear();
 
-        Outline ol = DocummentFileHelper::instance()->outline();
+        Outline ol = DocummentFileHelper::instance()->getDocummentProxy()->outline();
         foreach (const Section &s, ol) {   //  1 级显示
             if (s.link.page > 0) {
                 auto itemList = getItemList(s.title, s.link.page);
@@ -154,10 +156,8 @@ void CatalogTreeView::SlotClicked(const QModelIndex &index)
 {
     int nPage = index.data(Qt::UserRole + 1).toInt();
     nPage--;
-    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
-    if (nPage != nCurPage) {    //  两页 不一样, 再跳转
-        DocummentFileHelper::instance()->pageJump(nPage);
-    }
+
+    notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nPage));
 }
 
 //  文档页变化, 目录高亮随之变化
