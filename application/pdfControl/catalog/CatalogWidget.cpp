@@ -20,7 +20,7 @@
 
 #include <QVBoxLayout>
 
-#include "catalog/CatalogTreeView.h"
+#include "CatalogTreeView.h"
 
 #include "CustomControl/CustomClickLabel.h"
 

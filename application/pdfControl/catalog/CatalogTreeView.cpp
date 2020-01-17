@@ -26,8 +26,6 @@
 
 #include "frame/DocummentFileHelper.h"
 
-#include "CatalogDelegate.h"
-
 #include <QDebug>
 
 CatalogTreeView::CatalogTreeView(DWidget *parent)
@@ -44,11 +42,7 @@ CatalogTreeView::CatalogTreeView(DWidget *parent)
 
     this->setContentsMargins(0, 0, 0, 0);
 
-    this->setItemDelegate(new CatalogDelegate(this));   //  代理进行绘制
-
     initConnections();
-
-    DFontSizeManager::instance()->bind(this, DFontSizeManager::T8);
 
     m_pSubjectThread = g_NotifySubject::getInstance();
     if (m_pSubjectThread) {
@@ -120,7 +114,7 @@ QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const 
     auto item = new QStandardItem(title);
     item->setData(page);
 
-    item->setTextAlignment(Qt::AlignLeft);
+    item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
     auto item1 = new QStandardItem();
     item1->setData(page);
@@ -128,7 +122,7 @@ QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const 
     auto item2 = new QStandardItem(QString::number(page));
     item2->setData(page);
 
-    item2->setTextAlignment(Qt::AlignRight);
+    item2->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     return QList<QStandardItem *>() << item << item1 << item2;
 }
@@ -237,9 +231,9 @@ void CatalogTreeView::SlotExpanded(const QModelIndex &index)
 //  窗口大小变化, 列的宽度随之变化
 void CatalogTreeView::resizeEvent(QResizeEvent *event)
 {
-    setColumnWidth(0, this->width() - 100);
+    setColumnWidth(0, this->width() - 120);
     setColumnWidth(1, 22);
-    setColumnWidth(2, 28);
+    setColumnWidth(2, 60);
 
     DTreeView::resizeEvent(event);
 }

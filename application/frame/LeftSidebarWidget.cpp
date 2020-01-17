@@ -8,7 +8,7 @@
 #include "pdfControl/NotesWidget.h"
 #include "pdfControl/SearchResWidget.h"
 #include "pdfControl/ThumbnailWidget.h"
-#include "pdfControl/CatalogWidget.h"
+#include "pdfControl/catalog/CatalogWidget.h"
 
 #include "MainOperationWidget.h"
 
