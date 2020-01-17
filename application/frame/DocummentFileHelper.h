@@ -32,6 +32,7 @@ public:
 
 public:
     void setDocProxy(DocummentProxy *);
+    DocummentProxy *getDocummentProxy() const;
 
 signals:
     void sigDealWithData(const int &, const QString &);
@@ -142,6 +143,7 @@ private:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+
 };
 
 #endif // DOCUMMENTFILEHELPER_H

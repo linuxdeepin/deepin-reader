@@ -506,6 +506,11 @@ void DocummentFileHelper::slotFileCtrlContent()
     }
 }
 
+DocummentProxy *DocummentFileHelper::getDocummentProxy() const
+{
+    return m_pDocummentProxy;
+}
+
 
 //  文档　跳转页码　．　打开浏览器
 void DocummentFileHelper::onClickPageLink(Page::Link *pLink)
