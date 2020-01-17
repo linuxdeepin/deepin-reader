@@ -58,9 +58,10 @@ void FileViewWidget::initWidget()
 
         connect(m_pDocummentProxy, SIGNAL(signal_openResult(bool)), SLOT(SlotDocFileOpenResult(bool)));
 
-        m_pDocummentFileHelper = DocummentFileHelper::instance();
-        m_pDocummentFileHelper->setDocProxy(m_pDocummentProxy);     //  唯一设置 文档类入口
     }
+
+    m_pDocummentFileHelper = DocummentFileHelper::instance();
+//        m_pDocummentFileHelper->setDocProxy(m_pDocummentProxy);     //  唯一设置 文档类入口
 }
 
 //  鼠标移动

@@ -42,11 +42,11 @@ DocummentFileHelper::~DocummentFileHelper()
     }
 }
 
-void DocummentFileHelper::setDocProxy(DocummentProxy *p)
-{
-    m_pDocummentProxy = p;
+//void DocummentFileHelper::setDocProxy(DocummentProxy *p)
+//{
+//    DocummentProxy::instance() = p;
 
-//    connect(m_pDocummentProxy, &DocummentProxy::signal_openResult, this, [ = ](bool openresult) {
+//    connect(DocummentProxy::instance(), &DocummentProxy::signal_openResult, this, [ = ](bool openresult) {
 //        if (openresult) {
 //            notifyMsg(MSG_OPERATION_OPEN_FILE_OK);
 //            //  通知 其他窗口， 打开文件成功了！！！
@@ -58,7 +58,7 @@ void DocummentFileHelper::setDocProxy(DocummentProxy *p)
 //            notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
 //        }
 //    });
-}
+//}
 
 void DocummentFileHelper::initConnections()
 {
@@ -139,83 +139,83 @@ void DocummentFileHelper::notifyMsg(const int &msgType, const QString &msgConten
 
 bool DocummentFileHelper::save(const QString &filepath, bool withChanges)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return false;
     }
 
-    return m_pDocummentProxy->save(filepath, withChanges);
+    return DocummentProxy::instance()->save(filepath, withChanges);
 }
 
 bool DocummentFileHelper::closeFile()
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return false;
     }
 
-    return m_pDocummentProxy->closeFile();
+    return DocummentProxy::instance()->closeFile();
 }
 
 void DocummentFileHelper::docBasicInfo(stFileInfo &info)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return ;
     }
 
-    m_pDocummentProxy->docBasicInfo(info);
+    DocummentProxy::instance()->docBasicInfo(info);
 }
 
 void DocummentFileHelper::setViewFocus()
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return ;
     }
 
-    m_pDocummentProxy->setViewFocus();
+    DocummentProxy::instance()->setViewFocus();
 }
 
 bool DocummentFileHelper::mouseSelectText(const QPoint &start, const QPoint &stop)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return false;
     }
 
-    return m_pDocummentProxy->mouseSelectText(start, stop);
+    return DocummentProxy::instance()->mouseSelectText(start, stop);
 }
 
 bool DocummentFileHelper::mouseBeOverText(const QPoint &point)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return false;
     }
 
-    return m_pDocummentProxy->mouseBeOverText(point);
+    return DocummentProxy::instance()->mouseBeOverText(point);
 }
 
 Page::Link *DocummentFileHelper::mouseBeOverLink(const QPoint &point)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return nullptr;
     }
 
-    return m_pDocummentProxy->mouseBeOverLink(point);
+    return DocummentProxy::instance()->mouseBeOverLink(point);
 }
 
 void DocummentFileHelper::mouseSelectTextClear()
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return ;
     }
 
-    m_pDocummentProxy->mouseSelectTextClear();
+    DocummentProxy::instance()->mouseSelectTextClear();
 }
 
 bool DocummentFileHelper::getSelectTextString(QString &st)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return false;
     }
 
-    return m_pDocummentProxy->getSelectTextString(st);
+    return DocummentProxy::instance()->getSelectTextString(st);
 }
 
 //  保存
@@ -244,7 +244,7 @@ void DocummentFileHelper::onSaveFile()
 //  另存为
 void DocummentFileHelper::onSaveAsFile()
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return;
     }
     QString sFilter = FFH::getFileFilter(m_nCurDocType);
@@ -270,7 +270,7 @@ void DocummentFileHelper::onSaveAsFile()
             } else {
                 QString sFilePath = FFH::getFilePath(filePath, m_nCurDocType);
 
-                bool rl = m_pDocummentProxy->saveas(sFilePath, true);
+                bool rl = DocummentProxy::instance()->saveas(sFilePath, true);
                 if (rl) {
                     //insert a new bookmark record to bookmarktabel
                     dApp->dbM->saveasBookMark(m_szFilePath, sFilePath);
@@ -311,7 +311,7 @@ void DocummentFileHelper::saveFileFontMsg(const QString &filePath)
 //  跳转页面
 void DocummentFileHelper::__PageJump(const int &pagenum)
 {
-    if (m_pDocummentProxy) {
+    if (DocummentProxy::instance()) {
         int nPageSize = getPageSNum();      //  总页数
         if (pagenum < 0 || pagenum == nPageSize) {
             return;
@@ -319,7 +319,7 @@ void DocummentFileHelper::__PageJump(const int &pagenum)
 
         int nCurPage = currentPageNo();
         if (nCurPage != pagenum) {
-            m_pDocummentProxy->pageJump(pagenum);
+            DocummentProxy::instance()->pageJump(pagenum);
         }
     }
 }
@@ -371,7 +371,7 @@ void DocummentFileHelper::setDBFileFontMsgToAppSet(const QString &filePath)
 //  打开　文件路径
 void DocummentFileHelper::onOpenFile(const QString &filePaths)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return;
     }
 
@@ -407,7 +407,7 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
             }
         }
         notifyMsg(MSG_OPERATION_OPEN_FILE_START);
-        m_pDocummentProxy->closeFile();
+        DocummentProxy::instance()->closeFile();
         notifyMsg(MSG_CLOSE_FILE);
     } else {
         notifyMsg(MSG_OPERATION_OPEN_FILE_START);
@@ -451,7 +451,7 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
         ViewMode_EM viewmode = static_cast<ViewMode_EM>(doubPage.toInt());
         int ipage = AppSetting::instance()->getKeyValue(KEY_PAGENUM).toInt();
         qDebug()  << ipage << AppSetting::instance()->getKeyValue(KEY_ROTATE).toInt() << AppSetting::instance()->getKeyValue(KEY_DOUBPAGE).toInt();
-        bool rl = m_pDocummentProxy->openFile(m_nCurDocType, sPath, static_cast<unsigned int>(ipage), rotatetype, scale, viewmode);
+        bool rl = DocummentProxy::instance()->openFile(m_nCurDocType, sPath, static_cast<unsigned int>(ipage), rotatetype, scale, viewmode);
         if (!rl) {
             m_szFilePath = "";
             DataManager::instance()->setStrOnlyFilePath("");
@@ -492,12 +492,12 @@ void DocummentFileHelper::onOpenFiles(const QString &filePaths)
 //  设置  应用显示名称
 void DocummentFileHelper::setAppShowTitle()
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return;
     }
 
     QString sTitle = "";
-    m_pDocummentProxy->title(sTitle);
+    DocummentProxy::instance()->title(sTitle);
     if (sTitle == "") {
         QFileInfo info(m_szFilePath);
         sTitle = info.baseName();
@@ -520,19 +520,19 @@ void DocummentFileHelper::slotCopySelectContent(const QString &sCopy)
  */
 void DocummentFileHelper::slotFileSlider(const int &nFlag)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return;
     }
 
     if (nFlag == 1) {
-        bool bSlideModel = m_pDocummentProxy->showSlideModel();    //  开启幻灯片
+        bool bSlideModel = DocummentProxy::instance()->showSlideModel();    //  开启幻灯片
         if (bSlideModel) {
-            m_pDocummentProxy->setAutoPlaySlide(true);
+            DocummentProxy::instance()->setAutoPlaySlide(true);
             DataManager::instance()->setCurShowState(FILE_SLIDE);
         }
     } else {
         if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
-            bool rl = m_pDocummentProxy->exitSlideModel();
+            bool rl = DocummentProxy::instance()->exitSlideModel();
             if (rl) {
                 DataManager::instance()->setCurShowState(FILE_NORMAL);
             }
@@ -557,16 +557,16 @@ void DocummentFileHelper::setSzFilePath(const QString &szFilePath)
 
 DocummentProxy *DocummentFileHelper::getDocummentProxy() const
 {
-    return m_pDocummentProxy;
+    return DocummentProxy::instance();
 }
 
 
 //  文档　跳转页码　．　打开浏览器
 void DocummentFileHelper::onClickPageLink(Page::Link *pLink)
 {
-    if (!m_pDocummentProxy) {
-        return;
-    }
+//    if (!DocummentProxy::instance()) {
+//        return;
+//    }
     Page::LinkType_EM linkType = pLink->type;
     if (linkType == Page::LinkType_NULL) {
 
@@ -585,50 +585,50 @@ void DocummentFileHelper::onClickPageLink(Page::Link *pLink)
 
 QPoint DocummentFileHelper::global2RelativePoint(const QPoint &globalpoint)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return QPoint(0, 0);
     }
-    return  m_pDocummentProxy->global2RelativePoint(globalpoint);
+    return  DocummentProxy::instance()->global2RelativePoint(globalpoint);
 }
 
 bool DocummentFileHelper::pageMove(const double &mvx, const double &mvy)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return false;
     }
-    return m_pDocummentProxy->pageMove(mvx, mvy);
+    return DocummentProxy::instance()->pageMove(mvx, mvy);
 }
 
 int DocummentFileHelper::pointInWhichPage(const QPoint &pos)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return -1;
     }
-    return m_pDocummentProxy->pointInWhichPage(pos);
+    return DocummentProxy::instance()->pointInWhichPage(pos);
 }
 
 int DocummentFileHelper::getPageSNum()
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return -1;
     }
-    return m_pDocummentProxy->getPageSNum();
+    return DocummentProxy::instance()->getPageSNum();
 }
 
 int DocummentFileHelper::currentPageNo()
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return -1;
     }
-    return m_pDocummentProxy->currentPageNo();
+    return DocummentProxy::instance()->currentPageNo();
 }
 
 bool DocummentFileHelper::getImage(const int &pagenum, QImage &image, const double &width, const double &height)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return false;
     }
-    return  m_pDocummentProxy->getImage(pagenum, image, width, height);
+    return  DocummentProxy::instance()->getImage(pagenum, image, width, height);
 }
 
 QImage DocummentFileHelper::roundImage(const QPixmap &img_in, const int &radius)
@@ -650,84 +650,84 @@ QImage DocummentFileHelper::roundImage(const QPixmap &img_in, const int &radius)
 
 bool DocummentFileHelper::showMagnifier(const QPoint &point)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return false;
     }
-    return  m_pDocummentProxy->showMagnifier(point);
+    return  DocummentProxy::instance()->showMagnifier(point);
 }
 
 bool DocummentFileHelper::closeMagnifier()
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return false;
     }
-    return m_pDocummentProxy->closeMagnifier();
+    return DocummentProxy::instance()->closeMagnifier();
 }
 
 bool DocummentFileHelper::setBookMarkState(const int &page, const bool &state)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return false;
     }
-    return m_pDocummentProxy->setBookMarkState(page, state);
+    return DocummentProxy::instance()->setBookMarkState(page, state);
 }
 
 void DocummentFileHelper::setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return ;
     }
-    m_pDocummentProxy->setScaleRotateViewModeAndShow(scale, rotate, viewmode);
+    DocummentProxy::instance()->setScaleRotateViewModeAndShow(scale, rotate, viewmode);
 }
 
 //bool DocummentFileHelper::setViewModeAndShow(const ViewMode_EM &viewmode)
 //{
-//    return m_pDocummentProxy->setViewModeAndShow(viewmode);
+//    return DocummentProxy::instance()->setViewModeAndShow(viewmode);
 //}
 
 //void DocummentFileHelper::scaleRotateAndShow(const double &scale, const RotateType_EM &rotate)
 //{
-//    m_pDocummentProxy->scaleRotateAndShow(scale, rotate);
+//    DocummentProxy::instance()->scaleRotateAndShow(scale, rotate);
 //}
 
 double DocummentFileHelper::adaptWidthAndShow(const double &width)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return 0.0;
     }
-    return m_pDocummentProxy->adaptWidthAndShow(width);
+    return DocummentProxy::instance()->adaptWidthAndShow(width);
 }
 
 double DocummentFileHelper::adaptHeightAndShow(const double &height)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return 0.0;
     }
-    return m_pDocummentProxy->adaptHeightAndShow(height);
+    return DocummentProxy::instance()->adaptHeightAndShow(height);
 }
 
 void DocummentFileHelper::clearsearch()
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return ;
     }
-    m_pDocummentProxy->clearsearch();
+    DocummentProxy::instance()->clearsearch();
 }
 
 void DocummentFileHelper::getAllAnnotation(QList<stHighlightContent> &listres)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return ;
     }
-    m_pDocummentProxy->getAllAnnotation(listres);
+    DocummentProxy::instance()->getAllAnnotation(listres);
 }
 
 QString DocummentFileHelper::addAnnotation(const QPoint &startpos, const QPoint &endpos, const QColor &color)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return "";
     }
-    QString strUuid = m_pDocummentProxy->addAnnotation(startpos, endpos, color);
+    QString strUuid = DocummentProxy::instance()->addAnnotation(startpos, endpos, color);
     if (strUuid != "") {
         DataManager::instance()->setBIsUpdate(true);
     }
@@ -736,109 +736,109 @@ QString DocummentFileHelper::addAnnotation(const QPoint &startpos, const QPoint 
 
 void DocummentFileHelper::changeAnnotationColor(const int &ipage, const QString &uuid, const QColor &color)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return ;
     }
     DataManager::instance()->setBIsUpdate(true);
-    m_pDocummentProxy->changeAnnotationColor(ipage, uuid, color);
+    DocummentProxy::instance()->changeAnnotationColor(ipage, uuid, color);
 }
 
 bool DocummentFileHelper::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return false;
     }
-    return m_pDocummentProxy->annotationClicked(pos, strtext, struuid);
+    return DocummentProxy::instance()->annotationClicked(pos, strtext, struuid);
 }
 
 void DocummentFileHelper::removeAnnotation(const QString &struuid, const int &ipage)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return ;
     }
     DataManager::instance()->setBIsUpdate(true);
-    m_pDocummentProxy->removeAnnotation(struuid, ipage);
+    DocummentProxy::instance()->removeAnnotation(struuid, ipage);
 }
 
 QString DocummentFileHelper::removeAnnotation(const QPoint &pos)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return "";
     }
     DataManager::instance()->setBIsUpdate(true);
-    return m_pDocummentProxy->removeAnnotation(pos);
+    return DocummentProxy::instance()->removeAnnotation(pos);
 }
 
 void DocummentFileHelper::setAnnotationText(const int &ipage, const QString &struuid, const QString &strtext)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return;
     }
     DataManager::instance()->setBIsUpdate(true);
-    m_pDocummentProxy->setAnnotationText(ipage, struuid, strtext);
+    DocummentProxy::instance()->setAnnotationText(ipage, struuid, strtext);
 }
 
 void DocummentFileHelper::getAnnotationText(const QString &struuid, QString &strtext, const int &ipage)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return;
     }
-    m_pDocummentProxy->getAnnotationText(struuid, strtext, ipage);
+    DocummentProxy::instance()->getAnnotationText(struuid, strtext, ipage);
 }
 
 void DocummentFileHelper::jumpToHighLight(const QString &uuid, const int &ipage)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return ;
     }
     DataManager::instance()->setBIsUpdate(true);
-    m_pDocummentProxy->jumpToHighLight(uuid, ipage);
+    DocummentProxy::instance()->jumpToHighLight(uuid, ipage);
 }
 
 void DocummentFileHelper::search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return ;
     }
-    m_pDocummentProxy->search(strtext, resmap, color);
+    DocummentProxy::instance()->search(strtext, resmap, color);
 }
 
 void DocummentFileHelper::findNext()
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return ;
     }
-    m_pDocummentProxy->findNext();
+    DocummentProxy::instance()->findNext();
 }
 
 void DocummentFileHelper::findPrev()
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return ;
     }
-    m_pDocummentProxy->findPrev();
+    DocummentProxy::instance()->findPrev();
 }
 
 bool DocummentFileHelper::getAutoPlaySlideStatu()
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return false;
     }
-    return m_pDocummentProxy->getAutoPlaySlideStatu();
+    return DocummentProxy::instance()->getAutoPlaySlideStatu();
 }
 
 void DocummentFileHelper::setAutoPlaySlide(const bool &autoplay, const int &timemsec)
 {
-    if (!m_pDocummentProxy) {
+    if (!DocummentProxy::instance()) {
         return ;
     }
-    m_pDocummentProxy->setAutoPlaySlide(autoplay, timemsec);
+    DocummentProxy::instance()->setAutoPlaySlide(autoplay, timemsec);
 }
 
 //Outline DocummentFileHelper::outline()
 //{
-//    if (!m_pDocummentProxy) {
+//    if (!DocummentProxy::instance()) {
 //        return Outline();
 //    }
-//    return  m_pDocummentProxy->outline();
+//    return  DocummentProxy::instance()->outline();
 //}

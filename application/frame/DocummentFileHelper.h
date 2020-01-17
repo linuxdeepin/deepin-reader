@@ -31,7 +31,7 @@ public:
     ~DocummentFileHelper() Q_DECL_OVERRIDE;
 
 public:
-    void setDocProxy(DocummentProxy *);
+//    void setDocProxy(DocummentProxy *);
     DocummentProxy *getDocummentProxy() const;
 
 signals:
@@ -137,7 +137,7 @@ private slots:
     void slotFileCtrlContent();
 
 private:
-    DocummentProxy          *m_pDocummentProxy = nullptr;   //  文档操作代理类
+//    DocummentProxy          *m_pDocummentProxy = nullptr;   //  文档操作代理类
 
     SubjectThread           *m_pNotifySubject = nullptr;
 
