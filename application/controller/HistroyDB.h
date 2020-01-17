@@ -14,15 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef DBMANAGER_H
-#define DBMANAGER_H
-
-// BookMarkTable
-///////////////////////////////////////////////////////
-//FilePath           | FileName | PageNumber        | Time  //
-//TEXT primari key   | TEXT     | TEXT       | TEXT  //
-///////////////////////////////////////////////////////
-
+#ifndef CONTROLLER_HISTROYDB_H
+#define CONTROLLER_HISTROYDB_H
 
 // FileFontTable
 ////////////////////////////////////////////////////////////////////////
@@ -30,36 +23,17 @@
 //TEXT primari key   | TEXT      | TEXT         | TEXT    | TEXT      //
 ////////////////////////////////////////////////////////////////////////
 
+#include "DBManager.h"
 
-#include <QSqlDatabase>
-#include <QObject>
-#include <QDateTime>
-#include <QMutex>
-#include <QDebug>
-
-class DBManager : public QObject
+class HistroyDB : public DBManager
 {
     Q_OBJECT
-    Q_DISABLE_COPY(DBManager)
+    Q_DISABLE_COPY(HistroyDB)
 
 public:
-    explicit DBManager(QObject *parent = nullptr);
-
-protected:
-    const QSqlDatabase getDatabase() const;
-    void checkDatabase();
+    explicit HistroyDB(DBManager *parent = nullptr);
 
 public:
-    void setStrFilePath(const QString &strFilePath);
-
-    void getBookMarks();     //  获取给文件 所有标签的页码
-    void saveBookMark();
-
-    QList<int> getBookMarkList() const;
-
-    void setBookMarkList(const QList<int> &pBookMarkList);
-
-    bool saveasBookMark(const QString &oldpath, const QString &newpath);
 
     //FileFontTable
     void insertFileFontMsg(const QString &, const QString &, const QString &, const QString &, const QString filePath = "");
@@ -68,27 +42,6 @@ public:
     void saveFileFontMsg();
     bool saveAsFileFontMsg(const QString &, const QString &, const QString &, const QString &, const QString newFilePath = "");
     void getFileFontMsg(QString &, QString &, QString &, QString &, const QString &);
-
-private:
-    void insertBookMark(const QString &, const QString &strFilePath = "", const QString &strFileName = "");
-    void updateBookMark(const QString &);
-    void deleteBookMark();
-
-    void clearInvalidRecord();
-
-protected:
-    bool hasFilePathDB(const QString &);
-
-private:
-    QList<int>      m_pBookMarkList;
-    int             m_nDbType = -1;   //  原来是否有数据
-
-    QString m_connectionName = "";
-
-protected:
-    QString m_strFilePath = "";
-    QString m_strFileName = "";
-    mutable QMutex m_mutex;
 };
 
-#endif // DBMANAGER_H
+#endif // CONTROLLER_HISTROYDB_H

@@ -64,9 +64,6 @@ Application::Application(int &argc, char **argv)
 
 Application::~Application()
 {
-    dbM->deleteLater();
-    dbM = nullptr;
-
     g_NotifySubject::getInstance()->stopThreadRun();
 }
 
@@ -89,7 +86,7 @@ void Application::initCfgPath()
 
 void Application::initChildren()
 {
-    dbM = DBManager::instance();
+    dbM = new DBManager(this);
 }
 
 void Application::initI18n()

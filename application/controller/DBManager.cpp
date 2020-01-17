@@ -30,17 +30,6 @@
 #include "subjectObserver/MsgHeader.h"
 #include "utils/utils.h"
 
-DBManager *DBManager::m_dbManager = nullptr;
-
-DBManager *DBManager::instance()
-{
-    if (!m_dbManager) {
-        m_dbManager = new DBManager;
-    }
-
-    return m_dbManager;
-}
-
 void DBManager::getBookMarks()
 {
     m_pBookMarkList.clear();

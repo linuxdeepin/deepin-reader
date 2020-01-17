@@ -6,7 +6,8 @@ HEADERS += \
     $$PWD/AppSetting.h \
     $$PWD/SubjectThread.h \
     $$PWD/DBOperation/AbstractImplement.h \
-    $$PWD/DBOperation/Abstraction.h
+    $$PWD/DBOperation/Abstraction.h \
+    $$PWD/HistroyDB.h
 
 SOURCES += \
     $$PWD/DataManager.cpp \
@@ -14,4 +15,5 @@ SOURCES += \
     $$PWD/DBManager.cpp \
     $$PWD/AppSetting.cpp \
     $$PWD/DBOperation/AbstractImplement.cpp \
-    $$PWD/DBOperation/Abstraction.cpp
+    $$PWD/DBOperation/Abstraction.cpp \
+    $$PWD/HistroyDB.cpp
