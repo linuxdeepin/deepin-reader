@@ -37,7 +37,7 @@ public:
 
 signals:
 //    void sigDealWithData(const int &, const QString &);
-    void sigDealWithKeyMsg(const QString &);
+//    void sigDealWithKeyMsg(const QString &);
 
     void sigShowPlayCtrl(bool bshow);
 

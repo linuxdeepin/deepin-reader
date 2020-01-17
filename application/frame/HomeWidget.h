@@ -19,7 +19,7 @@ public:
     ~HomeWidget() Q_DECL_OVERRIDE;
 
 signals:
-    void sigDealWithKeyMsg(const QString &);
+//    void sigDealWithKeyMsg(const QString &);
 
 private slots:
     void slotDealWithKeyMsg(const QString &);

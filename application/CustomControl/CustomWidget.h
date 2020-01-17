@@ -58,6 +58,7 @@ public:
 signals:
     void sigUpdateTheme();
     void sigDealWithData(const int &, const QString &);
+    void sigDealWithKeyMsg(const QString &);
 
 protected:
     virtual void initWidget() = 0;

@@ -116,7 +116,7 @@ void TitleWidget::initConnections()
     connect(this, SIGNAL(sigMagnifierCancel()), SLOT(slotMagnifierCancel()));
     connect(this, SIGNAL(sigAppFullScreen()), SLOT(slotAppFullScreen()));
 
-    connect(this, SIGNAL(sigDealWithShortKey(const QString &)),
+    connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)),
             SLOT(slotDealWithShortKey(const QString &)));
 }
 
@@ -397,7 +397,7 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
             emit sigAppFullScreen();
         } else {
             if (shortKeyList.contains(msgContent)) {
-                emit sigDealWithShortKey(msgContent);
+                emit sigDealWithKeyMsg(msgContent);
                 return ConstantMsg::g_effective_res;
             }
         }

@@ -28,7 +28,7 @@ signals:
     void sigOpenFileOk();
     void sigAppFullScreen();
     void sigMagnifierCancel();
-    void sigDealWithShortKey(const QString &);
+//    void sigDealWithShortKey(const QString &);
 
 private slots:
     void slotSetFindWidget(const int &);
