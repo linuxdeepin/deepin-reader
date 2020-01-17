@@ -52,6 +52,7 @@ public:
     void getAllAnnotation(QList<stHighlightContent> &listres);
     int  pointInWhichPage(QPoint pos);
     void jumpToHighLight(const QString &uuid, int ipage);
+    void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage = 0);
     bool setBookMarkState(int page, bool state);
     void changeAnnotationColor(int ipage, const QString uuid, const QColor &color);
     void selectAllText();

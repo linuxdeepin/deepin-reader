@@ -275,7 +275,7 @@ public:
     virtual bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid) {return false; }
     virtual bool freshFile(QString file) {return false;}
     virtual void jumpToHighLight(const QString &uuid, int ipage) {}
-    virtual void changeAnnotationColor(int ipage, const QString uuid, const QColor &color) {}
+    virtual void changeAnnotationColor(int, const QString, const QColor &) {}
     virtual Outline outline() { return Outline(); }
     void stopLoadPageThread();
     bool openFile(QString filepath, unsigned int ipage = 0, RotateType_EM rotatetype = RotateType_0, double scale = 1.0, ViewMode_EM viewmode = ViewMode_SinglePage);
@@ -317,6 +317,7 @@ public:
     bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
     bool removeIconAnnotation(const QString &uuid, int ipage);
     double getMaxZoomratio();
+    void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage);
 
 signals:
     void signal_pageChange(int);

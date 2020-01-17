@@ -1969,5 +1969,67 @@ double DocummentBase::getMaxZoomratio()
     return  d->m_maxzoomratio;
 }
 
+void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, unsigned int ipage)
+{
+    Q_D(DocummentBase);
+    int xvalue, yvalue;
+    double curwidth = d->m_scale * d->m_imagewidth;
+    double curheight = d->m_scale * d->m_imageheight;
+    if (ipage < d->m_pages.size()) {
+        if (d->m_viewmode == ViewMode_SinglePage) {
+            switch (d->m_rotate) {
+            case RotateType_0:
+            case RotateType_180: {
+                double topspace = (d->m_widgets.at(ipage)->height() - curheight) / 2;
+                double leftspace = (d->m_widgets.at(ipage)->width() - curwidth) / 2;
+                int widgetheight = frameRect().height();
+                double leftposition = d->m_scale * realtop + leftspace;
+                yvalue = d->m_widgets.at(ipage)->y() + topspace + leftposition;
+                //横向有缩放
+                if (frameRect().width() < curwidth) {
+                    if (leftposition > frameRect().width()) {
+                        xvalue = leftposition - frameRect().width();
+                    } else {
+                        xvalue = 0;
+                    }
+
+                }
+            }
+            break;
+            case RotateType_90:
+            case RotateType_270: {
+//                double topspace = (d->m_widgets.at(ipage)->height() - curwidth) / 2;
+//                double leftspace = (d->m_widgets.at(ipage)->width() - curheight) / 2;
+//                int widgetheight = frameRect().height();
+//                yvalue = d->m_widgets.at(ipage)->y() + topspace + rectorg.y() - widgetheight / 2;
+//                //横向有缩放
+//                if (frameRect().width() < curheight) {
+//                    int iwidth = rectorg.x() + leftspace;
+//                    if (iwidth > (frameRect().width() / 2)) {
+//                        xvalue = iwidth - frameRect().width() / 2;
+//                    } else {
+//                        xvalue = iwidth / 2;
+//                    }
+//                }
+            }
+            break;
+            }
+        } else if (d->m_viewmode == ViewMode_FacingPage) {
+
+
+        }
+    }
+
+    QScrollBar *scrollBar_X = horizontalScrollBar();
+    if (scrollBar_X)
+        scrollBar_X->setValue(xvalue);
+
+    QScrollBar *scrollBar_Y = verticalScrollBar();
+    if (scrollBar_Y)
+        scrollBar_Y->setValue(yvalue);
+
+
+}
+
 
 

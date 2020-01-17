@@ -439,6 +439,12 @@ void DocummentProxy::jumpToHighLight(const QString &uuid, int ipage)
     }
 }
 
+void DocummentProxy::jumpToOutline(const qreal &realleft, const qreal &realtop, unsigned int ipage)
+{
+    if (m_documment)
+        m_documment->jumpToOutline(realleft, realtop, ipage);
+}
+
 bool DocummentProxy::closeFile()
 {
     QMutexLocker locker(&mutexlockgetimage);

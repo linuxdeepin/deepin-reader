@@ -134,10 +134,6 @@ void MainWindow::initUI()
 //    if (nType == QEvent::KeyPress) {    //  按下
 //        QKeyEvent *event = static_cast<QKeyEvent *>(e);
 //        QString key = Utils::getKeyshortcut(event);
-//        if (m_pFilterList.contains(key)) {
-//            dealWithKeyEvent(key);
-//            return true;
-//        }
 //    }
 //    return DMainWindow::eventFilter(obj, e);
 //}

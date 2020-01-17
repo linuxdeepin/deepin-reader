@@ -173,6 +173,7 @@ void NotesItemWidget::initWidget()
     DFontSizeManager::instance()->bind(m_pSearchResultNum, DFontSizeManager::T10);
 
     m_pTextLab = new DLabel(this);
+    m_pTextLab->setTextFormat(Qt::PlainText);
     m_pTextLab->setFixedHeight(54);
     m_pTextLab->setMinimumWidth(80);
     //    m_pTextLab->setMaximumWidth(349);

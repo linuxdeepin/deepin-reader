@@ -40,7 +40,7 @@ signals:
 protected:
     void showEvent(QShowEvent *ev) Q_DECL_OVERRIDE;
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
-//    bool eventFilter(QObject *obj, QEvent *e) Q_DECL_OVERRIDE;
+    // bool eventFilter(QObject *obj, QEvent *e) Q_DECL_OVERRIDE;
 
 private:
     void initUI();

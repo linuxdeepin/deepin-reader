@@ -3,6 +3,7 @@
 #include <DTextEdit>
 #include <QHBoxLayout>
 #include <DFontSizeManager>
+#include <QDebug>
 #include "CustomControl/CustomClickLabel.h"
 
 NoteTipWidget::NoteTipWidget(DWidget *parnet)
@@ -29,8 +30,9 @@ void NoteTipWidget::setTipContent(const QString &content)
 
         QString strContent = content;
 
-        strContent.replace('\n', "");
-        strContent.replace('\t', "");
+        //strContent.replace('\n', "");
+        //strContent.replace('\t', "");
+        qDebug() << strContent.count('\n') << strContent.count('\t') << strContent.count('\r\n');
 
         QFontMetrics fm(pedit->font());
         int pixelsWide = fm.horizontalAdvance(strContent);
