@@ -38,7 +38,7 @@ public:
 
 signals:
     void sigOpenFileOk();
-    void sigDealWithData(const int &, const QString &);
+//    void sigDealWithData(const int &, const QString &);
 
     // QWidget interface
 protected:

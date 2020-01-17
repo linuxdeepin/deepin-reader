@@ -24,7 +24,7 @@ signals:
     void sigShowFileFind();
     void sigChangePlayCtrlShow(bool bshow);
 
-    void sigDealWithData(const int &, const QString &);
+//    void sigDealWithData(const int &, const QString &);
 
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;

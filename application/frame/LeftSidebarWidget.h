@@ -18,7 +18,7 @@ public:
     ~LeftSidebarWidget() Q_DECL_OVERRIDE;
 
 signals:
-    void sigDealWithData(const int &, const QString &);
+//    void sigDealWithData(const int &, const QString &);
     void sigDealWithKeyMsg(const QString &);
 
     void sigSearchWidgetState(const int &);

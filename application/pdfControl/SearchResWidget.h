@@ -85,7 +85,7 @@ public:
     ~SearchResWidget() Q_DECL_OVERRIDE;
 
 signals:
-    void sigDealWithData(const int &, const QString &);
+//    void sigDealWithData(const int &, const QString &);
 //    void sigClearWidget();
     void sigCloseFile();
     void sigFlushSearchWidget(const QString &);

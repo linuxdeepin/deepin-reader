@@ -47,7 +47,7 @@ public:
     ~PagingWidget() Q_DECL_OVERRIDE;
 
 signals:
-    void sigDealWithData(const int &, const QString &);
+//    void sigDealWithData(const int &, const QString &);
 
 public:
     void setTotalPages(int pages);

@@ -89,7 +89,7 @@ signals:
 //    void sigJumpToNextItem();
     void sigRightSelectItem(QString);
 
-    void sigDealWithData(const int &, const QString &);
+//    void sigDealWithData(const int &, const QString &);
 
 
 protected:

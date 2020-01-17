@@ -32,7 +32,7 @@ private:
     void initConnect();
 
 signals:
-    void sigDealWithData(const int &, const QString &);
+//    void sigDealWithData(const int &, const QString &);
 //    void sigSearchControl();
 //    void sigSearchClosed();
     void sigShowStackWidget(const int &);

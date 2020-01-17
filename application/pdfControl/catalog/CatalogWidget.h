@@ -38,7 +38,7 @@ public:
     ~CatalogWidget() Q_DECL_OVERRIDE;
 
 signals:
-    void sigDealWithData(const int &, const QString &);
+//    void sigDealWithData(const int &, const QString &);
 
     // IObserver interface
 public:
