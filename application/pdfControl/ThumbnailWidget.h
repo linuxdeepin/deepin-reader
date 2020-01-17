@@ -120,7 +120,6 @@ private:
     void setSelectItemBackColor(QListWidgetItem *);
     void addThumbnailItem(const int &);
     void initConnection();
-//    void jumpToSpecifiedPage(const int &);
 
 private slots:
     void slotOpenFileOk();

@@ -109,8 +109,8 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
             pWidget->setBSelect(true);
         }
 
-        int nJumpPage = pWidget->nPageIndex();
-        m_pPageWidget->setCurrentPageValue(nJumpPage);
+//        int nJumpPage = pWidget->nPageIndex();
+//        m_pPageWidget->setCurrentPageValue(nJumpPage);
     }
 }
 
@@ -311,11 +311,7 @@ void ThumbnailWidget::showItemBookMark(int ipage)
  */
 void ThumbnailWidget::prevPage()
 {
-    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
-    nCurPage--;
-    notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
-
-//    jumpToSpecifiedPage(nCurPage);
+    notifyMsg(MSG_OPERATION_PREV_PAGE);
 }
 
 /**
@@ -324,10 +320,7 @@ void ThumbnailWidget::prevPage()
  */
 void ThumbnailWidget::nextPage()
 {
-    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
-    nCurPage++;
-    notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
-//    jumpToSpecifiedPage(nCurPage);
+    notifyMsg(MSG_OPERATION_NEXT_PAGE);
 }
 
 /**
@@ -370,7 +363,7 @@ void ThumbnailWidget::slotOpenFileOk()
     int pages = DocummentFileHelper::instance()->getPageSNum();
 
     m_totalPages = pages;
-    m_pPageWidget->setTotalPages(m_totalPages);
+//    m_pPageWidget->setTotalPages(m_totalPages);
 
     m_pThumbnailListWidget->clear();
     m_nValuePreIndex = 0;

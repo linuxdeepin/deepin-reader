@@ -24,7 +24,8 @@ DocummentFileHelper::DocummentFileHelper(QObject *parent)
     initConnections();
 
     m_pMsgList = { MSG_OPEN_FILE_PATH, MSG_OPEN_FILE_PATH_S, MSG_OPERATION_SAVE_AS_FILE,
-                   MSG_OPERATION_TEXT_COPY, MSG_DOC_JUMP_PAGE
+                   MSG_OPERATION_TEXT_COPY, MSG_DOC_JUMP_PAGE, MSG_OPERATION_FIRST_PAGE, MSG_OPERATION_PREV_PAGE,
+                   MSG_OPERATION_NEXT_PAGE, MSG_OPERATION_END_PAGE
                  };
     m_pKeyMsgList = {KeyStr::g_ctrl_s, KeyStr::g_ctrl_shift_s};
 
@@ -108,6 +109,9 @@ void DocummentFileHelper::slotDealWithData(const int &msgType, const QString &ms
         slotCopySelectContent(msgContent);
     } else if (msgType == MSG_DOC_JUMP_PAGE) {              //  请求跳转页面
         __PageJump(msgContent.toInt());
+    } else if (msgType == MSG_OPERATION_FIRST_PAGE || msgType == MSG_OPERATION_PREV_PAGE ||
+               msgType == MSG_OPERATION_NEXT_PAGE || msgType == MSG_OPERATION_END_PAGE) {
+        __PageJumpByMsg(msgType);
     }
 }
 
@@ -318,6 +322,26 @@ void DocummentFileHelper::__PageJump(const int &pagenum)
             m_pDocummentProxy->pageJump(pagenum);
         }
     }
+}
+
+//  前一页\第一页\后一页\最后一页 操作
+void DocummentFileHelper::__PageJumpByMsg(const int &iType)
+{
+    int iPage = -1;
+    if (iType == MSG_OPERATION_FIRST_PAGE) {
+        iPage = 0;
+    } else if (iType == MSG_OPERATION_PREV_PAGE) {
+        int nCurPage = currentPageNo();
+        iPage = nCurPage - 1;
+    } else if (iType == MSG_OPERATION_NEXT_PAGE) {
+        int nCurPage = currentPageNo();
+        iPage = nCurPage + 1;
+    } else if (iType == MSG_OPERATION_END_PAGE) {
+        int nCurPage = getPageSNum();
+        iPage = nCurPage - 1;
+    }
+
+    __PageJump(iPage);
 }
 
 /**

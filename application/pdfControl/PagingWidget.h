@@ -35,8 +35,6 @@
  * @brief   跳转页窗体
  */
 
-const int FIRSTPAGES = 1;
-//
 class PagingWidget : public CustomWidget
 {
     Q_OBJECT
@@ -47,21 +45,15 @@ public:
     ~PagingWidget() Q_DECL_OVERRIDE;
 
 signals:
-//    void sigDocFilePageChange(const QString &);
-
-//    void sigDealWithData(const int &, const QString &);
-
-public:
-    void setTotalPages(int pages);
-    void setCurrentPageValue(const int &);
+    void sigDocFilePageChange(const QString &);
+    void sigDocFileOpenOk();
 
 private slots:
-    void slotDealWithData(const int &, const QString &);
     void slotPrePage();
     void slotNextPage();
     void slotUpdateTheme();
-//    void SlotDocFilePageChange(const QString &);
-
+    void SlotDocFilePageChange(const QString &);
+    void SlotDocFileOpenOk();
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -70,15 +62,11 @@ protected:
 private:
     void initConnections();
 
-//    void onJumpToSpecifiedPage(const int &);
-
 private:
     CustomClickLabel *m_pTotalPagesLab = nullptr;        // 当前文档总页数标签
     DIconButton *m_pPrePageBtn = nullptr;      // 按钮 前一页
     DIconButton *m_pNextPageBtn = nullptr;     // 按钮 后一页
     DSpinBox *m_pJumpPageSpinBox = nullptr;    // 输入框 跳转页码
-    int m_totalPage = 0;                       // 当前文档页码总数
-//    int m_preRow = -1;                         // 当前页码所在list中的行
 
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;

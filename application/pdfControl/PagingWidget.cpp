@@ -25,10 +25,6 @@ PagingWidget::PagingWidget(CustomWidget *parent)
 {
     resize(LEFTNORMALWIDTH, 56);
 
-    m_pMsgList = { MSG_OPERATION_FIRST_PAGE, MSG_OPERATION_PREV_PAGE,
-                   MSG_OPERATION_NEXT_PAGE, MSG_OPERATION_END_PAGE
-                 };
-
     initWidget();
     initConnections();
     slotUpdateTheme();
@@ -105,11 +101,7 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
 
             if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
                 int index = m_pJumpPageSpinBox->value() - 1;
-
-//                if (m_preRow != index) {
-//                    m_preRow = index;
                 notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(index));
-//                }
             }
         } else if (event->type() == QEvent::KeyRelease &&
                    qobject_cast<DSpinBox *>(watched) == m_pJumpPageSpinBox) {
@@ -133,31 +125,10 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
 
 void PagingWidget::initConnections()
 {
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
-            SLOT(slotDealWithData(const int &, const QString &)));
-//    connect(this, SIGNAL(sigDocFilePageChange(const QString &)),
-//            SLOT(slotDealWithData(const int &, const QString &)));
+    connect(this, SIGNAL(sigDocFilePageChange(const QString &)), SLOT(SlotDocFilePageChange(const QString &)));
+    connect(this, SIGNAL(sigDocFileOpenOk()), SLOT(SlotDocFileOpenOk()));
 
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
-}
-
-/**
- * @brief PagingWidget::setTotalPages
- * 设置 总页数
- * @param pages
- */
-void PagingWidget::setTotalPages(int pages)
-{
-    m_totalPage = pages;
-    m_pTotalPagesLab->setText(QString("/%1").arg(pages));
-
-    m_pJumpPageSpinBox->setMaximum(m_totalPage);
-
-    m_pPrePageBtn->setEnabled(false);
-
-    if (m_totalPage == 1) {
-        m_pNextPageBtn->setEnabled(false);
-    }
 }
 
 /**
@@ -168,37 +139,19 @@ void PagingWidget::setTotalPages(int pages)
  */
 int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (m_pMsgList.contains(msgType)) {
-        emit sigDealWithData(msgType, msgContent);
-        return ConstantMsg::g_effective_res;
-    }
-    /*    if (msgType == MSG_FILE_PAGE_CHANGE) {
-            emit sigDocFilePageChange(msgContent);
-        } else*/
-    if (msgType == MSG_OPERATION_UPDATE_THEME) { //  颜色主题切换
+    if (msgType == MSG_FILE_PAGE_CHANGE) {                  //  文档页变化了
+        emit sigDocFilePageChange(msgContent);
+    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {     //  颜色主题切换
         emit sigUpdateTheme();
+    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {     //  文档打开成功了
+        emit sigDocFileOpenOk();
     }
 
     return 0;
 }
 
-//  跳转 指定页
-//void PagingWidget::onJumpToSpecifiedPage(const int &nPage)
-//{
-//    //  跳转的页码 必须 大于0, 且 小于 总页码数
-//    int nPageSize = DocummentFileHelper::instance()->getPageSNum();
-//    if (nPage < 0 || nPage >= nPageSize) {
-//        return;
-//    }
-
-//    m_preRow = nPage;
-
-//    DocummentFileHelper::instance()->pageJump(nPage);
-//}
-
 void PagingWidget::slotUpdateTheme()
 {
-//    m_pTotalPagesLab->setThemePalette();
     if (m_pTotalPagesLab) {
         m_pTotalPagesLab->setForegroundRole(DPalette::Text);
     }
@@ -207,19 +160,17 @@ void PagingWidget::slotUpdateTheme()
     }
 }
 
-//void PagingWidget::SlotDocFilePageChange(const QString &msgContent)
-//{
-//    m_preRow = msgContent.toInt();
-//}
-
-//  设置当前页码, 进行比对,是否可以 上一页\下一页
-void PagingWidget::setCurrentPageValue(const int &inputData)
+void PagingWidget::SlotDocFilePageChange(const QString &msgContent)
 {
+    int totalPage = DocummentFileHelper::instance()->getPageSNum();
+
+    int inputData = msgContent.toInt();
+
     int currntPage = inputData + 1;
-    if (currntPage == FIRSTPAGES) {
+    if (currntPage == 1) {
         m_pPrePageBtn->setEnabled(false);
         m_pNextPageBtn->setEnabled(true);
-    } else if (currntPage == m_totalPage) {
+    } else if (currntPage == totalPage) {
         m_pPrePageBtn->setEnabled(true);
         m_pNextPageBtn->setEnabled(false);
     } else {
@@ -227,47 +178,35 @@ void PagingWidget::setCurrentPageValue(const int &inputData)
         m_pNextPageBtn->setEnabled(true);
     }
 
-//    m_preRow = inputData;
-
     m_pJumpPageSpinBox->setValue(currntPage);
 }
 
-void PagingWidget::slotDealWithData(const int &msgType, const QString &)
+//  文档打开成功, 设置总页数 和 当前页码
+void PagingWidget::SlotDocFileOpenOk()
 {
-    switch (msgType) {
-    case MSG_OPERATION_FIRST_PAGE:  //  第一页
-        notifyMsg(MSG_DOC_JUMP_PAGE, "0");
-        break;
-    case MSG_OPERATION_PREV_PAGE:  //  上一页
-        slotPrePage();
-        break;
-    case MSG_OPERATION_NEXT_PAGE:  //  下一页
-        slotNextPage();
-        break;
-    case MSG_OPERATION_END_PAGE:  //  最后一页
-        notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(m_totalPage - FIRSTPAGES));
-        break;
-    default:
-        break;
+    int totalPage = DocummentFileHelper::instance()->getPageSNum();
+
+    m_pTotalPagesLab->setText(QString("/%1").arg(totalPage));
+    m_pJumpPageSpinBox->setMaximum(totalPage);
+
+    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
+    if (nCurPage == 0)  //  已经是第一页了
+        m_pPrePageBtn->setEnabled(false);
+    else if (nCurPage == totalPage) {   //  已经是最后一页了
+        m_pNextPageBtn->setEnabled(false);
     }
 
-
+    SlotDocFilePageChange(QString::number(nCurPage));
 }
 
 //  按钮点击 上一页
 void PagingWidget::slotPrePage()
 {
-    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
-    nCurPage--;
-    notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
-//    onJumpToSpecifiedPage(nCurPage);
+    notifyMsg(MSG_OPERATION_PREV_PAGE);
 }
 
 //  按钮点击 下一页
 void PagingWidget::slotNextPage()
 {
-    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
-    nCurPage++;
-    notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
-//    onJumpToSpecifiedPage(nCurPage);
+    notifyMsg(MSG_OPERATION_NEXT_PAGE);
 }
