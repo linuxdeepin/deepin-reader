@@ -307,14 +307,16 @@ void DocummentFileHelper::saveFileFontMsg(const QString &filePath)
 //  跳转页面
 void DocummentFileHelper::__PageJump(const int &pagenum)
 {
-    int nPageSize = getPageSNum();      //  总页数
-    if (pagenum < 0 || pagenum == nPageSize) {
-        return;
-    }
+    if (m_pDocummentProxy) {
+        int nPageSize = getPageSNum();      //  总页数
+        if (pagenum < 0 || pagenum == nPageSize) {
+            return;
+        }
 
-    int nCurPage = currentPageNo();
-    if (nCurPage != pagenum) {
-        m_pDocummentProxy->pageJump(pagenum);
+        int nCurPage = currentPageNo();
+        if (nCurPage != pagenum) {
+            m_pDocummentProxy->pageJump(pagenum);
+        }
     }
 }
 
@@ -588,14 +590,6 @@ int DocummentFileHelper::currentPageNo()
         return -1;
     }
     return m_pDocummentProxy->currentPageNo();
-}
-
-bool DocummentFileHelper::pageJump(const int &pagenum)
-{
-    if (!m_pDocummentProxy) {
-        return false;
-    }
-    return m_pDocummentProxy->pageJump(pagenum);
 }
 
 bool DocummentFileHelper::getImage(const int &pagenum, QImage &image, const double &width, const double &height)

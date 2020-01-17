@@ -106,10 +106,10 @@ bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
             if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
                 int index = m_pJumpPageSpinBox->value() - 1;
 
-                if (m_preRow != index) {
-                    m_preRow = index;
-                    DocummentFileHelper::instance()->pageJump(index);
-                }
+//                if (m_preRow != index) {
+//                    m_preRow = index;
+                notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(index));
+//                }
             }
         } else if (event->type() == QEvent::KeyRelease &&
                    qobject_cast<DSpinBox *>(watched) == m_pJumpPageSpinBox) {
@@ -135,6 +135,8 @@ void PagingWidget::initConnections()
 {
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
             SLOT(slotDealWithData(const int &, const QString &)));
+//    connect(this, SIGNAL(sigDocFilePageChange(const QString &)),
+//            SLOT(slotDealWithData(const int &, const QString &)));
 
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
@@ -170,7 +172,9 @@ int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigDealWithData(msgType, msgContent);
         return ConstantMsg::g_effective_res;
     }
-
+    /*    if (msgType == MSG_FILE_PAGE_CHANGE) {
+            emit sigDocFilePageChange(msgContent);
+        } else*/
     if (msgType == MSG_OPERATION_UPDATE_THEME) { //  颜色主题切换
         emit sigUpdateTheme();
     }
@@ -179,18 +183,18 @@ int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
 }
 
 //  跳转 指定页
-void PagingWidget::onJumpToSpecifiedPage(const int &nPage)
-{
-    //  跳转的页码 必须 大于0, 且 小于 总页码数
-    int nPageSize = DocummentFileHelper::instance()->getPageSNum();
-    if (nPage < 0 || nPage >= nPageSize) {
-        return;
-    }
+//void PagingWidget::onJumpToSpecifiedPage(const int &nPage)
+//{
+//    //  跳转的页码 必须 大于0, 且 小于 总页码数
+//    int nPageSize = DocummentFileHelper::instance()->getPageSNum();
+//    if (nPage < 0 || nPage >= nPageSize) {
+//        return;
+//    }
 
-    m_preRow = nPage;
+//    m_preRow = nPage;
 
-    DocummentFileHelper::instance()->pageJump(nPage);
-}
+//    DocummentFileHelper::instance()->pageJump(nPage);
+//}
 
 void PagingWidget::slotUpdateTheme()
 {
@@ -202,6 +206,11 @@ void PagingWidget::slotUpdateTheme()
         m_pJumpPageSpinBox->setForegroundRole(DPalette::Text);
     }
 }
+
+//void PagingWidget::SlotDocFilePageChange(const QString &msgContent)
+//{
+//    m_preRow = msgContent.toInt();
+//}
 
 //  设置当前页码, 进行比对,是否可以 上一页\下一页
 void PagingWidget::setCurrentPageValue(const int &inputData)
@@ -218,7 +227,7 @@ void PagingWidget::setCurrentPageValue(const int &inputData)
         m_pNextPageBtn->setEnabled(true);
     }
 
-    m_preRow = inputData;
+//    m_preRow = inputData;
 
     m_pJumpPageSpinBox->setValue(currntPage);
 }
@@ -227,7 +236,7 @@ void PagingWidget::slotDealWithData(const int &msgType, const QString &)
 {
     switch (msgType) {
     case MSG_OPERATION_FIRST_PAGE:  //  第一页
-        onJumpToSpecifiedPage(0);
+        notifyMsg(MSG_DOC_JUMP_PAGE, "0");
         break;
     case MSG_OPERATION_PREV_PAGE:  //  上一页
         slotPrePage();
@@ -236,11 +245,13 @@ void PagingWidget::slotDealWithData(const int &msgType, const QString &)
         slotNextPage();
         break;
     case MSG_OPERATION_END_PAGE:  //  最后一页
-        onJumpToSpecifiedPage(m_totalPage - FIRSTPAGES);
+        notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(m_totalPage - FIRSTPAGES));
         break;
     default:
         break;
     }
+
+
 }
 
 //  按钮点击 上一页
@@ -248,7 +259,8 @@ void PagingWidget::slotPrePage()
 {
     int nCurPage = DocummentFileHelper::instance()->currentPageNo();
     nCurPage--;
-    onJumpToSpecifiedPage(nCurPage);
+    notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
+//    onJumpToSpecifiedPage(nCurPage);
 }
 
 //  按钮点击 下一页
@@ -256,5 +268,6 @@ void PagingWidget::slotNextPage()
 {
     int nCurPage = DocummentFileHelper::instance()->currentPageNo();
     nCurPage++;
-    onJumpToSpecifiedPage(nCurPage);
+    notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
+//    onJumpToSpecifiedPage(nCurPage);
 }

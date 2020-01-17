@@ -78,7 +78,7 @@ void BookMarkWidget::prevPage()
     if (pCurItem != nullptr) {
         auto t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
         if (t_widget) {
-            DocummentFileHelper::instance()->pageJump(t_widget->nPageIndex());
+            notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(t_widget->nPageIndex()));
         }
     }
 }
@@ -106,7 +106,7 @@ void BookMarkWidget::nextPage()
     if (pCurItem) {
         auto t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
         if (t_widget) {
-            DocummentFileHelper::instance()->pageJump(t_widget->nPageIndex());
+            notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(t_widget->nPageIndex()));
         }
     }
 }

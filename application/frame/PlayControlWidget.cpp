@@ -148,12 +148,8 @@ void PlayControlWidget::pagejump(bool bpre)
         else
             nCurPage++;
 
-        int nPageSize = helper->getPageSNum();
-        if (nCurPage < 0 || nCurPage == nPageSize) {
-            return;
-        }
+        notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
 
-        helper->pageJump(nCurPage);
         if (bstart) {
             helper->setAutoPlaySlide(true);
             bstart = false;

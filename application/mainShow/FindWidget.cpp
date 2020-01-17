@@ -79,10 +79,8 @@ void FindWidget::slotSetVisible()
 void FindWidget::findCancel()
 {
     m_pSearchEdit->setText("");
+    slotEditAborted();
 
-    onSetEditAlert(0);
-
-    notifyMsg(MSG_CLEAR_FIND_CONTENT);
     this->close();
 }
 
@@ -116,7 +114,7 @@ void FindWidget::slotClearContent()
     }
 }
 
-void FindWidget::slotDealWithData(const int &msgType, const QString &msgContent)
+void FindWidget::slotDealWithData(const int &msgType, const QString &)
 {
     if (msgType == MSG_FIND_NONE) {
         onSetEditAlert(1);
@@ -126,7 +124,7 @@ void FindWidget::slotDealWithData(const int &msgType, const QString &msgContent)
 //  点击 搜索框 里面 的 x
 void FindWidget::slotEditAborted()
 {
-    qDebug() << __FUNCTION__;
+//    qDebug() << __FUNCTION__;
     onSetEditAlert(0);
     notifyMsg(MSG_CLEAR_FIND_CONTENT);
 }

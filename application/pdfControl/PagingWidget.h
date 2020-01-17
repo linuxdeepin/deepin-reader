@@ -47,6 +47,8 @@ public:
     ~PagingWidget() Q_DECL_OVERRIDE;
 
 signals:
+//    void sigDocFilePageChange(const QString &);
+
 //    void sigDealWithData(const int &, const QString &);
 
 public:
@@ -58,6 +60,8 @@ private slots:
     void slotPrePage();
     void slotNextPage();
     void slotUpdateTheme();
+//    void SlotDocFilePageChange(const QString &);
+
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -66,7 +70,7 @@ protected:
 private:
     void initConnections();
 
-    void onJumpToSpecifiedPage(const int &);
+//    void onJumpToSpecifiedPage(const int &);
 
 private:
     CustomClickLabel *m_pTotalPagesLab = nullptr;        // 当前文档总页数标签
@@ -74,7 +78,7 @@ private:
     DIconButton *m_pNextPageBtn = nullptr;     // 按钮 后一页
     DSpinBox *m_pJumpPageSpinBox = nullptr;    // 输入框 跳转页码
     int m_totalPage = 0;                       // 当前文档页码总数
-    int m_preRow = -1;                         // 当前页码所在list中的行
+//    int m_preRow = -1;                         // 当前页码所在list中的行
 
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;

@@ -348,9 +348,10 @@ void NotesWidget::slotJumpToPrevItem()
         if (t_widget) {
             clearItemColor();
             m_pNotesList->setCurrentItem(item);
-            DocummentFileHelper::instance()->pageJump(t_widget->nPageIndex());
             m_pNoteItem = item;
             t_widget->setBSelect(true);
+
+            notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(t_widget->nPageIndex()));
         }
     }
 }
@@ -380,9 +381,10 @@ void NotesWidget::slotJumpToNextItem()
         if (t_widget) {
             clearItemColor();
             m_pNotesList->setCurrentItem(item);
-            DocummentFileHelper::instance()->pageJump(t_widget->nPageIndex());
             m_pNoteItem = item;
             t_widget->setBSelect(true);
+
+            notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(t_widget->nPageIndex()));
         }
     }
 }

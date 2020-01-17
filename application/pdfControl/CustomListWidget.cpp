@@ -103,11 +103,9 @@ void CustomListWidget::slotShowSelectItem(QListWidgetItem *item)
     auto t_ItemWidget = reinterpret_cast<CustomItemWidget *>(this->itemWidget(item));
     if (t_ItemWidget) {
         int nJumpPage = t_ItemWidget->nPageIndex();
-        int nCurPage = DocummentFileHelper::instance()->currentPageNo();
-        if (nCurPage != nJumpPage) {
-            //  页跳转
-            DocummentFileHelper::instance()->pageJump(nJumpPage);
-        }
+        //  页跳转
+        g_NotifySubject::getInstance()->notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nJumpPage));
+
     }
 }
 

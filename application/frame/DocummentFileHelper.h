@@ -61,7 +61,7 @@ public:
     int  pointInWhichPage(const QPoint &pos);
     int  getPageSNum();
     int currentPageNo();
-    bool pageJump(const int &pagenum);
+//    bool pageJump(const int &pagenum);
     bool getImage(const int &pagenum, QImage &image, const double &width, const double &height);
 
 private:

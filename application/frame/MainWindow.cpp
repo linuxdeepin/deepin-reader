@@ -330,7 +330,7 @@ void MainWindow::onSetAppTitle(const QString &sData)
 
     QString sPageNum = AppSetting::instance()->getKeyValue(KEY_PAGENUM);
     if (sPageNum != "") {
-        DocummentFileHelper::instance()->pageJump(sPageNum.toInt());
+        notifyMsg(MSG_DOC_JUMP_PAGE, sPageNum);
     }
 
     QString sM = AppSetting::instance()->getKeyValue(KEY_M);
