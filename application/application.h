@@ -20,6 +20,7 @@
 #include <DApplication>
 
 #include "controller/DBManager.h"
+#include "controller/HistroyDB.h"
 
 #if defined(dApp)
 #undef dApp
@@ -41,6 +42,7 @@ protected:
 
 public:
     DBManager *dbM = nullptr;
+    HistroyDB   *histroyDb = nullptr;
 
 private:
     void initCfgPath();

@@ -64,6 +64,9 @@ Application::Application(int &argc, char **argv)
 
 Application::~Application()
 {
+    histroyDb->deleteLater();
+    histroyDb = nullptr;
+
     g_NotifySubject::getInstance()->stopThreadRun();
 }
 
@@ -87,6 +90,7 @@ void Application::initCfgPath()
 void Application::initChildren()
 {
     dbM = new DBManager(this);
+    histroyDb = new HistroyDB;
 }
 
 void Application::initI18n()

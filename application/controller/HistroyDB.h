@@ -33,15 +33,19 @@ class HistroyDB : public DBManager
 public:
     explicit HistroyDB(DBManager *parent = nullptr);
 
+private:
+    void checkDatabase();
+    void clearInvalidRecord();
+
 public:
 
     //FileFontTable
-    void insertFileFontMsg(const QString &, const QString &, const QString &, const QString &, const QString filePath = "");
-    void updateFileFontMsg(const QString &, const QString &, const QString &, const QString &, const QString filePath = "");
-    void deleteFileFontMsg();
+    void insertFileFontMsg(const QString &, const QString &, const QString &, const QString &, const QString &, const QString filePath = "");
+    void updateFileFontMsg(const QString &, const QString &, const QString &, const QString &, const QString &, const QString filePath = "");
+//    void deleteFileFontMsg();
     void saveFileFontMsg();
-    bool saveAsFileFontMsg(const QString &, const QString &, const QString &, const QString &, const QString newFilePath = "");
-    void getFileFontMsg(QString &, QString &, QString &, QString &, const QString &);
+    bool saveAsFileFontMsg(const QString &, const QString &, const QString &, const QString &, const QString &, const QString newFilePath = "");
+    void getFileFontMsg(QString &, QString &, QString &, QString &, QString &, const QString &);
 };
 
 #endif // CONTROLLER_HISTROYDB_H

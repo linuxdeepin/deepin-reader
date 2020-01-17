@@ -49,7 +49,6 @@ void DBManager::getBookMarks()
                 m_nDbType = 0;
                 sData = query.value(0).toString();      //  结果
             }
-            mutex.unlock();
 
             QStringList sPageList = sData.split(",", QString::SkipEmptyParts);
             foreach (QString s, sPageList) {
@@ -119,7 +118,6 @@ void DBManager::insertBookMark(const QString &pageNumber, const QString &strFile
     } else {
         query.exec("ROLLBACK");//回滚
     }
-    mutex.unlock();
 }
 
 //  更新标签数据
@@ -220,7 +218,6 @@ const QSqlDatabase DBManager::getDatabase() const
     QMutexLocker mutex(&m_mutex);
     if (QSqlDatabase::contains(m_connectionName)) {
         QSqlDatabase db = QSqlDatabase::database(m_connectionName);
-        mutex.unlock();
         return db;
     } else {
         //if database not open, open it.
@@ -229,10 +226,8 @@ const QSqlDatabase DBManager::getDatabase() const
         db.setDatabaseName(sDbPath + "/" + ConstantMsg::g_db_name);
         if (! db.open()) {
             qWarning() << "Open database error:" << db.lastError();
-            mutex.unlock();
             return QSqlDatabase();
         } else {
-            mutex.unlock();
             return db;
         }
     }
@@ -268,31 +263,6 @@ void DBManager::checkDatabase()
                            "PageNumber TEXT, "
                            "Time TEXT )"));
     }
-
-    //FileFontTable
-    query.prepare("SELECT name FROM sqlite_master "
-                  "WHERE type=\"table\" AND name = \"FileFontTable\"");
-    if (query.exec() && query.first()) {
-        tableExist = !query.value(0).toString().isEmpty();
-    }
-
-    //if FileFontTable not exist, create it.
-    if (!tableExist) {
-        QSqlQuery query(db);
-        // FileFontTable
-        ////////////////////////////////////////////////////////////////////////
-        //FilePath           | FileScale | FileDoubPage | FileFit | FileRotate//
-        //TEXT primari key   | TEXT      | TEXT         | TEXT    | TEXT      //
-        ////////////////////////////////////////////////////////////////////////
-        query.exec(QString("CREATE TABLE IF NOT EXISTS FileFontTable ( "
-                           "FilePath TEXT primary key, "
-                           "FileScale TEXT, "
-                           "FileDoubPage TEXT, "
-                           "FileFit TEXT, "
-                           "FileRotate TEXT )"));
-    }
-
-    mutex.unlock();
 }
 
 void DBManager::setStrFilePath(const QString &strFilePath)
@@ -378,7 +348,6 @@ void DBManager::insertFileFontMsg(const QString &scale, const QString &doubPage,
             qDebug() << " insert FileFontTable error:" << query.lastError();
             query.exec("ROLLBACK");//回滚
         }
-        mutex.unlock();
     }
 }
 
@@ -507,7 +476,6 @@ void DBManager::getFileFontMsg(QString &scale, QString &doubPage, QString &fit, 
                 rotate = query.value(3).toString();     //  文档旋转角度
             }
         }
-        mutex.unlock();
     }
 }
 
