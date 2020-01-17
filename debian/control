@@ -9,4 +9,4 @@ Package: deepin-reader
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+ Document Viewer is a simple PDF reader, supporting bookmarks, highlights and annotations.
