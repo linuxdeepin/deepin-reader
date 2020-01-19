@@ -67,3 +67,14 @@ int CustomItemWidget::nPageIndex() const
 {
     return m_nPageIndex;
 }
+
+void CustomItemWidget::resizeEvent(QResizeEvent *event)
+{
+    CustomWidget::resizeEvent(event);
+
+    auto parentWidget = reinterpret_cast<QWidget *>(this->parent());
+    if (parentWidget) {
+        resize(parentWidget->width(), this->height());
+    }
+
+}

@@ -318,13 +318,3 @@ QString NotesItemWidget::calcText(const QFont &font, const QString &note,
     return text;
 #endif
 }
-
-void NotesItemWidget::resizeEvent(QResizeEvent *event)
-{
-    CustomItemWidget::resizeEvent(event);
-
-    auto parentWidget = reinterpret_cast<QWidget *>(this->parent());
-    if (parentWidget) {
-        resize(parentWidget->width(), this->height());
-    }
-}
