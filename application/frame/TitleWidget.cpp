@@ -66,6 +66,11 @@ void TitleWidget::slotOpenFileOk()
     m_pSettingBtn->setDisabled(false);
     m_pHandleShapeBtn->setDisabled(false);
     m_pMagnifierBtn->setDisabled(false);
+
+    bool showLeft = false;
+    (DataManager::instance()->getShowLeft() == "1") ? (showLeft = true) : (showLeft = false);
+    m_pThumbnailBtn->setChecked(showLeft);
+    on_thumbnailBtn_clicked();
 }
 
 // 应用全屏显示

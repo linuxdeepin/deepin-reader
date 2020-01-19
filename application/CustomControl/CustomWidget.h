@@ -41,9 +41,9 @@ DWIDGET_USE_NAMESPACE
  */
 
 const int FIRST_LOAD_PAGES = 20;
-const int LEFTMINWIDTH = 226;
+const int LEFTMINWIDTH = 266;//226  >>  266
 const int LEFTMAXWIDTH = 380;
-const int LEFTNORMALWIDTH = 226;
+const int LEFTNORMALWIDTH = 266;//226  >>  266
 
 class CustomWidget : public DWidget, public IObserver
 {
