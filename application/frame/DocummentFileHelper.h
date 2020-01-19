@@ -51,7 +51,7 @@ public:
 
 public:
 //    void setDocProxy(DocummentProxy *);
-    DocummentProxy *getDocummentProxy() const;
+//    DocummentProxy *getDocummentProxy() const;
 
 signals:
     void sigDealWithData(const int &, const QString &);

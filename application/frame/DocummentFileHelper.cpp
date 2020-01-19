@@ -510,8 +510,6 @@ void DocummentFileHelper::setAppShowTitle()
         sTitle = info.baseName();
     }
     notifyMsg(MSG_OPERATION_OPEN_FILE_OK, sTitle);
-    notifyMsg(MSG_OPERATION_OPEN_FILE_TITLE, sTitle);
-    notifyMsg(MSG_CATALOG_FILE_TITLE, sTitle);
 }
 
 //  复制
@@ -562,10 +560,10 @@ void DocummentFileHelper::setSzFilePath(const QString &szFilePath)
     m_szFilePath = szFilePath;
 }
 
-DocummentProxy *DocummentFileHelper::getDocummentProxy() const
-{
-    return DocummentProxy::instance();
-}
+//DocummentProxy *DocummentFileHelper::getDocummentProxy() const
+//{
+//    return DocummentProxy::instance();
+//}
 
 
 ////  文档　跳转页码　．　打开浏览器

@@ -38,7 +38,7 @@ public:
     ~CatalogWidget() Q_DECL_OVERRIDE;
 
 signals:
-//    void sigDealWithData(const int &, const QString &);
+    void sigDocOpenFileOk(const QString &);
 
     // IObserver interface
 public:
@@ -52,14 +52,10 @@ private:
     void initConnections();
 
 private slots:
-    void SlotDealWithData(const int &, const QString &);
-
-private:
-    void setCatalogTitle(const QString &);
+    void SlotDocOpenFileOk(const QString &);
 
 private:
     DLabel  *titleLabel = nullptr;
-
 };
 
 

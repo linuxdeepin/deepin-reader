@@ -7,7 +7,7 @@
 #include <DDialog>
 #include <DTitlebar>
 #include <DWidgetUtil>
-#include <DFloatingMessage>
+//#include <DFloatingMessage>
 #include <DMessageManager>
 #include <QDesktopServices>
 #include <QDebug>
@@ -27,7 +27,7 @@ MainWindow::MainWindow(DMainWindow *parent)
     setTitlebarShadowEnabled(true);
 
     m_strObserverName = "MainWindow";
-    m_pMsgList = {MSG_OPERATION_OPEN_FILE_TITLE, MSG_OPERATION_EXIT};
+    m_pMsgList = {MSG_OPERATION_EXIT};
 
     setCurTheme();
 
@@ -157,7 +157,7 @@ void MainWindow::createActionMap(DMenu *m_menu, QSignalMapper *pSigManager,
 
 void MainWindow::initConnections()
 {
-    connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));
+    connect(this, SIGNAL(sigOpenFileOk(const QString &)), SLOT(slotOpenFileOk(const QString &)));
     connect(this, SIGNAL(sigFullScreen()), SLOT(slotFullScreen()));
     connect(this, SIGNAL(sigAppShowState(const int &)), SLOT(slotAppShowState(const int &)));
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
@@ -347,12 +347,14 @@ void MainWindow::onSetAppTitle(const QString &sData)
 }
 
 //  文件打开成，　功能性　菜单才能点击
-void MainWindow::slotOpenFileOk()
+void MainWindow::slotOpenFileOk(const QString &msgContent)
 {
     auto actions = titlebar()->menu()->findChildren<QAction *>();
     foreach (QAction *a, actions) {
         a->setDisabled(false);
     }
+
+    onSetAppTitle(msgContent);
 }
 
 //  点击菜单　发送指令
@@ -385,9 +387,7 @@ void MainWindow::slotActionTrigger(const QString &sAction)
 
 void MainWindow::slotDealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_OPEN_FILE_TITLE) {
-        onSetAppTitle(msgContent);
-    } else if (msgType == MSG_OPERATION_EXIT) {
+    if (msgType == MSG_OPERATION_EXIT) {
         onAppExit();
     }
 }
@@ -467,7 +467,7 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
     }
 
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        emit sigOpenFileOk();
+        emit sigOpenFileOk(msgContent);
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == KeyStr::g_f11 && DataManager::instance()->CurShowState() != FILE_SLIDE) {
             if (DataManager::instance()->CurShowState() == FILE_FULLSCREEN)

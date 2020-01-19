@@ -30,8 +30,6 @@ CatalogWidget::CatalogWidget(DWidget *parent)
     initWidget();
     initConnections();
 
-    m_pMsgList = { MSG_CATALOG_FILE_TITLE };
-
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
     }
@@ -46,10 +44,10 @@ CatalogWidget::~CatalogWidget()
 
 int CatalogWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (m_pMsgList.contains(msgType)) {
-        emit sigDealWithData(msgType, msgContent);
-        return ConstantMsg::g_effective_res;
+    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
+        emit sigDocOpenFileOk(msgContent);
     }
+
     return 0;
 }
 
@@ -76,17 +74,10 @@ void CatalogWidget::initWidget()
 
 void CatalogWidget::initConnections()
 {
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
+    connect(this, SIGNAL(sigDocOpenFileOk(const QString &)), SLOT(SlotDocOpenFileOk(const QString &)));
 }
 
-void CatalogWidget::SlotDealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_CATALOG_FILE_TITLE) {
-        setCatalogTitle(msgContent);
-    }
-}
-
-void CatalogWidget::setCatalogTitle(const QString &msgContent)
+void CatalogWidget::SlotDocOpenFileOk(const QString &msgContent)
 {
     if (titleLabel) {
         titleLabel->setText(msgContent);

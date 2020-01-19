@@ -105,12 +105,10 @@ enum E_DOC_MSG {
 enum MSG_OPERATION_RES_TYPE {
     MSG_OPERATION_OPEN_FILE_OK = 1000,  //  打开文件成功, 要告诉所有人
     MSG_OPERATION_OPEN_FILE_START,      //  开始打开文件
-    MSG_OPERATION_OPEN_FILE_TITLE,      //  打开文件成功, 文件标题
     MSG_OPERATION_OPEN_FILE_FAIL,       //  打开文件失败
     MSG_OPERATION_UPDATE_THEME,         //  主题变了
     MSG_NOTIFY_KEY_MSG,                 //  按键通知消息
     MSG_NOTIFY_SHOW_TIP,                //  显示提示窗口
-    MSG_CATALOG_FILE_TITLE,             //  打开文件成功, 目录标题
 };
 
 }
