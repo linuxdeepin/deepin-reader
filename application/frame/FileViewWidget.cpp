@@ -313,13 +313,17 @@ void FileViewWidget::slotDealWithData(const int &msgType, const QString &msgCont
 
 void FileViewWidget::slotDealWithKeyMsg(const QString &msgContent)
 {
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (!_proxy)
+        return;
+
     if (msgContent == KeyStr::g_ctrl_p) {
         onPrintFile();
     } else if (msgContent == KeyStr::g_ctrl_l) {
         onFileAddAnnotation();
     } else if (msgContent == KeyStr::g_ctrl_i) {
         QString selectText;
-        if (m_pDocummentFileHelper->getSelectTextString(selectText))
+        if (_proxy->getSelectTextString(selectText))
             onFileAddNote();
         else {
             notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Please select the text"));
@@ -347,7 +351,7 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         return;
 
     QString sSelectText = "";
-    m_pDocummentFileHelper->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
+    _proxy->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
 
     QPoint tempPoint = this->mapToGlobal(point);
     QPoint pRightClickPoint = _proxy->global2RelativePoint(tempPoint);
@@ -422,6 +426,10 @@ void FileViewWidget::onSetHandShape(const QString &data)
 //  添加高亮颜色  快捷键
 void FileViewWidget::onFileAddAnnotation()
 {
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (!_proxy)
+        return;
+
     //  处于幻灯片模式下
     if (DataManager::instance()->CurShowState() == FILE_SLIDE)
         return;
@@ -445,7 +453,7 @@ void FileViewWidget::onFileAddAnnotation()
         return;
     }
     QString selectText = "", t_strUUid = "";
-    m_pDocummentFileHelper->getSelectTextString(selectText);
+    _proxy->getSelectTextString(selectText);
     if (selectText != "") {
         QColor color = DataManager::instance()->selectColor();
 

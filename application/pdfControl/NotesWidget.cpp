@@ -435,7 +435,7 @@ void NotesWidget::addNotesItem(const QString &text)
         if (b_has) {
             flushNoteItemText(t_nPage, t_strUUid, t_strText);
         } else {
-            auto dproxy = DocummentFileHelper::instance();
+            auto dproxy = DocummentProxy::instance();
             if (nullptr == dproxy) {
                 return;
             }
@@ -655,7 +655,7 @@ void ThreadLoadImageOfNote::run()
         for (int page = 0; page < m_stListNote.count(); page++) {
             if (!m_isLoaded)
                 break;
-            auto dproxy = DocummentFileHelper::instance();
+            auto dproxy = DocummentProxy::instance();
             if (nullptr == dproxy) {
                 break;
             }

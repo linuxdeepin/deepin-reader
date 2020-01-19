@@ -60,7 +60,7 @@ signals:
     void sigDealWithKeyMsg(const QString &);
     void sigFileSlider(const int &);
 
-    void sigFileCtrlContent();
+//    void sigFileCtrlContent();
 
 public:
     bool save(const QString &filepath, bool withChanges);
@@ -73,17 +73,17 @@ public:
 //    bool mouseBeOverText(const QPoint &point);
 //    Page::Link *mouseBeOverLink(const QPoint &point);
 //    void mouseSelectTextClear();
-    bool getSelectTextString(QString &st);
+//    bool getSelectTextString(QString &st);
 
 public:
 //    void onClickPageLink(Page::Link *pLink);
 //    QPoint global2RelativePoint(const QPoint &globalpoint);
 //    bool pageMove(const double &mvx, const double &mvy);
 //    int  pointInWhichPage(const QPoint &pos);
-    int  getPageSNum();
-    int currentPageNo();
+//    int  getPageSNum();
+//    int currentPageNo();
 //    bool pageJump(const int &pagenum);
-    bool getImage(const int &pagenum, QImage &image, const double &width, const double &height);
+//    bool getImage(const int &pagenum, QImage &image, const double &width, const double &height);
 
 private:
 //    QImage roundImage(const QPixmap &img_in, const int &radius);
@@ -118,7 +118,7 @@ public:
     void jumpToHighLight(const QString &uuid, const int &ipage);
 
 public:
-////    void search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color);
+//    void search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color);
 //    void findNext();
 //    void findPrev();
 
@@ -135,6 +135,7 @@ public:
 private:
     void __PageJump(const int &pagenum);
     void __PageJumpByMsg(const int &);
+    void __FileCtrlCContent();
 
     void initConnections();
     void onOpenFile(const QString &filePaths);
@@ -155,7 +156,6 @@ private slots:
 
     void slotCopySelectContent(const QString &);
     void slotFileSlider(const int &);
-    void slotFileCtrlContent();
 
 private:
 //    DocummentProxy          *m_pDocummentProxy = nullptr;   //  文档操作代理类

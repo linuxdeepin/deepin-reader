@@ -21,26 +21,20 @@
 
 #include <DApplication>
 #include <QClipboard>
-//#include <QDesktopServices>
 #include <DFileDialog>
 #include <DDialog>
-#include <QBitmap>
+
+#include "application.h"
+#include "FileFormatHelper.h"
 
 #include "subjectObserver/ModuleHeader.h"
 #include "subjectObserver/MsgHeader.h"
-
 #include "controller/DBManager.h"
 #include "controller/NotifySubject.h"
-
-#include "FileFormatHelper.h"
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
-
 #include "docview/docummentproxy.h"
 
-//#include "controller/AppSetting.h"
-
-#include "application.h"
 
 DocummentFileHelper::DocummentFileHelper(QObject *parent)
     : QObject(parent)
@@ -51,7 +45,7 @@ DocummentFileHelper::DocummentFileHelper(QObject *parent)
                    MSG_OPERATION_TEXT_COPY, MSG_DOC_JUMP_PAGE, MSG_OPERATION_FIRST_PAGE, MSG_OPERATION_PREV_PAGE,
                    MSG_OPERATION_NEXT_PAGE, MSG_OPERATION_END_PAGE
                  };
-    m_pKeyMsgList = {KeyStr::g_ctrl_s, KeyStr::g_ctrl_shift_s};
+    m_pKeyMsgList = {KeyStr::g_ctrl_s, KeyStr::g_ctrl_shift_s, KeyStr::g_ctrl_c};
 
     m_pNotifySubject = g_NotifySubject::getInstance();
     if (m_pNotifySubject) {
@@ -92,7 +86,7 @@ void DocummentFileHelper::initConnections()
             SLOT(slotDealWithKeyMsg(const QString &)));
 
     connect(this, SIGNAL(sigFileSlider(const int &)), SLOT(slotFileSlider(const int &)));
-    connect(this, SIGNAL(sigFileCtrlContent()), SLOT(slotFileCtrlContent()));
+//    connect(this, SIGNAL(sigFileCtrlContent()), SLOT(slotFileCtrlContent()));
 }
 
 //  处理 应用推送的消息数据
@@ -113,10 +107,7 @@ int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgCont
 
         if (KeyStr::g_esc == msgContent) {
             emit sigFileSlider(0);
-        } else if (KeyStr::g_ctrl_c == msgContent) {
-            emit sigFileCtrlContent();
         }
-
     }
     return 0;
 }
@@ -145,6 +136,8 @@ void DocummentFileHelper::slotDealWithKeyMsg(const QString &msgContent)
         onSaveFile();
     } else if (msgContent == KeyStr::g_ctrl_shift_s) {
         onSaveAsFile();
+    } else if (msgContent == KeyStr::g_ctrl_c) {
+        __FileCtrlCContent();
     }
 }
 
@@ -233,14 +226,14 @@ bool DocummentFileHelper::save(const QString &filepath, bool withChanges)
 //    DocummentProxy::instance()->mouseSelectTextClear();
 //}
 
-bool DocummentFileHelper::getSelectTextString(QString &st)
-{
-    if (!DocummentProxy::instance()) {
-        return false;
-    }
+//bool DocummentFileHelper::getSelectTextString(QString &st)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return false;
+//    }
 
-    return DocummentProxy::instance()->getSelectTextString(st);
-}
+//    return DocummentProxy::instance()->getSelectTextString(st);
+//}
 
 //  保存 数据
 void DocummentFileHelper::onSaveFile()
@@ -327,15 +320,16 @@ void DocummentFileHelper::saveFileFontMsg(const QString &filePath)
 //  跳转页面
 void DocummentFileHelper::__PageJump(const int &pagenum)
 {
-    if (DocummentProxy::instance()) {
-        int nPageSize = getPageSNum();      //  总页数
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
+        int nPageSize = _proxy->getPageSNum();      //  总页数
         if (pagenum < 0 || pagenum == nPageSize) {
             return;
         }
 
-        int nCurPage = currentPageNo();
+        int nCurPage = _proxy->currentPageNo();
         if (nCurPage != pagenum) {
-            DocummentProxy::instance()->pageJump(pagenum);
+            _proxy->pageJump(pagenum);
         }
     }
 }
@@ -343,21 +337,24 @@ void DocummentFileHelper::__PageJump(const int &pagenum)
 //  前一页\第一页\后一页\最后一页 操作
 void DocummentFileHelper::__PageJumpByMsg(const int &iType)
 {
-    int iPage = -1;
-    if (iType == MSG_OPERATION_FIRST_PAGE) {
-        iPage = 0;
-    } else if (iType == MSG_OPERATION_PREV_PAGE) {
-        int nCurPage = currentPageNo();
-        iPage = nCurPage - 1;
-    } else if (iType == MSG_OPERATION_NEXT_PAGE) {
-        int nCurPage = currentPageNo();
-        iPage = nCurPage + 1;
-    } else if (iType == MSG_OPERATION_END_PAGE) {
-        int nCurPage = getPageSNum();
-        iPage = nCurPage - 1;
-    }
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
+        int iPage = -1;
+        if (iType == MSG_OPERATION_FIRST_PAGE) {
+            iPage = 0;
+        } else if (iType == MSG_OPERATION_PREV_PAGE) {
+            int nCurPage = _proxy->currentPageNo();
+            iPage = nCurPage - 1;
+        } else if (iType == MSG_OPERATION_NEXT_PAGE) {
+            int nCurPage = _proxy->currentPageNo();
+            iPage = nCurPage + 1;
+        } else if (iType == MSG_OPERATION_END_PAGE) {
+            int nCurPage = _proxy->getPageSNum();
+            iPage = nCurPage - 1;
+        }
 
-    __PageJump(iPage);
+        __PageJump(iPage);
+    }
 }
 
 /**
@@ -527,19 +524,20 @@ void DocummentFileHelper::slotCopySelectContent(const QString &sCopy)
  */
 void DocummentFileHelper::slotFileSlider(const int &nFlag)
 {
-    if (!DocummentProxy::instance()) {
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (!_proxy) {
         return;
     }
 
     if (nFlag == 1) {
-        bool bSlideModel = DocummentProxy::instance()->showSlideModel();    //  开启幻灯片
+        bool bSlideModel = _proxy->showSlideModel();    //  开启幻灯片
         if (bSlideModel) {
-            DocummentProxy::instance()->setAutoPlaySlide(true);
+            _proxy->setAutoPlaySlide(true);
             DataManager::instance()->setCurShowState(FILE_SLIDE);
         }
     } else {
         if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
-            bool rl = DocummentProxy::instance()->exitSlideModel();
+            bool rl = _proxy->exitSlideModel();
             if (rl) {
                 DataManager::instance()->setCurShowState(FILE_NORMAL);
             }
@@ -547,13 +545,18 @@ void DocummentFileHelper::slotFileSlider(const int &nFlag)
     }
 }
 
-void DocummentFileHelper::slotFileCtrlContent()
+void DocummentFileHelper::__FileCtrlCContent()
 {
-    QString sSelectText = "";
-    getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (!_proxy) {
+        return;
+    }
 
-    if (sSelectText != "") {
-        slotCopySelectContent(sSelectText);
+    QString sSelectText = "";
+    if (_proxy->getSelectTextString(sSelectText)) { //  选择　当前选中下面是否有文字
+        if (sSelectText != "") {
+            slotCopySelectContent(sSelectText);
+        }
     }
 }
 
@@ -614,29 +617,29 @@ void DocummentFileHelper::setSzFilePath(const QString &szFilePath)
 //    return DocummentProxy::instance()->pointInWhichPage(pos);
 //}
 
-int DocummentFileHelper::getPageSNum()
-{
-    if (!DocummentProxy::instance()) {
-        return -1;
-    }
-    return DocummentProxy::instance()->getPageSNum();
-}
+//int DocummentFileHelper::getPageSNum()
+//{
+//    if (!DocummentProxy::instance()) {
+//        return -1;
+//    }
+//    return DocummentProxy::instance()->getPageSNum();
+//}
 
-int DocummentFileHelper::currentPageNo()
-{
-    if (!DocummentProxy::instance()) {
-        return -1;
-    }
-    return DocummentProxy::instance()->currentPageNo();
-}
+//int DocummentFileHelper::currentPageNo()
+//{
+//    if (!DocummentProxy::instance()) {
+//        return -1;
+//    }
+//    return DocummentProxy::instance()->currentPageNo();
+//}
 
-bool DocummentFileHelper::getImage(const int &pagenum, QImage &image, const double &width, const double &height)
-{
-    if (!DocummentProxy::instance()) {
-        return false;
-    }
-    return  DocummentProxy::instance()->getImage(pagenum, image, width, height);
-}
+//bool DocummentFileHelper::getImage(const int &pagenum, QImage &image, const double &width, const double &height)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return false;
+//    }
+//    return  DocummentProxy::instance()->getImage(pagenum, image, width, height);
+//}
 
 //QImage DocummentFileHelper::roundImage(const QPixmap &img_in, const int &radius)
 //{

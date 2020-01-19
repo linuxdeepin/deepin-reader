@@ -18,13 +18,12 @@
  */
 #include "ThumbnailWidget.h"
 
+#include "application.h"
+
 #include "controller/DBManager.h"
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
-
-#include "frame/DocummentFileHelper.h"
 #include "docview/docummentproxy.h"
-#include "application.h"
 
 ThumbnailWidget::ThumbnailWidget(DWidget *parent)
     : CustomWidget(QString("ThumbnailWidget"), parent)
@@ -357,38 +356,41 @@ void ThumbnailWidget::forScreenPageing(bool direction)
 // 关联成功打开文件槽函数
 void ThumbnailWidget::slotOpenFileOk()
 {
-    m_isLoading = true;
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
+        m_isLoading = true;
 
-    m_ThreadLoadImage.setIsLoaded(false);
-    if (m_ThreadLoadImage.isRunning()) {
-        m_ThreadLoadImage.stopThreadRun();
-    }
+        m_ThreadLoadImage.setIsLoaded(false);
+        if (m_ThreadLoadImage.isRunning()) {
+            m_ThreadLoadImage.stopThreadRun();
+        }
 
-    int pages = DocummentFileHelper::instance()->getPageSNum();
+        int pages = _proxy->getPageSNum();
 
-    m_totalPages = pages;
+        m_totalPages = pages;
 //    m_pPageWidget->setTotalPages(m_totalPages);
 
-    m_pThumbnailListWidget->clear();
-    m_nValuePreIndex = 0;
-    fillContantToList();
-    m_nRotate = DataManager::instance()->getFontRotate().toInt();
-    if (m_nRotate < 0) {
-        m_nRotate = qAbs(m_nRotate);
-    }
-    m_nRotate %= 360;
+        m_pThumbnailListWidget->clear();
+        m_nValuePreIndex = 0;
+        fillContantToList();
+        m_nRotate = DataManager::instance()->getFontRotate().toInt();
+        if (m_nRotate < 0) {
+            m_nRotate = qAbs(m_nRotate);
+        }
+        m_nRotate %= 360;
 
-    int currentPage = DocummentFileHelper::instance()->currentPageNo();
+        int currentPage = _proxy->currentPageNo();
 
-    qDebug() << "     currentPage:" << currentPage << "  m_nRotate:" << m_nRotate;
-    m_ThreadLoadImage.setPages(m_totalPages);
-    if (!m_ThreadLoadImage.isRunning()) {
-        m_ThreadLoadImage.clearList();;
-        m_ThreadLoadImage.setStartAndEndIndex(currentPage - (FIRST_LOAD_PAGES / 2), currentPage + (FIRST_LOAD_PAGES / 2));
+//        qDebug() << "     currentPage:" << currentPage << "  m_nRotate:" << m_nRotate;
+        m_ThreadLoadImage.setPages(m_totalPages);
+        if (!m_ThreadLoadImage.isRunning()) {
+            m_ThreadLoadImage.clearList();;
+            m_ThreadLoadImage.setStartAndEndIndex(currentPage - (FIRST_LOAD_PAGES / 2), currentPage + (FIRST_LOAD_PAGES / 2));
+        }
+        m_ThreadLoadImage.setIsLoaded(true);
+        m_ThreadLoadImage.start();
+        slotDocFilePageChanged(QString::number(currentPage));
     }
-    m_ThreadLoadImage.setIsLoaded(true);
-    m_ThreadLoadImage.start();
-    slotDocFilePageChanged(QString::number(currentPage));
 }
 
 /*******************************ThreadLoadImage*************************************************/
@@ -449,7 +451,7 @@ void ThreadLoadImage::run()
             m_nEndPage = m_pages - 1;
         }
 
-        auto dproxy = DocummentFileHelper::instance();
+        auto dproxy = DocummentProxy::instance();
         if (nullptr == dproxy) {
             break;
         }

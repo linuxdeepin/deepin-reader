@@ -129,7 +129,7 @@ void BookMarkWidget::slotAddBookMark()
         return;
     }
 
-    auto proxy = DocummentFileHelper::instance();
+    auto proxy = DocummentProxy::instance();
     if (proxy) {
         int nPage = proxy->currentPageNo();
         sendMsg(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(nPage));
@@ -152,7 +152,7 @@ void BookMarkWidget::slotAddBookMark(const int &nPage)
         dApp->dbM->setBookMarkList(pageList);
     }
 
-    auto dproxy = DocummentFileHelper::instance();
+    auto dproxy = DocummentProxy::instance();
     if (dproxy) {
         int nCurPage = dproxy->currentPageNo();
         if (nCurPage == nPage) {  //  是当前页
@@ -233,7 +233,8 @@ void BookMarkWidget::slotDocFilePageChanged(const QString &sPage)
                     reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
                 if (pItemWidget) {
                     int nWidgetPage = pItemWidget->nPageIndex();
-                    auto dproxy = DocummentFileHelper::instance();
+
+                    auto dproxy = DocummentProxy::instance();
                     if (dproxy) {
                         int nCurPage = dproxy->currentPageNo();
                         if (nWidgetPage == nCurPage) {
@@ -666,8 +667,13 @@ void LoadBookMarkThread::stopThreadRun()
  */
 void LoadBookMarkThread::run()
 {
+    DocummentProxy *_proxy = nullptr;
     while (m_isRunning) {
+        if (!_proxy) {
+            _proxy = DocummentProxy::instance();
+        }
         msleep(50);
+
         if (m_nStartIndex < 0) {
             m_nStartIndex = 0;
         }
@@ -693,7 +699,7 @@ void LoadBookMarkThread::run()
                 continue;
             }
 
-            bool bl = DocummentFileHelper::instance()->getImage(page, image, 48, 68 /*42, 62*/);
+            bool bl = _proxy->getImage(page, image, 48, 68 /*42, 62*/);
             if (bl) {
                 emit sigLoadImage(page, image);
             }

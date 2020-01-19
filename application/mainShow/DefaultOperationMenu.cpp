@@ -3,7 +3,7 @@
 #include "application.h"
 #include <DFontSizeManager>
 
-#include "frame/DocummentFileHelper.h"
+#include "docview/docummentproxy.h"
 
 #include "controller/DataManager.h"
 #include "controller/NotifySubject.h"
@@ -34,12 +34,15 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
         m_pFirstPage->setEnabled(false);
         m_pPrevPage->setEnabled(false);
     } else {
-        int nPageNum = DocummentFileHelper::instance()->getPageSNum();
-        nPageNum--;
+        DocummentProxy *_proxy = DocummentProxy::instance();
+        if (_proxy) {
+            int nPageNum = _proxy->getPageSNum();
+            nPageNum--;
 
-        if (m_nRightPageNumber == nPageNum) { //  最后一页
-            m_pNextPage->setEnabled(false);
-            m_pEndPage->setEnabled(false);
+            if (m_nRightPageNumber == nPageNum) { //  最后一页
+                m_pNextPage->setEnabled(false);
+                m_pEndPage->setEnabled(false);
+            }
         }
     }
 

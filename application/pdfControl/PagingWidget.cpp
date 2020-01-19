@@ -18,6 +18,8 @@
  */
 #include "PagingWidget.h"
 
+#include "docview/docummentproxy.h"
+
 #include "frame/DocummentFileHelper.h"
 
 PagingWidget::PagingWidget(CustomWidget *parent)
@@ -162,43 +164,48 @@ void PagingWidget::slotUpdateTheme()
 
 void PagingWidget::SlotDocFilePageChange(const QString &msgContent)
 {
-    int totalPage = DocummentFileHelper::instance()->getPageSNum();
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
+        int totalPage = _proxy->getPageSNum();
 
-    int inputData = msgContent.toInt();
+        int inputData = msgContent.toInt();
 
-    int currntPage = inputData + 1;
-    if (currntPage == 1) {
-        m_pPrePageBtn->setEnabled(false);
-        m_pNextPageBtn->setEnabled(true);
-    } else if (currntPage == totalPage) {
-        m_pPrePageBtn->setEnabled(true);
-        m_pNextPageBtn->setEnabled(false);
-    } else {
-        m_pPrePageBtn->setEnabled(true);
-        m_pNextPageBtn->setEnabled(true);
+        int currntPage = inputData + 1;
+        if (currntPage == 1) {
+            m_pPrePageBtn->setEnabled(false);
+            m_pNextPageBtn->setEnabled(true);
+        } else if (currntPage == totalPage) {
+            m_pPrePageBtn->setEnabled(true);
+            m_pNextPageBtn->setEnabled(false);
+        } else {
+            m_pPrePageBtn->setEnabled(true);
+            m_pNextPageBtn->setEnabled(true);
+        }
+
+        m_pJumpPageSpinBox->setValue(currntPage);
     }
-
-    m_pJumpPageSpinBox->setValue(currntPage);
 }
 
 //  文档打开成功, 设置总页数 和 当前页码
 void PagingWidget::SlotDocFileOpenOk()
 {
-    int totalPage = DocummentFileHelper::instance()->getPageSNum();
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
+        int totalPage = _proxy->getPageSNum();
 
-    m_pTotalPagesLab->setText(QString("/%1").arg(totalPage));
-    m_pJumpPageSpinBox->setMaximum(totalPage);
+        m_pTotalPagesLab->setText(QString("/%1").arg(totalPage));
+        m_pJumpPageSpinBox->setMaximum(totalPage);
 
-    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
-    if (nCurPage == 0)  //  已经是第一页了
-        m_pPrePageBtn->setEnabled(false);
-    else if (nCurPage == totalPage) {   //  已经是最后一页了
-        m_pNextPageBtn->setEnabled(false);
+        int nCurPage = _proxy->currentPageNo();
+        if (nCurPage == 0)  //  已经是第一页了
+            m_pPrePageBtn->setEnabled(false);
+        else if (nCurPage == totalPage) {   //  已经是最后一页了
+            m_pNextPageBtn->setEnabled(false);
+        }
+
+        SlotDocFilePageChange(QString::number(nCurPage));
     }
-
-    SlotDocFilePageChange(QString::number(nCurPage));
 }
-
 //  按钮点击 上一页
 void PagingWidget::slotPrePage()
 {
