@@ -1980,8 +1980,10 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, u
                 double topspace = (d->m_widgets.at(ipage)->height() - curheight) / 2;
                 double leftspace = (d->m_widgets.at(ipage)->width() - curwidth) / 2;
                 int widgetheight = frameRect().height();
-                double leftposition = d->m_scale * realtop + leftspace;
-                yvalue = d->m_widgets.at(ipage)->y() + topspace + leftposition;
+                double leftposition = curwidth * realleft + leftspace;
+                double topposition = curheight * realtop + topspace;
+                yvalue = d->m_widgets.at(ipage)->y() + topposition;
+                qDebug() << realleft << realtop << leftposition << topposition << yvalue;
                 //横向有缩放
                 if (frameRect().width() < curwidth) {
                     if (leftposition > frameRect().width()) {
@@ -2016,7 +2018,7 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, u
 
         }
     }
-
+    qDebug() << "--------" << xvalue << yvalue;
     QScrollBar *scrollBar_X = horizontalScrollBar();
     if (scrollBar_X)
         scrollBar_X->setValue(xvalue);
