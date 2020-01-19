@@ -318,7 +318,7 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
         QString t_uuid = t_widget->noteUUId();
         int page = t_widget->nPageIndex();
 
-        auto pDocProxy = DocummentFileHelper::instance();
+        auto pDocProxy = DocummentProxy::instance();
         if (pDocProxy) {
             pDocProxy->jumpToHighLight(t_uuid, page);
         }

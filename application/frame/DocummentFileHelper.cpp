@@ -744,14 +744,14 @@ QString DocummentFileHelper::addAnnotation(const QPoint &startpos, const QPoint 
     return strUuid;
 }
 
-void DocummentFileHelper::changeAnnotationColor(const int &ipage, const QString &uuid, const QColor &color)
-{
-    if (!DocummentProxy::instance()) {
-        return ;
-    }
-    DataManager::instance()->setBIsUpdate(true);
-    DocummentProxy::instance()->changeAnnotationColor(ipage, uuid, color);
-}
+//void DocummentFileHelper::changeAnnotationColor(const int &ipage, const QString &uuid, const QColor &color)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return ;
+//    }
+//    DataManager::instance()->setBIsUpdate(true);
+//    DocummentProxy::instance()->changeAnnotationColor(ipage, uuid, color);
+//}
 
 //bool DocummentFileHelper::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 //{
@@ -796,14 +796,15 @@ void DocummentFileHelper::setAnnotationText(const int &ipage, const QString &str
 //    DocummentProxy::instance()->getAnnotationText(struuid, strtext, ipage);
 //}
 
-void DocummentFileHelper::jumpToHighLight(const QString &uuid, const int &ipage)
-{
-    if (!DocummentProxy::instance()) {
-        return ;
-    }
-    DataManager::instance()->setBIsUpdate(true);
-    DocummentProxy::instance()->jumpToHighLight(uuid, ipage);
-}
+//void DocummentFileHelper::jumpToHighLight(const QString &uuid, const int &ipage)
+//{
+//    qDebug() << __FUNCTION__ << "               123";
+//    if (!DocummentProxy::instance()) {
+//        return ;
+//    }
+//    DataManager::instance()->setBIsUpdate(true);
+//    DocummentProxy::instance()->jumpToHighLight(uuid, ipage);
+//}
 
 //void DocummentFileHelper::search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color)
 //{

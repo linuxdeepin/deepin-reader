@@ -500,6 +500,10 @@ void FileViewWidget::onFileAddAnnotation(const QString &msgContent)
 //  更新高亮颜色
 void FileViewWidget::onFileUpdateAnnotation(const QString &msgContent)
 {
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (!_proxy)
+        return;
+
     QStringList contentList = msgContent.split(",", QString::SkipEmptyParts);
     if (contentList.size() == 3) {
         QString sIndex = contentList.at(0);
@@ -509,7 +513,8 @@ void FileViewWidget::onFileUpdateAnnotation(const QString &msgContent)
         int iIndex = sIndex.toInt();
         QColor color = DataManager::instance()->getLightColorList().at(iIndex);
 
-        m_pDocummentFileHelper->changeAnnotationColor(sPage.toInt(), sUuid, color);
+        _proxy->changeAnnotationColor(sPage.toInt(), sUuid, color);     //  更新高亮顏色,  是对文档进行了操作
+        DataManager::instance()->setBIsUpdate(true);
     }
 }
 

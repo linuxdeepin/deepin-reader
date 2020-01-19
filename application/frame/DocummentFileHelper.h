@@ -109,13 +109,13 @@ public:
 public:
 //    void getAllAnnotation(QList<stHighlightContent> &listres);
     QString addAnnotation(const QPoint &startpos, const QPoint &endpos, const QColor &color = Qt::yellow);
-    void changeAnnotationColor(const int &ipage, const QString &uuid, const QColor &color);
+//    void changeAnnotationColor(const int &ipage, const QString &uuid, const QColor &color);
 //    bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
     void removeAnnotation(const QString &struuid, const int &ipage = -1);
     QString removeAnnotation(const QPoint &pos);
     void setAnnotationText(const int &ipage, const QString &struuid, const QString &strtext);
 //    void getAnnotationText(const QString &struuid, QString &strtext, const int &ipage);
-    void jumpToHighLight(const QString &uuid, const int &ipage);
+//    void jumpToHighLight(const QString &uuid, const int &ipage);
 
 public:
 //    void search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color);
