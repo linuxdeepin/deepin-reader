@@ -148,58 +148,63 @@ void DataManager::settrCurrentTheme(const QString &strCurrentTheme)
 
 void DataManager::setFontScale(const QString &scale)
 {
-    if (m_historyMsg.m_strScale != scale) {
-        m_historyMsg.m_strScale = scale;
+    if (m_historyMsg.m_strScale != "" && m_historyMsg.m_strScale != scale) {
         m_bIsUpdate = true;
     }
+    m_historyMsg.m_strScale = scale;
 }
 
 void DataManager::setFontDoubPage(const QString &doubPage)
 {
-    if (m_historyMsg.m_strDoubPage != doubPage) {
-        m_historyMsg.m_strDoubPage = doubPage;
+    if (m_historyMsg.m_strDoubPage != "" && m_historyMsg.m_strDoubPage != doubPage) {
         m_bIsUpdate = true;
     }
+    m_historyMsg.m_strDoubPage = doubPage;
 }
 
 void DataManager::setFontFit(const QString &fit)
 {
-    if (m_historyMsg.m_strFit != fit) {
-        m_historyMsg.m_strFit = fit;
+    if (m_historyMsg.m_strFit != "" && m_historyMsg.m_strFit != fit) {
         m_bIsUpdate = true;
     }
+    m_historyMsg.m_strFit = fit;
 }
 
 void DataManager::setFontRotate(const QString &rotate)
 {
-    if (m_historyMsg.m_strRotate != rotate) {
-        m_historyMsg.m_strRotate = rotate;
+    if (m_historyMsg.m_strRotate != "" && m_historyMsg.m_strRotate != rotate) {
         m_bIsUpdate = true;
     }
+    m_historyMsg.m_strRotate = rotate;
 }
 
 void DataManager::setShowLeft(const QString &showLeft)
 {
-    if (m_historyMsg.m_strShowLeft != showLeft) {
-        m_historyMsg.m_strShowLeft = showLeft;
+    if (m_historyMsg.m_strShowLeft != "" && m_historyMsg.m_strShowLeft != showLeft) {
         m_bIsUpdate = true;
     }
+    m_historyMsg.m_strShowLeft = showLeft;
 }
 
 void DataManager::setListIndex(const QString &listIndex)
 {
-    if (m_historyMsg.m_strListIndex != listIndex) {
-        m_historyMsg.m_strListIndex = listIndex;
+    if (m_historyMsg.m_strListIndex != "" && m_historyMsg.m_strListIndex != listIndex) {
         m_bIsUpdate = true;
     }
+    m_historyMsg.m_strListIndex = listIndex;
 }
 
 void DataManager::setCurPage(const QString &curPage)
 {
-    if (m_historyMsg.m_strCurPage != curPage) {
-        m_historyMsg.m_strCurPage = curPage;
+    if (m_historyMsg.m_strCurPage != "" && m_historyMsg.m_strCurPage != curPage) {
         m_bIsUpdate = true;
     }
+    m_historyMsg.m_strCurPage = curPage;
+}
+
+void DataManager::setHistoryMsg(const st_fileHistoryMsg &historyMsg)
+{
+    m_historyMsg = historyMsg;
 }
 
 QList<QKeySequence> DataManager::getPKeyList() const

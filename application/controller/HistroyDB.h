@@ -46,7 +46,7 @@ public:
     void updateFileFontMsg(const st_fileHistoryMsg &, const QString filePath = "");
     void saveFileFontMsg(const st_fileHistoryMsg &, const QString filePath = "");
     void saveAsFileFontMsg(const st_fileHistoryMsg &, const QString filePath = "");
-    void getFileFontMsg(st_fileHistoryMsg &, const QString filePath = "");
+    bool getFileFontMsg(st_fileHistoryMsg &, const QString filePath = "");
 };
 
 #endif // CONTROLLER_HISTROYDB_H

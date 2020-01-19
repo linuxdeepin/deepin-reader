@@ -178,7 +178,7 @@ void HistroyDB::saveAsFileFontMsg(const st_fileHistoryMsg &msg, const QString fi
     insertFileFontMsg(msg, filePath);
 }
 
-void HistroyDB::getFileFontMsg(st_fileHistoryMsg &msg, const QString filePath)
+bool HistroyDB::getFileFontMsg(st_fileHistoryMsg &msg, const QString filePath)
 {
     const QSqlDatabase db = getDatabase();
     if (db.isValid()) {
@@ -196,7 +196,11 @@ void HistroyDB::getFileFontMsg(st_fileHistoryMsg &msg, const QString filePath)
                 msg.m_strShowLeft = query.value(4).toString();    //  左侧列表窗口是否显示
                 msg.m_strListIndex = query.value(5).toString();   // 在哪个列表
                 msg.m_strCurPage = query.value(6).toString();     // 文档当前页
+                return false;
             }
+        } else {
+            return true;
         }
     }
+    return true;
 }

@@ -160,10 +160,7 @@ public:
     {
         return m_historyMsg;
     }
-    inline void setHistoryMsg(const st_fileHistoryMsg &historyMsg)
-    {
-        m_historyMsg = historyMsg;
-    }
+    void setHistoryMsg(const st_fileHistoryMsg &historyMsg);
 
     QList<QKeySequence> getPKeyList() const;
 
@@ -181,7 +178,7 @@ private:
     QSize m_smallNoteSize;              // 注释小窗体的大小
     QColor m_selectColor;               // 高亮颜色
     bool m_bThumbnIsShow = false;       // 左侧缩略图是否展开
-
+    bool m_bFirstOpenFile = false;      // 初次打开某个文档
     QList<QKeySequence>     m_pKeyList;      //  快捷键对应
     QList<QKeySequence>     m_pLeftKeyList;      // left 快捷键对应
     st_fileHistoryMsg       m_historyMsg;// 文档字号信息
