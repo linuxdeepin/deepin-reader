@@ -20,8 +20,6 @@
 
 #include "docview/docummentproxy.h"
 
-#include "frame/DocummentFileHelper.h"
-
 PagingWidget::PagingWidget(CustomWidget *parent)
     : CustomWidget(QString("PagingWidget"), parent)
 {

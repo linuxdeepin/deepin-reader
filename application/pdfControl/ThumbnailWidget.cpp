@@ -149,22 +149,6 @@ void ThumbnailWidget::initConnection()
 
 }
 
-/**
- * @brief ThumbnailWidget::jumpToSpecifiedPage
- * 跳转到指定页
- * @param page
- */
-//void ThumbnailWidget::jumpToSpecifiedPage(const int &page)
-//{
-//    //  跳转的页码 必须 大于0, 且 小于 总页码数
-//    int nPageSize = DocummentFileHelper::instance()->getPageSNum();
-//    if (page < 0 || page == nPageSize) {
-//        return;
-//    }
-
-//    DocummentFileHelper::instance()->pageJump(page);
-//}
-
 //  文件  当前页变化, 获取与 文档页  对应的 item, 设置 选中该item, 绘制item
 void ThumbnailWidget::slotDocFilePageChanged(const QString &sPage)
 {

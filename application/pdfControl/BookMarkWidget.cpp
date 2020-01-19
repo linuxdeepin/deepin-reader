@@ -18,10 +18,10 @@
  */
 #include "BookMarkWidget.h"
 
-#include "controller/DataManager.h"
-#include "frame/DocummentFileHelper.h"
-#include "BookMarkItemWidget.h"
 #include "application.h"
+#include "BookMarkItemWidget.h"
+
+#include "controller/DataManager.h"
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
 
