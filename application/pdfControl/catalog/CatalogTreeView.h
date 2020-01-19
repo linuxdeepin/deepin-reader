@@ -57,7 +57,7 @@ private:
     void initConnections();
     void parseCatalogData(const Section &, QStandardItem *);
 
-    QList<QStandardItem *>   getItemList(const QString &, const int &);
+    QList<QStandardItem *>   getItemList(const QString &, const int &, const qreal  &realleft, const qreal &realtop);
 
 private slots:
     void SlotOpenFileOk();

@@ -61,7 +61,7 @@ private slots:
 
 private:
     void initConnections();
-    void onClickPageLink(Page::Link *pLink);
+    void __ClickPageLink(Page::Link *pLink);
     void onShowNoteTipWidget(const QPoint &docPos);
 
     void onMagnifying(const QString &);

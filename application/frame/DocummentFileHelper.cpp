@@ -1,19 +1,42 @@
+/*
+ * Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
+ *
+ * Author:     wangzhxiaun
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "DocummentFileHelper.h"
+
 #include <DApplication>
 #include <QClipboard>
-#include <QDesktopServices>
-#include "subjectObserver/MsgHeader.h"
+//#include <QDesktopServices>
 #include <DFileDialog>
-#include "utils/utils.h"
 #include <DDialog>
 #include <QBitmap>
+
 #include "subjectObserver/ModuleHeader.h"
+#include "subjectObserver/MsgHeader.h"
 
 #include "controller/DBManager.h"
 #include "controller/NotifySubject.h"
+
 #include "FileFormatHelper.h"
 #include "utils/PublicFunction.h"
-#include "controller/AppSetting.h"
+#include "utils/utils.h"
+
+//#include "controller/AppSetting.h"
 
 #include "application.h"
 
@@ -172,41 +195,41 @@ void DocummentFileHelper::setViewFocus()
     DocummentProxy::instance()->setViewFocus();
 }
 
-bool DocummentFileHelper::mouseSelectText(const QPoint &start, const QPoint &stop)
-{
-    if (!DocummentProxy::instance()) {
-        return false;
-    }
+//bool DocummentFileHelper::mouseSelectText(const QPoint &start, const QPoint &stop)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return false;
+//    }
 
-    return DocummentProxy::instance()->mouseSelectText(start, stop);
-}
+//    return DocummentProxy::instance()->mouseSelectText(start, stop);
+//}
 
-bool DocummentFileHelper::mouseBeOverText(const QPoint &point)
-{
-    if (!DocummentProxy::instance()) {
-        return false;
-    }
+//bool DocummentFileHelper::mouseBeOverText(const QPoint &point)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return false;
+//    }
 
-    return DocummentProxy::instance()->mouseBeOverText(point);
-}
+//    return DocummentProxy::instance()->mouseBeOverText(point);
+//}
 
-Page::Link *DocummentFileHelper::mouseBeOverLink(const QPoint &point)
-{
-    if (!DocummentProxy::instance()) {
-        return nullptr;
-    }
+//Page::Link *DocummentFileHelper::mouseBeOverLink(const QPoint &point)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return nullptr;
+//    }
 
-    return DocummentProxy::instance()->mouseBeOverLink(point);
-}
+//    return DocummentProxy::instance()->mouseBeOverLink(point);
+//}
 
-void DocummentFileHelper::mouseSelectTextClear()
-{
-    if (!DocummentProxy::instance()) {
-        return ;
-    }
+//void DocummentFileHelper::mouseSelectTextClear()
+//{
+//    if (!DocummentProxy::instance()) {
+//        return ;
+//    }
 
-    DocummentProxy::instance()->mouseSelectTextClear();
-}
+//    DocummentProxy::instance()->mouseSelectTextClear();
+//}
 
 bool DocummentFileHelper::getSelectTextString(QString &st)
 {
@@ -545,51 +568,51 @@ DocummentProxy *DocummentFileHelper::getDocummentProxy() const
 }
 
 
-//  文档　跳转页码　．　打开浏览器
-void DocummentFileHelper::onClickPageLink(Page::Link *pLink)
-{
-//    if (!DocummentProxy::instance()) {
-//        return;
+////  文档　跳转页码　．　打开浏览器
+//void DocummentFileHelper::onClickPageLink(Page::Link *pLink)
+//{
+////    if (!DocummentProxy::instance()) {
+////        return;
+////    }
+//    Page::LinkType_EM linkType = pLink->type;
+//    if (linkType == Page::LinkType_NULL) {
+
+//    } else if (linkType == Page::LinkType_Goto) {
+//        int page = pLink->page - 1;
+//        __PageJump(page);
+//    } else if (linkType == Page::LinkType_GotoOtherFile) {
+
+//    } else if (linkType == Page::LinkType_Browse) {
+//        QString surlOrFileName = pLink->urlOrFileName;
+//        QDesktopServices::openUrl(QUrl(surlOrFileName, QUrl::TolerantMode));
+//    } else if (linkType == Page::LinkType_Execute) {
+
 //    }
-    Page::LinkType_EM linkType = pLink->type;
-    if (linkType == Page::LinkType_NULL) {
+//}
 
-    } else if (linkType == Page::LinkType_Goto) {
-        int page = pLink->page - 1;
-        __PageJump(page);
-    } else if (linkType == Page::LinkType_GotoOtherFile) {
+//QPoint DocummentFileHelper::global2RelativePoint(const QPoint &globalpoint)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return QPoint(0, 0);
+//    }
+//    return  DocummentProxy::instance()->global2RelativePoint(globalpoint);
+//}
 
-    } else if (linkType == Page::LinkType_Browse) {
-        QString surlOrFileName = pLink->urlOrFileName;
-        QDesktopServices::openUrl(QUrl(surlOrFileName, QUrl::TolerantMode));
-    } else if (linkType == Page::LinkType_Execute) {
+//bool DocummentFileHelper::pageMove(const double &mvx, const double &mvy)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return false;
+//    }
+//    return DocummentProxy::instance()->pageMove(mvx, mvy);
+//}
 
-    }
-}
-
-QPoint DocummentFileHelper::global2RelativePoint(const QPoint &globalpoint)
-{
-    if (!DocummentProxy::instance()) {
-        return QPoint(0, 0);
-    }
-    return  DocummentProxy::instance()->global2RelativePoint(globalpoint);
-}
-
-bool DocummentFileHelper::pageMove(const double &mvx, const double &mvy)
-{
-    if (!DocummentProxy::instance()) {
-        return false;
-    }
-    return DocummentProxy::instance()->pageMove(mvx, mvy);
-}
-
-int DocummentFileHelper::pointInWhichPage(const QPoint &pos)
-{
-    if (!DocummentProxy::instance()) {
-        return -1;
-    }
-    return DocummentProxy::instance()->pointInWhichPage(pos);
-}
+//int DocummentFileHelper::pointInWhichPage(const QPoint &pos)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return -1;
+//    }
+//    return DocummentProxy::instance()->pointInWhichPage(pos);
+//}
 
 int DocummentFileHelper::getPageSNum()
 {
@@ -632,21 +655,21 @@ QImage DocummentFileHelper::roundImage(const QPixmap &img_in, const int &radius)
     return image.toImage();
 }
 
-bool DocummentFileHelper::showMagnifier(const QPoint &point)
-{
-    if (!DocummentProxy::instance()) {
-        return false;
-    }
-    return  DocummentProxy::instance()->showMagnifier(point);
-}
+//bool DocummentFileHelper::showMagnifier(const QPoint &point)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return false;
+//    }
+//    return  DocummentProxy::instance()->showMagnifier(point);
+//}
 
-bool DocummentFileHelper::closeMagnifier()
-{
-    if (!DocummentProxy::instance()) {
-        return false;
-    }
-    return DocummentProxy::instance()->closeMagnifier();
-}
+//bool DocummentFileHelper::closeMagnifier()
+//{
+//    if (!DocummentProxy::instance()) {
+//        return false;
+//    }
+//    return DocummentProxy::instance()->closeMagnifier();
+//}
 
 bool DocummentFileHelper::setBookMarkState(const int &page, const bool &state)
 {
@@ -674,21 +697,21 @@ void DocummentFileHelper::setScaleRotateViewModeAndShow(double scale, RotateType
 //    DocummentProxy::instance()->scaleRotateAndShow(scale, rotate);
 //}
 
-double DocummentFileHelper::adaptWidthAndShow(const double &width)
-{
-    if (!DocummentProxy::instance()) {
-        return 0.0;
-    }
-    return DocummentProxy::instance()->adaptWidthAndShow(width);
-}
+//double DocummentFileHelper::adaptWidthAndShow(const double &width)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return 0.0;
+//    }
+//    return DocummentProxy::instance()->adaptWidthAndShow(width);
+//}
 
-double DocummentFileHelper::adaptHeightAndShow(const double &height)
-{
-    if (!DocummentProxy::instance()) {
-        return 0.0;
-    }
-    return DocummentProxy::instance()->adaptHeightAndShow(height);
-}
+//double DocummentFileHelper::adaptHeightAndShow(const double &height)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return 0.0;
+//    }
+//    return DocummentProxy::instance()->adaptHeightAndShow(height);
+//}
 
 void DocummentFileHelper::clearsearch()
 {
@@ -727,13 +750,13 @@ void DocummentFileHelper::changeAnnotationColor(const int &ipage, const QString 
     DocummentProxy::instance()->changeAnnotationColor(ipage, uuid, color);
 }
 
-bool DocummentFileHelper::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
-{
-    if (!DocummentProxy::instance()) {
-        return false;
-    }
-    return DocummentProxy::instance()->annotationClicked(pos, strtext, struuid);
-}
+//bool DocummentFileHelper::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return false;
+//    }
+//    return DocummentProxy::instance()->annotationClicked(pos, strtext, struuid);
+//}
 
 void DocummentFileHelper::removeAnnotation(const QString &struuid, const int &ipage)
 {

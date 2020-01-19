@@ -1,3 +1,22 @@
+/*
+ * Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
+ *
+ * Author:     wangzhxiaun
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef DOCUMMENTFILEHELPER_H
 #define DOCUMMENTFILEHELPER_H
 
@@ -48,17 +67,17 @@ public:
     void setViewFocus();
 
 public:
-    bool mouseSelectText(const QPoint &start, const QPoint &stop);
-    bool mouseBeOverText(const QPoint &point);
-    Page::Link *mouseBeOverLink(const QPoint &point);
-    void mouseSelectTextClear();
+//    bool mouseSelectText(const QPoint &start, const QPoint &stop);
+//    bool mouseBeOverText(const QPoint &point);
+//    Page::Link *mouseBeOverLink(const QPoint &point);
+//    void mouseSelectTextClear();
     bool getSelectTextString(QString &st);
 
 public:
-    void onClickPageLink(Page::Link *pLink);
-    QPoint global2RelativePoint(const QPoint &globalpoint);
-    bool pageMove(const double &mvx, const double &mvy);
-    int  pointInWhichPage(const QPoint &pos);
+//    void onClickPageLink(Page::Link *pLink);
+//    QPoint global2RelativePoint(const QPoint &globalpoint);
+//    bool pageMove(const double &mvx, const double &mvy);
+//    int  pointInWhichPage(const QPoint &pos);
     int  getPageSNum();
     int currentPageNo();
 //    bool pageJump(const int &pagenum);
@@ -68,8 +87,8 @@ private:
     QImage roundImage(const QPixmap &img_in, const int &radius);
 
 public:
-    bool showMagnifier(const QPoint &point);
-    bool closeMagnifier();
+//    bool showMagnifier(const QPoint &point);
+//    bool closeMagnifier();
 
     bool setBookMarkState(const int &page, const bool &state);
 
@@ -79,8 +98,8 @@ public:
 //    void scaleRotateAndShow(const double &scale, const RotateType_EM &rotate);
 
 public:
-    double adaptWidthAndShow(const double &width);
-    double adaptHeightAndShow(const double &height);
+//    double adaptWidthAndShow(const double &width);
+//    double adaptHeightAndShow(const double &height);
 
 public:
     void clearsearch();
@@ -89,7 +108,7 @@ public:
     void getAllAnnotation(QList<stHighlightContent> &listres);
     QString addAnnotation(const QPoint &startpos, const QPoint &endpos, const QColor &color = Qt::yellow);
     void changeAnnotationColor(const int &ipage, const QString &uuid, const QColor &color);
-    bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
+//    bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
     void removeAnnotation(const QString &struuid, const int &ipage = -1);
     QString removeAnnotation(const QPoint &pos);
     void setAnnotationText(const int &ipage, const QString &struuid, const QString &strtext);

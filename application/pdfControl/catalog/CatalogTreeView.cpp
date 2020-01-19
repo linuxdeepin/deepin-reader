@@ -96,12 +96,12 @@ void CatalogTreeView::parseCatalogData(const Section &ol, QStandardItem *parentI
     if (model) {
         foreach (auto s, ol.children) { //  2级显示
             if (s.link.page > 0) {
-                auto itemList = getItemList(s.title, s.link.page);
+                auto itemList = getItemList(s.title, s.link.page, s.link.left, s.link.top);
                 parentItem->appendRow(itemList);
 
                 foreach (auto s1, s.children) { //  3级显示
                     if (s1.link.page > 0) {
-                        auto itemList1 = getItemList(s1.title, s1.link.page);
+                        auto itemList1 = getItemList(s1.title, s1.link.page, s.link.left, s.link.top);
                         itemList.at(0)->appendRow(itemList1);
                     }
                 }
@@ -111,18 +111,24 @@ void CatalogTreeView::parseCatalogData(const Section &ol, QStandardItem *parentI
 }
 
 //  获取 一行的 三列数据
-QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const int &page)
+QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const int &page, const qreal  &realleft, const qreal &realtop)
 {
     auto item = new QStandardItem(title);
     item->setData(page);
+    item->setData(realleft, Qt::UserRole + 2);
+    item->setData(realtop, Qt::UserRole + 3);
 
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
     auto item1 = new QStandardItem();
     item1->setData(page);
+    item1->setData(realleft, Qt::UserRole + 2);
+    item1->setData(realtop, Qt::UserRole + 3);
 
     auto item2 = new QStandardItem(QString::number(page));
     item2->setData(page);
+    item2->setData(realleft, Qt::UserRole + 2);
+    item2->setData(realtop, Qt::UserRole + 3);
 
     item2->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
@@ -136,28 +142,43 @@ void CatalogTreeView::SlotOpenFileOk()
     if (model) {
         model->clear();
 
-        Outline ol = DocummentFileHelper::instance()->getDocummentProxy()->outline();
-        foreach (const Section &s, ol) {   //  1 级显示
-            if (s.link.page > 0) {
-                auto itemList = getItemList(s.title, s.link.page);
-                model->appendRow(itemList);
+        DocummentProxy *_proxy = DocummentProxy::instance();
+        if (_proxy) {
 
-                parseCatalogData(s, itemList.at(0));
+            Outline ol = _proxy->outline();
+            foreach (const Section &s, ol) {   //  1 级显示
+                if (s.link.page > 0) {
+                    auto itemList = getItemList(s.title, s.link.page, s.link.left, s.link.top);
+                    model->appendRow(itemList);
+
+                    parseCatalogData(s, itemList.at(0));
+                }
             }
-        }
 
-        int nCurPage = DocummentFileHelper::instance()->currentPageNo();
-        SlotFilePageChanged(QString::number(nCurPage));
+            int nCurPage = DocummentFileHelper::instance()->currentPageNo();
+            SlotFilePageChanged(QString::number(nCurPage));
+        }
     }
 }
 
 //  点击 任一行, 实现 跳转页面
 void CatalogTreeView::SlotClicked(const QModelIndex &index)
 {
-    int nPage = index.data(Qt::UserRole + 1).toInt();
-    nPage--;
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
+        int nPage = index.data(Qt::UserRole + 1).toInt();
+        nPage--;
 
-    notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nPage));
+        double left = index.data(Qt::UserRole + 2).toDouble();
+        double top = index.data(Qt::UserRole + 3).toDouble();
+
+
+        qDebug() << nPage << "      " << left << "      " << top;
+
+        _proxy->jumpToOutline(left, top, nPage);
+
+    }
+//    notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nPage));
 }
 
 //  文档页变化, 目录高亮随之变化

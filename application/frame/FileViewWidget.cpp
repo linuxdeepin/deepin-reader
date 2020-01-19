@@ -1,15 +1,18 @@
 #include "FileViewWidget.h"
+
 #include <QClipboard>
 #include <QGridLayout>
-#include "application.h"
-#include "controller/DataManager.h"
-
+#include <QDesktopServices>
 #include <DDialog>
-#include <QPrintPreviewDialog>
-#include <QPrinter>
-#include <QPrinterInfo>
+//#include <QPrintPreviewDialog>
+//#include <QPrinter>
+//#include <QPrinterInfo>
+
+#include "application.h"
+
 #include "docview/docummentproxy.h"
 
+#include "controller/DataManager.h"
 #include "controller/AppSetting.h"
 #include "frame/DocummentFileHelper.h"
 #include "mainShow/DefaultOperationMenu.h"
@@ -67,6 +70,10 @@ void FileViewWidget::initWidget()
 //  鼠标移动
 void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
 {
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (!_proxy)
+        return;
+
     //  处于幻灯片模式下
     if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
         emit(sigShowPlayCtrl(true));
@@ -74,7 +81,7 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
     }
 
     QPoint globalPos = event->globalPos();
-    QPoint docGlobalPos = m_pDocummentFileHelper->global2RelativePoint(globalPos);
+    QPoint docGlobalPos = _proxy->global2RelativePoint(globalPos);
     //begin>>kyz 2019-12-19 注释图标移动测试
 //    if (m_bmousepressed && event->buttons()&Qt::LeftButton && !struidtmp.isEmpty()) {
 
@@ -87,23 +94,23 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
             int mvX = mvPoint.x();
             int mvY = mvPoint.y();
 
-            m_pDocummentFileHelper->pageMove(mvX, mvY);
+            _proxy->pageMove(mvX, mvY);
 
             m_pHandleMoveStartPoint = globalPos;
         }
     } else if (m_nCurrentHandelState == Magnifier_State) {  //  当前是放大镜状态
-        m_pDocummentFileHelper->showMagnifier(docGlobalPos);
+        _proxy->showMagnifier(docGlobalPos);
     } else {
         if (m_bSelectOrMove) {  //  鼠标已经按下，　则选中所经过的文字
             m_pEndSelectPoint = docGlobalPos;
-            m_pDocummentFileHelper->mouseSelectText(m_pStartPoint, m_pEndSelectPoint);
+            _proxy->mouseSelectText(m_pStartPoint, m_pEndSelectPoint);
         } else {
             //  首先判断文档划过属性
-            auto pLink = m_pDocummentFileHelper->mouseBeOverLink(docGlobalPos);
+            auto pLink = _proxy->mouseBeOverLink(docGlobalPos);
             if (pLink) {
                 setCursor(QCursor(Qt::PointingHandCursor));
             } else {
-                if (m_pDocummentFileHelper->mouseBeOverText(docGlobalPos)) {
+                if (_proxy->mouseBeOverText(docGlobalPos)) {
                     m_bIsHandleSelect = true;
                     setCursor(QCursor(Qt::IBeamCursor));
 
@@ -124,6 +131,10 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
 //  鼠标左键 按下
 void FileViewWidget::mousePressEvent(QMouseEvent *event)
 {
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (!_proxy)
+        return;
+
     m_bmousepressed = true;
     //  处于幻灯片模式下
     if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
@@ -152,15 +163,15 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
             m_pHandleMoveStartPoint = globalPos;  //  变成手，　需要的是　相对坐标
             m_bSelectOrMove = true;
         } else {
-            QPoint docGlobalPos = m_pDocummentFileHelper->global2RelativePoint(globalPos);
+            QPoint docGlobalPos = _proxy->global2RelativePoint(globalPos);
 
             //  点击的时候　先判断　点击处　　是否有链接之类
-            auto pLink = m_pDocummentFileHelper->mouseBeOverLink(docGlobalPos);
+            auto pLink = _proxy->mouseBeOverLink(docGlobalPos);
             if (pLink) {
-                m_pDocummentFileHelper->onClickPageLink(pLink);
+                __ClickPageLink(pLink);
             } else {
                 if (m_nCurrentHandelState == Default_State) {
-                    m_pDocummentFileHelper->mouseSelectTextClear();  //  清除之前选中的文字高亮
+                    _proxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
 
                     if (m_pNoteTipWidget && m_pNoteTipWidget->isVisible()) {
                         m_pNoteTipWidget->hide();
@@ -180,6 +191,10 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
 //  鼠标松开
 void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 {
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (!_proxy)
+        return;
+
     m_bmousepressed = false;
     //  处于幻灯片模式下
     if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
@@ -197,24 +212,23 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 
     if (m_bSelectOrMove) {
         //判断鼠标左键松开的位置有没有高亮
-        qDebug() << __FUNCTION__ << m_pDocummentFileHelper->global2RelativePoint(event->globalPos()) << m_pStartPoint;
+//        qDebug() << __FUNCTION__ << _proxy->global2RelativePoint(event->globalPos()) << m_pStartPoint;
         QPoint globalPos = event->globalPos();
-        QPoint docGlobalPos = m_pDocummentFileHelper->global2RelativePoint(globalPos);
+        QPoint docGlobalPos = _proxy->global2RelativePoint(globalPos);
         DataManager::instance()->setMousePressLocal(false, globalPos);
         //添加其实结束point是否为同一个，不是同一个说明不是点击可能是选择文字
         if (nBtn == Qt::LeftButton && docGlobalPos == m_pStartPoint) {
             // 判断鼠标点击的地方是否有高亮
             QString selectText, t_strUUid;
 
-            bool bIsHighLightReleasePoint =
-                m_pDocummentFileHelper->annotationClicked(docGlobalPos, selectText, t_strUUid);
+            bool bIsHighLightReleasePoint = _proxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
             DataManager::instance()->setMousePressLocal(bIsHighLightReleasePoint, globalPos);
             if (bIsHighLightReleasePoint) {
                 if (m_pNoteTipWidget && m_pNoteTipWidget->isVisible()) {
                     m_pNoteTipWidget->hide();
                 }
 
-                int nPage = m_pDocummentFileHelper->pointInWhichPage(docGlobalPos);
+                int nPage = _proxy->pointInWhichPage(docGlobalPos);
                 QString t_strContant =
                     t_strUUid.trimmed() + QString("%1%") + QString::number(nPage);
                 notifyMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
@@ -319,6 +333,10 @@ void FileViewWidget::slotDealWithKeyMsg(const QString &msgContent)
 //  弹出 自定义 菜单
 void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 {
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (!_proxy)
+        return;
+
     //  处于幻灯片模式下
     if (DataManager::instance()->CurShowState() == FILE_SLIDE)
         return;
@@ -335,14 +353,13 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
     m_pDocummentFileHelper->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
 
     QPoint tempPoint = this->mapToGlobal(point);
-    QPoint pRightClickPoint = m_pDocummentFileHelper->global2RelativePoint(tempPoint);
+    QPoint pRightClickPoint = _proxy->global2RelativePoint(tempPoint);
 
     //  右键鼠标点 是否有高亮区域
     QString sAnnotationText = "", struuid = "";
-    bool bIsHighLight =
-        m_pDocummentFileHelper->annotationClicked(pRightClickPoint, sAnnotationText, struuid);
+    bool bIsHighLight = _proxy->annotationClicked(pRightClickPoint, sAnnotationText, struuid);
 
-    int nPage = m_pDocummentFileHelper->pointInWhichPage(pRightClickPoint);
+    int nPage = _proxy->pointInWhichPage(pRightClickPoint);
     if (sSelectText != "" || bIsHighLight) {  //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
         if (nullptr == m_operatemenu) {
@@ -365,9 +382,13 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 //  放大镜　控制
 void FileViewWidget::onMagnifying(const QString &data)
 {
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (!_proxy)
+        return;
+
     int nRes = data.toInt();
     if (nRes == 1) {
-        m_pDocummentFileHelper->mouseSelectTextClear();  //  清除之前选中的文字高亮
+        _proxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
 
         m_nCurrentHandelState = Magnifier_State;
         this->setCursor(Qt::BlankCursor);
@@ -377,7 +398,7 @@ void FileViewWidget::onMagnifying(const QString &data)
             m_nCurrentHandelState = Default_State;
             this->setCursor(Qt::ArrowCursor);
 
-            m_pDocummentFileHelper->closeMagnifier();
+            _proxy->closeMagnifier();
         }
     }
 }
@@ -385,8 +406,12 @@ void FileViewWidget::onMagnifying(const QString &data)
 //  手势控制
 void FileViewWidget::onSetHandShape(const QString &data)
 {
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (!_proxy)
+        return;
+
     //  手型 切换 也需要将之前选中的文字清除 选中样式
-    m_pDocummentFileHelper->mouseSelectTextClear();
+    _proxy->mouseSelectTextClear();
     int nRes = data.toInt();
     if (nRes == 1) {  //  手形
         m_nCurrentHandelState = Handel_State;
@@ -487,6 +512,10 @@ void FileViewWidget::onFileRemoveAnnotation(const QString &msgContent)
 //  添加注释
 void FileViewWidget::onFileAddNote(const QString &msgContent)
 {
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (!_proxy)
+        return;
+
     QString sUuid = "", sNote = "", sPage = "";
     int ipage = 0;
     QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
@@ -506,9 +535,10 @@ void FileViewWidget::onFileAddNote(const QString &msgContent)
         QPoint tempPoint(sX.toInt(), sY.toInt());
         sUuid = m_pDocummentFileHelper->addAnnotation(m_pStartPoint, m_pEndSelectPoint,
                                                       color);  //  高亮 产生的 uuid
+
         //此判断是针对跨页选择多行并且是page页码从高到低
         if (m_pStartPoint.y() > m_pEndSelectPoint.y()) {
-            ipage = m_pDocummentFileHelper->pointInWhichPage(m_pStartPoint);
+            ipage = _proxy->pointInWhichPage(m_pStartPoint);
         }
     }
 
@@ -522,6 +552,10 @@ void FileViewWidget::onFileAddNote(const QString &msgContent)
 
 void FileViewWidget::onFileAddNote()
 {
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (!_proxy)
+        return;
+
     //  处于幻灯片模式下
     if (DataManager::instance()->CurShowState() == FILE_SLIDE)
         return;
@@ -545,7 +579,7 @@ void FileViewWidget::onFileAddNote()
         return;
     }
 
-    int nPage = m_pDocummentFileHelper->pointInWhichPage(m_pEndSelectPoint);
+    int nPage = _proxy->pointInWhichPage(m_pEndSelectPoint);
     QString msgContent = QString("%1").arg(nPage) + Constant::sQStringSep +
                          QString("%1").arg(m_pEndSelectPoint.x()) + Constant::sQStringSep +
                          QString("%1").arg(m_pEndSelectPoint.y());
@@ -596,14 +630,35 @@ void FileViewWidget::initConnections()
             SLOT(slotDealWithKeyMsg(const QString &)));
 }
 
+void FileViewWidget::__ClickPageLink(Page::Link *pLink)
+{
+    Page::LinkType_EM linkType = pLink->type;
+    if (linkType == Page::LinkType_NULL) {
+
+    } else if (linkType == Page::LinkType_Goto) {
+        int page = pLink->page - 1;
+        notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(page));
+    } else if (linkType == Page::LinkType_GotoOtherFile) {
+
+    } else if (linkType == Page::LinkType_Browse) {
+        QString surlOrFileName = pLink->urlOrFileName;
+        QDesktopServices::openUrl(QUrl(surlOrFileName, QUrl::TolerantMode));
+    } else if (linkType == Page::LinkType_Execute) {
+
+    }
+}
+
 //  显示 注释内容Tip
 void FileViewWidget::onShowNoteTipWidget(const QPoint &docPos)
 {
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (!_proxy)
+        return;
+
     QString selectText, t_strUUid;
-    bool bIsHighLightReleasePoint =
-        m_pDocummentFileHelper->annotationClicked(docPos, selectText, t_strUUid);
+    bool bIsHighLightReleasePoint = _proxy->annotationClicked(docPos, selectText, t_strUUid);
     if (bIsHighLightReleasePoint) {
-        int nPage = m_pDocummentFileHelper->pointInWhichPage(docPos);
+        int nPage = _proxy->pointInWhichPage(docPos);
         QString sContant = "";
         m_pDocummentFileHelper->getAnnotationText(t_strUUid, sContant, nPage);
         if (sContant != "") {
@@ -628,13 +683,17 @@ void FileViewWidget::onPrintFile()
 //  设置　窗口　自适应　宽＼高　度
 void FileViewWidget::onSetWidgetAdapt()
 {
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (!_proxy)
+        return;
+
     double nScale = 0.0;
     if (m_nAdapteState == WIDGET_State) {
         int nWidth = this->width();
-        nScale = m_pDocummentFileHelper->adaptWidthAndShow(nWidth);
+        nScale = _proxy->adaptWidthAndShow(nWidth);
     } else if (m_nAdapteState == HEIGHT_State) {
         int nHeight = this->height();
-        nScale = m_pDocummentFileHelper->adaptHeightAndShow(nHeight);
+        nScale = _proxy->adaptHeightAndShow(nHeight);
     }
 
     if (nScale != 0.0) {
