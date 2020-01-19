@@ -660,7 +660,7 @@ void FileViewWidget::onShowNoteTipWidget(const QPoint &docPos)
     if (bIsHighLightReleasePoint) {
         int nPage = _proxy->pointInWhichPage(docPos);
         QString sContant = "";
-        m_pDocummentFileHelper->getAnnotationText(t_strUUid, sContant, nPage);
+        _proxy->getAnnotationText(t_strUUid, sContant, nPage);
         if (sContant != "") {
             if (m_pNoteTipWidget == nullptr) {
                 m_pNoteTipWidget = new NoteTipWidget(this);

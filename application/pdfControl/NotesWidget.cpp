@@ -200,7 +200,7 @@ void NotesWidget::slotOpenFileOk()
         m_ThreadLoadImage.stopThreadRun();
     }
 
-    auto t_docPtr = DocummentFileHelper::instance();
+    auto t_docPtr = DocummentProxy::instance();
     if (!t_docPtr) {
         return;
     }

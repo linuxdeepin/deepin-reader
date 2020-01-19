@@ -289,7 +289,7 @@ void BookMarkWidget::deleteIndexPage(const int &pageIndex)
     pageList.removeOne(pageIndex);
     dApp->dbM->setBookMarkList(pageList);
 
-    auto dproxy = DocummentFileHelper::instance();
+    auto dproxy = DocummentProxy::instance();
     if (dproxy) {
         DataManager::instance()->setBIsUpdate(true);
         dproxy->setBookMarkState(pageIndex, false);
@@ -491,7 +491,7 @@ void BookMarkWidget::initConnection()
  */
 QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
 {
-    auto dproxy = DocummentFileHelper::instance();
+    auto dproxy = DocummentProxy::instance();
     if (nullptr == dproxy) {
         return nullptr;
     }

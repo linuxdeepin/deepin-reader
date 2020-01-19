@@ -153,7 +153,7 @@ void DocShowShellWidget::onShowNoteWidget(const QString &contant)
 
         QString sContant = "";
 
-        auto pHelper = DocummentFileHelper::instance();
+        auto pHelper = DocummentProxy::instance();
         if (pHelper) {
             pHelper->getAnnotationText(t_strUUid, sContant, t_page.toInt());
         }
@@ -292,7 +292,7 @@ void DocShowShellWidget::enterEvent(QEvent *event)
 {
     CustomWidget::enterEvent(event);
 
-    if (DocummentFileHelper::instance()) {
-        DocummentFileHelper::instance()->setViewFocus();
+    if (DocummentProxy::instance()) {
+        DocummentProxy::instance()->setViewFocus();
     }
 }

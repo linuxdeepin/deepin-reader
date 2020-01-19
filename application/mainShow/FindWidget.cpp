@@ -95,13 +95,19 @@ void FindWidget::handleContentChanged()
 
 void FindWidget::slotFindNextBtnClicked()
 {
-    DocummentFileHelper::instance()->findNext();
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
+        _proxy->findNext();
+    }
     this->raise();
 }
 
 void FindWidget::slotFindPrevBtnClicked()
 {
-    DocummentFileHelper::instance()->findPrev();
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
+        _proxy->findPrev();
+    }
     this->raise();
 }
 

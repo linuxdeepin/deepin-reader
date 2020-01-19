@@ -570,12 +570,17 @@ void FontMenu::calcRotateType()
  */
 void FontMenu::setScaleRotateViewModeAndShow()
 {
-    double scale = (m_nScale * 0.01);
-    ViewMode_EM viewmode = ViewMode_SinglePage;
-    if (m_bDoubPage) {
-        viewmode = ViewMode_FacingPage;
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
+
+        double scale = (m_nScale * 0.01);
+        ViewMode_EM viewmode = ViewMode_SinglePage;
+        if (m_bDoubPage) {
+            viewmode = ViewMode_FacingPage;
+        }
+
+        _proxy->setScaleRotateViewModeAndShow(scale, m_rotateType, viewmode);
     }
-    DocummentFileHelper::instance()->setScaleRotateViewModeAndShow(scale, m_rotateType, viewmode);
 }
 
 /**

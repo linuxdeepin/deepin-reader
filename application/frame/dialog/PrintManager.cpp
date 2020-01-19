@@ -61,25 +61,29 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
 {
     //  文档实际大小
     stFileInfo fileInfo;
-    DocummentFileHelper::instance()->docBasicInfo(fileInfo);
+    int nPageSize = 0;
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
+        _proxy->docBasicInfo(fileInfo);
 
-    int nPageSize = DocummentFileHelper::instance()->getPageSNum();  //  pdf 页数
+        nPageSize = _proxy->getPageSNum();  //  pdf 页数
 
-    QPainter painter(printer);
-    painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::Antialiasing);
-    painter.begin(printer);
+        QPainter painter(printer);
+        painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::Antialiasing);
+        painter.begin(printer);
 
-    QRect rect = painter.viewport();
+        QRect rect = painter.viewport();
 
-    for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
-        QImage image;
+        for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
+            QImage image;
 
-        bool rl = DocummentFileHelper::instance()->getImage(iIndex, image, rect.width(), rect.height());
-        if (rl) {
-            painter.drawPixmap(0, 0, QPixmap::fromImage(image));
-            if (iIndex < nPageSize - 1)
-                printer->newPage();
+            bool rl = _proxy->getImage(iIndex, image, rect.width(), rect.height());
+            if (rl) {
+                painter.drawPixmap(0, 0, QPixmap::fromImage(image));
+                if (iIndex < nPageSize - 1)
+                    printer->newPage();
+            }
         }
+        painter.end();
     }
-    painter.end();
 }

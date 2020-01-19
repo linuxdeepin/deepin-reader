@@ -63,7 +63,10 @@ void SearchResWidget::__ClearSearchContent()
         m_loadSearchResThread.stopThread();
     }
     if (m_pSearchList->count() > 0) {
-        DocummentFileHelper::instance()->clearsearch();
+        DocummentProxy *_proxy = DocummentProxy::instance();
+        if (_proxy) {
+            _proxy->clearsearch();
+        }
 
         m_pSearchList->clear();
     }
@@ -83,7 +86,10 @@ void SearchResWidget::slotCloseFile()
     m_bShowList = false;
 
     if (m_pSearchList->count() > 0) {
-        DocummentFileHelper::instance()->clearsearch();
+        DocummentProxy *_proxy = DocummentProxy::instance();
+        if (_proxy) {
+            _proxy->clearsearch();
+        }
 
         m_pSearchList->clear();
     }
@@ -96,13 +102,17 @@ void SearchResWidget::slotFlushSearchWidget(const QString &msgContent)
     notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(WIDGET_BUFFER));    //  窗口 显示 转圈圈
     notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(1));
     m_bShowList = true;
-    connect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this,
-            SLOT(slotGetSearchContant(stSearchRes)));
-    QMap<int, stSearchRes> resMap;
-    DocummentFileHelper::instance()->search(msgContent, resMap, Qt::red);
-    disconnect(DocummentProxy::instance(), SIGNAL(signal_searchover()), this,
-               SLOT(slotSearchOver()));
-    connect(DocummentProxy::instance(), SIGNAL(signal_searchover()), this, SLOT(slotSearchOver()));
+
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
+        connect(_proxy, SIGNAL(signal_searchRes(stSearchRes)), this, SLOT(slotGetSearchContant(stSearchRes)));
+
+        QMap<int, stSearchRes> resMap;
+        _proxy->search(msgContent, resMap, Qt::red);
+
+        disconnect(_proxy, SIGNAL(signal_searchover()), this, SLOT(slotSearchOver()));
+        connect(_proxy, SIGNAL(signal_searchover()), this, SLOT(slotSearchOver()));
+    }
 }
 
 void SearchResWidget::slotGetSearchContant(stSearchRes search)

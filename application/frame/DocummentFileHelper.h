@@ -62,9 +62,9 @@ signals:
 
 public:
     bool save(const QString &filepath, bool withChanges);
-    bool closeFile();
-    void docBasicInfo(stFileInfo &info);
-    void setViewFocus();
+//    bool closeFile();
+//    void docBasicInfo(stFileInfo &info);
+//    void setViewFocus();
 
 public:
 //    bool mouseSelectText(const QPoint &start, const QPoint &stop);
@@ -84,16 +84,16 @@ public:
     bool getImage(const int &pagenum, QImage &image, const double &width, const double &height);
 
 private:
-    QImage roundImage(const QPixmap &img_in, const int &radius);
+//    QImage roundImage(const QPixmap &img_in, const int &radius);
 
 public:
 //    bool showMagnifier(const QPoint &point);
 //    bool closeMagnifier();
 
-    bool setBookMarkState(const int &page, const bool &state);
+//    bool setBookMarkState(const int &page, const bool &state);
 
 public:
-    void setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode);
+//    void setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode);
 //    bool setViewModeAndShow(const ViewMode_EM &viewmode);
 //    void scaleRotateAndShow(const double &scale, const RotateType_EM &rotate);
 
@@ -102,27 +102,27 @@ public:
 //    double adaptHeightAndShow(const double &height);
 
 public:
-    void clearsearch();
+//    void clearsearch();
 
 public:
-    void getAllAnnotation(QList<stHighlightContent> &listres);
+//    void getAllAnnotation(QList<stHighlightContent> &listres);
     QString addAnnotation(const QPoint &startpos, const QPoint &endpos, const QColor &color = Qt::yellow);
     void changeAnnotationColor(const int &ipage, const QString &uuid, const QColor &color);
 //    bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
     void removeAnnotation(const QString &struuid, const int &ipage = -1);
     QString removeAnnotation(const QPoint &pos);
     void setAnnotationText(const int &ipage, const QString &struuid, const QString &strtext);
-    void getAnnotationText(const QString &struuid, QString &strtext, const int &ipage);
+//    void getAnnotationText(const QString &struuid, QString &strtext, const int &ipage);
     void jumpToHighLight(const QString &uuid, const int &ipage);
 
 public:
-    void search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color);
-    void findNext();
-    void findPrev();
+////    void search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color);
+//    void findNext();
+//    void findPrev();
 
 public:
-    bool getAutoPlaySlideStatu();
-    void setAutoPlaySlide(const bool &autoplay, const int &timemsec = 3000);
+//    bool getAutoPlaySlideStatu();
+//    void setAutoPlaySlide(const bool &autoplay, const int &timemsec = 3000);
 
 //    Outline outline();
     void saveFileFontMsg(const QString &filePath);

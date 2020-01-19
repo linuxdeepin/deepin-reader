@@ -135,7 +135,7 @@ DIconButton *PlayControlWidget::createBtn(const QString &strname)
 
 void PlayControlWidget::pagejump(bool bpre)
 {
-    auto helper = DocummentFileHelper::instance();
+    auto helper = DocummentProxy::instance();
     if (helper) {
         bool bstart = false;
         if (helper->getAutoPlaySlideStatu()) {

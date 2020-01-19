@@ -113,7 +113,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
         //  保存文档字号参数信息
         DocummentFileHelper::instance()->saveFileFontMsg(sFilePath);
         notifyMsg(MSG_CLOSE_FILE);
-        DocummentFileHelper::instance()->closeFile();
+
+        DocummentProxy *_proxy = DocummentProxy::instance();
+        if (_proxy) {
+            _proxy->closeFile();
+        }
     }
 
     AppSetting::instance()->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
@@ -164,7 +168,7 @@ void MainWindow::initConnections()
             SLOT(slotDealWithData(const int &, const QString &)));
 
     connect(this, &MainWindow::sigSpacePressed, this, []() {
-        auto helper = DocummentFileHelper::instance();
+        auto helper = DocummentProxy::instance();
         if (helper) {
             if (helper->getAutoPlaySlideStatu()) {
                 helper->setAutoPlaySlide(false);

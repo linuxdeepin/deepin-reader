@@ -69,8 +69,8 @@ void LeftSidebarWidget::slotDealWithKeyMsg(const QString &msgContent)
 void LeftSidebarWidget::onSetWidgetVisible(const int &nVis)
 {
     this->setVisible(nVis);
-    if (!nVis && DocummentFileHelper::instance())
-        DocummentFileHelper::instance()->setViewFocus();
+    if (!nVis && DocummentProxy::instance())
+        DocummentProxy::instance()->setViewFocus();
 }
 
 void LeftSidebarWidget::slotUpdateTheme()

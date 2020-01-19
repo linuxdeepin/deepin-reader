@@ -333,7 +333,7 @@ void ThumbnailWidget::forScreenPageing(bool direction)
 {
     if (DataManager::instance()->CurShowState() != FILE_NORMAL) {
 
-        auto helper = DocummentFileHelper::instance();
+        auto helper = DocummentProxy::instance();
         if (helper) {
             bool bstart = false;
             if (helper->getAutoPlaySlideStatu()) {

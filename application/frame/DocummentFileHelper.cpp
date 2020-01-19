@@ -168,32 +168,32 @@ bool DocummentFileHelper::save(const QString &filepath, bool withChanges)
     return DocummentProxy::instance()->save(filepath, withChanges);
 }
 
-bool DocummentFileHelper::closeFile()
-{
-    if (!DocummentProxy::instance()) {
-        return false;
-    }
+//bool DocummentFileHelper::closeFile()
+//{
+//    if (!DocummentProxy::instance()) {
+//        return false;
+//    }
 
-    return DocummentProxy::instance()->closeFile();
-}
+//    return DocummentProxy::instance()->closeFile();
+//}
 
-void DocummentFileHelper::docBasicInfo(stFileInfo &info)
-{
-    if (!DocummentProxy::instance()) {
-        return ;
-    }
+//void DocummentFileHelper::docBasicInfo(stFileInfo &info)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return ;
+//    }
 
-    DocummentProxy::instance()->docBasicInfo(info);
-}
+//    DocummentProxy::instance()->docBasicInfo(info);
+//}
 
-void DocummentFileHelper::setViewFocus()
-{
-    if (!DocummentProxy::instance()) {
-        return ;
-    }
+//void DocummentFileHelper::setViewFocus()
+//{
+//    if (!DocummentProxy::instance()) {
+//        return ;
+//    }
 
-    DocummentProxy::instance()->setViewFocus();
-}
+//    DocummentProxy::instance()->setViewFocus();
+//}
 
 //bool DocummentFileHelper::mouseSelectText(const QPoint &start, const QPoint &stop)
 //{
@@ -240,7 +240,7 @@ bool DocummentFileHelper::getSelectTextString(QString &st)
     return DocummentProxy::instance()->getSelectTextString(st);
 }
 
-//  保存
+//  保存 数据
 void DocummentFileHelper::onSaveFile()
 {
     if (DataManager::instance()->bIsUpdate()) {
@@ -636,22 +636,22 @@ bool DocummentFileHelper::getImage(const int &pagenum, QImage &image, const doub
     return  DocummentProxy::instance()->getImage(pagenum, image, width, height);
 }
 
-QImage DocummentFileHelper::roundImage(const QPixmap &img_in, const int &radius)
-{
-    if (img_in.isNull()) {
-        return QPixmap().toImage();
-    }
-    QSize size(img_in.size());
-    QBitmap mask(size);
-    QPainter painter(&mask);
-    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-    painter.fillRect(mask.rect(), Qt::white);
-    painter.setBrush(QColor(0, 0, 0));
-    painter.drawRoundedRect(mask.rect(), radius, radius);
-    QPixmap image = img_in;
-    image.setMask(mask);
-    return image.toImage();
-}
+//QImage DocummentFileHelper::roundImage(const QPixmap &img_in, const int &radius)
+//{
+//    if (img_in.isNull()) {
+//        return QPixmap().toImage();
+//    }
+//    QSize size(img_in.size());
+//    QBitmap mask(size);
+//    QPainter painter(&mask);
+//    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+//    painter.fillRect(mask.rect(), Qt::white);
+//    painter.setBrush(QColor(0, 0, 0));
+//    painter.drawRoundedRect(mask.rect(), radius, radius);
+//    QPixmap image = img_in;
+//    image.setMask(mask);
+//    return image.toImage();
+//}
 
 //bool DocummentFileHelper::showMagnifier(const QPoint &point)
 //{
@@ -669,21 +669,21 @@ QImage DocummentFileHelper::roundImage(const QPixmap &img_in, const int &radius)
 //    return DocummentProxy::instance()->closeMagnifier();
 //}
 
-bool DocummentFileHelper::setBookMarkState(const int &page, const bool &state)
-{
-    if (!DocummentProxy::instance()) {
-        return false;
-    }
-    return DocummentProxy::instance()->setBookMarkState(page, state);
-}
+//bool DocummentFileHelper::setBookMarkState(const int &page, const bool &state)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return false;
+//    }
+//    return DocummentProxy::instance()->setBookMarkState(page, state);
+//}
 
-void DocummentFileHelper::setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode)
-{
-    if (!DocummentProxy::instance()) {
-        return ;
-    }
-    DocummentProxy::instance()->setScaleRotateViewModeAndShow(scale, rotate, viewmode);
-}
+//void DocummentFileHelper::setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return ;
+//    }
+//    DocummentProxy::instance()->setScaleRotateViewModeAndShow(scale, rotate, viewmode);
+//}
 
 //bool DocummentFileHelper::setViewModeAndShow(const ViewMode_EM &viewmode)
 //{
@@ -711,21 +711,21 @@ void DocummentFileHelper::setScaleRotateViewModeAndShow(double scale, RotateType
 //    return DocummentProxy::instance()->adaptHeightAndShow(height);
 //}
 
-void DocummentFileHelper::clearsearch()
-{
-    if (!DocummentProxy::instance()) {
-        return ;
-    }
-    DocummentProxy::instance()->clearsearch();
-}
+//void DocummentFileHelper::clearsearch()
+//{
+//    if (!DocummentProxy::instance()) {
+//        return ;
+//    }
+//    DocummentProxy::instance()->clearsearch();
+//}
 
-void DocummentFileHelper::getAllAnnotation(QList<stHighlightContent> &listres)
-{
-    if (!DocummentProxy::instance()) {
-        return ;
-    }
-    DocummentProxy::instance()->getAllAnnotation(listres);
-}
+//void DocummentFileHelper::getAllAnnotation(QList<stHighlightContent> &listres)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return ;
+//    }
+//    DocummentProxy::instance()->getAllAnnotation(listres);
+//}
 
 QString DocummentFileHelper::addAnnotation(const QPoint &startpos, const QPoint &endpos, const QColor &color)
 {
@@ -783,13 +783,13 @@ void DocummentFileHelper::setAnnotationText(const int &ipage, const QString &str
     DocummentProxy::instance()->setAnnotationText(ipage, struuid, strtext);
 }
 
-void DocummentFileHelper::getAnnotationText(const QString &struuid, QString &strtext, const int &ipage)
-{
-    if (!DocummentProxy::instance()) {
-        return;
-    }
-    DocummentProxy::instance()->getAnnotationText(struuid, strtext, ipage);
-}
+//void DocummentFileHelper::getAnnotationText(const QString &struuid, QString &strtext, const int &ipage)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return;
+//    }
+//    DocummentProxy::instance()->getAnnotationText(struuid, strtext, ipage);
+//}
 
 void DocummentFileHelper::jumpToHighLight(const QString &uuid, const int &ipage)
 {
@@ -800,45 +800,45 @@ void DocummentFileHelper::jumpToHighLight(const QString &uuid, const int &ipage)
     DocummentProxy::instance()->jumpToHighLight(uuid, ipage);
 }
 
-void DocummentFileHelper::search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color)
-{
-    if (!DocummentProxy::instance()) {
-        return ;
-    }
-    DocummentProxy::instance()->search(strtext, resmap, color);
-}
+//void DocummentFileHelper::search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return ;
+//    }
+//    DocummentProxy::instance()->search(strtext, resmap, color);
+//}
 
-void DocummentFileHelper::findNext()
-{
-    if (!DocummentProxy::instance()) {
-        return ;
-    }
-    DocummentProxy::instance()->findNext();
-}
+//void DocummentFileHelper::findNext()
+//{
+//    if (!DocummentProxy::instance()) {
+//        return ;
+//    }
+//    DocummentProxy::instance()->findNext();
+//}
 
-void DocummentFileHelper::findPrev()
-{
-    if (!DocummentProxy::instance()) {
-        return ;
-    }
-    DocummentProxy::instance()->findPrev();
-}
+//void DocummentFileHelper::findPrev()
+//{
+//    if (!DocummentProxy::instance()) {
+//        return ;
+//    }
+//    DocummentProxy::instance()->findPrev();
+//}
 
-bool DocummentFileHelper::getAutoPlaySlideStatu()
-{
-    if (!DocummentProxy::instance()) {
-        return false;
-    }
-    return DocummentProxy::instance()->getAutoPlaySlideStatu();
-}
+//bool DocummentFileHelper::getAutoPlaySlideStatu()
+//{
+//    if (!DocummentProxy::instance()) {
+//        return false;
+//    }
+//    return DocummentProxy::instance()->getAutoPlaySlideStatu();
+//}
 
-void DocummentFileHelper::setAutoPlaySlide(const bool &autoplay, const int &timemsec)
-{
-    if (!DocummentProxy::instance()) {
-        return ;
-    }
-    DocummentProxy::instance()->setAutoPlaySlide(autoplay, timemsec);
-}
+//void DocummentFileHelper::setAutoPlaySlide(const bool &autoplay, const int &timemsec)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return ;
+//    }
+//    DocummentProxy::instance()->setAutoPlaySlide(autoplay, timemsec);
+//}
 
 //Outline DocummentFileHelper::outline()
 //{
