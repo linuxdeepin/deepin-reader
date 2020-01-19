@@ -20,13 +20,11 @@
 
 #include <QHeaderView>
 #include <DFontSizeManager>
+#include <QDebug>
 
 #include "subjectObserver/MsgHeader.h"
 #include "controller/NotifySubject.h"
-
-#include "frame/DocummentFileHelper.h"
-
-#include <QDebug>
+#include "docview/docummentproxy.h"
 
 CatalogTreeView::CatalogTreeView(DWidget *parent)
     : DTreeView(parent)
@@ -155,7 +153,7 @@ void CatalogTreeView::SlotOpenFileOk()
                 }
             }
 
-            int nCurPage = DocummentFileHelper::instance()->currentPageNo();
+            int nCurPage = _proxy->currentPageNo();
             SlotFilePageChanged(QString::number(nCurPage));
         }
     }
@@ -234,18 +232,23 @@ void CatalogTreeView::SlotFilePageChanged(const QString &sPage)
 void CatalogTreeView::SlotCollapsed(const QModelIndex &index)
 {
     Q_UNUSED(index);
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
+        int nCurPage = _proxy->currentPageNo();
 
-    int nCurPage = DocummentFileHelper::instance()->currentPageNo();
-
-    SlotFilePageChanged(QString::number(nCurPage));
+        SlotFilePageChanged(QString::number(nCurPage));
+    }
 }
 
 //  展开 节点处理
 void CatalogTreeView::SlotExpanded(const QModelIndex &index)
 {
     if (index == this->selectionModel()->currentIndex()) {  //  展开的节点 是 高亮节点
-        int nCurPage = DocummentFileHelper::instance()->currentPageNo();
-        SlotFilePageChanged(QString::number(nCurPage));
+        DocummentProxy *_proxy = DocummentProxy::instance();
+        if (_proxy) {
+            int nCurPage = _proxy->currentPageNo();
+            SlotFilePageChanged(QString::number(nCurPage));
+        }
     }
 }
 

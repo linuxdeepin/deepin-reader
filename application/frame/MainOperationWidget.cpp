@@ -1,10 +1,11 @@
 #include "MainOperationWidget.h"
+
 #include <DToolButton>
 #include <QButtonGroup>
 #include <QHBoxLayout>
+
 #include "controller/AppSetting.h"
 #include "controller/DataManager.h"
-#include "frame/DocummentFileHelper.h"
 #include "utils/PublicFunction.h"
 
 MainOperationWidget::MainOperationWidget(CustomWidget *parent)

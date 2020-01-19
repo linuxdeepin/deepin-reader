@@ -19,6 +19,8 @@
 
 #include "dialog/ShortCutShow.h"
 
+#include "docview/docummentproxy.h"
+
 DWIDGET_USE_NAMESPACE
 
 MainWindow::MainWindow(DMainWindow *parent)

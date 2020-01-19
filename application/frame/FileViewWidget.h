@@ -7,6 +7,7 @@
 #include "DocummentFileHelper.h"
 #include "NoteTipWidget.h"
 #include "mainShow/TextOperationMenu.h"
+#include "docview/pagebase.h"
 
 //  当前鼠标状态
 enum Handel_Enum {

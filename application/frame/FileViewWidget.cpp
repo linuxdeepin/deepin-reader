@@ -11,13 +11,10 @@
 #include "application.h"
 
 #include "docview/docummentproxy.h"
-
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
-#include "frame/DocummentFileHelper.h"
 #include "mainShow/DefaultOperationMenu.h"
 #include "utils/PublicFunction.h"
-
 #include "dialog/PrintManager.h"
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)

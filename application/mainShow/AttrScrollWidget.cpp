@@ -1,13 +1,13 @@
 #include "AttrScrollWidget.h"
 
 #include <QDebug>
+#include <DFontSizeManager>
 #include <DTextBrowser>
-#include <DFontSizeManager>
+
 #include "docview/commonstruct.h"
-#include "frame/DocummentFileHelper.h"
 #include "utils/utils.h"
-#include <DFontSizeManager>
 #include "CustomControl/DFMGlobal.h"
+#include "docview/docummentproxy.h"
 
 #define LAEBL_TEXT_WIDTH   165
 

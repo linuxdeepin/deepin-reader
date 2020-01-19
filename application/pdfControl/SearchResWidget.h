@@ -89,8 +89,6 @@ signals:
 //    void sigClearWidget();
     void sigCloseFile();
     void sigFlushSearchWidget(const QString &);
-//    void sigFindPrev();
-//    void sigFindNext();
 
 private slots:
     void SlotDealWithData(const int &, const QString &);
@@ -100,8 +98,6 @@ private slots:
     void slotGetSearchContant(stSearchRes);
     void slotSearchOver();
     void slotLoadImage(const int &, const QImage &);
-//    void slotFindPrev();
-//    void slotFindNext();
     void slotSelectItem(QListWidgetItem *);
     void slotStopFind();
 

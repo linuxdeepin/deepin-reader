@@ -22,10 +22,12 @@
 
 #include <QObject>
 
-#include "docview/docummentproxy.h"
 #include "subjectObserver/IObserver.h"
+
 #include "controller/DataManager.h"
 #include "controller/NotifySubject.h"
+
+#include "docview/commonstruct.h"
 
 /**
  * @brief The DocummentFileHelper class

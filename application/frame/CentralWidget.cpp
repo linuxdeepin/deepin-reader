@@ -18,20 +18,21 @@
  */
 
 #include "CentralWidget.h"
+
 #include <DSplitter>
 #include <QFileInfo>
 #include <QMimeData>
 #include <QUrl>
-
+#include <DSpinner>
 #include <DDialog>
 #include <DMessageManager>
 #include <QStackedLayout>
+
 #include "DocShowShellWidget.h"
-#include "DocummentFileHelper.h"
 #include "HomeWidget.h"
 #include "LeftSidebarWidget.h"
-#include "utils/utils.h"
 
+#include "utils/utils.h"
 #include "controller/DataManager.h"
 
 CentralWidget::CentralWidget(CustomWidget *parent)

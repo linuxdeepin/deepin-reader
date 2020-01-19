@@ -2,11 +2,13 @@
 
 #include <DFontSizeManager>
 #include <DFrame>
+#include <DScrollArea>
 #include <DWindowCloseButton>
 #include <QFileInfo>
+
 #include "AttrScrollWidget.h"
 #include "controller/DataManager.h"
-#include "frame/DocummentFileHelper.h"
+#include "docview/docummentproxy.h"
 #include "CustomControl/DFMGlobal.h"
 #include "subjectObserver/ModuleHeader.h"
 #include "subjectObserver/MsgHeader.h"
@@ -40,7 +42,7 @@ FileAttrWidget::~FileAttrWidget()
 //  各个 对应的 label 赋值
 void FileAttrWidget::setFileAttr()
 {
-    auto dproxy = DocummentFileHelper::instance();
+    auto dproxy = DocummentProxy::instance();
     if (nullptr == dproxy) {
         return;
     }

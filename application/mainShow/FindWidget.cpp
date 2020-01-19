@@ -21,16 +21,19 @@
  */
 
 #include "FindWidget.h"
+
 #include <DDialogCloseButton>
 #include <DIconButton>
 #include <QDebug>
 #include <QHBoxLayout>
 #include <QDesktopWidget>
+
 #include "application.h"
+
 #include "controller/DataManager.h"
 #include "subjectObserver/ModuleHeader.h"
 #include "subjectObserver/MsgHeader.h"
-#include "frame/DocummentFileHelper.h"
+#include "docview/docummentproxy.h"
 
 FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)

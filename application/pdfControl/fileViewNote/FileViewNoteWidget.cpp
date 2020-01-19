@@ -19,7 +19,7 @@
 #include "FileViewNoteWidget.h"
 #include <DPlatformWindowHandle>
 #include <QTextCodec>
-#include "frame/DocummentFileHelper.h"
+
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
 

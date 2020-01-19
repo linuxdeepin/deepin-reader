@@ -17,12 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "BookMarkWidget.h"
+
 #include "controller/DataManager.h"
 #include "frame/DocummentFileHelper.h"
-
 #include "BookMarkItemWidget.h"
 #include "application.h"
 #include "controller/AppSetting.h"
+#include "docview/docummentproxy.h"
 
 BookMarkWidget::BookMarkWidget(DWidget *parent)
     : CustomWidget(QString("BookMarkWidget"), parent)

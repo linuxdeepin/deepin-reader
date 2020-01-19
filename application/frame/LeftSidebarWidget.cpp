@@ -1,21 +1,21 @@
 #include "LeftSidebarWidget.h"
+
 #include <DStackedWidget>
 #include <QButtonGroup>
 #include <QVBoxLayout>
+
+#include "MainOperationWidget.h"
 
 #include "pdfControl/BookMarkWidget.h"
 #include "pdfControl/BufferWidget.h"
 #include "pdfControl/NotesWidget.h"
 #include "pdfControl/SearchResWidget.h"
 #include "pdfControl/ThumbnailWidget.h"
-#include "pdfControl/catalog/CatalogWidget.h"
-
-#include "MainOperationWidget.h"
-
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
+#include "docview/docummentproxy.h"
 
-#include "frame/DocummentFileHelper.h"
+#include "pdfControl/catalog/CatalogWidget.h"
 
 LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
     : CustomWidget("LeftSidebarWidget", parent)

@@ -17,11 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ThumbnailWidget.h"
+
 #include "controller/DBManager.h"
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
-#include "frame/DocummentFileHelper.h"
 
+#include "frame/DocummentFileHelper.h"
+#include "docview/docummentproxy.h"
 #include "application.h"
 
 ThumbnailWidget::ThumbnailWidget(DWidget *parent)

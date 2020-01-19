@@ -17,9 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SearchResWidget.h"
+
 #include "controller/DataManager.h"
-#include "frame/DocummentFileHelper.h"
 #include "frame/LeftSidebarWidget.h"
+#include "docview/docummentproxy.h"
 
 SearchResWidget::SearchResWidget(DWidget *parent)
     : CustomWidget(QString("SearchResWidget"), parent)
@@ -177,24 +178,6 @@ void SearchResWidget::slotLoadImage(const int &page, const QImage &image)
         }
     }
 }
-
-//void SearchResWidget::slotFindPrev()
-//{
-//    if (DataManager::instance()->bThumbnIsShow() == false) {
-//        return;
-//    }
-//    DocummentFileHelper::instance()->findPrev();
-//}
-
-//void SearchResWidget::slotFindNext()
-//{
-////    qDebug() << __FUNCTION__ << "SearchResWidget========";
-//    if (DataManager::instance()->bThumbnIsShow() == false) {
-//        return;
-//    }
-////    qDebug() << __FUNCTION__ << "SearchResWidget+++++++++++";
-//    DocummentFileHelper::instance()->findNext();
-//}
 
 void SearchResWidget::slotSelectItem(QListWidgetItem *item)
 {
@@ -458,7 +441,7 @@ void LoadSearchResThread::run()
         if (!m_pSearchResWidget) {
             break;
         }
-        auto dproxy = DocummentFileHelper::instance();
+        auto dproxy = DocummentProxy::instance();
         if (nullptr == dproxy) {
             break;
         }

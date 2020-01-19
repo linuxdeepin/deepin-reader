@@ -1,13 +1,15 @@
 #include "PlayControlWidget.h"
+
+#include <DPlatformWindowHandle>
+#include <QTimer>
+#include <QHBoxLayout>
+#include <QDebug>
+
 #include "subjectObserver/MsgHeader.h"
 #include "subjectObserver/ModuleHeader.h"
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
-#include "frame/DocummentFileHelper.h"
-#include <DPlatformWindowHandle>
-#include <QTimer>
-#include <QHBoxLayout>
-#include <QtDebug>
+#include "docview/docummentproxy.h"
 
 PlayControlWidget::PlayControlWidget(DWidget *parnet)
     : DFloatingWidget(parnet)

@@ -17,12 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "FontMenu.h"
+
 #include <DFontSizeManager>
 #include <QWidgetAction>
+
 #include "utils/PublicFunction.h"
 #include "subjectObserver/ModuleHeader.h"
 #include "controller/AppSetting.h"
-#include "frame/DocummentFileHelper.h"
+#include "docview/docummentproxy.h"
 
 FontMenu::FontMenu(QWidget *parent):
     DMenu(parent)

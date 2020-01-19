@@ -17,8 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CustomListWidget.h"
+
+#include <DScrollBar>
+
 #include "CustomItemWidget.h"
-#include "frame/DocummentFileHelper.h"
 #include "utils/utils.h"
 
 CustomListWidget::CustomListWidget(DWidget *parent)

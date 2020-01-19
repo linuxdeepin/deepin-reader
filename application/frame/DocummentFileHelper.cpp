@@ -36,6 +36,8 @@
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
 
+#include "docview/docummentproxy.h"
+
 //#include "controller/AppSetting.h"
 
 #include "application.h"

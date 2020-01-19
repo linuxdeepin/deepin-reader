@@ -21,10 +21,9 @@
 #include <QPrinter>
 #include <QPainter>
 #include <QPrintPreviewDialog>
-
 #include <DDialog>
 
-#include "frame/DocummentFileHelper.h"
+#include "docview/docummentproxy.h"
 #include "utils/PublicFunction.h"
 
 PrintManager::PrintManager(QObject *parent)

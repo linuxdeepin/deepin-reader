@@ -1,16 +1,20 @@
 #include "DocShowShellWidget.h"
+
 #include <DDialogCloseButton>
 #include <QDesktopWidget>
 #include <QVBoxLayout>
-#include "DocummentFileHelper.h"
-#include "FileViewWidget.h"
+
 #include "application.h"
+#include "FileViewWidget.h"
+#include "PlayControlWidget.h"
+
 #include "controller/DataManager.h"
 #include "mainShow/FindWidget.h"
 #include "mainShow/FileAttrWidget.h"
-#include "pdfControl/fileViewNote/FileViewNoteWidget.h"
 #include "utils/PublicFunction.h"
-#include "PlayControlWidget.h"
+#include "docview/docummentproxy.h"
+
+#include "pdfControl/fileViewNote/FileViewNoteWidget.h"
 
 DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
     : CustomWidget("DocShowShellWidget", parent)
