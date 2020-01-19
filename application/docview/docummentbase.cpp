@@ -1355,10 +1355,7 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
         break;
     }
     d->m_vboxLayout->update();
-    QCoreApplication::processEvents();
     pageJump(currpageno);
-
-    qDebug() << "DocummentBase::setViewModeAndShow loadPages" << d->m_widget->rect();
     loadPages();
 
     d->donotneedreloaddoc = false;
