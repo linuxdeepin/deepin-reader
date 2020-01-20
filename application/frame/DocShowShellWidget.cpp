@@ -14,7 +14,7 @@
 #include "utils/PublicFunction.h"
 #include "docview/docummentproxy.h"
 
-#include "pdfControl/fileViewNote/FileViewNoteWidget.h"
+#include "pdfControl/note/FileViewNoteWidget.h"
 
 DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
     : CustomWidget("DocShowShellWidget", parent)

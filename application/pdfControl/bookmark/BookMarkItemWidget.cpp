@@ -17,7 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "BookMarkItemWidget.h"
-#include <DApplicationHelper>
+
+#include <DLabel>
+#include <QHBoxLayout>
+#include <DMenu>
+
 #include "controller/DataManager.h"
 
 BookMarkItemWidget::BookMarkItemWidget(QWidget *parent)

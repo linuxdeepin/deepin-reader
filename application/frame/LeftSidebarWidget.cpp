@@ -6,16 +6,16 @@
 
 #include "MainOperationWidget.h"
 
-#include "pdfControl/BookMarkWidget.h"
-#include "pdfControl/BufferWidget.h"
-#include "pdfControl/NotesWidget.h"
-#include "pdfControl/SearchResWidget.h"
-#include "pdfControl/ThumbnailWidget.h"
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
 
+#include "pdfControl/bookmark/BookMarkWidget.h"
 #include "pdfControl/catalog/CatalogWidget.h"
+#include "pdfControl/note/NotesWidget.h"
+#include "pdfControl/search/BufferWidget.h"
+#include "pdfControl/search/SearchResWidget.h"
+#include "pdfControl/thumbnail/ThumbnailWidget.h"
 
 LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
     : CustomWidget("LeftSidebarWidget", parent)

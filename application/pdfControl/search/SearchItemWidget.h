@@ -16,55 +16,60 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef BOOKMARKITEMWIDGET_H
-#define BOOKMARKITEMWIDGET_H
+#ifndef SEARCHITEMWIDGET_H
+#define SEARCHITEMWIDGET_H
 
 #include <DLabel>
+#include <DTextEdit>
+
 #include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QFont>
 #include <QMenu>
 #include <QAction>
 #include <QContextMenuEvent>
 
-#include "CustomItemWidget.h"
+#include "../CustomItemWidget.h"
 
 /**
- * @brief The BookMarkWidget class
- * @brief   书签列表item
+ * @brief   搜索item
  */
 
-
-class BookMarkItemWidget : public CustomItemWidget
+class SearchItemWidget : public CustomItemWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(BookMarkItemWidget)
+    Q_DISABLE_COPY(SearchItemWidget)
 
 public:
-    explicit BookMarkItemWidget(QWidget *parent = nullptr);
-    ~BookMarkItemWidget() Q_DECL_OVERRIDE;
-
-signals:
-//    void sigDeleleteItem(const int &);
+    explicit SearchItemWidget(DWidget *parent = nullptr);
+    ~SearchItemWidget() Q_DECL_OVERRIDE;
 
 public:
-    // IObserver interface
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    void setTextEditText(const QString &);
+    void setSerchResultText(const QString &);
     bool bSelect();
     void setBSelect(const bool &paint);
 
 private slots:
-    void slotDltBookMark();
-    void slotShowContextMenu(const QPoint &);
+    void slotUpdateTheme();
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
-    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+
+public:
+    // IObserver interface
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 
 private:
-//    bool bOperationBK();
+    QString calcText(const QFont &font, const QString &note, const QSize &size/*const int MaxWidth*/);
 
 private:
-    bool m_bPaint = false;                    // 是否绘制选中item
+    DLabel *m_pSearchResultNum = nullptr;
+    DLabel *m_pTextLab = nullptr;
+    QString m_strNote = "";   // 注释内容
+    bool m_bPaint = false;
     DMenu *m_menu = nullptr;
 };
 
-#endif // BOOKMARKITEMWIDGET_H
+#endif // SEARCHITEMWIDGET_H

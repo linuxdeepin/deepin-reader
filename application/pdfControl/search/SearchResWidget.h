@@ -23,7 +23,7 @@
 #include <QVBoxLayout>
 
 #include "CustomControl/CustomWidget.h"
-#include "CustomListWidget.h"
+#include "../CustomListWidget.h"
 #include "docview/commonstruct.h"
 
 /**

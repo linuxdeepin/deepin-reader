@@ -27,7 +27,7 @@
 #include <QVBoxLayout>
 
 #include "CustomControl/CustomWidget.h"
-#include "CustomListWidget.h"
+#include "../CustomListWidget.h"
 #include "PagingWidget.h"
 #include "ThumbnailItemWidget.h"
 

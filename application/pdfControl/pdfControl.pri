@@ -1,35 +1,35 @@
 HEADERS += \
-    $$PWD/PagingWidget.h \
-    $$PWD/NotesWidget.h \
-    $$PWD/BookMarkWidget.h \
-    $$PWD/ThumbnailItemWidget.h \
-    $$PWD/ThumbnailWidget.h \
-    $$PWD/BookMarkItemWidget.h \
-    $$PWD/NotesItemWidget.h \
-    $$PWD/SearchResWidget.h \
-    $$PWD/fileViewNote/FileViewNoteWidget.h \
     $$PWD/CustomListWidget.h \
     $$PWD/CustomItemWidget.h \
-    $$PWD/BufferWidget.h \
+    $$PWD/note/FileViewNoteWidget.h \
+    $$PWD/note/NotesWidget.h \
+    $$PWD/note/NotesItemWidget.h \
     $$PWD/font/FontMenu.h \
     $$PWD/catalog/CatalogTreeView.h \
     $$PWD/catalog/CatalogWidget.h \
-    $$PWD/SearchItemWidget.h
+    $$PWD/thumbnail/PagingWidget.h \
+    $$PWD/thumbnail/ThumbnailItemWidget.h \
+    $$PWD/thumbnail/ThumbnailWidget.h \
+    $$PWD/search/SearchItemWidget.h \
+    $$PWD/search/SearchResWidget.h \
+    $$PWD/search/BufferWidget.h \
+    $$PWD/bookmark/BookMarkItemWidget.h \
+    $$PWD/bookmark/BookMarkWidget.h
 
 SOURCES += \
-    $$PWD/PagingWidget.cpp \
-    $$PWD/NotesWidget.cpp \
-    $$PWD/BookMarkWidget.cpp \
-    $$PWD/ThumbnailItemWidget.cpp \
-    $$PWD/ThumbnailWidget.cpp \
-    $$PWD/BookMarkItemWidget.cpp \
-    $$PWD/NotesItemWidget.cpp \
-    $$PWD/SearchResWidget.cpp \
-    $$PWD/fileViewNote/FileViewNoteWidget.cpp \
     $$PWD/CustomListWidget.cpp \
     $$PWD/CustomItemWidget.cpp \
-    $$PWD/BufferWidget.cpp \
+    $$PWD/note/FileViewNoteWidget.cpp \
+    $$PWD/note/NotesWidget.cpp \
+    $$PWD/note/NotesItemWidget.cpp \
     $$PWD/font/FontMenu.cpp \
     $$PWD/catalog/CatalogTreeView.cpp \
     $$PWD/catalog/CatalogWidget.cpp \
-    $$PWD/SearchItemWidget.cpp
+    $$PWD/thumbnail/PagingWidget.cpp \
+    $$PWD/thumbnail/ThumbnailItemWidget.cpp \
+    $$PWD/thumbnail/ThumbnailWidget.cpp \
+    $$PWD/search/BufferWidget.cpp \
+    $$PWD/search/SearchItemWidget.cpp \
+    $$PWD/search/SearchResWidget.cpp \
+    $$PWD/bookmark/BookMarkItemWidget.cpp \
+    $$PWD/bookmark/BookMarkWidget.cpp

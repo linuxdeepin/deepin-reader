@@ -27,9 +27,10 @@
 #include <QThread>
 #include <QVBoxLayout>
 
-#include "CustomControl/CustomWidget.h"
-#include "CustomListWidget.h"
 #include "NotesItemWidget.h"
+
+#include "../CustomListWidget.h"
+#include "CustomControl/CustomWidget.h"
 #include "docview/commonstruct.h"
 
 class ThreadLoadImageOfNote : public QThread

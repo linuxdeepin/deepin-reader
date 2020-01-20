@@ -16,44 +16,49 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef THUMBNAILITEMWIDGET_H
-#define THUMBNAILITEMWIDGET_H
+#ifndef BOOKMARKITEMWIDGET_H
+#define BOOKMARKITEMWIDGET_H
 
-#include <DLabel>
-#include <QVBoxLayout>
-
-#include "CustomItemWidget.h"
+#include "../CustomItemWidget.h"
 
 /**
- * @brief The ThumbnailItemWidget class
- * @brief   缩略图中的item
+ * @brief The BookMarkWidget class
+ * @brief   书签列表item
  */
 
-class ThumbnailItemWidget : public CustomItemWidget
+
+class BookMarkItemWidget : public CustomItemWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(ThumbnailItemWidget)
+    Q_DISABLE_COPY(BookMarkItemWidget)
 
 public:
-    explicit ThumbnailItemWidget(DWidget *parent = nullptr);
-    ~ThumbnailItemWidget() Q_DECL_OVERRIDE;
+    explicit BookMarkItemWidget(QWidget *parent = nullptr);
+    ~BookMarkItemWidget() Q_DECL_OVERRIDE;
+
+signals:
+//    void sigDeleleteItem(const int &);
 
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    bool bSelect();
     void setBSelect(const bool &paint);
-    void rotateThumbnail(int);
 
-signals:
-    void sigBookMarkStatusChanged(bool);
-public slots:
-    void slotBookMarkShowStatus(bool bshow);
+private slots:
+    void slotDltBookMark();
+    void slotShowContextMenu(const QPoint &);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private:
-//    bool m_bPaint = false;  // 是否绘制选中item
+//    bool bOperationBK();
+
+private:
+    bool m_bPaint = false;                    // 是否绘制选中item
+    DMenu *m_menu = nullptr;
 };
 
-#endif  // THUMBNAILITEMWIDGET_H
+#endif // BOOKMARKITEMWIDGET_H
