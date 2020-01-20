@@ -120,11 +120,11 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
             //  首先判断文档划过属性
             auto pLink = _proxy->mouseBeOverLink(docGlobalPos);
             if (pLink) {
-                setCursor(QCursor(Qt::PointingHandCursor));
+                __SetCursor(QCursor(Qt::PointingHandCursor));
             } else {
                 if (_proxy->mouseBeOverText(docGlobalPos)) {
                     m_bIsHandleSelect = true;
-                    setCursor(QCursor(Qt::IBeamCursor));
+                    __SetCursor(QCursor(Qt::IBeamCursor));
 
                     onShowNoteTipWidget(docGlobalPos);
                 } else {
@@ -133,7 +133,7 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
                     }
 
                     m_bIsHandleSelect = false;
-                    setCursor(QCursor(Qt::ArrowCursor));
+                    __SetCursor(QCursor(Qt::ArrowCursor));
                 }
             }
         }
@@ -407,12 +407,12 @@ void FileViewWidget::onMagnifying(const QString &data)
         _proxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
 
         m_nCurrentHandelState = Magnifier_State;
-        this->setCursor(Qt::BlankCursor);
+        __SetCursor(Qt::BlankCursor);
     } else {
         if (m_nCurrentHandelState == Magnifier_State) {  //  是 放大镜模式 才取消
 
             m_nCurrentHandelState = Default_State;
-            this->setCursor(Qt::ArrowCursor);
+            __SetCursor(Qt::ArrowCursor);
 
             _proxy->closeMagnifier();
         }
@@ -431,10 +431,10 @@ void FileViewWidget::onSetHandShape(const QString &data)
     int nRes = data.toInt();
     if (nRes == 1) {  //  手形
         m_nCurrentHandelState = Handel_State;
-        this->setCursor(Qt::OpenHandCursor);
+        __SetCursor(Qt::OpenHandCursor);
     } else {
         m_nCurrentHandelState = Default_State;
-        this->setCursor(Qt::ArrowCursor);
+        __SetCursor(Qt::ArrowCursor);
     }
 }
 
@@ -609,6 +609,15 @@ void FileViewWidget::onFileAddNote()
                          QString("%1").arg(m_pEndSelectPoint.x()) + Constant::sQStringSep +
                          QString("%1").arg(m_pEndSelectPoint.y());
     notifyMsg(MSG_OPERATION_TEXT_ADD_ANNOTATION, msgContent);
+}
+
+//  设置鼠标状态
+void FileViewWidget::__SetCursor(const QCursor &cs)
+{
+    const QCursor ss = cursor();    //  当前鼠标状态
+    if (ss != cs) {
+        setCursor(cs);
+    }
 }
 
 //  文档书签状态改变

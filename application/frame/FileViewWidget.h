@@ -97,6 +97,7 @@ private:
     void onPrintFile();
     void onFileAddAnnotation();
     void onFileAddNote();
+    void __SetCursor(const QCursor &cursor);
 
 private:
     TextOperationMenu       *m_operatemenu = nullptr;
