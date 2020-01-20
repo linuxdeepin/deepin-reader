@@ -54,6 +54,7 @@ int CatalogWidget::dealWithData(const int &msgType, const QString &msgContent)
 void CatalogWidget::initWidget()
 {
     titleLabel = new CustomClickLabel("");
+    titleLabel->setForegroundRole(DPalette::TextTips);
     titleLabel->setAlignment(Qt::AlignCenter);
     DFontSizeManager::instance()->bind(titleLabel, DFontSizeManager::T8);
 
