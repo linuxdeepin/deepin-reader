@@ -145,8 +145,8 @@ void SearchResWidget::slotSearchOver()
     QList<stSearchRes> list = m_loadSearchResThread.searchList();
 
     if (list.size() <= 0) {
-        disconnect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
-                   SLOT(slotSelectItem(QListWidgetItem *)));
+//        disconnect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
+//                   SLOT(slotSelectItem(QListWidgetItem *)));
         showTips();
 
         //显示无结果窗口
@@ -160,8 +160,8 @@ void SearchResWidget::slotSearchOver()
             notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(!t_bTnumbnIsShow));
         }
     } else {
-        connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
-                SLOT(slotSelectItem(QListWidgetItem *)));
+//        connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
+//                SLOT(slotSelectItem(QListWidgetItem *)));
         //让搜索框回复正常
 //        notifyMsg(MSG_FIND_NONE, "0");
         //生成左侧搜索列表
@@ -323,7 +323,7 @@ void SearchResWidget::setSelectItemBackColor(QListWidgetItem *item)
     auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pSearchList->itemWidget(item));
     if (t_widget) {
         t_widget->setBSelect(true);
-        m_pSearchItem = item;
+//        m_pSearchItem = item;
     }
 }
 
@@ -334,7 +334,7 @@ void SearchResWidget::clearItemColor()
     auto pCurItem = m_pSearchList->currentItem();
     if (pCurItem) {
         auto pItemWidget =
-            reinterpret_cast<NotesItemWidget *>(m_pSearchList->itemWidget(m_pSearchItem));
+            reinterpret_cast<NotesItemWidget *>(m_pSearchList->itemWidget(pCurItem));
         if (pItemWidget) {
             pItemWidget->setBSelect(false);
         }

@@ -79,15 +79,15 @@ public:
     void nextPage();
 
 signals:
-    void sigAddNewNoteItem(const QString &);
-    void sigDltNoteItem(QString);
-    void sigDltNoteContant(QString);
+//    void sigAddNewNoteItem(const QString &);
+//    void sigDltNoteItem(QString);
+//    void sigDltNoteContant(QString);
     void sigOpenFileOk();
     void sigCloseFile();
     void sigDelNoteItem();
 //    void sigJumpToPrevItem();
 //    void sigJumpToNextItem();
-    void sigRightSelectItem(QString);
+//    void sigRightSelectItem(QString);
 
 //    void sigDealWithData(const int &, const QString &);
 
@@ -97,20 +97,23 @@ protected:
 
 private slots:
     void slotDealWithData(const int &, const QString &);
-    void slotAddNoteItem(const QString &);
-    void slotDltNoteItem(QString);
-    void slotDltNoteContant(QString);
+
     void slotOpenFileOk();
     void slotCloseFile();
     void slotLoadImage(const QImage &);
     void slotDelNoteItem();
     void slotSelectItem(QListWidgetItem *);
-    void slotJumpToPrevItem();
-    void slotJumpToNextItem();
-    void slotRightSelectItem(QString);
-    void slotAddAnnotation();
+
+//    void slotAddAnnotation();
 
 private:
+    void __AddNoteItem(const QString &);
+    void __DeleteNoteContant(const QString &);
+    void __DeleteNoteItem(const QString &);
+    void __JumpToPrevItem();
+    void __JumpToNextItem();
+    void __RightSelectItem(const QString &);
+
     void addNotesItem(const QString &text);
     void initConnection();
     void setSelectItemBackColor(QListWidgetItem *);

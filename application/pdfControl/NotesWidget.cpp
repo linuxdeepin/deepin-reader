@@ -49,7 +49,7 @@ NotesWidget::~NotesWidget()
  */
 void NotesWidget::prevPage()
 {
-    slotJumpToPrevItem();
+    __JumpToPrevItem();
 }
 
 /**
@@ -58,7 +58,7 @@ void NotesWidget::prevPage()
  */
 void NotesWidget::nextPage()
 {
-    slotJumpToNextItem();
+    __JumpToNextItem();
 }
 
 /**
@@ -87,21 +87,21 @@ void NotesWidget::initWidget()
 void NotesWidget::slotDealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_NOTE_DLTNOTEITEM == msgType) {
-        slotDltNoteItem(msgContent);
+        __DeleteNoteItem(msgContent);
     } else if (MSG_NOTE_ADDITEM == msgType) {
-        slotAddNoteItem(msgContent);
+        __AddNoteItem(msgContent);
     } else if (MSG_NOTE_DLTNOTECONTANT == msgType) {
-        slotDltNoteContant(msgContent);
+        __DeleteNoteContant(msgContent);
     } else if (MSG_NOTE_SELECTITEM == msgType) {
-        slotRightSelectItem(msgContent);
+        __RightSelectItem(msgContent);
     }
 }
 
 /**
  * @brief NotesWidget::slotAddNoteItem
- * 增加注释缩略图Item槽函数
+ * 增加注释缩略图Item
  */
-void NotesWidget::slotAddNoteItem(const QString &note)
+void NotesWidget::__AddNoteItem(const QString &note)
 {
     clearItemColor();
     addNotesItem(note);
@@ -111,7 +111,7 @@ void NotesWidget::slotAddNoteItem(const QString &note)
  * @brief NotesWidget::slotDltNoteItem
  * 右键删除当前注释item
  */
-void NotesWidget::slotDltNoteItem(QString uuid)
+void NotesWidget::__DeleteNoteItem(const QString &uuid)
 {
     if (m_pNotesList == nullptr) {
         return;
@@ -155,7 +155,7 @@ void NotesWidget::slotDltNoteItem(QString uuid)
  * 根据uuid删除本地缓存中的注释内容
  * @param uuid
  */
-void NotesWidget::slotDltNoteContant(QString uuid)
+void NotesWidget::__DeleteNoteContant(const QString &uuid)
 {
     if (m_pNotesList == nullptr) {
         return;
@@ -325,7 +325,7 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
     }
 }
 
-void NotesWidget::slotJumpToPrevItem()
+void NotesWidget::__JumpToPrevItem()
 {
     if (m_pNotesList == nullptr ||
             DataManager::instance()->bThumbnIsShow() == false ||
@@ -357,7 +357,7 @@ void NotesWidget::slotJumpToPrevItem()
     }
 }
 
-void NotesWidget::slotJumpToNextItem()
+void NotesWidget::__JumpToNextItem()
 {
     if (m_pNotesList == nullptr ||
             DataManager::instance()->bThumbnIsShow() == false ||
@@ -390,7 +390,7 @@ void NotesWidget::slotJumpToNextItem()
     }
 }
 
-void NotesWidget::slotRightSelectItem(QString uuid)
+void NotesWidget::__RightSelectItem(const QString &uuid)
 {
     if (m_pNotesList == nullptr) {
         return;
@@ -411,10 +411,10 @@ void NotesWidget::slotRightSelectItem(QString uuid)
  * @brief NotesWidget::slotAddAnnotation
  * 添加注释按钮
  */
-void NotesWidget::slotAddAnnotation()
-{
-    //add annotation   signal
-}
+//void NotesWidget::slotAddAnnotation()
+//{
+//add annotation   signal
+//}
 
 /**
  * @brief NotesWidget::addNotesItem
@@ -460,11 +460,11 @@ void NotesWidget::initConnection()
 {
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
 
-    connect(this, SIGNAL(sigDltNoteItem(QString)), this, SLOT(slotDltNoteItem(QString)));
-    connect(this, SIGNAL(sigDltNoteContant(QString)), this, SLOT(slotDltNoteContant(QString)));
+//    connect(this, SIGNAL(sigDltNoteItem(QString)), this, SLOT(slotDltNoteItem(QString)));
+//    connect(this, SIGNAL(sigDltNoteContant(QString)), this, SLOT(slotDltNoteContant(QString)));
 
-    connect(this, SIGNAL(sigAddNewNoteItem(const QString &)), this,
-            SLOT(slotAddNoteItem(const QString &)));
+//    connect(this, SIGNAL(sigAddNewNoteItem(const QString &)), this,
+//            SLOT(slotAddNoteItem(const QString &)));
 
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
@@ -473,7 +473,7 @@ void NotesWidget::initConnection()
     connect(this, SIGNAL(sigDelNoteItem()), this, SLOT(slotDelNoteItem()));
     connect(m_pNotesList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
             SLOT(slotSelectItem(QListWidgetItem *)));
-    connect(this, SIGNAL(sigRightSelectItem(QString)), this, SLOT(slotRightSelectItem(QString)));
+//    connect(this, SIGNAL(sigRightSelectItem(QString)), this, SLOT(slotRightSelectItem(QString)));
 }
 
 /**
