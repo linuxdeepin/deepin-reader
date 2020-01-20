@@ -72,8 +72,7 @@ void PagingWidget::initWidget()
 //    m_pJumpPageSpinBox->setForegroundRole(DPalette::Text);
     //DLineEdit *m_pJumpPageLineEdit
     m_pJumpPageLineEdit = new DLineEdit(this);
-    m_pJumpPageLineEdit->setMinimumWidth(70);
-    m_pJumpPageLineEdit->setFixedHeight(40);
+    m_pJumpPageLineEdit->setFixedSize(70, 40);
     m_pJumpPageLineEdit->installEventFilter(this);
     m_pJumpPageLineEdit->setClearButtonEnabled(false);
     DFontSizeManager::instance()->bind(m_pJumpPageLineEdit, DFontSizeManager::T6);
