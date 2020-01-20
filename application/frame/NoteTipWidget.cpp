@@ -30,9 +30,9 @@ void NoteTipWidget::setTipContent(const QString &content)
 
         QString strContent = content;
 
-        //strContent.replace('\n', "");
-        //strContent.replace('\t', "");
-        qDebug() << strContent.count('\n') << strContent.count('\t') << strContent.count('\r\n');
+        strContent.replace('\n', "");
+        strContent.replace('\t', "");
+        //  qDebug() << strContent.count('\n') << strContent.count('\t') << strContent.count('\r\n');
 
         QFontMetrics fm(pedit->font());
         int pixelsWide = fm.horizontalAdvance(strContent);

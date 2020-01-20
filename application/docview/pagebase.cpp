@@ -669,13 +669,12 @@ Page::Link *PageBase::ifMouseMoveOverLink(const QPoint point)
     Q_D(PageBase);
     QPointF qp = point;
     getImagePoint(qp);
-    //    qDebug() << "ifMouseMoveOverLink qp:" << qp;
+
     for (int i = 0; i < d->m_links.size(); i++) {
         if (qp.x() > d->m_links.at(i)->boundary.x()*d->m_imagewidth &&
                 qp.x() < d->m_links.at(i)->boundary.x()*d->m_imagewidth + d->m_links.at(i)->boundary.width()*d->m_imagewidth &&
                 qp.y() > d->m_links.at(i)->boundary.y()*d->m_imageheight &&
                 qp.y() < d->m_links.at(i)->boundary.y()*d->m_imageheight + d->m_links.at(i)->boundary.height()*d->m_imageheight) {
-            //            qDebug() << "boundary:" << m_links.at(i)->boundary;
             return d->m_links.at(i);
         }
     }

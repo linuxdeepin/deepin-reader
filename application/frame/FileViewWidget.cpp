@@ -105,7 +105,9 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
             QPoint mvPoint = m_pHandleMoveStartPoint - globalPos;
             int mvX = mvPoint.x();
             int mvY = mvPoint.y();
-
+            if (this->cursor() != Qt::OpenHandCursor) {
+                this->setCursor(QCursor(Qt::OpenHandCursor));
+            }
             _proxy->pageMove(mvX, mvY);
 
             m_pHandleMoveStartPoint = globalPos;
@@ -120,20 +122,23 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
             //  首先判断文档划过属性
             auto pLink = _proxy->mouseBeOverLink(docGlobalPos);
             if (pLink) {
-                __SetCursor(QCursor(Qt::PointingHandCursor));
+                if (this->cursor() != Qt::PointingHandCursor)
+                    setCursor(QCursor(Qt::PointingHandCursor));
             } else {
                 if (_proxy->mouseBeOverText(docGlobalPos)) {
                     m_bIsHandleSelect = true;
-                    __SetCursor(QCursor(Qt::IBeamCursor));
-
+                    if (this->cursor() != Qt::IBeamCursor)
+                        setCursor(QCursor(Qt::IBeamCursor));
                     onShowNoteTipWidget(docGlobalPos);
                 } else {
                     if (m_pNoteTipWidget && m_pNoteTipWidget->isVisible()) {
                         m_pNoteTipWidget->hide();
                     }
-
                     m_bIsHandleSelect = false;
-                    __SetCursor(QCursor(Qt::ArrowCursor));
+
+                    if (this->cursor() != Qt::ArrowCursor) {
+                        setCursor(QCursor(Qt::ArrowCursor));
+                    }
                 }
             }
         }
