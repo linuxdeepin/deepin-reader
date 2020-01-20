@@ -21,6 +21,7 @@
 
 #include <DSpinBox>
 #include <DIconButton>
+#include <DLineEdit>
 
 #include <QIntValidator>
 #include <QKeyEvent>
@@ -66,7 +67,9 @@ private:
     CustomClickLabel *m_pTotalPagesLab = nullptr;        // 当前文档总页数标签
     DIconButton *m_pPrePageBtn = nullptr;      // 按钮 前一页
     DIconButton *m_pNextPageBtn = nullptr;     // 按钮 后一页
-    DSpinBox *m_pJumpPageSpinBox = nullptr;    // 输入框 跳转页码
+//    DSpinBox *m_pJumpPageSpinBox = nullptr;    // 输入框 跳转页码
+    DLineEdit *m_pJumpPageLineEdit = nullptr;  // 输入框 跳转页码
+    int m_nMaxPage = 0;                        // 文档总页数
 
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;

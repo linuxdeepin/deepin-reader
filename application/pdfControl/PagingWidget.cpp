@@ -61,19 +61,27 @@ void PagingWidget::initWidget()
     m_pNextPageBtn->setFixedSize(QSize(38, 38));
     connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPage()));
 
-    m_pJumpPageSpinBox = new DSpinBox(this);
-    m_pJumpPageSpinBox->setMinimum(1);
-    m_pJumpPageSpinBox->setValue(1);
-    m_pJumpPageSpinBox->setMinimumWidth(70);
-    m_pJumpPageSpinBox->setFixedHeight(40);
-    m_pJumpPageSpinBox->installEventFilter(this);
-    m_pJumpPageSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
-    DFontSizeManager::instance()->bind(m_pJumpPageSpinBox, DFontSizeManager::T6);
-    m_pJumpPageSpinBox->setForegroundRole(DPalette::Text);
+//    m_pJumpPageSpinBox = new DSpinBox(this);
+//    m_pJumpPageSpinBox->setMinimum(1);
+//    m_pJumpPageSpinBox->setValue(1);
+//    m_pJumpPageSpinBox->setMinimumWidth(70);
+//    m_pJumpPageSpinBox->setFixedHeight(40);
+//    m_pJumpPageSpinBox->installEventFilter(this);
+//    m_pJumpPageSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
+//    DFontSizeManager::instance()->bind(m_pJumpPageSpinBox, DFontSizeManager::T6);
+//    m_pJumpPageSpinBox->setForegroundRole(DPalette::Text);
+    //DLineEdit *m_pJumpPageLineEdit
+    m_pJumpPageLineEdit = new DLineEdit(this);
+    m_pJumpPageLineEdit->setMinimumWidth(70);
+    m_pJumpPageLineEdit->setFixedHeight(40);
+    m_pJumpPageLineEdit->installEventFilter(this);
+    m_pJumpPageLineEdit->setClearButtonEnabled(false);
+    DFontSizeManager::instance()->bind(m_pJumpPageLineEdit, DFontSizeManager::T6);
+    m_pJumpPageLineEdit->setForegroundRole(DPalette::Text);
 
     auto hLayout = new QHBoxLayout;
     hLayout->setContentsMargins(7, 2, 7, 0);
-    hLayout->addWidget(m_pJumpPageSpinBox);
+    hLayout->addWidget(m_pJumpPageLineEdit);
     hLayout->addWidget(m_pTotalPagesLab);
     hLayout->addStretch(1);
     hLayout->addWidget(m_pPrePageBtn);
@@ -91,31 +99,32 @@ void PagingWidget::initWidget()
  */
 bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == m_pJumpPageSpinBox) {
+    if (watched == m_pJumpPageLineEdit) {
         if (event->type() == QEvent::KeyPress) {
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
             //过滤掉零开头的输入
-            if (keyEvent->key() == Qt::Key_0 && m_pJumpPageSpinBox->text().isEmpty()) {
+            if (keyEvent->key() == Qt::Key_0 && m_pJumpPageLineEdit->text().isEmpty()) {
                 return true;
             }
 
             if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
-                int index = m_pJumpPageSpinBox->value() - 1;
-                notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(index));
+                int index = m_pJumpPageLineEdit->text().trimmed().toInt() - 1;
+                if (index >= 0 && index < m_nMaxPage)
+                    notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(index));
             }
         } else if (event->type() == QEvent::KeyRelease &&
-                   qobject_cast<DSpinBox *>(watched) == m_pJumpPageSpinBox) {
+                   qobject_cast<DLineEdit *>(watched) == m_pJumpPageLineEdit) {
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
             if (keyEvent->key() == Qt::Key_0) {
-                QString strvalue = m_pJumpPageSpinBox->text();
+                QString strvalue = m_pJumpPageLineEdit->text();
                 if (strvalue.startsWith("0")) {
                     strvalue = strvalue.right(strvalue.length() - 1);
                     if (strvalue.isEmpty()) {
                         // strvalue=QString("1");
-                        m_pJumpPageSpinBox->clear();
+                        m_pJumpPageLineEdit->clear();
                         return true;
                     }
-                    m_pJumpPageSpinBox->setValue(strvalue.toInt());
+                    m_pJumpPageLineEdit->setText(strvalue);
                 }
             }
         }
@@ -155,9 +164,9 @@ void PagingWidget::slotUpdateTheme()
     if (m_pTotalPagesLab) {
         m_pTotalPagesLab->setForegroundRole(DPalette::Text);
     }
-    if (m_pJumpPageSpinBox) {
-        m_pJumpPageSpinBox->setForegroundRole(DPalette::Text);
-    }
+//    if (m_pJumpPageSpinBox) {
+//        m_pJumpPageSpinBox->setForegroundRole(DPalette::Text);
+//    }
 }
 
 void PagingWidget::SlotDocFilePageChange(const QString &msgContent)
@@ -180,7 +189,7 @@ void PagingWidget::SlotDocFilePageChange(const QString &msgContent)
             m_pNextPageBtn->setEnabled(true);
         }
 
-        m_pJumpPageSpinBox->setValue(currntPage);
+        m_pJumpPageLineEdit->setText(QString::number(currntPage));
     }
 }
 
@@ -192,7 +201,8 @@ void PagingWidget::SlotDocFileOpenOk()
         int totalPage = _proxy->getPageSNum();
 
         m_pTotalPagesLab->setText(QString("/%1").arg(totalPage));
-        m_pJumpPageSpinBox->setMaximum(totalPage);
+//        m_pJumpPageSpinBox->setMaximum(totalPage);
+        m_nMaxPage = totalPage;
 
         int nCurPage = _proxy->currentPageNo();
         if (nCurPage == 0)  //  已经是第一页了
