@@ -43,7 +43,7 @@ public:
     ~BookMarkItemWidget() Q_DECL_OVERRIDE;
 
 signals:
-    void sigDeleleteItem(const int &);
+//    void sigDeleleteItem(const int &);
 
 public:
     // IObserver interface

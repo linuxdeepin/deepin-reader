@@ -46,14 +46,6 @@ BookMarkItemWidget::~BookMarkItemWidget()
  */
 int BookMarkItemWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (MSG_NOTIFY_KEY_MSG == msgType) {
-        if (msgContent == KeyStr::g_del) {
-            bool bFocus = bSelect();
-            if (bOperationBK() && bFocus) {
-                emit sigDeleleteItem(m_nPageIndex);
-            }
-        }
-    }
     return 0;
 }
 

@@ -61,6 +61,45 @@ void NotesWidget::nextPage()
     __JumpToNextItem();
 }
 
+void NotesWidget::DeleteItemByKey()
+{
+    bool bFocus = this->hasFocus();
+    if (bFocus) {
+        auto curItem = m_pNotesList->currentItem();
+        if (curItem == nullptr)
+            return;
+
+        auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(curItem));
+        if (t_widget) {
+            if (t_widget->bSelect()) {
+
+                QString t_uuid = t_widget->noteUUId();
+                int page = t_widget->nPageIndex();
+
+                delete t_widget;
+                t_widget = nullptr;
+
+                delete curItem;
+                curItem = nullptr;
+
+                m_pNotesList->update();
+
+                // remove date from map and notify kong yun zhen
+                m_mapUuidAndPage.remove(t_uuid);
+
+                auto t_pDocummentProxy = DocummentFileHelper::instance();
+                if (t_pDocummentProxy) {
+                    t_pDocummentProxy->removeAnnotation(t_uuid, page);
+                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The annotation has been removed"));
+                }
+            }
+        }
+        if (m_pNotesList->count() > 0) {
+            m_pNotesList->setCurrentRow(0);
+        }
+    }
+}
+
 /**
  * @brief NotesWidget::initWidget
  * 初始化界面
@@ -266,44 +305,44 @@ void NotesWidget::slotLoadImage(const QImage &image)
 }
 
 //  按 键盘 Del 删除
-void NotesWidget::slotDelNoteItem()
-{
-    bool bFocus = this->hasFocus();
-    if (bFocus) {
-        auto curItem = m_pNotesList->currentItem();
-        if (curItem == nullptr)
-            return;
+//void NotesWidget::slotDelNoteItem()
+//{
+//    bool bFocus = this->hasFocus();
+//    if (bFocus) {
+//        auto curItem = m_pNotesList->currentItem();
+//        if (curItem == nullptr)
+//            return;
 
-        auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(curItem));
-        if (t_widget) {
-            if (t_widget->bSelect()) {
+//        auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(curItem));
+//        if (t_widget) {
+//            if (t_widget->bSelect()) {
 
-                QString t_uuid = t_widget->noteUUId();
-                int page = t_widget->nPageIndex();
+//                QString t_uuid = t_widget->noteUUId();
+//                int page = t_widget->nPageIndex();
 
-                delete t_widget;
-                t_widget = nullptr;
+//                delete t_widget;
+//                t_widget = nullptr;
 
-                delete curItem;
-                curItem = nullptr;
+//                delete curItem;
+//                curItem = nullptr;
 
-                m_pNotesList->update();
+//                m_pNotesList->update();
 
-                // remove date from map and notify kong yun zhen
-                m_mapUuidAndPage.remove(t_uuid);
+//                // remove date from map and notify kong yun zhen
+//                m_mapUuidAndPage.remove(t_uuid);
 
-                auto t_pDocummentProxy = DocummentFileHelper::instance();
-                if (t_pDocummentProxy) {
-                    t_pDocummentProxy->removeAnnotation(t_uuid, page);
-                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The annotation has been removed"));
-                }
-            }
-        }
-        if (m_pNotesList->count() > 0) {
-            m_pNotesList->setCurrentRow(0);
-        }
-    }
-}
+//                auto t_pDocummentProxy = DocummentFileHelper::instance();
+//                if (t_pDocummentProxy) {
+//                    t_pDocummentProxy->removeAnnotation(t_uuid, page);
+//                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The annotation has been removed"));
+//                }
+//            }
+//        }
+//        if (m_pNotesList->count() > 0) {
+//            m_pNotesList->setCurrentRow(0);
+//        }
+//    }
+//}
 
 void NotesWidget::slotSelectItem(QListWidgetItem *item)
 {
@@ -466,14 +505,15 @@ void NotesWidget::initConnection()
 //    connect(this, SIGNAL(sigAddNewNoteItem(const QString &)), this,
 //            SLOT(slotAddNoteItem(const QString &)));
 
+//    connect(this, SIGNAL(sigDelNoteItem()), this, SLOT(slotDelNoteItem()));
+//    connect(this, SIGNAL(sigRightSelectItem(QString)), this, SLOT(slotRightSelectItem(QString)));
+
     connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
     connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const QImage &)), this,
             SLOT(slotLoadImage(const QImage &)));
-    connect(this, SIGNAL(sigDelNoteItem()), this, SLOT(slotDelNoteItem()));
     connect(m_pNotesList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
             SLOT(slotSelectItem(QListWidgetItem *)));
-//    connect(this, SIGNAL(sigRightSelectItem(QString)), this, SLOT(slotRightSelectItem(QString)));
 }
 
 /**
@@ -618,10 +658,6 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigOpenFileOk();
     } else if (MSG_CLOSE_FILE == msgType) {
         emit sigCloseFile();
-    } else if (MSG_NOTIFY_KEY_MSG == msgType) {
-        if (msgContent == KeyStr::g_del) {
-            emit sigDelNoteItem();
-        }
     }
 
     return 0;

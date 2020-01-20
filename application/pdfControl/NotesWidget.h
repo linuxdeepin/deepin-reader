@@ -77,6 +77,7 @@ public:
 
     void prevPage();
     void nextPage();
+    void DeleteItemByKey();
 
 signals:
 //    void sigAddNewNoteItem(const QString &);
@@ -84,7 +85,7 @@ signals:
 //    void sigDltNoteContant(QString);
     void sigOpenFileOk();
     void sigCloseFile();
-    void sigDelNoteItem();
+//    void sigDelNoteItem();
 //    void sigJumpToPrevItem();
 //    void sigJumpToNextItem();
 //    void sigRightSelectItem(QString);
@@ -101,7 +102,7 @@ private slots:
     void slotOpenFileOk();
     void slotCloseFile();
     void slotLoadImage(const QImage &);
-    void slotDelNoteItem();
+//    void slotDelNoteItem();
     void slotSelectItem(QListWidgetItem *);
 
 //    void slotAddAnnotation();

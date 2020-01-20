@@ -26,7 +26,8 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
 
     m_pMsgList = {MSG_SLIDER_SHOW_STATE};
     m_pKeyMsgList = {KeyStr::g_up, KeyStr::g_pgup, KeyStr::g_left,
-                     KeyStr::g_down, KeyStr::g_pgdown, KeyStr::g_right
+                     KeyStr::g_down, KeyStr::g_pgdown, KeyStr::g_right,
+                     KeyStr::g_del
                     };
 
     initWidget();
@@ -63,6 +64,8 @@ void LeftSidebarWidget::slotDealWithKeyMsg(const QString &msgContent)
     } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown ||
                msgContent == KeyStr::g_right) {
         onJumpToNextPage();
+    } else if (msgContent == KeyStr::g_del) {
+        __DeleteItemByKey();
     }
 }
 
@@ -134,6 +137,29 @@ void LeftSidebarWidget::initConnections()
 
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
     connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)), SLOT(slotDealWithKeyMsg(const QString &)));
+}
+
+//  按delete 键 删除书签 或者 注释
+void LeftSidebarWidget::__DeleteItemByKey()
+{
+    bool bl = this->isVisible();
+    if (bl) {
+        auto pWidget = this->findChild<DStackedWidget *>();
+        if (pWidget) {
+            int iIndex = pWidget->currentIndex();
+            if (iIndex == WIDGET_BOOKMARK) {
+                auto widget = this->findChild<BookMarkWidget *>();
+                if (widget) {
+                    widget->DeleteItemByKey();
+                }
+            } else if (iIndex == WIDGET_NOTE) {
+                auto widget = this->findChild<NotesWidget *>();
+                if (widget) {
+                    widget->DeleteItemByKey();
+                }
+            }
+        }
+    }
 }
 
 /**

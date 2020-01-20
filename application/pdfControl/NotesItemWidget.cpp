@@ -32,7 +32,7 @@ NotesItemWidget::NotesItemWidget(DWidget *parent)
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this,
             SLOT(slotShowContextMenu(const QPoint &)));
     connect(this, SIGNAL(sigUpdateTheme()), this, SLOT(slotUpdateTheme()));
-    connect(this, SIGNAL(sigDltNoteItemByKey()), this, SLOT(slotDltNoteItemByKey()));
+//    connect(this, SIGNAL(sigDltNoteItemByKey()), this, SLOT(slotDltNoteItemByKey()));
 
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
@@ -139,17 +139,17 @@ void NotesItemWidget::slotUpdateTheme()
  * brief NotesItemWidget::slotDltNoteItemByKey
  * delete键删除注释item
  */
-void NotesItemWidget::slotDltNoteItemByKey()
-{
-    int leftShow = 0;
-    int widgetIndex = 0;
-    leftShow = DataManager::instance()->getShowLeft().toInt();
-    widgetIndex = DataManager::instance()->getListIndex().toInt();
-    if ((leftShow == 1) && (widgetIndex == 3) && bSelect()) {
-        slotDltNoteContant();
-    }
-    return;
-}
+//void NotesItemWidget::slotDltNoteItemByKey()
+//{
+//    int leftShow = 0;
+//    int widgetIndex = 0;
+//    leftShow = DataManager::instance()->getShowLeft().toInt();
+//    widgetIndex = DataManager::instance()->getListIndex().toInt();
+//    if ((leftShow == 1) && (widgetIndex == 3) && bSelect()) {
+//        slotDltNoteContant();
+//    }
+//    return;
+//}
 
 void NotesItemWidget::initWidget()
 {
@@ -215,11 +215,7 @@ void NotesItemWidget::initWidget()
 
 int NotesItemWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (MSG_NOTIFY_KEY_MSG == msgType) {
-        if (msgContent == KeyStr::g_del) {
-            emit sigDltNoteItemByKey();
-        }
-    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
     }
     return 0;

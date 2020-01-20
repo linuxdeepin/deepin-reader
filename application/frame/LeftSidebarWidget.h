@@ -33,6 +33,7 @@ private slots:
 private:
     void initConnections();
 
+    void __DeleteItemByKey();
     void onSetWidgetVisible(const int &);
 
     void onJumpToPrevPage();

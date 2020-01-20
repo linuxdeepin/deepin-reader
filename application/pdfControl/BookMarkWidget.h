@@ -76,6 +76,7 @@ public:
 
     void prevPage();
     void nextPage();
+    void DeleteItemByKey();
 
 signals:
     void sigFilePageChanged(const QString &);
@@ -83,7 +84,7 @@ signals:
     void sigDeleteBookItem(const int &);
     void sigAddBookMark(const int &);
     void sigCloseFile();
-    void sigDelBKItem();
+//    void sigDelBKItem();
 //    void sigCtrlBAddBookMark();
     void sigRightSelectItem(QString);
 //    void sigDealWithShurtKey(const QString &);
@@ -96,7 +97,7 @@ private slots:
     void slotDeleteBookItem(const int &);
     void slotCloseFile();
     void slotLoadImage(const int &, const QImage &);
-    void slotDelBkItem();
+//    void slotDelBkItem();
     void slotUpdateTheme();
     void slotRightSelectItem(QString);
     void slotSelectItemBackColor(QListWidgetItem *);

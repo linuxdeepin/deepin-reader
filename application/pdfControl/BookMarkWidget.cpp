@@ -112,6 +112,25 @@ void BookMarkWidget::nextPage()
     }
 }
 
+void BookMarkWidget::DeleteItemByKey()
+{
+    bool bFocus = this->hasFocus();
+    if (bFocus) {
+        auto pCurItem = m_pBookMarkListWidget->currentItem();
+        if (pCurItem) {
+            auto t_widget =
+                reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
+            if (t_widget) {
+                if (t_widget->bSelect()) {
+                    int nPageIndex = t_widget->nPageIndex();
+
+                    notifyMsg(MSG_BOOKMARK_DLTITEM, QString::number(nPageIndex));
+                }
+            }
+        }
+    }
+}
+
 /**
  * @brief BookMarkWidget::slotAddBookMark
  * @brief 点击按钮添加 当前页 为 书签
@@ -360,38 +379,38 @@ void BookMarkWidget::slotLoadImage(const int &page, const QImage &image)
 }
 
 /**
- * @brief BookMarkWidget::slotDelNoteItem
+ * @brief BookMarkWidget::slotDelBkItem
  * delete键删除鼠标选中书签item
  */
-void BookMarkWidget::slotDelBkItem()
-{
-//    qDebug() << __FUNCTION__ << "  111111111111111 ";
-    //  按Del键删除, 当前显示的List 必须是 自己 才可以进行删除
-    bool bFocus = this->hasFocus();
-    if (bFocus) {
-        auto pCurItem = m_pBookMarkListWidget->currentItem();
-        if (pCurItem) {
-            auto t_widget =
-                reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
-            if (t_widget) {
-                if (t_widget->bSelect()) {
-                    int nPageIndex = t_widget->nPageIndex();
+//void BookMarkWidget::slotDelBkItem()
+//{
+////    qDebug() << __FUNCTION__ << "  111111111111111 ";
+//    //  按Del键删除, 当前显示的List 必须是 自己 才可以进行删除
+//    bool bFocus = this->hasFocus();
+//    if (bFocus) {
+//        auto pCurItem = m_pBookMarkListWidget->currentItem();
+//        if (pCurItem) {
+//            auto t_widget =
+//                reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
+//            if (t_widget) {
+//                if (t_widget->bSelect()) {
+//                    int nPageIndex = t_widget->nPageIndex();
 
-                    notifyMsg(MSG_BOOKMARK_DLTITEM, QString::number(nPageIndex));
+//                    notifyMsg(MSG_BOOKMARK_DLTITEM, QString::number(nPageIndex));
 
-//                    t_widget->deleteLater();
-//                    t_widget = nullptr;
+////                    t_widget->deleteLater();
+////                    t_widget = nullptr;
 
-//                    delete pCurItem;
-//                    pCurItem = nullptr;
+////                    delete pCurItem;
+////                    pCurItem = nullptr;
 
-//                    deleteIndexPage(nPageIndex);
-//                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The bookmark has been removed"));
-                }
-            }
-        }
-    }
-}
+////                    deleteIndexPage(nPageIndex);
+////                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The bookmark has been removed"));
+//                }
+//            }
+//        }
+//    }
+//}
 
 void BookMarkWidget::slotUpdateTheme()
 {
@@ -466,7 +485,7 @@ void BookMarkWidget::initConnection()
     connect(this, SIGNAL(sigDeleteBookItem(const int &)), this,
             SLOT(slotDeleteBookItem(const int &)));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
-    connect(this, SIGNAL(sigDelBKItem()), this, SLOT(slotDelBkItem()));
+//    connect(this, SIGNAL(sigDelBKItem()), this, SLOT(slotDelBkItem()));
     connect(this, SIGNAL(sigUpdateTheme()), this, SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigFilePageChanged(const QString &)),
             SLOT(slotDocFilePageChanged(const QString &)));
@@ -497,7 +516,7 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
         item->setSizeHint(QSize(LEFTMINWIDTH, 80));
 
         auto t_widget = new BookMarkItemWidget(this);
-        connect(t_widget, SIGNAL(sigDeleleteItem(const int &)), SLOT(slotDeleteBookItem(const int &)));
+//        connect(t_widget, SIGNAL(sigDeleleteItem(const int &)), SLOT(slotDeleteBookItem(const int &)));
         t_widget->setLabelImage(img);
         t_widget->setLabelPage(page, 1);
 
@@ -585,18 +604,6 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
             emit sigDealWithKeyMsg(msgContent);
             return ConstantMsg::g_effective_res;
         }
-        if (msgContent == KeyStr::g_del) {
-            if (bOperationBK()) {
-                emit sigDelBKItem();
-            }
-        }
-//        emit sigDealWithShurtKey(msgContent);
-//        if (msgContent == KeyStr::g_del) {
-//            emit sigDelBKItem();
-//        } else if (msgContent == KeyStr::g_ctrl_b) {
-//            emit sigCtrlBAddBookMark();
-//            return ConstantMsg::g_effective_res;
-//        }
     }
     return 0;
 }
