@@ -18,6 +18,8 @@
  */
 #include "SearchResWidget.h"
 
+#include "SearchItemWidget.h"
+
 #include "controller/DataManager.h"
 #include "frame/LeftSidebarWidget.h"
 #include "docview/docummentproxy.h"
@@ -264,8 +266,8 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
         item->setFlags(Qt::NoItemFlags);
         item->setSizeHint(QSize(LEFTMINWIDTH, 80));
 
-        auto itemWidget = new NotesItemWidget(this);
-        itemWidget->setNoteSigne(false);
+        auto itemWidget = new SearchItemWidget(this);
+//        itemWidget->setNoteSigne(false);
         itemWidget->setLabelPage(page, 1);
         itemWidget->setTextEditText(text);
         itemWidget->setSerchResultText(tr("%1 items found").arg(resultNum));
@@ -320,7 +322,7 @@ void SearchResWidget::setSelectItemBackColor(QListWidgetItem *item)
 
     m_pSearchList->setCurrentItem(item);
 
-    auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pSearchList->itemWidget(item));
+    auto t_widget = reinterpret_cast<SearchItemWidget *>(m_pSearchList->itemWidget(item));
     if (t_widget) {
         t_widget->setBSelect(true);
 //        m_pSearchItem = item;
@@ -334,7 +336,7 @@ void SearchResWidget::clearItemColor()
     auto pCurItem = m_pSearchList->currentItem();
     if (pCurItem) {
         auto pItemWidget =
-            reinterpret_cast<NotesItemWidget *>(m_pSearchList->itemWidget(pCurItem));
+            reinterpret_cast<SearchItemWidget *>(m_pSearchList->itemWidget(pCurItem));
         if (pItemWidget) {
             pItemWidget->setBSelect(false);
         }
@@ -386,7 +388,7 @@ int SearchResWidget::getSearchPage(const int &index)
 {
     auto pItem = m_pSearchList->item(index);
     if (pItem) {
-        m_pSearchItemWidget = reinterpret_cast<NotesItemWidget *>(m_pSearchList->itemWidget(pItem));
+        m_pSearchItemWidget = reinterpret_cast<SearchItemWidget *>(m_pSearchList->itemWidget(pItem));
         if (m_pSearchItemWidget) {
             return m_pSearchItemWidget->nPageIndex();
         }

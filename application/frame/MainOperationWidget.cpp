@@ -173,15 +173,10 @@ void MainOperationWidget::slotUpdateTheme()
     }
 }
 
+//  点击按钮 跳转对应的 widget
 void MainOperationWidget::slotButtonClicked(int id)
 {
-    if (m_pRefinedAbstractionA) {
-        m_pRefinedAbstractionA->Operation(QString::number(id));
-    }
-
     emit sigShowStackWidget(id);
-
-    DataManager::instance()->setListIndex(QString::number(id));
 }
 
 int MainOperationWidget::dealWithData(const int &msgType, const QString &msgContent)

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "NotesItemWidget.h"
+#include "SearchItemWidget.h"
 #include <DApplication>
 #include <DApplicationHelper>
 #include <QClipboard>
@@ -25,28 +25,27 @@
 //#include "controller/AppSetting.h"
 #include "controller/DataManager.h"
 
-NotesItemWidget::NotesItemWidget(DWidget *parent)
-    : CustomItemWidget(QString("NotesItemWidget"), parent)
+SearchItemWidget::SearchItemWidget(DWidget *parent)
+    : CustomItemWidget(QString("SearchItemWidget"), parent)
 {
     initWidget();
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this,
-            SLOT(slotShowContextMenu(const QPoint &)));
+
     connect(this, SIGNAL(sigUpdateTheme()), this, SLOT(slotUpdateTheme()));
-//    connect(this, SIGNAL(sigDltNoteItemByKey()), this, SLOT(slotDltNoteItemByKey()));
 
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
     }
 }
 
-NotesItemWidget::~NotesItemWidget()
+SearchItemWidget::~SearchItemWidget()
 {
     if (m_pNotifySubject) {
         m_pNotifySubject->removeObserver(this);
     }
 }
 
-void NotesItemWidget::setTextEditText(const QString &contant)
+//  搜索显示内容
+void SearchItemWidget::setTextEditText(const QString &contant)
 {
     m_strNote = contant;
     if (m_pTextLab) {
@@ -55,14 +54,15 @@ void NotesItemWidget::setTextEditText(const QString &contant)
     }
 }
 
-void NotesItemWidget::setSerchResultText(const QString &result)
+//  搜索結果
+void SearchItemWidget::setSerchResultText(const QString &result)
 {
     if (m_pSearchResultNum) {
         m_pSearchResultNum->setText(result);
     }
 }
 
-bool NotesItemWidget::bSelect()
+bool SearchItemWidget::bSelect()
 {
     if (m_pPicture) {
         return m_pPicture->bSelect();
@@ -70,7 +70,7 @@ bool NotesItemWidget::bSelect()
     return false;
 }
 
-void NotesItemWidget::setBSelect(const bool &paint)
+void SearchItemWidget::setBSelect(const bool &paint)
 {
     if (m_pPicture) {
         m_pPicture->setSelect(paint);
@@ -79,48 +79,8 @@ void NotesItemWidget::setBSelect(const bool &paint)
     update();
 }
 
-void NotesItemWidget::slotDltNoteContant()
+void SearchItemWidget::slotUpdateTheme()
 {
-    sendMsg(MSG_NOTE_DLTNOTEITEM, m_strUUid);
-}
-
-void NotesItemWidget::slotCopyContant()
-{
-    if (m_pTextLab) {
-        QString str = m_pTextLab->text();
-        if (str != QString("")) {
-            QClipboard *clipboard = DApplication::clipboard();  //获取系统剪贴板指针
-            clipboard->setText(str);
-        }
-    }
-}
-
-void NotesItemWidget::slotShowContextMenu(const QPoint &)
-{
-    notifyMsg(MSG_NOTE_SELECTITEM, m_strUUid);
-
-    if (m_menu == nullptr) {
-        m_menu = new DMenu(this);
-        QAction *copyAction = m_menu->addAction(tr("Copy"));
-        DFontSizeManager::instance()->bind(m_menu, DFontSizeManager::T6);
-        m_menu->addSeparator();
-        QAction *dltItemAction = m_menu->addAction(tr("Remove annotation"));
-        connect(dltItemAction, SIGNAL(triggered()), this, SLOT(slotDltNoteContant()));
-        connect(copyAction, SIGNAL(triggered()), this, SLOT(slotCopyContant()));
-    }
-
-    if (m_menu) {
-        m_menu->exec(QCursor::pos());
-    }
-}
-
-void NotesItemWidget::slotUpdateTheme()
-{
-//    Dtk::Gui::DPalette pltorg = m_pPageNumber->palette();
-//    Dtk::Gui::DPalette plt =
-//        Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
-//    pltorg.setColor(Dtk::Gui::DPalette::Text, plt.color(Dtk::Gui::DPalette::TextTips));
-//    m_pPageNumber->setPalette(pltorg);
     if (m_pPageNumber) {
         m_pPageNumber->setForegroundRole(DPalette::TextTitle);
     }
@@ -132,23 +92,7 @@ void NotesItemWidget::slotUpdateTheme()
     }
 }
 
-/**
- * brief NotesItemWidget::slotDltNoteItemByKey
- * delete键删除注释item
- */
-//void NotesItemWidget::slotDltNoteItemByKey()
-//{
-//    int leftShow = 0;
-//    int widgetIndex = 0;
-//    leftShow = DataManager::instance()->getShowLeft().toInt();
-//    widgetIndex = DataManager::instance()->getListIndex().toInt();
-//    if ((leftShow == 1) && (widgetIndex == 3) && bSelect()) {
-//        slotDltNoteContant();
-//    }
-//    return;
-//}
-
-void NotesItemWidget::initWidget()
+void SearchItemWidget::initWidget()
 {
     auto t_vLayoutPicture = new QVBoxLayout;
     t_vLayoutPicture->setContentsMargins(0, 3, 0, 0);
@@ -210,7 +154,7 @@ void NotesItemWidget::initWidget()
     this->setLayout(m_pHLayout);
 }
 
-int NotesItemWidget::dealWithData(const int &msgType, const QString &msgContent)
+int SearchItemWidget::dealWithData(const int &msgType, const QString &)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
@@ -218,7 +162,7 @@ int NotesItemWidget::dealWithData(const int &msgType, const QString &msgContent)
     return 0;
 }
 
-void NotesItemWidget::paintEvent(QPaintEvent *e)
+void SearchItemWidget::paintEvent(QPaintEvent *e)
 {
     CustomItemWidget::paintEvent(e);
 
@@ -239,8 +183,8 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
     }
 }
 
-QString NotesItemWidget::calcText(const QFont &font, const QString &note,
-                                  const QSize &size /*const int MaxWidth*/)
+QString SearchItemWidget::calcText(const QFont &font, const QString &note,
+                                   const QSize &size /*const int MaxWidth*/)
 {
 #if 0
     QString text = note;

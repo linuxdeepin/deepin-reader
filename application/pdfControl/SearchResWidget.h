@@ -24,7 +24,6 @@
 
 #include "CustomControl/CustomWidget.h"
 #include "CustomListWidget.h"
-#include "NotesItemWidget.h"
 #include "docview/commonstruct.h"
 
 /**
@@ -33,6 +32,7 @@
  */
 
 class SearchResWidget;
+class SearchItemWidget;
 
 class LoadSearchResThread : public QThread
 {
@@ -115,7 +115,7 @@ private:
 
 private:
     CustomListWidget *m_pSearchList = nullptr;       // 搜索结果列表
-    NotesItemWidget *m_pSearchItemWidget = nullptr;  // 缩略图子窗体
+    SearchItemWidget *m_pSearchItemWidget = nullptr;  // 缩略图子窗体
     LoadSearchResThread m_loadSearchResThread;       // 加载搜索缩略图线程
 //    QListWidgetItem *m_pSearchItem = nullptr;        // 当前鼠标左键点击的item
     bool m_bShowList = false;                        // 是否显示搜索列表

@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef NOTESITEMWIDGET_H
-#define NOTESITEMWIDGET_H
+#ifndef SEARCHITEMWIDGET_H
+#define SEARCHITEMWIDGET_H
 
 #include <DLabel>
 #include <DTextEdit>
@@ -32,52 +32,26 @@
 #include "CustomItemWidget.h"
 
 /**
- * @brief The ThumbnailItemWidget class
- * @brief   注释和搜索item
+ * @brief   搜索item
  */
 
-class NotesItemWidget : public CustomItemWidget
+class SearchItemWidget : public CustomItemWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(NotesItemWidget)
+    Q_DISABLE_COPY(SearchItemWidget)
 
 public:
-    explicit NotesItemWidget(DWidget *parent = nullptr);
-    ~NotesItemWidget() Q_DECL_OVERRIDE;
+    explicit SearchItemWidget(DWidget *parent = nullptr);
+    ~SearchItemWidget() Q_DECL_OVERRIDE;
 
 public:
     void setTextEditText(const QString &);
     void setSerchResultText(const QString &);
-    inline void setNoteUUid(const QString &uuid)
-    {
-        m_strUUid = uuid;
-    }
-    inline QString noteUUId() const
-    {
-        return m_strUUid;
-    }
-    inline QString note() const
-    {
-        return m_strNote;
-    }
-
-    inline void setNote(const QString &note)
-    {
-        m_strNote = note;
-    }
-
     bool bSelect();
     void setBSelect(const bool &paint);
 
-signals:
-//    void sigDltNoteItemByKey();
-
 private slots:
-    void slotDltNoteContant();
-    void slotCopyContant();
-    void slotShowContextMenu(const QPoint &);
     void slotUpdateTheme();
-//    void slotDltNoteItemByKey();
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -93,10 +67,9 @@ private:
 private:
     DLabel *m_pSearchResultNum = nullptr;
     DLabel *m_pTextLab = nullptr;
-    QString m_strUUid;    // 当前注释唯一标识
-    QString m_strNote;   // 注释内容
+    QString m_strNote = "";   // 注释内容
     bool m_bPaint = false;
     DMenu *m_menu = nullptr;
 };
 
-#endif // NOTESITEMWIDGET_H
+#endif // SEARCHITEMWIDGET_H

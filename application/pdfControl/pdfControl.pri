@@ -13,7 +13,8 @@ HEADERS += \
     $$PWD/BufferWidget.h \
     $$PWD/font/FontMenu.h \
     $$PWD/catalog/CatalogTreeView.h \
-    $$PWD/catalog/CatalogWidget.h
+    $$PWD/catalog/CatalogWidget.h \
+    $$PWD/SearchItemWidget.h
 
 SOURCES += \
     $$PWD/PagingWidget.cpp \
@@ -30,4 +31,5 @@ SOURCES += \
     $$PWD/BufferWidget.cpp \
     $$PWD/font/FontMenu.cpp \
     $$PWD/catalog/CatalogTreeView.cpp \
-    $$PWD/catalog/CatalogWidget.cpp
+    $$PWD/catalog/CatalogWidget.cpp \
+    $$PWD/SearchItemWidget.cpp
