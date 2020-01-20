@@ -1,16 +1,20 @@
 #ifndef NOTIFYSUBJECT_H
 #define NOTIFYSUBJECT_H
 
+#include <QMutex>
+
 #include "SubjectThread.h"
 #include "subjectObserver/Singleton.h"
-#include <QThread>
-#include "SubjectHeader.h"
-#include <QMutex>
 
 /**
  * @brief The NotifySubject class
  * @brief 消息推送服务
  */
+//  消息数据结构体
+typedef struct {
+    int msgType = -1;
+    QString msgContent = "";
+} MsgStruct;
 
 
 class NotifySubject : public SubjectThread

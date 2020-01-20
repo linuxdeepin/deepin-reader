@@ -10,7 +10,6 @@
 
 #include <DDialog>
 #include "utils/utils.h"
-#include "CustomControl/ImageFrame.h"
 #include "CustomControl/ImageLabel.h"
 #include "subjectObserver/IObserver.h"
 
@@ -50,9 +49,7 @@ private slots:
 private:
     QVBoxLayout     *m_pVBoxLayout = nullptr;
     SubjectThread   *m_pNotifySubject = nullptr;
-
-    //    DLabel *labelImage = nullptr;
-    /*ImageFrame*/ ImageLabel *frameImage = nullptr;
+    ImageLabel *frameImage = nullptr;
 };
 
 #endif  // FILEATTRWIDGET_H

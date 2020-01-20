@@ -18,7 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#pragma once
+
+#ifndef CUSTOMCONTROL_ROUNDCOLORWIDGET_H
+#define CUSTOMCONTROL_ROUNDCOLORWIDGET_H
 
 #include <DWidget>
 
@@ -27,6 +29,8 @@ DWIDGET_USE_NAMESPACE
 class RoundColorWidget : public DWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(RoundColorWidget)
+
 public:
     explicit RoundColorWidget(const QColor &color, QWidget *parent = nullptr);
     bool isSelected();
@@ -41,6 +45,8 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
-    bool m_isSelected;
+    bool m_isSelected = false;
     QColor m_color;
 };
+
+#endif // CUSTOMCONTROL_ROUNDCOLORWIDGET_H

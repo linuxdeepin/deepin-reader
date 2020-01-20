@@ -3,12 +3,10 @@
 
 #include <DMenu>
 #include <DPushButton>
-#include <DToolButton>
 
-#include "CustomControl/CustemIconButton.h"
 #include "CustomControl/CustomWidget.h"
-#include "utils/PublicFunction.h"
 #include "pdfControl/font/FontMenu.h"
+
 /**
  * @brief The TitleWidget class
  * @brief   标题栏的 按钮操作
@@ -28,7 +26,14 @@ signals:
     void sigOpenFileOk();
     void sigAppFullScreen();
     void sigMagnifierCancel();
-//    void sigDealWithShortKey(const QString &);
+
+    // IObserver interface
+public:
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+
+    // CustomWidget interface
+protected:
+    void initWidget() Q_DECL_OVERRIDE;
 
 private slots:
     void slotSetFindWidget(const int &);
@@ -64,7 +69,6 @@ private:
     QStringList shortKeyList;
 
     DMenu *m_pHandleMenu = nullptr;
-//    DMenu *m_pSettingMenu = nullptr;
     FontMenu *m_pFontMenu = nullptr;
 
     DPushButton *m_pThumbnailBtn = nullptr;
@@ -73,13 +77,6 @@ private:
     DPushButton *m_pMagnifierBtn = nullptr;
 
     int m_nCurHandleShape = -1;  //  当前的选择工具状态
-    // CustomWidget interface
-protected:
-    void initWidget() Q_DECL_OVERRIDE;
-
-    // IObserver interface
-public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 };
 
 #endif  // TITLEWIDGET_H

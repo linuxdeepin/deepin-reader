@@ -201,7 +201,7 @@ void FileAttrWidget::initCloseBtn()
 
 void FileAttrWidget::initImageLabel()
 {
-    frameImage = new /*ImageFrame*/ ImageLabel(this);
+    frameImage = new ImageLabel(this);
     frameImage->setFixedSize(98, 117);
 
     auto vlayout = new QVBoxLayout;

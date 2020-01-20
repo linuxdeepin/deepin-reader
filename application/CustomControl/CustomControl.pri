@@ -3,10 +3,7 @@ HEADERS += \
     $$PWD/CustomClickLabel.h \
     $$PWD/ImageLabel.h \
     $$PWD/PageNumberLabel.h \
-    $$PWD/ColorMenu.h \
     $$PWD/DFMGlobal.h \
-    $$PWD/ImageFrame.h \
-    $$PWD/CustemIconButton.h \
     $$PWD/RoundColorWidget.h
 
 SOURCES += \
@@ -14,8 +11,5 @@ SOURCES += \
     $$PWD/CustomClickLabel.cpp \
     $$PWD/ImageLabel.cpp \
     $$PWD/PageNumberLabel.cpp \
-    $$PWD/ColorMenu.cpp \
     $$PWD/DFMGlobal.cpp \
-    $$PWD/ImageFrame.cpp \
-    $$PWD/CustemIconButton.cpp \
     $$PWD/RoundColorWidget.cpp

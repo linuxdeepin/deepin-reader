@@ -1,8 +1,10 @@
 #include "TitleWidget.h"
+
 #include <QHBoxLayout>
 #include <QWidgetAction>
-#include "controller/AppSetting.h"
+
 #include "controller/DataManager.h"
+#include "utils/PublicFunction.h"
 
 TitleWidget::TitleWidget(CustomWidget *parent)
     : CustomWidget("TitleWidget", parent)
