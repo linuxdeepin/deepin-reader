@@ -76,5 +76,4 @@ void CustomItemWidget::resizeEvent(QResizeEvent *event)
     if (parentWidget) {
         resize(parentWidget->width(), this->height());
     }
-
 }

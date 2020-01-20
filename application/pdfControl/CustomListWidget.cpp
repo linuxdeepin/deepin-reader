@@ -21,7 +21,7 @@
 #include <DScrollBar>
 
 #include "CustomItemWidget.h"
-#include "utils/utils.h"
+//#include "utils/utils.h"
 
 CustomListWidget::CustomListWidget(DWidget *parent)
     : DListWidget(parent)
@@ -36,8 +36,7 @@ CustomListWidget::CustomListWidget(DWidget *parent)
     setSelectionMode(QAbstractItemView::SingleSelection);
     sortItems(Qt::AscendingOrder);
 
-    connect(this, SIGNAL(itemClicked(QListWidgetItem *)), this,
-            SLOT(slotShowSelectItem(QListWidgetItem *)));
+    connect(this, SIGNAL(itemClicked(QListWidgetItem *)), SLOT(slotShowSelectItem(QListWidgetItem *)));
     connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SIGNAL(sigValueChanged(int)));
 }
 
@@ -78,16 +77,16 @@ QListWidgetItem *CustomListWidget::insertWidgetItem(const int &iData)
  * @param row
  * @param image
  */
-void CustomListWidget::slot_loadImage(const int &row, const QImage &image)
-{
-    auto item = this->item(row);
-    if (item) {
-        auto t_ItemWidget = reinterpret_cast<CustomItemWidget *>(this->itemWidget(item));
-        if (t_ItemWidget) {
-            t_ItemWidget->setLabelImage(image);
-        }
-    }
-}
+//void CustomListWidget::slot_loadImage(const int &row, const QImage &image)
+//{
+//    auto item = this->item(row);
+//    if (item) {
+//        auto t_ItemWidget = reinterpret_cast<CustomItemWidget *>(this->itemWidget(item));
+//        if (t_ItemWidget) {
+//            t_ItemWidget->setLabelImage(image);
+//        }
+//    }
+//}
 
 /**
  * @brief CustomListWidget::slotShowSelectItem
@@ -107,17 +106,16 @@ void CustomListWidget::slotShowSelectItem(QListWidgetItem *item)
         int nJumpPage = t_ItemWidget->nPageIndex();
         //  页跳转
         g_NotifySubject::getInstance()->notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nJumpPage));
-
     }
 }
 
-void CustomListWidget::resizeEvent(QResizeEvent *event)
-{
-    DListWidget::resizeEvent(event);
+//void CustomListWidget::resizeEvent(QResizeEvent *event)
+//{
+//    DListWidget::resizeEvent(event);
 
-    auto parentWidget = reinterpret_cast<DWidget *>(this->parent());
-    if (parentWidget) {
-        resize(parentWidget->width(), this->height());
+//    auto parentWidget = reinterpret_cast<DWidget *>(this->parent());
+//    if (parentWidget) {
+//        resize(parentWidget->width(), this->height());
 //        qDebug() << "  CustomListWidget  width:" << this->width() << "  height:" << this->height();
-    }
-}
+//    }
+//}

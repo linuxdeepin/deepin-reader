@@ -44,15 +44,15 @@ public:
 //    inline void setRotateAngele(const int &angle) {m_nRotate = angle;}
 
 private slots:
-    void slot_loadImage(const int &row, const QImage &image);
+//    void slot_loadImage(const int &row, const QImage &image);
     void slotShowSelectItem(QListWidgetItem *);
 
 //private:
 //    int m_nRotate = 0;           // 缩略图旋转角度
 
     // QWidget interface
-protected:
-    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+//protected:
+//    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 };
 
 #endif // CUSTOMLISTWIDGET_H

@@ -111,7 +111,7 @@ private:
     QListWidgetItem *addBookMarkItem(const int &);
     void deleteIndexPage(const int &pageIndex);
     void clearItemColor();
-    bool bOperationBK();
+//    bool bOperationBK();
 
 public:
     // IObserver interface

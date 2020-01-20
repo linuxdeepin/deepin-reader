@@ -145,16 +145,16 @@ void BookMarkItemWidget::paintEvent(QPaintEvent *event)
     }
 }
 
-bool BookMarkItemWidget::bOperationBK()
-{
-    int leftShow = 0;
-    int widgetIndex = 0;
-    leftShow = DataManager::instance()->getShowLeft().toInt();
-    widgetIndex = DataManager::instance()->getListIndex().toInt();
+//bool BookMarkItemWidget::bOperationBK()
+//{
+//    int leftShow = 0;
+//    int widgetIndex = 0;
+//    leftShow = DataManager::instance()->getShowLeft().toInt();
+//    widgetIndex = DataManager::instance()->getListIndex().toInt();
 
-    if (leftShow == 1 && widgetIndex == 2) {
-        return true;
-    }
+//    if (leftShow == 1 && widgetIndex == 2) {
+//        return true;
+//    }
 
-    return false;
-}
+//    return false;
+//}

@@ -120,7 +120,6 @@ private:
     void setSelectItemBackColor(QListWidgetItem *);
     void clearItemColor();
 
-private:
     void fillContantToList();
     void addNewItem(const stHighlightContent &note);
     QListWidgetItem *addNewItem(const QImage &image, const int &page, const QString &uuid, const QString &text);
