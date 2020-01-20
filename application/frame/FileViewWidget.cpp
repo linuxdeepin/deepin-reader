@@ -625,7 +625,7 @@ void FileViewWidget::slotBookMarkStateChange(int nPage, bool bState)
 //  文档页变化了
 void FileViewWidget::slotDocFilePageChanged(int page)
 {
-//    AppSetting::instance()->setKeyValue(KEY_PAGENUM, QString("%1").arg(page));
+    DataManager::instance()->setCurPage(QString::number(page));
 
     notifyMsg(MSG_FILE_PAGE_CHANGE, QString("%1").arg(page));
 }

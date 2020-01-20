@@ -118,7 +118,7 @@ void MainOperationWidget::__SearchExit()
 {
     int nId = 0;
 
-    QString sWidget = DataManager::instance()->getListIndex();//AppSetting::instance()->getKeyValue(KEY_WIDGET);
+    QString sWidget = DataManager::instance()->getListIndex();
     if (sWidget != "") {
         nId = sWidget.toInt();
     }
@@ -183,34 +183,6 @@ void MainOperationWidget::slotButtonClicked(int id)
 
     DataManager::instance()->setListIndex(QString::number(id));
 }
-
-/**
- * @brief MainOperationWidget::slotSearchControl
- * 搜索内容时，此模块不可用
- */
-//void MainOperationWidget::slotSearchControl()
-//{
-//    auto hideBtn = this->findChild<DPushButton *>("hideBtn");
-//    if (hideBtn) {
-//        hideBtn->setChecked(true);
-//    }
-//}
-
-/**
- * @brief MainOperationWidget::slotSearchClosed
- * 搜索结束后，回复结束后的状态
- */
-//void MainOperationWidget::slotSearchClosed()
-//{
-//    int nId = 0;
-
-//    QString sWidget = AppSetting::instance()->getKeyValue(KEY_WIDGET);
-//    if (sWidget != "") {
-//        nId = sWidget.toInt();
-//    }
-
-//    __SetBtnCheckById(nId);
-//}
 
 int MainOperationWidget::dealWithData(const int &msgType, const QString &msgContent)
 {

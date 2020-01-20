@@ -118,13 +118,6 @@ void BookMarkWidget::nextPage()
  */
 void BookMarkWidget::slotAddBookMark()
 {
-//    int leftShow = 0;
-//    int widgetIndex = 0;
-//    leftShow =AppSetting::instance()->getKeyValue(KEY_M).toInt();
-//    widgetIndex = AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt();
-
-//    if (leftShow == 1 && widgetIndex == 2) {
-
     if (!m_pAddBookMarkBtn->isEnabled()) {
         return;
     }
@@ -134,7 +127,6 @@ void BookMarkWidget::slotAddBookMark()
         int nPage = proxy->currentPageNo();
         sendMsg(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(nPage));
     }
-//    }
 }
 
 //  书签状态 添加指定页
@@ -321,8 +313,8 @@ bool BookMarkWidget::bOperationBK()
 {
     int leftShow = 0;
     int widgetIndex = 0;
-    leftShow = DataManager::instance()->getShowLeft().toInt();//AppSetting::instance()->getKeyValue(KEY_M).toInt();
-    widgetIndex = DataManager::instance()->getListIndex().toInt();//AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt();
+    leftShow = DataManager::instance()->getShowLeft().toInt();
+    widgetIndex = DataManager::instance()->getListIndex().toInt();
 
     if (leftShow == 1 && widgetIndex == 2) {
         return true;

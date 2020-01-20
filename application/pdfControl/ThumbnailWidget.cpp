@@ -79,7 +79,6 @@ void ThumbnailWidget::initWidget()
     auto hLine = new DHorizontalLine(this);
 
     auto m_pvBoxLayout = new QVBoxLayout;
-    m_pvBoxLayout->setContentsMargins(0, 0, 0, 0);
     m_pvBoxLayout->addWidget(m_pThumbnailListWidget);
     m_pvBoxLayout->addWidget(hLine);
     m_pvBoxLayout->addWidget(m_pPageWidget);
@@ -109,11 +108,6 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
         if (pWidget) {
             pWidget->setBSelect(true);
         }
-
-        int nJumpPage = pWidget->nPageIndex();
-//        m_pPageWidget->setCurrentPageValue(nJumpPage);
-
-        DataManager::instance()->setCurPage(QString::number(nJumpPage));
     }
 }
 
@@ -195,10 +189,11 @@ void ThumbnailWidget::slotRotateThumbnail(int index)
             return;
         }
         auto item = m_pThumbnailListWidget->item(index);
-        auto pWidget =
-            reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
-        if (pWidget) {
-            pWidget->rotateThumbnail(m_nRotate);
+        if (item) {
+            auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
+            if (pWidget) {
+                pWidget->rotateThumbnail(m_nRotate);
+            }
         }
     }
 }
@@ -280,14 +275,18 @@ void ThumbnailWidget::showItemBookMark(int ipage)
     if (ipage >= 0) {
         auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(
                            m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(ipage)));
-        pWidget->slotBookMarkShowStatus(true);
+        if (pWidget) {
+            pWidget->slotBookMarkShowStatus(true);
+        }
     } else {
         dApp->dbM->getBookMarks();
         QList<int> pageList = dApp->dbM->getBookMarkList();
         foreach (int index, pageList) {
             auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(
                                m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(index)));
-            pWidget->slotBookMarkShowStatus(true);
+            if (pWidget) {
+                pWidget->slotBookMarkShowStatus(true);
+            }
         }
     }
 }

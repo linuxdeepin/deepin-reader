@@ -334,17 +334,17 @@ void MainWindow::onSetAppTitle(const QString &sData)
 {
     titlebar()->setTitle(sData);
 
-    QString sPageNum = DataManager::instance()->getCurPage();//AppSetting::instance()->getKeyValue(KEY_PAGENUM);
+    QString sPageNum = DataManager::instance()->getCurPage();
     if (sPageNum != "") {
         notifyMsg(MSG_DOC_JUMP_PAGE, sPageNum);
     }
 
-    QString sM = DataManager::instance()->getShowLeft();//AppSetting::instance()->getKeyValue(KEY_M);
+    QString sM = DataManager::instance()->getShowLeft();
     if (sM == "1") {
         notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_m);
     }
 
-    QString sWidget = DataManager::instance()->getListIndex();//AppSetting::instance()->getKeyValue(KEY_WIDGET);
+    QString sWidget = DataManager::instance()->getListIndex();
     if (sWidget != "") {
         notifyMsg(MSG_SWITCHLEFTWIDGET, sWidget);
     } else {

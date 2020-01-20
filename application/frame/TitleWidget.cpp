@@ -133,7 +133,6 @@ void TitleWidget::on_thumbnailBtn_clicked()
     bool rl = m_pThumbnailBtn->isChecked();
     notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(rl));
 
-//    AppSetting::instance()->setKeyValue(KEY_M, QString("%1").arg(rl));
     DataManager::instance()->setBThumbnIsShow(rl);
     DataManager::instance()->setShowLeft(QString::number(rl));
 }

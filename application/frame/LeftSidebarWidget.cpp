@@ -90,7 +90,7 @@ void LeftSidebarWidget::slotSetStackCurIndex(const int &iIndex)
     if (iIndex == WIDGET_SEARCH || iIndex == WIDGET_BUFFER) {
         emit sigSearchWidgetState(iIndex);
     } else {
-        DataManager::instance()->setListIndex(QString::number(iIndex));//AppSetting::instance()->setKeyValue(KEY_WIDGET, QString::number(iIndex));
+        DataManager::instance()->setListIndex(QString::number(iIndex));
     }
 }
 

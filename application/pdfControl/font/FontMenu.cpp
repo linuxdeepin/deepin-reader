@@ -113,8 +113,6 @@ void FontMenu::resetAdaptive()
 
     setScaleRotateViewModeAndShow();
 
-//    AppSetting::instance()->setKeyValue(KEY_PERCENTAGE, "100");
-//    AppSetting::instance()->setKeyValue(KEY_ADAPTAT, "0");
     DataManager::instance()->setFontScale(QString::number(100));
     DataManager::instance()->setFontFit(QString::number(0));
 }
@@ -179,7 +177,6 @@ void FontMenu::slotTwoPage()
         notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(1));  //emit sigFiteH(QString::number(1));
     }
 
-//    AppSetting::instance()->setKeyValue(KEY_DOUBPAGE, QString::number(m_bDoubPage));
     DataManager::instance()->setFontDoubPage(QString::number(m_bDoubPage));
 }
 
@@ -197,9 +194,8 @@ void FontMenu::slotFiteH()
     setAppSetFiteHAndW();
     int t_nShow = m_bFiteH ? 1 : 0;
 
-    notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(t_nShow));  //emit sigFiteH(QString::number(t_nShow));
+    notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(t_nShow));
 
-//    AppSetting::instance()->setKeyValue(KEY_ADAPTAT, QString::number(m_bFiteH ? 10 : (m_bFiteW ? 1 : 0)));
     DataManager::instance()->setFontFit(QString::number(m_bFiteH ? 10 : (m_bFiteW ? 1 : 0)));
 }
 
@@ -217,9 +213,8 @@ void FontMenu::slotFiteW()
     setAppSetFiteHAndW();
     int t_nShow = m_bFiteW ? 1 : 0;
 
-    notifyMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(t_nShow));  //emit sigFiteW(QString::number(t_nShow));
+    notifyMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(t_nShow));
 
-//    AppSetting::instance()->setKeyValue(KEY_ADAPTAT, QString::number(m_bFiteH ? 10 : (m_bFiteW ? 1 : 0)));
     DataManager::instance()->setFontFit(QString::number(m_bFiteH ? 10 : (m_bFiteW ? 1 : 0)));
 }
 
@@ -258,7 +253,6 @@ void FontMenu::slotScaleValChanged(int scale)
         resetFiteHAndW();
         scaleAndRotate();
     } else {
-//        AppSetting::instance()->setKeyValue(KEY_PERCENTAGE, QString::number(m_nScale));
         DataManager::instance()->setFontScale(QString::number(m_nScale));
     }
 
@@ -276,7 +270,7 @@ void FontMenu::slotFileOpenOk()
     int value = 0;
 
     //缩放比例
-    value = DataManager::instance()->getFontScale().toInt();//AppSetting::instance()->getKeyValue(KEY_PERCENTAGE).toInt();
+    value = DataManager::instance()->getFontScale().toInt();
     if (value > 0) {
         m_bIsAdaptMove = true;
         m_pEnlargeSlider->setValue(value);
@@ -284,33 +278,29 @@ void FontMenu::slotFileOpenOk()
     }
 
     //单双页
-    value = DataManager::instance()->getFontDoubPage().toInt();//AppSetting::instance()->getKeyValue(KEY_DOUBPAGE).toInt();
+    value = DataManager::instance()->getFontDoubPage().toInt();
     m_bDoubPage = (value == 1) ? true : false;
     if (m_pTwoPageAction) {
         m_pTwoPageAction->setChecked(m_bDoubPage);
     }
 
     //自适应宽/高
-    int adaptat = DataManager::instance()->getFontFit().toInt();//AppSetting::instance()->getKeyValue(KEY_ADAPTAT).toInt();
+    int adaptat = DataManager::instance()->getFontFit().toInt();
     if (adaptat == 1) {
         m_bFiteW = true;
         m_bFiteH = false;
         m_pFiteWAction->setChecked(m_bFiteW);
         m_pFiteHAction->setChecked(m_bFiteH);
-//        notifyMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(1));          //emit sigFiteW(QString::number(1));
     } else if (adaptat == 10) {
         m_bFiteH = true;
         m_bFiteW = false;
         m_pFiteWAction->setChecked(m_bFiteW);
         m_pFiteHAction->setChecked(m_bFiteH);
-//        notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(1));          //emit sigFiteH(QString::number(1));
     }
 
     //旋转度数
-    m_nRotate = DataManager::instance()->getFontRotate().toInt();//AppSetting::instance()->getKeyValue(KEY_ROTATE).toInt();
+    m_nRotate = DataManager::instance()->getFontRotate().toInt();
     m_nRotate %= 360;
-
-//    scaleAndRotate();
 }
 
 /**
@@ -502,12 +492,9 @@ void FontMenu::rotateThumbnail(bool direct)
 
     setScaleRotateViewModeAndShow();
 
-//    qDebug() << __FUNCTION__ << "  m_nRotate:" << m_nRotate;
-
-//    AppSetting::instance()->setKeyValue(KEY_ROTATE, QString::number(m_nRotate));
     DataManager::instance()->setFontRotate(QString::number(m_nRotate));
 
-    notifyMsg(MSG_FILE_ROTATE, QString::number(m_nRotate));  //emit sigRotate(QString::number(m_nRotate));
+    notifyMsg(MSG_FILE_ROTATE, QString::number(m_nRotate));
 }
 
 /**
@@ -516,15 +503,9 @@ void FontMenu::rotateThumbnail(bool direct)
  */
 void FontMenu::scaleAndRotate()
 {
-    qDebug() << __FUNCTION__ << "      12334566478699     ";
     calcRotateType();
 
     setScaleRotateViewModeAndShow();
-
-//    AppSetting::instance()->setKeyValue(KEY_DOUBPAGE, QString::number(m_bDoubPage));
-//    AppSetting::instance()->setKeyValue(KEY_PERCENTAGE, QString::number(m_nScale));
-//    AppSetting::instance()->setKeyValue(KEY_ADAPTAT, QString::number(m_bFiteH ? 10 : (m_bFiteW ? 1 : 0)));
-//    AppSetting::instance()->setKeyValue(KEY_ROTATE, QString::number(m_nRotate));
 
     DataManager::instance()->setFontScale(QString::number(m_nScale));
     DataManager::instance()->setFontDoubPage(QString::number(m_bDoubPage));
@@ -600,8 +581,7 @@ void FontMenu::setAppSetFiteHAndW()
         iValue = 10;
     }
 
-//    AppSetting::instance()->setKeyValue(KEY_ADAPTAT, QString::number(iValue));
-    DataManager::instance()->setFontFit(QString::number(m_bFiteH ? 10 : (m_bFiteW ? 1 : 0)));
+    DataManager::instance()->setFontFit(QString::number(iValue));
 }
 
 /**

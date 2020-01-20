@@ -143,8 +143,8 @@ void NotesItemWidget::slotDltNoteItemByKey()
 {
     int leftShow = 0;
     int widgetIndex = 0;
-    leftShow = DataManager::instance()->getShowLeft().toInt();//AppSetting::instance()->getKeyValue(KEY_M).toInt();
-    widgetIndex = DataManager::instance()->getListIndex().toInt();//AppSetting::instance()->getKeyValue(KEY_WIDGET).toInt();
+    leftShow = DataManager::instance()->getShowLeft().toInt();
+    widgetIndex = DataManager::instance()->getListIndex().toInt();
     if ((leftShow == 1) && (widgetIndex == 3) && bSelect()) {
         slotDltNoteContant();
     }

@@ -10,13 +10,13 @@
 
 enum KeyType {
     KEY_DIR,
-    KEY_PAGENUM,
-    KEY_M,
-    KEY_WIDGET,
-    KEY_PERCENTAGE,
-    KEY_DOUBPAGE,
-    KEY_ADAPTAT,
-    KEY_ROTATE,
+//    KEY_PAGENUM,
+//    KEY_M,
+//    KEY_WIDGET,
+//    KEY_PERCENTAGE,
+//    KEY_DOUBPAGE,
+//    KEY_ADAPTAT,
+//    KEY_ROTATE,
     KEY_APP_WIDTH,
     KEY_APP_HEIGHT
 };
