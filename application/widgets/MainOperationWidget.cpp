@@ -28,10 +28,10 @@ MainOperationWidget::~MainOperationWidget()
         m_pNotifySubject->removeObserver(this);
     }
 
-    if (m_pRefinedAbstractionA) {
-        delete m_pRefinedAbstractionA;
-        m_pRefinedAbstractionA = nullptr;
-    }
+//    if (m_pRefinedAbstractionA) {
+//        delete m_pRefinedAbstractionA;
+//        m_pRefinedAbstractionA = nullptr;
+//    }
 }
 
 /**
@@ -52,12 +52,13 @@ MainOperationWidget::~MainOperationWidget()
 
 void MainOperationWidget::initWidget()
 {
-    m_pRefinedAbstractionA = new RefinedAbstractionA(new ConcreteAbstractionImplementA(this));
+//    m_pRefinedAbstractionA = new RefinedAbstractionA(new ConcreteAbstractionImplementA(this));
 
     auto hboxLayout = new QHBoxLayout;
-    hboxLayout->setContentsMargins(19, 0, 19, 0);
+    hboxLayout->setContentsMargins(15, 0, 15, 0);
+    hboxLayout->setSpacing(31);
 
-    hboxLayout->addStretch();
+//    hboxLayout->addStretch();
 
     auto btnGroup = new QButtonGroup(this);  //  按钮组，　自动实现按钮唯一check属性
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
@@ -72,7 +73,7 @@ void MainOperationWidget::initWidget()
         auto btn = createBtn(sBtn, sObj);
         btnGroup->addButton(btn, iLoop);
         hboxLayout->addWidget(btn);
-        hboxLayout->addSpacing(40);
+//        hboxLayout->addSpacing(40);
     }
 
     auto pSearchBtn = __CreateHideBtn();
@@ -83,7 +84,7 @@ void MainOperationWidget::initWidget()
     btnGroup->addButton(pBufferBtn, WIDGET_BUFFER);
     hboxLayout->addWidget(pBufferBtn);
 
-    hboxLayout->addStretch();
+//    hboxLayout->addStretch();
 
     this->setLayout(hboxLayout);
 

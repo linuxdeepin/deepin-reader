@@ -23,7 +23,7 @@
 PagingWidget::PagingWidget(CustomWidget *parent)
     : CustomWidget(QString("PagingWidget"), parent)
 {
-    resize(LEFTNORMALWIDTH, 56);
+//    resize(LEFTNORMALWIDTH, 56);
 
     initWidget();
     initConnections();
@@ -48,17 +48,17 @@ PagingWidget::~PagingWidget()
 void PagingWidget::initWidget()
 {
     m_pTotalPagesLab = new CustomClickLabel(QString("/xxx"), this);
-    m_pTotalPagesLab->setMinimumWidth(60);
-    m_pTotalPagesLab->setFixedHeight(40);
+//    m_pTotalPagesLab->setMinimumWidth(60);
+//    m_pTotalPagesLab->setFixedHeight(40);
     DFontSizeManager::instance()->bind(m_pTotalPagesLab, DFontSizeManager::T6);
     m_pTotalPagesLab->setForegroundRole(DPalette::Text);
 
     m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
-    m_pPrePageBtn->setFixedSize(QSize(38, 38));
+    m_pPrePageBtn->setFixedSize(QSize(36, 36));
     connect(m_pPrePageBtn, SIGNAL(clicked()), SLOT(slotPrePage()));
 
     m_pNextPageBtn = new DIconButton(DStyle::SP_ArrowRight);
-    m_pNextPageBtn->setFixedSize(QSize(38, 38));
+    m_pNextPageBtn->setFixedSize(QSize(36, 36));
     connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPage()));
 
 //    m_pJumpPageSpinBox = new DSpinBox(this);
@@ -72,15 +72,16 @@ void PagingWidget::initWidget()
 //    m_pJumpPageSpinBox->setForegroundRole(DPalette::Text);
     //DLineEdit *m_pJumpPageLineEdit
     m_pJumpPageLineEdit = new DLineEdit(this);
-    m_pJumpPageLineEdit->setFixedSize(70, 40);
+    m_pJumpPageLineEdit->setFixedSize(60, 36);
     m_pJumpPageLineEdit->installEventFilter(this);
     m_pJumpPageLineEdit->setClearButtonEnabled(false);
     DFontSizeManager::instance()->bind(m_pJumpPageLineEdit, DFontSizeManager::T6);
     m_pJumpPageLineEdit->setForegroundRole(DPalette::Text);
 
     auto hLayout = new QHBoxLayout;
-    hLayout->setContentsMargins(7, 2, 7, 0);
+    hLayout->setContentsMargins(10, 0, 10, 0);
     hLayout->addWidget(m_pJumpPageLineEdit);
+    hLayout->addSpacing(5);
     hLayout->addWidget(m_pTotalPagesLab);
     hLayout->addStretch(1);
     hLayout->addWidget(m_pPrePageBtn);

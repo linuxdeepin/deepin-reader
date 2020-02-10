@@ -57,7 +57,7 @@ public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 
 private:
-    RefinedAbstractionA *m_pRefinedAbstractionA = nullptr;
+//    RefinedAbstractionA *m_pRefinedAbstractionA = nullptr;
 };
 
 #endif // MAINOPERATIONWIDGET_H

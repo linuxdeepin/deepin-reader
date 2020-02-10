@@ -20,9 +20,10 @@
 LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
     : CustomWidget("LeftSidebarWidget", parent)
 {
-    resize(LEFTNORMALWIDTH, this->height());
     setMinimumWidth(LEFTMINWIDTH);
     setMaximumWidth(LEFTMAXWIDTH);
+
+    resize(LEFTNORMALWIDTH, this->height());
 
     m_pMsgList = {MSG_SLIDER_SHOW_STATE};
     m_pKeyMsgList = {KeyStr::g_up, KeyStr::g_pgup, KeyStr::g_left,
