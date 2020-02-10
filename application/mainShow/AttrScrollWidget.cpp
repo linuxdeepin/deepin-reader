@@ -91,9 +91,9 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
         labelText->setText(tr("Unknown")); /*labelText->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);*/
         layout->addWidget(labelText, index, 1);
     } else {
-        DFrame *frame = addTitleFrame(sData);
-        frame->setFrameShape(QFrame::NoFrame);
-        layout->addWidget(frame, index, 1);
+        DFrame *widgets = addTitleFrame(sData);
+        widgets->setFrameShape(QFrame::NoFrame);
+        layout->addWidget(widgets, index, 1);
     }
 }
 

@@ -224,7 +224,7 @@ void CustemTextEdit::init()
     // text corlor
     this->setTextColor(QColor(QString("#452B0A")));
 
-    // frame style
+    // widgets style
     this->setFrameStyle(QFrame::NoFrame);
 
     // text under line

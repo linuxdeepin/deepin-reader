@@ -21,7 +21,7 @@
 #include "SearchItemWidget.h"
 
 #include "controller/DataManager.h"
-#include "frame/LeftSidebarWidget.h"
+#include "widgets/LeftSidebarWidget.h"
 #include "docview/docummentproxy.h"
 
 SearchResWidget::SearchResWidget(DWidget *parent)

@@ -11,7 +11,6 @@ TARGET = deepin-reader
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
 
-include (frame/frame.pri)
 include (utils/utils.pri)
 include (controller/controller.pri)
 include (pdfControl/pdfControl.pri)
@@ -19,6 +18,7 @@ include (docview/docview.pri)
 include (subjectObserver/subjectObserver.pri)
 include (mainShow/mainShow.pri)
 include (CustomControl/CustomControl.pri)
+include (widgets/widgets.pri)
 
 SOURCES += \
         main.cpp \

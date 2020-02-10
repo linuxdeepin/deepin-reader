@@ -1,4 +1,4 @@
-#include "frame/MainWindow.h"
+#include "widgets/MainWindow.h"
 #include "application.h"
 #include <DLog>
 #include <DApplicationSettings>
