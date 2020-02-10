@@ -23,12 +23,14 @@ include (widgets/widgets.pri)
 SOURCES += \
         main.cpp \
     application.cpp\
+    MainWindow.cpp
 
 RESOURCES +=         \
     icons.qrc
 
 HEADERS +=\
-    application.h
+    application.h \
+    MainWindow.h
 
 TRANSLATIONS += \
     translations/deepin-reader_en_US.ts\

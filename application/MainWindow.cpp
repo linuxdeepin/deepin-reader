@@ -1,25 +1,24 @@
 #include "MainWindow.h"
-#include "TitleWidget.h"
-#include "CentralWidget.h"
 
 #include <QFileInfo>
-
 #include <DDialog>
 #include <DTitlebar>
 #include <DWidgetUtil>
-//#include <DFloatingMessage>
 #include <DMessageManager>
 #include <QDesktopServices>
 #include <QDebug>
+#include <DGuiApplicationHelper>
+
+#include "application.h"
 
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
-#include <DGuiApplicationHelper>
-#include "DocummentFileHelper.h"
-
-#include "dialog/ShortCutShow.h"
-
 #include "docview/docummentproxy.h"
+#include "widgets/TitleWidget.h"
+#include "widgets/CentralWidget.h"
+#include "widgets/DocummentFileHelper.h"
+
+#include "widgets/dialog/ShortCutShow.h"
 
 DWIDGET_USE_NAMESPACE
 

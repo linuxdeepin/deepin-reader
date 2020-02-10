@@ -1,13 +1,13 @@
 ﻿#ifndef MainWindow_H
 #define MainWindow_H
 
-#include "application.h"
 #include <DMainWindow>
 #include <DMenu>
 #include <QSignalMapper>
-#include "controller/NotifySubject.h"
 #include <QCloseEvent>
 #include <QResizeEvent>
+
+#include "controller/NotifySubject.h"
 
 DWIDGET_USE_NAMESPACE
 

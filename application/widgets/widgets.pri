@@ -1,5 +1,4 @@
 HEADERS += \
-    $$PWD/MainWindow.h \
     $$PWD/HomeWidget.h \
     $$PWD/LeftSidebarWidget.h \
     $$PWD/FileViewWidget.h \
@@ -18,7 +17,6 @@ HEADERS += \
     $$PWD/FindWidget.h
 
 SOURCES += \
-    $$PWD/MainWindow.cpp \
     $$PWD/HomeWidget.cpp \
     $$PWD/FileViewWidget.cpp \
     $$PWD/LeftSidebarWidget.cpp \
