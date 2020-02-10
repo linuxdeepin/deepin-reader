@@ -1,9 +1,12 @@
 #include "AppSetting.h"
-#include "utils/utils.h"
+
 #include <QDir>
-#include "DataManager.h"
 #include <QDebug>
+
+#include "DataManager.h"
+
 #include "subjectObserver/MsgHeader.h"
+#include "utils/utils.h"
 
 AppSetting::AppSetting(QObject *parent)
     : QObject(parent)
@@ -24,27 +27,27 @@ void AppSetting::setFileKeyValue(const QString &sValue)
     }
 }
 
-QString AppSetting::getFileKeyValue() const
-{
-    // initalize the configuration file.
-    QString sKey = QString("%1").arg(KEY_DIR);
-    return m_pSettings->value(sKey).toString();
-}
+//QString AppSetting::getFileKeyValue() const
+//{
+//    // initalize the configuration file.
+//    QString sKey = QString("%1").arg(KEY_DIR);
+//    return m_pSettings->value(sKey).toString();
+//}
 
-void AppSetting::setKeyValue(const int &iKey, const QString &sValue)
-{
-    // initalize the configuration file.
-    QString sKey = QString("%1").arg(iKey);
+//void AppSetting::setKeyValue(const int &iKey, const QString &sValue)
+//{
+//    // initalize the configuration file.
+//    QString sKey = QString("%1").arg(iKey);
 
-    QString ssFilePath = DataManager::instance()->strOnlyFilePath();
-    QString ssValue = QString("%1@#&%2").arg(ssFilePath).arg(sValue);
+//    QString ssFilePath = DataManager::instance()->strOnlyFilePath();
+//    QString ssValue = QString("%1@#&%2").arg(ssFilePath).arg(sValue);
 
-    if (sValue == "") {
-        m_pSettings->remove(sKey);
-    } else {
-        m_pSettings->setValue(sKey, ssValue);
-    }
-}
+//    if (sValue == "") {
+//        m_pSettings->remove(sKey);
+//    } else {
+//        m_pSettings->setValue(sKey, ssValue);
+//    }
+//}
 
 QString AppSetting::getKeyValue(const int &iKey) const
 {
