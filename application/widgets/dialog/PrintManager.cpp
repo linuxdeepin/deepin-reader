@@ -21,10 +21,8 @@
 #include <QPrinter>
 #include <QPainter>
 #include <QPrintPreviewDialog>
-#include <DDialog>
 
 #include "docview/docummentproxy.h"
-#include "utils/PublicFunction.h"
 
 PrintManager::PrintManager(QObject *parent)
     : QObject(parent)
@@ -35,21 +33,6 @@ PrintManager::PrintManager(QObject *parent)
 void PrintManager::showPrintDialog(DWidget *widget)
 {
     QPrinter printer;
-    printer.setOutputFormat(QPrinter::PdfFormat);
-    printer.setColorMode(QPrinter::Color);
-
-    // 创建打印对话框
-    QString printerName = printer.printerName();
-
-    if (printerName.size() == 0) {
-        DDialog dlg("", tr("No printer found"));
-        dlg.setIcon(QIcon(PF::getIconPath("exception-logo")));
-        dlg.addButtons(QStringList() << tr("OK"));
-        QMargins mar(0, 0, 0, 30);
-        dlg.setContentLayoutContentsMargins(mar);
-        dlg.exec();
-        return;
-    }
 
     QPrintPreviewDialog preview(&printer, widget);
     connect(&preview, SIGNAL(paintRequested(QPrinter *)), SLOT(slotPrintPreview(QPrinter *)));
@@ -68,7 +51,7 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
         nPageSize = _proxy->getPageSNum();  //  pdf 页数
 
         QPainter painter(printer);
-        painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::Antialiasing);
+        painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
         painter.begin(printer);
 
         QRect rect = painter.viewport();
