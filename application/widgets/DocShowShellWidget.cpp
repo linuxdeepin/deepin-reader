@@ -6,13 +6,13 @@
 
 #include "application.h"
 #include "FileViewWidget.h"
+#include "FindWidget.h"
+#include "FileAttrWidget.h"
 #include "PlayControlWidget.h"
 
 #include "controller/DataManager.h"
-#include "mainShow/FindWidget.h"
-#include "mainShow/FileAttrWidget.h"
-#include "utils/PublicFunction.h"
 #include "docview/docummentproxy.h"
+#include "utils/PublicFunction.h"
 
 #include "pdfControl/note/FileViewNoteWidget.h"
 

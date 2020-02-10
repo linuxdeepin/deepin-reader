@@ -12,7 +12,10 @@ HEADERS += \
     $$PWD/PlayControlWidget.h \
     $$PWD/dialog/PrintManager.h \
     $$PWD/dialog/ShortCutShow.h \
-    $$PWD/CentralWidget.h
+    $$PWD/CentralWidget.h \
+    $$PWD/AttrScrollWidget.h \
+    $$PWD/FileAttrWidget.h \
+    $$PWD/FindWidget.h
 
 SOURCES += \
     $$PWD/MainWindow.cpp \
@@ -27,4 +30,7 @@ SOURCES += \
     $$PWD/PlayControlWidget.cpp \
     $$PWD/dialog/PrintManager.cpp \
     $$PWD/dialog/ShortCutShow.cpp \
-    $$PWD/CentralWidget.cpp
+    $$PWD/CentralWidget.cpp \
+    $$PWD/AttrScrollWidget.cpp \
+    $$PWD/FileAttrWidget.cpp \
+    $$PWD/FindWidget.cpp

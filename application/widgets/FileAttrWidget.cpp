@@ -7,6 +7,7 @@
 #include <QFileInfo>
 
 #include "AttrScrollWidget.h"
+
 #include "controller/DataManager.h"
 #include "docview/docummentproxy.h"
 #include "CustomControl/DFMGlobal.h"

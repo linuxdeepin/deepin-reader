@@ -4,10 +4,10 @@
 #include <DFontSizeManager>
 #include <DTextBrowser>
 
-#include "docview/commonstruct.h"
-#include "utils/utils.h"
 #include "CustomControl/DFMGlobal.h"
+#include "docview/commonstruct.h"
 #include "docview/docummentproxy.h"
+#include "utils/utils.h"
 
 #define LAEBL_TEXT_WIDTH   165
 
