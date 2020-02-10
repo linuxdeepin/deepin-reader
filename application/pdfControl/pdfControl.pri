@@ -4,7 +4,6 @@ HEADERS += \
     $$PWD/note/FileViewNoteWidget.h \
     $$PWD/note/NotesWidget.h \
     $$PWD/note/NotesItemWidget.h \
-    $$PWD/font/FontMenu.h \
     $$PWD/catalog/CatalogTreeView.h \
     $$PWD/catalog/CatalogWidget.h \
     $$PWD/thumbnail/PagingWidget.h \
@@ -14,7 +13,8 @@ HEADERS += \
     $$PWD/search/SearchResWidget.h \
     $$PWD/search/BufferWidget.h \
     $$PWD/bookmark/BookMarkItemWidget.h \
-    $$PWD/bookmark/BookMarkWidget.h
+    $$PWD/bookmark/BookMarkWidget.h \
+    $$PWD/FontMenu.h
 
 SOURCES += \
     $$PWD/CustomListWidget.cpp \
@@ -22,7 +22,6 @@ SOURCES += \
     $$PWD/note/FileViewNoteWidget.cpp \
     $$PWD/note/NotesWidget.cpp \
     $$PWD/note/NotesItemWidget.cpp \
-    $$PWD/font/FontMenu.cpp \
     $$PWD/catalog/CatalogTreeView.cpp \
     $$PWD/catalog/CatalogWidget.cpp \
     $$PWD/thumbnail/PagingWidget.cpp \
@@ -32,4 +31,5 @@ SOURCES += \
     $$PWD/search/SearchItemWidget.cpp \
     $$PWD/search/SearchResWidget.cpp \
     $$PWD/bookmark/BookMarkItemWidget.cpp \
-    $$PWD/bookmark/BookMarkWidget.cpp
+    $$PWD/bookmark/BookMarkWidget.cpp \
+    $$PWD/FontMenu.cpp
