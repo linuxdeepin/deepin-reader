@@ -17,6 +17,7 @@ include (pdfControl/pdfControl.pri)
 include (docview/docview.pri)
 include (subjectObserver/subjectObserver.pri)
 include (mainShow/mainShow.pri)
+include (menu/menu.pri)
 include (CustomControl/CustomControl.pri)
 include (widgets/widgets.pri)
 

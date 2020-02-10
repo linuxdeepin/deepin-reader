@@ -13,8 +13,7 @@ HEADERS += \
     $$PWD/search/SearchResWidget.h \
     $$PWD/search/BufferWidget.h \
     $$PWD/bookmark/BookMarkItemWidget.h \
-    $$PWD/bookmark/BookMarkWidget.h \
-    $$PWD/FontMenu.h
+    $$PWD/bookmark/BookMarkWidget.h
 
 SOURCES += \
     $$PWD/CustomListWidget.cpp \
@@ -31,5 +30,4 @@ SOURCES += \
     $$PWD/search/SearchItemWidget.cpp \
     $$PWD/search/SearchResWidget.cpp \
     $$PWD/bookmark/BookMarkItemWidget.cpp \
-    $$PWD/bookmark/BookMarkWidget.cpp \
-    $$PWD/FontMenu.cpp
+    $$PWD/bookmark/BookMarkWidget.cpp

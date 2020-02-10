@@ -24,7 +24,7 @@
 #include "CustomControl/CustomWidget.h"
 #include "DocummentFileHelper.h"
 #include "NoteTipWidget.h"
-#include "mainShow/TextOperationMenu.h"
+#include "menu/TextOperationMenu.h"
 #include "docview/pagebase.h"
 
 //  当前鼠标状态

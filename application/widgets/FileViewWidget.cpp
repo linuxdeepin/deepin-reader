@@ -28,7 +28,7 @@
 #include "docview/docummentproxy.h"
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
-#include "mainShow/DefaultOperationMenu.h"
+#include "menu/DefaultOperationMenu.h"
 #include "utils/PublicFunction.h"
 #include "dialog/PrintManager.h"
 

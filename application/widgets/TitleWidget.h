@@ -5,7 +5,7 @@
 #include <DPushButton>
 
 #include "CustomControl/CustomWidget.h"
-#include "pdfControl/FontMenu.h"
+#include "menu/FontMenu.h"
 
 /**
  * @brief The TitleWidget class
