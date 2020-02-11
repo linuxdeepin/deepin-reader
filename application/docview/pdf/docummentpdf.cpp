@@ -62,7 +62,12 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
     m_pages.clear();
     for (int i = 0; i < document->numPages(); i++) {
         PagePdf *page = new PagePdf(q);
-        page->setPage(document->page(i), i);
+        Poppler::Page *popplerpage = document->page(i);
+        page->setPage(popplerpage, i);
+        QString strlabel = popplerpage->label();
+        if (!strlabel.isEmpty()) {
+            m_labeltopageindex.insert(strlabel, i);
+        }
         m_pages.append((PageBase *)page);
     }
     if (m_pages.size() > 0) {

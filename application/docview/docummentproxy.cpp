@@ -224,6 +224,16 @@ bool DocummentProxy::removeIconAnnotation(const QString &uuid, int ipage)
     return  m_documment->removeIconAnnotation(uuid, ipage);
 }
 
+QMap<QString, int> DocummentProxy::getlabelmap()
+{
+    QMap<QString, int> tem;
+    if (!m_documment)
+        return tem;
+
+    return m_documment->getlabelmap();
+
+}
+
 bool DocummentProxy::save(const QString &filepath, bool withChanges)
 {
     if (!m_documment || bcloseing)

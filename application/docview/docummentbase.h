@@ -27,23 +27,7 @@ DGUI_USE_NAMESPACE
 class SearchTask;
 class DocummentBase;
 class DocummentBasePrivate;
-//class ThreadLoadDocumment : public QThread
-//{
-//    Q_OBJECT
-//public:
-//    ThreadLoadDocumment();
-//    void setDoc(DocummentBase *doc, QString path);
-//    void setRestart();
-//signals:
-//    void signal_docLoaded(bool);
-//protected:
-//    virtual void run();
 
-//private:
-//    DocummentBase *m_doc;
-//    QString m_path;
-//    bool restart;
-//};
 class ThreadLoadData : public QThread
 {
     Q_OBJECT
@@ -149,6 +133,7 @@ public:
         autoplayslidtimer = nullptr;
         m_autoplayslidmsec = 0;
         m_bautoplayslidreset = false;
+        m_labeltopageindex.clear();
 
     }
 
@@ -232,6 +217,7 @@ public:
     QTimer *autoplayslidtimer;
     int m_autoplayslidmsec;
     bool m_bautoplayslidreset;//播放到最后一页重置状态从头可以从头开始播放
+    QMap<QString, int> m_labeltopageindex;
 
 
 signals:
@@ -318,6 +304,7 @@ public:
     bool removeIconAnnotation(const QString &uuid, int ipage);
     double getMaxZoomratio();
     void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage);
+    const QMap<QString, int> &getlabelmap();
 
 signals:
     void signal_pageChange(int);

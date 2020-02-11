@@ -2030,5 +2030,11 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, u
 
 }
 
+const QMap<QString, int> &DocummentBase::getlabelmap()
+{
+    Q_D(DocummentBase);
+    return d->m_labeltopageindex;
+}
+
 
 

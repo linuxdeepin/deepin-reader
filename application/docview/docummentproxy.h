@@ -67,6 +67,7 @@ public:
     void moveIconAnnotation(const QString &uuid, const QPoint &pos);
     bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
     bool removeIconAnnotation(const QString &uuid, int ipage = -1);
+    QMap<QString, int> getlabelmap();
 signals:
     void signal_pageChange(int);
     bool signal_pageJump(int);
