@@ -11,13 +11,14 @@ TARGET = deepin-reader
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
 
-include (utils/utils.pri)
+include (business/business.pri)
 include (controller/controller.pri)
-include (pdfControl/pdfControl.pri)
-include (docview/docview.pri)
-include (subjectObserver/subjectObserver.pri)
-include (menu/menu.pri)
 include (CustomControl/CustomControl.pri)
+include (docview/docview.pri)
+include (menu/menu.pri)
+include (pdfControl/pdfControl.pri)
+include (subjectObserver/subjectObserver.pri)
+include (utils/utils.pri)
 include (widgets/widgets.pri)
 
 SOURCES += \
@@ -65,6 +66,9 @@ CONFIG(release, debug|release) {
 }
 
 INSTALLS += target desktop icon_files
+
+DISTFILES += \
+    business/business.pri
 
 
 

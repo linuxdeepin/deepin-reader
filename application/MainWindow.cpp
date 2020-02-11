@@ -9,15 +9,14 @@
 
 #include "application.h"
 
+#include "business/ShortCutShow.h"
+#include "business/DocummentFileHelper.h"
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
 #include "menu/TitleMenu.h"
 #include "widgets/TitleWidget.h"
 #include "widgets/CentralWidget.h"
-#include "widgets/DocummentFileHelper.h"
-
-#include "widgets/dialog/ShortCutShow.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -329,6 +328,7 @@ void MainWindow::showDefaultSize()
         resize(nWidth, nHeight);
     }
 }
+
 
 //  初始化 快捷键操作
 void MainWindow::initShortCut()

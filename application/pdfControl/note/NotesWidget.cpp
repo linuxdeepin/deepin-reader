@@ -18,7 +18,7 @@
  */
 #include "NotesWidget.h"
 #include "controller/DataManager.h"
-#include "widgets/DocummentFileHelper.h"
+#include "business/DocummentFileHelper.h"
 #include "docview/docummentproxy.h"
 
 NotesWidget::NotesWidget(DWidget *parent)

@@ -20,7 +20,6 @@
 #define PRINTMANAGER_H
 
 #include <QObject>
-
 #include <DWidget>
 
 class QPrinter;

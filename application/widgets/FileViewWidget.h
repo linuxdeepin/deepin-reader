@@ -21,11 +21,12 @@
 
 #include <QMouseEvent>
 
-#include "CustomControl/CustomWidget.h"
-#include "DocummentFileHelper.h"
 #include "NoteTipWidget.h"
-#include "menu/TextOperationMenu.h"
+
+#include "business/DocummentFileHelper.h"
+#include "CustomControl/CustomWidget.h"
 #include "docview/pagebase.h"
+#include "menu/TextOperationMenu.h"
 
 //  当前鼠标状态
 enum Handel_Enum {

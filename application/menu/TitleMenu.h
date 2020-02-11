@@ -36,7 +36,7 @@ class TitleMenu : public DMenu
     Q_DISABLE_COPY(TitleMenu)
 
 public:
-    TitleMenu(DWidget *parent = nullptr);
+    explicit TitleMenu(DWidget *parent = nullptr);
 
 signals:
     void sigSetSlideShow();

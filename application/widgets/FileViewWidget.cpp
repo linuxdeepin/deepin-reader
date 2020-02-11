@@ -30,7 +30,7 @@
 #include "controller/AppSetting.h"
 #include "menu/DefaultOperationMenu.h"
 #include "utils/PublicFunction.h"
-#include "dialog/PrintManager.h"
+#include "business/PrintManager.h"
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
