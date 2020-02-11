@@ -23,12 +23,10 @@
 //TEXT primari key   | TEXT     | TEXT       | TEXT  //
 ///////////////////////////////////////////////////////
 
-
-#include <QSqlDatabase>
 #include <QObject>
-#include <QDateTime>
 #include <QMutex>
-#include <QDebug>
+
+class QSqlDatabase;
 
 class DBManager : public QObject
 {
@@ -40,7 +38,7 @@ public:
     virtual ~DBManager();
 
 protected:
-    const QSqlDatabase getDatabase() const;
+    const QSqlDatabase getDatabase();
     void checkDatabase();
 
 public:
@@ -74,7 +72,7 @@ private:
 protected:
     QString m_strFilePath = "";
     QString m_strFileName = "";
-    mutable QMutex m_mutex;
+    QMutex m_mutex;
 };
 
 #endif // DBMANAGER_H

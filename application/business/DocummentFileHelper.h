@@ -23,11 +23,10 @@
 #include <QObject>
 
 #include "subjectObserver/IObserver.h"
-
 #include "controller/DataManager.h"
-#include "controller/NotifySubject.h"
-
 #include "docview/commonstruct.h"
+
+class SubjectThread;
 
 /**
  * @brief The DocummentFileHelper class

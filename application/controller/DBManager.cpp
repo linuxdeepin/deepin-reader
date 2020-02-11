@@ -15,17 +15,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "DBManager.h"
-#include "application.h"
-//#include "signalmanager.h"
-//#include "utils/baseutils.h"
+
 #include <QDebug>
 #include <QDir>
-#include <QMutex>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
-
+#include <QDateTime>
 #include <QStandardPaths>
+
+#include "application.h"
 
 #include "subjectObserver/MsgHeader.h"
 #include "utils/utils.h"
@@ -219,7 +218,7 @@ DBManager::~DBManager()
 }
 
 
-const QSqlDatabase DBManager::getDatabase() const
+const QSqlDatabase DBManager::getDatabase()
 {
     QMutexLocker mutex(&m_mutex);
     if (QSqlDatabase::contains(m_connectionName)) {
