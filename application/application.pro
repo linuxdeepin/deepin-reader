@@ -71,10 +71,6 @@ CONFIG(release, debug|release) {
 
 INSTALLS += target desktop icon_files
 
-DISTFILES += \
-    business/business.pri
-
-
 
 
 
