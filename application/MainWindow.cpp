@@ -1,11 +1,9 @@
 #include "MainWindow.h"
 
-#include <QFileInfo>
 #include <DDialog>
 #include <DTitlebar>
 #include <DWidgetUtil>
-#include <DMessageManager>
-#include <QDesktopServices>
+#include <QSignalMapper>
 #include <QDebug>
 #include <DGuiApplicationHelper>
 
@@ -14,6 +12,7 @@
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
+#include "menu/TitleMenu.h"
 #include "widgets/TitleWidget.h"
 #include "widgets/CentralWidget.h"
 #include "widgets/DocummentFileHelper.h"
@@ -34,15 +33,11 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     initUI();
 
-    initTitlebar();
-
     initConnections();
 
     initThemeChanged();
 
     initShortCut();
-
-    //installEventFilter(this);
 
     m_pNotifySubject = g_NotifySubject::getInstance();
     if (m_pNotifySubject) {
@@ -129,35 +124,15 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::initUI()
 {
+    titlebar()->setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
+    titlebar()->setTitle("");
+
+    TitleMenu *menu = new TitleMenu(this);
+    connect(menu, SIGNAL(sigSetSlideShow()), SLOT(SlotSlideShow()));
+    titlebar()->setMenu(menu);
+
     titlebar()->addWidget(new TitleWidget, Qt::AlignLeft);
     setCentralWidget(new CentralWidget);
-}
-
-//bool MainWindow::eventFilter(QObject *obj, QEvent *e)
-//{
-//    int nType = e->type();
-//    if (nType == QEvent::KeyPress) {    //  按下
-//        QKeyEvent *event = static_cast<QKeyEvent *>(e);
-//        QString key = Utils::getKeyshortcut(event);
-//    }
-//    return DMainWindow::eventFilter(obj, e);
-//}
-
-
-void MainWindow::createActionMap(DMenu *m_menu, QSignalMapper *pSigManager,
-                                 const QStringList &actionList, const QStringList &actionObjList)
-{
-    int nFirstSize = actionList.size();
-    for (int iLoop = 0; iLoop < nFirstSize; iLoop++) {
-        QString sActionName = actionList.at(iLoop);
-        QString sObjName = actionObjList.at(iLoop);
-
-        QAction *_action = createAction(m_menu, sActionName, sObjName);
-        connect(_action, SIGNAL(triggered()), pSigManager, SLOT(map()));
-        pSigManager->setMapping(_action, sObjName);
-        m_menu->addSeparator();
-    }
-    m_menu->addSeparator();
 }
 
 void MainWindow::initConnections()
@@ -178,56 +153,10 @@ void MainWindow::initConnections()
             }
         }
     });
-
-    auto m_menu = new DMenu(this);
-    auto pSigManager = new QSignalMapper(this);
-    connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(slotActionTrigger(const QString &)));
-
-    QStringList firstActionList = QStringList() << tr("Open") << tr("Save") << tr("Save as")
-                                  << tr("Display in file manager") << tr("Print") << tr("Document info");
-    QStringList firstActionObjList = QStringList() << "Open" << "Save" << "Save as"
-                                     << "Display in file manager" << "Print" << "Document info";
-
-    createActionMap(m_menu, pSigManager, firstActionList, firstActionObjList);
-
-    QStringList secondActionList = QStringList() << tr("Search") /*<< tr("Fullscreen")*/ << tr("Slide show")
-                                   << tr("Zoom in") << tr("Zoom out");
-    QStringList secondActionObjList = QStringList() << "Search" /*<< "Fullscreen" */ << "Slide show"
-                                      << "Zoom in" << "Zoom out";
-
-    createActionMap(m_menu, pSigManager, secondActionList, secondActionObjList);
-
-    titlebar()->setMenu(m_menu);
-
-    auto actions = m_menu->findChildren<QAction *>();
-    foreach (QAction *a, actions) {
-        if (a->objectName() == "Open") {
-            a->setDisabled(false);
-            break;
-        }
-    }
-}
-
-void MainWindow::initTitlebar()
-{
-    titlebar()->setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
-    titlebar()->setTitle("");
-}
-
-//  打开 所在文件夹
-void MainWindow::onOpenFolder()
-{
-    QString strFilePath = DataManager::instance()->strOnlyFilePath();
-    if (strFilePath != "") {
-        int nLastPos = strFilePath.lastIndexOf('/');
-        strFilePath = strFilePath.mid(0, nLastPos);
-        strFilePath = QString("file://") + strFilePath;
-        QDesktopServices::openUrl(QUrl(strFilePath));
-    }
 }
 
 //  放映
-void MainWindow::onScreening()
+void MainWindow::SlotSlideShow()
 {
     //  已经是幻灯片了
     if (FILE_SLIDE == DataManager::instance()->CurShowState()) {
@@ -262,21 +191,6 @@ void MainWindow::setCurTheme()
 
     DataManager::instance()->settrCurrentTheme(sTheme);
 }
-
-//void MainWindow::onOpenAppHelp()
-//{
-//    QDesktopServices::openUrl(QUrl(Constant::sAcknowledgementLink));
-//}
-
-//void MainWindow::dealWithKeyEvent(const QString &key)
-//{
-//    qDebug() << "           1";
-//    QString sFilePath = DataManager::instance()->strOnlyFilePath();
-//    if (sFilePath != "") {
-//        notifyMsg(MSG_NOTIFY_KEY_MSG, key);
-//    }
-//}
-
 
 //  显示快捷键
 void MainWindow::displayShortcuts()
@@ -362,34 +276,6 @@ void MainWindow::slotOpenFileOk(const QString &msgContent)
     onSetAppTitle(msgContent);
 }
 
-//  点击菜单　发送指令
-void MainWindow::slotActionTrigger(const QString &sAction)
-{
-    if (sAction == "Open") {
-        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_o);
-    } else if (sAction == "Save") {
-        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_s);
-    } else if (sAction == "Save as") {
-        notifyMsg(MSG_OPERATION_SAVE_AS_FILE);
-    } else if (sAction == "Display in file manager") {
-        onOpenFolder();
-    } else if (sAction == "Print") {
-        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_p);
-    } else if (sAction == "Document info") {
-        notifyMsg(MSG_OPERATION_ATTR);
-    } else if (sAction == "Search") {
-        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_f);
-    } else if (sAction == "Fullscreen") {
-        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_f11);
-    } else if (sAction == "Slide show") {
-        onScreening();
-    } else if (sAction == "Zoom in") {
-        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_larger);
-    } else if (sAction == "Zoom out") {
-        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_smaller);
-    }
-}
-
 void MainWindow::slotDealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_EXIT) {
@@ -400,9 +286,6 @@ void MainWindow::slotDealWithData(const int &msgType, const QString &msgContent)
 //  快捷键 实现
 void MainWindow::slotShortCut(const QString &key)
 {
-//    if (key == KeyStr::g_f1) {
-//        onOpenAppHelp();
-//    } else
     if (key == KeyStr::g_ctrl_shift_slash) { //  显示快捷键预览
         displayShortcuts();
     } else if (key == KeyStr::g_ctrl_o) {   //  打开文件
@@ -411,7 +294,7 @@ void MainWindow::slotShortCut(const QString &key)
         QString sFilePath = DataManager::instance()->strOnlyFilePath();     //  没有打开的文件
         if (sFilePath != "") {
             if (key == KeyStr::g_ctrl_h) {  //  播放幻灯片
-                onScreening();
+                SlotSlideShow();
             } else {
                 notifyMsg(MSG_NOTIFY_KEY_MSG, key);
             }
@@ -489,14 +372,4 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
         }
     }
     return 0;
-}
-
-QAction *MainWindow::createAction(DMenu *menu, const QString &actionName, const QString &objName)
-{
-    QAction *action = new QAction(actionName, menu);
-    action->setObjectName(objName);
-    action->setDisabled(true);
-    menu->addAction(action);
-
-    return action;
 }

@@ -3,13 +3,13 @@
 
 #include <DMainWindow>
 #include <DMenu>
-#include <QSignalMapper>
-#include <QCloseEvent>
-#include <QResizeEvent>
 
-#include "controller/NotifySubject.h"
+#include "subjectObserver/IObserver.h"
 
 DWIDGET_USE_NAMESPACE
+
+class SubjectThread;
+class QSignalMapper;
 
 /**
  * @brief The MainWindow class
@@ -40,28 +40,17 @@ signals:
 protected:
     void showEvent(QShowEvent *ev) Q_DECL_OVERRIDE;
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
-    // bool eventFilter(QObject *obj, QEvent *e) Q_DECL_OVERRIDE;
 
 private:
     void initUI();
     void initConnections();
-    void initTitlebar();
 
-    QAction *createAction(DMenu *menu, const QString &actionName, const QString &);
-
-//    void onOpenFile();
-    void onOpenFolder();
-    void onScreening();
     void onSetAppTitle(const QString &);
     void onAppExit();
 
     void initThemeChanged();
     void setCurTheme();
-//    void dealWithKeyEvent(const QString &key);
-//    void onOpenAppHelp();
     void displayShortcuts();
-
-    void createActionMap(DMenu *m_menu, QSignalMapper *pSigManager, const QStringList &firstActionList, const QStringList &firstActionObjList);
 
     // IObserver interface
     void sendMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
@@ -76,22 +65,20 @@ private slots:
     void slotFullScreen();
     void slotAppShowState(const int &);
 
-    void slotActionTrigger(const QString &);
     void slotDealWithData(const int &, const QString &);
 
     void slotShortCut(const QString &);
+    void SlotSlideShow();
 
 private:
     SubjectThread   *m_pNotifySubject = nullptr;
 
     QList<int>      m_pMsgList;
-//    QStringList     m_pFilterList;
     Qt::WindowStates    m_nOldState = Qt::WindowNoState;        //  旧的窗口状态
 
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
-
 };
 
 #endif // MainWindow_H
