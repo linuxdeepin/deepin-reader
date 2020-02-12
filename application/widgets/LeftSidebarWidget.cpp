@@ -26,6 +26,9 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
     resize(LEFTNORMALWIDTH, this->height());
 
     m_pMsgList = {MSG_SLIDER_SHOW_STATE};
+    m_pKeyMsgList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown
+                    << KeyStr::g_down << KeyStr::g_up
+                    << KeyStr::g_left << KeyStr::g_right << KeyStr::g_del;
 
     initWidget();
     initConnections();
@@ -49,6 +52,17 @@ void LeftSidebarWidget::slotDealWithData(const int &msgType, const QString &msgC
 {
     if (msgType == MSG_SLIDER_SHOW_STATE) {//  控制 侧边栏显隐
         onSetWidgetVisible(msgContent.toInt());
+    }
+}
+
+void LeftSidebarWidget::slotDealWithKeyMsg(const QString &sKey)
+{
+    if (sKey == KeyStr::g_up || sKey == KeyStr::g_pgup || sKey == KeyStr::g_left) {
+        onJumpToPrevPage();
+    } else if (sKey == KeyStr::g_down || sKey == KeyStr::g_pgdown || sKey == KeyStr::g_right) {
+        onJumpToNextPage();
+    } else if (sKey == KeyStr::g_del) {
+        __DeleteItemByKey();
     }
 }
 
@@ -119,6 +133,7 @@ void LeftSidebarWidget::initConnections()
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
+    connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)), SLOT(slotDealWithKeyMsg(const QString &)));
 }
 
 //  按delete 键 删除书签 或者 注释
@@ -240,35 +255,12 @@ int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgConten
 
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
-    }
-
-    return 0;
-}
-
-//  左侧栏 接收 上\下\左\右, 删除 消息即可,  文档区域不作处理.
-void LeftSidebarWidget::keyPressEvent(QKeyEvent *event)
-{
-    QStringList pFilterList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown
-                              << KeyStr::g_down << KeyStr::g_up
-                              << KeyStr::g_left << KeyStr::g_right  << KeyStr::g_del;
-    QString key = Utils::getKeyshortcut(event);
-    if (pFilterList.contains(key)) {
-        QString sFilePath = DataManager::instance()->strOnlyFilePath();
-        if (sFilePath != "") {
-            __DealWithPressKey(key);
+    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
+        if (m_pKeyMsgList.contains(msgContent)) {
+            emit sigDealWithKeyMsg(msgContent);
+            return ConstantMsg::g_effective_res;
         }
     }
 
-    CustomWidget::keyPressEvent(event);
-}
-
-void LeftSidebarWidget::__DealWithPressKey(const QString &sKey)
-{
-    if (sKey == KeyStr::g_up || sKey == KeyStr::g_pgup || sKey == KeyStr::g_left) {
-        onJumpToPrevPage();
-    } else if (sKey == KeyStr::g_down || sKey == KeyStr::g_pgdown || sKey == KeyStr::g_right) {
-        onJumpToNextPage();
-    } else if (sKey == KeyStr::g_del) {
-        __DeleteItemByKey();
-    }
+    return 0;
 }

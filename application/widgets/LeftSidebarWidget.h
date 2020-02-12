@@ -28,12 +28,9 @@ public:
 protected:
     void initWidget() Q_DECL_OVERRIDE;
 
-    // QWidget interface
-protected:
-    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
-
 private slots:
     void slotDealWithData(const int &, const QString &);
+    void slotDealWithKeyMsg(const QString &);
 
     void slotUpdateTheme();
     void slotSetStackCurIndex(const int &);
@@ -46,8 +43,6 @@ private:
 
     void onJumpToPrevPage();
     void onJumpToNextPage();
-
-    void __DealWithPressKey(const QString &);
 
     void doPrevPage(const int &index);
     void doNextPage(const int &index);
