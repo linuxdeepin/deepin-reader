@@ -240,13 +240,15 @@ void CentralWidget::dropEvent(QDropEvent *event)
             onShowTips(msgContent);
         }
 
-        QString sRes = "";
+        if (canOpenFileList.count() > 0) {
+            QString sRes = "";
 
-        foreach (auto s, canOpenFileList) {
-            sRes += s + Constant::sQStringSep;
+            foreach (auto s, canOpenFileList) {
+                sRes += s + Constant::sQStringSep;
+            }
+
+            notifyMsg(MSG_OPEN_FILE_PATH_S, sRes);
         }
-
-        notifyMsg(MSG_OPEN_FILE_PATH_S, sRes);
     }
 }
 
