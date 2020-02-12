@@ -224,14 +224,25 @@ bool DocummentProxy::removeIconAnnotation(const QString &uuid, int ipage)
     return  m_documment->removeIconAnnotation(uuid, ipage);
 }
 
-QMap<QString, int> DocummentProxy::getlabelmap()
+QString DocummentProxy::pagenum2label(int index)
 {
-    QMap<QString, int> tem;
     if (!m_documment)
-        return tem;
+        return  QString();
+    return m_documment->pagenum2label(index);
+}
 
-    return m_documment->getlabelmap();
+int DocummentProxy::label2pagenum(QString label)
+{
+    if (!m_documment)
+        return  -1;
+    return  m_documment->label2pagenum(label);
+}
 
+bool DocummentProxy::haslabel()
+{
+    if (!m_documment)
+        return  false;
+    return m_documment->haslabel();
 }
 
 bool DocummentProxy::save(const QString &filepath, bool withChanges)

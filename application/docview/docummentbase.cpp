@@ -2030,11 +2030,27 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, u
 
 }
 
-const QMap<QString, int> &DocummentBase::getlabelmap()
+QString DocummentBase::pagenum2label(int index)
 {
     Q_D(DocummentBase);
-    return d->m_labeltopageindex;
+    auto it = d->m_pagenum2label.find(index);
+    return it != d->m_pagenum2label.end() ? it.value() : QString();
 }
+
+int DocummentBase::label2pagenum(QString label)
+{
+    Q_D(DocummentBase);
+    auto it = d->m_label2pagenum.find(label);
+    return it != d->m_label2pagenum.end() ? it.value() : -1;
+}
+
+bool DocummentBase::haslabel()
+{
+    Q_D(DocummentBase);
+    return d->m_label2pagenum.size() > 0 ? true : false;
+}
+
+
 
 
 

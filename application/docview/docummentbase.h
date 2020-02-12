@@ -133,8 +133,8 @@ public:
         autoplayslidtimer = nullptr;
         m_autoplayslidmsec = 0;
         m_bautoplayslidreset = false;
-        m_labeltopageindex.clear();
-
+        m_label2pagenum.clear();
+        m_pagenum2label.clear();
     }
 
     ~DocummentBasePrivate()
@@ -217,7 +217,8 @@ public:
     QTimer *autoplayslidtimer;
     int m_autoplayslidmsec;
     bool m_bautoplayslidreset;//播放到最后一页重置状态从头可以从头开始播放
-    QMap<QString, int> m_labeltopageindex;
+    QMap<QString, int> m_label2pagenum;
+    QMap<int, QString> m_pagenum2label;
 
 
 signals:
@@ -304,7 +305,9 @@ public:
     bool removeIconAnnotation(const QString &uuid, int ipage);
     double getMaxZoomratio();
     void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage);
-    const QMap<QString, int> &getlabelmap();
+    QString pagenum2label(int index);
+    int label2pagenum(QString label);
+    bool haslabel();
 
 signals:
     void signal_pageChange(int);
