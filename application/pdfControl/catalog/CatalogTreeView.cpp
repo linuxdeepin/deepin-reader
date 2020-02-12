@@ -99,7 +99,7 @@ void CatalogTreeView::parseCatalogData(const Section &ol, QStandardItem *parentI
 
                 foreach (auto s1, s.children) { //  3级显示
                     if (s1.link.page > 0) {
-                        auto itemList1 = getItemList(s1.title, s1.link.page, s.link.left, s.link.top);
+                        auto itemList1 = getItemList(s1.title, s1.link.page, s1.link.left, s1.link.top);
                         itemList.at(0)->appendRow(itemList1);
                     }
                 }
@@ -170,13 +170,8 @@ void CatalogTreeView::SlotClicked(const QModelIndex &index)
         double left = index.data(Qt::UserRole + 2).toDouble();
         double top = index.data(Qt::UserRole + 3).toDouble();
 
-
-        qDebug() << nPage << "      " << left << "      " << top;
-
         _proxy->jumpToOutline(left, top, nPage);
-
     }
-//    notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nPage));
 }
 
 //  文档页变化, 目录高亮随之变化
