@@ -11,8 +11,8 @@ TARGET = deepin-reader
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
 
-CONFIG += precompile_header
-PRECOMPILED_HEADER = stable.h
+#CONFIG += precompile_header
+#PRECOMPILED_HEADER = stable.h
 
 include (business/business.pri)
 include (controller/controller.pri)
@@ -35,7 +35,7 @@ RESOURCES +=         \
 HEADERS +=\
     application.h \
     MainWindow.h \
-    stable.h
+#    stable.h
 
 TRANSLATIONS += \
     translations/deepin-reader_en_US.ts\
