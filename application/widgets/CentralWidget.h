@@ -38,13 +38,19 @@ public:
 
 signals:
     void sigOpenFileOk();
-//    void sigDealWithData(const int &, const QString &);
+
+    // IObserver interface
+public:
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 
     // QWidget interface
 protected:
-    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
     void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
+
+    // CustomWidget interface
+protected:
+    void initWidget() Q_DECL_OVERRIDE;
 
 private slots:
     void slotOpenFileOk();
@@ -56,14 +62,6 @@ private:
     void onOpenFileStart();
     void onOpenFileFail(const QString &);
     void onShowTips(const QString &);
-
-    // IObserver interface
-public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
-
-    // CustomWidget interface
-protected:
-    void initWidget() Q_DECL_OVERRIDE;
 };
 
 #endif  // MAINSTACKWIDGET_H

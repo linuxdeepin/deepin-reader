@@ -23,7 +23,7 @@ DataManager::DataManager(QObject *parent) :
 void DataManager::initKeyList()
 {
 //    m_pKeyList.append(QKeySequence::HelpContents);            //  dtk 已实现
-    m_pKeyList.append(QKeySequence::Delete);
+//    m_pKeyList.append(QKeySequence::Delete);                  //  2020.2.12  delete 不能作快捷键使用
     m_pKeyList.append(QKeySequence::Find);
     m_pKeyList.append(QKeySequence::Open);
     m_pKeyList.append(QKeySequence::Print);

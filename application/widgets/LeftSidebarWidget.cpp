@@ -26,10 +26,6 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
     resize(LEFTNORMALWIDTH, this->height());
 
     m_pMsgList = {MSG_SLIDER_SHOW_STATE};
-    m_pKeyMsgList = {KeyStr::g_up, KeyStr::g_pgup, KeyStr::g_left,
-                     KeyStr::g_down, KeyStr::g_pgdown, KeyStr::g_right,
-                     KeyStr::g_del
-                    };
 
     initWidget();
     initConnections();
@@ -53,20 +49,6 @@ void LeftSidebarWidget::slotDealWithData(const int &msgType, const QString &msgC
 {
     if (msgType == MSG_SLIDER_SHOW_STATE) {//  控制 侧边栏显隐
         onSetWidgetVisible(msgContent.toInt());
-    }
-}
-
-void LeftSidebarWidget::slotDealWithKeyMsg(const QString &msgContent)
-{
-    //  上 下 一页 由左侧栏进行转发
-    if (msgContent == KeyStr::g_up || msgContent == KeyStr::g_pgup ||
-            msgContent == KeyStr::g_left) {
-        onJumpToPrevPage();
-    } else if (msgContent == KeyStr::g_down || msgContent == KeyStr::g_pgdown ||
-               msgContent == KeyStr::g_right) {
-        onJumpToNextPage();
-    } else if (msgContent == KeyStr::g_del) {
-        __DeleteItemByKey();
     }
 }
 
@@ -137,27 +119,23 @@ void LeftSidebarWidget::initConnections()
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
-    connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)), SLOT(slotDealWithKeyMsg(const QString &)));
 }
 
 //  按delete 键 删除书签 或者 注释
 void LeftSidebarWidget::__DeleteItemByKey()
 {
-    bool bl = this->isVisible();
-    if (bl) {
-        auto pWidget = this->findChild<DStackedWidget *>();
-        if (pWidget) {
-            int iIndex = pWidget->currentIndex();
-            if (iIndex == WIDGET_BOOKMARK) {
-                auto widget = this->findChild<BookMarkWidget *>();
-                if (widget) {
-                    widget->DeleteItemByKey();
-                }
-            } else if (iIndex == WIDGET_NOTE) {
-                auto widget = this->findChild<NotesWidget *>();
-                if (widget) {
-                    widget->DeleteItemByKey();
-                }
+    auto pWidget = this->findChild<DStackedWidget *>();
+    if (pWidget) {
+        int iIndex = pWidget->currentIndex();
+        if (iIndex == WIDGET_BOOKMARK) {
+            auto widget = this->findChild<BookMarkWidget *>();
+            if (widget) {
+                widget->DeleteItemByKey();
+            }
+        } else if (iIndex == WIDGET_NOTE) {
+            auto widget = this->findChild<NotesWidget *>();
+            if (widget) {
+                widget->DeleteItemByKey();
             }
         }
     }
@@ -262,19 +240,35 @@ int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgConten
 
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
-    } else if (MSG_NOTIFY_KEY_MSG == msgType) {
-        if (m_pKeyMsgList.contains(msgContent)) {
-            emit sigDealWithKeyMsg(msgContent);
-            return ConstantMsg::g_effective_res;
-        }
     }
 
     return 0;
 }
 
-void LeftSidebarWidget::resizeEvent(QResizeEvent *event)
+//  左侧栏 接收 上\下\左\右, 删除 消息即可,  文档区域不作处理.
+void LeftSidebarWidget::keyPressEvent(QKeyEvent *event)
 {
-    CustomWidget::resizeEvent(event);
+    QStringList pFilterList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown
+                              << KeyStr::g_down << KeyStr::g_up
+                              << KeyStr::g_left << KeyStr::g_right  << KeyStr::g_del;
+    QString key = Utils::getKeyshortcut(event);
+    if (pFilterList.contains(key)) {
+        QString sFilePath = DataManager::instance()->strOnlyFilePath();
+        if (sFilePath != "") {
+            __DealWithPressKey(key);
+        }
+    }
 
-    update();
+    CustomWidget::keyPressEvent(event);
+}
+
+void LeftSidebarWidget::__DealWithPressKey(const QString &sKey)
+{
+    if (sKey == KeyStr::g_up || sKey == KeyStr::g_pgup || sKey == KeyStr::g_left) {
+        onJumpToPrevPage();
+    } else if (sKey == KeyStr::g_down || sKey == KeyStr::g_pgdown || sKey == KeyStr::g_right) {
+        onJumpToNextPage();
+    } else if (sKey == KeyStr::g_del) {
+        __DeleteItemByKey();
+    }
 }
