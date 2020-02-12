@@ -757,7 +757,7 @@ QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
 bool PageBase::showImage(double scale, RotateType_EM rotate)
 {
     Q_D(PageBase);
-    qDebug() << "PageBase in showImage" << scale << d->m_scale;
+    // qDebug() << "PageBase in showImage" << scale << d->m_scale;
     if (((d->m_scale - scale) < EPSINON || (scale - d->m_scale) < EPSINON) && d->m_rotate == rotate && d->havereander) {
         return false;
     }

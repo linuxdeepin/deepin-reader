@@ -60,17 +60,26 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
     document->setRenderHint(Poppler::Document::ThinLineSolid, true);
     document->setRenderHint(Poppler::Document::ThinLineShape, true);
     m_pages.clear();
+    int countlabelnotmatch = 0;
     for (int i = 0; i < document->numPages(); i++) {
         PagePdf *page = new PagePdf(q);
         Poppler::Page *popplerpage = document->page(i);
         page->setPage(popplerpage, i);
         QString strlabel = popplerpage->label();
+
         if (!strlabel.isEmpty()) {
+            qDebug() << __FUNCTION__ << "-------" << strlabel << i;
             m_label2pagenum.insert(strlabel, i);
             m_pagenum2label.insert(i, strlabel);
-            qDebug() << __FUNCTION__ << strlabel << "------" << i;
+            if (strlabel.toInt() != i + 1) {
+                countlabelnotmatch ++;
+            }
         }
         m_pages.append((PageBase *)page);
+    }
+    if (countlabelnotmatch <= 0) {
+        m_label2pagenum.clear();
+        m_pagenum2label.clear();
     }
     if (m_pages.size() > 0) {
         m_imagewidth = m_pages.at(0)->getOriginalImageWidth();
