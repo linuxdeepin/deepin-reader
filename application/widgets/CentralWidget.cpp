@@ -58,15 +58,17 @@ CentralWidget::~CentralWidget()
 
 void CentralWidget::keyPressEvent(QKeyEvent *event)
 {
-    //  暂未想出好的处理方法  王志轩, 左侧栏 和 文档区域 上下键 功能不相同
-    QStringList pFilterList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown
-                              << KeyStr::g_down << KeyStr::g_up
-                              << KeyStr::g_left << KeyStr::g_right << KeyStr::g_del;
-    QString key = Utils::getKeyshortcut(event);
-    if (pFilterList.contains(key)) {
-        QString sFilePath = DataManager::instance()->strOnlyFilePath();
-        if (sFilePath != "") {
-            notifyMsg(MSG_NOTIFY_KEY_MSG, key);
+    //  不是正常显示, 则是全屏模式或者幻灯片模式, 进行页面跳转
+    if (DataManager::instance()->CurShowState() != FILE_NORMAL) {
+        QStringList pFilterList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown
+                                  << KeyStr::g_down << KeyStr::g_up
+                                  << KeyStr::g_left << KeyStr::g_right;
+        QString key = Utils::getKeyshortcut(event);
+        if (pFilterList.contains(key)) {
+            QString sFilePath = DataManager::instance()->strOnlyFilePath();
+            if (sFilePath != "") {
+                notifyMsg(MSG_NOTIFY_KEY_PLAY_MSG, key);
+            }
         }
     }
 

@@ -313,28 +313,28 @@ void ThumbnailWidget::nextPage()
  * @brief ThumbnailWidget::forScreenPageing
  * 全屏和放映时快捷键切换页 true:向下翻页  false:向上翻页
  */
-void ThumbnailWidget::forScreenPageing(bool direction)
-{
-    if (DataManager::instance()->CurShowState() != FILE_NORMAL) {
+//void ThumbnailWidget::forScreenPageing(bool direction)
+//{
+//    if (DataManager::instance()->CurShowState() != FILE_NORMAL) {
 
-        auto helper = DocummentProxy::instance();
-        if (helper) {
-            bool bstart = false;
-            if (helper->getAutoPlaySlideStatu()) {
-                helper->setAutoPlaySlide(false);
-                bstart = true;
-            }
-            int nCurPage = helper->currentPageNo();
-            direction ? nCurPage++ : nCurPage--;
-            notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
-//            jumpToSpecifiedPage(nCurPage);
-            if (bstart) {
-                helper->setAutoPlaySlide(true);
-                bstart = false;
-            }
-        }
-    }
-}
+//        auto helper = DocummentProxy::instance();
+//        if (helper) {
+//            bool bstart = false;
+//            if (helper->getAutoPlaySlideStatu()) {
+//                helper->setAutoPlaySlide(false);
+//                bstart = true;
+//            }
+//            int nCurPage = helper->currentPageNo();
+//            direction ? nCurPage++ : nCurPage--;
+//            notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
+////            jumpToSpecifiedPage(nCurPage);
+//            if (bstart) {
+//                helper->setAutoPlaySlide(true);
+//                bstart = false;
+//            }
+//        }
+//    }
+//}
 
 // 关联成功打开文件槽函数
 void ThumbnailWidget::slotOpenFileOk()

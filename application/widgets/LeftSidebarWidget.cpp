@@ -26,9 +26,6 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
     resize(LEFTNORMALWIDTH, this->height());
 
     m_pMsgList = {MSG_SLIDER_SHOW_STATE};
-    m_pKeyMsgList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown
-                    << KeyStr::g_down << KeyStr::g_up
-                    << KeyStr::g_left << KeyStr::g_right << KeyStr::g_del;
 
     initWidget();
     initConnections();
@@ -55,7 +52,7 @@ void LeftSidebarWidget::slotDealWithData(const int &msgType, const QString &msgC
     }
 }
 
-void LeftSidebarWidget::slotDealWithKeyMsg(const QString &sKey)
+void LeftSidebarWidget::__DealWithPressKey(const QString &sKey)
 {
     if (sKey == KeyStr::g_up || sKey == KeyStr::g_pgup || sKey == KeyStr::g_left) {
         onJumpToPrevPage();
@@ -97,34 +94,50 @@ void LeftSidebarWidget::slotSetStackCurIndex(const int &iIndex)
 //  上一页
 void LeftSidebarWidget::onJumpToPrevPage()
 {
-    //  1.需要判断当前的模式, 是正常显示 还是幻灯片模式
-    //  2.若不是幻灯片模式, 则正常进行处理
-    bool bl = this->isVisible();
-    if (bl) {
-        auto pWidget = this->findChild<DStackedWidget *>();
-        if (pWidget) {
-            int iIndex = pWidget->currentIndex();
-            doPrevPage(iIndex);
+    auto pWidget = this->findChild<DStackedWidget *>();
+    if (pWidget) {
+        int iIndex = pWidget->currentIndex();
+        if (iIndex == WIDGET_THUMBNAIL) {
+            auto widget = this->findChild<ThumbnailWidget *>();
+            if (widget) {
+                widget->prevPage();
+            }
+        }  else if (iIndex == WIDGET_BOOKMARK) {
+            auto widget = this->findChild<BookMarkWidget *>();
+            if (widget) {
+                widget->prevPage();
+            }
+        } else if (iIndex == WIDGET_NOTE) {
+            auto widget = this->findChild<NotesWidget *>();
+            if (widget) {
+                widget->prevPage();
+            }
         }
-    } else {
-        forScreenPageing(false);
     }
 }
 
 //  下一页
 void LeftSidebarWidget::onJumpToNextPage()
 {
-    //  1.需要判断当前的模式, 是正常显示 还是幻灯片模式
-    //  2.若不是幻灯片模式, 则正常进行处理
-    bool bl = this->isVisible();
-    if (bl) {
-        auto pWidget = this->findChild<DStackedWidget *>();
-        if (pWidget) {
-            int iIndex = pWidget->currentIndex();
-            doNextPage(iIndex);
+    auto pWidget = this->findChild<DStackedWidget *>();
+    if (pWidget) {
+        int iIndex = pWidget->currentIndex();
+        if (iIndex == WIDGET_THUMBNAIL) {
+            auto widget = this->findChild<ThumbnailWidget *>();
+            if (widget) {
+                widget->nextPage();
+            }
+        }  else if (iIndex == WIDGET_BOOKMARK) {
+            auto widget = this->findChild<BookMarkWidget *>();
+            if (widget) {
+                widget->nextPage();
+            }
+        } else if (iIndex == WIDGET_NOTE) {
+            auto widget = this->findChild<NotesWidget *>();
+            if (widget) {
+                widget->nextPage();
+            }
         }
-    } else {
-        forScreenPageing(true);
     }
 }
 
@@ -133,7 +146,6 @@ void LeftSidebarWidget::initConnections()
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
-    connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)), SLOT(slotDealWithKeyMsg(const QString &)));
 }
 
 //  按delete 键 删除书签 或者 注释
@@ -153,68 +165,6 @@ void LeftSidebarWidget::__DeleteItemByKey()
                 widget->DeleteItemByKey();
             }
         }
-    }
-}
-
-/**
- * @brief LeftSidebarWidget::doPrevPage
- * 上一页
- * @param index
- */
-void LeftSidebarWidget::doPrevPage(const int &index)
-{
-    if (index == WIDGET_THUMBNAIL) {
-        auto widget = this->findChild<ThumbnailWidget *>();
-        if (widget) {
-            widget->prevPage();
-        }
-    }  else if (index == WIDGET_BOOKMARK) {
-        auto widget = this->findChild<BookMarkWidget *>();
-        if (widget) {
-            widget->prevPage();
-        }
-    } else if (index == WIDGET_NOTE) {
-        auto widget = this->findChild<NotesWidget *>();
-        if (widget) {
-            widget->prevPage();
-        }
-    }
-}
-
-/**
- * @brief LeftSidebarWidget::doNextPage
- * 下一页
- * @param index
- */
-void LeftSidebarWidget::doNextPage(const int &index)
-{
-    if (index == WIDGET_THUMBNAIL) {
-        auto widget = this->findChild<ThumbnailWidget *>();
-        if (widget) {
-            widget->nextPage();
-        }
-    }  else if (index == WIDGET_BOOKMARK) {
-        auto widget = this->findChild<BookMarkWidget *>();
-        if (widget) {
-            widget->nextPage();
-        }
-    } else if (index == WIDGET_NOTE) {
-        auto widget = this->findChild<NotesWidget *>();
-        if (widget) {
-            widget->nextPage();
-        }
-    }
-}
-
-/**
- * @brief LeftSidebarWidget::forScreenPageing
- * 全屏和放映时快捷键切换页 true:向下翻页  false:向上翻页
- */
-void LeftSidebarWidget::forScreenPageing(bool direction)
-{
-    auto widget = this->findChild<ThumbnailWidget *>();
-    if (widget) {
-        widget->forScreenPageing(direction);
     }
 }
 
@@ -255,12 +205,24 @@ int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgConten
 
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
-    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (m_pKeyMsgList.contains(msgContent)) {
-            emit sigDealWithKeyMsg(msgContent);
-            return ConstantMsg::g_effective_res;
-        }
     }
 
     return 0;
+}
+
+void LeftSidebarWidget::keyPressEvent(QKeyEvent *event)
+{
+    QStringList pFilterList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown
+                              << KeyStr::g_down << KeyStr::g_up
+                              << KeyStr::g_left << KeyStr::g_right
+                              << KeyStr::g_del;
+    QString key = Utils::getKeyshortcut(event);
+    if (pFilterList.contains(key)) {
+        QString sFilePath = DataManager::instance()->strOnlyFilePath();
+        if (sFilePath != "") {
+            __DealWithPressKey(key);
+        }
+    }
+
+    CustomWidget::keyPressEvent(event);
 }

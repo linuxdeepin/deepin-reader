@@ -28,6 +28,8 @@ PlayControlWidget::PlayControlWidget(DWidget *parnet)
     initConnections();
     adjustSize();
 
+    m_pMsgList = {MSG_NOTIFY_KEY_PLAY_MSG};
+
     m_pNotifySubject = g_NotifySubject::getInstance();
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
@@ -45,6 +47,11 @@ PlayControlWidget::~PlayControlWidget()
 
 int PlayControlWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
+    if (m_pMsgList.contains(msgType)) {
+        emit sigDealWithData(msgType, msgContent);
+        return ConstantMsg::g_effective_res;
+    }
+
     if (MSG_NOTIFY_KEY_MSG == msgType) {
         if (KeyStr::g_space == msgContent) {
             changePlayStatus();
@@ -123,6 +130,8 @@ void PlayControlWidget::initConnections()
     connect(m_pbtnnext, &DIconButton::clicked, this, &PlayControlWidget::slotNextClicked);
     connect(m_pbtnexit, &DIconButton::clicked, this, &PlayControlWidget::slotExitClicked);
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
+
+    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
 }
 
 DIconButton *PlayControlWidget::createBtn(const QString &strname)
@@ -135,7 +144,7 @@ DIconButton *PlayControlWidget::createBtn(const QString &strname)
     return  btn;
 }
 
-void PlayControlWidget::pagejump(bool bpre)
+void PlayControlWidget::pagejump(const bool &bpre)
 {
     auto helper = DocummentProxy::instance();
     if (helper) {
@@ -179,7 +188,7 @@ void PlayControlWidget::enterEvent(QEvent *event)
 void PlayControlWidget::leaveEvent(QEvent *event)
 {
     m_ptimer->start();
-    DFloatingWidget::enterEvent(event);
+    DFloatingWidget::leaveEvent(event);
 }
 
 void PlayControlWidget::slotUpdateTheme()
@@ -218,4 +227,21 @@ void PlayControlWidget::slotExitClicked()
     notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
     m_ptimer->stop();
     hide();
+}
+
+void PlayControlWidget::SlotDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_NOTIFY_KEY_PLAY_MSG) {
+        __PageChangeByKey(msgContent);
+    }
+}
+
+//  按了键盘 上下左右
+void PlayControlWidget::__PageChangeByKey(const QString &sKey)
+{
+    if (sKey == KeyStr::g_up || sKey == KeyStr::g_pgup || sKey == KeyStr::g_left) {
+        pagejump(true);
+    } else {
+        pagejump(false);
+    }
 }

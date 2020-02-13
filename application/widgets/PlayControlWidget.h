@@ -18,19 +18,42 @@ public:
     explicit PlayControlWidget(DWidget *parnet = nullptr);
     ~PlayControlWidget()Q_DECL_OVERRIDE;
 
+    //  主题更新信号
+signals:
+    void sigUpdateTheme();
+    void sigDealWithData(const int &, const QString &);
+
 public:
     void activeshow(int ix = 0, int iy = 0);
     void killshow();
     void setCanShow(bool bshow) {m_bcanshow = bshow;}
     bool canShow() {return m_bcanshow;}
+
+    // IObserver interface
+public:
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    void sendMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
+    void notifyMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
+
 protected:
+    void enterEvent(QEvent *) Q_DECL_OVERRIDE;
+    void leaveEvent(QEvent *) Q_DECL_OVERRIDE;
+
+private slots:
+    void slotUpdateTheme();
+    void slotPreClicked();
+    void slotPlayClicked();
+    void slotNextClicked();
+    void slotExitClicked();
+    void SlotDealWithData(const int &, const QString &);
+
+private:
+    void __PageChangeByKey(const QString &);
     void initWidget();
     void initConnections();
     DIconButton *createBtn(const QString &strname = QString());
-    void pagejump(bool bpre = true);
+    void pagejump(const bool &bpre);
     void changePlayStatus();
-    void enterEvent(QEvent *)Q_DECL_OVERRIDE;
-    void leaveEvent(QEvent *)Q_DECL_OVERRIDE;
 
 private:
     SubjectThread   *m_pNotifySubject = nullptr;
@@ -43,21 +66,8 @@ private:
     bool m_bcanshow = false;
     bool m_bautoplaying = false;
     bool m_bfirstshow = false;
-    //  主题更新信号
-signals:
-    void sigUpdateTheme();
-private slots:
-    void slotUpdateTheme();
-    void slotPreClicked();
-    void slotPlayClicked();
-    void slotNextClicked();
-    void slotExitClicked();
 
-    // IObserver interface
-public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
-    void sendMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
-    void notifyMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
+    QList<int>          m_pMsgList;
 };
 
 #endif // PLAYCONTROLWIDGET_H

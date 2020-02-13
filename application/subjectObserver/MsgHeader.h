@@ -108,6 +108,7 @@ enum MSG_OPERATION_RES_TYPE {
     MSG_OPERATION_OPEN_FILE_FAIL,       //  打开文件失败
     MSG_OPERATION_UPDATE_THEME,         //  主题变了
     MSG_NOTIFY_KEY_MSG,                 //  按键通知消息
+    MSG_NOTIFY_KEY_PLAY_MSG,            //  幻灯片模式按键通知消息
     MSG_NOTIFY_SHOW_TIP,                //  显示提示窗口
 };
 

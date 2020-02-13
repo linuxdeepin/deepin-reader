@@ -111,7 +111,7 @@ public:
     void prevPage();
     void nextPage();
 
-    void forScreenPageing(bool);
+//    void forScreenPageing(bool);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
