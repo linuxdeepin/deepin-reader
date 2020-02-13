@@ -18,14 +18,13 @@
  */
 #include "PagingWidget.h"
 
+#include <QValidator>
+
 #include "docview/docummentproxy.h"
 
 PagingWidget::PagingWidget(CustomWidget *parent)
     : CustomWidget(QString("PagingWidget"), parent)
 {
-//    resize(LEFTNORMALWIDTH, 56);
-
-    initWidget();
     initConnections();
     slotUpdateTheme();
 
@@ -48,32 +47,20 @@ PagingWidget::~PagingWidget()
 void PagingWidget::initWidget()
 {
     m_pTotalPagesLab = new CustomClickLabel(QString("/xxx"), this);
-//    m_pTotalPagesLab->setMinimumWidth(60);
-//    m_pTotalPagesLab->setFixedHeight(40);
     DFontSizeManager::instance()->bind(m_pTotalPagesLab, DFontSizeManager::T6);
     m_pTotalPagesLab->setForegroundRole(DPalette::Text);
 
     m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
     m_pPrePageBtn->setFixedSize(QSize(36, 36));
-    connect(m_pPrePageBtn, SIGNAL(clicked()), SLOT(slotPrePage()));
+    connect(m_pPrePageBtn, SIGNAL(clicked()), SLOT(slotPrePageBtnClicked()));
 
     m_pNextPageBtn = new DIconButton(DStyle::SP_ArrowRight);
     m_pNextPageBtn->setFixedSize(QSize(36, 36));
-    connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPage()));
+    connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPageBtnClicked()));
 
-//    m_pJumpPageSpinBox = new DSpinBox(this);
-//    m_pJumpPageSpinBox->setMinimum(1);
-//    m_pJumpPageSpinBox->setValue(1);
-//    m_pJumpPageSpinBox->setMinimumWidth(70);
-//    m_pJumpPageSpinBox->setFixedHeight(40);
-//    m_pJumpPageSpinBox->installEventFilter(this);
-//    m_pJumpPageSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
-//    DFontSizeManager::instance()->bind(m_pJumpPageSpinBox, DFontSizeManager::T6);
-//    m_pJumpPageSpinBox->setForegroundRole(DPalette::Text);
-    //DLineEdit *m_pJumpPageLineEdit
     m_pJumpPageLineEdit = new DLineEdit(this);
     m_pJumpPageLineEdit->setFixedSize(60, 36);
-    m_pJumpPageLineEdit->installEventFilter(this);
+    connect(m_pJumpPageLineEdit, SIGNAL(returnPressed()), SLOT(SlotJumpPageLineEditReturnPressed()));
     m_pJumpPageLineEdit->setClearButtonEnabled(false);
     DFontSizeManager::instance()->bind(m_pJumpPageLineEdit, DFontSizeManager::T6);
     m_pJumpPageLineEdit->setForegroundRole(DPalette::Text);
@@ -82,54 +69,17 @@ void PagingWidget::initWidget()
     hLayout->setContentsMargins(10, 0, 10, 0);
     hLayout->addWidget(m_pJumpPageLineEdit);
     hLayout->addSpacing(5);
+
+    if (m_pCurrantPageLab) {
+        hLayout->addWidget(m_pCurrantPageLab);
+    }
+
     hLayout->addWidget(m_pTotalPagesLab);
     hLayout->addStretch(1);
     hLayout->addWidget(m_pPrePageBtn);
     hLayout->addWidget(m_pNextPageBtn);
 
     this->setLayout(hLayout);
-}
-
-/**
- * @brief PagingWidget::eventFilter
- * 输入框响应回车事件
- * @param watched
- * @param event
- * @return
- */
-bool PagingWidget::eventFilter(QObject *watched, QEvent *event)
-{
-    if (watched == m_pJumpPageLineEdit) {
-        if (event->type() == QEvent::KeyPress) {
-            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-            //过滤掉零开头的输入
-            if (keyEvent->key() == Qt::Key_0 && m_pJumpPageLineEdit->text().isEmpty()) {
-                return true;
-            }
-
-            if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
-                int index = m_pJumpPageLineEdit->text().trimmed().toInt() - 1;
-                if (index >= 0 && index < m_nMaxPage)
-                    notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(index));
-            }
-        } else if (event->type() == QEvent::KeyRelease &&
-                   qobject_cast<DLineEdit *>(watched) == m_pJumpPageLineEdit) {
-            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-            if (keyEvent->key() == Qt::Key_0) {
-                QString strvalue = m_pJumpPageLineEdit->text();
-                if (strvalue.startsWith("0")) {
-                    strvalue = strvalue.right(strvalue.length() - 1);
-                    if (strvalue.isEmpty()) {
-                        // strvalue=QString("1");
-                        m_pJumpPageLineEdit->clear();
-                        return true;
-                    }
-                    m_pJumpPageLineEdit->setText(strvalue);
-                }
-            }
-        }
-    }
-    return QWidget::eventFilter(watched, event);
 }
 
 void PagingWidget::initConnections()
@@ -164,9 +114,28 @@ void PagingWidget::slotUpdateTheme()
     if (m_pTotalPagesLab) {
         m_pTotalPagesLab->setForegroundRole(DPalette::Text);
     }
-//    if (m_pJumpPageSpinBox) {
-//        m_pJumpPageSpinBox->setForegroundRole(DPalette::Text);
-//    }
+
+    if (m_pCurrantPageLab) {
+        m_pCurrantPageLab->setForegroundRole(DPalette::Text);
+    }
+}
+
+void PagingWidget::__SetBtnState(const int &currntPage, const int &totalPage)
+{
+    if (currntPage == 1) {                  //  第一页
+        m_pPrePageBtn->setEnabled(false);
+        if (totalPage == 1) {               //  也是最后一页
+            m_pNextPageBtn->setEnabled(false);
+        } else {
+            m_pNextPageBtn->setEnabled(true);
+        }
+    } else if (currntPage == totalPage) {   //    最后一页
+        m_pPrePageBtn->setEnabled(true);
+        m_pNextPageBtn->setEnabled(false);
+    } else {                                //  中间页
+        m_pPrePageBtn->setEnabled(true);
+        m_pNextPageBtn->setEnabled(true);
+    }
 }
 
 void PagingWidget::SlotDocFilePageChange(const QString &msgContent)
@@ -177,51 +146,95 @@ void PagingWidget::SlotDocFilePageChange(const QString &msgContent)
 
         int inputData = msgContent.toInt();
 
-        int currntPage = inputData + 1;
-        if (currntPage == 1) {
-            m_pPrePageBtn->setEnabled(false);
-            m_pNextPageBtn->setEnabled(true);
-        } else if (currntPage == totalPage) {
-            m_pPrePageBtn->setEnabled(true);
-            m_pNextPageBtn->setEnabled(false);
-        } else {
-            m_pPrePageBtn->setEnabled(true);
-            m_pNextPageBtn->setEnabled(true);
-        }
+        int currntPage = inputData + 1;     //  + 1 是为了 数字 从1 开始显示
+        __SetBtnState(currntPage, totalPage);
 
-        m_pJumpPageLineEdit->setText(QString::number(currntPage));
+        if (m_pCurrantPageLab) {
+            m_pCurrantPageLab->setText(QString::number(currntPage));
+
+            QString sPage = _proxy->pagenum2label(inputData);
+
+            m_pJumpPageLineEdit->setText(sPage);
+        } else {
+            m_pJumpPageLineEdit->setText(QString::number(currntPage));
+        }
     }
 }
 
-//  文档打开成功, 设置总页数 和 当前页码
+/**
+ * 文档打开成功
+ * 1. 进行控件初始化
+ * 2.设置总页数 和 当前页码
+ *
+ */
 void PagingWidget::SlotDocFileOpenOk()
 {
     DocummentProxy *_proxy = DocummentProxy::instance();
     if (_proxy) {
+        bool isHasLabel = _proxy->haslabel();
+        if (isHasLabel) {
+            m_pCurrantPageLab = new CustomClickLabel("");
+            DFontSizeManager::instance()->bind(m_pCurrantPageLab, DFontSizeManager::T6);
+            m_pCurrantPageLab->setForegroundRole(DPalette::Text);
+        }
+
+        initWidget();
+
         int totalPage = _proxy->getPageSNum();
 
-        m_pTotalPagesLab->setText(QString("/%1").arg(totalPage));
-//        m_pJumpPageSpinBox->setMaximum(totalPage);
-        m_nMaxPage = totalPage;
+        if (m_pCurrantPageLab == nullptr) {   //  不可读取页码, 则设置只能输入大于 0 的数字
+            m_pJumpPageLineEdit->lineEdit()->setValidator(new QIntValidator(1, totalPage, this));
+        }
+
+        m_pTotalPagesLab->setText(QString("/ %1").arg(totalPage));
 
         int nCurPage = _proxy->currentPageNo();
-        if (nCurPage == 0)  //  已经是第一页了
-            m_pPrePageBtn->setEnabled(false);
-        else if (nCurPage == totalPage) {   //  已经是最后一页了
-            m_pNextPageBtn->setEnabled(false);
-        }
 
         SlotDocFilePageChange(QString::number(nCurPage));
     }
 }
-//  按钮点击 上一页
-void PagingWidget::slotPrePage()
+
+//  输入框  敲回车键 响应
+void PagingWidget::SlotJumpPageLineEditReturnPressed()
+{
+    if (m_pCurrantPageLab == nullptr) {
+        __NormalChangePage();
+    } else {
+        __PageNumberJump();
+    }
+}
+
+void PagingWidget::__NormalChangePage()
+{
+    QString sText = m_pJumpPageLineEdit->text();
+    int iPage = sText.toInt() - 1;
+    notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(iPage));
+}
+
+void PagingWidget::__PageNumberJump()
+{
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
+        int nPageSum = _proxy->getPageSNum();
+
+        QString sText = m_pJumpPageLineEdit->text();
+
+        int iPage = _proxy->label2pagenum(sText);
+
+        if (iPage > -1 && iPage < nPageSum) {   //  输入的页码 必须在 0-最大值 之间, 才可以
+            notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(iPage));
+        } else {
+            notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Invalid page number"));
+        }
+    }
+}
+
+void PagingWidget::slotPrePageBtnClicked()
 {
     notifyMsg(MSG_OPERATION_PREV_PAGE);
 }
 
-//  按钮点击 下一页
-void PagingWidget::slotNextPage()
+void PagingWidget::slotNextPageBtnClicked()
 {
     notifyMsg(MSG_OPERATION_NEXT_PAGE);
 }

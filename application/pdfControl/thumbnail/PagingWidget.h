@@ -19,13 +19,8 @@
 #ifndef PAGINGWIDGET_H
 #define PAGINGWIDGET_H
 
-#include <DSpinBox>
 #include <DIconButton>
 #include <DLineEdit>
-
-#include <QIntValidator>
-#include <QKeyEvent>
-#include <QVBoxLayout>
 
 #include "CustomControl/CustomWidget.h"
 #include "CustomControl/CustomClickLabel.h"
@@ -49,30 +44,32 @@ signals:
     void sigDocFilePageChange(const QString &);
     void sigDocFileOpenOk();
 
+    // IObserver interface
+public:
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+
 private slots:
-    void slotPrePage();
-    void slotNextPage();
+    void slotPrePageBtnClicked();
+    void slotNextPageBtnClicked();
     void slotUpdateTheme();
     void SlotDocFilePageChange(const QString &);
     void SlotDocFileOpenOk();
+    void SlotJumpPageLineEditReturnPressed();
 
-protected:
+private:
     void initWidget() Q_DECL_OVERRIDE;
-    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
-
-private:
     void initConnections();
+    void __SetBtnState(const int &currntPage, const int &totalPage);
+
+    void __NormalChangePage();
+    void __PageNumberJump();
 
 private:
-    CustomClickLabel *m_pTotalPagesLab = nullptr;        // 当前文档总页数标签
-    DIconButton *m_pPrePageBtn = nullptr;      // 按钮 前一页
-    DIconButton *m_pNextPageBtn = nullptr;     // 按钮 后一页
-//    DSpinBox *m_pJumpPageSpinBox = nullptr;    // 输入框 跳转页码
-    DLineEdit *m_pJumpPageLineEdit = nullptr;  // 输入框 跳转页码
-    int m_nMaxPage = 0;                        // 文档总页数
-
-public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    DLabel              *m_pTotalPagesLab = nullptr;        // 当前文档总页数标签
+    DLabel              *m_pCurrantPageLab = nullptr;       // 当前文档当前页码
+    DIconButton         *m_pPrePageBtn = nullptr;           // 按钮 前一页
+    DIconButton         *m_pNextPageBtn = nullptr;          // 按钮 后一页
+    DLineEdit           *m_pJumpPageLineEdit = nullptr;     // 输入框 跳转页码
 };
 
 #endif // PAGINGWIDGET_H
