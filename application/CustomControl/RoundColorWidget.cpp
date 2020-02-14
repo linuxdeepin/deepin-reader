@@ -55,7 +55,7 @@ void RoundColorWidget::setSelected(bool selected)
 void RoundColorWidget::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        if (m_isSelected) return;
+        if (m_isSelected && !m_allnotify) return;
         Q_EMIT clicked();
     }
 }

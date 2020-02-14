@@ -66,6 +66,7 @@ public:
     QString addIconAnnotation(const QPoint &pos);
     void moveIconAnnotation(const QString &uuid, const QPoint &pos);
     bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
+    bool  mouseovericonAnnotation(const QPoint &pos);
     bool removeIconAnnotation(const QString &uuid, int ipage = -1);
     QString pagenum2label(int index);
     int label2pagenum(QString label);

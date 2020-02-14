@@ -35,6 +35,7 @@ public:
     explicit RoundColorWidget(const QColor &color, QWidget *parent = nullptr);
     bool isSelected();
     void setSelected(bool selected);
+    inline void setAllClickNotify(bool bnotify) {m_allnotify = bnotify;}
     static const int EXTRA = 2; //2px extra space to avoid line cutted off
 
 Q_SIGNALS:
@@ -47,6 +48,7 @@ protected:
 private:
     bool m_isSelected = false;
     QColor m_color;
+    bool m_allnotify = false;
 };
 
 #endif // CUSTOMCONTROL_ROUNDCOLORWIDGET_H

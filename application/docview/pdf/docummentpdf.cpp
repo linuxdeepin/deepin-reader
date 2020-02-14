@@ -68,7 +68,7 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
         QString strlabel = popplerpage->label();
 
         if (!strlabel.isEmpty()) {
-            qDebug() << __FUNCTION__ << "-------" << strlabel << i;
+            // qDebug() << __FUNCTION__ << "-------" << strlabel << i;
             m_label2pagenum.insert(strlabel, i);
             m_pagenum2label.insert(i, strlabel);
             if (strlabel.toInt() != i + 1) {

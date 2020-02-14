@@ -217,6 +217,14 @@ bool DocummentProxy::iconAnnotationClicked(const QPoint &pos, QString &strtext, 
     return m_documment->iconAnnotationClicked(pos, strtext, struuid);
 }
 
+bool DocummentProxy::mouseovericonAnnotation(const QPoint &pos)
+{
+    if (!m_documment || bcloseing)
+        return false;
+    QString strtext, struuid;
+    return  m_documment->iconAnnotationClicked(pos, strtext, struuid);
+}
+
 bool DocummentProxy::removeIconAnnotation(const QString &uuid, int ipage)
 {
     if (!m_documment || bcloseing)

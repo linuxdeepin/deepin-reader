@@ -103,9 +103,11 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
     auto colorList = DataManager::instance()->getLightColorList();
     for (int iLoop = 0; iLoop < colorList.size(); iLoop++) {
         auto btn = new RoundColorWidget(colorList.at(iLoop), pWidget);
+        btn->setAllClickNotify(true);
         btn->setObjectName(QString("%1").arg(iLoop));
         btn->setFixedSize(QSize(25, 25));
-
+        if (iLoop == 0)
+            btn->setSelected(true);
         connect(btn, SIGNAL(clicked()), sigMap, SLOT(map()));
         sigMap->setMapping(btn, iLoop);
 
