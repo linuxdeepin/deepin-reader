@@ -63,11 +63,6 @@ enum MSG_LEFT_SLIDER_TYPE {
     MSG_BOOKMARK_DLTITEM = 100,  //  删除指定书签 消息
     //    MSG_BOOKMARK_ADDITEM,               //  添加指定书签 消息
     //    MSG_NOTE_COPYCHOICECONTANT,         //  拷贝指定注释内容 消息
-    MSG_NOTE_ADDCONTANT,      //  添加注释内容 消息
-    MSG_NOTE_ADDITEM,         //  添加注释子节点 消息
-    MSG_NOTE_DLTNOTECONTANT,  //  删除注释内容 消息
-    MSG_NOTE_DLTNOTEITEM,     //  删除注释子节点 消息
-    MSG_NOTE_SELECTITEM,      //  选择注释子节点 消息
     MSG_SWITCHLEFTWIDGET,     //  切换左侧窗口(缩略图、书签、注释) 消息
     //    MSG_BOOKMARK_STATE,                 //  文件页码书签状态
     MSG_CLOSE_FILE,           //  关闭当前文档　消息
@@ -98,6 +93,15 @@ enum MSG_FIND_TYPE {
 enum E_DOC_MSG {
     MSG_DOC_JUMP_PAGE = 250,            //  请求跳转页面
 
+};
+
+//  注释消息
+enum E_NOTE_MSG {
+    MSG_NOTE_ADDCONTANT = 300,      //  添加注释内容 消息
+    MSG_NOTE_ADDITEM,               //  添加注释子节点 消息
+    MSG_NOTE_DLTNOTECONTANT,        //  删除注释内容 消息
+    MSG_NOTE_DLTNOTEITEM,           //  删除注释子节点 消息
+    MSG_NOTE_SELECTITEM,            //  选择注释子节点 消息
 };
 
 

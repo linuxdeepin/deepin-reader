@@ -16,69 +16,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef FILEVIEWNOTEWIDGET_H
-#define FILEVIEWNOTEWIDGET_H
+#ifndef NOTEVIEWWIDGET_H
+#define NOTEVIEWWIDGET_H
 
-#include <DTextEdit>
-#include <QHBoxLayout>
-#include <QHideEvent>
-#include <QTextEdit>
-#include <QVBoxLayout>
-#include "CustomControl/CustomClickLabel.h"
 #include "CustomControl/CustomWidget.h"
 
-class CustemTextEdit : public QTextEdit
-{
-    Q_OBJECT
-public:
-    explicit CustemTextEdit(DWidget *parent = nullptr);
-
-signals:
-    void sigShowTips();
-
-protected:
-    // void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
-
-private:
-    void init();
-    int calcTextSize(const QString &);
-    QString getMaxLenStr(QString);
-
-private slots:
-    void slotTextEditMaxContantNum();
-
-private:
-    int m_nMaxContantLen = 1500;  // 允许输入文本最大长度
-};
+class CustomClickLabel;
+class TransparentTextEdit;
 
 /**
- *@brief The FileViewNoteWidget class
+ *@brief The NoteViewWidget class
  *@brief 添加注释子界面
  */
-class FileViewNoteWidget : public CustomWidget
+class NoteViewWidget : public CustomWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(FileViewNoteWidget)
+    Q_DISABLE_COPY(NoteViewWidget)
 
 public:
-    explicit FileViewNoteWidget(CustomWidget *parent = nullptr);
-    ~FileViewNoteWidget() Q_DECL_OVERRIDE;
+    explicit NoteViewWidget(CustomWidget *parent = nullptr);
+    ~NoteViewWidget() Q_DECL_OVERRIDE;
 
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 
 public:
-    void setEditText(const QString &note);
-    void closeWidget();
-    void showWidget(const int &);
     void showWidget(const QPoint &);
 
+    void setEditText(const QString &note);
     void setPointAndPage(const QString &);
-
     void setNoteUuid(const QString &pNoteUuid);
     void setNotePage(const QString &pNotePage);
 
+    // QWidget interface
 protected:
     void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
     void initWidget() Q_DECL_OVERRIDE;
@@ -88,19 +59,17 @@ private:
 
 private slots:
     void slotUpdateTheme();
-    void slotClosed();
-    void slotTextEditMaxContantNum();
-    void slotShowTips();
 
 private:
-    /*CustemTextEdit DTextEdit*/
     QString m_pHighLightPointAndPage = "";
     QString m_pNoteUuid = "";
     QString m_pNotePage = "";
 
-    CustemTextEdit *m_pTextEdit = nullptr;    // 注释
-    CustomClickLabel *m_pCloseLab = nullptr;  // 关闭
+    TransparentTextEdit *m_pTextEdit = nullptr;    // 注释
+    CustomClickLabel    *m_pCloseLab = nullptr;  // 关闭
     QString m_strNote = "";                   // 注释内容
+
+    int     m_nWidgetType = NOTE_HIGHLIGHT;         //  高亮注释\页面注释
 };
 
-#endif  // FILEVIEWNOTEWIDGET_H
+#endif  // NOTEVIEWWIDGET_H

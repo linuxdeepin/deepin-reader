@@ -22,16 +22,13 @@
 #include <DIconButton>
 #include <DPushButton>
 
-#include <QList>
-#include <QMap>
 #include <QThread>
-#include <QVBoxLayout>
-
-#include "NotesItemWidget.h"
 
 #include "../CustomListWidget.h"
 #include "CustomControl/CustomWidget.h"
 #include "docview/commonstruct.h"
+
+class NotesItemWidget;
 
 class ThreadLoadImageOfNote : public QThread
 {
@@ -81,18 +78,8 @@ public:
     void DeleteItemByKey();
 
 signals:
-//    void sigAddNewNoteItem(const QString &);
-//    void sigDltNoteItem(QString);
-//    void sigDltNoteContant(QString);
     void sigOpenFileOk();
     void sigCloseFile();
-//    void sigDelNoteItem();
-//    void sigJumpToPrevItem();
-//    void sigJumpToNextItem();
-//    void sigRightSelectItem(QString);
-
-//    void sigDealWithData(const int &, const QString &);
-
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -103,10 +90,9 @@ private slots:
     void slotOpenFileOk();
     void slotCloseFile();
     void slotLoadImage(const QImage &);
-//    void slotDelNoteItem();
     void slotSelectItem(QListWidgetItem *);
 
-//    void slotAddAnnotation();
+    void slotAddAnnotation();
 
 private:
     void __AddNoteItem(const QString &);
@@ -130,7 +116,6 @@ private:
     CustomListWidget *m_pNotesList = nullptr;
     QMap<QString, int> m_mapUuidAndPage;      //  uuid 和 页码 对应
     ThreadLoadImageOfNote m_ThreadLoadImage;  // 加载注释缩略图线程
-    QListWidgetItem *m_pNoteItem = nullptr;   // 当前鼠标左键点击的item
     int m_nIndex = -1;                        // 当前注释列表数
     DPushButton *m_pAddAnnotationBtn = nullptr ;   // 添加注释
 

@@ -1,7 +1,6 @@
 HEADERS += \
     $$PWD/CustomListWidget.h \
     $$PWD/CustomItemWidget.h \
-    $$PWD/note/FileViewNoteWidget.h \
     $$PWD/note/NotesWidget.h \
     $$PWD/note/NotesItemWidget.h \
     $$PWD/catalog/CatalogTreeView.h \
@@ -13,12 +12,13 @@ HEADERS += \
     $$PWD/search/SearchResWidget.h \
     $$PWD/search/BufferWidget.h \
     $$PWD/bookmark/BookMarkItemWidget.h \
-    $$PWD/bookmark/BookMarkWidget.h
+    $$PWD/bookmark/BookMarkWidget.h \
+    $$PWD/note/NoteViewWidget.h \
+    $$PWD/note/TransparentTextEdit.h
 
 SOURCES += \
     $$PWD/CustomListWidget.cpp \
     $$PWD/CustomItemWidget.cpp \
-    $$PWD/note/FileViewNoteWidget.cpp \
     $$PWD/note/NotesWidget.cpp \
     $$PWD/note/NotesItemWidget.cpp \
     $$PWD/catalog/CatalogTreeView.cpp \
@@ -30,4 +30,6 @@ SOURCES += \
     $$PWD/search/SearchItemWidget.cpp \
     $$PWD/search/SearchResWidget.cpp \
     $$PWD/bookmark/BookMarkItemWidget.cpp \
-    $$PWD/bookmark/BookMarkWidget.cpp
+    $$PWD/bookmark/BookMarkWidget.cpp \
+    $$PWD/note/NoteViewWidget.cpp \
+    $$PWD/note/TransparentTextEdit.cpp

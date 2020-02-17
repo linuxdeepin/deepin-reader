@@ -19,21 +19,13 @@
 #ifndef NOTESITEMWIDGET_H
 #define NOTESITEMWIDGET_H
 
-#include <DLabel>
-#include <DTextEdit>
-
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QFont>
-#include <QMenu>
-#include <QAction>
-#include <QContextMenuEvent>
-
 #include "../CustomItemWidget.h"
 
+#include <DMenu>
+
 /**
- * @brief The ThumbnailItemWidget class
- * @brief   注释和搜索item
+ * @brief The NotesItemWidget class
+ * @brief   注释item
  */
 
 class NotesItemWidget : public CustomItemWidget
@@ -46,8 +38,11 @@ public:
     ~NotesItemWidget() Q_DECL_OVERRIDE;
 
 public:
+    // IObserver interface
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+
+public:
     void setTextEditText(const QString &);
-    void setSerchResultText(const QString &);
     inline void setNoteUUid(const QString &uuid)
     {
         m_strUUid = uuid;
@@ -69,34 +64,29 @@ public:
     bool bSelect();
     void setBSelect(const bool &paint);
 
-signals:
-//    void sigDltNoteItemByKey();
+    // QWidget interface
+protected:
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+
+private:
+    void initWidget() Q_DECL_OVERRIDE;
+    void __InitConnections();
+    QString calcText(const QFont &font, const QString &note, const QSize &size);
 
 private slots:
     void slotDltNoteContant();
     void slotCopyContant();
     void slotShowContextMenu(const QPoint &);
     void slotUpdateTheme();
-//    void slotDltNoteItemByKey();
 
-protected:
-    void initWidget() Q_DECL_OVERRIDE;
-    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
-
-public:
-    // IObserver interface
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 
 private:
-    QString calcText(const QFont &font, const QString &note, const QSize &size/*const int MaxWidth*/);
-
-private:
-    DLabel *m_pSearchResultNum = nullptr;
-    DLabel *m_pTextLab = nullptr;
-    QString m_strUUid;    // 当前注释唯一标识
-    QString m_strNote;   // 注释内容
-    bool m_bPaint = false;
-    DMenu *m_menu = nullptr;
+    DLabel      *m_pTextLab = nullptr;
+    QString     m_strUUid = "";     // 当前注释唯一标识
+    QString     m_strNote = "";     // 注释内容
+    int         m_nNoteType = -1;   // 注释类型, 0,高亮注释; 1,页面注释
+    bool        m_bPaint = false;
+    DMenu       *m_menu = nullptr;
 };
 
 #endif // NOTESITEMWIDGET_H

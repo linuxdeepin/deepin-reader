@@ -17,6 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "NotesWidget.h"
+
+#include "NotesItemWidget.h"
+
 #include "controller/DataManager.h"
 #include "business/DocummentFileHelper.h"
 #include "docview/docummentproxy.h"
@@ -113,14 +116,15 @@ void NotesWidget::initWidget()
 
     m_pNotesList = new CustomListWidget;
 
-//    m_pAddAnnotationBtn = new DPushButton(this);
-//    m_pAddAnnotationBtn->setFixedHeight(36);
-//    m_pAddAnnotationBtn->setMinimumWidth(170);
-//    m_pAddAnnotationBtn->setText(tr("Add annotation"));
-//    DFontSizeManager::instance()->bind(m_pAddAnnotationBtn, DFontSizeManager::T6);
-//    connect(m_pAddAnnotationBtn, SIGNAL(clicked()), this, SLOT(slotAddAnnotation()));
+    m_pAddAnnotationBtn = new DPushButton(this);
+    m_pAddAnnotationBtn->setFixedHeight(36);
+    m_pAddAnnotationBtn->setMinimumWidth(170);
+    m_pAddAnnotationBtn->setText(tr("Add annotation"));
+    DFontSizeManager::instance()->bind(m_pAddAnnotationBtn, DFontSizeManager::T6);
+    connect(m_pAddAnnotationBtn, SIGNAL(clicked()), this, SLOT(slotAddAnnotation()));
 
     m_pVLayout->addWidget(m_pNotesList);
+    m_pVLayout->addWidget(m_pAddAnnotationBtn);
 }
 
 void NotesWidget::slotDealWithData(const int &msgType, const QString &msgContent)
@@ -388,10 +392,15 @@ void NotesWidget::__JumpToPrevItem()
         if (t_widget) {
             clearItemColor();
             m_pNotesList->setCurrentItem(item);
-            m_pNoteItem = item;
             t_widget->setBSelect(true);
 
-            notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(t_widget->nPageIndex()));
+            QString t_uuid = t_widget->noteUUId();
+            int page = t_widget->nPageIndex();
+
+            auto pDocProxy = DocummentProxy::instance();
+            if (pDocProxy) {
+                pDocProxy->jumpToHighLight(t_uuid, page);
+            }
         }
     }
 }
@@ -421,10 +430,15 @@ void NotesWidget::__JumpToNextItem()
         if (t_widget) {
             clearItemColor();
             m_pNotesList->setCurrentItem(item);
-            m_pNoteItem = item;
             t_widget->setBSelect(true);
 
-            notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(t_widget->nPageIndex()));
+            QString t_uuid = t_widget->noteUUId();
+            int page = t_widget->nPageIndex();
+
+            auto pDocProxy = DocummentProxy::instance();
+            if (pDocProxy) {
+                pDocProxy->jumpToHighLight(t_uuid, page);
+            }
         }
     }
 }
@@ -450,10 +464,10 @@ void NotesWidget::__RightSelectItem(const QString &uuid)
  * @brief NotesWidget::slotAddAnnotation
  * 添加注释按钮
  */
-//void NotesWidget::slotAddAnnotation()
-//{
-//add annotation   signal
-//}
+void NotesWidget::slotAddAnnotation()
+{
+
+}
 
 /**
  * @brief NotesWidget::addNotesItem
@@ -533,7 +547,6 @@ void NotesWidget::setSelectItemBackColor(QListWidgetItem *item)
     auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
     if (t_widget) {
         t_widget->setBSelect(true);
-        m_pNoteItem = item;
     }
 }
 
@@ -635,7 +648,6 @@ void NotesWidget::flushNoteItemText(const int &page, const QString &uuid, const 
                 if (t_widget->nPageIndex() == page && t_widget->noteUUId() == uuid) {
                     t_widget->setBSelect(true);
                     t_widget->setTextEditText(text);
-                    m_pNoteItem = pItem;
                     break;
                 }
             }

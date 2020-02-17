@@ -14,7 +14,7 @@
 #include "docview/docummentproxy.h"
 #include "utils/PublicFunction.h"
 
-#include "pdfControl/note/FileViewNoteWidget.h"
+#include "pdfControl/note/NoteViewWidget.h"
 
 DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
     : CustomWidget("DocShowShellWidget", parent)
@@ -131,9 +131,9 @@ void DocShowShellWidget::slotShowFindWidget()
 //  注释窗口
 void DocShowShellWidget::onOpenNoteWidget(const QString &msgContent)
 {
-    auto pWidget = this->findChild<FileViewNoteWidget *>();
+    auto pWidget = this->findChild<NoteViewWidget *>();
     if (pWidget == nullptr) {
-        pWidget = new FileViewNoteWidget(this);
+        pWidget = new NoteViewWidget(this);
     }
     pWidget->setEditText("");
     pWidget->setPointAndPage(msgContent);
@@ -162,9 +162,9 @@ void DocShowShellWidget::onShowNoteWidget(const QString &contant)
             pHelper->getAnnotationText(t_strUUid, sContant, t_page.toInt());
         }
 
-        auto pWidget = this->findChild<FileViewNoteWidget *>();
+        auto pWidget = this->findChild<NoteViewWidget *>();
         if (pWidget == nullptr) {
-            pWidget = new FileViewNoteWidget(this);
+            pWidget = new NoteViewWidget(this);
         }
         pWidget->setNoteUuid(t_strUUid);
         pWidget->setNotePage(t_page);

@@ -15,6 +15,12 @@ enum Widget_Type {
     WIDGET_BUFFER       //  缓冲
 };
 
+// 注释类型
+enum Note_Type {
+    NOTE_HIGHLIGHT = 0,     //  高亮注释
+    NOTE_PAGE,              //  页面注释
+};
+
 }
 
 namespace Constant {

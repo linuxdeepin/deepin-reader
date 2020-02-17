@@ -17,22 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "NotesItemWidget.h"
+
 #include <DApplication>
 #include <DApplicationHelper>
 #include <QClipboard>
 #include <QTextLayout>
-#include "utils/utils.h"
-//#include "controller/AppSetting.h"
+#include <QVBoxLayout>
+
 #include "controller/DataManager.h"
 
 NotesItemWidget::NotesItemWidget(DWidget *parent)
     : CustomItemWidget(QString("NotesItemWidget"), parent)
 {
     initWidget();
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this,
-            SLOT(slotShowContextMenu(const QPoint &)));
-    connect(this, SIGNAL(sigUpdateTheme()), this, SLOT(slotUpdateTheme()));
-//    connect(this, SIGNAL(sigDltNoteItemByKey()), this, SLOT(slotDltNoteItemByKey()));
+    __InitConnections();
 
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
@@ -52,13 +50,6 @@ void NotesItemWidget::setTextEditText(const QString &contant)
     if (m_pTextLab) {
         m_pTextLab->clear();
         m_pTextLab->setText(contant);
-    }
-}
-
-void NotesItemWidget::setSerchResultText(const QString &result)
-{
-    if (m_pSearchResultNum) {
-        m_pSearchResultNum->setText(result);
     }
 }
 
@@ -101,12 +92,14 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
 
     if (m_menu == nullptr) {
         m_menu = new DMenu(this);
-        QAction *copyAction = m_menu->addAction(tr("Copy"));
         DFontSizeManager::instance()->bind(m_menu, DFontSizeManager::T6);
+
+        QAction *copyAction = m_menu->addAction(tr("Copy"));
+        connect(copyAction, SIGNAL(triggered()), this, SLOT(slotCopyContant()));
         m_menu->addSeparator();
+
         QAction *dltItemAction = m_menu->addAction(tr("Remove annotation"));
         connect(dltItemAction, SIGNAL(triggered()), this, SLOT(slotDltNoteContant()));
-        connect(copyAction, SIGNAL(triggered()), this, SLOT(slotCopyContant()));
     }
 
     if (m_menu) {
@@ -116,37 +109,13 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
 
 void NotesItemWidget::slotUpdateTheme()
 {
-//    Dtk::Gui::DPalette pltorg = m_pPageNumber->palette();
-//    Dtk::Gui::DPalette plt =
-//        Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
-//    pltorg.setColor(Dtk::Gui::DPalette::Text, plt.color(Dtk::Gui::DPalette::TextTips));
-//    m_pPageNumber->setPalette(pltorg);
     if (m_pPageNumber) {
         m_pPageNumber->setForegroundRole(DPalette::TextTitle);
     }
     if (m_pTextLab) {
         m_pTextLab->setForegroundRole(QPalette::BrightText);
     }
-    if (m_pSearchResultNum) {
-        m_pSearchResultNum->setForegroundRole(DPalette::TextTips);
-    }
 }
-
-/**
- * brief NotesItemWidget::slotDltNoteItemByKey
- * delete键删除注释item
- */
-//void NotesItemWidget::slotDltNoteItemByKey()
-//{
-//    int leftShow = 0;
-//    int widgetIndex = 0;
-//    leftShow = DataManager::instance()->getShowLeft().toInt();
-//    widgetIndex = DataManager::instance()->getListIndex().toInt();
-//    if ((leftShow == 1) && (widgetIndex == 3) && bSelect()) {
-//        slotDltNoteContant();
-//    }
-//    return;
-//}
 
 void NotesItemWidget::initWidget()
 {
@@ -164,17 +133,10 @@ void NotesItemWidget::initWidget()
     m_pPageNumber->setForegroundRole(DPalette::WindowText);
     DFontSizeManager::instance()->bind(m_pPageNumber, DFontSizeManager::T8);
 
-    m_pSearchResultNum = new DLabel(this);
-    m_pSearchResultNum->setMinimumWidth(31);
-    m_pSearchResultNum->setFixedHeight(18);
-    m_pSearchResultNum->setForegroundRole(DPalette::TextTips);
-    DFontSizeManager::instance()->bind(m_pSearchResultNum, DFontSizeManager::T10);
-
     m_pTextLab = new DLabel(this);
     m_pTextLab->setTextFormat(Qt::PlainText);
     m_pTextLab->setFixedHeight(54);
     m_pTextLab->setMinimumWidth(80);
-    //    m_pTextLab->setMaximumWidth(349);
     m_pTextLab->setFrameStyle(QFrame::NoFrame);
     m_pTextLab->setWordWrap(true);
     m_pTextLab->setAlignment(Qt::AlignLeft);
@@ -188,7 +150,6 @@ void NotesItemWidget::initWidget()
     t_hLayout->setContentsMargins(0, 0, 0, 0);
     t_hLayout->setSpacing(0);
     t_hLayout->addWidget(m_pPageNumber);
-    t_hLayout->addWidget(m_pSearchResultNum);
 
     auto t_vLayout = new QVBoxLayout;
     t_vLayout->setContentsMargins(15, 0, 10, 0);
@@ -202,7 +163,6 @@ void NotesItemWidget::initWidget()
 
     m_pHLayout->setSpacing(1);
     m_pHLayout->setContentsMargins(0, 0, 10, 0);
-//    m_pHLayout->addWidget(m_pPicture);
     m_pHLayout->addItem(t_vLayoutPicture);
     m_pHLayout->addItem(t_vLayout);
     m_pHLayout->setSpacing(1);
@@ -210,7 +170,13 @@ void NotesItemWidget::initWidget()
     this->setLayout(m_pHLayout);
 }
 
-int NotesItemWidget::dealWithData(const int &msgType, const QString &msgContent)
+void NotesItemWidget::__InitConnections()
+{
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), SLOT(slotShowContextMenu(const QPoint &)));
+    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
+}
+
+int NotesItemWidget::dealWithData(const int &msgType, const QString &)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
@@ -227,7 +193,6 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
 
         note.replace(QChar('\n'), QString(""));
         note.replace(QChar('\t'), QString(""));
-//        note.replace(QChar(' '), QString(""));
         m_pTextLab->setText(calcText(m_pTextLab->font(), note, m_pTextLab->size()));
     }
 
