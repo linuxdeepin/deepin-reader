@@ -24,11 +24,14 @@
 #include <DDialog>
 
 #include "application.h"
+#include "NoteTipWidget.h"
 
+#include "business/DocummentFileHelper.h"
 #include "docview/docummentproxy.h"
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
 #include "menu/DefaultOperationMenu.h"
+#include "menu/TextOperationMenu.h"
 #include "utils/PublicFunction.h"
 #include "business/PrintManager.h"
 
@@ -76,7 +79,6 @@ void FileViewWidget::initWidget()
     }
 
     m_pDocummentFileHelper = DocummentFileHelper::instance();
-//        m_pDocummentFileHelper->setDocProxy(m_pDocummentProxy);     //  唯一设置 文档类入口
 }
 
 //  鼠标移动
@@ -94,12 +96,6 @@ void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
 
     QPoint globalPos = event->globalPos();
     QPoint docGlobalPos = _proxy->global2RelativePoint(globalPos);
-    //begin>>kyz 2019-12-19 注释图标移动测试
-//    if (m_bmousepressed && event->buttons()&Qt::LeftButton && !struidtmp.isEmpty()) {
-
-//        DocummentProxy::instance()->moveIconAnnotation(struidtmp, docGlobalPos);
-//    }
-    //end<<
     if (m_nCurrentHandelState == Handel_State) {  //   手型状态下， 按住鼠标左键 位置进行移动
         if (m_bSelectOrMove) {
             QPoint mvPoint = m_pHandleMoveStartPoint - globalPos;
@@ -152,7 +148,6 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
     if (!_proxy)
         return;
 
-    m_bmousepressed = true;
     //  处于幻灯片模式下
     if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
         return;
@@ -160,16 +155,6 @@ void FileViewWidget::mousePressEvent(QMouseEvent *event)
     //  放大镜状态， 直接返回
     if (m_nCurrentHandelState == Magnifier_State)
         return;
-
-    //begin>>kyz 2019-12-18 测试
-//    QPoint pt = m_pDocummentFileHelper->global2RelativePoint(event->globalPos());
-//    if (event->button() == Qt::RightButton)
-//        DocummentProxy::instance()->addIconAnnotation(pt);
-//    else {
-//        QString strtext, struid;
-//        DocummentProxy::instance()->iconAnnotationClicked(pt, strtext, struidtmp);
-//    }
-    //<<end
 
     Qt::MouseButton nBtn = event->button();
     if (nBtn == Qt::LeftButton) {
@@ -212,7 +197,6 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
     if (!_proxy)
         return;
 
-    m_bmousepressed = false;
     //  处于幻灯片模式下
     if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
         if (event->button() == Qt::RightButton)
@@ -254,7 +238,6 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
     }
 
     m_bSelectOrMove = false;
-    CustomWidget::mouseReleaseEvent(event);
 }
 
 void FileViewWidget::leaveEvent(QEvent *event)

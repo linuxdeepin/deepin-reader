@@ -21,12 +21,13 @@
 
 #include <QMouseEvent>
 
-#include "NoteTipWidget.h"
 
-#include "business/DocummentFileHelper.h"
 #include "CustomControl/CustomWidget.h"
 #include "docview/pagebase.h"
-#include "menu/TextOperationMenu.h"
+
+class DocummentFileHelper;
+class NoteTipWidget;
+class TextOperationMenu;
 
 //  当前鼠标状态
 enum Handel_Enum {
@@ -56,11 +57,17 @@ public:
     ~FileViewWidget() Q_DECL_OVERRIDE;
 
 signals:
-//    void sigDealWithData(const int &, const QString &);
-//    void sigDealWithKeyMsg(const QString &);
-
     void sigShowPlayCtrl(bool bshow);
 
+    // IObserver interface
+public:
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+
+    // CustomWidget interface
+protected:
+    void initWidget() Q_DECL_OVERRIDE;
+
+    // QWidget interface
 protected:
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
@@ -110,19 +117,9 @@ private:
     int         m_nAdapteState = NO_ADAPTE_State;       //  当前自适应状态
     bool        m_bSelectOrMove = false;                //  是否可以选中文字、移动
     bool        m_bIsHandleSelect = false;              //  是否可以选中
-    bool        m_bmousepressed = false;                //  鼠标是否被按住
-    QString         struidtmp;
     QPoint      m_pStartPoint;
     QPoint      m_pEndSelectPoint;
     QPoint      m_pHandleMoveStartPoint;
-
-    // CustomWidget interface
-protected:
-    void initWidget() Q_DECL_OVERRIDE;
-
-    // IObserver interface
-public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 };
 
 
