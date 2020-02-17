@@ -33,7 +33,7 @@ CatalogTreeView::CatalogTreeView(DWidget *parent)
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     this->header()->setHidden(true);
     this->viewport()->setAutoFillBackground(false);

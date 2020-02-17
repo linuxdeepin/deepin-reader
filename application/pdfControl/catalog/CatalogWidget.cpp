@@ -23,6 +23,7 @@
 #include "CatalogTreeView.h"
 
 #include "CustomControl/CustomClickLabel.h"
+#include "CustomControl/DFMGlobal.h"
 
 CatalogWidget::CatalogWidget(DWidget *parent)
     : CustomWidget("CatalogWidget", parent)
@@ -81,6 +82,16 @@ void CatalogWidget::initConnections()
 void CatalogWidget::SlotDocOpenFileOk(const QString &msgContent)
 {
     if (titleLabel) {
-        titleLabel->setText(msgContent);
+        QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T8);
+        QString t = DFMGlobal::elideText(msgContent, QSize(120, 18), QTextOption::WrapAnywhere, font, Qt::ElideMiddle, 0);
+        QStringList labelTexts = t.split("\n");
+        if (labelTexts.size() < 3) {
+            titleLabel->setText(msgContent);
+        } else {
+            QString sStart = labelTexts.at(0);
+            QString sEnd = labelTexts.at(labelTexts.size() - 1);
+
+            titleLabel->setText(sStart + "..." + sEnd);
+        }
     }
 }
