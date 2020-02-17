@@ -54,11 +54,9 @@ void MainOperationWidget::initWidget()
 {
 //    m_pRefinedAbstractionA = new RefinedAbstractionA(new ConcreteAbstractionImplementA(this));
 
-    auto hboxLayout = new QHBoxLayout;
-    hboxLayout->setContentsMargins(15, 0, 15, 0);
-    hboxLayout->setSpacing(31);
-
-//    hboxLayout->addStretch();
+    auto mLayout = new QHBoxLayout;
+    mLayout->setContentsMargins(15, 0, 15, 0);
+    mLayout->setSpacing(31);
 
     auto btnGroup = new QButtonGroup(this);  //  按钮组，　自动实现按钮唯一check属性
     connect(btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
@@ -72,24 +70,20 @@ void MainOperationWidget::initWidget()
         QString sObj = btnObjList.at(iLoop);
         auto btn = createBtn(sBtn, sObj);
         btnGroup->addButton(btn, iLoop);
-        hboxLayout->addWidget(btn);
-//        hboxLayout->addSpacing(40);
+        mLayout->addWidget(btn);
+
+        if (iLoop != nSize - 1) {   //  不是最后一个按钮, 则添加弹簧
+            mLayout->addStretch();
+        }
     }
 
     auto pSearchBtn = __CreateHideBtn();
     btnGroup->addButton(pSearchBtn, WIDGET_SEARCH);
-    hboxLayout->addWidget(pSearchBtn);
 
     auto pBufferBtn = __CreateHideBtn();
     btnGroup->addButton(pBufferBtn, WIDGET_BUFFER);
-    hboxLayout->addWidget(pBufferBtn);
 
-//    hboxLayout->addStretch();
-
-    this->setLayout(hboxLayout);
-
-    //  缩略图 默认是 check 状态
-//    slotButtonClicked(WIDGET_THUMBNAIL);  //wzx 2020-01-16
+    this->setLayout(mLayout);
 }
 
 //  创建 隐形的按钮, 搜索 和 搜索转圈圈
@@ -129,7 +123,6 @@ void MainOperationWidget::__SearchExit()
 
 DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QString &objName)
 {
-    // auto btn = new DIconButton(this);
     auto btn = new DToolButton(this);
     btn->setToolTip(btnName);
     btn->setObjectName(objName);
@@ -143,8 +136,6 @@ DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QStrin
 
 void MainOperationWidget::initConnect()
 {
-//    connect(this, SIGNAL(sigSearchControl()), SLOT(slotSearchControl()));
-//    connect(this, SIGNAL(sigSearchClosed()), SLOT(slotSearchClosed()));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
 }
