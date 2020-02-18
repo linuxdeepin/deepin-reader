@@ -49,13 +49,17 @@ public:
     void setNoteUuid(const QString &pNoteUuid);
     void setNotePage(const QString &pNotePage);
 
-    // QWidget interface
+    void setWidgetType(const int &nWidgetType);
+
+    //  QWidget interface
 protected:
     void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
     void initWidget() Q_DECL_OVERRIDE;
 
 private:
     void initConnections();
+    void __FileNoteHideEvent();
+    void __PageNoteHideEvent();
 
 private slots:
     void slotUpdateTheme();

@@ -466,7 +466,7 @@ void NotesWidget::__RightSelectItem(const QString &uuid)
  */
 void NotesWidget::slotAddAnnotation()
 {
-
+    notifyMsg(MSG_NOTE_PAGE_ADD);
 }
 
 /**

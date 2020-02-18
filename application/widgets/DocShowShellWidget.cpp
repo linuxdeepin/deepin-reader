@@ -28,7 +28,7 @@ DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
     }
 
     m_pMsgList = {MSG_OPERATION_ATTR, MSG_OPERATION_TEXT_ADD_ANNOTATION,
-                  MSG_OPERATION_TEXT_SHOW_NOTEWIDGET
+                  MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, MSG_NOTE_PAGE_SHOW_NOTEWIDGET
                  };
 }
 
@@ -182,6 +182,29 @@ void DocShowShellWidget::onShowNoteWidget(const QString &contant)
     }
 }
 
+void DocShowShellWidget::__ShowPageNoteWidget(const QString &msgContent)
+{
+    QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    if (sList.size() == 4) {
+        QString sUuid = sList.at(0);
+        QString sPage = sList.at(1);
+        QString sX = sList.at(2);
+        QString sY = sList.at(3);
+
+        auto pWidget = this->findChild<NoteViewWidget *>();
+        if (pWidget == nullptr) {
+            pWidget = new NoteViewWidget(this);
+        }
+        pWidget->setEditText("");
+        pWidget->setPointAndPage(msgContent);
+        pWidget->setNoteUuid(sUuid);
+        pWidget->setNotePage(sPage);
+        pWidget->setWidgetType(NOTE_PAGE);
+
+        pWidget->showWidget(QPoint(sX.toInt(), sY.toInt()));
+    }
+}
+
 void DocShowShellWidget::slotBtnCloseClicked()
 {
     notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
@@ -211,12 +234,14 @@ void DocShowShellWidget::slotChangePlayCtrlShow(bool bshow)
 
 void DocShowShellWidget::slotDealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_ATTR) { //  打开该文件的属性信息
+    if (msgType == MSG_OPERATION_ATTR) {                            //  打开该文件的属性信息
         onShowFileAttr();
-    } else if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {   //  添加注释
+    } else if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {      //  添加注释
         onOpenNoteWidget(msgContent);
-    } else if (msgType ==  MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) { //  显示注释窗口
+    } else if (msgType ==  MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) {    //  显示注释窗口
         onShowNoteWidget(msgContent);
+    } else if (msgType == MSG_NOTE_PAGE_SHOW_NOTEWIDGET) {          //  显示注释窗口
+        __ShowPageNoteWidget(msgContent);
     }
 }
 

@@ -19,21 +19,17 @@
 #ifndef FILEVIEWWIDGET_H
 #define FILEVIEWWIDGET_H
 
-#include <QMouseEvent>
-
-
 #include "CustomControl/CustomWidget.h"
-#include "docview/pagebase.h"
 
 class DocummentFileHelper;
-class NoteTipWidget;
 class TextOperationMenu;
 
 //  当前鼠标状态
-enum Handel_Enum {
+enum E_Handel_State {
     Default_State,
     Handel_State,
-    Magnifier_State
+    Magnifier_State,
+    NOTE_ADD_State
 };
 
 //  窗口自适应状态
@@ -72,7 +68,6 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
 
@@ -88,8 +83,6 @@ private slots:
 
 private:
     void initConnections();
-    void __ClickPageLink(Page::Link *pLink);
-    void onShowNoteTipWidget(const QPoint &docPos);
 
     void onMagnifying(const QString &);
     void onSetHandShape(const QString &);
@@ -100,8 +93,8 @@ private:
     void onFileRemoveAnnotation(const QString &);
 
     void onFileAddNote(const QString &);
+    void __SetPageAddIconState();
 
-private:
     void onPrintFile();
     void onFileAddAnnotation();
     void onFileAddNote();
@@ -110,16 +103,13 @@ private:
 private:
     TextOperationMenu       *m_operatemenu = nullptr;
     DocummentFileHelper     *m_pDocummentFileHelper = nullptr;
-    NoteTipWidget           *m_pNoteTipWidget = nullptr;
 
-private:
     int         m_nCurrentHandelState = Default_State;  //  当前鼠标状态
     int         m_nAdapteState = NO_ADAPTE_State;       //  当前自适应状态
-    bool        m_bSelectOrMove = false;                //  是否可以选中文字、移动
-    bool        m_bIsHandleSelect = false;              //  是否可以选中
     QPoint      m_pStartPoint;
     QPoint      m_pEndSelectPoint;
-    QPoint      m_pHandleMoveStartPoint;
+
+    friend class FVMMouseEvent;
 };
 
 

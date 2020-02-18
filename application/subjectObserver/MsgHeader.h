@@ -102,6 +102,8 @@ enum E_NOTE_MSG {
     MSG_NOTE_DLTNOTECONTANT,        //  删除注释内容 消息
     MSG_NOTE_DLTNOTEITEM,           //  删除注释子节点 消息
     MSG_NOTE_SELECTITEM,            //  选择注释子节点 消息
+    MSG_NOTE_PAGE_ADD,              //  页面注释显示 可以点击添加
+    MSG_NOTE_PAGE_SHOW_NOTEWIDGET,  //  页面注释显示 注释内容界面
 };
 
 

@@ -47,6 +47,9 @@ private:
     void onOpenNoteWidget(const QString &);
     void onShowNoteWidget(const QString &);
 
+    /****   begin   wzx 2020.2.18   ********/
+    void __ShowPageNoteWidget(const QString &);
+    /****   end     wzx 2020.2.18   ********/
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;

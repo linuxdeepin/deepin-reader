@@ -79,23 +79,12 @@ void NoteViewWidget::showWidget(const QPoint &point)
 void NoteViewWidget::hideEvent(QHideEvent *event)
 {
     //  原来是有注释的, 被删除了
-    QString t_contant = m_pTextEdit->toPlainText().trimmed();
-    if (m_strNote != "" && t_contant == "") {
-        sendMsg(MSG_NOTE_DLTNOTECONTANT, m_pNoteUuid);
-        m_strNote = t_contant;
+    if (m_nWidgetType == NOTE_HIGHLIGHT) {
+        __FileNoteHideEvent();
     } else {
-        QString t_contant = m_pTextEdit->toPlainText().trimmed();  //  注释内容
-        if (t_contant != m_strNote) {  //  只有 和 原来已有注释内容不一样, 才会提示 保存
-            QString msgContent = "";
-            if (m_pNoteUuid != "") {  //  已经高亮
-                msgContent = t_contant + Constant::sQStringSep + m_pNoteUuid +
-                             Constant::sQStringSep + m_pNotePage;
-            } else {
-                msgContent = t_contant + Constant::sQStringSep + m_pHighLightPointAndPage;
-            }
-            sendMsg(MSG_NOTE_ADDCONTANT, msgContent);
-        }
+        __PageNoteHideEvent();
     }
+
     CustomWidget::hideEvent(event);
 }
 
@@ -136,6 +125,34 @@ void NoteViewWidget::initConnections()
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
+//  高亮注释 处理
+void NoteViewWidget::__FileNoteHideEvent()
+{
+    QString t_contant = m_pTextEdit->toPlainText().trimmed();
+    if (m_strNote != "" && t_contant == "") {
+        sendMsg(MSG_NOTE_DLTNOTECONTANT, m_pNoteUuid);
+        m_strNote = t_contant;
+    } else {
+        QString t_contant = m_pTextEdit->toPlainText().trimmed();  //  注释内容
+        if (t_contant != m_strNote) {  //  只有 和 原来已有注释内容不一样, 才会提示 保存
+            QString msgContent = "";
+            if (m_pNoteUuid != "") {  //  已经高亮
+                msgContent = t_contant + Constant::sQStringSep + m_pNoteUuid +
+                             Constant::sQStringSep + m_pNotePage;
+            } else {
+                msgContent = t_contant + Constant::sQStringSep + m_pHighLightPointAndPage;
+            }
+            sendMsg(MSG_NOTE_ADDCONTANT, msgContent);
+        }
+    }
+}
+
+//  页面注释处理
+void NoteViewWidget::__PageNoteHideEvent()
+{
+
+}
+
 //  主题变了
 void NoteViewWidget::slotUpdateTheme()
 {
@@ -146,6 +163,11 @@ void NoteViewWidget::slotUpdateTheme()
 void NoteViewWidget::setNotePage(const QString &pNotePage)
 {
     m_pNotePage = pNotePage;
+}
+
+void NoteViewWidget::setWidgetType(const int &nWidgetType)
+{
+    m_nWidgetType = nWidgetType;
 }
 
 void NoteViewWidget::setNoteUuid(const QString &pNoteUuid)

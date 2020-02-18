@@ -10,7 +10,8 @@ HEADERS += \
     $$PWD/CentralWidget.h \
     $$PWD/AttrScrollWidget.h \
     $$PWD/FileAttrWidget.h \
-    $$PWD/FindWidget.h
+    $$PWD/FindWidget.h \
+    $$PWD/controller/FVMMouseEvent.h
 
 SOURCES += \
     $$PWD/HomeWidget.cpp \
@@ -24,4 +25,5 @@ SOURCES += \
     $$PWD/CentralWidget.cpp \
     $$PWD/AttrScrollWidget.cpp \
     $$PWD/FileAttrWidget.cpp \
-    $$PWD/FindWidget.cpp
+    $$PWD/FindWidget.cpp \
+    $$PWD/controller/FVMMouseEvent.cpp
