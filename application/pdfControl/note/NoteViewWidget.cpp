@@ -128,29 +128,55 @@ void NoteViewWidget::initConnections()
 //  高亮注释 处理
 void NoteViewWidget::__FileNoteHideEvent()
 {
-    QString t_contant = m_pTextEdit->toPlainText().trimmed();
-    if (m_strNote != "" && t_contant == "") {
-        sendMsg(MSG_NOTE_DLTNOTECONTANT, m_pNoteUuid);
-        m_strNote = t_contant;
-    } else {
-        QString t_contant = m_pTextEdit->toPlainText().trimmed();  //  注释内容
-        if (t_contant != m_strNote) {  //  只有 和 原来已有注释内容不一样, 才会提示 保存
-            QString msgContent = "";
-            if (m_pNoteUuid != "") {  //  已经高亮
-                msgContent = t_contant + Constant::sQStringSep + m_pNoteUuid +
-                             Constant::sQStringSep + m_pNotePage;
-            } else {
-                msgContent = t_contant + Constant::sQStringSep + m_pHighLightPointAndPage;
-            }
-            sendMsg(MSG_NOTE_ADDCONTANT, msgContent);
+    QString sText = m_pTextEdit->toPlainText().trimmed();
+    if (m_pNoteUuid == "") {
+        if (sText != "") {
+            QString msgContent = sText + Constant::sQStringSep + m_pNotePage;
+            sendMsg(MSG_NOTE_ADD_CONTENT, msgContent);
         }
+    } else {
+        if (m_strNote != "") {
+            if (sText == "") {
+                QString msgContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage;
+                sendMsg(MSG_NOTE_DELETE_CONTENT, msgContent);
+            }
+        } else if (sText != m_strNote) {
+            QString msgContent = sText + Constant::sQStringSep +
+                                 m_pNoteUuid + Constant::sQStringSep +
+                                 m_pNotePage;
+            sendMsg(MSG_NOTE_UPDATE_CONTENT, msgContent);
+        }
+        m_strNote = sText;
     }
 }
+
 
 //  页面注释处理
 void NoteViewWidget::__PageNoteHideEvent()
 {
+    if (m_pNoteUuid != "") {
+        QString sText = m_pTextEdit->toPlainText().trimmed();
+        if (m_strNote == "") {
+            if (sText != "") {
+                QString msgContent = sText + Constant::sQStringSep +
+                                     m_pNoteUuid + Constant::sQStringSep +
+                                     m_pNotePage;
 
+                sendMsg(MSG_NOTE_PAGE_ADD_CONTENT, msgContent);
+            }
+        } else {
+            if (sText == "") {
+                QString msgContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage;
+                sendMsg(MSG_NOTE_PAGE_DELETE_CONTENT, msgContent);
+            } else if (sText != m_strNote) {  //  只有 和 原来已有注释内容不一样, 才会提示 保存
+                QString msgContent = sText + Constant::sQStringSep +
+                                     m_pNoteUuid + Constant::sQStringSep +
+                                     m_pNotePage;
+
+                sendMsg(MSG_NOTE_PAGE_UPDATE_CONTENT, msgContent);
+            }
+        }
+    }
 }
 
 //  主题变了
@@ -173,9 +199,4 @@ void NoteViewWidget::setWidgetType(const int &nWidgetType)
 void NoteViewWidget::setNoteUuid(const QString &pNoteUuid)
 {
     m_pNoteUuid = pNoteUuid;
-}
-
-void NoteViewWidget::setPointAndPage(const QString &pointAndPage)
-{
-    m_pHighLightPointAndPage = pointAndPage;
 }

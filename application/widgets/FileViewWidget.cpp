@@ -26,6 +26,7 @@
 #include "application.h"
 
 #include "business/DocummentFileHelper.h"
+#include "business/AnnotationHelper.h"
 #include "docview/docummentproxy.h"
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
@@ -41,8 +42,7 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
 {
     m_pMsgList = { MSG_MAGNIFYING, MSG_HANDLESHAPE, MSG_SELF_ADAPTE_HEIGHT, MSG_SELF_ADAPTE_WIDTH,
                    MSG_FILE_ROTATE, MSG_OPERATION_TEXT_ADD_HIGHLIGHTED,
-                   MSG_OPERATION_TEXT_UPDATE_HIGHLIGHTED, MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED,
-                   MSG_NOTE_ADDCONTANT, MSG_NOTE_PAGE_ADD
+                   MSG_NOTE_ADD_CONTENT, MSG_NOTE_PAGE_ADD
                  };
 
     m_pKeyMsgList = {KeyStr::g_ctrl_p, KeyStr::g_ctrl_l, KeyStr::g_ctrl_i};
@@ -69,16 +69,14 @@ void FileViewWidget::initWidget()
     //  实际文档类  唯一实例化设置 父窗口
     auto m_pDocummentProxy = DocummentProxy::instance(this);
     if (m_pDocummentProxy) {
-        connect(m_pDocummentProxy, SIGNAL(signal_bookMarkStateChange(int, bool)), this,
-                SLOT(slotBookMarkStateChange(int, bool)));
-        connect(m_pDocummentProxy, SIGNAL(signal_pageChange(int)), this,
-                SLOT(slotDocFilePageChanged(int)));
-
+        connect(m_pDocummentProxy, SIGNAL(signal_bookMarkStateChange(int, bool)), SLOT(slotBookMarkStateChange(int, bool)));
+        connect(m_pDocummentProxy, SIGNAL(signal_pageChange(int)), SLOT(slotDocFilePageChanged(int)));
         connect(m_pDocummentProxy, SIGNAL(signal_openResult(bool)), SLOT(SlotDocFileOpenResult(bool)));
-
     }
 
-    m_pDocummentFileHelper = DocummentFileHelper::instance();
+    //  纯粹 业务处理类
+    DocummentFileHelper::instance();
+    new AnnotationHelper(this);
 }
 
 //  鼠标移动
@@ -153,13 +151,7 @@ void FileViewWidget::slotDealWithData(const int &msgType, const QString &msgCont
     case MSG_OPERATION_TEXT_ADD_HIGHLIGHTED:    //  高亮显示
         onFileAddAnnotation(msgContent);
         break;
-    case MSG_OPERATION_TEXT_UPDATE_HIGHLIGHTED: //  更新高亮颜色
-        onFileUpdateAnnotation(msgContent);
-        break;
-    case MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED: //  移除高亮颜色
-        onFileRemoveAnnotation(msgContent);
-        break;
-    case MSG_NOTE_ADDCONTANT:                   //  添加注释
+    case MSG_NOTE_ADD_CONTENT:                   //  添加注释
         onFileAddNote(msgContent);
         break;
     case MSG_NOTE_PAGE_ADD:                     //  2020.2.18   wzx add
@@ -281,9 +273,6 @@ void FileViewWidget::onSetHandShape(const QString &data)
 //  添加高亮颜色  快捷键
 void FileViewWidget::onFileAddAnnotation()
 {
-    DocummentProxy *_proxy = DocummentProxy::instance();
-    if (!_proxy)
-        return;
 
     //  处于幻灯片模式下
     if (DataManager::instance()->CurShowState() == FILE_SLIDE)
@@ -307,12 +296,20 @@ void FileViewWidget::onFileAddAnnotation()
         notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Please select the text"));
         return;
     }
-    QString selectText = "", t_strUUid = "";
+
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (!_proxy)
+        return;
+
+    QString selectText = "";
     _proxy->getSelectTextString(selectText);
     if (selectText != "") {
-        QColor color = DataManager::instance()->selectColor();
+        QString sContent = QString::number(nSx) + Constant::sQStringSep +
+                           QString::number(nSy) + Constant::sQStringSep +
+                           QString::number(nEx) + Constant::sQStringSep +
+                           QString::number(nEy);
 
-        m_pDocummentFileHelper->addAnnotation(m_pStartPoint, m_pEndSelectPoint, color);
+        notifyMsg(MSG_NOTE_ADD_HIGHLIGHT, sContent);
     } else {
         notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Please select the text"));
     }
@@ -321,97 +318,49 @@ void FileViewWidget::onFileAddAnnotation()
 //  添加高亮颜色
 void FileViewWidget::onFileAddAnnotation(const QString &msgContent)
 {
-    QStringList contentList = msgContent.split(",", QString::SkipEmptyParts);
+    QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (contentList.size() == 3) {
         QString sIndex = contentList.at(0);
-        QString sX = contentList.at(1);
-        QString sY = contentList.at(2);
 
-        int iIndex = sIndex.toInt();
-        QColor color = DataManager::instance()->getLightColorList().at(iIndex);
-        DataManager::instance()->setSelectColor(color);
+        int nSx = m_pStartPoint.x();
+        int nSy = m_pStartPoint.y();
 
-        QPoint tempPoint(sX.toInt(), sY.toInt());
-        m_pDocummentFileHelper->addAnnotation(m_pStartPoint, m_pEndSelectPoint, color);
-    }
-}
+        int nEx = m_pEndSelectPoint.x();
+        int nEy = m_pEndSelectPoint.y();
 
-//  更新高亮颜色
-void FileViewWidget::onFileUpdateAnnotation(const QString &msgContent)
-{
-    DocummentProxy *_proxy = DocummentProxy::instance();
-    if (!_proxy)
-        return;
+        QString sContent = QString::number(nSx) + Constant::sQStringSep +
+                           QString::number(nSy) + Constant::sQStringSep +
+                           QString::number(nEx) + Constant::sQStringSep +
+                           QString::number(nEy) + Constant::sQStringSep +
+                           sIndex;
 
-    QStringList contentList = msgContent.split(",", QString::SkipEmptyParts);
-    if (contentList.size() == 3) {
-        QString sIndex = contentList.at(0);
-        QString sUuid = contentList.at(1);
-        QString sPage = contentList.at(2);
-
-        int iIndex = sIndex.toInt();
-        QColor color = DataManager::instance()->getLightColorList().at(iIndex);
-
-        _proxy->changeAnnotationColor(sPage.toInt(), sUuid, color);     //  更新高亮顏色,  是对文档进行了操作
-        DataManager::instance()->setBIsUpdate(true);
-    }
-}
-
-//  移除高亮, 有注释 则删除注释
-void FileViewWidget::onFileRemoveAnnotation(const QString &msgContent)
-{
-    QStringList contentList = msgContent.split(",", QString::SkipEmptyParts);
-    if (contentList.size() == 2) {
-        QString sX = contentList.at(0);
-        QString sY = contentList.at(1);
-
-        QPoint tempPoint(sX.toInt(), sY.toInt());
-        QString sUuid = m_pDocummentFileHelper->removeAnnotation(tempPoint);
-        if (sUuid != "") {
-            sendMsg(MSG_NOTE_DLTNOTEITEM, sUuid);  //  notesWidget 处理该消息
-        }
+        notifyMsg(MSG_NOTE_ADD_HIGHLIGHT, sContent);
     }
 }
 
 //  添加注释
 void FileViewWidget::onFileAddNote(const QString &msgContent)
 {
-    DocummentProxy *_proxy = DocummentProxy::instance();
-    if (!_proxy)
-        return;
-
-    QString sUuid = "", sNote = "", sPage = "";
-    int ipage = 0;
     QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (contentList.size() == 3) {
-        sNote = contentList.at(0);
-        sUuid = contentList.at(1);
-        sPage = contentList.at(2);
-        ipage = sPage.toInt();
-    } else if (contentList.size() == 4) {
-        sNote = contentList.at(0);
-        sPage = contentList.at(1);
-        ipage = sPage.toInt();
-        QString sX = contentList.at(2);
-        QString sY = contentList.at(3);
+    if (contentList.size() == 2) {
+        QString sNote = contentList.at(0);
+        QString sPage = contentList.at(1);
 
-        QColor color = DataManager::instance()->selectColor();
-        QPoint tempPoint(sX.toInt(), sY.toInt());
-        sUuid = m_pDocummentFileHelper->addAnnotation(m_pStartPoint, m_pEndSelectPoint,
-                                                      color);  //  高亮 产生的 uuid
+        int nSx = m_pStartPoint.x();
+        int nSy = m_pStartPoint.y();
 
-        //此判断是针对跨页选择多行并且是page页码从高到低
-        if (m_pStartPoint.y() > m_pEndSelectPoint.y()) {
-            ipage = _proxy->pointInWhichPage(m_pStartPoint);
-        }
+        int nEx = m_pEndSelectPoint.x();
+        int nEy = m_pEndSelectPoint.y();
+
+        QString sContent = QString::number(nSx) + Constant::sQStringSep +
+                           QString::number(nSy) + Constant::sQStringSep +
+                           QString::number(nEx) + Constant::sQStringSep +
+                           QString::number(nEy) + Constant::sQStringSep +
+                           sNote + Constant::sQStringSep +
+                           sPage;
+
+        notifyMsg(MSG_NOTE_ADD_HIGHLIGHT_NOTE, sContent);
     }
-
-    if (sUuid == "" || sNote == "" || sPage == "" || sPage == "-1") {
-        return;
-    }
-    QString t_str = sUuid.trimmed() + QString("%") + sNote.trimmed() + QString("%") + sPage;
-    sendMsg(MSG_NOTE_ADDITEM, t_str);
-    m_pDocummentFileHelper->setAnnotationText(ipage, sUuid, sNote);
 }
 
 void FileViewWidget::__SetPageAddIconState()

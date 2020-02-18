@@ -65,7 +65,6 @@ private slots:
     void slotUpdateTheme();
 
 private:
-    QString m_pHighLightPointAndPage = "";
     QString m_pNoteUuid = "";
     QString m_pNotePage = "";
 

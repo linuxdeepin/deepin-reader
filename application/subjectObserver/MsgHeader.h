@@ -97,13 +97,23 @@ enum E_DOC_MSG {
 
 //  注释消息
 enum E_NOTE_MSG {
-    MSG_NOTE_ADDCONTANT = 300,      //  添加注释内容 消息
-    MSG_NOTE_ADDITEM,               //  添加注释子节点 消息
-    MSG_NOTE_DLTNOTECONTANT,        //  删除注释内容 消息
-    MSG_NOTE_DLTNOTEITEM,           //  删除注释子节点 消息
-    MSG_NOTE_SELECTITEM,            //  选择注释子节点 消息
-    MSG_NOTE_PAGE_ADD,              //  页面注释显示 可以点击添加
-    MSG_NOTE_PAGE_SHOW_NOTEWIDGET,  //  页面注释显示 注释内容界面
+    MSG_NOTE_ADD_CONTENT = 300,      //  添加注释内容 消息
+    MSG_NOTE_ADD_HIGHLIGHT,          //  添加高亮
+    MSG_NOTE_ADD_HIGHLIGHT_NOTE,     //  添加高亮注释
+    MSG_NOTE_ADD_ITEM,               //  添加注释子节点
+    MSG_NOTE_UPDATE_CONTENT,         //  更新高亮注释内容
+    MSG_NOTE_UPDATE_ITEM,            //  更新高亮注释节点
+    MSG_NOTE_DELETE_CONTENT,         //  删除注释内容 消息
+    MSG_NOTE_DELETE_ITEM,            //  删除注释子节点
+    MSG_NOTE_SELECTITEM,             //  选择注释子节点 消息
+    MSG_NOTE_PAGE_ADD,               //  页面注释显示 可以点击添加
+    MSG_NOTE_PAGE_SHOW_NOTEWIDGET,   //  页面注释显示 注释内容界面
+    MSG_NOTE_PAGE_ADD_CONTENT,       //  页面注释 添加内容
+    MSG_NOTE_PAGE_ADD_ITEM,          //  页面注释 添加节点
+    MSG_NOTE_PAGE_UPDATE_CONTENT,    //  页面注释 更新内容
+    MSG_NOTE_PAGE_UPDATE_ITEM,       //  页面注释 更新节点
+    MSG_NOTE_PAGE_DELETE_CONTENT,    //  页面注释 删除内容
+    MSG_NOTE_PAGE_DELETE_ITEM,       //  页面注释 删除节点
 };
 
 

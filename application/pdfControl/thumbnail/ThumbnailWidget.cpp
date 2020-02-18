@@ -72,19 +72,19 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
 // 初始化界面
 void ThumbnailWidget::initWidget()
 {
-    m_pThumbnailListWidget = new CustomListWidget(this);
+    m_pThumbnailListWidget = new CustomListWidget;
     m_pThumbnailListWidget->setSpacing(8);
 
-    m_pPageWidget = new PagingWidget(this);
-    auto hLine = new DHorizontalLine(this);
+    m_pPageWidget = new PagingWidget;
 
     auto m_pvBoxLayout = new QVBoxLayout;
+    m_pvBoxLayout->setContentsMargins(0, 0, 0, 0);
+    m_pvBoxLayout->setSpacing(0);
+
     m_pvBoxLayout->addWidget(m_pThumbnailListWidget);
-    m_pvBoxLayout->addWidget(hLine);
+    m_pvBoxLayout->addWidget(new DHorizontalLine(this));
     m_pvBoxLayout->addWidget(m_pPageWidget);
 
-    m_pvBoxLayout->setContentsMargins(0, 2, 0, 8);
-    m_pvBoxLayout->setSpacing(6);
     this->setLayout(m_pvBoxLayout);
 }
 

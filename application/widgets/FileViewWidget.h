@@ -21,7 +21,6 @@
 
 #include "CustomControl/CustomWidget.h"
 
-class DocummentFileHelper;
 class TextOperationMenu;
 
 //  当前鼠标状态
@@ -89,8 +88,6 @@ private:
     void onSetWidgetAdapt();
 
     void onFileAddAnnotation(const QString &);
-    void onFileUpdateAnnotation(const QString &);
-    void onFileRemoveAnnotation(const QString &);
 
     void onFileAddNote(const QString &);
     void __SetPageAddIconState();
@@ -102,7 +99,6 @@ private:
 
 private:
     TextOperationMenu       *m_operatemenu = nullptr;
-    DocummentFileHelper     *m_pDocummentFileHelper = nullptr;
 
     int         m_nCurrentHandelState = Default_State;  //  当前鼠标状态
     int         m_nAdapteState = NO_ADAPTE_State;       //  当前自适应状态

@@ -64,6 +64,12 @@ public:
     bool bSelect();
     void setBSelect(const bool &paint);
 
+    int nNoteType() const;
+    void setNNoteType(const int &nNoteType);
+
+    QString strPage() const;
+    void setStrPage(const QString &strPage);
+
     // QWidget interface
 protected:
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
@@ -84,7 +90,8 @@ private:
     DLabel      *m_pTextLab = nullptr;
     QString     m_strUUid = "";     // 当前注释唯一标识
     QString     m_strNote = "";     // 注释内容
-    int         m_nNoteType = -1;   // 注释类型, 0,高亮注释; 1,页面注释
+    QString     m_strPage = "";     // 注释页面
+    int         m_nNoteType = NOTE_HIGHLIGHT;   // 注释类型, 0,高亮注释; 1,页面注释
     bool        m_bPaint = false;
     DMenu       *m_menu = nullptr;
 };

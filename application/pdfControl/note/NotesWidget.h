@@ -28,8 +28,6 @@
 #include "CustomControl/CustomWidget.h"
 #include "docview/commonstruct.h"
 
-class NotesItemWidget;
-
 class ThreadLoadImageOfNote : public QThread
 {
     Q_OBJECT
@@ -81,6 +79,10 @@ signals:
     void sigOpenFileOk();
     void sigCloseFile();
 
+public:
+    // IObserver interface
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+
 protected:
     void initWidget() Q_DECL_OVERRIDE;
 
@@ -95,33 +97,30 @@ private slots:
     void slotAddAnnotation();
 
 private:
-    void __AddNoteItem(const QString &);
-    void __DeleteNoteContant(const QString &);
+    void __AddNoteItem(const QString &, const int &iType = NOTE_HIGHLIGHT);
     void __DeleteNoteItem(const QString &);
+    void __UpdateNoteItem(const QString &);
+
     void __JumpToPrevItem();
     void __JumpToNextItem();
     void __RightSelectItem(const QString &);
 
-    void addNotesItem(const QString &text);
+    void addNotesItem(const QString &text, const int &iType);
     void initConnection();
     void setSelectItemBackColor(QListWidgetItem *);
     void clearItemColor();
 
     void fillContantToList();
-    void addNewItem(const stHighlightContent &note);
-    QListWidgetItem *addNewItem(const QImage &image, const int &page, const QString &uuid, const QString &text);
-    void flushNoteItemText(const int &page, const QString &uuid, const QString &text);
+    QListWidgetItem *addNewItem(const QImage &image, const int &page, const QString &uuid, const QString &text,
+                                const bool &bNew = false, const int &iType = NOTE_HIGHLIGHT);
 
 private:
     CustomListWidget *m_pNotesList = nullptr;
     QMap<QString, int> m_mapUuidAndPage;      //  uuid 和 页码 对应
     ThreadLoadImageOfNote m_ThreadLoadImage;  // 加载注释缩略图线程
-    int m_nIndex = -1;                        // 当前注释列表数
     DPushButton *m_pAddAnnotationBtn = nullptr ;   // 添加注释
 
-public:
-    // IObserver interface
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int m_nIndex = -1;                        // 当前注释列表数
 };
 
 #endif  // NOTESFORM_H

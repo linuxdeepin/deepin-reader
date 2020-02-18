@@ -98,9 +98,17 @@ void TextOperationMenu::slotSetHighLight(const int &nColor)
 
     bool bEnable = m_pRemoveHighLight->isEnabled();
     if (bEnable) {  //  移除高亮可以点,说明已有高亮, 点击操作 是 更新高亮
-        notifyMsgToFrame(MSG_OPERATION_TEXT_UPDATE_HIGHLIGHTED, QString("%1,%2,%3").arg(m_pLightColor).arg(m_strNoteUuid).arg(m_nClickPage));
+        QString sContent = QString::number(m_pLightColor) + Constant::sQStringSep +
+                           m_strNoteUuid + Constant::sQStringSep +
+                           QString::number(m_nClickPage);
+
+        notifyMsgToFrame(MSG_OPERATION_TEXT_UPDATE_HIGHLIGHTED, sContent);
     } else {    //  移除高亮不可点,说明没有高亮, 点击操作 是 添加高亮
-        notifyMsgToFrame(MSG_OPERATION_TEXT_ADD_HIGHLIGHTED, QString("%1,%2,%3").arg(m_pLightColor).arg(m_pClickPoint.x()).arg(m_pClickPoint.y()));
+        QString sContent = QString::number(m_pLightColor) + Constant::sQStringSep +
+                           QString::number(m_pClickPoint.x()) + Constant::sQStringSep +
+                           QString::number(m_pClickPoint.y());
+
+        notifyMsgToFrame(MSG_OPERATION_TEXT_ADD_HIGHLIGHTED, sContent);
     }
 }
 
@@ -111,7 +119,8 @@ void TextOperationMenu::slotCopyClicked()
 
 void TextOperationMenu::slotRemoveHighLightClicked()
 {
-    notifyMsgToFrame(MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED, QString("%1,%2").arg(m_pClickPoint.x()).arg(m_pClickPoint.y()));
+    QString sContent = QString::number(m_pClickPoint.x()) + Constant::sQStringSep +  QString::number(m_pClickPoint.y());
+    notifyMsgToFrame(MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED, sContent);
 }
 
 void TextOperationMenu::slotAddNoteClicked()

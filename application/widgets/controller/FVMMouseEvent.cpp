@@ -91,7 +91,6 @@ void FVMMouseEvent::__MouseSelectText(FileViewWidget *fvw, const QPoint &clickPo
     _proxy->mouseSelectText(fvw->m_pStartPoint, fvw->m_pEndSelectPoint);
 }
 
-
 void FVMMouseEvent::__ShowNoteTipWidget(FileViewWidget *fvw, const QString &sText)
 {
     NoteTipWidget *tipWidget = fvw->findChild<NoteTipWidget *>();
@@ -184,19 +183,26 @@ void FVMMouseEvent::mousePressEvent(QMouseEvent *event, DWidget *widget)
     if (widget == nullptr)
         return;
 
-    //  处于幻灯片模式下
-    if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
-        return;
-    }
-
     FileViewWidget *fvw = qobject_cast<FileViewWidget *>(widget);
 
-    //  放大镜状态， 直接返回
-    if (fvw->m_nCurrentHandelState == Magnifier_State)
-        return;
-
     Qt::MouseButton nBtn = event->button();
-    if (nBtn == Qt::LeftButton) {
+    if (nBtn == Qt::RightButton) {  //  右键处理
+        //  处于幻灯片模式下
+        if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
+            fvw->notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
+            return;
+        }
+
+        //  放大镜状态，
+        if (fvw->m_nCurrentHandelState == Magnifier_State) {
+            fvw->notifyMsg(MSG_MAGNIFYING_CANCEL);
+            return;
+        }
+    } else if (nBtn == Qt::LeftButton) { // 左键处理
+        //  幻灯片模式下, 左键单击 不作任何处理
+        if (DataManager::instance()->CurShowState() == FILE_SLIDE)
+            return;
+
         QPoint globalPos = event->globalPos();
         //  当前状态是 手, 先 拖动, 之后 在是否是链接之类
         if (fvw->m_nCurrentHandelState == NOTE_ADD_State) {
@@ -246,14 +252,14 @@ void FVMMouseEvent::__HandlClicked(const QPoint &globalPos)
 }
 
 //  点击 页面能够跳转
-void FVMMouseEvent::__ClickPageLink(Page::Link *pLink, FileViewWidget *widget)
+void FVMMouseEvent::__ClickPageLink(Page::Link *pLink, FileViewWidget *fvw)
 {
     Page::LinkType_EM linkType = pLink->type;
     if (linkType == Page::LinkType_NULL) {
 
     } else if (linkType == Page::LinkType_Goto) {
         int page = pLink->page - 1;
-        widget->notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(page));
+        fvw->notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(page));
     } else if (linkType == Page::LinkType_GotoOtherFile) {
 
     } else if (linkType == Page::LinkType_Browse) {
@@ -291,26 +297,19 @@ void FVMMouseEvent::__OtherMousePress(FileViewWidget *fvw, const QPoint &globalP
 
 void FVMMouseEvent::mouseReleaseEvent(QMouseEvent *event, DWidget *widget)
 {
+    //  幻灯片模式下, 左键单击 不作任何处理
+    if (DataManager::instance()->CurShowState() == FILE_SLIDE)
+        return;
+
     DocummentProxy *_proxy = DocummentProxy::instance();
     if (!_proxy)
         return;
 
+    Qt::MouseButton nBtn = event->button();
+
     FileViewWidget *fvw = qobject_cast<FileViewWidget *>(widget);
 
-    //  处于幻灯片模式下
-    if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
-        if (event->button() == Qt::RightButton)
-            fvw->notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
-        return;
-    }
-
     //  放大镜状态， 右键则取消放大镜 并且 直接返回
-    Qt::MouseButton nBtn = event->button();
-    if (nBtn == Qt::RightButton && fvw->m_nCurrentHandelState == Magnifier_State) {
-        fvw->notifyMsg(MSG_MAGNIFYING_CANCEL);
-        return;
-    }
-
     if (m_bSelectOrMove) {
         //判断鼠标左键松开的位置有没有高亮
         QPoint globalPos = event->globalPos();

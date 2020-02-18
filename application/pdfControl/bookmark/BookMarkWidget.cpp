@@ -366,40 +366,6 @@ void BookMarkWidget::slotLoadImage(const int &page, const QImage &image)
     }
 }
 
-/**
- * @brief BookMarkWidget::slotDelBkItem
- * delete键删除鼠标选中书签item
- */
-//void BookMarkWidget::slotDelBkItem()
-//{
-////    qDebug() << __FUNCTION__ << "  111111111111111 ";
-//    //  按Del键删除, 当前显示的List 必须是 自己 才可以进行删除
-//    bool bFocus = this->hasFocus();
-//    if (bFocus) {
-//        auto pCurItem = m_pBookMarkListWidget->currentItem();
-//        if (pCurItem) {
-//            auto t_widget =
-//                reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
-//            if (t_widget) {
-//                if (t_widget->bSelect()) {
-//                    int nPageIndex = t_widget->nPageIndex();
-
-//                    notifyMsg(MSG_BOOKMARK_DLTITEM, QString::number(nPageIndex));
-
-////                    t_widget->deleteLater();
-////                    t_widget = nullptr;
-
-////                    delete pCurItem;
-////                    pCurItem = nullptr;
-
-////                    deleteIndexPage(nPageIndex);
-////                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The bookmark has been removed"));
-//                }
-//            }
-//        }
-//    }
-//}
-
 void BookMarkWidget::slotUpdateTheme()
 {
     auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();

@@ -72,7 +72,12 @@ void NotesItemWidget::setBSelect(const bool &paint)
 
 void NotesItemWidget::slotDltNoteContant()
 {
-    sendMsg(MSG_NOTE_DLTNOTEITEM, m_strUUid);
+    QString sContent = m_strUUid + Constant::sQStringSep + m_strPage;
+    if (m_nNoteType == NOTE_HIGHLIGHT) {
+        notifyMsg(MSG_NOTE_DELETE_CONTENT, sContent);
+    } else {
+        notifyMsg(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
+    }
 }
 
 void NotesItemWidget::slotCopyContant()
@@ -115,6 +120,26 @@ void NotesItemWidget::slotUpdateTheme()
     if (m_pTextLab) {
         m_pTextLab->setForegroundRole(QPalette::BrightText);
     }
+}
+
+QString NotesItemWidget::strPage() const
+{
+    return m_strPage;
+}
+
+void NotesItemWidget::setStrPage(const QString &strPage)
+{
+    m_strPage = strPage;
+}
+
+int NotesItemWidget::nNoteType() const
+{
+    return m_nNoteType;
+}
+
+void NotesItemWidget::setNNoteType(const int &nNoteType)
+{
+    m_nNoteType = nNoteType;
 }
 
 void NotesItemWidget::initWidget()

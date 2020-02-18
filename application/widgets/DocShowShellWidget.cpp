@@ -131,20 +131,27 @@ void DocShowShellWidget::slotShowFindWidget()
 //  注释窗口
 void DocShowShellWidget::onOpenNoteWidget(const QString &msgContent)
 {
-    auto pWidget = this->findChild<NoteViewWidget *>();
-    if (pWidget == nullptr) {
-        pWidget = new NoteViewWidget(this);
-    }
-    pWidget->setEditText("");
-    pWidget->setPointAndPage(msgContent);
-    pWidget->setNoteUuid("");
-    pWidget->setNotePage("");
+    QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    if (sList.size() == 3) {
 
-    QPoint point;
-    bool t_bHigh = false;
-    DataManager::instance()->setSmallNoteWidgetSize(pWidget->size());
-    DataManager::instance()->mousePressLocal(t_bHigh, point);
-    pWidget->showWidget(point);
+        QString sPage = sList.at(0);
+//        QString sX = sList.at(1);
+//        QString sY = sList.at(2);
+
+        auto pWidget = this->findChild<NoteViewWidget *>();
+        if (pWidget == nullptr) {
+            pWidget = new NoteViewWidget(this);
+        }
+        pWidget->setEditText("");
+        pWidget->setNoteUuid("");
+        pWidget->setNotePage(sPage);
+
+        QPoint point;
+        bool t_bHigh = false;
+        DataManager::instance()->setSmallNoteWidgetSize(pWidget->size());
+        DataManager::instance()->mousePressLocal(t_bHigh, point);
+        pWidget->showWidget(point);
+    }
 }
 
 //  显示 当前 注释
@@ -169,7 +176,7 @@ void DocShowShellWidget::onShowNoteWidget(const QString &contant)
         pWidget->setNoteUuid(t_strUUid);
         pWidget->setNotePage(t_page);
         pWidget->setEditText(sContant);
-        pWidget->setPointAndPage("");
+//        pWidget->setPointAndPage("");
         DataManager::instance()->setSmallNoteWidgetSize(pWidget->size());
 
         bool t_bHigh = false;  // 点击位置是否是高亮
@@ -196,7 +203,7 @@ void DocShowShellWidget::__ShowPageNoteWidget(const QString &msgContent)
             pWidget = new NoteViewWidget(this);
         }
         pWidget->setEditText("");
-        pWidget->setPointAndPage(msgContent);
+//        pWidget->setPointAndPage(msgContent);
         pWidget->setNoteUuid(sUuid);
         pWidget->setNotePage(sPage);
         pWidget->setWidgetType(NOTE_PAGE);
@@ -303,7 +310,7 @@ void DocShowShellWidget::initWidget()
     auto layout = new QHBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    qDebug() << rect();
+
     auto m_pfileviwewidget = new FileViewWidget(this);
     connect(m_pfileviwewidget, SIGNAL(sigShowPlayCtrl(bool)), this, SLOT(slotChangePlayCtrlShow(bool)));
 
@@ -317,11 +324,12 @@ void DocShowShellWidget::initWidget()
  * 鼠标进入时自动获取焦点
  * @param event
  */
-void DocShowShellWidget::enterEvent(QEvent *event)
-{
-    CustomWidget::enterEvent(event);
+//  2020.2.18   注释
+//void DocShowShellWidget::enterEvent(QEvent *event)
+//{
+//    CustomWidget::enterEvent(event);
 
-    if (DocummentProxy::instance()) {
-        DocummentProxy::instance()->setViewFocus();
-    }
-}
+//    if (DocummentProxy::instance()) {
+//        DocummentProxy::instance()->setViewFocus();
+//    }
+//}
