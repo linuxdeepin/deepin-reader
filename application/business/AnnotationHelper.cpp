@@ -30,7 +30,7 @@ AnnotationHelper::AnnotationHelper(QObject *parent)
 {
     m_pMsgList = { MSG_NOTE_PAGE_ADD_CONTENT, MSG_NOTE_PAGE_DELETE_CONTENT, MSG_NOTE_PAGE_UPDATE_CONTENT,
                    MSG_NOTE_DELETE_CONTENT, MSG_NOTE_UPDATE_CONTENT,
-                   MSG_NOTE_ADD_HIGHLIGHT, MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED, MSG_OPERATION_TEXT_UPDATE_HIGHLIGHTED,
+                   MSG_NOTE_ADD_HIGHLIGHT_COLOR, MSG_NOTE_REMOVE_HIGHLIGHT_COLOR, MSG_NOTE_UPDATE_HIGHLIGHT_COLOR,
                    MSG_NOTE_ADD_HIGHLIGHT_NOTE
                  };
 
@@ -83,11 +83,11 @@ void AnnotationHelper::slotDealWithData(const int &msgType, const QString &msgCo
         __RemoveAnnotation(msgContent);
     } else if (msgType == MSG_NOTE_UPDATE_CONTENT) {            //  更新高亮注释
         __UpdateAnnotationText(msgContent);
-    } else if (msgType == MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED) {  //  移除高亮注释 的高亮
+    } else if (msgType == MSG_NOTE_REMOVE_HIGHLIGHT_COLOR) {  //  移除高亮注释 的高亮
         __RemoveHighLight(msgContent);
-    } else if (msgType == MSG_OPERATION_TEXT_UPDATE_HIGHLIGHTED) {  //  更新高亮颜色
+    } else if (msgType == MSG_NOTE_UPDATE_HIGHLIGHT_COLOR) {  //  更新高亮颜色
         __ChangeAnnotationColor(msgContent);
-    } else if (msgType == MSG_NOTE_ADD_HIGHLIGHT) {                 //  添加高亮
+    } else if (msgType == MSG_NOTE_ADD_HIGHLIGHT_COLOR) {                 //  添加高亮
         __AddHighLight(msgContent);
     } else if (msgType == MSG_NOTE_ADD_HIGHLIGHT_NOTE) {            //  添加高亮注释
         __AddHighLightAnnotation(msgContent);

@@ -87,8 +87,6 @@ private:
     void onSetHandShape(const QString &);
     void onSetWidgetAdapt();
 
-    void onFileAddAnnotation(const QString &);
-
     void onFileAddNote(const QString &);
     void __SetPageAddIconState();
 

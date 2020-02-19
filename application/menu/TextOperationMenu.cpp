@@ -4,12 +4,10 @@
 #include <DGuiApplicationHelper>
 
 #include "application.h"
+#include "ColorWidgetAction.h"
 
 #include "controller/NotifySubject.h"
 #include "controller/DataManager.h"
-
-#include "ColorWidgetAction.h"
-
 #include "subjectObserver/MsgHeader.h"
 #include "subjectObserver/ModuleHeader.h"
 
@@ -102,13 +100,21 @@ void TextOperationMenu::slotSetHighLight(const int &nColor)
                            m_strNoteUuid + Constant::sQStringSep +
                            QString::number(m_nClickPage);
 
-        notifyMsgToFrame(MSG_OPERATION_TEXT_UPDATE_HIGHLIGHTED, sContent);
+        notifyMsgToFrame(MSG_NOTE_UPDATE_HIGHLIGHT_COLOR, sContent);
     } else {    //  移除高亮不可点,说明没有高亮, 点击操作 是 添加高亮
-        QString sContent = QString::number(m_pLightColor) + Constant::sQStringSep +
-                           QString::number(m_pClickPoint.x()) + Constant::sQStringSep +
-                           QString::number(m_pClickPoint.y());
+        int nSx = m_pStartPoint.x();
+        int nSy = m_pStartPoint.y();
 
-        notifyMsgToFrame(MSG_OPERATION_TEXT_ADD_HIGHLIGHTED, sContent);
+        int nEx = m_pEndPoint.x();
+        int nEy = m_pEndPoint.y();
+
+        QString sContent = QString::number(nSx) + Constant::sQStringSep +
+                           QString::number(nSy) + Constant::sQStringSep +
+                           QString::number(nEx) + Constant::sQStringSep +
+                           QString::number(nEy) + Constant::sQStringSep +
+                           QString::number(m_pLightColor);
+
+        notifyMsgToFrame(MSG_NOTE_ADD_HIGHLIGHT_COLOR, sContent);
     }
 }
 
@@ -120,7 +126,7 @@ void TextOperationMenu::slotCopyClicked()
 void TextOperationMenu::slotRemoveHighLightClicked()
 {
     QString sContent = QString::number(m_pClickPoint.x()) + Constant::sQStringSep +  QString::number(m_pClickPoint.y());
-    notifyMsgToFrame(MSG_OPERATION_TEXT_REMOVE_HIGHLIGHTED, sContent);
+    notifyMsgToFrame(MSG_NOTE_REMOVE_HIGHLIGHT_COLOR, sContent);
 }
 
 void TextOperationMenu::slotAddNoteClicked()
@@ -129,7 +135,7 @@ void TextOperationMenu::slotAddNoteClicked()
         QString msgContent = QString("%1").arg(m_nClickPage) + Constant::sQStringSep + QString("%1").arg(m_pClickPoint.x()) + Constant::sQStringSep + QString("%1").arg(m_pClickPoint.y());
         notifyMsgToFrame(MSG_OPERATION_TEXT_ADD_ANNOTATION, msgContent);
     } else {
-        QString t_strContant = m_strNoteUuid.trimmed() + QString("%none%") + QString::number(m_nClickPage);
+        QString t_strContant = m_strNoteUuid.trimmed() + Constant::sQStringSep + QString::number(m_nClickPage);
         notifyMsgToFrame(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
     }
 }
@@ -142,4 +148,14 @@ void TextOperationMenu::slotAddBookMarkClicked()
 void TextOperationMenu::slotExitFullScreenClicked()
 {
     notifyMsgToFrame(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
+}
+
+void TextOperationMenu::setPEndPoint(const QPoint &pEndPoint)
+{
+    m_pEndPoint = pEndPoint;
+}
+
+void TextOperationMenu::setPStartPoint(const QPoint &pStartPoint)
+{
+    m_pStartPoint = pStartPoint;
 }

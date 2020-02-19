@@ -157,10 +157,10 @@ void DocShowShellWidget::onOpenNoteWidget(const QString &msgContent)
 //  显示 当前 注释
 void DocShowShellWidget::onShowNoteWidget(const QString &contant)
 {
-    QStringList t_strList = contant.split(QString("%"), QString::SkipEmptyParts);
-    if (t_strList.count() == 3) {
+    QStringList t_strList = contant.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    if (t_strList.count() == 2) {
         QString t_strUUid = t_strList.at(0);
-        QString t_page = t_strList.at(2);
+        QString t_page = t_strList.at(1);
 
         QString sContant = "";
 

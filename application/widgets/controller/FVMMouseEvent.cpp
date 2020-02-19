@@ -327,7 +327,7 @@ void FVMMouseEvent::mouseReleaseEvent(QMouseEvent *event, DWidget *widget)
                 __CloseFileNoteWidget(fvw);
 
                 int nPage = _proxy->pointInWhichPage(docGlobalPos);
-                QString t_strContant = t_strUUid.trimmed() + QString("%1%") + QString::number(nPage);
+                QString t_strContant = t_strUUid.trimmed() + Constant::sQStringSep + QString::number(nPage);
                 fvw->notifyMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
             }
         }

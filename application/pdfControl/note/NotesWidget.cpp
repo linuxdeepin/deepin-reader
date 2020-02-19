@@ -28,7 +28,7 @@ NotesWidget::NotesWidget(DWidget *parent)
     : CustomWidget("NotesWidget", parent)
 {
     m_pMsgList = {MSG_NOTE_ADD_ITEM, MSG_NOTE_DELETE_ITEM, MSG_NOTE_UPDATE_ITEM,
-                  MSG_NOTE_SELECTITEM,
+                  MSG_NOTE_SELECT_ITEM,
                   MSG_NOTE_PAGE_ADD_ITEM, MSG_NOTE_PAGE_DELETE_ITEM, MSG_NOTE_PAGE_UPDATE_ITEM
                  };
     initWidget();
@@ -130,7 +130,7 @@ void NotesWidget::slotDealWithData(const int &msgType, const QString &msgContent
         __DeleteNoteItem(msgContent);
     } else if (MSG_NOTE_UPDATE_ITEM == msgType || MSG_NOTE_PAGE_UPDATE_ITEM == msgType) {
         __UpdateNoteItem(msgContent);
-    } else if (MSG_NOTE_SELECTITEM == msgType) {
+    } else if (MSG_NOTE_SELECT_ITEM == msgType) {
         __RightSelectItem(msgContent);
     }
 }

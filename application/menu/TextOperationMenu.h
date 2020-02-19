@@ -1,12 +1,12 @@
 #ifndef TEXTOPERATIONMENU_H
 #define TEXTOPERATIONMENU_H
 
-
 #include <DMenu>
-#include <QAction>
-#include "ColorWidgetAction.h"
 
 DWIDGET_USE_NAMESPACE
+
+
+class ColorWidgetAction;
 
 /**
  * @brief The DefaultOperationWidget class
@@ -26,6 +26,10 @@ public:
     void setClickPoint(const QPoint &);
 
     void setClickPage(int nClickPage);
+
+    void setPStartPoint(const QPoint &pStartPoint);
+
+    void setPEndPoint(const QPoint &pEndPoint);
 
 private:
     void initMenu();
@@ -54,6 +58,8 @@ private:
     ColorWidgetAction   *m_pColorWidgetAction = nullptr;
 
     QPoint      m_pClickPoint;
+    QPoint      m_pStartPoint;          //  右键菜单的 起始点
+    QPoint      m_pEndPoint;            //  右键菜单的 结束点
     int         m_nClickPage = -1;
 };
 

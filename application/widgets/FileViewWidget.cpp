@@ -41,7 +41,7 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
     , m_operatemenu(nullptr)
 {
     m_pMsgList = { MSG_MAGNIFYING, MSG_HANDLESHAPE, MSG_SELF_ADAPTE_HEIGHT, MSG_SELF_ADAPTE_WIDTH,
-                   MSG_FILE_ROTATE, MSG_OPERATION_TEXT_ADD_HIGHLIGHTED,
+                   MSG_FILE_ROTATE,
                    MSG_NOTE_ADD_CONTENT, MSG_NOTE_PAGE_ADD
                  };
 
@@ -148,9 +148,6 @@ void FileViewWidget::slotDealWithData(const int &msgType, const QString &msgCont
     case MSG_FILE_ROTATE:           //  文档旋转了
         onSetWidgetAdapt();
         break;
-    case MSG_OPERATION_TEXT_ADD_HIGHLIGHTED:    //  高亮显示
-        onFileAddAnnotation(msgContent);
-        break;
     case MSG_NOTE_ADD_CONTENT:                   //  添加注释
         onFileAddNote(msgContent);
         break;
@@ -216,6 +213,8 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
             m_operatemenu = new TextOperationMenu(this);
         }
         m_operatemenu->setClickPoint(pRightClickPoint);
+        m_operatemenu->setPStartPoint(m_pStartPoint);
+        m_operatemenu->setPEndPoint(m_pEndSelectPoint);
         m_operatemenu->setClickPage(nPage);
 
         DataManager::instance()->setMousePressLocal(bIsHighLight, tempPoint);
@@ -273,7 +272,6 @@ void FileViewWidget::onSetHandShape(const QString &data)
 //  添加高亮颜色  快捷键
 void FileViewWidget::onFileAddAnnotation()
 {
-
     //  处于幻灯片模式下
     if (DataManager::instance()->CurShowState() == FILE_SLIDE)
         return;
@@ -309,32 +307,9 @@ void FileViewWidget::onFileAddAnnotation()
                            QString::number(nEx) + Constant::sQStringSep +
                            QString::number(nEy);
 
-        notifyMsg(MSG_NOTE_ADD_HIGHLIGHT, sContent);
+        notifyMsg(MSG_NOTE_ADD_HIGHLIGHT_COLOR, sContent);
     } else {
         notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Please select the text"));
-    }
-}
-
-//  添加高亮颜色
-void FileViewWidget::onFileAddAnnotation(const QString &msgContent)
-{
-    QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (contentList.size() == 3) {
-        QString sIndex = contentList.at(0);
-
-        int nSx = m_pStartPoint.x();
-        int nSy = m_pStartPoint.y();
-
-        int nEx = m_pEndSelectPoint.x();
-        int nEy = m_pEndSelectPoint.y();
-
-        QString sContent = QString::number(nSx) + Constant::sQStringSep +
-                           QString::number(nSy) + Constant::sQStringSep +
-                           QString::number(nEx) + Constant::sQStringSep +
-                           QString::number(nEy) + Constant::sQStringSep +
-                           sIndex;
-
-        notifyMsg(MSG_NOTE_ADD_HIGHLIGHT, sContent);
     }
 }
 

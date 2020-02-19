@@ -93,7 +93,7 @@ void NotesItemWidget::slotCopyContant()
 
 void NotesItemWidget::slotShowContextMenu(const QPoint &)
 {
-    notifyMsg(MSG_NOTE_SELECTITEM, m_strUUid);
+    notifyMsg(MSG_NOTE_SELECT_ITEM, m_strUUid);
 
     if (m_menu == nullptr) {
         m_menu = new DMenu(this);
