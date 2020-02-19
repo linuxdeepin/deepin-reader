@@ -79,6 +79,7 @@ void DataManager::setStrOnlyFilePath(const QString &strOnlyFilePath)
         m_bIsUpdate = false;
     }
     dApp->dbM->setStrFilePath(strOnlyFilePath);
+    dApp->m_BookMarkDB->setStrFilePath(strOnlyFilePath);
 
     m_strOnlyFilePath = strOnlyFilePath;
 }

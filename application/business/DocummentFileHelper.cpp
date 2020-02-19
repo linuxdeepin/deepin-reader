@@ -34,6 +34,8 @@
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
 
+#include "business/db/BookMarkDB.h"
+
 DocummentFileHelper::DocummentFileHelper(QObject *parent)
     : QObject(parent)
 {
@@ -152,7 +154,7 @@ void DocummentFileHelper::onSaveFile()
         if (rl) {
             //  保存需要保存 数据库记录
             qDebug() << "DocummentFileHelper::slotSaveFile saveBookMark";
-            dApp->dbM->saveBookMark();
+            qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->saveData();
 
             DataManager::instance()->setBIsUpdate(false);
             notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Saved successfully"));
@@ -198,7 +200,8 @@ void DocummentFileHelper::onSaveAsFile()
                 bool rl = DocummentProxy::instance()->saveas(sFilePath, true);
                 if (rl) {
                     //insert a new bookmark record to bookmarktabel
-                    dApp->dbM->saveasBookMark(m_szFilePath, sFilePath);
+                    qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->saveAsData(sFilePath);
+
                     DataManager::instance()->setStrOnlyFilePath(sFilePath);
                     //insert msg to FileFontTable
                     saveFileFontMsg(filePath);
@@ -309,7 +312,8 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
             if (nRes == 2) {    // 保存已打开文件
                 save(m_szFilePath, true);
                 //  保存 书签数据
-                dApp->dbM->saveBookMark();
+                qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->saveData();
+
                 //insert msg to FileFontTable
                 saveFileFontMsg(m_szFilePath);
             }
@@ -416,6 +420,8 @@ void DocummentFileHelper::setAppShowTitle()
         sTitle = info.baseName();
     }
     notifyMsg(MSG_OPERATION_OPEN_FILE_OK, sTitle);
+
+    dApp->m_BookMarkDB->qSelectData();
 }
 
 //  复制

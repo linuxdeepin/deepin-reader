@@ -14,54 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "DBManager.h"
+#include "DBFactory.h"
 
-#include <QDebug>
-#include <QDir>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
-#include <QDateTime>
-#include <QStandardPaths>
+#include <QDebug>
 
-#include "application.h"
-
-#include "subjectObserver/MsgHeader.h"
 #include "utils/utils.h"
+#include "subjectObserver/MsgHeader.h"
 
-bool DBManager::hasFilePathDB(const QString &filePath)
-{
-    const QSqlDatabase db = getDatabase();
-    QMutexLocker mutex(&m_mutex);
-    QSqlQuery query(db);
-    QString sql = QString("select FilePath from FilesTable where FilePath = '%1'").arg(filePath);
-//    query.prepare("select FilePath from FileFontTable where FilePath = ?");
-//    query.addBindValue(filePath);
-    if (query.exec(sql)) {
-        while (query.next()) {
-            qDebug() << "  FilePath:" << query.value(0).toString();
-            if (query.value(0).toString() != "")
-                return true;
-        }
-    }
-    return false;
-}
-
-DBManager::DBManager(QObject *parent)
+DBFactory::DBFactory(QObject *parent)
     : QObject(parent)
-    , m_connectionName("default_connection")
 {
 }
 
-const QSqlDatabase DBManager::getDatabase()
+const QSqlDatabase DBFactory::getDatabase()
 {
+    QString m_connectionName = "default_connection";
     QMutexLocker mutex(&m_mutex);
     if (QSqlDatabase::contains(m_connectionName)) {
         QSqlDatabase db = QSqlDatabase::database(m_connectionName);
         return db;
     } else {
         //if database not open, open it.
-        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);//not dbConnection
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);
         QString sDbPath = Utils::getConfigPath();
         db.setDatabaseName(sDbPath + "/" + ConstantMsg::g_db_name);
         if (! db.open()) {
@@ -73,7 +50,26 @@ const QSqlDatabase DBManager::getDatabase()
     }
 }
 
-void DBManager::setStrFilePath(const QString &strFilePath)
+bool DBFactory::hasFilePathDB(const QString &sTabelName)
+{
+    const QSqlDatabase db = getDatabase();
+    if (db.isValid()) {
+        QMutexLocker mutex(&m_mutex);
+        QSqlQuery query(db);
+        QString sSql = QString("select count(*) from %1 where FilePath=?").arg(sTabelName);
+        query.prepare(sSql);
+        query.addBindValue(m_strFilePath);
+        if (query.exec() && query.next()) {
+            return query.value(0).toInt() == 1;
+        } else {
+            qWarning() << __FUNCTION__ << "   " << query.lastError();
+        }
+
+        return false;
+    }
+}
+
+void DBFactory::setStrFilePath(const QString &strFilePath)
 {
     m_strFilePath = strFilePath;
 
@@ -81,3 +77,4 @@ void DBManager::setStrFilePath(const QString &strFilePath)
     nLastPos++;
     m_strFileName = strFilePath.mid(nLastPos);
 }
+

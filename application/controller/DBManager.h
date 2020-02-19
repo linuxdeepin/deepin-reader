@@ -17,12 +17,6 @@
 #ifndef DBMANAGER_H
 #define DBMANAGER_H
 
-// BookMarkTable
-///////////////////////////////////////////////////////
-//FilePath           | FileName | PageNumber        | Time  //
-//TEXT primari key   | TEXT     | TEXT       | TEXT  //
-///////////////////////////////////////////////////////
-
 #include <QObject>
 #include <QMutex>
 
@@ -35,30 +29,12 @@ class DBManager : public QObject
 
 public:
     explicit DBManager(QObject *parent = nullptr);
-    virtual ~DBManager();
 
 protected:
     const QSqlDatabase getDatabase();
-    void checkDatabase();
 
 public:
     void setStrFilePath(const QString &strFilePath);
-
-    void getBookMarks();     //  获取给文件 所有标签的页码
-    void saveBookMark();
-
-    QList<int> getBookMarkList() const;
-
-    void setBookMarkList(const QList<int> &pBookMarkList);
-
-    bool saveasBookMark(const QString &oldpath, const QString &newpath);
-
-private:
-    void insertBookMark(const QString &, const QString &strFilePath = "", const QString &strFileName = "");
-    void updateBookMark(const QString &);
-    void deleteBookMark();
-
-    void clearInvalidRecord();
 
 protected:
     bool hasFilePathDB(const QString &);

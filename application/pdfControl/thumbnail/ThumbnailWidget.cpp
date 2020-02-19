@@ -25,6 +25,8 @@
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
 
+#include "business/db/BookMarkDB.h"
+
 ThumbnailWidget::ThumbnailWidget(DWidget *parent)
     : CustomWidget(QString("ThumbnailWidget"), parent)
 {
@@ -279,8 +281,7 @@ void ThumbnailWidget::showItemBookMark(int ipage)
             pWidget->slotBookMarkShowStatus(true);
         }
     } else {
-        dApp->dbM->getBookMarks();
-        QList<int> pageList = dApp->dbM->getBookMarkList();
+        QList<int> pageList = qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->getBookMarkList();
         foreach (int index, pageList) {
             auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(
                                m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(index)));

@@ -14,45 +14,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef APPLICATION_H_
-#define APPLICATION_H_
+#ifndef DBFACTORY_H
+#define DBFACTORY_H
 
-#include <DApplication>
+#include <QObject>
+#include <QMutex>
 
-#include "controller/DBManager.h"
-#include "controller/HistroyDB.h"
+class QSqlDatabase;
 
-#include "business/db/DBFactory.h"
-
-#if defined(dApp)
-#undef dApp
-#endif
-#define dApp (static_cast<Application *>(QCoreApplication::instance()))
-
-DWIDGET_USE_NAMESPACE
-
-
-
-class Application : public DApplication
+class DBFactory : public QObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(DBFactory)
 
 public:
-    Application(int &argc, char **argv);
-    ~Application() Q_DECL_OVERRIDE;
+    explicit DBFactory(QObject *parent = nullptr);
+
+public:
+    void setStrFilePath(const QString &strFilePath);
+    virtual void saveData() = 0;
+    virtual void saveAsData(const QString &newPath) = 0;
+    virtual void qSelectData() = 0;
 
 protected:
-    void handleQuitAction() Q_DECL_OVERRIDE;
+    virtual void checkDatabase() = 0;
+    virtual void clearInvalidRecord() = 0;
 
-public:
-    DBManager *dbM = nullptr;
-    DBFactory   *m_BookMarkDB = nullptr;
-    HistroyDB   *histroyDb = nullptr;
+protected:
+    const QSqlDatabase getDatabase();
+    bool hasFilePathDB(const QString &);
 
-private:
-    void initCfgPath();
-    void initChildren();
-    void initI18n();
+protected:
+    QString m_strFilePath = "";
+    QString m_strFileName = "";
+    QMutex m_mutex;
 };
 
-#endif  // APPLICATION_H_
+#endif // DBMANAGER_H

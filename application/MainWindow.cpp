@@ -101,7 +101,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
                 //  保存
                 DocummentFileHelper::instance()->save(sFilePath, true);
                 //  保存 书签数据r
-                dApp->dbM->saveBookMark();
+                dApp->m_BookMarkDB->saveData();
             }
         }
 

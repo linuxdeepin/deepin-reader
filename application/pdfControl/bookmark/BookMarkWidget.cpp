@@ -25,6 +25,8 @@
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
 
+#include "business/db/BookMarkDB.h"
+
 BookMarkWidget::BookMarkWidget(DWidget *parent)
     : CustomWidget(QString("BookMarkWidget"), parent)
 {
@@ -151,7 +153,7 @@ void BookMarkWidget::slotAddBookMark()
 //  书签状态 添加指定页
 void BookMarkWidget::slotAddBookMark(const int &nPage)
 {
-    QList<int> pageList = dApp->dbM->getBookMarkList();
+    QList<int> pageList = qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->getBookMarkList();
     if (pageList.contains(nPage)) {
         return;
     }
@@ -160,7 +162,7 @@ void BookMarkWidget::slotAddBookMark(const int &nPage)
     if (item) {
         DataManager::instance()->setBIsUpdate(true);
         pageList.append(nPage);
-        dApp->dbM->setBookMarkList(pageList);
+        qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->setBookMarkList(pageList);
     }
 
     auto dproxy = DocummentProxy::instance();
@@ -184,8 +186,7 @@ void BookMarkWidget::slotOpenFileOk()
 
     m_pBookMarkListWidget->clear();
 
-    dApp->dbM->getBookMarks();
-    QList<int> pageList = dApp->dbM->getBookMarkList();
+    QList<int> pageList = qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->getBookMarkList();
     foreach (int iPage, pageList) {
         addBookMarkItem(iPage);
     }
@@ -193,21 +194,25 @@ void BookMarkWidget::slotOpenFileOk()
     clearItemColor();
 
     //  第一页 就是书签, 添加书签按钮 不能点
-    if (pageList.contains(0)) {
-        m_pAddBookMarkBtn->setEnabled(false);
+    auto dproxy = DocummentProxy::instance();
+    if (dproxy) {
+        int nCurPage = dproxy->currentPageNo();
+        if (pageList.contains(nCurPage)) {      //  当前页 是书签, 按钮不可点
+            m_pAddBookMarkBtn->setEnabled(false);
 
-        int nSize = m_pBookMarkListWidget->count();
-        for (int iLoop = 0; iLoop < nSize; iLoop++) {
-            auto item = m_pBookMarkListWidget->item(iLoop);
-            if (item) {
-                auto pItemWidget =
-                    reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
-                if (pItemWidget) {
-                    if (pItemWidget->nPageIndex() == 0) {
-                        pItemWidget->setBSelect(true);
+            int nSize = m_pBookMarkListWidget->count();
+            for (int iLoop = 0; iLoop < nSize; iLoop++) {
+                auto item = m_pBookMarkListWidget->item(iLoop);
+                if (item) {
+                    auto pItemWidget =
+                        reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
+                    if (pItemWidget) {
+                        if (pItemWidget->nPageIndex() == nCurPage) {
+                            pItemWidget->setBSelect(true);
 
-                        m_pBookMarkListWidget->setCurrentItem(item);
-                        break;
+                            m_pBookMarkListWidget->setCurrentItem(item);
+                            break;
+                        }
                     }
                 }
             }
@@ -286,9 +291,9 @@ void BookMarkWidget::slotDeleteBookItem(const int &nPage)
 //  删除指定页
 void BookMarkWidget::deleteIndexPage(const int &pageIndex)
 {
-    QList<int> pageList = dApp->dbM->getBookMarkList();
+    QList<int> pageList = qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->getBookMarkList();
     pageList.removeOne(pageIndex);
-    dApp->dbM->setBookMarkList(pageList);
+    qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->setBookMarkList(pageList);
 
     auto dproxy = DocummentProxy::instance();
     if (dproxy) {
@@ -568,7 +573,7 @@ int BookMarkWidget::getBookMarkPage(const int &index)
             reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
         if (pItemWidget) {
             int page = pItemWidget->nPageIndex();
-            QList<int> pageList = dApp->dbM->getBookMarkList();
+            QList<int> pageList = qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->getBookMarkList();
             if (pageList.contains(page)) {
                 return page;
             }
