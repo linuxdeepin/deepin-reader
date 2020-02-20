@@ -22,9 +22,12 @@
 #include <DFontSizeManager>
 #include <QDebug>
 
-#include "subjectObserver/MsgHeader.h"
+#include "controller/DataManager.h"
 #include "controller/NotifySubject.h"
 #include "docview/docummentproxy.h"
+#include "subjectObserver/MsgHeader.h"
+#include "subjectObserver/ModuleHeader.h"
+#include "utils/utils.h"
 
 CatalogTreeView::CatalogTreeView(DWidget *parent)
     : DTreeView(parent)
@@ -82,7 +85,6 @@ void CatalogTreeView::initConnections()
     connect(this, SIGNAL(sigFilePageChanged(const QString &)), SLOT(SlotFilePageChanged(const QString &)));
     connect(this, SIGNAL(sigOpenFileOk()), SLOT(SlotOpenFileOk()));
     connect(this, SIGNAL(clicked(const QModelIndex &)), SLOT(SlotClicked(const QModelIndex &)));
-
     connect(this, SIGNAL(collapsed(const QModelIndex &)), SLOT(SlotCollapsed(const QModelIndex &)));
     connect(this, SIGNAL(expanded(const QModelIndex &)), SLOT(SlotExpanded(const QModelIndex &)));
 }
@@ -244,6 +246,23 @@ void CatalogTreeView::SlotExpanded(const QModelIndex &index)
             int nCurPage = _proxy->currentPageNo();
             SlotFilePageChanged(QString::number(nCurPage));
         }
+    }
+}
+
+//  实现 上下左键 跳转
+void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
+{
+    Q_UNUSED(previous);
+
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
+        int nPage = current.data(Qt::UserRole + 1).toInt();
+        nPage--;
+
+        double left = current.data(Qt::UserRole + 2).toDouble();
+        double top = current.data(Qt::UserRole + 3).toDouble();
+
+        _proxy->jumpToOutline(left, top, nPage);
     }
 }
 

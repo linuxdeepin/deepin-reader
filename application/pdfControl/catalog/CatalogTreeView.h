@@ -53,6 +53,10 @@ public:
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
+    // QAbstractItemView interface
+protected slots:
+    void currentChanged(const QModelIndex &current, const QModelIndex &previous) Q_DECL_OVERRIDE;
+
 private:
     void initConnections();
     void parseCatalogData(const Section &, QStandardItem *);
@@ -64,12 +68,12 @@ private slots:
 
     void SlotClicked(const QModelIndex &);
     void SlotFilePageChanged(const QString &);
-
     void SlotCollapsed(const QModelIndex &);
     void SlotExpanded(const QModelIndex &);
 
 private:
     SubjectThread       *m_pSubjectThread = nullptr;
+
 };
 
 #endif // CATALOGTREEVIEW_H
