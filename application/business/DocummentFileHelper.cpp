@@ -22,6 +22,7 @@
 #include <QClipboard>
 #include <DFileDialog>
 #include <DDialog>
+#include <QJsonObject>
 
 #include "application.h"
 #include "FileFormatHelper.h"
@@ -33,9 +34,6 @@
 #include "subjectObserver/ModuleHeader.h"
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
-
-#include "business/db/BookMarkDB.h"
-#include "business/db/HistroyDB.h"
 
 DocummentFileHelper::DocummentFileHelper(QObject *parent)
     : QObject(parent)
@@ -155,7 +153,7 @@ void DocummentFileHelper::onSaveFile()
         if (rl) {
             //  保存需要保存 数据库记录
             qDebug() << "DocummentFileHelper::slotSaveFile saveBookMark";
-            dApp->m_BookMarkDB->saveData();
+            dApp->m_pDBService->qSaveData(m_szFilePath, DB_BOOKMARK);
 
             DataManager::instance()->setBIsUpdate(false);
             notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Saved successfully"));
@@ -166,7 +164,7 @@ void DocummentFileHelper::onSaveFile()
         notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("No changes"));
     }
     //insert msg to FileFontTable
-    dApp->m_histroyDB->saveData();
+    dApp->m_pDBService->qSaveData(m_szFilePath, DB_HISTROY);
 }
 
 //  另存为
@@ -201,8 +199,8 @@ void DocummentFileHelper::onSaveAsFile()
                 bool rl = DocummentProxy::instance()->saveas(sFilePath, true);
                 if (rl) {
                     //insert a new bookmark record to bookmarktabel
-                    dApp->m_BookMarkDB->saveAsData(sFilePath);
-                    dApp->m_histroyDB->saveAsData(sFilePath);
+                    dApp->m_pDBService->qSaveData(sFilePath, DB_BOOKMARK);
+                    dApp->m_pDBService->qSaveData(sFilePath, DB_HISTROY);
 
                     DataManager::instance()->setStrOnlyFilePath(sFilePath);
 
@@ -290,10 +288,10 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
             if (nRes == 2) {    // 保存已打开文件
                 save(m_szFilePath, true);
                 //  保存 书签数据
-                dApp->m_BookMarkDB->saveData();
+                dApp->m_pDBService->qSaveData(m_szFilePath, DB_BOOKMARK);
             }
         }
-        dApp->m_histroyDB->saveData();
+        dApp->m_pDBService->qSaveData(m_szFilePath, DB_HISTROY);
 
         notifyMsg(MSG_OPERATION_OPEN_FILE_START);
         DocummentProxy::instance()->closeFile();
@@ -318,8 +316,8 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
         bool rl = false;
 
         //从数据库中获取文件的字号信息
-        dApp->m_histroyDB->qSelectData();
-        QJsonObject obj = qobject_cast<HistroyDB *>(dApp->m_histroyDB)->getHistroyData();
+        dApp->m_pDBService->qSelectData(DB_HISTROY);
+        QJsonObject obj = dApp->m_pDBService->getHistroyData();
         if (!obj.isEmpty()) {
             int iscale = obj["scale"].toInt();          // 缩放
             int doubPage = obj["doubleShow"].toInt();     // 是否是双页
@@ -388,7 +386,7 @@ void DocummentFileHelper::setAppShowTitle()
     }
     notifyMsg(MSG_OPERATION_OPEN_FILE_OK, sTitle);
 
-    dApp->m_BookMarkDB->qSelectData();
+    dApp->m_pDBService->qSelectData(DB_BOOKMARK);
 }
 
 //  复制

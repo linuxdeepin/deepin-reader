@@ -22,11 +22,9 @@
 #include <DFontSizeManager>
 #include <QDebug>
 
-#include "controller/DataManager.h"
 #include "controller/NotifySubject.h"
 #include "docview/docummentproxy.h"
 #include "subjectObserver/MsgHeader.h"
-#include "subjectObserver/ModuleHeader.h"
 #include "utils/utils.h"
 
 CatalogTreeView::CatalogTreeView(DWidget *parent)

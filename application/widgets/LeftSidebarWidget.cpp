@@ -11,7 +11,6 @@
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
 
-#include "business/db/HistroyDB.h"
 #include "pdfControl/bookmark/BookMarkWidget.h"
 #include "pdfControl/catalog/CatalogWidget.h"
 #include "pdfControl/note/NotesWidget.h"
@@ -89,7 +88,7 @@ void LeftSidebarWidget::slotSetStackCurIndex(const int &iIndex)
     if (iIndex == WIDGET_SEARCH || iIndex == WIDGET_BUFFER) {
         emit sigSearchWidgetState(iIndex);
     } else {
-        qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("listIndex", iIndex);
+        dApp->m_pDBService->setHistroyData("listIndex", iIndex);
     }
 }
 

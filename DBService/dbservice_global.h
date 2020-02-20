@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
+ * Copyright (C) 2019 ~ 2020 UOS Technology Co., Ltd.
  *
- * Author:     duanxiaohui
+ * Author:     wangzhxiaun
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,31 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "AbstractImplement.h"
+#ifndef DBSERVICE_GLOBAL_H
+#define DBSERVICE_GLOBAL_H
 
-AbstractionImplement::AbstractionImplement()
-{
+#include <QtCore/qglobal.h>
 
-}
+#if defined(DBSERVICE_LIBRARY)
+#  define DBSERVICESHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define DBSERVICESHARED_EXPORT Q_DECL_IMPORT
+#endif
 
-AbstractionImplement::~AbstractionImplement()
-{
-
-}
-
-ConcreteAbstractionImplementA::ConcreteAbstractionImplementA(QObject *obj):
-    QObject(obj)
-{
-
-}
-
-ConcreteAbstractionImplementA::~ConcreteAbstractionImplementA()
-{
-
-}
-
-void ConcreteAbstractionImplementA::Operation(const QString &action)
-{
-    qDebug() << action;
-}
-
+#endif // DBSERVICE_GLOBAL_H

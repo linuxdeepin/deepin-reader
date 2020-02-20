@@ -101,12 +101,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
                 //  保存
                 DocummentFileHelper::instance()->save(sFilePath, true);
                 //  保存 书签数据r
-                dApp->m_BookMarkDB->saveData();
+                dApp->m_pDBService->qSaveData(sFilePath, DB_BOOKMARK);
             }
         }
 
         //  保存文档字号参数信息
-        dApp->m_histroyDB->saveData();
+        dApp->m_pDBService->qSaveData(sFilePath, DB_HISTROY);
         notifyMsg(MSG_CLOSE_FILE);
 
         DocummentProxy *_proxy = DocummentProxy::instance();

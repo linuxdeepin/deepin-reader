@@ -25,8 +25,6 @@
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
 
-#include "business/db/BookMarkDB.h"
-
 BookMarkWidget::BookMarkWidget(DWidget *parent)
     : CustomWidget(QString("BookMarkWidget"), parent)
 {
@@ -153,7 +151,7 @@ void BookMarkWidget::slotAddBookMark()
 //  书签状态 添加指定页
 void BookMarkWidget::slotAddBookMark(const int &nPage)
 {
-    QList<int> pageList = qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->getBookMarkList();
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList();
     if (pageList.contains(nPage)) {
         return;
     }
@@ -162,7 +160,7 @@ void BookMarkWidget::slotAddBookMark(const int &nPage)
     if (item) {
         DataManager::instance()->setBIsUpdate(true);
         pageList.append(nPage);
-        qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->setBookMarkList(pageList);
+        dApp->m_pDBService->setBookMarkList(pageList);
     }
 
     auto dproxy = DocummentProxy::instance();
@@ -186,7 +184,7 @@ void BookMarkWidget::slotOpenFileOk()
 
     m_pBookMarkListWidget->clear();
 
-    QList<int> pageList = qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->getBookMarkList();
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList();
     foreach (int iPage, pageList) {
         addBookMarkItem(iPage);
     }
@@ -291,9 +289,9 @@ void BookMarkWidget::slotDeleteBookItem(const int &nPage)
 //  删除指定页
 void BookMarkWidget::deleteIndexPage(const int &pageIndex)
 {
-    QList<int> pageList = qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->getBookMarkList();
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList();
     pageList.removeOne(pageIndex);
-    qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->setBookMarkList(pageList);
+    dApp->m_pDBService->setBookMarkList(pageList);
 
     auto dproxy = DocummentProxy::instance();
     if (dproxy) {
@@ -573,7 +571,7 @@ int BookMarkWidget::getBookMarkPage(const int &index)
             reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
         if (pItemWidget) {
             int page = pItemWidget->nPageIndex();
-            QList<int> pageList = qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->getBookMarkList();
+            QList<int> pageList = dApp->m_pDBService->getBookMarkList();
             if (pageList.contains(page)) {
                 return page;
             }

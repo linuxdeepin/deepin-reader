@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,36 +14,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef BOOKMARKDB_H
-#define BOOKMARKDB_H
+#ifndef CONTROLLER_HISTROYDBEX_H
+#define CONTROLLER_HISTROYDBEX_H
 
-// BookMarkTable
-///////////////////////////////////////////////////////
-//FilePath           | FileName | PageNumber       //
-//TEXT primari key   | TEXT     | TEXT        //
-///////////////////////////////////////////////////////
+// FilesTable
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//FilePath           | FileScale | FileDoubPage | FileFit  | FileRotate | FileShowLeft | ListIndex | CurPage //
+//TEXT primari key   | TEXT      | TEXT         | TEXT     | TEXT       | TEXT         | TEXT      | TEXT    //
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "DBFactory.h"
+#include <QJsonObject>
 
-class BookMarkDB : public DBFactory
+class HistroyDB : public DBFactory
 {
     Q_OBJECT
-    Q_DISABLE_COPY(BookMarkDB)
+    Q_DISABLE_COPY(HistroyDB)
 
 public:
-    explicit BookMarkDB(QObject *parent = nullptr);
-    ~BookMarkDB() Q_DECL_OVERRIDE;
+    explicit HistroyDB(QObject *parent = nullptr);
 
     // DBFactory interface
 public:
-    void saveData() Q_DECL_OVERRIDE;
-    void saveAsData(const QString &newPath) Q_DECL_OVERRIDE;
+    void saveData(const QString &newPath) Q_DECL_OVERRIDE;
     void qSelectData() Q_DECL_OVERRIDE;
 
-    QList<int> getBookMarkList() const;
-    void setBookMarkList(const QList<int> &pBookMarkList);
+    QJsonObject getHistroyData() const;
+    void setHistroyData(const QString &, const int &);
 
-    // DBFactory interface
 private:
     void checkDatabase() Q_DECL_OVERRIDE;
     void clearInvalidRecord() Q_DECL_OVERRIDE;
@@ -52,10 +50,12 @@ private:
     void updateData(const QString &);
     void deleteData();
 
+    int GetKeyValue(const QString &);
+
 private:
-    QString         m_strPageNumber = "PageNumber";
-    QString         m_strTableName = "BookMarkTable";
-    QList<int>      m_pBookMarkList;
+    QString m_strTableName = "FilesTable";
+    QJsonObject m_pDataObj;
+    QJsonObject m_pNewDataObj;
 };
 
-#endif // DBMANAGER_H
+#endif // CONTROLLER_HISTROYDBEX_H

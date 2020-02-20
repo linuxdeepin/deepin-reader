@@ -18,8 +18,7 @@
 #define APPLICATION_H_
 
 #include <DApplication>
-
-#include "business/db/DBFactory.h"
+#include "DBService.h"
 
 #if defined(dApp)
 #undef dApp
@@ -42,8 +41,7 @@ protected:
     void handleQuitAction() Q_DECL_OVERRIDE;
 
 public:
-    DBFactory   *m_BookMarkDB = nullptr;
-    DBFactory   *m_histroyDB = nullptr;
+    DBService   *m_pDBService = nullptr;
 
 private:
     void initCfgPath();

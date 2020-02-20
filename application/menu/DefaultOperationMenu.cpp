@@ -10,8 +10,6 @@
 #include "subjectObserver/MsgHeader.h"
 #include "subjectObserver/ModuleHeader.h"
 
-#include "business/db/BookMarkDB.h"
-
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     : DMenu(parent)
 {
@@ -22,7 +20,7 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
 {
     m_nRightPageNumber = nClickPage;
 
-    QList<int> pageList = qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->getBookMarkList();
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList();
     bool bBookState = pageList.contains(m_nRightPageNumber);
     if (bBookState) {
         m_pBookMark->setProperty("data", 0);

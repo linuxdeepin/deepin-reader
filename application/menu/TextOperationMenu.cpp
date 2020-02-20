@@ -11,8 +11,6 @@
 #include "subjectObserver/MsgHeader.h"
 #include "subjectObserver/ModuleHeader.h"
 
-#include "business/db/BookMarkDB.h"
-
 TextOperationMenu::TextOperationMenu(DWidget *parent)
     : DMenu(parent)
 {
@@ -21,7 +19,8 @@ TextOperationMenu::TextOperationMenu(DWidget *parent)
 
 void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, const QString &sSelectText, const QString &sUuid)
 {
-    QList<int> pageList = qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->getBookMarkList();
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList();
+
     bool bBookState = pageList.contains(m_nClickPage);
     m_pAddBookMark->setEnabled(!bBookState);
 

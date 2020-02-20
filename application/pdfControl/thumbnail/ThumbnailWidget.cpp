@@ -18,14 +18,13 @@
  */
 #include "ThumbnailWidget.h"
 
+#include <QJsonObject>
+
 #include "application.h"
 
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
-
-#include "business/db/BookMarkDB.h"
-#include "business/db/HistroyDB.h"
 
 ThumbnailWidget::ThumbnailWidget(DWidget *parent)
     : CustomWidget(QString("ThumbnailWidget"), parent)
@@ -207,13 +206,16 @@ void ThumbnailWidget::slotRotateThumbnail(int index)
  */
 void ThumbnailWidget::slotLoadThumbnail(int value)
 {
+    if (m_nValuePreIndex < 1 || value < 1)
+        return;
+
     int loadStart = 0;
     int loadEnd = 0;
     int indexPage = 0;
 
     indexPage = value / m_nValuePreIndex;
 
-    if (value < 0 || m_nValuePreIndex <= 0 || indexPage < 0 || indexPage > m_totalPages || m_ThreadLoadImage.inLoading(indexPage)) {
+    if (indexPage < 0 || indexPage > m_totalPages || m_ThreadLoadImage.inLoading(indexPage)) {
         return;
     }
 
@@ -281,7 +283,7 @@ void ThumbnailWidget::showItemBookMark(int ipage)
             pWidget->slotBookMarkShowStatus(true);
         }
     } else {
-        QList<int> pageList = qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->getBookMarkList();
+        QList<int> pageList = dApp->m_pDBService->getBookMarkList();
         foreach (int index, pageList) {
             auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(
                                m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(index)));
@@ -358,7 +360,7 @@ void ThumbnailWidget::slotOpenFileOk()
         m_nValuePreIndex = 0;
         fillContantToList();
 
-        QJsonObject obj = qobject_cast<HistroyDB *>(dApp->m_histroyDB)->getHistroyData();
+        QJsonObject obj = dApp->m_pDBService->getHistroyData();
         m_nRotate = obj["rotate"].toInt();
 
         if (m_nRotate < 0) {

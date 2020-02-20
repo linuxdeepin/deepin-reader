@@ -32,8 +32,7 @@ public:
 
 public:
     void setStrFilePath(const QString &strFilePath);
-    virtual void saveData() = 0;
-    virtual void saveAsData(const QString &newPath) = 0;
+    virtual void saveData(const QString &) = 0;
     virtual void qSelectData() = 0;
 
 protected:
@@ -42,7 +41,7 @@ protected:
 
 protected:
     const QSqlDatabase getDatabase();
-    bool hasFilePathDB(const QString &);
+    bool hasFilePathDB(const QString &, const QString &);
 
 protected:
     QString m_strFilePath = "";

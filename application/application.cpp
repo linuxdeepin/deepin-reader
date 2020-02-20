@@ -26,9 +26,6 @@
 #include "controller/NotifySubject.h"
 #include "utils/utils.h"
 
-#include "business/db/BookMarkDB.h"
-#include "business/db/HistroyDB.h"
-
 namespace {
 
 }  // namespace
@@ -89,8 +86,7 @@ void Application::initCfgPath()
 
 void Application::initChildren()
 {
-    m_BookMarkDB = new BookMarkDB(this);
-    m_histroyDB = new HistroyDB(this);
+    m_pDBService = new DBService(this);
 }
 
 void Application::initI18n()

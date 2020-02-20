@@ -20,9 +20,9 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QDebug>
+#include <QStandardPaths>
 
-#include "utils/utils.h"
-#include "subjectObserver/MsgHeader.h"
+const QString g_db_name = "deepinreader.db";
 
 DBFactory::DBFactory(QObject *parent)
     : QObject(parent)
@@ -40,8 +40,8 @@ const QSqlDatabase DBFactory::getDatabase()
     } else {
         //if database not open, open it.
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);
-        QString sDbPath = Utils::getConfigPath();
-        db.setDatabaseName(sDbPath + "/" + ConstantMsg::g_db_name);
+        QString sDbPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        db.setDatabaseName(sDbPath + "/" + g_db_name);
         if (! db.open()) {
             qWarning() << "Open database error:" << db.lastError();
             return QSqlDatabase();
@@ -51,7 +51,7 @@ const QSqlDatabase DBFactory::getDatabase()
     }
 }
 
-bool DBFactory::hasFilePathDB(const QString &sTabelName)
+bool DBFactory::hasFilePathDB(const QString &strFilePath, const QString &sTabelName)
 {
     const QSqlDatabase db = getDatabase();
     if (db.isValid()) {
@@ -59,7 +59,7 @@ bool DBFactory::hasFilePathDB(const QString &sTabelName)
         QSqlQuery query(db);
         QString sSql = QString("select count(*) from %1 where FilePath=?").arg(sTabelName);
         query.prepare(sSql);
-        query.addBindValue(m_strFilePath);
+        query.addBindValue(strFilePath);
         if (query.exec() && query.next()) {
             return query.value(0).toInt() == 1;
         } else {

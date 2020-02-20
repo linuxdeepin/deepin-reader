@@ -30,34 +30,12 @@ HistroyDB::HistroyDB(QObject *parent)
     clearInvalidRecord();
 }
 
-void HistroyDB::saveData()
+void HistroyDB::saveData(const QString &newPath)
 {
-    if (!hasFilePathDB(m_strTableName)) {
-        insertData();
+    if (!hasFilePathDB(newPath, m_strTableName)) {
+        insertData(newPath);
     } else {
-        updateData();
-    }
-}
-
-void HistroyDB::saveAsData(const QString &newPath)
-{
-    QSqlDatabase db = getDatabase();
-    if (db.isValid()) {
-        QMutexLocker mutex(&m_mutex);
-        QSqlQuery query(db);
-
-        QString sSql = QString("UPDATE %1 set FilePath = ? where FilePath = ?;").arg(m_strTableName);
-        query.prepare(sSql);
-
-        query.addBindValue(newPath);
-        query.addBindValue(m_strFilePath);
-
-        if (query.exec()) {
-            db.commit();
-        } else {
-            db.rollback();
-            qWarning() << __func__ << " error:  " << query.lastError();
-        }
+        updateData(newPath);
     }
 }
 
@@ -146,7 +124,7 @@ void HistroyDB::clearInvalidRecord()
     }
 }
 
-void HistroyDB::insertData()
+void HistroyDB::insertData(const QString &sPath)
 {
     QSqlDatabase db = getDatabase();
     if (db.isValid()) {
@@ -157,7 +135,7 @@ void HistroyDB::insertData()
                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)").arg(m_strTableName);
         query.prepare(sSql);
 
-        query.addBindValue(m_strFilePath);
+        query.addBindValue(sPath);
         query.addBindValue(GetKeyValue("scale"));
         query.addBindValue(GetKeyValue("doubleShow"));
         query.addBindValue(GetKeyValue("fit"));
@@ -175,7 +153,7 @@ void HistroyDB::insertData()
     }
 }
 
-void HistroyDB::updateData()
+void HistroyDB::updateData(const QString &sPath)
 {
     QSqlDatabase db = getDatabase();
     if (db.isValid()) {
@@ -196,7 +174,7 @@ void HistroyDB::updateData()
         query.addBindValue(GetKeyValue("leftState"));
         query.addBindValue(GetKeyValue("listIndex"));
         query.addBindValue(GetKeyValue("curPage"));
-        query.addBindValue(m_strFilePath);
+        query.addBindValue(sPath);
 
         if (query.exec()) {
             db.commit();

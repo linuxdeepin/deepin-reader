@@ -1,16 +1,16 @@
 #include "MainOperationWidget.h"
 
 #include <DToolButton>
+
 #include <QButtonGroup>
 #include <QHBoxLayout>
+#include <QJsonObject>
 
 #include "application.h"
 
 #include "controller/AppSetting.h"
 #include "controller/DataManager.h"
 #include "utils/PublicFunction.h"
-
-#include "business/db/HistroyDB.h"
 
 MainOperationWidget::MainOperationWidget(CustomWidget *parent)
     : CustomWidget("MainOperationWidget", parent)
@@ -32,32 +32,10 @@ MainOperationWidget::~MainOperationWidget()
         m_pNotifySubject->removeObserver(this);
     }
 
-//    if (m_pRefinedAbstractionA) {
-//        delete m_pRefinedAbstractionA;
-//        m_pRefinedAbstractionA = nullptr;
-//    }
 }
-
-/**
- * @brief MainOperationWidget::setOperatAction
- * 打开文档，展示上次按钮状态
- * @param index
- */
-//void MainOperationWidget::setOperatAction(const int &index)
-//{
-//    auto btnBox = this->findChild<QButtonGroup *>();
-//    if (btnBox) {
-//        auto btn = btnBox->button(index);
-//        if (btn) {
-//            btn->setChecked(true);
-//        }
-//    }
-//}
 
 void MainOperationWidget::initWidget()
 {
-//    m_pRefinedAbstractionA = new RefinedAbstractionA(new ConcreteAbstractionImplementA(this));
-
     auto mLayout = new QHBoxLayout;
     mLayout->setContentsMargins(15, 0, 15, 0);
     mLayout->setSpacing(31);
@@ -117,7 +95,7 @@ void MainOperationWidget::__SearchExit()
 {
     int nId = 0;
 
-    QJsonObject obj =  qobject_cast<HistroyDB *>(dApp->m_histroyDB)->getHistroyData();
+    QJsonObject obj = dApp->m_pDBService->getHistroyData();
     if (!obj.isEmpty()) {
         nId = obj["listIndex"].toInt();
     }
@@ -157,7 +135,7 @@ void MainOperationWidget::SlotDealWithData(const int &msgType, const QString &ms
 void MainOperationWidget::slotOpenFileOk()
 {
     int nId = 0;
-    QJsonObject obj = qobject_cast<HistroyDB *>(dApp->m_histroyDB)->getHistroyData();
+    QJsonObject obj = dApp->m_pDBService->getHistroyData();
     if (!obj.isEmpty()) {
         nId = obj["listIndex"].toInt();
     }
