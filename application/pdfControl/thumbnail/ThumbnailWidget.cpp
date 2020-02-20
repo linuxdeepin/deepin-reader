@@ -20,12 +20,12 @@
 
 #include "application.h"
 
-#include "controller/DBManager.h"
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
 
 #include "business/db/BookMarkDB.h"
+#include "business/db/HistroyDB.h"
 
 ThumbnailWidget::ThumbnailWidget(DWidget *parent)
     : CustomWidget(QString("ThumbnailWidget"), parent)
@@ -357,7 +357,10 @@ void ThumbnailWidget::slotOpenFileOk()
         m_pThumbnailListWidget->clear();
         m_nValuePreIndex = 0;
         fillContantToList();
-        m_nRotate = DataManager::instance()->getFontRotate().toInt();
+
+        QJsonObject obj = qobject_cast<HistroyDB *>(dApp->m_histroyDB)->getHistroyData();
+        m_nRotate = obj["rotate"].toInt();
+
         if (m_nRotate < 0) {
             m_nRotate = qAbs(m_nRotate);
         }

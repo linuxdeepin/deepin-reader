@@ -27,26 +27,6 @@ enum ICON_RADIUS {
     ICON_BIG = 10       // 大图标圆角
 };
 
-typedef struct FileHistoryMsg {
-    QString m_strScale;//缩放比例
-    QString m_strDoubPage;//单双页
-    QString m_strFit;//自适应宽/高
-    QString m_strRotate;//旋转角度
-    QString m_strShowLeft;//list widget是否显示
-    QString m_strListIndex;//左侧处于哪个列表
-    QString m_strCurPage;//文档当前页
-    FileHistoryMsg()
-    {
-        m_strScale = "";//缩放比例
-        m_strDoubPage = "";//单双页
-        m_strFit = "";//自适应宽/高
-        m_strRotate = "";//旋转角度
-        m_strShowLeft = "";//list widget是否显示
-        m_strListIndex = "";//左侧处于哪个列表
-        m_strCurPage = "";//文档当前页
-    }
-} st_fileHistoryMsg;
-
 class DataManager : public QObject
 {
     Q_OBJECT
@@ -113,55 +93,6 @@ public:
         m_bThumbnIsShow = show;
     }
 
-    //文档字号信息数据接口
-    inline QString getFontScale() const
-    {
-        return m_historyMsg.m_strScale;
-    }
-    void setFontScale(const QString &scale);
-
-    inline QString getFontDoubPage() const
-    {
-        return m_historyMsg.m_strDoubPage;
-    }
-    void setFontDoubPage(const QString &doubPage);
-
-    inline QString getFontFit() const
-    {
-        return m_historyMsg.m_strFit;
-    }
-    void setFontFit(const QString &fit);
-
-    inline QString getFontRotate() const
-    {
-        return m_historyMsg.m_strRotate;
-    }
-    void setFontRotate(const QString &rotate);
-
-    inline QString getShowLeft() const
-    {
-        return m_historyMsg.m_strShowLeft;
-    }
-    void setShowLeft(const QString &showLeft);
-
-    inline QString getListIndex() const
-    {
-        return m_historyMsg.m_strListIndex;
-    }
-    void setListIndex(const QString &listIndex);
-
-    inline QString getCurPage() const
-    {
-        return m_historyMsg.m_strCurPage;
-    }
-    void setCurPage(const QString &curPage);
-
-    inline st_fileHistoryMsg getHistoryMsg() const
-    {
-        return m_historyMsg;
-    }
-    void setHistoryMsg(const st_fileHistoryMsg &historyMsg);
-
     QList<QKeySequence> getPKeyList() const;
 
     QList<QKeySequence> getPLeftKeyList() const;
@@ -181,7 +112,6 @@ private:
     bool m_bFirstOpenFile = false;      // 初次打开某个文档
     QList<QKeySequence>     m_pKeyList;      //  快捷键对应
     QList<QKeySequence>     m_pLeftKeyList;      // left 快捷键对应
-    st_fileHistoryMsg       m_historyMsg;// 文档字号信息
 };
 
 #endif // DATAMANAGER_H

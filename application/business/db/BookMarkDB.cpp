@@ -39,7 +39,7 @@ BookMarkDB::~BookMarkDB()
 void BookMarkDB::saveData()
 {
     if (m_pBookMarkList.size() == 0) {
-        deleteBookMark();
+        deleteData();
     } else {
         QString sPage = "";
         foreach (int i, m_pBookMarkList) {
@@ -47,9 +47,9 @@ void BookMarkDB::saveData()
         }
 
         if (!hasFilePathDB(m_strTableName)) {
-            insertBookMark(sPage);
+            insertData(sPage);
         } else {
-            updateBookMark(sPage);
+            updateData(sPage);
         }
     }
 }
@@ -120,7 +120,7 @@ void BookMarkDB::qSelectData()
 }
 
 //  新增标签数据
-void BookMarkDB::insertBookMark(const QString &pageNumber)
+void BookMarkDB::insertData(const QString &pageNumber)
 {
     QSqlDatabase db = getDatabase();
     if (db.isValid()) {
@@ -143,7 +143,7 @@ void BookMarkDB::insertBookMark(const QString &pageNumber)
 }
 
 //  更新标签数据
-void BookMarkDB::updateBookMark(const QString &pageNumber)
+void BookMarkDB::updateData(const QString &pageNumber)
 {
     QSqlDatabase db = getDatabase();
     if (db.isValid()) {
@@ -166,7 +166,7 @@ void BookMarkDB::updateBookMark(const QString &pageNumber)
     }
 }
 
-void BookMarkDB::deleteBookMark()
+void BookMarkDB::deleteData()
 {
     QSqlDatabase db = getDatabase();
     if (db.isValid()) {

@@ -27,6 +27,7 @@
 DBFactory::DBFactory(QObject *parent)
     : QObject(parent)
 {
+
 }
 
 const QSqlDatabase DBFactory::getDatabase()
@@ -64,9 +65,8 @@ bool DBFactory::hasFilePathDB(const QString &sTabelName)
         } else {
             qWarning() << __FUNCTION__ << "   " << query.lastError();
         }
-
-        return false;
     }
+    return false;
 }
 
 void DBFactory::setStrFilePath(const QString &strFilePath)

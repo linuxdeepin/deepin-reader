@@ -4,12 +4,14 @@
 #include <QButtonGroup>
 #include <QVBoxLayout>
 
+#include "application.h"
 #include "MainOperationWidget.h"
 
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
 
+#include "business/db/HistroyDB.h"
 #include "pdfControl/bookmark/BookMarkWidget.h"
 #include "pdfControl/catalog/CatalogWidget.h"
 #include "pdfControl/note/NotesWidget.h"
@@ -87,7 +89,7 @@ void LeftSidebarWidget::slotSetStackCurIndex(const int &iIndex)
     if (iIndex == WIDGET_SEARCH || iIndex == WIDGET_BUFFER) {
         emit sigSearchWidgetState(iIndex);
     } else {
-        DataManager::instance()->setListIndex(QString::number(iIndex));
+        qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("listIndex", iIndex);
     }
 }
 

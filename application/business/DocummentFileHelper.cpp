@@ -26,7 +26,7 @@
 #include "application.h"
 #include "FileFormatHelper.h"
 
-#include "controller/DBManager.h"
+#include "controller/DataManager.h"
 #include "controller/NotifySubject.h"
 #include "docview/docummentproxy.h"
 #include "subjectObserver/MsgHeader.h"
@@ -35,6 +35,7 @@
 #include "utils/utils.h"
 
 #include "business/db/BookMarkDB.h"
+#include "business/db/HistroyDB.h"
 
 DocummentFileHelper::DocummentFileHelper(QObject *parent)
     : QObject(parent)
@@ -154,7 +155,7 @@ void DocummentFileHelper::onSaveFile()
         if (rl) {
             //  保存需要保存 数据库记录
             qDebug() << "DocummentFileHelper::slotSaveFile saveBookMark";
-            qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->saveData();
+            dApp->m_BookMarkDB->saveData();
 
             DataManager::instance()->setBIsUpdate(false);
             notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Saved successfully"));
@@ -165,7 +166,7 @@ void DocummentFileHelper::onSaveFile()
         notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("No changes"));
     }
     //insert msg to FileFontTable
-    saveFileFontMsg(m_szFilePath);
+    dApp->m_histroyDB->saveData();
 }
 
 //  另存为
@@ -200,11 +201,11 @@ void DocummentFileHelper::onSaveAsFile()
                 bool rl = DocummentProxy::instance()->saveas(sFilePath, true);
                 if (rl) {
                     //insert a new bookmark record to bookmarktabel
-                    qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->saveAsData(sFilePath);
+                    dApp->m_BookMarkDB->saveAsData(sFilePath);
+                    dApp->m_histroyDB->saveAsData(sFilePath);
 
                     DataManager::instance()->setStrOnlyFilePath(sFilePath);
-                    //insert msg to FileFontTable
-                    saveFileFontMsg(filePath);
+
                     DataManager::instance()->setBIsUpdate(false);
 
                     m_szFilePath = sFilePath;
@@ -214,18 +215,6 @@ void DocummentFileHelper::onSaveAsFile()
             }
         }
     }
-}
-
-/**
- * @brief DocummentFileHelper::saveFileFontMsg
- * 存储文件的字号信息到表FileFontTable
- * @param filePath
- */
-void DocummentFileHelper::saveFileFontMsg(const QString &filePath)
-{
-    st_fileHistoryMsg msg;
-    msg = DataManager::instance()->getHistoryMsg();
-    dApp->histroyDb->insertFileFontMsg(msg, filePath);
 }
 
 //  跳转页面
@@ -268,17 +257,6 @@ void DocummentFileHelper::__PageJumpByMsg(const int &iType)
     }
 }
 
-/**
- * brief DocummentFileHelper::setDBFileFontMsgToAppSet
- * 取数据库中文件的字号信息，保存到全局数据类中
- */
-void DocummentFileHelper::setDBFilesMsgToAppSet(st_fileHistoryMsg &historyMsg, const QString &filePath)
-{
-    dApp->histroyDb->getFileFontMsg(historyMsg, filePath);
-
-    DataManager::instance()->setHistoryMsg(historyMsg);
-}
-
 //  打开　文件路径
 void DocummentFileHelper::onOpenFile(const QString &filePaths)
 {
@@ -312,12 +290,11 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
             if (nRes == 2) {    // 保存已打开文件
                 save(m_szFilePath, true);
                 //  保存 书签数据
-                qobject_cast<BookMarkDB *>(dApp->m_BookMarkDB)->saveData();
-
-                //insert msg to FileFontTable
-                saveFileFontMsg(m_szFilePath);
+                dApp->m_BookMarkDB->saveData();
             }
         }
+        dApp->m_histroyDB->saveData();
+
         notifyMsg(MSG_OPERATION_OPEN_FILE_START);
         DocummentProxy::instance()->closeFile();
         notifyMsg(MSG_CLOSE_FILE);
@@ -337,37 +314,27 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
 
         m_szFilePath = sPath;
         DataManager::instance()->setStrOnlyFilePath(sPath);
+
+        bool rl = false;
+
         //从数据库中获取文件的字号信息
-        QString ssscale = "";
-        QString doubPage = "";
-        QString fit = "";
-        QString rotate = "";
-        QString curPage = "";
+        dApp->m_histroyDB->qSelectData();
+        QJsonObject obj = qobject_cast<HistroyDB *>(dApp->m_histroyDB)->getHistroyData();
+        if (!obj.isEmpty()) {
+            int iscale = obj["scale"].toInt();          // 缩放
+            int doubPage = obj["doubleShow"].toInt();     // 是否是双页
+            int rotate = obj["rotate"].toInt();         // 文档旋转角度(0~360)
+            int curPage = obj["curPage"].toInt();        // 文档当前页
 
-        st_fileHistoryMsg historyMsg;
+            iscale = (iscale > 500 ? 500 : iscale) <= 0 ? 100 : iscale;
+            double scale = iscale / 100.0;
+            RotateType_EM rotatetype = static_cast<RotateType_EM>((rotate / 90) + 1);
+            ViewMode_EM viewmode = static_cast<ViewMode_EM>(doubPage);
 
-        setDBFilesMsgToAppSet(historyMsg, sPath);
-
-        ssscale = historyMsg.m_strScale;
-        doubPage = historyMsg.m_strDoubPage;
-        fit = historyMsg.m_strFit;
-        rotate = historyMsg.m_strRotate;
-        curPage = historyMsg.m_strCurPage;
-
-        qDebug() << __FUNCTION__ << " scale:" << ssscale
-                 << "  doubPage:" << doubPage
-                 << "  fit:" << fit
-                 << "  rotate:" << rotate
-                 << "  curPage:" << curPage;
-
-        int iscale = ssscale.toInt();
-        iscale = (iscale > 500 ? 500 : iscale) <= 0 ? 100 : iscale;
-        double scale = iscale / 100.0;
-        RotateType_EM rotatetype = static_cast<RotateType_EM>((rotate.toInt() / 90) + 1);
-        ViewMode_EM viewmode = static_cast<ViewMode_EM>(doubPage.toInt());
-
-        int ipage = curPage.toInt();
-        bool rl = DocummentProxy::instance()->openFile(m_nCurDocType, sPath, static_cast<unsigned int>(ipage), rotatetype, scale, viewmode);
+            rl = DocummentProxy::instance()->openFile(m_nCurDocType, sPath, curPage, rotatetype, scale, viewmode);
+        } else {
+            rl = DocummentProxy::instance()->openFile(m_nCurDocType, sPath);
+        }
 
         if (!rl) {
             m_szFilePath = "";

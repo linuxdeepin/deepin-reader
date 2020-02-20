@@ -21,10 +21,14 @@
 #include <DFontSizeManager>
 #include <QWidgetAction>
 
+#include "application.h"
+
 #include "utils/PublicFunction.h"
 #include "subjectObserver/ModuleHeader.h"
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
+
+#include "business/db/HistroyDB.h"
 
 FontMenu::FontMenu(QWidget *parent):
     DMenu(parent)
@@ -113,8 +117,8 @@ void FontMenu::resetAdaptive()
 
     setScaleRotateViewModeAndShow();
 
-    DataManager::instance()->setFontScale(QString::number(100));
-    DataManager::instance()->setFontFit(QString::number(0));
+    qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("scale", 100);
+    qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("fit", 0);
 }
 
 /**
@@ -177,7 +181,7 @@ void FontMenu::slotTwoPage()
         notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(1));  //emit sigFiteH(QString::number(1));
     }
 
-    DataManager::instance()->setFontDoubPage(QString::number(m_bDoubPage));
+    qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("doubleShow", m_bDoubPage);
 }
 
 /**
@@ -196,7 +200,7 @@ void FontMenu::slotFiteH()
 
     notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(t_nShow));
 
-    DataManager::instance()->setFontFit(QString::number(m_bFiteH ? 10 : (m_bFiteW ? 1 : 0)));
+    qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("fit", m_bFiteH ? 10 : (m_bFiteW ? 1 : 0));
 }
 
 /**
@@ -215,7 +219,7 @@ void FontMenu::slotFiteW()
 
     notifyMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(t_nShow));
 
-    DataManager::instance()->setFontFit(QString::number(m_bFiteH ? 10 : (m_bFiteW ? 1 : 0)));
+    qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("fit", m_bFiteH ? 10 : (m_bFiteW ? 1 : 0));
 }
 
 /**
@@ -253,7 +257,7 @@ void FontMenu::slotScaleValChanged(int scale)
         resetFiteHAndW();
         scaleAndRotate();
     } else {
-        DataManager::instance()->setFontScale(QString::number(m_nScale));
+        qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("scale", m_nScale);
     }
 
     m_bIsAdaptMove = false;
@@ -267,10 +271,12 @@ void FontMenu::slotFileOpenOk()
 {
     setSliderMaxValue();
 
+    QJsonObject obj = qobject_cast<HistroyDB *>(dApp->m_histroyDB)->getHistroyData();
+
     int value = 0;
 
     //缩放比例
-    value = DataManager::instance()->getFontScale().toInt();
+    value = obj["scale"].toInt();
     if (value > 0) {
         m_bIsAdaptMove = true;
         m_pEnlargeSlider->setValue(value);
@@ -278,14 +284,14 @@ void FontMenu::slotFileOpenOk()
     }
 
     //单双页
-    value = DataManager::instance()->getFontDoubPage().toInt();
+    value = obj["doubleShow"].toInt();
     m_bDoubPage = (value == 1) ? true : false;
     if (m_pTwoPageAction) {
         m_pTwoPageAction->setChecked(m_bDoubPage);
     }
 
     //自适应宽/高
-    int adaptat = DataManager::instance()->getFontFit().toInt();
+    int adaptat = obj["fit"].toInt();
     if (adaptat == 1) {
         m_bFiteW = true;
         m_bFiteH = false;
@@ -299,7 +305,7 @@ void FontMenu::slotFileOpenOk()
     }
 
     //旋转度数
-    m_nRotate = DataManager::instance()->getFontRotate().toInt();
+    m_nRotate = obj["rotate"].toInt();
     m_nRotate %= 360;
 }
 
@@ -492,7 +498,7 @@ void FontMenu::rotateThumbnail(bool direct)
 
     setScaleRotateViewModeAndShow();
 
-    DataManager::instance()->setFontRotate(QString::number(m_nRotate));
+    qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("rotate", m_nRotate);
 
     notifyMsg(MSG_FILE_ROTATE, QString::number(m_nRotate));
 }
@@ -507,10 +513,10 @@ void FontMenu::scaleAndRotate()
 
     setScaleRotateViewModeAndShow();
 
-    DataManager::instance()->setFontScale(QString::number(m_nScale));
-    DataManager::instance()->setFontDoubPage(QString::number(m_bDoubPage));
-    DataManager::instance()->setFontFit(QString::number(m_bFiteH ? 10 : (m_bFiteW ? 1 : 0)));
-    DataManager::instance()->setFontRotate(QString::number(m_nRotate));
+    qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("scale", m_nScale);
+    qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("doubleShow", m_bDoubPage);
+    qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("fit", m_bFiteH ? 10 : (m_bFiteW ? 1 : 0));
+    qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("rotate", m_nRotate);
 }
 
 /**
@@ -581,7 +587,7 @@ void FontMenu::setAppSetFiteHAndW()
         iValue = 10;
     }
 
-    DataManager::instance()->setFontFit(QString::number(iValue));
+    qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("fit", iValue);
 }
 
 /**

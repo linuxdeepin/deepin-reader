@@ -27,6 +27,7 @@
 #include "utils/utils.h"
 
 #include "business/db/BookMarkDB.h"
+#include "business/db/HistroyDB.h"
 
 namespace {
 
@@ -66,9 +67,6 @@ Application::Application(int &argc, char **argv)
 
 Application::~Application()
 {
-    histroyDb->deleteLater();
-    histroyDb = nullptr;
-
     g_NotifySubject::getInstance()->stopThreadRun();
 }
 
@@ -92,9 +90,7 @@ void Application::initCfgPath()
 void Application::initChildren()
 {
     m_BookMarkDB = new BookMarkDB(this);
-
-    dbM = new DBManager(this);
-    histroyDb = new HistroyDB(this);
+    m_histroyDB = new HistroyDB(this);
 }
 
 void Application::initI18n()

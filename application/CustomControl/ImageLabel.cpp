@@ -17,11 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ImageLabel.h"
+
 #include <DGuiApplicationHelper>
 #include <QDebug>
 #include <QPainter>
 #include <QPalette>
-#include "controller/DBManager.h"
+
 #include "utils/utils.h"
 
 ImageLabel::ImageLabel(DWidget *parent)

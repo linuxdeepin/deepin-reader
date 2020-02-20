@@ -48,9 +48,9 @@ private:
     void checkDatabase() Q_DECL_OVERRIDE;
     void clearInvalidRecord() Q_DECL_OVERRIDE;
 
-    void insertBookMark(const QString &);
-    void updateBookMark(const QString &);
-    void deleteBookMark();
+    void insertData(const QString &);
+    void updateData(const QString &);
+    void deleteData();
 
 private:
     QString         m_strPageNumber = "PageNumber";

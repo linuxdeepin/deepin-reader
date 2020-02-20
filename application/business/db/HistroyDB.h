@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CONTROLLER_HISTROYDB_H
-#define CONTROLLER_HISTROYDB_H
+#ifndef CONTROLLER_HISTROYDBEX_H
+#define CONTROLLER_HISTROYDBEX_H
 
 // FilesTable
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,12 +23,10 @@
 //TEXT primari key   | TEXT      | TEXT         | TEXT     | TEXT       | TEXT         | TEXT      | TEXT    //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <QObject>
+#include "DBFactory.h"
+#include <QJsonObject>
 
-#include "DBManager.h"
-#include "DataManager.h"
-
-class HistroyDB : public DBManager
+class HistroyDB : public DBFactory
 {
     Q_OBJECT
     Q_DISABLE_COPY(HistroyDB)
@@ -36,17 +34,29 @@ class HistroyDB : public DBManager
 public:
     explicit HistroyDB(QObject *parent = nullptr);
 
-private:
-    void checkDatabases();
-    void clearInvalidRecords();
-
+    // DBFactory interface
 public:
-    //FilesTable
-    void insertFileFontMsg(const st_fileHistoryMsg &, const QString filePath = "");
-    void updateFileFontMsg(const st_fileHistoryMsg &, const QString filePath = "");
-    void saveFileFontMsg(const st_fileHistoryMsg &, const QString filePath = "");
-    void saveAsFileFontMsg(const st_fileHistoryMsg &, const QString filePath = "");
-    bool getFileFontMsg(st_fileHistoryMsg &, const QString filePath = "");
+    void saveData() Q_DECL_OVERRIDE;
+    void saveAsData(const QString &newPath) Q_DECL_OVERRIDE;
+    void qSelectData() Q_DECL_OVERRIDE;
+
+    QJsonObject getHistroyData() const;
+    void setHistroyData(const QString &, const int &);
+
+private:
+    void checkDatabase() Q_DECL_OVERRIDE;
+    void clearInvalidRecord() Q_DECL_OVERRIDE;
+
+    void insertData();
+    void updateData();
+    void deleteData();
+
+    int GetKeyValue(const QString &);
+
+private:
+    QString m_strTableName = "FilesTable";
+    QJsonObject m_pDataObj;
+    QJsonObject m_pNewDataObj;
 };
 
-#endif // CONTROLLER_HISTROYDB_H
+#endif // CONTROLLER_HISTROYDBEX_H

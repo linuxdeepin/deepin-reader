@@ -74,12 +74,12 @@ void SearchResWidget::__ClearSearchContent()
         m_pSearchList->clear();
     }
 
+    notifyMsg(MSG_FIND_EXIT);       //  查询结束
+
     bool bShowThunmb = DataManager::instance()->bThumbnIsShow();
     if (!bShowThunmb) {
         //  侧边栏 隐藏
         notifyMsg(MSG_HIDE_FIND_WIDGET);
-    } else {
-        notifyMsg(MSG_FIND_EXIT);       //  查询结束
     }
 }
 

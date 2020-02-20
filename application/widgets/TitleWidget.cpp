@@ -3,8 +3,12 @@
 #include <QHBoxLayout>
 #include <QWidgetAction>
 
+#include "application.h"
+
 #include "controller/DataManager.h"
 #include "utils/PublicFunction.h"
+
+#include "business/db/HistroyDB.h"
 
 TitleWidget::TitleWidget(CustomWidget *parent)
     : CustomWidget("TitleWidget", parent)
@@ -32,7 +36,8 @@ void TitleWidget::slotSetFindWidget(const int &iFlag)
 {
     if (iFlag == 1) {
         m_pThumbnailBtn->setChecked(true);
-        DataManager::instance()->setShowLeft(QString::number(1));
+
+        qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("leftState", 1);
     } else {
         slotAppFullScreen();
     }
@@ -69,8 +74,11 @@ void TitleWidget::slotOpenFileOk()
     m_pHandleShapeBtn->setDisabled(false);
     m_pMagnifierBtn->setDisabled(false);
 
-    bool showLeft = false;
-    (DataManager::instance()->getShowLeft() == "1") ? (showLeft = true) : (showLeft = false);
+    QJsonObject obj = qobject_cast<HistroyDB *>(dApp->m_histroyDB)->getHistroyData();
+
+    int nState = obj["leftState"].toInt();
+    bool showLeft = nState == 1 ? true : false;
+
     m_pThumbnailBtn->setChecked(showLeft);
     on_thumbnailBtn_clicked();
 }
@@ -80,7 +88,7 @@ void TitleWidget::slotAppFullScreen()
 {
     //  显示了侧边栏, 则隐藏
     m_pThumbnailBtn->setChecked(false);
-    DataManager::instance()->setShowLeft(QString::number(0));
+    qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("leftState", 0);
 
     //  侧边栏 隐藏
     notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, "0");
@@ -136,7 +144,7 @@ void TitleWidget::on_thumbnailBtn_clicked()
     notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(rl));
 
     DataManager::instance()->setBThumbnIsShow(rl);
-    DataManager::instance()->setShowLeft(QString::number(rl));
+    qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("leftState", rl);
 }
 
 //  文档显示
@@ -222,7 +230,7 @@ void TitleWidget::slotDealWithShortKey(const QString &sKey)
         //        m_pThumbnailBtn->setStatus(m_pThumbnailBtn->isChecked());
         notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(1));
         DataManager::instance()->setBThumbnIsShow(1);
-        DataManager::instance()->setShowLeft(QString::number(1));
+        qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("leftState", 1);
     } else if (sKey == KeyStr::g_alt_z) {  //  开启放大镜
         setMagnifierState();
     }

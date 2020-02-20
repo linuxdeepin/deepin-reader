@@ -36,6 +36,8 @@
 #include "utils/PublicFunction.h"
 #include "business/PrintManager.h"
 
+#include "business/db/HistroyDB.h"
+
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
     , m_operatemenu(nullptr)
@@ -402,7 +404,7 @@ void FileViewWidget::slotBookMarkStateChange(int nPage, bool bState)
 //  文档页变化了
 void FileViewWidget::slotDocFilePageChanged(int page)
 {
-    DataManager::instance()->setCurPage(QString::number(page));
+    qobject_cast<HistroyDB *>(dApp->m_histroyDB)->setHistroyData("curPage", page);
 
     notifyMsg(MSG_FILE_PAGE_CHANGE, QString("%1").arg(page));
 }

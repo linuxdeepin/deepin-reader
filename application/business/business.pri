@@ -5,7 +5,8 @@ HEADERS += \
     $$PWD/FileFormatHelper.h \
     $$PWD/AnnotationHelper.h \
     $$PWD/db/BookMarkDB.h \
-    $$PWD/db/DBFactory.h
+    $$PWD/db/DBFactory.h \
+    $$PWD/db/HistroyDB.h
 
 SOURCES += \
     $$PWD/PrintManager.cpp \
@@ -13,5 +14,5 @@ SOURCES += \
     $$PWD/DocummentFileHelper.cpp \
     $$PWD/AnnotationHelper.cpp \
     $$PWD/db/BookMarkDB.cpp \
-    $$PWD/db/DBFactory.cpp
-
+    $$PWD/db/DBFactory.cpp \
+    $$PWD/db/HistroyDB.cpp

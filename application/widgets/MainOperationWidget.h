@@ -35,13 +35,14 @@ signals:
 //    void sigDealWithData(const int &, const QString &);
 //    void sigSearchControl();
 //    void sigSearchClosed();
+    void sigOpenFileOk();
     void sigShowStackWidget(const int &);
 
 private slots:
     void SlotDealWithData(const int &, const QString &);
+    void slotOpenFileOk();
     void slotUpdateTheme();
     void slotButtonClicked(int);
-//    void slotSearchControl();
 
     // CustomWidget interface
 protected:

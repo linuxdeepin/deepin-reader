@@ -23,7 +23,6 @@
 #include <QObject>
 
 #include "subjectObserver/IObserver.h"
-#include "controller/DataManager.h"
 #include "docview/commonstruct.h"
 
 class SubjectThread;
@@ -61,8 +60,6 @@ public:
 public:
     bool save(const QString &filepath, bool withChanges);
 
-    void saveFileFontMsg(const QString &filePath);
-
     void setAppShowTitle();
     void setSzFilePath(const QString &szFilePath);
 
@@ -77,8 +74,6 @@ private:
 
     void onSaveFile();
     void onSaveAsFile();
-
-    void setDBFilesMsgToAppSet(st_fileHistoryMsg &historyMsg, const QString &filePath);
 
     // IObserver interface
     void sendMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;

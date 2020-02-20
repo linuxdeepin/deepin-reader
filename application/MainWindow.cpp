@@ -106,7 +106,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         }
 
         //  保存文档字号参数信息
-        DocummentFileHelper::instance()->saveFileFontMsg(sFilePath);
+        dApp->m_histroyDB->saveData();
         notifyMsg(MSG_CLOSE_FILE);
 
         DocummentProxy *_proxy = DocummentProxy::instance();
@@ -245,23 +245,6 @@ void MainWindow::slotAppShowState(const int &nState)
 void MainWindow::onSetAppTitle(const QString &sData)
 {
     titlebar()->setTitle(sData);
-
-    QString sPageNum = DataManager::instance()->getCurPage();
-    if (sPageNum != "") {
-        notifyMsg(MSG_DOC_JUMP_PAGE, sPageNum);
-    }
-
-    QString sM = DataManager::instance()->getShowLeft();
-    if (sM == "1") {
-        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_m);
-    }
-
-    QString sWidget = DataManager::instance()->getListIndex();
-    if (sWidget != "") {
-        notifyMsg(MSG_SWITCHLEFTWIDGET, sWidget);
-    } else {
-        notifyMsg(MSG_SWITCHLEFTWIDGET, "0");
-    }
 }
 
 //  文件打开成，　功能性　菜单才能点击

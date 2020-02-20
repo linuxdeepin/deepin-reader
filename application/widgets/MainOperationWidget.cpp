@@ -4,9 +4,13 @@
 #include <QButtonGroup>
 #include <QHBoxLayout>
 
+#include "application.h"
+
 #include "controller/AppSetting.h"
 #include "controller/DataManager.h"
 #include "utils/PublicFunction.h"
+
+#include "business/db/HistroyDB.h"
 
 MainOperationWidget::MainOperationWidget(CustomWidget *parent)
     : CustomWidget("MainOperationWidget", parent)
@@ -113,9 +117,9 @@ void MainOperationWidget::__SearchExit()
 {
     int nId = 0;
 
-    QString sWidget = DataManager::instance()->getListIndex();
-    if (sWidget != "") {
-        nId = sWidget.toInt();
+    QJsonObject obj =  qobject_cast<HistroyDB *>(dApp->m_histroyDB)->getHistroyData();
+    if (!obj.isEmpty()) {
+        nId = obj["listIndex"].toInt();
     }
 
     __SetBtnCheckById(nId);
@@ -136,6 +140,7 @@ DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QStrin
 
 void MainOperationWidget::initConnect()
 {
+    connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
 }
@@ -147,6 +152,17 @@ void MainOperationWidget::SlotDealWithData(const int &msgType, const QString &ms
     } else if (msgType == MSG_FIND_EXIT) {
         __SearchExit();
     }
+}
+
+void MainOperationWidget::slotOpenFileOk()
+{
+    int nId = 0;
+    QJsonObject obj = qobject_cast<HistroyDB *>(dApp->m_histroyDB)->getHistroyData();
+    if (!obj.isEmpty()) {
+        nId = obj["listIndex"].toInt();
+    }
+
+    __SetBtnCheckById(nId);
 }
 
 //  主题更新
@@ -180,6 +196,8 @@ int MainOperationWidget::dealWithData(const int &msgType, const QString &msgCont
 
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
+    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        emit sigOpenFileOk();
     }
 
     return 0;

@@ -19,9 +19,6 @@
 
 #include <DApplication>
 
-#include "controller/DBManager.h"
-#include "controller/HistroyDB.h"
-
 #include "business/db/DBFactory.h"
 
 #if defined(dApp)
@@ -45,9 +42,8 @@ protected:
     void handleQuitAction() Q_DECL_OVERRIDE;
 
 public:
-    DBManager *dbM = nullptr;
     DBFactory   *m_BookMarkDB = nullptr;
-    HistroyDB   *histroyDb = nullptr;
+    DBFactory   *m_histroyDB = nullptr;
 
 private:
     void initCfgPath();
