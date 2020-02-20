@@ -232,6 +232,13 @@ bool DocummentProxy::removeIconAnnotation(const QString &uuid, int ipage)
     return  m_documment->removeIconAnnotation(uuid, ipage);
 }
 
+void DocummentProxy::setIconAnnottationText(int ipage, const QString &struuid, const QString &strtext)
+{
+    if (!m_documment || bcloseing)
+        return;
+    m_documment->setIconAnnottationText(ipage, struuid, strtext);
+}
+
 QString DocummentProxy::pagenum2label(int index)
 {
     if (!m_documment)

@@ -303,6 +303,7 @@ public:
     void moveIconAnnotation(const QString &uuid, const QPoint &pos);
     bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
     bool removeIconAnnotation(const QString &uuid, int ipage);
+    void setIconAnnottationText(int ipage, const QString &struuid, const QString &strtext);
     double getMaxZoomratio();
     void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage);
     QString pagenum2label(int index);

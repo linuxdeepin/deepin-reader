@@ -14,8 +14,8 @@
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
-#define ICONANNOTE_WIDTH    24
-#define ICONANNOTE_HEIGHT   24
+#define ICONANNOTE_WIDTH    46
+#define ICONANNOTE_HEIGHT   46
 namespace Page {
 enum LinkType_EM {
     LinkType_NULL = 0,
@@ -272,6 +272,7 @@ public:
     void clearSelectText();
     void selectAllText();
     QRectF translateRect(QRectF &rect, double scale, RotateType_EM rotate);
+    QPointF translatepoint(QPointF pt, double scale, RotateType_EM rotate);
     void clearHighlightRects();
     void setCurSearchShow(bool bshow)
     {
@@ -287,6 +288,7 @@ public:
     bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
     void moveIconAnnotation(const QString &uuid, const QPoint &pos);
     bool removeIconAnnotation(const QString &uuid);
+    void setIconAnnotationText(const QString &uuid, const QString &strtext);
 
 signals:
     void signal_MagnifierPixmapCacheLoaded(int);

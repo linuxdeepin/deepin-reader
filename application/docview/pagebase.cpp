@@ -208,11 +208,13 @@ void PageBase::paintEvent(QPaintEvent *event)
     }
 
     foreach (ICONANNOTATION annote, d->m_iconannotationlist) {
-        double rx = annote.position.x() * d->m_scale * d->m_imagewidth - ICONANNOTE_WIDTH / 2;
-        double ry = annote.position.y() * d->m_scale * d->m_imageheight - ICONANNOTE_HEIGHT / 2;
+        double rx, ry;
+        rx = annote.position.x() * d->m_scale * d->m_imagewidth - ICONANNOTE_WIDTH / 2;
+        ry = annote.position.y() * d->m_scale * d->m_imageheight - ICONANNOTE_HEIGHT / 2;
+
         QPointF pt(rx, ry);
 
-        QPixmap pixtag(Utils::renderSVG(":/icons/deepin/builtin/ok.svg", QSize(24, 24)));
+        QPixmap pixtag(Utils::renderSVG(":/resources/image/iconannotation.svg", QSize(46, 46)));
         qpainter.drawPixmap(pt, pixtag);
     }
 }
@@ -754,6 +756,37 @@ QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
     return  newrect;
 }
 
+QPointF PageBase::translatepoint(QPointF pt, double scale, RotateType_EM rotate)
+{
+    Q_D(PageBase);
+    QPointF respt;
+    switch (rotate) {
+    case RotateType_Normal:
+    case RotateType_0: {
+        respt = pt;
+        break;
+    }
+    case RotateType_90: {
+        respt.setX(1 - pt.y());
+        respt.setY(pt.x());
+        break;
+    }
+    case RotateType_180: {
+        respt.setX(1 - pt.y());
+        respt.setY(1 - pt.x());
+        break;
+    }
+    case RotateType_270: {
+        respt.setX(pt.y());
+        respt.setY(1 - pt.x());
+        break;
+    }
+    default:
+        break;
+    }
+    return  respt;
+}
+
 bool PageBase::showImage(double scale, RotateType_EM rotate)
 {
     Q_D(PageBase);
@@ -815,11 +848,27 @@ QString PageBase::addIconAnnotation(const QPoint &pos)
     Q_D(PageBase);
     double curwidth = d->m_imagewidth * d->m_scale;
     double curheight = d->m_imageheight * d->m_scale;
+    double x = pos.x();
+    double y = pos.y();
+
+    if (x - ICONANNOTE_WIDTH / 2 <= 0) {
+        x = ICONANNOTE_WIDTH / 2;
+    } else if (x + ICONANNOTE_WIDTH / 2 >= curwidth) {
+
+        x = curwidth - ICONANNOTE_WIDTH / 2;
+    }
+
+    if (y - ICONANNOTE_WIDTH / 2 <= 0) {
+        y = ICONANNOTE_WIDTH / 2;
+    } else if (y + ICONANNOTE_WIDTH / 2 >= curheight) {
+        y = curheight - ICONANNOTE_WIDTH / 2;
+    }
+    qDebug() << x << y << pos << "``````````````````";
     QString uuid("");
     uuid = PublicFunc::getUuid();
     ICONANNOTATION annote;
-    annote.position.setX(pos.x() / curwidth);
-    annote.position.setY(pos.y() / curheight);
+    annote.position.setX(x / curwidth);
+    annote.position.setY(y / curheight);
     annote.uuid = uuid;
     d->m_iconannotationlist.push_back(annote);
     update(QRect(pos.x() - 100, pos.y() - 100, 200, 200));
@@ -871,9 +920,20 @@ bool PageBase::removeIconAnnotation(const QString &uuid)
         if (annote.uuid == uuid) {
             bsuccess = true;
             d->m_iconannotationlist.removeAt(index);
+            update();
             break;
         }
         index++;
     }
     return  bsuccess;
+}
+
+void PageBase::setIconAnnotationText(const QString &uuid, const QString &strtext)
+{
+    Q_D(PageBase);
+    foreach (ICONANNOTATION annote, d->m_iconannotationlist) {
+        if (annote.uuid == uuid) {
+
+        }
+    }
 }

@@ -1900,9 +1900,11 @@ QString DocummentBase::addIconAnnotation(const QPoint &pos)
         double curheight = d->m_imageheight * d->m_scale;
         double leftspace = (d->m_widgets.at(ipage)->width() - curwidth) / 2;
         double topspace = (d->m_widgets.at(ipage)->height() - curheight) / 2;
-        if (pos.x() > leftspace && pos.x() < curwidth + leftspace && pos.y() > topspace && pos.y() < topspace + curheight) {
+        double curwidgety = d->m_widgets.at(ipage)->y();
+        if (pos.x() > leftspace && pos.x() < curwidth + leftspace &&
+                pos.y() > curwidgety && pos.y() < curwidgety + curheight) {
             pt.setX(pos.x() - leftspace);
-            pt.setY(pos.y() - topspace);
+            pt.setY(pt.y() - topspace);
             uuid = d->m_pages.at(ipage)->addIconAnnotation(pt);
         }
     }
@@ -1923,7 +1925,6 @@ void DocummentBase::moveIconAnnotation(const QString &uuid, const QPoint &pos)
         if (pos.x() > leftspace && pos.x() < curwidth + leftspace && pos.y() > topspace && pos.y() < topspace + curheight) {
             pt.setX(pos.x() - leftspace);
             pt.setY(pos.y() - topspace);
-
             d->m_pages.at(ipage)->moveIconAnnotation(uuid, pt);
         }
     }
@@ -1958,6 +1959,14 @@ bool DocummentBase::removeIconAnnotation(const QString &uuid, int ipage)
         bsuccess = d->m_pages.at(ipage)->removeIconAnnotation(uuid);
     }
     return  bsuccess;
+}
+
+void DocummentBase::setIconAnnottationText(int ipage, const QString &struuid, const QString &strtext)
+{
+    Q_D(DocummentBase);
+    if (ipage >= 0 && ipage < d->m_pages.size()) {
+
+    }
 }
 
 double DocummentBase::getMaxZoomratio()
