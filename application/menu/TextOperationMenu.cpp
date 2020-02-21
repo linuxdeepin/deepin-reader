@@ -12,9 +12,21 @@
 #include "subjectObserver/ModuleHeader.h"
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)
-    : DMenu(parent)
+    : CustomMenu("TextOperationMenu", parent)
 {
-    initMenu();
+    initActions();
+
+    m_pNotifySubject = g_NotifySubject::getInstance();
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+}
+
+TextOperationMenu::~TextOperationMenu()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
 }
 
 void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, const QString &sSelectText, const QString &sUuid)
@@ -57,9 +69,8 @@ void TextOperationMenu::setClickPage(int nClickPage)
     m_nClickPage = nClickPage;
 }
 
-void TextOperationMenu::initMenu()
+void TextOperationMenu::initActions()
 {
-    DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
     m_pCopy = createAction(tr("Copy"), SLOT(slotCopyClicked()));
 
     m_pColorWidgetAction = new ColorWidgetAction(this);
@@ -87,7 +98,7 @@ QAction *TextOperationMenu::createAction(const QString &text, const char *member
 
 void TextOperationMenu::notifyMsgToFrame(const int &msgType, const QString &msgContent)
 {
-    g_NotifySubject::getInstance()->notifyMsg(msgType, msgContent);
+    notifyMsg(msgType, msgContent);
     this->hide();
 }
 
@@ -154,6 +165,11 @@ void TextOperationMenu::slotExitFullScreenClicked()
 void TextOperationMenu::setPEndPoint(const QPoint &pEndPoint)
 {
     m_pEndPoint = pEndPoint;
+}
+
+int TextOperationMenu::dealWithData(const int &, const QString &)
+{
+    return 0;
 }
 
 void TextOperationMenu::setPStartPoint(const QPoint &pStartPoint)

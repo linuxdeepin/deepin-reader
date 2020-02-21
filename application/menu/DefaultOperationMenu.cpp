@@ -11,9 +11,20 @@
 #include "subjectObserver/ModuleHeader.h"
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
-    : DMenu(parent)
+    : CustomMenu("DefaultOperationMenu", parent)
 {
-    initMenu();
+    initActions();
+
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(this);
+    }
+}
+
+DefaultOperationMenu::~DefaultOperationMenu()
+{
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(this);
+    }
 }
 
 void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPage)
@@ -58,9 +69,13 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
     this->exec(showPoint);
 }
 
-void DefaultOperationMenu::initMenu()
+int DefaultOperationMenu::dealWithData(const int &, const QString &)
 {
-    DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
+    return 0;
+}
+
+void DefaultOperationMenu::initActions()
+{
     m_pSearch = createAction(tr("Search"), SLOT(slotSearchClicked()));
 
     m_pBookMark = createAction(tr("Add bookmark"), SLOT(slotBookMarkClicked()));
@@ -88,47 +103,42 @@ QAction *DefaultOperationMenu::createAction(const QString &name, const char *mem
     return action;
 }
 
-void DefaultOperationMenu::notifyMsgToFrame(const int &msgType, const QString &msgContent)
-{
-    g_NotifySubject::getInstance()->notifyMsg(msgType, msgContent);
-}
-
 void DefaultOperationMenu::slotSearchClicked()
 {
-    notifyMsgToFrame(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_f);
+    notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_f);
 }
 
 void DefaultOperationMenu::slotBookMarkClicked()
 {
     int nData = m_pBookMark->property("data").toInt();
     if (nData == 0) {
-        notifyMsgToFrame(MSG_OPERATION_DELETE_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
+        notifyMsg(MSG_OPERATION_DELETE_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
     } else {
-        notifyMsgToFrame(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
+        notifyMsg(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
     }
 }
 
 void DefaultOperationMenu::slotFirstPageClicked()
 {
-    notifyMsgToFrame(MSG_OPERATION_FIRST_PAGE);
+    notifyMsg(MSG_OPERATION_FIRST_PAGE);
 }
 
 void DefaultOperationMenu::slotPrevPageClicked()
 {
-    notifyMsgToFrame(MSG_OPERATION_PREV_PAGE);
+    notifyMsg(MSG_OPERATION_PREV_PAGE);
 }
 
 void DefaultOperationMenu::slotNextPageClicked()
 {
-    notifyMsgToFrame(MSG_OPERATION_NEXT_PAGE);
+    notifyMsg(MSG_OPERATION_NEXT_PAGE);
 }
 
 void DefaultOperationMenu::slotEndPageClicked()
 {
-    notifyMsgToFrame(MSG_OPERATION_END_PAGE);
+    notifyMsg(MSG_OPERATION_END_PAGE);
 }
 
 void DefaultOperationMenu::slotExitFullScreenClicked()
 {
-    notifyMsgToFrame(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
+    notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
 }

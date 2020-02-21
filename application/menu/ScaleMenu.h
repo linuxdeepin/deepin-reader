@@ -16,27 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef TITLEMENU_H
-#define TITLEMENU_H
+#ifndef SCALEMENU_H
+#define SCALEMENU_H
 
 #include "CustomControl/CustomMenu.h"
 
-class QSignalMapper;
-
-
-/**
- * @brief The TitleMenu class
- *  标题栏 菜单
- */
-
-class TitleMenu : public CustomMenu
+class ScaleMenu : public CustomMenu
 {
     Q_OBJECT
-    Q_DISABLE_COPY(TitleMenu)
+    Q_DISABLE_COPY(ScaleMenu)
 
 public:
-    explicit TitleMenu(DWidget *parent = nullptr);
-    ~TitleMenu() Q_DECL_OVERRIDE;
+    explicit ScaleMenu(DWidget *parent = nullptr);
+    ~ScaleMenu() Q_DECL_OVERRIDE;
 
     // IObserver interface
 public:
@@ -46,13 +38,18 @@ public:
 protected:
     void initActions() Q_DECL_OVERRIDE;
 
-private:
-    void __CreateActionMap(QSignalMapper *pSigManager, const QStringList &actionList, const QStringList &actionObjList);
-    QAction *__CreateAction(const QString &actionName, const QString &);
-
 private slots:
-    void slotActionTrigger(const QString &);
+    void slotActionTrigger(QAction *);
+    void sloPrevScale();
+    void sloNextScale();
+
+private:
+    void __ChangeScale(const int &);
+
+private:
+    QList<int> dataList;
+    int     m_nCurrentIndex = 5;
 
 };
 
-#endif // TITLEMENU_H
+#endif // SCALEMENU_H

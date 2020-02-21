@@ -7,6 +7,9 @@
 #include "application.h"
 
 #include "controller/DataManager.h"
+#include "menu/FontMenu.h"
+#include "menu/ScaleMenu.h"
+#include "menu/HandleMenu.h"
 #include "utils/PublicFunction.h"
 
 TitleWidget::TitleWidget(CustomWidget *parent)
@@ -70,7 +73,9 @@ void TitleWidget::slotOpenFileOk()
     m_pThumbnailBtn->setDisabled(false);
     m_pSettingBtn->setDisabled(false);
     m_pHandleShapeBtn->setDisabled(false);
-    m_pMagnifierBtn->setDisabled(false);
+    if (m_pMagnifierBtn) {
+        m_pMagnifierBtn->setDisabled(false);
+    }
 
     QJsonObject obj = dApp->m_pDBService->getHistroyData();
 
@@ -89,19 +94,22 @@ void TitleWidget::slotAppFullScreen()
     dApp->m_pDBService->setHistroyData("leftState", 0);
 
     //  侧边栏 隐藏
-    notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, "0");
+    notifyMsg(MSG_SLIDER_SHOW_STATE, "0");
 }
 
 //  退出放大鏡
 void TitleWidget::slotMagnifierCancel()
 {
     //  如果开启了, 放大镜 则取消
+    if (m_pMagnifierBtn == nullptr) {
+        return;
+    }
     bool bCheck = m_pMagnifierBtn->isChecked();
     if (bCheck) {
         m_pMagnifierBtn->setChecked(!bCheck);
 
         //  取消放大镜
-        notifyMsgToSubject(MSG_MAGNIFYING, "0");
+        notifyMsg(MSG_MAGNIFYING, "0");
     }
     //    m_pMagnifierBtn->setStatus(m_pMagnifierBtn->isChecked());
 }
@@ -110,7 +118,9 @@ void TitleWidget::initWidget()
 {
     initBtns();
 
-    initMenus();
+    __InitHandel();
+    __InitSelectTool();
+    __InitScale();
 
     auto m_layout = new QHBoxLayout();
     m_layout->setContentsMargins(5, 0, 0, 0);
@@ -120,7 +130,13 @@ void TitleWidget::initWidget()
     m_layout->addWidget(m_pThumbnailBtn);
     m_layout->addWidget(m_pSettingBtn);
     m_layout->addWidget(m_pHandleShapeBtn);
-    m_layout->addWidget(m_pMagnifierBtn);
+    m_layout->addWidget(m_pPreBtn);
+    m_layout->addWidget(m_pScaleMenuBtn);
+    m_layout->addWidget(m_pNextBtn);
+    if (m_pMagnifierBtn) {
+        m_layout->addWidget(m_pMagnifierBtn);
+    }
+
     m_layout->addStretch(1);
 }
 
@@ -139,7 +155,7 @@ void TitleWidget::initConnections()
 void TitleWidget::on_thumbnailBtn_clicked()
 {
     bool rl = m_pThumbnailBtn->isChecked();
-    notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(rl));
+    notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(rl));
 
     DataManager::instance()->setBThumbnIsShow(rl);
     dApp->m_pDBService->setHistroyData("leftState", rl);
@@ -148,14 +164,13 @@ void TitleWidget::on_thumbnailBtn_clicked()
 //  文档显示
 void TitleWidget::on_settingBtn_clicked()
 {
-    QPoint point = m_pSettingBtn->mapToGlobal(QPoint(0, 0));
-    int nOldY = point.y();
+    if (m_pFontMenu && m_pSettingBtn) {
+        QPoint point = m_pSettingBtn->mapToGlobal(QPoint(0, 0));
+        int nOldY = point.y();
 
-    int nHeight = m_pSettingBtn->height();
-    point.setY(nHeight + nOldY + 2);
+        int nHeight = m_pSettingBtn->height();
+        point.setY(nHeight + nOldY + 2);
 
-//    m_pSettingMenu->exec(point);
-    if (m_pFontMenu) {
         m_pFontMenu->exec(point);
     }
 }
@@ -163,20 +178,40 @@ void TitleWidget::on_settingBtn_clicked()
 //  手型点击
 void TitleWidget::on_handleShapeBtn_clicked()
 {
-    int nHeight = m_pHandleShapeBtn->height();
+    if (m_pHandleMenu && m_pHandleShapeBtn) {
+        int nHeight = m_pHandleShapeBtn->height();
 
-    QPoint point = m_pHandleShapeBtn->mapToGlobal(QPoint(0, 0));
-    int nOldY = point.y();
+        QPoint point = m_pHandleShapeBtn->mapToGlobal(QPoint(0, 0));
+        int nOldY = point.y();
 
-    point.setY(nHeight + nOldY + 2);
-    m_pHandleMenu->exec(point);
+        point.setY(nHeight + nOldY + 2);
+
+        m_pHandleMenu->exec(point);
+    }
+}
+
+// 比例按钮
+void TitleWidget::SlotScaleMenuBtnClicked()
+{
+    if (m_pScaleMenu && m_pScaleMenuBtn) {
+        QPoint point = m_pScaleMenuBtn->mapToGlobal(QPoint(0, 0));
+        int nOldY = point.y();
+
+        int nHeight = m_pScaleMenuBtn->height();
+        point.setY(nHeight + nOldY + 2);
+
+        m_pScaleMenu->exec(point);
+    }
 }
 
 //  放大镜
 void TitleWidget::on_magnifyingBtn_clicked()
 {
+    if (m_pMagnifierBtn == nullptr)
+        return;
+
     bool bCheck = m_pMagnifierBtn->isChecked();
-    notifyMsgToSubject(MSG_MAGNIFYING, QString::number(bCheck));
+    notifyMsg(MSG_MAGNIFYING, QString::number(bCheck));
 
     //  开启了放大镜, 需要把选择工具 切换为 选择工具
     if (bCheck) {
@@ -194,12 +229,11 @@ void TitleWidget::on_magnifyingBtn_clicked()
     }
 }
 
-void TitleWidget::slotActionTrigger(QAction *action)
+void TitleWidget::SlotSetCurrentTool(const QString &sAction)
 {
     //  切换了选择工具, 需要取消放大镜的操作
     slotMagnifierCancel();
 
-    QString sAction = action->objectName();
     if (sAction == "defaultshape") {
         setDefaultShape();
     } else {
@@ -226,7 +260,7 @@ void TitleWidget::slotDealWithShortKey(const QString &sKey)
         //        m_pThumbnailBtn->setFlat(true);
         m_pThumbnailBtn->setChecked(true);
         //        m_pThumbnailBtn->setStatus(m_pThumbnailBtn->isChecked());
-        notifyMsgToSubject(MSG_SLIDER_SHOW_STATE, QString::number(1));
+        notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(1));
         DataManager::instance()->setBThumbnIsShow(1);
         dApp->m_pDBService->setHistroyData("leftState", 1);
     } else if (sKey == KeyStr::g_alt_z) {  //  开启放大镜
@@ -239,77 +273,54 @@ void TitleWidget::initBtns()
     m_pThumbnailBtn = createBtn(tr("Thumbnails"), true);
     m_pThumbnailBtn->setObjectName("thumbnails");
     connect(m_pThumbnailBtn, SIGNAL(clicked()), SLOT(on_thumbnailBtn_clicked()));
+}
 
-    m_pSettingBtn = createBtn(tr("Page Display"));
-    m_pSettingBtn->setObjectName("viewchange");
-    connect(m_pSettingBtn, SIGNAL(clicked()), SLOT(on_settingBtn_clicked()));
+void TitleWidget::__InitHandel()
+{
+    m_pHandleMenu = new HandleMenu(this);
+    connect(m_pHandleMenu, SIGNAL(sigCurrentTool(const QString &)), SLOT(SlotSetCurrentTool(const QString &)));
 
     m_pHandleShapeBtn = createBtn(tr("Select Text"));
     m_pHandleShapeBtn->setObjectName("defaultshape");
     m_pHandleShapeBtn->setFixedSize(QSize(42, 36));
     m_pHandleShapeBtn->setIconSize(QSize(42, 36));
     connect(m_pHandleShapeBtn, SIGNAL(clicked()), SLOT(on_handleShapeBtn_clicked()));
-
-    m_pMagnifierBtn = createBtn(tr("Magnifier"), true);
-    m_pMagnifierBtn->setObjectName("magnifier");
-    connect(m_pMagnifierBtn, SIGNAL(clicked()), SLOT(on_magnifyingBtn_clicked()));
 }
 
-void TitleWidget::initMenus()
+void TitleWidget::__InitSelectTool()
 {
-    {
-        //字号调整菜单
-        m_pFontMenu = new FontMenu(this);
-    }
-//    {
-//        m_pSettingMenu = new DMenu(this);
-////        m_pSettingMenu->setFixedWidth(220);
-//        DFontSizeManager::instance()->bind(m_pSettingMenu, DFontSizeManager::T6);
+    //字号调整菜单
+    m_pFontMenu = new FontMenu(this);
 
-//        auto action = new QWidgetAction(this);
-//        auto scaleWidget = new FontWidget(this);
+    m_pSettingBtn = createBtn(tr("Page Display"));
+    m_pSettingBtn->setObjectName("viewchange");
+    connect(m_pSettingBtn, SIGNAL(clicked()), SLOT(on_settingBtn_clicked()));
+}
 
-//        action->setDefaultWidget(scaleWidget);
+void TitleWidget::__InitScale()
+{
+    m_pScaleMenu = new ScaleMenu(this);
 
-//        m_pSettingMenu->addAction(action);
-//    }
-    {
-        m_pHandleMenu = new DMenu(this);
+    m_pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
+    m_pPreBtn->setFixedSize(QSize(24, 24));
+    connect(m_pPreBtn, SIGNAL(clicked()), m_pScaleMenu, SLOT(sloPrevScale()));
 
-        auto actionGroup = new QActionGroup(this);
+    m_pScaleMenuBtn = new DPushButton();
+    connect(m_pScaleMenuBtn, SIGNAL(clicked()), SLOT(SlotScaleMenuBtnClicked()));
 
-        {
-            auto action = new QAction(tr("Select Text"), this);
-            action->setObjectName("defaultshape");
-            action->setCheckable(true);
-            action->setChecked(true);
-
-            actionGroup->addAction(action);
-            m_pHandleMenu->addAction(action);
-            m_pHandleMenu->addSeparator();
-        }
-
-        {
-            auto action = new QAction(tr("Hand Tool"), this);
-            action->setObjectName("handleshape");
-            action->setCheckable(true);
-
-            actionGroup->addAction(action);
-            m_pHandleMenu->addAction(action);
-        }
-
-        connect(actionGroup, SIGNAL(triggered(QAction *)), SLOT(slotActionTrigger(QAction *)));
-    }
+    m_pNextBtn = new DIconButton(DStyle::SP_IncreaseElement);
+    m_pNextBtn->setFixedSize(QSize(24, 24));
+    connect(m_pNextBtn, SIGNAL(clicked()), m_pScaleMenu, SLOT(sloNextScale()));
 }
 
 void TitleWidget::setDefaultShape()
 {
     QString btnName = "defaultshape";
 
-    auto action = this->findChild<QAction *>(btnName);
-    if (action) {
-        action->setChecked(true);
-    }
+//    auto action = this->findChild<QAction *>(btnName);
+//    if (action) {
+//        action->setChecked(true);
+//    }
 
     m_pHandleShapeBtn->setToolTip(tr("Select Text"));
 
@@ -318,16 +329,16 @@ void TitleWidget::setDefaultShape()
     QIcon icon = PF::getIcon(Pri::g_module + btnName);
     m_pHandleShapeBtn->setIcon(icon);
 
-    notifyMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurHandleShape));
+    notifyMsg(MSG_HANDLESHAPE, QString::number(m_nCurHandleShape));
 }
 
 void TitleWidget::setHandleShape()
 {
     QString btnName = "handleshape";
-    auto action = this->findChild<QAction *>(btnName);
-    if (action) {
-        action->setChecked(true);
-    }
+//    auto action = this->findChild<QAction *>(btnName);
+//    if (action) {
+//        action->setChecked(true);
+//    }
 
     m_pHandleShapeBtn->setToolTip(tr("Hand Tool"));
 
@@ -336,7 +347,7 @@ void TitleWidget::setHandleShape()
     QIcon icon = PF::getIcon(Pri::g_module + btnName);
     m_pHandleShapeBtn->setIcon(icon);
 
-    notifyMsgToSubject(MSG_HANDLESHAPE, QString::number(m_nCurHandleShape));
+    notifyMsg(MSG_HANDLESHAPE, QString::number(m_nCurHandleShape));
 }
 
 DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
@@ -357,23 +368,16 @@ DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
     return btn;
 }
 
-void TitleWidget::sendMsgToSubject(const int &msgType, const QString &msgCotent)
-{
-    sendMsg(msgType, msgCotent);
-}
-
-void TitleWidget::notifyMsgToSubject(const int &msgType, const QString &msgCotent)
-{
-    notifyMsg(msgType, msgCotent);
-}
-
 //  开启放大镜
 void TitleWidget::setMagnifierState()
 {
+    if (m_pMagnifierBtn == nullptr)
+        return;
+
     bool bCheck = m_pMagnifierBtn->isChecked();
     if (!bCheck) {
         m_pMagnifierBtn->setChecked(true);
-        notifyMsgToSubject(MSG_MAGNIFYING, QString::number(1));
+        notifyMsg(MSG_MAGNIFYING, QString::number(1));
 
         //  开启了放大镜, 需要把选择工具 切换为 选择工具
         auto actionList = this->findChildren<QAction *>();

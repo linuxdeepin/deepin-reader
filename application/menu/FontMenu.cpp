@@ -24,26 +24,30 @@
 
 #include "application.h"
 
+#include "controller/NotifySubject.h"
+
 #include "utils/PublicFunction.h"
 #include "subjectObserver/ModuleHeader.h"
+#include "subjectObserver/MsgHeader.h"
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
 
-FontMenu::FontMenu(QWidget *parent):
-    DMenu(parent)
+
+FontMenu::FontMenu(DWidget *parent):
+    CustomMenu("FontMenu", parent)
 {
     shortKeyList << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3
                  << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r
                  << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_equal << KeyStr::g_ctrl_smaller;
 
+    initActions();
+
+    initConnection();
+
     m_pNotifySubject = g_NotifySubject::getInstance();
     if (m_pNotifySubject) {
         m_pNotifySubject->addObserver(this);
     }
-
-    initMenu();
-
-    initConnection();
 }
 
 FontMenu::~FontMenu()
@@ -75,29 +79,6 @@ int FontMenu::dealWithData(const int &msgType, const QString &msgContent)
     return 0;
 }
 
-// 不用此接口
-void FontMenu::sendMsg(const int &, const QString &)
-{
-
-}
-
-/**
- * @brief FontMenu::notifyMsg
- * 分发全局消息
- * @param msgType     消息类型
- * @param msgContent  消息内容
- */
-void FontMenu::notifyMsg(const int &msgType, const QString &msgContent)
-{
-    if (m_pNotifySubject == nullptr) {
-        m_pNotifySubject = g_NotifySubject::getInstance();
-    }
-
-    if (m_pNotifySubject != nullptr) {
-        m_pNotifySubject->notifyMsg(msgType, msgContent);
-    }
-}
-
 /**
  * @brief FontMenu::resetAdaptive
  * 手动改变(ctrl + 1)缩放比例时，复位自适应宽高
@@ -107,12 +88,12 @@ void FontMenu::resetAdaptive()
     resetFiteHAndW();
 
     m_bIsAdaptMove = true;
-    if (m_pEnlargeSlider) {
-        m_pEnlargeSlider->setValue(100);
-    }
-    if (m_pEnlargeLab) {
-        m_pEnlargeLab->setText(QString("%1%").arg(m_nScale));
-    }
+//    if (m_pEnlargeSlider) {
+//        m_pEnlargeSlider->setValue(100);
+//    }
+//    if (m_pEnlargeLab) {
+//        m_pEnlargeLab->setText(QString("%1%").arg(m_nScale));
+//    }
 
     setScaleRotateViewModeAndShow();
 
@@ -128,42 +109,42 @@ void FontMenu::resetAdaptive()
 void FontMenu::setFileViewScale(bool larger)
 {
     m_bIsAdaptMove = false;
-    if (larger) {
-        int scale = m_pEnlargeSlider->value();
-        if (scale < 500) {
-            scale += 25;
-            if (scale > 500) {
-                scale = 500;
-            }
-            m_pEnlargeSlider->setValue(scale);
-        }
-    } else {
-        int scale = m_pEnlargeSlider->value();
-        if (scale > 10) {
-            scale -= 25;
-            if (scale <= 10) {
-                scale = 10;
-            }
-            m_pEnlargeSlider->setValue(scale);
-        }
-    }
+//    if (larger) {
+//        int scale = m_pEnlargeSlider->value();
+//        if (scale < 500) {
+//            scale += 25;
+//            if (scale > 500) {
+//                scale = 500;
+//            }
+//            m_pEnlargeSlider->setValue(scale);
+//        }
+//    } else {
+//        int scale = m_pEnlargeSlider->value();
+//        if (scale > 10) {
+//            scale -= 25;
+//            if (scale <= 10) {
+//                scale = 10;
+//            }
+//            m_pEnlargeSlider->setValue(scale);
+//        }
+//    }
 }
 
 /**
  * @brief FontMenu::setSliderMaxValue
  * 打开文件时，设置缩放最大值，不一定是500%
  */
-void FontMenu::setSliderMaxValue()
-{
-    int maxZoomRatio = 100;
-    maxZoomRatio = static_cast<int>(DocummentProxy::instance()->getMaxZoomratio() * 100);
+//void FontMenu::setSliderMaxValue()
+//{
+//    int maxZoomRatio = 100;
+//    maxZoomRatio = static_cast<int>(DocummentProxy::instance()->getMaxZoomratio() * 100);
 
-    if (DocummentProxy::instance() && m_pEnlargeSlider->maximum() != maxZoomRatio) {
-        int maxVal = 500;
-        maxVal = static_cast<int>(DocummentProxy::instance()->getMaxZoomratio() * 100);
-        m_pEnlargeSlider->setMaximum(maxVal);
-    }
-}
+//    if (DocummentProxy::instance() && m_pEnlargeSlider->maximum() != maxZoomRatio) {
+//        int maxVal = 500;
+//        maxVal = static_cast<int>(DocummentProxy::instance()->getMaxZoomratio() * 100);
+//        m_pEnlargeSlider->setMaximum(maxVal);
+//    }
+//}
 
 /**
  * @brief FontMenu::slotTwoPage
@@ -245,18 +226,18 @@ void FontMenu::slotRotateR()
  */
 void FontMenu::slotScaleValChanged(int scale)
 {
-    m_nScale = scale;
+//    m_nScale = scale;
 
-    if (m_pEnlargeLab) {
-        m_pEnlargeLab->clear();
-        m_pEnlargeLab->setText(QString("%1%").arg(scale));
-    }
+//    if (m_pEnlargeLab) {
+//        m_pEnlargeLab->clear();
+//        m_pEnlargeLab->setText(QString("%1%").arg(scale));
+//    }
 
     if (!m_bIsAdaptMove) {
         resetFiteHAndW();
         scaleAndRotate();
     } else {
-        dApp->m_pDBService->setHistroyData("scale", m_nScale);
+//        dApp->m_pDBService->setHistroyData("scale", m_nScale);
     }
 
     m_bIsAdaptMove = false;
@@ -268,19 +249,19 @@ void FontMenu::slotScaleValChanged(int scale)
  */
 void FontMenu::slotFileOpenOk()
 {
-    setSliderMaxValue();
+//    setSliderMaxValue();
 
     QJsonObject obj = dApp->m_pDBService->getHistroyData();
 
     int value = 0;
 
     //缩放比例
-    value = obj["scale"].toInt();
-    if (value > 0) {
-        m_bIsAdaptMove = true;
-        m_pEnlargeSlider->setValue(value);
-        m_bIsAdaptMove = false;
-    }
+//    value = obj["scale"].toInt();
+//    if (value > 0) {
+//        m_bIsAdaptMove = true;
+//        m_pEnlargeSlider->setValue(value);
+//        m_bIsAdaptMove = false;
+//    }
 
     //单双页
     value = obj["doubleShow"].toInt();
@@ -349,14 +330,14 @@ void FontMenu::slotDealWithShortKey(const QString &keyType)
 void FontMenu::slotSetCurScale(const QString &scale)
 {
 //    setScaleVal(static_cast<int>(scale.toDouble() * 100));
-    int nScale = 100;
+//    int nScale = 100;
 
-    nScale = static_cast<int>(scale.toDouble() * 100);
+//    nScale = static_cast<int>(scale.toDouble() * 100);
 
     m_bIsAdaptMove = true;
     //设置 当前的缩放比, 不要触发滑动条值变化信号
     //m_pEnlargeSlider->blockSignals(true);
-    m_pEnlargeSlider->setValue(nScale);
+//    m_pEnlargeSlider->setValue(nScale);
     m_bIsAdaptMove = false;
     //m_pEnlargeSlider->blockSignals(false);
 }
@@ -365,12 +346,8 @@ void FontMenu::slotSetCurScale(const QString &scale)
  * @brief FontMenu::initMenu
  * 初始化Menu
  */
-void FontMenu::initMenu()
+void FontMenu::initActions()
 {
-    initScale();
-
-    this->addSeparator();
-
     //双页
     m_pTwoPageAction = createAction(tr("Two-Page View"), SLOT(slotTwoPage()), true);
 
@@ -385,61 +362,6 @@ void FontMenu::initMenu()
 
     //右旋转
     m_pRotateRAction = createAction(tr("Rotate Right"), SLOT(slotRotateR()));
-
-    //设置菜单中字体大小
-    DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
-}
-
-/**
- * @brief FontMenu::initScale
- * 初始化缩放比例
- */
-void FontMenu::initScale()
-{
-    DWidget *scaleWidget = new DWidget(this);
-    if (scaleWidget) {
-        scaleWidget->setMinimumWidth(220);
-        scaleWidget->setMinimumHeight(80);
-        QHBoxLayout     *t_pEnlargeLabLayout = new QHBoxLayout;
-        t_pEnlargeLabLayout->setContentsMargins(0, 0, 0, 0);
-        QHBoxLayout     *t_pEnlargeSliderLayout = new QHBoxLayout;
-        t_pEnlargeSliderLayout->setContentsMargins(23, 0, 23, 0);
-        QVBoxLayout     *t_pWidgetLayout = new QVBoxLayout;
-        t_pWidgetLayout->setContentsMargins(0, 0, 0, 0);
-
-        m_pEnlargeLab = new DLabel(scaleWidget);
-        m_pEnlargeLab->setText("100%");
-        m_pEnlargeLab->setAlignment(Qt::AlignCenter);
-        m_pEnlargeLab->setForegroundRole(DPalette::BrightText);
-        DFontSizeManager::instance()->bind(m_pEnlargeLab, DFontSizeManager::T5);
-
-        t_pEnlargeLabLayout->addStretch(1);
-        t_pEnlargeLabLayout->addWidget(m_pEnlargeLab);
-        t_pEnlargeLabLayout->addStretch(1);
-
-        m_pEnlargeSlider = new DSlider(Qt::Horizontal, scaleWidget);
-        QIcon icon;
-        icon = PF::getIcon(Pri::g_module + "a_small");
-        m_pEnlargeSlider->setLeftIcon(icon);
-        icon = PF::getIcon(Pri::g_module + "a_big");
-        m_pEnlargeSlider->setRightIcon(icon);
-        t_pEnlargeSliderLayout->addWidget(m_pEnlargeSlider);
-        t_pEnlargeSliderLayout->setAlignment(Qt::AlignCenter);
-        m_pEnlargeSlider->setMinimum(10);
-        m_pEnlargeSlider->setMaximum(500);
-        m_pEnlargeSlider->setValue(100);
-        m_pEnlargeSlider->slider()->setSingleStep(25);
-        m_pEnlargeSlider->setPageStep(25);
-        connect(m_pEnlargeSlider, SIGNAL(valueChanged(int)), this, SLOT(slotScaleValChanged(int)));
-
-        t_pWidgetLayout->addItem(t_pEnlargeLabLayout);
-        t_pWidgetLayout->addItem(t_pEnlargeSliderLayout);
-        scaleWidget->setLayout(t_pWidgetLayout);
-
-        QWidgetAction *widgetAction = new QWidgetAction(this);
-        widgetAction->setDefaultWidget(scaleWidget);
-        this->addAction(widgetAction);
-    }
 }
 
 /**
@@ -512,7 +434,7 @@ void FontMenu::scaleAndRotate()
 
     setScaleRotateViewModeAndShow();
 
-    dApp->m_pDBService->setHistroyData("scale", m_nScale);
+//    dApp->m_pDBService->setHistroyData("scale", m_nScale);
     dApp->m_pDBService->setHistroyData("doubleShow", m_bDoubPage);
     dApp->m_pDBService->setHistroyData("fit", m_bFiteH ? 10 : (m_bFiteW ? 1 : 0));
     dApp->m_pDBService->setHistroyData("rotate", m_nRotate);
@@ -561,13 +483,13 @@ void FontMenu::setScaleRotateViewModeAndShow()
     DocummentProxy *_proxy = DocummentProxy::instance();
     if (_proxy) {
 
-        double scale = (m_nScale * 0.01);
-        ViewMode_EM viewmode = ViewMode_SinglePage;
-        if (m_bDoubPage) {
-            viewmode = ViewMode_FacingPage;
-        }
+//        double scale = (m_nScale * 0.01);
+//        ViewMode_EM viewmode = ViewMode_SinglePage;
+//        if (m_bDoubPage) {
+//            viewmode = ViewMode_FacingPage;
+//        }
 
-        _proxy->setScaleRotateViewModeAndShow(scale, m_rotateType, viewmode);
+//        _proxy->setScaleRotateViewModeAndShow(scale, m_rotateType, viewmode);
     }
 }
 

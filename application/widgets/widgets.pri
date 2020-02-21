@@ -3,7 +3,6 @@ HEADERS += \
     $$PWD/LeftSidebarWidget.h \
     $$PWD/FileViewWidget.h \
     $$PWD/MainOperationWidget.h \
-    $$PWD/TitleWidget.h \
     $$PWD/DocShowShellWidget.h \
     $$PWD/NoteTipWidget.h \
     $$PWD/PlayControlWidget.h \
@@ -14,14 +13,14 @@ HEADERS += \
     $$PWD/controller/FVMMouseEvent.h \
     $$PWD/main/MainSplitter.h \
     $$PWD/main/MainTabBar.h \
-    $$PWD/main/MainTabWidgetEx.h
+    $$PWD/main/MainTabWidgetEx.h \
+    $$PWD/TitleWidget.h
 
 SOURCES += \
     $$PWD/HomeWidget.cpp \
     $$PWD/FileViewWidget.cpp \
     $$PWD/LeftSidebarWidget.cpp \
     $$PWD/MainOperationWidget.cpp \
-    $$PWD/TitleWidget.cpp \
     $$PWD/DocShowShellWidget.cpp \
     $$PWD/NoteTipWidget.cpp \
     $$PWD/PlayControlWidget.cpp \
@@ -32,4 +31,5 @@ SOURCES += \
     $$PWD/controller/FVMMouseEvent.cpp \
     $$PWD/main/MainSplitter.cpp \
     $$PWD/main/MainTabBar.cpp \
-    $$PWD/main/MainTabWidgetEx.cpp
+    $$PWD/main/MainTabWidgetEx.cpp \
+    $$PWD/TitleWidget.cpp

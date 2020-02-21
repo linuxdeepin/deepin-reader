@@ -1,10 +1,7 @@
 #ifndef TEXTOPERATIONMENU_H
 #define TEXTOPERATIONMENU_H
 
-#include <DMenu>
-
-DWIDGET_USE_NAMESPACE
-
+#include "CustomControl/CustomMenu.h"
 
 class ColorWidgetAction;
 
@@ -13,13 +10,14 @@ class ColorWidgetAction;
  * @brief   右键  文本菜单操作， 复制、高亮显示、移除高亮显示、添加注释、添加书签
  */
 
-class TextOperationMenu : public DMenu
+class TextOperationMenu : public CustomMenu
 {
     Q_OBJECT
     Q_DISABLE_COPY(TextOperationMenu)
 
 public:
     explicit TextOperationMenu(DWidget *parent = nullptr);
+    ~TextOperationMenu() Q_DECL_OVERRIDE;
 
 public:
     void execMenu(const QPoint &, const bool &bHigh, const QString &sSelectText, const QString &sUuid);
@@ -31,8 +29,15 @@ public:
 
     void setPEndPoint(const QPoint &pEndPoint);
 
+    // IObserver interface
+public:
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+
+    // CustomMenu interface
+protected:
+    void initActions() Q_DECL_OVERRIDE;
+
 private:
-    void initMenu();
     QAction *createAction(const QString &, const char *member);
     void notifyMsgToFrame(const int &, const QString &msgContent = "");
 
@@ -61,6 +66,7 @@ private:
     QPoint      m_pStartPoint;          //  右键菜单的 起始点
     QPoint      m_pEndPoint;            //  右键菜单的 结束点
     int         m_nClickPage = -1;
+
 };
 
 #endif // TEXTOPERATIONMENU_H

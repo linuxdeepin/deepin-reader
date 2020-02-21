@@ -16,43 +16,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef TITLEMENU_H
-#define TITLEMENU_H
+#ifndef CUSTOMMENU_H
+#define CUSTOMMENU_H
 
-#include "CustomControl/CustomMenu.h"
+#include <DMenu>
 
-class QSignalMapper;
+#include "subjectObserver/IObserver.h"
 
+DWIDGET_USE_NAMESPACE
 
-/**
- * @brief The TitleMenu class
- *  标题栏 菜单
- */
+class SubjectThread;
 
-class TitleMenu : public CustomMenu
+class CustomMenu : public DMenu, public IObserver
 {
     Q_OBJECT
-    Q_DISABLE_COPY(TitleMenu)
+    Q_DISABLE_COPY(CustomMenu)
 
 public:
-    explicit TitleMenu(DWidget *parent = nullptr);
-    ~TitleMenu() Q_DECL_OVERRIDE;
+    CustomMenu(const QString &, DWidget *parent = nullptr);
 
-    // IObserver interface
-public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    //  主题更新信号
+signals:
+    void sigUpdateTheme();
 
-    // CustomMenu interface
 protected:
-    void initActions() Q_DECL_OVERRIDE;
+    virtual void initActions() = 0;
 
-private:
-    void __CreateActionMap(QSignalMapper *pSigManager, const QStringList &actionList, const QStringList &actionObjList);
-    QAction *__CreateAction(const QString &actionName, const QString &);
+protected:
+    void sendMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
+    void notifyMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
 
-private slots:
-    void slotActionTrigger(const QString &);
-
+protected:
+    SubjectThread   *m_pNotifySubject = nullptr;
 };
 
-#endif // TITLEMENU_H
+
+#endif // CUSTOMMENU_H

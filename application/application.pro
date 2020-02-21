@@ -11,9 +11,6 @@ TARGET = deepin-reader
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
 
-#INCLUDEPATH += $$PWD/../DBService
-#LIBS += -L$$OUT_PWD/../DBService -lDBService
-
 #CONFIG += precompile_header
 #PRECOMPILED_HEADER = stable.h
 
@@ -75,5 +72,6 @@ CONFIG(release, debug|release) {
 INSTALLS += target desktop icon_files
 
 LIBS += -L$$OUT_PWD/../DBService/ -lDBService
+
 INCLUDEPATH += $$PWD/../DBService
 DEPENDPATH += $$PWD/../DBService

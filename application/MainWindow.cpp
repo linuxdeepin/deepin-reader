@@ -126,9 +126,7 @@ void MainWindow::initUI()
     titlebar()->setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
     titlebar()->setTitle("");
 
-    TitleMenu *menu = new TitleMenu(this);
-    connect(menu, SIGNAL(sigSetSlideShow()), SLOT(SlotSlideShow()));
-    titlebar()->setMenu(menu);
+    titlebar()->setMenu(new TitleMenu());
 
     titlebar()->addWidget(new TitleWidget, Qt::AlignLeft);
     setCentralWidget(new CentralWidget);

@@ -3,9 +3,13 @@
 
 #include <DMenu>
 #include <DPushButton>
+#include <DIconButton>
 
 #include "CustomControl/CustomWidget.h"
-#include "menu/FontMenu.h"
+
+class ScaleMenu;
+class FontMenu;
+class HandleMenu;
 
 /**
  * @brief The TitleWidget class
@@ -45,36 +49,43 @@ private slots:
     void on_thumbnailBtn_clicked();
     void on_settingBtn_clicked();
     void on_handleShapeBtn_clicked();
+    void SlotScaleMenuBtnClicked();
+
     void on_magnifyingBtn_clicked();
 
-    void slotActionTrigger(QAction *);
+    void SlotSetCurrentTool(const QString &);
     void slotDealWithShortKey(const QString &);
 
 private:
     void initConnections();
 
     void initBtns();
-    void initMenus();
+    void __InitHandel();
+    void __InitSelectTool();
+    void __InitScale();
 
     void setDefaultShape();
     void setHandleShape();
 
     DPushButton *createBtn(const QString &btnName, bool bCheckable = false);
-    void sendMsgToSubject(const int &, const QString &msgCotent = "");
-    void notifyMsgToSubject(const int &, const QString &msgCotent = "");
 
     void setMagnifierState();
 
 private:
     QStringList shortKeyList;
 
-    DMenu *m_pHandleMenu = nullptr;
+    HandleMenu *m_pHandleMenu = nullptr;
     FontMenu *m_pFontMenu = nullptr;
 
     DPushButton *m_pThumbnailBtn = nullptr;
     DPushButton *m_pSettingBtn = nullptr;
     DPushButton *m_pHandleShapeBtn = nullptr;
     DPushButton *m_pMagnifierBtn = nullptr;
+
+    DIconButton     *m_pPreBtn = nullptr;
+    DPushButton     *m_pScaleMenuBtn = nullptr;
+    DIconButton     *m_pNextBtn = nullptr;
+    ScaleMenu       *m_pScaleMenu = nullptr;
 
     int m_nCurHandleShape = -1;  //  当前的选择工具状态
 };

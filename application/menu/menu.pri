@@ -3,6 +3,8 @@ HEADERS += \
     $$PWD/TextOperationMenu.h \
     $$PWD/FontMenu.h \
     $$PWD/ColorWidgetAction.h \
+    $$PWD/HandleMenu.h \
+    $$PWD/ScaleMenu.h \
     $$PWD/TitleMenu.h
 
 SOURCES += \
@@ -10,5 +12,7 @@ SOURCES += \
     $$PWD/TextOperationMenu.cpp \
     $$PWD/FontMenu.cpp \
     $$PWD/ColorWidgetAction.cpp \
+    $$PWD/HandleMenu.cpp \
+    $$PWD/ScaleMenu.cpp \
     $$PWD/TitleMenu.cpp
 

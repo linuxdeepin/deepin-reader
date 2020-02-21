@@ -31,7 +31,11 @@ enum MSG_TYPE {
 //  菜单操作消息类型
 enum E_MENU_MSG {
     MSG_OPERATION_SAVE_AS_FILE = MSG_CLOSE_FILE + 50,  //  另存为文件
-    MSG_OPERATION_OPEN_FOLDER,        //  打开文件所处文件夹
+    MSG_MENU_NEW_WINDOW,                // 新窗口打开一个文档
+    MSG_MENU_NEW_TAB,                   // 新增加一个文档
+    MSG_MENU_OPEN_FOLDER,               //  打开文件所处文件夹
+    MSG_MENU_MAGNIFER,                  //  放大镜
+    MSG_MENU_SCALE_CHANGE,              //  缩放比例变化
     MSG_OPERATION_ATTR,               //  属性
     MSG_OPERATION_SLIDE,              //  放映
     MSG_OPERATION_EXIT,               //  退出
