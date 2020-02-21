@@ -63,9 +63,11 @@ public:
     double getMaxZoomratio();
     Outline outline();
     //icon annotation
-    QString addIconAnnotation(const QPoint &pos);
-    void moveIconAnnotation(const QString &uuid, const QPoint &pos);
+    QString addIconAnnotation(const QPoint &pos, const QColor &color = Qt::yellow, TextAnnoteType_Em type = TextAnnoteType_Note);
     bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
+
+    void moveIconAnnotation(const QString &uuid, const QPoint &pos);
+
     bool  mouseovericonAnnotation(const QPoint &pos);
     bool removeIconAnnotation(const QString &uuid, int ipage = -1);
     void setIconAnnottationText(int ipage, const QString &struuid, const QString &strtext);

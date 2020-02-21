@@ -61,25 +61,7 @@ struct Section {
 class PageBase;
 class PageInterface;
 class PageBasePrivate;
-//class ThreadRenderImage : public QThread
-//{
-//    Q_OBJECT
-//public:
-//    ThreadRenderImage();
-//    void setPage(PageInterface *page, double width, double height);
-//    void setRestart();
 
-//protected:
-//    virtual void run();
-
-//signals:
-//    void signal_RenderFinish(QImage);
-//private:
-//    PageInterface *m_page;
-//    bool restart;
-//    double m_width;
-//    double m_height;
-//};
 class ThreadRenderImage : public QObject, public QRunnable
 {
     Q_OBJECT
@@ -284,11 +266,6 @@ public:
     void waitThread();
     void clearImage();
     bool setBookMarkState(bool state);
-    QString addIconAnnotation(const QPoint &pos);
-    bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
-    void moveIconAnnotation(const QString &uuid, const QPoint &pos);
-    bool removeIconAnnotation(const QString &uuid);
-    void setIconAnnotationText(const QString &uuid, const QString &strtext);
 
 signals:
     void signal_MagnifierPixmapCacheLoaded(int);

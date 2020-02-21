@@ -264,6 +264,7 @@ public:
     virtual void jumpToHighLight(const QString &uuid, int ipage) {}
     virtual void changeAnnotationColor(int, const QString, const QColor &) {}
     virtual Outline outline() { return Outline(); }
+    virtual QString addTextAnnotation(const QPoint &, const QColor &color = Qt::yellow, TextAnnoteType_Em type = TextAnnoteType_Note) {return  QString();}
     void stopLoadPageThread();
     bool openFile(QString filepath, unsigned int ipage = 0, RotateType_EM rotatetype = RotateType_0, double scale = 1.0, ViewMode_EM viewmode = ViewMode_SinglePage);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
@@ -299,16 +300,12 @@ public:
     void setAutoPlaySlide(bool autoplay, int timemsec);
     bool getAutoPlaySlideStatu();
     void setViewFocus();
-    QString addIconAnnotation(const QPoint &pos);
-    void moveIconAnnotation(const QString &uuid, const QPoint &pos);
-    bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
-    bool removeIconAnnotation(const QString &uuid, int ipage);
-    void setIconAnnottationText(int ipage, const QString &struuid, const QString &strtext);
     double getMaxZoomratio();
     void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage);
     QString pagenum2label(int index);
     int label2pagenum(QString label);
     bool haslabel();
+
 
 signals:
     void signal_pageChange(int);

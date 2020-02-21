@@ -30,6 +30,17 @@ enum RotateType_EM {
     RotateType_270
 };
 
+//The type of the icon for this text annotation.
+enum TextAnnoteType_Em {
+    TextAnnoteType_Note = 0,
+    TextAnnoteType_Comment,
+    TextAnnoteType_Help,
+    TextAnnoteType_Insert,
+    TextAnnoteType_Key,
+    TextAnnoteType_NewParagraph,
+    TextAnnoteType_Paragraph,
+};
+
 typedef struct SEARCH_RESULT {
     unsigned int ipage;
     QList<QString> listtext;

@@ -191,30 +191,29 @@ QString DocummentProxy::addAnnotation(const QPoint &startpos, const QPoint &endp
 {
     if (!m_documment || bcloseing)
         return QString("");
-    // qDebug() << "addAnnotation";
     return m_documment->addAnnotation(startpos, endpos, color);
 }
 
-QString DocummentProxy::addIconAnnotation(const QPoint &pos)
+QString DocummentProxy::addIconAnnotation(const QPoint &pos, const QColor &color, TextAnnoteType_Em type)
 {
     if (!m_documment || bcloseing)
         return QString("");
 
-    return m_documment->addIconAnnotation(pos);
+    return m_documment->addTextAnnotation(pos, color, type);
 }
 
 void DocummentProxy::moveIconAnnotation(const QString &uuid, const QPoint &pos)
 {
     if (!m_documment || bcloseing)
         return ;
-    m_documment->moveIconAnnotation(uuid, pos);
+    // m_documment->moveIconAnnotation(uuid, pos);
 }
 
 bool DocummentProxy::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {
     if (!m_documment || bcloseing)
         return false;
-    return m_documment->iconAnnotationClicked(pos, strtext, struuid);
+    return false;//m_documment->iconAnnotationClicked(pos, strtext, struuid);
 }
 
 bool DocummentProxy::mouseovericonAnnotation(const QPoint &pos)
@@ -222,21 +221,21 @@ bool DocummentProxy::mouseovericonAnnotation(const QPoint &pos)
     if (!m_documment || bcloseing)
         return false;
     QString strtext, struuid;
-    return  m_documment->iconAnnotationClicked(pos, strtext, struuid);
+    return false;// m_documment->iconAnnotationClicked(pos, strtext, struuid);
 }
 
 bool DocummentProxy::removeIconAnnotation(const QString &uuid, int ipage)
 {
     if (!m_documment || bcloseing)
         return  false;
-    return  m_documment->removeIconAnnotation(uuid, ipage);
+    return false;// m_documment->removeIconAnnotation(uuid, ipage);
 }
 
 void DocummentProxy::setIconAnnottationText(int ipage, const QString &struuid, const QString &strtext)
 {
     if (!m_documment || bcloseing)
         return;
-    m_documment->setIconAnnottationText(ipage, struuid, strtext);
+    // m_documment->setIconAnnottationText(ipage, struuid, strtext);
 }
 
 QString DocummentProxy::pagenum2label(int index)

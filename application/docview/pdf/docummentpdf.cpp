@@ -646,3 +646,29 @@ Outline DocummentPDF::loadOutline(const QDomNode &parent, Poppler::Document *doc
     return outline;
 }
 
+QString DocummentPDF::addTextAnnotation(const QPoint &pos, const QColor &color, TextAnnoteType_Em type)
+{
+    Q_D(DocummentPDF);
+    QPoint pt = pos;
+    int ipage = pointInWhichPage(pt);
+    QString uuid;
+
+    if (ipage < d->m_pages.size() && ipage >= 0) {
+
+        double curwidth = d->m_imagewidth * d->m_scale;
+        double curheight = d->m_imageheight * d->m_scale;
+        double leftspace = (d->m_widgets.at(ipage)->width() - curwidth) / 2;
+        double topspace = (d->m_widgets.at(ipage)->height() - curheight) / 2;
+        double curwidgety = d->m_widgets.at(ipage)->y();
+        if (pos.x() > leftspace && pos.x() < curwidth + leftspace &&
+                pos.y() > curwidgety && pos.y() < curwidgety + curheight) {
+            pt.setX(pos.x() - leftspace);
+            pt.setY(pt.y() - topspace);
+            uuid = static_cast<PagePdf *>(d->m_pages.at(ipage))->addTextAnnotation(pt, color, type);
+        }
+    }
+    return  uuid;
+}
+
+
+

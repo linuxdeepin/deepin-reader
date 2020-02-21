@@ -28,6 +28,8 @@ public:
     QString removeAnnotation(const QPoint &pos);
     void removeAnnotation(const QString &struuid);
     bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
+    bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
+    QString addTextAnnotation(const QPoint &pos, const QColor &color, TextAnnoteType_Em type);
     Poppler::Page *GetPage();
     stSearchRes search(const QString &text, bool matchCase, bool wholeWords) override;
     void changeAnnotationColor(const QString uuid, const QColor &color);

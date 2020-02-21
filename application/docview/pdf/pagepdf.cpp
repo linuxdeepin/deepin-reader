@@ -534,6 +534,103 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext, QString &st
     return  false;
 }
 
+bool PagePdf::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
+{
+    Q_D(PagePdf);
+    const double scaleX = d->m_scale;
+    const double scaleY = d->m_scale;
+    double curwidth = d->m_scale * d->m_imagewidth;
+    double curheight = d->m_scale * d->m_imageheight;
+
+    // QPoint qp = QPoint((pos.x() - x() - (width() - m_scale * m_imagewidth) / 2) / scaleX, (pos.y() - y() - (height() - m_scale * m_imageheight) / 2) / scaleY);
+    QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
+    QList<Poppler::Annotation *> listannote = d->m_page->annotations();
+    foreach (Poppler::Annotation *annote, listannote) {
+        if (annote->subType() == Poppler::Annotation::AHighlight) { //必须判断
+            QList<Poppler::HighlightAnnotation::Quad> listquad = static_cast<Poppler::HighlightAnnotation *>(annote)->highlightQuads();
+            foreach (Poppler::HighlightAnnotation::Quad quad, listquad) {
+                QRectF rectbound;
+                rectbound.setTopLeft(quad.points[0]);
+                rectbound.setTopRight(quad.points[1]);
+                rectbound.setBottomLeft(quad.points[2]);
+                rectbound.setBottomRight(quad.points[3]);
+                // qDebug() << "########" << quad.points[0];
+                if (rectbound.contains(ptf)) {
+                    struuid = annote->uniqueName();
+                    strtext = annote->contents();
+                    qDeleteAll(listannote);
+                    //  qDebug() << "******* contaions***" << struuid;
+                    return true;
+                } /*else {
+                    qDebug() << "******* not contains";
+                }*/
+            }
+        }
+    }
+    qDeleteAll(listannote);
+    return  false;
+}
+
+QString PagePdf::addTextAnnotation(const QPoint &pos, const QColor &color, TextAnnoteType_Em type)
+{
+    Q_D(PagePdf);
+    QString strtype;
+    switch (type) {
+    case TextAnnoteType_Note:
+        strtype = QString("Note");
+        break;
+    case TextAnnoteType_Comment:
+        strtype = QString("Comment");
+        break;
+    case TextAnnoteType_Help:
+        strtype = QString("Help");
+        break;
+    case TextAnnoteType_Insert:
+        strtype = QString("Insert");
+        break;
+    case TextAnnoteType_Key:
+        strtype = QString("Key");
+        break;
+    case TextAnnoteType_NewParagraph:
+        strtype = QString("NewParagraph");
+        break;
+    case TextAnnoteType_Paragraph:
+        strtype = QString("Paragraph");
+        break;
+    }
+    QString uuid;
+    Poppler::Annotation::Style style;
+    QColor cl(255, 255, 255, 0);
+    style.setColor(color);
+    // style.setOpacity(0.3);
+
+    Poppler::Annotation::Popup popup;
+    popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
+
+    Poppler::TextAnnotation *annotation = new Poppler::TextAnnotation(Poppler::TextAnnotation::Linked);
+
+    double x = pos.x() / d->m_imagewidth * d->m_scale;
+    double y = pos.y() / d->m_imageheight * d->m_scale;
+    QRectF boundary;
+    boundary.setX(x);
+    boundary.setY(y);
+    boundary.setWidth(0.01);
+    boundary.setHeight(0.01);
+
+    uuid = PublicFunc::getUuid();
+    annotation->setBoundary(boundary);
+    //annotation->setTextColor(color);
+    annotation->setTextIcon(strtype);
+    annotation->setStyle(style);
+    annotation->setPopup(popup);
+    annotation->setUniqueName(uuid);
+    d->m_page->addAnnotation(annotation);
+    QImage image;
+    getImage(image, d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
+    slot_RenderFinish(image);
+    return uuid;
+}
+
 Poppler::Page *PagePdf::GetPage()
 {
     Q_D(PagePdf);
