@@ -20,25 +20,18 @@
 
 #include <QSignalMapper>
 
-#include "controller/NotifySubject.h"
-#include "subjectObserver/MsgHeader.h"
-
 ScaleMenu::ScaleMenu(DWidget *parent)
     : CustomMenu("ScaleMenu", parent)
 {
     initActions();
 
-    m_pNotifySubject = g_NotifySubject::getInstance();
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
+
 }
 
 ScaleMenu::~ScaleMenu()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 int ScaleMenu::dealWithData(const int &, const QString &)

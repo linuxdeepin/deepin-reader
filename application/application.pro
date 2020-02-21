@@ -20,7 +20,6 @@ include (CustomControl/CustomControl.pri)
 include (docview/docview.pri)
 include (menu/menu.pri)
 include (pdfControl/pdfControl.pri)
-include (subjectObserver/subjectObserver.pri)
 include (utils/utils.pri)
 include (widgets/widgets.pri)
 
@@ -75,3 +74,8 @@ LIBS += -L$$OUT_PWD/../DBService/ -lDBService
 
 INCLUDEPATH += $$PWD/../DBService
 DEPENDPATH += $$PWD/../DBService
+
+LIBS += -L$$OUT_PWD/../ModelService/ -lModelService
+
+INCLUDEPATH += $$PWD/../ModelService
+DEPENDPATH += $$PWD/../ModelService

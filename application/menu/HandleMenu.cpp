@@ -18,24 +18,18 @@
  */
 #include "HandleMenu.h"
 
-#include "controller/NotifySubject.h"
-
 HandleMenu::HandleMenu(DWidget *parent)
     : CustomMenu("HandleMenu", parent)
 {
     initActions();
 
-    m_pNotifySubject = g_NotifySubject::getInstance();
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
+
 }
 
 HandleMenu::~HandleMenu()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 int HandleMenu::dealWithData(const int &, const QString &)

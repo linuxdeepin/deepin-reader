@@ -23,16 +23,12 @@ BufferWidget::BufferWidget(CustomWidget *parent)
 {
     initWidget();
 
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 BufferWidget::~BufferWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 int BufferWidget::dealWithData(const int &, const QString &)

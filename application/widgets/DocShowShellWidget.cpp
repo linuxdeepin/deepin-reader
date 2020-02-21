@@ -4,7 +4,6 @@
 #include <QDesktopWidget>
 #include <QVBoxLayout>
 
-#include "application.h"
 #include "FileViewWidget.h"
 #include "FindWidget.h"
 #include "FileAttrWidget.h"
@@ -23,20 +22,16 @@ DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
     initWidget();
     initConnections();
 
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
-
     m_pMsgList = {MSG_OPERATION_ATTR, MSG_OPERATION_TEXT_ADD_ANNOTATION,
                   MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, MSG_NOTE_PAGE_SHOW_NOTEWIDGET
                  };
+
+    dApp->m_pModelService->addObserver(this);
 }
 
 DocShowShellWidget::~DocShowShellWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 void DocShowShellWidget::resizeEvent(QResizeEvent *event)

@@ -23,8 +23,6 @@
 #include <QDesktopServices>
 #include <DDialog>
 
-#include "application.h"
-
 #include "business/DocummentFileHelper.h"
 #include "business/AnnotationHelper.h"
 #include "docview/docummentproxy.h"
@@ -42,7 +40,8 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
 {
     m_pMsgList = { MSG_MAGNIFYING, MSG_HANDLESHAPE, MSG_SELF_ADAPTE_HEIGHT, MSG_SELF_ADAPTE_WIDTH,
                    MSG_FILE_ROTATE,
-                   MSG_NOTE_ADD_CONTENT, MSG_NOTE_PAGE_ADD
+                   MSG_NOTE_ADD_CONTENT, MSG_NOTE_PAGE_ADD,
+                   MSG_EXIT_SAVE_FILE
                  };
 
     m_pKeyMsgList = {KeyStr::g_ctrl_p, KeyStr::g_ctrl_l, KeyStr::g_ctrl_i};
@@ -52,16 +51,12 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
     initWidget();
     initConnections();
 
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 FileViewWidget::~FileViewWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 void FileViewWidget::initWidget()
@@ -75,7 +70,7 @@ void FileViewWidget::initWidget()
     }
 
     //  纯粹 业务处理类
-    DocummentFileHelper::instance();
+    m_pDocummentFileHelper = new DocummentFileHelper(this);
     new AnnotationHelper(this);
 }
 
@@ -153,6 +148,18 @@ void FileViewWidget::slotDealWithData(const int &msgType, const QString &msgCont
         break;
     case MSG_NOTE_PAGE_ADD:                     //  2020.2.18   wzx add
         __SetPageAddIconState();
+        break;
+    case MSG_EXIT_SAVE_FILE:
+        QString sFilePath = DataManager::instance()->strOnlyFilePath();
+        m_pDocummentFileHelper->save(sFilePath, true);
+
+        notifyMsg(MSG_CLOSE_FILE);
+
+        DocummentProxy *_proxy = DocummentProxy::instance();
+        if (_proxy) {
+            _proxy->closeFile();
+        }
+
         break;
     }
 }
@@ -412,9 +419,9 @@ void FileViewWidget::SlotDocFileOpenResult(bool openresult)
 {
     //  通知 其他窗口， 打开文件成功了！！！
     if (openresult) {
-        DocummentFileHelper::instance()->setAppShowTitle();
+        m_pDocummentFileHelper->setAppShowTitle();
     } else {
-        DocummentFileHelper::instance()->setSzFilePath("");
+        m_pDocummentFileHelper->setSzFilePath("");
         DataManager::instance()->setStrOnlyFilePath("");
         notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
     }

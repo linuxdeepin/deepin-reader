@@ -29,6 +29,8 @@
 #include <QString>
 #include <QIcon>
 
+#include "application.h"
+
 class Utils : public QObject
 {
     Q_OBJECT

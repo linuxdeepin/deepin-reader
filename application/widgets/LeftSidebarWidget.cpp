@@ -4,7 +4,6 @@
 #include <QButtonGroup>
 #include <QVBoxLayout>
 
-#include "application.h"
 #include "MainOperationWidget.h"
 
 #include "controller/DataManager.h"
@@ -34,16 +33,12 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
     onSetWidgetVisible(0);  //  默认 隐藏
     slotUpdateTheme();
 
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 LeftSidebarWidget::~LeftSidebarWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 void LeftSidebarWidget::slotDealWithData(const int &msgType, const QString &msgContent)

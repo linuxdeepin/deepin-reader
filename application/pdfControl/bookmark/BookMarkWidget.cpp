@@ -18,7 +18,6 @@
  */
 #include "BookMarkWidget.h"
 
-#include "application.h"
 #include "BookMarkItemWidget.h"
 
 #include "controller/DataManager.h"
@@ -36,9 +35,7 @@ BookMarkWidget::BookMarkWidget(DWidget *parent)
 
     m_pKeyMsgList = {KeyStr::g_ctrl_b};
 
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 /**
  * @brief BookMarkWidget::~BookMarkWidget
@@ -46,9 +43,7 @@ BookMarkWidget::BookMarkWidget(DWidget *parent)
  */
 BookMarkWidget::~BookMarkWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 
     if (m_loadBookMarkThread.isRunning()) {
         m_loadBookMarkThread.stopThreadRun();

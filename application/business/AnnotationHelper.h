@@ -23,14 +23,12 @@
 #include <QObject>
 #include <QColor>
 
-#include "subjectObserver/IObserver.h"
+#include "../ModelService/IObserver.h"
 
 /**
  * @brief The AnnotationHelper class
  *          高亮和注释 业务处理
  */
-
-class SubjectThread;
 
 class AnnotationHelper : public QObject, public IObserver
 {
@@ -71,8 +69,6 @@ private:
     void __InitConnection();
 
 private:
-    SubjectThread           *m_pNotifySubject = nullptr;
-
     QList<int>              m_pMsgList;
 
 };

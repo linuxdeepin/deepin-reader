@@ -9,11 +9,12 @@
 #include <QVBoxLayout>
 
 #include <DDialog>
+
+#include "application.h"
+
 #include "utils/utils.h"
 #include "CustomControl/ImageLabel.h"
-#include "subjectObserver/IObserver.h"
 
-#include "controller/NotifySubject.h"
 
 DWIDGET_USE_NAMESPACE
 /**
@@ -48,7 +49,6 @@ private slots:
 
 private:
     QVBoxLayout     *m_pVBoxLayout = nullptr;
-    SubjectThread   *m_pNotifySubject = nullptr;
     ImageLabel *frameImage = nullptr;
 };
 

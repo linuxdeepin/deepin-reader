@@ -31,16 +31,12 @@ BookMarkItemWidget::BookMarkItemWidget(QWidget *parent)
             SLOT(slotShowContextMenu(const QPoint &)));
     initWidget();
 
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 BookMarkItemWidget::~BookMarkItemWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 /**

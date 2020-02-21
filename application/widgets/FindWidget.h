@@ -27,8 +27,7 @@
 #include <DFloatingWidget>
 #include <DSearchEdit>
 
-#include "subjectObserver/IObserver.h"
-#include "controller/NotifySubject.h"
+#include "application.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -68,7 +67,6 @@ private:
 
 private:
     DSearchEdit     *m_pSearchEdit = nullptr;
-    SubjectThread   *m_pNotifySubject = nullptr;
 
     QList<int>      m_pMsgList;
 

@@ -5,7 +5,6 @@
 
 #include "DataManager.h"
 
-#include "subjectObserver/MsgHeader.h"
 #include "utils/utils.h"
 
 AppSetting::AppSetting(QObject *parent)

@@ -32,16 +32,12 @@ SearchItemWidget::SearchItemWidget(DWidget *parent)
 
     connect(this, SIGNAL(sigUpdateTheme()), this, SLOT(slotUpdateTheme()));
 
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 SearchItemWidget::~SearchItemWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 //  搜索显示内容

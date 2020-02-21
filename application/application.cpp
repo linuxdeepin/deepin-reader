@@ -21,9 +21,6 @@
 #include <QDebug>
 #include <QDir>
 
-#include "subjectObserver/ModuleHeader.h"
-#include "subjectObserver/MsgHeader.h"
-#include "controller/NotifySubject.h"
 #include "utils/utils.h"
 
 namespace {
@@ -58,18 +55,13 @@ Application::Application(int &argc, char **argv)
     initCfgPath();
 
     initChildren();
-
-    g_NotifySubject::getInstance()->startThreadRun();
-}
-
-Application::~Application()
-{
-    g_NotifySubject::getInstance()->stopThreadRun();
 }
 
 void Application::handleQuitAction()
 {
-    g_NotifySubject::getInstance()->notifyMsg(MSG_OPERATION_EXIT);
+    if (m_pModelService) {
+        m_pModelService->notifyMsg(MSG_OPERATION_EXIT);
+    }
 }
 
 //  初始化 deepin-reader 的配置文件目录, 包含 数据库, conf.cfg
@@ -87,6 +79,7 @@ void Application::initCfgPath()
 void Application::initChildren()
 {
     m_pDBService = new DBService(this);
+    m_pModelService = new ModelService(this);
 }
 
 void Application::initI18n()

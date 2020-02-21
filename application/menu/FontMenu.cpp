@@ -22,16 +22,9 @@
 #include <QJsonObject>
 #include <QWidgetAction>
 
-#include "application.h"
-
-#include "controller/NotifySubject.h"
-
 #include "utils/PublicFunction.h"
-#include "subjectObserver/ModuleHeader.h"
-#include "subjectObserver/MsgHeader.h"
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
-
 
 FontMenu::FontMenu(DWidget *parent):
     CustomMenu("FontMenu", parent)
@@ -44,17 +37,12 @@ FontMenu::FontMenu(DWidget *parent):
 
     initConnection();
 
-    m_pNotifySubject = g_NotifySubject::getInstance();
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 FontMenu::~FontMenu()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 /**

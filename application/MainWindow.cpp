@@ -7,8 +7,6 @@
 #include <QDebug>
 #include <DGuiApplicationHelper>
 
-#include "application.h"
-
 #include "business/ShortCutShow.h"
 #include "business/DocummentFileHelper.h"
 #include "controller/DataManager.h"
@@ -38,10 +36,7 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     initShortCut();
 
-    m_pNotifySubject = g_NotifySubject::getInstance();
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 
     //暂定752*360，后期根据最合适效果设定
     setMinimumSize(752, 360);
@@ -55,9 +50,7 @@ MainWindow::MainWindow(DMainWindow *parent)
 MainWindow::~MainWindow()
 {
     // We don't need clean pointers because application has exit here.
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 void MainWindow::openfile(const QString &filepath)
@@ -99,20 +92,29 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
             if (nRes == 2) {
                 //  保存
-                DocummentFileHelper::instance()->save(sFilePath, true);
+                dApp->m_pModelService->notifyMsg(MSG_EXIT_SAVE_FILE);
+
                 //  保存 书签数据r
                 dApp->m_pDBService->qSaveData(sFilePath, DB_BOOKMARK);
+            } else {    //  不保存
+                notifyMsg(MSG_CLOSE_FILE);
+
+                DocummentProxy *_proxy = DocummentProxy::instance();
+                if (_proxy) {
+                    _proxy->closeFile();
+                }
+            }
+        } else {
+            notifyMsg(MSG_CLOSE_FILE);
+
+            DocummentProxy *_proxy = DocummentProxy::instance();
+            if (_proxy) {
+                _proxy->closeFile();
             }
         }
 
         //  保存文档字号参数信息
         dApp->m_pDBService->qSaveData(sFilePath, DB_HISTROY);
-        notifyMsg(MSG_CLOSE_FILE);
-
-        DocummentProxy *_proxy = DocummentProxy::instance();
-        if (_proxy) {
-            _proxy->closeFile();
-        }
     }
 
     AppSetting::instance()->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
@@ -289,9 +291,7 @@ void MainWindow::sendMsg(const int &, const QString &)
 
 void MainWindow::notifyMsg(const int &msgType, const QString &msgContent)
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->notifyMsg(msgType, msgContent);
-    }
+    dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
 
 //  窗口显示默认大小

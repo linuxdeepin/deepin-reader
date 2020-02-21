@@ -6,8 +6,6 @@
 #include <QHBoxLayout>
 #include <QJsonObject>
 
-#include "application.h"
-
 #include "controller/AppSetting.h"
 #include "controller/DataManager.h"
 #include "utils/PublicFunction.h"
@@ -21,17 +19,12 @@ MainOperationWidget::MainOperationWidget(CustomWidget *parent)
 
     m_pMsgList = {MSG_SWITCHLEFTWIDGET, MSG_FIND_EXIT};
 
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 MainOperationWidget::~MainOperationWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
-
+    dApp->m_pModelService->addObserver(this);
 }
 
 void MainOperationWidget::initWidget()

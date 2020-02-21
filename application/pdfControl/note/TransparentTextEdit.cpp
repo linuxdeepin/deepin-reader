@@ -20,8 +20,7 @@
 
 #include <DFontSizeManager>
 
-#include "controller/NotifySubject.h"
-#include "subjectObserver/MsgHeader.h"
+#include "application.h"
 
 TransparentTextEdit::TransparentTextEdit(DWidget *parent)
     : QTextEdit(parent)
@@ -80,6 +79,6 @@ void TransparentTextEdit::slotTextEditMaxContantNum()
         textCursor.setPosition(position - (length - m_nMaxContantLen));
         this->setTextCursor(textCursor);
 
-        g_NotifySubject::getInstance()->notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Input limit reached"));
+        dApp->m_pModelService->notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Input limit reached"));
     }
 }

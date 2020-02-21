@@ -20,8 +20,6 @@
 
 #include <QJsonObject>
 
-#include "application.h"
-
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
@@ -35,16 +33,12 @@ ThumbnailWidget::ThumbnailWidget(DWidget *parent)
 
     initConnection();
 
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 ThumbnailWidget::~ThumbnailWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 
     // 等待子线程退出
     if (m_ThreadLoadImage.isRunning()) {

@@ -21,14 +21,10 @@
 
 #include <DFontSizeManager>
 
-#include "controller/NotifySubject.h"
-
 CustomMenu::CustomMenu(const QString &, DWidget *parent)
     : DMenu(parent)
 {
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
-
-    m_pNotifySubject = g_NotifySubject::getInstance();
 }
 
 void CustomMenu::sendMsg(const int &msgType, const QString &msgContent)
@@ -38,7 +34,5 @@ void CustomMenu::sendMsg(const int &msgType, const QString &msgContent)
 
 void CustomMenu::notifyMsg(const int &msgType, const QString &msgContent)
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->notifyMsg(msgType, msgContent);
-    }
+    dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }

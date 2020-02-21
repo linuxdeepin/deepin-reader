@@ -23,7 +23,7 @@
 #include <DWidget>
 
 #include "docview/pagebase.h"
-#include "subjectObserver/Singleton.h"
+#include "../ModelService/Singleton.h"
 
 class FileViewWidget;
 class DocummentProxy;

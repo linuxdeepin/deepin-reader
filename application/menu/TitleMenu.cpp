@@ -21,26 +21,18 @@
 #include <QSignalMapper>
 
 #include "controller/DataManager.h"
-#include "controller/NotifySubject.h"
-#include "subjectObserver/MsgHeader.h"
-#include "subjectObserver/ModuleHeader.h"
 
 TitleMenu::TitleMenu(DWidget *parent)
     : CustomMenu("TitleMenu", parent)
 {
     initActions();
 
-    m_pNotifySubject = g_NotifySubject::getInstance();
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 TitleMenu::~TitleMenu()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 int TitleMenu::dealWithData(const int &, const QString &)

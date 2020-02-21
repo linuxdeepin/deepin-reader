@@ -32,16 +32,12 @@ NotesItemWidget::NotesItemWidget(DWidget *parent)
     initWidget();
     __InitConnections();
 
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 NotesItemWidget::~NotesItemWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 void NotesItemWidget::setTextEditText(const QString &contant)

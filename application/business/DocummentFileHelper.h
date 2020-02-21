@@ -22,10 +22,9 @@
 
 #include <QObject>
 
-#include "subjectObserver/IObserver.h"
-#include "docview/commonstruct.h"
+#include "application.h"
 
-class SubjectThread;
+#include "docview/commonstruct.h"
 
 /**
  * @brief The DocummentFileHelper class
@@ -37,7 +36,7 @@ class DocummentFileHelper : public QObject, public IObserver
     Q_OBJECT
     Q_DISABLE_COPY(DocummentFileHelper)
 
-private:
+public:
     explicit DocummentFileHelper(QObject *parent = nullptr);
 
 public:
@@ -87,8 +86,6 @@ private slots:
     void slotFileSlider(const int &);
 
 private:
-    SubjectThread           *m_pNotifySubject = nullptr;
-
     QList<int>              m_pMsgList;
     QList<QString>          m_pKeyMsgList;
     QString                 m_szFilePath = "";

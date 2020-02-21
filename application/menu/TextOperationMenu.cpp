@@ -3,30 +3,21 @@
 #include <DFontSizeManager>
 #include <DGuiApplicationHelper>
 
-#include "application.h"
 #include "ColorWidgetAction.h"
 
-#include "controller/NotifySubject.h"
 #include "controller/DataManager.h"
-#include "subjectObserver/MsgHeader.h"
-#include "subjectObserver/ModuleHeader.h"
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)
     : CustomMenu("TextOperationMenu", parent)
 {
     initActions();
 
-    m_pNotifySubject = g_NotifySubject::getInstance();
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 TextOperationMenu::~TextOperationMenu()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, const QString &sSelectText, const QString &sUuid)

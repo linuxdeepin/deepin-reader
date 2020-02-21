@@ -4,9 +4,8 @@
 #include <DWidget>
 #include <DFloatingWidget>
 #include <DIconButton>
-#include "subjectObserver/IObserver.h"
 
-#include "controller/NotifySubject.h"
+#include "application.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -56,8 +55,6 @@ private:
     void changePlayStatus();
 
 private:
-    SubjectThread   *m_pNotifySubject = nullptr;
-
     QTimer *m_ptimer = nullptr;
     DIconButton *m_pbtnpre = nullptr;
     DIconButton *m_pbtnplay = nullptr;

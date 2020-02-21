@@ -4,8 +4,6 @@
 #include <QJsonObject>
 #include <QWidgetAction>
 
-#include "application.h"
-
 #include "controller/DataManager.h"
 #include "menu/FontMenu.h"
 #include "menu/ScaleMenu.h"
@@ -21,16 +19,12 @@ TitleWidget::TitleWidget(CustomWidget *parent)
     initConnections();
     slotUpdateTheme();
 
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 TitleWidget::~TitleWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 //  显示了侧边栏, 则隐藏

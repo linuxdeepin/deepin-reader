@@ -1,30 +1,24 @@
 #include "DefaultOperationMenu.h"
+
 #include <DPushButton>
-#include "application.h"
 #include <DFontSizeManager>
 
 #include "docview/docummentproxy.h"
 
 #include "controller/DataManager.h"
-#include "controller/NotifySubject.h"
-#include "subjectObserver/MsgHeader.h"
-#include "subjectObserver/ModuleHeader.h"
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     : CustomMenu("DefaultOperationMenu", parent)
 {
     initActions();
 
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
+
 }
 
 DefaultOperationMenu::~DefaultOperationMenu()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPage)

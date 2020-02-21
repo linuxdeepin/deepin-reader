@@ -24,10 +24,8 @@
 #include <DPalette>
 #include <DWidget>
 
-#include "controller/NotifySubject.h"
-#include "subjectObserver/IObserver.h"
-#include "subjectObserver/ModuleHeader.h"
-#include "subjectObserver/MsgHeader.h"
+#include "application.h"
+
 #include "utils/utils.h"
 
 #include <QDebug>
@@ -72,9 +70,6 @@ protected:
 protected:
     QList<int>          m_pMsgList;         //  需要处理的消息列表
     QList<QString>      m_pKeyMsgList;      //  需要处理的按键消息列表
-
-protected:
-    SubjectThread   *m_pNotifySubject = nullptr;
 };
 
 #endif  // CUSTOMWIDGET_H

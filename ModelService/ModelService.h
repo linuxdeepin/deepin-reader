@@ -16,34 +16,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CUSTOMMENU_H
-#define CUSTOMMENU_H
+#ifndef MODELSERVICE_H
+#define MODELSERVICE_H
 
-#include <DMenu>
+#include "modelservice_global.h"
+#include <QObject>
 
-#include "application.h"
+#include "IObserver.h"
+#include "ModuleHeader.h"
+#include "MsgHeader.h"
 
-DWIDGET_USE_NAMESPACE
+class SubjectThread;
 
-class CustomMenu : public DMenu, public IObserver
+class MODELSERVICESHARED_EXPORT ModelService : public QObject
 {
-    Q_OBJECT
-    Q_DISABLE_COPY(CustomMenu)
 
 public:
-    CustomMenu(const QString &, DWidget *parent = nullptr);
+    explicit ModelService(QObject *parent = nullptr);
+    ~ModelService() Q_DECL_OVERRIDE;
 
-    //  主题更新信号
-signals:
-    void sigUpdateTheme();
+    // ISubject interface
+public:
+    void addObserver(IObserver *obs) ;
+    void removeObserver(IObserver *obs) ;
 
-protected:
-    virtual void initActions() = 0;
+    // SubjectThread interface
+public:
+    void notifyMsg(const int &, const QString &msgContent = "");
 
-protected:
-    void sendMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
-    void notifyMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
+private:
+    SubjectThread *m_pSubjectThread = nullptr;
 };
 
-
-#endif // CUSTOMMENU_H
+#endif // MODELSERVICE_H

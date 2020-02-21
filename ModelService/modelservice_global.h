@@ -16,34 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CUSTOMMENU_H
-#define CUSTOMMENU_H
+#ifndef MODELSERVICE_GLOBAL_H
+#define MODELSERVICE_GLOBAL_H
 
-#include <DMenu>
+#include <QtCore/qglobal.h>
 
-#include "application.h"
+#if defined(MODELSERVICE_LIBRARY)
+#  define MODELSERVICESHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define MODELSERVICESHARED_EXPORT Q_DECL_IMPORT
+#endif
 
-DWIDGET_USE_NAMESPACE
-
-class CustomMenu : public DMenu, public IObserver
-{
-    Q_OBJECT
-    Q_DISABLE_COPY(CustomMenu)
-
-public:
-    CustomMenu(const QString &, DWidget *parent = nullptr);
-
-    //  主题更新信号
-signals:
-    void sigUpdateTheme();
-
-protected:
-    virtual void initActions() = 0;
-
-protected:
-    void sendMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
-    void notifyMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
-};
-
-
-#endif // CUSTOMMENU_H
+#endif // MODELSERVICE_GLOBAL_H

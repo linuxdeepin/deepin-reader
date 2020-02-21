@@ -28,11 +28,8 @@
 #include <QHBoxLayout>
 #include <QDesktopWidget>
 
-#include "application.h"
 
 #include "controller/DataManager.h"
-#include "subjectObserver/ModuleHeader.h"
-#include "subjectObserver/MsgHeader.h"
 #include "docview/docummentproxy.h"
 
 FindWidget::FindWidget(DWidget *parent)
@@ -48,17 +45,14 @@ FindWidget::FindWidget(DWidget *parent)
 
     slotSetVisible();
 
-    m_pNotifySubject = g_NotifySubject::getInstance();
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+
+    dApp->m_pModelService->addObserver(this);
+
 }
 
 FindWidget::~FindWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 void FindWidget::showPosition(const int &nParentWidth)
@@ -163,7 +157,7 @@ void FindWidget::sendMsg(const int &, const QString &)
 void FindWidget::notifyMsg(const int &msgType, const QString &msgContent)
 {
     if (this->isVisible()) {
-        m_pNotifySubject->notifyMsg(msgType, msgContent);
+        dApp->m_pModelService->notifyMsg(msgType, msgContent);
     }
 }
 

@@ -2,7 +2,7 @@
 #define SUBJECTTHREAD_H
 
 #include <QThread>
-#include "subjectObserver/ISubject.h"
+#include "ISubject.h"
 
 /**
  * @brief The SubjectThread class

@@ -5,8 +5,6 @@
 #include <QHBoxLayout>
 #include <QDebug>
 
-#include "subjectObserver/MsgHeader.h"
-#include "subjectObserver/ModuleHeader.h"
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
 #include "docview/docummentproxy.h"
@@ -30,19 +28,17 @@ PlayControlWidget::PlayControlWidget(DWidget *parnet)
 
     m_pMsgList = {MSG_NOTIFY_KEY_PLAY_MSG};
 
-    m_pNotifySubject = g_NotifySubject::getInstance();
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+
+    dApp->m_pModelService->addObserver(this);
 }
 
 PlayControlWidget::~PlayControlWidget()
 {
     m_ptimer->stop();
     m_ptimer->deleteLater();
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+
+    dApp->m_pModelService->removeObserver(this);
+
 }
 
 int PlayControlWidget::dealWithData(const int &msgType, const QString &msgContent)
@@ -69,9 +65,7 @@ void PlayControlWidget::sendMsg(const int &msgType, const QString &msgContent)
 
 void PlayControlWidget::notifyMsg(const int &msgType, const QString &msgContent)
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->notifyMsg(msgType, msgContent);
-    }
+    dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
 
 void PlayControlWidget::activeshow(int ix, int iy)

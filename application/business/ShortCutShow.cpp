@@ -25,7 +25,6 @@
 #include <QJsonArray>
 
 #include "application.h"
-#include "subjectObserver/ModuleHeader.h"
 
 ShortCutShow::ShortCutShow(QObject *parent)
     : QObject(parent)

@@ -27,16 +27,12 @@ ThumbnailItemWidget::ThumbnailItemWidget(DWidget *parent)
     initWidget();
     connect(this, SIGNAL(sigBookMarkStatusChanged(bool)), SLOT(slotBookMarkShowStatus(bool)));
 
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 ThumbnailItemWidget::~ThumbnailItemWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 // 处理消息接口

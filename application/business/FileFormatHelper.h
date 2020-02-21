@@ -2,7 +2,7 @@
 #define FILEFORMATHELPER_H
 
 #include <QString>
-#include "subjectObserver/ModuleHeader.h"
+#include "../ModelService/ModuleHeader.h"
 #include "docview/commonstruct.h"
 
 namespace  FFH {

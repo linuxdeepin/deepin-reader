@@ -34,16 +34,12 @@ SearchResWidget::SearchResWidget(DWidget *parent)
     initWidget();
     initConnections();
 
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 SearchResWidget::~SearchResWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 
     if (m_loadSearchResThread.isRunning()) {
         m_loadSearchResThread.stopThread();

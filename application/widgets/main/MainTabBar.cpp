@@ -20,8 +20,6 @@
 
 #include <QDebug>
 
-#include "subjectObserver/MsgHeader.h"
-#include "controller/NotifySubject.h"
 
 MainTabBar::MainTabBar(DWidget *parent)
     : DTabBar(parent)
@@ -34,17 +32,13 @@ MainTabBar::MainTabBar(DWidget *parent)
 
     __InitConnection();
 
-    m_pSubjectThread = g_NotifySubject::getInstance();
-    if (m_pSubjectThread) {
-        m_pSubjectThread->addObserver(this);
-    }
+
+    dApp->m_pModelService->addObserver(this);
 }
 
 MainTabBar::~MainTabBar()
 {
-    if (m_pSubjectThread) {
-        m_pSubjectThread->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 int MainTabBar::dealWithData(const int &msgType, const QString &msgContent)

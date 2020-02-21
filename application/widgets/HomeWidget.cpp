@@ -18,20 +18,19 @@ HomeWidget::HomeWidget(CustomWidget *parent)
     initWidget();
     initConnections();
 
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+
+
 
     m_settings = AppSetting::instance();
 
     slotUpdateTheme();
+
+    dApp->m_pModelService->addObserver(this);
 }
 
 HomeWidget::~HomeWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 
     if (m_settings) {
         m_settings->deleteLater();

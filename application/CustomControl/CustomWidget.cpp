@@ -28,19 +28,7 @@ CustomWidget::CustomWidget(const QString &name, DWidget *parent)
     setObjectName(name);
     setAutoFillBackground(true);
     setContextMenuPolicy(Qt::CustomContextMenu);//让widget支持右键菜单事件
-
-    m_pNotifySubject = g_NotifySubject::getInstance();
-//    if (m_pNotifySubject) {
-//        m_pNotifySubject->addObserver(this);
-//    }
 }
-
-//CustomWidget::~CustomWidget()
-//{
-//    if (m_pNotifySubject) {
-//        m_pNotifySubject->removeObserver(this);
-//    }
-//}
 
 void CustomWidget::updateWidgetTheme()
 {
@@ -58,9 +46,7 @@ void CustomWidget::sendMsg(const int &msgType, const QString &msgContent)
 //  通知消息
 void CustomWidget::notifyMsg(const int &msgType, const QString &msgContent)
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->notifyMsg(msgType, msgContent);
-    }
+    dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
 
 void CustomWidget::showScreenCenter()

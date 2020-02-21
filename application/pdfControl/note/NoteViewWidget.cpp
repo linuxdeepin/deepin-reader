@@ -39,16 +39,12 @@ NoteViewWidget::NoteViewWidget(CustomWidget *parent)
     initConnections();
     slotUpdateTheme();
 
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 NoteViewWidget::~NoteViewWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 int NoteViewWidget::dealWithData(const int &msgType, const QString &)

@@ -21,12 +21,9 @@
 
 #include <DTabBar>
 #include <DTabWidget>
-
-#include "subjectObserver/IObserver.h"
+#include "application.h"
 
 DWIDGET_USE_NAMESPACE
-
-class SubjectThread;
 
 class MainTabBar : public DTabBar, public IObserver
 {
@@ -66,7 +63,6 @@ private slots:
 
 private:
     int     m_nOldMiniWidth = 0;
-    SubjectThread   *m_pSubjectThread = nullptr;
 
 };
 

@@ -1,5 +1,5 @@
 #include "NotifySubject.h"
-#include "subjectObserver/MsgHeader.h"
+#include "MsgHeader.h"
 #include <QDebug>
 
 void NotifySubject::startThreadRun()

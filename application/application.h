@@ -19,6 +19,7 @@
 
 #include <DApplication>
 #include "DBService.h"
+#include "ModelService.h"
 
 #if defined(dApp)
 #undef dApp
@@ -35,13 +36,13 @@ class Application : public DApplication
 
 public:
     Application(int &argc, char **argv);
-    ~Application() Q_DECL_OVERRIDE;
 
 protected:
     void handleQuitAction() Q_DECL_OVERRIDE;
 
 public:
     DBService   *m_pDBService = nullptr;
+    ModelService    *m_pModelService = nullptr;
 
 private:
     void initCfgPath();

@@ -22,9 +22,9 @@
 #include <DFontSizeManager>
 #include <QDebug>
 
-#include "controller/NotifySubject.h"
+#include "application.h"
+
 #include "docview/docummentproxy.h"
-#include "subjectObserver/MsgHeader.h"
 #include "utils/utils.h"
 
 CatalogTreeView::CatalogTreeView(DWidget *parent)
@@ -43,17 +43,13 @@ CatalogTreeView::CatalogTreeView(DWidget *parent)
 
     initConnections();
 
-    m_pSubjectThread = g_NotifySubject::getInstance();
-    if (m_pSubjectThread) {
-        m_pSubjectThread->addObserver(this);
-    }
+
+    dApp->m_pModelService->addObserver(this);
 }
 
 CatalogTreeView::~CatalogTreeView()
 {
-    if (m_pSubjectThread) {
-        m_pSubjectThread->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 int CatalogTreeView::dealWithData(const int &msgType, const QString &msgContent)
@@ -73,9 +69,7 @@ void CatalogTreeView::sendMsg(const int &, const QString &)
 
 void CatalogTreeView::notifyMsg(const int &msgType, const QString &msgContent)
 {
-    if (m_pSubjectThread) {
-        m_pSubjectThread->notifyMsg(msgType, msgContent);
-    }
+    dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
 
 void CatalogTreeView::initConnections()

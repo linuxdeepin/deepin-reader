@@ -11,8 +11,6 @@
 #include "controller/DataManager.h"
 #include "docview/docummentproxy.h"
 #include "CustomControl/DFMGlobal.h"
-#include "subjectObserver/ModuleHeader.h"
-#include "subjectObserver/MsgHeader.h"
 
 FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
@@ -27,17 +25,12 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
 
     initWidget();
 
-    m_pNotifySubject = g_NotifySubject::getInstance();
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 FileAttrWidget::~FileAttrWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 //  各个 对应的 label 赋值

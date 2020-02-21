@@ -4,8 +4,7 @@
 #include <QMutex>
 
 #include "SubjectThread.h"
-#include "subjectObserver/Singleton.h"
-
+#include "Singleton.h"
 /**
  * @brief The NotifySubject class
  * @brief 消息推送服务

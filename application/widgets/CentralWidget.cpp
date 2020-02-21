@@ -46,16 +46,12 @@ CentralWidget::CentralWidget(CustomWidget *parent)
     initWidget();
     initConnections();
 
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 CentralWidget::~CentralWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 void CentralWidget::keyPressEvent(QKeyEvent *event)

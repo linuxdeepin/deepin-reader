@@ -19,11 +19,11 @@
 
 #include "AnnotationHelper.h"
 
+#include "application.h"
 #include "controller/DataManager.h"
-#include "controller/NotifySubject.h"
+
 #include "docview/docummentproxy.h"
-#include "subjectObserver/ModuleHeader.h"
-#include "subjectObserver/MsgHeader.h"
+
 
 AnnotationHelper::AnnotationHelper(QObject *parent)
     : QObject(parent)
@@ -36,17 +36,12 @@ AnnotationHelper::AnnotationHelper(QObject *parent)
 
     __InitConnection();
 
-    m_pNotifySubject = g_NotifySubject::getInstance();
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 AnnotationHelper::~AnnotationHelper()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 int AnnotationHelper::dealWithData(const int &msgType, const QString &msgContent)
@@ -66,9 +61,7 @@ void AnnotationHelper::sendMsg(const int &msgType, const QString &msgContent)
 
 void AnnotationHelper::notifyMsg(const int &msgType, const QString &msgContent)
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->notifyMsg(msgType, msgContent);
-    }
+    dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
 
 void AnnotationHelper::slotDealWithData(const int &msgType, const QString &msgContent)

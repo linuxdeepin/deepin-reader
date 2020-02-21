@@ -4,11 +4,10 @@
 #include <DMainWindow>
 #include <DMenu>
 
-#include "subjectObserver/IObserver.h"
+#include "application.h"
 
 DWIDGET_USE_NAMESPACE
 
-class SubjectThread;
 class QSignalMapper;
 
 /**
@@ -71,8 +70,6 @@ private slots:
     void SlotSlideShow();
 
 private:
-    SubjectThread   *m_pNotifySubject = nullptr;
-
     QList<int>      m_pMsgList;
     Qt::WindowStates    m_nOldState = Qt::WindowNoState;        //  旧的窗口状态
 

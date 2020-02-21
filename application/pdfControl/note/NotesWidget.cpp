@@ -21,7 +21,6 @@
 #include "NotesItemWidget.h"
 
 #include "controller/DataManager.h"
-#include "business/DocummentFileHelper.h"
 #include "docview/docummentproxy.h"
 
 NotesWidget::NotesWidget(DWidget *parent)
@@ -35,16 +34,12 @@ NotesWidget::NotesWidget(DWidget *parent)
 
     initConnection();
 
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 NotesWidget::~NotesWidget()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 /**

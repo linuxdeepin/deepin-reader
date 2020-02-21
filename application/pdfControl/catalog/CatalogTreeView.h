@@ -23,10 +23,8 @@
 
 #include <QStandardItemModel>
 
-#include "subjectObserver/IObserver.h"
+#include "../ModelService/IObserver.h"
 #include "docview/pagebase.h"
-
-class SubjectThread;
 
 DWIDGET_USE_NAMESPACE
 
@@ -70,10 +68,6 @@ private slots:
     void SlotFilePageChanged(const QString &);
     void SlotCollapsed(const QModelIndex &);
     void SlotExpanded(const QModelIndex &);
-
-private:
-    SubjectThread       *m_pSubjectThread = nullptr;
-
 };
 
 #endif // CATALOGTREEVIEW_H

@@ -22,6 +22,7 @@
 #include "CustomControl/CustomWidget.h"
 
 class TextOperationMenu;
+class DocummentFileHelper;
 
 //  当前鼠标状态
 enum E_Handel_State {
@@ -97,6 +98,7 @@ private:
 
 private:
     TextOperationMenu       *m_operatemenu = nullptr;
+    DocummentFileHelper     *m_pDocummentFileHelper = nullptr;
 
     int         m_nCurrentHandelState = Default_State;  //  当前鼠标状态
     int         m_nAdapteState = NO_ADAPTE_State;       //  当前自适应状态

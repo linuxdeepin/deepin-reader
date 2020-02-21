@@ -24,14 +24,11 @@
 #include <DDialog>
 #include <QJsonObject>
 
-#include "application.h"
 #include "FileFormatHelper.h"
 
 #include "controller/DataManager.h"
-#include "controller/NotifySubject.h"
+
 #include "docview/docummentproxy.h"
-#include "subjectObserver/MsgHeader.h"
-#include "subjectObserver/ModuleHeader.h"
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
 
@@ -47,17 +44,12 @@ DocummentFileHelper::DocummentFileHelper(QObject *parent)
 
     initConnections();
 
-    m_pNotifySubject = g_NotifySubject::getInstance();
-    if (m_pNotifySubject) {
-        m_pNotifySubject->addObserver(this);
-    }
+    dApp->m_pModelService->addObserver(this);
 }
 
 DocummentFileHelper::~DocummentFileHelper()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->removeObserver(this);
-    }
+    dApp->m_pModelService->removeObserver(this);
 }
 
 void DocummentFileHelper::initConnections()
@@ -132,7 +124,7 @@ void DocummentFileHelper::sendMsg(const int &msgType, const QString &msgContent)
 //  通知消息, 不需要撤回
 void DocummentFileHelper::notifyMsg(const int &msgType, const QString &msgContent)
 {
-    m_pNotifySubject->notifyMsg(msgType, msgContent);
+    dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
 
 bool DocummentFileHelper::save(const QString &filepath, bool withChanges)

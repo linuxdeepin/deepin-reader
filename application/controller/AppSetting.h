@@ -2,6 +2,7 @@
 #define APPSETTING_H
 
 #include <QSettings>
+#include "application.h"
 
 /**
  * @brief The AppSetting class

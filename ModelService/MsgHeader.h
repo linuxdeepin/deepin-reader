@@ -25,6 +25,7 @@ enum MSG_TYPE {
     MSG_NOTIFY_KEY_MSG,                 //  按键通知消息
     MSG_NOTIFY_KEY_PLAY_MSG,            //  幻灯片模式按键通知消息
     MSG_NOTIFY_SHOW_TIP,                //  显示提示窗口
+    MSG_EXIT_SAVE_FILE,                     //  关闭当前文档　消息
     MSG_CLOSE_FILE,                     //  关闭当前文档　消息
 };
 

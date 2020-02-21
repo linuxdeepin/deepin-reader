@@ -20,8 +20,8 @@
 
 #include <DScrollBar>
 
+#include "application.h"
 #include "CustomItemWidget.h"
-//#include "utils/utils.h"
 
 CustomListWidget::CustomListWidget(DWidget *parent)
     : DListWidget(parent)
@@ -105,7 +105,7 @@ void CustomListWidget::slotShowSelectItem(QListWidgetItem *item)
     if (t_ItemWidget) {
         int nJumpPage = t_ItemWidget->nPageIndex();
         //  页跳转
-        g_NotifySubject::getInstance()->notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nJumpPage));
+        dApp->m_pModelService->notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nJumpPage));
     }
 }
 
