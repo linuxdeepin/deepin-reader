@@ -30,7 +30,9 @@
 
 #include "DocShowShellWidget.h"
 #include "HomeWidget.h"
+#include "main/MainTabWidgetEx.h"
 #include "LeftSidebarWidget.h"
+#include "main/MainTabBar.h"
 
 #include "utils/utils.h"
 #include "controller/DataManager.h"
@@ -261,19 +263,5 @@ void CentralWidget::initWidget()
     pStcakLayout->setSpacing(0);
 
     pStcakLayout->addWidget(new HomeWidget);
-
-    auto pSplitter = new DSplitter;
-    pSplitter->setHandleWidth(5);
-    pSplitter->setChildrenCollapsible(false);  //  子部件不可拉伸到 0
-
-    pSplitter->addWidget(new LeftSidebarWidget(this));
-    pSplitter->addWidget(new DocShowShellWidget(this));
-
-    QList<int> list_src;
-    list_src.append(LEFTNORMALWIDTH);
-    list_src.append(1000 - LEFTNORMALWIDTH);
-
-    pSplitter->setSizes(list_src);
-
-    pStcakLayout->addWidget(pSplitter);
+    pStcakLayout->addWidget(new MainTabWidgetEx);
 }

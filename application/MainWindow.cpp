@@ -255,7 +255,7 @@ void MainWindow::slotOpenFileOk(const QString &msgContent)
         a->setDisabled(false);
     }
 
-    onSetAppTitle(msgContent);
+//    onSetAppTitle(msgContent);
 }
 
 void MainWindow::slotDealWithData(const int &msgType, const QString &msgContent)
