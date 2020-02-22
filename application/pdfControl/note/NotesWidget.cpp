@@ -100,18 +100,18 @@ void NotesWidget::initWidget()
 
     m_pNotesList = new CustomListWidget;
 
-//    m_pAddAnnotationBtn = new DPushButton(this);
-//    m_pAddAnnotationBtn->setFixedHeight(36);
-//    m_pAddAnnotationBtn->setMinimumWidth(170);
-//    m_pAddAnnotationBtn->setText(tr("Add annotation"));
-//    DFontSizeManager::instance()->bind(m_pAddAnnotationBtn, DFontSizeManager::T6);
-//    connect(m_pAddAnnotationBtn, SIGNAL(clicked()), this, SLOT(slotAddAnnotation()));
+    m_pAddAnnotationBtn = new DPushButton(this);
+    m_pAddAnnotationBtn->setFixedHeight(36);
+    m_pAddAnnotationBtn->setMinimumWidth(170);
+    m_pAddAnnotationBtn->setText(tr("Add annotation"));
+    DFontSizeManager::instance()->bind(m_pAddAnnotationBtn, DFontSizeManager::T6);
+    connect(m_pAddAnnotationBtn, SIGNAL(clicked()), this, SLOT(slotAddAnnotation()));
 
     auto m_pHBoxLayout = new QHBoxLayout;
     m_pHBoxLayout->setContentsMargins(10, 6, 10, 6);
     m_pVLayout->addWidget(m_pNotesList);
-//    m_pVLayout->addWidget(new DHorizontalLine(this));
-//    m_pHBoxLayout->addWidget(m_pAddAnnotationBtn);
+    m_pVLayout->addWidget(new DHorizontalLine(this));
+    m_pHBoxLayout->addWidget(m_pAddAnnotationBtn);
     m_pVLayout->addItem(m_pHBoxLayout);
 }
 

@@ -537,38 +537,25 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext, QString &st
 bool PagePdf::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {
     Q_D(PagePdf);
-    const double scaleX = d->m_scale;
-    const double scaleY = d->m_scale;
     double curwidth = d->m_scale * d->m_imagewidth;
     double curheight = d->m_scale * d->m_imageheight;
-
-    // QPoint qp = QPoint((pos.x() - x() - (width() - m_scale * m_imagewidth) / 2) / scaleX, (pos.y() - y() - (height() - m_scale * m_imageheight) / 2) / scaleY);
+    bool bclicked=false;
     QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
     foreach (Poppler::Annotation *annote, listannote) {
-        if (annote->subType() == Poppler::Annotation::AHighlight) { //必须判断
-            QList<Poppler::HighlightAnnotation::Quad> listquad = static_cast<Poppler::HighlightAnnotation *>(annote)->highlightQuads();
-            foreach (Poppler::HighlightAnnotation::Quad quad, listquad) {
-                QRectF rectbound;
-                rectbound.setTopLeft(quad.points[0]);
-                rectbound.setTopRight(quad.points[1]);
-                rectbound.setBottomLeft(quad.points[2]);
-                rectbound.setBottomRight(quad.points[3]);
-                // qDebug() << "########" << quad.points[0];
-                if (rectbound.contains(ptf)) {
-                    struuid = annote->uniqueName();
-                    strtext = annote->contents();
-                    qDeleteAll(listannote);
-                    //  qDebug() << "******* contaions***" << struuid;
-                    return true;
-                } /*else {
-                    qDebug() << "******* not contains";
-                }*/
-            }
+        if (annote->subType() == Poppler::Annotation::AText) { //必须判断
+           if(annote->boundary().contains(ptf))
+           {
+               qDebug()<<__FUNCTION__<<"iconannotation clicked true";
+               strtext=annote->contents();
+               struuid=annote->uniqueName();
+               bclicked=true;
+               break;
+           }
         }
     }
     qDeleteAll(listannote);
-    return  false;
+    return  bclicked;
 }
 
 QString PagePdf::addTextAnnotation(const QPoint &pos, const QColor &color, TextAnnoteType_Em type)

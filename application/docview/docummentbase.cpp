@@ -250,7 +250,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     d->m_slidewidget->hide();
     //    d->m_magnifierwidget->raise();
     d->m_magnifierwidget->hide();
-    d->m_vboxLayout = new QVBoxLayout; //d->m_vboxLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+    d->m_vboxLayout = new QVBoxLayout;
     d->m_widget->setLayout(d->m_vboxLayout);
     d->m_vboxLayout->setMargin(0);
     d->m_vboxLayout->setSpacing(0);

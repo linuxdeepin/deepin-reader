@@ -238,7 +238,7 @@ void FVMMouseEvent::__AddIconAnnotation(FileViewWidget *fvw, const QPoint &globa
                                  QString::number(globalPos.x()) + Constant::sQStringSep +
                                  QString::number(globalPos.y());
 
-            fvw->notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, strContent);
+           // fvw->notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, strContent);
         } else {
             qWarning() << __FUNCTION__ << "          " << sUuid;;
         }

@@ -670,5 +670,16 @@ QString DocummentPDF::addTextAnnotation(const QPoint &pos, const QColor &color, 
     return  uuid;
 }
 
+bool DocummentPDF::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
+{
+    Q_D(DocummentPDF);
+    QPoint pt(pos);
+    bool bclicked=false;
+    int ipage = pointInWhichPage(pt);
+    if (ipage>=0&&ipage<d->m_pages.size())
+        bclicked=(static_cast<PagePdf *>(d->m_pages.at(ipage)))->iconAnnotationClicked(pt, strtext, struuid);
+    return bclicked;
+}
+
 
 

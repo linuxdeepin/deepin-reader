@@ -35,7 +35,7 @@ public:
     Outline outline() override;
     Outline loadOutline(const QDomNode &parent, Poppler::Document *document);
     QString addTextAnnotation(const QPoint &pos, const QColor &color = Qt::yellow, TextAnnoteType_Em type = TextAnnoteType_Note)override;
-
+    bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid) override;
 private:
     bool pdfsave(const QString &filePath, bool withChanges);
     void refreshOnePage(int ipage);

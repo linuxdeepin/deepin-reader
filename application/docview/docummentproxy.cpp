@@ -13,7 +13,6 @@ DocummentProxy::DocummentProxy(QObject *parent)
       m_type(DocType_NULL),
       m_path(""),
       m_documment(nullptr),
-//      bclosefile(false),
       bcloseing(false)
 {
     qwfather = (DWidget *)parent;
