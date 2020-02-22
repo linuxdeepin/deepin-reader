@@ -25,7 +25,7 @@ public:
     //Annotation
     QString addAnnotation(const QColor &color);
     QString addAnnotation(const QColor &color, const QRect &rect);
-    QString removeAnnotation(const QPoint &pos);
+    QString removeAnnotation(const QPoint &pos,AnnoteType_Em type);
     void removeAnnotation(const QString &struuid);
     bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
     bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);

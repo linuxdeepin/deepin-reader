@@ -97,7 +97,8 @@ void AnnotationHelper::__DeletePageIconAnnotation(const QString &msgContent)
             QString sUuid = sList.at(0);
             QString sPage = sList.at(1);
 
-            bool rl = _proxy->removeIconAnnotation(sUuid, sPage.toInt());
+            bool rl=false ;
+            _proxy->removeAnnotation(sUuid, sPage.toInt());
             if (rl) {
                 DataManager::instance()->setBIsUpdate(true);
 

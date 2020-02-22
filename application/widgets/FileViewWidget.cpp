@@ -212,7 +212,7 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
     //  右键鼠标点 是否有高亮区域
     QString sAnnotationText = "", struuid = "";
     bool bIsHighLight = _proxy->annotationClicked(pRightClickPoint, sAnnotationText, struuid);
-
+    bool bicon=_proxy->iconAnnotationClicked(pRightClickPoint,sAnnotationText,struuid);
     int nPage = _proxy->pointInWhichPage(pRightClickPoint);
     if (sSelectText != "" || bIsHighLight) {  //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项

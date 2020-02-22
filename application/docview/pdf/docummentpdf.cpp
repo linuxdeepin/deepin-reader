@@ -197,14 +197,14 @@ void DocummentPDF::removeAllAnnotation()
     scaleAndShow(d->m_scale, d->m_rotate);
 }
 
-QString DocummentPDF::removeAnnotation(const QPoint &startpos)
+QString DocummentPDF::removeAnnotation(const QPoint &startpos, AnnoteType_Em type)
 {
     Q_D(DocummentPDF);
     QPoint pt = startpos;
     int page = pointInWhichPage(pt);
     qDebug() << "removeAnnotation start";
     if (page < 0) return "";
-    QString uuid = static_cast<PagePdf *>(d->m_pages.at(page))->removeAnnotation(pt);
+    QString uuid = static_cast<PagePdf *>(d->m_pages.at(page))->removeAnnotation(pt,type);
     qDebug() << "removeAnnotation end";
     return uuid;
 }

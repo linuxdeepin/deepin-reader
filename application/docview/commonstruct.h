@@ -41,6 +41,12 @@ enum TextAnnoteType_Em {
     TextAnnoteType_Paragraph,
 };
 
+//note type
+enum AnnoteType_Em{
+    Annote_Highlight=0,
+    Annote_Text,
+};
+
 typedef struct SEARCH_RESULT {
     unsigned int ipage;
     QList<QString> listtext;

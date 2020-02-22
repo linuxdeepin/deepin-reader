@@ -33,7 +33,7 @@ public:
     int currentPageNo();
     bool pageJump(int pagenum);
     void docBasicInfo(stFileInfo &info);
-    QString removeAnnotation(const QPoint &startpos);
+    QString removeAnnotation(const QPoint &startpos,AnnoteType_Em type=Annote_Highlight);
     void removeAnnotation(const QString &struuid, int ipage = -1);
     bool pageMove(double mvx, double mvy);
     void title(QString &title);
@@ -65,12 +65,8 @@ public:
     //icon annotation
     QString addIconAnnotation(const QPoint &pos, const QColor &color = Qt::yellow, TextAnnoteType_Em type = TextAnnoteType_Note);
     bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
-
-    void moveIconAnnotation(const QString &uuid, const QPoint &pos);
-
     bool  mouseovericonAnnotation(const QPoint &pos);
-    bool removeIconAnnotation(const QString &uuid, int ipage = -1);
-    void setIconAnnottationText(int ipage, const QString &struuid, const QString &strtext);
+    void moveIconAnnotation(const QString &uuid, const QPoint &pos);
 
     QString pagenum2label(int index);
     int label2pagenum(QString label);

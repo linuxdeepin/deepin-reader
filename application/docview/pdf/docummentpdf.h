@@ -18,7 +18,7 @@ public:
     bool save(const QString &filePath, bool withChanges) override;
     bool saveas(const QString &filePath, bool withChanges) override;
     void removeAllAnnotation();
-    QString removeAnnotation(const QPoint &startpos) override;
+    QString removeAnnotation(const QPoint &startpos,AnnoteType_Em type) override;
     void removeAnnotation(const QString &struuid, int ipage = -1) override;
     QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow) override;
     void getAllAnnotation(QList<stHighlightContent> &listres) override;

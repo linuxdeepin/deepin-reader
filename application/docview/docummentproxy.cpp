@@ -212,29 +212,16 @@ bool DocummentProxy::iconAnnotationClicked(const QPoint &pos, QString &strtext, 
 {
     if (!m_documment || bcloseing)
         return false;
-    return false;//m_documment->iconAnnotationClicked(pos, strtext, struuid);
+    return m_documment->iconAnnotationClicked(pos, strtext, struuid);
 }
 
 bool DocummentProxy::mouseovericonAnnotation(const QPoint &pos)
 {
+    return  false;
     if (!m_documment || bcloseing)
         return false;
     QString strtext, struuid;
-    return false;// m_documment->iconAnnotationClicked(pos, strtext, struuid);
-}
-
-bool DocummentProxy::removeIconAnnotation(const QString &uuid, int ipage)
-{
-    if (!m_documment || bcloseing)
-        return  false;
-    return false;// m_documment->removeIconAnnotation(uuid, ipage);
-}
-
-void DocummentProxy::setIconAnnottationText(int ipage, const QString &struuid, const QString &strtext)
-{
-    if (!m_documment || bcloseing)
-        return;
-    // m_documment->setIconAnnottationText(ipage, struuid, strtext);
+    return m_documment->iconAnnotationClicked(pos, strtext, struuid);
 }
 
 QString DocummentProxy::pagenum2label(int index)
@@ -322,13 +309,12 @@ void DocummentProxy::docBasicInfo(stFileInfo &info)
     m_documment->docBasicInfo(info);
 }
 
-QString DocummentProxy::removeAnnotation(const QPoint &startpos)
+QString DocummentProxy::removeAnnotation(const QPoint &startpos, AnnoteType_Em type)
 {
-    qDebug() << "DocummentProxy::removeAnnotation";
     if (!m_documment || bcloseing)
         return "";
-    // qDebug() << "removeAnnotation";
-    QString uuid = m_documment->removeAnnotation(startpos);
+
+    QString uuid = m_documment->removeAnnotation(startpos,type);
     return uuid;
 }
 
@@ -336,9 +322,7 @@ void DocummentProxy::removeAnnotation(const QString &struuid, int ipage)
 {
     if (!m_documment || bcloseing)
         return ;
-    qDebug() << "removeAnnotation ========start";
     m_documment->removeAnnotation(struuid, ipage);
-    qDebug() << "removeAnnotation ========end";
 }
 
 void DocummentProxy::slot_pageChange(int pageno)
