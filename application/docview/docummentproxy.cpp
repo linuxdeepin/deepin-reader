@@ -6,42 +6,37 @@
 #include <QDebug>
 #include <QMutex>
 static QMutex mutexlockgetimage;
-DocummentProxy *DocummentProxy::s_pDocProxy = nullptr;
-QObject *DocummentProxy::m_curobj = nullptr;
-QMap<QObject *, stCurDocProxy> DocummentProxy::m_proxymap;
+QMap<QString, stCurDocProxy> DocummentProxy::m_proxymap;
+QString DocummentProxy::struuid;
+
 DocummentProxy::DocummentProxy(QObject *parent)
     : QObject(parent),
       m_path(""),
       m_documment(nullptr),
       bcloseing(false)
 {
-    qwfather = (DWidget *)parent;
+
 }
 
-bool DocummentProxy::CreateInstance(QObject *parent)
+QString DocummentProxy::CreateInstance(QObject *parent)
 {
-    bool bsucess = false;
+    QString uuid;
     if (parent) {
+        uuid=struuid=PublicFunc::getUuid();
         stCurDocProxy st;
         st.pwgt = (DWidget *)parent;
-        m_proxymap.insert(parent, st);
-        m_curobj = parent;
+        st.proxy=new DocummentProxy(parent);
+        m_proxymap.insert(struuid, st);
     }
-    return  bsucess;
+    return  uuid;
 }
 
-DocummentProxy *DocummentProxy::instance(QObject *parent)
+DocummentProxy *DocummentProxy::instance(QObject *)
 {
-    if (nullptr == parent && nullptr == s_pDocProxy) {
+    if (m_proxymap.size() <= 0)
         return nullptr;
-    }
-    if (nullptr != parent && nullptr == s_pDocProxy) {
-        s_pDocProxy = new DocummentProxy(parent);
-    }
-//    return  s_pDocProxy;
-//    if (m_proxymap.size() <= 0)
-//        return nullptr;
-//    return  m_proxymap.take(m_curobj).proxy;
+    auto it=m_proxymap.find(struuid);
+    return  it!=m_proxymap.end()?it.value().proxy:nullptr;
 }
 
 bool DocummentProxy::openFile(DocType_EM type, QString filepath, unsigned int ipage, RotateType_EM rotatetype, double scale, ViewMode_EM viewmode)
@@ -55,9 +50,9 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath, unsigned int ip
         delete m_documment;
         m_documment = nullptr;
     }
-
-    m_documment = DocummentFactory::creatDocumment(type, qwfather);
-    if (m_documment) {
+    auto it=m_proxymap.find(struuid);
+    m_documment = DocummentFactory::creatDocumment(type, it.value().pwgt);
+    if (m_documment) { 
         connect(m_documment, SIGNAL(signal_pageChange(int)), this, SLOT(slot_pageChange(int)));
         connect(this, SIGNAL(signal_pageJump(int)), m_documment, SLOT(pageJump(int)));
         connect(m_documment, SIGNAL(signal_searchRes(stSearchRes)), this, SIGNAL(signal_searchRes(stSearchRes)));
@@ -77,7 +72,6 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath, unsigned int ip
     }
     bcloseing = false;
     return bre;
-//    return startOpenFile();
 }
 
 bool DocummentProxy::setSelectTextStyle(QColor paintercolor, QColor pencolor, int penwidth)
@@ -330,6 +324,21 @@ void DocummentProxy::removeAnnotation(const QString &struuid, int ipage)
 void DocummentProxy::slot_pageChange(int pageno)
 {
     emit signal_pageChange(pageno);
+}
+
+void DocummentProxy::slot_changetab(const QString &uuid)
+{
+   auto it=m_proxymap.find(uuid);
+   if(it!=m_proxymap.end())
+   {
+       struuid=uuid;
+   }
+}
+
+void DocummentProxy::slot_closetab(const QString &uuid)
+{
+    m_proxymap.remove(uuid);
+    closeFileAndWaitThreadClearEnd();
 }
 
 bool DocummentProxy::pageMove(double mvx, double mvy)

@@ -1760,14 +1760,12 @@ void DocummentBase::stopLoadPageThread()
     for (int i = 0; i < d->m_pages.size(); i++) {
         d->m_pages.at(i)->stopThread();
     }
+
     if (d->threadloaddata.isRunning()) {
         d->threadloaddata.requestInterruption();
         d->threadloaddata.wait();
     }
-//    if (d->threadloaddoc.isRunning()) {
-//        d->threadloaddoc.requestInterruption();
-//        d->threadloaddoc.wait();
-//    }
+
     d->m_searchTask->wait();
     for (int i = 0; i < d->m_pages.size(); i++) {
         d->m_pages.at(i)->waitThread();
@@ -1830,7 +1828,7 @@ bool DocummentBase::loadData()
     QTime loadtime;
     loadtime.start();
     bool bfirst = true;
-    for (int i = 0; i < d->m_pages.size(); i++) {
+    for (int i = 0; i < d->m_pages.size(); i++) {      
         if (QThread::currentThread()->isInterruptionRequested()) {
             break;
         }

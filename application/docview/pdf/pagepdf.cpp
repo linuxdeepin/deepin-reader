@@ -5,7 +5,6 @@
 
 class PagePdfPrivate: public PageBasePrivate, public  PageInterface
 {
-//    Q_OBJECT
 public:
     PagePdfPrivate(PagePdf *parent): PageBasePrivate(parent)
     {

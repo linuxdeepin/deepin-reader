@@ -106,7 +106,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             }
         } else {
             notifyMsg(MSG_CLOSE_FILE);
-
+            hide();
             DocummentProxy *_proxy = DocummentProxy::instance();
             if (_proxy) {
                 _proxy->closeFile();
@@ -119,7 +119,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
     AppSetting::instance()->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
     AppSetting::instance()->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
-    hide();
+
     DMainWindow::closeEvent(event);
 }
 

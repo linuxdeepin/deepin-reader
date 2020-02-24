@@ -824,10 +824,6 @@ void PageBase::stopThread()
 void PageBase::waitThread()
 {
     Q_D(PageBase);
-//    if (d->threadreander.isRunning()) {
-//        //        threadreander.quit();
-//        d->threadreander.wait();
-//    }
     if (d->loadmagnifiercachethread.isRunning()) {
         //        loadmagnifiercachethread.quit();
         d->loadmagnifiercachethread.wait();
