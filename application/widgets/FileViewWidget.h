@@ -51,10 +51,10 @@ class FileViewWidget : public CustomWidget
 public:
     explicit FileViewWidget(CustomWidget *parent = nullptr);
     ~FileViewWidget() Q_DECL_OVERRIDE;
+    int         m_nCurrentHandelState = Default_State;  //  当前鼠标状态
 
 signals:
     void sigShowPlayCtrl(bool bshow);
-
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
@@ -70,6 +70,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
+
 
 private slots:
     void slotDealWithData(const int &, const QString &);
@@ -100,7 +101,7 @@ private:
     TextOperationMenu       *m_operatemenu = nullptr;
     DocummentFileHelper     *m_pDocummentFileHelper = nullptr;
 
-    int         m_nCurrentHandelState = Default_State;  //  当前鼠标状态
+
     int         m_nAdapteState = NO_ADAPTE_State;       //  当前自适应状态
     QPoint      m_pStartPoint;
     QPoint      m_pEndSelectPoint;

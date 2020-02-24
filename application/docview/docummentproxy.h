@@ -4,11 +4,26 @@
 #include "commonstruct.h"
 #include <QObject>
 #include <DWidget>
+class DocummentProxy;
+typedef   struct   STCURDOCUMENTPROXY {
+    DWidget *pwgt;
+    DocummentProxy *proxy;
+    DocummentBase *pdocumment;
+    QString path;
+    STCURDOCUMENTPROXY()
+    {
+        pwgt = nullptr;
+        proxy = nullptr;
+        pdocumment = nullptr;
+    }
+
+} stCurDocProxy;
 
 class DocummentProxy: public QObject
 {
     Q_OBJECT
 public:
+    static bool CreateInstance(QObject *parent = nullptr);
     static DocummentProxy *instance(QObject *parent = nullptr);
     bool openFile(DocType_EM type, QString filepath, unsigned int ipage = 0, RotateType_EM rotatetype = RotateType_0, double scale = 1.0, ViewMode_EM viewmode = ViewMode_SinglePage);
     bool closeFile();
@@ -33,7 +48,7 @@ public:
     int currentPageNo();
     bool pageJump(int pagenum);
     void docBasicInfo(stFileInfo &info);
-    QString removeAnnotation(const QPoint &startpos,AnnoteType_Em type=Annote_Highlight);
+    QString removeAnnotation(const QPoint &startpos, AnnoteType_Em type = Annote_Highlight);
     void removeAnnotation(const QString &struuid, int ipage = -1);
     bool pageMove(double mvx, double mvy);
     void title(QString &title);
@@ -85,26 +100,23 @@ signals:
     void signal_autoplaytoend();
 private slots:
     void slot_pageChange(int);
-//    bool startOpenFile();
+    //void slot_curindexChange();
+    //void slot_closetab();
 
 private:
     DocummentProxy(QObject *parent = nullptr);
     ~DocummentProxy()
     {
-        qDebug() << "----~DocummentProxy-------";
         closeFileAndWaitThreadClearEnd();
-//        if (threadwaitloadwordsend.isRunning()) {
-//            threadwaitloadwordsend.wait();
-//        }
     }
     DWidget *qwfather;
-    DocType_EM m_type;
     QString m_path;
     DocummentBase *m_documment;
-//    ThreadWaitLoadWordsEnd threadwaitloadwordsend;
-//    bool bclosefile;
     bool bcloseing;
     static  DocummentProxy *s_pDocProxy;
+    static QObject *m_curobj;
+
+    static QMap<QObject *, stCurDocProxy> m_proxymap;
 };
 
 #endif // DOCUMMENTPROXY_H

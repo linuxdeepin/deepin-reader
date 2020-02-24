@@ -7,15 +7,27 @@
 #include <QMutex>
 static QMutex mutexlockgetimage;
 DocummentProxy *DocummentProxy::s_pDocProxy = nullptr;
-
+QObject *DocummentProxy::m_curobj = nullptr;
+QMap<QObject *, stCurDocProxy> DocummentProxy::m_proxymap;
 DocummentProxy::DocummentProxy(QObject *parent)
     : QObject(parent),
-      m_type(DocType_NULL),
       m_path(""),
       m_documment(nullptr),
       bcloseing(false)
 {
     qwfather = (DWidget *)parent;
+}
+
+bool DocummentProxy::CreateInstance(QObject *parent)
+{
+    bool bsucess = false;
+    if (parent) {
+        stCurDocProxy st;
+        st.pwgt = (DWidget *)parent;
+        m_proxymap.insert(parent, st);
+        m_curobj = parent;
+    }
+    return  bsucess;
 }
 
 DocummentProxy *DocummentProxy::instance(QObject *parent)
@@ -26,35 +38,25 @@ DocummentProxy *DocummentProxy::instance(QObject *parent)
     if (nullptr != parent && nullptr == s_pDocProxy) {
         s_pDocProxy = new DocummentProxy(parent);
     }
-    return  s_pDocProxy;
+//    return  s_pDocProxy;
+//    if (m_proxymap.size() <= 0)
+//        return nullptr;
+//    return  m_proxymap.take(m_curobj).proxy;
 }
 
 bool DocummentProxy::openFile(DocType_EM type, QString filepath, unsigned int ipage, RotateType_EM rotatetype, double scale, ViewMode_EM viewmode)
 {
     QMutexLocker locker(&mutexlockgetimage);
     bool bre = false;
-    m_type = type;
     m_path = filepath;
     if (nullptr != m_documment) {
         bcloseing = true;
-//        bclosefile = false;
         m_documment->stopLoadPageThread();
         delete m_documment;
         m_documment = nullptr;
-//        if (m_documment->isWordsBeLoad()) {
-//            qDebug() << "threadwaitloadwordsend true";
-//            bclosefile = false;
-//            if (!threadwaitloadwordsend.isRunning()) {
-//                threadwaitloadwordsend.setDoc(m_documment);
-//                threadwaitloadwordsend.start();
-//            }
-//            return true;
-//        }
     }
-//    if (bclosefile) {
-//        return false;
-//    }
-    m_documment = DocummentFactory::creatDocumment(m_type, qwfather);
+
+    m_documment = DocummentFactory::creatDocumment(type, qwfather);
     if (m_documment) {
         connect(m_documment, SIGNAL(signal_pageChange(int)), this, SLOT(slot_pageChange(int)));
         connect(this, SIGNAL(signal_pageJump(int)), m_documment, SLOT(pageJump(int)));
@@ -314,7 +316,7 @@ QString DocummentProxy::removeAnnotation(const QPoint &startpos, AnnoteType_Em t
     if (!m_documment || bcloseing)
         return "";
 
-    QString uuid = m_documment->removeAnnotation(startpos,type);
+    QString uuid = m_documment->removeAnnotation(startpos, type);
     return uuid;
 }
 
@@ -490,16 +492,9 @@ void DocummentProxy::closeFileAndWaitThreadClearEnd()
     QMutexLocker locker(&mutexlockgetimage);
     if (!m_documment)
         return;
-//    bclosefile = true;
-//    disconnect(&threadwaitloadwordsend, SIGNAL(startOpenFile()), this, SLOT(startOpenFile()));
-//    if (threadwaitloadwordsend.isRunning()) {
-//        threadwaitloadwordsend.wait();
-//    }
+
     bcloseing = true;
     m_documment->stopLoadPageThread();
-//    while (m_documment->isWordsBeLoad()) {
-//        QThread::msleep(30);
-//    }
     if (nullptr != m_documment) {
         delete m_documment;
         m_documment = nullptr;

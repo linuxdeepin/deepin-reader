@@ -1412,7 +1412,7 @@ bool DocummentBase::loadPages()
 //        lastpagenum = d->m_currentpageno + (icount - 1) * 2 + 1;
 //    }
     }
-    qDebug() << "DocummentBase::loadPages" << d->m_pages.at(d->m_currentpageno)->rect() << viewport()->rect() << d->m_currentpageno << curheight << icount << firstpagenum << lastpagenum;
+    // qDebug() << "DocummentBase::loadPages" << d->m_pages.at(d->m_currentpageno)->rect() << viewport()->rect() << d->m_currentpageno << curheight << icount << firstpagenum << lastpagenum;
     for (int i = firstpagenum; i <= lastpagenum ; i++) {
         if (i >= 0 && i < d->m_pages.size())
             d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);

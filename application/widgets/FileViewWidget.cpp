@@ -62,6 +62,7 @@ FileViewWidget::~FileViewWidget()
 void FileViewWidget::initWidget()
 {
     //  实际文档类  唯一实例化设置 父窗口
+    DocummentProxy::CreateInstance(this);
     auto m_pDocummentProxy = DocummentProxy::instance(this);
     if (m_pDocummentProxy) {
         connect(m_pDocummentProxy, SIGNAL(signal_bookMarkStateChange(int, bool)), SLOT(slotBookMarkStateChange(int, bool)));
@@ -212,7 +213,7 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
     //  右键鼠标点 是否有高亮区域
     QString sAnnotationText = "", struuid = "";
     bool bIsHighLight = _proxy->annotationClicked(pRightClickPoint, sAnnotationText, struuid);
-    bool bicon=_proxy->iconAnnotationClicked(pRightClickPoint,sAnnotationText,struuid);
+    bool bicon = _proxy->iconAnnotationClicked(pRightClickPoint, sAnnotationText, struuid);
     int nPage = _proxy->pointInWhichPage(pRightClickPoint);
     if (sSelectText != "" || bIsHighLight) {  //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项

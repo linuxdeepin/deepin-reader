@@ -203,7 +203,7 @@ void FVMMouseEvent::mousePressEvent(QMouseEvent *event, DWidget *widget)
         if (DataManager::instance()->CurShowState() == FILE_SLIDE)
             return;
 
-        QPoint globalPos = event->globalPos();        
+        QPoint globalPos = event->globalPos();
         //  当前状态是 手, 先 拖动, 之后 在是否是链接之类
         if (fvw->m_nCurrentHandelState == NOTE_ADD_State) {
             __AddIconAnnotation(fvw, globalPos);
@@ -237,8 +237,8 @@ void FVMMouseEvent::__AddIconAnnotation(FileViewWidget *fvw, const QPoint &globa
                                  QString::number(nClickPage) + Constant::sQStringSep +
                                  QString::number(globalPos.x()) + Constant::sQStringSep +
                                  QString::number(globalPos.y());
-
-           // fvw->notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, strContent);
+            fvw->m_nCurrentHandelState = Default_State;
+            // fvw->notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, strContent);
         } else {
             qWarning() << __FUNCTION__ << "          " << sUuid;;
         }
