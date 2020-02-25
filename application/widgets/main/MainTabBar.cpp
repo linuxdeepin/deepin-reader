@@ -26,7 +26,7 @@
 #include <QUrl>
 
 #include "business/SaveDialog.h"
-#include "controller/DataManager.h"
+#include "controller/FileDataManager.h"
 
 MainTabBar::MainTabBar(DWidget *parent)
     : DTabBar(parent)

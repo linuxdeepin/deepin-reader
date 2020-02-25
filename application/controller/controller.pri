@@ -1,9 +1,9 @@
 HEADERS += \
-    $$PWD/DataManager.h \
     $$PWD/AppSetting.h \
-    $$PWD/AppInfo.h
+    $$PWD/AppInfo.h \
+    $$PWD/FileDataManager.h
 
 SOURCES += \
-    $$PWD/DataManager.cpp \
     $$PWD/AppSetting.cpp \
-    $$PWD/AppInfo.cpp
+    $$PWD/AppInfo.cpp \
+    $$PWD/FileDataManager.cpp

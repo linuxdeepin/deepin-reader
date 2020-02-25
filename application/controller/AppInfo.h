@@ -21,7 +21,24 @@
 
 #include <QObject>
 #include <QColor>
+#include <QPoint>
+#include <QRect>
 #include <QKeySequence>
+#include <QSize>
+
+//  文档显示状态
+enum File_Show_Enum {
+    FILE_NORMAL,        //  正常显示
+    FILE_FULLSCREEN,    //  全屏
+    FILE_SLIDE,         //  幻灯片
+};
+
+
+enum ICON_RADIUS {
+    ICON_SMALL = 8,     // 小图标圆角
+    ICON_BIG = 10       // 大图标圆角
+};
+
 
 class AppInfo : public QObject
 {
@@ -44,12 +61,26 @@ public:
     QString qGetCurrentTheme() const;
     void qSetCurrentTheme(const QString &strCurrentTheme);
 
+    int qGetCurShowState() const;
+    void qSetCurShowState(const int &nState);
+
+    void mousePressLocal(bool &highLight, QPoint &point);
+
+    void setMousePressLocal(const bool &highLight, const QPoint &point);
+
+    void setScreenRect(const QRect &rect);
+    void setSmallNoteWidgetSize(const QSize &size);
 
 private:
     QList<QKeySequence>     m_pKeyList;                 //  快捷键对应
     QList<QColor>           m_listColor;                //  color list
     QColor                  m_selectColor;              // 高亮颜色
-    QString m_strCurrentTheme = "";     //  当前主题
+    QString m_strCurrentTheme = "";                     //  当前主题
+    int     m_nCurShowState = FILE_NORMAL;              //  文档当前显示状态
+    bool m_bIsHighLight = false;                        // 鼠标左键点击位置有没有高亮
+    QPoint m_point;                                     // 鼠标左键点击位置
+    QRect m_screenRect;                                 // 屏幕的分辨率
+    QSize m_smallNoteSize;                              // 注释小窗体的大小
 
 };
 

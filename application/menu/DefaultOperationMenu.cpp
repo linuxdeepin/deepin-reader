@@ -5,7 +5,7 @@
 
 #include "docview/docummentproxy.h"
 
-#include "controller/DataManager.h"
+#include "controller/AppInfo.h"
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     : CustomMenu("DefaultOperationMenu", parent)
@@ -52,7 +52,7 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
     }
 
     //  当前显示状态状态
-    int nState = DataManager::instance()->CurShowState();
+    int nState = dApp->m_pAppInfo->qGetCurShowState();
     if (nState == FILE_FULLSCREEN) {
         m_pExitFullScreen->setVisible(true);
         m_pSearch->setVisible(false);

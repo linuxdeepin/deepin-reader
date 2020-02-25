@@ -3,7 +3,7 @@
 #include <QDir>
 #include <QDebug>
 
-#include "DataManager.h"
+//#include "DataManager.h"
 
 #include "utils/utils.h"
 

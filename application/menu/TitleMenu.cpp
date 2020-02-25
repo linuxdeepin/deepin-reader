@@ -20,8 +20,6 @@
 
 #include <QSignalMapper>
 
-#include "controller/DataManager.h"
-
 TitleMenu::TitleMenu(DWidget *parent)
     : CustomMenu("TitleMenu", parent)
 {
@@ -87,17 +85,6 @@ QAction *TitleMenu::__CreateAction(const QString &actionName, const QString &obj
     return action;
 }
 
-//void TitleMenu::__OpenFolder()
-//{
-//    QString strFilePath = DataManager::instance()->strOnlyFilePath();
-//    if (strFilePath != "") {
-//        int nLastPos = strFilePath.lastIndexOf('/');
-//        strFilePath = strFilePath.mid(0, nLastPos);
-//        strFilePath = QString("file://") + strFilePath;
-//        QDesktopServices::openUrl(QUrl(strFilePath));
-//    }
-//}
-
 void TitleMenu::slotActionTrigger(const QString &sAction)
 {
     if (sAction == "New window") {
@@ -119,13 +106,4 @@ void TitleMenu::slotActionTrigger(const QString &sAction)
     } else if (sAction == "Slide show") {
         notifyMsg(MSG_OPERATION_SLIDE);
     }
-//    else if (sAction == "Search") {
-//        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_f);
-//    } else if (sAction == "Fullscreen") {
-//        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_f11);
-//    }  else if (sAction == "Zoom in") {
-//        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_larger);
-//    } else if (sAction == "Zoom out") {
-//        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_smaller);
-//    }
 }

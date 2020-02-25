@@ -5,7 +5,7 @@
 
 #include "ColorWidgetAction.h"
 
-#include "controller/DataManager.h"
+#include "controller/AppInfo.h"
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)
     : CustomMenu("TextOperationMenu", parent)
@@ -40,7 +40,7 @@ void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, con
     m_pColorWidgetAction->setBtnAddLightState(bHigh);
 
     //  当前显示状态状态
-    int nState = DataManager::instance()->CurShowState();
+    int nState = dApp->m_pAppInfo->qGetCurShowState();
     if (nState == FILE_FULLSCREEN) {
         m_pExitFullScreen->setVisible(true);
     } else {

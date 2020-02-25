@@ -24,8 +24,6 @@
 #include <QTextLayout>
 #include <QVBoxLayout>
 
-#include "controller/DataManager.h"
-
 NotesItemWidget::NotesItemWidget(DWidget *parent)
     : CustomItemWidget(QString("NotesItemWidget"), parent)
 {

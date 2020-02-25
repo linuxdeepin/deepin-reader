@@ -26,9 +26,9 @@
 #include "business/DocummentFileHelper.h"
 #include "business/AnnotationHelper.h"
 #include "docview/docummentproxy.h"
-#include "controller/DataManager.h"
 #include "controller/AppSetting.h"
 #include "controller/FVMMouseEvent.h"
+#include "controller/FileDataManager.h"
 #include "menu/DefaultOperationMenu.h"
 #include "menu/TextOperationMenu.h"
 #include "utils/PublicFunction.h"
@@ -179,7 +179,7 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         return;
 
     //  处于幻灯片模式下
-    if (DataManager::instance()->CurShowState() == FILE_SLIDE)
+    if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE)
         return;
 
     //  放大镜状态， 直接返回
@@ -211,7 +211,7 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         m_operatemenu->setPEndPoint(m_pEndSelectPoint);
         m_operatemenu->setClickPage(nPage);
 
-        DataManager::instance()->setMousePressLocal(bIsHighLight, tempPoint);
+        dApp->m_pAppInfo->setMousePressLocal(bIsHighLight, tempPoint);
 
         m_operatemenu->execMenu(tempPoint, bIsHighLight, sSelectText, struuid);
     } else if (bicon) {
@@ -223,7 +223,7 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         m_operatemenu->setPEndPoint(m_pEndSelectPoint);
         m_operatemenu->setClickPage(nPage);
 
-        DataManager::instance()->setMousePressLocal(bIsHighLight, tempPoint);
+        dApp->m_pAppInfo->setMousePressLocal(bIsHighLight, tempPoint);
         m_operatemenu->execMenu(tempPoint, bicon, sSelectText, struuid);
     } else {  //  否则弹出 文档操作菜单
         auto menu = new DefaultOperationMenu(this);
@@ -278,7 +278,7 @@ void FileViewWidget::onSetHandShape(const QString &data)
 void FileViewWidget::onFileAddAnnotation()
 {
     //  处于幻灯片模式下
-    if (DataManager::instance()->CurShowState() == FILE_SLIDE)
+    if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE)
         return;
 
     //  放大镜状态， 直接返回
@@ -355,7 +355,7 @@ void FileViewWidget::onFileAddNote()
         return;
 
     //  处于幻灯片模式下
-    if (DataManager::instance()->CurShowState() == FILE_SLIDE)
+    if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE)
         return;
 
     //  放大镜状态， 直接返回
@@ -401,7 +401,7 @@ void FileViewWidget::slotBookMarkStateChange(int nPage, bool bState)
     } else {
         sendMsg(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(nPage));
     }
-    DataManager::instance()->setBIsUpdate(true);
+//    DataManager::instance()->setBIsUpdate(true);
 }
 
 //  文档页变化了

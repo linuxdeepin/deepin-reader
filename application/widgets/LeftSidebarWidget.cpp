@@ -6,7 +6,6 @@
 
 #include "MainOperationWidget.h"
 
-#include "controller/DataManager.h"
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
 

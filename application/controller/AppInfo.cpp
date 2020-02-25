@@ -107,3 +107,57 @@ void AppInfo::qSetCurrentTheme(const QString &strCurrentTheme)
 {
     m_strCurrentTheme = strCurrentTheme;
 }
+
+int AppInfo::qGetCurShowState() const
+{
+    return  m_nCurShowState;
+}
+
+void AppInfo::qSetCurShowState(const int &nState)
+{
+    m_nCurShowState = nState;
+}
+
+void AppInfo::mousePressLocal(bool &highLight, QPoint &point)
+{
+    highLight = m_bIsHighLight;
+    point = m_point;
+}
+
+void AppInfo::setMousePressLocal(const bool &highLight, const QPoint &point)
+{
+    m_bIsHighLight = highLight;
+
+    QPoint t_point;
+    int t_w = point.x();
+    int t_h = point.y();
+
+    int screenW =  m_screenRect.width();
+    int screenH =  m_screenRect.height();
+
+    int noteWidgetW = m_smallNoteSize.width();
+    int noteWidgetH = m_smallNoteSize.height();
+
+    if (t_h + noteWidgetH > screenH) {
+        t_h = screenH - noteWidgetH;
+    }
+
+    if (t_w + noteWidgetW > screenW) {
+        t_w -= noteWidgetW;
+    }
+
+    t_point.setX(t_w);
+    t_point.setY(t_h);
+
+    m_point = t_point;
+}
+
+void AppInfo::setScreenRect(const QRect &rect)
+{
+    m_screenRect = rect;
+}
+
+void AppInfo::setSmallNoteWidgetSize(const QSize &size)
+{
+    m_smallNoteSize = size;
+}

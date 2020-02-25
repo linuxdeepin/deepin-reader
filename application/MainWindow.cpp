@@ -7,13 +7,12 @@
 #include <QDebug>
 #include <DGuiApplicationHelper>
 
-
 #include "business/ShortCutShow.h"
 #include "business/SaveDialog.h"
 #include "business/DocummentFileHelper.h"
 #include "controller/AppInfo.h"
-#include "controller/DataManager.h"
 #include "controller/AppSetting.h"
+#include "controller/FileDataManager.h"
 #include "docview/docummentproxy.h"
 #include "menu/TitleMenu.h"
 #include "widgets/TitleWidget.h"
@@ -63,7 +62,7 @@ void MainWindow::openfile(const QString &filepath)
 
 void MainWindow::setSreenRect(const QRect &rect)
 {
-    DataManager::instance()->setScreenRect(rect);
+    dApp->m_pAppInfo->setScreenRect(rect);
 }
 
 //  临时 添加 焦点
@@ -125,7 +124,7 @@ void MainWindow::initConnections()
 void MainWindow::SlotSlideShow()
 {
     //  已经是幻灯片了
-    if (FILE_SLIDE == DataManager::instance()->CurShowState()) {
+    if (FILE_SLIDE == dApp->m_pAppInfo->qGetCurShowState()) {
         return;
     }
     slotAppShowState(0);
@@ -174,10 +173,10 @@ void MainWindow::onAppExit()
 //  全屏
 void MainWindow::slotFullScreen()
 {
-    int nCurState = DataManager::instance()->CurShowState();
+    int nCurState = dApp->m_pAppInfo->qGetCurShowState();
     if (nCurState != FILE_FULLSCREEN) {
         slotAppShowState(0);
-        DataManager::instance()->setCurShowState(FILE_FULLSCREEN);  //  全屏状态
+        dApp->m_pAppInfo->qSetCurShowState(FILE_FULLSCREEN);  //  全屏状态
     }
 }
 
@@ -192,7 +191,7 @@ void MainWindow::slotAppShowState(const int &nState)
 
     if (nState == 1) {
         if (windowState() == Qt::WindowFullScreen) {
-            DataManager::instance()->setCurShowState(FILE_NORMAL);  //  正常状态
+            dApp->m_pAppInfo->qSetCurShowState(FILE_NORMAL);  //  正常状态
 
             showNormal();
 
@@ -305,8 +304,8 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         emit sigOpenFileOk(msgContent);
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (msgContent == KeyStr::g_f11 && DataManager::instance()->CurShowState() != FILE_SLIDE) {
-            if (DataManager::instance()->CurShowState() == FILE_FULLSCREEN)
+        if (msgContent == KeyStr::g_f11 && dApp->m_pAppInfo->qGetCurShowState() != FILE_SLIDE) {
+            if (dApp->m_pAppInfo->qGetCurShowState() == FILE_FULLSCREEN)
                 emit sigAppShowState(1);
             else {
                 emit sigFullScreen();
@@ -314,7 +313,7 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
         } else if (msgContent == KeyStr::g_esc) {        //  退出全屏模式
             emit sigAppShowState(1);
         } else if (msgContent == KeyStr::g_space) {
-            if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
+            if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE) {
                 emit sigSpacePressed();
             }
         }

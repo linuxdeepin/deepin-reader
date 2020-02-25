@@ -9,7 +9,6 @@
 #include "FileAttrWidget.h"
 #include "PlayControlWidget.h"
 
-#include "controller/DataManager.h"
 #include "docview/docummentproxy.h"
 #include "utils/PublicFunction.h"
 
@@ -38,7 +37,7 @@ DocShowShellWidget::~DocShowShellWidget()
 
 void DocShowShellWidget::resizeEvent(QResizeEvent *event)
 {
-    int nState = DataManager::instance()->CurShowState();
+    int nState = dApp->m_pAppInfo->qGetCurShowState();
     if (nState == FILE_NORMAL || nState == FILE_FULLSCREEN) {
         auto findWidget = this->findChild<FindWidget *>();
         if (findWidget && findWidget->isVisible()) {
@@ -145,8 +144,8 @@ void DocShowShellWidget::onOpenNoteWidget(const QString &msgContent)
 
         QPoint point;
         bool t_bHigh = false;
-        DataManager::instance()->setSmallNoteWidgetSize(pWidget->size());
-        DataManager::instance()->mousePressLocal(t_bHigh, point);
+        dApp->m_pAppInfo->setSmallNoteWidgetSize(pWidget->size());
+        dApp->m_pAppInfo->mousePressLocal(t_bHigh, point);
         pWidget->showWidget(point);
     }
 }
@@ -174,12 +173,12 @@ void DocShowShellWidget::onShowNoteWidget(const QString &contant)
         pWidget->setNotePage(t_page);
         pWidget->setEditText(sContant);
 //        pWidget->setPointAndPage("");
-        DataManager::instance()->setSmallNoteWidgetSize(pWidget->size());
+        dApp->m_pAppInfo->setSmallNoteWidgetSize(pWidget->size());
 
         bool t_bHigh = false;  // 点击位置是否是高亮
         QPoint point;          // = this->mapToGlobal(rrect.bottomRight());// 鼠标点击位置
 
-        DataManager::instance()->mousePressLocal(t_bHigh, point);
+        dApp->m_pAppInfo->mousePressLocal(t_bHigh, point);
         pWidget->showWidget(point);
     }
 }
@@ -281,13 +280,13 @@ void DocShowShellWidget::initConnections()
 //  集中处理 按键通知消息
 int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
 {
-    if (KeyStr::g_ctrl_f == msgContent && DataManager::instance()->CurShowState() != FILE_SLIDE) { //  搜索
+    if (KeyStr::g_ctrl_f == msgContent && dApp->m_pAppInfo->qGetCurShowState() != FILE_SLIDE) { //  搜索
         emit sigShowFileFind();
         return ConstantMsg::g_effective_res;
     }
 
-    if (KeyStr::g_f11 == msgContent && DataManager::instance()->CurShowState() != FILE_SLIDE) { //  全屏
-        if (DataManager::instance()->CurShowState() == FILE_FULLSCREEN)
+    if (KeyStr::g_f11 == msgContent && dApp->m_pAppInfo->qGetCurShowState() != FILE_SLIDE) { //  全屏
+        if (dApp->m_pAppInfo->qGetCurShowState() == FILE_FULLSCREEN)
             emit sigHideCloseBtn();
         else {
             emit sigShowCloseBtn(0);

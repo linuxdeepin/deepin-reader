@@ -28,8 +28,6 @@
 #include <QHBoxLayout>
 #include <QDesktopWidget>
 
-
-#include "controller/DataManager.h"
 #include "docview/docummentproxy.h"
 
 FindWidget::FindWidget(DWidget *parent)

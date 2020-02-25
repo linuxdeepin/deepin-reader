@@ -20,7 +20,7 @@
 
 #include "NotesItemWidget.h"
 
-#include "controller/DataManager.h"
+#include "controller/AppInfo.h"
 #include "docview/docummentproxy.h"
 
 NotesWidget::NotesWidget(DWidget *parent)
@@ -309,9 +309,7 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
 
 void NotesWidget::__JumpToPrevItem()
 {
-    if (m_pNotesList == nullptr ||
-            DataManager::instance()->bThumbnIsShow() == false ||
-            DataManager::instance()->CurShowState() != FILE_NORMAL) {
+    if (m_pNotesList == nullptr) {
         return;
     }
     if (m_pNotesList->count() <= 0) {
@@ -334,9 +332,7 @@ void NotesWidget::__JumpToPrevItem()
 
 void NotesWidget::__JumpToNextItem()
 {
-    if (m_pNotesList == nullptr ||
-            DataManager::instance()->bThumbnIsShow() == false ||
-            DataManager::instance()->CurShowState() != FILE_NORMAL) {
+    if (m_pNotesList == nullptr) {
         return;
     }
 

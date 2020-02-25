@@ -29,8 +29,9 @@
 #include "HomeWidget.h"
 #include "main/MainTabWidgetEx.h"
 
+#include "controller/AppInfo.h"
+#include "controller/FileDataManager.h"
 #include "utils/utils.h"
-#include "controller/DataManager.h"
 
 CentralWidget::CentralWidget(CustomWidget *parent)
     : CustomWidget("CentralWidget", parent)
@@ -52,7 +53,7 @@ CentralWidget::~CentralWidget()
 void CentralWidget::keyPressEvent(QKeyEvent *event)
 {
     //  不是正常显示, 则是全屏模式或者幻灯片模式, 进行页面跳转
-    if (DataManager::instance()->CurShowState() != FILE_NORMAL) {
+    if (dApp->m_pAppInfo->qGetCurShowState() != FILE_NORMAL) {
         QStringList pFilterList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown
                                   << KeyStr::g_down << KeyStr::g_up
                                   << KeyStr::g_left << KeyStr::g_right;

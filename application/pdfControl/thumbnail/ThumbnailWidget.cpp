@@ -20,7 +20,6 @@
 
 #include <QJsonObject>
 
-#include "controller/DataManager.h"
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
 

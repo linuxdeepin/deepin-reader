@@ -17,7 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ThumbnailItemWidget.h"
-#include "controller/DataManager.h"
+
+#include "controller/AppInfo.h"
 
 ThumbnailItemWidget::ThumbnailItemWidget(DWidget *parent)
     : CustomItemWidget("ThumbnailItemWidget", parent)

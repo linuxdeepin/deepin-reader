@@ -26,7 +26,7 @@ DWIDGET_USE_NAMESPACE
 
 #include "application.h"
 #include "FileData.h"
-#include "controller/DataManager.h"
+#include "controller/FileDataManager.h"
 
 SaveDialog::SaveDialog(QObject *parent)
     : QObject(parent)

@@ -26,7 +26,7 @@
 
 #include "FileFormatHelper.h"
 
-#include "controller/DataManager.h"
+#include "controller/FileDataManager.h"
 
 #include "docview/docummentproxy.h"
 #include "utils/PublicFunction.h"
@@ -185,7 +185,7 @@ void DocummentFileHelper::onSaveFile()
             qDebug() << "DocummentFileHelper::slotSaveFile saveBookMark";
             dApp->m_pDBService->qSaveData(sCurPath, DB_BOOKMARK);
 
-            DataManager::instance()->setBIsUpdate(false);
+//            DataManager::instance()->setBIsUpdate(false);
             notifyMsg(CENTRAL_SHOW_TIP, tr("Saved successfully"));
         } else {
             notifyMsg(CENTRAL_SHOW_TIP, tr("Saved failed"));
@@ -379,13 +379,13 @@ void DocummentFileHelper::slotFileSlider(const int &nFlag)
         bool bSlideModel = _proxy->showSlideModel();    //  开启幻灯片
         if (bSlideModel) {
             _proxy->setAutoPlaySlide(true);
-            DataManager::instance()->setCurShowState(FILE_SLIDE);
+            dApp->m_pAppInfo->qSetCurShowState(FILE_SLIDE);
         }
     } else {
-        if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
+        if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE) {
             bool rl = _proxy->exitSlideModel();
             if (rl) {
-                DataManager::instance()->setCurShowState(FILE_NORMAL);
+                dApp->m_pAppInfo->qSetCurShowState(FILE_NORMAL);
             }
         }
     }

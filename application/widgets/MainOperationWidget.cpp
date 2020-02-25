@@ -7,7 +7,6 @@
 #include <QJsonObject>
 
 #include "controller/AppSetting.h"
-#include "controller/DataManager.h"
 #include "utils/PublicFunction.h"
 
 MainOperationWidget::MainOperationWidget(CustomWidget *parent)

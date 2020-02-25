@@ -1,11 +1,10 @@
 #ifndef MAINOPERATIONWIDGET_H
 #define MAINOPERATIONWIDGET_H
 
-#include <DIconButton>
 #include <DPushButton>
 #include <DToolButton>
+
 #include "CustomControl/CustomWidget.h"
-#include "controller/DataManager.h"
 
 /**
  * @brief The MainOperationWidget class

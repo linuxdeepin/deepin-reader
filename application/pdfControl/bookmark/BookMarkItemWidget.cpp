@@ -22,8 +22,6 @@
 #include <QHBoxLayout>
 #include <DMenu>
 
-#include "controller/DataManager.h"
-
 BookMarkItemWidget::BookMarkItemWidget(QWidget *parent)
     : CustomItemWidget("BookMarkItemWidget", parent)
 {

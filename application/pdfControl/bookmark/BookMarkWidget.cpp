@@ -20,7 +20,7 @@
 
 #include "BookMarkItemWidget.h"
 
-#include "controller/DataManager.h"
+#include "controller/AppInfo.h"
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
 
@@ -56,9 +56,7 @@ BookMarkWidget::~BookMarkWidget()
  */
 void BookMarkWidget::prevPage()
 {
-    if (m_pBookMarkListWidget == nullptr ||
-            DataManager::instance()->bThumbnIsShow() == false ||
-            DataManager::instance()->CurShowState() != FILE_NORMAL) {
+    if (m_pBookMarkListWidget == nullptr) {
         return;
     }
 
@@ -85,11 +83,6 @@ void BookMarkWidget::prevPage()
  */
 void BookMarkWidget::nextPage()
 {
-    if (DataManager::instance()->bThumbnIsShow() == false ||
-            DataManager::instance()->CurShowState() != FILE_NORMAL) {
-        return;
-    }
-
     if (m_pBookMarkListWidget->count() <= 0) {
         return;
     }
@@ -153,7 +146,7 @@ void BookMarkWidget::slotAddBookMark(const int &nPage)
 
     auto item = addBookMarkItem(nPage);
     if (item) {
-        DataManager::instance()->setBIsUpdate(true);
+//        DataManager::instance()->setBIsUpdate(true);
         pageList.append(nPage);
         dApp->m_pDBService->setBookMarkList(pageList);
     }
@@ -290,7 +283,7 @@ void BookMarkWidget::deleteIndexPage(const int &pageIndex)
 
     auto dproxy = DocummentProxy::instance();
     if (dproxy) {
-        DataManager::instance()->setBIsUpdate(true);
+//        DataManager::instance()->setBIsUpdate(true);
         dproxy->setBookMarkState(pageIndex, false);
 
         int nCurPage = dproxy->currentPageNo();
@@ -463,7 +456,6 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
         item->setSizeHint(QSize(LEFTMINWIDTH, 80));
 
         auto t_widget = new BookMarkItemWidget(this);
-//        connect(t_widget, SIGNAL(sigDeleleteItem(const int &)), SLOT(slotDeleteBookItem(const int &)));
         t_widget->setLabelImage(img);
         t_widget->setLabelPage(page, 1);
 

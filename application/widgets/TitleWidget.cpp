@@ -4,7 +4,6 @@
 #include <QJsonObject>
 #include <QWidgetAction>
 
-#include "controller/DataManager.h"
 #include "menu/FontMenu.h"
 #include "menu/ScaleMenu.h"
 #include "menu/HandleMenu.h"
@@ -151,8 +150,8 @@ void TitleWidget::on_thumbnailBtn_clicked()
     bool rl = m_pThumbnailBtn->isChecked();
     notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(rl));
 
-    DataManager::instance()->setBThumbnIsShow(rl);
-    dApp->m_pDBService->setHistroyData("leftState", rl);
+//    DataManager::instance()->setBThumbnIsShow(rl);
+//    dApp->m_pDBService->setHistroyData("leftState", rl);
 }
 
 //  文档显示
@@ -255,7 +254,7 @@ void TitleWidget::slotDealWithShortKey(const QString &sKey)
         m_pThumbnailBtn->setChecked(true);
         //        m_pThumbnailBtn->setStatus(m_pThumbnailBtn->isChecked());
         notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(1));
-        DataManager::instance()->setBThumbnIsShow(1);
+//        DataManager::instance()->setBThumbnIsShow(1);
         dApp->m_pDBService->setHistroyData("leftState", 1);
     } else if (sKey == KeyStr::g_alt_z) {  //  开启放大镜
         setMagnifierState();

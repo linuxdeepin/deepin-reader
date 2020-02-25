@@ -23,7 +23,7 @@
 
 class AppInfo;
 class AnnotationHelper;
-class DataManager;
+class FileDataManager;
 class DocummentFileHelper;
 
 #if defined(dApp)
@@ -46,10 +46,10 @@ protected:
     void handleQuitAction() Q_DECL_OVERRIDE;
 
 public:
-    DBService   *m_pDBService = nullptr;
-    ModelService    *m_pModelService = nullptr;
+    DBService           *m_pDBService = nullptr;
+    ModelService        *m_pModelService = nullptr;
     AppInfo             *m_pAppInfo = nullptr;
-    DataManager         *m_pDataManager = nullptr;
+    FileDataManager     *m_pDataManager = nullptr;
     DocummentFileHelper *m_pDocummentFileHelper = nullptr;
     AnnotationHelper    *m_pAnnotationHelper = nullptr;
 

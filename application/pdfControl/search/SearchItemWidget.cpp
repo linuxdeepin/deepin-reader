@@ -21,9 +21,8 @@
 #include <DApplicationHelper>
 #include <QClipboard>
 #include <QTextLayout>
+
 #include "utils/utils.h"
-//#include "controller/AppSetting.h"
-#include "controller/DataManager.h"
 
 SearchItemWidget::SearchItemWidget(DWidget *parent)
     : CustomItemWidget(QString("SearchItemWidget"), parent)

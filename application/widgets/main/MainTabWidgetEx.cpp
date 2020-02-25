@@ -26,7 +26,7 @@
 #include "MsgModel.h"
 
 #include "business/DocummentFileHelper.h"
-#include "controller/DataManager.h"
+#include "controller/FileDataManager.h"
 
 MainTabWidgetEx::MainTabWidgetEx(DWidget *parent)
     : CustomWidget("MainTabWidgetEx", parent)

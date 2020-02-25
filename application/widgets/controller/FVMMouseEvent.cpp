@@ -22,8 +22,8 @@
 #include <QMouseEvent>
 #include <QDesktopServices>
 
+#include "controller/AppInfo.h"
 #include "docview/docummentproxy.h"
-#include "controller/DataManager.h"
 
 #include "../FileViewWidget.h"
 #include "../NoteTipWidget.h"
@@ -36,7 +36,7 @@ void FVMMouseEvent::mouseMoveEvent(QMouseEvent *event, DWidget *widget)
     FileViewWidget *fvw = qobject_cast<FileViewWidget *>(widget);
 
     //  处于幻灯片模式下
-    if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
+    if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE) {
         emit fvw->sigShowPlayCtrl(true);
         return;
     }
@@ -188,7 +188,7 @@ void FVMMouseEvent::mousePressEvent(QMouseEvent *event, DWidget *widget)
     Qt::MouseButton nBtn = event->button();
     if (nBtn == Qt::RightButton) {  //  右键处理
         //  处于幻灯片模式下
-        if (DataManager::instance()->CurShowState() == FILE_SLIDE) {
+        if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE) {
             fvw->notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
             return;
         }
@@ -200,7 +200,7 @@ void FVMMouseEvent::mousePressEvent(QMouseEvent *event, DWidget *widget)
         }
     } else if (nBtn == Qt::LeftButton) { // 左键处理
         //  幻灯片模式下, 左键单击 不作任何处理
-        if (DataManager::instance()->CurShowState() == FILE_SLIDE)
+        if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE)
             return;
 
         QPoint globalPos = event->globalPos();
@@ -298,7 +298,7 @@ void FVMMouseEvent::__OtherMousePress(FileViewWidget *fvw, const QPoint &globalP
 void FVMMouseEvent::mouseReleaseEvent(QMouseEvent *event, DWidget *widget)
 {
     //  幻灯片模式下, 左键单击 不作任何处理
-    if (DataManager::instance()->CurShowState() == FILE_SLIDE)
+    if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE)
         return;
 
     DocummentProxy *_proxy = DocummentProxy::instance();
@@ -316,7 +316,7 @@ void FVMMouseEvent::mouseReleaseEvent(QMouseEvent *event, DWidget *widget)
     if (m_bSelectOrMove && !bicon) {
         //判断鼠标左键松开的位置有没有高亮
 
-        DataManager::instance()->setMousePressLocal(false, globalPos);
+        dApp->m_pAppInfo->setMousePressLocal(false, globalPos);
         //添加其实结束point是否为同一个，不是同一个说明不是点击可能是选择文字
         if (nBtn == Qt::LeftButton && docGlobalPos == fvw->m_pStartPoint) {
             // 判断鼠标点击的地方是否有高亮
@@ -324,7 +324,7 @@ void FVMMouseEvent::mouseReleaseEvent(QMouseEvent *event, DWidget *widget)
 
             bool bIsHighLightReleasePoint = _proxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
 
-            DataManager::instance()->setMousePressLocal(bIsHighLightReleasePoint, globalPos);
+            dApp->m_pAppInfo->setMousePressLocal(bIsHighLightReleasePoint, globalPos);
             if (bIsHighLightReleasePoint) {
                 __CloseFileNoteWidget(fvw);
                 int nPage = _proxy->pointInWhichPage(docGlobalPos);

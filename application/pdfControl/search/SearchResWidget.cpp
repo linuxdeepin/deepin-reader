@@ -20,7 +20,6 @@
 
 #include "SearchItemWidget.h"
 
-#include "controller/DataManager.h"
 #include "widgets/LeftSidebarWidget.h"
 #include "docview/docummentproxy.h"
 
@@ -72,11 +71,11 @@ void SearchResWidget::__ClearSearchContent()
 
     notifyMsg(MSG_FIND_EXIT);       //  查询结束
 
-    bool bShowThunmb = DataManager::instance()->bThumbnIsShow();
-    if (!bShowThunmb) {
-        //  侧边栏 隐藏
-        notifyMsg(MSG_HIDE_FIND_WIDGET);
-    }
+//    bool bShowThunmb = DataManager::instance()->bThumbnIsShow();
+//    if (!bShowThunmb) {
+//        //  侧边栏 隐藏
+//        notifyMsg(MSG_HIDE_FIND_WIDGET);
+//    }
 }
 
 //  关闭应用
@@ -153,10 +152,10 @@ void SearchResWidget::slotSearchOver()
         notifyMsg(MSG_FIND_NONE);
         //发送提示消息
         // notifyMsg(CENTRAL_SHOW_TIP, tr("No search results") + ConstantMsg::g_warningtip_suffix);
-        bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
-        if (!t_bTnumbnIsShow) {
-            notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(!t_bTnumbnIsShow));
-        }
+//        bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
+//        if (!t_bTnumbnIsShow) {
+//            notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(!t_bTnumbnIsShow));
+//        }
     } else {
 //        connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
 //                SLOT(slotSelectItem(QListWidgetItem *)));
@@ -192,10 +191,10 @@ void SearchResWidget::slotStopFind()
     if (m_bShowList) {
         notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(WIDGET_SEARCH));
 
-        bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
-        if (!t_bTnumbnIsShow) {
-            notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(!t_bTnumbnIsShow));
-        }
+//        bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
+//        if (!t_bTnumbnIsShow) {
+//            notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(!t_bTnumbnIsShow));
+//        }
     }
 }
 

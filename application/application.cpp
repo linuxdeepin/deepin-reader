@@ -24,7 +24,7 @@
 #include "business/AnnotationHelper.h"
 #include "business/DocummentFileHelper.h"
 #include "controller/AppInfo.h"
-#include "controller/DataManager.h"
+#include "controller/FileDataManager.h"
 #include "utils/utils.h"
 
 namespace {
@@ -84,7 +84,7 @@ void Application::initChildren()
 {
     m_pDBService = new DBService(this);
     m_pModelService = new ModelService(this);
-    m_pDataManager = new DataManager(this);
+    m_pDataManager = new FileDataManager(this);
     m_pDocummentFileHelper = new DocummentFileHelper(this);
     m_pAnnotationHelper = new AnnotationHelper(this);
     m_pAppInfo = new AppInfo(this);
