@@ -97,13 +97,9 @@ void AnnotationHelper::__DeletePageIconAnnotation(const QString &msgContent)
             QString sUuid = sList.at(0);
             QString sPage = sList.at(1);
 
-            bool rl=false ;
             _proxy->removeAnnotation(sUuid, sPage.toInt());
-            if (rl) {
-                DataManager::instance()->setBIsUpdate(true);
-
-                notifyMsg(MSG_NOTE_PAGE_DELETE_ITEM, sUuid);
-            }
+            DataManager::instance()->setBIsUpdate(true);
+            notifyMsg(MSG_NOTE_PAGE_DELETE_ITEM, sUuid);
         }
     }
 }
@@ -281,21 +277,19 @@ void AnnotationHelper::__UpdateAnnotationText(const QString &msgContent)
     }
 }
 
-void AnnotationHelper::__AddPageIconAnnotation(const QString &)
+void AnnotationHelper::__AddPageIconAnnotation(const QString &msgContent)
 {
-    //    DocummentProxy *_proxy = DocummentProxy::instance();
-    //    if (_proxy) {
-    //        QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    //        if (sList.size() == 2) {
-    //            QString sUuid = sList.at(0);
-    //            QString sPage = sList.at(1);
-
-    //            bool rl = _proxy->removeIconAnnotation(sUuid, sPage.toInt());
-    //            if (rl) {
-    //                DataManager::instance()->setBIsUpdate(true);
-
-    //                notifyMsg(MSG_NOTE_PAGE_ADD_ITEM, sUuid);
-    //            }
-    //        }
-    //    }
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
+        QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
+        if (sList.size() == 3) {
+            QString sNote = sList.at(0);
+            QString sUuid = sList.at(1);
+            QString sPage = sList.at(2);
+            _proxy->setAnnotationText(sPage.toInt(), sUuid, sNote);
+            QString t_str = sUuid.trimmed() + Constant::sQStringSep + sNote.trimmed() + Constant::sQStringSep + sPage;
+            notifyMsg(MSG_NOTE_PAGE_ADD_ITEM, t_str);
+            DataManager::instance()->setBIsUpdate(true);
+        }
+    }
 }

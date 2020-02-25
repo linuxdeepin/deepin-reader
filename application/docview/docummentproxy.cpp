@@ -22,10 +22,10 @@ QString DocummentProxy::CreateInstance(QObject *parent)
 {
     QString uuid;
     if (parent) {
-        uuid=struuid=PublicFunc::getUuid();
+        uuid = struuid = PublicFunc::getUuid();
         stCurDocProxy st;
         st.pwgt = (DWidget *)parent;
-        st.proxy=new DocummentProxy(parent);
+        st.proxy = new DocummentProxy(parent);
         m_proxymap.insert(struuid, st);
     }
     return  uuid;
@@ -35,8 +35,8 @@ DocummentProxy *DocummentProxy::instance(QObject *)
 {
     if (m_proxymap.size() <= 0)
         return nullptr;
-    auto it=m_proxymap.find(struuid);
-    return  it!=m_proxymap.end()?it.value().proxy:nullptr;
+    auto it = m_proxymap.find(struuid);
+    return  it != m_proxymap.end() ? it.value().proxy : nullptr;
 }
 
 bool DocummentProxy::openFile(DocType_EM type, QString filepath, unsigned int ipage, RotateType_EM rotatetype, double scale, ViewMode_EM viewmode)
@@ -50,9 +50,9 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath, unsigned int ip
         delete m_documment;
         m_documment = nullptr;
     }
-    auto it=m_proxymap.find(struuid);
+    auto it = m_proxymap.find(struuid);
     m_documment = DocummentFactory::creatDocumment(type, it.value().pwgt);
-    if (m_documment) { 
+    if (m_documment) {
         connect(m_documment, SIGNAL(signal_pageChange(int)), this, SLOT(slot_pageChange(int)));
         connect(this, SIGNAL(signal_pageJump(int)), m_documment, SLOT(pageJump(int)));
         connect(m_documment, SIGNAL(signal_searchRes(stSearchRes)), this, SIGNAL(signal_searchRes(stSearchRes)));
@@ -213,7 +213,6 @@ bool DocummentProxy::iconAnnotationClicked(const QPoint &pos, QString &strtext, 
 
 bool DocummentProxy::mouseovericonAnnotation(const QPoint &pos)
 {
-    return  false;
     if (!m_documment || bcloseing)
         return false;
     QString strtext, struuid;
@@ -328,11 +327,10 @@ void DocummentProxy::slot_pageChange(int pageno)
 
 void DocummentProxy::slot_changetab(const QString &uuid)
 {
-   auto it=m_proxymap.find(uuid);
-   if(it!=m_proxymap.end())
-   {
-       struuid=uuid;
-   }
+    auto it = m_proxymap.find(uuid);
+    if (it != m_proxymap.end()) {
+        struuid = uuid;
+    }
 }
 
 void DocummentProxy::slot_closetab(const QString &uuid)

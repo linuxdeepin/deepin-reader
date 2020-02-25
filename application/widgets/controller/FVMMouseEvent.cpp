@@ -160,7 +160,7 @@ void FVMMouseEvent::__OtherMouseMove(FileViewWidget *fvw, const QPoint &globalPo
     } else {
         //  先判断是否是页面注释图标
         if (_proxy->mouseovericonAnnotation(docGlobalPos)) {
-            __ShowPageNoteWidget(fvw, globalPos);
+            __ShowPageNoteWidget(fvw, docGlobalPos);
         } else if (_proxy->mouseBeOverText(docGlobalPos)) {
             m_bIsHandleSelect = true;
 
@@ -238,7 +238,7 @@ void FVMMouseEvent::__AddIconAnnotation(FileViewWidget *fvw, const QPoint &globa
                                  QString::number(globalPos.x()) + Constant::sQStringSep +
                                  QString::number(globalPos.y());
             fvw->m_nCurrentHandelState = Default_State;
-            // fvw->notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, strContent);
+            fvw->notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, strContent);
         } else {
             qWarning() << __FUNCTION__ << "          " << sUuid;;
         }
@@ -308,29 +308,37 @@ void FVMMouseEvent::mouseReleaseEvent(QMouseEvent *event, DWidget *widget)
     Qt::MouseButton nBtn = event->button();
 
     FileViewWidget *fvw = qobject_cast<FileViewWidget *>(widget);
-
+    QPoint globalPos = event->globalPos();
+    QPoint docGlobalPos = _proxy->global2RelativePoint(globalPos);
+    QString selectText, t_strUUid;
+    bool bicon = _proxy->iconAnnotationClicked(docGlobalPos, selectText, t_strUUid);
     //  放大镜状态， 右键则取消放大镜 并且 直接返回
-    if (m_bSelectOrMove) {
+    if (m_bSelectOrMove && !bicon) {
         //判断鼠标左键松开的位置有没有高亮
-        QPoint globalPos = event->globalPos();
-        QPoint docGlobalPos = _proxy->global2RelativePoint(globalPos);
+
         DataManager::instance()->setMousePressLocal(false, globalPos);
         //添加其实结束point是否为同一个，不是同一个说明不是点击可能是选择文字
         if (nBtn == Qt::LeftButton && docGlobalPos == fvw->m_pStartPoint) {
             // 判断鼠标点击的地方是否有高亮
-            QString selectText, t_strUUid;
+
 
             bool bIsHighLightReleasePoint = _proxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
+
             DataManager::instance()->setMousePressLocal(bIsHighLightReleasePoint, globalPos);
             if (bIsHighLightReleasePoint) {
-
                 __CloseFileNoteWidget(fvw);
-
                 int nPage = _proxy->pointInWhichPage(docGlobalPos);
                 QString t_strContant = t_strUUid.trimmed() + Constant::sQStringSep + QString::number(nPage);
                 fvw->notifyMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
             }
         }
+    } else if (bicon) {
+        __CloseFileNoteWidget(fvw);
+        int nPage = _proxy->pointInWhichPage(docGlobalPos);
+        QString t_strContant = t_strUUid.trimmed() + Constant::sQStringSep + QString::number(nPage) + Constant::sQStringSep +
+                               QString::number(globalPos.x()) + Constant::sQStringSep +
+                               QString::number(globalPos.y());
+        fvw->notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, t_strContant);
     }
 
     m_bSelectOrMove = false;

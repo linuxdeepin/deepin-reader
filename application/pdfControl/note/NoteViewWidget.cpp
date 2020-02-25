@@ -25,6 +25,7 @@
 
 #include "CustomControl/CustomClickLabel.h"
 #include "utils/PublicFunction.h"
+#include "docview/docummentproxy.h"
 
 NoteViewWidget::NoteViewWidget(CustomWidget *parent)
     : CustomWidget(QString("NoteViewWidget"), parent)
@@ -59,7 +60,6 @@ void NoteViewWidget::setEditText(const QString &note)
 {
     if (m_pTextEdit) {
         m_pTextEdit->clear();
-        //m_pTextEdit->setText(note);
         m_pTextEdit->setPlainText(note);
         m_strNote = note;
     }
@@ -158,11 +158,20 @@ void NoteViewWidget::__PageNoteHideEvent()
                                      m_pNotePage;
 
                 sendMsg(MSG_NOTE_PAGE_ADD_CONTENT, msgContent);
+            } else {
+                auto pHelper = DocummentProxy::instance();
+                if (pHelper) {
+                    pHelper->removeAnnotation(m_pNoteUuid);
+                }
             }
         } else {
             if (sText == "") {
                 QString msgContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage;
                 sendMsg(MSG_NOTE_PAGE_DELETE_CONTENT, msgContent);
+                auto pHelper = DocummentProxy::instance();
+                if (pHelper) {
+                    pHelper->removeAnnotation(m_pNoteUuid);
+                }
             } else if (sText != m_strNote) {  //  只有 和 原来已有注释内容不一样, 才会提示 保存
                 QString msgContent = sText + Constant::sQStringSep +
                                      m_pNoteUuid + Constant::sQStringSep +

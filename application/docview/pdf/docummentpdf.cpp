@@ -204,7 +204,7 @@ QString DocummentPDF::removeAnnotation(const QPoint &startpos, AnnoteType_Em typ
     int page = pointInWhichPage(pt);
     qDebug() << "removeAnnotation start";
     if (page < 0) return "";
-    QString uuid = static_cast<PagePdf *>(d->m_pages.at(page))->removeAnnotation(pt,type);
+    QString uuid = static_cast<PagePdf *>(d->m_pages.at(page))->removeAnnotation(pt, type);
     qDebug() << "removeAnnotation end";
     return uuid;
 }
@@ -510,10 +510,10 @@ void DocummentPDF::setAnnotationText(int ipage, const QString &struuid, const QS
         QList<Poppler::Annotation *> plistannote = page->annotations();
         foreach (Poppler::Annotation *annote, plistannote) {
             QString uniquename = annote->uniqueName();
-//            qDebug() << "setAnnotationText--" << uniquename << struuid;
+            qDebug() << "setAnnotationText--" << uniquename << struuid;
             if (!uniquename.isEmpty() && uniquename.indexOf(struuid) >= 0) {
                 annote->setContents(strtext);
-//                qDebug() << "setAnnotationText++" << annote->contents();
+                qDebug() << "setAnnotationText++" << annote->contents();
             }
         }
         qDeleteAll(plistannote);
@@ -530,7 +530,7 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, i
             QString uniquename = annote->uniqueName();
             if (!uniquename.isEmpty() && uniquename.indexOf(struuid) >= 0 && !struuid.isEmpty()) {
                 strtext = annote->contents();
-//                qDebug() << QString("getAnnotationText=%1=%2=%3=%4").arg(uniquename).arg(struuid).arg(ipage).arg(strtext);
+                qDebug() << QString("getAnnotationText=%1=%2=%3=%4").arg(uniquename).arg(struuid).arg(ipage).arg(strtext);
                 qDeleteAll(plistannote);
                 return;
             }
@@ -674,10 +674,10 @@ bool DocummentPDF::iconAnnotationClicked(const QPoint &pos, QString &strtext, QS
 {
     Q_D(DocummentPDF);
     QPoint pt(pos);
-    bool bclicked=false;
+    bool bclicked = false;
     int ipage = pointInWhichPage(pt);
-    if (ipage>=0&&ipage<d->m_pages.size())
-        bclicked=(static_cast<PagePdf *>(d->m_pages.at(ipage)))->iconAnnotationClicked(pt, strtext, struuid);
+    if (ipage >= 0 && ipage < d->m_pages.size())
+        bclicked = (static_cast<PagePdf *>(d->m_pages.at(ipage)))->iconAnnotationClicked(pt, strtext, struuid);
     return bclicked;
 }
 

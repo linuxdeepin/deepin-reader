@@ -178,9 +178,7 @@ void DocShowShellWidget::onShowNoteWidget(const QString &contant)
         QPoint point;          // = this->mapToGlobal(rrect.bottomRight());// 鼠标点击位置
 
         DataManager::instance()->mousePressLocal(t_bHigh, point);
-        if (t_bHigh) {
-            pWidget->showWidget(point);
-        }
+        pWidget->showWidget(point);
     }
 }
 
@@ -193,16 +191,20 @@ void DocShowShellWidget::__ShowPageNoteWidget(const QString &msgContent)
         QString sX = sList.at(2);
         QString sY = sList.at(3);
 
+        QString sContant = "";
+
+        auto pHelper = DocummentProxy::instance();
+        if (pHelper) {
+            pHelper->getAnnotationText(sUuid, sContant, sPage.toInt());
+        }
         auto pWidget = this->findChild<NoteViewWidget *>();
         if (pWidget == nullptr) {
             pWidget = new NoteViewWidget(this);
         }
-        pWidget->setEditText("");
-//        pWidget->setPointAndPage(msgContent);
+        pWidget->setEditText(sContant);
         pWidget->setNoteUuid(sUuid);
         pWidget->setNotePage(sPage);
         pWidget->setWidgetType(NOTE_PAGE);
-
         pWidget->showWidget(QPoint(sX.toInt(), sY.toInt()));
     }
 }

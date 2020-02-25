@@ -1376,7 +1376,7 @@ bool DocummentBase::loadPages()
     } else {
         curheight = d->m_scale * d->m_imagewidth;
     }
-    qDebug() << rect() << viewport()->rect() << d->qwfather->rect();
+    //qDebug() << rect() << viewport()->rect() << d->qwfather->rect();
     int icount = viewport()->rect().height() / (curheight); //当前页一共能显示多少个
     icount = icount > 0 ? icount + 2 : 2;
 
@@ -1828,7 +1828,7 @@ bool DocummentBase::loadData()
     QTime loadtime;
     loadtime.start();
     bool bfirst = true;
-    for (int i = 0; i < d->m_pages.size(); i++) {      
+    for (int i = 0; i < d->m_pages.size(); i++) {
         if (QThread::currentThread()->isInterruptionRequested()) {
             break;
         }
