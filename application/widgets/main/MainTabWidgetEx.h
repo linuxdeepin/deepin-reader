@@ -21,6 +21,8 @@
 
 #include "CustomControl/CustomWidget.h"
 
+class QStackedLayout;
+
 class MainTabWidgetEx : public CustomWidget
 {
     Q_OBJECT
@@ -28,6 +30,11 @@ class MainTabWidgetEx : public CustomWidget
 
 public:
     explicit MainTabWidgetEx(DWidget *parent = nullptr);
+    ~MainTabWidgetEx() Q_DECL_OVERRIDE;
+
+signals:
+    void sigCloseFile(const int &, const QString &);
+    void sigTabMsg(const QString &);
 
     // IObserver interface
 public:
@@ -38,6 +45,27 @@ protected:
     void initWidget() Q_DECL_OVERRIDE;
 
 private:
+    void InitConnections();
+
+    void AddFileLayout(const QString &);
+    void AddFileLayoutEnd(const QString &);
+
+    void AppExitFile(const int &, const QString &);
+    void RemoveTabFile(const int &, const QString &);
+
+    void setCurrentIndexFile(const QString &);
+
+private slots:
+    void SlotDealWithData(const int &, const QString &);
+    void SlotOpenFiles(const QString &);
+    void SlotTabMsg(const QString &);
+
+
+    void SlotCloseFile(const int &, const QString &);
+//    void SlotTabRemoveFile(const int &, const QString &);
+
+private:
+    QStackedLayout  *m_pStackedLayout = nullptr;
 };
 
 #endif // MAINTABWIDGETEX_H

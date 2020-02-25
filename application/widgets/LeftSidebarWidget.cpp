@@ -206,6 +206,11 @@ int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgConten
     return 0;
 }
 
+void LeftSidebarWidget::qSetPath(const QString &sPath)
+{
+    m_strPath = sPath;
+}
+
 void LeftSidebarWidget::keyPressEvent(QKeyEvent *event)
 {
     QStringList pFilterList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown

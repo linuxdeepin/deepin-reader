@@ -37,7 +37,6 @@ class AnnotationHelper : public QObject, public IObserver
 
 public:
     explicit AnnotationHelper(QObject *parent = nullptr);
-    ~AnnotationHelper() Q_DECL_OVERRIDE;
 
 signals:
     void sigDealWithData(const int &, const QString &);

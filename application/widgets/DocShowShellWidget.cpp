@@ -2,7 +2,7 @@
 
 #include <DDialogCloseButton>
 #include <QDesktopWidget>
-#include <QVBoxLayout>
+#include <QStackedLayout>
 
 #include "FileViewWidget.h"
 #include "FindWidget.h"
@@ -19,6 +19,8 @@ DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
     : CustomWidget("DocShowShellWidget", parent)
     , m_pctrlwidget(new PlayControlWidget(this))
 {
+    m_pctrlwidget->hide();
+
     initWidget();
     initConnections();
 
@@ -236,6 +238,20 @@ void DocShowShellWidget::slotChangePlayCtrlShow(bool bshow)
     }
 }
 
+void DocShowShellWidget::slotOpenFileOk(const QString &sPath)
+{
+    auto pView = this->findChild<FileViewWidget *>();
+    if (pView) {
+        QString viewPath = pView->qGetPath();
+        if (viewPath == sPath) {
+            m_playout->removeWidget(m_pSpiner);
+
+            delete  m_pSpiner;
+            m_pSpiner = nullptr;
+        }
+    }
+}
+
 void DocShowShellWidget::slotDealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_ATTR) {                            //  打开该文件的属性信息
@@ -251,6 +267,7 @@ void DocShowShellWidget::slotDealWithData(const int &msgType, const QString &msg
 
 void DocShowShellWidget::initConnections()
 {
+    connect(this, SIGNAL(sigOpenFileOk(const QString &)), SLOT(slotOpenFileOk(const QString &)));
     connect(this, SIGNAL(sigShowFileFind()), SLOT(slotShowFindWidget()));
     connect(this, SIGNAL(sigShowCloseBtn(const int &)), SLOT(slotShowCloseBtn(const int &)));
     connect(this, SIGNAL(sigHideCloseBtn()), SLOT(slotHideCloseBtn()));
@@ -291,7 +308,9 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
         return ConstantMsg::g_effective_res;
     }
 
-    if (msgType == MSG_OPERATION_SLIDE) {
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        emit sigOpenFileOk(msgContent);
+    } else if (msgType == MSG_OPERATION_SLIDE) {
         m_pctrlwidget->setCanShow(true);
         emit sigChangePlayCtrlShow(true);
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
@@ -302,31 +321,30 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
     return 0;
 }
 
+void DocShowShellWidget::qSetPath(const QString &sPath)
+{
+    auto pView = this->findChild<FileViewWidget *>();
+    if (pView) {
+        pView->qSetPath(sPath);
+    }
+}
+
 void DocShowShellWidget::initWidget()
 {
-    auto layout = new QHBoxLayout;
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
+    m_playout = new QStackedLayout;
+    m_playout->setContentsMargins(0, 0, 0, 0);
+    m_playout->setSpacing(0);
+
+    m_pSpiner = new DSpinner;
+    m_pSpiner->setFixedSize(QSize(36, 36));
+    m_pSpiner->start();
 
     auto m_pfileviwewidget = new FileViewWidget(this);
     connect(m_pfileviwewidget, SIGNAL(sigShowPlayCtrl(bool)), this, SLOT(slotChangePlayCtrlShow(bool)));
 
-    layout->addWidget(m_pfileviwewidget);
+    m_playout->addWidget(m_pSpiner);
 
-    this->setLayout(layout);
+    m_playout->addWidget(m_pfileviwewidget);
+
+    this->setLayout(m_playout);
 }
-
-/**
- * @brief DocShowShellWidget::enterEvent
- * 鼠标进入时自动获取焦点
- * @param event
- */
-//  2020.2.18   注释
-//void DocShowShellWidget::enterEvent(QEvent *event)
-//{
-//    CustomWidget::enterEvent(event);
-
-//    if (DocummentProxy::instance()) {
-//        DocummentProxy::instance()->setViewFocus();
-//    }
-//}

@@ -47,11 +47,6 @@ DocummentFileHelper::DocummentFileHelper(QObject *parent)
     dApp->m_pModelService->addObserver(this);
 }
 
-DocummentFileHelper::~DocummentFileHelper()
-{
-    dApp->m_pModelService->removeObserver(this);
-}
-
 void DocummentFileHelper::initConnections()
 {
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
@@ -136,16 +131,59 @@ bool DocummentFileHelper::save(const QString &filepath, bool withChanges)
     return DocummentProxy::instance()->save(filepath, withChanges);
 }
 
+void DocummentFileHelper::qRemoveTabFile(const int &iType, const QString &sPath)
+{
+    dApp->m_pDBService->qSaveData(sPath, DB_HISTROY);
+
+    if (MSG_TAB_SAVE_FILE == iType || MSG_TAB_NOT_SAVE_FILE == iType) {
+        bool bSave = iType == MSG_TAB_SAVE_FILE ? true : false;
+        save(sPath, bSave);
+
+        if (bSave) {
+            dApp->m_pDBService->qSaveData(sPath, DB_BOOKMARK);
+        }
+    }
+
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
+        _proxy->closeFile();
+    }
+    notifyMsg(MSG_CLOSE_FILE, sPath);
+}
+
+void DocummentFileHelper::qAppExitFile(const int &iType, const QString &sPath)
+{
+    dApp->m_pDBService->qSaveData(sPath, DB_HISTROY);
+
+    if (MSG_EXIT_SAVE_FILE == iType || MSG_EXIT_NOT_SAVE_FILE == iType) {
+        bool bSave = iType == MSG_EXIT_SAVE_FILE ? true : false;
+        save(sPath, bSave);
+
+        if (bSave) {
+            dApp->m_pDBService->qSaveData(sPath, DB_BOOKMARK);
+        }
+    }
+
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
+        _proxy->closeFile();
+    }
+
+    notifyMsg(E_APP_EXIT, sPath);
+}
+
 //  保存 数据
 void DocummentFileHelper::onSaveFile()
 {
-    if (DataManager::instance()->bIsUpdate()) {
-        bool rl = save(m_szFilePath, true);
+    QString sCurPath = dApp->m_pDataManager->getCurrentFilePath();
+    FileData fd = dApp->m_pDataManager->qGetFileData(sCurPath);
+    if (fd.bIsChane) {  //  改变了        bool rl = save(m_szFilePath, true);
+        bool rl = save(sCurPath, true);
         qDebug() << "slotSaveFile" << rl;
         if (rl) {
             //  保存需要保存 数据库记录
             qDebug() << "DocummentFileHelper::slotSaveFile saveBookMark";
-            dApp->m_pDBService->qSaveData(m_szFilePath, DB_BOOKMARK);
+            dApp->m_pDBService->qSaveData(sCurPath, DB_BOOKMARK);
 
             DataManager::instance()->setBIsUpdate(false);
             notifyMsg(CENTRAL_SHOW_TIP, tr("Saved successfully"));
@@ -156,7 +194,7 @@ void DocummentFileHelper::onSaveFile()
         notifyMsg(CENTRAL_SHOW_TIP, tr("No changes"));
     }
     //insert msg to FileFontTable
-    dApp->m_pDBService->qSaveData(m_szFilePath, DB_HISTROY);
+    dApp->m_pDBService->qSaveData(sCurPath, DB_HISTROY);
 }
 
 //  另存为
@@ -165,12 +203,18 @@ void DocummentFileHelper::onSaveAsFile()
     if (!DocummentProxy::instance()) {
         return;
     }
-    QString sFilter = FFH::getFileFilter(m_nCurDocType);
+    QString sCurPath = dApp->m_pDataManager->getCurrentFilePath();
+    QFileInfo info(sCurPath);
+
+    QString sCompleteSuffix = info.completeSuffix();
+    DocType_EM nCurDocType = FFH::setCurDocuType(sCompleteSuffix);
+
+    QString sFilter = FFH::getFileFilter(nCurDocType);
 
     if (sFilter != "") {
         QFileDialog dialog;
-        dialog.selectFile(m_szFilePath);
-        QString filePath = dialog.getSaveFileName(nullptr, tr("Save as"), m_szFilePath, sFilter);
+        dialog.selectFile(sCurPath);
+        QString filePath = dialog.getSaveFileName(nullptr, tr("Save as"), sCurPath, sFilter);
 
         if (filePath.endsWith("/.pdf")) {
             DDialog dlg("", tr("Invalid file name"));
@@ -183,10 +227,10 @@ void DocummentFileHelper::onSaveAsFile()
             return;
         }
         if (filePath != "") {
-            if (m_szFilePath == filePath) {
+            if (sCurPath == filePath) {
                 onSaveFile();
             } else {
-                QString sFilePath = FFH::getFilePath(filePath, m_nCurDocType);
+                QString sFilePath = FFH::getFilePath(filePath, nCurDocType);
 
                 bool rl = DocummentProxy::instance()->saveas(sFilePath, true);
                 if (rl) {
@@ -198,9 +242,7 @@ void DocummentFileHelper::onSaveAsFile()
 
                     DataManager::instance()->setBIsUpdate(false);
 
-                    m_szFilePath = sFilePath;
-
-                    setAppShowTitle();
+                    notifyMsg(MSG_OPERATION_OPEN_FILE_OK, sFilePath);
                 }
             }
         }
@@ -262,10 +304,7 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
         QFileInfo info(sPath);
 
         QString sCompleteSuffix = info.completeSuffix();
-        m_nCurDocType = FFH::setCurDocuType(sCompleteSuffix);
-
-        m_szFilePath = sPath;
-        DataManager::instance()->setStrOnlyFilePath(sPath);
+        DocType_EM nCurDocType = FFH::setCurDocuType(sCompleteSuffix);
 
         bool rl = false;
         notifyMsg(MSG_DOC_OPEN_FILE_START, sPath);
@@ -283,65 +322,44 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
             RotateType_EM rotatetype = static_cast<RotateType_EM>((rotate / 90) + 1);
             ViewMode_EM viewmode = static_cast<ViewMode_EM>(doubPage);
 
-            rl = DocummentProxy::instance()->openFile(m_nCurDocType, sPath, curPage, rotatetype, scale, viewmode);
+            rl = DocummentProxy::instance()->openFile(nCurDocType, sPath, curPage, rotatetype, scale, viewmode);
         } else {
-            rl = DocummentProxy::instance()->openFile(m_nCurDocType, sPath);
+            rl = DocummentProxy::instance()->openFile(nCurDocType, sPath);
         }
 
         if (!rl) {
-            m_szFilePath = "";
-            DataManager::instance()->setStrOnlyFilePath("");
-
             notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("File not supported"));
         }
     }
 }
 
-void DocummentFileHelper::onOpenFiles(const QString &filePaths)
-{
-    bool bisopen = false;
-    QStringList canOpenFileList = filePaths.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    foreach (auto s, canOpenFileList) {
-        QString sOpenPath = DataManager::instance()->strOnlyFilePath();
-        if (s == sOpenPath) {
-            notifyMsg(CENTRAL_SHOW_TIP, tr("The file is already open"));
-        } else {
-            QString sRes = s + Constant::sQStringSep;
-            QString sOpenPath = DataManager::instance()->strOnlyFilePath(); //  打开文档为空
-            if (sOpenPath == "") {
-                if (!bisopen)
-                    notifyMsg(MSG_OPEN_FILE_PATH, sRes);
-                else {
-                    if (!Utils::runApp(s))
-                        qDebug() << __FUNCTION__ << "process start deepin-reader failed";
-                }
+//void DocummentFileHelper::onOpenFiles(const QString &filePaths)
+//{
+//    bool bisopen = false;
+//    QStringList canOpenFileList = filePaths.split(Constant::sQStringSep, QString::SkipEmptyParts);
+//    foreach (auto s, canOpenFileList) {
+//        QString sOpenPath = DataManager::instance()->strOnlyFilePath();
+//        if (s == sOpenPath) {
+//            notifyMsg(CENTRAL_SHOW_TIP, tr("The file is already open"));
+//        } else {
+//            QString sRes = s + Constant::sQStringSep;
+//            QString sOpenPath = DataManager::instance()->strOnlyFilePath(); //  打开文档为空
+//            if (sOpenPath == "") {
+//                if (!bisopen)
+//                    notifyMsg(MSG_OPEN_FILE_PATH, sRes);
+//                else {
+//                    if (!Utils::runApp(s))
+//                        qDebug() << __FUNCTION__ << "process start deepin-reader failed";
+//                }
 
-                bisopen = true;
-            } else {
-                if (!Utils::runApp(s))
-                    qDebug() << __FUNCTION__ << "process start deepin-reader failed";
-            }
-        }
-    }
-}
-
-//  设置  应用显示名称
-void DocummentFileHelper::setAppShowTitle()
-{
-    if (!DocummentProxy::instance()) {
-        return;
-    }
-
-    QString sTitle = "";
-    DocummentProxy::instance()->title(sTitle);
-    if (sTitle == "") {
-        QFileInfo info(m_szFilePath);
-        sTitle = info.baseName();
-    }
-    notifyMsg(MSG_OPERATION_OPEN_FILE_OK, sTitle);
-
-    dApp->m_pDBService->qSelectData(DB_BOOKMARK);
-}
+//                bisopen = true;
+//            } else {
+//                if (!Utils::runApp(s))
+//                    qDebug() << __FUNCTION__ << "process start deepin-reader failed";
+//            }
+//        }
+//    }
+//}
 
 //  复制
 void DocummentFileHelper::slotCopySelectContent(const QString &sCopy)
@@ -392,7 +410,3 @@ void DocummentFileHelper::__FileCtrlCContent()
     }
 }
 
-void DocummentFileHelper::setSzFilePath(const QString &szFilePath)
-{
-    m_szFilePath = szFilePath;
-}

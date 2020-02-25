@@ -37,7 +37,7 @@ public:
     ~CentralWidget() Q_DECL_OVERRIDE;
 
 signals:
-    void sigOpenFileOk();
+    void sigOpenFiles(const QString &);
 
     // IObserver interface
 public:
@@ -54,15 +54,13 @@ protected:
     void initWidget() Q_DECL_OVERRIDE;
 
 private slots:
-    void slotOpenFileOk();
     void slotDealWithData(const int &, const QString &msgContent = "");
+    void SlotOpenFiles(const QString &);
 
 private:
     void initConnections();
-
-    void onOpenFileStart();
-    void onOpenFileFail(const QString &);
-    void onShowTips(const QString &);
+    void OnSetCurrentIndex();
+    void onShowTip(const QString &);
 };
 
 #endif  // MAINSTACKWIDGET_H

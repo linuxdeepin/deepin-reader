@@ -35,13 +35,15 @@ public:
     ~MainTabBar() Q_DECL_OVERRIDE;
 
 signals:
-    void sigOpenFileOk(const QString &);
+//    void sigOpenFileOk(const QString &);
+    void sigDealWithData(const int &, const QString &);
+    void sigCloseFile(const int &, const QString &);
 
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
     void sendMsg(const int &, const QString &) Q_DECL_OVERRIDE;
-    void notifyMsg(const int &, const QString &) Q_DECL_OVERRIDE;
+    void notifyMsg(const int &, const QString &s = "") Q_DECL_OVERRIDE;
 
     // QWidget interface
 protected:
@@ -51,19 +53,25 @@ private:
     void __InitConnection();
 
     void __SetTabMiniWidth();
+    void AddFileTab(const QString &);
+    QString getFileName(const QString &strFilePath);
+    void OpenCurFileFolder();
 
 private slots:
     void SlotTabBarClicked(int);
     void SlotTabAddRequested();
     void SlotTabCloseRequested(int index);
-//    void SlotTabMoved(int, int);
-    void SlotTabDroped(int, Qt::DropAction, QObject *);
 
-    void SlotOpenFileOk(const QString &);
+    void SlotCloseFile(const int &, const QString &);
+    void SlotDealWithData(const int &, const QString &);
+//    void SlotTabMoved(int, int);
+//    void SlotTabDroped(int, Qt::DropAction, QObject *);
+
+//    void SlotOpenFileOk(const QString &);
 
 private:
     int     m_nOldMiniWidth = 0;
-
+    QList <int> m_pMsgList;
 };
 
 #endif // MAINTABWIDGET_H

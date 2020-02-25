@@ -19,20 +19,15 @@
 
 #include "CentralWidget.h"
 
-#include <DSplitter>
 #include <QFileInfo>
 #include <QMimeData>
 #include <QUrl>
-#include <DSpinner>
 #include <DDialog>
 #include <DMessageManager>
 #include <QStackedLayout>
 
-#include "DocShowShellWidget.h"
 #include "HomeWidget.h"
 #include "main/MainTabWidgetEx.h"
-#include "LeftSidebarWidget.h"
-#include "main/MainTabBar.h"
 
 #include "utils/utils.h"
 #include "controller/DataManager.h"
@@ -42,7 +37,7 @@ CentralWidget::CentralWidget(CustomWidget *parent)
 {
     setAcceptDrops(true);
 
-    m_pMsgList = {MSG_OPERATION_OPEN_FILE_FAIL, MSG_DOC_OPEN_FILE_START, CENTRAL_SHOW_TIP};
+    m_pMsgList = {CENTRAL_SHOW_TIP, CENTRAL_INDEX_CHANGE};
     initWidget();
     initConnections();
 
@@ -75,96 +70,38 @@ void CentralWidget::keyPressEvent(QKeyEvent *event)
 
 void CentralWidget::initConnections()
 {
-    connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));
-
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
             SLOT(slotDealWithData(const int &, const QString &)));
 }
 
-//  文件打开成功
-void CentralWidget::slotOpenFileOk()
+void CentralWidget::OnSetCurrentIndex()
 {
     auto pLayout = this->findChild<QStackedLayout *>();
     if (pLayout) {
-        pLayout->setCurrentIndex(1);
-
-        //  打开成功, 删除转圈圈
-        auto spinnerList = this->findChildren<DSpinner *>();
-        foreach (auto sp, spinnerList) {
-            if (sp->objectName() == "home_spinner") {
-
-                delete  sp;
-                sp = nullptr;
-
-                break;
-            }
-        }
+        pLayout->setCurrentIndex(0);
     }
 }
 
 void CentralWidget::slotDealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_OPEN_FILE_FAIL) {
-        onOpenFileFail(msgContent);
-    } else if (msgType == MSG_DOC_OPEN_FILE_START) {
-        onOpenFileStart();
+    if (msgType == CENTRAL_INDEX_CHANGE) {
+        OnSetCurrentIndex();
     } else if (msgType == CENTRAL_SHOW_TIP) {
-        onShowTips(msgContent);
+        onShowTip(msgContent);
     }
 }
 
-void CentralWidget::onOpenFileStart()
+void CentralWidget::SlotOpenFiles(const QString &filePaths)
 {
     auto pLayout = this->findChild<QStackedLayout *>();
     if (pLayout) {
-
-        //  开始的时候  new 转圈圈
-        auto pSpinnerWidget = new DWidget;
-        QGridLayout *gridlyout = new QGridLayout(pSpinnerWidget);
-        gridlyout->setAlignment(Qt::AlignCenter);
-        auto m_spinner = new DSpinner(this);
-        m_spinner->setObjectName("home_spinner");
-        m_spinner->setFixedSize(60, 60);
-        gridlyout->addWidget(m_spinner);
-        m_spinner->start();
-
-        pLayout->addWidget(pSpinnerWidget);
-
-        pLayout->setCurrentIndex(2);
+        pLayout->setCurrentIndex(1);
     }
+
+    notifyMsg(MSG_TAB_ADD, filePaths);
 }
 
-//  文件打开失败
-void CentralWidget::onOpenFileFail(const QString &errorInfo)
-{
-    //  打开失败, 停止转圈圈, 并且删除
-    auto spinnerList = this->findChildren<DSpinner *>();
-    foreach (auto sp, spinnerList) {
-        if (sp->objectName() == "home_spinner") {
-            sp->stop();
-
-            delete sp;
-            sp = nullptr;
-
-            break;
-        }
-    }
-
-    //  文档打开失败, 切换回首页
-    auto pLayout = this->findChild<QStackedLayout *>();
-    if (pLayout) {
-        if (pLayout->currentIndex() != 0) {
-            pLayout->setCurrentIndex(0);
-        }
-    }
-    DDialog dlg("", errorInfo);
-    dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
-    dlg.addButtons(QStringList() << tr("OK"));
-    dlg.exec();
-}
-
-
-void CentralWidget::onShowTips(const QString &contant)
+void CentralWidget::onShowTip(const QString &contant)
 {
     int position = contant.indexOf("##**");
     if (!contant.isEmpty() && position > 0) {
@@ -189,11 +126,6 @@ int CentralWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigDealWithData(msgType, msgContent);
         return ConstantMsg::g_effective_res;
     }
-
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        emit sigOpenFileOk();
-    }
-
     return 0;
 }
 
@@ -237,7 +169,7 @@ void CentralWidget::dropEvent(QDropEvent *event)
             }
             QString msgTitle = QString("%1").arg(msgType);
             QString msgContent = tr("%1 is not supported").arg(msgTitle);
-            onShowTips(msgContent);
+            onShowTip(msgContent);
         }
 
         if (canOpenFileList.count() > 0) {
@@ -247,7 +179,7 @@ void CentralWidget::dropEvent(QDropEvent *event)
                 sRes += s + Constant::sQStringSep;
             }
 
-//            notifyMsg(MSG_OPEN_FILE_PATH_S, sRes);
+            SlotOpenFiles(sRes);
         }
     }
 }
@@ -258,6 +190,9 @@ void CentralWidget::initWidget()
     pStcakLayout->setContentsMargins(0, 0, 0, 0);
     pStcakLayout->setSpacing(0);
 
-    pStcakLayout->addWidget(new HomeWidget);
+    HomeWidget *homeWidget = new HomeWidget;
+    connect(homeWidget, SIGNAL(sigOpenFilePaths(const QString &)), SLOT(SlotOpenFiles(const QString &)));
+    pStcakLayout->addWidget(homeWidget);
+
     pStcakLayout->addWidget(new MainTabWidgetEx);
 }

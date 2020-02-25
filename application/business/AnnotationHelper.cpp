@@ -39,11 +39,6 @@ AnnotationHelper::AnnotationHelper(QObject *parent)
     dApp->m_pModelService->addObserver(this);
 }
 
-AnnotationHelper::~AnnotationHelper()
-{
-    dApp->m_pModelService->removeObserver(this);
-}
-
 int AnnotationHelper::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgList.contains(msgType)) {

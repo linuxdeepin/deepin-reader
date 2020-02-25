@@ -39,14 +39,6 @@ class DocummentFileHelper : public QObject, public IObserver
 public:
     explicit DocummentFileHelper(QObject *parent = nullptr);
 
-public:
-    static DocummentFileHelper *instance()
-    {
-        static DocummentFileHelper helper;
-        return &helper;
-    }
-    ~DocummentFileHelper() Q_DECL_OVERRIDE;
-
 signals:
     void sigDealWithData(const int &, const QString &);
     void sigDealWithKeyMsg(const QString &);
@@ -59,8 +51,8 @@ public:
 public:
     bool save(const QString &filepath, bool withChanges);
 
-    void setAppShowTitle();
-    void setSzFilePath(const QString &szFilePath);
+    void qRemoveTabFile(const int &iType,  const QString &sPath);
+    void qAppExitFile(const int &iType, const QString &sPath);
 
 private:
     void __PageJump(const int &pagenum);
@@ -69,7 +61,7 @@ private:
 
     void initConnections();
     void onOpenFile(const QString &filePaths);
-    void onOpenFiles(const QString &filePaths);
+//    void onOpenFiles(const QString &filePaths);
 
     void onSaveFile();
     void onSaveAsFile();
@@ -88,8 +80,8 @@ private slots:
 private:
     QList<int>              m_pMsgList;
     QList<QString>          m_pKeyMsgList;
-    QString                 m_szFilePath = "";
-    DocType_EM              m_nCurDocType = DocType_NULL;
+//    QString                 m_szFilePath = "";
+//    DocType_EM              m_nCurDocType = DocType_NULL;
 };
 
 #endif // DOCUMMENTFILEHELPER_H

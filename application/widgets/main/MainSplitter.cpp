@@ -20,24 +20,69 @@
 
 #include "../DocShowShellWidget.h"
 #include "../LeftSidebarWidget.h"
+#include "../FileViewWidget.h"
 
-MainSplitter::MainSplitter(DWidget *parent)
+MainSplitter::MainSplitter(CustomWidget *parent)
     : DSplitter(parent)
 {
-    __InitWidget();
+    InitWidget();
+    InitConnections();
+
+    dApp->m_pModelService->addObserver(this);
 }
 
-void MainSplitter::__InitWidget()
+MainSplitter::~MainSplitter()
+{
+    dApp->m_pModelService->removeObserver(this);
+}
+
+void MainSplitter::InitWidget()
 {
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
-    addWidget(new LeftSidebarWidget);
-    addWidget(new DocShowShellWidget);
+    m_pLeftSidebarWidget = new LeftSidebarWidget;
+    addWidget(m_pLeftSidebarWidget);
+
+    m_pDocShellWidget = new DocShowShellWidget;
+    addWidget(m_pDocShellWidget);
 
     QList<int> list_src;
     list_src.append(LEFTNORMALWIDTH);
     list_src.append(1000 - LEFTNORMALWIDTH);
 
     setSizes(list_src);
+}
+
+void MainSplitter::InitConnections()
+{
+
+}
+
+int MainSplitter::dealWithData(const int &msgType, const QString &msgContent)
+{
+    return 0;
+}
+
+void MainSplitter::sendMsg(const int &msgType, const QString &msgContent)
+{
+    notifyMsg(msgType, msgContent);
+}
+
+void MainSplitter::notifyMsg(const int &msgType, const QString &msgContent)
+{
+    dApp->m_pModelService->notifyMsg(msgType, msgContent);
+}
+
+QString MainSplitter::qGetPath() const
+{
+    return m_strPath;
+}
+
+void MainSplitter::qSetPath(const QString &strPath)
+{
+    m_strPath = strPath;
+
+    m_pLeftSidebarWidget->qSetPath(m_strPath);
+    m_pDocShellWidget->qSetPath(m_strPath);
 }

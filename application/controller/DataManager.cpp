@@ -63,7 +63,17 @@ void DataManager::initKeyList()
 //    m_pLeftKeyList.append(QKeySequence(Qt::Key_Down));
 //    m_pLeftKeyList.append(QKeySequence(Qt::Key_Up));
 //    m_pLeftKeyList.append(QKeySequence(Qt::Key_Left));
-//    m_pLeftKeyList.append(QKeySequence(Qt::Key_Right));
+    //    m_pLeftKeyList.append(QKeySequence(Qt::Key_Right));
+}
+
+QString DataManager::getCurrentFilePath() const
+{
+    return m_strCurrentFilePath;
+}
+
+void DataManager::setCurrentFilePath(const QString &strFilePath)
+{
+    m_strCurrentFilePath = strFilePath;
 }
 
 QString DataManager::strOnlyFilePath() const
@@ -170,4 +180,35 @@ void DataManager::qSetFileData(const QString &sPath, const FileData &fd)
 QMap<QString, FileData> DataManager::qGetFileStateMap() const
 {
     return m_pFileStateMap;
+}
+
+QMap<QString, QString> DataManager::qGetFileAndUuidMap() const
+{
+    return m_pFileAndUuidMap;
+}
+
+void DataManager::qInsertFileAndUuid(const QString &sPath, const QString &sUuid)
+{
+    m_pFileAndUuidMap.insert(sPath, sUuid);
+}
+
+QString DataManager::qGetFileUuid(const QString &sPath)
+{
+    return  m_pFileAndUuidMap[sPath];
+}
+
+QList<QString> DataManager::qGetOpenFilePathList() const
+{
+    return m_pFileStateMap.keys();
+}
+
+void DataManager::qInsertOpenFilePath(const QString &strPath)
+{
+    m_pFileStateMap.insert(strPath, FileData());
+}
+
+void DataManager::qRemoveFilePath(const QString &strPath)
+{
+    m_pFileStateMap.remove(strPath);
+    m_pFileAndUuidMap.remove(strPath);
 }

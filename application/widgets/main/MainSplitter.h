@@ -21,18 +21,41 @@
 
 #include <DSplitter>
 
+#include "CustomControl/CustomWidget.h"
+
+#include "application.h"
+
 DWIDGET_USE_NAMESPACE
 
-class MainSplitter : public DSplitter
+class DocShowShellWidget;
+class LeftSidebarWidget;
+
+class MainSplitter : public DSplitter, public IObserver
 {
     Q_OBJECT
     Q_DISABLE_COPY(MainSplitter)
 
 public:
-    explicit MainSplitter(DWidget *parent = nullptr);
+    explicit MainSplitter(CustomWidget *parent = nullptr);
+    ~MainSplitter() Q_DECL_OVERRIDE;
+
+    // IObserver interface
+public:
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    void sendMsg(const int &, const QString &) Q_DECL_OVERRIDE;
+    void notifyMsg(const int &, const QString &) Q_DECL_OVERRIDE;
+
+    QString qGetPath() const;
+    void qSetPath(const QString &strPath);
 
 private:
-    void __InitWidget();
+    void InitWidget();
+    void InitConnections();
+
+private:
+    LeftSidebarWidget        *m_pLeftSidebarWidget = nullptr;
+    DocShowShellWidget       *m_pDocShellWidget = nullptr;
+    QString         m_strPath = "";
 };
 
 #endif // MAINSPLITTER_H

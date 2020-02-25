@@ -47,6 +47,13 @@ public:
         return &manager;
     }
 
+    QString getCurrentFilePath() const;
+    void setCurrentFilePath(const QString &strFilePath);
+
+    QList<QString> qGetOpenFilePathList() const;
+    void qInsertOpenFilePath(const QString &strPath);
+    void qRemoveFilePath(const QString &strPath);
+
     QString strOnlyFilePath() const;
     void setStrOnlyFilePath(const QString &strOnlyFilePath);
 
@@ -104,8 +111,15 @@ public:
     void qSetFileData(const QString &strPath, const FileData &);
     QMap<QString, FileData> qGetFileStateMap() const;
 
+    QMap<QString, QString> qGetFileAndUuidMap() const;
+    void qInsertFileAndUuid(const QString &, const QString &);
+    QString qGetFileUuid(const QString &);
+
 private:
+    QString m_strCurrentFilePath = "";     //  当前显示的文档路径
     QMap<QString, FileData> m_pFileStateMap;     //  已打开的文档列表
+    QMap<QString, QString> m_pFileAndUuidMap;     //  已打开的文档列表
+
 
     QString m_strCurrentTheme = "";     //  当前主题
     QString m_strOnlyFilePath = "";     //  只显示一个pdf 文件

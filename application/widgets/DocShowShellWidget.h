@@ -3,11 +3,15 @@
 
 #include "CustomControl/CustomWidget.h"
 
+#include <DSpinner>
+
+class PlayControlWidget;
+class QStackedLayout;
+
 /**
  * @brief The DocShowShellWidget class
  * @brief   文档　显示外壳
  */
-class PlayControlWidget;
 
 class DocShowShellWidget : public CustomWidget
 {
@@ -23,11 +27,13 @@ signals:
     void sigHideCloseBtn();
     void sigShowFileFind();
     void sigChangePlayCtrlShow(bool bshow);
+    void sigOpenFileOk(const QString &);
 
 //    void sigDealWithData(const int &, const QString &);
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    void qSetPath(const QString &);
 
     // QWidget interface
 protected:
@@ -40,6 +46,7 @@ private slots:
     void slotBtnCloseClicked();
     void slotUpdateTheme();
     void slotChangePlayCtrlShow(bool bshow);
+    void slotOpenFileOk(const QString &);
 
     void slotDealWithData(const int &, const QString &msgContent = "");
 
@@ -61,10 +68,8 @@ protected:
 
 private:
     PlayControlWidget *m_pctrlwidget = nullptr;
-
-    // QWidget interface
-protected:
-//    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
+    DSpinner            *m_pSpiner = nullptr;
+    QStackedLayout      *m_playout = nullptr;
 };
 
 #endif // DOCSHOWSHELLWIDGET_H

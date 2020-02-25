@@ -8,6 +8,7 @@
 #include <DGuiApplicationHelper>
 
 #include "business/ShortCutShow.h"
+#include "business/SaveDialog.h"
 #include "business/DocummentFileHelper.h"
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
@@ -55,7 +56,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::openfile(const QString &filepath)
 {
-    notifyMsg(MSG_OPEN_FILE_PATH, filepath);
+//    notifyMsg(MSG_OPEN_FILE_PATH, filepath);
 }
 
 void MainWindow::setSreenRect(const QRect &rect)
@@ -73,54 +74,18 @@ void MainWindow::showEvent(QShowEvent *ev)
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    QString sFilePath = DataManager::instance()->strOnlyFilePath();
-    if (sFilePath != "") {
-        bool rl = DataManager::instance()->bIsUpdate();
-        if (rl) {
-            DDialog dlg("", tr("Do you want to save the changes?"));
-            dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
-            dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Discard"));
-            dlg.addButton(tr("Save"), true, DDialog::ButtonRecommend);
-            QMargins mar(0, 0, 0, 30);
-            dlg.setContentLayoutContentsMargins(mar);
-
-            int nRes = dlg.exec();
-            if (nRes <= 0) {
-                event->ignore();
-                return;
-            }
-
-            if (nRes == 2) {
-                //  保存
-                dApp->m_pModelService->notifyMsg(MSG_EXIT_SAVE_FILE);
-
-                //  保存 书签数据r
-                dApp->m_pDBService->qSaveData(sFilePath, DB_BOOKMARK);
-            } else {    //  不保存
-                notifyMsg(MSG_CLOSE_FILE);
-
-                DocummentProxy *_proxy = DocummentProxy::instance();
-                if (_proxy) {
-                    _proxy->closeFile();
-                }
-            }
-        } else {
-            notifyMsg(MSG_CLOSE_FILE);
-            hide();
-            DocummentProxy *_proxy = DocummentProxy::instance();
-            if (_proxy) {
-                _proxy->closeFile();
-            }
-        }
-
-        //  保存文档字号参数信息
-        dApp->m_pDBService->qSaveData(sFilePath, DB_HISTROY);
-    }
-
     AppSetting::instance()->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
     AppSetting::instance()->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
 
-    DMainWindow::closeEvent(event);
+    QMap<QString, FileData> sFileStateMap = dApp->m_pDataManager->qGetFileStateMap();
+    if (sFileStateMap.size() > 0) {
+        SaveDialog sd;
+        sd.showSaveDialog(E_APP_MSG);
+
+        event->ignore();
+    } else {
+        DMainWindow::closeEvent(event);
+    }
 }
 
 void MainWindow::initUI()

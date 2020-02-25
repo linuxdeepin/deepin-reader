@@ -23,6 +23,7 @@ signals:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    void qSetPath(const QString &sPath);
 
     // QWidget interface
 protected:
@@ -47,6 +48,9 @@ private:
 
     void onJumpToPrevPage();
     void onJumpToNextPage();
+
+private:
+    QString         m_strPath = "";
 };
 
 #endif  // LEFTSHOWWIDGET_H

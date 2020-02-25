@@ -19,9 +19,18 @@ public:
     ~HomeWidget() Q_DECL_OVERRIDE;
 
 signals:
-//    void sigDealWithKeyMsg(const QString &);
+    void sigOpenFilePaths(const QString &);
+
+    // IObserver interface
+public:
+    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+
+    // CustomWidget interface
+protected:
+    void initWidget() Q_DECL_OVERRIDE;
 
 private slots:
+    void slotDealWithData(const int &, const QString &);
     void slotDealWithKeyMsg(const QString &);
     void slotChooseBtnClicked();
     void slotUpdateTheme();
@@ -29,17 +38,10 @@ private slots:
 private:
     QStringList getOpenFileList();
     void initConnections();
+    void NewWindow();
 
 private:
     AppSetting *m_settings = nullptr;
-
-    // CustomWidget interface
-protected:
-    void initWidget() Q_DECL_OVERRIDE;
-
-    // IObserver interface
-public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 };
 
 #endif // OPENFILEWIDGET_H

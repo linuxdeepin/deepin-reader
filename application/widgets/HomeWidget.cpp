@@ -13,6 +13,7 @@
 HomeWidget::HomeWidget(CustomWidget *parent)
     : CustomWidget("HomeWidget", parent)
 {
+    m_pMsgList = {MSG_MENU_NEW_WINDOW};
     m_pKeyMsgList = {KeyStr::g_ctrl_o};
 
     initWidget();
@@ -32,6 +33,13 @@ HomeWidget::~HomeWidget()
     if (m_settings) {
         m_settings->deleteLater();
         m_settings = nullptr;
+    }
+}
+
+void HomeWidget::slotDealWithData(const int &msgType, const QString &)
+{
+    if (MSG_MENU_NEW_WINDOW == msgType) {
+        NewWindow();
     }
 }
 
@@ -83,7 +91,7 @@ void HomeWidget::slotChooseBtnClicked()
             sRes += s + Constant::sQStringSep;
         }
 
-//        notifyMsg(MSG_OPEN_FILE_PATH_S, sRes);
+        emit sigOpenFilePaths(sRes);
     }
 }
 
@@ -136,6 +144,11 @@ void HomeWidget::initConnections()
 {
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)), SLOT(slotDealWithKeyMsg(const QString &)));
+}
+
+void HomeWidget::NewWindow()
+{
+
 }
 
 int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)

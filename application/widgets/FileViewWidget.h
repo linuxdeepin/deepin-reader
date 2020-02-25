@@ -22,7 +22,6 @@
 #include "CustomControl/CustomWidget.h"
 
 class TextOperationMenu;
-class DocummentFileHelper;
 
 //  当前鼠标状态
 enum E_Handel_State {
@@ -58,6 +57,8 @@ signals:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    void qSetPath(const QString &);
+    QString qGetPath() const;
 
     // CustomWidget interface
 protected:
@@ -99,8 +100,9 @@ private:
 
 private:
     TextOperationMenu       *m_operatemenu = nullptr;
-    DocummentFileHelper     *m_pDocummentFileHelper = nullptr;
 
+    QString                 m_strPath = "";
+    QString     m_strProcUuid = "";
 
     int         m_nAdapteState = NO_ADAPTE_State;       //  当前自适应状态
     QPoint      m_pStartPoint;

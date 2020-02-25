@@ -62,17 +62,16 @@ FileViewWidget::~FileViewWidget()
 void FileViewWidget::initWidget()
 {
     //  实际文档类  唯一实例化设置 父窗口
-    DocummentProxy::CreateInstance(this);
+    m_strProcUuid = DocummentProxy::CreateInstance(this);
+
     auto m_pDocummentProxy = DocummentProxy::instance(this);
     if (m_pDocummentProxy) {
+        connect(this, SIGNAL(sigChangeProxy(const QString &)), m_pDocummentProxy, SLOT(slot_changetab(const QString &)));
+
         connect(m_pDocummentProxy, SIGNAL(signal_bookMarkStateChange(int, bool)), SLOT(slotBookMarkStateChange(int, bool)));
         connect(m_pDocummentProxy, SIGNAL(signal_pageChange(int)), SLOT(slotDocFilePageChanged(int)));
         connect(m_pDocummentProxy, SIGNAL(signal_openResult(bool)), SLOT(SlotDocFileOpenResult(bool)));
     }
-
-    //  纯粹 业务处理类
-    m_pDocummentFileHelper = new DocummentFileHelper(this);
-    new AnnotationHelper(this);
 }
 
 //  鼠标移动
@@ -150,17 +149,7 @@ void FileViewWidget::slotDealWithData(const int &msgType, const QString &msgCont
     case MSG_NOTE_PAGE_ADD:                     //  2020.2.18   wzx add
         __SetPageAddIconState();
         break;
-    case MSG_EXIT_SAVE_FILE:
-        QString sFilePath = DataManager::instance()->strOnlyFilePath();
-        m_pDocummentFileHelper->save(sFilePath, true);
-
-        notifyMsg(MSG_CLOSE_FILE);
-
-        DocummentProxy *_proxy = DocummentProxy::instance();
-        if (_proxy) {
-            _proxy->closeFile();
-        }
-
+    default:
         break;
     }
 }
@@ -431,10 +420,8 @@ void FileViewWidget::SlotDocFileOpenResult(bool openresult)
 {
     //  通知 其他窗口， 打开文件成功了！！！
     if (openresult) {
-        m_pDocummentFileHelper->setAppShowTitle();
+        notifyMsg(MSG_OPERATION_OPEN_FILE_OK, m_strPath);
     } else {
-        m_pDocummentFileHelper->setSzFilePath("");
-        DataManager::instance()->setStrOnlyFilePath("");
         notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
     }
 }
@@ -495,4 +482,15 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
     }
 
     return 0;
+}
+
+void FileViewWidget::qSetPath(const QString &sPath)
+{
+    m_strPath = sPath;
+    dApp->m_pDataManager->qInsertFileAndUuid(sPath, m_strProcUuid);
+}
+
+QString FileViewWidget::qGetPath() const
+{
+    return m_strPath;
 }
