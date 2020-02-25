@@ -9,29 +9,65 @@
 
 namespace {
 
+//  消息类型
+enum E_MSG_TYPE {
+    E_MSG_TYPE_BEGIN = 0,
+    E_APP_MSG,
+    E_TAB_MSG,
+    E_DOC_MSG,
+    E_MSG_TYPE_END
+};
 
+//  应用类 消息
+enum E_APP_MSG_TYPE {
+    E_APP_MSG_TYPE_BEGIN = E_MSG_TYPE_END + 50,
+    E_APP_EXIT,
+    E_APP_MSG_TYPE_END
+};
+
+//  central 消息
+enum E_CENTRAL_MSG {
+    E_CENTRAL_MSG_BEGIN = E_MSG_TYPE_END + 50,
+    CENTRAL_INDEX_CHANGE,
+    CENTRAL_SHOW_TIP,                //  显示提示窗口
+    E_CENTRAL_MSG_END
+};
 
 //  消息类型
 enum MSG_TYPE {
-    MSG_MAGNIFYING = 0,             //  放大镜消息
+    MSG_TYPE_BEGIN = E_CENTRAL_MSG_END + 50,
+    MSG_MAGNIFYING,             //  放大镜消息
     MSG_MAGNIFYING_CANCEL,          //  取消放大镜消息
     MSG_HANDLESHAPE,                //  手型 消息
-    MSG_OPEN_FILE_PATH,             //  打开的文件消息
-    MSG_OPEN_FILE_PATH_S,           //  打开的文件消息
-    MSG_OPERATION_OPEN_FILE_OK,     //  打开文件成功, 要告诉所有人
-    MSG_OPERATION_OPEN_FILE_START,      //  开始打开文件
-    MSG_OPERATION_OPEN_FILE_FAIL,       //  打开文件失败
+
     MSG_OPERATION_UPDATE_THEME,         //  主题变了
     MSG_NOTIFY_KEY_MSG,                 //  按键通知消息
     MSG_NOTIFY_KEY_PLAY_MSG,            //  幻灯片模式按键通知消息
-    MSG_NOTIFY_SHOW_TIP,                //  显示提示窗口
-    MSG_EXIT_SAVE_FILE,                     //  关闭当前文档　消息
+    MSG_EXIT_SAVE_FILE,                 //  关闭当前文档　消息
+    MSG_EXIT_NOT_SAVE_FILE,             //  关闭当前文档　消息
+    MSG_EXIT_NOT_CHANGE_FILE,             //  关闭当前文档　消息
     MSG_CLOSE_FILE,                     //  关闭当前文档　消息
+    MSG_JSON_NOTIFY_TYPE,
+    MSG_TYPE_END,
+};
+
+//  多标签消息
+enum E_TAB_TYPE {
+    MSG_TAB_MSG_BEGIN = MSG_TYPE_END + 50,
+    MSG_TAB_ADD,                    //  添加 tab 消息
+    MSG_TAB_ADD_OK,                 //  添加 tab 成功
+    MSG_TAB_ADD_END,                //  添加 tab 结束
+    MSG_TAB_DATA_CHANGE,            //  文档数据有变化消息
+    MSG_TAB_SAVE_FILE,              //  关闭当前文档　消息
+    MSG_TAB_SHOW_FILE_CHANGE,       //  关闭当前文档　消息
+    MSG_TAB_NOT_SAVE_FILE,          //  关闭当前文档　消息
+    MSG_TAB_NOT_CHANGE_SAVE_FILE,   //  关闭当前文档　消息
+    MSG_TAB_MSG_END,
 };
 
 //  菜单操作消息类型
 enum E_MENU_MSG {
-    MSG_OPERATION_SAVE_AS_FILE = MSG_CLOSE_FILE + 50,  //  另存为文件
+    MSG_OPERATION_SAVE_AS_FILE = MSG_TAB_MSG_END + 50,  //  另存为文件
     MSG_MENU_NEW_WINDOW,                // 新窗口打开一个文档
     MSG_MENU_NEW_TAB,                   // 新增加一个文档
     MSG_MENU_OPEN_FOLDER,               //  打开文件所处文件夹
@@ -67,8 +103,13 @@ enum E_FIND_MSG {
 };
 
 //  文档操作消息
-enum E_DOC_MSG {
+enum E_DOC_TYPE_MSG {
     MSG_DOC_JUMP_PAGE = MSG_FIND_EXIT + 50,             //  请求跳转页面
+    MSG_OPEN_FILE_PATH,             //  打开的文件消息
+//    MSG_OPEN_FILE_PATH_S,           //  打开的文件消息
+    MSG_OPERATION_OPEN_FILE_OK,     //  打开文件成功, 要告诉所有人
+    MSG_DOC_OPEN_FILE_START,      //  开始打开文件
+    MSG_OPERATION_OPEN_FILE_FAIL,       //  打开文件失败
     MSG_OPERATION_FIRST_PAGE,                           //  第一页
     MSG_OPERATION_PREV_PAGE,                            //  上一页
     MSG_OPERATION_NEXT_PAGE,                            //  下一页
@@ -88,7 +129,8 @@ enum E_BOOKMARK_MSG {
 
 //  高亮&注释消息
 enum E_NOTE_MSG {
-    MSG_NOTE_ADD_CONTENT = MSG_OPERATION_RIGHT_SELECT_BOOKMARK + 50,        //  添加注释内容 消息
+    E_NOTE_MSG_BEGIN = MSG_OPERATION_RIGHT_SELECT_BOOKMARK + 50,
+    MSG_NOTE_ADD_CONTENT,        //  添加注释内容 消息
     MSG_NOTE_ADD_HIGHLIGHT_COLOR,       //  添加高亮
     MSG_NOTE_UPDATE_HIGHLIGHT_COLOR,    //  更新 高亮显示
     MSG_NOTE_REMOVE_HIGHLIGHT_COLOR,    //  移除 高亮显示
@@ -109,6 +151,21 @@ enum E_NOTE_MSG {
     MSG_NOTE_PAGE_UPDATE_ITEM,          //  页面注释 更新节点
     MSG_NOTE_PAGE_DELETE_CONTENT,       //  页面注释 删除内容
     MSG_NOTE_PAGE_DELETE_ITEM,          //  页面注释 删除节点
+    E_NOTE_MSG_END,
+};
+
+//  文档显示变化消息
+enum E_FILE_VALUE_MSG {
+    E_FILE_VALUE_MSG_BEGIN = E_NOTE_MSG_END + 50,
+    MSG_TAB_FILE_CHANGE,                //  titlebar 缩略图按钮 状态
+    MSG_WIDGET_THUMBNAILS_VIEW,         //  titlebar 缩略图按钮 状态
+    MSG_VIEWCHANGE_DOUBLE_SHOW,         //  双页显示状态
+    MSG_VIEWCHANGE_FIT,                 //  自适应
+    MSG_VIEWCHANGE_ROTATE,              //  旋转
+    MSG_HANDLE_SELECT,                  //  选择工具
+    MSG_FILE_SCALE,                     //  当前比例
+    MSG_FILE_IS_CHANGE,                 //  文档是否有变化
+    E_FILE_VALUE_MSG_END
 };
 
 }

@@ -22,6 +22,8 @@
 #include <QDir>
 
 #include "utils/utils.h"
+#include "controller/AppInfo.h"
+#include "controller/DataManager.h"
 
 namespace {
 
@@ -80,6 +82,8 @@ void Application::initChildren()
 {
     m_pDBService = new DBService(this);
     m_pModelService = new ModelService(this);
+    m_pDataManager = new DataManager(this);
+    m_pAppInfo = new AppInfo(this);
 }
 
 void Application::initI18n()

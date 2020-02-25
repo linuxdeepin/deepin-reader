@@ -156,3 +156,18 @@ QList<QKeySequence> DataManager::getPLeftKeyList() const
 {
     return m_pLeftKeyList;
 }
+
+FileData DataManager::qGetFileData(const QString &sPath) const
+{
+    return m_pFileStateMap[sPath];
+}
+
+void DataManager::qSetFileData(const QString &sPath, const FileData &fd)
+{
+    m_pFileStateMap[sPath] = fd;
+}
+
+QMap<QString, FileData> DataManager::qGetFileStateMap() const
+{
+    return m_pFileStateMap;
+}

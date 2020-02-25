@@ -21,6 +21,9 @@
 #include "DBService.h"
 #include "ModelService.h"
 
+class AppInfo;
+class DataManager;
+
 #if defined(dApp)
 #undef dApp
 #endif
@@ -43,6 +46,8 @@ protected:
 public:
     DBService   *m_pDBService = nullptr;
     ModelService    *m_pModelService = nullptr;
+    AppInfo             *m_pAppInfo = nullptr;
+    DataManager         *m_pDataManager = nullptr;
 
 private:
     void initCfgPath();

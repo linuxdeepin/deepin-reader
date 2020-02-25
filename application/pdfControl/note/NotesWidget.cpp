@@ -166,7 +166,7 @@ void NotesWidget::__DeleteNoteItem(const QString &sUuid)
                     // remove date from map and notify kong yun zhen
                     m_mapUuidAndPage.remove(sUuid);
 
-                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The annotation has been removed"));
+                    notifyMsg(CENTRAL_SHOW_TIP, tr("The annotation has been removed"));
                     break;
                 }
             }

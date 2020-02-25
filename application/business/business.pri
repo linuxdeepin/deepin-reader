@@ -3,10 +3,12 @@ HEADERS += \
     $$PWD/PrintManager.h \
     $$PWD/DocummentFileHelper.h \
     $$PWD/FileFormatHelper.h \
-    $$PWD/AnnotationHelper.h
+    $$PWD/AnnotationHelper.h \
+    $$PWD/SaveDialog.h
 
 SOURCES += \
     $$PWD/PrintManager.cpp \
     $$PWD/ShortCutShow.cpp \
     $$PWD/DocummentFileHelper.cpp \
-    $$PWD/AnnotationHelper.cpp
+    $$PWD/AnnotationHelper.cpp \
+    $$PWD/SaveDialog.cpp

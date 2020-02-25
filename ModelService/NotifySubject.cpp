@@ -34,6 +34,11 @@ void NotifySubject::run()
     }
 }
 
+NotifySubject::~NotifySubject()
+{
+    qDeleteAll(m_observerList.begin(), m_observerList.end());
+}
+
 void NotifySubject::addObserver(IObserver *obs)
 {
     QMutexLocker locker(&m_obsMutex);

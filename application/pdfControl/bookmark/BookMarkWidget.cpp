@@ -272,7 +272,7 @@ void BookMarkWidget::slotDeleteBookItem(const int &nPage)
 
                     deleteIndexPage(nPageIndex);
 
-                    notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The bookmark has been removed"));
+                    notifyMsg(CENTRAL_SHOW_TIP, tr("The bookmark has been removed"));
 
                     break;
                 }

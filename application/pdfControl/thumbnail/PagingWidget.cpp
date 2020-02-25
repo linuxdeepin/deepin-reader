@@ -220,7 +220,7 @@ void PagingWidget::__PageNumberJump()
         if (iPage > -1 && iPage < nPageSum) {   //  输入的页码 必须在 0-最大值 之间, 才可以
             notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(iPage));
         } else {
-            notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Invalid page number"));
+            notifyMsg(CENTRAL_SHOW_TIP, tr("Invalid page number"));
         }
     }
 }

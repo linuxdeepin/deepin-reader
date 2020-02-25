@@ -10,7 +10,7 @@
 
 class IObserver
 {
-protected:
+public:
     virtual ~IObserver() {}
 
 public:

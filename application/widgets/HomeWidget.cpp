@@ -18,9 +18,6 @@ HomeWidget::HomeWidget(CustomWidget *parent)
     initWidget();
     initConnections();
 
-
-
-
     m_settings = AppSetting::instance();
 
     slotUpdateTheme();
@@ -86,7 +83,7 @@ void HomeWidget::slotChooseBtnClicked()
             sRes += s + Constant::sQStringSep;
         }
 
-        notifyMsg(MSG_OPEN_FILE_PATH_S, sRes);
+//        notifyMsg(MSG_OPEN_FILE_PATH_S, sRes);
     }
 }
 

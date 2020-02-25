@@ -42,7 +42,7 @@ CentralWidget::CentralWidget(CustomWidget *parent)
 {
     setAcceptDrops(true);
 
-    m_pMsgList = {MSG_OPERATION_OPEN_FILE_FAIL, MSG_OPERATION_OPEN_FILE_START, MSG_NOTIFY_SHOW_TIP};
+    m_pMsgList = {MSG_OPERATION_OPEN_FILE_FAIL, MSG_DOC_OPEN_FILE_START, CENTRAL_SHOW_TIP};
     initWidget();
     initConnections();
 
@@ -106,9 +106,9 @@ void CentralWidget::slotDealWithData(const int &msgType, const QString &msgConte
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_FAIL) {
         onOpenFileFail(msgContent);
-    } else if (msgType == MSG_OPERATION_OPEN_FILE_START) {
+    } else if (msgType == MSG_DOC_OPEN_FILE_START) {
         onOpenFileStart();
-    } else if (msgType == MSG_NOTIFY_SHOW_TIP) {
+    } else if (msgType == CENTRAL_SHOW_TIP) {
         onShowTips(msgContent);
     }
 }
@@ -247,7 +247,7 @@ void CentralWidget::dropEvent(QDropEvent *event)
                 sRes += s + Constant::sQStringSep;
             }
 
-            notifyMsg(MSG_OPEN_FILE_PATH_S, sRes);
+//            notifyMsg(MSG_OPEN_FILE_PATH_S, sRes);
         }
     }
 }

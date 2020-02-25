@@ -9,6 +9,9 @@
 #include <QKeySequence>
 #include <QDebug>
 
+#include "FileData.h"
+
+
 /**
  * @brief The DataManager class
  * @brief   固定数据管理区， 采用 单例
@@ -32,7 +35,7 @@ class DataManager : public QObject
     Q_OBJECT
     Q_DISABLE_COPY(DataManager)
 
-private:
+public:
     explicit DataManager(QObject *parent = nullptr);
 
     void initKeyList();
@@ -97,7 +100,13 @@ public:
 
     QList<QKeySequence> getPLeftKeyList() const;
 
+    FileData qGetFileData(const QString &) const;
+    void qSetFileData(const QString &strPath, const FileData &);
+    QMap<QString, FileData> qGetFileStateMap() const;
+
 private:
+    QMap<QString, FileData> m_pFileStateMap;     //  已打开的文档列表
+
     QString m_strCurrentTheme = "";     //  当前主题
     QString m_strOnlyFilePath = "";     //  只显示一个pdf 文件
     int     m_nCurShowState = FILE_NORMAL;       //  文档当前显示状态

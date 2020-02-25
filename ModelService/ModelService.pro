@@ -13,7 +13,8 @@ DEFINES += MODELSERVICE_LIBRARY
 
 SOURCES += \
         ModelService.cpp \
-    NotifySubject.cpp
+    NotifySubject.cpp \
+    MsgModel.cpp
 
 HEADERS += \
         ModelService.h \
@@ -24,7 +25,9 @@ HEADERS += \
     Singleton.h \
     ModuleHeader.h \
     NotifySubject.h \
-    SubjectThread.h
+    SubjectThread.h \
+    MsgModel.h \
+    FileData.h
 
 
 QMAKE_PKGCONFIG_LIBDIR = $$target.path

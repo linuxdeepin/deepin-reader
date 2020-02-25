@@ -35,7 +35,7 @@
 DocummentFileHelper::DocummentFileHelper(QObject *parent)
     : QObject(parent)
 {
-    m_pMsgList = { MSG_OPEN_FILE_PATH, MSG_OPEN_FILE_PATH_S, MSG_OPERATION_SAVE_AS_FILE,
+    m_pMsgList = { MSG_OPEN_FILE_PATH, MSG_OPERATION_SAVE_AS_FILE,
                    MSG_OPERATION_TEXT_COPY,
                    MSG_DOC_JUMP_PAGE, MSG_OPERATION_FIRST_PAGE, MSG_OPERATION_PREV_PAGE, MSG_OPERATION_NEXT_PAGE, MSG_OPERATION_END_PAGE
                  };
@@ -89,9 +89,9 @@ void DocummentFileHelper::slotDealWithData(const int &msgType, const QString &ms
 {
     if (msgType == MSG_OPEN_FILE_PATH) {            //  打开单个文件
         onOpenFile(msgContent);
-    } else if (msgType == MSG_OPEN_FILE_PATH_S) {   //  打开多个文件
+    } /*else if (msgType == MSG_OPEN_FILE_PATH_S) {   //  打开多个文件
         onOpenFiles(msgContent);
-    } else if (msgType == MSG_OPERATION_SAVE_AS_FILE) { //  另存为文件
+    }*/ else if (msgType == MSG_OPERATION_SAVE_AS_FILE) { //  另存为文件
         onSaveAsFile();
     } else if (msgType == MSG_OPERATION_TEXT_COPY) {    //  复制
         slotCopySelectContent(msgContent);
@@ -148,12 +148,12 @@ void DocummentFileHelper::onSaveFile()
             dApp->m_pDBService->qSaveData(m_szFilePath, DB_BOOKMARK);
 
             DataManager::instance()->setBIsUpdate(false);
-            notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Saved successfully"));
+            notifyMsg(CENTRAL_SHOW_TIP, tr("Saved successfully"));
         } else {
-            notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("Saved failed"));
+            notifyMsg(CENTRAL_SHOW_TIP, tr("Saved failed"));
         }
     } else {
-        notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("No changes"));
+        notifyMsg(CENTRAL_SHOW_TIP, tr("No changes"));
     }
     //insert msg to FileFontTable
     dApp->m_pDBService->qSaveData(m_szFilePath, DB_HISTROY);
@@ -254,44 +254,6 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
         return;
     }
 
-    //  已经打开了文件，　询问是否需要保存当前打开的文件
-    if (m_szFilePath != "") {
-        QStringList fileList = filePaths.split(Constant::sQStringSep,  QString::SkipEmptyParts);
-        int nSize = fileList.size();
-        if (nSize > 0) {
-            QString sPath = fileList.at(0);
-
-            if (m_szFilePath == sPath) {
-                notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The file is already open"));
-                return;
-            }
-        }
-        //  是否有操作
-        bool rl = DataManager::instance()->bIsUpdate();
-        if (rl) {
-            DDialog dlg(tr("Save"), tr("Do you want to save the changes?"));
-            dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
-            dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Discard") <<  tr("Save"));
-            int nRes = dlg.exec();
-            if (nRes == 0) {    //  取消打开该文件
-                return;
-            }
-
-            if (nRes == 2) {    // 保存已打开文件
-                save(m_szFilePath, true);
-                //  保存 书签数据
-                dApp->m_pDBService->qSaveData(m_szFilePath, DB_BOOKMARK);
-            }
-        }
-        dApp->m_pDBService->qSaveData(m_szFilePath, DB_HISTROY);
-
-        notifyMsg(MSG_OPERATION_OPEN_FILE_START);
-        DocummentProxy::instance()->closeFile();
-        notifyMsg(MSG_CLOSE_FILE);
-    } else {
-        notifyMsg(MSG_OPERATION_OPEN_FILE_START);
-    }
-
     QStringList fileList = filePaths.split(Constant::sQStringSep,  QString::SkipEmptyParts);
     int nSize = fileList.size();
     if (nSize > 0) {
@@ -306,7 +268,7 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
         DataManager::instance()->setStrOnlyFilePath(sPath);
 
         bool rl = false;
-
+        notifyMsg(MSG_DOC_OPEN_FILE_START, sPath);
         //从数据库中获取文件的字号信息
         dApp->m_pDBService->qSelectData(DB_HISTROY);
         QJsonObject obj = dApp->m_pDBService->getHistroyData();
@@ -342,7 +304,7 @@ void DocummentFileHelper::onOpenFiles(const QString &filePaths)
     foreach (auto s, canOpenFileList) {
         QString sOpenPath = DataManager::instance()->strOnlyFilePath();
         if (s == sOpenPath) {
-            notifyMsg(MSG_NOTIFY_SHOW_TIP, tr("The file is already open"));
+            notifyMsg(CENTRAL_SHOW_TIP, tr("The file is already open"));
         } else {
             QString sRes = s + Constant::sQStringSep;
             QString sOpenPath = DataManager::instance()->strOnlyFilePath(); //  打开文档为空

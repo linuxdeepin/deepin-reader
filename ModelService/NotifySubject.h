@@ -18,6 +18,8 @@ typedef struct {
 
 class NotifySubject : public SubjectThread
 {
+public:
+    ~NotifySubject() Q_DECL_OVERRIDE;
     // ISubject interface
 public:
     void addObserver(IObserver *obs) Q_DECL_OVERRIDE;
