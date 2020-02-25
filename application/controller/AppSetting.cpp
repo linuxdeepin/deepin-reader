@@ -48,22 +48,22 @@ void AppSetting::setFileKeyValue(const QString &sValue)
 //    }
 //}
 
-QString AppSetting::getKeyValue(const int &iKey) const
-{
-    QString sKey = QString("%1").arg(iKey);
-    QString sTempValue = m_pSettings->value(sKey).toString();
-    QStringList sTempList = sTempValue.split("@#&", QString::SkipEmptyParts);
-    if (sTempList.size() == 2) {
-        QString sFilePath = sTempList.at(0);
-        QString ssFilePath = DataManager::instance()->strOnlyFilePath();
+//QString AppSetting::getKeyValue(const int &iKey) const
+//{
+//    QString sKey = QString("%1").arg(iKey);
+//    QString sTempValue = m_pSettings->value(sKey).toString();
+//    QStringList sTempList = sTempValue.split("@#&", QString::SkipEmptyParts);
+//    if (sTempList.size() == 2) {
+//        QString sFilePath = sTempList.at(0);
+//        QString ssFilePath = DataManager::instance()->strOnlyFilePath();
 
-        if (sFilePath == ssFilePath) {
-            return sTempList.at(1);
-        }
-    }
+//        if (sFilePath == ssFilePath) {
+//            return sTempList.at(1);
+//        }
+//    }
 
-    return "";
-}
+//    return "";
+//}
 
 void AppSetting::setAppKeyValue(const int &iKey, const QString &sValue)
 {

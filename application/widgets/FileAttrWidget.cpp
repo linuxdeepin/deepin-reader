@@ -50,7 +50,7 @@ void FileAttrWidget::setFileAttr()
         }
     }
 
-    QString filePath = DataManager::instance()->strOnlyFilePath();
+    QString filePath = dApp->m_pDataManager->qGetCurrentFilePath();
     QFileInfo info(filePath);
     QString szTitle = info.fileName();
 

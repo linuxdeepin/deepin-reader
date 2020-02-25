@@ -219,10 +219,7 @@ void LeftSidebarWidget::keyPressEvent(QKeyEvent *event)
                               << KeyStr::g_del;
     QString key = Utils::getKeyshortcut(event);
     if (pFilterList.contains(key)) {
-        QString sFilePath = DataManager::instance()->strOnlyFilePath();
-        if (sFilePath != "") {
-            __DealWithPressKey(key);
-        }
+        __DealWithPressKey(key);
     }
 
     CustomWidget::keyPressEvent(event);

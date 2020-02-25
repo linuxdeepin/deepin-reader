@@ -121,10 +121,7 @@ QStringList HomeWidget::getOpenFileList()
     dialog.setFileMode(DFileDialog::ExistingFiles);
     dialog.setNameFilter(Utils::getSuffixList());
 
-    QString historyDir = m_settings->getKeyValue(KEY_DIR);
-    if (historyDir.isEmpty()) {
-        historyDir = QDir::homePath();
-    }
+    QString historyDir = QDir::homePath();
     dialog.setDirectory(historyDir);
 
     const int mode = dialog.exec();

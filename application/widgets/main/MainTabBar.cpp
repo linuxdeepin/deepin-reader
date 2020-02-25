@@ -97,10 +97,10 @@ void MainTabBar::SlotTabBarClicked(int index)
 {
     QString sPath = this->tabData(index).toString();
 
-    QString sCurPath = dApp->m_pDataManager->getCurrentFilePath();
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
 
     if (sPath != sCurPath) {
-        dApp->m_pDataManager->setCurrentFilePath(sPath);
+        dApp->m_pDataManager->qSetCurrentFilePath(sPath);
 
         FileData fd = dApp->m_pDataManager->qGetFileData(sPath);
         if (!fd.bIsOpen) {  //  该文档还未打开

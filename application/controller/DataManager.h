@@ -38,7 +38,7 @@ class DataManager : public QObject
 public:
     explicit DataManager(QObject *parent = nullptr);
 
-    void initKeyList();
+//    void initKeyList();
 
 public:
     static DataManager *instance()
@@ -47,15 +47,15 @@ public:
         return &manager;
     }
 
-    QString getCurrentFilePath() const;
-    void setCurrentFilePath(const QString &strFilePath);
+    QString qGetCurrentFilePath() const;
+    void qSetCurrentFilePath(const QString &strFilePath);
 
     QList<QString> qGetOpenFilePathList() const;
     void qInsertOpenFilePath(const QString &strPath);
     void qRemoveFilePath(const QString &strPath);
 
-    QString strOnlyFilePath() const;
-    void setStrOnlyFilePath(const QString &strOnlyFilePath);
+//    QString strOnlyFilePath() const;
+//    void setStrOnlyFilePath(const QString &strOnlyFilePath);
 
     int CurShowState() const;
     void setCurShowState(int nCurShowState);
@@ -63,7 +63,7 @@ public:
     bool bIsUpdate() const;
     void setBIsUpdate(bool bIsUpdate);
 
-    QList<QColor>   getLightColorList();
+//    QList<QColor>   getLightColorList();
 
     inline void mousePressLocal(bool &highLight, QPoint &point)
     {
@@ -82,17 +82,17 @@ public:
         m_smallNoteSize = size;
     }
 
-    QString gettrCurrentTheme() const;
-    void settrCurrentTheme(const QString &strCurrentTheme);
+//    QString gettrCurrentTheme() const;
+//    void settrCurrentTheme(const QString &strCurrentTheme);
 
-    inline QColor selectColor()
-    {
-        return m_selectColor;
-    }
-    inline void setSelectColor(const QColor &color)
-    {
-        m_selectColor = color;
-    }
+//    inline QColor selectColor()
+//    {
+//        return m_selectColor;
+//    }
+//    inline void setSelectColor(const QColor &color)
+//    {
+//        m_selectColor = color;
+//    }
 
     inline bool bThumbnIsShow() const
     {
@@ -103,9 +103,9 @@ public:
         m_bThumbnIsShow = show;
     }
 
-    QList<QKeySequence> getPKeyList() const;
+//    QList<QKeySequence> getPKeyList() const;
 
-    QList<QKeySequence> getPLeftKeyList() const;
+//    QList<QKeySequence> getPLeftKeyList() const;
 
     FileData qGetFileData(const QString &) const;
     void qSetFileData(const QString &strPath, const FileData &);
@@ -121,11 +121,11 @@ private:
     QMap<QString, QString> m_pFileAndUuidMap;     //  已打开的文档列表
 
 
-    QString m_strCurrentTheme = "";     //  当前主题
-    QString m_strOnlyFilePath = "";     //  只显示一个pdf 文件
+//    QString m_strCurrentTheme = "";     //  当前主题
+//    QString m_strOnlyFilePath = "";     //  只显示一个pdf 文件
     int     m_nCurShowState = FILE_NORMAL;       //  文档当前显示状态
     bool    m_bIsUpdate = false;        //  文档是否有修改
-    QList<QColor> m_listColor;          //  color list
+//    QList<QColor> m_listColor;          //  color list
     bool m_bIsHighLight = false;        // 鼠标左键点击位置有没有高亮
     QPoint m_point;                     // 鼠标左键点击位置
     QRect m_screenRect;                 // 屏幕的分辨率
@@ -133,8 +133,8 @@ private:
     QColor m_selectColor;               // 高亮颜色
     bool m_bThumbnIsShow = false;       // 左侧缩略图是否展开
     bool m_bFirstOpenFile = false;      // 初次打开某个文档
-    QList<QKeySequence>     m_pKeyList;      //  快捷键对应
-    QList<QKeySequence>     m_pLeftKeyList;      // left 快捷键对应
+//    QList<QKeySequence>     m_pKeyList;      //  快捷键对应
+//    QList<QKeySequence>     m_pLeftKeyList;      // left 快捷键对应
 };
 
 #endif // DATAMANAGER_H

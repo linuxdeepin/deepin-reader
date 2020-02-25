@@ -58,7 +58,7 @@ void CentralWidget::keyPressEvent(QKeyEvent *event)
                                   << KeyStr::g_left << KeyStr::g_right;
         QString key = Utils::getKeyshortcut(event);
         if (pFilterList.contains(key)) {
-            QString sFilePath = DataManager::instance()->strOnlyFilePath();
+            QString sFilePath = dApp->m_pDataManager->qGetCurrentFilePath();
             if (sFilePath != "") {
                 notifyMsg(MSG_NOTIFY_KEY_PLAY_MSG, key);
             }

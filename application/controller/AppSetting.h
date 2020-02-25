@@ -42,7 +42,7 @@ public:
 //    QString getFileKeyValue() const;
 
 //    void setKeyValue(const int &, const QString &);
-    QString getKeyValue(const int &) const;
+//    QString getKeyValue(const int &) const;
 
     void setAppKeyValue(const int &, const QString &);
     QString getAppKeyValue(const int &) const;

@@ -175,7 +175,7 @@ void DocummentFileHelper::qAppExitFile(const int &iType, const QString &sPath)
 //  保存 数据
 void DocummentFileHelper::onSaveFile()
 {
-    QString sCurPath = dApp->m_pDataManager->getCurrentFilePath();
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
     FileData fd = dApp->m_pDataManager->qGetFileData(sCurPath);
     if (fd.bIsChane) {  //  改变了        bool rl = save(m_szFilePath, true);
         bool rl = save(sCurPath, true);
@@ -203,7 +203,7 @@ void DocummentFileHelper::onSaveAsFile()
     if (!DocummentProxy::instance()) {
         return;
     }
-    QString sCurPath = dApp->m_pDataManager->getCurrentFilePath();
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
     QFileInfo info(sCurPath);
 
     QString sCompleteSuffix = info.completeSuffix();
@@ -237,10 +237,6 @@ void DocummentFileHelper::onSaveAsFile()
                     //insert a new bookmark record to bookmarktabel
                     dApp->m_pDBService->qSaveData(sFilePath, DB_BOOKMARK);
                     dApp->m_pDBService->qSaveData(sFilePath, DB_HISTROY);
-
-                    DataManager::instance()->setStrOnlyFilePath(sFilePath);
-
-                    DataManager::instance()->setBIsUpdate(false);
 
                     notifyMsg(MSG_OPERATION_OPEN_FILE_OK, sFilePath);
                 }

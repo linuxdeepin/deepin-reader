@@ -41,10 +41,16 @@ public:
 
     QList<QKeySequence> getKeyList() const;
 
+    QString qGetCurrentTheme() const;
+    void qSetCurrentTheme(const QString &strCurrentTheme);
+
+
 private:
     QList<QKeySequence>     m_pKeyList;                 //  快捷键对应
     QList<QColor>           m_listColor;                //  color list
     QColor                  m_selectColor;              // 高亮颜色
+    QString m_strCurrentTheme = "";     //  当前主题
+
 };
 
 #endif // CONSTANTHEADER_H

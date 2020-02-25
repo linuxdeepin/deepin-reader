@@ -4,13 +4,15 @@
 #include <QDebug>
 #include <QIcon>
 #include <QString>
-#include "controller/DataManager.h"
+
+#include "application.h"
+#include "controller/AppInfo.h"
 
 namespace PF {
 
 static QString getImagePath(const QString &imageName, const QString &priName)
 {
-    QString sTheme = DataManager::instance()->gettrCurrentTheme();
+    QString sTheme = dApp->m_pAppInfo->qGetCurrentTheme();
     //    QString
     //    strfilepath=QString(":/resources/%1/%2/%3.svg").arg(sTheme).arg(priName).arg(imageName);
     QString strfilepath =

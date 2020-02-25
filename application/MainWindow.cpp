@@ -7,9 +7,11 @@
 #include <QDebug>
 #include <DGuiApplicationHelper>
 
+
 #include "business/ShortCutShow.h"
 #include "business/SaveDialog.h"
 #include "business/DocummentFileHelper.h"
+#include "controller/AppInfo.h"
 #include "controller/DataManager.h"
 #include "controller/AppSetting.h"
 #include "docview/docummentproxy.h"
@@ -153,7 +155,7 @@ void MainWindow::setCurTheme()
         sTheme = "dark";
     }
 
-    DataManager::instance()->settrCurrentTheme(sTheme);
+    dApp->m_pAppInfo->qSetCurrentTheme(sTheme);
 }
 
 //  显示快捷键
@@ -238,7 +240,7 @@ void MainWindow::slotShortCut(const QString &key)
     } else if (key == KeyStr::g_ctrl_o) {   //  打开文件
         notifyMsg(MSG_NOTIFY_KEY_MSG, key);
     } else {
-        QString sFilePath = DataManager::instance()->strOnlyFilePath();     //  没有打开的文件
+        QString sFilePath = dApp->m_pDataManager->qGetCurrentFilePath();
         if (sFilePath != "") {
             if (key == KeyStr::g_ctrl_h) {  //  播放幻灯片
                 SlotSlideShow();
@@ -282,7 +284,7 @@ void MainWindow::initShortCut()
     auto pSigManager = new QSignalMapper(this);
     connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(slotShortCut(const QString &)));
 
-    auto keyList = DataManager::instance()->getPKeyList();
+    auto keyList = dApp->m_pAppInfo->getKeyList();
     foreach (auto key, keyList) {
         auto action = new QAction;
         action->setShortcut(key);

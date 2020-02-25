@@ -104,13 +104,10 @@ void FileViewWidget::wheelEvent(QWheelEvent *event)
 {
     CustomWidget::wheelEvent(event);
     if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
-        QString sFilePath = DataManager::instance()->strOnlyFilePath();
-        if (sFilePath != "") {
-            if (event->delta() > 0) {
-                notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_larger);
-            } else {
-                notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_smaller);
-            }
+        if (event->delta() > 0) {
+            notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_larger);
+        } else {
+            notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_smaller);
         }
     }
 }

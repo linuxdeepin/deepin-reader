@@ -6,7 +6,9 @@
 #include <QSignalMapper>
 #include <QDebug>
 
-#include "controller/DataManager.h"
+#include "application.h"
+
+#include "controller/AppInfo.h"
 #include "CustomControl/RoundColorWidget.h"
 
 ColorWidgetAction::ColorWidgetAction(DWidget *pParent)
@@ -100,7 +102,7 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
 
     auto sigMap = new QSignalMapper(this);
 
-    auto colorList = DataManager::instance()->getLightColorList();
+    auto colorList = dApp->m_pAppInfo->getLightColorList();
     for (int iLoop = 0; iLoop < colorList.size(); iLoop++) {
         auto btn = new RoundColorWidget(colorList.at(iLoop), pWidget);
         btn->setAllClickNotify(true);

@@ -20,10 +20,8 @@
 #include "AnnotationHelper.h"
 
 #include "application.h"
-#include "controller/DataManager.h"
-
+#include "controller/AppInfo.h"
 #include "docview/docummentproxy.h"
-
 
 AnnotationHelper::AnnotationHelper(QObject *parent)
     : QObject(parent)
@@ -93,7 +91,7 @@ void AnnotationHelper::__DeletePageIconAnnotation(const QString &msgContent)
             QString sPage = sList.at(1);
 
             _proxy->removeAnnotation(sUuid, sPage.toInt());
-            DataManager::instance()->setBIsUpdate(true);
+
             notifyMsg(MSG_NOTE_PAGE_DELETE_ITEM, sUuid);
         }
     }
@@ -145,17 +143,17 @@ void AnnotationHelper::__AddHighLight(const QString &msgContent)
         nEy = sList.at(3);
         int iIndex = sList.at(4).toInt();
 
-        QColor color = DataManager::instance()->getLightColorList().at(iIndex);
-        DataManager::instance()->setSelectColor(color);
+        QColor color = dApp->m_pAppInfo->getLightColorList().at(iIndex);
+        dApp->m_pAppInfo->setSelectColor(color);
     }
 
     QPoint pStartPoint(nSx.toInt(), nSy.toInt());
     QPoint pEndPoint(nEx.toInt(), nEy.toInt());
-    QColor color = DataManager::instance()->selectColor();
+    QColor color = dApp->m_pAppInfo->selectColor();
 
     QString strUuid = _proxy->addAnnotation(pStartPoint, pEndPoint, color);
     if (strUuid != "") {
-        DataManager::instance()->setBIsUpdate(true);
+        notifyMsg(MSG_FILE_IS_CHANGE, "1");
     }
 }
 
@@ -177,7 +175,7 @@ void AnnotationHelper::__AddHighLightAnnotation(const QString &msgContent)
 
         QPoint pStartPoint(nSx.toInt(), nSy.toInt());
         QPoint pEndPoint(nEx.toInt(), nEy.toInt());
-        QColor color = DataManager::instance()->selectColor();
+        QColor color = dApp->m_pAppInfo->selectColor();
 
         QString strUuid = _proxy->addAnnotation(pStartPoint, pEndPoint, color);
         if (strUuid != "") {
@@ -185,8 +183,6 @@ void AnnotationHelper::__AddHighLightAnnotation(const QString &msgContent)
 
             QString t_str = strUuid.trimmed() + Constant::sQStringSep + sNote.trimmed() + Constant::sQStringSep + sPage;
             notifyMsg(MSG_NOTE_ADD_ITEM, t_str);
-
-            DataManager::instance()->setBIsUpdate(true);
         }
     }
 }
@@ -206,8 +202,6 @@ void AnnotationHelper::__RemoveHighLight(const QString &msgContent)
 
         QString sUuid = _proxy->removeAnnotation(tempPoint);
         if (sUuid != "") {
-            DataManager::instance()->setBIsUpdate(true);
-
             notifyMsg(MSG_NOTE_DELETE_ITEM, sUuid);
         }
     }
@@ -228,10 +222,10 @@ void AnnotationHelper::__ChangeAnnotationColor(const QString &msgContent)
         QString sPage = contentList.at(2);
 
         int iIndex = sIndex.toInt();
-        QColor color = DataManager::instance()->getLightColorList().at(iIndex);
+        QColor color = dApp->m_pAppInfo->getLightColorList().at(iIndex);
 
         _proxy->changeAnnotationColor(sPage.toInt(), sUuid, color);     //  更新高亮顏色,  是对文档进行了操作
-        DataManager::instance()->setBIsUpdate(true);
+        notifyMsg(MSG_FILE_IS_CHANGE, "1");
     }
 }
 
@@ -247,8 +241,6 @@ void AnnotationHelper::__RemoveAnnotation(const QString &msgContent)
         QString sPage = sList.at(1);
 
         _proxy->removeAnnotation(sUuid, sPage.toInt());
-
-        DataManager::instance()->setBIsUpdate(true);
 
         notifyMsg(MSG_NOTE_DELETE_ITEM, sUuid);
     }
@@ -267,7 +259,7 @@ void AnnotationHelper::__UpdateAnnotationText(const QString &msgContent)
         QString sPage = sList.at(2);
 
         DocummentProxy::instance()->setAnnotationText(sPage.toInt(), sUuid, sText);
-        DataManager::instance()->setBIsUpdate(true);
+
         notifyMsg(MSG_NOTE_UPDATE_ITEM, msgContent);
     }
 }
@@ -284,7 +276,6 @@ void AnnotationHelper::__AddPageIconAnnotation(const QString &msgContent)
             _proxy->setAnnotationText(sPage.toInt(), sUuid, sNote);
             QString t_str = sUuid.trimmed() + Constant::sQStringSep + sNote.trimmed() + Constant::sQStringSep + sPage;
             notifyMsg(MSG_NOTE_PAGE_ADD_ITEM, t_str);
-            DataManager::instance()->setBIsUpdate(true);
         }
     }
 }
