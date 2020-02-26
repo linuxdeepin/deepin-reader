@@ -550,7 +550,7 @@ bool PagePdf::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString
         if (annote->subType() == Poppler::Annotation::AText) { //必须判断
             QRectF rec = annote->boundary();
             if (annote->boundary().contains(ptf)) {
-                qDebug() << __FUNCTION__ << "iconannotation clicked true";
+                //  qDebug() << __FUNCTION__ << "iconannotation clicked true";
                 strtext = annote->contents();
                 struuid = annote->uniqueName();
                 bclicked = true;

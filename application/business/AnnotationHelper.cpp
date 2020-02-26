@@ -23,6 +23,7 @@
 #include "MsgModel.h"
 
 #include "controller/AppInfo.h"
+#include "controller/DataManager.h"
 #include "docview/docummentproxy.h"
 
 AnnotationHelper::AnnotationHelper(QObject *parent)
@@ -102,21 +103,17 @@ void AnnotationHelper::__DeletePageIconAnnotation(const QString &msgContent)
 //  更新注释节点内容
 void AnnotationHelper::__UpdatePageIconAnnotation(const QString &msgContent)
 {
-//    DocummentProxy *_proxy = DocummentProxy::instance();
-//    if (_proxy) {
-//        QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-//        if (sList.size() == 2) {
-//            QString sUuid = sList.at(0);
-//            QString sPage = sList.at(1);
-
-//            bool rl = _proxy->removeIconAnnotation(sUuid, sPage.toInt());
-//            if (rl) {
-//                DataManager::instance()->setBIsUpdate(true);
-
-//                notifyMsg(MSG_NOTE_PAGE_UPDATE_ITEM, sUuid);
-//            }
-//        }
-    //    }
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
+        QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
+        if (sList.size() == 3) {
+            QString sNote = sList.at(0);
+            QString sUuid = sList.at(1);
+            QString sPage = sList.at(2);
+            _proxy->setAnnotationText(sPage.toInt(), sUuid, sNote);
+            notifyMsg(MSG_NOTE_PAGE_UPDATE_ITEM, msgContent);
+        }
+    }
 }
 
 void AnnotationHelper::__InitConnection()
@@ -253,7 +250,6 @@ void AnnotationHelper::__RemoveAnnotation(const QString &msgContent)
         QString sPage = sList.at(1);
 
         _proxy->removeAnnotation(sUuid, sPage.toInt());
-
         notifyMsg(MSG_NOTE_DELETE_ITEM, sUuid);
     }
 }
@@ -271,7 +267,6 @@ void AnnotationHelper::__UpdateAnnotationText(const QString &msgContent)
         QString sPage = sList.at(2);
 
         DocummentProxy::instance()->setAnnotationText(sPage.toInt(), sUuid, sText);
-
         notifyMsg(MSG_NOTE_UPDATE_ITEM, msgContent);
     }
 }
