@@ -62,9 +62,8 @@ private:
     void initConnection();
     QAction *createAction(const QString &objName, const char *, bool checked = false);
     void rotateThumbnail(bool);
-    void scaleAndRotate();
+//    void scaleAndRotate();
     void calcRotateType();
-    void setScaleRotateViewModeAndShow();
     void setAppSetFiteHAndW();
     void resetFiteHAndW();
     void resetAdaptive();
@@ -80,7 +79,7 @@ private:
     QAction *m_pFiteWAction = nullptr;            // 自适应宽
     QAction *m_pRotateLAction = nullptr;          // 左旋转
     QAction *m_pRotateRAction = nullptr;          // 右旋转
-//    int m_nScale = 100;                           // 缩放比例(缺省100%)
+    int m_nScale = 100;                           // 缩放比例(缺省100%)
     bool m_bDoubPage = false;                     // 双页
     bool m_bFiteH = false;                        // 自适应高
     bool m_bFiteW = false;                        // 自适应宽

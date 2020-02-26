@@ -24,7 +24,7 @@ MainOperationWidget::MainOperationWidget(CustomWidget *parent)
 
 MainOperationWidget::~MainOperationWidget()
 {
-    dApp->m_pModelService->addObserver(this);
+    dApp->m_pModelService->removeObserver(this);
 }
 
 void MainOperationWidget::initWidget()

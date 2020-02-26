@@ -57,12 +57,12 @@ signals:
     void sigChangeProxy(const QString &);
     void sigCloseFile(const QString &);
     void sigClosetab(const QString &);
-
+    void sigTitleMsg(const QString &);
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
     void qSetPath(const QString &);
-    QString qGetPath() const;
+//    QString qGetPath() const;
 
     // CustomWidget interface
 protected:
@@ -76,7 +76,6 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
 
-
 private slots:
     void slotDealWithData(const int &, const QString &);
     void slotDealWithKeyMsg(const QString &);
@@ -87,6 +86,7 @@ private slots:
     void slotDocFilePageChanged(int);
     void SlotDocFileOpenResult(bool);
     void SlotCloseFile(const QString &);
+    void SlotTitleMsg(const QString &);
 
 private:
     void initConnections();
@@ -105,13 +105,12 @@ private:
 
 private:
     TextOperationMenu       *m_operatemenu = nullptr;
-
+    QString                 m_strProcUuid = "";
     QString                 m_strPath = "";
-    QString     m_strProcUuid = "";
 
-    int         m_nAdapteState = NO_ADAPTE_State;       //  当前自适应状态
-    QPoint      m_pStartPoint;
-    QPoint      m_pEndSelectPoint;
+    int                     m_nAdapteState = NO_ADAPTE_State;       //  当前自适应状态
+    QPoint                  m_pStartPoint;
+    QPoint                  m_pEndSelectPoint;
 
     friend class FVMMouseEvent;
 };

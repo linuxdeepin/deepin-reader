@@ -9,6 +9,8 @@
 #include "FileAttrWidget.h"
 #include "PlayControlWidget.h"
 
+#include "MsgModel.h"
+
 #include "docview/docummentproxy.h"
 #include "utils/PublicFunction.h"
 
@@ -261,18 +263,10 @@ void DocShowShellWidget::slotChangePlayCtrlShow(bool bshow)
 
 void DocShowShellWidget::slotOpenFileOk(const QString &sPath)
 {
-    qDebug() << "----++++++++";
-    auto pView = this->findChild<FileViewWidget *>();
-    if (pView) {
-        QString viewPath = pView->qGetPath();
-        qDebug() << "----++++++++" << viewPath << sPath;
-        if (viewPath == sPath) {
-            m_playout->removeWidget(m_pSpinerWidget);
+    m_playout->removeWidget(m_pSpinerWidget);
 
-            delete  m_pSpinerWidget;
-            m_pSpinerWidget = nullptr;
-        }
-    }
+    delete  m_pSpinerWidget;
+    m_pSpinerWidget = nullptr;
 }
 
 void DocShowShellWidget::slotDealWithData(const int &msgType, const QString &msgContent)
@@ -346,9 +340,9 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
 
 void DocShowShellWidget::qSetPath(const QString &sPath)
 {
-    auto pView = this->findChild<FileViewWidget *>();
-    if (pView) {
-        pView->qSetPath(sPath);
+    auto pViewWidget = this->findChild<FileViewWidget *>();
+    if (pViewWidget) {
+        pViewWidget->qSetPath(sPath);
     }
 }
 
@@ -358,13 +352,13 @@ void DocShowShellWidget::initWidget()
     m_playout->setContentsMargins(0, 0, 0, 0);
     m_playout->setSpacing(0);
 
-    auto m_pfileviwewidget = new FileViewWidget(this);
-    connect(m_pfileviwewidget, SIGNAL(sigShowPlayCtrl(bool)), this, SLOT(slotChangePlayCtrlShow(bool)));
+    auto pViewWidget = new FileViewWidget(this);
+    connect(pViewWidget, SIGNAL(sigShowPlayCtrl(bool)), this, SLOT(slotChangePlayCtrlShow(bool)));
 
     InitSpinner();
     m_playout->addWidget(m_pSpinerWidget);
 
-    m_playout->addWidget(m_pfileviwewidget);
+    m_playout->addWidget(pViewWidget);
 
     this->setLayout(m_playout);
 }

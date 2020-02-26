@@ -22,6 +22,8 @@
 #include <QJsonObject>
 #include <QWidgetAction>
 
+#include "MsgModel.h"
+
 #include "controller/AppSetting.h"
 #include "controller/FileDataManager.h"
 #include "docview/docummentproxy.h"
@@ -85,10 +87,13 @@ void FontMenu::resetAdaptive()
 //        m_pEnlargeLab->setText(QString("%1%").arg(m_nScale));
 //    }
 
-    setScaleRotateViewModeAndShow();
+    {
+        MsgModel mm;
+        mm.setMsgType(MSG_FILE_SCALE);
+        mm.setValue("100");
 
-    notifyMsg(MSG_FILE_SCALE, "100");
-    notifyMsg(MSG_VIEWCHANGE_FIT, "0");
+        notifyMsg(E_TITLE_MSG, mm.toJson());
+    }
 }
 
 /**
@@ -144,14 +149,11 @@ void FontMenu::slotTwoPage()
 {
     m_bDoubPage = !m_bDoubPage;
 
-    scaleAndRotate();
-    if (m_bFiteW) {
-        notifyMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(1));  //emit sigFiteW(QString::number(1));
-    } else if (m_bFiteH) {
-        notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(1));  //emit sigFiteH(QString::number(1));
-    }
+    MsgModel mm;
+    mm.setMsgType(MSG_VIEWCHANGE_DOUBLE_SHOW);
+    mm.setValue(QString::number(m_bDoubPage));
 
-    notifyMsg(MSG_VIEWCHANGE_DOUBLE_SHOW, QString::number(m_bDoubPage));
+    notifyMsg(E_TITLE_MSG, mm.toJson());
 }
 
 /**
@@ -166,11 +168,6 @@ void FontMenu::slotFiteH()
     m_pFiteHAction->setChecked(m_bFiteH);
 
     setAppSetFiteHAndW();
-    int t_nShow = m_bFiteH ? 1 : 0;
-
-    notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(t_nShow));
-
-    setAppSetFiteHAndW();
 }
 
 /**
@@ -183,11 +180,6 @@ void FontMenu::slotFiteW()
     m_bFiteH = false;
     m_bFiteW = !m_bFiteW;
     m_pFiteWAction->setChecked(m_bFiteW);
-
-    setAppSetFiteHAndW();
-    int t_nShow = m_bFiteW ? 1 : 0;
-
-    notifyMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(t_nShow));
 
     setAppSetFiteHAndW();
 }
@@ -349,9 +341,8 @@ void FontMenu::initActions()
  */
 void FontMenu::initConnection()
 {
-    connect(this, SIGNAL(sigFileOpenOk(const QString &)), this, SLOT(slotFileOpenOk(const QString &)));
-    connect(this, SIGNAL(sigDealWithShortKey(const QString &))
-            , this, SLOT(slotDealWithShortKey(const QString &)));
+    connect(this, SIGNAL(sigFileOpenOk(const QString &)), SLOT(slotFileOpenOk(const QString &)));
+    connect(this, SIGNAL(sigDealWithShortKey(const QString &)), SLOT(slotDealWithShortKey(const QString &)));
 //    connect(this, SIGNAL(sigSetCurScale(const QString &)), this, SLOT(slotSetCurScale(const QString &)));
 }
 
@@ -396,29 +387,27 @@ void FontMenu::rotateThumbnail(bool direct)
 
     calcRotateType();
 
-    setScaleRotateViewModeAndShow();
+    MsgModel mm;
+    mm.setMsgType(MSG_VIEWCHANGE_ROTATE);
+    mm.setValue(QString::number(m_nRotate));
 
-    notifyMsg(MSG_VIEWCHANGE_ROTATE, QString::number(m_nRotate));
-
-    notifyMsg(MSG_FILE_ROTATE, QString::number(m_nRotate));
+    notifyMsg(E_TITLE_MSG, mm.toJson());
 }
 
 /**
  * @brief FontMenu::scaleAndRotate
  * 缩放和旋转
  */
-void FontMenu::scaleAndRotate()
-{
-    calcRotateType();
+//void FontMenu::scaleAndRotate()
+//{
+//    calcRotateType();
 
-    setScaleRotateViewModeAndShow();
+//    notifyMsg(MSG_VIEWCHANGE_DOUBLE_SHOW, QString::number(m_bDoubPage));
 
-    notifyMsg(MSG_VIEWCHANGE_DOUBLE_SHOW, QString::number(m_bDoubPage));
+//    setAppSetFiteHAndW();
 
-    setAppSetFiteHAndW();
-
-    notifyMsg(MSG_VIEWCHANGE_ROTATE, QString::number(m_nRotate));
-}
+//    notifyMsg(MSG_VIEWCHANGE_ROTATE, QString::number(m_nRotate));
+//}
 
 /**
  * @brief FontMenu::calcRotateType
@@ -455,25 +444,6 @@ void FontMenu::calcRotateType()
 }
 
 /**
- * @brief FontMenu::setScaleRotateViewModeAndShow
- * 调用文件解析库接口，设置文档的缩放、缩放、视图
- */
-void FontMenu::setScaleRotateViewModeAndShow()
-{
-    DocummentProxy *_proxy = DocummentProxy::instance();
-    if (_proxy) {
-
-//        double scale = (m_nScale * 0.01);
-//        ViewMode_EM viewmode = ViewMode_SinglePage;
-//        if (m_bDoubPage) {
-//            viewmode = ViewMode_FacingPage;
-//        }
-
-//        _proxy->setScaleRotateViewModeAndShow(scale, m_rotateType, viewmode);
-    }
-}
-
-/**
  * @brief FontMenu::setAppSetFiteHAndW
  * 记录文档属性,下次加载时使用
  * 0:都不自适应  1:自适应宽  10:自适应高
@@ -488,7 +458,13 @@ void FontMenu::setAppSetFiteHAndW()
         iValue = 10;
     }
 
-    notifyMsg(MSG_VIEWCHANGE_FIT, QString::number(iValue));
+    int t_nShow = m_bFiteH ? 1 : 0;
+
+    MsgModel mm;
+    mm.setMsgType(MSG_VIEWCHANGE_FIT);
+    mm.setValue(QString::number(t_nShow));
+
+    notifyMsg(E_TITLE_MSG, mm.toJson());
 }
 
 /**
@@ -498,18 +474,16 @@ void FontMenu::setAppSetFiteHAndW()
 void FontMenu::resetFiteHAndW()
 {
     //缩放比例, 取消 自适应宽/高
-    if (m_bFiteW) {
-        notifyMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(0));  //emit sigFiteW(QString::number(0));
-    } else if (m_bFiteH) {
-        notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(0));  //emit sigFiteH(QString::number(0));
-    }
+    MsgModel mm;
+    mm.setMsgType(MSG_VIEWCHANGE_FIT);
+    mm.setValue("0");
+
+    notifyMsg(E_TITLE_MSG, mm.toJson());
 
     m_bFiteH = false;
     m_bFiteW = false;
-    if (m_pFiteHAction) {
-        m_pFiteHAction->setChecked(m_bFiteH);
-    }
-    if (m_pFiteWAction) {
-        m_pFiteWAction->setChecked(m_bFiteW);
-    }
+
+    m_pFiteHAction->setChecked(false);
+    m_pFiteWAction->setChecked(false);
+
 }

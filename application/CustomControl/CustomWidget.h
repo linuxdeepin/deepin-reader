@@ -54,6 +54,7 @@ public:
 
     //  主题更新信号
 signals:
+    void sigTitleMsg(const QString &);
     void sigUpdateTheme();
     void sigDealWithData(const int &, const QString &);
     void sigDealWithKeyMsg(const QString &);

@@ -50,12 +50,10 @@ LeftSidebarWidget::~LeftSidebarWidget()
 
 void LeftSidebarWidget::SlotOpenFileOk(const QString &sPath)
 {
-    if (m_strPath == sPath) {
-        FileDataModel fdm = dApp->m_pDataManager->qGetFileData(sPath);
-        int nShow = fdm.qGetData(Thumbnail);
-        bool showLeft = nShow == 1 ? true : false;
-        onSetWidgetVisible(showLeft);
-    }
+    FileDataModel fdm = dApp->m_pDataManager->qGetFileData(sPath);
+    int nShow = fdm.qGetData(Thumbnail);
+    bool showLeft = nShow == 1 ? true : false;
+    onSetWidgetVisible(showLeft);
 }
 
 void LeftSidebarWidget::__DealWithPressKey(const QString &sKey)
@@ -72,8 +70,8 @@ void LeftSidebarWidget::__DealWithPressKey(const QString &sKey)
 void LeftSidebarWidget::onSetWidgetVisible(const int &nVis)
 {
     this->setVisible(nVis);
-    if (!nVis && DocummentProxy::instance())
-        DocummentProxy::instance()->setViewFocus();
+//    if (!nVis && DocummentProxy::instance())
+//        DocummentProxy::instance()->setViewFocus();
 }
 
 void LeftSidebarWidget::slotUpdateTheme()
@@ -99,16 +97,24 @@ void LeftSidebarWidget::slotSetStackCurIndex(const int &iIndex)
 
 void LeftSidebarWidget::slotFileChangeMsg(const QString &sContent)
 {
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-    if (m_strPath == sCurPath) {
-        MsgModel mm;
-        mm.fromJson(sContent);
+    MsgModel mm;
+    mm.fromJson(sContent);
 
-        QString nValue = mm.getValue();
-        int nMsg = mm.getMsgType();
-        if (nMsg == MSG_WIDGET_THUMBNAILS_VIEW) {
-            onSetWidgetVisible(nValue.toInt());
-        }
+    QString nValue = mm.getValue();
+    int nMsg = mm.getMsgType();
+    if (nMsg == MSG_WIDGET_THUMBNAILS_VIEW) {
+        onSetWidgetVisible(nValue.toInt());
+    }
+}
+
+void LeftSidebarWidget::slotTitleMsg(const QString &sContent)
+{
+    MsgModel mm;
+    mm.fromJson(sContent);
+
+    int nMsg = mm.getMsgType();
+    if (nMsg == MSG_WIDGET_THUMBNAILS_VIEW) {
+        onSetWidgetVisible(mm.getValue().toInt());
     }
 }
 
@@ -167,7 +173,7 @@ void LeftSidebarWidget::initConnections()
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigOpenFileOk(const QString &)), SLOT(SlotOpenFileOk(const QString &)));
     connect(this, SIGNAL(sigFileChangeMsg(const QString &)), SLOT(slotFileChangeMsg(const QString &)));
-//    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
+    connect(this, SIGNAL(sigTitleMsg(const QString &)), SLOT(slotTitleMsg(const QString &)));
 }
 
 //  按delete 键 删除书签 或者 注释
@@ -220,24 +226,16 @@ void LeftSidebarWidget::initWidget()
 
 int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-//    if (m_pMsgList.contains(msgType)) {
-//        emit sigDealWithData(msgType, msgContent);
-//        return ConstantMsg::g_effective_res;
-//    }
     if (msgType == E_FILE_MSG) {
         emit sigFileChangeMsg(msgContent);
     } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         emit sigOpenFileOk(msgContent);
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
+    } else if (msgType == E_TITLE_MSG) {
+        emit sigTitleMsg(msgContent);
     }
-
     return 0;
-}
-
-void LeftSidebarWidget::qSetPath(const QString &sPath)
-{
-    m_strPath = sPath;
 }
 
 void LeftSidebarWidget::keyPressEvent(QKeyEvent *event)

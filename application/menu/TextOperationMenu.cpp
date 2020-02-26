@@ -13,12 +13,12 @@ TextOperationMenu::TextOperationMenu(DWidget *parent)
 {
     initActions();
 
-    dApp->m_pModelService->addObserver(this);
+//    dApp->m_pModelService->addObserver(this);
 }
 
 TextOperationMenu::~TextOperationMenu()
 {
-    dApp->m_pModelService->removeObserver(this);
+//    dApp->m_pModelService->removeObserver(this);
 }
 
 void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, const QString &sSelectText, const QString &sUuid)

@@ -20,13 +20,14 @@
 
 #include <QSignalMapper>
 
+#include "MsgModel.h"
+
 ScaleMenu::ScaleMenu(DWidget *parent)
     : CustomMenu("ScaleMenu", parent)
 {
     initActions();
 
     dApp->m_pModelService->addObserver(this);
-
 }
 
 ScaleMenu::~ScaleMenu()
@@ -86,5 +87,9 @@ void ScaleMenu::__ChangeScale(const int &iData)
 {
     m_nCurrentIndex = dataList.indexOf(iData);
 
-    notifyMsg(MSG_MENU_SCALE_CHANGE, QString::number(iData));
+    MsgModel mm;
+    mm.setMsgType(MSG_FILE_SCALE);
+    mm.setValue(QString::number(iData));
+
+    notifyMsg(E_TITLE_MSG, mm.toJson());
 }

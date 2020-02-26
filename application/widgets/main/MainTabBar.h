@@ -37,7 +37,7 @@ public:
 signals:
 //    void sigOpenFileOk(const QString &);
     void sigDealWithData(const int &, const QString &);
-    void sigCloseFile(const QString &);
+    void sigCloseFile(const int &, const QString &);
     void sigTabMsg(const QString &);
 
     // IObserver interface
@@ -55,7 +55,6 @@ private:
 
     void __SetTabMiniWidth();
     void AddFileTab(const QString &);
-    void RemoveFileTab(const QString &);
     QString getFileName(const QString &strFilePath);
     void OpenCurFileFolder();
 
@@ -64,7 +63,7 @@ private slots:
     void SlotTabAddRequested();
     void SlotTabCloseRequested(int index);
 
-    void SlotExitAppCloseFile(const QString &);
+    void SlotCloseFile(const int &, const QString &);
     void SlotDealWithData(const int &, const QString &);
     void SlotTabMsg(const QString &);
 

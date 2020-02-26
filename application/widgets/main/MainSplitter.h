@@ -27,9 +27,6 @@
 
 DWIDGET_USE_NAMESPACE
 
-class DocShowShellWidget;
-class LeftSidebarWidget;
-
 class MainSplitter : public DSplitter, public IObserver
 {
     Q_OBJECT
@@ -38,6 +35,9 @@ class MainSplitter : public DSplitter, public IObserver
 public:
     explicit MainSplitter(CustomWidget *parent = nullptr);
     ~MainSplitter() Q_DECL_OVERRIDE;
+
+signals:
+    void sigTitleMsgData(const QString &);
 
     // IObserver interface
 public:
@@ -52,9 +52,10 @@ private:
     void InitWidget();
     void InitConnections();
 
+private slots:
+    void SlotTitleMsg(const QString &);
+
 private:
-    LeftSidebarWidget        *m_pLeftSidebarWidget = nullptr;
-    DocShowShellWidget       *m_pDocShellWidget = nullptr;
     QString         m_strPath = "";
 };
 

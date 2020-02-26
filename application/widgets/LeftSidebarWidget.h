@@ -21,11 +21,11 @@ signals:
     void sigSearchWidgetState(const int &);
     void sigOpenFileOk(const QString &);
     void sigFileChangeMsg(const QString &);
+    void sigTitleMsg(const QString &);
 
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
-    void qSetPath(const QString &sPath);
 
     // QWidget interface
 protected:
@@ -36,12 +36,12 @@ protected:
     void initWidget() Q_DECL_OVERRIDE;
 
 private slots:
-//    void slotDealWithData(const int &, const QString &);
     void SlotOpenFileOk(const QString &);
 
     void slotUpdateTheme();
     void slotSetStackCurIndex(const int &);
     void slotFileChangeMsg(const QString &);
+    void slotTitleMsg(const QString &);
 
 private:
     void initConnections();
@@ -52,9 +52,6 @@ private:
 
     void onJumpToPrevPage();
     void onJumpToNextPage();
-
-private:
-    QString         m_strPath = "";
 };
 
 #endif  // LEFTSHOWWIDGET_H

@@ -55,8 +55,8 @@ int MainTabBar::dealWithData(const int &msgType, const QString &msgContent)
         return  ConstantMsg::g_effective_res;
     }
 
-    if (msgType == E_APP_EXIT) {
-        emit sigCloseFile(msgContent);
+    if (msgType == E_APP_EXIT || msgType == MSG_CLOSE_FILE) {
+        emit sigCloseFile(msgType, msgContent);
     } else if (msgType == E_TAB_MSG) {
         emit sigTabMsg(msgContent);
     }
@@ -82,7 +82,7 @@ void MainTabBar::resizeEvent(QResizeEvent *event)
 
 void MainTabBar::__InitConnection()
 {
-    connect(this, SIGNAL(sigCloseFile(const QString &)), SLOT(SlotExitAppCloseFile(const QString &)));
+    connect(this, SIGNAL(sigCloseFile(const int &, const QString &)), SLOT(SlotCloseFile(const int &, const QString &)));
     connect(this, SIGNAL(sigTabMsg(const QString &)), SLOT(SlotTabMsg(const QString &)));
 
     connect(this, SIGNAL(tabBarClicked(int)), SLOT(SlotTabBarClicked(int)));
@@ -179,26 +179,6 @@ void MainTabBar::AddFileTab(const QString &sContent)
     }
 }
 
-void MainTabBar::RemoveFileTab(const QString &sPath)
-{
-    int nCount = this->count();
-    for (int iLoop = 0; iLoop < nCount; iLoop++) {
-        QString sTabData = this->tabData(iLoop).toString();
-        if (sTabData == sPath) {
-            this->removeTab(iLoop);
-
-            dApp->m_pDataManager->qRemoveFilePath(sPath);
-
-            __SetTabMiniWidth();
-        }
-    }
-
-    nCount = this->count();
-    if (nCount == 0) {
-        notifyMsg(CENTRAL_INDEX_CHANGE);
-    }
-}
-
 QString MainTabBar::getFileName(const QString &strFilePath)
 {
     int nLastPos = strFilePath.lastIndexOf('/');
@@ -222,7 +202,7 @@ void MainTabBar::SlotTabCloseRequested(int index)
     }
 }
 
-void MainTabBar::SlotExitAppCloseFile(const QString &sPath)
+void MainTabBar::SlotCloseFile(const int &msgType, const QString &sPath)
 {
     int nCount = this->count();
     for (int iLoop = 0; iLoop < nCount; iLoop++) {
@@ -238,7 +218,11 @@ void MainTabBar::SlotExitAppCloseFile(const QString &sPath)
 
     nCount = this->count();
     if (nCount == 0) {
-        dApp->exit(0);
+        if (msgType == MSG_CLOSE_FILE) {
+            notifyMsg(CENTRAL_INDEX_CHANGE);
+        } else {
+            dApp->exit(0);
+        }
     }
 }
 
@@ -255,14 +239,6 @@ void MainTabBar::SlotDealWithData(const int &msgType, const QString &msgContent)
 
 void MainTabBar::SlotTabMsg(const QString &sContent)
 {
-    MsgModel mm;
-    mm.fromJson(sContent);
-
-    QString sPath = mm.getPath();
-    int nMsgType = mm.getMsgType();
-    if (nMsgType == MSG_TAB_REMOVE) {
-        RemoveFileTab(sPath);
-    }
 }
 
 void MainTabBar::OpenCurFileFolder()

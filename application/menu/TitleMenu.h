@@ -53,6 +53,16 @@ private:
 private slots:
     void slotActionTrigger(const QString &);
 
+private:
+    void OnNewWindow();
+    void OnNewTab();
+    void OnSave();
+    void OnSaveAs();
+    void DisplayInFileManager();
+    void OnPrint();
+    void DocumentInfo();
+    void OnMagnifer();
+    void OnSlideShow();
 };
 
 #endif // TITLEMENU_H

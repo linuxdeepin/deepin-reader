@@ -421,7 +421,6 @@ void FileViewWidget::SlotDocFileOpenResult(bool openresult)
         dApp->m_pDataManager->qInsertFileChange(m_strPath, false);
         dApp->m_pDataManager->qInsertFileOpen(m_strPath, true);
 
-        qDebug() << __FUNCTION__ << "open file success" << m_strPath;
         notifyMsg(MSG_OPERATION_OPEN_FILE_OK, m_strPath);
     } else {
         notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
@@ -430,26 +429,23 @@ void FileViewWidget::SlotDocFileOpenResult(bool openresult)
 
 void FileViewWidget::SlotCloseFile(const QString &sPath)
 {
-    if (sPath == m_strPath) {
-        emit sigClosetab(m_strProcUuid);
+    emit sigClosetab(m_strProcUuid);
+}
 
-        MsgModel mm;
-        mm.setMsgType(MSG_TAB_REMOVE);
-        mm.setPath(sPath);
-        notifyMsg(E_TAB_MSG, mm.toJson());
-    }
+void FileViewWidget::SlotTitleMsg(const QString &sContent)
+{
+    qDebug() << __FUNCTION__ << sContent;
 }
 
 //  信号槽　初始化
 void FileViewWidget::initConnections()
 {
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
-            SLOT(slotCustomContextMenuRequested(const QPoint &)));
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), SLOT(slotCustomContextMenuRequested(const QPoint &)));
 
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
-            SLOT(slotDealWithData(const int &, const QString &)));
-    connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)),
-            SLOT(slotDealWithKeyMsg(const QString &)));
+    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
+    connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)), SLOT(slotDealWithKeyMsg(const QString &)));
+    connect(this, SIGNAL(sigTitleMsg(const QString &)), SLOT(SlotTitleMsg(const QString &)));
+    connect(this, SIGNAL(sigCloseFile(const QString &)), SLOT(SlotCloseFile(const QString &)));
 }
 
 //  打印
@@ -497,6 +493,8 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
 
     if (msgType == MSG_CLOSE_FILE) {
         emit sigCloseFile(msgContent);
+    } else if (msgType == E_TITLE_MSG) {
+        emit sigTitleMsg(msgContent);
     }
 
     return 0;
@@ -505,10 +503,5 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
 void FileViewWidget::qSetPath(const QString &sPath)
 {
     m_strPath = sPath;
-    dApp->m_pDataManager->qInsertFileAndUuid(sPath, m_strProcUuid);
-}
-
-QString FileViewWidget::qGetPath() const
-{
-    return m_strPath;
+    dApp->m_pDataManager->qInsertFileAndUuid(m_strPath, m_strProcUuid);
 }

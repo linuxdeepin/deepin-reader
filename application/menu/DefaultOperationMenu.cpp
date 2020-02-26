@@ -10,13 +10,13 @@ DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
 {
     initActions();
 
-    dApp->m_pModelService->addObserver(this);
+//    dApp->m_pModelService->addObserver(this);
 
 }
 
 DefaultOperationMenu::~DefaultOperationMenu()
 {
-    dApp->m_pModelService->removeObserver(this);
+//    dApp->m_pModelService->removeObserver(this);
 }
 
 void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPage)

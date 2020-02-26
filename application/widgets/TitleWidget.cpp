@@ -35,11 +35,11 @@ void TitleWidget::slotSetFindWidget(const int &iFlag)
     if (iFlag == 1) {
         m_pThumbnailBtn->setChecked(true);
 
-        MsgModel mm;
-        mm.setMsgType(MSG_WIDGET_THUMBNAILS_VIEW);
-        mm.setValue("1");
+//        MsgModel mm;
+//        mm.setMsgType(MSG_WIDGET_THUMBNAILS_VIEW);
+//        mm.setValue("1");
 
-        notifyMsg(E_FILE_MSG, mm.toJson());
+//        notifyMsg(E_FILE_MSG, mm.toJson());
     } else {
         slotAppFullScreen();
     }
@@ -96,18 +96,22 @@ void TitleWidget::slotAppFullScreen()
     //  显示了侧边栏, 则隐藏
     m_pThumbnailBtn->setChecked(false);
 
-    MsgModel mm;
-    mm.setMsgType(MSG_WIDGET_THUMBNAILS_VIEW);
-    mm.setValue("0");
+//    MsgModel mm;
+//    mm.setMsgType(MSG_WIDGET_THUMBNAILS_VIEW);
+//    mm.setValue("0");
 
-    notifyMsg(E_FILE_MSG, mm.toJson());
+//    notifyMsg(E_FILE_MSG, mm.toJson());
 }
 
 //  退出放大鏡
 void TitleWidget::slotMagnifierCancel()
 {
 //  取消放大镜
-    notifyMsg(MSG_MAGNIFYING, "0");
+    MsgModel mm;
+    mm.setMsgType(MSG_MAGNIFYING);
+    mm.setValue("0");
+
+    notifyMsg(E_TITLE_MSG, mm.toJson());
 }
 
 void TitleWidget::initWidget()
@@ -150,6 +154,8 @@ void TitleWidget::initConnections()
 void TitleWidget::OnFileShowChange(const QString &sPath)
 {
     slotOpenFileOk(sPath);
+
+    slotMagnifierCancel();
 }
 
 //  缩略图
@@ -161,7 +167,7 @@ void TitleWidget::on_thumbnailBtn_clicked()
     mm.setMsgType(MSG_WIDGET_THUMBNAILS_VIEW);
     mm.setValue(QString::number(rl));
 
-    notifyMsg(E_FILE_MSG, mm.toJson());
+    notifyMsg(E_TITLE_MSG, mm.toJson());
 }
 
 //  文档显示
@@ -251,7 +257,7 @@ void TitleWidget::SlotDealWithShortKey(const QString &sKey)
         MsgModel mm;
         mm.setMsgType(MSG_WIDGET_THUMBNAILS_VIEW);
         mm.setValue("1");
-        notifyMsg(E_FILE_MSG, mm.toJson());
+        notifyMsg(E_TITLE_MSG, mm.toJson());
     } else if (sKey == KeyStr::g_alt_z) {  //  开启放大镜
         setMagnifierState();
     }
@@ -316,7 +322,11 @@ void TitleWidget::setDefaultShape()
     QIcon icon = PF::getIcon(Pri::g_module + btnName);
     m_pHandleShapeBtn->setIcon(icon);
 
-    notifyMsg(MSG_HANDLESHAPE, QString::number(m_nCurHandleShape));
+    MsgModel mm;
+    mm.setMsgType(MSG_HANDLESHAPE);
+    mm.setValue(QString::number(m_nCurHandleShape));
+
+    notifyMsg(E_TITLE_MSG, mm.toJson());
 }
 
 void TitleWidget::setHandleShape()
@@ -330,7 +340,11 @@ void TitleWidget::setHandleShape()
     QIcon icon = PF::getIcon(Pri::g_module + btnName);
     m_pHandleShapeBtn->setIcon(icon);
 
-    notifyMsg(MSG_HANDLESHAPE, QString::number(m_nCurHandleShape));
+    MsgModel mm;
+    mm.setMsgType(MSG_HANDLESHAPE);
+    mm.setValue(QString::number(m_nCurHandleShape));
+
+    notifyMsg(E_TITLE_MSG, mm.toJson());
 }
 
 DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
@@ -353,7 +367,11 @@ DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 //  开启放大镜
 void TitleWidget::setMagnifierState()
 {
-    notifyMsg(MSG_MAGNIFYING, QString::number(1));
+    MsgModel mm;
+    mm.setMsgType(MSG_MAGNIFYING);
+    mm.setValue("1");
+
+    notifyMsg(E_TITLE_MSG, mm.toJson());
 
     //  开启了放大镜, 需要把选择工具 切换为 选择工具
     auto actionList = this->findChildren<QAction *>();

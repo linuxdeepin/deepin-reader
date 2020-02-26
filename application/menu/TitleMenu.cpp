@@ -19,6 +19,7 @@
 #include "TitleMenu.h"
 
 #include <QSignalMapper>
+#include "MsgModel.h"
 
 TitleMenu::TitleMenu(DWidget *parent)
     : CustomMenu("TitleMenu", parent)
@@ -88,22 +89,82 @@ QAction *TitleMenu::__CreateAction(const QString &actionName, const QString &obj
 void TitleMenu::slotActionTrigger(const QString &sAction)
 {
     if (sAction == "New window") {
-        notifyMsg(MSG_MENU_NEW_WINDOW);
+        OnNewWindow();
     } else if (sAction == "New tab") {
-        notifyMsg(MSG_NOTIFY_KEY_MSG,  KeyStr::g_ctrl_o);
+        OnNewTab();
     } else if (sAction == "Save") {
-        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_s);
+        OnSave();
     } else if (sAction == "Save as") {
-        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_shift_s);
+        OnSaveAs();
     } else if (sAction == "Display in file manager") {
-        notifyMsg(MSG_MENU_OPEN_FOLDER);
+        DisplayInFileManager();
     } else if (sAction == "Print") {
-        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_p);
+        OnPrint();
     } else if (sAction == "Document info") {
-        notifyMsg(MSG_OPERATION_ATTR);
+        DocumentInfo();
     } else if (sAction == "Magnifer") {
-        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_alt_z);
+        OnMagnifer();
     } else if (sAction == "Slide show") {
-        notifyMsg(MSG_OPERATION_SLIDE);
+        OnSlideShow();
     }
+}
+
+void TitleMenu::OnNewWindow()
+{
+    notifyMsg(MSG_MENU_NEW_WINDOW);
+}
+
+void TitleMenu::OnNewTab()
+{
+    notifyMsg(MSG_NOTIFY_KEY_MSG,  KeyStr::g_ctrl_o);
+}
+
+void TitleMenu::OnSave()
+{
+    MsgModel mm;
+    mm.setMsgType(MSG_NOTIFY_KEY_MSG);
+    mm.setShortKey(KeyStr::g_ctrl_s);
+
+    notifyMsg(E_TITLE_MSG, mm.toJson());
+}
+
+void TitleMenu::OnSaveAs()
+{
+    MsgModel mm;
+    mm.setMsgType(MSG_NOTIFY_KEY_MSG);
+    mm.setShortKey(KeyStr::g_ctrl_shift_s);
+
+    notifyMsg(E_TITLE_MSG, mm.toJson());
+}
+
+void TitleMenu::DisplayInFileManager()
+{
+    notifyMsg(MSG_MENU_OPEN_FOLDER);
+}
+
+void TitleMenu::OnPrint()
+{
+    MsgModel mm;
+    mm.setMsgType(MSG_NOTIFY_KEY_MSG);
+    mm.setShortKey(KeyStr::g_ctrl_p);
+    notifyMsg(E_TITLE_MSG, mm.toJson());
+
+}
+
+void TitleMenu::DocumentInfo()
+{
+    notifyMsg(MSG_OPERATION_ATTR);
+}
+
+void TitleMenu::OnMagnifer()
+{
+    notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_alt_z);
+}
+
+void TitleMenu::OnSlideShow()
+{
+    MsgModel mm;
+    mm.setMsgType(MSG_NOTIFY_KEY_MSG);
+    mm.setShortKey(KeyStr::g_ctrl_h);
+    notifyMsg(E_TITLE_MSG, mm.toJson());
 }

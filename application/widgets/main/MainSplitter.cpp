@@ -20,15 +20,18 @@
 
 #include "../DocShowShellWidget.h"
 #include "../LeftSidebarWidget.h"
-#include "../FileViewWidget.h"
+
+#include "controller/FileDataManager.h"
+
+#include "MsgModel.h"
 
 MainSplitter::MainSplitter(CustomWidget *parent)
     : DSplitter(parent)
 {
+    dApp->m_pModelService->addObserver(this);
+
     InitWidget();
     InitConnections();
-
-    dApp->m_pModelService->addObserver(this);
 }
 
 MainSplitter::~MainSplitter()
@@ -41,11 +44,8 @@ void MainSplitter::InitWidget()
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
-    m_pLeftSidebarWidget = new LeftSidebarWidget;
-    addWidget(m_pLeftSidebarWidget);
-
-    m_pDocShellWidget = new DocShowShellWidget;
-    addWidget(m_pDocShellWidget);
+    addWidget(new LeftSidebarWidget);
+    addWidget(new DocShowShellWidget);
 
     QList<int> list_src;
     list_src.append(LEFTNORMALWIDTH);
@@ -56,11 +56,29 @@ void MainSplitter::InitWidget()
 
 void MainSplitter::InitConnections()
 {
-
+    connect(this, SIGNAL(sigTitleMsgData(const QString &)), SLOT(SlotTitleMsg(const QString &)));
 }
 
+void MainSplitter::SlotTitleMsg(const QString &msgContent)
+{
+    auto children = this->findChildren<CustomWidget *>();
+    foreach (auto sw, children) {
+        sw->dealWithData(E_TITLE_MSG, msgContent);
+    }
+}
+
+//  第一个 消息处理入口
 int MainSplitter::dealWithData(const int &msgType, const QString &msgContent)
 {
+    if (msgType == E_TITLE_MSG) {       //  标题消息, 如果和当前路径显示路径 一样, 则截断消息
+        QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+
+        if (m_strPath == sCurPath) {
+            emit sigTitleMsgData(msgContent);
+            return ConstantMsg::g_effective_res;
+        }
+    }
+
     return 0;
 }
 
@@ -83,6 +101,8 @@ void MainSplitter::qSetPath(const QString &strPath)
 {
     m_strPath = strPath;
 
-    m_pLeftSidebarWidget->qSetPath(m_strPath);
-    m_pDocShellWidget->qSetPath(m_strPath);
+    auto docWidget = this->findChild<DocShowShellWidget *>();
+    if (docWidget) {
+        docWidget->qSetPath(strPath);
+    }
 }

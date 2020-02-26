@@ -28,7 +28,7 @@ signals:
     void sigShowFileFind();
     void sigChangePlayCtrlShow(bool bshow);
     void sigOpenFileOk(const QString &);
-
+    void sigTitleMsg(const QString &);
 //    void sigDealWithData(const int &, const QString &);
     // IObserver interface
 public:
@@ -47,6 +47,7 @@ private slots:
     void slotUpdateTheme();
     void slotChangePlayCtrlShow(bool bshow);
     void slotOpenFileOk(const QString &);
+
 
     void slotDealWithData(const int &, const QString &msgContent = "");
 

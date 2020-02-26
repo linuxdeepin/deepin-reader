@@ -16,6 +16,7 @@ enum E_MSG_TYPE {
     E_TAB_MSG,
     E_DOC_MSG,
     E_FILE_MSG,
+    E_TITLE_MSG,
     E_MSG_TYPE_END
 };
 
