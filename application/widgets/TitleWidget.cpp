@@ -4,6 +4,9 @@
 #include <QJsonObject>
 #include <QWidgetAction>
 
+#include "MsgModel.h"
+
+#include "controller/FileDataManager.h"
 #include "menu/FontMenu.h"
 #include "menu/ScaleMenu.h"
 #include "menu/HandleMenu.h"
@@ -32,7 +35,11 @@ void TitleWidget::slotSetFindWidget(const int &iFlag)
     if (iFlag == 1) {
         m_pThumbnailBtn->setChecked(true);
 
-        dApp->m_pDBService->setHistroyData("leftState", 1);
+        MsgModel mm;
+        mm.setMsgType(MSG_WIDGET_THUMBNAILS_VIEW);
+        mm.setValue("1");
+
+        notifyMsg(E_FILE_MSG, mm.toJson());
     } else {
         slotAppFullScreen();
     }
@@ -61,22 +68,26 @@ void TitleWidget::slotUpdateTheme()
 }
 
 //  打开文件成功
-void TitleWidget::slotOpenFileOk()
+void TitleWidget::SetBtnDisable(const bool &bAble)
 {
-    m_pThumbnailBtn->setDisabled(false);
-    m_pSettingBtn->setDisabled(false);
-    m_pHandleShapeBtn->setDisabled(false);
-    if (m_pMagnifierBtn) {
-        m_pMagnifierBtn->setDisabled(false);
-    }
+    m_pThumbnailBtn->setDisabled(bAble);
+    m_pSettingBtn->setDisabled(bAble);
+    m_pHandleShapeBtn->setDisabled(bAble);
+    m_pPreBtn->setDisabled(bAble);
+    m_pScaleMenuBtn->setDisabled(bAble);
+    m_pNextBtn->setDisabled(bAble);
+}
 
-    QJsonObject obj = dApp->m_pDBService->getHistroyData();
+void TitleWidget::slotOpenFileOk(const QString &sPath)
+{
+    SetBtnDisable(false);
 
-    int nState = obj["leftState"].toInt();
+    FileDataModel fdm = dApp->m_pDataManager->qGetFileData(sPath);
+
+    int nState = fdm.qGetData(Thumbnail);
     bool showLeft = nState == 1 ? true : false;
 
     m_pThumbnailBtn->setChecked(showLeft);
-    on_thumbnailBtn_clicked();
 }
 
 // 应用全屏显示
@@ -84,27 +95,19 @@ void TitleWidget::slotAppFullScreen()
 {
     //  显示了侧边栏, 则隐藏
     m_pThumbnailBtn->setChecked(false);
-    dApp->m_pDBService->setHistroyData("leftState", 0);
 
-    //  侧边栏 隐藏
-    notifyMsg(MSG_SLIDER_SHOW_STATE, "0");
+    MsgModel mm;
+    mm.setMsgType(MSG_WIDGET_THUMBNAILS_VIEW);
+    mm.setValue("0");
+
+    notifyMsg(E_FILE_MSG, mm.toJson());
 }
 
 //  退出放大鏡
 void TitleWidget::slotMagnifierCancel()
 {
-    //  如果开启了, 放大镜 则取消
-    if (m_pMagnifierBtn == nullptr) {
-        return;
-    }
-    bool bCheck = m_pMagnifierBtn->isChecked();
-    if (bCheck) {
-        m_pMagnifierBtn->setChecked(!bCheck);
-
-        //  取消放大镜
-        notifyMsg(MSG_MAGNIFYING, "0");
-    }
-    //    m_pMagnifierBtn->setStatus(m_pMagnifierBtn->isChecked());
+//  取消放大镜
+    notifyMsg(MSG_MAGNIFYING, "0");
 }
 
 void TitleWidget::initWidget()
@@ -126,9 +129,6 @@ void TitleWidget::initWidget()
     m_layout->addWidget(m_pPreBtn);
     m_layout->addWidget(m_pScaleMenuBtn);
     m_layout->addWidget(m_pNextBtn);
-    if (m_pMagnifierBtn) {
-        m_layout->addWidget(m_pMagnifierBtn);
-    }
 
     m_layout->addStretch(1);
 }
@@ -136,22 +136,32 @@ void TitleWidget::initWidget()
 void TitleWidget::initConnections()
 {
     connect(this, SIGNAL(sigSetFindWidget(const int &)), SLOT(slotSetFindWidget(const int &)));
-    connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));
+    connect(this, SIGNAL(sigOpenFileOk(const QString &)), SLOT(slotOpenFileOk(const QString &)));
     connect(this, SIGNAL(sigMagnifierCancel()), SLOT(slotMagnifierCancel()));
     connect(this, SIGNAL(sigAppFullScreen()), SLOT(slotAppFullScreen()));
 
     connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)),
-            SLOT(slotDealWithShortKey(const QString &)));
+            SLOT(SlotDealWithShortKey(const QString &)));
+
+    connect(this, SIGNAL(sigTabMsg(const QString &)), SLOT(SlotTabMsg(const QString &)));
+}
+
+//  文档切换了
+void TitleWidget::OnFileShowChange(const QString &sPath)
+{
+    slotOpenFileOk(sPath);
 }
 
 //  缩略图
 void TitleWidget::on_thumbnailBtn_clicked()
 {
     bool rl = m_pThumbnailBtn->isChecked();
-    notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(rl));
 
-//    DataManager::instance()->setBThumbnIsShow(rl);
-//    dApp->m_pDBService->setHistroyData("leftState", rl);
+    MsgModel mm;
+    mm.setMsgType(MSG_WIDGET_THUMBNAILS_VIEW);
+    mm.setValue(QString::number(rl));
+
+    notifyMsg(E_FILE_MSG, mm.toJson());
 }
 
 //  文档显示
@@ -197,31 +207,6 @@ void TitleWidget::SlotScaleMenuBtnClicked()
     }
 }
 
-//  放大镜
-void TitleWidget::on_magnifyingBtn_clicked()
-{
-    if (m_pMagnifierBtn == nullptr)
-        return;
-
-    bool bCheck = m_pMagnifierBtn->isChecked();
-    notifyMsg(MSG_MAGNIFYING, QString::number(bCheck));
-
-    //  开启了放大镜, 需要把选择工具 切换为 选择工具
-    if (bCheck) {
-        auto actionList = this->findChildren<QAction *>();
-        foreach (auto a, actionList) {
-            QString objName = a->objectName();
-            if (objName == "defaultshape") {
-                a->setChecked(true);
-                break;
-            }
-        }
-
-        QIcon icon = PF::getIcon(Pri::g_module + "defaultshape");
-        m_pHandleShapeBtn->setIcon(icon);
-    }
-}
-
 void TitleWidget::SlotSetCurrentTool(const QString &sAction)
 {
     //  切换了选择工具, 需要取消放大镜的操作
@@ -234,8 +219,20 @@ void TitleWidget::SlotSetCurrentTool(const QString &sAction)
     }
 }
 
+void TitleWidget::SlotTabMsg(const QString &sContent)
+{
+    MsgModel mm;
+    mm.fromJson(sContent);
+
+    QString sPath = mm.getPath();
+    int nMsg = mm.getMsgType();
+    if (nMsg == MSG_TAB_SHOW_FILE_CHANGE) {
+        OnFileShowChange(sPath);
+    }
+}
+
 //  处理 快捷键
-void TitleWidget::slotDealWithShortKey(const QString &sKey)
+void TitleWidget::SlotDealWithShortKey(const QString &sKey)
 {
     if (sKey == KeyStr::g_alt_1) {  //  选择工具
         slotMagnifierCancel();
@@ -250,12 +247,11 @@ void TitleWidget::slotDealWithShortKey(const QString &sKey)
             setHandleShape();
         }
     } else if (sKey == KeyStr::g_ctrl_m) {  //  显示缩略图
-        //        m_pThumbnailBtn->setFlat(true);
         m_pThumbnailBtn->setChecked(true);
-        //        m_pThumbnailBtn->setStatus(m_pThumbnailBtn->isChecked());
-        notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(1));
-//        DataManager::instance()->setBThumbnIsShow(1);
-        dApp->m_pDBService->setHistroyData("leftState", 1);
+        MsgModel mm;
+        mm.setMsgType(MSG_WIDGET_THUMBNAILS_VIEW);
+        mm.setValue("1");
+        notifyMsg(E_FILE_MSG, mm.toJson());
     } else if (sKey == KeyStr::g_alt_z) {  //  开启放大镜
         setMagnifierState();
     }
@@ -295,13 +291,16 @@ void TitleWidget::__InitScale()
     m_pScaleMenu = new ScaleMenu(this);
 
     m_pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
+    m_pPreBtn->setDisabled(true);
     m_pPreBtn->setFixedSize(QSize(24, 24));
     connect(m_pPreBtn, SIGNAL(clicked()), m_pScaleMenu, SLOT(sloPrevScale()));
 
-    m_pScaleMenuBtn = new DPushButton();
+    m_pScaleMenuBtn = new DPushButton("0%");
+    m_pScaleMenuBtn->setDisabled(true);
     connect(m_pScaleMenuBtn, SIGNAL(clicked()), SLOT(SlotScaleMenuBtnClicked()));
 
     m_pNextBtn = new DIconButton(DStyle::SP_IncreaseElement);
+    m_pNextBtn->setDisabled(true);
     m_pNextBtn->setFixedSize(QSize(24, 24));
     connect(m_pNextBtn, SIGNAL(clicked()), m_pScaleMenu, SLOT(sloNextScale()));
 }
@@ -309,11 +308,6 @@ void TitleWidget::__InitScale()
 void TitleWidget::setDefaultShape()
 {
     QString btnName = "defaultshape";
-
-//    auto action = this->findChild<QAction *>(btnName);
-//    if (action) {
-//        action->setChecked(true);
-//    }
 
     m_pHandleShapeBtn->setToolTip(tr("Select Text"));
 
@@ -328,10 +322,6 @@ void TitleWidget::setDefaultShape()
 void TitleWidget::setHandleShape()
 {
     QString btnName = "handleshape";
-//    auto action = this->findChild<QAction *>(btnName);
-//    if (action) {
-//        action->setChecked(true);
-//    }
 
     m_pHandleShapeBtn->setToolTip(tr("Hand Tool"));
 
@@ -350,7 +340,6 @@ DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
     btn->setIconSize(QSize(36, 36));
     btn->setToolTip(btnName);
     btn->setCheckable(bCheckable);
-    //    btn->setFlat(true);
 
     if (bCheckable) {
         btn->setChecked(false);
@@ -364,27 +353,20 @@ DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 //  开启放大镜
 void TitleWidget::setMagnifierState()
 {
-    if (m_pMagnifierBtn == nullptr)
-        return;
+    notifyMsg(MSG_MAGNIFYING, QString::number(1));
 
-    bool bCheck = m_pMagnifierBtn->isChecked();
-    if (!bCheck) {
-        m_pMagnifierBtn->setChecked(true);
-        notifyMsg(MSG_MAGNIFYING, QString::number(1));
-
-        //  开启了放大镜, 需要把选择工具 切换为 选择工具
-        auto actionList = this->findChildren<QAction *>();
-        foreach (auto a, actionList) {
-            QString objName = a->objectName();
-            if (objName == "defaultshape") {
-                a->setChecked(true);
-                break;
-            }
+    //  开启了放大镜, 需要把选择工具 切换为 选择工具
+    auto actionList = this->findChildren<QAction *>();
+    foreach (auto a, actionList) {
+        QString objName = a->objectName();
+        if (objName == "defaultshape") {
+            a->setChecked(true);
+            break;
         }
-
-        QIcon icon = PF::getIcon(Pri::g_module + "defaultshape");
-        m_pHandleShapeBtn->setIcon(icon);
     }
+
+    QIcon icon = PF::getIcon(Pri::g_module + "defaultshape");
+    m_pHandleShapeBtn->setIcon(icon);
 }
 
 //  处理 推送消息
@@ -393,7 +375,7 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
     if (msgType == MSG_FIND_START) {
         emit sigSetFindWidget(1);
     } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        emit sigOpenFileOk();
+        emit sigOpenFileOk(msgContent);
     } else if (msgType == MSG_OPERATION_SLIDE) {
         emit sigAppFullScreen();
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
@@ -403,6 +385,8 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
         return ConstantMsg::g_effective_res;
     } else if (msgType == MSG_HIDE_FIND_WIDGET) {
         emit sigSetFindWidget(0);
+    } else if (msgType == E_TAB_MSG) {
+        emit sigTabMsg(msgContent);
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == KeyStr::g_esc) {
             emit sigMagnifierCancel();  //  退出放大镜模式

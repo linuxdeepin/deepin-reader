@@ -24,7 +24,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "DBFactory.h"
-#include <QJsonObject>
+#include "FileDataModel.h"
+#include <QMap>
 
 class HistroyDB : public DBFactory
 {
@@ -36,11 +37,11 @@ public:
 
     // DBFactory interface
 public:
-    void saveData(const QString &newPath) Q_DECL_OVERRIDE;
-    void qSelectData() Q_DECL_OVERRIDE;
+    void saveData(const QString &sPath) Q_DECL_OVERRIDE;
+    void qSelectData(const QString &) Q_DECL_OVERRIDE;
 
-    QJsonObject getHistroyData() const;
-    void setHistroyData(const QString &, const int &);
+    FileDataModel getHistroyData(const QString &) const;
+    void setHistroyData(const QString &, const int &, const int &);
 
 private:
     void checkDatabase() Q_DECL_OVERRIDE;
@@ -50,12 +51,12 @@ private:
     void updateData(const QString &);
     void deleteData();
 
-    int GetKeyValue(const QString &);
+    int GetKeyValue(const QString &sPath, const int &);
 
 private:
     QString m_strTableName = "FilesTable";
-    QJsonObject m_pDataObj;
-    QJsonObject m_pNewDataObj;
+    QMap<QString, FileDataModel> m_pDataMapObj;
+    QMap<QString, FileDataModel> m_pNewDataMapObj;
 };
 
 #endif // CONTROLLER_HISTROYDBEX_H

@@ -1,11 +1,9 @@
 #include "DefaultOperationMenu.h"
 
-#include <DPushButton>
-#include <DFontSizeManager>
+#include "controller/AppInfo.h"
+#include "controller/FileDataManager.h"
 
 #include "docview/docummentproxy.h"
-
-#include "controller/AppInfo.h"
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     : CustomMenu("DefaultOperationMenu", parent)
@@ -25,7 +23,9 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
 {
     m_nRightPageNumber = nClickPage;
 
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList();
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
     bool bBookState = pageList.contains(m_nRightPageNumber);
     if (bBookState) {
         m_pBookMark->setProperty("data", 0);

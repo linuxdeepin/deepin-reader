@@ -122,50 +122,51 @@ void DocummentFileHelper::notifyMsg(const int &msgType, const QString &msgConten
     dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
 
-bool DocummentFileHelper::save(const QString &filepath, bool withChanges)
-{
-    if (!DocummentProxy::instance()) {
-        return false;
-    }
+//bool DocummentFileHelper::save(const QString &filepath, bool withChanges)
+//{
+//    if (!DocummentProxy::instance()) {
+//        return false;
+//    }
 
-    return DocummentProxy::instance()->save(filepath, withChanges);
-}
+//    return DocummentProxy::instance()->save(filepath, withChanges);
+//}
 
 void DocummentFileHelper::qRemoveTabFile(const int &iType, const QString &sPath)
 {
-    dApp->m_pDBService->qSaveData(sPath, DB_HISTROY);
-
-    if (MSG_TAB_SAVE_FILE == iType || MSG_TAB_NOT_SAVE_FILE == iType) {
-        bool bSave = iType == MSG_TAB_SAVE_FILE ? true : false;
-        save(sPath, bSave);
-
-        if (bSave) {
-            dApp->m_pDBService->qSaveData(sPath, DB_BOOKMARK);
-        }
-    }
-
     DocummentProxy *_proxy = DocummentProxy::instance();
     if (_proxy) {
+        dApp->m_pDBService->qSaveData(sPath, DB_HISTROY);
+
+        if (MSG_TAB_SAVE_FILE == iType || MSG_TAB_NOT_SAVE_FILE == iType) {
+            bool bSave = iType == MSG_TAB_SAVE_FILE ? true : false;
+            _proxy->save(sPath, bSave);
+
+            if (bSave) {
+                dApp->m_pDBService->qSaveData(sPath, DB_BOOKMARK);
+            }
+        }
+
         _proxy->closeFile();
+
+        notifyMsg(MSG_CLOSE_FILE, sPath);
     }
-    notifyMsg(MSG_CLOSE_FILE, sPath);
 }
 
 void DocummentFileHelper::qAppExitFile(const int &iType, const QString &sPath)
 {
-    dApp->m_pDBService->qSaveData(sPath, DB_HISTROY);
-
-    if (MSG_EXIT_SAVE_FILE == iType || MSG_EXIT_NOT_SAVE_FILE == iType) {
-        bool bSave = iType == MSG_EXIT_SAVE_FILE ? true : false;
-        save(sPath, bSave);
-
-        if (bSave) {
-            dApp->m_pDBService->qSaveData(sPath, DB_BOOKMARK);
-        }
-    }
-
     DocummentProxy *_proxy = DocummentProxy::instance();
     if (_proxy) {
+        dApp->m_pDBService->qSaveData(sPath, DB_HISTROY);
+
+        if (MSG_EXIT_SAVE_FILE == iType || MSG_EXIT_NOT_SAVE_FILE == iType) {
+            bool bSave = iType == MSG_EXIT_SAVE_FILE ? true : false;
+            _proxy->save(sPath, bSave);
+
+            if (bSave) {
+                dApp->m_pDBService->qSaveData(sPath, DB_BOOKMARK);
+            }
+        }
+
         _proxy->closeFile();
     }
 
@@ -175,26 +176,30 @@ void DocummentFileHelper::qAppExitFile(const int &iType, const QString &sPath)
 //  保存 数据
 void DocummentFileHelper::onSaveFile()
 {
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-    FileData fd = dApp->m_pDataManager->qGetFileData(sCurPath);
-    if (fd.bIsChane) {  //  改变了        bool rl = save(m_szFilePath, true);
-        bool rl = save(sCurPath, true);
-        qDebug() << "slotSaveFile" << rl;
-        if (rl) {
-            //  保存需要保存 数据库记录
-            qDebug() << "DocummentFileHelper::slotSaveFile saveBookMark";
-            dApp->m_pDBService->qSaveData(sCurPath, DB_BOOKMARK);
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    if (_proxy) {
 
-//            DataManager::instance()->setBIsUpdate(false);
-            notifyMsg(CENTRAL_SHOW_TIP, tr("Saved successfully"));
+        QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+        FileState fs = dApp->m_pDataManager->qGetFileChange(sCurPath);
+        if (fs.isChange) {  //  改变了
+            bool rl = _proxy->save(sCurPath, true);
+            qDebug() << "slotSaveFile" << rl;
+            if (rl) {
+                //  保存需要保存 数据库记录
+                dApp->m_pDBService->qSaveData(sCurPath, DB_BOOKMARK);
+
+                dApp->m_pDataManager->qInsertFileChange(sCurPath, 1);
+
+                notifyMsg(CENTRAL_SHOW_TIP, tr("Saved successfully"));
+            } else {
+                notifyMsg(CENTRAL_SHOW_TIP, tr("Saved failed"));
+            }
         } else {
-            notifyMsg(CENTRAL_SHOW_TIP, tr("Saved failed"));
+            notifyMsg(CENTRAL_SHOW_TIP, tr("No changes"));
         }
-    } else {
-        notifyMsg(CENTRAL_SHOW_TIP, tr("No changes"));
+        //insert msg to FileFontTable
+        dApp->m_pDBService->qSaveData(sCurPath, DB_HISTROY);
     }
-    //insert msg to FileFontTable
-    dApp->m_pDBService->qSaveData(sCurPath, DB_HISTROY);
 }
 
 //  另存为
@@ -305,13 +310,16 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
         bool rl = false;
         notifyMsg(MSG_DOC_OPEN_FILE_START, sPath);
         //从数据库中获取文件的字号信息
-        dApp->m_pDBService->qSelectData(DB_HISTROY);
-        QJsonObject obj = dApp->m_pDBService->getHistroyData();
-        if (!obj.isEmpty()) {
-            int iscale = obj["scale"].toInt();          // 缩放
-            int doubPage = obj["doubleShow"].toInt();     // 是否是双页
-            int rotate = obj["rotate"].toInt();         // 文档旋转角度(0~360)
-            int curPage = obj["curPage"].toInt();        // 文档当前页
+        dApp->m_pDBService->qSelectData(sPath, DB_HISTROY);
+        FileDataModel fdm = dApp->m_pDBService->getHistroyData(sPath);
+
+        dApp->m_pDataManager->qSetFileData(sPath, fdm);
+
+        int curPage = fdm.qGetData(CurPage);
+        if (curPage != -1) {
+            int iscale = fdm.qGetData(Scale);          // 缩放
+            int doubPage = fdm.qGetData(DoubleShow);     // 是否是双页
+            int rotate = fdm.qGetData(Rotate);         // 文档旋转角度(0~360)
 
             iscale = (iscale > 500 ? 500 : iscale) <= 0 ? 100 : iscale;
             double scale = iscale / 100.0;

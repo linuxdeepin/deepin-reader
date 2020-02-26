@@ -25,6 +25,8 @@
 
 #include "DBFactory.h"
 
+#include <QMap>
+
 class BookMarkDB : public DBFactory
 {
     Q_OBJECT
@@ -37,10 +39,10 @@ public:
     // DBFactory interface
 public:
     void saveData(const QString &newPath) Q_DECL_OVERRIDE;
-    void qSelectData() Q_DECL_OVERRIDE;
+    void qSelectData(const QString &) Q_DECL_OVERRIDE;
 
-    QList<int> getBookMarkList() const;
-    void setBookMarkList(const QList<int> &pBookMarkList);
+    QList<int> getBookMarkList(const QString &) const;
+    void setBookMarkList(const QString &, const QList<int> &pBookMarkList);
 
     // DBFactory interface
 private:
@@ -49,12 +51,12 @@ private:
 
     void insertData(const QString &, const QString &);
     void updateData(const QString &, const QString &);
-    void deleteData();
+    void deleteData(const QString &);
 
 private:
     QString         m_strPageNumber = "PageNumber";
     QString         m_strTableName = "BookMarkTable";
-    QList<int>      m_pBookMarkList;
+    QMap<QString, QList<int> >       m_pBookMarkMap;
 };
 
 #endif // DBMANAGER_H

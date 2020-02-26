@@ -7,6 +7,7 @@
 #include <QJsonObject>
 
 #include "controller/AppSetting.h"
+#include "controller/FileDataManager.h"
 #include "utils/PublicFunction.h"
 
 MainOperationWidget::MainOperationWidget(CustomWidget *parent)
@@ -85,14 +86,7 @@ void MainOperationWidget::__SetBtnCheckById(const int &id)
 
 void MainOperationWidget::__SearchExit()
 {
-    int nId = 0;
-
-    QJsonObject obj = dApp->m_pDBService->getHistroyData();
-    if (!obj.isEmpty()) {
-        nId = obj["listIndex"].toInt();
-    }
-
-    __SetBtnCheckById(nId);
+    slotOpenFileOk("");
 }
 
 DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QString &objName)
@@ -110,7 +104,7 @@ DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QStrin
 
 void MainOperationWidget::initConnect()
 {
-    connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));
+    connect(this, SIGNAL(sigOpenFileOk(const QString &)), SLOT(slotOpenFileOk(const QString &)));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
 }
@@ -124,12 +118,12 @@ void MainOperationWidget::SlotDealWithData(const int &msgType, const QString &ms
     }
 }
 
-void MainOperationWidget::slotOpenFileOk()
+void MainOperationWidget::slotOpenFileOk(const QString &sPath)
 {
-    int nId = 0;
-    QJsonObject obj = dApp->m_pDBService->getHistroyData();
-    if (!obj.isEmpty()) {
-        nId = obj["listIndex"].toInt();
+    FileDataModel fdm = dApp->m_pDataManager->qGetFileData(sPath);
+    int nId = fdm.qGetData(LeftIndex);
+    if (nId == -1) {
+        nId = 0;
     }
 
     __SetBtnCheckById(nId);
@@ -167,7 +161,7 @@ int MainOperationWidget::dealWithData(const int &msgType, const QString &msgCont
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
     } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        emit sigOpenFileOk();
+        emit sigOpenFileOk(msgContent);
     }
 
     return 0;

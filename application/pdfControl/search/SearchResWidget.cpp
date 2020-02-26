@@ -98,7 +98,7 @@ void SearchResWidget::slotFlushSearchWidget(const QString &msgContent)
     m_isSearch = true;  //  开始搜索,  标志位 为 true
 
     notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(WIDGET_BUFFER));    //  窗口 显示 转圈圈
-    notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(1));
+//    notifyMsg(MSG_WIDGET_THUMBNAILS_VIEW, QString::number(1));
     m_bShowList = true;
 
     DocummentProxy *_proxy = DocummentProxy::instance();
@@ -154,7 +154,7 @@ void SearchResWidget::slotSearchOver()
         // notifyMsg(CENTRAL_SHOW_TIP, tr("No search results") + ConstantMsg::g_warningtip_suffix);
 //        bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
 //        if (!t_bTnumbnIsShow) {
-//            notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(!t_bTnumbnIsShow));
+//            notifyMsg(MSG_WIDGET_THUMBNAILS_VIEW, QString::number(!t_bTnumbnIsShow));
 //        }
     } else {
 //        connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
@@ -193,7 +193,7 @@ void SearchResWidget::slotStopFind()
 
 //        bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
 //        if (!t_bTnumbnIsShow) {
-//            notifyMsg(MSG_SLIDER_SHOW_STATE, QString::number(!t_bTnumbnIsShow));
+//            notifyMsg(MSG_WIDGET_THUMBNAILS_VIEW, QString::number(!t_bTnumbnIsShow));
 //        }
     }
 }

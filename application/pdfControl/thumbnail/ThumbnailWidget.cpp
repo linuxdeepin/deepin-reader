@@ -21,6 +21,7 @@
 #include <QJsonObject>
 
 #include "controller/AppSetting.h"
+#include "controller/FileDataManager.h"
 #include "docview/docummentproxy.h"
 
 ThumbnailWidget::ThumbnailWidget(DWidget *parent)
@@ -50,7 +51,7 @@ ThumbnailWidget::~ThumbnailWidget()
 int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
-        emit sigOpenFileOk();
+        emit sigOpenFileOk(msgContent);
     } else if (MSG_CLOSE_FILE == msgType) {
         emit sigCloseFile();
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
@@ -125,7 +126,7 @@ void ThumbnailWidget::initConnection()
     connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const int &, const QImage &)),
             this, SLOT(slotLoadImage(const int &, const QImage &)));
 
-    connect(this, SIGNAL(sigOpenFileOk()), this, SLOT(slotOpenFileOk()));
+    connect(this, SIGNAL(sigOpenFileOk(const QString &)), this, SLOT(slotOpenFileOk(const QString &)));
     connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigFilePageChanged(const QString &)),
@@ -276,7 +277,8 @@ void ThumbnailWidget::showItemBookMark(int ipage)
             pWidget->slotBookMarkShowStatus(true);
         }
     } else {
-        QList<int> pageList = dApp->m_pDBService->getBookMarkList();
+        QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+        QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
         foreach (int index, pageList) {
             auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(
                                m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(index)));
@@ -333,7 +335,7 @@ void ThumbnailWidget::nextPage()
 //}
 
 // 关联成功打开文件槽函数
-void ThumbnailWidget::slotOpenFileOk()
+void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
 {
     DocummentProxy *_proxy = DocummentProxy::instance();
     if (_proxy) {
@@ -353,8 +355,8 @@ void ThumbnailWidget::slotOpenFileOk()
         m_nValuePreIndex = 0;
         fillContantToList();
 
-        QJsonObject obj = dApp->m_pDBService->getHistroyData();
-        m_nRotate = obj["rotate"].toInt();
+        FileDataModel fdm = dApp->m_pDataManager->qGetFileData(sPath);
+        m_nRotate = fdm.qGetData(Rotate);
 
         if (m_nRotate < 0) {
             m_nRotate = qAbs(m_nRotate);

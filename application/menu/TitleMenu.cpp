@@ -90,11 +90,11 @@ void TitleMenu::slotActionTrigger(const QString &sAction)
     if (sAction == "New window") {
         notifyMsg(MSG_MENU_NEW_WINDOW);
     } else if (sAction == "New tab") {
-        notifyMsg(MSG_MENU_NEW_TAB);
+        notifyMsg(MSG_NOTIFY_KEY_MSG,  KeyStr::g_ctrl_o);
     } else if (sAction == "Save") {
         notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_s);
     } else if (sAction == "Save as") {
-        notifyMsg(MSG_OPERATION_SAVE_AS_FILE);
+        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_shift_s);
     } else if (sAction == "Display in file manager") {
         notifyMsg(MSG_MENU_OPEN_FOLDER);
     } else if (sAction == "Print") {
@@ -102,7 +102,7 @@ void TitleMenu::slotActionTrigger(const QString &sAction)
     } else if (sAction == "Document info") {
         notifyMsg(MSG_OPERATION_ATTR);
     } else if (sAction == "Magnifer") {
-        notifyMsg(MSG_MENU_MAGNIFER);
+        notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_alt_z);
     } else if (sAction == "Slide show") {
         notifyMsg(MSG_OPERATION_SLIDE);
     }

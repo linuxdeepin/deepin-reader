@@ -21,7 +21,7 @@ public:
     ~MainOperationWidget() Q_DECL_OVERRIDE;
 
 signals:
-    void sigOpenFileOk();
+    void sigOpenFileOk(const QString &sPath);
     void sigShowStackWidget(const int &);
 
     // IObserver interface
@@ -42,7 +42,7 @@ private:
 
 private slots:
     void SlotDealWithData(const int &, const QString &);
-    void slotOpenFileOk();
+    void slotOpenFileOk(const QString &sPath);
     void slotUpdateTheme();
     void slotButtonClicked(int);
 };

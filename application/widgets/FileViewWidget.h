@@ -54,6 +54,10 @@ public:
 
 signals:
     void sigShowPlayCtrl(bool bshow);
+    void sigChangeProxy(const QString &);
+    void sigCloseFile(const QString &);
+    void sigClosetab(const QString &);
+
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
@@ -82,6 +86,7 @@ private slots:
     void slotBookMarkStateChange(int, bool);
     void slotDocFilePageChanged(int);
     void SlotDocFileOpenResult(bool);
+    void SlotCloseFile(const QString &);
 
 private:
     void initConnections();

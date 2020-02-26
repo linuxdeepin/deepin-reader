@@ -22,9 +22,11 @@
 #include <QJsonObject>
 #include <QWidgetAction>
 
-#include "utils/PublicFunction.h"
 #include "controller/AppSetting.h"
+#include "controller/FileDataManager.h"
 #include "docview/docummentproxy.h"
+
+#include "utils/PublicFunction.h"
 
 FontMenu::FontMenu(DWidget *parent):
     CustomMenu("FontMenu", parent)
@@ -55,15 +57,15 @@ FontMenu::~FontMenu()
 int FontMenu::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        emit sigFileOpenOk();
+        emit sigFileOpenOk(msgContent);
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (shortKeyList.contains(msgContent)) {
             emit sigDealWithShortKey(msgContent);
             return ConstantMsg::g_effective_res;
         }
-    } else if (msgType == MSG_SELF_ADAPTE_SCALE) {
+    } /*else if (msgType == MSG_SELF_ADAPTE_SCALE) {
         emit sigSetCurScale(msgContent);
-    }
+    }*/
     return 0;
 }
 
@@ -85,8 +87,8 @@ void FontMenu::resetAdaptive()
 
     setScaleRotateViewModeAndShow();
 
-    dApp->m_pDBService->setHistroyData("scale", 100);
-    dApp->m_pDBService->setHistroyData("fit", 0);
+    notifyMsg(MSG_FILE_SCALE, "100");
+    notifyMsg(MSG_VIEWCHANGE_FIT, "0");
 }
 
 /**
@@ -149,7 +151,7 @@ void FontMenu::slotTwoPage()
         notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(1));  //emit sigFiteH(QString::number(1));
     }
 
-    dApp->m_pDBService->setHistroyData("doubleShow", m_bDoubPage);
+    notifyMsg(MSG_VIEWCHANGE_DOUBLE_SHOW, QString::number(m_bDoubPage));
 }
 
 /**
@@ -168,7 +170,7 @@ void FontMenu::slotFiteH()
 
     notifyMsg(MSG_SELF_ADAPTE_HEIGHT, QString::number(t_nShow));
 
-    dApp->m_pDBService->setHistroyData("fit", m_bFiteH ? 10 : (m_bFiteW ? 1 : 0));
+    setAppSetFiteHAndW();
 }
 
 /**
@@ -187,7 +189,7 @@ void FontMenu::slotFiteW()
 
     notifyMsg(MSG_SELF_ADAPTE_WIDTH, QString::number(t_nShow));
 
-    dApp->m_pDBService->setHistroyData("fit", m_bFiteH ? 10 : (m_bFiteW ? 1 : 0));
+    setAppSetFiteHAndW();
 }
 
 /**
@@ -212,34 +214,25 @@ void FontMenu::slotRotateR()
  * @brief FontMenu::slotScaleValChanged
  * 缩放比例变化
  */
-void FontMenu::slotScaleValChanged(int scale)
-{
-//    m_nScale = scale;
-
-//    if (m_pEnlargeLab) {
-//        m_pEnlargeLab->clear();
-//        m_pEnlargeLab->setText(QString("%1%").arg(scale));
+//void FontMenu::slotScaleValChanged(int scale)
+//{
+//    if (!m_bIsAdaptMove) {
+//        resetFiteHAndW();
+//        scaleAndRotate();
 //    }
 
-    if (!m_bIsAdaptMove) {
-        resetFiteHAndW();
-        scaleAndRotate();
-    } else {
-//        dApp->m_pDBService->setHistroyData("scale", m_nScale);
-    }
-
-    m_bIsAdaptMove = false;
-}
+//    m_bIsAdaptMove = false;
+//}
 
 /**
  * @brief FontMenu::slotFileOpenOk
  * 打开文件，加载参数
  */
-void FontMenu::slotFileOpenOk()
+void FontMenu::slotFileOpenOk(const QString &sPath)
 {
 //    setSliderMaxValue();
 
-    QJsonObject obj = dApp->m_pDBService->getHistroyData();
+    FileDataModel fdm = dApp->m_pDataManager->qGetFileData(sPath);
 
     int value = 0;
 
@@ -252,14 +245,14 @@ void FontMenu::slotFileOpenOk()
 //    }
 
     //单双页
-    value = obj["doubleShow"].toInt();
+    value = fdm.qGetData(DoubleShow);
     m_bDoubPage = (value == 1) ? true : false;
     if (m_pTwoPageAction) {
         m_pTwoPageAction->setChecked(m_bDoubPage);
     }
 
     //自适应宽/高
-    int adaptat = obj["fit"].toInt();
+    int adaptat = fdm.qGetData(Fit);
     if (adaptat == 1) {
         m_bFiteW = true;
         m_bFiteH = false;
@@ -273,7 +266,7 @@ void FontMenu::slotFileOpenOk()
     }
 
     //旋转度数
-    m_nRotate = obj["rotate"].toInt();
+    m_nRotate = fdm.qGetData(Rotate);
     m_nRotate %= 360;
 }
 
@@ -305,8 +298,6 @@ void FontMenu::slotDealWithShortKey(const QString &keyType)
     } else if (keyType == KeyStr::g_ctrl_larger || keyType == KeyStr::g_ctrl_equal) {
         //放大
         setFileViewScale(true);
-    } else {
-        return;
     }
 }
 
@@ -315,20 +306,20 @@ void FontMenu::slotDealWithShortKey(const QString &keyType)
  * 根据自适应宽高设置缩放比例scale
  * @param scale   缩放比例
  */
-void FontMenu::slotSetCurScale(const QString &scale)
-{
+//void FontMenu::slotSetCurScale(const QString &scale)
+//{
 //    setScaleVal(static_cast<int>(scale.toDouble() * 100));
 //    int nScale = 100;
 
 //    nScale = static_cast<int>(scale.toDouble() * 100);
 
-    m_bIsAdaptMove = true;
-    //设置 当前的缩放比, 不要触发滑动条值变化信号
-    //m_pEnlargeSlider->blockSignals(true);
+//    m_bIsAdaptMove = true;
+//设置 当前的缩放比, 不要触发滑动条值变化信号
+//m_pEnlargeSlider->blockSignals(true);
 //    m_pEnlargeSlider->setValue(nScale);
-    m_bIsAdaptMove = false;
-    //m_pEnlargeSlider->blockSignals(false);
-}
+//    m_bIsAdaptMove = false;
+//m_pEnlargeSlider->blockSignals(false);
+//}
 
 /**
  * @brief FontMenu::initMenu
@@ -358,10 +349,10 @@ void FontMenu::initActions()
  */
 void FontMenu::initConnection()
 {
-    connect(this, SIGNAL(sigFileOpenOk()), this, SLOT(slotFileOpenOk()));
+    connect(this, SIGNAL(sigFileOpenOk(const QString &)), this, SLOT(slotFileOpenOk(const QString &)));
     connect(this, SIGNAL(sigDealWithShortKey(const QString &))
             , this, SLOT(slotDealWithShortKey(const QString &)));
-    connect(this, SIGNAL(sigSetCurScale(const QString &)), this, SLOT(slotSetCurScale(const QString &)));
+//    connect(this, SIGNAL(sigSetCurScale(const QString &)), this, SLOT(slotSetCurScale(const QString &)));
 }
 
 /**
@@ -407,7 +398,7 @@ void FontMenu::rotateThumbnail(bool direct)
 
     setScaleRotateViewModeAndShow();
 
-    dApp->m_pDBService->setHistroyData("rotate", m_nRotate);
+    notifyMsg(MSG_VIEWCHANGE_ROTATE, QString::number(m_nRotate));
 
     notifyMsg(MSG_FILE_ROTATE, QString::number(m_nRotate));
 }
@@ -422,10 +413,11 @@ void FontMenu::scaleAndRotate()
 
     setScaleRotateViewModeAndShow();
 
-//    dApp->m_pDBService->setHistroyData("scale", m_nScale);
-    dApp->m_pDBService->setHistroyData("doubleShow", m_bDoubPage);
-    dApp->m_pDBService->setHistroyData("fit", m_bFiteH ? 10 : (m_bFiteW ? 1 : 0));
-    dApp->m_pDBService->setHistroyData("rotate", m_nRotate);
+    notifyMsg(MSG_VIEWCHANGE_DOUBLE_SHOW, QString::number(m_bDoubPage));
+
+    setAppSetFiteHAndW();
+
+    notifyMsg(MSG_VIEWCHANGE_ROTATE, QString::number(m_nRotate));
 }
 
 /**
@@ -496,7 +488,7 @@ void FontMenu::setAppSetFiteHAndW()
         iValue = 10;
     }
 
-    dApp->m_pDBService->setHistroyData("fit", iValue);
+    notifyMsg(MSG_VIEWCHANGE_FIT, QString::number(iValue));
 }
 
 /**

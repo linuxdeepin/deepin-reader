@@ -39,36 +39,48 @@ void HistroyDB::saveData(const QString &newPath)
     }
 }
 
-void HistroyDB::qSelectData()
+void HistroyDB::qSelectData(const QString &sPath)
 {
     const QSqlDatabase db = getDatabase();
     if (db.isValid()) {
         QMutexLocker mutex(&m_mutex);
         QSqlQuery query(db);
         query.setForwardOnly(true);
-        QString sql = QString("SELECT * FROM %1 where FilePath = '%2'").arg(m_strTableName).arg(m_strFilePath);
+        QString sql = QString("SELECT * FROM %1 where FilePath = '%2'").arg(m_strTableName).arg(sPath);
 
         if (query.exec(sql) && query.next()) {
-            m_pDataObj.insert("scale", query.value(1).toInt());          // 缩放
-            m_pDataObj.insert("doubleShow", query.value(2).toInt());     // 是否是双页
-            m_pDataObj.insert("fit", query.value(3).toInt());            // 自适应宽/高
-            m_pDataObj.insert("rotate", query.value(4).toInt());         // 文档旋转角度(0~360)
-            m_pDataObj.insert("leftState", query.value(5).toInt());      //  左侧列表窗口是否显示
-            m_pDataObj.insert("listIndex", query.value(6).toInt());      // 在哪个列表
-            m_pDataObj.insert("curPage", query.value(7).toInt());        // 文档当前页
+            FileDataModel dataObj;
+            dataObj.qSetData(Scale, query.value(1).toInt());          // 缩放
+            dataObj.qSetData(DoubleShow, query.value(2).toInt());     // 是否是双页
+            dataObj.qSetData(Fit, query.value(3).toInt());            // 自适应宽/高
+            dataObj.qSetData(Rotate, query.value(4).toInt());         // 文档旋转角度(0~360)
+            dataObj.qSetData(Thumbnail, query.value(5).toInt());      //  左侧列表窗口是否显示
+            dataObj.qSetData(LeftIndex, query.value(6).toInt());      // 在哪个列表
+            dataObj.qSetData(CurPage, query.value(7).toInt());         // 文档当前页
+
+            m_pDataMapObj.insert(sPath, dataObj);
         }
     }
 }
 
-QJsonObject HistroyDB::getHistroyData() const
+FileDataModel HistroyDB::getHistroyData(const QString &sPath) const
 {
-    return m_pDataObj;
+    if (m_pDataMapObj.contains(sPath)) {
+        return m_pDataMapObj[sPath];
+    }
+    return  FileDataModel();
 }
 
 //  新的数据
-void HistroyDB::setHistroyData(const QString &sKey, const int &iValue)
+void HistroyDB::setHistroyData(const QString &sPath, const int &iKey, const int &iValue)
 {
-    m_pNewDataObj[sKey] = iValue;
+    if (m_pNewDataMapObj.contains(sPath)) {
+        m_pNewDataMapObj[sPath].qSetData(iKey, iValue);
+    } else {
+        FileDataModel dataObj;
+        dataObj.qSetData(iKey, iValue);
+        m_pNewDataMapObj.insert(sPath, dataObj);
+    }
 }
 
 void HistroyDB::checkDatabase()
@@ -136,13 +148,13 @@ void HistroyDB::insertData(const QString &sPath)
         query.prepare(sSql);
 
         query.addBindValue(sPath);
-        query.addBindValue(GetKeyValue("scale"));
-        query.addBindValue(GetKeyValue("doubleShow"));
-        query.addBindValue(GetKeyValue("fit"));
-        query.addBindValue(GetKeyValue("rotate"));
-        query.addBindValue(GetKeyValue("leftState"));
-        query.addBindValue(GetKeyValue("listIndex"));
-        query.addBindValue(GetKeyValue("curPage"));
+        query.addBindValue(GetKeyValue(sPath, Scale));
+        query.addBindValue(GetKeyValue(sPath, DoubleShow));
+        query.addBindValue(GetKeyValue(sPath, Fit));
+        query.addBindValue(GetKeyValue(sPath, Rotate));
+        query.addBindValue(GetKeyValue(sPath, Thumbnail));
+        query.addBindValue(GetKeyValue(sPath, LeftIndex));
+        query.addBindValue(GetKeyValue(sPath, CurPage));
 
         if (query.exec()) {
             db.commit();
@@ -167,13 +179,13 @@ void HistroyDB::updateData(const QString &sPath)
                                "CurPage = ? where FilePath = ?").arg(m_strTableName);
         query.prepare(sSql);
 
-        query.addBindValue(GetKeyValue("scale"));
-        query.addBindValue(GetKeyValue("doubleShow"));
-        query.addBindValue(GetKeyValue("fit"));
-        query.addBindValue(GetKeyValue("rotate"));
-        query.addBindValue(GetKeyValue("leftState"));
-        query.addBindValue(GetKeyValue("listIndex"));
-        query.addBindValue(GetKeyValue("curPage"));
+        query.addBindValue(GetKeyValue(sPath, Scale));
+        query.addBindValue(GetKeyValue(sPath, DoubleShow));
+        query.addBindValue(GetKeyValue(sPath, Fit));
+        query.addBindValue(GetKeyValue(sPath, Rotate));
+        query.addBindValue(GetKeyValue(sPath, Thumbnail));
+        query.addBindValue(GetKeyValue(sPath, LeftIndex));
+        query.addBindValue(GetKeyValue(sPath, CurPage));
         query.addBindValue(sPath);
 
         if (query.exec()) {
@@ -190,11 +202,13 @@ void HistroyDB::deleteData()
 
 }
 
-int HistroyDB::GetKeyValue(const QString &sKey)
+int HistroyDB::GetKeyValue(const QString &sPath, const int &iKey)
 {
-    if (m_pNewDataObj[sKey].isNull()) {
-        return m_pDataObj[sKey].toInt();
+    if (m_pNewDataMapObj.contains(sPath)) {
+        int nTemp = m_pNewDataMapObj[sPath].qGetData(iKey);
+        if (-1 == nTemp)
+            return nTemp;
     }
 
-    return m_pNewDataObj[sKey].toInt();
+    return m_pDataMapObj[sPath].qGetData(iKey);
 }

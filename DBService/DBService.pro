@@ -17,14 +17,16 @@ SOURCES += \
         DBService.cpp \
     DBFactory.cpp \
     BookMarkDB.cpp \
-    HistroyDB.cpp
+    HistroyDB.cpp \
+    FileDataModel.cpp
 
 HEADERS += \
         DBService.h \
         dbservice_global.h \ 
     DBFactory.h \
     BookMarkDB.h \
-    HistroyDB.h
+    HistroyDB.h \
+    FileDataModel.h
 
 QMAKE_PKGCONFIG_LIBDIR = $$target.path
 QMAKE_PKGCONFIG_VERSION = $$VERSION

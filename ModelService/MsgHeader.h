@@ -15,6 +15,7 @@ enum E_MSG_TYPE {
     E_APP_MSG,
     E_TAB_MSG,
     E_DOC_MSG,
+    E_FILE_MSG,
     E_MSG_TYPE_END
 };
 
@@ -55,6 +56,7 @@ enum MSG_TYPE {
 enum E_TAB_TYPE {
     MSG_TAB_MSG_BEGIN = MSG_TYPE_END + 50,
     MSG_TAB_ADD,                    //  添加 tab 消息
+    MSG_TAB_REMOVE,                 //  删除 tab 消息
     MSG_TAB_ADD_OK,                 //  添加 tab 成功
     MSG_TAB_ADD_END,                //  添加 tab 结束
     MSG_TAB_DATA_CHANGE,            //  文档数据有变化消息
@@ -81,7 +83,7 @@ enum E_MENU_MSG {
 
 //  左侧 侧边栏 消息
 enum E_LEFT_SLIDER_MSG {
-    MSG_SLIDER_SHOW_STATE = MSG_OPERATION_TEXT_COPY + 50, //  侧边栏 显隐消息
+    QQQQQQQQ_NO_USE = MSG_OPERATION_TEXT_COPY + 50, //  侧边栏 显隐消息
     MSG_HIDE_FIND_WIDGET,       //  侧边栏 显隐消息
     MSG_SWITCHLEFTWIDGET,       //  切换左侧窗口(缩略图、书签、注释) 消息
 };
@@ -157,14 +159,15 @@ enum E_NOTE_MSG {
 //  文档显示变化消息
 enum E_FILE_VALUE_MSG {
     E_FILE_VALUE_MSG_BEGIN = E_NOTE_MSG_END + 50,
-    MSG_TAB_FILE_CHANGE,                //  titlebar 缩略图按钮 状态
-    MSG_WIDGET_THUMBNAILS_VIEW,         //  titlebar 缩略图按钮 状态
+    MSG_TAB_FILE_CHANGE,                //  文档显示切换
+    MSG_WIDGET_THUMBNAILS_VIEW,         //  文档 左侧缩略图展开状态
     MSG_VIEWCHANGE_DOUBLE_SHOW,         //  双页显示状态
     MSG_VIEWCHANGE_FIT,                 //  自适应
     MSG_VIEWCHANGE_ROTATE,              //  旋转
     MSG_HANDLE_SELECT,                  //  选择工具
     MSG_FILE_SCALE,                     //  当前比例
     MSG_FILE_IS_CHANGE,                 //  文档是否有变化
+    MSG_LEFTBAR_STATE,                  //  文档是否有变化
     E_FILE_VALUE_MSG_END
 };
 

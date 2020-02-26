@@ -28,18 +28,12 @@ DBService::DBService(QObject *parent)
     m_pHistroy = new HistroyDB(this);
 }
 
-void DBService::qSetStrFilePath(const QString &strFilePath)
-{
-    m_pBookMark->setStrFilePath(strFilePath);
-    m_pHistroy->setStrFilePath(strFilePath);
-}
-
-void DBService::qSelectData(const int &iType)
+void DBService::qSelectData(const QString &sPath, const int &iType)
 {
     if (iType == DB_BOOKMARK) {
-        m_pBookMark->qSelectData();
+        m_pBookMark->qSelectData(sPath);
     } else {
-        m_pHistroy->qSelectData();
+        m_pHistroy->qSelectData(sPath);
     }
 }
 
@@ -52,22 +46,22 @@ void DBService::qSaveData(const QString &sPath, const int &iType)
     }
 }
 
-QList<int> DBService::getBookMarkList() const
+QList<int> DBService::getBookMarkList(const QString &sPath) const
 {
-    return qobject_cast<BookMarkDB *>(m_pBookMark)->getBookMarkList();
+    return qobject_cast<BookMarkDB *>(m_pBookMark)->getBookMarkList(sPath);
 }
 
-void DBService::setBookMarkList(const QList<int> &pBookMarkList)
+void DBService::setBookMarkList(const QString &sPath, const QList<int> &pBookMarkList)
 {
-    qobject_cast<BookMarkDB *>(m_pBookMark)->setBookMarkList(pBookMarkList);
+    qobject_cast<BookMarkDB *>(m_pBookMark)->setBookMarkList(sPath, pBookMarkList);
 }
 
-QJsonObject DBService::getHistroyData() const
+FileDataModel DBService::getHistroyData(const QString &sPath) const
 {
-    return qobject_cast<HistroyDB *>(m_pHistroy)->getHistroyData();
+    return qobject_cast<HistroyDB *>(m_pHistroy)->getHistroyData(sPath);
 }
 
-void DBService::setHistroyData(const QString &sKey, const int &iValue)
+void DBService::setHistroyData(const QString &sPath, const int &iKey, const int &iValue)
 {
-    qobject_cast<HistroyDB *>(m_pHistroy)->setHistroyData(sKey, iValue);
+    qobject_cast<HistroyDB *>(m_pHistroy)->setHistroyData(sPath, iKey, iValue);
 }

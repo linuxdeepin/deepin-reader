@@ -1,7 +1,6 @@
 ﻿#ifndef TITLEWIDGET_H
 #define TITLEWIDGET_H
 
-#include <DMenu>
 #include <DPushButton>
 #include <DIconButton>
 
@@ -27,9 +26,10 @@ public:
 
 signals:
     void sigSetFindWidget(const int &);
-    void sigOpenFileOk();
+    void sigOpenFileOk(const QString &);
     void sigAppFullScreen();
     void sigMagnifierCancel();
+    void sigTabMsg(const QString &);
 
     // IObserver interface
 public:
@@ -42,7 +42,7 @@ protected:
 private slots:
     void slotSetFindWidget(const int &);
     void slotUpdateTheme();
-    void slotOpenFileOk();
+    void slotOpenFileOk(const QString &);
     void slotAppFullScreen();
     void slotMagnifierCancel();
 
@@ -51,13 +51,13 @@ private slots:
     void on_handleShapeBtn_clicked();
     void SlotScaleMenuBtnClicked();
 
-    void on_magnifyingBtn_clicked();
-
     void SlotSetCurrentTool(const QString &);
-    void slotDealWithShortKey(const QString &);
+    void SlotDealWithShortKey(const QString &);
+    void SlotTabMsg(const QString &);
 
 private:
     void initConnections();
+    void OnFileShowChange(const QString &);
 
     void initBtns();
     void __InitHandel();
@@ -70,6 +70,7 @@ private:
     DPushButton *createBtn(const QString &btnName, bool bCheckable = false);
 
     void setMagnifierState();
+    void SetBtnDisable(const bool &bAble);
 
 private:
     QStringList shortKeyList;
@@ -80,7 +81,6 @@ private:
     DPushButton *m_pThumbnailBtn = nullptr;
     DPushButton *m_pSettingBtn = nullptr;
     DPushButton *m_pHandleShapeBtn = nullptr;
-    DPushButton *m_pMagnifierBtn = nullptr;
 
     DIconButton     *m_pPreBtn = nullptr;
     DPushButton     *m_pScaleMenuBtn = nullptr;

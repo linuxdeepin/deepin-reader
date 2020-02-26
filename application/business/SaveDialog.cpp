@@ -25,7 +25,7 @@ DWIDGET_USE_NAMESPACE
 #include "MsgHeader.h"
 
 #include "application.h"
-#include "FileData.h"
+#include "FileDataModel.h"
 #include "controller/FileDataManager.h"
 
 SaveDialog::SaveDialog(QObject *parent)
@@ -48,11 +48,11 @@ void SaveDialog::AppExit()
     QString saveFileList = "";
     QString noChangeFileList = "";
 
-    QMap<QString, FileData> sFileStateMap = dApp->m_pDataManager->qGetFileStateMap();
-    QMapIterator<QString, FileData> iter(sFileStateMap);
+    QMap<QString, FileState> sFileStateMap = dApp->m_pDataManager->qGetFileChangeMap();
+    QMapIterator<QString, FileState> iter(sFileStateMap);
     while (iter.hasNext()) {
         iter.next();
-        if (iter.value().bIsChane) {
+        if (iter.value().isChange) {
             saveFileList.append(iter.key() + Constant::sQStringSep);
         } else {
             noChangeFileList.append(iter.key() + Constant::sQStringSep);
@@ -79,8 +79,8 @@ void SaveDialog::AppExit()
 
 void SaveDialog::TabRemove(const QString &sPath)
 {
-    FileData fd = dApp->m_pDataManager->qGetFileData(sPath);
-    if (fd.bIsChane) {
+    FileState fs = dApp->m_pDataManager->qGetFileChange(sPath);
+    if (fs.isChange) {
         int nRes = showDialog();
         if (nRes <= 0) {
             return;

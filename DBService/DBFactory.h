@@ -31,9 +31,8 @@ public:
     explicit DBFactory(QObject *parent = nullptr);
 
 public:
-    void setStrFilePath(const QString &strFilePath);
     virtual void saveData(const QString &) = 0;
-    virtual void qSelectData() = 0;
+    virtual void qSelectData(const QString &) = 0;
 
 protected:
     virtual void checkDatabase() = 0;
@@ -44,8 +43,6 @@ protected:
     bool hasFilePathDB(const QString &, const QString &);
 
 protected:
-    QString m_strFilePath = "";
-    QString m_strFileName = "";
     QMutex m_mutex;
 };
 

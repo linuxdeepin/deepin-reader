@@ -78,8 +78,20 @@ void MainWindow::closeEvent(QCloseEvent *event)
     AppSetting::instance()->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
     AppSetting::instance()->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
 
-    QMap<QString, FileData> sFileStateMap = dApp->m_pDataManager->qGetFileStateMap();
-    if (sFileStateMap.size() > 0) {
+    bool rl = false;
+
+    QMap<QString, FileState> sFileStateMap = dApp->m_pDataManager->qGetFileChangeMap();
+    QMapIterator<QString, FileState> iter(sFileStateMap);
+    while (iter.hasNext()) {
+        iter.next();
+
+        if (iter.key() != "" && iter.value().isChange) {
+            rl = true;
+            break;
+        }
+    }
+
+    if (rl) {
         SaveDialog sd;
         sd.showSaveDialog(E_APP_MSG);
 

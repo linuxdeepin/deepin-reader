@@ -23,6 +23,8 @@
 #include <QDesktopServices>
 #include <DDialog>
 
+#include "MsgModel.h"
+
 #include "business/DocummentFileHelper.h"
 #include "business/AnnotationHelper.h"
 #include "docview/docummentproxy.h"
@@ -67,6 +69,7 @@ void FileViewWidget::initWidget()
     auto m_pDocummentProxy = DocummentProxy::instance(this);
     if (m_pDocummentProxy) {
         connect(this, SIGNAL(sigChangeProxy(const QString &)), m_pDocummentProxy, SLOT(slot_changetab(const QString &)));
+        connect(this, SIGNAL(sigClosetab(const QString &)), m_pDocummentProxy, SLOT(slot_closetab(const QString &)));
 
         connect(m_pDocummentProxy, SIGNAL(signal_bookMarkStateChange(int, bool)), SLOT(slotBookMarkStateChange(int, bool)));
         connect(m_pDocummentProxy, SIGNAL(signal_pageChange(int)), SLOT(slotDocFilePageChanged(int)));
@@ -401,14 +404,11 @@ void FileViewWidget::slotBookMarkStateChange(int nPage, bool bState)
     } else {
         sendMsg(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(nPage));
     }
-//    DataManager::instance()->setBIsUpdate(true);
 }
 
 //  文档页变化了
 void FileViewWidget::slotDocFilePageChanged(int page)
 {
-    dApp->m_pDBService->setHistroyData("curPage", page);
-
     notifyMsg(MSG_FILE_PAGE_CHANGE, QString("%1").arg(page));
 }
 
@@ -417,9 +417,25 @@ void FileViewWidget::SlotDocFileOpenResult(bool openresult)
 {
     //  通知 其他窗口， 打开文件成功了！！！
     if (openresult) {
+        dApp->m_pDBService->qSelectData(m_strPath, DB_BOOKMARK);
+        dApp->m_pDataManager->qInsertFileChange(m_strPath, false);
+        dApp->m_pDataManager->qInsertFileOpen(m_strPath, true);
+
         notifyMsg(MSG_OPERATION_OPEN_FILE_OK, m_strPath);
     } else {
         notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
+    }
+}
+
+void FileViewWidget::SlotCloseFile(const QString &sPath)
+{
+    if (sPath == m_strPath) {
+        emit sigClosetab(m_strProcUuid);
+
+        MsgModel mm;
+        mm.setMsgType(MSG_TAB_REMOVE);
+        mm.setPath(sPath);
+        notifyMsg(E_TAB_MSG, mm.toJson());
     }
 }
 
@@ -476,6 +492,10 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
             emit sigDealWithKeyMsg(msgContent);
             return ConstantMsg::g_effective_res;
         }
+    }
+
+    if (msgType == MSG_CLOSE_FILE) {
+        emit sigCloseFile(msgContent);
     }
 
     return 0;

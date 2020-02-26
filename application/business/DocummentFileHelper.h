@@ -49,7 +49,7 @@ public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 
 public:
-    bool save(const QString &filepath, bool withChanges);
+//    bool save(const QString &filepath, bool withChanges);
 
     void qRemoveTabFile(const int &iType,  const QString &sPath);
     void qAppExitFile(const int &iType, const QString &sPath);

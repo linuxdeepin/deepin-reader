@@ -23,6 +23,8 @@
 
 #include <QObject>
 
+#include "FileDataModel.h"
+
 enum E_DB_TYPE {
     DB_BOOKMARK,
     DB_HISTROY
@@ -37,15 +39,14 @@ public:
     explicit DBService(QObject *parent = nullptr);
 
 public:
-    void qSetStrFilePath(const QString &strFilePath);
-    void qSelectData(const int &);
+    void qSelectData(const QString &, const int &);
     void qSaveData(const QString &sPath, const int &);
 
-    QList<int> getBookMarkList() const;
-    void setBookMarkList(const QList<int> &pBookMarkList);
+    QList<int> getBookMarkList(const QString &) const;
+    void setBookMarkList(const QString &, const QList<int> &pBookMarkList);
 
-    QJsonObject getHistroyData() const;
-    void setHistroyData(const QString &, const int &);
+    FileDataModel getHistroyData(const QString &) const;
+    void setHistroyData(const QString &, const int &, const int &);
 
 private:
     DBFactory   *m_pBookMark = nullptr;

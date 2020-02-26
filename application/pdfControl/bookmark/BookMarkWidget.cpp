@@ -19,9 +19,11 @@
 #include "BookMarkWidget.h"
 
 #include "BookMarkItemWidget.h"
+#include "MsgModel.h"
 
 #include "controller/AppInfo.h"
 #include "controller/AppSetting.h"
+#include "controller/FileDataManager.h"
 #include "docview/docummentproxy.h"
 
 BookMarkWidget::BookMarkWidget(DWidget *parent)
@@ -139,16 +141,21 @@ void BookMarkWidget::slotAddBookMark()
 //  书签状态 添加指定页
 void BookMarkWidget::slotAddBookMark(const int &nPage)
 {
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList();
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
     if (pageList.contains(nPage)) {
         return;
     }
 
     auto item = addBookMarkItem(nPage);
     if (item) {
-//        DataManager::instance()->setBIsUpdate(true);
+        MsgModel mm;
+        mm.setMsgType(MSG_FILE_IS_CHANGE);
+        mm.setValue("1");
+
+        notifyMsg(E_FILE_MSG, mm.toJson());
         pageList.append(nPage);
-        dApp->m_pDBService->setBookMarkList(pageList);
+        dApp->m_pDBService->setBookMarkList(sCurPath, pageList);
     }
 
     auto dproxy = DocummentProxy::instance();
@@ -172,7 +179,8 @@ void BookMarkWidget::slotOpenFileOk()
 
     m_pBookMarkListWidget->clear();
 
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList();
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
     foreach (int iPage, pageList) {
         addBookMarkItem(iPage);
     }
@@ -277,13 +285,19 @@ void BookMarkWidget::slotDeleteBookItem(const int &nPage)
 //  删除指定页
 void BookMarkWidget::deleteIndexPage(const int &pageIndex)
 {
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList();
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
     pageList.removeOne(pageIndex);
-    dApp->m_pDBService->setBookMarkList(pageList);
+    dApp->m_pDBService->setBookMarkList(sCurPath, pageList);
 
     auto dproxy = DocummentProxy::instance();
     if (dproxy) {
-//        DataManager::instance()->setBIsUpdate(true);
+        MsgModel mm;
+        mm.setMsgType(MSG_FILE_IS_CHANGE);
+        mm.setValue("1");
+
+        notifyMsg(E_FILE_MSG, mm.toJson());
+
         dproxy->setBookMarkState(pageIndex, false);
 
         int nCurPage = dproxy->currentPageNo();
@@ -558,7 +572,8 @@ int BookMarkWidget::getBookMarkPage(const int &index)
             reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
         if (pItemWidget) {
             int page = pItemWidget->nPageIndex();
-            QList<int> pageList = dApp->m_pDBService->getBookMarkList();
+            QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+            QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
             if (pageList.contains(page)) {
                 return page;
             }

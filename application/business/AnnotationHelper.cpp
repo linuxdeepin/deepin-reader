@@ -20,6 +20,8 @@
 #include "AnnotationHelper.h"
 
 #include "application.h"
+#include "MsgModel.h"
+
 #include "controller/AppInfo.h"
 #include "docview/docummentproxy.h"
 
@@ -153,7 +155,12 @@ void AnnotationHelper::__AddHighLight(const QString &msgContent)
 
     QString strUuid = _proxy->addAnnotation(pStartPoint, pEndPoint, color);
     if (strUuid != "") {
-        notifyMsg(MSG_FILE_IS_CHANGE, "1");
+
+        MsgModel mm;
+        mm.setMsgType(MSG_FILE_IS_CHANGE);
+        mm.setValue("1");
+
+        notifyMsg(E_FILE_MSG, mm.toJson());
     }
 }
 
@@ -225,7 +232,12 @@ void AnnotationHelper::__ChangeAnnotationColor(const QString &msgContent)
         QColor color = dApp->m_pAppInfo->getLightColorList().at(iIndex);
 
         _proxy->changeAnnotationColor(sPage.toInt(), sUuid, color);     //  更新高亮顏色,  是对文档进行了操作
-        notifyMsg(MSG_FILE_IS_CHANGE, "1");
+
+        MsgModel mm;
+        mm.setMsgType(MSG_FILE_IS_CHANGE);
+        mm.setValue("1");
+
+        notifyMsg(E_FILE_MSG, mm.toJson());
     }
 }
 

@@ -5,7 +5,8 @@
 #include <QMap>
 
 #include "application.h"
-#include "FileData.h"
+#include "FileDataModel.h"
+#include "FileStateHeader.h"
 
 /**
  * @brief The DataManager class
@@ -19,6 +20,9 @@ class FileDataManager : public QObject, public IObserver
 
 public:
     explicit FileDataManager(QObject *parent = nullptr);
+
+signals:
+    void sigFileChange(const QString &);
 
     // IObserver interface
 public:
@@ -34,18 +38,33 @@ public:
     void qInsertOpenFilePath(const QString &strPath);
     void qRemoveFilePath(const QString &strPath);
 
-    FileData qGetFileData(const QString &) const;
-    void qSetFileData(const QString &strPath, const FileData &);
-    QMap<QString, FileData> qGetFileStateMap() const;
+    FileDataModel qGetFileData(const QString &) const;
+    void qSetFileData(const QString &strPath, const FileDataModel &);
+    QMap<QString, FileDataModel> qGetFileStateMap() const;
 
     QMap<QString, QString> qGetFileAndUuidMap() const;
     void qInsertFileAndUuid(const QString &, const QString &);
     QString qGetFileUuid(const QString &);
 
+    QMap<QString, FileState> qGetFileChangeMap() const;
+    void qInsertFileChange(const QString &, const int &);
+    void qInsertFileOpen(const QString &, const int &);
+    FileState qGetFileChange(const QString &);
+
+private:
+    void InitConnection();
+
+    void setFileChange(const QString &);
+    void setThumbnailState(const QString &);
+
+private slots:
+    void slotFileChange(const QString &);
+
 private:
     QString m_strCurrentFilePath = "";              //  当前显示的文档路径
-    QMap<QString, FileData> m_pFileStateMap;        //  已打开的文档列表
-    QMap<QString, QString> m_pFileAndUuidMap;       //  已打开的文档列表
+    QMap<QString, FileDataModel> m_pFileStateMap;        //  已打开的文档列表
+    QMap<QString, QString>  m_pFileAndUuidMap;       //  已打开的文档列表
+    QMap<QString, FileState>      m_pFileChangeMap;
 };
 
 #endif // DATAMANAGER_H

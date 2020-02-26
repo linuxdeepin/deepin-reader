@@ -60,6 +60,7 @@ private:
 
     /****   begin   wzx 2020.2.18   ********/
     void __ShowPageNoteWidget(const QString &);
+    void InitSpinner();
     /****   end     wzx 2020.2.18   ********/
 
     // CustomWidget interface
@@ -69,6 +70,7 @@ protected:
 private:
     PlayControlWidget *m_pctrlwidget = nullptr;
     DSpinner            *m_pSpiner = nullptr;
+    DWidget             *m_pSpinerWidget = nullptr;
     QStackedLayout      *m_playout = nullptr;
 };
 

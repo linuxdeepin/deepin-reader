@@ -21,7 +21,7 @@
 #include <QDebug>
 #include <QDesktopServices>
 
-#include "FileData.h"
+#include "FileDataModel.h"
 #include "MsgModel.h"
 #include <QUrl>
 
@@ -35,11 +35,10 @@ MainTabBar::MainTabBar(DWidget *parent)
     this->setMovable(true);
 
     m_pMsgList = {MSG_TAB_ADD, MSG_MENU_NEW_TAB,
-                  MSG_MENU_OPEN_FOLDER
+                  MSG_MENU_OPEN_FOLDER,
                  };
 
     __InitConnection();
-
 
     dApp->m_pModelService->addObserver(this);
 }
@@ -56,8 +55,10 @@ int MainTabBar::dealWithData(const int &msgType, const QString &msgContent)
         return  ConstantMsg::g_effective_res;
     }
 
-    if (msgType == MSG_CLOSE_FILE || msgType == E_APP_EXIT) {
-        emit sigCloseFile(msgType, msgContent);
+    if (msgType == E_APP_EXIT) {
+        emit sigCloseFile(msgContent);
+    } else if (msgType == E_TAB_MSG) {
+        emit sigTabMsg(msgContent);
     }
     return 0;
 }
@@ -81,7 +82,8 @@ void MainTabBar::resizeEvent(QResizeEvent *event)
 
 void MainTabBar::__InitConnection()
 {
-    connect(this, SIGNAL(sigCloseFile(const int &, const QString &)), SLOT(SlotCloseFile(const int &, const QString &)));
+    connect(this, SIGNAL(sigCloseFile(const QString &)), SLOT(SlotExitAppCloseFile(const QString &)));
+    connect(this, SIGNAL(sigTabMsg(const QString &)), SLOT(SlotTabMsg(const QString &)));
 
     connect(this, SIGNAL(tabBarClicked(int)), SLOT(SlotTabBarClicked(int)));
     connect(this, SIGNAL(tabCloseRequested(int)), SLOT(SlotTabCloseRequested(int)));
@@ -102,8 +104,8 @@ void MainTabBar::SlotTabBarClicked(int index)
     if (sPath != sCurPath) {
         dApp->m_pDataManager->qSetCurrentFilePath(sPath);
 
-        FileData fd = dApp->m_pDataManager->qGetFileData(sPath);
-        if (!fd.bIsOpen) {  //  该文档还未打开
+        FileState fs = dApp->m_pDataManager->qGetFileChange(sPath);
+        if (!fs.isOpen) {  //  该文档还未打开
             notifyMsg(MSG_OPEN_FILE_PATH, sPath);
         } else {
 
@@ -163,6 +165,8 @@ void MainTabBar::AddFileTab(const QString &sContent)
                 this->setTabData(iIndex, s);
 
                 if (iLoop == nSize - 1) {
+                    dApp->m_pDataManager->qSetCurrentFilePath(s);
+
                     notifyMsg(MSG_TAB_ADD_END, s);
 
                     setCurrentIndex(iIndex);
@@ -172,6 +176,26 @@ void MainTabBar::AddFileTab(const QString &sContent)
             }
         }
         __SetTabMiniWidth();
+    }
+}
+
+void MainTabBar::RemoveFileTab(const QString &sPath)
+{
+    int nCount = this->count();
+    for (int iLoop = 0; iLoop < nCount; iLoop++) {
+        QString sTabData = this->tabData(iLoop).toString();
+        if (sTabData == sPath) {
+            this->removeTab(iLoop);
+
+            dApp->m_pDataManager->qRemoveFilePath(sPath);
+
+            __SetTabMiniWidth();
+        }
+    }
+
+    nCount = this->count();
+    if (nCount == 0) {
+        notifyMsg(CENTRAL_INDEX_CHANGE);
     }
 }
 
@@ -198,7 +222,7 @@ void MainTabBar::SlotTabCloseRequested(int index)
     }
 }
 
-void MainTabBar::SlotCloseFile(const int  &msgType, const QString &sPath)
+void MainTabBar::SlotExitAppCloseFile(const QString &sPath)
 {
     int nCount = this->count();
     for (int iLoop = 0; iLoop < nCount; iLoop++) {
@@ -214,11 +238,7 @@ void MainTabBar::SlotCloseFile(const int  &msgType, const QString &sPath)
 
     nCount = this->count();
     if (nCount == 0) {
-        if (msgType == E_APP_EXIT) {    //  退出应用
-            dApp->exit(0);
-        } else {    //  返回首页
-            notifyMsg(CENTRAL_INDEX_CHANGE);
-        }
+        dApp->exit(0);
     }
 }
 
@@ -230,6 +250,18 @@ void MainTabBar::SlotDealWithData(const int &msgType, const QString &msgContent)
         SlotTabAddRequested();
     } else if (MSG_MENU_OPEN_FOLDER == msgType) {
         OpenCurFileFolder();
+    }
+}
+
+void MainTabBar::SlotTabMsg(const QString &sContent)
+{
+    MsgModel mm;
+    mm.fromJson(sContent);
+
+    QString sPath = mm.getPath();
+    int nMsgType = mm.getMsgType();
+    if (nMsgType == MSG_TAB_REMOVE) {
+        RemoveFileTab(sPath);
     }
 }
 

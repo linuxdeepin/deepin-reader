@@ -96,7 +96,7 @@ public:
 
 signals:
     void sigFilePageChanged(const QString &);
-    void sigOpenFileOk();
+    void sigOpenFileOk(const QString &);
     void sigCloseFile();
     void sigSetRotate(int);
 
@@ -122,7 +122,7 @@ private:
     void initConnection();
 
 private slots:
-    void slotOpenFileOk();
+    void slotOpenFileOk(const QString &);
     void slotDocFilePageChanged(const QString &);
     void slotCloseFile();
     void slotUpdateTheme();

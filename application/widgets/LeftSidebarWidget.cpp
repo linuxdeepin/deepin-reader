@@ -3,10 +3,13 @@
 #include <DStackedWidget>
 #include <QButtonGroup>
 #include <QVBoxLayout>
+#include <QJsonObject>
 
 #include "MainOperationWidget.h"
+#include "MsgModel.h"
 
 #include "controller/AppSetting.h"
+#include "controller/FileDataManager.h"
 #include "docview/docummentproxy.h"
 
 #include "pdfControl/bookmark/BookMarkWidget.h"
@@ -24,8 +27,6 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
 
     resize(LEFTNORMALWIDTH, this->height());
 
-    m_pMsgList = {MSG_SLIDER_SHOW_STATE};
-
     initWidget();
     initConnections();
 
@@ -40,10 +41,20 @@ LeftSidebarWidget::~LeftSidebarWidget()
     dApp->m_pModelService->removeObserver(this);
 }
 
-void LeftSidebarWidget::slotDealWithData(const int &msgType, const QString &msgContent)
+//void LeftSidebarWidget::slotDealWithData(const int &msgType, const QString &msgContent)
+//{
+//    if (msgType == MSG_WIDGET_THUMBNAILS_VIEW) {//  控制 侧边栏显隐
+//        onSetWidgetVisible(msgContent.toInt());
+//    }
+//}
+
+void LeftSidebarWidget::SlotOpenFileOk(const QString &sPath)
 {
-    if (msgType == MSG_SLIDER_SHOW_STATE) {//  控制 侧边栏显隐
-        onSetWidgetVisible(msgContent.toInt());
+    if (m_strPath == sPath) {
+        FileDataModel fdm = dApp->m_pDataManager->qGetFileData(sPath);
+        int nShow = fdm.qGetData(Thumbnail);
+        bool showLeft = nShow == 1 ? true : false;
+        onSetWidgetVisible(showLeft);
     }
 }
 
@@ -82,7 +93,22 @@ void LeftSidebarWidget::slotSetStackCurIndex(const int &iIndex)
     if (iIndex == WIDGET_SEARCH || iIndex == WIDGET_BUFFER) {
         emit sigSearchWidgetState(iIndex);
     } else {
-        dApp->m_pDBService->setHistroyData("listIndex", iIndex);
+        notifyMsg(MSG_LEFTBAR_STATE, QString::number(iIndex));
+    }
+}
+
+void LeftSidebarWidget::slotFileChangeMsg(const QString &sContent)
+{
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    if (m_strPath == sCurPath) {
+        MsgModel mm;
+        mm.fromJson(sContent);
+
+        QString nValue = mm.getValue();
+        int nMsg = mm.getMsgType();
+        if (nMsg == MSG_WIDGET_THUMBNAILS_VIEW) {
+            onSetWidgetVisible(nValue.toInt());
+        }
     }
 }
 
@@ -139,8 +165,9 @@ void LeftSidebarWidget::onJumpToNextPage()
 void LeftSidebarWidget::initConnections()
 {
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
-
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
+    connect(this, SIGNAL(sigOpenFileOk(const QString &)), SLOT(SlotOpenFileOk(const QString &)));
+    connect(this, SIGNAL(sigFileChangeMsg(const QString &)), SLOT(slotFileChangeMsg(const QString &)));
+//    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
 }
 
 //  按delete 键 删除书签 或者 注释
@@ -193,12 +220,15 @@ void LeftSidebarWidget::initWidget()
 
 int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (m_pMsgList.contains(msgType)) {
-        emit sigDealWithData(msgType, msgContent);
-        return ConstantMsg::g_effective_res;
-    }
-
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {
+//    if (m_pMsgList.contains(msgType)) {
+//        emit sigDealWithData(msgType, msgContent);
+//        return ConstantMsg::g_effective_res;
+//    }
+    if (msgType == E_FILE_MSG) {
+        emit sigFileChangeMsg(msgContent);
+    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        emit sigOpenFileOk(msgContent);
+    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
     }
 

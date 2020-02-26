@@ -6,6 +6,7 @@
 #include "ColorWidgetAction.h"
 
 #include "controller/AppInfo.h"
+#include "controller/FileDataManager.h"
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)
     : CustomMenu("TextOperationMenu", parent)
@@ -22,7 +23,8 @@ TextOperationMenu::~TextOperationMenu()
 
 void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, const QString &sSelectText, const QString &sUuid)
 {
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList();
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
 
     bool bBookState = pageList.contains(m_nClickPage);
     m_pAddBookMark->setEnabled(!bBookState);

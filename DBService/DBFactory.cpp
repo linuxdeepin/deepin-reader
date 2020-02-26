@@ -68,13 +68,3 @@ bool DBFactory::hasFilePathDB(const QString &strFilePath, const QString &sTabelN
     }
     return false;
 }
-
-void DBFactory::setStrFilePath(const QString &strFilePath)
-{
-    m_strFilePath = strFilePath;
-
-    int nLastPos = strFilePath.lastIndexOf('/');
-    nLastPos++;
-    m_strFileName = strFilePath.mid(nLastPos);
-}
-

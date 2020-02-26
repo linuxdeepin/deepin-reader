@@ -16,17 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef FILEDATA_H
-#define FILEDATA_H
+#ifndef FILESTATEHEADER_H
+#define FILESTATEHEADER_H
 
-#include <QString>
-
-struct FileData {
-    bool        bIsChane = false;
-    QString     sScale = "";
-    bool        bLeftBarIsShow = false;
-    bool        bIsOpen = false;            //  文档是否已打开
-//    DocType_EM  m_nCurDocType = DocType_NULL;
+struct FileState {
+    bool isOpen = false;
+    bool isChange = false;
 };
 
-#endif // FILEDATA_H
+
+#endif // FILESTATE_H

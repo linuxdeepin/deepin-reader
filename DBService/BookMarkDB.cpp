@@ -36,46 +36,48 @@ BookMarkDB::~BookMarkDB()
 
 }
 
-void BookMarkDB::saveData(const QString &newpath)
+void BookMarkDB::saveData(const QString &sPath)
 {
-    if (m_pBookMarkList.size() == 0) {
-        deleteData();
+    QList<int> dataList = m_pBookMarkMap[sPath];
+    if (dataList.size() == 0) {
+        deleteData(sPath);
     } else {
         QString sPage = "";
-        foreach (int i, m_pBookMarkList) {
+        foreach (int i, dataList) {
             sPage += QString::number(i) + ",";
         }
 
-        if (!hasFilePathDB(newpath, m_strTableName)) {
-            insertData(newpath, sPage);
+        if (!hasFilePathDB(sPath, m_strTableName)) {
+            insertData(sPath, sPage);
         } else {
-            updateData(newpath, sPage);
+            updateData(sPath, sPage);
         }
     }
 }
 
-void BookMarkDB::qSelectData()
+void BookMarkDB::qSelectData(const QString &sPath)
 {
-    m_pBookMarkList.clear();
     const QSqlDatabase db = getDatabase();
     if (db.isValid()) {
         QMutexLocker mutex(&m_mutex);
         QSqlQuery query(db);
 
-        QString sSql = QString("SELECT %1 FROM %2 where FilePath = ? and FileName = ?;").arg(m_strPageNumber).arg(m_strTableName);
+        QString sSql = QString("SELECT %1 FROM %2 where FilePath = ?;").arg(m_strPageNumber).arg(m_strTableName);
         query.prepare(sSql);
-        query.addBindValue(m_strFilePath);
-        query.addBindValue(m_strFileName);
+        query.addBindValue(sPath);
         if (query.exec() && query.next()) {
             QString sData = query.value(0).toString();      //  结果
 
+            QList<int> dataList;
             QStringList sPageList = sData.split(",", QString::SkipEmptyParts);
             foreach (QString s, sPageList) {
                 int nPage = s.toInt();
-                m_pBookMarkList.append(nPage);
+                dataList.append(nPage);
             }
 
-            qSort(m_pBookMarkList.begin(), m_pBookMarkList.end());
+            qSort(dataList.begin(), dataList.end());
+
+            m_pBookMarkMap.insert(sPath, dataList);
         } else {
             qWarning() << __func__ << " error:  " << query.lastError();
         }
@@ -90,11 +92,10 @@ void BookMarkDB::insertData(const QString &strFilePath, const QString &pageNumbe
         QMutexLocker mutex(&m_mutex);
         QSqlQuery query(db);
 
-        QString sSql = QString("INSERT INTO %1 (FilePath, FileName, %2) VALUES (?, ?, ?);").arg(m_strTableName).arg(m_strPageNumber);
+        QString sSql = QString("INSERT INTO %1 (FilePath, %2) VALUES (?, ?);").arg(m_strTableName).arg(m_strPageNumber);
         query.prepare(sSql);
 
         query.addBindValue(strFilePath);
-        query.addBindValue(m_strFileName);
         query.addBindValue(pageNumber);
 
         if (query.exec()) {
@@ -113,12 +114,11 @@ void BookMarkDB::updateData(const QString &strFilePath, const QString &pageNumbe
         QMutexLocker mutex(&m_mutex);
         QSqlQuery query(db);
 
-        QString sSql = QString("UPDATE %1 set %2 = ? where FilePath = ? and FileName = ?;").arg(m_strTableName).arg(m_strPageNumber);
+        QString sSql = QString("UPDATE %1 set %2 = ? where FilePath = ?;").arg(m_strTableName).arg(m_strPageNumber);
         query.prepare(sSql);
 
         query.addBindValue(pageNumber);
         query.addBindValue(strFilePath);
-        query.addBindValue(m_strFileName);
 
         if (query.exec()) {
             db.commit();
@@ -129,7 +129,7 @@ void BookMarkDB::updateData(const QString &strFilePath, const QString &pageNumbe
     }
 }
 
-void BookMarkDB::deleteData()
+void BookMarkDB::deleteData(const QString &strPath)
 {
     QSqlDatabase db = getDatabase();
     if (db.isValid()) {
@@ -138,11 +138,10 @@ void BookMarkDB::deleteData()
         // delete into BookMarkTable
         QSqlQuery query(db);
 
-        QString sSql = QString("DELETE FROM %1 where FilePath = ? and FileName = ?;").arg(m_strTableName);
+        QString sSql = QString("DELETE FROM %1 where FilePath = ?;").arg(m_strTableName);
         query.prepare(sSql);
 
-        query.addBindValue(m_strFilePath);
-        query.addBindValue(m_strFileName);
+        query.addBindValue(strPath);
 
         if (query.exec()) {
             db.commit();
@@ -208,19 +207,18 @@ void BookMarkDB::checkDatabase()
 
         QString sql = QString("CREATE TABLE IF NOT EXISTS %1 ( "
                               "FilePath TEXT primary key, "
-                              "FileName TEXT, "
                               "%2 TEXT, "
                               "Time TEXT )").arg(m_strTableName).arg(m_strPageNumber);
         query.exec(sql);
     }
 }
 
-void BookMarkDB::setBookMarkList(const QList<int> &pBookMarkList)
+void BookMarkDB::setBookMarkList(const QString &sPath, const QList<int> &pBookMarkList)
 {
-    m_pBookMarkList = pBookMarkList;
+    m_pBookMarkMap[sPath] = pBookMarkList;
 }
 
-QList<int> BookMarkDB::getBookMarkList() const
+QList<int> BookMarkDB::getBookMarkList(const QString &sPath) const
 {
-    return m_pBookMarkList;
+    return m_pBookMarkMap[sPath];
 }

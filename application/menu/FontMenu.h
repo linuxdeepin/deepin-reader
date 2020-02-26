@@ -33,9 +33,9 @@ public:
 
 signals:
     //新增
-    void sigFileOpenOk();
+    void sigFileOpenOk(const QString &);
     void sigDealWithShortKey(const QString &);
-    void sigSetCurScale(const QString &);
+//    void sigSetCurScale(const QString &);
 
     // IObserver interface
 public:
@@ -51,12 +51,12 @@ private slots:
     void slotFiteW();
     void slotRotateL();
     void slotRotateR();
-    void slotScaleValChanged(int);
+//    void slotScaleValChanged(int);
 
     //新增
-    void slotFileOpenOk();
+    void slotFileOpenOk(const QString &);
     void slotDealWithShortKey(const QString &);
-    void slotSetCurScale(const QString &);
+//    void slotSetCurScale(const QString &);
 
 private:
     void initConnection();

@@ -210,6 +210,28 @@ void DocShowShellWidget::__ShowPageNoteWidget(const QString &msgContent)
     }
 }
 
+void DocShowShellWidget::InitSpinner()
+{
+    m_pSpinerWidget = new DWidget(this);
+
+    QVBoxLayout *vLayout = new QVBoxLayout;
+    vLayout->addStretch();
+
+    m_pSpiner = new DSpinner;
+    m_pSpiner->setFixedSize(QSize(36, 36));
+    m_pSpiner->start();
+
+    vLayout->addWidget(m_pSpiner);
+    vLayout->addStretch();
+
+    QHBoxLayout *hLayout = new QHBoxLayout;
+    hLayout->addStretch();
+    hLayout->addItem(vLayout);
+    hLayout->addStretch();
+
+    m_pSpinerWidget->setLayout(hLayout);
+}
+
 void DocShowShellWidget::slotBtnCloseClicked()
 {
     notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
@@ -243,10 +265,10 @@ void DocShowShellWidget::slotOpenFileOk(const QString &sPath)
     if (pView) {
         QString viewPath = pView->qGetPath();
         if (viewPath == sPath) {
-            m_playout->removeWidget(m_pSpiner);
+            m_playout->removeWidget(m_pSpinerWidget);
 
-            delete  m_pSpiner;
-            m_pSpiner = nullptr;
+            delete  m_pSpinerWidget;
+            m_pSpinerWidget = nullptr;
         }
     }
 }
@@ -334,16 +356,14 @@ void DocShowShellWidget::initWidget()
     m_playout->setContentsMargins(0, 0, 0, 0);
     m_playout->setSpacing(0);
 
-    m_pSpiner = new DSpinner;
-    m_pSpiner->setFixedSize(QSize(36, 36));
-    m_pSpiner->start();
-
     auto m_pfileviwewidget = new FileViewWidget(this);
     connect(m_pfileviwewidget, SIGNAL(sigShowPlayCtrl(bool)), this, SLOT(slotChangePlayCtrlShow(bool)));
 
-    m_playout->addWidget(m_pSpiner);
+    InitSpinner();
+    m_playout->addWidget(m_pSpinerWidget);
 
     m_playout->addWidget(m_pfileviwewidget);
 
     this->setLayout(m_playout);
 }
+
