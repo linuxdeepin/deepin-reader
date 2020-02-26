@@ -23,7 +23,7 @@
 #include "MsgModel.h"
 
 #include "controller/AppInfo.h"
-#include "controller/DataManager.h"
+//#include "controller/DataManager.h"
 #include "docview/docummentproxy.h"
 
 AnnotationHelper::AnnotationHelper(QObject *parent)
