@@ -66,7 +66,7 @@ void FileViewWidget::initWidget()
     //  实际文档类  唯一实例化设置 父窗口
     m_strProcUuid = DocummentProxy::CreateInstance(this);
 
-    auto m_pDocummentProxy = DocummentProxy::instance(this);
+    auto m_pDocummentProxy = DocummentProxy::instance(m_strProcUuid);
     if (m_pDocummentProxy) {
         connect(this, SIGNAL(sigChangeProxy(const QString &)), m_pDocummentProxy, SLOT(slot_changetab(const QString &)));
         connect(this, SIGNAL(sigClosetab(const QString &)), m_pDocummentProxy, SLOT(slot_closetab(const QString &)));
@@ -421,6 +421,7 @@ void FileViewWidget::SlotDocFileOpenResult(bool openresult)
         dApp->m_pDataManager->qInsertFileChange(m_strPath, false);
         dApp->m_pDataManager->qInsertFileOpen(m_strPath, true);
 
+        qDebug() << __FUNCTION__ << "open file success" << m_strPath;
         notifyMsg(MSG_OPERATION_OPEN_FILE_OK, m_strPath);
     } else {
         notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));

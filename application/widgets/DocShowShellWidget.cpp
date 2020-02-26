@@ -261,9 +261,11 @@ void DocShowShellWidget::slotChangePlayCtrlShow(bool bshow)
 
 void DocShowShellWidget::slotOpenFileOk(const QString &sPath)
 {
+    qDebug() << "----++++++++";
     auto pView = this->findChild<FileViewWidget *>();
     if (pView) {
         QString viewPath = pView->qGetPath();
+        qDebug() << "----++++++++" << viewPath << sPath;
         if (viewPath == sPath) {
             m_playout->removeWidget(m_pSpinerWidget);
 

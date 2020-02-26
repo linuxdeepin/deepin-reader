@@ -293,7 +293,8 @@ void DocummentFileHelper::__PageJumpByMsg(const int &iType)
 //  打开　文件路径
 void DocummentFileHelper::onOpenFile(const QString &filePaths)
 {
-    if (!DocummentProxy::instance()) {
+    DocummentProxy *proxy =  DocummentProxy::instance(dApp->m_pDataManager->qGetFileUuid(filePaths));
+    if (!proxy) {
         return;
     }
 
@@ -326,9 +327,9 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
             RotateType_EM rotatetype = static_cast<RotateType_EM>((rotate / 90) + 1);
             ViewMode_EM viewmode = static_cast<ViewMode_EM>(doubPage);
 
-            rl = DocummentProxy::instance()->openFile(nCurDocType, sPath, curPage, rotatetype, scale, viewmode);
+            rl = proxy->openFile(nCurDocType, sPath, curPage, rotatetype, scale, viewmode);
         } else {
-            rl = DocummentProxy::instance()->openFile(nCurDocType, sPath);
+            rl = proxy->openFile(nCurDocType, sPath);
         }
 
         if (!rl) {

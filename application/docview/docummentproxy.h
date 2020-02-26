@@ -12,7 +12,7 @@ typedef   struct   STCURDOCUMENTPROXY {
     STCURDOCUMENTPROXY()
     {
         pwgt = nullptr;
-        proxy = nullptr; 
+        proxy = nullptr;
     }
 
 } stCurDocProxy;
@@ -20,9 +20,16 @@ typedef   struct   STCURDOCUMENTPROXY {
 class DocummentProxy: public QObject
 {
     Q_OBJECT
+
+public:
+    DocummentProxy(QObject *parent = nullptr);
+    ~DocummentProxy()
+    {
+        closeFileAndWaitThreadClearEnd();
+    }
 public:
     static QString CreateInstance(QObject *parent = nullptr);
-    static DocummentProxy *instance(QObject *parent = nullptr);
+    static DocummentProxy *instance(QString uuid = QString());
     bool openFile(DocType_EM type, QString filepath, unsigned int ipage = 0, RotateType_EM rotatetype = RotateType_0, double scale = 1.0, ViewMode_EM viewmode = ViewMode_SinglePage);
     bool closeFile();
     QPoint global2RelativePoint(QPoint globalpoint);
@@ -84,6 +91,8 @@ public:
     QString pagenum2label(int index);
     int label2pagenum(QString label);
     bool haslabel();
+
+    void setparam(const DWidget *pwget, const QString &struuid);
 signals:
     void signal_pageChange(int);
     bool signal_pageJump(int);
@@ -98,21 +107,16 @@ signals:
     void signal_autoplaytoend();
 private slots:
     void slot_pageChange(int);
-    void slot_changetab(const QString& uuid);
-    void slot_closetab(const QString& uuid);
+    void slot_changetab(const QString &uuid);
+    void slot_closetab(const QString &uuid);
 
 private:
-    DocummentProxy(QObject *parent = nullptr);
-    ~DocummentProxy()
-    {
-        closeFileAndWaitThreadClearEnd();
-    }
-
+    DWidget *pwgt;
     QString m_path;
     DocummentBase *m_documment;
-    bool bcloseing;   
-    static QString struuid;
-    static QMap<QString, stCurDocProxy> m_proxymap;
+    bool bcloseing;
+    QString m_struuid;
+    static QMap<QString, DocummentProxy *> m_proxymap;
 };
 
 #endif // DOCUMMENTPROXY_H

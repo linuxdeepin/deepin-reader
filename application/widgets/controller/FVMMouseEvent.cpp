@@ -28,6 +28,7 @@
 #include "../FileViewWidget.h"
 #include "../NoteTipWidget.h"
 
+
 void FVMMouseEvent::mouseMoveEvent(QMouseEvent *event, DWidget *widget)
 {
     if (widget == nullptr)
@@ -151,6 +152,7 @@ void FVMMouseEvent::__CloseFileNoteWidget(FileViewWidget *fvw)
 void FVMMouseEvent::__OtherMouseMove(FileViewWidget *fvw, const QPoint &globalPos)
 {
     DocummentProxy *_proxy = DocummentProxy::instance();
+    if (!_proxy)return;
     QPoint docGlobalPos = _proxy->global2RelativePoint(globalPos);
 
     //  首先判断文档划过属性
@@ -273,6 +275,7 @@ void FVMMouseEvent::__ClickPageLink(Page::Link *pLink, FileViewWidget *fvw)
 void FVMMouseEvent::__OtherMousePress(FileViewWidget *fvw, const QPoint &globalPos)
 {
     DocummentProxy *_proxy = DocummentProxy::instance();
+    if (!_proxy)return;
     QPoint docGlobalPos = _proxy->global2RelativePoint(globalPos);
 
     //  点击的时候　先判断　点击处　　是否有链接之类

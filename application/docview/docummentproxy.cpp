@@ -1,13 +1,14 @@
 #include "docummentproxy.h"
 #include "docummentfactory.h"
 #include "publicfunc.h"
+#include "../controller/FileDataManager.h"
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QDebug>
 #include <QMutex>
 static QMutex mutexlockgetimage;
-QMap<QString, stCurDocProxy> DocummentProxy::m_proxymap;
-QString DocummentProxy::struuid;
+QMap<QString, DocummentProxy *> DocummentProxy::m_proxymap;
+
 
 DocummentProxy::DocummentProxy(QObject *parent)
     : QObject(parent),
@@ -15,33 +16,35 @@ DocummentProxy::DocummentProxy(QObject *parent)
       m_documment(nullptr),
       bcloseing(false)
 {
-
+    pwgt = (DWidget *)parent;
 }
 
 QString DocummentProxy::CreateInstance(QObject *parent)
 {
     QString uuid;
     if (parent) {
-        uuid = struuid = PublicFunc::getUuid();
-        stCurDocProxy st;
-        st.pwgt = (DWidget *)parent;
-        st.proxy = new DocummentProxy(parent);
-        m_proxymap.insert(struuid, st);
+        uuid = PublicFunc::getUuid();        ;
+        DocummentProxy *proxy = new DocummentProxy(parent);
+        proxy->setparam((DWidget *)parent, uuid);
+        m_proxymap.insert(uuid, proxy);
     }
     return  uuid;
 }
 
-DocummentProxy *DocummentProxy::instance(QObject *)
+DocummentProxy *DocummentProxy::instance(QString uuid)
 {
     if (m_proxymap.size() <= 0)
         return nullptr;
-    auto it = m_proxymap.find(struuid);
-    return  it != m_proxymap.end() ? it.value().proxy : nullptr;
+    if (uuid.isEmpty()) {
+        uuid = dApp->m_pDataManager->qGetCurUuid();
+    }
+    auto it = m_proxymap.find(uuid);
+    return it != m_proxymap.end() ? it.value() : nullptr;
 }
 
 bool DocummentProxy::openFile(DocType_EM type, QString filepath, unsigned int ipage, RotateType_EM rotatetype, double scale, ViewMode_EM viewmode)
 {
-    QMutexLocker locker(&mutexlockgetimage);
+    // QMutexLocker locker(&mutexlockgetimage);
     bool bre = false;
     m_path = filepath;
     if (nullptr != m_documment) {
@@ -50,8 +53,8 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath, unsigned int ip
         delete m_documment;
         m_documment = nullptr;
     }
-    auto it = m_proxymap.find(struuid);
-    m_documment = DocummentFactory::creatDocumment(type, it.value().pwgt);
+
+    m_documment = DocummentFactory::creatDocumment(type, pwgt);
     if (m_documment) {
         connect(m_documment, SIGNAL(signal_pageChange(int)), this, SLOT(slot_pageChange(int)));
         connect(this, SIGNAL(signal_pageJump(int)), m_documment, SLOT(pageJump(int)));
@@ -240,6 +243,12 @@ bool DocummentProxy::haslabel()
     return m_documment->haslabel();
 }
 
+void DocummentProxy::setparam(const DWidget *pwget, const QString &struuid)
+{
+    pwget = pwget;
+    m_struuid = struuid;
+}
+
 bool DocummentProxy::save(const QString &filepath, bool withChanges)
 {
     if (!m_documment || bcloseing)
@@ -327,16 +336,12 @@ void DocummentProxy::slot_pageChange(int pageno)
 
 void DocummentProxy::slot_changetab(const QString &uuid)
 {
-    auto it = m_proxymap.find(uuid);
-    if (it != m_proxymap.end()) {
-        struuid = uuid;
-    }
+
 }
 
 void DocummentProxy::slot_closetab(const QString &uuid)
 {
-    m_proxymap.remove(uuid);
-    closeFileAndWaitThreadClearEnd();
+
 }
 
 bool DocummentProxy::pageMove(double mvx, double mvy)
@@ -474,7 +479,7 @@ void DocummentProxy::jumpToOutline(const qreal &realleft, const qreal &realtop, 
 
 bool DocummentProxy::closeFile()
 {
-    QMutexLocker locker(&mutexlockgetimage);
+    // QMutexLocker locker(&mutexlockgetimage);
 //    qDebug() << "closeFile";
     if (!m_documment || bcloseing)
         return false;
@@ -496,7 +501,8 @@ bool DocummentProxy::closeFile()
 
 void DocummentProxy::closeFileAndWaitThreadClearEnd()
 {
-    QMutexLocker locker(&mutexlockgetimage);
+    QMutex mutexlockclose;
+    QMutexLocker locker(&mutexlockclose);
     if (!m_documment)
         return;
 

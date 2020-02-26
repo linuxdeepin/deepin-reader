@@ -31,6 +31,7 @@ public:
     void notifyMsg(const int &, const QString &) Q_DECL_OVERRIDE;
 
 public:
+    QString qGetCurUuid()const;
     QString qGetCurrentFilePath() const;
     void qSetCurrentFilePath(const QString &strFilePath);
 

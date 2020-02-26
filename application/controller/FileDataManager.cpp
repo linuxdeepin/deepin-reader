@@ -28,6 +28,12 @@ void FileDataManager::notifyMsg(const int &, const QString &)
 
 }
 
+QString FileDataManager::qGetCurUuid() const
+{
+    auto it = m_pFileAndUuidMap.find(m_strCurrentFilePath);
+    return  it != m_pFileAndUuidMap.end() ? it.value() : nullptr;
+}
+
 void FileDataManager::InitConnection()
 {
     connect(this, SIGNAL(sigFileChange(const QString &)), SLOT(slotFileChange(const QString &)));
