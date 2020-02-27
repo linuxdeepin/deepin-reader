@@ -331,18 +331,8 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
 
 DocummentBase::~DocummentBase()
 {
-    //    Q_D(DocummentBase);
     this->hide();
-    delete d_ptr;
-    //    if (d->m_magnifierwidget) {
-    //        delete d->m_magnifierwidget;
-    //        d->m_magnifierwidget = nullptr;
-
-    //    }
-    //    if (d->m_slidewidget) {
-    //        delete d->m_slidewidget;
-    //        d->m_slidewidget = nullptr;
-    //    }
+    // delete d_ptr;
 }
 
 QPoint DocummentBase::global2RelativePoint(QPoint globalpoint)

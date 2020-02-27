@@ -68,9 +68,6 @@ void FileViewWidget::initWidget()
 
     auto m_pDocummentProxy = DocummentProxy::instance(m_strProcUuid);
     if (m_pDocummentProxy) {
-        connect(this, SIGNAL(sigChangeProxy(const QString &)), m_pDocummentProxy, SLOT(slot_changetab(const QString &)));
-        connect(this, SIGNAL(sigClosetab(const QString &)), m_pDocummentProxy, SLOT(slot_closetab(const QString &)));
-
         connect(m_pDocummentProxy, SIGNAL(signal_bookMarkStateChange(int, bool)), SLOT(slotBookMarkStateChange(int, bool)));
         connect(m_pDocummentProxy, SIGNAL(signal_pageChange(int)), SLOT(slotDocFilePageChanged(int)));
         connect(m_pDocummentProxy, SIGNAL(signal_openResult(bool)), SLOT(SlotDocFileOpenResult(bool)));

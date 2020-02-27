@@ -20,13 +20,6 @@ typedef   struct   STCURDOCUMENTPROXY {
 class DocummentProxy: public QObject
 {
     Q_OBJECT
-
-public:
-    DocummentProxy(QObject *parent = nullptr);
-    ~DocummentProxy()
-    {
-        closeFileAndWaitThreadClearEnd();
-    }
 public:
     static QString CreateInstance(QObject *parent = nullptr);
     static DocummentProxy *instance(QString uuid = QString());
@@ -107,9 +100,13 @@ signals:
     void signal_autoplaytoend();
 private slots:
     void slot_pageChange(int);
-    void slot_changetab(const QString &uuid);
-    void slot_closetab(const QString &uuid);
 
+private:
+    DocummentProxy(QObject *parent = nullptr);
+    ~DocummentProxy()
+    {
+        closeFileAndWaitThreadClearEnd();
+    }
 private:
     DWidget *pwgt;
     QString m_path;

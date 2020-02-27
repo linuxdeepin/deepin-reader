@@ -334,7 +334,6 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
         //  最后一个处理通知消息
         return dealWithNotifyMsg(msgContent);
     }
-
     return 0;
 }
 

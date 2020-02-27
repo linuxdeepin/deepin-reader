@@ -334,16 +334,6 @@ void DocummentProxy::slot_pageChange(int pageno)
     emit signal_pageChange(pageno);
 }
 
-void DocummentProxy::slot_changetab(const QString &uuid)
-{
-
-}
-
-void DocummentProxy::slot_closetab(const QString &uuid)
-{
-
-}
-
 bool DocummentProxy::pageMove(double mvx, double mvy)
 {
     if (!m_documment || bcloseing)
