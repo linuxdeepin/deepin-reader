@@ -38,11 +38,5 @@ void CustomMenu::sendMsg(const int &msgType, const QString &msgContent)
 
 void CustomMenu::notifyMsg(const int &msgType, const QString &msgContent)
 {
-    MsgModel mm;
-    mm.fromJson(msgContent);
-
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-    mm.setPath(sCurPath);
-
-    dApp->m_pModelService->notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
+    dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }

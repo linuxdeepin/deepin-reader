@@ -166,7 +166,10 @@ void FontMenu::slotTwoPage()
     mm.setMsgType(MSG_VIEWCHANGE_DOUBLE_SHOW);
     mm.setValue(QString::number(m_bDoubPage));
 
-    notifyMsg(-1, mm.toJson());
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    mm.setPath(sCurPath);
+
+    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
 }
 
 /**
@@ -404,7 +407,10 @@ void FontMenu::rotateThumbnail(bool direct)
     mm.setMsgType(MSG_VIEWCHANGE_ROTATE);
     mm.setValue(QString::number(m_nRotate));
 
-    notifyMsg(-1, mm.toJson());
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    mm.setPath(sCurPath);
+
+    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
 }
 
 /**
@@ -477,7 +483,10 @@ void FontMenu::setAppSetFiteHAndW()
     mm.setMsgType(MSG_VIEWCHANGE_FIT);
     mm.setValue(QString::number(t_nShow));
 
-    notifyMsg(-1, mm.toJson());
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    mm.setPath(sCurPath);
+
+    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
 }
 
 /**
@@ -491,7 +500,10 @@ void FontMenu::resetFiteHAndW()
     mm.setMsgType(MSG_VIEWCHANGE_FIT);
     mm.setValue("0");
 
-    notifyMsg(-1, mm.toJson());
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    mm.setPath(sCurPath);
+
+    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
 
     m_bFiteH = false;
     m_bFiteW = false;
