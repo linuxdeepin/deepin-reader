@@ -12,6 +12,7 @@
 #include "MsgModel.h"
 
 #include "docview/docummentproxy.h"
+#include "controller/FileDataManager.h"
 #include "utils/PublicFunction.h"
 
 #include "pdfControl/note/NoteViewWidget.h"
@@ -275,6 +276,20 @@ void DocShowShellWidget::slotChangePlayCtrlShow(bool bshow)
 
 void DocShowShellWidget::slotOpenFileOk(const QString &sPath)
 {
+    if (this->isVisible()) {
+        dApp->m_pDataManager->qSetCurrentFilePath(sPath);
+
+        qDebug() << __FUNCTION__ << "  12312             " << sPath;
+
+        MsgModel mm;
+        mm.setMsgType(MSG_OPERATION_OPEN_FILE_OK);
+        mm.setPath(sPath);
+
+        notifyMsg(E_DOCPROXY_MSG_TYPE, mm.toJson());
+    } else {
+        qDebug() << __FUNCTION__ << "  111111111111111111ssssssssss             " << sPath;
+    }
+
     m_playout->removeWidget(m_pSpinerWidget);
 
     delete  m_pSpinerWidget;
@@ -337,9 +352,7 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
         return ConstantMsg::g_effective_res;
     }
 
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        slotOpenFileOk(msgContent);
-    } else if (msgType == MSG_OPERATION_SLIDE) {
+    if (msgType == MSG_OPERATION_SLIDE) {
         m_pctrlwidget->setCanShow(true);
         emit sigChangePlayCtrlShow(true);
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
@@ -356,6 +369,7 @@ void DocShowShellWidget::initWidget()
     m_playout->setSpacing(0);
 
     auto pViewWidget = new FileViewWidget(this);
+    connect(pViewWidget, SIGNAL(sigFileOpenOK(const QString &)), SLOT(slotOpenFileOk(const QString &)));
     connect(pViewWidget, SIGNAL(sigShowPlayCtrl(bool)), this, SLOT(slotChangePlayCtrlShow(bool)));
 
     InitSpinner();

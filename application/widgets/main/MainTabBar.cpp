@@ -60,6 +60,8 @@ int MainTabBar::dealWithData(const int &msgType, const QString &msgContent)
         emit sigCloseFile(msgType, msgContent);
     } else if (msgType == E_TAB_MSG) {
         emit sigTabMsg(msgContent);
+    } else if (msgType == MSG_DOC_OPEN_FILE_START) {
+        emit sigDocProxyMsg(msgContent);
     }
     return 0;
 }
@@ -85,6 +87,7 @@ void MainTabBar::__InitConnection()
 {
     connect(this, SIGNAL(sigCloseFile(const int &, const QString &)), SLOT(SlotCloseFile(const int &, const QString &)));
     connect(this, SIGNAL(sigTabMsg(const QString &)), SLOT(SlotTabMsg(const QString &)));
+    connect(this, SIGNAL(sigDocProxyMsg(const QString &)), SLOT(SlotDocProxyMsg(const QString &)));
 
     connect(this, SIGNAL(currentChanged(int)), SLOT(SlotCurrentChanged(int)));
     connect(this, SIGNAL(tabBarClicked(int)), SLOT(SlotTabBarClicked(int)));
@@ -167,11 +170,7 @@ void MainTabBar::AddFileTab(const QString &sContent)
                 this->setTabData(iIndex, s);
 
                 if (iLoop == nSize - 1) {
-                    dApp->m_pDataManager->qSetCurrentFilePath(s);
-
                     notifyMsg(MSG_TAB_ADD_END, s);
-
-                    setCurrentIndex(iIndex);
                 } else {
                     notifyMsg(MSG_TAB_ADD_OK, s);
                 }
@@ -264,6 +263,18 @@ void MainTabBar::SlotDealWithData(const int &msgType, const QString &msgContent)
 
 void MainTabBar::SlotTabMsg(const QString &sContent)
 {
+}
+
+void MainTabBar::SlotDocProxyMsg(const QString &sPath)
+{
+    int iCount = this->count();
+    for (int iLoop = 0; iLoop < iCount; iLoop++) {
+        QString sTabData = this->tabData(iLoop).toString();
+        if (sPath == sTabData) {
+            this->setCurrentIndex(iLoop);
+            break;
+        }
+    }
 }
 
 void MainTabBar::OpenCurFileFolder()

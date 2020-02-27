@@ -243,6 +243,11 @@ void TitleWidget::SlotTabMsg(const QString &sContent)
     }
 }
 
+void TitleWidget::SlotCurrentScale(const int &iScale)
+{
+    m_pScaleMenuBtn->setText(QString::number(iScale) + "%");
+}
+
 //  处理 快捷键
 void TitleWidget::SlotDealWithShortKey(const QString &sKey)
 {
@@ -305,6 +310,7 @@ void TitleWidget::__InitSelectTool()
 void TitleWidget::__InitScale()
 {
     m_pScaleMenu = new ScaleMenu(this);
+    connect(m_pScaleMenu, SIGNAL(sigCurrentScale(const int &)), SLOT(SlotCurrentScale(const int &)));
 
     m_pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
     m_pPreBtn->setDisabled(true);

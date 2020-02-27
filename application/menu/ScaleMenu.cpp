@@ -28,6 +28,9 @@ ScaleMenu::ScaleMenu(DWidget *parent)
     : CustomMenu("ScaleMenu", parent)
 {
     initActions();
+    InitConnection();
+
+    shortKeyList << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_equal << KeyStr::g_ctrl_smaller;
 
     dApp->m_pModelService->addObserver(this);
 }
@@ -37,8 +40,16 @@ ScaleMenu::~ScaleMenu()
     dApp->m_pModelService->removeObserver(this);
 }
 
-int ScaleMenu::dealWithData(const int &, const QString &)
+int ScaleMenu::dealWithData(const int &msgType, const QString &msgContent)
 {
+    if (msgType == E_DOCPROXY_MSG_TYPE) {
+        emit sigDocProxyMsg(msgContent);
+    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
+        if (shortKeyList.contains(msgContent)) {
+            emit sigDealWithShortKey(msgContent);
+            return ConstantMsg::g_effective_res;
+        }
+    }
     return 0;
 }
 
@@ -85,8 +96,33 @@ void ScaleMenu::sloNextScale()
     }
 }
 
+void ScaleMenu::slotDocProxyMsg(const QString &sContent)
+{
+    MsgModel mm;
+    mm.fromJson(sContent);
+
+    int nMsg = mm.getMsgType();
+    if (nMsg == MSG_OPERATION_OPEN_FILE_OK) {
+        QString sPath = mm.getPath();
+        OnFileOpenOk(sPath);
+    }
+}
+
+void ScaleMenu::slotDealWithShortKey(const QString &keyType)
+{
+    if (keyType == KeyStr::g_ctrl_smaller) {
+        //缩放
+        sloPrevScale();
+    } else if (keyType == KeyStr::g_ctrl_larger || keyType == KeyStr::g_ctrl_equal) {
+        //放大
+        sloNextScale();
+    }
+}
+
 void ScaleMenu::__ChangeScale(const int &iData)
 {
+    emit sigCurrentScale(iData);
+
     m_nCurrentIndex = dataList.indexOf(iData);
 
     MsgModel mm;
@@ -97,4 +133,41 @@ void ScaleMenu::__ChangeScale(const int &iData)
     mm.setPath(sCurPath);
 
     notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
+
+    auto actionList = this->findChildren<QAction *>();
+    foreach (auto a, actionList) {
+        int nData = a->data().toInt();
+        if (nData == iData) {
+            a->setChecked(true);
+            break;
+        }
+    }
+}
+
+void ScaleMenu::InitConnection()
+{
+    connect(this, SIGNAL(sigDocProxyMsg(const QString &)), SLOT(slotDocProxyMsg(const QString &)));
+    connect(this, SIGNAL(sigDealWithShortKey(const QString &)), SLOT(slotDealWithShortKey(const QString &)));
+}
+
+void ScaleMenu::OnFileOpenOk(const QString &sPath)
+{
+    FileDataModel fdm = dApp->m_pDataManager->qGetFileData(sPath);
+    int nScale = fdm.qGetData(Scale);
+    if (nScale == 0) {
+        nScale = 100;
+    }
+
+    m_nCurrentIndex = dataList.indexOf(nScale);
+    emit sigCurrentScale(nScale);
+
+    auto actionList = this->findChildren<QAction *>();
+    foreach (auto a, actionList) {
+        int nData = a->data().toInt();
+        if (nData == nScale) {
+            a->setChecked(true);
+            break;
+        }
+    }
+
 }

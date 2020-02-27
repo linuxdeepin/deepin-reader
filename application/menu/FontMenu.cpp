@@ -34,8 +34,7 @@ FontMenu::FontMenu(DWidget *parent):
     CustomMenu("FontMenu", parent)
 {
     shortKeyList << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3
-                 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r
-                 << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_equal << KeyStr::g_ctrl_smaller;
+                 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r;
 
     initActions();
 
@@ -65,9 +64,7 @@ int FontMenu::dealWithData(const int &msgType, const QString &msgContent)
             emit sigDealWithShortKey(msgContent);
             return ConstantMsg::g_effective_res;
         }
-    } /*else if (msgType == MSG_SELF_ADAPTE_SCALE) {
-        emit sigSetCurScale(msgContent);
-    }*/
+    }
     return 0;
 }
 
@@ -235,12 +232,6 @@ void FontMenu::slotDealWithShortKey(const QString &keyType)
     } else if (keyType == KeyStr::g_ctrl_shift_r) {
         //右旋转
         rotateThumbnail(true);
-    } else if (keyType == KeyStr::g_ctrl_smaller) {
-        //缩放
-        setFileViewScale(false);
-    } else if (keyType == KeyStr::g_ctrl_larger || keyType == KeyStr::g_ctrl_equal) {
-        //放大
-        setFileViewScale(true);
     }
 }
 

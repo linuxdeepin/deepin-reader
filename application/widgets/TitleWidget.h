@@ -55,6 +55,8 @@ private slots:
     void SlotDealWithShortKey(const QString &);
     void SlotTabMsg(const QString &);
 
+    void SlotCurrentScale(const int &);
+
 private:
     void initConnections();
     void OnFileShowChange(const QString &);

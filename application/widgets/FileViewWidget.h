@@ -57,6 +57,7 @@ signals:
     void sigChangeProxy(const QString &);
     void sigCloseFile(const QString &);
     void sigClosetab(const QString &);
+    void sigFileOpenOK(const QString &);
 
     // IObserver interface
 public:

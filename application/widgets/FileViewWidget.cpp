@@ -456,11 +456,7 @@ void FileViewWidget::SlotDocFileOpenResult(bool openresult)
         dApp->m_pDataManager->qInsertFileChange(m_strPath, false);
         dApp->m_pDataManager->qInsertFileOpen(m_strPath, true);
 
-        MsgModel mm;
-        mm.setMsgType(MSG_OPERATION_OPEN_FILE_OK);
-        mm.setPath(m_strPath);
-
-        notifyMsg(E_DOCPROXY_MSG_TYPE, mm.toJson());
+        emit sigFileOpenOK(m_strPath);
 
         FileDataModel fdm = dApp->m_pDataManager->qGetFileData(m_strPath);      //  打开成功之后 获取之前数据
         m_nScale = fdm.qGetData(Scale);

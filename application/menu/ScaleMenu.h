@@ -30,6 +30,11 @@ public:
     explicit ScaleMenu(DWidget *parent = nullptr);
     ~ScaleMenu() Q_DECL_OVERRIDE;
 
+signals:
+    void sigDocProxyMsg(const QString &);
+    void sigCurrentScale(const int &);
+    void sigDealWithShortKey(const QString &);
+
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
@@ -42,14 +47,18 @@ private slots:
     void slotActionTrigger(QAction *);
     void sloPrevScale();
     void sloNextScale();
+    void slotDocProxyMsg(const QString &);
+    void slotDealWithShortKey(const QString &);
 
 private:
     void __ChangeScale(const int &);
+    void InitConnection();
+    void OnFileOpenOk(const QString &sPath);
 
 private:
     QList<int> dataList;
     int     m_nCurrentIndex = 5;
-
+    QStringList     shortKeyList;                 // 要处理的消息类型
 };
 
 #endif // SCALEMENU_H
