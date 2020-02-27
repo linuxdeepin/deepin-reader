@@ -99,13 +99,14 @@ void MainTabWidgetEx::AddFileLayout(const QString &msgContent)
 
         dApp->m_pDataManager->qInsertOpenFilePath(msgContent);
     }
+    notifyMsg(MSG_OPEN_FILE_PATH, msgContent);
 }
 
 void MainTabWidgetEx::AddFileLayoutEnd(const QString &msgContent)
 {
     AddFileLayout(msgContent);
 
-    notifyMsg(MSG_OPEN_FILE_PATH, msgContent);
+
 }
 
 //  应用退出

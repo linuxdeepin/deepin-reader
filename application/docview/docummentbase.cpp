@@ -13,41 +13,6 @@
 #include <poppler-qt5.h>
 #include <qglobal.h>
 static QMutex mutexlockloaddata;
-//static QMutex mutexlocksshow;
-
-//ThreadLoadDocumment::ThreadLoadDocumment()
-//{
-//    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
-//    m_doc = nullptr;
-//    restart = false;
-//}
-
-//void ThreadLoadDocumment::setDoc(DocummentBase *doc, QString path)
-//{
-//    m_doc = doc;
-//    m_path = path;
-//}
-
-//void ThreadLoadDocumment::setRestart()
-//{
-//    restart = true;
-//}
-
-//void ThreadLoadDocumment::run()
-//{
-//    QMutexLocker locker(&mutexlockloaddata);
-//    if (!m_doc) {
-//        emit signal_docLoaded(false);
-//        return;
-//    }
-//    restart = true;
-//    while (restart) {
-//        restart = false;
-//        m_doc->loadDoc(m_path);
-//    }
-//    emit signal_docLoaded(true);
-//}
-
 
 ThreadLoadData::ThreadLoadData()
 {
@@ -68,7 +33,7 @@ void ThreadLoadData::setRestart()
 
 void ThreadLoadData::run()
 {
-    QMutexLocker locker(&mutexlockloaddata);
+    // QMutexLocker locker(&mutexlockloaddata);
     if (!m_doc) {
         emit signal_dataLoaded(false);
         return;
@@ -1782,7 +1747,7 @@ void DocummentBase::stopLoadPageThread()
 bool DocummentBase::openFile(QString filepath, unsigned int ipage, RotateType_EM rotatetype, double scale, ViewMode_EM viewmode)
 {
     Q_D(DocummentBase);
-    QMutexLocker locker(&mutexlockloaddata);
+    // QMutexLocker locker(&mutexlockloaddata);
     d->m_scale = scale;
     d->m_rotate = rotatetype;
     d->m_viewmode = viewmode;
