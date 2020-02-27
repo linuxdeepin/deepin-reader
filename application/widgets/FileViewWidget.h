@@ -57,11 +57,11 @@ signals:
     void sigChangeProxy(const QString &);
     void sigCloseFile(const QString &);
     void sigClosetab(const QString &);
-    void sigTitleMsg(const QString &);
+
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
-    void qSetPath(const QString &);
+    void qSetBindPath(const QString &);
 //    QString qGetPath() const;
 
     // CustomWidget interface
@@ -86,7 +86,6 @@ private slots:
     void slotDocFilePageChanged(int);
     void SlotDocFileOpenResult(bool);
     void SlotCloseFile(const QString &);
-    void SlotTitleMsg(const QString &);
 
 private:
     void initConnections();

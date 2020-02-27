@@ -52,6 +52,9 @@ private:
 
     void onJumpToPrevPage();
     void onJumpToNextPage();
+
+    void onDocProxyMsg(const QString &);
+
 };
 
 #endif  // LEFTSHOWWIDGET_H

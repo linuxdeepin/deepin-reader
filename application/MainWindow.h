@@ -28,7 +28,6 @@ public:
     void setSreenRect(const QRect &); //得到屏幕的分辨率
 
 signals:
-    void sigOpenFileOk(const QString &);
     void sigAppShowState(const int &);
     void sigFullScreen();
     void sigSpacePressed();
@@ -60,7 +59,6 @@ private:
     void initShortCut();
 
 private slots:
-    void slotOpenFileOk(const QString &);
     void slotFullScreen();
     void slotAppShowState(const int &);
 

@@ -40,6 +40,8 @@ private:
     void __SetBtnCheckById(const int &);
     void __SearchExit();
 
+    void onDocProxyMsg(const QString &);
+
 private slots:
     void SlotDealWithData(const int &, const QString &);
     void slotOpenFileOk(const QString &sPath);

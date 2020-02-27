@@ -35,6 +35,7 @@
 DocummentFileHelper::DocummentFileHelper(QObject *parent)
     : QObject(parent)
 {
+    m_strObserverName = "DocummentFileHelper";
     m_pMsgList = { MSG_OPEN_FILE_PATH, MSG_OPERATION_SAVE_AS_FILE,
                    MSG_OPERATION_TEXT_COPY,
                    MSG_DOC_JUMP_PAGE, MSG_OPERATION_FIRST_PAGE, MSG_OPERATION_PREV_PAGE, MSG_OPERATION_NEXT_PAGE, MSG_OPERATION_END_PAGE

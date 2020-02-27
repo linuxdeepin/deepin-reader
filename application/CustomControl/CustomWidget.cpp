@@ -19,6 +19,8 @@
 #include "CustomWidget.h"
 #include <DWidgetUtil>
 
+#include "controller/FileDataManager.h"
+
 CustomWidget::CustomWidget(const QString &name, DWidget *parent)
     : DWidget(parent)
 {
@@ -35,6 +37,11 @@ void CustomWidget::updateWidgetTheme()
     auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
     plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
     setPalette(plt);
+}
+
+void CustomWidget::qSetBindPath(const QString &sPath)
+{
+    m_strBindPath = sPath;
 }
 
 //  操作 消息

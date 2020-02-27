@@ -19,6 +19,7 @@
 #include "TitleMenu.h"
 
 #include <QSignalMapper>
+
 #include "MsgModel.h"
 
 TitleMenu::TitleMenu(DWidget *parent)
@@ -34,8 +35,11 @@ TitleMenu::~TitleMenu()
     dApp->m_pModelService->removeObserver(this);
 }
 
-int TitleMenu::dealWithData(const int &, const QString &)
+int TitleMenu::dealWithData(const int &msgType, const QString &msgContent)
 {
+    if (msgType == E_DOCPROXY_MSG_TYPE) {
+        onDocProxyMsg(msgContent);
+    }
     return 0;
 }
 
@@ -109,6 +113,14 @@ void TitleMenu::slotActionTrigger(const QString &sAction)
     }
 }
 
+void TitleMenu::onDocProxyMsg(const QString &)
+{
+    auto actions = this->findChildren<QAction *>();
+    foreach (QAction *a, actions) {
+        a->setDisabled(false);
+    }
+}
+
 void TitleMenu::OnNewWindow()
 {
     notifyMsg(MSG_MENU_NEW_WINDOW);
@@ -125,7 +137,7 @@ void TitleMenu::OnSave()
     mm.setMsgType(MSG_NOTIFY_KEY_MSG);
     mm.setShortKey(KeyStr::g_ctrl_s);
 
-    notifyMsg(E_TITLE_MSG, mm.toJson());
+    notifyMsg(-1, mm.toJson());
 }
 
 void TitleMenu::OnSaveAs()
@@ -134,7 +146,7 @@ void TitleMenu::OnSaveAs()
     mm.setMsgType(MSG_NOTIFY_KEY_MSG);
     mm.setShortKey(KeyStr::g_ctrl_shift_s);
 
-    notifyMsg(E_TITLE_MSG, mm.toJson());
+    notifyMsg(-1, mm.toJson());
 }
 
 void TitleMenu::DisplayInFileManager()
@@ -147,7 +159,7 @@ void TitleMenu::OnPrint()
     MsgModel mm;
     mm.setMsgType(MSG_NOTIFY_KEY_MSG);
     mm.setShortKey(KeyStr::g_ctrl_p);
-    notifyMsg(E_TITLE_MSG, mm.toJson());
+    notifyMsg(-1, mm.toJson());
 
 }
 
@@ -166,5 +178,5 @@ void TitleMenu::OnSlideShow()
     MsgModel mm;
     mm.setMsgType(MSG_NOTIFY_KEY_MSG);
     mm.setShortKey(KeyStr::g_ctrl_h);
-    notifyMsg(E_TITLE_MSG, mm.toJson());
+    notifyMsg(-1, mm.toJson());
 }

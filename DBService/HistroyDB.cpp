@@ -48,17 +48,21 @@ void HistroyDB::qSelectData(const QString &sPath)
         query.setForwardOnly(true);
         QString sql = QString("SELECT * FROM %1 where FilePath = '%2'").arg(m_strTableName).arg(sPath);
 
-        if (query.exec(sql) && query.next()) {
-            FileDataModel dataObj;
-            dataObj.qSetData(Scale, query.value(1).toInt());          // 缩放
-            dataObj.qSetData(DoubleShow, query.value(2).toInt());     // 是否是双页
-            dataObj.qSetData(Fit, query.value(3).toInt());            // 自适应宽/高
-            dataObj.qSetData(Rotate, query.value(4).toInt());         // 文档旋转角度(0~360)
-            dataObj.qSetData(Thumbnail, query.value(5).toInt());      //  左侧列表窗口是否显示
-            dataObj.qSetData(LeftIndex, query.value(6).toInt());      // 在哪个列表
-            dataObj.qSetData(CurPage, query.value(7).toInt());         // 文档当前页
+        if (query.exec(sql)) {
+            if (query.next()) {
+                FileDataModel dataObj;
+                dataObj.qSetData(Scale, query.value(1).toInt());          // 缩放
+                dataObj.qSetData(DoubleShow, query.value(2).toInt());     // 是否是双页
+                dataObj.qSetData(Fit, query.value(3).toInt());            // 自适应宽/高
+                dataObj.qSetData(Rotate, query.value(4).toInt());         // 文档旋转角度(0~360)
+                dataObj.qSetData(Thumbnail, query.value(5).toInt());      //  左侧列表窗口是否显示
+                dataObj.qSetData(LeftIndex, query.value(6).toInt());      // 在哪个列表
+                dataObj.qSetData(CurPage, query.value(7).toInt());         // 文档当前页
 
-            m_pDataMapObj.insert(sPath, dataObj);
+                m_pDataMapObj.insert(sPath, dataObj);
+            } else {
+                qWarning() << __func__ << " no data ";
+            }
         }
     }
 }

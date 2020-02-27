@@ -31,6 +31,7 @@
 MainTabBar::MainTabBar(DWidget *parent)
     : DTabBar(parent)
 {
+    m_strObserverName = "MainTabBar";
     this->setTabsClosable(true);
     this->setMovable(true);
 
@@ -85,6 +86,7 @@ void MainTabBar::__InitConnection()
     connect(this, SIGNAL(sigCloseFile(const int &, const QString &)), SLOT(SlotCloseFile(const int &, const QString &)));
     connect(this, SIGNAL(sigTabMsg(const QString &)), SLOT(SlotTabMsg(const QString &)));
 
+//    connect(this, SIGNAL(currentChanged(int)), SLOT(SlotCurrentChanged(int)));
     connect(this, SIGNAL(tabBarClicked(int)), SLOT(SlotTabBarClicked(int)));
     connect(this, SIGNAL(tabCloseRequested(int)), SLOT(SlotTabCloseRequested(int)));
     connect(this, SIGNAL(tabAddRequested()), SLOT(SlotTabAddRequested()));
@@ -200,6 +202,11 @@ void MainTabBar::SlotTabCloseRequested(int index)
         SaveDialog sd;
         sd.showSaveDialog(E_TAB_MSG, sPath);
     }
+}
+
+void MainTabBar::SlotCurrentChanged(int index)
+{
+    qDebug() << __FUNCTION__ << "           " << index;
 }
 
 void MainTabBar::SlotCloseFile(const int &msgType, const QString &sPath)

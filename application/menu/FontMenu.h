@@ -68,6 +68,7 @@ private:
     void resetFiteHAndW();
     void resetAdaptive();
     void setFileViewScale(bool);
+    void onDocProxyMsg(const QString &);
 //    void setSliderMaxValue();
 
 private:

@@ -108,9 +108,9 @@ private:
         closeFileAndWaitThreadClearEnd();
     }
 private:
-    DWidget *pwgt;
+    DWidget *pwgt = nullptr;
     QString m_path;
-    DocummentBase *m_documment;
+    DocummentBase *m_documment = nullptr;
     bool bcloseing;
     QString m_struuid;
     static QMap<QString, DocummentProxy *> m_proxymap;

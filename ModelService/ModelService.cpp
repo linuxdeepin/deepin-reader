@@ -19,6 +19,7 @@
 #include "ModelService.h"
 
 #include "NotifySubject.h"
+#include "MsgModel.h"
 
 ModelService::ModelService(QObject *parent)
     : QObject(parent)

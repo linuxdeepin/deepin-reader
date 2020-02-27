@@ -54,6 +54,8 @@ private slots:
     void slotActionTrigger(const QString &);
 
 private:
+    void onDocProxyMsg(const QString &);
+
     void OnNewWindow();
     void OnNewTab();
     void OnSave();

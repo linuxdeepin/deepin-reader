@@ -33,7 +33,6 @@ signals:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
-    void qSetPath(const QString &);
 
     // QWidget interface
 protected:
@@ -63,13 +62,14 @@ private:
     void __ShowPageNoteWidget(const QString &);
     void InitSpinner();
     /****   end     wzx 2020.2.18   ********/
+    void OnDocProxyMsg(const QString &);
 
     // CustomWidget interface
 protected:
     void initWidget() Q_DECL_OVERRIDE;
 
 private:
-    PlayControlWidget *m_pctrlwidget = nullptr;
+    PlayControlWidget   *m_pctrlwidget = nullptr;
     DSpinner            *m_pSpiner = nullptr;
     DWidget             *m_pSpinerWidget = nullptr;
     QStackedLayout      *m_playout = nullptr;

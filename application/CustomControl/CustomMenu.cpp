@@ -21,6 +21,10 @@
 
 #include <DFontSizeManager>
 
+#include "MsgModel.h"
+
+#include "controller/FileDataManager.h"
+
 CustomMenu::CustomMenu(const QString &, DWidget *parent)
     : DMenu(parent)
 {
@@ -34,5 +38,11 @@ void CustomMenu::sendMsg(const int &msgType, const QString &msgContent)
 
 void CustomMenu::notifyMsg(const int &msgType, const QString &msgContent)
 {
-    dApp->m_pModelService->notifyMsg(msgType, msgContent);
+    MsgModel mm;
+    mm.fromJson(msgContent);
+
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    mm.setPath(sCurPath);
+
+    dApp->m_pModelService->notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
 }

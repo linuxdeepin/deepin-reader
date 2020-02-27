@@ -4,6 +4,7 @@
 FileDataManager::FileDataManager(QObject *parent) :
     QObject(parent)
 {
+    m_strObserverName = "FileDataManager";
     InitConnection();
 
     dApp->m_pModelService->addObserver(this);

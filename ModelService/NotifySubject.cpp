@@ -72,7 +72,7 @@ void NotifySubject::NotifyObservers(const int &msgType, const QString &msgConten
     QListIterator<IObserver *> iter(m_observerList);
     while (iter.hasNext()) {
         auto obs = iter.next();
-        if (obs) {
+        if (obs != nullptr) {
             int nRes = obs->dealWithData(msgType, msgContent);
             if (nRes == ConstantMsg::g_effective_res) {
 

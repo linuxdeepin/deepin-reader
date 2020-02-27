@@ -58,8 +58,8 @@ FontMenu::~FontMenu()
  */
 int FontMenu::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        emit sigFileOpenOk(msgContent);
+    if (msgType == E_DOCPROXY_MSG_TYPE) {
+        onDocProxyMsg(msgContent);
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (shortKeyList.contains(msgContent)) {
             emit sigDealWithShortKey(msgContent);
@@ -88,11 +88,12 @@ void FontMenu::resetAdaptive()
 //    }
 
     {
+
         MsgModel mm;
         mm.setMsgType(MSG_FILE_SCALE);
         mm.setValue("100");
 
-        notifyMsg(E_TITLE_MSG, mm.toJson());
+        notifyMsg(-1, mm.toJson());
     }
 }
 
@@ -122,7 +123,19 @@ void FontMenu::setFileViewScale(bool larger)
 //            }
 //            m_pEnlargeSlider->setValue(scale);
 //        }
-//    }
+    //    }
+}
+
+void FontMenu::onDocProxyMsg(const QString &sContent)
+{
+    MsgModel mm;
+    mm.fromJson(sContent);
+
+    int nMsg = mm.getMsgType();
+    if (nMsg == MSG_OPERATION_OPEN_FILE_OK) {
+        QString sPath = mm.getPath();
+        slotFileOpenOk(sPath);
+    }
 }
 
 /**
@@ -153,7 +166,7 @@ void FontMenu::slotTwoPage()
     mm.setMsgType(MSG_VIEWCHANGE_DOUBLE_SHOW);
     mm.setValue(QString::number(m_bDoubPage));
 
-    notifyMsg(E_TITLE_MSG, mm.toJson());
+    notifyMsg(-1, mm.toJson());
 }
 
 /**
@@ -341,7 +354,7 @@ void FontMenu::initActions()
  */
 void FontMenu::initConnection()
 {
-    connect(this, SIGNAL(sigFileOpenOk(const QString &)), SLOT(slotFileOpenOk(const QString &)));
+//    connect(this, SIGNAL(sigFileOpenOk(const QString &)), SLOT(slotFileOpenOk(const QString &)));
     connect(this, SIGNAL(sigDealWithShortKey(const QString &)), SLOT(slotDealWithShortKey(const QString &)));
 //    connect(this, SIGNAL(sigSetCurScale(const QString &)), this, SLOT(slotSetCurScale(const QString &)));
 }
@@ -391,7 +404,7 @@ void FontMenu::rotateThumbnail(bool direct)
     mm.setMsgType(MSG_VIEWCHANGE_ROTATE);
     mm.setValue(QString::number(m_nRotate));
 
-    notifyMsg(E_TITLE_MSG, mm.toJson());
+    notifyMsg(-1, mm.toJson());
 }
 
 /**
@@ -464,7 +477,7 @@ void FontMenu::setAppSetFiteHAndW()
     mm.setMsgType(MSG_VIEWCHANGE_FIT);
     mm.setValue(QString::number(t_nShow));
 
-    notifyMsg(E_TITLE_MSG, mm.toJson());
+    notifyMsg(-1, mm.toJson());
 }
 
 /**
@@ -478,7 +491,7 @@ void FontMenu::resetFiteHAndW()
     mm.setMsgType(MSG_VIEWCHANGE_FIT);
     mm.setValue("0");
 
-    notifyMsg(E_TITLE_MSG, mm.toJson());
+    notifyMsg(-1, mm.toJson());
 
     m_bFiteH = false;
     m_bFiteW = false;

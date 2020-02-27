@@ -65,24 +65,27 @@ void BookMarkDB::qSelectData(const QString &sPath)
         QString sSql = QString("SELECT %1 FROM %2 where FilePath = ?;").arg(m_strPageNumber).arg(m_strTableName);
         query.prepare(sSql);
         query.addBindValue(sPath);
-        if (query.exec() && query.next()) {
-            QString sData = query.value(0).toString();      //  结果
+        if (query.exec()) {
+            if (query.next()) {
+                QString sData = query.value(0).toString();      //  结果
 
-            QList<int> dataList;
-            QStringList sPageList = sData.split(",", QString::SkipEmptyParts);
-            foreach (QString s, sPageList) {
-                int nPage = s.toInt();
-                dataList.append(nPage);
+                QList<int> dataList;
+                QStringList sPageList = sData.split(",", QString::SkipEmptyParts);
+                foreach (QString s, sPageList) {
+                    int nPage = s.toInt();
+                    dataList.append(nPage);
+                }
+
+                qSort(dataList.begin(), dataList.end());
+
+                m_pBookMarkMap.insert(sPath, dataList);
+            } else {
+                qWarning() << __func__ << " no data ";
             }
-
-            qSort(dataList.begin(), dataList.end());
-
-            m_pBookMarkMap.insert(sPath, dataList);
-        } else {
-            qWarning() << __func__ << " error:  " << query.lastError();
         }
     }
 }
+
 
 //  新增标签数据
 void BookMarkDB::insertData(const QString &strFilePath, const QString &pageNumber)

@@ -168,6 +168,18 @@ void LeftSidebarWidget::onJumpToNextPage()
     }
 }
 
+void LeftSidebarWidget::onDocProxyMsg(const QString &msgContent)
+{
+    MsgModel mm;
+    mm.fromJson(msgContent);
+
+    int nMsg = mm.getMsgType();
+    if (nMsg == MSG_OPERATION_OPEN_FILE_OK) {
+        QString sPath = mm.getPath();
+        SlotOpenFileOk(sPath);
+    }
+}
+
 void LeftSidebarWidget::initConnections()
 {
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
@@ -228,12 +240,12 @@ int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgConten
 {
     if (msgType == E_FILE_MSG) {
         emit sigFileChangeMsg(msgContent);
-    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        emit sigOpenFileOk(msgContent);
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
-    } else if (msgType == E_TITLE_MSG) {
-        emit sigTitleMsg(msgContent);
+    } else if (msgType == MSG_WIDGET_THUMBNAILS_VIEW) {
+        onSetWidgetVisible(msgContent.toInt());
+    } else if (msgType == E_DOCPROXY_MSG_TYPE) {
+        onDocProxyMsg(msgContent);
     }
     return 0;
 }

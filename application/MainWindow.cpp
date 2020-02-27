@@ -7,6 +7,8 @@
 #include <QDebug>
 #include <DGuiApplicationHelper>
 
+#include "MsgModel.h"
+
 #include "business/ShortCutShow.h"
 #include "business/SaveDialog.h"
 #include "business/DocummentFileHelper.h"
@@ -106,7 +108,7 @@ void MainWindow::initUI()
     titlebar()->setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
     titlebar()->setTitle("");
 
-    titlebar()->setMenu(new TitleMenu());
+    titlebar()->setMenu(new TitleMenu(this));
 
     titlebar()->addWidget(new TitleWidget, Qt::AlignLeft);
     setCentralWidget(new CentralWidget);
@@ -114,7 +116,6 @@ void MainWindow::initUI()
 
 void MainWindow::initConnections()
 {
-    connect(this, SIGNAL(sigOpenFileOk(const QString &)), SLOT(slotOpenFileOk(const QString &)));
     connect(this, SIGNAL(sigFullScreen()), SLOT(slotFullScreen()));
     connect(this, SIGNAL(sigAppShowState(const int &)), SLOT(slotAppShowState(const int &)));
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
@@ -225,17 +226,6 @@ void MainWindow::onSetAppTitle(const QString &sData)
     titlebar()->setTitle(sData);
 }
 
-//  文件打开成，　功能性　菜单才能点击
-void MainWindow::slotOpenFileOk(const QString &msgContent)
-{
-    auto actions = titlebar()->menu()->findChildren<QAction *>();
-    foreach (QAction *a, actions) {
-        a->setDisabled(false);
-    }
-
-//    onSetAppTitle(msgContent);
-}
-
 void MainWindow::slotDealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_EXIT) {
@@ -313,9 +303,7 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
         return ConstantMsg::g_effective_res;
     }
 
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        emit sigOpenFileOk(msgContent);
-    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
+    if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == KeyStr::g_f11 && dApp->m_pAppInfo->qGetCurShowState() != FILE_SLIDE) {
             if (dApp->m_pAppInfo->qGetCurShowState() == FILE_FULLSCREEN)
                 emit sigAppShowState(1);

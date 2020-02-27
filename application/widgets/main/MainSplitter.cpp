@@ -28,6 +28,8 @@
 MainSplitter::MainSplitter(CustomWidget *parent)
     : DSplitter(parent)
 {
+    m_strObserverName = "MainSplitter";
+
     dApp->m_pModelService->addObserver(this);
 
     InitWidget();
@@ -56,25 +58,53 @@ void MainSplitter::InitWidget()
 
 void MainSplitter::InitConnections()
 {
-    connect(this, SIGNAL(sigTitleMsgData(const QString &)), SLOT(SlotTitleMsg(const QString &)));
+    connect(this, SIGNAL(sigTitleMsg(const QString &)), SLOT(SlotTitleData(const QString &)));
+    connect(this, SIGNAL(sigDocProxy(const QString &)), SLOT(SlotDocProxyData(const QString &)));
 }
 
-void MainSplitter::SlotTitleMsg(const QString &msgContent)
+void MainSplitter::SlotDocProxyData(const QString &msgContent)
 {
+    MsgModel mm;
+    mm.fromJson(msgContent);
+
+    int msgType = mm.getMsgType();
     auto children = this->findChildren<CustomWidget *>();
     foreach (auto sw, children) {
-        sw->dealWithData(E_TITLE_MSG, msgContent);
+        sw->dealWithData(msgType, m_strPath);
+    }
+}
+
+void MainSplitter::SlotTitleData(const QString &msgContent)
+{
+    MsgModel mm;
+    mm.fromJson(msgContent);
+
+    int msgType = mm.getMsgType();
+    auto children = this->findChildren<CustomWidget *>();
+    foreach (auto sw, children) {
+        sw->dealWithData(msgType, mm.getValue());
     }
 }
 
 //  第一个 消息处理入口
 int MainSplitter::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == E_TITLE_MSG) {       //  标题消息, 如果和当前路径显示路径 一样, 则截断消息
-        QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    if (msgType == E_DOCPROXY_MSG_TYPE || msgType == E_TAB_MSG) {
+        MsgModel mm;
+        mm.fromJson(msgContent);
+        QString sMsgPath = mm.getPath();
 
-        if (m_strPath == sCurPath) {
-            emit sigTitleMsgData(msgContent);
+        if (m_strPath == sMsgPath) {
+            emit sigDocProxy(msgContent);
+            return ConstantMsg::g_effective_res;
+        }
+    } else if (msgType == E_TITLE_MSG_TYPE) {
+        MsgModel mm;
+        mm.fromJson(msgContent);
+        QString sMsgPath = mm.getPath();
+
+        if (m_strPath == sMsgPath) {
+            emit sigTitleMsg(msgContent);
             return ConstantMsg::g_effective_res;
         }
     }
@@ -101,8 +131,8 @@ void MainSplitter::qSetPath(const QString &strPath)
 {
     m_strPath = strPath;
 
-    auto docWidget = this->findChild<DocShowShellWidget *>();
-    if (docWidget) {
-        docWidget->qSetPath(strPath);
+    auto children = this->findChildren<CustomWidget *>();
+    foreach (auto sw, children) {
+        sw->qSetBindPath(strPath);
     }
 }

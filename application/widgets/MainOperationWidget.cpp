@@ -89,6 +89,18 @@ void MainOperationWidget::__SearchExit()
     slotOpenFileOk("");
 }
 
+void MainOperationWidget::onDocProxyMsg(const QString &msgContent)
+{
+    MsgModel mm;
+    mm.fromJson(msgContent);
+
+    int nMsg = mm.getMsgType();
+    if (nMsg == MSG_OPERATION_OPEN_FILE_OK) {
+        QString sPath = mm.getPath();
+        slotOpenFileOk(sPath);
+    }
+}
+
 DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QString &objName)
 {
     auto btn = new DToolButton(this);
@@ -160,8 +172,8 @@ int MainOperationWidget::dealWithData(const int &msgType, const QString &msgCont
 
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
-    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        emit sigOpenFileOk(msgContent);
+    } else if (msgType == E_DOCPROXY_MSG_TYPE) {
+        onDocProxyMsg(msgContent);
     }
 
     return 0;

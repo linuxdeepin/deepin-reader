@@ -111,7 +111,10 @@ void TitleWidget::slotMagnifierCancel()
     mm.setMsgType(MSG_MAGNIFYING);
     mm.setValue("0");
 
-    notifyMsg(E_TITLE_MSG, mm.toJson());
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    mm.setPath(sCurPath);
+
+    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
 }
 
 void TitleWidget::initWidget()
@@ -167,7 +170,10 @@ void TitleWidget::on_thumbnailBtn_clicked()
     mm.setMsgType(MSG_WIDGET_THUMBNAILS_VIEW);
     mm.setValue(QString::number(rl));
 
-    notifyMsg(E_TITLE_MSG, mm.toJson());
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    mm.setPath(sCurPath);
+
+    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
 }
 
 //  文档显示
@@ -257,7 +263,11 @@ void TitleWidget::SlotDealWithShortKey(const QString &sKey)
         MsgModel mm;
         mm.setMsgType(MSG_WIDGET_THUMBNAILS_VIEW);
         mm.setValue("1");
-        notifyMsg(E_TITLE_MSG, mm.toJson());
+
+        QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+        mm.setPath(sCurPath);
+
+        notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
     } else if (sKey == KeyStr::g_alt_z) {  //  开启放大镜
         setMagnifierState();
     }
@@ -326,7 +336,10 @@ void TitleWidget::setDefaultShape()
     mm.setMsgType(MSG_HANDLESHAPE);
     mm.setValue(QString::number(m_nCurHandleShape));
 
-    notifyMsg(E_TITLE_MSG, mm.toJson());
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    mm.setPath(sCurPath);
+
+    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
 }
 
 void TitleWidget::setHandleShape()
@@ -344,7 +357,10 @@ void TitleWidget::setHandleShape()
     mm.setMsgType(MSG_HANDLESHAPE);
     mm.setValue(QString::number(m_nCurHandleShape));
 
-    notifyMsg(E_TITLE_MSG, mm.toJson());
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    mm.setPath(sCurPath);
+
+    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
 }
 
 DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
@@ -371,7 +387,10 @@ void TitleWidget::setMagnifierState()
     mm.setMsgType(MSG_MAGNIFYING);
     mm.setValue("1");
 
-    notifyMsg(E_TITLE_MSG, mm.toJson());
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    mm.setPath(sCurPath);
+
+    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
 
     //  开启了放大镜, 需要把选择工具 切换为 选择工具
     auto actionList = this->findChildren<QAction *>();
@@ -390,10 +409,10 @@ void TitleWidget::setMagnifierState()
 //  处理 推送消息
 int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_FIND_START) {
+    if (msgType == E_DOCPROXY_MSG_TYPE) {
+        onDocProxyMsg(msgContent);
+    } else if (msgType == MSG_FIND_START) {
         emit sigSetFindWidget(1);
-    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        emit sigOpenFileOk(msgContent);
     } else if (msgType == MSG_OPERATION_SLIDE) {
         emit sigAppFullScreen();
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
@@ -418,4 +437,16 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
         }
     }
     return 0;
+}
+
+void TitleWidget::onDocProxyMsg(const QString &msgContent)
+{
+    MsgModel mm;
+    mm.fromJson(msgContent);
+
+    int nMsg = mm.getMsgType();
+    if (nMsg == MSG_OPERATION_OPEN_FILE_OK) {
+        QString sPath = mm.getPath();
+        slotOpenFileOk(sPath);
+    }
 }

@@ -333,6 +333,22 @@ DocummentBase::~DocummentBase()
 {
     this->hide();
     // delete d_ptr;
+//    if (d_ptr) {
+//    delete d_ptr;
+//        d_ptr = nullptr;
+//        d_ptr->deleteLater();
+//        d_ptr = nullptr;
+//    }
+//    delete d_ptr;
+    //    if (d->m_magnifierwidget) {
+    //        delete d->m_magnifierwidget;
+    //        d->m_magnifierwidget = nullptr;
+
+    //    }
+    //    if (d->m_slidewidget) {
+    //        delete d->m_slidewidget;
+    //        d->m_slidewidget = nullptr;
+    //    }
 }
 
 QPoint DocummentBase::global2RelativePoint(QPoint globalpoint)

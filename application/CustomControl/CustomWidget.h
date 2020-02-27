@@ -25,6 +25,7 @@
 #include <DWidget>
 
 #include "application.h"
+#include "MsgModel.h"
 
 #include "utils/utils.h"
 
@@ -59,6 +60,9 @@ signals:
     void sigDealWithData(const int &, const QString &);
     void sigDealWithKeyMsg(const QString &);
 
+public:
+    virtual void qSetBindPath(const QString &);
+
 protected:
     virtual void initWidget() = 0;
     void updateWidgetTheme();
@@ -71,6 +75,7 @@ protected:
 protected:
     QList<int>          m_pMsgList;         //  需要处理的消息列表
     QList<QString>      m_pKeyMsgList;      //  需要处理的按键消息列表
+    QString             m_strBindPath = "";
 };
 
 #endif  // CUSTOMWIDGET_H

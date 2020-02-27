@@ -29,6 +29,7 @@
 AnnotationHelper::AnnotationHelper(QObject *parent)
     : QObject(parent)
 {
+    m_strObserverName = "AnnotationHelper";
     m_pMsgList = { MSG_NOTE_PAGE_ADD_CONTENT, MSG_NOTE_PAGE_DELETE_CONTENT, MSG_NOTE_PAGE_UPDATE_CONTENT,
                    MSG_NOTE_DELETE_CONTENT, MSG_NOTE_UPDATE_CONTENT,
                    MSG_NOTE_ADD_HIGHLIGHT_COLOR, MSG_NOTE_REMOVE_HIGHLIGHT_COLOR, MSG_NOTE_UPDATE_HIGHLIGHT_COLOR,

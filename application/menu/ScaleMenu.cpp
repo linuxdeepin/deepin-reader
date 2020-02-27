@@ -91,5 +91,5 @@ void ScaleMenu::__ChangeScale(const int &iData)
     mm.setMsgType(MSG_FILE_SCALE);
     mm.setValue(QString::number(iData));
 
-    notifyMsg(E_TITLE_MSG, mm.toJson());
+    notifyMsg(-1, mm.toJson());
 }

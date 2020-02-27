@@ -219,7 +219,7 @@ void DocShowShellWidget::InitSpinner()
     QVBoxLayout *vLayout = new QVBoxLayout;
     vLayout->addStretch();
 
-    m_pSpiner = new DSpinner;
+    m_pSpiner = new DSpinner(m_pSpinerWidget);
     m_pSpiner->setFixedSize(QSize(36, 36));
     m_pSpiner->start();
 
@@ -232,6 +232,18 @@ void DocShowShellWidget::InitSpinner()
     hLayout->addStretch();
 
     m_pSpinerWidget->setLayout(hLayout);
+}
+
+void DocShowShellWidget::OnDocProxyMsg(const QString &msgContent)
+{
+    MsgModel mm;
+    mm.fromJson(msgContent);
+
+    int nMsg = mm.getMsgType();
+    if (nMsg == MSG_OPERATION_OPEN_FILE_OK) {
+        QString sPath = mm.getPath();
+        slotOpenFileOk(sPath);
+    }
 }
 
 void DocShowShellWidget::slotBtnCloseClicked()
@@ -326,7 +338,7 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
     }
 
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        emit sigOpenFileOk(msgContent);
+        slotOpenFileOk(msgContent);
     } else if (msgType == MSG_OPERATION_SLIDE) {
         m_pctrlwidget->setCanShow(true);
         emit sigChangePlayCtrlShow(true);
@@ -335,14 +347,6 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
         return dealWithNotifyMsg(msgContent);
     }
     return 0;
-}
-
-void DocShowShellWidget::qSetPath(const QString &sPath)
-{
-    auto pViewWidget = this->findChild<FileViewWidget *>();
-    if (pViewWidget) {
-        pViewWidget->qSetPath(sPath);
-    }
 }
 
 void DocShowShellWidget::initWidget()

@@ -14,9 +14,9 @@ enum E_MSG_TYPE {
     E_MSG_TYPE_BEGIN = 0,
     E_APP_MSG,
     E_TAB_MSG,
-    E_DOC_MSG,
+    E_DOCPROXY_MSG_TYPE,
     E_FILE_MSG,
-    E_TITLE_MSG,
+    E_TITLE_MSG_TYPE,
     E_MSG_TYPE_END
 };
 
@@ -62,7 +62,7 @@ enum E_TAB_TYPE {
     MSG_TAB_ADD_END,                //  添加 tab 结束
     MSG_TAB_DATA_CHANGE,            //  文档数据有变化消息
     MSG_TAB_SAVE_FILE,              //  关闭当前文档　消息
-    MSG_TAB_SHOW_FILE_CHANGE,       //  关闭当前文档　消息
+    MSG_TAB_SHOW_FILE_CHANGE,       //  文档 显示切换消息
     MSG_TAB_NOT_SAVE_FILE,          //  关闭当前文档　消息
     MSG_TAB_NOT_CHANGE_SAVE_FILE,   //  关闭当前文档　消息
     MSG_TAB_MSG_END,

@@ -34,11 +34,7 @@ PlayControlWidget::PlayControlWidget(DWidget *parnet)
 
 PlayControlWidget::~PlayControlWidget()
 {
-    m_ptimer->stop();
-    m_ptimer->deleteLater();
-
     dApp->m_pModelService->removeObserver(this);
-
 }
 
 int PlayControlWidget::dealWithData(const int &msgType, const QString &msgContent)

@@ -72,6 +72,7 @@ private:
     void setMagnifierState();
     void SetBtnDisable(const bool &bAble);
 
+    void onDocProxyMsg(const QString &msgContent);
 private:
     QStringList shortKeyList;
 

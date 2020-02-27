@@ -62,6 +62,7 @@ private slots:
     void SlotTabBarClicked(int);
     void SlotTabAddRequested();
     void SlotTabCloseRequested(int index);
+    void SlotCurrentChanged(int index);
 
     void SlotCloseFile(const int &, const QString &);
     void SlotDealWithData(const int &, const QString &);

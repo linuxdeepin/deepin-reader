@@ -37,7 +37,8 @@ public:
     ~MainSplitter() Q_DECL_OVERRIDE;
 
 signals:
-    void sigTitleMsgData(const QString &);
+    void sigDocProxy(const QString &);
+    void sigTitleMsg(const QString &);
 
     // IObserver interface
 public:
@@ -53,7 +54,8 @@ private:
     void InitConnections();
 
 private slots:
-    void SlotTitleMsg(const QString &);
+    void SlotDocProxyData(const QString &);
+    void SlotTitleData(const QString &);
 
 private:
     QString         m_strPath = "";

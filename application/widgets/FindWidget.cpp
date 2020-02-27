@@ -33,6 +33,8 @@
 FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)
 {
+    m_strObserverName = "FindWidget";
+
     setMinimumSize(QSize(414, 60));
     setWindowFlags(Qt::WindowStaysOnTopHint);
     setBlurBackgroundEnabled(true);
@@ -43,9 +45,7 @@ FindWidget::FindWidget(DWidget *parent)
 
     slotSetVisible();
 
-
     dApp->m_pModelService->addObserver(this);
-
 }
 
 FindWidget::~FindWidget()
