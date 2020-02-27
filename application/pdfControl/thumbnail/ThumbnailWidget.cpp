@@ -38,13 +38,13 @@ ThumbnailWidget::ThumbnailWidget(DWidget *parent)
 
 ThumbnailWidget::~ThumbnailWidget()
 {
-    dApp->m_pModelService->removeObserver(this);
-
     // 等待子线程退出
     if (m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();
         m_ThreadLoadImage.clearList();
     }
+
+    dApp->m_pModelService->removeObserver(this);
 }
 
 // 处理消息事件

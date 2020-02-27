@@ -30,10 +30,10 @@ MainSplitter::MainSplitter(CustomWidget *parent)
 {
     m_strObserverName = "MainSplitter";
 
-    dApp->m_pModelService->addObserver(this);
-
     InitWidget();
     InitConnections();
+
+    dApp->m_pModelService->addObserver(this);
 }
 
 MainSplitter::~MainSplitter()

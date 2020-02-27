@@ -19,7 +19,7 @@ public:
 
 signals:
     void sigSearchWidgetState(const int &);
-    void sigOpenFileOk(const QString &);;
+    void sigOpenFileOk(const QString &);
     void sigTitleMsg(const QString &);
 
     // IObserver interface

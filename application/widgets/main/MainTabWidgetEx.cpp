@@ -98,15 +98,14 @@ void MainTabWidgetEx::AddFileLayout(const QString &msgContent)
         m_pStackedLayout->addWidget(splitter);
 
         dApp->m_pDataManager->qInsertOpenFilePath(msgContent);
+
+        notifyMsg(MSG_OPEN_FILE_PATH, msgContent);
     }
-    notifyMsg(MSG_OPEN_FILE_PATH, msgContent);
 }
 
 void MainTabWidgetEx::AddFileLayoutEnd(const QString &msgContent)
 {
     AddFileLayout(msgContent);
-
-
 }
 
 //  应用退出
