@@ -22,8 +22,10 @@
 
 #include "CatalogTreeView.h"
 
+#include "controller/FileDataManager.h"
 #include "CustomControl/CustomClickLabel.h"
 #include "CustomControl/DFMGlobal.h"
+#include "docview/docummentproxy.h"
 
 CatalogWidget::CatalogWidget(DWidget *parent)
     : CustomWidget("CatalogWidget", parent)
@@ -50,7 +52,7 @@ int CatalogWidget::dealWithData(const int &msgType, const QString &msgContent)
 
 void CatalogWidget::initWidget()
 {
-    titleLabel = new CustomClickLabel("");
+    titleLabel = new CustomClickLabel("", this);
     titleLabel->setForegroundRole(DPalette::TextTips);
     titleLabel->setAlignment(Qt::AlignCenter);
     DFontSizeManager::instance()->bind(titleLabel, DFontSizeManager::T8);
@@ -75,19 +77,37 @@ void CatalogWidget::initConnections()
     connect(this, SIGNAL(sigDocOpenFileOk(const QString &)), SLOT(SlotDocOpenFileOk(const QString &)));
 }
 
-void CatalogWidget::SlotDocOpenFileOk(const QString &msgContent)
+void CatalogWidget::SlotDocOpenFileOk(const QString &sPath)
 {
-    if (titleLabel) {
-        QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T8);
-        QString t = DFMGlobal::elideText(msgContent, QSize(120, 18), QTextOption::WrapAnywhere, font, Qt::ElideMiddle, 0);
-        QStringList labelTexts = t.split("\n");
-        if (labelTexts.size() < 3) {
-            titleLabel->setText(msgContent);
-        } else {
-            QString sStart = labelTexts.at(0);
-            QString sEnd = labelTexts.at(labelTexts.size() - 1);
+    QString sUuid = dApp->m_pDataManager->qGetFileUuid(sPath);
+    if (sUuid != "") {
+        auto _pProxy = DocummentProxy::instance(sUuid);
+        if (_pProxy) {
 
-            titleLabel->setText(sStart + "..." + sEnd);
+            stFileInfo fileInfo;
+
+            _pProxy->docBasicInfo(fileInfo);
+
+            QString strTheme =  fileInfo.strTheme;
+
+            if (strTheme == "") {
+                strTheme = tr("Unknown");
+            }
+
+            if (titleLabel) {
+                QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T8);
+                QString t = DFMGlobal::elideText(strTheme, QSize(120, 18), QTextOption::WrapAnywhere, font, Qt::ElideMiddle, 0);
+                QStringList labelTexts = t.split("\n");
+                if (labelTexts.size() < 3) {
+                    titleLabel->setText(strTheme);
+                } else {
+                    QString sStart = labelTexts.at(0);
+                    QString sEnd = labelTexts.at(labelTexts.size() - 1);
+
+                    titleLabel->setText(sStart + "..." + sEnd);
+                }
+            }
         }
     }
+
 }

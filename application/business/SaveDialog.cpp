@@ -36,7 +36,7 @@ SaveDialog::SaveDialog(QObject *parent)
 
 void SaveDialog::showSaveDialog(const int &msgType, const QString &sPath)
 {
-    if (E_APP_MSG == msgType) {
+    if (E_APP_MSG_TYPE == msgType) {
         AppExit();
     } else {
         TabRemove(sPath);

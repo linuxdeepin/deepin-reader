@@ -86,7 +86,7 @@ void MainTabBar::__InitConnection()
     connect(this, SIGNAL(sigCloseFile(const int &, const QString &)), SLOT(SlotCloseFile(const int &, const QString &)));
     connect(this, SIGNAL(sigTabMsg(const QString &)), SLOT(SlotTabMsg(const QString &)));
 
-//    connect(this, SIGNAL(currentChanged(int)), SLOT(SlotCurrentChanged(int)));
+    connect(this, SIGNAL(currentChanged(int)), SLOT(SlotCurrentChanged(int)));
     connect(this, SIGNAL(tabBarClicked(int)), SLOT(SlotTabBarClicked(int)));
     connect(this, SIGNAL(tabCloseRequested(int)), SLOT(SlotTabCloseRequested(int)));
     connect(this, SIGNAL(tabAddRequested()), SLOT(SlotTabAddRequested()));
@@ -197,6 +197,8 @@ void MainTabBar::SlotTabAddRequested()
 //  关闭
 void MainTabBar::SlotTabCloseRequested(int index)
 {
+//    disconnect(this, SIGNAL(currentChanged(int)), nullptr, nullptr);
+
     QString sPath = this->tabData(index).toString();
     if (sPath != "") {
         SaveDialog sd;
@@ -206,7 +208,25 @@ void MainTabBar::SlotTabCloseRequested(int index)
 
 void MainTabBar::SlotCurrentChanged(int index)
 {
-    qDebug() << __FUNCTION__ << "           " << index;
+//    QString sPath = this->tabData(index).toString();
+
+//    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+
+//    if (sPath != sCurPath) {
+//        dApp->m_pDataManager->qSetCurrentFilePath(sPath);
+
+//        FileState fs = dApp->m_pDataManager->qGetFileChange(sPath);
+//        if (!fs.isOpen) {  //  该文档还未打开
+//            notifyMsg(MSG_OPEN_FILE_PATH, sPath);
+//        } else {
+
+//            MsgModel mm;
+//            mm.setMsgType(MSG_TAB_SHOW_FILE_CHANGE);
+//            mm.setPath(sPath);
+
+//            notifyMsg(E_TAB_MSG, mm.toJson());
+//        }
+//    }
 }
 
 void MainTabBar::SlotCloseFile(const int &msgType, const QString &sPath)

@@ -102,6 +102,8 @@ private:
     void onFileAddNote();
     void __SetCursor(const QCursor &cursor);
 
+    void OnSetViewChange();
+
 private:
     TextOperationMenu       *m_operatemenu = nullptr;
     QString                 m_strProcUuid = "";
@@ -110,6 +112,9 @@ private:
     int                     m_nAdapteState = NO_ADAPTE_State;       //  当前自适应状态
     QPoint                  m_pStartPoint;
     QPoint                  m_pEndSelectPoint;
+
+
+    bool                    m_bDoubleShow = false;
 
     friend class FVMMouseEvent;
 };

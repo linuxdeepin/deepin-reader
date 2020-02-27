@@ -23,6 +23,8 @@ public:
 
 signals:
     void sigFileChange(const QString &);
+    void sigHistroyChange(const QString &);
+    void sigAppExitNothing(const QString &);
 
     // IObserver interface
 public:
@@ -52,14 +54,19 @@ public:
     void qInsertFileOpen(const QString &, const int &);
     FileState qGetFileChange(const QString &);
 
+    void qSaveData(const QString &sPath);
+
 private:
     void InitConnection();
 
     void setFileChange(const QString &);
     void setThumbnailState(const QString &);
+    void SetLeftWidgetIndex(const QString &sValue);
 
 private slots:
     void slotFileChange(const QString &);
+    void slotHistroyChange(const QString &);
+    void slotAppExitNothing(const QString &);
 
 private:
     QString m_strCurrentFilePath = "";              //  当前显示的文档路径

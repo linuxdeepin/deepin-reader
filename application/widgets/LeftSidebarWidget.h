@@ -19,8 +19,7 @@ public:
 
 signals:
     void sigSearchWidgetState(const int &);
-    void sigOpenFileOk(const QString &);
-    void sigFileChangeMsg(const QString &);
+    void sigOpenFileOk(const QString &);;
     void sigTitleMsg(const QString &);
 
     // IObserver interface
@@ -40,7 +39,6 @@ private slots:
 
     void slotUpdateTheme();
     void slotSetStackCurIndex(const int &);
-    void slotFileChangeMsg(const QString &);
     void slotTitleMsg(const QString &);
 
 private:

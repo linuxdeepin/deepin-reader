@@ -21,10 +21,6 @@
 
 #include <DFontSizeManager>
 
-#include "MsgModel.h"
-
-#include "controller/FileDataManager.h"
-
 CustomMenu::CustomMenu(const QString &, DWidget *parent)
     : DMenu(parent)
 {

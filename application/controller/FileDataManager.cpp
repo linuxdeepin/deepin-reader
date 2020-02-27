@@ -14,6 +14,10 @@ int FileDataManager::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (E_FILE_MSG == msgType) {
         emit sigFileChange(msgContent);
+    } else if (E_TITLE_MSG_TYPE == msgType) {
+        emit sigHistroyChange(msgContent);
+    } else if (E_APP_MSG_TYPE == msgType) {
+        emit sigAppExitNothing(msgContent);
     }
 
     return 0;
@@ -38,6 +42,8 @@ QString FileDataManager::qGetCurUuid() const
 void FileDataManager::InitConnection()
 {
     connect(this, SIGNAL(sigFileChange(const QString &)), SLOT(slotFileChange(const QString &)));
+    connect(this, SIGNAL(sigHistroyChange(const QString &)), SLOT(slotHistroyChange(const QString &)));
+    connect(this, SIGNAL(sigAppExitNothing(const QString &)), SLOT(slotAppExitNothing(const QString &)));
 }
 
 void FileDataManager::slotFileChange(const QString &sContent)
@@ -51,8 +57,37 @@ void FileDataManager::slotFileChange(const QString &sContent)
 
     if (nType == MSG_FILE_IS_CHANGE) {
         setFileChange(sValue);
-    } else if (nType == MSG_WIDGET_THUMBNAILS_VIEW) {
+    }
+}
+
+void FileDataManager::slotHistroyChange(const QString &sContent)
+{
+    MsgModel mm;
+    mm.fromJson(sContent);
+
+    int nType = mm.getMsgType();
+    QString sValue = mm.getValue();
+
+    if (nType == MSG_WIDGET_THUMBNAILS_VIEW) {
         setThumbnailState(sValue);
+    } else if (nType == MSG_LEFTBAR_STATE) {
+        SetLeftWidgetIndex(sValue);
+    }
+}
+
+void FileDataManager::slotAppExitNothing(const QString &sContent)
+{
+    MsgModel mm;
+    mm.fromJson(sContent);
+
+    int nMsg = mm.getMsgType();
+    if (E_APP_EXIT_NOTHING == nMsg) {
+        QList<QString> fileList = qGetOpenFilePathList();
+        foreach (const QString &s, fileList) {
+            qSaveData(s);
+        }
+
+        dApp->exit(0);
     }
 }
 
@@ -65,6 +100,14 @@ void FileDataManager::setThumbnailState(const QString &sValue)
 {
     FileDataModel fdm = qGetFileData(m_strCurrentFilePath);
     fdm.qSetData(Thumbnail, sValue.toInt());
+
+    qSetFileData(m_strCurrentFilePath, fdm);
+}
+
+void FileDataManager::SetLeftWidgetIndex(const QString &sValue)
+{
+    FileDataModel fdm = qGetFileData(m_strCurrentFilePath);
+    fdm.qSetData(LeftIndex, sValue.toInt());
 
     qSetFileData(m_strCurrentFilePath, fdm);
 }
@@ -139,6 +182,16 @@ void FileDataManager::qInsertFileOpen(const QString &sPath, const int &iOpen)
 FileState FileDataManager::qGetFileChange(const QString &sPath)
 {
     return m_pFileChangeMap[sPath];
+}
+
+void FileDataManager::qSaveData(const QString &sPath)
+{
+    FileDataModel fdm = dApp->m_pDataManager->qGetFileData(sPath);
+
+    for (int iLoop = Scale; iLoop < CurPage + 1; iLoop++) {
+        dApp->m_pDBService->setHistroyData(sPath, iLoop, fdm.qGetData(iLoop));
+    }
+    dApp->m_pDBService->qSaveData(sPath, DB_HISTROY);
 }
 
 QList<QString> FileDataManager::qGetOpenFilePathList() const

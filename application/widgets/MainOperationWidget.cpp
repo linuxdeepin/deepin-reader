@@ -172,8 +172,8 @@ int MainOperationWidget::dealWithData(const int &msgType, const QString &msgCont
 
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
-    } else if (msgType == E_DOCPROXY_MSG_TYPE) {
-        onDocProxyMsg(msgContent);
+    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        slotOpenFileOk(msgContent);
     }
 
     return 0;

@@ -147,6 +147,8 @@ void DocummentFileHelper::qRemoveTabFile(const int &iType, const QString &sPath)
             }
         }
 
+        dApp->m_pDataManager->qSaveData(sPath);
+
         _proxy->closeFile();
 
         notifyMsg(MSG_CLOSE_FILE, sPath);
@@ -167,6 +169,8 @@ void DocummentFileHelper::qAppExitFile(const int &iType, const QString &sPath)
                 dApp->m_pDBService->qSaveData(sPath, DB_BOOKMARK);
             }
         }
+
+        dApp->m_pDataManager->qSaveData(sPath);
 
         _proxy->closeFile();
     }
@@ -199,7 +203,7 @@ void DocummentFileHelper::onSaveFile()
             notifyMsg(CENTRAL_SHOW_TIP, tr("No changes"));
         }
         //insert msg to FileFontTable
-        dApp->m_pDBService->qSaveData(sCurPath, DB_HISTROY);
+        dApp->m_pDataManager->qSaveData(sCurPath);
     }
 }
 

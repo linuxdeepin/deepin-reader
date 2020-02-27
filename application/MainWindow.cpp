@@ -77,6 +77,8 @@ void MainWindow::showEvent(QShowEvent *ev)
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    event->ignore();
+
     AppSetting::instance()->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
     AppSetting::instance()->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
 
@@ -95,11 +97,13 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
     if (rl) {
         SaveDialog sd;
-        sd.showSaveDialog(E_APP_MSG);
-
-        event->ignore();
+        sd.showSaveDialog(E_APP_MSG_TYPE);
     } else {
-        DMainWindow::closeEvent(event);
+        //  没有对文档进行修改,  也需要保存 历史记录
+        MsgModel mm;
+        mm.setMsgType(E_APP_EXIT_NOTHING);
+
+        notifyMsg(E_APP_MSG_TYPE, mm.toJson());
     }
 }
 

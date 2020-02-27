@@ -91,19 +91,11 @@ void LeftSidebarWidget::slotSetStackCurIndex(const int &iIndex)
     if (iIndex == WIDGET_SEARCH || iIndex == WIDGET_BUFFER) {
         emit sigSearchWidgetState(iIndex);
     } else {
-        notifyMsg(MSG_LEFTBAR_STATE, QString::number(iIndex));
-    }
-}
+        MsgModel mm;
+        mm.setMsgType(MSG_LEFTBAR_STATE);
+        mm.setValue(QString::number(iIndex));
 
-void LeftSidebarWidget::slotFileChangeMsg(const QString &sContent)
-{
-    MsgModel mm;
-    mm.fromJson(sContent);
-
-    QString nValue = mm.getValue();
-    int nMsg = mm.getMsgType();
-    if (nMsg == MSG_WIDGET_THUMBNAILS_VIEW) {
-        onSetWidgetVisible(nValue.toInt());
+        notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
     }
 }
 
@@ -184,7 +176,6 @@ void LeftSidebarWidget::initConnections()
 {
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigOpenFileOk(const QString &)), SLOT(SlotOpenFileOk(const QString &)));
-    connect(this, SIGNAL(sigFileChangeMsg(const QString &)), SLOT(slotFileChangeMsg(const QString &)));
     connect(this, SIGNAL(sigTitleMsg(const QString &)), SLOT(slotTitleMsg(const QString &)));
 }
 
@@ -238,14 +229,12 @@ void LeftSidebarWidget::initWidget()
 
 int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == E_FILE_MSG) {
-        emit sigFileChangeMsg(msgContent);
-    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
     } else if (msgType == MSG_WIDGET_THUMBNAILS_VIEW) {
         onSetWidgetVisible(msgContent.toInt());
-    } else if (msgType == E_DOCPROXY_MSG_TYPE) {
-        onDocProxyMsg(msgContent);
+    } if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        SlotOpenFileOk(msgContent);
     }
     return 0;
 }

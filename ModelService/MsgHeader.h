@@ -12,7 +12,7 @@ namespace {
 //  消息类型
 enum E_MSG_TYPE {
     E_MSG_TYPE_BEGIN = 0,
-    E_APP_MSG,
+    E_APP_MSG_TYPE,
     E_TAB_MSG,
     E_DOCPROXY_MSG_TYPE,
     E_FILE_MSG,
@@ -24,6 +24,7 @@ enum E_MSG_TYPE {
 enum E_APP_MSG_TYPE {
     E_APP_MSG_TYPE_BEGIN = E_MSG_TYPE_END + 50,
     E_APP_EXIT,
+    E_APP_EXIT_NOTHING,
     E_APP_MSG_TYPE_END
 };
 
@@ -92,8 +93,7 @@ enum E_LEFT_SLIDER_MSG {
 //  字体菜单 消息
 enum E_FONT_MENU_MSG {
     MSG_SELF_ADAPTE_HEIGHT = MSG_SWITCHLEFTWIDGET + 50,  //  自适应高度
-    MSG_SELF_ADAPTE_WIDTH,         //  自适应宽度
-    MSG_SELF_ADAPTE_SCALE,         //  自适应宽\高 缩放比例变化
+
     MSG_FILE_ROTATE,               //  旋转
 };
 

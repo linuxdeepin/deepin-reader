@@ -211,7 +211,8 @@ int HistroyDB::GetKeyValue(const QString &sPath, const int &iKey)
     if (m_pNewDataMapObj.contains(sPath)) {
         int nTemp = m_pNewDataMapObj[sPath].qGetData(iKey);
         if (-1 == nTemp)
-            return nTemp;
+            return m_pDataMapObj[sPath].qGetData(iKey);
+        return nTemp;
     }
 
     return m_pDataMapObj[sPath].qGetData(iKey);

@@ -58,8 +58,8 @@ FontMenu::~FontMenu()
  */
 int FontMenu::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == E_DOCPROXY_MSG_TYPE) {
-        onDocProxyMsg(msgContent);
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        slotFileOpenOk(msgContent);
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (shortKeyList.contains(msgContent)) {
             emit sigDealWithShortKey(msgContent);

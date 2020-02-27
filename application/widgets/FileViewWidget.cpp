@@ -40,7 +40,7 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
     , m_operatemenu(nullptr)
 {
-    m_pMsgList = { MSG_MAGNIFYING, MSG_HANDLESHAPE, MSG_SELF_ADAPTE_HEIGHT, MSG_SELF_ADAPTE_WIDTH,
+    m_pMsgList = { MSG_MAGNIFYING, MSG_HANDLESHAPE, MSG_VIEWCHANGE_FIT,
                    MSG_FILE_ROTATE,
                    MSG_NOTE_ADD_CONTENT, MSG_NOTE_PAGE_ADD,
                    MSG_EXIT_SAVE_FILE
@@ -121,16 +121,11 @@ void FileViewWidget::slotDealWithData(const int &msgType, const QString &msgCont
     case MSG_HANDLESHAPE:           //  手势 信号
         onSetHandShape(msgContent);
         break;
-    case MSG_SELF_ADAPTE_HEIGHT:    //  自适应 高度
+    case MSG_VIEWCHANGE_FIT:    //  自适应
         if (msgContent == "1") {
             m_nAdapteState = HEIGHT_State;
             onSetWidgetAdapt();
-        } else {
-            m_nAdapteState = Default_State;
-        }
-        break;
-    case MSG_SELF_ADAPTE_WIDTH:     //  自适应宽度
-        if (msgContent == "1") {
+        } else if (msgContent == "10") {
             m_nAdapteState = WIDGET_State;
             onSetWidgetAdapt();
         } else {
@@ -393,6 +388,13 @@ void FileViewWidget::__SetCursor(const QCursor &cs)
     }
 }
 
+void FileViewWidget::OnSetViewChange()
+{
+    auto _pProxy = DocummentProxy::instance(m_strProcUuid);
+//    _pProxy->setScaleRotateViewModeAndShow(0, 0, m_bDoubleShow);
+    qDebug() <<  __FUNCTION__  << "      " << m_bDoubleShow;
+}
+
 //  文档书签状态改变
 void FileViewWidget::slotBookMarkStateChange(int nPage, bool bState)
 {
@@ -453,7 +455,7 @@ void FileViewWidget::onPrintFile()
 //  设置　窗口　自适应　宽＼高　度
 void FileViewWidget::onSetWidgetAdapt()
 {
-    DocummentProxy *_proxy = DocummentProxy::instance();
+    DocummentProxy *_proxy = DocummentProxy::instance(m_strProcUuid);
     if (!_proxy)
         return;
 
@@ -467,7 +469,7 @@ void FileViewWidget::onSetWidgetAdapt()
     }
 
     if (nScale != 0.0) {
-        notifyMsg(MSG_SELF_ADAPTE_SCALE, QString::number(nScale));
+        notifyMsg(MSG_FILE_SCALE, QString::number(nScale));
     }
 }
 
@@ -486,7 +488,10 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         }
     }
 
-    if (msgType == MSG_CLOSE_FILE) {
+    if (msgType == MSG_VIEWCHANGE_DOUBLE_SHOW) {
+        m_bDoubleShow = msgContent.toInt();
+        OnSetViewChange();
+    } else if (msgType == MSG_CLOSE_FILE) {
         emit sigCloseFile(msgContent);
     }
 

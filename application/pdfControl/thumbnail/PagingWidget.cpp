@@ -25,6 +25,8 @@
 PagingWidget::PagingWidget(CustomWidget *parent)
     : CustomWidget(QString("PagingWidget"), parent)
 {
+    initWidget();
+
     initConnections();
     slotUpdateTheme();
 
@@ -61,15 +63,16 @@ void PagingWidget::initWidget()
     DFontSizeManager::instance()->bind(m_pJumpPageLineEdit, DFontSizeManager::T6);
     m_pJumpPageLineEdit->setForegroundRole(DPalette::Text);
 
+    m_pCurrantPageLab = new CustomClickLabel("");
+    DFontSizeManager::instance()->bind(m_pCurrantPageLab, DFontSizeManager::T6);
+    m_pCurrantPageLab->setForegroundRole(DPalette::Text);
+
     auto hLayout = new QHBoxLayout;
     hLayout->setContentsMargins(10, 6, 10, 6);
     hLayout->addWidget(m_pJumpPageLineEdit);
     hLayout->addSpacing(5);
 
-    if (m_pCurrantPageLab) {
-        hLayout->addWidget(m_pCurrantPageLab);
-    }
-
+    hLayout->addWidget(m_pCurrantPageLab);
     hLayout->addWidget(m_pTotalPagesLab);
     hLayout->addStretch(1);
     hLayout->addWidget(m_pPrePageBtn);
@@ -168,13 +171,10 @@ void PagingWidget::SlotDocFileOpenOk()
     DocummentProxy *_proxy = DocummentProxy::instance();
     if (_proxy) {
         bool isHasLabel = _proxy->haslabel();
-        if (isHasLabel) {
-            m_pCurrantPageLab = new CustomClickLabel("");
-            DFontSizeManager::instance()->bind(m_pCurrantPageLab, DFontSizeManager::T6);
-            m_pCurrantPageLab->setForegroundRole(DPalette::Text);
+        if (!isHasLabel) {
+            delete m_pCurrantPageLab;
+            m_pCurrantPageLab =  nullptr;
         }
-
-        initWidget();
 
         int totalPage = _proxy->getPageSNum();
 
