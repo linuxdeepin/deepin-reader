@@ -34,10 +34,6 @@ class BookMarkItemWidget : public CustomItemWidget
 
 public:
     explicit BookMarkItemWidget(QWidget *parent = nullptr);
-    ~BookMarkItemWidget() Q_DECL_OVERRIDE;
-
-signals:
-//    void sigDeleleteItem(const int &);
 
 public:
     // IObserver interface
@@ -52,9 +48,6 @@ private slots:
 protected:
     void initWidget() Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
-
-private:
-//    bool bOperationBK();
 
 private:
     bool m_bPaint = false;                    // 是否绘制选中item

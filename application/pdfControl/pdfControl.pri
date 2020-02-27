@@ -14,7 +14,8 @@ HEADERS += \
     $$PWD/bookmark/BookMarkItemWidget.h \
     $$PWD/bookmark/BookMarkWidget.h \
     $$PWD/note/NoteViewWidget.h \
-    $$PWD/note/TransparentTextEdit.h
+    $$PWD/note/TransparentTextEdit.h \
+    $$PWD/DataStackedWidget.h
 
 SOURCES += \
     $$PWD/CustomListWidget.cpp \
@@ -32,4 +33,5 @@ SOURCES += \
     $$PWD/bookmark/BookMarkItemWidget.cpp \
     $$PWD/bookmark/BookMarkWidget.cpp \
     $$PWD/note/NoteViewWidget.cpp \
-    $$PWD/note/TransparentTextEdit.cpp
+    $$PWD/note/TransparentTextEdit.cpp \
+    $$PWD/DataStackedWidget.cpp

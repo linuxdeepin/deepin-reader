@@ -86,7 +86,7 @@ signals:
 //    void sigDelBKItem();
 //    void sigCtrlBAddBookMark();
     void sigRightSelectItem(QString);
-//    void sigDealWithShurtKey(const QString &);
+    void sigSetBookMarkState(const int &, const int &);
 
 private slots:
     void slotAddBookMark();

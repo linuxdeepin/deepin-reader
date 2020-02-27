@@ -149,6 +149,8 @@ void BookMarkWidget::slotAddBookMark(const int &nPage)
 
     auto item = addBookMarkItem(nPage);
     if (item) {
+        emit sigSetBookMarkState(1, nPage);
+
         MsgModel mm;
         mm.setMsgType(MSG_FILE_IS_CHANGE);
         mm.setValue("1");
@@ -270,6 +272,8 @@ void BookMarkWidget::slotDeleteBookItem(const int &nPage)
 
                     delete pItem;
                     pItem = nullptr;
+
+                    emit sigSetBookMarkState(-1, nPage);
 
                     deleteIndexPage(nPageIndex);
 

@@ -522,7 +522,7 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         return ConstantMsg::g_effective_res;
     }
 
-    if (msgType == MSG_NOTIFY_KEY_MSG) {
+    if (msgType == MSG_NOTIFY_KEY_MSG && this->isVisible()) {
         if (m_pKeyMsgList.contains(msgContent)) {
             emit sigDealWithKeyMsg(msgContent);
             return ConstantMsg::g_effective_res;

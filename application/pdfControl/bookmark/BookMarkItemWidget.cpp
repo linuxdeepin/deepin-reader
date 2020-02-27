@@ -28,13 +28,6 @@ BookMarkItemWidget::BookMarkItemWidget(QWidget *parent)
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             SLOT(slotShowContextMenu(const QPoint &)));
     initWidget();
-
-    dApp->m_pModelService->addObserver(this);
-}
-
-BookMarkItemWidget::~BookMarkItemWidget()
-{
-    dApp->m_pModelService->removeObserver(this);
 }
 
 /**

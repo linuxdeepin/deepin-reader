@@ -238,6 +238,21 @@ void ThumbnailWidget::slotLoadImage(const int &row, const QImage &image)
     }
 }
 
+void ThumbnailWidget::SlotSetBookMarkState(const int &iType, const int &iPage)
+{
+    bool bStatus = false;
+    if (iType == -1) {
+    } else {
+        bStatus = true;
+    }
+
+    auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(
+                       m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(iPage)));
+    if (pWidget) {
+        pWidget->qSetBookMarkShowStatus(bStatus);
+    }
+}
+
 // 初始化缩略图列表list，无缩略图
 void ThumbnailWidget::fillContantToList()
 {
@@ -274,7 +289,7 @@ void ThumbnailWidget::showItemBookMark(int ipage)
         auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(
                            m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(ipage)));
         if (pWidget) {
-            pWidget->slotBookMarkShowStatus(true);
+            pWidget->qSetBookMarkShowStatus(true);
         }
     } else {
         QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
@@ -283,7 +298,7 @@ void ThumbnailWidget::showItemBookMark(int ipage)
             auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(
                                m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(index)));
             if (pWidget) {
-                pWidget->slotBookMarkShowStatus(true);
+                pWidget->qSetBookMarkShowStatus(true);
             }
         }
     }

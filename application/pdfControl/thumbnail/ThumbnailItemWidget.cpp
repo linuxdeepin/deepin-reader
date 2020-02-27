@@ -26,28 +26,25 @@ ThumbnailItemWidget::ThumbnailItemWidget(DWidget *parent)
     setWindowFlags(Qt::FramelessWindowHint);
 
     initWidget();
-    connect(this, SIGNAL(sigBookMarkStatusChanged(bool)), SLOT(slotBookMarkShowStatus(bool)));
-
-    dApp->m_pModelService->addObserver(this);
+//    connect(this, SIGNAL(sigBookMarkStatusChanged(bool)), SLOT(slotBookMarkShowStatus(bool)));
 }
 
 ThumbnailItemWidget::~ThumbnailItemWidget()
 {
-    dApp->m_pModelService->removeObserver(this);
 }
 
 // 处理消息接口
 int ThumbnailItemWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (MSG_BOOKMARK_DLTITEM == msgType || MSG_OPERATION_DELETE_BOOKMARK == msgType) {   //  删除书签消息
-        if (m_nPageIndex == msgContent.toInt()) {
-            emit sigBookMarkStatusChanged(false);
-        }
-    } else if (MSG_OPERATION_ADD_BOOKMARK == msgType || MSG_OPERATION_TEXT_ADD_BOOKMARK == msgType) { //  增加书签消息
-        if (m_nPageIndex == msgContent.toInt()) {
-            emit sigBookMarkStatusChanged(true);
-        }
-    }
+//    if (MSG_BOOKMARK_DLTITEM == msgType || MSG_OPERATION_DELETE_BOOKMARK == msgType) {   //  删除书签消息
+//        if (m_nPageIndex == msgContent.toInt()) {
+//            emit sigBookMarkStatusChanged(false);
+//        }
+//    } else if (MSG_OPERATION_ADD_BOOKMARK == msgType || MSG_OPERATION_TEXT_ADD_BOOKMARK == msgType) { //  增加书签消息
+//        if (m_nPageIndex == msgContent.toInt()) {
+//            emit sigBookMarkStatusChanged(true);
+//        }
+//    }
     return 0;
 }
 
@@ -74,7 +71,7 @@ void ThumbnailItemWidget::rotateThumbnail(int angle)
     }
 }
 
-void ThumbnailItemWidget::slotBookMarkShowStatus(bool bshow)
+void ThumbnailItemWidget::qSetBookMarkShowStatus(const bool &bshow)
 {
     m_pPicture->setBookMarkStatus(bshow);
     m_pPicture->update();

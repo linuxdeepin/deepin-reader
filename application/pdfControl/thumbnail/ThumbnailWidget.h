@@ -132,6 +132,8 @@ private slots:
     void slotLoadThumbnail(int);
     void slotLoadImage(const int &row, const QImage &image);
 
+    void SlotSetBookMarkState(const int &, const int &);
+
 private:
     CustomListWidget *m_pThumbnailListWidget = nullptr;  // list widget item子界面
     PagingWidget *m_pPageWidget = nullptr;               // 跳页界面

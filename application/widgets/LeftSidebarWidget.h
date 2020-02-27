@@ -26,10 +26,6 @@ signals:
 public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
 
-    // QWidget interface
-protected:
-    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
-
     // CustomWidget interface
 protected:
     void initWidget() Q_DECL_OVERRIDE;
@@ -38,21 +34,13 @@ private slots:
     void SlotOpenFileOk(const QString &);
 
     void slotUpdateTheme();
-    void slotSetStackCurIndex(const int &);
     void slotTitleMsg(const QString &);
 
 private:
     void initConnections();
-
-    void __DeleteItemByKey();
-    void __DealWithPressKey(const QString &);
     void onSetWidgetVisible(const int &);
 
-    void onJumpToPrevPage();
-    void onJumpToNextPage();
-
     void onDocProxyMsg(const QString &);
-
 };
 
 #endif  // LEFTSHOWWIDGET_H

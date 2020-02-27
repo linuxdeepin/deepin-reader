@@ -43,11 +43,7 @@ public:
     int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
     void setBSelect(const bool &paint);
     void rotateThumbnail(int);
-
-signals:
-    void sigBookMarkStatusChanged(bool);
-public slots:
-    void slotBookMarkShowStatus(bool bshow);
+    void qSetBookMarkShowStatus(const bool &bshow);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;

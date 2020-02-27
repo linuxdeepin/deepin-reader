@@ -29,13 +29,10 @@ NotesItemWidget::NotesItemWidget(DWidget *parent)
 {
     initWidget();
     __InitConnections();
-
-    dApp->m_pModelService->addObserver(this);
 }
 
 NotesItemWidget::~NotesItemWidget()
 {
-    dApp->m_pModelService->removeObserver(this);
 }
 
 void NotesItemWidget::setTextEditText(const QString &contant)
@@ -108,12 +105,12 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
 
 void NotesItemWidget::slotUpdateTheme()
 {
-    if (m_pPageNumber) {
-        m_pPageNumber->setForegroundRole(DPalette::TextTitle);
-    }
-    if (m_pTextLab) {
-        m_pTextLab->setForegroundRole(QPalette::BrightText);
-    }
+//    if (m_pPageNumber) {
+//        m_pPageNumber->setForegroundRole(DPalette::TextTitle);
+//    }
+//    if (m_pTextLab) {
+//        m_pTextLab->setForegroundRole(QPalette::BrightText);
+//    }
 }
 
 QString NotesItemWidget::strPage() const

@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
+ * Copyright (C) 2019 ~ 2020 UOS Technology Co., Ltd.
  *
- * Author:     duanxiaohui
+ * Author:     wangzhxiaun
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,36 +16,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef BUFFERWIDGET_H
-#define BUFFERWIDGET_H
+#ifndef DATASTACKEDWIDGET_H
+#define DATASTACKEDWIDGET_H
 
-#include <QHBoxLayout>
-#include <QVBoxLayout>
+#include <DStackedWidget>
 
-#include <DSpinner>
+DWIDGET_USE_NAMESPACE
 
-#include "CustomControl/CustomWidget.h"
-
-class BufferWidget : public CustomWidget
+class DataStackedWidget : public DStackedWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(BufferWidget)
-public:
-    explicit BufferWidget(DWidget *parent = nullptr);
-    ~BufferWidget() Q_DECL_OVERRIDE;
+    Q_DISABLE_COPY(DataStackedWidget)
 
 public:
-    // IObserver interface
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    explicit DataStackedWidget(DWidget *parent = nullptr);
 
+signals:
+    void sigSearchWidgetState(const int &);
+
+    // QWidget interface
 protected:
-    void initWidget() Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    void SlotSetSpinnerState(const int &);
+    void slotSetStackCurIndex(const int &);
 
 private:
-    DSpinner        *m_pSpinner = nullptr;
+    void InitWidgets();
+    void DealWithPressKey(const QString &sKey);
+    void onJumpToPrevPage();
+    void onJumpToNextPage();
+    void DeleteItemByKey();
 };
 
-#endif  // BUFFERWIDGET_H
+#endif // DATASTACKEDWIDGET_H
