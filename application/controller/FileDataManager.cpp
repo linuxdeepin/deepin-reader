@@ -72,6 +72,14 @@ void FileDataManager::slotHistroyChange(const QString &sContent)
         setThumbnailState(sValue);
     } else if (nType == MSG_LEFTBAR_STATE) {
         SetLeftWidgetIndex(sValue);
+    } else if (nType == MSG_VIEWCHANGE_DOUBLE_SHOW) {
+        OnSetViewChange(sValue);
+    } else if (nType == MSG_VIEWCHANGE_ROTATE) {
+        OnSetViewRotate(sValue);
+    } else if (nType == MSG_FILE_SCALE) {
+        OnSetViewScale(sValue);
+    } else if (nType == MSG_VIEWCHANGE_FIT) {
+        OnSetViewHit(sValue);
     }
 }
 
@@ -108,6 +116,38 @@ void FileDataManager::SetLeftWidgetIndex(const QString &sValue)
 {
     FileDataModel fdm = qGetFileData(m_strCurrentFilePath);
     fdm.qSetData(LeftIndex, sValue.toInt());
+
+    qSetFileData(m_strCurrentFilePath, fdm);
+}
+
+void FileDataManager::OnSetViewChange(const QString &sValue)
+{
+    FileDataModel fdm = qGetFileData(m_strCurrentFilePath);
+    fdm.qSetData(DoubleShow, sValue.toInt());
+
+    qSetFileData(m_strCurrentFilePath, fdm);
+}
+
+void FileDataManager::OnSetViewScale(const QString &sValue)
+{
+    FileDataModel fdm = qGetFileData(m_strCurrentFilePath);
+    fdm.qSetData(Scale, sValue.toInt());
+
+    qSetFileData(m_strCurrentFilePath, fdm);
+}
+
+void FileDataManager::OnSetViewRotate(const QString &sValue)
+{
+    FileDataModel fdm = qGetFileData(m_strCurrentFilePath);
+    fdm.qSetData(Rotate, sValue.toInt());
+
+    qSetFileData(m_strCurrentFilePath, fdm);
+}
+
+void FileDataManager::OnSetViewHit(const QString &sValue)
+{
+    FileDataModel fdm = qGetFileData(m_strCurrentFilePath);
+    fdm.qSetData(Fit, sValue.toInt());
 
     qSetFileData(m_strCurrentFilePath, fdm);
 }
@@ -159,7 +199,7 @@ QMap<QString, FileState> FileDataManager::qGetFileChangeMap() const
 
 void FileDataManager::qInsertFileChange(const QString &sPath, const int &nState)
 {
-    if (!m_pFileChangeMap.contains(sPath))
+    if (m_pFileChangeMap.contains(sPath))
         m_pFileChangeMap[sPath].isChange = nState;
     else {
         FileState fs;
@@ -170,7 +210,7 @@ void FileDataManager::qInsertFileChange(const QString &sPath, const int &nState)
 
 void FileDataManager::qInsertFileOpen(const QString &sPath, const int &iOpen)
 {
-    if (!m_pFileChangeMap.contains(sPath))
+    if (m_pFileChangeMap.contains(sPath))
         m_pFileChangeMap[sPath].isOpen = iOpen;
     else {
         FileState fs;

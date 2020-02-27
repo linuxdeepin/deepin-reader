@@ -102,7 +102,12 @@ private:
     void onFileAddNote();
     void __SetCursor(const QCursor &cursor);
 
-    void OnSetViewChange();
+    void OnSetViewChange(const QString &);
+    void OnSetViewScale(const QString &);
+    void OnSetViewRotate(const QString &);
+    void OnSetViewHit(const QString &);
+
+    void setScaleRotateViewModeAndShow();
 
 private:
     TextOperationMenu       *m_operatemenu = nullptr;
@@ -113,8 +118,9 @@ private:
     QPoint                  m_pStartPoint;
     QPoint                  m_pEndSelectPoint;
 
-
-    bool                    m_bDoubleShow = false;
+    int                     m_nDoubleShow = false;
+    int                     m_rotateType = 0;            // 旋转类型(后台所需旋转类型)
+    int                     m_nScale = 0;
 
     friend class FVMMouseEvent;
 };

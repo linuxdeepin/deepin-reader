@@ -85,9 +85,7 @@ void DocummentFileHelper::slotDealWithData(const int &msgType, const QString &ms
 {
     if (msgType == MSG_OPEN_FILE_PATH) {            //  打开单个文件
         onOpenFile(msgContent);
-    } /*else if (msgType == MSG_OPEN_FILE_PATH_S) {   //  打开多个文件
-        onOpenFiles(msgContent);
-    }*/ else if (msgType == MSG_OPERATION_SAVE_AS_FILE) { //  另存为文件
+    } else if (msgType == MSG_OPERATION_SAVE_AS_FILE) { //  另存为文件
         onSaveAsFile();
     } else if (msgType == MSG_OPERATION_TEXT_COPY) {    //  复制
         slotCopySelectContent(msgContent);
@@ -122,15 +120,6 @@ void DocummentFileHelper::notifyMsg(const int &msgType, const QString &msgConten
 {
     dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
-
-//bool DocummentFileHelper::save(const QString &filepath, bool withChanges)
-//{
-//    if (!DocummentProxy::instance()) {
-//        return false;
-//    }
-
-//    return DocummentProxy::instance()->save(filepath, withChanges);
-//}
 
 void DocummentFileHelper::qRemoveTabFile(const int &iType, const QString &sPath)
 {
@@ -313,8 +302,6 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
         QString sCompleteSuffix = info.completeSuffix();
         DocType_EM nCurDocType = FFH::setCurDocuType(sCompleteSuffix);
 
-        bool rl = false;
-        notifyMsg(MSG_DOC_OPEN_FILE_START, sPath);
         //从数据库中获取文件的字号信息
         dApp->m_pDBService->qSelectData(sPath, DB_HISTROY);
         FileDataModel fdm = dApp->m_pDBService->getHistroyData(sPath);
@@ -322,23 +309,20 @@ void DocummentFileHelper::onOpenFile(const QString &filePaths)
         dApp->m_pDataManager->qSetFileData(sPath, fdm);
 
         int curPage = fdm.qGetData(CurPage);
-        if (curPage != -1) {
-            int iscale = fdm.qGetData(Scale);          // 缩放
-            int doubPage = fdm.qGetData(DoubleShow);     // 是否是双页
-            int rotate = fdm.qGetData(Rotate);         // 文档旋转角度(0~360)
+        int iscale = fdm.qGetData(Scale);          // 缩放
+        int doubPage = fdm.qGetData(DoubleShow);     // 是否是双页
+        int rotate = fdm.qGetData(Rotate);         // 文档旋转角度(0,1,2,3,4)
 
-            iscale = (iscale > 500 ? 500 : iscale) <= 0 ? 100 : iscale;
-            double scale = iscale / 100.0;
-            RotateType_EM rotatetype = static_cast<RotateType_EM>((rotate / 90) + 1);
-            ViewMode_EM viewmode = static_cast<ViewMode_EM>(doubPage);
+        iscale = (iscale > 500 ? 500 : iscale) <= 0 ? 100 : iscale;
+        double scale = iscale / 100.0;
+        RotateType_EM rotatetype = static_cast<RotateType_EM>(rotate);
+        ViewMode_EM viewmode = static_cast<ViewMode_EM>(doubPage);
 
-            rl = proxy->openFile(nCurDocType, sPath, curPage, rotatetype, scale, viewmode);
-        } else {
-            rl = proxy->openFile(nCurDocType, sPath);
-        }
-
+        bool rl = proxy->openFile(nCurDocType, sPath, curPage, rotatetype, scale, viewmode);
         if (!rl) {
             notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("File not supported"));
+        } else {
+            notifyMsg(MSG_DOC_OPEN_FILE_START, sPath);
         }
     }
 }

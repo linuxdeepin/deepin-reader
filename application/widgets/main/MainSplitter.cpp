@@ -18,12 +18,12 @@
  */
 #include "MainSplitter.h"
 
+#include "MsgModel.h"
+
 #include "../DocShowShellWidget.h"
 #include "../LeftSidebarWidget.h"
 
 #include "controller/FileDataManager.h"
-
-#include "MsgModel.h"
 
 MainSplitter::MainSplitter(CustomWidget *parent)
     : DSplitter(parent)

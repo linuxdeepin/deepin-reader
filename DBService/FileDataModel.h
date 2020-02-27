@@ -75,10 +75,10 @@ private:
     bool        bThumbnail = false;
     bool        bDoubleShow = false;
     int         nFit = false;
-    int         nRotate = -1;
-    int         nScale = -1;
+    int         nRotate = 0;
+    int         nScale = 0;
     int         nLeftIndex = 0;
-    int         nCurPage = -1;
+    int         nCurPage = 0;
 };
 
 #endif // FILEDATA_H

@@ -197,8 +197,6 @@ void MainTabBar::SlotTabAddRequested()
 //  关闭
 void MainTabBar::SlotTabCloseRequested(int index)
 {
-//    disconnect(this, SIGNAL(currentChanged(int)), nullptr, nullptr);
-
     QString sPath = this->tabData(index).toString();
     if (sPath != "") {
         SaveDialog sd;

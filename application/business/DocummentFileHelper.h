@@ -80,8 +80,6 @@ private slots:
 private:
     QList<int>              m_pMsgList;
     QList<QString>          m_pKeyMsgList;
-//    QString                 m_szFilePath = "";
-//    DocType_EM              m_nCurDocType = DocType_NULL;
 };
 
 #endif // DOCUMMENTFILEHELPER_H

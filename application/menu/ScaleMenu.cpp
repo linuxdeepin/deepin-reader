@@ -22,6 +22,8 @@
 
 #include "MsgModel.h"
 
+#include "controller/FileDataManager.h"
+
 ScaleMenu::ScaleMenu(DWidget *parent)
     : CustomMenu("ScaleMenu", parent)
 {
@@ -91,5 +93,8 @@ void ScaleMenu::__ChangeScale(const int &iData)
     mm.setMsgType(MSG_FILE_SCALE);
     mm.setValue(QString::number(iData));
 
-    notifyMsg(-1, mm.toJson());
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    mm.setPath(sCurPath);
+
+    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
 }

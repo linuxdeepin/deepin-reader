@@ -17,8 +17,11 @@
 #include "pdfControl/note/NoteViewWidget.h"
 
 DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
-    : CustomWidget("DocShowShellWidget", parent)
+    : CustomWidget("DocShowShellWidget", parent),
+      m_pctrlwidget(new  PlayControlWidget(this))
 {
+    m_pctrlwidget->hide();
+
     initWidget();
     initConnections();
 

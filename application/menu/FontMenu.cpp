@@ -58,8 +58,8 @@ FontMenu::~FontMenu()
  */
 int FontMenu::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        slotFileOpenOk(msgContent);
+    if (msgType == E_DOCPROXY_MSG_TYPE) {
+        emit sigDocProxyMsg(msgContent);
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (shortKeyList.contains(msgContent)) {
             emit sigDealWithShortKey(msgContent);
@@ -77,56 +77,21 @@ int FontMenu::dealWithData(const int &msgType, const QString &msgContent)
  */
 void FontMenu::resetAdaptive()
 {
-    resetFiteHAndW();
+    m_bFiteH = false;
+    m_bFiteW = false;
 
-    m_bIsAdaptMove = true;
-//    if (m_pEnlargeSlider) {
-//        m_pEnlargeSlider->setValue(100);
-//    }
-//    if (m_pEnlargeLab) {
-//        m_pEnlargeLab->setText(QString("%1%").arg(m_nScale));
-//    }
+    m_pFiteHAction->setChecked(false);
+    m_pFiteWAction->setChecked(false);
 
-    {
-
-        MsgModel mm;
-        mm.setMsgType(MSG_FILE_SCALE);
-        mm.setValue("100");
-
-        notifyMsg(-1, mm.toJson());
-    }
+    setAppSetFiteHAndW();
 }
 
-/**
- * @brief FontMenu::setFileViewScale
- * 键盘快捷键控制文档视图缩放
- * @param large true:放大   false:缩小
- */
-void FontMenu::setFileViewScale(bool larger)
+void FontMenu::setFileViewScale(bool)
 {
-    m_bIsAdaptMove = false;
-//    if (larger) {
-//        int scale = m_pEnlargeSlider->value();
-//        if (scale < 500) {
-//            scale += 25;
-//            if (scale > 500) {
-//                scale = 500;
-//            }
-//            m_pEnlargeSlider->setValue(scale);
-//        }
-//    } else {
-//        int scale = m_pEnlargeSlider->value();
-//        if (scale > 10) {
-//            scale -= 25;
-//            if (scale <= 10) {
-//                scale = 10;
-//            }
-//            m_pEnlargeSlider->setValue(scale);
-//        }
-    //    }
+
 }
 
-void FontMenu::onDocProxyMsg(const QString &sContent)
+void FontMenu::SlotDocProxyMsg(const QString &sContent)
 {
     MsgModel mm;
     mm.fromJson(sContent);
@@ -134,25 +99,9 @@ void FontMenu::onDocProxyMsg(const QString &sContent)
     int nMsg = mm.getMsgType();
     if (nMsg == MSG_OPERATION_OPEN_FILE_OK) {
         QString sPath = mm.getPath();
-        slotFileOpenOk(sPath);
+        OnFileOpenOk(sPath);
     }
 }
-
-/**
- * @brief FontMenu::setSliderMaxValue
- * 打开文件时，设置缩放最大值，不一定是500%
- */
-//void FontMenu::setSliderMaxValue()
-//{
-//    int maxZoomRatio = 100;
-//    maxZoomRatio = static_cast<int>(DocummentProxy::instance()->getMaxZoomratio() * 100);
-
-//    if (DocummentProxy::instance() && m_pEnlargeSlider->maximum() != maxZoomRatio) {
-//        int maxVal = 500;
-//        maxVal = static_cast<int>(DocummentProxy::instance()->getMaxZoomratio() * 100);
-//        m_pEnlargeSlider->setMaximum(maxVal);
-//    }
-//}
 
 /**
  * @brief FontMenu::slotTwoPage
@@ -206,7 +155,14 @@ void FontMenu::slotFiteW()
  */
 void FontMenu::slotRotateL()
 {
-    rotateThumbnail(false);
+    MsgModel mm;
+    mm.setMsgType(MSG_VIEWCHANGE_ROTATE);
+    mm.setValue("-1");
+
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    mm.setPath(sCurPath);
+
+    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
 }
 
 /**
@@ -215,42 +171,25 @@ void FontMenu::slotRotateL()
  */
 void FontMenu::slotRotateR()
 {
-    rotateThumbnail(true);
+    MsgModel mm;
+    mm.setMsgType(MSG_VIEWCHANGE_ROTATE);
+    mm.setValue("1");
+
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    mm.setPath(sCurPath);
+
+    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
 }
-
-/**
- * @brief FontMenu::slotScaleValChanged
- * 缩放比例变化
- */
-//void FontMenu::slotScaleValChanged(int scale)
-//{
-//    if (!m_bIsAdaptMove) {
-//        resetFiteHAndW();
-//        scaleAndRotate();
-//    }
-
-//    m_bIsAdaptMove = false;
-//}
 
 /**
  * @brief FontMenu::slotFileOpenOk
  * 打开文件，加载参数
  */
-void FontMenu::slotFileOpenOk(const QString &sPath)
+void FontMenu::OnFileOpenOk(const QString &sPath)
 {
-//    setSliderMaxValue();
-
     FileDataModel fdm = dApp->m_pDataManager->qGetFileData(sPath);
 
     int value = 0;
-
-    //缩放比例
-//    value = obj["scale"].toInt();
-//    if (value > 0) {
-//        m_bIsAdaptMove = true;
-//        m_pEnlargeSlider->setValue(value);
-//        m_bIsAdaptMove = false;
-//    }
 
     //单双页
     value = fdm.qGetData(DoubleShow);
@@ -272,10 +211,6 @@ void FontMenu::slotFileOpenOk(const QString &sPath)
         m_pFiteWAction->setChecked(m_bFiteW);
         m_pFiteHAction->setChecked(m_bFiteH);
     }
-
-    //旋转度数
-    m_nRotate = fdm.qGetData(Rotate);
-    m_nRotate %= 360;
 }
 
 /**
@@ -310,44 +245,15 @@ void FontMenu::slotDealWithShortKey(const QString &keyType)
 }
 
 /**
- * @brief FontMenu::slotSetCurScale
- * 根据自适应宽高设置缩放比例scale
- * @param scale   缩放比例
- */
-//void FontMenu::slotSetCurScale(const QString &scale)
-//{
-//    setScaleVal(static_cast<int>(scale.toDouble() * 100));
-//    int nScale = 100;
-
-//    nScale = static_cast<int>(scale.toDouble() * 100);
-
-//    m_bIsAdaptMove = true;
-//设置 当前的缩放比, 不要触发滑动条值变化信号
-//m_pEnlargeSlider->blockSignals(true);
-//    m_pEnlargeSlider->setValue(nScale);
-//    m_bIsAdaptMove = false;
-//m_pEnlargeSlider->blockSignals(false);
-//}
-
-/**
  * @brief FontMenu::initMenu
  * 初始化Menu
  */
 void FontMenu::initActions()
 {
-    //双页
     m_pTwoPageAction = createAction(tr("Two-Page View"), SLOT(slotTwoPage()), true);
-
-    //自适应高
     m_pFiteHAction = createAction(tr("Fit Height"), SLOT(slotFiteH()), true);
-
-    //自适应宽
     m_pFiteWAction = createAction(tr("Fit Width"), SLOT(slotFiteW()), true);
-
-    //左旋转
     m_pRotateLAction = createAction(tr("Rotate Left"), SLOT(slotRotateL()));
-
-    //右旋转
     m_pRotateRAction = createAction(tr("Rotate Right"), SLOT(slotRotateR()));
 }
 
@@ -357,9 +263,8 @@ void FontMenu::initActions()
  */
 void FontMenu::initConnection()
 {
-//    connect(this, SIGNAL(sigFileOpenOk(const QString &)), SLOT(slotFileOpenOk(const QString &)));
+    connect(this, SIGNAL(sigDocProxyMsg(const QString &)), SLOT(SlotDocProxyMsg(const QString &)));
     connect(this, SIGNAL(sigDealWithShortKey(const QString &)), SLOT(slotDealWithShortKey(const QString &)));
-//    connect(this, SIGNAL(sigSetCurScale(const QString &)), this, SLOT(slotSetCurScale(const QString &)));
 }
 
 /**
@@ -372,7 +277,6 @@ void FontMenu::initConnection()
 QAction *FontMenu::createAction(const QString &objName, const char *member, bool checked)
 {
     auto action = new QAction(objName, this);
-
     if (action) {
         action->setObjectName(objName);
         action->setCheckable(checked);
@@ -391,75 +295,21 @@ QAction *FontMenu::createAction(const QString &objName, const char *member, bool
  * @brief FontMenu::rotateThumbnail 旋转文档和缩略图
  * @param direct true:向右 false:向左
  */
-void FontMenu::rotateThumbnail(bool direct)
+void FontMenu::rotateThumbnail(const bool &direct)
 {
+    int nRes = -1;
     if (direct) {
-        m_nRotate += 90;
-    } else {
-        m_nRotate -= 90;
+        nRes = 1;
     }
-
-    m_nRotate = (m_nRotate < 0) ? (m_nRotate + 360) : (m_nRotate % 360);
-
-    calcRotateType();
 
     MsgModel mm;
     mm.setMsgType(MSG_VIEWCHANGE_ROTATE);
-    mm.setValue(QString::number(m_nRotate));
+    mm.setValue(QString::number(nRes));
 
     QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
     mm.setPath(sCurPath);
 
     notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
-}
-
-/**
- * @brief FontMenu::scaleAndRotate
- * 缩放和旋转
- */
-//void FontMenu::scaleAndRotate()
-//{
-//    calcRotateType();
-
-//    notifyMsg(MSG_VIEWCHANGE_DOUBLE_SHOW, QString::number(m_bDoubPage));
-
-//    setAppSetFiteHAndW();
-
-//    notifyMsg(MSG_VIEWCHANGE_ROTATE, QString::number(m_nRotate));
-//}
-
-/**
- * @brief FontMenu::calcRotateType
- * 计算旋转类型(后台所需)
- */
-void FontMenu::calcRotateType()
-{
-    int t_rotate = 0;
-
-    t_rotate = (m_nRotate / 90) % 4;
-
-    t_rotate = (t_rotate < 0) ? (t_rotate * -1) : t_rotate;
-
-    t_rotate += 1;
-
-    switch (t_rotate) {
-    case RotateType_0:
-        m_nRotate = 0;
-        m_rotateType = RotateType_0;
-        break;
-    case RotateType_90:
-        m_rotateType = RotateType_90;
-        break;
-    case RotateType_180:
-        m_rotateType = RotateType_180;
-        break;
-    case RotateType_270:
-        m_rotateType = RotateType_270;
-        break;
-    default:
-        m_rotateType = RotateType_Normal;
-        break;
-    }
 }
 
 /**
@@ -477,38 +327,12 @@ void FontMenu::setAppSetFiteHAndW()
         iValue = 10;
     }
 
-    int t_nShow = m_bFiteH ? 1 : 0;
-
     MsgModel mm;
     mm.setMsgType(MSG_VIEWCHANGE_FIT);
-    mm.setValue(QString::number(t_nShow));
+    mm.setValue(QString::number(iValue));
 
     QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
     mm.setPath(sCurPath);
 
     notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
-}
-
-/**
- * @brief FontMenu::resetFiteHAndW
- * 手动改变缩放比例，复位自适应宽高
- */
-void FontMenu::resetFiteHAndW()
-{
-    //缩放比例, 取消 自适应宽/高
-    MsgModel mm;
-    mm.setMsgType(MSG_VIEWCHANGE_FIT);
-    mm.setValue("0");
-
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-    mm.setPath(sCurPath);
-
-    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
-
-    m_bFiteH = false;
-    m_bFiteW = false;
-
-    m_pFiteHAction->setChecked(false);
-    m_pFiteWAction->setChecked(false);
-
 }

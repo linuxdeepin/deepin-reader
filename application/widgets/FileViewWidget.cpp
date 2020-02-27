@@ -25,6 +25,7 @@
 
 #include "MsgModel.h"
 
+#include "docview/commonstruct.h"
 #include "business/DocummentFileHelper.h"
 #include "business/AnnotationHelper.h"
 #include "docview/docummentproxy.h"
@@ -40,7 +41,7 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
     , m_operatemenu(nullptr)
 {
-    m_pMsgList = { MSG_MAGNIFYING, MSG_HANDLESHAPE, MSG_VIEWCHANGE_FIT,
+    m_pMsgList = { MSG_MAGNIFYING, MSG_HANDLESHAPE,
                    MSG_FILE_ROTATE,
                    MSG_NOTE_ADD_CONTENT, MSG_NOTE_PAGE_ADD,
                    MSG_EXIT_SAVE_FILE
@@ -120,17 +121,6 @@ void FileViewWidget::slotDealWithData(const int &msgType, const QString &msgCont
         break;
     case MSG_HANDLESHAPE:           //  手势 信号
         onSetHandShape(msgContent);
-        break;
-    case MSG_VIEWCHANGE_FIT:    //  自适应
-        if (msgContent == "1") {
-            m_nAdapteState = HEIGHT_State;
-            onSetWidgetAdapt();
-        } else if (msgContent == "10") {
-            m_nAdapteState = WIDGET_State;
-            onSetWidgetAdapt();
-        } else {
-            m_nAdapteState = Default_State;
-        }
         break;
     case MSG_FILE_ROTATE:           //  文档旋转了
         onSetWidgetAdapt();
@@ -388,11 +378,57 @@ void FileViewWidget::__SetCursor(const QCursor &cs)
     }
 }
 
-void FileViewWidget::OnSetViewChange()
+void FileViewWidget::OnSetViewChange(const QString &msgContent)
+{
+    m_nDoubleShow = msgContent.toInt();
+    setScaleRotateViewModeAndShow();
+}
+
+void FileViewWidget::setScaleRotateViewModeAndShow()
 {
     auto _pProxy = DocummentProxy::instance(m_strProcUuid);
-//    _pProxy->setScaleRotateViewModeAndShow(0, 0, m_bDoubleShow);
-    qDebug() <<  __FUNCTION__  << "      " << m_bDoubleShow;
+    if (_pProxy) {
+        double dScale = m_nScale / 100.0;
+        ViewMode_EM em = m_nDoubleShow ? ViewMode_FacingPage : ViewMode_SinglePage;
+        _pProxy->setScaleRotateViewModeAndShow(dScale, static_cast<RotateType_EM>(m_rotateType), em);
+    }
+}
+
+void FileViewWidget::OnSetViewScale(const QString &msgConent)
+{
+    m_nScale = msgConent.toInt();
+
+    setScaleRotateViewModeAndShow();
+}
+
+void FileViewWidget::OnSetViewRotate(const QString &msgConent)
+{
+    int nTemp = msgConent.toInt();
+    if (nTemp == 1) { //  右旋转
+        m_rotateType++;
+    } else {
+        m_rotateType--;
+    }
+
+    if (m_rotateType > RotateType_270) {
+        m_rotateType = RotateType_0;
+    } else if (m_rotateType < RotateType_0) {
+        m_rotateType = RotateType_270;
+    }
+
+    setScaleRotateViewModeAndShow();
+}
+
+void FileViewWidget::OnSetViewHit(const QString &msgContent)
+{
+    if (msgContent == "1") {
+        m_nAdapteState = WIDGET_State;
+    } else if (msgContent == "10") {
+        m_nAdapteState = HEIGHT_State;
+    } else {
+        m_nAdapteState = Default_State;
+    }
+    onSetWidgetAdapt();
 }
 
 //  文档书签状态改变
@@ -425,6 +461,14 @@ void FileViewWidget::SlotDocFileOpenResult(bool openresult)
         mm.setPath(m_strPath);
 
         notifyMsg(E_DOCPROXY_MSG_TYPE, mm.toJson());
+
+        FileDataModel fdm = dApp->m_pDataManager->qGetFileData(m_strPath);      //  打开成功之后 获取之前数据
+        m_nScale = fdm.qGetData(Scale);
+        m_nDoubleShow = fdm.qGetData(DoubleShow);
+        m_rotateType = fdm.qGetData(Rotate);
+
+        m_nAdapteState = fdm.qGetData(Fit);
+        onSetWidgetAdapt();
     } else {
         notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
     }
@@ -455,24 +499,25 @@ void FileViewWidget::onPrintFile()
 //  设置　窗口　自适应　宽＼高　度
 void FileViewWidget::onSetWidgetAdapt()
 {
-    DocummentProxy *_proxy = DocummentProxy::instance(m_strProcUuid);
-    if (!_proxy)
-        return;
+    if (m_nAdapteState != Default_State) {
+        DocummentProxy *_proxy = DocummentProxy::instance(m_strProcUuid);
+        if (!_proxy)
+            return;
 
-    double nScale = 0.0;
-    if (m_nAdapteState == WIDGET_State) {
-        int nWidth = this->width();
-        nScale = _proxy->adaptWidthAndShow(nWidth);
-    } else if (m_nAdapteState == HEIGHT_State) {
-        int nHeight = this->height();
-        nScale = _proxy->adaptHeightAndShow(nHeight);
-    }
+        double nScale = 0.0;
+        if (m_nAdapteState == WIDGET_State) {
+            int nWidth = this->width();
+            nScale = _proxy->adaptWidthAndShow(nWidth);
+        } else if (m_nAdapteState == HEIGHT_State) {
+            int nHeight = this->height();
+            nScale = _proxy->adaptHeightAndShow(nHeight);
+        }
 
-    if (nScale != 0.0) {
-        notifyMsg(MSG_FILE_SCALE, QString::number(nScale));
+//    if (nScale != 0.0) {
+//        notifyMsg(MSG_FILE_SCALE, QString::number(nScale));
+//    }
     }
 }
-
 //  消息 数据 处理
 int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
@@ -489,8 +534,13 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
     }
 
     if (msgType == MSG_VIEWCHANGE_DOUBLE_SHOW) {
-        m_bDoubleShow = msgContent.toInt();
-        OnSetViewChange();
+        OnSetViewChange(msgContent);
+    } else if (msgType == MSG_VIEWCHANGE_ROTATE) {
+        OnSetViewRotate(msgContent);
+    } else if (msgType == MSG_FILE_SCALE) {
+        OnSetViewScale(msgContent);
+    } else if (msgType == MSG_VIEWCHANGE_FIT) {
+        OnSetViewHit(msgContent);
     } else if (msgType == MSG_CLOSE_FILE) {
         emit sigCloseFile(msgContent);
     }
