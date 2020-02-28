@@ -32,7 +32,7 @@ class MainTabBar : public DTabBar, public IObserver
 
 public:
     explicit MainTabBar(DWidget *parent = nullptr);
-    ~MainTabBar() Q_DECL_OVERRIDE;
+    ~MainTabBar() override;
 
 signals:
     void sigDealWithData(const int &, const QString &);
@@ -41,13 +41,13 @@ signals:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
-    void sendMsg(const int &, const QString &) Q_DECL_OVERRIDE;
-    void notifyMsg(const int &, const QString &s = "") Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
+    void sendMsg(const int &, const QString &) override;
+    void notifyMsg(const int &, const QString &s = "") override;
 
     // QWidget interface
 protected:
-    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     void __InitConnection();

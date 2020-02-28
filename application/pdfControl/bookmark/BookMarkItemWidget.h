@@ -37,7 +37,7 @@ public:
 
 public:
     // IObserver interface
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
     bool bSelect();
     void setBSelect(const bool &paint);
 
@@ -46,8 +46,8 @@ private slots:
     void slotShowContextMenu(const QPoint &);
 
 protected:
-    void initWidget() Q_DECL_OVERRIDE;
-    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+    void initWidget() override;
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     bool m_bPaint = false;                    // 是否绘制选中item

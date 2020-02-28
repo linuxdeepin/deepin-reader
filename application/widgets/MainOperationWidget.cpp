@@ -4,10 +4,8 @@
 
 #include <QButtonGroup>
 #include <QHBoxLayout>
-#include <QJsonObject>
 
-#include "controller/AppSetting.h"
-#include "controller/FileDataManager.h"
+#include "business/FileDataManager.h"
 #include "utils/PublicFunction.h"
 
 MainOperationWidget::MainOperationWidget(CustomWidget *parent)

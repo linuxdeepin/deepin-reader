@@ -5,10 +5,10 @@
 
 #include "ColorWidgetAction.h"
 
-#include "business/bridge/IHelper.h"
+#include "business/AppInfo.h"
+#include "business/FileDataManager.h"
 
-#include "controller/AppInfo.h"
-#include "controller/FileDataManager.h"
+#include "business/bridge/IHelper.h"
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)
     : CustomMenu("TextOperationMenu", parent)

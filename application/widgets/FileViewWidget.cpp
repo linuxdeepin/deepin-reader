@@ -28,9 +28,8 @@
 #include "docview/commonstruct.h"
 
 #include "docview/docummentproxy.h"
-#include "controller/AppSetting.h"
 #include "controller/FVMMouseEvent.h"
-#include "controller/FileDataManager.h"
+#include "business/FileDataManager.h"
 #include "menu/DefaultOperationMenu.h"
 #include "menu/TextOperationMenu.h"
 #include "utils/PublicFunction.h"

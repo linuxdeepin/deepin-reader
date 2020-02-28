@@ -19,8 +19,6 @@ HomeWidget::HomeWidget(CustomWidget *parent)
     initWidget();
     initConnections();
 
-    m_settings = AppSetting::instance();
-
     slotUpdateTheme();
 
     dApp->m_pModelService->addObserver(this);
@@ -29,11 +27,6 @@ HomeWidget::HomeWidget(CustomWidget *parent)
 HomeWidget::~HomeWidget()
 {
     dApp->m_pModelService->removeObserver(this);
-
-    if (m_settings) {
-        m_settings->deleteLater();
-        m_settings = nullptr;
-    }
 }
 
 void HomeWidget::slotDealWithData(const int &msgType, const QString &)
@@ -125,9 +118,6 @@ QStringList HomeWidget::getOpenFileList()
     dialog.setDirectory(historyDir);
 
     const int mode = dialog.exec();
-
-    // save the directory string to config file.
-    m_settings->setFileKeyValue(dialog.directoryUrl().toLocalFile());
 
     // if click cancel button or close button.
     if (mode != QDialog::Accepted) {

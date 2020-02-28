@@ -20,7 +20,7 @@ class DocShowShellWidget : public CustomWidget
 
 public:
     explicit DocShowShellWidget(CustomWidget *parent = nullptr);
-    ~DocShowShellWidget() Q_DECL_OVERRIDE;
+    ~DocShowShellWidget() override;
 
 signals:
     void sigShowCloseBtn(const int &);
@@ -32,11 +32,11 @@ signals:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
     // QWidget interface
 protected:
-    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *event) override;
 
 private slots:
     void slotShowCloseBtn(const int &);
@@ -65,7 +65,7 @@ private:
 
     // CustomWidget interface
 protected:
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget() override;
 
 private:
     PlayControlWidget   *m_pctrlwidget = nullptr;

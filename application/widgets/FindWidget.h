@@ -38,7 +38,7 @@ class FindWidget : public DFloatingWidget, public IObserver
 
 public:
     explicit FindWidget(DWidget *parent = nullptr);
-    ~FindWidget() Q_DECL_OVERRIDE;
+    ~FindWidget() override;
 
 signals:
     void sigSetVisible();
@@ -72,9 +72,9 @@ private:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
-    void sendMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
-    void notifyMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
+    void sendMsg(const int &, const QString &msgContent = "") override;
+    void notifyMsg(const int &, const QString &msgContent = "") override;
 };
 
 #endif

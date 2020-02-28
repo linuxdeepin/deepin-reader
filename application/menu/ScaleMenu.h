@@ -28,7 +28,7 @@ class ScaleMenu : public CustomMenu
 
 public:
     explicit ScaleMenu(DWidget *parent = nullptr);
-    ~ScaleMenu() Q_DECL_OVERRIDE;
+    ~ScaleMenu() override;
 
 signals:
     void sigDocProxyMsg(const QString &);
@@ -37,11 +37,11 @@ signals:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
     // CustomMenu interface
 protected:
-    void initActions() Q_DECL_OVERRIDE;
+    void initActions() override;
 
 private slots:
     void slotActionTrigger(QAction *);

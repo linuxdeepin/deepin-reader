@@ -398,8 +398,6 @@ void LoadSearchResThread::run()
             m_nEndIndex = m_pages - 1;
         }
 
-        int page = -1;
-
         if (!m_pSearchResWidget) {
             break;
         }
@@ -412,7 +410,7 @@ void LoadSearchResThread::run()
             if (!m_isRunning) {
                 break;
             }
-            page = m_pSearchResWidget->getSearchPage(index);
+            int page = m_pSearchResWidget->getSearchPage(index);
 
             if (page == -1) {
                 continue;

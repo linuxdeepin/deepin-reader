@@ -42,7 +42,7 @@ class SearchItemWidget : public CustomItemWidget
 
 public:
     explicit SearchItemWidget(DWidget *parent = nullptr);
-    ~SearchItemWidget() Q_DECL_OVERRIDE;
+    ~SearchItemWidget() override;
 
 public:
     void setTextEditText(const QString &);
@@ -54,15 +54,14 @@ private slots:
     void slotUpdateTheme();
 
 protected:
-    void initWidget() Q_DECL_OVERRIDE;
-    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    void initWidget() override;
+
+    void resizeEvent(QResizeEvent *event) override;
+    void paintEvent(QPaintEvent *e) override;
 
 public:
     // IObserver interface
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
-
-private:
-    QString calcText(const QFont &font, const QString &note, const QSize &size/*const int MaxWidth*/);
+    int dealWithData(const int &, const QString &) override;
 
 private:
     DLabel *m_pSearchResultNum = nullptr;

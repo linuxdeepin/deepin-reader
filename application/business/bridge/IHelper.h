@@ -19,14 +19,14 @@
 #ifndef IHELPER_H
 #define IHELPER_H
 
-#include <QString>
+#include <QObject>
 
 class HelperImpl;
 
-class IHelper
+class IHelper : public QObject
 {
 protected:
-    IHelper();
+    explicit IHelper(QObject *parent = nullptr);
 
 public:
     virtual ~IHelper() {}
@@ -36,8 +36,8 @@ public:
 class Helper : public IHelper
 {
 public:
-    Helper();
-    void qDealWithData(const int &msgType, const QString &msgContent);
+    explicit Helper(QObject *parent = nullptr);
+    void qDealWithData(const int &msgType, const QString &msgContent) override;
 
 private:
     HelperImpl  *m_pAnnotatinHelperImpl = nullptr;

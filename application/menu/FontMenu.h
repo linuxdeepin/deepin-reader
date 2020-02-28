@@ -28,7 +28,7 @@ class FontMenu : public CustomMenu
 
 public:
     explicit FontMenu(DWidget *parent = nullptr);
-    ~FontMenu() Q_DECL_OVERRIDE;
+    ~FontMenu() override;
 
 signals:
     //新增
@@ -37,11 +37,11 @@ signals:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
     // CustomMenu interface
 protected:
-    void initActions() Q_DECL_OVERRIDE;
+    void initActions() override;
 
 private slots:
     void slotTwoPage();

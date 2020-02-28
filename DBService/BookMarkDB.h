@@ -34,20 +34,20 @@ class BookMarkDB : public DBFactory
 
 public:
     explicit BookMarkDB(QObject *parent = nullptr);
-    ~BookMarkDB() Q_DECL_OVERRIDE;
+    ~BookMarkDB() override;
 
     // DBFactory interface
 public:
-    void saveData(const QString &newPath) Q_DECL_OVERRIDE;
-    void qSelectData(const QString &) Q_DECL_OVERRIDE;
+    void saveData(const QString &newPath) override;
+    void qSelectData(const QString &) override;
 
     QList<int> getBookMarkList(const QString &) const;
     void setBookMarkList(const QString &, const QList<int> &pBookMarkList);
 
     // DBFactory interface
 private:
-    void checkDatabase() Q_DECL_OVERRIDE;
-    void clearInvalidRecord() Q_DECL_OVERRIDE;
+    void checkDatabase() override;
+    void clearInvalidRecord() override;
 
     void insertData(const QString &, const QString &);
     void updateData(const QString &, const QString &);

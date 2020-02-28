@@ -1,14 +1,14 @@
 #include "ColorWidgetAction.h"
+
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-
 #include <DFontSizeManager>
 #include <QSignalMapper>
 #include <QDebug>
 
 #include "application.h"
 
-#include "controller/AppInfo.h"
+#include "business/AppInfo.h"
 #include "CustomControl/RoundColorWidget.h"
 
 ColorWidgetAction::ColorWidgetAction(DWidget *pParent)
@@ -49,7 +49,6 @@ void ColorWidgetAction::setcolor(bool benable)
     }
 
     m_pClickLabel->setPalette(plt);
-
 }
 
 

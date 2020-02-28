@@ -15,7 +15,7 @@ class LeftSidebarWidget : public CustomWidget
 
 public:
     explicit LeftSidebarWidget(CustomWidget *parent = nullptr);
-    ~LeftSidebarWidget() Q_DECL_OVERRIDE;
+    ~LeftSidebarWidget() override;
 
 signals:
     void sigSearchWidgetState(const int &);
@@ -24,11 +24,11 @@ signals:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
     // CustomWidget interface
 protected:
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget() override;
 
 private slots:
     void SlotOpenFileOk(const QString &);

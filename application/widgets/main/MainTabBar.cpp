@@ -26,8 +26,7 @@
 #include "MsgModel.h"
 
 #include "business/SaveDialog.h"
-
-#include "controller/FileDataManager.h"
+#include "business/FileDataManager.h"
 
 #include "business/bridge/IHelper.h"
 

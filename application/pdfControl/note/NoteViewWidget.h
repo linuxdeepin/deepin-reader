@@ -35,11 +35,11 @@ class NoteViewWidget : public CustomWidget
 
 public:
     explicit NoteViewWidget(CustomWidget *parent = nullptr);
-    ~NoteViewWidget() Q_DECL_OVERRIDE;
+    ~NoteViewWidget() override;
 
 public:
     // IObserver interface
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
 public:
     void showWidget(const QPoint &);
@@ -53,8 +53,8 @@ public:
 
     //  QWidget interface
 protected:
-    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
-    void initWidget() Q_DECL_OVERRIDE;
+    void hideEvent(QHideEvent *event) override;
+    void initWidget() override;
 
 private:
     void initConnections();

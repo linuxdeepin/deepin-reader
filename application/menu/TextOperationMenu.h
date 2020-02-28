@@ -17,7 +17,7 @@ class TextOperationMenu : public CustomMenu
 
 public:
     explicit TextOperationMenu(DWidget *parent = nullptr);
-    ~TextOperationMenu() Q_DECL_OVERRIDE;
+    ~TextOperationMenu() override;
 
 public:
     void execMenu(const QPoint &, const bool &bHigh, const QString &sSelectText, const QString &sUuid);
@@ -31,11 +31,11 @@ public:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
     // CustomMenu interface
 protected:
-    void initActions() Q_DECL_OVERRIDE;
+    void initActions() override;
 
 private:
     QAction *createAction(const QString &, const char *member);

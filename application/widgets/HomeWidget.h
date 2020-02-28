@@ -2,7 +2,6 @@
 #define HOMEWIDGET_H
 
 #include "CustomControl/CustomWidget.h"
-#include "controller/AppSetting.h"
 
 /**
  *  @brief  支持拖拽
@@ -16,18 +15,18 @@ class HomeWidget : public CustomWidget
 
 public:
     explicit HomeWidget(CustomWidget *parent = nullptr);
-    ~HomeWidget() Q_DECL_OVERRIDE;
+    ~HomeWidget() override;
 
 signals:
     void sigOpenFilePaths(const QString &);
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
     // CustomWidget interface
 protected:
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget() override;
 
 private slots:
     void slotDealWithData(const int &, const QString &);
@@ -39,9 +38,6 @@ private:
     QStringList getOpenFileList();
     void initConnections();
     void NewWindow();
-
-private:
-    AppSetting *m_settings = nullptr;
 };
 
 #endif // OPENFILEWIDGET_H

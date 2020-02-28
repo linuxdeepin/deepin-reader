@@ -35,7 +35,7 @@ class ThreadLoadImageOfNote : public QThread
 
 public:
     explicit ThreadLoadImageOfNote(QObject *parent = nullptr);
-    ~ThreadLoadImageOfNote() Q_DECL_OVERRIDE { stopThreadRun(); }
+    ~ThreadLoadImageOfNote() override { stopThreadRun(); }
 
 public:
     void stopThreadRun();
@@ -50,7 +50,7 @@ signals:
     void sigLoadImage(const QImage &);
 
 protected:
-    void run() Q_DECL_OVERRIDE;
+    void run() override;
 
 private:
     bool m_isLoaded = false;                 // 是都加载完毕
@@ -69,7 +69,7 @@ class NotesWidget : public CustomWidget
 
 public:
     explicit NotesWidget(DWidget *parent = nullptr);
-    ~NotesWidget() Q_DECL_OVERRIDE;
+    ~NotesWidget() override;
 
     void prevPage();
     void nextPage();
@@ -80,10 +80,10 @@ signals:
 
 public:
     // IObserver interface
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
 protected:
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget() override;
 
 private slots:
     void slotDealWithData(const int &, const QString &);

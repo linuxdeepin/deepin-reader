@@ -15,18 +15,18 @@ class DefaultOperationMenu : public CustomMenu
 
 public:
     explicit DefaultOperationMenu(DWidget *parent = nullptr);
-    ~DefaultOperationMenu() Q_DECL_OVERRIDE;
+    ~DefaultOperationMenu() override;
 
 public:
     void execMenu(const QPoint &, const int &);
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
     // CustomMenu interface
 protected:
-    void initActions() Q_DECL_OVERRIDE;
+    void initActions() override;
 
 private:
     QAction *createAction(const QString &, const char *member);

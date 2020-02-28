@@ -18,7 +18,7 @@ class MainOperationWidget : public CustomWidget
 
 public:
     explicit MainOperationWidget(CustomWidget *parent = nullptr);
-    ~MainOperationWidget() Q_DECL_OVERRIDE;
+    ~MainOperationWidget() override;
 
 signals:
     void sigOpenFileOk(const QString &sPath);
@@ -26,11 +26,11 @@ signals:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
     // CustomWidget interface
 protected:
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget() override;
 
 private:
     DToolButton *createBtn(const QString &btnName, const QString &objName);

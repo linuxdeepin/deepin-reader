@@ -35,11 +35,11 @@ class NotesItemWidget : public CustomItemWidget
 
 public:
     explicit NotesItemWidget(DWidget *parent = nullptr);
-    ~NotesItemWidget() Q_DECL_OVERRIDE;
+    ~NotesItemWidget() override;
 
 public:
     // IObserver interface
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
 public:
     void setTextEditText(const QString &);
@@ -72,19 +72,18 @@ public:
 
     // QWidget interface
 protected:
-    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *e) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget() override;
     void __InitConnections();
-    QString calcText(const QFont &font, const QString &note, const QSize &size);
 
 private slots:
     void slotDltNoteContant();
     void slotCopyContant();
     void slotShowContextMenu(const QPoint &);
     void slotUpdateTheme();
-
 
 private:
     DLabel      *m_pTextLab = nullptr;

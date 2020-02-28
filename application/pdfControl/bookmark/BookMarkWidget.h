@@ -54,7 +54,7 @@ public:
     void stopThreadRun();
 
 protected:
-    void run() Q_DECL_OVERRIDE;
+    void run() override;
 
 private:
     BookMarkWidget *m_pBookMarkWidget = nullptr;
@@ -71,7 +71,7 @@ class BookMarkWidget : public CustomWidget
 
 public:
     explicit BookMarkWidget(DWidget *parent = nullptr);
-    ~BookMarkWidget() Q_DECL_OVERRIDE;
+    ~BookMarkWidget() override;
 
     void prevPage();
     void nextPage();
@@ -98,7 +98,7 @@ private slots:
     void slotDealWithShurtKey(const QString &);
 
 protected:
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget() override;
 
 private:
     void initConnection();
@@ -108,7 +108,7 @@ private:
 
 public:
     // IObserver interface
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
     int getBookMarkPage(const int &index);
     bool hasClickFoucs();
 

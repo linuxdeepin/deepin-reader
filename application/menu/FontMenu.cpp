@@ -24,10 +24,8 @@
 
 #include "MsgModel.h"
 
-#include "controller/AppSetting.h"
-#include "controller/FileDataManager.h"
+#include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
-
 #include "utils/PublicFunction.h"
 
 FontMenu::FontMenu(DWidget *parent):

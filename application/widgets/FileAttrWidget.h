@@ -29,13 +29,13 @@ class FileAttrWidget : public DAbstractDialog, public IObserver
 
 public:
     explicit FileAttrWidget(DWidget *parent = nullptr);
-    ~FileAttrWidget() Q_DECL_OVERRIDE;
+    ~FileAttrWidget() override;
     void showScreenCenter();
 
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
-    void sendMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
-    void notifyMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
+    void sendMsg(const int &, const QString &msgContent = "") override;
+    void notifyMsg(const int &, const QString &msgContent = "") override;
 
 private:
     void initWidget();

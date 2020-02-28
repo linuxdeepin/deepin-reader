@@ -36,20 +36,17 @@ class ThumbnailItemWidget : public CustomItemWidget
 
 public:
     explicit ThumbnailItemWidget(DWidget *parent = nullptr);
-    ~ThumbnailItemWidget() Q_DECL_OVERRIDE;
 
 public:
     // IObserver interface
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
     void setBSelect(const bool &paint);
     void rotateThumbnail(int);
     void qSetBookMarkShowStatus(const bool &bshow);
 
 protected:
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget() override;
 
-private:
-//    bool m_bPaint = false;  // 是否绘制选中item
 };
 
 #endif  // THUMBNAILITEMWIDGET_H

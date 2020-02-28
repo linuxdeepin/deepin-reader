@@ -27,10 +27,10 @@
 #include <QStackedLayout>
 
 #include "HomeWidget.h"
-#include "main/MainTabWidgetEx.h"
 
-#include "controller/AppInfo.h"
-#include "controller/FileDataManager.h"
+#include "main/MainTabWidgetEx.h"
+#include "business/AppInfo.h"
+#include "business/FileDataManager.h"
 #include "utils/utils.h"
 
 CentralWidget::CentralWidget(CustomWidget *parent)

@@ -52,7 +52,7 @@ private slots:
 
     // QWidget interface
 //protected:
-//    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+//    void resizeEvent(QResizeEvent *event) override;
 };
 
 #endif // CUSTOMLISTWIDGET_H

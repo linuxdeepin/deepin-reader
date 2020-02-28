@@ -22,8 +22,8 @@
 #include <QDir>
 
 #include "business/DocummentFileHelper.h"
-#include "controller/AppInfo.h"
-#include "controller/FileDataManager.h"
+#include "business/AppInfo.h"
+#include "business/FileDataManager.h"
 #include "utils/utils.h"
 
 #include "business/bridge/IHelper.h"
@@ -90,7 +90,7 @@ void Application::initChildren()
 
     m_pAppInfo = new AppInfo(this);
 
-    m_pHelper = new Helper;
+    m_pHelper = new Helper(this);
 }
 
 void Application::initI18n()

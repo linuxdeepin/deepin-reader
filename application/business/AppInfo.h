@@ -25,6 +25,7 @@
 #include <QRect>
 #include <QKeySequence>
 #include <QSize>
+#include <QSettings>
 
 //  文档显示状态
 enum File_Show_Enum {
@@ -37,6 +38,11 @@ enum File_Show_Enum {
 enum ICON_RADIUS {
     ICON_SMALL = 8,     // 小图标圆角
     ICON_BIG = 10       // 大图标圆角
+};
+
+enum SET_KEY {
+    KEY_APP_WIDTH,
+    KEY_APP_HEIGHT
 };
 
 
@@ -71,6 +77,10 @@ public:
     void setScreenRect(const QRect &rect);
     void setSmallNoteWidgetSize(const QSize &size);
 
+public:
+    void setAppKeyValue(const int &, const QString &);
+    QString getAppKeyValue(const int &) const;
+
 private:
     QList<QKeySequence>     m_pKeyList;                 //  快捷键对应
     QList<QColor>           m_listColor;                //  color list
@@ -82,6 +92,7 @@ private:
     QRect m_screenRect;                                 // 屏幕的分辨率
     QSize m_smallNoteSize;                              // 注释小窗体的大小
 
+    QSettings *m_pSettings = nullptr;
 };
 
 #endif // CONSTANTHEADER_H

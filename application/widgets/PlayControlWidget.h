@@ -15,7 +15,7 @@ class PlayControlWidget : public DFloatingWidget, public IObserver
     Q_DISABLE_COPY(PlayControlWidget)
 public:
     explicit PlayControlWidget(DWidget *parnet = nullptr);
-    ~PlayControlWidget()Q_DECL_OVERRIDE;
+    ~PlayControlWidget()override;
 
     //  主题更新信号
 signals:
@@ -30,13 +30,13 @@ public:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
-    void sendMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
-    void notifyMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
+    void sendMsg(const int &, const QString &msgContent = "") override;
+    void notifyMsg(const int &, const QString &msgContent = "") override;
 
 protected:
-    void enterEvent(QEvent *) Q_DECL_OVERRIDE;
-    void leaveEvent(QEvent *) Q_DECL_OVERRIDE;
+    void enterEvent(QEvent *) override;
+    void leaveEvent(QEvent *) override;
 
 private slots:
     void slotUpdateTheme();

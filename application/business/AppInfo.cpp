@@ -19,9 +19,15 @@
 
 #include "AppInfo.h"
 
+#include <QDir>
+
+#include "utils/utils.h"
+
 AppInfo::AppInfo(QObject *parent)
     : QObject(parent)
 {
+    m_pSettings = new QSettings(QDir(Utils::getConfigPath()).filePath(ConstantMsg::g_cfg_name), QSettings::IniFormat, parent);
+
     InitColor();
     InitKeyList();
 }
@@ -160,4 +166,26 @@ void AppInfo::setScreenRect(const QRect &rect)
 void AppInfo::setSmallNoteWidgetSize(const QSize &size)
 {
     m_smallNoteSize = size;
+}
+
+void AppInfo::setAppKeyValue(const int &iKey, const QString &sValue)
+{
+    // initalize the configuration file.
+    QString sKey = QString("%1").arg(iKey);
+
+    QString ssValue = QString("%1").arg(sValue);
+
+    if (sValue == "") {
+        m_pSettings->remove(sKey);
+    } else {
+        m_pSettings->setValue(sKey, ssValue);
+    }
+}
+
+QString AppInfo::getAppKeyValue(const int &iKey) const
+{
+    // initalize the configuration file.
+    QString sKey = QString("%1").arg(iKey);
+
+    return m_pSettings->value(sKey).toString();
 }

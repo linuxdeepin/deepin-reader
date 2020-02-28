@@ -42,7 +42,9 @@ public:
     int nPageIndex() const;
 
 protected:
-    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *event) override;
+
+    QString calcText(const QFont &font, const QString &note, const QSize &size);
 
 protected:
     ImageLabel          *m_pPicture = nullptr;          // 承载缩略图的label

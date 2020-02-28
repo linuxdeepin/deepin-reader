@@ -22,7 +22,7 @@ class MainWindow : public DMainWindow, public IObserver
 
 public:
     explicit MainWindow(DMainWindow *parent = nullptr);
-    ~MainWindow() Q_DECL_OVERRIDE;
+    ~MainWindow() override;
 
     void openfile(const QString &filepath);
     void setSreenRect(const QRect &); //得到屏幕的分辨率
@@ -36,8 +36,8 @@ signals:
 
     // QWidget interface
 protected:
-    void showEvent(QShowEvent *ev) Q_DECL_OVERRIDE;
-    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent *ev) override;
+    void closeEvent(QCloseEvent *event) override;
 
 private:
     void initUI();
@@ -51,8 +51,8 @@ private:
     void displayShortcuts();
 
     // IObserver interface
-    void sendMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
-    void notifyMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
+    void sendMsg(const int &, const QString &msgContent = "") override;
+    void notifyMsg(const int &, const QString &msgContent = "") override;
 
     void showDefaultSize();
 
@@ -73,7 +73,7 @@ private:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 };
 
 #endif // MainWindow_H

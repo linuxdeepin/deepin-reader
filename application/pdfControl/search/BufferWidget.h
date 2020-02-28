@@ -32,14 +32,14 @@ class BufferWidget : public CustomWidget
     Q_DISABLE_COPY(BufferWidget)
 public:
     explicit BufferWidget(DWidget *parent = nullptr);
-    ~BufferWidget() Q_DECL_OVERRIDE;
+    ~BufferWidget() override;
 
 public:
     // IObserver interface
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
 protected:
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget() override;
 
 private slots:
     void SlotSetSpinnerState(const int &);

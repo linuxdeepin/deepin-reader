@@ -52,7 +52,7 @@ public:
     inline void setRotateAngle(const int &angle) {m_nRotate = angle;}
 
 protected:
-    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *e) override;
 
 private:
     bool m_bSelect = false;

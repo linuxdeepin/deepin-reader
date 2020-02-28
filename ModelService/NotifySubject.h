@@ -19,21 +19,21 @@ typedef struct {
 class NotifySubject : public SubjectThread
 {
 public:
-    ~NotifySubject() Q_DECL_OVERRIDE;
+    ~NotifySubject() override;
     // ISubject interface
 public:
-    void addObserver(IObserver *obs) Q_DECL_OVERRIDE;
-    void removeObserver(IObserver *obs) Q_DECL_OVERRIDE;
+    void addObserver(IObserver *obs) override;
+    void removeObserver(IObserver *obs) override;
 
     // QThread interface
 protected:
-    void run() Q_DECL_OVERRIDE;
+    void run() override;
 
     // SubjectThread interface
 public:
-    void startThreadRun() Q_DECL_OVERRIDE;
-    void stopThreadRun() Q_DECL_OVERRIDE;
-    void notifyMsg(const int &, const QString &msgContent = "") Q_DECL_OVERRIDE;
+    void startThreadRun() override;
+    void stopThreadRun() override;
+    void notifyMsg(const int &, const QString &msgContent = "") override;
 
 private:
     void NotifyObservers(const int &, const QString &);

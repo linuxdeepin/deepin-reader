@@ -41,8 +41,8 @@ protected:
     virtual void initActions() = 0;
 
 protected:
-    void sendMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
-    void notifyMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
+    void sendMsg(const int &msgType, const QString &msgContent = "") override;
+    void notifyMsg(const int &msgType, const QString &msgContent = "") override;
 };
 
 

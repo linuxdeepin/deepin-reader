@@ -22,7 +22,7 @@
 
 #include "MsgModel.h"
 
-#include "controller/FileDataManager.h"
+#include "business/FileDataManager.h"
 
 ScaleMenu::ScaleMenu(DWidget *parent)
     : CustomMenu("ScaleMenu", parent)

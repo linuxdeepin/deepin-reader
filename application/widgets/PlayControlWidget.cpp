@@ -140,10 +140,9 @@ void PlayControlWidget::pagejump(const bool &bpre)
 {
     auto helper = DocummentProxy::instance();
     if (helper) {
-        bool bstart = false;
-        if (helper->getAutoPlaySlideStatu()) {
+        bool bSatus = helper->getAutoPlaySlideStatu();
+        if (bSatus) {
             helper->setAutoPlaySlide(false);
-            bstart = true;
         }
         int nCurPage = helper->currentPageNo();
         if (bpre)
@@ -153,9 +152,8 @@ void PlayControlWidget::pagejump(const bool &bpre)
 
         dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
 
-        if (bstart) {
-            helper->setAutoPlaySlide(true);
-            bstart = false;
+        if (bSatus) {
+            helper->setAutoPlaySlide(bSatus);
         }
     }
 }

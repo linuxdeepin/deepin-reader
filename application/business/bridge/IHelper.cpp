@@ -23,15 +23,17 @@
 #include "AnnotationHelper.h"
 #include "DocFileHelper.h"
 
-IHelper::IHelper()
+IHelper::IHelper(QObject *parent)
+    : QObject(parent)
 {
 
 }
 
-Helper::Helper()
+Helper::Helper(QObject *parent)
+    : IHelper(parent)
 {
-    m_pAnnotatinHelperImpl = new AnnotationHelper;
-    m_pDocHelperImpl = new DocFileHelper;
+    m_pAnnotatinHelperImpl = new AnnotationHelper(this);
+    m_pDocHelperImpl = new DocFileHelper(this);
 }
 
 void Helper::qDealWithData(const int &msgType, const QString &msgContent)

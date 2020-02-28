@@ -8,7 +8,7 @@
 
 #include "AttrScrollWidget.h"
 
-#include "controller/FileDataManager.h"
+#include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
 #include "CustomControl/DFMGlobal.h"
 

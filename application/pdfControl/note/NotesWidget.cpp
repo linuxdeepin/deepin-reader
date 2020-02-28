@@ -20,7 +20,8 @@
 
 #include "NotesItemWidget.h"
 
-#include "controller/AppInfo.h"
+#include "business/AppInfo.h"
+#include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
 
 #include "business/bridge/IHelper.h"
@@ -168,6 +169,8 @@ void NotesWidget::__DeleteNoteItem(const QString &sUuid)
                     // remove date from map and notify kong yun zhen
                     m_mapUuidAndPage.remove(sUuid);
 
+                    QString sPath = dApp->m_pDataManager->qGetCurrentFilePath();
+
                     notifyMsg(CENTRAL_SHOW_TIP, tr("The annotation has been removed"));
                     break;
                 }
@@ -196,6 +199,7 @@ void NotesWidget::__UpdateNoteItem(const QString &msgContent)
                         rl = true;
                         t_widget->setBSelect(true);
                         t_widget->setTextEditText(sText);
+
                         break;
                     }
                 }
@@ -303,13 +307,14 @@ void NotesWidget::__JumpToPrevItem()
     if (m_pNotesList->count() <= 0) {
         return;
     }
-    int t_index = -1;
 
     auto current_item = m_pNotesList->currentItem();
     if (current_item) {
-        t_index = m_pNotesList->row(current_item);
-        if (--t_index < 0)
+        int t_index = m_pNotesList->row(current_item);
+        t_index--;
+        if (t_index < 0)
             return;
+
         auto item = m_pNotesList->item(t_index);
         if (item == nullptr)
             return;
@@ -328,12 +333,13 @@ void NotesWidget::__JumpToNextItem()
         return;
     }
 
-    int t_index = -1;
     auto current_item = m_pNotesList->currentItem();
     if (current_item) {
-        t_index = m_pNotesList->row(current_item);
-        if (++t_index < 0)
+        int t_index = m_pNotesList->row(current_item);
+        t_index++;
+        if (t_index < 0)
             return;
+
         auto item = m_pNotesList->item(t_index);
         if (item == nullptr)
             return;

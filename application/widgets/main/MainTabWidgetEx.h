@@ -30,7 +30,7 @@ class MainTabWidgetEx : public CustomWidget
 
 public:
     explicit MainTabWidgetEx(DWidget *parent = nullptr);
-    ~MainTabWidgetEx() Q_DECL_OVERRIDE;
+    ~MainTabWidgetEx() override;
 
 signals:
     void sigCloseFile(const QString &);
@@ -38,11 +38,11 @@ signals:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
     // CustomWidget interface
 protected:
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget() override;
 
 private:
     void InitConnections();

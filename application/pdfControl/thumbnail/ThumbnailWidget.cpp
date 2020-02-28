@@ -18,10 +18,7 @@
  */
 #include "ThumbnailWidget.h"
 
-#include <QJsonObject>
-
-#include "controller/AppSetting.h"
-#include "controller/FileDataManager.h"
+#include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
 
 #include "business/bridge/IHelper.h"

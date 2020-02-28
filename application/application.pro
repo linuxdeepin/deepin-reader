@@ -15,7 +15,6 @@ CONFIG += c++11 link_pkgconfig
 #PRECOMPILED_HEADER = stable.h
 
 include (business/business.pri)
-include (controller/controller.pri)
 include (CustomControl/CustomControl.pri)
 include (docview/docview.pri)
 include (menu/menu.pri)

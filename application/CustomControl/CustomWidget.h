@@ -51,7 +51,7 @@ class CustomWidget : public DWidget, public IObserver
 
 public:
     CustomWidget(const QString &, DWidget *parent = nullptr);
-//    ~CustomWidget() Q_DECL_OVERRIDE;
+//    ~CustomWidget() override;
 
     //  主题更新信号
 signals:
@@ -68,8 +68,8 @@ protected:
     void updateWidgetTheme();
 
 protected:
-    void sendMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
-    void notifyMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
+    void sendMsg(const int &msgType, const QString &msgContent = "") override;
+    void notifyMsg(const int &msgType, const QString &msgContent = "") override;
     void showScreenCenter();
 
 protected:

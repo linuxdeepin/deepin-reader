@@ -1,11 +1,13 @@
 #include "docummentproxy.h"
 #include "docummentfactory.h"
 #include "publicfunc.h"
-#include "../controller/FileDataManager.h"
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QDebug>
 #include <QMutex>
+
+#include "../business/FileDataManager.h"
+
 static QMutex mutexlockgetimage;
 QMap<QString, DocummentProxy *> DocummentProxy::m_proxymap;
 
@@ -257,7 +259,7 @@ bool DocummentProxy::save(const QString &filepath, bool withChanges)
     if (!m_documment->save(filepath, withChanges)) {
         return false;
     }
-    return m_documment->freshFile(m_path);
+    return m_documment->freshFile(filepath);
 //        return m_documment->save(filepath, withChanges);
 }
 

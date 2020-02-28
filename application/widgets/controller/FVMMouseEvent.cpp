@@ -22,7 +22,7 @@
 #include <QMouseEvent>
 #include <QDesktopServices>
 
-#include "controller/AppInfo.h"
+#include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
 
 #include "../FileViewWidget.h"

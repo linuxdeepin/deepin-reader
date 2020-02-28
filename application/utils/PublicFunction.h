@@ -6,7 +6,8 @@
 #include <QString>
 
 #include "application.h"
-#include "controller/AppInfo.h"
+
+#include "business/AppInfo.h"
 
 namespace PF {
 

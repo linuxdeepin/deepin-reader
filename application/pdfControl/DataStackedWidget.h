@@ -36,7 +36,7 @@ signals:
 
     // QWidget interface
 protected:
-    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
     void slotSetStackCurIndex(const int &);

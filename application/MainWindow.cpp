@@ -11,9 +11,8 @@
 
 #include "business/ShortCutShow.h"
 #include "business/SaveDialog.h"
-#include "controller/AppInfo.h"
-#include "controller/AppSetting.h"
-#include "controller/FileDataManager.h"
+#include "business/AppInfo.h"
+#include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
 #include "menu/TitleMenu.h"
 #include "widgets/TitleWidget.h"
@@ -80,8 +79,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     event->ignore();
 
-    AppSetting::instance()->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
-    AppSetting::instance()->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
+    dApp->m_pAppInfo->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
+    dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
 
     bool rl = false;
 
@@ -269,14 +268,14 @@ void MainWindow::notifyMsg(const int &msgType, const QString &msgContent)
 //  窗口显示默认大小
 void MainWindow::showDefaultSize()
 {
-    int nWidth = AppSetting::instance()->getAppKeyValue(KEY_APP_WIDTH).toInt();
-    int nHeight = AppSetting::instance()->getAppKeyValue(KEY_APP_HEIGHT).toInt();
+    int nWidth = dApp->m_pAppInfo->getAppKeyValue(KEY_APP_WIDTH).toInt();
+    int nHeight = dApp->m_pAppInfo->getAppKeyValue(KEY_APP_HEIGHT).toInt();
 
     if (nWidth == 0 || nHeight == 0) {
         resize(1000, 680);
 
-        AppSetting::instance()->setAppKeyValue(KEY_APP_WIDTH, "1000");
-        AppSetting::instance()->setAppKeyValue(KEY_APP_HEIGHT, "680");
+        dApp->m_pAppInfo->setAppKeyValue(KEY_APP_WIDTH, "1000");
+        dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, "680");
     } else {
         resize(nWidth, nHeight);
     }

@@ -44,7 +44,7 @@ public:
     Application(int &argc, char **argv);
 
 protected:
-    void handleQuitAction() Q_DECL_OVERRIDE;
+    void handleQuitAction() override;
 
 public:
     DBService           *m_pDBService = nullptr;

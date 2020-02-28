@@ -36,15 +36,15 @@ class TitleMenu : public CustomMenu
 
 public:
     explicit TitleMenu(DWidget *parent = nullptr);
-    ~TitleMenu() Q_DECL_OVERRIDE;
+    ~TitleMenu() override;
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
     // CustomMenu interface
 protected:
-    void initActions() Q_DECL_OVERRIDE;
+    void initActions() override;
 
 private:
     void __CreateActionMap(QSignalMapper *pSigManager, const QStringList &actionList, const QStringList &actionObjList);

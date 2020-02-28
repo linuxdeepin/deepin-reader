@@ -19,7 +19,7 @@
 #include "CustomWidget.h"
 #include <DWidgetUtil>
 
-#include "controller/FileDataManager.h"
+#include "business/FileDataManager.h"
 
 CustomWidget::CustomWidget(const QString &name, DWidget *parent)
     : DWidget(parent)

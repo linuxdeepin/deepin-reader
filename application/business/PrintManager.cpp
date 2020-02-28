@@ -22,7 +22,7 @@
 #include <QPainter>
 #include <QPrintPreviewDialog>
 
-#include "controller/FileDataManager.h"
+#include "business/FileDataManager.h"
 
 PrintManager::PrintManager(QObject *parent)
     : QObject(parent)

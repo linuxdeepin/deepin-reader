@@ -37,15 +37,15 @@ public:
 
     // DBFactory interface
 public:
-    void saveData(const QString &sPath) Q_DECL_OVERRIDE;
-    void qSelectData(const QString &) Q_DECL_OVERRIDE;
+    void saveData(const QString &sPath) override;
+    void qSelectData(const QString &) override;
 
     FileDataModel getHistroyData(const QString &) const;
     void setHistroyData(const QString &, const int &, const int &);
 
 private:
-    void checkDatabase() Q_DECL_OVERRIDE;
-    void clearInvalidRecord() Q_DECL_OVERRIDE;
+    void checkDatabase() override;
+    void clearInvalidRecord() override;
 
     void insertData(const QString &);
     void updateData(const QString &);

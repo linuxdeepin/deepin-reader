@@ -51,6 +51,8 @@ private:
     void AddPageIconAnnotation(const QString &);
     void __DeletePageIconAnnotation(const QString &);
     void __UpdatePageIconAnnotation(const QString &);
+
+    void UpdateDocFileState();
 };
 
 #endif // ANNOTATIONHELPER_H

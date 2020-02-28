@@ -49,7 +49,7 @@ class FileViewWidget : public CustomWidget
 
 public:
     explicit FileViewWidget(CustomWidget *parent = nullptr);
-    ~FileViewWidget() Q_DECL_OVERRIDE;
+    ~FileViewWidget() override;
     int         m_nCurrentHandelState = Default_State;  //  当前鼠标状态
 
 signals:
@@ -58,21 +58,21 @@ signals:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
     void qSetBindPath(const QString &);
 //    QString qGetPath() const;
 
     // CustomWidget interface
 protected:
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget() override;
 
     // QWidget interface
 protected:
-    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
-    void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void wheelEvent(QWheelEvent *e) override;
 
 private slots:
     void slotDealWithData(const int &, const QString &);

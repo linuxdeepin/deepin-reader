@@ -35,18 +35,18 @@ class CatalogWidget : public CustomWidget
 
 public:
     explicit CatalogWidget(DWidget *parent = nullptr);
-    ~CatalogWidget() Q_DECL_OVERRIDE;
+    ~CatalogWidget() override;
 
 signals:
     void sigDocOpenFileOk(const QString &);
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
     // CustomWidget interface
 protected:
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget() override;
 
 private:
     void initConnections();

@@ -33,7 +33,7 @@ class MODELSERVICESHARED_EXPORT ModelService : public QObject
 
 public:
     explicit ModelService(QObject *parent = nullptr);
-    ~ModelService() Q_DECL_OVERRIDE;
+    ~ModelService() override;
 
     // ISubject interface
 public:

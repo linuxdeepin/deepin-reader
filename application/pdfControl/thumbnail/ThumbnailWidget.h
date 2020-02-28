@@ -45,7 +45,7 @@ class ThreadLoadImage : public QThread
 
 public:
     explicit ThreadLoadImage(QObject *parent = nullptr);
-    ~ThreadLoadImage() Q_DECL_OVERRIDE { stopThreadRun(); }
+    ~ThreadLoadImage() override { stopThreadRun(); }
 
 public:
     void stopThreadRun();
@@ -71,7 +71,7 @@ signals:
     void sigRotateImage(const int &index);
 
 protected:
-    void run() Q_DECL_OVERRIDE;
+    void run() override;
 
 private:
     int m_pages = 0;          // 文件总页数
@@ -92,7 +92,7 @@ class ThumbnailWidget : public CustomWidget
 
 public:
     explicit ThumbnailWidget(DWidget *parent = nullptr);
-    ~ThumbnailWidget() Q_DECL_OVERRIDE;
+    ~ThumbnailWidget() override;
 
 signals:
     void sigFilePageChanged(const QString &);
@@ -101,7 +101,7 @@ signals:
 
 public:
     // IObserver interface
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
     void fillContantToList();
 
     inline bool isLoading() { return m_isLoading; }
@@ -113,7 +113,7 @@ public:
 //    void forScreenPageing(bool);
 
 protected:
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget() override;
 
 private:
     void setSelectItemBackColor(QListWidgetItem *);

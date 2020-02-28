@@ -23,7 +23,7 @@
 #include "../DocShowShellWidget.h"
 #include "../LeftSidebarWidget.h"
 
-#include "controller/FileDataManager.h"
+#include "business/FileDataManager.h"
 
 MainSplitter::MainSplitter(DWidget *parent)
     : DSplitter(parent)

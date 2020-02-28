@@ -42,14 +42,14 @@ signals:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
 private:
     void initConnections();
 
     // IObserver interface
-    void sendMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
-    void notifyMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
+    void sendMsg(const int &msgType, const QString &msgContent = "") override;
+    void notifyMsg(const int &msgType, const QString &msgContent = "") override;
 
 private slots:
     void slotFileSlider(const int &);

@@ -21,9 +21,8 @@
 #include "BookMarkItemWidget.h"
 #include "MsgModel.h"
 
-#include "controller/AppInfo.h"
-#include "controller/AppSetting.h"
-#include "controller/FileDataManager.h"
+#include "business/AppInfo.h"
+#include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
 
 #include "business/bridge/IHelper.h"

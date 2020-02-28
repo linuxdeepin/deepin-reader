@@ -28,18 +28,18 @@ class HandleMenu : public CustomMenu
 
 public:
     explicit HandleMenu(DWidget *parent = nullptr);
-    ~HandleMenu() Q_DECL_OVERRIDE;
+    ~HandleMenu() override;
 
 signals:
     void sigCurrentTool(const QString &);
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
     // CustomMenu interface
 protected:
-    void initActions() Q_DECL_OVERRIDE;
+    void initActions() override;
 
 private slots:
     void SlotActionTrigger(QAction *);

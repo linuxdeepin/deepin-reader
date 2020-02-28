@@ -335,7 +335,7 @@ protected:
     void showSinglePage();
     void showFacingPage();
     void initConnect();
-    void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
+    void wheelEvent(QWheelEvent *e) override;
     void resizeEvent(QResizeEvent *e) override;
 
     DocummentBasePrivate *d_ptr;

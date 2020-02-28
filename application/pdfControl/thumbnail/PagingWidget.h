@@ -38,7 +38,7 @@ class PagingWidget : public CustomWidget
 
 public:
     explicit PagingWidget(CustomWidget *parent = nullptr);
-    ~PagingWidget() Q_DECL_OVERRIDE;
+    ~PagingWidget() override;
 
 signals:
     void sigDocFilePageChange(const QString &);
@@ -46,7 +46,7 @@ signals:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
 private slots:
     void slotPrePageBtnClicked();
@@ -57,7 +57,7 @@ private slots:
     void SlotJumpPageLineEditReturnPressed();
 
 private:
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget() override;
     void initConnections();
     void __SetBtnState(const int &currntPage, const int &totalPage);
 

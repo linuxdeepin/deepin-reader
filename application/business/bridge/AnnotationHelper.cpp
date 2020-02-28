@@ -22,8 +22,8 @@
 #include "application.h"
 #include "MsgModel.h"
 
-#include "controller/AppInfo.h"
-#include "controller/FileDataManager.h"
+#include "business/AppInfo.h"
+#include "business/FileDataManager.h"
 
 AnnotationHelper::AnnotationHelper(QObject *parent)
     : HelperImpl(parent)
@@ -67,6 +67,11 @@ int AnnotationHelper::qDealWithData(const int &msgType, const QString &msgConten
         __AddHighLightAnnotation(msgContent);
         nRes = MSG_OK;
     }
+
+    if (nRes == MSG_OK) {
+        UpdateDocFileState() ;
+    }
+
     return nRes;
 }
 
@@ -104,6 +109,18 @@ void AnnotationHelper::__UpdatePageIconAnnotation(const QString &msgContent)
     }
 }
 
+void AnnotationHelper::UpdateDocFileState()
+{
+    QString sPath = dApp->m_pDataManager->qGetCurrentFilePath();
+
+    MsgModel mm;
+    mm.setMsgType(MSG_FILE_IS_CHANGE);
+    mm.setPath(sPath);
+    mm.setValue("1");
+
+    notifyMsg(E_FILE_MSG, mm.toJson());
+}
+
 void AnnotationHelper::__AddHighLight(const QString &msgContent)
 {
     DocummentProxy *_proxy = dApp->m_pDataManager->qGetCurrentProxy();
@@ -130,15 +147,7 @@ void AnnotationHelper::__AddHighLight(const QString &msgContent)
         QPoint pEndPoint(nEx.toInt(), nEy.toInt());
         QColor color = dApp->m_pAppInfo->selectColor();
 
-        QString strUuid = _proxy->addAnnotation(pStartPoint, pEndPoint, color);
-        if (strUuid != "") {
-
-            MsgModel mm;
-            mm.setMsgType(MSG_FILE_IS_CHANGE);
-            mm.setValue("1");
-
-            notifyMsg(E_FILE_MSG, mm.toJson());
-        }
+        _proxy->addAnnotation(pStartPoint, pEndPoint, color);
     }
 }
 
@@ -206,12 +215,6 @@ void AnnotationHelper::__ChangeAnnotationColor(const QString &msgContent)
             QColor color = dApp->m_pAppInfo->getLightColorList().at(iIndex);
 
             _proxy->changeAnnotationColor(sPage.toInt(), sUuid, color);     //  更新高亮顏色,  是对文档进行了操作
-
-            MsgModel mm;
-            mm.setMsgType(MSG_FILE_IS_CHANGE);
-            mm.setValue("1");
-
-            notifyMsg(E_FILE_MSG, mm.toJson());
         }
     }
 }

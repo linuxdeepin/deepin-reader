@@ -35,7 +35,7 @@ class CatalogTreeView : public DTreeView, public IObserver
 
 public:
     explicit CatalogTreeView(DWidget *parent = nullptr);
-    ~CatalogTreeView() Q_DECL_OVERRIDE;
+    ~CatalogTreeView() override;
 
 signals:
     void sigOpenFileOk();
@@ -43,17 +43,17 @@ signals:
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
-    void sendMsg(const int &, const QString &) Q_DECL_OVERRIDE;
-    void notifyMsg(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
+    void sendMsg(const int &, const QString &) override;
+    void notifyMsg(const int &, const QString &) override;
 
     // QWidget interface
 protected:
-    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *event) override;
 
     // QAbstractItemView interface
 protected slots:
-    void currentChanged(const QModelIndex &current, const QModelIndex &previous) Q_DECL_OVERRIDE;
+    void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
 
 private:
     void initConnections();

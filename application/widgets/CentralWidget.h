@@ -34,24 +34,24 @@ class CentralWidget : public CustomWidget
 
 public:
     explicit CentralWidget(CustomWidget *parent = nullptr);
-    ~CentralWidget() Q_DECL_OVERRIDE;
+    ~CentralWidget() override;
 
 signals:
     void sigOpenFiles(const QString &);
 
     // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int dealWithData(const int &, const QString &) override;
 
     // QWidget interface
 protected:
-    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
-    void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
-    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
     // CustomWidget interface
 protected:
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget() override;
 
 private slots:
     void slotDealWithData(const int &, const QString &msgContent = "");

@@ -25,8 +25,7 @@
 
 #include "../FileFormatHelper.h"
 
-#include "controller/FileDataManager.h"
-
+#include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
@@ -77,10 +76,13 @@ void DocFileHelper::AppExitFile(const int &iType, const QString &sPaths)
             if (_proxy) {
                 if (APP_EXIT_SAVE_FILE == iType || APP_EXIT_NOT_SAVE_FILE == iType) {
                     bool bSave = iType == APP_EXIT_SAVE_FILE ? true : false;
-                    _proxy->save(s, bSave);
-
-                    if (bSave) {
-                        dApp->m_pDBService->qSaveData(s, DB_BOOKMARK);
+                    bool rl = _proxy->save(s, bSave);
+                    if (rl) {
+                        if (bSave) {
+                            dApp->m_pDBService->qSaveData(s, DB_BOOKMARK);
+                        }
+                    } else {
+                        qDebug() << __FUNCTION__ << "            ";
                     }
                 }
 

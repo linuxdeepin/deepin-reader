@@ -3,15 +3,12 @@
 #include <DStackedWidget>
 #include <QButtonGroup>
 #include <QVBoxLayout>
-#include <QJsonObject>
 
 #include "MainOperationWidget.h"
 #include "MsgModel.h"
 
-#include "controller/AppSetting.h"
-#include "controller/FileDataManager.h"
+#include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
-
 #include "pdfControl/DataStackedWidget.h"
 
 LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
