@@ -42,7 +42,7 @@ public:
 
 signals:
     void sigDocFilePageChange(const QString &);
-    void sigDocFileOpenOk();
+    void sigDocFileOpenOk(QString strpath);
 
     // IObserver interface
 public:
@@ -53,7 +53,7 @@ private slots:
     void slotNextPageBtnClicked();
     void slotUpdateTheme();
     void SlotDocFilePageChange(const QString &);
-    void SlotDocFileOpenOk();
+    void SlotDocFileOpenOk(QString strpath);
     void SlotJumpPageLineEditReturnPressed();
 
 private:

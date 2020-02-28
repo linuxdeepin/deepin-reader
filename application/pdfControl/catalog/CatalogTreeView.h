@@ -38,7 +38,7 @@ public:
     ~CatalogTreeView() override;
 
 signals:
-    void sigOpenFileOk();
+    void sigOpenFileOk(QString path);
     void sigFilePageChanged(const QString &);
 
     // IObserver interface
@@ -62,7 +62,7 @@ private:
     QList<QStandardItem *>   getItemList(const QString &, const int &, const qreal  &realleft, const qreal &realtop);
 
 private slots:
-    void SlotOpenFileOk();
+    void SlotOpenFileOk(QString path);
 
     void SlotClicked(const QModelIndex &);
     void SlotFilePageChanged(const QString &);

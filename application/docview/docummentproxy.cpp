@@ -479,15 +479,6 @@ bool DocummentProxy::closeFile()
     m_documment->stopLoadPageThread();
     delete m_documment;
     m_documment = nullptr;
-//    if (m_documment->isWordsBeLoad()) {
-//        bclosefile = true;
-//        if (!threadwaitloadwordsend.isRunning()) {
-//            threadwaitloadwordsend.setDoc(m_documment);
-//            threadwaitloadwordsend.start();
-//        }
-//        return true;
-//    }
-//    bcloseing = false;
     return true;
 }
 

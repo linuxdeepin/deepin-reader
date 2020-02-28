@@ -35,7 +35,7 @@
  * @brief The ThreadLoadImage class
  * @brief   加载缩略图线程
  */
-
+class DocummentProxy;
 class ThumbnailWidget;
 
 class ThreadLoadImage : public QThread
@@ -66,6 +66,8 @@ public:
 
     inline void clearList() {m_listLoad.clear();}
 
+    void setproxy(DocummentProxy *_proxy) {m_proxy = _proxy;};
+
 signals:
     void sigLoadImage(const int &, const QImage &);
     void sigRotateImage(const int &index);
@@ -80,6 +82,7 @@ private:
     int m_nStartPage = 0;  // 加载图片起始页码
     int m_nEndPage = 19;   // 加载图片结束页码
     QList<int> m_listLoad; // 加载过来的缩略图
+    DocummentProxy *m_proxy = nullptr;
 };
 
 /*

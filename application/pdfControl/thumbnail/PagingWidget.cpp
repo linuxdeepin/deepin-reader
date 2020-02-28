@@ -21,7 +21,7 @@
 #include <QValidator>
 
 #include "docview/docummentproxy.h"
-
+#include "business/FileDataManager.h"
 #include "business/bridge/IHelper.h"
 
 PagingWidget::PagingWidget(CustomWidget *parent)
@@ -86,7 +86,7 @@ void PagingWidget::initWidget()
 void PagingWidget::initConnections()
 {
     connect(this, SIGNAL(sigDocFilePageChange(const QString &)), SLOT(SlotDocFilePageChange(const QString &)));
-    connect(this, SIGNAL(sigDocFileOpenOk()), SLOT(SlotDocFileOpenOk()));
+    connect(this, SIGNAL(sigDocFileOpenOk(QString)), SLOT(SlotDocFileOpenOk(QString)));
 
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
@@ -104,7 +104,7 @@ int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {     //  颜色主题切换
         emit sigUpdateTheme();
     } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {     //  文档打开成功了
-        emit sigDocFileOpenOk();
+        emit sigDocFileOpenOk(msgContent);
     }
 
     return 0;
@@ -168,9 +168,9 @@ void PagingWidget::SlotDocFilePageChange(const QString &msgContent)
  * 2.设置总页数 和 当前页码
  *
  */
-void PagingWidget::SlotDocFileOpenOk()
+void PagingWidget::SlotDocFileOpenOk(QString strpath)
 {
-    DocummentProxy *_proxy = DocummentProxy::instance();
+    DocummentProxy *_proxy = DocummentProxy::instance(dApp->m_pDataManager->qGetFileUuid(strpath));
     if (_proxy) {
         bool isHasLabel = _proxy->haslabel();
         if (!isHasLabel) {

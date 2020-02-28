@@ -276,15 +276,15 @@ void DocShowShellWidget::slotChangePlayCtrlShow(bool bshow)
 
 void DocShowShellWidget::slotOpenFileOk(const QString &sPath)
 {
-//    if (this->isVisible()) {
-    dApp->m_pDataManager->qSetCurrentFilePath(sPath);
+    if (/*this->isVisible()*/!sPath.isEmpty()) {
+        dApp->m_pDataManager->qSetCurrentFilePath(sPath);
 
-    MsgModel mm;
-    mm.setMsgType(MSG_OPERATION_OPEN_FILE_OK);
-    mm.setPath(sPath);
+        MsgModel mm;
+        mm.setMsgType(MSG_OPERATION_OPEN_FILE_OK);
+        mm.setPath(sPath);
 
-    notifyMsg(E_DOCPROXY_MSG_TYPE, mm.toJson());
-//    }
+        notifyMsg(E_DOCPROXY_MSG_TYPE, mm.toJson());
+    }
 
     m_playout->removeWidget(m_pSpinerWidget);
 

@@ -76,7 +76,8 @@ public:
     void DeleteItemByKey();
 
 signals:
-    void sigOpenFileOk();
+    void sigOpenFileOk(QString strcontent);
+    void sigCloseFile();
 
 public:
     // IObserver interface
@@ -88,7 +89,8 @@ protected:
 private slots:
     void slotDealWithData(const int &, const QString &);
 
-    void slotOpenFileOk();
+    void slotOpenFileOk(QString strcontent);
+    void slotCloseFile();
     void slotLoadImage(const QImage &);
     void slotSelectItem(QListWidgetItem *);
 

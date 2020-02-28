@@ -4,18 +4,6 @@
 #include "commonstruct.h"
 #include <QObject>
 #include <DWidget>
-class DocummentProxy;
-typedef   struct   STCURDOCUMENTPROXY {
-    DWidget *pwgt;
-    DocummentProxy *proxy;
-
-    STCURDOCUMENTPROXY()
-    {
-        pwgt = nullptr;
-        proxy = nullptr;
-    }
-
-} stCurDocProxy;
 
 class DocummentProxy: public QObject
 {

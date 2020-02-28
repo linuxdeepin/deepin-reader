@@ -525,7 +525,7 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, i
             QString uniquename = annote->uniqueName();
             if (!uniquename.isEmpty() && uniquename.indexOf(struuid) >= 0 && !struuid.isEmpty()) {
                 strtext = annote->contents();
-                qDebug() << QString("getAnnotationText=%1=%2=%3=%4").arg(uniquename).arg(struuid).arg(ipage).arg(strtext);
+                //qDebug() << QString("getAnnotationText=%1=%2=%3=%4").arg(uniquename).arg(struuid).arg(ipage).arg(strtext);
                 qDeleteAll(plistannote);
                 return;
             }

@@ -23,6 +23,7 @@
 #include "business/AppInfo.h"
 #include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
+#include "business/FileDataManager.h"
 
 #include "business/bridge/IHelper.h"
 
@@ -217,15 +218,16 @@ void NotesWidget::__UpdateNoteItem(const QString &msgContent)
 }
 
 
-void NotesWidget::slotOpenFileOk()
+void NotesWidget::slotOpenFileOk(QString strcontent)
 {
+    qDebug() << "^*^*^*^*^*" << strcontent;
     m_nIndex = 0;
     m_ThreadLoadImage.setIsLoaded(false);
     if (m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();
     }
 
-    auto t_docPtr = DocummentProxy::instance();
+    auto t_docPtr = DocummentProxy::instance(dApp->m_pDataManager->qGetFileUuid(strcontent));
     if (!t_docPtr) {
         return;
     }
@@ -260,6 +262,11 @@ void NotesWidget::slotOpenFileOk()
     if (!m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.start();
     }
+}
+
+void NotesWidget::slotCloseFile()
+{
+
 }
 
 void NotesWidget::slotLoadImage(const QImage &image)
@@ -412,7 +419,10 @@ void NotesWidget::addNotesItem(const QString &text, const int &iType)
 void NotesWidget::initConnection()
 {
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
-    connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));
+
+    connect(this, SIGNAL(sigOpenFileOk(QString)), SLOT(slotOpenFileOk(QString)));
+    connect(this, SIGNAL(sigCloseFile()), SLOT(slotCloseFile()));
+
 
     connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const QImage &)), SLOT(slotLoadImage(const QImage &)));
 
@@ -499,7 +509,11 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
         return ConstantMsg::g_effective_res;;
     }
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
-        emit sigOpenFileOk();
+
+        emit sigOpenFileOk(msgContent);
+    } else if (MSG_CLOSE_FILE == msgType) {
+        emit sigCloseFile();
+
     }
 
     return 0;

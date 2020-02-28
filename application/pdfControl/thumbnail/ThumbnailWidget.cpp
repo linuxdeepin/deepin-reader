@@ -339,10 +339,11 @@ void ThumbnailWidget::nextPage()
 // 关联成功打开文件槽函数
 void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
 {
-    DocummentProxy *_proxy = DocummentProxy::instance();
+    qDebug() << "++++++++++----------" << sPath;
+    DocummentProxy *_proxy = DocummentProxy::instance(dApp->m_pDataManager->qGetFileUuid(sPath));
     if (_proxy) {
         m_isLoading = true;
-
+        qDebug() << "^^^^^^^^^^^^^^^^^----------" << sPath;
         m_ThreadLoadImage.setIsLoaded(false);
         if (m_ThreadLoadImage.isRunning()) {
             m_ThreadLoadImage.stopThreadRun();
@@ -368,7 +369,7 @@ void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
         int currentPage = _proxy->currentPageNo();
 
 //        qDebug() << "     currentPage:" << currentPage << "  m_nRotate:" << m_nRotate;
-        m_ThreadLoadImage.setPages(m_totalPages);
+        m_ThreadLoadImage.setPages(m_totalPages); m_ThreadLoadImage.setproxy(_proxy);
         if (!m_ThreadLoadImage.isRunning()) {
             m_ThreadLoadImage.clearList();;
             m_ThreadLoadImage.setStartAndEndIndex(currentPage - (FIRST_LOAD_PAGES / 2), currentPage + (FIRST_LOAD_PAGES / 2));
@@ -437,7 +438,7 @@ void ThreadLoadImage::run()
             m_nEndPage = m_pages - 1;
         }
 
-        auto dproxy = DocummentProxy::instance();
+        auto dproxy = m_proxy; //DocummentProxy::instance(dApp->m_pDataManager->qGetFileUuid(m_strfilepath));
         if (nullptr == dproxy) {
             break;
         }

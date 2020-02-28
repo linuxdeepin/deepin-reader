@@ -792,7 +792,6 @@ bool DocummentBase::showMagnifier(QPoint point)
 void DocummentBase::resizeEvent(QResizeEvent *e)
 {
     DScrollArea::resizeEvent(e);
-    qDebug() << "DocummentBase::resizeEvent******" << rect();
     loadPages(); //主要目的是解决文档刚加载的时候qwfather获取的尺寸不对，导致界面少显示页面的问题
 }
 

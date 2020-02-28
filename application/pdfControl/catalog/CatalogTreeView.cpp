@@ -26,6 +26,7 @@
 
 #include "docview/docummentproxy.h"
 #include "utils/utils.h"
+#include "business/FileDataManager.h"
 
 CatalogTreeView::CatalogTreeView(DWidget *parent)
     : DTreeView(parent)
@@ -55,7 +56,7 @@ CatalogTreeView::~CatalogTreeView()
 int CatalogTreeView::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        emit sigOpenFileOk();
+        emit sigOpenFileOk(msgContent);
     } else if (msgType == MSG_FILE_PAGE_CHANGE) {    //  文档页变化, 需要跳转到对应项
         emit sigFilePageChanged(msgContent);
     }
@@ -74,7 +75,7 @@ void CatalogTreeView::notifyMsg(const int &, const QString &)
 void CatalogTreeView::initConnections()
 {
     connect(this, SIGNAL(sigFilePageChanged(const QString &)), SLOT(SlotFilePageChanged(const QString &)));
-    connect(this, SIGNAL(sigOpenFileOk()), SLOT(SlotOpenFileOk()));
+    connect(this, SIGNAL(sigOpenFileOk(QString)), SLOT(SlotOpenFileOk(QString)));
     connect(this, SIGNAL(clicked(const QModelIndex &)), SLOT(SlotClicked(const QModelIndex &)));
     connect(this, SIGNAL(collapsed(const QModelIndex &)), SLOT(SlotCollapsed(const QModelIndex &)));
     connect(this, SIGNAL(expanded(const QModelIndex &)), SLOT(SlotExpanded(const QModelIndex &)));
@@ -127,13 +128,13 @@ QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const 
 }
 
 //  文档打开成功, 加载对应目录
-void CatalogTreeView::SlotOpenFileOk()
+void CatalogTreeView::SlotOpenFileOk(QString path)
 {
     auto model = reinterpret_cast<QStandardItemModel *>(this->model());
     if (model) {
         model->clear();
 
-        DocummentProxy *_proxy = DocummentProxy::instance();
+        DocummentProxy *_proxy = DocummentProxy::instance(dApp->m_pDataManager->qGetFileUuid(path));
         if (_proxy) {
 
             Outline ol = _proxy->outline();
