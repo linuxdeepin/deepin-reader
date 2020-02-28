@@ -37,7 +37,7 @@ Helper::Helper()
 void Helper::qDealWithData(const int &msgType, const QString &msgContent)
 {
     int nRes = m_pAnnotatinHelperImpl->qDealWithData(msgType, msgContent);
-    if (nRes != 0) {
+    if (nRes == MSG_NO_OK) {
         m_pDocHelperImpl->qDealWithData(msgType, msgContent);
     }
 }

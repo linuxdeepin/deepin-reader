@@ -97,7 +97,6 @@ public:
 signals:
     void sigFilePageChanged(const QString &);
     void sigOpenFileOk(const QString &);
-    void sigCloseFile();
     void sigSetRotate(int);
 
 public:
@@ -124,7 +123,6 @@ private:
 private slots:
     void slotOpenFileOk(const QString &);
     void slotDocFilePageChanged(const QString &);
-    void slotCloseFile();
     void slotUpdateTheme();
 
     void slotSetRotate(int);

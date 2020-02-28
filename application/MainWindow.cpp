@@ -102,7 +102,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     } else {
         //  没有对文档进行修改,  也需要保存 历史记录
         MsgModel mm;
-        mm.setMsgType(E_APP_EXIT_NOTHING);
+        mm.setMsgType(APP_EXIT_NOTHING);
 
         notifyMsg(E_APP_MSG_TYPE, mm.toJson());
     }

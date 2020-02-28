@@ -35,10 +35,7 @@ public:
     ~MainTabBar() Q_DECL_OVERRIDE;
 
 signals:
-//    void sigOpenFileOk(const QString &);
     void sigDealWithData(const int &, const QString &);
-    void sigCloseFile(const int &, const QString &);
-    void sigDocProxyMsg(const QString &);
     void sigTabBarIndexChange(const QString &);
     void sigAddTab(const QString &);
 
@@ -65,10 +62,8 @@ private slots:
     void SlotTabAddRequested();
     void SlotTabCloseRequested(int index);
 
-    void SlotCloseFile(const int &, const QString &);
+    void SlotRemoveFileTab(const QString &);
     void SlotDealWithData(const int &, const QString &);
-    void SlotDocProxyMsg(const QString &);
-    void slotcurrentChanged(int);
 
 private:
     int     m_nOldMiniWidth = 0;

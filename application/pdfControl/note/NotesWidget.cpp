@@ -258,20 +258,6 @@ void NotesWidget::slotOpenFileOk()
     }
 }
 
-void NotesWidget::slotCloseFile()
-{
-    m_nIndex = 0;
-    m_ThreadLoadImage.setIsLoaded(false);
-    if (m_ThreadLoadImage.isRunning()) {
-        m_ThreadLoadImage.stopThreadRun();
-    }
-
-    m_mapUuidAndPage.clear();
-    if (m_pNotesList) {
-        m_pNotesList->clear();
-    }
-}
-
 void NotesWidget::slotLoadImage(const QImage &image)
 {
     if (m_pNotesList->count() < 1 || m_nIndex >= m_pNotesList->count()) {
@@ -421,7 +407,6 @@ void NotesWidget::initConnection()
 {
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
     connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));
-    connect(this, SIGNAL(sigCloseFile()), SLOT(slotCloseFile()));
 
     connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const QImage &)), SLOT(slotLoadImage(const QImage &)));
 
@@ -509,8 +494,6 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
     }
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
         emit sigOpenFileOk();
-    } else if (MSG_CLOSE_FILE == msgType) {
-        emit sigCloseFile();
     }
 
     return 0;

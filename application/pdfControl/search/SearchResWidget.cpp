@@ -78,21 +78,6 @@ void SearchResWidget::__ClearSearchContent()
 //    }
 }
 
-//  关闭应用
-void SearchResWidget::slotCloseFile()
-{
-    m_bShowList = false;
-
-    if (m_pSearchList->count() > 0) {
-        DocummentProxy *_proxy = DocummentProxy::instance();
-        if (_proxy) {
-            _proxy->clearsearch();
-        }
-
-        m_pSearchList->clear();
-    }
-}
-
 void SearchResWidget::slotFlushSearchWidget(const QString &msgContent)
 {
     m_isSearch = true;  //  开始搜索,  标志位 为 true
@@ -212,22 +197,14 @@ void SearchResWidget::initWidget()
 
 void SearchResWidget::initConnections()
 {
-    connect(&m_loadSearchResThread, SIGNAL(sigLoadImage(const int &, const QImage &)), this,
-            SLOT(slotLoadImage(const int &, const QImage &)));
+    connect(&m_loadSearchResThread, SIGNAL(sigLoadImage(const int &, const QImage &)), SLOT(slotLoadImage(const int &, const QImage &)));
+    connect(&m_loadSearchResThread, SIGNAL(sigStopFind()), SLOT(slotStopFind()));
 
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
-            SLOT(SlotDealWithData(const int &, const QString &)));
+    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
+    connect(this, SIGNAL(sigFlushSearchWidget(const QString &)), SLOT(slotFlushSearchWidget(const QString &)));
 
-//    connect(this, SIGNAL(sigClearWidget()), this, SLOT(slotClearWidget()));
-    connect(this, SIGNAL(sigFlushSearchWidget(const QString &)), this,
-            SLOT(slotFlushSearchWidget(const QString &)));
-    connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
-//    connect(this, SIGNAL(sigFindPrev()), this, SLOT(slotFindPrev()));
-//    connect(this, SIGNAL(sigFindNext()), this, SLOT(slotFindNext()));
     connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
             SLOT(slotSelectItem(QListWidgetItem *)));
-    connect(&m_loadSearchResThread, &LoadSearchResThread::sigStopFind, this,
-            &SearchResWidget::slotStopFind);
 }
 
 void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
@@ -347,16 +324,6 @@ void SearchResWidget::clearItemColor()
  */
 int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-//    if (msgType == MSG_FIND_PREV) {
-//        emit sigFindPrev();
-//        return ConstantMsg::g_effective_res;
-//    }
-
-//    if (msgType == MSG_FIND_NEXT) {
-//        emit sigFindNext();
-//        return ConstantMsg::g_effective_res;
-//    }
-
     if (m_pMsgList.contains(msgType)) {
         emit sigDealWithData(msgType, msgContent);
         return  ConstantMsg::g_effective_res;
@@ -366,8 +333,6 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
         if (msgContent != QString("")) {
             emit sigFlushSearchWidget(msgContent);
         }
-    }  else if (MSG_CLOSE_FILE == msgType) {  //  关闭w文件通知消息
-        emit sigCloseFile();
     }
 
     return 0;

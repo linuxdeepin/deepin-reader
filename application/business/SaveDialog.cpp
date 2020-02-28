@@ -62,6 +62,8 @@ void SaveDialog::AppExit()
         }
     }
 
+    int nMsgType = APP_EXIT_NOT_CHANGE_FILE;
+
     if (saveFileList != "") {
         int nRes = showDialog();
         if (nRes <= 0) {
@@ -69,15 +71,18 @@ void SaveDialog::AppExit()
         }
 
         if (nRes == 2) {     //  保存
-            dApp->m_pModelService->notifyMsg(MSG_EXIT_SAVE_FILE, saveFileList);
+            nMsgType = APP_EXIT_SAVE_FILE;
         } else {    //  不保存
-            dApp->m_pModelService->notifyMsg(MSG_EXIT_NOT_SAVE_FILE, saveFileList);
+            nMsgType = APP_EXIT_NOT_SAVE_FILE;
         }
+        dApp->m_pHelper->qDealWithData(nMsgType, saveFileList);
     }
 
     if (noChangeFileList != "") {
-        dApp->m_pModelService->notifyMsg(MSG_EXIT_NOT_CHANGE_FILE, noChangeFileList);
+        dApp->m_pHelper->qDealWithData(APP_EXIT_NOT_CHANGE_FILE, noChangeFileList);
     }
+
+    dApp->exit(0);
 }
 
 void SaveDialog::TabRemove(const QString &sPath)

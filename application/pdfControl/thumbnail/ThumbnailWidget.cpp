@@ -54,8 +54,6 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
         emit sigOpenFileOk(msgContent);
-    } else if (MSG_CLOSE_FILE == msgType) {
-        emit sigCloseFile();
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
     } else if (MSG_FILE_PAGE_CHANGE == msgType) {
@@ -129,7 +127,6 @@ void ThumbnailWidget::initConnection()
             this, SLOT(slotLoadImage(const int &, const QImage &)));
 
     connect(this, SIGNAL(sigOpenFileOk(const QString &)), this, SLOT(slotOpenFileOk(const QString &)));
-    connect(this, SIGNAL(sigCloseFile()), this, SLOT(slotCloseFile()));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigFilePageChanged(const QString &)),
             SLOT(slotDocFilePageChanged(const QString &)));
@@ -151,15 +148,6 @@ void ThumbnailWidget::slotDocFilePageChanged(const QString &sPage)
             return;
 
         setSelectItemBackColor(curPageItem);
-    }
-}
-
-// 关联关闭文件槽函数
-void ThumbnailWidget::slotCloseFile()
-{
-    if (m_ThreadLoadImage.isRunning()) {
-        m_ThreadLoadImage.clearList();
-        m_ThreadLoadImage.stopThreadRun();
     }
 }
 

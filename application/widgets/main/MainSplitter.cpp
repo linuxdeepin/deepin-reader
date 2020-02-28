@@ -25,7 +25,7 @@
 
 #include "controller/FileDataManager.h"
 
-MainSplitter::MainSplitter(CustomWidget *parent)
+MainSplitter::MainSplitter(DWidget *parent)
     : DSplitter(parent)
 {
     m_strObserverName = "MainSplitter";
@@ -114,12 +114,12 @@ int MainSplitter::dealWithData(const int &msgType, const QString &msgContent)
 
 void MainSplitter::sendMsg(const int &msgType, const QString &msgContent)
 {
-    notifyMsg(msgType, msgContent);
+//    notifyMsg(msgType, msgContent);
 }
 
 void MainSplitter::notifyMsg(const int &msgType, const QString &msgContent)
 {
-    dApp->m_pModelService->notifyMsg(msgType, msgContent);
+//    dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
 
 QString MainSplitter::qGetPath() const

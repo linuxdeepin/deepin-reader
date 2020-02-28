@@ -118,7 +118,6 @@ void DataStackedWidget::onJumpToPrevPage()
 
 void DataStackedWidget::onJumpToNextPage()
 {
-
     int iIndex = this->currentIndex();
     if (iIndex == WIDGET_THUMBNAIL) {
         auto widget = this->findChild<ThumbnailWidget *>();

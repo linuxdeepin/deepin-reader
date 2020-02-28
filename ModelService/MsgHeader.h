@@ -24,8 +24,11 @@ enum E_MSG_TYPE {
 //  应用类 消息
 enum E_APP_MSG_TYPE {
     E_APP_MSG_TYPE_BEGIN = E_MSG_TYPE_END + 50,
-    E_APP_EXIT,
-    E_APP_EXIT_NOTHING,
+    APP_EXIT,
+    APP_EXIT_NOTHING,
+    APP_EXIT_SAVE_FILE,                 //  应用退出 保存文档
+    APP_EXIT_NOT_SAVE_FILE,             //  应用退出 不保存文档
+    APP_EXIT_NOT_CHANGE_FILE,           //  应用退出 文档未修改
     E_APP_MSG_TYPE_END
 };
 
@@ -43,13 +46,9 @@ enum MSG_TYPE {
     MSG_MAGNIFYING,             //  放大镜消息
     MSG_MAGNIFYING_CANCEL,          //  取消放大镜消息
     MSG_HANDLESHAPE,                //  手型 消息
-
     MSG_OPERATION_UPDATE_THEME,         //  主题变了
     MSG_NOTIFY_KEY_MSG,                 //  按键通知消息
     MSG_NOTIFY_KEY_PLAY_MSG,            //  幻灯片模式按键通知消息
-    MSG_EXIT_SAVE_FILE,                 //  关闭当前文档　消息
-    MSG_EXIT_NOT_SAVE_FILE,             //  关闭当前文档　消息
-    MSG_EXIT_NOT_CHANGE_FILE,             //  关闭当前文档　消息
     MSG_CLOSE_FILE,                     //  关闭当前文档　消息
     MSG_JSON_NOTIFY_TYPE,
     MSG_TYPE_END,

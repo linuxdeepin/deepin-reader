@@ -82,9 +82,6 @@ signals:
     void sigOpenFileOk();
     void sigDeleteBookItem(const int &);
     void sigAddBookMark(const int &);
-    void sigCloseFile();
-//    void sigDelBKItem();
-//    void sigCtrlBAddBookMark();
     void sigRightSelectItem(QString);
     void sigSetBookMarkState(const int &, const int &);
 
@@ -94,9 +91,7 @@ private slots:
     void slotOpenFileOk();
     void slotDocFilePageChanged(const QString &);
     void slotDeleteBookItem(const int &);
-    void slotCloseFile();
     void slotLoadImage(const int &, const QImage &);
-//    void slotDelBkItem();
     void slotUpdateTheme();
     void slotRightSelectItem(QString);
     void slotSelectItemBackColor(QListWidgetItem *);
@@ -110,7 +105,6 @@ private:
     QListWidgetItem *addBookMarkItem(const int &);
     void deleteIndexPage(const int &pageIndex);
     void clearItemColor();
-//    bool bOperationBK();
 
 public:
     // IObserver interface

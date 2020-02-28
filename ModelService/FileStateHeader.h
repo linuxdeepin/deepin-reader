@@ -20,7 +20,7 @@
 #define FILESTATEHEADER_H
 
 struct FileState {
-    bool isOpen = false;
+    bool isOpen = true;
     bool isChange = false;
 };
 

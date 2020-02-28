@@ -22,11 +22,6 @@
 
 #include "HelperImpl.h"
 
-/**
- * @brief The DocummentFileHelper class
- * 封装 DocView 函数调用
- */
-
 class DocFileHelper : public HelperImpl
 {
     Q_OBJECT

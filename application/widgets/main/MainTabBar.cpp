@@ -59,11 +59,6 @@ int MainTabBar::dealWithData(const int &msgType, const QString &msgContent)
         return  ConstantMsg::g_effective_res;
     }
 
-    if (msgType == E_APP_EXIT || msgType == MSG_CLOSE_FILE) {
-        emit sigCloseFile(msgType, msgContent);
-    } else if (msgType == MSG_DOC_OPEN_FILE_START) {
-        emit sigDocProxyMsg(msgContent);
-    }
     return 0;
 }
 
@@ -86,32 +81,19 @@ void MainTabBar::resizeEvent(QResizeEvent *event)
 
 void MainTabBar::__InitConnection()
 {
-    connect(this, SIGNAL(sigCloseFile(const int &, const QString &)), SLOT(SlotCloseFile(const int &, const QString &)));
-    connect(this, SIGNAL(sigDocProxyMsg(const QString &)), SLOT(SlotDocProxyMsg(const QString &)));
-
     connect(this, SIGNAL(tabBarClicked(int)), SLOT(SlotTabBarClicked(int)));
     connect(this, SIGNAL(tabCloseRequested(int)), SLOT(SlotTabCloseRequested(int)));
     connect(this, SIGNAL(tabAddRequested()), SLOT(SlotTabAddRequested()));
+    connect(this, SIGNAL(currentChanged(int)), SLOT(SlotTabBarClicked(int)));
 
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
-    connect(this, SIGNAL(currentChanged(int)), SLOT(slotcurrentChanged(int)));
 }
 
 void MainTabBar::SlotTabBarClicked(int index)
 {
     QString sPath = this->tabData(index).toString();
-
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-
-    if (sPath != sCurPath) {
-        dApp->m_pDataManager->qSetCurrentFilePath(sPath);
-
-        FileState fs = dApp->m_pDataManager->qGetFileChange(sPath);
-        if (!fs.isOpen) {  //  该文档还未打开
-            dApp->m_pHelper->qDealWithData(MSG_OPEN_FILE_PATH, sPath);
-        } else {
-            emit sigTabBarIndexChange(sPath);
-        }
+    if (sPath != "") {
+        emit sigTabBarIndexChange(sPath);
     }
 }
 
@@ -156,7 +138,6 @@ void MainTabBar::AddFileTab(const QString &sContent)
         for (int iLoop = 0; iLoop < nSize; iLoop++) {
             QString s = filePaths.at(iLoop);
             if (s != "") {
-
                 QString sName = getFileName(s);
                 int iIndex = this->addTab(sName);
                 this->setTabData(iIndex, s);
@@ -164,6 +145,7 @@ void MainTabBar::AddFileTab(const QString &sContent)
                 emit sigAddTab(s);
             }
         }
+
         __SetTabMiniWidth();
     }
 }
@@ -191,7 +173,7 @@ void MainTabBar::SlotTabCloseRequested(int index)
     }
 }
 
-void MainTabBar::SlotCloseFile(const int &msgType, const QString &sPath)
+void MainTabBar::SlotRemoveFileTab(const QString &sPath)
 {
     if (sPath != "") {
         int nCount = this->count();
@@ -200,8 +182,6 @@ void MainTabBar::SlotCloseFile(const int &msgType, const QString &sPath)
             if (sTabData == sPath) {
                 this->removeTab(iLoop);
 
-                dApp->m_pDataManager->qRemoveFilePath(sPath);
-
                 __SetTabMiniWidth();
                 break;
             }
@@ -209,11 +189,7 @@ void MainTabBar::SlotCloseFile(const int &msgType, const QString &sPath)
 
         nCount = this->count();
         if (nCount == 0) {
-            if (msgType == MSG_CLOSE_FILE) {
-                notifyMsg(CENTRAL_INDEX_CHANGE);
-            } else {
-                dApp->exit(0);
-            }
+            notifyMsg(CENTRAL_INDEX_CHANGE);
         }
     }
 }
@@ -226,30 +202,6 @@ void MainTabBar::SlotDealWithData(const int &msgType, const QString &msgContent)
         SlotTabAddRequested();
     } else if (MSG_MENU_OPEN_FOLDER == msgType) {
         OpenCurFileFolder();
-    }
-}
-
-void MainTabBar::SlotDocProxyMsg(const QString &sPath)
-{
-    int iCount = this->count();
-    for (int iLoop = 0; iLoop < iCount; iLoop++) {
-        QString sTabData = this->tabData(iLoop).toString();
-        if (sPath == sTabData) {
-            this->setCurrentIndex(iLoop);
-            break;
-        }
-    }
-}
-
-void MainTabBar::slotcurrentChanged(int index)
-{
-    QString sPath = this->tabData(index).toString();
-
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-
-    if (sPath != sCurPath) {
-        dApp->m_pDataManager->qSetCurrentFilePath(sPath);
-        emit sigTabBarIndexChange(sPath);
     }
 }
 

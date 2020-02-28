@@ -58,13 +58,13 @@ void LeftSidebarWidget::slotUpdateTheme()
 
 void LeftSidebarWidget::slotTitleMsg(const QString &sContent)
 {
-    MsgModel mm;
-    mm.fromJson(sContent);
+//    MsgModel mm;
+//    mm.fromJson(sContent);
 
-    int nMsg = mm.getMsgType();
-    if (nMsg == MSG_WIDGET_THUMBNAILS_VIEW) {
-        onSetWidgetVisible(mm.getValue().toInt());
-    }
+//    int nMsg = mm.getMsgType();
+//    if (nMsg == MSG_WIDGET_THUMBNAILS_VIEW) {
+//        onSetWidgetVisible(mm.getValue().toInt());
+//    }
 }
 
 void LeftSidebarWidget::onDocProxyMsg(const QString &msgContent)

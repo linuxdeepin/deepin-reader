@@ -67,9 +67,8 @@ void CatalogTreeView::sendMsg(const int &, const QString &)
 
 }
 
-void CatalogTreeView::notifyMsg(const int &msgType, const QString &msgContent)
+void CatalogTreeView::notifyMsg(const int &, const QString &)
 {
-    dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
 
 void CatalogTreeView::initConnections()

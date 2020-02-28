@@ -327,31 +327,6 @@ void BookMarkWidget::clearItemColor()
     }
 }
 
-//bool BookMarkWidget::bOperationBK()
-//{
-//    int leftShow = 0;
-//    int widgetIndex = 0;
-//    leftShow = DataManager::instance()->getShowLeft().toInt();
-//    widgetIndex = DataManager::instance()->getListIndex().toInt();
-
-//    if (leftShow == 1 && widgetIndex == 2) {
-//        return true;
-//    }
-
-//    return false;
-//}
-
-/**
- * @brief BookMarkWidget::slotCloseFile
- *关联关闭文件成功槽函数
- */
-void BookMarkWidget::slotCloseFile()
-{
-    if (m_loadBookMarkThread.isRunning()) {
-        m_loadBookMarkThread.stopThreadRun();
-    }
-}
-
 /**
  * @brief BookMarkWidget::slotLoadImage
  * 填充书签缩略图
@@ -383,7 +358,6 @@ void BookMarkWidget::slotUpdateTheme()
     plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
     setPalette(plt);
     m_pAddBookMarkBtn->setPalette(plt);
-    //  updateWidgetTheme();
 }
 
 void BookMarkWidget::slotRightSelectItem(QString page)
@@ -448,7 +422,6 @@ void BookMarkWidget::initConnection()
     connect(this, SIGNAL(sigAddBookMark(const int &)), SLOT(slotAddBookMark(const int &)));
     connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));
     connect(this, SIGNAL(sigDeleteBookItem(const int &)), SLOT(slotDeleteBookItem(const int &)));
-    connect(this, SIGNAL(sigCloseFile()), SLOT(slotCloseFile()));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigFilePageChanged(const QString &)), SLOT(slotDocFilePageChanged(const QString &)));
     connect(this, SIGNAL(sigRightSelectItem(QString)), SLOT(slotRightSelectItem(QString)));
@@ -550,8 +523,6 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigRightSelectItem(msgContent);
     } else  if (MSG_OPERATION_OPEN_FILE_OK == msgType) {  //  打开 文件通知消息
         emit sigOpenFileOk();
-    } else if (MSG_CLOSE_FILE == msgType) {                 //  关闭 文件通知消息
-        emit sigCloseFile();
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更消息
         emit sigUpdateTheme();
     } else if (MSG_FILE_PAGE_CHANGE == msgType) {  //  文档页变化消息

@@ -89,7 +89,7 @@ void FileDataManager::slotAppExitNothing(const QString &sContent)
     mm.fromJson(sContent);
 
     int nMsg = mm.getMsgType();
-    if (E_APP_EXIT_NOTHING == nMsg) {
+    if (APP_EXIT_NOTHING == nMsg) {
         QList<QString> fileList = qGetOpenFilePathList();
         foreach (const QString &s, fileList) {
             qSaveData(s);
@@ -159,16 +159,25 @@ QString FileDataManager::qGetCurrentFilePath() const
 
 void FileDataManager::qSetCurrentFilePath(const QString &strFilePath)
 {
+    if (strFilePath == "")
+        return;
+
     m_strCurrentFilePath = strFilePath;
 }
 
 FileDataModel FileDataManager::qGetFileData(const QString &sPath) const
 {
+    if (sPath == "")
+        return FileDataModel();
+
     return m_pFileStateMap[sPath];
 }
 
 void FileDataManager::qSetFileData(const QString &sPath, const FileDataModel &fd)
 {
+    if (sPath == "")
+        return;
+
     m_pFileStateMap[sPath] = fd;
 }
 
@@ -184,6 +193,9 @@ QMap<QString, QString> FileDataManager::qGetFileAndUuidMap() const
 
 void FileDataManager::qInsertFileAndUuid(const QString &sPath, const QString &sUuid)
 {
+    if (sPath == "")
+        return;
+
     m_pFileAndUuidMap.insert(sPath, sUuid);
 }
 
@@ -199,6 +211,9 @@ QMap<QString, FileState> FileDataManager::qGetFileChangeMap() const
 
 void FileDataManager::qInsertFileChange(const QString &sPath, const int &nState)
 {
+    if (sPath == "")
+        return;
+
     if (m_pFileChangeMap.contains(sPath))
         m_pFileChangeMap[sPath].isChange = nState;
     else {
@@ -210,6 +225,9 @@ void FileDataManager::qInsertFileChange(const QString &sPath, const int &nState)
 
 void FileDataManager::qInsertFileOpen(const QString &sPath, const int &iOpen)
 {
+    if (sPath == "")
+        return;
+
     if (m_pFileChangeMap.contains(sPath))
         m_pFileChangeMap[sPath].isOpen = iOpen;
     else {
@@ -226,6 +244,9 @@ FileState FileDataManager::qGetFileChange(const QString &sPath)
 
 void FileDataManager::qSaveData(const QString &sPath)
 {
+    if (sPath == "")
+        return;
+
     FileDataModel fdm = dApp->m_pDataManager->qGetFileData(sPath);
 
     for (int iLoop = Scale; iLoop < CurPage + 1; iLoop++) {

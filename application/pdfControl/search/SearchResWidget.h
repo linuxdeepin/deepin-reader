@@ -85,15 +85,11 @@ public:
     ~SearchResWidget() Q_DECL_OVERRIDE;
 
 signals:
-//    void sigDealWithData(const int &, const QString &);
-//    void sigClearWidget();
-    void sigCloseFile();
     void sigFlushSearchWidget(const QString &);
 
 private slots:
     void SlotDealWithData(const int &, const QString &);
 
-    void slotCloseFile();
     void slotFlushSearchWidget(const QString &);
     void slotGetSearchContant(stSearchRes);
     void slotSearchOver();

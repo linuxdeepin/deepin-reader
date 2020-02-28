@@ -279,15 +279,11 @@ void DocShowShellWidget::slotOpenFileOk(const QString &sPath)
     if (this->isVisible()) {
         dApp->m_pDataManager->qSetCurrentFilePath(sPath);
 
-        qDebug() << __FUNCTION__ << "  12312             " << sPath;
-
         MsgModel mm;
         mm.setMsgType(MSG_OPERATION_OPEN_FILE_OK);
         mm.setPath(sPath);
 
         notifyMsg(E_DOCPROXY_MSG_TYPE, mm.toJson());
-    } else {
-        qDebug() << __FUNCTION__ << "  111111111111111111ssssssssss             " << sPath;
     }
 
     m_playout->removeWidget(m_pSpinerWidget);

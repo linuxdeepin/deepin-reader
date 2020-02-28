@@ -20,9 +20,6 @@
 #define MAINSPLITTER_H
 
 #include <DSplitter>
-
-#include "CustomControl/CustomWidget.h"
-
 #include "application.h"
 
 DWIDGET_USE_NAMESPACE
@@ -33,8 +30,8 @@ class MainSplitter : public DSplitter, public IObserver
     Q_DISABLE_COPY(MainSplitter)
 
 public:
-    explicit MainSplitter(CustomWidget *parent = nullptr);
-    ~MainSplitter() Q_DECL_OVERRIDE;
+    explicit MainSplitter(DWidget *parent = nullptr);
+    ~MainSplitter() override;
 
 signals:
     void sigDocProxy(const QString &);

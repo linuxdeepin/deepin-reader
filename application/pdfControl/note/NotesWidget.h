@@ -77,7 +77,6 @@ public:
 
 signals:
     void sigOpenFileOk();
-    void sigCloseFile();
 
 public:
     // IObserver interface
@@ -90,7 +89,6 @@ private slots:
     void slotDealWithData(const int &, const QString &);
 
     void slotOpenFileOk();
-    void slotCloseFile();
     void slotLoadImage(const QImage &);
     void slotSelectItem(QListWidgetItem *);
 

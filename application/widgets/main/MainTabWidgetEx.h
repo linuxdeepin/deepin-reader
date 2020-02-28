@@ -33,7 +33,8 @@ public:
     ~MainTabWidgetEx() Q_DECL_OVERRIDE;
 
 signals:
-    void sigCloseFile(const int &, const QString &);
+    void sigCloseFile(const QString &);
+    void sigRemoveFileTab(const QString &);
 
     // IObserver interface
 public:
@@ -46,15 +47,11 @@ protected:
 private:
     void InitConnections();
 
-    void AppExitFile(const int &, const QString &);
-
 private slots:
-    void SlotDealWithData(const int &, const QString &);
-
     void SlotSetCurrentIndexFile(const QString &);
     void SlotAddTab(const QString &);
 
-    void SlotCloseFile(const int &, const QString &);
+    void SlotCloseFile(const QString &);
 //    void SlotTabRemoveFile(const int &, const QString &);
 
 private:

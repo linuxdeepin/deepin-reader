@@ -26,7 +26,7 @@
 #include "MsgModel.h"
 
 #include "docview/commonstruct.h"
-#include "business/DocummentFileHelper.h"
+
 #include "docview/docummentproxy.h"
 #include "controller/AppSetting.h"
 #include "controller/FVMMouseEvent.h"
@@ -45,7 +45,7 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
     m_pMsgList = { MSG_MAGNIFYING, MSG_HANDLESHAPE,
                    MSG_FILE_ROTATE,
                    MSG_NOTE_ADD_CONTENT, MSG_NOTE_PAGE_ADD,
-                   MSG_EXIT_SAVE_FILE
+                   APP_EXIT_SAVE_FILE
                  };
 
     m_pKeyMsgList = {KeyStr::g_ctrl_p, KeyStr::g_ctrl_l, KeyStr::g_ctrl_i};
@@ -471,11 +471,6 @@ void FileViewWidget::SlotDocFileOpenResult(bool openresult)
     }
 }
 
-void FileViewWidget::SlotCloseFile(const QString &sPath)
-{
-    emit sigClosetab(m_strProcUuid);
-}
-
 //  信号槽　初始化
 void FileViewWidget::initConnections()
 {
@@ -483,7 +478,6 @@ void FileViewWidget::initConnections()
 
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
     connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)), SLOT(slotDealWithKeyMsg(const QString &)));
-    connect(this, SIGNAL(sigCloseFile(const QString &)), SLOT(SlotCloseFile(const QString &)));
 }
 
 //  打印
@@ -539,8 +533,6 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         OnSetViewScale(msgContent);
     } else if (msgType == MSG_VIEWCHANGE_FIT) {
         OnSetViewHit(msgContent);
-    } else if (msgType == MSG_CLOSE_FILE) {
-        emit sigCloseFile(msgContent);
     }
 
     return 0;

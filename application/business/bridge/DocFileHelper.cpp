@@ -48,8 +48,6 @@ void DocFileHelper::RemoveTabFile(const int &iType, const QString &sPath)
     if (sUuid != "") {
         DocummentProxy *_proxy = DocummentProxy::instance(sUuid);
         if (_proxy) {
-            dApp->m_pDBService->qSaveData(sPath, DB_HISTROY);
-
             if (MSG_TAB_SAVE_FILE == iType || MSG_TAB_NOT_SAVE_FILE == iType) {
                 bool bSave = iType == MSG_TAB_SAVE_FILE ? true : false;
                 _proxy->save(sPath, bSave);
@@ -68,29 +66,29 @@ void DocFileHelper::RemoveTabFile(const int &iType, const QString &sPath)
     }
 }
 
-void DocFileHelper::AppExitFile(const int &iType, const QString &sPath)
+void DocFileHelper::AppExitFile(const int &iType, const QString &sPaths)
 {
-    QString sUuid = dApp->m_pDataManager->qGetFileUuid(sPath);
-    if (sUuid != "") {
-        DocummentProxy *_proxy = DocummentProxy::instance(sUuid);
-        if (_proxy) {
-            dApp->m_pDBService->qSaveData(sPath, DB_HISTROY);
+    //  应用退出
+    QStringList pathList = sPaths.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    foreach (const QString &s, pathList) {
+        QString sUuid = dApp->m_pDataManager->qGetFileUuid(s);
+        if (sUuid != "") {
+            DocummentProxy *_proxy = DocummentProxy::instance(sUuid);
+            if (_proxy) {
+                if (APP_EXIT_SAVE_FILE == iType || APP_EXIT_NOT_SAVE_FILE == iType) {
+                    bool bSave = iType == APP_EXIT_SAVE_FILE ? true : false;
+                    _proxy->save(s, bSave);
 
-            if (MSG_EXIT_SAVE_FILE == iType || MSG_EXIT_NOT_SAVE_FILE == iType) {
-                bool bSave = iType == MSG_EXIT_SAVE_FILE ? true : false;
-                _proxy->save(sPath, bSave);
-
-                if (bSave) {
-                    dApp->m_pDBService->qSaveData(sPath, DB_BOOKMARK);
+                    if (bSave) {
+                        dApp->m_pDBService->qSaveData(s, DB_BOOKMARK);
+                    }
                 }
+
+                dApp->m_pDataManager->qSaveData(s);
+
+                _proxy->closeFile();
             }
-
-            dApp->m_pDataManager->qSaveData(sPath);
-
-            _proxy->closeFile();
         }
-
-        notifyMsg(E_APP_EXIT, sPath);
     }
 }
 
@@ -159,7 +157,8 @@ void DocFileHelper::onSaveAsFile()
                     if (rl) {
                         //insert a new bookmark record to bookmarktabel
                         dApp->m_pDBService->qSaveData(sFilePath, DB_BOOKMARK);
-                        dApp->m_pDBService->qSaveData(sFilePath, DB_HISTROY);
+
+                        dApp->m_pDataManager->qSaveData(sFilePath);
 
                         notifyMsg(MSG_OPERATION_OPEN_FILE_OK, sFilePath);
                     }
@@ -205,7 +204,7 @@ int DocFileHelper::qDealWithData(const int &msgType, const QString &msgContent)
     } else if (MSG_TAB_SAVE_FILE == msgType || MSG_TAB_NOT_SAVE_FILE == msgType || MSG_TAB_NOT_CHANGE_SAVE_FILE == msgType)  {
         RemoveTabFile(msgType, msgContent);
         nRes = MSG_OK;
-    } else if (MSG_EXIT_SAVE_FILE == msgType || MSG_EXIT_NOT_SAVE_FILE == msgType || MSG_EXIT_NOT_CHANGE_FILE == msgType) {
+    } else if (APP_EXIT_SAVE_FILE == msgType || APP_EXIT_NOT_SAVE_FILE == msgType || APP_EXIT_NOT_CHANGE_FILE == msgType) {
         AppExitFile(msgType, msgContent);
         nRes = MSG_OK;
     }

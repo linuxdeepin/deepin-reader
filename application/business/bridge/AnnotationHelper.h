@@ -53,4 +53,4 @@ private:
     void __UpdatePageIconAnnotation(const QString &);
 };
 
-#endif // DOCUMMENTFILEHELPER_H
+#endif // ANNOTATIONHELPER_H

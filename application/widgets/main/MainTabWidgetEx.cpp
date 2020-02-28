@@ -25,7 +25,6 @@
 #include "MainSplitter.h"
 #include "MsgModel.h"
 
-#include "business/DocummentFileHelper.h"
 #include "controller/FileDataManager.h"
 
 #include "business/bridge/IHelper.h"
@@ -33,10 +32,6 @@
 MainTabWidgetEx::MainTabWidgetEx(DWidget *parent)
     : CustomWidget("MainTabWidgetEx", parent)
 {
-    m_pMsgList = {MSG_EXIT_SAVE_FILE, MSG_EXIT_NOT_SAVE_FILE, MSG_EXIT_NOT_CHANGE_FILE,
-                  MSG_DOC_OPEN_FILE_START
-                 };
-
     initWidget();
     InitConnections();
 
@@ -50,13 +45,8 @@ MainTabWidgetEx::~MainTabWidgetEx()
 
 int MainTabWidgetEx::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (m_pMsgList.contains(msgType)) {
-        emit sigDealWithData(msgType, msgContent);
-        return ConstantMsg::g_effective_res;
-    }
-
-    if (msgType == MSG_CLOSE_FILE || msgType == E_APP_EXIT) {
-        emit sigCloseFile(msgType, msgContent);
+    if (msgType == MSG_CLOSE_FILE) {
+        emit sigCloseFile(msgContent);
     }
 
     return 0;
@@ -67,6 +57,8 @@ void MainTabWidgetEx::initWidget()
     MainTabBar *bar = new MainTabBar;
     connect(bar, SIGNAL(sigTabBarIndexChange(const QString &)), SLOT(SlotSetCurrentIndexFile(const QString &)));
     connect(bar, SIGNAL(sigAddTab(const QString &)), SLOT(SlotAddTab(const QString &)));
+
+    connect(this, SIGNAL(sigRemoveFileTab(const QString &)), bar, SLOT(SlotRemoveFileTab(const QString &)));
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(bar);
@@ -82,35 +74,7 @@ void MainTabWidgetEx::initWidget()
 
 void MainTabWidgetEx::InitConnections()
 {
-    connect(this, SIGNAL(sigCloseFile(const int &, const QString &)), SLOT(SlotCloseFile(const int &, const QString &)));
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
-}
-
-//  应用退出
-void MainTabWidgetEx::AppExitFile(const int &msgType, const QString &sPath)
-{
-    QStringList pathList = sPath.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    foreach (const QString &text, pathList) {
-        auto splitterList = this->findChildren<MainSplitter *>();
-        foreach (auto s, splitterList) {
-            QString sSplitterPath = s->qGetPath();
-            if (sSplitterPath == text) {
-
-                dApp->m_pHelper->qDealWithData(msgType, text);
-                break;
-            }
-        }
-    }
-}
-
-
-void MainTabWidgetEx::SlotDealWithData(const int &msgType, const QString &msgContent)
-{
-    if (MSG_EXIT_SAVE_FILE == msgType || MSG_EXIT_NOT_SAVE_FILE == msgType || MSG_EXIT_NOT_CHANGE_FILE == msgType) {
-        AppExitFile(msgType, msgContent);
-    } else if (MSG_DOC_OPEN_FILE_START == msgType) {
-        SlotSetCurrentIndexFile(msgContent);
-    }
+    connect(this, SIGNAL(sigCloseFile(const QString &)), SLOT(SlotCloseFile(const QString &)));
 }
 
 void MainTabWidgetEx::SlotSetCurrentIndexFile(const QString &sPath)
@@ -119,10 +83,14 @@ void MainTabWidgetEx::SlotSetCurrentIndexFile(const QString &sPath)
     foreach (auto s, splitterList) {
         QString sSplitterPath = s->qGetPath();
         if (sSplitterPath == sPath) {
-            int iIndex = m_pStackedLayout->indexOf(s);
-            m_pStackedLayout->setCurrentIndex(iIndex);
+            if (!s->isVisible()) {
+                dApp->m_pDataManager->qSetCurrentFilePath(sPath);
 
-            break;
+                int iIndex = m_pStackedLayout->indexOf(s);
+                m_pStackedLayout->setCurrentIndex(iIndex);
+
+                break;
+            }
         }
     }
 }
@@ -138,12 +106,16 @@ void MainTabWidgetEx::SlotAddTab(const QString &sPath)
     }
 }
 
-void MainTabWidgetEx::SlotCloseFile(const int &, const QString &sPath)
+void MainTabWidgetEx::SlotCloseFile(const QString &sPath)
 {
     auto splitterList = this->findChildren<MainSplitter *>();
     foreach (auto s, splitterList) {
         QString sSplitterPath = s->qGetPath();
         if (sSplitterPath == sPath) {
+            dApp->m_pDataManager->qRemoveFilePath(sPath);
+
+            emit sigRemoveFileTab(sPath);
+
             m_pStackedLayout->removeWidget(s);
 
             delete  s;
