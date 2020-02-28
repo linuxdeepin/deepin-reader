@@ -68,6 +68,7 @@ private slots:
     void SlotCloseFile(const int &, const QString &);
     void SlotDealWithData(const int &, const QString &);
     void SlotDocProxyMsg(const QString &);
+    void slotcurrentChanged(int);
 
 private:
     int     m_nOldMiniWidth = 0;

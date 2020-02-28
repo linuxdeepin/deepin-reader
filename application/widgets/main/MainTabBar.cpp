@@ -94,6 +94,7 @@ void MainTabBar::__InitConnection()
     connect(this, SIGNAL(tabAddRequested()), SLOT(SlotTabAddRequested()));
 
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
+    connect(this, SIGNAL(currentChanged(int)), SLOT(slotcurrentChanged(int)));
 }
 
 void MainTabBar::SlotTabBarClicked(int index)
@@ -237,6 +238,18 @@ void MainTabBar::SlotDocProxyMsg(const QString &sPath)
             this->setCurrentIndex(iLoop);
             break;
         }
+    }
+}
+
+void MainTabBar::slotcurrentChanged(int index)
+{
+    QString sPath = this->tabData(index).toString();
+
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+
+    if (sPath != sCurPath) {
+        dApp->m_pDataManager->qSetCurrentFilePath(sPath);
+        emit sigTabBarIndexChange(sPath);
     }
 }
 
