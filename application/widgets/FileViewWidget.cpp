@@ -27,7 +27,6 @@
 
 #include "docview/commonstruct.h"
 #include "business/DocummentFileHelper.h"
-#include "business/AnnotationHelper.h"
 #include "docview/docummentproxy.h"
 #include "controller/AppSetting.h"
 #include "controller/FVMMouseEvent.h"
@@ -36,6 +35,8 @@
 #include "menu/TextOperationMenu.h"
 #include "utils/PublicFunction.h"
 #include "business/PrintManager.h"
+
+#include "business/bridge/IHelper.h"
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
@@ -297,7 +298,7 @@ void FileViewWidget::onFileAddAnnotation()
                            QString::number(nEx) + Constant::sQStringSep +
                            QString::number(nEy);
 
-        notifyMsg(MSG_NOTE_ADD_HIGHLIGHT_COLOR, sContent);
+        dApp->m_pHelper->qDealWithData(MSG_NOTE_ADD_HIGHLIGHT_COLOR, sContent);
     } else {
         notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
     }
@@ -324,7 +325,7 @@ void FileViewWidget::onFileAddNote(const QString &msgContent)
                            sNote + Constant::sQStringSep +
                            sPage;
 
-        notifyMsg(MSG_NOTE_ADD_HIGHLIGHT_NOTE, sContent);
+        dApp->m_pHelper->qDealWithData(MSG_NOTE_ADD_HIGHLIGHT_NOTE, sContent);
     }
 }
 
@@ -489,6 +490,7 @@ void FileViewWidget::initConnections()
 void FileViewWidget::onPrintFile()
 {
     PrintManager p;
+    p.setPrintPath(m_strPath);
     p.showPrintDialog(this);
 }
 

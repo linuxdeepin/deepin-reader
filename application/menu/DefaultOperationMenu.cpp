@@ -2,8 +2,9 @@
 
 #include "controller/AppInfo.h"
 #include "controller/FileDataManager.h"
-
 #include "docview/docummentproxy.h"
+
+#include "business/bridge/IHelper.h"
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     : CustomMenu("DefaultOperationMenu", parent)
@@ -110,22 +111,22 @@ void DefaultOperationMenu::slotBookMarkClicked()
 
 void DefaultOperationMenu::slotFirstPageClicked()
 {
-    notifyMsg(MSG_OPERATION_FIRST_PAGE);
+    dApp->m_pHelper->qDealWithData(MSG_OPERATION_FIRST_PAGE, "");
 }
 
 void DefaultOperationMenu::slotPrevPageClicked()
 {
-    notifyMsg(MSG_OPERATION_PREV_PAGE);
+    dApp->m_pHelper->qDealWithData(MSG_OPERATION_PREV_PAGE, "");
 }
 
 void DefaultOperationMenu::slotNextPageClicked()
 {
-    notifyMsg(MSG_OPERATION_NEXT_PAGE);
+    dApp->m_pHelper->qDealWithData(MSG_OPERATION_NEXT_PAGE, "");
 }
 
 void DefaultOperationMenu::slotEndPageClicked()
 {
-    notifyMsg(MSG_OPERATION_END_PAGE);
+    dApp->m_pHelper->qDealWithData(MSG_OPERATION_END_PAGE, "");
 }
 
 void DefaultOperationMenu::slotExitFullScreenClicked()

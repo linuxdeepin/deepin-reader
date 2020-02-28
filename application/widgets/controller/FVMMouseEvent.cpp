@@ -28,6 +28,7 @@
 #include "../FileViewWidget.h"
 #include "../NoteTipWidget.h"
 
+#include "business/bridge/IHelper.h"
 
 void FVMMouseEvent::mouseMoveEvent(QMouseEvent *event, DWidget *widget)
 {
@@ -261,7 +262,7 @@ void FVMMouseEvent::__ClickPageLink(Page::Link *pLink, FileViewWidget *fvw)
 
     } else if (linkType == Page::LinkType_Goto) {
         int page = pLink->page - 1;
-        fvw->notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(page));
+        dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(page));
     } else if (linkType == Page::LinkType_GotoOtherFile) {
 
     } else if (linkType == Page::LinkType_Browse) {

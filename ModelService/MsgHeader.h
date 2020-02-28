@@ -60,8 +60,6 @@ enum E_TAB_TYPE {
     MSG_TAB_MSG_BEGIN = MSG_TYPE_END + 50,
     MSG_TAB_ADD,                    //  添加 tab 消息
     MSG_TAB_REMOVE,                 //  删除 tab 消息
-    MSG_TAB_ADD_OK,                 //  添加 tab 成功
-    MSG_TAB_ADD_END,                //  添加 tab 结束
     MSG_TAB_DATA_CHANGE,            //  文档数据有变化消息
     MSG_TAB_SAVE_FILE,              //  关闭当前文档　消息
     MSG_TAB_SHOW_FILE_CHANGE,       //  文档 显示切换消息
@@ -72,7 +70,7 @@ enum E_TAB_TYPE {
 
 //  菜单操作消息类型
 enum E_MENU_MSG {
-    MSG_OPERATION_SAVE_AS_FILE = MSG_TAB_MSG_END + 50,  //  另存为文件
+    E_MENU_MSG_BEGIN = MSG_TAB_MSG_END + 50,
     MSG_MENU_NEW_WINDOW,                // 新窗口打开一个文档
     MSG_MENU_NEW_TAB,                   // 新增加一个文档
     MSG_MENU_OPEN_FOLDER,               //  打开文件所处文件夹

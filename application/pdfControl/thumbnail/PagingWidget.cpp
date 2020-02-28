@@ -22,6 +22,8 @@
 
 #include "docview/docummentproxy.h"
 
+#include "business/bridge/IHelper.h"
+
 PagingWidget::PagingWidget(CustomWidget *parent)
     : CustomWidget(QString("PagingWidget"), parent)
 {
@@ -204,7 +206,7 @@ void PagingWidget::__NormalChangePage()
 {
     QString sText = m_pJumpPageLineEdit->text();
     int iPage = sText.toInt() - 1;
-    notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(iPage));
+    dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(iPage));
 }
 
 void PagingWidget::__PageNumberJump()
@@ -218,7 +220,7 @@ void PagingWidget::__PageNumberJump()
         int iPage = _proxy->label2pagenum(sText);
 
         if (iPage > -1 && iPage < nPageSum) {   //  输入的页码 必须在 0-最大值 之间, 才可以
-            notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(iPage));
+            dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(iPage));
         } else {
             notifyMsg(CENTRAL_SHOW_TIP, tr("Invalid page number"));
         }
@@ -227,10 +229,10 @@ void PagingWidget::__PageNumberJump()
 
 void PagingWidget::slotPrePageBtnClicked()
 {
-    notifyMsg(MSG_OPERATION_PREV_PAGE);
+    dApp->m_pHelper->qDealWithData(MSG_OPERATION_PREV_PAGE, "");
 }
 
 void PagingWidget::slotNextPageBtnClicked()
 {
-    notifyMsg(MSG_OPERATION_NEXT_PAGE);
+    dApp->m_pHelper->qDealWithData(MSG_OPERATION_NEXT_PAGE, "");
 }

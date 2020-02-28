@@ -27,6 +27,8 @@
 #include "utils/PublicFunction.h"
 #include "docview/docummentproxy.h"
 
+#include "business/bridge/IHelper.h"
+
 NoteViewWidget::NoteViewWidget(CustomWidget *parent)
     : CustomWidget(QString("NoteViewWidget"), parent)
 {
@@ -133,13 +135,12 @@ void NoteViewWidget::__FileNoteHideEvent()
     } else {
         if (sText == "" && m_strNote != "") {   //  原来有内容, 被删了, 删除高亮
             QString msgContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage;
-            sendMsg(MSG_NOTE_DELETE_CONTENT, msgContent);
+            dApp->m_pHelper->qDealWithData(MSG_NOTE_DELETE_CONTENT, msgContent);
         } else if (sText != m_strNote) {
             QString msgContent = sText + Constant::sQStringSep +
                                  m_pNoteUuid + Constant::sQStringSep +
                                  m_pNotePage;
-
-            sendMsg(MSG_NOTE_UPDATE_CONTENT, msgContent);
+            dApp->m_pHelper->qDealWithData(MSG_NOTE_UPDATE_CONTENT, msgContent);
         }
         m_strNote = sText;
     }
@@ -157,7 +158,7 @@ void NoteViewWidget::__PageNoteHideEvent()
                                      m_pNoteUuid + Constant::sQStringSep +
                                      m_pNotePage;
 
-                sendMsg(MSG_NOTE_PAGE_ADD_CONTENT, msgContent);
+                dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_ADD_CONTENT, msgContent);
             } else {
                 auto pHelper = DocummentProxy::instance();
                 if (pHelper) {
@@ -167,17 +168,12 @@ void NoteViewWidget::__PageNoteHideEvent()
         } else {
             if (sText == "") {
                 QString msgContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage;
-                sendMsg(MSG_NOTE_PAGE_DELETE_CONTENT, msgContent);
-                auto pHelper = DocummentProxy::instance();
-                if (pHelper) {
-                    pHelper->removeAnnotation(m_pNoteUuid);
-                }
+                dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_DELETE_CONTENT, msgContent);
             } else if (sText != m_strNote) {  //  只有 和 原来已有注释内容不一样, 才会提示 保存
                 QString msgContent = sText + Constant::sQStringSep +
                                      m_pNoteUuid + Constant::sQStringSep +
                                      m_pNotePage;
-
-                sendMsg(MSG_NOTE_PAGE_UPDATE_CONTENT, msgContent);
+                dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_UPDATE_CONTENT, msgContent);
             }
         }
     }

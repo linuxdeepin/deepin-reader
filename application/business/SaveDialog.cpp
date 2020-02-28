@@ -26,7 +26,10 @@ DWIDGET_USE_NAMESPACE
 
 #include "application.h"
 #include "FileDataModel.h"
+
 #include "controller/FileDataManager.h"
+
+#include "business/bridge/IHelper.h"
 
 SaveDialog::SaveDialog(QObject *parent)
     : QObject(parent)
@@ -79,6 +82,8 @@ void SaveDialog::AppExit()
 
 void SaveDialog::TabRemove(const QString &sPath)
 {
+    int nMsgType = MSG_TAB_NOT_CHANGE_SAVE_FILE;
+
     FileState fs = dApp->m_pDataManager->qGetFileChange(sPath);
     if (fs.isChange) {
         int nRes = showDialog();
@@ -87,13 +92,12 @@ void SaveDialog::TabRemove(const QString &sPath)
         }
 
         if (nRes == 2) {
-            dApp->m_pModelService->notifyMsg(MSG_TAB_SAVE_FILE, sPath);
+            nMsgType = MSG_TAB_SAVE_FILE;
         } else {    //  不保存
-            dApp->m_pModelService->notifyMsg(MSG_TAB_NOT_SAVE_FILE, sPath);
+            nMsgType = MSG_TAB_NOT_SAVE_FILE;
         }
-    } else {
-        dApp->m_pModelService->notifyMsg(MSG_TAB_NOT_CHANGE_SAVE_FILE, sPath);
     }
+    dApp->m_pHelper->qDealWithData(nMsgType, sPath);
 }
 
 int SaveDialog::showDialog()

@@ -22,9 +22,10 @@
 #include "ModelService.h"
 
 class AppInfo;
-class AnnotationHelper;
 class FileDataManager;
 class DocummentFileHelper;
+
+class IHelper;
 
 #if defined(dApp)
 #undef dApp
@@ -51,7 +52,8 @@ public:
     AppInfo             *m_pAppInfo = nullptr;
     FileDataManager     *m_pDataManager = nullptr;
     DocummentFileHelper *m_pDocummentFileHelper = nullptr;
-    AnnotationHelper    *m_pAnnotationHelper = nullptr;
+
+    IHelper              *m_pHelper = nullptr;
 
 private:
     void initCfgPath();

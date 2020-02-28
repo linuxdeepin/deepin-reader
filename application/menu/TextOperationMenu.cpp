@@ -5,6 +5,8 @@
 
 #include "ColorWidgetAction.h"
 
+#include "business/bridge/IHelper.h"
+
 #include "controller/AppInfo.h"
 #include "controller/FileDataManager.h"
 
@@ -12,13 +14,10 @@ TextOperationMenu::TextOperationMenu(DWidget *parent)
     : CustomMenu("TextOperationMenu", parent)
 {
     initActions();
-
-//    dApp->m_pModelService->addObserver(this);
 }
 
 TextOperationMenu::~TextOperationMenu()
 {
-//    dApp->m_pModelService->removeObserver(this);
 }
 
 void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, const QString &sSelectText, const QString &sUuid)
@@ -104,8 +103,7 @@ void TextOperationMenu::slotSetHighLight(const int &nColor)
         QString sContent = QString::number(m_pLightColor) + Constant::sQStringSep +
                            m_strNoteUuid + Constant::sQStringSep +
                            QString::number(m_nClickPage);
-
-        notifyMsgToFrame(MSG_NOTE_UPDATE_HIGHLIGHT_COLOR, sContent);
+        dApp->m_pHelper->qDealWithData(MSG_NOTE_UPDATE_HIGHLIGHT_COLOR, sContent);
     } else {    //  移除高亮不可点,说明没有高亮, 点击操作 是 添加高亮
         int nSx = m_pStartPoint.x();
         int nSy = m_pStartPoint.y();
@@ -119,19 +117,19 @@ void TextOperationMenu::slotSetHighLight(const int &nColor)
                            QString::number(nEy) + Constant::sQStringSep +
                            QString::number(m_pLightColor);
 
-        notifyMsgToFrame(MSG_NOTE_ADD_HIGHLIGHT_COLOR, sContent);
+        dApp->m_pHelper->qDealWithData(MSG_NOTE_ADD_HIGHLIGHT_COLOR, sContent);
     }
 }
 
 void TextOperationMenu::slotCopyClicked()
 {
-    notifyMsgToFrame(MSG_OPERATION_TEXT_COPY, m_strSelectText);
+    dApp->m_pHelper->qDealWithData(MSG_OPERATION_TEXT_COPY, m_strSelectText);
 }
 
 void TextOperationMenu::slotRemoveHighLightClicked()
 {
     QString sContent = QString::number(m_pClickPoint.x()) + Constant::sQStringSep +  QString::number(m_pClickPoint.y());
-    notifyMsgToFrame(MSG_NOTE_REMOVE_HIGHLIGHT_COLOR, sContent);
+    dApp->m_pHelper->qDealWithData(MSG_NOTE_REMOVE_HIGHLIGHT_COLOR, sContent);
 }
 
 void TextOperationMenu::slotAddNoteClicked()

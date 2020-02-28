@@ -24,6 +24,8 @@
 #include "controller/FileDataManager.h"
 #include "docview/docummentproxy.h"
 
+#include "business/bridge/IHelper.h"
+
 ThumbnailWidget::ThumbnailWidget(DWidget *parent)
     : CustomWidget(QString("ThumbnailWidget"), parent)
 {
@@ -310,7 +312,7 @@ void ThumbnailWidget::showItemBookMark(int ipage)
  */
 void ThumbnailWidget::prevPage()
 {
-    notifyMsg(MSG_OPERATION_PREV_PAGE);
+    dApp->m_pHelper->qDealWithData(MSG_OPERATION_PREV_PAGE, "");
 }
 
 /**
@@ -319,7 +321,7 @@ void ThumbnailWidget::prevPage()
  */
 void ThumbnailWidget::nextPage()
 {
-    notifyMsg(MSG_OPERATION_NEXT_PAGE);
+    dApp->m_pHelper->qDealWithData(MSG_OPERATION_NEXT_PAGE, "");
 }
 
 /**

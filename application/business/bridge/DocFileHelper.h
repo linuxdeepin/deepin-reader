@@ -17,45 +17,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DOCUMMENTFILEHELPER_H
-#define DOCUMMENTFILEHELPER_H
+#ifndef DOCFILEHELPER_H
+#define DOCFILEHELPER_H
 
-#include <QObject>
-
-#include "application.h"
+#include "HelperImpl.h"
 
 /**
  * @brief The DocummentFileHelper class
  * 封装 DocView 函数调用
  */
 
-class DocummentFileHelper : public QObject, public IObserver
+class DocFileHelper : public HelperImpl
 {
     Q_OBJECT
-    Q_DISABLE_COPY(DocummentFileHelper)
+public:
+    explicit DocFileHelper(QObject *parent = nullptr);
 
 public:
-    explicit DocummentFileHelper(QObject *parent = nullptr);
-
-signals:
-    void sigFileSlider(const int &);
-
-    // IObserver interface
-public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
+    int qDealWithData(const int &msgType, const QString &msgContent) override;
 
 private:
-    void initConnections();
+    void __PageJump(const int &pagenum);
+    void __PageJumpByMsg(const int &);
 
-    // IObserver interface
-    void sendMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
-    void notifyMsg(const int &msgType, const QString &msgContent = "") Q_DECL_OVERRIDE;
+    void onOpenFile(const QString &filePaths);
 
-private slots:
-    void slotFileSlider(const int &);
+    void onSaveFile();
+    void onSaveAsFile();
 
-private:
-    QList<QString>          m_pKeyMsgList;
+    void __FileCtrlCContent();
+    //  复制
+    void OnCopySelectContent(const QString &sCopy);
+
+    void notifyMsg(const int &msgType, const QString &msgContent = "") ;
+
+    void SetFileSlider(const int &nFlag);
+
+    void RemoveTabFile(const int &iType, const QString &sPath);
+    void AppExitFile(const int &iType, const QString &sPath);
 };
 
-#endif // DOCUMMENTFILEHELPER_H
+
+#endif // DOCFILEHELPER_H

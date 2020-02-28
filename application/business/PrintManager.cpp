@@ -22,7 +22,7 @@
 #include <QPainter>
 #include <QPrintPreviewDialog>
 
-#include "docview/docummentproxy.h"
+#include "controller/FileDataManager.h"
 
 PrintManager::PrintManager(QObject *parent)
     : QObject(parent)
@@ -41,14 +41,15 @@ void PrintManager::showPrintDialog(DWidget *widget)
 
 void PrintManager::slotPrintPreview(QPrinter *printer)
 {
-    //  文档实际大小
-    stFileInfo fileInfo;
-    int nPageSize = 0;
-    DocummentProxy *_proxy = DocummentProxy::instance();
+    DocummentProxy *_proxy = dApp->m_pDataManager->qGetCurrentProxy();
     if (_proxy) {
+        //  文档实际大小
+        stFileInfo fileInfo;
         _proxy->docBasicInfo(fileInfo);
 
-        nPageSize = _proxy->getPageSNum();  //  pdf 页数
+        int nPageSize = _proxy->getPageSNum();  //  pdf 页数
+
+        printer->setDocName(m_strPrintName);
 
         QPainter painter(printer);
         painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
@@ -68,4 +69,13 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
         }
         painter.end();
     }
+}
+
+void PrintManager::setPrintPath(const QString &strPrintPath)
+{
+    QString sPath = strPrintPath;
+    int nLastPos = sPath.lastIndexOf('/');
+    nLastPos++;
+
+    m_strPrintName = sPath.mid(nLastPos);
 }

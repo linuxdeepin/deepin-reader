@@ -26,6 +26,8 @@
 #include "controller/FileDataManager.h"
 #include "docview/docummentproxy.h"
 
+#include "business/bridge/IHelper.h"
+
 BookMarkWidget::BookMarkWidget(DWidget *parent)
     : CustomWidget(QString("BookMarkWidget"), parent)
 {
@@ -74,7 +76,7 @@ void BookMarkWidget::prevPage()
     if (pCurItem != nullptr) {
         auto t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
         if (t_widget) {
-            notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(t_widget->nPageIndex()));
+            dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(t_widget->nPageIndex()));
         }
     }
 }
@@ -97,7 +99,7 @@ void BookMarkWidget::nextPage()
     if (pCurItem) {
         auto t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
         if (t_widget) {
-            notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(t_widget->nPageIndex()));
+            dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(t_widget->nPageIndex()));
         }
     }
 }

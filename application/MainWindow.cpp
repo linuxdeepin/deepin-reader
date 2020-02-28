@@ -11,7 +11,6 @@
 
 #include "business/ShortCutShow.h"
 #include "business/SaveDialog.h"
-#include "business/DocummentFileHelper.h"
 #include "controller/AppInfo.h"
 #include "controller/AppSetting.h"
 #include "controller/FileDataManager.h"
@@ -19,6 +18,8 @@
 #include "menu/TitleMenu.h"
 #include "widgets/TitleWidget.h"
 #include "widgets/CentralWidget.h"
+
+#include "business/bridge/IHelper.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -249,6 +250,8 @@ void MainWindow::slotShortCut(const QString &key)
         if (sFilePath != "") {
             if (key == KeyStr::g_ctrl_h) {  //  播放幻灯片
                 SlotSlideShow();
+            } else if (key == KeyStr::g_ctrl_s || key == KeyStr::g_ctrl_shift_s || key == KeyStr::g_ctrl_c) {
+                dApp->m_pHelper->qDealWithData(MSG_NOTIFY_KEY_MSG, key);
             } else {
                 notifyMsg(MSG_NOTIFY_KEY_MSG, key);
             }
@@ -256,10 +259,7 @@ void MainWindow::slotShortCut(const QString &key)
     }
 }
 
-void MainWindow::sendMsg(const int &, const QString &)
-{
-
-}
+void MainWindow::sendMsg(const int &, const QString &) {}
 
 void MainWindow::notifyMsg(const int &msgType, const QString &msgContent)
 {

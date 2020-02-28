@@ -24,6 +24,8 @@
 #include <QTextLayout>
 #include <QVBoxLayout>
 
+#include "business/bridge/IHelper.h"
+
 NotesItemWidget::NotesItemWidget(DWidget *parent)
     : CustomItemWidget(QString("NotesItemWidget"), parent)
 {
@@ -65,9 +67,9 @@ void NotesItemWidget::slotDltNoteContant()
 {
     QString sContent = m_strUUid + Constant::sQStringSep + m_strPage;
     if (m_nNoteType == NOTE_HIGHLIGHT) {
-        notifyMsg(MSG_NOTE_DELETE_CONTENT, sContent);
+        dApp->m_pHelper->qDealWithData(MSG_NOTE_DELETE_CONTENT, sContent);
     } else {
-        notifyMsg(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
+        dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
     }
 }
 

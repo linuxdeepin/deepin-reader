@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
+ * Copyright (C) 2019 ~ 2020 UOS Technology Co., Ltd.
  *
  * Author:     wangzhxiaun
  *
@@ -16,39 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef PRINTMANAGER_H
-#define PRINTMANAGER_H
 
-#include <QObject>
-#include <DWidget>
+#include "IHelper.h"
 
-class QPrinter;
+#include "HelperImpl.h"
+#include "AnnotationHelper.h"
+#include "DocFileHelper.h"
 
-DWIDGET_USE_NAMESPACE
-
-
-/**
- * @brief The PrintManager class
- * @brief   打印管理
- *
- */
-
-
-class PrintManager : public QObject
+IHelper::IHelper()
 {
-    Q_OBJECT
-public:
-    explicit PrintManager(QObject *parent = nullptr);
 
-    void showPrintDialog(DWidget *widget);
+}
 
-    void setPrintPath(const QString &strPrintPath);
+Helper::Helper()
+{
+    m_pAnnotatinHelperImpl = new AnnotationHelper;
+    m_pDocHelperImpl = new DocFileHelper;
+}
 
-private slots:
-    void slotPrintPreview(QPrinter *printer);
-
-private:
-    QString     m_strPrintName = "";
-};
-
-#endif // PRINTMANAGER_H
+void Helper::qDealWithData(const int &msgType, const QString &msgContent)
+{
+    int nRes = m_pAnnotatinHelperImpl->qDealWithData(msgType, msgContent);
+    if (nRes != 0) {
+        m_pDocHelperImpl->qDealWithData(msgType, msgContent);
+    }
+}

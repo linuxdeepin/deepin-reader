@@ -23,6 +23,8 @@
 #include "controller/AppInfo.h"
 #include "docview/docummentproxy.h"
 
+#include "business/bridge/IHelper.h"
+
 NotesWidget::NotesWidget(DWidget *parent)
     : CustomWidget("NotesWidget", parent)
 {
@@ -78,9 +80,9 @@ void NotesWidget::DeleteItemByKey()
                 QString sContent = t_uuid + Constant::sQStringSep + QString::number(page);
 
                 if (nType == NOTE_HIGHLIGHT) {
-                    notifyMsg(MSG_NOTE_DELETE_CONTENT, sContent);
+                    dApp->m_pHelper->qDealWithData(MSG_NOTE_DELETE_CONTENT, sContent);
                 } else {
-                    notifyMsg(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
+                    dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
                 }
             }
         }

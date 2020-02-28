@@ -38,8 +38,9 @@ signals:
 //    void sigOpenFileOk(const QString &);
     void sigDealWithData(const int &, const QString &);
     void sigCloseFile(const int &, const QString &);
-    void sigTabMsg(const QString &);
     void sigDocProxyMsg(const QString &);
+    void sigTabBarIndexChange(const QString &);
+    void sigAddTab(const QString &);
 
     // IObserver interface
 public:
@@ -63,17 +64,10 @@ private slots:
     void SlotTabBarClicked(int);
     void SlotTabAddRequested();
     void SlotTabCloseRequested(int index);
-    void SlotCurrentChanged(int index);
 
     void SlotCloseFile(const int &, const QString &);
     void SlotDealWithData(const int &, const QString &);
-    void SlotTabMsg(const QString &);
     void SlotDocProxyMsg(const QString &);
-
-//    void SlotTabMoved(int, int);
-//    void SlotTabDroped(int, Qt::DropAction, QObject *);
-
-//    void SlotOpenFileOk(const QString &);
 
 private:
     int     m_nOldMiniWidth = 0;

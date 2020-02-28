@@ -234,6 +234,21 @@ void FileDataManager::qSaveData(const QString &sPath)
     dApp->m_pDBService->qSaveData(sPath, DB_HISTROY);
 }
 
+DocummentProxy *FileDataManager::qGetCurrentProxy()
+{
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    if (sCurPath != "") {
+        QString sUuid = dApp->m_pDataManager->qGetFileUuid(sCurPath);
+        if (sUuid != "") {
+            DocummentProxy *_proxy = DocummentProxy::instance(sUuid);
+            if (_proxy) {
+                return _proxy;
+            }
+        }
+    }
+    return nullptr;
+}
+
 QList<QString> FileDataManager::qGetOpenFilePathList() const
 {
     return m_pFileStateMap.keys();

@@ -28,12 +28,12 @@
 #include "business/DocummentFileHelper.h"
 #include "controller/FileDataManager.h"
 
+#include "business/bridge/IHelper.h"
+
 MainTabWidgetEx::MainTabWidgetEx(DWidget *parent)
     : CustomWidget("MainTabWidgetEx", parent)
 {
-    m_pMsgList = {MSG_TAB_ADD_OK, MSG_TAB_ADD_END,
-                  MSG_EXIT_SAVE_FILE, MSG_EXIT_NOT_SAVE_FILE, MSG_EXIT_NOT_CHANGE_FILE,
-                  MSG_TAB_SAVE_FILE, MSG_TAB_NOT_SAVE_FILE, MSG_TAB_NOT_CHANGE_SAVE_FILE,
+    m_pMsgList = {MSG_EXIT_SAVE_FILE, MSG_EXIT_NOT_SAVE_FILE, MSG_EXIT_NOT_CHANGE_FILE,
                   MSG_DOC_OPEN_FILE_START
                  };
 
@@ -59,16 +59,14 @@ int MainTabWidgetEx::dealWithData(const int &msgType, const QString &msgContent)
         emit sigCloseFile(msgType, msgContent);
     }
 
-    if (msgType == E_TAB_MSG) {
-        emit sigTabMsg(msgContent);
-    }
-
     return 0;
 }
 
 void MainTabWidgetEx::initWidget()
 {
     MainTabBar *bar = new MainTabBar;
+    connect(bar, SIGNAL(sigTabBarIndexChange(const QString &)), SLOT(SlotSetCurrentIndexFile(const QString &)));
+    connect(bar, SIGNAL(sigAddTab(const QString &)), SLOT(SlotAddTab(const QString &)));
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(bar);
@@ -84,28 +82,8 @@ void MainTabWidgetEx::initWidget()
 
 void MainTabWidgetEx::InitConnections()
 {
-    connect(this, SIGNAL(sigTabMsg(const QString &)), SLOT(SlotTabMsg(const QString &)));
-
     connect(this, SIGNAL(sigCloseFile(const int &, const QString &)), SLOT(SlotCloseFile(const int &, const QString &)));
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
-}
-
-void MainTabWidgetEx::AddFileLayout(const QString &msgContent)
-{
-    if (m_pStackedLayout) {
-        MainSplitter *splitter = new MainSplitter(this);
-        splitter->qSetPath(msgContent);
-        m_pStackedLayout->addWidget(splitter);
-
-        dApp->m_pDataManager->qInsertOpenFilePath(msgContent);
-
-        notifyMsg(MSG_OPEN_FILE_PATH, msgContent);
-    }
-}
-
-void MainTabWidgetEx::AddFileLayoutEnd(const QString &msgContent)
-{
-    AddFileLayout(msgContent);
 }
 
 //  应用退出
@@ -118,61 +96,24 @@ void MainTabWidgetEx::AppExitFile(const int &msgType, const QString &sPath)
             QString sSplitterPath = s->qGetPath();
             if (sSplitterPath == text) {
 
-                dApp->m_pDocummentFileHelper->qAppExitFile(msgType, text);
+                dApp->m_pHelper->qDealWithData(msgType, text);
                 break;
             }
         }
     }
 }
 
-//  tab 关闭删除文件
-void MainTabWidgetEx::RemoveTabFile(const int &msgType, const QString &sPath)
-{
-    auto splitterList = this->findChildren<MainSplitter *>();
-    foreach (auto s, splitterList) {
-        QString sSplitterPath = s->qGetPath();
-        if (sSplitterPath == sPath) {
-
-            dApp->m_pDocummentFileHelper->qRemoveTabFile(msgType, sPath);
-            break;
-        }
-    }
-}
 
 void MainTabWidgetEx::SlotDealWithData(const int &msgType, const QString &msgContent)
 {
-    if (MSG_TAB_ADD_OK == msgType) {
-        AddFileLayout(msgContent);
-    } else if (MSG_TAB_ADD_END == msgType) {
-        AddFileLayoutEnd(msgContent);
-    } else if (MSG_EXIT_SAVE_FILE == msgType || MSG_EXIT_NOT_SAVE_FILE == msgType || MSG_EXIT_NOT_CHANGE_FILE == msgType) {
+    if (MSG_EXIT_SAVE_FILE == msgType || MSG_EXIT_NOT_SAVE_FILE == msgType || MSG_EXIT_NOT_CHANGE_FILE == msgType) {
         AppExitFile(msgType, msgContent);
-    } else if (MSG_TAB_SAVE_FILE == msgType || MSG_TAB_NOT_SAVE_FILE == msgType || MSG_TAB_NOT_CHANGE_SAVE_FILE == msgType) {
-        RemoveTabFile(msgType, msgContent);
     } else if (MSG_DOC_OPEN_FILE_START == msgType) {
-        setCurrentIndexFile(msgContent);
+        SlotSetCurrentIndexFile(msgContent);
     }
 }
 
-void MainTabWidgetEx::SlotOpenFiles(const QString &filePaths)
-{
-    notifyMsg(MSG_TAB_ADD, filePaths);
-}
-
-void MainTabWidgetEx::SlotTabMsg(const QString &sContent)
-{
-    MsgModel mm;
-    mm.fromJson(sContent);
-
-    QString sPath = mm.getPath();
-
-    int iMsg = mm.getMsgType();
-    if (iMsg == MSG_TAB_SHOW_FILE_CHANGE) {
-        setCurrentIndexFile(sPath);
-    }
-}
-
-void MainTabWidgetEx::setCurrentIndexFile(const QString &sPath)
+void MainTabWidgetEx::SlotSetCurrentIndexFile(const QString &sPath)
 {
     auto splitterList = this->findChildren<MainSplitter *>();
     foreach (auto s, splitterList) {
@@ -183,6 +124,17 @@ void MainTabWidgetEx::setCurrentIndexFile(const QString &sPath)
 
             break;
         }
+    }
+}
+
+void MainTabWidgetEx::SlotAddTab(const QString &sPath)
+{
+    if (m_pStackedLayout) {
+        MainSplitter *splitter = new MainSplitter(this);
+        splitter->qSetPath(sPath);
+        m_pStackedLayout->addWidget(splitter);
+
+        dApp->m_pHelper->qDealWithData(MSG_OPEN_FILE_PATH, sPath);
     }
 }
 

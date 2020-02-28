@@ -20,37 +20,24 @@
 #ifndef ANNOTATIONHELPER_H
 #define ANNOTATIONHELPER_H
 
-#include <QObject>
-#include <QColor>
-
-#include "../ModelService/IObserver.h"
+#include "HelperImpl.h"
 
 /**
  * @brief The AnnotationHelper class
  *          高亮和注释 业务处理
  */
 
-class AnnotationHelper : public QObject, public IObserver
+class AnnotationHelper : public HelperImpl
 {
     Q_OBJECT
-    Q_DISABLE_COPY(AnnotationHelper)
-
 public:
     explicit AnnotationHelper(QObject *parent = nullptr);
 
-signals:
-    void sigDealWithData(const int &, const QString &);
-
-    // IObserver interface
-public:
-    int dealWithData(const int &, const QString &) Q_DECL_OVERRIDE;
-
 private:
-    void sendMsg(const int &, const QString &) Q_DECL_OVERRIDE;
-    void notifyMsg(const int &, const QString &) Q_DECL_OVERRIDE;
+    void notifyMsg(const int &, const QString &) ;
 
-private slots:
-    void slotDealWithData(const int &, const QString &);
+public:
+    int qDealWithData(const int &, const QString &) override;
 
 private:
     void __AddHighLight(const QString &msgContent);
@@ -61,15 +48,9 @@ private:
     void __RemoveAnnotation(const QString &);
     void __UpdateAnnotationText(const QString &);
 
-    void __AddPageIconAnnotation(const QString &);
+    void AddPageIconAnnotation(const QString &);
     void __DeletePageIconAnnotation(const QString &);
     void __UpdatePageIconAnnotation(const QString &);
-
-    void __InitConnection();
-
-private:
-    QList<int>              m_pMsgList;
-
 };
 
 #endif // DOCUMMENTFILEHELPER_H

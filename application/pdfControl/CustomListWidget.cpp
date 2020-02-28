@@ -23,6 +23,8 @@
 #include "application.h"
 #include "CustomItemWidget.h"
 
+#include "business/bridge/IHelper.h"
+
 CustomListWidget::CustomListWidget(DWidget *parent)
     : DListWidget(parent)
 {
@@ -105,7 +107,7 @@ void CustomListWidget::slotShowSelectItem(QListWidgetItem *item)
     if (t_ItemWidget) {
         int nJumpPage = t_ItemWidget->nPageIndex();
         //  页跳转
-        dApp->m_pModelService->notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nJumpPage));
+        dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(nJumpPage));
     }
 }
 

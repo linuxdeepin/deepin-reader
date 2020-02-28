@@ -22,6 +22,8 @@
 
 #include "MsgModel.h"
 
+#include "business/bridge/IHelper.h"
+
 TitleMenu::TitleMenu(DWidget *parent)
     : CustomMenu("TitleMenu", parent)
 {
@@ -133,20 +135,12 @@ void TitleMenu::OnNewTab()
 
 void TitleMenu::OnSave()
 {
-    MsgModel mm;
-    mm.setMsgType(MSG_NOTIFY_KEY_MSG);
-    mm.setShortKey(KeyStr::g_ctrl_s);
-
-    notifyMsg(-1, mm.toJson());
+    dApp->m_pHelper->qDealWithData(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_s);
 }
 
 void TitleMenu::OnSaveAs()
 {
-    MsgModel mm;
-    mm.setMsgType(MSG_NOTIFY_KEY_MSG);
-    mm.setShortKey(KeyStr::g_ctrl_shift_s);
-
-    notifyMsg(-1, mm.toJson());
+    dApp->m_pHelper->qDealWithData(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_shift_s);
 }
 
 void TitleMenu::DisplayInFileManager()
@@ -160,7 +154,6 @@ void TitleMenu::OnPrint()
     mm.setMsgType(MSG_NOTIFY_KEY_MSG);
     mm.setShortKey(KeyStr::g_ctrl_p);
     notifyMsg(-1, mm.toJson());
-
 }
 
 void TitleMenu::DocumentInfo()

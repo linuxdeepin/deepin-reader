@@ -9,6 +9,8 @@
 #include "utils/utils.h"
 #include "docview/docummentproxy.h"
 
+#include "business/bridge/IHelper.h"
+
 PlayControlWidget::PlayControlWidget(DWidget *parnet)
     : DFloatingWidget(parnet)
 {
@@ -149,7 +151,7 @@ void PlayControlWidget::pagejump(const bool &bpre)
         else
             nCurPage++;
 
-        notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
+        dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
 
         if (bstart) {
             helper->setAutoPlaySlide(true);

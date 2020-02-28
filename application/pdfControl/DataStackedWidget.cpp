@@ -97,67 +97,60 @@ void DataStackedWidget::DealWithPressKey(const QString &sKey)
 
 void DataStackedWidget::onJumpToPrevPage()
 {
-    auto pWidget = this->findChild<DStackedWidget *>();
-    if (pWidget) {
-        int iIndex = pWidget->currentIndex();
-        if (iIndex == WIDGET_THUMBNAIL) {
-            auto widget = this->findChild<ThumbnailWidget *>();
-            if (widget) {
-                widget->prevPage();
-            }
-        }  else if (iIndex == WIDGET_BOOKMARK) {
-            auto widget = this->findChild<BookMarkWidget *>();
-            if (widget) {
-                widget->prevPage();
-            }
-        } else if (iIndex == WIDGET_NOTE) {
-            auto widget = this->findChild<NotesWidget *>();
-            if (widget) {
-                widget->prevPage();
-            }
+    int iIndex = this->currentIndex();
+    if (iIndex == WIDGET_THUMBNAIL) {
+        auto widget = this->findChild<ThumbnailWidget *>();
+        if (widget) {
+            widget->prevPage();
+        }
+    }  else if (iIndex == WIDGET_BOOKMARK) {
+        auto widget = this->findChild<BookMarkWidget *>();
+        if (widget) {
+            widget->prevPage();
+        }
+    } else if (iIndex == WIDGET_NOTE) {
+        auto widget = this->findChild<NotesWidget *>();
+        if (widget) {
+            widget->prevPage();
         }
     }
 }
 
 void DataStackedWidget::onJumpToNextPage()
 {
-    auto pWidget = this->findChild<DStackedWidget *>();
-    if (pWidget) {
-        int iIndex = pWidget->currentIndex();
-        if (iIndex == WIDGET_THUMBNAIL) {
-            auto widget = this->findChild<ThumbnailWidget *>();
-            if (widget) {
-                widget->nextPage();
-            }
-        }  else if (iIndex == WIDGET_BOOKMARK) {
-            auto widget = this->findChild<BookMarkWidget *>();
-            if (widget) {
-                widget->nextPage();
-            }
-        } else if (iIndex == WIDGET_NOTE) {
-            auto widget = this->findChild<NotesWidget *>();
-            if (widget) {
-                widget->nextPage();
-            }
+
+    int iIndex = this->currentIndex();
+    if (iIndex == WIDGET_THUMBNAIL) {
+        auto widget = this->findChild<ThumbnailWidget *>();
+        if (widget) {
+            widget->nextPage();
+        }
+    }  else if (iIndex == WIDGET_BOOKMARK) {
+        auto widget = this->findChild<BookMarkWidget *>();
+        if (widget) {
+            widget->nextPage();
+        }
+    } else if (iIndex == WIDGET_NOTE) {
+        auto widget = this->findChild<NotesWidget *>();
+        if (widget) {
+            widget->nextPage();
         }
     }
 }
 
 void DataStackedWidget::DeleteItemByKey()
 {
-    auto pWidget = this->findChild<DStackedWidget *>();
-    if (pWidget) {
-        int iIndex = pWidget->currentIndex();
-        if (iIndex == WIDGET_BOOKMARK) {
-            auto widget = this->findChild<BookMarkWidget *>();
-            if (widget) {
-                widget->DeleteItemByKey();
-            }
-        } else if (iIndex == WIDGET_NOTE) {
-            auto widget = this->findChild<NotesWidget *>();
-            if (widget) {
-                widget->DeleteItemByKey();
-            }
+    int iIndex = this->currentIndex();
+    if (iIndex == WIDGET_BOOKMARK) {
+        auto widget = this->findChild<BookMarkWidget *>();
+        if (widget) {
+            widget->DeleteItemByKey();
+        }
+    } else if (iIndex == WIDGET_NOTE) {
+        auto widget = this->findChild<NotesWidget *>();
+        if (widget) {
+            widget->DeleteItemByKey();
         }
     }
 }
+

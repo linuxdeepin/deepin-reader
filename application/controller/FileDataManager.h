@@ -8,6 +8,8 @@
 #include "FileDataModel.h"
 #include "FileStateHeader.h"
 
+#include "docview/docummentproxy.h"
+
 /**
  * @brief The DataManager class
  * @brief   固定数据管理区， 采用 单例
@@ -55,6 +57,7 @@ public:
     FileState qGetFileChange(const QString &);
 
     void qSaveData(const QString &sPath);
+    DocummentProxy  *qGetCurrentProxy();
 
 private:
     void InitConnection();
@@ -74,9 +77,9 @@ private slots:
 
 private:
     QString m_strCurrentFilePath = "";              //  当前显示的文档路径
-    QMap<QString, FileDataModel> m_pFileStateMap;        //  已打开的文档列表
-    QMap<QString, QString>  m_pFileAndUuidMap;       //  已打开的文档列表
-    QMap<QString, FileState>      m_pFileChangeMap;
+    QMap<QString, FileDataModel>    m_pFileStateMap;        //  已打开的文档列表
+    QMap<QString, QString>          m_pFileAndUuidMap;       //  已打开的文档列表
+    QMap<QString, FileState>        m_pFileChangeMap;
 };
 
 #endif // DATAMANAGER_H
