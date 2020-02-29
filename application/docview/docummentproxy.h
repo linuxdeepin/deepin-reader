@@ -9,6 +9,12 @@ class DocummentProxy: public QObject
 {
     Q_OBJECT
 public:
+    DocummentProxy(QObject *parent = nullptr);
+    ~DocummentProxy()
+    {
+        closeFileAndWaitThreadClearEnd();
+    }
+public:
     static QString CreateInstance(QObject *parent = nullptr);
     static DocummentProxy *instance(QString uuid = QString());
     bool openFile(DocType_EM type, QString filepath, unsigned int ipage = 0, RotateType_EM rotatetype = RotateType_0, double scale = 1.0, ViewMode_EM viewmode = ViewMode_SinglePage);
@@ -89,12 +95,7 @@ signals:
 private slots:
     void slot_pageChange(int);
 
-private:
-    DocummentProxy(QObject *parent = nullptr);
-    ~DocummentProxy()
-    {
-        closeFileAndWaitThreadClearEnd();
-    }
+
 private:
     DWidget *pwgt = nullptr;
     QString m_path;
