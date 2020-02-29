@@ -53,9 +53,11 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
     if (nState == FILE_FULLSCREEN) {
         m_pExitFullScreen->setVisible(true);
         m_pSearch->setVisible(false);
+        m_pAddIconNote->setVisible(false);
     } else {
         m_pExitFullScreen->setVisible(false);
         m_pSearch->setVisible(true);
+        m_pAddIconNote->setVisible(true);
     }
     this->exec(showPoint);
 }
@@ -70,6 +72,8 @@ void DefaultOperationMenu::initActions()
     m_pSearch = createAction(tr("Search"), SLOT(slotSearchClicked()));
 
     m_pBookMark = createAction(tr("Add bookmark"), SLOT(slotBookMarkClicked()));
+
+    m_pAddIconNote = createAction(tr("Add icon note"), SLOT(slotBookMarkClicked()));
 
     m_pFirstPage = createAction(tr("First page"), SLOT(slotFirstPageClicked()));
 
@@ -133,4 +137,9 @@ void DefaultOperationMenu::slotEndPageClicked()
 void DefaultOperationMenu::slotExitFullScreenClicked()
 {
     notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
+}
+
+void DefaultOperationMenu::slotAddIconNote()
+{
+
 }

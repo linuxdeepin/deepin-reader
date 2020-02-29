@@ -369,7 +369,8 @@ void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
         int currentPage = _proxy->currentPageNo();
 
 //        qDebug() << "     currentPage:" << currentPage << "  m_nRotate:" << m_nRotate;
-        m_ThreadLoadImage.setPages(m_totalPages); m_ThreadLoadImage.setproxy(_proxy);
+        m_ThreadLoadImage.setPages(m_totalPages);
+        m_ThreadLoadImage.setFilePath(sPath);
         if (!m_ThreadLoadImage.isRunning()) {
             m_ThreadLoadImage.clearList();;
             m_ThreadLoadImage.setStartAndEndIndex(currentPage - (FIRST_LOAD_PAGES / 2), currentPage + (FIRST_LOAD_PAGES / 2));
@@ -438,7 +439,7 @@ void ThreadLoadImage::run()
             m_nEndPage = m_pages - 1;
         }
 
-        auto dproxy = m_proxy; //DocummentProxy::instance(dApp->m_pDataManager->qGetFileUuid(m_strfilepath));
+        auto dproxy = DocummentProxy::instance(dApp->m_pDataManager->qGetFileUuid(m_filepath));
         if (nullptr == dproxy) {
             break;
         }

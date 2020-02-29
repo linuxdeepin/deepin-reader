@@ -66,7 +66,7 @@ public:
 
     inline void clearList() {m_listLoad.clear();}
 
-    void setproxy(DocummentProxy *_proxy) {m_proxy = _proxy;};
+    void setFilePath(const QString &strfilepath) {m_filepath = strfilepath;};
 
 signals:
     void sigLoadImage(const int &, const QImage &);
@@ -83,6 +83,7 @@ private:
     int m_nEndPage = 19;   // 加载图片结束页码
     QList<int> m_listLoad; // 加载过来的缩略图
     DocummentProxy *m_proxy = nullptr;
+    QString m_filepath;
 };
 
 /*

@@ -35,6 +35,13 @@ void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, con
         m_pCopy->setEnabled(true);
     }
 
+    if (m_nType == NOTE_ICON) {
+        m_pRemoveHighLight->setText(tr("Remove annotation"));
+        m_pAddNote->setText(tr("Add icon note"));
+    } else if (m_nType == NOTE_HIGHLIGHT) {
+        m_pRemoveHighLight->setText(tr("Remove highlight"));
+        m_pAddNote->setText(tr("Add highlight note"));
+    }
     m_strNoteUuid = sUuid;
     m_pRemoveHighLight->setEnabled(bHigh);
 
@@ -72,7 +79,7 @@ void TextOperationMenu::initActions()
     this->addSeparator();
 
     m_pRemoveHighLight = createAction(tr("Remove highlight"), SLOT(slotRemoveHighLightClicked()));
-    createAction(tr("Add note"), SLOT(slotAddNoteClicked()));
+    m_pAddNote = createAction(tr("Add note"), SLOT(slotAddNoteClicked()));
 
     m_pAddBookMark = createAction(tr("Add bookmark"), SLOT(slotAddBookMarkClicked()));
     m_pExitFullScreen = createAction(tr("Exit fullscreen"), SLOT(slotExitFullScreenClicked()));

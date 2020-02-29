@@ -208,7 +208,7 @@ void DocShowShellWidget::__ShowPageNoteWidget(const QString &msgContent)
         pWidget->setEditText(sContant);
         pWidget->setNoteUuid(sUuid);
         pWidget->setNotePage(sPage);
-        pWidget->setWidgetType(NOTE_PAGE);
+        pWidget->setWidgetType(NOTE_ICON);
         pWidget->showWidget(QPoint(sX.toInt(), sY.toInt()));
     }
 }

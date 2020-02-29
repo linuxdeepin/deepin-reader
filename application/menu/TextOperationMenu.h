@@ -29,6 +29,8 @@ public:
 
     void setPEndPoint(const QPoint &pEndPoint);
 
+    inline void setType(Note_Type type) {m_nType = type;}
+
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
@@ -57,6 +59,7 @@ private:
 
     QAction     *m_pCopy = nullptr;
     QAction     *m_pRemoveHighLight = nullptr;
+    QAction     *m_pAddNote = nullptr;
     QAction     *m_pAddBookMark = nullptr;
     QAction     *m_pExitFullScreen = nullptr;
 
@@ -66,6 +69,7 @@ private:
     QPoint      m_pStartPoint;          //  右键菜单的 起始点
     QPoint      m_pEndPoint;            //  右键菜单的 结束点
     int         m_nClickPage = -1;
+    Note_Type   m_nType = NOTE_HIGHLIGHT;
 
 };
 

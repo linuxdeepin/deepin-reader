@@ -39,6 +39,8 @@ DocummentProxy *DocummentProxy::instance(QString uuid)
         return nullptr;
     if (uuid.isEmpty()) {
         uuid = dApp->m_pDataManager->qGetCurUuid();
+        //if (uuid.isEmpty())
+        //qDebug() << __FUNCTION__ << "qGetCurUuid() is Null *********" << uuid << dApp->m_pDataManager->qGetCurrentFilePath();
     }
     auto it = m_proxymap.find(uuid);
     return it != m_proxymap.end() ? it.value() : nullptr;

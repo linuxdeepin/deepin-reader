@@ -186,28 +186,25 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
     bool bIsHighLight = _proxy->annotationClicked(pRightClickPoint, sAnnotationText, struuid);
     bool bicon = _proxy->iconAnnotationClicked(pRightClickPoint, sAnnotationText, struuid);
     int nPage = _proxy->pointInWhichPage(pRightClickPoint);
+    if (nullptr == m_operatemenu) {
+        m_operatemenu = new TextOperationMenu(this);
+    }
     if ((sSelectText != "" || bIsHighLight) && !bicon) { //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
-        if (nullptr == m_operatemenu) {
-            m_operatemenu = new TextOperationMenu(this);
-        }
         m_operatemenu->setClickPoint(pRightClickPoint);
         m_operatemenu->setPStartPoint(m_pStartPoint);
         m_operatemenu->setPEndPoint(m_pEndSelectPoint);
         m_operatemenu->setClickPage(nPage);
-
+        m_operatemenu->setType(NOTE_HIGHLIGHT);
         dApp->m_pAppInfo->setMousePressLocal(bIsHighLight, tempPoint);
 
         m_operatemenu->execMenu(tempPoint, bIsHighLight, sSelectText, struuid);
     } else if (bicon) {
-        if (nullptr == m_operatemenu) {
-            m_operatemenu = new TextOperationMenu(this);
-        }
         m_operatemenu->setClickPoint(pRightClickPoint);
         m_operatemenu->setPStartPoint(m_pStartPoint);
         m_operatemenu->setPEndPoint(m_pEndSelectPoint);
         m_operatemenu->setClickPage(nPage);
-
+        m_operatemenu->setType(NOTE_ICON);
         dApp->m_pAppInfo->setMousePressLocal(bIsHighLight, tempPoint);
         m_operatemenu->execMenu(tempPoint, bicon, sSelectText, struuid);
     } else {  //  否则弹出 文档操作菜单

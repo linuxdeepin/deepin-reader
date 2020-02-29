@@ -124,7 +124,7 @@ void NotesWidget::slotDealWithData(const int &msgType, const QString &msgContent
     if (MSG_NOTE_ADD_ITEM == msgType) {
         __AddNoteItem(msgContent);
     } else if (MSG_NOTE_PAGE_ADD_ITEM == msgType) {
-        __AddNoteItem(msgContent, NOTE_PAGE);
+        __AddNoteItem(msgContent, NOTE_ICON);
     } else if (MSG_NOTE_DELETE_ITEM == msgType || MSG_NOTE_PAGE_DELETE_ITEM == msgType) {
         __DeleteNoteItem(msgContent);
     } else if (MSG_NOTE_UPDATE_ITEM == msgType || MSG_NOTE_PAGE_UPDATE_ITEM == msgType) {

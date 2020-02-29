@@ -18,7 +18,7 @@ enum Widget_Type {
 // 注释类型
 enum Note_Type {
     NOTE_HIGHLIGHT = 0,     //  高亮注释
-    NOTE_PAGE,              //  页面注释
+    NOTE_ICON,              //  页面注释
 };
 
 }
