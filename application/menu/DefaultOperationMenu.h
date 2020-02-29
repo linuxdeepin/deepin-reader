@@ -19,7 +19,7 @@ public:
 
 public:
     void execMenu(const QPoint &, const int &);
-
+    inline void setClickpoint(const QPoint &pt) {m_pointclicked = pt;}
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
@@ -51,6 +51,8 @@ private:
     QAction *m_pNextPage = nullptr;
     QAction *m_pEndPage = nullptr;
     QAction *m_pExitFullScreen = nullptr;
+    QPoint m_pointclicked;
+    QPoint m_showPoint;
 
 };
 

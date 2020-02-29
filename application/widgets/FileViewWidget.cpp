@@ -209,6 +209,7 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         m_operatemenu->execMenu(tempPoint, bicon, sSelectText, struuid);
     } else {  //  否则弹出 文档操作菜单
         auto menu = new DefaultOperationMenu(this);
+        menu->setClickpoint(pRightClickPoint);
         menu->execMenu(tempPoint, nPage);
     }
 }

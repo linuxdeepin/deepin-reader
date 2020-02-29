@@ -18,6 +18,7 @@ DefaultOperationMenu::~DefaultOperationMenu()
 
 void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPage)
 {
+    m_showPoint = showPoint;
     m_nRightPageNumber = nClickPage;
 
     QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
@@ -73,7 +74,7 @@ void DefaultOperationMenu::initActions()
 
     m_pBookMark = createAction(tr("Add bookmark"), SLOT(slotBookMarkClicked()));
 
-    m_pAddIconNote = createAction(tr("Add icon note"), SLOT(slotBookMarkClicked()));
+    m_pAddIconNote = createAction(tr("Add icon note"), SLOT(slotAddIconNote()));
 
     m_pFirstPage = createAction(tr("First page"), SLOT(slotFirstPageClicked()));
 
@@ -141,5 +142,15 @@ void DefaultOperationMenu::slotExitFullScreenClicked()
 
 void DefaultOperationMenu::slotAddIconNote()
 {
+    DocummentProxy *_proxy = DocummentProxy::instance();
+    QString sUuid = _proxy->addIconAnnotation(m_pointclicked);        //  添加注释图标成功
+    if (sUuid != "") {
+        int nClickPage = _proxy->pointInWhichPage(m_pointclicked);
+        QString strContent = sUuid.trimmed() + Constant::sQStringSep +
+                             QString::number(nClickPage) + Constant::sQStringSep +
+                             QString::number(m_showPoint.x()) + Constant::sQStringSep +
+                             QString::number(m_showPoint.y());
 
+        notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, strContent);
+    }
 }
