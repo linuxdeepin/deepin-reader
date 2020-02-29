@@ -36,6 +36,7 @@ public:
 signals:
     void sigDocProxy(const QString &);
     void sigTitleMsg(const QString &);
+//    void sigDealWithDataMsg(const int &, const QString &);
 
     // IObserver interface
 public:
@@ -51,6 +52,7 @@ private:
     void InitConnections();
 
 private slots:
+//    void SlotDealWithDataMsg(const int &, const QString &);
     void SlotDocProxyData(const QString &);
     void SlotTitleData(const QString &);
 

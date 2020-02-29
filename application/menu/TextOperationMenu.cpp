@@ -145,7 +145,8 @@ void TextOperationMenu::slotAddNoteClicked()
 
 void TextOperationMenu::slotAddBookMarkClicked()
 {
-    notifyMsgToFrame(MSG_OPERATION_TEXT_ADD_BOOKMARK, QString("%1").arg(m_nClickPage));
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    notifyMsgToFrame(MSG_OPERATION_TEXT_ADD_BOOKMARK, sCurPath + Constant::sQStringSep + QString("%1").arg(m_nClickPage));
 }
 
 void TextOperationMenu::slotExitFullScreenClicked()

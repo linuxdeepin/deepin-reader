@@ -80,6 +80,8 @@ void FileDataManager::slotHistroyChange(const QString &sContent)
         OnSetViewScale(sValue);
     } else if (nType == MSG_VIEWCHANGE_FIT) {
         OnSetViewHit(sValue);
+    } else if (nType == MSG_FILE_PAGE_CHANGE) {
+
     }
 }
 
@@ -148,6 +150,14 @@ void FileDataManager::OnSetViewHit(const QString &sValue)
 {
     FileDataModel fdm = qGetFileData(m_strCurrentFilePath);
     fdm.qSetData(Fit, sValue.toInt());
+
+    qSetFileData(m_strCurrentFilePath, fdm);
+}
+
+void FileDataManager::OnSetCurPage(const QString &sValue)
+{
+    FileDataModel fdm = qGetFileData(m_strCurrentFilePath);
+    fdm.qSetData(CurPage, sValue.toInt());
 
     qSetFileData(m_strCurrentFilePath, fdm);
 }

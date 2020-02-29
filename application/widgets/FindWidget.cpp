@@ -27,7 +27,10 @@
 #include <QDebug>
 #include <QHBoxLayout>
 #include <QDesktopWidget>
+#include <QJsonObject>
+#include <QJsonDocument>
 
+#include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
 
 FindWidget::FindWidget(DWidget *parent)

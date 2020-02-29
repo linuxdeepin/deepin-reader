@@ -23,6 +23,9 @@
 #include <DFileDialog>
 #include <DDialog>
 
+#include <QJsonObject>
+#include <QJsonDocument>
+
 #include "../FileFormatHelper.h"
 
 #include "business/FileDataManager.h"

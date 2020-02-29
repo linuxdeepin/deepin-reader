@@ -4,7 +4,10 @@
 #include <QTimer>
 #include <QHBoxLayout>
 #include <QDebug>
+#include <QJsonObject>
+#include <QJsonDocument>
 
+#include "business/FileDataManager.h"
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
 #include "docview/docummentproxy.h"

@@ -80,17 +80,17 @@ public:
 signals:
     void sigFilePageChanged(const QString &);
     void sigOpenFileOk();
-    void sigDeleteBookItem(const int &);
-    void sigAddBookMark(const int &);
+    void sigDeleteBookItem(const QString &);
+    void sigAddBookMark(const QString &);
     void sigRightSelectItem(QString);
     void sigSetBookMarkState(const int &, const int &);
 
 private slots:
     void slotAddBookMark();
-    void slotAddBookMark(const int &);
+    void slotAddBookMark(const QString &);
     void slotOpenFileOk();
     void slotDocFilePageChanged(const QString &);
-    void slotDeleteBookItem(const int &);
+    void slotDeleteBookItem(const QString &);
     void slotLoadImage(const int &, const QImage &);
     void slotUpdateTheme();
     void slotRightSelectItem(QString);

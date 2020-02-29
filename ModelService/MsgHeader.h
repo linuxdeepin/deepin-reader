@@ -18,6 +18,7 @@ enum E_MSG_TYPE {
     E_FILE_MSG,
     E_TITLE_MSG_TYPE,
     E_SHORTKEY_MSG_TYPE,
+    E_FILE_DATA_MSG,
     E_MSG_TYPE_END
 };
 

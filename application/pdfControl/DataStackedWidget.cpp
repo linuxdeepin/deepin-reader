@@ -24,6 +24,7 @@
 #include "note/NotesWidget.h"
 #include "search/BufferWidget.h"
 #include "search/SearchResWidget.h"
+#include "business/FileDataManager.h"
 
 DataStackedWidget::DataStackedWidget(DWidget *parent)
     : DStackedWidget(parent)
@@ -53,11 +54,7 @@ void DataStackedWidget::slotSetStackCurIndex(const int &iIndex)
     if (iIndex == WIDGET_SEARCH || iIndex == WIDGET_BUFFER) {
         emit sigSearchWidgetState(iIndex);
     } else {
-        MsgModel mm;
-        mm.setMsgType(MSG_LEFTBAR_STATE);
-        mm.setValue(QString::number(iIndex));
-
-        dApp->m_pModelService->notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
+        dApp->m_pModelService->notifyMsg(E_TITLE_MSG_TYPE,  QString::number(iIndex));
     }
 }
 
@@ -69,10 +66,11 @@ void DataStackedWidget::InitWidgets()
     insertWidget(WIDGET_catalog, new CatalogWidget(this));
 
     BookMarkWidget *bookMark = new BookMarkWidget(this);
-    connect(bookMark, SIGNAL(sigSetBookMarkState(const int &, const int &)),
-            tnWidget, SLOT(SlotSetBookMarkState(const int &, const int &)));
 
     insertWidget(WIDGET_BOOKMARK, bookMark);
+
+    connect(bookMark, SIGNAL(sigSetBookMarkState(const int &, const int &)),
+            tnWidget, SLOT(SlotSetBookMarkState(const int &, const int &)));
 
     insertWidget(WIDGET_NOTE, new NotesWidget(this));
     insertWidget(WIDGET_SEARCH, new SearchResWidget(this));

@@ -44,7 +44,6 @@ CatalogTreeView::CatalogTreeView(DWidget *parent)
 
     initConnections();
 
-
     dApp->m_pModelService->addObserver(this);
 }
 

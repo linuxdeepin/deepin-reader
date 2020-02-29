@@ -69,6 +69,7 @@ private:
     void OnSetViewScale(const QString &);
     void OnSetViewRotate(const QString &);
     void OnSetViewHit(const QString &);
+    void OnSetCurPage(const QString &sValue);
 
 private slots:
     void slotFileChange(const QString &);

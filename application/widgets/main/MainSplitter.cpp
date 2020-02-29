@@ -60,7 +60,16 @@ void MainSplitter::InitConnections()
 {
     connect(this, SIGNAL(sigTitleMsg(const QString &)), SLOT(SlotTitleData(const QString &)));
     connect(this, SIGNAL(sigDocProxy(const QString &)), SLOT(SlotDocProxyData(const QString &)));
+//    connect(this, SIGNAL(sigDealWithDataMsg(const int &, const QString &)), SLOT(SlotDealWithDataMsg(const int &, const QString &)));
 }
+
+//void MainSplitter::SlotDealWithDataMsg(const int &msgType, const QString &msgContent)
+//{
+//    auto children = this->findChildren<CustomWidget *>();
+//    foreach (auto sw, children) {
+//        sw->dealWithData(msgType, msgContent);
+//    }
+//}
 
 void MainSplitter::SlotDocProxyData(const QString &msgContent)
 {

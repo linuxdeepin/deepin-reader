@@ -21,6 +21,11 @@
 
 #include <DFontSizeManager>
 
+#include <QJsonObject>
+#include <QJsonDocument>
+
+#include "business/FileDataManager.h"
+
 CustomMenu::CustomMenu(const QString &, DWidget *parent)
     : DMenu(parent)
 {

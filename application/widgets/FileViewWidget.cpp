@@ -435,16 +435,21 @@ void FileViewWidget::OnSetViewHit(const QString &msgContent)
 void FileViewWidget::slotBookMarkStateChange(int nPage, bool bState)
 {
     if (!bState) {
-        sendMsg(MSG_OPERATION_DELETE_BOOKMARK, QString("%1").arg(nPage));
+        sendMsg(MSG_OPERATION_DELETE_BOOKMARK, m_strPath + Constant::sQStringSep + QString("%1").arg(nPage));
     } else {
-        sendMsg(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(nPage));
+        sendMsg(MSG_OPERATION_ADD_BOOKMARK,  m_strPath + Constant::sQStringSep + QString("%1").arg(nPage));
     }
 }
 
 //  文档页变化了
 void FileViewWidget::slotDocFilePageChanged(int page)
 {
-    notifyMsg(MSG_FILE_PAGE_CHANGE, QString("%1").arg(page));
+    MsgModel mm;
+    mm.setMsgType(MSG_FILE_PAGE_CHANGE);
+    mm.setPath(m_strPath);
+    mm.setValue(QString("%1").arg(page));
+
+    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
 }
 
 //  打开文档结果

@@ -101,11 +101,12 @@ void DefaultOperationMenu::slotSearchClicked()
 
 void DefaultOperationMenu::slotBookMarkClicked()
 {
+    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
     int nData = m_pBookMark->property("data").toInt();
     if (nData == 0) {
-        notifyMsg(MSG_OPERATION_DELETE_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
+        notifyMsg(MSG_OPERATION_DELETE_BOOKMARK, sCurPath + Constant::sQStringSep + QString("%1").arg(m_nRightPageNumber));
     } else {
-        notifyMsg(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
+        notifyMsg(MSG_OPERATION_ADD_BOOKMARK, sCurPath + Constant::sQStringSep + QString("%1").arg(m_nRightPageNumber));
     }
 }
 
