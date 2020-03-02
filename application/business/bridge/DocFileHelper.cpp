@@ -176,6 +176,10 @@ QString DocFileHelper::qDealWithData(const int &msgType, const QString &msgConte
         SetFileSlider(msgContent.toInt());
     } else if (MSG_SAVE_FILE == msgType || MSG_NOT_SAVE_FILE == msgType || MSG_NOT_CHANGE_SAVE_FILE == msgType)  {
         CloseFile(msgType, msgContent);
+    } else if (msgType == MSG_SAVE_FILE_PATH) {
+        onSaveFile();
+    } else if (msgType == MSG_SAVE_AS_FILE_PATH) {
+        onSaveAsFile();
     }
 
     int nRes = MSG_NO_OK;

@@ -8,39 +8,8 @@ MainSplitterPrivate::MainSplitterPrivate(MainSplitter *parent) :
 
 }
 
-int MainSplitterPrivate::qDealWithData(const int &msgType, const QString &msgContent)
+void MainSplitterPrivate::qDealWithData(const int &nType, const QString &sValue)
 {
-    if (E_FILE_MSG == msgType) {
-        slotFileChange(msgContent);
-    } else if (E_TITLE_MSG_TYPE == msgType) {
-        slotHistroyChange(msgContent);
-    }
-
-    return 0;
-}
-
-void MainSplitterPrivate::slotFileChange(const QString &sContent)
-{
-    MsgModel mm;
-    mm.fromJson(sContent);
-
-    int nType = mm.getMsgType();
-    QString sPath = mm.getPath();
-    QString sValue = mm.getValue();
-
-    if (nType == MSG_FILE_IS_CHANGE) {
-        qSetFileChange(sValue.toInt());
-    }
-}
-
-void MainSplitterPrivate::slotHistroyChange(const QString &sContent)
-{
-    MsgModel mm;
-    mm.fromJson(sContent);
-
-    int nType = mm.getMsgType();
-    QString sValue = mm.getValue();
-
     if (nType == MSG_WIDGET_THUMBNAILS_VIEW) {
         setThumbnailState(sValue);
     } else if (nType == MSG_LEFTBAR_STATE) {

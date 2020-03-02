@@ -15,14 +15,10 @@ class DefaultOperationMenu : public CustomMenu
 
 public:
     explicit DefaultOperationMenu(DWidget *parent = nullptr);
-    ~DefaultOperationMenu() override;
 
 public:
     void execMenu(const QPoint &, const int &);
     inline void setClickpoint(const QPoint &pt) {m_pointclicked = pt;}
-    // IObserver interface
-public:
-    int dealWithData(const int &, const QString &) override;
 
     // CustomMenu interface
 protected:
@@ -53,7 +49,6 @@ private:
     QAction *m_pExitFullScreen = nullptr;
     QPoint m_pointclicked;
     QPoint m_showPoint;
-
 };
 
 #endif // DEFAULTOPERATIONMENU_H

@@ -21,10 +21,8 @@
 
 #include <DFontSizeManager>
 
-#include <QJsonObject>
-#include <QJsonDocument>
-
-#include "business/FileDataManager.h"
+#include "application.h"
+#include "ModelService.h"
 
 CustomMenu::CustomMenu(const QString &, DWidget *parent)
     : DMenu(parent)
@@ -32,9 +30,9 @@ CustomMenu::CustomMenu(const QString &, DWidget *parent)
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
 }
 
-void CustomMenu::sendMsg(const int &msgType, const QString &msgContent)
+int CustomMenu::qDealWithData(const int &, const QString &)
 {
-    notifyMsg(msgType, msgContent);
+    return MSG_NO_OK;
 }
 
 void CustomMenu::notifyMsg(const int &msgType, const QString &msgContent)

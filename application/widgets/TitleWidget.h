@@ -34,7 +34,6 @@ signals:
     void sigSetFindWidget(const int &);
     void sigAppFullScreen();
     void sigMagnifierCancel();
-    void sigTabMsg(const QString &);
 
     // IObserver interface
 public:

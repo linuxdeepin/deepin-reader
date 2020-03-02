@@ -22,9 +22,8 @@ class MainSplitterPrivate : public QObject
 public:
     explicit MainSplitterPrivate(MainSplitter *parent = nullptr);
 
-    // IObserver interface
 public:
-    int qDealWithData(const int &, const QString &);
+    void qDealWithData(const int &, const QString &);
 
     void qSetFileChange(const int &);
     int qGetFileChange();
@@ -43,9 +42,6 @@ private:
     void OnSetViewRotate(const QString &);
     void OnSetViewHit(const QString &);
     void OnSetCurPage(const QString &sValue);
-
-    void slotFileChange(const QString &);
-    void slotHistroyChange(const QString &);
 
 private:
     QString             m_strPath = "";

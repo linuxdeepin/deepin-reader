@@ -28,16 +28,10 @@ class FontMenu : public CustomMenu
 
 public:
     explicit FontMenu(DWidget *parent = nullptr);
-    ~FontMenu() override;
 
-signals:
-    //新增
-    void sigDocProxyMsg(const QString &);
-    void sigDealWithShortKey(const QString &);
-
-    // IObserver interface
+    // CustomMenu interface
 public:
-    int dealWithData(const int &, const QString &) override;
+    int qDealWithData(const int &, const QString &) override;
 
     // CustomMenu interface
 protected:
@@ -50,10 +44,6 @@ private slots:
     void slotRotateL();
     void slotRotateR();
 
-    //新增
-    void SlotDocProxyMsg(const QString &);
-    void slotDealWithShortKey(const QString &);
-
 private:
     void initConnection();
     QAction *createAction(const QString &objName, const char *, bool checked = false);
@@ -61,7 +51,6 @@ private:
 
     void setAppSetFiteHAndW();
     void resetAdaptive();
-    void setFileViewScale(bool);
     void OnFileOpenOk(const QString &);
 
 private:
@@ -74,6 +63,7 @@ private:
     bool    m_bDoubPage = false;                     // 双页
     bool    m_bFiteH = false;                        // 自适应高
     bool    m_bFiteW = false;                        // 自适应宽
+
 };
 
 #endif // FONTMENU_H

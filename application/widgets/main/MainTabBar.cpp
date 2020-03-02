@@ -19,8 +19,6 @@
 #include "MainTabBar.h"
 
 #include <QDebug>
-#include <QDesktopServices>
-#include <QUrl>
 
 #include "FileDataModel.h"
 #include "MsgModel.h"
@@ -203,21 +201,6 @@ void MainTabBar::SlotDealWithData(const int &msgType, const QString &msgContent)
         AddFileTab(msgContent);
     } else if (MSG_MENU_NEW_TAB == msgType) {
         SlotTabAddRequested();
-    } else if (MSG_MENU_OPEN_FOLDER == msgType) {
-        OpenCurFileFolder();
     }
 }
 
-void MainTabBar::OpenCurFileFolder()
-{
-    int nCurrentIndex = this->currentIndex();
-    if (nCurrentIndex > -1) {
-        QString sPath = this->tabData(nCurrentIndex).toString();
-        if (sPath != "") {
-            int nLastPos = sPath.lastIndexOf('/');
-            sPath = sPath.mid(0, nLastPos);
-            sPath = QString("file://") + sPath;
-            QDesktopServices::openUrl(QUrl(sPath));
-        }
-    }
-}

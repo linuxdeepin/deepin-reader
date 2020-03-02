@@ -22,19 +22,6 @@ HandleMenu::HandleMenu(DWidget *parent)
     : CustomMenu("HandleMenu", parent)
 {
     initActions();
-
-    dApp->m_pModelService->addObserver(this);
-
-}
-
-HandleMenu::~HandleMenu()
-{
-    dApp->m_pModelService->removeObserver(this);
-}
-
-int HandleMenu::dealWithData(const int &, const QString &)
-{
-    return 0;
 }
 
 void HandleMenu::initActions()

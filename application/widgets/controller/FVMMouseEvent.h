@@ -45,7 +45,7 @@ public:
 
 private:
     void __FilePageMove(FileViewWidget *, const QPoint &);
-    void __ShowMagnifier(const QPoint &);
+    void __ShowMagnifier(FileViewWidget *, const QPoint &);
     void __MouseSelectText(FileViewWidget *fvw, const QPoint &);
     void __ShowPageNoteWidget(FileViewWidget *fvw, const QPoint &);
     void __ShowFileNoteWidget(FileViewWidget *fvw, const QPoint &);

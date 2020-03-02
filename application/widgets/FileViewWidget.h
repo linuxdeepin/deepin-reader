@@ -63,6 +63,7 @@ signals:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
+    int qDealWithData(const int &, const QString &) override;
 
     // CustomWidget interface
 protected:
@@ -96,7 +97,6 @@ private:
     void onFileAddNote(const QString &);
     void __SetPageAddIconState(const QString &);
 
-    void onPrintFile();
     void onFileAddAnnotation();
     void onFileAddNote();
     void __SetCursor(const QCursor &cursor);

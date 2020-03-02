@@ -18,7 +18,7 @@ enum E_RETURN_MSG {
 enum E_MSG_TYPE {
     E_MSG_TYPE_BEGIN = 0,
     E_APP_MSG_TYPE,
-    E_TAB_MSG,
+    E_TABBAR_MSG_TYPE,
     E_DOCPROXY_MSG_TYPE,
     E_FILE_MSG,
     E_TITLE_MSG_TYPE,
@@ -73,7 +73,6 @@ enum E_MENU_MSG {
     MSG_MENU_OPEN_FOLDER,               //  打开文件所处文件夹
     MSG_MENU_MAGNIFER,                  //  放大镜
     MSG_MENU_SCALE_CHANGE,              //  缩放比例变化
-    MSG_OPERATION_ATTR,               //  属性
     MSG_OPERATION_SLIDE,              //  放映
     MSG_OPERATION_EXIT,               //  退出
     MSG_OPERATION_TEXT_COPY,          //  复制
@@ -105,7 +104,9 @@ enum E_FIND_MSG {
 enum E_DOC_TYPE_MSG {
     MSG_DOC_JUMP_PAGE = MSG_FIND_EXIT + 50,             //  请求跳转页面
     MSG_OPEN_FILE_PATH,             //  打开的文件消息
-//    MSG_OPEN_FILE_PATH_S,           //  打开的文件消息
+    MSG_SAVE_FILE_PATH,             //  保存文件消息
+    MSG_SAVE_AS_FILE_PATH,             //  保存文件消息
+///    MSG_OPEN_FILE_PATH_S,           //  打开的文件消息
     MSG_OPERATION_OPEN_FILE_OK,     //  打开文件成功, 要告诉所有人
 //    MSG_DOC_OPEN_FILE_START,      //  开始打开文件
     MSG_OPERATION_OPEN_FILE_FAIL,       //  打开文件失败

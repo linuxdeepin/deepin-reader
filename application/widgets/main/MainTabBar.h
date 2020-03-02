@@ -56,7 +56,6 @@ private:
     void __SetTabMiniWidth();
     void AddFileTab(const QString &);
     QString getFileName(const QString &strFilePath);
-    void OpenCurFileFolder();
 
 private slots:
     void SlotTabBarClicked(int);

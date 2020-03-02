@@ -14,6 +14,8 @@
 
 #include "main/MainTabWidgetEx.h"
 
+#include "menu/TitleMenu.h"
+
 TitleWidget *TitleWidget::g_onlyTitleWdiget = nullptr;
 
 TitleWidget *TitleWidget::Instance()
@@ -22,7 +24,7 @@ TitleWidget *TitleWidget::Instance()
 }
 
 TitleWidget::TitleWidget(CustomWidget *parent)
-    : CustomWidget("TitleWidget", parent)
+    : CustomWidget(TITLE_WIDGET, parent)
 {
     shortKeyList = QStringList() << KeyStr::g_alt_1 << KeyStr::g_alt_2 << KeyStr::g_ctrl_m
                    << KeyStr::g_alt_z ;
@@ -159,8 +161,6 @@ void TitleWidget::initConnections()
 
     connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)),
             SLOT(SlotDealWithShortKey(const QString &)));
-
-    connect(this, SIGNAL(sigTabMsg(const QString &)), SLOT(SlotTabMsg(const QString &)));
 }
 
 //  文档切换了
@@ -174,14 +174,11 @@ void TitleWidget::OnFileShowChange(const QString &sPath)
 //  缩略图
 void TitleWidget::on_thumbnailBtn_clicked()
 {
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
-
     bool rl = m_pThumbnailBtn->isChecked();
 
     QJsonObject obj;
-    obj.insert("need", true);
-    obj.insert("path", pMtwe->qGetCurPath());
     obj.insert("content", QString::number(rl));
+    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET);
 
     QJsonDocument doc(obj);
 
@@ -277,14 +274,14 @@ void TitleWidget::SlotDealWithShortKey(const QString &sKey)
         }
     } else if (sKey == KeyStr::g_ctrl_m) {  //  显示缩略图
         m_pThumbnailBtn->setChecked(true);
-        MsgModel mm;
-        mm.setMsgType(MSG_WIDGET_THUMBNAILS_VIEW);
-        mm.setValue("1");
 
-        QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-        mm.setPath(sCurPath);
+        QJsonObject obj;
+        obj.insert("content", "1");
+        obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET);
 
-        notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
+        QJsonDocument doc(obj);
+
+        notifyMsg(MSG_WIDGET_THUMBNAILS_VIEW, doc.toJson(QJsonDocument::Compact));
     } else if (sKey == KeyStr::g_alt_z) {  //  开启放大镜
         setMagnifierState();
     }
@@ -350,14 +347,13 @@ void TitleWidget::setDefaultShape()
     QIcon icon = PF::getIcon(Pri::g_module + btnName);
     m_pHandleShapeBtn->setIcon(icon);
 
-    MsgModel mm;
-    mm.setMsgType(MSG_HANDLESHAPE);
-    mm.setValue(QString::number(m_nCurHandleShape));
+    QJsonObject obj;
+    obj.insert("content", QString::number(m_nCurHandleShape));
+    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
 
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-    mm.setPath(sCurPath);
+    QJsonDocument doc(obj);
 
-    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
+    notifyMsg(MSG_HANDLESHAPE, doc.toJson(QJsonDocument::Compact));
 }
 
 void TitleWidget::setHandleShape()
@@ -371,14 +367,13 @@ void TitleWidget::setHandleShape()
     QIcon icon = PF::getIcon(Pri::g_module + btnName);
     m_pHandleShapeBtn->setIcon(icon);
 
-    MsgModel mm;
-    mm.setMsgType(MSG_HANDLESHAPE);
-    mm.setValue(QString::number(m_nCurHandleShape));
+    QJsonObject obj;
+    obj.insert("content", QString::number(m_nCurHandleShape));
+    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
 
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-    mm.setPath(sCurPath);
+    QJsonDocument doc(obj);
 
-    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
+    notifyMsg(MSG_HANDLESHAPE, doc.toJson(QJsonDocument::Compact));
 }
 
 DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
@@ -408,7 +403,7 @@ void TitleWidget::setMagnifierState()
     QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
     mm.setPath(sCurPath);
 
-    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
+    notifyMsg(MSG_MAGNIFYING, mm.toJson());
 
     //  开启了放大镜, 需要把选择工具 切换为 选择工具
     auto actionList = this->findChildren<QAction *>();
@@ -438,8 +433,6 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
         return ConstantMsg::g_effective_res;
     } else if (msgType == MSG_HIDE_FIND_WIDGET) {
         emit sigSetFindWidget(0);
-    } else if (msgType == E_TAB_MSG) {
-        emit sigTabMsg(msgContent);
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == KeyStr::g_esc) {
             emit sigMagnifierCancel();  //  退出放大镜模式
@@ -460,6 +453,10 @@ int TitleWidget::qDealWithData(const int &msgType, const QString &msgContent)
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         slotOpenFileOk(msgContent);
     }
+
+    TitleMenu::Instance()->qDealWithData(msgType, msgContent);
+    m_pFontMenu->qDealWithData(msgType, msgContent);
+    m_pScaleMenu->qDealWithData(msgType, msgContent);
 
     int nRes = MSG_NO_OK;
 

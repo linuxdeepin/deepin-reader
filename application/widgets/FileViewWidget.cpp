@@ -48,7 +48,8 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
 {
     m_pMsgList = { MSG_MAGNIFYING, MSG_HANDLESHAPE,
                    MSG_FILE_ROTATE,
-                   MSG_NOTE_ADD_CONTENT, MSG_NOTE_PAGE_ADD
+                   MSG_NOTE_ADD_CONTENT, MSG_NOTE_PAGE_ADD,
+                   MSG_VIEWCHANGE_DOUBLE_SHOW, MSG_VIEWCHANGE_ROTATE, MSG_FILE_SCALE, MSG_VIEWCHANGE_FIT
                  };
 
     m_pKeyMsgList = {KeyStr::g_ctrl_p, KeyStr::g_ctrl_l, KeyStr::g_ctrl_i};
@@ -114,9 +115,6 @@ void FileViewWidget::slotDealWithData(const int &msgType, const QString &msgCont
     case MSG_MAGNIFYING:            //  放大镜信号
         onMagnifying(msgContent);
         break;
-    case MSG_HANDLESHAPE:           //  手势 信号
-        onSetHandShape(msgContent);
-        break;
     case MSG_FILE_ROTATE:           //  文档旋转了
         onSetWidgetAdapt();
         break;
@@ -133,17 +131,16 @@ void FileViewWidget::slotDealWithData(const int &msgType, const QString &msgCont
 
 void FileViewWidget::slotDealWithKeyMsg(const QString &msgContent)
 {
-    DocummentProxy *_proxy = DocummentProxy::instance();
-    if (!_proxy)
+    if (!m_pProxy)
         return;
 
     if (msgContent == KeyStr::g_ctrl_p) {
-        onPrintFile();
+//        onPrintFile();
     } else if (msgContent == KeyStr::g_ctrl_l) {
         onFileAddAnnotation();
     } else if (msgContent == KeyStr::g_ctrl_i) {
         QString selectText;
-        if (_proxy->getSelectTextString(selectText))
+        if (m_pProxy->getSelectTextString(selectText))
             onFileAddNote();
         else {
             notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
@@ -154,8 +151,7 @@ void FileViewWidget::slotDealWithKeyMsg(const QString &msgContent)
 //  弹出 自定义 菜单
 void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 {
-    DocummentProxy *_proxy = DocummentProxy::instance();
-    if (!_proxy)
+    if (!m_pProxy)
         return;
 
     //  处于幻灯片模式下
@@ -171,16 +167,16 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         return;
 
     QString sSelectText = "";
-    _proxy->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
+    m_pProxy->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
 
     QPoint tempPoint = this->mapToGlobal(point);
-    QPoint pRightClickPoint = _proxy->global2RelativePoint(tempPoint);
+    QPoint pRightClickPoint = m_pProxy->global2RelativePoint(tempPoint);
 
     //  右键鼠标点 是否有高亮区域
     QString sAnnotationText = "", struuid = "";
-    bool bIsHighLight = _proxy->annotationClicked(pRightClickPoint, sAnnotationText, struuid);
-    bool bicon = _proxy->iconAnnotationClicked(pRightClickPoint, sAnnotationText, struuid);
-    int nPage = _proxy->pointInWhichPage(pRightClickPoint);
+    bool bIsHighLight = m_pProxy->annotationClicked(pRightClickPoint, sAnnotationText, struuid);
+    bool bicon = m_pProxy->iconAnnotationClicked(pRightClickPoint, sAnnotationText, struuid);
+    int nPage = m_pProxy->pointInWhichPage(pRightClickPoint);
     if (nullptr == m_operatemenu) {
         m_operatemenu = new TextOperationMenu(this);
     }
@@ -221,13 +217,12 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 //  放大镜　控制
 void FileViewWidget::onMagnifying(const QString &data)
 {
-    DocummentProxy *_proxy = DocummentProxy::instance();
-    if (!_proxy)
+    if (!m_pProxy)
         return;
 
     int nRes = data.toInt();
     if (nRes == 1) {
-        _proxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
+        m_pProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
 
         m_nCurrentHandelState = Magnifier_State;
         __SetCursor(Qt::BlankCursor);
@@ -237,7 +232,7 @@ void FileViewWidget::onMagnifying(const QString &data)
             m_nCurrentHandelState = Default_State;
             __SetCursor(Qt::ArrowCursor);
 
-            _proxy->closeMagnifier();
+            m_pProxy->closeMagnifier();
         }
     }
 }
@@ -245,12 +240,11 @@ void FileViewWidget::onMagnifying(const QString &data)
 //  手势控制
 void FileViewWidget::onSetHandShape(const QString &data)
 {
-    DocummentProxy *_proxy = DocummentProxy::instance();
-    if (!_proxy)
+    if (!m_pProxy)
         return;
 
     //  手型 切换 也需要将之前选中的文字清除 选中样式
-    _proxy->mouseSelectTextClear();
+    m_pProxy->mouseSelectTextClear();
     int nRes = data.toInt();
     if (nRes == 1) {  //  手形
         m_nCurrentHandelState = Handel_State;
@@ -287,12 +281,11 @@ void FileViewWidget::onFileAddAnnotation()
         return;
     }
 
-    DocummentProxy *_proxy = DocummentProxy::instance();
-    if (!_proxy)
+    if (!m_pProxy)
         return;
 
     QString selectText = "";
-    _proxy->getSelectTextString(selectText);
+    m_pProxy->getSelectTextString(selectText);
     if (selectText != "") {
         QString sContent = QString::number(nSx) + Constant::sQStringSep +
                            QString::number(nSy) + Constant::sQStringSep +
@@ -342,8 +335,7 @@ void FileViewWidget::__SetPageAddIconState(const QString &sPath)
 
 void FileViewWidget::onFileAddNote()
 {
-    DocummentProxy *_proxy = DocummentProxy::instance();
-    if (!_proxy)
+    if (!m_pProxy)
         return;
 
     //  处于幻灯片模式下
@@ -369,7 +361,7 @@ void FileViewWidget::onFileAddNote()
         return;
     }
 
-    int nPage = _proxy->pointInWhichPage(m_pEndSelectPoint);
+    int nPage = m_pProxy->pointInWhichPage(m_pEndSelectPoint);
     QString msgContent = QString("%1").arg(nPage) + Constant::sQStringSep +
                          QString("%1").arg(m_pEndSelectPoint.x()) + Constant::sQStringSep +
                          QString("%1").arg(m_pEndSelectPoint.y());
@@ -529,14 +521,6 @@ void FileViewWidget::initConnections()
     connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)), SLOT(slotDealWithKeyMsg(const QString &)));
 }
 
-//  打印
-void FileViewWidget::onPrintFile()
-{
-    PrintManager p;
-    p.setPrintPath(m_strPath);
-    p.showPrintDialog(this);
-}
-
 //  设置　窗口　自适应　宽＼高　度
 void FileViewWidget::onSetWidgetAdapt()
 {
@@ -568,7 +552,14 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
             emit sigDealWithKeyMsg(msgContent);
             return ConstantMsg::g_effective_res;
         }
-    } else if (msgType == MSG_VIEWCHANGE_DOUBLE_SHOW) {
+    }
+
+    return 0;
+}
+
+int FileViewWidget::qDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_VIEWCHANGE_DOUBLE_SHOW) {
         OnSetViewChange(msgContent);
     } else if (msgType == MSG_VIEWCHANGE_ROTATE) {
         OnSetViewRotate(msgContent);
@@ -576,7 +567,14 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         OnSetViewScale(msgContent);
     } else if (msgType == MSG_VIEWCHANGE_FIT) {
         OnSetViewHit(msgContent);
+    } else if (msgType == MSG_HANDLESHAPE) {
+        onSetHandShape(msgContent);
     }
 
-    return 0;
+    bool rl = m_pMsgList.contains(msgType);
+    if (rl) {
+        return MSG_OK;
+    }
+
+    return MSG_NO_OK;
 }

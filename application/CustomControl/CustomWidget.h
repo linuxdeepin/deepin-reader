@@ -26,11 +26,12 @@
 
 #include "application.h"
 #include "MsgModel.h"
-
+#include "WidgetHeader.h"
 #include "utils/utils.h"
 
 #include <QDebug>
 
+using namespace DR_SPACE;
 DWIDGET_USE_NAMESPACE
 
 /**

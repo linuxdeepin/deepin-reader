@@ -31,26 +31,15 @@ ScaleMenu::ScaleMenu(DWidget *parent)
     InitConnection();
 
     shortKeyList << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_equal << KeyStr::g_ctrl_smaller;
-
-    dApp->m_pModelService->addObserver(this);
 }
 
-ScaleMenu::~ScaleMenu()
+int ScaleMenu::qDealWithData(const int &msgType, const QString &msgContent)
 {
-    dApp->m_pModelService->removeObserver(this);
-}
-
-int ScaleMenu::dealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == E_DOCPROXY_MSG_TYPE) {
-        emit sigDocProxyMsg(msgContent);
-    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (shortKeyList.contains(msgContent)) {
-            emit sigDealWithShortKey(msgContent);
-            return ConstantMsg::g_effective_res;
-        }
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        OnFileOpenOk(msgContent);
     }
-    return 0;
+
+    return MSG_NO_OK;
 }
 
 void ScaleMenu::initActions()
@@ -125,14 +114,13 @@ void ScaleMenu::__ChangeScale(const int &iData)
 
     m_nCurrentIndex = dataList.indexOf(iData);
 
-    MsgModel mm;
-    mm.setMsgType(MSG_FILE_SCALE);
-    mm.setValue(QString::number(iData));
+    QJsonObject obj;
+    obj.insert("content", QString::number(iData));
+    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
 
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-    mm.setPath(sCurPath);
+    QJsonDocument doc(obj);
 
-    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
+    dApp->m_pModelService->notifyMsg(MSG_FILE_SCALE, doc.toJson(QJsonDocument::Compact));
 
     auto actionList = this->findChildren<QAction *>();
     foreach (auto a, actionList) {
@@ -146,8 +134,6 @@ void ScaleMenu::__ChangeScale(const int &iData)
 
 void ScaleMenu::InitConnection()
 {
-    connect(this, SIGNAL(sigDocProxyMsg(const QString &)), SLOT(slotDocProxyMsg(const QString &)));
-    connect(this, SIGNAL(sigDealWithShortKey(const QString &)), SLOT(slotDealWithShortKey(const QString &)));
 }
 
 void ScaleMenu::OnFileOpenOk(const QString &sPath)

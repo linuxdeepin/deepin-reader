@@ -22,13 +22,12 @@
 
 #include "../DocShowShellWidget.h"
 #include "../LeftSidebarWidget.h"
-
 #include "../FileViewWidget.h"
+#include "../TitleWidget.h"
 
 #include "business/FileDataManager.h"
-
 #include "MainSplitterPrivate.h"
-#include "../TitleWidget.h"
+#include "menu/TitleMenu.h"
 
 MainSplitter::MainSplitter(DWidget *parent)
     : DSplitter(parent)
@@ -94,15 +93,26 @@ void MainSplitter::SlotSplitterMsg(const int &msgType, const QString &msgContent
     SlotDealWithDataMsg(msgType, msgContent);
 }
 
-void MainSplitter::SlotTitleMsg(const int &msgType, const QString &msgContent)
+void MainSplitter::SlotNotifyMsg(const int &msgType, const QString &msgContent)
 {
     if (this->isVisible()) {    //  只有显示的窗口 处理 MainTabWidgetEx 发送的信号
-        int nRes = m_pLeftWidget->qDealWithData(msgType, msgContent);
-        if (nRes != MSG_OK) {
-            m_pDocWidget->qDealWithData(msgType, msgContent);
+        QJsonParseError error;
+        QJsonDocument doc = QJsonDocument::fromJson(msgContent.toLocal8Bit().data(), &error);
+        if (error.error == QJsonParseError::NoError) {
+            QJsonObject obj = doc.object();
+
+            QString sContent = obj.value("content").toString();
+
+            d_ptr->qDealWithData(msgType, sContent);
+
+            int nRes = m_pLeftWidget->qDealWithData(msgType, sContent);
+            if (nRes != MSG_OK) {
+                m_pDocWidget->qDealWithData(msgType, sContent);
+            }
         }
     }
 }
+
 
 void MainSplitter::SlotMainTabWidgetExMsg()
 {

@@ -16,10 +16,6 @@ TextOperationMenu::TextOperationMenu(DWidget *parent)
     initActions();
 }
 
-TextOperationMenu::~TextOperationMenu()
-{
-}
-
 void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, const QString &sSelectText, const QString &sUuid)
 {
     QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
@@ -97,7 +93,7 @@ QAction *TextOperationMenu::createAction(const QString &text, const char *member
 
 void TextOperationMenu::notifyMsgToFrame(const int &msgType, const QString &msgContent)
 {
-    notifyMsg(msgType, msgContent);
+    dApp->m_pModelService->notifyMsg(msgType, msgContent);
     this->hide();
 }
 
@@ -143,16 +139,16 @@ void TextOperationMenu::slotAddNoteClicked()
 {
     if (m_strNoteUuid == "") {
         QString msgContent = QString("%1").arg(m_nClickPage) + Constant::sQStringSep + QString("%1").arg(m_pClickPoint.x()) + Constant::sQStringSep + QString("%1").arg(m_pClickPoint.y());
-        emit sigDealWithData(MSG_OPERATION_TEXT_ADD_ANNOTATION, msgContent);
+//        emit sigDealWithData(MSG_OPERATION_TEXT_ADD_ANNOTATION, msgContent);
     } else {
         QString t_strContant = m_strNoteUuid.trimmed() + Constant::sQStringSep + QString::number(m_nClickPage);
-        emit sigDealWithData(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+//        emit sigDealWithData(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
     }
 }
 
 void TextOperationMenu::slotAddBookMarkClicked()
 {
-    emit sigDealWithData(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nClickPage));
+//    emit sigDealWithData(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nClickPage));
 }
 
 void TextOperationMenu::slotExitFullScreenClicked()
@@ -163,11 +159,6 @@ void TextOperationMenu::slotExitFullScreenClicked()
 void TextOperationMenu::setPEndPoint(const QPoint &pEndPoint)
 {
     m_pEndPoint = pEndPoint;
-}
-
-int TextOperationMenu::dealWithData(const int &, const QString &)
-{
-    return 0;
 }
 
 void TextOperationMenu::setPStartPoint(const QPoint &pStartPoint)

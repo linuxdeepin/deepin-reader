@@ -5,15 +5,12 @@
 #include "docview/docummentproxy.h"
 
 #include "business/bridge/IHelper.h"
+#include "widgets/main/MainTabWidgetEx.h"
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     : CustomMenu("DefaultOperationMenu", parent)
 {
     initActions();
-}
-
-DefaultOperationMenu::~DefaultOperationMenu()
-{
 }
 
 void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPage)
@@ -37,7 +34,8 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
         m_pFirstPage->setEnabled(false);
         m_pPrevPage->setEnabled(false);
     } else {
-        DocummentProxy *_proxy = DocummentProxy::instance();
+        MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+        DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sCurPath);
         if (_proxy) {
             int nPageNum = _proxy->getPageSNum();
             nPageNum--;
@@ -61,11 +59,6 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
         m_pAddIconNote->setVisible(true);
     }
     this->exec(showPoint);
-}
-
-int DefaultOperationMenu::dealWithData(const int &, const QString &)
-{
-    return 0;
 }
 
 void DefaultOperationMenu::initActions()
@@ -101,16 +94,16 @@ QAction *DefaultOperationMenu::createAction(const QString &name, const char *mem
 
 void DefaultOperationMenu::slotSearchClicked()
 {
-    notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_f);
+    dApp->m_pModelService->notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_f);
 }
 
 void DefaultOperationMenu::slotBookMarkClicked()
 {
     int nData = m_pBookMark->property("data").toInt();
     if (nData == 0) {
-        emit sigDealWithData(MSG_OPERATION_DELETE_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
+//        emit sigDealWithData(MSG_OPERATION_DELETE_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
     } else {
-        emit sigDealWithData(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
+//        emit sigDealWithData(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
     }
 }
 
@@ -136,7 +129,7 @@ void DefaultOperationMenu::slotEndPageClicked()
 
 void DefaultOperationMenu::slotExitFullScreenClicked()
 {
-    notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
+    dApp->m_pModelService->notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
 }
 
 void DefaultOperationMenu::slotAddIconNote()
@@ -150,6 +143,6 @@ void DefaultOperationMenu::slotAddIconNote()
                              QString::number(m_showPoint.x()) + Constant::sQStringSep +
                              QString::number(m_showPoint.y());
 
-        notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, strContent);
+        dApp->m_pModelService->notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, strContent);
     }
 }

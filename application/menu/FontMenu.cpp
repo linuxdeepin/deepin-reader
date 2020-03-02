@@ -37,33 +37,15 @@ FontMenu::FontMenu(DWidget *parent):
     initActions();
 
     initConnection();
-
-    dApp->m_pModelService->addObserver(this);
 }
 
-FontMenu::~FontMenu()
+int FontMenu::qDealWithData(const int &msgType, const QString &msgContent)
 {
-    dApp->m_pModelService->removeObserver(this);
-}
-
-/**
- * @brief FontMenu::dealWithData
- * 处理全局消息
- * @param msgType     消息类型
- * @param msgContent  消息内容
- * @return            处理消息状态
- */
-int FontMenu::dealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == E_DOCPROXY_MSG_TYPE) {
-        emit sigDocProxyMsg(msgContent);
-    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (shortKeyList.contains(msgContent)) {
-            emit sigDealWithShortKey(msgContent);
-            return ConstantMsg::g_effective_res;
-        }
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        OnFileOpenOk(msgContent);
     }
-    return 0;
+
+    return MSG_NO_OK;
 }
 
 /**
@@ -81,22 +63,6 @@ void FontMenu::resetAdaptive()
     setAppSetFiteHAndW();
 }
 
-void FontMenu::setFileViewScale(bool)
-{
-
-}
-
-void FontMenu::SlotDocProxyMsg(const QString &sContent)
-{
-    MsgModel mm;
-    mm.fromJson(sContent);
-
-    int nMsg = mm.getMsgType();
-    if (nMsg == MSG_OPERATION_OPEN_FILE_OK) {
-        QString sPath = mm.getPath();
-        OnFileOpenOk(sPath);
-    }
-}
 
 /**
  * @brief FontMenu::slotTwoPage
@@ -106,14 +72,13 @@ void FontMenu::slotTwoPage()
 {
     m_bDoubPage = !m_bDoubPage;
 
-    MsgModel mm;
-    mm.setMsgType(MSG_VIEWCHANGE_DOUBLE_SHOW);
-    mm.setValue(QString::number(m_bDoubPage));
+    QJsonObject obj;
+    obj.insert("content", QString::number(m_bDoubPage));
+    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
 
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-    mm.setPath(sCurPath);
+    QJsonDocument doc(obj);
 
-    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
+    notifyMsg(MSG_VIEWCHANGE_DOUBLE_SHOW, doc.toJson(QJsonDocument::Compact));
 }
 
 /**
@@ -150,14 +115,13 @@ void FontMenu::slotFiteW()
  */
 void FontMenu::slotRotateL()
 {
-    MsgModel mm;
-    mm.setMsgType(MSG_VIEWCHANGE_ROTATE);
-    mm.setValue("-1");
+    QJsonObject obj;
+    obj.insert("content", "-1");
+    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
 
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-    mm.setPath(sCurPath);
+    QJsonDocument doc(obj);
 
-    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
+    notifyMsg(MSG_VIEWCHANGE_ROTATE, doc.toJson(QJsonDocument::Compact));
 }
 
 /**
@@ -166,14 +130,13 @@ void FontMenu::slotRotateL()
  */
 void FontMenu::slotRotateR()
 {
-    MsgModel mm;
-    mm.setMsgType(MSG_VIEWCHANGE_ROTATE);
-    mm.setValue("1");
+    QJsonObject obj;
+    obj.insert("content", "1");
+    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
 
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-    mm.setPath(sCurPath);
+    QJsonDocument doc(obj);
 
-    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
+    notifyMsg(MSG_VIEWCHANGE_ROTATE, doc.toJson(QJsonDocument::Compact));
 }
 
 /**
@@ -184,10 +147,8 @@ void FontMenu::OnFileOpenOk(const QString &sPath)
 {
     FileDataModel fdm = dApp->m_pDataManager->qGetFileData(sPath);
 
-    int value = 0;
-
     //单双页
-    value = fdm.qGetData(DoubleShow);
+    int value = fdm.qGetData(DoubleShow);
     m_bDoubPage = (value == 1) ? true : false;
     if (m_pTwoPageAction) {
         m_pTwoPageAction->setChecked(m_bDoubPage);
@@ -213,25 +174,25 @@ void FontMenu::OnFileOpenOk(const QString &sPath)
  * 处理键盘事件
  * @param keyType  事件内容
  */
-void FontMenu::slotDealWithShortKey(const QString &keyType)
-{
-    if (keyType == KeyStr::g_ctrl_1) {
-        //还原
-        resetAdaptive();
-    } else if (keyType == KeyStr::g_ctrl_2) {
-        //自适应高
-        slotFiteH();
-    } else if (keyType == KeyStr::g_ctrl_3) {
-        //自适应宽
-        slotFiteW();
-    } else if (keyType == KeyStr::g_ctrl_r) {
-        //左旋转
-        rotateThumbnail(false);
-    } else if (keyType == KeyStr::g_ctrl_shift_r) {
-        //右旋转
-        rotateThumbnail(true);
-    }
-}
+//void FontMenu::slotDealWithShortKey(const QString &keyType)
+//{
+//    if (keyType == KeyStr::g_ctrl_1) {
+//        //还原
+//        resetAdaptive();
+//    } else if (keyType == KeyStr::g_ctrl_2) {
+//        //自适应高
+//        slotFiteH();
+//    } else if (keyType == KeyStr::g_ctrl_3) {
+//        //自适应宽
+//        slotFiteW();
+//    } else if (keyType == KeyStr::g_ctrl_r) {
+//        //左旋转
+//        rotateThumbnail(false);
+//    } else if (keyType == KeyStr::g_ctrl_shift_r) {
+//        //右旋转
+//        rotateThumbnail(true);
+//    }
+//}
 
 /**
  * @brief FontMenu::initMenu
@@ -252,8 +213,6 @@ void FontMenu::initActions()
  */
 void FontMenu::initConnection()
 {
-    connect(this, SIGNAL(sigDocProxyMsg(const QString &)), SLOT(SlotDocProxyMsg(const QString &)));
-    connect(this, SIGNAL(sigDealWithShortKey(const QString &)), SLOT(slotDealWithShortKey(const QString &)));
 }
 
 /**
@@ -291,14 +250,13 @@ void FontMenu::rotateThumbnail(const bool &direct)
         nRes = 1;
     }
 
-    MsgModel mm;
-    mm.setMsgType(MSG_VIEWCHANGE_ROTATE);
-    mm.setValue(QString::number(nRes));
+    QJsonObject obj;
+    obj.insert("content", QString::number(nRes));
+    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
 
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-    mm.setPath(sCurPath);
+    QJsonDocument doc(obj);
 
-    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
+    dApp->m_pModelService->notifyMsg(MSG_VIEWCHANGE_ROTATE, doc.toJson(QJsonDocument::Compact));
 }
 
 /**
@@ -316,12 +274,11 @@ void FontMenu::setAppSetFiteHAndW()
         iValue = 10;
     }
 
-    MsgModel mm;
-    mm.setMsgType(MSG_VIEWCHANGE_FIT);
-    mm.setValue(QString::number(iValue));
+    QJsonObject obj;
+    obj.insert("content", QString::number(iValue));
+    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
 
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-    mm.setPath(sCurPath);
+    QJsonDocument doc(obj);
 
-    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
+    notifyMsg(MSG_VIEWCHANGE_FIT, doc.toJson(QJsonDocument::Compact));
 }

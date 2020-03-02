@@ -20,11 +20,14 @@
 
 #include <QVBoxLayout>
 #include <QStackedLayout>
+#include <QDesktopServices>
+#include <QUrl>
 
 #include "MainTabBar.h"
 #include "MainSplitter.h"
 
 #include "business/SaveDialog.h"
+#include "business/PrintManager.h"
 #include "../FileAttrWidget.h"
 
 #include "business/bridge/IHelper.h"
@@ -32,9 +35,9 @@
 MainTabWidgetEx *MainTabWidgetEx::g_onlyApp = nullptr;
 
 MainTabWidgetEx::MainTabWidgetEx(DWidget *parent)
-    : CustomWidget("MainTabWidgetEx", parent)
+    : CustomWidget(MAIN_TAB_WIDGET, parent)
 {
-    m_pMsgList = {MSG_OPERATION_ATTR, APP_EXIT};
+    m_pMsgList = {APP_EXIT, E_TABBAR_MSG_TYPE};
 
     initWidget();
     InitConnections();
@@ -55,19 +58,19 @@ MainTabWidgetEx *MainTabWidgetEx::Instance()
 
 int MainTabWidgetEx::dealWithData(const int &msgType, const QString &msgContent)
 {
+    if (m_pMsgList.contains(msgType)) {
+        emit sigDealWithData(msgType, msgContent);
+        return ConstantMsg::g_effective_res;
+    }
+
     QJsonParseError error;
     QJsonDocument doc = QJsonDocument::fromJson(msgContent.toLocal8Bit().data(), &error);
     if (error.error == QJsonParseError::NoError) {
         QJsonObject obj = doc.object();
-        QString sFrom = obj.value("from").toString();
+        QString sTo = obj.value("to").toString();
 
-        if (sFrom == "TitleWidget") {
-            emit sigTitleMsg(msgType, msgContent);
-            return ConstantMsg::g_effective_res;
-        }
-    } else {
-        if (m_pMsgList.contains(msgType)) {
-            emit sigDealWithData(msgType, msgContent);
+        if (sTo.contains(this->m_strObserverName)) {
+            emit sigDealNotifyMsg(msgType, msgContent);
             return ConstantMsg::g_effective_res;
         }
     }
@@ -183,12 +186,66 @@ void MainTabWidgetEx::OnAppExit()
     dApp->exit(0);
 }
 
-void MainTabWidgetEx::SlotDealWithData(const int &msgType, const QString &)
+void MainTabWidgetEx::OnTabBarMsg(const QString &s)
 {
-    if (msgType == MSG_OPERATION_ATTR) {                            //  打开该文件的属性信息
+    if (s == "New window") {
+
+    } else if (s == "New tab") {
+
+    } else if (s == "Save") { //  保存当前显示文件
+        OnSaveFile();
+    } else if (s == "Save as") {
+        OnSaveAsFile();
+    } else if (s == "Print") {
+        OnPrintFile();
+    } else if (s == "Slide show") { //  开启幻灯片
+
+    } else if (s == "Magnifer") {   //  开启放大镜
+
+    } else if (s == "Document info") {
         onShowFileAttr();
-    } else if (msgType == APP_EXIT) {   //  关闭应用
+    } else if (s == "Display in file manager") {    //  文件浏览器 显示
+        OpenCurFileFolder();
+    }
+}
+
+//  保存当前显示文件
+void MainTabWidgetEx::OnSaveFile()
+{
+    QString sRes = dApp->m_pHelper->qDealWithData(MSG_SAVE_FILE_PATH, "");
+}
+
+void MainTabWidgetEx::OnSaveAsFile()
+{
+    QString sRes = dApp->m_pHelper->qDealWithData(MSG_SAVE_AS_FILE_PATH, "");
+}
+
+void MainTabWidgetEx::OnPrintFile()
+{
+    QString sPath = qGetCurPath();
+    //  打印
+    PrintManager p;
+    p.setPrintPath(sPath);
+    p.showPrintDialog(this);
+}
+
+void MainTabWidgetEx::OpenCurFileFolder()
+{
+    QString sPath = qGetCurPath();
+    if (sPath != "") {
+        int nLastPos = sPath.lastIndexOf('/');
+        sPath = sPath.mid(0, nLastPos);
+        sPath = QString("file://") + sPath;
+        QDesktopServices::openUrl(QUrl(sPath));
+    }
+}
+
+void MainTabWidgetEx::SlotDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (msgType == APP_EXIT) {   //  关闭应用
         OnAppExit();
+    } else if (msgType == E_TABBAR_MSG_TYPE) {
+        OnTabBarMsg(msgContent);
     }
 }
 
@@ -210,8 +267,8 @@ void MainTabWidgetEx::SlotAddTab(const QString &sPath)
 {
     if (m_pStackedLayout) {
         MainSplitter *splitter = new MainSplitter(this);
-        connect(this, SIGNAL(sigTitleMsg(const int &, const QString &)), splitter, SLOT(SlotTitleMsg(const int &, const QString &)));
-        connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), splitter, SLOT(SlotDealWithDataMsg(const int &, const QString &)));
+        connect(this, SIGNAL(sigDealNotifyMsg(const int &, const QString &)), splitter, SLOT(SlotNotifyMsg(const int &, const QString &)));
+//        connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), splitter, SLOT(SlotDealWithDataMsg(const int &, const QString &)));
         splitter->qSetPath(sPath);
         m_pStackedLayout->addWidget(splitter);
     }

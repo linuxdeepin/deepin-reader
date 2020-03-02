@@ -42,7 +42,7 @@ public:
 
 signals:
     void sigDealWithData(const int &, const QString &);
-    void sigTitleMsg(const int &, const QString &);
+    void sigDealNotifyMsg(const int &, const QString &);
 
     void sigRemoveFileTab(const QString &);
 
@@ -69,6 +69,14 @@ private:
     void InitConnections();
     void onShowFileAttr();
     void OnAppExit();
+    void OnTabBarMsg(const QString &);
+    void OnSaveFile();
+    void OnSaveAsFile();
+    void OnPrintFile();
+    void OpenCurFileFolder();
+//    void OnSaveFile();
+//    void OnSaveFile();
+//    void OnSaveFile();
 
 private slots:
     void SlotDealWithData(const int &, const QString &);

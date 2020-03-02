@@ -60,7 +60,7 @@ private:
 private slots:
     void SlotDealWithDataMsg(const int &, const QString &);
     void SlotSplitterMsg(const int &, const QString &);
-    void SlotTitleMsg(const int &, const QString &);
+    void SlotNotifyMsg(const int &, const QString &);
 
     void SlotMainTabWidgetExMsg();
 

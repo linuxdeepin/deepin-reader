@@ -28,14 +28,9 @@ class HandleMenu : public CustomMenu
 
 public:
     explicit HandleMenu(DWidget *parent = nullptr);
-    ~HandleMenu() override;
 
 signals:
     void sigCurrentTool(const QString &);
-
-    // IObserver interface
-public:
-    int dealWithData(const int &, const QString &) override;
 
     // CustomMenu interface
 protected:

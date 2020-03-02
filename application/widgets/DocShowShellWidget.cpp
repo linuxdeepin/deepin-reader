@@ -324,19 +324,22 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
 
 int DocShowShellWidget::qDealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {             //  添加注释
-        onOpenNoteWidget(msgContent);
-    } else if (msgType == MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) {
-        onShowNoteWidget(msgContent);
-    } else if (msgType == MSG_NOTE_PAGE_SHOW_NOTEWIDGET) {          //  显示注释窗口
-        __ShowPageNoteWidget(msgContent);
-    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        OnOpenFileOk();
-    }
+    int nRes = m_pFileViewWidget->qDealWithData(msgType, msgContent);
+    if (nRes != MSG_OK) {
+        if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {             //  添加注释
+            onOpenNoteWidget(msgContent);
+        } else if (msgType == MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) {
+            onShowNoteWidget(msgContent);
+        } else if (msgType == MSG_NOTE_PAGE_SHOW_NOTEWIDGET) {          //  显示注释窗口
+            __ShowPageNoteWidget(msgContent);
+        } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+            OnOpenFileOk();
+        }
 
-    int nRes = MSG_NO_OK;
-    if (m_pMsgList.contains(msgType)) {
-        nRes = MSG_OK;
+        int nRes = MSG_NO_OK;
+        if (m_pMsgList.contains(msgType)) {
+            nRes = MSG_OK;
+        }
     }
     return nRes;
 }

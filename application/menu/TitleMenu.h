@@ -36,11 +36,17 @@ class TitleMenu : public CustomMenu
 
 public:
     explicit TitleMenu(DWidget *parent = nullptr);
-    ~TitleMenu() override;
 
-    // IObserver interface
+private:
+    static TitleMenu *g_onlyTitleMenu;
+
 public:
-    int dealWithData(const int &, const QString &) override;
+    static TitleMenu *Instance();
+
+
+    // CustomMenu interface
+public:
+    int qDealWithData(const int &, const QString &) override;
 
     // CustomMenu interface
 protected:
@@ -55,16 +61,7 @@ private slots:
 
 private:
     void onDocProxyMsg(const QString &);
-
-    void OnNewWindow();
-    void OnNewTab();
-    void OnSave();
-    void OnSaveAs();
-    void DisplayInFileManager();
-    void OnPrint();
-    void DocumentInfo();
-    void OnMagnifer();
-    void OnSlideShow();
 };
+
 
 #endif // TITLEMENU_H

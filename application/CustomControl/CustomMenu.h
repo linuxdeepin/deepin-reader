@@ -22,10 +22,12 @@
 #include <DMenu>
 
 #include "application.h"
+#include "WidgetHeader.h"
 
+using namespace DR_SPACE;
 DWIDGET_USE_NAMESPACE
 
-class CustomMenu : public DMenu, public IObserver
+class CustomMenu : public DMenu
 {
     Q_OBJECT
     Q_DISABLE_COPY(CustomMenu)
@@ -33,17 +35,12 @@ class CustomMenu : public DMenu, public IObserver
 public:
     CustomMenu(const QString &, DWidget *parent = nullptr);
 
-    //  主题更新信号
-signals:
-    void sigUpdateTheme();
-    void sigDealWithData(const int &, const QString &);
+public:
+    virtual int qDealWithData(const int &, const QString &);
 
 protected:
     virtual void initActions() = 0;
-
-protected:
-    void sendMsg(const int &msgType, const QString &msgContent = "") override;
-    void notifyMsg(const int &msgType, const QString &msgContent = "") override;
+    void notifyMsg(const int &, const QString &);
 };
 
 

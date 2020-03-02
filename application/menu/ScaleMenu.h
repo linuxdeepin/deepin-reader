@@ -28,16 +28,13 @@ class ScaleMenu : public CustomMenu
 
 public:
     explicit ScaleMenu(DWidget *parent = nullptr);
-    ~ScaleMenu() override;
 
 signals:
-    void sigDocProxyMsg(const QString &);
     void sigCurrentScale(const int &);
-    void sigDealWithShortKey(const QString &);
 
-    // IObserver interface
+    // CustomMenu interface
 public:
-    int dealWithData(const int &, const QString &) override;
+    int qDealWithData(const int &, const QString &) override;
 
     // CustomMenu interface
 protected:
@@ -59,6 +56,8 @@ private:
     QList<int> dataList;
     int     m_nCurrentIndex = 5;
     QStringList     shortKeyList;                 // 要处理的消息类型
+
+
 };
 
 #endif // SCALEMENU_H
