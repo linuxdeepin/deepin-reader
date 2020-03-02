@@ -26,8 +26,7 @@
 
 #include "business/SaveDialog.h"
 
-#include "business/bridge/IHelper.h"
-
+#include "gof/bridge/IHelper.h"
 
 MainTabBar::MainTabBar(DWidget *parent)
     : DTabBar(parent)

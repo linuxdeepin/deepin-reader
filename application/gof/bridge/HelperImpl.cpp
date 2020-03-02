@@ -16,35 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef IHELPER_H
-#define IHELPER_H
 
-#include <QObject>
+#include "HelperImpl.h"
 
-class HelperImpl;
-
-class IHelper : public QObject
+HelperImpl::HelperImpl(QObject *parent)
+    : QObject(parent)
 {
-protected:
-    explicit IHelper(QObject *parent = nullptr);
 
-public:
-    virtual ~IHelper() {}
-    virtual QString qDealWithData(const int &, const QString &) = 0;
-    virtual void qSetCurrentPath(const QString &) = 0;
-};
-
-class Helper : public IHelper
-{
-public:
-    explicit Helper(QObject *parent = nullptr);
-    QString qDealWithData(const int &msgType, const QString &msgContent) override;
-    void qSetCurrentPath(const QString &) override;
-
-private:
-    HelperImpl  *m_pAnnotatinHelperImpl = nullptr;
-    HelperImpl  *m_pDocHelperImpl = nullptr;
-};
-
-
-#endif // IHELPER_H
+}

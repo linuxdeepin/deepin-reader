@@ -19,7 +19,7 @@
 
 #include "DocummentFileHelper.h"
 
-#include "business/bridge/IHelper.h"
+#include "gof/bridge/IHelper.h"
 
 DocummentFileHelper::DocummentFileHelper(QObject *parent)
     : QObject(parent)

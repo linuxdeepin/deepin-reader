@@ -23,7 +23,7 @@
 #include "application.h"
 #include "CustomItemWidget.h"
 
-#include "business/bridge/IHelper.h"
+#include "gof/bridge/IHelper.h"
 
 CustomListWidget::CustomListWidget(DWidget *parent)
     : DListWidget(parent)

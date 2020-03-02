@@ -37,7 +37,7 @@
 #include "utils/PublicFunction.h"
 #include "business/PrintManager.h"
 
-#include "business/bridge/IHelper.h"
+#include "gof/bridge/IHelper.h"
 
 #include "main/MainTabWidgetEx.h"
 

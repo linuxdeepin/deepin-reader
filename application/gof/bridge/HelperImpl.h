@@ -29,10 +29,8 @@ protected:
 public:
     virtual ~HelperImpl() {}
     virtual QString qDealWithData(const int &, const QString &) = 0;
-    void qSetCurrentPath(const QString &);
 
 protected:
-    QString         m_strPath = "";
     QList<int>      m_pMsgList;
 };
 

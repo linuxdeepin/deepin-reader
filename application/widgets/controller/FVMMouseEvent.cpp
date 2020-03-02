@@ -28,7 +28,7 @@
 #include "../FileViewWidget.h"
 #include "../NoteTipWidget.h"
 
-#include "business/bridge/IHelper.h"
+#include "gof/bridge/IHelper.h"
 
 void FVMMouseEvent::mouseMoveEvent(QMouseEvent *event, DWidget *widget)
 {

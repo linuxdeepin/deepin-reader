@@ -23,7 +23,7 @@
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
 
-#include "business/bridge/IHelper.h"
+#include "gof/bridge/IHelper.h"
 #include "widgets/main/MainTabWidgetEx.h"
 
 NotesWidget::NotesWidget(DWidget *parent)

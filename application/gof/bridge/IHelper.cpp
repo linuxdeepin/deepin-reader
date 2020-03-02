@@ -56,9 +56,3 @@ QString Helper::qDealWithData(const int &msgType, const QString &msgContent)
     }
     return sRes;
 }
-
-void Helper::qSetCurrentPath(const QString &sCurPath)
-{
-    m_pAnnotatinHelperImpl->qSetCurrentPath(sCurPath);
-    m_pDocHelperImpl->qSetCurrentPath(sCurPath);
-}

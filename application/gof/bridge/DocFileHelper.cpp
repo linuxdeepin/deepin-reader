@@ -26,7 +26,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-#include "../FileFormatHelper.h"
+#include "business/FileFormatHelper.h"
 
 #include "docview/docummentproxy.h"
 #include "utils/PublicFunction.h"

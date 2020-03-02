@@ -32,7 +32,7 @@
 #include "../FileAttrWidget.h"
 #include "../TitleWidget.h"
 
-#include "business/bridge/IHelper.h"
+#include "gof/bridge/IHelper.h"
 
 MainTabWidgetEx *MainTabWidgetEx::g_onlyApp = nullptr;
 

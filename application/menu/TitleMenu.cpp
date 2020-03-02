@@ -22,11 +22,9 @@
 
 #include "MsgModel.h"
 
-#include "business/bridge/IHelper.h"
-
+#include "gof/bridge/IHelper.h"
 
 TitleMenu *TitleMenu::g_onlyTitleMenu = nullptr;
-
 
 TitleMenu *TitleMenu::Instance()
 {

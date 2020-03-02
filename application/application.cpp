@@ -25,7 +25,7 @@
 #include "business/AppInfo.h"
 #include "utils/utils.h"
 
-#include "business/bridge/IHelper.h"
+#include "gof/bridge/IHelper.h"
 
 namespace {
 

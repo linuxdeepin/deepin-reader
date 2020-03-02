@@ -17,7 +17,7 @@
 #include "widgets/TitleWidget.h"
 #include "widgets/CentralWidget.h"
 
-#include "business/bridge/IHelper.h"
+#include "gof/bridge/IHelper.h"
 
 #include "widgets/main/MainTabWidgetEx.h"
 

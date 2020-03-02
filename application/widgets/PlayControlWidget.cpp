@@ -11,7 +11,7 @@
 #include "utils/utils.h"
 #include "docview/docummentproxy.h"
 
-#include "business/bridge/IHelper.h"
+#include "gof/bridge/IHelper.h"
 
 PlayControlWidget::PlayControlWidget(DWidget *parnet)
     : DFloatingWidget(parnet)

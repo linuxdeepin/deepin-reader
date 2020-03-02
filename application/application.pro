@@ -17,6 +17,7 @@ CONFIG += c++11 link_pkgconfig
 include (business/business.pri)
 include (CustomControl/CustomControl.pri)
 include (docview/docview.pri)
+include (gof/gof.pri)
 include (menu/menu.pri)
 include (pdfControl/pdfControl.pri)
 include (utils/utils.pri)

@@ -7,7 +7,7 @@
 
 #include "business/AppInfo.h"
 
-#include "business/bridge/IHelper.h"
+#include "gof/bridge/IHelper.h"
 #include "widgets/main/MainTabWidgetEx.h"
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)

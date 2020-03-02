@@ -24,7 +24,7 @@
 #include <QTextLayout>
 #include <QVBoxLayout>
 
-#include "business/bridge/IHelper.h"
+#include "gof/bridge/IHelper.h"
 
 NotesItemWidget::NotesItemWidget(DWidget *parent)
     : CustomItemWidget(QString("NotesItemWidget"), parent)

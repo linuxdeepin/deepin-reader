@@ -21,7 +21,7 @@
 #include <QValidator>
 
 #include "docview/docummentproxy.h"
-#include "business/bridge/IHelper.h"
+#include "gof/bridge/IHelper.h"
 #include "widgets/main/MainTabWidgetEx.h"
 
 PagingWidget::PagingWidget(CustomWidget *parent)
