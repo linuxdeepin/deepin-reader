@@ -23,6 +23,7 @@
 #include "docview/docummentproxy.h"
 #include "business/FileDataManager.h"
 #include "business/bridge/IHelper.h"
+#include "widgets/main/MainTabWidgetEx.h"
 
 PagingWidget::PagingWidget(CustomWidget *parent)
     : CustomWidget(QString("PagingWidget"), parent)
@@ -85,9 +86,6 @@ void PagingWidget::initWidget()
 
 void PagingWidget::initConnections()
 {
-    connect(this, SIGNAL(sigDocFilePageChange(const QString &)), SLOT(SlotDocFilePageChange(const QString &)));
-    connect(this, SIGNAL(sigDocFileOpenOk(QString)), SLOT(SlotDocFileOpenOk(QString)));
-
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
@@ -99,15 +97,23 @@ void PagingWidget::initConnections()
  */
 int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_FILE_PAGE_CHANGE) {                  //  文档页变化了
-        emit sigDocFilePageChange(msgContent);
-    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {     //  颜色主题切换
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {     //  颜色主题切换
         emit sigUpdateTheme();
-    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {     //  文档打开成功了
-        emit sigDocFileOpenOk(msgContent);
     }
 
     return 0;
+}
+
+int PagingWidget::qDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {     //  文档打开成功了
+        OnDocFileOpenOk(msgContent);
+    } else if (msgType == MSG_FILE_PAGE_CHANGE) {                  //  文档页变化了
+        OnDocFilePageChange(msgContent);
+    }
+    int nRes = MSG_NO_OK;
+
+    return  nRes;
 }
 
 void PagingWidget::slotUpdateTheme()
@@ -139,9 +145,11 @@ void PagingWidget::__SetBtnState(const int &currntPage, const int &totalPage)
     }
 }
 
-void PagingWidget::SlotDocFilePageChange(const QString &msgContent)
+void PagingWidget::OnDocFilePageChange(const QString &msgContent)
 {
-    DocummentProxy *_proxy = DocummentProxy::instance();
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    QString sPath = pMtwe->qGetCurPath();
+    DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sPath);
     if (_proxy) {
         int totalPage = _proxy->getPageSNum();
 
@@ -168,9 +176,10 @@ void PagingWidget::SlotDocFilePageChange(const QString &msgContent)
  * 2.设置总页数 和 当前页码
  *
  */
-void PagingWidget::SlotDocFileOpenOk(QString strpath)
+void PagingWidget::OnDocFileOpenOk(const QString &sPath)
 {
-    DocummentProxy *_proxy = DocummentProxy::instance(dApp->m_pDataManager->qGetFileUuid(strpath));
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sPath);
     if (_proxy) {
         bool isHasLabel = _proxy->haslabel();
         if (!isHasLabel) {
@@ -188,7 +197,7 @@ void PagingWidget::SlotDocFileOpenOk(QString strpath)
 
         int nCurPage = _proxy->currentPageNo();
 
-        SlotDocFilePageChange(QString::number(nCurPage));
+        OnDocFilePageChange(QString::number(nCurPage));
     }
 }
 
@@ -211,7 +220,9 @@ void PagingWidget::__NormalChangePage()
 
 void PagingWidget::__PageNumberJump()
 {
-    DocummentProxy *_proxy = DocummentProxy::instance();
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    QString sPath = pMtwe->qGetCurPath();
+    DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sPath);
     if (_proxy) {
         int nPageSum = _proxy->getPageSNum();
 

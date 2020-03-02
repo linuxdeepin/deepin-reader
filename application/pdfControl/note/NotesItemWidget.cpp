@@ -91,7 +91,7 @@ void NotesItemWidget::slotCopyContant()
 
 void NotesItemWidget::slotShowContextMenu(const QPoint &)
 {
-    notifyMsg(MSG_NOTE_SELECT_ITEM, m_strUUid);
+    emit sigSelectItem(m_strUUid);
 
     if (m_menu == nullptr) {
         m_menu = new DMenu(this);
@@ -224,9 +224,6 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
 void NotesItemWidget::resizeEvent(QResizeEvent *event)
 {
     if (m_pTextLab) {
-
-        qDebug() << __FUNCTION__ ;
-
         QString note = m_strNote;
 
         note.replace(QChar('\n'), QString(""));

@@ -77,23 +77,23 @@ public:
     void nextPage();
     void DeleteItemByKey();
 
+public:
+    // IObserver interface
+    int dealWithData(const int &, const QString &) override;
+    int qDealWithData(const int &, const QString &) override;
+
+    int getBookMarkPage(const int &index);
+
 signals:
-    void sigFilePageChanged(const QString &);
-    void sigOpenFileOk();
-    void sigDeleteBookItem(const QString &);
-    void sigAddBookMark(const QString &);
-    void sigRightSelectItem(QString);
     void sigSetBookMarkState(const int &, const int &);
 
 private slots:
     void slotAddBookMark();
     void slotAddBookMark(const QString &);
-    void slotOpenFileOk();
-    void slotDocFilePageChanged(const QString &);
     void slotDeleteBookItem(const QString &);
     void slotLoadImage(const int &, const QImage &);
     void slotUpdateTheme();
-    void slotRightSelectItem(QString);
+    void slotRightSelectItem(const QString &);
     void slotSelectItemBackColor(QListWidgetItem *);
     void slotDealWithShurtKey(const QString &);
 
@@ -101,21 +101,18 @@ protected:
     void initWidget() override;
 
 private:
+    void OnOpenFileOk(const QString &);
+    void slotDocFilePageChanged(const QString &);
+
     void initConnection();
     QListWidgetItem *addBookMarkItem(const int &);
     void deleteIndexPage(const int &pageIndex);
     void clearItemColor();
 
-public:
-    // IObserver interface
-    int dealWithData(const int &, const QString &) override;
-    int getBookMarkPage(const int &index);
-    bool hasClickFoucs();
-
 private:
-    CustomListWidget *m_pBookMarkListWidget = nullptr;
-    DPushButton *m_pAddBookMarkBtn = nullptr;
-    LoadBookMarkThread m_loadBookMarkThread;
+    CustomListWidget    *m_pBookMarkListWidget = nullptr;
+    DPushButton         *m_pAddBookMarkBtn = nullptr;
+    LoadBookMarkThread  m_loadBookMarkThread;
 };
 
 #endif  // BOOKMARKFORM_H

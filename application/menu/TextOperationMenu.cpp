@@ -143,17 +143,16 @@ void TextOperationMenu::slotAddNoteClicked()
 {
     if (m_strNoteUuid == "") {
         QString msgContent = QString("%1").arg(m_nClickPage) + Constant::sQStringSep + QString("%1").arg(m_pClickPoint.x()) + Constant::sQStringSep + QString("%1").arg(m_pClickPoint.y());
-        notifyMsgToFrame(MSG_OPERATION_TEXT_ADD_ANNOTATION, msgContent);
+        emit sigDealWithData(MSG_OPERATION_TEXT_ADD_ANNOTATION, msgContent);
     } else {
         QString t_strContant = m_strNoteUuid.trimmed() + Constant::sQStringSep + QString::number(m_nClickPage);
-        notifyMsgToFrame(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+        emit sigDealWithData(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
     }
 }
 
 void TextOperationMenu::slotAddBookMarkClicked()
 {
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-    notifyMsgToFrame(MSG_OPERATION_TEXT_ADD_BOOKMARK, sCurPath + Constant::sQStringSep + QString("%1").arg(m_nClickPage));
+    emit sigDealWithData(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nClickPage));
 }
 
 void TextOperationMenu::slotExitFullScreenClicked()

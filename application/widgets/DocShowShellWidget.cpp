@@ -26,8 +26,8 @@ DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
     initWidget();
     initConnections();
 
-    m_pMsgList = {MSG_OPERATION_ATTR, MSG_OPERATION_TEXT_ADD_ANNOTATION,
-                  MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, MSG_NOTE_PAGE_SHOW_NOTEWIDGET
+    m_pMsgList = { MSG_OPERATION_TEXT_ADD_ANNOTATION,
+                   MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, MSG_NOTE_PAGE_SHOW_NOTEWIDGET
                  };
 
     dApp->m_pModelService->addObserver(this);
@@ -105,13 +105,6 @@ void DocShowShellWidget::slotHideCloseBtn()
     if (closeBtn != nullptr && closeBtn->isVisible()) {
         closeBtn->hide();
     }
-}
-
-//  获取文件的基本数据，　进行展示
-void DocShowShellWidget::onShowFileAttr()
-{
-    auto pFileAttrWidget = new FileAttrWidget;
-    pFileAttrWidget->showScreenCenter();
 }
 
 //  搜索框
@@ -235,18 +228,6 @@ void DocShowShellWidget::InitSpinner()
     m_pSpinerWidget->setLayout(hLayout);
 }
 
-void DocShowShellWidget::OnDocProxyMsg(const QString &msgContent)
-{
-    MsgModel mm;
-    mm.fromJson(msgContent);
-
-    int nMsg = mm.getMsgType();
-    if (nMsg == MSG_OPERATION_OPEN_FILE_OK) {
-        QString sPath = mm.getPath();
-        slotOpenFileOk(sPath);
-    }
-}
-
 void DocShowShellWidget::slotBtnCloseClicked()
 {
     notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
@@ -274,48 +255,31 @@ void DocShowShellWidget::slotChangePlayCtrlShow(bool bshow)
     }
 }
 
-void DocShowShellWidget::slotOpenFileOk(const QString &sPath)
+void DocShowShellWidget::slotDealWithData(const int &msgType, const QString &msgContent)
 {
-    if (/*this->isVisible()*/!sPath.isEmpty()) {
-        dApp->m_pDataManager->qSetCurrentFilePath(sPath);
-
-        MsgModel mm;
-        mm.setMsgType(MSG_OPERATION_OPEN_FILE_OK);
-        mm.setPath(sPath);
-
-        notifyMsg(E_DOCPROXY_MSG_TYPE, mm.toJson());
+    if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {      //  添加注释
+        onOpenNoteWidget(msgContent);
     }
+}
 
+void DocShowShellWidget::OnOpenFileOk()
+{
     m_playout->removeWidget(m_pSpinerWidget);
 
     delete  m_pSpinerWidget;
     m_pSpinerWidget = nullptr;
 }
 
-void DocShowShellWidget::slotDealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_OPERATION_ATTR) {                            //  打开该文件的属性信息
-        onShowFileAttr();
-    } else if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {      //  添加注释
-        onOpenNoteWidget(msgContent);
-    } else if (msgType ==  MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) {    //  显示注释窗口
-        onShowNoteWidget(msgContent);
-    } else if (msgType == MSG_NOTE_PAGE_SHOW_NOTEWIDGET) {          //  显示注释窗口
-        __ShowPageNoteWidget(msgContent);
-    }
-}
-
 void DocShowShellWidget::initConnections()
 {
-    connect(this, SIGNAL(sigOpenFileOk(const QString &)), SLOT(slotOpenFileOk(const QString &)));
     connect(this, SIGNAL(sigShowFileFind()), SLOT(slotShowFindWidget()));
     connect(this, SIGNAL(sigShowCloseBtn(const int &)), SLOT(slotShowCloseBtn(const int &)));
     connect(this, SIGNAL(sigHideCloseBtn()), SLOT(slotHideCloseBtn()));
     connect(this, SIGNAL(sigChangePlayCtrlShow(bool)), SLOT(slotChangePlayCtrlShow(bool)));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
-            SLOT(slotDealWithData(const int &, const QString &)));
+//    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
+//            SLOT(slotDealWithData(const int &, const QString &)));
 }
 
 //  集中处理 按键通知消息
@@ -358,20 +322,44 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
     return 0;
 }
 
+int DocShowShellWidget::qDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {             //  添加注释
+        onOpenNoteWidget(msgContent);
+    } else if (msgType == MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) {
+        onShowNoteWidget(msgContent);
+    } else if (msgType == MSG_NOTE_PAGE_SHOW_NOTEWIDGET) {          //  显示注释窗口
+        __ShowPageNoteWidget(msgContent);
+    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        OnOpenFileOk();
+    }
+
+    int nRes = MSG_NO_OK;
+    if (m_pMsgList.contains(msgType)) {
+        nRes = MSG_OK;
+    }
+    return nRes;
+}
+
+bool DocShowShellWidget::OpenFilePath(const QString &sPath)
+{
+    return m_pFileViewWidget->OpenFilePath(sPath);
+}
+
 void DocShowShellWidget::initWidget()
 {
     m_playout = new QStackedLayout;
     m_playout->setContentsMargins(0, 0, 0, 0);
     m_playout->setSpacing(0);
 
-    auto pViewWidget = new FileViewWidget(this);
-    connect(pViewWidget, SIGNAL(sigFileOpenOK(const QString &)), SLOT(slotOpenFileOk(const QString &)));
-    connect(pViewWidget, SIGNAL(sigShowPlayCtrl(bool)), this, SLOT(slotChangePlayCtrlShow(bool)));
+    m_pFileViewWidget = new FileViewWidget(this);
+    connect(m_pFileViewWidget, SIGNAL(signalDealWithData(const int &, const QString &)), this, SIGNAL(signalDealWithData(const int &, const QString &)));
+    connect(m_pFileViewWidget, SIGNAL(sigShowPlayCtrl(bool)), this, SLOT(slotChangePlayCtrlShow(bool)));
 
     InitSpinner();
     m_playout->addWidget(m_pSpinerWidget);
 
-    m_playout->addWidget(pViewWidget);
+    m_playout->addWidget(m_pFileViewWidget);
 
     this->setLayout(m_playout);
 }

@@ -24,3 +24,8 @@ HelperImpl::HelperImpl(QObject *parent)
 {
 
 }
+
+void HelperImpl::qSetCurrentPath(const QString &sPath)
+{
+    m_strPath = sPath;
+}

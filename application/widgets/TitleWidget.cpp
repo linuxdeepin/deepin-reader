@@ -12,6 +12,15 @@
 #include "menu/HandleMenu.h"
 #include "utils/PublicFunction.h"
 
+#include "main/MainTabWidgetEx.h"
+
+TitleWidget *TitleWidget::g_onlyTitleWdiget = nullptr;
+
+TitleWidget *TitleWidget::Instance()
+{
+    return g_onlyTitleWdiget;
+}
+
 TitleWidget::TitleWidget(CustomWidget *parent)
     : CustomWidget("TitleWidget", parent)
 {
@@ -20,6 +29,8 @@ TitleWidget::TitleWidget(CustomWidget *parent)
     initWidget();
     initConnections();
     slotUpdateTheme();
+
+    g_onlyTitleWdiget = this;
 
     dApp->m_pModelService->addObserver(this);
 }
@@ -143,7 +154,6 @@ void TitleWidget::initWidget()
 void TitleWidget::initConnections()
 {
     connect(this, SIGNAL(sigSetFindWidget(const int &)), SLOT(slotSetFindWidget(const int &)));
-    connect(this, SIGNAL(sigOpenFileOk(const QString &)), SLOT(slotOpenFileOk(const QString &)));
     connect(this, SIGNAL(sigMagnifierCancel()), SLOT(slotMagnifierCancel()));
     connect(this, SIGNAL(sigAppFullScreen()), SLOT(slotAppFullScreen()));
 
@@ -164,16 +174,18 @@ void TitleWidget::OnFileShowChange(const QString &sPath)
 //  缩略图
 void TitleWidget::on_thumbnailBtn_clicked()
 {
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+
     bool rl = m_pThumbnailBtn->isChecked();
 
-    MsgModel mm;
-    mm.setMsgType(MSG_WIDGET_THUMBNAILS_VIEW);
-    mm.setValue(QString::number(rl));
+    QJsonObject obj;
+    obj.insert("need", true);
+    obj.insert("path", pMtwe->qGetCurPath());
+    obj.insert("content", QString::number(rl));
 
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-    mm.setPath(sCurPath);
+    QJsonDocument doc(obj);
 
-    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
+    notifyMsg(MSG_WIDGET_THUMBNAILS_VIEW, doc.toJson(QJsonDocument::Compact));
 }
 
 //  文档显示
@@ -415,9 +427,7 @@ void TitleWidget::setMagnifierState()
 //  处理 推送消息
 int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == E_DOCPROXY_MSG_TYPE) {
-        onDocProxyMsg(msgContent);
-    } else if (msgType == MSG_FIND_START) {
+    if (msgType == MSG_FIND_START) {
         emit sigSetFindWidget(1);
     } else if (msgType == MSG_OPERATION_SLIDE) {
         emit sigAppFullScreen();
@@ -445,14 +455,13 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
     return 0;
 }
 
-void TitleWidget::onDocProxyMsg(const QString &msgContent)
+int TitleWidget::qDealWithData(const int &msgType, const QString &msgContent)
 {
-    MsgModel mm;
-    mm.fromJson(msgContent);
-
-    int nMsg = mm.getMsgType();
-    if (nMsg == MSG_OPERATION_OPEN_FILE_OK) {
-        QString sPath = mm.getPath();
-        slotOpenFileOk(sPath);
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        slotOpenFileOk(msgContent);
     }
+
+    int nRes = MSG_NO_OK;
+
+    return nRes;
 }

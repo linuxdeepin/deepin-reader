@@ -22,86 +22,12 @@
 
 DWIDGET_USE_NAMESPACE
 
-#include "application.h"
 #include "MsgHeader.h"
-#include "FileDataModel.h"
-
-#include "business/FileDataManager.h"
-
-#include "business/bridge/IHelper.h"
 
 SaveDialog::SaveDialog(QObject *parent)
     : QObject(parent)
 {
 
-}
-
-void SaveDialog::showSaveDialog(const int &msgType, const QString &sPath)
-{
-    if (E_APP_MSG_TYPE == msgType) {
-        AppExit();
-    } else {
-        TabRemove(sPath);
-    }
-}
-
-void SaveDialog::AppExit()
-{
-    QString saveFileList = "";
-    QString noChangeFileList = "";
-
-    QMap<QString, FileState> sFileStateMap = dApp->m_pDataManager->qGetFileChangeMap();
-    QMapIterator<QString, FileState> iter(sFileStateMap);
-    while (iter.hasNext()) {
-        iter.next();
-        if (iter.value().isChange) {
-            saveFileList.append(iter.key() + Constant::sQStringSep);
-        } else {
-            noChangeFileList.append(iter.key() + Constant::sQStringSep);
-        }
-    }
-
-    int nMsgType = APP_EXIT_NOT_CHANGE_FILE;
-
-    if (saveFileList != "") {
-        int nRes = showDialog();
-        if (nRes <= 0) {
-            return;
-        }
-
-        if (nRes == 2) {     //  保存
-            nMsgType = APP_EXIT_SAVE_FILE;
-        } else {    //  不保存
-            nMsgType = APP_EXIT_NOT_SAVE_FILE;
-        }
-        dApp->m_pHelper->qDealWithData(nMsgType, saveFileList);
-    }
-
-    if (noChangeFileList != "") {
-        dApp->m_pHelper->qDealWithData(APP_EXIT_NOT_CHANGE_FILE, noChangeFileList);
-    }
-
-    dApp->exit(0);
-}
-
-void SaveDialog::TabRemove(const QString &sPath)
-{
-    int nMsgType = MSG_TAB_NOT_CHANGE_SAVE_FILE;
-
-    FileState fs = dApp->m_pDataManager->qGetFileChange(sPath);
-    if (fs.isChange) {
-        int nRes = showDialog();
-        if (nRes <= 0) {
-            return;
-        }
-
-        if (nRes == 2) {
-            nMsgType = MSG_TAB_SAVE_FILE;
-        } else {    //  不保存
-            nMsgType = MSG_TAB_NOT_SAVE_FILE;
-        }
-    }
-    dApp->m_pHelper->qDealWithData(nMsgType, sPath);
 }
 
 int SaveDialog::showDialog()

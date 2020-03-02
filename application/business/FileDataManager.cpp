@@ -1,6 +1,8 @@
 #include "FileDataManager.h"
 #include "MsgModel.h"
 
+#include "business/bridge/IHelper.h"
+
 FileDataManager::FileDataManager(QObject *parent) :
     QObject(parent)
 {
@@ -33,12 +35,6 @@ void FileDataManager::notifyMsg(const int &, const QString &)
 
 }
 
-QString FileDataManager::qGetCurUuid() const
-{
-    auto it = m_pFileAndUuidMap.find(m_strCurrentFilePath);
-    return  it != m_pFileAndUuidMap.end() ? it.value() : nullptr;
-}
-
 void FileDataManager::InitConnection()
 {
     connect(this, SIGNAL(sigFileChange(const QString &)), SLOT(slotFileChange(const QString &)));
@@ -56,7 +52,7 @@ void FileDataManager::slotFileChange(const QString &sContent)
     QString sValue = mm.getValue();
 
     if (nType == MSG_FILE_IS_CHANGE) {
-        setFileChange(sValue);
+//        setFileChange(sValue);
     }
 }
 
@@ -99,11 +95,6 @@ void FileDataManager::slotAppExitNothing(const QString &sContent)
 
         dApp->exit(0);
     }
-}
-
-void FileDataManager::setFileChange(const QString &sContent)
-{
-    qInsertFileChange(m_strCurrentFilePath, sContent.toInt());
 }
 
 void FileDataManager::setThumbnailState(const QString &sValue)
@@ -173,6 +164,9 @@ void FileDataManager::qSetCurrentFilePath(const QString &strFilePath)
         return;
 
     m_strCurrentFilePath = strFilePath;
+
+    dApp->m_pHelper->qSetCurrentPath(m_strCurrentFilePath);
+
 }
 
 FileDataModel FileDataManager::qGetFileData(const QString &sPath) const
@@ -196,62 +190,6 @@ QMap<QString, FileDataModel> FileDataManager::qGetFileStateMap() const
     return m_pFileStateMap;
 }
 
-QMap<QString, QString> FileDataManager::qGetFileAndUuidMap() const
-{
-    return m_pFileAndUuidMap;
-}
-
-void FileDataManager::qInsertFileAndUuid(const QString &sPath, const QString &sUuid)
-{
-    if (sPath == "")
-        return;
-
-    m_pFileAndUuidMap.insert(sPath, sUuid);
-}
-
-QString FileDataManager::qGetFileUuid(const QString &sPath)
-{
-    return  m_pFileAndUuidMap[sPath];
-}
-
-QMap<QString, FileState> FileDataManager::qGetFileChangeMap() const
-{
-    return m_pFileChangeMap;
-}
-
-void FileDataManager::qInsertFileChange(const QString &sPath, const int &nState)
-{
-    if (sPath == "")
-        return;
-
-    if (m_pFileChangeMap.contains(sPath))
-        m_pFileChangeMap[sPath].isChange = nState;
-    else {
-        FileState fs;
-        fs.isChange = nState;
-        m_pFileChangeMap.insert(sPath, fs);
-    }
-}
-
-void FileDataManager::qInsertFileOpen(const QString &sPath, const int &iOpen)
-{
-    if (sPath == "")
-        return;
-
-    if (m_pFileChangeMap.contains(sPath))
-        m_pFileChangeMap[sPath].isOpen = iOpen;
-    else {
-        FileState fs;
-        fs.isOpen = iOpen;
-        m_pFileChangeMap.insert(sPath, fs);
-    }
-}
-
-FileState FileDataManager::qGetFileChange(const QString &sPath)
-{
-    return m_pFileChangeMap[sPath];
-}
-
 void FileDataManager::qSaveData(const QString &sPath)
 {
     if (sPath == "")
@@ -263,21 +201,6 @@ void FileDataManager::qSaveData(const QString &sPath)
         dApp->m_pDBService->setHistroyData(sPath, iLoop, fdm.qGetData(iLoop));
     }
     dApp->m_pDBService->qSaveData(sPath, DB_HISTROY);
-}
-
-DocummentProxy *FileDataManager::qGetCurrentProxy()
-{
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-    if (sCurPath != "") {
-        QString sUuid = dApp->m_pDataManager->qGetFileUuid(sCurPath);
-        if (sUuid != "") {
-            DocummentProxy *_proxy = DocummentProxy::instance(sUuid);
-            if (_proxy) {
-                return _proxy;
-            }
-        }
-    }
-    return nullptr;
 }
 
 QList<QString> FileDataManager::qGetOpenFilePathList() const
@@ -293,5 +216,4 @@ void FileDataManager::qInsertOpenFilePath(const QString &strPath)
 void FileDataManager::qRemoveFilePath(const QString &strPath)
 {
     m_pFileStateMap.remove(strPath);
-    m_pFileAndUuidMap.remove(strPath);
 }

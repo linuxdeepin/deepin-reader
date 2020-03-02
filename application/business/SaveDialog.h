@@ -29,12 +29,6 @@ class SaveDialog : public QObject
 public:
     explicit SaveDialog(QObject *parent = nullptr);
 
-    void showSaveDialog(const int &msgType, const QString &sPath = "");
-
-private:
-    void AppExit();
-    void TabRemove(const QString &);
-
     int showDialog();
 };
 

@@ -27,6 +27,8 @@
 #include "CustomControl/DFMGlobal.h"
 #include "docview/docummentproxy.h"
 
+#include "widgets/main/MainTabWidgetEx.h"
+
 CatalogWidget::CatalogWidget(DWidget *parent)
     : CustomWidget("CatalogWidget", parent)
 {
@@ -43,11 +45,19 @@ CatalogWidget::~CatalogWidget()
 
 int CatalogWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
+    return 0;
+}
+
+int CatalogWidget::qDealWithData(const int &msgType, const QString &msgContent)
+{
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
-        emit sigDocOpenFileOk(msgContent);
+        OnDocOpenFileOk(msgContent);
     }
 
-    return 0;
+    m_pTree->qDealWithData(msgType, msgContent);
+
+    int nRes = MSG_NO_OK;
+    return nRes;
 }
 
 void CatalogWidget::initWidget()
@@ -61,53 +71,48 @@ void CatalogWidget::initWidget()
 
     mainLayout->addWidget(titleLabel);
 
-    auto tree = new CatalogTreeView(this);
+    m_pTree = new CatalogTreeView(this);
 
     auto pModel = new QStandardItemModel;
     pModel->setColumnCount(3);
-    tree->setModel(pModel);
+    m_pTree->setModel(pModel);
 
-    mainLayout->addWidget(tree);
+    mainLayout->addWidget(m_pTree);
 
     this->setLayout(mainLayout);
 }
 
 void CatalogWidget::initConnections()
 {
-    connect(this, SIGNAL(sigDocOpenFileOk(const QString &)), SLOT(SlotDocOpenFileOk(const QString &)));
 }
 
-void CatalogWidget::SlotDocOpenFileOk(const QString &sPath)
+void CatalogWidget::OnDocOpenFileOk(const QString &sPath)
 {
-    QString sUuid = dApp->m_pDataManager->qGetFileUuid(sPath);
-    if (sUuid != "") {
-        auto _pProxy = DocummentProxy::instance(sUuid);
-        if (_pProxy) {
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    DocummentProxy *_pProxy = pMtwe->getCurFileAndProxy(sPath);
+    if (_pProxy) {
 
-            stFileInfo fileInfo;
+        stFileInfo fileInfo;
+        _pProxy->docBasicInfo(fileInfo);
 
-            _pProxy->docBasicInfo(fileInfo);
+        QString strTheme =  fileInfo.strTheme;
+        if (strTheme == "") {
+            strTheme = tr("Unknown");
+        }
 
-            QString strTheme =  fileInfo.strTheme;
+        if (titleLabel) {
+            QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T8);
+            QString t = DFMGlobal::elideText(strTheme, QSize(120, 18), QTextOption::WrapAnywhere, font, Qt::ElideMiddle, 0);
+            QStringList labelTexts = t.split("\n");
+            if (labelTexts.size() < 3) {
+                titleLabel->setText(strTheme);
+            } else {
+                QString sStart = labelTexts.at(0);
+                QString sEnd = labelTexts.at(labelTexts.size() - 1);
 
-            if (strTheme == "") {
-                strTheme = tr("Unknown");
-            }
-
-            if (titleLabel) {
-                QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T8);
-                QString t = DFMGlobal::elideText(strTheme, QSize(120, 18), QTextOption::WrapAnywhere, font, Qt::ElideMiddle, 0);
-                QStringList labelTexts = t.split("\n");
-                if (labelTexts.size() < 3) {
-                    titleLabel->setText(strTheme);
-                } else {
-                    QString sStart = labelTexts.at(0);
-                    QString sEnd = labelTexts.at(labelTexts.size() - 1);
-
-                    titleLabel->setText(sStart + "..." + sEnd);
-                }
+                titleLabel->setText(sStart + "..." + sEnd);
             }
         }
     }
-
 }
+

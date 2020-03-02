@@ -99,13 +99,13 @@ public:
     ~ThumbnailWidget() override;
 
 signals:
-    void sigFilePageChanged(const QString &);
-    void sigOpenFileOk(const QString &);
     void sigSetRotate(int);
 
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
+    int qDealWithData(const int &, const QString &) override;
+
     void fillContantToList();
 
     inline bool isLoading() { return m_isLoading; }
@@ -123,9 +123,9 @@ private:
     void setSelectItemBackColor(QListWidgetItem *);
     void addThumbnailItem(const int &);
     void initConnection();
+    void slotOpenFileOk(const QString &);
 
 private slots:
-    void slotOpenFileOk(const QString &);
     void slotDocFilePageChanged(const QString &);
     void slotUpdateTheme();
 
@@ -145,6 +145,8 @@ private:
 //    ThreadRotateImage m_threadRotateImage;               // 旋转缩略图
     int m_nRotate = 0;                                   // 旋转度数
     int m_nValuePreIndex = 0;                            // 每一个item所占scrollbar的大小
+
+
 };
 
 #endif  // THUMBNAILWIDGET_H

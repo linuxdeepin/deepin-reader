@@ -23,6 +23,8 @@
 
 #include "business/bridge/IHelper.h"
 
+#include "widgets/main/MainTabWidgetEx.h"
+
 ThumbnailWidget::ThumbnailWidget(DWidget *parent)
     : CustomWidget(QString("ThumbnailWidget"), parent)
 {
@@ -49,16 +51,25 @@ ThumbnailWidget::~ThumbnailWidget()
 // 处理消息事件
 int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
-        emit sigOpenFileOk(msgContent);
-    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
-    } else if (MSG_FILE_PAGE_CHANGE == msgType) {
-        emit sigFilePageChanged(msgContent);
     } else if (msgType == MSG_FILE_ROTATE) {  //  文档旋转了
         emit sigSetRotate(msgContent.toInt());
     }
     return 0;
+}
+
+int ThumbnailWidget::qDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
+        slotOpenFileOk(msgContent);
+    } else if (MSG_FILE_PAGE_CHANGE == msgType) {
+        slotDocFilePageChanged(msgContent);
+    }
+
+    int nRes = MSG_NO_OK;
+
+    return nRes;
 }
 
 // 初始化界面
@@ -123,10 +134,7 @@ void ThumbnailWidget::initConnection()
     connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const int &, const QImage &)),
             this, SLOT(slotLoadImage(const int &, const QImage &)));
 
-    connect(this, SIGNAL(sigOpenFileOk(const QString &)), this, SLOT(slotOpenFileOk(const QString &)));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
-    connect(this, SIGNAL(sigFilePageChanged(const QString &)),
-            SLOT(slotDocFilePageChanged(const QString &)));
     connect(this, SIGNAL(sigSetRotate(int)), this, SLOT(slotSetRotate(int)));
     connect(&m_ThreadLoadImage, SIGNAL(sigRotateImage(int)), this,
             SLOT(slotRotateThumbnail(int)));
@@ -340,7 +348,8 @@ void ThumbnailWidget::nextPage()
 void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
 {
     qDebug() << "++++++++++----------" << sPath;
-    DocummentProxy *_proxy = DocummentProxy::instance(dApp->m_pDataManager->qGetFileUuid(sPath));
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sPath);
     if (_proxy) {
         m_isLoading = true;
         qDebug() << "^^^^^^^^^^^^^^^^^----------" << sPath;
@@ -438,8 +447,8 @@ void ThreadLoadImage::run()
         if (m_nEndPage >= m_pages) {
             m_nEndPage = m_pages - 1;
         }
-
-        auto dproxy = DocummentProxy::instance(dApp->m_pDataManager->qGetFileUuid(m_filepath));
+        MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+        auto dproxy = pMtwe->getCurFileAndProxy(m_filepath);
         if (nullptr == dproxy) {
             break;
         }

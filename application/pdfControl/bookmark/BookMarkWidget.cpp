@@ -26,6 +26,7 @@
 #include "docview/docummentproxy.h"
 
 #include "business/bridge/IHelper.h"
+#include "widgets/main/MainTabWidgetEx.h"
 
 BookMarkWidget::BookMarkWidget(DWidget *parent)
     : CustomWidget(QString("BookMarkWidget"), parent)
@@ -35,6 +36,8 @@ BookMarkWidget::BookMarkWidget(DWidget *parent)
     initWidget();
     initConnection();
     slotUpdateTheme();
+
+    m_pMsgList = {MSG_OPERATION_DELETE_BOOKMARK, MSG_OPERATION_ADD_BOOKMARK};
 
     m_pKeyMsgList = {KeyStr::g_ctrl_b};
 
@@ -47,10 +50,6 @@ BookMarkWidget::BookMarkWidget(DWidget *parent)
 BookMarkWidget::~BookMarkWidget()
 {
     dApp->m_pModelService->removeObserver(this);
-
-    if (m_loadBookMarkThread.isRunning()) {
-        m_loadBookMarkThread.stopThreadRun();
-    }
 }
 
 /**
@@ -115,7 +114,7 @@ void BookMarkWidget::DeleteItemByKey()
                 if (t_widget->bSelect()) {
                     int nPageIndex = t_widget->nPageIndex();
 
-                    notifyMsg(MSG_BOOKMARK_DLTITEM, QString::number(nPageIndex));
+                    slotDeleteBookItem(QString::number(nPageIndex));
                 }
             }
         }
@@ -132,48 +131,56 @@ void BookMarkWidget::slotAddBookMark()
         return;
     }
 
-    auto proxy = dApp->m_pDataManager->qGetCurrentProxy();
-    if (proxy) {
-        int nPage = proxy->currentPageNo();
-        sendMsg(MSG_OPERATION_ADD_BOOKMARK, m_strBindPath + Constant::sQStringSep + QString("%1").arg(nPage));
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    if (pMtwe) {
+        QString sCurPath = pMtwe->qGetCurPath();
+        if (sCurPath != "") {
+            DocummentProxy *proxy =  pMtwe->getCurFileAndProxy(sCurPath);
+            if (proxy) {
+                int nPage = proxy->currentPageNo();
+                slotAddBookMark(QString::number(nPage));
+                proxy->setBookMarkState(nPage, true);
+            }
+        }
     }
 }
 
 //  书签状态 添加指定页
 void BookMarkWidget::slotAddBookMark(const QString &sContent)
 {
-    QStringList sList = sContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (sList.size() == 2) {
+    int nPage = sContent.toInt();
 
-        QString sPath = sList.at(0);
-        if (sPath != m_strBindPath) {
-            return;
-        }
+    QString sPath = MainTabWidgetEx::Instance()->qGetCurPath();
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(sPath);
+    if (pageList.contains(nPage)) {
+        return;
+    }
 
-        int nPage = sList.at(1).toInt();
-        QList<int> pageList = dApp->m_pDBService->getBookMarkList(sPath);
-        if (pageList.contains(nPage)) {
-            return;
-        }
+    auto item = addBookMarkItem(nPage);
+    if (item) {
+        MsgModel mm;
+        mm.setMsgType(MSG_FILE_IS_CHANGE);
+        mm.setPath(sPath);
+        mm.setValue("1");
 
-        auto item = addBookMarkItem(nPage);
-        if (item) {
-            emit sigSetBookMarkState(1, nPage);
+        notifyMsg(E_FILE_MSG, mm.toJson());
 
-            MsgModel mm;
-            mm.setMsgType(MSG_FILE_IS_CHANGE);
-            mm.setValue("1");
+        pageList.append(nPage);
+        dApp->m_pDBService->setBookMarkList(sPath, pageList);
+    }
 
-            notifyMsg(E_FILE_MSG, mm.toJson());
-            pageList.append(nPage);
-            dApp->m_pDBService->setBookMarkList(sPath, pageList);
-        }
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    if (pMtwe) {
+        QString sCurPath = pMtwe->qGetCurPath();
+        if (sCurPath != "") {
+            DocummentProxy *proxy =  pMtwe->getCurFileAndProxy(sCurPath);
+            if (proxy) {
+                int nCurPage = proxy->currentPageNo();
+                if (nCurPage == nPage) {  //  是当前页
+                    m_pAddBookMarkBtn->setEnabled(false);
 
-        auto dproxy = dApp->m_pDataManager->qGetCurrentProxy();
-        if (dproxy) {
-            int nCurPage = dproxy->currentPageNo();
-            if (nCurPage == nPage) {  //  是当前页
-                m_pAddBookMarkBtn->setEnabled(false);
+                    emit sigSetBookMarkState(1, nPage);
+                }
             }
         }
     }
@@ -183,7 +190,7 @@ void BookMarkWidget::slotAddBookMark(const QString &sContent)
  * @brief BookMarkWidget::slotOpenFileOk
  *  打开文件成功，　获取该文件的书签数据
  */
-void BookMarkWidget::slotOpenFileOk()
+void BookMarkWidget::OnOpenFileOk(const QString &sPath)
 {
     if (m_loadBookMarkThread.isRunning()) {
         m_loadBookMarkThread.stopThreadRun();
@@ -191,8 +198,10 @@ void BookMarkWidget::slotOpenFileOk()
 
     m_pBookMarkListWidget->clear();
 
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(sPath);
+    if (pageList.size() == 0)
+        return;
+
     foreach (int iPage, pageList) {
         addBookMarkItem(iPage);
     }
@@ -200,33 +209,39 @@ void BookMarkWidget::slotOpenFileOk()
     clearItemColor();
 
     //  第一页 就是书签, 添加书签按钮 不能点
-    auto dproxy = DocummentProxy::instance();
-    if (dproxy) {
-        int nCurPage = dproxy->currentPageNo();
-        if (pageList.contains(nCurPage)) {      //  当前页 是书签, 按钮不可点
-            m_pAddBookMarkBtn->setEnabled(false);
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    if (pMtwe) {
+        QString sCurPath = pMtwe->qGetCurPath();
+        if (sCurPath != "") {
+            DocummentProxy *proxy =  pMtwe->getCurFileAndProxy(sCurPath);
+            if (proxy) {
+                int nCurPage = proxy->currentPageNo();
+                if (pageList.contains(nCurPage)) {      //  当前页 是书签, 按钮不可点
+                    m_pAddBookMarkBtn->setEnabled(false);
 
-            int nSize = m_pBookMarkListWidget->count();
-            for (int iLoop = 0; iLoop < nSize; iLoop++) {
-                auto item = m_pBookMarkListWidget->item(iLoop);
-                if (item) {
-                    auto pItemWidget =
-                        reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
-                    if (pItemWidget) {
-                        if (pItemWidget->nPageIndex() == nCurPage) {
-                            pItemWidget->setBSelect(true);
+                    int nSize = m_pBookMarkListWidget->count();
+                    for (int iLoop = 0; iLoop < nSize; iLoop++) {
+                        auto item = m_pBookMarkListWidget->item(iLoop);
+                        if (item) {
+                            auto pItemWidget =
+                                reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
+                            if (pItemWidget) {
+                                if (pItemWidget->nPageIndex() == nCurPage) {
+                                    pItemWidget->setBSelect(true);
 
-                            m_pBookMarkListWidget->setCurrentItem(item);
-                            break;
+                                    m_pBookMarkListWidget->setCurrentItem(item);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
             }
+
+            m_loadBookMarkThread.setBookMarks(pageList.count());
+            m_loadBookMarkThread.start();
         }
     }
-
-    m_loadBookMarkThread.setBookMarks(pageList.count());
-    m_loadBookMarkThread.start();
 }
 
 /**
@@ -268,62 +283,62 @@ void BookMarkWidget::slotDocFilePageChanged(const QString &sPage)
  */
 void BookMarkWidget::slotDeleteBookItem(const QString &sContent)
 {
-    QStringList sList = sContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (sList.size() == 2) {
+    int nPage = sContent.toInt();
 
-        if (sList.at(0) == m_strBindPath) {
-            int nPage = sList.at(1).toInt();
+    int nSize = m_pBookMarkListWidget->count();
+    for (int iLoop = 0; iLoop < nSize; iLoop++) {
+        auto pItem = m_pBookMarkListWidget->item(iLoop);
+        if (pItem) {
+            auto t_widget =
+                reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
+            if (t_widget) {
+                int nPageIndex = t_widget->nPageIndex();
+                if (nPageIndex == nPage) {
+                    t_widget->deleteLater();
+                    t_widget = nullptr;
 
-            int nSize = m_pBookMarkListWidget->count();
-            for (int iLoop = 0; iLoop < nSize; iLoop++) {
-                auto pItem = m_pBookMarkListWidget->item(iLoop);
-                if (pItem) {
-                    auto t_widget =
-                        reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
-                    if (t_widget) {
-                        int nPageIndex = t_widget->nPageIndex();
-                        if (nPageIndex == nPage) {
-                            t_widget->deleteLater();
-                            t_widget = nullptr;
+                    delete pItem;
+                    pItem = nullptr;
 
-                            delete pItem;
-                            pItem = nullptr;
+                    deleteIndexPage(nPageIndex);
 
-                            emit sigSetBookMarkState(-1, nPage);
+                    notifyMsg(CENTRAL_SHOW_TIP, tr("The bookmark has been removed"));
 
-                            deleteIndexPage(nPageIndex);
-
-                            notifyMsg(CENTRAL_SHOW_TIP, tr("The bookmark has been removed"));
-
-                            break;
-                        }
-                    }
+                    break;
                 }
             }
         }
     }
 }
+
 //  删除指定页
 void BookMarkWidget::deleteIndexPage(const int &pageIndex)
 {
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
-    pageList.removeOne(pageIndex);
-    dApp->m_pDBService->setBookMarkList(sCurPath, pageList);
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    if (pMtwe) {
+        QString sPath = MainTabWidgetEx::Instance()->qGetCurPath();
 
-    auto dproxy = DocummentProxy::instance();
-    if (dproxy) {
-        MsgModel mm;
-        mm.setMsgType(MSG_FILE_IS_CHANGE);
-        mm.setValue("1");
+        QList<int> pageList = dApp->m_pDBService->getBookMarkList(sPath);
+        pageList.removeOne(pageIndex);
+        dApp->m_pDBService->setBookMarkList(sPath, pageList);
 
-        notifyMsg(E_FILE_MSG, mm.toJson());
+        DocummentProxy *proxy =  pMtwe->getCurFileAndProxy(sPath);
+        if (proxy) {
+            MsgModel mm;
+            mm.setMsgType(MSG_FILE_IS_CHANGE);
+            mm.setValue("1");
+            mm.setPath(sPath);
 
-        dproxy->setBookMarkState(pageIndex, false);
+            notifyMsg(E_FILE_MSG, mm.toJson());
 
-        int nCurPage = dproxy->currentPageNo();
-        if (nCurPage == pageIndex) {  //  当前页被删了
-            m_pAddBookMarkBtn->setEnabled(true);
+            proxy->setBookMarkState(pageIndex, false);
+
+            int nCurPage = proxy->currentPageNo();
+            if (nCurPage == pageIndex) {  //  当前页被删了
+                m_pAddBookMarkBtn->setEnabled(true);
+
+                emit sigSetBookMarkState(-1, pageIndex);
+            }
         }
     }
 }
@@ -375,7 +390,7 @@ void BookMarkWidget::slotUpdateTheme()
     m_pAddBookMarkBtn->setPalette(plt);
 }
 
-void BookMarkWidget::slotRightSelectItem(QString page)
+void BookMarkWidget::slotRightSelectItem(const QString &page)
 {
     if (m_pBookMarkListWidget == nullptr) {
         return;
@@ -391,6 +406,7 @@ void BookMarkWidget::slotRightSelectItem(QString page)
                 int nPageIndex = t_widget->nPageIndex();
                 if (nPageIndex == page.toInt()) {
                     slotSelectItemBackColor(pItem);
+                    break;
                 }
             }
         }
@@ -434,12 +450,7 @@ void BookMarkWidget::initConnection()
     connect(&m_loadBookMarkThread, SIGNAL(sigLoadImage(const int &, const QImage &)),
             SLOT(slotLoadImage(const int &, const QImage &)));
 
-    connect(this, SIGNAL(sigAddBookMark(const QString &)), SLOT(slotAddBookMark(const QString &)));
-    connect(this, SIGNAL(sigOpenFileOk()), SLOT(slotOpenFileOk()));
-    connect(this, SIGNAL(sigDeleteBookItem(const QString &)), SLOT(slotDeleteBookItem(const QString &)));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
-    connect(this, SIGNAL(sigFilePageChanged(const QString &)), SLOT(slotDocFilePageChanged(const QString &)));
-    connect(this, SIGNAL(sigRightSelectItem(QString)), SLOT(slotRightSelectItem(QString)));
     connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)), SLOT(slotDealWithShurtKey(const QString &)));
 
     connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem *)), SLOT(slotSelectItemBackColor(QListWidgetItem *)));
@@ -452,33 +463,41 @@ void BookMarkWidget::initConnection()
  */
 QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
 {
-    auto dproxy = DocummentProxy::instance();
-    if (nullptr == dproxy) {
-        return nullptr;
-    }
-    QImage t_image;
-    bool rl = dproxy->getImage(page, t_image, 48, 68 /*42, 62*/);
-    if (rl) {
-        QImage img = Utils::roundImage(QPixmap::fromImage(t_image), ICON_SMALL);
-        auto item = m_pBookMarkListWidget->insertWidgetItem(page);
-        item->setSizeHint(QSize(LEFTMINWIDTH, 80));
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    if (pMtwe) {
+        QString sPath = MainTabWidgetEx::Instance()->qGetCurPath();
 
-        auto t_widget = new BookMarkItemWidget(this);
-        t_widget->setLabelImage(img);
-        t_widget->setLabelPage(page, 1);
+        DocummentProxy *proxy =  pMtwe->getCurFileAndProxy(sPath);
 
-        m_pBookMarkListWidget->setItemWidget(item, t_widget);
+        if (nullptr != proxy) {
+            QImage t_image;
+            bool rl = proxy->getImage(page, t_image, 48, 68 /*42, 62*/);
+            if (rl) {
+                QImage img = Utils::roundImage(QPixmap::fromImage(t_image), ICON_SMALL);
+                auto item = m_pBookMarkListWidget->insertWidgetItem(page);
+                item->setSizeHint(QSize(LEFTMINWIDTH, 80));
 
-        int nCurPage = dproxy->currentPageNo();
-        if (nCurPage == page) {
+                auto t_widget = new BookMarkItemWidget(this);
+                connect(t_widget, SIGNAL(sigDeleteItem(const QString &)), SLOT(slotDeleteBookItem(const QString &)));
+                connect(t_widget, SIGNAL(sigSelectItem(const QString &)), SLOT(slotRightSelectItem(const QString &)));
 
-            t_widget->setBSelect(true);
+                t_widget->setLabelImage(img);
+                t_widget->setLabelPage(page, 1);
 
-            m_pBookMarkListWidget->setCurrentItem(item);
+                m_pBookMarkListWidget->setItemWidget(item, t_widget);
+
+                int nCurPage = proxy->currentPageNo();
+                if (nCurPage == page) {
+
+                    t_widget->setBSelect(true);
+
+                    m_pBookMarkListWidget->setCurrentItem(item);
+                }
+                proxy->setBookMarkState(page, true);
+
+                return item;
+            }
         }
-        dproxy->setBookMarkState(page, true);
-
-        return item;
     }
     return nullptr;
 }
@@ -530,25 +549,33 @@ void BookMarkWidget::slotDealWithShurtKey(const QString &msgContent)
  */
 int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (MSG_BOOKMARK_DLTITEM == msgType || MSG_OPERATION_DELETE_BOOKMARK == msgType) {   //  删除书签消息
-        emit sigDeleteBookItem(msgContent);
-    } else if (MSG_OPERATION_ADD_BOOKMARK == msgType || MSG_OPERATION_TEXT_ADD_BOOKMARK == msgType) {  //  增加书签消息
-        emit sigAddBookMark(msgContent);
-    } else if (MSG_OPERATION_RIGHT_SELECT_BOOKMARK == msgType) {
-        emit sigRightSelectItem(msgContent);
-    } else  if (MSG_OPERATION_OPEN_FILE_OK == msgType) {  //  打开 文件通知消息
-        emit sigOpenFileOk();
-    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更消息
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更消息
         emit sigUpdateTheme();
-    } else if (MSG_FILE_PAGE_CHANGE == msgType) {  //  文档页变化消息
-        emit sigFilePageChanged(msgContent);
     } else if (MSG_NOTIFY_KEY_MSG == msgType) {  //  按键通知消息
         if (m_pKeyMsgList.contains(msgContent)) {
             emit sigDealWithKeyMsg(msgContent);
-            return ConstantMsg::g_effective_res;
         }
     }
     return 0;
+}
+
+int BookMarkWidget::qDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {  //  打开 文件通知消息
+        OnOpenFileOk(msgContent);
+    } else if (MSG_FILE_PAGE_CHANGE == msgType) {  //  文档页变化消息
+        slotDocFilePageChanged(msgContent);
+    } else if (msgType == MSG_OPERATION_DELETE_BOOKMARK) {
+        slotDeleteBookItem(msgContent);
+    } else if (msgType == MSG_OPERATION_ADD_BOOKMARK) {
+        slotAddBookMark(msgContent);
+    }
+
+    int nRes = MSG_NO_OK;
+    if (m_pMsgList.contains(msgType)) {
+        nRes = MSG_OK;
+    }
+    return  nRes;
 }
 
 /**
@@ -573,15 +600,6 @@ int BookMarkWidget::getBookMarkPage(const int &index)
     }
 
     return -1;
-}
-
-bool BookMarkWidget::hasClickFoucs()
-{
-    if (m_pBookMarkListWidget) {
-        return m_pBookMarkListWidget->hasFocus();
-    }
-
-    return false;
 }
 
 /*************************************LoadBookMarkThread**************************************/
@@ -610,47 +628,50 @@ void LoadBookMarkThread::stopThreadRun()
  */
 void LoadBookMarkThread::run()
 {
-    DocummentProxy *_proxy = nullptr;
-    while (m_isRunning) {
-        if (!_proxy) {
-            _proxy = DocummentProxy::instance();
-        }
-        msleep(50);
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    if (pMtwe) {
+        QString sPath = MainTabWidgetEx::Instance()->qGetCurPath();
+        DocummentProxy *proxy =  pMtwe->getCurFileAndProxy(sPath);
+        if (nullptr != proxy) {
+            while (m_isRunning) {
+                msleep(50);
 
-        if (m_nStartIndex < 0) {
-            m_nStartIndex = 0;
-        }
-        if (m_nEndIndex >= m_bookMarks) {
-            m_nEndIndex = m_bookMarks - 1;
-        }
+                if (m_nStartIndex < 0) {
+                    m_nStartIndex = 0;
+                }
+                if (m_nEndIndex >= m_bookMarks) {
+                    m_nEndIndex = m_bookMarks - 1;
+                }
 
-        for (int index = m_nStartIndex; index <= m_nEndIndex; index++) {
-            QImage image;
-            int page = -1;
+                for (int index = m_nStartIndex; index <= m_nEndIndex; index++) {
+                    QImage image;
+                    int page = -1;
 
-            if (!m_isRunning) {
-                break;
+                    if (!m_isRunning) {
+                        break;
+                    }
+
+                    if (!m_pBookMarkWidget) {
+                        break;
+                    }
+
+                    page = m_pBookMarkWidget->getBookMarkPage(index);
+
+                    if (page == -1) {
+                        continue;
+                    }
+
+                    bool bl = proxy->getImage(page, image, 48, 68 /*42, 62*/);
+                    if (bl) {
+                        emit sigLoadImage(page, image);
+                    }
+
+                    msleep(50);
+                }
+
+                m_nStartIndex += FIRST_LOAD_PAGES;
+                m_nEndIndex += FIRST_LOAD_PAGES;
             }
-
-            if (!m_pBookMarkWidget) {
-                break;
-            }
-
-            page = m_pBookMarkWidget->getBookMarkPage(index);
-
-            if (page == -1) {
-                continue;
-            }
-
-            bool bl = _proxy->getImage(page, image, 48, 68 /*42, 62*/);
-            if (bl) {
-                emit sigLoadImage(page, image);
-            }
-
-            msleep(50);
         }
-
-        m_nStartIndex += FIRST_LOAD_PAGES;
-        m_nEndIndex += FIRST_LOAD_PAGES;
     }
 }

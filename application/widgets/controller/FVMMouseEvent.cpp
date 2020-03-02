@@ -241,7 +241,7 @@ void FVMMouseEvent::__AddIconAnnotation(FileViewWidget *fvw, const QPoint &globa
                                  QString::number(globalPos.x()) + Constant::sQStringSep +
                                  QString::number(globalPos.y());
             fvw->m_nCurrentHandelState = Default_State;
-            fvw->notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, strContent);
+            emit fvw->signalDealWithData(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, strContent);
         } else {
             qWarning() << __FUNCTION__ << "          " << sUuid;;
         }
@@ -324,8 +324,6 @@ void FVMMouseEvent::mouseReleaseEvent(QMouseEvent *event, DWidget *widget)
         //添加其实结束point是否为同一个，不是同一个说明不是点击可能是选择文字
         if (nBtn == Qt::LeftButton && docGlobalPos == fvw->m_pStartPoint) {
             // 判断鼠标点击的地方是否有高亮
-
-
             bool bIsHighLightReleasePoint = _proxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
 
             dApp->m_pAppInfo->setMousePressLocal(bIsHighLightReleasePoint, globalPos);
@@ -333,7 +331,7 @@ void FVMMouseEvent::mouseReleaseEvent(QMouseEvent *event, DWidget *widget)
                 __CloseFileNoteWidget(fvw);
                 int nPage = _proxy->pointInWhichPage(docGlobalPos);
                 QString t_strContant = t_strUUid.trimmed() + Constant::sQStringSep + QString::number(nPage);
-                fvw->notifyMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+                emit fvw->signalDealWithData(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
             }
         }
     } else if (bicon) {
@@ -342,7 +340,7 @@ void FVMMouseEvent::mouseReleaseEvent(QMouseEvent *event, DWidget *widget)
         QString t_strContant = t_strUUid.trimmed() + Constant::sQStringSep + QString::number(nPage) + Constant::sQStringSep +
                                QString::number(globalPos.x()) + Constant::sQStringSep +
                                QString::number(globalPos.y());
-        fvw->notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, t_strContant);
+        emit fvw->signalDealWithData(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, t_strContant);
     }
 
     m_bSelectOrMove = false;

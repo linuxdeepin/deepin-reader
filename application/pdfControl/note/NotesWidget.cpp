@@ -26,12 +26,12 @@
 #include "business/FileDataManager.h"
 
 #include "business/bridge/IHelper.h"
+#include "widgets/main/MainTabWidgetEx.h"
 
 NotesWidget::NotesWidget(DWidget *parent)
     : CustomWidget("NotesWidget", parent)
 {
     m_pMsgList = {MSG_NOTE_ADD_ITEM, MSG_NOTE_DELETE_ITEM, MSG_NOTE_UPDATE_ITEM,
-                  MSG_NOTE_SELECT_ITEM,
                   MSG_NOTE_PAGE_ADD_ITEM, MSG_NOTE_PAGE_DELETE_ITEM, MSG_NOTE_PAGE_UPDATE_ITEM
                  };
     initWidget();
@@ -129,8 +129,6 @@ void NotesWidget::slotDealWithData(const int &msgType, const QString &msgContent
         __DeleteNoteItem(msgContent);
     } else if (MSG_NOTE_UPDATE_ITEM == msgType || MSG_NOTE_PAGE_UPDATE_ITEM == msgType) {
         __UpdateNoteItem(msgContent);
-    } else if (MSG_NOTE_SELECT_ITEM == msgType) {
-        __RightSelectItem(msgContent);
     }
 }
 
@@ -169,8 +167,6 @@ void NotesWidget::__DeleteNoteItem(const QString &sUuid)
 
                     // remove date from map and notify kong yun zhen
                     m_mapUuidAndPage.remove(sUuid);
-
-                    QString sPath = dApp->m_pDataManager->qGetCurrentFilePath();
 
                     notifyMsg(CENTRAL_SHOW_TIP, tr("The annotation has been removed"));
                     break;
@@ -218,55 +214,49 @@ void NotesWidget::__UpdateNoteItem(const QString &msgContent)
 }
 
 
-void NotesWidget::slotOpenFileOk(QString strcontent)
+void NotesWidget::slotOpenFileOk(QString sPath)
 {
-    qDebug() << "^*^*^*^*^*" << strcontent;
+    qDebug() << "^*^*^*^*^*" << sPath;
     m_nIndex = 0;
     m_ThreadLoadImage.setIsLoaded(false);
     if (m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();
     }
 
-    auto t_docPtr = DocummentProxy::instance(dApp->m_pDataManager->qGetFileUuid(strcontent));
-    if (!t_docPtr) {
-        return;
-    }
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    DocummentProxy *t_docPtr = pMtwe->getCurFileAndProxy(sPath);
+    if (t_docPtr) {
+        m_mapUuidAndPage.clear();
+        m_pNotesList->clear();
 
-    m_mapUuidAndPage.clear();
-    m_pNotesList->clear();
+        QList<stHighlightContent> list_note;
+        t_docPtr->getAllAnnotation(list_note);
 
-    QList<stHighlightContent> list_note;
-    t_docPtr->getAllAnnotation(list_note);
-
-    if (list_note.count() < 1) {
-        return;
-    }
-
-    for (int index = 0; index < list_note.count(); ++index) {
-        stHighlightContent st = list_note.at(index);
-        if (st.strcontents == QString("")) {
-            continue;
+        if (list_note.count() < 1) {
+            return;
         }
 
-        int page = static_cast<int>(st.ipage);
-        QString uuid = st.struuid;
-        QString contant = st.strcontents;
+        for (int index = 0; index < list_note.count(); ++index) {
+            stHighlightContent st = list_note.at(index);
+            if (st.strcontents == QString("")) {
+                continue;
+            }
 
-        addNewItem(QImage(), page, uuid, contant);
+            int page = static_cast<int>(st.ipage);
+            QString uuid = st.struuid;
+            QString contant = st.strcontents;
+
+            addNewItem(QImage(), page, uuid, contant);
+        }
+
+        m_pNotesList->setCurrentRow(0);
+
+        m_ThreadLoadImage.setListNoteSt(list_note);
+        m_ThreadLoadImage.setIsLoaded(true);
+        if (!m_ThreadLoadImage.isRunning()) {
+            m_ThreadLoadImage.start();
+        }
     }
-
-    m_pNotesList->setCurrentRow(0);
-
-    m_ThreadLoadImage.setListNoteSt(list_note);
-    m_ThreadLoadImage.setIsLoaded(true);
-    if (!m_ThreadLoadImage.isRunning()) {
-        m_ThreadLoadImage.start();
-    }
-}
-
-void NotesWidget::slotCloseFile()
-{
-
 }
 
 void NotesWidget::slotLoadImage(const QImage &image)
@@ -302,6 +292,24 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
         auto pDocProxy = DocummentProxy::instance();
         if (pDocProxy) {
             pDocProxy->jumpToHighLight(t_uuid, page);
+        }
+    }
+}
+
+void NotesWidget::SlotRightSelectItem(const QString &uuid)
+{
+    if (m_pNotesList == nullptr) {
+        return;
+    }
+
+    for (int index = 0; index < m_pNotesList->count(); ++index) {
+        auto item = m_pNotesList->item(index);
+        auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
+        if (t_widget) {
+            if (t_widget->noteUUId() == uuid) {
+                slotSelectItem(item);
+                break;
+            }
         }
     }
 }
@@ -355,30 +363,13 @@ void NotesWidget::__JumpToNextItem()
     }
 }
 
-void NotesWidget::__RightSelectItem(const QString &uuid)
-{
-    if (m_pNotesList == nullptr) {
-        return;
-    }
-
-    for (int index = 0; index < m_pNotesList->count(); ++index) {
-        auto item = m_pNotesList->item(index);
-        auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
-        if (t_widget) {
-            if (t_widget->noteUUId() == uuid) {
-                slotSelectItem(item);
-            }
-        }
-    }
-}
-
 /**
  * @brief NotesWidget::slotAddAnnotation
  * 添加注释按钮
  */
 void NotesWidget::slotAddAnnotation()
 {
-    notifyMsg(MSG_NOTE_PAGE_ADD);
+    emit signalDealWithData(MSG_NOTE_PAGE_ADD, "");
 }
 
 /**
@@ -391,10 +382,10 @@ void NotesWidget::slotAddAnnotation()
 void NotesWidget::addNotesItem(const QString &text, const int &iType)
 {
     QStringList t_strList = text.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (t_strList.count() == 3) {
-        QString t_strUUid = t_strList.at(0).trimmed();
-        QString t_strText = t_strList.at(1).trimmed();
-        int t_nPage = t_strList.at(2).trimmed().toInt();
+    if (t_strList.count() == 4) {
+        QString t_strUUid = t_strList.at(1).trimmed();
+        QString t_strText = t_strList.at(2).trimmed();
+        int t_nPage = t_strList.at(3).trimmed().toInt();
 
         auto dproxy = DocummentProxy::instance();
         if (nullptr == dproxy) {
@@ -419,10 +410,6 @@ void NotesWidget::addNotesItem(const QString &text, const int &iType)
 void NotesWidget::initConnection()
 {
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
-
-    connect(this, SIGNAL(sigOpenFileOk(QString)), SLOT(slotOpenFileOk(QString)));
-    connect(this, SIGNAL(sigCloseFile()), SLOT(slotCloseFile()));
-
 
     connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const QImage &)), SLOT(slotLoadImage(const QImage &)));
 
@@ -485,6 +472,8 @@ QListWidgetItem *NotesWidget::addNewItem(const QImage &image, const int &page, c
         itemWidget->setMinimumSize(QSize(LEFTMINWIDTH, 80));
         itemWidget->setBSelect(bNew);
 
+        connect(itemWidget, SIGNAL(sigSelectItem(const QString &)), SLOT(SlotRightSelectItem(const QString &)));
+
         item->setFlags(Qt::NoItemFlags);
         item->setSizeHint(QSize(LEFTMINWIDTH, 80));
 
@@ -506,17 +495,17 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgList.contains(msgType)) {
         emit sigDealWithData(msgType, msgContent);
-        return ConstantMsg::g_effective_res;;
-    }
-    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
-
-        emit sigOpenFileOk(msgContent);
-    } else if (MSG_CLOSE_FILE == msgType) {
-        emit sigCloseFile();
-
     }
 
     return 0;
+}
+
+int NotesWidget::qDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
+        slotOpenFileOk(msgContent);
+    }
+    return MSG_NO_OK;
 }
 
 /*********************class ThreadLoadImageOfNote***********************/

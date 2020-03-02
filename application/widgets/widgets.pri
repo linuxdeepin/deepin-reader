@@ -14,7 +14,8 @@ HEADERS += \
     $$PWD/main/MainSplitter.h \
     $$PWD/main/MainTabBar.h \
     $$PWD/main/MainTabWidgetEx.h \
-    $$PWD/TitleWidget.h
+    $$PWD/TitleWidget.h \
+    $$PWD/main/MainSplitterPrivate.h
 
 SOURCES += \
     $$PWD/HomeWidget.cpp \
@@ -32,4 +33,5 @@ SOURCES += \
     $$PWD/main/MainSplitter.cpp \
     $$PWD/main/MainTabBar.cpp \
     $$PWD/main/MainTabWidgetEx.cpp \
-    $$PWD/TitleWidget.cpp
+    $$PWD/TitleWidget.cpp \
+    $$PWD/main/MainSplitterPrivate.cpp

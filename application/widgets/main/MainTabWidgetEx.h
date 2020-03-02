@@ -22,6 +22,8 @@
 #include "CustomControl/CustomWidget.h"
 
 class QStackedLayout;
+class MainTabBar;
+class DocummentProxy;
 
 class MainTabWidgetEx : public CustomWidget
 {
@@ -32,30 +34,55 @@ public:
     explicit MainTabWidgetEx(DWidget *parent = nullptr);
     ~MainTabWidgetEx() override;
 
+private:
+    static MainTabWidgetEx *g_onlyApp;
+
+public:
+    static MainTabWidgetEx *Instance();
+
 signals:
-    void sigCloseFile(const QString &);
+    void sigDealWithData(const int &, const QString &);
+    void sigTitleMsg(const int &, const QString &);
+
     void sigRemoveFileTab(const QString &);
+
+    void sigTabBarIndexChange(const QString &);
+    void sigAddTab(const QString &);
 
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
 
+public:
+    QString qGetCurPath() const;
+    int GetCurFileState(const QString &);
+
+    void InsertPathProxy(const QString &, DocummentProxy *);
+
     // CustomWidget interface
+    DocummentProxy *getCurFileAndProxy(const QString &sPath) const;
+
 protected:
     void initWidget() override;
 
 private:
     void InitConnections();
+    void onShowFileAttr();
+    void OnAppExit();
 
 private slots:
+    void SlotDealWithData(const int &, const QString &);
+
     void SlotSetCurrentIndexFile(const QString &);
     void SlotAddTab(const QString &);
-
-    void SlotCloseFile(const QString &);
-//    void SlotTabRemoveFile(const int &, const QString &);
+    void SlotCloseTab(const QString &);
 
 private:
     QStackedLayout  *m_pStackedLayout = nullptr;
+    MainTabBar      *m_pTabBar = nullptr;
+
+    QMap<QString, DocummentProxy *> m_strOpenFileAndProxy;
+
 };
 
 #endif // MAINTABWIDGETEX_H

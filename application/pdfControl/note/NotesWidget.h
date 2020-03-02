@@ -75,13 +75,10 @@ public:
     void nextPage();
     void DeleteItemByKey();
 
-signals:
-    void sigOpenFileOk(QString strcontent);
-    void sigCloseFile();
-
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
+    int qDealWithData(const int &, const QString &) override;
 
 protected:
     void initWidget() override;
@@ -90,10 +87,9 @@ private slots:
     void slotDealWithData(const int &, const QString &);
 
     void slotOpenFileOk(QString strcontent);
-    void slotCloseFile();
     void slotLoadImage(const QImage &);
     void slotSelectItem(QListWidgetItem *);
-
+    void SlotRightSelectItem(const QString &);
     void slotAddAnnotation();
 
 private:
@@ -103,7 +99,6 @@ private:
 
     void __JumpToPrevItem();
     void __JumpToNextItem();
-    void __RightSelectItem(const QString &);
 
     void addNotesItem(const QString &text, const int &iType);
     void initConnection();
@@ -121,6 +116,7 @@ private:
     DPushButton *m_pAddAnnotationBtn = nullptr ;   // 添加注释
 
     int m_nIndex = -1;                        // 当前注释列表数
+
 };
 
 #endif  // NOTESFORM_H

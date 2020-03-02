@@ -23,10 +23,13 @@
 #include <QDesktopServices>
 #include <DDialog>
 
+#include <QFileInfo>
+
 #include "MsgModel.h"
 
-#include "docview/commonstruct.h"
+#include "business/FileFormatHelper.h"
 
+#include "docview/commonstruct.h"
 #include "docview/docummentproxy.h"
 #include "controller/FVMMouseEvent.h"
 #include "business/FileDataManager.h"
@@ -37,14 +40,15 @@
 
 #include "business/bridge/IHelper.h"
 
+#include "main/MainTabWidgetEx.h"
+
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
     , m_operatemenu(nullptr)
 {
     m_pMsgList = { MSG_MAGNIFYING, MSG_HANDLESHAPE,
                    MSG_FILE_ROTATE,
-                   MSG_NOTE_ADD_CONTENT, MSG_NOTE_PAGE_ADD,
-                   APP_EXIT_SAVE_FILE
+                   MSG_NOTE_ADD_CONTENT, MSG_NOTE_PAGE_ADD
                  };
 
     m_pKeyMsgList = {KeyStr::g_ctrl_p, KeyStr::g_ctrl_l, KeyStr::g_ctrl_i};
@@ -64,15 +68,6 @@ FileViewWidget::~FileViewWidget()
 
 void FileViewWidget::initWidget()
 {
-    //  实际文档类  唯一实例化设置 父窗口
-    m_strProcUuid = DocummentProxy::CreateInstance(this);
-
-    auto m_pDocummentProxy = DocummentProxy::instance(m_strProcUuid);
-    if (m_pDocummentProxy) {
-        connect(m_pDocummentProxy, SIGNAL(signal_bookMarkStateChange(int, bool)), SLOT(slotBookMarkStateChange(int, bool)));
-        connect(m_pDocummentProxy, SIGNAL(signal_pageChange(int)), SLOT(slotDocFilePageChanged(int)));
-        connect(m_pDocummentProxy, SIGNAL(signal_openResult(bool)), SLOT(SlotDocFileOpenResult(bool)));
-    }
 }
 
 //  鼠标移动
@@ -129,7 +124,7 @@ void FileViewWidget::slotDealWithData(const int &msgType, const QString &msgCont
         onFileAddNote(msgContent);
         break;
     case MSG_NOTE_PAGE_ADD:                     //  2020.2.18   wzx add
-        __SetPageAddIconState();
+        __SetPageAddIconState(msgContent);
         break;
     default:
         break;
@@ -200,6 +195,11 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 
         m_operatemenu->execMenu(tempPoint, bIsHighLight, sSelectText, struuid);
     } else if (bicon) {
+        if (nullptr == m_operatemenu) {
+            m_operatemenu = new TextOperationMenu(this);
+            connect(m_operatemenu, SIGNAL(sigDealWithData(const int &, const QString &)), this, SIGNAL(signalDealWithData(const int &, const QString &)));
+        }
+
         m_operatemenu->setClickPoint(pRightClickPoint);
         m_operatemenu->setPStartPoint(m_pStartPoint);
         m_operatemenu->setPEndPoint(m_pEndSelectPoint);
@@ -208,9 +208,13 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         dApp->m_pAppInfo->setMousePressLocal(bIsHighLight, tempPoint);
         m_operatemenu->execMenu(tempPoint, bicon, sSelectText, struuid);
     } else {  //  否则弹出 文档操作菜单
-        auto menu = new DefaultOperationMenu(this);
-        menu->setClickpoint(pRightClickPoint);
-        menu->execMenu(tempPoint, nPage);
+        if (nullptr == m_pDefaultMenu) {
+            m_pDefaultMenu = new DefaultOperationMenu(this);
+            connect(m_pDefaultMenu, SIGNAL(sigDealWithData(const int &, const QString &)), this, SIGNAL(signalDealWithData(const int &, const QString &)));
+        }
+        m_pDefaultMenu->setClickpoint(pRightClickPoint);
+        m_pDefaultMenu->execMenu(tempPoint, nPage);
+
     }
 }
 
@@ -305,30 +309,35 @@ void FileViewWidget::onFileAddAnnotation()
 void FileViewWidget::onFileAddNote(const QString &msgContent)
 {
     QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (contentList.size() == 2) {
-        QString sNote = contentList.at(0);
-        QString sPage = contentList.at(1);
+    if (contentList.size() == 3) {
+        QString sPath = contentList.at(0);
+        if (sPath == m_strPath) {
+            QString sNote = contentList.at(1);
+            QString sPage = contentList.at(2);
 
-        int nSx = m_pStartPoint.x();
-        int nSy = m_pStartPoint.y();
+            int nSx = m_pStartPoint.x();
+            int nSy = m_pStartPoint.y();
 
-        int nEx = m_pEndSelectPoint.x();
-        int nEy = m_pEndSelectPoint.y();
+            int nEx = m_pEndSelectPoint.x();
+            int nEy = m_pEndSelectPoint.y();
 
-        QString sContent = QString::number(nSx) + Constant::sQStringSep +
-                           QString::number(nSy) + Constant::sQStringSep +
-                           QString::number(nEx) + Constant::sQStringSep +
-                           QString::number(nEy) + Constant::sQStringSep +
-                           sNote + Constant::sQStringSep +
-                           sPage;
+            QString sContent = QString::number(nSx) + Constant::sQStringSep +
+                               QString::number(nSy) + Constant::sQStringSep +
+                               QString::number(nEx) + Constant::sQStringSep +
+                               QString::number(nEy) + Constant::sQStringSep +
+                               sNote + Constant::sQStringSep +
+                               sPage;
 
-        dApp->m_pHelper->qDealWithData(MSG_NOTE_ADD_HIGHLIGHT_NOTE, sContent);
+            dApp->m_pHelper->qDealWithData(MSG_NOTE_ADD_HIGHLIGHT_NOTE, sContent);
+        }
     }
 }
 
-void FileViewWidget::__SetPageAddIconState()
+void FileViewWidget::__SetPageAddIconState(const QString &sPath)
 {
-    m_nCurrentHandelState = NOTE_ADD_State;
+    if (m_strPath == sPath) {
+        m_nCurrentHandelState = NOTE_ADD_State;
+    }
 }
 
 void FileViewWidget::onFileAddNote()
@@ -364,7 +373,7 @@ void FileViewWidget::onFileAddNote()
     QString msgContent = QString("%1").arg(nPage) + Constant::sQStringSep +
                          QString("%1").arg(m_pEndSelectPoint.x()) + Constant::sQStringSep +
                          QString("%1").arg(m_pEndSelectPoint.y());
-    notifyMsg(MSG_OPERATION_TEXT_ADD_ANNOTATION, msgContent);
+    emit signalDealWithData(MSG_OPERATION_TEXT_ADD_ANNOTATION, msgContent);
 }
 
 //  设置鼠标状态
@@ -384,12 +393,57 @@ void FileViewWidget::OnSetViewChange(const QString &msgContent)
 
 void FileViewWidget::setScaleRotateViewModeAndShow()
 {
-    auto _pProxy = DocummentProxy::instance(m_strProcUuid);
-    if (_pProxy) {
+    if (m_pProxy) {
         double dScale = m_nScale / 100.0;
         ViewMode_EM em = m_nDoubleShow ? ViewMode_FacingPage : ViewMode_SinglePage;
-        _pProxy->setScaleRotateViewModeAndShow(dScale, static_cast<RotateType_EM>(m_rotateType), em);
+        m_pProxy->setScaleRotateViewModeAndShow(dScale, static_cast<RotateType_EM>(m_rotateType), em);
     }
+}
+
+bool FileViewWidget::OpenFilePath(const QString &sPath)
+{
+    m_strPath = sPath;
+    //  实际文档类  唯一实例化设置 父窗口
+    QString m_strProcUuid = DocummentProxy::CreateInstance(this);
+
+    m_pProxy = DocummentProxy::instance(m_strProcUuid);
+    if (m_pProxy) {
+        connect(m_pProxy, SIGNAL(signal_bookMarkStateChange(int, bool)), SLOT(slotBookMarkStateChange(int, bool)));
+        connect(m_pProxy, SIGNAL(signal_pageChange(int)), SLOT(slotDocFilePageChanged(int)));
+        connect(m_pProxy, SIGNAL(signal_openResult(bool)), SLOT(SlotDocFileOpenResult(bool)));
+
+        QFileInfo info(sPath);
+
+        QString sCompleteSuffix = info.completeSuffix();
+        DocType_EM nCurDocType = FFH::setCurDocuType(sCompleteSuffix);
+
+        //从数据库中获取文件的字号信息
+        dApp->m_pDBService->qSelectData(sPath, DB_HISTROY);
+        FileDataModel fdm = dApp->m_pDBService->getHistroyData(sPath);
+
+        dApp->m_pDataManager->qSetFileData(sPath, fdm);
+
+        int curPage = fdm.qGetData(CurPage);
+        int iscale = fdm.qGetData(Scale);          // 缩放
+        int doubPage = fdm.qGetData(DoubleShow);     // 是否是双页
+        int rotate = fdm.qGetData(Rotate);         // 文档旋转角度(0,1,2,3,4)
+
+        iscale = (iscale > 500 ? 500 : iscale) <= 0 ? 100 : iscale;
+        double scale = iscale / 100.0;
+        RotateType_EM rotatetype = static_cast<RotateType_EM>(rotate);
+        ViewMode_EM viewmode = static_cast<ViewMode_EM>(doubPage);
+
+        bool rl = m_pProxy->openFile(nCurDocType, sPath, curPage, rotatetype, scale, viewmode);
+        if (rl) {
+            MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+            if (pMtwe) {
+                pMtwe->InsertPathProxy(sPath, m_pProxy);       //  存储 filePath 对应的 proxy
+            }
+
+            return rl;
+        }
+    }
+    return false;
 }
 
 void FileViewWidget::OnSetViewScale(const QString &msgConent)
@@ -433,21 +487,16 @@ void FileViewWidget::OnSetViewHit(const QString &msgContent)
 void FileViewWidget::slotBookMarkStateChange(int nPage, bool bState)
 {
     if (!bState) {
-        sendMsg(MSG_OPERATION_DELETE_BOOKMARK, m_strPath + Constant::sQStringSep + QString("%1").arg(nPage));
+        emit signalDealWithData(MSG_OPERATION_DELETE_BOOKMARK, QString("%1").arg(nPage));
     } else {
-        sendMsg(MSG_OPERATION_ADD_BOOKMARK,  m_strPath + Constant::sQStringSep + QString("%1").arg(nPage));
+        emit signalDealWithData(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(nPage));
     }
 }
 
 //  文档页变化了
 void FileViewWidget::slotDocFilePageChanged(int page)
 {
-    MsgModel mm;
-    mm.setMsgType(MSG_FILE_PAGE_CHANGE);
-    mm.setPath(m_strPath);
-    mm.setValue(QString("%1").arg(page));
-
-    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
+    emit signalDealWithData(MSG_FILE_PAGE_CHANGE, QString::number(page));
 }
 
 //  打开文档结果
@@ -456,10 +505,8 @@ void FileViewWidget::SlotDocFileOpenResult(bool openresult)
     //  通知 其他窗口， 打开文件成功了！！！
     if (openresult) {
         dApp->m_pDBService->qSelectData(m_strPath, DB_BOOKMARK);
-        dApp->m_pDataManager->qInsertFileChange(m_strPath, false);
-        dApp->m_pDataManager->qInsertFileOpen(m_strPath, true);
 
-        emit sigFileOpenOK(m_strPath);
+        emit signalDealWithData(MSG_OPERATION_OPEN_FILE_OK, "");
 
         FileDataModel fdm = dApp->m_pDataManager->qGetFileData(m_strPath);      //  打开成功之后 获取之前数据
         m_nScale = fdm.qGetData(Scale);
@@ -494,17 +541,16 @@ void FileViewWidget::onPrintFile()
 void FileViewWidget::onSetWidgetAdapt()
 {
     if (m_nAdapteState != Default_State) {
-        DocummentProxy *_proxy = DocummentProxy::instance(m_strProcUuid);
-        if (!_proxy)
+        if (!m_pProxy)
             return;
 
         double nScale = 0.0;
         if (m_nAdapteState == WIDGET_State) {
             int nWidth = this->width();
-            nScale = _proxy->adaptWidthAndShow(nWidth);
+            nScale = m_pProxy->adaptWidthAndShow(nWidth);
         } else if (m_nAdapteState == HEIGHT_State) {
             int nHeight = this->height();
-            nScale = _proxy->adaptHeightAndShow(nHeight);
+            nScale = m_pProxy->adaptHeightAndShow(nHeight);
         }
 
 //    if (nScale != 0.0) {
@@ -517,17 +563,12 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgList.contains(msgType)) {
         emit sigDealWithData(msgType, msgContent);
-        return ConstantMsg::g_effective_res;
-    }
-
-    if (msgType == MSG_NOTIFY_KEY_MSG && this->isVisible()) {
+    } else if (msgType == MSG_NOTIFY_KEY_MSG && this->isVisible()) {
         if (m_pKeyMsgList.contains(msgContent)) {
             emit sigDealWithKeyMsg(msgContent);
             return ConstantMsg::g_effective_res;
         }
-    }
-
-    if (msgType == MSG_VIEWCHANGE_DOUBLE_SHOW) {
+    } else if (msgType == MSG_VIEWCHANGE_DOUBLE_SHOW) {
         OnSetViewChange(msgContent);
     } else if (msgType == MSG_VIEWCHANGE_ROTATE) {
         OnSetViewRotate(msgContent);
@@ -538,10 +579,4 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
     }
 
     return 0;
-}
-
-void FileViewWidget::qSetBindPath(const QString &sPath)
-{
-    m_strPath = sPath;
-    dApp->m_pDataManager->qInsertFileAndUuid(m_strPath, m_strProcUuid);
 }

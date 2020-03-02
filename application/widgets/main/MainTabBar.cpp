@@ -146,6 +146,11 @@ void MainTabBar::AddFileTab(const QString &sContent)
         }
 
         __SetTabMiniWidth();
+
+        int nCurIndex = this->currentIndex();
+        if (nCurIndex > -1) {
+            SlotTabBarClicked(nCurIndex);
+        }
     }
 }
 
@@ -167,8 +172,7 @@ void MainTabBar::SlotTabCloseRequested(int index)
 {
     QString sPath = this->tabData(index).toString();
     if (sPath != "") {
-        SaveDialog sd;
-        sd.showSaveDialog(E_TAB_MSG, sPath);
+        emit sigCloseTab(sPath);
     }
 }
 

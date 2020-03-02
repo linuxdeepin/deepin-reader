@@ -37,16 +37,13 @@ public:
     explicit CatalogTreeView(DWidget *parent = nullptr);
     ~CatalogTreeView() override;
 
-signals:
-    void sigOpenFileOk(QString path);
-    void sigFilePageChanged(const QString &);
-
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
     void sendMsg(const int &, const QString &) override;
     void notifyMsg(const int &, const QString &) override;
 
+    int qDealWithData(const int &, const QString &);
     // QWidget interface
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -61,11 +58,11 @@ private:
 
     QList<QStandardItem *>   getItemList(const QString &, const int &, const qreal  &realleft, const qreal &realtop);
 
-private slots:
-    void SlotOpenFileOk(QString path);
+    void OnOpenFileOk(const QString &path);
+    void OnFilePageChanged(const QString &);
 
+private slots:
     void SlotClicked(const QModelIndex &);
-    void SlotFilePageChanged(const QString &);
     void SlotCollapsed(const QModelIndex &);
     void SlotExpanded(const QModelIndex &);
 };

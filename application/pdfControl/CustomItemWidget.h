@@ -35,6 +35,10 @@ class CustomItemWidget : public CustomWidget
 public:
     CustomItemWidget(const QString &, QWidget *parent = nullptr);
 
+signals:
+    void sigDeleteItem(const QString &);
+    void sigSelectItem(const QString &);
+
 public:
     void setLabelImage(const QImage &);
     void setLabelPage(const int &, const int &nShowPage = 0);

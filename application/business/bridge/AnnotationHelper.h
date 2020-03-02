@@ -33,16 +33,13 @@ class AnnotationHelper : public HelperImpl
 public:
     explicit AnnotationHelper(QObject *parent = nullptr);
 
-private:
-    void notifyMsg(const int &, const QString &) ;
-
 public:
-    int qDealWithData(const int &, const QString &) override;
+    QString qDealWithData(const int &, const QString &) override;
 
 private:
     void __AddHighLight(const QString &msgContent);
     void __AddHighLightAnnotation(const QString &msgContent);
-    void __RemoveHighLight(const QString &msgContent);
+    void __RemoveHighLight(const QString &msgContent, QString &);
     void __ChangeAnnotationColor(const QString &msgContent);
 
     void __RemoveAnnotation(const QString &);
@@ -52,7 +49,9 @@ private:
     void __DeletePageIconAnnotation(const QString &);
     void __UpdatePageIconAnnotation(const QString &);
 
+private:
     void UpdateDocFileState();
+    void notifyMsg(const int &msgType, const QString &msgContent);
 };
 
 #endif // ANNOTATIONHELPER_H

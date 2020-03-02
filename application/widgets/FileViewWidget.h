@@ -22,6 +22,9 @@
 #include "CustomControl/CustomWidget.h"
 
 class TextOperationMenu;
+class DefaultOperationMenu;
+
+class DocummentProxy;
 
 //  当前鼠标状态
 enum E_Handel_State {
@@ -53,14 +56,13 @@ public:
     int         m_nCurrentHandelState = Default_State;  //  当前鼠标状态
 
 signals:
+    void signalDealWithData(const int &, const QString &);
     void sigShowPlayCtrl(bool bshow);
-    void sigFileOpenOK(const QString &);
+    void sigFileOpenOK();
 
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
-    void qSetBindPath(const QString &);
-//    QString qGetPath() const;
 
     // CustomWidget interface
 protected:
@@ -92,7 +94,7 @@ private:
     void onSetWidgetAdapt();
 
     void onFileAddNote(const QString &);
-    void __SetPageAddIconState();
+    void __SetPageAddIconState(const QString &);
 
     void onPrintFile();
     void onFileAddAnnotation();
@@ -105,10 +107,12 @@ private:
     void OnSetViewHit(const QString &);
 
     void setScaleRotateViewModeAndShow();
+    bool OpenFilePath(const QString &);
 
 private:
     TextOperationMenu       *m_operatemenu = nullptr;
-    QString                 m_strProcUuid = "";
+    DefaultOperationMenu    *m_pDefaultMenu = nullptr;
+    DocummentProxy          *m_pProxy = nullptr;
     QString                 m_strPath = "";
 
     int                     m_nAdapteState = NO_ADAPTE_State;       //  当前自适应状态
@@ -120,6 +124,8 @@ private:
     int                     m_nScale = 0;
 
     friend class FVMMouseEvent;
+    friend class DocShowShellWidget;
+
 };
 
 

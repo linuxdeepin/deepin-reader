@@ -24,6 +24,10 @@
 
 DWIDGET_USE_NAMESPACE
 
+class DocShowShellWidget;
+class LeftSidebarWidget;
+class MainSplitterPrivate;
+
 class MainSplitter : public DSplitter, public IObserver
 {
     Q_OBJECT
@@ -34,9 +38,7 @@ public:
     ~MainSplitter() override;
 
 signals:
-    void sigDocProxy(const QString &);
-    void sigTitleMsg(const QString &);
-//    void sigDealWithDataMsg(const int &, const QString &);
+    void sigDealWithDataMsg(const int &, const QString &);
 
     // IObserver interface
 public:
@@ -44,20 +46,29 @@ public:
     void sendMsg(const int &, const QString &) override;
     void notifyMsg(const int &, const QString &) override;
 
+public:
     QString qGetPath() const;
     void qSetPath(const QString &strPath);
+
+    void qSetFileChange(const int &);
+    int qGetFileChange();
 
 private:
     void InitWidget();
     void InitConnections();
 
 private slots:
-//    void SlotDealWithDataMsg(const int &, const QString &);
-    void SlotDocProxyData(const QString &);
-    void SlotTitleData(const QString &);
+    void SlotDealWithDataMsg(const int &, const QString &);
+    void SlotSplitterMsg(const int &, const QString &);
+    void SlotTitleMsg(const int &, const QString &);
+
+    void SlotMainTabWidgetExMsg();
 
 private:
-    QString         m_strPath = "";
+    LeftSidebarWidget   *m_pLeftWidget = nullptr;
+    DocShowShellWidget  *m_pDocWidget   = nullptr;
+
+    MainSplitterPrivate     *d_ptr = nullptr;
 };
 
 #endif // MAINSPLITTER_H

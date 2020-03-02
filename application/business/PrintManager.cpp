@@ -24,6 +24,8 @@
 
 #include "business/FileDataManager.h"
 
+#include "widgets/main/MainTabWidgetEx.h"
+
 PrintManager::PrintManager(QObject *parent)
     : QObject(parent)
 {
@@ -41,33 +43,40 @@ void PrintManager::showPrintDialog(DWidget *widget)
 
 void PrintManager::slotPrintPreview(QPrinter *printer)
 {
-    DocummentProxy *_proxy = dApp->m_pDataManager->qGetCurrentProxy();
-    if (_proxy) {
-        //  文档实际大小
-        stFileInfo fileInfo;
-        _proxy->docBasicInfo(fileInfo);
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    if (pMtwe) {
+        QString sCurPath = pMtwe->qGetCurPath();
+        if (sCurPath != "") {
+            DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(sCurPath);
+            if (!_proxy) {
 
-        int nPageSize = _proxy->getPageSNum();  //  pdf 页数
+                //  文档实际大小
+                stFileInfo fileInfo;
+                _proxy->docBasicInfo(fileInfo);
 
-        printer->setDocName(m_strPrintName);
+                int nPageSize = _proxy->getPageSNum();  //  pdf 页数
 
-        QPainter painter(printer);
-        painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
-        painter.begin(printer);
+                printer->setDocName(m_strPrintName);
 
-        QRect rect = painter.viewport();
+                QPainter painter(printer);
+                painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
+                painter.begin(printer);
 
-        for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
-            QImage image;
+                QRect rect = painter.viewport();
 
-            bool rl = _proxy->getImage(iIndex, image, rect.width(), rect.height());
-            if (rl) {
-                painter.drawPixmap(0, 0, QPixmap::fromImage(image));
-                if (iIndex < nPageSize - 1)
-                    printer->newPage();
+                for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
+                    QImage image;
+
+                    bool rl = _proxy->getImage(iIndex, image, rect.width(), rect.height());
+                    if (rl) {
+                        painter.drawPixmap(0, 0, QPixmap::fromImage(image));
+                        if (iIndex < nPageSize - 1)
+                            printer->newPage();
+                    }
+                }
+                painter.end();
             }
         }
-        painter.end();
     }
 }
 

@@ -19,66 +19,82 @@
 
 #include "AnnotationHelper.h"
 
+#include <QJsonObject>
+#include <QJsonDocument>
+
 #include "application.h"
 #include "MsgModel.h"
 
 #include "business/AppInfo.h"
 #include "business/FileDataManager.h"
 
+#include "widgets/main/MainTabWidgetEx.h"
+
 AnnotationHelper::AnnotationHelper(QObject *parent)
     : HelperImpl(parent)
 {
-
+    m_pMsgList = {
+        MSG_NOTE_PAGE_ADD_CONTENT, MSG_NOTE_PAGE_DELETE_CONTENT, MSG_NOTE_PAGE_UPDATE_CONTENT,
+        MSG_NOTE_DELETE_CONTENT, MSG_NOTE_UPDATE_CONTENT, MSG_NOTE_REMOVE_HIGHLIGHT_COLOR,
+        MSG_NOTE_UPDATE_HIGHLIGHT_COLOR, MSG_NOTE_ADD_HIGHLIGHT_COLOR, MSG_NOTE_ADD_HIGHLIGHT_NOTE
+    };
 }
 
 void AnnotationHelper::notifyMsg(const int &msgType, const QString &msgContent)
 {
-    dApp->m_pModelService->notifyMsg(msgType, msgContent);
+    QString sCurPath = MainTabWidgetEx::Instance()->qGetCurPath();
+
+    QJsonObject obj;
+    obj.insert("need", true);
+    obj.insert("path", sCurPath);
+    obj.insert("content", msgContent);
+
+    QJsonDocument doc = QJsonDocument(obj);
+
+    dApp->m_pModelService->notifyMsg(msgType, doc.toJson(QJsonDocument::Compact));
 }
 
-int AnnotationHelper::qDealWithData(const int &msgType, const QString &msgContent)
+QString AnnotationHelper::qDealWithData(const int &msgType, const QString &msgContent)
 {
-    int nRes = MSG_NO_OK;
+    QString sRes = "";
     if (msgType == MSG_NOTE_PAGE_ADD_CONTENT) {                 //  新增 页面注释
         AddPageIconAnnotation(msgContent);
-        nRes = MSG_OK;
     } else if (msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {       //  删除页面注释
         __DeletePageIconAnnotation(msgContent);
-        nRes = MSG_OK;
     } else if (msgType == MSG_NOTE_PAGE_UPDATE_CONTENT) {       //  更新页面注释
         __UpdatePageIconAnnotation(msgContent);
-        nRes = MSG_OK;
     } else if (msgType == MSG_NOTE_DELETE_CONTENT) {            //  刪除高亮注释
         __RemoveAnnotation(msgContent);
-        nRes = MSG_OK;
     } else if (msgType == MSG_NOTE_UPDATE_CONTENT) {            //  更新高亮注释
         __UpdateAnnotationText(msgContent);
-        nRes = MSG_OK;
     } else if (msgType == MSG_NOTE_REMOVE_HIGHLIGHT_COLOR) {  //  移除高亮注释 的高亮
-        __RemoveHighLight(msgContent);
-        nRes = MSG_OK;
+        __RemoveHighLight(msgContent, sRes);
     } else if (msgType == MSG_NOTE_UPDATE_HIGHLIGHT_COLOR) {  //  更新高亮颜色
         __ChangeAnnotationColor(msgContent);
-        nRes = MSG_OK;
     } else if (msgType == MSG_NOTE_ADD_HIGHLIGHT_COLOR) {                 //  添加高亮
         __AddHighLight(msgContent);
-        nRes = MSG_OK;
     } else if (msgType == MSG_NOTE_ADD_HIGHLIGHT_NOTE) {            //  添加高亮注释
         __AddHighLightAnnotation(msgContent);
+    }
+
+    int nRes = MSG_NO_OK;
+    if (m_pMsgList.contains(msgType)) {
         nRes = MSG_OK;
     }
 
-    if (nRes == MSG_OK) {
-        UpdateDocFileState() ;
-    }
+    QJsonObject obj;
+    obj.insert("return", nRes);
+    obj.insert("value", sRes);
 
-    return nRes;
+    QJsonDocument doc(obj);
+
+    return doc.toJson(QJsonDocument::Compact);
 }
 
 //  删除注释节点
 void AnnotationHelper::__DeletePageIconAnnotation(const QString &msgContent)
 {
-    DocummentProxy *_proxy = dApp->m_pDataManager->qGetCurrentProxy();
+    DocummentProxy *_proxy = DocummentProxy::instance();
     if (_proxy) {
         QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (sList.size() == 2) {
@@ -96,7 +112,7 @@ void AnnotationHelper::__DeletePageIconAnnotation(const QString &msgContent)
 //  更新注释节点内容
 void AnnotationHelper::__UpdatePageIconAnnotation(const QString &msgContent)
 {
-    DocummentProxy *_proxy = dApp->m_pDataManager->qGetCurrentProxy();
+    DocummentProxy *_proxy = DocummentProxy::instance();
     if (_proxy) {
         QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (sList.size() == 3) {
@@ -104,6 +120,7 @@ void AnnotationHelper::__UpdatePageIconAnnotation(const QString &msgContent)
             QString sUuid = sList.at(1);
             QString sPage = sList.at(2);
             _proxy->setAnnotationText(sPage.toInt(), sUuid, sNote);
+
             notifyMsg(MSG_NOTE_PAGE_UPDATE_ITEM, msgContent);
         }
     }
@@ -111,19 +128,21 @@ void AnnotationHelper::__UpdatePageIconAnnotation(const QString &msgContent)
 
 void AnnotationHelper::UpdateDocFileState()
 {
-    QString sPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    QString sPath = MainTabWidgetEx::Instance()->qGetCurPath();
 
-    MsgModel mm;
-    mm.setMsgType(MSG_FILE_IS_CHANGE);
-    mm.setPath(sPath);
-    mm.setValue("1");
+    QJsonObject obj;
+    obj.insert("need", true);
+    obj.insert("path", sPath);
+    obj.insert("content", "1");
 
-    notifyMsg(E_FILE_MSG, mm.toJson());
+    QJsonDocument doc = QJsonDocument(obj);
+
+    notifyMsg(MSG_FILE_IS_CHANGE, doc.toJson(QJsonDocument::Compact));
 }
 
 void AnnotationHelper::__AddHighLight(const QString &msgContent)
 {
-    DocummentProxy *_proxy = dApp->m_pDataManager->qGetCurrentProxy();
+    DocummentProxy *_proxy = DocummentProxy::instance();
     if (_proxy) {
         QString nSx = "", nSy = "", nEx = "", nEy = "";
         QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
@@ -153,17 +172,17 @@ void AnnotationHelper::__AddHighLight(const QString &msgContent)
 
 void AnnotationHelper::__AddHighLightAnnotation(const QString &msgContent)
 {
-    DocummentProxy *_proxy = dApp->m_pDataManager->qGetCurrentProxy();
-    if (_proxy) {
-        QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-        if (sList.size() == 6) {
-            QString nSx = sList.at(0);
-            QString nSy = sList.at(1);
-            QString nEx = sList.at(2);
-            QString nEy = sList.at(3);
-            QString sNote = sList.at(4);
-            QString sPage = sList.at(5);
+    QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    if (sList.size() == 6) {
+        QString nSx = sList.at(0);
+        QString nSy = sList.at(1);
+        QString nEx = sList.at(2);
+        QString nEy = sList.at(3);
+        QString sNote = sList.at(4);
+        QString sPage = sList.at(5);
 
+        DocummentProxy *_proxy = DocummentProxy::instance();
+        if (_proxy) {
             QPoint pStartPoint(nSx.toInt(), nSy.toInt());
             QPoint pEndPoint(nEx.toInt(), nEy.toInt());
             QColor color = dApp->m_pAppInfo->selectColor();
@@ -179,11 +198,9 @@ void AnnotationHelper::__AddHighLightAnnotation(const QString &msgContent)
     }
 }
 
-
-
-void AnnotationHelper::__RemoveHighLight(const QString &msgContent)
+void AnnotationHelper::__RemoveHighLight(const QString &msgContent, QString &sRes)
 {
-    DocummentProxy *_proxy = dApp->m_pDataManager->qGetCurrentProxy();
+    DocummentProxy *_proxy = DocummentProxy::instance();
     if (_proxy) {
         QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (contentList.size() == 2) {
@@ -194,6 +211,7 @@ void AnnotationHelper::__RemoveHighLight(const QString &msgContent)
 
             QString sUuid = _proxy->removeAnnotation(tempPoint);
             if (sUuid != "") {
+                sRes = sUuid;
                 notifyMsg(MSG_NOTE_DELETE_ITEM, sUuid);
             }
         }
@@ -203,7 +221,7 @@ void AnnotationHelper::__RemoveHighLight(const QString &msgContent)
 //  更新高亮颜色
 void AnnotationHelper::__ChangeAnnotationColor(const QString &msgContent)
 {
-    DocummentProxy *_proxy = dApp->m_pDataManager->qGetCurrentProxy();
+    DocummentProxy *_proxy = DocummentProxy::instance();
     if (_proxy) {
         QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (contentList.size() == 3) {
@@ -221,14 +239,14 @@ void AnnotationHelper::__ChangeAnnotationColor(const QString &msgContent)
 
 void AnnotationHelper::__RemoveAnnotation(const QString &msgContent)
 {
-    DocummentProxy *_proxy = dApp->m_pDataManager->qGetCurrentProxy();
+    DocummentProxy *_proxy = DocummentProxy::instance();
     if (_proxy) {
         QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (sList.size() == 2) {
             QString sUuid = sList.at(0);
             QString sPage = sList.at(1);
-
             _proxy->removeAnnotation(sUuid, sPage.toInt());
+
             notifyMsg(MSG_NOTE_DELETE_ITEM, sUuid);
         }
     }
@@ -236,9 +254,8 @@ void AnnotationHelper::__RemoveAnnotation(const QString &msgContent)
 
 void AnnotationHelper::__UpdateAnnotationText(const QString &msgContent)
 {
-    DocummentProxy *_proxy = dApp->m_pDataManager->qGetCurrentProxy();
+    DocummentProxy *_proxy = DocummentProxy::instance();
     if (_proxy) {
-
         QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (sList.size() == 3) {
             QString sText = sList.at(0);
@@ -253,7 +270,7 @@ void AnnotationHelper::__UpdateAnnotationText(const QString &msgContent)
 
 void AnnotationHelper::AddPageIconAnnotation(const QString &msgContent)
 {
-    DocummentProxy *_proxy = dApp->m_pDataManager->qGetCurrentProxy();
+    DocummentProxy *_proxy = DocummentProxy::instance();
     if (_proxy) {
         QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (sList.size() == 3) {

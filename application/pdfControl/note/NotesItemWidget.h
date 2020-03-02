@@ -37,6 +37,9 @@ public:
     explicit NotesItemWidget(DWidget *parent = nullptr);
     ~NotesItemWidget() override;
 
+signals:
+    void sigSelectItem(const QString &);
+
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;

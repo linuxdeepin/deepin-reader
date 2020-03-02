@@ -29,13 +29,13 @@ public:
     explicit DocFileHelper(QObject *parent = nullptr);
 
 public:
-    int qDealWithData(const int &msgType, const QString &msgContent) override;
+    QString qDealWithData(const int &msgType, const QString &msgContent) override;
 
 private:
     void __PageJump(const int &pagenum);
     void __PageJumpByMsg(const int &);
 
-    void onOpenFile(const QString &filePaths);
+//    bool onOpenFile(const QString &filePaths);
 
     void onSaveFile();
     void onSaveAsFile();
@@ -48,8 +48,7 @@ private:
 
     void SetFileSlider(const int &nFlag);
 
-    void RemoveTabFile(const int &iType, const QString &sPath);
-    void AppExitFile(const int &iType, const QString &sPath);
+    void CloseFile(const int &iType, const QString &sPath);
 };
 
 

@@ -39,9 +39,9 @@ void CustomWidget::updateWidgetTheme()
     setPalette(plt);
 }
 
-void CustomWidget::qSetBindPath(const QString &sPath)
+int CustomWidget::qDealWithData(const int &, const QString &)
 {
-    m_strBindPath = sPath;
+    return MSG_NO_OK;
 }
 
 //  操作 消息

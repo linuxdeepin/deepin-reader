@@ -23,6 +23,7 @@
 
 #include <DLabel>
 
+class CatalogTreeView;
 /**
  * @brief The CatalogWidget class
  * @brief       目录 界面
@@ -37,12 +38,10 @@ public:
     explicit CatalogWidget(DWidget *parent = nullptr);
     ~CatalogWidget() override;
 
-signals:
-    void sigDocOpenFileOk(const QString &);
-
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
+    int qDealWithData(const int &, const QString &) override;
 
     // CustomWidget interface
 protected:
@@ -51,11 +50,12 @@ protected:
 private:
     void initConnections();
 
-private slots:
-    void SlotDocOpenFileOk(const QString &);
+private:
+    void OnDocOpenFileOk(const QString &);
 
 private:
     DLabel  *titleLabel = nullptr;
+    CatalogTreeView  *m_pTree = nullptr;
 };
 
 

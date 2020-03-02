@@ -6,7 +6,6 @@
 
 #include "application.h"
 #include "FileDataModel.h"
-#include "FileStateHeader.h"
 
 #include "docview/docummentproxy.h"
 
@@ -35,7 +34,6 @@ public:
     void notifyMsg(const int &, const QString &) override;
 
 public:
-    QString qGetCurUuid()const;
     QString qGetCurrentFilePath() const;
     void qSetCurrentFilePath(const QString &strFilePath);
 
@@ -47,22 +45,12 @@ public:
     void qSetFileData(const QString &strPath, const FileDataModel &);
     QMap<QString, FileDataModel> qGetFileStateMap() const;
 
-    QMap<QString, QString> qGetFileAndUuidMap() const;
-    void qInsertFileAndUuid(const QString &, const QString &);
-    QString qGetFileUuid(const QString &);
-
-    QMap<QString, FileState> qGetFileChangeMap() const;
-    void qInsertFileChange(const QString &, const int &);
-    void qInsertFileOpen(const QString &, const int &);
-    FileState qGetFileChange(const QString &);
-
     void qSaveData(const QString &sPath);
-    DocummentProxy  *qGetCurrentProxy();
 
 private:
     void InitConnection();
 
-    void setFileChange(const QString &);
+//    void setFileChange(const QString &);
     void setThumbnailState(const QString &);
     void SetLeftWidgetIndex(const QString &sValue);
     void OnSetViewChange(const QString &);
@@ -79,8 +67,6 @@ private slots:
 private:
     QString m_strCurrentFilePath = "";              //  当前显示的文档路径
     QMap<QString, FileDataModel>    m_pFileStateMap;        //  已打开的文档列表
-    QMap<QString, QString>          m_pFileAndUuidMap;       //  已打开的文档列表
-    QMap<QString, FileState>        m_pFileChangeMap;
 };
 
 #endif // DATAMANAGER_H

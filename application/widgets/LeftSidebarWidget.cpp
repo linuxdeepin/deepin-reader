@@ -19,6 +19,7 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
 
     resize(LEFTNORMALWIDTH, this->height());
 
+    m_pMsgList = {MSG_WIDGET_THUMBNAILS_VIEW};
     initWidget();
     initConnections();
 
@@ -53,34 +54,9 @@ void LeftSidebarWidget::slotUpdateTheme()
     updateWidgetTheme();
 }
 
-void LeftSidebarWidget::slotTitleMsg(const QString &sContent)
-{
-//    MsgModel mm;
-//    mm.fromJson(sContent);
-
-//    int nMsg = mm.getMsgType();
-//    if (nMsg == MSG_WIDGET_THUMBNAILS_VIEW) {
-//        onSetWidgetVisible(mm.getValue().toInt());
-//    }
-}
-
-void LeftSidebarWidget::onDocProxyMsg(const QString &msgContent)
-{
-    MsgModel mm;
-    mm.fromJson(msgContent);
-
-    int nMsg = mm.getMsgType();
-    if (nMsg == MSG_OPERATION_OPEN_FILE_OK) {
-        QString sPath = mm.getPath();
-        SlotOpenFileOk(sPath);
-    }
-}
-
 void LeftSidebarWidget::initConnections()
 {
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
-    connect(this, SIGNAL(sigOpenFileOk(const QString &)), SLOT(SlotOpenFileOk(const QString &)));
-    connect(this, SIGNAL(sigTitleMsg(const QString &)), SLOT(slotTitleMsg(const QString &)));
 }
 
 void LeftSidebarWidget::initWidget()
@@ -101,12 +77,20 @@ void LeftSidebarWidget::initWidget()
 
 int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        emit sigUpdateTheme();
-    } else if (msgType == MSG_WIDGET_THUMBNAILS_VIEW) {
+    return 0;
+}
+
+int LeftSidebarWidget::qDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_WIDGET_THUMBNAILS_VIEW) {
         onSetWidgetVisible(msgContent.toInt());
-    } if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         SlotOpenFileOk(msgContent);
     }
-    return 0;
+
+    int nRes = MSG_NO_OK;
+    if (m_pMsgList.contains(msgType)) {
+        nRes = MSG_OK;
+    }
+    return nRes;
 }

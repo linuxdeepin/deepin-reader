@@ -21,12 +21,12 @@ public:
     ~MainOperationWidget() override;
 
 signals:
-    void sigOpenFileOk(const QString &sPath);
     void sigShowStackWidget(const int &);
 
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
+    int qDealWithData(const int &, const QString &) override;
 
     // CustomWidget interface
 protected:
@@ -47,6 +47,7 @@ private slots:
     void slotOpenFileOk(const QString &sPath);
     void slotUpdateTheme();
     void slotButtonClicked(int);
+
 };
 
 #endif // MAINOPERATIONWIDGET_H

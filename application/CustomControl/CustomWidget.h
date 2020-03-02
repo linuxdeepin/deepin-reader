@@ -51,17 +51,17 @@ class CustomWidget : public DWidget, public IObserver
 
 public:
     CustomWidget(const QString &, DWidget *parent = nullptr);
-//    ~CustomWidget() override;
 
     //  主题更新信号
 signals:
+    void signalDealWithData(const int &, const QString &);
     void sigTitleMsg(const QString &);
     void sigUpdateTheme();
     void sigDealWithData(const int &, const QString &);
     void sigDealWithKeyMsg(const QString &);
 
 public:
-    virtual void qSetBindPath(const QString &);
+    virtual int qDealWithData(const int &, const QString &);
 
 protected:
     virtual void initWidget() = 0;
@@ -75,8 +75,6 @@ protected:
 protected:
     QList<int>          m_pMsgList;         //  需要处理的消息列表
     QList<QString>      m_pKeyMsgList;      //  需要处理的按键消息列表
-
-    QString             m_strBindPath = "";
 };
 
 #endif  // CUSTOMWIDGET_H

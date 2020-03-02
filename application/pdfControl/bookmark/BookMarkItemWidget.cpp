@@ -35,7 +35,7 @@ BookMarkItemWidget::BookMarkItemWidget(QWidget *parent)
  * 处理全局消息接口
  * @return
  */
-int BookMarkItemWidget::dealWithData(const int &msgType, const QString &msgContent)
+int BookMarkItemWidget::dealWithData(const int &, const QString &)
 {
     return 0;
 }
@@ -64,7 +64,7 @@ void BookMarkItemWidget::setBSelect(const bool &paint)
  */
 void BookMarkItemWidget::slotDltBookMark()
 {
-    sendMsg(MSG_BOOKMARK_DLTITEM, QString::number(m_nPageIndex));
+    emit sigDeleteItem(QString::number(m_nPageIndex));
 }
 
 /**
@@ -73,8 +73,6 @@ void BookMarkItemWidget::slotDltBookMark()
  */
 void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
 {
-    sendMsg(MSG_OPERATION_RIGHT_SELECT_BOOKMARK, QString::number(m_nPageIndex));
-
     if (m_menu == nullptr) {
         m_menu = new DMenu(this);
         DFontSizeManager::instance()->bind(m_menu, DFontSizeManager::T6);
@@ -86,6 +84,8 @@ void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
     if (m_menu) {
         m_menu->exec(QCursor::pos());
     }
+
+    emit sigSelectItem(QString::number(m_nPageIndex));
 }
 
 /**
@@ -135,17 +135,3 @@ void BookMarkItemWidget::paintEvent(QPaintEvent *event)
         m_pPicture->setForegroundRole(QPalette::Shadow);
     }
 }
-
-//bool BookMarkItemWidget::bOperationBK()
-//{
-//    int leftShow = 0;
-//    int widgetIndex = 0;
-//    leftShow = DataManager::instance()->getShowLeft().toInt();
-//    widgetIndex = DataManager::instance()->getListIndex().toInt();
-
-//    if (leftShow == 1 && widgetIndex == 2) {
-//        return true;
-//    }
-
-//    return false;
-//}

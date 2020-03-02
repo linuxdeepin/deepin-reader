@@ -20,6 +20,8 @@
 
 #include "business/bridge/IHelper.h"
 
+#include "widgets/main/MainTabWidgetEx.h"
+
 DWIDGET_USE_NAMESPACE
 
 MainWindow::MainWindow(DMainWindow *parent)
@@ -82,29 +84,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     dApp->m_pAppInfo->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
     dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
 
-    bool rl = false;
-
-    QMap<QString, FileState> sFileStateMap = dApp->m_pDataManager->qGetFileChangeMap();
-    QMapIterator<QString, FileState> iter(sFileStateMap);
-    while (iter.hasNext()) {
-        iter.next();
-
-        if (iter.key() != "" && iter.value().isChange) {
-            rl = true;
-            break;
-        }
-    }
-
-    if (rl) {
-        SaveDialog sd;
-        sd.showSaveDialog(E_APP_MSG_TYPE);
-    } else {
-        //  没有对文档进行修改,  也需要保存 历史记录
-        MsgModel mm;
-        mm.setMsgType(APP_EXIT_NOTHING);
-
-        notifyMsg(E_APP_MSG_TYPE, mm.toJson());
-    }
+    notifyMsg(APP_EXIT);
 }
 
 void MainWindow::initUI()
@@ -245,14 +225,17 @@ void MainWindow::slotShortCut(const QString &key)
     } else if (key == KeyStr::g_ctrl_o) {   //  打开文件
         notifyMsg(MSG_NOTIFY_KEY_MSG, key);
     } else {
-        QString sFilePath = dApp->m_pDataManager->qGetCurrentFilePath();
-        if (sFilePath != "") {
-            if (key == KeyStr::g_ctrl_h) {  //  播放幻灯片
-                SlotSlideShow();
-            } else if (key == KeyStr::g_ctrl_s || key == KeyStr::g_ctrl_shift_s || key == KeyStr::g_ctrl_c) {
-                dApp->m_pHelper->qDealWithData(MSG_NOTIFY_KEY_MSG, key);
-            } else {
-                notifyMsg(MSG_NOTIFY_KEY_MSG, key);
+        auto pMtwe = MainTabWidgetEx::Instance();
+        if (pMtwe) {
+            QString sFilePath = pMtwe->qGetCurPath();
+            if (sFilePath != "") {
+                if (key == KeyStr::g_ctrl_h) {  //  播放幻灯片
+                    SlotSlideShow();
+                } else if (key == KeyStr::g_ctrl_s || key == KeyStr::g_ctrl_shift_s || key == KeyStr::g_ctrl_c) {
+                    dApp->m_pHelper->qDealWithData(MSG_NOTIFY_KEY_MSG, key);
+                } else {
+                    notifyMsg(MSG_NOTIFY_KEY_MSG, key);
+                }
             }
         }
     }

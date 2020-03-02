@@ -28,6 +28,8 @@
 #include "utils/utils.h"
 #include "business/FileDataManager.h"
 
+#include "widgets/main/MainTabWidgetEx.h"
+
 CatalogTreeView::CatalogTreeView(DWidget *parent)
     : DTreeView(parent)
 {
@@ -54,11 +56,6 @@ CatalogTreeView::~CatalogTreeView()
 
 int CatalogTreeView::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        emit sigOpenFileOk(msgContent);
-    } else if (msgType == MSG_FILE_PAGE_CHANGE) {    //  文档页变化, 需要跳转到对应项
-        emit sigFilePageChanged(msgContent);
-    }
     return 0;
 }
 
@@ -71,10 +68,18 @@ void CatalogTreeView::notifyMsg(const int &, const QString &)
 {
 }
 
+int CatalogTreeView::qDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        OnOpenFileOk(msgContent);
+    } else if (msgType == MSG_FILE_PAGE_CHANGE) {    //  文档页变化, 需要跳转到对应项
+        OnFilePageChanged(msgContent);
+    }
+    return MSG_NO_OK;
+}
+
 void CatalogTreeView::initConnections()
 {
-    connect(this, SIGNAL(sigFilePageChanged(const QString &)), SLOT(SlotFilePageChanged(const QString &)));
-    connect(this, SIGNAL(sigOpenFileOk(QString)), SLOT(SlotOpenFileOk(QString)));
     connect(this, SIGNAL(clicked(const QModelIndex &)), SLOT(SlotClicked(const QModelIndex &)));
     connect(this, SIGNAL(collapsed(const QModelIndex &)), SLOT(SlotCollapsed(const QModelIndex &)));
     connect(this, SIGNAL(expanded(const QModelIndex &)), SLOT(SlotExpanded(const QModelIndex &)));
@@ -127,27 +132,33 @@ QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const 
 }
 
 //  文档打开成功, 加载对应目录
-void CatalogTreeView::SlotOpenFileOk(QString path)
+void CatalogTreeView::OnOpenFileOk(const QString &path)
 {
     auto model = reinterpret_cast<QStandardItemModel *>(this->model());
     if (model) {
         model->clear();
 
-        DocummentProxy *_proxy = DocummentProxy::instance(dApp->m_pDataManager->qGetFileUuid(path));
-        if (_proxy) {
+        MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+        if (pMtwe) {
+            QString sCurPath = pMtwe->qGetCurPath();
+            if (sCurPath != "") {
+                DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(sCurPath);
+                if (_proxy) {
 
-            Outline ol = _proxy->outline();
-            foreach (const Section &s, ol) {   //  1 级显示
-                if (s.link.page > 0) {
-                    auto itemList = getItemList(s.title, s.link.page, s.link.left, s.link.top);
-                    model->appendRow(itemList);
+                    Outline ol = _proxy->outline();
+                    foreach (const Section &s, ol) {   //  1 级显示
+                        if (s.link.page > 0) {
+                            auto itemList = getItemList(s.title, s.link.page, s.link.left, s.link.top);
+                            model->appendRow(itemList);
 
-                    parseCatalogData(s, itemList.at(0));
+                            parseCatalogData(s, itemList.at(0));
+                        }
+                    }
+
+                    int nCurPage = _proxy->currentPageNo();
+                    OnFilePageChanged(QString::number(nCurPage));
                 }
             }
-
-            int nCurPage = _proxy->currentPageNo();
-            SlotFilePageChanged(QString::number(nCurPage));
         }
     }
 }
@@ -155,20 +166,26 @@ void CatalogTreeView::SlotOpenFileOk(QString path)
 //  点击 任一行, 实现 跳转页面
 void CatalogTreeView::SlotClicked(const QModelIndex &index)
 {
-    DocummentProxy *_proxy = DocummentProxy::instance();
-    if (_proxy) {
-        int nPage = index.data(Qt::UserRole + 1).toInt();
-        nPage--;
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    if (pMtwe) {
+        QString sCurPath = pMtwe->qGetCurPath();
+        if (sCurPath != "") {
+            DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(sCurPath);
+            if (_proxy) {
+                int nPage = index.data(Qt::UserRole + 1).toInt();
+                nPage--;
 
-        double left = index.data(Qt::UserRole + 2).toDouble();
-        double top = index.data(Qt::UserRole + 3).toDouble();
+                double left = index.data(Qt::UserRole + 2).toDouble();
+                double top = index.data(Qt::UserRole + 3).toDouble();
 
-        _proxy->jumpToOutline(left, top, nPage);
+                _proxy->jumpToOutline(left, top, nPage);
+            }
+        }
     }
 }
 
 //  文档页变化, 目录高亮随之变化
-void CatalogTreeView::SlotFilePageChanged(const QString &sPage)
+void CatalogTreeView::OnFilePageChanged(const QString &sPage)
 {
     this->clearSelection(); //  清除 之前的选中
 
@@ -220,11 +237,17 @@ void CatalogTreeView::SlotFilePageChanged(const QString &sPage)
 void CatalogTreeView::SlotCollapsed(const QModelIndex &index)
 {
     Q_UNUSED(index);
-    DocummentProxy *_proxy = DocummentProxy::instance();
-    if (_proxy) {
-        int nCurPage = _proxy->currentPageNo();
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    if (pMtwe) {
+        QString sCurPath = pMtwe->qGetCurPath();
+        if (sCurPath != "") {
+            DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(sCurPath);
+            if (_proxy) {
+                int nCurPage = _proxy->currentPageNo();
 
-        SlotFilePageChanged(QString::number(nCurPage));
+                OnFilePageChanged(QString::number(nCurPage));
+            }
+        }
     }
 }
 
@@ -232,10 +255,16 @@ void CatalogTreeView::SlotCollapsed(const QModelIndex &index)
 void CatalogTreeView::SlotExpanded(const QModelIndex &index)
 {
     if (index == this->selectionModel()->currentIndex()) {  //  展开的节点 是 高亮节点
-        DocummentProxy *_proxy = DocummentProxy::instance();
-        if (_proxy) {
-            int nCurPage = _proxy->currentPageNo();
-            SlotFilePageChanged(QString::number(nCurPage));
+        MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+        if (pMtwe) {
+            QString sCurPath = pMtwe->qGetCurPath();
+            if (sCurPath != "") {
+                DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(sCurPath);
+                if (_proxy) {
+                    int nCurPage = _proxy->currentPageNo();
+                    OnFilePageChanged(QString::number(nCurPage));
+                }
+            }
         }
     }
 }
@@ -245,15 +274,21 @@ void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelInd
 {
     Q_UNUSED(previous);
 
-    DocummentProxy *_proxy = DocummentProxy::instance();
-    if (_proxy) {
-        int nPage = current.data(Qt::UserRole + 1).toInt();
-        nPage--;
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    if (pMtwe) {
+        QString sCurPath = pMtwe->qGetCurPath();
+        if (sCurPath != "") {
+            DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(sCurPath);
+            if (_proxy) {
+                int nPage = current.data(Qt::UserRole + 1).toInt();
+                nPage--;
 
-        double left = current.data(Qt::UserRole + 2).toDouble();
-        double top = current.data(Qt::UserRole + 3).toDouble();
+                double left = current.data(Qt::UserRole + 2).toDouble();
+                double top = current.data(Qt::UserRole + 3).toDouble();
 
-        _proxy->jumpToOutline(left, top, nPage);
+                _proxy->jumpToOutline(left, top, nPage);
+            }
+        }
     }
 }
 

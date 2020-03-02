@@ -87,18 +87,6 @@ void MainOperationWidget::__SearchExit()
     slotOpenFileOk("");
 }
 
-void MainOperationWidget::onDocProxyMsg(const QString &msgContent)
-{
-    MsgModel mm;
-    mm.fromJson(msgContent);
-
-    int nMsg = mm.getMsgType();
-    if (nMsg == MSG_OPERATION_OPEN_FILE_OK) {
-        QString sPath = mm.getPath();
-        slotOpenFileOk(sPath);
-    }
-}
-
 DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QString &objName)
 {
     auto btn = new DToolButton(this);
@@ -114,7 +102,6 @@ DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QStrin
 
 void MainOperationWidget::initConnect()
 {
-    connect(this, SIGNAL(sigOpenFileOk(const QString &)), SLOT(slotOpenFileOk(const QString &)));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
 }
@@ -170,9 +157,15 @@ int MainOperationWidget::dealWithData(const int &msgType, const QString &msgCont
 
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
-    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        slotOpenFileOk(msgContent);
     }
 
     return 0;
+}
+
+int MainOperationWidget::qDealWithData(const int &msgType,  const QString &msgContent)
+{
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        slotOpenFileOk(msgContent);
+    }
+    return MSG_NO_OK;
 }

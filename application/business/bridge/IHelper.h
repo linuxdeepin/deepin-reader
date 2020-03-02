@@ -30,14 +30,16 @@ protected:
 
 public:
     virtual ~IHelper() {}
-    virtual void qDealWithData(const int &, const QString &) = 0;
+    virtual QString qDealWithData(const int &, const QString &) = 0;
+    virtual void qSetCurrentPath(const QString &) = 0;
 };
 
 class Helper : public IHelper
 {
 public:
     explicit Helper(QObject *parent = nullptr);
-    void qDealWithData(const int &msgType, const QString &msgContent) override;
+    QString qDealWithData(const int &msgType, const QString &msgContent) override;
+    void qSetCurrentPath(const QString &) override;
 
 private:
     HelperImpl  *m_pAnnotatinHelperImpl = nullptr;

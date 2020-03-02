@@ -36,6 +36,7 @@ public:
     //  主题更新信号
 signals:
     void sigUpdateTheme();
+    void sigDealWithData(const int &, const QString &);
 
 protected:
     virtual void initActions() = 0;

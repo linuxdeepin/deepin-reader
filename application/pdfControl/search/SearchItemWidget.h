@@ -45,6 +45,10 @@ public:
     ~SearchItemWidget() override;
 
 public:
+    // IObserver interface
+    int dealWithData(const int &, const QString &) override;
+
+public:
     void setTextEditText(const QString &);
     void setSerchResultText(const QString &);
     bool bSelect();
@@ -59,9 +63,6 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
     void paintEvent(QPaintEvent *e) override;
 
-public:
-    // IObserver interface
-    int dealWithData(const int &, const QString &) override;
 
 private:
     DLabel *m_pSearchResultNum = nullptr;

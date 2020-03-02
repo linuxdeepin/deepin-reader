@@ -40,20 +40,16 @@ public:
     explicit PagingWidget(CustomWidget *parent = nullptr);
     ~PagingWidget() override;
 
-signals:
-    void sigDocFilePageChange(const QString &);
-    void sigDocFileOpenOk(QString strpath);
-
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
+    int qDealWithData(const int &, const QString &) override;
 
 private slots:
     void slotPrePageBtnClicked();
     void slotNextPageBtnClicked();
     void slotUpdateTheme();
-    void SlotDocFilePageChange(const QString &);
-    void SlotDocFileOpenOk(QString strpath);
+
     void SlotJumpPageLineEditReturnPressed();
 
 private:
@@ -64,12 +60,17 @@ private:
     void __NormalChangePage();
     void __PageNumberJump();
 
+    void OnDocFilePageChange(const QString &);
+    void OnDocFileOpenOk(const QString &strpath);
+
 private:
     DLabel              *m_pTotalPagesLab = nullptr;        // 当前文档总页数标签
     DLabel              *m_pCurrantPageLab = nullptr;       // 当前文档当前页码
     DIconButton         *m_pPrePageBtn = nullptr;           // 按钮 前一页
     DIconButton         *m_pNextPageBtn = nullptr;          // 按钮 后一页
     DLineEdit           *m_pJumpPageLineEdit = nullptr;     // 输入框 跳转页码
+
+
 };
 
 #endif // PAGINGWIDGET_H

@@ -40,13 +40,13 @@ public:
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
+
     void setBSelect(const bool &paint);
     void rotateThumbnail(int);
     void qSetBookMarkShowStatus(const bool &bshow);
 
 protected:
     void initWidget() override;
-
 };
 
 #endif  // THUMBNAILITEMWIDGET_H

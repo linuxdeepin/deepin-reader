@@ -9,6 +9,11 @@
 
 namespace {
 
+enum E_RETURN_MSG {
+    MSG_OK = 0,
+    MSG_NO_OK
+};
+
 //  消息类型
 enum E_MSG_TYPE {
     E_MSG_TYPE_BEGIN = 0,
@@ -17,8 +22,6 @@ enum E_MSG_TYPE {
     E_DOCPROXY_MSG_TYPE,
     E_FILE_MSG,
     E_TITLE_MSG_TYPE,
-    E_SHORTKEY_MSG_TYPE,
-    E_FILE_DATA_MSG,
     E_MSG_TYPE_END
 };
 
@@ -27,9 +30,6 @@ enum E_APP_MSG_TYPE {
     E_APP_MSG_TYPE_BEGIN = E_MSG_TYPE_END + 50,
     APP_EXIT,
     APP_EXIT_NOTHING,
-    APP_EXIT_SAVE_FILE,                 //  应用退出 保存文档
-    APP_EXIT_NOT_SAVE_FILE,             //  应用退出 不保存文档
-    APP_EXIT_NOT_CHANGE_FILE,           //  应用退出 文档未修改
     E_APP_MSG_TYPE_END
 };
 
@@ -61,10 +61,7 @@ enum E_TAB_TYPE {
     MSG_TAB_ADD,                    //  添加 tab 消息
     MSG_TAB_REMOVE,                 //  删除 tab 消息
     MSG_TAB_DATA_CHANGE,            //  文档数据有变化消息
-    MSG_TAB_SAVE_FILE,              //  关闭当前文档　消息
     MSG_TAB_SHOW_FILE_CHANGE,       //  文档 显示切换消息
-    MSG_TAB_NOT_SAVE_FILE,          //  关闭当前文档　消息
-    MSG_TAB_NOT_CHANGE_SAVE_FILE,   //  关闭当前文档　消息
     MSG_TAB_MSG_END,
 };
 
@@ -110,28 +107,30 @@ enum E_DOC_TYPE_MSG {
     MSG_OPEN_FILE_PATH,             //  打开的文件消息
 //    MSG_OPEN_FILE_PATH_S,           //  打开的文件消息
     MSG_OPERATION_OPEN_FILE_OK,     //  打开文件成功, 要告诉所有人
-    MSG_DOC_OPEN_FILE_START,      //  开始打开文件
+//    MSG_DOC_OPEN_FILE_START,      //  开始打开文件
     MSG_OPERATION_OPEN_FILE_FAIL,       //  打开文件失败
     MSG_OPERATION_FIRST_PAGE,                           //  第一页
     MSG_OPERATION_PREV_PAGE,                            //  上一页
     MSG_OPERATION_NEXT_PAGE,                            //  下一页
     MSG_OPERATION_END_PAGE,                             //  最后一页
     MSG_FILE_PAGE_CHANGE,                               //  文档 页码变化消息
+    MSG_SAVE_FILE,                                      //  关闭当前文档　消息
+    MSG_NOT_SAVE_FILE,                                  //  关闭当前文档　消息
+    MSG_NOT_CHANGE_SAVE_FILE,                           //  关闭当前文档　消息
 };
 
 //  书签消息
 enum E_BOOKMARK_MSG {
-    MSG_OPERATION_ADD_BOOKMARK = MSG_FILE_PAGE_CHANGE + 50,           //  添加书签
-    MSG_OPERATION_TEXT_ADD_BOOKMARK,        //  添加书签
+    E_BOOKMARK_MSG_BEGIN = MSG_FILE_PAGE_CHANGE + 50,
+    MSG_OPERATION_ADD_BOOKMARK,            //  添加书签
     MSG_OPERATION_DELETE_BOOKMARK,          //  删除书签
-    MSG_BOOKMARK_DLTITEM,                   //  删除指定书签 消息
-    MSG_OPERATION_RIGHT_SELECT_BOOKMARK,    //  右键选择书签
+    E_BOOKMARK_MSG_END
 };
 
 
 //  高亮&注释消息
 enum E_NOTE_MSG {
-    E_NOTE_MSG_BEGIN = MSG_OPERATION_RIGHT_SELECT_BOOKMARK + 50,
+    E_NOTE_MSG_BEGIN = E_BOOKMARK_MSG_END + 50,
     MSG_NOTE_ADD_CONTENT,        //  添加注释内容 消息
     MSG_NOTE_ADD_HIGHLIGHT_COLOR,       //  添加高亮
     MSG_NOTE_UPDATE_HIGHLIGHT_COLOR,    //  更新 高亮显示
@@ -144,7 +143,6 @@ enum E_NOTE_MSG {
     MSG_NOTE_UPDATE_ITEM,               //  更新高亮注释节点
     MSG_NOTE_DELETE_CONTENT,            //  删除注释内容 消息
     MSG_NOTE_DELETE_ITEM,               //  删除注释子节点
-    MSG_NOTE_SELECT_ITEM,               //  选择注释子节点 消息
     MSG_NOTE_PAGE_ADD,                  //  页面注释显示 可以点击添加
     MSG_NOTE_PAGE_SHOW_NOTEWIDGET,      //  页面注释显示 注释内容界面
     MSG_NOTE_PAGE_ADD_CONTENT,          //  页面注释 添加内容

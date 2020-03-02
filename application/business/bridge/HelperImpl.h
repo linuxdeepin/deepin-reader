@@ -21,11 +21,6 @@
 
 #include <QObject>
 
-enum E_RETURN_MSG {
-    MSG_OK = 0,
-    MSG_NO_OK
-};
-
 class HelperImpl : public QObject
 {
 protected:
@@ -33,7 +28,12 @@ protected:
 
 public:
     virtual ~HelperImpl() {}
-    virtual int qDealWithData(const int &, const QString &) = 0;
+    virtual QString qDealWithData(const int &, const QString &) = 0;
+    void qSetCurrentPath(const QString &);
+
+protected:
+    QString         m_strPath = "";
+    QList<int>      m_pMsgList;
 };
 
 #endif // HELPERIMPL_H

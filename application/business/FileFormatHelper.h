@@ -6,7 +6,7 @@
 #include "docview/commonstruct.h"
 
 namespace  FFH {
-QString getFileFilter(const int &nCurDocType)
+static QString getFileFilter(const int &nCurDocType)
 {
     QString sFilter = "";
     if (nCurDocType == DocType_PDF) {
@@ -26,7 +26,7 @@ QString getFileFilter(const int &nCurDocType)
     return sFilter;
 }
 
-QString getFilePath(const QString &inputPath, const int &nCurDocType)
+static QString getFilePath(const QString &inputPath, const int &nCurDocType)
 {
     QString filePath = inputPath;
     if (nCurDocType == DocType_PDF) {
@@ -55,7 +55,7 @@ QString getFilePath(const QString &inputPath, const int &nCurDocType)
     return filePath;
 }
 
-DocType_EM setCurDocuType(const QString &sCompleteSuffix)
+static DocType_EM setCurDocuType(const QString &sCompleteSuffix)
 {
     DocType_EM m_nCurDocType = DocType_NULL;
     if (sCompleteSuffix == "pdf" || sCompleteSuffix.endsWith("pdf")) {

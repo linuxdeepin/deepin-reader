@@ -5,8 +5,10 @@
 
 #include <DSpinner>
 
-class PlayControlWidget;
 class QStackedLayout;
+
+class PlayControlWidget;
+class FileViewWidget;
 
 /**
  * @brief The DocShowShellWidget class
@@ -27,12 +29,13 @@ signals:
     void sigHideCloseBtn();
     void sigShowFileFind();
     void sigChangePlayCtrlShow(bool bshow);
-    void sigOpenFileOk(const QString &);
     void sigTitleMsg(const QString &);
 
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
+    int qDealWithData(const int &, const QString &) override;
+    bool OpenFilePath(const QString &);
 
     // QWidget interface
 protected:
@@ -45,15 +48,13 @@ private slots:
     void slotBtnCloseClicked();
     void slotUpdateTheme();
     void slotChangePlayCtrlShow(bool bshow);
-    void slotOpenFileOk(const QString &);
 
     void slotDealWithData(const int &, const QString &msgContent = "");
 
 private:
+    void OnOpenFileOk();
     void initConnections();
     int dealWithNotifyMsg(const QString &);
-
-    void onShowFileAttr();
     void onOpenNoteWidget(const QString &);
     void onShowNoteWidget(const QString &);
 
@@ -61,7 +62,6 @@ private:
     void __ShowPageNoteWidget(const QString &);
     void InitSpinner();
     /****   end     wzx 2020.2.18   ********/
-    void OnDocProxyMsg(const QString &);
 
     // CustomWidget interface
 protected:
@@ -69,6 +69,7 @@ protected:
 
 private:
     PlayControlWidget   *m_pctrlwidget = nullptr;
+    FileViewWidget      *m_pFileViewWidget = nullptr;
     DSpinner            *m_pSpiner = nullptr;
     DWidget             *m_pSpinerWidget = nullptr;
     QStackedLayout      *m_playout = nullptr;

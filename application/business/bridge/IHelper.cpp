@@ -19,9 +19,14 @@
 
 #include "IHelper.h"
 
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonParseError>
+
 #include "HelperImpl.h"
 #include "AnnotationHelper.h"
 #include "DocFileHelper.h"
+#include "MsgHeader.h"
 
 IHelper::IHelper(QObject *parent)
     : QObject(parent)
@@ -36,10 +41,24 @@ Helper::Helper(QObject *parent)
     m_pDocHelperImpl = new DocFileHelper(this);
 }
 
-void Helper::qDealWithData(const int &msgType, const QString &msgContent)
+QString Helper::qDealWithData(const int &msgType, const QString &msgContent)
 {
-    int nRes = m_pAnnotatinHelperImpl->qDealWithData(msgType, msgContent);
-    if (nRes == MSG_NO_OK) {
-        m_pDocHelperImpl->qDealWithData(msgType, msgContent);
+    QString sRes = m_pAnnotatinHelperImpl->qDealWithData(msgType, msgContent);
+
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
+    if (error.error == QJsonParseError::NoError) {
+        QJsonObject obj = doc.object();
+        int nReturn = obj.value("return").toInt();
+        if (nReturn == MSG_NO_OK) {
+            sRes = m_pDocHelperImpl->qDealWithData(msgType, msgContent);
+        }
     }
+    return sRes;
+}
+
+void Helper::qSetCurrentPath(const QString &sCurPath)
+{
+    m_pAnnotatinHelperImpl->qSetCurrentPath(sCurPath);
+    m_pDocHelperImpl->qSetCurrentPath(sCurPath);
 }

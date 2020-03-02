@@ -24,9 +24,14 @@ public:
     explicit TitleWidget(CustomWidget *parent = nullptr);
     ~TitleWidget() override;
 
+private:
+    static TitleWidget *g_onlyTitleWdiget;
+
+public:
+    static TitleWidget *Instance();
+
 signals:
     void sigSetFindWidget(const int &);
-    void sigOpenFileOk(const QString &);
     void sigAppFullScreen();
     void sigMagnifierCancel();
     void sigTabMsg(const QString &);
@@ -34,7 +39,7 @@ signals:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
-
+    int qDealWithData(const int &, const QString &) override;
     // CustomWidget interface
 protected:
     void initWidget() override;
@@ -74,7 +79,6 @@ private:
     void setMagnifierState();
     void SetBtnDisable(const bool &bAble);
 
-    void onDocProxyMsg(const QString &msgContent);
 private:
     QStringList shortKeyList;
 

@@ -38,6 +38,7 @@ signals:
     void sigDealWithData(const int &, const QString &);
     void sigTabBarIndexChange(const QString &);
     void sigAddTab(const QString &);
+    void sigCloseTab(const QString &);
 
     // IObserver interface
 public:

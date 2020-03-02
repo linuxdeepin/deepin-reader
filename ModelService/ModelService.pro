@@ -26,8 +26,7 @@ HEADERS += \
     ModuleHeader.h \
     NotifySubject.h \
     SubjectThread.h \
-    MsgModel.h \
-    FileStateHeader.h
+    MsgModel.h
 
 
 QMAKE_PKGCONFIG_LIBDIR = $$target.path
