@@ -59,10 +59,10 @@ signals:
     void sigTitleMsg(const QString &);
     void sigUpdateTheme();
     void sigDealWithData(const int &, const QString &);
-    void sigDealWithKeyMsg(const QString &);
 
 public:
     virtual int qDealWithData(const int &, const QString &);
+    virtual int qDealWithShortKey(const QString &);
 
 protected:
     virtual void initWidget() = 0;

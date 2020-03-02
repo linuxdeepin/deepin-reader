@@ -22,7 +22,6 @@
 #include "ModelService.h"
 
 class AppInfo;
-class FileDataManager;
 class DocummentFileHelper;
 
 class IHelper;
@@ -50,7 +49,6 @@ public:
     DBService           *m_pDBService = nullptr;
     ModelService        *m_pModelService = nullptr;
     AppInfo             *m_pAppInfo = nullptr;
-    FileDataManager     *m_pDataManager = nullptr;
     DocummentFileHelper *m_pDocummentFileHelper = nullptr;
 
     IHelper              *m_pHelper = nullptr;

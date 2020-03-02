@@ -38,12 +38,18 @@ signals:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
+
+    // CustomWidget interface
+public:
     int qDealWithData(const int &, const QString &) override;
+    int qDealWithShortKey(const QString &) override;
+
     // CustomWidget interface
 protected:
     void initWidget() override;
 
 private slots:
+    void SlotDealWithData(const int &, const QString &);
     void slotSetFindWidget(const int &);
     void slotUpdateTheme();
     void slotOpenFileOk(const QString &);
@@ -56,7 +62,6 @@ private slots:
     void SlotScaleMenuBtnClicked();
 
     void SlotSetCurrentTool(const QString &);
-    void SlotDealWithShortKey(const QString &);
     void SlotTabMsg(const QString &);
 
     void SlotCurrentScale(const int &);
@@ -78,6 +83,10 @@ private:
     void setMagnifierState();
     void SetBtnDisable(const bool &bAble);
 
+    void OnShortCut_Alt1();
+    void OnShortCut_Alt2();
+    void OnShortCut_CtrlM();
+
 private:
     QStringList shortKeyList;
 
@@ -94,6 +103,7 @@ private:
     ScaleMenu       *m_pScaleMenu = nullptr;
 
     int m_nCurHandleShape = -1;  //  当前的选择工具状态
+
 };
 
 #endif  // TITLEWIDGET_H

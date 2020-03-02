@@ -83,6 +83,7 @@ void NotifySubject::NotifyObservers(const int &msgType, const QString &msgConten
                         <<  "   end ";
 #endif
                 break;
+//            }
             }
         }
     }

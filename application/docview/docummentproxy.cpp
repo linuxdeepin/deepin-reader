@@ -6,8 +6,6 @@
 #include <QDebug>
 #include <QMutex>
 
-#include "../business/FileDataManager.h"
-
 static QMutex mutexlockgetimage;
 QMap<QString, DocummentProxy *> DocummentProxy::m_proxymap;
 

@@ -21,9 +21,7 @@
 #include "NotesItemWidget.h"
 
 #include "business/AppInfo.h"
-#include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
-#include "business/FileDataManager.h"
 
 #include "business/bridge/IHelper.h"
 #include "widgets/main/MainTabWidgetEx.h"
@@ -289,7 +287,7 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
         QString t_uuid = t_widget->noteUUId();
         int page = t_widget->nPageIndex();
 
-        auto pDocProxy = DocummentProxy::instance();
+        auto pDocProxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
         if (pDocProxy) {
             pDocProxy->jumpToHighLight(t_uuid, page);
         }
@@ -387,7 +385,7 @@ void NotesWidget::addNotesItem(const QString &text, const int &iType)
         QString t_strText = t_strList.at(2).trimmed();
         int t_nPage = t_strList.at(3).trimmed().toInt();
 
-        auto dproxy = DocummentProxy::instance();
+        auto dproxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
         if (nullptr == dproxy) {
             return;
         }
@@ -536,7 +534,7 @@ void ThreadLoadImageOfNote::run()
         for (int page = 0; page < m_stListNote.count(); page++) {
             if (!m_isLoaded)
                 break;
-            auto dproxy = DocummentProxy::instance();
+            auto dproxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
             if (nullptr == dproxy) {
                 break;
             }

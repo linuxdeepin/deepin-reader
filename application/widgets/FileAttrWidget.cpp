@@ -8,9 +8,10 @@
 
 #include "AttrScrollWidget.h"
 
-#include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
 #include "CustomControl/DFMGlobal.h"
+
+#include "main/MainTabWidgetEx.h"
 
 FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
@@ -38,7 +39,14 @@ FileAttrWidget::~FileAttrWidget()
 //  各个 对应的 label 赋值
 void FileAttrWidget::setFileAttr()
 {
-    auto dproxy = DocummentProxy::instance();
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+
+    QString filePath = pMtwe->qGetCurPath();
+    if (filePath == "") {
+        return;
+    }
+
+    auto dproxy = pMtwe->getCurFileAndProxy(filePath);
     if (nullptr == dproxy) {
         return;
     }
@@ -52,7 +60,6 @@ void FileAttrWidget::setFileAttr()
         }
     }
 
-    QString filePath = dApp->m_pDataManager->qGetCurrentFilePath();
     QFileInfo info(filePath);
     QString szTitle = info.fileName();
 
@@ -73,7 +80,7 @@ void FileAttrWidget::setFileAttr()
 
     scroll->setFrameShape(QFrame::NoFrame);
     scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    scroll->setWidget(new AttrScrollWidget);
+    scroll->setWidget(new AttrScrollWidget(filePath));
     scroll->setWidgetResizable(true);
 
     frameLayout->addWidget(scroll);

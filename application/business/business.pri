@@ -8,8 +8,7 @@ HEADERS += \
     $$PWD/bridge/HelperImpl.h \
     $$PWD/bridge/AnnotationHelper.h \
     $$PWD/bridge/DocFileHelper.h \
-    $$PWD/AppInfo.h \
-    $$PWD/FileDataManager.h
+    $$PWD/AppInfo.h
 
 SOURCES += \
     $$PWD/PrintManager.cpp \
@@ -20,5 +19,4 @@ SOURCES += \
     $$PWD/bridge/HelperImpl.cpp \
     $$PWD/bridge/AnnotationHelper.cpp \
     $$PWD/bridge/DocFileHelper.cpp \
-    $$PWD/AppInfo.cpp \
-    $$PWD/FileDataManager.cpp
+    $$PWD/AppInfo.cpp

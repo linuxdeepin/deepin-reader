@@ -22,14 +22,14 @@
 #include <QPainter>
 #include <QPrintPreviewDialog>
 
-#include "business/FileDataManager.h"
+#include "docview/docummentproxy.h"
 
 #include "widgets/main/MainTabWidgetEx.h"
 
-PrintManager::PrintManager(QObject *parent)
+PrintManager::PrintManager(const QString &sPath, QObject *parent)
     : QObject(parent)
 {
-
+    setPrintPath(sPath);
 }
 
 void PrintManager::showPrintDialog(DWidget *widget)
@@ -45,43 +45,40 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
 {
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
     if (pMtwe) {
-        QString sCurPath = pMtwe->qGetCurPath();
-        if (sCurPath != "") {
-            DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(sCurPath);
-            if (!_proxy) {
+        DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(m_strPrintPath);
+        if (_proxy) {
+            //  文档实际大小
+            stFileInfo fileInfo;
+            _proxy->docBasicInfo(fileInfo);
 
-                //  文档实际大小
-                stFileInfo fileInfo;
-                _proxy->docBasicInfo(fileInfo);
+            int nPageSize = _proxy->getPageSNum();  //  pdf 页数
 
-                int nPageSize = _proxy->getPageSNum();  //  pdf 页数
+            printer->setDocName(m_strPrintName);
 
-                printer->setDocName(m_strPrintName);
+            QPainter painter(printer);
+            painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
+            painter.begin(printer);
 
-                QPainter painter(printer);
-                painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
-                painter.begin(printer);
+            QRect rect = painter.viewport();
 
-                QRect rect = painter.viewport();
+            for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
+                QImage image;
 
-                for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
-                    QImage image;
-
-                    bool rl = _proxy->getImage(iIndex, image, rect.width(), rect.height());
-                    if (rl) {
-                        painter.drawPixmap(0, 0, QPixmap::fromImage(image));
-                        if (iIndex < nPageSize - 1)
-                            printer->newPage();
-                    }
+                bool rl = _proxy->getImage(iIndex, image, rect.width(), rect.height());
+                if (rl) {
+                    painter.drawPixmap(0, 0, QPixmap::fromImage(image));
+                    if (iIndex < nPageSize - 1)
+                        printer->newPage();
                 }
-                painter.end();
             }
+            painter.end();
         }
     }
 }
 
 void PrintManager::setPrintPath(const QString &strPrintPath)
 {
+    m_strPrintPath = strPrintPath;
     QString sPath = strPrintPath;
     int nLastPos = sPath.lastIndexOf('/');
     nLastPos++;

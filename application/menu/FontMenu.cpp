@@ -24,9 +24,10 @@
 
 #include "MsgModel.h"
 
-#include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
 #include "utils/PublicFunction.h"
+
+#include "widgets/main/MainTabWidgetEx.h"
 
 FontMenu::FontMenu(DWidget *parent):
     CustomMenu("FontMenu", parent)
@@ -41,8 +42,11 @@ FontMenu::FontMenu(DWidget *parent):
 
 int FontMenu::qDealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK || msgType == MSG_TAB_SHOW_FILE_CHANGE) {
         OnFileOpenOk(msgContent);
+    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
+        OnShortKey(msgContent);
+        return MSG_OK;
     }
 
     return MSG_NO_OK;
@@ -145,7 +149,7 @@ void FontMenu::slotRotateR()
  */
 void FontMenu::OnFileOpenOk(const QString &sPath)
 {
-    FileDataModel fdm = dApp->m_pDataManager->qGetFileData(sPath);
+    FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(sPath);
 
     //单双页
     int value = fdm.qGetData(DoubleShow);
@@ -174,25 +178,25 @@ void FontMenu::OnFileOpenOk(const QString &sPath)
  * 处理键盘事件
  * @param keyType  事件内容
  */
-//void FontMenu::slotDealWithShortKey(const QString &keyType)
-//{
-//    if (keyType == KeyStr::g_ctrl_1) {
-//        //还原
-//        resetAdaptive();
-//    } else if (keyType == KeyStr::g_ctrl_2) {
-//        //自适应高
-//        slotFiteH();
-//    } else if (keyType == KeyStr::g_ctrl_3) {
-//        //自适应宽
-//        slotFiteW();
-//    } else if (keyType == KeyStr::g_ctrl_r) {
-//        //左旋转
-//        rotateThumbnail(false);
-//    } else if (keyType == KeyStr::g_ctrl_shift_r) {
-//        //右旋转
-//        rotateThumbnail(true);
-//    }
-//}
+void FontMenu::OnShortKey(const QString &keyType)
+{
+    if (keyType == KeyStr::g_ctrl_1) {
+        //还原
+        resetAdaptive();
+    } else if (keyType == KeyStr::g_ctrl_2) {
+        //自适应高
+        slotFiteH();
+    } else if (keyType == KeyStr::g_ctrl_3) {
+        //自适应宽
+        slotFiteW();
+    } else if (keyType == KeyStr::g_ctrl_r) {
+        //左旋转
+        rotateThumbnail(false);
+    } else if (keyType == KeyStr::g_ctrl_shift_r) {
+        //右旋转
+        rotateThumbnail(true);
+    }
+}
 
 /**
  * @brief FontMenu::initMenu

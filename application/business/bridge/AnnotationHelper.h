@@ -50,7 +50,6 @@ private:
     void __UpdatePageIconAnnotation(const QString &);
 
 private:
-    void UpdateDocFileState();
     void notifyMsg(const int &msgType, const QString &msgContent);
 };
 

@@ -12,10 +12,10 @@
 #include "MsgModel.h"
 
 #include "docview/docummentproxy.h"
-#include "business/FileDataManager.h"
 #include "utils/PublicFunction.h"
 
 #include "pdfControl/note/NoteViewWidget.h"
+#include "widgets/main/MainTabWidgetEx.h"
 
 DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
     : CustomWidget("DocShowShellWidget", parent),
@@ -156,7 +156,7 @@ void DocShowShellWidget::onShowNoteWidget(const QString &contant)
 
         QString sContant = "";
 
-        auto pHelper = DocummentProxy::instance();
+        auto pHelper = MainTabWidgetEx::Instance()->getCurFileAndProxy();
         if (pHelper) {
             pHelper->getAnnotationText(t_strUUid, sContant, t_page.toInt());
         }
@@ -190,7 +190,7 @@ void DocShowShellWidget::__ShowPageNoteWidget(const QString &msgContent)
 
         QString sContant = "";
 
-        auto pHelper = DocummentProxy::instance();
+        auto pHelper = MainTabWidgetEx::Instance()->getCurFileAndProxy();
         if (pHelper) {
             pHelper->getAnnotationText(sUuid, sContant, sPage.toInt());
         }

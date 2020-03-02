@@ -19,23 +19,19 @@ enum E_MSG_TYPE {
     E_MSG_TYPE_BEGIN = 0,
     E_APP_MSG_TYPE,
     E_TABBAR_MSG_TYPE,
-    E_DOCPROXY_MSG_TYPE,
-    E_FILE_MSG,
-    E_TITLE_MSG_TYPE,
     E_MSG_TYPE_END
 };
 
-//  应用类 消息
-enum E_APP_MSG_TYPE {
-    E_APP_MSG_TYPE_BEGIN = E_MSG_TYPE_END + 50,
-    APP_EXIT,
-    APP_EXIT_NOTHING,
-    E_APP_MSG_TYPE_END
+enum E_HOMEWIDGET_MSG {
+    E_HOMEWIDGET_MSG_BEGIN = E_MSG_TYPE_END + 50,
+    E_OPEN_FILE,
+    E_HOMEWIDGET_MSG_END
 };
+
 
 //  central 消息
 enum E_CENTRAL_MSG {
-    E_CENTRAL_MSG_BEGIN = E_MSG_TYPE_END + 50,
+    E_CENTRAL_MSG_BEGIN = E_HOMEWIDGET_MSG_END + 50,
     CENTRAL_INDEX_CHANGE,
     CENTRAL_SHOW_TIP,                //  显示提示窗口
     E_CENTRAL_MSG_END
@@ -50,8 +46,6 @@ enum MSG_TYPE {
     MSG_OPERATION_UPDATE_THEME,         //  主题变了
     MSG_NOTIFY_KEY_MSG,                 //  按键通知消息
     MSG_NOTIFY_KEY_PLAY_MSG,            //  幻灯片模式按键通知消息
-    MSG_CLOSE_FILE,                     //  关闭当前文档　消息
-    MSG_JSON_NOTIFY_TYPE,
     MSG_TYPE_END,
 };
 

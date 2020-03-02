@@ -1,7 +1,6 @@
 #include "DefaultOperationMenu.h"
 
 #include "business/AppInfo.h"
-#include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
 
 #include "business/bridge/IHelper.h"
@@ -18,7 +17,8 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
     m_showPoint = showPoint;
     m_nRightPageNumber = nClickPage;
 
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    QString sCurPath = pMtwe->qGetCurPath();
 
     QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
     bool bBookState = pageList.contains(m_nRightPageNumber);
@@ -134,7 +134,7 @@ void DefaultOperationMenu::slotExitFullScreenClicked()
 
 void DefaultOperationMenu::slotAddIconNote()
 {
-    DocummentProxy *_proxy = DocummentProxy::instance();
+    DocummentProxy *_proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
     QString sUuid = _proxy->addIconAnnotation(m_pointclicked);        //  添加注释图标成功
     if (sUuid != "") {
         int nClickPage = _proxy->pointInWhichPage(m_pointclicked);

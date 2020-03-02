@@ -52,6 +52,7 @@ private:
     void setAppSetFiteHAndW();
     void resetAdaptive();
     void OnFileOpenOk(const QString &);
+    void OnShortKey(const QString &keyType);
 
 private:
     QStringList     shortKeyList;                 // 要处理的消息类型

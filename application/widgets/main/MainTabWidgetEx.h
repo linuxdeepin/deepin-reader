@@ -54,13 +54,16 @@ public:
     int dealWithData(const int &, const QString &) override;
 
 public:
+    QStringList qGetAllPath() const;
     QString qGetCurPath() const;
     int GetCurFileState(const QString &);
+    FileDataModel qGetFileData(const QString &) const;
+    void SetFileData(const QString &, const FileDataModel &);
 
     void InsertPathProxy(const QString &, DocummentProxy *);
 
     // CustomWidget interface
-    DocummentProxy *getCurFileAndProxy(const QString &sPath) const;
+    DocummentProxy *getCurFileAndProxy(const QString &sPath = "") const;
 
 protected:
     void initWidget() override;
@@ -68,9 +71,14 @@ protected:
 private:
     void InitConnections();
     void onShowFileAttr();
+
+    void OnAppMsgData(const QString &);
     void OnAppExit();
+    void OnAppShortCut(const QString &);
+
     void OnTabBarMsg(const QString &);
     void OnSaveFile();
+    void SaveFile(const int &nSaveType, const QString &);
     void OnSaveAsFile();
     void OnPrintFile();
     void OpenCurFileFolder();

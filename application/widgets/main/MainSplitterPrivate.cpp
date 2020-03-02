@@ -27,6 +27,15 @@ void MainSplitterPrivate::qDealWithData(const int &nType, const QString &sValue)
     }
 }
 
+void MainSplitterPrivate::saveData()
+{
+    for (int iLoop = Scale; iLoop < CurPage + 1; iLoop++) {
+        dApp->m_pDBService->setHistroyData(m_strPath, iLoop, m_pFileDataModel.qGetData(iLoop));
+    }
+
+    dApp->m_pDBService->qSaveData(m_strPath, DB_HISTROY);
+}
+
 QString MainSplitterPrivate::qGetPath() const
 {
     return m_strPath;
@@ -39,58 +48,38 @@ void MainSplitterPrivate::qSetPath(const QString &strPath)
 
 void MainSplitterPrivate::setThumbnailState(const QString &sValue)
 {
-    FileDataModel fdm = qGetFileData();
-    fdm.qSetData(Thumbnail, sValue.toInt());
-
-    qSetFileData(fdm);
+    m_pFileDataModel.qSetData(Thumbnail, sValue.toInt());
 }
 
 void MainSplitterPrivate::SetLeftWidgetIndex(const QString &sValue)
 {
-    FileDataModel fdm = qGetFileData();
-    fdm.qSetData(LeftIndex, sValue.toInt());
-
-    qSetFileData(fdm);
+    m_pFileDataModel.qSetData(LeftIndex, sValue.toInt());
 }
 
 void MainSplitterPrivate::OnSetViewChange(const QString &sValue)
 {
-    FileDataModel fdm = qGetFileData();
-    fdm.qSetData(DoubleShow, sValue.toInt());
-
-    qSetFileData(fdm);
+    m_pFileDataModel.qSetData(DoubleShow, sValue.toInt());
 }
 
 void MainSplitterPrivate::OnSetViewScale(const QString &sValue)
 {
-    FileDataModel fdm = qGetFileData();
-    fdm.qSetData(Scale, sValue.toInt());
-
-    qSetFileData(fdm);
+    m_pFileDataModel.qSetData(Scale, sValue.toInt());
 }
 
 void MainSplitterPrivate::OnSetViewRotate(const QString &sValue)
 {
-    FileDataModel fdm = qGetFileData();
-    fdm.qSetData(Rotate, sValue.toInt());
-
-    qSetFileData(fdm);
+    m_pFileDataModel.qSetData(Rotate, sValue.toInt());
 }
 
 void MainSplitterPrivate::OnSetViewHit(const QString &sValue)
 {
-    FileDataModel fdm = qGetFileData();
-    fdm.qSetData(Fit, sValue.toInt());
+    m_pFileDataModel.qSetData(Fit, sValue.toInt());
 
-    qSetFileData(fdm);
 }
 
 void MainSplitterPrivate::OnSetCurPage(const QString &sValue)
 {
-    FileDataModel fdm = qGetFileData();
-    fdm.qSetData(CurPage, sValue.toInt());
-
-    qSetFileData(fdm);
+    m_pFileDataModel.qSetData(CurPage, sValue.toInt());
 }
 
 FileDataModel MainSplitterPrivate::qGetFileData() const

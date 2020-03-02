@@ -23,12 +23,12 @@
 
 #include "TransparentTextEdit.h"
 
-#include "business/FileDataManager.h"
 #include "CustomControl/CustomClickLabel.h"
 #include "utils/PublicFunction.h"
 #include "docview/docummentproxy.h"
 
 #include "business/bridge/IHelper.h"
+#include "widgets/main/MainTabWidgetEx.h"
 
 NoteViewWidget::NoteViewWidget(CustomWidget *parent)
     : CustomWidget(QString("NoteViewWidget"), parent)
@@ -130,8 +130,7 @@ void NoteViewWidget::__FileNoteHideEvent()
     QString sText = m_pTextEdit->toPlainText().trimmed();
     if (m_pNoteUuid == "") {
         if (sText != "") {
-            QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-            QString msgContent = sCurPath + Constant::sQStringSep + sText + Constant::sQStringSep + m_pNotePage;
+            QString msgContent = sText + Constant::sQStringSep + m_pNotePage;
             sendMsg(MSG_NOTE_ADD_CONTENT, msgContent);
         }
     } else {
@@ -162,7 +161,7 @@ void NoteViewWidget::__PageNoteHideEvent()
 
                 dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_ADD_CONTENT, msgContent);
             } else {
-                auto pHelper = DocummentProxy::instance();
+                auto pHelper = MainTabWidgetEx::Instance()->getCurFileAndProxy();
                 if (pHelper) {
                     pHelper->removeAnnotation(m_pNoteUuid);
                 }

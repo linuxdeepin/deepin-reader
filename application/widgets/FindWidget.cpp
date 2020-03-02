@@ -30,8 +30,8 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-#include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
+#include "widgets/main/MainTabWidgetEx.h"
 
 FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)
@@ -93,7 +93,7 @@ void FindWidget::handleContentChanged()
 
 void FindWidget::slotFindNextBtnClicked()
 {
-    DocummentProxy *_proxy = DocummentProxy::instance();
+    DocummentProxy *_proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
     if (_proxy) {
         _proxy->findNext();
     }
@@ -102,7 +102,7 @@ void FindWidget::slotFindNextBtnClicked()
 
 void FindWidget::slotFindPrevBtnClicked()
 {
-    DocummentProxy *_proxy = DocummentProxy::instance();
+    DocummentProxy *_proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
     if (_proxy) {
         _proxy->findPrev();
     }

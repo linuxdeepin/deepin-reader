@@ -26,7 +26,6 @@
 
 #include "docview/docummentproxy.h"
 #include "utils/utils.h"
-#include "business/FileDataManager.h"
 
 #include "widgets/main/MainTabWidgetEx.h"
 

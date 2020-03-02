@@ -30,7 +30,6 @@ protected:
 
 private slots:
     void slotDealWithData(const int &, const QString &);
-    void slotDealWithKeyMsg(const QString &);
     void slotChooseBtnClicked();
     void slotUpdateTheme();
 

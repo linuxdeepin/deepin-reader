@@ -53,6 +53,11 @@ public:
     void qSetFileChange(const int &);
     int qGetFileChange();
 
+    void saveData();
+
+    FileDataModel qGetFileData() const;
+    void setFileData(const FileDataModel &) const;
+
 private:
     void InitWidget();
     void InitConnections();

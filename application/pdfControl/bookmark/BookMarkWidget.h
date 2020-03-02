@@ -80,7 +80,11 @@ public:
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
+    // CustomWidget interface
+
+public:
     int qDealWithData(const int &, const QString &) override;
+    int qDealWithShortKey(const QString &) override;
 
     int getBookMarkPage(const int &index);
 
@@ -95,7 +99,6 @@ private slots:
     void slotUpdateTheme();
     void slotRightSelectItem(const QString &);
     void slotSelectItemBackColor(QListWidgetItem *);
-    void slotDealWithShurtKey(const QString &);
 
 protected:
     void initWidget() override;
@@ -113,6 +116,7 @@ private:
     CustomListWidget    *m_pBookMarkListWidget = nullptr;
     DPushButton         *m_pAddBookMarkBtn = nullptr;
     LoadBookMarkThread  m_loadBookMarkThread;
+
 };
 
 #endif  // BOOKMARKFORM_H

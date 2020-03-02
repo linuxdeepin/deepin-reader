@@ -27,7 +27,7 @@
 #include <QJsonDocument>
 
 #include "../FileFormatHelper.h"
-#include "business/FileDataManager.h"
+
 #include "docview/docummentproxy.h"
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
@@ -51,7 +51,7 @@ void DocFileHelper::notifyMsg(const int &msgType, const QString &msgContent)
 
 void DocFileHelper::CloseFile(const int &iType, const QString &sPath)
 {
-    DocummentProxy *_proxy = DocummentProxy::instance();
+    DocummentProxy *_proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy(sPath);
     if (_proxy) {
         if (MSG_SAVE_FILE == iType || MSG_NOT_SAVE_FILE == iType) {
             bool bSave = iType == MSG_SAVE_FILE ? true : false;
@@ -61,17 +61,9 @@ void DocFileHelper::CloseFile(const int &iType, const QString &sPath)
                 dApp->m_pDBService->qSaveData(sPath, DB_BOOKMARK);
             }
         }
-
-        dApp->m_pDataManager->qSaveData(sPath);
-
         _proxy->closeFile();
     }
 }
-
-//void DocFileHelper::SlotDocFileOpenResult(bool rl)
-//{
-//    qDebug() << "           " << __func__;
-//}
 
 //  保存 数据
 void DocFileHelper::onSaveFile()
@@ -98,8 +90,6 @@ void DocFileHelper::onSaveFile()
             } else {
                 notifyMsg(CENTRAL_SHOW_TIP, tr("No changes"));
             }
-            //insert msg to FileFontTable
-            dApp->m_pDataManager->qSaveData(sCurPath);
         }
     }
 }
@@ -107,50 +97,52 @@ void DocFileHelper::onSaveFile()
 //  另存为
 void DocFileHelper::onSaveAsFile()
 {
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-    if (sCurPath != "") {
-        QFileInfo info(sCurPath);
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    if (pMtwe) {
+        QString sCurPath = pMtwe->qGetCurPath();
+        if (sCurPath != "") {
+            QFileInfo info(sCurPath);
 
-        QString sCompleteSuffix = info.completeSuffix();
-        DocType_EM nCurDocType = FFH::setCurDocuType(sCompleteSuffix);
+            QString sCompleteSuffix = info.completeSuffix();
+            DocType_EM nCurDocType = FFH::setCurDocuType(sCompleteSuffix);
 
-        QString sFilter = FFH::getFileFilter(nCurDocType);
+            QString sFilter = FFH::getFileFilter(nCurDocType);
 
-        if (sFilter != "") {
-            QFileDialog dialog;
-            dialog.selectFile(sCurPath);
-            QString filePath = dialog.getSaveFileName(nullptr, tr("Save as"), sCurPath, sFilter);
+            if (sFilter != "") {
+                QFileDialog dialog;
+                dialog.selectFile(sCurPath);
+                QString filePath = dialog.getSaveFileName(nullptr, tr("Save as"), sCurPath, sFilter);
 
-            if (filePath.endsWith("/.pdf")) {
-                DDialog dlg("", tr("Invalid file name"));
-                QIcon icon(PF::getIconPath("exception-logo"));
-                dlg.setIcon(icon /*QIcon(":/resources/exception-logo.svg")*/);
-                dlg.addButtons(QStringList() << tr("OK"));
-                QMargins mar(0, 0, 0, 30);
-                dlg.setContentLayoutContentsMargins(mar);
-                dlg.exec();
-                return;
-            }
-            if (filePath != "") {
-                if (sCurPath == filePath) {
-                    onSaveFile();
-                } else {
-                    QString sFilePath = FFH::getFilePath(filePath, nCurDocType);
+                if (filePath.endsWith("/.pdf")) {
+                    DDialog dlg("", tr("Invalid file name"));
+                    QIcon icon(PF::getIconPath("exception-logo"));
+                    dlg.setIcon(icon /*QIcon(":/resources/exception-logo.svg")*/);
+                    dlg.addButtons(QStringList() << tr("OK"));
+                    QMargins mar(0, 0, 0, 30);
+                    dlg.setContentLayoutContentsMargins(mar);
+                    dlg.exec();
+                    return;
+                }
+                if (filePath != "") {
+                    if (sCurPath == filePath) {
+                        onSaveFile();
+                    } else {
+                        QString sFilePath = FFH::getFilePath(filePath, nCurDocType);
 
-                    bool rl = DocummentProxy::instance()->saveas(sFilePath, true);
-                    if (rl) {
-                        //insert a new bookmark record to bookmarktabel
-                        dApp->m_pDBService->qSaveData(sFilePath, DB_BOOKMARK);
+                        bool rl = pMtwe->getCurFileAndProxy(sCurPath)->saveas(sFilePath, true);
+                        if (rl) {
+                            //insert a new bookmark record to bookmarktabel
+                            dApp->m_pDBService->qSaveData(sFilePath, DB_BOOKMARK);
 
-                        dApp->m_pDataManager->qSaveData(sFilePath);
-
-                        notifyMsg(MSG_OPERATION_OPEN_FILE_OK, sFilePath);
+                            notifyMsg(MSG_OPERATION_OPEN_FILE_OK, sFilePath);
+                        }
                     }
                 }
             }
         }
     }
 }
+
 
 //  跳转页面
 

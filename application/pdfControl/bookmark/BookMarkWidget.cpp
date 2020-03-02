@@ -22,7 +22,6 @@
 #include "MsgModel.h"
 
 #include "business/AppInfo.h"
-#include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
 
 #include "business/bridge/IHelper.h"
@@ -158,12 +157,12 @@ void BookMarkWidget::slotAddBookMark(const QString &sContent)
 
     auto item = addBookMarkItem(nPage);
     if (item) {
-        MsgModel mm;
-        mm.setMsgType(MSG_FILE_IS_CHANGE);
-        mm.setPath(sPath);
-        mm.setValue("1");
+//        MsgModel mm;
+//        mm.setMsgType(MSG_FILE_IS_CHANGE);
+//        mm.setPath(sPath);
+//        mm.setValue("1");
 
-        notifyMsg(E_FILE_MSG, mm.toJson());
+//        notifyMsg(E_FILE_MSG, mm.toJson());
 
         pageList.append(nPage);
         dApp->m_pDBService->setBookMarkList(sPath, pageList);
@@ -324,12 +323,12 @@ void BookMarkWidget::deleteIndexPage(const int &pageIndex)
 
         DocummentProxy *proxy =  pMtwe->getCurFileAndProxy(sPath);
         if (proxy) {
-            MsgModel mm;
-            mm.setMsgType(MSG_FILE_IS_CHANGE);
-            mm.setValue("1");
-            mm.setPath(sPath);
+//            MsgModel mm;
+//            mm.setMsgType(MSG_FILE_IS_CHANGE);
+//            mm.setValue("1");
+//            mm.setPath(sPath);
 
-            notifyMsg(E_FILE_MSG, mm.toJson());
+//            notifyMsg(E_FILE_MSG, mm.toJson());
 
             proxy->setBookMarkState(pageIndex, false);
 
@@ -451,7 +450,6 @@ void BookMarkWidget::initConnection()
             SLOT(slotLoadImage(const int &, const QImage &)));
 
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
-    connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)), SLOT(slotDealWithShurtKey(const QString &)));
 
     connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem *)), SLOT(slotSelectItemBackColor(QListWidgetItem *)));
 }
@@ -529,18 +527,6 @@ void BookMarkWidget::slotSelectItemBackColor(QListWidgetItem *item)
 }
 
 /**
- * @brief BookMarkWidget::slotDealWithShurtKey
- * 处理键盘事件
- * @param msgContent    事件内容
- */
-void BookMarkWidget::slotDealWithShurtKey(const QString &msgContent)
-{
-    if (msgContent == KeyStr::g_ctrl_b) {
-        slotAddBookMark();
-    }
-}
-
-/**
  * @brief BookMarkWidget::dealWithData
  * 处理全局消息
  * @param msgType:消息类型
@@ -551,11 +537,8 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更消息
         emit sigUpdateTheme();
-    } else if (MSG_NOTIFY_KEY_MSG == msgType) {  //  按键通知消息
-        if (m_pKeyMsgList.contains(msgContent)) {
-            emit sigDealWithKeyMsg(msgContent);
-        }
     }
+
     return 0;
 }
 
@@ -571,11 +554,22 @@ int BookMarkWidget::qDealWithData(const int &msgType, const QString &msgContent)
         slotAddBookMark(msgContent);
     }
 
-    int nRes = MSG_NO_OK;
     if (m_pMsgList.contains(msgType)) {
-        nRes = MSG_OK;
+        return MSG_OK;
     }
-    return  nRes;
+    return MSG_NO_OK;
+}
+
+int BookMarkWidget::qDealWithShortKey(const QString &s)
+{
+    if (s == KeyStr::g_ctrl_b) {
+        slotAddBookMark();
+    }
+
+    if (m_pKeyMsgList.contains(s)) {
+        return MSG_OK;
+    }
+    return MSG_NO_OK;
 }
 
 /**
@@ -591,7 +585,8 @@ int BookMarkWidget::getBookMarkPage(const int &index)
             reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
         if (pItemWidget) {
             int page = pItemWidget->nPageIndex();
-            QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+
+            QString sCurPath = MainTabWidgetEx::Instance()->qGetCurPath();
             QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
             if (pageList.contains(page)) {
                 return page;

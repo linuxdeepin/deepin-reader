@@ -23,6 +23,8 @@
 #include "widgets/LeftSidebarWidget.h"
 #include "docview/docummentproxy.h"
 
+#include "widgets/main/MainTabWidgetEx.h"
+
 SearchResWidget::SearchResWidget(DWidget *parent)
     : CustomWidget(QString("SearchResWidget"), parent)
 {
@@ -61,7 +63,7 @@ void SearchResWidget::__ClearSearchContent()
         m_loadSearchResThread.stopThread();
     }
     if (m_pSearchList->count() > 0) {
-        DocummentProxy *_proxy = DocummentProxy::instance();
+        DocummentProxy *_proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
         if (_proxy) {
             _proxy->clearsearch();
         }
@@ -86,7 +88,7 @@ void SearchResWidget::slotFlushSearchWidget(const QString &msgContent)
 //    notifyMsg(MSG_WIDGET_THUMBNAILS_VIEW, QString::number(1));
     m_bShowList = true;
 
-    DocummentProxy *_proxy = DocummentProxy::instance();
+    DocummentProxy *_proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
     if (_proxy) {
         connect(_proxy, SIGNAL(signal_searchRes(stSearchRes)), this, SLOT(slotGetSearchContant(stSearchRes)));
 
@@ -121,8 +123,8 @@ void SearchResWidget::slotSearchOver()
 
     m_pSearchList->clear();
 
-    disconnect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this,
-               SLOT(slotGetSearchContant(stSearchRes)));
+//    disconnect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this,
+//               SLOT(slotGetSearchContant(stSearchRes)));
 
     QList<stSearchRes> list = m_loadSearchResThread.searchList();
 
@@ -401,7 +403,7 @@ void LoadSearchResThread::run()
         if (!m_pSearchResWidget) {
             break;
         }
-        auto dproxy = DocummentProxy::instance();
+        auto dproxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
         if (nullptr == dproxy) {
             break;
         }

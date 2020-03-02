@@ -21,7 +21,6 @@
 #include <QValidator>
 
 #include "docview/docummentproxy.h"
-#include "business/FileDataManager.h"
 #include "business/bridge/IHelper.h"
 #include "widgets/main/MainTabWidgetEx.h"
 

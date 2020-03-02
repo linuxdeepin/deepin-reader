@@ -8,6 +8,8 @@
  * @brief   侧边栏显示
  */
 
+class MainOperationWidget;
+
 class LeftSidebarWidget : public CustomWidget
 {
     Q_OBJECT
@@ -30,7 +32,6 @@ protected:
     void initWidget() override;
 
 private slots:
-
     void slotUpdateTheme();
 
 private:
@@ -38,6 +39,10 @@ private:
     void onSetWidgetVisible(const int &);
 
     void SlotOpenFileOk(const QString &);
+
+private:
+    MainOperationWidget     *m_pMainOperationWidget = nullptr;
+
 };
 
 #endif  // LEFTSHOWWIDGET_H

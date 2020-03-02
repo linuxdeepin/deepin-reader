@@ -22,7 +22,7 @@
 
 #include "MsgModel.h"
 
-#include "business/FileDataManager.h"
+#include "widgets/main/MainTabWidgetEx.h"
 
 ScaleMenu::ScaleMenu(DWidget *parent)
     : CustomMenu("ScaleMenu", parent)
@@ -35,8 +35,11 @@ ScaleMenu::ScaleMenu(DWidget *parent)
 
 int ScaleMenu::qDealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK || msgType == MSG_TAB_SHOW_FILE_CHANGE) {
         OnFileOpenOk(msgContent);
+    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
+        onShortKey(msgContent);
+        return MSG_OK;
     }
 
     return MSG_NO_OK;
@@ -97,13 +100,11 @@ void ScaleMenu::slotDocProxyMsg(const QString &sContent)
     }
 }
 
-void ScaleMenu::slotDealWithShortKey(const QString &keyType)
+void ScaleMenu::onShortKey(const QString &keyType)
 {
     if (keyType == KeyStr::g_ctrl_smaller) {
-        //缩放
         sloPrevScale();
     } else if (keyType == KeyStr::g_ctrl_larger || keyType == KeyStr::g_ctrl_equal) {
-        //放大
         sloNextScale();
     }
 }
@@ -138,7 +139,7 @@ void ScaleMenu::InitConnection()
 
 void ScaleMenu::OnFileOpenOk(const QString &sPath)
 {
-    FileDataModel fdm = dApp->m_pDataManager->qGetFileData(sPath);
+    FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(sPath);
     int nScale = fdm.qGetData(Scale);
     if (nScale == 0) {
         nScale = 100;

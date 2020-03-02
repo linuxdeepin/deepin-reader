@@ -20,13 +20,14 @@
 
 #include <QDebug>
 
+#include "MainTabWidgetEx.h"
 #include "FileDataModel.h"
 #include "MsgModel.h"
 
 #include "business/SaveDialog.h"
-#include "business/FileDataManager.h"
 
 #include "business/bridge/IHelper.h"
+
 
 MainTabBar::MainTabBar(DWidget *parent)
     : DTabBar(parent)
@@ -119,7 +120,7 @@ void MainTabBar::AddFileTab(const QString &sContent)
 {
     QStringList filePaths;
 
-    QList<QString> sOpenFiles = dApp->m_pDataManager->qGetOpenFilePathList();
+    QList<QString> sOpenFiles = MainTabWidgetEx::Instance()->qGetAllPath();
 
     QStringList canOpenFileList = sContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
     foreach (auto s, canOpenFileList) {
@@ -162,7 +163,7 @@ QString MainTabBar::getFileName(const QString &strFilePath)
 //  新增
 void MainTabBar::SlotTabAddRequested()
 {
-    notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_o);
+    notifyMsg(E_OPEN_FILE);
 }
 
 //  关闭

@@ -53,9 +53,6 @@ private:
 
 private slots:
     void slotFileSlider(const int &);
-
-private:
-    QList<QString>          m_pKeyMsgList;
 };
 
 #endif // DOCUMMENTFILEHELPER_H

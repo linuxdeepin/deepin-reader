@@ -64,6 +64,7 @@ signals:
 public:
     int dealWithData(const int &, const QString &) override;
     int qDealWithData(const int &, const QString &) override;
+    int qDealWithShortKey(const QString &) override;
 
     // CustomWidget interface
 protected:
@@ -79,7 +80,6 @@ protected:
 
 private slots:
     void slotDealWithData(const int &, const QString &);
-    void slotDealWithKeyMsg(const QString &);
 
     void slotCustomContextMenuRequested(const QPoint &);
 
@@ -109,6 +109,9 @@ private:
     void setScaleRotateViewModeAndShow();
     bool OpenFilePath(const QString &);
 
+    void OnShortCutKey_Ctrl_l();
+    void OnShortCutKey_Ctrl_i();
+
 private:
     TextOperationMenu       *m_operatemenu = nullptr;
     DefaultOperationMenu    *m_pDefaultMenu = nullptr;
@@ -125,6 +128,7 @@ private:
 
     friend class FVMMouseEvent;
     friend class DocShowShellWidget;
+
 
 };
 

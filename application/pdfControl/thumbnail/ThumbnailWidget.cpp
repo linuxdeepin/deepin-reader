@@ -18,11 +18,9 @@
  */
 #include "ThumbnailWidget.h"
 
-#include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
 
 #include "business/bridge/IHelper.h"
-
 #include "widgets/main/MainTabWidgetEx.h"
 
 ThumbnailWidget::ThumbnailWidget(DWidget *parent)
@@ -287,7 +285,7 @@ void ThumbnailWidget::showItemBookMark(int ipage)
             pWidget->qSetBookMarkShowStatus(true);
         }
     } else {
-        QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+        QString sCurPath = MainTabWidgetEx::Instance()->qGetCurPath();
         QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
         foreach (int index, pageList) {
             auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(
@@ -317,33 +315,6 @@ void ThumbnailWidget::nextPage()
     dApp->m_pHelper->qDealWithData(MSG_OPERATION_NEXT_PAGE, "");
 }
 
-/**
- * @brief ThumbnailWidget::forScreenPageing
- * 全屏和放映时快捷键切换页 true:向下翻页  false:向上翻页
- */
-//void ThumbnailWidget::forScreenPageing(bool direction)
-//{
-//    if (DataManager::instance()->CurShowState() != FILE_NORMAL) {
-
-//        auto helper = DocummentProxy::instance();
-//        if (helper) {
-//            bool bstart = false;
-//            if (helper->getAutoPlaySlideStatu()) {
-//                helper->setAutoPlaySlide(false);
-//                bstart = true;
-//            }
-//            int nCurPage = helper->currentPageNo();
-//            direction ? nCurPage++ : nCurPage--;
-//            notifyMsg(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
-////            jumpToSpecifiedPage(nCurPage);
-//            if (bstart) {
-//                helper->setAutoPlaySlide(true);
-//                bstart = false;
-//            }
-//        }
-//    }
-//}
-
 // 关联成功打开文件槽函数
 void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
 {
@@ -367,7 +338,7 @@ void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
         m_nValuePreIndex = 0;
         fillContantToList();
 
-        FileDataModel fdm = dApp->m_pDataManager->qGetFileData(sPath);
+        FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(sPath);
         m_nRotate = fdm.qGetData(Rotate);
 
         if (m_nRotate < 0) {

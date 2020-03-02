@@ -32,7 +32,6 @@
 #include "docview/commonstruct.h"
 #include "docview/docummentproxy.h"
 #include "controller/FVMMouseEvent.h"
-#include "business/FileDataManager.h"
 #include "menu/DefaultOperationMenu.h"
 #include "menu/TextOperationMenu.h"
 #include "utils/PublicFunction.h"
@@ -52,7 +51,7 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
                    MSG_VIEWCHANGE_DOUBLE_SHOW, MSG_VIEWCHANGE_ROTATE, MSG_FILE_SCALE, MSG_VIEWCHANGE_FIT
                  };
 
-    m_pKeyMsgList = {KeyStr::g_ctrl_p, KeyStr::g_ctrl_l, KeyStr::g_ctrl_i};
+    m_pKeyMsgList = {KeyStr::g_ctrl_l, KeyStr::g_ctrl_i};
 
     setMouseTracking(true);  //  接受 鼠标滑动事件
 
@@ -126,25 +125,6 @@ void FileViewWidget::slotDealWithData(const int &msgType, const QString &msgCont
         break;
     default:
         break;
-    }
-}
-
-void FileViewWidget::slotDealWithKeyMsg(const QString &msgContent)
-{
-    if (!m_pProxy)
-        return;
-
-    if (msgContent == KeyStr::g_ctrl_p) {
-//        onPrintFile();
-    } else if (msgContent == KeyStr::g_ctrl_l) {
-        onFileAddAnnotation();
-    } else if (msgContent == KeyStr::g_ctrl_i) {
-        QString selectText;
-        if (m_pProxy->getSelectTextString(selectText))
-            onFileAddNote();
-        else {
-            notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
-        }
     }
 }
 
@@ -413,12 +393,12 @@ bool FileViewWidget::OpenFilePath(const QString &sPath)
         dApp->m_pDBService->qSelectData(sPath, DB_HISTROY);
         FileDataModel fdm = dApp->m_pDBService->getHistroyData(sPath);
 
-        dApp->m_pDataManager->qSetFileData(sPath, fdm);
+        m_nAdapteState = fdm.qGetData(Fit);
 
         int curPage = fdm.qGetData(CurPage);
-        int iscale = fdm.qGetData(Scale);          // 缩放
-        int doubPage = fdm.qGetData(DoubleShow);     // 是否是双页
-        int rotate = fdm.qGetData(Rotate);         // 文档旋转角度(0,1,2,3,4)
+        int iscale = m_nScale = fdm.qGetData(Scale);         // 缩放
+        int doubPage = m_nDoubleShow = fdm.qGetData(DoubleShow);   // 是否是双页
+        int rotate = m_rotateType = fdm.qGetData(Rotate);         // 文档旋转角度(0,1,2,3,4)
 
         iscale = (iscale > 500 ? 500 : iscale) <= 0 ? 100 : iscale;
         double scale = iscale / 100.0;
@@ -429,6 +409,7 @@ bool FileViewWidget::OpenFilePath(const QString &sPath)
         if (rl) {
             MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
             if (pMtwe) {
+                pMtwe->SetFileData(sPath, fdm);
                 pMtwe->InsertPathProxy(sPath, m_pProxy);       //  存储 filePath 对应的 proxy
             }
 
@@ -436,6 +417,23 @@ bool FileViewWidget::OpenFilePath(const QString &sPath)
         }
     }
     return false;
+}
+
+void FileViewWidget::OnShortCutKey_Ctrl_l()
+{
+    onFileAddAnnotation();
+}
+
+void FileViewWidget::OnShortCutKey_Ctrl_i()
+{
+    if (m_pProxy) {
+        QString selectText;
+        if (m_pProxy->getSelectTextString(selectText))
+            onFileAddNote();
+        else {
+            notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
+        }
+    }
 }
 
 void FileViewWidget::OnSetViewScale(const QString &msgConent)
@@ -500,12 +498,6 @@ void FileViewWidget::SlotDocFileOpenResult(bool openresult)
 
         emit signalDealWithData(MSG_OPERATION_OPEN_FILE_OK, "");
 
-        FileDataModel fdm = dApp->m_pDataManager->qGetFileData(m_strPath);      //  打开成功之后 获取之前数据
-        m_nScale = fdm.qGetData(Scale);
-        m_nDoubleShow = fdm.qGetData(DoubleShow);
-        m_rotateType = fdm.qGetData(Rotate);
-
-        m_nAdapteState = fdm.qGetData(Fit);
         onSetWidgetAdapt();
     } else {
         notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
@@ -547,11 +539,6 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgList.contains(msgType)) {
         emit sigDealWithData(msgType, msgContent);
-    } else if (msgType == MSG_NOTIFY_KEY_MSG && this->isVisible()) {
-        if (m_pKeyMsgList.contains(msgContent)) {
-            emit sigDealWithKeyMsg(msgContent);
-            return ConstantMsg::g_effective_res;
-        }
     }
 
     return 0;
@@ -576,5 +563,19 @@ int FileViewWidget::qDealWithData(const int &msgType, const QString &msgContent)
         return MSG_OK;
     }
 
+    return MSG_NO_OK;
+}
+
+int FileViewWidget::qDealWithShortKey(const QString &sKey)
+{
+    if (sKey == KeyStr::g_ctrl_l) {
+        OnShortCutKey_Ctrl_l();
+    } else if (sKey == KeyStr::g_ctrl_i) {
+        OnShortCutKey_Ctrl_i();
+    }
+
+    if (m_pKeyMsgList.contains(sKey)) {
+        return MSG_OK;
+    }
     return MSG_NO_OK;
 }

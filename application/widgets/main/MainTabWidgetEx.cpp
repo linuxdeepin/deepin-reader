@@ -28,7 +28,9 @@
 
 #include "business/SaveDialog.h"
 #include "business/PrintManager.h"
+
 #include "../FileAttrWidget.h"
+#include "../TitleWidget.h"
 
 #include "business/bridge/IHelper.h"
 
@@ -37,7 +39,7 @@ MainTabWidgetEx *MainTabWidgetEx::g_onlyApp = nullptr;
 MainTabWidgetEx::MainTabWidgetEx(DWidget *parent)
     : CustomWidget(MAIN_TAB_WIDGET, parent)
 {
-    m_pMsgList = {APP_EXIT, E_TABBAR_MSG_TYPE};
+    m_pMsgList = {E_APP_MSG_TYPE, E_TABBAR_MSG_TYPE};
 
     initWidget();
     InitConnections();
@@ -78,6 +80,20 @@ int MainTabWidgetEx::dealWithData(const int &msgType, const QString &msgContent)
     return 0;
 }
 
+QStringList MainTabWidgetEx::qGetAllPath() const
+{
+    QStringList pathList;
+
+    auto splitterList = this->findChildren<MainSplitter *>();
+    foreach (auto s, splitterList) {
+        QString sSplitterPath = s->qGetPath();
+        if (sSplitterPath != "") {
+            pathList.append(sSplitterPath);
+        }
+    }
+    return pathList;
+}
+
 QString MainTabWidgetEx::qGetCurPath() const
 {
     QWidget *w = m_pStackedLayout->currentWidget();
@@ -103,6 +119,30 @@ int MainTabWidgetEx::GetCurFileState(const QString &sPath)
     return -1;
 }
 
+FileDataModel MainTabWidgetEx::qGetFileData(const QString &sPath) const
+{
+    auto splitterList = this->findChildren<MainSplitter *>();
+    foreach (auto s, splitterList) {
+        QString sSplitterPath = s->qGetPath();
+        if (sSplitterPath == sPath) {
+            return s->qGetFileData();
+        }
+    }
+    return FileDataModel();
+}
+
+void MainTabWidgetEx::SetFileData(const QString &sPath, const FileDataModel &fdm)
+{
+    auto splitterList = this->findChildren<MainSplitter *>();
+    foreach (auto s, splitterList) {
+        QString sSplitterPath = s->qGetPath();
+        if (sSplitterPath == sPath) {
+            s->setFileData(fdm);
+            break;
+        }
+    }
+}
+
 void MainTabWidgetEx::InsertPathProxy(const QString &sPath, DocummentProxy *proxy)
 {
     m_strOpenFileAndProxy.insert(sPath, proxy);
@@ -110,8 +150,12 @@ void MainTabWidgetEx::InsertPathProxy(const QString &sPath, DocummentProxy *prox
 
 DocummentProxy *MainTabWidgetEx::getCurFileAndProxy(const QString &sPath) const
 {
-    if (m_strOpenFileAndProxy.contains(sPath)) {
-        return m_strOpenFileAndProxy[sPath];
+    QString sTempPath = sPath;
+    if (sTempPath == "") {
+        sTempPath = qGetCurPath();
+    }
+    if (m_strOpenFileAndProxy.contains(sTempPath)) {
+        return m_strOpenFileAndProxy[sTempPath];
     }
     return  nullptr;
 }
@@ -148,24 +192,40 @@ void MainTabWidgetEx::onShowFileAttr()
     pFileAttrWidget->showScreenCenter();
 }
 
+void MainTabWidgetEx::OnAppMsgData(const QString &sText)
+{
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson(sText.toLocal8Bit().data(), &error);
+    if (error.error == QJsonParseError::NoError) {
+        QJsonObject obj = doc.object();
+        QString sType = obj.value("type").toString();
+        if (sType == "exit_app") {
+            OnAppExit();
+        } else if (sType == "ShortCut") {
+            QString sKey = obj.value("key").toString();
+            OnAppShortCut(sKey);
+        }
+    }
+}
+
 //  应用退出, 删除所有文件
 void MainTabWidgetEx::OnAppExit()
 {
-    QString saveFileList = "";
-    QString noChangeFileList = "";
+    QStringList saveFileList;
+    QStringList noChangeFileList;
 
     auto splitterList = this->findChildren<MainSplitter *>();
     foreach (auto s, splitterList) {
         QString sSplitterPath = s->qGetPath();
         int iChange = s->qGetFileChange();
         if (iChange == 1) {
-            saveFileList.append(sSplitterPath  + Constant::sQStringSep);
+            saveFileList.append(sSplitterPath);
         } else {
-            noChangeFileList.append(sSplitterPath + Constant::sQStringSep);
+            noChangeFileList.append(sSplitterPath);
         }
     }
 
-    if (saveFileList != "") {
+    if (saveFileList.size() > 0) {
         SaveDialog sd;
         int nRes = sd.showDialog();
         if (nRes <= 0) {
@@ -176,14 +236,50 @@ void MainTabWidgetEx::OnAppExit()
         if (nRes == 2) {     //  保存
             nMsgType = MSG_SAVE_FILE;
         }
-        dApp->m_pHelper->qDealWithData(nMsgType, saveFileList);
+
+        auto splitterList = this->findChildren<MainSplitter *>();
+        foreach (auto s, splitterList) {
+            QString sSplitterPath = s->qGetPath();
+            if (saveFileList.contains(sSplitterPath)) {
+                SaveFile(nMsgType, sSplitterPath);
+            }
+        }
     }
 
-    if (noChangeFileList != "") {
-        dApp->m_pHelper->qDealWithData(MSG_NOT_CHANGE_SAVE_FILE, noChangeFileList);
+    foreach (auto s, splitterList) {
+        QString sSplitterPath = s->qGetPath();
+        if (noChangeFileList.contains(sSplitterPath)) {
+            SaveFile(MSG_NOT_CHANGE_SAVE_FILE, sSplitterPath);
+        }
     }
 
     dApp->exit(0);
+}
+
+void MainTabWidgetEx::OnAppShortCut(const QString &s)
+{
+    auto children = this->findChildren<MainSplitter *>();
+    if (children.size() == 0)
+        return;
+
+    if (s == KeyStr::g_ctrl_p) {
+        OnPrintFile();
+    } else if (s == KeyStr::g_ctrl_s) {
+        OnSaveFile();
+    } else if (s == KeyStr::g_alt_1 || s == KeyStr::g_alt_2 || s == KeyStr::g_ctrl_m  ||
+               s == KeyStr::g_ctrl_1 || s == KeyStr::g_ctrl_2 || s == KeyStr::g_ctrl_3 ||
+               s == KeyStr::g_ctrl_r || s == KeyStr::g_ctrl_shift_r ||
+               s == KeyStr::g_ctrl_larger || s == KeyStr::g_ctrl_equal || s == KeyStr::g_ctrl_smaller) {
+        TitleWidget::Instance()->qDealWithShortKey(s);
+    } else if (s == KeyStr::g_ctrl_f) {     //  搜索
+
+    } else if (s == KeyStr::g_ctrl_h) {     //  开启幻灯片
+
+    } else if (s == KeyStr::g_ctrl_shift_s) {   //  另存为
+        OnSaveAsFile();
+    } else {
+        emit sigDealNotifyMsg(MSG_NOTIFY_KEY_MSG, s);
+    }
 }
 
 void MainTabWidgetEx::OnTabBarMsg(const QString &s)
@@ -191,7 +287,7 @@ void MainTabWidgetEx::OnTabBarMsg(const QString &s)
     if (s == "New window") {
 
     } else if (s == "New tab") {
-
+        notifyMsg(E_OPEN_FILE);
     } else if (s == "Save") { //  保存当前显示文件
         OnSaveFile();
     } else if (s == "Save as") {
@@ -208,11 +304,42 @@ void MainTabWidgetEx::OnTabBarMsg(const QString &s)
         OpenCurFileFolder();
     }
 }
+void MainTabWidgetEx::SaveFile(const int &iType, const QString &sPath)
+{
+    QString sRes = dApp->m_pHelper->qDealWithData(iType, sPath);
+    if (sRes != "") {
+        QJsonParseError error;
+        QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
+        if (error.error == QJsonParseError::NoError) {
+            QJsonObject obj = doc.object();
+            int nReturn = obj.value("return").toInt();
+            if (nReturn == MSG_OK) {
+                DWidget *w = m_pStackedLayout->currentWidget();
+                if (w) {
+                    auto pSplitter = qobject_cast<MainSplitter *>(w);
+                    if (pSplitter) {
+                        pSplitter->saveData();
+                    }
+                }
+            }
+        }
+    }
+}
 
 //  保存当前显示文件
 void MainTabWidgetEx::OnSaveFile()
 {
-    QString sRes = dApp->m_pHelper->qDealWithData(MSG_SAVE_FILE_PATH, "");
+    DWidget *w = m_pStackedLayout->currentWidget();
+    if (w) {
+        auto pSplitter = qobject_cast<MainSplitter *>(w);
+        if (pSplitter) {
+            int nChange = pSplitter->qGetFileChange();
+            if (nChange == 1) {
+                QString sPath = pSplitter->qGetPath();
+                SaveFile(MSG_SAVE_FILE, sPath);
+            }
+        }
+    }
 }
 
 void MainTabWidgetEx::OnSaveAsFile()
@@ -220,13 +347,14 @@ void MainTabWidgetEx::OnSaveAsFile()
     QString sRes = dApp->m_pHelper->qDealWithData(MSG_SAVE_AS_FILE_PATH, "");
 }
 
+//  打印
 void MainTabWidgetEx::OnPrintFile()
 {
     QString sPath = qGetCurPath();
-    //  打印
-    PrintManager p;
-    p.setPrintPath(sPath);
-    p.showPrintDialog(this);
+    if (sPath != "") {
+        PrintManager p(sPath);
+        p.showPrintDialog(this);
+    }
 }
 
 void MainTabWidgetEx::OpenCurFileFolder()
@@ -242,10 +370,10 @@ void MainTabWidgetEx::OpenCurFileFolder()
 
 void MainTabWidgetEx::SlotDealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == APP_EXIT) {   //  关闭应用
-        OnAppExit();
-    } else if (msgType == E_TABBAR_MSG_TYPE) {
+    if (msgType == E_TABBAR_MSG_TYPE) {
         OnTabBarMsg(msgContent);
+    } else if (msgType == E_APP_MSG_TYPE) {     //  应用类消息
+        OnAppMsgData(msgContent);
     }
 }
 
@@ -257,6 +385,8 @@ void MainTabWidgetEx::SlotSetCurrentIndexFile(const QString &sPath)
         if (sSplitterPath == sPath) {
             int iIndex = m_pStackedLayout->indexOf(s);
             m_pStackedLayout->setCurrentIndex(iIndex);
+
+            notifyMsg(MSG_TAB_SHOW_FILE_CHANGE, sPath);
 
             break;
         }
@@ -309,6 +439,9 @@ void MainTabWidgetEx::SlotCloseTab(const QString &sPath)
                     QJsonObject obj = doc.object();
                     int nReturn = obj.value("return").toInt();
                     if (nReturn == MSG_OK) {
+                        //  保存成功
+                        s->saveData();
+
                         m_strOpenFileAndProxy.remove(sPath);
 
                         emit sigRemoveFileTab(sPath);

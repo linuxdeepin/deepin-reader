@@ -20,7 +20,7 @@ class AttrScrollWidget : public DFrame
     Q_DISABLE_COPY(AttrScrollWidget)
 
 public:
-    explicit AttrScrollWidget(DWidget *parent  = nullptr);
+    explicit AttrScrollWidget(const QString &, DWidget *parent  = nullptr);
 
 protected:
     bool eventFilter(QObject *obj, QEvent *e) override;

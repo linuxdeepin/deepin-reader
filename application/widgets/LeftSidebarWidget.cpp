@@ -7,9 +7,10 @@
 #include "MainOperationWidget.h"
 #include "MsgModel.h"
 
-#include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
 #include "pdfControl/DataStackedWidget.h"
+
+#include "widgets/main/MainTabWidgetEx.h"
 
 LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
     : CustomWidget("LeftSidebarWidget", parent)
@@ -36,7 +37,7 @@ LeftSidebarWidget::~LeftSidebarWidget()
 
 void LeftSidebarWidget::SlotOpenFileOk(const QString &sPath)
 {
-    FileDataModel fdm = dApp->m_pDataManager->qGetFileData(sPath);
+    FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(sPath);
     int nShow = fdm.qGetData(Thumbnail);
     bool showLeft = nShow == 1 ? true : false;
     onSetWidgetVisible(showLeft);
@@ -45,8 +46,6 @@ void LeftSidebarWidget::SlotOpenFileOk(const QString &sPath)
 void LeftSidebarWidget::onSetWidgetVisible(const int &nVis)
 {
     this->setVisible(nVis);
-//    if (!nVis && DocummentProxy::instance())
-//        DocummentProxy::instance()->setViewFocus();
 }
 
 void LeftSidebarWidget::slotUpdateTheme()
@@ -69,10 +68,10 @@ void LeftSidebarWidget::initWidget()
     auto pStackedWidget = new DataStackedWidget(this);
     pVBoxLayout->addWidget(pStackedWidget);
 
-    auto mainOperation = new MainOperationWidget;
-    connect(mainOperation, SIGNAL(sigShowStackWidget(const int &)), pStackedWidget, SLOT(slotSetStackCurIndex(const int &)));
+    m_pMainOperationWidget = new MainOperationWidget;
+    connect(m_pMainOperationWidget, SIGNAL(sigShowStackWidget(const int &)), pStackedWidget, SLOT(slotSetStackCurIndex(const int &)));
 
-    pVBoxLayout->addWidget(mainOperation, 0, Qt::AlignBottom);
+    pVBoxLayout->addWidget(m_pMainOperationWidget, 0, Qt::AlignBottom);
 }
 
 int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgContent)
@@ -86,6 +85,8 @@ int LeftSidebarWidget::qDealWithData(const int &msgType, const QString &msgConte
         onSetWidgetVisible(msgContent.toInt());
     } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         SlotOpenFileOk(msgContent);
+
+        m_pMainOperationWidget->qDealWithData(msgType, msgContent);
     }
 
     int nRes = MSG_NO_OK;

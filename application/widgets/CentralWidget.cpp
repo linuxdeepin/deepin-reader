@@ -30,7 +30,6 @@
 
 #include "main/MainTabWidgetEx.h"
 #include "business/AppInfo.h"
-#include "business/FileDataManager.h"
 #include "utils/utils.h"
 
 CentralWidget::CentralWidget(CustomWidget *parent)
@@ -57,13 +56,19 @@ void CentralWidget::keyPressEvent(QKeyEvent *event)
         QStringList pFilterList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown
                                   << KeyStr::g_down << KeyStr::g_up
                                   << KeyStr::g_left << KeyStr::g_right;
-        QString key = Utils::getKeyshortcut(event);
-        if (pFilterList.contains(key)) {
-            QString sFilePath = dApp->m_pDataManager->qGetCurrentFilePath();
-            if (sFilePath != "") {
-                notifyMsg(MSG_NOTIFY_KEY_PLAY_MSG, key);
-            }
-        }
+//        QString key = Utils::getKeyshortcut(event);
+//        if (pFilterList.contains(key)) {
+
+//            QJsonObject obj;
+//            obj.insert("content", "1");
+//            obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET);
+
+//            QJsonDocument doc(obj);
+
+//            notifyMsg(MSG_WIDGET_THUMBNAILS_VIEW, doc.toJson(QJsonDocument::Compact));
+
+//            notifyMsg(E_APP_MSG_TYPE, key);
+//        }
     }
 
     CustomWidget::keyPressEvent(event);

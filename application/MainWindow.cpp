@@ -12,7 +12,6 @@
 #include "business/ShortCutShow.h"
 #include "business/SaveDialog.h"
 #include "business/AppInfo.h"
-#include "business/FileDataManager.h"
 #include "docview/docummentproxy.h"
 #include "menu/TitleMenu.h"
 #include "widgets/TitleWidget.h"
@@ -84,7 +83,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
     dApp->m_pAppInfo->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
     dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
 
-    notifyMsg(APP_EXIT);
+    QJsonObject obj;
+    obj.insert("type", "exit_app");
+
+    QJsonDocument doc = QJsonDocument(obj);
+    notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
 }
 
 void MainWindow::initUI()
@@ -133,25 +136,25 @@ void MainWindow::initThemeChanged()
 {
     //  主题变了
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ]() {
-        setCurTheme();
-        notifyMsg(MSG_OPERATION_UPDATE_THEME);
+//        setCurTheme();
+//        notifyMsg(MSG_OPERATION_UPDATE_THEME);
     });
 }
 
 //  设置 主题
 void MainWindow::setCurTheme()
 {
-    DGuiApplicationHelper::ColorType colorType = DGuiApplicationHelper::instance()->themeType();
-    QString sTheme = "";
-    if (colorType == DGuiApplicationHelper::UnknownType) {  //  未知
-        sTheme = "Unknown";
-    } else if (colorType == DGuiApplicationHelper::LightType) { //  浅色
-        sTheme = "light";
-    } else if (colorType == DGuiApplicationHelper::DarkType) {  //  深色
-        sTheme = "dark";
-    }
+//    DGuiApplicationHelper::ColorType colorType = DGuiApplicationHelper::instance()->themeType();
+//    QString sTheme = "";
+//    if (colorType == DGuiApplicationHelper::UnknownType) {  //  未知
+//        sTheme = "Unknown";
+//    } else if (colorType == DGuiApplicationHelper::LightType) { //  浅色
+//        sTheme = "light";
+//    } else if (colorType == DGuiApplicationHelper::DarkType) {  //  深色
+//        sTheme = "dark";
+//    }
 
-    dApp->m_pAppInfo->qSetCurrentTheme(sTheme);
+//    dApp->m_pAppInfo->qSetCurrentTheme(sTheme);
 }
 
 //  显示快捷键
@@ -222,9 +225,17 @@ void MainWindow::slotShortCut(const QString &key)
 {
     if (key == KeyStr::g_ctrl_shift_slash) { //  显示快捷键预览
         displayShortcuts();
-    } else if (key == KeyStr::g_ctrl_o) {   //  打开文件
-        notifyMsg(MSG_NOTIFY_KEY_MSG, key);
+    } else  if (key == KeyStr::g_ctrl_o) {
+        notifyMsg(E_OPEN_FILE);
     } else {
+        QJsonObject obj;
+        obj.insert("type", "ShortCut");
+        obj.insert("key", key);
+
+        QJsonDocument doc = QJsonDocument(obj);
+        notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
+    }
+    /*
         auto pMtwe = MainTabWidgetEx::Instance();
         if (pMtwe) {
             QString sFilePath = pMtwe->qGetCurPath();
@@ -238,7 +249,7 @@ void MainWindow::slotShortCut(const QString &key)
                 }
             }
         }
-    }
+    }*/
 }
 
 void MainWindow::sendMsg(const int &, const QString &) {}

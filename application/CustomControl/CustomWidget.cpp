@@ -19,8 +19,6 @@
 #include "CustomWidget.h"
 #include <DWidgetUtil>
 
-#include "business/FileDataManager.h"
-
 CustomWidget::CustomWidget(const QString &name, DWidget *parent)
     : DWidget(parent)
 {
@@ -40,6 +38,11 @@ void CustomWidget::updateWidgetTheme()
 }
 
 int CustomWidget::qDealWithData(const int &, const QString &)
+{
+    return MSG_NO_OK;
+}
+
+int CustomWidget::qDealWithShortKey(const QString &)
 {
     return MSG_NO_OK;
 }

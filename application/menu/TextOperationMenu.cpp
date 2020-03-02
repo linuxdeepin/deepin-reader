@@ -6,9 +6,9 @@
 #include "ColorWidgetAction.h"
 
 #include "business/AppInfo.h"
-#include "business/FileDataManager.h"
 
 #include "business/bridge/IHelper.h"
+#include "widgets/main/MainTabWidgetEx.h"
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)
     : CustomMenu("TextOperationMenu", parent)
@@ -18,7 +18,9 @@ TextOperationMenu::TextOperationMenu(DWidget *parent)
 
 void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, const QString &sSelectText, const QString &sUuid)
 {
-    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    QString sCurPath = pMtwe->qGetCurPath();
+
     QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
 
     bool bBookState = pageList.contains(m_nClickPage);

@@ -45,12 +45,12 @@ private slots:
     void sloPrevScale();
     void sloNextScale();
     void slotDocProxyMsg(const QString &);
-    void slotDealWithShortKey(const QString &);
 
 private:
     void __ChangeScale(const int &);
     void InitConnection();
     void OnFileOpenOk(const QString &sPath);
+    void onShortKey(const QString &);
 
 private:
     QList<int> dataList;

@@ -24,6 +24,7 @@ public:
 
 public:
     void qDealWithData(const int &, const QString &);
+    void saveData();
 
     void qSetFileChange(const int &);
     int qGetFileChange();

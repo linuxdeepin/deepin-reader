@@ -5,8 +5,9 @@
 #include <QButtonGroup>
 #include <QHBoxLayout>
 
-#include "business/FileDataManager.h"
 #include "utils/PublicFunction.h"
+
+#include "widgets/main/MainTabWidgetEx.h"
 
 MainOperationWidget::MainOperationWidget(CustomWidget *parent)
     : CustomWidget("MainOperationWidget", parent)
@@ -117,7 +118,7 @@ void MainOperationWidget::SlotDealWithData(const int &msgType, const QString &ms
 
 void MainOperationWidget::slotOpenFileOk(const QString &sPath)
 {
-    FileDataModel fdm = dApp->m_pDataManager->qGetFileData(sPath);
+    FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(sPath);
     int nId = fdm.qGetData(LeftIndex);
     if (nId == -1) {
         nId = 0;

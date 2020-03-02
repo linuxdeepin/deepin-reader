@@ -25,7 +25,6 @@
 #include "../FileViewWidget.h"
 #include "../TitleWidget.h"
 
-#include "business/FileDataManager.h"
 #include "MainSplitterPrivate.h"
 #include "menu/TitleMenu.h"
 
@@ -75,9 +74,8 @@ void MainSplitter::SlotDealWithDataMsg(const int &msgType, const QString &msgCon
     QString s = msgContent;
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
         s = d_ptr->qGetPath();
+        TitleWidget::Instance()->qDealWithData(msgType, msgContent);
     }
-
-    TitleWidget::Instance()->qDealWithData(msgType, msgContent);
 
     auto children = this->findChildren<CustomWidget *>();
     foreach (auto sw, children) {
@@ -96,18 +94,28 @@ void MainSplitter::SlotSplitterMsg(const int &msgType, const QString &msgContent
 void MainSplitter::SlotNotifyMsg(const int &msgType, const QString &msgContent)
 {
     if (this->isVisible()) {    //  只有显示的窗口 处理 MainTabWidgetEx 发送的信号
-        QJsonParseError error;
-        QJsonDocument doc = QJsonDocument::fromJson(msgContent.toLocal8Bit().data(), &error);
-        if (error.error == QJsonParseError::NoError) {
-            QJsonObject obj = doc.object();
+        if (msgType == MSG_NOTIFY_KEY_MSG) {
+            auto cwlist = this->findChildren<CustomWidget *>();
+            foreach (auto cw, cwlist) {
+                int nRes = cw->qDealWithShortKey(msgContent);
+                if (nRes == MSG_OK) {
+                    break;
+                }
+            }
+        } else {
+            QJsonParseError error;
+            QJsonDocument doc = QJsonDocument::fromJson(msgContent.toLocal8Bit().data(), &error);
+            if (error.error == QJsonParseError::NoError) {
+                QJsonObject obj = doc.object();
 
-            QString sContent = obj.value("content").toString();
+                QString sContent = obj.value("content").toString();
 
-            d_ptr->qDealWithData(msgType, sContent);
+                d_ptr->qDealWithData(msgType, sContent);
 
-            int nRes = m_pLeftWidget->qDealWithData(msgType, sContent);
-            if (nRes != MSG_OK) {
-                m_pDocWidget->qDealWithData(msgType, sContent);
+                int nRes = m_pLeftWidget->qDealWithData(msgType, sContent);
+                if (nRes != MSG_OK) {
+                    nRes = m_pDocWidget->qDealWithData(msgType, sContent);
+                }
             }
         }
     }
@@ -172,4 +180,19 @@ void MainSplitter::qSetFileChange(const int &nState)
 int MainSplitter::qGetFileChange()
 {
     return d_ptr->qGetFileChange();
+}
+
+void MainSplitter::saveData()
+{
+    d_ptr->saveData();
+}
+
+FileDataModel MainSplitter::qGetFileData() const
+{
+    return d_ptr->qGetFileData();
+}
+
+void MainSplitter::setFileData(const FileDataModel &fdm) const
+{
+    d_ptr->qSetFileData(fdm);
 }

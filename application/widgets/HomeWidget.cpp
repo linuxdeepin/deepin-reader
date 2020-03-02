@@ -13,8 +13,7 @@
 HomeWidget::HomeWidget(CustomWidget *parent)
     : CustomWidget("HomeWidget", parent)
 {
-    m_pMsgList = {MSG_MENU_NEW_WINDOW};
-    m_pKeyMsgList = {KeyStr::g_ctrl_o};
+    m_pMsgList = {MSG_MENU_NEW_WINDOW, E_OPEN_FILE};
 
     initWidget();
     initConnections();
@@ -33,12 +32,7 @@ void HomeWidget::slotDealWithData(const int &msgType, const QString &)
 {
     if (MSG_MENU_NEW_WINDOW == msgType) {
         NewWindow();
-    }
-}
-
-void HomeWidget::slotDealWithKeyMsg(const QString &msgContent)
-{
-    if (msgContent == KeyStr::g_ctrl_o) {
+    } else if (E_OPEN_FILE == msgType) {
         slotChooseBtnClicked();
     }
 }
@@ -130,7 +124,7 @@ QStringList HomeWidget::getOpenFileList()
 void HomeWidget::initConnections()
 {
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
-    connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)), SLOT(slotDealWithKeyMsg(const QString &)));
+    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
 }
 
 void HomeWidget::NewWindow()
@@ -140,14 +134,13 @@ void HomeWidget::NewWindow()
 
 int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        emit sigUpdateTheme();
-    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (m_pKeyMsgList.contains(msgContent)) {
-            emit sigDealWithKeyMsg(msgContent);
-            return ConstantMsg::g_effective_res;
-        }
+    if (m_pMsgList.contains(msgType)) {
+        emit sigDealWithData(msgType, msgContent);
+        return ConstantMsg::g_effective_res;
     }
 
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {
+        emit sigUpdateTheme();
+    }
     return 0;
 }

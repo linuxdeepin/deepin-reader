@@ -24,7 +24,6 @@
 #include "note/NotesWidget.h"
 #include "search/BufferWidget.h"
 #include "search/SearchResWidget.h"
-#include "business/FileDataManager.h"
 
 DataStackedWidget::DataStackedWidget(DWidget *parent)
     : DStackedWidget(parent)
@@ -54,7 +53,13 @@ void DataStackedWidget::slotSetStackCurIndex(const int &iIndex)
     if (iIndex == WIDGET_SEARCH || iIndex == WIDGET_BUFFER) {
         emit sigSearchWidgetState(iIndex);
     } else {
-        dApp->m_pModelService->notifyMsg(E_TITLE_MSG_TYPE,  QString::number(iIndex));
+        QJsonObject obj;
+        obj.insert("content", "1");
+        obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET);
+
+        QJsonDocument doc(obj);
+
+        dApp->m_pModelService->notifyMsg(MSG_LEFTBAR_STATE,  QString::number(iIndex));
     }
 }
 
