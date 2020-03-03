@@ -318,12 +318,10 @@ void ThumbnailWidget::nextPage()
 // 关联成功打开文件槽函数
 void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
 {
-    qDebug() << "++++++++++----------" << sPath;
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
     DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sPath);
     if (_proxy) {
         m_isLoading = true;
-        qDebug() << "^^^^^^^^^^^^^^^^^----------" << sPath;
         m_ThreadLoadImage.setIsLoaded(false);
         if (m_ThreadLoadImage.isRunning()) {
             m_ThreadLoadImage.stopThreadRun();

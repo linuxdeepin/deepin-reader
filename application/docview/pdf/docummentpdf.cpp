@@ -505,10 +505,10 @@ void DocummentPDF::setAnnotationText(int ipage, const QString &struuid, const QS
         QList<Poppler::Annotation *> plistannote = page->annotations();
         foreach (Poppler::Annotation *annote, plistannote) {
             QString uniquename = annote->uniqueName();
-            qDebug() << "setAnnotationText--" << uniquename << struuid;
+            //qDebug() << "setAnnotationText--" << uniquename << struuid;
             if (!uniquename.isEmpty() && uniquename.indexOf(struuid) >= 0) {
                 annote->setContents(strtext);
-                qDebug() << "setAnnotationText++" << annote->contents();
+                //qDebug() << "setAnnotationText++" << annote->contents();
             }
         }
         qDeleteAll(plistannote);
@@ -607,14 +607,16 @@ Outline DocummentPDF::loadOutline(const QDomNode &parent, Poppler::Document *doc
             page = page >= 1 ? page : 1;
             page = page <= document->numPages() ? page : document->numPages();
 
-            if (destination->isChangeLeft()) {
+            //if (destination->isChangeLeft())
+            {
                 left = destination->left();
 
                 left = left >= 0.0 ? left : 0.0;
                 left = left <= 1.0 ? left : 1.0;
             }
-
-            if (destination->isChangeTop()) {
+            qDebug() << "======" << destination->top() << destination->left() << destination->bottom() << destination->right() << element.attribute("");
+            //if (destination->isChangeTop())
+            {
                 top = destination->top();
 
                 top = top >= 0.0 ? top : 0.0;

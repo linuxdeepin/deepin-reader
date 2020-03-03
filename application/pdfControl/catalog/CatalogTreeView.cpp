@@ -266,7 +266,7 @@ void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelInd
     Q_UNUSED(previous);
 
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
-    if (pMtwe) {
+    if (pMtwe && this->isVisible()) {
         DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(m_strBindPath);
         if (_proxy) {
             int nPage = current.data(Qt::UserRole + 1).toInt();
