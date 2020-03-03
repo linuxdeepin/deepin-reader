@@ -88,30 +88,31 @@ void CatalogWidget::initConnections()
 void CatalogWidget::OnDocOpenFileOk(const QString &sPath)
 {
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
-    DocummentProxy *_pProxy = pMtwe->getCurFileAndProxy(sPath);
-    if (_pProxy) {
+    if (pMtwe) {
+        DocummentProxy *_pProxy = pMtwe->getCurFileAndProxy(sPath);
+        if (_pProxy) {
 
-        stFileInfo fileInfo;
-        _pProxy->docBasicInfo(fileInfo);
+            stFileInfo fileInfo;
+            _pProxy->docBasicInfo(fileInfo);
 
-        QString strTheme =  fileInfo.strTheme;
-        if (strTheme == "") {
-            strTheme = tr("Unknown");
-        }
+            QString strTheme =  fileInfo.strTheme;
+            if (strTheme == "") {
+                strTheme = tr("Unknown");
+            }
 
-        if (titleLabel) {
-            QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T8);
-            QString t = DFMGlobal::elideText(strTheme, QSize(120, 18), QTextOption::WrapAnywhere, font, Qt::ElideMiddle, 0);
-            QStringList labelTexts = t.split("\n");
-            if (labelTexts.size() < 3) {
-                titleLabel->setText(strTheme);
-            } else {
-                QString sStart = labelTexts.at(0);
-                QString sEnd = labelTexts.at(labelTexts.size() - 1);
+            if (titleLabel) {
+                QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T8);
+                QString t = DFMGlobal::elideText(strTheme, QSize(120, 18), QTextOption::WrapAnywhere, font, Qt::ElideMiddle, 0);
+                QStringList labelTexts = t.split("\n");
+                if (labelTexts.size() < 3) {
+                    titleLabel->setText(strTheme);
+                } else {
+                    QString sStart = labelTexts.at(0);
+                    QString sEnd = labelTexts.at(labelTexts.size() - 1);
 
-                titleLabel->setText(sStart + "..." + sEnd);
+                    titleLabel->setText(sStart + "..." + sEnd);
+                }
             }
         }
     }
 }
-

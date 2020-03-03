@@ -65,6 +65,9 @@ private slots:
     void SlotClicked(const QModelIndex &);
     void SlotCollapsed(const QModelIndex &);
     void SlotExpanded(const QModelIndex &);
+
+private:
+    QString     m_strBindPath = "";
 };
 
 #endif // CATALOGTREEVIEW_H

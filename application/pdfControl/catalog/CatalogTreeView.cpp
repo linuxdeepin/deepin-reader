@@ -133,30 +133,29 @@ QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const 
 //  文档打开成功, 加载对应目录
 void CatalogTreeView::OnOpenFileOk(const QString &path)
 {
+    m_strBindPath = path;
+
     auto model = reinterpret_cast<QStandardItemModel *>(this->model());
     if (model) {
         model->clear();
 
         MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
         if (pMtwe) {
-            QString sCurPath = pMtwe->qGetCurPath();
-            if (sCurPath != "") {
-                DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(sCurPath);
-                if (_proxy) {
+            DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(m_strBindPath);
+            if (_proxy) {
 
-                    Outline ol = _proxy->outline();
-                    foreach (const Section &s, ol) {   //  1 级显示
-                        if (s.link.page > 0) {
-                            auto itemList = getItemList(s.title, s.link.page, s.link.left, s.link.top);
-                            model->appendRow(itemList);
+                Outline ol = _proxy->outline();
+                foreach (const Section &s, ol) {   //  1 级显示
+                    if (s.link.page > 0) {
+                        auto itemList = getItemList(s.title, s.link.page, s.link.left, s.link.top);
+                        model->appendRow(itemList);
 
-                            parseCatalogData(s, itemList.at(0));
-                        }
+                        parseCatalogData(s, itemList.at(0));
                     }
-
-                    int nCurPage = _proxy->currentPageNo();
-                    OnFilePageChanged(QString::number(nCurPage));
                 }
+
+                int nCurPage = _proxy->currentPageNo();
+                OnFilePageChanged(QString::number(nCurPage));
             }
         }
     }
@@ -167,21 +166,19 @@ void CatalogTreeView::SlotClicked(const QModelIndex &index)
 {
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
     if (pMtwe) {
-        QString sCurPath = pMtwe->qGetCurPath();
-        if (sCurPath != "") {
-            DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(sCurPath);
-            if (_proxy) {
-                int nPage = index.data(Qt::UserRole + 1).toInt();
-                nPage--;
+        DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(m_strBindPath);
+        if (_proxy) {
+            int nPage = index.data(Qt::UserRole + 1).toInt();
+            nPage--;
 
-                double left = index.data(Qt::UserRole + 2).toDouble();
-                double top = index.data(Qt::UserRole + 3).toDouble();
+            double left = index.data(Qt::UserRole + 2).toDouble();
+            double top = index.data(Qt::UserRole + 3).toDouble();
 
-                _proxy->jumpToOutline(left, top, nPage);
-            }
+            _proxy->jumpToOutline(left, top, nPage);
         }
     }
 }
+
 
 //  文档页变化, 目录高亮随之变化
 void CatalogTreeView::OnFilePageChanged(const QString &sPage)
@@ -238,17 +235,15 @@ void CatalogTreeView::SlotCollapsed(const QModelIndex &index)
     Q_UNUSED(index);
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
     if (pMtwe) {
-        QString sCurPath = pMtwe->qGetCurPath();
-        if (sCurPath != "") {
-            DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(sCurPath);
-            if (_proxy) {
-                int nCurPage = _proxy->currentPageNo();
+        DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(m_strBindPath);
+        if (_proxy) {
+            int nCurPage = _proxy->currentPageNo();
 
-                OnFilePageChanged(QString::number(nCurPage));
-            }
+            OnFilePageChanged(QString::number(nCurPage));
         }
     }
 }
+
 
 //  展开 节点处理
 void CatalogTreeView::SlotExpanded(const QModelIndex &index)
@@ -256,13 +251,10 @@ void CatalogTreeView::SlotExpanded(const QModelIndex &index)
     if (index == this->selectionModel()->currentIndex()) {  //  展开的节点 是 高亮节点
         MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
         if (pMtwe) {
-            QString sCurPath = pMtwe->qGetCurPath();
-            if (sCurPath != "") {
-                DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(sCurPath);
-                if (_proxy) {
-                    int nCurPage = _proxy->currentPageNo();
-                    OnFilePageChanged(QString::number(nCurPage));
-                }
+            DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(m_strBindPath);
+            if (_proxy) {
+                int nCurPage = _proxy->currentPageNo();
+                OnFilePageChanged(QString::number(nCurPage));
             }
         }
     }
@@ -275,21 +267,19 @@ void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelInd
 
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
     if (pMtwe) {
-        QString sCurPath = pMtwe->qGetCurPath();
-        if (sCurPath != "") {
-            DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(sCurPath);
-            if (_proxy) {
-                int nPage = current.data(Qt::UserRole + 1).toInt();
-                nPage--;
+        DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(m_strBindPath);
+        if (_proxy) {
+            int nPage = current.data(Qt::UserRole + 1).toInt();
+            nPage--;
 
-                double left = current.data(Qt::UserRole + 2).toDouble();
-                double top = current.data(Qt::UserRole + 3).toDouble();
+            double left = current.data(Qt::UserRole + 2).toDouble();
+            double top = current.data(Qt::UserRole + 3).toDouble();
 
-                _proxy->jumpToOutline(left, top, nPage);
-            }
+            _proxy->jumpToOutline(left, top, nPage);
         }
     }
 }
+
 
 //  窗口大小变化, 列的宽度随之变化
 void CatalogTreeView::resizeEvent(QResizeEvent *event)
