@@ -133,11 +133,16 @@ void FindWidget::slotEditAborted()
     notifyMsg(MSG_CLEAR_FIND_CONTENT);
 }
 
+int FindWidget::dealWithData(const QString &)
+{
+    return MSG_NO_OK;
+}
+
 int FindWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgList.contains(msgType)) {
         emit sigDealWithData(msgType, msgContent);
-        return ConstantMsg::g_effective_res;
+        return MSG_OK;
     }
     if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
     } else if (msgType == MSG_OPERATION_SLIDE) {  //  幻灯片了
@@ -147,13 +152,13 @@ int FindWidget::dealWithData(const int &msgType, const QString &msgContent)
             emit sigSetVisible();
         }
     }
-    return 0;
+    return MSG_NO_OK;
 }
 
-void FindWidget::sendMsg(const int &, const QString &)
-{
+//void FindWidget::sendMsg(const int &, const QString &)
+//{
 
-}
+//}
 
 void FindWidget::notifyMsg(const int &msgType, const QString &msgContent)
 {

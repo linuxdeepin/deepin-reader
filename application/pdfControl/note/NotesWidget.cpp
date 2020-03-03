@@ -37,6 +37,8 @@ NotesWidget::NotesWidget(DWidget *parent)
 
     initConnection();
 
+    m_ThreadLoadImage.setParentWidget(this);
+
     dApp->m_pModelService->addObserver(this);
 }
 
@@ -81,10 +83,22 @@ void NotesWidget::DeleteItemByKey()
                 int page = t_widget->nPageIndex();
                 QString sContent = t_uuid + Constant::sQStringSep + QString::number(page);
 
+                QString sRes = "";
                 if (nType == NOTE_HIGHLIGHT) {
-                    dApp->m_pHelper->qDealWithData(MSG_NOTE_DELETE_CONTENT, sContent);
+                    sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_DELETE_CONTENT, sContent);
                 } else {
-                    dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
+                    sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
+                }
+
+                QJsonParseError error;
+                QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
+                if (error.error == QJsonParseError::NoError) {
+                    QJsonObject obj = doc.object();
+                    int nReturn = obj.value("return").toInt();
+                    if (nReturn == MSG_OK) {
+                        QString sUuid = obj.value("value").toString();
+                        __DeleteNoteItem(sUuid);
+                    }
                 }
             }
         }
@@ -117,19 +131,6 @@ void NotesWidget::initWidget()
     m_pVLayout->addWidget(new DHorizontalLine(this));
     m_pHBoxLayout->addWidget(m_pAddAnnotationBtn);
     m_pVLayout->addItem(m_pHBoxLayout);
-}
-
-void NotesWidget::slotDealWithData(const int &msgType, const QString &msgContent)
-{
-    if (MSG_NOTE_ADD_ITEM == msgType) {
-        __AddNoteItem(msgContent);
-    } else if (MSG_NOTE_PAGE_ADD_ITEM == msgType) {
-        __AddNoteItem(msgContent, NOTE_ICON);
-    } else if (MSG_NOTE_DELETE_ITEM == msgType || MSG_NOTE_PAGE_DELETE_ITEM == msgType) {
-        __DeleteNoteItem(msgContent);
-    } else if (MSG_NOTE_UPDATE_ITEM == msgType || MSG_NOTE_PAGE_UPDATE_ITEM == msgType) {
-        __UpdateNoteItem(msgContent);
-    }
 }
 
 /**
@@ -165,9 +166,7 @@ void NotesWidget::__DeleteNoteItem(const QString &sUuid)
                     delete pItem;
                     pItem = nullptr;
 
-                    // remove date from map and notify kong yun zhen
-                    m_mapUuidAndPage.remove(sUuid);
-
+                    notifyMsg(MSG_FILE_IS_CHANGE, "1");
                     notifyMsg(CENTRAL_SHOW_TIP, tr("The annotation has been removed"));
                     break;
                 }
@@ -180,8 +179,8 @@ void NotesWidget::__UpdateNoteItem(const QString &msgContent)
 {
     QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (sList.size() == 3) {
-        QString sText = sList.at(0);
-        QString sUuid = sList.at(1);
+        QString sUuid = sList.at(0);
+        QString  sText = sList.at(1);
         QString sPage = sList.at(2);
 
         bool rl = false;
@@ -196,6 +195,10 @@ void NotesWidget::__UpdateNoteItem(const QString &msgContent)
                         rl = true;
                         t_widget->setBSelect(true);
                         t_widget->setTextEditText(sText);
+
+                        m_pNotesList->setCurrentItem(pItem);
+
+                        notifyMsg(MSG_FILE_IS_CHANGE, "1");
 
                         break;
                     }
@@ -214,8 +217,9 @@ void NotesWidget::__UpdateNoteItem(const QString &msgContent)
 }
 
 
-void NotesWidget::slotOpenFileOk(QString sPath)
+void NotesWidget::slotOpenFileOk(const QString &sPath)
 {
+    m_strBindPath = sPath;
     qDebug() << "^*^*^*^*^*" << sPath;
     m_nIndex = 0;
     m_ThreadLoadImage.setIsLoaded(false);
@@ -224,9 +228,8 @@ void NotesWidget::slotOpenFileOk(QString sPath)
     }
 
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
-    DocummentProxy *t_docPtr = pMtwe->getCurFileAndProxy(sPath);
+    DocummentProxy *t_docPtr = pMtwe->getCurFileAndProxy(m_strBindPath);
     if (t_docPtr) {
-        m_mapUuidAndPage.clear();
         m_pNotesList->clear();
 
         QList<stHighlightContent> list_note;
@@ -248,8 +251,6 @@ void NotesWidget::slotOpenFileOk(QString sPath)
 
             addNewItem(QImage(), page, uuid, contant);
         }
-
-        m_pNotesList->setCurrentRow(0);
 
         m_ThreadLoadImage.setListNoteSt(list_note);
         m_ThreadLoadImage.setIsLoaded(true);
@@ -289,7 +290,7 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
         QString t_uuid = t_widget->noteUUId();
         int page = t_widget->nPageIndex();
 
-        auto pDocProxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
+        auto pDocProxy = MainTabWidgetEx::Instance()->getCurFileAndProxy(m_strBindPath);
         if (pDocProxy) {
             pDocProxy->jumpToHighLight(t_uuid, page);
         }
@@ -387,12 +388,12 @@ void NotesWidget::slotAddAnnotation()
 void NotesWidget::addNotesItem(const QString &text, const int &iType)
 {
     QStringList t_strList = text.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (t_strList.count() == 4) {
-        QString t_strUUid = t_strList.at(1).trimmed();
-        QString t_strText = t_strList.at(2).trimmed();
-        int t_nPage = t_strList.at(3).trimmed().toInt();
+    if (t_strList.count() == 3) {
+        QString t_strUUid = t_strList.at(0).trimmed();
+        QString t_strText = t_strList.at(1).trimmed();
+        int t_nPage = t_strList.at(2).trimmed().toInt();
 
-        auto dproxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
+        auto dproxy = MainTabWidgetEx::Instance()->getCurFileAndProxy(m_strBindPath);
         if (nullptr == dproxy) {
             return;
         }
@@ -402,7 +403,9 @@ void NotesWidget::addNotesItem(const QString &text, const int &iType)
             QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_SMALL);
             auto item = addNewItem(img, t_nPage, t_strUUid, t_strText, true, iType);
             if (item) {
-                m_mapUuidAndPage.insert(t_strUUid, t_nPage);
+                m_pNotesList->setCurrentItem(item);
+
+                notifyMsg(MSG_FILE_IS_CHANGE, "1");
             }
         }
     }
@@ -414,8 +417,6 @@ void NotesWidget::addNotesItem(const QString &text, const int &iType)
  */
 void NotesWidget::initConnection()
 {
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
-
     connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const QImage &)), SLOT(slotLoadImage(const QImage &)));
 
     connect(m_pNotesList, SIGNAL(sigSelectItem(QListWidgetItem *)), SLOT(slotSelectItem(QListWidgetItem *)));
@@ -483,12 +484,16 @@ QListWidgetItem *NotesWidget::addNewItem(const QImage &image, const int &page, c
         item->setSizeHint(QSize(LEFTMINWIDTH, 80));
 
         m_pNotesList->setItemWidget(item, itemWidget);
-        m_pNotesList->setCurrentItem(item);
 
         return item;
     }
 
     return nullptr;
+}
+
+QString NotesWidget::getBindPath() const
+{
+    return m_strBindPath;
 }
 
 /**
@@ -498,17 +503,20 @@ QListWidgetItem *NotesWidget::addNewItem(const QImage &image, const int &page, c
  */
 int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (m_pMsgList.contains(msgType)) {
-        emit sigDealWithData(msgType, msgContent);
-    }
-
-    return 0;
-}
-
-int NotesWidget::qDealWithData(const int &msgType, const QString &msgContent)
-{
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
         slotOpenFileOk(msgContent);
+    } else if (MSG_NOTE_ADD_ITEM == msgType) {
+        __AddNoteItem(msgContent);
+    } else if (MSG_NOTE_PAGE_ADD_ITEM == msgType) {
+        __AddNoteItem(msgContent, NOTE_ICON);
+    } else if (MSG_NOTE_DELETE_ITEM == msgType || MSG_NOTE_PAGE_DELETE_ITEM == msgType) {
+        __DeleteNoteItem(msgContent);
+    } else if (MSG_NOTE_UPDATE_ITEM == msgType || MSG_NOTE_PAGE_UPDATE_ITEM == msgType) {
+        __UpdateNoteItem(msgContent);
+    }
+
+    if (m_pMsgList.contains(msgType)) {
+        return MSG_OK;
     }
     return MSG_NO_OK;
 }
@@ -541,7 +549,7 @@ void ThreadLoadImageOfNote::run()
         for (int page = 0; page < m_stListNote.count(); page++) {
             if (!m_isLoaded)
                 break;
-            auto dproxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
+            auto dproxy = MainTabWidgetEx::Instance()->getCurFileAndProxy(m_pNoteWidget->getBindPath());
             if (nullptr == dproxy) {
                 break;
             }

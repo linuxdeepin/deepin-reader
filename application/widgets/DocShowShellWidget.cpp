@@ -130,19 +130,19 @@ void DocShowShellWidget::onOpenNoteWidget(const QString &msgContent)
 //        QString sX = sList.at(1);
 //        QString sY = sList.at(2);
 
-        auto pWidget = this->findChild<NoteViewWidget *>();
-        if (pWidget == nullptr) {
-            pWidget = new NoteViewWidget(this);
+        if (m_pNoteViewWidget == nullptr) {
+            m_pNoteViewWidget = new NoteViewWidget(this);
         }
-        pWidget->setEditText("");
-        pWidget->setNoteUuid("");
-        pWidget->setNotePage(sPage);
+        m_pNoteViewWidget->setEditText("");
+        m_pNoteViewWidget->setNoteUuid("");
+        m_pNoteViewWidget->setNotePage(sPage);
+        m_pNoteViewWidget->setWidgetType(NOTE_HIGHLIGHT);
 
         QPoint point;
         bool t_bHigh = false;
-        dApp->m_pAppInfo->setSmallNoteWidgetSize(pWidget->size());
+        dApp->m_pAppInfo->setSmallNoteWidgetSize(m_pNoteViewWidget->size());
         dApp->m_pAppInfo->mousePressLocal(t_bHigh, point);
-        pWidget->showWidget(point);
+        m_pNoteViewWidget->showWidget(point);
     }
 }
 
@@ -161,21 +161,21 @@ void DocShowShellWidget::onShowNoteWidget(const QString &contant)
             pHelper->getAnnotationText(t_strUUid, sContant, t_page.toInt());
         }
 
-        auto pWidget = this->findChild<NoteViewWidget *>();
-        if (pWidget == nullptr) {
-            pWidget = new NoteViewWidget(this);
+        if (m_pNoteViewWidget == nullptr) {
+            m_pNoteViewWidget = new NoteViewWidget(this);
         }
-        pWidget->setNoteUuid(t_strUUid);
-        pWidget->setNotePage(t_page);
-        pWidget->setEditText(sContant);
+        m_pNoteViewWidget->setNoteUuid(t_strUUid);
+        m_pNoteViewWidget->setNotePage(t_page);
+        m_pNoteViewWidget->setEditText(sContant);
+        m_pNoteViewWidget->setWidgetType(NOTE_HIGHLIGHT);
 //        pWidget->setPointAndPage("");
-        dApp->m_pAppInfo->setSmallNoteWidgetSize(pWidget->size());
+        dApp->m_pAppInfo->setSmallNoteWidgetSize(m_pNoteViewWidget->size());
 
         bool t_bHigh = false;  // 点击位置是否是高亮
         QPoint point;          // = this->mapToGlobal(rrect.bottomRight());// 鼠标点击位置
 
         dApp->m_pAppInfo->mousePressLocal(t_bHigh, point);
-        pWidget->showWidget(point);
+        m_pNoteViewWidget->showWidget(point);
     }
 }
 
@@ -194,15 +194,14 @@ void DocShowShellWidget::__ShowPageNoteWidget(const QString &msgContent)
         if (pHelper) {
             pHelper->getAnnotationText(sUuid, sContant, sPage.toInt());
         }
-        auto pWidget = this->findChild<NoteViewWidget *>();
-        if (pWidget == nullptr) {
-            pWidget = new NoteViewWidget(this);
+        if (m_pNoteViewWidget == nullptr) {
+            m_pNoteViewWidget = new NoteViewWidget(this);
         }
-        pWidget->setEditText(sContant);
-        pWidget->setNoteUuid(sUuid);
-        pWidget->setNotePage(sPage);
-        pWidget->setWidgetType(NOTE_ICON);
-        pWidget->showWidget(QPoint(sX.toInt(), sY.toInt()));
+        m_pNoteViewWidget->setEditText(sContant);
+        m_pNoteViewWidget->setNoteUuid(sUuid);
+        m_pNoteViewWidget->setNotePage(sPage);
+        m_pNoteViewWidget->setWidgetType(NOTE_ICON);
+        m_pNoteViewWidget->showWidget(QPoint(sX.toInt(), sY.toInt()));
     }
 }
 
@@ -279,7 +278,7 @@ int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
 {
     if (KeyStr::g_ctrl_f == msgContent && dApp->m_pAppInfo->qGetCurShowState() != FILE_SLIDE) { //  搜索
         emit sigShowFileFind();
-        return ConstantMsg::g_effective_res;
+        return MSG_OK;
     }
 
     if (KeyStr::g_f11 == msgContent && dApp->m_pAppInfo->qGetCurShowState() != FILE_SLIDE) { //  全屏
@@ -294,29 +293,12 @@ int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
         m_pctrlwidget->setCanShow(false);
         emit sigChangePlayCtrlShow(false);
     }
-    return 0;
+    return MSG_NO_OK;
 }
 
 int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (m_pMsgList.contains(msgType)) {
-        emit sigDealWithData(msgType, msgContent);
-        return ConstantMsg::g_effective_res;
-    }
-
-    if (msgType == MSG_OPERATION_SLIDE) {
-        m_pctrlwidget->setCanShow(true);
-        emit sigChangePlayCtrlShow(true);
-    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-        //  最后一个处理通知消息
-        return dealWithNotifyMsg(msgContent);
-    }
-    return 0;
-}
-
-int DocShowShellWidget::qDealWithData(const int &msgType, const QString &msgContent)
-{
-    int nRes = m_pFileViewWidget->qDealWithData(msgType, msgContent);
+    int nRes = m_pFileViewWidget->dealWithData(msgType, msgContent);
     if (nRes != MSG_OK) {
         if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {             //  添加注释
             onOpenNoteWidget(msgContent);
@@ -326,11 +308,19 @@ int DocShowShellWidget::qDealWithData(const int &msgType, const QString &msgCont
             __ShowPageNoteWidget(msgContent);
         }
 
-        int nRes = MSG_NO_OK;
         if (m_pMsgList.contains(msgType)) {
-            nRes = MSG_OK;
+            return  MSG_OK;
+        }
+
+        if (msgType == MSG_OPERATION_SLIDE) {
+            m_pctrlwidget->setCanShow(true);
+            emit sigChangePlayCtrlShow(true);
+        } else if (msgType == MSG_NOTIFY_KEY_MSG) {
+            //  最后一个处理通知消息
+            return dealWithNotifyMsg(msgContent);
         }
     }
+
     return nRes;
 }
 

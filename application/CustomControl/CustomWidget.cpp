@@ -37,21 +37,21 @@ void CustomWidget::updateWidgetTheme()
     setPalette(plt);
 }
 
-int CustomWidget::qDealWithData(const int &, const QString &)
-{
-    return MSG_NO_OK;
-}
-
 int CustomWidget::qDealWithShortKey(const QString &)
 {
     return MSG_NO_OK;
 }
 
-//  操作 消息
-void CustomWidget::sendMsg(const int &msgType, const QString &msgContent)
+int CustomWidget::dealWithData(const QString &)
 {
-    notifyMsg(msgType, msgContent);
+    return MSG_NO_OK;
 }
+
+//  操作 消息
+//void CustomWidget::sendMsg(const int &msgType, const QString &msgContent)
+//{
+//    notifyMsg(msgType, msgContent);
+//}
 
 //  通知消息
 void CustomWidget::notifyMsg(const int &msgType, const QString &msgContent)

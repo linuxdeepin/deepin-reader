@@ -62,12 +62,9 @@ void MainSplitter::InitWidget()
 void MainSplitter::SlotOpenFileOk()
 {
     QString s = d_ptr->qGetPath();
-    TitleWidget::Instance()->qDealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
+    TitleWidget::Instance()->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
 
-    auto children = this->findChildren<CustomWidget *>();
-    foreach (auto sw, children) {
-        sw->qDealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
-    }
+    m_pLeftWidget->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
 }
 
 void MainSplitter::SlotNotifyMsg(const int &msgType, const QString &msgContent)
@@ -91,9 +88,11 @@ void MainSplitter::SlotNotifyMsg(const int &msgType, const QString &msgContent)
 
                 d_ptr->qDealWithData(msgType, sContent);
 
-                int nRes = m_pLeftWidget->qDealWithData(msgType, sContent);
+                int nRes = m_pLeftWidget->dealWithData(msgType, sContent);
                 if (nRes != MSG_OK) {
-                    nRes = m_pDocWidget->qDealWithData(msgType, sContent);
+                    nRes = m_pDocWidget->dealWithData(msgType, sContent);
+                    if (nRes == MSG_OK)
+                        return;
                 }
             }
         }

@@ -53,15 +53,25 @@ CatalogTreeView::~CatalogTreeView()
     dApp->m_pModelService->removeObserver(this);
 }
 
+int CatalogTreeView::dealWithData(const QString &msgContent)
+{
+    return MSG_NO_OK;
+}
+
 int CatalogTreeView::dealWithData(const int &msgType, const QString &msgContent)
 {
-    return 0;
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        OnOpenFileOk(msgContent);
+    } else if (msgType == MSG_FILE_PAGE_CHANGE) {    //  文档页变化, 需要跳转到对应项
+        OnFilePageChanged(msgContent);
+    }
+    return MSG_NO_OK;
 }
 
-void CatalogTreeView::sendMsg(const int &, const QString &)
-{
+//void CatalogTreeView::sendMsg(const int &, const QString &)
+//{
 
-}
+//}
 
 void CatalogTreeView::notifyMsg(const int &, const QString &)
 {
@@ -69,11 +79,6 @@ void CatalogTreeView::notifyMsg(const int &, const QString &)
 
 int CatalogTreeView::qDealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        OnOpenFileOk(msgContent);
-    } else if (msgType == MSG_FILE_PAGE_CHANGE) {    //  文档页变化, 需要跳转到对应项
-        OnFilePageChanged(msgContent);
-    }
     return MSG_NO_OK;
 }
 
@@ -183,47 +188,49 @@ void CatalogTreeView::SlotClicked(const QModelIndex &index)
 //  文档页变化, 目录高亮随之变化
 void CatalogTreeView::OnFilePageChanged(const QString &sPage)
 {
-    this->clearSelection(); //  清除 之前的选中
+    if (this->isVisible()) {
+        this->clearSelection(); //  清除 之前的选中
 
-    auto model = reinterpret_cast<QStandardItemModel *>(this->model());
-    if (model) {
+        auto model = reinterpret_cast<QStandardItemModel *>(this->model());
+        if (model) {
 
-        int iPage = sPage.toInt();
-        iPage++;
+            int iPage = sPage.toInt();
+            iPage++;
 
-        auto itemList = model->findItems("*", Qt::MatchWildcard | Qt::MatchRecursive);
-        foreach (auto item, itemList) {
-            int itemPage = item->data().toInt();
-            if (itemPage == iPage) {    //  找到了
+            auto itemList = model->findItems("*", Qt::MatchWildcard | Qt::MatchRecursive);
+            foreach (auto item, itemList) {
+                int itemPage = item->data().toInt();
+                if (itemPage == iPage) {    //  找到了
 
-                auto curIndex = model->indexFromItem(item);
-                if (curIndex.isValid()) {
+                    auto curIndex = model->indexFromItem(item);
+                    if (curIndex.isValid()) {
 
-                    auto curSelIndex = curIndex;
+                        auto curSelIndex = curIndex;
 
-                    auto parentIndex = curIndex.parent();   //  父 节点
-                    if (parentIndex.isValid()) {    //  父节点存在
-                        auto grandpaIndex = parentIndex.parent();       //  是否还存在 爷爷节点
-                        if (grandpaIndex.isValid()) {    //  爷爷节点存在
-                            bool isGrandpaExpand = this->isExpanded(grandpaIndex);
-                            if (isGrandpaExpand) { //  爷爷节点 已 展开
-                                bool isExpand = this->isExpanded(parentIndex);
-                                if (!isExpand) {   //  父节点未展开, 则 父节点高亮
-                                    curSelIndex = parentIndex;
+                        auto parentIndex = curIndex.parent();   //  父 节点
+                        if (parentIndex.isValid()) {    //  父节点存在
+                            auto grandpaIndex = parentIndex.parent();       //  是否还存在 爷爷节点
+                            if (grandpaIndex.isValid()) {    //  爷爷节点存在
+                                bool isGrandpaExpand = this->isExpanded(grandpaIndex);
+                                if (isGrandpaExpand) { //  爷爷节点 已 展开
+                                    bool isExpand = this->isExpanded(parentIndex);
+                                    if (!isExpand) {   //  父节点未展开, 则 父节点高亮
+                                        curSelIndex = parentIndex;
+                                    }
+                                } else {    //  爷爷节点 未展开, 则 爷爷节点高亮
+                                    curSelIndex = grandpaIndex;
                                 }
-                            } else {    //  爷爷节点 未展开, 则 爷爷节点高亮
-                                curSelIndex = grandpaIndex;
+                            } else {    //  没有 爷爷节点
+                                bool isExpand = this->isExpanded(parentIndex);
+                                if (!isExpand)     //  父节点未展开, 则 父节点高亮
+                                    curSelIndex = parentIndex;
                             }
-                        } else {    //  没有 爷爷节点
-                            bool isExpand = this->isExpanded(parentIndex);
-                            if (!isExpand)     //  父节点未展开, 则 父节点高亮
-                                curSelIndex = parentIndex;
                         }
-                    }
 
-                    this->selectionModel()->setCurrentIndex(curSelIndex, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+                        this->selectionModel()->setCurrentIndex(curSelIndex, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+                    }
+                    break;
                 }
-                break;
             }
         }
     }

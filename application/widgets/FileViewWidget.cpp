@@ -117,9 +117,6 @@ void FileViewWidget::slotDealWithData(const int &msgType, const QString &msgCont
     case MSG_FILE_ROTATE:           //  文档旋转了
         onSetWidgetAdapt();
         break;
-    case MSG_NOTE_ADD_CONTENT:                   //  添加注释
-        onFileAddNote(msgContent);
-        break;
     default:
         break;
     }
@@ -273,26 +270,40 @@ void FileViewWidget::onFileAddAnnotation()
 void FileViewWidget::onFileAddNote(const QString &msgContent)
 {
     QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (contentList.size() == 3) {
-        QString sPath = contentList.at(0);
-        if (sPath == m_strPath) {
-            QString sNote = contentList.at(1);
-            QString sPage = contentList.at(2);
+    if (contentList.size() == 2) {
+        QString sNote = contentList.at(0);
+        QString sPage = contentList.at(1);
 
-            int nSx = m_pStartPoint.x();
-            int nSy = m_pStartPoint.y();
+        int nSx = m_pStartPoint.x();
+        int nSy = m_pStartPoint.y();
 
-            int nEx = m_pEndSelectPoint.x();
-            int nEy = m_pEndSelectPoint.y();
+        int nEx = m_pEndSelectPoint.x();
+        int nEy = m_pEndSelectPoint.y();
 
-            QString sContent = QString::number(nSx) + Constant::sQStringSep +
-                               QString::number(nSy) + Constant::sQStringSep +
-                               QString::number(nEx) + Constant::sQStringSep +
-                               QString::number(nEy) + Constant::sQStringSep +
-                               sNote + Constant::sQStringSep +
-                               sPage;
+        QString sContent = QString::number(nSx) + Constant::sQStringSep +
+                           QString::number(nSy) + Constant::sQStringSep +
+                           QString::number(nEx) + Constant::sQStringSep +
+                           QString::number(nEy) + Constant::sQStringSep +
+                           sNote + Constant::sQStringSep +
+                           sPage;
 
-            dApp->m_pHelper->qDealWithData(MSG_NOTE_ADD_HIGHLIGHT_NOTE, sContent);
+        QString sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_ADD_HIGHLIGHT_NOTE, sContent);
+        QJsonParseError error;
+        QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
+        if (error.error == QJsonParseError::NoError) {
+            QJsonObject obj = doc.object();
+            int nReturn = obj.value("return").toInt();
+            if (nReturn == MSG_OK) {
+                QString sValue = obj.value("value").toString();
+
+                QJsonObject notifyObj;
+
+                notifyObj.insert("content", sValue);
+                notifyObj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + NOTE_WIDGET);
+
+                QJsonDocument notifyDoc(notifyObj);
+                notifyMsg(MSG_NOTE_ADD_ITEM, notifyDoc.toJson(QJsonDocument::Compact));
+            }
         }
     }
 }
@@ -517,7 +528,6 @@ void FileViewWidget::initConnections()
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), SLOT(slotCustomContextMenuRequested(const QPoint &)));
 
     connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
-    connect(this, SIGNAL(sigDealWithKeyMsg(const QString &)), SLOT(slotDealWithKeyMsg(const QString &)));
 }
 
 //  设置　窗口　自适应　宽＼高　度
@@ -527,13 +537,12 @@ void FileViewWidget::onSetWidgetAdapt()
         if (!m_pProxy)
             return;
 
-        double nScale = 0.0;
         if (m_nAdapteState == WIDGET_State) {
             int nWidth = this->width();
-            nScale = m_pProxy->adaptWidthAndShow(nWidth);
+            m_pProxy->adaptWidthAndShow(nWidth);
         } else if (m_nAdapteState == HEIGHT_State) {
             int nHeight = this->height();
-            nScale = m_pProxy->adaptHeightAndShow(nHeight);
+            m_pProxy->adaptHeightAndShow(nHeight);
         }
 
 //    if (nScale != 0.0) {
@@ -543,15 +552,6 @@ void FileViewWidget::onSetWidgetAdapt()
 }
 //  消息 数据 处理
 int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
-{
-    if (m_pMsgList.contains(msgType)) {
-        emit sigDealWithData(msgType, msgContent);
-    }
-
-    return 0;
-}
-
-int FileViewWidget::qDealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_VIEWCHANGE_DOUBLE_SHOW) {
         OnSetViewChange(msgContent);
@@ -565,6 +565,8 @@ int FileViewWidget::qDealWithData(const int &msgType, const QString &msgContent)
         onSetHandShape(msgContent);
     } else if (msgType == MSG_NOTE_PAGE_ADD) {      //  开启添加图标注释开关
         __SetPageAddIconState();
+    } else if (msgType == MSG_NOTE_ADD_CONTENT) {
+        onFileAddNote(msgContent);
     }
 
     bool rl = m_pMsgList.contains(msgType);

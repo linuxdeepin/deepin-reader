@@ -9,6 +9,7 @@
  */
 
 class MainOperationWidget;
+class DataStackedWidget;
 
 class LeftSidebarWidget : public CustomWidget
 {
@@ -25,7 +26,6 @@ signals:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
-    int qDealWithData(const int &, const QString &) override;
 
     // CustomWidget interface
 protected:
@@ -42,7 +42,7 @@ private:
 
 private:
     MainOperationWidget     *m_pMainOperationWidget = nullptr;
-
+    DataStackedWidget       *m_pStackedWidget = nullptr;
 };
 
 #endif  // LEFTSHOWWIDGET_H

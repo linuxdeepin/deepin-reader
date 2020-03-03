@@ -83,10 +83,11 @@ public:
     // CustomWidget interface
 
 public:
-    int qDealWithData(const int &, const QString &) override;
     int qDealWithShortKey(const QString &) override;
 
     int getBookMarkPage(const int &index);
+
+    QString getBindPath() const;
 
 signals:
     void sigSetBookMarkState(const int &, const int &);
@@ -116,7 +117,7 @@ private:
     CustomListWidget    *m_pBookMarkListWidget = nullptr;
     DPushButton         *m_pAddBookMarkBtn = nullptr;
     LoadBookMarkThread  m_loadBookMarkThread;
-
+    QString             m_strBindPath = "";
 };
 
 #endif  // BOOKMARKFORM_H

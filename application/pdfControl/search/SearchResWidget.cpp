@@ -328,7 +328,7 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgList.contains(msgType)) {
         emit sigDealWithData(msgType, msgContent);
-        return  ConstantMsg::g_effective_res;
+        return  MSG_OK;
     }
 
     if (msgType == MSG_FIND_START) {  //  查询内容
@@ -337,7 +337,7 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
         }
     }
 
-    return 0;
+    return MSG_NO_OK;
 }
 
 /**

@@ -40,22 +40,17 @@ AnnotationHelper::AnnotationHelper(QObject *parent)
     };
 }
 
-void AnnotationHelper::notifyMsg(const int &msgType, const QString &msgContent)
-{
-
-}
-
 QString AnnotationHelper::qDealWithData(const int &msgType, const QString &msgContent)
 {
     QString sRes = "";
     if (msgType == MSG_NOTE_PAGE_ADD_CONTENT) {                 //  新增 页面注释
         AddPageIconAnnotation(msgContent);
     } else if (msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {       //  删除页面注释
-        __DeletePageIconAnnotation(msgContent);
+        __DeletePageIconAnnotation(msgContent, sRes);
     } else if (msgType == MSG_NOTE_PAGE_UPDATE_CONTENT) {       //  更新页面注释
         __UpdatePageIconAnnotation(msgContent);
     } else if (msgType == MSG_NOTE_DELETE_CONTENT) {            //  刪除高亮注释
-        __RemoveAnnotation(msgContent);
+        __RemoveAnnotation(msgContent, sRes);
     } else if (msgType == MSG_NOTE_UPDATE_CONTENT) {            //  更新高亮注释
         __UpdateAnnotationText(msgContent);
     } else if (msgType == MSG_NOTE_REMOVE_HIGHLIGHT_COLOR) {  //  移除高亮注释 的高亮
@@ -65,7 +60,7 @@ QString AnnotationHelper::qDealWithData(const int &msgType, const QString &msgCo
     } else if (msgType == MSG_NOTE_ADD_HIGHLIGHT_COLOR) {                 //  添加高亮
         __AddHighLight(msgContent);
     } else if (msgType == MSG_NOTE_ADD_HIGHLIGHT_NOTE) {            //  添加高亮注释
-        __AddHighLightAnnotation(msgContent);
+        __AddHighLightAnnotation(msgContent, sRes);
     }
 
     int nRes = MSG_NO_OK;
@@ -83,7 +78,7 @@ QString AnnotationHelper::qDealWithData(const int &msgType, const QString &msgCo
 }
 
 //  删除注释节点
-void AnnotationHelper::__DeletePageIconAnnotation(const QString &msgContent)
+void AnnotationHelper::__DeletePageIconAnnotation(const QString &msgContent, QString &sUuid)
 {
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
 
@@ -91,12 +86,10 @@ void AnnotationHelper::__DeletePageIconAnnotation(const QString &msgContent)
     if (_proxy) {
         QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (sList.size() == 2) {
-            QString sUuid = sList.at(0);
+            sUuid = sList.at(0);
             QString sPage = sList.at(1);
 
             _proxy->removeAnnotation(sUuid, sPage.toInt());
-
-            notifyMsg(MSG_NOTE_PAGE_DELETE_ITEM, sUuid);
         }
     }
 }
@@ -111,12 +104,10 @@ void AnnotationHelper::__UpdatePageIconAnnotation(const QString &msgContent)
     if (_proxy) {
         QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (sList.size() == 3) {
-            QString sNote = sList.at(0);
-            QString sUuid = sList.at(1);
+            QString sUuid = sList.at(0);
+            QString sNote = sList.at(1);
             QString sPage = sList.at(2);
             _proxy->setAnnotationText(sPage.toInt(), sUuid, sNote);
-
-            notifyMsg(MSG_NOTE_PAGE_UPDATE_ITEM, msgContent);
         }
     }
 }
@@ -153,7 +144,7 @@ void AnnotationHelper::__AddHighLight(const QString &msgContent)
     }
 }
 
-void AnnotationHelper::__AddHighLightAnnotation(const QString &msgContent)
+void AnnotationHelper::__AddHighLightAnnotation(const QString &msgContent, QString &sRes)
 {
     QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (sList.size() == 6) {
@@ -176,8 +167,7 @@ void AnnotationHelper::__AddHighLightAnnotation(const QString &msgContent)
             if (strUuid != "") {
                 _proxy->setAnnotationText(sPage.toInt(), strUuid, sNote);
 
-                QString t_str = strUuid.trimmed() + Constant::sQStringSep + sNote.trimmed() + Constant::sQStringSep + sPage;
-                notifyMsg(MSG_NOTE_ADD_ITEM, t_str);
+                sRes = strUuid.trimmed() + Constant::sQStringSep + sNote.trimmed() + Constant::sQStringSep + sPage;
             }
         }
     }
@@ -199,7 +189,6 @@ void AnnotationHelper::__RemoveHighLight(const QString &msgContent, QString &sRe
             QString sUuid = _proxy->removeAnnotation(tempPoint);
             if (sUuid != "") {
                 sRes = sUuid;
-                notifyMsg(MSG_NOTE_DELETE_ITEM, sUuid);
             }
         }
     }
@@ -226,7 +215,7 @@ void AnnotationHelper::__ChangeAnnotationColor(const QString &msgContent)
     }
 }
 
-void AnnotationHelper::__RemoveAnnotation(const QString &msgContent)
+void AnnotationHelper::__RemoveAnnotation(const QString &msgContent, QString &sUuid)
 {
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
 
@@ -234,11 +223,9 @@ void AnnotationHelper::__RemoveAnnotation(const QString &msgContent)
     if (_proxy) {
         QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (sList.size() == 2) {
-            QString sUuid = sList.at(0);
+            sUuid = sList.at(0);
             QString sPage = sList.at(1);
             _proxy->removeAnnotation(sUuid, sPage.toInt());
-
-            notifyMsg(MSG_NOTE_DELETE_ITEM, sUuid);
         }
     }
 }
@@ -256,7 +243,6 @@ void AnnotationHelper::__UpdateAnnotationText(const QString &msgContent)
             QString sPage = sList.at(2);
 
             _proxy->setAnnotationText(sPage.toInt(), sUuid, sText);
-            notifyMsg(MSG_NOTE_UPDATE_ITEM, msgContent);
         }
     }
 }
@@ -269,12 +255,11 @@ void AnnotationHelper::AddPageIconAnnotation(const QString &msgContent)
     if (_proxy) {
         QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (sList.size() == 3) {
-            QString sNote = sList.at(0);
-            QString sUuid = sList.at(1);
+            QString sUuid = sList.at(0);
+            QString  sNote = sList.at(1);
             QString sPage = sList.at(2);
             _proxy->setAnnotationText(sPage.toInt(), sUuid, sNote);
             QString t_str = sUuid.trimmed() + Constant::sQStringSep + sNote.trimmed() + Constant::sQStringSep + sPage;
-            notifyMsg(MSG_NOTE_PAGE_ADD_ITEM, t_str);
         }
     }
 }

@@ -9,6 +9,7 @@ class QStackedLayout;
 
 class PlayControlWidget;
 class FileViewWidget;
+class NoteViewWidget;
 
 /**
  * @brief The DocShowShellWidget class
@@ -36,7 +37,7 @@ signals:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
-    int qDealWithData(const int &, const QString &) override;
+
     bool OpenFilePath(const QString &);
 
     // QWidget interface
@@ -70,6 +71,8 @@ protected:
 private:
     PlayControlWidget   *m_pctrlwidget = nullptr;
     FileViewWidget      *m_pFileViewWidget = nullptr;
+    NoteViewWidget      *m_pNoteViewWidget = nullptr;
+
     DSpinner            *m_pSpiner = nullptr;
     DWidget             *m_pSpinerWidget = nullptr;
     QStackedLayout      *m_playout = nullptr;

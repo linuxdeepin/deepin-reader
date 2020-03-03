@@ -124,7 +124,13 @@ void MainOperationWidget::slotOpenFileOk(const QString &sPath)
         nId = 0;
     }
 
-    __SetBtnCheckById(nId);
+    auto btnGroup = this->findChild<QButtonGroup *>();
+    if (btnGroup) {
+        auto btn = btnGroup->button(nId);
+        if (btn) {
+            btn->setChecked(true);
+        }
+    }
 }
 
 //  主题更新
@@ -153,20 +159,14 @@ int MainOperationWidget::dealWithData(const int &msgType, const QString &msgCont
 {
     if (m_pMsgList.contains(msgType)) {
         emit sigDealWithData(msgType, msgContent);
-        return ConstantMsg::g_effective_res;
+        return MSG_OK;
     }
 
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        slotOpenFileOk(msgContent);
+    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
     }
 
-    return 0;
-}
-
-int MainOperationWidget::qDealWithData(const int &msgType,  const QString &msgContent)
-{
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        slotOpenFileOk(msgContent);
-    }
     return MSG_NO_OK;
 }

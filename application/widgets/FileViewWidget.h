@@ -62,7 +62,6 @@ signals:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
-    int qDealWithData(const int &, const QString &) override;
     int qDealWithShortKey(const QString &) override;
 
     // CustomWidget interface

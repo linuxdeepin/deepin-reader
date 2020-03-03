@@ -96,23 +96,15 @@ void PagingWidget::initConnections()
  */
 int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {     //  颜色主题切换
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {    //  颜色主题切换
         emit sigUpdateTheme();
-    }
-
-    return 0;
-}
-
-int PagingWidget::qDealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {     //  文档打开成功了
+    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         OnDocFileOpenOk(msgContent);
     } else if (msgType == MSG_FILE_PAGE_CHANGE) {                  //  文档页变化了
         OnDocFilePageChange(msgContent);
     }
-    int nRes = MSG_NO_OK;
 
-    return  nRes;
+    return MSG_NO_OK;
 }
 
 void PagingWidget::slotUpdateTheme()

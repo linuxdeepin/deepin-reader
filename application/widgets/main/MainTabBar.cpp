@@ -50,20 +50,25 @@ MainTabBar::~MainTabBar()
     dApp->m_pModelService->removeObserver(this);
 }
 
+int MainTabBar::dealWithData(const QString &)
+{
+    return MSG_NO_OK;
+}
+
 int MainTabBar::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgList.contains(msgType)) {
         emit sigDealWithData(msgType, msgContent);
-        return  ConstantMsg::g_effective_res;
+        return MSG_OK;
     }
 
-    return 0;
+    return MSG_NO_OK;
 }
 
-void MainTabBar::sendMsg(const int &msgType, const QString &msgContent)
-{
-    notifyMsg(msgType, msgContent);
-}
+//void MainTabBar::sendMsg(const int &msgType, const QString &msgContent)
+//{
+//    notifyMsg(msgType, msgContent);
+//}
 
 void MainTabBar::notifyMsg(const int &msgType, const QString &msgContent)
 {

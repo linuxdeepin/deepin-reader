@@ -62,7 +62,7 @@ int MainTabWidgetEx::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgList.contains(msgType)) {
         emit sigDealWithData(msgType, msgContent);
-        return ConstantMsg::g_effective_res;
+        return MSG_OK;
     }
 
     QJsonParseError error;
@@ -73,11 +73,11 @@ int MainTabWidgetEx::dealWithData(const int &msgType, const QString &msgContent)
 
         if (sTo.contains(this->m_strObserverName)) {
             emit sigDealNotifyMsg(msgType, msgContent);
-            return ConstantMsg::g_effective_res;
+            return MSG_OK;
         }
     }
 
-    return 0;
+    return MSG_NO_OK;
 }
 
 QStringList MainTabWidgetEx::qGetAllPath() const

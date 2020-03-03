@@ -14,56 +14,58 @@ DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
 
 void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPage)
 {
-    m_showPoint = showPoint;
-    m_nRightPageNumber = nClickPage;
-
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
-    QString sCurPath = pMtwe->qGetCurPath();
+    if (pMtwe) {
 
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
-    bool bBookState = pageList.contains(m_nRightPageNumber);
-    if (bBookState) {
-        m_pBookMark->setProperty("data", 0);
-        m_pBookMark->setText(tr("Remove bookmark"));
-    } else {
-        m_pBookMark->setProperty("data", 1);
-        m_pBookMark->setText(tr("Add bookmark"));
-    }
+        m_showPoint = showPoint;
+        m_nRightPageNumber = nClickPage;
 
-    m_pFirstPage->setEnabled(true);
-    m_pPrevPage->setEnabled(true);
-    m_pNextPage->setEnabled(true);
-    m_pEndPage->setEnabled(true);
+        QString sCurPath = pMtwe->qGetCurPath();
 
-    if (m_nRightPageNumber == 0) {    //  首页
-        m_pFirstPage->setEnabled(false);
-        m_pPrevPage->setEnabled(false);
-    } else {
-        MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
-        DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sCurPath);
-        if (_proxy) {
-            int nPageNum = _proxy->getPageSNum();
-            nPageNum--;
+        QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
+        bool bBookState = pageList.contains(m_nRightPageNumber);
+        if (bBookState) {
+            m_pBookMark->setProperty("data", 0);
+            m_pBookMark->setText(tr("Remove bookmark"));
+        } else {
+            m_pBookMark->setProperty("data", 1);
+            m_pBookMark->setText(tr("Add bookmark"));
+        }
 
-            if (m_nRightPageNumber == nPageNum) { //  最后一页
-                m_pNextPage->setEnabled(false);
-                m_pEndPage->setEnabled(false);
+        m_pFirstPage->setEnabled(true);
+        m_pPrevPage->setEnabled(true);
+        m_pNextPage->setEnabled(true);
+        m_pEndPage->setEnabled(true);
+
+        if (m_nRightPageNumber == 0) {    //  首页
+            m_pFirstPage->setEnabled(false);
+            m_pPrevPage->setEnabled(false);
+        } else {
+            DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sCurPath);
+            if (_proxy) {
+                int nPageNum = _proxy->getPageSNum();
+                nPageNum--;
+
+                if (m_nRightPageNumber == nPageNum) { //  最后一页
+                    m_pNextPage->setEnabled(false);
+                    m_pEndPage->setEnabled(false);
+                }
             }
         }
-    }
 
-    //  当前显示状态状态
-    int nState = dApp->m_pAppInfo->qGetCurShowState();
-    if (nState == FILE_FULLSCREEN) {
-        m_pExitFullScreen->setVisible(true);
-        m_pSearch->setVisible(false);
-        m_pAddIconNote->setVisible(false);
-    } else {
-        m_pExitFullScreen->setVisible(false);
-        m_pSearch->setVisible(true);
-        m_pAddIconNote->setVisible(true);
+        //  当前显示状态状态
+        int nState = dApp->m_pAppInfo->qGetCurShowState();
+        if (nState == FILE_FULLSCREEN) {
+            m_pExitFullScreen->setVisible(true);
+            m_pSearch->setVisible(false);
+            m_pAddIconNote->setVisible(false);
+        } else {
+            m_pExitFullScreen->setVisible(false);
+            m_pSearch->setVisible(true);
+            m_pAddIconNote->setVisible(true);
+        }
+        this->exec(showPoint);
     }
-    this->exec(showPoint);
 }
 
 void DefaultOperationMenu::initActions()

@@ -29,6 +29,7 @@ void MainSplitterPrivate::qDealWithData(const int &nType, const QString &sValue)
 
 void MainSplitterPrivate::saveData()
 {
+    m_pChangeState = -1;
     for (int iLoop = Scale; iLoop < CurPage + 1; iLoop++) {
         dApp->m_pDBService->setHistroyData(m_strPath, iLoop, m_pFileDataModel.qGetData(iLoop));
     }

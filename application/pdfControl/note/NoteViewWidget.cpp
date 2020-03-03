@@ -56,7 +56,7 @@ int NoteViewWidget::dealWithData(const int &msgType, const QString &)
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
     }
-    return 0;
+    return MSG_NO_OK;
 }
 
 void NoteViewWidget::setEditText(const QString &note)
@@ -131,17 +131,56 @@ void NoteViewWidget::__FileNoteHideEvent()
     if (m_pNoteUuid == "") {
         if (sText != "") {
             QString msgContent = sText + Constant::sQStringSep + m_pNotePage;
-            sendMsg(MSG_NOTE_ADD_CONTENT, msgContent);
+
+            QJsonObject obj;
+            obj.insert("content", msgContent);
+            obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
+
+            QJsonDocument doc(obj);
+
+            notifyMsg(MSG_NOTE_ADD_CONTENT, doc.toJson(QJsonDocument::Compact));
         }
     } else {
         if (sText == "" && m_strNote != "") {   //  原来有内容, 被删了, 删除高亮
             QString msgContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage;
-            dApp->m_pHelper->qDealWithData(MSG_NOTE_DELETE_CONTENT, msgContent);
+            QString sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_DELETE_CONTENT, msgContent);
+
+            QJsonParseError error;
+            QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
+            if (error.error == QJsonParseError::NoError) {
+                QJsonObject obj = doc.object();
+                int nReturn = obj.value("return").toInt();
+                if (nReturn == MSG_OK) {
+
+                    QJsonObject notifyObj;
+                    notifyObj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + NOTE_WIDGET);
+                    notifyObj.insert("content", m_pNoteUuid);
+
+                    QJsonDocument notifyDoc(notifyObj);
+                    notifyMsg(MSG_NOTE_DELETE_ITEM, notifyDoc.toJson(QJsonDocument::Compact));
+                }
+            }
+
         } else if (sText != m_strNote) {
-            QString msgContent = sText + Constant::sQStringSep +
-                                 m_pNoteUuid + Constant::sQStringSep +
+            QString msgContent = m_pNoteUuid  + Constant::sQStringSep +
+                                 sText + Constant::sQStringSep +
                                  m_pNotePage;
-            dApp->m_pHelper->qDealWithData(MSG_NOTE_UPDATE_CONTENT, msgContent);
+            QString sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_UPDATE_CONTENT, msgContent);
+            QJsonParseError error;
+            QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
+            if (error.error == QJsonParseError::NoError) {
+                QJsonObject obj = doc.object();
+                int nReturn = obj.value("return").toInt();
+                if (nReturn == MSG_OK) {
+
+                    QJsonObject notifyObj;
+                    notifyObj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + NOTE_WIDGET);
+                    notifyObj.insert("content", msgContent);
+
+                    QJsonDocument notifyDoc(notifyObj);
+                    notifyMsg(MSG_NOTE_UPDATE_ITEM, notifyDoc.toJson(QJsonDocument::Compact));
+                }
+            }
         }
         m_strNote = sText;
     }
@@ -155,26 +194,71 @@ void NoteViewWidget::__PageNoteHideEvent()
         QString sText = m_pTextEdit->toPlainText().trimmed();
         if (m_strNote == "") {
             if (sText != "") {
-                QString msgContent = sText + Constant::sQStringSep +
-                                     m_pNoteUuid + Constant::sQStringSep +
+                QString msgContent = m_pNoteUuid  + Constant::sQStringSep +
+                                     sText + Constant::sQStringSep +
                                      m_pNotePage;
 
-                dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_ADD_CONTENT, msgContent);
+                QString sRes =  dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_ADD_CONTENT, msgContent);
+                QJsonParseError error;
+                QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
+                if (error.error == QJsonParseError::NoError) {
+                    QJsonObject obj = doc.object();
+                    int nReturn = obj.value("return").toInt();
+                    if (nReturn == MSG_OK) {
+                        QJsonObject notifyObj;
+                        notifyObj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + NOTE_WIDGET);
+                        notifyObj.insert("content", msgContent);
+
+                        QJsonDocument notifyDoc(notifyObj);
+                        notifyMsg(MSG_NOTE_PAGE_ADD_ITEM, notifyDoc.toJson(QJsonDocument::Compact));
+                    }
+                }
             } else {
                 auto pHelper = MainTabWidgetEx::Instance()->getCurFileAndProxy();
                 if (pHelper) {
                     pHelper->removeAnnotation(m_pNoteUuid);
+
+                    QJsonObject notifyObj;
+                    notifyObj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + NOTE_WIDGET);
+                    notifyObj.insert("content", m_pNoteUuid);
+
+                    QJsonDocument notifyDoc(notifyObj);
+                    notifyMsg(MSG_NOTE_PAGE_DELETE_ITEM, notifyDoc.toJson(QJsonDocument::Compact));
                 }
             }
         } else {
             if (sText == "") {
-                QString msgContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage;
-                dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_DELETE_CONTENT, msgContent);
+                auto pHelper = MainTabWidgetEx::Instance()->getCurFileAndProxy();
+                if (pHelper) {
+                    pHelper->removeAnnotation(m_pNoteUuid);
+
+                    QJsonObject notifyObj;
+                    notifyObj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + NOTE_WIDGET);
+                    notifyObj.insert("content", m_pNoteUuid);
+
+                    QJsonDocument notifyDoc(notifyObj);
+                    notifyMsg(MSG_NOTE_PAGE_DELETE_ITEM, notifyDoc.toJson(QJsonDocument::Compact));
+                }
             } else if (sText != m_strNote) {  //  只有 和 原来已有注释内容不一样, 才会提示 保存
-                QString msgContent = sText + Constant::sQStringSep +
-                                     m_pNoteUuid + Constant::sQStringSep +
+                QString msgContent = m_pNoteUuid  + Constant::sQStringSep +
+                                     sText + Constant::sQStringSep +
                                      m_pNotePage;
-                dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_UPDATE_CONTENT, msgContent);
+                QString sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_UPDATE_CONTENT, msgContent);
+                QJsonParseError error;
+                QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
+                if (error.error == QJsonParseError::NoError) {
+                    QJsonObject obj = doc.object();
+                    int nReturn = obj.value("return").toInt();
+                    if (nReturn == MSG_OK) {
+
+                        QJsonObject notifyObj;
+                        notifyObj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + NOTE_WIDGET);
+                        notifyObj.insert("content", msgContent);
+
+                        QJsonDocument notifyDoc(notifyObj);
+                        notifyMsg(MSG_NOTE_PAGE_UPDATE_ITEM, notifyDoc.toJson(QJsonDocument::Compact));
+                    }
+                }
             }
         }
     }

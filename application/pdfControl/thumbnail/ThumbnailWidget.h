@@ -104,7 +104,6 @@ signals:
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
-    int qDealWithData(const int &, const QString &) override;
 
     void fillContantToList();
 

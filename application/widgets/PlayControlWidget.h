@@ -31,7 +31,8 @@ public:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
-    void sendMsg(const int &, const QString &msgContent = "") override;
+    int dealWithData(const QString &) override;
+//    void sendMsg(const int &, const QString &msgContent = "") override;
     void notifyMsg(const int &, const QString &msgContent = "") override;
 
 protected:

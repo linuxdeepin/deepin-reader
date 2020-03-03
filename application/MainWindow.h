@@ -34,6 +34,11 @@ signals:
 
     void sigDealWithData(const int &, const QString &);
 
+    // IObserver interface
+public:
+    int dealWithData(const int &, const QString &) override;
+    int dealWithData(const QString &) override;
+
     // QWidget interface
 protected:
     void showEvent(QShowEvent *ev) override;
@@ -51,7 +56,7 @@ private:
     void displayShortcuts();
 
     // IObserver interface
-    void sendMsg(const int &, const QString &msgContent = "") override;
+//    void sendMsg(const int &, const QString &msgContent = "") override;
     void notifyMsg(const int &, const QString &msgContent = "") override;
 
     void showDefaultSize();
@@ -71,9 +76,7 @@ private:
     QList<int>      m_pMsgList;
     Qt::WindowStates    m_nOldState = Qt::WindowNoState;        //  旧的窗口状态
 
-    // IObserver interface
-public:
-    int dealWithData(const int &, const QString &) override;
+
 };
 
 #endif // MainWindow_H

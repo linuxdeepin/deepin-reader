@@ -35,10 +35,10 @@ class NotesItemWidget : public CustomItemWidget
 
 public:
     explicit NotesItemWidget(DWidget *parent = nullptr);
-    ~NotesItemWidget() override;
 
 signals:
     void sigSelectItem(const QString &);
+    void sigDeleteItem(const QString &);
 
 public:
     // IObserver interface

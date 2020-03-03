@@ -25,10 +25,39 @@
 #include "search/BufferWidget.h"
 #include "search/SearchResWidget.h"
 
+#include "widgets/main/MainTabWidgetEx.h"
+
 DataStackedWidget::DataStackedWidget(DWidget *parent)
     : DStackedWidget(parent)
 {
     InitWidgets();
+}
+
+int DataStackedWidget::dealWithData(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(msgContent);
+        int nId = fdm.qGetData(LeftIndex);
+        if (nId == -1) {
+            nId = 0;
+        }
+        setCurrentIndex(nId);
+    }
+
+    int nRes = m_pThWidget->dealWithData(msgType, msgContent);
+    if (nRes != MSG_OK) {
+        nRes = m_pCatalogWidget->dealWithData(msgType, msgContent);
+        if (nRes != MSG_OK) {
+            nRes = m_pBookMarkWidget ->dealWithData(msgType, msgContent);
+            if (nRes != MSG_OK) {
+                nRes = m_pNotesWidget->dealWithData(msgType, msgContent);
+                if (nRes == MSG_OK)
+                    return MSG_OK;
+            }
+        }
+    }
+
+    return MSG_NO_OK;
 }
 
 void DataStackedWidget::keyPressEvent(QKeyEvent *event)
@@ -54,36 +83,38 @@ void DataStackedWidget::slotSetStackCurIndex(const int &iIndex)
         emit sigSearchWidgetState(iIndex);
     } else {
         QJsonObject obj;
-        obj.insert("content", "1");
+        obj.insert("content", QString::number(iIndex));
         obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET);
 
         QJsonDocument doc(obj);
 
-        dApp->m_pModelService->notifyMsg(MSG_LEFTBAR_STATE,  QString::number(iIndex));
+        dApp->m_pModelService->notifyMsg(MSG_LEFTBAR_STATE,  doc.toJson(QJsonDocument::Compact));
     }
 }
 
 void DataStackedWidget::InitWidgets()
 {
-    ThumbnailWidget *tnWidget = new ThumbnailWidget(this);
-    insertWidget(WIDGET_THUMBNAIL, tnWidget);
+    m_pThWidget = new ThumbnailWidget;
+    insertWidget(WIDGET_THUMBNAIL, m_pThWidget);
 
-    insertWidget(WIDGET_catalog, new CatalogWidget(this));
+    m_pCatalogWidget = new CatalogWidget;
+    insertWidget(WIDGET_catalog, m_pCatalogWidget);
 
-    BookMarkWidget *bookMark = new BookMarkWidget(this);
+    m_pBookMarkWidget = new BookMarkWidget(this);
 
-    insertWidget(WIDGET_BOOKMARK, bookMark);
+    insertWidget(WIDGET_BOOKMARK, m_pBookMarkWidget);
 
-    connect(bookMark, SIGNAL(sigSetBookMarkState(const int &, const int &)),
-            tnWidget, SLOT(SlotSetBookMarkState(const int &, const int &)));
+    m_pNotesWidget = new NotesWidget(this);
+    connect(m_pBookMarkWidget, SIGNAL(sigSetBookMarkState(const int &, const int &)),
+            m_pThWidget, SLOT(SlotSetBookMarkState(const int &, const int &)));
 
-    insertWidget(WIDGET_NOTE, new NotesWidget(this));
-    insertWidget(WIDGET_SEARCH, new SearchResWidget(this));
+    insertWidget(WIDGET_NOTE, m_pNotesWidget);
+//    insertWidget(WIDGET_SEARCH, new SearchResWidget(this));
 
-    auto buffWidget = new BufferWidget(this);
-    connect(this, SIGNAL(sigSearchWidgetState(const int &)), buffWidget, SLOT(SlotSetSpinnerState(const int &)));
+//    auto buffWidget = new BufferWidget(this);
+//    connect(this, SIGNAL(sigSearchWidgetState(const int &)), buffWidget, SLOT(SlotSetSpinnerState(const int &)));
 
-    insertWidget(WIDGET_BUFFER, buffWidget);
+//    insertWidget(WIDGET_BUFFER, buffWidget);
     setCurrentIndex(WIDGET_THUMBNAIL);
 }
 

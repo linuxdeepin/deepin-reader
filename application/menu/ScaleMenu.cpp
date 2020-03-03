@@ -39,7 +39,10 @@ int ScaleMenu::qDealWithData(const int &msgType, const QString &msgContent)
         OnFileOpenOk(msgContent);
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         onShortKey(msgContent);
-        return MSG_OK;
+
+        if (shortKeyList.contains(msgContent)) {
+            return MSG_OK;
+        }
     }
 
     return MSG_NO_OK;

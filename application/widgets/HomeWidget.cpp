@@ -142,5 +142,5 @@ int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
         emit sigUpdateTheme();
     }
-    return 0;
+    return MSG_NO_OK;
 }

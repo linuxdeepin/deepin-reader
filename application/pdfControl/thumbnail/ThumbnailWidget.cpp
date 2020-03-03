@@ -53,21 +53,17 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigUpdateTheme();
     } else if (msgType == MSG_FILE_ROTATE) {  //  文档旋转了
         emit sigSetRotate(msgContent.toInt());
-    }
-    return 0;
-}
-
-int ThumbnailWidget::qDealWithData(const int &msgType, const QString &msgContent)
-{
-    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
-        slotOpenFileOk(msgContent);
-    } else if (MSG_FILE_PAGE_CHANGE == msgType) {
-        slotDocFilePageChanged(msgContent);
+    } else {
+        if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+            slotOpenFileOk(msgContent);
+            m_pPageWidget->dealWithData(msgType, msgContent);
+        } else if (MSG_FILE_PAGE_CHANGE == msgType) {
+            slotDocFilePageChanged(msgContent);
+            m_pPageWidget->dealWithData(msgType, msgContent);
+        }
     }
 
-    int nRes = MSG_NO_OK;
-
-    return nRes;
+    return MSG_NO_OK;
 }
 
 // 初始化界面

@@ -41,7 +41,6 @@ public:
 
     // CustomWidget interface
 public:
-    int qDealWithData(const int &, const QString &) override;
     int qDealWithShortKey(const QString &) override;
 
     // CustomWidget interface
@@ -49,7 +48,6 @@ protected:
     void initWidget() override;
 
 private slots:
-    void SlotDealWithData(const int &, const QString &);
     void slotSetFindWidget(const int &);
     void slotUpdateTheme();
     void slotOpenFileOk(const QString &);
@@ -103,7 +101,6 @@ private:
     ScaleMenu       *m_pScaleMenu = nullptr;
 
     int m_nCurHandleShape = -1;  //  当前的选择工具状态
-
 };
 
 #endif  // TITLEWIDGET_H

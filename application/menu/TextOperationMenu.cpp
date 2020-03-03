@@ -134,7 +134,25 @@ void TextOperationMenu::slotCopyClicked()
 void TextOperationMenu::slotRemoveHighLightClicked()
 {
     QString sContent = QString::number(m_pClickPoint.x()) + Constant::sQStringSep +  QString::number(m_pClickPoint.y());
-    dApp->m_pHelper->qDealWithData(MSG_NOTE_REMOVE_HIGHLIGHT_COLOR, sContent);
+    QString sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_REMOVE_HIGHLIGHT_COLOR, sContent);
+
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
+    if (error.error == QJsonParseError::NoError) {
+        QJsonObject obj = doc.object();
+        int nReturn = obj.value("return").toInt();
+        if (nReturn == MSG_OK) {
+            QString sUuid = obj.value("value").toString();
+
+            QJsonObject notifyObj;
+
+            notifyObj.insert("content", sUuid);
+            notifyObj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + NOTE_WIDGET);
+
+            QJsonDocument notifyDoc(notifyObj);
+            notifyMsg(MSG_NOTE_DELETE_ITEM, notifyDoc.toJson(QJsonDocument::Compact));
+        }
+    }
 }
 
 void TextOperationMenu::slotAddNoteClicked()

@@ -33,10 +33,6 @@ NotesItemWidget::NotesItemWidget(DWidget *parent)
     __InitConnections();
 }
 
-NotesItemWidget::~NotesItemWidget()
-{
-}
-
 void NotesItemWidget::setTextEditText(const QString &contant)
 {
     m_strNote = contant;
@@ -71,10 +67,30 @@ void NotesItemWidget::setBSelect(const bool &paint)
 void NotesItemWidget::slotDltNoteContant()
 {
     QString sContent = m_strUUid + Constant::sQStringSep + m_strPage;
+
+    QString sRes = "";
     if (m_nNoteType == NOTE_HIGHLIGHT) {
-        dApp->m_pHelper->qDealWithData(MSG_NOTE_DELETE_CONTENT, sContent);
+        sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_DELETE_CONTENT, sContent);
     } else {
-        dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
+        sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
+    }
+    if (sRes != "") {
+        QJsonParseError error;
+        QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
+        if (error.error == QJsonParseError::NoError) {
+            QJsonObject obj = doc.object();
+            int nReturn = obj.value("return").toInt();
+            if (nReturn == MSG_OK) {
+
+                QJsonObject notifyObj;
+                notifyObj.insert("content", m_strUUid);
+                notifyObj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + NOTE_WIDGET);
+
+                QJsonDocument notifyDoc(notifyObj);
+
+                notifyMsg(MSG_NOTE_DELETE_ITEM, notifyDoc.toJson(QJsonDocument::Compact));
+            }
+        }
     }
 }
 
@@ -108,6 +124,7 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
     if (m_menu) {
         m_menu->exec(QCursor::pos());
     }
+
 }
 
 void NotesItemWidget::slotUpdateTheme()

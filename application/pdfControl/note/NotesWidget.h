@@ -28,6 +28,8 @@
 #include "CustomControl/CustomWidget.h"
 #include "docview/commonstruct.h"
 
+class NotesWidget;
+
 class ThreadLoadImageOfNote : public QThread
 {
     Q_OBJECT
@@ -45,6 +47,8 @@ public:
     inline bool isLoaded() { return m_isLoaded; }
 
     inline void setListNoteSt(const QList<stHighlightContent> &list) { m_stListNote = list; }
+    inline void setParentWidget(NotesWidget *thumbnail) { m_pNoteWidget = thumbnail; }
+
 
 signals:
     void sigLoadImage(const QImage &);
@@ -55,6 +59,7 @@ protected:
 private:
     bool m_isLoaded = false;                 // 是都加载完毕
     QList<stHighlightContent> m_stListNote;  // 新文件的注释列表
+    NotesWidget *m_pNoteWidget = nullptr;
 };
 
 /**
@@ -78,15 +83,14 @@ public:
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
-    int qDealWithData(const int &, const QString &) override;
+
+    QString getBindPath() const;
 
 protected:
     void initWidget() override;
 
 private slots:
-    void slotDealWithData(const int &, const QString &);
-
-    void slotOpenFileOk(QString strcontent);
+    void slotOpenFileOk(const QString &strcontent);
     void slotLoadImage(const QImage &);
     void slotSelectItem(QListWidgetItem *);
     void SlotRightSelectItem(const QString &);
@@ -111,12 +115,11 @@ private:
 
 private:
     CustomListWidget *m_pNotesList = nullptr;
-    QMap<QString, int> m_mapUuidAndPage;      //  uuid 和 页码 对应
     ThreadLoadImageOfNote m_ThreadLoadImage;  // 加载注释缩略图线程
     DPushButton *m_pAddAnnotationBtn = nullptr ;   // 添加注释
 
     int m_nIndex = -1;                        // 当前注释列表数
-
+    QString m_strBindPath = "";
 };
 
 #endif  // NOTESFORM_H

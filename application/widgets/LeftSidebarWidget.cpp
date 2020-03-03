@@ -65,42 +65,34 @@ void LeftSidebarWidget::initWidget()
     pVBoxLayout->setSpacing(0);
     this->setLayout(pVBoxLayout);
 
-    auto pStackedWidget = new DataStackedWidget(this);
-    pVBoxLayout->addWidget(pStackedWidget);
+    m_pStackedWidget = new DataStackedWidget(this);
+    pVBoxLayout->addWidget(m_pStackedWidget);
 
     m_pMainOperationWidget = new MainOperationWidget;
-    connect(m_pMainOperationWidget, SIGNAL(sigShowStackWidget(const int &)), pStackedWidget, SLOT(slotSetStackCurIndex(const int &)));
+    connect(m_pMainOperationWidget, SIGNAL(sigShowStackWidget(const int &)), m_pStackedWidget, SLOT(slotSetStackCurIndex(const int &)));
 
     pVBoxLayout->addWidget(m_pMainOperationWidget, 0, Qt::AlignBottom);
 }
 
 int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    return 0;
-}
-
-int LeftSidebarWidget::qDealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_WIDGET_THUMBNAILS_VIEW) {
-        onSetWidgetVisible(msgContent.toInt());
-    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        SlotOpenFileOk(msgContent);
-
-        m_pMainOperationWidget->qDealWithData(msgType, msgContent);
-    }
-
     int nRes = MSG_NO_OK;
-    if (m_pMsgList.contains(msgType)) {
-        nRes = MSG_OK;
-    }
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        SlotOpenFileOk(msgContent);
+        m_pStackedWidget->dealWithData(msgType, msgContent);
+        m_pMainOperationWidget->dealWithData(msgType, msgContent);
 
-    if (nRes != MSG_OK) {
-        auto children = this->findChildren<CustomWidget *>();
-        foreach (auto cw, children) {
-            nRes = cw->qDealWithData(msgType, msgContent);
-            if (nRes == MSG_OK) {
-                break;
-            }
+    } else {
+        if (msgType == MSG_WIDGET_THUMBNAILS_VIEW) {
+            onSetWidgetVisible(msgContent.toInt());
+        }
+
+        if (m_pMsgList.contains(msgType)) {
+            nRes = MSG_OK;
+        }
+
+        if (nRes != MSG_OK) {
+            nRes = m_pStackedWidget->dealWithData(msgType, msgContent);
         }
     }
 

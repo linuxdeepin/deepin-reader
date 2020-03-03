@@ -23,6 +23,11 @@
 
 DWIDGET_USE_NAMESPACE
 
+class BookMarkWidget;
+class CatalogWidget;
+class NotesWidget;
+class ThumbnailWidget;
+
 class DataStackedWidget : public DStackedWidget
 {
     Q_OBJECT
@@ -33,6 +38,9 @@ public:
 
 signals:
     void sigSearchWidgetState(const int &);
+
+public:
+    int dealWithData(const int &, const QString &);
 
     // QWidget interface
 protected:
@@ -47,6 +55,12 @@ private:
     void onJumpToPrevPage();
     void onJumpToNextPage();
     void DeleteItemByKey();
+
+private:
+    ThumbnailWidget     *m_pThWidget = nullptr;
+    CatalogWidget       *m_pCatalogWidget = nullptr;
+    BookMarkWidget      *m_pBookMarkWidget = nullptr;
+    NotesWidget         *m_pNotesWidget = nullptr;
 };
 
 #endif // DATASTACKEDWIDGET_H

@@ -26,7 +26,7 @@
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
 
-class SubjectThread;
+class NotifySubject;
 
 class MODELSERVICESHARED_EXPORT ModelService : public QObject
 {
@@ -45,7 +45,7 @@ public:
     void notifyMsg(const int &, const QString &msgContent = "");
 
 private:
-    SubjectThread *m_pSubjectThread = nullptr;
+    NotifySubject *m_pNotifySubject = nullptr;
 };
 
 #endif // MODELSERVICE_H

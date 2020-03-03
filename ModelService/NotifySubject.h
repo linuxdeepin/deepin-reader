@@ -4,7 +4,7 @@
 #include <QMutex>
 
 #include "SubjectThread.h"
-#include "Singleton.h"
+
 /**
  * @brief The NotifySubject class
  * @brief 消息推送服务
@@ -18,22 +18,31 @@ typedef struct {
 
 class NotifySubject : public SubjectThread
 {
+private:
+    NotifySubject();
+
 public:
-    ~NotifySubject() override;
+    static NotifySubject *Instance()
+    {
+        static NotifySubject ns;
+        return &ns;
+    }
+
     // ISubject interface
 public:
     void addObserver(IObserver *obs) override;
     void removeObserver(IObserver *obs) override;
 
-    // QThread interface
-protected:
-    void run() override;
-
     // SubjectThread interface
 public:
     void startThreadRun() override;
     void stopThreadRun() override;
+
     void notifyMsg(const int &, const QString &msgContent = "") override;
+
+    // QThread interface
+protected:
+    void run() override;
 
 private:
     void NotifyObservers(const int &, const QString &);
@@ -45,8 +54,8 @@ private:
 
     QMutex              m_mutex;
     QMutex              m_obsMutex;
+
 };
 
-typedef CSingleton<NotifySubject> g_NotifySubject;
 
 #endif // NOTIFYSUBJECT_H

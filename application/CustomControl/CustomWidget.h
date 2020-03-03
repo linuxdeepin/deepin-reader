@@ -60,21 +60,23 @@ signals:
     void sigDealWithData(const int &, const QString &);
 
 public:
-    virtual int qDealWithData(const int &, const QString &);
     virtual int qDealWithShortKey(const QString &);
+    int dealWithData(const QString &) override;
 
 protected:
     virtual void initWidget() = 0;
     void updateWidgetTheme();
 
 protected:
-    void sendMsg(const int &msgType, const QString &msgContent = "") override;
+//    void sendMsg(const int &msgType, const QString &msgContent = "") override;
     void notifyMsg(const int &msgType, const QString &msgContent = "") override;
     void showScreenCenter();
 
 protected:
     QList<int>          m_pMsgList;         //  需要处理的消息列表
     QList<QString>      m_pKeyMsgList;      //  需要处理的按键消息列表
+
+
 };
 
 #endif  // CUSTOMWIDGET_H

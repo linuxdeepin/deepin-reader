@@ -188,23 +188,11 @@ void TitleWidget::initWidget()
     m_layout->addStretch(1);
 }
 
-void TitleWidget::SlotDealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_TAB_SHOW_FILE_CHANGE) {
-        OnFileShowChange(msgContent);
-
-        m_pFontMenu->qDealWithData(msgType, msgContent);
-        m_pScaleMenu->qDealWithData(msgType, msgContent);
-    }
-}
-
 void TitleWidget::initConnections()
 {
     connect(this, SIGNAL(sigSetFindWidget(const int &)), SLOT(slotSetFindWidget(const int &)));
     connect(this, SIGNAL(sigMagnifierCancel()), SLOT(slotMagnifierCancel()));
     connect(this, SIGNAL(sigAppFullScreen()), SLOT(slotAppFullScreen()));
-
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
 }
 
 //  文档切换了
@@ -436,12 +424,17 @@ void TitleWidget::setMagnifierState()
 //  处理 推送消息
 int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (m_pMsgList.contains(msgType)) {
-        emit sigDealWithData(msgType, msgContent);
-        return ConstantMsg::g_effective_res;
-    };
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        slotOpenFileOk(msgContent);
 
-    if (msgType == MSG_FIND_START) {
+        TitleMenu::Instance()->qDealWithData(msgType, msgContent);
+    }
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK  || msgType == MSG_FILE_PAGE_CHANGE) {
+        OnFileShowChange(msgContent);
+
+        m_pFontMenu->qDealWithData(msgType, msgContent);
+        m_pScaleMenu->qDealWithData(msgType, msgContent);
+    } else if (msgType == MSG_FIND_START) {
         emit sigSetFindWidget(1);
     } else if (msgType == MSG_OPERATION_SLIDE) {
         emit sigAppFullScreen();
@@ -459,22 +452,12 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
             emit sigAppFullScreen();
         }
     }
-    return 0;
-}
 
-int TitleWidget::qDealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        slotOpenFileOk(msgContent);
+    if (m_pMsgList.contains(msgType)) {
+        return MSG_OK;
     }
 
-    TitleMenu::Instance()->qDealWithData(msgType, msgContent);
-    m_pFontMenu->qDealWithData(msgType, msgContent);
-    m_pScaleMenu->qDealWithData(msgType, msgContent);
-
-    int nRes = MSG_NO_OK;
-
-    return nRes;
+    return MSG_NO_OK;
 }
 
 int TitleWidget::qDealWithShortKey(const QString &sKey)
@@ -489,11 +472,16 @@ int TitleWidget::qDealWithShortKey(const QString &sKey)
         int nRes = m_pFontMenu->qDealWithData(MSG_NOTIFY_KEY_MSG, sKey);
         if (nRes != MSG_OK) {
             nRes = m_pScaleMenu->qDealWithData(MSG_NOTIFY_KEY_MSG, sKey);
+
+            if (nRes == MSG_OK) {
+                return MSG_OK;
+            }
         }
     }
 
     if (m_pKeyMsgList.contains(sKey)) {
         return MSG_OK;
     }
+
     return MSG_NO_OK;
 }

@@ -44,19 +44,16 @@ CatalogWidget::~CatalogWidget()
 
 int CatalogWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    return 0;
-}
-
-int CatalogWidget::qDealWithData(const int &msgType, const QString &msgContent)
-{
+    //  打开 文件通知消息
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
         OnDocOpenFileOk(msgContent);
     }
 
-    m_pTree->qDealWithData(msgType, msgContent);
+    if (MSG_OPERATION_OPEN_FILE_OK == msgType || MSG_FILE_PAGE_CHANGE == msgType) {
+        m_pTree->dealWithData(msgType, msgContent);
+    }
 
-    int nRes = MSG_NO_OK;
-    return nRes;
+    return MSG_NO_OK;
 }
 
 void CatalogWidget::initWidget()

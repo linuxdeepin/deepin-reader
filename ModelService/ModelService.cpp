@@ -23,36 +23,36 @@
 ModelService::ModelService(QObject *parent)
     : QObject(parent)
 {
-    m_pSubjectThread = g_NotifySubject::getInstance();
-    if (m_pSubjectThread) {
-        m_pSubjectThread->startThreadRun();
+    m_pNotifySubject = NotifySubject::Instance();
+    if (m_pNotifySubject) {
+        m_pNotifySubject->startThreadRun();
     }
 }
 
 ModelService::~ModelService()
 {
-    if (m_pSubjectThread) {
-        m_pSubjectThread->stopThreadRun();
+    if (m_pNotifySubject) {
+        m_pNotifySubject->stopThreadRun();
     }
 }
 
 void ModelService::addObserver(IObserver *obs)
 {
-    if (m_pSubjectThread) {
-        m_pSubjectThread->addObserver(obs);
+    if (m_pNotifySubject) {
+        m_pNotifySubject->addObserver(obs);
     }
 }
 
 void ModelService::removeObserver(IObserver *obs)
 {
-    if (m_pSubjectThread) {
-        m_pSubjectThread->removeObserver(obs);
+    if (m_pNotifySubject) {
+        m_pNotifySubject->removeObserver(obs);
     }
 }
 
 void ModelService::notifyMsg(const int &msgType, const QString &msgContent)
 {
-    if (m_pSubjectThread) {
-        m_pSubjectThread->notifyMsg(msgType, msgContent);
+    if (m_pNotifySubject) {
+        m_pNotifySubject->notifyMsg(msgType, msgContent);
     }
 }

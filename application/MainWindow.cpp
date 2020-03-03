@@ -237,7 +237,7 @@ void MainWindow::slotShortCut(const QString &key)
     }
 }
 
-void MainWindow::sendMsg(const int &, const QString &) {}
+//void MainWindow::sendMsg(const int &, const QString &) {}
 
 void MainWindow::notifyMsg(const int &msgType, const QString &msgContent)
 {
@@ -278,11 +278,17 @@ void MainWindow::initShortCut()
     }
 }
 
+int MainWindow::dealWithData(const QString &)
+{
+    return MSG_NO_OK;
+}
+
+
 int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgList.contains(msgType)) {
         emit sigDealWithData(msgType, msgContent);
-        return ConstantMsg::g_effective_res;
+        return MSG_OK;
     }
 
     if (msgType == MSG_NOTIFY_KEY_MSG) {
@@ -300,5 +306,5 @@ int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
             }
         }
     }
-    return 0;
+    return MSG_NO_OK;
 }
