@@ -25,6 +25,8 @@ public:
     ~DocShowShellWidget() override;
 
 signals:
+    void sigOpenFileOk();
+
     void sigShowCloseBtn(const int &);
     void sigHideCloseBtn();
     void sigShowFileFind();
@@ -48,11 +50,9 @@ private slots:
     void slotBtnCloseClicked();
     void slotUpdateTheme();
     void slotChangePlayCtrlShow(bool bshow);
-
-    void slotDealWithData(const int &, const QString &msgContent = "");
+    void SlotOpenFileOk();
 
 private:
-    void OnOpenFileOk();
     void initConnections();
     int dealWithNotifyMsg(const QString &);
     void onOpenNoteWidget(const QString &);

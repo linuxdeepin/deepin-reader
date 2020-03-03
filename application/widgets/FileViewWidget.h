@@ -56,7 +56,6 @@ public:
     int         m_nCurrentHandelState = Default_State;  //  当前鼠标状态
 
 signals:
-    void signalDealWithData(const int &, const QString &);
     void sigShowPlayCtrl(bool bshow);
     void sigFileOpenOK();
 
@@ -95,7 +94,7 @@ private:
     void onSetWidgetAdapt();
 
     void onFileAddNote(const QString &);
-    void __SetPageAddIconState(const QString &);
+    void __SetPageAddIconState();
 
     void onFileAddAnnotation();
     void onFileAddNote();

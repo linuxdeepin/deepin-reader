@@ -120,9 +120,6 @@ void FileViewWidget::slotDealWithData(const int &msgType, const QString &msgCont
     case MSG_NOTE_ADD_CONTENT:                   //  添加注释
         onFileAddNote(msgContent);
         break;
-    case MSG_NOTE_PAGE_ADD:                     //  2020.2.18   wzx add
-        __SetPageAddIconState(msgContent);
-        break;
     default:
         break;
     }
@@ -171,11 +168,6 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 
         m_operatemenu->execMenu(tempPoint, bIsHighLight, sSelectText, struuid);
     } else if (bicon) {
-        if (nullptr == m_operatemenu) {
-            m_operatemenu = new TextOperationMenu(this);
-            connect(m_operatemenu, SIGNAL(sigDealWithData(const int &, const QString &)), this, SIGNAL(signalDealWithData(const int &, const QString &)));
-        }
-
         m_operatemenu->setClickPoint(pRightClickPoint);
         m_operatemenu->setPStartPoint(m_pStartPoint);
         m_operatemenu->setPEndPoint(m_pEndSelectPoint);
@@ -186,7 +178,6 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
     } else {  //  否则弹出 文档操作菜单
         if (nullptr == m_pDefaultMenu) {
             m_pDefaultMenu = new DefaultOperationMenu(this);
-            connect(m_pDefaultMenu, SIGNAL(sigDealWithData(const int &, const QString &)), this, SIGNAL(signalDealWithData(const int &, const QString &)));
         }
         m_pDefaultMenu->setClickpoint(pRightClickPoint);
         m_pDefaultMenu->execMenu(tempPoint, nPage);
@@ -306,11 +297,9 @@ void FileViewWidget::onFileAddNote(const QString &msgContent)
     }
 }
 
-void FileViewWidget::__SetPageAddIconState(const QString &sPath)
+void FileViewWidget::__SetPageAddIconState()
 {
-    if (m_strPath == sPath) {
-        m_nCurrentHandelState = NOTE_ADD_State;
-    }
+    m_nCurrentHandelState = NOTE_ADD_State;
 }
 
 void FileViewWidget::onFileAddNote()
@@ -345,7 +334,13 @@ void FileViewWidget::onFileAddNote()
     QString msgContent = QString("%1").arg(nPage) + Constant::sQStringSep +
                          QString("%1").arg(m_pEndSelectPoint.x()) + Constant::sQStringSep +
                          QString("%1").arg(m_pEndSelectPoint.y());
-    emit signalDealWithData(MSG_OPERATION_TEXT_ADD_ANNOTATION, msgContent);
+    QJsonObject obj;
+    obj.insert("content", msgContent);
+    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
+
+    QJsonDocument doc(obj);
+
+    notifyMsg(MSG_OPERATION_TEXT_ADD_ANNOTATION, doc.toJson(QJsonDocument::Compact));
 }
 
 //  设置鼠标状态
@@ -476,17 +471,29 @@ void FileViewWidget::OnSetViewHit(const QString &msgContent)
 //  文档书签状态改变
 void FileViewWidget::slotBookMarkStateChange(int nPage, bool bState)
 {
+    QJsonObject obj;
+    obj.insert("content", QString::number(nPage));
+    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + BOOKMARK_WIDGET);
+
+    QJsonDocument doc(obj);
+
     if (!bState) {
-        emit signalDealWithData(MSG_OPERATION_DELETE_BOOKMARK, QString("%1").arg(nPage));
+        notifyMsg(MSG_OPERATION_DELETE_BOOKMARK, doc.toJson(QJsonDocument::Compact));
     } else {
-        emit signalDealWithData(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(nPage));
+        notifyMsg(MSG_OPERATION_ADD_BOOKMARK, doc.toJson(QJsonDocument::Compact));
     }
 }
 
 //  文档页变化了
 void FileViewWidget::slotDocFilePageChanged(int page)
 {
-    emit signalDealWithData(MSG_FILE_PAGE_CHANGE, QString::number(page));
+    QJsonObject obj;
+    obj.insert("content", QString::number(page));
+    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET);
+
+    QJsonDocument doc(obj);
+
+    notifyMsg(MSG_FILE_PAGE_CHANGE, doc.toJson(QJsonDocument::Compact));
 }
 
 //  打开文档结果
@@ -496,7 +503,7 @@ void FileViewWidget::SlotDocFileOpenResult(bool openresult)
     if (openresult) {
         dApp->m_pDBService->qSelectData(m_strPath, DB_BOOKMARK);
 
-        emit signalDealWithData(MSG_OPERATION_OPEN_FILE_OK, "");
+        emit sigFileOpenOK();
 
         onSetWidgetAdapt();
     } else {
@@ -556,6 +563,8 @@ int FileViewWidget::qDealWithData(const int &msgType, const QString &msgContent)
         OnSetViewHit(msgContent);
     } else if (msgType == MSG_HANDLESHAPE) {
         onSetHandShape(msgContent);
+    } else if (msgType == MSG_NOTE_PAGE_ADD) {      //  开启添加图标注释开关
+        __SetPageAddIconState();
     }
 
     bool rl = m_pMsgList.contains(msgType);

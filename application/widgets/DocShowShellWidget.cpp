@@ -255,19 +255,14 @@ void DocShowShellWidget::slotChangePlayCtrlShow(bool bshow)
     }
 }
 
-void DocShowShellWidget::slotDealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {      //  添加注释
-        onOpenNoteWidget(msgContent);
-    }
-}
-
-void DocShowShellWidget::OnOpenFileOk()
+void DocShowShellWidget::SlotOpenFileOk()
 {
     m_playout->removeWidget(m_pSpinerWidget);
 
     delete  m_pSpinerWidget;
     m_pSpinerWidget = nullptr;
+
+    emit sigOpenFileOk();
 }
 
 void DocShowShellWidget::initConnections()
@@ -277,9 +272,6 @@ void DocShowShellWidget::initConnections()
     connect(this, SIGNAL(sigHideCloseBtn()), SLOT(slotHideCloseBtn()));
     connect(this, SIGNAL(sigChangePlayCtrlShow(bool)), SLOT(slotChangePlayCtrlShow(bool)));
     connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
-
-//    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
-//            SLOT(slotDealWithData(const int &, const QString &)));
 }
 
 //  集中处理 按键通知消息
@@ -332,8 +324,6 @@ int DocShowShellWidget::qDealWithData(const int &msgType, const QString &msgCont
             onShowNoteWidget(msgContent);
         } else if (msgType == MSG_NOTE_PAGE_SHOW_NOTEWIDGET) {          //  显示注释窗口
             __ShowPageNoteWidget(msgContent);
-        } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-            OnOpenFileOk();
         }
 
         int nRes = MSG_NO_OK;
@@ -356,7 +346,7 @@ void DocShowShellWidget::initWidget()
     m_playout->setSpacing(0);
 
     m_pFileViewWidget = new FileViewWidget(this);
-    connect(m_pFileViewWidget, SIGNAL(signalDealWithData(const int &, const QString &)), this, SIGNAL(signalDealWithData(const int &, const QString &)));
+    connect(m_pFileViewWidget, SIGNAL(sigFileOpenOK()), SLOT(SlotOpenFileOk()));
     connect(m_pFileViewWidget, SIGNAL(sigShowPlayCtrl(bool)), this, SLOT(slotChangePlayCtrlShow(bool)));
 
     InitSpinner();

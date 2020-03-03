@@ -66,7 +66,7 @@ private slots:
     void SlotDealWithData(const int &, const QString &);
 
 private:
-    int     m_nOldMiniWidth = 0;
+//    int     m_nOldMiniWidth = 0;/
     QList <int> m_pMsgList;
 };
 

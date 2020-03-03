@@ -32,6 +32,7 @@ NotesWidget::NotesWidget(DWidget *parent)
     m_pMsgList = {MSG_NOTE_ADD_ITEM, MSG_NOTE_DELETE_ITEM, MSG_NOTE_UPDATE_ITEM,
                   MSG_NOTE_PAGE_ADD_ITEM, MSG_NOTE_PAGE_DELETE_ITEM, MSG_NOTE_PAGE_UPDATE_ITEM
                  };
+
     initWidget();
 
     initConnection();
@@ -41,6 +42,7 @@ NotesWidget::NotesWidget(DWidget *parent)
 
 NotesWidget::~NotesWidget()
 {
+    m_ThreadLoadImage.stopThreadRun();
     dApp->m_pModelService->removeObserver(this);
 }
 
@@ -367,7 +369,12 @@ void NotesWidget::__JumpToNextItem()
  */
 void NotesWidget::slotAddAnnotation()
 {
-    emit signalDealWithData(MSG_NOTE_PAGE_ADD, "");
+    QJsonObject obj;
+    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET + Constant::sQStringSep + FILE_VIEW_WIDGET);
+
+    QJsonDocument doc(obj);
+
+    dApp->m_pModelService->notifyMsg(MSG_NOTE_PAGE_ADD, doc.toJson(QJsonDocument::Compact));
 }
 
 /**

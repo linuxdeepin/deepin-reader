@@ -34,6 +34,7 @@ MainTabBar::MainTabBar(DWidget *parent)
     m_strObserverName = "MainTabBar";
     this->setTabsClosable(true);
     this->setMovable(true);
+    this->expanding();
 
     m_pMsgList = {MSG_TAB_ADD, MSG_MENU_NEW_TAB,
                   MSG_MENU_OPEN_FOLDER,
@@ -106,14 +107,14 @@ void MainTabBar::__SetTabMiniWidth()
         nWidth = 140;
     }
 
-    if (m_nOldMiniWidth != nWidth) {
-        m_nOldMiniWidth = nWidth;
+//    if (m_nOldMiniWidth != nWidth) {
+//        m_nOldMiniWidth = nWidth;
 
-        for (int iLoop = 0; iLoop < nCount; iLoop++) {
-            this->setTabMinimumSize(iLoop, QSize(nWidth, 36));
-        }
+    for (int iLoop = 0; iLoop < nCount; iLoop++) {
+        this->setTabMinimumSize(iLoop, QSize(nWidth, 36));
     }
 }
+//}
 
 void MainTabBar::AddFileTab(const QString &sContent)
 {

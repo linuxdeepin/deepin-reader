@@ -93,5 +93,16 @@ int LeftSidebarWidget::qDealWithData(const int &msgType, const QString &msgConte
     if (m_pMsgList.contains(msgType)) {
         nRes = MSG_OK;
     }
+
+    if (nRes != MSG_OK) {
+        auto children = this->findChildren<CustomWidget *>();
+        foreach (auto cw, children) {
+            nRes = cw->qDealWithData(msgType, msgContent);
+            if (nRes == MSG_OK) {
+                break;
+            }
+        }
+    }
+
     return nRes;
 }

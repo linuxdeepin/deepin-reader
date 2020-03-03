@@ -30,6 +30,11 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
         m_pBookMark->setText(tr("Add bookmark"));
     }
 
+    m_pFirstPage->setEnabled(true);
+    m_pPrevPage->setEnabled(true);
+    m_pNextPage->setEnabled(true);
+    m_pEndPage->setEnabled(true);
+
     if (m_nRightPageNumber == 0) {    //  首页
         m_pFirstPage->setEnabled(false);
         m_pPrevPage->setEnabled(false);
@@ -99,11 +104,17 @@ void DefaultOperationMenu::slotSearchClicked()
 
 void DefaultOperationMenu::slotBookMarkClicked()
 {
+    QJsonObject obj;
+    obj.insert("content", QString("%1").arg(m_nRightPageNumber));
+    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + BOOKMARK_WIDGET);
+
+    QJsonDocument doc(obj);
+
     int nData = m_pBookMark->property("data").toInt();
     if (nData == 0) {
-//        emit sigDealWithData(MSG_OPERATION_DELETE_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
+        notifyMsg(MSG_OPERATION_DELETE_BOOKMARK, doc.toJson(QJsonDocument::Compact));
     } else {
-//        emit sigDealWithData(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
+        notifyMsg(MSG_OPERATION_ADD_BOOKMARK, doc.toJson(QJsonDocument::Compact));
     }
 }
 
@@ -143,6 +154,12 @@ void DefaultOperationMenu::slotAddIconNote()
                              QString::number(m_showPoint.x()) + Constant::sQStringSep +
                              QString::number(m_showPoint.y());
 
-        dApp->m_pModelService->notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, strContent);
+        QJsonObject obj;
+        obj.insert("content", strContent);
+        obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
+
+        QJsonDocument doc(obj);
+
+        dApp->m_pModelService->notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, doc.toJson(QJsonDocument::Compact));
     }
 }

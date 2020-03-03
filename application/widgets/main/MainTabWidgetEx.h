@@ -77,6 +77,9 @@ private:
     void OnAppShortCut(const QString &);
 
     void OnTabBarMsg(const QString &);
+    void OnTabFileChangeMsg(const QString &);
+    void SetFileChange(const QString &sPath, const int &iState);
+
     void OnSaveFile();
     void SaveFile(const int &nSaveType, const QString &);
     void OnSaveAsFile();

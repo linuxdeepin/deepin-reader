@@ -228,7 +228,14 @@ void FVMMouseEvent::__AddIconAnnotation(FileViewWidget *fvw, const QPoint &globa
                                  QString::number(globalPos.x()) + Constant::sQStringSep +
                                  QString::number(globalPos.y());
             fvw->m_nCurrentHandelState = Default_State;
-            emit fvw->signalDealWithData(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, strContent);
+
+            QJsonObject obj;
+            obj.insert("content", strContent);
+            obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
+
+            QJsonDocument doc(obj);
+
+            dApp->m_pModelService->notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, doc.toJson(QJsonDocument::Compact));
         } else {
             qWarning() << __FUNCTION__ << "          " << sUuid;;
         }
@@ -311,17 +318,30 @@ void FVMMouseEvent::mouseReleaseEvent(QMouseEvent *event, DWidget *widget)
             if (bIsHighLightReleasePoint) {
                 __CloseFileNoteWidget(fvw);
                 int nPage = fvw->m_pProxy->pointInWhichPage(docGlobalPos);
-                QString t_strContant = t_strUUid.trimmed() + Constant::sQStringSep + QString::number(nPage);
-                emit fvw->signalDealWithData(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+                QString msgContent = t_strUUid.trimmed() + Constant::sQStringSep + QString::number(nPage);
+
+                QJsonObject obj;
+                obj.insert("content", msgContent);
+                obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
+
+                QJsonDocument doc(obj);
+                fvw->notifyMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, doc.toJson(QJsonDocument::Compact));
             }
         }
     } else if (bicon) {
         __CloseFileNoteWidget(fvw);
         int nPage = fvw->m_pProxy->pointInWhichPage(docGlobalPos);
-        QString t_strContant = t_strUUid.trimmed() + Constant::sQStringSep + QString::number(nPage) + Constant::sQStringSep +
-                               QString::number(globalPos.x()) + Constant::sQStringSep +
-                               QString::number(globalPos.y());
-        emit fvw->signalDealWithData(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, t_strContant);
+        QString strContent = t_strUUid.trimmed() + Constant::sQStringSep + QString::number(nPage) + Constant::sQStringSep +
+                             QString::number(globalPos.x()) + Constant::sQStringSep +
+                             QString::number(globalPos.y());
+
+        QJsonObject obj;
+        obj.insert("content", strContent);
+        obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
+
+        QJsonDocument doc(obj);
+
+        dApp->m_pModelService->notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, doc.toJson(QJsonDocument::Compact));
     }
 
     m_bSelectOrMove = false;

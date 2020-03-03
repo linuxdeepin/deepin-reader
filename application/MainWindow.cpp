@@ -136,25 +136,25 @@ void MainWindow::initThemeChanged()
 {
     //  主题变了
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ]() {
-//        setCurTheme();
-//        notifyMsg(MSG_OPERATION_UPDATE_THEME);
+        setCurTheme();
+        notifyMsg(MSG_OPERATION_UPDATE_THEME);
     });
 }
 
 //  设置 主题
 void MainWindow::setCurTheme()
 {
-//    DGuiApplicationHelper::ColorType colorType = DGuiApplicationHelper::instance()->themeType();
-//    QString sTheme = "";
-//    if (colorType == DGuiApplicationHelper::UnknownType) {  //  未知
-//        sTheme = "Unknown";
-//    } else if (colorType == DGuiApplicationHelper::LightType) { //  浅色
-//        sTheme = "light";
-//    } else if (colorType == DGuiApplicationHelper::DarkType) {  //  深色
-//        sTheme = "dark";
-//    }
+    DGuiApplicationHelper::ColorType colorType = DGuiApplicationHelper::instance()->themeType();
+    QString sTheme = "";
+    if (colorType == DGuiApplicationHelper::UnknownType) {  //  未知
+        sTheme = "Unknown";
+    } else if (colorType == DGuiApplicationHelper::LightType) { //  浅色
+        sTheme = "light";
+    } else if (colorType == DGuiApplicationHelper::DarkType) {  //  深色
+        sTheme = "dark";
+    }
 
-//    dApp->m_pAppInfo->qSetCurrentTheme(sTheme);
+    dApp->m_pAppInfo->qSetCurrentTheme(sTheme);
 }
 
 //  显示快捷键
@@ -235,21 +235,6 @@ void MainWindow::slotShortCut(const QString &key)
         QJsonDocument doc = QJsonDocument(obj);
         notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
     }
-    /*
-        auto pMtwe = MainTabWidgetEx::Instance();
-        if (pMtwe) {
-            QString sFilePath = pMtwe->qGetCurPath();
-            if (sFilePath != "") {
-                if (key == KeyStr::g_ctrl_h) {  //  播放幻灯片
-                    SlotSlideShow();
-                } else if (key == KeyStr::g_ctrl_s || key == KeyStr::g_ctrl_shift_s || key == KeyStr::g_ctrl_c) {
-                    dApp->m_pHelper->qDealWithData(MSG_NOTIFY_KEY_MSG, key);
-                } else {
-                    notifyMsg(MSG_NOTIFY_KEY_MSG, key);
-                }
-            }
-        }
-    }*/
 }
 
 void MainWindow::sendMsg(const int &, const QString &) {}

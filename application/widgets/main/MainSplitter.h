@@ -20,7 +20,7 @@
 #define MAINSPLITTER_H
 
 #include <DSplitter>
-#include "application.h"
+#include "FileDataModel.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -28,7 +28,7 @@ class DocShowShellWidget;
 class LeftSidebarWidget;
 class MainSplitterPrivate;
 
-class MainSplitter : public DSplitter, public IObserver
+class MainSplitter : public DSplitter
 {
     Q_OBJECT
     Q_DISABLE_COPY(MainSplitter)
@@ -36,15 +36,6 @@ class MainSplitter : public DSplitter, public IObserver
 public:
     explicit MainSplitter(DWidget *parent = nullptr);
     ~MainSplitter() override;
-
-signals:
-    void sigDealWithDataMsg(const int &, const QString &);
-
-    // IObserver interface
-public:
-    int dealWithData(const int &, const QString &) override;
-    void sendMsg(const int &, const QString &) override;
-    void notifyMsg(const int &, const QString &) override;
 
 public:
     QString qGetPath() const;
@@ -60,14 +51,10 @@ public:
 
 private:
     void InitWidget();
-    void InitConnections();
 
 private slots:
-    void SlotDealWithDataMsg(const int &, const QString &);
-    void SlotSplitterMsg(const int &, const QString &);
+    void SlotOpenFileOk();
     void SlotNotifyMsg(const int &, const QString &);
-
-    void SlotMainTabWidgetExMsg();
 
 private:
     LeftSidebarWidget   *m_pLeftWidget = nullptr;

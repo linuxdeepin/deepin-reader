@@ -141,16 +141,35 @@ void TextOperationMenu::slotAddNoteClicked()
 {
     if (m_strNoteUuid == "") {
         QString msgContent = QString("%1").arg(m_nClickPage) + Constant::sQStringSep + QString("%1").arg(m_pClickPoint.x()) + Constant::sQStringSep + QString("%1").arg(m_pClickPoint.y());
-//        emit sigDealWithData(MSG_OPERATION_TEXT_ADD_ANNOTATION, msgContent);
+
+        QJsonObject obj;
+        obj.insert("content", msgContent);
+        obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
+
+        QJsonDocument doc(obj);
+
+        notifyMsg(MSG_OPERATION_TEXT_ADD_ANNOTATION, doc.toJson(QJsonDocument::Compact));
     } else {
-        QString t_strContant = m_strNoteUuid.trimmed() + Constant::sQStringSep + QString::number(m_nClickPage);
-//        emit sigDealWithData(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, t_strContant);
+        QString msgContent = m_strNoteUuid.trimmed() + Constant::sQStringSep + QString::number(m_nClickPage);
+
+        QJsonObject obj;
+        obj.insert("content", msgContent);
+        obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
+
+        QJsonDocument doc(obj);
+        notifyMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, doc.toJson(QJsonDocument::Compact));
     }
 }
 
 void TextOperationMenu::slotAddBookMarkClicked()
 {
-//    emit sigDealWithData(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nClickPage));
+    QJsonObject obj;
+    obj.insert("content", QString::number(m_nClickPage));
+    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + BOOKMARK_WIDGET);
+
+    QJsonDocument doc(obj);
+
+    notifyMsg(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nClickPage));
 }
 
 void TextOperationMenu::slotExitFullScreenClicked()

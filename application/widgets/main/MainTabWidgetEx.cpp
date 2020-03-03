@@ -39,7 +39,7 @@ MainTabWidgetEx *MainTabWidgetEx::g_onlyApp = nullptr;
 MainTabWidgetEx::MainTabWidgetEx(DWidget *parent)
     : CustomWidget(MAIN_TAB_WIDGET, parent)
 {
-    m_pMsgList = {E_APP_MSG_TYPE, E_TABBAR_MSG_TYPE};
+    m_pMsgList = {E_APP_MSG_TYPE, E_TABBAR_MSG_TYPE, MSG_FILE_IS_CHANGE};
 
     initWidget();
     InitConnections();
@@ -143,6 +143,18 @@ void MainTabWidgetEx::SetFileData(const QString &sPath, const FileDataModel &fdm
     }
 }
 
+void MainTabWidgetEx::SetFileChange(const QString &sPath, const int &iState)
+{
+    auto splitterList = this->findChildren<MainSplitter *>();
+    foreach (auto s, splitterList) {
+        QString sSplitterPath = s->qGetPath();
+        if (sSplitterPath == sPath) {
+            s->qSetFileChange(iState);
+            break;
+        }
+    }
+}
+
 void MainTabWidgetEx::InsertPathProxy(const QString &sPath, DocummentProxy *proxy)
 {
     m_strOpenFileAndProxy.insert(sPath, proxy);
@@ -237,7 +249,6 @@ void MainTabWidgetEx::OnAppExit()
             nMsgType = MSG_SAVE_FILE;
         }
 
-        auto splitterList = this->findChildren<MainSplitter *>();
         foreach (auto s, splitterList) {
             QString sSplitterPath = s->qGetPath();
             if (saveFileList.contains(sSplitterPath)) {
@@ -304,6 +315,14 @@ void MainTabWidgetEx::OnTabBarMsg(const QString &s)
         OpenCurFileFolder();
     }
 }
+
+void MainTabWidgetEx::OnTabFileChangeMsg(const QString &sVale)
+{
+    QString sCurPath = qGetCurPath();
+
+    SetFileChange(sCurPath, sVale.toInt());
+}
+
 void MainTabWidgetEx::SaveFile(const int &iType, const QString &sPath)
 {
     QString sRes = dApp->m_pHelper->qDealWithData(iType, sPath);
@@ -374,6 +393,8 @@ void MainTabWidgetEx::SlotDealWithData(const int &msgType, const QString &msgCon
         OnTabBarMsg(msgContent);
     } else if (msgType == E_APP_MSG_TYPE) {     //  应用类消息
         OnAppMsgData(msgContent);
+    } else if (msgType == MSG_FILE_IS_CHANGE) {
+        OnTabFileChangeMsg(msgContent);
     }
 }
 
@@ -398,7 +419,6 @@ void MainTabWidgetEx::SlotAddTab(const QString &sPath)
     if (m_pStackedLayout) {
         MainSplitter *splitter = new MainSplitter(this);
         connect(this, SIGNAL(sigDealNotifyMsg(const int &, const QString &)), splitter, SLOT(SlotNotifyMsg(const int &, const QString &)));
-//        connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), splitter, SLOT(SlotDealWithDataMsg(const int &, const QString &)));
         splitter->qSetPath(sPath);
         m_pStackedLayout->addWidget(splitter);
     }

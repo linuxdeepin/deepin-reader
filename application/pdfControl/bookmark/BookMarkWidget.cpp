@@ -32,6 +32,8 @@ BookMarkWidget::BookMarkWidget(DWidget *parent)
 {
     setFocusPolicy(Qt::ClickFocus);
 
+    m_loadBookMarkThread.setBookMark(this);
+
     initWidget();
     initConnection();
     slotUpdateTheme();
@@ -48,6 +50,7 @@ BookMarkWidget::BookMarkWidget(DWidget *parent)
  */
 BookMarkWidget::~BookMarkWidget()
 {
+    m_loadBookMarkThread.stopThreadRun();
     dApp->m_pModelService->removeObserver(this);
 }
 
@@ -157,15 +160,10 @@ void BookMarkWidget::slotAddBookMark(const QString &sContent)
 
     auto item = addBookMarkItem(nPage);
     if (item) {
-//        MsgModel mm;
-//        mm.setMsgType(MSG_FILE_IS_CHANGE);
-//        mm.setPath(sPath);
-//        mm.setValue("1");
-
-//        notifyMsg(E_FILE_MSG, mm.toJson());
-
         pageList.append(nPage);
         dApp->m_pDBService->setBookMarkList(sPath, pageList);
+
+        notifyMsg(MSG_FILE_IS_CHANGE, "1");
     }
 
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
@@ -301,8 +299,6 @@ void BookMarkWidget::slotDeleteBookItem(const QString &sContent)
 
                     deleteIndexPage(nPageIndex);
 
-                    notifyMsg(CENTRAL_SHOW_TIP, tr("The bookmark has been removed"));
-
                     break;
                 }
             }
@@ -323,12 +319,8 @@ void BookMarkWidget::deleteIndexPage(const int &pageIndex)
 
         DocummentProxy *proxy =  pMtwe->getCurFileAndProxy(sPath);
         if (proxy) {
-//            MsgModel mm;
-//            mm.setMsgType(MSG_FILE_IS_CHANGE);
-//            mm.setValue("1");
-//            mm.setPath(sPath);
-
-//            notifyMsg(E_FILE_MSG, mm.toJson());
+            notifyMsg(MSG_FILE_IS_CHANGE, "1");
+            notifyMsg(CENTRAL_SHOW_TIP, tr("The bookmark has been removed"));
 
             proxy->setBookMarkState(pageIndex, false);
 
@@ -463,7 +455,7 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
 {
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
     if (pMtwe) {
-        QString sPath = MainTabWidgetEx::Instance()->qGetCurPath();
+        QString sPath = pMtwe->qGetCurPath();
 
         DocummentProxy *proxy =  pMtwe->getCurFileAndProxy(sPath);
 
@@ -625,7 +617,7 @@ void LoadBookMarkThread::run()
 {
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
     if (pMtwe) {
-        QString sPath = MainTabWidgetEx::Instance()->qGetCurPath();
+        QString sPath = pMtwe->qGetCurPath();
         DocummentProxy *proxy =  pMtwe->getCurFileAndProxy(sPath);
         if (nullptr != proxy) {
             while (m_isRunning) {

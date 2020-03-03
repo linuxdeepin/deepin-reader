@@ -32,17 +32,12 @@ MainSplitter::MainSplitter(DWidget *parent)
     : DSplitter(parent)
 {
     d_ptr = new MainSplitterPrivate(this);
-    m_strObserverName = "MainSplitter";
 
     InitWidget();
-    InitConnections();
-
-    dApp->m_pModelService->addObserver(this);
 }
 
 MainSplitter::~MainSplitter()
 {
-    dApp->m_pModelService->removeObserver(this);
 }
 
 void MainSplitter::InitWidget()
@@ -54,7 +49,7 @@ void MainSplitter::InitWidget()
     addWidget(m_pLeftWidget);
 
     m_pDocWidget = new DocShowShellWidget;
-    connect(m_pDocWidget, SIGNAL(signalDealWithData(const int &, const QString &)), SLOT(SlotSplitterMsg(const int &, const QString &)));
+    connect(m_pDocWidget, SIGNAL(sigOpenFileOk()), SLOT(SlotOpenFileOk()));
     addWidget(m_pDocWidget);
 
     QList<int> list_src;
@@ -64,31 +59,15 @@ void MainSplitter::InitWidget()
     setSizes(list_src);
 }
 
-void MainSplitter::InitConnections()
+void MainSplitter::SlotOpenFileOk()
 {
-    connect(this, SIGNAL(sigDealWithDataMsg(const int &, const QString &)), SLOT(SlotDealWithDataMsg(const int &, const QString &)));
-}
-
-void MainSplitter::SlotDealWithDataMsg(const int &msgType, const QString &msgContent)
-{
-    QString s = msgContent;
-    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
-        s = d_ptr->qGetPath();
-        TitleWidget::Instance()->qDealWithData(msgType, msgContent);
-    }
+    QString s = d_ptr->qGetPath();
+    TitleWidget::Instance()->qDealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
 
     auto children = this->findChildren<CustomWidget *>();
     foreach (auto sw, children) {
-        int nRes = sw->qDealWithData(msgType, s);
-        if (nRes == MSG_OK) {
-            break;
-        }
+        sw->qDealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
     }
-}
-
-void MainSplitter::SlotSplitterMsg(const int &msgType, const QString &msgContent)
-{
-    SlotDealWithDataMsg(msgType, msgContent);
 }
 
 void MainSplitter::SlotNotifyMsg(const int &msgType, const QString &msgContent)
@@ -119,45 +98,6 @@ void MainSplitter::SlotNotifyMsg(const int &msgType, const QString &msgContent)
             }
         }
     }
-}
-
-
-void MainSplitter::SlotMainTabWidgetExMsg()
-{
-    if (this->isVisible()) {    //  只有显示的窗口 处理 MainTabWidgetEx 发送的信号
-        qDebug() << this << "  222         " << __FUNCTION__  << this->qGetPath();
-    }
-}
-
-//  第一个 消息处理入口
-int MainSplitter::dealWithData(const int &msgType, const QString &msgContent)
-{
-    QJsonParseError error;
-    QJsonDocument doc = QJsonDocument::fromJson(msgContent.toLocal8Bit().data(), &error);
-    if (error.error == QJsonParseError::NoError) {
-        QJsonObject obj = doc.object();
-        bool needPath = obj.value("need").toBool();
-        if (needPath) {
-            QString sPath = obj.value("path").toString();
-            if (sPath == d_ptr->qGetPath()) {
-                QString s = obj.value("content").toString();
-                emit sigDealWithDataMsg(msgType, s);
-                return ConstantMsg::g_effective_res;
-            }
-        }
-    }
-
-    return 0;
-}
-
-void MainSplitter::sendMsg(const int &msgType, const QString &msgContent)
-{
-//    notifyMsg(msgType, msgContent);
-}
-
-void MainSplitter::notifyMsg(const int &msgType, const QString &msgContent)
-{
-//    dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
 
 QString MainSplitter::qGetPath() const
