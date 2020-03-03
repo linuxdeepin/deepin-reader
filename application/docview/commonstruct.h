@@ -23,11 +23,11 @@ enum DocType_EM {
 };
 
 enum RotateType_EM {
-    RotateType_Normal = 0,
-    RotateType_0,
+    RotateType_0 = 0,
     RotateType_90,
     RotateType_180,
-    RotateType_270
+    RotateType_270,
+    RotateType_Normal,
 };
 
 //The type of the icon for this text annotation.
@@ -42,8 +42,8 @@ enum TextAnnoteType_Em {
 };
 
 //note type
-enum AnnoteType_Em{
-    Annote_Highlight=0,
+enum AnnoteType_Em {
+    Annote_Highlight = 0,
     Annote_Text,
 };
 

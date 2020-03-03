@@ -1871,6 +1871,7 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, u
     if (ipage < d->m_pages.size()) {
         if (d->m_viewmode == ViewMode_SinglePage) {
             switch (d->m_rotate) {
+            case RotateType_Normal:
             case RotateType_0:
             case RotateType_180: {
                 double topspace = (d->m_widgets.at(ipage)->height() - curheight) / 2;
