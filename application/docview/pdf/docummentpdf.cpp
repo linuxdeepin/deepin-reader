@@ -614,7 +614,7 @@ Outline DocummentPDF::loadOutline(const QDomNode &parent, Poppler::Document *doc
                 left = left >= 0.0 ? left : 0.0;
                 left = left <= 1.0 ? left : 1.0;
             }
-            qDebug() << "======" << destination->top() << destination->left() << destination->bottom() << destination->right() << element.attribute("");
+            // qDebug() << "======" << destination->top() << destination->left() << destination->bottom() << destination->right() << element.attribute("");
             //if (destination->isChangeTop())
             {
                 top = destination->top();

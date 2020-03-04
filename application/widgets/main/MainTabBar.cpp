@@ -93,6 +93,7 @@ void MainTabBar::SlotTabBarClicked(int index)
 
 void MainTabBar::__SetTabMiniWidth()
 {
+    return;
     int nCount = this->count();
     if (nCount == 0)
         return;
@@ -105,8 +106,9 @@ void MainTabBar::__SetTabMiniWidth()
 //    if (m_nOldMiniWidth != nWidth) {
 //        m_nOldMiniWidth = nWidth;
 
+    // this->setFixedWidth(nWidth);
     for (int iLoop = 0; iLoop < nCount; iLoop++) {
-        this->setTabMinimumSize(iLoop, QSize(nWidth, 36));
+        // this->setTabMinimumSize(iLoop, QSize(nWidth, 36));
     }
 }
 //}
@@ -134,7 +136,7 @@ void MainTabBar::AddFileTab(const QString &sContent)
                 QString sName = getFileName(s);
                 int iIndex = this->addTab(sName);
                 this->setTabData(iIndex, s);
-
+                this->setTabMinimumSize(iIndex, QSize(140, 36));
                 emit sigAddTab(s);
             }
         }
