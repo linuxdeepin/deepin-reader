@@ -42,17 +42,6 @@ int CustomWidget::qDealWithShortKey(const QString &)
     return MSG_NO_OK;
 }
 
-int CustomWidget::dealWithData(const QString &)
-{
-    return MSG_NO_OK;
-}
-
-//  操作 消息
-//void CustomWidget::sendMsg(const int &msgType, const QString &msgContent)
-//{
-//    notifyMsg(msgType, msgContent);
-//}
-
 //  通知消息
 void CustomWidget::notifyMsg(const int &msgType, const QString &msgContent)
 {

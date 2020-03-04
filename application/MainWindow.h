@@ -37,7 +37,6 @@ signals:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
-    int dealWithData(const QString &) override;
 
     // QWidget interface
 protected:

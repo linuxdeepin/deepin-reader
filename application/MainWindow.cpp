@@ -278,12 +278,6 @@ void MainWindow::initShortCut()
     }
 }
 
-int MainWindow::dealWithData(const QString &)
-{
-    return MSG_NO_OK;
-}
-
-
 int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgList.contains(msgType)) {

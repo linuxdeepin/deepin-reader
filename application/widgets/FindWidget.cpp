@@ -133,11 +133,6 @@ void FindWidget::slotEditAborted()
     notifyMsg(MSG_CLEAR_FIND_CONTENT);
 }
 
-int FindWidget::dealWithData(const QString &)
-{
-    return MSG_NO_OK;
-}
-
 int FindWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgList.contains(msgType)) {

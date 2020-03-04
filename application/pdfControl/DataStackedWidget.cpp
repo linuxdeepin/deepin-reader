@@ -94,10 +94,10 @@ void DataStackedWidget::slotSetStackCurIndex(const int &iIndex)
 
 void DataStackedWidget::InitWidgets()
 {
-    m_pThWidget = new ThumbnailWidget;
+    m_pThWidget = new ThumbnailWidget(this);
     insertWidget(WIDGET_THUMBNAIL, m_pThWidget);
 
-    m_pCatalogWidget = new CatalogWidget;
+    m_pCatalogWidget = new CatalogWidget(this);
     insertWidget(WIDGET_catalog, m_pCatalogWidget);
 
     m_pBookMarkWidget = new BookMarkWidget(this);

@@ -46,7 +46,7 @@ public:
 
     // CustomMenu interface
 public:
-    int qDealWithData(const int &, const QString &) override;
+    int dealWithData(const int &, const QString &) override;
 
     // CustomMenu interface
 protected:

@@ -136,7 +136,7 @@ int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgList.contains(msgType)) {
         emit sigDealWithData(msgType, msgContent);
-        return ConstantMsg::g_effective_res;
+        return MSG_OK;
     }
 
     if (msgType == MSG_OPERATION_UPDATE_THEME) {

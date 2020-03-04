@@ -23,17 +23,17 @@
 ModelService::ModelService(QObject *parent)
     : QObject(parent)
 {
-    m_pNotifySubject = NotifySubject::Instance();
-    if (m_pNotifySubject) {
-        m_pNotifySubject->startThreadRun();
-    }
+    m_pNotifySubject = g_NotifySubject::getInstance();
+//    if (m_pNotifySubject) {
+//        m_pNotifySubject->startThreadRun();
+//    }
 }
 
 ModelService::~ModelService()
 {
-    if (m_pNotifySubject) {
-        m_pNotifySubject->stopThreadRun();
-    }
+//    if (m_pNotifySubject) {
+//        m_pNotifySubject->stopThreadRun();
+//    }
 }
 
 void ModelService::addObserver(IObserver *obs)

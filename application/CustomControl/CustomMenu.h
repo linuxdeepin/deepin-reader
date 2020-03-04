@@ -36,7 +36,7 @@ public:
     CustomMenu(const QString &, DWidget *parent = nullptr);
 
 public:
-    virtual int qDealWithData(const int &, const QString &);
+    virtual int dealWithData(const int &, const QString &);
 
 protected:
     virtual void initActions() = 0;

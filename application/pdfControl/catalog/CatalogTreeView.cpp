@@ -53,11 +53,6 @@ CatalogTreeView::~CatalogTreeView()
     dApp->m_pModelService->removeObserver(this);
 }
 
-int CatalogTreeView::dealWithData(const QString &msgContent)
-{
-    return MSG_NO_OK;
-}
-
 int CatalogTreeView::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
@@ -75,11 +70,6 @@ int CatalogTreeView::dealWithData(const int &msgType, const QString &msgContent)
 
 void CatalogTreeView::notifyMsg(const int &, const QString &)
 {
-}
-
-int CatalogTreeView::qDealWithData(const int &msgType, const QString &msgContent)
-{
-    return MSG_NO_OK;
 }
 
 void CatalogTreeView::initConnections()

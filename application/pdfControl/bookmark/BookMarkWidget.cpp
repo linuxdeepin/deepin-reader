@@ -200,17 +200,19 @@ void BookMarkWidget::OnOpenFileOk(const QString &sPath)
     if (pageList.size() == 0)
         return;
 
-    foreach (int iPage, pageList) {
-        addBookMarkItem(iPage);
-    }
-
     clearItemColor();
 
-    //  第一页 就是书签, 添加书签按钮 不能点
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
     if (pMtwe) {
         DocummentProxy *proxy =  pMtwe->getCurFileAndProxy(m_strBindPath);
         if (proxy) {
+            foreach (int iPage, pageList) {
+                addBookMarkItem(iPage);
+
+                proxy->setBookMarkState(iPage, true);
+            }
+
+            //  第一页 就是书签, 添加书签按钮 不能点
             int nCurPage = proxy->currentPageNo();
             if (pageList.contains(nCurPage)) {      //  当前页 是书签, 按钮不可点
                 m_pAddBookMarkBtn->setEnabled(false);
@@ -483,7 +485,7 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
 
                     m_pBookMarkListWidget->setCurrentItem(item);
                 }
-                proxy->setBookMarkState(page, true);
+//                proxy->setBookMarkState(page, true);
 
                 return item;
             }

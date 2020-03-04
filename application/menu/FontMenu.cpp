@@ -40,7 +40,7 @@ FontMenu::FontMenu(DWidget *parent):
     initConnection();
 }
 
-int FontMenu::qDealWithData(const int &msgType, const QString &msgContent)
+int FontMenu::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK || msgType == MSG_TAB_SHOW_FILE_CHANGE) {
         OnFileOpenOk(msgContent);

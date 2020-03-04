@@ -34,8 +34,6 @@ public:
 
 public:
     int dealWithData(const int &, const QString &) override;
-    int dealWithData(const QString &) override;
-//    void sendMsg(const int &, const QString &msgContent = "") override;
     void notifyMsg(const int &, const QString &msgContent = "") override;
 
 private:

@@ -39,7 +39,7 @@ TitleMenu::TitleMenu(DWidget *parent)
     g_onlyTitleMenu = this;
 }
 
-int TitleMenu::qDealWithData(const int &msgType, const QString &)
+int TitleMenu::dealWithData(const int &msgType, const QString &)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         auto actions = this->findChildren<QAction *>();

@@ -30,12 +30,12 @@ CustomMenu::CustomMenu(const QString &, DWidget *parent)
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
 }
 
-int CustomMenu::qDealWithData(const int &, const QString &)
-{
-    return MSG_NO_OK;
-}
-
 void CustomMenu::notifyMsg(const int &msgType, const QString &msgContent)
 {
     dApp->m_pModelService->notifyMsg(msgType, msgContent);
+}
+
+int CustomMenu::dealWithData(const int &, const QString &)
+{
+    return MSG_NO_OK;
 }

@@ -36,11 +36,6 @@ void DocummentFileHelper::initConnections()
     connect(this, SIGNAL(sigFileSlider(const int &)), SLOT(slotFileSlider(const int &)));
 }
 
-int DocummentFileHelper::dealWithData(const QString &)
-{
-    return MSG_NO_OK;
-}
-
 //  处理 应用推送的消息数据
 int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgContent)
 {
@@ -51,7 +46,7 @@ int DocummentFileHelper::dealWithData(const int &msgType, const QString &msgCont
             emit sigFileSlider(0);
         }
     }
-    return 0;
+    return MSG_NO_OK;
 }
 
 //  发送 操作消息

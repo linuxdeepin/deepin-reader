@@ -427,13 +427,13 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         slotOpenFileOk(msgContent);
 
-        TitleMenu::Instance()->qDealWithData(msgType, msgContent);
+        TitleMenu::Instance()->dealWithData(msgType, msgContent);
     }
     if (msgType == MSG_OPERATION_OPEN_FILE_OK  || msgType == MSG_FILE_PAGE_CHANGE) {
         OnFileShowChange(msgContent);
 
-        m_pFontMenu->qDealWithData(msgType, msgContent);
-        m_pScaleMenu->qDealWithData(msgType, msgContent);
+        m_pFontMenu->dealWithData(msgType, msgContent);
+        m_pScaleMenu->dealWithData(msgType, msgContent);
     } else if (msgType == MSG_FIND_START) {
         emit sigSetFindWidget(1);
     } else if (msgType == MSG_OPERATION_SLIDE) {
@@ -442,7 +442,7 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigUpdateTheme();
     } else if (msgType == MSG_MAGNIFYING_CANCEL) {  //  右键取消放大镜
         emit sigMagnifierCancel();
-        return ConstantMsg::g_effective_res;
+        return MSG_OK;
     } else if (msgType == MSG_HIDE_FIND_WIDGET) {
         emit sigSetFindWidget(0);
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
@@ -469,9 +469,9 @@ int TitleWidget::qDealWithShortKey(const QString &sKey)
     } else if (sKey == KeyStr::g_ctrl_m) { //  显示缩略图
         OnShortCut_CtrlM();
     } else {
-        int nRes = m_pFontMenu->qDealWithData(MSG_NOTIFY_KEY_MSG, sKey);
+        int nRes = m_pFontMenu->dealWithData(MSG_NOTIFY_KEY_MSG, sKey);
         if (nRes != MSG_OK) {
-            nRes = m_pScaleMenu->qDealWithData(MSG_NOTIFY_KEY_MSG, sKey);
+            nRes = m_pScaleMenu->dealWithData(MSG_NOTIFY_KEY_MSG, sKey);
 
             if (nRes == MSG_OK) {
                 return MSG_OK;

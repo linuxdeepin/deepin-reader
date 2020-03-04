@@ -40,11 +40,8 @@ public:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
-    int dealWithData(const QString &) override;
-//    void sendMsg(const int &, const QString &) override;
     void notifyMsg(const int &, const QString &) override;
 
-    int qDealWithData(const int &, const QString &);
     // QWidget interface
 protected:
     void resizeEvent(QResizeEvent *event) override;

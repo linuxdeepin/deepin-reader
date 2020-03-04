@@ -41,12 +41,6 @@ PlayControlWidget::~PlayControlWidget()
     dApp->m_pModelService->removeObserver(this);
 }
 
-
-int PlayControlWidget::dealWithData(const QString &)
-{
-    return MSG_NO_OK;
-}
-
 int PlayControlWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (m_pMsgList.contains(msgType)) {

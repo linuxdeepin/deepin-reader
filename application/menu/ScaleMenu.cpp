@@ -33,7 +33,7 @@ ScaleMenu::ScaleMenu(DWidget *parent)
     shortKeyList << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_equal << KeyStr::g_ctrl_smaller;
 }
 
-int ScaleMenu::qDealWithData(const int &msgType, const QString &msgContent)
+int ScaleMenu::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK || msgType == MSG_TAB_SHOW_FILE_CHANGE) {
         OnFileOpenOk(msgContent);

@@ -162,22 +162,12 @@ void FileAttrWidget::showScreenCenter()
     this->show();
 }
 
-int FileAttrWidget::dealWithData(const QString &)
-{
-    return MSG_NO_OK;
-}
-
 int FileAttrWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_NOTIFY_KEY_MSG == msgType && KeyStr::g_esc == msgContent)
         close();
     return 0;
 }
-
-//void FileAttrWidget::sendMsg(const int &, const QString &)
-//{
-
-//}
 
 void FileAttrWidget::notifyMsg(const int &, const QString &)
 {
