@@ -471,14 +471,16 @@ void DocummentProxy::jumpToOutline(const qreal &realleft, const qreal &realtop, 
 
 bool DocummentProxy::closeFile()
 {
-    // QMutexLocker locker(&mutexlockgetimage);
-//    qDebug() << "closeFile";
+    QMutex mutexlockclose;
+    QMutexLocker locker(&mutexlockclose);
     if (!m_documment || bcloseing)
         return false;
     bcloseing = true;
+    QTime tm;
+    tm.start();
     m_documment->stopLoadPageThread();
-    delete m_documment;
-    m_documment = nullptr;
+//    delete m_documment;
+//    m_documment = nullptr;
     return true;
 }
 
@@ -486,11 +488,13 @@ void DocummentProxy::closeFileAndWaitThreadClearEnd()
 {
     QMutex mutexlockclose;
     QMutexLocker locker(&mutexlockclose);
+    if (!bcloseing)
+        closeFile();
     if (!m_documment)
         return;
 
     bcloseing = true;
-    m_documment->stopLoadPageThread();
+    m_documment->waitThreadquit();
     if (nullptr != m_documment) {
         delete m_documment;
         m_documment = nullptr;

@@ -87,7 +87,7 @@ private:
         }
         QList<Poppler::Link *> qlinks = m_page->links();
         foreach (const Poppler::Link *link, qlinks) {
-            if (QThread::currentThread()->isInterruptionRequested()) {
+            if (QThread::currentThread()->isInterruptionRequested() || m_bquit) {
                 break;
             }
             const QRectF boundary = link->linkArea().normalized();
@@ -145,14 +145,14 @@ private:
         bool addChar;
         m_words.clear();
         foreach (Poppler::TextBox *word, text) {
-            if (QThread::currentThread()->isInterruptionRequested()) {
+            if (QThread::currentThread()->isInterruptionRequested() || m_bquit) {
                 break;
             }
             const int qstringCharCount = word->text().length();
             next = word->nextWord();
             // if(next)
             int textBoxChar = 0;
-            for (int j = 0; j < qstringCharCount; j++) {
+            for (int j = 0; j < qstringCharCount && !m_bquit; j++) {
                 const QChar c = word->text().at(j);
                 if (c.isHighSurrogate()) {
                     s = c;
@@ -164,7 +164,8 @@ private:
                     s = c;
                     addChar = true;
                 }
-
+                if (m_bquit)
+                    int a = 0;
                 if (addChar) {
                     QRectF charBBox = word->charBoundingBox(textBoxChar);
                     //                qDebug() << "addChar s:" << s << " charBBox:" << charBBox;
@@ -191,6 +192,8 @@ private:
                 m_words.append(sword);
             }
         }
+        if (m_bquit)
+            int a = 0;
         return true;
     }
 };

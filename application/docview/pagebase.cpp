@@ -60,6 +60,7 @@ ThreadRenderImage::ThreadRenderImage()
     m_width = 0;
     m_height = 0;
     b_running = false;
+    m_bquit = false;
     setAutoDelete(false);
 }
 
@@ -86,6 +87,11 @@ void ThreadRenderImage::setRunningTrue()
     b_running = true;
 }
 
+void ThreadRenderImage::setQuit()
+{
+    m_bquit = true;
+}
+
 void ThreadRenderImage::run()
 {
     if (!m_page)
@@ -93,7 +99,7 @@ void ThreadRenderImage::run()
     restart = true;
     b_running = true;
     while (restart) {
-        if (QThread::currentThread()->isInterruptionRequested()) {
+        if (QThread::currentThread()->isInterruptionRequested() || m_bquit) {
             b_running = false;
             return;
         }
@@ -104,14 +110,13 @@ void ThreadRenderImage::run()
             QTime timecost;
             timecost.start();
             if (m_page->getImage(image, m_width, m_height)) {
-                qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " get suc!" << timecost.elapsed();
-                if (QThread::currentThread()->isInterruptionRequested()) {
+                if (QThread::currentThread()->isInterruptionRequested() || m_bquit) {
+                    qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " get suc!" << timecost.elapsed() << m_bquit;
                     b_running = false;
                     return;
                 }
                 if (restart)
                     continue;
-//                m_page->loadData();
                 qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " emit render!";
                 emit signal_RenderFinish(image);
             } else {
@@ -207,16 +212,16 @@ void PageBase::paintEvent(QPaintEvent *event)
         qpainter.drawRect(d->paintrects[i]);
     }
 
-    foreach (ICONANNOTATION annote, d->m_iconannotationlist) {
-        double rx, ry;
-        rx = annote.position.x() * d->m_scale * d->m_imagewidth - ICONANNOTE_WIDTH / 2;
-        ry = annote.position.y() * d->m_scale * d->m_imageheight - ICONANNOTE_HEIGHT / 2;
+//    foreach (ICONANNOTATION annote, d->m_iconannotationlist) {
+//        double rx, ry;
+//        rx = annote.position.x() * d->m_scale * d->m_imagewidth - ICONANNOTE_WIDTH / 2;
+//        ry = annote.position.y() * d->m_scale * d->m_imageheight - ICONANNOTE_HEIGHT / 2;
 
-        QPointF pt(rx, ry);
+//        QPointF pt(rx, ry);
 
-        QPixmap pixtag(Utils::renderSVG(":/resources/image/iconannotation.svg", QSize(46, 46)));
-        qpainter.drawPixmap(pt, pixtag);
-    }
+//        QPixmap pixtag(Utils::renderSVG(":/resources/image/iconannotation.svg", QSize(46, 46)));
+//        qpainter.drawPixmap(pt, pixtag);
+//    }
 }
 
 bool PageBase::setSelectTextStyle(QColor paintercolor, QColor pencolor, int penwidth)
@@ -622,10 +627,7 @@ void PageBase::clearImage()
     waitThread();
 //    QThreadPool::globalInstance()->waitForDone();
     clear();
-//    qDeleteAll(d->m_links);
-//    d->m_links.clear();
     d->paintrects.clear();
-//    d->m_words.clear();
     d->havereander = false;
     clearMagnifierPixmap();
 }
@@ -815,19 +817,30 @@ bool PageBase::showImage(double scale, RotateType_EM rotate)
 void PageBase::stopThread()
 {
     Q_D(PageBase);
-//    d->threadreander.requestInterruption();
     if (d->loadmagnifiercachethread.isRunning()) {
         d->loadmagnifiercachethread.requestInterruption();
     }
+}
+
+void PageBase::quitThread()
+{
+    Q_D(PageBase);
+    if (d->loadmagnifiercachethread.isRunning()) {
+        d->loadmagnifiercachethread.quit();
+        // d->loadmagnifiercachethread.requestInterruption();
+    }
+    if (d->threadreander.isRunning())
+        d->threadreander.setQuit();
+    d->m_bquit = true;
 }
 
 void PageBase::waitThread()
 {
     Q_D(PageBase);
     if (d->loadmagnifiercachethread.isRunning()) {
-        //        loadmagnifiercachethread.quit();
         d->loadmagnifiercachethread.wait();
     }
+
     d->m_spinner->stop();
     d->m_spinner->hide();
 }
@@ -838,6 +851,7 @@ bool PageBase::setBookMarkState(bool state)
     d->bookmarkbtn->setClickState(state);
     return true;
 }
+
 
 
 

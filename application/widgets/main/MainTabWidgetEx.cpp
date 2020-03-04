@@ -31,6 +31,7 @@
 
 #include "../FileAttrWidget.h"
 #include "../TitleWidget.h"
+#include "docview/docummentproxy.h"
 
 #include "gof/bridge/IHelper.h"
 
@@ -263,7 +264,11 @@ void MainTabWidgetEx::OnAppExit()
             SaveFile(MSG_NOT_CHANGE_SAVE_FILE, sSplitterPath);
         }
     }
-
+    for (auto it = m_strOpenFileAndProxy.begin(); it != m_strOpenFileAndProxy.end(); it++) {
+        if (it.value() != nullptr)
+            it.value()->closeFileAndWaitThreadClearEnd();
+    }
+    topLevelWidget()->hide();
     dApp->exit(0);
 }
 

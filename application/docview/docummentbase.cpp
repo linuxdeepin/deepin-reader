@@ -1728,18 +1728,25 @@ void DocummentBase::stopLoadPageThread()
     d->bcloseing = true;
     d->m_searchTask->cancel();
     for (int i = 0; i < d->m_pages.size(); i++) {
-        d->m_pages.at(i)->stopThread();
+        d->m_pages.at(i)->quitThread();
     }
 
     if (d->threadloaddata.isRunning()) {
         d->threadloaddata.requestInterruption();
+    }
+}
+
+void DocummentBase::waitThreadquit()
+{
+    Q_D(DocummentBase);
+    if (d->threadloaddata.isRunning()) {
         d->threadloaddata.wait();
     }
 
-    d->m_searchTask->wait();
     for (int i = 0; i < d->m_pages.size(); i++) {
         d->m_pages.at(i)->waitThread();
     }
+    d->m_searchTask->wait();
     QThreadPool::globalInstance()->waitForDone();
 }
 

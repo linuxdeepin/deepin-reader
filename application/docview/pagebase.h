@@ -71,6 +71,7 @@ public:
     void setRestart();
     bool isRunning();
     void setRunningTrue();
+    void setQuit();
 
 protected:
     virtual void run();
@@ -83,6 +84,7 @@ private:
     double m_width;
     double m_height;
     bool b_running;
+    bool m_bquit;
 };
 class ThreadLoadMagnifierCache : public QThread
 {
@@ -142,7 +144,7 @@ public:
         pixelratiof = 1;
         bookmarkbtn = nullptr;
         m_spinner = nullptr;
-        m_iconannotationlist.clear();
+        m_bquit = false;
         connect(&loadmagnifiercachethread, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)), this, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)));
         connect(&threadreander, SIGNAL(signal_RenderFinish(QImage)), this, SIGNAL(signal_RenderFinish(QImage)));
     }
@@ -191,10 +193,10 @@ public:
     qreal pixelratiof;
     BookMarkButton *bookmarkbtn;
     DSpinner *m_spinner;
-    QList<ICONANNOTATION> m_iconannotationlist;//注释图标列表
+    // QList<ICONANNOTATION> m_iconannotationlist;//注释图标列表
 //    QMutex m_mutexlockgetimage;
     QPixmap m_pixmapshow;//当前页文档图片
-
+    bool m_bquit;
     PageBase *q_ptr;
     Q_DECLARE_PUBLIC(PageBase)
 signals:
@@ -263,6 +265,7 @@ public:
     }
     bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     void stopThread();
+    void quitThread();
     void waitThread();
     void clearImage();
     bool setBookMarkState(bool state);

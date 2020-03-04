@@ -12,7 +12,8 @@ public:
     DocummentProxy(QObject *parent = nullptr);
     ~DocummentProxy()
     {
-        closeFileAndWaitThreadClearEnd();
+        if (!bcloseing && m_documment)
+            closeFileAndWaitThreadClearEnd();
     }
 public:
     static QString CreateInstance(QObject *parent = nullptr);
