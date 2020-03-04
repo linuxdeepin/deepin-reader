@@ -7,7 +7,7 @@
 
 class QStackedLayout;
 
-class PlayControlWidget;
+//class PlayControlWidget;
 class FileViewWidget;
 class NoteViewWidget;
 
@@ -30,27 +30,28 @@ signals:
 
     void sigShowCloseBtn(const int &);
     void sigHideCloseBtn();
-    void sigShowFileFind();
+//    void sigShowFileFind();
     void sigChangePlayCtrlShow(bool bshow);
-    void sigTitleMsg(const QString &);
 
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
 
     bool OpenFilePath(const QString &);
+    void OnOpenSliderShow();
+    void OnExitSliderShow();
 
     // QWidget interface
-protected:
-    void resizeEvent(QResizeEvent *event) override;
+//protected:
+//    void resizeEvent(QResizeEvent *event) override;
 
 private slots:
     void slotShowCloseBtn(const int &);
-    void slotHideCloseBtn();
-    void slotShowFindWidget();
+//    void slotHideCloseBtn();
+//    void slotShowFindWidget();
     void slotBtnCloseClicked();
     void slotUpdateTheme();
-    void slotChangePlayCtrlShow(bool bshow);
+//    void slotChangePlayCtrlShow(bool bshow);
     void SlotOpenFileOk();
 
 private:
@@ -69,7 +70,7 @@ protected:
     void initWidget() override;
 
 private:
-    PlayControlWidget   *m_pctrlwidget = nullptr;
+//    PlayControlWidget   *m_pctrlwidget = nullptr;
     FileViewWidget      *m_pFileViewWidget = nullptr;
     NoteViewWidget      *m_pNoteViewWidget = nullptr;
 

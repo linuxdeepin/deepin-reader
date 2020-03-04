@@ -28,15 +28,6 @@ HomeWidget::~HomeWidget()
     dApp->m_pModelService->removeObserver(this);
 }
 
-void HomeWidget::slotDealWithData(const int &msgType, const QString &)
-{
-    if (MSG_MENU_NEW_WINDOW == msgType) {
-        NewWindow();
-    } else if (E_OPEN_FILE == msgType) {
-        slotChooseBtnClicked();
-    }
-}
-
 void HomeWidget::initWidget()
 {
     auto tipsLabel = new CustomClickLabel(tr("Drag PDF files here"), this);
@@ -123,8 +114,6 @@ QStringList HomeWidget::getOpenFileList()
 
 void HomeWidget::initConnections()
 {
-    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
 }
 
 void HomeWidget::NewWindow()
@@ -134,13 +123,17 @@ void HomeWidget::NewWindow()
 
 int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
+    if (MSG_MENU_NEW_WINDOW == msgType) {
+        NewWindow();
+    } else if (E_OPEN_FILE == msgType) {
+        slotChooseBtnClicked();
+    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+        slotUpdateTheme();
+    }
+
     if (m_pMsgList.contains(msgType)) {
-        emit sigDealWithData(msgType, msgContent);
         return MSG_OK;
     }
 
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        emit sigUpdateTheme();
-    }
     return MSG_NO_OK;
 }

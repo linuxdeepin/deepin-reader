@@ -39,7 +39,6 @@ DocFileHelper::DocFileHelper(QObject *parent)
 {
     m_pMsgList = {MSG_OPERATION_TEXT_COPY,
                   MSG_DOC_JUMP_PAGE, MSG_OPERATION_FIRST_PAGE, MSG_OPERATION_END_PAGE, MSG_OPERATION_PREV_PAGE, MSG_OPERATION_NEXT_PAGE,
-                  MSG_OPERATION_SLIDE,
                   MSG_SAVE_FILE, MSG_NOT_SAVE_FILE, MSG_NOT_CHANGE_SAVE_FILE
                  };
 }
@@ -164,8 +163,6 @@ QString DocFileHelper::qDealWithData(const int &msgType, const QString &msgConte
         } else if (msgContent == KeyStr::g_ctrl_c) {
             __FileCtrlCContent();
         }
-    } else if (msgType == MSG_OPERATION_SLIDE) {
-        SetFileSlider(msgContent.toInt());
     } else if (MSG_SAVE_FILE == msgType || MSG_NOT_SAVE_FILE == msgType || MSG_NOT_CHANGE_SAVE_FILE == msgType)  {
         CloseFile(msgType, msgContent);
     } else if (msgType == MSG_SAVE_FILE_PATH) {
@@ -266,31 +263,31 @@ void DocFileHelper::__FileCtrlCContent()
     }
 }
 
-void DocFileHelper::SetFileSlider(const int &nFlag)
-{
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
-    if (pMtwe) {
-        QString sCurPath = pMtwe->qGetCurPath();
-        if (sCurPath != "") {
-            DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(sCurPath);
-            if (!_proxy) {
-                return;
-            }
+//void DocFileHelper::SetFileSlider(const int &nFlag)
+//{
+//    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+//    if (pMtwe) {
+//        QString sCurPath = pMtwe->qGetCurPath();
+//        if (sCurPath != "") {
+//            DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(sCurPath);
+//            if (!_proxy) {
+//                return;
+//            }
 
-            if (nFlag == 1) {
-                bool bSlideModel = _proxy->showSlideModel();    //  开启幻灯片
-                if (bSlideModel) {
-                    _proxy->setAutoPlaySlide(true);
-                    dApp->m_pAppInfo->qSetCurShowState(FILE_SLIDE);
-                }
-            } else {
-                if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE) {
-                    bool rl = _proxy->exitSlideModel();
-                    if (rl) {
-                        dApp->m_pAppInfo->qSetCurShowState(FILE_NORMAL);
-                    }
-                }
-            }
-        }
-    }
-}
+//            if (nFlag == 1) {
+//                bool bSlideModel = _proxy->showSlideModel();    //  开启幻灯片
+//                if (bSlideModel) {
+//                    _proxy->setAutoPlaySlide(true);
+//                    dApp->m_pAppInfo->qSetCurShowState(FILE_SLIDE);
+//                }
+//            } else {
+//                if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE) {
+//                    bool rl = _proxy->exitSlideModel();
+//                    if (rl) {
+//                        dApp->m_pAppInfo->qSetCurShowState(FILE_NORMAL);
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}

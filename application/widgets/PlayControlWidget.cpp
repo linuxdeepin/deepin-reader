@@ -11,6 +11,8 @@
 #include "utils/utils.h"
 #include "docview/docummentproxy.h"
 
+#include "main/MainTabWidgetEx.h"
+
 #include "gof/bridge/IHelper.h"
 
 PlayControlWidget::PlayControlWidget(DWidget *parnet)
@@ -30,9 +32,6 @@ PlayControlWidget::PlayControlWidget(DWidget *parnet)
     initConnections();
     adjustSize();
 
-    m_pMsgList = {MSG_NOTIFY_KEY_PLAY_MSG};
-
-
     dApp->m_pModelService->addObserver(this);
 }
 
@@ -43,18 +42,17 @@ PlayControlWidget::~PlayControlWidget()
 
 int PlayControlWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (m_pMsgList.contains(msgType)) {
-        emit sigDealWithData(msgType, msgContent);
-        return MSG_OK;
-    }
-
+    /*if (msgType == MSG_NOTIFY_KEY_PLAY_MSG) {
+        __PageChangeByKey(msgContent);
+    } else*/
     if (MSG_NOTIFY_KEY_MSG == msgType) {
         if (KeyStr::g_space == msgContent) {
             changePlayStatus();
         }
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        emit sigUpdateTheme();
+        slotUpdateTheme();
     }
+
     return  MSG_NO_OK;
 }
 
@@ -72,10 +70,16 @@ void PlayControlWidget::activeshow(int ix, int iy)
 {
     if (m_bfirstshow) {
         m_bfirstshow = false;
-        connect(DocummentProxy::instance(), &DocummentProxy::signal_autoplaytoend, this, [this] {
-            this->changePlayStatus(); qDebug() << "$$$%%%%$$####%$";
-        });
+
+        MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+        if (pMtwe) {
+            auto helper = pMtwe->getCurFileAndProxy(m_strSliderPath);
+            connect(helper, &DocummentProxy::signal_autoplaytoend, this, [this] {
+                this->changePlayStatus(); qDebug() << "$$$%%%%$$####%$";
+            });
+        }
     }
+
     if (m_ptimer->isActive())
         m_ptimer->stop();
     m_ptimer->start();
@@ -123,9 +127,6 @@ void PlayControlWidget::initConnections()
     connect(m_pbtnplay, &DIconButton::clicked, this, &PlayControlWidget::slotPlayClicked);
     connect(m_pbtnnext, &DIconButton::clicked, this, &PlayControlWidget::slotNextClicked);
     connect(m_pbtnexit, &DIconButton::clicked, this, &PlayControlWidget::slotExitClicked);
-    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
-
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
 }
 
 DIconButton *PlayControlWidget::createBtn(const QString &strname)
@@ -140,34 +141,42 @@ DIconButton *PlayControlWidget::createBtn(const QString &strname)
 
 void PlayControlWidget::pagejump(const bool &bpre)
 {
-    auto helper = DocummentProxy::instance();
-    if (helper) {
-        bool bSatus = helper->getAutoPlaySlideStatu();
-        if (bSatus) {
-            helper->setAutoPlaySlide(false);
-        }
-        int nCurPage = helper->currentPageNo();
-        if (bpre)
-            nCurPage--;
-        else
-            nCurPage++;
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    if (pMtwe) {
+        auto helper = pMtwe->getCurFileAndProxy(m_strSliderPath);
+        if (helper) {
+            bool bSatus = helper->getAutoPlaySlideStatu();
+            if (bSatus) {
+                helper->setAutoPlaySlide(false);
+            }
+            int nCurPage = helper->currentPageNo();
+            if (bpre)
+                nCurPage--;
+            else
+                nCurPage++;
 
-        dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
+            dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
 
-        if (bSatus) {
-            helper->setAutoPlaySlide(bSatus);
+            if (bSatus) {
+                helper->setAutoPlaySlide(bSatus);
+            }
         }
     }
 }
 
 void PlayControlWidget::changePlayStatus()
 {
-    m_bautoplaying = m_bautoplaying ? false : true;
+    m_bautoplaying = !m_bautoplaying;
     if (m_bautoplaying)
         m_pbtnplay->setIcon(QIcon(Utils::renderSVG(PF::getImagePath("suspend_normal", Pri::g_icons), QSize(36, 36))));
     else {
         m_pbtnplay->setIcon(QIcon(Utils::renderSVG(PF::getImagePath("play_normal", Pri::g_icons), QSize(36, 36))));
     }
+}
+
+void PlayControlWidget::setSliderPath(const QString &strSliderPath)
+{
+    m_strSliderPath = strSliderPath;
 }
 
 void PlayControlWidget::enterEvent(QEvent *event)
@@ -185,7 +194,7 @@ void PlayControlWidget::leaveEvent(QEvent *event)
 
 void PlayControlWidget::slotUpdateTheme()
 {
-    QList<DIconButton *> plist = findChildren<DIconButton *>();
+    QList<DIconButton *> plist = this->findChildren<DIconButton *>();
     foreach (DIconButton *btn, plist) {
         if (btn == m_pbtnplay) {
             if (m_bautoplaying) {
@@ -206,7 +215,12 @@ void PlayControlWidget::slotPreClicked()
 
 void PlayControlWidget::slotPlayClicked()
 {
-    notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_space);
+    QJsonObject obj;
+    obj.insert("type", "keyPress");
+    obj.insert("key", KeyStr::g_space);
+
+    QJsonDocument doc = QJsonDocument(obj);
+    notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
 }
 
 void PlayControlWidget::slotNextClicked()
@@ -216,24 +230,25 @@ void PlayControlWidget::slotNextClicked()
 
 void PlayControlWidget::slotExitClicked()
 {
-    notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
-    m_ptimer->stop();
-    hide();
-}
+    QJsonObject obj;
+    obj.insert("type", "ShortCut");
+    obj.insert("key",  KeyStr::g_esc);
 
-void PlayControlWidget::SlotDealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_NOTIFY_KEY_PLAY_MSG) {
-        __PageChangeByKey(msgContent);
-    }
+    QJsonDocument doc = QJsonDocument(obj);
+    notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
 }
 
 //  按了键盘 上下左右
-void PlayControlWidget::__PageChangeByKey(const QString &sKey)
+void PlayControlWidget::PageChangeByKey(const QString &sKey)
 {
-    if (sKey == KeyStr::g_up || sKey == KeyStr::g_pgup || sKey == KeyStr::g_left) {
-        pagejump(true);
+    if (sKey == KeyStr::g_space) {
+        qDebug() << __FUNCTION__ << "           1";
+        changePlayStatus();
     } else {
-        pagejump(false);
+        if (sKey == KeyStr::g_up || sKey == KeyStr::g_pgup || sKey == KeyStr::g_left) {
+            pagejump(true);
+        } else {
+            pagejump(false);
+        }
     }
 }

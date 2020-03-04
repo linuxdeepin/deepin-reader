@@ -48,16 +48,13 @@ private slots:
 
 private:
     void __ChangeScale(const int &);
-    void InitConnection();
     void OnFileOpenOk(const QString &sPath);
     void onShortKey(const QString &);
 
 private:
     QList<int> dataList;
-    int     m_nCurrentIndex = 5;
+    int     m_nCurrentIndex = 0;
     QStringList     shortKeyList;                 // 要处理的消息类型
-
-
 };
 
 #endif // SCALEMENU_H

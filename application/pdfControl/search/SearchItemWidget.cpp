@@ -28,8 +28,6 @@ SearchItemWidget::SearchItemWidget(DWidget *parent)
     : CustomItemWidget(QString("SearchItemWidget"), parent)
 {
     initWidget();
-
-    connect(this, SIGNAL(sigUpdateTheme()), this, SLOT(slotUpdateTheme()));
 }
 
 SearchItemWidget::~SearchItemWidget()
@@ -153,9 +151,9 @@ void SearchItemWidget::initWidget()
 int SearchItemWidget::dealWithData(const int &msgType, const QString &)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        emit sigUpdateTheme();
+        slotUpdateTheme();
     }
-    return 0;
+    return MSG_NO_OK;
 }
 
 void SearchItemWidget::resizeEvent(QResizeEvent *event)

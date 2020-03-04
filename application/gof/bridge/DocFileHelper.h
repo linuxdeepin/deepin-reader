@@ -46,7 +46,7 @@ private:
 
     void notifyMsg(const int &msgType, const QString &msgContent = "") ;
 
-    void SetFileSlider(const int &nFlag);
+//    void SetFileSlider(const int &nFlag);
 
     void CloseFile(const int &iType, const QString &sPath);
 };

@@ -22,8 +22,6 @@
 #include "ModelService.h"
 
 class AppInfo;
-class DocummentFileHelper;
-
 class IHelper;
 
 #if defined(dApp)
@@ -49,7 +47,6 @@ public:
     DBService           *m_pDBService = nullptr;
     ModelService        *m_pModelService = nullptr;
     AppInfo             *m_pAppInfo = nullptr;
-    DocummentFileHelper *m_pDocummentFileHelper = nullptr;
 
     IHelper              *m_pHelper = nullptr;
 

@@ -129,12 +129,12 @@ void NotesItemWidget::slotShowContextMenu(const QPoint &)
 
 void NotesItemWidget::slotUpdateTheme()
 {
-//    if (m_pPageNumber) {
-//        m_pPageNumber->setForegroundRole(DPalette::TextTitle);
-//    }
-//    if (m_pTextLab) {
-//        m_pTextLab->setForegroundRole(QPalette::BrightText);
-//    }
+    if (m_pPageNumber) {
+        m_pPageNumber->setForegroundRole(DPalette::TextTitle);
+    }
+    if (m_pTextLab) {
+        m_pTextLab->setForegroundRole(QPalette::BrightText);
+    }
 }
 
 QString NotesItemWidget::strPage() const
@@ -213,22 +213,19 @@ void NotesItemWidget::initWidget()
 void NotesItemWidget::__InitConnections()
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), SLOT(slotShowContextMenu(const QPoint &)));
-    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
 int NotesItemWidget::dealWithData(const int &msgType, const QString &)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        emit sigUpdateTheme();
+        slotUpdateTheme();
     }
-    return 0;
+    return MSG_NO_OK;
 }
 
 void NotesItemWidget::paintEvent(QPaintEvent *e)
 {
     CustomItemWidget::paintEvent(e);
-
-
 
     //  涉及到 主题颜色
     if (m_bPaint) {

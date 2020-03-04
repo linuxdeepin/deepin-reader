@@ -47,13 +47,6 @@ SearchResWidget::~SearchResWidget()
     }
 }
 
-void SearchResWidget::SlotDealWithData(const int &msgType, const QString &)
-{
-    if (MSG_CLEAR_FIND_CONTENT == msgType) {
-        __ClearSearchContent();
-    }
-}
-
 void SearchResWidget::__ClearSearchContent()
 {
     m_isSearch = false;
@@ -202,7 +195,6 @@ void SearchResWidget::initConnections()
     connect(&m_loadSearchResThread, SIGNAL(sigLoadImage(const int &, const QImage &)), SLOT(slotLoadImage(const int &, const QImage &)));
     connect(&m_loadSearchResThread, SIGNAL(sigStopFind()), SLOT(slotStopFind()));
 
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
     connect(this, SIGNAL(sigFlushSearchWidget(const QString &)), SLOT(slotFlushSearchWidget(const QString &)));
 
     connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
@@ -326,15 +318,18 @@ void SearchResWidget::clearItemColor()
  */
 int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (m_pMsgList.contains(msgType)) {
-        emit sigDealWithData(msgType, msgContent);
-        return  MSG_OK;
+    if (MSG_CLEAR_FIND_CONTENT == msgType) {
+        __ClearSearchContent();
     }
 
     if (msgType == MSG_FIND_START) {  //  查询内容
         if (msgContent != QString("")) {
             emit sigFlushSearchWidget(msgContent);
         }
+    }
+
+    if (m_pMsgList.contains(msgType)) {
+        return MSG_OK;
     }
 
     return MSG_NO_OK;

@@ -21,7 +21,6 @@
 #include <QDebug>
 #include <QDir>
 
-#include "business/DocummentFileHelper.h"
 #include "business/AppInfo.h"
 #include "utils/utils.h"
 
@@ -84,7 +83,6 @@ void Application::initChildren()
 {
     m_pDBService = new DBService(this);
     m_pModelService = new ModelService(this);
-    m_pDocummentFileHelper = new DocummentFileHelper(this);
 
     m_pAppInfo = new AppInfo(this);
 

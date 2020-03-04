@@ -24,15 +24,16 @@ public:
     explicit MainWindow(DMainWindow *parent = nullptr);
     ~MainWindow() override;
 
+private:
+    static MainWindow *g_onlyMainWindow;
+public:
+    static MainWindow *Instance();
+
     void openfile(const QString &filepath);
     void setSreenRect(const QRect &); //得到屏幕的分辨率
 
-signals:
-    void sigAppShowState(const int &);
-    void sigFullScreen();
-    void sigSpacePressed();
-
-    void sigDealWithData(const int &, const QString &);
+public:
+    void SetSliderShowState(const int &);
 
     // IObserver interface
 public:
@@ -45,17 +46,15 @@ protected:
 
 private:
     void initUI();
-    void initConnections();
+//    void initConnections();
 
-    void onSetAppTitle(const QString &);
+//    void onSetAppTitle(const QString &);
     void onAppExit();
 
     void initThemeChanged();
     void setCurTheme();
     void displayShortcuts();
 
-    // IObserver interface
-//    void sendMsg(const int &, const QString &msgContent = "") override;
     void notifyMsg(const int &, const QString &msgContent = "") override;
 
     void showDefaultSize();
@@ -63,19 +62,11 @@ private:
     void initShortCut();
 
 private slots:
-    void slotFullScreen();
-    void slotAppShowState(const int &);
-
-    void slotDealWithData(const int &, const QString &);
-
     void slotShortCut(const QString &);
-    void SlotSlideShow();
 
 private:
     QList<int>      m_pMsgList;
     Qt::WindowStates    m_nOldState = Qt::WindowNoState;        //  旧的窗口状态
-
-
 };
 
 #endif // MainWindow_H

@@ -28,7 +28,6 @@ ScaleMenu::ScaleMenu(DWidget *parent)
     : CustomMenu("ScaleMenu", parent)
 {
     initActions();
-    InitConnection();
 
     shortKeyList << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_equal << KeyStr::g_ctrl_smaller;
 }
@@ -136,10 +135,6 @@ void ScaleMenu::__ChangeScale(const int &iData)
     }
 }
 
-void ScaleMenu::InitConnection()
-{
-}
-
 void ScaleMenu::OnFileOpenOk(const QString &sPath)
 {
     FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(sPath);
@@ -159,5 +154,4 @@ void ScaleMenu::OnFileOpenOk(const QString &sPath)
             break;
         }
     }
-
 }

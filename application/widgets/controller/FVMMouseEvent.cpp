@@ -29,6 +29,7 @@
 #include "../NoteTipWidget.h"
 
 #include "gof/bridge/IHelper.h"
+#include "widgets/main/MainTabWidgetEx.h"
 
 void FVMMouseEvent::mouseMoveEvent(QMouseEvent *event, DWidget *widget)
 {
@@ -38,8 +39,9 @@ void FVMMouseEvent::mouseMoveEvent(QMouseEvent *event, DWidget *widget)
     FileViewWidget *fvw = qobject_cast<FileViewWidget *>(widget);
 
     //  处于幻灯片模式下
-    if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE) {
-        emit fvw->sigShowPlayCtrl(true);
+    int nState = MainTabWidgetEx::Instance()->getCurrentState();
+    if (nState == SLIDER_SHOW) {
+        MainTabWidgetEx::Instance()->showPlayControlWidget();   //  显示 幻灯片 控制
         return;
     }
 
@@ -179,7 +181,8 @@ void FVMMouseEvent::mousePressEvent(QMouseEvent *event, DWidget *widget)
     Qt::MouseButton nBtn = event->button();
     if (nBtn == Qt::RightButton) {  //  右键处理
         //  处于幻灯片模式下
-        if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE) {
+        int nState = MainTabWidgetEx::Instance()->getCurrentState();
+        if (nState == SLIDER_SHOW) {
             fvw->notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
             return;
         }
@@ -191,7 +194,8 @@ void FVMMouseEvent::mousePressEvent(QMouseEvent *event, DWidget *widget)
         }
     } else if (nBtn == Qt::LeftButton) { // 左键处理
         //  幻灯片模式下, 左键单击 不作任何处理
-        if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE)
+        int nState = MainTabWidgetEx::Instance()->getCurrentState();
+        if (nState == SLIDER_SHOW)
             return;
 
         QPoint globalPos = event->globalPos();
@@ -294,7 +298,8 @@ void FVMMouseEvent::__OtherMousePress(FileViewWidget *fvw, const QPoint &globalP
 void FVMMouseEvent::mouseReleaseEvent(QMouseEvent *event, DWidget *widget)
 {
     //  幻灯片模式下, 左键单击 不作任何处理
-    if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE)
+    int nState = MainTabWidgetEx::Instance()->getCurrentState();
+    if (nState == SLIDER_SHOW)
         return;
 
     Qt::MouseButton nBtn = event->button();

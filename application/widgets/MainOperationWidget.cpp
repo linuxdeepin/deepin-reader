@@ -103,17 +103,6 @@ DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QStrin
 
 void MainOperationWidget::initConnect()
 {
-    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
-}
-
-void MainOperationWidget::SlotDealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_SWITCHLEFTWIDGET) {
-        __SetBtnCheckById(msgContent.toInt());
-    } else if (msgType == MSG_FIND_EXIT) {
-        __SearchExit();
-    }
 }
 
 void MainOperationWidget::slotOpenFileOk(const QString &sPath)
@@ -157,16 +146,18 @@ void MainOperationWidget::slotButtonClicked(int id)
 
 int MainOperationWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (m_pMsgList.contains(msgType)) {
-        emit sigDealWithData(msgType, msgContent);
-        return MSG_OK;
-    }
-
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+    if (msgType == MSG_SWITCHLEFTWIDGET) {
+        __SetBtnCheckById(msgContent.toInt());
+    } else if (msgType == MSG_FIND_EXIT) {
+        __SearchExit();
+    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         slotOpenFileOk(msgContent);
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        emit sigUpdateTheme();
+        slotUpdateTheme();
     }
 
+    if (m_pMsgList.contains(msgType)) {
+        return MSG_OK;
+    }
     return MSG_NO_OK;
 }

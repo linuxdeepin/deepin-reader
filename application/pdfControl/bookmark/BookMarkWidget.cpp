@@ -445,8 +445,6 @@ void BookMarkWidget::initConnection()
     connect(&m_loadBookMarkThread, SIGNAL(sigLoadImage(const int &, const QImage &)),
             SLOT(slotLoadImage(const int &, const QImage &)));
 
-    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
-
     connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem *)), SLOT(slotSelectItemBackColor(QListWidgetItem *)));
 }
 
@@ -485,7 +483,6 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
 
                     m_pBookMarkListWidget->setCurrentItem(item);
                 }
-//                proxy->setBookMarkState(page, true);
 
                 return item;
             }
@@ -530,7 +527,7 @@ void BookMarkWidget::slotSelectItemBackColor(QListWidgetItem *item)
 int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更消息
-        emit sigUpdateTheme();
+        slotUpdateTheme();
     } else if (MSG_OPERATION_OPEN_FILE_OK == msgType) { //  打开 文件通知消息
         OnOpenFileOk(msgContent);
     } else if (MSG_FILE_PAGE_CHANGE == msgType) { //  文档页变化消息

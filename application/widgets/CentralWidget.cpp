@@ -51,24 +51,19 @@ CentralWidget::~CentralWidget()
 
 void CentralWidget::keyPressEvent(QKeyEvent *event)
 {
+
     //  不是正常显示, 则是全屏模式或者幻灯片模式, 进行页面跳转
-    if (dApp->m_pAppInfo->qGetCurShowState() != FILE_NORMAL) {
-        QStringList pFilterList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown
-                                  << KeyStr::g_down << KeyStr::g_up
-                                  << KeyStr::g_left << KeyStr::g_right;
-//        QString key = Utils::getKeyshortcut(event);
-//        if (pFilterList.contains(key)) {
+    QStringList pFilterList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown
+                              << KeyStr::g_down << KeyStr::g_up
+                              << KeyStr::g_left << KeyStr::g_right << KeyStr::g_space;
+    QString key = Utils::getKeyshortcut(event);
+    if (pFilterList.contains(key)) {
+        QJsonObject obj;
+        obj.insert("type", "keyPress");
+        obj.insert("key", key);
 
-//            QJsonObject obj;
-//            obj.insert("content", "1");
-//            obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET);
-
-//            QJsonDocument doc(obj);
-
-//            notifyMsg(MSG_WIDGET_THUMBNAILS_VIEW, doc.toJson(QJsonDocument::Compact));
-
-//            notifyMsg(E_APP_MSG_TYPE, key);
-//        }
+        QJsonDocument doc = QJsonDocument(obj);
+        notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
     }
 
     CustomWidget::keyPressEvent(event);
@@ -76,8 +71,6 @@ void CentralWidget::keyPressEvent(QKeyEvent *event)
 
 void CentralWidget::initConnections()
 {
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
-            SLOT(slotDealWithData(const int &, const QString &)));
 }
 
 void CentralWidget::OnSetCurrentIndex()
@@ -85,15 +78,6 @@ void CentralWidget::OnSetCurrentIndex()
     auto pLayout = this->findChild<QStackedLayout *>();
     if (pLayout) {
         pLayout->setCurrentIndex(0);
-    }
-}
-
-void CentralWidget::slotDealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == CENTRAL_INDEX_CHANGE) {
-        OnSetCurrentIndex();
-    } else if (msgType == CENTRAL_SHOW_TIP) {
-        onShowTip(msgContent);
     }
 }
 
@@ -128,8 +112,13 @@ void CentralWidget::onShowTip(const QString &contant)
 
 int CentralWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
+    if (msgType == CENTRAL_INDEX_CHANGE) {
+        OnSetCurrentIndex();
+    } else if (msgType == CENTRAL_SHOW_TIP) {
+        onShowTip(msgContent);
+    }
+
     if (m_pMsgList.contains(msgType)) {
-        emit sigDealWithData(msgType, msgContent);
         return MSG_OK;
     }
     return MSG_NO_OK;

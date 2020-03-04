@@ -37,7 +37,7 @@ BookMarkItemWidget::BookMarkItemWidget(QWidget *parent)
  */
 int BookMarkItemWidget::dealWithData(const int &, const QString &)
 {
-    return 0;
+    return MSG_NO_OK;
 }
 
 bool BookMarkItemWidget::bSelect()

@@ -40,10 +40,6 @@ public:
     explicit FindWidget(DWidget *parent = nullptr);
     ~FindWidget() override;
 
-signals:
-    void sigSetVisible();
-    void sigDealWithData(const int &, const QString &);
-
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
@@ -54,13 +50,11 @@ public:
     void setSearchEditFocus();
 
 private slots:
-    void slotSetVisible();
     void findCancel();
     void handleContentChanged();
     void slotFindNextBtnClicked();
     void slotFindPrevBtnClicked();
     void slotClearContent();
-    void slotDealWithData(const int &, const QString &);
     void slotEditAborted();
 
 private:

@@ -85,7 +85,6 @@ void PagingWidget::initWidget()
 
 void PagingWidget::initConnections()
 {
-    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
 /**
@@ -97,7 +96,7 @@ void PagingWidget::initConnections()
 int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {    //  颜色主题切换
-        emit sigUpdateTheme();
+        slotUpdateTheme();
     } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         OnDocFileOpenOk(msgContent);
     } else if (msgType == MSG_FILE_PAGE_CHANGE) {                  //  文档页变化了

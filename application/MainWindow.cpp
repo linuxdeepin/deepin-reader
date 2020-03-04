@@ -10,9 +10,9 @@
 #include "MsgModel.h"
 
 #include "business/ShortCutShow.h"
-#include "business/SaveDialog.h"
+//#include "business/SaveDialog.h"
 #include "business/AppInfo.h"
-#include "docview/docummentproxy.h"
+//#include "docview/docummentproxy.h"
 #include "menu/TitleMenu.h"
 #include "widgets/TitleWidget.h"
 #include "widgets/CentralWidget.h"
@@ -22,6 +22,13 @@
 #include "widgets/main/MainTabWidgetEx.h"
 
 DWIDGET_USE_NAMESPACE
+
+MainWindow *MainWindow::g_onlyMainWindow = nullptr;
+
+MainWindow *MainWindow::Instance()
+{
+    return g_onlyMainWindow;
+}
 
 MainWindow::MainWindow(DMainWindow *parent)
     : DMainWindow(parent)
@@ -35,11 +42,13 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     initUI();
 
-    initConnections();
+//    initConnections();
 
     initThemeChanged();
 
     initShortCut();
+
+    g_onlyMainWindow = this;
 
     dApp->m_pModelService->addObserver(this);
 
@@ -66,6 +75,30 @@ void MainWindow::openfile(const QString &filepath)
 void MainWindow::setSreenRect(const QRect &rect)
 {
     dApp->m_pAppInfo->setScreenRect(rect);
+}
+
+//  0 开启幻灯片, 1 取消幻灯片
+void MainWindow::SetSliderShowState(const int &nState)
+{
+    titlebar()->setVisible(nState);
+    // setTitlebarShadowEnabled(nState);
+
+    if (nState == 1) {
+        if (windowState() == Qt::WindowFullScreen) {
+//            dApp->m_pAppInfo->qSetCurShowState(FILE_NORMAL);  //  正常状态
+
+            showNormal();
+
+            if (m_nOldState == Qt::WindowMaximized) {
+                showMaximized();
+            }
+
+            m_nOldState = Qt::WindowNoState;        // 状态恢复     2019-12-23  wzx
+        }
+    } else {
+        m_nOldState = this->windowState();      //  全屏之前 保存当前状态     2019-12-23  wzx
+        this->setWindowState(Qt::WindowFullScreen);
+    }
 }
 
 //  临时 添加 焦点
@@ -101,36 +134,8 @@ void MainWindow::initUI()
     setCentralWidget(new CentralWidget);
 }
 
-void MainWindow::initConnections()
-{
-    connect(this, SIGNAL(sigFullScreen()), SLOT(slotFullScreen()));
-    connect(this, SIGNAL(sigAppShowState(const int &)), SLOT(slotAppShowState(const int &)));
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)),
-            SLOT(slotDealWithData(const int &, const QString &)));
-
-    connect(this, &MainWindow::sigSpacePressed, this, []() {
-        auto helper = DocummentProxy::instance();
-        if (helper) {
-            if (helper->getAutoPlaySlideStatu()) {
-                helper->setAutoPlaySlide(false);
-            } else  {
-                helper->setAutoPlaySlide(true);
-            }
-        }
-    });
-}
-
-//  放映
-void MainWindow::SlotSlideShow()
-{
-    //  已经是幻灯片了
-    if (FILE_SLIDE == dApp->m_pAppInfo->qGetCurShowState()) {
-        return;
-    }
-    slotAppShowState(0);
-    notifyMsg(MSG_OPERATION_SLIDE);
-
-}
+//void MainWindow::initConnections()
+//{}
 
 void MainWindow::initThemeChanged()
 {
@@ -170,55 +175,11 @@ void MainWindow::onAppExit()
     close();
 }
 
-//  全屏
-void MainWindow::slotFullScreen()
-{
-    int nCurState = dApp->m_pAppInfo->qGetCurShowState();
-    if (nCurState != FILE_FULLSCREEN) {
-        slotAppShowState(0);
-        dApp->m_pAppInfo->qSetCurShowState(FILE_FULLSCREEN);  //  全屏状态
-    }
-}
-
-/**
- * @brief MainWindow::slotAppShowState
- * @param nState 1 退出全屏, 0 全屏显示
- */
-void MainWindow::slotAppShowState(const int &nState)
-{
-    titlebar()->setVisible(nState);
-    // setTitlebarShadowEnabled(nState);
-
-    if (nState == 1) {
-        if (windowState() == Qt::WindowFullScreen) {
-            dApp->m_pAppInfo->qSetCurShowState(FILE_NORMAL);  //  正常状态
-
-            showNormal();
-
-            if (m_nOldState == Qt::WindowMaximized) {
-                showMaximized();
-            }
-
-            m_nOldState = Qt::WindowNoState;        // 状态恢复     2019-12-23  wzx
-        }
-    } else {
-        m_nOldState = this->windowState();      //  全屏之前 保存当前状态     2019-12-23  wzx
-        this->setWindowState(Qt::WindowFullScreen);
-    }
-}
-
 //  设置 文档标题
-void MainWindow::onSetAppTitle(const QString &sData)
-{
-    titlebar()->setTitle(sData);
-}
-
-void MainWindow::slotDealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_OPERATION_EXIT) {
-        onAppExit();
-    }
-}
+//void MainWindow::onSetAppTitle(const QString &sData)
+//{
+//    titlebar()->setTitle(sData);
+//}
 
 //  快捷键 实现
 void MainWindow::slotShortCut(const QString &key)
@@ -236,8 +197,6 @@ void MainWindow::slotShortCut(const QString &key)
         notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
     }
 }
-
-//void MainWindow::sendMsg(const int &, const QString &) {}
 
 void MainWindow::notifyMsg(const int &msgType, const QString &msgContent)
 {
@@ -260,7 +219,6 @@ void MainWindow::showDefaultSize()
     }
 }
 
-
 //  初始化 快捷键操作
 void MainWindow::initShortCut()
 {
@@ -278,27 +236,14 @@ void MainWindow::initShortCut()
     }
 }
 
-int MainWindow::dealWithData(const int &msgType, const QString &msgContent)
+int MainWindow::dealWithData(const int &msgType, const QString &)
 {
-    if (m_pMsgList.contains(msgType)) {
-        emit sigDealWithData(msgType, msgContent);
-        return MSG_OK;
+    if (msgType == MSG_OPERATION_EXIT) {
+        onAppExit();
     }
 
-    if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (msgContent == KeyStr::g_f11 && dApp->m_pAppInfo->qGetCurShowState() != FILE_SLIDE) {
-            if (dApp->m_pAppInfo->qGetCurShowState() == FILE_FULLSCREEN)
-                emit sigAppShowState(1);
-            else {
-                emit sigFullScreen();
-            }
-        } else if (msgContent == KeyStr::g_esc) {        //  退出全屏模式
-            emit sigAppShowState(1);
-        } else if (msgContent == KeyStr::g_space) {
-            if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE) {
-                emit sigSpacePressed();
-            }
-        }
+    if (m_pMsgList.contains(msgType)) {
+        return MSG_OK;
     }
     return MSG_NO_OK;
 }

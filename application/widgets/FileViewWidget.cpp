@@ -129,7 +129,8 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         return;
 
     //  处于幻灯片模式下
-    if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE)
+    int nState = MainTabWidgetEx::Instance()->getCurrentState();
+    if (nState == SLIDER_SHOW)
         return;
 
     //  放大镜状态， 直接返回
@@ -227,7 +228,8 @@ void FileViewWidget::onSetHandShape(const QString &data)
 void FileViewWidget::onFileAddAnnotation()
 {
     //  处于幻灯片模式下
-    if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE)
+    int nState = MainTabWidgetEx::Instance()->getCurrentState();
+    if (nState == SLIDER_SHOW)
         return;
 
     //  放大镜状态， 直接返回
@@ -319,7 +321,8 @@ void FileViewWidget::onFileAddNote()
         return;
 
     //  处于幻灯片模式下
-    if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE)
+    int nState = MainTabWidgetEx::Instance()->getCurrentState();
+    if (nState == SLIDER_SHOW)
         return;
 
     //  放大镜状态， 直接返回
@@ -526,8 +529,6 @@ void FileViewWidget::SlotDocFileOpenResult(bool openresult)
 void FileViewWidget::initConnections()
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), SLOT(slotCustomContextMenuRequested(const QPoint &)));
-
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
 }
 
 //  设置　窗口　自适应　宽＼高　度

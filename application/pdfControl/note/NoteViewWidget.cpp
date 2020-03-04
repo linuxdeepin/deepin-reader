@@ -54,7 +54,7 @@ NoteViewWidget::~NoteViewWidget()
 int NoteViewWidget::dealWithData(const int &msgType, const QString &)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        emit sigUpdateTheme();
+        slotUpdateTheme();
     }
     return MSG_NO_OK;
 }
@@ -121,7 +121,6 @@ void NoteViewWidget::initWidget()
 
 void NoteViewWidget::initConnections()
 {
-    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
 }
 
 //  高亮注释 处理

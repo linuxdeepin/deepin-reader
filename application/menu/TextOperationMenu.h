@@ -65,7 +65,6 @@ private:
     QPoint      m_pEndPoint;            //  右键菜单的 结束点
     int         m_nClickPage = -1;
     Note_Type   m_nType = NOTE_HIGHLIGHT;
-
 };
 
 #endif // TEXTOPERATIONMENU_H

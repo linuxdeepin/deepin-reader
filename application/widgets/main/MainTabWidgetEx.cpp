@@ -21,15 +21,22 @@
 #include <QVBoxLayout>
 #include <QStackedLayout>
 #include <QDesktopServices>
+#include <QDesktopWidget>
 #include <QUrl>
 
 #include "MainTabBar.h"
 #include "MainSplitter.h"
 
+#include "MainWindow.h"
+
+#include "business/AppInfo.h"
 #include "business/SaveDialog.h"
 #include "business/PrintManager.h"
+#include "docview/docummentproxy.h"
 
+#include "../FindWidget.h"
 #include "../FileAttrWidget.h"
+#include "../PlayControlWidget.h"
 #include "../TitleWidget.h"
 #include "docview/docummentproxy.h"
 
@@ -61,21 +68,28 @@ MainTabWidgetEx *MainTabWidgetEx::Instance()
 
 int MainTabWidgetEx::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (m_pMsgList.contains(msgType)) {
-        emit sigDealWithData(msgType, msgContent);
-        return MSG_OK;
+    if (msgType == E_TABBAR_MSG_TYPE) {
+        OnTabBarMsg(msgContent);
+    } else if (msgType == E_APP_MSG_TYPE) {     //  应用类消息
+        OnAppMsgData(msgContent);
+    } else if (msgType == MSG_FILE_IS_CHANGE) {
+        OnTabFileChangeMsg(msgContent);
+    } else {
+        QJsonParseError error;
+        QJsonDocument doc = QJsonDocument::fromJson(msgContent.toLocal8Bit().data(), &error);
+        if (error.error == QJsonParseError::NoError) {
+            QJsonObject obj = doc.object();
+            QString sTo = obj.value("to").toString();
+
+            if (sTo.contains(this->m_strObserverName)) {
+                emit sigDealNotifyMsg(msgType, msgContent);
+                return MSG_OK;
+            }
+        }
     }
 
-    QJsonParseError error;
-    QJsonDocument doc = QJsonDocument::fromJson(msgContent.toLocal8Bit().data(), &error);
-    if (error.error == QJsonParseError::NoError) {
-        QJsonObject obj = doc.object();
-        QString sTo = obj.value("to").toString();
-
-        if (sTo.contains(this->m_strObserverName)) {
-            emit sigDealNotifyMsg(msgType, msgContent);
-            return MSG_OK;
-        }
+    if (m_pMsgList.contains(msgType)) {
+        return MSG_OK;
     }
 
     return MSG_NO_OK;
@@ -173,6 +187,15 @@ DocummentProxy *MainTabWidgetEx::getCurFileAndProxy(const QString &sPath) const
     return  nullptr;
 }
 
+void MainTabWidgetEx::showPlayControlWidget() const
+{
+    if (m_pctrlwidget) {
+        int nScreenWidth = qApp->desktop()->geometry().width();
+        int inScreenHeght = qApp->desktop()->geometry().height();
+        m_pctrlwidget->activeshow((nScreenWidth - m_pctrlwidget->width()) / 2, inScreenHeght - 100);
+    }
+}
+
 void MainTabWidgetEx::initWidget()
 {
     m_pTabBar = new MainTabBar;
@@ -194,9 +217,18 @@ void MainTabWidgetEx::initWidget()
     this->setLayout(mainLayout);
 }
 
+void MainTabWidgetEx::resizeEvent(QResizeEvent *event)
+{
+    auto findWidget = this->findChild<FindWidget *>();
+    if (findWidget && findWidget->isVisible()) {
+        int nParentWidth = this->width();
+        findWidget->showPosition(nParentWidth);
+    }
+    CustomWidget::resizeEvent(event);
+}
+
 void MainTabWidgetEx::InitConnections()
 {
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
 }
 
 void MainTabWidgetEx::onShowFileAttr()
@@ -217,6 +249,9 @@ void MainTabWidgetEx::OnAppMsgData(const QString &sText)
         } else if (sType == "ShortCut") {
             QString sKey = obj.value("key").toString();
             OnAppShortCut(sKey);
+        } else if (sType == "keyPress") {
+            QString sKey = obj.value("key").toString();
+            OnKeyPress(sKey);
         }
     }
 }
@@ -288,11 +323,13 @@ void MainTabWidgetEx::OnAppShortCut(const QString &s)
                s == KeyStr::g_ctrl_larger || s == KeyStr::g_ctrl_equal || s == KeyStr::g_ctrl_smaller) {
         TitleWidget::Instance()->qDealWithShortKey(s);
     } else if (s == KeyStr::g_ctrl_f) {     //  搜索
-
+        ShowFindWidget();
     } else if (s == KeyStr::g_ctrl_h) {     //  开启幻灯片
-
+        OnOpenSliderShow();
     } else if (s == KeyStr::g_ctrl_shift_s) {   //  另存为
         OnSaveAsFile();
+    } else if (s == KeyStr::g_esc) {   //  esc 统一处理
+        OnShortCutKey_Esc();
     } else {
         emit sigDealNotifyMsg(MSG_NOTIFY_KEY_MSG, s);
     }
@@ -311,7 +348,7 @@ void MainTabWidgetEx::OnTabBarMsg(const QString &s)
     } else if (s == "Print") {
         OnPrintFile();
     } else if (s == "Slide show") { //  开启幻灯片
-
+        OnOpenSliderShow();
     } else if (s == "Magnifer") {   //  开启放大镜
 
     } else if (s == "Document info") {
@@ -392,14 +429,30 @@ void MainTabWidgetEx::OpenCurFileFolder()
     }
 }
 
-void MainTabWidgetEx::SlotDealWithData(const int &msgType, const QString &msgContent)
+void MainTabWidgetEx::OnShortCutKey_Esc()
 {
-    if (msgType == E_TABBAR_MSG_TYPE) {
-        OnTabBarMsg(msgContent);
-    } else if (msgType == E_APP_MSG_TYPE) {     //  应用类消息
-        OnAppMsgData(msgContent);
-    } else if (msgType == MSG_FILE_IS_CHANGE) {
-        OnTabFileChangeMsg(msgContent);
+    if (m_nCurrentState == SLIDER_SHOW) {   //  当前是幻灯片模式
+        OnExitSliderShow();
+    }
+
+    m_nCurrentState = -1;
+}
+
+void MainTabWidgetEx::OnKeyPress(const QString &sKey)
+{
+    if (m_nCurrentState == SLIDER_SHOW && m_pctrlwidget) {
+        if (sKey == KeyStr::g_space) {
+            auto helper = getCurFileAndProxy(m_strSliderPath);
+            if (helper) {
+                if (helper->getAutoPlaySlideStatu()) {
+                    helper->setAutoPlaySlide(false);
+                } else  {
+                    helper->setAutoPlaySlide(true);
+                }
+            }
+        }
+
+        m_pctrlwidget->PageChangeByKey(sKey);
     }
 }
 
@@ -481,4 +534,85 @@ void MainTabWidgetEx::SlotCloseTab(const QString &sPath)
             break;
         }
     }
+}
+
+int MainTabWidgetEx::getCurrentState() const
+{
+    return m_nCurrentState;
+}
+
+//  搜索框
+void MainTabWidgetEx::ShowFindWidget()
+{
+    if (m_nCurrentState == SLIDER_SHOW)
+        return;
+
+    if (m_pFindWidget == nullptr) {
+        m_pFindWidget = new FindWidget(this);
+    }
+
+    int nParentWidth = this->width();
+    m_pFindWidget->showPosition(nParentWidth);
+    m_pFindWidget->setSearchEditFocus();
+}
+
+//  开启 幻灯片
+void MainTabWidgetEx::OnOpenSliderShow()
+{
+    if (m_nCurrentState != SLIDER_SHOW) {
+        m_pTabBar->setVisible(false);
+
+        auto splitterList = this->findChildren<MainSplitter *>();
+        foreach (auto s, splitterList) {
+            bool rl = s->isVisible();
+            if (rl) {
+                m_nCurrentState = SLIDER_SHOW;
+
+                MainWindow::Instance()->SetSliderShowState(0);
+
+                s->OnOpenSliderShow();
+                m_strSliderPath = s->qGetPath();
+
+                auto _proxy = getCurFileAndProxy(m_strSliderPath);
+                _proxy->setAutoPlaySlide(true);
+                _proxy->showSlideModel();
+
+                if (m_pctrlwidget == nullptr) {
+                    m_pctrlwidget = new PlayControlWidget(this);
+                }
+
+                m_pctrlwidget->setSliderPath(m_strSliderPath);
+                int nScreenWidth = qApp->desktop()->geometry().width();
+                int inScreenHeght = qApp->desktop()->geometry().height();
+                m_pctrlwidget->activeshow((nScreenWidth - m_pctrlwidget->width()) / 2, inScreenHeght - 100);
+
+                break;
+            }
+        }
+    }
+}
+
+void MainTabWidgetEx::OnExitSliderShow()
+{
+    MainWindow::Instance()->SetSliderShowState(1);
+    m_pTabBar->setVisible(true);
+
+    auto splitterList = this->findChildren<MainSplitter *>();
+    foreach (auto s, splitterList) {
+        bool rl = s->isVisible();
+        if (rl) {
+            s->OnExitSliderShow();
+
+            DocummentProxy *_proxy = getCurFileAndProxy(m_strSliderPath);
+            if (!_proxy) {
+                return;
+            }
+            _proxy->exitSlideModel();
+
+            delete m_pctrlwidget;
+            m_pctrlwidget = nullptr;
+        }
+    }
+
+    m_strSliderPath = "";
 }

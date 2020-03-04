@@ -50,7 +50,7 @@ ThumbnailWidget::~ThumbnailWidget()
 int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        emit sigUpdateTheme();
+        slotUpdateTheme();
     } else if (msgType == MSG_FILE_ROTATE) {  //  文档旋转了
         emit sigSetRotate(msgContent.toInt());
     } else {
@@ -128,7 +128,6 @@ void ThumbnailWidget::initConnection()
     connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const int &, const QImage &)),
             this, SLOT(slotLoadImage(const int &, const QImage &)));
 
-    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
     connect(this, SIGNAL(sigSetRotate(int)), this, SLOT(slotSetRotate(int)));
     connect(&m_ThreadLoadImage, SIGNAL(sigRotateImage(int)), this,
             SLOT(slotRotateThumbnail(int)));

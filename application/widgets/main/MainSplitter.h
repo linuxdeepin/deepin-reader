@@ -49,6 +49,9 @@ public:
     FileDataModel qGetFileData() const;
     void setFileData(const FileDataModel &) const;
 
+    void OnOpenSliderShow();
+    void OnExitSliderShow();
+
 private:
     void InitWidget();
 
@@ -58,6 +61,8 @@ private slots:
 
 private:
     LeftSidebarWidget   *m_pLeftWidget = nullptr;
+    bool                m_bOldState = false;
+
     DocShowShellWidget  *m_pDocWidget   = nullptr;
 
     MainSplitterPrivate     *d_ptr = nullptr;

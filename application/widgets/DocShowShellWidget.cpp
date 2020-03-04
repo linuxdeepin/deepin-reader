@@ -5,9 +5,9 @@
 #include <QStackedLayout>
 
 #include "FileViewWidget.h"
-#include "FindWidget.h"
+//#include "FindWidget.h"
 #include "FileAttrWidget.h"
-#include "PlayControlWidget.h"
+//#include "PlayControlWidget.h"
 
 #include "MsgModel.h"
 
@@ -18,10 +18,10 @@
 #include "widgets/main/MainTabWidgetEx.h"
 
 DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
-    : CustomWidget("DocShowShellWidget", parent),
-      m_pctrlwidget(new  PlayControlWidget(this))
+    : CustomWidget("DocShowShellWidget", parent)
+//      m_pctrlwidget(new  PlayControlWidget(this))
 {
-    m_pctrlwidget->hide();
+//    m_pctrlwidget->hide();
 
     initWidget();
     initConnections();
@@ -38,18 +38,18 @@ DocShowShellWidget::~DocShowShellWidget()
     dApp->m_pModelService->removeObserver(this);
 }
 
-void DocShowShellWidget::resizeEvent(QResizeEvent *event)
-{
-    int nState = dApp->m_pAppInfo->qGetCurShowState();
-    if (nState == FILE_NORMAL || nState == FILE_FULLSCREEN) {
-        auto findWidget = this->findChild<FindWidget *>();
-        if (findWidget && findWidget->isVisible()) {
-            int nParentWidth = this->width();
-            findWidget->showPosition(nParentWidth);
-        }
-    }
-    CustomWidget::resizeEvent(event);
-}
+//void DocShowShellWidget::resizeEvent(QResizeEvent *event)
+//{
+//    int nState = dApp->m_pAppInfo->qGetCurShowState();
+//    if (nState == FILE_NORMAL || nState == FILE_FULLSCREEN) {
+//        auto findWidget = this->findChild<FindWidget *>();
+//        if (findWidget && findWidget->isVisible()) {
+//            int nParentWidth = this->width();
+//            findWidget->showPosition(nParentWidth);
+//        }
+//    }
+//    CustomWidget::resizeEvent(event);
+//}
 
 //  全屏 \ 幻灯片放映, 显示 关闭按钮
 void DocShowShellWidget::slotShowCloseBtn(const int &iFlag)
@@ -90,35 +90,35 @@ void DocShowShellWidget::slotShowCloseBtn(const int &iFlag)
     closeBtn->raise();
 }
 
-void DocShowShellWidget::slotHideCloseBtn()
-{
-    DIconButton *closeBtn = nullptr;
+//void DocShowShellWidget::slotHideCloseBtn()
+//{
+//    DIconButton *closeBtn = nullptr;
 
-    auto iconBtnList = this->findChildren<DIconButton *>();
-    foreach (auto btn, iconBtnList) {
-        if (/*btn->objectName() == "slider" || */btn->objectName() == "fullscreen") {
-            closeBtn = btn;
-            break;
-        }
-    }
+//    auto iconBtnList = this->findChildren<DIconButton *>();
+//    foreach (auto btn, iconBtnList) {
+//        if (/*btn->objectName() == "slider" || */btn->objectName() == "fullscreen") {
+//            closeBtn = btn;
+//            break;
+//        }
+//    }
 
-    if (closeBtn != nullptr && closeBtn->isVisible()) {
-        closeBtn->hide();
-    }
-}
+//    if (closeBtn != nullptr && closeBtn->isVisible()) {
+//        closeBtn->hide();
+//    }
+//}
 
 //  搜索框
-void DocShowShellWidget::slotShowFindWidget()
-{
-    auto findWidget = this->findChild<FindWidget *>();
-    if (!findWidget) {
-        findWidget = new FindWidget(this);
-    }
+//void DocShowShellWidget::slotShowFindWidget()
+//{
+//    auto findWidget = this->findChild<FindWidget *>();
+//    if (!findWidget) {
+//        findWidget = new FindWidget(this);
+//    }
 
-    int nParentWidth = this->width();
-    findWidget->showPosition(nParentWidth);
-    findWidget->setSearchEditFocus();
-}
+//    int nParentWidth = this->width();
+//    findWidget->showPosition(nParentWidth);
+//    findWidget->setSearchEditFocus();
+//}
 
 //  注释窗口
 void DocShowShellWidget::onOpenNoteWidget(const QString &msgContent)
@@ -168,7 +168,6 @@ void DocShowShellWidget::onShowNoteWidget(const QString &contant)
         m_pNoteViewWidget->setNotePage(t_page);
         m_pNoteViewWidget->setEditText(sContant);
         m_pNoteViewWidget->setWidgetType(NOTE_HIGHLIGHT);
-//        pWidget->setPointAndPage("");
         dApp->m_pAppInfo->setSmallNoteWidgetSize(m_pNoteViewWidget->size());
 
         bool t_bHigh = false;  // 点击位置是否是高亮
@@ -229,7 +228,12 @@ void DocShowShellWidget::InitSpinner()
 
 void DocShowShellWidget::slotBtnCloseClicked()
 {
-    notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
+    QJsonObject obj;
+    obj.insert("type", "ShortCut");
+    obj.insert("key",  KeyStr::g_esc);
+
+    QJsonDocument doc = QJsonDocument(obj);
+    notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
 }
 
 void DocShowShellWidget::slotUpdateTheme()
@@ -243,16 +247,16 @@ void DocShowShellWidget::slotUpdateTheme()
     }
 }
 
-void DocShowShellWidget::slotChangePlayCtrlShow(bool bshow)
-{
-    if (bshow && m_pctrlwidget->canShow()) {
-        int nScreenWidth = qApp->desktop()->geometry().width();
-        int inScreenHeght = qApp->desktop()->geometry().height();
-        m_pctrlwidget->activeshow((nScreenWidth - m_pctrlwidget->width()) / 2, inScreenHeght - 100);
-    } else {
-        m_pctrlwidget->killshow();
-    }
-}
+//void DocShowShellWidget::slotChangePlayCtrlShow(bool bshow)
+//{
+//    if (bshow && m_pctrlwidget->canShow()) {
+//        int nScreenWidth = qApp->desktop()->geometry().width();
+//        int inScreenHeght = qApp->desktop()->geometry().height();
+//        m_pctrlwidget->activeshow((nScreenWidth - m_pctrlwidget->width()) / 2, inScreenHeght - 100);
+//    } else {
+//        m_pctrlwidget->killshow();
+//    }
+//}
 
 void DocShowShellWidget::SlotOpenFileOk()
 {
@@ -266,33 +270,32 @@ void DocShowShellWidget::SlotOpenFileOk()
 
 void DocShowShellWidget::initConnections()
 {
-    connect(this, SIGNAL(sigShowFileFind()), SLOT(slotShowFindWidget()));
-    connect(this, SIGNAL(sigShowCloseBtn(const int &)), SLOT(slotShowCloseBtn(const int &)));
-    connect(this, SIGNAL(sigHideCloseBtn()), SLOT(slotHideCloseBtn()));
-    connect(this, SIGNAL(sigChangePlayCtrlShow(bool)), SLOT(slotChangePlayCtrlShow(bool)));
-    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
+//    connect(this, SIGNAL(sigShowFileFind()), SLOT(slotShowFindWidget()));
+//    connect(this, SIGNAL(sigShowCloseBtn(const int &)), SLOT(slotShowCloseBtn(const int &)));
+//    connect(this, SIGNAL(sigHideCloseBtn()), SLOT(slotHideCloseBtn()));
+//    connect(this, SIGNAL(sigChangePlayCtrlShow(bool)), SLOT(slotChangePlayCtrlShow(bool)));
 }
 
 //  集中处理 按键通知消息
 int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
 {
-    if (KeyStr::g_ctrl_f == msgContent && dApp->m_pAppInfo->qGetCurShowState() != FILE_SLIDE) { //  搜索
-        emit sigShowFileFind();
-        return MSG_OK;
-    }
+//    if (KeyStr::g_ctrl_f == msgContent && dApp->m_pAppInfo->qGetCurShowState() != FILE_SLIDE) { //  搜索
+//        emit sigShowFileFind();
+//        return MSG_OK;
+//    }
 
-    if (KeyStr::g_f11 == msgContent && dApp->m_pAppInfo->qGetCurShowState() != FILE_SLIDE) { //  全屏
-        if (dApp->m_pAppInfo->qGetCurShowState() == FILE_FULLSCREEN)
-            emit sigHideCloseBtn();
-        else {
-            emit sigShowCloseBtn(0);
-        }
-    }
-    if (KeyStr::g_esc == msgContent) {  //  退出   幻灯片\全屏
-        emit sigHideCloseBtn();
-        m_pctrlwidget->setCanShow(false);
-        emit sigChangePlayCtrlShow(false);
-    }
+//    if (KeyStr::g_f11 == msgContent && dApp->m_pAppInfo->qGetCurShowState() != FILE_SLIDE) { //  全屏
+//        if (dApp->m_pAppInfo->qGetCurShowState() == FILE_FULLSCREEN)
+//            emit sigHideCloseBtn();
+//        else {
+//            emit sigShowCloseBtn(0);
+//        }
+//    }
+//    if (KeyStr::g_esc == msgContent) {  //  退出   幻灯片\全屏
+//        emit sigHideCloseBtn();
+//        m_pctrlwidget->setCanShow(false);
+//        emit sigChangePlayCtrlShow(false);
+//    }
     return MSG_NO_OK;
 }
 
@@ -306,18 +309,15 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
             onShowNoteWidget(msgContent);
         } else if (msgType == MSG_NOTE_PAGE_SHOW_NOTEWIDGET) {          //  显示注释窗口
             __ShowPageNoteWidget(msgContent);
+        } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+            slotUpdateTheme();
+        } else if (msgType == MSG_NOTIFY_KEY_MSG) {
+            //  最后一个处理通知消息
+            return dealWithNotifyMsg(msgContent);
         }
 
         if (m_pMsgList.contains(msgType)) {
             return  MSG_OK;
-        }
-
-        if (msgType == MSG_OPERATION_SLIDE) {
-            m_pctrlwidget->setCanShow(true);
-            emit sigChangePlayCtrlShow(true);
-        } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-            //  最后一个处理通知消息
-            return dealWithNotifyMsg(msgContent);
         }
     }
 
@@ -329,6 +329,20 @@ bool DocShowShellWidget::OpenFilePath(const QString &sPath)
     return m_pFileViewWidget->OpenFilePath(sPath);
 }
 
+void DocShowShellWidget::OnOpenSliderShow()
+{
+    slotShowCloseBtn(1);
+}
+
+void DocShowShellWidget::OnExitSliderShow()
+{
+    auto closeBtn = this->findChild<DIconButton *>();
+    if (closeBtn) {
+        delete  closeBtn;
+        closeBtn = nullptr;
+    }
+}
+
 void DocShowShellWidget::initWidget()
 {
     m_playout = new QStackedLayout;
@@ -337,7 +351,7 @@ void DocShowShellWidget::initWidget()
 
     m_pFileViewWidget = new FileViewWidget(this);
     connect(m_pFileViewWidget, SIGNAL(sigFileOpenOK()), SLOT(SlotOpenFileOk()));
-    connect(m_pFileViewWidget, SIGNAL(sigShowPlayCtrl(bool)), this, SLOT(slotChangePlayCtrlShow(bool)));
+//    connect(m_pFileViewWidget, SIGNAL(sigShowPlayCtrl(bool)), this, SLOT(slotChangePlayCtrlShow(bool)));
 
     InitSpinner();
     m_playout->addWidget(m_pSpinerWidget);

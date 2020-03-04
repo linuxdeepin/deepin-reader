@@ -35,7 +35,6 @@ public:
     ~MainTabBar() override;
 
 signals:
-    void sigDealWithData(const int &, const QString &);
     void sigTabBarIndexChange(const QString &);
     void sigAddTab(const QString &);
     void sigCloseTab(const QString &);
@@ -62,7 +61,6 @@ private slots:
     void SlotTabCloseRequested(int index);
 
     void SlotRemoveFileTab(const QString &);
-    void SlotDealWithData(const int &, const QString &);
 
 private:
 //    int     m_nOldMiniWidth = 0;/

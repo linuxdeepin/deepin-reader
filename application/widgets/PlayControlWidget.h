@@ -17,11 +17,6 @@ public:
     explicit PlayControlWidget(DWidget *parnet = nullptr);
     ~PlayControlWidget()override;
 
-    //  主题更新信号
-signals:
-    void sigUpdateTheme();
-    void sigDealWithData(const int &, const QString &);
-
 public:
     void activeshow(int ix = 0, int iy = 0);
     void killshow();
@@ -33,6 +28,9 @@ public:
     int dealWithData(const int &, const QString &) override;
     void notifyMsg(const int &, const QString &msgContent = "") override;
 
+    void setSliderPath(const QString &strSliderPath);
+    void PageChangeByKey(const QString &);
+
 protected:
     void enterEvent(QEvent *) override;
     void leaveEvent(QEvent *) override;
@@ -43,10 +41,8 @@ private slots:
     void slotPlayClicked();
     void slotNextClicked();
     void slotExitClicked();
-    void SlotDealWithData(const int &, const QString &);
 
 private:
-    void __PageChangeByKey(const QString &);
     void initWidget();
     void initConnections();
     DIconButton *createBtn(const QString &strname = QString());
@@ -63,7 +59,7 @@ private:
     bool m_bautoplaying = false;
     bool m_bfirstshow = false;
 
-    QList<int>          m_pMsgList;
+    QString             m_strSliderPath = "";
 };
 
 #endif // PLAYCONTROLWIDGET_H

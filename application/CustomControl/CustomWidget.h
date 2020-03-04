@@ -53,12 +53,6 @@ class CustomWidget : public DWidget, public IObserver
 public:
     CustomWidget(const QString &, DWidget *parent = nullptr);
 
-    //  主题更新信号
-signals:
-    void sigTitleMsg(const QString &);
-    void sigUpdateTheme();
-    void sigDealWithData(const int &, const QString &);
-
 public:
     virtual int qDealWithShortKey(const QString &);
 

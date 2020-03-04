@@ -67,7 +67,6 @@ enum E_MENU_MSG {
     MSG_MENU_OPEN_FOLDER,               //  打开文件所处文件夹
     MSG_MENU_MAGNIFER,                  //  放大镜
     MSG_MENU_SCALE_CHANGE,              //  缩放比例变化
-    MSG_OPERATION_SLIDE,              //  放映
     MSG_OPERATION_EXIT,               //  退出
     MSG_OPERATION_TEXT_COPY,          //  复制
 };

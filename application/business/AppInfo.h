@@ -28,11 +28,11 @@
 #include <QSettings>
 
 //  文档显示状态
-enum File_Show_Enum {
-    FILE_NORMAL,        //  正常显示
-    FILE_FULLSCREEN,    //  全屏
-    FILE_SLIDE,         //  幻灯片
-};
+//enum File_Show_Enum {
+//    FILE_NORMAL,        //  正常显示
+//    FILE_FULLSCREEN,    //  全屏
+//    FILE_SLIDE,         //  幻灯片
+//};
 
 
 enum ICON_RADIUS {
@@ -86,7 +86,7 @@ private:
     QList<QColor>           m_listColor;                //  color list
     QColor                  m_selectColor;              // 高亮颜色
     QString m_strCurrentTheme = "";                     //  当前主题
-    int     m_nCurShowState = FILE_NORMAL;              //  文档当前显示状态
+//    int     m_nCurShowState = FILE_NORMAL;              //  文档当前显示状态
     bool m_bIsHighLight = false;                        // 鼠标左键点击位置有没有高亮
     QPoint m_point;                                     // 鼠标左键点击位置
     QRect m_screenRect;                                 // 屏幕的分辨率

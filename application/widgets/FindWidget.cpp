@@ -46,7 +46,7 @@ FindWidget::FindWidget(DWidget *parent)
     initWidget();
     initConnection();
 
-    slotSetVisible();
+    this->setVisible(false);
 
     dApp->m_pModelService->addObserver(this);
 }
@@ -67,11 +67,6 @@ void FindWidget::showPosition(const int &nParentWidth)
 void FindWidget::setSearchEditFocus()
 {
     m_pSearchEdit->lineEdit()->setFocus();
-}
-
-void FindWidget::slotSetVisible()
-{
-    this->setVisible(false);
 }
 
 void FindWidget::findCancel()
@@ -118,13 +113,6 @@ void FindWidget::slotClearContent()
     }
 }
 
-void FindWidget::slotDealWithData(const int &msgType, const QString &)
-{
-    if (msgType == MSG_FIND_NONE) {
-        onSetEditAlert(1);
-    }
-}
-
 //  点击 搜索框 里面 的 x
 void FindWidget::slotEditAborted()
 {
@@ -135,17 +123,12 @@ void FindWidget::slotEditAborted()
 
 int FindWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (m_pMsgList.contains(msgType)) {
-        emit sigDealWithData(msgType, msgContent);
-        return MSG_OK;
+    if (msgType == MSG_FIND_NONE) {
+        onSetEditAlert(1);
     }
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更
-    } else if (msgType == MSG_OPERATION_SLIDE) {  //  幻灯片了
-        emit sigSetVisible();
-    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (msgContent == KeyStr::g_f11) {
-            emit sigSetVisible();
-        }
+
+    if (m_pMsgList.contains(msgType)) {
+        return MSG_OK;
     }
     return MSG_NO_OK;
 }
@@ -200,8 +183,6 @@ void FindWidget::initWidget()
 
 void FindWidget::initConnection()
 {
-    connect(this, SIGNAL(sigSetVisible()), SLOT(slotSetVisible()));
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(slotDealWithData(const int &, const QString &)));
 }
 
 ////  退出查询

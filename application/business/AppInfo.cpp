@@ -56,7 +56,7 @@ void AppInfo::InitKeyList()
     m_pKeyList.append(QKeySequence::Save);
     m_pKeyList.append(QKeySequence::Copy);
 
-    m_pKeyList.append(QKeySequence(Qt::Key_Space));
+//    m_pKeyList.append(QKeySequence(Qt::Key_Space));
 //    m_pKeyList.append(QKeySequence(Qt::Key_F11));             //  全屏暂时取消  2020.1.6    wzx
     m_pKeyList.append(QKeySequence(Qt::Key_Escape));
 
@@ -114,15 +114,15 @@ void AppInfo::qSetCurrentTheme(const QString &strCurrentTheme)
     m_strCurrentTheme = strCurrentTheme;
 }
 
-int AppInfo::qGetCurShowState() const
-{
-    return  m_nCurShowState;
-}
+//int AppInfo::qGetCurShowState() const
+//{
+//    return  m_nCurShowState;
+//}
 
-void AppInfo::qSetCurShowState(const int &nState)
-{
-    m_nCurShowState = nState;
-}
+//void AppInfo::qSetCurShowState(const int &nState)
+//{
+//    m_nCurShowState = nState;
+//}
 
 void AppInfo::mousePressLocal(bool &highLight, QPoint &point)
 {

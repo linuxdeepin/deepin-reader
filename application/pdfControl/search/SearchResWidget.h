@@ -88,8 +88,6 @@ signals:
     void sigFlushSearchWidget(const QString &);
 
 private slots:
-    void SlotDealWithData(const int &, const QString &);
-
     void slotFlushSearchWidget(const QString &);
     void slotGetSearchContant(stSearchRes);
     void slotSearchOver();

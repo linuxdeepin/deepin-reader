@@ -43,7 +43,6 @@ private:
 public:
     static TitleMenu *Instance();
 
-
     // CustomMenu interface
 public:
     int dealWithData(const int &, const QString &) override;

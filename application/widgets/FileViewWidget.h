@@ -56,7 +56,7 @@ public:
     int         m_nCurrentHandelState = Default_State;  //  当前鼠标状态
 
 signals:
-    void sigShowPlayCtrl(bool bshow);
+//    void sigShowPlayCtrl(bool bshow);
     void sigFileOpenOK();
 
     // IObserver interface

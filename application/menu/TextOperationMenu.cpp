@@ -46,12 +46,12 @@ void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, con
     m_pColorWidgetAction->setBtnAddLightState(bHigh);
 
     //  当前显示状态状态
-    int nState = dApp->m_pAppInfo->qGetCurShowState();
-    if (nState == FILE_FULLSCREEN) {
-        m_pExitFullScreen->setVisible(true);
-    } else {
-        m_pExitFullScreen->setVisible(false);
-    }
+//    int nState = dApp->m_pAppInfo->qGetCurShowState();
+//    if (nState == FILE_FULLSCREEN) {
+//        m_pExitFullScreen->setVisible(true);
+//    } else {
+//        m_pExitFullScreen->setVisible(false);
+//    }
 
     this->exec(showPoint);
 }
@@ -80,7 +80,7 @@ void TextOperationMenu::initActions()
     m_pAddNote = createAction(tr("Add note"), SLOT(slotAddNoteClicked()));
 
     m_pAddBookMark = createAction(tr("Add bookmark"), SLOT(slotAddBookMarkClicked()));
-    m_pExitFullScreen = createAction(tr("Exit fullscreen"), SLOT(slotExitFullScreenClicked()));
+//    m_pExitFullScreen = createAction(tr("Exit fullscreen"), SLOT(slotExitFullScreenClicked()));
 }
 
 QAction *TextOperationMenu::createAction(const QString &text, const char *member)

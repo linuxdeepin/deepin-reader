@@ -29,7 +29,6 @@ protected:
     void initWidget() override;
 
 private slots:
-    void slotDealWithData(const int &, const QString &);
     void slotChooseBtnClicked();
     void slotUpdateTheme();
 

@@ -42,7 +42,6 @@ private:
     void onDocProxyMsg(const QString &);
 
 private slots:
-    void SlotDealWithData(const int &, const QString &);
     void slotOpenFileOk(const QString &sPath);
     void slotUpdateTheme();
     void slotButtonClicked(int);

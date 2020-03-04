@@ -52,8 +52,13 @@ MainTabBar::~MainTabBar()
 
 int MainTabBar::dealWithData(const int &msgType, const QString &msgContent)
 {
+    if (MSG_TAB_ADD == msgType) {
+        AddFileTab(msgContent);
+    } else if (MSG_MENU_NEW_TAB == msgType) {
+        SlotTabAddRequested();
+    }
+
     if (m_pMsgList.contains(msgType)) {
-        emit sigDealWithData(msgType, msgContent);
         return MSG_OK;
     }
 
@@ -67,8 +72,6 @@ void MainTabBar::notifyMsg(const int &msgType, const QString &msgContent)
 
 void MainTabBar::resizeEvent(QResizeEvent *event)
 {
-    __SetTabMiniWidth();
-
     DTabBar::resizeEvent(event);
 }
 
@@ -78,8 +81,6 @@ void MainTabBar::__InitConnection()
     connect(this, SIGNAL(tabCloseRequested(int)), SLOT(SlotTabCloseRequested(int)));
     connect(this, SIGNAL(tabAddRequested()), SLOT(SlotTabAddRequested()));
     connect(this, SIGNAL(currentChanged(int)), SLOT(SlotTabBarClicked(int)));
-
-    connect(this, SIGNAL(sigDealWithData(const int &, const QString &)), SLOT(SlotDealWithData(const int &, const QString &)));
 }
 
 void MainTabBar::SlotTabBarClicked(int index)
@@ -93,25 +94,9 @@ void MainTabBar::SlotTabBarClicked(int index)
 
 void MainTabBar::__SetTabMiniWidth()
 {
-    return;
-    int nCount = this->count();
-    if (nCount == 0)
-        return;
 
-    int nWidth = this->width() / nCount;
-    if (nWidth < 140) {
-        nWidth = 140;
-    }
-
-//    if (m_nOldMiniWidth != nWidth) {
-//        m_nOldMiniWidth = nWidth;
-
-    // this->setFixedWidth(nWidth);
-    for (int iLoop = 0; iLoop < nCount; iLoop++) {
-        // this->setTabMinimumSize(iLoop, QSize(nWidth, 36));
-    }
 }
-//}
+
 
 void MainTabBar::AddFileTab(const QString &sContent)
 {
@@ -140,8 +125,6 @@ void MainTabBar::AddFileTab(const QString &sContent)
                 emit sigAddTab(s);
             }
         }
-
-        __SetTabMiniWidth();
 
         int nCurIndex = this->currentIndex();
         if (nCurIndex > -1) {
@@ -180,8 +163,6 @@ void MainTabBar::SlotRemoveFileTab(const QString &sPath)
             QString sTabData = this->tabData(iLoop).toString();
             if (sTabData == sPath) {
                 this->removeTab(iLoop);
-
-                __SetTabMiniWidth();
                 break;
             }
         }
@@ -190,15 +171,6 @@ void MainTabBar::SlotRemoveFileTab(const QString &sPath)
         if (nCount == 0) {
             notifyMsg(CENTRAL_INDEX_CHANGE);
         }
-    }
-}
-
-void MainTabBar::SlotDealWithData(const int &msgType, const QString &msgContent)
-{
-    if (MSG_TAB_ADD == msgType) {
-        AddFileTab(msgContent);
-    } else if (MSG_MENU_NEW_TAB == msgType) {
-        SlotTabAddRequested();
     }
 }
 

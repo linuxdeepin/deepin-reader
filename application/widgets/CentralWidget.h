@@ -54,7 +54,6 @@ protected:
     void initWidget() override;
 
 private slots:
-    void slotDealWithData(const int &, const QString &msgContent = "");
     void SlotOpenFiles(const QString &);
 
 private:

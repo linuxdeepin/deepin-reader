@@ -21,9 +21,16 @@
 
 #include "CustomControl/CustomWidget.h"
 
+class DocummentProxy;
+class FindWidget;
 class QStackedLayout;
 class MainTabBar;
-class DocummentProxy;
+class PlayControlWidget;
+
+//  当前的操作状态
+enum E_CUR_STATE {
+    SLIDER_SHOW
+};
 
 class MainTabWidgetEx : public CustomWidget
 {
@@ -41,7 +48,6 @@ public:
     static MainTabWidgetEx *Instance();
 
 signals:
-    void sigDealWithData(const int &, const QString &);
     void sigDealNotifyMsg(const int &, const QString &);
 
     void sigRemoveFileTab(const QString &);
@@ -65,8 +71,15 @@ public:
     // CustomWidget interface
     DocummentProxy *getCurFileAndProxy(const QString &sPath = "") const;
 
+    void showPlayControlWidget() const;
+    int getCurrentState() const;
+
 protected:
     void initWidget() override;
+
+    // QWidget interface
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     void InitConnections();
@@ -74,24 +87,27 @@ private:
 
     void OnAppMsgData(const QString &);
     void OnAppExit();
-    void OnAppShortCut(const QString &);
 
     void OnTabBarMsg(const QString &);
     void OnTabFileChangeMsg(const QString &);
     void SetFileChange(const QString &sPath, const int &iState);
 
-    void OnSaveFile();
     void SaveFile(const int &nSaveType, const QString &);
     void OnSaveAsFile();
+
+    void OnAppShortCut(const QString &);
+    void OnSaveFile();
     void OnPrintFile();
+    void ShowFindWidget();
+    void OnOpenSliderShow();
+    void OnExitSliderShow();
+
     void OpenCurFileFolder();
-//    void OnSaveFile();
-//    void OnSaveFile();
-//    void OnSaveFile();
+    void OnShortCutKey_Esc();
+
+    void OnKeyPress(const QString &);
 
 private slots:
-    void SlotDealWithData(const int &, const QString &);
-
     void SlotSetCurrentIndexFile(const QString &);
     void SlotAddTab(const QString &);
     void SlotCloseTab(const QString &);
@@ -102,6 +118,11 @@ private:
 
     QMap<QString, DocummentProxy *> m_strOpenFileAndProxy;
 
+    FindWidget          *m_pFindWidget = nullptr;
+    PlayControlWidget   *m_pctrlwidget = nullptr;
+    QString             m_strSliderPath = "";
+
+    int                 m_nCurrentState = -1;
 };
 
 #endif // MAINTABWIDGETEX_H

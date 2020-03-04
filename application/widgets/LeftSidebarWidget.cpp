@@ -22,7 +22,6 @@ LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
 
     m_pMsgList = {MSG_WIDGET_THUMBNAILS_VIEW};
     initWidget();
-    initConnections();
 
     onSetWidgetVisible(0);  //  默认 隐藏
     slotUpdateTheme();
@@ -53,11 +52,6 @@ void LeftSidebarWidget::slotUpdateTheme()
     updateWidgetTheme();
 }
 
-void LeftSidebarWidget::initConnections()
-{
-    connect(this, SIGNAL(sigUpdateTheme()), SLOT(slotUpdateTheme()));
-}
-
 void LeftSidebarWidget::initWidget()
 {
     auto pVBoxLayout = new QVBoxLayout;
@@ -76,12 +70,15 @@ void LeftSidebarWidget::initWidget()
 
 int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {
+        slotUpdateTheme();
+    }
+
     int nRes = MSG_NO_OK;
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         SlotOpenFileOk(msgContent);
         m_pStackedWidget->dealWithData(msgType, msgContent);
         m_pMainOperationWidget->dealWithData(msgType, msgContent);
-
     } else {
         if (msgType == MSG_WIDGET_THUMBNAILS_VIEW) {
             onSetWidgetVisible(msgContent.toInt());

@@ -32,7 +32,7 @@ public:
 
 signals:
     void sigSetFindWidget(const int &);
-    void sigAppFullScreen();
+//    void sigAppFullScreen();
     void sigMagnifierCancel();
 
     // IObserver interface
@@ -51,7 +51,7 @@ private slots:
     void slotSetFindWidget(const int &);
     void slotUpdateTheme();
     void slotOpenFileOk(const QString &);
-    void slotAppFullScreen();
+//    void slotAppFullScreen();
     void slotMagnifierCancel();
 
     void on_thumbnailBtn_clicked();
@@ -60,7 +60,7 @@ private slots:
     void SlotScaleMenuBtnClicked();
 
     void SlotSetCurrentTool(const QString &);
-    void SlotTabMsg(const QString &);
+//    void SlotTabMsg(const QString &);
 
     void SlotCurrentScale(const int &);
 

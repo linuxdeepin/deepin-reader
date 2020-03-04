@@ -54,16 +54,16 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
         }
 
         //  当前显示状态状态
-        int nState = dApp->m_pAppInfo->qGetCurShowState();
-        if (nState == FILE_FULLSCREEN) {
-            m_pExitFullScreen->setVisible(true);
-            m_pSearch->setVisible(false);
-            m_pAddIconNote->setVisible(false);
-        } else {
-            m_pExitFullScreen->setVisible(false);
-            m_pSearch->setVisible(true);
-            m_pAddIconNote->setVisible(true);
-        }
+//        int nState = dApp->m_pAppInfo->qGetCurShowState();
+//        if (nState == FILE_FULLSCREEN) {
+//            m_pExitFullScreen->setVisible(true);
+//            m_pSearch->setVisible(false);
+//            m_pAddIconNote->setVisible(false);
+//        } else {
+        m_pExitFullScreen->setVisible(false);
+        m_pSearch->setVisible(true);
+        m_pAddIconNote->setVisible(true);
+//        }
         this->exec(showPoint);
     }
 }
