@@ -85,8 +85,8 @@ void SearchResWidget::slotFlushSearchWidget(const QString &msgContent)
     if (_proxy) {
         connect(_proxy, SIGNAL(signal_searchRes(stSearchRes)), this, SLOT(slotGetSearchContant(stSearchRes)));
 
-        QMap<int, stSearchRes> resMap;
-        _proxy->search(msgContent, resMap, Qt::red);
+
+        _proxy->search(msgContent);
 
         disconnect(_proxy, SIGNAL(signal_searchover()), this, SLOT(slotSearchOver()));
         connect(_proxy, SIGNAL(signal_searchover()), this, SLOT(slotSearchOver()));
