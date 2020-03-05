@@ -22,6 +22,8 @@
 #include <QObject>
 #include <QMap>
 
+#include "MsgHeader.h"
+
 class DocummentProxy;
 class FileDataModel;
 class MainTabWidgetEx;
@@ -63,7 +65,7 @@ private:
 
     QString             m_strSliderPath = "";
     QString             m_strMagniferPath = "";
-    int                 m_nCurrentState = -1;
+    int                 m_nCurrentState = Default_State;
 
 
     MainTabWidgetEx     *q_ptr = nullptr;

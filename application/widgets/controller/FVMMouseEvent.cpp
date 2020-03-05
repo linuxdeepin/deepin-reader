@@ -38,24 +38,22 @@ void FVMMouseEvent::mouseMoveEvent(QMouseEvent *event, DWidget *widget)
 
     FileViewWidget *fvw = qobject_cast<FileViewWidget *>(widget);
 
+    QPoint globalPos = event->globalPos();
     //  处于幻灯片模式下
     int nState = MainTabWidgetEx::Instance()->getCurrentState();
     if (nState == SLIDER_SHOW) {
         MainTabWidgetEx::Instance()->showPlayControlWidget();   //  显示 幻灯片 控制
-    } else {
-        QPoint globalPos = event->globalPos();
-        if (nState == Magnifer_State) {     //  当前是放大镜状态
-            __ShowMagnifier(fvw, globalPos);
-        } else if (nState == Handel_State) {  //   手型状态下， 按住鼠标左键 位置进行移动
-            if (m_bSelectOrMove) {
-                __FilePageMove(fvw, globalPos);
-            }
+    } else if (nState == Magnifer_State) {    //  当前是放大镜状态
+        __ShowMagnifier(fvw, globalPos);
+    } else if (nState == Handel_State) {  //   手型状态下， 按住鼠标左键 位置进行移动
+        if (m_bSelectOrMove) {
+            __FilePageMove(fvw, globalPos);
+        }
+    } else if (nState == Default_State) {
+        if (m_bSelectOrMove) {  //  鼠标已经按下，　则选中所经过的文字
+            __MouseSelectText(fvw, globalPos);
         } else {
-            if (m_bSelectOrMove) {  //  鼠标已经按下，　则选中所经过的文字
-                __MouseSelectText(fvw, globalPos);
-            } else {
-                __OtherMouseMove(fvw, globalPos);
-            }
+            __OtherMouseMove(fvw, globalPos);
         }
     }
 }
