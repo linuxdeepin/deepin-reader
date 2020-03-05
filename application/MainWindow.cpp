@@ -69,7 +69,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::openfile(const QString &filepath)
 {
-//    notifyMsg(MSG_OPEN_FILE_PATH, filepath);
+    emit  sigopenfile(filepath);
 }
 
 void MainWindow::setSreenRect(const QRect &rect)
@@ -131,7 +131,9 @@ void MainWindow::initUI()
     titlebar()->setMenu(new TitleMenu(this));
 
     titlebar()->addWidget(new TitleWidget, Qt::AlignLeft);
-    setCentralWidget(new CentralWidget);
+    CentralWidget *pcenter = new CentralWidget;
+    setCentralWidget(pcenter);
+    connect(this, &MainWindow::sigopenfile, pcenter, &CentralWidget::SlotOpenFiles);
 }
 
 //void MainWindow::initConnections()

@@ -31,8 +31,6 @@ public:
 
     void openfile(const QString &filepath);
     void setSreenRect(const QRect &); //得到屏幕的分辨率
-
-public:
     void SetSliderShowState(const int &);
 
     // IObserver interface
@@ -60,6 +58,8 @@ private:
     void showDefaultSize();
 
     void initShortCut();
+signals:
+    void  sigopenfile(const QString &filepath);
 
 private slots:
     void slotShortCut(const QString &);

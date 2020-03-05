@@ -53,7 +53,7 @@ protected:
 protected:
     void initWidget() override;
 
-private slots:
+public slots:
     void SlotOpenFiles(const QString &);
 
 private:
