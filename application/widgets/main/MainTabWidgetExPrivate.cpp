@@ -23,9 +23,9 @@
 #include "MainTabWidgetEx.h"
 #include "MainSplitter.h"
 
-MainTabWidgetExPrivate::MainTabWidgetExPrivate(MainTabWidgetEx *widget)
+MainTabWidgetExPrivate::MainTabWidgetExPrivate()
 {
-    q_ptr = widget;
+    m_pMsgList = {E_APP_MSG_TYPE, E_TABBAR_MSG_TYPE, MSG_FILE_IS_CHANGE};
 }
 
 QString MainTabWidgetExPrivate::getSliderPath() const
@@ -62,7 +62,7 @@ DocummentProxy *MainTabWidgetExPrivate::getCurFileAndProxy(const QString &sPath)
 {
     QString sTempPath = sPath;
     if (sTempPath == "") {
-        sTempPath = q_ptr->qGetCurPath();
+        sTempPath = qobject_cast<MainTabWidgetEx *>(q_ptr)->qGetCurPath();
     }
     if (m_strOpenFileAndProxy.contains(sTempPath)) {
         return m_strOpenFileAndProxy[sTempPath];
@@ -78,7 +78,7 @@ QMap<QString, DocummentProxy *> MainTabWidgetExPrivate::getOpenFileAndProxy() co
 //  打开当前所在文件夹
 void MainTabWidgetExPrivate::OpenCurFileFolder()
 {
-    QString sPath = q_ptr->qGetCurPath();
+    QString sPath = qobject_cast<MainTabWidgetEx *>(q_ptr)->qGetCurPath();
     if (sPath != "") {
         int nLastPos = sPath.lastIndexOf('/');
         sPath = sPath.mid(0, nLastPos);

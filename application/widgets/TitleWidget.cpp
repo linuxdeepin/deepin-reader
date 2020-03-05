@@ -1,10 +1,7 @@
 #include "TitleWidget.h"
 
 #include <QHBoxLayout>
-#include <QJsonObject>
 #include <QWidgetAction>
-
-#include "MsgModel.h"
 
 #include "menu/FontMenu.h"
 #include "menu/ScaleMenu.h"
@@ -93,6 +90,7 @@ void TitleWidget::SetBtnDisable(const bool &bAble)
     m_pPreBtn->setDisabled(bAble);
     m_pScaleMenuBtn->setDisabled(bAble);
     m_pNextBtn->setDisabled(bAble);
+    m_pSearchBtn->setDisabled(bAble);
 }
 
 void TitleWidget::OnShortCut_Alt1()
@@ -167,6 +165,7 @@ void TitleWidget::initWidget()
     m_layout->addWidget(m_pPreBtn);
     m_layout->addWidget(m_pScaleMenuBtn);
     m_layout->addWidget(m_pNextBtn);
+    m_layout->addWidget(m_pSearchBtn);
 
     m_layout->addStretch(1);
 }
@@ -227,6 +226,11 @@ void TitleWidget::on_handleShapeBtn_clicked()
     }
 }
 
+void TitleWidget::on_searchBtn_clicked()
+{
+
+}
+
 // 比例按钮
 void TitleWidget::SlotScaleMenuBtnClicked()
 {
@@ -264,6 +268,12 @@ void TitleWidget::initBtns()
     m_pThumbnailBtn = createBtn(tr("Thumbnails"), true);
     m_pThumbnailBtn->setObjectName("thumbnails");
     connect(m_pThumbnailBtn, SIGNAL(clicked()), SLOT(on_thumbnailBtn_clicked()));
+
+    m_pSearchBtn = new DIconButton(DStyle::SP_IndicatorSearch);
+    m_pSearchBtn->setDisabled(true);
+    m_pSearchBtn->setFixedSize(QSize(36, 36));
+    m_pSearchBtn->setIconSize(QSize(30, 30));
+    connect(m_pSearchBtn, SIGNAL(clicked()), SLOT(on_searchBtn_clicked()));
 }
 
 void TitleWidget::__InitHandel()
@@ -296,7 +306,7 @@ void TitleWidget::__InitScale()
     m_pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
     m_pPreBtn->setDisabled(true);
     m_pPreBtn->setFixedSize(QSize(24, 24));
-    connect(m_pPreBtn, SIGNAL(clicked()), m_pScaleMenu, SLOT(sloPrevScale()));
+    connect(m_pPreBtn, SIGNAL(clicked()), m_pScaleMenu, SLOT(slotPrevScale()));
 
     m_pScaleMenuBtn = new DPushButton("0%");
     m_pScaleMenuBtn->setDisabled(true);
@@ -305,7 +315,7 @@ void TitleWidget::__InitScale()
     m_pNextBtn = new DIconButton(DStyle::SP_IncreaseElement);
     m_pNextBtn->setDisabled(true);
     m_pNextBtn->setFixedSize(QSize(24, 24));
-    connect(m_pNextBtn, SIGNAL(clicked()), m_pScaleMenu, SLOT(sloNextScale()));
+    connect(m_pNextBtn, SIGNAL(clicked()), m_pScaleMenu, SLOT(slotNextScale()));
 }
 
 void TitleWidget::setDefaultShape()

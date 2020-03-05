@@ -39,20 +39,25 @@ signals:
     void sigSelectItem(QListWidgetItem *);
     void sigValueChanged(int);
 
+    void sigListMenuClick(const int &);
+
 public:
     QListWidgetItem *insertWidgetItem(const int &);
-//    inline void setRotateAngele(const int &angle) {m_nRotate = angle;}
+
+    void setListType(const int &nListType);
+
+protected:
+    void mousePressEvent(QMouseEvent *event) override;
 
 private slots:
-//    void slot_loadImage(const int &row, const QImage &image);
     void slotShowSelectItem(QListWidgetItem *);
 
-//private:
-//    int m_nRotate = 0;           // 缩略图旋转角度
+private:
+    void showNoteMenu();
+    void showBookMarkMenu();
 
-    // QWidget interface
-//protected:
-//    void resizeEvent(QResizeEvent *event) override;
+private:
+    int     m_nListType = -1;
 };
 
 #endif // CUSTOMLISTWIDGET_H

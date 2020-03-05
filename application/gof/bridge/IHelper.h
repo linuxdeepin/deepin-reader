@@ -21,6 +21,10 @@
 
 #include <QObject>
 
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonParseError>
+
 class HelperImpl;
 
 class IHelper : public QObject

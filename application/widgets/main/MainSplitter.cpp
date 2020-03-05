@@ -18,7 +18,8 @@
  */
 #include "MainSplitter.h"
 
-#include "MsgModel.h"
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #include "../DocShowShellWidget.h"
 #include "../LeftSidebarWidget.h"

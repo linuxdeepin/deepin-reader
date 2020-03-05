@@ -19,9 +19,6 @@
 #ifndef THUMBNAILITEMWIDGET_H
 #define THUMBNAILITEMWIDGET_H
 
-#include <DLabel>
-#include <QVBoxLayout>
-
 #include "../CustomItemWidget.h"
 
 /**

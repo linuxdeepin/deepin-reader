@@ -19,14 +19,18 @@
 #ifndef CUSTOMWIDGET_H
 #define CUSTOMWIDGET_H
 
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonParseError>
+
 #include <DFontSizeManager>
 #include <DGuiApplicationHelper>
 #include <DPalette>
 #include <DWidget>
 
 #include "application.h"
-#include "MsgModel.h"
 #include "WidgetHeader.h"
+#include "CustomMenu.h"
 #include "utils/utils.h"
 
 #include <QDebug>
@@ -45,10 +49,13 @@ const int LEFTMINWIDTH = 266;//226  >>  266
 const int LEFTMAXWIDTH = 380;
 const int LEFTNORMALWIDTH = 266;//226  >>  266
 
+class CustomWidgetPrivate;
+
 class CustomWidget : public DWidget, public IObserver
 {
     Q_OBJECT
     Q_DISABLE_COPY(CustomWidget)
+    Q_DECLARE_PRIVATE(CustomWidget)
 
 public:
     CustomWidget(const QString &, DWidget *parent = nullptr);
@@ -63,6 +70,9 @@ protected:
 protected:
     void notifyMsg(const int &msgType, const QString &msgContent = "") override;
     void showScreenCenter();
+
+protected:
+    CustomWidgetPrivate    *d_ptr = nullptr;
 
 protected:
     QList<int>          m_pMsgList;         //  需要处理的消息列表

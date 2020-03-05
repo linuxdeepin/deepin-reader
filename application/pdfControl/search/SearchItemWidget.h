@@ -19,16 +19,6 @@
 #ifndef SEARCHITEMWIDGET_H
 #define SEARCHITEMWIDGET_H
 
-#include <DLabel>
-#include <DTextEdit>
-
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QFont>
-#include <QMenu>
-#include <QAction>
-#include <QContextMenuEvent>
-
 #include "../CustomItemWidget.h"
 
 /**
@@ -54,22 +44,20 @@ public:
     bool bSelect();
     void setBSelect(const bool &paint);
 
-private slots:
-    void slotUpdateTheme();
-
 protected:
     void initWidget() override;
 
     void resizeEvent(QResizeEvent *event) override;
     void paintEvent(QPaintEvent *e) override;
 
+private slots:
+    void slotUpdateTheme();
 
 private:
     DLabel *m_pSearchResultNum = nullptr;
     DLabel *m_pTextLab = nullptr;
     QString m_strNote = "";   // 注释内容
     bool m_bPaint = false;
-    DMenu *m_menu = nullptr;
 };
 
 #endif // SEARCHITEMWIDGET_H

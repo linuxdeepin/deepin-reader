@@ -46,8 +46,8 @@ MainTabWidgetEx *MainTabWidgetEx::g_onlyApp = nullptr;
 MainTabWidgetEx::MainTabWidgetEx(DWidget *parent)
     : CustomWidget(MAIN_TAB_WIDGET, parent)
 {
-    d_ptr = new MainTabWidgetExPrivate(this);
-    m_pMsgList = {E_APP_MSG_TYPE, E_TABBAR_MSG_TYPE, MSG_FILE_IS_CHANGE};
+    d_ptr = new MainTabWidgetExPrivate;
+    d_ptr->q_ptr = this;
 
     initWidget();
     InitConnections();
@@ -88,7 +88,7 @@ int MainTabWidgetEx::dealWithData(const int &msgType, const QString &msgContent)
         }
     }
 
-    if (m_pMsgList.contains(msgType)) {
+    if (d_ptr->getMsgList().contains(msgType)) {
         return MSG_OK;
     }
 
@@ -97,37 +97,37 @@ int MainTabWidgetEx::dealWithData(const int &msgType, const QString &msgContent)
 
 QStringList MainTabWidgetEx::qGetAllPath() const
 {
-    return d_ptr->GetAllPath();
+    return dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->GetAllPath();
 }
 
 QString MainTabWidgetEx::qGetCurPath() const
 {
-    return d_ptr->GetCurPath();
+    return dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->GetCurPath();
 }
 
 int MainTabWidgetEx::GetFileChange(const QString &sPath)
 {
-    return d_ptr->GetFileChange(sPath);
+    return dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->GetFileChange(sPath);
 }
 
 FileDataModel MainTabWidgetEx::qGetFileData(const QString &sPath) const
 {
-    return d_ptr->GetFileData(sPath);
+    return dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->GetFileData(sPath);
 }
 
 void MainTabWidgetEx::SetFileData(const QString &sPath, const FileDataModel &fdm)
 {
-    d_ptr->SetFileData(sPath, fdm);
+    dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->SetFileData(sPath, fdm);
 }
 
 void MainTabWidgetEx::InsertPathProxy(const QString &sPath, DocummentProxy *proxy)
 {
-    d_ptr->InsertPathProxy(sPath, proxy);
+    dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->InsertPathProxy(sPath, proxy);
 }
 
 DocummentProxy *MainTabWidgetEx::getCurFileAndProxy(const QString &sPath) const
 {
-    return d_ptr->getCurFileAndProxy(sPath);
+    return dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->getCurFileAndProxy(sPath);
 }
 
 void MainTabWidgetEx::showPlayControlWidget() const
@@ -242,7 +242,7 @@ void MainTabWidgetEx::OnAppExit()
             SaveFile(MSG_NOT_CHANGE_SAVE_FILE, sSplitterPath);
         }
     }
-    auto mapIt = d_ptr->getOpenFileAndProxy();
+    auto mapIt = dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->getOpenFileAndProxy();
     for (auto it = mapIt.begin(); it != mapIt.end(); it++) {
         if (it.value() != nullptr)
             it.value()->closeFileAndWaitThreadClearEnd();
@@ -298,7 +298,7 @@ void MainTabWidgetEx::OnTabBarMsg(const QString &s)
     } else if (s == "Document info") {
         onShowFileAttr();
     } else if (s == "Display in file manager") {    //  文件浏览器 显示
-        d_ptr->OpenCurFileFolder();
+        dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->OpenCurFileFolder();
     }
 }
 
@@ -306,7 +306,7 @@ void MainTabWidgetEx::OnTabFileChangeMsg(const QString &sVale)
 {
     QString sCurPath = qGetCurPath();
 
-    d_ptr->SetFileChange(sCurPath, sVale.toInt());
+    dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->SetFileChange(sCurPath, sVale.toInt());
 }
 
 void MainTabWidgetEx::SaveFile(const int &iType, const QString &sPath)
@@ -379,7 +379,7 @@ void MainTabWidgetEx::OnKeyPress(const QString &sKey)
     int nState = getCurrentState();
     if (nState == SLIDER_SHOW && m_pctrlwidget) {
         if (sKey == KeyStr::g_space) {
-            QString sPath = d_ptr->getSliderPath();
+            QString sPath = dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->getSliderPath();
             auto helper = getCurFileAndProxy(sPath);
             if (helper) {
                 if (helper->getAutoPlaySlideStatu()) {
@@ -402,7 +402,7 @@ void MainTabWidgetEx::SlotSetCurrentIndexFile(const QString &sPath)
     if (nState == Magnifer_State) {
         setCurrentState(Default_State);
 
-        QString sMagniferPath = d_ptr->getMagniferPath();
+        QString sMagniferPath = dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->getMagniferPath();
         auto proxy = getCurFileAndProxy(sMagniferPath);
         if (proxy) {
             proxy->closeMagnifier();
@@ -471,7 +471,7 @@ void MainTabWidgetEx::SlotCloseTab(const QString &sPath)
                         //  保存成功
                         s->saveData();
 
-                        d_ptr->RemovePath(sPath);
+                        dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->RemovePath(sPath);
 
                         emit sigRemoveFileTab(sPath);
 
@@ -489,12 +489,12 @@ void MainTabWidgetEx::SlotCloseTab(const QString &sPath)
 
 void MainTabWidgetEx::setCurrentState(const int &nCurrentState)
 {
-    d_ptr->setCurrentState(nCurrentState);
+    dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->setCurrentState(nCurrentState);
 }
 
 int MainTabWidgetEx::getCurrentState() const
 {
-    return d_ptr->getCurrentState();
+    return dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->getCurrentState();
 }
 
 //  搜索框
@@ -530,7 +530,7 @@ void MainTabWidgetEx::OnOpenSliderShow()
 
             QString sPath = splitter->qGetPath();
 
-            d_ptr->setSliderPath(sPath);
+            dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->setSliderPath(sPath);
 
             auto _proxy = getCurFileAndProxy(sPath);
             _proxy->setAutoPlaySlide(true);
@@ -562,7 +562,7 @@ void MainTabWidgetEx::OnExitSliderShow()
         if (splitter) {
             splitter->OnExitSliderShow();
 
-            QString sPath = d_ptr->getSliderPath();
+            QString sPath = dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->getSliderPath();
             DocummentProxy *_proxy = getCurFileAndProxy(sPath);
             if (!_proxy) {
                 return;
@@ -573,7 +573,7 @@ void MainTabWidgetEx::OnExitSliderShow()
             m_pctrlwidget = nullptr;
         }
 
-        d_ptr->setSliderPath("");
+        dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->setSliderPath("");
     }
 }
 
@@ -582,7 +582,7 @@ void MainTabWidgetEx::OnOpenMagnifer()
     int nState = getCurrentState();
     if (nState != Magnifer_State) {
         setCurrentState(Magnifer_State);
-        d_ptr->setMagniferPath(qGetCurPath());
+        dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->setMagniferPath(qGetCurPath());
     }
 }
 

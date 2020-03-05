@@ -68,37 +68,34 @@ void NotesWidget::nextPage()
 
 void NotesWidget::DeleteItemByKey()
 {
-    bool bFocus = this->hasFocus();
-    if (bFocus) {
-        auto curItem = m_pNotesList->currentItem();
-        if (curItem == nullptr)
-            return;
+    auto curItem = m_pNotesList->currentItem();
+    if (curItem == nullptr)
+        return;
 
-        auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(curItem));
-        if (t_widget) {
-            if (t_widget->bSelect()) {
-                int nType = t_widget->nNoteType();
+    auto t_widget = qobject_cast<NotesItemWidget *>(m_pNotesList->itemWidget(curItem));
+    if (t_widget) {
+        if (t_widget->bSelect()) {
+            int nType = t_widget->nNoteType();
 
-                QString t_uuid = t_widget->noteUUId();
-                int page = t_widget->nPageIndex();
-                QString sContent = t_uuid + Constant::sQStringSep + QString::number(page);
+            QString t_uuid = t_widget->noteUUId();
+            int page = t_widget->nPageIndex();
+            QString sContent = t_uuid + Constant::sQStringSep + QString::number(page);
 
-                QString sRes = "";
-                if (nType == NOTE_HIGHLIGHT) {
-                    sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_DELETE_CONTENT, sContent);
-                } else {
-                    sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
-                }
+            QString sRes = "";
+            if (nType == NOTE_HIGHLIGHT) {
+                sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_DELETE_CONTENT, sContent);
+            } else {
+                sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
+            }
 
-                QJsonParseError error;
-                QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
-                if (error.error == QJsonParseError::NoError) {
-                    QJsonObject obj = doc.object();
-                    int nReturn = obj.value("return").toInt();
-                    if (nReturn == MSG_OK) {
-                        QString sUuid = obj.value("value").toString();
-                        __DeleteNoteItem(sUuid);
-                    }
+            QJsonParseError error;
+            QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
+            if (error.error == QJsonParseError::NoError) {
+                QJsonObject obj = doc.object();
+                int nReturn = obj.value("return").toInt();
+                if (nReturn == MSG_OK) {
+                    QString sUuid = obj.value("value").toString();
+                    __DeleteNoteItem(sUuid);
                 }
             }
         }
@@ -117,6 +114,9 @@ void NotesWidget::initWidget()
     this->setLayout(m_pVLayout);
 
     m_pNotesList = new CustomListWidget;
+    m_pNotesList->setListType(E_NOTE_WIDGET);
+    connect(m_pNotesList, SIGNAL(sigSelectItem(QListWidgetItem *)), SLOT(slotSelectItem(QListWidgetItem *)));
+    connect(m_pNotesList, SIGNAL(sigListMenuClick(const int &)), SLOT(slotListMenuClick(const int &)));
 
     m_pAddAnnotationBtn = new DPushButton(this);
     m_pAddAnnotationBtn->setFixedHeight(36);
@@ -156,11 +156,11 @@ void NotesWidget::__DeleteNoteItem(const QString &sUuid)
     for (int row = 0; row < m_pNotesList->count(); ++row) {
         auto pItem = m_pNotesList->item(row);
         if (pItem) {
-            auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
+            auto t_widget = qobject_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
             if (t_widget) {
                 QString t_uuid = t_widget->noteUUId();
                 if (t_uuid == sUuid) {
-                    delete t_widget;
+                    t_widget->deleteLater();
                     t_widget = nullptr;
 
                     delete pItem;
@@ -189,7 +189,7 @@ void NotesWidget::__UpdateNoteItem(const QString &msgContent)
         for (int iLoop = 0; iLoop < iCount; iLoop++) {
             auto pItem = m_pNotesList->item(iLoop);
             if (pItem) {
-                auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
+                auto t_widget = qobject_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
                 if (t_widget) {
                     if (t_widget->nPageIndex() == sPage.toInt() && t_widget->noteUUId() == sUuid) {
                         rl = true;
@@ -220,7 +220,7 @@ void NotesWidget::__UpdateNoteItem(const QString &msgContent)
 void NotesWidget::slotOpenFileOk(const QString &sPath)
 {
     m_strBindPath = sPath;
-    qDebug() << "^*^*^*^*^*" << sPath;
+
     m_nIndex = 0;
     m_ThreadLoadImage.setIsLoaded(false);
     if (m_ThreadLoadImage.isRunning()) {
@@ -277,6 +277,15 @@ void NotesWidget::slotLoadImage(const QImage &image)
     ++m_nIndex;
 }
 
+void NotesWidget::slotListMenuClick(const int &iAction)
+{
+    if (iAction == E_NOTE_COPY) {
+        CopyNoteContent();
+    } else if (iAction == E_NOTE_DELETE) {
+        DeleteItemByKey();
+    }
+}
+
 void NotesWidget::slotSelectItem(QListWidgetItem *item)
 {
     if (item == nullptr) {
@@ -285,7 +294,7 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
 
     setSelectItemBackColor(item);
 
-    auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
+    auto t_widget = qobject_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
     if (t_widget) {
         QString t_uuid = t_widget->noteUUId();
         int page = t_widget->nPageIndex();
@@ -297,22 +306,9 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
     }
 }
 
-void NotesWidget::SlotRightSelectItem(const QString &uuid)
+void NotesWidget::SlotRightDeleteItem()
 {
-    if (m_pNotesList == nullptr) {
-        return;
-    }
-
-    for (int index = 0; index < m_pNotesList->count(); ++index) {
-        auto item = m_pNotesList->item(index);
-        auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
-        if (t_widget) {
-            if (t_widget->noteUUId() == uuid) {
-                slotSelectItem(item);
-                break;
-            }
-        }
-    }
+    DeleteItemByKey();
 }
 
 void NotesWidget::__JumpToPrevItem()
@@ -373,6 +369,18 @@ void NotesWidget::slotAddAnnotation()
     MainTabWidgetEx::Instance()->setCurrentState(NOTE_ADD_State);
 }
 
+void NotesWidget::CopyNoteContent()
+{
+    auto curItem = m_pNotesList->currentItem();
+    if (curItem == nullptr)
+        return;
+
+    auto t_widget = qobject_cast<NotesItemWidget *>(m_pNotesList->itemWidget(curItem));
+    if (t_widget) {
+        t_widget->CopyItemText();
+    }
+}
+
 /**
  * @brief NotesWidget::addNotesItem
  * 给新节点填充内容（包括文字、缩略图等内容）
@@ -413,8 +421,6 @@ void NotesWidget::addNotesItem(const QString &text, const int &iType)
 void NotesWidget::initConnection()
 {
     connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const QImage &)), SLOT(slotLoadImage(const QImage &)));
-
-    connect(m_pNotesList, SIGNAL(sigSelectItem(QListWidgetItem *)), SLOT(slotSelectItem(QListWidgetItem *)));
 }
 
 /**
@@ -431,7 +437,7 @@ void NotesWidget::setSelectItemBackColor(QListWidgetItem *item)
 
     m_pNotesList->setCurrentItem(item);
 
-    auto t_widget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
+    auto t_widget = qobject_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
     if (t_widget) {
         t_widget->setBSelect(true);
     }
@@ -443,7 +449,7 @@ void NotesWidget::clearItemColor()
         return;
     auto pCurItem = m_pNotesList->currentItem();
     if (pCurItem) {
-        auto pItemWidget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pCurItem));
+        auto pItemWidget = qobject_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pCurItem));
         if (pItemWidget) {
             pItemWidget->setBSelect(false);
         }
@@ -472,8 +478,6 @@ QListWidgetItem *NotesWidget::addNewItem(const QImage &image, const int &page, c
         itemWidget->setTextEditText(text);
         itemWidget->setMinimumSize(QSize(LEFTMINWIDTH, 80));
         itemWidget->setBSelect(bNew);
-
-        connect(itemWidget, SIGNAL(sigSelectItem(const QString &)), SLOT(SlotRightSelectItem(const QString &)));
 
         item->setFlags(Qt::NoItemFlags);
         item->setSizeHint(QSize(LEFTMINWIDTH, 80));

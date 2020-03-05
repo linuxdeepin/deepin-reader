@@ -70,7 +70,9 @@ enum E_MENU {
     E_SCALE_MENU,
     E_HANDLE_MENU,
     E_FONT_MENU,
-    E_DEFAULT_OPERATION_MENU
+    E_DEFAULT_OPERATION_MENU,
+    E_NOTE_MENU,
+    E_BOOKMARK_MENU
 };
 
 static QString TITLE_MENU = "TitleMenu";
@@ -79,6 +81,8 @@ static QString SCALE_MENU = "ScaleMenu";
 static QString HANDLE_MENU = "HandleMenu";
 static QString FONT_MENU = "FontMenu";
 static QString DEFAULT_OPERATION_MENU = "DefaultOperationMenu";
+static QString NOTE_MENU = "NOTE_MENU";
+static QString BOOKMARK_MENU = "BOOKMARK_MENU";
 
 
 }

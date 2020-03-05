@@ -19,10 +19,6 @@
 
 #include "IHelper.h"
 
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonParseError>
-
 #include "HelperImpl.h"
 #include "AnnotationHelper.h"
 #include "DocFileHelper.h"

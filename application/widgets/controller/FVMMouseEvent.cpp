@@ -19,6 +19,8 @@
 
 #include "FVMMouseEvent.h"
 
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QMouseEvent>
 #include <QDesktopServices>
 

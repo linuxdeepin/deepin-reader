@@ -122,8 +122,6 @@ private:
     MainTabBar          *m_pTabBar = nullptr;
     FindWidget          *m_pFindWidget = nullptr;
     PlayControlWidget   *m_pctrlwidget = nullptr;
-
-    MainTabWidgetExPrivate  *d_ptr = nullptr;
 };
 
 #endif // MAINTABWIDGETEX_H

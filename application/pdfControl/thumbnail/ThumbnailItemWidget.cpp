@@ -18,6 +18,8 @@
  */
 #include "ThumbnailItemWidget.h"
 
+#include <QVBoxLayout>
+
 #include "business/AppInfo.h"
 
 ThumbnailItemWidget::ThumbnailItemWidget(DWidget *parent)

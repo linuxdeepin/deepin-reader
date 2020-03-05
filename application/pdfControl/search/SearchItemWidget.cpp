@@ -17,14 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SearchItemWidget.h"
-#include <DApplication>
-#include <DApplicationHelper>
-#include <QTextLayout>
 
-#include "utils/utils.h"
+#include <QVBoxLayout>
 
 SearchItemWidget::SearchItemWidget(DWidget *parent)
-    : CustomItemWidget(QString("SearchItemWidget"), parent)
+    : CustomItemWidget(SEARCH_ITEM_WIDGET, parent)
 {
     initWidget();
 }

@@ -20,8 +20,6 @@
 
 #include <QSignalMapper>
 
-#include "MsgModel.h"
-
 #include "widgets/main/MainTabWidgetEx.h"
 
 ScaleMenu::ScaleMenu(DWidget *parent)
@@ -70,7 +68,7 @@ void ScaleMenu::slotActionTrigger(QAction *action)
     __ChangeScale(iData);
 }
 
-void ScaleMenu::sloPrevScale()
+void ScaleMenu::slotPrevScale()
 {
     int nIndex = m_nCurrentIndex - 1;
     if (nIndex < 0) {
@@ -80,7 +78,7 @@ void ScaleMenu::sloPrevScale()
     __ChangeScale(iData);
 }
 
-void ScaleMenu::sloNextScale()
+void ScaleMenu::slotNextScale()
 {
     int nIndex = m_nCurrentIndex + 1;
     int nSize = dataList.size();
@@ -92,22 +90,15 @@ void ScaleMenu::sloNextScale()
 
 void ScaleMenu::slotDocProxyMsg(const QString &sContent)
 {
-    MsgModel mm;
-    mm.fromJson(sContent);
 
-    int nMsg = mm.getMsgType();
-    if (nMsg == MSG_OPERATION_OPEN_FILE_OK) {
-        QString sPath = mm.getPath();
-        OnFileOpenOk(sPath);
-    }
 }
 
 void ScaleMenu::onShortKey(const QString &keyType)
 {
     if (keyType == KeyStr::g_ctrl_smaller) {
-        sloPrevScale();
+        slotPrevScale();
     } else if (keyType == KeyStr::g_ctrl_larger || keyType == KeyStr::g_ctrl_equal) {
-        sloNextScale();
+        slotNextScale();
     }
 }
 

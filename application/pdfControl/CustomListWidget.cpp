@@ -23,6 +23,9 @@
 #include "application.h"
 #include "CustomItemWidget.h"
 
+#include "menu/BookMarkMenu.h"
+#include "menu/NoteMenu.h"
+
 #include "gof/bridge/IHelper.h"
 
 CustomListWidget::CustomListWidget(DWidget *parent)
@@ -73,22 +76,25 @@ QListWidgetItem *CustomListWidget::insertWidgetItem(const int &iData)
     return item;
 }
 
-/**
- * @brief CustomListWidget::setItemImage
- * 填充缩略图
- * @param row
- * @param image
- */
-//void CustomListWidget::slot_loadImage(const int &row, const QImage &image)
-//{
-//    auto item = this->item(row);
-//    if (item) {
-//        auto t_ItemWidget = reinterpret_cast<CustomItemWidget *>(this->itemWidget(item));
-//        if (t_ItemWidget) {
-//            t_ItemWidget->setLabelImage(image);
-//        }
-//    }
-//}
+//  显示 右键菜单
+void CustomListWidget::mousePressEvent(QMouseEvent *event)
+{
+    Qt::MouseButton btn = event->button();
+    if (btn == Qt::RightButton) {
+        QListWidgetItem *item = this->itemAt(event->pos());
+        if (item != nullptr) {
+            emit itemClicked(item);
+
+            if (m_nListType == E_NOTE_WIDGET) {
+                showNoteMenu();
+            } else if (m_nListType == E_BOOKMARK_WIDGET) {
+                showBookMarkMenu();
+            }
+        }
+    }
+
+    DListWidget::mousePressEvent(event);
+}
 
 /**
  * @brief CustomListWidget::slotShowSelectItem
@@ -103,7 +109,7 @@ void CustomListWidget::slotShowSelectItem(QListWidgetItem *item)
 
     emit sigSelectItem(item);
 
-    auto t_ItemWidget = reinterpret_cast<CustomItemWidget *>(this->itemWidget(item));
+    auto t_ItemWidget = qobject_cast<CustomItemWidget *>(this->itemWidget(item));
     if (t_ItemWidget) {
         int nJumpPage = t_ItemWidget->nPageIndex();
         //  页跳转
@@ -111,13 +117,24 @@ void CustomListWidget::slotShowSelectItem(QListWidgetItem *item)
     }
 }
 
-//void CustomListWidget::resizeEvent(QResizeEvent *event)
-//{
-//    DListWidget::resizeEvent(event);
+//  显示 注释菜单
+void CustomListWidget::showNoteMenu()
+{
+    auto pMenu = new NoteMenu();
+    connect(pMenu, SIGNAL(sigClickAction(const int &)), this, SIGNAL(sigListMenuClick(const int &)));
+    pMenu->exec(QCursor::pos());
 
-//    auto parentWidget = reinterpret_cast<DWidget *>(this->parent());
-//    if (parentWidget) {
-//        resize(parentWidget->width(), this->height());
-//        qDebug() << "  CustomListWidget  width:" << this->width() << "  height:" << this->height();
-//    }
-//}
+}
+
+//  显示 书签菜单
+void CustomListWidget::showBookMarkMenu()
+{
+    auto pMenu = new BookMarkMenu();
+    connect(pMenu, SIGNAL(sigClickAction(const int &)), this, SIGNAL(sigListMenuClick(const int &)));
+    pMenu->exec(QCursor::pos());
+}
+
+void CustomListWidget::setListType(const int &nListType)
+{
+    m_nListType = nListType;
+}

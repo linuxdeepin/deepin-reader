@@ -33,7 +33,7 @@ class BookMarkItemWidget : public CustomItemWidget
     Q_DISABLE_COPY(BookMarkItemWidget)
 
 public:
-    explicit BookMarkItemWidget(QWidget *parent = nullptr);
+    explicit BookMarkItemWidget(DWidget *parent = nullptr);
 
 public:
     // IObserver interface
@@ -42,17 +42,12 @@ public:
     bool bSelect();
     void setBSelect(const bool &paint);
 
-private slots:
-    void slotDltBookMark();
-    void slotShowContextMenu(const QPoint &);
-
 protected:
     void initWidget() override;
     void paintEvent(QPaintEvent *event) override;
 
 private:
     bool m_bPaint = false;                    // 是否绘制选中item
-    DMenu *m_menu = nullptr;
 };
 
 #endif // BOOKMARKITEMWIDGET_H

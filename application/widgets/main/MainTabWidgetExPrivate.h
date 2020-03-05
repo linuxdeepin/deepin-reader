@@ -23,15 +23,16 @@
 #include <QMap>
 
 #include "MsgHeader.h"
+#include "CustomControl/CustomWidgetPrivate.h"
 
 class DocummentProxy;
 class FileDataModel;
 class MainTabWidgetEx;
 
-class MainTabWidgetExPrivate
+class MainTabWidgetExPrivate : public CustomWidgetPrivate
 {
 public:
-    explicit MainTabWidgetExPrivate(MainTabWidgetEx *widget);
+    MainTabWidgetExPrivate();
 
 public:
     QString getSliderPath() const;
@@ -66,10 +67,6 @@ private:
     QString             m_strSliderPath = "";
     QString             m_strMagniferPath = "";
     int                 m_nCurrentState = Default_State;
-
-
-    MainTabWidgetEx     *q_ptr = nullptr;
-
 };
 
 #endif // MAINTABWIDGETEXPRIVATE_H

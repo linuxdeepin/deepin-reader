@@ -18,6 +18,9 @@
  */
 #include "DataStackedWidget.h"
 
+#include <QJsonObject>
+#include <QJsonDocument>
+
 #include "thumbnail/ThumbnailWidget.h"
 #include "catalog/CatalogWidget.h"
 #include "bookmark/BookMarkWidget.h"

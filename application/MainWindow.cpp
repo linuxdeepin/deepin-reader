@@ -7,8 +7,6 @@
 #include <QDebug>
 #include <DGuiApplicationHelper>
 
-#include "MsgModel.h"
-
 #include "business/ShortCutShow.h"
 //#include "business/SaveDialog.h"
 #include "business/AppInfo.h"

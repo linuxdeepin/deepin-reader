@@ -19,10 +19,7 @@
 #include "FontMenu.h"
 
 #include <DFontSizeManager>
-#include <QJsonObject>
 #include <QWidgetAction>
-
-#include "MsgModel.h"
 
 #include "docview/docummentproxy.h"
 #include "utils/PublicFunction.h"

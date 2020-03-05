@@ -20,13 +20,10 @@
 
 #include <DLabel>
 #include <QHBoxLayout>
-#include <DMenu>
 
-BookMarkItemWidget::BookMarkItemWidget(QWidget *parent)
-    : CustomItemWidget("BookMarkItemWidget", parent)
+BookMarkItemWidget::BookMarkItemWidget(DWidget *parent)
+    : CustomItemWidget(BOOKMARK_ITEM_WIDGET, parent)
 {
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
-            SLOT(slotShowContextMenu(const QPoint &)));
     initWidget();
 }
 
@@ -56,36 +53,6 @@ void BookMarkItemWidget::setBSelect(const bool &paint)
     }
     m_bPaint = paint;
     update();
-}
-
-/**
- * @brief BookMarkItemWidget::slotDltBookMark
- * 删除当前书签，并发送删除书签全局消息
- */
-void BookMarkItemWidget::slotDltBookMark()
-{
-    emit sigDeleteItem(QString::number(m_nPageIndex));
-}
-
-/**
- * @brief BookMarkItemWidget::slotShowContextMenu
- * 显示书签右键菜单
- */
-void BookMarkItemWidget::slotShowContextMenu(const QPoint &)
-{
-    if (m_menu == nullptr) {
-        m_menu = new DMenu(this);
-        DFontSizeManager::instance()->bind(m_menu, DFontSizeManager::T6);
-        QAction *dltBookMarkAction =
-            m_menu->addAction(tr("Remove bookmark"));
-        connect(dltBookMarkAction, SIGNAL(triggered()), this, SLOT(slotDltBookMark()));
-    }
-
-    if (m_menu) {
-        m_menu->exec(QCursor::pos());
-    }
-
-    emit sigSelectItem(QString::number(m_nPageIndex));
 }
 
 /**

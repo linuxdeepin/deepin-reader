@@ -92,11 +92,13 @@ protected:
 private slots:
     void slotOpenFileOk(const QString &strcontent);
     void slotLoadImage(const QImage &);
+    void slotListMenuClick(const int &);
     void slotSelectItem(QListWidgetItem *);
-    void SlotRightSelectItem(const QString &);
+    void SlotRightDeleteItem();
     void slotAddAnnotation();
 
 private:
+    void CopyNoteContent();
     void __AddNoteItem(const QString &, const int &iType = NOTE_HIGHLIGHT);
     void __DeleteNoteItem(const QString &);
     void __UpdateNoteItem(const QString &);
@@ -117,6 +119,7 @@ private:
     CustomListWidget *m_pNotesList = nullptr;
     ThreadLoadImageOfNote m_ThreadLoadImage;  // 加载注释缩略图线程
     DPushButton *m_pAddAnnotationBtn = nullptr ;   // 添加注释
+    DMenu       *m_menu = nullptr;
 
     int m_nIndex = -1;                        // 当前注释列表数
     QString m_strBindPath = "";

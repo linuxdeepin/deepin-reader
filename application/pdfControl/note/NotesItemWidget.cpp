@@ -18,12 +18,7 @@
  */
 #include "NotesItemWidget.h"
 
-#include <DApplication>
-#include <DApplicationHelper>
-#include <QTextLayout>
 #include <QVBoxLayout>
-
-#include "gof/bridge/IHelper.h"
 
 NotesItemWidget::NotesItemWidget(DWidget *parent)
     : CustomItemWidget(QString("NotesItemWidget"), parent)
@@ -63,66 +58,6 @@ void NotesItemWidget::setBSelect(const bool &paint)
     update();
 }
 
-void NotesItemWidget::slotDltNoteContant()
-{
-    QString sContent = m_strUUid + Constant::sQStringSep + m_strPage;
-
-    QString sRes = "";
-    if (m_nNoteType == NOTE_HIGHLIGHT) {
-        sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_DELETE_CONTENT, sContent);
-    } else {
-        sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
-    }
-    if (sRes != "") {
-        QJsonParseError error;
-        QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
-        if (error.error == QJsonParseError::NoError) {
-            QJsonObject obj = doc.object();
-            int nReturn = obj.value("return").toInt();
-            if (nReturn == MSG_OK) {
-
-                QJsonObject notifyObj;
-                notifyObj.insert("content", m_strUUid);
-                notifyObj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + NOTE_WIDGET);
-
-                QJsonDocument notifyDoc(notifyObj);
-
-                notifyMsg(MSG_NOTE_DELETE_ITEM, notifyDoc.toJson(QJsonDocument::Compact));
-            }
-        }
-    }
-}
-
-void NotesItemWidget::slotCopyContant()
-{
-    if (m_pTextLab) {
-        QString str = m_pTextLab->text();
-        Utils::copyText(str);
-    }
-}
-
-void NotesItemWidget::slotShowContextMenu(const QPoint &)
-{
-    emit sigSelectItem(m_strUUid);
-
-    if (m_menu == nullptr) {
-        m_menu = new DMenu(this);
-        DFontSizeManager::instance()->bind(m_menu, DFontSizeManager::T6);
-
-        QAction *copyAction = m_menu->addAction(tr("Copy"));
-        connect(copyAction, SIGNAL(triggered()), this, SLOT(slotCopyContant()));
-        m_menu->addSeparator();
-
-        QAction *dltItemAction = m_menu->addAction(tr("Remove annotation"));
-        connect(dltItemAction, SIGNAL(triggered()), this, SLOT(slotDltNoteContant()));
-    }
-
-    if (m_menu) {
-        m_menu->exec(QCursor::pos());
-    }
-
-}
-
 void NotesItemWidget::slotUpdateTheme()
 {
     if (m_pPageNumber) {
@@ -141,6 +76,14 @@ QString NotesItemWidget::strPage() const
 void NotesItemWidget::setStrPage(const QString &strPage)
 {
     m_strPage = strPage;
+}
+
+void NotesItemWidget::CopyItemText()
+{
+    if (m_pTextLab) {
+        QString str = m_pTextLab->text();
+        Utils::copyText(str);
+    }
 }
 
 int NotesItemWidget::nNoteType() const
@@ -208,7 +151,7 @@ void NotesItemWidget::initWidget()
 
 void NotesItemWidget::__InitConnections()
 {
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), SLOT(slotShowContextMenu(const QPoint &)));
+
 }
 
 int NotesItemWidget::dealWithData(const int &msgType, const QString &)

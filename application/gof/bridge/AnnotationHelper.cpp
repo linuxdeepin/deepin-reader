@@ -19,11 +19,7 @@
 
 #include "AnnotationHelper.h"
 
-#include <QJsonObject>
-#include <QJsonDocument>
-
 #include "application.h"
-#include "MsgModel.h"
 
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"

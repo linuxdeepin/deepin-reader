@@ -16,44 +16,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CUSTOMMENU_H
-#define CUSTOMMENU_H
+#include "NoteMenu.h"
 
-#include <DMenu>
-
-#include <QJsonObject>
-#include <QJsonDocument>
-
-#include "application.h"
-#include "WidgetHeader.h"
-
-using namespace DR_SPACE;
-DWIDGET_USE_NAMESPACE
-
-enum E_MENU_ACTION {
-    E_BOOKMARK_DELETE,
-    E_NOTE_COPY,
-    E_NOTE_DELETE
-};
-
-class CustomMenu : public DMenu
+NoteMenu::NoteMenu(DWidget *parent)
+    : CustomMenu(NOTE_MENU, parent)
 {
-    Q_OBJECT
-    Q_DISABLE_COPY(CustomMenu)
+    initActions();
+}
 
-public:
-    CustomMenu(const QString &, DWidget *parent = nullptr);
+void NoteMenu::initActions()
+{
+    QAction *copyAction = this->addAction(tr("Copy"));
+    connect(copyAction, SIGNAL(triggered()), this, SLOT(slotCopy()));
+    this->addSeparator();
 
-signals:
-    void sigClickAction(const int &);
+    QAction *delAction = this->addAction(tr("Remove annotation"));
+    connect(delAction, SIGNAL(triggered()), this, SLOT(slotDelete()));
+}
 
-public:
-    virtual int dealWithData(const int &, const QString &);
+void NoteMenu::slotCopy()
+{
+    emit sigClickAction(E_NOTE_COPY);
+}
 
-protected:
-    virtual void initActions() = 0;
-    void notifyMsg(const int &, const QString &);
-};
-
-
-#endif // CUSTOMMENU_H
+void NoteMenu::slotDelete()
+{
+    emit sigClickAction(E_NOTE_DELETE);
+}

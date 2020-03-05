@@ -16,44 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CUSTOMMENU_H
-#define CUSTOMMENU_H
+#ifndef CUSTOMWIDGETDATA_H
+#define CUSTOMWIDGETDATA_H
 
-#include <DMenu>
+#include <QObject>
+#include <QList>
 
-#include <QJsonObject>
-#include <QJsonDocument>
+class CustomWidget;
 
-#include "application.h"
-#include "WidgetHeader.h"
-
-using namespace DR_SPACE;
-DWIDGET_USE_NAMESPACE
-
-enum E_MENU_ACTION {
-    E_BOOKMARK_DELETE,
-    E_NOTE_COPY,
-    E_NOTE_DELETE
-};
-
-class CustomMenu : public DMenu
+class CustomWidgetPrivate
 {
-    Q_OBJECT
-    Q_DISABLE_COPY(CustomMenu)
+protected:
+    virtual ~CustomWidgetPrivate() {}
 
 public:
-    CustomMenu(const QString &, DWidget *parent = nullptr);
+    CustomWidgetPrivate();
 
-signals:
-    void sigClickAction(const int &);
+    QList<int> getMsgList() const;
+    QList<QString> getKeyMsgList() const;
 
 public:
-    virtual int dealWithData(const int &, const QString &);
+    CustomWidget     *q_ptr = nullptr;
 
 protected:
-    virtual void initActions() = 0;
-    void notifyMsg(const int &, const QString &);
+    QList<int>          m_pMsgList;         //  需要处理的消息列表
+    QList<QString>      m_pKeyMsgList;      //  需要处理的按键消息列表
 };
 
-
-#endif // CUSTOMMENU_H
+#endif // CUSTOMWIDGETDATA_H

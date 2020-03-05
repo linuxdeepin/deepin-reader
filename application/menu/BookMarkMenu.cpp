@@ -16,44 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CUSTOMMENU_H
-#define CUSTOMMENU_H
+#include "BookMarkMenu.h"
 
-#include <DMenu>
-
-#include <QJsonObject>
-#include <QJsonDocument>
-
-#include "application.h"
-#include "WidgetHeader.h"
-
-using namespace DR_SPACE;
-DWIDGET_USE_NAMESPACE
-
-enum E_MENU_ACTION {
-    E_BOOKMARK_DELETE,
-    E_NOTE_COPY,
-    E_NOTE_DELETE
-};
-
-class CustomMenu : public DMenu
+BookMarkMenu::BookMarkMenu(DWidget *parent)
+    : CustomMenu(BOOKMARK_MENU, parent)
 {
-    Q_OBJECT
-    Q_DISABLE_COPY(CustomMenu)
+    initActions();
+}
 
-public:
-    CustomMenu(const QString &, DWidget *parent = nullptr);
+void BookMarkMenu::initActions()
+{
+    QAction *dltBookMarkAction = this->addAction(tr("Remove bookmark"));
+    connect(dltBookMarkAction, SIGNAL(triggered()), SLOT(slotDelete()));
+}
 
-signals:
-    void sigClickAction(const int &);
-
-public:
-    virtual int dealWithData(const int &, const QString &);
-
-protected:
-    virtual void initActions() = 0;
-    void notifyMsg(const int &, const QString &);
-};
-
-
-#endif // CUSTOMMENU_H
+void BookMarkMenu::slotDelete()
+{
+    emit sigClickAction(E_BOOKMARK_DELETE);
+}

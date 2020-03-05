@@ -5,7 +5,8 @@ HEADERS += \
     $$PWD/PageNumberLabel.h \
     $$PWD/DFMGlobal.h \
     $$PWD/RoundColorWidget.h \
-    $$PWD/CustomMenu.h
+    $$PWD/CustomMenu.h \
+    $$PWD/CustomWidgetPrivate.h
 
 SOURCES += \
     $$PWD/CustomWidget.cpp \
@@ -14,4 +15,5 @@ SOURCES += \
     $$PWD/PageNumberLabel.cpp \
     $$PWD/DFMGlobal.cpp \
     $$PWD/RoundColorWidget.cpp \
-    $$PWD/CustomMenu.cpp
+    $$PWD/CustomMenu.cpp \
+    $$PWD/CustomWidgetPrivate.cpp

@@ -16,44 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CUSTOMMENU_H
-#define CUSTOMMENU_H
+#include "CustomWidgetPrivate.h"
 
-#include <DMenu>
-
-#include <QJsonObject>
-#include <QJsonDocument>
-
-#include "application.h"
-#include "WidgetHeader.h"
-
-using namespace DR_SPACE;
-DWIDGET_USE_NAMESPACE
-
-enum E_MENU_ACTION {
-    E_BOOKMARK_DELETE,
-    E_NOTE_COPY,
-    E_NOTE_DELETE
-};
-
-class CustomMenu : public DMenu
+CustomWidgetPrivate::CustomWidgetPrivate()
 {
-    Q_OBJECT
-    Q_DISABLE_COPY(CustomMenu)
 
-public:
-    CustomMenu(const QString &, DWidget *parent = nullptr);
+}
 
-signals:
-    void sigClickAction(const int &);
+QList<int> CustomWidgetPrivate::getMsgList() const
+{
+    return m_pMsgList;
+}
 
-public:
-    virtual int dealWithData(const int &, const QString &);
-
-protected:
-    virtual void initActions() = 0;
-    void notifyMsg(const int &, const QString &);
-};
-
-
-#endif // CUSTOMMENU_H
+QList<QString> CustomWidgetPrivate::getKeyMsgList() const
+{
+    return m_pKeyMsgList;
+}

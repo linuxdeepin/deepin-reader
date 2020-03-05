@@ -19,7 +19,6 @@
 #include "BookMarkWidget.h"
 
 #include "BookMarkItemWidget.h"
-#include "MsgModel.h"
 
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
@@ -74,7 +73,7 @@ void BookMarkWidget::prevPage()
         return;
     auto pCurItem = m_pBookMarkListWidget->item(nCurIndex);
     if (pCurItem != nullptr) {
-        auto t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
+        auto t_widget = qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
         if (t_widget) {
             dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(t_widget->nPageIndex()));
         }
@@ -97,7 +96,7 @@ void BookMarkWidget::nextPage()
         return;
     auto pCurItem = m_pBookMarkListWidget->item(curIndex);
     if (pCurItem) {
-        auto t_widget = reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
+        auto t_widget = qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
         if (t_widget) {
             dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(t_widget->nPageIndex()));
         }
@@ -106,18 +105,15 @@ void BookMarkWidget::nextPage()
 
 void BookMarkWidget::DeleteItemByKey()
 {
-    bool bFocus = this->hasFocus();
-    if (bFocus) {
-        auto pCurItem = m_pBookMarkListWidget->currentItem();
-        if (pCurItem) {
-            auto t_widget =
-                reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
-            if (t_widget) {
-                if (t_widget->bSelect()) {
-                    int nPageIndex = t_widget->nPageIndex();
+    auto pCurItem = m_pBookMarkListWidget->currentItem();
+    if (pCurItem) {
+        auto t_widget =
+            qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
+        if (t_widget) {
+            if (t_widget->bSelect()) {
+                int nPageIndex = t_widget->nPageIndex();
 
-                    slotDeleteBookItem(QString::number(nPageIndex));
-                }
+                slotDeleteBookItem(QString::number(nPageIndex));
             }
         }
     }
@@ -174,6 +170,8 @@ void BookMarkWidget::slotAddBookMark(const QString &sContent)
             if (proxy) {
                 int nCurPage = proxy->currentPageNo();
                 if (nCurPage == nPage) {  //  是当前页
+                    proxy->setBookMarkState(nPage, true);
+
                     m_pAddBookMarkBtn->setEnabled(false);
 
                     emit sigSetBookMarkState(1, nPage);
@@ -222,7 +220,7 @@ void BookMarkWidget::OnOpenFileOk(const QString &sPath)
                     auto item = m_pBookMarkListWidget->item(iLoop);
                     if (item) {
                         auto pItemWidget =
-                            reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
+                            qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
                         if (pItemWidget) {
                             if (pItemWidget->nPageIndex() == nCurPage) {
                                 pItemWidget->setBSelect(true);
@@ -259,7 +257,7 @@ void BookMarkWidget::slotDocFilePageChanged(const QString &sPage)
         auto item = m_pBookMarkListWidget->item(iLoop);
         if (item) {
             auto pItemWidget =
-                reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
+                qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
             if (pItemWidget) {
                 int nWidgetPage = pItemWidget->nPageIndex();
                 if (nWidgetPage == sPage.toInt()) {
@@ -288,7 +286,7 @@ void BookMarkWidget::slotDeleteBookItem(const QString &sContent)
         auto pItem = m_pBookMarkListWidget->item(iLoop);
         if (pItem) {
             auto t_widget =
-                reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
+                qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
             if (t_widget) {
                 int nPageIndex = t_widget->nPageIndex();
                 if (nPageIndex == nPage) {
@@ -340,7 +338,7 @@ void BookMarkWidget::clearItemColor()
     auto pCurItem = m_pBookMarkListWidget->currentItem();
     if (pCurItem) {
         auto pItemWidget =
-            reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
+            qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
         if (pItemWidget) {
             pItemWidget->setBSelect(false);
         }
@@ -365,7 +363,7 @@ void BookMarkWidget::slotLoadImage(const int &page, const QImage &image)
         auto pItem = m_pBookMarkListWidget->item(iLoop);
         if (pItem) {
             auto t_widget =
-                reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
+                qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
             if (t_widget) {
                 int nPageIndex = t_widget->nPageIndex();
                 if (nPageIndex == page) {
@@ -385,29 +383,6 @@ void BookMarkWidget::slotUpdateTheme()
     m_pAddBookMarkBtn->setPalette(plt);
 }
 
-void BookMarkWidget::slotRightSelectItem(const QString &page)
-{
-    if (m_pBookMarkListWidget == nullptr) {
-        return;
-    }
-
-    int nSize = m_pBookMarkListWidget->count();
-    for (int iLoop = 0; iLoop < nSize; iLoop++) {
-        auto pItem = m_pBookMarkListWidget->item(iLoop);
-        if (pItem) {
-            auto t_widget =
-                reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
-            if (t_widget) {
-                int nPageIndex = t_widget->nPageIndex();
-                if (nPageIndex == page.toInt()) {
-                    slotSelectItemBackColor(pItem);
-                    break;
-                }
-            }
-        }
-    }
-}
-
 /**
  * @brief BookMarkWidget::initWidget
  * 初始化书签窗体
@@ -415,6 +390,9 @@ void BookMarkWidget::slotRightSelectItem(const QString &page)
 void BookMarkWidget::initWidget()
 {
     m_pBookMarkListWidget = new CustomListWidget(this);
+    m_pBookMarkListWidget->setListType(E_BOOKMARK_WIDGET);
+    connect(m_pBookMarkListWidget, SIGNAL(sigListMenuClick(const int &)), SLOT(slotListMenuClick(const int &)));
+    connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem *)), SLOT(slotSelectItemBackColor(QListWidgetItem *)));
 
     m_pAddBookMarkBtn = new DPushButton(this);
     m_pAddBookMarkBtn->setFixedHeight(36);
@@ -444,8 +422,6 @@ void BookMarkWidget::initConnection()
 {
     connect(&m_loadBookMarkThread, SIGNAL(sigLoadImage(const int &, const QImage &)),
             SLOT(slotLoadImage(const int &, const QImage &)));
-
-    connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem *)), SLOT(slotSelectItemBackColor(QListWidgetItem *)));
 }
 
 /**
@@ -468,9 +444,6 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
                 item->setSizeHint(QSize(LEFTMINWIDTH, 80));
 
                 auto t_widget = new BookMarkItemWidget(this);
-                connect(t_widget, SIGNAL(sigDeleteItem(const QString &)), SLOT(slotDeleteBookItem(const QString &)));
-                connect(t_widget, SIGNAL(sigSelectItem(const QString &)), SLOT(slotRightSelectItem(const QString &)));
-
                 t_widget->setLabelImage(img);
                 t_widget->setLabelPage(page, 1);
 
@@ -511,9 +484,16 @@ void BookMarkWidget::slotSelectItemBackColor(QListWidgetItem *item)
     m_pBookMarkListWidget->setCurrentItem(item);
 
     auto pItemWidget =
-        reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
+        qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
     if (pItemWidget) {
         pItemWidget->setBSelect(true);
+    }
+}
+
+void BookMarkWidget::slotListMenuClick(const int &iType)
+{
+    if (iType == E_BOOKMARK_DELETE) {
+        DeleteItemByKey();
     }
 }
 
@@ -567,7 +547,7 @@ int BookMarkWidget::getBookMarkPage(const int &index)
     auto pItem = m_pBookMarkListWidget->item(index);
     if (pItem) {
         auto pItemWidget =
-            reinterpret_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
+            qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
         if (pItemWidget) {
             int page = pItemWidget->nPageIndex();
 

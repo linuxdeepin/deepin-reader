@@ -16,45 +16,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SCALEMENU_H
-#define SCALEMENU_H
+#ifndef BOOKMARKMENU_H
+#define BOOKMARKMENU_H
 
 #include "CustomControl/CustomMenu.h"
 
-class ScaleMenu : public CustomMenu
+class BookMarkMenu : public CustomMenu
 {
     Q_OBJECT
-    Q_DISABLE_COPY(ScaleMenu)
+    Q_DISABLE_COPY(BookMarkMenu)
 
 public:
-    explicit ScaleMenu(DWidget *parent = nullptr);
-
-signals:
-    void sigCurrentScale(const int &);
-
-    // CustomMenu interface
-public:
-    int dealWithData(const int &, const QString &) override;
+    explicit BookMarkMenu(DWidget *parent = nullptr);
 
     // CustomMenu interface
 protected:
     void initActions() override;
 
 private slots:
-    void slotActionTrigger(QAction *);
-    void slotPrevScale();
-    void slotNextScale();
-    void slotDocProxyMsg(const QString &);
+    void slotDelete();
 
-private:
-    void __ChangeScale(const int &);
-    void OnFileOpenOk(const QString &sPath);
-    void onShortKey(const QString &);
-
-private:
-    QList<int> dataList;
-    int     m_nCurrentIndex = 0;
-    QStringList     shortKeyList;                 // 要处理的消息类型
 };
 
-#endif // SCALEMENU_H
+#endif // BOOKMARKMENU_H

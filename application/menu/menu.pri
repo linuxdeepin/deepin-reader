@@ -5,7 +5,9 @@ HEADERS += \
     $$PWD/ColorWidgetAction.h \
     $$PWD/HandleMenu.h \
     $$PWD/ScaleMenu.h \
-    $$PWD/TitleMenu.h
+    $$PWD/TitleMenu.h \
+    $$PWD/NoteMenu.h \
+    $$PWD/BookMarkMenu.h
 
 SOURCES += \
     $$PWD/DefaultOperationMenu.cpp \
@@ -14,5 +16,7 @@ SOURCES += \
     $$PWD/ColorWidgetAction.cpp \
     $$PWD/HandleMenu.cpp \
     $$PWD/ScaleMenu.cpp \
-    $$PWD/TitleMenu.cpp
+    $$PWD/TitleMenu.cpp \
+    $$PWD/NoteMenu.cpp \
+    $$PWD/BookMarkMenu.cpp
 

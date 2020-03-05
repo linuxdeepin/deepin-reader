@@ -21,8 +21,6 @@
 
 #include "../CustomItemWidget.h"
 
-#include <DMenu>
-
 /**
  * @brief The NotesItemWidget class
  * @brief   注释item
@@ -35,10 +33,6 @@ class NotesItemWidget : public CustomItemWidget
 
 public:
     explicit NotesItemWidget(DWidget *parent = nullptr);
-
-signals:
-    void sigSelectItem(const QString &);
-    void sigDeleteItem(const QString &);
 
 public:
     // IObserver interface
@@ -73,6 +67,8 @@ public:
     QString strPage() const;
     void setStrPage(const QString &strPage);
 
+    void CopyItemText();
+
     // QWidget interface
 protected:
     void paintEvent(QPaintEvent *e) override;
@@ -83,9 +79,6 @@ private:
     void __InitConnections();
 
 private slots:
-    void slotDltNoteContant();
-    void slotCopyContant();
-    void slotShowContextMenu(const QPoint &);
     void slotUpdateTheme();
 
 private:
@@ -95,7 +88,6 @@ private:
     QString     m_strPage = "";     // 注释页面
     int         m_nNoteType = NOTE_HIGHLIGHT;   // 注释类型, 0,高亮注释; 1,页面注释
     bool        m_bPaint = false;
-    DMenu       *m_menu = nullptr;
 };
 
 #endif // NOTESITEMWIDGET_H

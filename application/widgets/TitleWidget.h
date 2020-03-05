@@ -53,6 +53,7 @@ private slots:
     void on_thumbnailBtn_clicked();
     void on_settingBtn_clicked();
     void on_handleShapeBtn_clicked();
+    void on_searchBtn_clicked();
     void SlotScaleMenuBtnClicked();
 
     void SlotSetCurrentTool(const QString &);
@@ -94,6 +95,8 @@ private:
     DPushButton     *m_pScaleMenuBtn = nullptr;
     DIconButton     *m_pNextBtn = nullptr;
     ScaleMenu       *m_pScaleMenu = nullptr;
+
+    DIconButton     *m_pSearchBtn = nullptr;
 };
 
 #endif  // TITLEWIDGET_H

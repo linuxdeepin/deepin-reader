@@ -80,8 +80,8 @@ public:
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
-    // CustomWidget interface
 
+    // CustomWidget interface
 public:
     int qDealWithShortKey(const QString &) override;
 
@@ -98,9 +98,9 @@ private slots:
     void slotDeleteBookItem(const QString &);
     void slotLoadImage(const int &, const QImage &);
     void slotUpdateTheme();
-    void slotRightSelectItem(const QString &);
     void slotSelectItemBackColor(QListWidgetItem *);
 
+    void slotListMenuClick(const int &);
 protected:
     void initWidget() override;
 
