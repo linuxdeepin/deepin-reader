@@ -54,8 +54,12 @@ int DataStackedWidget::dealWithData(const int &msgType, const QString &msgConten
             nRes = m_pBookMarkWidget ->dealWithData(msgType, msgContent);
             if (nRes != MSG_OK) {
                 nRes = m_pNotesWidget->dealWithData(msgType, msgContent);
-                if (nRes == MSG_OK)
-                    return MSG_OK;
+                if (nRes != MSG_OK) {
+                    nRes = m_pSearchResWidget->dealWithData(msgType, msgContent);
+
+                    if (nRes == MSG_OK)
+                        return MSG_OK;
+                }
             }
         }
     }
@@ -112,12 +116,14 @@ void DataStackedWidget::InitWidgets()
             m_pThWidget, SLOT(SlotSetBookMarkState(const int &, const int &)));
 
     insertWidget(WIDGET_NOTE, m_pNotesWidget);
-//    insertWidget(WIDGET_SEARCH, new SearchResWidget(this));
 
-//    auto buffWidget = new BufferWidget(this);
-//    connect(this, SIGNAL(sigSearchWidgetState(const int &)), buffWidget, SLOT(SlotSetSpinnerState(const int &)));
+    m_pSearchResWidget = new SearchResWidget(this);
+    insertWidget(WIDGET_SEARCH, m_pSearchResWidget);
 
-//    insertWidget(WIDGET_BUFFER, buffWidget);
+    m_pBuffWidget = new BufferWidget(this);
+    connect(this, SIGNAL(sigSearchWidgetState(const int &)), m_pBuffWidget, SLOT(SlotSetSpinnerState(const int &)));
+
+    insertWidget(WIDGET_BUFFER, m_pBuffWidget);
     setCurrentIndex(WIDGET_THUMBNAIL);
 }
 

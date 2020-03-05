@@ -22,7 +22,6 @@
 #include "CustomControl/CustomWidget.h"
 
 class DocummentProxy;
-class FindWidget;
 class QStackedLayout;
 class MainTabBar;
 class PlayControlWidget;
@@ -76,10 +75,6 @@ public:
 protected:
     void initWidget() override;
 
-    // QWidget interface
-protected:
-    void resizeEvent(QResizeEvent *event) override;
-
 private:
     void InitConnections();
     void onShowFileAttr();
@@ -120,7 +115,6 @@ private slots:
 private:
     QStackedLayout      *m_pStackedLayout = nullptr;
     MainTabBar          *m_pTabBar = nullptr;
-    FindWidget          *m_pFindWidget = nullptr;
     PlayControlWidget   *m_pctrlwidget = nullptr;
 };
 

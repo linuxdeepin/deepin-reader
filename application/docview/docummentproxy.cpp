@@ -274,8 +274,10 @@ bool DocummentProxy::saveas(const QString &filepath, bool withChanges)
     return false;
 }
 
-void DocummentProxy::search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color)
+void DocummentProxy::search(const QString &strtext, const QMap<int, stSearchRes> &resmap, const QColor &color)
 {
+    Q_UNUSED(resmap);
+
     if (!m_documment || bcloseing)
         return ;
 //    qDebug() << "search";

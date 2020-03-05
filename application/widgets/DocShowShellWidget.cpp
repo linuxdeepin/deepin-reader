@@ -5,9 +5,8 @@
 #include <QStackedLayout>
 
 #include "FileViewWidget.h"
-//#include "FindWidget.h"
+#include "FindWidget.h"
 #include "FileAttrWidget.h"
-//#include "PlayControlWidget.h"
 
 #include "MsgModel.h"
 
@@ -19,9 +18,7 @@
 
 DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
     : CustomWidget("DocShowShellWidget", parent)
-//      m_pctrlwidget(new  PlayControlWidget(this))
 {
-//    m_pctrlwidget->hide();
 
     initWidget();
     initConnections();
@@ -37,58 +34,6 @@ DocShowShellWidget::~DocShowShellWidget()
 {
     dApp->m_pModelService->removeObserver(this);
 }
-
-//void DocShowShellWidget::resizeEvent(QResizeEvent *event)
-//{
-//    int nState = dApp->m_pAppInfo->qGetCurShowState();
-//    if (nState == FILE_NORMAL || nState == FILE_FULLSCREEN) {
-//        auto findWidget = this->findChild<FindWidget *>();
-//        if (findWidget && findWidget->isVisible()) {
-//            int nParentWidth = this->width();
-//            findWidget->showPosition(nParentWidth);
-//        }
-//    }
-//    CustomWidget::resizeEvent(event);
-//}
-
-//  全屏 \ 幻灯片放映, 显示 关闭按钮
-//void DocShowShellWidget::slotShowCloseBtn(const int &iFlag)
-//{
-//    DIconButton *closeBtn = nullptr;
-
-//    auto iconBtnList = this->findChildren<DIconButton *>();
-//    foreach (auto btn, iconBtnList) {
-//        if (/*btn->objectName() == "slider" ||*/ btn->objectName() == "fullscreen") {
-//            closeBtn = btn;
-//            break;
-//        }
-//    }
-
-//    if (closeBtn == nullptr) {
-//        closeBtn = new DIconButton(this);
-
-//        connect(closeBtn, &DIconButton::clicked, this, &DocShowShellWidget::slotBtnCloseClicked);
-
-//        closeBtn->setIconSize(QSize(50, 50));
-//        closeBtn->setFixedSize(QSize(50, 50));
-//    }
-
-//    /* if (iFlag == 2) {
-//         QString sIcon = PF::getImagePath("exit_slider", Pri::g_actions);
-//         closeBtn->setIcon(QIcon(sIcon));
-//         closeBtn->setObjectName("slider");
-//     } else */{
-//        QString sIcon = PF::getImagePath("exit_fullscreen", Pri::g_actions);
-//        closeBtn->setIcon(QIcon(sIcon));
-//        closeBtn->setObjectName("fullscreen");
-//    }
-
-//    int nScreenWidth = qApp->desktop()->geometry().width();
-//    closeBtn->move(nScreenWidth - 50, 0);
-
-//    closeBtn->show();
-//    closeBtn->raise();
-//}
 
 //  注释窗口
 void DocShowShellWidget::onOpenNoteWidget(const QString &msgContent)
@@ -196,25 +141,8 @@ void DocShowShellWidget::InitSpinner()
     m_pSpinerWidget->setLayout(hLayout);
 }
 
-//void DocShowShellWidget::slotBtnCloseClicked()
-//{
-//    QJsonObject obj;
-//    obj.insert("type", "ShortCut");
-//    obj.insert("key",  KeyStr::g_esc);
-
-//    QJsonDocument doc = QJsonDocument(obj);
-//    notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
-//}
-
 void DocShowShellWidget::slotUpdateTheme()
 {
-//    auto closeBtn = this->findChild<DIconButton *>();
-//    if (nullptr != closeBtn) {
-//        if (closeBtn->objectName() == "fullscreen") {
-//            QString sIcon = PF::getImagePath("exit_fullscreen", Pri::g_actions);
-//            closeBtn->setIcon(QIcon(sIcon));
-//        }
-//    }
 }
 
 void DocShowShellWidget::SlotOpenFileOk()
@@ -225,6 +153,13 @@ void DocShowShellWidget::SlotOpenFileOk()
     m_pSpinerWidget = nullptr;
 
     emit sigOpenFileOk();
+}
+
+void DocShowShellWidget::SlotFindOperation(const int &iType, const QString &strFind)
+{
+    if (m_pFileViewWidget) {
+        m_pFileViewWidget->SetFindOperation(iType, strFind);
+    }
 }
 
 void DocShowShellWidget::initConnections()
@@ -267,6 +202,18 @@ bool DocShowShellWidget::OpenFilePath(const QString &sPath)
     return m_pFileViewWidget->OpenFilePath(sPath);
 }
 
+void DocShowShellWidget::ShowFindWidget()
+{
+    if (m_pFindWidget == nullptr) {
+        m_pFindWidget = new FindWidget(this);
+        connect(m_pFindWidget, SIGNAL(sigFindOperation(const int &, const QString &)), SLOT(SlotFindOperation(const int &, const QString &)));
+    }
+
+    int nParentWidth = this->width();
+    m_pFindWidget->showPosition(nParentWidth);
+    m_pFindWidget->setSearchEditFocus();
+}
+
 void DocShowShellWidget::initWidget()
 {
     m_playout = new QStackedLayout;
@@ -282,5 +229,15 @@ void DocShowShellWidget::initWidget()
     m_playout->addWidget(m_pFileViewWidget);
 
     this->setLayout(m_playout);
+}
+
+void DocShowShellWidget::resizeEvent(QResizeEvent *event)
+{
+    if (m_pFindWidget && m_pFindWidget->isVisible()) {
+        int nParentWidth = this->width();
+        m_pFindWidget->showPosition(nParentWidth);
+    }
+
+    CustomWidget::resizeEvent(event);
 }
 

@@ -87,6 +87,14 @@ public:
 signals:
     void sigFlushSearchWidget(const QString &);
 
+public:
+    // IObserver interface
+    int dealWithData(const int &, const QString &) override;
+    int getSearchPage(const int &);
+
+protected:
+    void initWidget() override;
+
 private slots:
     void slotFlushSearchWidget(const QString &);
     void slotGetSearchContant(stSearchRes);
@@ -95,10 +103,8 @@ private slots:
     void slotSelectItem(QListWidgetItem *);
     void slotStopFind();
 
-protected:
-    void initWidget() override;
-
 private:
+    void OnOpenFileOk(const QString &);
     void __ClearSearchContent();
     void initConnections();
     void initSearchList(const QList<stSearchRes> &);
@@ -115,10 +121,6 @@ private:
     bool m_bShowList = false;                        // 是否显示搜索列表
     bool    m_isSearch = false;                     //  是否开启了搜索 , 标志位
 
-public:
-    // IObserver interface
-    int dealWithData(const int &, const QString &) override;
-    int getSearchPage(const int &);
 };
 
 #endif  // NOTESFORM_H

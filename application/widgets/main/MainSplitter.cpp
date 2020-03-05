@@ -147,3 +147,8 @@ void MainSplitter::OnExitSliderShow()
 {
     m_pLeftWidget->setVisible(m_bOldState);
 }
+
+void MainSplitter::ShowFindWidget()
+{
+    m_pDocWidget->ShowFindWidget();
+}

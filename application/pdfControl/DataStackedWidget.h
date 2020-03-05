@@ -24,8 +24,10 @@
 DWIDGET_USE_NAMESPACE
 
 class BookMarkWidget;
+class BufferWidget;
 class CatalogWidget;
 class NotesWidget;
+class SearchResWidget;
 class ThumbnailWidget;
 
 class DataStackedWidget : public DStackedWidget
@@ -61,6 +63,8 @@ private:
     CatalogWidget       *m_pCatalogWidget = nullptr;
     BookMarkWidget      *m_pBookMarkWidget = nullptr;
     NotesWidget         *m_pNotesWidget = nullptr;
+    SearchResWidget     *m_pSearchResWidget = nullptr;
+    BufferWidget        *m_pBuffWidget = nullptr;
 };
 
 #endif // DATASTACKEDWIDGET_H

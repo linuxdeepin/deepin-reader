@@ -82,26 +82,18 @@ void FindWidget::handleContentChanged()
     QString strFind = m_pSearchEdit->text();
     if (strFind != "") {
         onSetEditAlert(0);
-        notifyMsg(MSG_FIND_START, strFind);
+        emit sigFindOperation(E_FIND_CONTENT, strFind);
     }
 }
 
 void FindWidget::slotFindNextBtnClicked()
 {
-    DocummentProxy *_proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
-    if (_proxy) {
-        _proxy->findNext();
-    }
-    this->raise();
+    emit sigFindOperation(E_FIND_NEXT, "");
 }
 
 void FindWidget::slotFindPrevBtnClicked()
 {
-    DocummentProxy *_proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
-    if (_proxy) {
-        _proxy->findPrev();
-    }
-    this->raise();
+    emit sigFindOperation(E_FIND_PREV, "");
 }
 
 //  文本内容变化, 为空, 则取消红色提示
@@ -118,7 +110,7 @@ void FindWidget::slotEditAborted()
 {
 //    qDebug() << __FUNCTION__;
     onSetEditAlert(0);
-    notifyMsg(MSG_CLEAR_FIND_CONTENT);
+    emit sigFindOperation(E_FIND_EXIT, "");
 }
 
 int FindWidget::dealWithData(const int &msgType, const QString &msgContent)
@@ -194,9 +186,7 @@ void FindWidget::initConnection()
 void FindWidget::onSetEditAlert(const int &iFlag)
 {
     if (m_pSearchEdit) {
-
         bool bAlert = iFlag == 1 ? true : false;
-
         m_pSearchEdit->setAlert(bAlert);
     }
 }

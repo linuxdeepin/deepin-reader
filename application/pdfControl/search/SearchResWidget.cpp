@@ -178,6 +178,16 @@ void SearchResWidget::slotStopFind()
     }
 }
 
+//  打开成功之后, 链接搜索信号
+void SearchResWidget::OnOpenFileOk(const QString &sPath)
+{
+    DocummentProxy *_proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy(sPath);
+    if (_proxy) {
+        connect(_proxy, SIGNAL(signal_searchRes(stSearchRes)), SLOT(slotGetSearchContant(stSearchRes)));
+        connect(_proxy, SIGNAL(signal_searchover()), SLOT(slotSearchOver()));
+    }
+}
+
 void SearchResWidget::initWidget()
 {
     auto m_pVLayout = new QVBoxLayout;
@@ -233,17 +243,12 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
         item->setSizeHint(QSize(LEFTMINWIDTH, 80));
 
         auto itemWidget = new SearchItemWidget(this);
-//        itemWidget->setNoteSigne(false);
+
         itemWidget->setLabelPage(page, 1);
         itemWidget->setTextEditText(text);
         itemWidget->setSerchResultText(tr("%1 items found").arg(resultNum));
         itemWidget->setMinimumSize(QSize(LEFTMINWIDTH - 5, 80));
 
-//    auto item = new QListWidgetItem(m_pSearchList);
-//    item->setFlags(Qt::NoItemFlags);
-//    item->setSizeHint(QSize(LEFTMINWIDTH, 80));
-
-//        m_pSearchList->addItem(item);
         m_pSearchList->setItemWidget(item, itemWidget);
     }
 }
@@ -318,11 +323,11 @@ void SearchResWidget::clearItemColor()
  */
 int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (MSG_CLEAR_FIND_CONTENT == msgType) {
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        OnOpenFileOk(msgContent);
+    } else if (MSG_CLEAR_FIND_CONTENT == msgType) {
         __ClearSearchContent();
-    }
-
-    if (msgType == MSG_FIND_START) {  //  查询内容
+    } else if (msgType == MSG_FIND_START) {  //  查询内容
         if (msgContent != QString("")) {
             emit sigFlushSearchWidget(msgContent);
         }

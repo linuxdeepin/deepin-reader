@@ -40,6 +40,9 @@ public:
     explicit FindWidget(DWidget *parent = nullptr);
     ~FindWidget() override;
 
+signals:
+    void sigFindOperation(const int &, const QString &);
+
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;

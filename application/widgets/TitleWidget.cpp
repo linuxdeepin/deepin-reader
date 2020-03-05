@@ -228,7 +228,12 @@ void TitleWidget::on_handleShapeBtn_clicked()
 
 void TitleWidget::on_searchBtn_clicked()
 {
+    QJsonObject obj;
+    obj.insert("type", "ShortCut");
+    obj.insert("key", KeyStr::g_ctrl_f);
 
+    QJsonDocument doc = QJsonDocument(obj);
+    notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
 }
 
 // 比例按钮

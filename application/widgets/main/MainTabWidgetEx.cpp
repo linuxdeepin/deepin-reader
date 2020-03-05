@@ -160,16 +160,6 @@ void MainTabWidgetEx::initWidget()
     this->setLayout(mainLayout);
 }
 
-void MainTabWidgetEx::resizeEvent(QResizeEvent *event)
-{
-    auto findWidget = this->findChild<FindWidget *>();
-    if (findWidget && findWidget->isVisible()) {
-        int nParentWidth = this->width();
-        findWidget->showPosition(nParentWidth);
-    }
-    CustomWidget::resizeEvent(event);
-}
-
 void MainTabWidgetEx::InitConnections()
 {
 }
@@ -504,13 +494,13 @@ void MainTabWidgetEx::ShowFindWidget()
     if (nState == SLIDER_SHOW)
         return;
 
-    if (m_pFindWidget == nullptr) {
-        m_pFindWidget = new FindWidget(this);
+    DWidget *w = m_pStackedLayout->currentWidget();
+    if (w) {
+        auto splitter = qobject_cast<MainSplitter *>(w);
+        if (splitter) {
+            splitter->ShowFindWidget();
+        }
     }
-
-    int nParentWidth = this->width();
-    m_pFindWidget->showPosition(nParentWidth);
-    m_pFindWidget->setSearchEditFocus();
 }
 
 //  开启 幻灯片

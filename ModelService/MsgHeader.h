@@ -45,6 +45,14 @@ enum E_CENTRAL_MSG {
     E_CENTRAL_MSG_END
 };
 
+//  搜索框消息
+enum E_FIND_WIDGET_MSG {
+    E_FIND_PREV,
+    E_FIND_NEXT,
+    E_FIND_EXIT,
+    E_FIND_CONTENT
+};
+
 //  消息类型
 enum MSG_TYPE {
     MSG_TYPE_BEGIN = E_CENTRAL_MSG_END + 50,

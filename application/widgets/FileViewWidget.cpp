@@ -570,3 +570,18 @@ int FileViewWidget::qDealWithShortKey(const QString &sKey)
     }
     return MSG_NO_OK;
 }
+
+void FileViewWidget::SetFindOperation(const int &iType, const QString &sFind)
+{
+    if (m_pProxy) {
+        if (iType == E_FIND_NEXT) {
+            m_pProxy->findNext();
+        } else if (iType == E_FIND_PREV) {
+            m_pProxy->findPrev();
+        } else if (iType == E_FIND_EXIT) {
+            m_pProxy->clearsearch();
+        } else {
+            m_pProxy->search(sFind);
+        }
+    }
+}

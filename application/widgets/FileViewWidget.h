@@ -52,6 +52,7 @@ signals:
 public:
     int dealWithData(const int &, const QString &) override;
     int qDealWithShortKey(const QString &) override;
+    void SetFindOperation(const int &, const QString &);
 
     // CustomWidget interface
 protected:

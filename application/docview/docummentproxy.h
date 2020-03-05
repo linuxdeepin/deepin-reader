@@ -4,6 +4,7 @@
 #include "commonstruct.h"
 #include <QObject>
 #include <DWidget>
+#include <QMap>
 
 class DocummentProxy: public QObject
 {
@@ -36,7 +37,7 @@ public:
     QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow);
     bool save(const QString &filepath, bool withChanges);
     bool saveas(const QString &filepath, bool withChanges);
-    void search(const QString &strtext, QMap<int, stSearchRes> &resmap, const QColor &color);
+    void search(const QString &strtext, const QMap<int, stSearchRes> &resmap = QMap<int, stSearchRes>(), const QColor &color = Qt::red);
     void clearsearch();
     int currentPageNo();
     bool pageJump(int pagenum);

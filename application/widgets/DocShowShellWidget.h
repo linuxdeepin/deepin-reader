@@ -7,6 +7,7 @@
 
 class QStackedLayout;
 
+class FindWidget;
 class FileViewWidget;
 class NoteViewWidget;
 
@@ -36,12 +37,18 @@ public:
     int dealWithData(const int &, const QString &) override;
 
     bool OpenFilePath(const QString &);
+    void ShowFindWidget();
+
+    // CustomWidget interface
+protected:
+    void initWidget() override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private slots:
-//    void slotShowCloseBtn(const int &);
-//    void slotBtnCloseClicked();
     void slotUpdateTheme();
     void SlotOpenFileOk();
+
+    void SlotFindOperation(const int &, const QString &);
 
 private:
     void initConnections();
@@ -52,12 +59,9 @@ private:
     void __ShowPageNoteWidget(const QString &);
     void InitSpinner();
 
-    // CustomWidget interface
-protected:
-    void initWidget() override;
-
 private:
     FileViewWidget      *m_pFileViewWidget = nullptr;
+    FindWidget          *m_pFindWidget = nullptr;
     NoteViewWidget      *m_pNoteViewWidget = nullptr;
 
     DSpinner            *m_pSpiner = nullptr;
