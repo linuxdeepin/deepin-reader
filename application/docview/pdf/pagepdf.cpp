@@ -13,7 +13,6 @@ public:
 
     ~PagePdfPrivate() override
     {
-        //        qDebug() << "~PagePdfPrivate";
         if (m_page) {
             delete m_page;
             m_page = nullptr;
@@ -45,7 +44,6 @@ public:
         height = m_imageheight * scale;
         if (!m_page)
             return false;
-//        qDebug() << "getSlideImage width:" << width << " height:" << height;
         image = m_page->renderToImage(xres * scale * pixelratiof, yres * scale * pixelratiof);
         image.setDevicePixelRatio(pixelratiof);
         return true;
@@ -605,12 +603,12 @@ QString PagePdf::addTextAnnotation(const QPoint &pos, const QColor &color, TextA
 
     double x = pos.x() / d->m_imagewidth * d->m_scale;
     double y = pos.y() / d->m_imageheight * d->m_scale;
-    double width = 20 / d->m_imagewidth;
-    double height = 20 / d->m_imageheight;
+    double width = ICONANNOTE_WIDTH / d->m_imagewidth;
+    double height = ICONANNOTE_WIDTH / d->m_imageheight;
     qDebug() << __FUNCTION__ << width << height;
     QRectF boundary;
-    boundary.setX(x);
-    boundary.setY(y);
+    boundary.setX(x - width / 2.0);
+    boundary.setY(y - height / 2.0);
     boundary.setWidth(width);
     boundary.setHeight(height);
 

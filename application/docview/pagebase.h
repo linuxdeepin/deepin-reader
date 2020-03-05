@@ -14,8 +14,8 @@
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
-#define ICONANNOTE_WIDTH    46
-#define ICONANNOTE_HEIGHT   46
+#define ICONANNOTE_WIDTH    20
+
 namespace Page {
 enum LinkType_EM {
     LinkType_NULL = 0,

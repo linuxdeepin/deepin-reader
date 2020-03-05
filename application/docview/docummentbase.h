@@ -306,6 +306,7 @@ public:
     QString pagenum2label(int index);
     int label2pagenum(QString label);
     bool haslabel();
+    QPoint transformPoint(const QPoint &pt, RotateType_EM type, double scale);
 
 
 signals:

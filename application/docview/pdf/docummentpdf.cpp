@@ -651,18 +651,54 @@ QString DocummentPDF::addTextAnnotation(const QPoint &pos, const QColor &color, 
     QString uuid;
 
     if (ipage < d->m_pages.size() && ipage >= 0) {
-
-        double curwidth = d->m_imagewidth * d->m_scale;
-        double curheight = d->m_imageheight * d->m_scale;
-        double leftspace = (d->m_widgets.at(ipage)->width() - curwidth) / 2;
-        double topspace = (d->m_widgets.at(ipage)->height() - curheight) / 2;
-        double curwidgety = d->m_widgets.at(ipage)->y();
-        if (pos.x() > leftspace && pos.x() < curwidth + leftspace &&
-                pos.y() > curwidgety && pos.y() < curwidgety + curheight) {
+        double curwidth, curheight, leftspace, topspace;
+        curwidth = curheight = leftspace = topspace = 0.0;
+        switch (d->m_rotate) {
+        case RotateType_0:
+        case RotateType_180: {
+            curwidth = d->m_imagewidth * d->m_scale;
+            curheight = d->m_imageheight * d->m_scale;
+        }
+        break;
+        case RotateType_90:
+        case RotateType_270: {
+            curheight = d->m_imagewidth * d->m_scale;
+            curwidth = d->m_imageheight * d->m_scale;
+        }
+        break;
+        }
+        if (ViewMode_FacingPage == d->m_viewmode) {
+            topspace = (d->m_widgets.at(ipage)->height() - curheight) / 2.0;
+            leftspace = (d->m_widgets.at(ipage)->width() - 2 * curwidth) / 3.0;
+            if (ipage % 2 != 0) {
+                pt.setX(pos.x() - curwidth - 2 * leftspace);
+                pt.setY(pt.y() - topspace);
+            } else {
+                pt.setX(pos.x() - leftspace);
+                pt.setY(pt.y() - topspace);
+            }
+        } else {
+            leftspace = (d->m_widgets.at(ipage)->width() - curwidth) / 2.0;
+            topspace = (d->m_widgets.at(ipage)->height() - curheight) / 2.0;
             pt.setX(pos.x() - leftspace);
             pt.setY(pt.y() - topspace);
-            uuid = static_cast<PagePdf *>(d->m_pages.at(ipage))->addTextAnnotation(pt, color, type);
         }
+        pt = transformPoint(pt, d->m_rotate, d->m_scale);
+        int x, y;
+        if (pt.x() > ICONANNOTE_WIDTH / 2) {
+            x = (pt.x() + ICONANNOTE_WIDTH / 2) > curwidth ? curwidth - ICONANNOTE_WIDTH / 2 : pt.x();
+        } else {
+            x = (pt.x() < ICONANNOTE_WIDTH / 2) ? ICONANNOTE_WIDTH / 2 : pt.x();
+        }
+        pt.setX(x);
+        if (pt.y() > ICONANNOTE_WIDTH / 2) {
+            y = (pt.y() + ICONANNOTE_WIDTH / 2) > curheight ? curheight - ICONANNOTE_WIDTH / 2 : pt.y();
+        } else {
+            y = (pt.y() < ICONANNOTE_WIDTH / 2) ? ICONANNOTE_WIDTH / 2 : pt.y();
+        }
+        pt.setY(y);
+
+        uuid = static_cast<PagePdf *>(d->m_pages.at(ipage))->addTextAnnotation(pt, color, type);
     }
     return  uuid;
 }

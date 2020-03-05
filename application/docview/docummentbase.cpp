@@ -1954,6 +1954,37 @@ bool DocummentBase::haslabel()
     return d->m_label2pagenum.size() > 0 ? true : false;
 }
 
+QPoint DocummentBase::transformPoint(const QPoint &pt, RotateType_EM type, double scale)
+{
+    Q_D(DocummentBase);
+    QPoint pos;
+    double curwidth = d->m_imagewidth * scale;
+    double curheight = d->m_imageheight * scale;
+    switch (type) {
+    case RotateType_0:
+    case RotateType_Normal: {
+        pos = pt;
+    }
+    break;
+    case RotateType_90: {
+        pos.setX(pt.y());
+        pos.setY(curheight - pt.x());
+    }
+    break;
+    case RotateType_180: {
+        pos.setX(curwidth - pt.x());
+        pos.setY(curheight - pt.y());
+    }
+    break;
+    case RotateType_270: {
+        pos.setX(curwidth - pt.y());
+        pos.setY(pt.x());
+    }
+    break;
+    }
+    return  pos;
+}
+
 
 
 
