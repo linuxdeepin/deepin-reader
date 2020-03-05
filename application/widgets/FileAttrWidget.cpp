@@ -5,12 +5,12 @@
 #include <DScrollArea>
 #include <DWindowCloseButton>
 #include <QFileInfo>
-
+#include <DWidgetUtil>
 #include "AttrScrollWidget.h"
 
 #include "docview/docummentproxy.h"
 #include "CustomControl/DFMGlobal.h"
-
+#include "CustomControl/ImageLabel.h"
 #include "main/MainTabWidgetEx.h"
 
 FileAttrWidget::FileAttrWidget(DWidget *parent)
@@ -166,7 +166,7 @@ int FileAttrWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_NOTIFY_KEY_MSG == msgType && KeyStr::g_esc == msgContent)
         close();
-    return 0;
+    return MSG_NO_OK;
 }
 
 void FileAttrWidget::notifyMsg(const int &, const QString &)
@@ -190,7 +190,7 @@ void FileAttrWidget::initCloseBtn()
     auto closeButton = new DWindowCloseButton(this);
     closeButton->setFixedSize(QSize(50, 50));
     closeButton->setIconSize(QSize(50, 50));
-    connect(closeButton, &DWindowCloseButton::clicked, this, &FileAttrWidget::slotBtnCloseClicked);
+    connect(closeButton, &DWindowCloseButton::clicked, this, &DAbstractDialog::close);
 
     layout->addWidget(closeButton);
 
@@ -209,9 +209,4 @@ void FileAttrWidget::initImageLabel()
     vlayout->addWidget(/*labelImage*/ frameImage);
 
     m_pVBoxLayout->addItem(vlayout);
-}
-
-void FileAttrWidget::slotBtnCloseClicked()
-{
-    this->close();
 }

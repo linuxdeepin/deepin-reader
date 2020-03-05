@@ -16,7 +16,7 @@ void MainSplitterPrivate::qDealWithData(const int &nType, const QString &sValue)
         SetLeftWidgetIndex(sValue);
     } else if (nType == MSG_VIEWCHANGE_DOUBLE_SHOW) {
         OnSetViewChange(sValue);
-    } else if (nType == MSG_VIEWCHANGE_ROTATE) {
+    } else if (nType == MSG_VIEWCHANGE_ROTATE_VALUE) {
         OnSetViewRotate(sValue);
     } else if (nType == MSG_FILE_SCALE) {
         OnSetViewScale(sValue);

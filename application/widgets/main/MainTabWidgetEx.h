@@ -27,10 +27,8 @@ class QStackedLayout;
 class MainTabBar;
 class PlayControlWidget;
 
-//  当前的操作状态
-enum E_CUR_STATE {
-    SLIDER_SHOW
-};
+
+class MainTabWidgetExPrivate;
 
 class MainTabWidgetEx : public CustomWidget
 {
@@ -62,7 +60,7 @@ public:
 public:
     QStringList qGetAllPath() const;
     QString qGetCurPath() const;
-    int GetCurFileState(const QString &);
+    int GetFileChange(const QString &);
     FileDataModel qGetFileData(const QString &) const;
     void SetFileData(const QString &, const FileDataModel &);
 
@@ -72,7 +70,9 @@ public:
     DocummentProxy *getCurFileAndProxy(const QString &sPath = "") const;
 
     void showPlayControlWidget() const;
+
     int getCurrentState() const;
+    void setCurrentState(const int &nCurrentState);
 
 protected:
     void initWidget() override;
@@ -90,7 +90,6 @@ private:
 
     void OnTabBarMsg(const QString &);
     void OnTabFileChangeMsg(const QString &);
-    void SetFileChange(const QString &sPath, const int &iState);
 
     void SaveFile(const int &nSaveType, const QString &);
     void OnSaveAsFile();
@@ -99,10 +98,17 @@ private:
     void OnSaveFile();
     void OnPrintFile();
     void ShowFindWidget();
+
     void OnOpenSliderShow();
+public:
     void OnExitSliderShow();
 
-    void OpenCurFileFolder();
+private:
+    void OnOpenMagnifer();
+public:
+    void OnExitMagnifer();
+
+private:
     void OnShortCutKey_Esc();
 
     void OnKeyPress(const QString &);
@@ -113,16 +119,18 @@ private slots:
     void SlotCloseTab(const QString &);
 
 private:
-    QStackedLayout  *m_pStackedLayout = nullptr;
-    MainTabBar      *m_pTabBar = nullptr;
-
-    QMap<QString, DocummentProxy *> m_strOpenFileAndProxy;
-
+    QStackedLayout      *m_pStackedLayout = nullptr;
+    MainTabBar          *m_pTabBar = nullptr;
     FindWidget          *m_pFindWidget = nullptr;
     PlayControlWidget   *m_pctrlwidget = nullptr;
-    QString             m_strSliderPath = "";
 
-    int                 m_nCurrentState = -1;
+    MainTabWidgetExPrivate  *d_ptr = nullptr;
+
+//    QMap<QString, DocummentProxy *> m_strOpenFileAndProxy;
+
+//    int                 m_nCurrentState = -1;
+//    QString             m_strSliderPath = "";
+//    QString             m_strMagniferPath = "";
 };
 
 #endif // MAINTABWIDGETEX_H

@@ -7,7 +7,6 @@
 
 class QStackedLayout;
 
-//class PlayControlWidget;
 class FileViewWidget;
 class NoteViewWidget;
 
@@ -30,7 +29,6 @@ signals:
 
     void sigShowCloseBtn(const int &);
     void sigHideCloseBtn();
-//    void sigShowFileFind();
     void sigChangePlayCtrlShow(bool bshow);
 
     // IObserver interface
@@ -38,20 +36,11 @@ public:
     int dealWithData(const int &, const QString &) override;
 
     bool OpenFilePath(const QString &);
-    void OnOpenSliderShow();
-    void OnExitSliderShow();
-
-    // QWidget interface
-//protected:
-//    void resizeEvent(QResizeEvent *event) override;
 
 private slots:
-    void slotShowCloseBtn(const int &);
-//    void slotHideCloseBtn();
-//    void slotShowFindWidget();
-    void slotBtnCloseClicked();
+//    void slotShowCloseBtn(const int &);
+//    void slotBtnCloseClicked();
     void slotUpdateTheme();
-//    void slotChangePlayCtrlShow(bool bshow);
     void SlotOpenFileOk();
 
 private:
@@ -60,17 +49,14 @@ private:
     void onOpenNoteWidget(const QString &);
     void onShowNoteWidget(const QString &);
 
-    /****   begin   wzx 2020.2.18   ********/
     void __ShowPageNoteWidget(const QString &);
     void InitSpinner();
-    /****   end     wzx 2020.2.18   ********/
 
     // CustomWidget interface
 protected:
     void initWidget() override;
 
 private:
-//    PlayControlWidget   *m_pctrlwidget = nullptr;
     FileViewWidget      *m_pFileViewWidget = nullptr;
     NoteViewWidget      *m_pNoteViewWidget = nullptr;
 

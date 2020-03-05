@@ -32,8 +32,6 @@ public:
 
 signals:
     void sigSetFindWidget(const int &);
-//    void sigAppFullScreen();
-    void sigMagnifierCancel();
 
     // IObserver interface
 public:
@@ -51,8 +49,6 @@ private slots:
     void slotSetFindWidget(const int &);
     void slotUpdateTheme();
     void slotOpenFileOk(const QString &);
-//    void slotAppFullScreen();
-    void slotMagnifierCancel();
 
     void on_thumbnailBtn_clicked();
     void on_settingBtn_clicked();
@@ -60,7 +56,6 @@ private slots:
     void SlotScaleMenuBtnClicked();
 
     void SlotSetCurrentTool(const QString &);
-//    void SlotTabMsg(const QString &);
 
     void SlotCurrentScale(const int &);
 
@@ -99,8 +94,6 @@ private:
     DPushButton     *m_pScaleMenuBtn = nullptr;
     DIconButton     *m_pNextBtn = nullptr;
     ScaleMenu       *m_pScaleMenu = nullptr;
-
-    int m_nCurHandleShape = -1;  //  当前的选择工具状态
 };
 
 #endif  // TITLEWIDGET_H

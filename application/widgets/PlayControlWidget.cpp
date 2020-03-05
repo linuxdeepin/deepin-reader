@@ -42,14 +42,7 @@ PlayControlWidget::~PlayControlWidget()
 
 int PlayControlWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    /*if (msgType == MSG_NOTIFY_KEY_PLAY_MSG) {
-        __PageChangeByKey(msgContent);
-    } else*/
-    if (MSG_NOTIFY_KEY_MSG == msgType) {
-        if (KeyStr::g_space == msgContent) {
-            changePlayStatus();
-        }
-    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {
         slotUpdateTheme();
     }
 
@@ -230,19 +223,13 @@ void PlayControlWidget::slotNextClicked()
 
 void PlayControlWidget::slotExitClicked()
 {
-    QJsonObject obj;
-    obj.insert("type", "ShortCut");
-    obj.insert("key",  KeyStr::g_esc);
-
-    QJsonDocument doc = QJsonDocument(obj);
-    notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
+    MainTabWidgetEx::Instance()->OnExitSliderShow();
 }
 
 //  按了键盘 上下左右
 void PlayControlWidget::PageChangeByKey(const QString &sKey)
 {
     if (sKey == KeyStr::g_space) {
-        qDebug() << __FUNCTION__ << "           1";
         changePlayStatus();
     } else {
         if (sKey == KeyStr::g_up || sKey == KeyStr::g_pgup || sKey == KeyStr::g_left) {

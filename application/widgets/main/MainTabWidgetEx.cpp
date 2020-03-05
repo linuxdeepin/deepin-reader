@@ -26,8 +26,8 @@
 
 #include "MainTabBar.h"
 #include "MainSplitter.h"
-
 #include "MainWindow.h"
+#include "MainTabWidgetExPrivate.h"
 
 #include "business/AppInfo.h"
 #include "business/SaveDialog.h"
@@ -47,6 +47,7 @@ MainTabWidgetEx *MainTabWidgetEx::g_onlyApp = nullptr;
 MainTabWidgetEx::MainTabWidgetEx(DWidget *parent)
     : CustomWidget(MAIN_TAB_WIDGET, parent)
 {
+    d_ptr = new MainTabWidgetExPrivate(this);
     m_pMsgList = {E_APP_MSG_TYPE, E_TABBAR_MSG_TYPE, MSG_FILE_IS_CHANGE};
 
     initWidget();
@@ -97,94 +98,37 @@ int MainTabWidgetEx::dealWithData(const int &msgType, const QString &msgContent)
 
 QStringList MainTabWidgetEx::qGetAllPath() const
 {
-    QStringList pathList;
-
-    auto splitterList = this->findChildren<MainSplitter *>();
-    foreach (auto s, splitterList) {
-        QString sSplitterPath = s->qGetPath();
-        if (sSplitterPath != "") {
-            pathList.append(sSplitterPath);
-        }
-    }
-    return pathList;
+    return d_ptr->GetAllPath();
 }
 
 QString MainTabWidgetEx::qGetCurPath() const
 {
-    QWidget *w = m_pStackedLayout->currentWidget();
-    if (w) {
-        auto pSplitter = qobject_cast<MainSplitter *>(w);
-        if (pSplitter) {
-            return pSplitter->qGetPath();
-        }
-    }
-
-    return "";
+    return d_ptr->GetCurPath();
 }
 
-int MainTabWidgetEx::GetCurFileState(const QString &sPath)
+int MainTabWidgetEx::GetFileChange(const QString &sPath)
 {
-    auto splitterList = this->findChildren<MainSplitter *>();
-    foreach (auto s, splitterList) {
-        QString sSplitterPath = s->qGetPath();
-        if (sSplitterPath == sPath) {
-            return  s->qGetFileChange();
-        }
-    }
-    return -1;
+    return d_ptr->GetFileChange(sPath);
 }
 
 FileDataModel MainTabWidgetEx::qGetFileData(const QString &sPath) const
 {
-    auto splitterList = this->findChildren<MainSplitter *>();
-    foreach (auto s, splitterList) {
-        QString sSplitterPath = s->qGetPath();
-        if (sSplitterPath == sPath) {
-            return s->qGetFileData();
-        }
-    }
-    return FileDataModel();
+    return d_ptr->GetFileData(sPath);
 }
 
 void MainTabWidgetEx::SetFileData(const QString &sPath, const FileDataModel &fdm)
 {
-    auto splitterList = this->findChildren<MainSplitter *>();
-    foreach (auto s, splitterList) {
-        QString sSplitterPath = s->qGetPath();
-        if (sSplitterPath == sPath) {
-            s->setFileData(fdm);
-            break;
-        }
-    }
-}
-
-void MainTabWidgetEx::SetFileChange(const QString &sPath, const int &iState)
-{
-    auto splitterList = this->findChildren<MainSplitter *>();
-    foreach (auto s, splitterList) {
-        QString sSplitterPath = s->qGetPath();
-        if (sSplitterPath == sPath) {
-            s->qSetFileChange(iState);
-            break;
-        }
-    }
+    d_ptr->SetFileData(sPath, fdm);
 }
 
 void MainTabWidgetEx::InsertPathProxy(const QString &sPath, DocummentProxy *proxy)
 {
-    m_strOpenFileAndProxy.insert(sPath, proxy);
+    d_ptr->InsertPathProxy(sPath, proxy);
 }
 
 DocummentProxy *MainTabWidgetEx::getCurFileAndProxy(const QString &sPath) const
 {
-    QString sTempPath = sPath;
-    if (sTempPath == "") {
-        sTempPath = qGetCurPath();
-    }
-    if (m_strOpenFileAndProxy.contains(sTempPath)) {
-        return m_strOpenFileAndProxy[sTempPath];
-    }
-    return  nullptr;
+    return d_ptr->getCurFileAndProxy(sPath);
 }
 
 void MainTabWidgetEx::showPlayControlWidget() const
@@ -299,7 +243,8 @@ void MainTabWidgetEx::OnAppExit()
             SaveFile(MSG_NOT_CHANGE_SAVE_FILE, sSplitterPath);
         }
     }
-    for (auto it = m_strOpenFileAndProxy.begin(); it != m_strOpenFileAndProxy.end(); it++) {
+    auto mapIt = d_ptr->getOpenFileAndProxy();
+    for (auto it = mapIt.begin(); it != mapIt.end(); it++) {
         if (it.value() != nullptr)
             it.value()->closeFileAndWaitThreadClearEnd();
     }
@@ -350,11 +295,11 @@ void MainTabWidgetEx::OnTabBarMsg(const QString &s)
     } else if (s == "Slide show") { //  开启幻灯片
         OnOpenSliderShow();
     } else if (s == "Magnifer") {   //  开启放大镜
-
+        OnOpenMagnifer();
     } else if (s == "Document info") {
         onShowFileAttr();
     } else if (s == "Display in file manager") {    //  文件浏览器 显示
-        OpenCurFileFolder();
+        d_ptr->OpenCurFileFolder();
     }
 }
 
@@ -362,7 +307,7 @@ void MainTabWidgetEx::OnTabFileChangeMsg(const QString &sVale)
 {
     QString sCurPath = qGetCurPath();
 
-    SetFileChange(sCurPath, sVale.toInt());
+    d_ptr->SetFileChange(sCurPath, sVale.toInt());
 }
 
 void MainTabWidgetEx::SaveFile(const int &iType, const QString &sPath)
@@ -418,31 +363,25 @@ void MainTabWidgetEx::OnPrintFile()
     }
 }
 
-void MainTabWidgetEx::OpenCurFileFolder()
-{
-    QString sPath = qGetCurPath();
-    if (sPath != "") {
-        int nLastPos = sPath.lastIndexOf('/');
-        sPath = sPath.mid(0, nLastPos);
-        sPath = QString("file://") + sPath;
-        QDesktopServices::openUrl(QUrl(sPath));
-    }
-}
-
 void MainTabWidgetEx::OnShortCutKey_Esc()
 {
-    if (m_nCurrentState == SLIDER_SHOW) {   //  当前是幻灯片模式
+    int nState = getCurrentState();
+    if (nState == SLIDER_SHOW) {  //  当前是幻灯片模式
         OnExitSliderShow();
+    } else if (nState == Magnifer_State) {
+        OnExitMagnifer();
     }
 
-    m_nCurrentState = -1;
+    setCurrentState(Default_State);
 }
 
 void MainTabWidgetEx::OnKeyPress(const QString &sKey)
 {
-    if (m_nCurrentState == SLIDER_SHOW && m_pctrlwidget) {
+    int nState = getCurrentState();
+    if (nState == SLIDER_SHOW && m_pctrlwidget) {
         if (sKey == KeyStr::g_space) {
-            auto helper = getCurFileAndProxy(m_strSliderPath);
+            QString sPath = d_ptr->getSliderPath();
+            auto helper = getCurFileAndProxy(sPath);
             if (helper) {
                 if (helper->getAutoPlaySlideStatu()) {
                     helper->setAutoPlaySlide(false);
@@ -456,8 +395,21 @@ void MainTabWidgetEx::OnKeyPress(const QString &sKey)
     }
 }
 
+
+//  切换文档, 需要取消之前文档 放大镜模式
 void MainTabWidgetEx::SlotSetCurrentIndexFile(const QString &sPath)
 {
+    int nState = getCurrentState();
+    if (nState == Magnifer_State) {
+        setCurrentState(Default_State);
+
+        QString sMagniferPath = d_ptr->getMagniferPath();
+        auto proxy = getCurFileAndProxy(sMagniferPath);
+        if (proxy) {
+            proxy->closeMagnifier();
+        }
+    }
+
     auto splitterList = this->findChildren<MainSplitter *>();
     foreach (auto s, splitterList) {
         QString sSplitterPath = s->qGetPath();
@@ -520,7 +472,7 @@ void MainTabWidgetEx::SlotCloseTab(const QString &sPath)
                         //  保存成功
                         s->saveData();
 
-                        m_strOpenFileAndProxy.remove(sPath);
+                        d_ptr->RemovePath(sPath);
 
                         emit sigRemoveFileTab(sPath);
 
@@ -536,15 +488,21 @@ void MainTabWidgetEx::SlotCloseTab(const QString &sPath)
     }
 }
 
+void MainTabWidgetEx::setCurrentState(const int &nCurrentState)
+{
+    d_ptr->setCurrentState(nCurrentState);
+}
+
 int MainTabWidgetEx::getCurrentState() const
 {
-    return m_nCurrentState;
+    return d_ptr->getCurrentState();
 }
 
 //  搜索框
 void MainTabWidgetEx::ShowFindWidget()
 {
-    if (m_nCurrentState == SLIDER_SHOW)
+    int nState = getCurrentState();
+    if (nState == SLIDER_SHOW)
         return;
 
     if (m_pFindWidget == nullptr) {
@@ -559,60 +517,87 @@ void MainTabWidgetEx::ShowFindWidget()
 //  开启 幻灯片
 void MainTabWidgetEx::OnOpenSliderShow()
 {
-    if (m_nCurrentState != SLIDER_SHOW) {
+    int nState = getCurrentState();
+    if (nState != SLIDER_SHOW) {
+        setCurrentState(SLIDER_SHOW);
+
         m_pTabBar->setVisible(false);
 
-        auto splitterList = this->findChildren<MainSplitter *>();
-        foreach (auto s, splitterList) {
-            bool rl = s->isVisible();
-            if (rl) {
-                m_nCurrentState = SLIDER_SHOW;
+        auto splitter = qobject_cast<MainSplitter *>(m_pStackedLayout->currentWidget());
+        if (splitter) {
+            splitter->OnOpenSliderShow();
 
-                MainWindow::Instance()->SetSliderShowState(0);
+            MainWindow::Instance()->SetSliderShowState(0);
 
-                s->OnOpenSliderShow();
-                m_strSliderPath = s->qGetPath();
+            QString sPath = splitter->qGetPath();
 
-                auto _proxy = getCurFileAndProxy(m_strSliderPath);
-                _proxy->setAutoPlaySlide(true);
-                _proxy->showSlideModel();
+            d_ptr->setSliderPath(sPath);
 
-                if (m_pctrlwidget == nullptr) {
-                    m_pctrlwidget = new PlayControlWidget(this);
-                }
+            auto _proxy = getCurFileAndProxy(sPath);
+            _proxy->setAutoPlaySlide(true);
+            _proxy->showSlideModel();
 
-                m_pctrlwidget->setSliderPath(m_strSliderPath);
-                int nScreenWidth = qApp->desktop()->geometry().width();
-                int inScreenHeght = qApp->desktop()->geometry().height();
-                m_pctrlwidget->activeshow((nScreenWidth - m_pctrlwidget->width()) / 2, inScreenHeght - 100);
-
-                break;
+            if (m_pctrlwidget == nullptr) {
+                m_pctrlwidget = new PlayControlWidget(this);
             }
+
+            m_pctrlwidget->setSliderPath(sPath);
+            int nScreenWidth = qApp->desktop()->geometry().width();
+            int inScreenHeght = qApp->desktop()->geometry().height();
+            m_pctrlwidget->activeshow((nScreenWidth - m_pctrlwidget->width()) / 2, inScreenHeght - 100);
         }
     }
 }
 
+//  退出幻灯片
 void MainTabWidgetEx::OnExitSliderShow()
 {
+    setCurrentState(Default_State);
     MainWindow::Instance()->SetSliderShowState(1);
     m_pTabBar->setVisible(true);
 
-    auto splitterList = this->findChildren<MainSplitter *>();
-    foreach (auto s, splitterList) {
-        bool rl = s->isVisible();
-        if (rl) {
-            s->OnExitSliderShow();
+    auto splitter = qobject_cast<MainSplitter *>(m_pStackedLayout->currentWidget());
+    if (splitter) {
+        splitter->OnExitSliderShow();
 
-            DocummentProxy *_proxy = getCurFileAndProxy(m_strSliderPath);
+        QString sPath = d_ptr->getSliderPath();
+        DocummentProxy *_proxy = getCurFileAndProxy(sPath);
+        if (!_proxy) {
+            return;
+        }
+        _proxy->exitSlideModel();
+
+        delete m_pctrlwidget;
+        m_pctrlwidget = nullptr;
+    }
+
+    d_ptr->setSliderPath("");
+}
+
+void MainTabWidgetEx::OnOpenMagnifer()
+{
+    int nState = getCurrentState();
+    if (nState != Magnifer_State) {
+        setCurrentState(Magnifer_State);
+        d_ptr->setMagniferPath(qGetCurPath());
+    }
+}
+
+//  取消放大镜
+void MainTabWidgetEx::OnExitMagnifer()
+{
+    int nState = getCurrentState();
+    if (nState == Magnifer_State) {
+        setCurrentState(Default_State);
+
+        auto splitter = qobject_cast<MainSplitter *>(m_pStackedLayout->currentWidget());
+        if (splitter) {
+            QString sPath = splitter->qGetPath();
+            DocummentProxy *_proxy = getCurFileAndProxy(sPath);
             if (!_proxy) {
                 return;
             }
-            _proxy->exitSlideModel();
-
-            delete m_pctrlwidget;
-            m_pctrlwidget = nullptr;
+            _proxy->closeMagnifier();
         }
     }
-
-    m_strSliderPath = "";
 }

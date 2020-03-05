@@ -140,12 +140,9 @@ void MainSplitter::OnOpenSliderShow()
 {
     m_bOldState = m_pLeftWidget->isVisible();
     m_pLeftWidget->setVisible(false);
-
-    m_pDocWidget->OnOpenSliderShow();
 }
 
 void MainSplitter::OnExitSliderShow()
 {
     m_pLeftWidget->setVisible(m_bOldState);
-    m_pDocWidget->OnExitSliderShow();
 }

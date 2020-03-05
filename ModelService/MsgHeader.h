@@ -14,6 +14,15 @@ enum E_RETURN_MSG {
     MSG_NO_OK
 };
 
+//  当前的操作状态
+enum E_CUR_STATE {
+    Default_State,
+    SLIDER_SHOW,
+    Magnifer_State,
+    Handel_State,
+    NOTE_ADD_State
+};
+
 //  消息类型
 enum E_MSG_TYPE {
     E_MSG_TYPE_BEGIN = 0,
@@ -40,7 +49,7 @@ enum E_CENTRAL_MSG {
 //  消息类型
 enum MSG_TYPE {
     MSG_TYPE_BEGIN = E_CENTRAL_MSG_END + 50,
-    MSG_MAGNIFYING,             //  放大镜消息
+//    MSG_MAGNIFYING,             //  放大镜消息
     MSG_MAGNIFYING_CANCEL,          //  取消放大镜消息
     MSG_HANDLESHAPE,                //  手型 消息
     MSG_OPERATION_UPDATE_THEME,         //  主题变了
@@ -76,18 +85,12 @@ enum E_LEFT_SLIDER_MSG {
     QQQQQQQQ_NO_USE = MSG_OPERATION_TEXT_COPY + 50, //  侧边栏 显隐消息
     MSG_HIDE_FIND_WIDGET,       //  侧边栏 显隐消息
     MSG_SWITCHLEFTWIDGET,       //  切换左侧窗口(缩略图、书签、注释) 消息
-};
-
-//  字体菜单 消息
-enum E_FONT_MENU_MSG {
-    MSG_SELF_ADAPTE_HEIGHT = MSG_SWITCHLEFTWIDGET + 50,  //  自适应高度
-
-    MSG_FILE_ROTATE,               //  旋转
+    QQQQQQQQ_NO_USE_END
 };
 
 //  搜索 消息
 enum E_FIND_MSG {
-    MSG_FIND_START = MSG_FILE_ROTATE + 50,           //  开始查询
+    MSG_FIND_START = QQQQQQQQ_NO_USE_END + 50,           //  开始查询
     MSG_CLEAR_FIND_CONTENT,         //  清除查询内容
     MSG_FIND_NONE,                  //  查询无果
     MSG_FIND_EXIT                   //  退出查询
@@ -137,7 +140,6 @@ enum E_NOTE_MSG {
     MSG_NOTE_UPDATE_ITEM,               //  更新高亮注释节点
     MSG_NOTE_DELETE_CONTENT,            //  删除注释内容 消息
     MSG_NOTE_DELETE_ITEM,               //  删除注释子节点
-    MSG_NOTE_PAGE_ADD,                  //  页面注释显示 可以点击添加
     MSG_NOTE_PAGE_SHOW_NOTEWIDGET,      //  页面注释显示 注释内容界面
     MSG_NOTE_PAGE_ADD_CONTENT,          //  页面注释 添加内容
     MSG_NOTE_PAGE_ADD_ITEM,             //  页面注释 添加节点
@@ -156,6 +158,7 @@ enum E_FILE_VALUE_MSG {
     MSG_VIEWCHANGE_DOUBLE_SHOW,         //  双页显示状态
     MSG_VIEWCHANGE_FIT,                 //  自适应
     MSG_VIEWCHANGE_ROTATE,              //  旋转
+    MSG_VIEWCHANGE_ROTATE_VALUE,              //  旋转
     MSG_HANDLE_SELECT,                  //  选择工具
     MSG_FILE_SCALE,                     //  当前比例
     MSG_FILE_IS_CHANGE,                 //  文档是否有变化

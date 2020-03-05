@@ -1,20 +1,12 @@
 #ifndef FILEATTRWIDGET_H
 #define FILEATTRWIDGET_H
 
-#include <DLabel>
-#include <DTextEdit>
+#include <DAbstractDialog>
 #include <DWidget>
-#include <DWidgetUtil>
-#include <QGridLayout>
+#include "IObserver.h"
 #include <QVBoxLayout>
 
-#include <DDialog>
-
-#include "application.h"
-
-#include "utils/utils.h"
-#include "CustomControl/ImageLabel.h"
-
+class ImageLabel;
 
 DWIDGET_USE_NAMESPACE
 /**
@@ -42,9 +34,6 @@ private:
     void initCloseBtn();
     void initImageLabel();
     void addTitleFrame(const QString &);
-
-private slots:
-    void slotBtnCloseClicked();
 
 private:
     QVBoxLayout     *m_pVBoxLayout = nullptr;

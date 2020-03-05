@@ -49,7 +49,7 @@ public:
 
     inline void setHasThumbnail(const bool has) {m_bHasThumbnail = has;}
     inline bool hasThumbnail() {return m_bHasThumbnail;}
-    inline void setRotateAngle(const int &angle) {m_nRotate = angle;}
+    void setRotateAngle(const int &angle);
 
 protected:
     void paintEvent(QPaintEvent *e) override;

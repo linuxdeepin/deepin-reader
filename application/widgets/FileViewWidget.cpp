@@ -45,9 +45,8 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
     , m_operatemenu(nullptr)
 {
-    m_pMsgList = { MSG_MAGNIFYING, MSG_HANDLESHAPE,
-                   MSG_FILE_ROTATE,
-                   MSG_NOTE_ADD_CONTENT, MSG_NOTE_PAGE_ADD,
+    m_pMsgList = { MSG_HANDLESHAPE,
+                   MSG_NOTE_ADD_CONTENT,
                    MSG_VIEWCHANGE_DOUBLE_SHOW, MSG_VIEWCHANGE_ROTATE, MSG_FILE_SCALE, MSG_VIEWCHANGE_FIT
                  };
 
@@ -98,47 +97,35 @@ void FileViewWidget::resizeEvent(QResizeEvent *event)
 
 void FileViewWidget::wheelEvent(QWheelEvent *event)
 {
-    CustomWidget::wheelEvent(event);
     if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
-        if (event->delta() > 0) {
-            notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_larger);
-        } else {
-            notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_smaller);
-        }
-    }
-}
+        QJsonObject obj;
+        obj.insert("type", "ShortCut");
 
-void FileViewWidget::slotDealWithData(const int &msgType, const QString &msgContent)
-{
-    switch (msgType) {
-    case MSG_MAGNIFYING:            //  放大镜信号
-        onMagnifying(msgContent);
-        break;
-    case MSG_FILE_ROTATE:           //  文档旋转了
-        onSetWidgetAdapt();
-        break;
-    default:
-        break;
+        if (event->delta() > 0) {
+            obj.insert("key", KeyStr::g_ctrl_larger);
+        } else {
+            obj.insert("key", KeyStr::g_ctrl_smaller);
+        }
+        QJsonDocument doc = QJsonDocument(obj);
+        notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
     }
+    CustomWidget::wheelEvent(event);
 }
 
 //  弹出 自定义 菜单
 void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
 {
-    if (!m_pProxy)
-        return;
-
     //  处于幻灯片模式下
     int nState = MainTabWidgetEx::Instance()->getCurrentState();
     if (nState == SLIDER_SHOW)
         return;
 
     //  放大镜状态， 直接返回
-    if (m_nCurrentHandelState == Magnifier_State)
+    if (nState == Magnifer_State)
         return;
 
     //  手型状态， 直接返回
-    if (m_nCurrentHandelState == Handel_State)
+    if (nState == Handel_State)
         return;
 
     QString sSelectText = "";
@@ -183,29 +170,6 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
     }
 }
 
-//  放大镜　控制
-void FileViewWidget::onMagnifying(const QString &data)
-{
-    if (!m_pProxy)
-        return;
-
-    int nRes = data.toInt();
-    if (nRes == 1) {
-        m_pProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
-
-        m_nCurrentHandelState = Magnifier_State;
-        __SetCursor(Qt::BlankCursor);
-    } else {
-        if (m_nCurrentHandelState == Magnifier_State) {  //  是 放大镜模式 才取消
-
-            m_nCurrentHandelState = Default_State;
-            __SetCursor(Qt::ArrowCursor);
-
-            m_pProxy->closeMagnifier();
-        }
-    }
-}
-
 //  手势控制
 void FileViewWidget::onSetHandShape(const QString &data)
 {
@@ -215,13 +179,12 @@ void FileViewWidget::onSetHandShape(const QString &data)
     //  手型 切换 也需要将之前选中的文字清除 选中样式
     m_pProxy->mouseSelectTextClear();
     int nRes = data.toInt();
-    if (nRes == 1) {  //  手形
-        m_nCurrentHandelState = Handel_State;
+    if (nRes == Handel_State) {  //  手形
         __SetCursor(Qt::OpenHandCursor);
     } else {
-        m_nCurrentHandelState = Default_State;
         __SetCursor(Qt::ArrowCursor);
     }
+    MainTabWidgetEx::Instance()->setCurrentState(nRes);
 }
 
 //  添加高亮颜色  快捷键
@@ -233,11 +196,11 @@ void FileViewWidget::onFileAddAnnotation()
         return;
 
     //  放大镜状态， 直接返回
-    if (m_nCurrentHandelState == Magnifier_State)
+    if (nState == Magnifer_State)
         return;
 
     //  手型状态， 直接返回
-    if (m_nCurrentHandelState == Handel_State)
+    if (nState == Handel_State)
         return;
 
     int nSx = m_pStartPoint.x();
@@ -310,11 +273,6 @@ void FileViewWidget::onFileAddNote(const QString &msgContent)
     }
 }
 
-void FileViewWidget::__SetPageAddIconState()
-{
-    m_nCurrentHandelState = NOTE_ADD_State;
-}
-
 void FileViewWidget::onFileAddNote()
 {
     if (!m_pProxy)
@@ -326,11 +284,11 @@ void FileViewWidget::onFileAddNote()
         return;
 
     //  放大镜状态， 直接返回
-    if (m_nCurrentHandelState == Magnifier_State)
+    if (nState == Magnifer_State)
         return;
 
     //  手型状态， 直接返回
-    if (m_nCurrentHandelState == Handel_State)
+    if (nState == Handel_State)
         return;
 
     int nSx = m_pStartPoint.x();
@@ -467,7 +425,18 @@ void FileViewWidget::OnSetViewRotate(const QString &msgConent)
         m_rotateType = RotateType_270;
     }
 
+    QJsonObject obj;
+    obj.insert("content", QString::number(m_rotateType));
+    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
+
+    QJsonDocument doc(obj);
+
+    notifyMsg(MSG_VIEWCHANGE_ROTATE_VALUE, doc.toJson(QJsonDocument::Compact));
+
     setScaleRotateViewModeAndShow();
+
+    //  旋转之后, 若是 双页显示
+    onSetWidgetAdapt();
 }
 
 void FileViewWidget::OnSetViewHit(const QString &msgContent)
@@ -551,6 +520,7 @@ void FileViewWidget::onSetWidgetAdapt()
 //    }
     }
 }
+
 //  消息 数据 处理
 int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
@@ -564,8 +534,6 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         OnSetViewHit(msgContent);
     } else if (msgType == MSG_HANDLESHAPE) {
         onSetHandShape(msgContent);
-    } else if (msgType == MSG_NOTE_PAGE_ADD) {      //  开启添加图标注释开关
-        __SetPageAddIconState();
     } else if (msgType == MSG_NOTE_ADD_CONTENT) {
         onFileAddNote(msgContent);
     }

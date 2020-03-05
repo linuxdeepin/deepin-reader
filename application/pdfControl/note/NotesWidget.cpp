@@ -180,7 +180,7 @@ void NotesWidget::__UpdateNoteItem(const QString &msgContent)
     QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (sList.size() == 3) {
         QString sUuid = sList.at(0);
-        QString  sText = sList.at(1);
+        QString sText = sList.at(1);
         QString sPage = sList.at(2);
 
         bool rl = false;
@@ -370,12 +370,7 @@ void NotesWidget::__JumpToNextItem()
  */
 void NotesWidget::slotAddAnnotation()
 {
-    QJsonObject obj;
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET + Constant::sQStringSep + FILE_VIEW_WIDGET);
-
-    QJsonDocument doc(obj);
-
-    dApp->m_pModelService->notifyMsg(MSG_NOTE_PAGE_ADD, doc.toJson(QJsonDocument::Compact));
+    MainTabWidgetEx::Instance()->setCurrentState(NOTE_ADD_State);
 }
 
 /**

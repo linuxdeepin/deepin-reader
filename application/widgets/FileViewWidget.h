@@ -23,16 +23,7 @@
 
 class TextOperationMenu;
 class DefaultOperationMenu;
-
 class DocummentProxy;
-
-//  当前鼠标状态
-enum E_Handel_State {
-    Default_State,
-    Handel_State,
-    Magnifier_State,
-    NOTE_ADD_State
-};
 
 //  窗口自适应状态
 enum ADAPTE_Enum {
@@ -53,10 +44,8 @@ class FileViewWidget : public CustomWidget
 public:
     explicit FileViewWidget(CustomWidget *parent = nullptr);
     ~FileViewWidget() override;
-    int         m_nCurrentHandelState = Default_State;  //  当前鼠标状态
 
 signals:
-//    void sigShowPlayCtrl(bool bshow);
     void sigFileOpenOK();
 
     // IObserver interface
@@ -77,8 +66,6 @@ protected:
     void wheelEvent(QWheelEvent *e) override;
 
 private slots:
-    void slotDealWithData(const int &, const QString &);
-
     void slotCustomContextMenuRequested(const QPoint &);
 
     void slotBookMarkStateChange(int, bool);
@@ -88,12 +75,10 @@ private slots:
 private:
     void initConnections();
 
-    void onMagnifying(const QString &);
     void onSetHandShape(const QString &);
     void onSetWidgetAdapt();
 
     void onFileAddNote(const QString &);
-    void __SetPageAddIconState();
 
     void onFileAddAnnotation();
     void onFileAddNote();
@@ -126,8 +111,6 @@ private:
 
     friend class FVMMouseEvent;
     friend class DocShowShellWidget;
-
-
 };
 
 

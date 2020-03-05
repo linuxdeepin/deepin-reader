@@ -51,8 +51,8 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
         slotUpdateTheme();
-    } else if (msgType == MSG_FILE_ROTATE) {  //  文档旋转了
-        emit sigSetRotate(msgContent.toInt());
+    } else if (msgType == MSG_VIEWCHANGE_ROTATE_VALUE) {  //  文档旋转了
+        slotSetRotate(msgContent.toInt());
     } else {
         if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
             slotOpenFileOk(msgContent);

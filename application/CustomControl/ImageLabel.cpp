@@ -83,6 +83,19 @@ void ImageLabel::rotateImage()
     update();
 }
 
+void ImageLabel::setRotateAngle(const int &angle)
+{
+    if (angle == 1) {
+        m_nRotate = 90;
+    } else if (angle == 2) {
+        m_nRotate = 180;
+    } else if (angle == 3) {
+        m_nRotate = 270;
+    } else {
+        m_nRotate = 0;
+    }
+}
+
 void ImageLabel::paintEvent(QPaintEvent *e)
 {
     DLabel::paintEvent(e);

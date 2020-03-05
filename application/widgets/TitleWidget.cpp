@@ -97,19 +97,29 @@ void TitleWidget::SetBtnDisable(const bool &bAble)
 
 void TitleWidget::OnShortCut_Alt1()
 {
-    slotMagnifierCancel();
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    if (pMtwe) {
+        pMtwe->OnExitMagnifer();
 
-    if (0 != m_nCurHandleShape) {
-        setDefaultShape();
+        int nState = pMtwe->getCurrentState();
+
+        if (Default_State != nState) {
+            setDefaultShape();
+        }
     }
 }
 
 void TitleWidget::OnShortCut_Alt2()
 {
-    slotMagnifierCancel();
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    if (pMtwe) {
+        pMtwe->OnExitMagnifer();
 
-    if (1 != m_nCurHandleShape) {
-        setHandleShape();
+        int nState = pMtwe->getCurrentState();
+
+        if (Handel_State != nState) {
+            setHandleShape();
+        }
     }
 }
 
@@ -138,33 +148,6 @@ void TitleWidget::slotOpenFileOk(const QString &sPath)
     m_pThumbnailBtn->setChecked(showLeft);
 }
 
-// 应用全屏显示
-//void TitleWidget::slotAppFullScreen()
-//{
-//  显示了侧边栏, 则隐藏
-//    m_pThumbnailBtn->setChecked(false);
-
-//    MsgModel mm;
-//    mm.setMsgType(MSG_WIDGET_THUMBNAILS_VIEW);
-//    mm.setValue("0");
-
-//    notifyMsg(E_FILE_MSG, mm.toJson());
-//}
-
-//  退出放大鏡
-void TitleWidget::slotMagnifierCancel()
-{
-//  取消放大镜
-//    MsgModel mm;
-//    mm.setMsgType(MSG_MAGNIFYING);
-//    mm.setValue("0");
-
-//    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-//    mm.setPath(sCurPath);
-
-//    notifyMsg(E_TITLE_MSG_TYPE, mm.toJson());
-}
-
 void TitleWidget::initWidget()
 {
     initBtns();
@@ -191,7 +174,7 @@ void TitleWidget::initWidget()
 void TitleWidget::initConnections()
 {
     connect(this, SIGNAL(sigSetFindWidget(const int &)), SLOT(slotSetFindWidget(const int &)));
-    connect(this, SIGNAL(sigMagnifierCancel()), SLOT(slotMagnifierCancel()));
+//    connect(this, SIGNAL(sigMagnifierCancel()), SLOT(slotMagnifierCancel()));
 //    connect(this, SIGNAL(sigAppFullScreen()), SLOT(slotAppFullScreen()));
 }
 
@@ -199,8 +182,6 @@ void TitleWidget::initConnections()
 void TitleWidget::OnFileShowChange(const QString &sPath)
 {
     slotOpenFileOk(sPath);
-
-    slotMagnifierCancel();
 }
 
 //  缩略图
@@ -263,7 +244,7 @@ void TitleWidget::SlotScaleMenuBtnClicked()
 void TitleWidget::SlotSetCurrentTool(const QString &sAction)
 {
     //  切换了选择工具, 需要取消放大镜的操作
-    slotMagnifierCancel();
+    MainTabWidgetEx::Instance()->OnExitMagnifer();
 
     if (sAction == "defaultshape") {
         setDefaultShape();
@@ -272,17 +253,6 @@ void TitleWidget::SlotSetCurrentTool(const QString &sAction)
     }
 }
 
-//void TitleWidget::SlotTabMsg(const QString &sContent)
-//{
-//    MsgModel mm;
-//    mm.fromJson(sContent);
-
-//    QString sPath = mm.getPath();
-//    int nMsg = mm.getMsgType();
-//    if (nMsg == MSG_TAB_SHOW_FILE_CHANGE) {
-//        OnFileShowChange(sPath);
-//    }
-//}
 
 void TitleWidget::SlotCurrentScale(const int &iScale)
 {
@@ -344,13 +314,11 @@ void TitleWidget::setDefaultShape()
 
     m_pHandleShapeBtn->setToolTip(tr("Select Text"));
 
-    m_nCurHandleShape = 0;
-
     QIcon icon = PF::getIcon(Pri::g_module + btnName);
     m_pHandleShapeBtn->setIcon(icon);
 
     QJsonObject obj;
-    obj.insert("content", QString::number(m_nCurHandleShape));
+    obj.insert("content", QString::number(Default_State));
     obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
 
     QJsonDocument doc(obj);
@@ -364,13 +332,11 @@ void TitleWidget::setHandleShape()
 
     m_pHandleShapeBtn->setToolTip(tr("Hand Tool"));
 
-    m_nCurHandleShape = 1;
-
     QIcon icon = PF::getIcon(Pri::g_module + btnName);
     m_pHandleShapeBtn->setIcon(icon);
 
     QJsonObject obj;
-    obj.insert("content", QString::number(m_nCurHandleShape));
+    obj.insert("content", QString::number(Handel_State));
     obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
 
     QJsonDocument doc(obj);
@@ -435,17 +401,8 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
         emit sigSetFindWidget(1);
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         slotUpdateTheme();
-    } else if (msgType == MSG_MAGNIFYING_CANCEL) {  //  右键取消放大镜
-        emit sigMagnifierCancel();
-        return MSG_OK;
     } else if (msgType == MSG_HIDE_FIND_WIDGET) {
         emit sigSetFindWidget(0);
-    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (msgContent == KeyStr::g_esc) {
-            emit sigMagnifierCancel();  //  退出放大镜模式
-        } /*else if (msgContent == KeyStr::g_f11) {
-            emit sigAppFullScreen();
-        }*/
     }
 
     if (m_pMsgList.contains(msgType)) {

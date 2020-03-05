@@ -42,21 +42,20 @@ void FVMMouseEvent::mouseMoveEvent(QMouseEvent *event, DWidget *widget)
     int nState = MainTabWidgetEx::Instance()->getCurrentState();
     if (nState == SLIDER_SHOW) {
         MainTabWidgetEx::Instance()->showPlayControlWidget();   //  显示 幻灯片 控制
-        return;
-    }
-
-    QPoint globalPos = event->globalPos();
-    if (fvw->m_nCurrentHandelState == Handel_State) {  //   手型状态下， 按住鼠标左键 位置进行移动
-        if (m_bSelectOrMove) {
-            __FilePageMove(fvw, globalPos);
-        }
-    } else if (fvw->m_nCurrentHandelState == Magnifier_State) {  //  当前是放大镜状态
-        __ShowMagnifier(fvw, globalPos);
     } else {
-        if (m_bSelectOrMove) {  //  鼠标已经按下，　则选中所经过的文字
-            __MouseSelectText(fvw, globalPos);
+        QPoint globalPos = event->globalPos();
+        if (nState == Magnifer_State) {     //  当前是放大镜状态
+            __ShowMagnifier(fvw, globalPos);
+        } else if (nState == Handel_State) {  //   手型状态下， 按住鼠标左键 位置进行移动
+            if (m_bSelectOrMove) {
+                __FilePageMove(fvw, globalPos);
+            }
         } else {
-            __OtherMouseMove(fvw, globalPos);
+            if (m_bSelectOrMove) {  //  鼠标已经按下，　则选中所经过的文字
+                __MouseSelectText(fvw, globalPos);
+            } else {
+                __OtherMouseMove(fvw, globalPos);
+            }
         }
     }
 }
@@ -82,6 +81,7 @@ void FVMMouseEvent::__ShowMagnifier(FileViewWidget *fvw, const QPoint &clickPoin
     QPoint docGlobalPos = fvw->m_pProxy->global2RelativePoint(clickPoint);
 
     fvw->m_pProxy->showMagnifier(docGlobalPos);
+    fvw->__SetCursor(Qt::BlankCursor);
 }
 
 //  选中文本
@@ -178,31 +178,31 @@ void FVMMouseEvent::mousePressEvent(QMouseEvent *event, DWidget *widget)
 
     FileViewWidget *fvw = qobject_cast<FileViewWidget *>(widget);
 
+    int nState = MainTabWidgetEx::Instance()->getCurrentState();
+
     Qt::MouseButton nBtn = event->button();
     if (nBtn == Qt::RightButton) {  //  右键处理
         //  处于幻灯片模式下
-        int nState = MainTabWidgetEx::Instance()->getCurrentState();
         if (nState == SLIDER_SHOW) {
-            fvw->notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
+            MainTabWidgetEx::Instance()->OnExitSliderShow();
             return;
         }
 
         //  放大镜状态，
-        if (fvw->m_nCurrentHandelState == Magnifier_State) {
-            fvw->notifyMsg(MSG_MAGNIFYING_CANCEL);
+        if (nState == Magnifer_State) {
+            MainTabWidgetEx::Instance()->OnExitMagnifer();
             return;
         }
     } else if (nBtn == Qt::LeftButton) { // 左键处理
         //  幻灯片模式下, 左键单击 不作任何处理
-        int nState = MainTabWidgetEx::Instance()->getCurrentState();
         if (nState == SLIDER_SHOW)
             return;
 
         QPoint globalPos = event->globalPos();
         //  当前状态是 手, 先 拖动, 之后 在是否是链接之类
-        if (fvw->m_nCurrentHandelState == NOTE_ADD_State) {
+        if (nState == NOTE_ADD_State) {
             __AddIconAnnotation(fvw, globalPos);
-        } else if (fvw->m_nCurrentHandelState == Handel_State) {
+        } else if (nState == Handel_State) {
             __HandlClicked(globalPos);
         } else {
             __OtherMousePress(fvw, globalPos);
@@ -220,8 +220,6 @@ void FVMMouseEvent::__AddIconAnnotation(FileViewWidget *fvw, const QPoint &globa
     if (bIsIcon) {
         QString sContent = "", sUuid = "";
         if (fvw->m_pProxy->iconAnnotationClicked(docGlobalPos, sContent, sUuid)) {
-
-            qDebug() << __FUNCTION__ << "            " << sContent << "      " << sUuid;
         }
     } else {
         QString sUuid = fvw->m_pProxy->addIconAnnotation(docGlobalPos);        //  添加注释图标成功
@@ -231,7 +229,7 @@ void FVMMouseEvent::__AddIconAnnotation(FileViewWidget *fvw, const QPoint &globa
                                  QString::number(nClickPage) + Constant::sQStringSep +
                                  QString::number(globalPos.x()) + Constant::sQStringSep +
                                  QString::number(globalPos.y());
-            fvw->m_nCurrentHandelState = Default_State;
+            MainTabWidgetEx::Instance()->setCurrentState(Default_State);
 
             QJsonObject obj;
             obj.insert("content", strContent);
@@ -280,7 +278,8 @@ void FVMMouseEvent::__OtherMousePress(FileViewWidget *fvw, const QPoint &globalP
     if (pLink) {
         __ClickPageLink(pLink, fvw);
     } else {
-        if (fvw->m_nCurrentHandelState == Default_State) {
+        int nState = MainTabWidgetEx::Instance()->getCurrentState();
+        if (nState == Default_State) {
             fvw->m_pProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
 
             __CloseFileNoteWidget(fvw);

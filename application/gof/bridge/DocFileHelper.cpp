@@ -71,7 +71,7 @@ void DocFileHelper::onSaveFile()
     if (pMtwe) {
         QString sCurPath = pMtwe->qGetCurPath();
         if (sCurPath != "") {
-            int fs = pMtwe->GetCurFileState(sCurPath);
+            int fs = pMtwe->GetFileChange(sCurPath);
             if (fs == 1) {  //  改变了
                 DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sCurPath);
                 if (_proxy) {
