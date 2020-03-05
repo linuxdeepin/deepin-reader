@@ -239,7 +239,7 @@ void DocShowShellWidget::slotBtnCloseClicked()
 void DocShowShellWidget::slotUpdateTheme()
 {
     auto closeBtn = this->findChild<DIconButton *>();
-    if (!closeBtn) {
+    if (nullptr != closeBtn) {
         if (closeBtn->objectName() == "fullscreen") {
             QString sIcon = PF::getImagePath("exit_fullscreen", Pri::g_actions);
             closeBtn->setIcon(QIcon(sIcon));

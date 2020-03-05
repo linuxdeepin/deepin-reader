@@ -238,8 +238,8 @@ void AnnotationHelper::__UpdateAnnotationText(const QString &msgContent)
     if (_proxy) {
         QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (sList.size() == 3) {
-            QString sText = sList.at(0);
-            QString sUuid = sList.at(1);
+            QString sUuid = sList.at(0);
+            QString sText = sList.at(1);
             QString sPage = sList.at(2);
 
             _proxy->setAnnotationText(sPage.toInt(), sUuid, sText);
