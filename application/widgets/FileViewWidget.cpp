@@ -18,7 +18,6 @@
  */
 #include "FileViewWidget.h"
 
-#include <QClipboard>
 #include <QGridLayout>
 #include <QDesktopServices>
 #include <DDialog>

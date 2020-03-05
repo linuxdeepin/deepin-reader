@@ -37,7 +37,6 @@ enum E_HOMEWIDGET_MSG {
     E_HOMEWIDGET_MSG_END
 };
 
-
 //  central 消息
 enum E_CENTRAL_MSG {
     E_CENTRAL_MSG_BEGIN = E_HOMEWIDGET_MSG_END + 50,
@@ -49,12 +48,9 @@ enum E_CENTRAL_MSG {
 //  消息类型
 enum MSG_TYPE {
     MSG_TYPE_BEGIN = E_CENTRAL_MSG_END + 50,
-//    MSG_MAGNIFYING,             //  放大镜消息
-    MSG_MAGNIFYING_CANCEL,          //  取消放大镜消息
     MSG_HANDLESHAPE,                //  手型 消息
     MSG_OPERATION_UPDATE_THEME,         //  主题变了
     MSG_NOTIFY_KEY_MSG,                 //  按键通知消息
-    MSG_NOTIFY_KEY_PLAY_MSG,            //  幻灯片模式按键通知消息
     MSG_TYPE_END,
 };
 
@@ -62,8 +58,6 @@ enum MSG_TYPE {
 enum E_TAB_TYPE {
     MSG_TAB_MSG_BEGIN = MSG_TYPE_END + 50,
     MSG_TAB_ADD,                    //  添加 tab 消息
-    MSG_TAB_REMOVE,                 //  删除 tab 消息
-    MSG_TAB_DATA_CHANGE,            //  文档数据有变化消息
     MSG_TAB_SHOW_FILE_CHANGE,       //  文档 显示切换消息
     MSG_TAB_MSG_END,
 };
@@ -73,16 +67,13 @@ enum E_MENU_MSG {
     E_MENU_MSG_BEGIN = MSG_TAB_MSG_END + 50,
     MSG_MENU_NEW_WINDOW,                // 新窗口打开一个文档
     MSG_MENU_NEW_TAB,                   // 新增加一个文档
-    MSG_MENU_OPEN_FOLDER,               //  打开文件所处文件夹
-    MSG_MENU_MAGNIFER,                  //  放大镜
-    MSG_MENU_SCALE_CHANGE,              //  缩放比例变化
     MSG_OPERATION_EXIT,               //  退出
-    MSG_OPERATION_TEXT_COPY,          //  复制
+    E_MENU_MSG_END
 };
 
 //  左侧 侧边栏 消息
 enum E_LEFT_SLIDER_MSG {
-    QQQQQQQQ_NO_USE = MSG_OPERATION_TEXT_COPY + 50, //  侧边栏 显隐消息
+    QQQQQQQQ_NO_USE = E_MENU_MSG_END + 50, //  侧边栏 显隐消息
     MSG_HIDE_FIND_WIDGET,       //  侧边栏 显隐消息
     MSG_SWITCHLEFTWIDGET,       //  切换左侧窗口(缩略图、书签、注释) 消息
     QQQQQQQQ_NO_USE_END
@@ -100,11 +91,8 @@ enum E_FIND_MSG {
 enum E_DOC_TYPE_MSG {
     MSG_DOC_JUMP_PAGE = MSG_FIND_EXIT + 50,             //  请求跳转页面
     MSG_OPEN_FILE_PATH,             //  打开的文件消息
-    MSG_SAVE_FILE_PATH,             //  保存文件消息
     MSG_SAVE_AS_FILE_PATH,             //  保存文件消息
-///    MSG_OPEN_FILE_PATH_S,           //  打开的文件消息
     MSG_OPERATION_OPEN_FILE_OK,     //  打开文件成功, 要告诉所有人
-//    MSG_DOC_OPEN_FILE_START,      //  开始打开文件
     MSG_OPERATION_OPEN_FILE_FAIL,       //  打开文件失败
     MSG_OPERATION_FIRST_PAGE,                           //  第一页
     MSG_OPERATION_PREV_PAGE,                            //  上一页

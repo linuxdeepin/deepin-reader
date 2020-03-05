@@ -41,8 +41,6 @@ private:
     void onSaveAsFile();
 
     void __FileCtrlCContent();
-    //  复制
-    void OnCopySelectContent(const QString &sCopy);
 
     void notifyMsg(const int &msgType, const QString &msgContent = "") ;
 

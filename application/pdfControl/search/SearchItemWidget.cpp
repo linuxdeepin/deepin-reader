@@ -19,7 +19,6 @@
 #include "SearchItemWidget.h"
 #include <DApplication>
 #include <DApplicationHelper>
-#include <QClipboard>
 #include <QTextLayout>
 
 #include "utils/utils.h"

@@ -36,11 +36,9 @@ MainTabBar::MainTabBar(DWidget *parent)
     this->setMovable(true);
     this->expanding();
 
-    m_pMsgList = {MSG_TAB_ADD, MSG_MENU_NEW_TAB,
-                  MSG_MENU_OPEN_FOLDER,
-                 };
+    m_pMsgList = {MSG_TAB_ADD, MSG_MENU_NEW_TAB};
 
-    __InitConnection();
+//    __InitConnection();
 
     dApp->m_pModelService->addObserver(this);
 }
@@ -70,10 +68,10 @@ void MainTabBar::notifyMsg(const int &msgType, const QString &msgContent)
     dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
 
-void MainTabBar::resizeEvent(QResizeEvent *event)
-{
-    DTabBar::resizeEvent(event);
-}
+//void MainTabBar::resizeEvent(QResizeEvent *event)
+//{
+//    DTabBar::resizeEvent(event);
+//}
 
 void MainTabBar::__InitConnection()
 {
@@ -96,7 +94,6 @@ void MainTabBar::__SetTabMiniWidth()
 {
 
 }
-
 
 void MainTabBar::AddFileTab(const QString &sContent)
 {

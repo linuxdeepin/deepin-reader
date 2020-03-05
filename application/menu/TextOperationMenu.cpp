@@ -128,7 +128,7 @@ void TextOperationMenu::slotSetHighLight(const int &nColor)
 
 void TextOperationMenu::slotCopyClicked()
 {
-    dApp->m_pHelper->qDealWithData(MSG_OPERATION_TEXT_COPY, m_strSelectText);
+    Utils::copyText(m_strSelectText);
 }
 
 void TextOperationMenu::slotRemoveHighLightClicked()

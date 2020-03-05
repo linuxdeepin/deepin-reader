@@ -70,6 +70,8 @@ public:
     static bool runApp(const QString &args);
     static QImage roundImage(const QPixmap &img_in, int radius);
     static QPixmap roundQPixmap(const QPixmap &img_in, int radius);
+
+    static void copyText(const QString &sText);
 };
 
 #endif // UTILS_H

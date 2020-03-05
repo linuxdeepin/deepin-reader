@@ -27,7 +27,6 @@ class QStackedLayout;
 class MainTabBar;
 class PlayControlWidget;
 
-
 class MainTabWidgetExPrivate;
 
 class MainTabWidgetEx : public CustomWidget
@@ -125,12 +124,6 @@ private:
     PlayControlWidget   *m_pctrlwidget = nullptr;
 
     MainTabWidgetExPrivate  *d_ptr = nullptr;
-
-//    QMap<QString, DocummentProxy *> m_strOpenFileAndProxy;
-
-//    int                 m_nCurrentState = -1;
-//    QString             m_strSliderPath = "";
-//    QString             m_strMagniferPath = "";
 };
 
 #endif // MAINTABWIDGETEX_H

@@ -20,7 +20,6 @@
 
 #include <DApplication>
 #include <DApplicationHelper>
-#include <QClipboard>
 #include <QTextLayout>
 #include <QVBoxLayout>
 
@@ -98,10 +97,7 @@ void NotesItemWidget::slotCopyContant()
 {
     if (m_pTextLab) {
         QString str = m_pTextLab->text();
-        if (str != QString("")) {
-            QClipboard *clipboard = DApplication::clipboard();  //获取系统剪贴板指针
-            clipboard->setText(str);
-        }
+        Utils::copyText(str);
     }
 }
 

@@ -133,11 +133,6 @@ int FindWidget::dealWithData(const int &msgType, const QString &msgContent)
     return MSG_NO_OK;
 }
 
-//void FindWidget::sendMsg(const int &, const QString &)
-//{
-
-//}
-
 void FindWidget::notifyMsg(const int &msgType, const QString &msgContent)
 {
     if (this->isVisible()) {

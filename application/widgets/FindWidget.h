@@ -68,7 +68,6 @@ private:
     DSearchEdit     *m_pSearchEdit = nullptr;
 
     QList<int>      m_pMsgList;
-
 };
 
 #endif

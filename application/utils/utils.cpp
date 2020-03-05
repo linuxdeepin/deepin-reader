@@ -44,6 +44,7 @@
 #include <QProcess>
 #include <QPixmap>
 #include <QBitmap>
+#include <QClipboard>
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
@@ -657,4 +658,16 @@ QPixmap Utils::roundQPixmap(const QPixmap &img_in, int radius)
     QPixmap image = img_in;// .scaled(size);
     image.setMask(mask);
     return image;
+}
+
+//  复制文字
+void  Utils::copyText(const QString &sText)
+{
+    if (sText != "") {
+        QClipboard *clipboard = DApplication::clipboard();  //获取系统剪贴板指针
+        QString sOldText = clipboard->text(QClipboard::Clipboard);
+        if (sOldText != sText) {
+            clipboard->setText(sText);
+        }
+    }
 }

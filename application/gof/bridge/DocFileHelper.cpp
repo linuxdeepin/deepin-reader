@@ -19,7 +19,6 @@
 
 #include "DocFileHelper.h"
 
-#include <QClipboard>
 #include <DFileDialog>
 #include <DDialog>
 
@@ -37,9 +36,8 @@
 DocFileHelper::DocFileHelper(QObject *parent)
     : HelperImpl(parent)
 {
-    m_pMsgList = {MSG_OPERATION_TEXT_COPY,
-                  MSG_DOC_JUMP_PAGE, MSG_OPERATION_FIRST_PAGE, MSG_OPERATION_END_PAGE, MSG_OPERATION_PREV_PAGE, MSG_OPERATION_NEXT_PAGE,
-                  MSG_SAVE_FILE, MSG_NOT_SAVE_FILE, MSG_NOT_CHANGE_SAVE_FILE
+    m_pMsgList = { MSG_DOC_JUMP_PAGE, MSG_OPERATION_FIRST_PAGE, MSG_OPERATION_END_PAGE, MSG_OPERATION_PREV_PAGE, MSG_OPERATION_NEXT_PAGE,
+                   MSG_SAVE_FILE, MSG_NOT_SAVE_FILE, MSG_NOT_CHANGE_SAVE_FILE
                  };
 }
 //  通知消息, 不需要撤回
@@ -148,9 +146,7 @@ void DocFileHelper::onSaveAsFile()
 
 QString DocFileHelper::qDealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_TEXT_COPY) {    //  复制
-        OnCopySelectContent(msgContent);
-    } else if (msgType == MSG_DOC_JUMP_PAGE) {              //  请求跳转页面
+    if (msgType == MSG_DOC_JUMP_PAGE) {              //  请求跳转页面
         __PageJump(msgContent.toInt());
     } else if (msgType == MSG_OPERATION_FIRST_PAGE || msgType == MSG_OPERATION_PREV_PAGE ||
                msgType == MSG_OPERATION_NEXT_PAGE || msgType == MSG_OPERATION_END_PAGE) {
@@ -165,8 +161,6 @@ QString DocFileHelper::qDealWithData(const int &msgType, const QString &msgConte
         }
     } else if (MSG_SAVE_FILE == msgType || MSG_NOT_SAVE_FILE == msgType || MSG_NOT_CHANGE_SAVE_FILE == msgType)  {
         CloseFile(msgType, msgContent);
-    } else if (msgType == MSG_SAVE_FILE_PATH) {
-        onSaveFile();
     } else if (msgType == MSG_SAVE_AS_FILE_PATH) {
         onSaveAsFile();
     }
@@ -235,13 +229,6 @@ void DocFileHelper::__PageJumpByMsg(const int &iType)
     }
 }
 
-//  复制
-void DocFileHelper::OnCopySelectContent(const QString &sCopy)
-{
-    QClipboard *clipboard = DApplication::clipboard();   //获取系统剪贴板指针
-    clipboard->setText(sCopy);
-}
-
 void DocFileHelper::__FileCtrlCContent()
 {
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
@@ -256,7 +243,7 @@ void DocFileHelper::__FileCtrlCContent()
             QString sSelectText = "";
             if (_proxy->getSelectTextString(sSelectText)) { //  选择　当前选中下面是否有文字
                 if (sSelectText != "") {
-                    OnCopySelectContent(sSelectText);
+                    Utils::copyText(sSelectText);
                 }
             }
         }

@@ -38,7 +38,6 @@
 #include "../FileAttrWidget.h"
 #include "../PlayControlWidget.h"
 #include "../TitleWidget.h"
-#include "docview/docummentproxy.h"
 
 #include "gof/bridge/IHelper.h"
 
@@ -552,26 +551,30 @@ void MainTabWidgetEx::OnOpenSliderShow()
 //  退出幻灯片
 void MainTabWidgetEx::OnExitSliderShow()
 {
-    setCurrentState(Default_State);
-    MainWindow::Instance()->SetSliderShowState(1);
-    m_pTabBar->setVisible(true);
+    int nState = getCurrentState();
+    if (nState == SLIDER_SHOW) {
+        setCurrentState(Default_State);
 
-    auto splitter = qobject_cast<MainSplitter *>(m_pStackedLayout->currentWidget());
-    if (splitter) {
-        splitter->OnExitSliderShow();
+        MainWindow::Instance()->SetSliderShowState(1);
+        m_pTabBar->setVisible(true);
 
-        QString sPath = d_ptr->getSliderPath();
-        DocummentProxy *_proxy = getCurFileAndProxy(sPath);
-        if (!_proxy) {
-            return;
+        auto splitter = qobject_cast<MainSplitter *>(m_pStackedLayout->currentWidget());
+        if (splitter) {
+            splitter->OnExitSliderShow();
+
+            QString sPath = d_ptr->getSliderPath();
+            DocummentProxy *_proxy = getCurFileAndProxy(sPath);
+            if (!_proxy) {
+                return;
+            }
+            _proxy->exitSlideModel();
+
+            delete m_pctrlwidget;
+            m_pctrlwidget = nullptr;
         }
-        _proxy->exitSlideModel();
 
-        delete m_pctrlwidget;
-        m_pctrlwidget = nullptr;
+        d_ptr->setSliderPath("");
     }
-
-    d_ptr->setSliderPath("");
 }
 
 void MainTabWidgetEx::OnOpenMagnifer()
