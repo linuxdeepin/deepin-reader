@@ -38,7 +38,7 @@ MainTabBar::MainTabBar(DWidget *parent)
 
     m_pMsgList = {MSG_TAB_ADD, MSG_MENU_NEW_TAB};
 
-//    __InitConnection();
+    __InitConnection();
 
     dApp->m_pModelService->addObserver(this);
 }

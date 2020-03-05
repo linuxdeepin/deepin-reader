@@ -35,16 +35,10 @@ private:
     void __PageJump(const int &pagenum);
     void __PageJumpByMsg(const int &);
 
-//    bool onOpenFile(const QString &filePaths);
-
     void onSaveFile();
     void onSaveAsFile();
 
-    void __FileCtrlCContent();
-
     void notifyMsg(const int &msgType, const QString &msgContent = "") ;
-
-//    void SetFileSlider(const int &nFlag);
 
     void CloseFile(const int &iType, const QString &sPath);
 };

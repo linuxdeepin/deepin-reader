@@ -152,12 +152,8 @@ QString DocFileHelper::qDealWithData(const int &msgType, const QString &msgConte
                msgType == MSG_OPERATION_NEXT_PAGE || msgType == MSG_OPERATION_END_PAGE) {
         __PageJumpByMsg(msgType);
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (msgContent == KeyStr::g_ctrl_s) {
-            onSaveFile();
-        } else if (msgContent == KeyStr::g_ctrl_shift_s) {
+        if (msgContent == KeyStr::g_ctrl_shift_s) {
             onSaveAsFile();
-        } else if (msgContent == KeyStr::g_ctrl_c) {
-            __FileCtrlCContent();
         }
     } else if (MSG_SAVE_FILE == msgType || MSG_NOT_SAVE_FILE == msgType || MSG_NOT_CHANGE_SAVE_FILE == msgType)  {
         CloseFile(msgType, msgContent);
@@ -228,53 +224,3 @@ void DocFileHelper::__PageJumpByMsg(const int &iType)
         }
     }
 }
-
-void DocFileHelper::__FileCtrlCContent()
-{
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
-    if (pMtwe) {
-        QString sCurPath = pMtwe->qGetCurPath();
-        if (sCurPath != "") {
-            DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(sCurPath);
-            if (!_proxy) {
-                return;
-            }
-
-            QString sSelectText = "";
-            if (_proxy->getSelectTextString(sSelectText)) { //  选择　当前选中下面是否有文字
-                if (sSelectText != "") {
-                    Utils::copyText(sSelectText);
-                }
-            }
-        }
-    }
-}
-
-//void DocFileHelper::SetFileSlider(const int &nFlag)
-//{
-//    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
-//    if (pMtwe) {
-//        QString sCurPath = pMtwe->qGetCurPath();
-//        if (sCurPath != "") {
-//            DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(sCurPath);
-//            if (!_proxy) {
-//                return;
-//            }
-
-//            if (nFlag == 1) {
-//                bool bSlideModel = _proxy->showSlideModel();    //  开启幻灯片
-//                if (bSlideModel) {
-//                    _proxy->setAutoPlaySlide(true);
-//                    dApp->m_pAppInfo->qSetCurShowState(FILE_SLIDE);
-//                }
-//            } else {
-//                if (dApp->m_pAppInfo->qGetCurShowState() == FILE_SLIDE) {
-//                    bool rl = _proxy->exitSlideModel();
-//                    if (rl) {
-//                        dApp->m_pAppInfo->qSetCurShowState(FILE_NORMAL);
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}

@@ -94,6 +94,7 @@ private:
 
     void OnShortCutKey_Ctrl_l();
     void OnShortCutKey_Ctrl_i();
+    void OnShortCutKey_Ctrl_c();
 
 private:
     TextOperationMenu       *m_operatemenu = nullptr;

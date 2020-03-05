@@ -49,7 +49,7 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
                    MSG_VIEWCHANGE_DOUBLE_SHOW, MSG_VIEWCHANGE_ROTATE, MSG_FILE_SCALE, MSG_VIEWCHANGE_FIT
                  };
 
-    m_pKeyMsgList = {KeyStr::g_ctrl_l, KeyStr::g_ctrl_i};
+    m_pKeyMsgList = {KeyStr::g_ctrl_l, KeyStr::g_ctrl_i, KeyStr::g_ctrl_c};
 
     setMouseTracking(true);  //  接受 鼠标滑动事件
 
@@ -402,6 +402,16 @@ void FileViewWidget::OnShortCutKey_Ctrl_i()
     }
 }
 
+void FileViewWidget::OnShortCutKey_Ctrl_c()
+{
+    if (m_pProxy) {
+        QString sSelectText = "";
+        if (m_pProxy->getSelectTextString(sSelectText)) { //  选择　当前选中下面是否有文字
+            Utils::copyText(sSelectText);
+        }
+    }
+}
+
 void FileViewWidget::OnSetViewScale(const QString &msgConent)
 {
     m_nScale = msgConent.toInt();
@@ -551,6 +561,8 @@ int FileViewWidget::qDealWithShortKey(const QString &sKey)
         OnShortCutKey_Ctrl_l();
     } else if (sKey == KeyStr::g_ctrl_i) {
         OnShortCutKey_Ctrl_i();
+    } else if (sKey == KeyStr::g_ctrl_c) {
+        OnShortCutKey_Ctrl_c();
     }
 
     if (m_pKeyMsgList.contains(sKey)) {
