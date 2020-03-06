@@ -30,7 +30,7 @@ TitleMenu *TitleMenu::Instance()
 }
 
 TitleMenu::TitleMenu(DWidget *parent)
-    : CustomMenu("TitleMenu", parent)
+    : CustomMenu(TITLE_MENU, parent)
 {
     initActions();
 

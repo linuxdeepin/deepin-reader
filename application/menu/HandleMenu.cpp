@@ -19,7 +19,7 @@
 #include "HandleMenu.h"
 
 HandleMenu::HandleMenu(DWidget *parent)
-    : CustomMenu("HandleMenu", parent)
+    : CustomMenu(HANDLE_MENU, parent)
 {
     initActions();
 }

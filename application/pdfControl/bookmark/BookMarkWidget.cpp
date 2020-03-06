@@ -110,11 +110,9 @@ void BookMarkWidget::DeleteItemByKey()
         auto t_widget =
             qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
         if (t_widget) {
-            if (t_widget->bSelect()) {
-                int nPageIndex = t_widget->nPageIndex();
+            int nPageIndex = t_widget->nPageIndex();
 
-                slotDeleteBookItem(QString::number(nPageIndex));
-            }
+            slotDeleteBookItem(QString::number(nPageIndex));
         }
     }
 }

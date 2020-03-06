@@ -37,15 +37,6 @@ int BookMarkItemWidget::dealWithData(const int &, const QString &)
     return MSG_NO_OK;
 }
 
-bool BookMarkItemWidget::bSelect()
-{
-    if (m_pPicture) {
-        return m_pPicture->bSelect();
-    }
-
-    return false;
-}
-
 void BookMarkItemWidget::setBSelect(const bool &paint)
 {
     if (m_pPicture) {

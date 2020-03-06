@@ -7,7 +7,7 @@
 #include "widgets/main/MainTabWidgetEx.h"
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
-    : CustomMenu("DefaultOperationMenu", parent)
+    : CustomMenu(DEFAULT_OPERATION_MENU, parent)
 {
     initActions();
 }
@@ -101,7 +101,12 @@ QAction *DefaultOperationMenu::createAction(const QString &name, const char *mem
 
 void DefaultOperationMenu::slotSearchClicked()
 {
-    dApp->m_pModelService->notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_ctrl_f);
+    QJsonObject obj;
+    obj.insert("type", "ShortCut");
+    obj.insert("key", KeyStr::g_ctrl_f);
+
+    QJsonDocument doc = QJsonDocument(obj);
+    notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
 }
 
 void DefaultOperationMenu::slotBookMarkClicked()

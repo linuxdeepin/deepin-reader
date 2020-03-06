@@ -35,6 +35,8 @@ LeftSidebarWidget::~LeftSidebarWidget()
 
 void LeftSidebarWidget::SlotOpenFileOk(const QString &sPath)
 {
+    m_strBindPath = sPath;
+
     FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(sPath);
     int nShow = fdm.qGetData(Thumbnail);
     bool showLeft = nShow == 1 ? true : false;
@@ -101,11 +103,17 @@ void LeftSidebarWidget::SetFindOperation(const int &iType)
     m_pStackedWidget->SetFindOperation(iType);
 
     if (iType == E_FIND_CONTENT) {
+        m_nSearch = 1;
         m_bOldVisible = this->isVisible();
         if (!m_bOldVisible) {
             this->setVisible(true);
         }
     } else if (iType == E_FIND_EXIT) {
-        this->setVisible(m_bOldVisible);
+        if (m_nSearch == 1) {
+            m_nSearch = -1;
+            this->setVisible(m_bOldVisible);
+        } else {
+            SlotOpenFileOk(m_strBindPath);
+        }
     }
 }

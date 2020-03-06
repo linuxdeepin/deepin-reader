@@ -23,7 +23,7 @@
 #include "widgets/main/MainTabWidgetEx.h"
 
 ScaleMenu::ScaleMenu(DWidget *parent)
-    : CustomMenu("ScaleMenu", parent)
+    : CustomMenu(SCALE_MENU, parent)
 {
     initActions();
 

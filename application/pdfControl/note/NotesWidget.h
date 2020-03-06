@@ -119,7 +119,6 @@ private:
     CustomListWidget *m_pNotesList = nullptr;
     ThreadLoadImageOfNote m_ThreadLoadImage;  // 加载注释缩略图线程
     DPushButton *m_pAddAnnotationBtn = nullptr ;   // 添加注释
-    DMenu       *m_menu = nullptr;
 
     int m_nIndex = -1;                        // 当前注释列表数
     QString m_strBindPath = "";

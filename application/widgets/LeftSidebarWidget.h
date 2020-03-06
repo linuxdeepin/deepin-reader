@@ -45,7 +45,9 @@ private:
     MainOperationWidget     *m_pMainOperationWidget = nullptr;
     DataStackedWidget       *m_pStackedWidget = nullptr;
 
+    int         m_nSearch = -1;
     bool        m_bOldVisible = false;
+    QString     m_strBindPath = "";
 };
 
 #endif  // LEFTSHOWWIDGET_H

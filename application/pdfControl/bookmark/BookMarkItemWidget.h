@@ -39,7 +39,6 @@ public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
 
-    bool bSelect();
     void setBSelect(const bool &paint);
 
 protected:

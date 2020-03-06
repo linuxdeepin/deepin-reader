@@ -8,7 +8,7 @@
 #include "widgets/main/MainTabWidgetEx.h"
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)
-    : CustomMenu("TextOperationMenu", parent)
+    : CustomMenu(TEXT_OPERATION_MENU, parent)
 {
     initActions();
 }

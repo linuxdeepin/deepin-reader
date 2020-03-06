@@ -34,6 +34,8 @@ public:
 public:
     int dealWithData(const int &, const QString &) override;
 
+    void setMagnifierState();
+
     // CustomWidget interface
 public:
     int qDealWithShortKey(const QString &) override;
@@ -70,7 +72,6 @@ private:
 
     DPushButton *createBtn(const QString &btnName, bool bCheckable = false);
 
-    void setMagnifierState();
     void SetBtnDisable(const bool &bAble);
 
     void OnShortCut_Alt1();

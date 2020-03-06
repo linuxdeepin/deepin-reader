@@ -21,7 +21,7 @@
 #include "widgets/main/MainTabWidgetEx.h"
 
 FontMenu::FontMenu(DWidget *parent):
-    CustomMenu("FontMenu", parent)
+    CustomMenu(FONT_MENU, parent)
 {
     shortKeyList << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3
                  << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r;

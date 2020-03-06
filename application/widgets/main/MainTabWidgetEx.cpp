@@ -388,21 +388,23 @@ void MainTabWidgetEx::OnKeyPress(const QString &sKey)
 //  切换文档, 需要取消之前文档 放大镜模式
 void MainTabWidgetEx::SlotSetCurrentIndexFile(const QString &sPath)
 {
-    int nState = getCurrentState();
-    if (nState == Magnifer_State) {
-        setCurrentState(Default_State);
-
-        QString sMagniferPath = dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->getMagniferPath();
-        auto proxy = getCurFileAndProxy(sMagniferPath);
-        if (proxy) {
-            proxy->closeMagnifier();
-        }
-    }
-
     auto splitterList = this->findChildren<MainSplitter *>();
     foreach (auto s, splitterList) {
         QString sSplitterPath = s->qGetPath();
         if (sSplitterPath == sPath) {
+
+            //  切换文档 需要将放大镜状态 取消
+            int nState = getCurrentState();
+            if (nState == Magnifer_State) {
+                setCurrentState(Default_State);
+
+                QString sMagniferPath = dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->getMagniferPath();
+                auto proxy = getCurFileAndProxy(sMagniferPath);
+                if (proxy) {
+                    proxy->closeMagnifier();
+                }
+            }
+
             int iIndex = m_pStackedLayout->indexOf(s);
             m_pStackedLayout->setCurrentIndex(iIndex);
 
@@ -571,6 +573,9 @@ void MainTabWidgetEx::OnOpenMagnifer()
 {
     int nState = getCurrentState();
     if (nState != Magnifer_State) {
+
+        TitleWidget::Instance()->setMagnifierState();
+
         setCurrentState(Magnifer_State);
         dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->setMagniferPath(qGetCurPath());
     }

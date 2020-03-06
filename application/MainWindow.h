@@ -2,7 +2,6 @@
 #define MainWindow_H
 
 #include <DMainWindow>
-#include <DMenu>
 
 #include "application.h"
 
