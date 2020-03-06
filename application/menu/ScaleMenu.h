@@ -44,7 +44,6 @@ private slots:
     void slotActionTrigger(QAction *);
     void slotPrevScale();
     void slotNextScale();
-    void slotDocProxyMsg(const QString &);
 
 private:
     void __ChangeScale(const int &);

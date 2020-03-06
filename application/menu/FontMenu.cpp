@@ -18,12 +18,6 @@
  */
 #include "FontMenu.h"
 
-#include <DFontSizeManager>
-#include <QWidgetAction>
-
-#include "docview/docummentproxy.h"
-#include "utils/PublicFunction.h"
-
 #include "widgets/main/MainTabWidgetEx.h"
 
 FontMenu::FontMenu(DWidget *parent):

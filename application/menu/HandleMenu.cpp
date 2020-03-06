@@ -29,6 +29,7 @@ void HandleMenu::initActions()
     auto actionGroup = new QActionGroup(this);
 
     auto action = new QAction(tr("Select Text"), this);
+    connect(action, SIGNAL(triggered()), SLOT(slotSelectText()));
     action->setObjectName("defaultshape");
     action->setCheckable(true);
     action->setChecked(true);
@@ -38,19 +39,20 @@ void HandleMenu::initActions()
     addSeparator();
 
     action = new QAction(tr("Hand Tool"), this);
+    connect(action, SIGNAL(triggered()), SLOT(slotHandTool()));
     action->setObjectName("handleshape");
     action->setCheckable(true);
 
     actionGroup->addAction(action);
     addAction(action);
-
-    connect(actionGroup, SIGNAL(triggered(QAction *)), SLOT(SlotActionTrigger(QAction *)));
 }
 
-void HandleMenu::SlotActionTrigger(QAction *action)
+void HandleMenu::slotHandTool()
 {
-    QString sAction = action->objectName();
-    if (sAction != "") {
-        emit sigCurrentTool(sAction);
-    }
+    emit sigClickAction(E_HANDLE_HANDLE_TOOL);
+}
+
+void HandleMenu::slotSelectText()
+{
+    emit sigClickAction(E_HANDLE_SELECT_TEXT);
 }

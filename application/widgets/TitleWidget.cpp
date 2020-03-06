@@ -249,12 +249,12 @@ void TitleWidget::SlotScaleMenuBtnClicked()
     }
 }
 
-void TitleWidget::SlotSetCurrentTool(const QString &sAction)
+void TitleWidget::SlotSetCurrentTool(const int &sAction)
 {
     //  切换了选择工具, 需要取消放大镜的操作
     MainTabWidgetEx::Instance()->OnExitMagnifer();
 
-    if (sAction == "defaultshape") {
+    if (sAction == E_HANDLE_SELECT_TEXT) {
         setDefaultShape();
     } else {
         setHandleShape();
@@ -283,7 +283,7 @@ void TitleWidget::initBtns()
 void TitleWidget::__InitHandel()
 {
     m_pHandleMenu = new HandleMenu(this);
-    connect(m_pHandleMenu, SIGNAL(sigCurrentTool(const QString &)), SLOT(SlotSetCurrentTool(const QString &)));
+    connect(m_pHandleMenu, SIGNAL(sigClickAction(const int &)), SLOT(SlotSetCurrentTool(const int &)));
 
     m_pHandleShapeBtn = createBtn(tr("Select Text"));
     m_pHandleShapeBtn->setObjectName("defaultshape");

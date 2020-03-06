@@ -52,7 +52,7 @@ private slots:
     void on_searchBtn_clicked();
     void SlotScaleMenuBtnClicked();
 
-    void SlotSetCurrentTool(const QString &);
+    void SlotSetCurrentTool(const int &);
 
     void SlotCurrentScale(const int &);
 

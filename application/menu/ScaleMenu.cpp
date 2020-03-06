@@ -88,11 +88,6 @@ void ScaleMenu::slotNextScale()
     }
 }
 
-void ScaleMenu::slotDocProxyMsg(const QString &sContent)
-{
-
-}
-
 void ScaleMenu::onShortKey(const QString &keyType)
 {
     if (keyType == KeyStr::g_ctrl_smaller) {

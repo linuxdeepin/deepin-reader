@@ -1,8 +1,5 @@
 #include "TextOperationMenu.h"
 
-#include <DFontSizeManager>
-#include <DGuiApplicationHelper>
-
 #include "ColorWidgetAction.h"
 
 #include "business/AppInfo.h"
