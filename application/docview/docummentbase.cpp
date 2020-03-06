@@ -1958,26 +1958,34 @@ QPoint DocummentBase::transformPoint(const QPoint &pt, RotateType_EM type, doubl
 {
     Q_D(DocummentBase);
     QPoint pos;
-    double curwidth = d->m_imagewidth * scale;
-    double curheight = d->m_imageheight * scale;
+    double curwidth, curheight;
     switch (type) {
     case RotateType_0:
     case RotateType_Normal: {
-        pos = pt;
+        curwidth = d->m_imagewidth * scale;
+        curheight = d->m_imageheight * scale;
+        pos.setX(pt.x());
+        pos.setY(pt.y());
     }
     break;
     case RotateType_90: {
+        curwidth = d->m_imageheight  * scale;
+        curheight = d->m_imagewidth * scale;
         pos.setX(pt.y());
-        pos.setY(curheight - pt.x());
+        pos.setY(curwidth - pt.x());
     }
     break;
     case RotateType_180: {
+        curwidth = d->m_imagewidth * scale;
+        curheight = d->m_imageheight * scale;
         pos.setX(curwidth - pt.x());
         pos.setY(curheight - pt.y());
     }
     break;
     case RotateType_270: {
-        pos.setX(curwidth - pt.y());
+        curwidth = d->m_imageheight  * scale;
+        curheight = d->m_imagewidth * scale;
+        pos.setX((curheight - pt.y()));
         pos.setY(pt.x());
     }
     break;

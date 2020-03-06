@@ -566,6 +566,8 @@ bool PagePdf::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString
 QString PagePdf::addTextAnnotation(const QPoint &pos, const QColor &color, TextAnnoteType_Em type)
 {
     Q_D(PagePdf);
+    double curwidth = d->m_scale * d->m_imagewidth;
+    double curheight = d->m_scale * d->m_imageheight;
     QString strtype;
     switch (type) {
     case TextAnnoteType_Note:
@@ -601,14 +603,15 @@ QString PagePdf::addTextAnnotation(const QPoint &pos, const QColor &color, TextA
 
     Poppler::TextAnnotation *annotation = new Poppler::TextAnnotation(Poppler::TextAnnotation::Linked);
 
-    double x = pos.x() / d->m_imagewidth * d->m_scale;
-    double y = pos.y() / d->m_imageheight * d->m_scale;
+    qDebug() << x() << y() << width() << height();
+    double x1 = pos.x() / (d->m_imagewidth * d->m_scale);
+    double y1 = pos.y() / (d->m_imageheight * d->m_scale);
     double width = ICONANNOTE_WIDTH / d->m_imagewidth;
     double height = ICONANNOTE_WIDTH / d->m_imageheight;
     qDebug() << __FUNCTION__ << width << height;
     QRectF boundary;
-    boundary.setX(x - width / 2.0);
-    boundary.setY(y - height / 2.0);
+    boundary.setX(x1 - width / 2.0);
+    boundary.setY(y1 - height / 2.0);
     boundary.setWidth(width);
     boundary.setHeight(height);
 
