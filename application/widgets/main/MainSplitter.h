@@ -59,6 +59,7 @@ private:
 
 private slots:
     void SlotOpenFileOk();
+    void SlotFindOperation(const int &);
     void SlotNotifyMsg(const int &, const QString &);
 
 private:

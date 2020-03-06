@@ -95,3 +95,18 @@ int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgConten
 
     return nRes;
 }
+
+void LeftSidebarWidget::SetFindOperation(const int &iType)
+{
+    m_pMainOperationWidget->SetFindOperation(iType);
+    m_pStackedWidget->SetFindOperation(iType);
+
+    if (iType == E_FIND_CONTENT) {
+        m_bOldVisible = this->isVisible();
+        if (!m_bOldVisible) {
+            this->setVisible(true);
+        }
+    } else if (iType == E_FIND_EXIT) {
+        this->setVisible(m_bOldVisible);
+    }
+}

@@ -38,16 +38,12 @@ DataStackedWidget::DataStackedWidget(DWidget *parent)
 
 int DataStackedWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
+    int nRes = MSG_NO_OK;
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(msgContent);
-        int nId = fdm.qGetData(LeftIndex);
-        if (nId == -1) {
-            nId = 0;
-        }
-        setCurrentIndex(nId);
+        OnOpenFileOk(msgContent);
     }
 
-    int nRes = m_pThWidget->dealWithData(msgType, msgContent);
+    nRes = m_pThWidget->dealWithData(msgType, msgContent);
     if (nRes != MSG_OK) {
         nRes = m_pCatalogWidget->dealWithData(msgType, msgContent);
         if (nRes != MSG_OK) {
@@ -64,7 +60,18 @@ int DataStackedWidget::dealWithData(const int &msgType, const QString &msgConten
         }
     }
 
-    return MSG_NO_OK;
+    return nRes;
+}
+
+void DataStackedWidget::SetFindOperation(const int &iType)
+{
+    if (iType == E_FIND_CONTENT) {
+        setCurrentIndex(WIDGET_SEARCH);
+    } else if (iType == E_FIND_EXIT) {
+        OnOpenFileOk(m_strBindPath);
+
+        m_pSearchResWidget->OnExitSearch();
+    }
 }
 
 void DataStackedWidget::keyPressEvent(QKeyEvent *event)
@@ -86,9 +93,7 @@ void DataStackedWidget::slotSetStackCurIndex(const int &iIndex)
     setCurrentIndex(iIndex);
 
     //  前一个是 出来搜索结果了, 后一个是正在搜索, 两个都不需要保存在记录中
-    if (iIndex == WIDGET_SEARCH || iIndex == WIDGET_BUFFER) {
-        emit sigSearchWidgetState(iIndex);
-    } else {
+    if (iIndex != WIDGET_SEARCH) {
         QJsonObject obj;
         obj.insert("content", QString::number(iIndex));
         obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET);
@@ -120,10 +125,6 @@ void DataStackedWidget::InitWidgets()
     m_pSearchResWidget = new SearchResWidget(this);
     insertWidget(WIDGET_SEARCH, m_pSearchResWidget);
 
-    m_pBuffWidget = new BufferWidget(this);
-    connect(this, SIGNAL(sigSearchWidgetState(const int &)), m_pBuffWidget, SLOT(SlotSetSpinnerState(const int &)));
-
-    insertWidget(WIDGET_BUFFER, m_pBuffWidget);
     setCurrentIndex(WIDGET_THUMBNAIL);
 }
 
@@ -194,5 +195,17 @@ void DataStackedWidget::DeleteItemByKey()
             widget->DeleteItemByKey();
         }
     }
+}
+
+void DataStackedWidget::OnOpenFileOk(const QString &sPath)
+{
+    m_strBindPath = sPath;
+
+    FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(m_strBindPath);
+    int nId = fdm.qGetData(LeftIndex);
+    if (nId == -1) {
+        nId = 0;
+    }
+    setCurrentIndex(nId);
 }
 

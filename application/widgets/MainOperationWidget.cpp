@@ -16,8 +16,6 @@ MainOperationWidget::MainOperationWidget(CustomWidget *parent)
     initConnect();
     slotUpdateTheme();
 
-    m_pMsgList = {MSG_SWITCHLEFTWIDGET, MSG_FIND_EXIT};
-
     dApp->m_pModelService->addObserver(this);
 }
 
@@ -54,8 +52,8 @@ void MainOperationWidget::initWidget()
     auto pSearchBtn = __CreateHideBtn();
     btnGroup->addButton(pSearchBtn, WIDGET_SEARCH);
 
-    auto pBufferBtn = __CreateHideBtn();
-    btnGroup->addButton(pBufferBtn, WIDGET_BUFFER);
+//    auto pBufferBtn = __CreateHideBtn();
+//    btnGroup->addButton(pBufferBtn, WIDGET_BUFFER);
 
     this->setLayout(mLayout);
 }
@@ -83,11 +81,6 @@ void MainOperationWidget::__SetBtnCheckById(const int &id)
     }
 }
 
-void MainOperationWidget::__SearchExit()
-{
-    slotOpenFileOk("");
-}
-
 DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QString &objName)
 {
     auto btn = new DToolButton(this);
@@ -107,7 +100,8 @@ void MainOperationWidget::initConnect()
 
 void MainOperationWidget::slotOpenFileOk(const QString &sPath)
 {
-    FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(sPath);
+    m_strBindPath = sPath;
+    FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(m_strBindPath);
     int nId = fdm.qGetData(LeftIndex);
     if (nId == -1) {
         nId = 0;
@@ -146,11 +140,7 @@ void MainOperationWidget::slotButtonClicked(int id)
 
 int MainOperationWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_SWITCHLEFTWIDGET) {
-        __SetBtnCheckById(msgContent.toInt());
-    } else if (msgType == MSG_FIND_EXIT) {
-        __SearchExit();
-    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         slotOpenFileOk(msgContent);
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         slotUpdateTheme();
@@ -160,4 +150,13 @@ int MainOperationWidget::dealWithData(const int &msgType, const QString &msgCont
         return MSG_OK;
     }
     return MSG_NO_OK;
+}
+
+void MainOperationWidget::SetFindOperation(const int &iType)
+{
+    if (iType == E_FIND_CONTENT) {
+        __SetBtnCheckById(WIDGET_SEARCH);
+    } else if (iType == E_FIND_EXIT) {
+        slotOpenFileOk(m_strBindPath);
+    }
 }

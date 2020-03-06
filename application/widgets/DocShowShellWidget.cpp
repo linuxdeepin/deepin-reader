@@ -157,8 +157,14 @@ void DocShowShellWidget::SlotOpenFileOk()
 
 void DocShowShellWidget::SlotFindOperation(const int &iType, const QString &strFind)
 {
+    emit sigFindOperation(iType);
+
     if (m_pFileViewWidget) {
         m_pFileViewWidget->SetFindOperation(iType, strFind);
+    }
+
+    if (iType == E_FIND_CONTENT || iType == E_FIND_EXIT) {
+        notifyMsg(iType, m_strBindPath);
     }
 }
 
@@ -176,6 +182,13 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
 {
     int nRes = m_pFileViewWidget->dealWithData(msgType, msgContent);
     if (nRes != MSG_OK) {
+        if (m_pFindWidget) {
+            nRes = m_pFindWidget->dealWithData(msgType, msgContent);
+            if (nRes == MSG_OK) {
+                return nRes;
+            }
+        }
+
         if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {             //  添加注释
             onOpenNoteWidget(msgContent);
         } else if (msgType == MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) {
@@ -199,6 +212,7 @@ int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgConte
 
 bool DocShowShellWidget::OpenFilePath(const QString &sPath)
 {
+    m_strBindPath = sPath;
     return m_pFileViewWidget->OpenFilePath(sPath);
 }
 

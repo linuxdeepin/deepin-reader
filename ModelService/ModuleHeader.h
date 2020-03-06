@@ -5,14 +5,26 @@
 
 namespace  {
 
-// 窗口类型
-enum Widget_Type {
+enum E_RETURN_MSG {
+    MSG_OK = 0,
+    MSG_NO_OK
+};
+
+//  当前的操作状态
+enum E_CUR_STATE {
+    Default_State,
+    SLIDER_SHOW,
+    Magnifer_State,
+    Handel_State,
+    NOTE_ADD_State
+};
+
+enum E_STACK_TYPE {
     WIDGET_THUMBNAIL = 0, //  缩略图
     WIDGET_catalog,     //  目录
     WIDGET_BOOKMARK,    //  书签
     WIDGET_NOTE,        //  注释
     WIDGET_SEARCH,      //  搜索
-    WIDGET_BUFFER       //  缓冲
 };
 
 // 注释类型
@@ -31,7 +43,7 @@ const QString sTiff_Filter = "Tiff files (*.tiff)";
 const QString sPs_Filter = "Ps files (*.ps)";
 const QString sXps_Filter = "Xps files (*.xps)";
 const QString sDjvu_Filter = "Djvu files (*.djvu)";
-const QString sQStringSep = "@#$!!#$$@@#&!@#$";
+const QString sQStringSep = "wwzzxx@#$!!#$$@@#&!@#$wzxwzxc";
 }  // namespace Constant
 
 // 图标类型

@@ -30,9 +30,6 @@ private:
 public:
     static TitleWidget *Instance();
 
-signals:
-    void sigSetFindWidget(const int &);
-
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
@@ -46,7 +43,6 @@ protected:
     void initWidget() override;
 
 private slots:
-    void slotSetFindWidget(const int &);
     void slotUpdateTheme();
     void slotOpenFileOk(const QString &);
 
@@ -80,6 +76,8 @@ private:
     void OnShortCut_Alt1();
     void OnShortCut_Alt2();
     void OnShortCut_CtrlM();
+
+    void SetFindWidget(const int &, const QString &);
 
 private:
     QStringList shortKeyList;

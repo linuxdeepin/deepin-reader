@@ -22,7 +22,7 @@
 #include <QObject>
 #include <QMap>
 
-#include "MsgHeader.h"
+#include "ModuleHeader.h"
 #include "CustomControl/CustomWidgetPrivate.h"
 
 class DocummentProxy;

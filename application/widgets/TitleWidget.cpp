@@ -21,7 +21,7 @@ TitleWidget *TitleWidget::Instance()
 TitleWidget::TitleWidget(CustomWidget *parent)
     : CustomWidget(TITLE_WIDGET, parent)
 {
-    m_pMsgList = {MSG_TAB_SHOW_FILE_CHANGE};
+    m_pMsgList = {MSG_TAB_SHOW_FILE_CHANGE, E_FIND_CONTENT, E_FIND_EXIT};
 
     shortKeyList = QStringList() << KeyStr::g_alt_1 << KeyStr::g_alt_2 << KeyStr::g_ctrl_m
                    << KeyStr::g_alt_z
@@ -43,19 +43,18 @@ TitleWidget::~TitleWidget()
     dApp->m_pModelService->removeObserver(this);
 }
 
-//  显示了侧边栏, 则隐藏
-void TitleWidget::slotSetFindWidget(const int &iFlag)
+//  缩略图显示按钮状态切换
+void TitleWidget::SetFindWidget(const int &iFlag, const QString &sPath)
 {
-    if (iFlag == 1) {
+    if (iFlag == E_FIND_CONTENT) {
         m_pThumbnailBtn->setChecked(true);
+    } else if (iFlag == E_FIND_EXIT) {
+        FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(sPath);
 
-//        MsgModel mm;
-//        mm.setMsgType(MSG_WIDGET_THUMBNAILS_VIEW);
-//        mm.setValue("1");
+        int nState = fdm.qGetData(Thumbnail);
+        bool showLeft = nState == 1 ? true : false;
 
-//        notifyMsg(E_FILE_MSG, mm.toJson());
-    } else {
-//        slotAppFullScreen();
+        m_pThumbnailBtn->setChecked(showLeft);
     }
 }
 
@@ -172,7 +171,7 @@ void TitleWidget::initWidget()
 
 void TitleWidget::initConnections()
 {
-    connect(this, SIGNAL(sigSetFindWidget(const int &)), SLOT(slotSetFindWidget(const int &)));
+//    connect(this, SIGNAL(sigSetFindWidget(const int &)), SLOT(slotSetFindWidget(const int &)));
 //    connect(this, SIGNAL(sigMagnifierCancel()), SLOT(slotMagnifierCancel()));
 //    connect(this, SIGNAL(sigAppFullScreen()), SLOT(slotAppFullScreen()));
 }
@@ -412,12 +411,10 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
 
         m_pFontMenu->dealWithData(msgType, msgContent);
         m_pScaleMenu->dealWithData(msgType, msgContent);
-    } else if (msgType == MSG_FIND_START) {
-        emit sigSetFindWidget(1);
+    } else if (msgType == E_FIND_CONTENT || msgType == E_FIND_EXIT) {
+        SetFindWidget(msgType, msgContent);
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         slotUpdateTheme();
-    } else if (msgType == MSG_HIDE_FIND_WIDGET) {
-        emit sigSetFindWidget(0);
     }
 
     if (m_pMsgList.contains(msgType)) {

@@ -9,20 +9,6 @@
 
 namespace {
 
-enum E_RETURN_MSG {
-    MSG_OK = 0,
-    MSG_NO_OK
-};
-
-//  当前的操作状态
-enum E_CUR_STATE {
-    Default_State,
-    SLIDER_SHOW,
-    Magnifer_State,
-    Handel_State,
-    NOTE_ADD_State
-};
-
 //  消息类型
 enum E_MSG_TYPE {
     E_MSG_TYPE_BEGIN = 0,
@@ -47,10 +33,12 @@ enum E_CENTRAL_MSG {
 
 //  搜索框消息
 enum E_FIND_WIDGET_MSG {
+    E_FIND_WIDGET_BEGIN = E_CENTRAL_MSG_END + 50,
     E_FIND_PREV,
     E_FIND_NEXT,
     E_FIND_EXIT,
-    E_FIND_CONTENT
+    E_FIND_CONTENT,
+    E_FIND_WIDGET_END,
 };
 
 //  消息类型
@@ -83,21 +71,19 @@ enum E_MENU_MSG {
 enum E_LEFT_SLIDER_MSG {
     QQQQQQQQ_NO_USE = E_MENU_MSG_END + 50, //  侧边栏 显隐消息
     MSG_HIDE_FIND_WIDGET,       //  侧边栏 显隐消息
-    MSG_SWITCHLEFTWIDGET,       //  切换左侧窗口(缩略图、书签、注释) 消息
     QQQQQQQQ_NO_USE_END
 };
 
 //  搜索 消息
 enum E_FIND_MSG {
-    MSG_FIND_START = QQQQQQQQ_NO_USE_END + 50,           //  开始查询
-    MSG_CLEAR_FIND_CONTENT,         //  清除查询内容
-    MSG_FIND_NONE,                  //  查询无果
-    MSG_FIND_EXIT                   //  退出查询
+    QQQQQQQQ_NO_USE1 = QQQQQQQQ_NO_USE_END + 50, //  侧边栏 显隐消息
+    MSG_FIND_NONE_CONTENT,       //  侧边栏 显隐消息
+    QQQQQQQQ_NO_USE_END1,                  //  查询无果
 };
 
 //  文档操作消息
 enum E_DOC_TYPE_MSG {
-    MSG_DOC_JUMP_PAGE = MSG_FIND_EXIT + 50,             //  请求跳转页面
+    MSG_DOC_JUMP_PAGE = QQQQQQQQ_NO_USE_END1 + 50,             //  请求跳转页面
     MSG_OPEN_FILE_PATH,             //  打开的文件消息
     MSG_SAVE_AS_FILE_PATH,             //  保存文件消息
     MSG_OPERATION_OPEN_FILE_OK,     //  打开文件成功, 要告诉所有人

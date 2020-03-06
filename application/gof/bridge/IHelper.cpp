@@ -22,7 +22,7 @@
 #include "HelperImpl.h"
 #include "AnnotationHelper.h"
 #include "DocFileHelper.h"
-#include "MsgHeader.h"
+#include "ModuleHeader.h"
 
 IHelper::IHelper(QObject *parent)
     : QObject(parent)

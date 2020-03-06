@@ -20,18 +20,13 @@
 
 #include "SearchItemWidget.h"
 
-#include "widgets/LeftSidebarWidget.h"
 #include "docview/docummentproxy.h"
 
 #include "widgets/main/MainTabWidgetEx.h"
 
 SearchResWidget::SearchResWidget(DWidget *parent)
-    : CustomWidget(QString("SearchResWidget"), parent)
+    : CustomWidget(SEARCH_RES_WIDGET, parent)
 {
-    m_loadSearchResThread.setSearchResW(this);
-
-    m_pMsgList = {MSG_CLEAR_FIND_CONTENT};
-
     initWidget();
     initConnections();
 
@@ -41,118 +36,35 @@ SearchResWidget::SearchResWidget(DWidget *parent)
 SearchResWidget::~SearchResWidget()
 {
     dApp->m_pModelService->removeObserver(this);
-
-    if (m_loadSearchResThread.isRunning()) {
-        m_loadSearchResThread.stopThread();
-    }
 }
 
-void SearchResWidget::__ClearSearchContent()
+//  查询有数据, 则填充
+void SearchResWidget::slotGetSearchContant(const stSearchRes &search)
 {
-    m_isSearch = false;
+    int resultNum = 0;
+    QString strText = "";
 
-    m_bShowList = false;
-    if (m_loadSearchResThread.isRunning()) {
-        m_loadSearchResThread.stopThread();
-    }
-    if (m_pSearchList->count() > 0) {
-        DocummentProxy *_proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
-        if (_proxy) {
-            _proxy->clearsearch();
-        }
+    int page = search.ipage;
+    foreach (QString s, search.listtext) {
+        strText += s.trimmed();
+        strText += QString("    ");
 
-        m_pSearchList->clear();
+        ++resultNum;
     }
 
-    notifyMsg(MSG_FIND_EXIT);       //  查询结束
-
-//    bool bShowThunmb = DataManager::instance()->bThumbnIsShow();
-//    if (!bShowThunmb) {
-//        //  侧边栏 隐藏
-//        notifyMsg(MSG_HIDE_FIND_WIDGET);
-//    }
-}
-
-void SearchResWidget::slotFlushSearchWidget(const QString &msgContent)
-{
-    m_isSearch = true;  //  开始搜索,  标志位 为 true
-
-    notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(WIDGET_BUFFER));    //  窗口 显示 转圈圈
-//    notifyMsg(MSG_WIDGET_THUMBNAILS_VIEW, QString::number(1));
-    m_bShowList = true;
-
-    DocummentProxy *_proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
-    if (_proxy) {
-        connect(_proxy, SIGNAL(signal_searchRes(stSearchRes)), this, SLOT(slotGetSearchContant(stSearchRes)));
-
-
-        _proxy->search(msgContent);
-
-        disconnect(_proxy, SIGNAL(signal_searchover()), this, SLOT(slotSearchOver()));
-        connect(_proxy, SIGNAL(signal_searchover()), this, SLOT(slotSearchOver()));
-    }
-}
-
-void SearchResWidget::slotGetSearchContant(stSearchRes search)
-{
-    if (search.listtext.size() < 1) {
-        return;
-    }
-    m_loadSearchResThread.pushSearch(search);
+    addSearchsItem(page, strText, resultNum);
 }
 
 void SearchResWidget::slotSearchOver()
 {
-    if (!m_isSearch) {      //  不搜索了, 不要搜索结果了
-        return;
-    }
+    if (m_pSearchList->count() == 0) {      //  无结果
+        QJsonObject obj;
+        obj.insert("to", E_MAIN_TAB_WIDGET + Constant::sQStringSep + E_DOC_SHOW_SHELL_WIDGET + Constant::sQStringSep + E_FIND_WIDGET);
 
-    if (m_loadSearchResThread.isRunning()) {
-        m_loadSearchResThread.stopThread();
-    }
+        QJsonDocument doc(obj);
 
-    if (m_pSearchList == nullptr)
-        return;
-
-    m_pSearchList->clear();
-
-//    disconnect(DocummentProxy::instance(), SIGNAL(signal_searchRes(stSearchRes)), this,
-//               SLOT(slotGetSearchContant(stSearchRes)));
-
-    QList<stSearchRes> list = m_loadSearchResThread.searchList();
-
-    if (list.size() <= 0) {
-//        disconnect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
-//                   SLOT(slotSelectItem(QListWidgetItem *)));
+        notifyMsg(MSG_FIND_NONE_CONTENT, doc.toJson(QJsonDocument::Compact));
         showTips();
-
-        //显示无结果窗口
-        notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(WIDGET_SEARCH));
-        //让搜索框变粉红色
-        notifyMsg(MSG_FIND_NONE);
-        //发送提示消息
-        // notifyMsg(CENTRAL_SHOW_TIP, tr("No search results") + ConstantMsg::g_warningtip_suffix);
-//        bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
-//        if (!t_bTnumbnIsShow) {
-//            notifyMsg(MSG_WIDGET_THUMBNAILS_VIEW, QString::number(!t_bTnumbnIsShow));
-//        }
-    } else {
-//        connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
-//                SLOT(slotSelectItem(QListWidgetItem *)));
-        //让搜索框回复正常
-//        notifyMsg(MSG_FIND_NONE, "0");
-        //生成左侧搜索列表
-        // to do and send flush thumbnail and contant
-        initSearchList(list);
-    }
-}
-
-void SearchResWidget::slotLoadImage(const int &page, const QImage &image)
-{
-    if (m_pSearchItemWidget) {
-        if (page == m_pSearchItemWidget->nPageIndex()) {
-            m_pSearchItemWidget->setLabelImage(image);
-        }
     }
 }
 
@@ -165,25 +77,12 @@ void SearchResWidget::slotSelectItem(QListWidgetItem *item)
     setSelectItemBackColor(item);
 }
 
-void SearchResWidget::slotStopFind()
-{
-//    notifyMsg(MSG_FIND_STOP);
-    if (m_bShowList) {
-        notifyMsg(MSG_SWITCHLEFTWIDGET, QString::number(WIDGET_SEARCH));
-
-//        bool t_bTnumbnIsShow = DataManager::instance()->bThumbnIsShow();
-//        if (!t_bTnumbnIsShow) {
-//            notifyMsg(MSG_WIDGET_THUMBNAILS_VIEW, QString::number(!t_bTnumbnIsShow));
-//        }
-    }
-}
-
 //  打开成功之后, 链接搜索信号
 void SearchResWidget::OnOpenFileOk(const QString &sPath)
 {
     DocummentProxy *_proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy(sPath);
     if (_proxy) {
-        connect(_proxy, SIGNAL(signal_searchRes(stSearchRes)), SLOT(slotGetSearchContant(stSearchRes)));
+        connect(_proxy, SIGNAL(signal_searchRes(stSearchRes)), SLOT(slotGetSearchContant(const stSearchRes &)));
         connect(_proxy, SIGNAL(signal_searchover()), SLOT(slotSearchOver()));
     }
 }
@@ -196,43 +95,13 @@ void SearchResWidget::initWidget()
     this->setLayout(m_pVLayout);
 
     m_pSearchList = new CustomListWidget;
+    connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), SLOT(slotSelectItem(QListWidgetItem *)));
 
     m_pVLayout->addWidget(m_pSearchList);
 }
 
 void SearchResWidget::initConnections()
 {
-    connect(&m_loadSearchResThread, SIGNAL(sigLoadImage(const int &, const QImage &)), SLOT(slotLoadImage(const int &, const QImage &)));
-    connect(&m_loadSearchResThread, SIGNAL(sigStopFind()), SLOT(slotStopFind()));
-
-    connect(this, SIGNAL(sigFlushSearchWidget(const QString &)), SLOT(slotFlushSearchWidget(const QString &)));
-
-    connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), this,
-            SLOT(slotSelectItem(QListWidgetItem *)));
-}
-
-void SearchResWidget::initSearchList(const QList<stSearchRes> &list)
-{
-    int resultNum = 0;
-    QString strText = "";
-
-    foreach (stSearchRes it, list) {
-        int page = static_cast<int>(it.ipage);
-        foreach (QString s, it.listtext) {
-            strText += s.trimmed();
-            strText += QString("    ");
-
-            ++resultNum;
-        }
-
-        addSearchsItem(page, strText, resultNum);
-        resultNum = 0;
-        strText.clear();
-    }
-
-    //开始填充缩略图线程
-    m_loadSearchResThread.setRunning(true);
-    m_loadSearchResThread.start();
 }
 
 void SearchResWidget::addSearchsItem(const int &page, const QString &text, const int &resultNum)
@@ -249,16 +118,21 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
         itemWidget->setSerchResultText(tr("%1 items found").arg(resultNum));
         itemWidget->setMinimumSize(QSize(LEFTMINWIDTH - 5, 80));
 
+        auto dproxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
+        if (nullptr != dproxy) {
+            QImage image;
+            bool bl = dproxy->getImage(page, image, 48, 68 /*42, 62*/);
+            if (bl) {
+                itemWidget->setLabelImage(image);
+            }
+        }
+
         m_pSearchList->setItemWidget(item, itemWidget);
     }
 }
 
 void SearchResWidget::showTips()
 {
-    if (m_pSearchList == nullptr) {
-        return;
-    }
-
     auto hLayout = new QHBoxLayout;
     auto vLayout = new QVBoxLayout;
     auto tipWidget = new DWidget;
@@ -296,7 +170,6 @@ void SearchResWidget::setSelectItemBackColor(QListWidgetItem *item)
     auto t_widget = reinterpret_cast<SearchItemWidget *>(m_pSearchList->itemWidget(item));
     if (t_widget) {
         t_widget->setBSelect(true);
-//        m_pSearchItem = item;
     }
 }
 
@@ -325,12 +198,6 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         OnOpenFileOk(msgContent);
-    } else if (MSG_CLEAR_FIND_CONTENT == msgType) {
-        __ClearSearchContent();
-    } else if (msgType == MSG_FIND_START) {  //  查询内容
-        if (msgContent != QString("")) {
-            emit sigFlushSearchWidget(msgContent);
-        }
     }
 
     if (m_pMsgList.contains(msgType)) {
@@ -340,113 +207,7 @@ int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
     return MSG_NO_OK;
 }
 
-/**
- * @brief SearchResWidget::getSearchPage
- * 得到当前搜索页码
- * @param index
- * @return
- */
-int SearchResWidget::getSearchPage(const int &index)
+void SearchResWidget::OnExitSearch()
 {
-    auto pItem = m_pSearchList->item(index);
-    if (pItem) {
-        m_pSearchItemWidget = reinterpret_cast<SearchItemWidget *>(m_pSearchList->itemWidget(pItem));
-        if (m_pSearchItemWidget) {
-            return m_pSearchItemWidget->nPageIndex();
-        }
-    }
-    return -1;
-}
-
-/************************************LoadSearchResList*******************************************************/
-/************************************加载搜索列表缩略图*********************************************************/
-
-LoadSearchResThread::LoadSearchResThread(QObject *parent)
-    : QThread(parent)
-{
-}
-
-/**
- * @brief LoadSearchResThread::stopThread
- * 停止线程
- */
-void LoadSearchResThread::stopThread()
-{
-    m_isRunning = false;
-
-    quit();
-    wait();  //阻塞等待
-}
-
-/**
- * @brief LoadSearchResThread::run
- * 线程主工作区
- */
-void LoadSearchResThread::run()
-{
-    m_pages = m_searchContantList.count();
-    m_searchContantList.clear();
-
-    int m_nStartIndex = 0;
-    int m_nEndIndex = 19;
-    bool t_bSendMSG = true;
-
-    while (m_isRunning) {
-        msleep(50);
-        if (m_nStartIndex < 0) {
-            m_nStartIndex = 0;
-        }
-        if (m_nEndIndex >= m_pages) {
-            m_nEndIndex = m_pages - 1;
-        }
-
-        if (!m_pSearchResWidget) {
-            break;
-        }
-        auto dproxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
-        if (nullptr == dproxy) {
-            break;
-        }
-
-        for (int index = m_nStartIndex; index <= m_nEndIndex; index++) {
-            if (!m_isRunning) {
-                break;
-            }
-            int page = m_pSearchResWidget->getSearchPage(index);
-
-            if (page == -1) {
-                continue;
-            }
-
-            QImage image;
-            bool bl = dproxy->getImage(page, image, 48, 68 /*42, 62*/);
-            if (bl) {
-                emit sigLoadImage(page, image);
-                msleep(50);
-            }
-        }
-
-        if ((m_nEndIndex >= m_pages - 1) && t_bSendMSG) {
-            emit sigStopFind();
-            t_bSendMSG = false;
-        }
-
-        if ((m_nEndIndex <= FIRST_LOAD_PAGES) && t_bSendMSG) {
-            emit sigStopFind();
-            t_bSendMSG = false;
-        }
-
-        if (m_nEndIndex >= m_pages - 1) {
-            m_isRunning = false;
-            break;
-        }
-
-        m_nStartIndex += FIRST_LOAD_PAGES;
-        m_nEndIndex += FIRST_LOAD_PAGES;
-    }
-
-    if (t_bSendMSG) {
-        emit sigStopFind();
-        t_bSendMSG = false;
-    }
+    m_pSearchList->clear();
 }

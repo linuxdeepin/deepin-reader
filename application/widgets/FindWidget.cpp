@@ -42,7 +42,7 @@ FindWidget::FindWidget(DWidget *parent)
     setWindowFlags(Qt::WindowStaysOnTopHint);
     setBlurBackgroundEnabled(true);
 
-    m_pMsgList = {MSG_FIND_NONE};
+    m_pMsgList = {MSG_FIND_NONE_CONTENT};
     initWidget();
     initConnection();
 
@@ -115,7 +115,7 @@ void FindWidget::slotEditAborted()
 
 int FindWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_FIND_NONE) {
+    if (msgType == MSG_FIND_NONE_CONTENT) {
         onSetEditAlert(1);
     }
 

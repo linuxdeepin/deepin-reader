@@ -51,6 +51,7 @@ void MainSplitter::InitWidget()
 
     m_pDocWidget = new DocShowShellWidget;
     connect(m_pDocWidget, SIGNAL(sigOpenFileOk()), SLOT(SlotOpenFileOk()));
+    connect(m_pDocWidget, SIGNAL(sigFindOperation(const int &)), SLOT(SlotFindOperation(const int &)));
     addWidget(m_pDocWidget);
 
     QList<int> list_src;
@@ -66,6 +67,11 @@ void MainSplitter::SlotOpenFileOk()
     TitleWidget::Instance()->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
 
     m_pLeftWidget->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
+}
+
+void MainSplitter::SlotFindOperation(const int &iType)
+{
+    m_pLeftWidget->SetFindOperation(iType);
 }
 
 void MainSplitter::SlotNotifyMsg(const int &msgType, const QString &msgContent)

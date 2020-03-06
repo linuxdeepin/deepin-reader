@@ -62,10 +62,10 @@ void BufferWidget::initWidget()
 void BufferWidget::SlotSetSpinnerState(const int &iState)
 {
     if (m_pSpinner) {
-        if (iState == WIDGET_BUFFER) {
-            m_pSpinner->start();
-        } else {
-            m_pSpinner->stop();
-        }
+//        if (iState == WIDGET_BUFFER) {
+//            m_pSpinner->start();
+//        } else {
+//            m_pSpinner->stop();
+//        }
     }
 }

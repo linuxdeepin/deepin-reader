@@ -27,10 +27,7 @@ public:
 
 signals:
     void sigOpenFileOk();
-
-    void sigShowCloseBtn(const int &);
-    void sigHideCloseBtn();
-    void sigChangePlayCtrlShow(bool bshow);
+    void sigFindOperation(const int &);
 
     // IObserver interface
 public:
@@ -67,6 +64,7 @@ private:
     DSpinner            *m_pSpiner = nullptr;
     DWidget             *m_pSpinerWidget = nullptr;
     QStackedLayout      *m_playout = nullptr;
+    QString             m_strBindPath = "";
 };
 
 #endif // DOCSHOWSHELLWIDGET_H

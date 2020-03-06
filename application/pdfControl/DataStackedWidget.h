@@ -24,7 +24,6 @@
 DWIDGET_USE_NAMESPACE
 
 class BookMarkWidget;
-class BufferWidget;
 class CatalogWidget;
 class NotesWidget;
 class SearchResWidget;
@@ -38,11 +37,9 @@ class DataStackedWidget : public DStackedWidget
 public:
     explicit DataStackedWidget(DWidget *parent = nullptr);
 
-signals:
-    void sigSearchWidgetState(const int &);
-
 public:
     int dealWithData(const int &, const QString &);
+    void SetFindOperation(const int &);
 
     // QWidget interface
 protected:
@@ -58,13 +55,16 @@ private:
     void onJumpToNextPage();
     void DeleteItemByKey();
 
+    void OnOpenFileOk(const QString &);
+
 private:
     ThumbnailWidget     *m_pThWidget = nullptr;
     CatalogWidget       *m_pCatalogWidget = nullptr;
     BookMarkWidget      *m_pBookMarkWidget = nullptr;
     NotesWidget         *m_pNotesWidget = nullptr;
     SearchResWidget     *m_pSearchResWidget = nullptr;
-    BufferWidget        *m_pBuffWidget = nullptr;
+
+    QString             m_strBindPath = "";
 };
 
 #endif // DATASTACKEDWIDGET_H

@@ -26,6 +26,7 @@ signals:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
+    void SetFindOperation(const int &);
 
     // CustomWidget interface
 protected:
@@ -43,6 +44,8 @@ private:
 private:
     MainOperationWidget     *m_pMainOperationWidget = nullptr;
     DataStackedWidget       *m_pStackedWidget = nullptr;
+
+    bool        m_bOldVisible = false;
 };
 
 #endif  // LEFTSHOWWIDGET_H

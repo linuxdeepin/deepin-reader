@@ -26,6 +26,7 @@ signals:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
+    void SetFindOperation(const int &);
 
     // CustomWidget interface
 protected:
@@ -37,7 +38,6 @@ private:
     void initConnect();
     DPushButton *__CreateHideBtn();
     void __SetBtnCheckById(const int &);
-    void __SearchExit();
 
     void onDocProxyMsg(const QString &);
 
@@ -45,6 +45,9 @@ private slots:
     void slotOpenFileOk(const QString &sPath);
     void slotUpdateTheme();
     void slotButtonClicked(int);
+
+private:
+    QString     m_strBindPath = "";
 
 };
 
