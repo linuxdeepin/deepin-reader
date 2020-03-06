@@ -1,7 +1,5 @@
 #include "MainSplitterPrivate.h"
 
-#include "MsgModel.h"
-
 MainSplitterPrivate::MainSplitterPrivate(MainSplitter *parent) :
     q_ptr(parent)
 {

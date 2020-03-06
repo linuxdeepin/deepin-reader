@@ -57,9 +57,6 @@ private:
 
 private slots:
     void slotActionTrigger(const QString &);
-
-private:
-    void onDocProxyMsg(const QString &);
 };
 
 

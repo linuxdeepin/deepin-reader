@@ -22,7 +22,6 @@
 
 #include "MainTabWidgetEx.h"
 #include "FileDataModel.h"
-#include "MsgModel.h"
 
 #include "business/SaveDialog.h"
 

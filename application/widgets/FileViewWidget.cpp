@@ -19,12 +19,8 @@
 #include "FileViewWidget.h"
 
 #include <QGridLayout>
-#include <QDesktopServices>
-#include <DDialog>
 
 #include <QFileInfo>
-
-#include "MsgModel.h"
 
 #include "business/FileFormatHelper.h"
 

@@ -22,7 +22,6 @@
 #include <QFileInfo>
 #include <QMimeData>
 #include <QUrl>
-#include <DDialog>
 #include <DMessageManager>
 #include <QStackedLayout>
 

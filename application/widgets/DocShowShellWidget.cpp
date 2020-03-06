@@ -8,8 +8,6 @@
 #include "FindWidget.h"
 #include "FileAttrWidget.h"
 
-#include "MsgModel.h"
-
 #include "docview/docummentproxy.h"
 #include "utils/PublicFunction.h"
 

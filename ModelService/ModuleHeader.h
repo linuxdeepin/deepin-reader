@@ -108,4 +108,11 @@ const QString g_ctrl_a = "Ctrl+A";
 const QString g_ctrl_shift_slash = "Ctrl+Shift+/";
 }  // namespace KeyStr
 
+namespace ConstantMsg {
+const QString g_app_name = "deepin-reader";
+const QString g_db_name = "deepinreader.db";
+const QString g_cfg_name = "config.conf";
+}  // namespace ConstantMsg
+
+
 #endif  // IMAGEHEADER_H

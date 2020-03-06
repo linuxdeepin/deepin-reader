@@ -5,7 +5,6 @@
 #include <QVBoxLayout>
 
 #include "MainOperationWidget.h"
-#include "MsgModel.h"
 
 #include "docview/docummentproxy.h"
 #include "pdfControl/DataStackedWidget.h"

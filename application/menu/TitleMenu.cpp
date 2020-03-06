@@ -20,8 +20,6 @@
 
 #include <QSignalMapper>
 
-#include "MsgModel.h"
-
 #include "gof/bridge/IHelper.h"
 
 TitleMenu *TitleMenu::g_onlyTitleMenu = nullptr;

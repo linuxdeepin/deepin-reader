@@ -38,6 +38,7 @@ enum E_FIND_WIDGET_MSG {
     E_FIND_NEXT,
     E_FIND_EXIT,
     E_FIND_CONTENT,
+    MSG_FIND_NONE_CONTENT,       //  未搜索到内容消息
     E_FIND_WIDGET_END,
 };
 
@@ -67,27 +68,13 @@ enum E_MENU_MSG {
     E_MENU_MSG_END
 };
 
-//  左侧 侧边栏 消息
-enum E_LEFT_SLIDER_MSG {
-    QQQQQQQQ_NO_USE = E_MENU_MSG_END + 50, //  侧边栏 显隐消息
-    MSG_HIDE_FIND_WIDGET,       //  侧边栏 显隐消息
-    QQQQQQQQ_NO_USE_END
-};
-
-//  搜索 消息
-enum E_FIND_MSG {
-    QQQQQQQQ_NO_USE1 = QQQQQQQQ_NO_USE_END + 50, //  侧边栏 显隐消息
-    MSG_FIND_NONE_CONTENT,       //  侧边栏 显隐消息
-    QQQQQQQQ_NO_USE_END1,                  //  查询无果
-};
-
 //  文档操作消息
 enum E_DOC_TYPE_MSG {
-    MSG_DOC_JUMP_PAGE = QQQQQQQQ_NO_USE_END1 + 50,             //  请求跳转页面
-    MSG_OPEN_FILE_PATH,             //  打开的文件消息
-    MSG_SAVE_AS_FILE_PATH,             //  保存文件消息
-    MSG_OPERATION_OPEN_FILE_OK,     //  打开文件成功, 要告诉所有人
-    MSG_OPERATION_OPEN_FILE_FAIL,       //  打开文件失败
+    MSG_DOC_JUMP_PAGE = E_MENU_MSG_END + 50,             //  请求跳转页面
+    MSG_OPEN_FILE_PATH,                                 //  打开的文件消息
+    MSG_SAVE_AS_FILE_PATH,                              //  保存文件消息
+    MSG_OPERATION_OPEN_FILE_OK,                         //  打开文件成功, 要告诉所有人
+    MSG_OPERATION_OPEN_FILE_FAIL,                       //  打开文件失败
     MSG_OPERATION_FIRST_PAGE,                           //  第一页
     MSG_OPERATION_PREV_PAGE,                            //  上一页
     MSG_OPERATION_NEXT_PAGE,                            //  下一页
@@ -150,17 +137,5 @@ enum E_FILE_VALUE_MSG {
 
 }
 
-namespace ConstantMsg {
-
-const QString g_app_name = "deepin-reader";
-const QString g_db_name = "deepinreader.db";
-const QString g_cfg_name = "config.conf";
-
-//const QString g_warningtip_suffix = "##**warning";
-//const QString g_errortip_suffix = "##**error";
-
-//const int g_effective_res = 9999;  //  表明 消息已被处理
-//const int g_menu_width = 150;      //  菜单的宽度
-}  // namespace ConstantMsg
 
 #endif  // MSGHEADER_H

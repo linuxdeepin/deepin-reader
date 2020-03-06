@@ -1,6 +1,5 @@
 #include "MainWindow.h"
 
-#include <DDialog>
 #include <DTitlebar>
 #include <DWidgetUtil>
 #include <QSignalMapper>
@@ -8,9 +7,7 @@
 #include <DGuiApplicationHelper>
 
 #include "business/ShortCutShow.h"
-//#include "business/SaveDialog.h"
 #include "business/AppInfo.h"
-//#include "docview/docummentproxy.h"
 #include "menu/TitleMenu.h"
 #include "widgets/TitleWidget.h"
 #include "widgets/CentralWidget.h"

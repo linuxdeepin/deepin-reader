@@ -13,8 +13,7 @@ DEFINES += MODELSERVICE_LIBRARY
 
 SOURCES += \
         ModelService.cpp \
-    NotifySubject.cpp \
-    MsgModel.cpp
+    NotifySubject.cpp
 
 HEADERS += \
         ModelService.h \
@@ -26,7 +25,6 @@ HEADERS += \
     ModuleHeader.h \
     NotifySubject.h \
     SubjectThread.h \
-    MsgModel.h \
     WidgetHeader.h
 
 
