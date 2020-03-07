@@ -19,6 +19,7 @@
 #include "ThumbnailWidget.h"
 
 #include "docview/docummentproxy.h"
+#include "CustomControl/CustomWidgetPrivate.h"
 
 #include "gof/bridge/IHelper.h"
 #include "widgets/main/MainTabWidgetEx.h"
@@ -53,15 +54,14 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
         slotUpdateTheme();
     } else if (msgType == MSG_VIEWCHANGE_ROTATE_VALUE) {  //  文档旋转了
         slotSetRotate(msgContent.toInt());
-    } else {
-        if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-            slotOpenFileOk(msgContent);
-            m_pPageWidget->dealWithData(msgType, msgContent);
-        } else if (MSG_FILE_PAGE_CHANGE == msgType) {
-            slotDocFilePageChanged(msgContent);
-            m_pPageWidget->dealWithData(msgType, msgContent);
-        }
+    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+        slotOpenFileOk(msgContent);
+        m_pPageWidget->dealWithData(msgType, msgContent);
+    } else if (MSG_FILE_PAGE_CHANGE == msgType) {
+        slotDocFilePageChanged(msgContent);
+        m_pPageWidget->dealWithData(msgType, msgContent);
     }
+
 
     return MSG_NO_OK;
 }
@@ -71,6 +71,7 @@ void ThumbnailWidget::initWidget()
 {
     m_pThumbnailListWidget = new CustomListWidget;
     m_pThumbnailListWidget->setSpacing(8);
+    connect(m_pThumbnailListWidget, SIGNAL(sigValueChanged(const int &)), SLOT(slotLoadThumbnail(const int &)));
 
     m_pPageWidget = new PagingWidget;
 
@@ -91,20 +92,11 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
     //  先清空之前的选中颜色
     auto curItem = m_pThumbnailListWidget->currentItem();
     if (curItem) {
-        auto itemWidget =
-            reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(curItem));
-        if (itemWidget) {
-            itemWidget->setBSelect(false);
-        }
+        SetSelectItemColor(curItem, false);
     }
 
     if (item) {
-        m_pThumbnailListWidget->setCurrentItem(item);
-        auto pWidget =
-            reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
-        if (pWidget) {
-            pWidget->setBSelect(true);
-        }
+        SetSelectItemColor(item, true);
     }
 }
 
@@ -127,12 +119,9 @@ void ThumbnailWidget::initConnection()
 {
     connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const int &, const QImage &)),
             this, SLOT(slotLoadImage(const int &, const QImage &)));
+    connect(&m_ThreadLoadImage, SIGNAL(sigRotateImage(const int &)), SLOT(slotRotateThumbnail(const int &)));
 
-    connect(this, SIGNAL(sigSetRotate(int)), this, SLOT(slotSetRotate(int)));
-    connect(&m_ThreadLoadImage, SIGNAL(sigRotateImage(int)), this,
-            SLOT(slotRotateThumbnail(int)));
-    connect(m_pThumbnailListWidget, SIGNAL(sigValueChanged(int)), this, SLOT(slotLoadThumbnail(int)));
-
+    connect(this, SIGNAL(sigSetRotate(const int &)), SLOT(slotSetRotate(const int &)));
 }
 
 //  文件  当前页变化, 获取与 文档页  对应的 item, 设置 选中该item, 绘制item
@@ -154,7 +143,7 @@ void ThumbnailWidget::slotUpdateTheme()
     updateWidgetTheme();
 }
 
-void ThumbnailWidget::slotSetRotate(int angle)
+void ThumbnailWidget::slotSetRotate(const int &angle)
 {
     m_nRotate = angle;
     if (m_ThreadLoadImage.isRunning()) {
@@ -165,7 +154,7 @@ void ThumbnailWidget::slotSetRotate(int angle)
     m_ThreadLoadImage.start();
 }
 
-void ThumbnailWidget::slotRotateThumbnail(int index)
+void ThumbnailWidget::slotRotateThumbnail(const int &index)
 {
     if (m_pThumbnailListWidget) {
         if (index >= m_pThumbnailListWidget->count()) {
@@ -173,7 +162,7 @@ void ThumbnailWidget::slotRotateThumbnail(int index)
         }
         auto item = m_pThumbnailListWidget->item(index);
         if (item) {
-            auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
+            auto pWidget = getItemWidget(item);
             if (pWidget) {
                 pWidget->rotateThumbnail(m_nRotate);
             }
@@ -186,23 +175,19 @@ void ThumbnailWidget::slotRotateThumbnail(int index)
  * 根据纵向滚动条来加载缩略图
  * value 为当前滚动条移动的数值,最小是0，最大是滚动条的最大值
  */
-void ThumbnailWidget::slotLoadThumbnail(int value)
+void ThumbnailWidget::slotLoadThumbnail(const int &value)
 {
     if (m_nValuePreIndex < 1 || value < 1)
         return;
 
-    int loadStart = 0;
-    int loadEnd = 0;
-    int indexPage = 0;
-
-    indexPage = value / m_nValuePreIndex;
+    int indexPage = value / m_nValuePreIndex;
 
     if (indexPage < 0 || indexPage > m_totalPages || m_ThreadLoadImage.inLoading(indexPage)) {
         return;
     }
 
-    loadStart = (indexPage - (FIRST_LOAD_PAGES / 2)) < 0 ? 0 : (indexPage - (FIRST_LOAD_PAGES / 2));
-    loadEnd = (indexPage + (FIRST_LOAD_PAGES / 2)) > m_totalPages ? m_totalPages : (indexPage + (FIRST_LOAD_PAGES / 2));
+    int loadStart = (indexPage - (FIRST_LOAD_PAGES / 2)) < 0 ? 0 : (indexPage - (FIRST_LOAD_PAGES / 2));
+    int loadEnd = (indexPage + (FIRST_LOAD_PAGES / 2)) > m_totalPages ? m_totalPages : (indexPage + (FIRST_LOAD_PAGES / 2));
     if (m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();
     }
@@ -218,10 +203,10 @@ void ThumbnailWidget::slotLoadImage(const int &row, const QImage &image)
     }
     auto item = m_pThumbnailListWidget->item(row);
     if (item) {
-        auto t_ItemWidget = reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
-        if (t_ItemWidget) {
-            t_ItemWidget->rotateThumbnail(m_nRotate);
-            t_ItemWidget->setLabelImage(image);
+        auto pWidget = getItemWidget(item);
+        if (pWidget) {
+            pWidget->rotateThumbnail(m_nRotate);
+            pWidget->setLabelImage(image);
         }
     }
 }
@@ -234,63 +219,52 @@ void ThumbnailWidget::SlotSetBookMarkState(const int &iType, const int &iPage)
         bStatus = true;
     }
 
-    auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(
-                       m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(iPage)));
-    if (pWidget) {
-        pWidget->qSetBookMarkShowStatus(bStatus);
+    auto item = m_pThumbnailListWidget->item(iPage);
+    if (item) {
+        auto pWidget = getItemWidget(item);
+        if (pWidget) {
+            pWidget->qSetBookMarkShowStatus(bStatus);
+        }
     }
 }
 
 // 初始化缩略图列表list，无缩略图
 void ThumbnailWidget::fillContantToList()
 {
-    for (int idex = 0; idex < m_totalPages; ++idex) {
-        addThumbnailItem(idex);
-    }
-
     if (m_totalPages > 0) {
+        for (int idex = 0; idex < m_totalPages; ++idex) {
+            addThumbnailItem(idex);
+        }
+
         showItemBookMark();
         auto item = m_pThumbnailListWidget->item(0);
         if (item) {
-            m_pThumbnailListWidget->setCurrentItem(item);
-            auto pWidget =
-                reinterpret_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
-            if (pWidget) {
-                pWidget->setBSelect(true);
-            }
+            SetSelectItemColor(item, true);
         }
         /**
          * @brief listCount
          * 计算每个item的大小
          */
-        int listCount = 0;
-        listCount = m_pThumbnailListWidget->count();
+        int listCount = m_pThumbnailListWidget->count();
         m_nValuePreIndex = m_pThumbnailListWidget->verticalScrollBar()->maximum() / listCount;
     }
 
     m_isLoading = false;
 }
 
-void ThumbnailWidget::showItemBookMark(int ipage)
+void ThumbnailWidget::showItemBookMark()
 {
-    if (ipage >= 0) {
-        auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(
-                           m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(ipage)));
+    QString sPath = d_ptr->getBindPath();
+
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(sPath);
+    foreach (int index, pageList) {
+        auto pWidget = getItemWidget(m_pThumbnailListWidget->item(index));
         if (pWidget) {
             pWidget->qSetBookMarkShowStatus(true);
         }
-    } else {
-        QString sCurPath = MainTabWidgetEx::Instance()->qGetCurPath();
-        QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
-        foreach (int index, pageList) {
-            auto pWidget = reinterpret_cast<ThumbnailItemWidget *>(
-                               m_pThumbnailListWidget->itemWidget(m_pThumbnailListWidget->item(index)));
-            if (pWidget) {
-                pWidget->qSetBookMarkShowStatus(true);
-            }
-        }
     }
 }
+
 
 /**
  * @brief ThumbnailWidget::prevPage
@@ -313,6 +287,8 @@ void ThumbnailWidget::nextPage()
 // 关联成功打开文件槽函数
 void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
 {
+    d_ptr->setBindPath(sPath);
+
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
     DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sPath);
     if (_proxy) {
@@ -322,10 +298,7 @@ void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
             m_ThreadLoadImage.stopThreadRun();
         }
 
-        int pages = _proxy->getPageSNum();
-
-        m_totalPages = pages;
-//    m_pPageWidget->setTotalPages(m_totalPages);
+        m_totalPages = _proxy->getPageSNum();
 
         m_pThumbnailListWidget->clear();
         m_nValuePreIndex = 0;
@@ -341,7 +314,6 @@ void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
 
         int currentPage = _proxy->currentPageNo();
 
-//        qDebug() << "     currentPage:" << currentPage << "  m_nRotate:" << m_nRotate;
         m_ThreadLoadImage.setPages(m_totalPages);
         m_ThreadLoadImage.setFilePath(sPath);
         if (!m_ThreadLoadImage.isRunning()) {
@@ -352,6 +324,27 @@ void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
         m_ThreadLoadImage.start();
         slotDocFilePageChanged(QString::number(currentPage));
     }
+}
+
+void ThumbnailWidget::SetSelectItemColor(QListWidgetItem *item, const bool &bSelect)
+{
+    auto pWidget = getItemWidget(item);
+    if (pWidget) {
+        pWidget->setBSelect(bSelect);
+    }
+
+    if (bSelect) {
+        m_pThumbnailListWidget->setCurrentItem(item);
+    }
+}
+
+ThumbnailItemWidget *ThumbnailWidget::getItemWidget(QListWidgetItem *item)
+{
+    auto pWidget = qobject_cast<ThumbnailItemWidget *>(m_pThumbnailListWidget->itemWidget(item));
+    if (pWidget) {
+        return pWidget;
+    }
+    return nullptr;
 }
 
 /*******************************ThreadLoadImage*************************************************/
@@ -365,7 +358,6 @@ void ThreadLoadImage::stopThreadRun()
 {
     m_isLoaded = false;
     quit();
-    //    terminate();    //终止线程
     wait();  //阻塞等待
 }
 

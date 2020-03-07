@@ -37,7 +37,7 @@ public:
 
 signals:
     void sigSelectItem(QListWidgetItem *);
-    void sigValueChanged(int);
+    void sigValueChanged(const int &);
 
     void sigListMenuClick(const int &);
 

@@ -86,7 +86,6 @@ void ThumbnailItemWidget::initWidget()
 
     auto t_hLayout = new QHBoxLayout;
     t_hLayout->setContentsMargins(0, 0, 32, 0);
-//    t_hLayout->setSpacing(0);
     t_hLayout->addStretch(1);
     t_hLayout->addItem(t_vLayout);
     t_hLayout->addStretch(1);

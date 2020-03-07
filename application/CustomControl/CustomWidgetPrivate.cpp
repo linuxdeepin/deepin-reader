@@ -1,10 +1,9 @@
-/*
- * Copyright (C) 2019 ~ 2020 UOS Technology Co., Ltd.
- *
- * Author:     wangzhxiaun
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+/* Copyright (C) 2019 ~ 2020 UOS Technology Co., Ltd.
+*
+* Author:     wangzhxiaun
+              *
+              * This program is free software: you can redistribute it and/or modify
+              * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * any later version.
  *
@@ -31,4 +30,14 @@ QList<int> CustomWidgetPrivate::getMsgList() const
 QList<QString> CustomWidgetPrivate::getKeyMsgList() const
 {
     return m_pKeyMsgList;
+}
+
+QString CustomWidgetPrivate::getBindPath() const
+{
+    return m_strBindPath;
+}
+
+void CustomWidgetPrivate::setBindPath(const QString &strBindPath)
+{
+    m_strBindPath = strBindPath;
 }

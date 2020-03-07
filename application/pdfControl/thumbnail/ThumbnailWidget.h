@@ -99,16 +99,13 @@ public:
     ~ThumbnailWidget() override;
 
 signals:
-    void sigSetRotate(int);
+    void sigSetRotate(const int &);
 
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
 
-    void fillContantToList();
-
     inline bool isLoading() { return m_isLoading; }
-    void showItemBookMark(int ipage = -1);
 
     void prevPage();
     void nextPage();
@@ -119,18 +116,22 @@ protected:
     void initWidget() override;
 
 private:
+    void fillContantToList();
+    void showItemBookMark();
     void setSelectItemBackColor(QListWidgetItem *);
     void addThumbnailItem(const int &);
     void initConnection();
     void slotOpenFileOk(const QString &);
+    void SetSelectItemColor(QListWidgetItem *item, const bool &);
+    ThumbnailItemWidget *getItemWidget(QListWidgetItem *);
 
 private slots:
     void slotDocFilePageChanged(const QString &);
     void slotUpdateTheme();
 
-    void slotSetRotate(int);
-    void slotRotateThumbnail(int);
-    void slotLoadThumbnail(int);
+    void slotSetRotate(const int &);
+    void slotRotateThumbnail(const int &);
+    void slotLoadThumbnail(const int &);
     void slotLoadImage(const int &row, const QImage &image);
 
     void SlotSetBookMarkState(const int &, const int &);
@@ -144,8 +145,6 @@ private:
 //    ThreadRotateImage m_threadRotateImage;               // 旋转缩略图
     int m_nRotate = 0;                                   // 旋转度数
     int m_nValuePreIndex = 0;                            // 每一个item所占scrollbar的大小
-
-
 };
 
 #endif  // THUMBNAILWIDGET_H

@@ -23,13 +23,13 @@
 #include "docview/docummentproxy.h"
 #include "gof/bridge/IHelper.h"
 #include "widgets/main/MainTabWidgetEx.h"
+#include "CustomControl/CustomWidgetPrivate.h"
 
 PagingWidget::PagingWidget(CustomWidget *parent)
     : CustomWidget(QString("PagingWidget"), parent)
 {
     initWidget();
 
-    initConnections();
     slotUpdateTheme();
 
     dApp->m_pModelService->addObserver(this);
@@ -83,10 +83,6 @@ void PagingWidget::initWidget()
     this->setLayout(hLayout);
 }
 
-void PagingWidget::initConnections()
-{
-}
-
 /**
  * @brief PagingWidget::dealWithData
  * 处理全局消息接口
@@ -137,8 +133,9 @@ void PagingWidget::__SetBtnState(const int &currntPage, const int &totalPage)
 
 void PagingWidget::OnDocFilePageChange(const QString &msgContent)
 {
+    QString sPath = d_ptr->getBindPath();
+
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
-    QString sPath = pMtwe->qGetCurPath();
     DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sPath);
     if (_proxy) {
         int totalPage = _proxy->getPageSNum();
@@ -168,6 +165,8 @@ void PagingWidget::OnDocFilePageChange(const QString &msgContent)
  */
 void PagingWidget::OnDocFileOpenOk(const QString &sPath)
 {
+    d_ptr->setBindPath(sPath);
+
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
     DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sPath);
     if (_proxy) {
@@ -210,8 +209,9 @@ void PagingWidget::__NormalChangePage()
 
 void PagingWidget::__PageNumberJump()
 {
+    QString sPath = d_ptr->getBindPath();
+
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
-    QString sPath = pMtwe->qGetCurPath();
     DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sPath);
     if (_proxy) {
         int nPageSum = _proxy->getPageSNum();
