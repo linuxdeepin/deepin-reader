@@ -32,10 +32,8 @@ void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, con
 
     if (m_nType == NOTE_ICON) {
         m_pRemoveHighLight->setText(tr("Remove annotation"));
-        m_pAddNote->setText(tr("Add note"));
     } else if (m_nType == NOTE_HIGHLIGHT) {
         m_pRemoveHighLight->setText(tr("Remove highlight"));
-        m_pAddNote->setText(tr("Add highlight note"));
     }
     m_strNoteUuid = sUuid;
     m_pRemoveHighLight->setEnabled(bHigh);

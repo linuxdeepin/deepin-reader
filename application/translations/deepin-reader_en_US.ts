@@ -125,12 +125,12 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/bookmark/BookMarkWidget.cpp" line="320"/>
+        <location filename="../pdfControl/bookmark/BookMarkWidget.cpp" line="318"/>
         <source>The bookmark has been removed</source>
         <translation>The bookmark has been removed</translation>
     </message>
     <message>
-        <location filename="../pdfControl/bookmark/BookMarkWidget.cpp" line="400"/>
+        <location filename="../pdfControl/bookmark/BookMarkWidget.cpp" line="398"/>
         <source>Add bookmark</source>
         <translation>Add bookmark</translation>
     </message>
@@ -241,13 +241,18 @@
         <translation type="unfinished">Saved successfully</translation>
     </message>
     <message>
-        <location filename="../gof/bridge/DocFileHelper.cpp" line="81"/>
         <source>Saved failed</source>
-        <translation type="unfinished">Saved failed</translation>
+        <translation type="obsolete">Saved failed</translation>
     </message>
     <message>
+        <location filename="../gof/bridge/DocFileHelper.cpp" line="81"/>
+        <source>Save failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gof/bridge/DocFileHelper.cpp" line="85"/>
         <source>No changes</source>
-        <translation type="obsolete">No changes</translation>
+        <translation type="unfinished">No changes</translation>
     </message>
     <message>
         <location filename="../gof/bridge/DocFileHelper.cpp" line="108"/>
@@ -816,13 +821,13 @@
 <context>
     <name>TextOperationMenu</name>
     <message>
-        <location filename="../menu/TextOperationMenu.cpp" line="68"/>
+        <location filename="../menu/TextOperationMenu.cpp" line="66"/>
         <source>Copy</source>
         <translation>Copy</translation>
     </message>
     <message>
-        <location filename="../menu/TextOperationMenu.cpp" line="37"/>
-        <location filename="../menu/TextOperationMenu.cpp" line="76"/>
+        <location filename="../menu/TextOperationMenu.cpp" line="36"/>
+        <location filename="../menu/TextOperationMenu.cpp" line="74"/>
         <source>Remove highlight</source>
         <translation>Remove highlight</translation>
     </message>
@@ -832,18 +837,12 @@
         <translation type="unfinished">Remove annotation</translation>
     </message>
     <message>
-        <location filename="../menu/TextOperationMenu.cpp" line="38"/>
-        <source>Add highlight note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../menu/TextOperationMenu.cpp" line="35"/>
-        <location filename="../menu/TextOperationMenu.cpp" line="77"/>
+        <location filename="../menu/TextOperationMenu.cpp" line="75"/>
         <source>Add note</source>
         <translation>Add note</translation>
     </message>
     <message>
-        <location filename="../menu/TextOperationMenu.cpp" line="79"/>
+        <location filename="../menu/TextOperationMenu.cpp" line="77"/>
         <source>Add bookmark</source>
         <translation>Add bookmark</translation>
     </message>

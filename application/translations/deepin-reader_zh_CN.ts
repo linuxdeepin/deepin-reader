@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>Application</name>
     <message>
@@ -119,18 +117,18 @@
     <message>
         <location filename="../menu/BookMarkMenu.cpp" line="29"/>
         <source>Remove bookmark</source>
-        <translation type="unfinished">删除书签</translation>
+        <translation>删除书签</translation>
     </message>
 </context>
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/bookmark/BookMarkWidget.cpp" line="320"/>
+        <location filename="../pdfControl/bookmark/BookMarkWidget.cpp" line="318"/>
         <source>The bookmark has been removed</source>
         <translation>已删除书签</translation>
     </message>
     <message>
-        <location filename="../pdfControl/bookmark/BookMarkWidget.cpp" line="400"/>
+        <location filename="../pdfControl/bookmark/BookMarkWidget.cpp" line="398"/>
         <source>Add bookmark</source>
         <translation>添加书签</translation>
     </message>
@@ -140,7 +138,7 @@
     <message>
         <location filename="../pdfControl/catalog/CatalogWidget.cpp" line="97"/>
         <source>Unknown</source>
-        <translation type="unfinished">未知</translation>
+        <translation>未知</translation>
     </message>
 </context>
 <context>
@@ -205,7 +203,7 @@
     <message>
         <location filename="../menu/DefaultOperationMenu.cpp" line="77"/>
         <source>Add note</source>
-        <translation type="unfinished">添加注释</translation>
+        <translation>添加注释</translation>
     </message>
     <message>
         <location filename="../menu/DefaultOperationMenu.cpp" line="79"/>
@@ -238,31 +236,36 @@
     <message>
         <location filename="../gof/bridge/DocFileHelper.cpp" line="79"/>
         <source>Saved successfully</source>
-        <translation type="unfinished">保存成功</translation>
+        <translation>保存成功</translation>
+    </message>
+    <message>
+        <source>Saved failed</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gof/bridge/DocFileHelper.cpp" line="81"/>
-        <source>Saved failed</source>
-        <translation type="unfinished">保存失败</translation>
+        <source>Save failed</source>
+        <translation>保存失败</translation>
     </message>
     <message>
+        <location filename="../gof/bridge/DocFileHelper.cpp" line="85"/>
         <source>No changes</source>
-        <translation type="obsolete">文档未修改</translation>
+        <translation>文档未修改</translation>
     </message>
     <message>
         <location filename="../gof/bridge/DocFileHelper.cpp" line="108"/>
         <source>Save as</source>
-        <translation type="unfinished">另存为</translation>
+        <translation>另存为</translation>
     </message>
     <message>
         <location filename="../gof/bridge/DocFileHelper.cpp" line="111"/>
         <source>Invalid file name</source>
-        <translation type="unfinished">请输入有效的文件名</translation>
+        <translation>请输入有效的文件名</translation>
     </message>
     <message>
         <location filename="../gof/bridge/DocFileHelper.cpp" line="114"/>
         <source>OK</source>
-        <translation type="unfinished">确定</translation>
+        <translation>确定</translation>
     </message>
 </context>
 <context>
@@ -305,7 +308,7 @@
     </message>
     <message>
         <source>Do you want to save the changes?</source>
-        <translation type="vanished">您是否要保存已编辑的文档？</translation>
+        <translation type="vanished">是否保存已编辑的文档？</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -389,12 +392,12 @@
     <message>
         <location filename="../menu/HandleMenu.cpp" line="31"/>
         <source>Select Text</source>
-        <translation type="unfinished">选择工具</translation>
+        <translation>选择工具</translation>
     </message>
     <message>
         <location filename="../menu/HandleMenu.cpp" line="41"/>
         <source>Hand Tool</source>
-        <translation type="unfinished">手形工具</translation>
+        <translation>手形工具</translation>
     </message>
 </context>
 <context>
@@ -438,14 +441,14 @@
     <message>
         <location filename="../widgets/main/MainTabBar.cpp" line="106"/>
         <source>The file is already open</source>
-        <translation type="unfinished">文档已打开</translation>
+        <translation>文档已打开</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Do you want to save the changes?</source>
-        <translation type="vanished">您是否要保存已编辑的文档？</translation>
+        <translation type="vanished">是否保存已编辑的文档？</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -501,12 +504,12 @@
     <message>
         <location filename="../menu/NoteMenu.cpp" line="29"/>
         <source>Copy</source>
-        <translation type="unfinished">复制</translation>
+        <translation>复制</translation>
     </message>
     <message>
         <location filename="../menu/NoteMenu.cpp" line="33"/>
         <source>Remove annotation</source>
-        <translation type="unfinished">删除注释</translation>
+        <translation>删除注释</translation>
     </message>
 </context>
 <context>
@@ -525,7 +528,7 @@
     <message>
         <location filename="../pdfControl/note/NotesWidget.cpp" line="124"/>
         <source>Add annotation</source>
-        <translation type="unfinished">添加注释</translation>
+        <translation>添加注释</translation>
     </message>
     <message>
         <location filename="../pdfControl/note/NotesWidget.cpp" line="170"/>
@@ -538,7 +541,7 @@
     <message>
         <location filename="../pdfControl/thumbnail/PagingWidget.cpp" line="226"/>
         <source>Invalid page number</source>
-        <translation type="unfinished"></translation>
+        <translation>请输入有效的页码</translation>
     </message>
 </context>
 <context>
@@ -557,22 +560,22 @@
     <message>
         <location filename="../business/SaveDialog.cpp" line="35"/>
         <source>Do you want to save the changes?</source>
-        <translation type="unfinished">您是否要保存已编辑的文档？</translation>
+        <translation>是否保存已编辑的文档？</translation>
     </message>
     <message>
         <location filename="../business/SaveDialog.cpp" line="37"/>
         <source>Cancel</source>
-        <translation type="unfinished">取消</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../business/SaveDialog.cpp" line="37"/>
         <source>Discard</source>
-        <translation type="unfinished">不保存</translation>
+        <translation>不保存</translation>
     </message>
     <message>
         <location filename="../business/SaveDialog.cpp" line="38"/>
         <source>Save</source>
-        <translation type="unfinished">保存</translation>
+        <translation>保存</translation>
     </message>
 </context>
 <context>
@@ -816,34 +819,28 @@
 <context>
     <name>TextOperationMenu</name>
     <message>
-        <location filename="../menu/TextOperationMenu.cpp" line="68"/>
+        <location filename="../menu/TextOperationMenu.cpp" line="66"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../menu/TextOperationMenu.cpp" line="37"/>
-        <location filename="../menu/TextOperationMenu.cpp" line="76"/>
+        <location filename="../menu/TextOperationMenu.cpp" line="36"/>
+        <location filename="../menu/TextOperationMenu.cpp" line="74"/>
         <source>Remove highlight</source>
         <translation>取消高亮</translation>
     </message>
     <message>
         <location filename="../menu/TextOperationMenu.cpp" line="34"/>
         <source>Remove annotation</source>
-        <translation type="unfinished">删除注释</translation>
+        <translation>删除注释</translation>
     </message>
     <message>
-        <location filename="../menu/TextOperationMenu.cpp" line="38"/>
-        <source>Add highlight note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../menu/TextOperationMenu.cpp" line="35"/>
-        <location filename="../menu/TextOperationMenu.cpp" line="77"/>
+        <location filename="../menu/TextOperationMenu.cpp" line="75"/>
         <source>Add note</source>
         <translation>添加注释</translation>
     </message>
     <message>
-        <location filename="../menu/TextOperationMenu.cpp" line="79"/>
+        <location filename="../menu/TextOperationMenu.cpp" line="77"/>
         <source>Add bookmark</source>
         <translation>添加书签</translation>
     </message>
@@ -881,12 +878,12 @@
     <message>
         <location filename="../menu/TitleMenu.cpp" line="57"/>
         <source>New window</source>
-        <translation type="unfinished"></translation>
+        <translation>新窗口</translation>
     </message>
     <message>
         <location filename="../menu/TitleMenu.cpp" line="57"/>
         <source>New tab</source>
-        <translation type="unfinished"></translation>
+        <translation>新标签页</translation>
     </message>
     <message>
         <location filename="../menu/TitleMenu.cpp" line="70"/>
@@ -896,7 +893,7 @@
     <message>
         <location filename="../menu/TitleMenu.cpp" line="70"/>
         <source>Magnifer</source>
-        <translation type="unfinished"></translation>
+        <translation>放大镜</translation>
     </message>
     <message>
         <source>Search</source>
@@ -949,7 +946,7 @@
     <message>
         <location filename="../pdfControl/note/TransparentTextEdit.cpp" line="82"/>
         <source>Input limit reached</source>
-        <translation type="unfinished">输入已达上限</translation>
+        <translation>输入已达上限</translation>
     </message>
 </context>
 </TS>

@@ -78,11 +78,11 @@ void DocFileHelper::onSaveFile()
 
                         notifyMsg(CENTRAL_SHOW_TIP, tr("Saved successfully"));
                     } else {
-                        notifyMsg(CENTRAL_SHOW_TIP, tr("Saved failed"));
+                        notifyMsg(CENTRAL_SHOW_TIP, tr("Save failed"));
                     }
                 }
             } else {
-                //  notifyMsg(CENTRAL_SHOW_TIP, tr("No changes"));
+                notifyMsg(CENTRAL_SHOW_TIP, tr("No changes"));
             }
         }
     }
