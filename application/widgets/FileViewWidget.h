@@ -91,8 +91,8 @@ private:
     void OnShortCutKey_Ctrl_c();
 
 private:
-    TextOperationMenu       *m_operatemenu;
-    DefaultOperationMenu    *m_pDefaultMenu;
+    TextOperationMenu       *m_operatemenu = nullptr;
+    DefaultOperationMenu    *m_pDefaultMenu = nullptr;
     DocummentProxy          *m_pProxy = nullptr;
     QString                 m_strPath = "";
 
@@ -104,7 +104,7 @@ private:
     int                     m_rotateType = 0;            // 旋转类型(后台所需旋转类型)
     int                     m_nScale = 0;
 
-    bool                    m_bFirstShow = true;
+    bool                    m_bFirstShow = true;        //  是否是第一次显示,  用于判断 resizeEvent
 
     friend class FVMMouseEvent;
     friend class DocShowShellWidget;

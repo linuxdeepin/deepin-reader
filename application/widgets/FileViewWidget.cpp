@@ -18,23 +18,19 @@
  */
 #include "FileViewWidget.h"
 
-#include <QGridLayout>
-
 #include <QFileInfo>
 
 #include "business/FileFormatHelper.h"
-
 #include "docview/commonstruct.h"
 #include "docview/docummentproxy.h"
 #include "controller/FVMMouseEvent.h"
+#include "main/MainTabWidgetEx.h"
 #include "menu/DefaultOperationMenu.h"
 #include "menu/TextOperationMenu.h"
 #include "utils/PublicFunction.h"
 #include "business/PrintManager.h"
 
 #include "gof/bridge/IHelper.h"
-
-#include "main/MainTabWidgetEx.h"
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget(FILE_VIEW_WIDGET, parent)

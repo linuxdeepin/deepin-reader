@@ -64,7 +64,7 @@ void ScaleWidget::initWidget()
 
     scaleComboBox = new DComboBox();
     connect(scaleComboBox, SIGNAL(currentIndexChanged(const QString &)), SLOT(SlotCurrentTextChanged(const QString &)));
-    scaleComboBox->setFrame(QFrame::NoFrame);
+    scaleComboBox->setInsertPolicy(QComboBox::NoInsert);
     scaleComboBox->setFixedWidth(100);
     scaleComboBox->setEditable(true);
 
@@ -115,26 +115,29 @@ void ScaleWidget::slotNextScale()
 void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
 {
     int nIndex = sText.lastIndexOf("%");
-    if (nIndex != -1) {
-        QString sTempData = sText.mid(0, nIndex);
+    if (nIndex == -1) {
+        scaleComboBox->setCurrentText(sText + "%");
+    }
 
-        bool bOk = false;
+    QString sTempText = scaleComboBox->currentText();
 
-        double dValue = sTempData.toDouble(&bOk);
+    bool bOk = false;
+    QString sTempData = sTempText.mid(0, nIndex);
+    double dValue = sTempData.toDouble(&bOk);
+    if (bOk && dValue > 10.0 && dValue <= m_nMaxScale) {
+        QJsonObject obj;
+        obj.insert("content", QString::number(dValue));
+        obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
 
-        if (bOk && dValue > 10.0 && dValue <= m_nMaxScale) {
-            QJsonObject obj;
-            obj.insert("content", QString::number(dValue));
-            obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
+        QJsonDocument doc(obj);
 
-            QJsonDocument doc(obj);
+        dApp->m_pModelService->notifyMsg(MSG_FILE_SCALE, doc.toJson(QJsonDocument::Compact));
 
-            dApp->m_pModelService->notifyMsg(MSG_FILE_SCALE, doc.toJson(QJsonDocument::Compact));
-
-            emit sigScaleChanged();
-        }
+        emit sigScaleChanged();
     }
 }
+
+
 
 void ScaleWidget::SetComboBoxMax(const QString &sPath)
 {
