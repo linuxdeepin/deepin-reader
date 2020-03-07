@@ -91,8 +91,8 @@ private:
     void OnShortCutKey_Ctrl_c();
 
 private:
-    TextOperationMenu       *m_operatemenu = nullptr;
-    DefaultOperationMenu    *m_pDefaultMenu = nullptr;
+    TextOperationMenu       *m_operatemenu;
+    DefaultOperationMenu    *m_pDefaultMenu;
     DocummentProxy          *m_pProxy = nullptr;
     QString                 m_strPath = "";
 

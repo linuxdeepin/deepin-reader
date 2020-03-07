@@ -484,6 +484,11 @@ void MainTabWidgetEx::setCurrentState(const int &nCurrentState)
     dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->setCurrentState(nCurrentState);
 }
 
+void MainTabWidgetEx::SetFileChange()
+{
+    dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->SetFileChange(qGetCurPath(), 1);
+}
+
 int MainTabWidgetEx::getCurrentState() const
 {
     return dynamic_cast<MainTabWidgetExPrivate *>(d_ptr)->getCurrentState();

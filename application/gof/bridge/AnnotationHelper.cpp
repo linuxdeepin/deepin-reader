@@ -86,6 +86,7 @@ void AnnotationHelper::__DeletePageIconAnnotation(const QString &msgContent, QSt
             QString sPage = sList.at(1);
 
             _proxy->removeAnnotation(sUuid, sPage.toInt());
+            pMtwe->SetFileChange();
         }
     }
 }
@@ -104,6 +105,7 @@ void AnnotationHelper::__UpdatePageIconAnnotation(const QString &msgContent)
             QString sNote = sList.at(1);
             QString sPage = sList.at(2);
             _proxy->setAnnotationText(sPage.toInt(), sUuid, sNote);
+            pMtwe->SetFileChange();
         }
     }
 }
@@ -137,6 +139,7 @@ void AnnotationHelper::__AddHighLight(const QString &msgContent)
         QColor color = dApp->m_pAppInfo->selectColor();
 
         _proxy->addAnnotation(pStartPoint, pEndPoint, color);
+        pMtwe->SetFileChange();
     }
 }
 
@@ -165,6 +168,7 @@ void AnnotationHelper::__AddHighLightAnnotation(const QString &msgContent, QStri
 
                 sRes = strUuid.trimmed() + Constant::sQStringSep + sNote.trimmed() + Constant::sQStringSep + sPage;
             }
+            pMtwe->SetFileChange();
         }
     }
 }
@@ -186,6 +190,7 @@ void AnnotationHelper::__RemoveHighLight(const QString &msgContent, QString &sRe
             if (sUuid != "") {
                 sRes = sUuid;
             }
+            pMtwe->SetFileChange();
         }
     }
 }
@@ -207,6 +212,7 @@ void AnnotationHelper::__ChangeAnnotationColor(const QString &msgContent)
             QColor color = dApp->m_pAppInfo->getLightColorList().at(iIndex);
 
             _proxy->changeAnnotationColor(sPage.toInt(), sUuid, color);     //  更新高亮顏色,  是对文档进行了操作
+            pMtwe->SetFileChange();
         }
     }
 }
@@ -222,6 +228,7 @@ void AnnotationHelper::__RemoveAnnotation(const QString &msgContent, QString &sU
             sUuid = sList.at(0);
             QString sPage = sList.at(1);
             _proxy->removeAnnotation(sUuid, sPage.toInt());
+            pMtwe->SetFileChange();
         }
     }
 }
@@ -239,6 +246,7 @@ void AnnotationHelper::__UpdateAnnotationText(const QString &msgContent)
             QString sPage = sList.at(2);
 
             _proxy->setAnnotationText(sPage.toInt(), sUuid, sText);
+            pMtwe->SetFileChange();
         }
     }
 }
@@ -256,6 +264,7 @@ void AnnotationHelper::AddPageIconAnnotation(const QString &msgContent)
             QString sPage = sList.at(2);
             _proxy->setAnnotationText(sPage.toInt(), sUuid, sNote);
             QString t_str = sUuid.trimmed() + Constant::sQStringSep + sNote.trimmed() + Constant::sQStringSep + sPage;
+            pMtwe->SetFileChange();
         }
     }
 }

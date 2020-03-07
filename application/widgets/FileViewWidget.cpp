@@ -38,7 +38,9 @@
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget("FileViewWidget", parent)
-    , m_operatemenu(nullptr)
+    , m_operatemenu(new TextOperationMenu(this))
+    , m_pDefaultMenu(new DefaultOperationMenu(this))
+
 {
     m_pMsgList = { MSG_HANDLESHAPE,
                    MSG_NOTE_ADD_CONTENT,
@@ -134,9 +136,6 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
     bool bIsHighLight = m_pProxy->annotationClicked(pRightClickPoint, sAnnotationText, struuid);
     bool bicon = m_pProxy->iconAnnotationClicked(pRightClickPoint, sAnnotationText, struuid);
     int nPage = m_pProxy->pointInWhichPage(pRightClickPoint);
-    if (nullptr == m_operatemenu) {
-        m_operatemenu = new TextOperationMenu(this);
-    }
     if ((sSelectText != "" || bIsHighLight) && !bicon) { //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
         m_operatemenu->setClickPoint(pRightClickPoint);
@@ -156,9 +155,6 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         dApp->m_pAppInfo->setMousePressLocal(bIsHighLight, tempPoint);
         m_operatemenu->execMenu(tempPoint, bicon, sSelectText, struuid);
     } else {  //  否则弹出 文档操作菜单
-        if (nullptr == m_pDefaultMenu) {
-            m_pDefaultMenu = new DefaultOperationMenu(this);
-        }
         m_pDefaultMenu->setClickpoint(pRightClickPoint);
         m_pDefaultMenu->execMenu(tempPoint, nPage);
 
@@ -501,6 +497,7 @@ void FileViewWidget::SlotDocFileOpenResult(bool openresult)
 void FileViewWidget::initConnections()
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), SLOT(slotCustomContextMenuRequested(const QPoint &)));
+
 }
 
 //  设置　窗口　自适应　宽＼高　度

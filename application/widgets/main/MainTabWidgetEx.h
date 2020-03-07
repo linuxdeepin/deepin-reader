@@ -71,6 +71,7 @@ public:
 
     int getCurrentState() const;
     void setCurrentState(const int &nCurrentState);
+    void SetFileChange();
 
 protected:
     void initWidget() override;
