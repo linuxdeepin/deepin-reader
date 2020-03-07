@@ -226,6 +226,20 @@ void DocShowShellWidget::ShowFindWidget()
     m_pFindWidget->setSearchEditFocus();
 }
 
+void DocShowShellWidget::setFileChange(bool bchange)
+{
+    if (nullptr != m_pFileViewWidget)
+        m_pFileViewWidget->setFileChange(bchange);
+}
+
+bool DocShowShellWidget::getFileChange()
+{
+    bool bchange = false;
+    if (nullptr != m_pFileViewWidget)
+        bchange = m_pFileViewWidget->getFileChange();
+    return  bchange;
+}
+
 void DocShowShellWidget::initWidget()
 {
     m_playout = new QStackedLayout;

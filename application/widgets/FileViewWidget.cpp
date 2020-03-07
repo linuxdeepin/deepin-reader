@@ -31,11 +31,15 @@
 #include "business/PrintManager.h"
 
 #include "gof/bridge/IHelper.h"
+#include "main/MainTabWidgetEx.h"
+#include "FileViewWidgetPrivate.h"
+
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
     : CustomWidget(FILE_VIEW_WIDGET, parent)
     , m_operatemenu(new TextOperationMenu(this))
     , m_pDefaultMenu(new DefaultOperationMenu(this))
+    , d_ptr(new FileViewWidgetPrivate(this))
 {
     m_pMsgList = { MSG_HANDLESHAPE,
                    MSG_NOTE_ADD_CONTENT,
@@ -492,11 +496,41 @@ void FileViewWidget::SlotDocFileOpenResult(bool openresult)
     }
 }
 
+void FileViewWidget::slotDealWithMenu(int type, const QString &strcontents)
+{
+    Q_D(FileViewWidget);
+    switch (type) {
+    case MSG_NOTE_PAGE_ADD_CONTENT:
+        d->AddPageIconAnnotation(strcontents);
+        break;
+    case MSG_NOTE_PAGE_DELETE_CONTENT:
+        d->DeletePageIconAnnotation(strcontents);
+        break;
+    case MSG_NOTE_PAGE_UPDATE_CONTENT:
+        break;
+    case MSG_NOTE_DELETE_CONTENT:
+        break;
+    case MSG_NOTE_UPDATE_CONTENT:
+        break;
+    case MSG_NOTE_REMOVE_HIGHLIGHT_COLOR:
+        break;
+    case MSG_NOTE_UPDATE_HIGHLIGHT_COLOR:
+        break;
+    case MSG_NOTE_ADD_HIGHLIGHT_COLOR:
+        d->AddHighLight(strcontents);
+        break;
+    case MSG_NOTE_ADD_HIGHLIGHT_NOTE:
+        break;
+    default:
+        break;
+    }
+}
+
 //  信号槽　初始化
 void FileViewWidget::initConnections()
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), SLOT(slotCustomContextMenuRequested(const QPoint &)));
-
+    connect(m_operatemenu, SIGNAL(sigActionTrigger(int, const QString &)), this, SLOT(slotDealWithMenu(int, const QString &)));
 }
 
 //  设置　窗口　自适应　宽＼高　度
@@ -575,4 +609,16 @@ void FileViewWidget::SetFindOperation(const int &iType, const QString &sFind)
             m_pProxy->search(sFind);
         }
     }
+}
+
+void FileViewWidget::setFileChange(bool bchanged)
+{
+    Q_D(FileViewWidget);
+    d->m_filechanged = bchanged;
+}
+
+bool FileViewWidget::getFileChange()
+{
+    Q_D(FileViewWidget);
+    return d->m_filechanged ;
 }

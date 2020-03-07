@@ -36,6 +36,9 @@ public:
     bool OpenFilePath(const QString &);
     void ShowFindWidget();
 
+    void setFileChange(bool bchange);
+    bool getFileChange();
+
     // CustomWidget interface
 protected:
     void initWidget() override;

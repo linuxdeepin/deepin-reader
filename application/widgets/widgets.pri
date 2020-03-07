@@ -1,4 +1,5 @@
 HEADERS += \
+    $$PWD/FileViewWidgetPrivate.h \
     $$PWD/HomeWidget.h \
     $$PWD/LeftSidebarWidget.h \
     $$PWD/FileViewWidget.h \
@@ -20,6 +21,7 @@ HEADERS += \
     $$PWD/ScaleWidget.h
 
 SOURCES += \
+    $$PWD/FileViewWidgetPrivate.cpp \
     $$PWD/HomeWidget.cpp \
     $$PWD/FileViewWidget.cpp \
     $$PWD/LeftSidebarWidget.cpp \

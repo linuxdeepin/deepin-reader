@@ -24,6 +24,7 @@
 class TextOperationMenu;
 class DefaultOperationMenu;
 class DocummentProxy;
+class FileViewWidgetPrivate;
 
 /**
  * @brief The FileViewWidget class
@@ -47,6 +48,9 @@ public:
     int qDealWithShortKey(const QString &) override;
     void SetFindOperation(const int &, const QString &);
 
+
+    void setFileChange(bool bchanged);
+    bool getFileChange();
     // CustomWidget interface
 protected:
     void initWidget() override;
@@ -65,6 +69,7 @@ private slots:
     void slotBookMarkStateChange(int, bool);
     void slotDocFilePageChanged(int);
     void SlotDocFileOpenResult(bool);
+    void slotDealWithMenu(int type, const QString &strcontents);
 
 private:
     void initConnections();
@@ -91,8 +96,11 @@ private:
     void OnShortCutKey_Ctrl_c();
 
 private:
-    TextOperationMenu       *m_operatemenu = nullptr;
-    DefaultOperationMenu    *m_pDefaultMenu = nullptr;
+    inline DocummentProxy *getDocumentProxy() {return m_pProxy;}
+
+private:
+    TextOperationMenu       *m_operatemenu;
+    DefaultOperationMenu    *m_pDefaultMenu;
     DocummentProxy          *m_pProxy = nullptr;
     QString                 m_strPath = "";
 
@@ -108,6 +116,9 @@ private:
 
     friend class FVMMouseEvent;
     friend class DocShowShellWidget;
+
+    FileViewWidgetPrivate *d_ptr;
+    Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), FileViewWidget)
 };
 
 

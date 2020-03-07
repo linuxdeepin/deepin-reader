@@ -84,7 +84,6 @@ QAction *TextOperationMenu::createAction(const QString &text, const char *member
     connect(action, SIGNAL(triggered()), member);
     this->addAction(action);
     this->addSeparator();
-
     return action;
 }
 
@@ -117,6 +116,7 @@ void TextOperationMenu::slotSetHighLight(const int &nColor)
                            QString::number(nEy) + Constant::sQStringSep +
                            QString::number(m_pLightColor);
 
+        emit sigActionTrigger(MSG_NOTE_ADD_HIGHLIGHT_COLOR, sContent);
         dApp->m_pHelper->qDealWithData(MSG_NOTE_ADD_HIGHLIGHT_COLOR, sContent);
     }
 }

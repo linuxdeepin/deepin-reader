@@ -120,12 +120,19 @@ void MainSplitter::qSetPath(const QString &strPath)
 
 void MainSplitter::qSetFileChange(const int &nState)
 {
-    d_ptr->qSetFileChange(nState);
+    //d_ptr->qSetFileChange(nState);
+    bool bchange = nState == 1 ? true : false;
+    if (nullptr != m_pDocWidget)
+        m_pDocWidget->setFileChange(bchange);
 }
 
 int MainSplitter::qGetFileChange()
 {
-    return d_ptr->qGetFileChange();
+    //return d_ptr->qGetFileChange();
+    int istatus = -1;
+    if (nullptr != m_pDocWidget)
+        istatus = m_pDocWidget->getFileChange() ? 1 : 0;
+    return  istatus;
 }
 
 void MainSplitter::saveData()

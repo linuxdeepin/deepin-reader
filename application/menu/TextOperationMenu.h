@@ -39,11 +39,7 @@ private:
     void notifyMsgToFrame(const int &, const QString &msgContent = "");
 
 signals:
-    void sigSetHighLightClicked(const QString);
-    void sigCopyTextClicked(const QString);
-    void sigRemoveHighLightClicked(const QString);
-    void sigAddNoteClicked(const QString);
-    void sigAddBookMarkClicked(const QString);
+    void sigActionTrigger(int type, const QString &strcontents);
 
 private slots:
     void slotSetHighLight(const int &);
