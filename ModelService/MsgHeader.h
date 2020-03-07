@@ -51,6 +51,13 @@ enum MSG_TYPE {
     MSG_TYPE_END,
 };
 
+//  窗口自适应状态
+enum E_ADAPTE_MSG {
+    NO_ADAPTE_State,
+    ADAPTE_WIDGET_State,
+    ADAPTE_HEIGHT_State
+};
+
 //  多标签消息
 enum E_TAB_TYPE {
     MSG_TAB_MSG_BEGIN = MSG_TYPE_END + 50,
@@ -130,6 +137,7 @@ enum E_FILE_VALUE_MSG {
     MSG_VIEWCHANGE_ROTATE_VALUE,              //  旋转
     MSG_HANDLE_SELECT,                  //  选择工具
     MSG_FILE_SCALE,                     //  当前比例
+    MSG_FILE_FIT_SCALE,                     //  当前比例        自适应的缩放比
     MSG_FILE_IS_CHANGE,                 //  文档是否有变化
     MSG_LEFTBAR_STATE,                  //  文档是否有变化
     E_FILE_VALUE_MSG_END

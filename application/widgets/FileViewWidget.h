@@ -25,13 +25,6 @@ class TextOperationMenu;
 class DefaultOperationMenu;
 class DocummentProxy;
 
-//  窗口自适应状态
-enum ADAPTE_Enum {
-    NO_ADAPTE_State,
-    WIDGET_State,
-    HEIGHT_State
-};
-
 /**
  * @brief The FileViewWidget class
  * @brief   文档显示区域

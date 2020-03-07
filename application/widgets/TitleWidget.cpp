@@ -262,9 +262,14 @@ void TitleWidget::SlotSetCurrentTool(const int &sAction)
 }
 
 
-void TitleWidget::SlotCurrentScale(const int &iScale)
+void TitleWidget::SlotCurrentScale(const int &iScale, const int &iFlag)
 {
     m_pScaleMenuBtn->setText(QString::number(iScale) + "%");
+
+    if (iFlag == 0) {
+        //  比例变化, 自适应宽\高 状态 取消
+        m_pFontMenu->CancelFitState();
+    }
 }
 
 void TitleWidget::initBtns()
@@ -305,7 +310,7 @@ void TitleWidget::__InitSelectTool()
 void TitleWidget::__InitScale()
 {
     m_pScaleMenu = new ScaleMenu(this);
-    connect(m_pScaleMenu, SIGNAL(sigCurrentScale(const int &)), SLOT(SlotCurrentScale(const int &)));
+    connect(m_pScaleMenu, SIGNAL(sigCurrentScale(const int &, const int &)), SLOT(SlotCurrentScale(const int &, const int &)));
 
     m_pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
     m_pPreBtn->setDisabled(true);
@@ -408,14 +413,17 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
         OnFileShowChange(msgContent);
 
         TitleMenu::Instance()->dealWithData(msgType, msgContent);
-
-        m_pFontMenu->dealWithData(msgType, msgContent);
-        m_pScaleMenu->dealWithData(msgType, msgContent);
-    } else if (msgType == E_FIND_CONTENT || msgType == E_FIND_EXIT) {
-        SetFindWidget(msgType, msgContent);
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         slotUpdateTheme();
     }
+
+    int nRes = m_pFontMenu->dealWithData(msgType, msgContent);
+    if (nRes == MSG_OK) {
+        return MSG_OK;
+    }
+    nRes = m_pScaleMenu->dealWithData(msgType, msgContent);
+    if (nRes == MSG_OK)
+        return MSG_OK;
 
     if (m_pMsgList.contains(msgType)) {
         return MSG_OK;

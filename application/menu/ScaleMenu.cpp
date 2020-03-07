@@ -27,6 +27,8 @@ ScaleMenu::ScaleMenu(DWidget *parent)
 {
     initActions();
 
+    m_pMsgList = {MSG_FILE_FIT_SCALE};
+
     shortKeyList << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_equal << KeyStr::g_ctrl_smaller;
 }
 
@@ -40,6 +42,12 @@ int ScaleMenu::dealWithData(const int &msgType, const QString &msgContent)
         if (shortKeyList.contains(msgContent)) {
             return MSG_OK;
         }
+    } else if (msgType == MSG_FILE_FIT_SCALE) {
+        double dTemp = msgContent.toDouble() * 100;
+        int nScale = dTemp;
+
+        __ChangeScale(nScale, 1);
+        return MSG_OK;
     }
 
     return MSG_NO_OK;
@@ -65,7 +73,7 @@ void ScaleMenu::initActions()
 void ScaleMenu::slotActionTrigger(QAction *action)
 {
     int iData = action->data().toInt();
-    __ChangeScale(iData);
+    __ChangeScale(iData, 0);
 }
 
 void ScaleMenu::slotPrevScale()
@@ -75,7 +83,7 @@ void ScaleMenu::slotPrevScale()
         return ;
     }
     int iData = dataList.at(nIndex);
-    __ChangeScale(iData);
+    __ChangeScale(iData, 0);
 }
 
 void ScaleMenu::slotNextScale()
@@ -84,7 +92,7 @@ void ScaleMenu::slotNextScale()
     int nSize = dataList.size();
     if (nIndex < nSize) {
         int iData = dataList.at(nIndex);
-        __ChangeScale(iData);
+        __ChangeScale(iData, 0);
     }
 }
 
@@ -97,26 +105,29 @@ void ScaleMenu::onShortKey(const QString &keyType)
     }
 }
 
-void ScaleMenu::__ChangeScale(const int &iData)
+void ScaleMenu::__ChangeScale(const int &iData, const int &iFlag)
 {
-    emit sigCurrentScale(iData);
+    emit sigCurrentScale(iData, iFlag);
 
-    m_nCurrentIndex = dataList.indexOf(iData);
+    int nTemp = dataList.indexOf(iData);
+    if (nTemp != -1) {
+        m_nCurrentIndex = nTemp;
 
-    QJsonObject obj;
-    obj.insert("content", QString::number(iData));
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
+        QJsonObject obj;
+        obj.insert("content", QString::number(iData));
+        obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
 
-    QJsonDocument doc(obj);
+        QJsonDocument doc(obj);
 
-    dApp->m_pModelService->notifyMsg(MSG_FILE_SCALE, doc.toJson(QJsonDocument::Compact));
+        dApp->m_pModelService->notifyMsg(MSG_FILE_SCALE, doc.toJson(QJsonDocument::Compact));
 
-    auto actionList = this->findChildren<QAction *>();
-    foreach (auto a, actionList) {
-        int nData = a->data().toInt();
-        if (nData == iData) {
-            a->setChecked(true);
-            break;
+        auto actionList = this->findChildren<QAction *>();
+        foreach (auto a, actionList) {
+            int nData = a->data().toInt();
+            if (nData == iData) {
+                a->setChecked(true);
+                break;
+            }
         }
     }
 }
@@ -130,7 +141,7 @@ void ScaleMenu::OnFileOpenOk(const QString &sPath)
     }
 
     m_nCurrentIndex = dataList.indexOf(nScale);
-    emit sigCurrentScale(nScale);
+    emit sigCurrentScale(nScale, 1);
 
     auto actionList = this->findChildren<QAction *>();
     foreach (auto a, actionList) {

@@ -408,11 +408,14 @@ void FileViewWidget::OnShortCutKey_Ctrl_c()
     }
 }
 
+//  比例调整了, 取消自适应 宽高状态
 void FileViewWidget::OnSetViewScale(const QString &msgConent)
 {
     m_nScale = msgConent.toInt();
 
     setScaleRotateViewModeAndShow();
+
+    m_nAdapteState = Default_State;
 }
 
 void FileViewWidget::OnSetViewRotate(const QString &msgConent)
@@ -446,13 +449,8 @@ void FileViewWidget::OnSetViewRotate(const QString &msgConent)
 
 void FileViewWidget::OnSetViewHit(const QString &msgContent)
 {
-    if (msgContent == "1") {
-        m_nAdapteState = WIDGET_State;
-    } else if (msgContent == "10") {
-        m_nAdapteState = HEIGHT_State;
-    } else {
-        m_nAdapteState = Default_State;
-    }
+    m_nAdapteState = msgContent.toInt();
+
     onSetWidgetAdapt();
 }
 
@@ -512,17 +510,18 @@ void FileViewWidget::onSetWidgetAdapt()
         if (!m_pProxy)
             return;
 
-        if (m_nAdapteState == WIDGET_State) {
+        double dScale = 0.0;
+        if (m_nAdapteState == ADAPTE_WIDGET_State) {
             int nWidth = this->width();
-            m_pProxy->adaptWidthAndShow(nWidth);
-        } else if (m_nAdapteState == HEIGHT_State) {
+            dScale = m_pProxy->adaptWidthAndShow(nWidth);
+        } else if (m_nAdapteState == ADAPTE_HEIGHT_State) {
             int nHeight = this->height();
-            m_pProxy->adaptHeightAndShow(nHeight);
+            dScale = m_pProxy->adaptHeightAndShow(nHeight);
         }
 
-//    if (nScale != 0.0) {
-//        notifyMsg(MSG_FILE_SCALE, QString::number(nScale));
-//    }
+        if (dScale != 0.0) {
+            notifyMsg(MSG_FILE_FIT_SCALE, QString::number(dScale));
+        }
     }
 }
 

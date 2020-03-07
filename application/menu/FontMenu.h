@@ -32,6 +32,7 @@ public:
     // CustomMenu interface
 public:
     int dealWithData(const int &, const QString &) override;
+    void CancelFitState();
 
     // CustomMenu interface
 protected:
@@ -55,16 +56,14 @@ private:
     void OnShortKey(const QString &keyType);
 
 private:
-    QStringList     shortKeyList;                 // 要处理的消息类型
-    QAction *m_pTwoPageAction = nullptr;          // 双页
-    QAction *m_pFiteHAction = nullptr;            // 自适应高
-    QAction *m_pFiteWAction = nullptr;            // 自适应宽
-    QAction *m_pRotateLAction = nullptr;          // 左旋转
-    QAction *m_pRotateRAction = nullptr;          // 右旋转
-    bool    m_bDoubPage = false;                     // 双页
-    bool    m_bFiteH = false;                        // 自适应高
-    bool    m_bFiteW = false;                        // 自适应宽
-
+    QAction         *m_pTwoPageAction = nullptr;          // 双页
+    QAction         *m_pFiteHAction = nullptr;            // 自适应高
+    QAction         *m_pFiteWAction = nullptr;            // 自适应宽
+    QAction         *m_pRotateLAction = nullptr;          // 左旋转
+    QAction         *m_pRotateRAction = nullptr;          // 右旋转
+    bool            m_bDoubPage = false;                     // 双页
+    bool            m_bFiteH = false;                        // 自适应高
+    bool            m_bFiteW = false;                        // 自适应宽
 };
 
 #endif // FONTMENU_H

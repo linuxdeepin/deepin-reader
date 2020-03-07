@@ -56,7 +56,7 @@ private slots:
 
     void SlotSetCurrentTool(const int &);
 
-    void SlotCurrentScale(const int &);
+    void SlotCurrentScale(const int &, const int &);
 
 private:
     void initConnections();

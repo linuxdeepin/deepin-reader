@@ -45,17 +45,20 @@ int FontMenu::dealWithData(const int &msgType, const QString &msgContent)
     return MSG_NO_OK;
 }
 
+void FontMenu::CancelFitState()
+{
+    m_bFiteH = m_bFiteW = false;
+    m_pFiteHAction->setChecked(false);
+    m_pFiteWAction->setChecked(false);
+}
+
 /**
  * @brief FontMenu::resetAdaptive
  * 手动改变(ctrl + 1)缩放比例时，复位自适应宽高
  */
 void FontMenu::resetAdaptive()
 {
-    m_bFiteH = false;
-    m_bFiteW = false;
-
-    m_pFiteHAction->setChecked(false);
-    m_pFiteWAction->setChecked(false);
+    CancelFitState();
 
     setAppSetFiteHAndW();
 }
@@ -153,17 +156,15 @@ void FontMenu::OnFileOpenOk(const QString &sPath)
 
     //自适应宽/高
     int adaptat = fdm.qGetData(Fit);
-    if (adaptat == 1) {
+    if (adaptat == ADAPTE_WIDGET_State) {
         m_bFiteW = true;
         m_bFiteH = false;
-        m_pFiteWAction->setChecked(m_bFiteW);
-        m_pFiteHAction->setChecked(m_bFiteH);
-    } else if (adaptat == 10) {
+    } else if (adaptat == ADAPTE_HEIGHT_State) {
         m_bFiteH = true;
         m_bFiteW = false;
-        m_pFiteWAction->setChecked(m_bFiteW);
-        m_pFiteHAction->setChecked(m_bFiteH);
     }
+    m_pFiteWAction->setChecked(m_bFiteW);
+    m_pFiteHAction->setChecked(m_bFiteH);
 }
 
 /**
@@ -263,12 +264,12 @@ void FontMenu::rotateThumbnail(const bool &direct)
  */
 void FontMenu::setAppSetFiteHAndW()
 {
-    int iValue = 0;
+    int iValue = Default_State;
 
     if (m_bFiteW) {
-        iValue = 1;
+        iValue = ADAPTE_WIDGET_State;
     } else if (m_bFiteH) {
-        iValue = 10;
+        iValue = ADAPTE_HEIGHT_State;
     }
 
     QJsonObject obj;

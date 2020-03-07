@@ -30,7 +30,7 @@ public:
     explicit ScaleMenu(DWidget *parent = nullptr);
 
 signals:
-    void sigCurrentScale(const int &);
+    void sigCurrentScale(const int &, const int &);
 
     // CustomMenu interface
 public:
@@ -46,14 +46,13 @@ private slots:
     void slotNextScale();
 
 private:
-    void __ChangeScale(const int &);
+    void __ChangeScale(const int &, const int &nFlag = 1);
     void OnFileOpenOk(const QString &sPath);
     void onShortKey(const QString &);
 
 private:
     QList<int> dataList;
     int     m_nCurrentIndex = 0;
-    QStringList     shortKeyList;                 // 要处理的消息类型
 };
 
 #endif // SCALEMENU_H
