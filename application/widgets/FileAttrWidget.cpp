@@ -16,7 +16,7 @@
 FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
 {
-    m_strObserverName = "FileAttrWidget";
+    m_strObserverName = FILE_ATTR_WIDGET;
 
     setAttribute(Qt::WA_ShowModal, true);  //  模态对话框， 属性设置
     setAttribute(Qt::WA_DeleteOnClose);

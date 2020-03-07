@@ -37,10 +37,9 @@
 #include "main/MainTabWidgetEx.h"
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
-    : CustomWidget("FileViewWidget", parent)
+    : CustomWidget(FILE_VIEW_WIDGET, parent)
     , m_operatemenu(new TextOperationMenu(this))
     , m_pDefaultMenu(new DefaultOperationMenu(this))
-
 {
     m_pMsgList = { MSG_HANDLESHAPE,
                    MSG_NOTE_ADD_CONTENT,
@@ -87,7 +86,9 @@ void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 //  文档 显示区域 大小变化
 void FileViewWidget::resizeEvent(QResizeEvent *event)
 {
-    onSetWidgetAdapt();
+    if (!m_bFirstShow) {
+        onSetWidgetAdapt();
+    }
 
     CustomWidget::resizeEvent(event);
 }
@@ -488,6 +489,8 @@ void FileViewWidget::SlotDocFileOpenResult(bool openresult)
         emit sigFileOpenOK();
 
         onSetWidgetAdapt();
+
+        m_bFirstShow = false;
     } else {
         notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
     }

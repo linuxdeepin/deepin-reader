@@ -29,7 +29,7 @@
 #include "widgets/main/MainTabWidgetEx.h"
 
 CatalogWidget::CatalogWidget(DWidget *parent)
-    : CustomWidget("CatalogWidget", parent)
+    : CustomWidget(CATALOG_WIDGET, parent)
 {
     initWidget();
     initConnections();

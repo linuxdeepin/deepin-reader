@@ -25,7 +25,7 @@
 #include "widgets/main/MainTabWidgetEx.h"
 
 ThumbnailWidget::ThumbnailWidget(DWidget *parent)
-    : CustomWidget(QString("ThumbnailWidget"), parent)
+    : CustomWidget(THUMBAIL_WIDGET, parent)
 {
     m_ThreadLoadImage.setThumbnail(this);
 

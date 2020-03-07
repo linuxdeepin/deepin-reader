@@ -23,7 +23,7 @@
 #include "business/AppInfo.h"
 
 ThumbnailItemWidget::ThumbnailItemWidget(DWidget *parent)
-    : CustomItemWidget("ThumbnailItemWidget", parent)
+    : CustomItemWidget(THUMBAIL_ITEM_WIDGET, parent)
 {
     setWindowFlags(Qt::FramelessWindowHint);
 

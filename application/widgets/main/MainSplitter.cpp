@@ -30,10 +30,8 @@
 #include "menu/TitleMenu.h"
 
 MainSplitter::MainSplitter(DWidget *parent)
-    : DSplitter(parent)
+    : DSplitter(parent), d_ptr(new MainSplitterPrivate(this))
 {
-    d_ptr = new MainSplitterPrivate(this);
-
     InitWidget();
 }
 
@@ -63,7 +61,7 @@ void MainSplitter::InitWidget()
 
 void MainSplitter::SlotOpenFileOk()
 {
-    QString s = d_ptr->qGetPath();
+    QString s = qGetPath();
     TitleWidget::Instance()->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
 
     m_pLeftWidget->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
@@ -76,6 +74,8 @@ void MainSplitter::SlotFindOperation(const int &iType)
 
 void MainSplitter::SlotNotifyMsg(const int &msgType, const QString &msgContent)
 {
+    Q_D(MainSplitter);
+
     if (this->isVisible()) {    //  只有显示的窗口 处理 MainTabWidgetEx 发送的信号
         if (msgType == MSG_NOTIFY_KEY_MSG) {
             auto cwlist = this->findChildren<CustomWidget *>();
@@ -93,7 +93,7 @@ void MainSplitter::SlotNotifyMsg(const int &msgType, const QString &msgContent)
 
                 QString sContent = obj.value("content").toString();
 
-                d_ptr->qDealWithData(msgType, sContent);
+                d->qDealWithData(msgType, sContent);
 
                 int nRes = m_pLeftWidget->dealWithData(msgType, sContent);
                 if (nRes != MSG_OK) {

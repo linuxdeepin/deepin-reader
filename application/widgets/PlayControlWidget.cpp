@@ -18,7 +18,7 @@
 PlayControlWidget::PlayControlWidget(DWidget *parnet)
     : DFloatingWidget(parnet)
 {
-    m_strObserverName = "PlayControlWidget";
+    m_strObserverName = PLAY_CONTROL_WIDGET;
     m_bcanshow = false;
     m_bautoplaying = true;
     m_bfirstshow = true;

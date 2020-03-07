@@ -6,9 +6,11 @@
 
 #include "CustomControl/CustomWidget.h"
 
-class ScaleMenu;
+//class ScaleMenu;
 class FontMenu;
 class HandleMenu;
+
+class ScaleWidget;
 
 /**
  * @brief The TitleWidget class
@@ -56,7 +58,7 @@ private slots:
 
     void SlotSetCurrentTool(const int &);
 
-    void SlotCurrentScale(const int &, const int &);
+    void SlotScaleChanged();
 
 private:
     void initConnections();
@@ -90,10 +92,12 @@ private:
     DPushButton *m_pSettingBtn = nullptr;
     DPushButton *m_pHandleShapeBtn = nullptr;
 
-    DIconButton     *m_pPreBtn = nullptr;
-    DPushButton     *m_pScaleMenuBtn = nullptr;
-    DIconButton     *m_pNextBtn = nullptr;
-    ScaleMenu       *m_pScaleMenu = nullptr;
+//    DIconButton     *m_pPreBtn = nullptr;
+//    DPushButton     *m_pScaleMenuBtn = nullptr;
+//    DIconButton     *m_pNextBtn = nullptr;
+//    ScaleMenu       *m_pScaleMenu = nullptr;
+
+    ScaleWidget     *m_pSw = nullptr;
 
     DIconButton     *m_pSearchBtn = nullptr;
 };

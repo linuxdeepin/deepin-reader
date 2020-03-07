@@ -26,7 +26,7 @@
 #include "CustomControl/CustomWidgetPrivate.h"
 
 PagingWidget::PagingWidget(CustomWidget *parent)
-    : CustomWidget(QString("PagingWidget"), parent)
+    : CustomWidget(PAGE_WIDGET, parent)
 {
     initWidget();
 

@@ -21,7 +21,7 @@
 #include <QVBoxLayout>
 
 NotesItemWidget::NotesItemWidget(DWidget *parent)
-    : CustomItemWidget(QString("NotesItemWidget"), parent)
+    : CustomItemWidget(NOTE_ITEM_WIDGET, parent)
 {
     initWidget();
     __InitConnections();

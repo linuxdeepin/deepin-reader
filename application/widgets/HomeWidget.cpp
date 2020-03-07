@@ -11,7 +11,7 @@
 #include <QSvgWidget>
 
 HomeWidget::HomeWidget(CustomWidget *parent)
-    : CustomWidget("HomeWidget", parent)
+    : CustomWidget(HOME_WIDGET, parent)
 {
     m_pMsgList = {MSG_MENU_NEW_WINDOW, E_OPEN_FILE};
 

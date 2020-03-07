@@ -18,6 +18,7 @@ class MainSplitterPrivate : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(MainSplitterPrivate)
+    Q_DECLARE_PUBLIC(MainSplitter)
 
 public:
     explicit MainSplitterPrivate(MainSplitter *parent = nullptr);
@@ -49,7 +50,7 @@ private:
     FileDataModel       m_pFileDataModel;        //  已打开的文档列表
     int                 m_pChangeState = -1;
 
-    MainSplitter        *q_ptr = nullptr;
+    MainSplitter        *const q_ptr = nullptr;
 };
 
 #endif // DATAMANAGER_H

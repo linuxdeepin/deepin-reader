@@ -2,13 +2,16 @@
 
 #include <QHBoxLayout>
 #include <QWidgetAction>
+#include <DComboBox>
+#include <QLineEdit>
+
+#include "ScaleWidget.h"
 
 #include "menu/FontMenu.h"
-#include "menu/ScaleMenu.h"
+//#include "menu/ScaleMenu.h"
 #include "menu/HandleMenu.h"
 #include "main/MainTabWidgetEx.h"
 #include "menu/TitleMenu.h"
-
 #include "utils/PublicFunction.h"
 
 TitleWidget *TitleWidget::g_onlyTitleWdiget = nullptr;
@@ -86,10 +89,12 @@ void TitleWidget::SetBtnDisable(const bool &bAble)
     m_pThumbnailBtn->setDisabled(bAble);
     m_pSettingBtn->setDisabled(bAble);
     m_pHandleShapeBtn->setDisabled(bAble);
-    m_pPreBtn->setDisabled(bAble);
-    m_pScaleMenuBtn->setDisabled(bAble);
-    m_pNextBtn->setDisabled(bAble);
+//    m_pPreBtn->setDisabled(bAble);
+//    m_pScaleMenuBtn->setDisabled(bAble);
+//    m_pNextBtn->setDisabled(bAble);
     m_pSearchBtn->setDisabled(bAble);
+
+    m_pSw->setDisabled(bAble);
 }
 
 void TitleWidget::OnShortCut_Alt1()
@@ -151,7 +156,7 @@ void TitleWidget::initWidget()
 
     __InitHandel();
     __InitSelectTool();
-    __InitScale();
+//    __InitScale();
 
     auto m_layout = new QHBoxLayout();
     m_layout->setContentsMargins(5, 0, 0, 0);
@@ -161,11 +166,17 @@ void TitleWidget::initWidget()
     m_layout->addWidget(m_pThumbnailBtn);
     m_layout->addWidget(m_pSettingBtn);
     m_layout->addWidget(m_pHandleShapeBtn);
-    m_layout->addWidget(m_pPreBtn);
-    m_layout->addWidget(m_pScaleMenuBtn);
-    m_layout->addWidget(m_pNextBtn);
-    m_layout->addWidget(m_pSearchBtn);
+//    m_layout->addWidget(m_pPreBtn);
+//    m_layout->addWidget(m_pScaleMenuBtn);
+//    m_layout->addWidget(m_pNextBtn);
 
+    m_pSw = new ScaleWidget;
+    connect(m_pSw, SIGNAL(sigScaleChanged()), SLOT(SlotScaleChanged()));
+    m_pSw->setDisabled(true);
+
+    m_layout->addWidget(m_pSw);
+
+    m_layout->addWidget(m_pSearchBtn);
     m_layout->addStretch(1);
 }
 
@@ -238,15 +249,15 @@ void TitleWidget::on_searchBtn_clicked()
 // 比例按钮
 void TitleWidget::SlotScaleMenuBtnClicked()
 {
-    if (m_pScaleMenu && m_pScaleMenuBtn) {
-        QPoint point = m_pScaleMenuBtn->mapToGlobal(QPoint(0, 0));
-        int nOldY = point.y();
+//    if (m_pScaleMenu && m_pScaleMenuBtn) {
+//        QPoint point = m_pScaleMenuBtn->mapToGlobal(QPoint(0, 0));
+//        int nOldY = point.y();
 
-        int nHeight = m_pScaleMenuBtn->height();
-        point.setY(nHeight + nOldY + 2);
+//        int nHeight = m_pScaleMenuBtn->height();
+//        point.setY(nHeight + nOldY + 2);
 
-        m_pScaleMenu->exec(point);
-    }
+//        m_pScaleMenu->exec(point);
+//    }
 }
 
 void TitleWidget::SlotSetCurrentTool(const int &sAction)
@@ -262,14 +273,14 @@ void TitleWidget::SlotSetCurrentTool(const int &sAction)
 }
 
 
-void TitleWidget::SlotCurrentScale(const int &iScale, const int &iFlag)
+void TitleWidget::SlotScaleChanged()
 {
-    m_pScaleMenuBtn->setText(QString::number(iScale) + "%");
+//    m_pScaleMenuBtn->setText(QString::number(iScale) + "%");
 
-    if (iFlag == 0) {
-        //  比例变化, 自适应宽\高 状态 取消
-        m_pFontMenu->CancelFitState();
-    }
+//    if (iFlag == 0) {
+    //  比例变化, 自适应宽\高 状态 取消
+    m_pFontMenu->CancelFitState();
+//    }
 }
 
 void TitleWidget::initBtns()
@@ -309,22 +320,22 @@ void TitleWidget::__InitSelectTool()
 
 void TitleWidget::__InitScale()
 {
-    m_pScaleMenu = new ScaleMenu(this);
-    connect(m_pScaleMenu, SIGNAL(sigCurrentScale(const int &, const int &)), SLOT(SlotCurrentScale(const int &, const int &)));
+//    m_pScaleMenu = new ScaleMenu(this);
+//    connect(m_pScaleMenu, SIGNAL(sigCurrentScale(const int &, const int &)), SLOT(SlotCurrentScale(const int &, const int &)));
 
-    m_pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
-    m_pPreBtn->setDisabled(true);
-    m_pPreBtn->setFixedSize(QSize(24, 24));
-    connect(m_pPreBtn, SIGNAL(clicked()), m_pScaleMenu, SLOT(slotPrevScale()));
+//    m_pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
+//    m_pPreBtn->setDisabled(true);
+//    m_pPreBtn->setFixedSize(QSize(24, 24));
+//    connect(m_pPreBtn, SIGNAL(clicked()), m_pScaleMenu, SLOT(slotPrevScale()));
 
-    m_pScaleMenuBtn = new DPushButton("0%");
-    m_pScaleMenuBtn->setDisabled(true);
-    connect(m_pScaleMenuBtn, SIGNAL(clicked()), SLOT(SlotScaleMenuBtnClicked()));
+//    m_pScaleMenuBtn = new DPushButton("0%");
+//    m_pScaleMenuBtn->setDisabled(true);
+//    connect(m_pScaleMenuBtn, SIGNAL(clicked()), SLOT(SlotScaleMenuBtnClicked()));
 
-    m_pNextBtn = new DIconButton(DStyle::SP_IncreaseElement);
-    m_pNextBtn->setDisabled(true);
-    m_pNextBtn->setFixedSize(QSize(24, 24));
-    connect(m_pNextBtn, SIGNAL(clicked()), m_pScaleMenu, SLOT(slotNextScale()));
+//    m_pNextBtn = new DIconButton(DStyle::SP_IncreaseElement);
+//    m_pNextBtn->setDisabled(true);
+//    m_pNextBtn->setFixedSize(QSize(24, 24));
+//    connect(m_pNextBtn, SIGNAL(clicked()), m_pScaleMenu, SLOT(slotNextScale()));
 }
 
 void TitleWidget::setDefaultShape()
@@ -411,19 +422,20 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK || msgType == MSG_TAB_SHOW_FILE_CHANGE) {
         OnFileShowChange(msgContent);
-
         TitleMenu::Instance()->dealWithData(msgType, msgContent);
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         slotUpdateTheme();
     }
 
-    int nRes = m_pFontMenu->dealWithData(msgType, msgContent);
+    int nRes = m_pSw->dealWithData(msgType, msgContent);
     if (nRes == MSG_OK) {
         return MSG_OK;
     }
-    nRes = m_pScaleMenu->dealWithData(msgType, msgContent);
-    if (nRes == MSG_OK)
+
+    nRes = m_pFontMenu->dealWithData(msgType, msgContent);
+    if (nRes == MSG_OK) {
         return MSG_OK;
+    }
 
     if (m_pMsgList.contains(msgType)) {
         return MSG_OK;
@@ -443,7 +455,7 @@ int TitleWidget::qDealWithShortKey(const QString &sKey)
     } else {
         int nRes = m_pFontMenu->dealWithData(MSG_NOTIFY_KEY_MSG, sKey);
         if (nRes != MSG_OK) {
-            nRes = m_pScaleMenu->dealWithData(MSG_NOTIFY_KEY_MSG, sKey);
+            nRes = m_pSw->dealWithData(MSG_NOTIFY_KEY_MSG, sKey);
 
             if (nRes == MSG_OK) {
                 return MSG_OK;

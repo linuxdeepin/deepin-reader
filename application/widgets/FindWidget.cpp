@@ -36,7 +36,7 @@
 FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)
 {
-    m_strObserverName = "FindWidget";
+    m_strObserverName = FIND_WIDGET;
 
     setMinimumSize(QSize(414, 60));
     setWindowFlags(Qt::WindowStaysOnTopHint);

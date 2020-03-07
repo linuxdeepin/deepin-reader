@@ -15,7 +15,7 @@
 #include "widgets/main/MainTabWidgetEx.h"
 
 DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
-    : CustomWidget("DocShowShellWidget", parent)
+    : CustomWidget(DOC_SHOW_SHELL_WIDGET, parent)
 {
 
     initWidget();

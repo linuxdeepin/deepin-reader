@@ -82,12 +82,14 @@ void MainTabBar::__InitConnection()
 
 void MainTabBar::SlotTabBarClicked(int index)
 {
-    QString sPath = this->tabData(index).toString();
-    if (sPath != "") {
-        emit sigTabBarIndexChange(sPath);
+    int iTemp = this->currentIndex();
+    if (iTemp != index) {
+        QString sPath = this->tabData(index).toString();
+        if (sPath != "") {
+            emit sigTabBarIndexChange(sPath);
+        }
     }
 }
-
 
 void MainTabBar::__SetTabMiniWidth()
 {

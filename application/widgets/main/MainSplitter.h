@@ -32,6 +32,7 @@ class MainSplitter : public DSplitter
 {
     Q_OBJECT
     Q_DISABLE_COPY(MainSplitter)
+    Q_DECLARE_PRIVATE(MainSplitter)
 
 public:
     explicit MainSplitter(DWidget *parent = nullptr);
@@ -68,7 +69,7 @@ private:
 
     DocShowShellWidget  *m_pDocWidget   = nullptr;
 
-    MainSplitterPrivate     *d_ptr = nullptr;
+    MainSplitterPrivate     *const d_ptr = nullptr;
 };
 
 #endif // MAINSPLITTER_H

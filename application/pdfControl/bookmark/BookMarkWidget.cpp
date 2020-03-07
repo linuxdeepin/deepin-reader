@@ -27,7 +27,7 @@
 #include "widgets/main/MainTabWidgetEx.h"
 
 BookMarkWidget::BookMarkWidget(DWidget *parent)
-    : CustomWidget(QString("BookMarkWidget"), parent)
+    : CustomWidget(BOOKMARK_WIDGET, parent)
 {
     setFocusPolicy(Qt::ClickFocus);
 

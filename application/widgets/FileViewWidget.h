@@ -104,6 +104,8 @@ private:
     int                     m_rotateType = 0;            // 旋转类型(后台所需旋转类型)
     int                     m_nScale = 0;
 
+    bool                    m_bFirstShow = true;
+
     friend class FVMMouseEvent;
     friend class DocShowShellWidget;
 };

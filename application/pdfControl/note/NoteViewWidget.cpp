@@ -31,7 +31,7 @@
 #include "widgets/main/MainTabWidgetEx.h"
 
 NoteViewWidget::NoteViewWidget(CustomWidget *parent)
-    : CustomWidget(QString("NoteViewWidget"), parent)
+    : CustomWidget(NOTE_VIEW_WIDGET, parent)
 {
     setWindowFlag(Qt::Popup);
     setFixedSize(QSize(250, 320));

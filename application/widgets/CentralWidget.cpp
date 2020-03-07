@@ -32,7 +32,7 @@
 #include "utils/utils.h"
 
 CentralWidget::CentralWidget(CustomWidget *parent)
-    : CustomWidget("CentralWidget", parent)
+    : CustomWidget(CENTRAL_WIDGET, parent)
 {
     setAcceptDrops(true);
 

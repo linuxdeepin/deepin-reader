@@ -1,5 +1,7 @@
 #include "MainSplitterPrivate.h"
 
+#include "MainSplitter.h"
+
 MainSplitterPrivate::MainSplitterPrivate(MainSplitter *parent) :
     q_ptr(parent)
 {
