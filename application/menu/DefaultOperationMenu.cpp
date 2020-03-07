@@ -74,7 +74,7 @@ void DefaultOperationMenu::initActions()
 
     m_pBookMark = createAction(tr("Add bookmark"), SLOT(slotBookMarkClicked()));
 
-    m_pAddIconNote = createAction(tr("Add icon note"), SLOT(slotAddIconNote()));
+    m_pAddIconNote = createAction(tr("Add note"), SLOT(slotAddIconNote()));
 
     m_pFirstPage = createAction(tr("First page"), SLOT(slotFirstPageClicked()));
 

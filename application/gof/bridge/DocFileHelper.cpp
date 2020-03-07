@@ -82,7 +82,7 @@ void DocFileHelper::onSaveFile()
                     }
                 }
             } else {
-                notifyMsg(CENTRAL_SHOW_TIP, tr("No changes"));
+                //  notifyMsg(CENTRAL_SHOW_TIP, tr("No changes"));
             }
         }
     }

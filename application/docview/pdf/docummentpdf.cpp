@@ -685,8 +685,6 @@ QString DocummentPDF::addTextAnnotation(const QPoint &pos, const QColor &color, 
             y = (pt.y() < space / 2) ? space / 2 : pt.y();
         }
         pt.setY(y);
-
-        pt.setY(y);
         pt = transformPoint(pt, d->m_rotate, d->m_scale);
         uuid = static_cast<PagePdf *>(d->m_pages.at(ipage))->addTextAnnotation(pt, color, type);
     }
