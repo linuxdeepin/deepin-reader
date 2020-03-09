@@ -32,7 +32,7 @@ class MainTabWidgetEx;
 class MainTabWidgetExPrivate : public CustomWidgetPrivate
 {
 public:
-    MainTabWidgetExPrivate();
+    explicit MainTabWidgetExPrivate(CustomWidget *, QObject *parent = nullptr);
 
 public:
     QString getSliderPath() const;

@@ -19,26 +19,29 @@
 #ifndef CUSTOMWIDGETDATA_H
 #define CUSTOMWIDGETDATA_H
 
+#include <QDebug>
 #include <QObject>
 #include <QList>
 
 class CustomWidget;
 
-class CustomWidgetPrivate
+class CustomWidgetPrivate : public QObject
 {
+    Q_OBJECT
+public:
+    CustomWidgetPrivate(CustomWidget *cw, QObject *parent = nullptr);
+
 protected:
     virtual ~CustomWidgetPrivate() {}
 
 public:
-    CustomWidgetPrivate();
-
     QList<int> getMsgList() const;
     QList<QString> getKeyMsgList() const;
 
     QString getBindPath() const;
     void setBindPath(const QString &strBindPath);
 
-public:
+protected:
     CustomWidget     *q_ptr = nullptr;
 
 protected:

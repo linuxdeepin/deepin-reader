@@ -22,10 +22,8 @@
 #include "CustomWidgetPrivate.h"
 
 CustomWidget::CustomWidget(const QString &name, DWidget *parent)
-    : DWidget(parent), d_ptr(new CustomWidgetPrivate())
+    : DWidget(parent), d_ptr(new CustomWidgetPrivate(this, this))
 {
-    d_ptr->q_ptr = this;
-
     m_strObserverName = name;
     setWindowFlags(Qt::FramelessWindowHint);
     setFocusPolicy(Qt::StrongFocus);
