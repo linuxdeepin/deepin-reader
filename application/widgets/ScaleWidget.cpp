@@ -32,6 +32,7 @@ ScaleWidget::ScaleWidget(DWidget *parent)
 {
     initWidget();
     m_pKeyMsgList << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_equal << KeyStr::g_ctrl_smaller;
+    dataList = {10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500};
 }
 
 ScaleWidget::~ScaleWidget()
@@ -96,23 +97,21 @@ void ScaleWidget::onShortKey(const QString &keyType)
 
 void ScaleWidget::slotPrevScale()
 {
-    int nCurIndex = scaleComboBox->currentIndex();
-    nCurIndex --;
-    if (nCurIndex > -1) {
-        QString sText = scaleComboBox->itemText(nCurIndex);
+    m_nCurrentIndex --;
+    if (m_nCurrentIndex > -1) {
+        QString sText = scaleComboBox->itemText(m_nCurrentIndex);
         scaleComboBox->setCurrentText(sText);
-        scaleComboBox->setCurrentIndex(nCurIndex);
+        scaleComboBox->setCurrentIndex(m_nCurrentIndex);
     }
 }
 
 void ScaleWidget::slotNextScale()
 {
-    int nCurIndex = scaleComboBox->currentIndex();
-    nCurIndex++;
-    if (nCurIndex < scaleComboBox->count()) {
-        QString sText = scaleComboBox->itemText(nCurIndex);
+    m_nCurrentIndex ++;
+    if (m_nCurrentIndex < scaleComboBox->count()) {
+        QString sText = scaleComboBox->itemText(m_nCurrentIndex);
         scaleComboBox->setCurrentText(sText);
-        scaleComboBox->setCurrentIndex(nCurIndex);
+        scaleComboBox->setCurrentIndex(m_nCurrentIndex);
     }
 }
 
@@ -124,6 +123,10 @@ void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
     }
 
     QString sTempText = scaleComboBox->currentText();
+    int nTempIndex = scaleComboBox->findText(sTempText);
+    if (nTempIndex != -1) {
+        m_nCurrentIndex = nTempIndex;
+    }
 
     bool bOk = false;
     QString sTempData = sTempText.mid(0, nIndex);
@@ -149,16 +152,27 @@ void ScaleWidget::SlotReturnPressed()
     if (nIndex == -1) {     //  列表中没有输入的选项
         SlotCurrentTextChanged(sTempText);
 
-        scaleComboBox->setCurrentIndex(-1);
         nIndex = sTempText.lastIndexOf("%");
-        if (nIndex == -1) {
-            sTempText = sTempText + "%";
+        if (nIndex != -1) {
+            sTempText = sTempText.mid(0, nIndex);
         }
-        scaleComboBox->setCurrentText(sTempText);
+
+        bool bOk = false;
+        double dValue = sTempText.toDouble(&bOk);
+        if (bOk && dValue > 10.0 && dValue <= m_nMaxScale) {
+
+            dataList.append(dValue);
+            qSort(dataList.begin(), dataList.end());
+
+            m_nCurrentIndex = dataList.indexOf(dValue);
+            dataList.removeOne(dValue);
+
+            m_nCurrentIndex--;
+
+            scaleComboBox->setCurrentText(sTempText + "%");
+        }
     }
 }
-
-
 
 void ScaleWidget::SetComboBoxMax(const QString &sPath)
 {
@@ -170,7 +184,6 @@ void ScaleWidget::SetComboBoxMax(const QString &sPath)
 
         scaleComboBox->blockSignals(true);
 
-        QList<int> dataList = {10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500};
         foreach (int iData, dataList) {
             if (iData <= m_nMaxScale) {
                 scaleComboBox->addItem(QString::number(iData) + "%");
@@ -182,14 +195,21 @@ void ScaleWidget::SetComboBoxMax(const QString &sPath)
         if (nScale == 0) {
             nScale = 100;
         }
+        m_nCurrentIndex = dataList.indexOf(nScale);
 
-        int nIndex = dataList.indexOf(nScale);
-        if (nIndex != -1) {
-            scaleComboBox->setCurrentIndex(nIndex);
-        } else {
-            scaleComboBox->setCurrentIndex(0);
+        scaleComboBox->setCurrentIndex(m_nCurrentIndex);
+        if (m_nCurrentIndex == -1) {
+            dataList.append(nScale);
+            qSort(dataList.begin(), dataList.end());
+
+            m_nCurrentIndex = dataList.indexOf(nScale);
+            dataList.removeOne(nScale);
+
+            m_nCurrentIndex--;
+
+            QString sCurText = QString::number(nScale) + "%";
+            scaleComboBox->setCurrentText(sCurText);
         }
-        scaleComboBox->setCurrentText(QString::number(nScale) + "%");
 
         scaleComboBox->blockSignals(false);
     }
@@ -197,9 +217,16 @@ void ScaleWidget::SetComboBoxMax(const QString &sPath)
 
 void ScaleWidget::SetFitScale(const QString &msgContent)
 {
-    scaleComboBox->setCurrentIndex(-1);
-
     double dTemp = msgContent.toDouble() * 100;
     int nScale = dTemp;
-    scaleComboBox->setCurrentText(QString::number(nScale) + "%");
+    QString sCurText = QString::number(nScale) + "%";
+
+    int nIndex = scaleComboBox->findText(sCurText);
+    if (nIndex != -1) {
+        m_nCurrentIndex = nIndex;
+        scaleComboBox->setCurrentIndex(m_nCurrentIndex);
+    } else {
+        scaleComboBox->setCurrentIndex(-1);
+        scaleComboBox->setCurrentText(sCurText);
+    }
 }
