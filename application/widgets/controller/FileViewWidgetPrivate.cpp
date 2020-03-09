@@ -12,8 +12,8 @@
 #include "gof/bridge/IHelper.h"
 #include "widgets/main/MainTabWidgetEx.h"
 
-FileViewWidgetPrivate::FileViewWidgetPrivate(FileViewWidget *cw, QObject *parent)
-    : QObject(parent), q_ptr(cw)
+FileViewWidgetPrivate::FileViewWidgetPrivate(FileViewWidget *parent)
+    : QObject(parent), q_ptr(parent)
 {
     m_pAnnotation = new Annotation(this);
 }
@@ -351,6 +351,7 @@ void FileViewWidgetPrivate::mouseReleaseEvent(QMouseEvent *event)
 
 void FileViewWidgetPrivate::AddHighLight(const QString &msgContent)
 {
+    qDebug() << "------------*********" << msgContent;
     m_pAnnotation->AddHighLight(msgContent);
     m_filechanged = true;
 }

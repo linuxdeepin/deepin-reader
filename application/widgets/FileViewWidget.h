@@ -37,7 +37,7 @@ class FileViewWidget : public CustomWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(FileViewWidget)
-    Q_DECLARE_PRIVATE(FileViewWidget)
+
 
 public:
     explicit FileViewWidget(CustomWidget *parent = nullptr);
@@ -135,7 +135,8 @@ private:
 
     friend class DocShowShellWidget;
 
-    FileViewWidgetPrivate *d_ptr;
+    FileViewWidgetPrivate *d_fvptr;
+    Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_fvptr), FileViewWidget)
 };
 
 

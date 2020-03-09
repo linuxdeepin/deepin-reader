@@ -14,12 +14,11 @@ class FileViewWidget;
 class FileViewWidgetPrivate: public QObject
 {
     Q_OBJECT
-    Q_DECLARE_PUBLIC(FileViewWidget)
 
 public:
-    FileViewWidgetPrivate(FileViewWidget *, QObject *parent = nullptr);
+    FileViewWidgetPrivate(FileViewWidget *parent = nullptr);
 
-private:
+public slots:
     void slotDealWithMenu(const int &, const QString &);
     void setProxy(DocummentProxy *);
 
@@ -62,7 +61,9 @@ private:
 
     Annotation  *m_pAnnotation = nullptr;
 
-    FileViewWidget *q_ptr = nullptr;
+protected:
+    FileViewWidget *q_ptr;
+    Q_DECLARE_PUBLIC(FileViewWidget)
 };
 
 #endif // FILEVIEWWIDGETPRIVATE_H

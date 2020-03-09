@@ -44,7 +44,7 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
       m_operatemenu(new TextOperationMenu(this)),
       m_pDefaultMenu(new DefaultOperationMenu(this))
 {
-    d_ptr = new FileViewWidgetPrivate(this, this);
+    d_fvptr = new FileViewWidgetPrivate(this);
 
     m_pMsgList = { MSG_HANDLESHAPE,
                    MSG_NOTE_ADD_CONTENT,
@@ -524,9 +524,8 @@ void FileViewWidget::SlotFindOperation(const int &iType, const QString &strFind)
 //  信号槽　初始化
 void FileViewWidget::initConnections()
 {
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), SLOT(slotCustomContextMenuRequested(const QPoint &)));
-
     Q_D(FileViewWidget);
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), SLOT(slotCustomContextMenuRequested(const QPoint &)));
     connect(m_operatemenu, SIGNAL(sigActionTrigger(const int &, const QString &)), d, SLOT(slotDealWithMenu(const int &, const QString &)));
 }
 
