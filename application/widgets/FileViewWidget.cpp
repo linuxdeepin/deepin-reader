@@ -196,6 +196,7 @@ void FileViewWidget::onSetHandShape(const QString &data)
 //  添加高亮颜色  快捷键
 void FileViewWidget::onFileAddAnnotation()
 {
+    Q_D(FileViewWidget);
     //  处于幻灯片模式下
     int nState = MainTabWidgetEx::Instance()->getCurrentState();
     if (nState == SLIDER_SHOW)
@@ -231,7 +232,8 @@ void FileViewWidget::onFileAddAnnotation()
                            QString::number(nEx) + Constant::sQStringSep +
                            QString::number(nEy);
 
-        dApp->m_pHelper->qDealWithData(MSG_NOTE_ADD_HIGHLIGHT_COLOR, sContent);
+        //dApp->m_pHelper->qDealWithData(MSG_NOTE_ADD_HIGHLIGHT_COLOR, sContent);
+        d->AddHighLight(sContent);
     } else {
         notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
     }
