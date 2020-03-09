@@ -185,7 +185,7 @@ void ScaleWidget::SetComboBoxMax()
         scaleComboBox->blockSignals(true);
 
         int nTempMax = dMax * 100;
-        if (nTempMax != m_nMaxScale) {
+        if (nTempMax != m_nMaxScale) {  //  判断当前最大显示 是否 和之前一样, 不一样, 清楚item, 重新添加
             scaleComboBox->clear();
             m_nMaxScale = nTempMax;
 

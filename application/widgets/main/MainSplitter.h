@@ -24,7 +24,8 @@
 
 DWIDGET_USE_NAMESPACE
 
-class DocShowShellWidget;
+//class DocShowShellWidget;
+class FileViewWidget;
 class LeftSidebarWidget;
 class MainSplitterPrivate;
 
@@ -39,7 +40,7 @@ public:
     ~MainSplitter() override;
 
 public:
-    QString qGetPath() const;
+    QString qGetPath();
     void qSetPath(const QString &strPath);
 
     void qSetFileChange(const int &);
@@ -47,8 +48,8 @@ public:
 
     void saveData();
 
-    FileDataModel qGetFileData() const;
-    void setFileData(const FileDataModel &) const;
+    FileDataModel qGetFileData();
+    void setFileData(const FileDataModel &);
 
     void OnOpenSliderShow();
     void OnExitSliderShow();
@@ -59,15 +60,16 @@ private:
     void InitWidget();
 
 private slots:
-    void SlotOpenFileOk();
+    void SlotOpenFileOk(const QString &);
     void SlotFindOperation(const int &);
     void SlotNotifyMsg(const int &, const QString &);
 
 private:
     LeftSidebarWidget   *m_pLeftWidget = nullptr;
+    FileViewWidget      *m_pFileViewWidget = nullptr;
     bool                m_bOldState = false;
 
-    DocShowShellWidget  *m_pDocWidget   = nullptr;
+//    DocShowShellWidget  *m_pDocWidget   = nullptr;
 
     MainSplitterPrivate     *const d_ptr = nullptr;
 };

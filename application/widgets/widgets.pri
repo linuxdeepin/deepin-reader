@@ -1,5 +1,4 @@
 HEADERS += \
-    $$PWD/FileViewWidgetPrivate.h \
     $$PWD/HomeWidget.h \
     $$PWD/LeftSidebarWidget.h \
     $$PWD/FileViewWidget.h \
@@ -11,17 +10,18 @@ HEADERS += \
     $$PWD/AttrScrollWidget.h \
     $$PWD/FileAttrWidget.h \
     $$PWD/FindWidget.h \
-    $$PWD/controller/FVMMouseEvent.h \
     $$PWD/main/MainSplitter.h \
     $$PWD/main/MainTabBar.h \
     $$PWD/main/MainTabWidgetEx.h \
     $$PWD/TitleWidget.h \
     $$PWD/main/MainSplitterPrivate.h \
     $$PWD/main/MainTabWidgetExPrivate.h \
-    $$PWD/ScaleWidget.h
+    $$PWD/ScaleWidget.h \
+    $$PWD/controller/FileViewWidgetPrivate.h \
+    $$PWD/SpinnerWidget.h \
+    $$PWD/controller/Annotation.h
 
 SOURCES += \
-    $$PWD/FileViewWidgetPrivate.cpp \
     $$PWD/HomeWidget.cpp \
     $$PWD/FileViewWidget.cpp \
     $$PWD/LeftSidebarWidget.cpp \
@@ -33,11 +33,13 @@ SOURCES += \
     $$PWD/AttrScrollWidget.cpp \
     $$PWD/FileAttrWidget.cpp \
     $$PWD/FindWidget.cpp \
-    $$PWD/controller/FVMMouseEvent.cpp \
     $$PWD/main/MainSplitter.cpp \
     $$PWD/main/MainTabBar.cpp \
     $$PWD/main/MainTabWidgetEx.cpp \
     $$PWD/TitleWidget.cpp \
     $$PWD/main/MainSplitterPrivate.cpp \
     $$PWD/main/MainTabWidgetExPrivate.cpp \
-    $$PWD/ScaleWidget.cpp
+    $$PWD/ScaleWidget.cpp \
+    $$PWD/controller/FileViewWidgetPrivate.cpp \
+    $$PWD/SpinnerWidget.cpp \
+    $$PWD/controller/Annotation.cpp

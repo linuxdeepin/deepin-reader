@@ -5,8 +5,8 @@
 #include <QStackedLayout>
 
 #include "FileViewWidget.h"
-#include "FindWidget.h"
 #include "FileAttrWidget.h"
+#include "SpinnerWidget.h"
 
 #include "docview/docummentproxy.h"
 #include "utils/PublicFunction.h"
@@ -17,9 +17,7 @@
 DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
     : CustomWidget(DOC_SHOW_SHELL_WIDGET, parent)
 {
-
     initWidget();
-    initConnections();
 
     m_pMsgList = { MSG_OPERATION_TEXT_ADD_ANNOTATION,
                    MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, MSG_NOTE_PAGE_SHOW_NOTEWIDGET
@@ -36,119 +34,26 @@ DocShowShellWidget::~DocShowShellWidget()
 //  注释窗口
 void DocShowShellWidget::onOpenNoteWidget(const QString &msgContent)
 {
-    QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (sList.size() == 3) {
-
-        QString sPage = sList.at(0);
-//        QString sX = sList.at(1);
-//        QString sY = sList.at(2);
-
-        if (m_pNoteViewWidget == nullptr) {
-            m_pNoteViewWidget = new NoteViewWidget(this);
-        }
-        m_pNoteViewWidget->setEditText("");
-        m_pNoteViewWidget->setNoteUuid("");
-        m_pNoteViewWidget->setNotePage(sPage);
-        m_pNoteViewWidget->setWidgetType(NOTE_HIGHLIGHT);
-
-        QPoint point;
-        bool t_bHigh = false;
-        dApp->m_pAppInfo->setSmallNoteWidgetSize(m_pNoteViewWidget->size());
-        dApp->m_pAppInfo->mousePressLocal(t_bHigh, point);
-        m_pNoteViewWidget->showWidget(point);
-    }
+    m_pFileViewWidget->onOpenNoteWidget(msgContent);
 }
 
 //  显示 当前 注释
-void DocShowShellWidget::onShowNoteWidget(const QString &contant)
+void DocShowShellWidget::onShowNoteWidget(const QString &msgContent)
 {
-    QStringList t_strList = contant.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (t_strList.count() == 2) {
-        QString t_strUUid = t_strList.at(0);
-        QString t_page = t_strList.at(1);
-
-        QString sContant = "";
-
-        auto pHelper = MainTabWidgetEx::Instance()->getCurFileAndProxy();
-        if (pHelper) {
-            pHelper->getAnnotationText(t_strUUid, sContant, t_page.toInt());
-        }
-
-        if (m_pNoteViewWidget == nullptr) {
-            m_pNoteViewWidget = new NoteViewWidget(this);
-        }
-        m_pNoteViewWidget->setNoteUuid(t_strUUid);
-        m_pNoteViewWidget->setNotePage(t_page);
-        m_pNoteViewWidget->setEditText(sContant);
-        m_pNoteViewWidget->setWidgetType(NOTE_HIGHLIGHT);
-        dApp->m_pAppInfo->setSmallNoteWidgetSize(m_pNoteViewWidget->size());
-
-        bool t_bHigh = false;  // 点击位置是否是高亮
-        QPoint point;          // = this->mapToGlobal(rrect.bottomRight());// 鼠标点击位置
-
-        dApp->m_pAppInfo->mousePressLocal(t_bHigh, point);
-        m_pNoteViewWidget->showWidget(point);
-    }
+    m_pFileViewWidget->onShowNoteWidget(msgContent);
 }
 
 void DocShowShellWidget::__ShowPageNoteWidget(const QString &msgContent)
 {
-    QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (sList.size() == 4) {
-        QString sUuid = sList.at(0);
-        QString sPage = sList.at(1);
-        QString sX = sList.at(2);
-        QString sY = sList.at(3);
-
-        QString sContant = "";
-
-        auto pHelper = MainTabWidgetEx::Instance()->getCurFileAndProxy();
-        if (pHelper) {
-            pHelper->getAnnotationText(sUuid, sContant, sPage.toInt());
-        }
-        if (m_pNoteViewWidget == nullptr) {
-            m_pNoteViewWidget = new NoteViewWidget(this);
-        }
-        m_pNoteViewWidget->setEditText(sContant);
-        m_pNoteViewWidget->setNoteUuid(sUuid);
-        m_pNoteViewWidget->setNotePage(sPage);
-        m_pNoteViewWidget->setWidgetType(NOTE_ICON);
-        m_pNoteViewWidget->showWidget(QPoint(sX.toInt(), sY.toInt()));
-    }
-}
-
-void DocShowShellWidget::InitSpinner()
-{
-    m_pSpinerWidget = new DWidget(this);
-
-    QVBoxLayout *vLayout = new QVBoxLayout;
-    vLayout->addStretch();
-
-    m_pSpiner = new DSpinner(m_pSpinerWidget);
-    m_pSpiner->setFixedSize(QSize(36, 36));
-    m_pSpiner->start();
-
-    vLayout->addWidget(m_pSpiner);
-    vLayout->addStretch();
-
-    QHBoxLayout *hLayout = new QHBoxLayout;
-    hLayout->addStretch();
-    hLayout->addItem(vLayout);
-    hLayout->addStretch();
-
-    m_pSpinerWidget->setLayout(hLayout);
-}
-
-void DocShowShellWidget::slotUpdateTheme()
-{
+    m_pFileViewWidget->__ShowPageNoteWidget(msgContent);
 }
 
 void DocShowShellWidget::SlotOpenFileOk()
 {
-    m_playout->removeWidget(m_pSpinerWidget);
+    m_playout->removeWidget(m_pSpiner);
 
-    delete  m_pSpinerWidget;
-    m_pSpinerWidget = nullptr;
+    delete  m_pSpiner;
+    m_pSpiner = nullptr;
 
     emit sigOpenFileOk();
 }
@@ -158,46 +63,20 @@ void DocShowShellWidget::SlotFindOperation(const int &iType, const QString &strF
     emit sigFindOperation(iType);
 
     if (m_pFileViewWidget) {
-        m_pFileViewWidget->SetFindOperation(iType, strFind);
+//        m_pFileViewWidget->SetFindOperation(iType, strFind);
     }
-
-    if (iType == E_FIND_CONTENT || iType == E_FIND_EXIT) {
-        notifyMsg(iType, m_strBindPath);
-    }
-}
-
-void DocShowShellWidget::initConnections()
-{
-}
-
-//  集中处理 按键通知消息
-int DocShowShellWidget::dealWithNotifyMsg(const QString &msgContent)
-{
-    return MSG_NO_OK;
 }
 
 int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     int nRes = m_pFileViewWidget->dealWithData(msgType, msgContent);
     if (nRes != MSG_OK) {
-        if (m_pFindWidget) {
-            nRes = m_pFindWidget->dealWithData(msgType, msgContent);
-            if (nRes == MSG_OK) {
-                return nRes;
-            }
-        }
-
         if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {             //  添加注释
             onOpenNoteWidget(msgContent);
         } else if (msgType == MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) {
             onShowNoteWidget(msgContent);
         } else if (msgType == MSG_NOTE_PAGE_SHOW_NOTEWIDGET) {          //  显示注释窗口
             __ShowPageNoteWidget(msgContent);
-        } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
-            slotUpdateTheme();
-        } else if (msgType == MSG_NOTIFY_KEY_MSG) {
-            //  最后一个处理通知消息
-            return dealWithNotifyMsg(msgContent);
         }
 
         if (m_pMsgList.contains(msgType)) {
@@ -216,14 +95,7 @@ bool DocShowShellWidget::OpenFilePath(const QString &sPath)
 
 void DocShowShellWidget::ShowFindWidget()
 {
-    if (m_pFindWidget == nullptr) {
-        m_pFindWidget = new FindWidget(this);
-        connect(m_pFindWidget, SIGNAL(sigFindOperation(const int &, const QString &)), SLOT(SlotFindOperation(const int &, const QString &)));
-    }
-
-    int nParentWidth = this->width();
-    m_pFindWidget->showPosition(nParentWidth);
-    m_pFindWidget->setSearchEditFocus();
+    m_pFileViewWidget->ShowFindWidget();
 }
 
 void DocShowShellWidget::setFileChange(bool bchange)
@@ -249,21 +121,12 @@ void DocShowShellWidget::initWidget()
     m_pFileViewWidget = new FileViewWidget(this);
     connect(m_pFileViewWidget, SIGNAL(sigFileOpenOK()), SLOT(SlotOpenFileOk()));
 
-    InitSpinner();
-    m_playout->addWidget(m_pSpinerWidget);
+    m_pSpiner = new SpinnerWidget(this);
+    m_pSpiner->setSpinnerSize(QSize(36, 36));
+    m_pSpiner->startSpinner();
+    m_playout->addWidget(m_pSpiner);
 
     m_playout->addWidget(m_pFileViewWidget);
 
     this->setLayout(m_playout);
 }
-
-void DocShowShellWidget::resizeEvent(QResizeEvent *event)
-{
-    if (m_pFindWidget && m_pFindWidget->isVisible()) {
-        int nParentWidth = this->width();
-        m_pFindWidget->showPosition(nParentWidth);
-    }
-
-    CustomWidget::resizeEvent(event);
-}
-

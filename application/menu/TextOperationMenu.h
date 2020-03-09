@@ -38,9 +38,6 @@ private:
     QAction *createAction(const QString &, const char *member);
     void notifyMsgToFrame(const int &, const QString &msgContent = "");
 
-signals:
-    void sigActionTrigger(int type, const QString &strcontents);
-
 private slots:
     void slotSetHighLight(const int &);
     void slotCopyClicked();

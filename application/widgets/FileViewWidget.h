@@ -25,6 +25,9 @@ class TextOperationMenu;
 class DefaultOperationMenu;
 class DocummentProxy;
 class FileViewWidgetPrivate;
+class FindWidget;
+class NoteTipWidget;
+class NoteViewWidget;
 
 /**
  * @brief The FileViewWidget class
@@ -34,24 +37,28 @@ class FileViewWidget : public CustomWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(FileViewWidget)
+    Q_DECLARE_PRIVATE(FileViewWidget)
 
 public:
     explicit FileViewWidget(CustomWidget *parent = nullptr);
     ~FileViewWidget() override;
 
 signals:
-    void sigFileOpenOK();
+    void sigFileOpenOK(const QString &);
+    void sigFindOperation(const int &);
+    void sigAnntationMsg(const int &, const QString &);
 
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
     int qDealWithShortKey(const QString &) override;
-    void SetFindOperation(const int &, const QString &);
 
+    bool OpenFilePath(const QString &);
+    void ShowFindWidget();
 
     void setFileChange(bool bchanged);
     bool getFileChange();
-    // CustomWidget interface
+
 protected:
     void initWidget() override;
 
@@ -69,7 +76,8 @@ private slots:
     void slotBookMarkStateChange(int, bool);
     void slotDocFilePageChanged(int);
     void SlotDocFileOpenResult(bool);
-    void slotDealWithMenu(int type, const QString &strcontents);
+
+    void SlotFindOperation(const int &, const QString &strFind);
 
 private:
     void initConnections();
@@ -77,10 +85,17 @@ private:
     void onSetHandShape(const QString &);
     void onSetWidgetAdapt();
 
+private:
     void onFileAddNote(const QString &);
+    void onOpenNoteWidget(const QString &msgContent);
+    void onShowNoteWidget(const QString &contant);
+    void __ShowPageNoteWidget(const QString &msgContent);
 
     void onFileAddAnnotation();
     void onFileAddNote();
+    void __ShowNoteTipWidget(const QString &sText);
+    void __CloseFileNoteWidget();
+
     void __SetCursor(const QCursor &cursor);
 
     void OnSetViewChange(const QString &);
@@ -89,19 +104,23 @@ private:
     void OnSetViewHit(const QString &);
 
     void setScaleRotateViewModeAndShow();
-    bool OpenFilePath(const QString &);
 
     void OnShortCutKey_Ctrl_l();
     void OnShortCutKey_Ctrl_i();
     void OnShortCutKey_Ctrl_c();
 
 private:
-    inline DocummentProxy *getDocumentProxy() {return m_pProxy;}
 
 private:
-    TextOperationMenu       *m_operatemenu;
-    DefaultOperationMenu    *m_pDefaultMenu;
+    FindWidget              *m_pFindWidget = nullptr;
+    NoteViewWidget          *m_pNoteViewWidget = nullptr;
+    NoteTipWidget           *m_pTipWidget = nullptr;
+
+    TextOperationMenu       *m_operatemenu = nullptr;
+    DefaultOperationMenu    *m_pDefaultMenu = nullptr;
     DocummentProxy          *m_pProxy = nullptr;
+
+
     QString                 m_strPath = "";
 
     int                     m_nAdapteState = NO_ADAPTE_State;       //  当前自适应状态
@@ -114,11 +133,9 @@ private:
 
     bool                    m_bFirstShow = true;        //  是否是第一次显示,  用于判断 resizeEvent
 
-    friend class FVMMouseEvent;
     friend class DocShowShellWidget;
 
     FileViewWidgetPrivate *d_ptr;
-    Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), FileViewWidget)
 };
 
 

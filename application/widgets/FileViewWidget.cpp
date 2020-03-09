@@ -20,10 +20,11 @@
 
 #include <QFileInfo>
 
+#include "FindWidget.h"
+
 #include "business/FileFormatHelper.h"
 #include "docview/commonstruct.h"
 #include "docview/docummentproxy.h"
-#include "controller/FVMMouseEvent.h"
 #include "main/MainTabWidgetEx.h"
 #include "menu/DefaultOperationMenu.h"
 #include "menu/TextOperationMenu.h"
@@ -32,20 +33,25 @@
 
 #include "gof/bridge/IHelper.h"
 #include "main/MainTabWidgetEx.h"
-#include "FileViewWidgetPrivate.h"
+#include "pdfControl/note/NoteViewWidget.h"
+#include "widgets/NoteTipWidget.h"
 
+#include "controller/Annotation.h"
+#include "controller/FileViewWidgetPrivate.h"
 
 FileViewWidget::FileViewWidget(CustomWidget *parent)
-    : CustomWidget(FILE_VIEW_WIDGET, parent)
-    , m_operatemenu(new TextOperationMenu(this))
-    , m_pDefaultMenu(new DefaultOperationMenu(this))
-    , d_ptr(new FileViewWidgetPrivate(this))
+    : CustomWidget(FILE_VIEW_WIDGET, parent),
+      m_operatemenu(new TextOperationMenu(this)),
+      m_pDefaultMenu(new DefaultOperationMenu(this))
 {
+    d_ptr = new FileViewWidgetPrivate(this, this);
+
     m_pMsgList = { MSG_HANDLESHAPE,
                    MSG_NOTE_ADD_CONTENT,
-                   MSG_VIEWCHANGE_DOUBLE_SHOW, MSG_VIEWCHANGE_ROTATE, MSG_FILE_SCALE, MSG_VIEWCHANGE_FIT
+                   MSG_VIEWCHANGE_DOUBLE_SHOW, MSG_VIEWCHANGE_ROTATE, MSG_FILE_SCALE, MSG_VIEWCHANGE_FIT,
+                   MSG_OPERATION_TEXT_ADD_ANNOTATION,
+                   MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, MSG_NOTE_PAGE_SHOW_NOTEWIDGET
                  };
-
     m_pKeyMsgList = {KeyStr::g_ctrl_l, KeyStr::g_ctrl_i, KeyStr::g_ctrl_c};
 
     setMouseTracking(true);  //  接受 鼠标滑动事件
@@ -68,19 +74,22 @@ void FileViewWidget::initWidget()
 //  鼠标移动
 void FileViewWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    g_FVMMouseEvent::getInstance()->mouseMoveEvent(event, this);
+    Q_D(FileViewWidget);
+    d->mouseMoveEvent(event);
 }
 
 //  鼠标左键 按下
 void FileViewWidget::mousePressEvent(QMouseEvent *event)
 {
-    g_FVMMouseEvent::getInstance()->mousePressEvent(event, this);
+    Q_D(FileViewWidget);
+    d->mousePressEvent(event);
 }
 
 //  鼠标松开
 void FileViewWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-    g_FVMMouseEvent::getInstance()->mouseReleaseEvent(event, this);
+    Q_D(FileViewWidget);
+    d->mouseReleaseEvent(event);
 }
 
 //  文档 显示区域 大小变化
@@ -88,6 +97,11 @@ void FileViewWidget::resizeEvent(QResizeEvent *event)
 {
     if (!m_bFirstShow) {
         onSetWidgetAdapt();
+    }
+
+    if (m_pFindWidget && m_pFindWidget->isVisible()) {
+        int nParentWidth = this->width();
+        m_pFindWidget->showPosition(nParentWidth);
     }
 
     CustomWidget::resizeEvent(event);
@@ -226,7 +240,6 @@ void FileViewWidget::onFileAddAnnotation()
 //  添加注释
 void FileViewWidget::onFileAddNote(const QString &msgContent)
 {
-    Q_D(FileViewWidget);
     QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (contentList.size() == 2) {
         QString sNote = contentList.at(0);
@@ -245,7 +258,8 @@ void FileViewWidget::onFileAddNote(const QString &msgContent)
                            sNote + Constant::sQStringSep +
                            sPage;
 
-        d->AddHighLightNote(sContent);
+        Q_D(FileViewWidget);
+        d->slotDealWithMenu(MSG_NOTE_ADD_HIGHLIGHT_NOTE, sContent);
     }
 }
 
@@ -350,6 +364,10 @@ bool FileViewWidget::OpenFilePath(const QString &sPath)
 
         bool rl = m_pProxy->openFile(nCurDocType, sPath, curPage, rotatetype, scale, viewmode);
         if (rl) {
+
+            Q_D(FileViewWidget);
+            d->setProxy(m_pProxy);
+
             MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
             if (pMtwe) {
                 pMtwe->SetFileData(sPath, fdm);
@@ -470,7 +488,7 @@ void FileViewWidget::SlotDocFileOpenResult(bool openresult)
     if (openresult) {
         dApp->m_pDBService->qSelectData(m_strPath, DB_BOOKMARK);
 
-        emit sigFileOpenOK();
+        emit sigFileOpenOK(m_strPath);
 
         onSetWidgetAdapt();
 
@@ -480,35 +498,24 @@ void FileViewWidget::SlotDocFileOpenResult(bool openresult)
     }
 }
 
-void FileViewWidget::slotDealWithMenu(int type, const QString &strcontents)
+void FileViewWidget::SlotFindOperation(const int &iType, const QString &strFind)
 {
-    Q_D(FileViewWidget);
-    switch (type) {
-    case MSG_NOTE_PAGE_ADD_CONTENT:
-        d->AddPageIconAnnotation(strcontents);
-        break;
-    case MSG_NOTE_PAGE_DELETE_CONTENT:
-        d->DeletePageIconAnnotation(strcontents);
-        break;
-    case MSG_NOTE_PAGE_UPDATE_CONTENT:
-        break;
-    case MSG_NOTE_DELETE_CONTENT:
-        break;
-    case MSG_NOTE_UPDATE_CONTENT:
-        break;
-    case MSG_NOTE_REMOVE_HIGHLIGHT:
-        d->RemoveHighLight(strcontents);
-        break;
-    case MSG_NOTE_UPDATE_HIGHLIGHT_COLOR:
-        d->ChangeAnnotationColor(strcontents);
-        break;
-    case MSG_NOTE_ADD_HIGHLIGHT_COLOR:
-        d->AddHighLight(strcontents);
-        break;
-    case MSG_NOTE_ADD_HIGHLIGHT_NOTE:
-        break;
-    default:
-        break;
+    emit sigFindOperation(iType);
+
+    if (iType == E_FIND_CONTENT || iType == E_FIND_EXIT) {
+        notifyMsg(iType, m_strPath);
+    }
+
+    if (m_pProxy) {
+        if (iType == E_FIND_NEXT) {
+            m_pProxy->findNext();
+        } else if (iType == E_FIND_PREV) {
+            m_pProxy->findPrev();
+        } else if (iType == E_FIND_EXIT) {
+            m_pProxy->clearsearch();
+        } else {
+            m_pProxy->search(strFind);
+        }
     }
 }
 
@@ -516,7 +523,9 @@ void FileViewWidget::slotDealWithMenu(int type, const QString &strcontents)
 void FileViewWidget::initConnections()
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), SLOT(slotCustomContextMenuRequested(const QPoint &)));
-    connect(m_operatemenu, SIGNAL(sigActionTrigger(int, const QString &)), this, SLOT(slotDealWithMenu(int, const QString &)));
+
+    Q_D(FileViewWidget);
+    connect(m_operatemenu, SIGNAL(sigActionTrigger(const int &, const QString &)), d, SLOT(slotDealWithMenu(const int &, const QString &)));
 }
 
 //  设置　窗口　自适应　宽＼高　度
@@ -544,6 +553,13 @@ void FileViewWidget::onSetWidgetAdapt()
 //  消息 数据 处理
 int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
+    if (m_pFindWidget) {
+        int nRes = m_pFindWidget->dealWithData(msgType, msgContent);
+        if (nRes == MSG_OK) {
+            return nRes;
+        }
+    }
+
     if (msgType == MSG_VIEWCHANGE_DOUBLE_SHOW) {
         OnSetViewChange(msgContent);
     } else if (msgType == MSG_VIEWCHANGE_ROTATE) {
@@ -556,6 +572,12 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         onSetHandShape(msgContent);
     } else if (msgType == MSG_NOTE_ADD_CONTENT) {
         onFileAddNote(msgContent);
+    } else if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {             //  添加注释
+        onOpenNoteWidget(msgContent);
+    } else if (msgType == MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) {
+        onShowNoteWidget(msgContent);
+    } else if (msgType == MSG_NOTE_PAGE_SHOW_NOTEWIDGET) {          //  显示注释窗口
+        __ShowPageNoteWidget(msgContent);
     }
 
     bool rl = m_pMsgList.contains(msgType);
@@ -582,21 +604,6 @@ int FileViewWidget::qDealWithShortKey(const QString &sKey)
     return MSG_NO_OK;
 }
 
-void FileViewWidget::SetFindOperation(const int &iType, const QString &sFind)
-{
-    if (m_pProxy) {
-        if (iType == E_FIND_NEXT) {
-            m_pProxy->findNext();
-        } else if (iType == E_FIND_PREV) {
-            m_pProxy->findPrev();
-        } else if (iType == E_FIND_EXIT) {
-            m_pProxy->clearsearch();
-        } else {
-            m_pProxy->search(sFind);
-        }
-    }
-}
-
 void FileViewWidget::setFileChange(bool bchanged)
 {
     Q_D(FileViewWidget);
@@ -607,4 +614,118 @@ bool FileViewWidget::getFileChange()
 {
     Q_D(FileViewWidget);
     return d->m_filechanged ;
+}
+
+void FileViewWidget::ShowFindWidget()
+{
+    if (m_pFindWidget == nullptr) {
+        m_pFindWidget = new FindWidget(this);
+        connect(m_pFindWidget, SIGNAL(sigFindOperation(const int &, const QString &)), SLOT(SlotFindOperation(const int &, const QString &)));
+    }
+
+    int nParentWidth = this->width();
+    m_pFindWidget->showPosition(nParentWidth);
+    m_pFindWidget->setSearchEditFocus();
+}
+
+void FileViewWidget::onOpenNoteWidget(const QString &msgContent)
+{
+    QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    if (sList.size() == 3) {
+
+        QString sPage = sList.at(0);
+//        QString sX = sList.at(1);
+//        QString sY = sList.at(2);
+
+        if (m_pNoteViewWidget == nullptr) {
+            m_pNoteViewWidget = new NoteViewWidget(this);
+        }
+        m_pNoteViewWidget->setEditText("");
+        m_pNoteViewWidget->setNoteUuid("");
+        m_pNoteViewWidget->setNotePage(sPage);
+        m_pNoteViewWidget->setWidgetType(NOTE_HIGHLIGHT);
+
+        QPoint point;
+        bool t_bHigh = false;
+        dApp->m_pAppInfo->setSmallNoteWidgetSize(m_pNoteViewWidget->size());
+        dApp->m_pAppInfo->mousePressLocal(t_bHigh, point);
+        m_pNoteViewWidget->showWidget(point);
+    }
+}
+
+//  显示 当前 注释
+void FileViewWidget::onShowNoteWidget(const QString &contant)
+{
+    QStringList t_strList = contant.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    if (t_strList.count() == 2) {
+        QString t_strUUid = t_strList.at(0);
+        QString t_page = t_strList.at(1);
+
+        QString sContant = "";
+
+        auto pHelper = MainTabWidgetEx::Instance()->getCurFileAndProxy();
+        if (pHelper) {
+            pHelper->getAnnotationText(t_strUUid, sContant, t_page.toInt());
+        }
+
+        if (m_pNoteViewWidget == nullptr) {
+            m_pNoteViewWidget = new NoteViewWidget(this);
+        }
+        m_pNoteViewWidget->setNoteUuid(t_strUUid);
+        m_pNoteViewWidget->setNotePage(t_page);
+        m_pNoteViewWidget->setEditText(sContant);
+        m_pNoteViewWidget->setWidgetType(NOTE_HIGHLIGHT);
+        dApp->m_pAppInfo->setSmallNoteWidgetSize(m_pNoteViewWidget->size());
+
+        bool t_bHigh = false;  // 点击位置是否是高亮
+        QPoint point;          // = this->mapToGlobal(rrect.bottomRight());// 鼠标点击位置
+
+        dApp->m_pAppInfo->mousePressLocal(t_bHigh, point);
+        m_pNoteViewWidget->showWidget(point);
+    }
+}
+
+void FileViewWidget::__ShowPageNoteWidget(const QString &msgContent)
+{
+    QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    if (sList.size() == 4) {
+        QString sUuid = sList.at(0);
+        QString sPage = sList.at(1);
+        QString sX = sList.at(2);
+        QString sY = sList.at(3);
+
+        QString sContant = "";
+
+        auto pHelper = MainTabWidgetEx::Instance()->getCurFileAndProxy();
+        if (pHelper) {
+            pHelper->getAnnotationText(sUuid, sContant, sPage.toInt());
+        }
+        if (m_pNoteViewWidget == nullptr) {
+            m_pNoteViewWidget = new NoteViewWidget(this);
+        }
+        m_pNoteViewWidget->setEditText(sContant);
+        m_pNoteViewWidget->setNoteUuid(sUuid);
+        m_pNoteViewWidget->setNotePage(sPage);
+        m_pNoteViewWidget->setWidgetType(NOTE_ICON);
+        m_pNoteViewWidget->showWidget(QPoint(sX.toInt(), sY.toInt()));
+    }
+}
+
+void FileViewWidget::__ShowNoteTipWidget(const QString &sText)
+{
+    if (m_pTipWidget == nullptr) {
+        m_pTipWidget = new NoteTipWidget(this);
+    }
+    m_pTipWidget->setTipContent(sText);
+    QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 10);
+    m_pTipWidget->move(showRealPos);
+    m_pTipWidget->show();
+}
+
+
+void FileViewWidget::__CloseFileNoteWidget()
+{
+    if (m_pTipWidget && m_pTipWidget->isVisible()) {
+        m_pTipWidget->close();
+    }
 }

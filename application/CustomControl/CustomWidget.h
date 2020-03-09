@@ -64,6 +64,7 @@ public:
     virtual int qDealWithShortKey(const QString &);
 
 protected:
+    CustomWidget(CustomWidgetPrivate &, DWidget *parent = nullptr);
     virtual void initWidget() = 0;
     void updateWidgetTheme();
 

@@ -23,11 +23,15 @@
 #include <QObject>
 #include <QList>
 
+
 class CustomWidget;
 
 class CustomWidgetPrivate : public QObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(CustomWidgetPrivate)
+    Q_DECLARE_PUBLIC(CustomWidget)
+
 public:
     CustomWidgetPrivate(CustomWidget *cw, QObject *parent = nullptr);
 

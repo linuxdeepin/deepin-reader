@@ -21,9 +21,9 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-#include "../DocShowShellWidget.h"
+//#include "../DocShowShellWidget.h"
 #include "../LeftSidebarWidget.h"
-#include "../FileViewWidget.h"
+#include "widgets/FileViewWidget.h"
 #include "../TitleWidget.h"
 
 #include "MainSplitterPrivate.h"
@@ -47,10 +47,15 @@ void MainSplitter::InitWidget()
     m_pLeftWidget = new LeftSidebarWidget;
     addWidget(m_pLeftWidget);
 
-    m_pDocWidget = new DocShowShellWidget;
-    connect(m_pDocWidget, SIGNAL(sigOpenFileOk()), SLOT(SlotOpenFileOk()));
-    connect(m_pDocWidget, SIGNAL(sigFindOperation(const int &)), SLOT(SlotFindOperation(const int &)));
-    addWidget(m_pDocWidget);
+    m_pFileViewWidget = new FileViewWidget;
+    connect(m_pFileViewWidget, SIGNAL(sigFileOpenOK(const QString &)), SLOT(SlotOpenFileOk(const QString &)));
+    connect(m_pFileViewWidget, SIGNAL(sigFindOperation(const int &)), SLOT(SlotFindOperation(const int &)));
+    addWidget(m_pFileViewWidget);
+
+//    m_pDocWidget = new DocShowShellWidget;
+//    connect(m_pDocWidget, SIGNAL(sigOpenFileOk()), SLOT(SlotOpenFileOk()));
+//    connect(m_pDocWidget, SIGNAL(sigFindOperation(const int &)), SLOT(SlotFindOperation(const int &)));
+//    addWidget(m_pDocWidget);
 
     QList<int> list_src;
     list_src.append(LEFTNORMALWIDTH);
@@ -59,9 +64,8 @@ void MainSplitter::InitWidget()
     setSizes(list_src);
 }
 
-void MainSplitter::SlotOpenFileOk()
+void MainSplitter::SlotOpenFileOk(const QString &s)
 {
-    QString s = qGetPath();
     TitleWidget::Instance()->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
 
     m_pLeftWidget->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
@@ -97,7 +101,7 @@ void MainSplitter::SlotNotifyMsg(const int &msgType, const QString &msgContent)
 
                 int nRes = m_pLeftWidget->dealWithData(msgType, sContent);
                 if (nRes != MSG_OK) {
-                    nRes = m_pDocWidget->dealWithData(msgType, sContent);
+                    nRes = m_pFileViewWidget->dealWithData(msgType, sContent);
                     if (nRes == MSG_OK)
                         return;
                 }
@@ -106,48 +110,53 @@ void MainSplitter::SlotNotifyMsg(const int &msgType, const QString &msgContent)
     }
 }
 
-QString MainSplitter::qGetPath() const
+QString MainSplitter::qGetPath()
 {
-    return d_ptr->qGetPath();
+    Q_D(MainSplitter);
+    return d->qGetPath();
 }
 
 void MainSplitter::qSetPath(const QString &strPath)
 {
-    d_ptr->qSetPath(strPath);
+    Q_D(MainSplitter);
+    d->qSetPath(strPath);
 
-    m_pDocWidget->OpenFilePath(strPath);  //  proxy 打开文件
+    m_pFileViewWidget->OpenFilePath(strPath);  //  proxy 打开文件
 }
 
 void MainSplitter::qSetFileChange(const int &nState)
 {
     //d_ptr->qSetFileChange(nState);
     bool bchange = nState == 1 ? true : false;
-    if (nullptr != m_pDocWidget)
-        m_pDocWidget->setFileChange(bchange);
+    if (nullptr != m_pFileViewWidget)
+        m_pFileViewWidget->setFileChange(bchange);
 }
 
 int MainSplitter::qGetFileChange()
 {
     //return d_ptr->qGetFileChange();
     int istatus = -1;
-    if (nullptr != m_pDocWidget)
-        istatus = m_pDocWidget->getFileChange() ? 1 : 0;
+    if (nullptr != m_pFileViewWidget)
+        istatus = m_pFileViewWidget->getFileChange() ? 1 : 0;
     return  istatus;
 }
 
 void MainSplitter::saveData()
 {
-    d_ptr->saveData();
+    Q_D(MainSplitter);
+    d->saveData();
 }
 
-FileDataModel MainSplitter::qGetFileData() const
+FileDataModel MainSplitter::qGetFileData()
 {
-    return d_ptr->qGetFileData();
+    Q_D(MainSplitter);
+    return d->qGetFileData();
 }
 
-void MainSplitter::setFileData(const FileDataModel &fdm) const
+void MainSplitter::setFileData(const FileDataModel &fdm)
 {
-    d_ptr->qSetFileData(fdm);
+    Q_D(MainSplitter);
+    d->qSetFileData(fdm);
 }
 
 void MainSplitter::OnOpenSliderShow()
@@ -163,5 +172,5 @@ void MainSplitter::OnExitSliderShow()
 
 void MainSplitter::ShowFindWidget()
 {
-    m_pDocWidget->ShowFindWidget();
+    m_pFileViewWidget->ShowFindWidget();
 }

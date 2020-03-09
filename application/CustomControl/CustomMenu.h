@@ -48,6 +48,7 @@ public:
 
 signals:
     void sigClickAction(const int &);
+    void sigActionTrigger(const int &, const QString &);
 
 public:
     virtual int dealWithData(const int &, const QString &);

@@ -7,9 +7,9 @@
 
 class QStackedLayout;
 
-class FindWidget;
 class FileViewWidget;
 class NoteViewWidget;
+class SpinnerWidget;
 
 /**
  * @brief The DocShowShellWidget class
@@ -42,30 +42,23 @@ public:
     // CustomWidget interface
 protected:
     void initWidget() override;
-    void resizeEvent(QResizeEvent *event) override;
 
 private slots:
-    void slotUpdateTheme();
     void SlotOpenFileOk();
 
     void SlotFindOperation(const int &, const QString &);
 
 private:
-    void initConnections();
-    int dealWithNotifyMsg(const QString &);
     void onOpenNoteWidget(const QString &);
     void onShowNoteWidget(const QString &);
 
     void __ShowPageNoteWidget(const QString &);
-    void InitSpinner();
 
 private:
     FileViewWidget      *m_pFileViewWidget = nullptr;
-    FindWidget          *m_pFindWidget = nullptr;
     NoteViewWidget      *m_pNoteViewWidget = nullptr;
 
-    DSpinner            *m_pSpiner = nullptr;
-    DWidget             *m_pSpinerWidget = nullptr;
+    SpinnerWidget            *m_pSpiner = nullptr;
     QStackedLayout      *m_playout = nullptr;
     QString             m_strBindPath = "";
 };
