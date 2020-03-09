@@ -45,6 +45,8 @@ private slots:
     void slotNextScale();
     void SlotCurrentTextChanged(const QString &);
 
+    void SlotReturnPressed();
+
 private:
     void SetComboBoxMax(const QString &);
     void SetFitScale(const QString &);

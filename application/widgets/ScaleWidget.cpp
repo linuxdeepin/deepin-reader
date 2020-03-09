@@ -65,8 +65,12 @@ void ScaleWidget::initWidget()
     scaleComboBox = new DComboBox();
     connect(scaleComboBox, SIGNAL(currentIndexChanged(const QString &)), SLOT(SlotCurrentTextChanged(const QString &)));
     scaleComboBox->setInsertPolicy(QComboBox::NoInsert);
+    scaleComboBox->setDuplicatesEnabled(false); //  重复项 不允许添加
     scaleComboBox->setFixedWidth(100);
     scaleComboBox->setEditable(true);
+
+    QLineEdit *edit = scaleComboBox->lineEdit();
+    connect(edit, SIGNAL(returnPressed()), SLOT(SlotReturnPressed()));
 
     DIconButton *pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
     pPreBtn->setFixedSize(QSize(24, 24));
@@ -134,6 +138,23 @@ void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
         dApp->m_pModelService->notifyMsg(MSG_FILE_SCALE, doc.toJson(QJsonDocument::Compact));
 
         emit sigScaleChanged();
+    }
+}
+
+//  combobox 敲了回车
+void ScaleWidget::SlotReturnPressed()
+{
+    QString sTempText = scaleComboBox->currentText();
+    int nIndex = scaleComboBox->findText(sTempText, Qt::MatchExactly);
+    if (nIndex == -1) {     //  列表中没有输入的选项
+        SlotCurrentTextChanged(sTempText);
+
+        scaleComboBox->setCurrentIndex(-1);
+        nIndex = sTempText.lastIndexOf("%");
+        if (nIndex == -1) {
+            sTempText = sTempText + "%";
+        }
+        scaleComboBox->setCurrentText(sTempText);
     }
 }
 
