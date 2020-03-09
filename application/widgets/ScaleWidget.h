@@ -48,7 +48,7 @@ private slots:
     void SlotReturnPressed();
 
 private:
-    void SetComboBoxMax(const QString &);
+    void SetComboBoxMax();
     void SetFitScale(const QString &);
     void onShortKey(const QString &keyType);
 

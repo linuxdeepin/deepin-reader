@@ -42,7 +42,7 @@ ScaleWidget::~ScaleWidget()
 int ScaleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK || msgType == MSG_TAB_SHOW_FILE_CHANGE) {
-        SetComboBoxMax(msgContent);
+        SetComboBoxMax();
     } else if (msgType == MSG_FILE_FIT_SCALE) {
         SetFitScale(msgContent);
         return MSG_OK;
@@ -174,19 +174,25 @@ void ScaleWidget::SlotReturnPressed()
     }
 }
 
-void ScaleWidget::SetComboBoxMax(const QString &sPath)
+void ScaleWidget::SetComboBoxMax()
 {
+    QString sPath = MainTabWidgetEx::Instance()->qGetCurPath();
+
     auto _proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy(sPath);
     if (_proxy) {
         double dMax = _proxy->getMaxZoomratio();
 
-        m_nMaxScale = dMax * 100;
-
         scaleComboBox->blockSignals(true);
 
-        foreach (int iData, dataList) {
-            if (iData <= m_nMaxScale) {
-                scaleComboBox->addItem(QString::number(iData) + "%");
+        int nTempMax = dMax * 100;
+        if (nTempMax != m_nMaxScale) {
+            scaleComboBox->clear();
+            m_nMaxScale = nTempMax;
+
+            foreach (int iData, dataList) {
+                if (iData <= m_nMaxScale) {
+                    scaleComboBox->addItem(QString::number(iData) + "%");
+                }
             }
         }
 
