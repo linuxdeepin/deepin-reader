@@ -41,7 +41,7 @@ void FileViewWidgetPrivate::AddHighLight(const QString &msgContent)
     }
 }
 
-void FileViewWidgetPrivate::AddHighLightAnnotation(const QString &msgContent)
+void FileViewWidgetPrivate::AddHighLightNote(const QString &msgContent)
 {
     Q_Q(FileViewWidget);
     QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
@@ -62,8 +62,12 @@ void FileViewWidgetPrivate::AddHighLightAnnotation(const QString &msgContent)
             if (strUuid != "") {
                 _proxy->setAnnotationText(sPage.toInt(), strUuid, sNote);
                 m_filechanged = true;
-                //ToDo lefit list add
-                // sRes = strUuid.trimmed() + Constant::sQStringSep + sNote.trimmed() + Constant::sQStringSep + sPage;
+
+                QJsonObject notifyObj;
+                notifyObj.insert("content", strUuid);
+                notifyObj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + NOTE_WIDGET);
+                QJsonDocument notifyDoc(notifyObj);
+                notifytoframe(MSG_NOTE_ADD_ITEM, notifyDoc.toJson(QJsonDocument::Compact));
             }
         }
     }
@@ -83,9 +87,13 @@ void FileViewWidgetPrivate::RemoveHighLight(const QString &msgContent)
 
             QString sUuid = _proxy->removeAnnotation(tempPoint);
             if (sUuid != "") {
-                //sRes = sUuid;
                 m_filechanged = true;
-                //ToDo remove left
+                QJsonObject notifyObj;
+                notifyObj.insert("content", sUuid);
+                notifyObj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + NOTE_WIDGET);
+
+                QJsonDocument notifyDoc(notifyObj);
+                notifytoframe(MSG_NOTE_DELETE_ITEM, notifyDoc.toJson(QJsonDocument::Compact));
             }
         }
     }
@@ -192,4 +200,9 @@ void FileViewWidgetPrivate::UpdatePageIconAnnotation(const QString &msgContent)
             m_filechanged = true;
         }
     }
+}
+
+void FileViewWidgetPrivate::notifytoframe(const int &type, const QString &msgContent)
+{
+    dApp->m_pModelService->notifyMsg(type, msgContent);
 }

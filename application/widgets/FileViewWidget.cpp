@@ -226,6 +226,7 @@ void FileViewWidget::onFileAddAnnotation()
 //  添加注释
 void FileViewWidget::onFileAddNote(const QString &msgContent)
 {
+    Q_D(FileViewWidget);
     QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (contentList.size() == 2) {
         QString sNote = contentList.at(0);
@@ -244,24 +245,7 @@ void FileViewWidget::onFileAddNote(const QString &msgContent)
                            sNote + Constant::sQStringSep +
                            sPage;
 
-        QString sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_ADD_HIGHLIGHT_NOTE, sContent);
-        QJsonParseError error;
-        QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
-        if (error.error == QJsonParseError::NoError) {
-            QJsonObject obj = doc.object();
-            int nReturn = obj.value("return").toInt();
-            if (nReturn == MSG_OK) {
-                QString sValue = obj.value("value").toString();
-
-                QJsonObject notifyObj;
-
-                notifyObj.insert("content", sValue);
-                notifyObj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + NOTE_WIDGET);
-
-                QJsonDocument notifyDoc(notifyObj);
-                notifyMsg(MSG_NOTE_ADD_ITEM, notifyDoc.toJson(QJsonDocument::Compact));
-            }
-        }
+        d->AddHighLightNote(sContent);
     }
 }
 
@@ -512,9 +496,11 @@ void FileViewWidget::slotDealWithMenu(int type, const QString &strcontents)
         break;
     case MSG_NOTE_UPDATE_CONTENT:
         break;
-    case MSG_NOTE_REMOVE_HIGHLIGHT_COLOR:
+    case MSG_NOTE_REMOVE_HIGHLIGHT:
+        d->RemoveHighLight(strcontents);
         break;
     case MSG_NOTE_UPDATE_HIGHLIGHT_COLOR:
+        d->ChangeAnnotationColor(strcontents);
         break;
     case MSG_NOTE_ADD_HIGHLIGHT_COLOR:
         d->AddHighLight(strcontents);

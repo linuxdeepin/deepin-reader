@@ -12,7 +12,7 @@ public:
 
 public:
     void AddHighLight(const QString &msgContent);
-    void AddHighLightAnnotation(const QString &msgContent);
+    void AddHighLightNote(const QString &msgContent);
     void RemoveHighLight(const QString &msgContent);
     void ChangeAnnotationColor(const QString &msgContent);
     void RemoveAnnotation(const QString &msgContent);
@@ -23,6 +23,9 @@ public:
 
 public:
     bool m_filechanged;
+
+private:
+    void notifytoframe(const int &, const QString &msgContent = "");
 protected:
     FileViewWidget *q_ptr;
     Q_DECLARE_PUBLIC(FileViewWidget)
