@@ -231,7 +231,6 @@ void FileViewWidget::onFileAddAnnotation()
                            QString::number(nEx) + Constant::sQStringSep +
                            QString::number(nEy);
 
-        //dApp->m_pHelper->qDealWithData(MSG_NOTE_ADD_HIGHLIGHT_COLOR, sContent);
         d->AddHighLight(sContent);
     } else {
         notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
@@ -497,9 +496,11 @@ void FileViewWidget::SlotFindOperation(const int &iType, const QString &strFind)
 //  信号槽　初始化
 void FileViewWidget::initConnections()
 {
-    Q_D(FileViewWidget);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), SLOT(slotCustomContextMenuRequested(const QPoint &)));
+
+    Q_D(FileViewWidget);
     connect(m_operatemenu, SIGNAL(sigActionTrigger(const int &, const QString &)), d, SLOT(slotDealWithMenu(const int &, const QString &)));
+    connect(this, SIGNAL(sigDeleteAnntation(const int &, const QString &)), d, SLOT(SlotDeleteAnntation(const int &, const QString &)));
 }
 
 //  设置　窗口　自适应　宽＼高　度

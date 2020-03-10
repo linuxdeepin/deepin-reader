@@ -39,6 +39,7 @@ public:
 
 signals:
     void sigAnntationMsg(const int &, const QString &);
+    void sigDeleteAnntation(const int &, const QString &);
 
 public:
     int dealWithData(const int &, const QString &);

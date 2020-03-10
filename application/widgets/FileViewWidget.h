@@ -38,7 +38,6 @@ class FileViewWidget : public CustomWidget
     Q_OBJECT
     Q_DISABLE_COPY(FileViewWidget)
 
-
 public:
     explicit FileViewWidget(CustomWidget *parent = nullptr);
     ~FileViewWidget() override;
@@ -47,6 +46,7 @@ signals:
     void sigFileOpenOK(const QString &);
     void sigFindOperation(const int &);
     void sigAnntationMsg(const int &, const QString &);
+    void sigDeleteAnntation(const int &, const QString &);
 
     // IObserver interface
 public:
@@ -130,8 +130,6 @@ private:
     int                     m_nScale = 0;
 
     bool                    m_bFirstShow = true;        //  是否是第一次显示,  用于判断 resizeEvent
-
-    friend class DocShowShellWidget;
 
     FileViewWidgetPrivate *d_fvptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_fvptr), FileViewWidget)

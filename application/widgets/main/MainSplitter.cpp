@@ -48,6 +48,8 @@ void MainSplitter::InitWidget()
     addWidget(m_pLeftWidget);
 
     m_pFileViewWidget = new FileViewWidget;
+    connect(m_pLeftWidget, SIGNAL(sigDeleteAnntation(const int &, const QString &)), m_pFileViewWidget, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
+
     connect(m_pFileViewWidget, SIGNAL(sigFileOpenOK(const QString &)), SLOT(SlotOpenFileOk(const QString &)));
     connect(m_pFileViewWidget, SIGNAL(sigFindOperation(const int &)), SLOT(SlotFindOperation(const int &)));
     connect(m_pFileViewWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pLeftWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)));

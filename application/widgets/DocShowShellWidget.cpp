@@ -19,10 +19,6 @@ DocShowShellWidget::DocShowShellWidget(CustomWidget *parent)
 {
     initWidget();
 
-    m_pMsgList = { MSG_OPERATION_TEXT_ADD_ANNOTATION,
-                   MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, MSG_NOTE_PAGE_SHOW_NOTEWIDGET
-                 };
-
     dApp->m_pModelService->addObserver(this);
 }
 
@@ -34,18 +30,18 @@ DocShowShellWidget::~DocShowShellWidget()
 //  注释窗口
 void DocShowShellWidget::onOpenNoteWidget(const QString &msgContent)
 {
-    m_pFileViewWidget->onOpenNoteWidget(msgContent);
+//    m_pFileViewWidget->onOpenNoteWidget(msgContent);
 }
 
 //  显示 当前 注释
 void DocShowShellWidget::onShowNoteWidget(const QString &msgContent)
 {
-    m_pFileViewWidget->onShowNoteWidget(msgContent);
+//    m_pFileViewWidget->onShowNoteWidget(msgContent);
 }
 
 void DocShowShellWidget::__ShowPageNoteWidget(const QString &msgContent)
 {
-    m_pFileViewWidget->__ShowPageNoteWidget(msgContent);
+//    m_pFileViewWidget->__ShowPageNoteWidget(msgContent);
 }
 
 void DocShowShellWidget::SlotOpenFileOk()
@@ -69,22 +65,7 @@ void DocShowShellWidget::SlotFindOperation(const int &iType, const QString &strF
 
 int DocShowShellWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    int nRes = m_pFileViewWidget->dealWithData(msgType, msgContent);
-    if (nRes != MSG_OK) {
-        if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {             //  添加注释
-            onOpenNoteWidget(msgContent);
-        } else if (msgType == MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) {
-            onShowNoteWidget(msgContent);
-        } else if (msgType == MSG_NOTE_PAGE_SHOW_NOTEWIDGET) {          //  显示注释窗口
-            __ShowPageNoteWidget(msgContent);
-        }
-
-        if (m_pMsgList.contains(msgType)) {
-            return  MSG_OK;
-        }
-    }
-
-    return nRes;
+    return MSG_NO_OK;
 }
 
 bool DocShowShellWidget::OpenFilePath(const QString &sPath)

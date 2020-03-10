@@ -23,7 +23,6 @@
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
 
-#include "gof/bridge/IHelper.h"
 #include "widgets/main/MainTabWidgetEx.h"
 
 NotesWidget::NotesWidget(DWidget *parent)
@@ -77,22 +76,10 @@ void NotesWidget::DeleteItemByKey()
             int page = t_widget->nPageIndex();
             QString sContent = t_uuid + Constant::sQStringSep + QString::number(page);
 
-            QString sRes = "";
             if (nType == NOTE_HIGHLIGHT) {
-                sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_DELETE_CONTENT, sContent);
+                emit sigDeleteContent(MSG_NOTE_DELETE_CONTENT, sContent);
             } else {
-                sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
-            }
-
-            QJsonParseError error;
-            QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
-            if (error.error == QJsonParseError::NoError) {
-                QJsonObject obj = doc.object();
-                int nReturn = obj.value("return").toInt();
-                if (nReturn == MSG_OK) {
-                    QString sUuid = obj.value("value").toString();
-                    __DeleteNoteItem(sUuid);
-                }
+                emit sigDeleteContent(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
             }
         }
     }
@@ -413,8 +400,6 @@ void NotesWidget::addNotesItem(const QString &text, const int &iType)
             auto item = addNewItem(img, t_nPage, t_strUUid, t_strText, true, iType);
             if (item) {
                 m_pNotesList->setCurrentItem(item);
-
-                notifyMsg(MSG_FILE_IS_CHANGE, "1");
             }
         }
     }

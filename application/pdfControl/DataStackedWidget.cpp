@@ -120,6 +120,7 @@ void DataStackedWidget::InitWidgets()
 
     m_pNotesWidget = new NotesWidget(this);
     connect(this, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pNotesWidget, SLOT(SlotAnntationMsg(const int &, const QString &)));
+    connect(m_pNotesWidget, SIGNAL(sigDeleteContent(const int &, const QString &)), this, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
 
     insertWidget(WIDGET_NOTE, m_pNotesWidget);
 

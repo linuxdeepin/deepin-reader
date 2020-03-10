@@ -52,6 +52,16 @@ void FileViewWidgetPrivate::SlotNoteViewMsg(const int &msgType, const QString &m
     }
 }
 
+//  按 delete 键 删除
+void FileViewWidgetPrivate::SlotDeleteAnntation(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_NOTE_DELETE_CONTENT) {
+        RemoveAnnotation(msgContent);
+    } else if (msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {
+        DeletePageIconAnnotation(msgContent);
+    }
+}
+
 void FileViewWidgetPrivate::setProxy(DocummentProxy *proxy)
 {
     m_pAnnotation->setProxy(proxy);

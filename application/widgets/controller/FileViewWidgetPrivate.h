@@ -21,6 +21,7 @@ public:
 private slots:
     void slotDealWithMenu(const int &, const QString &);
     void SlotNoteViewMsg(const int &, const QString &);
+    void SlotDeleteAnntation(const int &, const QString &);
 
 private:
     void setProxy(DocummentProxy *);

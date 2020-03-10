@@ -22,6 +22,7 @@ public:
 
 signals:
     void sigAnntationMsg(const int &, const QString &);
+    void sigDeleteAnntation(const int &, const QString &);
 
     // IObserver interface
 public:
