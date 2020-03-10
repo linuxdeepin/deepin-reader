@@ -67,7 +67,6 @@ void TextOperationMenu::initActions()
 
     m_pColorWidgetAction = new ColorWidgetAction(this);
     connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked(const int &)), this, SLOT(slotSetHighLight(const int &)));
-//    connect(m_pColorWidgetAction, SIGNAL(sigBtnDefaultClicked()), this, SLOT(slotAddHighLightClicked()));
     this->addAction(m_pColorWidgetAction);
     this->addSeparator();
 
@@ -102,7 +101,6 @@ void TextOperationMenu::slotSetHighLight(const int &nColor)
         QString sContent = QString::number(m_pLightColor) + Constant::sQStringSep +
                            m_strNoteUuid + Constant::sQStringSep +
                            QString::number(m_nClickPage);
-        //dApp->m_pHelper->qDealWithData(MSG_NOTE_UPDATE_HIGHLIGHT_COLOR, sContent);
         emit sigActionTrigger(MSG_NOTE_UPDATE_HIGHLIGHT_COLOR, sContent);
     } else {    //  移除高亮不可点,说明没有高亮, 点击操作 是 添加高亮
         int nSx = m_pStartPoint.x();
@@ -118,7 +116,6 @@ void TextOperationMenu::slotSetHighLight(const int &nColor)
                            QString::number(m_pLightColor);
 
         emit sigActionTrigger(MSG_NOTE_ADD_HIGHLIGHT_COLOR, sContent);
-        // dApp->m_pHelper->qDealWithData(MSG_NOTE_ADD_HIGHLIGHT_COLOR, sContent);
     }
 }
 
@@ -131,48 +128,16 @@ void TextOperationMenu::slotRemoveHighLightClicked()
 {
     QString sContent = QString::number(m_pClickPoint.x()) + Constant::sQStringSep +  QString::number(m_pClickPoint.y());
     emit sigActionTrigger(MSG_NOTE_REMOVE_HIGHLIGHT, sContent);
-//    QString sRes = dApp->m_pHelper->qDealWithData(MSG_NOTE_REMOVE_HIGHLIGHT, sContent);
-
-//    QJsonParseError error;
-//    QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
-//    if (error.error == QJsonParseError::NoError) {
-//        QJsonObject obj = doc.object();
-//        int nReturn = obj.value("return").toInt();
-//        if (nReturn == MSG_OK) {
-//            QString sUuid = obj.value("value").toString();
-
-//            QJsonObject notifyObj;
-
-//            notifyObj.insert("content", sUuid);
-//            notifyObj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + NOTE_WIDGET);
-
-//            QJsonDocument notifyDoc(notifyObj);
-//            notifyMsg(MSG_NOTE_DELETE_ITEM, notifyDoc.toJson(QJsonDocument::Compact));
-//        }
-//    }
 }
 
 void TextOperationMenu::slotAddNoteClicked()
 {
     if (m_strNoteUuid == "") {
         QString msgContent = QString("%1").arg(m_nClickPage) + Constant::sQStringSep + QString("%1").arg(m_pClickPoint.x()) + Constant::sQStringSep + QString("%1").arg(m_pClickPoint.y());
-
-        QJsonObject obj;
-        obj.insert("content", msgContent);
-        obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
-
-        QJsonDocument doc(obj);
-
-        notifyMsg(MSG_OPERATION_TEXT_ADD_ANNOTATION, doc.toJson(QJsonDocument::Compact));
+        emit sigActionTrigger(MSG_OPERATION_TEXT_ADD_ANNOTATION, msgContent);
     } else {
         QString msgContent = m_strNoteUuid.trimmed() + Constant::sQStringSep + QString::number(m_nClickPage);
-
-        QJsonObject obj;
-        obj.insert("content", msgContent);
-        obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
-
-        QJsonDocument doc(obj);
-        notifyMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, doc.toJson(QJsonDocument::Compact));
+        emit sigActionTrigger(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, msgContent);
     }
 }
 

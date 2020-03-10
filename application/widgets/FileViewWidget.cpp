@@ -544,10 +544,6 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         OnSetViewHit(msgContent);
     } else if (msgType == MSG_HANDLESHAPE) {
         onSetHandShape(msgContent);
-    } else if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {             //  添加注释
-        onOpenNoteWidget(msgContent);
-    } else if (msgType == MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) {
-        onShowNoteWidget(msgContent);
     } else if (msgType == MSG_NOTE_PAGE_SHOW_NOTEWIDGET) {          //  显示注释窗口
         __ShowPageNoteWidget(msgContent);
     }

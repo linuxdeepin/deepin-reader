@@ -26,6 +26,12 @@ void FileViewWidgetPrivate::slotDealWithMenu(const int &msgType, const QString &
         ChangeAnnotationColor(msgContent);
     } else if (msgType == MSG_NOTE_ADD_HIGHLIGHT_COLOR) {       //  添加高亮
         AddHighLight(msgContent);
+    } else if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {  //  添加注释
+        Q_Q(FileViewWidget);
+        q->onOpenNoteWidget(msgContent);
+    } else if (msgType == MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) {
+        Q_Q(FileViewWidget);
+        q->onShowNoteWidget(msgContent);
     }
 }
 
