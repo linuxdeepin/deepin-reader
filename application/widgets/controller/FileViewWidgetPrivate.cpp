@@ -20,35 +20,29 @@ FileViewWidgetPrivate::FileViewWidgetPrivate(FileViewWidget *parent)
 
 void FileViewWidgetPrivate::slotDealWithMenu(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_NOTE_PAGE_ADD_CONTENT) {                 //  新增 页面注释
-        AddPageIconAnnotation(msgContent);
-    } else if (msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {       //  删除页面注释
-        DeletePageIconAnnotation(msgContent);
-    } else if (msgType == MSG_NOTE_PAGE_UPDATE_CONTENT) {       //  更新页面注释
-        UpdatePageIconAnnotation(msgContent);
-    } else if (msgType == MSG_NOTE_DELETE_CONTENT) {            //  刪除高亮注释
-        RemoveAnnotation(msgContent);
-    } else if (msgType == MSG_NOTE_UPDATE_CONTENT) {            //  更新高亮注释
-        UpdateAnnotationText(msgContent);
-    } else if (msgType == MSG_NOTE_REMOVE_HIGHLIGHT) {  //  移除高亮注释 的高亮
+    if (msgType == MSG_NOTE_REMOVE_HIGHLIGHT) {                 //  移除高亮注释 的高亮
         RemoveHighLight(msgContent);
-    } else if (msgType == MSG_NOTE_UPDATE_HIGHLIGHT_COLOR) {  //  更新高亮颜色
+    } else if (msgType == MSG_NOTE_UPDATE_HIGHLIGHT_COLOR) {    //  更新高亮颜色
         ChangeAnnotationColor(msgContent);
-    } else if (msgType == MSG_NOTE_ADD_HIGHLIGHT_COLOR) {                 //  添加高亮
+    } else if (msgType == MSG_NOTE_ADD_HIGHLIGHT_COLOR) {       //  添加高亮
         AddHighLight(msgContent);
-    } else if (msgType == MSG_NOTE_ADD_HIGHLIGHT_NOTE) {            //  添加高亮注释
-        AddHighLightAnnotation(msgContent);
     }
 }
 
 void FileViewWidgetPrivate::SlotNoteViewMsg(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_NOTE_ADD_CONTENT) {
+    if (msgType == MSG_NOTE_ADD_CONTENT) {                      //  新增高亮注释
         AddHighLightAnnotation(msgContent);
     } else if (msgType == MSG_NOTE_DELETE_CONTENT) {            //  刪除高亮注释
         RemoveAnnotation(msgContent);
     } else if (msgType == MSG_NOTE_UPDATE_CONTENT) {            //  更新高亮注释
         UpdateAnnotationText(msgContent);
+    } else if (msgType == MSG_NOTE_PAGE_ADD_CONTENT) {          //  新增 页面注释
+        AddPageIconAnnotation(msgContent);
+    } else if (msgType == MSG_NOTE_PAGE_UPDATE_CONTENT) {       //  更新页面注释
+        UpdatePageIconAnnotation(msgContent);
+    } else if (msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {       //  删除页面注释
+        DeletePageIconAnnotation(msgContent);
     }
 }
 
@@ -56,7 +50,6 @@ void FileViewWidgetPrivate::setProxy(DocummentProxy *proxy)
 {
     m_pAnnotation->setProxy(proxy);
 }
-
 
 void FileViewWidgetPrivate::mouseMoveEvent(QMouseEvent *event)
 {

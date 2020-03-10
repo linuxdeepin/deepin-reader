@@ -86,7 +86,6 @@ private:
     void onSetWidgetAdapt();
 
 private:
-    void onFileAddNote(const QString &);
     void onOpenNoteWidget(const QString &msgContent);
     void onShowNoteWidget(const QString &contant);
     void __ShowPageNoteWidget(const QString &msgContent);

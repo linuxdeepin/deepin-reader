@@ -47,7 +47,6 @@ FileViewWidget::FileViewWidget(CustomWidget *parent)
     d_fvptr = new FileViewWidgetPrivate(this);
 
     m_pMsgList = { MSG_HANDLESHAPE,
-                   MSG_NOTE_ADD_CONTENT,
                    MSG_VIEWCHANGE_DOUBLE_SHOW, MSG_VIEWCHANGE_ROTATE, MSG_FILE_SCALE, MSG_VIEWCHANGE_FIT,
                    MSG_OPERATION_TEXT_ADD_ANNOTATION,
                    MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, MSG_NOTE_PAGE_SHOW_NOTEWIDGET
@@ -236,32 +235,6 @@ void FileViewWidget::onFileAddAnnotation()
         d->AddHighLight(sContent);
     } else {
         notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
-    }
-}
-
-//  添加注释
-void FileViewWidget::onFileAddNote(const QString &msgContent)
-{
-    QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (contentList.size() == 2) {
-        QString sNote = contentList.at(0);
-        QString sPage = contentList.at(1);
-
-        int nSx = m_pStartPoint.x();
-        int nSy = m_pStartPoint.y();
-
-        int nEx = m_pEndSelectPoint.x();
-        int nEy = m_pEndSelectPoint.y();
-
-        QString sContent = QString::number(nSx) + Constant::sQStringSep +
-                           QString::number(nSy) + Constant::sQStringSep +
-                           QString::number(nEx) + Constant::sQStringSep +
-                           QString::number(nEy) + Constant::sQStringSep +
-                           sNote + Constant::sQStringSep +
-                           sPage;
-
-        Q_D(FileViewWidget);
-        d->slotDealWithMenu(MSG_NOTE_ADD_HIGHLIGHT_NOTE, sContent);
     }
 }
 
@@ -571,8 +544,6 @@ int FileViewWidget::dealWithData(const int &msgType, const QString &msgContent)
         OnSetViewHit(msgContent);
     } else if (msgType == MSG_HANDLESHAPE) {
         onSetHandShape(msgContent);
-    } else if (msgType == MSG_NOTE_ADD_CONTENT) {
-        onFileAddNote(msgContent);
     } else if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {             //  添加注释
         onOpenNoteWidget(msgContent);
     } else if (msgType == MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) {

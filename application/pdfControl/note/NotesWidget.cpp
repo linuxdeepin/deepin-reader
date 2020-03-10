@@ -29,10 +29,6 @@
 NotesWidget::NotesWidget(DWidget *parent)
     : CustomWidget(NOTE_WIDGET, parent)
 {
-    m_pMsgList = {MSG_NOTE_ADD_ITEM, MSG_NOTE_DELETE_ITEM, MSG_NOTE_UPDATE_ITEM,
-                  MSG_NOTE_PAGE_ADD_ITEM, MSG_NOTE_PAGE_DELETE_ITEM, MSG_NOTE_PAGE_UPDATE_ITEM
-                 };
-
     initWidget();
 
     initConnection();
@@ -196,8 +192,6 @@ void NotesWidget::__UpdateNoteItem(const QString &msgContent)
                         t_widget->setTextEditText(sText);
 
                         m_pNotesList->setCurrentItem(pItem);
-
-                        notifyMsg(MSG_FILE_IS_CHANGE, "1");
 
                         break;
                     }
@@ -372,10 +366,12 @@ void NotesWidget::SlotAnntationMsg(const int &msgType, const QString &msgContent
 {
     if (msgType == MSG_NOTE_ADD_ITEM) {
         __AddNoteItem(msgContent);
-    } else if (msgType == MSG_NOTE_DELETE_ITEM) {
+    } else if (msgType == MSG_NOTE_DELETE_ITEM || msgType == MSG_NOTE_PAGE_DELETE_ITEM) {
         __DeleteNoteItem(msgContent);
-    } else if (msgType == MSG_NOTE_UPDATE_ITEM) {
+    } else if (msgType == MSG_NOTE_UPDATE_ITEM || msgType == MSG_NOTE_PAGE_UPDATE_ITEM) {
         __UpdateNoteItem(msgContent);
+    } else if (msgType == MSG_NOTE_PAGE_ADD_ITEM) {
+        __AddNoteItem(msgContent, NOTE_ICON);
     }
 }
 
@@ -514,14 +510,6 @@ int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
         slotOpenFileOk(msgContent);
-    } else if (MSG_NOTE_ADD_ITEM == msgType) {
-        __AddNoteItem(msgContent);
-    } else if (MSG_NOTE_PAGE_ADD_ITEM == msgType) {
-        __AddNoteItem(msgContent, NOTE_ICON);
-    } else if (MSG_NOTE_DELETE_ITEM == msgType || MSG_NOTE_PAGE_DELETE_ITEM == msgType) {
-        __DeleteNoteItem(msgContent);
-    } else if (MSG_NOTE_UPDATE_ITEM == msgType || MSG_NOTE_PAGE_UPDATE_ITEM == msgType) {
-        __UpdateNoteItem(msgContent);
     }
 
     if (m_pMsgList.contains(msgType)) {
