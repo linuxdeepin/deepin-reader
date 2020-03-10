@@ -223,6 +223,8 @@ void ScaleWidget::SetComboBoxMax()
 
 void ScaleWidget::SetFitScale(const QString &msgContent)
 {
+    scaleComboBox->blockSignals(true);
+
     double dTemp = msgContent.toDouble() * 100;
     int nScale = dTemp;
     QString sCurText = QString::number(nScale) + "%";
@@ -235,4 +237,6 @@ void ScaleWidget::SetFitScale(const QString &msgContent)
         scaleComboBox->setCurrentIndex(-1);
         scaleComboBox->setCurrentText(sCurText);
     }
+
+    scaleComboBox->blockSignals(false);
 }

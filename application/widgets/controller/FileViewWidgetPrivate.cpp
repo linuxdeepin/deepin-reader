@@ -4,6 +4,7 @@
 
 #include "application.h"
 #include "Annotation.h"
+
 #include "docview/docummentproxy.h"
 #include "business/AppInfo.h"
 #include "widgets/FileViewWidget.h"
@@ -123,8 +124,8 @@ void FileViewWidgetPrivate::__MouseSelectText(const QPoint &clickPoint)
 
     QPoint docGlobalPos = q->m_pProxy->global2RelativePoint(clickPoint);
 
-    q->m_pEndSelectPoint = docGlobalPos;
-    q->m_pProxy->mouseSelectText(q->m_pStartPoint, q->m_pEndSelectPoint);
+    m_pEndSelectPoint = docGlobalPos;
+    q->m_pProxy->mouseSelectText(m_pStartPoint, m_pEndSelectPoint);
 }
 
 //  其余 鼠标移动
@@ -284,8 +285,8 @@ void FileViewWidgetPrivate::__OtherMousePress(const QPoint &globalPos)
 
             if (m_bIsHandleSelect) {
                 m_bSelectOrMove = true;
-                q->m_pStartPoint = docGlobalPos;
-                q->m_pEndSelectPoint = q->m_pStartPoint;
+                m_pStartPoint = docGlobalPos;
+                m_pEndSelectPoint = m_pStartPoint;
             }
         }
     }
@@ -331,7 +332,7 @@ void FileViewWidgetPrivate::mouseReleaseEvent(QMouseEvent *event)
 
         dApp->m_pAppInfo->setMousePressLocal(false, globalPos);
         //添加其实结束point是否为同一个，不是同一个说明不是点击可能是选择文字
-        if (nBtn == Qt::LeftButton && docGlobalPos == q->m_pStartPoint) {
+        if (nBtn == Qt::LeftButton && docGlobalPos == m_pStartPoint) {
             // 判断鼠标点击的地方是否有高亮
             bool bIsHighLightReleasePoint = q->m_pProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
 
@@ -383,11 +384,11 @@ void FileViewWidgetPrivate::AddHighLightAnnotation(const QString &msgContent)
         QString sNote = contentList.at(0);
         QString sPage = contentList.at(1);
 
-        int nSx = q->m_pStartPoint.x();
-        int nSy = q->m_pStartPoint.y();
+        int nSx = m_pStartPoint.x();
+        int nSy = m_pStartPoint.y();
 
-        int nEx = q->m_pEndSelectPoint.x();
-        int nEy = q->m_pEndSelectPoint.y();
+        int nEx = m_pEndSelectPoint.x();
+        int nEy = m_pEndSelectPoint.y();
 
         QString sContent = QString::number(nSx) + Constant::sQStringSep +
                            QString::number(nSy) + Constant::sQStringSep +
@@ -466,3 +467,63 @@ void FileViewWidgetPrivate::UpdatePageIconAnnotation(const QString &msgContent)
         m_filechanged = true;
     }
 }
+
+//void FileViewWidgetPrivate::onSetWidgetAdapt()
+//{
+////    m_pDocViewProxy->onSetWidgetAdapt();
+//}
+
+//void FileViewWidgetPrivate::OnSetViewChange(const QString &s)
+//{
+////    m_pDocViewProy->OnSetViewChange(s);
+//}
+
+//void FileViewWidgetPrivate::OnSetViewScale(const QString &s)
+//{
+////    m_pDocViewProxy->OnSetViewScale(s);
+//}
+
+//void FileViewWidgetPrivate::OnSetViewRotate(const QString &s)
+//{
+////    m_pDocViewProxy->OnSetViewRotate(s);
+//}
+
+//void FileViewWidgetPrivate::OnSetViewHit(const QString &s)
+//{
+////    m_pDocViewProxy->OnSetViewHit(s);
+//}
+
+//void FileViewWidgetPrivate::setScaleRotateViewModeAndShow()
+//{
+////    m_pDocViewProxy->setScaleRotateViewModeAndShow();
+//}
+
+//void FileViewWidgetPrivate::setAdapteState(const int &nAdapteState)
+//{
+////    m_pDocViewProxy->setAdapteState(nAdapteState);
+//}
+
+//void FileViewWidgetPrivate::setDoubleShow(const int &nDoubleShow)
+//{
+////    m_pDocViewProxy->setDoubleShow(nDoubleShow);
+//}
+
+//void FileViewWidgetPrivate::setRotateType(const int &rotateType)
+//{
+////    m_pDocViewProxy->setRotateType(rotateType);
+//}
+
+//void FileViewWidgetPrivate::setScale(const int &nScale)
+//{
+////    m_pDocViewProxy->setScale(nScale);
+//}
+
+//void FileViewWidgetPrivate::setWidth(const int &nWidth)
+//{
+////    m_pDocViewProxy->setWidth(nWidth);
+//}
+
+//void FileViewWidgetPrivate::setHeight(const int &nHeight)
+//{
+////    m_pDocViewProxy->setHeight(nHeight);
+//}

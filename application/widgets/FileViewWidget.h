@@ -24,6 +24,7 @@
 class TextOperationMenu;
 class DefaultOperationMenu;
 class DocummentProxy;
+class DocViewProxy;
 class FileViewWidgetPrivate;
 class FindWidget;
 class NoteTipWidget;
@@ -81,9 +82,7 @@ private slots:
 
 private:
     void initConnections();
-
     void onSetHandShape(const QString &);
-    void onSetWidgetAdapt();
 
 private:
     void onOpenNoteWidget(const QString &msgContent);
@@ -97,18 +96,9 @@ private:
 
     void __SetCursor(const QCursor &cursor);
 
-    void OnSetViewChange(const QString &);
-    void OnSetViewScale(const QString &);
-    void OnSetViewRotate(const QString &);
-    void OnSetViewHit(const QString &);
-
-    void setScaleRotateViewModeAndShow();
-
     void OnShortCutKey_Ctrl_l();
     void OnShortCutKey_Ctrl_i();
     void OnShortCutKey_Ctrl_c();
-
-private:
 
 private:
     FindWidget              *m_pFindWidget = nullptr;
@@ -119,17 +109,7 @@ private:
     DefaultOperationMenu    *m_pDefaultMenu = nullptr;
     DocummentProxy          *m_pProxy = nullptr;
 
-    QString                 m_strPath = "";
-
-    int                     m_nAdapteState = NO_ADAPTE_State;       //  当前自适应状态
-    QPoint                  m_pStartPoint;
-    QPoint                  m_pEndSelectPoint;
-
-    int                     m_nDoubleShow = false;
-    int                     m_rotateType = 0;            // 旋转类型(后台所需旋转类型)
-    int                     m_nScale = 0;
-
-    bool                    m_bFirstShow = true;        //  是否是第一次显示,  用于判断 resizeEvent
+    DocViewProxy            *m_pDocViewProxy = nullptr;     //  文档操作 旋转\单双页\自适应
 
     FileViewWidgetPrivate *d_fvptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_fvptr), FileViewWidget)

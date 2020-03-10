@@ -58,14 +58,20 @@ private:
     void UpdatePageIconAnnotation(const QString &msgContent);
 
 private:
-    bool        m_filechanged = false;
-    bool        m_bSelectOrMove = false;                //  是否可以选中文字、移动
-    bool        m_bIsHandleSelect = false;              //  是否可以选中
-    QPoint      m_pMoveStartPoint;
+    QString             m_strPath = "";
+    bool                m_filechanged = false;
+    bool                m_bSelectOrMove = false;                //  是否可以选中文字、移动
+    bool                m_bIsHandleSelect = false;              //  是否可以选中
+    QPoint              m_pMoveStartPoint;
 
-    Annotation  *m_pAnnotation = nullptr;
+    QPoint              m_pStartPoint;
+    QPoint              m_pEndSelectPoint;
 
-protected:
+    bool                m_bFirstShow = true;        //  是否是第一次显示,  用于判断 resizeEvent
+
+    Annotation          *m_pAnnotation = nullptr;
+
+private:
     FileViewWidget *q_ptr;
     Q_DECLARE_PUBLIC(FileViewWidget)
 };
