@@ -3,7 +3,6 @@ HEADERS += \
     $$PWD/LeftSidebarWidget.h \
     $$PWD/FileViewWidget.h \
     $$PWD/MainOperationWidget.h \
-    $$PWD/DocShowShellWidget.h \
     $$PWD/NoteTipWidget.h \
     $$PWD/PlayControlWidget.h \
     $$PWD/CentralWidget.h \
@@ -26,7 +25,6 @@ SOURCES += \
     $$PWD/FileViewWidget.cpp \
     $$PWD/LeftSidebarWidget.cpp \
     $$PWD/MainOperationWidget.cpp \
-    $$PWD/DocShowShellWidget.cpp \
     $$PWD/NoteTipWidget.cpp \
     $$PWD/PlayControlWidget.cpp \
     $$PWD/CentralWidget.cpp \

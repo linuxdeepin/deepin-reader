@@ -21,7 +21,6 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-//#include "../DocShowShellWidget.h"
 #include "../LeftSidebarWidget.h"
 #include "widgets/FileViewWidget.h"
 #include "../TitleWidget.h"
@@ -55,11 +54,6 @@ void MainSplitter::InitWidget()
     connect(m_pFileViewWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pLeftWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)));
 
     addWidget(m_pFileViewWidget);
-
-//    m_pDocWidget = new DocShowShellWidget;
-//    connect(m_pDocWidget, SIGNAL(sigOpenFileOk()), SLOT(SlotOpenFileOk()));
-//    connect(m_pDocWidget, SIGNAL(sigFindOperation(const int &)), SLOT(SlotFindOperation(const int &)));
-//    addWidget(m_pDocWidget);
 
     QList<int> list_src;
     list_src.append(LEFTNORMALWIDTH);

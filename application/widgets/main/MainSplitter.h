@@ -24,7 +24,6 @@
 
 DWIDGET_USE_NAMESPACE
 
-//class DocShowShellWidget;
 class FileViewWidget;
 class LeftSidebarWidget;
 class MainSplitterPrivate;
@@ -68,8 +67,6 @@ private:
     LeftSidebarWidget   *m_pLeftWidget = nullptr;
     FileViewWidget      *m_pFileViewWidget = nullptr;
     bool                m_bOldState = false;
-
-//    DocShowShellWidget  *m_pDocWidget   = nullptr;
 
     MainSplitterPrivate     *const d_ptr = nullptr;
 };
