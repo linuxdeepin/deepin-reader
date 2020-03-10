@@ -120,7 +120,6 @@ private:
     DefaultOperationMenu    *m_pDefaultMenu = nullptr;
     DocummentProxy          *m_pProxy = nullptr;
 
-
     QString                 m_strPath = "";
 
     int                     m_nAdapteState = NO_ADAPTE_State;       //  当前自适应状态

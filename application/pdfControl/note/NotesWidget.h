@@ -97,6 +97,8 @@ private slots:
     void SlotRightDeleteItem();
     void slotAddAnnotation();
 
+    void SlotAnntationMsg(const int &, const QString &);
+
 private:
     void CopyNoteContent();
     void __AddNoteItem(const QString &, const int &iType = NOTE_HIGHLIGHT);

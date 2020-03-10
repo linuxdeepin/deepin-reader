@@ -21,7 +21,7 @@ public:
     ~LeftSidebarWidget() override;
 
 signals:
-    void sigSearchWidgetState(const int &);
+    void sigAnntationMsg(const int &, const QString &);
 
     // IObserver interface
 public:

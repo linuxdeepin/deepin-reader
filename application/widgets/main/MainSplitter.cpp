@@ -50,6 +50,8 @@ void MainSplitter::InitWidget()
     m_pFileViewWidget = new FileViewWidget;
     connect(m_pFileViewWidget, SIGNAL(sigFileOpenOK(const QString &)), SLOT(SlotOpenFileOk(const QString &)));
     connect(m_pFileViewWidget, SIGNAL(sigFindOperation(const int &)), SLOT(SlotFindOperation(const int &)));
+    connect(m_pFileViewWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pLeftWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)));
+
     addWidget(m_pFileViewWidget);
 
 //    m_pDocWidget = new DocShowShellWidget;

@@ -37,6 +37,9 @@ class DataStackedWidget : public DStackedWidget
 public:
     explicit DataStackedWidget(DWidget *parent = nullptr);
 
+signals:
+    void sigAnntationMsg(const int &, const QString &);
+
 public:
     int dealWithData(const int &, const QString &);
     void SetFindOperation(const int &);

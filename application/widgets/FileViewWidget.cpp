@@ -631,6 +631,8 @@ void FileViewWidget::ShowFindWidget()
 
 void FileViewWidget::onOpenNoteWidget(const QString &msgContent)
 {
+    Q_D(FileViewWidget);
+
     QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (sList.size() == 3) {
 
@@ -640,6 +642,7 @@ void FileViewWidget::onOpenNoteWidget(const QString &msgContent)
 
         if (m_pNoteViewWidget == nullptr) {
             m_pNoteViewWidget = new NoteViewWidget(this);
+            connect(m_pNoteViewWidget, SIGNAL(sigNoteViewMsg(const int &, const QString &)), d, SLOT(SlotNoteViewMsg(const int &, const QString &)));
         }
         m_pNoteViewWidget->setEditText("");
         m_pNoteViewWidget->setNoteUuid("");
@@ -657,6 +660,7 @@ void FileViewWidget::onOpenNoteWidget(const QString &msgContent)
 //  显示 当前 注释
 void FileViewWidget::onShowNoteWidget(const QString &contant)
 {
+    Q_D(FileViewWidget);
     QStringList t_strList = contant.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (t_strList.count() == 2) {
         QString t_strUUid = t_strList.at(0);
@@ -671,6 +675,7 @@ void FileViewWidget::onShowNoteWidget(const QString &contant)
 
         if (m_pNoteViewWidget == nullptr) {
             m_pNoteViewWidget = new NoteViewWidget(this);
+            connect(m_pNoteViewWidget, SIGNAL(sigNoteViewMsg(const int &, const QString &)), d, SLOT(SlotNoteViewMsg(const int &, const QString &)));
         }
         m_pNoteViewWidget->setNoteUuid(t_strUUid);
         m_pNoteViewWidget->setNotePage(t_page);
@@ -688,6 +693,7 @@ void FileViewWidget::onShowNoteWidget(const QString &contant)
 
 void FileViewWidget::__ShowPageNoteWidget(const QString &msgContent)
 {
+    Q_D(FileViewWidget);
     QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (sList.size() == 4) {
         QString sUuid = sList.at(0);
@@ -703,6 +709,7 @@ void FileViewWidget::__ShowPageNoteWidget(const QString &msgContent)
         }
         if (m_pNoteViewWidget == nullptr) {
             m_pNoteViewWidget = new NoteViewWidget(this);
+            connect(m_pNoteViewWidget, SIGNAL(sigNoteViewMsg(const int &, const QString &)), d, SLOT(SlotNoteViewMsg(const int &, const QString &)));
         }
         m_pNoteViewWidget->setEditText(sContant);
         m_pNoteViewWidget->setNoteUuid(sUuid);

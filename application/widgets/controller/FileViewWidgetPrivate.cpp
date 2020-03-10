@@ -13,7 +13,7 @@
 #include "widgets/main/MainTabWidgetEx.h"
 
 FileViewWidgetPrivate::FileViewWidgetPrivate(FileViewWidget *parent)
-    : QObject(parent), q_ptr(parent)
+    : q_ptr(parent)
 {
     m_pAnnotation = new Annotation(this);
 }
@@ -38,6 +38,17 @@ void FileViewWidgetPrivate::slotDealWithMenu(const int &msgType, const QString &
         AddHighLight(msgContent);
     } else if (msgType == MSG_NOTE_ADD_HIGHLIGHT_NOTE) {            //  添加高亮注释
         AddHighLightAnnotation(msgContent);
+    }
+}
+
+void FileViewWidgetPrivate::SlotNoteViewMsg(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_NOTE_ADD_CONTENT) {
+        AddHighLightAnnotation(msgContent);
+    } else if (msgType == MSG_NOTE_DELETE_CONTENT) {            //  刪除高亮注释
+        RemoveAnnotation(msgContent);
+    } else if (msgType == MSG_NOTE_UPDATE_CONTENT) {            //  更新高亮注释
+        UpdateAnnotationText(msgContent);
     }
 }
 
@@ -357,11 +368,30 @@ void FileViewWidgetPrivate::AddHighLight(const QString &msgContent)
 
 void FileViewWidgetPrivate::AddHighLightAnnotation(const QString &msgContent)
 {
-    QString sRes = m_pAnnotation->AddHighLightAnnotation(msgContent);
-    if (sRes != "") {
-        Q_Q(FileViewWidget);
-        emit q->sigAnntationMsg(MSG_NOTE_ADD_ITEM, sRes);
-        m_filechanged = true;
+    Q_Q(FileViewWidget);
+    QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    if (contentList.size() == 2) {
+        QString sNote = contentList.at(0);
+        QString sPage = contentList.at(1);
+
+        int nSx = q->m_pStartPoint.x();
+        int nSy = q->m_pStartPoint.y();
+
+        int nEx = q->m_pEndSelectPoint.x();
+        int nEy = q->m_pEndSelectPoint.y();
+
+        QString sContent = QString::number(nSx) + Constant::sQStringSep +
+                           QString::number(nSy) + Constant::sQStringSep +
+                           QString::number(nEx) + Constant::sQStringSep +
+                           QString::number(nEy) + Constant::sQStringSep +
+                           sNote + Constant::sQStringSep +
+                           sPage;
+
+        QString sRes = m_pAnnotation->AddHighLightAnnotation(sContent);
+        if (sRes != "") {
+            emit q->sigAnntationMsg(MSG_NOTE_ADD_ITEM, sRes);
+            m_filechanged = true;
+        }
     }
 }
 

@@ -18,8 +18,11 @@ class FileViewWidgetPrivate: public QObject
 public:
     FileViewWidgetPrivate(FileViewWidget *parent = nullptr);
 
-public slots:
+private slots:
     void slotDealWithMenu(const int &, const QString &);
+    void SlotNoteViewMsg(const int &, const QString &);
+
+private:
     void setProxy(DocummentProxy *);
 
 private:

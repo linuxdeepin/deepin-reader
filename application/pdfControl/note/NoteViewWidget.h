@@ -37,6 +37,9 @@ public:
     explicit NoteViewWidget(CustomWidget *parent = nullptr);
     ~NoteViewWidget() override;
 
+signals:
+    void sigNoteViewMsg(const int &, const QString &);
+
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;

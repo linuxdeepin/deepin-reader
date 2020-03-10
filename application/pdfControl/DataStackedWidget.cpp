@@ -113,12 +113,13 @@ void DataStackedWidget::InitWidgets()
     insertWidget(WIDGET_catalog, m_pCatalogWidget);
 
     m_pBookMarkWidget = new BookMarkWidget(this);
+    connect(m_pBookMarkWidget, SIGNAL(sigSetBookMarkState(const int &, const int &)),
+            m_pThWidget, SLOT(SlotSetBookMarkState(const int &, const int &)));
 
     insertWidget(WIDGET_BOOKMARK, m_pBookMarkWidget);
 
     m_pNotesWidget = new NotesWidget(this);
-    connect(m_pBookMarkWidget, SIGNAL(sigSetBookMarkState(const int &, const int &)),
-            m_pThWidget, SLOT(SlotSetBookMarkState(const int &, const int &)));
+    connect(this, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pNotesWidget, SLOT(SlotAnntationMsg(const int &, const QString &)));
 
     insertWidget(WIDGET_NOTE, m_pNotesWidget);
 

@@ -166,7 +166,6 @@ void NotesWidget::__DeleteNoteItem(const QString &sUuid)
                     delete pItem;
                     pItem = nullptr;
 
-                    notifyMsg(MSG_FILE_IS_CHANGE, "1");
                     notifyMsg(CENTRAL_SHOW_TIP, tr("The annotation has been removed"));
                     break;
                 }
@@ -367,6 +366,17 @@ void NotesWidget::__JumpToNextItem()
 void NotesWidget::slotAddAnnotation()
 {
     MainTabWidgetEx::Instance()->setCurrentState(NOTE_ADD_State);
+}
+
+void NotesWidget::SlotAnntationMsg(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_NOTE_ADD_ITEM) {
+        __AddNoteItem(msgContent);
+    } else if (msgType == MSG_NOTE_DELETE_ITEM) {
+        __DeleteNoteItem(msgContent);
+    } else if (msgType == MSG_NOTE_UPDATE_ITEM) {
+        __UpdateNoteItem(msgContent);
+    }
 }
 
 void NotesWidget::CopyNoteContent()
