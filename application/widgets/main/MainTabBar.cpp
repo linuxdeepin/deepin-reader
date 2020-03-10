@@ -34,6 +34,7 @@ MainTabBar::MainTabBar(DWidget *parent)
     this->setTabsClosable(true);
     this->setMovable(true);
     this->expanding();
+    this->setElideMode(Qt::ElideMiddle);
 
     m_pMsgList = {MSG_TAB_ADD, MSG_MENU_NEW_TAB};
 

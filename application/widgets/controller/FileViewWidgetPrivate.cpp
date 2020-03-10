@@ -351,7 +351,6 @@ void FileViewWidgetPrivate::mouseReleaseEvent(QMouseEvent *event)
 
 void FileViewWidgetPrivate::AddHighLight(const QString &msgContent)
 {
-    qDebug() << "------------*********" << msgContent;
     m_pAnnotation->AddHighLight(msgContent);
     m_filechanged = true;
 }
