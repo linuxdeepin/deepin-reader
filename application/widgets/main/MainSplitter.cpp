@@ -20,10 +20,12 @@
 
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QStackedWidget>
 
-#include "../LeftSidebarWidget.h"
+#include "widgets/SpinnerWidget.h"
+#include "widgets/LeftSidebarWidget.h"
 #include "widgets/FileViewWidget.h"
-#include "../TitleWidget.h"
+#include "widgets/TitleWidget.h"
 
 #include "MainSplitterPrivate.h"
 #include "menu/TitleMenu.h"
@@ -53,7 +55,15 @@ void MainSplitter::InitWidget()
     connect(m_pFileViewWidget, SIGNAL(sigFindOperation(const int &)), SLOT(SlotFindOperation(const int &)));
     connect(m_pFileViewWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pLeftWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)));
 
-    addWidget(m_pFileViewWidget);
+    m_pRightWidget = new QStackedWidget;
+    m_pSpinnerWidget = new SpinnerWidget(this);
+    m_pSpinnerWidget->setSpinnerSize(QSize(36, 36));
+    m_pSpinnerWidget->startSpinner();
+
+    m_pRightWidget->addWidget(m_pSpinnerWidget);
+    m_pRightWidget->addWidget(m_pFileViewWidget);
+
+    addWidget(m_pRightWidget);
 
     QList<int> list_src;
     list_src.append(LEFTNORMALWIDTH);
@@ -64,6 +74,12 @@ void MainSplitter::InitWidget()
 
 void MainSplitter::SlotOpenFileOk(const QString &s)
 {
+    if (m_pRightWidget && m_pSpinnerWidget) {
+        m_pRightWidget->removeWidget(m_pSpinnerWidget);
+
+        delete  m_pSpinnerWidget;
+        m_pSpinnerWidget = nullptr;
+    }
     TitleWidget::Instance()->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
 
     m_pLeftWidget->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);

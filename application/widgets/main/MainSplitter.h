@@ -24,6 +24,7 @@
 
 DWIDGET_USE_NAMESPACE
 
+class SpinnerWidget;
 class FileViewWidget;
 class LeftSidebarWidget;
 class MainSplitterPrivate;
@@ -37,6 +38,8 @@ class MainSplitter : public DSplitter
 public:
     explicit MainSplitter(DWidget *parent = nullptr);
     ~MainSplitter() override;
+
+    void notifyMsg(const int &msgType, const QString &msgContent);
 
 public:
     QString qGetPath();
@@ -65,6 +68,10 @@ private slots:
 
 private:
     LeftSidebarWidget   *m_pLeftWidget = nullptr;
+
+    QStackedWidget      *m_pRightWidget = nullptr;
+
+    SpinnerWidget       *m_pSpinnerWidget = nullptr;
     FileViewWidget      *m_pFileViewWidget = nullptr;
     bool                m_bOldState = false;
 
