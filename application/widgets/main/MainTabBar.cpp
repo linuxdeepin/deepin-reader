@@ -75,13 +75,12 @@ void MainTabBar::notifyMsg(const int &msgType, const QString &msgContent)
 
 void MainTabBar::__InitConnection()
 {
-    connect(this, SIGNAL(tabBarClicked(int)), SLOT(SlotTabBarClicked(int)));
     connect(this, SIGNAL(tabCloseRequested(int)), SLOT(SlotTabCloseRequested(int)));
     connect(this, SIGNAL(tabAddRequested()), SLOT(SlotTabAddRequested()));
-    connect(this, SIGNAL(currentChanged(int)), SLOT(SlotTabBarClicked(int)));
+    connect(this, SIGNAL(currentChanged(int)), SLOT(SlotCurrentChanged(int)));
 }
 
-void MainTabBar::SlotTabBarClicked(int index)
+void MainTabBar::SlotCurrentChanged(int index)
 {
     int iTemp = this->currentIndex();
     if (iTemp != index) {
@@ -90,11 +89,6 @@ void MainTabBar::SlotTabBarClicked(int index)
             emit sigTabBarIndexChange(sPath);
         }
     }
-}
-
-void MainTabBar::__SetTabMiniWidth()
-{
-
 }
 
 void MainTabBar::AddFileTab(const QString &sContent)
@@ -127,7 +121,7 @@ void MainTabBar::AddFileTab(const QString &sContent)
 
         int nCurIndex = this->currentIndex();
         if (nCurIndex > -1) {
-            SlotTabBarClicked(nCurIndex);
+            SlotCurrentChanged(nCurIndex);
         }
     }
 }

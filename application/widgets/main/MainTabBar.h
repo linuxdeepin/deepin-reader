@@ -44,26 +44,20 @@ public:
     int dealWithData(const int &, const QString &) override;
     void notifyMsg(const int &, const QString &s = "") override;
 
-    // QWidget interface
-protected:
-//    void resizeEvent(QResizeEvent *event) override;
-
 private:
     void __InitConnection();
 
-    void __SetTabMiniWidth();
     void AddFileTab(const QString &);
     QString getFileName(const QString &strFilePath);
 
 private slots:
-    void SlotTabBarClicked(int);
+    void SlotCurrentChanged(int);
     void SlotTabAddRequested();
     void SlotTabCloseRequested(int index);
 
     void SlotRemoveFileTab(const QString &);
 
 private:
-//    int     m_nOldMiniWidth = 0;/
     QList <int> m_pMsgList;
 };
 

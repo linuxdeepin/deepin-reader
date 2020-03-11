@@ -306,7 +306,7 @@ void FileViewWidget::__SetCursor(const QCursor &cs)
     }
 }
 
-bool FileViewWidget::OpenFilePath(const QString &sPath)
+void FileViewWidget::OpenFilePath(const QString &sPath)
 {
     Q_D(FileViewWidget);
     d->m_strPath = sPath;
@@ -346,6 +346,7 @@ bool FileViewWidget::OpenFilePath(const QString &sPath)
 
         bool rl = m_pProxy->openFile(nCurDocType, sPath, curPage, rotatetype, scale, viewmode);
         if (rl) {
+            m_pProxy->setViewFocus();
             m_pDocViewProxy->setProxy(m_pProxy);
             d->setProxy(m_pProxy);
 
@@ -354,11 +355,8 @@ bool FileViewWidget::OpenFilePath(const QString &sPath)
                 pMtwe->SetFileData(sPath, fdm);
                 pMtwe->InsertPathProxy(sPath, m_pProxy);       //  存储 filePath 对应的 proxy
             }
-
-            return rl;
         }
     }
-    return false;
 }
 
 //  文档书签状态改变

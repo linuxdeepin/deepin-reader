@@ -54,7 +54,7 @@ public:
     int dealWithData(const int &, const QString &) override;
     int qDealWithShortKey(const QString &) override;
 
-    bool OpenFilePath(const QString &);
+    void OpenFilePath(const QString &);
     void ShowFindWidget();
 
     void setFileChange(bool bchanged);
