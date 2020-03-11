@@ -19,8 +19,9 @@ ColorWidgetAction::ColorWidgetAction(DWidget *pParent)
 
 void ColorWidgetAction::setBtnAddLightState(const bool &bState)
 {
-    m_pClickLabel->setEnabled(!bState);
-    if (!bState)
+    qDebug() << "------<<<<<<<<>>>>>>" << bState;
+    m_pClickLabel->setEnabled(bState);
+    if (bState)
         setcolor(true);
     else {
         setcolor(false);

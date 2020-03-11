@@ -164,12 +164,17 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         m_operatemenu->setPEndPoint(d->m_pEndSelectPoint);
         m_operatemenu->setClickPage(nPage);
         dApp->m_pAppInfo->setMousePressLocal(bIsHighLight, tempPoint);
+        bool bremoveenable = false;
         if (bicon) {
             m_operatemenu->setType(NOTE_ICON);
         } else {
             m_operatemenu->setType(NOTE_HIGHLIGHT);
         }
-        m_operatemenu->execMenu(tempPoint, bicon, sSelectText, struuid);
+        if (bicon || bIsHighLight)
+            bremoveenable = true;
+        qDebug() << "*********";
+        m_operatemenu->setRemoveEnabled(bremoveenable);
+        m_operatemenu->execMenu(tempPoint, true, sSelectText, struuid);
     } else if (sSelectText == "" && (bIsHighLight || bicon)) { //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
         m_operatemenu->setClickPoint(pRightClickPoint);
@@ -179,11 +184,12 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
         dApp->m_pAppInfo->setMousePressLocal(bIsHighLight, tempPoint);
         if (bicon) {
             m_operatemenu->setType(NOTE_ICON);
-        } else {
+        } else if (bIsHighLight) {
             m_operatemenu->setType(NOTE_HIGHLIGHT);
         }
         sSelectText = sAnnotationText;
-        m_operatemenu->execMenu(tempPoint, bIsHighLight, sSelectText, struuid);
+        m_operatemenu->setRemoveEnabled(true);
+        m_operatemenu->execMenu(tempPoint, false, sSelectText, struuid);
     } else {  //  否则弹出 文档操作菜单
         m_pDefaultMenu->setClickpoint(pRightClickPoint);
         m_pDefaultMenu->execMenu(tempPoint, nPage);

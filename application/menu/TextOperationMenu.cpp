@@ -37,8 +37,7 @@ void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, con
         //  m_pColorWidgetAction->setVisible(true);
     }
     m_strNoteUuid = sUuid;
-    m_pRemoveHighLight->setEnabled(bHigh);
-
+    qDebug() << bHigh;
     m_pColorWidgetAction->setBtnAddLightState(bHigh);
 
     //  当前显示状态状态
@@ -162,6 +161,11 @@ void TextOperationMenu::slotExitFullScreenClicked()
 void TextOperationMenu::setPEndPoint(const QPoint &pEndPoint)
 {
     m_pEndPoint = pEndPoint;
+}
+
+void TextOperationMenu::setRemoveEnabled(bool enable)
+{
+    m_pRemoveHighLight->setEnabled(enable);
 }
 
 void TextOperationMenu::setPStartPoint(const QPoint &pStartPoint)
