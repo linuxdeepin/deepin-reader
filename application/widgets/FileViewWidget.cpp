@@ -157,24 +157,33 @@ void FileViewWidget::slotCustomContextMenuRequested(const QPoint &point)
     bool bIsHighLight = m_pProxy->annotationClicked(pRightClickPoint, sAnnotationText, struuid);
     bool bicon = m_pProxy->iconAnnotationClicked(pRightClickPoint, sAnnotationText, struuid);
     int nPage = m_pProxy->pointInWhichPage(pRightClickPoint);
-    if ((sSelectText != "" || bIsHighLight) && !bicon) { //  选中区域 有文字, 弹出 文字操作菜单
+
+    if (sSelectText != "") {
+        m_operatemenu->setClickPoint(pRightClickPoint);
+        m_operatemenu->setPStartPoint(d->m_pStartPoint);
+        m_operatemenu->setPEndPoint(d->m_pEndSelectPoint);
+        m_operatemenu->setClickPage(nPage);
+        dApp->m_pAppInfo->setMousePressLocal(bIsHighLight, tempPoint);
+        if (bicon) {
+            m_operatemenu->setType(NOTE_ICON);
+        } else {
+            m_operatemenu->setType(NOTE_HIGHLIGHT);
+        }
+        m_operatemenu->execMenu(tempPoint, bicon, sSelectText, struuid);
+    } else if (sSelectText == "" && (bIsHighLight || bicon)) { //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
         m_operatemenu->setClickPoint(pRightClickPoint);
         m_operatemenu->setPStartPoint(d->m_pStartPoint);
         m_operatemenu->setPEndPoint(d->m_pEndSelectPoint);
         m_operatemenu->setClickPage(nPage);
-        m_operatemenu->setType(NOTE_HIGHLIGHT);
         dApp->m_pAppInfo->setMousePressLocal(bIsHighLight, tempPoint);
-
+        if (bicon) {
+            m_operatemenu->setType(NOTE_ICON);
+        } else {
+            m_operatemenu->setType(NOTE_HIGHLIGHT);
+        }
+        sSelectText = sAnnotationText;
         m_operatemenu->execMenu(tempPoint, bIsHighLight, sSelectText, struuid);
-    } else if (bicon) {
-        m_operatemenu->setClickPoint(pRightClickPoint);
-        m_operatemenu->setPStartPoint(d->m_pStartPoint);
-        m_operatemenu->setPEndPoint(d->m_pEndSelectPoint);
-        m_operatemenu->setClickPage(nPage);
-        m_operatemenu->setType(NOTE_ICON);
-        dApp->m_pAppInfo->setMousePressLocal(bIsHighLight, tempPoint);
-        m_operatemenu->execMenu(tempPoint, bicon, sSelectText, struuid);
     } else {  //  否则弹出 文档操作菜单
         m_pDefaultMenu->setClickpoint(pRightClickPoint);
         m_pDefaultMenu->execMenu(tempPoint, nPage);

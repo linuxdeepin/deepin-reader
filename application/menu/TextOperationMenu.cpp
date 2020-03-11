@@ -24,16 +24,17 @@ void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, con
     m_pAddBookMark->setEnabled(!bBookState);
 
     m_strSelectText = sSelectText;
-    if (m_strSelectText == "") {
-        m_pCopy->setEnabled(false);
-    } else {
-        m_pCopy->setEnabled(true);
-    }
 
     if (m_nType == NOTE_ICON) {
         m_pRemoveHighLight->setText(tr("Remove annotation"));
+        disconnect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked(const int &)), this, SLOT(slotSetHighLight(const int &)));
+        removeAction(m_pColorWidgetAction);
+        // m_pColorWidgetAction->setVisible(false);
     } else if (m_nType == NOTE_HIGHLIGHT) {
         m_pRemoveHighLight->setText(tr("Remove highlight"));
+        insertAction(m_pRemoveHighLight, m_pColorWidgetAction);
+        connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked(const int &)), this, SLOT(slotSetHighLight(const int &)));
+        //  m_pColorWidgetAction->setVisible(true);
     }
     m_strNoteUuid = sUuid;
     m_pRemoveHighLight->setEnabled(bHigh);
@@ -94,6 +95,7 @@ void TextOperationMenu::notifyMsgToFrame(const int &msgType, const QString &msgC
 
 void TextOperationMenu::slotSetHighLight(const int &nColor)
 {
+    qDebug() << __FUNCTION__ << "**++";
     m_pLightColor = nColor;
 
     bool bEnable = m_pRemoveHighLight->isEnabled();
