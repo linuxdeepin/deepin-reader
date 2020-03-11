@@ -342,12 +342,7 @@ void FileViewWidgetPrivate::mouseReleaseEvent(QMouseEvent *event)
                 int nPage = q->m_pProxy->pointInWhichPage(docGlobalPos);
                 QString msgContent = t_strUUid.trimmed() + Constant::sQStringSep + QString::number(nPage);
 
-                QJsonObject obj;
-                obj.insert("content", msgContent);
-                obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
-
-                QJsonDocument doc(obj);
-                q->notifyMsg(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, doc.toJson(QJsonDocument::Compact));
+                slotDealWithMenu(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, msgContent);
             }
         }
     } else if (bicon) {
@@ -468,62 +463,100 @@ void FileViewWidgetPrivate::UpdatePageIconAnnotation(const QString &msgContent)
     }
 }
 
-//void FileViewWidgetPrivate::onSetWidgetAdapt()
-//{
-////    m_pDocViewProxy->onSetWidgetAdapt();
-//}
+void FileViewWidgetPrivate::OnShortCutKey(const QString &sKey)
+{
+    //  处于幻灯片模式下
+    int nState = MainTabWidgetEx::Instance()->getCurrentState();
+    if (nState == SLIDER_SHOW)
+        return;
 
-//void FileViewWidgetPrivate::OnSetViewChange(const QString &s)
-//{
-////    m_pDocViewProy->OnSetViewChange(s);
-//}
+    //  放大镜状态， 直接返回
+    if (nState == Magnifer_State)
+        return;
 
-//void FileViewWidgetPrivate::OnSetViewScale(const QString &s)
-//{
-////    m_pDocViewProxy->OnSetViewScale(s);
-//}
+    //  手型状态， 直接返回
+    if (nState == Handel_State)
+        return;
 
-//void FileViewWidgetPrivate::OnSetViewRotate(const QString &s)
-//{
-////    m_pDocViewProxy->OnSetViewRotate(s);
-//}
+    if (sKey == KeyStr::g_ctrl_c) {
+        DocFile_ctrl_c();
+    } else if (sKey == KeyStr::g_ctrl_l) {
+        DocFile_ctrl_l();
+    } else if (sKey == KeyStr::g_ctrl_i) {
+        DocFile_ctrl_i();
+    }
+}
 
-//void FileViewWidgetPrivate::OnSetViewHit(const QString &s)
-//{
-////    m_pDocViewProxy->OnSetViewHit(s);
-//}
+//  添加高亮颜色  快捷键
+void FileViewWidgetPrivate::DocFile_ctrl_l()
+{
+    Q_Q(FileViewWidget);
 
-//void FileViewWidgetPrivate::setScaleRotateViewModeAndShow()
-//{
-////    m_pDocViewProxy->setScaleRotateViewModeAndShow();
-//}
+    int nSx = m_pStartPoint.x();
+    int nSy = m_pStartPoint.y();
 
-//void FileViewWidgetPrivate::setAdapteState(const int &nAdapteState)
-//{
-////    m_pDocViewProxy->setAdapteState(nAdapteState);
-//}
+    int nEx = m_pEndSelectPoint.x();
+    int nEy = m_pEndSelectPoint.y();
 
-//void FileViewWidgetPrivate::setDoubleShow(const int &nDoubleShow)
-//{
-////    m_pDocViewProxy->setDoubleShow(nDoubleShow);
-//}
+    if (nSx == nEx && nSy == nEy) {
+        q->notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
+        return;
+    }
 
-//void FileViewWidgetPrivate::setRotateType(const int &rotateType)
-//{
-////    m_pDocViewProxy->setRotateType(rotateType);
-//}
+    if (!q->m_pProxy)
+        return;
 
-//void FileViewWidgetPrivate::setScale(const int &nScale)
-//{
-////    m_pDocViewProxy->setScale(nScale);
-//}
+    QString selectText = "";
+    q->m_pProxy->getSelectTextString(selectText);
+    if (selectText != "") {
+        QString sContent = QString::number(nSx) + Constant::sQStringSep +
+                           QString::number(nSy) + Constant::sQStringSep +
+                           QString::number(nEx) + Constant::sQStringSep +
+                           QString::number(nEy);
 
-//void FileViewWidgetPrivate::setWidth(const int &nWidth)
-//{
-////    m_pDocViewProxy->setWidth(nWidth);
-//}
+        AddHighLight(sContent);
+    } else {
+        q->notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
+    }
+}
 
-//void FileViewWidgetPrivate::setHeight(const int &nHeight)
-//{
-////    m_pDocViewProxy->setHeight(nHeight);
-//}
+void FileViewWidgetPrivate::DocFile_ctrl_i()
+{
+    Q_Q(FileViewWidget);
+    if (q->m_pProxy) {
+        QString selectText;
+        if (q->m_pProxy->getSelectTextString(selectText)) {
+
+            int nSx = m_pStartPoint.x();
+            int nSy = m_pStartPoint.y();
+
+            int nEx = m_pEndSelectPoint.x();
+            int nEy = m_pEndSelectPoint.y();
+
+            if ((nSx == nEx && nSy == nEy)) {
+                q->notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
+                return;
+            }
+
+            int nPage = q->m_pProxy->pointInWhichPage(m_pEndSelectPoint);
+            QString msgContent = QString("%1").arg(nPage) + Constant::sQStringSep +
+                                 QString("%1").arg(m_pEndSelectPoint.x()) + Constant::sQStringSep +
+                                 QString("%1").arg(m_pEndSelectPoint.y());
+
+            q->onOpenNoteWidget(msgContent);
+        } else {
+            q->notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
+        }
+    }
+}
+
+void FileViewWidgetPrivate::DocFile_ctrl_c()
+{
+    Q_Q(FileViewWidget);
+    if (q->m_pProxy) {
+        QString sSelectText = "";
+        if (q->m_pProxy->getSelectTextString(sSelectText)) { //  选择　当前选中下面是否有文字
+            Utils::copyText(sSelectText);
+        }
+    }
+}

@@ -207,3 +207,5 @@ void Annotation::AddPageIconAnnotation(const QString &msgContent)
         }
     }
 }
+
+

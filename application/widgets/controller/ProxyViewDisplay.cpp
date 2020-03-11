@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "DocViewProxy.h"
+#include "ProxyViewDisplay.h"
 
 #include <QJsonObject>
 #include <QJsonDocument>
@@ -29,17 +29,17 @@
 
 using namespace DR_SPACE;
 
-DocViewProxy::DocViewProxy(QObject *parent) : QObject(parent)
+ProxyViewDisplay::ProxyViewDisplay(QObject *parent) : QObject(parent)
 {
 
 }
 
-void DocViewProxy::setProxy(DocummentProxy *proxy)
+void ProxyViewDisplay::setProxy(DocummentProxy *proxy)
 {
     m_pProxy = proxy;
 }
 
-void DocViewProxy::OnSetViewHit(const QString &msgContent)
+void ProxyViewDisplay::OnSetViewHit(const QString &msgContent)
 {
     m_nAdapteState = msgContent.toInt();
 
@@ -47,7 +47,7 @@ void DocViewProxy::OnSetViewHit(const QString &msgContent)
 }
 
 //  设置　窗口　自适应　宽＼高　度
-void DocViewProxy::onSetWidgetAdapt()
+void ProxyViewDisplay::onSetWidgetAdapt()
 {
     if (m_nAdapteState != Default_State) {
         if (!m_pProxy)
@@ -67,7 +67,7 @@ void DocViewProxy::onSetWidgetAdapt()
 }
 
 //  比例调整了, 取消自适应 宽高状态
-void DocViewProxy::OnSetViewScale(const QString &msgConent)
+void ProxyViewDisplay::OnSetViewScale(const QString &msgConent)
 {
     m_nScale = msgConent.toInt();
 
@@ -76,7 +76,7 @@ void DocViewProxy::OnSetViewScale(const QString &msgConent)
     m_nAdapteState = Default_State;
 }
 
-void DocViewProxy::OnSetViewRotate(const QString &msgConent)
+void ProxyViewDisplay::OnSetViewRotate(const QString &msgConent)
 {
     int nTemp = msgConent.toInt();
     if (nTemp == 1) { //  右旋转
@@ -105,13 +105,13 @@ void DocViewProxy::OnSetViewRotate(const QString &msgConent)
     onSetWidgetAdapt();
 }
 
-void DocViewProxy::OnSetViewChange(const QString &msgContent)
+void ProxyViewDisplay::OnSetViewChange(const QString &msgContent)
 {
     m_nDoubleShow = msgContent.toInt();
     setScaleRotateViewModeAndShow();
 }
 
-void DocViewProxy::setScaleRotateViewModeAndShow()
+void ProxyViewDisplay::setScaleRotateViewModeAndShow()
 {
     if (m_pProxy) {
         double dScale = m_nScale / 100.0;
@@ -121,37 +121,37 @@ void DocViewProxy::setScaleRotateViewModeAndShow()
 }
 
 //  通知消息
-void DocViewProxy::notifyMsg(const int &msgType, const QString &msgContent)
+void ProxyViewDisplay::notifyMsg(const int &msgType, const QString &msgContent)
 {
     dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
 
-void DocViewProxy::setHeight(const int &nHeight)
+void ProxyViewDisplay::setHeight(const int &nHeight)
 {
     m_nHeight = nHeight;
 }
 
-void DocViewProxy::setWidth(const int &nWidth)
+void ProxyViewDisplay::setWidth(const int &nWidth)
 {
     m_nWidth = nWidth;
 }
 
-void DocViewProxy::setScale(const int &nScale)
+void ProxyViewDisplay::setScale(const int &nScale)
 {
     m_nScale = nScale;
 }
 
-void DocViewProxy::setRotateType(const int &rotateType)
+void ProxyViewDisplay::setRotateType(const int &rotateType)
 {
     m_rotateType = rotateType;
 }
 
-void DocViewProxy::setDoubleShow(const int &nDoubleShow)
+void ProxyViewDisplay::setDoubleShow(const int &nDoubleShow)
 {
     m_nDoubleShow = nDoubleShow;
 }
 
-void DocViewProxy::setAdapteState(const int &nAdapteState)
+void ProxyViewDisplay::setAdapteState(const int &nAdapteState)
 {
     m_nAdapteState = nAdapteState;
 }

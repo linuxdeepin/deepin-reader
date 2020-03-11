@@ -28,11 +28,11 @@
 
 class DocummentProxy;
 
-class DocViewProxy : public QObject
+class ProxyViewDisplay : public QObject
 {
     Q_OBJECT
 public:
-    explicit DocViewProxy(QObject *parent = nullptr);
+    explicit ProxyViewDisplay(QObject *parent = nullptr);
 
 public:
     void setProxy(DocummentProxy *proxy);

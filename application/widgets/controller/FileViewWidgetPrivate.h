@@ -58,6 +58,12 @@ private:
     void UpdatePageIconAnnotation(const QString &msgContent);
 
 private:
+    void OnShortCutKey(const QString &);
+    void DocFile_ctrl_l();
+    void DocFile_ctrl_i();
+    void DocFile_ctrl_c();
+
+private:
     QString             m_strPath = "";
     bool                m_filechanged = false;
     bool                m_bSelectOrMove = false;                //  是否可以选中文字、移动

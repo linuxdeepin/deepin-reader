@@ -24,7 +24,7 @@
 class TextOperationMenu;
 class DefaultOperationMenu;
 class DocummentProxy;
-class DocViewProxy;
+class ProxyViewDisplay;
 class FileViewWidgetPrivate;
 class FindWidget;
 class NoteTipWidget;
@@ -89,16 +89,10 @@ private:
     void onShowNoteWidget(const QString &contant);
     void __ShowPageNoteWidget(const QString &msgContent);
 
-    void onFileAddAnnotation();
-    void onFileAddNote();
     void __ShowNoteTipWidget(const QString &sText);
     void __CloseFileNoteWidget();
 
     void __SetCursor(const QCursor &cursor);
-
-    void OnShortCutKey_Ctrl_l();
-    void OnShortCutKey_Ctrl_i();
-    void OnShortCutKey_Ctrl_c();
 
 private:
     FindWidget              *m_pFindWidget = nullptr;
@@ -109,7 +103,7 @@ private:
     DefaultOperationMenu    *m_pDefaultMenu = nullptr;
     DocummentProxy          *m_pProxy = nullptr;
 
-    DocViewProxy            *m_pDocViewProxy = nullptr;     //  文档操作 旋转\单双页\自适应
+    ProxyViewDisplay            *m_pDocViewProxy = nullptr;     //  文档操作 旋转\单双页\自适应
 
     FileViewWidgetPrivate *d_fvptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_fvptr), FileViewWidget)

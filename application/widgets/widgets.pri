@@ -19,7 +19,7 @@ HEADERS += \
     $$PWD/controller/FileViewWidgetPrivate.h \
     $$PWD/SpinnerWidget.h \
     $$PWD/controller/Annotation.h \
-    $$PWD/controller/DocViewProxy.h
+    $$PWD/controller/ProxyViewDisplay.h
 
 SOURCES += \
     $$PWD/HomeWidget.cpp \
@@ -42,4 +42,4 @@ SOURCES += \
     $$PWD/controller/FileViewWidgetPrivate.cpp \
     $$PWD/SpinnerWidget.cpp \
     $$PWD/controller/Annotation.cpp \
-    $$PWD/controller/DocViewProxy.cpp
+    $$PWD/controller/ProxyViewDisplay.cpp
