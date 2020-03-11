@@ -17,8 +17,6 @@ public:
             closeFileAndWaitThreadClearEnd();
     }
 public:
-    static QString CreateInstance(QObject *parent = nullptr);
-    static DocummentProxy *instance(QString uuid = QString());
     bool openFile(DocType_EM type, QString filepath, unsigned int ipage = 0, RotateType_EM rotatetype = RotateType_0, double scale = 1.0, ViewMode_EM viewmode = ViewMode_SinglePage);
     bool closeFile();
     QPoint global2RelativePoint(QPoint globalpoint);
@@ -80,8 +78,8 @@ public:
     QString pagenum2label(int index);
     int label2pagenum(QString label);
     bool haslabel();
+    bool filechanged();
 
-    void setparam(const DWidget *pwget, const QString &struuid);
 signals:
     void signal_pageChange(int);
     bool signal_pageJump(int);
@@ -104,7 +102,7 @@ private:
     DocummentBase *m_documment = nullptr;
     bool bcloseing;
     QString m_struuid;
-    static QMap<QString, DocummentProxy *> m_proxymap;
+    bool m_filechanged = false;
 };
 
 #endif // DOCUMMENTPROXY_H

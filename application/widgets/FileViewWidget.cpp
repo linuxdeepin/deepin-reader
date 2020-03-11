@@ -305,9 +305,7 @@ bool FileViewWidget::OpenFilePath(const QString &sPath)
     Q_D(FileViewWidget);
     d->m_strPath = sPath;
     //  实际文档类  唯一实例化设置 父窗口
-    QString m_strProcUuid = DocummentProxy::CreateInstance(this);
-
-    m_pProxy = DocummentProxy::instance(m_strProcUuid);
+    m_pProxy = new DocummentProxy(this);
     if (m_pProxy) {
         connect(m_pProxy, SIGNAL(signal_bookMarkStateChange(int, bool)), SLOT(slotBookMarkStateChange(int, bool)));
         connect(m_pProxy, SIGNAL(signal_pageChange(int)), SLOT(slotDocFilePageChanged(int)));
