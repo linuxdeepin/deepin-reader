@@ -97,8 +97,9 @@ void ScaleWidget::onShortKey(const QString &keyType)
 
 void ScaleWidget::slotPrevScale()
 {
-    m_nCurrentIndex --;
-    if (m_nCurrentIndex > -1) {
+    int nTemp = m_nCurrentIndex - 1;
+    if (nTemp > -1) {
+        m_nCurrentIndex = nTemp;
         QString sText = scaleComboBox->itemText(m_nCurrentIndex);
         scaleComboBox->setCurrentText(sText);
         scaleComboBox->setCurrentIndex(m_nCurrentIndex);
@@ -107,8 +108,9 @@ void ScaleWidget::slotPrevScale()
 
 void ScaleWidget::slotNextScale()
 {
-    m_nCurrentIndex ++;
-    if (m_nCurrentIndex < scaleComboBox->count()) {
+    int nTemp = m_nCurrentIndex + 1;
+    if (nTemp < scaleComboBox->count()) {
+        m_nCurrentIndex = nTemp;
         QString sText = scaleComboBox->itemText(m_nCurrentIndex);
         scaleComboBox->setCurrentText(sText);
         scaleComboBox->setCurrentIndex(m_nCurrentIndex);
