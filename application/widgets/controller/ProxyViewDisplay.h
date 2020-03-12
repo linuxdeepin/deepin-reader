@@ -26,7 +26,7 @@
  *  @brief  文档 缩放\单双页\旋转  操作
  */
 
-class DocummentProxy;
+class FileViewWidgetPrivate;
 
 class ProxyViewDisplay : public QObject
 {
@@ -35,8 +35,6 @@ public:
     explicit ProxyViewDisplay(QObject *parent = nullptr);
 
 public:
-    void setProxy(DocummentProxy *proxy);
-
     void onSetWidgetAdapt();
     void OnSetViewHit(const QString &msgContent);
     void OnSetViewRotate(const QString &msgConent);
@@ -55,7 +53,8 @@ private:
     void notifyMsg(const int &msgType, const QString &msgContent);
 
 private:
-    DocummentProxy      *m_pProxy = nullptr;
+    FileViewWidgetPrivate      *fvmPrivate = nullptr;
+    friend class FileViewWidgetPrivate;
 
     int                 m_nAdapteState = NO_ADAPTE_State;       //  当前自适应状态
 

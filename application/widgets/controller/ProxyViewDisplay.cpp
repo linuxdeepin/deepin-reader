@@ -21,6 +21,8 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
+#include "FileViewWidgetPrivate.h"
+
 #include "application.h"
 #include "ModuleHeader.h"
 #include "WidgetHeader.h"
@@ -31,12 +33,7 @@ using namespace DR_SPACE;
 
 ProxyViewDisplay::ProxyViewDisplay(QObject *parent) : QObject(parent)
 {
-
-}
-
-void ProxyViewDisplay::setProxy(DocummentProxy *proxy)
-{
-    m_pProxy = proxy;
+    fvmPrivate = qobject_cast<FileViewWidgetPrivate *>(parent);
 }
 
 void ProxyViewDisplay::OnSetViewHit(const QString &msgContent)
@@ -50,14 +47,14 @@ void ProxyViewDisplay::OnSetViewHit(const QString &msgContent)
 void ProxyViewDisplay::onSetWidgetAdapt()
 {
     if (m_nAdapteState != Default_State) {
-        if (!m_pProxy)
+        if (!fvmPrivate->m_pProxy)
             return;
 
         double dScale = 0.0;
         if (m_nAdapteState == ADAPTE_WIDGET_State) {
-            dScale = m_pProxy->adaptWidthAndShow(m_nWidth);
+            dScale = fvmPrivate->m_pProxy->adaptWidthAndShow(m_nWidth);
         } else if (m_nAdapteState == ADAPTE_HEIGHT_State) {
-            dScale = m_pProxy->adaptHeightAndShow(m_nHeight);
+            dScale = fvmPrivate->m_pProxy->adaptHeightAndShow(m_nHeight);
         }
 
         if (dScale != 0.0) {
@@ -113,10 +110,10 @@ void ProxyViewDisplay::OnSetViewChange(const QString &msgContent)
 
 void ProxyViewDisplay::setScaleRotateViewModeAndShow()
 {
-    if (m_pProxy) {
+    if (fvmPrivate->m_pProxy) {
         double dScale = m_nScale / 100.0;
         ViewMode_EM em = m_nDoubleShow ? ViewMode_FacingPage : ViewMode_SinglePage;
-        m_pProxy->setScaleRotateViewModeAndShow(dScale, static_cast<RotateType_EM>(m_rotateType), em);
+        fvmPrivate->m_pProxy->setScaleRotateViewModeAndShow(dScale, static_cast<RotateType_EM>(m_rotateType), em);
     }
 }
 

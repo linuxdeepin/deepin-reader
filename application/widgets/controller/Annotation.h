@@ -27,7 +27,7 @@
  *          高亮和注释 业务处理
  */
 
-class DocummentProxy;
+class FileViewWidgetPrivate;
 
 class Annotation : public QObject
 {
@@ -35,23 +35,25 @@ class Annotation : public QObject
 public:
     explicit Annotation(QObject *parent = nullptr);
 
-public:
-    void setProxy(DocummentProxy *);
+private:
+    void dealWithDataMsg(const int &, const QString &);
 
+public:
     void AddHighLight(const QString &);
-    QString AddHighLightAnnotation(const QString &);
-    QString RemoveHighLight(const QString &);
+    void AddHighLightAnnotation(const QString &);
+    void RemoveHighLight(const QString &);
     void ChangeAnnotationColor(const QString &);
 
-    QString RemoveAnnotation(const QString &);
+    void RemoveAnnotation(const QString &);
     void UpdateAnnotationText(const QString &);
 
     void AddPageIconAnnotation(const QString &);
-    QString DeletePageIconAnnotation(const QString &);
-    QString UpdatePageIconAnnotation(const QString &);
+    void DeletePageIconAnnotation(const QString &);
+    void UpdatePageIconAnnotation(const QString &);
 
 private:
-    DocummentProxy      *m_pProxy = nullptr;
+    FileViewWidgetPrivate      *fvmPrivate = nullptr;
+    friend class FileViewWidgetPrivate;
 };
 
 #endif // ANNOTATIONHELPER_H

@@ -21,19 +21,12 @@
 
 #include "CustomControl/CustomWidget.h"
 
-class TextOperationMenu;
-class DefaultOperationMenu;
-class DocummentProxy;
-class ProxyViewDisplay;
-class FileViewWidgetPrivate;
 class FindWidget;
-class NoteTipWidget;
-class NoteViewWidget;
-
 /**
  * @brief The FileViewWidget class
  * @brief   文档显示区域
  */
+class FileViewWidgetPrivate;
 class FileViewWidget : public CustomWidget
 {
     Q_OBJECT
@@ -72,38 +65,13 @@ protected:
     void wheelEvent(QWheelEvent *e) override;
 
 private slots:
-    void slotCustomContextMenuRequested(const QPoint &);
-
-    void slotBookMarkStateChange(int, bool);
-    void slotDocFilePageChanged(int);
-    void SlotDocFileOpenResult(bool);
-
     void SlotFindOperation(const int &, const QString &strFind);
 
 private:
     void initConnections();
-    void onSetHandShape(const QString &);
-
-private:
-    void onOpenNoteWidget(const QString &msgContent);
-    void onShowNoteWidget(const QString &contant);
-    void __ShowPageNoteWidget(const QString &msgContent);
-
-    void __ShowNoteTipWidget(const QString &sText);
-    void __CloseFileNoteWidget();
-
-    void __SetCursor(const QCursor &cursor);
 
 private:
     FindWidget              *m_pFindWidget = nullptr;
-    NoteViewWidget          *m_pNoteViewWidget = nullptr;
-    NoteTipWidget           *m_pTipWidget = nullptr;
-
-    TextOperationMenu       *m_operatemenu = nullptr;
-    DefaultOperationMenu    *m_pDefaultMenu = nullptr;
-    DocummentProxy          *m_pProxy = nullptr;
-
-    ProxyViewDisplay            *m_pDocViewProxy = nullptr;     //  文档操作 旋转\单双页\自适应
 
 private:
     FileViewWidgetPrivate *const d_ptr = nullptr;

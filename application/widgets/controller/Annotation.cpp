@@ -19,60 +19,90 @@
 
 #include "Annotation.h"
 
+#include "FileViewWidgetPrivate.h"
+
 #include "application.h"
 #include "MsgHeader.h"
 #include "ModuleHeader.h"
+#include "ProxyData.h"
 
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
 
+#include "widgets/FileViewWidget.h"
+
 Annotation::Annotation(QObject *parent)
     : QObject(parent)
-{}
-
-void Annotation::setProxy(DocummentProxy *proxy)
 {
-    m_pProxy = proxy;
+    fvmPrivate = qobject_cast<FileViewWidgetPrivate *>(parent);
+}
+
+void Annotation::dealWithDataMsg(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_NOTE_REMOVE_HIGHLIGHT) {                 //  移除高亮注释 的高亮
+        RemoveHighLight(msgContent);
+    } else if (msgType == MSG_NOTE_UPDATE_HIGHLIGHT_COLOR) {    //  更新高亮颜色
+        ChangeAnnotationColor(msgContent);
+    } else if (msgType == MSG_NOTE_ADD_HIGHLIGHT_COLOR) {       //  添加高亮
+        AddHighLight(msgContent);
+    } else if (msgType == MSG_NOTE_DELETE_CONTENT) {            //  刪除高亮注释
+        RemoveAnnotation(msgContent);
+    } else if (msgType == MSG_NOTE_UPDATE_CONTENT) {            //  更新高亮注释
+        UpdateAnnotationText(msgContent);
+    } else if (msgType == MSG_NOTE_PAGE_ADD_CONTENT) {          //  新增 页面注释
+        AddPageIconAnnotation(msgContent);
+    } else if (msgType == MSG_NOTE_PAGE_UPDATE_CONTENT) {       //  更新页面注释
+        UpdatePageIconAnnotation(msgContent);
+    } else if (msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {       //  删除页面注释
+        DeletePageIconAnnotation(msgContent);
+    } else  if (msgType == MSG_NOTE_DELETE_CONTENT) {
+        RemoveAnnotation(msgContent);
+    } else if (msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {
+        DeletePageIconAnnotation(msgContent);
+    }
 }
 
 //  删除注释节点
-QString Annotation::DeletePageIconAnnotation(const QString &msgContent)
+void Annotation::DeletePageIconAnnotation(const QString &msgContent)
 {
-    if (m_pProxy) {
+    if (fvmPrivate->m_pProxy) {
         QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (sList.size() == 2) {
             QString sUuid = sList.at(0);
             QString sPage = sList.at(1);
 
-            m_pProxy->removeAnnotation(sUuid, sPage.toInt());
-            return sUuid;
+            fvmPrivate->m_pProxy->removeAnnotation(sUuid, sPage.toInt());
+
+            if (sUuid != "") {
+                emit fvmPrivate->q_func()->sigAnntationMsg(MSG_NOTE_PAGE_DELETE_ITEM, sUuid);
+                fvmPrivate->m_pProxyData->setFileChanged(true);
+            }
         }
     }
-    return "";
 }
 
 //  更新注释节点内容
-QString Annotation::UpdatePageIconAnnotation(const QString &msgContent)
+void Annotation::UpdatePageIconAnnotation(const QString &msgContent)
 {
-    if (m_pProxy) {
+    if (fvmPrivate->m_pProxy) {
         QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (sList.size() == 3) {
             QString sUuid = sList.at(0);
             QString sNote = sList.at(1);
             QString sPage = sList.at(2);
-            m_pProxy->setAnnotationText(sPage.toInt(), sUuid, sNote);
+            fvmPrivate->m_pProxy->setAnnotationText(sPage.toInt(), sUuid, sNote);
 
-            return msgContent;
+            emit fvmPrivate->q_func()->sigAnntationMsg(MSG_NOTE_PAGE_UPDATE_ITEM, msgContent);
+
+            fvmPrivate->m_pProxyData->setFileChanged(true);
         }
     }
-
-    return "";
 }
 
 //  添加 高亮
 void Annotation::AddHighLight(const QString &msgContent)
 {
-    if (m_pProxy) {
+    if (fvmPrivate->m_pProxy) {
         QString nSx = "", nSy = "", nEx = "", nEy = "";
         QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (sList.size() == 4) {
@@ -95,11 +125,12 @@ void Annotation::AddHighLight(const QString &msgContent)
         QPoint pEndPoint(nEx.toInt(), nEy.toInt());
         QColor color = dApp->m_pAppInfo->selectColor();
 
-        m_pProxy->addAnnotation(pStartPoint, pEndPoint, color);
+        fvmPrivate->m_pProxy->addAnnotation(pStartPoint, pEndPoint, color);
+        fvmPrivate->m_pProxyData->setFileChanged(true);
     }
 }
 
-QString Annotation::AddHighLightAnnotation(const QString &msgContent)
+void Annotation::AddHighLightAnnotation(const QString &msgContent)
 {
     QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (sList.size() == 6) {
@@ -110,25 +141,29 @@ QString Annotation::AddHighLightAnnotation(const QString &msgContent)
         QString sNote = sList.at(4);
         QString sPage = sList.at(5);
 
-        if (m_pProxy) {
+        if (fvmPrivate->m_pProxy) {
             QPoint pStartPoint(nSx.toInt(), nSy.toInt());
             QPoint pEndPoint(nEx.toInt(), nEy.toInt());
             QColor color = dApp->m_pAppInfo->selectColor();
 
-            QString strUuid = m_pProxy->addAnnotation(pStartPoint, pEndPoint, color);
+            QString strUuid = fvmPrivate->m_pProxy->addAnnotation(pStartPoint, pEndPoint, color);
             if (strUuid != "") {
-                m_pProxy->setAnnotationText(sPage.toInt(), strUuid, sNote);
-                return strUuid.trimmed() + Constant::sQStringSep + sNote.trimmed() + Constant::sQStringSep + sPage;
+                fvmPrivate->m_pProxy->setAnnotationText(sPage.toInt(), strUuid, sNote);
+
+                QString sRes = strUuid.trimmed() + Constant::sQStringSep + sNote.trimmed() + Constant::sQStringSep + sPage;
+                if (sRes != "") {
+                    emit fvmPrivate->q_func()->sigAnntationMsg(MSG_NOTE_ADD_ITEM, sRes);
+                    fvmPrivate->m_pProxyData->setFileChanged(true);
+                }
             }
         }
     }
-    return "";
 }
 
 //  移除高亮颜色, 若是有注释, 则删除注释
-QString Annotation::RemoveHighLight(const QString &msgContent)
+void Annotation::RemoveHighLight(const QString &msgContent)
 {
-    if (m_pProxy) {
+    if (fvmPrivate->m_pProxy) {
         QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (contentList.size() == 2) {
             QString sX = contentList.at(0);
@@ -136,19 +171,19 @@ QString Annotation::RemoveHighLight(const QString &msgContent)
 
             QPoint tempPoint(sX.toInt(), sY.toInt());
 
-            QString sUuid = m_pProxy->removeAnnotation(tempPoint);
+            QString sUuid = fvmPrivate->m_pProxy->removeAnnotation(tempPoint);
             if (sUuid != "") {
-                return sUuid;
+                emit fvmPrivate->q_func()->sigAnntationMsg(MSG_NOTE_DELETE_ITEM, sUuid);
+                fvmPrivate->m_pProxyData->setFileChanged(true);
             }
         }
     }
-    return "";
 }
 
 //  更新高亮颜色
 void Annotation::ChangeAnnotationColor(const QString &msgContent)
 {
-    if (m_pProxy) {
+    if (fvmPrivate->m_pProxy) {
         QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (contentList.size() == 3) {
             QString sIndex = contentList.at(0);
@@ -158,38 +193,42 @@ void Annotation::ChangeAnnotationColor(const QString &msgContent)
             int iIndex = sIndex.toInt();
             QColor color = dApp->m_pAppInfo->getLightColorList().at(iIndex);
 
-            m_pProxy->changeAnnotationColor(sPage.toInt(), sUuid, color);     //  更新高亮顏色,  是对文档进行了操作
+            fvmPrivate->m_pProxy->changeAnnotationColor(sPage.toInt(), sUuid, color);     //  更新高亮顏色,  是对文档进行了操作
+            fvmPrivate->m_pProxyData->setFileChanged(true);
         }
     }
 }
 
 //  删除注释
-QString Annotation::RemoveAnnotation(const QString &msgContent)
+void Annotation::RemoveAnnotation(const QString &msgContent)
 {
-    if (m_pProxy) {
+    if (fvmPrivate->m_pProxy) {
         QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (sList.size() == 2) {
             QString sUuid = sList.at(0);
             QString sPage = sList.at(1);
-            m_pProxy->removeAnnotation(sUuid, sPage.toInt());
+            fvmPrivate->m_pProxy->removeAnnotation(sUuid, sPage.toInt());
 
-            return sUuid;
+            emit fvmPrivate->q_func()->sigAnntationMsg(MSG_NOTE_DELETE_ITEM, sUuid);
+            fvmPrivate->m_pProxyData->setFileChanged(true);
         }
     }
-    return "";
 }
 
 
 void Annotation::UpdateAnnotationText(const QString &msgContent)
 {
-    if (m_pProxy) {
+    if (fvmPrivate->m_pProxy) {
         QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (sList.size() == 3) {
             QString sUuid = sList.at(0);
             QString sText = sList.at(1);
             QString sPage = sList.at(2);
 
-            m_pProxy->setAnnotationText(sPage.toInt(), sUuid, sText);
+            fvmPrivate->m_pProxy->setAnnotationText(sPage.toInt(), sUuid, sText);
+
+            emit fvmPrivate->q_func()->sigAnntationMsg(MSG_NOTE_UPDATE_ITEM, msgContent);
+            fvmPrivate->m_pProxyData->setFileChanged(true);
         }
     }
 }
@@ -197,13 +236,16 @@ void Annotation::UpdateAnnotationText(const QString &msgContent)
 //  增加页面注释图标
 void Annotation::AddPageIconAnnotation(const QString &msgContent)
 {
-    if (m_pProxy) {
+    if (fvmPrivate->m_pProxy) {
         QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
         if (sList.size() == 3) {
             QString sUuid = sList.at(0);
             QString  sNote = sList.at(1);
             QString sPage = sList.at(2);
-            m_pProxy->setAnnotationText(sPage.toInt(), sUuid, sNote);
+            fvmPrivate->m_pProxy->setAnnotationText(sPage.toInt(), sUuid, sNote);
+
+            emit fvmPrivate->q_func()->sigAnntationMsg(MSG_NOTE_PAGE_ADD_ITEM, msgContent);
+            fvmPrivate->m_pProxyData->setFileChanged(true);
         }
     }
 }

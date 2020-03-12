@@ -19,7 +19,10 @@ HEADERS += \
     $$PWD/controller/FileViewWidgetPrivate.h \
     $$PWD/SpinnerWidget.h \
     $$PWD/controller/Annotation.h \
-    $$PWD/controller/ProxyViewDisplay.h
+    $$PWD/controller/ProxyViewDisplay.h \
+    $$PWD/controller/ProxyNotifyMsg.h \
+    $$PWD/controller/ProxyMouseMove.h \
+    $$PWD/controller/ProxyData.h
 
 SOURCES += \
     $$PWD/HomeWidget.cpp \
@@ -42,4 +45,7 @@ SOURCES += \
     $$PWD/controller/FileViewWidgetPrivate.cpp \
     $$PWD/SpinnerWidget.cpp \
     $$PWD/controller/Annotation.cpp \
-    $$PWD/controller/ProxyViewDisplay.cpp
+    $$PWD/controller/ProxyViewDisplay.cpp \
+    $$PWD/controller/ProxyNotifyMsg.cpp \
+    $$PWD/controller/ProxyMouseMove.cpp \
+    $$PWD/controller/ProxyData.cpp

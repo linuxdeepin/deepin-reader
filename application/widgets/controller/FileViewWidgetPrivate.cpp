@@ -1,38 +1,54 @@
 #include "FileViewWidgetPrivate.h"
 
 #include <QDesktopServices>
+#include <QFileInfo>
 
-#include "application.h"
 #include "Annotation.h"
+#include "ProxyNotifyMsg.h"
+#include "ProxyViewDisplay.h"
+#include "ProxyMouseMove.h"
+#include "ProxyData.h"
 
+#include "menu/TextOperationMenu.h"
+#include "menu/DefaultOperationMenu.h"
+
+#include "business/FileFormatHelper.h"
+#include "widgets/FindWidget.h"
 #include "docview/docummentproxy.h"
 #include "business/AppInfo.h"
 #include "widgets/FileViewWidget.h"
 #include "widgets/NoteTipWidget.h"
 
 #include "gof/bridge/IHelper.h"
+#include "pdfControl/note/NoteViewWidget.h"
 #include "widgets/main/MainTabWidgetEx.h"
 
 FileViewWidgetPrivate::FileViewWidgetPrivate(FileViewWidget *parent)
     : q_ptr(parent)
 {
+    m_pProxyData = new ProxyData(this);
+
+    m_operatemenu = new TextOperationMenu(parent);
+    connect(m_operatemenu, SIGNAL(sigActionTrigger(const int &, const QString &)), SLOT(slotDealWithMenu(const int &, const QString &)));
+
+    m_pDefaultMenu = new DefaultOperationMenu(parent);
+
     m_pAnnotation = new Annotation(this);
+    m_pDocViewProxy = new ProxyViewDisplay(this);
+
+    m_pProxyNotifyMsg = new ProxyNotifyMsg(this);
+    m_pProxyMouseMove = new ProxyMouseMove(this);
 }
 
 void FileViewWidgetPrivate::slotDealWithMenu(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_NOTE_REMOVE_HIGHLIGHT) {                 //  移除高亮注释 的高亮
-        RemoveHighLight(msgContent);
-    } else if (msgType == MSG_NOTE_UPDATE_HIGHLIGHT_COLOR) {    //  更新高亮颜色
-        ChangeAnnotationColor(msgContent);
-    } else if (msgType == MSG_NOTE_ADD_HIGHLIGHT_COLOR) {       //  添加高亮
-        AddHighLight(msgContent);
+    if (msgType == MSG_NOTE_REMOVE_HIGHLIGHT || msgType == MSG_NOTE_UPDATE_HIGHLIGHT_COLOR ||
+            msgType == MSG_NOTE_ADD_HIGHLIGHT_COLOR) {                 //  移除高亮注释 的高亮
+        m_pAnnotation->dealWithDataMsg(msgType, msgContent);
     } else if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {  //  添加注释
-        Q_Q(FileViewWidget);
-        q->onOpenNoteWidget(msgContent);
+        onOpenNoteWidget(msgContent);
     } else if (msgType == MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) {
-        Q_Q(FileViewWidget);
-        q->onShowNoteWidget(msgContent);
+        onShowNoteWidget(msgContent);
     }
 }
 
@@ -40,350 +56,47 @@ void FileViewWidgetPrivate::SlotNoteViewMsg(const int &msgType, const QString &m
 {
     if (msgType == MSG_NOTE_ADD_CONTENT) {                      //  新增高亮注释
         AddHighLightAnnotation(msgContent);
-    } else if (msgType == MSG_NOTE_DELETE_CONTENT) {            //  刪除高亮注释
-        RemoveAnnotation(msgContent);
-    } else if (msgType == MSG_NOTE_UPDATE_CONTENT) {            //  更新高亮注释
-        UpdateAnnotationText(msgContent);
-    } else if (msgType == MSG_NOTE_PAGE_ADD_CONTENT) {          //  新增 页面注释
-        AddPageIconAnnotation(msgContent);
-    } else if (msgType == MSG_NOTE_PAGE_UPDATE_CONTENT) {       //  更新页面注释
-        UpdatePageIconAnnotation(msgContent);
-    } else if (msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {       //  删除页面注释
-        DeletePageIconAnnotation(msgContent);
+    } else if (msgType == MSG_NOTE_DELETE_CONTENT || msgType == MSG_NOTE_UPDATE_CONTENT || msgType == MSG_NOTE_PAGE_ADD_CONTENT
+               || msgType == MSG_NOTE_PAGE_UPDATE_CONTENT || msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {
+        m_pAnnotation->dealWithDataMsg(msgType, msgContent);
     }
 }
 
 //  按 delete 键 删除
 void FileViewWidgetPrivate::SlotDeleteAnntation(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_NOTE_DELETE_CONTENT) {
-        RemoveAnnotation(msgContent);
-    } else if (msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {
-        DeletePageIconAnnotation(msgContent);
+    if (msgType == MSG_NOTE_DELETE_CONTENT || msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {
+        m_pAnnotation->dealWithDataMsg(msgType, msgContent);
     }
-}
-
-void FileViewWidgetPrivate::setProxy(DocummentProxy *proxy)
-{
-    m_pAnnotation->setProxy(proxy);
 }
 
 void FileViewWidgetPrivate::mouseMoveEvent(QMouseEvent *event)
 {
-    QPoint globalPos = event->globalPos();
-    //  处于幻灯片模式下
-    int nState = MainTabWidgetEx::Instance()->getCurrentState();
-    if (nState == SLIDER_SHOW) {
-        MainTabWidgetEx::Instance()->showPlayControlWidget();   //  显示 幻灯片 控制
-    } else if (nState == Magnifer_State) {    //  当前是放大镜状态
-        __ShowMagnifier(globalPos);
-    } else if (nState == Handel_State) {  //   手型状态下， 按住鼠标左键 位置进行移动
-        if (m_bSelectOrMove) {
-            __FilePageMove(globalPos);
-        }
-    } else if (nState == Default_State) {
-        if (m_bSelectOrMove) {  //  鼠标已经按下，　则选中所经过的文字
-            __MouseSelectText(globalPos);
-        } else {
-            __OtherMouseMove(globalPos);
-        }
-    }
-}
-
-//  显示放大镜 数据
-void FileViewWidgetPrivate::__ShowMagnifier(const QPoint &clickPoint)
-{
-    Q_Q(FileViewWidget);
-
-    QPoint docGlobalPos = q->m_pProxy->global2RelativePoint(clickPoint);
-
-    q->m_pProxy->showMagnifier(docGlobalPos);
-    q->__SetCursor(Qt::BlankCursor);
-}
-
-//  鼠标按住, 拖动页面
-void FileViewWidgetPrivate::__FilePageMove(const QPoint &endPos)
-{
-    Q_Q(FileViewWidget);
-
-    QPoint mvPoint = m_pMoveStartPoint - endPos;
-    int mvX = mvPoint.x();
-    int mvY = mvPoint.y();
-
-    q->m_pProxy->pageMove(mvX, mvY);
-
-    q->__SetCursor(QCursor(Qt::OpenHandCursor));
-
-    m_pMoveStartPoint = endPos;
-}
-
-//  选中文本
-void FileViewWidgetPrivate::__MouseSelectText(const QPoint &clickPoint)
-{
-    Q_Q(FileViewWidget);
-
-    QPoint docGlobalPos = q->m_pProxy->global2RelativePoint(clickPoint);
-
-    m_pEndSelectPoint = docGlobalPos;
-    q->m_pProxy->mouseSelectText(m_pStartPoint, m_pEndSelectPoint);
-}
-
-//  其余 鼠标移动
-void FileViewWidgetPrivate::__OtherMouseMove(const QPoint &globalPos)
-{
-    Q_Q(FileViewWidget);
-
-    QPoint docGlobalPos = q->m_pProxy->global2RelativePoint(globalPos);
-
-    //  首先判断文档划过属性
-    auto pLink = q->m_pProxy->mouseBeOverLink(docGlobalPos);
-    if (pLink) {
-        q->__SetCursor(QCursor(Qt::PointingHandCursor));
-    } else {
-        //  先判断是否是页面注释图标
-        if (q->m_pProxy->mouseovericonAnnotation(docGlobalPos)) {
-            __ShowPageNoteWidget(docGlobalPos);
-        } else if (q->m_pProxy->mouseBeOverText(docGlobalPos)) {
-            m_bIsHandleSelect = true;
-
-            q->__SetCursor(QCursor(Qt::IBeamCursor));
-
-            __ShowFileNoteWidget(docGlobalPos);
-        } else {
-            m_bIsHandleSelect = false;
-
-            q->__SetCursor(QCursor(Qt::ArrowCursor));
-
-            q->__CloseFileNoteWidget();
-        }
-    }
-}
-
-//  显示页面注释 提示界面
-void FileViewWidgetPrivate::__ShowPageNoteWidget(const QPoint &docPos)
-{
-    Q_Q(FileViewWidget);
-
-    QString sText = "", sUuid = "";
-    bool isOk = q->m_pProxy->iconAnnotationClicked(docPos, sText, sUuid);
-    if (isOk) {
-        if (sText != "") {
-            q->__ShowNoteTipWidget(sText);
-        }
-    }
-}
-
-//  显示 高亮注释 提示界面
-void FileViewWidgetPrivate::__ShowFileNoteWidget(const QPoint &docPos)
-{
-    Q_Q(FileViewWidget);
-
-    QString selectText, t_strUUid;
-    bool bIsHighLightReleasePoint = q->m_pProxy->annotationClicked(docPos, selectText, t_strUUid);
-    if (bIsHighLightReleasePoint) {
-        int nPage = q->m_pProxy->pointInWhichPage(docPos);
-        QString sText = "";
-        q->m_pProxy->getAnnotationText(t_strUUid, sText, nPage);
-        if (sText != "") {
-            q->__ShowNoteTipWidget(sText);
-        }
-    }
+    m_pProxyMouseMove->mouseMoveEvent(event);
 }
 
 void FileViewWidgetPrivate::mousePressEvent(QMouseEvent *event)
 {
-    int nState = MainTabWidgetEx::Instance()->getCurrentState();
-
-    Qt::MouseButton nBtn = event->button();
-    if (nBtn == Qt::RightButton) {  //  右键处理
-        //  处于幻灯片模式下
-        if (nState == SLIDER_SHOW) {
-            MainTabWidgetEx::Instance()->OnExitSliderShow();
-            return;
-        }
-
-        //  放大镜状态，
-        if (nState == Magnifer_State) {
-            MainTabWidgetEx::Instance()->OnExitMagnifer();
-            return;
-        }
-    } else if (nBtn == Qt::LeftButton) { // 左键处理
-        //  幻灯片模式下, 左键单击 不作任何处理
-        if (nState == SLIDER_SHOW)
-            return;
-
-        QPoint globalPos = event->globalPos();
-        //  当前状态是 手, 先 拖动, 之后 在是否是链接之类
-        if (nState == NOTE_ADD_State) {
-            __AddIconAnnotation(globalPos);
-        } else if (nState == Handel_State) {
-            __HandlClicked(globalPos);
-        } else {
-            __OtherMousePress(globalPos);
-        }
-    }
-}
-
-//  页面添加注释图标
-void FileViewWidgetPrivate::__AddIconAnnotation(const QPoint &globalPos)
-{
-    Q_Q(FileViewWidget);
-
-    QPoint docGlobalPos = q->m_pProxy->global2RelativePoint(globalPos);
-
-    //  添加之前先判断, 点击处是否 注释图标
-    bool bIsIcon = q->m_pProxy->mouseovericonAnnotation(docGlobalPos);
-    if (bIsIcon) {
-        QString sContent = "", sUuid = "";
-        if (q->m_pProxy->iconAnnotationClicked(docGlobalPos, sContent, sUuid)) {
-        }
-    } else {
-        QString sUuid = q->m_pProxy->addIconAnnotation(docGlobalPos);        //  添加注释图标成功
-        if (sUuid != "") {
-            int nClickPage = q->m_pProxy->pointInWhichPage(docGlobalPos);
-            QString strContent = sUuid.trimmed() + Constant::sQStringSep +
-                                 QString::number(nClickPage) + Constant::sQStringSep +
-                                 QString::number(globalPos.x()) + Constant::sQStringSep +
-                                 QString::number(globalPos.y());
-            MainTabWidgetEx::Instance()->setCurrentState(Default_State);
-
-            QJsonObject obj;
-            obj.insert("content", strContent);
-            obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
-
-            QJsonDocument doc(obj);
-
-            dApp->m_pModelService->notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, doc.toJson(QJsonDocument::Compact));
-        } else {
-            qWarning() << __FUNCTION__ << "          " << sUuid;;
-        }
-    }
-}
-
-void FileViewWidgetPrivate::__HandlClicked(const QPoint &globalPos)
-{
-    m_pMoveStartPoint = globalPos;  //  变成手，　需要的是　相对坐标
-    m_bSelectOrMove = true;
-}
-
-void FileViewWidgetPrivate::__OtherMousePress(const QPoint &globalPos)
-{
-    Q_Q(FileViewWidget);
-
-    QPoint docGlobalPos = q->m_pProxy->global2RelativePoint(globalPos);
-
-    //  点击的时候　先判断　点击处　　是否有链接之类
-    auto pLink = q->m_pProxy->mouseBeOverLink(docGlobalPos);
-    if (pLink) {
-        __ClickPageLink(pLink);
-    } else {
-        int nState = MainTabWidgetEx::Instance()->getCurrentState();
-        if (nState == Default_State) {
-            q->m_pProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
-
-            q->__CloseFileNoteWidget();
-
-            if (m_bIsHandleSelect) {
-                m_bSelectOrMove = true;
-                m_pStartPoint = docGlobalPos;
-                m_pEndSelectPoint = m_pStartPoint;
-            }
-        }
-    }
-}
-
-//  点击 页面能够跳转
-void FileViewWidgetPrivate::__ClickPageLink(Page::Link *pLink)
-{
-    Page::LinkType_EM linkType = pLink->type;
-    if (linkType == Page::LinkType_NULL) {
-
-    } else if (linkType == Page::LinkType_Goto) {
-        int page = pLink->page - 1;
-        dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(page));
-    } else if (linkType == Page::LinkType_GotoOtherFile) {
-
-    } else if (linkType == Page::LinkType_Browse) {
-        QString surlOrFileName = pLink->urlOrFileName;
-        QDesktopServices::openUrl(QUrl(surlOrFileName, QUrl::TolerantMode));
-    } else if (linkType == Page::LinkType_Execute) {
-
-    }
+    m_pProxyMouseMove->mousePressEvent(event);
 }
 
 void FileViewWidgetPrivate::mouseReleaseEvent(QMouseEvent *event)
 {
-    //  幻灯片模式下, 左键单击 不作任何处理
-    int nState = MainTabWidgetEx::Instance()->getCurrentState();
-    if (nState == SLIDER_SHOW)
-        return;
-
-    Q_Q(FileViewWidget);
-
-    Qt::MouseButton nBtn = event->button();
-
-    QPoint globalPos = event->globalPos();
-    QPoint docGlobalPos = q->m_pProxy->global2RelativePoint(globalPos);
-    QString selectText, t_strUUid;
-    bool bicon = q->m_pProxy->iconAnnotationClicked(docGlobalPos, selectText, t_strUUid);
-    //  放大镜状态， 右键则取消放大镜 并且 直接返回
-    if (m_bSelectOrMove && !bicon) {
-        //判断鼠标左键松开的位置有没有高亮
-
-        dApp->m_pAppInfo->setMousePressLocal(false, globalPos);
-        //添加其实结束point是否为同一个，不是同一个说明不是点击可能是选择文字
-        if (nBtn == Qt::LeftButton && docGlobalPos == m_pStartPoint) {
-            // 判断鼠标点击的地方是否有高亮
-            bool bIsHighLightReleasePoint = q->m_pProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
-
-            dApp->m_pAppInfo->setMousePressLocal(bIsHighLightReleasePoint, globalPos);
-            if (bIsHighLightReleasePoint) {
-                q->__CloseFileNoteWidget();
-                int nPage = q->m_pProxy->pointInWhichPage(docGlobalPos);
-                QString msgContent = t_strUUid.trimmed() + Constant::sQStringSep + QString::number(nPage);
-
-                slotDealWithMenu(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, msgContent);
-            }
-        }
-    } else if (bicon) {
-        q->__CloseFileNoteWidget();
-
-        int nPage = q->m_pProxy->pointInWhichPage(docGlobalPos);
-        QString strContent = t_strUUid.trimmed() + Constant::sQStringSep + QString::number(nPage) + Constant::sQStringSep +
-                             QString::number(globalPos.x()) + Constant::sQStringSep +
-                             QString::number(globalPos.y());
-
-        QJsonObject obj;
-        obj.insert("content", strContent);
-        obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
-
-        QJsonDocument doc(obj);
-
-        dApp->m_pModelService->notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, doc.toJson(QJsonDocument::Compact));
-    }
-
-    m_bSelectOrMove = false;
-}
-
-void FileViewWidgetPrivate::AddHighLight(const QString &msgContent)
-{
-    m_pAnnotation->AddHighLight(msgContent);
-    m_filechanged = true;
+    m_pProxyMouseMove->mouseReleaseEvent(event);
 }
 
 void FileViewWidgetPrivate::AddHighLightAnnotation(const QString &msgContent)
 {
-    Q_Q(FileViewWidget);
     QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (contentList.size() == 2) {
         QString sNote = contentList.at(0);
         QString sPage = contentList.at(1);
 
-        int nSx = m_pStartPoint.x();
-        int nSy = m_pStartPoint.y();
+        int nSx = m_pProxyData->getStartPoint().x();
+        int nSy = m_pProxyData->getStartPoint().y();
 
-        int nEx = m_pEndSelectPoint.x();
-        int nEy = m_pEndSelectPoint.y();
+        int nEx = m_pProxyData->getEndSelectPoint().x();
+        int nEy = m_pProxyData->getEndSelectPoint().y();
 
         QString sContent = QString::number(nSx) + Constant::sQStringSep +
                            QString::number(nSy) + Constant::sQStringSep +
@@ -392,74 +105,7 @@ void FileViewWidgetPrivate::AddHighLightAnnotation(const QString &msgContent)
                            sNote + Constant::sQStringSep +
                            sPage;
 
-        QString sRes = m_pAnnotation->AddHighLightAnnotation(sContent);
-        if (sRes != "") {
-            emit q->sigAnntationMsg(MSG_NOTE_ADD_ITEM, sRes);
-            m_filechanged = true;
-        }
-    }
-}
-
-void FileViewWidgetPrivate::RemoveHighLight(const QString &msgContent)
-{
-    QString sRes = m_pAnnotation->RemoveHighLight(msgContent);
-    if (sRes != "") {
-        Q_Q(FileViewWidget);
-        emit q->sigAnntationMsg(MSG_NOTE_DELETE_ITEM, sRes);
-        m_filechanged = true;
-    }
-}
-
-void FileViewWidgetPrivate::ChangeAnnotationColor(const QString &msgContent)
-{
-    m_pAnnotation->ChangeAnnotationColor(msgContent);
-    m_filechanged = true;
-}
-
-void FileViewWidgetPrivate::RemoveAnnotation(const QString &msgContent)
-{
-    QString sRes = m_pAnnotation->RemoveAnnotation(msgContent);
-    if (sRes != "") {
-        Q_Q(FileViewWidget);
-        emit q->sigAnntationMsg(MSG_NOTE_DELETE_ITEM, sRes);
-        m_filechanged = true;
-    }
-}
-
-void FileViewWidgetPrivate::UpdateAnnotationText(const QString &msgContent)
-{
-    m_pAnnotation->UpdateAnnotationText(msgContent);
-    Q_Q(FileViewWidget);
-    emit q->sigAnntationMsg(MSG_NOTE_UPDATE_ITEM, msgContent);
-    m_filechanged = true;
-}
-
-void FileViewWidgetPrivate::AddPageIconAnnotation(const QString &msgContent)
-{
-    m_pAnnotation->AddPageIconAnnotation(msgContent);
-    Q_Q(FileViewWidget);
-    emit q->sigAnntationMsg(MSG_NOTE_PAGE_ADD_ITEM, msgContent);
-    m_filechanged = true;
-}
-
-void FileViewWidgetPrivate::DeletePageIconAnnotation(const QString &msgContent)
-{
-    QString sUuid = m_pAnnotation->DeletePageIconAnnotation(msgContent);
-    if (sUuid != "") {
-        Q_Q(FileViewWidget);
-        emit q->sigAnntationMsg(MSG_NOTE_PAGE_DELETE_ITEM, sUuid);
-        m_filechanged = true;
-    }
-}
-
-void FileViewWidgetPrivate::UpdatePageIconAnnotation(const QString &msgContent)
-{
-    QString sRes = m_pAnnotation->UpdatePageIconAnnotation(msgContent);
-    if (sRes != "") {
-        Q_Q(FileViewWidget);
-        emit q->sigAnntationMsg(MSG_NOTE_PAGE_UPDATE_ITEM, msgContent);
-
-        m_filechanged = true;
+        m_pAnnotation->AddHighLightAnnotation(sContent);
     }
 }
 
@@ -490,73 +136,424 @@ void FileViewWidgetPrivate::OnShortCutKey(const QString &sKey)
 //  添加高亮颜色  快捷键
 void FileViewWidgetPrivate::DocFile_ctrl_l()
 {
-    Q_Q(FileViewWidget);
+    int nSx = m_pProxyData->getStartPoint().x();
+    int nSy = m_pProxyData->getStartPoint().y();
 
-    int nSx = m_pStartPoint.x();
-    int nSy = m_pStartPoint.y();
-
-    int nEx = m_pEndSelectPoint.x();
-    int nEy = m_pEndSelectPoint.y();
+    int nEx = m_pProxyData->getEndSelectPoint().x();
+    int nEy = m_pProxyData->getEndSelectPoint().y();
 
     if (nSx == nEx && nSy == nEy) {
-        q->notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
+        notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
         return;
     }
 
-    if (!q->m_pProxy)
+    if (!m_pProxy)
         return;
 
     QString selectText = "";
-    q->m_pProxy->getSelectTextString(selectText);
+    m_pProxy->getSelectTextString(selectText);
     if (selectText != "") {
         QString sContent = QString::number(nSx) + Constant::sQStringSep +
                            QString::number(nSy) + Constant::sQStringSep +
                            QString::number(nEx) + Constant::sQStringSep +
                            QString::number(nEy);
 
-        AddHighLight(sContent);
+        m_pAnnotation->AddHighLight(sContent);
     } else {
-        q->notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
+        notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
     }
 }
 
 void FileViewWidgetPrivate::DocFile_ctrl_i()
 {
-    Q_Q(FileViewWidget);
-    if (q->m_pProxy) {
+    if (m_pProxy) {
         QString selectText;
-        if (q->m_pProxy->getSelectTextString(selectText)) {
+        if (m_pProxy->getSelectTextString(selectText)) {
 
-            int nSx = m_pStartPoint.x();
-            int nSy = m_pStartPoint.y();
+            int nSx = m_pProxyData->getStartPoint().x();
+            int nSy = m_pProxyData->getStartPoint().y();
 
-            int nEx = m_pEndSelectPoint.x();
-            int nEy = m_pEndSelectPoint.y();
+            int nEx = m_pProxyData->getEndSelectPoint().x();
+            int nEy = m_pProxyData->getEndSelectPoint().y();
 
             if ((nSx == nEx && nSy == nEy)) {
-                q->notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
+                notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
                 return;
             }
 
-            int nPage = q->m_pProxy->pointInWhichPage(m_pEndSelectPoint);
+            int nPage = m_pProxy->pointInWhichPage(m_pProxyData->getEndSelectPoint());
             QString msgContent = QString("%1").arg(nPage) + Constant::sQStringSep +
-                                 QString("%1").arg(m_pEndSelectPoint.x()) + Constant::sQStringSep +
-                                 QString("%1").arg(m_pEndSelectPoint.y());
+                                 QString("%1").arg(nEx) + Constant::sQStringSep +
+                                 QString("%1").arg(nEy);
 
-            q->onOpenNoteWidget(msgContent);
+            onOpenNoteWidget(msgContent);
         } else {
-            q->notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
+            notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
         }
     }
 }
 
 void FileViewWidgetPrivate::DocFile_ctrl_c()
 {
-    Q_Q(FileViewWidget);
-    if (q->m_pProxy) {
+    if (m_pProxy) {
         QString sSelectText = "";
-        if (q->m_pProxy->getSelectTextString(sSelectText)) { //  选择　当前选中下面是否有文字
+        if (m_pProxy->getSelectTextString(sSelectText)) { //  选择　当前选中下面是否有文字
             Utils::copyText(sSelectText);
         }
     }
+}
+
+int FileViewWidgetPrivate::qDealWithShortKey(const QString &sKey)
+{
+    QList<QString> KeyMsgList = {KeyStr::g_ctrl_l, KeyStr::g_ctrl_i, KeyStr::g_ctrl_c};
+
+    if (KeyMsgList.contains(sKey)) {
+        OnShortCutKey(sKey);
+        return MSG_OK;
+    }
+    return MSG_NO_OK;
+}
+
+//  消息 数据 处理
+int FileViewWidgetPrivate::dealWithData(const int &msgType, const QString &msgContent)
+{
+    QList<int> msgList = { MSG_HANDLESHAPE,
+                           MSG_VIEWCHANGE_DOUBLE_SHOW, MSG_VIEWCHANGE_ROTATE, MSG_FILE_SCALE, MSG_VIEWCHANGE_FIT,
+                           MSG_OPERATION_TEXT_ADD_ANNOTATION,
+                           MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, MSG_NOTE_PAGE_SHOW_NOTEWIDGET
+                         };
+
+    Q_Q(FileViewWidget);
+
+    if (q->m_pFindWidget) {
+        int nRes = q->m_pFindWidget->dealWithData(msgType, msgContent);
+        if (nRes == MSG_OK) {
+            return nRes;
+        }
+    }
+
+    if (msgType == MSG_VIEWCHANGE_DOUBLE_SHOW) {
+        m_pDocViewProxy->OnSetViewChange(msgContent);
+    } else if (msgType == MSG_VIEWCHANGE_ROTATE) {
+        m_pDocViewProxy->OnSetViewRotate(msgContent);
+    } else if (msgType == MSG_FILE_SCALE) {
+        m_pDocViewProxy->OnSetViewScale(msgContent);
+    } else if (msgType == MSG_VIEWCHANGE_FIT) {
+        m_pDocViewProxy->OnSetViewHit(msgContent);
+    } else if (msgType == MSG_HANDLESHAPE) {
+        onSetHandShape(msgContent);
+    } else if (msgType == MSG_NOTE_PAGE_SHOW_NOTEWIDGET) {          //  显示注释窗口
+        __ShowPageNoteWidget(msgContent);
+    }
+
+    bool rl = msgList.contains(msgType);
+    if (rl) {
+        return MSG_OK;
+    }
+
+    return MSG_NO_OK;
+}
+
+//  手势控制
+void FileViewWidgetPrivate::onSetHandShape(const QString &data)
+{
+    if (!m_pProxy)
+        return;
+
+    //  手型 切换 也需要将之前选中的文字清除 选中样式
+    m_pProxy->mouseSelectTextClear();
+    int nRes = data.toInt();
+    if (nRes == Handel_State) {  //  手形
+        __SetCursor(Qt::OpenHandCursor);
+    } else {
+        __SetCursor(Qt::ArrowCursor);
+    }
+    MainTabWidgetEx::Instance()->setCurrentState(nRes);
+}
+
+void FileViewWidgetPrivate::showNoteViewWidget(const QString &sPage, const QString &t_strUUid, const QString &sText, const int &nType)
+{
+    Q_Q(FileViewWidget);
+
+    if (m_pNoteViewWidget == nullptr) {
+        m_pNoteViewWidget = new NoteViewWidget(q);
+        connect(m_pNoteViewWidget, SIGNAL(sigNoteViewMsg(const int &, const QString &)), SLOT(SlotNoteViewMsg(const int &, const QString &)));
+    }
+    m_pNoteViewWidget->setEditText(sText);
+    m_pNoteViewWidget->setNoteUuid(t_strUUid);
+    m_pNoteViewWidget->setNotePage(sPage);
+    m_pNoteViewWidget->setWidgetType(nType);
+
+    QPoint point;
+    bool t_bHigh = false;
+    dApp->m_pAppInfo->setSmallNoteWidgetSize(m_pNoteViewWidget->size());
+    dApp->m_pAppInfo->mousePressLocal(t_bHigh, point);
+    m_pNoteViewWidget->showWidget(point);
+}
+
+void FileViewWidgetPrivate::__SetCursor(const QCursor &cs)
+{
+    Q_Q(FileViewWidget);
+    const QCursor ss = q->cursor();    //  当前鼠标状态
+    if (ss != cs) {
+        q->setCursor(cs);
+    }
+}
+
+
+void FileViewWidgetPrivate::FindOperation(const int &iType, const QString &strFind)
+{
+    if (iType == E_FIND_CONTENT || iType == E_FIND_EXIT) {
+        notifyMsg(iType, m_pProxyData->getPath());
+    }
+
+    if (m_pProxy) {
+        if (iType == E_FIND_NEXT) {
+            m_pProxy->findNext();
+        } else if (iType == E_FIND_PREV) {
+            m_pProxy->findPrev();
+        } else if (iType == E_FIND_EXIT) {
+            m_pProxy->clearsearch();
+        } else {
+            m_pProxy->search(strFind);
+        }
+    }
+}
+
+void FileViewWidgetPrivate::resizeEvent(QResizeEvent *event)
+{
+    Q_Q(FileViewWidget);
+    if (!m_pProxyData->IsFirstShow()) {
+        QSize size = event->size();
+        m_pDocViewProxy->setWidth(size.width());
+        m_pDocViewProxy->setHeight(size.height());
+        m_pDocViewProxy->onSetWidgetAdapt();
+    }
+
+    if (q->m_pFindWidget && q->m_pFindWidget->isVisible()) {
+        int nParentWidth = q->width();
+        q->m_pFindWidget->showPosition(nParentWidth);
+    }
+}
+
+void FileViewWidgetPrivate::wheelEvent(QWheelEvent *event)
+{
+    if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
+        QJsonObject obj;
+        obj.insert("type", "ShortCut");
+
+        if (event->delta() > 0) {
+            obj.insert("key", KeyStr::g_ctrl_larger);
+        } else {
+            obj.insert("key", KeyStr::g_ctrl_smaller);
+        }
+        QJsonDocument doc = QJsonDocument(obj);
+        notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
+    }
+}
+
+void FileViewWidgetPrivate::onOpenNoteWidget(const QString &msgContent)
+{
+    QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    if (sList.size() == 3) {
+
+        QString sPage = sList.at(0);
+        showNoteViewWidget(sPage);
+    }
+}
+
+//  显示 当前 注释
+void FileViewWidgetPrivate::onShowNoteWidget(const QString &contant)
+{
+    QStringList t_strList = contant.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    if (t_strList.count() == 2) {
+        QString t_strUUid = t_strList.at(0);
+        QString t_page = t_strList.at(1);
+
+        QString sContant = "";
+
+        m_pProxy->getAnnotationText(t_strUUid, sContant, t_page.toInt());
+
+        showNoteViewWidget(t_page, t_strUUid, sContant);
+    }
+}
+
+void FileViewWidgetPrivate::__ShowPageNoteWidget(const QString &msgContent)
+{
+    QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    if (sList.size() == 4) {
+        QString sUuid = sList.at(0);
+        QString sPage = sList.at(1);
+        QString sX = sList.at(2);
+        QString sY = sList.at(3);
+
+        QString sContant = "";
+
+        m_pProxy->getAnnotationText(sUuid, sContant, sPage.toInt());
+
+        showNoteViewWidget(sPage, sUuid, sContant, NOTE_ICON);
+    }
+}
+
+void FileViewWidgetPrivate::__ShowNoteTipWidget(const QString &sText)
+{
+    Q_Q(FileViewWidget);
+    if (m_pTipWidget == nullptr) {
+        m_pTipWidget = new NoteTipWidget(q);
+    }
+    m_pTipWidget->setTipContent(sText);
+    QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 10);
+    m_pTipWidget->move(showRealPos);
+    m_pTipWidget->show();
+}
+
+
+void FileViewWidgetPrivate::__CloseFileNoteWidget()
+{
+    if (m_pTipWidget && m_pTipWidget->isVisible()) {
+        m_pTipWidget->close();
+    }
+}
+
+void FileViewWidgetPrivate::slotCustomContextMenuRequested(const QPoint &point)
+{
+    Q_Q(FileViewWidget);
+    //  处于幻灯片模式下
+    int nState = MainTabWidgetEx::Instance()->getCurrentState();
+    if (nState == SLIDER_SHOW)
+        return;
+
+    //  放大镜状态， 直接返回
+    if (nState == Magnifer_State)
+        return;
+
+    //  手型状态， 直接返回
+    if (nState == Handel_State)
+        return;
+
+    QString sSelectText = "";
+    m_pProxy->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
+
+    QPoint tempPoint = q->mapToGlobal(point);
+    QPoint pRightClickPoint = m_pProxy->global2RelativePoint(tempPoint);
+
+    //  右键鼠标点 是否有高亮区域
+    QString sAnnotationText = "", struuid = "";
+    bool bIsHighLight = m_pProxy->annotationClicked(pRightClickPoint, sAnnotationText, struuid);
+    bool bicon = m_pProxy->iconAnnotationClicked(pRightClickPoint, sAnnotationText, struuid);
+    int nPage = m_pProxy->pointInWhichPage(pRightClickPoint);
+
+    if (sSelectText != "") {
+        m_operatemenu->setClickPoint(pRightClickPoint);
+        m_operatemenu->setPStartPoint(m_pProxyData->getStartPoint());
+        m_operatemenu->setPEndPoint(m_pProxyData->getEndSelectPoint());
+        m_operatemenu->setClickPage(nPage);
+        dApp->m_pAppInfo->setMousePressLocal(bIsHighLight, tempPoint);
+        bool bremoveenable = false;
+        if (bicon) {
+            m_operatemenu->setType(NOTE_ICON);
+        } else {
+            m_operatemenu->setType(NOTE_HIGHLIGHT);
+        }
+        if (bicon || bIsHighLight)
+            bremoveenable = true;
+        qDebug() << "*********";
+        m_operatemenu->setRemoveEnabled(bremoveenable);
+        m_operatemenu->execMenu(tempPoint, true, sSelectText, struuid);
+    } else if (sSelectText == "" && (bIsHighLight || bicon)) { //  选中区域 有文字, 弹出 文字操作菜单
+        //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
+        m_operatemenu->setClickPoint(pRightClickPoint);
+        m_operatemenu->setPStartPoint(m_pProxyData->getStartPoint());
+        m_operatemenu->setPEndPoint(m_pProxyData->getEndSelectPoint());
+        m_operatemenu->setClickPage(nPage);
+        dApp->m_pAppInfo->setMousePressLocal(bIsHighLight, tempPoint);
+        if (bicon) {
+            m_operatemenu->setType(NOTE_ICON);
+        } else if (bIsHighLight) {
+            m_operatemenu->setType(NOTE_HIGHLIGHT);
+        }
+        sSelectText = sAnnotationText;
+        m_operatemenu->setRemoveEnabled(true);
+        m_operatemenu->execMenu(tempPoint, false, sSelectText, struuid);
+    } else {  //  否则弹出 文档操作菜单
+        m_pDefaultMenu->setClickpoint(pRightClickPoint);
+        m_pDefaultMenu->execMenu(tempPoint, nPage);
+    }
+}
+
+void FileViewWidgetPrivate::SlotDocFileOpenResult(bool openresult)
+{
+    Q_Q(FileViewWidget);
+    //  通知 其他窗口， 打开文件成功了！！！
+    if (openresult) {
+
+        dApp->m_pDBService->qSelectData(m_pProxyData->getPath(), DB_BOOKMARK);
+
+        emit q->sigFileOpenOK(m_pProxyData->getPath());
+
+        m_pDocViewProxy->onSetWidgetAdapt();
+
+        m_pProxyData->setFirstShow(false);
+    } else {
+        notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
+    }
+}
+
+void FileViewWidgetPrivate::OpenFilePath(const QString &sPath)
+{
+    Q_Q(FileViewWidget);
+    //  实际文档类  唯一实例化设置 父窗口
+    m_pProxy = new DocummentProxy(q);
+    if (m_pProxy) {
+        connect(m_pProxy, SIGNAL(signal_bookMarkStateChange(int, bool)), m_pProxyNotifyMsg, SLOT(slotBookMarkStateChange(int, bool)));
+        connect(m_pProxy, SIGNAL(signal_pageChange(int)), m_pProxyNotifyMsg, SLOT(slotDocFilePageChanged(int)));
+
+        connect(m_pProxy, SIGNAL(signal_openResult(bool)), SLOT(SlotDocFileOpenResult(bool)));
+
+        QFileInfo info(sPath);
+
+        QString sCompleteSuffix = info.completeSuffix();
+        DocType_EM nCurDocType = FFH::setCurDocuType(sCompleteSuffix);
+
+        //从数据库中获取文件的字号信息
+        dApp->m_pDBService->qSelectData(sPath, DB_HISTROY);
+        FileDataModel fdm = dApp->m_pDBService->getHistroyData(sPath);
+
+        int nAdapteState = fdm.qGetData(Fit);
+        m_pDocViewProxy->setAdapteState(nAdapteState);
+
+        int curPage = fdm.qGetData(CurPage);
+        int iscale  = fdm.qGetData(Scale);         // 缩放
+        m_pDocViewProxy->setScale(iscale);
+
+        int doubPage = fdm.qGetData(DoubleShow);   // 是否是双页
+        m_pDocViewProxy->setDoubleShow(doubPage);
+
+        int rotate = fdm.qGetData(Rotate);         // 文档旋转角度(0,1,2,3,4)
+        m_pDocViewProxy->setRotateType(rotate);
+
+        iscale = (iscale > 500 ? 500 : iscale) <= 0 ? 100 : iscale;
+        double scale = iscale / 100.0;
+        RotateType_EM rotatetype = static_cast<RotateType_EM>(rotate);
+        ViewMode_EM viewmode = static_cast<ViewMode_EM>(doubPage);
+
+        bool rl = m_pProxy->openFile(nCurDocType, sPath, curPage, rotatetype, scale, viewmode);
+        if (rl) {
+            m_pProxyData->setPath(sPath);
+
+            m_pProxy->setViewFocus();
+
+            MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+            if (pMtwe) {
+                pMtwe->SetFileData(sPath, fdm);
+                pMtwe->InsertPathProxy(sPath, m_pProxy);       //  存储 filePath 对应的 proxy
+            }
+        }
+    }
+}
+
+void FileViewWidgetPrivate::notifyMsg(const int &msgType, const QString &msgContent)
+{
+    Q_Q(FileViewWidget);
+    q->notifyMsg(msgType, msgContent);
 }
