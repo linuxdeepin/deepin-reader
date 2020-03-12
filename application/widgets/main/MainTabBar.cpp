@@ -68,11 +68,6 @@ void MainTabBar::notifyMsg(const int &msgType, const QString &msgContent)
     dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
 
-//void MainTabBar::resizeEvent(QResizeEvent *event)
-//{
-//    DTabBar::resizeEvent(event);
-//}
-
 void MainTabBar::__InitConnection()
 {
     connect(this, SIGNAL(tabCloseRequested(int)), SLOT(SlotTabCloseRequested(int)));
@@ -82,12 +77,9 @@ void MainTabBar::__InitConnection()
 
 void MainTabBar::SlotCurrentChanged(int index)
 {
-    int iTemp = this->currentIndex();
-    if (iTemp != index) {
-        QString sPath = this->tabData(index).toString();
-        if (sPath != "") {
-            emit sigTabBarIndexChange(sPath);
-        }
+    QString sPath = this->tabData(index).toString();
+    if (sPath != "") {
+        emit sigTabBarIndexChange(sPath);
     }
 }
 
