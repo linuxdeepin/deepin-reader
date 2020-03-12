@@ -17,7 +17,7 @@ class LeftSidebarWidget : public CustomWidget
     Q_DISABLE_COPY(LeftSidebarWidget)
 
 public:
-    explicit LeftSidebarWidget(CustomWidget *parent = nullptr);
+    explicit LeftSidebarWidget(DWidget *parent = nullptr);
     ~LeftSidebarWidget() override;
 
 signals:

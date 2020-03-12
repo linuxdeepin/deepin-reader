@@ -34,7 +34,7 @@ class NoteViewWidget : public CustomWidget
     Q_DISABLE_COPY(NoteViewWidget)
 
 public:
-    explicit NoteViewWidget(CustomWidget *parent = nullptr);
+    explicit NoteViewWidget(DWidget *parent = nullptr);
     ~NoteViewWidget() override;
 
 signals:

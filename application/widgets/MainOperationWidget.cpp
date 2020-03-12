@@ -9,7 +9,7 @@
 
 #include "widgets/main/MainTabWidgetEx.h"
 
-MainOperationWidget::MainOperationWidget(CustomWidget *parent)
+MainOperationWidget::MainOperationWidget(DWidget *parent)
     : CustomWidget(MAIN_OPERATION_WIDGET, parent)
 {
     initWidget();

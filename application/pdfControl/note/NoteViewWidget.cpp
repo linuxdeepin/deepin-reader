@@ -26,7 +26,7 @@
 #include "CustomControl/CustomClickLabel.h"
 #include "utils/PublicFunction.h"
 
-NoteViewWidget::NoteViewWidget(CustomWidget *parent)
+NoteViewWidget::NoteViewWidget(DWidget *parent)
     : CustomWidget(NOTE_VIEW_WIDGET, parent)
 {
     setWindowFlag(Qt::Popup);

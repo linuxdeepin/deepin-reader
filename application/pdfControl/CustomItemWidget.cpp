@@ -18,7 +18,7 @@
  */
 #include "CustomItemWidget.h"
 
-CustomItemWidget::CustomItemWidget(const QString &name, QWidget *parent)
+CustomItemWidget::CustomItemWidget(const QString &name, DWidget *parent)
     : CustomWidget(name, parent)
 {
     setFocusPolicy(Qt::NoFocus);

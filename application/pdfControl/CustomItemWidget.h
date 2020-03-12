@@ -33,7 +33,7 @@ class CustomItemWidget : public CustomWidget
     Q_DISABLE_COPY(CustomItemWidget)
 
 public:
-    CustomItemWidget(const QString &, QWidget *parent = nullptr);
+    CustomItemWidget(const QString &, DWidget *parent = nullptr);
 
 signals:
     void sigDeleteItem(const QString &);

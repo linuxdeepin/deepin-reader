@@ -31,7 +31,7 @@
 #include "business/AppInfo.h"
 #include "utils/utils.h"
 
-CentralWidget::CentralWidget(CustomWidget *parent)
+CentralWidget::CentralWidget(DWidget *parent)
     : CustomWidget(CENTRAL_WIDGET, parent)
 {
     setAcceptDrops(true);

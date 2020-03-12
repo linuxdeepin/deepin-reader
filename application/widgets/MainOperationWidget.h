@@ -17,7 +17,7 @@ class MainOperationWidget : public CustomWidget
     Q_DISABLE_COPY(MainOperationWidget)
 
 public:
-    explicit MainOperationWidget(CustomWidget *parent = nullptr);
+    explicit MainOperationWidget(DWidget *parent = nullptr);
     ~MainOperationWidget() override;
 
 signals:

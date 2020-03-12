@@ -21,7 +21,7 @@ TitleWidget *TitleWidget::Instance()
     return g_onlyTitleWdiget;
 }
 
-TitleWidget::TitleWidget(CustomWidget *parent)
+TitleWidget::TitleWidget(DWidget *parent)
     : CustomWidget(TITLE_WIDGET, parent)
 {
     m_pMsgList = {MSG_TAB_SHOW_FILE_CHANGE, E_FIND_CONTENT, E_FIND_EXIT};

@@ -17,8 +17,8 @@
  */
 #include "CustomWidgetPrivate.h"
 
-CustomWidgetPrivate::CustomWidgetPrivate(CustomWidget *cw, QObject *parent)
-    : QObject(parent), q_ptr(cw)
+CustomWidgetPrivate::CustomWidgetPrivate(CustomWidget *cw)
+    : q_ptr(cw)
 {
 
 }

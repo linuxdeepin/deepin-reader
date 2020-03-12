@@ -25,7 +25,7 @@
 #include "widgets/main/MainTabWidgetEx.h"
 #include "CustomControl/CustomWidgetPrivate.h"
 
-PagingWidget::PagingWidget(CustomWidget *parent)
+PagingWidget::PagingWidget(DWidget *parent)
     : CustomWidget(PAGE_WIDGET, parent)
 {
     initWidget();

@@ -22,7 +22,7 @@
 #include "CustomWidgetPrivate.h"
 
 CustomWidget::CustomWidget(const QString &name, DWidget *parent)
-    : DWidget(parent), d_ptr(new CustomWidgetPrivate(this, this))
+    : DWidget(parent), d_ptr(new CustomWidgetPrivate(this))
 {
     m_strObserverName = name;
     setWindowFlags(Qt::FramelessWindowHint);

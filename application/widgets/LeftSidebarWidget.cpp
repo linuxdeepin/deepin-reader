@@ -11,7 +11,7 @@
 
 #include "widgets/main/MainTabWidgetEx.h"
 
-LeftSidebarWidget::LeftSidebarWidget(CustomWidget *parent)
+LeftSidebarWidget::LeftSidebarWidget(DWidget *parent)
     : CustomWidget(LEFT_SLIDERBAR_WIDGET, parent)
 {
     setMinimumWidth(LEFTMINWIDTH);

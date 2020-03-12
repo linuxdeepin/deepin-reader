@@ -33,7 +33,7 @@ class CustomWidgetPrivate : public QObject
     Q_DECLARE_PUBLIC(CustomWidget)
 
 public:
-    CustomWidgetPrivate(CustomWidget *cw, QObject *parent = nullptr);
+    CustomWidgetPrivate(CustomWidget *cw);
 
 protected:
     virtual ~CustomWidgetPrivate() {}

@@ -40,7 +40,7 @@ class FileViewWidget : public CustomWidget
     Q_DISABLE_COPY(FileViewWidget)
 
 public:
-    explicit FileViewWidget(CustomWidget *parent = nullptr);
+    explicit FileViewWidget(DWidget *parent = nullptr);
     ~FileViewWidget() override;
 
 signals:

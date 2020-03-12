@@ -23,7 +23,7 @@ class TitleWidget : public CustomWidget
     Q_DISABLE_COPY(TitleWidget)
 
 public:
-    explicit TitleWidget(CustomWidget *parent = nullptr);
+    explicit TitleWidget(DWidget *parent = nullptr);
     ~TitleWidget() override;
 
 private:
@@ -42,7 +42,6 @@ public:
 public:
     int qDealWithShortKey(const QString &) override;
 
-    // CustomWidget interface
 protected:
     void initWidget() override;
 

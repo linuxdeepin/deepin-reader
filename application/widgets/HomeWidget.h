@@ -14,7 +14,7 @@ class HomeWidget : public CustomWidget
     Q_DISABLE_COPY(HomeWidget)
 
 public:
-    explicit HomeWidget(CustomWidget *parent = nullptr);
+    explicit HomeWidget(DWidget *parent = nullptr);
     ~HomeWidget() override;
 
 signals:

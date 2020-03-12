@@ -33,7 +33,7 @@ class CentralWidget : public CustomWidget
     Q_DISABLE_COPY(CentralWidget)
 
 public:
-    explicit CentralWidget(CustomWidget *parent = nullptr);
+    explicit CentralWidget(DWidget *parent = nullptr);
     ~CentralWidget() override;
 
 signals:

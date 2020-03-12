@@ -40,7 +40,7 @@
 
 #include "controller/FileViewWidgetPrivate.h"
 
-FileViewWidget::FileViewWidget(CustomWidget *parent)
+FileViewWidget::FileViewWidget(DWidget *parent)
     : CustomWidget(FILE_VIEW_WIDGET, parent),
       m_operatemenu(new TextOperationMenu(this)),
       m_pDefaultMenu(new DefaultOperationMenu(this))

@@ -46,7 +46,7 @@ MainTabWidgetEx *MainTabWidgetEx::g_onlyApp = nullptr;
 MainTabWidgetEx::MainTabWidgetEx(DWidget *parent)
     : CustomWidget(MAIN_TAB_WIDGET, parent)
 {
-    d_ptr = new MainTabWidgetExPrivate(this, this);
+    d_ptr = new MainTabWidgetExPrivate(this);
 
     initWidget();
     InitConnections();

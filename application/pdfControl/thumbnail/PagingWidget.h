@@ -37,7 +37,7 @@ class PagingWidget : public CustomWidget
     Q_DISABLE_COPY(PagingWidget)
 
 public:
-    explicit PagingWidget(CustomWidget *parent = nullptr);
+    explicit PagingWidget(DWidget *parent = nullptr);
     ~PagingWidget() override;
 
     // IObserver interface
