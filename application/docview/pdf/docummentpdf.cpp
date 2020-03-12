@@ -126,14 +126,10 @@ DocummentPDF::DocummentPDF(DWidget *parent):
 
 DocummentPDF::~DocummentPDF()
 {
-    //    Q_D(DocummentPDF);
-    //    delete d->document;
-    //    d->document = nullptr;
 }
 
 bool DocummentPDF::loadDocumment(QString filepath)
 {
-    Q_D(DocummentPDF);
     //    d->loadDocumment(filepath);
     emit signal_loadDocumment(filepath);
     return true;

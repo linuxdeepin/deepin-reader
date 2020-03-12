@@ -16,7 +16,6 @@ static QMutex mutexlockloaddata;
 
 ThreadLoadData::ThreadLoadData()
 {
-    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
     m_doc = nullptr;
     restart = false;
 }
@@ -1869,10 +1868,15 @@ double DocummentBase::getMaxZoomratio()
     return  d->m_maxzoomratio;
 }
 
-void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, unsigned int ipage)
+void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, int ipage)
 {
     Q_D(DocummentBase);
+    if (d->m_rotate != RotateType_Normal || d->m_rotate != RotateType_0) {
+        pageJump(ipage);
+        return;
+    }
     int xvalue, yvalue;
+    xvalue = yvalue = 0;
     double curwidth = d->m_scale * d->m_imagewidth;
     double curheight = d->m_scale * d->m_imageheight;
     if (ipage < d->m_pages.size()) {
@@ -1883,7 +1887,6 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, u
             case RotateType_180: {
                 double topspace = (d->m_widgets.at(ipage)->height() - curheight) / 2;
                 double leftspace = (d->m_widgets.at(ipage)->width() - curwidth) / 2;
-                int widgetheight = frameRect().height();
                 double leftposition = curwidth * realleft + leftspace;
                 double topposition = curheight * realtop + topspace;
                 yvalue = d->m_widgets.at(ipage)->y() + topposition;
@@ -1895,31 +1898,29 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, u
                     } else {
                         xvalue = 0;
                     }
-
                 }
             }
             break;
             case RotateType_90:
             case RotateType_270: {
-//                double topspace = (d->m_widgets.at(ipage)->height() - curwidth) / 2;
-//                double leftspace = (d->m_widgets.at(ipage)->width() - curheight) / 2;
-//                int widgetheight = frameRect().height();
-//                yvalue = d->m_widgets.at(ipage)->y() + topspace + rectorg.y() - widgetheight / 2;
-//                //横向有缩放
-//                if (frameRect().width() < curheight) {
-//                    int iwidth = rectorg.x() + leftspace;
-//                    if (iwidth > (frameRect().width() / 2)) {
-//                        xvalue = iwidth - frameRect().width() / 2;
-//                    } else {
-//                        xvalue = iwidth / 2;
-//                    }
-//                }
+
             }
             break;
             }
         } else if (d->m_viewmode == ViewMode_FacingPage) {
+            double curwidgetwidth = d->m_widgets.at(ipage / 2)->width();
+            double topspace = (d->m_widgets.at(ipage)->height() - curheight) / 2;
+            double leftspace = d->m_pages.at(ipage)->x();
 
-
+            double leftposition = curwidth * realleft + leftspace ;
+            double topposition = curheight * realtop + topspace;
+            yvalue = d->m_widgets.at(ipage / 2)->y() + topposition;
+            //横向有缩放
+            if (frameRect().width() < curwidgetwidth && ipage % 2 == 1) {
+                xvalue = leftposition;
+            } else {
+                xvalue = leftspace;
+            }
         }
     }
     qDebug() << "--------" << xvalue << yvalue;
@@ -1930,8 +1931,6 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, u
     QScrollBar *scrollBar_Y = verticalScrollBar();
     if (scrollBar_Y)
         scrollBar_Y->setValue(yvalue);
-
-
 }
 
 QString DocummentBase::pagenum2label(int index)

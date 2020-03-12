@@ -302,7 +302,7 @@ public:
     bool getAutoPlaySlideStatu();
     void setViewFocus();
     double getMaxZoomratio();
-    void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage);
+    void jumpToOutline(const qreal  &realleft, const qreal &realtop, int ipage);
     QString pagenum2label(int index);
     int label2pagenum(QString label);
     bool haslabel();

@@ -663,11 +663,9 @@ QPixmap Utils::roundQPixmap(const QPixmap &img_in, int radius)
 //  复制文字
 void  Utils::copyText(const QString &sText)
 {
-    if (sText != "") {
-        QClipboard *clipboard = DApplication::clipboard();  //获取系统剪贴板指针
-        QString sOldText = clipboard->text(QClipboard::Clipboard);
-        if (sOldText != sText) {
-            clipboard->setText(sText);
-        }
+    QClipboard *clipboard = DApplication::clipboard();  //获取系统剪贴板指针
+    QString sOldText = clipboard->text(QClipboard::Clipboard);
+    if (sOldText != sText) {
+        clipboard->setText(sText);
     }
 }
