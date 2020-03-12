@@ -16,7 +16,7 @@ class FileViewWidgetPrivate: public QObject
     Q_OBJECT
 
 public:
-    FileViewWidgetPrivate(FileViewWidget *parent = nullptr);
+    FileViewWidgetPrivate(FileViewWidget *parent);
 
 private slots:
     void slotDealWithMenu(const int &, const QString &);
@@ -78,7 +78,7 @@ private:
     Annotation          *m_pAnnotation = nullptr;
 
 private:
-    FileViewWidget *q_ptr;
+    FileViewWidget *const q_ptr = nullptr;
     Q_DECLARE_PUBLIC(FileViewWidget)
 };
 

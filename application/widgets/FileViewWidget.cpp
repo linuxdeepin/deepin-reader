@@ -43,10 +43,9 @@
 FileViewWidget::FileViewWidget(DWidget *parent)
     : CustomWidget(FILE_VIEW_WIDGET, parent),
       m_operatemenu(new TextOperationMenu(this)),
-      m_pDefaultMenu(new DefaultOperationMenu(this))
+      m_pDefaultMenu(new DefaultOperationMenu(this)),
+      d_ptr(new FileViewWidgetPrivate(this))
 {
-    d_fvptr = new FileViewWidgetPrivate(this);
-
     m_pMsgList = { MSG_HANDLESHAPE,
                    MSG_VIEWCHANGE_DOUBLE_SHOW, MSG_VIEWCHANGE_ROTATE, MSG_FILE_SCALE, MSG_VIEWCHANGE_FIT,
                    MSG_OPERATION_TEXT_ADD_ANNOTATION,

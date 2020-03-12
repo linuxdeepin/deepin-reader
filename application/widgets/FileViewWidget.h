@@ -105,8 +105,9 @@ private:
 
     ProxyViewDisplay            *m_pDocViewProxy = nullptr;     //  文档操作 旋转\单双页\自适应
 
-    FileViewWidgetPrivate *d_fvptr;
-    Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_fvptr), FileViewWidget)
+private:
+    FileViewWidgetPrivate *const d_ptr = nullptr;
+    Q_DECLARE_PRIVATE(FileViewWidget)
 };
 
 
