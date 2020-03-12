@@ -32,6 +32,7 @@ class MainTabWidgetEx : public CustomWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(MainTabWidgetEx)
+    Q_DECLARE_PRIVATE(MainTabWidgetEx)
 
 public:
     explicit MainTabWidgetEx(DWidget *parent = nullptr);
@@ -56,20 +57,20 @@ public:
     int dealWithData(const int &, const QString &) override;
 
 public:
-    QStringList qGetAllPath() const;
-    QString qGetCurPath() const;
+    QStringList qGetAllPath();
+    QString qGetCurPath();
     int GetFileChange(const QString &);
-    FileDataModel qGetFileData(const QString &) const;
+    FileDataModel qGetFileData(const QString &) ;
     void SetFileData(const QString &, const FileDataModel &);
 
     void InsertPathProxy(const QString &, DocummentProxy *);
 
     // CustomWidget interface
-    DocummentProxy *getCurFileAndProxy(const QString &sPath = "") const;
+    DocummentProxy *getCurFileAndProxy(const QString &sPath = "");
 
     void showPlayControlWidget() const;
 
-    int getCurrentState() const;
+    int getCurrentState();
     void setCurrentState(const int &nCurrentState);
     void SetFileChange();
 
@@ -117,6 +118,9 @@ private:
     QStackedLayout      *m_pStackedLayout = nullptr;
     MainTabBar          *m_pTabBar = nullptr;
     PlayControlWidget   *m_pctrlwidget = nullptr;
+
+private:
+    MainTabWidgetExPrivate *const d_ptr = nullptr;
 };
 
 #endif // MAINTABWIDGETEX_H

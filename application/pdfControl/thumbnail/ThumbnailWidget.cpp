@@ -19,7 +19,6 @@
 #include "ThumbnailWidget.h"
 
 #include "docview/docummentproxy.h"
-#include "CustomControl/CustomWidgetPrivate.h"
 
 #include "gof/bridge/IHelper.h"
 #include "widgets/main/MainTabWidgetEx.h"
@@ -254,9 +253,7 @@ void ThumbnailWidget::fillContantToList()
 
 void ThumbnailWidget::showItemBookMark()
 {
-    QString sPath = d_ptr->getBindPath();
-
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList(sPath);
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_strBindPath);
     foreach (int index, pageList) {
         auto pWidget = getItemWidget(m_pThumbnailListWidget->item(index));
         if (pWidget) {
@@ -287,7 +284,7 @@ void ThumbnailWidget::nextPage()
 // 关联成功打开文件槽函数
 void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
 {
-    d_ptr->setBindPath(sPath);
+    m_strBindPath = sPath;
 
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
     DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sPath);

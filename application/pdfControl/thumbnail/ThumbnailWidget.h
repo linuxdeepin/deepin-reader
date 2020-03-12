@@ -145,6 +145,8 @@ private:
 //    ThreadRotateImage m_threadRotateImage;               // 旋转缩略图
     int m_nRotate = 0;                                   // 旋转度数
     int m_nValuePreIndex = 0;                            // 每一个item所占scrollbar的大小
+
+    QString     m_strBindPath = "";
 };
 
 #endif  // THUMBNAILWIDGET_H

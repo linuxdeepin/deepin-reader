@@ -67,6 +67,8 @@ private:
     DIconButton         *m_pPrePageBtn = nullptr;           // 按钮 前一页
     DIconButton         *m_pNextPageBtn = nullptr;          // 按钮 后一页
     DLineEdit           *m_pJumpPageLineEdit = nullptr;     // 输入框 跳转页码
+
+    QString             m_strBindPath = "";
 };
 
 #endif // PAGINGWIDGET_H

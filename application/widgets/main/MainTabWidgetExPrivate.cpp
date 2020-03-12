@@ -23,8 +23,8 @@
 #include "MainTabWidgetEx.h"
 #include "MainSplitter.h"
 
-MainTabWidgetExPrivate::MainTabWidgetExPrivate(CustomWidget *cw)
-    : CustomWidgetPrivate(cw)
+MainTabWidgetExPrivate::MainTabWidgetExPrivate(MainTabWidgetEx *cw)
+    : q_ptr(cw)
 {
     m_pMsgList = {E_APP_MSG_TYPE, E_TABBAR_MSG_TYPE, MSG_FILE_IS_CHANGE};
 }
