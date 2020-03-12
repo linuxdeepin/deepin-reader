@@ -56,6 +56,7 @@ private slots:
     void SlotTabCloseRequested(int index);
 
     void SlotRemoveFileTab(const QString &);
+    void SlotOpenFileOk(const QString &);
 
 private:
     QList <int> m_pMsgList;

@@ -153,6 +153,7 @@ void MainTabWidgetEx::initWidget()
     connect(m_pTabBar, SIGNAL(sigCloseTab(const QString &)), SLOT(SlotCloseTab(const QString &)));
 
     connect(this, SIGNAL(sigRemoveFileTab(const QString &)), m_pTabBar, SLOT(SlotRemoveFileTab(const QString &)));
+    connect(this, SIGNAL(sigOpenFileOk(const QString &)), m_pTabBar, SLOT(SlotOpenFileOk(const QString &)));
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(m_pTabBar);
@@ -433,6 +434,7 @@ void MainTabWidgetEx::SlotAddTab(const QString &sPath)
     if (m_pStackedLayout) {
         MainSplitter *splitter = new MainSplitter(this);
         connect(this, SIGNAL(sigDealNotifyMsg(const int &, const QString &)), splitter, SLOT(SlotNotifyMsg(const int &, const QString &)));
+        connect(splitter, SIGNAL(sigOpenFileOk(const QString &)), this, SIGNAL(sigOpenFileOk(const QString &)));
         splitter->qSetPath(sPath);
         m_pStackedLayout->addWidget(splitter);
     }

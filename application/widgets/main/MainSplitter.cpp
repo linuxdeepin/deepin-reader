@@ -83,6 +83,8 @@ void MainSplitter::SlotOpenFileOk(const QString &s)
     TitleWidget::Instance()->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
 
     m_pLeftWidget->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
+
+    emit sigOpenFileOk(s);
 }
 
 void MainSplitter::SlotFindOperation(const int &iType)

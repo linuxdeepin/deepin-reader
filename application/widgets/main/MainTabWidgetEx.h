@@ -46,6 +46,7 @@ public:
 
 signals:
     void sigDealNotifyMsg(const int &, const QString &);
+    void sigOpenFileOk(const QString &);
 
     void sigRemoveFileTab(const QString &);
 

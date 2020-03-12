@@ -77,9 +77,16 @@ void MainTabBar::__InitConnection()
 
 void MainTabBar::SlotCurrentChanged(int index)
 {
-    QString sPath = this->tabData(index).toString();
-    if (sPath != "") {
-        emit sigTabBarIndexChange(sPath);
+    QString sTabData = this->tabData(index).toString();
+    if (sTabData != "") {
+        QStringList sDataList = sTabData.split(Constant::sQStringSep, QString::SkipEmptyParts);
+        if (sDataList.size() == 2) {
+            QString sPath = sDataList.at(0);
+            QString sFlag = sDataList.at(1);
+            if (sFlag == "111") {
+                emit sigTabBarIndexChange(sPath);
+            }
+        }
     }
 }
 
@@ -104,8 +111,10 @@ void MainTabBar::AddFileTab(const QString &sContent)
             QString s = filePaths.at(iLoop);
             if (s != "") {
                 QString sName = getFileName(s);
+                QString sTabData = s + Constant::sQStringSep + "000";
+
                 int iIndex = this->addTab(sName);
-                this->setTabData(iIndex, s);
+                this->setTabData(iIndex, sTabData);
                 this->setTabMinimumSize(iIndex, QSize(140, 36));
                 emit sigAddTab(s);
             }
@@ -155,6 +164,20 @@ void MainTabBar::SlotRemoveFileTab(const QString &sPath)
         nCount = this->count();
         if (nCount == 0) {
             notifyMsg(CENTRAL_INDEX_CHANGE);
+        }
+    }
+}
+
+//  打开成功了， 将标志位 置  111
+void MainTabBar::SlotOpenFileOk(const QString &s)
+{
+    int nCount = this->count();
+    for (int iLoop = 0; iLoop < nCount; iLoop++) {
+        QString sTabData = this->tabData(iLoop).toString();
+        if (sTabData.startsWith(s)) {
+            QString sTabData = s + Constant::sQStringSep + "111";
+            this->setTabData(iLoop, sTabData);
+            break;
         }
     }
 }

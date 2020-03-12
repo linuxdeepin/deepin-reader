@@ -39,7 +39,8 @@ public:
     explicit MainSplitter(DWidget *parent = nullptr);
     ~MainSplitter() override;
 
-    void notifyMsg(const int &msgType, const QString &msgContent);
+signals:
+    void sigOpenFileOk(const QString &);
 
 public:
     QString qGetPath();
