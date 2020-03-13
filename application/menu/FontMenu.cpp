@@ -23,7 +23,7 @@
 FontMenu::FontMenu(DWidget *parent):
     CustomMenu(FONT_MENU, parent)
 {
-    shortKeyList << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3
+    shortKeyList << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3
                  << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r;
 
     initActions();
@@ -174,10 +174,7 @@ void FontMenu::OnFileOpenOk(const QString &sPath)
  */
 void FontMenu::OnShortKey(const QString &keyType)
 {
-    if (keyType == KeyStr::g_ctrl_1) {
-        //还原
-        resetAdaptive();
-    } else if (keyType == KeyStr::g_ctrl_2) {
+    if (keyType == KeyStr::g_ctrl_2) {
         //自适应高
         slotFiteH();
     } else if (keyType == KeyStr::g_ctrl_3) {
