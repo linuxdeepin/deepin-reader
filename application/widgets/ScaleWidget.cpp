@@ -138,7 +138,7 @@ void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
     bool bOk = false;
     QString sTempData = sTempText.mid(0, nIndex);
     double dValue = sTempData.toDouble(&bOk);
-    if (bOk && dValue > 10.0 && dValue <= m_nMaxScale) {
+    if (bOk && dValue >= 10.0 && dValue <= m_nMaxScale) {
         QJsonObject obj;
         obj.insert("content", QString::number(dValue));
         obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
