@@ -118,6 +118,7 @@ void TextOperationMenu::slotSetHighLight(const int &nColor)
 
         emit sigActionTrigger(MSG_NOTE_ADD_HIGHLIGHT_COLOR, sContent);
     }
+    this->hide();
 }
 
 void TextOperationMenu::slotCopyClicked()

@@ -176,7 +176,7 @@ void PagingWidget::OnDocFileOpenOk(const QString &sPath)
         int totalPage = _proxy->getPageSNum();
 
         if (m_pCurrantPageLab == nullptr) {   //  不可读取页码, 则设置只能输入大于 0 的数字
-            m_pJumpPageLineEdit->lineEdit()->setValidator(new QIntValidator(1, totalPage, this));
+            //  m_pJumpPageLineEdit->lineEdit()->setValidator(new QIntValidator(1, totalPage, this));
         }
 
         m_pTotalPagesLab->setText(QString("/ %1").arg(totalPage));
@@ -200,8 +200,13 @@ void PagingWidget::SlotJumpPageLineEditReturnPressed()
 void PagingWidget::__NormalChangePage()
 {
     QString sText = m_pJumpPageLineEdit->text();
-    int iPage = sText.toInt() - 1;
-    dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(iPage));
+    int iPage = sText.toInt();
+    if (iPage == 0) {
+        notifyMsg(CENTRAL_SHOW_TIP, tr("Invalid page number"));
+    } else {
+        dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(iPage - 1));
+        setFocus();
+    }
 }
 
 void PagingWidget::__PageNumberJump()
@@ -217,6 +222,7 @@ void PagingWidget::__PageNumberJump()
 
         if (iPage > -1 && iPage < nPageSum) {   //  输入的页码 必须在 0-最大值 之间, 才可以
             dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(iPage));
+            setFocus();
         } else {
             notifyMsg(CENTRAL_SHOW_TIP, tr("Invalid page number"));
         }
