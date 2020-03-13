@@ -46,6 +46,10 @@ public:
 protected:
     void initWidget() override;
 
+    // QWidget interface
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+
 private:
     void initConnections();
 
@@ -53,8 +57,11 @@ private:
     void OnDocOpenFileOk(const QString &);
 
 private:
-    DLabel  *titleLabel = nullptr;
-    CatalogTreeView  *m_pTree = nullptr;
+    QString             m_strTheme = "";
+    DLabel              *titleLabel = nullptr;
+    CatalogTreeView     *m_pTree = nullptr;
+    void setTitleTheme();
+
 };
 
 
