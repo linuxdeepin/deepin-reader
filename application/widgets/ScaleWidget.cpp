@@ -68,7 +68,7 @@ void ScaleWidget::initWidget()
     connect(scaleComboBox, SIGNAL(currentIndexChanged(const QString &)), SLOT(SlotCurrentTextChanged(const QString &)));
     scaleComboBox->setInsertPolicy(QComboBox::NoInsert);
     scaleComboBox->setDuplicatesEnabled(false); //  重复项 不允许添加
-    scaleComboBox->setFixedWidth(100);
+    scaleComboBox->setFixedWidth(120);
     scaleComboBox->setEditable(true);
 
     QLineEdit *edit = scaleComboBox->lineEdit();
@@ -155,18 +155,22 @@ void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
 void ScaleWidget::SlotReturnPressed()
 {
     QString sTempText = scaleComboBox->currentText();
+
     int nIndex = scaleComboBox->findText(sTempText, Qt::MatchExactly);
     if (nIndex == -1) {     //  列表中没有输入的选项
-        SlotCurrentTextChanged(sTempText);
 
         nIndex = sTempText.lastIndexOf("%");
         if (nIndex != -1) {
             sTempText = sTempText.mid(0, nIndex);
         }
-
         bool bOk = false;
         double dValue = sTempText.toDouble(&bOk);
-        if (bOk && dValue > 10.0 && dValue <= m_nMaxScale) {
+        if (bOk && dValue >= 10.0 && dValue <= m_nMaxScale) {
+            QString sEndValue = QString::number(dValue, 'f', 2);        //  保留2位小数点
+            dValue = sEndValue.toDouble();
+
+            QString sShowText = QString::number(dValue) + "%";
+            SlotCurrentTextChanged(sShowText);
 
             dataList.append(dValue);
             qSort(dataList.begin(), dataList.end());
@@ -176,7 +180,7 @@ void ScaleWidget::SlotReturnPressed()
 
             m_nCurrentIndex--;
 
-            scaleComboBox->setCurrentText(sTempText + "%");
+            scaleComboBox->setCurrentText(sShowText);
         }
     }
 }
