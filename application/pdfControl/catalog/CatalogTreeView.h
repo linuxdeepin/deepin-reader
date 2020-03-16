@@ -60,7 +60,6 @@ private:
     void OnFilePageChanged(const QString &);
 
 private slots:
-    void SlotClicked(const QModelIndex &);
     void SlotCollapsed(const QModelIndex &);
     void SlotExpanded(const QModelIndex &);
 

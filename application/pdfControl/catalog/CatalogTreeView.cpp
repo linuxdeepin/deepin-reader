@@ -74,7 +74,6 @@ void CatalogTreeView::notifyMsg(const int &, const QString &)
 
 void CatalogTreeView::initConnections()
 {
-    connect(this, SIGNAL(clicked(const QModelIndex &)), SLOT(SlotClicked(const QModelIndex &)));
     connect(this, SIGNAL(collapsed(const QModelIndex &)), SLOT(SlotCollapsed(const QModelIndex &)));
     connect(this, SIGNAL(expanded(const QModelIndex &)), SLOT(SlotExpanded(const QModelIndex &)));
 }
@@ -155,25 +154,6 @@ void CatalogTreeView::OnOpenFileOk(const QString &path)
         }
     }
 }
-
-//  点击 任一行, 实现 跳转页面
-void CatalogTreeView::SlotClicked(const QModelIndex &index)
-{
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
-    if (pMtwe) {
-        DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(m_strBindPath);
-        if (_proxy) {
-            int nPage = index.data(Qt::UserRole + 1).toInt();
-            nPage--;
-
-            double left = index.data(Qt::UserRole + 2).toDouble();
-            double top = index.data(Qt::UserRole + 3).toDouble();
-
-            _proxy->jumpToOutline(left, top, nPage);
-        }
-    }
-}
-
 
 //  文档页变化, 目录高亮随之变化
 void CatalogTreeView::OnFilePageChanged(const QString &sPage)
