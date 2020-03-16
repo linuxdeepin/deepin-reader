@@ -31,7 +31,8 @@ ScaleWidget::ScaleWidget(DWidget *parent)
     : CustomWidget("ScaleWidget", parent)
 {
     initWidget();
-    m_pKeyMsgList << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_equal << KeyStr::g_ctrl_smaller;
+    m_pKeyMsgList << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_equal << KeyStr::g_ctrl_smaller << KeyStr::g_ctrl_1;
+
     dataList = {10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500};
 }
 
@@ -92,6 +93,8 @@ void ScaleWidget::onShortKey(const QString &keyType)
         slotPrevScale();
     } else if (keyType == KeyStr::g_ctrl_larger || keyType == KeyStr::g_ctrl_equal) {
         slotNextScale();
+    } else if (keyType == KeyStr::g_ctrl_1) {   // 恢复 100 比例
+        SlotCurrentTextChanged("100");
     }
 }
 
@@ -121,7 +124,9 @@ void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
 {
     int nIndex = sText.lastIndexOf("%");
     if (nIndex == -1) {
-        scaleComboBox->setCurrentText(sText + "%");
+        QString sssTemp = sText + "%";
+        scaleComboBox->setCurrentText(sssTemp);
+        nIndex = sssTemp.lastIndexOf("%");
     }
 
     QString sTempText = scaleComboBox->currentText();
@@ -133,7 +138,7 @@ void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
     bool bOk = false;
     QString sTempData = sTempText.mid(0, nIndex);
     double dValue = sTempData.toDouble(&bOk);
-    if (bOk && dValue > 10.0 && dValue <= m_nMaxScale) {
+    if (bOk && dValue >= 10.0 && dValue <= m_nMaxScale) {
         QJsonObject obj;
         obj.insert("content", QString::number(dValue));
         obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);

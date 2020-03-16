@@ -58,14 +58,20 @@ int CatalogWidget::dealWithData(const int &msgType, const QString &msgContent)
 
 void CatalogWidget::initWidget()
 {
+    QHBoxLayout *titleLayout = new QHBoxLayout;
+    titleLayout->setSpacing(0);
+    titleLayout->setContentsMargins(10, 0, 10, 0);
+
     titleLabel = new CustomClickLabel("", this);
     titleLabel->setForegroundRole(DPalette::TextTips);
     titleLabel->setAlignment(Qt::AlignCenter);
     DFontSizeManager::instance()->bind(titleLabel, DFontSizeManager::T8);
 
+    titleLayout->addWidget(titleLabel);
+
     auto mainLayout = new QVBoxLayout;
 
-    mainLayout->addWidget(titleLabel);
+    mainLayout->addItem(titleLayout);
 
     m_pTree = new CatalogTreeView(this);
 
@@ -78,36 +84,43 @@ void CatalogWidget::initWidget()
     this->setLayout(mainLayout);
 }
 
+void CatalogWidget::resizeEvent(QResizeEvent *event)
+{
+    if (m_strTheme != "" && titleLabel) {
+        setTitleTheme();
+    }
+
+    CustomWidget::resizeEvent(event);
+}
+
 void CatalogWidget::initConnections()
 {
 }
 
+void CatalogWidget::setTitleTheme()
+{
+    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T8);
+
+    QFontMetrics fm(font);
+    QString sTheme = fm.elidedText(m_strTheme, Qt::ElideMiddle, this->width() - 40, Qt::TextSingleLine);
+
+    titleLabel->setText(sTheme);
+}
+
 void CatalogWidget::OnDocOpenFileOk(const QString &sPath)
 {
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
-    if (pMtwe) {
-        DocummentProxy *_pProxy = pMtwe->getCurFileAndProxy(sPath);
-        if (_pProxy) {
+    if (titleLabel) {
+        MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+        if (pMtwe) {
+            DocummentProxy *_pProxy = pMtwe->getCurFileAndProxy(sPath);
+            if (_pProxy) {
 
-            stFileInfo fileInfo;
-            _pProxy->docBasicInfo(fileInfo);
+                stFileInfo fileInfo;
+                _pProxy->docBasicInfo(fileInfo);
 
-            QString strTheme =  fileInfo.strTheme;
-            if (strTheme == "") {
-                strTheme = tr("Unknown");
-            }
-
-            if (titleLabel) {
-                QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T8);
-                QString t = DFMGlobal::elideText(strTheme, QSize(120, 18), QTextOption::WrapAnywhere, font, Qt::ElideMiddle, 0);
-                QStringList labelTexts = t.split("\n");
-                if (labelTexts.size() < 3) {
-                    titleLabel->setText(strTheme);
-                } else {
-                    QString sStart = labelTexts.at(0);
-                    QString sEnd = labelTexts.at(labelTexts.size() - 1);
-
-                    titleLabel->setText(sStart + "..." + sEnd);
+                m_strTheme = fileInfo.strTheme;
+                if (m_strTheme != "") {
+                    setTitleTheme();
                 }
             }
         }
