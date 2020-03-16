@@ -134,7 +134,7 @@ void ScaleMenu::__ChangeScale(const int &iData, const int &iFlag)
 
 void ScaleMenu::OnFileOpenOk(const QString &sPath)
 {
-    FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(sPath);
+    FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData();
     int nScale = fdm.qGetData(Scale);
     if (nScale == 0) {
         nScale = 100;

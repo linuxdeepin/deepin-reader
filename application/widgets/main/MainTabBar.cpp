@@ -155,7 +155,8 @@ void MainTabBar::SlotRemoveFileTab(const QString &sPath)
         int nCount = this->count();
         for (int iLoop = 0; iLoop < nCount; iLoop++) {
             QString sTabData = this->tabData(iLoop).toString();
-            if (sTabData == sPath) {
+            if (sTabData.startsWith(sPath)) {
+
                 this->removeTab(iLoop);
                 break;
             }
@@ -169,16 +170,19 @@ void MainTabBar::SlotRemoveFileTab(const QString &sPath)
 }
 
 //  打开成功了， 将标志位 置  111
-void MainTabBar::SlotOpenFileOk(const QString &s)
+void MainTabBar::SlotOpenFileResult(const QString &s, const bool &res)
 {
-    int nCount = this->count();
-    for (int iLoop = 0; iLoop < nCount; iLoop++) {
-        QString sTabData = this->tabData(iLoop).toString();
-        if (sTabData.startsWith(s)) {
-            QString sTabData = s + Constant::sQStringSep + "111";
-            this->setTabData(iLoop, sTabData);
-            break;
+    if (res) {
+        int nCount = this->count();
+        for (int iLoop = 0; iLoop < nCount; iLoop++) {
+            QString sTabData = this->tabData(iLoop).toString();
+            if (sTabData.startsWith(s)) {
+                QString sTabData = s + Constant::sQStringSep + "111";
+                this->setTabData(iLoop, sTabData);
+                break;
+            }
         }
+    } else {
+        SlotRemoveFileTab(s);
     }
 }
-

@@ -52,7 +52,7 @@ void TitleWidget::SetFindWidget(const int &iFlag, const QString &sPath)
     if (iFlag == E_FIND_CONTENT) {
         m_pThumbnailBtn->setChecked(true);
     } else if (iFlag == E_FIND_EXIT) {
-        FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(sPath);
+        FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData();
 
         int nState = fdm.qGetData(Thumbnail);
         bool showLeft = nState == 1 ? true : false;
@@ -142,7 +142,7 @@ void TitleWidget::slotOpenFileOk(const QString &sPath)
 {
     SetBtnDisable(false);
 
-    FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(sPath);
+    FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData();
 
     int nState = fdm.qGetData(Thumbnail);
     bool showLeft = nState == 1 ? true : false;

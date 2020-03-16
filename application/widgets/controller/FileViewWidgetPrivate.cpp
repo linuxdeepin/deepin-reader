@@ -8,6 +8,7 @@
 #include "ProxyViewDisplay.h"
 #include "ProxyMouseMove.h"
 #include "ProxyData.h"
+#include "ProxyFileDataModel.h"
 
 #include "menu/TextOperationMenu.h"
 #include "menu/DefaultOperationMenu.h"
@@ -39,6 +40,14 @@ FileViewWidgetPrivate::FileViewWidgetPrivate(FileViewWidget *parent)
 
     m_pProxyNotifyMsg = new ProxyNotifyMsg(this);
     m_pProxyMouseMove = new ProxyMouseMove(this);
+    m_pProxyFileDataModel = new ProxyFileDataModel(this);
+}
+
+FileViewWidgetPrivate::~FileViewWidgetPrivate()
+{
+    if (m_pProxy) {
+        m_pProxy->closeFile();
+    }
 }
 
 void FileViewWidgetPrivate::hidetipwidget()
@@ -244,6 +253,9 @@ int FileViewWidgetPrivate::dealWithData(const int &msgType, const QString &msgCo
         }
     }
 
+    //  数据变化
+    m_pProxyFileDataModel->qDealWithData(msgType, msgContent);
+
     if (msgType == MSG_VIEWCHANGE_DOUBLE_SHOW) {
         m_pDocViewProxy->OnSetViewChange(msgContent);
     } else if (msgType == MSG_VIEWCHANGE_ROTATE) {
@@ -335,7 +347,7 @@ void FileViewWidgetPrivate::FindOperation(const int &iType, const QString &strFi
 void FileViewWidgetPrivate::resizeEvent(QResizeEvent *event)
 {
     Q_Q(FileViewWidget);
-    if (!m_pProxyData->IsFirstShow()) {
+    if (!m_pProxyData->IsFirstShow() && m_pProxyData->getIsFileOpenOk()) {
         QSize size = event->size();
         m_pDocViewProxy->setWidth(size.width());
         m_pDocViewProxy->setHeight(size.height());
@@ -500,14 +512,13 @@ void FileViewWidgetPrivate::SlotDocFileOpenResult(bool openresult)
 
         dApp->m_pDBService->qSelectData(m_pProxyData->getPath(), DB_BOOKMARK);
 
-        emit q->sigFileOpenOK(m_pProxyData->getPath());
-
-        m_pDocViewProxy->onSetWidgetAdapt();
-
         m_pProxyData->setFirstShow(false);
+        m_pProxyData->setIsFileOpenOk(true);
     } else {
-        notifyMsg(MSG_OPERATION_OPEN_FILE_FAIL, tr("Please check if the file is damaged"));
+        notifyMsg(CENTRAL_SHOW_TIP, tr("Please check if the file is damaged"));
     }
+
+    emit q->sigFileOpenResult(m_pProxyData->getPath(), openresult);
 }
 
 void FileViewWidgetPrivate::OpenFilePath(const QString &sPath)
@@ -529,6 +540,7 @@ void FileViewWidgetPrivate::OpenFilePath(const QString &sPath)
         //从数据库中获取文件的字号信息
         dApp->m_pDBService->qSelectData(sPath, DB_HISTROY);
         FileDataModel fdm = dApp->m_pDBService->getHistroyData(sPath);
+        m_pProxyFileDataModel->qSetFileData(fdm);
 
         int nAdapteState = fdm.qGetData(Fit);
         m_pDocViewProxy->setAdapteState(nAdapteState);
@@ -553,12 +565,6 @@ void FileViewWidgetPrivate::OpenFilePath(const QString &sPath)
             m_pProxyData->setPath(sPath);
 
             m_pProxy->setViewFocus();
-
-            MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
-            if (pMtwe) {
-                pMtwe->SetFileData(sPath, fdm);
-                pMtwe->InsertPathProxy(sPath, m_pProxy);       //  存储 filePath 对应的 proxy
-            }
         }
     }
 }

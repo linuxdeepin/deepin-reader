@@ -27,11 +27,10 @@
 #include "widgets/FileViewWidget.h"
 #include "widgets/TitleWidget.h"
 
-#include "MainSplitterPrivate.h"
 #include "menu/TitleMenu.h"
 
 MainSplitter::MainSplitter(DWidget *parent)
-    : DSplitter(parent), d_ptr(new MainSplitterPrivate(this))
+    : DSplitter(parent)
 {
     InitWidget();
 }
@@ -51,7 +50,7 @@ void MainSplitter::InitWidget()
     m_pFileViewWidget = new FileViewWidget;
     connect(m_pLeftWidget, SIGNAL(sigDeleteAnntation(const int &, const QString &)), m_pFileViewWidget, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
 
-    connect(m_pFileViewWidget, SIGNAL(sigFileOpenOK(const QString &)), SLOT(SlotOpenFileOk(const QString &)));
+    connect(m_pFileViewWidget, SIGNAL(sigFileOpenResult(const QString &, const bool &)), SLOT(SlotFileOpenResult(const QString &, const bool &)));
     connect(m_pFileViewWidget, SIGNAL(sigFindOperation(const int &)), SLOT(SlotFindOperation(const int &)));
     connect(m_pFileViewWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pLeftWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)));
     connect(m_pFileViewWidget, SIGNAL(sigBookMarkMsg(const int &, const QString &)), m_pLeftWidget, SIGNAL(sigBookMarkMsg(const int &, const QString &)));
@@ -73,19 +72,23 @@ void MainSplitter::InitWidget()
     setSizes(list_src);
 }
 
-void MainSplitter::SlotOpenFileOk(const QString &s)
+void MainSplitter::SlotFileOpenResult(const QString &s, const bool &res)
 {
-    if (m_pRightWidget && m_pSpinnerWidget) {
-        m_pRightWidget->removeWidget(m_pSpinnerWidget);
+    if (res) {
+        if (m_pRightWidget && m_pSpinnerWidget) {
+            m_pRightWidget->removeWidget(m_pSpinnerWidget);
 
-        delete  m_pSpinnerWidget;
-        m_pSpinnerWidget = nullptr;
+            delete  m_pSpinnerWidget;
+            m_pSpinnerWidget = nullptr;
+        }
+
+        if (this->isVisible()) {
+            TitleWidget::Instance()->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
+        }
+
+        m_pLeftWidget->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
     }
-    TitleWidget::Instance()->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
-
-    m_pLeftWidget->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
-
-    emit sigOpenFileOk(s);
+    emit sigOpenFileResult(s, res);
 }
 
 void MainSplitter::SlotFindOperation(const int &iType)
@@ -95,8 +98,6 @@ void MainSplitter::SlotFindOperation(const int &iType)
 
 void MainSplitter::SlotNotifyMsg(const int &msgType, const QString &msgContent)
 {
-    Q_D(MainSplitter);
-
     if (this->isVisible()) {    //  只有显示的窗口 处理 MainTabWidgetEx 发送的信号
         if (msgType == MSG_NOTIFY_KEY_MSG) {
             auto cwlist = this->findChildren<CustomWidget *>();
@@ -114,8 +115,6 @@ void MainSplitter::SlotNotifyMsg(const int &msgType, const QString &msgContent)
 
                 QString sContent = obj.value("content").toString();
 
-                d->qDealWithData(msgType, sContent);
-
                 int nRes = m_pLeftWidget->dealWithData(msgType, sContent);
                 if (nRes != MSG_OK) {
                     nRes = m_pFileViewWidget->dealWithData(msgType, sContent);
@@ -129,21 +128,16 @@ void MainSplitter::SlotNotifyMsg(const int &msgType, const QString &msgContent)
 
 QString MainSplitter::qGetPath()
 {
-    Q_D(MainSplitter);
-    return d->qGetPath();
+    return m_pFileViewWidget->getFilePath();
 }
 
 void MainSplitter::qSetPath(const QString &strPath)
 {
-    Q_D(MainSplitter);
-    d->qSetPath(strPath);
-
     m_pFileViewWidget->OpenFilePath(strPath);  //  proxy 打开文件
 }
 
 void MainSplitter::qSetFileChange(const int &nState)
 {
-    //d_ptr->qSetFileChange(nState);
     bool bchange = nState == 1 ? true : false;
     if (nullptr != m_pFileViewWidget)
         m_pFileViewWidget->setFileChange(bchange);
@@ -151,7 +145,6 @@ void MainSplitter::qSetFileChange(const int &nState)
 
 int MainSplitter::qGetFileChange()
 {
-    //return d_ptr->qGetFileChange();
     int istatus = -1;
     if (nullptr != m_pFileViewWidget)
         istatus = m_pFileViewWidget->getFileChange() ? 1 : 0;
@@ -160,20 +153,17 @@ int MainSplitter::qGetFileChange()
 
 void MainSplitter::saveData()
 {
-    Q_D(MainSplitter);
-    d->saveData();
+    m_pFileViewWidget->saveData();
 }
 
 FileDataModel MainSplitter::qGetFileData()
 {
-    Q_D(MainSplitter);
-    return d->qGetFileData();
+    return m_pFileViewWidget->qGetFileData();
 }
 
-void MainSplitter::setFileData(const FileDataModel &fdm)
+DocummentProxy *MainSplitter::getDocProxy()
 {
-    Q_D(MainSplitter);
-    d->qSetFileData(fdm);
+    return m_pFileViewWidget->GetDocProxy();
 }
 
 void MainSplitter::OnOpenSliderShow()

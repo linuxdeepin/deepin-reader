@@ -114,26 +114,34 @@ int MainTabWidgetEx::GetFileChange(const QString &sPath)
 
 FileDataModel MainTabWidgetEx::qGetFileData(const QString &sPath)
 {
-    Q_D(MainTabWidgetEx);
-    return d->GetFileData(sPath);
-}
-
-void MainTabWidgetEx::SetFileData(const QString &sPath, const FileDataModel &fdm)
-{
-    Q_D(MainTabWidgetEx);
-    d->SetFileData(sPath, fdm);
-}
-
-void MainTabWidgetEx::InsertPathProxy(const QString &sPath, DocummentProxy *proxy)
-{
-    Q_D(MainTabWidgetEx);
-    d->InsertPathProxy(sPath, proxy);
+    QString sTempPath = sPath;
+    if (sTempPath == "") {
+        sTempPath = qGetCurPath();
+    }
+    auto splitterList = this->findChildren<MainSplitter *>();
+    foreach (auto sP, splitterList) {
+        QString sPPath = sP->qGetPath();
+        if (sPPath == sTempPath) {
+            return sP->qGetFileData();
+        }
+    }
+    return FileDataModel();
 }
 
 DocummentProxy *MainTabWidgetEx::getCurFileAndProxy(const QString &sPath)
 {
-    Q_D(MainTabWidgetEx);
-    return d->getCurFileAndProxy(sPath);
+    QString sTempPath = sPath;
+    if (sTempPath == "") {
+        sTempPath = qGetCurPath();
+    }
+
+    auto splitterList = this->findChildren<MainSplitter *>();
+    foreach (auto s, splitterList) {
+        if (s->qGetPath() == sPath) {
+            return s->getDocProxy();
+        }
+    }
+    return nullptr;
 }
 
 void MainTabWidgetEx::showPlayControlWidget() const
@@ -153,7 +161,7 @@ void MainTabWidgetEx::initWidget()
     connect(m_pTabBar, SIGNAL(sigCloseTab(const QString &)), SLOT(SlotCloseTab(const QString &)));
 
     connect(this, SIGNAL(sigRemoveFileTab(const QString &)), m_pTabBar, SLOT(SlotRemoveFileTab(const QString &)));
-    connect(this, SIGNAL(sigOpenFileOk(const QString &)), m_pTabBar, SLOT(SlotOpenFileOk(const QString &)));
+    connect(this, SIGNAL(sigOpenFileResult(const QString &, const bool &)), m_pTabBar, SLOT(SlotOpenFileResult(const QString &, const bool &)));
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(m_pTabBar);
@@ -199,8 +207,6 @@ void MainTabWidgetEx::OnAppMsgData(const QString &sText)
 //  应用退出, 删除所有文件
 void MainTabWidgetEx::OnAppExit()
 {
-    Q_D(MainTabWidgetEx);
-
     QStringList saveFileList;
     QStringList noChangeFileList;
 
@@ -241,10 +247,8 @@ void MainTabWidgetEx::OnAppExit()
             SaveFile(MSG_NOT_CHANGE_SAVE_FILE, sSplitterPath);
         }
     }
-    auto mapIt = d->getOpenFileAndProxy();
-    for (auto it = mapIt.begin(); it != mapIt.end(); it++) {
-        if (it.value() != nullptr)
-            it.value()->closeFileAndWaitThreadClearEnd();
+    foreach (auto s, splitterList) {
+        s->getDocProxy()->closeFileAndWaitThreadClearEnd();
     }
     topLevelWidget()->hide();
     dApp->exit(0);
@@ -434,7 +438,7 @@ void MainTabWidgetEx::SlotAddTab(const QString &sPath)
     if (m_pStackedLayout) {
         MainSplitter *splitter = new MainSplitter(this);
         connect(this, SIGNAL(sigDealNotifyMsg(const int &, const QString &)), splitter, SLOT(SlotNotifyMsg(const int &, const QString &)));
-        connect(splitter, SIGNAL(sigOpenFileOk(const QString &)), this, SIGNAL(sigOpenFileOk(const QString &)));
+        connect(splitter, SIGNAL(sigOpenFileResult(const QString &, const bool &)), SLOT(SlotOpenFileResult(const QString &, const bool &)));
         splitter->qSetPath(sPath);
         m_pStackedLayout->addWidget(splitter);
     }
@@ -443,8 +447,6 @@ void MainTabWidgetEx::SlotAddTab(const QString &sPath)
 //  删除单个文件
 void MainTabWidgetEx::SlotCloseTab(const QString &sPath)
 {
-    Q_D(MainTabWidgetEx);
-
     auto splitterList = this->findChildren<MainSplitter *>();
     foreach (auto s, splitterList) {
         QString sSplitterPath = s->qGetPath();
@@ -480,8 +482,6 @@ void MainTabWidgetEx::SlotCloseTab(const QString &sPath)
                         //  保存成功
                         s->saveData();
 
-                        d->RemovePath(sPath);
-
                         emit sigRemoveFileTab(sPath);
 
                         m_pStackedLayout->removeWidget(s);
@@ -494,6 +494,25 @@ void MainTabWidgetEx::SlotCloseTab(const QString &sPath)
             break;
         }
     }
+}
+
+void MainTabWidgetEx::SlotOpenFileResult(const QString &sPath, const bool &res)
+{
+    if (!res) { //  打开失败了
+        auto splitterList = this->findChildren<MainSplitter *>();
+        foreach (auto s, splitterList) {
+            QString sSplitterPath = s->qGetPath();
+            if (sSplitterPath == sPath) {
+                m_pStackedLayout->removeWidget(s);
+
+                delete s;
+                s = nullptr;
+                break;
+            }
+        }
+    }
+
+    emit sigOpenFileResult(sPath, res);
 }
 
 void MainTabWidgetEx::setCurrentState(const int &nCurrentState)

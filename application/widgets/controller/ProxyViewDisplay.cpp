@@ -57,7 +57,7 @@ void ProxyViewDisplay::onSetWidgetAdapt()
             dScale = fvmPrivate->m_pProxy->adaptHeightAndShow(m_nHeight);
         }
 
-        if (dScale != 0.0) {
+        if (dScale > 0.0) {
             notifyMsg(MSG_FILE_FIT_SCALE, QString::number(dScale));
         }
     }

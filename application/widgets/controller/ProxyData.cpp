@@ -83,3 +83,13 @@ void ProxyData::setFirstShow(bool bFirstShow)
 {
     m_bFirstShow = bFirstShow;
 }
+
+bool ProxyData::getIsFileOpenOk() const
+{
+    return m_bIsFileOpenOk;
+}
+
+void ProxyData::setIsFileOpenOk(bool bIsFileOpenOk)
+{
+    m_bIsFileOpenOk = bIsFileOpenOk;
+}

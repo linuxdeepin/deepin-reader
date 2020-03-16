@@ -13,7 +13,6 @@ HEADERS += \
     $$PWD/main/MainTabBar.h \
     $$PWD/main/MainTabWidgetEx.h \
     $$PWD/TitleWidget.h \
-    $$PWD/main/MainSplitterPrivate.h \
     $$PWD/main/MainTabWidgetExPrivate.h \
     $$PWD/ScaleWidget.h \
     $$PWD/controller/FileViewWidgetPrivate.h \
@@ -22,7 +21,8 @@ HEADERS += \
     $$PWD/controller/ProxyViewDisplay.h \
     $$PWD/controller/ProxyNotifyMsg.h \
     $$PWD/controller/ProxyMouseMove.h \
-    $$PWD/controller/ProxyData.h
+    $$PWD/controller/ProxyData.h \
+    $$PWD/controller/ProxyFileDataModel.h
 
 SOURCES += \
     $$PWD/HomeWidget.cpp \
@@ -39,7 +39,6 @@ SOURCES += \
     $$PWD/main/MainTabBar.cpp \
     $$PWD/main/MainTabWidgetEx.cpp \
     $$PWD/TitleWidget.cpp \
-    $$PWD/main/MainSplitterPrivate.cpp \
     $$PWD/main/MainTabWidgetExPrivate.cpp \
     $$PWD/ScaleWidget.cpp \
     $$PWD/controller/FileViewWidgetPrivate.cpp \
@@ -48,4 +47,5 @@ SOURCES += \
     $$PWD/controller/ProxyViewDisplay.cpp \
     $$PWD/controller/ProxyNotifyMsg.cpp \
     $$PWD/controller/ProxyMouseMove.cpp \
-    $$PWD/controller/ProxyData.cpp
+    $$PWD/controller/ProxyData.cpp \
+    $$PWD/controller/ProxyFileDataModel.cpp

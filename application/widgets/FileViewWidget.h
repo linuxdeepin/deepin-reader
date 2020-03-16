@@ -21,6 +21,7 @@
 
 #include "CustomControl/CustomWidget.h"
 
+class DocummentProxy;
 class FindWidget;
 /**
  * @brief The FileViewWidget class
@@ -37,7 +38,7 @@ public:
     ~FileViewWidget() override;
 
 signals:
-    void sigFileOpenOK(const QString &);
+    void sigFileOpenResult(const QString &, const bool &);
     void sigFindOperation(const int &);
     void sigAnntationMsg(const int &, const QString &);
     void sigBookMarkMsg(const int &, const QString &);
@@ -49,10 +50,16 @@ public:
     int qDealWithShortKey(const QString &) override;
 
     void OpenFilePath(const QString &);
+    QString getFilePath();
+    void saveData();
     void ShowFindWidget();
 
     void setFileChange(bool bchanged);
     bool getFileChange();
+
+    DocummentProxy *GetDocProxy();
+    FileDataModel qGetFileData();
+    void qSetFileData(const FileDataModel &);
 
 protected:
     void initWidget() override;

@@ -145,7 +145,7 @@ void FontMenu::slotRotateR()
  */
 void FontMenu::OnFileOpenOk(const QString &sPath)
 {
-    FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(sPath);
+    FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData();
 
     //单双页
     int value = fdm.qGetData(DoubleShow);

@@ -24,7 +24,6 @@
 
 #include "ModuleHeader.h"
 
-class DocummentProxy;
 class FileDataModel;
 class MainTabWidgetEx;
 
@@ -40,12 +39,6 @@ public:
     int getCurrentState() const;
     void setCurrentState(const int &nCurrentState);
 
-    void RemovePath(const QString &);
-    void InsertPathProxy(const QString &, DocummentProxy *);
-    DocummentProxy *getCurFileAndProxy(const QString &sPath = "") const;
-
-    QMap<QString, DocummentProxy *> getOpenFileAndProxy() const;
-
     void OpenCurFileFolder();
 
     QString GetCurPath() const;
@@ -54,14 +47,10 @@ public:
     int GetFileChange(const QString &sPath);
     void SetFileChange(const QString &sPath, const int &iState);
 
-    void SetFileData(const QString &sPath, const FileDataModel &fdm);
-    FileDataModel GetFileData(const QString &sPath) const;
-
     QString getMagniferPath() const;
     void setMagniferPath(const QString &strMagniferPath);
 
 private:
-    QMap<QString, DocummentProxy *> m_strOpenFileAndProxy;
     QList<int>          m_pMsgList;
 
     QString             m_strSliderPath = "";

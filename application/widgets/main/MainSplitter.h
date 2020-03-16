@@ -27,20 +27,19 @@ DWIDGET_USE_NAMESPACE
 class SpinnerWidget;
 class FileViewWidget;
 class LeftSidebarWidget;
-class MainSplitterPrivate;
+class DocummentProxy;
 
 class MainSplitter : public DSplitter
 {
     Q_OBJECT
     Q_DISABLE_COPY(MainSplitter)
-    Q_DECLARE_PRIVATE(MainSplitter)
 
 public:
     explicit MainSplitter(DWidget *parent = nullptr);
     ~MainSplitter() override;
 
 signals:
-    void sigOpenFileOk(const QString &);
+    void sigOpenFileResult(const QString &, const bool &);
 
 public:
     QString qGetPath();
@@ -52,7 +51,7 @@ public:
     void saveData();
 
     FileDataModel qGetFileData();
-    void setFileData(const FileDataModel &);
+    DocummentProxy *getDocProxy();
 
     void OnOpenSliderShow();
     void OnExitSliderShow();
@@ -63,7 +62,7 @@ private:
     void InitWidget();
 
 private slots:
-    void SlotOpenFileOk(const QString &);
+    void SlotFileOpenResult(const QString &, const bool &);
     void SlotFindOperation(const int &);
     void SlotNotifyMsg(const int &, const QString &);
 
@@ -75,8 +74,6 @@ private:
     SpinnerWidget       *m_pSpinnerWidget = nullptr;
     FileViewWidget      *m_pFileViewWidget = nullptr;
     bool                m_bOldState = false;
-
-    MainSplitterPrivate     *const d_ptr = nullptr;
 };
 
 #endif // MAINSPLITTER_H

@@ -25,6 +25,7 @@
 
 #include "controller/FileViewWidgetPrivate.h"
 #include "widgets/controller/ProxyData.h"
+#include "widgets/controller/ProxyFileDataModel.h"
 
 FileViewWidget::FileViewWidget(DWidget *parent)
     : CustomWidget(FILE_VIEW_WIDGET, parent), d_ptr(new FileViewWidgetPrivate(this))
@@ -109,6 +110,19 @@ void FileViewWidget::OpenFilePath(const QString &sPath)
     d->OpenFilePath(sPath);
 }
 
+QString FileViewWidget::getFilePath()
+{
+    Q_D(FileViewWidget);
+    return d->m_pProxyData->getPath();
+}
+
+void FileViewWidget::saveData()
+{
+    Q_D(FileViewWidget);
+    setFileChange(false);
+    d->m_pProxyFileDataModel->saveData();
+}
+
 void FileViewWidget::SlotFindOperation(const int &iType, const QString &strFind)
 {
     Q_D(FileViewWidget);
@@ -148,4 +162,22 @@ bool FileViewWidget::getFileChange()
 {
     Q_D(FileViewWidget);
     return d->m_pProxyData->IsFileChanged();
+}
+
+DocummentProxy *FileViewWidget::GetDocProxy()
+{
+    Q_D(FileViewWidget);
+    return d->m_pProxy;
+}
+
+FileDataModel FileViewWidget::qGetFileData()
+{
+    Q_D(FileViewWidget);
+    return d->m_pProxyFileDataModel->qGetFileData();
+}
+
+void FileViewWidget::qSetFileData(const FileDataModel &fdm)
+{
+    Q_D(FileViewWidget);
+    d->m_pProxyFileDataModel->qSetFileData(fdm);
 }

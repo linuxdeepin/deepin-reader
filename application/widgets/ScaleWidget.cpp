@@ -207,7 +207,7 @@ void ScaleWidget::SetComboBoxMax()
             }
         }
 
-        FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(sPath);
+        FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData();
         int nScale = fdm.qGetData(Scale);
         if (nScale == 0) {
             nScale = 100;
@@ -245,6 +245,14 @@ void ScaleWidget::SetFitScale(const QString &msgContent)
         m_nCurrentIndex = nIndex;
         scaleComboBox->setCurrentIndex(m_nCurrentIndex);
     } else {
+        dataList.append(nScale);
+        qSort(dataList.begin(), dataList.end());
+
+        m_nCurrentIndex = dataList.indexOf(nScale);
+        dataList.removeOne(nScale);
+
+        m_nCurrentIndex--;
+
         scaleComboBox->setCurrentIndex(-1);
         scaleComboBox->setCurrentText(sCurText);
     }

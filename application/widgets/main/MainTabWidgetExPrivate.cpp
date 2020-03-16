@@ -49,33 +49,6 @@ void MainTabWidgetExPrivate::setCurrentState(const int &nCurrentState)
     m_nCurrentState = nCurrentState;
 }
 
-void MainTabWidgetExPrivate::RemovePath(const QString &sPath)
-{
-    m_strOpenFileAndProxy.remove(sPath);
-}
-
-void MainTabWidgetExPrivate::InsertPathProxy(const QString &sPath, DocummentProxy *proxy)
-{
-    m_strOpenFileAndProxy.insert(sPath, proxy);
-}
-
-DocummentProxy *MainTabWidgetExPrivate::getCurFileAndProxy(const QString &sPath) const
-{
-    QString sTempPath = sPath;
-    if (sTempPath == "") {
-        sTempPath = qobject_cast<MainTabWidgetEx *>(q_ptr)->qGetCurPath();
-    }
-    if (m_strOpenFileAndProxy.contains(sTempPath)) {
-        return m_strOpenFileAndProxy[sTempPath];
-    }
-    return  nullptr;
-}
-
-QMap<QString, DocummentProxy *> MainTabWidgetExPrivate::getOpenFileAndProxy() const
-{
-    return m_strOpenFileAndProxy;
-}
-
 //  打开当前所在文件夹
 void MainTabWidgetExPrivate::OpenCurFileFolder()
 {
@@ -125,18 +98,6 @@ QString MainTabWidgetExPrivate::GetCurPath() const
     return "";
 }
 
-FileDataModel MainTabWidgetExPrivate::GetFileData(const QString &sPath) const
-{
-    auto splitterList = q_ptr->findChildren<MainSplitter *>();
-    foreach (auto s, splitterList) {
-        QString sSplitterPath = s->qGetPath();
-        if (sSplitterPath == sPath) {
-            return s->qGetFileData();
-        }
-    }
-    return FileDataModel();
-}
-
 QString MainTabWidgetExPrivate::getMagniferPath() const
 {
     return m_strMagniferPath;
@@ -145,18 +106,6 @@ QString MainTabWidgetExPrivate::getMagniferPath() const
 void MainTabWidgetExPrivate::setMagniferPath(const QString &strMagniferPath)
 {
     m_strMagniferPath = strMagniferPath;
-}
-
-void MainTabWidgetExPrivate::SetFileData(const QString &sPath, const FileDataModel &fdm)
-{
-    auto splitterList = q_ptr->findChildren<MainSplitter *>();
-    foreach (auto s, splitterList) {
-        QString sSplitterPath = s->qGetPath();
-        if (sSplitterPath == sPath) {
-            s->setFileData(fdm);
-            break;
-        }
-    }
 }
 
 void MainTabWidgetExPrivate::SetFileChange(const QString &sPath, const int &iState)

@@ -14,6 +14,7 @@ class DocummentProxy;
 class ProxyViewDisplay;
 class ProxyNotifyMsg;
 class ProxyMouseMove;
+class ProxyFileDataModel;
 class NoteTipWidget;
 class NoteViewWidget;
 
@@ -29,6 +30,7 @@ class FileViewWidgetPrivate: public QObject
 
 public:
     FileViewWidgetPrivate(FileViewWidget *parent);
+    ~FileViewWidgetPrivate() override;
 
 public:
     void hidetipwidget();
@@ -94,6 +96,7 @@ private:
 
     ProxyData           *m_pProxyData = nullptr;            //  唯一 数据区
 
+    ProxyFileDataModel  *m_pProxyFileDataModel = nullptr;
     ProxyMouseMove      *m_pProxyMouseMove = nullptr;       //  移动操作
     ProxyNotifyMsg      *m_pProxyNotifyMsg = nullptr;       //  通知消息
     ProxyViewDisplay    *m_pDocViewProxy = nullptr;         //  文档操作 旋转\单双页\自适应
@@ -104,6 +107,7 @@ private:
     friend class ProxyViewDisplay;
     friend class ProxyMouseMove;
     friend class ProxyNotifyMsg;
+    friend class ProxyFileDataModel;
 
 private:
     FileViewWidget *const q_ptr = nullptr;

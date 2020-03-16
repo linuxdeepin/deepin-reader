@@ -46,7 +46,7 @@ public:
 
 signals:
     void sigDealNotifyMsg(const int &, const QString &);
-    void sigOpenFileOk(const QString &);
+    void sigOpenFileResult(const QString &, const bool &);
 
     void sigRemoveFileTab(const QString &);
 
@@ -61,10 +61,7 @@ public:
     QStringList qGetAllPath();
     QString qGetCurPath();
     int GetFileChange(const QString &);
-    FileDataModel qGetFileData(const QString &) ;
-    void SetFileData(const QString &, const FileDataModel &);
-
-    void InsertPathProxy(const QString &, DocummentProxy *);
+    FileDataModel qGetFileData(const QString &sPath = "") ;
 
     // CustomWidget interface
     DocummentProxy *getCurFileAndProxy(const QString &sPath = "");
@@ -114,6 +111,8 @@ private slots:
     void SlotSetCurrentIndexFile(const QString &);
     void SlotAddTab(const QString &);
     void SlotCloseTab(const QString &);
+
+    void SlotOpenFileResult(const QString &, const bool &);
 
 private:
     QStackedLayout      *m_pStackedLayout = nullptr;

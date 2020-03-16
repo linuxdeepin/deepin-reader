@@ -46,7 +46,11 @@ public:
     bool IsFirstShow() const;
     void setFirstShow(bool bFirstShow);
 
+    bool getIsFileOpenOk() const;
+    void setIsFileOpenOk(bool bIsFileOpenOk);
+
 private:
+    bool                m_bIsFileOpenOk = false;
     QString             m_strPath = "";
     bool                m_filechanged = false;
     bool                m_bIsHandleSelect = false;              //  是否可以选中
