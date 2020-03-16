@@ -273,6 +273,7 @@ public:
     bool mouseBeOverText(QPoint point);
     QPoint global2RelativePoint(QPoint globalpoint);
     bool showMagnifier(QPoint point);
+    bool showMagnifierTest(QPoint point);
     int getCurrentPageNo();
     int currentPageNo();
     Page::Link *mouseBeOverLink(QPoint point);

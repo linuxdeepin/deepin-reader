@@ -30,6 +30,9 @@ class FileViewWidgetPrivate: public QObject
 public:
     FileViewWidgetPrivate(FileViewWidget *parent);
 
+public:
+    void hidetipwidget();
+
 private slots:
     void slotDealWithMenu(const int &, const QString &);
     void SlotNoteViewMsg(const int &, const QString &);

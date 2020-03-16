@@ -20,7 +20,6 @@ public:
     }
     bool getImage(QImage &image, double width, double height) override
     {
-//        QMutexLocker locker(&m_mutexlockgetimage);
         int xres = 72.0, yres = 72.0;
         double scalex = width / m_imagewidth;
         double scaley = height / m_imageheight;

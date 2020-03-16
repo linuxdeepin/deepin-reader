@@ -40,6 +40,13 @@ FileViewWidgetPrivate::FileViewWidgetPrivate(FileViewWidget *parent)
     m_pProxyMouseMove = new ProxyMouseMove(this);
 }
 
+void FileViewWidgetPrivate::hidetipwidget()
+{
+    if (nullptr != m_pTipWidget && m_pTipWidget->isVisible()) {
+        m_pTipWidget->hide();
+    }
+}
+
 void FileViewWidgetPrivate::slotDealWithMenu(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_NOTE_REMOVE_HIGHLIGHT || msgType == MSG_NOTE_UPDATE_HIGHLIGHT_COLOR ||
@@ -457,7 +464,6 @@ void FileViewWidgetPrivate::slotCustomContextMenuRequested(const QPoint &point)
         }
         if (bicon || bIsHighLight)
             bremoveenable = true;
-        qDebug() << "*********";
         m_operatemenu->setRemoveEnabled(bremoveenable);
         m_operatemenu->execMenu(tempPoint, true, sSelectText, struuid);
     } else if (sSelectText == "" && (bIsHighLight || bicon)) { //  选中区域 有文字, 弹出 文字操作菜单

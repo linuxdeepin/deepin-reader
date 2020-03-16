@@ -84,6 +84,13 @@ void FileViewWidget::wheelEvent(QWheelEvent *event)
     CustomWidget::wheelEvent(event);
 }
 
+void FileViewWidget::leaveEvent(QEvent *event)
+{
+    Q_D(FileViewWidget);
+    d->hidetipwidget();
+    CustomWidget::leaveEvent(event);
+}
+
 void FileViewWidget::ShowFindWidget()
 {
     if (m_pFindWidget == nullptr) {

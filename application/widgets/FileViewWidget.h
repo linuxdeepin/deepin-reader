@@ -63,6 +63,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
     void wheelEvent(QWheelEvent *e) override;
+    void leaveEvent(QEvent *)override;
+
 
 private slots:
     void SlotFindOperation(const int &, const QString &strFind);

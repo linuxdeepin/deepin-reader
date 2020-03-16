@@ -689,7 +689,7 @@ bool DocummentBase::showMagnifier(QPoint point)
                 d->m_magnifierwidget->update();
             } else {
                 if (ppage ->getMagnifierPixmap(pixmap, qpoint, d->m_magnifierwidget->getMagnifierRadius(), ppage->width()*d->m_magnifierwidget->getMagnifierScale(), ppage->height()*d->m_magnifierwidget->getMagnifierScale())) {
-                    qDebug() << __FUNCTION__ << "++++++++" ;
+                    qDebug() << __FUNCTION__ << "++++++++" << pixmap.size().width();
                     if (pixmap.size().width() < d->m_magnifierwidget->getMagnifierRadius() * 2) {
                         left = (d->m_widgets.at(pagenum)->width() - curwidth) / 2.0;
                         int ileft = qpoint.x() - left;
@@ -765,6 +765,111 @@ bool DocummentBase::showMagnifier(QPoint point)
         d->m_magnifierwidget->show();
         d->m_magnifierwidget->update();
     }
+    if (!d->m_magnifierwidget->showState())
+        return false;
+    int radius = d->m_magnifierwidget->getMagnifierRadius() - d->m_magnifierwidget->getMagnifierRingWidth();
+    int bigcirclex = gpoint.x() - radius;
+    int bigcircley = gpoint.y() - radius;
+    if (bigcircley < 0) {
+
+        if (scrollBar_Y)
+            scrollBar_Y->setValue(scrollBar_Y->value() + bigcircley);
+    } else if (bigcircley > d->m_magnifierwidget->height() - radius * 2) {
+        if (scrollBar_Y)
+            scrollBar_Y->setValue(scrollBar_Y->value() + bigcircley - (d->m_magnifierwidget->height() - radius * 2));
+    }
+    if (bigcirclex < 0) {
+        if (scrollBar_X)
+            scrollBar_X->setValue(scrollBar_X->value() + bigcirclex);
+    } else if (bigcirclex > d->m_magnifierwidget->width() - radius * 2) {
+        if (scrollBar_X)
+            scrollBar_X->setValue(scrollBar_X->value() + bigcirclex - (d->m_magnifierwidget->width() - radius * 2));
+    }
+    return true;
+}
+
+bool DocummentBase::showMagnifierTest(QPoint point)
+{
+    Q_D(DocummentBase);
+    if (!bDocummentExist() || !d->m_magnifierwidget) {
+        return false;
+    }
+    QPoint qpoint = point;
+    d->m_magnifierpoint = point;
+    int pagenum = -1;
+    int x_offset = 0;
+    int y_offset = 0;
+    DScrollBar *scrollBar_X = horizontalScrollBar();
+    if (scrollBar_X)
+        x_offset = scrollBar_X->value();
+    DScrollBar *scrollBar_Y = verticalScrollBar();
+    if (scrollBar_Y)
+        y_offset = scrollBar_Y->value();
+    QPoint gpoint = d->m_magnifierwidget->mapFromGlobal(mapToGlobal(QPoint(point.x() - x_offset, point.y() - y_offset)));
+    pagenum = pointInWhichPage(qpoint);
+    if (-1 != pagenum) {
+        if (pagenum != d->m_lastmagnifierpagenum && -1 != d->m_lastmagnifierpagenum) {
+//            qDebug() << "++++++" << pagenum << d->m_lastmagnifierpagenum;
+            if (pagenum > d->m_lastmagnifierpagenum && d->m_lastmagnifierpagenum - 3 > 0) {
+                PageBase *ppage = d->m_pages.at(d->m_lastmagnifierpagenum - 3);
+                ppage->clearMagnifierPixmap();
+                if (pagenum - d->m_lastmagnifierpagenum > 1) {
+                    ppage = d->m_pages.at(d->m_lastmagnifierpagenum - 2);
+                    ppage->clearMagnifierPixmap();
+                }
+            } else if (pagenum < d->m_lastmagnifierpagenum && d->m_lastmagnifierpagenum + 3 < d->m_pages.size()) {
+                PageBase *ppage = d->m_pages.at(d->m_lastmagnifierpagenum + 3);
+                ppage->clearMagnifierPixmap();
+                if (d->m_lastmagnifierpagenum - pagenum > 1) {
+                    ppage = d->m_pages.at(d->m_lastmagnifierpagenum + 2);
+                    ppage->clearMagnifierPixmap();
+                }
+            }
+            PageBase *ppage = nullptr;
+            int ipageno = pagenum;
+            double imagewidth = d->m_pages.at(pagenum)->width() * d->m_magnifierwidget->getMagnifierScale() * devicePixelRatioF();
+            double imageheight = d->m_pages.at(pagenum)->height() * d->m_magnifierwidget->getMagnifierScale() * devicePixelRatioF();
+            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
+                ppage = d->m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(imagewidth, imageheight);
+            }
+            ipageno = pagenum + 1;
+            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
+                ppage = d->m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(imagewidth, imageheight);
+            }
+            ipageno = pagenum - 1;
+            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
+                ppage = d->m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(imagewidth, imageheight);
+            }
+            ipageno = pagenum + 2;
+            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
+                ppage = d->m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(imagewidth, imageheight);
+            }
+            ipageno = pagenum - 2;
+            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
+                ppage = d->m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(imagewidth, imageheight);
+            }
+            ipageno = pagenum + 3;
+            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
+                ppage = d->m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(imagewidth, imageheight);
+            }
+            ipageno = pagenum - 3;
+            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
+                ppage = d->m_pages.at(ipageno);
+                ppage->loadMagnifierCacheThreadStart(imagewidth, imageheight);
+            }
+        }
+        d->m_lastmagnifierpagenum = pagenum;
+        PageBase *ppage = d->m_pages.at(pagenum);
+        QPixmap pixmap;
+        d->m_magnifierpage = pagenum;
+    }
+
     if (!d->m_magnifierwidget->showState())
         return false;
     int radius = d->m_magnifierwidget->getMagnifierRadius() - d->m_magnifierwidget->getMagnifierRingWidth();

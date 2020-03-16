@@ -27,23 +27,20 @@ void NoteTipWidget::setTipContent(const QString &content)
 {
     DTextEdit *pedit = this->findChild<DTextEdit *>();
     if (pedit) {
-
         QString strContent = content;
-
         strContent.replace('\n', "");
         strContent.replace('\t', "");
-        //  qDebug() << strContent.count('\n') << strContent.count('\t') << strContent.count('\r\n');
 
         QFontMetrics fm(pedit->font());
         int pixelsWide = fm.horizontalAdvance(strContent);
         int pixelsHigh = fm.height();
-        //        qDebug() << pixelsWide << pixelsHigh << fm.lineSpacing();
-        QString strcontent;
-        //判断是否超过十行
+        // qDebug() << "%$%$%$" << pixelsWide << pixelsHigh << fm.lineSpacing();
+        QString strcontent = strContent;
+//        //判断是否超过十行
         if (pixelsWide > (m_iwidth - 30) * 10) {
             setFixedHeight(pixelsHigh * 10 + 8);
             strcontent = pedit->fontMetrics().elidedText(strContent, Qt::ElideRight,
-                                                         (m_iwidth - 30) * 10, Qt::TextWordWrap);
+                                                         (m_iwidth - 30) * 10, Qt::TextWrapAnywhere);
         } else {
             int line = pixelsWide / (m_iwidth - 16);
             // line = line > 2 ? line + 2 : 3;
@@ -79,7 +76,7 @@ void NoteTipWidget::initWidget()
     pedit->setReadOnly(true);
     pedit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     pedit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    pedit->setWordWrapMode(QTextOption::WrapAnywhere /*WordWrap*/);
+    pedit->setWordWrapMode(QTextOption:: WrapAnywhere /*WordWrap*/);
     auto layout = new QHBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(pedit);
