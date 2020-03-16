@@ -99,6 +99,7 @@ private slots:
     void slotLoadImage(const int &, const QImage &);
     void slotUpdateTheme();
     void slotSelectItemBackColor(QListWidgetItem *);
+    void SlotBookMarkMsg(const int &, const QString &);
 
     void slotListMenuClick(const int &);
 protected:

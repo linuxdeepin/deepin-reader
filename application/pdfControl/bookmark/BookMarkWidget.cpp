@@ -488,6 +488,15 @@ void BookMarkWidget::slotSelectItemBackColor(QListWidgetItem *item)
     }
 }
 
+void BookMarkWidget::SlotBookMarkMsg(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_OPERATION_DELETE_BOOKMARK) {
+        slotDeleteBookItem(msgContent);
+    } else if (msgType == MSG_OPERATION_ADD_BOOKMARK) {
+        slotAddBookMark(msgContent);
+    }
+}
+
 void BookMarkWidget::slotListMenuClick(const int &iType)
 {
     if (iType == E_BOOKMARK_DELETE) {
@@ -510,10 +519,6 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
         OnOpenFileOk(msgContent);
     } else if (MSG_FILE_PAGE_CHANGE == msgType) { //  文档页变化消息
         slotDocFilePageChanged(msgContent);
-    } else if (msgType == MSG_OPERATION_DELETE_BOOKMARK) {
-        slotDeleteBookItem(msgContent);
-    } else if (msgType == MSG_OPERATION_ADD_BOOKMARK) {
-        slotAddBookMark(msgContent);
     }
 
     if (m_pMsgList.contains(msgType)) {

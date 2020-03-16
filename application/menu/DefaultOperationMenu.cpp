@@ -111,17 +111,11 @@ void DefaultOperationMenu::slotSearchClicked()
 
 void DefaultOperationMenu::slotBookMarkClicked()
 {
-    QJsonObject obj;
-    obj.insert("content", QString("%1").arg(m_nRightPageNumber));
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + BOOKMARK_WIDGET);
-
-    QJsonDocument doc(obj);
-
     int nData = m_pBookMark->property("data").toInt();
     if (nData == 0) {
-        notifyMsg(MSG_OPERATION_DELETE_BOOKMARK, doc.toJson(QJsonDocument::Compact));
+        emit sigActionTrigger(MSG_OPERATION_DELETE_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
     } else {
-        notifyMsg(MSG_OPERATION_ADD_BOOKMARK, doc.toJson(QJsonDocument::Compact));
+        emit sigActionTrigger(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
     }
 }
 

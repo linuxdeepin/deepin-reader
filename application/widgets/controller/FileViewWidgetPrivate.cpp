@@ -32,6 +32,7 @@ FileViewWidgetPrivate::FileViewWidgetPrivate(FileViewWidget *parent)
     connect(m_operatemenu, SIGNAL(sigActionTrigger(const int &, const QString &)), SLOT(slotDealWithMenu(const int &, const QString &)));
 
     m_pDefaultMenu = new DefaultOperationMenu(parent);
+    connect(m_pDefaultMenu, SIGNAL(sigActionTrigger(const int &, const QString &)), SLOT(slotDealWithMenu(const int &, const QString &)));
 
     m_pAnnotation = new Annotation(this);
     m_pDocViewProxy = new ProxyViewDisplay(this);
@@ -56,6 +57,10 @@ void FileViewWidgetPrivate::slotDealWithMenu(const int &msgType, const QString &
         onOpenNoteWidget(msgContent);
     } else if (msgType == MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) {
         onShowNoteWidget(msgContent);
+    } else if (msgType == MSG_OPERATION_DELETE_BOOKMARK) {      //  右键删除
+        onBookMarkState(msgType, msgContent);
+    } else if (msgType == MSG_OPERATION_ADD_BOOKMARK) {      //  右键添加
+        onBookMarkState(msgType, msgContent);
     }
 }
 
@@ -562,4 +567,16 @@ void FileViewWidgetPrivate::notifyMsg(const int &msgType, const QString &msgCont
 {
     Q_Q(FileViewWidget);
     q->notifyMsg(msgType, msgContent);
+}
+
+void FileViewWidgetPrivate::onBookMarkState(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_OPERATION_ADD_BOOKMARK) {
+        m_pProxy->setBookMarkState(msgContent.toInt(), true);
+    } else if (msgType == MSG_OPERATION_DELETE_BOOKMARK) {
+        m_pProxy->setBookMarkState(msgContent.toInt(), false);
+    }
+
+    Q_Q(FileViewWidget);
+    emit q->sigBookMarkMsg(msgType, msgContent);
 }

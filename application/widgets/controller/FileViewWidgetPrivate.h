@@ -83,6 +83,8 @@ private:
 
     void notifyMsg(const int &, const QString &);
 
+    void onBookMarkState(const int &, const QString &);
+
 private:
     NoteViewWidget          *m_pNoteViewWidget = nullptr;   //  注释内容显示框
     NoteTipWidget           *m_pTipWidget = nullptr;        //  注释提示框
@@ -101,6 +103,7 @@ private:
     friend class Annotation;
     friend class ProxyViewDisplay;
     friend class ProxyMouseMove;
+    friend class ProxyNotifyMsg;
 
 private:
     FileViewWidget *const q_ptr = nullptr;

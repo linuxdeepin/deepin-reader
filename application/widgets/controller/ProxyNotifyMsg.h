@@ -25,6 +25,7 @@
  *  文档 书签和当前页变化通知
  */
 
+class FileViewWidgetPrivate;
 
 class ProxyNotifyMsg : public QObject
 {
@@ -35,6 +36,10 @@ public:
 private slots:
     void slotBookMarkStateChange(int, bool);
     void slotDocFilePageChanged(int);
+
+private:
+    FileViewWidgetPrivate   *_fvwParent = nullptr;
+    friend class FileViewWidgetPrivate;
 };
 
 #endif // PROXYNOTIFYMSG_H

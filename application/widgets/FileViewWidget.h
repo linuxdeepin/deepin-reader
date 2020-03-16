@@ -40,6 +40,7 @@ signals:
     void sigFileOpenOK(const QString &);
     void sigFindOperation(const int &);
     void sigAnntationMsg(const int &, const QString &);
+    void sigBookMarkMsg(const int &, const QString &);
     void sigDeleteAnntation(const int &, const QString &);
 
     // IObserver interface

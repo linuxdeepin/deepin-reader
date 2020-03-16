@@ -18,6 +18,9 @@
  */
 #include "ProxyNotifyMsg.h"
 
+#include "FileViewWidgetPrivate.h"
+
+#include "widgets/FileViewWidget.h"
 #include <QJsonObject>
 #include <QJsonDocument>
 
@@ -31,22 +34,16 @@ using namespace DR_SPACE;
 
 ProxyNotifyMsg::ProxyNotifyMsg(QObject *parent) : QObject(parent)
 {
-
+    _fvwParent = qobject_cast<FileViewWidgetPrivate *>(parent);
 }
 
 //  文档书签状态改变
 void ProxyNotifyMsg::slotBookMarkStateChange(int nPage, bool bState)
 {
-    QJsonObject obj;
-    obj.insert("content", QString::number(nPage));
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + BOOKMARK_WIDGET);
-
-    QJsonDocument doc(obj);
-
     if (!bState) {
-        dApp->m_pModelService->notifyMsg(MSG_OPERATION_DELETE_BOOKMARK, doc.toJson(QJsonDocument::Compact));
+        emit _fvwParent->q_func()->sigBookMarkMsg(MSG_OPERATION_DELETE_BOOKMARK, QString::number(nPage));
     } else {
-        dApp->m_pModelService->notifyMsg(MSG_OPERATION_ADD_BOOKMARK, doc.toJson(QJsonDocument::Compact));
+        emit _fvwParent->q_func()->sigBookMarkMsg(MSG_OPERATION_ADD_BOOKMARK, QString::number(nPage));
     }
 }
 

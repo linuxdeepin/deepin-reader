@@ -62,6 +62,7 @@ void LeftSidebarWidget::initWidget()
 
     m_pStackedWidget = new DataStackedWidget(this);
     connect(this, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pStackedWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)));
+    connect(this, SIGNAL(sigBookMarkMsg(const int &, const QString &)), m_pStackedWidget, SIGNAL(sigBookMarkMsg(const int &, const QString &)));
     connect(m_pStackedWidget, SIGNAL(sigDeleteAnntation(const int &, const QString &)), this, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
 
     pVBoxLayout->addWidget(m_pStackedWidget);
