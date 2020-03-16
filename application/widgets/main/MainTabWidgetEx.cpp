@@ -386,8 +386,7 @@ void MainTabWidgetEx::OnKeyPress(const QString &sKey)
     int nState = getCurrentState();
     if (nState == SLIDER_SHOW && m_pctrlwidget) {
         if (sKey == KeyStr::g_space) {
-            QString sPath = d->getSliderPath();
-            auto helper = getCurFileAndProxy(sPath);
+            auto helper = getCurFileAndProxy(d->m_strSliderPath);
             if (helper) {
                 if (helper->getAutoPlaySlideStatu()) {
                     helper->setAutoPlaySlide(false);
@@ -416,8 +415,7 @@ void MainTabWidgetEx::SlotSetCurrentIndexFile(const QString &sPath)
             if (nState == Magnifer_State) {
                 setCurrentState(Default_State);
 
-                QString sMagniferPath = d->getMagniferPath();
-                auto proxy = getCurFileAndProxy(sMagniferPath);
+                auto proxy = getCurFileAndProxy(d->m_strMagniferPath);
                 if (proxy) {
                     proxy->closeMagnifier();
                 }
@@ -518,7 +516,7 @@ void MainTabWidgetEx::SlotOpenFileResult(const QString &sPath, const bool &res)
 void MainTabWidgetEx::setCurrentState(const int &nCurrentState)
 {
     Q_D(MainTabWidgetEx);
-    d->setCurrentState(nCurrentState);
+    d->m_nCurrentState = nCurrentState;
 }
 
 void MainTabWidgetEx::SetFileChange()
@@ -530,7 +528,7 @@ void MainTabWidgetEx::SetFileChange()
 int MainTabWidgetEx::getCurrentState()
 {
     Q_D(MainTabWidgetEx);
-    return d->getCurrentState();
+    return d->m_nCurrentState;
 }
 
 //  搜索框
@@ -568,7 +566,7 @@ void MainTabWidgetEx::OnOpenSliderShow()
 
             QString sPath = splitter->qGetPath();
 
-            d->setSliderPath(sPath);
+            d->m_strSliderPath = sPath;
 
             auto _proxy = getCurFileAndProxy(sPath);
             _proxy->setAutoPlaySlide(true);
@@ -602,8 +600,7 @@ void MainTabWidgetEx::OnExitSliderShow()
         if (splitter) {
             splitter->OnExitSliderShow();
 
-            QString sPath = d->getSliderPath();
-            DocummentProxy *_proxy = getCurFileAndProxy(sPath);
+            DocummentProxy *_proxy = getCurFileAndProxy(d->m_strSliderPath);
             if (!_proxy) {
                 return;
             }
@@ -613,7 +610,7 @@ void MainTabWidgetEx::OnExitSliderShow()
             m_pctrlwidget = nullptr;
         }
 
-        d->setSliderPath("");
+        d->m_strSliderPath = "";
     }
 }
 
@@ -627,7 +624,7 @@ void MainTabWidgetEx::OnOpenMagnifer()
         TitleWidget::Instance()->setMagnifierState();
 
         setCurrentState(Magnifer_State);
-        d->setMagniferPath(qGetCurPath());
+        d->m_strMagniferPath = qGetCurPath();
     }
 }
 

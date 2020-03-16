@@ -33,22 +33,13 @@ public:
     MainTabWidgetExPrivate(MainTabWidgetEx *);
 
 public:
-    QString getSliderPath() const;
-    void setSliderPath(const QString &strSliderPath);
-
-    int getCurrentState() const;
-    void setCurrentState(const int &nCurrentState);
-
     void OpenCurFileFolder();
 
-    QString GetCurPath() const;
-    QStringList GetAllPath() const;
+    QString GetCurPath();
+    QStringList GetAllPath();
 
     int GetFileChange(const QString &sPath);
     void SetFileChange(const QString &sPath, const int &iState);
-
-    QString getMagniferPath() const;
-    void setMagniferPath(const QString &strMagniferPath);
 
 private:
     QList<int>          m_pMsgList;

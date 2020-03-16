@@ -29,30 +29,10 @@ MainTabWidgetExPrivate::MainTabWidgetExPrivate(MainTabWidgetEx *cw)
     m_pMsgList = {E_APP_MSG_TYPE, E_TABBAR_MSG_TYPE, MSG_FILE_IS_CHANGE};
 }
 
-QString MainTabWidgetExPrivate::getSliderPath() const
-{
-    return m_strSliderPath;
-}
-
-void MainTabWidgetExPrivate::setSliderPath(const QString &strSliderPath)
-{
-    m_strSliderPath = strSliderPath;
-}
-
-int MainTabWidgetExPrivate::getCurrentState() const
-{
-    return m_nCurrentState;
-}
-
-void MainTabWidgetExPrivate::setCurrentState(const int &nCurrentState)
-{
-    m_nCurrentState = nCurrentState;
-}
-
 //  打开当前所在文件夹
 void MainTabWidgetExPrivate::OpenCurFileFolder()
 {
-    QString sPath = qobject_cast<MainTabWidgetEx *>(q_ptr)->qGetCurPath();
+    QString sPath = GetCurPath();
     if (sPath != "") {
         int nLastPos = sPath.lastIndexOf('/');
         sPath = sPath.mid(0, nLastPos);
@@ -61,11 +41,12 @@ void MainTabWidgetExPrivate::OpenCurFileFolder()
     }
 }
 
-QStringList MainTabWidgetExPrivate::GetAllPath() const
+QStringList MainTabWidgetExPrivate::GetAllPath()
 {
+    Q_Q(MainTabWidgetEx);
     QStringList pathList;
 
-    auto splitterList = q_ptr->findChildren<MainSplitter *>();
+    auto splitterList = q->findChildren<MainSplitter *>();
     foreach (auto s, splitterList) {
         QString sSplitterPath = s->qGetPath();
         if (sSplitterPath != "") {
@@ -77,7 +58,9 @@ QStringList MainTabWidgetExPrivate::GetAllPath() const
 
 int MainTabWidgetExPrivate::GetFileChange(const QString &sPath)
 {
-    auto splitterList = q_ptr->findChildren<MainSplitter *>();
+    Q_Q(MainTabWidgetEx);
+
+    auto splitterList = q->findChildren<MainSplitter *>();
     foreach (auto s, splitterList) {
         QString sSplitterPath = s->qGetPath();
         if (sSplitterPath == sPath) {
@@ -87,25 +70,17 @@ int MainTabWidgetExPrivate::GetFileChange(const QString &sPath)
     return -1;
 }
 
-QString MainTabWidgetExPrivate::GetCurPath() const
+QString MainTabWidgetExPrivate::GetCurPath()
 {
-    auto splitterList = q_ptr->findChildren<MainSplitter *>();
+    Q_Q(MainTabWidgetEx);
+
+    auto splitterList = q->findChildren<MainSplitter *>();
     foreach (auto s, splitterList) {
         if (s->isVisible()) {
             return s->qGetPath();
         }
     }
     return "";
-}
-
-QString MainTabWidgetExPrivate::getMagniferPath() const
-{
-    return m_strMagniferPath;
-}
-
-void MainTabWidgetExPrivate::setMagniferPath(const QString &strMagniferPath)
-{
-    m_strMagniferPath = strMagniferPath;
 }
 
 void MainTabWidgetExPrivate::SetFileChange(const QString &sPath, const int &iState)
