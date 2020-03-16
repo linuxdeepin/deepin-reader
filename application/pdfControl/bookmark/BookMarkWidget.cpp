@@ -171,9 +171,9 @@ void BookMarkWidget::slotAddBookMark(const QString &sContent)
                     proxy->setBookMarkState(nPage, true);
 
                     m_pAddBookMarkBtn->setEnabled(false);
-
-                    emit sigSetBookMarkState(1, nPage);
                 }
+
+                emit sigSetBookMarkState(1, nPage);
             }
         }
     }
@@ -322,9 +322,9 @@ void BookMarkWidget::deleteIndexPage(const int &pageIndex)
             int nCurPage = proxy->currentPageNo();
             if (nCurPage == pageIndex) {  //  当前页被删了
                 m_pAddBookMarkBtn->setEnabled(true);
-
-                emit sigSetBookMarkState(-1, pageIndex);
             }
+
+            emit sigSetBookMarkState(-1, pageIndex);
         }
     }
 }
