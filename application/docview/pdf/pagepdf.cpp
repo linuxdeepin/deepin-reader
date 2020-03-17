@@ -656,14 +656,15 @@ void PagePdf::freshPage(Poppler::Page *page)
 bool PagePdf::getrectimage(QImage &image, double destwidth, double scalebase, double magnifierscale, QPoint &pt)
 {
     Q_D(PagePdf);
+    //  QTime tm; tm.start();
     QPointF ptimage = pt;
     getImagePoint(ptimage);
-    ptimage.setX(ptimage.x()*magnifierscale * d->m_scale);
-    ptimage.setY(ptimage.y()*magnifierscale * d->m_scale);
+    ptimage.setX(ptimage.x()*magnifierscale * d->m_scale * devicePixelRatioF());
+    ptimage.setY(ptimage.y()*magnifierscale * d->m_scale * devicePixelRatioF());
     int xres = 72.0, yres = 72.0;
     if (!d->m_page)
         return false;
     image = d->m_page->renderToImage(xres * scalebase, yres * scalebase, ptimage.x() - destwidth / 2, ptimage.y() - destwidth / 2, destwidth, destwidth);
-    qDebug() << pt << ptimage << ptimage.x() - destwidth / 2 << destwidth;
+    // qDebug() << pt << ptimage << ptimage.x() - destwidth / 2 << destwidth << "cost time:" << tm.elapsed();
     return true;
 }

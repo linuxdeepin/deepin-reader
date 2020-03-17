@@ -4,53 +4,6 @@
 #include <QPainter>
 #include <QThreadPool>
 #include <QDebug>
-//ThreadRenderImage::ThreadRenderImage()
-//{
-//    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
-//    m_page = nullptr;
-//    restart = false;
-//    m_width = 0;
-//    m_height = 0;
-//}
-
-//void ThreadRenderImage::setRestart()
-//{
-//    restart = true;
-//}
-
-//void ThreadRenderImage::setPage(PageInterface *page, double width, double height)
-//{
-//    qDebug() << "ThreadRenderImage::setPage" << width << height;
-//    m_page = page;
-//    m_width = width;
-//    m_height = height;
-//}
-
-//void ThreadRenderImage::run()
-//{
-//    if (!m_page)
-//        return;
-//    restart = true;
-//    while (restart) {
-//        if (QThread::currentThread()->isInterruptionRequested()) {
-//            return;
-//        }
-//        restart = false;
-//        if (m_width > 0 && m_height > 0) {
-//            QImage image;
-//            qDebug() << "ThreadRenderImage getImage ID:" << currentThreadId();
-//            if (m_page->getImage(image, m_width, m_height)) {
-//                if (QThread::currentThread()->isInterruptionRequested()) {
-//                    return;
-//                }
-////                m_page->loadData();
-//                emit signal_RenderFinish(image);
-//            } else {
-//                qDebug() << "ThreadRenderImage getImage ID:" << currentThreadId() << " fail!";
-//            }
-//        }
-//    }
-//}
 
 ThreadRenderImage::ThreadRenderImage()
 {
@@ -129,7 +82,6 @@ void ThreadRenderImage::run()
 
 ThreadLoadMagnifierCache::ThreadLoadMagnifierCache()
 {
-    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
     m_page = nullptr;
     restart = false;
     m_width = 0;

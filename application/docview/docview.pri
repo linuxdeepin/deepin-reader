@@ -3,6 +3,7 @@ PKGCONFIG += x11 poppler-qt5 ddjvuapi libspectre
 INCLUDEPATH+=/usr/include/KF5/KArchive
 LIBS+=-lKF5Archive -luuid -ltiff
 HEADERS += \
+    $$PWD/generatorclass.h \
     $$PWD/pdf/ \
     $$PWD/pdf/docummentpdf.h \
     $$PWD/pdf/pagepdf.h \
@@ -28,6 +29,7 @@ HEADERS += \
 
 
 SOURCES += \
+    $$PWD/generatorclass.cpp \
     $$PWD/pdf/docummentpdf.cpp \
     $$PWD/pdf/pagepdf.cpp \
     $$PWD/docummentbase.cpp \

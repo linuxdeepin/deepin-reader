@@ -148,17 +148,15 @@ bool DocummentProxy::closeMagnifier()
 {
     if (!m_documment || bcloseing)
         return false;
-    // qDebug() << "closeMagnifier";
     m_documment->magnifierClear();
     return true;
 }
 
-bool DocummentProxy::setMagnifierStyle(QColor magnifiercolor, int magnifierradius, int magnifierringwidth, double magnifierscale)
+bool DocummentProxy::setMagnifierStyle(int magnifierradius, int magnifierringwidth, double magnifierscale)
 {
     if (!m_documment || bcloseing)
         return false;
-    //qDebug() << "setMagnifierStyle";
-    return  m_documment->setMagnifierStyle(magnifiercolor, magnifierradius, magnifierringwidth, magnifierscale);
+    return  m_documment->setMagnifierStyle(magnifierradius, magnifierringwidth, magnifierscale);
 }
 QString DocummentProxy::addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color)
 {

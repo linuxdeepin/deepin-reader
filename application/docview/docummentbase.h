@@ -2,17 +2,15 @@
 #define DOCUMMENTBASE_H
 
 #include "docview/commonstruct.h"
+#include "docview/generatorclass.h"
 #include "searchtask.h"
 #include <DWidget>
 #include <DScrollArea>
 #include <DScrollBar>
-#include <DGuiApplicationHelper>
 #include <QList>
 #include <QVBoxLayout>
-#include <QPoint>
 #include <QColor>
 #include <QVideoWidget>
-#include <QThread>
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 #include <QTimer>
@@ -22,69 +20,8 @@ DGUI_USE_NAMESPACE
 
 #define     MAXPAGEHEIGHT       20000
 
-#include <QtDebug>
-
 class SearchTask;
-class DocummentBase;
 class DocummentBasePrivate;
-
-class ThreadLoadData : public QThread
-{
-    Q_OBJECT
-public:
-    ThreadLoadData();
-    void setDoc(DocummentBase *doc);
-    void setRestart();
-signals:
-    void signal_dataLoaded(bool);
-protected:
-    virtual void run();
-
-private:
-    DocummentBase *m_doc;
-    bool restart;
-};
-
-class MagnifierWidget: public DWidget
-{
-    Q_OBJECT
-public:
-    MagnifierWidget(DWidget *parent = nullptr);
-    void setPixmap(QPixmap pixmap);
-    void setPoint(QPoint point);
-    int getMagnifierRadius();
-    double getMagnifierScale();
-    int getMagnifierRingWidth();
-    void setMagnifierRadius(int radius);
-    void setMagnifierScale(double scale);
-    void setMagnifierRingWidth(int ringWidth);
-    void setMagnifierColor(QColor color);
-    void stopShow();
-    void startShow();
-    bool showState();
-protected:
-    void paintEvent(QPaintEvent *event) override;
-private:
-    QColor m_magnifiercolor;
-    int m_magnifierradius;
-    int m_magnifierringwidth;
-    QPoint m_magnifierpoint;
-    QPixmap m_magnifierpixmap;
-    double m_magnifierscale;
-    bool bStartShow;
-    int m_magnifiermapradius;
-    int m_magnifierringmapwidth;
-//    int m_magnifiershadowwidth;
-};
-
-class SlidWidget: public DWidget
-{
-    Q_OBJECT
-public:
-    SlidWidget(DWidget *parent = nullptr);
-protected:
-    void paintEvent(QPaintEvent *event) override;
-};
 
 class DocummentBasePrivate: public QObject
 {
@@ -292,7 +229,7 @@ public:
     void magnifierClear();
     void pageMove(double mvx, double mvy);
     //    bool isWordsBeLoad();
-    bool setMagnifierStyle(QColor magnifiercolor = Qt::white, int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3);
+    bool setMagnifierStyle(int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3);
     bool showSlideModel();
     void cacularValueXY(int &xvalue, int &yvalue, int curpage, bool bsearch = true, QRectF rect = QRectF());
     int pointInWhichPage(QPoint &qpoint);

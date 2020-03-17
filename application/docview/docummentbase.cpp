@@ -14,163 +14,6 @@
 #include <qglobal.h>
 static QMutex mutexlockloaddata;
 
-ThreadLoadData::ThreadLoadData()
-{
-    m_doc = nullptr;
-    restart = false;
-}
-
-void ThreadLoadData::setDoc(DocummentBase *doc)
-{
-    m_doc = doc;
-}
-
-void ThreadLoadData::setRestart()
-{
-    restart = true;
-}
-
-void ThreadLoadData::run()
-{
-    // QMutexLocker locker(&mutexlockloaddata);
-    if (!m_doc) {
-        emit signal_dataLoaded(false);
-        return;
-    }
-
-    restart = true;
-    while (restart) {
-        restart = false;
-        m_doc->loadData();
-    }
-    // emit signal_dataLoaded(true);
-}
-
-SlidWidget::SlidWidget(DWidget *parent): DWidget(parent)
-{
-    setMouseTracking(true);
-}
-
-void SlidWidget::paintEvent(QPaintEvent *event)
-{
-    DWidget::paintEvent(event);
-    update();
-}
-
-MagnifierWidget::MagnifierWidget(DWidget *parent): DWidget(parent)
-{
-    m_magnifiercolor = Qt::white;
-    m_magnifierringwidth = 10;
-    m_magnifierringmapwidth = 14;
-    m_magnifierradius = 100;
-    m_magnifiermapradius = 109;
-    m_magnifierscale = 3;
-//    m_magnifiershadowwidth = 3;
-    m_magnifierpixmap = QPixmap();
-    bStartShow = false;
-    setMouseTracking(true);
-}
-
-void MagnifierWidget::stopShow()
-{
-    bStartShow = false;
-}
-
-void MagnifierWidget::startShow()
-{
-    bStartShow = true;
-}
-
-bool MagnifierWidget::showState()
-{
-    return bStartShow;
-}
-
-void MagnifierWidget::paintEvent(QPaintEvent *event)
-{
-    //贴图方式实现
-    DWidget::paintEvent(event);
-    QPainter qpainter(this);
-    if (!bStartShow || m_magnifierpixmap.isNull())
-        return;
-    int radius = m_magnifiermapradius + m_magnifierringmapwidth;
-    int bigcirclex = m_magnifierpoint.x() - radius;
-    int bigcircley = m_magnifierpoint.y() - radius;
-    if (bigcirclex < 0) {
-        bigcirclex = 0;
-    } else if (bigcirclex > width() - radius * 2) {
-        bigcirclex = width() - radius * 2;
-    }
-    if (bigcircley < 0) {
-        bigcircley = 0;
-    } else if (bigcircley > height() - radius * 2) {
-        bigcircley = height() - radius * 2;
-    }
-    radius = m_magnifiermapradius;
-    int smallcirclex = bigcirclex + m_magnifierringmapwidth;
-    int smallcircley = bigcircley + m_magnifierringmapwidth;
-    QTransform tr;
-    tr.translate(smallcirclex, smallcircley);
-    tr.scale(1.0, 1.0);
-    QBrush brush(m_magnifierpixmap);
-    brush.setTransform(tr);
-    qpainter.setPen(QPen(QColor(255, 255, 255), 0));
-    qpainter.setBrush(brush);
-    qpainter.drawEllipse(smallcirclex, smallcircley, m_magnifiermapradius * 2, m_magnifiermapradius * 2);
-    QPixmap pix(":/resources/image/maganifier.svg");
-    const qreal ratio = qApp->devicePixelRatio();
-    pix.setDevicePixelRatio(ratio);
-    pix = pix.scaled(234, 234, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    qpainter.setRenderHints(QPainter::SmoothPixmapTransform);
-    qpainter.drawPixmap(bigcirclex, bigcircley, m_magnifiermapradius * 2 + m_magnifierringmapwidth * 2, m_magnifiermapradius * 2 + m_magnifierringmapwidth * 2, pix);
-}
-
-void MagnifierWidget::setPixmap(QPixmap pixmap)
-{
-    m_magnifierpixmap = pixmap;
-}
-
-
-void MagnifierWidget::setPoint(QPoint point)
-{
-    m_magnifierpoint = point;
-}
-
-int MagnifierWidget::getMagnifierRadius()
-{
-//    return m_magnifierradius;
-    return m_magnifiermapradius;
-}
-
-double MagnifierWidget::getMagnifierScale()
-{
-    return m_magnifierscale;
-}
-
-int MagnifierWidget::getMagnifierRingWidth()
-{
-//    return m_magnifierringwidth;
-    return m_magnifierringmapwidth;
-}
-
-void MagnifierWidget::setMagnifierRadius(int radius)
-{
-    m_magnifierradius = radius;
-}
-void MagnifierWidget::setMagnifierScale(double scale)
-{
-    m_magnifierscale = scale;
-}
-void MagnifierWidget::setMagnifierRingWidth(int ringWidth)
-{
-    m_magnifierringwidth = ringWidth;
-}
-void MagnifierWidget::setMagnifierColor(QColor color)
-{
-    m_magnifiercolor = color;
-}
-
-
 DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrollArea(parent),
     d_ptr(ptr ? ptr : new DocummentBasePrivate(this))
 {
@@ -731,7 +574,7 @@ bool DocummentBase::showMagnifier(QPoint point)
                     qDebug() << __FUNCTION__ << "############" << pixmap.size() << d->m_magnifierwidget->getMagnifierRadius();
                     d->m_magnifierwidget->setPixmap(pixmap);
                     d->m_magnifierwidget->setPoint(gpoint);
-                    d->m_magnifierwidget->startShow();
+                    d->m_magnifierwidget->setShowState(true);
                     d->m_magnifierwidget->show();
                     d->m_magnifierwidget->update();
                 }
@@ -752,7 +595,7 @@ bool DocummentBase::showMagnifier(QPoint point)
                 if (ppage ->getMagnifierPixmap(pixmap, qpoint, d->m_magnifierwidget->getMagnifierRadius(), ppage->width()*d->m_magnifierwidget->getMagnifierScale(), ppage->height()*d->m_magnifierwidget->getMagnifierScale())) {
                     d->m_magnifierwidget->setPixmap(pixmap);
                     d->m_magnifierwidget->setPoint(gpoint);
-                    d->m_magnifierwidget->startShow();
+                    d->m_magnifierwidget->setShowState(true);
                     d->m_magnifierwidget->show();
                     d->m_magnifierwidget->update();
                 }
@@ -796,7 +639,7 @@ bool DocummentBase::showMagnifierTest(QPoint point)
         return false;
     }
     QPoint qpoint = point;
-    d->m_magnifierpoint = point;
+    //  d->m_magnifierpoint = point;
     int pagenum = -1;
     int x_offset = 0;
     int y_offset = 0;
@@ -809,34 +652,41 @@ bool DocummentBase::showMagnifierTest(QPoint point)
     QPoint gpoint = d->m_magnifierwidget->mapFromGlobal(mapToGlobal(QPoint(point.x() - x_offset, point.y() - y_offset)));
     pagenum = pointInWhichPage(qpoint);
     if (-1 != pagenum) {
-        QImage resimage;
-
-        int imagewidth = d->m_magnifierwidget->getMagnifierRadius() * 2;
-        d->m_pages.at(pagenum)->getrectimage(resimage, imagewidth, d->m_scale * d->m_magnifierwidget->getMagnifierScale() * devicePixelRatioF(), d->m_magnifierwidget->getMagnifierScale(), qpoint);
-
-        QPixmap pix;
-        pix = pix.fromImage(resimage);
-        QMatrix leftmatrix;
-        switch (d->m_rotate) {
-        case RotateType_90:
-            leftmatrix.rotate(90);
-            break;
-        case RotateType_180:
-            leftmatrix.rotate(180);
-            break;
-        case RotateType_270:
-            leftmatrix.rotate(270);
-            break;
-        default:
-            break;
+        if (getMaxZoomratio() < 5) {
+            d->m_magnifierwidget->setMagnifierScale(1.5);
         }
-        pix = pix.transformed(leftmatrix, Qt::SmoothTransformation);
-        pix.setDevicePixelRatio(devicePixelRatioF());
-        d->m_magnifierwidget->setPixmap(pix);
+        d->m_magnifierwidget->showrectimage(d->m_pages.at(pagenum), d->m_scale, d->m_rotate, qpoint);
         d->m_magnifierwidget->setPoint(gpoint);
-        d->m_magnifierwidget->startShow();
         d->m_magnifierwidget->show();
         d->m_magnifierwidget->update();
+
+//        QImage resimage;
+//        int imagewidth = d->m_magnifierwidget->getMagnifierRadius() * 2;
+//        d->m_pages.at(pagenum)->getrectimage(resimage, imagewidth, d->m_scale * d->m_magnifierwidget->getMagnifierScale() * devicePixelRatioF(), d->m_magnifierwidget->getMagnifierScale(), qpoint);
+
+//        QPixmap pix;
+//        pix = pix.fromImage(resimage);
+//        QMatrix leftmatrix;
+//        switch (d->m_rotate) {
+//        case RotateType_90:
+//            leftmatrix.rotate(90);
+//            break;
+//        case RotateType_180:
+//            leftmatrix.rotate(180);
+//            break;
+//        case RotateType_270:
+//            leftmatrix.rotate(270);
+//            break;
+//        default:
+//            break;
+//        }
+//        pix = pix.transformed(leftmatrix, Qt::SmoothTransformation);
+//        pix.setDevicePixelRatio(devicePixelRatioF());
+//        d->m_magnifierwidget->setPixmap(pix);
+//        d->m_magnifierwidget->setPoint(gpoint);
+//        d->m_magnifierwidget->setShowState(true);
+//        d->m_magnifierwidget->show();
+//        d->m_magnifierwidget->update();
     }
 
     if (!d->m_magnifierwidget->showState())
@@ -1759,7 +1609,7 @@ void DocummentBase::magnifierClear()
     Q_D(DocummentBase);
     if (d->m_magnifierwidget) {
         d->m_magnifierwidget->setPixmap(QPixmap());
-        d->m_magnifierwidget->stopShow();
+        d->m_magnifierwidget->setShowState(false);
         d->m_magnifierpage = -1;
         d->m_magnifierwidget->hide();
     }
@@ -1782,7 +1632,7 @@ void DocummentBase::pageMove(double mvx, double mvy)
 
 //}
 
-bool DocummentBase::setMagnifierStyle(QColor magnifiercolor, int magnifierradius, int magnifierringwidth, double magnifierscale)
+bool DocummentBase::setMagnifierStyle(int magnifierradius, int magnifierringwidth, double magnifierscale)
 {
     Q_D(DocummentBase);
     if (!d->m_magnifierwidget) {
@@ -1791,7 +1641,6 @@ bool DocummentBase::setMagnifierStyle(QColor magnifiercolor, int magnifierradius
     d->m_magnifierwidget->setMagnifierRadius(magnifierradius);
     d->m_magnifierwidget->setMagnifierScale(magnifierscale);
     d->m_magnifierwidget->setMagnifierRingWidth(magnifierringwidth);
-    d->m_magnifierwidget->setMagnifierColor(magnifiercolor);
     return true;
 }
 
@@ -2065,9 +1914,5 @@ QPoint DocummentBase::transformPoint(const QPoint &pt, RotateType_EM type, doubl
     }
     return  pos;
 }
-
-
-
-
 
 
