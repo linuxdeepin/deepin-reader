@@ -592,6 +592,7 @@ bool DocummentBase::showMagnifier(QPoint point)
     if (!bDocummentExist() || !d->m_magnifierwidget) {
         return false;
     }
+    return  showMagnifierTest(point);
     QPoint qpoint = point;
     d->m_magnifierpoint = point;
     int pagenum = -1;
@@ -808,66 +809,34 @@ bool DocummentBase::showMagnifierTest(QPoint point)
     QPoint gpoint = d->m_magnifierwidget->mapFromGlobal(mapToGlobal(QPoint(point.x() - x_offset, point.y() - y_offset)));
     pagenum = pointInWhichPage(qpoint);
     if (-1 != pagenum) {
-        if (pagenum != d->m_lastmagnifierpagenum && -1 != d->m_lastmagnifierpagenum) {
-//            qDebug() << "++++++" << pagenum << d->m_lastmagnifierpagenum;
-            if (pagenum > d->m_lastmagnifierpagenum && d->m_lastmagnifierpagenum - 3 > 0) {
-                PageBase *ppage = d->m_pages.at(d->m_lastmagnifierpagenum - 3);
-                ppage->clearMagnifierPixmap();
-                if (pagenum - d->m_lastmagnifierpagenum > 1) {
-                    ppage = d->m_pages.at(d->m_lastmagnifierpagenum - 2);
-                    ppage->clearMagnifierPixmap();
-                }
-            } else if (pagenum < d->m_lastmagnifierpagenum && d->m_lastmagnifierpagenum + 3 < d->m_pages.size()) {
-                PageBase *ppage = d->m_pages.at(d->m_lastmagnifierpagenum + 3);
-                ppage->clearMagnifierPixmap();
-                if (d->m_lastmagnifierpagenum - pagenum > 1) {
-                    ppage = d->m_pages.at(d->m_lastmagnifierpagenum + 2);
-                    ppage->clearMagnifierPixmap();
-                }
-            }
-            PageBase *ppage = nullptr;
-            int ipageno = pagenum;
-            double imagewidth = d->m_pages.at(pagenum)->width() * d->m_magnifierwidget->getMagnifierScale() * devicePixelRatioF();
-            double imageheight = d->m_pages.at(pagenum)->height() * d->m_magnifierwidget->getMagnifierScale() * devicePixelRatioF();
-            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
-                ppage = d->m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(imagewidth, imageheight);
-            }
-            ipageno = pagenum + 1;
-            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
-                ppage = d->m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(imagewidth, imageheight);
-            }
-            ipageno = pagenum - 1;
-            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
-                ppage = d->m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(imagewidth, imageheight);
-            }
-            ipageno = pagenum + 2;
-            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
-                ppage = d->m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(imagewidth, imageheight);
-            }
-            ipageno = pagenum - 2;
-            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
-                ppage = d->m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(imagewidth, imageheight);
-            }
-            ipageno = pagenum + 3;
-            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
-                ppage = d->m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(imagewidth, imageheight);
-            }
-            ipageno = pagenum - 3;
-            if (ipageno >= 0 && ipageno < d->m_pages.size()) {
-                ppage = d->m_pages.at(ipageno);
-                ppage->loadMagnifierCacheThreadStart(imagewidth, imageheight);
-            }
+        QImage resimage;
+
+        int imagewidth = d->m_magnifierwidget->getMagnifierRadius() * 2;
+        d->m_pages.at(pagenum)->getrectimage(resimage, imagewidth, d->m_scale * d->m_magnifierwidget->getMagnifierScale() * devicePixelRatioF(), d->m_magnifierwidget->getMagnifierScale(), qpoint);
+
+        QPixmap pix;
+        pix = pix.fromImage(resimage);
+        QMatrix leftmatrix;
+        switch (d->m_rotate) {
+        case RotateType_90:
+            leftmatrix.rotate(90);
+            break;
+        case RotateType_180:
+            leftmatrix.rotate(180);
+            break;
+        case RotateType_270:
+            leftmatrix.rotate(270);
+            break;
+        default:
+            break;
         }
-        d->m_lastmagnifierpagenum = pagenum;
-        PageBase *ppage = d->m_pages.at(pagenum);
-        QPixmap pixmap;
-        d->m_magnifierpage = pagenum;
+        pix = pix.transformed(leftmatrix, Qt::SmoothTransformation);
+        pix.setDevicePixelRatio(devicePixelRatioF());
+        d->m_magnifierwidget->setPixmap(pix);
+        d->m_magnifierwidget->setPoint(gpoint);
+        d->m_magnifierwidget->startShow();
+        d->m_magnifierwidget->show();
+        d->m_magnifierwidget->update();
     }
 
     if (!d->m_magnifierwidget->showState())

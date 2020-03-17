@@ -506,7 +506,6 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPointF point, int radius, do
     double scaley = height / d->m_imageheight;
 
     double relx = qp.x() * scalex, rely = qp.y() * scaley;
-    // qDebug() << __FUNCTION__ << "=========" << qp << relx << rely;
     if (qp.x() * scalex <= 0) {
         relx = radius;
     } else if (relx < 2 * radius && relx > 0) {
@@ -531,22 +530,6 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPointF point, int radius, do
     } else {
         qpixmap1 = qpixmap.copy(relx - radius, rely - radius, radius * 2, radius * 2);
     }
-
-//    if (qp.x() * scalex <= 0) {
-//        relx = radius;
-//    } else if (qp.x() * scalex >= width) {
-//        relx = width;
-//    }
-//    if (qp.y() * scaley - radius < 0) {
-//        rely = radius;
-//    } else if (qp.y() * scaley > height - radius) {
-//        rely = height - radius;
-//    }
-
-//    relx *= devicePixelRatioF();
-//    rely *= devicePixelRatioF();
-//    qpixmap1 = qpixmap.copy(relx - radius, rely - radius, radius * 2, radius * 2);
-
     QMatrix leftmatrix;
     switch (d->m_rotate) {
     case RotateType_90:
@@ -582,8 +565,6 @@ void PageBase::slot_RenderFinish(QImage image)
     Q_D(PageBase);
     d->m_spinner->stop();
     d->m_spinner->hide();
-    QTime  time;
-    time.start();
     qDebug() << "page RenderFinish pagenum:" << d->m_pageno;
     d->havereander = true;
 //    double originwidth = image.width(), originheight = image.height();
@@ -605,7 +586,6 @@ void PageBase::slot_RenderFinish(QImage image)
     QPixmap map = QPixmap::fromImage(image);
     map = map.transformed(leftmatrix, Qt::SmoothTransformation);
     map.setDevicePixelRatio(devicePixelRatioF());
-    qDebug() << "PageBase::slot_RenderFinish to setPixmap" << map.rect();
     setPixmap(map);
 
 //    d->m_pixmapshow = QPixmap::fromImage(image);
@@ -614,8 +594,6 @@ void PageBase::slot_RenderFinish(QImage image)
 //    qDebug() << "PageBase::slot_RenderFinish to setPixmap" << d->m_pixmapshow.rect();
 //    update();
     setSelectTextRects();
-
-    qDebug() << "PageBase::slot_RenderFinish over time elapsed=" << time.elapsed();
 }
 
 void PageBase::clearImage()

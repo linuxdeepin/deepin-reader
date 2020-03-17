@@ -269,6 +269,7 @@ public:
     void waitThread();
     void clearImage();
     bool setBookMarkState(bool state);
+    virtual bool getrectimage(QImage &, double, double, double, QPoint &) {return  false;}
 
 signals:
     void signal_MagnifierPixmapCacheLoaded(int);

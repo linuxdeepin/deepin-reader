@@ -291,8 +291,6 @@ bool PagePdf::getSlideImage(QImage &image, double &width, double &height)
 bool PagePdf::getImage(QImage &image, double width, double height)
 {
     Q_D(PagePdf);
-
-    //    qDebug() << "devicePixelRatioF:" << devicePixelRatioF();
     return d->getImage(image, width, height);
 }
 
@@ -653,4 +651,19 @@ void PagePdf::freshPage(Poppler::Page *page)
 {
     Q_D(PagePdf);
     d->m_page = page;
+}
+
+bool PagePdf::getrectimage(QImage &image, double destwidth, double scalebase, double magnifierscale, QPoint &pt)
+{
+    Q_D(PagePdf);
+    QPointF ptimage = pt;
+    getImagePoint(ptimage);
+    ptimage.setX(ptimage.x()*magnifierscale * d->m_scale);
+    ptimage.setY(ptimage.y()*magnifierscale * d->m_scale);
+    int xres = 72.0, yres = 72.0;
+    if (!d->m_page)
+        return false;
+    image = d->m_page->renderToImage(xres * scalebase, yres * scalebase, ptimage.x() - destwidth / 2, ptimage.y() - destwidth / 2, destwidth, destwidth);
+    qDebug() << pt << ptimage << ptimage.x() - destwidth / 2 << destwidth;
+    return true;
 }

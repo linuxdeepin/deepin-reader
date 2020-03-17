@@ -35,6 +35,7 @@ public:
     void changeAnnotationColor(const QString uuid, const QColor &color);
     void deletePage();
     void freshPage(Poppler::Page *page);
+    bool getrectimage(QImage &image, double width, double scalebase, double magnifierscale, QPoint &pt) override;
 
 protected:
     void paintEvent(QPaintEvent *event) override;
