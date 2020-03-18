@@ -1675,13 +1675,12 @@ void DocummentBase::waitThreadquit()
 bool DocummentBase::openFile(QString filepath, unsigned int ipage, RotateType_EM rotatetype, double scale, ViewMode_EM viewmode)
 {
     Q_D(DocummentBase);
-    // QMutexLocker locker(&mutexlockloaddata);
     d->m_scale = scale;
     d->m_rotate = rotatetype;
     d->m_viewmode = viewmode;
     d->m_currentpageno = ipage;
     qDebug() << scale << rotatetype << viewmode;
-    d->donotneedreloaddoc = true; qDebug() << rect();
+    d->donotneedreloaddoc = true;
     if (!loadDocumment(filepath))
         return false;
     return true;
@@ -1732,12 +1731,11 @@ bool DocummentBase::loadData()
             break;
         }
         d->m_pages.at(i)->getInterFace()->loadData();
-        if (bfirst && (i > 3 || d->m_pages.size() <= 3)) {
+        if (bfirst && (i >= 3 || d->m_pages.size() <= 3)) {
             bfirst = false;
             emit signal_openResult(true);
         }
     }
-
     qDebug() << "loadWords end" << loadtime.elapsed();
     return true;
 }
