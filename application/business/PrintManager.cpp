@@ -57,21 +57,21 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
 
             QPainter painter(printer);
             painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
-            painter.begin(printer);
 
             QRect rect = painter.viewport();
 
             for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
                 QImage image;
-
-                bool rl = _proxy->getImage(iIndex, image, rect.width(), rect.height());
+                qreal deviceratio = qApp->devicePixelRatio() * 2.0;
+                bool rl = _proxy->getImage(iIndex, image, /*rect.width()*/fileInfo.iWidth * deviceratio, /*rect.height()*/fileInfo.iHeight * deviceratio);
                 if (rl) {
-                    painter.drawPixmap(0, 0, QPixmap::fromImage(image));
+                    QPixmap printpixmap = QPixmap::fromImage(image);
+                    printpixmap.setDevicePixelRatio(deviceratio);
+                    painter.drawPixmap(0, 0, printpixmap);
                     if (iIndex < nPageSize - 1)
                         printer->newPage();
                 }
             }
-            painter.end();
         }
     }
 }

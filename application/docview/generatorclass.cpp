@@ -2,12 +2,12 @@
 #include "docview/pagebase.h"
 #include "docummentbase.h"
 
-magnifierimagerender::magnifierimagerender()
+MagnifierImageRender::MagnifierImageRender()
 {
 
 }
 
-void magnifierimagerender::getmagnigierimage(PageBase *page, double width, double scalebase, double magnifierscale, QPoint &pt)
+void MagnifierImageRender::getmagnigierimage(PageBase *page, double width, double scalebase, double magnifierscale, QPoint &pt)
 {
     brender = true;
     pagebase = page;
@@ -23,7 +23,7 @@ void magnifierimagerender::getmagnigierimage(PageBase *page, double width, doubl
     mtex.unlock();
 }
 
-void magnifierimagerender::run()
+void MagnifierImageRender::run()
 {
     if (nullptr != pagebase) {
         while (brender) {
@@ -36,7 +36,6 @@ void magnifierimagerender::run()
                 mtex.lock();
                 condition.wait(&mtex);
                 mtex.unlock();
-                qDebug() << "sbkebcmj===========";
             }
         }
     }
@@ -55,16 +54,15 @@ MagnifierWidget::MagnifierWidget(DWidget *parent): DWidget(parent)
     m_magnifierscale = 2;//3;
     m_magnifierpixmap = QPixmap();
     bStartShow = false;
-    prenderthread = new magnifierimagerender;
     setMouseTracking(true);
-    connect(prenderthread, SIGNAL(signal_imagerenderover(QImage)), this, SLOT(slotupadteimage(QImage)));
+    connect(&renderthread, SIGNAL(signal_imagerenderover(QImage)), this, SLOT(slotupadteimage(QImage)));
 }
 
 void MagnifierWidget::setShowState(bool bshow)
 {
     bStartShow = bshow;
-    if (!bshow && nullptr != prenderthread)
-        prenderthread->stoprender();
+    if (!bshow)
+        renderthread.stoprender();
 }
 
 bool MagnifierWidget::showState()
@@ -78,7 +76,7 @@ void MagnifierWidget::showrectimage(PageBase *page, double pagescale, RotateType
     int imagewidth = m_magnifiermapradius * 2;
     rotatetype = type;
     double basescale = pagescale * devicePixelRatioF() * m_magnifierscale;
-    prenderthread->getmagnigierimage(page, imagewidth, basescale, m_magnifierscale, pt);
+    renderthread.getmagnigierimage(page, imagewidth, basescale, m_magnifierscale, pt);
 }
 
 void MagnifierWidget::paintEvent(QPaintEvent *event)

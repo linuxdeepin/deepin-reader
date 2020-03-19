@@ -1702,6 +1702,7 @@ bool DocummentBase::getImage(int pagenum, QImage &image, double width, double he
     if (pagenum < 0 || pagenum >= d->m_pages.size()) {
         return false;
     }
+    qDebug() << width << height << d->m_pages.at(pagenum)->devicePixelRatioF();
     qreal pixelratiof = d->m_pages.at(pagenum)->devicePixelRatioF();
     if (!d->m_pages.at(pagenum)->getImage(image, width * pixelratiof, height * pixelratiof)) {
         return false;
