@@ -71,6 +71,20 @@ void LeftSidebarWidget::initWidget()
     connect(m_pMainOperationWidget, SIGNAL(sigShowStackWidget(const int &)), m_pStackedWidget, SLOT(slotSetStackCurIndex(const int &)));
 
     pVBoxLayout->addWidget(m_pMainOperationWidget, 0, Qt::AlignBottom);
+
+    connect(this, SIGNAL(sigAdaptWindowSize(const double &)), m_pStackedWidget, SLOT(slotAdaptWindowSize(const double &)));
+}
+
+void LeftSidebarWidget::resizeEvent(QResizeEvent *event)
+{
+    CustomWidget::resizeEvent(event);
+
+//    int width = this->width();
+//    double scale = width * 1.0 / LEFTMINWIDTH * 1.0;
+
+//    qInfo() << "   LeftSidebarWidget::resizeEvent  " << "    widget width:" << width << "     scale:" << scale;
+
+//    emit sigAdaptWindowSize(scale);
 }
 
 int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgContent)

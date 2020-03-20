@@ -50,7 +50,7 @@ public:
     inline void setHasThumbnail(const bool has) {m_bHasThumbnail = has;}
     inline bool hasThumbnail() {return m_bHasThumbnail;}
     void setRotateAngle(const int &angle);
-
+    void scaleImage(const double &);//缩略图自适应窗体大小  add by duanxiaohui 2020-3-20
 protected:
     void paintEvent(QPaintEvent *e) override;
 

@@ -66,7 +66,7 @@ public:
 
     inline void clearList() {m_listLoad.clear();}
 
-    void setFilePath(const QString &strfilepath) {m_filepath = strfilepath;};
+    void setFilePath(const QString &strfilepath) {m_filepath = strfilepath;}
 
 signals:
     void sigLoadImage(const int &, const QImage &);
@@ -109,7 +109,7 @@ public:
 
     void prevPage();
     void nextPage();
-
+    void adaptWindowSize(const double &scale) Q_DECL_OVERRIDE; //缩略图列表自适应窗体大小  add by duanxiaohui 2020-3-19
 //    void forScreenPageing(bool);
 
 protected:
@@ -147,6 +147,7 @@ private:
     int m_nValuePreIndex = 0;                            // 每一个item所占scrollbar的大小
 
     QString     m_strBindPath = "";
+
 };
 
 #endif  // THUMBNAILWIDGET_H

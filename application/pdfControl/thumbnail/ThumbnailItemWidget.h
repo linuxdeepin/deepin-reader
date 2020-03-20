@@ -41,9 +41,13 @@ public:
     void setBSelect(const bool &paint);
     void rotateThumbnail(int);
     void qSetBookMarkShowStatus(const bool &bshow);
-
+//    void adaptWindowSize(const double &scale);
 protected:
     void initWidget() override;
+
+    // CustomWidget interface
+public:
+    void adaptWindowSize(const double &scale) Q_DECL_OVERRIDE;
 };
 
 #endif  // THUMBNAILITEMWIDGET_H

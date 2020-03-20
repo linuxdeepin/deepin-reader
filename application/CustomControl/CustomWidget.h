@@ -62,6 +62,7 @@ public:
 
 public:
     virtual int qDealWithShortKey(const QString &);
+    virtual void adaptWindowSize(const double &);
 
 protected:
     CustomWidget(CustomWidgetPrivate &, const QString &name, DWidget *parent = nullptr);
