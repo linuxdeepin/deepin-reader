@@ -3,8 +3,11 @@
 #include <DLog>
 #include <DApplicationSettings>
 #include <QDesktopWidget>
+#include "app/processcontroller.h"
+#include "app/json.h"
 
 DWIDGET_USE_NAMESPACE
+
 QUrl UrlInfo(QString path)
 {
     QUrl url;
@@ -44,28 +47,50 @@ int main(int argc, char *argv[])
 
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
-    MainWindow w;
+
     QCommandLineParser parser;
     parser.process(a);
-
-    QStringList urls;
     QStringList arguments = parser.positionalArguments();
+    ProcessController controller;
+    QStringList filePathList = arguments;
 
-    QString filepath;
-    foreach (const QString &path, arguments) {
-        filepath = UrlInfo(path).toLocalFile();
-        if (filepath.endsWith("pdf")) {
-            w.openfile(filepath);
-            qDebug() << __FUNCTION__ << "++++++++++++++" << path << arguments;
-            break;
-        } else {
-            exit(0);
+    if (!arguments.contains("newwindow")) {
+        QStringList waitOpenFilePathList;
+
+        foreach (const QString &path, arguments) {
+
+            QString filePath = UrlInfo(path).toLocalFile();
+
+            if (filePath.endsWith("pdf")) {
+
+                if (!controller.existFilePath(filePath))
+                    waitOpenFilePathList.append(filePath);
+            }
         }
+
+        if (waitOpenFilePathList.isEmpty())
+            return 0;
+
+        if (controller.openIfAppExist(waitOpenFilePathList))
+            return 0;
+
+        filePathList = waitOpenFilePathList;
+    }
+
+    MainWindow w;
+
+    foreach (const QString &filePath, filePathList) {
+        if (filePath.endsWith("pdf")) {
+            w.openfile(filePath);
+        }
+        qDebug() << __FUNCTION__ << "++++++++++++++" << filePath << arguments;
     }
 
     QApplication::desktop()->geometry();
     w.setSreenRect(a.desktop()->screenGeometry());
     w.show();
+
+    controller.listen();
 
     return a.exec();
 }

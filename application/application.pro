@@ -14,6 +14,7 @@ CONFIG += c++11 link_pkgconfig
 #CONFIG += precompile_header
 #PRECOMPILED_HEADER = stable.h
 
+include (app/app.pri)
 include (business/business.pri)
 include (CustomControl/CustomControl.pri)
 include (docview/docview.pri)
@@ -33,7 +34,7 @@ RESOURCES +=         \
 
 HEADERS +=\
     application.h \
-    MainWindow.h \
+    MainWindow.h
 #    stable.h
 
 TRANSLATIONS += \

@@ -525,6 +525,19 @@ void MainTabWidgetEx::SetFileChange()
     d->SetFileChange(qGetCurPath(), 1);
 }
 
+void MainTabWidgetEx::setCurrentTabByFilePath(const QString &filePath)
+{
+    auto splitterList = this->findChildren<MainSplitter *>();
+    foreach (auto s, splitterList) {
+        QString sSplitterPath = s->qGetPath();
+        if (sSplitterPath == filePath) {
+            int index = m_pTabBar->indexOfFilePath(filePath);
+            if (-1 != index)
+                m_pTabBar->setCurrentIndex(index);
+        }
+    }
+}
+
 int MainTabWidgetEx::getCurrentState()
 {
     Q_D(MainTabWidgetEx);

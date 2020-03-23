@@ -72,6 +72,8 @@ public:
     void setCurrentState(const int &nCurrentState);
     void SetFileChange();
 
+    void setCurrentTabByFilePath(const QString &filePath);
+
 protected:
     void initWidget() override;
 
