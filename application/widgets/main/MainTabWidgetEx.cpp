@@ -175,6 +175,50 @@ void MainTabWidgetEx::initWidget()
     this->setLayout(mainLayout);
 }
 
+void MainTabWidgetEx::BlockShutdown()
+{
+    if (m_bBlockShutdown)
+        return;
+
+    if (m_reply.value().isValid()) {
+        qDebug() << "m_reply.value().isValid():" << m_reply.value().isValid();
+        return;
+    }
+
+    m_pLoginManager = new QDBusInterface("org.freedesktop.login1",
+                                         "/org/freedesktop/login1",
+                                         "org.freedesktop.login1.Manager",
+                                         QDBusConnection::systemBus());
+
+    m_arg << QString("shutdown")             // what
+          << qApp->applicationDisplayName()           // who
+          << QObject::tr("File not saved") // why
+          << QString("block");                        // mode
+
+    int fd = -1;
+    m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);
+    if (m_reply.isValid()) {
+        fd = m_reply.value().fileDescriptor();
+        m_bBlockShutdown = true;
+    }
+}
+
+void MainTabWidgetEx::UnBlockShutdown()
+{
+    auto splitterList = this->findChildren<MainSplitter *>();
+    foreach (auto mainsplit, splitterList) {
+        if (mainsplit->qGetFileChange())
+            return;
+    }
+
+    if (m_reply.isValid()) {
+        QDBusReply<QDBusUnixFileDescriptor> tmp = m_reply;
+        m_reply = QDBusReply<QDBusUnixFileDescriptor>();
+        qDebug() << "Nublock shutdown.";
+        m_bBlockShutdown = false;
+    }
+}
+
 void MainTabWidgetEx::InitConnections()
 {
 }
@@ -400,6 +444,15 @@ void MainTabWidgetEx::OnKeyPress(const QString &sKey)
     }
 }
 
+void MainTabWidgetEx::slotfilechanged(bool bchanged)
+{
+    qDebug() << "^^^^^^^^^^^^^^^_____________+_________________";
+    if (bchanged) {
+        BlockShutdown();
+    } else {
+        UnBlockShutdown();
+    }
+}
 
 //  切换文档, 需要取消之前文档 放大镜模式
 void MainTabWidgetEx::SlotSetCurrentIndexFile(const QString &sPath)

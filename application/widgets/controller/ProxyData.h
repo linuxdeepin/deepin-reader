@@ -49,6 +49,9 @@ public:
     bool getIsFileOpenOk() const;
     void setIsFileOpenOk(bool bIsFileOpenOk);
 
+signals:
+    void signale_filechanged(bool bchanged);
+
 private:
     bool                m_bIsFileOpenOk = false;
     QString             m_strPath = "";

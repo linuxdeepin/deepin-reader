@@ -529,8 +529,8 @@ void FileViewWidgetPrivate::OpenFilePath(const QString &sPath)
     if (m_pProxy) {
         connect(m_pProxy, SIGNAL(signal_bookMarkStateChange(int, bool)), m_pProxyNotifyMsg, SLOT(slotBookMarkStateChange(int, bool)));
         connect(m_pProxy, SIGNAL(signal_pageChange(int)), m_pProxyNotifyMsg, SLOT(slotDocFilePageChanged(int)));
-
         connect(m_pProxy, SIGNAL(signal_openResult(bool)), SLOT(SlotDocFileOpenResult(bool)));
+        connect(m_pProxyData, SIGNAL(signale_filechanged(bool)), MainTabWidgetEx::Instance(), SLOT(slotfilechanged(bool)));
 
         QFileInfo info(sPath);
 

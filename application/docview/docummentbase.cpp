@@ -1270,7 +1270,7 @@ bool DocummentBase::loadPages()
         curheight = d->m_scale * d->m_imagewidth;
     }
     //qDebug() << rect() << viewport()->rect() << d->qwfather->rect();
-    int icount = viewport()->rect().height() / (curheight); //当前页一共能显示多少个
+    int icount = curheight > 0 ? viewport()->rect().height() / (curheight) : 0; //当前页一共能显示多少个
     icount = icount > 0 ? icount + 2 : 2;
 
     if (d->m_viewmode == ViewMode_SinglePage) {
@@ -1547,8 +1547,15 @@ void DocummentBase::slot_docummentLoaded(bool result)
         d->threadloaddata.start();
         return;
     }
+    d->donotneedreloaddoc = false;
+    if (d->threadloaddata.isRunning()) {
+        d->threadloaddata.requestInterruption();
+        d->threadloaddata.wait();
+    }
+    d->threadloaddata.setDoc(this);
+    d->threadloaddata.start();
+
     d->m_widgets.clear();
-//    qDebug() << "slot_docummentLoaded numPages :" << d->m_pages.size();
     for (int i = 0; i < d->m_pages.size(); i++) {
         DWidget *qwidget = new DWidget(this);
         QHBoxLayout *qhblayout = new QHBoxLayout(qwidget);
@@ -1561,14 +1568,8 @@ void DocummentBase::slot_docummentLoaded(bool result)
         QApplication::processEvents();
     }
     initConnect();
-    d->donotneedreloaddoc = false;
     scaleAndShow(0, d->m_rotate);
-    if (d->threadloaddata.isRunning()) {
-        d->threadloaddata.requestInterruption();
-        d->threadloaddata.wait();
-    }
-    d->threadloaddata.setDoc(this);
-    d->threadloaddata.start();
+
 //    loadPages();
 }
 
@@ -1695,14 +1696,13 @@ bool DocummentBase::setBookMarkState(int page, bool state)
     return d->m_pages.at(page)->setBookMarkState(state);
 }
 
-
 bool DocummentBase::getImage(int pagenum, QImage &image, double width, double height)
 {
     Q_D(DocummentBase);
     if (pagenum < 0 || pagenum >= d->m_pages.size()) {
         return false;
     }
-    qDebug() << width << height << d->m_pages.at(pagenum)->devicePixelRatioF();
+    // qDebug() << width << height << d->m_pages.at(pagenum)->devicePixelRatioF();
     qreal pixelratiof = d->m_pages.at(pagenum)->devicePixelRatioF();
     if (!d->m_pages.at(pagenum)->getImage(image, width * pixelratiof, height * pixelratiof)) {
         return false;
@@ -1731,11 +1731,11 @@ bool DocummentBase::loadData()
         if (QThread::currentThread()->isInterruptionRequested()) {
             break;
         }
-        d->m_pages.at(i)->getInterFace()->loadData();
-        if (bfirst && (i >= 3 || d->m_pages.size() <= 3)) {
+        if (bfirst && (i >= 3 || d->m_pages.size() <= 3 || d->m_pages.size() <= 3)) {
             bfirst = false;
             emit signal_openResult(true);
         }
+        d->m_pages.at(i)->getInterFace()->loadData();
     }
     qDebug() << "loadWords end" << loadtime.elapsed();
     return true;

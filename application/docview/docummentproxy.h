@@ -78,7 +78,6 @@ public:
     QString pagenum2label(int index);
     int label2pagenum(QString label);
     bool haslabel();
-    bool filechanged();
 
 signals:
     void signal_pageChange(int);
