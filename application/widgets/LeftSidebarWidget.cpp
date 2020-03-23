@@ -79,12 +79,12 @@ void LeftSidebarWidget::resizeEvent(QResizeEvent *event)
 {
     CustomWidget::resizeEvent(event);
 
-//    int width = this->width();
-//    double scale = width * 1.0 / LEFTMINWIDTH * 1.0;
+    int width = this->width();
+    double scale = width * 1.0 / LEFTMINWIDTH * 1.0;
 
-//    qInfo() << "   LeftSidebarWidget::resizeEvent  " << "    widget width:" << width << "     scale:" << scale;
+    qInfo() << "   LeftSidebarWidget::resizeEvent  " << "    widget width:" << width << "     scale:" << scale;
 
-//    emit sigAdaptWindowSize(scale);
+    emit sigAdaptWindowSize(scale);
 }
 
 int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgContent)

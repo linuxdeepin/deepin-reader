@@ -109,6 +109,16 @@ void ImageLabel::scaleImage(const double &scale)
     width = static_cast<double>(146) * scale;
     height = static_cast<double>(174) * scale;
 
+    qInfo() << "      m_nRotate:" << m_nRotate;
+
+    if (m_nRotate / 90) {
+        height = static_cast<double>(146) * scale;
+        width = static_cast<double>(174) * scale;
+    } else {
+        width = static_cast<double>(146) * scale;
+        height = static_cast<double>(174) * scale;
+    }
+
 //    this->resize(QSize(static_cast<int>(width), static_cast<int>(height)));
     setFixedSize(static_cast<int>(width), static_cast<int>(height));
 //    qInfo() << "    image  label  width:" << this->width() << "    height:" << this->height()  <<   "     scale:" << scale;
