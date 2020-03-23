@@ -19,6 +19,7 @@
 #include "TitleMenu.h"
 
 #include <QSignalMapper>
+#include "widgets/main/MainTabWidgetEx.h"
 
 #include "gof/bridge/IHelper.h"
 
@@ -46,7 +47,20 @@ int TitleMenu::dealWithData(const int &msgType, const QString &)
         }
     }
 
+    //disableSaveButton(!MainTabWidgetEx::Instance()->getFileChanged());
+
     return MSG_NO_OK;
+}
+
+void TitleMenu::disableSaveButton(bool disable)
+{
+    auto actions = this->findChildren<QAction *>();
+    foreach (QAction *a, actions) {
+        if (a->text() == tr("Save") ) {
+            a->setDisabled(disable);
+            break;
+        }
+    }
 }
 
 void TitleMenu::initActions()

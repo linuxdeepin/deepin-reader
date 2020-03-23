@@ -47,6 +47,8 @@ public:
 public:
     int dealWithData(const int &, const QString &) override;
 
+    void disableSaveButton(bool disable);
+
     // CustomMenu interface
 protected:
     void initActions() override;

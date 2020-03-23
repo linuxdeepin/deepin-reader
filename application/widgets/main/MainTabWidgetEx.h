@@ -38,6 +38,8 @@ public:
     explicit MainTabWidgetEx(DWidget *parent = nullptr);
     ~MainTabWidgetEx() override;
 
+    friend class MainTabBar;
+
 private:
     static MainTabWidgetEx *g_onlyApp;
 
@@ -61,6 +63,9 @@ public:
     QStringList qGetAllPath();
     QString qGetCurPath();
     int GetFileChange(const QString &);
+
+    int getFileChanged();
+
     FileDataModel qGetFileData(const QString &sPath = "") ;
 
     // CustomWidget interface

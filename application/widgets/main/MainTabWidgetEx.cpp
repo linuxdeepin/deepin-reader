@@ -112,6 +112,15 @@ int MainTabWidgetEx::GetFileChange(const QString &sPath)
     return d->GetFileChange(sPath);
 }
 
+int MainTabWidgetEx::getFileChanged()
+{
+    if (qGetCurPath().isEmpty())
+        return 0;
+
+    Q_D(MainTabWidgetEx);
+    return d->GetFileChange(qGetCurPath());
+}
+
 FileDataModel MainTabWidgetEx::qGetFileData(const QString &sPath)
 {
     QString sTempPath = sPath;

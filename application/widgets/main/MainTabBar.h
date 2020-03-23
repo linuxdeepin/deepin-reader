@@ -34,6 +34,20 @@ public:
     explicit MainTabBar(DWidget *parent = nullptr);
     ~MainTabBar() override;
 
+    int indexOfFilePath(const QString &filePath);
+
+protected:
+    QMimeData *createMimeDataFromTab(int index, const QStyleOptionTab &option) const;
+    void insertFromMimeDataOnDragEnter(int index, const QMimeData *source); //只是先生成一个tab,结束后自动删除
+    void insertFromMimeData(int index, const QMimeData *source);            //完全DROP 需要添加tab并打开对应的文档
+    bool canInsertFromMimeData(int index, const QMimeData *source) const;
+    void handleDragActionChanged(Qt::DropAction action);
+
+private slots:
+    void handleTabReleased(int index);                                  //方法测试结果为当tab从bar移除释放
+
+    void handleTabDroped(int index, Qt::DropAction da, QObject *target);//方法测试结果为当tab添加到其他的bar里释放
+
 signals:
     void sigTabBarIndexChange(const QString &);
     void sigAddTab(const QString &);
@@ -47,10 +61,12 @@ public:
 private:
     void __InitConnection();
 
-    void AddFileTab(const QString &);
+    void AddFileTab(const QString &, int index = -1);
     QString getFileName(const QString &strFilePath);
 
 private slots:
+
+
     void SlotCurrentChanged(int);
     void SlotTabAddRequested();
     void SlotTabCloseRequested(int index);

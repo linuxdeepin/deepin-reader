@@ -19,9 +19,15 @@
 #include "MainTabBar.h"
 
 #include <QDebug>
+#include <QDragEnterEvent>
+#include <QMimeData>
+#include <QProcess>
+#include <QDir>
 
 #include "MainTabWidgetEx.h"
 #include "FileDataModel.h"
+#include "MainWindow.h"
+#include <DPlatformWindowHandle>
 
 #include "business/SaveDialog.h"
 
@@ -41,11 +47,86 @@ MainTabBar::MainTabBar(DWidget *parent)
     __InitConnection();
 
     dApp->m_pModelService->addObserver(this);
+
+    connect(this, &DTabBar::tabReleaseRequested, this, &MainTabBar::handleTabReleased);
+    connect(this, &DTabBar::tabDroped, this, &MainTabBar::handleTabDroped);
+    setDragable(true);
 }
 
 MainTabBar::~MainTabBar()
 {
     dApp->m_pModelService->removeObserver(this);
+}
+
+int MainTabBar::indexOfFilePath(const QString &filePath)
+{
+    for (int i = 0; i < count(); ++i) {
+        QString sTabData = this->tabData(i).toString();
+        if (sTabData != "") {
+            QStringList sDataList = sTabData.split(Constant::sQStringSep, QString::SkipEmptyParts);
+            if (sDataList.size() == 2) {
+                QString sPath = sDataList.at(0);
+                if (sPath == filePath) {
+                    return i;
+                }
+            }
+        }
+    }
+    return -1;
+}
+
+QMimeData *MainTabBar::createMimeDataFromTab(int index, const QStyleOptionTab &option) const
+{
+    const QString tabName = tabText(index);
+
+    QMimeData *mimeData = new QMimeData;
+
+    mimeData->setData("reader/tabbar", tabName.toUtf8());
+
+    QStringList sDataList = this->tabData(index).toString().split(Constant::sQStringSep, QString::SkipEmptyParts);
+
+    QString sPath = sDataList.value(0);
+
+    mimeData->setData("reader/filePath", QByteArray().append(sPath));
+
+    return mimeData;
+}
+
+void MainTabBar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
+{
+    const QString tabName = QString::fromUtf8(source->data("reader/tabbar"));
+
+    insertTab(index, tabName);
+
+    setTabMinimumSize(index, QSize(140, 36));
+
+}
+
+void MainTabBar::insertFromMimeData(int index, const QMimeData *source)
+{
+    QString filePath = source->data("reader/filePath");
+
+    AddFileTab(filePath + Constant::sQStringSep, index);
+}
+
+bool MainTabBar::canInsertFromMimeData(int index, const QMimeData *source) const
+{
+    return source->hasFormat("reader/tabbar");
+}
+
+void MainTabBar::handleDragActionChanged(Qt::DropAction action)
+{
+    // Reset cursor to Qt::ArrowCursor if drag tab to TextEditor widget.
+    if (action == Qt::IgnoreAction) {
+        if (dragIconWindow()) {
+            QGuiApplication::changeOverrideCursor(Qt::ArrowCursor);
+            DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), true);
+        }
+    } else if (dragIconWindow()) {
+        DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), false);
+        if (QGuiApplication::overrideCursor())
+            QGuiApplication::changeOverrideCursor(QGuiApplication::overrideCursor()->shape());
+    }
 }
 
 int MainTabBar::dealWithData(const int &msgType, const QString &msgContent)
@@ -83,20 +164,21 @@ void MainTabBar::SlotCurrentChanged(int index)
         if (sDataList.size() == 2) {
             QString sPath = sDataList.at(0);
             QString sFlag = sDataList.at(1);
-            if (sFlag == "111") {
-                emit sigTabBarIndexChange(sPath);
-            }
+            //if (sFlag == "111") {     //实现拖拽进行直接显示，暂时移除判断
+            emit sigTabBarIndexChange(sPath);
+            //}
         }
     }
 }
 
-void MainTabBar::AddFileTab(const QString &sContent)
+void MainTabBar::AddFileTab(const QString &sContent, int index)
 {
     QStringList filePaths;
 
     QList<QString> sOpenFiles = MainTabWidgetEx::Instance()->qGetAllPath();
 
     QStringList canOpenFileList = sContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
+
     foreach (auto s, canOpenFileList) {
         if (sOpenFiles.contains(s)) {
             notifyMsg(CENTRAL_SHOW_TIP, tr("The file is already open"));
@@ -106,6 +188,7 @@ void MainTabBar::AddFileTab(const QString &sContent)
     }
 
     int nSize = filePaths.size();
+
     if (nSize > 0) {
         for (int iLoop = 0; iLoop < nSize; iLoop++) {
             QString s = filePaths.at(iLoop);
@@ -113,9 +196,14 @@ void MainTabBar::AddFileTab(const QString &sContent)
                 QString sName = getFileName(s);
                 QString sTabData = s + Constant::sQStringSep + "000";
 
-                int iIndex = this->addTab(sName);
-                this->setTabData(iIndex, sTabData);
-                this->setTabMinimumSize(iIndex, QSize(140, 36));
+                if (index == -1)
+                    index = this->addTab(sName);
+                else
+                    index = this->insertTab(index, sName);
+
+                this->setTabData(index, sTabData);
+                this->setTabMinimumSize(index, QSize(140, 36));
+                this->setCurrentIndex(index);
                 emit sigAddTab(s);
             }
         }
@@ -132,6 +220,25 @@ QString MainTabBar::getFileName(const QString &strFilePath)
     int nLastPos = strFilePath.lastIndexOf('/');
     nLastPos++;
     return strFilePath.mid(nLastPos);
+}
+
+void MainTabBar::handleTabReleased(int index)
+{
+    QStringList sDataList = this->tabData(index).toString().split(Constant::sQStringSep, QString::SkipEmptyParts);
+    QString sPath = sDataList.value(0);
+    MainTabWidgetEx::Instance()->SaveFile(MSG_SAVE_FILE, sPath);
+    removeTab(index);
+    emit sigCloseTab(sPath);
+    QProcess app;
+    app.startDetached(QString("%1 \"%2\" newwindow").arg(qApp->applicationDirPath() + "/deepin-reader").arg(sPath));
+}
+
+void MainTabBar::handleTabDroped(int index, Qt::DropAction da, QObject *target)
+{
+    QStringList sDataList = this->tabData(index).toString().split(Constant::sQStringSep, QString::SkipEmptyParts);
+    QString sPath = sDataList.value(0);
+    removeTab(index);
+    emit sigCloseTab(sPath);
 }
 
 //  新增
