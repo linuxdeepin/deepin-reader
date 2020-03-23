@@ -1793,7 +1793,7 @@ double DocummentBase::getMaxZoomratio()
 void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, int ipage)
 {
     Q_D(DocummentBase);
-    if (d->m_rotate != RotateType_Normal || d->m_rotate != RotateType_0) {
+    if (d->m_rotate != RotateType_Normal && d->m_rotate != RotateType_0) {
         pageJump(ipage);
         return;
     }

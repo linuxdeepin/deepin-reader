@@ -137,7 +137,7 @@ DocummentProxy *MainTabWidgetEx::getCurFileAndProxy(const QString &sPath)
 
     auto splitterList = this->findChildren<MainSplitter *>();
     foreach (auto s, splitterList) {
-        if (s->qGetPath() == sPath) {
+        if (s->qGetPath() == sTempPath) {
             return s->getDocProxy();
         }
     }
@@ -285,7 +285,7 @@ void MainTabWidgetEx::OnAppShortCut(const QString &s)
 void MainTabWidgetEx::OnTabBarMsg(const QString &s)
 {
     if (s == "New window") {
-
+        Utils::runApp(QString());
     } else if (s == "New tab") {
         notifyMsg(E_OPEN_FILE);
     } else if (s == "Save") { //  保存当前显示文件
