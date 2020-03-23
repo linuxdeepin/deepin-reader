@@ -138,3 +138,4 @@ void CustomListWidget::setListType(const int &nListType)
 {
     m_nListType = nListType;
 }
+

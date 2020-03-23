@@ -74,6 +74,7 @@ void ThumbnailItemWidget::initWidget()
 
     m_pPicture = new ImageLabel(this);
     m_pPicture->setFixedSize(QSize(146, 174));
+    m_pPicture->setSize(QSize(146, 174));
     m_pPicture->setAlignment(Qt::AlignCenter);
     m_pPicture->setRadius(ICON_BIG);
 
@@ -91,5 +92,24 @@ void ThumbnailItemWidget::initWidget()
     t_hLayout->addStretch(1);
 
     this->setLayout(t_hLayout);
+}
+/**
+ * @brief ThumbnailItemWidget::adaptWindowSize
+ * 缩略图列表自适应视窗大小
+ * @param scale  缩放因子 大于0的数
+ */
+void ThumbnailItemWidget::adaptWindowSize(const double &scale)
+{
+//    double width = 1.0;
+//    double height = 1.0;
+
+//    width = static_cast<double>(this->width()) * scale;
+//    height = static_cast<double>(this->height()) * scale;
+
+//    this->resize(QSize(static_cast<int>(width), static_cast<int>(height)));
+
+    if (m_pPicture) {
+        m_pPicture->scaleImage(scale);
+    }
 }
 

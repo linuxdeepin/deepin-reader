@@ -199,9 +199,10 @@ void PagingWidget::SlotJumpPageLineEditReturnPressed()
 
 void PagingWidget::__NormalChangePage()
 {
+    DocummentProxy *_proxy =  MainTabWidgetEx::Instance()->getCurFileAndProxy(m_strBindPath);
     QString sText = m_pJumpPageLineEdit->text();
     int iPage = sText.toInt();
-    if (iPage == 0) {
+    if (iPage <= 0 || iPage > _proxy->getPageSNum()) {
         notifyMsg(CENTRAL_SHOW_TIP, tr("Invalid page number"));
     } else {
         dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(iPage - 1));

@@ -82,12 +82,20 @@ void SearchItemWidget::slotUpdateTheme()
     }
 }
 
+void SearchItemWidget::adaptWindowSize(const double &scale)
+{
+    if (m_pPicture) {
+        m_pPicture->scaleImage(scale);
+    }
+}
+
 void SearchItemWidget::initWidget()
 {
     auto t_vLayoutPicture = new QVBoxLayout;
     t_vLayoutPicture->setContentsMargins(0, 3, 0, 0);
     m_pPicture = new ImageLabel(this);
     m_pPicture->setFixedSize(QSize(48, 68));
+    m_pPicture->setSize(QSize(48, 68));
     m_pPicture->setAlignment(Qt::AlignCenter);
     t_vLayoutPicture->addWidget(m_pPicture);
     t_vLayoutPicture->addStretch(1);

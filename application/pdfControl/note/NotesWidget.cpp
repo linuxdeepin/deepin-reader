@@ -18,8 +18,6 @@
  */
 #include "NotesWidget.h"
 
-#include "NotesItemWidget.h"
-
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
 
@@ -479,6 +477,50 @@ QListWidgetItem *NotesWidget::addNewItem(const QImage &image, const int &page, c
     }
 
     return nullptr;
+}
+
+NotesItemWidget *NotesWidget::getItemWidget(QListWidgetItem *item)
+{
+    if (m_pNotesList == nullptr) {
+        return nullptr;
+    }
+    auto pWidget = qobject_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
+    if (pWidget) {
+        return pWidget;
+    }
+    return nullptr;
+}
+
+/**
+ * @brief NotesWidget::adaptWindowSize
+ * 注释缩略图自适应视窗大小
+ * @param scale  缩放因子 大于0的数
+ */
+void NotesWidget::adaptWindowSize(const double &scale)
+{
+    double width = 1.0;
+    double height = 1.0;
+
+    //set item size
+    width = static_cast<double>(LEFTMINWIDTH) * scale;
+    height = static_cast<double>(80) * scale;
+
+    if (m_pNotesList) {
+        int itemCount = 0;
+        itemCount = m_pNotesList->count();
+        if (itemCount > 0) {
+            for (int index = 0; index < itemCount; index++) {
+                auto item = m_pNotesList->item(index);
+                if (item) {
+                    auto itemWidget = getItemWidget(item);
+                    if (itemWidget) {
+                        item->setSizeHint(QSize(static_cast<int>(width), static_cast<int>(height)));
+                        itemWidget->adaptWindowSize(scale);
+                    }
+                }
+            }
+        }
+    }
 }
 
 QString NotesWidget::getBindPath() const

@@ -22,6 +22,7 @@
 #include "CustomControl/CustomWidget.h"
 #include "../CustomListWidget.h"
 #include "docview/commonstruct.h"
+#include "SearchItemWidget.h"
 
 /**
  * @brief The LoadSearchResThread class
@@ -63,9 +64,14 @@ private:
     void showTips();
     void setSelectItemBackColor(QListWidgetItem *);
     void clearItemColor();
+    SearchItemWidget *getItemWidget(QListWidgetItem *);
 
 private:
     CustomListWidget *m_pSearchList = nullptr;       // 搜索结果列表
+
+    // CustomWidget interface
+public:
+    void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
 };
 
 #endif  // NOTESFORM_H

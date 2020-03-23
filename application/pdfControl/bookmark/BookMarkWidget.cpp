@@ -18,8 +18,6 @@
  */
 #include "BookMarkWidget.h"
 
-#include "BookMarkItemWidget.h"
-
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
 
@@ -339,6 +337,50 @@ void BookMarkWidget::clearItemColor()
             qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
         if (pItemWidget) {
             pItemWidget->setBSelect(false);
+        }
+    }
+}
+
+BookMarkItemWidget *BookMarkWidget::getItemWidget(QListWidgetItem *item)
+{
+    if (m_pBookMarkListWidget == nullptr) {
+        return nullptr;
+    }
+    auto pWidget = qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
+    if (pWidget) {
+        return pWidget;
+    }
+    return nullptr;
+}
+
+/**
+ * @brief BookMarkWidget::adaptWindowSize
+ * 书签缩略图列表自适应视窗大小
+ * @param scale  缩放因子 大于0的数
+ */
+void BookMarkWidget::adaptWindowSize(const double &scale)
+{
+    double width = 1.0;
+    double height = 1.0;
+
+    //set item size
+    width = static_cast<double>(LEFTMINWIDTH) * scale;
+    height = static_cast<double>(80) * scale;
+
+    if (m_pBookMarkListWidget) {
+        int itemCount = 0;
+        itemCount = m_pBookMarkListWidget->count();
+        if (itemCount > 0) {
+            for (int index = 0; index < itemCount; index++) {
+                auto item = m_pBookMarkListWidget->item(index);
+                if (item) {
+                    auto itemWidget = getItemWidget(item);
+                    if (itemWidget) {
+                        item->setSizeHint(QSize(static_cast<int>(width), static_cast<int>(height)));
+                        itemWidget->adaptWindowSize(scale);
+                    }
+                }
+            }
         }
     }
 }

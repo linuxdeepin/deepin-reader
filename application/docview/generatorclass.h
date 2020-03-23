@@ -16,11 +16,11 @@ DGUI_USE_NAMESPACE
 class PageBase;
 class DocummentBase;
 
-class magnifierimagerender: public QThread
+class MagnifierImageRender: public QThread
 {
     Q_OBJECT
 public:
-    magnifierimagerender();
+    MagnifierImageRender();
     void getmagnigierimage(PageBase *page, double width, double scalebase, double magnifierscale, QPoint &pt);
     void stoprender() {brender = false;}
 protected:
@@ -72,7 +72,7 @@ private:
     int m_magnifiermapradius;
     int m_magnifierringmapwidth;
 //    int m_magnifiershadowwidth;
-    magnifierimagerender *prenderthread;
+    MagnifierImageRender renderthread;
     RotateType_EM rotatetype;
 };
 

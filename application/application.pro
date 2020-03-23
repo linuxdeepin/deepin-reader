@@ -2,6 +2,7 @@ QT += core gui svg sql printsupport
 QT += dtkwidget
 QT += xml
 
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 #private

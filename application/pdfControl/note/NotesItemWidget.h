@@ -88,6 +88,10 @@ private:
     QString     m_strPage = "";     // 注释页面
     int         m_nNoteType = NOTE_HIGHLIGHT;   // 注释类型, 0,高亮注释; 1,页面注释
     bool        m_bPaint = false;
+
+    // CustomWidget interface
+public:
+    void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
 };
 
 #endif // NOTESITEMWIDGET_H

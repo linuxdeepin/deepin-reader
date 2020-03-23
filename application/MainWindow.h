@@ -2,7 +2,9 @@
 #define MainWindow_H
 
 #include <DMainWindow>
-
+#include <QDBusInterface>
+#include <QDBusReply>
+#include <QDBusUnixFileDescriptor>
 #include "application.h"
 
 DWIDGET_USE_NAMESPACE
@@ -43,11 +45,12 @@ protected:
 
 private:
     void initUI();
+    void initBlockShutdown();
+    void unBlockShutdown();
 //    void initConnections();
 
 //    void onSetAppTitle(const QString &);
     void onAppExit();
-
     void initThemeChanged();
     void setCurTheme();
     void displayShortcuts();
@@ -66,6 +69,9 @@ private slots:
 private:
     QList<int>      m_pMsgList;
     Qt::WindowStates    m_nOldState = Qt::WindowNoState;        //  旧的窗口状态
+    QDBusReply<QDBusUnixFileDescriptor> m_reply;
+    QDBusInterface *m_pLoginManager = nullptr;
+    QList<QVariant> m_arg;
 };
 
 #endif // MainWindow_H

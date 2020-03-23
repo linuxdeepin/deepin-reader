@@ -50,6 +50,16 @@ int CustomWidget::qDealWithShortKey(const QString &)
     return MSG_NO_OK;
 }
 
+/**
+ * @brief CustomWidget::adaptWindowSize
+ * 缩略图列表自适应视窗大小
+ * @param scale  缩放因子 大于0的数
+ */
+void CustomWidget::adaptWindowSize(const double &scale)
+{
+
+}
+
 //  通知消息
 void CustomWidget::notifyMsg(const int &msgType, const QString &msgContent)
 {

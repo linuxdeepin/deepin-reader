@@ -27,6 +27,7 @@
 
 #include "../CustomListWidget.h"
 #include "CustomControl/CustomWidget.h"
+#include "BookMarkItemWidget.h"
 
 /**
  * @brief The BookMarkWidget class
@@ -113,12 +114,17 @@ private:
     QListWidgetItem *addBookMarkItem(const int &);
     void deleteIndexPage(const int &pageIndex);
     void clearItemColor();
+    BookMarkItemWidget *getItemWidget(QListWidgetItem *);
 
 private:
     CustomListWidget    *m_pBookMarkListWidget = nullptr;
     DPushButton         *m_pAddBookMarkBtn = nullptr;
     LoadBookMarkThread  m_loadBookMarkThread;
     QString             m_strBindPath = "";
+
+    // CustomWidget interface
+public:
+    void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
 };
 
 #endif  // BOOKMARKFORM_H

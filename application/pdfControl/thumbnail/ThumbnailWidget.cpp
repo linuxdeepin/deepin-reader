@@ -262,7 +262,6 @@ void ThumbnailWidget::showItemBookMark()
     }
 }
 
-
 /**
  * @brief ThumbnailWidget::prevPage
  * 上一页
@@ -279,6 +278,39 @@ void ThumbnailWidget::prevPage()
 void ThumbnailWidget::nextPage()
 {
     dApp->m_pHelper->qDealWithData(MSG_OPERATION_NEXT_PAGE, "");
+}
+
+/**
+ * brief ThumbnailWidget::adaptWindowSize
+ * 缩略图列表自适应视窗大小
+ * @param scale  缩放因子 大于0的数
+ */
+void ThumbnailWidget::adaptWindowSize(const double &scale)
+{
+    double width = 1.0;
+    double height = 1.0;
+
+    //set item size
+    width = static_cast<double>(LEFTMINWIDTH) * scale;
+    height = static_cast<double>(212) * scale;
+
+    if (m_pThumbnailListWidget) {
+        int itemCount = 0;
+        itemCount = m_pThumbnailListWidget->count();
+        if (itemCount > 0) {
+            for (int index = 0; index < itemCount; index++) {
+                auto item = m_pThumbnailListWidget->item(index);
+                if (item) {
+                    auto itemWidget = getItemWidget(item);
+                    if (itemWidget) {
+                        item->setSizeHint(QSize(static_cast<int>(width), static_cast<int>(height)));
+                        itemWidget->adaptWindowSize(scale);
+                        m_pThumbnailListWidget->update();
+                    }
+                }
+            }
+        }
+    }
 }
 
 // 关联成功打开文件槽函数

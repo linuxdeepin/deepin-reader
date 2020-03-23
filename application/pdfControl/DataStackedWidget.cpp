@@ -104,6 +104,37 @@ void DataStackedWidget::slotSetStackCurIndex(const int &iIndex)
     }
 }
 
+/**
+ * @brief DataStackedWidget::slotAdaptWindowSize
+ * 缩略图列表自适应视窗大小
+ * @param scale  缩放因子 大于0的数
+ */
+void DataStackedWidget::slotAdaptWindowSize(const double &scale)
+{
+    if (scale < 0) {
+        return;
+    }
+
+    int iIndex = this->currentIndex();
+    if (iIndex == WIDGET_THUMBNAIL) {
+        if (m_pThWidget) {
+            m_pThWidget->adaptWindowSize(scale);
+        }
+    }  else if (iIndex == WIDGET_BOOKMARK) {
+        if (m_pBookMarkWidget) {
+            m_pBookMarkWidget->adaptWindowSize(scale);
+        }
+    } else if (iIndex == WIDGET_NOTE) {
+        if (m_pNotesWidget) {
+            m_pNotesWidget->adaptWindowSize(scale);
+        }
+    } else if (iIndex == WIDGET_SEARCH) {
+        if (m_pSearchResWidget) {
+            m_pSearchResWidget->adaptWindowSize(scale);
+        }
+    }
+}
+
 void DataStackedWidget::InitWidgets()
 {
     m_pThWidget = new ThumbnailWidget(this);

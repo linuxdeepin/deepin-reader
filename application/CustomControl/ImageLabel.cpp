@@ -96,6 +96,33 @@ void ImageLabel::setRotateAngle(const int &angle)
     }
 }
 
+/**
+ * @brief ImageLabel::scaleImage
+ * 缩略图列表自适应视窗大小
+ * @param scale  缩放因子 大于0的数
+ */
+void ImageLabel::scaleImage(const double &scale)
+{
+    double width = 1.0;
+    double height = 1.0;
+
+//    qInfo() << "      m_nRotate:" << m_nRotate;
+    int w = m_size.width();
+    int h = m_size.height();
+
+    if (m_nRotate % 180) {
+        height = static_cast<double>(w) * scale;
+        width = static_cast<double>(h) * scale;
+    } else {
+        width = static_cast<double>(w) * scale;
+        height = static_cast<double>(h) * scale;
+    }
+
+    setFixedSize(static_cast<int>(width), static_cast<int>(height));
+//    qInfo() << "    image  label  width:" << this->width() << "    height:" << this->height()  <<   "     scale:" << scale;
+    update();
+}
+
 void ImageLabel::paintEvent(QPaintEvent *e)
 {
     DLabel::paintEvent(e);

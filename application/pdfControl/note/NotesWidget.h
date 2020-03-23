@@ -27,6 +27,7 @@
 #include "../CustomListWidget.h"
 #include "CustomControl/CustomWidget.h"
 #include "docview/commonstruct.h"
+#include "NotesItemWidget.h"
 
 class NotesWidget;
 
@@ -119,7 +120,7 @@ private:
     void fillContantToList();
     QListWidgetItem *addNewItem(const QImage &image, const int &page, const QString &uuid, const QString &text,
                                 const bool &bNew = false, const int &iType = NOTE_HIGHLIGHT);
-
+    NotesItemWidget *getItemWidget(QListWidgetItem *);
 private:
     CustomListWidget *m_pNotesList = nullptr;
     ThreadLoadImageOfNote m_ThreadLoadImage;  // 加载注释缩略图线程
@@ -127,6 +128,10 @@ private:
 
     int m_nIndex = -1;                        // 当前注释列表数
     QString m_strBindPath = "";
+
+    // CustomWidget interface
+public:
+    void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
 };
 
 #endif  // NOTESFORM_H

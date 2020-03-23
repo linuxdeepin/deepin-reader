@@ -49,7 +49,6 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
     QString calcText(const QFont &font, const QString &note, const QSize &size);
-
 protected:
     ImageLabel          *m_pPicture = nullptr;          // 承载缩略图的label
     PageNumberLabel     *m_pPageNumber = nullptr;       // 页码label
