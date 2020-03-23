@@ -47,6 +47,10 @@ protected:
 
 private:
     bool m_bPaint = false;                    // 是否绘制选中item
+
+    // CustomWidget interface
+public:
+    void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
 };
 
 #endif // BOOKMARKITEMWIDGET_H

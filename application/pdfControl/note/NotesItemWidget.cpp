@@ -68,6 +68,13 @@ void NotesItemWidget::slotUpdateTheme()
     }
 }
 
+void NotesItemWidget::adaptWindowSize(const double &scale)
+{
+    if (m_pPicture) {
+        m_pPicture->scaleImage(scale);
+    }
+}
+
 QString NotesItemWidget::strPage() const
 {
     return m_strPage;
@@ -102,6 +109,7 @@ void NotesItemWidget::initWidget()
     t_vLayoutPicture->setContentsMargins(0, 3, 0, 0);
     m_pPicture = new ImageLabel(this);
     m_pPicture->setFixedSize(QSize(48, 68));
+    m_pPicture->setSize(QSize(48, 68));
     m_pPicture->setAlignment(Qt::AlignCenter);
     t_vLayoutPicture->addWidget(m_pPicture);
     t_vLayoutPicture->addStretch(1);

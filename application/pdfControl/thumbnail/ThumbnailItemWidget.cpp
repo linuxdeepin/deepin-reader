@@ -74,6 +74,7 @@ void ThumbnailItemWidget::initWidget()
 
     m_pPicture = new ImageLabel(this);
     m_pPicture->setFixedSize(QSize(146, 174));
+    m_pPicture->setSize(QSize(146, 174));
     m_pPicture->setAlignment(Qt::AlignCenter);
     m_pPicture->setRadius(ICON_BIG);
 
@@ -99,13 +100,13 @@ void ThumbnailItemWidget::initWidget()
  */
 void ThumbnailItemWidget::adaptWindowSize(const double &scale)
 {
-    double width = 1.0;
-    double height = 1.0;
+//    double width = 1.0;
+//    double height = 1.0;
 
-    width = static_cast<double>(this->width()) * scale;
-    height = static_cast<double>(this->height()) * scale;
+//    width = static_cast<double>(this->width()) * scale;
+//    height = static_cast<double>(this->height()) * scale;
 
-    this->resize(QSize(static_cast<int>(width), static_cast<int>(height)));
+//    this->resize(QSize(static_cast<int>(width), static_cast<int>(height)));
 
     if (m_pPicture) {
         m_pPicture->scaleImage(scale);

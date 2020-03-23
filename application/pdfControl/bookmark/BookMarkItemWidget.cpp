@@ -71,6 +71,7 @@ void BookMarkItemWidget::initWidget()
 
     m_pPicture = new ImageLabel(this);
     m_pPicture->setFixedSize(QSize(48, 68));
+    m_pPicture->setSize(QSize(48, 68));
     m_pPicture->setAlignment(Qt::AlignCenter);
 
     auto m_pHLayout = new QHBoxLayout;
@@ -91,5 +92,25 @@ void BookMarkItemWidget::paintEvent(QPaintEvent *event)
         m_pPicture->setForegroundRole(DPalette::Highlight);
     } else {
         m_pPicture->setForegroundRole(QPalette::Shadow);
+    }
+}
+
+/**
+ * @brief BookMarkItemWidget::adaptWindowSize
+ * 书签缩略图自适应视窗大小
+ * @param scale  缩放因子 大于0的数
+ */
+void BookMarkItemWidget::adaptWindowSize(const double &scale)
+{
+//    double width = 1.0;
+//    double height = 1.0;
+
+//    width = static_cast<double>(this->width()) * scale;
+//    height = static_cast<double>(this->height()) * scale;
+
+//    this->resize(QSize(static_cast<int>(width), static_cast<int>(height)));
+
+    if (m_pPicture) {
+        m_pPicture->scaleImage(scale);
     }
 }

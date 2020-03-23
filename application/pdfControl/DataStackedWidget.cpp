@@ -118,13 +118,20 @@ void DataStackedWidget::slotAdaptWindowSize(const double &scale)
     int iIndex = this->currentIndex();
     if (iIndex == WIDGET_THUMBNAIL) {
         if (m_pThWidget) {
-//            qInfo() << "   ThumbnailWidget  scanle:" << scale;
             m_pThWidget->adaptWindowSize(scale);
         }
     }  else if (iIndex == WIDGET_BOOKMARK) {
-
+        if (m_pBookMarkWidget) {
+            m_pBookMarkWidget->adaptWindowSize(scale);
+        }
     } else if (iIndex == WIDGET_NOTE) {
-
+        if (m_pNotesWidget) {
+            m_pNotesWidget->adaptWindowSize(scale);
+        }
+    } else if (iIndex == WIDGET_SEARCH) {
+        if (m_pSearchResWidget) {
+            m_pSearchResWidget->adaptWindowSize(scale);
+        }
     }
 }
 

@@ -106,23 +106,20 @@ void ImageLabel::scaleImage(const double &scale)
     double width = 1.0;
     double height = 1.0;
 
-    width = static_cast<double>(146) * scale;
-    height = static_cast<double>(174) * scale;
+//    qInfo() << "      m_nRotate:" << m_nRotate;
+    int w = m_size.width();
+    int h = m_size.height();
 
-    qInfo() << "      m_nRotate:" << m_nRotate;
-
-    if (m_nRotate / 90) {
-        height = static_cast<double>(146) * scale;
-        width = static_cast<double>(174) * scale;
+    if (m_nRotate % 180) {
+        height = static_cast<double>(w) * scale;
+        width = static_cast<double>(h) * scale;
     } else {
-        width = static_cast<double>(146) * scale;
-        height = static_cast<double>(174) * scale;
+        width = static_cast<double>(w) * scale;
+        height = static_cast<double>(h) * scale;
     }
 
-//    this->resize(QSize(static_cast<int>(width), static_cast<int>(height)));
     setFixedSize(static_cast<int>(width), static_cast<int>(height));
 //    qInfo() << "    image  label  width:" << this->width() << "    height:" << this->height()  <<   "     scale:" << scale;
-//    m_thumbPix = m_thumbPix.scaled(QSize(static_cast<int>(width), static_cast<int>(height)), Qt::KeepAspectRatio);
     update();
 }
 

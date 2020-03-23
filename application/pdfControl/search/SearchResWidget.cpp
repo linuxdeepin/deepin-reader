@@ -17,9 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SearchResWidget.h"
-
-#include "SearchItemWidget.h"
-
 #include "docview/docummentproxy.h"
 
 #include "widgets/main/MainTabWidgetEx.h"
@@ -44,7 +41,7 @@ void SearchResWidget::slotGetSearchContant(const stSearchRes &search)
     int resultNum = 0;
     QString strText = "";
 
-    int page = search.ipage;
+    int page = static_cast<int>(search.ipage);
     foreach (QString s, search.listtext) {
         strText += s.trimmed();
         strText += QString("    ");
@@ -183,6 +180,49 @@ void SearchResWidget::clearItemColor()
             reinterpret_cast<SearchItemWidget *>(m_pSearchList->itemWidget(pCurItem));
         if (pItemWidget) {
             pItemWidget->setBSelect(false);
+        }
+    }
+}
+
+SearchItemWidget *SearchResWidget::getItemWidget(QListWidgetItem *item)
+{
+    if (m_pSearchList == nullptr) {
+        return nullptr;
+    }
+    auto pWidget = qobject_cast<SearchItemWidget *>(m_pSearchList->itemWidget(item));
+    if (pWidget) {
+        return pWidget;
+    }
+    return nullptr;
+}
+
+/**
+ * @brief SearchResWidget::adaptWindowSize
+ * @param scale
+ */
+void SearchResWidget::adaptWindowSize(const double &scale)
+{
+    double width = 1.0;
+    double height = 1.0;
+
+    //set item size
+    width = static_cast<double>(LEFTMINWIDTH) * scale;
+    height = static_cast<double>(80) * scale;
+
+    if (m_pSearchList) {
+        int itemCount = 0;
+        itemCount = m_pSearchList->count();
+        if (itemCount > 0) {
+            for (int index = 0; index < itemCount; index++) {
+                auto item = m_pSearchList->item(index);
+                if (item) {
+                    auto itemWidget = getItemWidget(item);
+                    if (itemWidget) {
+                        item->setSizeHint(QSize(static_cast<int>(width), static_cast<int>(height)));
+                        itemWidget->adaptWindowSize(scale);
+                    }
+                }
+            }
         }
     }
 }

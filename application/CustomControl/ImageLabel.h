@@ -51,6 +51,10 @@ public:
     inline bool hasThumbnail() {return m_bHasThumbnail;}
     void setRotateAngle(const int &angle);
     void scaleImage(const double &);//缩略图自适应窗体大小  add by duanxiaohui 2020-3-20
+    inline void setSize(const QSize &size)
+    {
+        m_size = size;
+    }
 protected:
     void paintEvent(QPaintEvent *e) override;
 
@@ -66,6 +70,7 @@ private:
 
     int m_nRotate = 0;  // 缩略图旋转度数
     bool m_bHasThumbnail = false;   // 时候加载过缩略图
+    QSize m_size{0, 0}; //控件大小
 };
 
 #endif  // IMAGELABEL_H

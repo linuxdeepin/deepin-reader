@@ -80,7 +80,7 @@ void LeftSidebarWidget::resizeEvent(QResizeEvent *event)
     CustomWidget::resizeEvent(event);
 
 //    int width = this->width();
-//    double scale = width * 1.0 / LEFTMINWIDTH * 1.0;
+//    double scale = static_cast<double>(width) / static_cast<double>(LEFTMINWIDTH);
 
 //    qInfo() << "   LeftSidebarWidget::resizeEvent  " << "    widget width:" << width << "     scale:" << scale;
 

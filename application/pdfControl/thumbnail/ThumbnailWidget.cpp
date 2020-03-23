@@ -305,7 +305,7 @@ void ThumbnailWidget::adaptWindowSize(const double &scale)
                     if (itemWidget) {
                         item->setSizeHint(QSize(static_cast<int>(width), static_cast<int>(height)));
                         itemWidget->adaptWindowSize(scale);
-//                        m_pThumbnailListWidget->update();
+                        m_pThumbnailListWidget->update();
                     }
                 }
             }
