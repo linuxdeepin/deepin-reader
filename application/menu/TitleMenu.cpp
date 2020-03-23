@@ -47,9 +47,14 @@ int TitleMenu::dealWithData(const int &msgType, const QString &)
         }
     }
 
-    //disableSaveButton(!MainTabWidgetEx::Instance()->getFileChanged());
+    flushSaveButton();
 
     return MSG_NO_OK;
+}
+
+void TitleMenu::flushSaveButton()
+{
+    disableSaveButton(!MainTabWidgetEx::Instance()->getFileChanged());
 }
 
 void TitleMenu::disableSaveButton(bool disable)

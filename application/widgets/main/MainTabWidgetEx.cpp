@@ -28,6 +28,7 @@
 #include "MainSplitter.h"
 #include "MainWindow.h"
 #include "MainTabWidgetExPrivate.h"
+#include "menu/TitleMenu.h"
 
 #include "business/AppInfo.h"
 #include "business/SaveDialog.h"
@@ -343,6 +344,8 @@ void MainTabWidgetEx::SaveFile(const int &iType, const QString &sPath)
             }
         }
     }
+
+    TitleMenu::Instance()->flushSaveButton();
 }
 
 //  保存当前显示文件

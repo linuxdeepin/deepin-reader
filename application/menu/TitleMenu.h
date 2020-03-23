@@ -47,6 +47,9 @@ public:
 public:
     int dealWithData(const int &, const QString &) override;
 
+    void flushSaveButton();
+
+private:
     void disableSaveButton(bool disable);
 
     // CustomMenu interface

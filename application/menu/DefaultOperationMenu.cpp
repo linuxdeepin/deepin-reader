@@ -5,6 +5,7 @@
 
 #include "gof/bridge/IHelper.h"
 #include "widgets/main/MainTabWidgetEx.h"
+#include "menu/TitleMenu.h"
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     : CustomMenu(DEFAULT_OPERATION_MENU, parent)
@@ -117,6 +118,8 @@ void DefaultOperationMenu::slotBookMarkClicked()
     } else {
         emit sigActionTrigger(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
     }
+
+    TitleMenu::Instance()->flushSaveButton();
 }
 
 void DefaultOperationMenu::slotFirstPageClicked()

@@ -12,6 +12,7 @@
 
 #include "menu/TextOperationMenu.h"
 #include "menu/DefaultOperationMenu.h"
+#include "menu/TitleMenu.h"
 
 #include "business/FileFormatHelper.h"
 #include "widgets/FindWidget.h"
@@ -81,6 +82,8 @@ void FileViewWidgetPrivate::SlotNoteViewMsg(const int &msgType, const QString &m
                || msgType == MSG_NOTE_PAGE_UPDATE_CONTENT || msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {
         m_pAnnotation->dealWithDataMsg(msgType, msgContent);
     }
+
+    TitleMenu::Instance()->flushSaveButton();
 }
 
 //  按 delete 键 删除
