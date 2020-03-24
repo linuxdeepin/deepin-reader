@@ -88,6 +88,11 @@ void DataStackedWidget::keyPressEvent(QKeyEvent *event)
     DStackedWidget::keyPressEvent(event);
 }
 
+void DataStackedWidget::notifyMsg(const int &msgType, const QString &msgContent)
+{
+    dApp->m_pModelService->notifyMsg(msgType, msgContent);
+}
+
 void DataStackedWidget::slotSetStackCurIndex(const int &iIndex)
 {
     setCurrentIndex(iIndex);
@@ -133,6 +138,13 @@ void DataStackedWidget::slotAdaptWindowSize(const double &scale)
             m_pSearchResWidget->adaptWindowSize(scale);
         }
     }
+
+    //自动自适应宽
+    QJsonObject obj;
+    obj.insert("content", QString::number(1));
+    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
+    QJsonDocument doc(obj);
+    notifyMsg(MSG_VIEWCHANGE_FIT, doc.toJson(QJsonDocument::Compact));
 }
 
 void DataStackedWidget::InitWidgets()

@@ -82,7 +82,7 @@ void LeftSidebarWidget::resizeEvent(QResizeEvent *event)
 //    int width = this->width();
 //    double scale = static_cast<double>(width) / static_cast<double>(LEFTMINWIDTH);
 
-//    qInfo() << "   LeftSidebarWidget::resizeEvent  " << "    widget width:" << width << "     scale:" << scale;
+////    qInfo() << "   LeftSidebarWidget::resizeEvent  " << "    widget width:" << width << "     scale:" << scale;
 
 //    emit sigAdaptWindowSize(scale);
 }
