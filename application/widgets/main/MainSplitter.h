@@ -61,6 +61,10 @@ public:
 private:
     void InitWidget();
 
+protected:
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
+
 private slots:
     void SlotFileOpenResult(const QString &, const bool &);
     void SlotFindOperation(const int &);

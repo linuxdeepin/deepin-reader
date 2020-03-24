@@ -21,6 +21,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QStackedWidget>
+#include <QMimeData>
 
 #include "widgets/SpinnerWidget.h"
 #include "widgets/LeftSidebarWidget.h"
@@ -77,6 +78,22 @@ void MainSplitter::InitWidget()
     if (m_pLeftWidget) {
         m_pLeftWidget->setFirstView(false);
     }
+
+    setAcceptDrops(true);
+}
+
+void MainSplitter::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (!event->mimeData()->data("reader/tabbar").isEmpty()) {
+        event->accept();
+    }
+}
+
+void MainSplitter::dropEvent(QDropEvent *event)
+{
+    QString filePath = event->mimeData()->data("reader/filePath");
+    if (!filePath.isEmpty())
+        dApp->m_pModelService->notifyMsg(MSG_TAB_ADD, filePath);
 }
 
 void MainSplitter::SlotFileOpenResult(const QString &s, const bool &res)

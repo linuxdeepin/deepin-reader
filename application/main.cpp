@@ -56,34 +56,39 @@ int main(int argc, char *argv[])
 
     MainWindow w;
 
-    if (!arguments.contains("newwindow")) {
+    if (!arguments.isEmpty()) {
 
-        QStringList waitOpenFilePathList;
-
-        foreach (const QString &path, arguments) {
-
-            QString filePath = UrlInfo(path).toLocalFile();
-
-            if (filePath.endsWith("pdf")) {
-
-                if (!controller.existFilePath(filePath))
-                    waitOpenFilePathList.append(filePath);
+        if (arguments.contains("newwindow")) {
+            foreach (const QString &filePath, filePathList) {
+                if (filePath.endsWith("pdf")) {
+                    w.openfile(filePath);
+                }
+                qDebug() << __FUNCTION__ << "++++++++++++++" << filePath << arguments;
             }
+            w.move(QCursor::pos());
+        } else {
+            QStringList waitOpenFilePathList;
+
+            foreach (const QString &path, arguments) {
+
+                QString filePath = UrlInfo(path).toLocalFile();
+
+                if (filePath.endsWith("pdf")) {
+
+                    if (!controller.existFilePath(filePath))    //存在则直接通知 本程序不打开
+                        waitOpenFilePathList.append(filePath);
+                }
+            }
+
+            if (waitOpenFilePathList.isEmpty())
+                return 0;
+
+            if (controller.openIfAppExist(waitOpenFilePathList))
+                return 0;
+
+            foreach (const QString &filePath, waitOpenFilePathList)
+                w.openfile(filePath);
         }
-
-        if (!waitOpenFilePathList.isEmpty() && controller.openIfAppExist(waitOpenFilePathList))
-            return 0;
-
-        filePathList = waitOpenFilePathList;
-    } else {
-        w.move(QCursor::pos());
-    }
-
-    foreach (const QString &filePath, filePathList) {
-        if (filePath.endsWith("pdf")) {
-            w.openfile(filePath);
-        }
-        qDebug() << __FUNCTION__ << "++++++++++++++" << filePath << arguments;
     }
 
     QApplication::desktop()->geometry();

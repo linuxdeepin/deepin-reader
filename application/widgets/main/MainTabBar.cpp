@@ -38,9 +38,13 @@ MainTabBar::MainTabBar(DWidget *parent)
     : DTabBar(parent)
 {
     m_strObserverName = "MainTabBar";
+
     this->setTabsClosable(true);
+
     this->setMovable(true);
+
     this->expanding();
+
     this->setElideMode(Qt::ElideMiddle);
 
     m_pMsgList = {MSG_TAB_ADD, MSG_MENU_NEW_TAB};
@@ -50,7 +54,9 @@ MainTabBar::MainTabBar(DWidget *parent)
     dApp->m_pModelService->addObserver(this);
 
     connect(this, &DTabBar::tabReleaseRequested, this, &MainTabBar::handleTabReleased);
+
     connect(this, &DTabBar::tabDroped, this, &MainTabBar::handleTabDroped);
+
     setDragable(true);
 }
 
@@ -100,7 +106,6 @@ void MainTabBar::insertFromMimeDataOnDragEnter(int index, const QMimeData *sourc
     insertTab(index, tabName);
 
     setTabMinimumSize(index, QSize(140, 36));
-
 }
 
 void MainTabBar::insertFromMimeData(int index, const QMimeData *source)
@@ -112,6 +117,7 @@ void MainTabBar::insertFromMimeData(int index, const QMimeData *source)
 
 bool MainTabBar::canInsertFromMimeData(int index, const QMimeData *source) const
 {
+    return false;   //暂时不支持拖动到tabbar
     return source->hasFormat("reader/tabbar");
 }
 
@@ -236,6 +242,7 @@ void MainTabBar::handleTabReleased(int index)
     QProcess app;
     app.startDetached(QString("%1 \"%2\" newwindow").arg(qApp->applicationDirPath() + "/deepin-reader").arg(sPath));
 
+    qDebug() << "release:" << sPath;
     QTimer::singleShot(50, this, SLOT(onDroped()));
 }
 
@@ -246,6 +253,7 @@ void MainTabBar::handleTabDroped(int index, Qt::DropAction da, QObject *target)
     removeTab(index);
     emit sigCloseTab(sPath);
 
+    qDebug() << "drop:" << sPath;
     QTimer::singleShot(50, this, SLOT(onDroped()));
 }
 
