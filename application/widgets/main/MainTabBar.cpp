@@ -117,7 +117,6 @@ void MainTabBar::insertFromMimeData(int index, const QMimeData *source)
 
 bool MainTabBar::canInsertFromMimeData(int index, const QMimeData *source) const
 {
-    return false;   //暂时不支持拖动到tabbar
     return source->hasFormat("reader/tabbar");
 }
 
