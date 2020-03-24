@@ -100,23 +100,46 @@ void ScaleWidget::onShortKey(const QString &keyType)
 
 void ScaleWidget::slotPrevScale()
 {
-    int nTemp = m_nCurrentIndex - 1;
-    if (nTemp > -1) {
-        m_nCurrentIndex = nTemp;
-        QString sText = scaleComboBox->itemText(m_nCurrentIndex);
-        scaleComboBox->setCurrentText(sText);
-        scaleComboBox->setCurrentIndex(m_nCurrentIndex);
+    QString cuttext = scaleComboBox->currentText();
+    int nIndex = cuttext.lastIndexOf("%");
+    if (nIndex > 0)
+        cuttext = cuttext.mid(0, nIndex);
+    bool bok;
+    int curindex = -1;
+    double curscale = cuttext.toDouble(&bok);
+    if (curscale <= dataList.front()) {
+        return;
+    }
+    for (int i = 1; i < dataList.size(); i++) {
+        if (dataList.at(i) >= curscale && dataList.at(i - 1) < curscale) {
+            curindex = i - 1;
+            break;
+        }
+    }
+    if (bok) {
+        scaleComboBox->setCurrentIndex(curindex);
     }
 }
 
 void ScaleWidget::slotNextScale()
 {
-    int nTemp = m_nCurrentIndex + 1;
-    if (nTemp < scaleComboBox->count()) {
-        m_nCurrentIndex = nTemp;
-        QString sText = scaleComboBox->itemText(m_nCurrentIndex);
-        scaleComboBox->setCurrentText(sText);
-        scaleComboBox->setCurrentIndex(m_nCurrentIndex);
+    QString inputtext = scaleComboBox->currentText();
+    int nIndex = inputtext.lastIndexOf("%");
+    if (nIndex > 0)
+        inputtext = inputtext.mid(0, nIndex);
+    bool bok;
+    double inputscale = inputtext.toDouble(&bok);
+    int curindex = -1;
+    if (inputscale >= dataList.back())
+        return;
+    for (int i = 0; i < dataList.size(); i++) {
+        if (dataList.at(i) > inputscale) {
+            curindex = i;
+            break;
+        }
+    }
+    if (bok) {
+        scaleComboBox->setCurrentIndex(curindex);
     }
 }
 
@@ -131,9 +154,9 @@ void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
 
     QString sTempText = scaleComboBox->currentText();
     int nTempIndex = scaleComboBox->findText(sTempText);
-    if (nTempIndex != -1) {
-        m_nCurrentIndex = nTempIndex;
-    }
+//    if (nTempIndex != -1) {
+//        m_nCurrentIndex = nTempIndex;
+//    }
 
     bool bOk = false;
     QString sTempData = sTempText.mid(0, nIndex);
@@ -172,15 +195,11 @@ void ScaleWidget::SlotReturnPressed()
             QString sShowText = QString::number(dValue) + "%";
             SlotCurrentTextChanged(sShowText);
 
-            dataList.append(dValue);
-            qSort(dataList.begin(), dataList.end());
-
-            m_nCurrentIndex = dataList.indexOf(dValue);
-            dataList.removeOne(dValue);
-
-            m_nCurrentIndex--;
-
+            int curindex = dataList.indexOf(dValue);
+            if (curindex < 0)
+                scaleComboBox->setCurrentIndex(curindex);
             scaleComboBox->setCurrentText(sShowText);
+
         }
     }
 }
