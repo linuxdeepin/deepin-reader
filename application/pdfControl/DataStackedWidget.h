@@ -50,6 +50,7 @@ public:
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 
+    void notifyMsg(const int &, const QString &);
 private slots:
     void slotSetStackCurIndex(const int &);
     void slotAdaptWindowSize(const double &scale); //缩略图列表自适应窗体大小  add by duanxiaohui 2020-3-20
