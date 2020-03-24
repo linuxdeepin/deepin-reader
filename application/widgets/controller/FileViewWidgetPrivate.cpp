@@ -563,10 +563,9 @@ void FileViewWidgetPrivate::OpenFilePath(const QString &sPath)
         RotateType_EM rotatetype = static_cast<RotateType_EM>(rotate);
         ViewMode_EM viewmode = static_cast<ViewMode_EM>(doubPage);
 
+        m_pProxyData->setPath(sPath);
         bool rl = m_pProxy->openFile(nCurDocType, sPath, curPage, rotatetype, scale, viewmode);
         if (rl) {
-            m_pProxyData->setPath(sPath);
-
             m_pProxy->setViewFocus();
         }
     }

@@ -265,6 +265,8 @@ void MainTabBar::SlotTabAddRequested()
 void MainTabBar::SlotTabCloseRequested(int index)
 {
     QString sPath = this->tabData(index).toString();
+    int ipos = sPath.indexOf(Constant::sQStringSep);
+    sPath = sPath.mid(0, ipos);
     if (sPath != "") {
         emit sigCloseTab(sPath);
     }
