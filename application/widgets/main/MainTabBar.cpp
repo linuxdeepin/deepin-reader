@@ -23,6 +23,7 @@
 #include <QMimeData>
 #include <QProcess>
 #include <QDir>
+#include <QTimer>
 
 #include "MainTabWidgetEx.h"
 #include "FileDataModel.h"
@@ -224,6 +225,9 @@ QString MainTabBar::getFileName(const QString &strFilePath)
 
 void MainTabBar::handleTabReleased(int index)
 {
+    if (count() <= 1)
+        return;
+
     QStringList sDataList = this->tabData(index).toString().split(Constant::sQStringSep, QString::SkipEmptyParts);
     QString sPath = sDataList.value(0);
     MainTabWidgetEx::Instance()->SaveFile(MSG_SAVE_FILE, sPath);
@@ -231,6 +235,8 @@ void MainTabBar::handleTabReleased(int index)
     emit sigCloseTab(sPath);
     QProcess app;
     app.startDetached(QString("%1 \"%2\" newwindow").arg(qApp->applicationDirPath() + "/deepin-reader").arg(sPath));
+
+    QTimer::singleShot(50, this, SLOT(onDroped()));
 }
 
 void MainTabBar::handleTabDroped(int index, Qt::DropAction da, QObject *target)
@@ -239,6 +245,14 @@ void MainTabBar::handleTabDroped(int index, Qt::DropAction da, QObject *target)
     QString sPath = sDataList.value(0);
     removeTab(index);
     emit sigCloseTab(sPath);
+
+    QTimer::singleShot(50, this, SLOT(onDroped()));
+}
+
+void MainTabBar::onDroped()
+{
+    if (count() <= 0)
+        MainWindow::Instance()->close();
 }
 
 //  新增

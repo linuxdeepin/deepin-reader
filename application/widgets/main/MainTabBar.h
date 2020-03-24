@@ -48,6 +48,8 @@ private slots:
 
     void handleTabDroped(int index, Qt::DropAction da, QObject *target);//方法测试结果为当tab添加到其他的bar里释放
 
+    void onDroped();
+
 signals:
     void sigTabBarIndexChange(const QString &);
     void sigAddTab(const QString &);

@@ -54,7 +54,10 @@ int main(int argc, char *argv[])
     ProcessController controller;
     QStringList filePathList = arguments;
 
+    MainWindow w;
+
     if (!arguments.contains("newwindow")) {
+
         QStringList waitOpenFilePathList;
 
         foreach (const QString &path, arguments) {
@@ -68,16 +71,13 @@ int main(int argc, char *argv[])
             }
         }
 
-        if (waitOpenFilePathList.isEmpty())
-            return 0;
-
-        if (controller.openIfAppExist(waitOpenFilePathList))
+        if (!waitOpenFilePathList.isEmpty() && controller.openIfAppExist(waitOpenFilePathList))
             return 0;
 
         filePathList = waitOpenFilePathList;
+    } else {
+        w.move(QCursor::pos());
     }
-
-    MainWindow w;
 
     foreach (const QString &filePath, filePathList) {
         if (filePath.endsWith("pdf")) {
