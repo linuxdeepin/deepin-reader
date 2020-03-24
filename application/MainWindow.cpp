@@ -43,8 +43,6 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     initShortCut();
 
-    initBlockShutdown();
-
     g_onlyMainWindow = this;
 
     dApp->m_pModelService->addObserver(this);
@@ -132,45 +130,6 @@ void MainWindow::initUI()
     setCentralWidget(pcenter);
     connect(this, &MainWindow::sigopenfile, pcenter, &CentralWidget::SlotOpenFiles);
 }
-
-void MainWindow::initBlockShutdown()
-{
-    if (m_reply.value().isValid()) {
-        qDebug() << "m_reply.value().isValid():" << m_reply.value().isValid();
-        return;
-    }
-
-    m_pLoginManager = new QDBusInterface("org.freedesktop.login1",
-                                         "/org/freedesktop/login1",
-                                         "org.freedesktop.login1.Manager",
-                                         QDBusConnection::systemBus());
-
-    m_arg << QString("shutdown")             // what
-          << qApp->applicationDisplayName()           // who
-          << QObject::tr("File not saved") // why
-          << QString("block");                        // mode
-
-    QList<QVariant> arg1;
-    arg1 << "poweroff" << qApp->applicationDisplayName() << QObject::tr("File not saved") << QString("block");
-    int fd = -1;
-    m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);
-    m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", arg1);
-    if (m_reply.isValid()) {
-        fd = m_reply.value().fileDescriptor();
-    }
-}
-
-void MainWindow::unBlockShutdown()
-{
-    if (m_reply.isValid()) {
-        QDBusReply<QDBusUnixFileDescriptor> tmp = m_reply;
-        m_reply = QDBusReply<QDBusUnixFileDescriptor>();
-        qDebug() << "Nublock shutdown.";
-    }
-}
-
-//void MainWindow::initConnections()
-//{}
 
 void MainWindow::initThemeChanged()
 {

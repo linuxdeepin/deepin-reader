@@ -42,6 +42,7 @@ bool ProxyData::IsFileChanged() const
 void ProxyData::setFileChanged(bool filechanged)
 {
     m_filechanged = filechanged;
+    emit signale_filechanged(filechanged);
 }
 
 bool ProxyData::IsHandleSelect() const

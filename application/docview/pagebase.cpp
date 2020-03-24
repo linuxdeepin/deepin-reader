@@ -59,7 +59,6 @@ void ThreadRenderImage::run()
         restart = false;
         if (m_width > 0 && m_height > 0) {
             QImage image;
-            qDebug() << "ThreadRenderImage getImage width:" << m_width << " height:" << m_height;
             QTime timecost;
             timecost.start();
             if (m_page->getImage(image, m_width, m_height)) {

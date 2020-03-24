@@ -35,16 +35,11 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath, unsigned int ip
         connect(this, SIGNAL(signal_pageJump(int)), m_documment, SLOT(pageJump(int)));
         connect(m_documment, SIGNAL(signal_searchRes(stSearchRes)), this, SIGNAL(signal_searchRes(stSearchRes)));
         connect(m_documment, SIGNAL(signal_searchover()), this, SIGNAL(signal_searchover()));
-//      connect(this, SIGNAL(signal_mouseSelectText(QPoint, QPoint)), m_documment, SLOT(mouseSelectText(QPoint, QPoint)));
         connect(this, SIGNAL(signal_setScaleRotateViewModeAndShow(double, RotateType_EM, ViewMode_EM)), m_documment, SLOT(setScaleRotateViewModeAndShow(double, RotateType_EM, ViewMode_EM)));
         connect(this, SIGNAL(signal_scaleAndShow(double, RotateType_EM)), m_documment, SLOT(scaleAndShow(double, RotateType_EM)));
         connect(this, SIGNAL(signal_setViewModeAndShow(ViewMode_EM)), m_documment, SLOT(setViewModeAndShow(ViewMode_EM)));
-        connect(m_documment, &DocummentBase::signal_bookMarkStateChange, this, [ = ](int page, bool state) {
-            emit signal_bookMarkStateChange(page, state);
-        });
-        connect(m_documment, &DocummentBase::signal_openResult, this, [ = ](bool result) {
-            emit signal_openResult(result);
-        });
+        connect(m_documment, SIGNAL(signal_bookMarkStateChange(int, bool)), this, SIGNAL(signal_bookMarkStateChange(int, bool)));
+        connect(m_documment, SIGNAL(signal_openResult(bool)), this, SIGNAL(signal_openResult(bool)));
         connect(m_documment, &DocummentBase::signal_autoplaytoend, this, &DocummentProxy::signal_autoplaytoend);
         bre = m_documment->openFile(m_path, ipage, rotatetype, scale, viewmode);
     }
@@ -56,7 +51,6 @@ bool DocummentProxy::setSelectTextStyle(QColor paintercolor, QColor pencolor, in
 {
     if (!m_documment || bcloseing)
         return false;
-    //qDebug() << "setSelectTextStyle";
     return m_documment->setSelectTextStyle(paintercolor, pencolor, penwidth);
 }
 
@@ -164,8 +158,6 @@ QString DocummentProxy::addAnnotation(const QPoint &startpos, const QPoint &endp
     if (!m_documment || bcloseing)
         return QString("");
     strres = m_documment->addAnnotation(startpos, endpos, color);
-    if (!strres.isEmpty())
-        m_filechanged = true;
     return strres;
 }
 
@@ -175,8 +167,6 @@ QString DocummentProxy::addIconAnnotation(const QPoint &pos, const QColor &color
     if (!m_documment || bcloseing)
         return strres;
     strres = m_documment->addTextAnnotation(pos, color, type);
-    if (!strres.isEmpty())
-        m_filechanged = true;
     return strres;
 }
 
@@ -223,11 +213,6 @@ bool DocummentProxy::haslabel()
     return m_documment->haslabel();
 }
 
-bool DocummentProxy::filechanged()
-{
-    return  m_filechanged;
-}
-
 bool DocummentProxy::save(const QString &filepath, bool withChanges)
 {
     if (!m_documment || bcloseing)
@@ -236,20 +221,14 @@ bool DocummentProxy::save(const QString &filepath, bool withChanges)
     if (!m_documment->save(filepath, withChanges)) {
         return false;
     }
-    m_filechanged = false;
     return m_documment->freshFile(filepath);
-//        return m_documment->save(filepath, withChanges);
 }
 
 bool DocummentProxy::saveas(const QString &filepath, bool withChanges)
 {
     if (m_documment && !bcloseing && m_documment->saveas(filepath, withChanges)) {
-//        qDebug() << "saveas success";
-//        return openFile(DocType_PDF, filepath);
-        m_filechanged = false;
         return m_documment->freshFile(filepath);
     }
-//    qDebug() << "saveas failed";
     return false;
 }
 
@@ -295,8 +274,6 @@ QString DocummentProxy::removeAnnotation(const QPoint &startpos, AnnoteType_Em t
         return "";
 
     QString uuid = m_documment->removeAnnotation(startpos, type);
-    if (!uuid.isEmpty())
-        m_filechanged = true;
     return uuid;
 }
 
@@ -305,7 +282,6 @@ void DocummentProxy::removeAnnotation(const QString &struuid, int ipage)
     if (!m_documment || bcloseing)
         return ;
     m_documment->removeAnnotation(struuid, ipage);
-    m_filechanged = true;
 }
 
 void DocummentProxy::slot_pageChange(int pageno)
@@ -373,7 +349,6 @@ void DocummentProxy::setAnnotationText(int ipage, const QString &struuid, const 
 {
     if (m_documment || !bcloseing) {
         m_documment->setAnnotationText(ipage, struuid, strtext);
-        m_filechanged = true;
     }
 }
 
@@ -472,8 +447,6 @@ bool DocummentProxy::setBookMarkState(int page, bool state)
     if (!m_documment || bcloseing)
         return false;
     bool bsuccess = m_documment->setBookMarkState(page, state);
-    if (bsuccess)
-        m_filechanged = true;
     return bsuccess;
 }
 
@@ -481,7 +454,6 @@ void DocummentProxy::changeAnnotationColor(int ipage, const QString uuid, const 
 {
     if (m_documment) {
         m_documment->changeAnnotationColor(ipage, uuid, color);
-        m_filechanged = true;
     }
 }
 

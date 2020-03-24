@@ -20,6 +20,9 @@
 #define MAINTABWIDGETEX_H
 
 #include "CustomControl/CustomWidget.h"
+#include <QDBusInterface>
+#include <QDBusReply>
+#include <QDBusUnixFileDescriptor>
 
 class DocummentProxy;
 class QStackedLayout;
@@ -39,21 +42,8 @@ public:
     ~MainTabWidgetEx() override;
 
     friend class MainTabBar;
-
-private:
-    static MainTabWidgetEx *g_onlyApp;
-
 public:
     static MainTabWidgetEx *Instance();
-
-signals:
-    void sigDealNotifyMsg(const int &, const QString &);
-    void sigOpenFileResult(const QString &, const bool &);
-
-    void sigRemoveFileTab(const QString &);
-
-    void sigTabBarIndexChange(const QString &);
-    void sigAddTab(const QString &);
 
     // IObserver interface
 public:
@@ -76,6 +66,8 @@ public:
     int getCurrentState();
     void setCurrentState(const int &nCurrentState);
     void SetFileChange();
+    void OnExitSliderShow();
+    void OnExitMagnifer();
 
     void setCurrentTabByFilePath(const QString &filePath);
 
@@ -83,37 +75,34 @@ protected:
     void initWidget() override;
 
 private:
+    void BlockShutdown();
+    void UnBlockShutdown();
     void InitConnections();
     void onShowFileAttr();
-
     void OnAppMsgData(const QString &);
     void OnAppExit();
-
     void OnTabBarMsg(const QString &);
     void OnTabFileChangeMsg(const QString &);
-
     void SaveFile(const int &nSaveType, const QString &);
     void OnSaveAsFile();
-
     void OnAppShortCut(const QString &);
     void OnSaveFile();
     void OnPrintFile();
     void ShowFindWidget();
-
     void OnOpenSliderShow();
-public:
-    void OnExitSliderShow();
-
-private:
     void OnOpenMagnifer();
-public:
-    void OnExitMagnifer();
-
-private:
     void OnShortCutKey_Esc();
-
     void OnKeyPress(const QString &);
 
+signals:
+    void sigDealNotifyMsg(const int &, const QString &);
+    void sigOpenFileResult(const QString &, const bool &);
+    void sigRemoveFileTab(const QString &);
+    void sigTabBarIndexChange(const QString &);
+    void sigAddTab(const QString &);
+
+public slots:
+    void slotfilechanged(bool bchanged);
 private slots:
     void SlotSetCurrentIndexFile(const QString &);
     void SlotAddTab(const QString &);
@@ -125,9 +114,15 @@ private:
     QStackedLayout      *m_pStackedLayout = nullptr;
     MainTabBar          *m_pTabBar = nullptr;
     PlayControlWidget   *m_pctrlwidget = nullptr;
+    QDBusReply<QDBusUnixFileDescriptor> m_reply;
+    QDBusInterface *m_pLoginManager = nullptr;
+    QList<QVariant> m_arg;
+    bool m_bBlockShutdown = false;
+    static MainTabWidgetEx *g_onlyApp;
 
 private:
     MainTabWidgetExPrivate *const d_ptr = nullptr;
+
 };
 
 #endif // MAINTABWIDGETEX_H

@@ -77,6 +77,7 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
         }
         m_pages.append((PageBase *)page);
     }
+    emit signal_docummentLoaded(true);
     if (countlabelnotmatch <= 0) {
         m_label2pagenum.clear();
         m_pagenum2label.clear();
@@ -90,7 +91,7 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
         m_scale = m_scale > m_maxzoomratio ? m_maxzoomratio : m_scale;
     }
     setBasicInfo(filepath);
-    emit signal_docummentLoaded(true);
+
 }
 
 
