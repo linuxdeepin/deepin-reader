@@ -153,11 +153,6 @@ void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
     }
 
     QString sTempText = scaleComboBox->currentText();
-    int nTempIndex = scaleComboBox->findText(sTempText);
-//    if (nTempIndex != -1) {
-//        m_nCurrentIndex = nTempIndex;
-//    }
-
     bool bOk = false;
     QString sTempData = sTempText.mid(0, nIndex);
     double dValue = sTempData.toDouble(&bOk);
@@ -227,26 +222,23 @@ void ScaleWidget::SetComboBoxMax()
         }
 
         FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData();
-        int nScale = fdm.qGetData(Scale);
+        double nScale = fdm.qGetData(Scale);
         if (nScale == 0) {
             nScale = 100;
         }
-        m_nCurrentIndex = dataList.indexOf(nScale);
-
-        scaleComboBox->setCurrentIndex(m_nCurrentIndex);
-        if (m_nCurrentIndex == -1) {
-            dataList.append(nScale);
-            qSort(dataList.begin(), dataList.end());
-
-            m_nCurrentIndex = dataList.indexOf(nScale);
-            dataList.removeOne(nScale);
-
-            m_nCurrentIndex--;
-
+        int index = -1;
+        for (int i = 0; i < dataList.size(); i++) {
+            if (qAbs(dataList.at(i) - nScale) < 0.001) {
+                index = i;
+                break;
+            }
+        }
+        dataList.indexOf(nScale);
+        scaleComboBox->setCurrentIndex(index);
+        if (index == -1) {
             QString sCurText = QString::number(nScale) + "%";
             scaleComboBox->setCurrentText(sCurText);
         }
-
         scaleComboBox->blockSignals(false);
     }
 }

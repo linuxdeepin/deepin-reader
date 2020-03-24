@@ -462,8 +462,8 @@ void FileViewWidgetPrivate::slotCustomContextMenuRequested(const QPoint &point)
     m_pProxy->getSelectTextString(sSelectText);  //  选择　当前选中下面是否有文字
 
     QPoint tempPoint = q->mapToGlobal(point);
+    m_popwidgetshowpoint = tempPoint;
     QPoint pRightClickPoint = m_pProxy->global2RelativePoint(tempPoint);
-
     //  右键鼠标点 是否有高亮区域
     QString sAnnotationText = "", struuid = "";
     bool bIsHighLight = m_pProxy->annotationClicked(pRightClickPoint, sAnnotationText, struuid);
@@ -502,6 +502,7 @@ void FileViewWidgetPrivate::slotCustomContextMenuRequested(const QPoint &point)
         m_operatemenu->setRemoveEnabled(true);
         m_operatemenu->execMenu(tempPoint, false, sSelectText, struuid);
     } else {  //  否则弹出 文档操作菜单
+        dApp->m_pAppInfo->setMousePressLocal(false, tempPoint);
         m_pDefaultMenu->setClickpoint(pRightClickPoint);
         m_pDefaultMenu->execMenu(tempPoint, nPage);
     }

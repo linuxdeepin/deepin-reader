@@ -53,7 +53,7 @@ void FileDataModel::fromJson(const QString &sText)
     }
 }
 
-void FileDataModel::qSetData(const int &iKey, const int &iValue)
+void FileDataModel::qSetData(const int &iKey, const double &iValue)
 {
     if (iKey == Thumbnail) {
         setThumbnail(iValue);
@@ -72,7 +72,7 @@ void FileDataModel::qSetData(const int &iKey, const int &iValue)
     }
 }
 
-int FileDataModel::qGetData(const int &iKey) const
+double FileDataModel::qGetData(const int &iKey) const
 {
     if (iKey == Thumbnail) {
         return getThumbnail();
@@ -138,12 +138,12 @@ void FileDataModel::setRotate(int value)
     nRotate = value;
 }
 
-int FileDataModel::getScale() const
+double FileDataModel::getScale() const
 {
     return nScale;
 }
 
-void FileDataModel::setScale(int value)
+void FileDataModel::setScale(double value)
 {
     nScale = value;
 }

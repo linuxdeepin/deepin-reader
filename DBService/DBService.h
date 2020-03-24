@@ -46,7 +46,7 @@ public:
     void setBookMarkList(const QString &, const QList<int> &pBookMarkList);
 
     FileDataModel getHistroyData(const QString &) const;
-    void setHistroyData(const QString &, const int &, const int &);
+    void setHistroyData(const QString &, const int &, const double &);
 
 private:
     DBFactory   *m_pBookMark = nullptr;

@@ -61,7 +61,8 @@ FileDataModel DBService::getHistroyData(const QString &sPath) const
     return qobject_cast<HistroyDB *>(m_pHistroy)->getHistroyData(sPath);
 }
 
-void DBService::setHistroyData(const QString &sPath, const int &iKey, const int &iValue)
+void DBService::setHistroyData(const QString &sPath, const int &iKey, const double &iValue)
 {
     qobject_cast<HistroyDB *>(m_pHistroy)->setHistroyData(sPath, iKey, iValue);
 }
+

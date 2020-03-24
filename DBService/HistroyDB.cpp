@@ -51,7 +51,7 @@ void HistroyDB::qSelectData(const QString &sPath)
         if (query.exec(sql)) {
             if (query.next()) {
                 FileDataModel dataObj;
-                dataObj.qSetData(Scale, query.value(1).toInt());          // 缩放
+                dataObj.qSetData(Scale, query.value(1).toDouble());          // 缩放
                 dataObj.qSetData(DoubleShow, query.value(2).toInt());     // 是否是双页
                 dataObj.qSetData(Fit, query.value(3).toInt());            // 自适应宽/高
                 dataObj.qSetData(Rotate, query.value(4).toInt());         // 文档旋转角度(0~360)
@@ -76,7 +76,7 @@ FileDataModel HistroyDB::getHistroyData(const QString &sPath) const
 }
 
 //  新的数据
-void HistroyDB::setHistroyData(const QString &sPath, const int &iKey, const int &iValue)
+void HistroyDB::setHistroyData(const QString &sPath, const int &iKey, const double &iValue)
 {
     if (m_pNewDataMapObj.contains(sPath)) {
         m_pNewDataMapObj[sPath].qSetData(iKey, iValue);
@@ -206,10 +206,10 @@ void HistroyDB::deleteData()
 
 }
 
-int HistroyDB::GetKeyValue(const QString &sPath, const int &iKey)
+double HistroyDB::GetKeyValue(const QString &sPath, const int &iKey)
 {
     if (m_pNewDataMapObj.contains(sPath)) {
-        int nTemp = m_pNewDataMapObj[sPath].qGetData(iKey);
+        double nTemp = m_pNewDataMapObj[sPath].qGetData(iKey);
         if (-1 == nTemp)
             return m_pDataMapObj[sPath].qGetData(iKey);
         return nTemp;

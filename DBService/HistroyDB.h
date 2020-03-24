@@ -41,7 +41,7 @@ public:
     void qSelectData(const QString &) override;
 
     FileDataModel getHistroyData(const QString &) const;
-    void setHistroyData(const QString &, const int &, const int &);
+    void setHistroyData(const QString &, const int &, const double &);
 
 private:
     void checkDatabase() override;
@@ -51,7 +51,7 @@ private:
     void updateData(const QString &);
     void deleteData();
 
-    int GetKeyValue(const QString &sPath, const int &);
+    double GetKeyValue(const QString &sPath, const int &);
 
 private:
     QString m_strTableName = "FilesTable";

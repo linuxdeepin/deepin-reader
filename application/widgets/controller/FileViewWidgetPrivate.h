@@ -102,6 +102,7 @@ private:
     ProxyViewDisplay    *m_pDocViewProxy = nullptr;         //  文档操作 旋转\单双页\自适应
     Annotation          *m_pAnnotation = nullptr;           //  高亮 注释操作
     DocummentProxy      *m_pProxy = nullptr;                //  文档代理类
+    QPoint              m_popwidgetshowpoint;
 
     friend class Annotation;
     friend class ProxyViewDisplay;

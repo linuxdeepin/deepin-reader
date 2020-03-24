@@ -75,7 +75,7 @@ void ProxyFileDataModel::OnSetViewChange(const QString &sValue)
 
 void ProxyFileDataModel::OnSetViewScale(const QString &sValue)
 {
-    m_pFileDataModel.qSetData(Scale, sValue.toInt());
+    m_pFileDataModel.qSetData(Scale, sValue.toDouble());
 }
 
 void ProxyFileDataModel::OnSetViewRotate(const QString &sValue)

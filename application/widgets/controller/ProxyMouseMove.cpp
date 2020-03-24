@@ -193,6 +193,7 @@ void ProxyMouseMove::__AddIconAnnotation(const QPoint &globalPos)
     } else {
         QString sUuid = _fvwParent->m_pProxy->addIconAnnotation(docGlobalPos);        //  添加注释图标成功
         if (sUuid != "") {
+            dApp->m_pAppInfo->setMousePressLocal(false, globalPos);
             int nClickPage = _fvwParent->m_pProxy->pointInWhichPage(docGlobalPos);
             QString strContent = sUuid.trimmed() + Constant::sQStringSep +
                                  QString::number(nClickPage) + Constant::sQStringSep +
@@ -295,6 +296,7 @@ void ProxyMouseMove::mouseReleaseEvent(QMouseEvent *event)
             }
         }
     } else if (bicon) {
+        dApp->m_pAppInfo->setMousePressLocal(false, globalPos);
         _fvwParent->__CloseFileNoteWidget();
 
         int nPage = _fvwParent->m_pProxy->pointInWhichPage(docGlobalPos);

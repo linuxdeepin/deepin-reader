@@ -46,8 +46,8 @@ public:
     void fromJson(const QString &sText);
 
 public:
-    void qSetData(const int &iKey, const int &iValue);
-    int qGetData(const int &iKey) const;
+    void qSetData(const int &iKey, const double &iValue);
+    double qGetData(const int &iKey) const;
 
 private:
     bool getThumbnail() const;
@@ -62,8 +62,8 @@ private:
     int getRotate() const;
     void setRotate(int value);
 
-    int getScale() const;
-    void setScale(int value);
+    double getScale() const;
+    void setScale(double value);
 
     int getLeftIndex() const;
     void setLeftIndex(int value);
@@ -76,7 +76,7 @@ private:
     bool        bDoubleShow = false;
     int         nFit = false;
     int         nRotate = 0;
-    int         nScale = 0;
+    double      nScale = 0;
     int         nLeftIndex = 0;
     int         nCurPage = 0;
 };

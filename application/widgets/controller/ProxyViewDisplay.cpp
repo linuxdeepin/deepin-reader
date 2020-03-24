@@ -66,7 +66,7 @@ void ProxyViewDisplay::onSetWidgetAdapt()
 //  比例调整了, 取消自适应 宽高状态
 void ProxyViewDisplay::OnSetViewScale(const QString &msgConent)
 {
-    m_nScale = msgConent.toInt();
+    m_nScale = msgConent.toDouble();
 
     setScaleRotateViewModeAndShow();
 

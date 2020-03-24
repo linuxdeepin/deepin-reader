@@ -60,7 +60,7 @@ private:
 
     int                 m_nDoubleShow = false;
     int                 m_rotateType = 0;            // 旋转类型(后台所需旋转类型)
-    int                 m_nScale = 0;
+    double              m_nScale = 0;
 
     int                 m_nWidth = 0;
     int                 m_nHeight = 0;
