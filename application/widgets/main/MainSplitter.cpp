@@ -61,7 +61,10 @@ void MainSplitter::InitWidget()
 
     m_pRightWidget = new QStackedWidget;
     m_pSpinnerWidget = new SpinnerWidget(this);
-    m_pSpinnerWidget->setSpinnerSize(QSize(36, 36));
+    int tW = 36;
+    int tH = 36;
+    dApp->adaptScreenView(tW, tH);
+    m_pSpinnerWidget->setSpinnerSize(QSize(tW, tW));
     m_pSpinnerWidget->startSpinner();
 
     m_pRightWidget->addWidget(m_pSpinnerWidget);
@@ -70,8 +73,12 @@ void MainSplitter::InitWidget()
     addWidget(m_pRightWidget);
 
     QList<int> list_src;
-    list_src.append(LEFTNORMALWIDTH);
-    list_src.append(1000 - LEFTNORMALWIDTH);
+    tW = LEFTNORMALWIDTH;
+    dApp->adaptScreenView(tW, tH);
+    list_src.append(tW);
+    tW = 1000 - LEFTNORMALWIDTH;
+    dApp->adaptScreenView(tW, tH);
+    list_src.append(tW);
 
     setSizes(list_src);
 

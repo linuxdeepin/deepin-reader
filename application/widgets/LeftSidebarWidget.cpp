@@ -14,10 +14,16 @@
 LeftSidebarWidget::LeftSidebarWidget(DWidget *parent)
     : CustomWidget(LEFT_SLIDERBAR_WIDGET, parent)
 {
-    setMinimumWidth(LEFTMINWIDTH);
-    setMaximumWidth(LEFTMAXWIDTH);
-
-    resize(LEFTNORMALWIDTH, this->height());
+    int tW = LEFTMINWIDTH;
+    int tH = LEFTMINWIDTH;
+    dApp->adaptScreenView(tW, tH);
+    setMinimumWidth(tW);
+    tW = LEFTMAXWIDTH;
+    dApp->adaptScreenView(tW, tH);
+    setMaximumWidth(tW);
+    tW = LEFTNORMALWIDTH;
+    dApp->adaptScreenView(tW, tH);
+    resize(tW, this->height());
 
     m_pMsgList = {MSG_WIDGET_THUMBNAILS_VIEW};
     initWidget();

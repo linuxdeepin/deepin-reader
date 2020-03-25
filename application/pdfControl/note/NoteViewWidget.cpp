@@ -30,7 +30,10 @@ NoteViewWidget::NoteViewWidget(DWidget *parent)
     : CustomWidget(NOTE_VIEW_WIDGET, parent)
 {
     setWindowFlag(Qt::Popup);
-    setFixedSize(QSize(250, 320));
+    int tW = 250;
+    int tH = 320;
+    dApp->adaptScreenView(tW, tH);
+    setFixedSize(QSize(tW, tH));
     DPlatformWindowHandle handle(this);
     int radius = 18;
     handle.setWindowRadius(radius);
@@ -91,7 +94,10 @@ void NoteViewWidget::initWidget()
     this->setPalette(plt);
 
     m_pCloseLab = new CustomClickLabel("");
-    m_pCloseLab->setFixedSize(QSize(24, 24));
+    int tW = 24;
+    int tH = 24;
+    dApp->adaptScreenView(tW, tH);
+    m_pCloseLab->setFixedSize(QSize(tW, tH));
     connect(m_pCloseLab, SIGNAL(clicked()), this, SLOT(close()));
 
     auto m_pHLayoutClose = new QHBoxLayout;
@@ -176,7 +182,10 @@ void NoteViewWidget::__PageNoteHideEvent()
 void NoteViewWidget::slotUpdateTheme()
 {
     QString sClose = PF::getImagePath("close", Pri::g_icons);
-    m_pCloseLab->setPixmap(Utils::renderSVG(sClose, QSize(24, 24)));
+    int tW = 24;
+    int tH = 24;
+    dApp->adaptScreenView(tW, tH);
+    m_pCloseLab->setPixmap(Utils::renderSVG(sClose, QSize(tW, tH)));
 }
 
 void NoteViewWidget::setNotePage(const QString &pNotePage)

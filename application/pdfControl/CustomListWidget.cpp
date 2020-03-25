@@ -69,7 +69,10 @@ QListWidgetItem *CustomListWidget::insertWidgetItem(const int &iData)
     auto item = new QListWidgetItem;
     item->setData(Qt::UserRole + 1, iData);
     item->setFlags(Qt::NoItemFlags);
-    item->setSizeHint(QSize(230, 80));
+    int tW = 230;
+    int tH = 80;
+    dApp->adaptScreenView(tW, tH);
+    item->setSizeHint(QSize(tW, tH));
 
     this->insertItem(iInsertIndex, item);
 

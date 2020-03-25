@@ -98,10 +98,12 @@ void NotesWidget::initWidget()
     m_pNotesList->setListType(E_NOTE_WIDGET);
     connect(m_pNotesList, SIGNAL(sigSelectItem(QListWidgetItem *)), SLOT(slotSelectItem(QListWidgetItem *)));
     connect(m_pNotesList, SIGNAL(sigListMenuClick(const int &)), SLOT(slotListMenuClick(const int &)));
-
+    int tW = 170;
+    int tH = 36;
+    dApp->adaptScreenView(tW, tH);
     m_pAddAnnotationBtn = new DPushButton(this);
-    m_pAddAnnotationBtn->setFixedHeight(36);
-    m_pAddAnnotationBtn->setMinimumWidth(170);
+    m_pAddAnnotationBtn->setFixedHeight(tH);
+    m_pAddAnnotationBtn->setMinimumWidth(tW);
     m_pAddAnnotationBtn->setText(tr("Add annotation"));
     DFontSizeManager::instance()->bind(m_pAddAnnotationBtn, DFontSizeManager::T6);
     connect(m_pAddAnnotationBtn, SIGNAL(clicked()), this, SLOT(slotAddAnnotation()));
@@ -391,8 +393,11 @@ void NotesWidget::addNotesItem(const QString &text, const int &iType)
         if (nullptr == dproxy) {
             return;
         }
+        int tW = 48;
+        int tH = 68;
+        dApp->adaptScreenView(tW, tH);
         QImage image;
-        bool rl = dproxy->getImage(t_nPage, image, 48, 68 /*42, 62*/);
+        bool rl = dproxy->getImage(t_nPage, image, tW, tH /*42, 62*/);
         if (rl) {
             QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_SMALL);
             auto item = addNewItem(img, t_nPage, t_strUUid, t_strText, true, iType);

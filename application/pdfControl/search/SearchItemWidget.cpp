@@ -94,28 +94,37 @@ void SearchItemWidget::initWidget()
     auto t_vLayoutPicture = new QVBoxLayout;
     t_vLayoutPicture->setContentsMargins(0, 3, 0, 0);
     m_pPicture = new ImageLabel(this);
-    m_pPicture->setFixedSize(QSize(48, 68));
-    m_pPicture->setSize(QSize(48, 68));
+    int tW = 48;
+    int tH = 68;
+    dApp->adaptScreenView(tW, tH);
+    m_pPicture->setFixedSize(QSize(tW, tH));
+    m_pPicture->setSize(QSize(tW, tH));
     m_pPicture->setAlignment(Qt::AlignCenter);
     t_vLayoutPicture->addWidget(m_pPicture);
     t_vLayoutPicture->addStretch(1);
 
     m_pPageNumber = new PageNumberLabel(this);
-    m_pPageNumber->setMinimumWidth(31);
-    m_pPageNumber->setFixedHeight(18);
+    tW = 31;
+    tH = 18;
+    dApp->adaptScreenView(tW, tH);
+    m_pPageNumber->setMinimumWidth(tW);
+    m_pPageNumber->setFixedHeight(tH);
     m_pPageNumber->setForegroundRole(DPalette::WindowText);
     DFontSizeManager::instance()->bind(m_pPageNumber, DFontSizeManager::T8);
 
     m_pSearchResultNum = new DLabel(this);
-    m_pSearchResultNum->setMinimumWidth(31);
-    m_pSearchResultNum->setFixedHeight(18);
+    m_pSearchResultNum->setMinimumWidth(tW);
+    m_pSearchResultNum->setFixedHeight(tH);
     m_pSearchResultNum->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(m_pSearchResultNum, DFontSizeManager::T10);
 
     m_pTextLab = new DLabel(this);
     m_pTextLab->setTextFormat(Qt::PlainText);
-    m_pTextLab->setFixedHeight(54);
-    m_pTextLab->setMinimumWidth(80);
+    tW = 80;
+    tH = 54;
+    dApp->adaptScreenView(tW, tH);
+    m_pTextLab->setFixedHeight(tH);
+    m_pTextLab->setMinimumWidth(tW);
     //    m_pTextLab->setMaximumWidth(349);
     m_pTextLab->setFrameStyle(QFrame::NoFrame);
     m_pTextLab->setWordWrap(true);
