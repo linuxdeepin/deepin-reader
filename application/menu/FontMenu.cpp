@@ -162,6 +162,9 @@ void FontMenu::OnFileOpenOk(const QString &sPath)
     } else if (adaptat == ADAPTE_HEIGHT_State) {
         m_bFiteH = true;
         m_bFiteW = false;
+    } else {
+        m_bFiteW = false;
+        m_bFiteH = false;
     }
     m_pFiteWAction->setChecked(m_bFiteW);
     m_pFiteHAction->setChecked(m_bFiteH);
