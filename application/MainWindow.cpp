@@ -106,8 +106,7 @@ void MainWindow::showEvent(QShowEvent *ev)
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    //event->ignore();
-
+    event->ignore();
     dApp->m_pAppInfo->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
     dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
 
@@ -123,7 +122,7 @@ void MainWindow::initUI()
     titlebar()->setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
     titlebar()->setTitle("");
 
-    titlebar()->setMenu(new TitleMenu(this));
+    titlebar()->setMenu(TitleMenu::Instance(this));
 
     titlebar()->addWidget(new TitleWidget, Qt::AlignLeft);
     CentralWidget *pcenter = new CentralWidget;

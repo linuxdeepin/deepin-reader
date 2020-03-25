@@ -55,7 +55,7 @@ private:
 private:
     DComboBox *scaleComboBox     = nullptr;
     int         m_nCurrentIndex = -1;           //  当前选项
-    int         m_nMaxScale = 0;
+    int         m_nMaxScale = 1000;
 
     QList<int> dataList;
 };

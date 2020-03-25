@@ -33,6 +33,7 @@
 #include "business/SaveDialog.h"
 
 #include "gof/bridge/IHelper.h"
+#include "menu/TitleMenu.h"
 
 MainTabBar::MainTabBar(DWidget *parent)
     : DTabBar(parent)
@@ -294,6 +295,7 @@ void MainTabBar::SlotRemoveFileTab(const QString &sPath)
 
         nCount = this->count();
         if (nCount == 0) {
+            TitleMenu::Instance()->disableallaction();
             notifyMsg(CENTRAL_INDEX_CHANGE);
         }
     }

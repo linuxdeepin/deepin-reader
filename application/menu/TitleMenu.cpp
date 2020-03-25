@@ -25,24 +25,25 @@
 
 TitleMenu *TitleMenu::g_onlyTitleMenu = nullptr;
 
-TitleMenu *TitleMenu::Instance()
-{
-    return g_onlyTitleMenu;
-}
-
 TitleMenu::TitleMenu(DWidget *parent)
     : CustomMenu(TITLE_MENU, parent)
 {
     initActions();
+}
 
-    g_onlyTitleMenu = this;
+TitleMenu *TitleMenu::Instance(DWidget *parent)
+{
+    if (g_onlyTitleMenu == nullptr && nullptr != parent)
+        g_onlyTitleMenu = new TitleMenu(parent);
+    return g_onlyTitleMenu;
 }
 
 int TitleMenu::dealWithData(const int &msgType, const QString &)
 {
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK || msgType == MSG_TAB_SHOW_FILE_CHANGE) {
         auto actions = this->findChildren<QAction *>();
         foreach (QAction *a, actions) {
+            qDebug() << a->text();
             a->setDisabled(false);
         }
     }
@@ -57,11 +58,23 @@ void TitleMenu::flushSaveButton()
     disableSaveButton(!MainTabWidgetEx::Instance()->getFileChanged());
 }
 
+void TitleMenu::disableallaction()
+{
+    QStringList actiontextlist;
+    actiontextlist << "Save" << "Save as" << "Print" << "Slide show" << "Magnifer" << "Document info" << "Display in file manager";
+    auto actions = this->findChildren<QAction *>();
+    foreach (QAction *a, actions) {
+        qDebug() << a->text();
+        if (actiontextlist.indexOf(a->objectName()) != -1)
+            a->setDisabled(true);
+    }
+}
+
 void TitleMenu::disableSaveButton(bool disable)
 {
     auto actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
-        if (a->text() == tr("Save") ) {
+        if (a->text() == tr("Save")) {
             a->setDisabled(disable);
             break;
         }
