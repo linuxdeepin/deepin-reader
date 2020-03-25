@@ -54,6 +54,9 @@ int main(int argc, char *argv[])
     ProcessController controller;
     QStringList filePathList = arguments;
 
+    QApplication::desktop()->geometry();
+    a.setSreenRect(a.desktop()->geometry());
+
     MainWindow w;
 
     if (!arguments.isEmpty()) {
@@ -90,8 +93,8 @@ int main(int argc, char *argv[])
         }
     }
 
-    QApplication::desktop()->geometry();
-    w.setSreenRect(a.desktop()->screenGeometry());
+//    QApplication::desktop()->geometry();
+//    w.setSreenRect(a.desktop()->screenGeometry());
     w.show();
 
     controller.listen();

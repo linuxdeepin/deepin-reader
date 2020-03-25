@@ -44,7 +44,7 @@ public:
     QString qDealWithData(const int &msgType, const QString &msgContent) override;
 
 private:
-    HelperImpl  *m_pAnnotatinHelperImpl = nullptr;
+//    HelperImpl  *m_pAnnotatinHelperImpl = nullptr;
     HelperImpl  *m_pDocHelperImpl = nullptr;
 };
 

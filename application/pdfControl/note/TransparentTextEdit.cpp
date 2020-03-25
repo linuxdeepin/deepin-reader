@@ -25,7 +25,10 @@
 TransparentTextEdit::TransparentTextEdit(DWidget *parent)
     : QTextEdit(parent)
 {
-    setFixedSize(205, 257);
+    int tW = 205;
+    int tH = 257;
+    dApp->adaptScreenView(tW, tH);
+    setFixedSize(tW, tH);
     init();
 }
 

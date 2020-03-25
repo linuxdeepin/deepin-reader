@@ -81,6 +81,7 @@ public:
     void setAppKeyValue(const int &, const QString &);
     QString getAppKeyValue(const int &) const;
 
+    void adaptScreenView(int &width, int &height);
 private:
     QList<QKeySequence>     m_pKeyList;                 //  快捷键对应
     QList<QColor>           m_listColor;                //  color list
@@ -93,6 +94,11 @@ private:
     QSize m_smallNoteSize;                              // 注释小窗体的大小
 
     QSettings *m_pSettings = nullptr;
+    //add by dxh 2020-3-24   用于适配各种分辨率
+    int m_nWidth = 1920;//标准宽
+    int m_nHeight = 1080;//标准高
+    double m_dWidthScale = 1.0;//宽缩放比例
+    double m_dHeightScale = 1.0;//高缩放比例
 };
 
 #endif // CONSTANTHEADER_H

@@ -48,7 +48,11 @@ MainWindow::MainWindow(DMainWindow *parent)
     dApp->m_pModelService->addObserver(this);
 
     //暂定752*360，后期根据最合适效果设定
-    setMinimumSize(752, 360);
+    int tWidth = 752;
+    int tHeight = 360;
+
+    dApp->adaptScreenView(tWidth, tHeight);
+    setMinimumSize(tWidth, tHeight);
 
     showDefaultSize();
 
@@ -106,8 +110,7 @@ void MainWindow::showEvent(QShowEvent *ev)
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    //event->ignore();
-
+    event->ignore();
     dApp->m_pAppInfo->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
     dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
 
@@ -123,7 +126,7 @@ void MainWindow::initUI()
     titlebar()->setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
     titlebar()->setTitle("");
 
-    titlebar()->setMenu(new TitleMenu(this));
+    titlebar()->setMenu(TitleMenu::Instance(this));
 
     titlebar()->addWidget(new TitleWidget, Qt::AlignLeft);
     CentralWidget *pcenter = new CentralWidget;
@@ -204,11 +207,19 @@ void MainWindow::showDefaultSize()
     int nHeight = dApp->m_pAppInfo->getAppKeyValue(KEY_APP_HEIGHT).toInt();
 
     if (nWidth == 0 || nHeight == 0) {
-        resize(1000, 680);
+        int tWidth = 1000;
+        int tHeight = 680;
+        QString str = "";
 
-        dApp->m_pAppInfo->setAppKeyValue(KEY_APP_WIDTH, "1000");
-        dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, "680");
+        dApp->adaptScreenView(tWidth, tHeight);
+        resize(tWidth, tHeight);
+
+        str = QString::number(tWidth);
+        dApp->m_pAppInfo->setAppKeyValue(KEY_APP_WIDTH, str);
+        str = QString::number(tHeight);
+        dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, str);
     } else {
+        dApp->adaptScreenView(nWidth, nHeight);
         resize(nWidth, nHeight);
     }
 }

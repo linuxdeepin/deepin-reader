@@ -60,6 +60,21 @@ Application::Application(int &argc, char **argv)
     initChildren();
 }
 
+void Application::setSreenRect(const QRect &rect)
+{
+    if (m_pAppInfo) {
+        m_pAppInfo->setScreenRect(rect);
+    }
+}
+
+void Application::adaptScreenView(int &w, int &h)
+{
+    return;
+//    if (m_pAppInfo) {
+//        m_pAppInfo->adaptScreenView(w, h);
+//    }
+}
+
 void Application::handleQuitAction()
 {
     if (m_pModelService) {

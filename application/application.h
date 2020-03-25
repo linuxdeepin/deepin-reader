@@ -39,6 +39,8 @@ class Application : public DApplication
 
 public:
     Application(int &argc, char **argv);
+    void setSreenRect(const QRect &rect);
+    void adaptScreenView(int &w, int &h);
 
 protected:
     void handleQuitAction() override;

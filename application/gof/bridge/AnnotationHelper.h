@@ -20,34 +20,34 @@
 #ifndef ANNOTATIONHELPER_H
 #define ANNOTATIONHELPER_H
 
-#include "HelperImpl.h"
+#include <QObject>
 
 /**
  * @brief The AnnotationHelper class
  *          高亮和注释 业务处理
  */
 
-class AnnotationHelper : public HelperImpl
+class AnnotationHelper : public QObject
 {
     Q_OBJECT
 public:
     explicit AnnotationHelper(QObject *parent = nullptr);
 
 public:
-    QString qDealWithData(const int &, const QString &) override;
+//    QString qDealWithData(const int &, const QString &) override;
 
-private:
-    void __AddHighLight(const QString &msgContent);
-    void __AddHighLightAnnotation(const QString &msgContent, QString &sRes);
-    void __RemoveHighLight(const QString &msgContent, QString &);
-    void __ChangeAnnotationColor(const QString &msgContent);
+//private:
+//    void __AddHighLight(const QString &msgContent);
+//    void __AddHighLightAnnotation(const QString &msgContent, QString &sRes);
+//    void __RemoveHighLight(const QString &msgContent, QString &);
+//    void __ChangeAnnotationColor(const QString &msgContent);
 
-    void __RemoveAnnotation(const QString &, QString &);
-    void __UpdateAnnotationText(const QString &);
+//    void __RemoveAnnotation(const QString &, QString &);
+//    void __UpdateAnnotationText(const QString &);
 
-    void AddPageIconAnnotation(const QString &);
-    void __DeletePageIconAnnotation(const QString &, QString &);
-    void __UpdatePageIconAnnotation(const QString &);
+//    void AddPageIconAnnotation(const QString &);
+//    void __DeletePageIconAnnotation(const QString &, QString &);
+//    void __UpdatePageIconAnnotation(const QString &);
 };
 
 #endif // ANNOTATIONHELPER_H

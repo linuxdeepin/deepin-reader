@@ -36,7 +36,10 @@ void HomeWidget::initWidget()
     DFontSizeManager::instance()->bind(tipsLabel, DFontSizeManager::T8);
 
     auto chooseBtn = new DSuggestButton(tr("Select File"));
-    chooseBtn->setFixedSize(QSize(302, 36));
+    int tW = 302;
+    int tH = 36;
+    dApp->adaptScreenView(tW, tH);
+    chooseBtn->setFixedSize(QSize(tW, tH));
     connect(chooseBtn, &DPushButton::clicked, this, &HomeWidget::slotChooseBtnClicked);
 
     auto layout = new QVBoxLayout;
@@ -46,7 +49,10 @@ void HomeWidget::initWidget()
     layout->addStretch();
 
     auto iconSvg = new DLabel(this);
-    iconSvg->setFixedSize(QSize(128, 128));
+    tW = 128;
+    tH = 128;
+    dApp->adaptScreenView(tW, tH);
+    iconSvg->setFixedSize(QSize(tW, tH));
     iconSvg->setObjectName("iconSvg");
 
     layout->addWidget(iconSvg, 0, Qt::AlignHCenter);

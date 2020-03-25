@@ -69,12 +69,18 @@ void ThumbnailItemWidget::qSetBookMarkShowStatus(const bool &bshow)
 void ThumbnailItemWidget::initWidget()
 {
     m_pPageNumber = new PageNumberLabel(this);
-    m_pPageNumber->setMinimumSize(QSize(146, 18));
+    int tW = 146;
+    int tH = 18;
+    dApp->adaptScreenView(tW, tH);
+    m_pPageNumber->setMinimumSize(QSize(tW, tH));
     m_pPageNumber->setAlignment(Qt::AlignCenter);
 
     m_pPicture = new ImageLabel(this);
-    m_pPicture->setFixedSize(QSize(146, 174));
-    m_pPicture->setSize(QSize(146, 174));
+    tW = 146;
+    tH = 174;
+    dApp->adaptScreenView(tW, tH);
+    m_pPicture->setFixedSize(QSize(tW, tH));
+    m_pPicture->setSize(QSize(tW, tH));
     m_pPicture->setAlignment(Qt::AlignCenter);
     m_pPicture->setRadius(ICON_BIG);
 

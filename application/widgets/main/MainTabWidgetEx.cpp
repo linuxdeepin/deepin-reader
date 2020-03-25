@@ -159,7 +159,10 @@ void MainTabWidgetEx::showPlayControlWidget() const
     if (m_pctrlwidget) {
         int nScreenWidth = qApp->desktop()->geometry().width();
         int inScreenHeght = qApp->desktop()->geometry().height();
-        m_pctrlwidget->activeshow((nScreenWidth - m_pctrlwidget->width()) / 2, inScreenHeght - 100);
+        int tH = 100;
+        int tW = 0;
+        dApp->adaptScreenView(tW, tH);
+        m_pctrlwidget->activeshow((nScreenWidth - m_pctrlwidget->width()) / 2, inScreenHeght - tH);
     }
 }
 

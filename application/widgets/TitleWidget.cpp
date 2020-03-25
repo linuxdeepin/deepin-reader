@@ -291,8 +291,14 @@ void TitleWidget::initBtns()
 
     m_pSearchBtn = new DIconButton(DStyle::SP_IndicatorSearch);
     m_pSearchBtn->setDisabled(true);
-    m_pSearchBtn->setFixedSize(QSize(36, 36));
-    m_pSearchBtn->setIconSize(QSize(30, 30));
+    int tW = 36;
+    int tH = 36;
+    dApp->adaptScreenView(tW, tH);
+    m_pSearchBtn->setFixedSize(QSize(tW, tH));
+    tW = 30;
+    tH = 30;
+    dApp->adaptScreenView(tW, tH);
+    m_pSearchBtn->setIconSize(QSize(tW, tH));
     connect(m_pSearchBtn, SIGNAL(clicked()), SLOT(on_searchBtn_clicked()));
 }
 
@@ -303,8 +309,11 @@ void TitleWidget::__InitHandel()
 
     m_pHandleShapeBtn = createBtn(tr("Select Text"));
     m_pHandleShapeBtn->setObjectName("defaultshape");
-    m_pHandleShapeBtn->setFixedSize(QSize(42, 36));
-    m_pHandleShapeBtn->setIconSize(QSize(42, 36));
+    int tW = 42;
+    int tH = 36;
+    dApp->adaptScreenView(tW, tH);
+    m_pHandleShapeBtn->setFixedSize(QSize(tW, tH));
+    m_pHandleShapeBtn->setIconSize(QSize(tW, tH));
     connect(m_pHandleShapeBtn, SIGNAL(clicked()), SLOT(on_handleShapeBtn_clicked()));
 }
 
@@ -377,8 +386,11 @@ void TitleWidget::setHandleShape()
 DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 {
     auto btn = new DPushButton(this);
-    btn->setFixedSize(QSize(36, 36));
-    btn->setIconSize(QSize(36, 36));
+    int tW = 36;
+    int tH = 36;
+    dApp->adaptScreenView(tW, tH);
+    btn->setFixedSize(QSize(tW, tW));
+    btn->setIconSize(QSize(tW, tW));
     btn->setToolTip(btnName);
     btn->setCheckable(bCheckable);
 

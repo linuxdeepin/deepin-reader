@@ -68,7 +68,10 @@ void ScaleWidget::initWidget()
     connect(scaleComboBox, SIGNAL(currentIndexChanged(const QString &)), SLOT(SlotCurrentTextChanged(const QString &)));
     scaleComboBox->setInsertPolicy(QComboBox::NoInsert);
     scaleComboBox->setDuplicatesEnabled(false); //  重复项 不允许添加
-    scaleComboBox->setFixedWidth(120);
+    int tW = 120;
+    int tH = 0;
+    dApp->adaptScreenView(tW, tH);
+    scaleComboBox->setFixedWidth(tW);
     scaleComboBox->setEditable(true);
 
     QLineEdit *edit = scaleComboBox->lineEdit();

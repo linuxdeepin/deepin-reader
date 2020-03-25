@@ -53,8 +53,11 @@ void BookMarkItemWidget::setBSelect(const bool &paint)
 void BookMarkItemWidget::initWidget()
 {
     m_pPageNumber = new PageNumberLabel(this);
-    m_pPageNumber->setMinimumWidth(31);
-    m_pPageNumber->setFixedHeight(18);
+    int tW = 31;
+    int tH = 18;
+    dApp->adaptScreenView(tW, tH);
+    m_pPageNumber->setMinimumWidth(tW);
+    m_pPageNumber->setFixedHeight(tH);
     m_pPageNumber->setForegroundRole(DPalette::WindowText);
     DFontSizeManager::instance()->bind(m_pPageNumber, DFontSizeManager::T8);
 
@@ -70,8 +73,11 @@ void BookMarkItemWidget::initWidget()
     m_pRightVLayout->setContentsMargins(20, 0, 10, 0);
 
     m_pPicture = new ImageLabel(this);
-    m_pPicture->setFixedSize(QSize(48, 68));
-    m_pPicture->setSize(QSize(48, 68));
+    tW = 48;
+    tH = 68;
+    dApp->adaptScreenView(tW, tH);
+    m_pPicture->setFixedSize(QSize(tW, tH));
+    m_pPicture->setSize(QSize(tW, tH));
     m_pPicture->setAlignment(Qt::AlignCenter);
 
     auto m_pHLayout = new QHBoxLayout;

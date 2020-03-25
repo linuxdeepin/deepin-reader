@@ -108,7 +108,10 @@ void ThumbnailWidget::addThumbnailItem(const int &iIndex)
     auto item = new QListWidgetItem(m_pThumbnailListWidget);
     item->setFlags(Qt::NoItemFlags);
 
-    item->setSizeHint(QSize(LEFTMINWIDTH, 212));
+    int tW = LEFTMINWIDTH;
+    int tH = 212;
+    dApp->adaptScreenView(tW, tH);
+    item->setSizeHint(QSize(tW, tH));
 
     m_pThumbnailListWidget->addItem(item);
     m_pThumbnailListWidget->setItemWidget(item, widget);
@@ -290,9 +293,13 @@ void ThumbnailWidget::adaptWindowSize(const double &scale)
     double width = 1.0;
     double height = 1.0;
 
+    int tW = LEFTMINWIDTH;
+    int tH = 212;
+    dApp->adaptScreenView(tW, tH);
+
     //set item size
-    width = static_cast<double>(LEFTMINWIDTH) * scale;
-    height = static_cast<double>(212) * scale;
+    width = static_cast<double>(tW) * scale;
+    height = static_cast<double>(tH) * scale;
 
     if (m_pThumbnailListWidget) {
         int itemCount = 0;
@@ -438,6 +445,10 @@ void ThreadLoadImage::run()
             break;
         }
 
+        int tW = 146;
+        int tH = 174;
+        dApp->adaptScreenView(tW, tH);
+
         for (int page = m_nStartPage; page <= m_nEndPage; page++) {
             if (!m_isLoaded)
                 break;
@@ -447,7 +458,7 @@ void ThreadLoadImage::run()
                 continue;
             }
             QImage image;
-            bool bl = dproxy->getImage(page, image, 146, 174);
+            bool bl = dproxy->getImage(page, image, tW, tH);
             if (bl) {
                 m_listLoad.append(page);
                 emit sigLoadImage(page, image);

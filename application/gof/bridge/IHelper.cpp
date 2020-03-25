@@ -33,22 +33,22 @@ IHelper::IHelper(QObject *parent)
 Helper::Helper(QObject *parent)
     : IHelper(parent)
 {
-    m_pAnnotatinHelperImpl = new AnnotationHelper(this);
+//    m_pAnnotatinHelperImpl = new AnnotationHelper(this);
     m_pDocHelperImpl = new DocFileHelper(this);
 }
 
 QString Helper::qDealWithData(const int &msgType, const QString &msgContent)
 {
-    QString sRes = m_pAnnotatinHelperImpl->qDealWithData(msgType, msgContent);
+//    QString sRes = m_pAnnotatinHelperImpl->qDealWithData(msgType, msgContent);
 
-    QJsonParseError error;
-    QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
-    if (error.error == QJsonParseError::NoError) {
-        QJsonObject obj = doc.object();
-        int nReturn = obj.value("return").toInt();
-        if (nReturn == MSG_NO_OK) {
-            sRes = m_pDocHelperImpl->qDealWithData(msgType, msgContent);
-        }
-    }
-    return sRes;
+//    QJsonParseError error;
+//    QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
+//    if (error.error == QJsonParseError::NoError) {
+//        QJsonObject obj = doc.object();
+//        int nReturn = obj.value("return").toInt();
+//        if (nReturn == MSG_NO_OK) {
+    return m_pDocHelperImpl->qDealWithData(msgType, msgContent);
+//        }
+//    }
+//    return "";
 }

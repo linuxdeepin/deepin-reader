@@ -106,19 +106,28 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
     auto item = m_pSearchList->insertWidgetItem(page);
     if (item) {
         item->setFlags(Qt::NoItemFlags);
-        item->setSizeHint(QSize(LEFTMINWIDTH, 80));
+        int tW = LEFTMINWIDTH;
+        int tH = 80;
+        dApp->adaptScreenView(tW, tH);
+        item->setSizeHint(QSize(tW, tH));
 
         auto itemWidget = new SearchItemWidget(this);
 
         itemWidget->setLabelPage(page, 1);
         itemWidget->setTextEditText(text);
         itemWidget->setSerchResultText(tr("%1 items found").arg(resultNum));
-        itemWidget->setMinimumSize(QSize(LEFTMINWIDTH - 5, 80));
+        tW = LEFTMINWIDTH - 5;
+        tH = 80;
+        dApp->adaptScreenView(tW, tH);
+        itemWidget->setMinimumSize(QSize(tW, tH));
 
         auto dproxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
         if (nullptr != dproxy) {
             QImage image;
-            bool bl = dproxy->getImage(page, image, 48, 68 /*42, 62*/);
+            tW = 48;
+            tH = 68;
+            dApp->adaptScreenView(tW, tH);
+            bool bl = dproxy->getImage(page, image, tW, tH /*42, 62*/);
             if (bl) {
                 itemWidget->setLabelImage(image);
             }
@@ -136,8 +145,10 @@ void SearchResWidget::showTips()
     auto tipLab = new DLabel(tr("No search results"));
     tipLab->setForegroundRole(/*DPalette::TextTips*/ QPalette::ToolTipText);
     DFontSizeManager::instance()->bind(tipLab, DFontSizeManager::T6);
-
-    tipWidget->setMinimumSize(QSize(226, 528));
+    int tW = 226;
+    int tH = 528;
+    dApp->adaptScreenView(tW, tH);
+    tipWidget->setMinimumSize(QSize(tW, tH));
 
     hLayout->addStretch(1);
     hLayout->addWidget(tipLab);
@@ -148,7 +159,7 @@ void SearchResWidget::showTips()
     tipWidget->setLayout(vLayout);
 
     auto item = new QListWidgetItem;
-    item->setSizeHint(QSize(226, 528));
+    item->setSizeHint(QSize(tW, tH));
     item->setFlags(Qt::NoItemFlags);
     m_pSearchList->addItem(item);
     m_pSearchList->setItemWidget(item, tipWidget);
@@ -206,8 +217,11 @@ void SearchResWidget::adaptWindowSize(const double &scale)
     double height = 1.0;
 
     //set item size
-    width = static_cast<double>(LEFTMINWIDTH) * scale;
-    height = static_cast<double>(80) * scale;
+    int tW = LEFTMINWIDTH;
+    int tH = 80;
+    dApp->adaptScreenView(tW, tH);
+    width = static_cast<double>(tW) * scale;
+    height = static_cast<double>(tH) * scale;
 
     if (m_pSearchList) {
         int itemCount = 0;

@@ -49,16 +49,22 @@ void PagingWidget::initWidget()
     DFontSizeManager::instance()->bind(m_pTotalPagesLab, DFontSizeManager::T6);
     m_pTotalPagesLab->setForegroundRole(DPalette::Text);
 
+    int tW = 36;
+    int tH = 36;
+    dApp->adaptScreenView(tW, tH);
     m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
-    m_pPrePageBtn->setFixedSize(QSize(36, 36));
+    m_pPrePageBtn->setFixedSize(QSize(tW, tH));
     connect(m_pPrePageBtn, SIGNAL(clicked()), SLOT(slotPrePageBtnClicked()));
 
     m_pNextPageBtn = new DIconButton(DStyle::SP_ArrowRight);
-    m_pNextPageBtn->setFixedSize(QSize(36, 36));
+    m_pNextPageBtn->setFixedSize(QSize(tW, tH));
     connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPageBtnClicked()));
 
     m_pJumpPageLineEdit = new DLineEdit();
-    m_pJumpPageLineEdit->setFixedSize(60, 36);
+    tW = 60;
+    tH = 36;
+    dApp->adaptScreenView(tW, tH);
+    m_pJumpPageLineEdit->setFixedSize(tW, tH);
     connect(m_pJumpPageLineEdit, SIGNAL(returnPressed()), SLOT(SlotJumpPageLineEditReturnPressed()));
     m_pJumpPageLineEdit->setClearButtonEnabled(false);
     DFontSizeManager::instance()->bind(m_pJumpPageLineEdit, DFontSizeManager::T6);

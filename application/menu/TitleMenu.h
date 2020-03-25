@@ -34,20 +34,21 @@ class TitleMenu : public CustomMenu
     Q_OBJECT
     Q_DISABLE_COPY(TitleMenu)
 
-public:
+private:
     explicit TitleMenu(DWidget *parent = nullptr);
 
 private:
     static TitleMenu *g_onlyTitleMenu;
 
 public:
-    static TitleMenu *Instance();
+    static TitleMenu *Instance(DWidget *parent = nullptr);
 
     // CustomMenu interface
 public:
     int dealWithData(const int &, const QString &) override;
 
     void flushSaveButton();
+    void disableallaction();
 
 private:
     void disableSaveButton(bool disable);

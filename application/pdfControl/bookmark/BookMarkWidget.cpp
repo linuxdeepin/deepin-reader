@@ -435,8 +435,11 @@ void BookMarkWidget::initWidget()
     connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem *)), SLOT(slotSelectItemBackColor(QListWidgetItem *)));
 
     m_pAddBookMarkBtn = new DPushButton(this);
-    m_pAddBookMarkBtn->setFixedHeight(36);
-    m_pAddBookMarkBtn->setMinimumWidth(170);
+    int tW = 170;
+    int tH = 36;
+    dApp->adaptScreenView(tW, tH);
+    m_pAddBookMarkBtn->setFixedHeight(tH);
+    m_pAddBookMarkBtn->setMinimumWidth(tW);
     m_pAddBookMarkBtn->setText(tr("Add bookmark"));
     DFontSizeManager::instance()->bind(m_pAddBookMarkBtn, DFontSizeManager::T6);
     connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(slotAddBookMark()));
@@ -477,11 +480,17 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
 
         if (nullptr != proxy) {
             QImage t_image;
-            bool rl = proxy->getImage(page, t_image, 48, 68 /*42, 62*/);
+            int tW = 48;
+            int tH = 68;
+            dApp->adaptScreenView(tW, tH);
+            bool rl = proxy->getImage(page, t_image, tW, tH /*42, 62*/);
             if (rl) {
                 QImage img = Utils::roundImage(QPixmap::fromImage(t_image), ICON_SMALL);
                 auto item = m_pBookMarkListWidget->insertWidgetItem(page);
-                item->setSizeHint(QSize(LEFTMINWIDTH, 80));
+                tW = LEFTMINWIDTH;
+                tH = 80;
+                dApp->adaptScreenView(tW, tH);
+                item->setSizeHint(QSize(tW, tH));
 
                 auto t_widget = new BookMarkItemWidget(this);
                 t_widget->setLabelImage(img);
@@ -645,7 +654,9 @@ void LoadBookMarkThread::run()
                 if (m_nEndIndex >= m_bookMarks) {
                     m_nEndIndex = m_bookMarks - 1;
                 }
-
+                int tW = 48;
+                int tH = 68;
+                dApp->adaptScreenView(tW, tH);
                 for (int index = m_nStartIndex; index <= m_nEndIndex; index++) {
                     QImage image;
                     int page = -1;
@@ -664,7 +675,7 @@ void LoadBookMarkThread::run()
                         continue;
                     }
 
-                    bool bl = proxy->getImage(page, image, 48, 68 /*42, 62*/);
+                    bool bl = proxy->getImage(page, image, tW, tH /*42, 62*/);
                     if (bl) {
                         emit sigLoadImage(page, image);
                     }
