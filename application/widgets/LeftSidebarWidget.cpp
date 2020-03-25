@@ -25,7 +25,7 @@ LeftSidebarWidget::LeftSidebarWidget(DWidget *parent)
     dApp->adaptScreenView(tW, tH);
     resize(tW, this->height());
 
-    m_pMsgList = {MSG_WIDGET_THUMBNAILS_VIEW};
+//    m_pMsgList = {MSG_WIDGET_THUMBNAILS_VIEW};
     initWidget();
 
     onSetWidgetVisible(0);  //  默认 隐藏

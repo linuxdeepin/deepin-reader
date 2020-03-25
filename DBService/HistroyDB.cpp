@@ -51,13 +51,13 @@ void HistroyDB::qSelectData(const QString &sPath)
         if (query.exec(sql)) {
             if (query.next()) {
                 FileDataModel dataObj;
-                dataObj.qSetData(Scale, query.value(1).toDouble());          // 缩放
-                dataObj.qSetData(DoubleShow, query.value(2).toInt());     // 是否是双页
-                dataObj.qSetData(Fit, query.value(3).toInt());            // 自适应宽/高
-                dataObj.qSetData(Rotate, query.value(4).toInt());         // 文档旋转角度(0~360)
-                dataObj.qSetData(Thumbnail, query.value(5).toInt());      //  左侧列表窗口是否显示
-                dataObj.qSetData(LeftIndex, query.value(6).toInt());      // 在哪个列表
-                dataObj.qSetData(CurPage, query.value(7).toInt());         // 文档当前页
+                dataObj.qSetData(Scale, query.value("FileScale").toDouble());          // 缩放
+                dataObj.qSetData(DoubleShow, query.value("FileDoubPage").toDouble());     // 是否是双页
+                dataObj.qSetData(Fit, query.value("FileFit").toDouble());            // 自适应宽/高
+                dataObj.qSetData(Rotate, query.value("FileRotate").toDouble());         // 文档旋转角度(0~360)
+                dataObj.qSetData(Thumbnail, query.value("FileShowLeft").toDouble());      //  左侧列表窗口是否显示
+                dataObj.qSetData(LeftIndex, query.value("ListIndex").toDouble());      // 在哪个列表
+                dataObj.qSetData(CurPage, query.value("CurPage").toDouble());         // 文档当前页
 
                 m_pDataMapObj.insert(sPath, dataObj);
             } else {
