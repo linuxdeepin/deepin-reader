@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
                 if (filePath.endsWith("pdf")) {
                     w.openfile(filePath);
                 }
-                qDebug() << __FUNCTION__ << "++++++++++++++" << filePath << arguments;
+                qDebug() << __FUNCTION__ << "process:" << filePath << arguments;
             }
             w.move(QCursor::pos());
         } else {
