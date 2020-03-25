@@ -46,6 +46,7 @@ public:
     void title(QString &title);
     Page::Link *mouseBeOverLink(QPoint point);
     bool getSelectTextString(QString &st);
+    bool getSelectTextString(QString &st, int &page);
     bool showSlideModel();
     bool exitSlideModel();
     void findNext();

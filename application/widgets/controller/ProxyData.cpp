@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ProxyData.h"
+#include "menu/TitleMenu.h"
 
 ProxyData::ProxyData(QObject *parent)
     : QObject(parent)
@@ -42,6 +43,7 @@ bool ProxyData::IsFileChanged() const
 void ProxyData::setFileChanged(bool filechanged)
 {
     m_filechanged = filechanged;
+    TitleMenu::Instance()->flushSaveButton();
     emit signale_filechanged(filechanged);
 }
 

@@ -1,6 +1,7 @@
 #include "TextOperationMenu.h"
 
 #include "ColorWidgetAction.h"
+#include "TitleMenu.h"
 
 #include "business/AppInfo.h"
 
@@ -21,7 +22,14 @@ void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, con
     QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
 
     bool bBookState = pageList.contains(m_nClickPage);
-    m_pAddBookMark->setEnabled(!bBookState);
+
+    if (bBookState) {
+        m_pAddBookMark->setProperty("data", 0);
+        m_pAddBookMark->setText(tr("Remove bookmark"));
+    } else {
+        m_pAddBookMark->setProperty("data", 1);
+        m_pAddBookMark->setText(tr("Add bookmark"));
+    }
 
     m_strSelectText = sSelectText;
 
@@ -74,6 +82,8 @@ void TextOperationMenu::initActions()
     m_pAddNote = createAction(tr("Add note"), SLOT(slotAddNoteClicked()));
 
     m_pAddBookMark = createAction(tr("Add bookmark"), SLOT(slotAddBookMarkClicked()));
+
+
 //    m_pExitFullScreen = createAction(tr("Exit fullscreen"), SLOT(slotExitFullScreenClicked()));
 }
 
@@ -145,13 +155,12 @@ void TextOperationMenu::slotAddNoteClicked()
 
 void TextOperationMenu::slotAddBookMarkClicked()
 {
-    QJsonObject obj;
-    obj.insert("content", QString::number(m_nClickPage));
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + BOOKMARK_WIDGET);
-
-    QJsonDocument doc(obj);
-
-    notifyMsg(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nClickPage));
+    int nData = m_pAddBookMark->property("data").toInt();
+    if (nData == 0) {
+        emit sigActionTrigger(MSG_OPERATION_DELETE_BOOKMARK, QString("%1").arg(m_nClickPage));
+    } else {
+        emit sigActionTrigger(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nClickPage));
+    }
 }
 
 void TextOperationMenu::slotExitFullScreenClicked()

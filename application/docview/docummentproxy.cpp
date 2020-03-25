@@ -318,6 +318,13 @@ bool DocummentProxy::getSelectTextString(QString &st)
     return m_documment->getSelectTextString(st);
 }
 
+bool DocummentProxy::getSelectTextString(QString &st, int &page)
+{
+    if (!m_documment || bcloseing)
+        return false;
+    return m_documment->getSelectTextString(st, page);
+}
+
 bool DocummentProxy::showSlideModel()
 {
     if (!m_documment || bcloseing)

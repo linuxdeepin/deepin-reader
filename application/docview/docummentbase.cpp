@@ -22,7 +22,8 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     //    d->m_threadloadwords.setDoc(this);
     setWidgetResizable(true);
     setFrameShape(QFrame::NoFrame);
-    d->qwfather = parent; parent->setMinimumSize(400, 500);
+    d->qwfather = parent;
+    parent->setMinimumSize(400, 500);
     d->m_widget = new DWidget(this);
     setWidget(d->m_widget);
     d->showslidwaittimer = new QTimer(this);
@@ -1056,6 +1057,25 @@ bool DocummentBase::getSelectTextString(QString &st)
     for (int i = 0; i < d->m_pages.size(); i++) {
         QString stpage = "";
         if (d->m_pages.at(i)->getSelectTextString(stpage)) {
+            bselectexit = true;
+            st += stpage;
+        }
+    }
+    return bselectexit;
+}
+
+bool DocummentBase::getSelectTextString(QString &st, int &page)
+{
+    Q_D(DocummentBase);
+    if (!bDocummentExist()) {
+        return false;
+    }
+    st = "";
+    bool bselectexit = false;
+    for (int i = 0; i < d->m_pages.size(); i++) {
+        QString stpage = "";
+        if (d->m_pages.at(i)->getSelectTextString(stpage)) {
+            page = i;
             bselectexit = true;
             st += stpage;
         }

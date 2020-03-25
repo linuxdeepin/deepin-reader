@@ -461,7 +461,6 @@ void MainTabWidgetEx::OnKeyPress(const QString &sKey)
 
 void MainTabWidgetEx::slotfilechanged(bool bchanged)
 {
-    qDebug() << "^^^^^^^^^^^^^^^_____________+_________________";
     if (bchanged) {
         BlockShutdown();
     } else {

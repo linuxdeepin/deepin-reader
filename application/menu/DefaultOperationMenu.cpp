@@ -5,7 +5,7 @@
 
 #include "gof/bridge/IHelper.h"
 #include "widgets/main/MainTabWidgetEx.h"
-#include "menu/TitleMenu.h"
+
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     : CustomMenu(DEFAULT_OPERATION_MENU, parent)
@@ -24,7 +24,9 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
         QString sCurPath = pMtwe->qGetCurPath();
 
         QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
+
         bool bBookState = pageList.contains(m_nRightPageNumber);
+
         if (bBookState) {
             m_pBookMark->setProperty("data", 0);
             m_pBookMark->setText(tr("Remove bookmark"));
@@ -118,8 +120,6 @@ void DefaultOperationMenu::slotBookMarkClicked()
     } else {
         emit sigActionTrigger(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
     }
-
-    TitleMenu::Instance()->flushSaveButton();
 }
 
 void DefaultOperationMenu::slotFirstPageClicked()

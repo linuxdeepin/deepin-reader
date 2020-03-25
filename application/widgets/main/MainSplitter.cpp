@@ -28,8 +28,6 @@
 #include "widgets/FileViewWidget.h"
 #include "widgets/TitleWidget.h"
 
-#include "menu/TitleMenu.h"
-
 MainSplitter::MainSplitter(DWidget *parent)
     : DSplitter(parent)
 {

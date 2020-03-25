@@ -185,9 +185,15 @@ public:
     {
         return false;
     }
-    virtual QString removeAnnotation(const QPoint &, AnnoteType_Em) {return QString();}
+    virtual QString removeAnnotation(const QPoint &, AnnoteType_Em)
+    {
+        return QString();
+    }
     virtual void removeAnnotation(const QString &struuid, int ipage = -1) {}
-    virtual QString addAnnotation(const QPoint &, const QPoint &, QColor color = Qt::yellow) {return QString();}
+    virtual QString addAnnotation(const QPoint &, const QPoint &, QColor color = Qt::yellow)
+    {
+        return QString();
+    }
     virtual void search(const QString &strtext, QColor color = Qt::yellow) {}
     virtual void getAllAnnotation(QList<stHighlightContent> &listres) {}
     virtual void clearSearch() {}
@@ -195,13 +201,28 @@ public:
     virtual void title(QString &title) {}
     virtual void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) {}
     virtual void getAnnotationText(const QString &struuid, QString &strtext, int ipage) {}
-    virtual bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid) {return false; }
-    virtual bool freshFile(QString file) {return false;}
+    virtual bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
+    {
+        return false;
+    }
+    virtual bool freshFile(QString file)
+    {
+        return false;
+    }
     virtual void jumpToHighLight(const QString &uuid, int ipage) {}
     virtual void changeAnnotationColor(int, const QString, const QColor &) {}
-    virtual Outline outline() { return Outline(); }
-    virtual QString addTextAnnotation(const QPoint &, const QColor &color = Qt::yellow, TextAnnoteType_Em type = TextAnnoteType_Note) {return  QString();}
-    virtual bool iconAnnotationClicked(const QPoint &, QString &, QString &) {return false;};
+    virtual Outline outline()
+    {
+        return Outline();
+    }
+    virtual QString addTextAnnotation(const QPoint &, const QColor &color = Qt::yellow, TextAnnoteType_Em type = TextAnnoteType_Note)
+    {
+        return  QString();
+    }
+    virtual bool iconAnnotationClicked(const QPoint &, QString &, QString &)
+    {
+        return false;
+    };
     void stopLoadPageThread();
     void waitThreadquit();
     bool openFile(QString filepath, unsigned int ipage = 0, RotateType_EM rotatetype = RotateType_0, double scale = 1.0, ViewMode_EM viewmode = ViewMode_SinglePage);
@@ -215,6 +236,7 @@ public:
     int currentPageNo();
     Page::Link *mouseBeOverLink(QPoint point);
     bool getSelectTextString(QString &st);
+    bool getSelectTextString(QString &st, int &page);
     bool loadPages();
     double adaptWidthAndShow(double width);
     double adaptHeightAndShow(double height);
