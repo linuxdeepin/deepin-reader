@@ -117,6 +117,7 @@ void MainTabBar::insertFromMimeData(int index, const QMimeData *source)
 
 bool MainTabBar::canInsertFromMimeData(int index, const QMimeData *source) const
 {
+    //可以改为根据进程号当前进程不能给自己传
     return source->hasFormat("reader/tabbar");
 }
 
@@ -241,7 +242,6 @@ void MainTabBar::handleTabReleased(int index)
     QProcess app;
     app.startDetached(QString("%1 \"%2\" newwindow").arg(qApp->applicationDirPath() + "/deepin-reader").arg(sPath));
 
-    qDebug() << "release:" << sPath;
     QTimer::singleShot(50, this, SLOT(onDroped()));
 }
 
@@ -252,7 +252,6 @@ void MainTabBar::handleTabDroped(int index, Qt::DropAction da, QObject *target)
     removeTab(index);
     emit sigCloseTab(sPath);
 
-    qDebug() << "drop:" << sPath;
     QTimer::singleShot(50, this, SLOT(onDroped()));
 }
 
