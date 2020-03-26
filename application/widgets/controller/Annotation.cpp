@@ -55,10 +55,6 @@ void Annotation::dealWithDataMsg(const int &msgType, const QString &msgContent)
         UpdatePageIconAnnotation(msgContent);
     } else if (msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {       //  删除页面注释
         DeletePageIconAnnotation(msgContent);
-    } else  if (msgType == MSG_NOTE_DELETE_CONTENT) {
-        RemoveAnnotation(msgContent);
-    } else if (msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {
-        DeletePageIconAnnotation(msgContent);
     }
 }
 
