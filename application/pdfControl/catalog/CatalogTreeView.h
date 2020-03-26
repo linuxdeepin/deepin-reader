@@ -45,6 +45,10 @@ public:
     // QWidget interface
 protected:
     void resizeEvent(QResizeEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+
+
 
     // QAbstractItemView interface
 protected slots:
@@ -65,6 +69,7 @@ private slots:
 
 private:
     QString     m_strBindPath = "";
+    bool rightnotifypagechanged = false;
 };
 
 #endif // CATALOGTREEVIEW_H

@@ -69,10 +69,10 @@ void ThreadRenderImage::run()
                 }
                 if (restart)
                     continue;
-                qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " emit render!";
+                // qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " emit render!";
                 emit signal_RenderFinish(image);
             } else {
-                qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " get fail!";
+                // qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " get fail!";
             }
         }
     }
@@ -516,7 +516,7 @@ void PageBase::slot_RenderFinish(QImage image)
     Q_D(PageBase);
     d->m_spinner->stop();
     d->m_spinner->hide();
-    qDebug() << "page RenderFinish pagenum:" << d->m_pageno;
+    // qDebug() << "page RenderFinish pagenum:" << d->m_pageno;
     d->havereander = true;
 //    double originwidth = image.width(), originheight = image.height();
     QMatrix leftmatrix;
@@ -727,7 +727,7 @@ bool PageBase::showImage(double scale, RotateType_EM rotate)
     }
     d->m_scale = scale;
     d->m_rotate = rotate;
-    qDebug() << "PageBase::showImage*****" << d->m_pageno;
+    // qDebug() << "PageBase::showImage*****" << d->m_pageno;
     d->threadreander.setPage(getInterFace(), d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
     connect(d, SIGNAL(signal_RenderFinish(QImage)), this, SLOT(slot_RenderFinish(QImage)));
     if (!d->threadreander.isRunning()) {

@@ -1025,7 +1025,7 @@ void DocummentBase::slot_vScrollBarValueChanged(int value)
         int pageno = currentPageNo();
         if (d->m_currentpageno != pageno) {
             d->m_currentpageno = pageno;
-            qDebug() << "DocummentBase::slot_hScrollBarValueChanged^^^^^^^^^^";
+            // qDebug() << "DocummentBase::slot_hScrollBarValueChanged^^^^^^^^^^";
             emit signal_pageChange(d->m_currentpageno);
         }
         loadPages();
