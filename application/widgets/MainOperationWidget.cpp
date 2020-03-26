@@ -86,8 +86,11 @@ DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QStrin
     auto btn = new DToolButton(this);
     btn->setToolTip(btnName);
     btn->setObjectName(objName);
-    btn->setFixedSize(QSize(36, 36));
-    btn->setIconSize(QSize(36, 36));
+    int tW = 36;
+    int tH = 36;
+    dApp->adaptScreenView(tW, tH);
+    btn->setFixedSize(QSize(tW, tH));
+    btn->setIconSize(QSize(tW, tH));
     btn->setCheckable(true);
     btn->setChecked(false);
 
@@ -102,7 +105,7 @@ void MainOperationWidget::slotOpenFileOk(const QString &sPath)
 {
     m_strBindPath = sPath;
     FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(m_strBindPath);
-    int nId = fdm.qGetData(LeftIndex);
+    int nId = static_cast<int>(fdm.qGetData(LeftIndex));
     if (nId == -1) {
         nId = 0;
     }

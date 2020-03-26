@@ -44,7 +44,7 @@ void LeftSidebarWidget::SlotOpenFileOk(const QString &sPath)
     m_strBindPath = sPath;
 
     FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(sPath);
-    int nShow = fdm.qGetData(Thumbnail);
+    int nShow = static_cast<int>(fdm.qGetData(Thumbnail));
     bool showLeft = nShow == 1 ? true : false;
     onSetWidgetVisible(showLeft);
 }

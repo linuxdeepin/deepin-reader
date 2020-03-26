@@ -88,7 +88,10 @@ void HomeWidget::slotUpdateTheme()
         plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
         iconSvg->setPalette(plt);
         QString sPixmap = PF::getImagePath("import_photo", Pri::g_actions);
-        iconSvg->setPixmap(Utils::renderSVG(sPixmap, QSize(128, 128)));
+        int tW = 128;
+        int tH = 128;
+        dApp->adaptScreenView(tW, tH);
+        iconSvg->setPixmap(Utils::renderSVG(sPixmap, QSize(tW, tH)));
     }
 
     auto customClickLabelList = this->findChildren<CustomClickLabel *>();

@@ -126,9 +126,15 @@ DIconButton *PlayControlWidget::createBtn(const QString &strname)
 {
     DIconButton *btn = new  DIconButton(this);
     btn->setObjectName(strname);
-    btn->setFixedSize(QSize(50, 50));
+    int tW = 50;
+    int tH = 50;
+    dApp->adaptScreenView(tW, tH);
+    btn->setFixedSize(QSize(tW, tH));
     btn->setIcon(QIcon(Utils::renderSVG(PF::getImagePath(strname, Pri::g_icons), QSize(36, 36))));
-    btn->setIconSize(QSize(36, 36));
+    tW = 36;
+    tH = 36;
+    dApp->adaptScreenView(tW, tH);
+    btn->setIconSize(QSize(tW, tH));
     return  btn;
 }
 

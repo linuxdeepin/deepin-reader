@@ -5,6 +5,7 @@
 #include <DFontSizeManager>
 #include <QDebug>
 #include "CustomControl/CustomClickLabel.h"
+#include "application.h"
 
 NoteTipWidget::NoteTipWidget(DWidget *parnet)
     : DWidget(parnet)
@@ -12,6 +13,10 @@ NoteTipWidget::NoteTipWidget(DWidget *parnet)
 {
     setWindowFlags(Qt::ToolTip);
     //  setFixedSize(200, 50);
+    int tW = m_iwidth;
+    int tH = m_iwidth;
+    dApp->adaptScreenView(tW, tH);
+    m_iwidth = tW;
     setFixedWidth(m_iwidth);
     DPlatformWindowHandle handle(this);
     int radius = 8;

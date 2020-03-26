@@ -78,11 +78,14 @@ void ScaleWidget::initWidget()
     connect(edit, SIGNAL(returnPressed()), SLOT(SlotReturnPressed()));
 
     DIconButton *pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
-    pPreBtn->setFixedSize(QSize(24, 24));
+    tW = 24;
+    tH = 24;
+    dApp->adaptScreenView(tW, tH);
+    pPreBtn->setFixedSize(QSize(tW, tH));
     connect(pPreBtn, SIGNAL(clicked()), SLOT(slotPrevScale()));
 
     DIconButton *pNextBtn = new DIconButton(DStyle::SP_IncreaseElement);
-    pNextBtn->setFixedSize(QSize(24, 24));
+    pNextBtn->setFixedSize(QSize(tW, tH));
     connect(pNextBtn, SIGNAL(clicked()), SLOT(slotNextScale()));
 
     m_layout->addWidget(pPreBtn);
@@ -193,7 +196,7 @@ void ScaleWidget::SlotReturnPressed()
             QString sShowText = QString::number(dValue) + "%";
             SlotCurrentTextChanged(sShowText);
 
-            int curindex = dataList.indexOf(dValue);
+            int curindex = dataList.indexOf(static_cast<int>(dValue));
             if (curindex < 0)
                 scaleComboBox->setCurrentIndex(curindex);
             scaleComboBox->setCurrentText(sShowText);
@@ -212,7 +215,7 @@ void ScaleWidget::SetComboBoxMax()
 
         scaleComboBox->blockSignals(true);
 
-        int nTempMax = dMax * 100;
+        int nTempMax = static_cast<int>(dMax) * 100;
         if (nTempMax != m_nMaxScale) {  //  判断当前最大显示 是否 和之前一样, 不一样, 清楚item, 重新添加
             scaleComboBox->clear();
             m_nMaxScale = nTempMax;
@@ -226,7 +229,7 @@ void ScaleWidget::SetComboBoxMax()
 
         FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData();
         double nScale = fdm.qGetData(Scale);
-        if (nScale == 0) {
+        if (static_cast<int>(nScale) == 0) {
             nScale = 100;
         }
         int index = -1;
@@ -236,7 +239,7 @@ void ScaleWidget::SetComboBoxMax()
                 break;
             }
         }
-        dataList.indexOf(nScale);
+        dataList.indexOf(static_cast<int>(nScale));
         scaleComboBox->setCurrentIndex(index);
         if (index == -1) {
             QString sCurText = QString::number(nScale) + "%";
@@ -251,7 +254,7 @@ void ScaleWidget::SetFitScale(const QString &msgContent)
     scaleComboBox->blockSignals(true);
 
     double dTemp = msgContent.toDouble() * 100;
-    int nScale = dTemp;
+    int nScale = static_cast<int>(dTemp);
     QString sCurText = QString::number(nScale) + "%";
 
     int nIndex = scaleComboBox->findText(sCurText);

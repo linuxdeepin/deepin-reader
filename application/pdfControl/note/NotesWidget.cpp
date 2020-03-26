@@ -174,6 +174,8 @@ void NotesWidget::__UpdateNoteItem(const QString &msgContent)
                 auto t_widget = qobject_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
                 if (t_widget) {
                     if (t_widget->nPageIndex() == sPage.toInt() && t_widget->noteUUId() == sUuid) {
+                        clearItemColor();
+
                         rl = true;
                         t_widget->setBSelect(true);
                         t_widget->setTextEditText(sText);
@@ -470,11 +472,14 @@ QListWidgetItem *NotesWidget::addNewItem(const QImage &image, const int &page, c
         itemWidget->setStrPage(QString::number(page));
         itemWidget->setLabelPage(page, 1);
         itemWidget->setTextEditText(text);
-        itemWidget->setMinimumSize(QSize(LEFTMINWIDTH, 80));
+        int tW = LEFTMINWIDTH;
+        int tH = 80;
+        dApp->adaptScreenView(tW, tH);
+        itemWidget->setMinimumSize(QSize(tW, tH));
         itemWidget->setBSelect(bNew);
 
         item->setFlags(Qt::NoItemFlags);
-        item->setSizeHint(QSize(LEFTMINWIDTH, 80));
+        item->setSizeHint(QSize(tW, tH));
 
         m_pNotesList->setItemWidget(item, itemWidget);
 

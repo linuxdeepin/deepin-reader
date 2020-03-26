@@ -38,7 +38,10 @@ FindWidget::FindWidget(DWidget *parent)
 {
     m_strObserverName = FIND_WIDGET;
 
-    setMinimumSize(QSize(414, 60));
+    int tW = 414;
+    int tH = 60;
+    dApp->adaptScreenView(tW, tH);
+    setMinimumSize(QSize(tW, tH));
     setWindowFlags(Qt::WindowStaysOnTopHint);
     setBlurBackgroundEnabled(true);
 
@@ -136,23 +139,44 @@ void FindWidget::initWidget()
 {
     auto findNextButton = new DIconButton(DStyle::SP_ArrowDown);
     findNextButton->setToolTip(tr("Next"));
-    findNextButton->setFixedSize(QSize(36, 36));
-    findNextButton->setIconSize(QSize(12, 12));
+    int tW = 36;
+    int tH = 36;
+    dApp->adaptScreenView(tW, tH);
+    findNextButton->setFixedSize(QSize(tW, tH));
+    tW = 12;
+    tH = 12;
+    dApp->adaptScreenView(tW, tH);
+    findNextButton->setIconSize(QSize(tW, tH));
     connect(findNextButton, &DIconButton::clicked, this, &FindWidget::slotFindNextBtnClicked);
 
     auto findPrevButton = new DIconButton(DStyle::SP_ArrowUp);
     findPrevButton->setToolTip(tr("Previous"));
-    findPrevButton->setFixedSize(QSize(36, 36));
-    findPrevButton->setIconSize(QSize(12, 12));
+    tW = 36;
+    tH = 36;
+    dApp->adaptScreenView(tW, tH);
+    findPrevButton->setFixedSize(QSize(tW, tH));
+    tW = 12;
+    tH = 12;
+    dApp->adaptScreenView(tW, tH);
+    findPrevButton->setIconSize(QSize(tW, tH));
     connect(findPrevButton, &DIconButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
 
     auto closeButton = new DDialogCloseButton;
-    closeButton->setIconSize(QSize(28, 28 /*20, 20*/));
-    closeButton->setFixedSize(QSize(30, 30 /*22, 22*/));
+    tW = 28;
+    tH = 28;
+    dApp->adaptScreenView(tW, tH);
+    closeButton->setIconSize(QSize(tW, tH /*20, 20*/));
+    tW = 30;
+    tH = 30;
+    dApp->adaptScreenView(tW, tH);
+    closeButton->setFixedSize(QSize(tW, tH /*22, 22*/));
     connect(closeButton, &DDialogCloseButton::clicked, this, &FindWidget::findCancel);
 
     m_pSearchEdit = new DSearchEdit;
-    m_pSearchEdit->setFixedSize(QSize(270, 36));
+    tW = 270;
+    tH = 36;
+    dApp->adaptScreenView(tW, tH);
+    m_pSearchEdit->setFixedSize(QSize(tW, tH));
     m_pSearchEdit->setFocusPolicy(Qt::StrongFocus);
 
     connect(m_pSearchEdit, &DSearchEdit::returnPressed, this, &FindWidget::handleContentChanged);

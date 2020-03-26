@@ -206,8 +206,8 @@ void AppInfo::adaptScreenView(int &width, int &height)
     twidth = m_screenRect.width();
     theight = m_screenRect.height();
 
-    scale = (static_cast<double>((twidth <= 0) ? 1920 : twidth) / static_cast<double>(1920));
+    scale = (static_cast<double>((twidth <= 1920) ? 1920 : twidth) / static_cast<double>(1920));
     width = static_cast<int>(scale * static_cast<double>(width));
-    scale = (static_cast<double>((theight <= 0) ? 1080 : theight) / static_cast<double>(1080));
+    scale = (static_cast<double>((theight <= 1080) ? 1080 : theight) / static_cast<double>(1080));
     height = static_cast<int>(scale * static_cast<double>(height));
 }

@@ -102,11 +102,14 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
     auto sigMap = new QSignalMapper(this);
 
     auto colorList = dApp->m_pAppInfo->getLightColorList();
+    int tW = 25;
+    int tH = 25;
+    dApp->adaptScreenView(tW, tH);
     for (int iLoop = 0; iLoop < colorList.size(); iLoop++) {
         auto btn = new RoundColorWidget(colorList.at(iLoop), pWidget);
         btn->setAllClickNotify(true);
         btn->setObjectName(QString("%1").arg(iLoop));
-        btn->setFixedSize(QSize(25, 25));
+        btn->setFixedSize(QSize(tW, tH));
         if (iLoop == 0)
             btn->setSelected(true);
         connect(btn, SIGNAL(clicked()), sigMap, SLOT(map()));
