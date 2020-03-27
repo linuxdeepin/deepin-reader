@@ -9,11 +9,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <QProcess>
 
 #include <QLocalServer>
 #include <QLocalSocket>
 #include <QApplication>
 #include <QJsonDocument>
+#include <DFileDialog>
 
 ProcessController::ProcessController(QObject *parent) : QObject(parent)
 {
@@ -68,6 +70,34 @@ bool ProcessController::listen()
     connect(m_localServer, SIGNAL(newConnection()), this, SLOT(onReceiveMessage()));
 
     return m_localServer->listen(QString::number(pid));
+}
+
+void ProcessController::execOpenFiles()
+{
+    DFileDialog dialog;
+    dialog.setFileMode(DFileDialog::ExistingFiles);
+    dialog.setNameFilter(Utils::getSuffixList());
+    dialog.setDirectory(QDir::homePath());
+
+    if (QDialog::Accepted != dialog.exec()) {
+        return;
+    }
+
+    QStringList files = dialog.selectedFiles();
+
+    if (files.size() > 0) {
+        foreach (auto filePath, files) {
+            if (!ProcessController::existFilePath(filePath)) {
+                dApp->m_pModelService->notifyMsg(MSG_TAB_ADD, filePath);
+            }
+        }
+    }
+}
+
+void ProcessController::processOpenFile(const QString &filePath)
+{
+    QProcess app;
+    app.startDetached(QString("%1 \"%2\"").arg(qApp->applicationDirPath() + "/deepin-reader").arg(filePath));
 }
 
 QString ProcessController::request(const QString &pid, const QString &message)

@@ -30,19 +30,23 @@ public:
 
     virtual ~ProcessController();
 
-    bool existFilePath(const QString &filePath);   //获取打开对应文档程序的pid，为空则文档未打开
+    static bool existFilePath(const QString &filePath);   //获取打开对应文档程序的pid，为空则文档未打开
 
     bool openIfAppExist(const QStringList &filePathList);
 
     bool listen();
 
+    static void execOpenFiles();    //此方法会考虑是否已存在打开此文件进程
+
+    static void processOpenFile(const QString &filePath);  //
+
 private slots:
     void onReceiveMessage();
 
 private:
-    QString request(const QString &pid, const QString &message);
+    static QString request(const QString &pid, const QString &message);
 
-    QStringList findReaderPids();
+    static QStringList findReaderPids();
 
 private:
     QLocalServer *m_localServer = nullptr;

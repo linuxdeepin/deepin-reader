@@ -28,6 +28,7 @@
 #include "widgets/FileViewWidget.h"
 #include "widgets/TitleWidget.h"
 #include "widgets/main/MainTabWidgetEx.h"
+#include "app/processcontroller.h"
 
 MainSplitter::MainSplitter(DWidget *parent)
     : DSplitter(parent)
@@ -87,21 +88,6 @@ void MainSplitter::InitWidget()
     }
 
     setAcceptDrops(true);
-}
-
-void MainSplitter::dragEnterEvent(QDragEnterEvent *event)
-{
-    if (!event->mimeData()->data("reader/tabbar").isEmpty()) {
-        event->accept();
-    }
-}
-
-void MainSplitter::dropEvent(QDropEvent *event)
-{
-    QString filePath = event->mimeData()->data("reader/filePath");
-
-    if (!filePath.isEmpty() && !MainTabWidgetEx::Instance()->qGetAllPath().contains(filePath))
-        dApp->m_pModelService->notifyMsg(MSG_TAB_ADD, filePath);
 }
 
 void MainSplitter::SlotFileOpenResult(const QString &s, const bool &res)

@@ -24,12 +24,14 @@
 #include <QUrl>
 #include <DMessageManager>
 #include <QStackedLayout>
+#include <QProcess>
 
 #include "HomeWidget.h"
 
 #include "main/MainTabWidgetEx.h"
 #include "business/AppInfo.h"
 #include "utils/utils.h"
+#include "app/processcontroller.h"
 
 CentralWidget::CentralWidget(DWidget *parent)
     : CustomWidget(CENTRAL_WIDGET, parent)
@@ -145,8 +147,7 @@ void CentralWidget::dropEvent(QDropEvent *event)
             QFileInfo file(sFilePath);
             if (file.isFile()) {
                 QString sSuffix = file.completeSuffix();
-                if (sSuffix == "pdf" ||
-                        sFilePath.endsWith(QString(".pdf"))) {  //  打开第一个pdf文件
+                if (sSuffix == "pdf" || sFilePath.endsWith(QString(".pdf"))) {  //  打开第一个pdf文件
                     canOpenFileList.append(sFilePath);
                 } else {
                     if (!noOpenFileList.contains(sSuffix)) {
@@ -170,7 +171,8 @@ void CentralWidget::dropEvent(QDropEvent *event)
             QString sRes = "";
 
             foreach (auto s, canOpenFileList) {
-                sRes += s + Constant::sQStringSep;
+                if (!ProcessController::existFilePath(s))
+                    sRes += s + Constant::sQStringSep;
             }
 
             SlotOpenFiles(sRes);

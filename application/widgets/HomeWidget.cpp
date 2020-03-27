@@ -9,6 +9,7 @@
 #include "utils/PublicFunction.h"
 
 #include <QSvgWidget>
+#include "app/processcontroller.h"
 
 HomeWidget::HomeWidget(DWidget *parent)
     : CustomWidget(HOME_WIDGET, parent)
@@ -67,16 +68,18 @@ void HomeWidget::initWidget()
 
 void HomeWidget::slotChooseBtnClicked()
 {
-    QStringList fileList = getOpenFileList();
-    if (fileList.size() > 0) {
-        QString sRes = "";
+    ProcessController::execOpenFiles();
 
-        foreach (auto s, fileList) {
-            sRes += s + Constant::sQStringSep;
-        }
+//    QStringList fileList = getOpenFileList();
+//    if (fileList.size() > 0) {
+//        QString sRes = "";
 
-        emit sigOpenFilePaths(sRes);
-    }
+//        foreach (auto s, fileList) {
+//            sRes += s + Constant::sQStringSep;
+//        }
+
+//        emit sigOpenFilePaths(sRes);
+//    }
 }
 
 //  主题切换
