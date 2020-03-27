@@ -23,6 +23,8 @@ PlayControlWidget::PlayControlWidget(DWidget *parnet)
     m_bautoplaying = true;
     m_bfirstshow = true;
     setWindowFlags(Qt::WindowStaysOnTopHint);
+    setAttribute(Qt::WA_DeleteOnClose);
+
     setBlurBackgroundEnabled(true);
     setFramRadius(18);
 
@@ -32,6 +34,8 @@ PlayControlWidget::PlayControlWidget(DWidget *parnet)
     initConnections();
     adjustSize();
 
+    slotUpdateTheme();
+
     dApp->m_pModelService->addObserver(this);
 }
 
@@ -40,19 +44,10 @@ PlayControlWidget::~PlayControlWidget()
     dApp->m_pModelService->removeObserver(this);
 }
 
-int PlayControlWidget::dealWithData(const int &msgType, const QString &msgContent)
+int PlayControlWidget::dealWithData(const int &, const QString &)
 {
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        slotUpdateTheme();
-    }
-
     return  MSG_NO_OK;
 }
-
-//void PlayControlWidget::sendMsg(const int &msgType, const QString &msgContent)
-//{
-//    notifyMsg(msgType, msgContent);
-//}
 
 void PlayControlWidget::notifyMsg(const int &msgType, const QString &msgContent)
 {
