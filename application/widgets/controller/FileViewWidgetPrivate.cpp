@@ -82,8 +82,6 @@ void FileViewWidgetPrivate::SlotNoteViewMsg(const int &msgType, const QString &m
                || msgType == MSG_NOTE_PAGE_UPDATE_CONTENT || msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {
         m_pAnnotation->dealWithDataMsg(msgType, msgContent);
     }
-
-    TitleMenu::Instance()->flushSaveButton();
 }
 
 //  按 delete 键 删除
@@ -508,24 +506,34 @@ void FileViewWidgetPrivate::slotCustomContextMenuRequested(const QPoint &point)
     } else if (sSelectText == "" && (bIsHighLight || bicon)) { //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
         m_operatemenu->setClickPoint(pRightClickPoint);
+
         m_operatemenu->setPStartPoint(m_pProxyData->getStartPoint());
+
         m_operatemenu->setPEndPoint(m_pProxyData->getEndSelectPoint());
+
         m_operatemenu->setClickPage(clickPage);
+
         dApp->m_pAppInfo->setMousePressLocal(bIsHighLight, tempPoint);
+
         if (bicon) {
             m_operatemenu->setType(NOTE_ICON);
         } else if (bIsHighLight) {
             m_operatemenu->setType(NOTE_HIGHLIGHT);
         }
-        sSelectText = sAnnotationText;
-        m_operatemenu->setRemoveEnabled(true);
-        m_operatemenu->execMenu(tempPoint, false, sSelectText, struuid);
-    } else {  //  否则弹出 文档操作菜单
-        qDebug() << "default";
 
+        sSelectText = sAnnotationText;
+
+        m_operatemenu->setRemoveEnabled(true);
+
+        m_operatemenu->execMenu(tempPoint, false, sSelectText, struuid);
+
+    } else {  //  否则弹出 文档操作菜单
         dApp->m_pAppInfo->setMousePressLocal(false, tempPoint);
+
         m_pDefaultMenu->setClickpoint(pRightClickPoint);
+
         m_pDefaultMenu->execMenu(tempPoint, clickPage);
+
     }
 }
 

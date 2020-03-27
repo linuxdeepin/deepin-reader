@@ -550,13 +550,10 @@ void PageBase::slot_RenderFinish(QImage image)
 void PageBase::clearImage()
 {
     Q_D(PageBase);
-//    qDebug() << "page clearImage pagenum:" << d->m_pageno;
     disconnect(d, SIGNAL(signal_RenderFinish(QImage)), this, SLOT(slot_RenderFinish(QImage)));//防止页面频繁切换，页面有概率会不刷新的问题
     stopThread();
     waitThread();
-//    QThreadPool::globalInstance()->waitForDone();
     clear();
-    d->paintrects.clear();
     d->havereander = false;
     clearMagnifierPixmap();
 }

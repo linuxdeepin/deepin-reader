@@ -27,6 +27,7 @@
 #include "widgets/LeftSidebarWidget.h"
 #include "widgets/FileViewWidget.h"
 #include "widgets/TitleWidget.h"
+#include "widgets/main/MainTabWidgetEx.h"
 
 MainSplitter::MainSplitter(DWidget *parent)
     : DSplitter(parent)
@@ -98,7 +99,8 @@ void MainSplitter::dragEnterEvent(QDragEnterEvent *event)
 void MainSplitter::dropEvent(QDropEvent *event)
 {
     QString filePath = event->mimeData()->data("reader/filePath");
-    if (!filePath.isEmpty())
+
+    if (!filePath.isEmpty() && !MainTabWidgetEx::Instance()->qGetAllPath().contains(filePath))
         dApp->m_pModelService->notifyMsg(MSG_TAB_ADD, filePath);
 }
 

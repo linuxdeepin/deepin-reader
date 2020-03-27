@@ -144,8 +144,8 @@ void Annotation::AddHighLightAnnotation(const QString &msgContent)
             QPoint pStartPoint(nSx.toInt(), nSy.toInt());
             QPoint pEndPoint(nEx.toInt(), nEy.toInt());
             QColor color = dApp->m_pAppInfo->selectColor();
-
             QString strUuid = fvmPrivate->m_pProxy->addAnnotation(pStartPoint, pEndPoint, color);
+
             if (strUuid != "") {
                 fvmPrivate->m_pProxy->setAnnotationText(sPage.toInt(), strUuid, sNote);
 

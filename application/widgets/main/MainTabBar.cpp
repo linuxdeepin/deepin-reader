@@ -128,8 +128,10 @@ bool MainTabBar::canInsertFromMimeData(int index, const QMimeData *source) const
 
 void MainTabBar::handleDragActionChanged(Qt::DropAction action)
 {
-    if (action == Qt::IgnoreAction) {
-        QGuiApplication::changeOverrideCursor(Qt::ArrowCursor);
+    if (count() <= 1)
+        QGuiApplication::changeOverrideCursor(Qt::ForbiddenCursor);
+    else if (action == Qt::IgnoreAction) {
+        QGuiApplication::changeOverrideCursor(Qt::DragCopyCursor);
         DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), true);
     } else if (dragIconWindow()) {
         DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), false);
