@@ -111,7 +111,8 @@ public:
     void nextPage();
     void adaptWindowSize(const double &scale) Q_DECL_OVERRIDE; //缩略图列表自适应窗体大小  add by duanxiaohui 2020-3-19
 //    void forScreenPageing(bool);
-
+    // CustomWidget interface
+    void updateThumbnail(const int &) Q_DECL_OVERRIDE;
 protected:
     void initWidget() override;
 
@@ -147,7 +148,6 @@ private:
     int m_nValuePreIndex = 0;                            // 每一个item所占scrollbar的大小
 
     QString     m_strBindPath = "";
-
 };
 
 #endif  // THUMBNAILWIDGET_H

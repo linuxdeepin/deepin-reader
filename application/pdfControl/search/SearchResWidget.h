@@ -68,10 +68,12 @@ private:
 
 private:
     CustomListWidget *m_pSearchList = nullptr;       // 搜索结果列表
+    QString m_strBindPath = "";
 
     // CustomWidget interface
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
+    void updateThumbnail(const int &) Q_DECL_OVERRIDE;
 };
 
 #endif  // NOTESFORM_H

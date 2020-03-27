@@ -77,6 +77,7 @@ void SearchResWidget::slotSelectItem(QListWidgetItem *item)
 //  打开成功之后, 链接搜索信号
 void SearchResWidget::OnOpenFileOk(const QString &sPath)
 {
+    m_strBindPath = sPath;
     DocummentProxy *_proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy(sPath);
     if (_proxy) {
         connect(_proxy, SIGNAL(signal_searchRes(stSearchRes)), SLOT(slotGetSearchContant(const stSearchRes &)));
@@ -235,6 +236,44 @@ void SearchResWidget::adaptWindowSize(const double &scale)
                         item->setSizeHint(QSize(static_cast<int>(width), static_cast<int>(height)));
                         itemWidget->adaptWindowSize(scale);
                     }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * @brief SearchResWidget::updateThumbnail
+ * 高亮操作之后要跟换相应的缩略图
+ * @param page 页码数，从0开始
+ */
+void SearchResWidget::updateThumbnail(const int &page)
+{
+    if (m_pSearchList == nullptr) {
+        return;
+    }
+    int itemNum = 0;
+    itemNum = m_pSearchList->count();
+    if (itemNum <= 0) {
+        return;
+    }
+    QImage image;
+    int tW = 48;
+    int tH = 68;
+    dApp->adaptScreenView(tW, tH);
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    auto dproxy = pMtwe->getCurFileAndProxy(m_strBindPath);
+    dproxy->getImage(page, image, tW, tH);
+    for (int index = 0; index < itemNum; index++) {
+        auto item = m_pSearchList->item(index);
+        if (item) {
+            auto itemWidget = getItemWidget(item);
+            if (itemWidget) {
+                if (itemWidget->nPageIndex() == page) {
+                    if (nullptr == dproxy) {
+                        return;
+                    }
+                    itemWidget->setLabelImage(image);
                 }
             }
         }

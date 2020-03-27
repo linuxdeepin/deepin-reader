@@ -320,6 +320,44 @@ void ThumbnailWidget::adaptWindowSize(const double &scale)
     }
 }
 
+/**
+ * @brief ThumbnailWidget::updateThumbnail
+ * 高亮操作之后要跟换相应的缩略图
+ * @param page 页码数，从0开始
+ */
+void ThumbnailWidget::updateThumbnail(const int &page)
+{
+    if (m_pThumbnailListWidget == nullptr) {
+        return;
+    }
+    int itemNum = m_pThumbnailListWidget->count();
+    if (itemNum <= 0) {
+        return;
+    }
+    for (int index = 0; index < itemNum; index++) {
+        auto item = m_pThumbnailListWidget->item(index);
+        if (item) {
+            auto itemWidget = getItemWidget(item);
+            if (itemWidget) {
+                if (itemWidget->nPageIndex() == page) {
+                    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+                    auto dproxy = pMtwe->getCurFileAndProxy(m_strBindPath);
+                    if (nullptr == dproxy) {
+                        return;
+                    }
+                    QImage image;
+                    int tW = 146;
+                    int tH = 174;
+                    dApp->adaptScreenView(tW, tH);
+                    dproxy->getImage(page, image, tW, tH);
+                    itemWidget->setLabelImage(image);
+                    return;
+                }
+            }
+        }
+    }
+}
+
 // 关联成功打开文件槽函数
 void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
 {

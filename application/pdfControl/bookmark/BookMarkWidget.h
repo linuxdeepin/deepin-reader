@@ -125,6 +125,7 @@ private:
     // CustomWidget interface
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
+    void updateThumbnail(const int &) Q_DECL_OVERRIDE;
 };
 
 #endif  // BOOKMARKFORM_H

@@ -43,6 +43,7 @@ signals:
     void sigAnntationMsg(const int &, const QString &);
     void sigBookMarkMsg(const int &, const QString &);
     void sigDeleteAnntation(const int &, const QString &);
+    void sigUpdateThumbnail(const int &);
 
     // IObserver interface
 public:

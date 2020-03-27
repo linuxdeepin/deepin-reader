@@ -70,7 +70,7 @@ void LeftSidebarWidget::initWidget()
     connect(this, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pStackedWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)));
     connect(this, SIGNAL(sigBookMarkMsg(const int &, const QString &)), m_pStackedWidget, SIGNAL(sigBookMarkMsg(const int &, const QString &)));
     connect(m_pStackedWidget, SIGNAL(sigDeleteAnntation(const int &, const QString &)), this, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
-
+    connect(this, SIGNAL(sigUpdateThumbnail(const int &)), m_pStackedWidget, SIGNAL(sigUpdateThumbnail(const int &)));
     pVBoxLayout->addWidget(m_pStackedWidget);
 
     m_pMainOperationWidget = new MainOperationWidget;

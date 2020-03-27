@@ -60,6 +60,16 @@ void CustomWidget::adaptWindowSize(const double &scale)
 
 }
 
+/**
+ * @brief CustomWidget::updateThumbnail
+ * 高亮操作之后要跟换相应的缩略图
+ * @param page 页码数，从0开始
+ */
+void CustomWidget::updateThumbnail(const int &page)
+{
+
+}
+
 //  通知消息
 void CustomWidget::notifyMsg(const int &msgType, const QString &msgContent)
 {

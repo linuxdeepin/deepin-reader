@@ -385,6 +385,45 @@ void BookMarkWidget::adaptWindowSize(const double &scale)
     }
 }
 
+/**
+ * @brief BookMarkWidget::updateThumbnail
+ * 高亮操作之后要跟换相应的缩略图
+ * @param page 页码数，从0开始
+ */
+void BookMarkWidget::updateThumbnail(const int &page)
+{
+    if (m_pBookMarkListWidget == nullptr) {
+        return;
+    }
+    int itemNum = 0;
+    itemNum = m_pBookMarkListWidget->count();
+    if (itemNum <= 0) {
+        return;
+    }
+    QImage image;
+    int tW = 48;
+    int tH = 68;
+    dApp->adaptScreenView(tW, tH);
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    auto dproxy = pMtwe->getCurFileAndProxy(m_strBindPath);
+    dproxy->getImage(page, image, tW, tH);
+    for (int index = 0; index < itemNum; index++) {
+        auto item = m_pBookMarkListWidget->item(index);
+        if (item) {
+            auto itemWidget = getItemWidget(item);
+            if (itemWidget) {
+                if (itemWidget->nPageIndex() == page) {
+                    if (nullptr == dproxy) {
+                        return;
+                    }
+                    itemWidget->setLabelImage(image);
+                    return;
+                }
+            }
+        }
+    }
+}
+
 QString BookMarkWidget::getBindPath() const
 {
     return m_strBindPath;

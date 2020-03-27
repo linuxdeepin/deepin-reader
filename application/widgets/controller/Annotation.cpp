@@ -123,6 +123,9 @@ void Annotation::AddHighLight(const QString &msgContent)
 
         fvmPrivate->m_pProxy->addAnnotation(pStartPoint, pEndPoint, color);
         fvmPrivate->m_pProxyData->setFileChanged(true);
+        int page = 0;
+        page = fvmPrivate->m_pProxy->pointInWhichPage(pStartPoint);
+        emit fvmPrivate->q_func()->sigUpdateThumbnail(page);
     }
 }
 
@@ -150,6 +153,7 @@ void Annotation::AddHighLightAnnotation(const QString &msgContent)
                 if (sRes != "") {
                     emit fvmPrivate->q_func()->sigAnntationMsg(MSG_NOTE_ADD_ITEM, sRes);
                     fvmPrivate->m_pProxyData->setFileChanged(true);
+                    emit fvmPrivate->q_func()->sigUpdateThumbnail(sPage.toInt());
                 }
             }
         }
@@ -171,6 +175,9 @@ void Annotation::RemoveHighLight(const QString &msgContent)
             if (sUuid != "") {
                 emit fvmPrivate->q_func()->sigAnntationMsg(MSG_NOTE_DELETE_ITEM, sUuid);
                 fvmPrivate->m_pProxyData->setFileChanged(true);
+                int page = 0;
+                page = fvmPrivate->m_pProxy->pointInWhichPage(tempPoint);
+                emit fvmPrivate->q_func()->sigUpdateThumbnail(page);
             }
         }
     }
@@ -188,9 +195,9 @@ void Annotation::ChangeAnnotationColor(const QString &msgContent)
 
             int iIndex = sIndex.toInt();
             QColor color = dApp->m_pAppInfo->getLightColorList().at(iIndex);
-
             fvmPrivate->m_pProxy->changeAnnotationColor(sPage.toInt(), sUuid, color);     //  更新高亮顏色,  是对文档进行了操作
             fvmPrivate->m_pProxyData->setFileChanged(true);
+            emit fvmPrivate->q_func()->sigUpdateThumbnail(sPage.toInt());
         }
     }
 }
@@ -204,9 +211,9 @@ void Annotation::RemoveAnnotation(const QString &msgContent)
             QString sUuid = sList.at(0);
             QString sPage = sList.at(1);
             fvmPrivate->m_pProxy->removeAnnotation(sUuid, sPage.toInt());
-
             emit fvmPrivate->q_func()->sigAnntationMsg(MSG_NOTE_DELETE_ITEM, sUuid);
             fvmPrivate->m_pProxyData->setFileChanged(true);
+            emit fvmPrivate->q_func()->sigUpdateThumbnail(sPage.toInt());
         }
     }
 }

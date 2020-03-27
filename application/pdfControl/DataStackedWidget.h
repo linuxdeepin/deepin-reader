@@ -41,6 +41,7 @@ signals:
     void sigAnntationMsg(const int &, const QString &);
     void sigBookMarkMsg(const int &, const QString &);
     void sigDeleteAnntation(const int &, const QString &);
+    void sigUpdateThumbnail(const int &);
 
 public:
     int dealWithData(const int &, const QString &);
@@ -54,6 +55,7 @@ protected:
 private slots:
     void slotSetStackCurIndex(const int &);
     void slotAdaptWindowSize(const double &scale); //缩略图列表自适应窗体大小  add by duanxiaohui 2020-3-20
+    void slotUpdateThumbnail(const int &page);//添加或者移除高亮，要更新列表中相应的缩略图 add by duanxiaohui 2020-3-26
 
 private:
     void InitWidgets();

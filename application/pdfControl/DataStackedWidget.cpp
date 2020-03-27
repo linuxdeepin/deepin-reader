@@ -147,6 +147,22 @@ void DataStackedWidget::slotAdaptWindowSize(const double &scale)
     notifyMsg(MSG_VIEWCHANGE_FIT, doc.toJson(QJsonDocument::Compact));
 }
 
+void DataStackedWidget::slotUpdateThumbnail(const int &page)
+{
+    if (m_pThWidget) {
+        m_pThWidget->updateThumbnail(page);
+    }
+    if (m_pBookMarkWidget) {
+        m_pBookMarkWidget->updateThumbnail(page);
+    }
+    if (m_pNotesWidget) {
+        m_pNotesWidget->updateThumbnail(page);
+    }
+    if (m_pSearchResWidget) {
+        m_pSearchResWidget->updateThumbnail(page);
+    }
+}
+
 void DataStackedWidget::InitWidgets()
 {
     m_pThWidget = new ThumbnailWidget(this);
@@ -167,6 +183,7 @@ void DataStackedWidget::InitWidgets()
     connect(m_pNotesWidget, SIGNAL(sigDeleteContent(const int &, const QString &)), this, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
 
     insertWidget(WIDGET_NOTE, m_pNotesWidget);
+    connect(this, SIGNAL(sigUpdateThumbnail(const int &)), this, SLOT(slotUpdateThumbnail(const int &)));
 
     m_pSearchResWidget = new SearchResWidget(this);
     insertWidget(WIDGET_SEARCH, m_pSearchResWidget);

@@ -143,6 +143,9 @@ void NotesWidget::__DeleteNoteItem(const QString &sUuid)
             if (t_widget) {
                 QString t_uuid = t_widget->noteUUId();
                 if (t_uuid == sUuid) {
+                    int t_nPage = t_widget->nPageIndex();
+                    emit sigUpdateThumbnail(t_nPage);
+
                     t_widget->deleteLater();
                     t_widget = nullptr;
 
@@ -405,6 +408,7 @@ void NotesWidget::addNotesItem(const QString &text, const int &iType)
             auto item = addNewItem(img, t_nPage, t_strUUid, t_strText, true, iType);
             if (item) {
                 m_pNotesList->setCurrentItem(item);
+                emit sigUpdateThumbnail(t_nPage);
             }
         }
     }
@@ -527,6 +531,44 @@ void NotesWidget::adaptWindowSize(const double &scale)
                         item->setSizeHint(QSize(static_cast<int>(width), static_cast<int>(height)));
                         itemWidget->adaptWindowSize(scale);
                     }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * @brief NotesWidget::updateThumbnail
+ * 高亮操作之后要跟换相应的缩略图
+ * @param page 页码数，从0开始
+ */
+void NotesWidget::updateThumbnail(const int &page)
+{
+    if (m_pNotesList == nullptr) {
+        return;
+    }
+    int itemNum = 0;
+    itemNum = m_pNotesList->count();
+    if (itemNum <= 0) {
+        return;
+    }
+    QImage image;
+    int tW = 48;
+    int tH = 68;
+    dApp->adaptScreenView(tW, tH);
+    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    auto dproxy = pMtwe->getCurFileAndProxy(m_strBindPath);
+    dproxy->getImage(page, image, tW, tH);
+    for (int index = 0; index < itemNum; index++) {
+        auto item = m_pNotesList->item(index);
+        if (item) {
+            auto itemWidget = getItemWidget(item);
+            if (itemWidget) {
+                if (itemWidget->nPageIndex() == page) {
+                    if (nullptr == dproxy) {
+                        return;
+                    }
+                    itemWidget->setLabelImage(image);
                 }
             }
         }

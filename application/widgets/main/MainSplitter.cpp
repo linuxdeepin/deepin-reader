@@ -56,6 +56,7 @@ void MainSplitter::InitWidget()
     connect(m_pFileViewWidget, SIGNAL(sigFindOperation(const int &)), SLOT(SlotFindOperation(const int &)));
     connect(m_pFileViewWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pLeftWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)));
     connect(m_pFileViewWidget, SIGNAL(sigBookMarkMsg(const int &, const QString &)), m_pLeftWidget, SIGNAL(sigBookMarkMsg(const int &, const QString &)));
+    connect(m_pFileViewWidget, SIGNAL(sigUpdateThumbnail(const int &)), m_pLeftWidget, SIGNAL(sigUpdateThumbnail(const int &)));
 
     m_pRightWidget = new QStackedWidget;
     m_pSpinnerWidget = new SpinnerWidget(this);

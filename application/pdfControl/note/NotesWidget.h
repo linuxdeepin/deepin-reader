@@ -83,6 +83,7 @@ public:
 
 signals:
     void sigDeleteContent(const int &, const QString &);
+    void sigUpdateThumbnail(const int &page);
 
 public:
     // IObserver interface
@@ -132,6 +133,7 @@ private:
     // CustomWidget interface
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
+    void updateThumbnail(const int &) Q_DECL_OVERRIDE;
 };
 
 #endif  // NOTESFORM_H
