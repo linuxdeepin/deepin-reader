@@ -58,6 +58,8 @@ MainTabBar::MainTabBar(DWidget *parent)
 
     connect(this, &DTabBar::tabDroped, this, &MainTabBar::handleTabDroped);
 
+    connect(this, &DTabBar::dragActionChanged, this, &MainTabBar::handleDragActionChanged);
+
     setDragable(true);
 }
 
@@ -97,6 +99,8 @@ QMimeData *MainTabBar::createMimeDataFromTab(int index, const QStyleOptionTab &o
 
     mimeData->setData("reader/filePath", QByteArray().append(sPath));
 
+    mimeData->removeFormat("text/plain");
+
     return mimeData;
 }
 
@@ -124,12 +128,9 @@ bool MainTabBar::canInsertFromMimeData(int index, const QMimeData *source) const
 
 void MainTabBar::handleDragActionChanged(Qt::DropAction action)
 {
-    // Reset cursor to Qt::ArrowCursor if drag tab to TextEditor widget.
     if (action == Qt::IgnoreAction) {
-        if (dragIconWindow()) {
-            QGuiApplication::changeOverrideCursor(Qt::ArrowCursor);
-            DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), true);
-        }
+        QGuiApplication::changeOverrideCursor(Qt::ArrowCursor);
+        DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), true);
     } else if (dragIconWindow()) {
         DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), false);
         if (QGuiApplication::overrideCursor())

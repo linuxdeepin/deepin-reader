@@ -67,8 +67,6 @@ private:
     QString getFileName(const QString &strFilePath);
 
 private slots:
-
-
     void SlotCurrentChanged(int);
     void SlotTabAddRequested();
     void SlotTabCloseRequested(int index);
