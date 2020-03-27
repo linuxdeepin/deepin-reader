@@ -82,8 +82,9 @@ void FindWidget::findCancel()
 
 void FindWidget::handleContentChanged()
 {
-    QString strFind = m_pSearchEdit->text();
-    if (strFind != "") {
+    QString strFind = m_pSearchEdit->text().trimmed();
+    if ((strFind != "") && (m_strLastFindText != strFind)) {
+        m_strLastFindText = strFind;
         onSetEditAlert(0);
         emit sigFindOperation(E_FIND_CONTENT, strFind);
     }

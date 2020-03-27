@@ -71,6 +71,7 @@ private:
     DSearchEdit     *m_pSearchEdit = nullptr;
 
     QList<int>      m_pMsgList;
+    QString m_strLastFindText{""};//上一次查找内容
 };
 
 #endif
