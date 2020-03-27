@@ -128,6 +128,11 @@ void ProxyViewDisplay::setHeight(const int &nHeight)
     m_nHeight = nHeight;
 }
 
+bool ProxyViewDisplay::isDoubleShow()
+{
+    return m_nDoubleShow;
+}
+
 void ProxyViewDisplay::setWidth(const int &nWidth)
 {
     m_nWidth = nWidth;

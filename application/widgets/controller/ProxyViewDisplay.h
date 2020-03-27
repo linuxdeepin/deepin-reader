@@ -49,6 +49,8 @@ public:
     void setWidth(const int &nWidth);
     void setHeight(const int &nHeight);
 
+    bool isDoubleShow();
+
 private:
     void notifyMsg(const int &msgType, const QString &msgContent);
 

@@ -534,6 +534,8 @@ void FileViewWidgetPrivate::slotCustomContextMenuRequested(const QPoint &point)
 
         m_pDefaultMenu->execMenu(tempPoint, clickPage);
 
+        m_pDefaultMenu->setDoubleShow(m_pDocViewProxy->isDoubleShow());
+
     }
 }
 

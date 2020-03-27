@@ -33,7 +33,7 @@ public:
 
 private:
     void __PageJump(const int &pagenum);
-    void __PageJumpByMsg(const int &);
+    void __PageJumpByMsg(const int &, const QString &param);
 
     void onSaveFile();
     void onSaveAsFile();

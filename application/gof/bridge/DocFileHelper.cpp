@@ -147,7 +147,7 @@ QString DocFileHelper::qDealWithData(const int &msgType, const QString &msgConte
         __PageJump(msgContent.toInt());
     } else if (msgType == MSG_OPERATION_FIRST_PAGE || msgType == MSG_OPERATION_PREV_PAGE ||
                msgType == MSG_OPERATION_NEXT_PAGE || msgType == MSG_OPERATION_END_PAGE) {
-        __PageJumpByMsg(msgType);
+        __PageJumpByMsg(msgType, msgContent);
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == KeyStr::g_ctrl_shift_s) {
             onSaveAsFile();
@@ -194,23 +194,24 @@ void DocFileHelper::__PageJump(const int &pagenum)
 }
 
 //  前一页\第一页\后一页\最后一页 操作
-void DocFileHelper::__PageJumpByMsg(const int &iType)
+void DocFileHelper::__PageJumpByMsg(const int &iType, const QString &param)
 {
     MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
     if (pMtwe) {
         QString sCurPath = pMtwe->qGetCurPath();
         if (sCurPath != "") {
             DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(sCurPath);
+
             if (_proxy) {
                 int iPage = -1;
                 if (iType == MSG_OPERATION_FIRST_PAGE) {
                     iPage = 0;
                 } else if (iType == MSG_OPERATION_PREV_PAGE) {
                     int nCurPage = _proxy->currentPageNo();
-                    iPage = nCurPage - 1;
+                    iPage = nCurPage - (param == "doubleshow" ? 2 : 1);
                 } else if (iType == MSG_OPERATION_NEXT_PAGE) {
                     int nCurPage = _proxy->currentPageNo();
-                    iPage = nCurPage + 1;
+                    iPage = nCurPage + (param == "doubleshow" ? 2 : 1);
                 } else if (iType == MSG_OPERATION_END_PAGE) {
                     int nCurPage = _proxy->getPageSNum();
                     iPage = nCurPage - 1;

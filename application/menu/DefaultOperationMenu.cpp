@@ -71,6 +71,11 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
     }
 }
 
+void DefaultOperationMenu::setDoubleShow(const bool &isDoubleShow)
+{
+    m_isDoubleShow = isDoubleShow;
+}
+
 void DefaultOperationMenu::initActions()
 {
     m_pSearch = createAction(tr("Search"), SLOT(slotSearchClicked()));
@@ -129,12 +134,12 @@ void DefaultOperationMenu::slotFirstPageClicked()
 
 void DefaultOperationMenu::slotPrevPageClicked()
 {
-    dApp->m_pHelper->qDealWithData(MSG_OPERATION_PREV_PAGE, "");
+    dApp->m_pHelper->qDealWithData(MSG_OPERATION_PREV_PAGE, m_isDoubleShow ? "doubleshow" : "");
 }
 
 void DefaultOperationMenu::slotNextPageClicked()
 {
-    dApp->m_pHelper->qDealWithData(MSG_OPERATION_NEXT_PAGE, "");
+    dApp->m_pHelper->qDealWithData(MSG_OPERATION_NEXT_PAGE, m_isDoubleShow ? "doubleshow" : "");
 }
 
 void DefaultOperationMenu::slotEndPageClicked()

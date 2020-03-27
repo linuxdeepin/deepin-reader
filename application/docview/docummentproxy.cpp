@@ -58,7 +58,6 @@ bool DocummentProxy::mouseSelectText(QPoint start, QPoint stop)
 {
     if (!m_documment || bcloseing)
         return false;
-    // qDebug() << "mouseSelectText";
     mouseSelectTextClear();
     return m_documment->mouseSelectText(start, stop);
 }
@@ -72,7 +71,6 @@ bool DocummentProxy::mouseBeOverText(QPoint point)
 {
     if (!m_documment || bcloseing)
         return false;
-    //qDebug() << "mouseBeOverText";
     return m_documment->mouseBeOverText(point);
 }
 
@@ -80,7 +78,6 @@ void DocummentProxy::setScaleRotateViewModeAndShow(double scale, RotateType_EM r
 {
     if (!m_documment || bcloseing)
         return;
-    qDebug() << "setScaleRotateViewModeAndShow";
     mouseSelectTextClear();
     emit signal_setScaleRotateViewModeAndShow(scale, rotate, viewmode);
 }
@@ -89,8 +86,6 @@ void DocummentProxy::scaleRotateAndShow(double scale, RotateType_EM rotate)
     if (!m_documment || bcloseing)
         return;
     mouseSelectTextClear();
-//    m_documment->scaleAndShow(scale, rotate);
-    qDebug() << "scaleRotateAndShow";
     emit signal_scaleAndShow(scale, rotate);
 }
 

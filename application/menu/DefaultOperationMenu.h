@@ -18,7 +18,12 @@ public:
 
 public:
     void execMenu(const QPoint &, const int &);
-    inline void setClickpoint(const QPoint &pt) {m_pointclicked = pt;}
+    inline void setClickpoint(const QPoint &pt)
+    {
+        m_pointclicked = pt;
+    }
+
+    void setDoubleShow(const bool &isDoubleShow);
 
     // CustomMenu interface
 protected:
@@ -49,6 +54,7 @@ private:
     QAction *m_pExitFullScreen = nullptr;
     QPoint m_pointclicked;
     QPoint m_showPoint;
+    bool    m_isDoubleShow = false;
 };
 
 #endif // DEFAULTOPERATIONMENU_H
