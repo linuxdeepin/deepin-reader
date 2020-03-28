@@ -98,19 +98,23 @@ int main(int argc, char *argv[])
             share.detach();
             return 0;
         }
+    } else {
+        waitOpenFilePathList = arguments;
+        waitOpenFilePathList.removeOne("newwindow");
+
     }
     //通知==========
 
     DApplicationSettings savetheme;
-
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
-
     QApplication::desktop()->geometry();
-
     a.setSreenRect(a.desktop()->geometry());
 
     MainWindow w;
+
+    if (arguments.contains("newwindow"))
+        w.move(QCursor::pos());
 
     controller.listen();
 
