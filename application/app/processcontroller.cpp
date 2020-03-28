@@ -109,17 +109,17 @@ QString ProcessController::request(const QString &pid, const QString &message)
     QString result;
     QLocalSocket localSocket;
     localSocket.connectToServer(pid, QIODevice::ReadWrite);
-    if (!localSocket.waitForConnected(1000)) {
+    if (!localSocket.waitForConnected(100)) {
         qDebug() << localSocket.error();
         return result;
     }
 
     localSocket.write(message.toUtf8());
-    if (!localSocket.waitForBytesWritten(1000)) {
+    if (!localSocket.waitForBytesWritten(100)) {
         return result;
     }
 
-    if (!localSocket.waitForReadyRead(3000))
+    if (!localSocket.waitForReadyRead(100))
         return result;
 
     result  = localSocket.readAll();
@@ -166,12 +166,15 @@ void ProcessController::onReceiveMessage()
 
         if (ex && window ) {
             localSocket->write("exist");
+
             for (int i = 0 ; i < fileOpenList.count(); ++i) {
                 MainWindow::Instance()->openfile(fileOpenList.value(i));
                 if (i == fileOpenList.count() - 1)
                     ex->setCurrentTabByFilePath(fileOpenList.value(i));
             }
+
             window->activateWindow();
+
         } else {
             localSocket->write("none");
         }

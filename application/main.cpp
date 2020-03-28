@@ -41,71 +41,88 @@ int main(int argc, char *argv[])
 {
     // Init DTK.
     Application::loadDXcbPlugin();
+
     Application a(argc, argv);
+
+    QCommandLineParser parser;
+
+    parser.process(a);
+
+    QStringList arguments = parser.positionalArguments();
+
+    //进程同步
+    QSharedMemory share;
+    bool hasWaited = false;
+    share.setKey("deepin_reader");
+    while (!share.create(1)) {
+        hasWaited = true;
+        QThread::msleep(100);
+    }
+    if (hasWaited) {
+        share.detach();
+    }
+
+    //=======通知已经打开的进程
+    ProcessController controller;
+
+    QStringList waitOpenFilePathList;
+
+    if (!arguments.contains("newwindow")) {
+
+        foreach (const QString &path, arguments) {
+
+            QString filePath = UrlInfo(path).toLocalFile();
+
+            if (filePath.endsWith("pdf")) {
+
+                if (!controller.existFilePath(filePath))    //存在则直接通知 本程序不打开
+                    waitOpenFilePathList.append(filePath);
+            }
+        }
+
+        if (waitOpenFilePathList.isEmpty()) {
+            share.detach();
+            return 0;
+        }
+
+        if (controller.openIfAppExist(waitOpenFilePathList)) {
+            share.detach();
+            return 0;
+        }
+
+        if (hasWaited) {
+            QThread::msleep(500);      //经测试 存在一个 其他的等待10秒后 依旧打开新窗口
+        }
+
+        if (controller.openIfAppExist(waitOpenFilePathList)) {
+            share.detach();
+            return 0;
+        }
+    }
+    //通知==========
+
     DApplicationSettings savetheme;
 
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
 
-    QCommandLineParser parser;
-    parser.process(a);
-    QStringList arguments = parser.positionalArguments();
-
-    QSharedMemory share;
-    share.setKey("deepin_reader");
-    share.create(16);
-    share.lock();
-
-    ProcessController controller;
-
-    QStringList filePathList = arguments;
-
     QApplication::desktop()->geometry();
+
     a.setSreenRect(a.desktop()->geometry());
 
     MainWindow w;
 
-    if (!arguments.isEmpty()) {
+    controller.listen();
 
-        if (arguments.contains("newwindow")) {
-            foreach (const QString &filePath, filePathList) {
-                if (filePath.endsWith("pdf")) {
-                    w.openfile(filePath);
-                }
-            }
-            w.move(QCursor::pos());
-        } else {
-            QStringList waitOpenFilePathList;
-
-            foreach (const QString &path, arguments) {
-
-                QString filePath = UrlInfo(path).toLocalFile();
-
-                if (filePath.endsWith("pdf")) {
-
-                    if (!controller.existFilePath(filePath))    //存在则直接通知 本程序不打开
-                        waitOpenFilePathList.append(filePath);
-                }
-            }
-
-            if (waitOpenFilePathList.isEmpty())
-                return 0;
-
-            if (controller.openIfAppExist(waitOpenFilePathList))
-                return 0;
-
-            foreach (const QString &filePath, waitOpenFilePathList)
-                w.openfile(filePath);
+    foreach (const QString &filePath, waitOpenFilePathList) {
+        if (filePath.endsWith("pdf")) {
+            w.openfile(filePath);
         }
     }
 
-//    QApplication::desktop()->geometry();
-//    w.setSreenRect(a.desktop()->screenGeometry());
     w.show();
 
-    controller.listen();
-
-    share.unlock();
+    share.detach();
 
     return a.exec();
 }
