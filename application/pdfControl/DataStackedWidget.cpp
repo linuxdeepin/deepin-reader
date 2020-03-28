@@ -67,6 +67,10 @@ void DataStackedWidget::SetFindOperation(const int &iType)
 {
     if (iType == E_FIND_CONTENT) {
         setCurrentIndex(WIDGET_SEARCH);
+        //解决搜索不能清除上一次搜索结果问题
+        if (m_pSearchResWidget) {
+            m_pSearchResWidget->OnExitSearch();
+        }
     } else if (iType == E_FIND_EXIT) {
         OnOpenFileOk(m_strBindPath);
 
