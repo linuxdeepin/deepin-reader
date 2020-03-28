@@ -72,7 +72,7 @@ bool ProcessController::listen()
     return m_localServer->listen(QString::number(pid));
 }
 
-void ProcessController::execOpenFiles()
+bool ProcessController::execOpenFiles()
 {
     DFileDialog dialog;
     dialog.setFileMode(DFileDialog::ExistingFiles);
@@ -80,18 +80,22 @@ void ProcessController::execOpenFiles()
     dialog.setDirectory(QDir::homePath());
 
     if (QDialog::Accepted != dialog.exec()) {
-        return;
+        return false;
     }
 
     QStringList files = dialog.selectedFiles();
 
+    bool opened = false;
     if (files.size() > 0) {
         foreach (auto filePath, files) {
             if (!ProcessController::existFilePath(filePath)) {
                 dApp->m_pModelService->notifyMsg(MSG_TAB_ADD, filePath);
+                opened = true;
             }
         }
     }
+
+    return opened;
 }
 
 void ProcessController::processOpenFile(const QString &filePath)

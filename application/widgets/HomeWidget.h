@@ -20,6 +20,8 @@ public:
 signals:
     void sigOpenFilePaths(const QString &);
 
+    void filesOpened();
+
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;

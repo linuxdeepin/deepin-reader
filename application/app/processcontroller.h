@@ -36,7 +36,7 @@ public:
 
     bool listen();
 
-    static void execOpenFiles();    //此方法会考虑是否已存在打开此文件进程
+    static bool execOpenFiles();    //此方法会考虑是否已存在打开此文件进程
 
     static void processOpenFile(const QString &filePath);  //
 

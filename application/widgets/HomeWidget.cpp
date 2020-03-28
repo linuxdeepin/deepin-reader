@@ -68,7 +68,8 @@ void HomeWidget::initWidget()
 
 void HomeWidget::slotChooseBtnClicked()
 {
-    ProcessController::execOpenFiles();
+    if (ProcessController::execOpenFiles())
+        emit filesOpened();
 
 //    QStringList fileList = getOpenFileList();
 //    if (fileList.size() > 0) {

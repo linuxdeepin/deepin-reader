@@ -92,6 +92,14 @@ void CentralWidget::SlotOpenFiles(const QString &filePaths)
     notifyMsg(MSG_TAB_ADD, filePaths);
 }
 
+void CentralWidget::onFilesOpened()
+{
+    auto pLayout = this->findChild<QStackedLayout *>();
+    if (pLayout) {
+        pLayout->setCurrentIndex(1);
+    }
+}
+
 void CentralWidget::onShowTip(const QString &contant)
 {
     int position = contant.indexOf("##**");
@@ -188,6 +196,7 @@ void CentralWidget::initWidget()
 
     HomeWidget *homeWidget = new HomeWidget;
     connect(homeWidget, SIGNAL(sigOpenFilePaths(const QString &)), SLOT(SlotOpenFiles(const QString &)));
+    connect(homeWidget, SIGNAL(filesOpened()), SLOT(onFilesOpened()));
     pStcakLayout->addWidget(homeWidget);
 
     pStcakLayout->addWidget(new MainTabWidgetEx);

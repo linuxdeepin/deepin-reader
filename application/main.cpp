@@ -50,7 +50,14 @@ int main(int argc, char *argv[])
     QCommandLineParser parser;
     parser.process(a);
     QStringList arguments = parser.positionalArguments();
+
+    QSharedMemory share;
+    share.setKey("deepin_reader");
+    share.create(16);
+    share.lock();
+
     ProcessController controller;
+
     QStringList filePathList = arguments;
 
     QApplication::desktop()->geometry();
@@ -97,6 +104,8 @@ int main(int argc, char *argv[])
     w.show();
 
     controller.listen();
+
+    share.unlock();
 
     return a.exec();
 }

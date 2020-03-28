@@ -56,6 +56,8 @@ protected:
 public slots:
     void SlotOpenFiles(const QString &);
 
+    void onFilesOpened();
+
 private:
     void initConnections();
     void OnSetCurrentIndex();
