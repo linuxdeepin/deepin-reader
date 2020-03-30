@@ -23,8 +23,8 @@
 #include "application.h"
 #include "CustomItemWidget.h"
 
-#include "menu/BookMarkMenu.h"
-#include "menu/NoteMenu.h"
+//#include "menu/BookMarkMenu.h"
+//#include "menu/NoteMenu.h"
 
 #include "gof/bridge/IHelper.h"
 
@@ -123,18 +123,21 @@ void CustomListWidget::slotShowSelectItem(QListWidgetItem *item)
 //  显示 注释菜单
 void CustomListWidget::showNoteMenu()
 {
-    auto pMenu = new NoteMenu();
-    connect(pMenu, SIGNAL(sigClickAction(const int &)), this, SIGNAL(sigListMenuClick(const int &)));
-    pMenu->exec(QCursor::pos());
-
+    if (pNoteMenu == nullptr) {
+        pNoteMenu = new NoteMenu(this);
+        connect(pNoteMenu, SIGNAL(sigClickAction(const int &)), this, SIGNAL(sigListMenuClick(const int &)));
+    }
+    pNoteMenu->exec(QCursor::pos());
 }
 
 //  显示 书签菜单
 void CustomListWidget::showBookMarkMenu()
 {
-    auto pMenu = new BookMarkMenu();
-    connect(pMenu, SIGNAL(sigClickAction(const int &)), this, SIGNAL(sigListMenuClick(const int &)));
-    pMenu->exec(QCursor::pos());
+    if (m_pBookMarkMenu == nullptr) {
+        m_pBookMarkMenu = new BookMarkMenu(this);
+        connect(m_pBookMarkMenu, SIGNAL(sigClickAction(const int &)), this, SIGNAL(sigListMenuClick(const int &)));
+    }
+    m_pBookMarkMenu->exec(QCursor::pos());
 }
 
 void CustomListWidget::setListType(const int &nListType)

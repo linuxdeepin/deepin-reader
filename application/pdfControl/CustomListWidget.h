@@ -20,6 +20,8 @@
 #define CUSTOMLISTWIDGET_H
 
 #include <DListWidget>
+#include "menu/BookMarkMenu.h"
+#include "menu/NoteMenu.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -58,6 +60,8 @@ private:
 
 private:
     int     m_nListType = -1;
+    BookMarkMenu *m_pBookMarkMenu{nullptr};
+    NoteMenu *pNoteMenu{nullptr};
 };
 
 #endif // CUSTOMLISTWIDGET_H
