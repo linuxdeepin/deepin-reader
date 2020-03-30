@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 
     QStringList waitOpenFilePathList;
 
-    if (!arguments.contains("newwindow")) {
+    if (arguments.count() > 0 && !arguments.contains("newwindow")) {
 
         foreach (const QString &path, arguments) {
 
@@ -101,7 +101,6 @@ int main(int argc, char *argv[])
     } else {
         waitOpenFilePathList = arguments;
         waitOpenFilePathList.removeOne("newwindow");
-
     }
     //通知==========
 
