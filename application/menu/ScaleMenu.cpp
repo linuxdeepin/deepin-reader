@@ -18,8 +18,6 @@
  */
 #include "ScaleMenu.h"
 
-#include <QSignalMapper>
-
 #include "widgets/main/MainTabWidgetEx.h"
 
 ScaleMenu::ScaleMenu(DWidget *parent)

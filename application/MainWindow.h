@@ -42,9 +42,6 @@ protected:
 
 private:
     void initUI();
-//    void initConnections();
-
-//    void onSetAppTitle(const QString &);
     void onAppExit();
     void initThemeChanged();
     void setCurTheme();

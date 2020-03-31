@@ -5,6 +5,7 @@
 #include <DIconButton>
 
 #include "CustomControl/CustomWidget.h"
+#include "docview/commonstruct.h"
 
 //class ScaleMenu;
 class FontMenu;
@@ -31,6 +32,8 @@ private:
 
 public:
     static TitleWidget *Instance();
+
+    void suitDocType(DocType_EM type);     //根据不同文档展示不同的菜单项
 
     // IObserver interface
 public:

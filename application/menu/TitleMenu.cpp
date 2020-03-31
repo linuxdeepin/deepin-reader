@@ -64,7 +64,6 @@ void TitleMenu::disableallaction()
     actiontextlist << "Save" << "Save as" << "Print" << "Slide show" << "Magnifer" << "Document info" << "Display in file manager";
     auto actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
-        qDebug() << a->text();
         if (actiontextlist.indexOf(a->objectName()) != -1)
             a->setDisabled(true);
     }

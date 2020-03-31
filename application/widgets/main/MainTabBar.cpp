@@ -29,6 +29,7 @@
 #include "FileDataModel.h"
 #include "MainWindow.h"
 #include <DPlatformWindowHandle>
+#include "widgets/TitleWidget.h"
 
 #include "business/SaveDialog.h"
 
@@ -297,8 +298,11 @@ void MainTabBar::SlotRemoveFileTab(const QString &sPath)
 
         nCount = this->count();
         if (nCount == 0) {
+            //禁用所有的功能
             TitleMenu::Instance()->disableallaction();
+            TitleWidget::Instance()->suitDocType(DocType_NULL);
             notifyMsg(CENTRAL_INDEX_CHANGE);
+
         }
     }
 }

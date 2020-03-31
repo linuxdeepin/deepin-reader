@@ -7,6 +7,7 @@
 
 #include "ScaleWidget.h"
 
+
 #include "menu/FontMenu.h"
 //#include "menu/ScaleMenu.h"
 #include "menu/HandleMenu.h"
@@ -19,6 +20,13 @@ TitleWidget *TitleWidget::g_onlyTitleWdiget = nullptr;
 TitleWidget *TitleWidget::Instance()
 {
     return g_onlyTitleWdiget;
+}
+
+void TitleWidget::suitDocType(DocType_EM type)
+{
+    if (DocType_NULL == type) {
+        SetBtnDisable(true);
+    }
 }
 
 TitleWidget::TitleWidget(DWidget *parent)

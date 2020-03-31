@@ -50,8 +50,7 @@ int main(int argc, char *argv[])
 
     QStringList arguments = parser.positionalArguments();
 
-    qDebug() << QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    //进程同步
+    //进程同步 解决选中多个文件同时右击打开不在同一个窗口的问题
     QSharedMemory share;
     bool hasWaited = false;
     share.setKey("deepin_reader");
@@ -103,7 +102,7 @@ int main(int argc, char *argv[])
         waitOpenFilePathList = arguments;
         waitOpenFilePathList.removeOne("newwindow");
     }
-    //通知==========
+    //通知==========END
 
     DApplicationSettings savetheme;
     Dtk::Core::DLogManager::registerConsoleAppender();
@@ -113,10 +112,12 @@ int main(int argc, char *argv[])
 
     MainWindow w;
 
+    controller.listen();
+
+    share.detach();
+
     if (arguments.contains("newwindow"))
         w.move(QCursor::pos());
-
-    controller.listen();
 
     foreach (const QString &filePath, waitOpenFilePathList) {
         if (filePath.endsWith("pdf")) {
@@ -125,8 +126,6 @@ int main(int argc, char *argv[])
     }
 
     w.show();
-
-    share.detach();
 
     return a.exec();
 }

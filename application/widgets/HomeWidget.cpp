@@ -131,7 +131,7 @@ void HomeWidget::initConnections()
 
 void HomeWidget::NewWindow()
 {
-
+    ProcessController::processOpenFile("");
 }
 
 int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)

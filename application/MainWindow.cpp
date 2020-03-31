@@ -37,8 +37,6 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     initUI();
 
-//    initConnections();
-
     initThemeChanged();
 
     initShortCut();
@@ -171,12 +169,6 @@ void MainWindow::onAppExit()
 {
     close();
 }
-
-//  设置 文档标题
-//void MainWindow::onSetAppTitle(const QString &sData)
-//{
-//    titlebar()->setTitle(sData);
-//}
 
 //  快捷键 实现
 void MainWindow::slotShortCut(const QString &key)
