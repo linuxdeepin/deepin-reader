@@ -75,9 +75,3 @@ void CustomWidget::notifyMsg(const int &msgType, const QString &msgContent)
 {
     dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
-
-void CustomWidget::showScreenCenter()
-{
-    Dtk::Widget::moveToCenter(this);
-    this->show();
-}

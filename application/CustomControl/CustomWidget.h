@@ -72,7 +72,6 @@ protected:
 
 protected:
     void notifyMsg(const int &msgType, const QString &msgContent = "") override;
-    void showScreenCenter();
 
 protected:
     CustomWidgetPrivate    *d_ptr = nullptr;

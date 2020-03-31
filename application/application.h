@@ -49,8 +49,7 @@ public:
     DBService           *m_pDBService = nullptr;
     ModelService        *m_pModelService = nullptr;
     AppInfo             *m_pAppInfo = nullptr;
-
-    IHelper              *m_pHelper = nullptr;
+    IHelper             *m_pHelper = nullptr;
 
 private:
     void initCfgPath();

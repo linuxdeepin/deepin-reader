@@ -48,8 +48,6 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
 
-
-
     // QAbstractItemView interface
 protected slots:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;

@@ -38,7 +38,6 @@ FileViewWidgetPrivate::FileViewWidgetPrivate(FileViewWidget *parent)
 
     m_pAnnotation = new Annotation(this);
     m_pDocViewProxy = new ProxyViewDisplay(this);
-
     m_pProxyNotifyMsg = new ProxyNotifyMsg(this);
     m_pProxyMouseMove = new ProxyMouseMove(this);
     m_pProxyFileDataModel = new ProxyFileDataModel(this);
@@ -259,6 +258,7 @@ int FileViewWidgetPrivate::dealWithData(const int &msgType, const QString &msgCo
 
     if (msgType == MSG_VIEWCHANGE_DOUBLE_SHOW) {
         m_pDocViewProxy->OnSetViewChange(msgContent);
+        handleResize(q->size());
     } else if (msgType == MSG_VIEWCHANGE_ROTATE) {
         m_pDocViewProxy->OnSetViewRotate(msgContent);
     } else if (msgType == MSG_FILE_SCALE) {
@@ -345,11 +345,12 @@ void FileViewWidgetPrivate::FindOperation(const int &iType, const QString &strFi
     }
 }
 
-void FileViewWidgetPrivate::resizeEvent(QResizeEvent *event)
+void FileViewWidgetPrivate::handleResize(const QSize &size)
 {
     Q_Q(FileViewWidget);
+
     if (!m_pProxyData->IsFirstShow() && m_pProxyData->getIsFileOpenOk()) {
-        QSize size = event->size();
+
         m_pDocViewProxy->setWidth(size.width());
         m_pDocViewProxy->setHeight(size.height());
         m_pDocViewProxy->onSetWidgetAdapt();
@@ -359,6 +360,12 @@ void FileViewWidgetPrivate::resizeEvent(QResizeEvent *event)
         int nParentWidth = q->width();
         q->m_pFindWidget->showPosition(nParentWidth);
     }
+}
+
+void FileViewWidgetPrivate::resizeEvent(QResizeEvent *event)
+{
+    QSize size = event->size();
+    handleResize(size);
 }
 
 void FileViewWidgetPrivate::wheelEvent(QWheelEvent *event)

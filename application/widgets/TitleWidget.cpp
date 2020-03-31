@@ -406,15 +406,6 @@ DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 //  开启放大镜
 void TitleWidget::setMagnifierState()
 {
-//    MsgModel mm;
-//    mm.setMsgType(MSG_MAGNIFYING);
-//    mm.setValue("1");
-
-//    QString sCurPath = dApp->m_pDataManager->qGetCurrentFilePath();
-//    mm.setPath(sCurPath);
-
-//    notifyMsg(MSG_MAGNIFYING, mm.toJson());
-
     //  开启了放大镜, 需要把选择工具 切换为 选择工具
     auto actionList = this->findChildren<QAction *>();
     foreach (auto a, actionList) {

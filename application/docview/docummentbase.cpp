@@ -140,23 +140,6 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
 DocummentBase::~DocummentBase()
 {
     this->hide();
-    // delete d_ptr;
-//    if (d_ptr) {
-//    delete d_ptr;
-//        d_ptr = nullptr;
-//        d_ptr->deleteLater();
-//        d_ptr = nullptr;
-//    }
-//    delete d_ptr;
-    //    if (d->m_magnifierwidget) {
-    //        delete d->m_magnifierwidget;
-    //        d->m_magnifierwidget = nullptr;
-
-    //    }
-    //    if (d->m_slidewidget) {
-    //        delete d->m_slidewidget;
-    //        d->m_slidewidget = nullptr;
-    //    }
 }
 
 QPoint DocummentBase::global2RelativePoint(QPoint globalpoint)
@@ -171,7 +154,6 @@ QPoint DocummentBase::global2RelativePoint(QPoint globalpoint)
         y_offset = scrollBar_Y->value();
     QPoint qpoint = QPoint(mapFromGlobal(globalpoint).x() + x_offset,
                            mapFromGlobal(globalpoint).y() + y_offset);
-    //qDebug() << "globalpoint:" << globalpoint << " relativepoint:" << qpoint<<"mapFromGlobal(globalpoint)"<<mapFromGlobal(globalpoint);
     return qpoint;
 }
 

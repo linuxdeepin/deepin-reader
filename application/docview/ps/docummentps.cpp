@@ -1,11 +1,12 @@
 #include "docummentps.h"
 #include "pageps.h"
 #include "docview/publicfunc.h"
-//#include "../docummentbase.cpp"
+
 #include <QImage>
 #include <QTemporaryFile>
 #include <QFileInfo>
 #include <QDebug>
+#include <QSettings>
 
 static const int graphicsAntialiasBits = 4;
 static const int textAntialiasBits = 2;

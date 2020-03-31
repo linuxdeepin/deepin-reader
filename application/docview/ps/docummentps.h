@@ -3,7 +3,7 @@
 
 #include "../docummentbase.h"
 #include <libspectre/spectre-document.h>
-#include <QSettings>
+
 class DocummentPS;
 class DocummentPSPrivate;
 

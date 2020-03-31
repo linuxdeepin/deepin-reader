@@ -250,7 +250,6 @@ public:
     PageBase *getPage(int index);
     void magnifierClear();
     void pageMove(double mvx, double mvy);
-    //    bool isWordsBeLoad();
     bool setMagnifierStyle(int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3);
     bool showSlideModel();
     void cacularValueXY(int &xvalue, int &yvalue, int curpage, bool bsearch = true, QRectF rect = QRectF());
@@ -267,7 +266,6 @@ public:
     int label2pagenum(QString label);
     bool haslabel();
     QPoint transformPoint(const QPoint &pt, RotateType_EM type, double scale);
-
 
 signals:
     void signal_pageChange(int);
@@ -291,8 +289,8 @@ protected slots:
     void scaleAndShow(double scale, RotateType_EM rotate);
     bool setViewModeAndShow(ViewMode_EM viewmode);
     void showSlideModelTimerOut();
-//    void loadPageTimerOut();
     void autoplayslidTimerOut();
+
 protected:
     void showSinglePage();
     void showFacingPage();

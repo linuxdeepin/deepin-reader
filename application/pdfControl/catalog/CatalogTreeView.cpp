@@ -64,13 +64,9 @@ int CatalogTreeView::dealWithData(const int &msgType, const QString &msgContent)
     return MSG_NO_OK;
 }
 
-//void CatalogTreeView::sendMsg(const int &, const QString &)
-//{
-
-//}
-
 void CatalogTreeView::notifyMsg(const int &, const QString &)
 {
+
 }
 
 void CatalogTreeView::initConnections()
@@ -169,14 +165,10 @@ void CatalogTreeView::OnFilePageChanged(const QString &sPage)
             auto itemList = model->findItems("*", Qt::MatchWildcard | Qt::MatchRecursive);
             foreach (auto item, itemList) {
                 int itemPage = item->data().toInt();
-                qDebug() << itemPage << iPage;
                 if (itemPage == iPage) {    //  找到了
-
                     auto curIndex = model->indexFromItem(item);
                     if (curIndex.isValid()) {
-
                         auto curSelIndex = curIndex;
-
                         auto parentIndex = curIndex.parent();   //  父 节点
                         if (parentIndex.isValid()) {    //  父节点存在
                             auto grandpaIndex = parentIndex.parent();       //  是否还存在 爷爷节点
@@ -221,7 +213,6 @@ void CatalogTreeView::SlotCollapsed(const QModelIndex &index)
     }
 }
 
-
 //  展开 节点处理
 void CatalogTreeView::SlotExpanded(const QModelIndex &index)
 {
@@ -257,6 +248,8 @@ void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelInd
         }
     }
     rightnotifypagechanged = false;
+
+    return DTreeView::currentChanged(current, previous);
 }
 
 

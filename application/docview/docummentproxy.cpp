@@ -19,7 +19,6 @@ DocummentProxy::DocummentProxy(QObject *parent)
 
 bool DocummentProxy::openFile(DocType_EM type, QString filepath, unsigned int ipage, RotateType_EM rotatetype, double scale, ViewMode_EM viewmode)
 {
-    // QMutexLocker locker(&mutexlockgetimage);
     bool bre = false;
     m_path = filepath;
     if (nullptr != m_documment) {
@@ -120,7 +119,6 @@ bool DocummentProxy::setViewModeAndShow(ViewMode_EM viewmode)
     if (!m_documment || bcloseing)
         return false;
     mouseSelectTextClear();
-    qDebug() << "DocummentProxy::setViewModeAndShow";
     emit signal_setViewModeAndShow(viewmode);
     return true;
 }
@@ -129,7 +127,6 @@ bool DocummentProxy::showMagnifier(QPoint point)
 {
     if (!m_documment || bcloseing)
         return false;
-    // qDebug() << "showMagnifier";
     return  m_documment->showMagnifier(point);
 }
 
@@ -373,7 +370,6 @@ double DocummentProxy::adaptHeightAndShow(double height)
 {
     if (!m_documment || bcloseing)
         return -1;
-    qDebug() << "adaptWidthAndShow height:" << height;
     return m_documment->adaptHeightAndShow(height);
 }
 

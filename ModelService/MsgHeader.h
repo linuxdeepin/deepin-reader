@@ -45,7 +45,7 @@ enum E_FIND_WIDGET_MSG {
 //  消息类型
 enum MSG_TYPE {
     MSG_TYPE_BEGIN = E_CENTRAL_MSG_END + 50,
-    MSG_HANDLESHAPE,                //  手型 消息
+    MSG_HANDLESHAPE,                    //  手型 消息
     MSG_OPERATION_UPDATE_THEME,         //  主题变了
     MSG_NOTIFY_KEY_MSG,                 //  按键通知消息
     MSG_TYPE_END,
@@ -71,7 +71,7 @@ enum E_MENU_MSG {
     E_MENU_MSG_BEGIN = MSG_TAB_MSG_END + 50,
     MSG_MENU_NEW_WINDOW,                // 新窗口打开一个文档
     MSG_MENU_NEW_TAB,                   // 新增加一个文档
-    MSG_OPERATION_EXIT,               //  退出
+    MSG_OPERATION_EXIT,                 //  退出
     E_MENU_MSG_END
 };
 
@@ -134,10 +134,10 @@ enum E_FILE_VALUE_MSG {
     MSG_VIEWCHANGE_DOUBLE_SHOW,         //  双页显示状态
     MSG_VIEWCHANGE_FIT,                 //  自适应
     MSG_VIEWCHANGE_ROTATE,              //  旋转
-    MSG_VIEWCHANGE_ROTATE_VALUE,              //  旋转
+    MSG_VIEWCHANGE_ROTATE_VALUE,        //  旋转
     MSG_HANDLE_SELECT,                  //  选择工具
     MSG_FILE_SCALE,                     //  当前比例
-    MSG_FILE_FIT_SCALE,                     //  当前比例        自适应的缩放比
+    MSG_FILE_FIT_SCALE,                 //  当前比例        自适应的缩放比
     MSG_FILE_IS_CHANGE,                 //  文档是否有变化
     MSG_LEFTBAR_STATE,                  //  文档是否有变化
     E_FILE_VALUE_MSG_END

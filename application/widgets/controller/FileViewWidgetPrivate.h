@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QMouseEvent>
 
-
 #include "application.h"
 #include "MsgHeader.h"
 #include "docview/pagebase.h"
@@ -65,6 +64,7 @@ private:
 
     void FindOperation(const int &iType, const QString &strFind);
 
+    void handleResize(const QSize &size);
 private:
     void initConnections();
     void onSetHandShape(const QString &);

@@ -39,17 +39,14 @@ public:
 signals:
     void sigOpenFiles(const QString &);
 
-    // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
 
-    // QWidget interface
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
 
-    // CustomWidget interface
 protected:
     void initWidget() override;
 

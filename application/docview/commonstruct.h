@@ -19,7 +19,6 @@ enum DocType_EM {
     DocType_TIFF,
     DocType_PS,
     DocType_XPS
-
 };
 
 enum RotateType_EM {

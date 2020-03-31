@@ -34,8 +34,6 @@ Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
 {
     setAttribute(Qt::AA_UseHighDpiPixmaps);
-    // setAttribute(Qt::AA_EnableHighDpiScaling);
-    // setAttribute(Qt::AA_ForceRasterWidgets);
 
     initI18n();
 
@@ -52,8 +50,6 @@ Application::Application(int &argc, char **argv)
 
     //  wzx 2019-12-21 根据石墨文案修改
     setApplicationDescription(tr("Document Viewer is a simple PDF reader, supporting bookmarks, highlights and annotations."));
-    //kyz 2019-12-10 不允许在此处安装事件过滤
-    // installEventFilter(new ObjectEventFilter(this));
 
     initCfgPath();
 
@@ -69,7 +65,6 @@ void Application::setSreenRect(const QRect &rect)
 
 void Application::adaptScreenView(int &w, int &h)
 {
-//    return;
     if (m_pAppInfo) {
         m_pAppInfo->adaptScreenView(w, h);
     }

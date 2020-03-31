@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
 
     QStringList arguments = parser.positionalArguments();
 
+    qDebug() << QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     //进程同步
     QSharedMemory share;
     bool hasWaited = false;

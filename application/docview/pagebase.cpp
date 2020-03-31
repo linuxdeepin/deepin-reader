@@ -155,7 +155,6 @@ void PageBase::paintEvent(QPaintEvent *event)
     d->bookmarkbtn->move(this->width() - d->bookmarkbtn->width() - 20, 0);
     d->m_spinner->move(this->width() / 2, this->height() / 2);
     QPainter qpainter(this);
-    // qpainter.drawPixmap(this->rect(), d->m_pixmapshow);
     qpainter.setBrush(d->m_paintercolor);
     QPen qpen(d->m_pencolor, d->m_penwidth);
     qpainter.setPen(qpen);

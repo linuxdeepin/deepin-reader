@@ -19,32 +19,28 @@ public:
     DocummentPDFPrivate(DocummentPDF *parent): DocummentBasePrivate(parent)
     {
         document = nullptr;
-//        m_fileinfo = new stFileInfo;
     }
 
     ~DocummentPDFPrivate() override
     {
-//        qDebug() << "~DocummentPDFPrivate";
         qDeleteAll(m_pages);
         m_pages.clear();
         if (nullptr != document) {
             delete document;
             document = nullptr;
         }
-//        if (nullptr != m_fileinfo) {
-//            delete m_fileinfo;
-//            m_fileinfo = nullptr;
-//        }
     }
 
     Poppler::Document *document;
-//    stFileInfo *m_fileinfo;
 
     Q_DECLARE_PUBLIC(DocummentPDF)
+
 protected slots:
     void loadDocumment(QString filepath) override;
+
 private:
     void setBasicInfo(const QString &filepath);
+
 };
 
 void DocummentPDFPrivate::loadDocumment(QString filepath)
@@ -68,7 +64,6 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
         QString strlabel = popplerpage->label();
 
         if (!strlabel.isEmpty()) {
-            // qDebug() << __FUNCTION__ << "-------" << strlabel << i;
             m_label2pagenum.insert(strlabel, i);
             m_pagenum2label.insert(i, strlabel);
             if (strlabel.toInt() != i + 1) {
@@ -131,7 +126,6 @@ DocummentPDF::~DocummentPDF()
 
 bool DocummentPDF::loadDocumment(QString filepath)
 {
-    //    d->loadDocumment(filepath);
     emit signal_loadDocumment(filepath);
     return true;
 }
@@ -199,10 +193,9 @@ QString DocummentPDF::removeAnnotation(const QPoint &startpos, AnnoteType_Em typ
     Q_D(DocummentPDF);
     QPoint pt = startpos;
     int page = pointInWhichPage(pt);
-    qDebug() << "removeAnnotation start";
-    if (page < 0) return "";
+    if (page < 0)
+        return "";
     QString uuid = static_cast<PagePdf *>(d->m_pages.at(page))->removeAnnotation(pt, type);
-    qDebug() << "removeAnnotation end";
     return uuid;
 }
 
@@ -327,14 +320,12 @@ bool DocummentPDF::save(const QString &filePath, bool withChanges)
     // Save document to temporary file...
     QTemporaryFile temporaryFile;
     QString strtemfile = temporaryFile.fileTemplate() + QLatin1String(".") + QFileInfo(filePath).suffix();
-    qDebug() << __FUNCTION__ << strtemfile;
     temporaryFile.setFileTemplate(strtemfile);
     if (!temporaryFile.open()) {
         return false;
     }
 
     temporaryFile.close();
-    qDebug() << __FUNCTION__ << temporaryFile.fileName();
     if (!pdfsave(temporaryFile.fileName(), withChanges)) {
         return false;
     }
@@ -402,9 +393,11 @@ bool DocummentPDF::saveas(const QString &filePath, bool withChanges)
 bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
 {
     Q_D(DocummentPDF);
+
     QScopedPointer< Poppler::PDFConverter > pdfConverter(d->document->pdfConverter());
+
     pdfConverter->setOutputFileName(filePath);
-    //qDebug() << __FUNCTION__ << filePath << &d->document;
+
     Poppler::PDFConverter::PDFOptions options = pdfConverter->pdfOptions();
 
     if (withChanges & Poppler::PDFConverter::WithChanges) {
@@ -458,26 +451,6 @@ bool DocummentPDF::bDocummentExist()
     }
     return true;
 }
-
-//bool DocummentPDF::getImage(int pagenum, QImage &image, double width, double height)
-//{
-//    Q_D(DocummentPDF);
-//    if (pagenum < 0 || pagenum >= d->m_pages.size()) {
-//        return false;
-//    }
-//    qreal pixelratiof = d->m_pages.at(pagenum)->devicePixelRatioF();
-//    if (!d->m_pages.at(pagenum)->getImage(image, width * pixelratiof, height * pixelratiof)) {
-//        return false;
-//    }
-//    image.setDevicePixelRatio(d->m_pages.at(pagenum)->devicePixelRatioF());
-//    return true;
-//}
-
-//void DocummentPDF::docBasicInfo(stFileInfo &info)
-//{
-//    Q_D(DocummentPDF);
-//    info = *(d->m_fileinfo);
-//}
 
 bool DocummentPDF::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {
