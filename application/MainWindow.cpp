@@ -8,9 +8,9 @@
 
 #include "business/ShortCutShow.h"
 #include "business/AppInfo.h"
-#include "menu/TitleMenu.h"
-#include "widgets/TitleWidget.h"
-#include "widgets/CentralWidget.h"
+#include "TitleMenu.h"
+#include "TitleWidget.h"
+#include "CentralWidget.h"
 
 #include "gof/bridge/IHelper.h"
 

@@ -56,7 +56,6 @@ private slots:
     void on_settingBtn_clicked();
     void on_handleShapeBtn_clicked();
     void on_searchBtn_clicked();
-    void SlotScaleMenuBtnClicked();
 
     void SlotSetCurrentTool(const int &);
 
@@ -69,7 +68,6 @@ private:
     void initBtns();
     void __InitHandel();
     void __InitSelectTool();
-    void __InitScale();
 
     void setDefaultShape();
     void setHandleShape();
@@ -93,11 +91,6 @@ private:
     DPushButton *m_pThumbnailBtn = nullptr;
     DPushButton *m_pSettingBtn = nullptr;
     DPushButton *m_pHandleShapeBtn = nullptr;
-
-//    DIconButton     *m_pPreBtn = nullptr;
-//    DPushButton     *m_pScaleMenuBtn = nullptr;
-//    DIconButton     *m_pNextBtn = nullptr;
-//    ScaleMenu       *m_pScaleMenu = nullptr;
 
     ScaleWidget     *m_pSw = nullptr;
 

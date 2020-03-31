@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ProxyData.h"
-#include "menu/TitleMenu.h"
+#include "TitleMenu.h"
 
 ProxyData::ProxyData(QObject *parent)
     : QObject(parent)

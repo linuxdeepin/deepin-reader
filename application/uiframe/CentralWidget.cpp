@@ -26,12 +26,11 @@
 #include <QStackedLayout>
 #include <QProcess>
 
-#include "HomeWidget.h"
-
-#include "main/MainTabWidgetEx.h"
 #include "business/AppInfo.h"
 #include "utils/utils.h"
 #include "app/processcontroller.h"
+#include "widgets/HomeWidget.h"
+#include "widgets/main/MainTabWidgetEx.h"
 
 CentralWidget::CentralWidget(DWidget *parent)
     : CustomWidget(CENTRAL_WIDGET, parent)

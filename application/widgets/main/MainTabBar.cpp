@@ -29,12 +29,12 @@
 #include "FileDataModel.h"
 #include "MainWindow.h"
 #include <DPlatformWindowHandle>
-#include "widgets/TitleWidget.h"
+#include "TitleWidget.h"
 
 #include "business/SaveDialog.h"
 
 #include "gof/bridge/IHelper.h"
-#include "menu/TitleMenu.h"
+#include "TitleMenu.h"
 
 MainTabBar::MainTabBar(DWidget *parent)
     : DTabBar(parent)

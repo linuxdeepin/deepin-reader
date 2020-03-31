@@ -25,7 +25,7 @@
 #include <DComboBox>
 
 #include "docview/docummentproxy.h"
-#include "main/MainTabWidgetEx.h"
+#include "widgets/main/MainTabWidgetEx.h"
 
 ScaleWidget::ScaleWidget(DWidget *parent)
     : CustomWidget("ScaleWidget", parent)

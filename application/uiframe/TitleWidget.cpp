@@ -6,13 +6,11 @@
 #include <QLineEdit>
 
 #include "ScaleWidget.h"
+#include "FontMenu.h"
+#include "HandleMenu.h"
+#include "TitleMenu.h"
 
-
-#include "menu/FontMenu.h"
-//#include "menu/ScaleMenu.h"
-#include "menu/HandleMenu.h"
-#include "main/MainTabWidgetEx.h"
-#include "menu/TitleMenu.h"
+#include "widgets/main/MainTabWidgetEx.h"
 #include "utils/PublicFunction.h"
 
 TitleWidget *TitleWidget::g_onlyTitleWdiget = nullptr;
@@ -97,11 +95,7 @@ void TitleWidget::SetBtnDisable(const bool &bAble)
     m_pThumbnailBtn->setDisabled(bAble);
     m_pSettingBtn->setDisabled(bAble);
     m_pHandleShapeBtn->setDisabled(bAble);
-//    m_pPreBtn->setDisabled(bAble);
-//    m_pScaleMenuBtn->setDisabled(bAble);
-//    m_pNextBtn->setDisabled(bAble);
     m_pSearchBtn->setDisabled(bAble);
-
     m_pSw->setDisabled(bAble);
 }
 
@@ -174,9 +168,6 @@ void TitleWidget::initWidget()
     m_layout->addWidget(m_pThumbnailBtn);
     m_layout->addWidget(m_pSettingBtn);
     m_layout->addWidget(m_pHandleShapeBtn);
-//    m_layout->addWidget(m_pPreBtn);
-//    m_layout->addWidget(m_pScaleMenuBtn);
-//    m_layout->addWidget(m_pNextBtn);
 
     m_pSw = new ScaleWidget;
     connect(m_pSw, SIGNAL(sigScaleChanged()), SLOT(SlotScaleChanged()));
@@ -254,20 +245,6 @@ void TitleWidget::on_searchBtn_clicked()
     notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
 }
 
-// 比例按钮
-void TitleWidget::SlotScaleMenuBtnClicked()
-{
-//    if (m_pScaleMenu && m_pScaleMenuBtn) {
-//        QPoint point = m_pScaleMenuBtn->mapToGlobal(QPoint(0, 0));
-//        int nOldY = point.y();
-
-//        int nHeight = m_pScaleMenuBtn->height();
-//        point.setY(nHeight + nOldY + 2);
-
-//        m_pScaleMenu->exec(point);
-//    }
-}
-
 void TitleWidget::SlotSetCurrentTool(const int &sAction)
 {
     //  切换了选择工具, 需要取消放大镜的操作
@@ -329,30 +306,9 @@ void TitleWidget::__InitSelectTool()
 {
     //字号调整菜单
     m_pFontMenu = new FontMenu(this);
-
     m_pSettingBtn = createBtn(tr("Page Display"));
     m_pSettingBtn->setObjectName("viewchange");
     connect(m_pSettingBtn, SIGNAL(clicked()), SLOT(on_settingBtn_clicked()));
-}
-
-void TitleWidget::__InitScale()
-{
-//    m_pScaleMenu = new ScaleMenu(this);
-//    connect(m_pScaleMenu, SIGNAL(sigCurrentScale(const int &, const int &)), SLOT(SlotCurrentScale(const int &, const int &)));
-
-//    m_pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
-//    m_pPreBtn->setDisabled(true);
-//    m_pPreBtn->setFixedSize(QSize(24, 24));
-//    connect(m_pPreBtn, SIGNAL(clicked()), m_pScaleMenu, SLOT(slotPrevScale()));
-
-//    m_pScaleMenuBtn = new DPushButton("0%");
-//    m_pScaleMenuBtn->setDisabled(true);
-//    connect(m_pScaleMenuBtn, SIGNAL(clicked()), SLOT(SlotScaleMenuBtnClicked()));
-
-//    m_pNextBtn = new DIconButton(DStyle::SP_IncreaseElement);
-//    m_pNextBtn->setDisabled(true);
-//    m_pNextBtn->setFixedSize(QSize(24, 24));
-//    connect(m_pNextBtn, SIGNAL(clicked()), m_pScaleMenu, SLOT(slotNextScale()));
 }
 
 void TitleWidget::setDefaultShape()

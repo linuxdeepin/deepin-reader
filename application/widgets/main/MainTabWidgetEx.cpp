@@ -28,7 +28,7 @@
 #include "MainSplitter.h"
 #include "MainWindow.h"
 #include "MainTabWidgetExPrivate.h"
-#include "menu/TitleMenu.h"
+#include "TitleMenu.h"
 
 #include "business/AppInfo.h"
 #include "business/SaveDialog.h"
@@ -38,7 +38,7 @@
 #include "../FindWidget.h"
 #include "../FileAttrWidget.h"
 #include "../PlayControlWidget.h"
-#include "../TitleWidget.h"
+#include "TitleWidget.h"
 
 #include "gof/bridge/IHelper.h"
 

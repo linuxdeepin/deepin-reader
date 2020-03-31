@@ -26,7 +26,7 @@
 #include "widgets/SpinnerWidget.h"
 #include "widgets/LeftSidebarWidget.h"
 #include "widgets/FileViewWidget.h"
-#include "widgets/TitleWidget.h"
+#include "TitleWidget.h"
 #include "widgets/main/MainTabWidgetEx.h"
 #include "app/processcontroller.h"
 

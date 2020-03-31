@@ -12,7 +12,7 @@
 
 #include "menu/TextOperationMenu.h"
 #include "menu/DefaultOperationMenu.h"
-#include "menu/TitleMenu.h"
+#include "TitleMenu.h"
 
 #include "business/FileFormatHelper.h"
 #include "widgets/FindWidget.h"
