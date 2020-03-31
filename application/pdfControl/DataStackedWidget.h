@@ -29,6 +29,8 @@ class NotesWidget;
 class SearchResWidget;
 class ThumbnailWidget;
 
+const double EPSINON = 0.00000001;
+
 class DataStackedWidget : public DStackedWidget
 {
     Q_OBJECT
@@ -74,6 +76,7 @@ private:
     SearchResWidget     *m_pSearchResWidget = nullptr;
 
     QString             m_strBindPath = "";
+    double m_dScale{1.0};
 };
 
 #endif // DATASTACKEDWIDGET_H

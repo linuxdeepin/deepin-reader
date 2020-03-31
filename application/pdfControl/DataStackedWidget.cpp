@@ -101,6 +101,17 @@ void DataStackedWidget::slotSetStackCurIndex(const int &iIndex)
 {
     setCurrentIndex(iIndex);
 
+    double scale = 1.0;
+    double t_epsinon = 1.0;
+
+    scale = dApp->scale();
+    t_epsinon = scale - m_dScale;
+    if ((t_epsinon < -EPSINON) || (t_epsinon > EPSINON)) {
+        //刷新当前列表视图大小,如果缩放比例有变化的话
+        m_dScale = scale;
+        slotAdaptWindowSize(scale);
+    }
+
     //  前一个是 出来搜索结果了, 后一个是正在搜索, 两个都不需要保存在记录中
     if (iIndex != WIDGET_SEARCH) {
         QJsonObject obj;
@@ -270,7 +281,7 @@ void DataStackedWidget::OnOpenFileOk(const QString &sPath)
     m_strBindPath = sPath;
 
     FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(m_strBindPath);
-    int nId = fdm.qGetData(LeftIndex);
+    int nId = static_cast<int>(fdm.qGetData(LeftIndex));
     if (nId == -1) {
         nId = 0;
     }
