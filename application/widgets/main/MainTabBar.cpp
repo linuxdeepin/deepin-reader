@@ -193,7 +193,7 @@ void MainTabBar::AddFileTab(const QString &sContent, int index)
 
     foreach (auto s, canOpenFileList) {
         if (sOpenFiles.contains(s)) {
-            notifyMsg(CENTRAL_SHOW_TIP, tr("The file is already open"));
+            //notifyMsg(CENTRAL_SHOW_TIP, tr("The file is already open"));  //产品说移除已经打开的提示
         } else {
             filePaths.append(s);
         }
@@ -225,6 +225,9 @@ void MainTabBar::AddFileTab(const QString &sContent, int index)
             SlotCurrentChanged(nCurIndex);
         }
     }
+
+    if (canOpenFileList.count()  > 0)
+        MainTabWidgetEx::Instance()->setCurrentTabByFilePath(canOpenFileList.value(canOpenFileList.count() - 1));
 }
 
 QString MainTabBar::getFileName(const QString &strFilePath)

@@ -358,32 +358,25 @@ bool DocummentPDF::saveas(const QString &filePath, bool withChanges)
         if (!withChanges) {
             if (QFile::copy(strsource, filePath))
                 bsuccess = true;
-            else {
-//                qDebug() << "saveas5 " << strsource;
-            }
+
         } else {
             QString strtmp = strsource.left(strsource.lastIndexOf(QChar('/')) + 1);
             strtmp.append(PublicFunc::getUuid());
             strtmp.append(".pdf");
-//            qDebug() << "saveas2" << strtmp;
+
             if (QFile::copy(strsource, strtmp)) {
                 if (save(strsource, true)) {
                     if (QFile::copy(strsource, filePath)) {
                         bsuccess = true;
-//                        qDebug() << "saveas3 " << strsource;
+
                         if (QFile::remove(strsource)) {
                             if (QFile::rename(strtmp, strsource))
                                 QFile::remove(strtmp);
                         }
                     } else {
-//                        qDebug() << "saveas6 " << strtmp;
                         QFile::remove(strtmp);
                     }
                 }
-            } else {
-                QFile file(strtmp);
-                if (file.exists())
-                    qDebug() << "saveas7 file.exists()";
             }
         }
     }
@@ -405,7 +398,9 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
     }
 
     pdfConverter->setPDFOptions(options);
+
     bool bres = pdfConverter->convert();
+
     if (!bres) {
         qDebug() << __FUNCTION__ << pdfConverter->lastError();
 
