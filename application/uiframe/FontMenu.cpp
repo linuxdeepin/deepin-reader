@@ -79,6 +79,13 @@ void FontMenu::slotTwoPage()
     QJsonDocument doc(obj);
 
     notifyMsg(MSG_VIEWCHANGE_DOUBLE_SHOW, doc.toJson(QJsonDocument::Compact));
+
+    //解决双页时文档不能自适应是视窗大小的问题
+    QJsonObject jsonObj;
+    obj.insert("content", QString::number(1));
+    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
+    QJsonDocument jsonDoc(obj);
+    notifyMsg(MSG_VIEWCHANGE_FIT, jsonDoc.toJson(QJsonDocument::Compact));
 }
 
 /**
