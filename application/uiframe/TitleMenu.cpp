@@ -43,7 +43,6 @@ int TitleMenu::dealWithData(const int &msgType, const QString &)
     if (msgType == MSG_OPERATION_OPEN_FILE_OK || msgType == MSG_TAB_SHOW_FILE_CHANGE) {
         auto actions = this->findChildren<QAction *>();
         foreach (QAction *a, actions) {
-            qDebug() << a->text();
             a->setDisabled(false);
         }
     }

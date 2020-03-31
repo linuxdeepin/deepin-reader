@@ -55,7 +55,6 @@ public:
 
     void OnOpenSliderShow();
     void OnExitSliderShow();
-
     void ShowFindWidget();
 
 private:

@@ -134,9 +134,8 @@ int CentralWidget::dealWithData(const int &msgType, const QString &msgContent)
 
 void CentralWidget::dragEnterEvent(QDragEnterEvent *event)
 {
-    // Accept drag event if mime type is url.
     auto mimeData = event->mimeData();
-    if (mimeData->hasUrls()) {
+    if (mimeData->hasUrls() || mimeData->hasFormat("reader/tabbar")) {
         event->accept();
     }
 }
@@ -144,7 +143,10 @@ void CentralWidget::dragEnterEvent(QDragEnterEvent *event)
 void CentralWidget::dropEvent(QDropEvent *event)
 {
     auto mimeData = event->mimeData();
-    if (mimeData->hasUrls()) {
+    if (mimeData->hasFormat("reader/tabbar")) {
+        QString filePath = mimeData->data("reader/filePath");
+        SlotOpenFiles(filePath);
+    } else if (mimeData->hasUrls()) {
         QStringList noOpenFileList;
         QStringList canOpenFileList;
 
