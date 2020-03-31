@@ -129,6 +129,7 @@ private:
 
     int m_nIndex = -1;                        // 当前注释列表数
     QString m_strBindPath = "";
+    bool m_bOpenFileOk = false;               //是否刚打开文件
 
     // CustomWidget interface
 public:

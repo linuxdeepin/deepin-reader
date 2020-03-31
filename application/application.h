@@ -41,6 +41,8 @@ public:
     Application(int &argc, char **argv);
     void setSreenRect(const QRect &rect);
     void adaptScreenView(int &w, int &h);
+    inline void setScale(const double &scale) {m_dScal = scale;}
+    double scale() const {return m_dScal;}
 
 protected:
     void handleQuitAction() override;
@@ -50,6 +52,7 @@ public:
     ModelService        *m_pModelService = nullptr;
     AppInfo             *m_pAppInfo = nullptr;
     IHelper             *m_pHelper = nullptr;
+    double m_dScal{1.0};//左侧列表缩放比例
 
 private:
     void initCfgPath();

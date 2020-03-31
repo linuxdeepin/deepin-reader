@@ -221,6 +221,7 @@ void NotesWidget::slotOpenFileOk(const QString &sPath)
         t_docPtr->getAllAnnotation(list_note);
 
         if (list_note.count() < 1) {
+            m_bOpenFileOk = true;
             return;
         }
 
@@ -236,6 +237,7 @@ void NotesWidget::slotOpenFileOk(const QString &sPath)
 
             addNewItem(QImage(), page, uuid, contant);
         }
+        m_bOpenFileOk = true;
 
         m_ThreadLoadImage.setListNoteSt(list_note);
         m_ThreadLoadImage.setIsLoaded(true);
@@ -479,11 +481,26 @@ QListWidgetItem *NotesWidget::addNewItem(const QImage &image, const int &page, c
         int tW = LEFTMINWIDTH;
         int tH = 80;
         dApp->adaptScreenView(tW, tH);
-        itemWidget->setMinimumSize(QSize(tW, tH));
         itemWidget->setBSelect(bNew);
 
         item->setFlags(Qt::NoItemFlags);
-        item->setSizeHint(QSize(tW, tH));
+        if (m_bOpenFileOk) {
+            double width = 1.0;
+            double height = 1.0;
+            double scale = 1.0;
+            scale = dApp->scale();
+            //set item size
+            width = static_cast<double>(LEFTMINWIDTH) * scale;
+            height = static_cast<double>(80) * scale;
+            tW = static_cast<int>(width);
+            tH = static_cast<int>(height);
+            itemWidget->setMinimumSize(QSize(tW, tH));
+            itemWidget->adaptWindowSize(scale);
+            item->setSizeHint(QSize(tW, tH));
+        } else {
+            itemWidget->setMinimumSize(QSize(tW, tH));
+            item->setSizeHint(QSize(tW, tH));
+        }
 
         m_pNotesList->setItemWidget(item, itemWidget);
 

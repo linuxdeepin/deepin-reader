@@ -519,6 +519,13 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
 
         if (nullptr != proxy) {
             QImage t_image;
+            double width = 1.0;
+            double height = 1.0;
+            double scale = 1.0;
+            scale = dApp->scale();
+            //set item size
+            width = static_cast<double>(LEFTMINWIDTH) * scale;
+            height = static_cast<double>(80) * scale;
             int tW = 48;
             int tH = 68;
             dApp->adaptScreenView(tW, tH);
@@ -529,13 +536,15 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
                 tW = LEFTMINWIDTH;
                 tH = 80;
                 dApp->adaptScreenView(tW, tH);
+                tW = static_cast<int>(width);
+                tH = static_cast<int>(height);
                 item->setSizeHint(QSize(tW, tH));
 
                 auto t_widget = new BookMarkItemWidget(this);
                 t_widget->setLabelImage(img);
                 t_widget->setLabelPage(page, 1);
-
                 m_pBookMarkListWidget->setItemWidget(item, t_widget);
+                t_widget->adaptWindowSize(scale);
 
                 int nCurPage = proxy->currentPageNo();
                 if (nCurPage == page) {
