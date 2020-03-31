@@ -30,6 +30,8 @@ public:
 
     virtual ~ProcessController();
 
+    static bool checkFilePathOpened(const QString &filePath);   //仅仅查看是否被打开
+
     static bool existFilePath(const QString &filePath);   //获取打开对应文档程序的pid，为空则文档未打开
 
     bool openIfAppExist(const QStringList &filePathList);

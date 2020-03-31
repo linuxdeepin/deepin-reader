@@ -28,6 +28,24 @@ ProcessController::~ProcessController()
         m_localServer->close();
 }
 
+bool ProcessController::checkFilePathOpened(const QString &filePath)
+{
+    QStringList list = findReaderPids();
+    foreach (QString pid, list) {
+
+        Json json;
+        json.set("command", "checkFilePath");
+        json.set("message", filePath);
+
+        QString result = request(pid, json.toString());
+
+        if ("contains" == result)
+            return true;
+    }
+
+    return false;
+}
+
 bool ProcessController::openIfAppExist(const QStringList &filePathList)
 {
     QStringList list = findReaderPids();
@@ -142,7 +160,21 @@ void ProcessController::onReceiveMessage()
 
     Json json(QString::fromUtf8(byteArray.constData()));
 
-    if ("existFilePath" == json.getString("command")) {
+    if ("checkFilePath" == json.getString("command")) {
+
+        MainTabWidgetEx *ex = MainTabWidgetEx::Instance();
+        MainWindow *window = MainWindow::Instance();
+        QString filePath = json.getString("message");
+
+        if (ex && window && ex->qGetAllPath().contains(filePath)) {
+            localSocket->write("contains");
+
+        } else {
+            localSocket->write("none");
+        }
+
+        localSocket->waitForBytesWritten(1000);
+    } else if ("existFilePath" == json.getString("command")) {
 
         MainTabWidgetEx *ex = MainTabWidgetEx::Instance();
         MainWindow *window = MainWindow::Instance();

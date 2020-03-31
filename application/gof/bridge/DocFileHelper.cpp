@@ -117,6 +117,7 @@ void DocFileHelper::onSaveAsFile()
                     dlg.exec();
                     return;
                 }
+
                 if (filePath != "") {
                     if (sCurPath == filePath) {
                         onSaveFile();
@@ -137,10 +138,7 @@ void DocFileHelper::onSaveAsFile()
     }
 }
 
-
 //  跳转页面
-
-
 QString DocFileHelper::qDealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_DOC_JUMP_PAGE) {              //  请求跳转页面

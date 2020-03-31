@@ -30,6 +30,7 @@
 #include "MainWindow.h"
 #include <DPlatformWindowHandle>
 #include "TitleWidget.h"
+#include "app/processcontroller.h"
 
 #include "business/SaveDialog.h"
 
@@ -100,8 +101,6 @@ QMimeData *MainTabBar::createMimeDataFromTab(int index, const QStyleOptionTab &o
 
     mimeData->setData("reader/filePath", QByteArray().append(sPath));
 
-    mimeData->removeFormat("text/plain");
-
     return mimeData;
 }
 
@@ -131,7 +130,9 @@ void MainTabBar::handleDragActionChanged(Qt::DropAction action)
 {
     if (count() <= 1)
         QGuiApplication::changeOverrideCursor(Qt::ForbiddenCursor);
-    else if (action == Qt::IgnoreAction) {
+    else if (action == Qt::TargetMoveAction) {
+        QGuiApplication::changeOverrideCursor(Qt::DragMoveCursor);
+    } else if (action == Qt::IgnoreAction) {
         QGuiApplication::changeOverrideCursor(Qt::DragCopyCursor);
         DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), true);
     } else if (dragIconWindow()) {
@@ -243,11 +244,17 @@ void MainTabBar::handleTabReleased(int index)
         return;
 
     QStringList sDataList = this->tabData(index).toString().split(Constant::sQStringSep, QString::SkipEmptyParts);
+
     QString sPath = sDataList.value(0);
+
     MainTabWidgetEx::Instance()->SaveFile(MSG_SAVE_FILE, sPath);
+
     removeTab(index);
+
     emit sigCloseTab(sPath);
+
     QProcess app;
+
     app.startDetached(QString("%1 \"%2\" newwindow").arg(qApp->applicationDirPath() + "/deepin-reader").arg(sPath));
 
     QTimer::singleShot(50, this, SLOT(onDroped()));
@@ -255,9 +262,19 @@ void MainTabBar::handleTabReleased(int index)
 
 void MainTabBar::handleTabDroped(int index, Qt::DropAction da, QObject *target)
 {
+    if (nullptr != target) {//如果是本程序 同移出程序
+        handleTabReleased(index);
+        return;
+    }
+
     QStringList sDataList = this->tabData(index).toString().split(Constant::sQStringSep, QString::SkipEmptyParts);
+
     QString sPath = sDataList.value(0);
+
+    MainTabWidgetEx::Instance()->SaveFile(MSG_SAVE_FILE, sPath);
+
     removeTab(index);
+
     emit sigCloseTab(sPath);
 
     QTimer::singleShot(50, this, SLOT(onDroped()));
