@@ -19,6 +19,7 @@
 #include "MainTabWidgetExPrivate.h"
 
 #include <QDesktopServices>
+#include <QStackedLayout>
 
 #include "MainTabWidgetEx.h"
 #include "MainSplitter.h"
@@ -74,13 +75,21 @@ QString MainTabWidgetExPrivate::GetCurPath()
 {
     Q_Q(MainTabWidgetEx);
 
-    auto splitterList = q->findChildren<MainSplitter *>();
-    foreach (auto s, splitterList) {
-        if (s->isVisible()) {
-            return s->qGetPath();
-        }
+    if (q->m_pStackedLayout != nullptr) {
+        MainSplitter *splitter = static_cast<MainSplitter *>(q->m_pStackedLayout->currentWidget());
+        if (splitter != nullptr)
+            return splitter->qGetPath();
     }
+
     return "";
+
+//    auto splitterList = q->findChildren<MainSplitter *>();
+//    foreach (auto s, splitterList) {
+//        if (s->isVisible()) {
+//            return s->qGetPath();
+//        }
+//    }
+//    return "";
 }
 
 void MainTabWidgetExPrivate::SetFileChange(const QString &sPath, const int &iState)
