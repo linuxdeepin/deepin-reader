@@ -45,7 +45,6 @@ signals:
     void sigDeleteAnntation(const int &, const QString &);
     void sigUpdateThumbnail(const int &);
 
-    // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
     int qDealWithShortKey(const QString &) override;

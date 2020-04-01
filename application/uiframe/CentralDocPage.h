@@ -122,15 +122,15 @@ private slots:
     void SlotSetCurrentIndexFile(const QString &);
     void SlotAddTab(const QString &);
     void SlotCloseTab(const QString &);
-
     void SlotOpenFileResult(const QString &, const bool &);
 
 private:
     QStackedLayout      *m_pStackedLayout = nullptr;
-    DocTabBar          *m_pTabBar = nullptr;
+    DocTabBar           *m_pTabBar = nullptr;
     PlayControlWidget   *m_pctrlwidget = nullptr;
+    QDBusInterface      *m_pLoginManager = nullptr;
+
     QDBusReply<QDBusUnixFileDescriptor> m_reply;
-    QDBusInterface *m_pLoginManager = nullptr;
     QList<QVariant> m_arg;
     bool m_bBlockShutdown = false;
     static CentralDocPage *g_onlyApp;

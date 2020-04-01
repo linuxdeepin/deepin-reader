@@ -74,16 +74,16 @@ void CentralDocPage::OpenCurFileFolder()
 
 QStringList CentralDocPage::GetAllPath()
 {
-    QStringList pathList;
+    QStringList filePathList;
 
     auto sheets = findChildren<DocSheet *>();
     foreach (auto sheet, sheets) {
-        QString sSplitterPath = sheet->qGetPath();
-        if (sSplitterPath != "") {
-            pathList.append(sSplitterPath);
+        QString filePath = sheet->qGetPath();
+        if (filePath != "") {
+            filePathList.append(filePath);
         }
     }
-    return pathList;
+    return filePathList;
 }
 
 int CentralDocPage::GetFileChange(const QString &sPath)
@@ -205,10 +205,10 @@ DocummentProxy *CentralDocPage::getCurFileAndProxy(const QString &sPath)
         sTempPath = qGetCurPath();
     }
 
-    auto splitterList = this->findChildren<DocSheet *>();
-    foreach (auto s, splitterList) {
-        if (s->qGetPath() == sTempPath) {
-            return s->getDocProxy();
+    auto sheets = this->findChildren<DocSheet *>();
+    foreach (auto sheet, sheets) {
+        if (sheet->qGetPath() == sTempPath) {
+            return sheet->getDocProxy();
         }
     }
     return nullptr;
@@ -678,9 +678,9 @@ void CentralDocPage::ShowFindWidget()
 
     DWidget *w = m_pStackedLayout->currentWidget();
     if (w) {
-        auto splitter = qobject_cast<DocSheet *>(w);
-        if (splitter) {
-            splitter->ShowFindWidget();
+        auto sheet = qobject_cast<DocSheet *>(w);
+        if (sheet) {
+            sheet->ShowFindWidget();
         }
     }
 }
@@ -694,13 +694,13 @@ void CentralDocPage::OnOpenSliderShow()
 
         m_pTabBar->setVisible(false);
 
-        auto splitter = qobject_cast<DocSheet *>(m_pStackedLayout->currentWidget());
-        if (splitter) {
-            splitter->OnOpenSliderShow();
+        auto sheet = qobject_cast<DocSheet *>(m_pStackedLayout->currentWidget());
+        if (sheet) {
+            sheet->OnOpenSliderShow();
 
             MainWindow::Instance()->SetSliderShowState(0);
 
-            QString sPath = splitter->qGetPath();
+            QString sPath = sheet->qGetPath();
 
             m_strSliderPath = sPath;
 
@@ -732,9 +732,9 @@ void CentralDocPage::OnExitSliderShow()
         MainWindow::Instance()->SetSliderShowState(1);
         m_pTabBar->setVisible(true);
 
-        auto splitter = qobject_cast<DocSheet *>(m_pStackedLayout->currentWidget());
-        if (splitter) {
-            splitter->OnExitSliderShow();
+        auto sheet = qobject_cast<DocSheet *>(m_pStackedLayout->currentWidget());
+        if (sheet) {
+            sheet->OnExitSliderShow();
 
             DocummentProxy *_proxy = getCurFileAndProxy(m_strSliderPath);
             if (!_proxy) {
@@ -771,9 +771,9 @@ void CentralDocPage::OnExitMagnifer()
     if (nState == Magnifer_State) {
         setCurrentState(Default_State);
 
-        auto splitter = qobject_cast<DocSheet *>(m_pStackedLayout->currentWidget());
-        if (splitter) {
-            QString sPath = splitter->qGetPath();
+        auto sheet = qobject_cast<DocSheet *>(m_pStackedLayout->currentWidget());
+        if (sheet) {
+            QString sPath = sheet->qGetPath();
             DocummentProxy *_proxy = getCurFileAndProxy(sPath);
             if (!_proxy) {
                 return;
