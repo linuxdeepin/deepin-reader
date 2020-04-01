@@ -43,7 +43,6 @@ private:
 public:
     static TitleMenu *Instance(DWidget *parent = nullptr);
 
-    // CustomMenu interface
 public:
     int dealWithData(const int &, const QString &) override;
 
@@ -53,7 +52,6 @@ public:
 private:
     void disableSaveButton(bool disable);
 
-    // CustomMenu interface
 protected:
     void initActions() override;
 

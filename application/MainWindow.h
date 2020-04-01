@@ -31,11 +31,9 @@ public:
     void setSreenRect(const QRect &); //得到屏幕的分辨率
     void SetSliderShowState(const int &);
 
-    // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
 
-    // QWidget interface
 protected:
     void showEvent(QShowEvent *ev) override;
     void closeEvent(QCloseEvent *event) override;
@@ -59,7 +57,7 @@ private slots:
     void slotShortCut(const QString &);
 
 private:
-    QList<int>      m_pMsgList;
+    QList<int>          m_pMsgList;
     Qt::WindowStates    m_nOldState = Qt::WindowNoState;        //  旧的窗口状态
 };
 

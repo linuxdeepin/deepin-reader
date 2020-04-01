@@ -38,9 +38,13 @@ public:
 
 protected:
     QMimeData *createMimeDataFromTab(int index, const QStyleOptionTab &option) const;
+
     void insertFromMimeDataOnDragEnter(int index, const QMimeData *source); //只是先生成一个tab,结束后自动删除
+
     void insertFromMimeData(int index, const QMimeData *source);            //完全DROP 需要添加tab并打开对应的文档
+
     bool canInsertFromMimeData(int index, const QMimeData *source) const;
+
     void handleDragActionChanged(Qt::DropAction action);
 
 private slots:
@@ -52,30 +56,35 @@ private slots:
 
 signals:
     void sigTabBarIndexChange(const QString &);
+
     void sigAddTab(const QString &);
+
     void sigCloseTab(const QString &);
 
-    // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
+
     void notifyMsg(const int &, const QString &s = "") override;
 
 private:
-    void __InitConnection();
-
     void AddFileTab(const QString &, int index = -1);
+
     QString getFileName(const QString &strFilePath);
 
 private slots:
     void SlotCurrentChanged(int);
+
     void SlotTabAddRequested();
+
     void SlotTabCloseRequested(int index);
 
     void SlotRemoveFileTab(const QString &);
+
     void SlotOpenFileResult(const QString &, const bool &);
 
 private:
     QList <int> m_pMsgList;
+
 };
 
 #endif // MAINTABWIDGET_H

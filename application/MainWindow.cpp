@@ -123,13 +123,15 @@ void MainWindow::initUI()
 {
     titlebar()->setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
     titlebar()->setTitle("");
-
     titlebar()->setMenu(TitleMenu::Instance(this));
-
     titlebar()->addWidget(new TitleWidget, Qt::AlignLeft);
-    Central *pcenter = new Central;
-    setCentralWidget(pcenter);
-    connect(this, &MainWindow::sigopenfile, pcenter, &Central::SlotOpenFiles);
+
+    Central *central = new Central;
+
+    setCentralWidget(central);
+
+    connect(this, &MainWindow::sigopenfile, central, &Central::SlotOpenFiles);
+
 }
 
 void MainWindow::initThemeChanged()

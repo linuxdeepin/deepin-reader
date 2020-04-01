@@ -43,7 +43,7 @@ const QString sTiff_Filter = "Tiff files (*.tiff)";
 const QString sPs_Filter = "Ps files (*.ps)";
 const QString sXps_Filter = "Xps files (*.xps)";
 const QString sDjvu_Filter = "Djvu files (*.djvu)";
-const QString sQStringSep = "wwzzxx@#$!!#$$@@#&!@#$wzxwzxc";
+const QString sQStringSep = "&deepin_reader&";
 }  // namespace Constant
 
 // 图标类型

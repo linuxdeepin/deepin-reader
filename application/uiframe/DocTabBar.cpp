@@ -19,6 +19,7 @@
 #include "DocTabBar.h"
 
 #include <QDebug>
+#include <DPlatformWindowHandle>
 #include <QDragEnterEvent>
 #include <QMimeData>
 #include <QProcess>
@@ -28,14 +29,11 @@
 #include "CentralDocPage.h"
 #include "FileDataModel.h"
 #include "MainWindow.h"
-#include <DPlatformWindowHandle>
-#include "TitleWidget.h"
-#include "app/ProcessController.h"
-
-#include "business/SaveDialog.h"
-
 #include "gof/bridge/IHelper.h"
 #include "TitleMenu.h"
+#include "TitleWidget.h"
+#include "app/ProcessController.h"
+#include "business/SaveDialog.h"
 
 DocTabBar::DocTabBar(DWidget *parent)
     : DTabBar(parent)
@@ -52,7 +50,11 @@ DocTabBar::DocTabBar(DWidget *parent)
 
     m_pMsgList = {MSG_TAB_ADD, MSG_MENU_NEW_TAB};
 
-    __InitConnection();
+    connect(this, SIGNAL(tabCloseRequested(int)), SLOT(SlotTabCloseRequested(int)));
+
+    connect(this, SIGNAL(tabAddRequested()), SLOT(SlotTabAddRequested()));
+
+    connect(this, SIGNAL(currentChanged(int)), SLOT(SlotCurrentChanged(int)));
 
     dApp->m_pModelService->addObserver(this);
 
@@ -63,6 +65,7 @@ DocTabBar::DocTabBar(DWidget *parent)
     connect(this, &DTabBar::dragActionChanged, this, &DocTabBar::handleDragActionChanged);
 
     setDragable(true);
+
 }
 
 DocTabBar::~DocTabBar()
@@ -73,16 +76,8 @@ DocTabBar::~DocTabBar()
 int DocTabBar::indexOfFilePath(const QString &filePath)
 {
     for (int i = 0; i < count(); ++i) {
-        QString sTabData = this->tabData(i).toString();
-        if (sTabData != "") {
-            QStringList sDataList = sTabData.split(Constant::sQStringSep, QString::SkipEmptyParts);
-            if (sDataList.size() == 2) {
-                QString sPath = sDataList.at(0);
-                if (sPath == filePath) {
-                    return i;
-                }
-            }
-        }
+        if (this->tabData(i).toString() == filePath)
+            return i;
     }
     return -1;
 }
@@ -128,9 +123,9 @@ bool DocTabBar::canInsertFromMimeData(int index, const QMimeData *source) const
 
 void DocTabBar::handleDragActionChanged(Qt::DropAction action)
 {
-    if (count() <= 1)
+    if (count() <= 1) {
         QGuiApplication::changeOverrideCursor(Qt::ForbiddenCursor);
-    else if (action == Qt::TargetMoveAction) {
+    } else if (action == Qt::TargetMoveAction) {
         QGuiApplication::changeOverrideCursor(Qt::DragMoveCursor);
     } else if (action == Qt::IgnoreAction) {
         QGuiApplication::changeOverrideCursor(Qt::DragCopyCursor);
@@ -162,26 +157,10 @@ void DocTabBar::notifyMsg(const int &msgType, const QString &msgContent)
     dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
 
-void DocTabBar::__InitConnection()
-{
-    connect(this, SIGNAL(tabCloseRequested(int)), SLOT(SlotTabCloseRequested(int)));
-    connect(this, SIGNAL(tabAddRequested()), SLOT(SlotTabAddRequested()));
-    connect(this, SIGNAL(currentChanged(int)), SLOT(SlotCurrentChanged(int)));
-}
-
 void DocTabBar::SlotCurrentChanged(int index)
 {
-    QString sTabData = this->tabData(index).toString();
-    if (sTabData != "") {
-        QStringList sDataList = sTabData.split(Constant::sQStringSep, QString::SkipEmptyParts);
-        if (sDataList.size() == 2) {
-            QString sPath = sDataList.at(0);
-            QString sFlag = sDataList.at(1);
-            //if (sFlag == "111") {     //实现拖拽进行直接显示，暂时移除判断
-            emit sigTabBarIndexChange(sPath);
-            //}
-        }
-    }
+    QString filePath = this->tabData(index).toString();
+    emit sigTabBarIndexChange(filePath);
 }
 
 void DocTabBar::AddFileTab(const QString &sContent, int index)
@@ -193,9 +172,7 @@ void DocTabBar::AddFileTab(const QString &sContent, int index)
     QStringList canOpenFileList = sContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
 
     foreach (auto s, canOpenFileList) {
-        if (sOpenFiles.contains(s)) {
-            //notifyMsg(CENTRAL_SHOW_TIP, tr("The file is already open"));  //产品说移除已经打开的提示
-        } else {
+        if (!sOpenFiles.contains(s)) {
             filePaths.append(s);
         }
     }
@@ -203,21 +180,20 @@ void DocTabBar::AddFileTab(const QString &sContent, int index)
     int nSize = filePaths.size();
 
     if (nSize > 0) {
-        for (int iLoop = 0; iLoop < nSize; iLoop++) {
-            QString s = filePaths.at(iLoop);
-            if (s != "") {
-                QString sName = getFileName(s);
-                QString sTabData = s + Constant::sQStringSep + "000";
+        for (int i = 0; i < nSize; i++) {
+            QString filePath = filePaths.at(i);
+            if (filePath != "") {
+                QString fileName = getFileName(filePath);
 
                 if (index == -1)
-                    index = this->addTab(sName);
+                    index = this->addTab(fileName);
                 else
-                    index = this->insertTab(index, sName);
+                    index = this->insertTab(index, fileName);
 
-                this->setTabData(index, sTabData);
+                this->setTabData(index, filePath);
                 this->setTabMinimumSize(index, QSize(140, 36));
                 this->setCurrentIndex(index);
-                emit sigAddTab(s);
+                emit sigAddTab(filePath);
             }
         }
 
@@ -297,23 +273,17 @@ void DocTabBar::SlotTabAddRequested()
 //  关闭
 void DocTabBar::SlotTabCloseRequested(int index)
 {
-    QString sPath = this->tabData(index).toString();
-    int ipos = sPath.indexOf(Constant::sQStringSep);
-    sPath = sPath.mid(0, ipos);
-    if (sPath != "") {
-        emit sigCloseTab(sPath);
-    }
+    QString filePath = this->tabData(index).toString();
+    emit sigCloseTab(filePath);
 }
 
 void DocTabBar::SlotRemoveFileTab(const QString &sPath)
 {
     if (sPath != "") {
         int nCount = this->count();
-        for (int iLoop = 0; iLoop < nCount; iLoop++) {
-            QString sTabData = this->tabData(iLoop).toString();
-            if (sTabData.startsWith(sPath)) {
-
-                this->removeTab(iLoop);
+        for (int i = 0; i < nCount; i++) {
+            if (sPath == this->tabData(i).toString()) {
+                this->removeTab(i);
                 break;
             }
         }
@@ -330,19 +300,9 @@ void DocTabBar::SlotRemoveFileTab(const QString &sPath)
 }
 
 //  打开成功了， 将标志位 置  111
-void DocTabBar::SlotOpenFileResult(const QString &s, const bool &res)
+void DocTabBar::SlotOpenFileResult(const QString &filePath, const bool &res)
 {
-    if (res) {
-        int nCount = this->count();
-        for (int iLoop = 0; iLoop < nCount; iLoop++) {
-            QString sTabData = this->tabData(iLoop).toString();
-            if (sTabData.startsWith(s)) {
-                QString sTabData = s + Constant::sQStringSep + "111";
-                this->setTabData(iLoop, sTabData);
-                break;
-            }
-        }
-    } else {
-        SlotRemoveFileTab(s);
+    if (!res) {
+        SlotRemoveFileTab(filePath);
     }
 }
