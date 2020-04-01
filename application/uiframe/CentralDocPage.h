@@ -85,6 +85,13 @@ private:
 
     void SetFileChange(const QString &sPath, const int &iState);
 
+public:
+    void pageJump(const int &pagenum);
+    void pageJumpByMsg(const int &, const QString &param);
+    void notifyMsg(const int &msgType, const QString &msgContent = "") ;
+    void CloseFile(const int &iType, const QString &sPath);
+    QString qDealWithData(const int &msgType, const QString &msgContent);
+
 protected:
     void initWidget() override;
 
@@ -98,15 +105,20 @@ private:
     void OnTabBarMsg(const QString &);
     void OnTabFileChangeMsg(const QString &);
     void SaveFile(const int &nSaveType, const QString &);
-    void OnSaveAsFile();
     void OnAppShortCut(const QString &);
-    void OnSaveFile();
+
+    void onSaveFile();
     void OnPrintFile();
     void ShowFindWidget();
     void OnOpenSliderShow();
     void OnOpenMagnifer();
     void OnShortCutKey_Esc();
     void OnKeyPress(const QString &);
+
+public:
+    void saveCurFile();
+
+    void saveAsCurFile();
 
 signals:
     void sigDealNotifyMsg(const int &, const QString &);
@@ -136,6 +148,7 @@ private:
 
 private:
     QList<int>          m_pMsgList;
+    QList<int>          m_pMsgList2;
     QString             m_strSliderPath = "";
     QString             m_strMagniferPath = "";
     int                 m_nCurrentState = Default_State;

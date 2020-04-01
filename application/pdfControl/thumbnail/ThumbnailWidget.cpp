@@ -20,7 +20,7 @@
 
 #include "docview/docummentproxy.h"
 
-#include "gof/bridge/IHelper.h"
+
 #include "CentralDocPage.h"
 
 ThumbnailWidget::ThumbnailWidget(DWidget *parent)
@@ -271,7 +271,7 @@ void ThumbnailWidget::showItemBookMark()
  */
 void ThumbnailWidget::prevPage()
 {
-    dApp->m_pHelper->qDealWithData(MSG_OPERATION_PREV_PAGE, "");
+    CentralDocPage::Instance()->qDealWithData(MSG_OPERATION_PREV_PAGE, "");
 }
 
 /**
@@ -280,7 +280,7 @@ void ThumbnailWidget::prevPage()
  */
 void ThumbnailWidget::nextPage()
 {
-    dApp->m_pHelper->qDealWithData(MSG_OPERATION_NEXT_PAGE, "");
+    CentralDocPage::Instance()->qDealWithData(MSG_OPERATION_NEXT_PAGE, "");
 }
 
 /**

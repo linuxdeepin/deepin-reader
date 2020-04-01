@@ -42,7 +42,17 @@
 #include "widgets/PlayControlWidget.h"
 #include "TitleWidget.h"
 
-#include "gof/bridge/IHelper.h"
+#include <DFileDialog>
+#include <DDialog>
+
+#include "business/FileFormatHelper.h"
+
+#include "docview/docummentproxy.h"
+#include "utils/PublicFunction.h"
+#include "utils/utils.h"
+#include "CentralDocPage.h"
+
+
 
 CentralDocPage *CentralDocPage::g_onlyApp = nullptr;
 
@@ -53,6 +63,10 @@ CentralDocPage::CentralDocPage(DWidget *parent)
     InitConnections();
     g_onlyApp = this;
     m_pMsgList = {E_APP_MSG_TYPE, E_TABBAR_MSG_TYPE, MSG_FILE_IS_CHANGE};
+    m_pMsgList2 = { MSG_DOC_JUMP_PAGE, MSG_OPERATION_FIRST_PAGE, MSG_OPERATION_END_PAGE, MSG_OPERATION_PREV_PAGE, MSG_OPERATION_NEXT_PAGE,
+                    MSG_SAVE_FILE, MSG_NOT_SAVE_FILE, MSG_NOT_CHANGE_SAVE_FILE
+                  };
+
     dApp->m_pModelService->addObserver(this);
 }
 
@@ -60,7 +74,7 @@ CentralDocPage::~CentralDocPage()
 {
     dApp->m_pModelService->removeObserver(this);
 }
-//  打开当前所在文件夹
+
 void CentralDocPage::OpenCurFileFolder()
 {
     QString sPath = GetCurPath();
@@ -107,14 +121,6 @@ QString CentralDocPage::GetCurPath()
     }
 
     return "";
-
-//    auto splitterList = findChildren<DocSheet *>();
-//    foreach (auto s, splitterList) {
-//        if (s->isVisible()) {
-//            return s->qGetPath();
-//        }
-//    }
-//    return "";
 }
 
 void CentralDocPage::SetFileChange(const QString &sPath, const int &iState)
@@ -128,6 +134,218 @@ void CentralDocPage::SetFileChange(const QString &sPath, const int &iState)
         }
     }
 }
+
+void CentralDocPage::notifyMsg(const int &msgType, const QString &msgContent)
+{
+    dApp->m_pModelService->notifyMsg(msgType, msgContent);
+}
+
+void CentralDocPage::CloseFile(const int &iType, const QString &sPath)
+{
+    DocummentProxy *_proxy = getCurFileAndProxy(sPath);
+    if (_proxy) {
+        if (MSG_SAVE_FILE == iType || MSG_NOT_SAVE_FILE == iType) {
+            bool bSave = iType == MSG_SAVE_FILE ? true : false;
+            _proxy->save(sPath, bSave);
+
+            if (bSave) {
+                dApp->m_pDBService->qSaveData(sPath, DB_BOOKMARK);
+            }
+        }
+        _proxy->closeFile();
+    }
+}
+
+//  保存当前显示文件
+void CentralDocPage::saveCurFile()
+{
+    DWidget *w = m_pStackedLayout->currentWidget();
+    if (w) {
+        auto pSplitter = qobject_cast<DocSheet *>(w);
+        if (pSplitter) {
+            int nChange = pSplitter->qGetFileChange();
+            if (nChange == 1) {
+                QString sPath = pSplitter->qGetPath();
+                SaveFile(MSG_SAVE_FILE, sPath);
+            }
+        }
+    }
+}
+
+void CentralDocPage::SaveFile(const int &iType, const QString &sPath)
+{
+    QString sRes = qDealWithData(iType, sPath);
+    if (sRes != "") {
+        QJsonParseError error;
+        QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
+        if (error.error == QJsonParseError::NoError) {
+            QJsonObject obj = doc.object();
+            int nReturn = obj.value("return").toInt();
+            if (nReturn == MSG_OK) {
+                DWidget *w = m_pStackedLayout->currentWidget();
+                if (w) {
+                    auto pSplitter = qobject_cast<DocSheet *>(w);
+                    if (pSplitter) {
+                        pSplitter->saveData();
+                    }
+                }
+            }
+        }
+    }
+
+    TitleMenu::Instance()->flushSaveButton();
+}
+
+//  保存 数据
+void CentralDocPage::onSaveFile()
+{
+    QString sCurPath = qGetCurPath();
+    if (sCurPath != "") {
+        int fs = GetFileChange(sCurPath);
+        if (fs == 1) {  //  改变了
+            DocummentProxy *_proxy = getCurFileAndProxy(sCurPath);
+            if (_proxy) {
+                bool rl = _proxy->save(sCurPath, true);
+                if (rl) {
+                    //  保存需要保存 数据库记录
+                    dApp->m_pDBService->qSaveData(sCurPath, DB_BOOKMARK);
+
+                    notifyMsg(CENTRAL_SHOW_TIP, tr("Saved successfully"));
+                } else {
+                    notifyMsg(CENTRAL_SHOW_TIP, tr("Save failed"));
+                }
+            }
+        } else {
+            notifyMsg(CENTRAL_SHOW_TIP, tr("No changes"));
+        }
+    }
+}
+
+//  另存为
+void CentralDocPage::saveAsCurFile()
+{
+    QString sCurPath = qGetCurPath();
+    if (sCurPath != "") {
+        QFileInfo info(sCurPath);
+
+        QString sCompleteSuffix = info.completeSuffix();
+        DocType_EM nCurDocType = FFH::setCurDocuType(sCompleteSuffix);
+
+        QString sFilter = FFH::getFileFilter(nCurDocType);
+
+        if (sFilter != "") {
+            QFileDialog dialog;
+            dialog.selectFile(sCurPath);
+            QString filePath = dialog.getSaveFileName(nullptr, tr("Save as"), sCurPath, sFilter);
+
+            if (filePath.endsWith("/.pdf")) {
+                DDialog dlg("", tr("Invalid file name"));
+                QIcon icon(PF::getIconPath("exception-logo"));
+                dlg.setIcon(icon /*QIcon(":/resources/exception-logo.svg")*/);
+                dlg.addButtons(QStringList() << tr("OK"));
+                QMargins mar(0, 0, 0, 30);
+                dlg.setContentLayoutContentsMargins(mar);
+                dlg.exec();
+                return;
+            }
+
+            if (filePath != "") {
+                if (sCurPath == filePath) {
+                    onSaveFile();
+                } else {
+                    QString sFilePath = FFH::getFilePath(filePath, nCurDocType);
+
+                    bool rl = getCurFileAndProxy(sCurPath)->saveas(sFilePath, true);
+                    if (rl) {
+                        //insert a new bookmark record to bookmarktabel
+                        dApp->m_pDBService->qSaveData(sFilePath, DB_BOOKMARK);
+
+                        notifyMsg(MSG_OPERATION_OPEN_FILE_OK, sFilePath);
+                    }
+                }
+            }
+        }
+    }
+}
+
+//  跳转页面
+QString CentralDocPage::qDealWithData(const int &msgType, const QString &msgContent)
+{
+    if (msgType == MSG_DOC_JUMP_PAGE) {              //  请求跳转页面
+        pageJump(msgContent.toInt());
+    } else if (msgType == MSG_OPERATION_FIRST_PAGE || msgType == MSG_OPERATION_PREV_PAGE ||
+               msgType == MSG_OPERATION_NEXT_PAGE || msgType == MSG_OPERATION_END_PAGE) {
+        pageJumpByMsg(msgType, msgContent);
+    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
+        if (msgContent == KeyStr::g_ctrl_shift_s) {
+            saveAsCurFile();
+        }
+    } else if (MSG_SAVE_FILE == msgType || MSG_NOT_SAVE_FILE == msgType || MSG_NOT_CHANGE_SAVE_FILE == msgType)  {
+        CloseFile(msgType, msgContent);
+    } else if (msgType == MSG_SAVE_AS_FILE_PATH) {
+        saveAsCurFile();
+    }
+
+    int nRes = MSG_NO_OK;
+
+    if (m_pMsgList2.contains(msgType)) {
+        nRes = MSG_OK;
+    }
+
+    QJsonObject obj;
+    obj.insert("return", nRes);
+
+    QJsonDocument doc(obj);
+
+    return doc.toJson(QJsonDocument::Compact);
+}
+
+void CentralDocPage::pageJump(const int &pagenum)
+{
+    QString sCurPath = qGetCurPath();
+    if (sCurPath != "") {
+        DocummentProxy *_proxy =  getCurFileAndProxy(sCurPath);
+        if (_proxy) {
+            int nPageSize = _proxy->getPageSNum();      //  总页数
+            if (pagenum < 0 || pagenum == nPageSize) {
+                return;
+            }
+
+            int nCurPage = _proxy->currentPageNo();
+            if (nCurPage != pagenum) {
+                _proxy->pageJump(pagenum);
+            }
+        }
+    }
+}
+
+//  前一页\第一页\后一页\最后一页 操作
+void CentralDocPage::pageJumpByMsg(const int &iType, const QString &param)
+{
+    QString sCurPath = qGetCurPath();
+    if (sCurPath != "") {
+        DocummentProxy *_proxy =  getCurFileAndProxy(sCurPath);
+
+        if (_proxy) {
+            int iPage = -1;
+            if (iType == MSG_OPERATION_FIRST_PAGE) {
+                iPage = 0;
+            } else if (iType == MSG_OPERATION_PREV_PAGE) {
+                int nCurPage = _proxy->currentPageNo();
+                iPage = nCurPage - (param == "doubleshow" ? 2 : 1);
+            } else if (iType == MSG_OPERATION_NEXT_PAGE) {
+                int nCurPage = _proxy->currentPageNo();
+                iPage = nCurPage + (param == "doubleshow" ? 2 : 1);
+            } else if (iType == MSG_OPERATION_END_PAGE) {
+                int nCurPage = _proxy->getPageSNum();
+                iPage = nCurPage - 1;
+            }
+
+            pageJump(iPage);
+        }
+    }
+}
+
 CentralDocPage *CentralDocPage::Instance()
 {
     return g_onlyApp;
@@ -380,7 +598,7 @@ void CentralDocPage::OnAppShortCut(const QString &s)
     if (s == KeyStr::g_ctrl_p) {
         OnPrintFile();
     } else if (s == KeyStr::g_ctrl_s) {
-        OnSaveFile();
+        saveCurFile();
     } else if (s == KeyStr::g_alt_1 || s == KeyStr::g_alt_2 || s == KeyStr::g_ctrl_m  ||
                s == KeyStr::g_ctrl_1 || s == KeyStr::g_ctrl_2 || s == KeyStr::g_ctrl_3 ||
                s == KeyStr::g_ctrl_r || s == KeyStr::g_ctrl_shift_r ||
@@ -391,7 +609,7 @@ void CentralDocPage::OnAppShortCut(const QString &s)
     } else if (s == KeyStr::g_ctrl_h) {     //  开启幻灯片
         OnOpenSliderShow();
     } else if (s == KeyStr::g_ctrl_shift_s) {   //  另存为
-        OnSaveAsFile();
+        saveAsCurFile();
     } else if (s == KeyStr::g_esc) {   //  esc 统一处理
         OnShortCutKey_Esc();
     } else {
@@ -406,9 +624,9 @@ void CentralDocPage::OnTabBarMsg(const QString &s)
     } else if (s == "New tab") {
         notifyMsg(E_OPEN_FILE);
     } else if (s == "Save") { //  保存当前显示文件
-        OnSaveFile();
+        saveCurFile();
     } else if (s == "Save as") {
-        OnSaveAsFile();
+        saveAsCurFile();
     } else if (s == "Print") {
         OnPrintFile();
     } else if (s == "Slide show") { //  开启幻灯片
@@ -431,50 +649,7 @@ void CentralDocPage::OnTabFileChangeMsg(const QString &sVale)
     SetFileChange(sCurPath, sVale.toInt());
 }
 
-void CentralDocPage::SaveFile(const int &iType, const QString &sPath)
-{
-    QString sRes = dApp->m_pHelper->qDealWithData(iType, sPath);
-    if (sRes != "") {
-        QJsonParseError error;
-        QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
-        if (error.error == QJsonParseError::NoError) {
-            QJsonObject obj = doc.object();
-            int nReturn = obj.value("return").toInt();
-            if (nReturn == MSG_OK) {
-                DWidget *w = m_pStackedLayout->currentWidget();
-                if (w) {
-                    auto pSplitter = qobject_cast<DocSheet *>(w);
-                    if (pSplitter) {
-                        pSplitter->saveData();
-                    }
-                }
-            }
-        }
-    }
 
-    TitleMenu::Instance()->flushSaveButton();
-}
-
-//  保存当前显示文件
-void CentralDocPage::OnSaveFile()
-{
-    DWidget *w = m_pStackedLayout->currentWidget();
-    if (w) {
-        auto pSplitter = qobject_cast<DocSheet *>(w);
-        if (pSplitter) {
-            int nChange = pSplitter->qGetFileChange();
-            if (nChange == 1) {
-                QString sPath = pSplitter->qGetPath();
-                SaveFile(MSG_SAVE_FILE, sPath);
-            }
-        }
-    }
-}
-
-void CentralDocPage::OnSaveAsFile()
-{
-    QString sRes = dApp->m_pHelper->qDealWithData(MSG_SAVE_AS_FILE_PATH, "");
-}
 
 //  打印
 void CentralDocPage::OnPrintFile()
@@ -591,10 +766,10 @@ void CentralDocPage::SlotCloseTab(const QString &sPath)
                 }
 
                 QString s = sPath + Constant::sQStringSep;
-                sRes = dApp->m_pHelper->qDealWithData(nMsgType, s);
+                sRes = qDealWithData(nMsgType, s);
             } else {
                 QString s = sPath + Constant::sQStringSep;
-                sRes = dApp->m_pHelper->qDealWithData(MSG_NOT_CHANGE_SAVE_FILE, s);
+                sRes = qDealWithData(MSG_NOT_CHANGE_SAVE_FILE, s);
             }
 
             if (sRes != "") {

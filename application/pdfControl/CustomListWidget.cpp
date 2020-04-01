@@ -22,11 +22,12 @@
 
 #include "application.h"
 #include "CustomItemWidget.h"
+#include "CentralDocPage.h"
 
 //#include "menu/BookMarkMenu.h"
 //#include "menu/NoteMenu.h"
 
-#include "gof/bridge/IHelper.h"
+
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
 
@@ -118,7 +119,7 @@ void CustomListWidget::slotShowSelectItem(QListWidgetItem *item)
     if (t_ItemWidget) {
         int nJumpPage = t_ItemWidget->nPageIndex();
         //  页跳转
-        dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(nJumpPage));
+        CentralDocPage::Instance()->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(nJumpPage));
     }
 }
 

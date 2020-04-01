@@ -12,7 +12,7 @@
 #include "TitleWidget.h"
 #include "Central.h"
 
-#include "gof/bridge/IHelper.h"
+
 
 #include "CentralDocPage.h"
 

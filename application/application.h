@@ -22,7 +22,6 @@
 #include "ModelService.h"
 
 class AppInfo;
-class IHelper;
 
 #if defined(dApp)
 #undef dApp
@@ -71,7 +70,6 @@ public:
     DBService           *m_pDBService = nullptr;
     ModelService        *m_pModelService = nullptr;
     AppInfo             *m_pAppInfo = nullptr;
-    IHelper             *m_pHelper = nullptr;
     double m_dScal{1.0};//左侧列表缩放比例
     bool        m_bFirstView = true;//首次打开
     bool m_bFlush{true};//是否自适应宽

@@ -20,7 +20,7 @@
 #include "SheetBrowserPDF.h"
 #include "widgets/NoteTipWidget.h"
 
-#include "gof/bridge/IHelper.h"
+
 #include "pdfControl/note/NoteViewWidget.h"
 #include "CentralDocPage.h"
 

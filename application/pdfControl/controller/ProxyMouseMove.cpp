@@ -26,7 +26,7 @@
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
 
-#include "gof/bridge/IHelper.h"
+
 #include "CentralDocPage.h"
 
 ProxyMouseMove::ProxyMouseMove(QObject *parent) : QObject(parent)
@@ -252,7 +252,7 @@ void ProxyMouseMove::__ClickPageLink(Page::Link *pLink)
 
     } else if (linkType == Page::LinkType_Goto) {
         int page = pLink->page - 1;
-        dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(page));
+        CentralDocPage::Instance()->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(page));
     } else if (linkType == Page::LinkType_GotoOtherFile) {
 
     } else if (linkType == Page::LinkType_Browse) {

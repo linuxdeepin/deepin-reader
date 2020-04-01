@@ -29,7 +29,7 @@
 #include "CentralDocPage.h"
 #include "FileDataModel.h"
 #include "MainWindow.h"
-#include "gof/bridge/IHelper.h"
+
 #include "TitleMenu.h"
 #include "TitleWidget.h"
 #include "app/ProcessController.h"

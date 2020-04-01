@@ -3,7 +3,7 @@
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
 
-#include "gof/bridge/IHelper.h"
+
 #include "CentralDocPage.h"
 
 
@@ -129,22 +129,22 @@ void DefaultOperationMenu::slotBookMarkClicked()
 
 void DefaultOperationMenu::slotFirstPageClicked()
 {
-    dApp->m_pHelper->qDealWithData(MSG_OPERATION_FIRST_PAGE, "");
+    CentralDocPage::Instance()->qDealWithData(MSG_OPERATION_FIRST_PAGE, "");
 }
 
 void DefaultOperationMenu::slotPrevPageClicked()
 {
-    dApp->m_pHelper->qDealWithData(MSG_OPERATION_PREV_PAGE, m_isDoubleShow ? "doubleshow" : "");
+    CentralDocPage::Instance()->qDealWithData(MSG_OPERATION_PREV_PAGE, m_isDoubleShow ? "doubleshow" : "");
 }
 
 void DefaultOperationMenu::slotNextPageClicked()
 {
-    dApp->m_pHelper->qDealWithData(MSG_OPERATION_NEXT_PAGE, m_isDoubleShow ? "doubleshow" : "");
+    CentralDocPage::Instance()->qDealWithData(MSG_OPERATION_NEXT_PAGE, m_isDoubleShow ? "doubleshow" : "");
 }
 
 void DefaultOperationMenu::slotEndPageClicked()
 {
-    dApp->m_pHelper->qDealWithData(MSG_OPERATION_END_PAGE, "");
+    CentralDocPage::Instance()->qDealWithData(MSG_OPERATION_END_PAGE, "");
 }
 
 void DefaultOperationMenu::slotExitFullScreenClicked()

@@ -21,7 +21,7 @@
 #include <QSignalMapper>
 #include "CentralDocPage.h"
 
-#include "gof/bridge/IHelper.h"
+
 
 TitleMenu *TitleMenu::g_onlyTitleMenu = nullptr;
 

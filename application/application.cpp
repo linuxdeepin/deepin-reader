@@ -24,7 +24,6 @@
 #include "business/AppInfo.h"
 #include "utils/utils.h"
 
-#include "gof/bridge/IHelper.h"
 #include "IObserver.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
@@ -96,10 +95,7 @@ void Application::initChildren()
 {
     m_pDBService = new DBService(this);
     m_pModelService = new ModelService(this);
-
     m_pAppInfo = new AppInfo(this);
-
-    m_pHelper = new Helper(this);
 }
 
 void Application::initI18n()

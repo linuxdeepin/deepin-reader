@@ -13,7 +13,7 @@
 
 #include "CentralDocPage.h"
 
-#include "gof/bridge/IHelper.h"
+
 
 PlayControlWidget::PlayControlWidget(DWidget *parnet)
     : DFloatingWidget(parnet)
@@ -149,7 +149,7 @@ void PlayControlWidget::pagejump(const bool &bpre)
             else
                 nCurPage++;
 
-            dApp->m_pHelper->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
+            CentralDocPage::Instance()->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
 
             if (bSatus) {
                 helper->setAutoPlaySlide(bSatus);

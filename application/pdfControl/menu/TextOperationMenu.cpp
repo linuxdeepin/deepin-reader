@@ -5,7 +5,7 @@
 
 #include "business/AppInfo.h"
 
-#include "gof/bridge/IHelper.h"
+
 #include "CentralDocPage.h"
 #include "MsgHeader.h"
 
