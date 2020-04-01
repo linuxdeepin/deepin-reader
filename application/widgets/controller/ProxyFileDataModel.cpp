@@ -75,7 +75,11 @@ void ProxyFileDataModel::OnSetViewChange(const QString &sValue)
 
 void ProxyFileDataModel::OnSetViewScale(const QString &sValue)
 {
-    m_pFileDataModel.qSetData(Scale, sValue.toDouble());
+    QStringList sList = sValue.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    if (sList.size() == 2) {
+        m_pFileDataModel.qSetData(Scale, sList.at(0).toDouble());
+        qInfo() << __LINE__ <<  "     " << __FUNCTION__ << "      sValue:" << sValue;
+    }
 }
 
 void ProxyFileDataModel::OnSetViewRotate(const QString &sValue)
@@ -85,7 +89,19 @@ void ProxyFileDataModel::OnSetViewRotate(const QString &sValue)
 
 void ProxyFileDataModel::OnSetViewHit(const QString &sValue)
 {
-    m_pFileDataModel.qSetData(Fit, sValue.toInt());
+    QStringList sList = sValue.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    if (sList.size() == 2) {
+        int tValue = 0;
+        tValue = sList.at(1).toInt();
+        qInfo() << "      tValue:" << tValue;
+        if (tValue == 1) {
+            tValue = sList.at(0).toInt();
+            m_pFileDataModel.qSetData(Fit, tValue);//sValue.toInt());
+            if (dApp) {
+                dApp->setFlush((tValue == 1));
+            }
+        }
+    }
 }
 
 void ProxyFileDataModel::OnSetCurPage(const QString &sValue)

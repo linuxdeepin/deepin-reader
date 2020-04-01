@@ -186,6 +186,10 @@ void HistroyDB::updateData(const QString &sPath)
                                "CurPage = ? where FilePath = ?").arg(m_strTableName);
         query.prepare(sSql);
 
+        double scale = 1.0;
+        scale = GetKeyValue(sPath, Scale);
+        qDebug() << __LINE__ << "   " << __FUNCTION__ << "   scale:" << scale;
+
         query.addBindValue(GetKeyValue(sPath, Scale));
         query.addBindValue(GetKeyValue(sPath, DoubleShow));
         query.addBindValue(GetKeyValue(sPath, Fit));

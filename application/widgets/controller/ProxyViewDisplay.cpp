@@ -38,7 +38,13 @@ ProxyViewDisplay::ProxyViewDisplay(QObject *parent) : QObject(parent)
 
 void ProxyViewDisplay::OnSetViewHit(const QString &msgContent)
 {
-    m_nAdapteState = msgContent.toInt();
+    QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    if (sList.size() == 2) {
+        m_nAdapteState = sList.at(0).toInt();
+        qInfo() << "      m_nAdapteState:" << m_nAdapteState;
+    }
+
+//    m_nAdapteState = msgContent.toInt();
 
 //    qInfo() << "      m_nAdapteState:" << m_nAdapteState;
 
@@ -68,11 +74,17 @@ void ProxyViewDisplay::onSetWidgetAdapt()
 //  比例调整了, 取消自适应 宽高状态
 void ProxyViewDisplay::OnSetViewScale(const QString &msgConent)
 {
-    m_nScale = msgConent.toDouble();
+    QStringList sList = msgConent.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    if (sList.size() == 2) {
+        if (sList.at(1).toInt() == 0) {
+            return;
+        }
+        m_nScale = sList.at(0).toDouble();
+//        m_nScale = msgConent.toDouble();
+        setScaleRotateViewModeAndShow();
 
-    setScaleRotateViewModeAndShow();
-
-    m_nAdapteState = Default_State;
+        m_nAdapteState = Default_State;
+    }
 }
 
 void ProxyViewDisplay::OnSetViewRotate(const QString &msgConent)

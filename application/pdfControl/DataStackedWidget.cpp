@@ -154,12 +154,22 @@ void DataStackedWidget::slotAdaptWindowSize(const double &scale)
         }
     }
 
-    //自动自适应宽
-    QJsonObject obj;
-    obj.insert("content", QString::number(1));
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
-    QJsonDocument doc(obj);
-    notifyMsg(MSG_VIEWCHANGE_FIT, doc.toJson(QJsonDocument::Compact));
+    if (dApp) {
+        if (!(dApp->bFlush())) {
+            //自动自适应宽
+            QJsonObject obj;
+            QString str{""};
+            str = QString::number(1) + Constant::sQStringSep + QString::number(0);
+            obj.insert("content", str);//QString::number(1));
+            obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
+            QJsonDocument doc(obj);
+            notifyMsg(MSG_VIEWCHANGE_FIT, doc.toJson(QJsonDocument::Compact));
+            dApp->setFlush(true);
+            qInfo() << "    bFlush:" << dApp->bFlush();
+        } else {
+            dApp->setFlush(false);
+        }
+    }
 }
 
 void DataStackedWidget::slotUpdateThumbnail(const int &page)
