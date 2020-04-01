@@ -20,6 +20,8 @@
 #define NOTEVIEWWIDGET_H
 
 #include "CustomControl/CustomWidget.h"
+#include "MsgHeader.h"
+#include "ModuleHeader.h"
 
 class CustomClickLabel;
 class TransparentTextEdit;

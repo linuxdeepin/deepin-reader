@@ -24,7 +24,6 @@ HEADERS += \
     Singleton.h \
     ModuleHeader.h \
     NotifySubject.h \
-    SubjectThread.h \
     WidgetHeader.h
 
 

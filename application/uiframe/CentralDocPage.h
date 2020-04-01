@@ -20,15 +20,14 @@
 #define MAINTABWIDGETEX_H
 
 #include "CustomControl/CustomWidget.h"
+#include "app/ModuleHeader.h"
+
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QDBusUnixFileDescriptor>
 #include <QMap>
 
-#include "ModuleHeader.h"
-
 class FileDataModel;
-
 class DocummentProxy;
 class QStackedLayout;
 class DocTabBar;
@@ -55,7 +54,7 @@ public:
 
     QString qGetCurPath();
 
-    int getFileChanged();
+    int getCurFileChanged();
 
     int GetFileChange(const QString &sPath);
 

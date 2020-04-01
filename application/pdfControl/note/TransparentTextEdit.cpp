@@ -21,6 +21,8 @@
 #include <DFontSizeManager>
 
 #include "application.h"
+#include "ModuleHeader.h"
+#include "MsgHeader.h"
 
 TransparentTextEdit::TransparentTextEdit(DWidget *parent)
     : QTextEdit(parent)

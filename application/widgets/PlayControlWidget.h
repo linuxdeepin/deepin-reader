@@ -5,7 +5,7 @@
 #include <DFloatingWidget>
 #include <DIconButton>
 
-#include "application.h"
+#include "IObserver.h"
 
 DWIDGET_USE_NAMESPACE
 

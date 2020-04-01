@@ -2,6 +2,7 @@
 #include "json.h"
 #include "CentralDocPage.h"
 #include "MainWindow.h"
+#include "MsgHeader.h"
 
 #include <stdio.h>
 #include <sys/types.h>

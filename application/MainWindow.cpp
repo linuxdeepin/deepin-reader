@@ -31,6 +31,7 @@ MainWindow::MainWindow(DMainWindow *parent)
     setTitlebarShadowEnabled(true);
 
     m_strObserverName = "MainWindow";
+
     m_pMsgList = {MSG_OPERATION_EXIT};
 
     setCurTheme();
@@ -109,14 +110,19 @@ void MainWindow::showEvent(QShowEvent *ev)
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     event->ignore();
+
     dApp->m_pAppInfo->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
+
     dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
 
     QJsonObject obj;
+
     obj.insert("type", "exit_app");
 
     QJsonDocument doc = QJsonDocument(obj);
+
     notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
+
 }
 
 void MainWindow::initUI()

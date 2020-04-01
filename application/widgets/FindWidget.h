@@ -26,6 +26,7 @@
 #include <DWidget>
 #include <DFloatingWidget>
 #include <DSearchEdit>
+#include "IObserver.h"
 
 #include "application.h"
 

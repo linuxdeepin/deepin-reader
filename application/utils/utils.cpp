@@ -21,7 +21,6 @@
  */
 
 #include "utils.h"
-//#include "mainShow/toast.h"
 
 #include <DSettings>
 #include <DSettingsOption>
@@ -38,13 +37,13 @@
 #include <QtMath>
 #include <QWidget>
 #include <QStandardPaths>
-//#include <KEncodingProber>
 #include <QTextCodec>
 #include <QImageReader>
 #include <QProcess>
 #include <QPixmap>
 #include <QBitmap>
 #include <QClipboard>
+#include "ModuleHeader.h"
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);

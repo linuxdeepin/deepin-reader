@@ -23,7 +23,7 @@
 
 #include <QStandardItemModel>
 
-#include "../ModelService/IObserver.h"
+#include "IObserver.h"
 #include "docview/pagebase.h"
 
 DWIDGET_USE_NAMESPACE

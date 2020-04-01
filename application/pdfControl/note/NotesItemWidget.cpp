@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "NotesItemWidget.h"
+#include "ModuleHeader.h"
+#include "MsgHeader.h"
 
 #include <QVBoxLayout>
 

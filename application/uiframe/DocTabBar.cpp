@@ -291,7 +291,7 @@ void DocTabBar::SlotRemoveFileTab(const QString &sPath)
         nCount = this->count();
         if (nCount == 0) {
             //禁用所有的功能
-            TitleMenu::Instance()->disableallaction();
+            TitleMenu::Instance()->disableAllAction();
             TitleWidget::Instance()->suitDocType(DocType_NULL);
             notifyMsg(CENTRAL_INDEX_CHANGE);
 

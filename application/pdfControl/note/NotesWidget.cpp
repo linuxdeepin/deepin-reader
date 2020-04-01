@@ -22,6 +22,8 @@
 #include "docview/docummentproxy.h"
 
 #include "CentralDocPage.h"
+#include "MsgHeader.h"
+#include "ModuleHeader.h"
 
 NotesWidget::NotesWidget(DWidget *parent)
     : CustomWidget(NOTE_WIDGET, parent)

@@ -17,9 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CustomWidget.h"
-#include <DWidgetUtil>
-
 #include "CustomWidgetPrivate.h"
+#include "ModuleHeader.h"
+
+#include <DWidgetUtil>
 
 CustomWidget::CustomWidget(const QString &name, DWidget *parent)
     : DWidget(parent), d_ptr(new CustomWidgetPrivate(this))

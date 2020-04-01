@@ -47,7 +47,8 @@ public:
     int dealWithData(const int &, const QString &) override;
 
     void flushSaveButton();
-    void disableallaction();
+
+    void disableAllAction();
 
 private:
     void disableSaveButton(bool disable);

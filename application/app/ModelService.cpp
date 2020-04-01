@@ -16,36 +16,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef MODELSERVICE_H
-#define MODELSERVICE_H
-
-#include "modelservice_global.h"
-#include <QObject>
-
+#include "ModelService.h"
 #include "IObserver.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
 
-class NotifySubject;
-
-class MODELSERVICESHARED_EXPORT ModelService : public QObject
+ModelService::ModelService(QObject *parent)
+    : QObject(parent)
 {
 
-public:
-    explicit ModelService(QObject *parent = nullptr);
-    ~ModelService() override;
+}
 
-    // ISubject interface
-public:
-    void addObserver(IObserver *obs) ;
-    void removeObserver(IObserver *obs) ;
+ModelService::~ModelService()
+{
 
-    // SubjectThread interface
-public:
-    void notifyMsg(const int &, const QString &msgContent = "");
+}
 
-private:
-    NotifySubject *m_pNotifySubject = nullptr;
-};
+void ModelService::addObserver(IObserver *obs)
+{
+    m_observerList.append(obs);
+}
 
-#endif // MODELSERVICE_H
+void ModelService::removeObserver(IObserver *obs)
+{
+    m_observerList.removeOne(obs);
+}
+
+void ModelService::notifyMsg(const int &msgType, const QString &msgContent)
+{
+    QListIterator<IObserver *> iter(m_observerList);
+    while (iter.hasNext()) {
+        auto obs = iter.next();
+        if (obs != nullptr) {
+            int nRes = obs->dealWithData(msgType, msgContent);
+            if (nRes == MSG_OK) {
+                break;
+            }
+        }
+    }
+}

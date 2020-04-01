@@ -27,6 +27,8 @@
 //#include "menu/NoteMenu.h"
 
 #include "gof/bridge/IHelper.h"
+#include "ModuleHeader.h"
+#include "MsgHeader.h"
 
 CustomListWidget::CustomListWidget(DWidget *parent)
     : DListWidget(parent)

@@ -7,6 +7,7 @@
 
 #include "gof/bridge/IHelper.h"
 #include "CentralDocPage.h"
+#include "MsgHeader.h"
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)
     : CustomMenu(TEXT_OPERATION_MENU, parent)

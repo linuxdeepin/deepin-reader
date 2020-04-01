@@ -2,6 +2,7 @@
 #define TEXTOPERATIONMENU_H
 
 #include "CustomControl/CustomMenu.h"
+#include "ModuleHeader.h"
 
 class ColorWidgetAction;
 
@@ -29,7 +30,10 @@ public:
     void setPEndPoint(const QPoint &pEndPoint);
     void setRemoveEnabled(bool enable);
 
-    inline void setType(Note_Type type) {m_nType = type;}
+    inline void setType(Note_Type type)
+    {
+        m_nType = type;
+    }
 
     // CustomMenu interface
 protected:

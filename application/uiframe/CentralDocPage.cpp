@@ -174,7 +174,7 @@ QString CentralDocPage::qGetCurPath()
     return GetCurPath();
 }
 
-int CentralDocPage::getFileChanged()
+int CentralDocPage::getCurFileChanged()
 {
     if (qGetCurPath().isEmpty())
         return 0;

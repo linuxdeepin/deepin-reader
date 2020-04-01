@@ -20,6 +20,7 @@
 #define NOTESITEMWIDGET_H
 
 #include "../CustomItemWidget.h"
+#include "ModuleHeader.h"
 
 /**
  * @brief The NotesItemWidget class

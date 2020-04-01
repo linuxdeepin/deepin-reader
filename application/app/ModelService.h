@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
+ * Copyright (C) 2019 ~ 2020 UOS Technology Co., Ltd.
  *
  * Author:     wangzhxiaun
  *
@@ -16,32 +16,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SHORTCUTSHOW_H
-#define SHORTCUTSHOW_H
+#ifndef MODELSERVICE_H
+#define MODELSERVICE_H
 
 #include <QObject>
-#include <QMap>
 
-/**
- * @brief The ShortCutShow class
- * @brief   显示快捷键预览
- */
-
-class ShortCutShow : public QObject
+class IObserver;
+class ModelService : public QObject
 {
-    Q_OBJECT
-public:
-    explicit ShortCutShow(QObject *parent = nullptr);
 
 public:
-    void show();
+    explicit ModelService(QObject *parent = nullptr);
+
+    ~ModelService() override;
+
+public:
+    void addObserver(IObserver *obs) ;
+
+    void removeObserver(IObserver *obs) ;
+
+public:
+    void notifyMsg(const int &, const QString &msgContent = "");
 
 private:
-    void initData();
-
-private:
-    QStringList Settingsnames, Filesnames, Displaynames, Toolsnames, Editnames,  shortcutnames, windowKeymaps;
-    QMap<QString, QString> shortcutmap;
+    QList<IObserver *>  m_observerList;
 };
 
-#endif // SHORTCUTSHOW_H
+#endif // MODELSERVICE_H

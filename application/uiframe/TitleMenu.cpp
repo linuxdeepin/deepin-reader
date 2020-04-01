@@ -54,10 +54,10 @@ int TitleMenu::dealWithData(const int &msgType, const QString &)
 
 void TitleMenu::flushSaveButton()
 {
-    disableSaveButton(!CentralDocPage::Instance()->getFileChanged());
+    disableSaveButton(!CentralDocPage::Instance()->getCurFileChanged());
 }
 
-void TitleMenu::disableallaction()
+void TitleMenu::disableAllAction()
 {
     QStringList actiontextlist;
     actiontextlist << "Save" << "Save as" << "Print" << "Slide show" << "Magnifer" << "Document info" << "Display in file manager";

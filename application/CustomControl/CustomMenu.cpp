@@ -18,11 +18,12 @@
  */
 
 #include "CustomMenu.h"
-
-#include <DFontSizeManager>
-
 #include "application.h"
 #include "ModelService.h"
+#include "MsgHeader.h"
+#include "ModuleHeader.h"
+
+#include <DFontSizeManager>
 
 CustomMenu::CustomMenu(const QString &, DWidget *parent)
     : DMenu(parent)

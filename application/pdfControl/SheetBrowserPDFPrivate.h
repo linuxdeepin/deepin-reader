@@ -7,6 +7,7 @@
 #include "application.h"
 #include "MsgHeader.h"
 #include "docview/pagebase.h"
+#include "ModuleHeader.h"
 
 class Annotation;
 class DocummentProxy;

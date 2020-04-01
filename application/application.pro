@@ -92,7 +92,3 @@ LIBS += -L$$OUT_PWD/../DBService/ -lDBService
 INCLUDEPATH += $$PWD/../DBService
 DEPENDPATH += $$PWD/../DBService
 
-LIBS += -L$$OUT_PWD/../ModelService/ -lModelService
-
-INCLUDEPATH += $$PWD/../ModelService
-DEPENDPATH += $$PWD/../ModelService

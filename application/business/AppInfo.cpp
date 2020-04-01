@@ -18,10 +18,10 @@
  */
 
 #include "AppInfo.h"
+#include "utils/utils.h"
+#include "ModuleHeader.h"
 
 #include <QDir>
-
-#include "utils/utils.h"
 
 AppInfo::AppInfo(QObject *parent)
     : QObject(parent)

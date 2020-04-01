@@ -32,6 +32,9 @@
 #include "WidgetHeader.h"
 #include "CustomMenu.h"
 #include "utils/utils.h"
+#include "IObserver.h"
+#include "ModuleHeader.h"
+#include "MsgHeader.h"
 
 #include <QDebug>
 

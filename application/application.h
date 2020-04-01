@@ -31,8 +31,6 @@ class IHelper;
 
 DWIDGET_USE_NAMESPACE
 
-
-
 class Application : public DApplication
 {
     Q_OBJECT
@@ -41,12 +39,30 @@ public:
     Application(int &argc, char **argv);
     void setSreenRect(const QRect &rect);
     void adaptScreenView(int &w, int &h);
-    inline void setScale(const double &scale) {m_dScal = scale;}
-    double scale() const {return m_dScal;}
-    inline void setFirstView(const bool &first) {m_bFirstView = first;}
-    inline bool firstView() {return m_bFirstView;}
-    void setFlush(const bool &flush) {m_bFlush = flush;}
-    bool bFlush() {return m_bFlush;}
+    inline void setScale(const double &scale)
+    {
+        m_dScal = scale;
+    }
+    double scale() const
+    {
+        return m_dScal;
+    }
+    inline void setFirstView(const bool &first)
+    {
+        m_bFirstView = first;
+    }
+    inline bool firstView()
+    {
+        return m_bFirstView;
+    }
+    void setFlush(const bool &flush)
+    {
+        m_bFlush = flush;
+    }
+    bool bFlush()
+    {
+        return m_bFlush;
+    }
 
 protected:
     void handleQuitAction() override;

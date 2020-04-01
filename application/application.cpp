@@ -25,6 +25,9 @@
 #include "utils/utils.h"
 
 #include "gof/bridge/IHelper.h"
+#include "IObserver.h"
+#include "ModuleHeader.h"
+#include "MsgHeader.h"
 
 namespace {
 
