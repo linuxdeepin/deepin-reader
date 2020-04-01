@@ -25,10 +25,10 @@
 
 #include "widgets/SpinnerWidget.h"
 #include "widgets/LeftSidebarWidget.h"
-#include "widgets/FileViewWidget.h"
+#include "FileViewWidget.h"
 #include "TitleWidget.h"
 #include "widgets/main/MainTabWidgetEx.h"
-#include "app/processcontroller.h"
+#include "app/ProcessController.h"
 
 MainSplitter::MainSplitter(DWidget *parent)
     : DSplitter(parent)

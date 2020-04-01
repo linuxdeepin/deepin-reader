@@ -20,8 +20,14 @@ public:
 public:
     void activeshow(int ix = 0, int iy = 0);
     void killshow();
-    void setCanShow(bool bshow) {m_bcanshow = bshow;}
-    bool canShow() {return m_bcanshow;}
+    void setCanShow(bool bshow)
+    {
+        m_bcanshow = bshow;
+    }
+    bool canShow()
+    {
+        return m_bcanshow;
+    }
 
     // IObserver interface
 public:
@@ -59,7 +65,7 @@ private:
     bool m_bautoplaying = false;
     bool m_bfirstshow = false;
 
-    QString             m_strSliderPath = "";
+    QString m_strSliderPath = "";
 };
 
 #endif // PLAYCONTROLWIDGET_H

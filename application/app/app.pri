@@ -1,8 +1,8 @@
 HEADERS += \
-    $$PWD/processcontroller.h \
-    $$PWD/json.h
+    $$PWD/json.h \
+    $$PWD/ProcessController.h
 
 SOURCES += \
-    $$PWD/processcontroller.cpp \
-    $$PWD/json.cpp
+    $$PWD/json.cpp \
+    $$PWD/ProcessController.cpp
 

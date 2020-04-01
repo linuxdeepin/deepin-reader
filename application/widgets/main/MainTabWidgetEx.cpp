@@ -25,7 +25,7 @@
 #include <QUrl>
 
 #include "MainTabBar.h"
-#include "MainSplitter.h"
+#include "pdfControl/MainSplitter.h"
 #include "MainWindow.h"
 #include "MainTabWidgetExPrivate.h"
 #include "TitleMenu.h"

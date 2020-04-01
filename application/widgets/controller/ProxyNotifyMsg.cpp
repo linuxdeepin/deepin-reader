@@ -18,9 +18,9 @@
  */
 #include "ProxyNotifyMsg.h"
 
-#include "FileViewWidgetPrivate.h"
+#include "pdfControl/FileViewWidgetPrivate.h"
 
-#include "widgets/FileViewWidget.h"
+#include "pdfControl/FileViewWidget.h"
 #include <QJsonObject>
 #include <QJsonDocument>
 

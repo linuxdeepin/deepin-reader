@@ -5,11 +5,11 @@
 #include <DPushButton>
 #include <DSuggestButton>
 #include <QVBoxLayout>
+#include <QSvgWidget>
+
 #include "CustomControl/CustomClickLabel.h"
 #include "utils/PublicFunction.h"
-
-#include <QSvgWidget>
-#include "app/processcontroller.h"
+#include "app/ProcessController.h"
 
 HomeWidget::HomeWidget(DWidget *parent)
     : CustomWidget(HOME_WIDGET, parent)
@@ -18,7 +18,6 @@ HomeWidget::HomeWidget(DWidget *parent)
 
     initWidget();
     initConnections();
-
     slotUpdateTheme();
 
     dApp->m_pModelService->addObserver(this);
@@ -70,17 +69,6 @@ void HomeWidget::slotChooseBtnClicked()
 {
     if (ProcessController::execOpenFiles())
         emit filesOpened();
-
-//    QStringList fileList = getOpenFileList();
-//    if (fileList.size() > 0) {
-//        QString sRes = "";
-
-//        foreach (auto s, fileList) {
-//            sRes += s + Constant::sQStringSep;
-//        }
-
-//        emit sigOpenFilePaths(sRes);
-//    }
 }
 
 //  主题切换

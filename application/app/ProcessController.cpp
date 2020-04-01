@@ -1,4 +1,4 @@
-#include "processcontroller.h"
+#include "ProcessController.h"
 #include "json.h"
 #include "widgets/main/MainTabWidgetEx.h"
 #include "MainWindow.h"

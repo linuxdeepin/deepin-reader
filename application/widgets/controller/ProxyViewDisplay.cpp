@@ -21,7 +21,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-#include "FileViewWidgetPrivate.h"
+#include "pdfControl/FileViewWidgetPrivate.h"
 
 #include "application.h"
 #include "ModuleHeader.h"

@@ -15,7 +15,15 @@ HEADERS += \
     $$PWD/bookmark/BookMarkWidget.h \
     $$PWD/note/NoteViewWidget.h \
     $$PWD/note/TransparentTextEdit.h \
-    $$PWD/DataStackedWidget.h
+    $$PWD/DataStackedWidget.h \
+    $$PWD/menu/BookMarkMenu.h \
+    $$PWD/menu/ColorWidgetAction.h \
+    $$PWD/menu/DefaultOperationMenu.h \
+    $$PWD/menu/NoteMenu.h \
+    $$PWD/menu/TextOperationMenu.h \
+    $$PWD/MainSplitter.h \
+    $$PWD/FileViewWidgetPrivate.h \
+    $$PWD/FileViewWidget.h
 
 SOURCES += \
     $$PWD/CustomListWidget.cpp \
@@ -34,4 +42,12 @@ SOURCES += \
     $$PWD/bookmark/BookMarkWidget.cpp \
     $$PWD/note/NoteViewWidget.cpp \
     $$PWD/note/TransparentTextEdit.cpp \
-    $$PWD/DataStackedWidget.cpp
+    $$PWD/DataStackedWidget.cpp \
+    $$PWD/menu/BookMarkMenu.cpp \
+    $$PWD/menu/ColorWidgetAction.cpp \
+    $$PWD/menu/DefaultOperationMenu.cpp \
+    $$PWD/menu/NoteMenu.cpp \
+    $$PWD/menu/TextOperationMenu.cpp \
+    $$PWD/MainSplitter.cpp \
+    $$PWD/FileViewWidgetPrivate.cpp \
+    $$PWD/FileViewWidget.cpp

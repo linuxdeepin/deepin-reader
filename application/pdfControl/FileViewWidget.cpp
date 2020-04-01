@@ -18,10 +18,9 @@
  */
 #include "FileViewWidget.h"
 
-#include "FindWidget.h"
+#include "widgets/FindWidget.h"
 
-#include "menu/DefaultOperationMenu.h"
-#include "controller/FileViewWidgetPrivate.h"
+#include "FileViewWidgetPrivate.h"
 #include "widgets/controller/ProxyData.h"
 #include "widgets/controller/ProxyFileDataModel.h"
 

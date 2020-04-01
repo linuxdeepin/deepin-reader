@@ -19,7 +19,7 @@
 #include "ProxyFileDataModel.h"
 
 #include "application.h"
-#include "FileViewWidgetPrivate.h"
+#include "pdfControl/FileViewWidgetPrivate.h"
 #include "MsgHeader.h"
 #include "ProxyData.h"
 

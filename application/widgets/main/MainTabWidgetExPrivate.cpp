@@ -22,7 +22,7 @@
 #include <QStackedLayout>
 
 #include "MainTabWidgetEx.h"
-#include "MainSplitter.h"
+#include "pdfControl/MainSplitter.h"
 
 MainTabWidgetExPrivate::MainTabWidgetExPrivate(MainTabWidgetEx *cw)
     : q_ptr(cw)

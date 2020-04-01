@@ -19,7 +19,7 @@
 
 #include "Annotation.h"
 
-#include "FileViewWidgetPrivate.h"
+#include "pdfControl/FileViewWidgetPrivate.h"
 
 #include "application.h"
 #include "MsgHeader.h"
@@ -29,7 +29,7 @@
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
 
-#include "widgets/FileViewWidget.h"
+#include "pdfControl/FileViewWidget.h"
 
 Annotation::Annotation(QObject *parent)
     : QObject(parent)

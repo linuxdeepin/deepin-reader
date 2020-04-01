@@ -30,7 +30,7 @@
 #include "MainWindow.h"
 #include <DPlatformWindowHandle>
 #include "TitleWidget.h"
-#include "app/processcontroller.h"
+#include "app/ProcessController.h"
 
 #include "business/SaveDialog.h"
 
@@ -262,6 +262,8 @@ void MainTabBar::handleTabReleased(int index)
 
 void MainTabBar::handleTabDroped(int index, Qt::DropAction da, QObject *target)
 {
+    Q_UNUSED(da)    //同程序da可以根据目标传回，跨程序全是copyAction
+
     if (nullptr != target) {//如果是本程序 同移出程序
         handleTabReleased(index);
         return;

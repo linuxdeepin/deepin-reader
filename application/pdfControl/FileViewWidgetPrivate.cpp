@@ -3,12 +3,12 @@
 #include <QDesktopServices>
 #include <QFileInfo>
 
-#include "Annotation.h"
-#include "ProxyNotifyMsg.h"
-#include "ProxyViewDisplay.h"
-#include "ProxyMouseMove.h"
-#include "ProxyData.h"
-#include "ProxyFileDataModel.h"
+#include "widgets/controller/Annotation.h"
+#include "widgets/controller/ProxyNotifyMsg.h"
+#include "widgets/controller/ProxyViewDisplay.h"
+#include "widgets/controller/ProxyMouseMove.h"
+#include "widgets/controller/ProxyData.h"
+#include "widgets/controller/ProxyFileDataModel.h"
 
 #include "menu/TextOperationMenu.h"
 #include "menu/DefaultOperationMenu.h"
@@ -18,7 +18,7 @@
 #include "widgets/FindWidget.h"
 #include "docview/docummentproxy.h"
 #include "business/AppInfo.h"
-#include "widgets/FileViewWidget.h"
+#include "FileViewWidget.h"
 #include "widgets/NoteTipWidget.h"
 
 #include "gof/bridge/IHelper.h"

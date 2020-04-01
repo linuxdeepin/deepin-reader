@@ -3,7 +3,7 @@
 #include <DLog>
 #include <DApplicationSettings>
 #include <QDesktopWidget>
-#include "app/processcontroller.h"
+#include "app/ProcessController.h"
 #include "app/json.h"
 
 DWIDGET_USE_NAMESPACE

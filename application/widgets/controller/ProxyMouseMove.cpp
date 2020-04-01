@@ -20,7 +20,7 @@
 
 #include <QDesktopServices>
 
-#include "FileViewWidgetPrivate.h"
+#include "pdfControl/FileViewWidgetPrivate.h"
 #include "ProxyData.h"
 
 #include "business/AppInfo.h"

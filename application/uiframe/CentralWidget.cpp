@@ -28,7 +28,7 @@
 
 #include "business/AppInfo.h"
 #include "utils/utils.h"
-#include "app/processcontroller.h"
+#include "app/ProcessController.h"
 #include "widgets/HomeWidget.h"
 #include "widgets/main/MainTabWidgetEx.h"
 
@@ -51,7 +51,6 @@ CentralWidget::~CentralWidget()
 
 void CentralWidget::keyPressEvent(QKeyEvent *event)
 {
-
     //  不是正常显示, 则是全屏模式或者幻灯片模式, 进行页面跳转
     QStringList pFilterList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown
                               << KeyStr::g_down << KeyStr::g_up
