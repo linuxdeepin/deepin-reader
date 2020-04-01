@@ -91,6 +91,11 @@ void DocSheet::initPDF()
     setSizes(list_src);
 
     setAcceptDrops(true);
+
+    //文档刚打开时，模拟鼠标点击文档区域事件
+    QPoint pos(sidebar->geometry().x() + 10, sidebar->geometry().y() + 10);
+    QMouseEvent event0(QEvent::MouseButtonPress, pos, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QApplication::sendEvent(sidebar, &event0);
 }
 
 void DocSheet::SlotFileOpenResult(const QString &s, const bool &res)
