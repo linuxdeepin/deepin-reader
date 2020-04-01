@@ -1,15 +1,11 @@
 #include "TitleWidget.h"
 
 #include <QHBoxLayout>
-#include <QWidgetAction>
-#include <DComboBox>
-#include <QLineEdit>
 
-#include "ScaleWidget.h"
-#include "FontMenu.h"
-#include "HandleMenu.h"
+#include "widgets/ScaleWidget.h"
+#include "widgets/FontMenu.h"
+#include "widgets/HandleMenu.h"
 #include "TitleMenu.h"
-
 #include "CentralDocPage.h"
 #include "utils/PublicFunction.h"
 

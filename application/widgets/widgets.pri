@@ -6,7 +6,10 @@ HEADERS += \
     $$PWD/AttrScrollWidget.h \
     $$PWD/FileAttrWidget.h \
     $$PWD/FindWidget.h \
-    $$PWD/SpinnerWidget.h
+    $$PWD/SpinnerWidget.h \
+    $$PWD/FontMenu.h \
+    $$PWD/HandleMenu.h \
+    $$PWD/ScaleWidget.h
 
 SOURCES += \
     $$PWD/MainOperationWidget.cpp \
@@ -15,4 +18,7 @@ SOURCES += \
     $$PWD/AttrScrollWidget.cpp \
     $$PWD/FileAttrWidget.cpp \
     $$PWD/FindWidget.cpp \
-    $$PWD/SpinnerWidget.cpp
+    $$PWD/SpinnerWidget.cpp \
+    $$PWD/FontMenu.cpp \
+    $$PWD/HandleMenu.cpp \
+    $$PWD/ScaleWidget.cpp

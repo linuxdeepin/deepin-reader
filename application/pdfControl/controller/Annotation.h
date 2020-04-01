@@ -27,7 +27,7 @@
  *          高亮和注释 业务处理
  */
 
-class FileViewWidgetPrivate;
+class SheetBrowserPDFPrivate;
 
 class Annotation : public QObject
 {
@@ -52,8 +52,8 @@ public:
     void UpdatePageIconAnnotation(const QString &);
 
 private:
-    FileViewWidgetPrivate      *fvmPrivate = nullptr;
-    friend class FileViewWidgetPrivate;
+    SheetBrowserPDFPrivate      *fvmPrivate = nullptr;
+    friend class SheetBrowserPDFPrivate;
 };
 
 #endif // ANNOTATIONHELPER_H

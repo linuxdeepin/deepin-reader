@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "DocSheet.h"
+#include "docview/commonstruct.h"
+#include "pdfControl/SheetSidebarPDF.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -24,24 +26,28 @@
 #include <QMimeData>
 
 #include "widgets/SpinnerWidget.h"
-#include "SheetSidebar.h"
-#include "pdfControl/FileViewWidget.h"
+#include "pdfControl/SheetBrowserPDF.h"
 #include "TitleWidget.h"
 #include "CentralDocPage.h"
 #include "app/ProcessController.h"
 
-DocSheet::DocSheet(DWidget *parent)
-    : DSplitter(parent)
+DocSheet::DocSheet(int type, DWidget *parent)
+    : DSplitter(parent), m_type(type)
 {
-    InitWidget();
+    if (DocType_PDF == m_type) {
+        initPDF();
+    }
 }
 
 DocSheet::~DocSheet()
 {
 }
 
-void DocSheet::InitWidget()
+void DocSheet::initPDF()
 {
+    m_pRightWidget = new QStackedWidget(this);
+    m_pSpinnerWidget = new SpinnerWidget(this);
+
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
@@ -49,20 +55,16 @@ void DocSheet::InitWidget()
         dApp->setFirstView(true);
     }
 
-    m_sideBar = new SheetSidebar(this);
-    addWidget(m_sideBar);
+    SheetBrowserPDF *browser = new SheetBrowserPDF;
+    SheetSidebarPDF *sidebar = new SheetSidebarPDF(this);
 
-    m_pFileViewWidget = new FileViewWidget;
-    connect(m_sideBar, SIGNAL(sigDeleteAnntation(const int &, const QString &)), m_pFileViewWidget, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
+    connect(sidebar, SIGNAL(sigDeleteAnntation(const int &, const QString &)), browser, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
+    connect(browser, SIGNAL(sigFileOpenResult(const QString &, const bool &)), SLOT(SlotFileOpenResult(const QString &, const bool &)));
+    connect(browser, SIGNAL(sigFindOperation(const int &)), sidebar, SLOT(SetFindOperation(const int &)));
+    connect(browser, SIGNAL(sigAnntationMsg(const int &, const QString &)), sidebar, SIGNAL(sigAnntationMsg(const int &, const QString &)));
+    connect(browser, SIGNAL(sigBookMarkMsg(const int &, const QString &)), sidebar, SIGNAL(sigBookMarkMsg(const int &, const QString &)));
+    connect(browser, SIGNAL(sigUpdateThumbnail(const int &)), sidebar, SIGNAL(sigUpdateThumbnail(const int &)));
 
-    connect(m_pFileViewWidget, SIGNAL(sigFileOpenResult(const QString &, const bool &)), SLOT(SlotFileOpenResult(const QString &, const bool &)));
-    connect(m_pFileViewWidget, SIGNAL(sigFindOperation(const int &)), SLOT(SlotFindOperation(const int &)));
-    connect(m_pFileViewWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_sideBar, SIGNAL(sigAnntationMsg(const int &, const QString &)));
-    connect(m_pFileViewWidget, SIGNAL(sigBookMarkMsg(const int &, const QString &)), m_sideBar, SIGNAL(sigBookMarkMsg(const int &, const QString &)));
-    connect(m_pFileViewWidget, SIGNAL(sigUpdateThumbnail(const int &)), m_sideBar, SIGNAL(sigUpdateThumbnail(const int &)));
-
-    m_pRightWidget = new QStackedWidget;
-    m_pSpinnerWidget = new SpinnerWidget(this);
     int tW = 36;
     int tH = 36;
     dApp->adaptScreenView(tW, tH);
@@ -70,9 +72,13 @@ void DocSheet::InitWidget()
     m_pSpinnerWidget->startSpinner();
 
     m_pRightWidget->addWidget(m_pSpinnerWidget);
-    m_pRightWidget->addWidget(m_pFileViewWidget);
+    m_pRightWidget->addWidget(browser);
 
+    addWidget(sidebar);
     addWidget(m_pRightWidget);
+
+    m_sidebar = sidebar;
+    m_browser = browser;
 
     QList<int> list_src;
     tW = LEFTNORMALWIDTH;
@@ -101,18 +107,14 @@ void DocSheet::SlotFileOpenResult(const QString &s, const bool &res)
             TitleWidget::Instance()->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
         }
 
-        m_sideBar->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
+        if (DocType_PDF == m_type)
+            static_cast<SheetSidebarPDF *>(m_sidebar)->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
 
         if (dApp) {
             dApp->setFirstView(false);
         }
     }
     emit sigOpenFileResult(s, res);
-}
-
-void DocSheet::SlotFindOperation(const int &iType)
-{
-    m_sideBar->SetFindOperation(iType);
 }
 
 void DocSheet::SlotNotifyMsg(const int &msgType, const QString &msgContent)
@@ -134,9 +136,13 @@ void DocSheet::SlotNotifyMsg(const int &msgType, const QString &msgContent)
 
                 QString sContent = obj.value("content").toString();
 
-                int nRes = m_sideBar->dealWithData(msgType, sContent);
+                int nRes = MSG_NO_OK;
+
+                if (DocType_PDF == m_type)
+                    nRes = static_cast<SheetSidebarPDF *>(m_sidebar)->dealWithData(msgType, sContent);
+
                 if (nRes != MSG_OK) {
-                    nRes = m_pFileViewWidget->dealWithData(msgType, sContent);
+                    nRes = static_cast<SheetBrowserPDF *>(m_browser)->dealWithData(msgType, sContent);
                     if (nRes == MSG_OK)
                         return;
                 }
@@ -147,56 +153,56 @@ void DocSheet::SlotNotifyMsg(const int &msgType, const QString &msgContent)
 
 QString DocSheet::qGetPath()
 {
-    return m_pFileViewWidget->getFilePath();
+    return static_cast<SheetBrowserPDF *>(m_browser)->getFilePath();
 }
 
 void DocSheet::qSetPath(const QString &strPath)
 {
-    m_pFileViewWidget->OpenFilePath(strPath);  //  proxy 打开文件
+    static_cast<SheetBrowserPDF *>(m_browser)->OpenFilePath(strPath);  //  proxy 打开文件
 }
 
 void DocSheet::qSetFileChange(const int &nState)
 {
     bool bchange = nState == 1 ? true : false;
-    if (nullptr != m_pFileViewWidget)
-        m_pFileViewWidget->setFileChange(bchange);
+    if (nullptr != static_cast<SheetBrowserPDF *>(m_browser))
+        static_cast<SheetBrowserPDF *>(m_browser)->setFileChange(bchange);
 }
 
 int DocSheet::qGetFileChange()
 {
     int istatus = -1;
-    if (nullptr != m_pFileViewWidget)
-        istatus = m_pFileViewWidget->getFileChange() ? 1 : 0;
+    if (nullptr != static_cast<SheetBrowserPDF *>(m_browser))
+        istatus = static_cast<SheetBrowserPDF *>(m_browser)->getFileChange() ? 1 : 0;
     return  istatus;
 }
 
 void DocSheet::saveData()
 {
-    m_pFileViewWidget->saveData();
+    static_cast<SheetBrowserPDF *>(m_browser)->saveData();
 }
 
 FileDataModel DocSheet::qGetFileData()
 {
-    return m_pFileViewWidget->qGetFileData();
+    return static_cast<SheetBrowserPDF *>(m_browser)->qGetFileData();
 }
 
 DocummentProxy *DocSheet::getDocProxy()
 {
-    return m_pFileViewWidget->GetDocProxy();
+    return static_cast<SheetBrowserPDF *>(m_browser)->GetDocProxy();
 }
 
 void DocSheet::OnOpenSliderShow()
 {
-    m_bOldState = m_sideBar->isVisible();
-    m_sideBar->setVisible(false);
+    m_bOldState = static_cast<SheetSidebarPDF *>(m_sidebar)->isVisible();
+    static_cast<SheetSidebarPDF *>(m_sidebar)->setVisible(false);
 }
 
 void DocSheet::OnExitSliderShow()
 {
-    m_sideBar->setVisible(m_bOldState);
+    static_cast<SheetSidebarPDF *>(m_sidebar)->setVisible(m_bOldState);
 }
 
 void DocSheet::ShowFindWidget()
 {
-    m_pFileViewWidget->ShowFindWidget();
+    static_cast<SheetBrowserPDF *>(m_browser)->ShowFindWidget();
 }

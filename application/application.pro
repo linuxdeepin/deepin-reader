@@ -32,15 +32,11 @@ SOURCES += \
     MainWindow.cpp \
     uiframe/TitleMenu.cpp \
     uiframe/TitleWidget.cpp \
-    uiframe/ScaleWidget.cpp \
-    uiframe/HandleMenu.cpp \
-    uiframe/FontMenu.cpp \
     uiframe/Central.cpp \
     uiframe/CentralNavPage.cpp \
     uiframe/CentralDocPage.cpp \
     uiframe/DocTabBar.cpp \
-    uiframe/DocSheet.cpp \
-    uiframe/SheetSidebar.cpp
+    uiframe/DocSheet.cpp
 
 RESOURCES +=         \
     icons.qrc
@@ -50,15 +46,11 @@ HEADERS +=\
     MainWindow.h \
     uiframe/TitleWidget.h \
     uiframe/TitleMenu.h \
-    uiframe/ScaleWidget.h \
-    uiframe/HandleMenu.h \
-    uiframe/FontMenu.h \
     uiframe/Central.h \
     uiframe/CentralNavPage.h \
     uiframe/CentralDocPage.h \
     uiframe/DocTabBar.h \
-    uiframe/DocSheet.h \
-    uiframe/SheetSidebar.h
+    uiframe/DocSheet.h
 #    stable.h
 
 TRANSLATIONS += \

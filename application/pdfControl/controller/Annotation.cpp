@@ -19,7 +19,7 @@
 
 #include "Annotation.h"
 
-#include "pdfControl/FileViewWidgetPrivate.h"
+#include "pdfControl/SheetBrowserPDFPrivate.h"
 
 #include "application.h"
 #include "MsgHeader.h"
@@ -29,12 +29,12 @@
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
 
-#include "pdfControl/FileViewWidget.h"
+#include "pdfControl/SheetBrowserPDF.h"
 
 Annotation::Annotation(QObject *parent)
     : QObject(parent)
 {
-    fvmPrivate = qobject_cast<FileViewWidgetPrivate *>(parent);
+    fvmPrivate = qobject_cast<SheetBrowserPDFPrivate *>(parent);
 }
 
 void Annotation::dealWithDataMsg(const int &msgType, const QString &msgContent)

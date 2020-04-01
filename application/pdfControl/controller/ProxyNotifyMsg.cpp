@@ -18,9 +18,9 @@
  */
 #include "ProxyNotifyMsg.h"
 
-#include "pdfControl/FileViewWidgetPrivate.h"
+#include "pdfControl/SheetBrowserPDFPrivate.h"
 
-#include "pdfControl/FileViewWidget.h"
+#include "pdfControl/SheetBrowserPDF.h"
 #include <QJsonObject>
 #include <QJsonDocument>
 
@@ -34,7 +34,7 @@ using namespace DR_SPACE;
 
 ProxyNotifyMsg::ProxyNotifyMsg(QObject *parent) : QObject(parent)
 {
-    _fvwParent = qobject_cast<FileViewWidgetPrivate *>(parent);
+    _fvwParent = qobject_cast<SheetBrowserPDFPrivate *>(parent);
 }
 
 //  文档书签状态改变

@@ -26,7 +26,7 @@
  *  @brief  文档 缩放\单双页\旋转  操作
  */
 
-class FileViewWidgetPrivate;
+class SheetBrowserPDFPrivate;
 
 class ProxyViewDisplay : public QObject
 {
@@ -55,8 +55,8 @@ private:
     void notifyMsg(const int &msgType, const QString &msgContent);
 
 private:
-    FileViewWidgetPrivate      *fvmPrivate = nullptr;
-    friend class FileViewWidgetPrivate;
+    SheetBrowserPDFPrivate      *fvmPrivate = nullptr;
+    friend class SheetBrowserPDFPrivate;
 
     int                 m_nAdapteState = NO_ADAPTE_State;       //  当前自适应状态
 

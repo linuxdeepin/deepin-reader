@@ -20,7 +20,7 @@
 
 #include <QDesktopServices>
 
-#include "pdfControl/FileViewWidgetPrivate.h"
+#include "pdfControl/SheetBrowserPDFPrivate.h"
 #include "ProxyData.h"
 
 #include "business/AppInfo.h"
@@ -31,7 +31,7 @@
 
 ProxyMouseMove::ProxyMouseMove(QObject *parent) : QObject(parent)
 {
-    _fvwParent = qobject_cast<FileViewWidgetPrivate *>(parent);
+    _fvwParent = qobject_cast<SheetBrowserPDFPrivate *>(parent);
 }
 
 void ProxyMouseMove::mouseMoveEvent(QMouseEvent *event)

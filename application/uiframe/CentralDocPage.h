@@ -137,7 +137,6 @@ private:
 
 private:
     QList<int>          m_pMsgList;
-
     QString             m_strSliderPath = "";
     QString             m_strMagniferPath = "";
     int                 m_nCurrentState = Default_State;

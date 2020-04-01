@@ -1,4 +1,4 @@
-#include "SheetSidebar.h"
+#include "SheetSidebarPDF.h"
 
 #include <DStackedWidget>
 #include <QButtonGroup>
@@ -11,7 +11,7 @@
 
 #include "CentralDocPage.h"
 
-SheetSidebar::SheetSidebar(DWidget *parent)
+SheetSidebarPDF::SheetSidebarPDF(DWidget *parent)
     : CustomWidget(LEFT_SLIDERBAR_WIDGET, parent)
 {
     int tW = LEFTMINWIDTH;
@@ -34,12 +34,12 @@ SheetSidebar::SheetSidebar(DWidget *parent)
     dApp->m_pModelService->addObserver(this);
 }
 
-SheetSidebar::~SheetSidebar()
+SheetSidebarPDF::~SheetSidebarPDF()
 {
     dApp->m_pModelService->removeObserver(this);
 }
 
-void SheetSidebar::SlotOpenFileOk(const QString &sPath)
+void SheetSidebarPDF::SlotOpenFileOk(const QString &sPath)
 {
     m_strBindPath = sPath;
 
@@ -49,17 +49,17 @@ void SheetSidebar::SlotOpenFileOk(const QString &sPath)
     onSetWidgetVisible(showLeft);
 }
 
-void SheetSidebar::onSetWidgetVisible(const int &nVis)
+void SheetSidebarPDF::onSetWidgetVisible(const int &nVis)
 {
     this->setVisible(nVis);
 }
 
-void SheetSidebar::slotUpdateTheme()
+void SheetSidebarPDF::slotUpdateTheme()
 {
     updateWidgetTheme();
 }
 
-void SheetSidebar::initWidget()
+void SheetSidebarPDF::initWidget()
 {
     auto pVBoxLayout = new QVBoxLayout;
     pVBoxLayout->setContentsMargins(0, 0, 0, 0);
@@ -81,7 +81,7 @@ void SheetSidebar::initWidget()
     connect(this, SIGNAL(sigAdaptWindowSize(const double &)), m_pStackedWidget, SLOT(slotAdaptWindowSize(const double &)));
 }
 
-void SheetSidebar::resizeEvent(QResizeEvent *event)
+void SheetSidebarPDF::resizeEvent(QResizeEvent *event)
 {
     if (dApp->firstView()) {
         return;
@@ -92,13 +92,13 @@ void SheetSidebar::resizeEvent(QResizeEvent *event)
     int width = this->width();
     double scale = static_cast<double>(width) / static_cast<double>(LEFTMINWIDTH);
 
-//    qInfo() << "   SheetSidebar::resizeEvent  " << "    widget width:" << width << "     scale:" << scale;
+//    qInfo() << "   SheetSidebarPDF::resizeEvent  " << "    widget width:" << width << "     scale:" << scale;
     dApp->setScale(scale);
 
     emit sigAdaptWindowSize(scale);
 }
 
-int SheetSidebar::dealWithData(const int &msgType, const QString &msgContent)
+int SheetSidebarPDF::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
         slotUpdateTheme();
@@ -126,7 +126,7 @@ int SheetSidebar::dealWithData(const int &msgType, const QString &msgContent)
     return nRes;
 }
 
-void SheetSidebar::SetFindOperation(const int &iType)
+void SheetSidebarPDF::SetFindOperation(const int &iType)
 {
     m_pMainOperationWidget->SetFindOperation(iType);
     m_pStackedWidget->SetFindOperation(iType);

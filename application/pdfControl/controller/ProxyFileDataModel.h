@@ -23,7 +23,7 @@
 
 #include "FileDataModel.h"
 
-class FileViewWidgetPrivate;
+class SheetBrowserPDFPrivate;
 
 class ProxyFileDataModel : public QObject
 {
@@ -47,8 +47,8 @@ private:
 
 private:
     FileDataModel           m_pFileDataModel;        //  已打开的文档列表
-    FileViewWidgetPrivate   *_fvwParent = nullptr;
-    friend class FileViewWidgetPrivate;
+    SheetBrowserPDFPrivate   *_fvwParent = nullptr;
+    friend class SheetBrowserPDFPrivate;
 };
 
 #endif // PROXYFILEDATAMODEL_H

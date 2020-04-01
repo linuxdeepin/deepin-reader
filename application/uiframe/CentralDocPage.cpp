@@ -74,12 +74,11 @@ void CentralDocPage::OpenCurFileFolder()
 
 QStringList CentralDocPage::GetAllPath()
 {
-
     QStringList pathList;
 
-    auto splitterList = findChildren<DocSheet *>();
-    foreach (auto s, splitterList) {
-        QString sSplitterPath = s->qGetPath();
+    auto sheets = findChildren<DocSheet *>();
+    foreach (auto sheet, sheets) {
+        QString sSplitterPath = sheet->qGetPath();
         if (sSplitterPath != "") {
             pathList.append(sSplitterPath);
         }
@@ -562,7 +561,7 @@ void CentralDocPage::SlotSetCurrentIndexFile(const QString &sPath)
 void CentralDocPage::SlotAddTab(const QString &sPath)
 {
     if (m_pStackedLayout) {
-        DocSheet *splitter = new DocSheet(this);
+        DocSheet *splitter = new DocSheet(DocType_PDF, this);
         connect(this, SIGNAL(sigDealNotifyMsg(const int &, const QString &)), splitter, SLOT(SlotNotifyMsg(const int &, const QString &)));
         connect(splitter, SIGNAL(sigOpenFileResult(const QString &, const bool &)), SLOT(SlotOpenFileResult(const QString &, const bool &)));
         splitter->qSetPath(sPath);
@@ -643,7 +642,6 @@ void CentralDocPage::SlotOpenFileResult(const QString &sPath, const bool &res)
 
 void CentralDocPage::setCurrentState(const int &nCurrentState)
 {
-
     m_nCurrentState = nCurrentState;
 }
 
@@ -668,7 +666,6 @@ void CentralDocPage::setCurrentTabByFilePath(const QString &filePath)
 
 int CentralDocPage::getCurrentState()
 {
-
     return m_nCurrentState;
 }
 
@@ -691,8 +688,6 @@ void CentralDocPage::ShowFindWidget()
 //  开启 幻灯片
 void CentralDocPage::OnOpenSliderShow()
 {
-
-
     int nState = getCurrentState();
     if (nState != SLIDER_SHOW) {
         setCurrentState(SLIDER_SHOW);

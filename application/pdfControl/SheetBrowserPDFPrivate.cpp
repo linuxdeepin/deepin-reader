@@ -1,4 +1,4 @@
-#include "FileViewWidgetPrivate.h"
+#include "SheetBrowserPDFPrivate.h"
 
 #include <QDesktopServices>
 #include <QFileInfo>
@@ -12,20 +12,19 @@
 
 #include "menu/TextOperationMenu.h"
 #include "menu/DefaultOperationMenu.h"
-#include "TitleMenu.h"
 
 #include "business/FileFormatHelper.h"
 #include "widgets/FindWidget.h"
 #include "docview/docummentproxy.h"
 #include "business/AppInfo.h"
-#include "FileViewWidget.h"
+#include "SheetBrowserPDF.h"
 #include "widgets/NoteTipWidget.h"
 
 #include "gof/bridge/IHelper.h"
 #include "pdfControl/note/NoteViewWidget.h"
 #include "CentralDocPage.h"
 
-FileViewWidgetPrivate::FileViewWidgetPrivate(FileViewWidget *parent)
+SheetBrowserPDFPrivate::SheetBrowserPDFPrivate(SheetBrowserPDF *parent)
     : q_ptr(parent)
 {
     m_pProxyData = new ProxyData(this);
@@ -43,21 +42,21 @@ FileViewWidgetPrivate::FileViewWidgetPrivate(FileViewWidget *parent)
     m_pProxyFileDataModel = new ProxyFileDataModel(this);
 }
 
-FileViewWidgetPrivate::~FileViewWidgetPrivate()
+SheetBrowserPDFPrivate::~SheetBrowserPDFPrivate()
 {
     if (m_pProxy) {
         m_pProxy->closeFile();
     }
 }
 
-void FileViewWidgetPrivate::hidetipwidget()
+void SheetBrowserPDFPrivate::hidetipwidget()
 {
     if (nullptr != m_pTipWidget && m_pTipWidget->isVisible()) {
         m_pTipWidget->hide();
     }
 }
 
-void FileViewWidgetPrivate::slotDealWithMenu(const int &msgType, const QString &msgContent)
+void SheetBrowserPDFPrivate::slotDealWithMenu(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_NOTE_REMOVE_HIGHLIGHT || msgType == MSG_NOTE_UPDATE_HIGHLIGHT_COLOR ||
             msgType == MSG_NOTE_ADD_HIGHLIGHT_COLOR) {                 //  移除高亮注释 的高亮
@@ -73,7 +72,7 @@ void FileViewWidgetPrivate::slotDealWithMenu(const int &msgType, const QString &
     }
 }
 
-void FileViewWidgetPrivate::SlotNoteViewMsg(const int &msgType, const QString &msgContent)
+void SheetBrowserPDFPrivate::SlotNoteViewMsg(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_NOTE_ADD_CONTENT) {                      //  新增高亮注释
         AddHighLightAnnotation(msgContent);
@@ -84,29 +83,29 @@ void FileViewWidgetPrivate::SlotNoteViewMsg(const int &msgType, const QString &m
 }
 
 //  按 delete 键 删除
-void FileViewWidgetPrivate::SlotDeleteAnntation(const int &msgType, const QString &msgContent)
+void SheetBrowserPDFPrivate::SlotDeleteAnntation(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_NOTE_DELETE_CONTENT || msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {
         m_pAnnotation->dealWithDataMsg(msgType, msgContent);
     }
 }
 
-void FileViewWidgetPrivate::mouseMoveEvent(QMouseEvent *event)
+void SheetBrowserPDFPrivate::mouseMoveEvent(QMouseEvent *event)
 {
     m_pProxyMouseMove->mouseMoveEvent(event);
 }
 
-void FileViewWidgetPrivate::mousePressEvent(QMouseEvent *event)
+void SheetBrowserPDFPrivate::mousePressEvent(QMouseEvent *event)
 {
     m_pProxyMouseMove->mousePressEvent(event);
 }
 
-void FileViewWidgetPrivate::mouseReleaseEvent(QMouseEvent *event)
+void SheetBrowserPDFPrivate::mouseReleaseEvent(QMouseEvent *event)
 {
     m_pProxyMouseMove->mouseReleaseEvent(event);
 }
 
-void FileViewWidgetPrivate::AddHighLightAnnotation(const QString &msgContent)
+void SheetBrowserPDFPrivate::AddHighLightAnnotation(const QString &msgContent)
 {
     QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (contentList.size() == 2) {
@@ -130,7 +129,7 @@ void FileViewWidgetPrivate::AddHighLightAnnotation(const QString &msgContent)
     }
 }
 
-void FileViewWidgetPrivate::OnShortCutKey(const QString &sKey)
+void SheetBrowserPDFPrivate::OnShortCutKey(const QString &sKey)
 {
     //  处于幻灯片模式下
     int nState = CentralDocPage::Instance()->getCurrentState();
@@ -155,7 +154,7 @@ void FileViewWidgetPrivate::OnShortCutKey(const QString &sKey)
 }
 
 //  添加高亮颜色  快捷键
-void FileViewWidgetPrivate::DocFile_ctrl_l()
+void SheetBrowserPDFPrivate::DocFile_ctrl_l()
 {
     int nSx = m_pProxyData->getStartPoint().x();
     int nSy = m_pProxyData->getStartPoint().y();
@@ -185,7 +184,7 @@ void FileViewWidgetPrivate::DocFile_ctrl_l()
     }
 }
 
-void FileViewWidgetPrivate::DocFile_ctrl_i()
+void SheetBrowserPDFPrivate::DocFile_ctrl_i()
 {
     if (m_pProxy) {
         QString selectText;
@@ -214,7 +213,7 @@ void FileViewWidgetPrivate::DocFile_ctrl_i()
     }
 }
 
-void FileViewWidgetPrivate::DocFile_ctrl_c()
+void SheetBrowserPDFPrivate::DocFile_ctrl_c()
 {
     if (m_pProxy) {
         QString sSelectText = "";
@@ -224,7 +223,7 @@ void FileViewWidgetPrivate::DocFile_ctrl_c()
     }
 }
 
-int FileViewWidgetPrivate::qDealWithShortKey(const QString &sKey)
+int SheetBrowserPDFPrivate::qDealWithShortKey(const QString &sKey)
 {
     QList<QString> KeyMsgList = {KeyStr::g_ctrl_l, KeyStr::g_ctrl_i, KeyStr::g_ctrl_c};
 
@@ -236,7 +235,7 @@ int FileViewWidgetPrivate::qDealWithShortKey(const QString &sKey)
 }
 
 //  消息 数据 处理
-int FileViewWidgetPrivate::dealWithData(const int &msgType, const QString &msgContent)
+int SheetBrowserPDFPrivate::dealWithData(const int &msgType, const QString &msgContent)
 {
     QList<int> msgList = { MSG_HANDLESHAPE,
                            MSG_VIEWCHANGE_DOUBLE_SHOW, MSG_VIEWCHANGE_ROTATE, MSG_FILE_SCALE, MSG_VIEWCHANGE_FIT,
@@ -244,7 +243,7 @@ int FileViewWidgetPrivate::dealWithData(const int &msgType, const QString &msgCo
                            MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, MSG_NOTE_PAGE_SHOW_NOTEWIDGET
                          };
 
-    Q_Q(FileViewWidget);
+    Q_Q(SheetBrowserPDF);
 
     if (q->m_pFindWidget) {
         int nRes = q->m_pFindWidget->dealWithData(msgType, msgContent);
@@ -280,7 +279,7 @@ int FileViewWidgetPrivate::dealWithData(const int &msgType, const QString &msgCo
 }
 
 //  手势控制
-void FileViewWidgetPrivate::onSetHandShape(const QString &data)
+void SheetBrowserPDFPrivate::onSetHandShape(const QString &data)
 {
     if (!m_pProxy)
         return;
@@ -296,9 +295,9 @@ void FileViewWidgetPrivate::onSetHandShape(const QString &data)
     CentralDocPage::Instance()->setCurrentState(nRes);
 }
 
-void FileViewWidgetPrivate::showNoteViewWidget(const QString &sPage, const QString &t_strUUid, const QString &sText, const int &nType)
+void SheetBrowserPDFPrivate::showNoteViewWidget(const QString &sPage, const QString &t_strUUid, const QString &sText, const int &nType)
 {
-    Q_Q(FileViewWidget);
+    Q_Q(SheetBrowserPDF);
 
     if (m_pNoteViewWidget == nullptr) {
         m_pNoteViewWidget = new NoteViewWidget(q);
@@ -316,9 +315,9 @@ void FileViewWidgetPrivate::showNoteViewWidget(const QString &sPage, const QStri
     m_pNoteViewWidget->showWidget(point);
 }
 
-void FileViewWidgetPrivate::__SetCursor(const QCursor &cs)
+void SheetBrowserPDFPrivate::__SetCursor(const QCursor &cs)
 {
-    Q_Q(FileViewWidget);
+    Q_Q(SheetBrowserPDF);
     const QCursor ss = q->cursor();    //  当前鼠标状态
     if (ss != cs) {
         q->setCursor(cs);
@@ -326,7 +325,7 @@ void FileViewWidgetPrivate::__SetCursor(const QCursor &cs)
 }
 
 
-void FileViewWidgetPrivate::FindOperation(const int &iType, const QString &strFind)
+void SheetBrowserPDFPrivate::FindOperation(const int &iType, const QString &strFind)
 {
     if (iType == E_FIND_CONTENT || iType == E_FIND_EXIT) {
         notifyMsg(iType, m_pProxyData->getPath());
@@ -345,9 +344,9 @@ void FileViewWidgetPrivate::FindOperation(const int &iType, const QString &strFi
     }
 }
 
-void FileViewWidgetPrivate::handleResize(const QSize &size)
+void SheetBrowserPDFPrivate::handleResize(const QSize &size)
 {
-    Q_Q(FileViewWidget);
+    Q_Q(SheetBrowserPDF);
 
     if (!m_pProxyData->IsFirstShow() && m_pProxyData->getIsFileOpenOk()) {
 
@@ -362,13 +361,13 @@ void FileViewWidgetPrivate::handleResize(const QSize &size)
     }
 }
 
-void FileViewWidgetPrivate::resizeEvent(QResizeEvent *event)
+void SheetBrowserPDFPrivate::resizeEvent(QResizeEvent *event)
 {
     QSize size = event->size();
     handleResize(size);
 }
 
-void FileViewWidgetPrivate::wheelEvent(QWheelEvent *event)
+void SheetBrowserPDFPrivate::wheelEvent(QWheelEvent *event)
 {
     if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
         QJsonObject obj;
@@ -384,7 +383,7 @@ void FileViewWidgetPrivate::wheelEvent(QWheelEvent *event)
     }
 }
 
-void FileViewWidgetPrivate::onOpenNoteWidget(const QString &msgContent)
+void SheetBrowserPDFPrivate::onOpenNoteWidget(const QString &msgContent)
 {
     QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (sList.size() == 3) {
@@ -395,7 +394,7 @@ void FileViewWidgetPrivate::onOpenNoteWidget(const QString &msgContent)
 }
 
 //  显示 当前 注释
-void FileViewWidgetPrivate::onShowNoteWidget(const QString &contant)
+void SheetBrowserPDFPrivate::onShowNoteWidget(const QString &contant)
 {
     QStringList t_strList = contant.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (t_strList.count() == 2) {
@@ -410,7 +409,7 @@ void FileViewWidgetPrivate::onShowNoteWidget(const QString &contant)
     }
 }
 
-void FileViewWidgetPrivate::__ShowPageNoteWidget(const QString &msgContent)
+void SheetBrowserPDFPrivate::__ShowPageNoteWidget(const QString &msgContent)
 {
     QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (sList.size() == 4) {
@@ -427,9 +426,9 @@ void FileViewWidgetPrivate::__ShowPageNoteWidget(const QString &msgContent)
     }
 }
 
-void FileViewWidgetPrivate::__ShowNoteTipWidget(const QString &sText)
+void SheetBrowserPDFPrivate::__ShowNoteTipWidget(const QString &sText)
 {
-    Q_Q(FileViewWidget);
+    Q_Q(SheetBrowserPDF);
     if (m_pTipWidget == nullptr) {
         m_pTipWidget = new NoteTipWidget(q);
     }
@@ -440,16 +439,16 @@ void FileViewWidgetPrivate::__ShowNoteTipWidget(const QString &sText)
 }
 
 
-void FileViewWidgetPrivate::__CloseFileNoteWidget()
+void SheetBrowserPDFPrivate::__CloseFileNoteWidget()
 {
     if (m_pTipWidget && m_pTipWidget->isVisible()) {
         m_pTipWidget->close();
     }
 }
 
-void FileViewWidgetPrivate::slotCustomContextMenuRequested(const QPoint &point)
+void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
 {
-    Q_Q(FileViewWidget);
+    Q_Q(SheetBrowserPDF);
     //  处于幻灯片模式下
     int nState = CentralDocPage::Instance()->getCurrentState();
     if (nState == SLIDER_SHOW)
@@ -546,9 +545,9 @@ void FileViewWidgetPrivate::slotCustomContextMenuRequested(const QPoint &point)
     }
 }
 
-void FileViewWidgetPrivate::SlotDocFileOpenResult(bool openresult)
+void SheetBrowserPDFPrivate::SlotDocFileOpenResult(bool openresult)
 {
-    Q_Q(FileViewWidget);
+    Q_Q(SheetBrowserPDF);
     //  通知 其他窗口， 打开文件成功了！！！
     if (openresult) {
 
@@ -563,9 +562,9 @@ void FileViewWidgetPrivate::SlotDocFileOpenResult(bool openresult)
     emit q->sigFileOpenResult(m_pProxyData->getPath(), openresult);
 }
 
-void FileViewWidgetPrivate::OpenFilePath(const QString &sPath)
+void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
 {
-    Q_Q(FileViewWidget);
+    Q_Q(SheetBrowserPDF);
     //  实际文档类  唯一实例化设置 父窗口
     m_pProxy = new DocummentProxy(q);
     if (m_pProxy) {
@@ -610,13 +609,13 @@ void FileViewWidgetPrivate::OpenFilePath(const QString &sPath)
     }
 }
 
-void FileViewWidgetPrivate::notifyMsg(const int &msgType, const QString &msgContent)
+void SheetBrowserPDFPrivate::notifyMsg(const int &msgType, const QString &msgContent)
 {
-    Q_Q(FileViewWidget);
+    Q_Q(SheetBrowserPDF);
     q->notifyMsg(msgType, msgContent);
 }
 
-void FileViewWidgetPrivate::onBookMarkState(const int &msgType, const QString &msgContent)
+void SheetBrowserPDFPrivate::onBookMarkState(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_ADD_BOOKMARK) {
         m_pProxy->setBookMarkState(msgContent.toInt(), true);
@@ -624,6 +623,6 @@ void FileViewWidgetPrivate::onBookMarkState(const int &msgType, const QString &m
         m_pProxy->setBookMarkState(msgContent.toInt(), false);
     }
 
-    Q_Q(FileViewWidget);
+    Q_Q(SheetBrowserPDF);
     emit q->sigBookMarkMsg(msgType, msgContent);
 }

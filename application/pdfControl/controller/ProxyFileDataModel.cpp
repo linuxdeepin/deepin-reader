@@ -19,13 +19,13 @@
 #include "ProxyFileDataModel.h"
 
 #include "application.h"
-#include "pdfControl/FileViewWidgetPrivate.h"
+#include "pdfControl/SheetBrowserPDFPrivate.h"
 #include "MsgHeader.h"
 #include "ProxyData.h"
 
 ProxyFileDataModel::ProxyFileDataModel(QObject *parent) : QObject(parent)
 {
-    _fvwParent = qobject_cast<FileViewWidgetPrivate *>(parent);
+    _fvwParent = qobject_cast<SheetBrowserPDFPrivate *>(parent);
 }
 
 

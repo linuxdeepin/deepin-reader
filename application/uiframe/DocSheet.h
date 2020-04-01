@@ -1,21 +1,3 @@
-/*
- * Copyright (C) 2019 ~ 2020 UOS Technology Co., Ltd.
- *
- * Author:     wangzhxiaun
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 #ifndef MAINSPLITTER_H
 #define MAINSPLITTER_H
 
@@ -25,17 +7,17 @@
 DWIDGET_USE_NAMESPACE
 
 class SpinnerWidget;
-class FileViewWidget;
+class SheetBrowserPDF;
 class SheetSidebar;
 class DocummentProxy;
-
+class SheetBrowserArea;
 class DocSheet : public DSplitter
 {
     Q_OBJECT
     Q_DISABLE_COPY(DocSheet)
 
 public:
-    explicit DocSheet(DWidget *parent = nullptr);
+    explicit DocSheet(int type, DWidget *parent = nullptr);
     ~DocSheet() override;
 
 signals:
@@ -58,18 +40,19 @@ public:
     void ShowFindWidget();
 
 private:
-    void InitWidget();
+    void initPDF();
 
 private slots:
     void SlotFileOpenResult(const QString &, const bool &);
-    void SlotFindOperation(const int &);
     void SlotNotifyMsg(const int &, const QString &);
 
 private:
-    SheetSidebar        *m_sideBar = nullptr;
+    int   m_type;
+    void *m_sidebar = nullptr;
+    void *m_browser = nullptr;
+
     QStackedWidget      *m_pRightWidget = nullptr;
     SpinnerWidget       *m_pSpinnerWidget = nullptr;
-    FileViewWidget      *m_pFileViewWidget = nullptr;
     bool                m_bOldState = false;
 };
 

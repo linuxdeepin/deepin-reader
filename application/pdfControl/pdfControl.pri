@@ -21,14 +21,15 @@ HEADERS += \
     $$PWD/menu/DefaultOperationMenu.h \
     $$PWD/menu/NoteMenu.h \
     $$PWD/menu/TextOperationMenu.h \
-    $$PWD/FileViewWidgetPrivate.h \
-    $$PWD/FileViewWidget.h \
     $$PWD/controller/Annotation.h \
     $$PWD/controller/ProxyData.h \
     $$PWD/controller/ProxyFileDataModel.h \
     $$PWD/controller/ProxyMouseMove.h \
     $$PWD/controller/ProxyNotifyMsg.h \
-    $$PWD/controller/ProxyViewDisplay.h
+    $$PWD/controller/ProxyViewDisplay.h \
+    $$PWD/SheetSidebarPDF.h \
+    $$PWD/SheetBrowserPDF.h \
+    $$PWD/SheetBrowserPDFPrivate.h
 
 SOURCES += \
     $$PWD/CustomListWidget.cpp \
@@ -53,11 +54,12 @@ SOURCES += \
     $$PWD/menu/DefaultOperationMenu.cpp \
     $$PWD/menu/NoteMenu.cpp \
     $$PWD/menu/TextOperationMenu.cpp \
-    $$PWD/FileViewWidgetPrivate.cpp \
-    $$PWD/FileViewWidget.cpp \
     $$PWD/controller/Annotation.cpp \
     $$PWD/controller/ProxyData.cpp \
     $$PWD/controller/ProxyFileDataModel.cpp \
     $$PWD/controller/ProxyMouseMove.cpp \
     $$PWD/controller/ProxyNotifyMsg.cpp \
-    $$PWD/controller/ProxyViewDisplay.cpp
+    $$PWD/controller/ProxyViewDisplay.cpp \
+    $$PWD/SheetSidebarPDF.cpp \
+    $$PWD/SheetBrowserPDF.cpp \
+    $$PWD/SheetBrowserPDFPrivate.cpp

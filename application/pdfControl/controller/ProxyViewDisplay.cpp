@@ -21,7 +21,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-#include "pdfControl/FileViewWidgetPrivate.h"
+#include "pdfControl/SheetBrowserPDFPrivate.h"
 
 #include "application.h"
 #include "ModuleHeader.h"
@@ -33,7 +33,7 @@ using namespace DR_SPACE;
 
 ProxyViewDisplay::ProxyViewDisplay(QObject *parent) : QObject(parent)
 {
-    fvmPrivate = qobject_cast<FileViewWidgetPrivate *>(parent);
+    fvmPrivate = qobject_cast<SheetBrowserPDFPrivate *>(parent);
 }
 
 void ProxyViewDisplay::OnSetViewHit(const QString &msgContent)

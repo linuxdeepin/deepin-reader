@@ -24,18 +24,18 @@
 class DocummentProxy;
 class FindWidget;
 /**
- * @brief The FileViewWidget class
+ * @brief The SheetBrowserPDF class
  * @brief   文档显示区域
  */
-class FileViewWidgetPrivate;
-class FileViewWidget : public CustomWidget
+class SheetBrowserPDFPrivate;
+class SheetBrowserPDF : public CustomWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(FileViewWidget)
+    Q_DISABLE_COPY(SheetBrowserPDF)
 
 public:
-    explicit FileViewWidget(DWidget *parent = nullptr);
-    ~FileViewWidget() override;
+    explicit SheetBrowserPDF(DWidget *parent = nullptr);
+    ~SheetBrowserPDF() override;
 
 signals:
     void sigFileOpenResult(const QString &, const bool &);
@@ -85,8 +85,8 @@ private:
     FindWidget              *m_pFindWidget = nullptr;
 
 private:
-    FileViewWidgetPrivate *const d_ptr = nullptr;
-    Q_DECLARE_PRIVATE(FileViewWidget)
+    SheetBrowserPDFPrivate *const d_ptr = nullptr;
+    Q_DECLARE_PRIVATE(SheetBrowserPDF)
 };
 
 

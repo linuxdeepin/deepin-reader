@@ -25,7 +25,7 @@
 
 #include "docview/pagebase.h"
 
-class FileViewWidgetPrivate;
+class SheetBrowserPDFPrivate;
 
 class ProxyMouseMove : public QObject
 {
@@ -57,12 +57,12 @@ private:
     void notifyMsg(const int &, const QString &);
 
 private:
-    FileViewWidgetPrivate   *_fvwParent = nullptr;
+    SheetBrowserPDFPrivate   *_fvwParent = nullptr;
 
     bool            m_bSelectOrMove = false;
     QPoint          m_pMoveStartPoint;
 
-    friend class FileViewWidgetPrivate;
+    friend class SheetBrowserPDFPrivate;
 };
 
 #endif // PROXYMOUSEMOVE_H

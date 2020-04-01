@@ -13,14 +13,14 @@
 class MainOperationWidget;
 class DataStackedWidget;
 
-class SheetSidebar : public CustomWidget
+class SheetSidebarPDF : public CustomWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(SheetSidebar)
+    Q_DISABLE_COPY(SheetSidebarPDF)
 
 public:
-    explicit SheetSidebar(DWidget *parent = nullptr);
-    ~SheetSidebar() override;
+    explicit SheetSidebarPDF(DWidget *parent = nullptr);
+    ~SheetSidebarPDF() override;
 
 signals:
     void sigAnntationMsg(const int &, const QString &);
@@ -32,6 +32,8 @@ signals:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
+
+public slots:
     void SetFindOperation(const int &);
 
     // CustomWidget interface

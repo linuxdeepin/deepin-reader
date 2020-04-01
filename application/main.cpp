@@ -5,37 +5,9 @@
 #include <QDesktopWidget>
 #include "app/ProcessController.h"
 #include "app/json.h"
+#include "app/FileController.h"
 
 DWIDGET_USE_NAMESPACE
-
-QUrl UrlInfo(QString path)
-{
-    QUrl url;
-    // Just check if the path is an existing file.
-    if (QFile::exists(path)) {
-        url = QUrl::fromLocalFile(QDir::current().absoluteFilePath(path));
-        return url;
-    }
-
-    const auto match = QRegularExpression(QStringLiteral(":(\\d+)(?::(\\d+))?:?$")).match(path);
-
-    if (match.isValid()) {
-        // cut away line/column specification from the path.
-        path.chop(match.capturedLength());
-    }
-
-    // make relative paths absolute using the current working directory
-    // prefer local file, if in doubt!
-    url = QUrl::fromUserInput(path, QDir::currentPath(), QUrl::AssumeLocalFile);
-
-    // in some cases, this will fail, e.g.
-    // assume a local file and just convert it to an url.
-    if (!url.isValid()) {
-        // create absolute file path, we will e.g. pass this over dbus to other processes
-        url = QUrl::fromLocalFile(QDir::current().absoluteFilePath(path));
-    }
-    return url;
-}
 
 int main(int argc, char *argv[])
 {
@@ -71,10 +43,8 @@ int main(int argc, char *argv[])
 
         foreach (const QString &path, arguments) {
 
-            QString filePath = UrlInfo(path).toLocalFile();
-
-            if (filePath.endsWith("pdf")) {
-
+            if (FileController::FileType_UNKNOWN != FileController::getFileType(path)) {
+                QString filePath = FileController::getUrlInfo(path).toLocalFile();
                 if (!controller.existFilePath(filePath))    //存在则直接通知 本程序不打开
                     waitOpenFilePathList.append(filePath);
             }

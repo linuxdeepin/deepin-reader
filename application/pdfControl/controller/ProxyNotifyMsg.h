@@ -25,7 +25,7 @@
  *  文档 书签和当前页变化通知
  */
 
-class FileViewWidgetPrivate;
+class SheetBrowserPDFPrivate;
 
 class ProxyNotifyMsg : public QObject
 {
@@ -38,8 +38,8 @@ private slots:
     void slotDocFilePageChanged(int);
 
 private:
-    FileViewWidgetPrivate   *_fvwParent = nullptr;
-    friend class FileViewWidgetPrivate;
+    SheetBrowserPDFPrivate   *_fvwParent = nullptr;
+    friend class SheetBrowserPDFPrivate;
 };
 
 #endif // PROXYNOTIFYMSG_H
