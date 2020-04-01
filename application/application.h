@@ -43,7 +43,14 @@ public:
     void adaptScreenView(int &w, int &h);
     inline void setScale(const double &scale) {m_dScal = scale;}
     double scale() const {return m_dScal;}
-
+    inline void setFirstView(const bool &first)
+    {
+        m_bFirstView = first;
+    }
+    inline bool firstView()
+    {
+        return m_bFirstView;
+    }
 protected:
     void handleQuitAction() override;
 
@@ -53,6 +60,7 @@ public:
     AppInfo             *m_pAppInfo = nullptr;
     IHelper             *m_pHelper = nullptr;
     double m_dScal{1.0};//左侧列表缩放比例
+    bool        m_bFirstView = true;//首次打开
 
 private:
     void initCfgPath();

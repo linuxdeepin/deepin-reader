@@ -83,6 +83,10 @@ void LeftSidebarWidget::initWidget()
 
 void LeftSidebarWidget::resizeEvent(QResizeEvent *event)
 {
+    if (dApp->firstView()) {
+        return;
+    }
+
     CustomWidget::resizeEvent(event);
 
     int width = this->width();

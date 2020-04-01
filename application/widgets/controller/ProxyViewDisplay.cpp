@@ -40,6 +40,8 @@ void ProxyViewDisplay::OnSetViewHit(const QString &msgContent)
 {
     m_nAdapteState = msgContent.toInt();
 
+//    qInfo() << "      m_nAdapteState:" << m_nAdapteState;
+
     onSetWidgetAdapt();
 }
 

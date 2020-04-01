@@ -45,10 +45,10 @@ void MainSplitter::InitWidget()
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
-    m_pLeftWidget = new LeftSidebarWidget;
-    if (m_pLeftWidget) {
-        m_pLeftWidget->setFirstView(true);
+    if (dApp) {
+        dApp->setFirstView(true);
     }
+    m_pLeftWidget = new LeftSidebarWidget;
     addWidget(m_pLeftWidget);
 
     m_pFileViewWidget = new FileViewWidget;
@@ -83,10 +83,6 @@ void MainSplitter::InitWidget()
 
     setSizes(list_src);
 
-    if (m_pLeftWidget) {
-        m_pLeftWidget->setFirstView(false);
-    }
-
     setAcceptDrops(true);
 }
 
@@ -105,6 +101,10 @@ void MainSplitter::SlotFileOpenResult(const QString &s, const bool &res)
         }
 
         m_pLeftWidget->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
+
+        if (dApp) {
+            dApp->setFirstView(false);
+        }
     }
     emit sigOpenFileResult(s, res);
 }

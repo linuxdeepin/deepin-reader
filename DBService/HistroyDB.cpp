@@ -100,6 +100,7 @@ void HistroyDB::checkDatabase()
     query.prepare("SELECT name FROM sqlite_master WHERE type=\"table\" AND name = \"FilesTable\"");
     if (query.exec() && query.first()) {
         tableExist = !query.value(0).toString().isEmpty();
+        qDebug() << __LINE__ << "   " << __FUNCTION__ << "   " << query.lastError() << tableExist;
     }
 
     //if FilesTable not exist, create it.
@@ -114,6 +115,8 @@ void HistroyDB::checkDatabase()
                            "FileShowLeft TEXT, "
                            "ListIndex TEXT, "
                            "CurPage TEXT )"));
+
+        qDebug() << __LINE__ << "   " << __FUNCTION__ << "   " << query.lastError();
     }
 }
 
@@ -210,7 +213,7 @@ double HistroyDB::GetKeyValue(const QString &sPath, const int &iKey)
 {
     if (m_pNewDataMapObj.contains(sPath)) {
         double nTemp = m_pNewDataMapObj[sPath].qGetData(iKey);
-        if (-1 == nTemp)
+        if (-1 == static_cast<int>(nTemp))
             return m_pDataMapObj[sPath].qGetData(iKey);
         return nTemp;
     }

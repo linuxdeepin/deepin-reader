@@ -33,10 +33,6 @@ signals:
 public:
     int dealWithData(const int &, const QString &) override;
     void SetFindOperation(const int &);
-    inline void setFirstView(const bool &first)
-    {
-        m_bFirstView = first;
-    }
 
     // CustomWidget interface
 protected:
@@ -62,7 +58,6 @@ private:
     int         m_nSearch = -1;
     bool        m_bOldVisible = false;
     QString     m_strBindPath = "";
-    bool        m_bFirstView = true;//首次打开
 };
 
 #endif  // LEFTSHOWWIDGET_H
