@@ -27,7 +27,7 @@
 #include "docview/docummentproxy.h"
 
 #include "gof/bridge/IHelper.h"
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 ProxyMouseMove::ProxyMouseMove(QObject *parent) : QObject(parent)
 {
@@ -38,9 +38,9 @@ void ProxyMouseMove::mouseMoveEvent(QMouseEvent *event)
 {
     QPoint globalPos = event->globalPos();
     //  处于幻灯片模式下
-    int nState = MainTabWidgetEx::Instance()->getCurrentState();
+    int nState = CentralDocPage::Instance()->getCurrentState();
     if (nState == SLIDER_SHOW) {
-        MainTabWidgetEx::Instance()->showPlayControlWidget();   //  显示 幻灯片 控制
+        CentralDocPage::Instance()->showPlayControlWidget();   //  显示 幻灯片 控制
     } else if (nState == Magnifer_State) {    //  当前是放大镜状态
         __ShowMagnifier(globalPos);
     } else if (nState == Handel_State) {  //   手型状态下， 按住鼠标左键 位置进行移动
@@ -147,19 +147,19 @@ void ProxyMouseMove::__ShowFileNoteWidget(const QPoint &docPos)
 
 void ProxyMouseMove::mousePressEvent(QMouseEvent *event)
 {
-    int nState = MainTabWidgetEx::Instance()->getCurrentState();
+    int nState = CentralDocPage::Instance()->getCurrentState();
 
     Qt::MouseButton nBtn = event->button();
     if (nBtn == Qt::RightButton) {  //  右键处理
         //  处于幻灯片模式下
         if (nState == SLIDER_SHOW) {
-            MainTabWidgetEx::Instance()->OnExitSliderShow();
+            CentralDocPage::Instance()->OnExitSliderShow();
             return;
         }
 
         //  放大镜状态，
         if (nState == Magnifer_State) {
-            MainTabWidgetEx::Instance()->OnExitMagnifer();
+            CentralDocPage::Instance()->OnExitMagnifer();
             return;
         }
     } else if (nBtn == Qt::LeftButton) { // 左键处理
@@ -199,7 +199,7 @@ void ProxyMouseMove::__AddIconAnnotation(const QPoint &globalPos)
                                  QString::number(nClickPage) + Constant::sQStringSep +
                                  QString::number(globalPos.x()) + Constant::sQStringSep +
                                  QString::number(globalPos.y());
-            MainTabWidgetEx::Instance()->setCurrentState(Default_State);
+            CentralDocPage::Instance()->setCurrentState(Default_State);
 
             QJsonObject obj;
             obj.insert("content", strContent);
@@ -229,7 +229,7 @@ void ProxyMouseMove::__OtherMousePress(const QPoint &globalPos)
     if (pLink) {
         __ClickPageLink(pLink);
     } else {
-        int nState = MainTabWidgetEx::Instance()->getCurrentState();
+        int nState = CentralDocPage::Instance()->getCurrentState();
         if (nState == Default_State) {
             _fvwParent->m_pProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
 
@@ -266,7 +266,7 @@ void ProxyMouseMove::__ClickPageLink(Page::Link *pLink)
 void ProxyMouseMove::mouseReleaseEvent(QMouseEvent *event)
 {
     //  幻灯片模式下, 左键单击 不作任何处理
-    int nState = MainTabWidgetEx::Instance()->getCurrentState();
+    int nState = CentralDocPage::Instance()->getCurrentState();
     if (nState == SLIDER_SHOW)
         return;
 

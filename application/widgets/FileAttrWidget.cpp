@@ -11,7 +11,7 @@
 #include "docview/docummentproxy.h"
 #include "CustomControl/DFMGlobal.h"
 #include "CustomControl/ImageLabel.h"
-#include "main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
@@ -39,7 +39,7 @@ FileAttrWidget::~FileAttrWidget()
 //  各个 对应的 label 赋值
 void FileAttrWidget::setFileAttr()
 {
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
 
     QString filePath = pMtwe->qGetCurPath();
     if (filePath == "") {

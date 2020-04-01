@@ -10,11 +10,11 @@
 #include "business/AppInfo.h"
 #include "TitleMenu.h"
 #include "TitleWidget.h"
-#include "CentralWidget.h"
+#include "Central.h"
 
 #include "gof/bridge/IHelper.h"
 
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -127,9 +127,9 @@ void MainWindow::initUI()
     titlebar()->setMenu(TitleMenu::Instance(this));
 
     titlebar()->addWidget(new TitleWidget, Qt::AlignLeft);
-    CentralWidget *pcenter = new CentralWidget;
+    Central *pcenter = new Central;
     setCentralWidget(pcenter);
-    connect(this, &MainWindow::sigopenfile, pcenter, &CentralWidget::SlotOpenFiles);
+    connect(this, &MainWindow::sigopenfile, pcenter, &Central::SlotOpenFiles);
 }
 
 void MainWindow::initThemeChanged()

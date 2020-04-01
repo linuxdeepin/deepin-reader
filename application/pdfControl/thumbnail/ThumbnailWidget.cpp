@@ -21,7 +21,7 @@
 #include "docview/docummentproxy.h"
 
 #include "gof/bridge/IHelper.h"
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 ThumbnailWidget::ThumbnailWidget(DWidget *parent)
     : CustomWidget(THUMBAIL_WIDGET, parent)
@@ -340,7 +340,7 @@ void ThumbnailWidget::updateThumbnail(const int &page)
             auto itemWidget = getItemWidget(item);
             if (itemWidget) {
                 if (itemWidget->nPageIndex() == page) {
-                    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+                    CentralDocPage *pMtwe = CentralDocPage::Instance();
                     auto dproxy = pMtwe->getCurFileAndProxy(m_strBindPath);
                     if (nullptr == dproxy) {
                         return;
@@ -363,7 +363,7 @@ void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
 {
     m_strBindPath = sPath;
 
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sPath);
     if (_proxy) {
         m_isLoading = true;
@@ -378,7 +378,7 @@ void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
         m_nValuePreIndex = 0;
         fillContantToList();
 
-        FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(sPath);
+        FileDataModel fdm = CentralDocPage::Instance()->qGetFileData(sPath);
         m_nRotate = fdm.qGetData(Rotate);
 
         if (m_nRotate < 0) {
@@ -477,7 +477,7 @@ void ThreadLoadImage::run()
         if (m_nEndPage >= m_pages) {
             m_nEndPage = m_pages - 1;
         }
-        MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+        CentralDocPage *pMtwe = CentralDocPage::Instance();
         auto dproxy = pMtwe->getCurFileAndProxy(m_filepath);
         if (nullptr == dproxy) {
             break;

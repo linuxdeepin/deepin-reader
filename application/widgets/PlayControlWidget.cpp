@@ -11,7 +11,7 @@
 #include "utils/utils.h"
 #include "docview/docummentproxy.h"
 
-#include "main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 #include "gof/bridge/IHelper.h"
 
@@ -59,7 +59,7 @@ void PlayControlWidget::activeshow(int ix, int iy)
     if (m_bfirstshow) {
         m_bfirstshow = false;
 
-        MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+        CentralDocPage *pMtwe = CentralDocPage::Instance();
         if (pMtwe) {
             auto helper = pMtwe->getCurFileAndProxy(m_strSliderPath);
             connect(helper, &DocummentProxy::signal_autoplaytoend, this, [this] {
@@ -135,7 +135,7 @@ DIconButton *PlayControlWidget::createBtn(const QString &strname)
 
 void PlayControlWidget::pagejump(const bool &bpre)
 {
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     if (pMtwe) {
         auto helper = pMtwe->getCurFileAndProxy(m_strSliderPath);
         if (helper) {
@@ -224,7 +224,7 @@ void PlayControlWidget::slotNextClicked()
 
 void PlayControlWidget::slotExitClicked()
 {
-    MainTabWidgetEx::Instance()->OnExitSliderShow();
+    CentralDocPage::Instance()->OnExitSliderShow();
 }
 
 //  按了键盘 上下左右

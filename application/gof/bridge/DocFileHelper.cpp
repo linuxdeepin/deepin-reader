@@ -27,7 +27,7 @@
 #include "docview/docummentproxy.h"
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 DocFileHelper::DocFileHelper(QObject *parent)
     : HelperImpl(parent)
@@ -44,7 +44,7 @@ void DocFileHelper::notifyMsg(const int &msgType, const QString &msgContent)
 
 void DocFileHelper::CloseFile(const int &iType, const QString &sPath)
 {
-    DocummentProxy *_proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy(sPath);
+    DocummentProxy *_proxy = CentralDocPage::Instance()->getCurFileAndProxy(sPath);
     if (_proxy) {
         if (MSG_SAVE_FILE == iType || MSG_NOT_SAVE_FILE == iType) {
             bool bSave = iType == MSG_SAVE_FILE ? true : false;
@@ -61,7 +61,7 @@ void DocFileHelper::CloseFile(const int &iType, const QString &sPath)
 //  保存 数据
 void DocFileHelper::onSaveFile()
 {
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     if (pMtwe) {
         QString sCurPath = pMtwe->qGetCurPath();
         if (sCurPath != "") {
@@ -90,7 +90,7 @@ void DocFileHelper::onSaveFile()
 //  另存为
 void DocFileHelper::onSaveAsFile()
 {
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     if (pMtwe) {
         QString sCurPath = pMtwe->qGetCurPath();
         if (sCurPath != "") {
@@ -170,7 +170,7 @@ QString DocFileHelper::qDealWithData(const int &msgType, const QString &msgConte
 
 void DocFileHelper::__PageJump(const int &pagenum)
 {
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     if (pMtwe) {
         QString sCurPath = pMtwe->qGetCurPath();
         if (sCurPath != "") {
@@ -193,7 +193,7 @@ void DocFileHelper::__PageJump(const int &pagenum)
 //  前一页\第一页\后一页\最后一页 操作
 void DocFileHelper::__PageJumpByMsg(const int &iType, const QString &param)
 {
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     if (pMtwe) {
         QString sCurPath = pMtwe->qGetCurPath();
         if (sCurPath != "") {

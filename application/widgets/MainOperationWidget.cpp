@@ -7,7 +7,7 @@
 
 #include "utils/PublicFunction.h"
 
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 MainOperationWidget::MainOperationWidget(DWidget *parent)
     : CustomWidget(MAIN_OPERATION_WIDGET, parent)
@@ -104,7 +104,7 @@ void MainOperationWidget::initConnect()
 void MainOperationWidget::slotOpenFileOk(const QString &sPath)
 {
     m_strBindPath = sPath;
-    FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(m_strBindPath);
+    FileDataModel fdm = CentralDocPage::Instance()->qGetFileData(m_strBindPath);
     int nId = static_cast<int>(fdm.qGetData(LeftIndex));
     if (nId == -1) {
         nId = 0;

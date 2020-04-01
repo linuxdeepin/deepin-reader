@@ -18,7 +18,7 @@
  */
 #include "FontMenu.h"
 
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 FontMenu::FontMenu(DWidget *parent):
     CustomMenu(FONT_MENU, parent)
@@ -154,7 +154,7 @@ void FontMenu::slotRotateR()
  */
 void FontMenu::OnFileOpenOk(const QString &sPath)
 {
-    FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData();
+    FileDataModel fdm = CentralDocPage::Instance()->qGetFileData();
 
     //单双页
     int value = fdm.qGetData(DoubleShow);

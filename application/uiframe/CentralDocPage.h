@@ -23,27 +23,28 @@
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QDBusUnixFileDescriptor>
+#include <QMap>
+
+#include "ModuleHeader.h"
+
+class FileDataModel;
 
 class DocummentProxy;
 class QStackedLayout;
-class MainTabBar;
+class DocTabBar;
 class PlayControlWidget;
-
-class MainTabWidgetExPrivate;
-
-class MainTabWidgetEx : public CustomWidget
+class CentralDocPage : public CustomWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(MainTabWidgetEx)
-    Q_DECLARE_PRIVATE(MainTabWidgetEx)
+    Q_DISABLE_COPY(CentralDocPage)
 
 public:
-    explicit MainTabWidgetEx(DWidget *parent = nullptr);
-    ~MainTabWidgetEx() override;
+    explicit CentralDocPage(DWidget *parent = nullptr);
+    ~CentralDocPage() override;
 
-    friend class MainTabBar;
+    friend class DocTabBar;
 public:
-    static MainTabWidgetEx *Instance();
+    static CentralDocPage *Instance();
 
     // IObserver interface
 public:
@@ -51,25 +52,39 @@ public:
 
 public:
     QStringList qGetAllPath();
+
     QString qGetCurPath();
-    int GetFileChange(const QString &);
 
     int getFileChanged();
 
+    int GetFileChange(const QString &sPath);
+
     FileDataModel qGetFileData(const QString &sPath = "") ;
 
-    // CustomWidget interface
     DocummentProxy *getCurFileAndProxy(const QString &sPath = "");
 
     void showPlayControlWidget() const;
 
     int getCurrentState();
+
     void setCurrentState(const int &nCurrentState);
+
     void SetFileChange();
+
     void OnExitSliderShow();
+
     void OnExitMagnifer();
 
     void setCurrentTabByFilePath(const QString &filePath);
+
+private:
+    void OpenCurFileFolder();
+
+    QString GetCurPath();
+
+    QStringList GetAllPath();
+
+    void SetFileChange(const QString &sPath, const int &iState);
 
 protected:
     void initWidget() override;
@@ -112,17 +127,20 @@ private slots:
 
 private:
     QStackedLayout      *m_pStackedLayout = nullptr;
-    MainTabBar          *m_pTabBar = nullptr;
+    DocTabBar          *m_pTabBar = nullptr;
     PlayControlWidget   *m_pctrlwidget = nullptr;
     QDBusReply<QDBusUnixFileDescriptor> m_reply;
     QDBusInterface *m_pLoginManager = nullptr;
     QList<QVariant> m_arg;
     bool m_bBlockShutdown = false;
-    static MainTabWidgetEx *g_onlyApp;
+    static CentralDocPage *g_onlyApp;
 
 private:
-    MainTabWidgetExPrivate *const d_ptr = nullptr;
+    QList<int>          m_pMsgList;
 
+    QString             m_strSliderPath = "";
+    QString             m_strMagniferPath = "";
+    int                 m_nCurrentState = Default_State;
 };
 
 #endif // MAINTABWIDGETEX_H

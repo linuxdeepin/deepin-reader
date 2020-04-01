@@ -9,7 +9,7 @@
 #include "docview/docummentproxy.h"
 #include "utils/utils.h"
 
-#include "main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 #define LAEBL_TEXT_WIDTH   165
 
@@ -25,7 +25,7 @@ AttrScrollWidget::AttrScrollWidget(const QString &sPath, DWidget *parent)
     gridLayout->setSpacing(3);
 
     stFileInfo fileInfo;
-    DocummentProxy *_proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy(sPath);
+    DocummentProxy *_proxy = CentralDocPage::Instance()->getCurFileAndProxy(sPath);
     if (_proxy) {
         _proxy->docBasicInfo(fileInfo);
     }

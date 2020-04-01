@@ -1,17 +1,17 @@
-#include "LeftSidebarWidget.h"
+#include "SheetSidebar.h"
 
 #include <DStackedWidget>
 #include <QButtonGroup>
 #include <QVBoxLayout>
 
-#include "MainOperationWidget.h"
+#include "widgets/MainOperationWidget.h"
 
 #include "docview/docummentproxy.h"
 #include "pdfControl/DataStackedWidget.h"
 
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
-LeftSidebarWidget::LeftSidebarWidget(DWidget *parent)
+SheetSidebar::SheetSidebar(DWidget *parent)
     : CustomWidget(LEFT_SLIDERBAR_WIDGET, parent)
 {
     int tW = LEFTMINWIDTH;
@@ -34,32 +34,32 @@ LeftSidebarWidget::LeftSidebarWidget(DWidget *parent)
     dApp->m_pModelService->addObserver(this);
 }
 
-LeftSidebarWidget::~LeftSidebarWidget()
+SheetSidebar::~SheetSidebar()
 {
     dApp->m_pModelService->removeObserver(this);
 }
 
-void LeftSidebarWidget::SlotOpenFileOk(const QString &sPath)
+void SheetSidebar::SlotOpenFileOk(const QString &sPath)
 {
     m_strBindPath = sPath;
 
-    FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(sPath);
+    FileDataModel fdm = CentralDocPage::Instance()->qGetFileData(sPath);
     int nShow = static_cast<int>(fdm.qGetData(Thumbnail));
     bool showLeft = nShow == 1 ? true : false;
     onSetWidgetVisible(showLeft);
 }
 
-void LeftSidebarWidget::onSetWidgetVisible(const int &nVis)
+void SheetSidebar::onSetWidgetVisible(const int &nVis)
 {
     this->setVisible(nVis);
 }
 
-void LeftSidebarWidget::slotUpdateTheme()
+void SheetSidebar::slotUpdateTheme()
 {
     updateWidgetTheme();
 }
 
-void LeftSidebarWidget::initWidget()
+void SheetSidebar::initWidget()
 {
     auto pVBoxLayout = new QVBoxLayout;
     pVBoxLayout->setContentsMargins(0, 0, 0, 0);
@@ -81,7 +81,7 @@ void LeftSidebarWidget::initWidget()
     connect(this, SIGNAL(sigAdaptWindowSize(const double &)), m_pStackedWidget, SLOT(slotAdaptWindowSize(const double &)));
 }
 
-void LeftSidebarWidget::resizeEvent(QResizeEvent *event)
+void SheetSidebar::resizeEvent(QResizeEvent *event)
 {
     if (dApp->firstView()) {
         return;
@@ -92,13 +92,13 @@ void LeftSidebarWidget::resizeEvent(QResizeEvent *event)
     int width = this->width();
     double scale = static_cast<double>(width) / static_cast<double>(LEFTMINWIDTH);
 
-//    qInfo() << "   LeftSidebarWidget::resizeEvent  " << "    widget width:" << width << "     scale:" << scale;
+//    qInfo() << "   SheetSidebar::resizeEvent  " << "    widget width:" << width << "     scale:" << scale;
     dApp->setScale(scale);
 
     emit sigAdaptWindowSize(scale);
 }
 
-int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgContent)
+int SheetSidebar::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
         slotUpdateTheme();
@@ -126,7 +126,7 @@ int LeftSidebarWidget::dealWithData(const int &msgType, const QString &msgConten
     return nRes;
 }
 
-void LeftSidebarWidget::SetFindOperation(const int &iType)
+void SheetSidebar::SetFindOperation(const int &iType)
 {
     m_pMainOperationWidget->SetFindOperation(iType);
     m_pStackedWidget->SetFindOperation(iType);

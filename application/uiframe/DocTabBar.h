@@ -25,14 +25,14 @@
 
 DWIDGET_USE_NAMESPACE
 
-class MainTabBar : public DTabBar, public IObserver
+class DocTabBar : public DTabBar, public IObserver
 {
     Q_OBJECT
-    Q_DISABLE_COPY(MainTabBar)
+    Q_DISABLE_COPY(DocTabBar)
 
 public:
-    explicit MainTabBar(DWidget *parent = nullptr);
-    ~MainTabBar() override;
+    explicit DocTabBar(DWidget *parent = nullptr);
+    ~DocTabBar() override;
 
     int indexOfFilePath(const QString &filePath);
 

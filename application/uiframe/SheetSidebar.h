@@ -13,14 +13,14 @@
 class MainOperationWidget;
 class DataStackedWidget;
 
-class LeftSidebarWidget : public CustomWidget
+class SheetSidebar : public CustomWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(LeftSidebarWidget)
+    Q_DISABLE_COPY(SheetSidebar)
 
 public:
-    explicit LeftSidebarWidget(DWidget *parent = nullptr);
-    ~LeftSidebarWidget() override;
+    explicit SheetSidebar(DWidget *parent = nullptr);
+    ~SheetSidebar() override;
 
 signals:
     void sigAnntationMsg(const int &, const QString &);

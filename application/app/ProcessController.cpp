@@ -1,6 +1,6 @@
 #include "ProcessController.h"
 #include "json.h"
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 #include "MainWindow.h"
 
 #include <stdio.h>
@@ -162,7 +162,7 @@ void ProcessController::onReceiveMessage()
 
     if ("checkFilePath" == json.getString("command")) {
 
-        MainTabWidgetEx *ex = MainTabWidgetEx::Instance();
+        CentralDocPage *ex = CentralDocPage::Instance();
         MainWindow *window = MainWindow::Instance();
         QString filePath = json.getString("message");
 
@@ -176,7 +176,7 @@ void ProcessController::onReceiveMessage()
         localSocket->waitForBytesWritten(1000);
     } else if ("existFilePath" == json.getString("command")) {
 
-        MainTabWidgetEx *ex = MainTabWidgetEx::Instance();
+        CentralDocPage *ex = CentralDocPage::Instance();
         MainWindow *window = MainWindow::Instance();
         QString filePath = json.getString("message");
 
@@ -193,7 +193,7 @@ void ProcessController::onReceiveMessage()
     } else if ("openNewFile" == json.getString("command")) {
         QStringList fileOpenList = json.getStringList("message");
 
-        MainTabWidgetEx *ex = MainTabWidgetEx::Instance();
+        CentralDocPage *ex = CentralDocPage::Instance();
         MainWindow *window = MainWindow::Instance();
 
         if (ex && window ) {

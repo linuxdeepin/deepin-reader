@@ -28,7 +28,7 @@
 #include "search/BufferWidget.h"
 #include "search/SearchResWidget.h"
 
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 DataStackedWidget::DataStackedWidget(DWidget *parent)
     : DStackedWidget(parent)
@@ -290,7 +290,7 @@ void DataStackedWidget::OnOpenFileOk(const QString &sPath)
 {
     m_strBindPath = sPath;
 
-    FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData(m_strBindPath);
+    FileDataModel fdm = CentralDocPage::Instance()->qGetFileData(m_strBindPath);
     int nId = static_cast<int>(fdm.qGetData(LeftIndex));
     if (nId == -1) {
         nId = 0;

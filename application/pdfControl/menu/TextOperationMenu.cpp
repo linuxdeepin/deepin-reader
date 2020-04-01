@@ -6,7 +6,7 @@
 #include "business/AppInfo.h"
 
 #include "gof/bridge/IHelper.h"
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)
     : CustomMenu(TEXT_OPERATION_MENU, parent)
@@ -16,7 +16,7 @@ TextOperationMenu::TextOperationMenu(DWidget *parent)
 
 void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, const QString &sSelectText, const QString &sUuid)
 {
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     QString sCurPath = pMtwe->qGetCurPath();
 
     QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);

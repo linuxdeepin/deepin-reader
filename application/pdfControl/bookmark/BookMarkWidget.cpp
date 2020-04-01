@@ -22,7 +22,7 @@
 #include "docview/docummentproxy.h"
 
 #include "gof/bridge/IHelper.h"
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 BookMarkWidget::BookMarkWidget(DWidget *parent)
     : CustomWidget(BOOKMARK_WIDGET, parent)
@@ -125,7 +125,7 @@ void BookMarkWidget::slotAddBookMark()
         return;
     }
 
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     if (pMtwe) {
         QString sCurPath = pMtwe->qGetCurPath();
         if (sCurPath != "") {
@@ -144,7 +144,7 @@ void BookMarkWidget::slotAddBookMark(const QString &sContent)
 {
     int nPage = sContent.toInt();
 
-    QString sPath = MainTabWidgetEx::Instance()->qGetCurPath();
+    QString sPath = CentralDocPage::Instance()->qGetCurPath();
     QList<int> pageList = dApp->m_pDBService->getBookMarkList(sPath);
     if (pageList.contains(nPage)) {
         return;
@@ -158,7 +158,7 @@ void BookMarkWidget::slotAddBookMark(const QString &sContent)
         notifyMsg(MSG_FILE_IS_CHANGE, "1");
     }
 
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     if (pMtwe) {
         QString sCurPath = pMtwe->qGetCurPath();
         if (sCurPath != "") {
@@ -196,7 +196,7 @@ void BookMarkWidget::OnOpenFileOk(const QString &sPath)
 
     clearItemColor();
 
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     if (pMtwe) {
         DocummentProxy *proxy =  pMtwe->getCurFileAndProxy(m_strBindPath);
         if (proxy) {
@@ -304,7 +304,7 @@ void BookMarkWidget::slotDeleteBookItem(const QString &sContent)
 //  删除指定页
 void BookMarkWidget::deleteIndexPage(const int &pageIndex)
 {
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     if (pMtwe) {
         QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_strBindPath);
         pageList.removeOne(pageIndex);
@@ -404,7 +404,7 @@ void BookMarkWidget::updateThumbnail(const int &page)
     int tW = 48;
     int tH = 68;
     dApp->adaptScreenView(tW, tH);
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     auto dproxy = pMtwe->getCurFileAndProxy(m_strBindPath);
     dproxy->getImage(page, image, tW, tH);
     for (int index = 0; index < itemNum; index++) {
@@ -513,7 +513,7 @@ void BookMarkWidget::initConnection()
  */
 QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
 {
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     if (pMtwe) {
         DocummentProxy *proxy =  pMtwe->getCurFileAndProxy(m_strBindPath);
 
@@ -689,7 +689,7 @@ void LoadBookMarkThread::stopThreadRun()
  */
 void LoadBookMarkThread::run()
 {
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     if (pMtwe) {
         DocummentProxy *proxy =  pMtwe->getCurFileAndProxy(m_pBookMarkWidget->getBindPath());
         if (nullptr != proxy) {

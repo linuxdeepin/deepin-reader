@@ -24,7 +24,7 @@
 
 #include "docview/docummentproxy.h"
 
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 PrintManager::PrintManager(const QString &sPath, QObject *parent)
     : QObject(parent)
@@ -43,7 +43,7 @@ void PrintManager::showPrintDialog(DWidget *widget)
 
 void PrintManager::slotPrintPreview(QPrinter *printer)
 {
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     if (pMtwe) {
         DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(m_strPrintPath);
         if (_proxy) {

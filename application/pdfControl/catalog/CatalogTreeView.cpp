@@ -27,7 +27,7 @@
 #include "docview/docummentproxy.h"
 #include "utils/utils.h"
 
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 CatalogTreeView::CatalogTreeView(DWidget *parent)
     : DTreeView(parent)
@@ -130,7 +130,7 @@ void CatalogTreeView::OnOpenFileOk(const QString &path)
     if (model) {
         model->clear();
 
-        MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+        CentralDocPage *pMtwe = CentralDocPage::Instance();
         if (pMtwe) {
             DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(m_strBindPath);
             if (_proxy) {
@@ -202,7 +202,7 @@ void CatalogTreeView::OnFilePageChanged(const QString &sPage)
 void CatalogTreeView::SlotCollapsed(const QModelIndex &index)
 {
     Q_UNUSED(index);
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     if (pMtwe) {
         DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(m_strBindPath);
         if (_proxy) {
@@ -217,7 +217,7 @@ void CatalogTreeView::SlotCollapsed(const QModelIndex &index)
 void CatalogTreeView::SlotExpanded(const QModelIndex &index)
 {
     if (index == this->selectionModel()->currentIndex()) {  //  展开的节点 是 高亮节点
-        MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+        CentralDocPage *pMtwe = CentralDocPage::Instance();
         if (pMtwe) {
             DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(m_strBindPath);
             if (_proxy) {
@@ -233,7 +233,7 @@ void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelInd
 {
     Q_UNUSED(previous);
     if (!rightnotifypagechanged) {
-        MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+        CentralDocPage *pMtwe = CentralDocPage::Instance();
         if (pMtwe && this->isVisible()) {
             DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(m_strBindPath);
             if (_proxy) {

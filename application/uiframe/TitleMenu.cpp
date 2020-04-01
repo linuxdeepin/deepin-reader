@@ -19,7 +19,7 @@
 #include "TitleMenu.h"
 
 #include <QSignalMapper>
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 #include "gof/bridge/IHelper.h"
 
@@ -54,7 +54,7 @@ int TitleMenu::dealWithData(const int &msgType, const QString &)
 
 void TitleMenu::flushSaveButton()
 {
-    disableSaveButton(!MainTabWidgetEx::Instance()->getFileChanged());
+    disableSaveButton(!CentralDocPage::Instance()->getFileChanged());
 }
 
 void TitleMenu::disableallaction()

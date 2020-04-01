@@ -21,7 +21,7 @@
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
 
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 NotesWidget::NotesWidget(DWidget *parent)
     : CustomWidget(NOTE_WIDGET, parent)
@@ -212,7 +212,7 @@ void NotesWidget::slotOpenFileOk(const QString &sPath)
         m_ThreadLoadImage.stopThreadRun();
     }
 
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     DocummentProxy *t_docPtr = pMtwe->getCurFileAndProxy(m_strBindPath);
     if (t_docPtr) {
         m_pNotesList->clear();
@@ -286,7 +286,7 @@ void NotesWidget::slotSelectItem(QListWidgetItem *item)
         QString t_uuid = t_widget->noteUUId();
         int page = t_widget->nPageIndex();
 
-        auto pDocProxy = MainTabWidgetEx::Instance()->getCurFileAndProxy(m_strBindPath);
+        auto pDocProxy = CentralDocPage::Instance()->getCurFileAndProxy(m_strBindPath);
         if (pDocProxy) {
             pDocProxy->jumpToHighLight(t_uuid, page);
         }
@@ -353,7 +353,7 @@ void NotesWidget::__JumpToNextItem()
  */
 void NotesWidget::slotAddAnnotation()
 {
-    MainTabWidgetEx::Instance()->setCurrentState(NOTE_ADD_State);
+    CentralDocPage::Instance()->setCurrentState(NOTE_ADD_State);
 }
 
 void NotesWidget::SlotAnntationMsg(const int &msgType, const QString &msgContent)
@@ -396,7 +396,7 @@ void NotesWidget::addNotesItem(const QString &text, const int &iType)
         QString t_strText = t_strList.at(1).trimmed();
         int t_nPage = t_strList.at(2).trimmed().toInt();
 
-        auto dproxy = MainTabWidgetEx::Instance()->getCurFileAndProxy(m_strBindPath);
+        auto dproxy = CentralDocPage::Instance()->getCurFileAndProxy(m_strBindPath);
         if (nullptr == dproxy) {
             return;
         }
@@ -573,7 +573,7 @@ void NotesWidget::updateThumbnail(const int &page)
     int tW = 48;
     int tH = 68;
     dApp->adaptScreenView(tW, tH);
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     auto dproxy = pMtwe->getCurFileAndProxy(m_strBindPath);
     dproxy->getImage(page, image, tW, tH);
     for (int index = 0; index < itemNum; index++) {
@@ -642,7 +642,7 @@ void ThreadLoadImageOfNote::run()
         for (int page = 0; page < m_stListNote.count(); page++) {
             if (!m_isLoaded)
                 break;
-            auto dproxy = MainTabWidgetEx::Instance()->getCurFileAndProxy(m_pNoteWidget->getBindPath());
+            auto dproxy = CentralDocPage::Instance()->getCurFileAndProxy(m_pNoteWidget->getBindPath());
             if (nullptr == dproxy) {
                 break;
             }

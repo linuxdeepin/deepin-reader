@@ -3,12 +3,12 @@
 #include <QDesktopServices>
 #include <QFileInfo>
 
-#include "widgets/controller/Annotation.h"
-#include "widgets/controller/ProxyNotifyMsg.h"
-#include "widgets/controller/ProxyViewDisplay.h"
-#include "widgets/controller/ProxyMouseMove.h"
-#include "widgets/controller/ProxyData.h"
-#include "widgets/controller/ProxyFileDataModel.h"
+#include "controller/Annotation.h"
+#include "controller/ProxyNotifyMsg.h"
+#include "controller/ProxyViewDisplay.h"
+#include "controller/ProxyMouseMove.h"
+#include "controller/ProxyData.h"
+#include "controller/ProxyFileDataModel.h"
 
 #include "menu/TextOperationMenu.h"
 #include "menu/DefaultOperationMenu.h"
@@ -23,7 +23,7 @@
 
 #include "gof/bridge/IHelper.h"
 #include "pdfControl/note/NoteViewWidget.h"
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 FileViewWidgetPrivate::FileViewWidgetPrivate(FileViewWidget *parent)
     : q_ptr(parent)
@@ -133,7 +133,7 @@ void FileViewWidgetPrivate::AddHighLightAnnotation(const QString &msgContent)
 void FileViewWidgetPrivate::OnShortCutKey(const QString &sKey)
 {
     //  处于幻灯片模式下
-    int nState = MainTabWidgetEx::Instance()->getCurrentState();
+    int nState = CentralDocPage::Instance()->getCurrentState();
     if (nState == SLIDER_SHOW)
         return;
 
@@ -293,7 +293,7 @@ void FileViewWidgetPrivate::onSetHandShape(const QString &data)
     } else {
         __SetCursor(Qt::ArrowCursor);
     }
-    MainTabWidgetEx::Instance()->setCurrentState(nRes);
+    CentralDocPage::Instance()->setCurrentState(nRes);
 }
 
 void FileViewWidgetPrivate::showNoteViewWidget(const QString &sPage, const QString &t_strUUid, const QString &sText, const int &nType)
@@ -451,7 +451,7 @@ void FileViewWidgetPrivate::slotCustomContextMenuRequested(const QPoint &point)
 {
     Q_Q(FileViewWidget);
     //  处于幻灯片模式下
-    int nState = MainTabWidgetEx::Instance()->getCurrentState();
+    int nState = CentralDocPage::Instance()->getCurrentState();
     if (nState == SLIDER_SHOW)
         return;
 
@@ -572,7 +572,7 @@ void FileViewWidgetPrivate::OpenFilePath(const QString &sPath)
         connect(m_pProxy, SIGNAL(signal_bookMarkStateChange(int, bool)), m_pProxyNotifyMsg, SLOT(slotBookMarkStateChange(int, bool)));
         connect(m_pProxy, SIGNAL(signal_pageChange(int)), m_pProxyNotifyMsg, SLOT(slotDocFilePageChanged(int)));
         connect(m_pProxy, SIGNAL(signal_openResult(bool)), SLOT(SlotDocFileOpenResult(bool)));
-        connect(m_pProxyData, SIGNAL(signale_filechanged(bool)), MainTabWidgetEx::Instance(), SLOT(slotfilechanged(bool)));
+        connect(m_pProxyData, SIGNAL(signale_filechanged(bool)), CentralDocPage::Instance(), SLOT(slotfilechanged(bool)));
 
         QFileInfo info(sPath);
 

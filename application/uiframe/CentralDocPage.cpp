@@ -16,18 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 #include <QVBoxLayout>
 #include <QStackedLayout>
 #include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QUrl>
+#include <QDesktopServices>
+#include <QStackedLayout>
 
-#include "MainTabBar.h"
-#include "pdfControl/MainSplitter.h"
+#include "CentralDocPage.h"
+#include "DocSheet.h"
+#include "DocTabBar.h"
 #include "MainWindow.h"
-#include "MainTabWidgetExPrivate.h"
 #include "TitleMenu.h"
 
 #include "business/AppInfo.h"
@@ -35,37 +37,104 @@
 #include "business/PrintManager.h"
 #include "docview/docummentproxy.h"
 
-#include "../FindWidget.h"
-#include "../FileAttrWidget.h"
-#include "../PlayControlWidget.h"
+#include "widgets/FindWidget.h"
+#include "widgets/FileAttrWidget.h"
+#include "widgets/PlayControlWidget.h"
 #include "TitleWidget.h"
 
 #include "gof/bridge/IHelper.h"
 
-MainTabWidgetEx *MainTabWidgetEx::g_onlyApp = nullptr;
+CentralDocPage *CentralDocPage::g_onlyApp = nullptr;
 
-MainTabWidgetEx::MainTabWidgetEx(DWidget *parent)
-    : CustomWidget(MAIN_TAB_WIDGET, parent), d_ptr(new MainTabWidgetExPrivate(this))
+CentralDocPage::CentralDocPage(DWidget *parent)
+    : CustomWidget(MAIN_TAB_WIDGET, parent)
 {
-
     initWidget();
     InitConnections();
     g_onlyApp = this;
-
+    m_pMsgList = {E_APP_MSG_TYPE, E_TABBAR_MSG_TYPE, MSG_FILE_IS_CHANGE};
     dApp->m_pModelService->addObserver(this);
 }
 
-MainTabWidgetEx::~MainTabWidgetEx()
+CentralDocPage::~CentralDocPage()
 {
     dApp->m_pModelService->removeObserver(this);
 }
+//  打开当前所在文件夹
+void CentralDocPage::OpenCurFileFolder()
+{
+    QString sPath = GetCurPath();
+    if (sPath != "") {
+        int nLastPos = sPath.lastIndexOf('/');
+        sPath = sPath.mid(0, nLastPos);
+        sPath = QString("file://") + sPath;
+        QDesktopServices::openUrl(QUrl(sPath));
+    }
+}
 
-MainTabWidgetEx *MainTabWidgetEx::Instance()
+QStringList CentralDocPage::GetAllPath()
+{
+
+    QStringList pathList;
+
+    auto splitterList = findChildren<DocSheet *>();
+    foreach (auto s, splitterList) {
+        QString sSplitterPath = s->qGetPath();
+        if (sSplitterPath != "") {
+            pathList.append(sSplitterPath);
+        }
+    }
+    return pathList;
+}
+
+int CentralDocPage::GetFileChange(const QString &sPath)
+{
+    auto splitterList = findChildren<DocSheet *>();
+    foreach (auto s, splitterList) {
+        QString sSplitterPath = s->qGetPath();
+        if (sSplitterPath == sPath) {
+            return  s->qGetFileChange();
+        }
+    }
+    return -1;
+}
+
+QString CentralDocPage::GetCurPath()
+{
+    if (m_pStackedLayout != nullptr) {
+        DocSheet *splitter = static_cast<DocSheet *>(m_pStackedLayout->currentWidget());
+        if (splitter != nullptr)
+            return splitter->qGetPath();
+    }
+
+    return "";
+
+//    auto splitterList = findChildren<DocSheet *>();
+//    foreach (auto s, splitterList) {
+//        if (s->isVisible()) {
+//            return s->qGetPath();
+//        }
+//    }
+//    return "";
+}
+
+void CentralDocPage::SetFileChange(const QString &sPath, const int &iState)
+{
+    auto splitterList = findChildren<DocSheet *>();
+    foreach (auto s, splitterList) {
+        QString sSplitterPath = s->qGetPath();
+        if (sSplitterPath == sPath) {
+            s->qSetFileChange(iState);
+            break;
+        }
+    }
+}
+CentralDocPage *CentralDocPage::Instance()
 {
     return g_onlyApp;
 }
 
-int MainTabWidgetEx::dealWithData(const int &msgType, const QString &msgContent)
+int CentralDocPage::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == E_TABBAR_MSG_TYPE) {
         OnTabBarMsg(msgContent);
@@ -87,48 +156,40 @@ int MainTabWidgetEx::dealWithData(const int &msgType, const QString &msgContent)
         }
     }
 
-    Q_D(MainTabWidgetEx);
-    if (d->m_pMsgList.contains(msgType)) {
+
+    if (m_pMsgList.contains(msgType)) {
         return MSG_OK;
     }
 
     return MSG_NO_OK;
 }
 
-QStringList MainTabWidgetEx::qGetAllPath()
+QStringList CentralDocPage::qGetAllPath()
 {
-    Q_D(MainTabWidgetEx);
-    return d->GetAllPath();
+    return GetAllPath();
 }
 
-QString MainTabWidgetEx::qGetCurPath()
+QString CentralDocPage::qGetCurPath()
 {
-    Q_D(MainTabWidgetEx);
-    return d->GetCurPath();
+
+    return GetCurPath();
 }
 
-int MainTabWidgetEx::GetFileChange(const QString &sPath)
-{
-    Q_D(MainTabWidgetEx);
-    return d->GetFileChange(sPath);
-}
-
-int MainTabWidgetEx::getFileChanged()
+int CentralDocPage::getFileChanged()
 {
     if (qGetCurPath().isEmpty())
         return 0;
 
-    Q_D(MainTabWidgetEx);
-    return d->GetFileChange(qGetCurPath());
+    return GetFileChange(qGetCurPath());
 }
 
-FileDataModel MainTabWidgetEx::qGetFileData(const QString &sPath)
+FileDataModel CentralDocPage::qGetFileData(const QString &sPath)
 {
     QString sTempPath = sPath;
     if (sTempPath == "") {
         sTempPath = qGetCurPath();
     }
-    auto splitterList = this->findChildren<MainSplitter *>();
+    auto splitterList = this->findChildren<DocSheet *>();
     foreach (auto sP, splitterList) {
         QString sPPath = sP->qGetPath();
         if (sPPath == sTempPath) {
@@ -138,14 +199,14 @@ FileDataModel MainTabWidgetEx::qGetFileData(const QString &sPath)
     return FileDataModel();
 }
 
-DocummentProxy *MainTabWidgetEx::getCurFileAndProxy(const QString &sPath)
+DocummentProxy *CentralDocPage::getCurFileAndProxy(const QString &sPath)
 {
     QString sTempPath = sPath;
     if (sTempPath == "") {
         sTempPath = qGetCurPath();
     }
 
-    auto splitterList = this->findChildren<MainSplitter *>();
+    auto splitterList = this->findChildren<DocSheet *>();
     foreach (auto s, splitterList) {
         if (s->qGetPath() == sTempPath) {
             return s->getDocProxy();
@@ -154,7 +215,7 @@ DocummentProxy *MainTabWidgetEx::getCurFileAndProxy(const QString &sPath)
     return nullptr;
 }
 
-void MainTabWidgetEx::showPlayControlWidget() const
+void CentralDocPage::showPlayControlWidget() const
 {
     if (m_pctrlwidget) {
         int nScreenWidth = qApp->desktop()->geometry().width();
@@ -166,9 +227,9 @@ void MainTabWidgetEx::showPlayControlWidget() const
     }
 }
 
-void MainTabWidgetEx::initWidget()
+void CentralDocPage::initWidget()
 {
-    m_pTabBar = new MainTabBar;
+    m_pTabBar = new DocTabBar;
     connect(m_pTabBar, SIGNAL(sigTabBarIndexChange(const QString &)), SLOT(SlotSetCurrentIndexFile(const QString &)));
     connect(m_pTabBar, SIGNAL(sigAddTab(const QString &)), SLOT(SlotAddTab(const QString &)));
     connect(m_pTabBar, SIGNAL(sigCloseTab(const QString &)), SLOT(SlotCloseTab(const QString &)));
@@ -188,7 +249,7 @@ void MainTabWidgetEx::initWidget()
     this->setLayout(mainLayout);
 }
 
-void MainTabWidgetEx::BlockShutdown()
+void CentralDocPage::BlockShutdown()
 {
     if (m_bBlockShutdown)
         return;
@@ -216,9 +277,9 @@ void MainTabWidgetEx::BlockShutdown()
     }
 }
 
-void MainTabWidgetEx::UnBlockShutdown()
+void CentralDocPage::UnBlockShutdown()
 {
-    auto splitterList = this->findChildren<MainSplitter *>();
+    auto splitterList = this->findChildren<DocSheet *>();
     foreach (auto mainsplit, splitterList) {
         if (mainsplit->qGetFileChange())
             return;
@@ -232,17 +293,17 @@ void MainTabWidgetEx::UnBlockShutdown()
     }
 }
 
-void MainTabWidgetEx::InitConnections()
+void CentralDocPage::InitConnections()
 {
 }
 
-void MainTabWidgetEx::onShowFileAttr()
+void CentralDocPage::onShowFileAttr()
 {
     auto pFileAttrWidget = new FileAttrWidget;
     pFileAttrWidget->showScreenCenter();
 }
 
-void MainTabWidgetEx::OnAppMsgData(const QString &sText)
+void CentralDocPage::OnAppMsgData(const QString &sText)
 {
     QJsonParseError error;
     QJsonDocument doc = QJsonDocument::fromJson(sText.toLocal8Bit().data(), &error);
@@ -262,12 +323,12 @@ void MainTabWidgetEx::OnAppMsgData(const QString &sText)
 }
 
 //  应用退出, 删除所有文件
-void MainTabWidgetEx::OnAppExit()
+void CentralDocPage::OnAppExit()
 {
     QStringList saveFileList;
     QStringList noChangeFileList;
 
-    auto splitterList = this->findChildren<MainSplitter *>();
+    auto splitterList = this->findChildren<DocSheet *>();
     foreach (auto s, splitterList) {
         QString sSplitterPath = s->qGetPath();
         int iChange = s->qGetFileChange();
@@ -311,9 +372,9 @@ void MainTabWidgetEx::OnAppExit()
     dApp->exit(0);
 }
 
-void MainTabWidgetEx::OnAppShortCut(const QString &s)
+void CentralDocPage::OnAppShortCut(const QString &s)
 {
-    auto children = this->findChildren<MainSplitter *>();
+    auto children = this->findChildren<DocSheet *>();
     if (children.size() == 0)
         return;
 
@@ -339,7 +400,7 @@ void MainTabWidgetEx::OnAppShortCut(const QString &s)
     }
 }
 
-void MainTabWidgetEx::OnTabBarMsg(const QString &s)
+void CentralDocPage::OnTabBarMsg(const QString &s)
 {
     if (s == "New window") {
         Utils::runApp(QString());
@@ -358,20 +419,20 @@ void MainTabWidgetEx::OnTabBarMsg(const QString &s)
     } else if (s == "Document info") {
         onShowFileAttr();
     } else if (s == "Display in file manager") {    //  文件浏览器 显示
-        Q_D(MainTabWidgetEx);
-        d->OpenCurFileFolder();
+
+        OpenCurFileFolder();
     }
 }
 
-void MainTabWidgetEx::OnTabFileChangeMsg(const QString &sVale)
+void CentralDocPage::OnTabFileChangeMsg(const QString &sVale)
 {
-    Q_D(MainTabWidgetEx);
+
     QString sCurPath = qGetCurPath();
 
-    d->SetFileChange(sCurPath, sVale.toInt());
+    SetFileChange(sCurPath, sVale.toInt());
 }
 
-void MainTabWidgetEx::SaveFile(const int &iType, const QString &sPath)
+void CentralDocPage::SaveFile(const int &iType, const QString &sPath)
 {
     QString sRes = dApp->m_pHelper->qDealWithData(iType, sPath);
     if (sRes != "") {
@@ -383,7 +444,7 @@ void MainTabWidgetEx::SaveFile(const int &iType, const QString &sPath)
             if (nReturn == MSG_OK) {
                 DWidget *w = m_pStackedLayout->currentWidget();
                 if (w) {
-                    auto pSplitter = qobject_cast<MainSplitter *>(w);
+                    auto pSplitter = qobject_cast<DocSheet *>(w);
                     if (pSplitter) {
                         pSplitter->saveData();
                     }
@@ -396,11 +457,11 @@ void MainTabWidgetEx::SaveFile(const int &iType, const QString &sPath)
 }
 
 //  保存当前显示文件
-void MainTabWidgetEx::OnSaveFile()
+void CentralDocPage::OnSaveFile()
 {
     DWidget *w = m_pStackedLayout->currentWidget();
     if (w) {
-        auto pSplitter = qobject_cast<MainSplitter *>(w);
+        auto pSplitter = qobject_cast<DocSheet *>(w);
         if (pSplitter) {
             int nChange = pSplitter->qGetFileChange();
             if (nChange == 1) {
@@ -411,13 +472,13 @@ void MainTabWidgetEx::OnSaveFile()
     }
 }
 
-void MainTabWidgetEx::OnSaveAsFile()
+void CentralDocPage::OnSaveAsFile()
 {
     QString sRes = dApp->m_pHelper->qDealWithData(MSG_SAVE_AS_FILE_PATH, "");
 }
 
 //  打印
-void MainTabWidgetEx::OnPrintFile()
+void CentralDocPage::OnPrintFile()
 {
     QString sPath = qGetCurPath();
     if (sPath != "") {
@@ -426,7 +487,7 @@ void MainTabWidgetEx::OnPrintFile()
     }
 }
 
-void MainTabWidgetEx::OnShortCutKey_Esc()
+void CentralDocPage::OnShortCutKey_Esc()
 {
     int nState = getCurrentState();
     if (nState == SLIDER_SHOW) {  //  当前是幻灯片模式
@@ -438,14 +499,14 @@ void MainTabWidgetEx::OnShortCutKey_Esc()
     setCurrentState(Default_State);
 }
 
-void MainTabWidgetEx::OnKeyPress(const QString &sKey)
+void CentralDocPage::OnKeyPress(const QString &sKey)
 {
-    Q_D(MainTabWidgetEx);
+
 
     int nState = getCurrentState();
     if (nState == SLIDER_SHOW && m_pctrlwidget) {
         if (sKey == KeyStr::g_space) {
-            auto helper = getCurFileAndProxy(d->m_strSliderPath);
+            auto helper = getCurFileAndProxy(m_strSliderPath);
             if (helper) {
                 if (helper->getAutoPlaySlideStatu()) {
                     helper->setAutoPlaySlide(false);
@@ -459,7 +520,7 @@ void MainTabWidgetEx::OnKeyPress(const QString &sKey)
     }
 }
 
-void MainTabWidgetEx::slotfilechanged(bool bchanged)
+void CentralDocPage::slotfilechanged(bool bchanged)
 {
     if (bchanged) {
         BlockShutdown();
@@ -469,10 +530,10 @@ void MainTabWidgetEx::slotfilechanged(bool bchanged)
 }
 
 //  切换文档, 需要取消之前文档 放大镜模式
-void MainTabWidgetEx::SlotSetCurrentIndexFile(const QString &sPath)
+void CentralDocPage::SlotSetCurrentIndexFile(const QString &sPath)
 {
-    Q_D(MainTabWidgetEx);
-    auto splitterList = this->findChildren<MainSplitter *>();
+
+    auto splitterList = this->findChildren<DocSheet *>();
     foreach (auto s, splitterList) {
         QString sSplitterPath = s->qGetPath();
         if (sSplitterPath == sPath) {
@@ -482,7 +543,7 @@ void MainTabWidgetEx::SlotSetCurrentIndexFile(const QString &sPath)
             if (nState == Magnifer_State) {
                 setCurrentState(Default_State);
 
-                auto proxy = getCurFileAndProxy(d->m_strMagniferPath);
+                auto proxy = getCurFileAndProxy(m_strMagniferPath);
                 if (proxy) {
                     proxy->closeMagnifier();
                 }
@@ -498,10 +559,10 @@ void MainTabWidgetEx::SlotSetCurrentIndexFile(const QString &sPath)
     }
 }
 
-void MainTabWidgetEx::SlotAddTab(const QString &sPath)
+void CentralDocPage::SlotAddTab(const QString &sPath)
 {
     if (m_pStackedLayout) {
-        MainSplitter *splitter = new MainSplitter(this);
+        DocSheet *splitter = new DocSheet(this);
         connect(this, SIGNAL(sigDealNotifyMsg(const int &, const QString &)), splitter, SLOT(SlotNotifyMsg(const int &, const QString &)));
         connect(splitter, SIGNAL(sigOpenFileResult(const QString &, const bool &)), SLOT(SlotOpenFileResult(const QString &, const bool &)));
         splitter->qSetPath(sPath);
@@ -510,9 +571,9 @@ void MainTabWidgetEx::SlotAddTab(const QString &sPath)
 }
 
 //  删除单个文件
-void MainTabWidgetEx::SlotCloseTab(const QString &sPath)
+void CentralDocPage::SlotCloseTab(const QString &sPath)
 {
-    auto splitterList = this->findChildren<MainSplitter *>();
+    auto splitterList = this->findChildren<DocSheet *>();
     foreach (auto s, splitterList) {
         QString sSplitterPath = s->qGetPath();
         if (sSplitterPath == sPath) {
@@ -561,10 +622,10 @@ void MainTabWidgetEx::SlotCloseTab(const QString &sPath)
     }
 }
 
-void MainTabWidgetEx::SlotOpenFileResult(const QString &sPath, const bool &res)
+void CentralDocPage::SlotOpenFileResult(const QString &sPath, const bool &res)
 {
     if (!res) { //  打开失败了
-        auto splitterList = this->findChildren<MainSplitter *>();
+        auto splitterList = this->findChildren<DocSheet *>();
         foreach (auto s, splitterList) {
             QString sSplitterPath = s->qGetPath();
             if (sSplitterPath == sPath) {
@@ -580,21 +641,21 @@ void MainTabWidgetEx::SlotOpenFileResult(const QString &sPath, const bool &res)
     emit sigOpenFileResult(sPath, res);
 }
 
-void MainTabWidgetEx::setCurrentState(const int &nCurrentState)
+void CentralDocPage::setCurrentState(const int &nCurrentState)
 {
-    Q_D(MainTabWidgetEx);
-    d->m_nCurrentState = nCurrentState;
+
+    m_nCurrentState = nCurrentState;
 }
 
-void MainTabWidgetEx::SetFileChange()
+void CentralDocPage::SetFileChange()
 {
-    Q_D(MainTabWidgetEx);
-    d->SetFileChange(qGetCurPath(), 1);
+
+    SetFileChange(qGetCurPath(), 1);
 }
 
-void MainTabWidgetEx::setCurrentTabByFilePath(const QString &filePath)
+void CentralDocPage::setCurrentTabByFilePath(const QString &filePath)
 {
-    auto splitterList = this->findChildren<MainSplitter *>();
+    auto splitterList = this->findChildren<DocSheet *>();
     foreach (auto s, splitterList) {
         QString sSplitterPath = s->qGetPath();
         if (sSplitterPath == filePath) {
@@ -605,14 +666,14 @@ void MainTabWidgetEx::setCurrentTabByFilePath(const QString &filePath)
     }
 }
 
-int MainTabWidgetEx::getCurrentState()
+int CentralDocPage::getCurrentState()
 {
-    Q_D(MainTabWidgetEx);
-    return d->m_nCurrentState;
+
+    return m_nCurrentState;
 }
 
 //  搜索框
-void MainTabWidgetEx::ShowFindWidget()
+void CentralDocPage::ShowFindWidget()
 {
     int nState = getCurrentState();
     if (nState == SLIDER_SHOW)
@@ -620,7 +681,7 @@ void MainTabWidgetEx::ShowFindWidget()
 
     DWidget *w = m_pStackedLayout->currentWidget();
     if (w) {
-        auto splitter = qobject_cast<MainSplitter *>(w);
+        auto splitter = qobject_cast<DocSheet *>(w);
         if (splitter) {
             splitter->ShowFindWidget();
         }
@@ -628,9 +689,9 @@ void MainTabWidgetEx::ShowFindWidget()
 }
 
 //  开启 幻灯片
-void MainTabWidgetEx::OnOpenSliderShow()
+void CentralDocPage::OnOpenSliderShow()
 {
-    Q_D(MainTabWidgetEx);
+
 
     int nState = getCurrentState();
     if (nState != SLIDER_SHOW) {
@@ -638,7 +699,7 @@ void MainTabWidgetEx::OnOpenSliderShow()
 
         m_pTabBar->setVisible(false);
 
-        auto splitter = qobject_cast<MainSplitter *>(m_pStackedLayout->currentWidget());
+        auto splitter = qobject_cast<DocSheet *>(m_pStackedLayout->currentWidget());
         if (splitter) {
             splitter->OnOpenSliderShow();
 
@@ -646,7 +707,7 @@ void MainTabWidgetEx::OnOpenSliderShow()
 
             QString sPath = splitter->qGetPath();
 
-            d->m_strSliderPath = sPath;
+            m_strSliderPath = sPath;
 
             auto _proxy = getCurFileAndProxy(sPath);
             _proxy->setAutoPlaySlide(true);
@@ -665,9 +726,9 @@ void MainTabWidgetEx::OnOpenSliderShow()
 }
 
 //  退出幻灯片
-void MainTabWidgetEx::OnExitSliderShow()
+void CentralDocPage::OnExitSliderShow()
 {
-    Q_D(MainTabWidgetEx);
+
 
     int nState = getCurrentState();
     if (nState == SLIDER_SHOW) {
@@ -676,11 +737,11 @@ void MainTabWidgetEx::OnExitSliderShow()
         MainWindow::Instance()->SetSliderShowState(1);
         m_pTabBar->setVisible(true);
 
-        auto splitter = qobject_cast<MainSplitter *>(m_pStackedLayout->currentWidget());
+        auto splitter = qobject_cast<DocSheet *>(m_pStackedLayout->currentWidget());
         if (splitter) {
             splitter->OnExitSliderShow();
 
-            DocummentProxy *_proxy = getCurFileAndProxy(d->m_strSliderPath);
+            DocummentProxy *_proxy = getCurFileAndProxy(m_strSliderPath);
             if (!_proxy) {
                 return;
             }
@@ -690,13 +751,13 @@ void MainTabWidgetEx::OnExitSliderShow()
             m_pctrlwidget = nullptr;
         }
 
-        d->m_strSliderPath = "";
+        m_strSliderPath = "";
     }
 }
 
-void MainTabWidgetEx::OnOpenMagnifer()
+void CentralDocPage::OnOpenMagnifer()
 {
-    Q_D(MainTabWidgetEx);
+
 
     int nState = getCurrentState();
     if (nState != Magnifer_State) {
@@ -704,18 +765,18 @@ void MainTabWidgetEx::OnOpenMagnifer()
         TitleWidget::Instance()->setMagnifierState();
 
         setCurrentState(Magnifer_State);
-        d->m_strMagniferPath = qGetCurPath();
+        m_strMagniferPath = qGetCurPath();
     }
 }
 
 //  取消放大镜
-void MainTabWidgetEx::OnExitMagnifer()
+void CentralDocPage::OnExitMagnifer()
 {
     int nState = getCurrentState();
     if (nState == Magnifer_State) {
         setCurrentState(Default_State);
 
-        auto splitter = qobject_cast<MainSplitter *>(m_pStackedLayout->currentWidget());
+        auto splitter = qobject_cast<DocSheet *>(m_pStackedLayout->currentWidget());
         if (splitter) {
             QString sPath = splitter->qGetPath();
             DocummentProxy *_proxy = getCurFileAndProxy(sPath);

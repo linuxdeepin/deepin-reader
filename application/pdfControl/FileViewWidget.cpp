@@ -21,8 +21,8 @@
 #include "widgets/FindWidget.h"
 
 #include "FileViewWidgetPrivate.h"
-#include "widgets/controller/ProxyData.h"
-#include "widgets/controller/ProxyFileDataModel.h"
+#include "controller/ProxyData.h"
+#include "controller/ProxyFileDataModel.h"
 
 FileViewWidget::FileViewWidget(DWidget *parent)
     : CustomWidget(FILE_VIEW_WIDGET, parent), d_ptr(new FileViewWidgetPrivate(this))

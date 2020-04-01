@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "MainSplitter.h"
+#include "DocSheet.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -24,23 +24,23 @@
 #include <QMimeData>
 
 #include "widgets/SpinnerWidget.h"
-#include "widgets/LeftSidebarWidget.h"
-#include "FileViewWidget.h"
+#include "SheetSidebar.h"
+#include "pdfControl/FileViewWidget.h"
 #include "TitleWidget.h"
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 #include "app/ProcessController.h"
 
-MainSplitter::MainSplitter(DWidget *parent)
+DocSheet::DocSheet(DWidget *parent)
     : DSplitter(parent)
 {
     InitWidget();
 }
 
-MainSplitter::~MainSplitter()
+DocSheet::~DocSheet()
 {
 }
 
-void MainSplitter::InitWidget()
+void DocSheet::InitWidget()
 {
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
@@ -48,17 +48,18 @@ void MainSplitter::InitWidget()
     if (dApp) {
         dApp->setFirstView(true);
     }
-    m_pLeftWidget = new LeftSidebarWidget;
-    addWidget(m_pLeftWidget);
+
+    m_sideBar = new SheetSidebar(this);
+    addWidget(m_sideBar);
 
     m_pFileViewWidget = new FileViewWidget;
-    connect(m_pLeftWidget, SIGNAL(sigDeleteAnntation(const int &, const QString &)), m_pFileViewWidget, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
+    connect(m_sideBar, SIGNAL(sigDeleteAnntation(const int &, const QString &)), m_pFileViewWidget, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
 
     connect(m_pFileViewWidget, SIGNAL(sigFileOpenResult(const QString &, const bool &)), SLOT(SlotFileOpenResult(const QString &, const bool &)));
     connect(m_pFileViewWidget, SIGNAL(sigFindOperation(const int &)), SLOT(SlotFindOperation(const int &)));
-    connect(m_pFileViewWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pLeftWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)));
-    connect(m_pFileViewWidget, SIGNAL(sigBookMarkMsg(const int &, const QString &)), m_pLeftWidget, SIGNAL(sigBookMarkMsg(const int &, const QString &)));
-    connect(m_pFileViewWidget, SIGNAL(sigUpdateThumbnail(const int &)), m_pLeftWidget, SIGNAL(sigUpdateThumbnail(const int &)));
+    connect(m_pFileViewWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_sideBar, SIGNAL(sigAnntationMsg(const int &, const QString &)));
+    connect(m_pFileViewWidget, SIGNAL(sigBookMarkMsg(const int &, const QString &)), m_sideBar, SIGNAL(sigBookMarkMsg(const int &, const QString &)));
+    connect(m_pFileViewWidget, SIGNAL(sigUpdateThumbnail(const int &)), m_sideBar, SIGNAL(sigUpdateThumbnail(const int &)));
 
     m_pRightWidget = new QStackedWidget;
     m_pSpinnerWidget = new SpinnerWidget(this);
@@ -86,7 +87,7 @@ void MainSplitter::InitWidget()
     setAcceptDrops(true);
 }
 
-void MainSplitter::SlotFileOpenResult(const QString &s, const bool &res)
+void DocSheet::SlotFileOpenResult(const QString &s, const bool &res)
 {
     if (res) {
         if (m_pRightWidget && m_pSpinnerWidget) {
@@ -100,7 +101,7 @@ void MainSplitter::SlotFileOpenResult(const QString &s, const bool &res)
             TitleWidget::Instance()->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
         }
 
-        m_pLeftWidget->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
+        m_sideBar->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
 
         if (dApp) {
             dApp->setFirstView(false);
@@ -109,14 +110,14 @@ void MainSplitter::SlotFileOpenResult(const QString &s, const bool &res)
     emit sigOpenFileResult(s, res);
 }
 
-void MainSplitter::SlotFindOperation(const int &iType)
+void DocSheet::SlotFindOperation(const int &iType)
 {
-    m_pLeftWidget->SetFindOperation(iType);
+    m_sideBar->SetFindOperation(iType);
 }
 
-void MainSplitter::SlotNotifyMsg(const int &msgType, const QString &msgContent)
+void DocSheet::SlotNotifyMsg(const int &msgType, const QString &msgContent)
 {
-    if (this->isVisible()) {    //  只有显示的窗口 处理 MainTabWidgetEx 发送的信号
+    if (this->isVisible()) {    //  只有显示的窗口 处理 CentralDocPage 发送的信号
         if (msgType == MSG_NOTIFY_KEY_MSG) {
             auto cwlist = this->findChildren<CustomWidget *>();
             foreach (auto cw, cwlist) {
@@ -133,7 +134,7 @@ void MainSplitter::SlotNotifyMsg(const int &msgType, const QString &msgContent)
 
                 QString sContent = obj.value("content").toString();
 
-                int nRes = m_pLeftWidget->dealWithData(msgType, sContent);
+                int nRes = m_sideBar->dealWithData(msgType, sContent);
                 if (nRes != MSG_OK) {
                     nRes = m_pFileViewWidget->dealWithData(msgType, sContent);
                     if (nRes == MSG_OK)
@@ -144,24 +145,24 @@ void MainSplitter::SlotNotifyMsg(const int &msgType, const QString &msgContent)
     }
 }
 
-QString MainSplitter::qGetPath()
+QString DocSheet::qGetPath()
 {
     return m_pFileViewWidget->getFilePath();
 }
 
-void MainSplitter::qSetPath(const QString &strPath)
+void DocSheet::qSetPath(const QString &strPath)
 {
     m_pFileViewWidget->OpenFilePath(strPath);  //  proxy 打开文件
 }
 
-void MainSplitter::qSetFileChange(const int &nState)
+void DocSheet::qSetFileChange(const int &nState)
 {
     bool bchange = nState == 1 ? true : false;
     if (nullptr != m_pFileViewWidget)
         m_pFileViewWidget->setFileChange(bchange);
 }
 
-int MainSplitter::qGetFileChange()
+int DocSheet::qGetFileChange()
 {
     int istatus = -1;
     if (nullptr != m_pFileViewWidget)
@@ -169,33 +170,33 @@ int MainSplitter::qGetFileChange()
     return  istatus;
 }
 
-void MainSplitter::saveData()
+void DocSheet::saveData()
 {
     m_pFileViewWidget->saveData();
 }
 
-FileDataModel MainSplitter::qGetFileData()
+FileDataModel DocSheet::qGetFileData()
 {
     return m_pFileViewWidget->qGetFileData();
 }
 
-DocummentProxy *MainSplitter::getDocProxy()
+DocummentProxy *DocSheet::getDocProxy()
 {
     return m_pFileViewWidget->GetDocProxy();
 }
 
-void MainSplitter::OnOpenSliderShow()
+void DocSheet::OnOpenSliderShow()
 {
-    m_bOldState = m_pLeftWidget->isVisible();
-    m_pLeftWidget->setVisible(false);
+    m_bOldState = m_sideBar->isVisible();
+    m_sideBar->setVisible(false);
 }
 
-void MainSplitter::OnExitSliderShow()
+void DocSheet::OnExitSliderShow()
 {
-    m_pLeftWidget->setVisible(m_bOldState);
+    m_sideBar->setVisible(m_bOldState);
 }
 
-void MainSplitter::ShowFindWidget()
+void DocSheet::ShowFindWidget()
 {
     m_pFileViewWidget->ShowFindWidget();
 }

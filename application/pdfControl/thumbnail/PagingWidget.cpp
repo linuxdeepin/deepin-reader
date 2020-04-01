@@ -22,7 +22,7 @@
 
 #include "docview/docummentproxy.h"
 #include "gof/bridge/IHelper.h"
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 PagingWidget::PagingWidget(DWidget *parent)
     : CustomWidget(PAGE_WIDGET, parent)
@@ -138,7 +138,7 @@ void PagingWidget::__SetBtnState(const int &currntPage, const int &totalPage)
 
 void PagingWidget::OnDocFilePageChange(const QString &msgContent)
 {
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(m_strBindPath);
     if (_proxy) {
         int totalPage = _proxy->getPageSNum();
@@ -170,7 +170,7 @@ void PagingWidget::OnDocFileOpenOk(const QString &sPath)
 {
     m_strBindPath = sPath;
 
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sPath);
     if (_proxy) {
         bool isHasLabel = _proxy->haslabel();
@@ -205,7 +205,7 @@ void PagingWidget::SlotJumpPageLineEditReturnPressed()
 
 void PagingWidget::__NormalChangePage()
 {
-    DocummentProxy *_proxy =  MainTabWidgetEx::Instance()->getCurFileAndProxy(m_strBindPath);
+    DocummentProxy *_proxy =  CentralDocPage::Instance()->getCurFileAndProxy(m_strBindPath);
     QString sText = m_pJumpPageLineEdit->text();
     int iPage = sText.toInt();
     if (iPage <= 0 || iPage > _proxy->getPageSNum()) {
@@ -218,7 +218,7 @@ void PagingWidget::__NormalChangePage()
 
 void PagingWidget::__PageNumberJump()
 {
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(m_strBindPath);
     if (_proxy) {
         int nPageSum = _proxy->getPageSNum();

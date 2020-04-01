@@ -10,7 +10,7 @@
 #include "HandleMenu.h"
 #include "TitleMenu.h"
 
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 #include "utils/PublicFunction.h"
 
 TitleWidget *TitleWidget::g_onlyTitleWdiget = nullptr;
@@ -58,7 +58,7 @@ void TitleWidget::SetFindWidget(const int &iFlag, const QString &sPath)
     if (iFlag == E_FIND_CONTENT) {
         m_pThumbnailBtn->setChecked(true);
     } else if (iFlag == E_FIND_EXIT) {
-        FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData();
+        FileDataModel fdm = CentralDocPage::Instance()->qGetFileData();
 
         int nState = fdm.qGetData(Thumbnail);
         bool showLeft = nState == 1 ? true : false;
@@ -101,7 +101,7 @@ void TitleWidget::SetBtnDisable(const bool &bAble)
 
 void TitleWidget::OnShortCut_Alt1()
 {
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     if (pMtwe) {
         pMtwe->OnExitMagnifer();
 
@@ -115,7 +115,7 @@ void TitleWidget::OnShortCut_Alt1()
 
 void TitleWidget::OnShortCut_Alt2()
 {
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     if (pMtwe) {
         pMtwe->OnExitMagnifer();
 
@@ -144,7 +144,7 @@ void TitleWidget::slotOpenFileOk(const QString &sPath)
 {
     SetBtnDisable(false);
 
-    FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData();
+    FileDataModel fdm = CentralDocPage::Instance()->qGetFileData();
 
     int nState = fdm.qGetData(Thumbnail);
     bool showLeft = nState == 1 ? true : false;
@@ -248,7 +248,7 @@ void TitleWidget::on_searchBtn_clicked()
 void TitleWidget::SlotSetCurrentTool(const int &sAction)
 {
     //  切换了选择工具, 需要取消放大镜的操作
-    MainTabWidgetEx::Instance()->OnExitMagnifer();
+    CentralDocPage::Instance()->OnExitMagnifer();
 
     if (sAction == E_HANDLE_SELECT_TEXT) {
         setDefaultShape();

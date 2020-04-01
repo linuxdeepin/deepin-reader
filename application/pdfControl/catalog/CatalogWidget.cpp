@@ -26,7 +26,7 @@
 #include "CustomControl/DFMGlobal.h"
 #include "docview/docummentproxy.h"
 
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 CatalogWidget::CatalogWidget(DWidget *parent)
     : CustomWidget(CATALOG_WIDGET, parent)
@@ -110,7 +110,7 @@ void CatalogWidget::setTitleTheme()
 void CatalogWidget::OnDocOpenFileOk(const QString &sPath)
 {
     if (titleLabel) {
-        MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+        CentralDocPage *pMtwe = CentralDocPage::Instance();
         if (pMtwe) {
             DocummentProxy *_pProxy = pMtwe->getCurFileAndProxy(sPath);
             if (_pProxy) {

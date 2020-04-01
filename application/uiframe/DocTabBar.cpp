@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "MainTabBar.h"
+#include "DocTabBar.h"
 
 #include <QDebug>
 #include <QDragEnterEvent>
@@ -25,7 +25,7 @@
 #include <QDir>
 #include <QTimer>
 
-#include "MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 #include "FileDataModel.h"
 #include "MainWindow.h"
 #include <DPlatformWindowHandle>
@@ -37,10 +37,10 @@
 #include "gof/bridge/IHelper.h"
 #include "TitleMenu.h"
 
-MainTabBar::MainTabBar(DWidget *parent)
+DocTabBar::DocTabBar(DWidget *parent)
     : DTabBar(parent)
 {
-    m_strObserverName = "MainTabBar";
+    m_strObserverName = "DocTabBar";
 
     this->setTabsClosable(true);
 
@@ -56,21 +56,21 @@ MainTabBar::MainTabBar(DWidget *parent)
 
     dApp->m_pModelService->addObserver(this);
 
-    connect(this, &DTabBar::tabReleaseRequested, this, &MainTabBar::handleTabReleased);
+    connect(this, &DTabBar::tabReleaseRequested, this, &DocTabBar::handleTabReleased);
 
-    connect(this, &DTabBar::tabDroped, this, &MainTabBar::handleTabDroped);
+    connect(this, &DTabBar::tabDroped, this, &DocTabBar::handleTabDroped);
 
-    connect(this, &DTabBar::dragActionChanged, this, &MainTabBar::handleDragActionChanged);
+    connect(this, &DTabBar::dragActionChanged, this, &DocTabBar::handleDragActionChanged);
 
     setDragable(true);
 }
 
-MainTabBar::~MainTabBar()
+DocTabBar::~DocTabBar()
 {
     dApp->m_pModelService->removeObserver(this);
 }
 
-int MainTabBar::indexOfFilePath(const QString &filePath)
+int DocTabBar::indexOfFilePath(const QString &filePath)
 {
     for (int i = 0; i < count(); ++i) {
         QString sTabData = this->tabData(i).toString();
@@ -87,7 +87,7 @@ int MainTabBar::indexOfFilePath(const QString &filePath)
     return -1;
 }
 
-QMimeData *MainTabBar::createMimeDataFromTab(int index, const QStyleOptionTab &option) const
+QMimeData *DocTabBar::createMimeDataFromTab(int index, const QStyleOptionTab &option) const
 {
     const QString tabName = tabText(index);
 
@@ -104,7 +104,7 @@ QMimeData *MainTabBar::createMimeDataFromTab(int index, const QStyleOptionTab &o
     return mimeData;
 }
 
-void MainTabBar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
+void DocTabBar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
 {
     const QString tabName = QString::fromUtf8(source->data("reader/tabbar"));
 
@@ -113,20 +113,20 @@ void MainTabBar::insertFromMimeDataOnDragEnter(int index, const QMimeData *sourc
     setTabMinimumSize(index, QSize(140, 36));
 }
 
-void MainTabBar::insertFromMimeData(int index, const QMimeData *source)
+void DocTabBar::insertFromMimeData(int index, const QMimeData *source)
 {
     QString filePath = source->data("reader/filePath");
 
     AddFileTab(filePath + Constant::sQStringSep, index);
 }
 
-bool MainTabBar::canInsertFromMimeData(int index, const QMimeData *source) const
+bool DocTabBar::canInsertFromMimeData(int index, const QMimeData *source) const
 {
     //可以改为根据进程号当前进程不能给自己传
     return source->hasFormat("reader/tabbar");
 }
 
-void MainTabBar::handleDragActionChanged(Qt::DropAction action)
+void DocTabBar::handleDragActionChanged(Qt::DropAction action)
 {
     if (count() <= 1)
         QGuiApplication::changeOverrideCursor(Qt::ForbiddenCursor);
@@ -142,7 +142,7 @@ void MainTabBar::handleDragActionChanged(Qt::DropAction action)
     }
 }
 
-int MainTabBar::dealWithData(const int &msgType, const QString &msgContent)
+int DocTabBar::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_TAB_ADD == msgType) {
         AddFileTab(msgContent);
@@ -157,19 +157,19 @@ int MainTabBar::dealWithData(const int &msgType, const QString &msgContent)
     return MSG_NO_OK;
 }
 
-void MainTabBar::notifyMsg(const int &msgType, const QString &msgContent)
+void DocTabBar::notifyMsg(const int &msgType, const QString &msgContent)
 {
     dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
 
-void MainTabBar::__InitConnection()
+void DocTabBar::__InitConnection()
 {
     connect(this, SIGNAL(tabCloseRequested(int)), SLOT(SlotTabCloseRequested(int)));
     connect(this, SIGNAL(tabAddRequested()), SLOT(SlotTabAddRequested()));
     connect(this, SIGNAL(currentChanged(int)), SLOT(SlotCurrentChanged(int)));
 }
 
-void MainTabBar::SlotCurrentChanged(int index)
+void DocTabBar::SlotCurrentChanged(int index)
 {
     QString sTabData = this->tabData(index).toString();
     if (sTabData != "") {
@@ -184,11 +184,11 @@ void MainTabBar::SlotCurrentChanged(int index)
     }
 }
 
-void MainTabBar::AddFileTab(const QString &sContent, int index)
+void DocTabBar::AddFileTab(const QString &sContent, int index)
 {
     QStringList filePaths;
 
-    QList<QString> sOpenFiles = MainTabWidgetEx::Instance()->qGetAllPath();
+    QList<QString> sOpenFiles = CentralDocPage::Instance()->qGetAllPath();
 
     QStringList canOpenFileList = sContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
 
@@ -228,17 +228,17 @@ void MainTabBar::AddFileTab(const QString &sContent, int index)
     }
 
     if (canOpenFileList.count()  > 0)
-        MainTabWidgetEx::Instance()->setCurrentTabByFilePath(canOpenFileList.value(canOpenFileList.count() - 1));
+        CentralDocPage::Instance()->setCurrentTabByFilePath(canOpenFileList.value(canOpenFileList.count() - 1));
 }
 
-QString MainTabBar::getFileName(const QString &strFilePath)
+QString DocTabBar::getFileName(const QString &strFilePath)
 {
     int nLastPos = strFilePath.lastIndexOf('/');
     nLastPos++;
     return strFilePath.mid(nLastPos);
 }
 
-void MainTabBar::handleTabReleased(int index)
+void DocTabBar::handleTabReleased(int index)
 {
     if (count() <= 1)
         return;
@@ -247,7 +247,7 @@ void MainTabBar::handleTabReleased(int index)
 
     QString sPath = sDataList.value(0);
 
-    MainTabWidgetEx::Instance()->SaveFile(MSG_SAVE_FILE, sPath);
+    CentralDocPage::Instance()->SaveFile(MSG_SAVE_FILE, sPath);
 
     removeTab(index);
 
@@ -260,7 +260,7 @@ void MainTabBar::handleTabReleased(int index)
     QTimer::singleShot(50, this, SLOT(onDroped()));
 }
 
-void MainTabBar::handleTabDroped(int index, Qt::DropAction da, QObject *target)
+void DocTabBar::handleTabDroped(int index, Qt::DropAction da, QObject *target)
 {
     Q_UNUSED(da)    //同程序da可以根据目标传回，跨程序全是copyAction
 
@@ -273,7 +273,7 @@ void MainTabBar::handleTabDroped(int index, Qt::DropAction da, QObject *target)
 
     QString sPath = sDataList.value(0);
 
-    MainTabWidgetEx::Instance()->SaveFile(MSG_SAVE_FILE, sPath);
+    CentralDocPage::Instance()->SaveFile(MSG_SAVE_FILE, sPath);
 
     removeTab(index);
 
@@ -282,20 +282,20 @@ void MainTabBar::handleTabDroped(int index, Qt::DropAction da, QObject *target)
     QTimer::singleShot(50, this, SLOT(onDroped()));
 }
 
-void MainTabBar::onDroped()
+void DocTabBar::onDroped()
 {
     if (count() <= 0)
         MainWindow::Instance()->close();
 }
 
 //  新增
-void MainTabBar::SlotTabAddRequested()
+void DocTabBar::SlotTabAddRequested()
 {
     notifyMsg(E_OPEN_FILE);
 }
 
 //  关闭
-void MainTabBar::SlotTabCloseRequested(int index)
+void DocTabBar::SlotTabCloseRequested(int index)
 {
     QString sPath = this->tabData(index).toString();
     int ipos = sPath.indexOf(Constant::sQStringSep);
@@ -305,7 +305,7 @@ void MainTabBar::SlotTabCloseRequested(int index)
     }
 }
 
-void MainTabBar::SlotRemoveFileTab(const QString &sPath)
+void DocTabBar::SlotRemoveFileTab(const QString &sPath)
 {
     if (sPath != "") {
         int nCount = this->count();
@@ -330,7 +330,7 @@ void MainTabBar::SlotRemoveFileTab(const QString &sPath)
 }
 
 //  打开成功了， 将标志位 置  111
-void MainTabBar::SlotOpenFileResult(const QString &s, const bool &res)
+void DocTabBar::SlotOpenFileResult(const QString &s, const bool &res)
 {
     if (res) {
         int nCount = this->count();

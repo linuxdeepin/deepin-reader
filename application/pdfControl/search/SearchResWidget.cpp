@@ -19,7 +19,7 @@
 #include "SearchResWidget.h"
 #include "docview/docummentproxy.h"
 
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 SearchResWidget::SearchResWidget(DWidget *parent)
     : CustomWidget(SEARCH_RES_WIDGET, parent)
@@ -78,7 +78,7 @@ void SearchResWidget::slotSelectItem(QListWidgetItem *item)
 void SearchResWidget::OnOpenFileOk(const QString &sPath)
 {
     m_strBindPath = sPath;
-    DocummentProxy *_proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy(sPath);
+    DocummentProxy *_proxy = CentralDocPage::Instance()->getCurFileAndProxy(sPath);
     if (_proxy) {
         connect(_proxy, SIGNAL(signal_searchRes(stSearchRes)), SLOT(slotGetSearchContant(const stSearchRes &)));
         connect(_proxy, SIGNAL(signal_searchover()), SLOT(slotSearchOver()));
@@ -122,7 +122,7 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
         dApp->adaptScreenView(tW, tH);
         itemWidget->setMinimumSize(QSize(tW, tH));
 
-        auto dproxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
+        auto dproxy = CentralDocPage::Instance()->getCurFileAndProxy();
         if (nullptr != dproxy) {
             QImage image;
             tW = 48;
@@ -261,7 +261,7 @@ void SearchResWidget::updateThumbnail(const int &page)
     int tW = 48;
     int tH = 68;
     dApp->adaptScreenView(tW, tH);
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     auto dproxy = pMtwe->getCurFileAndProxy(m_strBindPath);
     dproxy->getImage(page, image, tW, tH);
     for (int index = 0; index < itemNum; index++) {

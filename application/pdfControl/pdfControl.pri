@@ -21,9 +21,14 @@ HEADERS += \
     $$PWD/menu/DefaultOperationMenu.h \
     $$PWD/menu/NoteMenu.h \
     $$PWD/menu/TextOperationMenu.h \
-    $$PWD/MainSplitter.h \
     $$PWD/FileViewWidgetPrivate.h \
-    $$PWD/FileViewWidget.h
+    $$PWD/FileViewWidget.h \
+    $$PWD/controller/Annotation.h \
+    $$PWD/controller/ProxyData.h \
+    $$PWD/controller/ProxyFileDataModel.h \
+    $$PWD/controller/ProxyMouseMove.h \
+    $$PWD/controller/ProxyNotifyMsg.h \
+    $$PWD/controller/ProxyViewDisplay.h
 
 SOURCES += \
     $$PWD/CustomListWidget.cpp \
@@ -48,6 +53,11 @@ SOURCES += \
     $$PWD/menu/DefaultOperationMenu.cpp \
     $$PWD/menu/NoteMenu.cpp \
     $$PWD/menu/TextOperationMenu.cpp \
-    $$PWD/MainSplitter.cpp \
     $$PWD/FileViewWidgetPrivate.cpp \
-    $$PWD/FileViewWidget.cpp
+    $$PWD/FileViewWidget.cpp \
+    $$PWD/controller/Annotation.cpp \
+    $$PWD/controller/ProxyData.cpp \
+    $$PWD/controller/ProxyFileDataModel.cpp \
+    $$PWD/controller/ProxyMouseMove.cpp \
+    $$PWD/controller/ProxyNotifyMsg.cpp \
+    $$PWD/controller/ProxyViewDisplay.cpp

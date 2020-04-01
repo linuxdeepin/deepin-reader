@@ -24,7 +24,7 @@
 //#include "business/AppInfo.h"
 //#include "docview/docummentproxy.h"
 
-//#include "widgets/main/MainTabWidgetEx.h"
+//#include "CentralDocPage.h"
 
 AnnotationHelper::AnnotationHelper(QObject *parent)
     : QObject(parent)
@@ -72,7 +72,7 @@ AnnotationHelper::AnnotationHelper(QObject *parent)
 ////  删除注释节点
 //void AnnotationHelper::__DeletePageIconAnnotation(const QString &msgContent, QString &sUuid)
 //{
-//    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+//    CentralDocPage *pMtwe = CentralDocPage::Instance();
 
 //    DocummentProxy *_proxy = pMtwe->getCurFileAndProxy();
 //    if (_proxy) {
@@ -91,7 +91,7 @@ AnnotationHelper::AnnotationHelper(QObject *parent)
 ////  更新注释节点内容
 //void AnnotationHelper::__UpdatePageIconAnnotation(const QString &msgContent)
 //{
-//    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+//    CentralDocPage *pMtwe = CentralDocPage::Instance();
 
 //    DocummentProxy *_proxy = pMtwe->getCurFileAndProxy();
 //    if (_proxy) {
@@ -108,7 +108,7 @@ AnnotationHelper::AnnotationHelper(QObject *parent)
 
 //void AnnotationHelper::__AddHighLight(const QString &msgContent)
 //{
-//    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+//    CentralDocPage *pMtwe = CentralDocPage::Instance();
 
 //    DocummentProxy *_proxy = pMtwe->getCurFileAndProxy();
 //    if (_proxy) {
@@ -150,7 +150,7 @@ AnnotationHelper::AnnotationHelper(QObject *parent)
 //        QString sNote = sList.at(4);
 //        QString sPage = sList.at(5);
 
-//        MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+//        CentralDocPage *pMtwe = CentralDocPage::Instance();
 
 //        DocummentProxy *_proxy = pMtwe->getCurFileAndProxy();
 //        if (_proxy) {
@@ -171,7 +171,7 @@ AnnotationHelper::AnnotationHelper(QObject *parent)
 
 //void AnnotationHelper::__RemoveHighLight(const QString &msgContent, QString &sRes)
 //{
-//    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+//    CentralDocPage *pMtwe = CentralDocPage::Instance();
 
 //    DocummentProxy *_proxy = pMtwe->getCurFileAndProxy();
 //    if (_proxy) {
@@ -194,7 +194,7 @@ AnnotationHelper::AnnotationHelper(QObject *parent)
 ////  更新高亮颜色
 //void AnnotationHelper::__ChangeAnnotationColor(const QString &msgContent)
 //{
-//    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+//    CentralDocPage *pMtwe = CentralDocPage::Instance();
 
 //    DocummentProxy *_proxy = pMtwe->getCurFileAndProxy();
 //    if (_proxy) {
@@ -215,7 +215,7 @@ AnnotationHelper::AnnotationHelper(QObject *parent)
 
 //void AnnotationHelper::__RemoveAnnotation(const QString &msgContent, QString &sUuid)
 //{
-//    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+//    CentralDocPage *pMtwe = CentralDocPage::Instance();
 
 //    DocummentProxy *_proxy = pMtwe->getCurFileAndProxy();
 //    if (_proxy) {
@@ -231,7 +231,7 @@ AnnotationHelper::AnnotationHelper(QObject *parent)
 
 //void AnnotationHelper::__UpdateAnnotationText(const QString &msgContent)
 //{
-//    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+//    CentralDocPage *pMtwe = CentralDocPage::Instance();
 
 //    DocummentProxy *_proxy = pMtwe->getCurFileAndProxy();
 //    if (_proxy) {
@@ -249,7 +249,7 @@ AnnotationHelper::AnnotationHelper(QObject *parent)
 
 //void AnnotationHelper::AddPageIconAnnotation(const QString &msgContent)
 //{
-//    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+//    CentralDocPage *pMtwe = CentralDocPage::Instance();
 
 //    DocummentProxy *_proxy = pMtwe->getCurFileAndProxy();
 //    if (_proxy) {

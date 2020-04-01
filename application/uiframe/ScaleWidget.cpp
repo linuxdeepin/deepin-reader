@@ -25,7 +25,7 @@
 #include <DComboBox>
 
 #include "docview/docummentproxy.h"
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 ScaleWidget::ScaleWidget(DWidget *parent)
     : CustomWidget("ScaleWidget", parent)
@@ -210,9 +210,9 @@ void ScaleWidget::SlotReturnPressed()
 
 void ScaleWidget::SetComboBoxMax()
 {
-    QString sPath = MainTabWidgetEx::Instance()->qGetCurPath();
+    QString sPath = CentralDocPage::Instance()->qGetCurPath();
 
-    auto _proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy(sPath);
+    auto _proxy = CentralDocPage::Instance()->getCurFileAndProxy(sPath);
     if (_proxy) {
         double dMax = _proxy->getMaxZoomratio();
 
@@ -231,7 +231,7 @@ void ScaleWidget::SetComboBoxMax()
             }
         }
 
-        FileDataModel fdm = MainTabWidgetEx::Instance()->qGetFileData();
+        FileDataModel fdm = CentralDocPage::Instance()->qGetFileData();
         double nScale = fdm.qGetData(Scale);
         if (static_cast<int>(nScale) == 0) {
             nScale = 100;

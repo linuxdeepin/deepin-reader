@@ -4,7 +4,7 @@
 #include "docview/docummentproxy.h"
 
 #include "gof/bridge/IHelper.h"
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralDocPage.h"
 
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
@@ -15,7 +15,7 @@ DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
 
 void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPage)
 {
-    MainTabWidgetEx *pMtwe = MainTabWidgetEx::Instance();
+    CentralDocPage *pMtwe = CentralDocPage::Instance();
     if (pMtwe) {
 
         m_showPoint = showPoint;
@@ -154,7 +154,7 @@ void DefaultOperationMenu::slotExitFullScreenClicked()
 
 void DefaultOperationMenu::slotAddIconNote()
 {
-    DocummentProxy *_proxy = MainTabWidgetEx::Instance()->getCurFileAndProxy();
+    DocummentProxy *_proxy = CentralDocPage::Instance()->getCurFileAndProxy();
     QString sUuid = _proxy->addIconAnnotation(m_pointclicked);        //  添加注释图标成功
     if (sUuid != "") {
         int nClickPage = _proxy->pointInWhichPage(m_pointclicked);

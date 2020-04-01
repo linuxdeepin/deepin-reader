@@ -1,4 +1,4 @@
-#include "HomeWidget.h"
+#include "CentralNavPage.h"
 
 #include <DFileDialog>
 #include <DLabel>
@@ -11,7 +11,7 @@
 #include "utils/PublicFunction.h"
 #include "app/ProcessController.h"
 
-HomeWidget::HomeWidget(DWidget *parent)
+CentralNavPage::CentralNavPage(DWidget *parent)
     : CustomWidget(HOME_WIDGET, parent)
 {
     m_pMsgList = {MSG_MENU_NEW_WINDOW, E_OPEN_FILE};
@@ -23,12 +23,12 @@ HomeWidget::HomeWidget(DWidget *parent)
     dApp->m_pModelService->addObserver(this);
 }
 
-HomeWidget::~HomeWidget()
+CentralNavPage::~CentralNavPage()
 {
     dApp->m_pModelService->removeObserver(this);
 }
 
-void HomeWidget::initWidget()
+void CentralNavPage::initWidget()
 {
     auto tipsLabel = new CustomClickLabel(tr("Drag PDF files here"), this);
     tipsLabel->setAlignment(Qt::AlignHCenter);
@@ -40,7 +40,7 @@ void HomeWidget::initWidget()
     int tH = 36;
     dApp->adaptScreenView(tW, tH);
     chooseBtn->setFixedSize(QSize(tW, tH));
-    connect(chooseBtn, &DPushButton::clicked, this, &HomeWidget::slotChooseBtnClicked);
+    connect(chooseBtn, &DPushButton::clicked, this, &CentralNavPage::slotChooseBtnClicked);
 
     auto layout = new QVBoxLayout;
     layout->setSpacing(0);
@@ -65,14 +65,14 @@ void HomeWidget::initWidget()
     this->setLayout(layout);
 }
 
-void HomeWidget::slotChooseBtnClicked()
+void CentralNavPage::slotChooseBtnClicked()
 {
     if (ProcessController::execOpenFiles())
         emit filesOpened();
 }
 
 //  主题切换
-void HomeWidget::slotUpdateTheme()
+void CentralNavPage::slotUpdateTheme()
 {
     auto iconSvg = this->findChild<DLabel *>("iconSvg");
     if (iconSvg) {
@@ -92,7 +92,7 @@ void HomeWidget::slotUpdateTheme()
     }
 }
 
-QStringList HomeWidget::getOpenFileList()
+QStringList CentralNavPage::getOpenFileList()
 {
     QStringList fileList;
 
@@ -103,26 +103,23 @@ QStringList HomeWidget::getOpenFileList()
     QString historyDir = QDir::homePath();
     dialog.setDirectory(historyDir);
 
-    const int mode = dialog.exec();
-
-    // if click cancel button or close button.
-    if (mode != QDialog::Accepted) {
+    if (QDialog::Accepted != dialog.exec()) {
         return fileList;
     }
     fileList = dialog.selectedFiles();
     return fileList;
 }
 
-void HomeWidget::initConnections()
+void CentralNavPage::initConnections()
 {
 }
 
-void HomeWidget::NewWindow()
+void CentralNavPage::NewWindow()
 {
     ProcessController::processOpenFile("");
 }
 
-int HomeWidget::dealWithData(const int &msgType, const QString &msgContent)
+int CentralNavPage::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_MENU_NEW_WINDOW == msgType) {
         NewWindow();

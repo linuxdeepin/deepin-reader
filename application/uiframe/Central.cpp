@@ -17,22 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "CentralWidget.h"
+#include "Central.h"
 
 #include <QFileInfo>
 #include <QMimeData>
 #include <QUrl>
 #include <DMessageManager>
 #include <QStackedLayout>
-#include <QProcess>
 
 #include "business/AppInfo.h"
 #include "utils/utils.h"
 #include "app/ProcessController.h"
-#include "widgets/HomeWidget.h"
-#include "widgets/main/MainTabWidgetEx.h"
+#include "CentralNavPage.h"
+#include "CentralDocPage.h"
 
-CentralWidget::CentralWidget(DWidget *parent)
+Central::Central(DWidget *parent)
     : CustomWidget(CENTRAL_WIDGET, parent)
 {
     setAcceptDrops(true);
@@ -44,12 +43,12 @@ CentralWidget::CentralWidget(DWidget *parent)
     dApp->m_pModelService->addObserver(this);
 }
 
-CentralWidget::~CentralWidget()
+Central::~Central()
 {
     dApp->m_pModelService->removeObserver(this);
 }
 
-void CentralWidget::keyPressEvent(QKeyEvent *event)
+void Central::keyPressEvent(QKeyEvent *event)
 {
     //  不是正常显示, 则是全屏模式或者幻灯片模式, 进行页面跳转
     QStringList pFilterList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown
@@ -68,11 +67,11 @@ void CentralWidget::keyPressEvent(QKeyEvent *event)
     CustomWidget::keyPressEvent(event);
 }
 
-void CentralWidget::initConnections()
+void Central::initConnections()
 {
 }
 
-void CentralWidget::OnSetCurrentIndex()
+void Central::OnSetCurrentIndex()
 {
     auto pLayout = this->findChild<QStackedLayout *>();
     if (pLayout) {
@@ -80,7 +79,7 @@ void CentralWidget::OnSetCurrentIndex()
     }
 }
 
-void CentralWidget::SlotOpenFiles(const QString &filePaths)
+void Central::SlotOpenFiles(const QString &filePaths)
 {
     auto pLayout = this->findChild<QStackedLayout *>();
     if (pLayout) {
@@ -90,7 +89,7 @@ void CentralWidget::SlotOpenFiles(const QString &filePaths)
     notifyMsg(MSG_TAB_ADD, filePaths);
 }
 
-void CentralWidget::onFilesOpened()
+void Central::onFilesOpened()
 {
     auto pLayout = this->findChild<QStackedLayout *>();
     if (pLayout) {
@@ -98,7 +97,7 @@ void CentralWidget::onFilesOpened()
     }
 }
 
-void CentralWidget::onShowTip(const QString &contant)
+void Central::onShowTip(const QString &contant)
 {
     int position = contant.indexOf("##**");
     if (!contant.isEmpty() && position > 0) {
@@ -117,7 +116,7 @@ void CentralWidget::onShowTip(const QString &contant)
     }
 }
 
-int CentralWidget::dealWithData(const int &msgType, const QString &msgContent)
+int Central::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == CENTRAL_INDEX_CHANGE) {
         OnSetCurrentIndex();
@@ -131,7 +130,7 @@ int CentralWidget::dealWithData(const int &msgType, const QString &msgContent)
     return MSG_NO_OK;
 }
 
-void CentralWidget::dragEnterEvent(QDragEnterEvent *event)
+void Central::dragEnterEvent(QDragEnterEvent *event)
 {
     auto mimeData = event->mimeData();
     if (mimeData->hasUrls()) {
@@ -141,7 +140,7 @@ void CentralWidget::dragEnterEvent(QDragEnterEvent *event)
     }
 }
 
-void CentralWidget::dropEvent(QDropEvent *event)
+void Central::dropEvent(QDropEvent *event)
 {
     auto mimeData = event->mimeData();
     if (mimeData->hasFormat("reader/tabbar")) {
@@ -194,16 +193,16 @@ void CentralWidget::dropEvent(QDropEvent *event)
     }
 }
 
-void CentralWidget::initWidget()
+void Central::initWidget()
 {
     auto pStcakLayout = new QStackedLayout(this);
     pStcakLayout->setContentsMargins(0, 0, 0, 0);
     pStcakLayout->setSpacing(0);
 
-    HomeWidget *homeWidget = new HomeWidget;
-    connect(homeWidget, SIGNAL(sigOpenFilePaths(const QString &)), SLOT(SlotOpenFiles(const QString &)));
-    connect(homeWidget, SIGNAL(filesOpened()), SLOT(onFilesOpened()));
-    pStcakLayout->addWidget(homeWidget);
+    CentralNavPage *nav = new CentralNavPage;
+    connect(nav, SIGNAL(sigOpenFilePaths(const QString &)), SLOT(SlotOpenFiles(const QString &)));
+    connect(nav, SIGNAL(filesOpened()), SLOT(onFilesOpened()));
+    pStcakLayout->addWidget(nav);
 
-    pStcakLayout->addWidget(new MainTabWidgetEx);
+    pStcakLayout->addWidget(new CentralDocPage);
 }
