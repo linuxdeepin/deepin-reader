@@ -279,21 +279,11 @@ QString CentralDocPage::qDealWithData(const int &msgType, const QString &msgCont
 
 void CentralDocPage::pageJump(const int &pagenum)
 {
-    QString sCurPath = qGetCurPath();
-    if (sCurPath != "") {
-        DocummentProxy *_proxy =  getCurFileAndProxy(sCurPath);
-        if (_proxy) {
-            int nPageSize = _proxy->getPageSNum();      //  总页数
-            if (pagenum < 0 || pagenum == nPageSize) {
-                return;
-            }
+    DocSheet *sheet = getCurSheet();
+    if (nullptr == sheet)
+        return;
 
-            int nCurPage = _proxy->currentPageNo();
-            if (nCurPage != pagenum) {
-                _proxy->pageJump(pagenum);
-            }
-        }
-    }
+    sheet->pageJump(pagenum);
 }
 
 //  前一页\第一页\后一页\最后一页 操作

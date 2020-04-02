@@ -30,6 +30,7 @@
 #include "TitleWidget.h"
 #include "CentralDocPage.h"
 #include "app/ProcessController.h"
+#include "docview/docummentproxy.h"
 
 DocSheet::DocSheet(DocType_EM type, DWidget *parent)
     : DSplitter(parent), m_type(type)
@@ -41,6 +42,24 @@ DocSheet::DocSheet(DocType_EM type, DWidget *parent)
 
 DocSheet::~DocSheet()
 {
+}
+
+void DocSheet::pageJump(const int &pagenum)
+{
+    if (DocType_PDF == m_type) {
+        DocummentProxy *_proxy =  static_cast<SheetBrowserPDF *>(m_browser)->GetDocProxy();
+        if (_proxy) {
+            int nPageSize = _proxy->getPageSNum();      //  总页数
+            if (pagenum < 0 || pagenum == nPageSize) {
+                return;
+            }
+
+            int nCurPage = _proxy->currentPageNo();
+            if (nCurPage != pagenum) {
+                _proxy->pageJump(pagenum);
+            }
+        }
+    }
 }
 
 void DocSheet::setFileChanged(bool hasChanged)
@@ -115,12 +134,8 @@ void DocSheet::SlotFileOpenResult(const QString &s, const bool &res)
             m_pSpinnerWidget = nullptr;
         }
 
-        if (this->isVisible()) {
-            TitleWidget::Instance()->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
-        }
-
         if (DocType_PDF == m_type)
-            static_cast<SheetSidebarPDF *>(m_sidebar)->dealWithData(MSG_OPERATION_OPEN_FILE_OK, s);
+            static_cast<SheetSidebarPDF *>(m_sidebar)->handleOpenSuccess();
 
         if (dApp) {
             dApp->setFirstView(false);

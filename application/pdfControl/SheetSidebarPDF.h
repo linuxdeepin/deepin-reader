@@ -31,6 +31,8 @@ signals:
 
     // IObserver interface
 public:
+    void handleOpenSuccess();
+
     int dealWithData(const int &, const QString &) override;
 
 public slots:
@@ -50,8 +52,6 @@ private slots:
 private:
     void initConnections();
     void onSetWidgetVisible(const int &);
-
-    void SlotOpenFileOk(const QString &);
 
 private:
     MainOperationWidget     *m_pMainOperationWidget = nullptr;

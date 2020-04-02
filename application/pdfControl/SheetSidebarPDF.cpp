@@ -37,14 +37,15 @@ SheetSidebarPDF::~SheetSidebarPDF()
     dApp->m_pModelService->removeObserver(this);
 }
 
-void SheetSidebarPDF::SlotOpenFileOk(const QString &sPath)
+void SheetSidebarPDF::handleOpenSuccess()
 {
-    m_strBindPath = sPath;
-
-    FileDataModel fdm = CentralDocPage::Instance()->qGetFileData(sPath);
+    FileDataModel fdm = m_sheet->qGetFileData();
     int nShow = static_cast<int>(fdm.qGetData(Thumbnail));
     bool showLeft = nShow == 1 ? true : false;
     onSetWidgetVisible(showLeft);
+
+    m_pStackedWidget->handleOpenSuccess();
+    m_pMainOperationWidget->handleOpenSuccess();
 }
 
 void SheetSidebarPDF::onSetWidgetVisible(const int &nVis)
@@ -104,9 +105,7 @@ int SheetSidebarPDF::dealWithData(const int &msgType, const QString &msgContent)
 
     int nRes = MSG_NO_OK;
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        SlotOpenFileOk(msgContent);
-        m_pStackedWidget->dealWithData(msgType, msgContent);
-        m_pMainOperationWidget->dealWithData(msgType, msgContent);
+        handleOpenSuccess();
     } else {
         if (msgType == MSG_WIDGET_THUMBNAILS_VIEW) {
             onSetWidgetVisible(msgContent.toInt());
@@ -140,7 +139,7 @@ void SheetSidebarPDF::SetFindOperation(const int &iType)
             m_nSearch = -1;
             this->setVisible(m_bOldVisible);
         } else {
-            SlotOpenFileOk(m_strBindPath);
+            handleOpenSuccess();
         }
     }
 }

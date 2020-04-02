@@ -27,6 +27,8 @@ signals:
     void sigFileChanged(bool hasChanged);     //被修改了
 
 public:
+    void pageJump(const int &pagenum);
+
     void setFileChanged(bool hasChanged);
 
     QString qGetPath();

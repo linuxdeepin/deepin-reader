@@ -38,17 +38,32 @@ class ThreadLoadImageOfNote : public QThread
 
 public:
     explicit ThreadLoadImageOfNote(QObject *parent = nullptr);
-    ~ThreadLoadImageOfNote() override { stopThreadRun(); }
+    ~ThreadLoadImageOfNote() override
+    {
+        stopThreadRun();
+    }
 
 public:
     void stopThreadRun();
 
-    inline void setIsLoaded(const bool &load) { m_isLoaded = load; }
+    inline void setIsLoaded(const bool &load)
+    {
+        m_isLoaded = load;
+    }
 
-    inline bool isLoaded() { return m_isLoaded; }
+    inline bool isLoaded()
+    {
+        return m_isLoaded;
+    }
 
-    inline void setListNoteSt(const QList<stHighlightContent> &list) { m_stListNote = list; }
-    inline void setParentWidget(NotesWidget *thumbnail) { m_pNoteWidget = thumbnail; }
+    inline void setListNoteSt(const QList<stHighlightContent> &list)
+    {
+        m_stListNote = list;
+    }
+    inline void setParentWidget(NotesWidget *thumbnail)
+    {
+        m_pNoteWidget = thumbnail;
+    }
 
 
 signals:
@@ -74,7 +89,7 @@ class NotesWidget : public CustomWidget
     Q_DISABLE_COPY(NotesWidget)
 
 public:
-    explicit NotesWidget(DWidget *parent = nullptr);
+    explicit NotesWidget(DocSheet *sheet, DWidget *parent = nullptr);
     ~NotesWidget() override;
 
     void prevPage();
@@ -131,6 +146,7 @@ private:
     QString m_strBindPath = "";
     bool m_bOpenFileOk = false;               //是否刚打开文件
 
+    DocSheet *m_sheet;
     // CustomWidget interface
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;

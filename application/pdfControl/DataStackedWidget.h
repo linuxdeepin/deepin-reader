@@ -66,7 +66,8 @@ private:
     void onJumpToNextPage();
     void DeleteItemByKey();
 
-    void OnOpenFileOk(const QString &);
+public:
+    void handleOpenSuccess();
 
 private:
     ThumbnailWidget     *m_pThWidget = nullptr;

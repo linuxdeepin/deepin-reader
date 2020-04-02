@@ -21,8 +21,8 @@
 
 #include "CentralDocPage.h"
 
-SearchResWidget::SearchResWidget(DWidget *parent)
-    : CustomWidget(SEARCH_RES_WIDGET, parent)
+SearchResWidget::SearchResWidget(DocSheet *sheet, DWidget *parent)
+    : CustomWidget(SEARCH_RES_WIDGET, parent), m_sheet(sheet)
 {
     initWidget();
     initConnections();
@@ -92,7 +92,7 @@ void SearchResWidget::initWidget()
     m_pVLayout->setSpacing(0);
     this->setLayout(m_pVLayout);
 
-    m_pSearchList = new CustomListWidget;
+    m_pSearchList = new CustomListWidget(m_sheet, this);
     connect(m_pSearchList, SIGNAL(sigSelectItem(QListWidgetItem *)), SLOT(slotSelectItem(QListWidgetItem *)));
 
     m_pVLayout->addWidget(m_pSearchList);

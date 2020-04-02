@@ -45,28 +45,52 @@ class ThreadLoadImage : public QThread
 
 public:
     explicit ThreadLoadImage(QObject *parent = nullptr);
-    ~ThreadLoadImage() override { stopThreadRun(); }
+    ~ThreadLoadImage() override
+    {
+        stopThreadRun();
+    }
 
 public:
     void stopThreadRun();
 
-    inline void setPages(const int pages) { m_pages = pages; }
+    inline void setPages(const int pages)
+    {
+        m_pages = pages;
+    }
 
-    inline int endPage() { return m_nEndPage; }
+    inline int endPage()
+    {
+        return m_nEndPage;
+    }
 
-    inline void setIsLoaded(const bool &load) { m_isLoaded = load; }
+    inline void setIsLoaded(const bool &load)
+    {
+        m_isLoaded = load;
+    }
 
-    inline bool isLoaded() { return m_isLoaded; }
+    inline bool isLoaded()
+    {
+        return m_isLoaded;
+    }
 
-    inline void setThumbnail(ThumbnailWidget *thumbnail) { m_pThumbnailWidget = thumbnail; }
+    inline void setThumbnail(ThumbnailWidget *thumbnail)
+    {
+        m_pThumbnailWidget = thumbnail;
+    }
 
     bool inLoading(int);
 
     void setStartAndEndIndex(int startIndex, int endIndex);
 
-    inline void clearList() {m_listLoad.clear();}
+    inline void clearList()
+    {
+        m_listLoad.clear();
+    }
 
-    void setFilePath(const QString &strfilepath) {m_filepath = strfilepath;}
+    void setFilePath(const QString &strfilepath)
+    {
+        m_filepath = strfilepath;
+    }
 
 signals:
     void sigLoadImage(const int &, const QImage &);
@@ -89,13 +113,14 @@ private:
 /*
  *缩略图列表页面
  */
+class DocSheet;
 class ThumbnailWidget : public CustomWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(ThumbnailWidget)
 
 public:
-    explicit ThumbnailWidget(DWidget *parent = nullptr);
+    explicit ThumbnailWidget(DocSheet *sheet, DWidget *parent = nullptr);
     ~ThumbnailWidget() override;
 
 signals:
@@ -105,7 +130,12 @@ public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
 
-    inline bool isLoading() { return m_isLoading; }
+    void handleOpenSuccess();
+
+    inline bool isLoading()
+    {
+        return m_isLoading;
+    }
 
     void prevPage();
     void nextPage();
@@ -148,6 +178,7 @@ private:
     int m_nValuePreIndex = 0;                            // 每一个item所占scrollbar的大小
 
     QString     m_strBindPath = "";
+    DocSheet *m_sheet;
 };
 
 #endif  // THUMBNAILWIDGET_H

@@ -31,13 +31,14 @@
  * @brief   跳转页窗体
  */
 
+class DocSheet;
 class PagingWidget : public CustomWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(PagingWidget)
 
 public:
-    explicit PagingWidget(DWidget *parent = nullptr);
+    explicit PagingWidget(DocSheet *sheet, DWidget *parent = nullptr);
     ~PagingWidget() override;
 
     // IObserver interface
@@ -59,7 +60,7 @@ private:
     void __PageNumberJump();
 
     void OnDocFilePageChange(const QString &);
-    void OnDocFileOpenOk(const QString &strpath);
+    void handleOpenSuccess();
 
 private:
     DLabel              *m_pTotalPagesLab = nullptr;        // 当前文档总页数标签
@@ -67,7 +68,7 @@ private:
     DIconButton         *m_pPrePageBtn = nullptr;           // 按钮 前一页
     DIconButton         *m_pNextPageBtn = nullptr;          // 按钮 后一页
     DLineEdit           *m_pJumpPageLineEdit = nullptr;     // 输入框 跳转页码
-
+    DocSheet *m_sheet;
     QString             m_strBindPath = "";
 };
 

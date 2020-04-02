@@ -31,14 +31,8 @@ class TitleMenu : public CustomMenu
 public:
     explicit TitleMenu(DWidget *parent = nullptr);
 
-private:
-    static TitleMenu *g_onlyTitleMenu;
-
 signals:
     void sigActionTriggered(const QString &action);
-
-public:
-    static TitleMenu *Instance(DWidget *parent = nullptr);
 
 public slots:
     void onCurSheetChanged(DocSheet *);

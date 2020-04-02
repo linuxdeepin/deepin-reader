@@ -29,13 +29,14 @@ DWIDGET_USE_NAMESPACE
  * @brief The CustomListWidget class
  * 自定义缩略图ListWidget
  */
+class DocSheet;
 class CustomListWidget : public DListWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(CustomListWidget)
 
 public:
-    explicit CustomListWidget(DWidget *parent = nullptr);
+    explicit CustomListWidget(DocSheet *sheet, DWidget *parent = nullptr);
 
 signals:
     void sigSelectItem(QListWidgetItem *);
@@ -62,6 +63,7 @@ private:
     int     m_nListType = -1;
     BookMarkMenu *m_pBookMarkMenu{nullptr};
     NoteMenu *pNoteMenu{nullptr};
+    DocSheet *m_sheet = nullptr;
 };
 
 #endif // CUSTOMLISTWIDGET_H

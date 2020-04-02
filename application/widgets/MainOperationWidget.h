@@ -24,7 +24,7 @@ signals:
 public:
     int dealWithData(const int &, const QString &) override;
     void SetFindOperation(const int &);
-
+    void handleOpenSuccess();
     // CustomWidget interface
 protected:
     void initWidget() override;
@@ -39,7 +39,6 @@ private:
     void onDocProxyMsg(const QString &);
 
 private slots:
-    void slotOpenFileOk(const QString &sPath);
     void slotUpdateTheme();
     void slotButtonClicked(int);
 

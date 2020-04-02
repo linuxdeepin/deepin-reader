@@ -22,9 +22,10 @@
 
 
 #include "CentralDocPage.h"
+#include "DocSheet.h"
 
-ThumbnailWidget::ThumbnailWidget(DWidget *parent)
-    : CustomWidget(THUMBAIL_WIDGET, parent)
+ThumbnailWidget::ThumbnailWidget(DocSheet *sheet, DWidget *parent)
+    : CustomWidget(THUMBAIL_WIDGET, parent), m_sheet(sheet)
 {
     m_ThreadLoadImage.setThumbnail(this);
 
@@ -49,13 +50,14 @@ ThumbnailWidget::~ThumbnailWidget()
 // 处理消息事件
 int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
+    if (msgType == MSG_OPERATION_OPEN_FILE_OK)
+        handleOpenSuccess();
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
         slotUpdateTheme();
     } else if (msgType == MSG_VIEWCHANGE_ROTATE_VALUE) {  //  文档旋转了
         slotSetRotate(msgContent.toInt());
     } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        slotOpenFileOk(msgContent);
-        m_pPageWidget->dealWithData(msgType, msgContent);
+
     } else if (MSG_FILE_PAGE_CHANGE == msgType) {
         slotDocFilePageChanged(msgContent);
         m_pPageWidget->dealWithData(msgType, msgContent);
@@ -65,16 +67,22 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
     return MSG_NO_OK;
 }
 
+void ThumbnailWidget::handleOpenSuccess()
+{
+    slotOpenFileOk(m_sheet->qGetPath());
+    m_pPageWidget->dealWithData(MSG_OPERATION_OPEN_FILE_OK, m_sheet->qGetPath());
+}
+
 // 初始化界面
 void ThumbnailWidget::initWidget()
 {
-    m_pThumbnailListWidget = new CustomListWidget;
+    m_pThumbnailListWidget = new CustomListWidget(m_sheet, this);
     m_pThumbnailListWidget->setSpacing(8);
     connect(m_pThumbnailListWidget, SIGNAL(sigValueChanged(const int &)), SLOT(slotLoadThumbnail(const int &)));
 
-    m_pPageWidget = new PagingWidget;
+    m_pPageWidget = new PagingWidget(m_sheet, this);
 
-    auto m_pvBoxLayout = new QVBoxLayout;
+    auto m_pvBoxLayout = new QVBoxLayout(this);
     m_pvBoxLayout->setContentsMargins(0, 0, 0, 0);
     m_pvBoxLayout->setSpacing(0);
 

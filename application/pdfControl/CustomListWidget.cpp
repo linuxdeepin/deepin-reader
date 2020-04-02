@@ -22,17 +22,12 @@
 
 #include "application.h"
 #include "CustomItemWidget.h"
-#include "CentralDocPage.h"
-
-//#include "menu/BookMarkMenu.h"
-//#include "menu/NoteMenu.h"
-
-
+#include "DocSheet.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
 
-CustomListWidget::CustomListWidget(DWidget *parent)
-    : DListWidget(parent)
+CustomListWidget::CustomListWidget(DocSheet *sheet, DWidget *parent)
+    : DListWidget(parent), m_sheet(sheet)
 {
     setSpacing(3);
 
@@ -119,7 +114,8 @@ void CustomListWidget::slotShowSelectItem(QListWidgetItem *item)
     if (t_ItemWidget) {
         int nJumpPage = t_ItemWidget->nPageIndex();
         //  页跳转
-        CentralDocPage::Instance()->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(nJumpPage));
+
+        m_sheet->pageJump(nJumpPage);
     }
 }
 

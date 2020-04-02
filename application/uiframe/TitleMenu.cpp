@@ -22,19 +22,10 @@
 #include "CentralDocPage.h"
 #include "DocSheet.h"
 
-TitleMenu *TitleMenu::g_onlyTitleMenu = nullptr;
-
 TitleMenu::TitleMenu(DWidget *parent)
     : CustomMenu(TITLE_MENU, parent)
 {
     initActions();
-}
-
-TitleMenu *TitleMenu::Instance(DWidget *parent)
-{
-    if (g_onlyTitleMenu == nullptr && nullptr != parent)
-        g_onlyTitleMenu = new TitleMenu(parent);
-    return g_onlyTitleMenu;
 }
 
 void TitleMenu::onCurSheetChanged(DocSheet *sheet)

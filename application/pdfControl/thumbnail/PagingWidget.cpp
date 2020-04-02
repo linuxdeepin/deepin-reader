@@ -23,9 +23,10 @@
 #include "docview/docummentproxy.h"
 
 #include "CentralDocPage.h"
+#include "DocSheet.h"
 
-PagingWidget::PagingWidget(DWidget *parent)
-    : CustomWidget(PAGE_WIDGET, parent)
+PagingWidget::PagingWidget(DocSheet *sheet, DWidget *parent)
+    : CustomWidget(PAGE_WIDGET, parent), m_sheet(sheet)
 {
     initWidget();
 
@@ -99,7 +100,7 @@ int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
     if (msgType == MSG_OPERATION_UPDATE_THEME) {    //  颜色主题切换
         slotUpdateTheme();
     } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        OnDocFileOpenOk(msgContent);
+        handleOpenSuccess();
     } else if (msgType == MSG_FILE_PAGE_CHANGE) {                  //  文档页变化了
         OnDocFilePageChange(msgContent);
     }
@@ -138,8 +139,11 @@ void PagingWidget::__SetBtnState(const int &currntPage, const int &totalPage)
 
 void PagingWidget::OnDocFilePageChange(const QString &msgContent)
 {
-    CentralDocPage *pMtwe = CentralDocPage::Instance();
-    DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(m_strBindPath);
+    if (nullptr == m_sheet)
+        return;
+
+    DocummentProxy *_proxy = m_sheet->getDocProxy();
+
     if (_proxy) {
         int totalPage = _proxy->getPageSNum();
 
@@ -166,12 +170,13 @@ void PagingWidget::OnDocFilePageChange(const QString &msgContent)
  * 2.设置总页数 和 当前页码
  *
  */
-void PagingWidget::OnDocFileOpenOk(const QString &sPath)
+void PagingWidget::handleOpenSuccess()
 {
-    m_strBindPath = sPath;
+    if (nullptr == m_sheet)
+        return;
 
-    CentralDocPage *pMtwe = CentralDocPage::Instance();
-    DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sPath);
+    DocummentProxy *_proxy = m_sheet->getDocProxy();
+
     if (_proxy) {
         bool isHasLabel = _proxy->haslabel();
         if (!isHasLabel) {

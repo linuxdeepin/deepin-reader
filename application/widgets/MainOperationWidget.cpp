@@ -97,12 +97,11 @@ void MainOperationWidget::initConnect()
 {
 }
 
-void MainOperationWidget::slotOpenFileOk(const QString &sPath)
+void MainOperationWidget::handleOpenSuccess()
 {
     if (m_sheet.isNull())
         return;
 
-    m_strBindPath = sPath;
     FileDataModel fdm = m_sheet->qGetFileData();
     int nId = static_cast<int>(fdm.qGetData(LeftIndex));
     if (nId == -1) {
@@ -143,7 +142,7 @@ void MainOperationWidget::slotButtonClicked(int id)
 int MainOperationWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        slotOpenFileOk(msgContent);
+        handleOpenSuccess();
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         slotUpdateTheme();
     }
@@ -159,6 +158,6 @@ void MainOperationWidget::SetFindOperation(const int &iType)
     if (iType == E_FIND_CONTENT) {
         __SetBtnCheckById(WIDGET_SEARCH);
     } else if (iType == E_FIND_EXIT) {
-        slotOpenFileOk(m_strBindPath);
+        handleOpenSuccess();
     }
 }

@@ -25,8 +25,8 @@
 #include "MsgHeader.h"
 #include "ModuleHeader.h"
 
-NotesWidget::NotesWidget(DWidget *parent)
-    : CustomWidget(NOTE_WIDGET, parent)
+NotesWidget::NotesWidget(DocSheet *sheet, DWidget *parent)
+    : CustomWidget(NOTE_WIDGET, parent), m_sheet(sheet)
 {
     initWidget();
 
@@ -96,7 +96,7 @@ void NotesWidget::initWidget()
     m_pVLayout->setSpacing(0);
     this->setLayout(m_pVLayout);
 
-    m_pNotesList = new CustomListWidget;
+    m_pNotesList = new CustomListWidget(m_sheet, this);
     m_pNotesList->setListType(E_NOTE_WIDGET);
     connect(m_pNotesList, SIGNAL(sigSelectItem(QListWidgetItem *)), SLOT(slotSelectItem(QListWidgetItem *)));
     connect(m_pNotesList, SIGNAL(sigListMenuClick(const int &)), SLOT(slotListMenuClick(const int &)));

@@ -27,6 +27,7 @@
 #include "note/NotesWidget.h"
 #include "search/BufferWidget.h"
 #include "search/SearchResWidget.h"
+#include "DocSheet.h"
 
 #include "CentralDocPage.h"
 
@@ -39,9 +40,6 @@ DataStackedWidget::DataStackedWidget(DocSheet *sheet, DWidget *parent)
 int DataStackedWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     int nRes = MSG_NO_OK;
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        OnOpenFileOk(msgContent);
-    }
 
     nRes = m_pThWidget->dealWithData(msgType, msgContent);
     if (nRes != MSG_OK) {
@@ -72,8 +70,7 @@ void DataStackedWidget::SetFindOperation(const int &iType)
             m_pSearchResWidget->OnExitSearch();
         }
     } else if (iType == E_FIND_EXIT) {
-        OnOpenFileOk(m_strBindPath);
-
+        handleOpenSuccess();
         m_pSearchResWidget->OnExitSearch();
     }
 }
@@ -190,7 +187,7 @@ void DataStackedWidget::slotUpdateThumbnail(const int &page)
 
 void DataStackedWidget::InitWidgets()
 {
-    m_pThWidget = new ThumbnailWidget(this);
+    m_pThWidget = new ThumbnailWidget(m_sheet, this);
     insertWidget(WIDGET_THUMBNAIL, m_pThWidget);
 
     m_pCatalogWidget = new CatalogWidget(this);
@@ -203,7 +200,7 @@ void DataStackedWidget::InitWidgets()
 
     insertWidget(WIDGET_BOOKMARK, m_pBookMarkWidget);
 
-    m_pNotesWidget = new NotesWidget(this);
+    m_pNotesWidget = new NotesWidget(m_sheet, this);
     connect(this, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pNotesWidget, SLOT(SlotAnntationMsg(const int &, const QString &)));
     connect(m_pNotesWidget, SIGNAL(sigDeleteContent(const int &, const QString &)), this, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
     connect(m_pNotesWidget, SIGNAL(sigUpdateThumbnail(const int &)), this, SLOT(slotUpdateThumbnail(const int &)));
@@ -211,7 +208,7 @@ void DataStackedWidget::InitWidgets()
     insertWidget(WIDGET_NOTE, m_pNotesWidget);
     connect(this, SIGNAL(sigUpdateThumbnail(const int &)), this, SLOT(slotUpdateThumbnail(const int &)));
 
-    m_pSearchResWidget = new SearchResWidget(this);
+    m_pSearchResWidget = new SearchResWidget(m_sheet, this);
     insertWidget(WIDGET_SEARCH, m_pSearchResWidget);
 
     setCurrentIndex(WIDGET_THUMBNAIL);
@@ -286,15 +283,19 @@ void DataStackedWidget::DeleteItemByKey()
     }
 }
 
-void DataStackedWidget::OnOpenFileOk(const QString &sPath)
+void DataStackedWidget::handleOpenSuccess()
 {
-    m_strBindPath = sPath;
-
-    FileDataModel fdm = CentralDocPage::Instance()->qGetFileData(m_strBindPath);
+    FileDataModel fdm = m_sheet->qGetFileData();
     int nId = static_cast<int>(fdm.qGetData(LeftIndex));
     if (nId == -1) {
         nId = 0;
     }
     setCurrentIndex(nId);
+
+    m_pThWidget->handleOpenSuccess();
+    m_pCatalogWidget->dealWithData(MSG_OPERATION_OPEN_FILE_OK, m_sheet->qGetPath());
+    m_pBookMarkWidget ->dealWithData(MSG_OPERATION_OPEN_FILE_OK, m_sheet->qGetPath());
+    m_pNotesWidget->dealWithData(MSG_OPERATION_OPEN_FILE_OK, m_sheet->qGetPath());
+    m_pSearchResWidget->dealWithData(MSG_OPERATION_OPEN_FILE_OK, m_sheet->qGetPath());
 }
 

@@ -16,17 +16,6 @@ TitleWidget *TitleWidget::Instance()
     return g_onlyTitleWdiget;
 }
 
-void TitleWidget::suitDocType(DocType_EM type)
-{
-    qDebug() << type;
-    if (DocType_NULL == type) {
-        SetBtnDisable(true);
-        return;
-    }
-
-    SetBtnDisable(false);
-}
-
 TitleWidget::TitleWidget(DWidget *parent)
     : CustomWidget(TITLE_WIDGET, parent)
 {
@@ -147,6 +136,7 @@ void TitleWidget::slotOpenFileOk(const QString &sPath)
     FileDataModel fdm = CentralDocPage::Instance()->qGetFileData();
 
     int nState = fdm.qGetData(Thumbnail);
+
     bool showLeft = nState == 1 ? true : false;
 
     m_pThumbnailBtn->setChecked(showLeft);
@@ -181,12 +171,25 @@ void TitleWidget::initWidget()
 
 void TitleWidget::onCurSheetChanged(DocSheet *sheet)
 {
-    if (nullptr == sheet) {
-        suitDocType(DocType_NULL);
-        return;
-    }
+    if (nullptr == sheet || sheet->type() == DocType_NULL) {
+        SetBtnDisable(true);
 
-    suitDocType(sheet->type());
+        return;
+
+    } else if (DocType_PDF == sheet->type()) {
+
+        SetBtnDisable(false);
+
+        FileDataModel fdm = sheet->qGetFileData();
+
+        int nState = fdm.qGetData(Thumbnail);
+
+        bool showLeft = nState == 1 ? true : false;
+
+        m_pThumbnailBtn->setChecked(showLeft);
+
+        SetBtnDisable(false);
+    }
 }
 
 void TitleWidget::initConnections()

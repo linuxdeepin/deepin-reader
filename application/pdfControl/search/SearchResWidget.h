@@ -34,13 +34,15 @@
  * @brief The SearchResWidget class
  * 搜索结果界面
  */
+
+class DocSheet;
 class SearchResWidget : public CustomWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(SearchResWidget)
 
 public:
-    explicit SearchResWidget(DWidget *parent = nullptr);
+    explicit SearchResWidget(DocSheet *sheet, DWidget *parent = nullptr);
     ~SearchResWidget() override;
 
 public:
@@ -69,7 +71,7 @@ private:
 private:
     CustomListWidget *m_pSearchList = nullptr;       // 搜索结果列表
     QString m_strBindPath = "";
-
+    DocSheet *m_sheet;
     // CustomWidget interface
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
