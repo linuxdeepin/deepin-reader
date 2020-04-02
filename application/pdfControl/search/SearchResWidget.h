@@ -43,8 +43,10 @@ class SearchResWidget : public CustomWidget
 
 public:
     explicit SearchResWidget(DocSheet *sheet, DWidget *parent = nullptr);
+
     ~SearchResWidget() override;
 
+    void handleOpenSuccess();
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;
@@ -60,7 +62,6 @@ private slots:
     void slotSelectItem(QListWidgetItem *);
 
 private:
-    void OnOpenFileOk(const QString &);
     void initConnections();
     void addSearchsItem(const int &page, const QString &text, const int &resultNum);
     void showTips();

@@ -29,16 +29,17 @@ class CatalogTreeView;
  * @brief       目录 界面
  */
 
+class DocSheet;
 class CatalogWidget : public CustomWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(CatalogWidget)
 
 public:
-    explicit CatalogWidget(DWidget *parent = nullptr);
+    explicit CatalogWidget(DocSheet *sheet, DWidget *parent = nullptr);
     ~CatalogWidget() override;
 
-    // IObserver interface
+    void handleOpenSuccess();
 public:
     int dealWithData(const int &, const QString &) override;
 
@@ -54,14 +55,11 @@ private:
     void initConnections();
 
 private:
-    void OnDocOpenFileOk(const QString &);
-
-private:
     QString             m_strTheme = "";
     DLabel              *titleLabel = nullptr;
     CatalogTreeView     *m_pTree = nullptr;
     void setTitleTheme();
-
+    DocSheet *m_sheet;
 };
 
 

@@ -18,8 +18,7 @@
  */
 #include "SearchResWidget.h"
 #include "docview/docummentproxy.h"
-
-#include "CentralDocPage.h"
+#include "DocSheet.h"
 
 SearchResWidget::SearchResWidget(DocSheet *sheet, DWidget *parent)
     : CustomWidget(SEARCH_RES_WIDGET, parent), m_sheet(sheet)
@@ -75,10 +74,12 @@ void SearchResWidget::slotSelectItem(QListWidgetItem *item)
 }
 
 //  打开成功之后, 链接搜索信号
-void SearchResWidget::OnOpenFileOk(const QString &sPath)
+void SearchResWidget::handleOpenSuccess()
 {
-    m_strBindPath = sPath;
-    DocummentProxy *_proxy = CentralDocPage::Instance()->getCurFileAndProxy(sPath);
+    if (nullptr == m_sheet)
+        return;
+
+    DocummentProxy *_proxy = m_sheet->getDocProxy();
     if (_proxy) {
         connect(_proxy, SIGNAL(signal_searchRes(stSearchRes)), SLOT(slotGetSearchContant(const stSearchRes &)));
         connect(_proxy, SIGNAL(signal_searchover()), SLOT(slotSearchOver()));
@@ -104,6 +105,9 @@ void SearchResWidget::initConnections()
 
 void SearchResWidget::addSearchsItem(const int &page, const QString &text, const int &resultNum)
 {
+    if (nullptr == m_sheet)
+        return;
+
     auto item = m_pSearchList->insertWidgetItem(page);
     if (item) {
         item->setFlags(Qt::NoItemFlags);
@@ -122,7 +126,7 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
         dApp->adaptScreenView(tW, tH);
         itemWidget->setMinimumSize(QSize(tW, tH));
 
-        auto dproxy = CentralDocPage::Instance()->getCurFileAndProxy();
+        auto dproxy = m_sheet->getDocProxy();
         if (nullptr != dproxy) {
             QImage image;
             tW = 48;
@@ -249,6 +253,9 @@ void SearchResWidget::adaptWindowSize(const double &scale)
  */
 void SearchResWidget::updateThumbnail(const int &page)
 {
+    if (nullptr == m_sheet)
+        return;
+
     if (m_pSearchList == nullptr) {
         return;
     }
@@ -261,8 +268,8 @@ void SearchResWidget::updateThumbnail(const int &page)
     int tW = 48;
     int tH = 68;
     dApp->adaptScreenView(tW, tH);
-    CentralDocPage *pMtwe = CentralDocPage::Instance();
-    auto dproxy = pMtwe->getCurFileAndProxy(m_strBindPath);
+
+    auto dproxy = m_sheet->getDocProxy();
     dproxy->getImage(page, image, tW, tH);
     for (int index = 0; index < itemNum; index++) {
         auto item = m_pSearchList->item(index);
@@ -290,7 +297,7 @@ void SearchResWidget::updateThumbnail(const int &page)
 int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        OnOpenFileOk(msgContent);
+        handleOpenSuccess();
     }
 
     if (m_pMsgList.contains(msgType)) {

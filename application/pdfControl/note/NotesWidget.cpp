@@ -24,6 +24,7 @@
 #include "CentralDocPage.h"
 #include "MsgHeader.h"
 #include "ModuleHeader.h"
+#include "DocSheet.h"
 
 NotesWidget::NotesWidget(DocSheet *sheet, DWidget *parent)
     : CustomWidget(NOTE_WIDGET, parent), m_sheet(sheet)
@@ -204,9 +205,10 @@ void NotesWidget::__UpdateNoteItem(const QString &msgContent)
 }
 
 
-void NotesWidget::slotOpenFileOk(const QString &sPath)
+void NotesWidget::handleOpenSuccess()
 {
-    m_strBindPath = sPath;
+    if (nullptr == m_sheet)
+        return;
 
     m_nIndex = 0;
     m_ThreadLoadImage.setIsLoaded(false);
@@ -214,8 +216,7 @@ void NotesWidget::slotOpenFileOk(const QString &sPath)
         m_ThreadLoadImage.stopThreadRun();
     }
 
-    CentralDocPage *pMtwe = CentralDocPage::Instance();
-    DocummentProxy *t_docPtr = pMtwe->getCurFileAndProxy(m_strBindPath);
+    DocummentProxy *t_docPtr = m_sheet->getDocProxy();
     if (t_docPtr) {
         m_pNotesList->clear();
 
@@ -607,7 +608,7 @@ QString NotesWidget::getBindPath() const
 int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
-        slotOpenFileOk(msgContent);
+        handleOpenSuccess();
     }
 
     if (m_pMsgList.contains(msgType)) {

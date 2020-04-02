@@ -97,6 +97,8 @@ public:
 
     QString getBindPath() const;
 
+    void handleOpenSuccess();
+
 signals:
     void sigSetBookMarkState(const int &, const int &);
 
@@ -114,9 +116,7 @@ protected:
     void initWidget() override;
 
 private:
-    void OnOpenFileOk(const QString &);
     void slotDocFilePageChanged(const QString &);
-
     void initConnection();
     QListWidgetItem *addBookMarkItem(const int &);
     void deleteIndexPage(const int &pageIndex);

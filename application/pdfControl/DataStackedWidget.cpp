@@ -190,7 +190,7 @@ void DataStackedWidget::InitWidgets()
     m_pThWidget = new ThumbnailWidget(m_sheet, this);
     insertWidget(WIDGET_THUMBNAIL, m_pThWidget);
 
-    m_pCatalogWidget = new CatalogWidget(this);
+    m_pCatalogWidget = new CatalogWidget(m_sheet, this);
     insertWidget(WIDGET_catalog, m_pCatalogWidget);
 
     m_pBookMarkWidget = new BookMarkWidget(m_sheet, this);
@@ -293,9 +293,9 @@ void DataStackedWidget::handleOpenSuccess()
     setCurrentIndex(nId);
 
     m_pThWidget->handleOpenSuccess();
-    m_pCatalogWidget->dealWithData(MSG_OPERATION_OPEN_FILE_OK, m_sheet->qGetPath());
-    m_pBookMarkWidget ->dealWithData(MSG_OPERATION_OPEN_FILE_OK, m_sheet->qGetPath());
-    m_pNotesWidget->dealWithData(MSG_OPERATION_OPEN_FILE_OK, m_sheet->qGetPath());
-    m_pSearchResWidget->dealWithData(MSG_OPERATION_OPEN_FILE_OK, m_sheet->qGetPath());
+    m_pCatalogWidget->handleOpenSuccess();
+    m_pBookMarkWidget ->handleOpenSuccess();
+    m_pNotesWidget->handleOpenSuccess();
+    m_pSearchResWidget->handleOpenSuccess();
 }
 

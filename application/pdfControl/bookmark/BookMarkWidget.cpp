@@ -173,27 +173,25 @@ void BookMarkWidget::slotAddBookMark(const QString &sContent)
  * @brief BookMarkWidget::slotOpenFileOk
  *  打开文件成功，　获取该文件的书签数据
  */
-void BookMarkWidget::OnOpenFileOk(const QString &sPath)
+void BookMarkWidget::handleOpenSuccess()
 {
-    qDebug() << "xxxxxxxxxx";
+    if (nullptr == m_sheet)
+        return;
 
-    m_strBindPath = sPath;
     if (m_loadBookMarkThread.isRunning()) {
         m_loadBookMarkThread.stopThreadRun();
     }
 
     m_pBookMarkListWidget->clear();
 
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList(sPath);
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->qGetPath());
     if (pageList.size() == 0)
         return;
 
     clearItemColor();
 
-    if (nullptr == m_sheet)
-        return;
-
     DocummentProxy *proxy =  m_sheet->getDocProxy();
+
     if (proxy) {
         foreach (int iPage, pageList) {
             addBookMarkItem(iPage);
@@ -617,7 +615,7 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
     if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更消息
         slotUpdateTheme();
     } else if (MSG_OPERATION_OPEN_FILE_OK == msgType) { //  打开 文件通知消息
-        OnOpenFileOk(msgContent);
+        handleOpenSuccess();
     } else if (MSG_FILE_PAGE_CHANGE == msgType) { //  文档页变化消息
         slotDocFilePageChanged(msgContent);
     }

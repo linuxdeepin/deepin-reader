@@ -95,7 +95,7 @@ public:
     void prevPage();
     void nextPage();
     void DeleteItemByKey();
-
+    void handleOpenSuccess();
 signals:
     void sigDeleteContent(const int &, const QString &);
     void sigUpdateThumbnail(const int &page);
@@ -110,7 +110,6 @@ protected:
     void initWidget() override;
 
 private slots:
-    void slotOpenFileOk(const QString &strcontent);
     void slotLoadImage(const QImage &);
     void slotListMenuClick(const int &);
     void slotSelectItem(QListWidgetItem *);

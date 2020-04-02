@@ -27,9 +27,10 @@
 #include "docview/docummentproxy.h"
 
 #include "CentralDocPage.h"
+#include "DocSheet.h"
 
-CatalogWidget::CatalogWidget(DWidget *parent)
-    : CustomWidget(CATALOG_WIDGET, parent)
+CatalogWidget::CatalogWidget(DocSheet *sheet, DWidget *parent)
+    : CustomWidget(CATALOG_WIDGET, parent), m_sheet(sheet)
 {
     initWidget();
     initConnections();
@@ -46,7 +47,7 @@ int CatalogWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     //  打开 文件通知消息
     if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
-        OnDocOpenFileOk(msgContent);
+        handleOpenSuccess();
     }
 
     if (MSG_OPERATION_OPEN_FILE_OK == msgType || MSG_FILE_PAGE_CHANGE == msgType) {
@@ -107,21 +108,22 @@ void CatalogWidget::setTitleTheme()
     titleLabel->setText(sTheme);
 }
 
-void CatalogWidget::OnDocOpenFileOk(const QString &sPath)
+void CatalogWidget::handleOpenSuccess()
 {
     if (titleLabel) {
-        CentralDocPage *pMtwe = CentralDocPage::Instance();
-        if (pMtwe) {
-            DocummentProxy *_pProxy = pMtwe->getCurFileAndProxy(sPath);
-            if (_pProxy) {
+        if (nullptr == m_sheet)
+            return;
 
-                stFileInfo fileInfo;
-                _pProxy->docBasicInfo(fileInfo);
+        DocummentProxy *_pProxy = m_sheet->getDocProxy();
 
-                m_strTheme = fileInfo.strTheme;
-                if (m_strTheme != "") {
-                    setTitleTheme();
-                }
+        if (_pProxy) {
+
+            stFileInfo fileInfo;
+            _pProxy->docBasicInfo(fileInfo);
+
+            m_strTheme = fileInfo.strTheme;
+            if (m_strTheme != "") {
+                setTitleTheme();
             }
         }
     }
