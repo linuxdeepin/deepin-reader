@@ -74,11 +74,13 @@ void CatalogWidget::initWidget()
 
     mainLayout->addItem(titleLayout);
 
-    m_pTree = new CatalogTreeView(this);
+    m_pTree = new CatalogTreeView(m_sheet, this);
 
-    auto pModel = new QStandardItemModel;
-    pModel->setColumnCount(3);
+    auto pModel = new QStandardItemModel(this);
+
     m_pTree->setModel(pModel);
+
+    pModel->setColumnCount(3);
 
     mainLayout->addWidget(m_pTree);
 
@@ -127,4 +129,6 @@ void CatalogWidget::handleOpenSuccess()
             }
         }
     }
+
+    m_pTree->handleOpenSuccess();
 }

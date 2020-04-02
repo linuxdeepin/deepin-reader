@@ -237,6 +237,12 @@ void CentralDocPage::saveAsCurFile()
                         //insert a new bookmark record to bookmarktabel
                         dApp->m_pDBService->qSaveData(sFilePath, DB_BOOKMARK);
 
+                        //如果能覆盖到所有MSG_OPERATION_OPEN_FILE_OK可以执行，则可以取消MSG_OPERATION_OPEN_FILE_OK发送//...
+//                        DocSheet *sheet = getSheet(sFilePath);
+//                        if (nullptr != sheet) {
+//                            sheet->reloadFile();
+//                        }
+
                         notifyMsg(MSG_OPERATION_OPEN_FILE_OK, sFilePath);
                     }
                 }
@@ -406,6 +412,18 @@ DocSheet *CentralDocPage::getCurSheet()
 {
     if (m_pStackedLayout != nullptr) {
         return static_cast<DocSheet *>(m_pStackedLayout->currentWidget());
+    }
+
+    return nullptr;
+}
+
+DocSheet *CentralDocPage::getSheet(const QString &filePath)
+{
+    auto sheets = this->findChildren<DocSheet *>();
+    foreach (auto sheet, sheets) {
+        if (sheet->qGetPath() == filePath) {
+            return sheet;
+        }
     }
 
     return nullptr;
@@ -715,14 +733,14 @@ void CentralDocPage::SlotSetCurrentIndexFile(const QString &sPath)
 void CentralDocPage::SlotAddTab(const QString &sPath)
 {
     if (m_pStackedLayout) {
-        DocSheet *splitter = new DocSheet(DocType_PDF, this);
-        connect(this, SIGNAL(sigDealNotifyMsg(const int &, const QString &)), splitter, SLOT(SlotNotifyMsg(const int &, const QString &)));
-        connect(splitter, SIGNAL(sigOpenFileResult(const QString &, const bool &)), SLOT(SlotOpenFileResult(const QString &, const bool &)));
-        connect(splitter, SIGNAL(sigFileChanged(bool)), SLOT(slotfilechanged(bool)));
+        DocSheet *sheet = new DocSheet(DocType_PDF, this);
+        connect(this, SIGNAL(sigDealNotifyMsg(const int &, const QString &)), sheet, SLOT(SlotNotifyMsg(const int &, const QString &)));
+        connect(sheet, SIGNAL(sigOpenFileResult(const QString &, const bool &)), SLOT(SlotOpenFileResult(const QString &, const bool &)));
+        connect(sheet, SIGNAL(sigFileChanged(bool)), SLOT(slotfilechanged(bool)));
 
-        splitter->qSetPath(sPath);
-        m_pStackedLayout->addWidget(splitter);
-        emit sigCurSheetChanged(splitter);
+        sheet->qSetPath(sPath);
+        m_pStackedLayout->addWidget(sheet);
+        emit sigCurSheetChanged(sheet);
     }
 }
 

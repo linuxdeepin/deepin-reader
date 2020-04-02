@@ -57,6 +57,8 @@ public:
 
 //    bool saveAs(QString filePath);
 
+    void reloadFile();      //重新读取当前文档 除了浏览区域
+
 private:
     void initPDF();
 

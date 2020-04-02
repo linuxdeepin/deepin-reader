@@ -28,27 +28,26 @@
 
 DWIDGET_USE_NAMESPACE
 
+class DocSheet;
 class CatalogTreeView : public DTreeView, public IObserver
 {
     Q_OBJECT
     Q_DISABLE_COPY(CatalogTreeView)
 
 public:
-    explicit CatalogTreeView(DWidget *parent = nullptr);
+    explicit CatalogTreeView(DocSheet *sheet, DWidget *parent = nullptr);
     ~CatalogTreeView() override;
 
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
     void notifyMsg(const int &, const QString &) override;
-
-    // QWidget interface
+    void handleOpenSuccess();
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
 
-    // QAbstractItemView interface
 protected slots:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
 
@@ -58,7 +57,7 @@ private:
 
     QList<QStandardItem *>   getItemList(const QString &, const int &, const qreal  &realleft, const qreal &realtop);
 
-    void OnOpenFileOk(const QString &path);
+
     void OnFilePageChanged(const QString &);
 
 private slots:
@@ -66,8 +65,8 @@ private slots:
     void SlotExpanded(const QModelIndex &);
 
 private:
-    QString     m_strBindPath = "";
     bool rightnotifypagechanged = false;
+    DocSheet *m_sheet;
 };
 
 #endif // CATALOGTREEVIEW_H

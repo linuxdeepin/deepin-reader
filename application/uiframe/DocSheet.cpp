@@ -83,6 +83,9 @@ void DocSheet::initPDF()
     SheetBrowserPDF *browser = new SheetBrowserPDF;
     SheetSidebarPDF *sidebar = new SheetSidebarPDF(this);
 
+    m_sidebar = sidebar;
+    m_browser = browser;
+
     connect(sidebar, SIGNAL(sigDeleteAnntation(const int &, const QString &)), browser, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
     connect(browser, SIGNAL(sigFileOpenResult(const QString &, const bool &)), SLOT(SlotFileOpenResult(const QString &, const bool &)));
     connect(browser, SIGNAL(sigFindOperation(const int &)), sidebar, SLOT(SetFindOperation(const int &)));
@@ -102,9 +105,6 @@ void DocSheet::initPDF()
 
     addWidget(sidebar);
     addWidget(m_pRightWidget);
-
-    m_sidebar = sidebar;
-    m_browser = browser;
 
     QList<int> list_src;
     tW = LEFTNORMALWIDTH;
@@ -134,14 +134,23 @@ void DocSheet::SlotFileOpenResult(const QString &s, const bool &res)
             m_pSpinnerWidget = nullptr;
         }
 
-        if (DocType_PDF == m_type)
-            static_cast<SheetSidebarPDF *>(m_sidebar)->handleOpenSuccess();
+        reloadFile();
 
         if (dApp) {
             dApp->setFirstView(false);
         }
     }
     emit sigOpenFileResult(s, res);
+}
+
+void DocSheet::reloadFile()
+{
+    if (DocType_PDF == m_type) {
+        SheetSidebarPDF *sidebar = static_cast<SheetSidebarPDF *>(m_sidebar);
+        if (sidebar)
+            sidebar->handleOpenSuccess();
+    }
+
 }
 
 void DocSheet::SlotNotifyMsg(const int &msgType, const QString &msgContent)
@@ -208,7 +217,13 @@ FileDataModel DocSheet::qGetFileData()
 
 DocummentProxy *DocSheet::getDocProxy()
 {
-    return static_cast<SheetBrowserPDF *>(m_browser)->GetDocProxy();
+    if (DocType_PDF == m_type) {
+        SheetBrowserPDF *browser = static_cast<SheetBrowserPDF *>(m_browser);
+        if (browser)
+            return browser->GetDocProxy();
+    }
+
+    return nullptr;
 }
 
 void DocSheet::OnOpenSliderShow()

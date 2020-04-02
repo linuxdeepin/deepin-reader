@@ -26,11 +26,12 @@
 
 #include "docview/docummentproxy.h"
 #include "utils/utils.h"
+#include "DocSheet.h"
+#include "ModuleHeader.h"
+#include "MsgHeader.h"
 
-#include "CentralDocPage.h"
-
-CatalogTreeView::CatalogTreeView(DWidget *parent)
-    : DTreeView(parent)
+CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
+    : DTreeView(parent), m_sheet(sheet)
 {
     setFrameShape(QFrame::NoFrame);
     setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -40,9 +41,7 @@ CatalogTreeView::CatalogTreeView(DWidget *parent)
 
     this->header()->setHidden(true);
     this->viewport()->setAutoFillBackground(false);
-
     this->setContentsMargins(0, 0, 0, 0);
-
     initConnections();
 
     dApp->m_pModelService->addObserver(this);
@@ -56,7 +55,7 @@ CatalogTreeView::~CatalogTreeView()
 int CatalogTreeView::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        OnOpenFileOk(msgContent);
+        handleOpenSuccess();
     } else if (msgType == MSG_FILE_PAGE_CHANGE) {    //  文档页变化, 需要跳转到对应项
         OnFilePageChanged(msgContent);
         rightnotifypagechanged = true;
@@ -122,32 +121,30 @@ QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const 
 }
 
 //  文档打开成功, 加载对应目录
-void CatalogTreeView::OnOpenFileOk(const QString &path)
+void CatalogTreeView::handleOpenSuccess()
 {
-    m_strBindPath = path;
-
     auto model = reinterpret_cast<QStandardItemModel *>(this->model());
     if (model) {
         model->clear();
 
-        CentralDocPage *pMtwe = CentralDocPage::Instance();
-        if (pMtwe) {
-            DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(m_strBindPath);
-            if (_proxy) {
+        if (nullptr == m_sheet)
+            return;
 
-                Outline ol = _proxy->outline();
-                foreach (const Section &s, ol) {   //  1 级显示
-                    if (s.link.page > 0) {
-                        auto itemList = getItemList(s.title, s.link.page, s.link.left, s.link.top);
-                        model->appendRow(itemList);
+        DocummentProxy *_proxy =  m_sheet->getDocProxy();
+        if (_proxy) {
 
-                        parseCatalogData(s, itemList.at(0));
-                    }
+            Outline ol = _proxy->outline();
+            foreach (const Section &s, ol) {   //  1 级显示
+                if (s.link.page > 0) {
+                    auto itemList = getItemList(s.title, s.link.page, s.link.left, s.link.top);
+                    model->appendRow(itemList);
+
+                    parseCatalogData(s, itemList.at(0));
                 }
-
-                int nCurPage = _proxy->currentPageNo();
-                OnFilePageChanged(QString::number(nCurPage));
             }
+
+            int nCurPage = _proxy->currentPageNo();
+            OnFilePageChanged(QString::number(nCurPage));
         }
     }
 }
@@ -202,14 +199,15 @@ void CatalogTreeView::OnFilePageChanged(const QString &sPage)
 void CatalogTreeView::SlotCollapsed(const QModelIndex &index)
 {
     Q_UNUSED(index);
-    CentralDocPage *pMtwe = CentralDocPage::Instance();
-    if (pMtwe) {
-        DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(m_strBindPath);
-        if (_proxy) {
-            int nCurPage = _proxy->currentPageNo();
 
-            OnFilePageChanged(QString::number(nCurPage));
-        }
+    if (nullptr == m_sheet)
+        return;
+
+    DocummentProxy *_proxy = m_sheet->getDocProxy();
+    if (_proxy) {
+        int nCurPage = _proxy->currentPageNo();
+
+        OnFilePageChanged(QString::number(nCurPage));
     }
 }
 
@@ -217,13 +215,13 @@ void CatalogTreeView::SlotCollapsed(const QModelIndex &index)
 void CatalogTreeView::SlotExpanded(const QModelIndex &index)
 {
     if (index == this->selectionModel()->currentIndex()) {  //  展开的节点 是 高亮节点
-        CentralDocPage *pMtwe = CentralDocPage::Instance();
-        if (pMtwe) {
-            DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(m_strBindPath);
-            if (_proxy) {
-                int nCurPage = _proxy->currentPageNo();
-                OnFilePageChanged(QString::number(nCurPage));
-            }
+        if (nullptr == m_sheet)
+            return;
+
+        DocummentProxy *_proxy = m_sheet->getDocProxy();
+        if (_proxy) {
+            int nCurPage = _proxy->currentPageNo();
+            OnFilePageChanged(QString::number(nCurPage));
         }
     }
 }
@@ -233,18 +231,23 @@ void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelInd
 {
     Q_UNUSED(previous);
     if (!rightnotifypagechanged) {
-        CentralDocPage *pMtwe = CentralDocPage::Instance();
-        if (pMtwe && this->isVisible()) {
-            DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(m_strBindPath);
-            if (_proxy) {
-                int nPage = current.data(Qt::UserRole + 1).toInt();
-                nPage--;
 
-                double left = current.data(Qt::UserRole + 2).toDouble();
-                double top = current.data(Qt::UserRole + 3).toDouble();
-                qDebug() << __FUNCTION__ << "******" << left << top << nPage;
-                _proxy->jumpToOutline(left, top, nPage);
-            }
+        if (nullptr == m_sheet)
+            return;
+
+        DocummentProxy *_proxy =  m_sheet->getDocProxy();
+
+        if (_proxy) {
+            int nPage = current.data(Qt::UserRole + 1).toInt();
+
+            nPage--;
+
+            double left = current.data(Qt::UserRole + 2).toDouble();
+
+            double top = current.data(Qt::UserRole + 3).toDouble();
+
+            _proxy->jumpToOutline(left, top, nPage);
+
         }
     }
     rightnotifypagechanged = false;

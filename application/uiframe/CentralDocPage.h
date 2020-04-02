@@ -66,6 +66,8 @@ public:
 
     DocSheet *getCurSheet();
 
+    DocSheet *getSheet(const QString &filePath);
+
     void showPlayControlWidget() const;
 
     int getCurrentState();
@@ -145,8 +147,6 @@ signals:
     void sigRemoveFileTab(const QString &);
 
     void sigTabBarIndexChange(const QString &);
-
-    void sigAddTab(const QString &);
 
     void sigCurSheetChanged(DocSheet *);        //当前的文档被 切换 改动 保存 等
 
