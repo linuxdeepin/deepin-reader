@@ -23,9 +23,10 @@
 
 
 #include "CentralDocPage.h"
+#include "DocSheet.h"
 
-BookMarkWidget::BookMarkWidget(DWidget *parent)
-    : CustomWidget(BOOKMARK_WIDGET, parent)
+BookMarkWidget::BookMarkWidget(DocSheet *sheet, DWidget *parent)
+    : CustomWidget(BOOKMARK_WIDGET, parent), m_sheet(sheet)
 {
     setFocusPolicy(Qt::ClickFocus);
 
@@ -155,7 +156,7 @@ void BookMarkWidget::slotAddBookMark(const QString &sContent)
         pageList.append(nPage);
         dApp->m_pDBService->setBookMarkList(sPath, pageList);
 
-        notifyMsg(MSG_FILE_IS_CHANGE, "1");
+        m_sheet->setFileChanged(true);
     }
 
     CentralDocPage *pMtwe = CentralDocPage::Instance();
@@ -312,7 +313,7 @@ void BookMarkWidget::deleteIndexPage(const int &pageIndex)
 
         DocummentProxy *proxy =  pMtwe->getCurFileAndProxy(m_strBindPath);
         if (proxy) {
-            notifyMsg(MSG_FILE_IS_CHANGE, "1");
+            m_sheet->setFileChanged(true);
             notifyMsg(CENTRAL_SHOW_TIP, tr("The bookmark has been removed"));
 
             proxy->setBookMarkState(pageIndex, false);

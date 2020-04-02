@@ -12,14 +12,14 @@
 
 class MainOperationWidget;
 class DataStackedWidget;
-
+class DocSheet;
 class SheetSidebarPDF : public CustomWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(SheetSidebarPDF)
 
 public:
-    explicit SheetSidebarPDF(DWidget *parent = nullptr);
+    explicit SheetSidebarPDF(DocSheet *parent = nullptr);
     ~SheetSidebarPDF() override;
 
 signals:
@@ -60,6 +60,7 @@ private:
     int         m_nSearch = -1;
     bool        m_bOldVisible = false;
     QString     m_strBindPath = "";
+    DocSheet   *m_sheet;
 };
 
 #endif  // LEFTSHOWWIDGET_H

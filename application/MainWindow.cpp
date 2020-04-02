@@ -127,17 +127,15 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::initUI()
 {
-    titlebar()->setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
-    titlebar()->setTitle("");
-    titlebar()->setMenu(TitleMenu::Instance(this));
-    titlebar()->addWidget(new TitleWidget, Qt::AlignLeft);
-
     Central *central = new Central;
-
     setCentralWidget(central);
 
-    connect(this, &MainWindow::sigopenfile, central, &Central::SlotOpenFiles);
+    titlebar()->setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
+    titlebar()->setTitle("");
+    titlebar()->setMenu(central->titleMenu());
+    titlebar()->addWidget(central->titleWidget(), Qt::AlignLeft);
 
+    connect(this, &MainWindow::sigopenfile, central, &Central::SlotOpenFiles);
 }
 
 void MainWindow::initThemeChanged()

@@ -40,6 +40,12 @@ SheetBrowserPDF::~SheetBrowserPDF()
     dApp->m_pModelService->removeObserver(this);
 }
 
+void SheetBrowserPDF::setFileChanged(bool hasChanged)
+{
+    Q_D(SheetBrowserPDF);
+    d->m_pProxyData->setFileChanged(hasChanged);
+}
+
 void SheetBrowserPDF::initWidget()
 {
 }
@@ -116,7 +122,7 @@ QString SheetBrowserPDF::getFilePath()
 void SheetBrowserPDF::saveData()
 {
     Q_D(SheetBrowserPDF);
-    setFileChange(false);
+    d->m_pProxyData->setFileChanged(false);
     d->m_pProxyFileDataModel->saveData();
 }
 
@@ -147,12 +153,6 @@ int SheetBrowserPDF::qDealWithShortKey(const QString &sKey)
 {
     Q_D(SheetBrowserPDF);
     return d->qDealWithShortKey(sKey);
-}
-
-void SheetBrowserPDF::setFileChange(bool bchanged)
-{
-    Q_D(SheetBrowserPDF);
-    d->m_pProxyData->setFileChanged(bchanged);
 }
 
 bool SheetBrowserPDF::getFileChange()

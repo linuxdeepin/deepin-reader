@@ -26,7 +26,6 @@ enum E_HOMEWIDGET_MSG {
 //  central 消息
 enum E_CENTRAL_MSG {
     E_CENTRAL_MSG_BEGIN = E_HOMEWIDGET_MSG_END + 50,
-    CENTRAL_INDEX_CHANGE,
     CENTRAL_SHOW_TIP,                //  显示提示窗口
     E_CENTRAL_MSG_END
 };
@@ -138,7 +137,6 @@ enum E_FILE_VALUE_MSG {
     MSG_HANDLE_SELECT,                  //  选择工具
     MSG_FILE_SCALE,                     //  当前比例
     MSG_FILE_FIT_SCALE,                 //  当前比例        自适应的缩放比
-    MSG_FILE_IS_CHANGE,                 //  文档是否有变化
     MSG_LEFTBAR_STATE,                  //  文档是否有变化
     E_FILE_VALUE_MSG_END
 };

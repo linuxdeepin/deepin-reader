@@ -43,7 +43,6 @@ bool ProxyData::IsFileChanged() const
 void ProxyData::setFileChanged(bool filechanged)
 {
     m_filechanged = filechanged;
-    TitleMenu::Instance()->flushSaveButton();
     emit signale_filechanged(filechanged);
 }
 

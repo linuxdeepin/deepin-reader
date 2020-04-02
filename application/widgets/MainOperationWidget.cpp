@@ -6,11 +6,10 @@
 #include <QHBoxLayout>
 
 #include "utils/PublicFunction.h"
+#include "DocSheet.h"
 
-#include "CentralDocPage.h"
-
-MainOperationWidget::MainOperationWidget(DWidget *parent)
-    : CustomWidget(MAIN_OPERATION_WIDGET, parent)
+MainOperationWidget::MainOperationWidget(DocSheet *sheet, DWidget *parent)
+    : CustomWidget(MAIN_OPERATION_WIDGET, parent), m_sheet(sheet)
 {
     initWidget();
     initConnect();
@@ -51,9 +50,6 @@ void MainOperationWidget::initWidget()
 
     auto pSearchBtn = __CreateHideBtn();
     btnGroup->addButton(pSearchBtn, WIDGET_SEARCH);
-
-//    auto pBufferBtn = __CreateHideBtn();
-//    btnGroup->addButton(pBufferBtn, WIDGET_BUFFER);
 
     this->setLayout(mLayout);
 }
@@ -103,8 +99,11 @@ void MainOperationWidget::initConnect()
 
 void MainOperationWidget::slotOpenFileOk(const QString &sPath)
 {
+    if (m_sheet.isNull())
+        return;
+
     m_strBindPath = sPath;
-    FileDataModel fdm = CentralDocPage::Instance()->qGetFileData(m_strBindPath);
+    FileDataModel fdm = m_sheet->qGetFileData();
     int nId = static_cast<int>(fdm.qGetData(LeftIndex));
     if (nId == -1) {
         nId = 0;

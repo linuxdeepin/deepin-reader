@@ -8,19 +8,14 @@
 
 DWIDGET_USE_NAMESPACE
 
-/**
- * @brief The AttrScrollWidget class
- * @brief   属性显示
- */
-
-
+class DocSheet;
 class AttrScrollWidget : public DFrame
 {
     Q_OBJECT
     Q_DISABLE_COPY(AttrScrollWidget)
 
 public:
-    explicit AttrScrollWidget(const QString &, DWidget *parent  = nullptr);
+    explicit AttrScrollWidget(DocSheet *sheet, DWidget *parent  = nullptr);
 
 protected:
     bool eventFilter(QObject *obj, QEvent *e) override;

@@ -3,6 +3,7 @@
 
 #include <DSplitter>
 #include "FileDataModel.h"
+#include "docview/commonstruct.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -17,18 +18,20 @@ class DocSheet : public DSplitter
     Q_DISABLE_COPY(DocSheet)
 
 public:
-    explicit DocSheet(int type, DWidget *parent = nullptr);
+    explicit DocSheet(DocType_EM type, DWidget *parent = nullptr);
     ~DocSheet() override;
 
 signals:
     void sigOpenFileResult(const QString &, const bool &);
 
+    void sigFileChanged(bool hasChanged);     //被修改了
+
 public:
+    void setFileChanged(bool hasChanged);
+
     QString qGetPath();
 
     void qSetPath(const QString &strPath);
-
-    void qSetFileChange(const int &);
 
     int qGetFileChange();
 
@@ -43,6 +46,8 @@ public:
     void OnExitSliderShow();
 
     void ShowFindWidget();
+
+    DocType_EM type();
 
 //    bool close();
 
@@ -59,7 +64,7 @@ private slots:
     void SlotNotifyMsg(const int &, const QString &);
 
 private:
-    int             m_type;
+    DocType_EM      m_type;
     void *m_sidebar = nullptr;
     void *m_browser = nullptr;
 

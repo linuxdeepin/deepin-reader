@@ -6,28 +6,27 @@
 #include <DWindowCloseButton>
 #include <QFileInfo>
 #include <DWidgetUtil>
-#include "AttrScrollWidget.h"
+#include <QVBoxLayout>
 
+#include "AttrScrollWidget.h"
 #include "docview/docummentproxy.h"
 #include "CustomControl/DFMGlobal.h"
 #include "CustomControl/ImageLabel.h"
-#include "CentralDocPage.h"
+#include "WidgetHeader.h"
+#include "ModuleHeader.h"
+#include "application.h"
+#include "DocSheet.h"
+#include "MsgHeader.h"
 
 FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
 {
-    m_strObserverName = FILE_ATTR_WIDGET;
-
     setAttribute(Qt::WA_ShowModal, true);  //  模态对话框， 属性设置
-    setAttribute(Qt::WA_DeleteOnClose);
     setFixedSize(QSize(300, 642));
-    //  setWindowOpacity(0.95);
     m_pVBoxLayout = new QVBoxLayout;
     m_pVBoxLayout->setContentsMargins(0, 0, 0, 10);
     this->setLayout(m_pVBoxLayout);
-
     initWidget();
-
     dApp->m_pModelService->addObserver(this);
 }
 
@@ -36,20 +35,15 @@ FileAttrWidget::~FileAttrWidget()
     dApp->m_pModelService->removeObserver(this);
 }
 
-//  各个 对应的 label 赋值
-void FileAttrWidget::setFileAttr()
+void FileAttrWidget::setFileAttr(DocSheet *sheet)
 {
-    CentralDocPage *pMtwe = CentralDocPage::Instance();
-
-    QString filePath = pMtwe->qGetCurPath();
-    if (filePath == "") {
+    if (sheet == nullptr)
         return;
-    }
 
-    auto dproxy = pMtwe->getCurFileAndProxy(filePath);
-    if (nullptr == dproxy) {
+    auto dproxy = sheet->getDocProxy();
+
+    if (nullptr == dproxy)
         return;
-    }
 
     QImage image;
     bool rl = dproxy->getImage(0, image, 94, 113);
@@ -60,7 +54,7 @@ void FileAttrWidget::setFileAttr()
         }
     }
 
-    QFileInfo info(filePath);
+    QFileInfo info(sheet->qGetPath());
     QString szTitle = info.fileName();
 
     addTitleFrame(szTitle);
@@ -73,14 +67,14 @@ void FileAttrWidget::setFileAttr()
     frameLayout->setContentsMargins(0, 5, 0, 5);
     infoframe->setLayout(frameLayout);
 
-    auto scroll = new DScrollArea;
+    auto scroll = new DScrollArea(this);
     QPalette palette = scroll->viewport()->palette();
     palette.setBrush(QPalette::Background, Qt::NoBrush);
     scroll->viewport()->setPalette(palette);
 
     scroll->setFrameShape(QFrame::NoFrame);
     scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    scroll->setWidget(new AttrScrollWidget(filePath));
+    scroll->setWidget(new AttrScrollWidget(sheet, this));
     scroll->setWidgetResizable(true);
 
     frameLayout->addWidget(scroll);
@@ -156,10 +150,10 @@ void FileAttrWidget::addTitleFrame(const QString &sData)
 
 void FileAttrWidget::showScreenCenter()
 {
-    setFileAttr();
-
     Dtk::Widget::moveToCenter(this);
+
     this->show();
+
 }
 
 int FileAttrWidget::dealWithData(const int &msgType, const QString &msgContent)

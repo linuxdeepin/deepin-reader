@@ -21,18 +21,22 @@
 
 #include <DTabBar>
 #include <DTabWidget>
+#include <QPointer>
+
 #include "application.h"
 #include "IObserver.h"
 
 DWIDGET_USE_NAMESPACE
 
+class CentralDocPage;
 class DocTabBar : public DTabBar, public IObserver
 {
     Q_OBJECT
     Q_DISABLE_COPY(DocTabBar)
 
 public:
-    explicit DocTabBar(DWidget *parent = nullptr);
+    explicit DocTabBar(CentralDocPage *parent);
+
     ~DocTabBar() override;
 
     int indexOfFilePath(const QString &filePath);
@@ -62,6 +66,8 @@ signals:
 
     void sigCloseTab(const QString &);
 
+    void sigFileCountChanged(int);
+
 public:
     int dealWithData(const int &, const QString &) override;
 
@@ -86,6 +92,7 @@ private slots:
 private:
     QList <int> m_pMsgList;
 
+    QPointer<CentralDocPage> m_docPage;
 };
 
 #endif // MAINTABWIDGET_H

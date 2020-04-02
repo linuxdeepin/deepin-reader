@@ -28,6 +28,7 @@ SheetBrowserPDFPrivate::SheetBrowserPDFPrivate(SheetBrowserPDF *parent)
     : q_ptr(parent)
 {
     m_pProxyData = new ProxyData(this);
+    connect(m_pProxyData, SIGNAL(signale_filechanged(bool)), q_ptr, SIGNAL(sigFileChanged(bool)));
 
     m_operatemenu = new TextOperationMenu(parent);
     connect(m_operatemenu, SIGNAL(sigActionTrigger(const int &, const QString &)), SLOT(slotDealWithMenu(const int &, const QString &)));
@@ -571,7 +572,6 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
         connect(m_pProxy, SIGNAL(signal_bookMarkStateChange(int, bool)), m_pProxyNotifyMsg, SLOT(slotBookMarkStateChange(int, bool)));
         connect(m_pProxy, SIGNAL(signal_pageChange(int)), m_pProxyNotifyMsg, SLOT(slotDocFilePageChanged(int)));
         connect(m_pProxy, SIGNAL(signal_openResult(bool)), SLOT(SlotDocFileOpenResult(bool)));
-        connect(m_pProxyData, SIGNAL(signale_filechanged(bool)), CentralDocPage::Instance(), SLOT(slotfilechanged(bool)));
 
         QFileInfo info(sPath);
 

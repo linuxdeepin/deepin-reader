@@ -13,6 +13,12 @@ DocSheet(SheetSidebar SheetBrowserArea document)
 
 #include "CustomControl/CustomWidget.h"
 
+class CentralDocPage;
+class CentralNavPage;
+class TitleMenu;
+class TitleWidget;
+class DocSheet;
+class QStackedLayout;
 class Central : public CustomWidget
 {
     Q_OBJECT
@@ -22,6 +28,10 @@ public:
     explicit Central(DWidget *parent = nullptr);
 
     ~Central() override;
+
+    TitleMenu *titleMenu();
+
+    TitleWidget *titleWidget();
 
 signals:
     void sigOpenFiles(const QString &);
@@ -44,6 +54,10 @@ public slots:
 
     void onFilesOpened();
 
+    void onCurSheetChanged(DocSheet *);
+
+    void onMenuTriggered(const QString &action);
+
 private:
     void initConnections();
 
@@ -51,6 +65,12 @@ private:
 
     void onShowTip(const QString &);
 
+private:
+    QStackedLayout      *m_layout = nullptr;
+    CentralDocPage      *m_docPage = nullptr;
+    CentralNavPage      *m_navPage = nullptr;
+    TitleMenu           *m_menu = nullptr;
+    TitleWidget         *m_widget = nullptr;
 };
 
 #endif  // MAINSTACKWIDGET_H

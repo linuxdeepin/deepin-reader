@@ -8,11 +8,11 @@
 
 #include "docview/docummentproxy.h"
 #include "pdfControl/DataStackedWidget.h"
-
+#include "DocSheet.h"
 #include "CentralDocPage.h"
 
-SheetSidebarPDF::SheetSidebarPDF(DWidget *parent)
-    : CustomWidget(LEFT_SLIDERBAR_WIDGET, parent)
+SheetSidebarPDF::SheetSidebarPDF(DocSheet *parent)
+    : CustomWidget(LEFT_SLIDERBAR_WIDGET, parent), m_sheet(parent)
 {
     int tW = LEFTMINWIDTH;
     int tH = LEFTMINWIDTH;
@@ -25,9 +25,7 @@ SheetSidebarPDF::SheetSidebarPDF(DWidget *parent)
     dApp->adaptScreenView(tW, tH);
     resize(tW, this->height());
 
-//    m_pMsgList = {MSG_WIDGET_THUMBNAILS_VIEW};
     initWidget();
-
     onSetWidgetVisible(0);  //  默认 隐藏
     slotUpdateTheme();
 
@@ -66,14 +64,14 @@ void SheetSidebarPDF::initWidget()
     pVBoxLayout->setSpacing(0);
     this->setLayout(pVBoxLayout);
 
-    m_pStackedWidget = new DataStackedWidget(this);
+    m_pStackedWidget = new DataStackedWidget(m_sheet, this);
     connect(this, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pStackedWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)));
     connect(this, SIGNAL(sigBookMarkMsg(const int &, const QString &)), m_pStackedWidget, SIGNAL(sigBookMarkMsg(const int &, const QString &)));
     connect(m_pStackedWidget, SIGNAL(sigDeleteAnntation(const int &, const QString &)), this, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
     connect(this, SIGNAL(sigUpdateThumbnail(const int &)), m_pStackedWidget, SIGNAL(sigUpdateThumbnail(const int &)));
     pVBoxLayout->addWidget(m_pStackedWidget);
 
-    m_pMainOperationWidget = new MainOperationWidget;
+    m_pMainOperationWidget = new MainOperationWidget(m_sheet, this);
     connect(m_pMainOperationWidget, SIGNAL(sigShowStackWidget(const int &)), m_pStackedWidget, SLOT(slotSetStackCurIndex(const int &)));
 
     pVBoxLayout->addWidget(m_pMainOperationWidget, 0, Qt::AlignBottom);

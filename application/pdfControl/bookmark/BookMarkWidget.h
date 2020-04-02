@@ -48,9 +48,15 @@ signals:
     void sigLoadImage(const int &, const QImage &);
 
 public:
-    inline void setBookMark(BookMarkWidget *bookMarkW) { m_pBookMarkWidget = bookMarkW; }
+    inline void setBookMark(BookMarkWidget *bookMarkW)
+    {
+        m_pBookMarkWidget = bookMarkW;
+    }
 
-    inline void setBookMarks(const int &count) { m_bookMarks = count; }
+    inline void setBookMarks(const int &count)
+    {
+        m_bookMarks = count;
+    }
 
     void stopThreadRun();
 
@@ -65,13 +71,14 @@ private:
     bool m_isRunning = true;  // 运行状态
 };
 
+class DocSheet;
 class BookMarkWidget : public CustomWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(BookMarkWidget)
 
 public:
-    explicit BookMarkWidget(DWidget *parent = nullptr);
+    explicit BookMarkWidget(DocSheet *sheet, DWidget *parent = nullptr);
     ~BookMarkWidget() override;
 
     void prevPage();
@@ -121,7 +128,7 @@ private:
     DPushButton         *m_pAddBookMarkBtn = nullptr;
     LoadBookMarkThread  m_loadBookMarkThread;
     QString             m_strBindPath = "";
-
+    DocSheet           *m_sheet;
     // CustomWidget interface
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;

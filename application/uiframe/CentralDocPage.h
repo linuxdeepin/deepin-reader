@@ -32,6 +32,9 @@ class DocummentProxy;
 class QStackedLayout;
 class DocTabBar;
 class PlayControlWidget;
+class DocSheet;
+class TitleMenu;
+class TitleWidget;
 class CentralDocPage : public CustomWidget
 {
     Q_OBJECT
@@ -45,7 +48,6 @@ public:
 public:
     static CentralDocPage *Instance();
 
-    // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
 
@@ -62,13 +64,13 @@ public:
 
     DocummentProxy *getCurFileAndProxy(const QString &sPath = "");
 
+    DocSheet *getCurSheet();
+
     void showPlayControlWidget() const;
 
     int getCurrentState();
 
     void setCurrentState(const int &nCurrentState);
-
-    void SetFileChange();
 
     void OnExitSliderShow();
 
@@ -76,43 +78,58 @@ public:
 
     void setCurrentTabByFilePath(const QString &filePath);
 
-private:
+public:
     void OpenCurFileFolder();
-
-    QString GetCurPath();
 
     QStringList GetAllPath();
 
-    void SetFileChange(const QString &sPath, const int &iState);
-
 public:
     void pageJump(const int &pagenum);
+
     void pageJumpByMsg(const int &, const QString &param);
+
     void notifyMsg(const int &msgType, const QString &msgContent = "") ;
+
     void CloseFile(const int &iType, const QString &sPath);
+
     QString qDealWithData(const int &msgType, const QString &msgContent);
 
 protected:
     void initWidget() override;
 
-private:
+public:
     void BlockShutdown();
+
     void UnBlockShutdown();
+
     void InitConnections();
+
     void onShowFileAttr();
+
     void OnAppMsgData(const QString &);
+
     void OnAppExit();
+
     void OnTabBarMsg(const QString &);
+
     void OnTabFileChangeMsg(const QString &);
+
     void SaveFile(const int &nSaveType, const QString &);
+
     void OnAppShortCut(const QString &);
 
     void onSaveFile();
+
     void OnPrintFile();
+
     void ShowFindWidget();
+
     void OnOpenSliderShow();
-    void OnOpenMagnifer();
+
+    bool OnOpenMagnifer();
+
     void OnShortCutKey_Esc();
+
     void OnKeyPress(const QString &);
 
 public:
@@ -122,17 +139,27 @@ public:
 
 signals:
     void sigDealNotifyMsg(const int &, const QString &);
+
     void sigOpenFileResult(const QString &, const bool &);
+
     void sigRemoveFileTab(const QString &);
+
     void sigTabBarIndexChange(const QString &);
+
     void sigAddTab(const QString &);
+
+    void sigCurSheetChanged(DocSheet *);        //当前的文档被 切换 改动 保存 等
 
 public slots:
     void slotfilechanged(bool bchanged);
+
 private slots:
     void SlotSetCurrentIndexFile(const QString &);
+
     void SlotAddTab(const QString &);
+
     void SlotCloseTab(const QString &);
+
     void SlotOpenFileResult(const QString &, const bool &);
 
 private:

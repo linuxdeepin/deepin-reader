@@ -20,8 +20,7 @@
 
 #include <QSignalMapper>
 #include "CentralDocPage.h"
-
-
+#include "DocSheet.h"
 
 TitleMenu *TitleMenu::g_onlyTitleMenu = nullptr;
 
@@ -36,6 +35,30 @@ TitleMenu *TitleMenu::Instance(DWidget *parent)
     if (g_onlyTitleMenu == nullptr && nullptr != parent)
         g_onlyTitleMenu = new TitleMenu(parent);
     return g_onlyTitleMenu;
+}
+
+void TitleMenu::onCurSheetChanged(DocSheet *sheet)
+{
+    if (nullptr == sheet) {
+        disableAllAction();
+        return;
+    }
+
+    auto actions = this->findChildren<QAction *>();
+    foreach (QAction *a, actions) {
+        a->setDisabled(false);
+    }
+
+    flushSaveButton();
+}
+
+void TitleMenu::onCurSheetSaved(DocSheet *sheet)
+{
+    if (nullptr == sheet) {
+        disableSaveButton(true);
+        return;
+    }
+    disableSaveButton(!sheet->qGetFileChange());
 }
 
 int TitleMenu::dealWithData(const int &msgType, const QString &)
@@ -82,7 +105,7 @@ void TitleMenu::disableSaveButton(bool disable)
 void TitleMenu::initActions()
 {
     auto pSigManager = new QSignalMapper(this);
-    connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(slotActionTrigger(const QString &)));
+    connect(pSigManager, SIGNAL(mapped(const QString &)), this, SIGNAL(sigActionTriggered(const QString &)));
 
     QStringList firstActionList = QStringList() << tr("New window") << tr("New tab");
     QStringList firstActionObjList = QStringList() << "New window" << "New tab";
@@ -124,9 +147,4 @@ QAction *TitleMenu::__CreateAction(const QString &actionName, const QString &obj
     this->addAction(action);
 
     return action;
-}
-
-void TitleMenu::slotActionTrigger(const QString &sAction)
-{
-    dApp->m_pModelService->notifyMsg(E_TABBAR_MSG_TYPE, sAction);
 }

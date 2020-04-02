@@ -38,6 +38,8 @@ Application::Application(int &argc, char **argv)
     setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     initI18n();
+    initCfgPath();
+    initChildren();
 
     setApplicationName(ConstantMsg::g_app_name);
     setOrganizationName("deepin");
@@ -49,13 +51,7 @@ Application::Application(int &argc, char **argv)
     QPixmap px(QIcon::fromTheme(ConstantMsg::g_app_name).pixmap(256 * qApp->devicePixelRatio(), 256 * qApp->devicePixelRatio()));
     px.setDevicePixelRatio(qApp->devicePixelRatio());
     setProductIcon(QIcon(px));
-
-    //  wzx 2019-12-21 根据石墨文案修改
     setApplicationDescription(tr("Document Viewer is a simple PDF reader, supporting bookmarks, highlights and annotations."));
-
-    initCfgPath();
-
-    initChildren();
 }
 
 void Application::setSreenRect(const QRect &rect)

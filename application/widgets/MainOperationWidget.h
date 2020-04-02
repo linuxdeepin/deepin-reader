@@ -3,21 +3,18 @@
 
 #include <DPushButton>
 #include <DToolButton>
+#include <QPointer>
 
 #include "CustomControl/CustomWidget.h"
 
-/**
- * @brief The MainOperationWidget class
- * @brief   缩略图、书签、注释 操作widget
- */
-
+class DocSheet;
 class MainOperationWidget : public CustomWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(MainOperationWidget)
 
 public:
-    explicit MainOperationWidget(DWidget *parent = nullptr);
+    explicit MainOperationWidget(DocSheet *sheet, DWidget *parent = nullptr);
     ~MainOperationWidget() override;
 
 signals:
@@ -48,7 +45,7 @@ private slots:
 
 private:
     QString     m_strBindPath = "";
-
+    QPointer<DocSheet> m_sheet;
 };
 
 #endif // MAINOPERATIONWIDGET_H

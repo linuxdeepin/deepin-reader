@@ -8,9 +8,9 @@
 #include "TitleMenu.h"
 #include "CentralDocPage.h"
 #include "utils/PublicFunction.h"
+#include "DocSheet.h"
 
 TitleWidget *TitleWidget::g_onlyTitleWdiget = nullptr;
-
 TitleWidget *TitleWidget::Instance()
 {
     return g_onlyTitleWdiget;
@@ -18,9 +18,13 @@ TitleWidget *TitleWidget::Instance()
 
 void TitleWidget::suitDocType(DocType_EM type)
 {
+    qDebug() << type;
     if (DocType_NULL == type) {
         SetBtnDisable(true);
+        return;
     }
+
+    SetBtnDisable(false);
 }
 
 TitleWidget::TitleWidget(DWidget *parent)
@@ -173,6 +177,16 @@ void TitleWidget::initWidget()
 
     m_layout->addWidget(m_pSearchBtn);
     m_layout->addStretch(1);
+}
+
+void TitleWidget::onCurSheetChanged(DocSheet *sheet)
+{
+    if (nullptr == sheet) {
+        suitDocType(DocType_NULL);
+        return;
+    }
+
+    suitDocType(sheet->type());
 }
 
 void TitleWidget::initConnections()
@@ -385,7 +399,6 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_OPEN_FILE_OK || msgType == MSG_TAB_SHOW_FILE_CHANGE) {
         OnFileShowChange(msgContent);
-        TitleMenu::Instance()->dealWithData(msgType, msgContent);
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         slotUpdateTheme();
     }

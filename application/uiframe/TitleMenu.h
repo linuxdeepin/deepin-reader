@@ -22,26 +22,28 @@
 #include "CustomControl/CustomMenu.h"
 
 class QSignalMapper;
-
-
-/**
- * @brief The TitleMenu class
- *  标题栏 菜单
- */
-
+class DocSheet;
 class TitleMenu : public CustomMenu
 {
     Q_OBJECT
     Q_DISABLE_COPY(TitleMenu)
 
-private:
+public:
     explicit TitleMenu(DWidget *parent = nullptr);
 
 private:
     static TitleMenu *g_onlyTitleMenu;
 
+signals:
+    void sigActionTriggered(const QString &action);
+
 public:
     static TitleMenu *Instance(DWidget *parent = nullptr);
+
+public slots:
+    void onCurSheetChanged(DocSheet *);
+
+    void onCurSheetSaved(DocSheet *);
 
 public:
     int dealWithData(const int &, const QString &) override;
@@ -58,10 +60,9 @@ protected:
 
 private:
     void __CreateActionMap(QSignalMapper *pSigManager, const QStringList &actionList, const QStringList &actionObjList);
+
     QAction *__CreateAction(const QString &actionName, const QString &);
 
-private slots:
-    void slotActionTrigger(const QString &);
 };
 
 

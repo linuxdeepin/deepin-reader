@@ -30,8 +30,8 @@
 
 #include "CentralDocPage.h"
 
-DataStackedWidget::DataStackedWidget(DWidget *parent)
-    : DStackedWidget(parent)
+DataStackedWidget::DataStackedWidget(DocSheet *sheet, DWidget *parent)
+    : DStackedWidget(parent), m_sheet(sheet)
 {
     InitWidgets();
 }
@@ -196,7 +196,7 @@ void DataStackedWidget::InitWidgets()
     m_pCatalogWidget = new CatalogWidget(this);
     insertWidget(WIDGET_catalog, m_pCatalogWidget);
 
-    m_pBookMarkWidget = new BookMarkWidget(this);
+    m_pBookMarkWidget = new BookMarkWidget(m_sheet, this);
     connect(m_pBookMarkWidget, SIGNAL(sigSetBookMarkState(const int &, const int &)),
             m_pThWidget, SLOT(SlotSetBookMarkState(const int &, const int &)));
     connect(this, SIGNAL(sigBookMarkMsg(const int &, const QString &)), m_pBookMarkWidget, SLOT(SlotBookMarkMsg(const int &, const QString &)));

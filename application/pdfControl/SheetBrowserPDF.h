@@ -45,7 +45,11 @@ signals:
     void sigDeleteAnntation(const int &, const QString &);
     void sigUpdateThumbnail(const int &);
 
+    void sigFileChanged(bool hasChanged);
+
 public:
+    void setFileChanged(bool hasChanged);
+
     int dealWithData(const int &, const QString &) override;
     int qDealWithShortKey(const QString &) override;
 
@@ -54,7 +58,6 @@ public:
     void saveData();
     void ShowFindWidget();
 
-    void setFileChange(bool bchanged);
     bool getFileChange();
 
     DocummentProxy *GetDocProxy();

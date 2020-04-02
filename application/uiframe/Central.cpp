@@ -30,14 +30,18 @@
 #include "app/ProcessController.h"
 #include "CentralNavPage.h"
 #include "CentralDocPage.h"
+#include "TitleMenu.h"
+#include "TitleWidget.h"
 
 Central::Central(DWidget *parent)
     : CustomWidget(CENTRAL_WIDGET, parent)
 {
     setAcceptDrops(true);
 
-    m_pMsgList = {CENTRAL_SHOW_TIP, CENTRAL_INDEX_CHANGE};
+    m_pMsgList = {CENTRAL_SHOW_TIP};
+
     initWidget();
+
     initConnections();
 
     dApp->m_pModelService->addObserver(this);
@@ -46,6 +50,16 @@ Central::Central(DWidget *parent)
 Central::~Central()
 {
     dApp->m_pModelService->removeObserver(this);
+}
+
+TitleMenu *Central::titleMenu()
+{
+    return m_menu;
+}
+
+TitleWidget *Central::titleWidget()
+{
+    return m_widget;
 }
 
 void Central::keyPressEvent(QKeyEvent *event)
@@ -97,6 +111,40 @@ void Central::onFilesOpened()
     }
 }
 
+void Central::onCurSheetChanged(DocSheet *sheet)
+{
+    if (nullptr == sheet) {
+        m_layout->setCurrentIndex(0);
+    } else {
+        m_layout->setCurrentIndex(1);
+    }
+}
+
+void Central::onMenuTriggered(const QString &action)
+{
+    if (action == "New window") {
+        Utils::runApp(QString());
+    } else if (action == "New tab") {
+        notifyMsg(E_OPEN_FILE);
+    } else if (action == "Save") { //  保存当前显示文件
+        m_docPage->saveCurFile();
+    } else if (action == "Save as") {
+        m_docPage->saveAsCurFile();
+    } else if (action == "Print") {
+        m_docPage->OnPrintFile();
+    } else if (action == "Slide show") { //  开启幻灯片
+        m_docPage->OnOpenSliderShow();
+    } else if (action == "Magnifer") {   //  开启放大镜
+        if (m_docPage->OnOpenMagnifer()) {
+            m_widget->setMagnifierState();
+        }
+    } else if (action == "Document info") {
+        m_docPage->onShowFileAttr();
+    } else if (action == "Display in file manager") {    //  文件浏览器 显示
+        m_docPage->OpenCurFileFolder();
+    }
+}
+
 void Central::onShowTip(const QString &contant)
 {
     int position = contant.indexOf("##**");
@@ -118,9 +166,7 @@ void Central::onShowTip(const QString &contant)
 
 int Central::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == CENTRAL_INDEX_CHANGE) {
-        OnSetCurrentIndex();
-    } else if (msgType == CENTRAL_SHOW_TIP) {
+    if (msgType == CENTRAL_SHOW_TIP) {
         onShowTip(msgContent);
     }
 
@@ -195,14 +241,24 @@ void Central::dropEvent(QDropEvent *event)
 
 void Central::initWidget()
 {
-    auto pStcakLayout = new QStackedLayout(this);
-    pStcakLayout->setContentsMargins(0, 0, 0, 0);
-    pStcakLayout->setSpacing(0);
+    m_menu    = new TitleMenu(this);
+    m_widget  = new TitleWidget(this);
+    m_docPage = new CentralDocPage(this);
+    m_navPage = new CentralNavPage(this);
 
-    CentralNavPage *nav = new CentralNavPage;
-    connect(nav, SIGNAL(sigOpenFilePaths(const QString &)), SLOT(SlotOpenFiles(const QString &)));
-    connect(nav, SIGNAL(filesOpened()), SLOT(onFilesOpened()));
-    pStcakLayout->addWidget(nav);
+    m_layout = new QStackedLayout(this);
+    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->setSpacing(0);
+    m_layout->addWidget(m_navPage);
+    m_layout->addWidget(m_docPage);
+    setLayout(m_layout);
 
-    pStcakLayout->addWidget(new CentralDocPage);
+    connect(m_menu, SIGNAL(sigActionTriggered(QString)), this, SLOT(onMenuTriggered(QString)));
+
+    connect(m_navPage, SIGNAL(sigOpenFilePaths(const QString &)), SLOT(SlotOpenFiles(const QString &)));
+    connect(m_navPage, SIGNAL(filesOpened()), SLOT(onFilesOpened()));
+
+    connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), this, SLOT(onCurSheetChanged(DocSheet *)));
+    connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_menu, SLOT(onCurSheetChanged(DocSheet *)));
+    connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_widget, SLOT(onCurSheetChanged(DocSheet *)));
 }

@@ -31,6 +31,7 @@
 #include "DocTabBar.h"
 #include "MainWindow.h"
 #include "TitleMenu.h"
+#include "TitleWidget.h"
 
 #include "business/AppInfo.h"
 #include "business/SaveDialog.h"
@@ -40,7 +41,7 @@
 #include "widgets/FindWidget.h"
 #include "widgets/FileAttrWidget.h"
 #include "widgets/PlayControlWidget.h"
-#include "TitleWidget.h"
+
 
 #include <DFileDialog>
 #include <DDialog>
@@ -62,7 +63,7 @@ CentralDocPage::CentralDocPage(DWidget *parent)
     initWidget();
     InitConnections();
     g_onlyApp = this;
-    m_pMsgList = {E_APP_MSG_TYPE, E_TABBAR_MSG_TYPE, MSG_FILE_IS_CHANGE};
+    m_pMsgList = {E_APP_MSG_TYPE, E_TABBAR_MSG_TYPE};
     m_pMsgList2 = { MSG_DOC_JUMP_PAGE, MSG_OPERATION_FIRST_PAGE, MSG_OPERATION_END_PAGE, MSG_OPERATION_PREV_PAGE, MSG_OPERATION_NEXT_PAGE,
                     MSG_SAVE_FILE, MSG_NOT_SAVE_FILE, MSG_NOT_CHANGE_SAVE_FILE
                   };
@@ -77,7 +78,7 @@ CentralDocPage::~CentralDocPage()
 
 void CentralDocPage::OpenCurFileFolder()
 {
-    QString sPath = GetCurPath();
+    QString sPath = qGetCurPath();
     if (sPath != "") {
         int nLastPos = sPath.lastIndexOf('/');
         sPath = sPath.mid(0, nLastPos);
@@ -110,29 +111,6 @@ int CentralDocPage::GetFileChange(const QString &sPath)
         }
     }
     return -1;
-}
-
-QString CentralDocPage::GetCurPath()
-{
-    if (m_pStackedLayout != nullptr) {
-        DocSheet *splitter = static_cast<DocSheet *>(m_pStackedLayout->currentWidget());
-        if (splitter != nullptr)
-            return splitter->qGetPath();
-    }
-
-    return "";
-}
-
-void CentralDocPage::SetFileChange(const QString &sPath, const int &iState)
-{
-    auto splitterList = findChildren<DocSheet *>();
-    foreach (auto s, splitterList) {
-        QString sSplitterPath = s->qGetPath();
-        if (sSplitterPath == sPath) {
-            s->qSetFileChange(iState);
-            break;
-        }
-    }
 }
 
 void CentralDocPage::notifyMsg(const int &msgType, const QString &msgContent)
@@ -187,13 +165,12 @@ void CentralDocPage::SaveFile(const int &iType, const QString &sPath)
                     auto pSplitter = qobject_cast<DocSheet *>(w);
                     if (pSplitter) {
                         pSplitter->saveData();
+                        emit sigCurSheetChanged(pSplitter);
                     }
                 }
             }
         }
     }
-
-    TitleMenu::Instance()->flushSaveButton();
 }
 
 //  保存 数据
@@ -357,8 +334,6 @@ int CentralDocPage::dealWithData(const int &msgType, const QString &msgContent)
         OnTabBarMsg(msgContent);
     } else if (msgType == E_APP_MSG_TYPE) {     //  应用类消息
         OnAppMsgData(msgContent);
-    } else if (msgType == MSG_FILE_IS_CHANGE) {
-        OnTabFileChangeMsg(msgContent);
     } else {
         QJsonParseError error;
         QJsonDocument doc = QJsonDocument::fromJson(msgContent.toLocal8Bit().data(), &error);
@@ -388,8 +363,13 @@ QStringList CentralDocPage::qGetAllPath()
 
 QString CentralDocPage::qGetCurPath()
 {
+    if (m_pStackedLayout != nullptr) {
+        DocSheet *splitter = static_cast<DocSheet *>(m_pStackedLayout->currentWidget());
+        if (splitter != nullptr)
+            return splitter->qGetPath();
+    }
 
-    return GetCurPath();
+    return "";
 }
 
 int CentralDocPage::getCurFileChanged()
@@ -432,6 +412,15 @@ DocummentProxy *CentralDocPage::getCurFileAndProxy(const QString &sPath)
     return nullptr;
 }
 
+DocSheet *CentralDocPage::getCurSheet()
+{
+    if (m_pStackedLayout != nullptr) {
+        return static_cast<DocSheet *>(m_pStackedLayout->currentWidget());
+    }
+
+    return nullptr;
+}
+
 void CentralDocPage::showPlayControlWidget() const
 {
     if (m_pctrlwidget) {
@@ -446,7 +435,7 @@ void CentralDocPage::showPlayControlWidget() const
 
 void CentralDocPage::initWidget()
 {
-    m_pTabBar = new DocTabBar;
+    m_pTabBar = new DocTabBar(this);
     connect(m_pTabBar, SIGNAL(sigTabBarIndexChange(const QString &)), SLOT(SlotSetCurrentIndexFile(const QString &)));
     connect(m_pTabBar, SIGNAL(sigAddTab(const QString &)), SLOT(SlotAddTab(const QString &)));
     connect(m_pTabBar, SIGNAL(sigCloseTab(const QString &)), SLOT(SlotCloseTab(const QString &)));
@@ -454,10 +443,10 @@ void CentralDocPage::initWidget()
     connect(this, SIGNAL(sigRemoveFileTab(const QString &)), m_pTabBar, SLOT(SlotRemoveFileTab(const QString &)));
     connect(this, SIGNAL(sigOpenFileResult(const QString &, const bool &)), m_pTabBar, SLOT(SlotOpenFileResult(const QString &, const bool &)));
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(m_pTabBar);
 
-    m_pStackedLayout = new QStackedLayout;
+    m_pStackedLayout = new QStackedLayout(this);
 
     mainLayout->addItem(m_pStackedLayout);
 
@@ -505,7 +494,6 @@ void CentralDocPage::UnBlockShutdown()
     if (m_reply.isValid()) {
         QDBusReply<QDBusUnixFileDescriptor> tmp = m_reply;
         m_reply = QDBusReply<QDBusUnixFileDescriptor>();
-        qDebug() << "Nublock shutdown.";
         m_bBlockShutdown = false;
     }
 }
@@ -517,7 +505,13 @@ void CentralDocPage::InitConnections()
 void CentralDocPage::onShowFileAttr()
 {
     auto pFileAttrWidget = new FileAttrWidget;
+
+    pFileAttrWidget->setFileAttr(getCurSheet());
+
+    pFileAttrWidget->setAttribute(Qt::WA_DeleteOnClose);
+
     pFileAttrWidget->showScreenCenter();
+
 }
 
 void CentralDocPage::OnAppMsgData(const QString &sText)
@@ -641,16 +635,6 @@ void CentralDocPage::OnTabBarMsg(const QString &s)
     }
 }
 
-void CentralDocPage::OnTabFileChangeMsg(const QString &sVale)
-{
-
-    QString sCurPath = qGetCurPath();
-
-    SetFileChange(sCurPath, sVale.toInt());
-}
-
-
-
 //  打印
 void CentralDocPage::OnPrintFile()
 {
@@ -696,6 +680,12 @@ void CentralDocPage::OnKeyPress(const QString &sKey)
 
 void CentralDocPage::slotfilechanged(bool bchanged)
 {
+    DocSheet *sheet = static_cast<DocSheet *>(sender());
+    if (nullptr == sheet && sheet != getCurSheet())
+        return;
+
+    sigCurSheetChanged(sheet);
+
     if (bchanged) {
         BlockShutdown();
     } else {
@@ -706,11 +696,9 @@ void CentralDocPage::slotfilechanged(bool bchanged)
 //  切换文档, 需要取消之前文档 放大镜模式
 void CentralDocPage::SlotSetCurrentIndexFile(const QString &sPath)
 {
-
-    auto splitterList = this->findChildren<DocSheet *>();
-    foreach (auto s, splitterList) {
-        QString sSplitterPath = s->qGetPath();
-        if (sSplitterPath == sPath) {
+    auto sheets = this->findChildren<DocSheet *>();
+    foreach (auto sheet, sheets) {
+        if (sheet->qGetPath() == sPath) {
 
             //  切换文档 需要将放大镜状态 取消
             int nState = getCurrentState();
@@ -723,7 +711,8 @@ void CentralDocPage::SlotSetCurrentIndexFile(const QString &sPath)
                 }
             }
 
-            int iIndex = m_pStackedLayout->indexOf(s);
+            int iIndex = m_pStackedLayout->indexOf(sheet);
+
             m_pStackedLayout->setCurrentIndex(iIndex);
 
             notifyMsg(MSG_TAB_SHOW_FILE_CHANGE, sPath);
@@ -739,8 +728,11 @@ void CentralDocPage::SlotAddTab(const QString &sPath)
         DocSheet *splitter = new DocSheet(DocType_PDF, this);
         connect(this, SIGNAL(sigDealNotifyMsg(const int &, const QString &)), splitter, SLOT(SlotNotifyMsg(const int &, const QString &)));
         connect(splitter, SIGNAL(sigOpenFileResult(const QString &, const bool &)), SLOT(SlotOpenFileResult(const QString &, const bool &)));
+        connect(splitter, SIGNAL(sigFileChanged(bool)), SLOT(slotfilechanged(bool)));
+
         splitter->qSetPath(sPath);
         m_pStackedLayout->addWidget(splitter);
+        emit sigCurSheetChanged(splitter);
     }
 }
 
@@ -786,8 +778,9 @@ void CentralDocPage::SlotCloseTab(const QString &sPath)
 
                         m_pStackedLayout->removeWidget(s);
 
+                        sigCurSheetChanged(qobject_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+
                         delete  s;
-                        s = nullptr;
                     }
                 }
             }
@@ -818,12 +811,6 @@ void CentralDocPage::SlotOpenFileResult(const QString &sPath, const bool &res)
 void CentralDocPage::setCurrentState(const int &nCurrentState)
 {
     m_nCurrentState = nCurrentState;
-}
-
-void CentralDocPage::SetFileChange()
-{
-
-    SetFileChange(qGetCurPath(), 1);
 }
 
 void CentralDocPage::setCurrentTabByFilePath(const QString &filePath)
@@ -925,18 +912,15 @@ void CentralDocPage::OnExitSliderShow()
     }
 }
 
-void CentralDocPage::OnOpenMagnifer()
+bool CentralDocPage::OnOpenMagnifer()
 {
-
-
     int nState = getCurrentState();
     if (nState != Magnifer_State) {
-
-        TitleWidget::Instance()->setMagnifierState();
-
         setCurrentState(Magnifer_State);
         m_strMagniferPath = qGetCurPath();
+        return true;
     }
+    return false;
 }
 
 //  取消放大镜

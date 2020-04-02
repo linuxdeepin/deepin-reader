@@ -35,8 +35,8 @@
 #include "app/ProcessController.h"
 #include "business/SaveDialog.h"
 
-DocTabBar::DocTabBar(DWidget *parent)
-    : DTabBar(parent)
+DocTabBar::DocTabBar(CentralDocPage *parent)
+    : DTabBar(parent), m_docPage(parent)
 {
     m_strObserverName = "DocTabBar";
 
@@ -165,9 +165,12 @@ void DocTabBar::SlotCurrentChanged(int index)
 
 void DocTabBar::AddFileTab(const QString &sContent, int index)
 {
+    if (m_docPage.isNull())
+        return;
+
     QStringList filePaths;
 
-    QList<QString> sOpenFiles = CentralDocPage::Instance()->qGetAllPath();
+    QList<QString> sOpenFiles = m_docPage->qGetAllPath();
 
     QStringList canOpenFileList = sContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
 
@@ -286,15 +289,6 @@ void DocTabBar::SlotRemoveFileTab(const QString &sPath)
                 this->removeTab(i);
                 break;
             }
-        }
-
-        nCount = this->count();
-        if (nCount == 0) {
-            //禁用所有的功能
-            TitleMenu::Instance()->disableAllAction();
-            TitleWidget::Instance()->suitDocType(DocType_NULL);
-            notifyMsg(CENTRAL_INDEX_CHANGE);
-
         }
     }
 }

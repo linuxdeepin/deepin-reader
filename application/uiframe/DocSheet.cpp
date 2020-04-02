@@ -31,7 +31,7 @@
 #include "CentralDocPage.h"
 #include "app/ProcessController.h"
 
-DocSheet::DocSheet(int type, DWidget *parent)
+DocSheet::DocSheet(DocType_EM type, DWidget *parent)
     : DSplitter(parent), m_type(type)
 {
     if (DocType_PDF == m_type) {
@@ -41,6 +41,12 @@ DocSheet::DocSheet(int type, DWidget *parent)
 
 DocSheet::~DocSheet()
 {
+}
+
+void DocSheet::setFileChanged(bool hasChanged)
+{
+    if (DocType_PDF == m_type)
+        static_cast<SheetBrowserPDF *>(m_browser)->setFileChanged(hasChanged);
 }
 
 void DocSheet::initPDF()
@@ -64,6 +70,7 @@ void DocSheet::initPDF()
     connect(browser, SIGNAL(sigAnntationMsg(const int &, const QString &)), sidebar, SIGNAL(sigAnntationMsg(const int &, const QString &)));
     connect(browser, SIGNAL(sigBookMarkMsg(const int &, const QString &)), sidebar, SIGNAL(sigBookMarkMsg(const int &, const QString &)));
     connect(browser, SIGNAL(sigUpdateThumbnail(const int &)), sidebar, SIGNAL(sigUpdateThumbnail(const int &)));
+    connect(browser, SIGNAL(sigFileChanged(bool)), this, SIGNAL(sigFileChanged(bool)));
 
     int tW = 36;
     int tH = 36;
@@ -166,13 +173,6 @@ void DocSheet::qSetPath(const QString &strPath)
     static_cast<SheetBrowserPDF *>(m_browser)->OpenFilePath(strPath);  //  proxy 打开文件
 }
 
-void DocSheet::qSetFileChange(const int &nState)
-{
-    bool bchange = nState == 1 ? true : false;
-    if (nullptr != static_cast<SheetBrowserPDF *>(m_browser))
-        static_cast<SheetBrowserPDF *>(m_browser)->setFileChange(bchange);
-}
-
 int DocSheet::qGetFileChange()
 {
     int istatus = -1;
@@ -210,4 +210,9 @@ void DocSheet::OnExitSliderShow()
 void DocSheet::ShowFindWidget()
 {
     static_cast<SheetBrowserPDF *>(m_browser)->ShowFindWidget();
+}
+
+DocType_EM DocSheet::type()
+{
+    return m_type;
 }

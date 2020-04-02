@@ -28,7 +28,7 @@ class CatalogWidget;
 class NotesWidget;
 class SearchResWidget;
 class ThumbnailWidget;
-
+class DocSheet;
 const double EPSINON = 0.00000001;
 
 class DataStackedWidget : public DStackedWidget
@@ -37,7 +37,7 @@ class DataStackedWidget : public DStackedWidget
     Q_DISABLE_COPY(DataStackedWidget)
 
 public:
-    explicit DataStackedWidget(DWidget *parent = nullptr);
+    explicit DataStackedWidget(DocSheet *sheet, DWidget *parent = nullptr);
 
 signals:
     void sigAnntationMsg(const int &, const QString &);
@@ -76,6 +76,7 @@ private:
     SearchResWidget     *m_pSearchResWidget = nullptr;
 
     QString             m_strBindPath = "";
+    DocSheet    *m_sheet = nullptr;
     double m_dScale{1.0};
 };
 

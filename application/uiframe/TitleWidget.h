@@ -10,14 +10,8 @@
 //class ScaleMenu;
 class FontMenu;
 class HandleMenu;
-
 class ScaleWidget;
-
-/**
- * @brief The TitleWidget class
- * @brief   标题栏的 按钮操作
- */
-
+class DocSheet;
 class TitleWidget : public CustomWidget
 {
     Q_OBJECT
@@ -25,6 +19,7 @@ class TitleWidget : public CustomWidget
 
 public:
     explicit TitleWidget(DWidget *parent = nullptr);
+
     ~TitleWidget() override;
 
 private:
@@ -35,31 +30,29 @@ public:
 
     void suitDocType(DocType_EM type);     //根据不同文档展示不同的菜单项
 
-    // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
 
     void setMagnifierState();
 
-    // CustomWidget interface
 public:
     int qDealWithShortKey(const QString &) override;
 
 protected:
     void initWidget() override;
 
+public slots:
+    void onCurSheetChanged(DocSheet *);
+
 private slots:
     void slotUpdateTheme();
     void slotOpenFileOk(const QString &);
-
+    void SlotSetCurrentTool(const int &);
+    void SlotScaleChanged();
     void on_thumbnailBtn_clicked();
     void on_settingBtn_clicked();
     void on_handleShapeBtn_clicked();
     void on_searchBtn_clicked();
-
-    void SlotSetCurrentTool(const int &);
-
-    void SlotScaleChanged();
 
 private:
     void initConnections();
@@ -93,7 +86,6 @@ private:
     DPushButton *m_pHandleShapeBtn = nullptr;
 
     ScaleWidget     *m_pSw = nullptr;
-
     DIconButton     *m_pSearchBtn = nullptr;
 };
 
