@@ -56,8 +56,6 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
         slotUpdateTheme();
     } else if (msgType == MSG_VIEWCHANGE_ROTATE_VALUE) {  //  文档旋转了
         slotSetRotate(msgContent.toInt());
-    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-
     } else if (MSG_FILE_PAGE_CHANGE == msgType) {
         slotDocFilePageChanged(msgContent);
         m_pPageWidget->dealWithData(msgType, msgContent);

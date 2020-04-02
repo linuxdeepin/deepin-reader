@@ -1847,7 +1847,7 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, i
             }
         }
     }
-    qDebug() << "--------" << xvalue << yvalue;
+
     QScrollBar *scrollBar_X = horizontalScrollBar();
     if (scrollBar_X)
         scrollBar_X->setValue(xvalue);

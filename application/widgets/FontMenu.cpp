@@ -17,8 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "FontMenu.h"
-
-#include "CentralDocPage.h"
+#include "DocSheet.h"
+#include "ModuleHeader.h"
+#include "MsgHeader.h"
 
 FontMenu::FontMenu(DWidget *parent):
     CustomMenu(FONT_MENU, parent)
@@ -33,9 +34,7 @@ FontMenu::FontMenu(DWidget *parent):
 
 int FontMenu::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK || msgType == MSG_TAB_SHOW_FILE_CHANGE) {
-        OnFileOpenOk(msgContent);
-    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
+    if (msgType == MSG_NOTIFY_KEY_MSG) {
         OnShortKey(msgContent);
         if (shortKeyList.contains(msgContent)) {
             return MSG_OK;
@@ -61,6 +60,36 @@ void FontMenu::resetAdaptive()
     CancelFitState();
 
     setAppSetFiteHAndW();
+}
+
+void FontMenu::readCurDocParam(DocSheet *sheet)
+{
+    if (nullptr == sheet)
+        return;
+
+    FileDataModel fdm = sheet->qGetFileData();
+
+    //单双页
+    int value = fdm.qGetData(DoubleShow);
+    m_bDoubPage = (value == 1) ? true : false;
+    if (m_pTwoPageAction) {
+        m_pTwoPageAction->setChecked(m_bDoubPage);
+    }
+
+    //自适应宽/高
+    int adaptat = fdm.qGetData(Fit);
+    if (adaptat == ADAPTE_WIDGET_State) {
+        m_bFiteW = true;
+        m_bFiteH = false;
+    } else if (adaptat == ADAPTE_HEIGHT_State) {
+        m_bFiteH = true;
+        m_bFiteW = false;
+    } else {
+        m_bFiteW = false;
+        m_bFiteH = false;
+    }
+    m_pFiteWAction->setChecked(m_bFiteW);
+    m_pFiteHAction->setChecked(m_bFiteH);
 }
 
 
@@ -146,37 +175,6 @@ void FontMenu::slotRotateR()
     QJsonDocument doc(obj);
 
     notifyMsg(MSG_VIEWCHANGE_ROTATE, doc.toJson(QJsonDocument::Compact));
-}
-
-/**
- * @brief FontMenu::slotFileOpenOk
- * 打开文件，加载参数
- */
-void FontMenu::OnFileOpenOk(const QString &sPath)
-{
-    FileDataModel fdm = CentralDocPage::Instance()->qGetFileData();
-
-    //单双页
-    int value = fdm.qGetData(DoubleShow);
-    m_bDoubPage = (value == 1) ? true : false;
-    if (m_pTwoPageAction) {
-        m_pTwoPageAction->setChecked(m_bDoubPage);
-    }
-
-    //自适应宽/高
-    int adaptat = fdm.qGetData(Fit);
-    if (adaptat == ADAPTE_WIDGET_State) {
-        m_bFiteW = true;
-        m_bFiteH = false;
-    } else if (adaptat == ADAPTE_HEIGHT_State) {
-        m_bFiteH = true;
-        m_bFiteW = false;
-    } else {
-        m_bFiteW = false;
-        m_bFiteH = false;
-    }
-    m_pFiteWAction->setChecked(m_bFiteW);
-    m_pFiteHAction->setChecked(m_bFiteH);
 }
 
 /**

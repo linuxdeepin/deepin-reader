@@ -104,8 +104,10 @@ int SheetSidebarPDF::dealWithData(const int &msgType, const QString &msgContent)
     }
 
     int nRes = MSG_NO_OK;
+
     if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
         handleOpenSuccess();
+
     } else {
         if (msgType == MSG_WIDGET_THUMBNAILS_VIEW) {
             onSetWidgetVisible(msgContent.toInt());

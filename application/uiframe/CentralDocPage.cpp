@@ -723,6 +723,8 @@ void CentralDocPage::SlotSetCurrentIndexFile(const QString &sPath)
 
             m_pStackedLayout->setCurrentIndex(iIndex);
 
+            sigCurSheetChanged(getCurSheet());
+
             notifyMsg(MSG_TAB_SHOW_FILE_CHANGE, sPath);
 
             break;

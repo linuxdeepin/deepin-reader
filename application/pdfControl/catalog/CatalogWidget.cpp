@@ -105,9 +105,11 @@ void CatalogWidget::setTitleTheme()
     QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T8);
 
     QFontMetrics fm(font);
+
     QString sTheme = fm.elidedText(m_strTheme, Qt::ElideMiddle, this->width() - 40, Qt::TextSingleLine);
 
     titleLabel->setText(sTheme);
+
 }
 
 void CatalogWidget::handleOpenSuccess()
@@ -121,9 +123,11 @@ void CatalogWidget::handleOpenSuccess()
         if (_pProxy) {
 
             stFileInfo fileInfo;
+
             _pProxy->docBasicInfo(fileInfo);
 
             m_strTheme = fileInfo.strTheme;
+
             if (m_strTheme != "") {
                 setTitleTheme();
             }

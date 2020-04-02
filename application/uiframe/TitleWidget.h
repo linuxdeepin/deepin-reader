@@ -3,6 +3,8 @@
 
 #include <DPushButton>
 #include <DIconButton>
+#include <QPointer>
+#include "DocSheet.h"
 
 #include "CustomControl/CustomWidget.h"
 #include "docview/commonstruct.h"
@@ -85,6 +87,8 @@ private:
 
     ScaleWidget     *m_pSw = nullptr;
     DIconButton     *m_pSearchBtn = nullptr;
+
+    QPointer<DocSheet> m_curSheet = nullptr;
 };
 
 #endif  // TITLEWIDGET_H

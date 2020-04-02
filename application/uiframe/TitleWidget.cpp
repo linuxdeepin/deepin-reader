@@ -171,6 +171,8 @@ void TitleWidget::initWidget()
 
 void TitleWidget::onCurSheetChanged(DocSheet *sheet)
 {
+    m_curSheet = sheet;
+
     if (nullptr == sheet || sheet->type() == DocType_NULL) {
         SetBtnDisable(true);
 
@@ -229,6 +231,7 @@ void TitleWidget::on_settingBtn_clicked()
         int nHeight = m_pSettingBtn->height();
         point.setY(nHeight + nOldY + 2);
 
+        m_pFontMenu->readCurDocParam(m_curSheet.data());
         m_pFontMenu->exec(point);
     }
 }

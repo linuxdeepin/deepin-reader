@@ -21,6 +21,7 @@
 
 #include "CustomControl/CustomMenu.h"
 
+class DocSheet;
 class FontMenu : public CustomMenu
 {
     Q_OBJECT
@@ -33,7 +34,7 @@ public:
 public:
     int dealWithData(const int &, const QString &) override;
     void CancelFitState();
-
+    void readCurDocParam(DocSheet *sheet);
     // CustomMenu interface
 protected:
     void initActions() override;
@@ -52,7 +53,7 @@ private:
 
     void setAppSetFiteHAndW();
     void resetAdaptive();
-    void OnFileOpenOk(const QString &);
+
     void OnShortKey(const QString &keyType);
 
 private:

@@ -147,9 +147,10 @@ void DocSheet::reloadFile()
 {
     if (DocType_PDF == m_type) {
         SheetSidebarPDF *sidebar = static_cast<SheetSidebarPDF *>(m_sidebar);
-        if (sidebar)
-            sidebar->handleOpenSuccess();
+        if (sidebar) sidebar->handleOpenSuccess();
     }
+
+    //title widget 也需要通知reload
 
 }
 
