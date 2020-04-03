@@ -136,12 +136,13 @@ void CentralDocPage::saveCurFile()
 {
     DWidget *w = m_pStackedLayout->currentWidget();
     if (w) {
-        auto pSplitter = qobject_cast<DocSheet *>(w);
-        if (pSplitter) {
-            int nChange = pSplitter->qGetFileChange();
+        auto sheet = qobject_cast<DocSheet *>(w);
+        if (sheet) {
+            int nChange = sheet->qGetFileChange();
             if (nChange == 1) {
-                QString sPath = pSplitter->qGetPath();
+                QString sPath = sheet->qGetPath();
                 SaveFile(MSG_SAVE_FILE, sPath);
+                emit sigCurSheetChanged(sheet);
             }
         }
     }
@@ -160,7 +161,6 @@ void CentralDocPage::SaveFile(const int &iType, const QString &sPath)
                 DocSheet *sheet =  getSheet(sPath);
                 if (sheet) {
                     sheet->saveData();
-                    emit sigCurSheetChanged(sheet);
                 }
             }
         }
@@ -172,18 +172,15 @@ void CentralDocPage::onSaveFile()
 {
     QString sCurPath = qGetCurPath();
     if (sCurPath != "") {
-        int fs = GetFileChange(sCurPath);
-        if (fs == 1) {  //  改变了
+        if (GetFileChange(sCurPath)) {
             DocummentProxy *_proxy = getCurFileAndProxy(sCurPath);
             if (_proxy) {
                 bool rl = _proxy->save(sCurPath, true);
                 if (rl) {
-                    //  保存需要保存 数据库记录
                     dApp->m_pDBService->qSaveData(sCurPath, DB_BOOKMARK);
-
-                    notifyMsg(CENTRAL_SHOW_TIP, tr("Saved successfully"));
+                    emit sigNeedShowTip(tr("Saved successfully"));
                 } else {
-                    notifyMsg(CENTRAL_SHOW_TIP, tr("Save failed"));
+                    emit sigNeedShowTip(tr("Save failed"));
                 }
             }
         } else {

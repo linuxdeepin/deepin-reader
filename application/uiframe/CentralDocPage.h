@@ -150,6 +150,8 @@ signals:
 
     void sigTitleShortCut(QString shortcut);
 
+    void sigNeedShowTip(const QString &msg);
+
 public slots:
     void slotfilechanged(bool bchanged);
 
