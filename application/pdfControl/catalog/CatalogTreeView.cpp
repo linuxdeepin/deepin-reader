@@ -57,6 +57,8 @@ int CatalogTreeView::dealWithData(const int &msgType, const QString &msgContent)
     if (msgType == MSG_FILE_PAGE_CHANGE) {    //  文档页变化, 需要跳转到对应项
         OnFilePageChanged(msgContent);
         rightnotifypagechanged = true;
+    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+        emit sigThemeChanged();
     }
     return MSG_NO_OK;
 }
@@ -70,6 +72,7 @@ void CatalogTreeView::initConnections()
 {
     connect(this, SIGNAL(collapsed(const QModelIndex &)), SLOT(SlotCollapsed(const QModelIndex &)));
     connect(this, SIGNAL(expanded(const QModelIndex &)), SLOT(SlotExpanded(const QModelIndex &)));
+    connect(this, &CatalogTreeView::sigThemeChanged, this, &CatalogTreeView::slotThemeChanged);
 }
 
 //  递归解析
@@ -96,12 +99,15 @@ void CatalogTreeView::parseCatalogData(const Section &ol, QStandardItem *parentI
 //  获取 一行的 三列数据
 QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const int &page, const qreal  &realleft, const qreal &realtop)
 {
+    auto color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().text().color();
     auto item = new QStandardItem(title);
     item->setData(page);
     item->setData(realleft, Qt::UserRole + 2);
     item->setData(realtop, Qt::UserRole + 3);
 
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    item->setData(QVariant::fromValue(color), Qt::TextColorRole);
+    m_listTitle.append(item);
 
     auto item1 = new QStandardItem();
     item1->setData(page);
@@ -114,6 +120,9 @@ QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const 
     item2->setData(realtop, Qt::UserRole + 3);
 
     item2->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().textTips().color();
+    item2->setData(QVariant::fromValue(color), Qt::TextColorRole);
+    m_listPage.append(item2);
 
     return QList<QStandardItem *>() << item << item1 << item2;
 }
@@ -152,6 +161,8 @@ void CatalogTreeView::OnFilePageChanged(const QString &sPage)
 {
     if (this->isVisible()) {
         this->clearSelection(); //  清除 之前的选中
+        m_listTitle.clear();
+        m_listPage.clear();
 
         auto model = reinterpret_cast<QStandardItemModel *>(this->model());
         if (model) {
@@ -253,6 +264,27 @@ void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelInd
     return DTreeView::currentChanged(current, previous);
 }
 
+void CatalogTreeView::slotThemeChanged()
+{
+    qInfo() << __LINE__ << "           " <<   __FUNCTION__;
+
+    auto color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().text().color(); s
+    for (int index = 0; index < m_listTitle.count(); index++) {
+        QStandardItem *item = m_listTitle.at(index);
+        if (item) {
+            item->setData(QVariant::fromValue(color), Qt::TextColorRole);
+        }
+    }
+
+    color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().textTips().color();
+    for (int index = 0; index < m_listPage.count(); index++) {
+        QStandardItem *item = m_listPage.at(index);
+        if (item) {
+            item->setData(QVariant::fromValue(color), Qt::TextColorRole);
+        }
+    }
+    this->update();
+}
 
 //  窗口大小变化, 列的宽度随之变化
 void CatalogTreeView::resizeEvent(QResizeEvent *event)

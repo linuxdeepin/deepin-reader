@@ -51,8 +51,12 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
 
+signals:
+    void sigThemeChanged();
+
 protected slots:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
+    void slotThemeChanged();
 
 private:
     void initConnections();
@@ -70,6 +74,8 @@ private slots:
 private:
     bool rightnotifypagechanged = false;
     DocSheet *m_sheet;
+    QList<QStandardItem *> m_listTitle;
+    QList<QStandardItem *> m_listPage;
 };
 
 #endif // CATALOGTREEVIEW_H
