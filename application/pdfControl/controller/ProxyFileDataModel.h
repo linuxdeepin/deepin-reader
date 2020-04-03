@@ -30,8 +30,10 @@ class ProxyFileDataModel : public QObject
     Q_OBJECT
 public:
     explicit ProxyFileDataModel(QObject *parent = nullptr);
+
 public:
     void qDealWithData(const int &, const QString &);
+    void setData(const int &, const QString &);
     void saveData();
 
     FileDataModel qGetFileData() const;
@@ -47,7 +49,7 @@ private:
 
 private:
     FileDataModel           m_pFileDataModel;        //  已打开的文档列表
-    SheetBrowserPDFPrivate   *_fvwParent = nullptr;
+    SheetBrowserPDFPrivate *_fvwParent = nullptr;
     friend class SheetBrowserPDFPrivate;
 };
 

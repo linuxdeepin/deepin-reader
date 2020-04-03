@@ -29,6 +29,8 @@ SheetSidebarPDF::SheetSidebarPDF(DocSheet *parent)
     onSetWidgetVisible(0);  //  默认 隐藏
     slotUpdateTheme();
 
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SheetSidebarPDF::slotUpdateTheme);
+
     dApp->m_pModelService->addObserver(this);
 }
 
@@ -91,7 +93,6 @@ void SheetSidebarPDF::resizeEvent(QResizeEvent *event)
     int width = this->width();
     double scale = static_cast<double>(width) / static_cast<double>(LEFTMINWIDTH);
 
-//    qInfo() << "   SheetSidebarPDF::resizeEvent  " << "    widget width:" << width << "     scale:" << scale;
     dApp->setScale(scale);
 
     emit sigAdaptWindowSize(scale);
@@ -99,15 +100,7 @@ void SheetSidebarPDF::resizeEvent(QResizeEvent *event)
 
 int SheetSidebarPDF::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        slotUpdateTheme();
-    }
-
     int nRes = MSG_NO_OK;
-
-    if (msgType == MSG_WIDGET_THUMBNAILS_VIEW) {
-        onSetWidgetVisible(msgContent.toInt());
-    }
 
     if (m_pMsgList.contains(msgType)) {
         nRes = MSG_OK;

@@ -31,9 +31,7 @@ ProxyFileDataModel::ProxyFileDataModel(QObject *parent) : QObject(parent)
 
 void ProxyFileDataModel::qDealWithData(const int &nType, const QString &sValue)
 {
-    if (nType == MSG_WIDGET_THUMBNAILS_VIEW) {
-        setThumbnailState(sValue);
-    } else if (nType == MSG_LEFTBAR_STATE) {
+    if (nType == MSG_LEFTBAR_STATE) {
         SetLeftWidgetIndex(sValue);
     } else if (nType == MSG_VIEWCHANGE_DOUBLE_SHOW) {
         OnSetViewChange(sValue);
@@ -46,6 +44,11 @@ void ProxyFileDataModel::qDealWithData(const int &nType, const QString &sValue)
     } else if (nType == MSG_FILE_PAGE_CHANGE) {
         OnSetCurPage(sValue);
     }
+}
+
+void ProxyFileDataModel::setData(const int &nType, const QString &sValue)
+{
+    m_pFileDataModel.qSetData(nType, sValue.toInt());
 }
 
 void ProxyFileDataModel::saveData()

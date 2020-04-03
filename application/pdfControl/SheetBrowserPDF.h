@@ -22,6 +22,7 @@
 #include "CustomControl/CustomWidget.h"
 
 class DocummentProxy;
+class ProxyFileDataModel;
 class FindWidget;
 /**
  * @brief The SheetBrowserPDF class
@@ -60,7 +61,10 @@ public:
 
     bool getFileChange();
 
-    DocummentProxy *GetDocProxy();
+    DocummentProxy     *GetDocProxy();
+
+    void setData(const int &, const QString &);
+
     FileDataModel qGetFileData();
     void qSetFileData(const FileDataModel &);
 

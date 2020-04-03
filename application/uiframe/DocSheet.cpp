@@ -153,6 +153,14 @@ void DocSheet::reloadFile()
 
 }
 
+void DocSheet::setSidebarVisible(bool isVisible)
+{
+    if (DocType_PDF == m_type) {
+        SheetSidebarPDF *sidebar = static_cast<SheetSidebarPDF *>(m_sidebar);
+        if (sidebar) sidebar->setVisible(isVisible);
+    }
+}
+
 void DocSheet::SlotNotifyMsg(const int &msgType, const QString &msgContent)
 {
     if (this->isVisible()) {    //  只有显示的窗口 处理 CentralDocPage 发送的信号
@@ -208,6 +216,11 @@ int DocSheet::qGetFileChange()
 void DocSheet::saveData()
 {
     static_cast<SheetBrowserPDF *>(m_browser)->saveData();
+}
+
+void DocSheet::setData(const int &nType, const QString &sValue)
+{
+    return static_cast<SheetBrowserPDF *>(m_browser)->setData(nType, sValue);
 }
 
 FileDataModel DocSheet::qGetFileData()

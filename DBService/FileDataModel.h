@@ -49,7 +49,7 @@ public:
     void qSetData(const int &iKey, const double &iValue);
     double qGetData(const int &iKey) const;
 
-private:
+public:
     bool getThumbnail() const;
     void setThumbnail(bool value);
 

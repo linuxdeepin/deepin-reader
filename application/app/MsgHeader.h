@@ -129,7 +129,6 @@ enum E_NOTE_MSG {
 enum E_FILE_VALUE_MSG {
     E_FILE_VALUE_MSG_BEGIN = E_NOTE_MSG_END + 50,
     MSG_TAB_FILE_CHANGE,                //  文档显示切换
-    MSG_WIDGET_THUMBNAILS_VIEW,         //  文档 左侧缩略图展开状态
     MSG_VIEWCHANGE_DOUBLE_SHOW,         //  双页显示状态
     MSG_VIEWCHANGE_FIT,                 //  自适应
     MSG_VIEWCHANGE_ROTATE,              //  旋转

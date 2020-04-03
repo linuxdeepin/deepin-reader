@@ -167,6 +167,12 @@ DocummentProxy *SheetBrowserPDF::GetDocProxy()
     return d->m_pProxy;
 }
 
+void SheetBrowserPDF::setData(const int &nType, const QString &sValue)
+{
+    Q_D(SheetBrowserPDF);
+    return d->m_pProxyFileDataModel->setData(nType, sValue);
+}
+
 FileDataModel SheetBrowserPDF::qGetFileData()
 {
     Q_D(SheetBrowserPDF);

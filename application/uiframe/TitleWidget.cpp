@@ -110,15 +110,12 @@ void TitleWidget::OnShortCut_Alt2()
 
 void TitleWidget::OnShortCut_CtrlM()
 {
+    if (m_curSheet.isNull())
+        return;
+
     m_pThumbnailBtn->setChecked(true);
-
-    QJsonObject obj;
-    obj.insert("content", "1");
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET);
-
-    QJsonDocument doc(obj);
-
-    notifyMsg(MSG_WIDGET_THUMBNAILS_VIEW, doc.toJson(QJsonDocument::Compact));
+    m_curSheet->setData(Thumbnail, "1");
+    m_curSheet->setSidebarVisible(true);
 }
 
 void TitleWidget::slotOpenFileOk(const QString &sPath)
@@ -206,13 +203,11 @@ void TitleWidget::on_thumbnailBtn_clicked()
 {
     bool rl = m_pThumbnailBtn->isChecked();
 
-    QJsonObject obj;
-    obj.insert("content", QString::number(rl));
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET);
+    if (m_curSheet.isNull())
+        return;
 
-    QJsonDocument doc(obj);
-
-    notifyMsg(MSG_WIDGET_THUMBNAILS_VIEW, doc.toJson(QJsonDocument::Compact));
+    m_curSheet->setData(Thumbnail, QString::number(rl));
+    m_curSheet->setSidebarVisible(rl);
 }
 
 //  文档显示
