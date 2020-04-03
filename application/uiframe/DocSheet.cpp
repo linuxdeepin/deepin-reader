@@ -75,11 +75,7 @@ void DocSheet::initPDF()
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
-    if (dApp) {
-        dApp->setFirstView(true);
-    }
-
-    SheetBrowserPDF *browser = new SheetBrowserPDF;
+    SheetBrowserPDF *browser = new SheetBrowserPDF(this);
     SheetSidebarPDF *sidebar = new SheetSidebarPDF(this);
 
     m_sidebar = sidebar;
@@ -134,10 +130,6 @@ void DocSheet::SlotFileOpenResult(const QString &s, const bool &res)
         }
 
         reloadFile();
-
-        if (dApp) {
-            dApp->setFirstView(false);
-        }
     }
     emit sigOpenFileResult(s, res);
 }
@@ -193,6 +185,11 @@ void DocSheet::SlotNotifyMsg(const int &msgType, const QString &msgContent)
             }
         }
     }
+}
+
+void DocSheet::onShowTips(const QString &tips)
+{
+    showTips(tips);
 }
 
 QString DocSheet::qGetPath()
@@ -258,6 +255,15 @@ void DocSheet::ShowFindWidget()
 DocType_EM DocSheet::type()
 {
     return m_type;
+}
+
+void DocSheet::showTips(const QString &tips)
+{
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return;
+
+    doc->showTips(tips);
 }
 
 int DocSheet::getCurrentState()

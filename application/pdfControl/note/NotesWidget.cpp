@@ -154,8 +154,7 @@ void NotesWidget::__DeleteNoteItem(const QString &sUuid)
 
                     delete pItem;
                     pItem = nullptr;
-
-                    notifyMsg(CENTRAL_SHOW_TIP, tr("The annotation has been removed"));
+                    m_sheet->showTips(tr("The annotation has been removed"));
                     break;
                 }
             }

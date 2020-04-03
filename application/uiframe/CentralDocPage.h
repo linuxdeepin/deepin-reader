@@ -78,6 +78,8 @@ public:
 
     void setCurrentTabByFilePath(const QString &filePath);
 
+    void showTips(const QString &tips);
+
 public:
     void OpenCurFileFolder();
 

@@ -38,18 +38,13 @@ Central::Central(DWidget *parent)
 {
     setAcceptDrops(true);
 
-    m_pMsgList = {CENTRAL_SHOW_TIP};
-
     initWidget();
 
     initConnections();
-
-    dApp->m_pModelService->addObserver(this);
 }
 
 Central::~Central()
 {
-    dApp->m_pModelService->removeObserver(this);
 }
 
 TitleMenu *Central::titleMenu()
@@ -166,13 +161,6 @@ void Central::onShowTip(const QString &contant)
 
 int Central::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == CENTRAL_SHOW_TIP) {
-        onShowTip(msgContent);
-    }
-
-    if (m_pMsgList.contains(msgType)) {
-        return MSG_OK;
-    }
     return MSG_NO_OK;
 }
 

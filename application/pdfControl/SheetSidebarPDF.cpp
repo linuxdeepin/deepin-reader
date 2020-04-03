@@ -84,13 +84,10 @@ void SheetSidebarPDF::initWidget()
 
 void SheetSidebarPDF::resizeEvent(QResizeEvent *event)
 {
-    if (dApp->firstView()) {
-        return;
-    }
-
     CustomWidget::resizeEvent(event);
 
     int width = this->width();
+
     double scale = static_cast<double>(width) / static_cast<double>(LEFTMINWIDTH);
 
     dApp->setScale(scale);

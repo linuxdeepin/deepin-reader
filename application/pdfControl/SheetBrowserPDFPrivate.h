@@ -21,12 +21,13 @@ class TextOperationMenu;
 class DefaultOperationMenu;
 class ProxyData;
 class SheetBrowserPDF;
+class DocSheet;
 class SheetBrowserPDFPrivate: public QObject
 {
     Q_OBJECT
 
 public:
-    SheetBrowserPDFPrivate(SheetBrowserPDF *parent);
+    SheetBrowserPDFPrivate(DocSheet *sheet, SheetBrowserPDF *parent);
     ~SheetBrowserPDFPrivate() override;
 
 public:
@@ -91,7 +92,7 @@ private:
     Annotation          *m_pAnnotation = nullptr;           //  高亮 注释操作
     DocummentProxy      *m_pProxy = nullptr;                //  文档代理类
     QPoint              m_popwidgetshowpoint;
-
+    DocSheet *m_sheet;
     friend class Annotation;
     friend class ProxyViewDisplay;
     friend class ProxyMouseMove;

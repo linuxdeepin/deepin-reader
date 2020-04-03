@@ -46,14 +46,6 @@ public:
     {
         return m_dScal;
     }
-    inline void setFirstView(const bool &first)
-    {
-        m_bFirstView = first;
-    }
-    inline bool firstView()
-    {
-        return m_bFirstView;
-    }
     void setFlush(const bool &flush)
     {
         m_bFlush = flush;
@@ -71,7 +63,6 @@ public:
     ModelService        *m_pModelService = nullptr;
     AppInfo             *m_pAppInfo = nullptr;
     double m_dScal{1.0};//左侧列表缩放比例
-    bool        m_bFirstView = true;//首次打开
     bool m_bFlush{true};//是否自适应宽
 
 private:

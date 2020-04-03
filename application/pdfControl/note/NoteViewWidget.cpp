@@ -110,6 +110,8 @@ void NoteViewWidget::initWidget()
     m_pHLayoutContant->addStretch(0);
 
     m_pTextEdit = new TransparentTextEdit(this);
+    connect(m_pTextEdit, SIGNAL(sigNeedShowTips(QString)), this, SIGNAL(sigNeedShowTips(QString)));
+
     m_pHLayoutContant->addWidget(m_pTextEdit);
 
     auto m_pVLayout = new QVBoxLayout;

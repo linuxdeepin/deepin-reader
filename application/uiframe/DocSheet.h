@@ -53,6 +53,8 @@ public:
 
     DocType_EM type();
 
+    void showTips(const QString &tips);
+
     int getCurrentState();
 
 //    bool close();
@@ -72,6 +74,8 @@ private slots:
     void SlotFileOpenResult(const QString &, const bool &);
 
     void SlotNotifyMsg(const int &, const QString &);
+
+    void onShowTips(const QString &tips);
 
 private:
     DocType_EM      m_type;

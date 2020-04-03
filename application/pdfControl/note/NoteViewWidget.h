@@ -42,6 +42,8 @@ public:
 signals:
     void sigNoteViewMsg(const int &, const QString &);
 
+    void sigNeedShowTips(const QString &tips);
+
 public:
     // IObserver interface
     int dealWithData(const int &, const QString &) override;

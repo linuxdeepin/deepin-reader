@@ -24,8 +24,8 @@
 #include "controller/ProxyData.h"
 #include "controller/ProxyFileDataModel.h"
 
-SheetBrowserPDF::SheetBrowserPDF(DWidget *parent)
-    : CustomWidget(FILE_VIEW_WIDGET, parent), d_ptr(new SheetBrowserPDFPrivate(this))
+SheetBrowserPDF::SheetBrowserPDF(DocSheet *sheet, DWidget *parent)
+    : CustomWidget(FILE_VIEW_WIDGET, parent), d_ptr(new SheetBrowserPDFPrivate(sheet, this))
 {
     setMouseTracking(true);  //  接受 鼠标滑动事件
 

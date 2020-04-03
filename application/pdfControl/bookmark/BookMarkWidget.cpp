@@ -308,7 +308,7 @@ void BookMarkWidget::deleteIndexPage(const int &pageIndex)
     DocummentProxy *proxy =  m_sheet->getDocProxy();
     if (proxy) {
         m_sheet->setFileChanged(true);
-        notifyMsg(CENTRAL_SHOW_TIP, tr("The bookmark has been removed"));
+        m_sheet->showTips(tr("The bookmark has been removed"));
 
         proxy->setBookMarkState(pageIndex, false);
 

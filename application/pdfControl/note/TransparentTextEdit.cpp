@@ -83,7 +83,6 @@ void TransparentTextEdit::slotTextEditMaxContantNum()
         this->setText(textContent);
         textCursor.setPosition(position - (length - m_nMaxContantLen));
         this->setTextCursor(textCursor);
-
-        dApp->m_pModelService->notifyMsg(CENTRAL_SHOW_TIP, tr("Input limit reached"));
+        sigNeedShowTips(tr("Input limit reached"));
     }
 }

@@ -178,13 +178,13 @@ void CentralDocPage::onSaveFile()
                 bool rl = _proxy->save(sCurPath, true);
                 if (rl) {
                     dApp->m_pDBService->qSaveData(sCurPath, DB_BOOKMARK);
-                    emit sigNeedShowTip(tr("Saved successfully"));
+                    showTips(tr("Saved successfully"));
                 } else {
-                    emit sigNeedShowTip(tr("Save failed"));
+                    showTips(tr("Save failed"));
                 }
             }
         } else {
-            notifyMsg(CENTRAL_SHOW_TIP, tr("No changes"));
+            showTips(tr("No changes"));
         }
     }
 }
@@ -821,6 +821,11 @@ void CentralDocPage::setCurrentTabByFilePath(const QString &filePath)
                 m_pTabBar->setCurrentIndex(index);
         }
     }
+}
+
+void CentralDocPage::showTips(const QString &tips)
+{
+    emit sigNeedShowTip(tips);
 }
 
 int CentralDocPage::getCurrentState()

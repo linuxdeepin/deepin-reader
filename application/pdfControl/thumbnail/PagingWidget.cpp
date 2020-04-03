@@ -212,7 +212,7 @@ void PagingWidget::__NormalChangePage()
     QString sText = m_pJumpPageLineEdit->text();
     int iPage = sText.toInt();
     if (iPage <= 0 || iPage > _proxy->getPageSNum()) {
-        notifyMsg(CENTRAL_SHOW_TIP, tr("Invalid page number"));
+        m_sheet->showTips(tr("Invalid page number"));
     } else {
         CentralDocPage::Instance()->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(iPage - 1));
         setFocus();
@@ -234,7 +234,7 @@ void PagingWidget::__PageNumberJump()
             CentralDocPage::Instance()->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(iPage));
             setFocus();
         } else {
-            notifyMsg(CENTRAL_SHOW_TIP, tr("Invalid page number"));
+            m_sheet->showTips(tr("Invalid page number"));
         }
     }
 }

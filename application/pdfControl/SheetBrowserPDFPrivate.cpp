@@ -23,9 +23,10 @@
 
 #include "pdfControl/note/NoteViewWidget.h"
 #include "CentralDocPage.h"
+#include "DocSheet.h"
 
-SheetBrowserPDFPrivate::SheetBrowserPDFPrivate(SheetBrowserPDF *parent)
-    : q_ptr(parent)
+SheetBrowserPDFPrivate::SheetBrowserPDFPrivate(DocSheet *sheet, SheetBrowserPDF *parent)
+    : q_ptr(parent), m_sheet(sheet)
 {
     m_pProxyData = new ProxyData(this);
     connect(m_pProxyData, SIGNAL(signale_filechanged(bool)), q_ptr, SIGNAL(sigFileChanged(bool)));
@@ -164,7 +165,7 @@ void SheetBrowserPDFPrivate::DocFile_ctrl_l()
     int nEy = m_pProxyData->getEndSelectPoint().y();
 
     if (nSx == nEx && nSy == nEy) {
-        notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
+        m_sheet->showTips(tr("Please select the text"));
         return;
     }
 
@@ -181,7 +182,7 @@ void SheetBrowserPDFPrivate::DocFile_ctrl_l()
 
         m_pAnnotation->AddHighLight(sContent);
     } else {
-        notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
+        m_sheet->showTips(tr("Please select the text"));
     }
 }
 
@@ -198,7 +199,7 @@ void SheetBrowserPDFPrivate::DocFile_ctrl_i()
             int nEy = m_pProxyData->getEndSelectPoint().y();
 
             if ((nSx == nEx && nSy == nEy)) {
-                notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
+                m_sheet->showTips(tr("Please select the text"));
                 return;
             }
 
@@ -209,7 +210,7 @@ void SheetBrowserPDFPrivate::DocFile_ctrl_i()
 
             onOpenNoteWidget(msgContent);
         } else {
-            notifyMsg(CENTRAL_SHOW_TIP, tr("Please select the text"));
+            m_sheet->showTips(tr("Please select the text"));
         }
     }
 }
@@ -303,6 +304,7 @@ void SheetBrowserPDFPrivate::showNoteViewWidget(const QString &sPage, const QStr
     if (m_pNoteViewWidget == nullptr) {
         m_pNoteViewWidget = new NoteViewWidget(q);
         connect(m_pNoteViewWidget, SIGNAL(sigNoteViewMsg(const int &, const QString &)), SLOT(SlotNoteViewMsg(const int &, const QString &)));
+        connect(m_pNoteViewWidget, SIGNAL(sigNeedShowTips(const QString &)), m_sheet, SLOT(onShowTips(const QString &)));
     }
     m_pNoteViewWidget->setEditText(sText);
     m_pNoteViewWidget->setNoteUuid(t_strUUid);
@@ -557,7 +559,7 @@ void SheetBrowserPDFPrivate::SlotDocFileOpenResult(bool openresult)
         m_pProxyData->setFirstShow(false);
         m_pProxyData->setIsFileOpenOk(true);
     } else {
-        notifyMsg(CENTRAL_SHOW_TIP, tr("Please check if the file is damaged"));
+        m_sheet->showTips(tr("Please check if the file is damaged"));
     }
 
     emit q->sigFileOpenResult(m_pProxyData->getPath(), openresult);

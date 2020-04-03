@@ -26,7 +26,6 @@ enum E_HOMEWIDGET_MSG {
 //  central 消息
 enum E_CENTRAL_MSG {
     E_CENTRAL_MSG_BEGIN = E_HOMEWIDGET_MSG_END + 50,
-    CENTRAL_SHOW_TIP,                //  显示提示窗口
     E_CENTRAL_MSG_END
 };
 

@@ -28,6 +28,7 @@ class FindWidget;
  * @brief The SheetBrowserPDF class
  * @brief   文档显示区域
  */
+class DocSheet;
 class SheetBrowserPDFPrivate;
 class SheetBrowserPDF : public CustomWidget
 {
@@ -35,7 +36,7 @@ class SheetBrowserPDF : public CustomWidget
     Q_DISABLE_COPY(SheetBrowserPDF)
 
 public:
-    explicit SheetBrowserPDF(DWidget *parent = nullptr);
+    explicit SheetBrowserPDF(DocSheet *sheet, DWidget *parent = nullptr);
     ~SheetBrowserPDF() override;
 
 signals:
