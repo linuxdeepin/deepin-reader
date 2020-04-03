@@ -50,8 +50,6 @@ ThumbnailWidget::~ThumbnailWidget()
 // 处理消息事件
 int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK)
-        handleOpenSuccess();
     if (msgType == MSG_OPERATION_UPDATE_THEME) {
         slotUpdateTheme();
     } else if (msgType == MSG_VIEWCHANGE_ROTATE_VALUE) {  //  文档旋转了
@@ -68,7 +66,7 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
 void ThumbnailWidget::handleOpenSuccess()
 {
     slotOpenFileOk(m_sheet->qGetPath());
-    m_pPageWidget->dealWithData(MSG_OPERATION_OPEN_FILE_OK, m_sheet->qGetPath());
+    m_pPageWidget->handleOpenSuccess();
 }
 
 // 初始化界面

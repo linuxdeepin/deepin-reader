@@ -27,7 +27,6 @@
 
 #include "widgets/SpinnerWidget.h"
 #include "pdfControl/SheetBrowserPDF.h"
-#include "TitleWidget.h"
 #include "CentralDocPage.h"
 #include "app/ProcessController.h"
 #include "docview/docummentproxy.h"
@@ -246,4 +245,13 @@ void DocSheet::ShowFindWidget()
 DocType_EM DocSheet::type()
 {
     return m_type;
+}
+
+int DocSheet::getCurrentState()
+{
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return Default_State;
+
+    return doc->getCurrentState();
 }

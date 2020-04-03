@@ -30,9 +30,6 @@
 #include "DocSheet.h"
 #include "DocTabBar.h"
 #include "MainWindow.h"
-#include "TitleMenu.h"
-#include "TitleWidget.h"
-
 #include "business/AppInfo.h"
 #include "business/SaveDialog.h"
 #include "business/PrintManager.h"
@@ -237,13 +234,11 @@ void CentralDocPage::saveAsCurFile()
                         //insert a new bookmark record to bookmarktabel
                         dApp->m_pDBService->qSaveData(sFilePath, DB_BOOKMARK);
 
-                        //如果能覆盖到所有MSG_OPERATION_OPEN_FILE_OK可以执行，则可以取消MSG_OPERATION_OPEN_FILE_OK发送//...
-//                        DocSheet *sheet = getSheet(sFilePath);
-//                        if (nullptr != sheet) {
-//                            sheet->reloadFile();
-//                        }
-
-                        notifyMsg(MSG_OPERATION_OPEN_FILE_OK, sFilePath);
+                        //重新打开
+                        DocSheet *sheet = getSheet(sFilePath);
+                        if (nullptr != sheet) {
+                            sheet->reloadFile();
+                        }
                     }
                 }
             }
@@ -605,7 +600,7 @@ void CentralDocPage::OnAppShortCut(const QString &s)
                s == KeyStr::g_ctrl_1 || s == KeyStr::g_ctrl_2 || s == KeyStr::g_ctrl_3 ||
                s == KeyStr::g_ctrl_r || s == KeyStr::g_ctrl_shift_r ||
                s == KeyStr::g_ctrl_larger || s == KeyStr::g_ctrl_equal || s == KeyStr::g_ctrl_smaller) {
-        TitleWidget::Instance()->qDealWithShortKey(s);
+        emit sigTitleShortCut(s);
     } else if (s == KeyStr::g_ctrl_f) {     //  搜索
         ShowFindWidget();
     } else if (s == KeyStr::g_ctrl_h) {     //  开启幻灯片
@@ -724,8 +719,6 @@ void CentralDocPage::SlotSetCurrentIndexFile(const QString &sPath)
             m_pStackedLayout->setCurrentIndex(iIndex);
 
             sigCurSheetChanged(getCurSheet());
-
-            notifyMsg(MSG_TAB_SHOW_FILE_CHANGE, sPath);
 
             break;
         }

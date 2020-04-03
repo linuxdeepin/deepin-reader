@@ -54,9 +54,7 @@ CatalogTreeView::~CatalogTreeView()
 
 int CatalogTreeView::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        handleOpenSuccess();
-    } else if (msgType == MSG_FILE_PAGE_CHANGE) {    //  文档页变化, 需要跳转到对应项
+    if (msgType == MSG_FILE_PAGE_CHANGE) {    //  文档页变化, 需要跳转到对应项
         OnFilePageChanged(msgContent);
         rightnotifypagechanged = true;
     }

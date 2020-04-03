@@ -614,8 +614,6 @@ int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更消息
         slotUpdateTheme();
-    } else if (MSG_OPERATION_OPEN_FILE_OK == msgType) { //  打开 文件通知消息
-        handleOpenSuccess();
     } else if (MSG_FILE_PAGE_CHANGE == msgType) { //  文档页变化消息
         slotDocFilePageChanged(msgContent);
     }

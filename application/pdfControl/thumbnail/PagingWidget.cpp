@@ -99,8 +99,6 @@ int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_OPERATION_UPDATE_THEME) {    //  颜色主题切换
         slotUpdateTheme();
-    } else if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        handleOpenSuccess();
     } else if (msgType == MSG_FILE_PAGE_CHANGE) {                  //  文档页变化了
         OnDocFilePageChange(msgContent);
     }

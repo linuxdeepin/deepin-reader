@@ -11,9 +11,6 @@
 #include "TitleMenu.h"
 #include "TitleWidget.h"
 #include "Central.h"
-
-
-
 #include "CentralDocPage.h"
 
 DWIDGET_USE_NAMESPACE

@@ -21,18 +21,21 @@
 
 #include "CustomControl/CustomWidget.h"
 
+class DocSheet;
 class ScaleWidget : public CustomWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(ScaleWidget)
 public:
     explicit ScaleWidget(DWidget *parent = nullptr);
+
     ~ScaleWidget() override;
+
+    void setSheet(DocSheet *sheet);
 
 signals:
     void sigScaleChanged();
 
-    // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
 
@@ -44,11 +47,9 @@ private slots:
     void slotPrevScale();
     void slotNextScale();
     void SlotCurrentTextChanged(const QString &);
-
     void SlotReturnPressed();
 
 private:
-    void SetComboBoxMax();
     void SetFitScale(const QString &);
     void onShortKey(const QString &keyType);
 

@@ -10,16 +10,10 @@
 #include "utils/PublicFunction.h"
 #include "DocSheet.h"
 
-TitleWidget *TitleWidget::g_onlyTitleWdiget = nullptr;
-TitleWidget *TitleWidget::Instance()
-{
-    return g_onlyTitleWdiget;
-}
-
 TitleWidget::TitleWidget(DWidget *parent)
     : CustomWidget(TITLE_WIDGET, parent)
 {
-    m_pMsgList = {MSG_TAB_SHOW_FILE_CHANGE, E_FIND_CONTENT, E_FIND_EXIT};
+    m_pMsgList = {E_FIND_CONTENT, E_FIND_EXIT};
 
     shortKeyList = QStringList() << KeyStr::g_alt_1 << KeyStr::g_alt_2 << KeyStr::g_ctrl_m
                    << KeyStr::g_alt_z
@@ -30,8 +24,6 @@ TitleWidget::TitleWidget(DWidget *parent)
     initWidget();
     initConnections();
     slotUpdateTheme();
-
-    g_onlyTitleWdiget = this;
 
     dApp->m_pModelService->addObserver(this);
 }
@@ -191,6 +183,8 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
         m_pThumbnailBtn->setChecked(showLeft);
 
         SetBtnDisable(false);
+
+        m_pSw->setSheet(sheet);
     }
 }
 
@@ -403,9 +397,7 @@ void TitleWidget::setMagnifierState()
 //  处理 推送消息
 int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK || msgType == MSG_TAB_SHOW_FILE_CHANGE) {
-        OnFileShowChange(msgContent);
-    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {
         slotUpdateTheme();
     }
 
@@ -426,7 +418,7 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
     return MSG_NO_OK;
 }
 
-int TitleWidget::qDealWithShortKey(const QString &sKey)
+int TitleWidget::onTitleShortCut(const QString &sKey)
 {
     if (sKey == KeyStr::g_alt_1) {
         OnShortCut_Alt1();

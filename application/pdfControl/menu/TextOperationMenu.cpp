@@ -1,11 +1,7 @@
 #include "TextOperationMenu.h"
 
 #include "ColorWidgetAction.h"
-#include "TitleMenu.h"
-
 #include "business/AppInfo.h"
-
-
 #include "CentralDocPage.h"
 #include "MsgHeader.h"
 

@@ -79,7 +79,7 @@ enum E_DOC_TYPE_MSG {
     MSG_DOC_JUMP_PAGE = E_MENU_MSG_END + 50,             //  请求跳转页面
     MSG_OPEN_FILE_PATH,                                 //  打开的文件消息
     MSG_SAVE_AS_FILE_PATH,                              //  保存文件消息
-    MSG_OPERATION_OPEN_FILE_OK,                         //  打开文件成功, 要告诉所有人
+    //MSG_OPERATION_OPEN_FILE_OK,                         //  打开文件成功, 要告诉所有人
     MSG_OPERATION_OPEN_FILE_FAIL,                       //  打开文件失败
     MSG_OPERATION_FIRST_PAGE,                           //  第一页
     MSG_OPERATION_PREV_PAGE,                            //  上一页

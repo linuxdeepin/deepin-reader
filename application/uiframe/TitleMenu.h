@@ -40,8 +40,6 @@ public slots:
     void onCurSheetSaved(DocSheet *);
 
 public:
-    int dealWithData(const int &, const QString &) override;
-
     void flushSaveButton();
 
     void disableAllAction();

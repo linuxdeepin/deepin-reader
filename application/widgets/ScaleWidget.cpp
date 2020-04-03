@@ -25,7 +25,7 @@
 #include <DComboBox>
 
 #include "docview/docummentproxy.h"
-#include "CentralDocPage.h"
+#include "DocSheet.h"
 
 ScaleWidget::ScaleWidget(DWidget *parent)
     : CustomWidget("ScaleWidget", parent)
@@ -42,14 +42,11 @@ ScaleWidget::~ScaleWidget()
 
 int ScaleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK || msgType == MSG_TAB_SHOW_FILE_CHANGE) {
-        SetComboBoxMax();
-    } else if (msgType == MSG_FILE_FIT_SCALE) {
+    if (msgType == MSG_FILE_FIT_SCALE) {
         SetFitScale(msgContent);
         return MSG_OK;
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         onShortKey(msgContent);
-
         if (m_pKeyMsgList.contains(msgContent)) {
             return MSG_OK;
         }
@@ -208,11 +205,12 @@ void ScaleWidget::SlotReturnPressed()
     }
 }
 
-void ScaleWidget::SetComboBoxMax()
+void ScaleWidget::setSheet(DocSheet *sheet)
 {
-    QString sPath = CentralDocPage::Instance()->qGetCurPath();
+    if (nullptr == sheet)
+        return;
 
-    auto _proxy = CentralDocPage::Instance()->getCurFileAndProxy(sPath);
+    auto _proxy = sheet->getDocProxy();
     if (_proxy) {
         double dMax = _proxy->getMaxZoomratio();
 
@@ -231,7 +229,7 @@ void ScaleWidget::SetComboBoxMax()
             }
         }
 
-        FileDataModel fdm = CentralDocPage::Instance()->qGetFileData();
+        FileDataModel fdm = sheet->qGetFileData();
         double nScale = fdm.qGetData(Scale);
         if (static_cast<int>(nScale) == 0) {
             nScale = 100;

@@ -29,9 +29,6 @@
 #include "CentralDocPage.h"
 #include "FileDataModel.h"
 #include "MainWindow.h"
-
-#include "TitleMenu.h"
-#include "TitleWidget.h"
 #include "app/ProcessController.h"
 #include "business/SaveDialog.h"
 

@@ -49,21 +49,13 @@ void TitleMenu::onCurSheetSaved(DocSheet *sheet)
         disableSaveButton(true);
         return;
     }
-    disableSaveButton(!sheet->qGetFileChange());
-}
 
-int TitleMenu::dealWithData(const int &msgType, const QString &)
-{
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK || msgType == MSG_TAB_SHOW_FILE_CHANGE) {
-        auto actions = this->findChildren<QAction *>();
-        foreach (QAction *a, actions) {
-            a->setDisabled(false);
-        }
+    auto actions = this->findChildren<QAction *>();
+    foreach (QAction *a, actions) {
+        a->setDisabled(false);
     }
 
-    flushSaveButton();
-
-    return MSG_NO_OK;
+    disableSaveButton(!sheet->qGetFileChange());
 }
 
 void TitleMenu::flushSaveButton()

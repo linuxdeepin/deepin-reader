@@ -45,12 +45,7 @@ CatalogWidget::~CatalogWidget()
 
 int CatalogWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    //  打开 文件通知消息
-    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
-        handleOpenSuccess();
-    }
-
-    if (MSG_OPERATION_OPEN_FILE_OK == msgType || MSG_FILE_PAGE_CHANGE == msgType) {
+    if (MSG_FILE_PAGE_CHANGE == msgType) {
         m_pTree->dealWithData(msgType, msgContent);
     }
 

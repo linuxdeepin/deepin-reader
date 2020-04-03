@@ -141,9 +141,7 @@ void MainOperationWidget::slotButtonClicked(int id)
 
 int MainOperationWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        handleOpenSuccess();
-    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
+    if (msgType == MSG_OPERATION_UPDATE_THEME) {
         slotUpdateTheme();
     }
 

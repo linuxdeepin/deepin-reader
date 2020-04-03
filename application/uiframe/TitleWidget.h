@@ -24,19 +24,13 @@ public:
 
     ~TitleWidget() override;
 
-private:
-    static TitleWidget *g_onlyTitleWdiget;
-
-public:
-    static TitleWidget *Instance();
-
 public:
     int dealWithData(const int &, const QString &) override;
 
     void setMagnifierState();
 
-public:
-    int qDealWithShortKey(const QString &) override;
+public slots:
+    int onTitleShortCut(const QString &);
 
 protected:
     void initWidget() override;

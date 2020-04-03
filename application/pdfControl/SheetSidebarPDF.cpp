@@ -105,21 +105,16 @@ int SheetSidebarPDF::dealWithData(const int &msgType, const QString &msgContent)
 
     int nRes = MSG_NO_OK;
 
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        handleOpenSuccess();
+    if (msgType == MSG_WIDGET_THUMBNAILS_VIEW) {
+        onSetWidgetVisible(msgContent.toInt());
+    }
 
-    } else {
-        if (msgType == MSG_WIDGET_THUMBNAILS_VIEW) {
-            onSetWidgetVisible(msgContent.toInt());
-        }
+    if (m_pMsgList.contains(msgType)) {
+        nRes = MSG_OK;
+    }
 
-        if (m_pMsgList.contains(msgType)) {
-            nRes = MSG_OK;
-        }
-
-        if (nRes != MSG_OK) {
-            nRes = m_pStackedWidget->dealWithData(msgType, msgContent);
-        }
+    if (nRes != MSG_OK) {
+        nRes = m_pStackedWidget->dealWithData(msgType, msgContent);
     }
 
     return nRes;

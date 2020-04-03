@@ -607,13 +607,6 @@ QString NotesWidget::getBindPath() const
  */
 int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (MSG_OPERATION_OPEN_FILE_OK == msgType) {
-        handleOpenSuccess();
-    }
-
-    if (m_pMsgList.contains(msgType)) {
-        return MSG_OK;
-    }
     return MSG_NO_OK;
 }
 

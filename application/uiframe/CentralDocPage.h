@@ -33,8 +33,6 @@ class QStackedLayout;
 class DocTabBar;
 class PlayControlWidget;
 class DocSheet;
-class TitleMenu;
-class TitleWidget;
 class CentralDocPage : public CustomWidget
 {
     Q_OBJECT
@@ -149,6 +147,8 @@ signals:
     void sigTabBarIndexChange(const QString &);
 
     void sigCurSheetChanged(DocSheet *);        //当前的文档被 切换 改动 保存 等
+
+    void sigTitleShortCut(QString shortcut);
 
 public slots:
     void slotfilechanged(bool bchanged);

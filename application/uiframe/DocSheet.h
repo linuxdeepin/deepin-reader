@@ -51,6 +51,8 @@ public:
 
     DocType_EM type();
 
+    int getCurrentState();
+
 //    bool close();
 
 //    bool save();

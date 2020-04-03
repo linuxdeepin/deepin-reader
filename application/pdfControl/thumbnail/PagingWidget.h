@@ -41,7 +41,7 @@ public:
     explicit PagingWidget(DocSheet *sheet, DWidget *parent = nullptr);
     ~PagingWidget() override;
 
-    // IObserver interface
+    void handleOpenSuccess();
 public:
     int dealWithData(const int &, const QString &) override;
 
@@ -60,7 +60,6 @@ private:
     void __PageNumberJump();
 
     void OnDocFilePageChange(const QString &);
-    void handleOpenSuccess();
 
 private:
     DLabel              *m_pTotalPagesLab = nullptr;        // 当前文档总页数标签

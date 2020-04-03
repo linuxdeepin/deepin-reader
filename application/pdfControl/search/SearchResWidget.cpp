@@ -296,14 +296,6 @@ void SearchResWidget::updateThumbnail(const int &page)
  */
 int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_OPEN_FILE_OK) {
-        handleOpenSuccess();
-    }
-
-    if (m_pMsgList.contains(msgType)) {
-        return MSG_OK;
-    }
-
     return MSG_NO_OK;
 }
 
