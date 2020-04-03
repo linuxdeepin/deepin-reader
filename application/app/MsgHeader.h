@@ -13,7 +13,6 @@ namespace {
 enum E_MSG_TYPE {
     E_MSG_TYPE_BEGIN = 0,
     E_APP_MSG_TYPE,
-    E_TABBAR_MSG_TYPE,
     E_MSG_TYPE_END
 };
 

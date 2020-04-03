@@ -21,6 +21,8 @@ public:
     explicit DocSheet(DocType_EM type, DWidget *parent = nullptr);
     ~DocSheet() override;
 
+    void openSliderShow();  //开启 幻灯片
+
 signals:
     void sigOpenFileResult(const QString &, const bool &);
 
@@ -59,6 +61,7 @@ public:
 
     int getCurrentState();
 
+    void setCurrentState(int state);
 //    bool close();
 
 //    bool save();
@@ -87,6 +90,7 @@ private:
     QStackedWidget *m_pRightWidget = nullptr;
     SpinnerWidget  *m_pSpinnerWidget = nullptr;
     bool            m_bOldState = false;
+    int             m_currentState;
 };
 
 #endif // MAINSPLITTER_H

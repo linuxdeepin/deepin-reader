@@ -60,7 +60,7 @@ CentralDocPage::CentralDocPage(DWidget *parent)
     initWidget();
     InitConnections();
     g_onlyApp = this;
-    m_pMsgList = {E_APP_MSG_TYPE, E_TABBAR_MSG_TYPE};
+    m_pMsgList = {E_APP_MSG_TYPE};
     m_pMsgList2 = { MSG_DOC_JUMP_PAGE, MSG_OPERATION_FIRST_PAGE, MSG_OPERATION_END_PAGE, MSG_OPERATION_PREV_PAGE, MSG_OPERATION_NEXT_PAGE,
                     MSG_SAVE_FILE, MSG_NOT_SAVE_FILE, MSG_NOT_CHANGE_SAVE_FILE
                   };
@@ -240,6 +240,23 @@ void CentralDocPage::saveAsCurFile()
     }
 }
 
+void CentralDocPage::onCurFileChanged(bool isChanged)
+{
+    DocSheet *sheet = static_cast<DocSheet *>(sender());
+
+    if (nullptr == sheet && sheet != getCurSheet())
+        return;
+
+    sigCurSheetChanged(sheet);
+
+    //...以下要改成记录所有的sheet,遍历一下，查看是否需要阻塞关机,目前只是记录最后一个文档被保存，有问题
+    if (isChanged) {
+        BlockShutdown();
+    } else {
+        UnBlockShutdown();
+    }
+}
+
 //  跳转页面
 QString CentralDocPage::qDealWithData(const int &msgType, const QString &msgContent)
 {
@@ -298,9 +315,7 @@ CentralDocPage *CentralDocPage::Instance()
 
 int CentralDocPage::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == E_TABBAR_MSG_TYPE) {
-        OnTabBarMsg(msgContent);
-    } else if (msgType == E_APP_MSG_TYPE) {     //  应用类消息
+    if (msgType == E_APP_MSG_TYPE) {     //  应用类消息
         OnAppMsgData(msgContent);
     } else {
         QJsonParseError error;
@@ -591,30 +606,6 @@ void CentralDocPage::OnAppShortCut(const QString &s)
     }
 }
 
-void CentralDocPage::OnTabBarMsg(const QString &s)
-{
-    if (s == "New window") {
-        Utils::runApp(QString());
-    } else if (s == "New tab") {
-        notifyMsg(E_OPEN_FILE);
-    } else if (s == "Save") { //  保存当前显示文件
-        saveCurFile();
-    } else if (s == "Save as") {
-        saveAsCurFile();
-    } else if (s == "Print") {
-        OnPrintFile();
-    } else if (s == "Slide show") { //  开启幻灯片
-        OnOpenSliderShow();
-    } else if (s == "Magnifer") {   //  开启放大镜
-        OnOpenMagnifer();
-    } else if (s == "Document info") {
-        onShowFileAttr();
-    } else if (s == "Display in file manager") {    //  文件浏览器 显示
-
-        OpenCurFileFolder();
-    }
-}
-
 //  打印
 void CentralDocPage::OnPrintFile()
 {
@@ -639,8 +630,6 @@ void CentralDocPage::OnShortCutKey_Esc()
 
 void CentralDocPage::OnKeyPress(const QString &sKey)
 {
-
-
     int nState = getCurrentState();
     if (nState == SLIDER_SHOW && m_pctrlwidget) {
         if (sKey == KeyStr::g_space) {
@@ -658,31 +647,19 @@ void CentralDocPage::OnKeyPress(const QString &sKey)
     }
 }
 
-void CentralDocPage::slotfilechanged(bool bchanged)
-{
-    DocSheet *sheet = static_cast<DocSheet *>(sender());
-    if (nullptr == sheet && sheet != getCurSheet())
-        return;
-
-    sigCurSheetChanged(sheet);
-
-    if (bchanged) {
-        BlockShutdown();
-    } else {
-        UnBlockShutdown();
-    }
-}
-
 //  切换文档, 需要取消之前文档 放大镜模式
 void CentralDocPage::SlotSetCurrentIndexFile(const QString &sPath)
 {
     auto sheets = this->findChildren<DocSheet *>();
+
     foreach (auto sheet, sheets) {
         if (sheet->qGetPath() == sPath) {
 
             //  切换文档 需要将放大镜状态 取消
             int nState = getCurrentState();
+
             if (nState == Magnifer_State) {
+
                 setCurrentState(Default_State);
 
                 auto proxy = getCurFileAndProxy(m_strMagniferPath);
@@ -706,9 +683,9 @@ void CentralDocPage::SlotAddTab(const QString &sPath)
 {
     if (m_pStackedLayout) {
         DocSheet *sheet = new DocSheet(DocType_PDF, this);
-        connect(this, SIGNAL(sigDealNotifyMsg(const int &, const QString &)), sheet, SLOT(SlotNotifyMsg(const int &, const QString &)));
+        connect(this,  SIGNAL(sigDealNotifyMsg(const int &, const QString &)), sheet, SLOT(SlotNotifyMsg(const int &, const QString &)));
         connect(sheet, SIGNAL(sigOpenFileResult(const QString &, const bool &)), SLOT(SlotOpenFileResult(const QString &, const bool &)));
-        connect(sheet, SIGNAL(sigFileChanged(bool)), SLOT(slotfilechanged(bool)));
+        connect(sheet, SIGNAL(sigFileChanged(bool)), SLOT(onCurFileChanged(bool)));
 
         sheet->qSetPath(sPath);
         m_pStackedLayout->addWidget(sheet);
@@ -835,61 +812,76 @@ void CentralDocPage::ShowFindWidget()
 //  开启 幻灯片
 void CentralDocPage::OnOpenSliderShow()
 {
+    DocSheet *sheet = getCurSheet();
+
+    if (nullptr == sheet)
+        return;
+
     int nState = getCurrentState();
+
     if (nState != SLIDER_SHOW) {
+
         setCurrentState(SLIDER_SHOW);
 
         m_pTabBar->setVisible(false);
 
-        auto sheet = qobject_cast<DocSheet *>(m_pStackedLayout->currentWidget());
-        if (sheet) {
-            sheet->OnOpenSliderShow();
+        sheet->OnOpenSliderShow();
 
-            MainWindow::Instance()->SetSliderShowState(0);
+        MainWindow::Instance()->SetSliderShowState(0);
 
-            QString sPath = sheet->qGetPath();
+        QString sPath = sheet->qGetPath();
 
-            m_strSliderPath = sPath;
+        m_strSliderPath = sPath;
 
-            auto _proxy = getCurFileAndProxy(sPath);
-            _proxy->setAutoPlaySlide(true);
-            _proxy->showSlideModel();
+        auto _proxy = sheet->getDocProxy();
 
-            if (m_pctrlwidget == nullptr) {
-                m_pctrlwidget = new PlayControlWidget(this);
-            }
+        _proxy->setAutoPlaySlide(true);
 
-            m_pctrlwidget->setSliderPath(sPath);
-            int nScreenWidth = qApp->desktop()->geometry().width();
-            int inScreenHeght = qApp->desktop()->geometry().height();
-            m_pctrlwidget->activeshow((nScreenWidth - m_pctrlwidget->width()) / 2, inScreenHeght - 100);
+        _proxy->showSlideModel();
+
+        if (m_pctrlwidget == nullptr) {
+            m_pctrlwidget = new PlayControlWidget(this);
         }
+
+        m_pctrlwidget->setSliderPath(sPath);
+
+        int nScreenWidth = qApp->desktop()->geometry().width();
+
+        int inScreenHeght = qApp->desktop()->geometry().height();
+
+        m_pctrlwidget->activeshow((nScreenWidth - m_pctrlwidget->width()) / 2, inScreenHeght - 100);
+
     }
 }
 
 //  退出幻灯片
 void CentralDocPage::OnExitSliderShow()
 {
-
-
     int nState = getCurrentState();
+
     if (nState == SLIDER_SHOW) {
+
         setCurrentState(Default_State);
 
         MainWindow::Instance()->SetSliderShowState(1);
+
         m_pTabBar->setVisible(true);
 
-        auto sheet = qobject_cast<DocSheet *>(m_pStackedLayout->currentWidget());
+        auto sheet = getSheet(m_strSliderPath);
+
         if (sheet) {
+
             sheet->OnExitSliderShow();
 
-            DocummentProxy *_proxy = getCurFileAndProxy(m_strSliderPath);
+            DocummentProxy *_proxy = sheet->getDocProxy();
+
             if (!_proxy) {
                 return;
             }
             _proxy->exitSlideModel();
 
             delete m_pctrlwidget;
+
             m_pctrlwidget = nullptr;
         }
 
@@ -900,11 +892,17 @@ void CentralDocPage::OnExitSliderShow()
 bool CentralDocPage::OnOpenMagnifer()
 {
     int nState = getCurrentState();
+
     if (nState != Magnifer_State) {
+
         setCurrentState(Magnifer_State);
+
         m_strMagniferPath = qGetCurPath();
+
         return true;
+
     }
+
     return false;
 }
 

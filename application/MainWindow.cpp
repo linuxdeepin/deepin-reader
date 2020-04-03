@@ -76,11 +76,9 @@ void MainWindow::setSreenRect(const QRect &rect)
 void MainWindow::SetSliderShowState(const int &nState)
 {
     titlebar()->setVisible(nState);
-    // setTitlebarShadowEnabled(nState);
 
     if (nState == 1) {
         if (windowState() == Qt::WindowFullScreen) {
-//            dApp->m_pAppInfo->qSetCurShowState(FILE_NORMAL);  //  正常状态
 
             showNormal();
 
@@ -91,7 +89,9 @@ void MainWindow::SetSliderShowState(const int &nState)
             m_nOldState = Qt::WindowNoState;        // 状态恢复     2019-12-23  wzx
         }
     } else {
+
         m_nOldState = this->windowState();      //  全屏之前 保存当前状态     2019-12-23  wzx
+
         this->setWindowState(Qt::WindowFullScreen);
     }
 }

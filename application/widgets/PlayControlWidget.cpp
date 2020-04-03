@@ -63,7 +63,7 @@ void PlayControlWidget::activeshow(int ix, int iy)
         if (pMtwe) {
             auto helper = pMtwe->getCurFileAndProxy(m_strSliderPath);
             connect(helper, &DocummentProxy::signal_autoplaytoend, this, [this] {
-                this->changePlayStatus(); qDebug() << "$$$%%%%$$####%$";
+                this->changePlayStatus();
             });
         }
     }

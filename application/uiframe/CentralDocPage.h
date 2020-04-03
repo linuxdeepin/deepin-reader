@@ -112,8 +112,6 @@ public:
 
     void OnAppExit();
 
-    void OnTabBarMsg(const QString &);
-
     void OnTabFileChangeMsg(const QString &);
 
     void SaveFile(const int &nSaveType, const QString &);
@@ -155,7 +153,7 @@ signals:
     void sigNeedShowTip(const QString &msg);
 
 public slots:
-    void slotfilechanged(bool bchanged);
+    void onCurFileChanged(bool isChanged);
 
 private slots:
     void SlotSetCurrentIndexFile(const QString &);

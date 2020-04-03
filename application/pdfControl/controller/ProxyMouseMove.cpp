@@ -26,7 +26,7 @@
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
 
-
+#include "DocSheet.h"
 #include "CentralDocPage.h"
 
 ProxyMouseMove::ProxyMouseMove(QObject *parent) : QObject(parent)
@@ -38,7 +38,7 @@ void ProxyMouseMove::mouseMoveEvent(QMouseEvent *event)
 {
     QPoint globalPos = event->globalPos();
     //  处于幻灯片模式下
-    int nState = CentralDocPage::Instance()->getCurrentState();
+    int nState = _fvwParent->m_sheet->getCurrentState();
     if (nState == SLIDER_SHOW) {
         CentralDocPage::Instance()->showPlayControlWidget();   //  显示 幻灯片 控制
     } else if (nState == Magnifer_State) {    //  当前是放大镜状态
@@ -252,7 +252,7 @@ void ProxyMouseMove::__ClickPageLink(Page::Link *pLink)
 
     } else if (linkType == Page::LinkType_Goto) {
         int page = pLink->page - 1;
-        CentralDocPage::Instance()->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(page));
+        _fvwParent->m_sheet->pageJump(page);
     } else if (linkType == Page::LinkType_GotoOtherFile) {
 
     } else if (linkType == Page::LinkType_Browse) {
@@ -266,7 +266,7 @@ void ProxyMouseMove::__ClickPageLink(Page::Link *pLink)
 void ProxyMouseMove::mouseReleaseEvent(QMouseEvent *event)
 {
     //  幻灯片模式下, 左键单击 不作任何处理
-    int nState = CentralDocPage::Instance()->getCurrentState();
+    int nState = _fvwParent->m_sheet->getCurrentState();
     if (nState == SLIDER_SHOW)
         return;
 

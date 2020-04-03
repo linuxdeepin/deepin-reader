@@ -17,15 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "PrintManager.h"
+#include "docview/docummentproxy.h"
+#include "DocSheet.h"
 
 #include <QPrinter>
 #include <QPainter>
 #include <QPrintPreviewDialog>
-
-#include "docview/docummentproxy.h"
-
-#include "CentralDocPage.h"
-#include "DocSheet.h"
 
 PrintManager::PrintManager(DocSheet *sheet, QObject *parent)
     : QObject(parent), m_sheet(sheet)
@@ -54,14 +51,12 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
         stFileInfo fileInfo;
         _proxy->docBasicInfo(fileInfo);
 
-        int nPageSize = _proxy->getPageSNum();  //  pdf 页数
+        int nPageSize = _proxy->getPageSNum();
 
         printer->setDocName(m_strPrintName);
 
         QPainter painter(printer);
         painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
-
-        QRect rect = painter.viewport();
 
         for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
             QImage image;
