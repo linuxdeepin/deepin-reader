@@ -634,6 +634,8 @@ void ThreadLoadImageOfNote::run()
         int t_page = -1;
         QImage image;
         bool bl = false;
+        int tW = 146;
+        int tH = 174;
 
         for (int page = 0; page < m_stListNote.count(); page++) {
             if (!m_isLoaded)
@@ -651,7 +653,9 @@ void ThreadLoadImageOfNote::run()
 
             if (t_page != static_cast<int>(highContent.ipage)) {
                 t_page = static_cast<int>(highContent.ipage);
-                bl = dproxy->getImage(t_page, image, 48, 68 /*42, 62*/);
+
+                dApp->adaptScreenView(tW, tH);
+                bl = dproxy->getImage(t_page, image, tW, tH/*48, 68*/);
             }
             if (bl) {
                 emit sigLoadImage(image);

@@ -265,8 +265,10 @@ void SearchResWidget::updateThumbnail(const int &page)
         return;
     }
     QImage image;
-    int tW = 48;
-    int tH = 68;
+//    int tW = 48;
+//    int tH = 68;
+    int tW = 146;
+    int tH = 174;
     dApp->adaptScreenView(tW, tH);
 
     auto dproxy = m_sheet->getDocProxy();

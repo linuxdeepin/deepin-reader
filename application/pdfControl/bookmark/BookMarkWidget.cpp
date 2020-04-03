@@ -700,8 +700,10 @@ void LoadBookMarkThread::run()
                 if (m_nEndIndex >= m_bookMarks) {
                     m_nEndIndex = m_bookMarks - 1;
                 }
-                int tW = 48;
-                int tH = 68;
+//                int tW = 48;
+//                int tH = 68;
+                int tW = 146;
+                int tH = 174;
                 dApp->adaptScreenView(tW, tH);
                 for (int index = m_nStartIndex; index <= m_nEndIndex; index++) {
                     QImage image;
