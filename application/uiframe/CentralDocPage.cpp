@@ -284,28 +284,11 @@ void CentralDocPage::pageJump(const int &pagenum)
 //  前一页\第一页\后一页\最后一页 操作
 void CentralDocPage::pageJumpByMsg(const int &iType, const QString &param)
 {
-    QString sCurPath = qGetCurPath();
-    if (sCurPath != "") {
-        DocummentProxy *_proxy =  getCurFileAndProxy(sCurPath);
+    DocSheet *sheet = getCurSheet();
+    if (nullptr == sheet)
+        return;
 
-        if (_proxy) {
-            int iPage = -1;
-            if (iType == MSG_OPERATION_FIRST_PAGE) {
-                iPage = 0;
-            } else if (iType == MSG_OPERATION_PREV_PAGE) {
-                int nCurPage = _proxy->currentPageNo();
-                iPage = nCurPage - (param == "doubleshow" ? 2 : 1);
-            } else if (iType == MSG_OPERATION_NEXT_PAGE) {
-                int nCurPage = _proxy->currentPageNo();
-                iPage = nCurPage + (param == "doubleshow" ? 2 : 1);
-            } else if (iType == MSG_OPERATION_END_PAGE) {
-                int nCurPage = _proxy->getPageSNum();
-                iPage = nCurPage - 1;
-            }
-
-            pageJump(iPage);
-        }
-    }
+    sheet->pageJumpByMsg(iType, param);
 }
 
 CentralDocPage *CentralDocPage::Instance()
@@ -635,11 +618,11 @@ void CentralDocPage::OnTabBarMsg(const QString &s)
 //  打印
 void CentralDocPage::OnPrintFile()
 {
-    QString sPath = qGetCurPath();
-    if (sPath != "") {
-        PrintManager p(sPath);
-        p.showPrintDialog(this);
-    }
+    if (nullptr == getCurSheet())
+        return;
+
+    PrintManager p(getCurSheet());
+    p.showPrintDialog(this);
 }
 
 void CentralDocPage::OnShortCutKey_Esc()

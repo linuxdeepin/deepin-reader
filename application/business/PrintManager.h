@@ -26,19 +26,12 @@ class QPrinter;
 
 DWIDGET_USE_NAMESPACE
 
-
-/**
- * @brief The PrintManager class
- * @brief   打印管理
- *
- */
-
-
+class DocSheet;
 class PrintManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit PrintManager(const QString &, QObject *parent = nullptr);
+    explicit PrintManager(DocSheet *sheet, QObject *parent = nullptr);
 
     void showPrintDialog(DWidget *widget);
 
@@ -50,6 +43,7 @@ private slots:
 private:
     QString     m_strPrintName = "";
     QString     m_strPrintPath = "";
+    DocSheet   *m_sheet;
 };
 
 #endif // PRINTMANAGER_H

@@ -29,6 +29,8 @@ signals:
 public:
     void pageJump(const int &pagenum);
 
+    void pageJumpByMsg(const int &iType, const QString &param);
+
     void setFileChanged(bool hasChanged);
 
     QString qGetPath();

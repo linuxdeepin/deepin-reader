@@ -61,6 +61,29 @@ void DocSheet::pageJump(const int &pagenum)
     }
 }
 
+void DocSheet::pageJumpByMsg(const int &iType, const QString &param)
+{
+    DocummentProxy *_proxy =  getDocProxy();
+
+    if (_proxy) {
+        int iPage = -1;
+        if (iType == MSG_OPERATION_FIRST_PAGE) {
+            iPage = 0;
+        } else if (iType == MSG_OPERATION_PREV_PAGE) {
+            int nCurPage = _proxy->currentPageNo();
+            iPage = nCurPage - (param == "doubleshow" ? 2 : 1);
+        } else if (iType == MSG_OPERATION_NEXT_PAGE) {
+            int nCurPage = _proxy->currentPageNo();
+            iPage = nCurPage + (param == "doubleshow" ? 2 : 1);
+        } else if (iType == MSG_OPERATION_END_PAGE) {
+            int nCurPage = _proxy->getPageSNum();
+            iPage = nCurPage - 1;
+        }
+
+        pageJump(iPage);
+    }
+}
+
 void DocSheet::setFileChanged(bool hasChanged)
 {
     if (DocType_PDF == m_type)
@@ -83,7 +106,7 @@ void DocSheet::initPDF()
 
     connect(sidebar, SIGNAL(sigDeleteAnntation(const int &, const QString &)), browser, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
     connect(browser, SIGNAL(sigFileOpenResult(const QString &, const bool &)), SLOT(SlotFileOpenResult(const QString &, const bool &)));
-    connect(browser, SIGNAL(sigFindOperation(const int &)), sidebar, SLOT(SetFindOperation(const int &)));
+    connect(browser, SIGNAL(sigFindOperation(const int &)), sidebar, SLOT(onSearch(const int &)));
     connect(browser, SIGNAL(sigAnntationMsg(const int &, const QString &)), sidebar, SIGNAL(sigAnntationMsg(const int &, const QString &)));
     connect(browser, SIGNAL(sigBookMarkMsg(const int &, const QString &)), sidebar, SIGNAL(sigBookMarkMsg(const int &, const QString &)));
     connect(browser, SIGNAL(sigUpdateThumbnail(const int &)), sidebar, SIGNAL(sigUpdateThumbnail(const int &)));

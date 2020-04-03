@@ -89,7 +89,7 @@ private:
     void initConnections();
 
 private:
-    FindWidget              *m_pFindWidget = nullptr;
+    FindWidget *m_pFindWidget = nullptr;
 
 private:
     SheetBrowserPDFPrivate *const d_ptr = nullptr;

@@ -49,7 +49,6 @@ private slots:
     void on_searchBtn_clicked();
 
 private:
-    void initConnections();
     void OnFileShowChange(const QString &);
 
     void initBtns();
@@ -66,8 +65,6 @@ private:
     void OnShortCut_Alt1();
     void OnShortCut_Alt2();
     void OnShortCut_CtrlM();
-
-    void SetFindWidget(const int &, const QString &);
 
 private:
     QStringList shortKeyList;

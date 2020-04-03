@@ -22,7 +22,6 @@ TitleWidget::TitleWidget(DWidget *parent)
                    << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_equal << KeyStr::g_ctrl_smaller;
 
     initWidget();
-    initConnections();
     slotUpdateTheme();
 
     dApp->m_pModelService->addObserver(this);
@@ -31,21 +30,6 @@ TitleWidget::TitleWidget(DWidget *parent)
 TitleWidget::~TitleWidget()
 {
     dApp->m_pModelService->removeObserver(this);
-}
-
-//  缩略图显示按钮状态切换
-void TitleWidget::SetFindWidget(const int &iFlag, const QString &sPath)
-{
-    if (iFlag == E_FIND_CONTENT) {
-        m_pThumbnailBtn->setChecked(true);
-    } else if (iFlag == E_FIND_EXIT) {
-        FileDataModel fdm = CentralDocPage::Instance()->qGetFileData();
-
-        int nState = fdm.qGetData(Thumbnail);
-        bool showLeft = nState == 1 ? true : false;
-
-        m_pThumbnailBtn->setChecked(showLeft);
-    }
 }
 
 //  主题变了
@@ -183,13 +167,6 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
 
         m_pSw->setSheet(m_curSheet);
     }
-}
-
-void TitleWidget::initConnections()
-{
-//    connect(this, SIGNAL(sigSetFindWidget(const int &)), SLOT(slotSetFindWidget(const int &)));
-//    connect(this, SIGNAL(sigMagnifierCancel()), SLOT(slotMagnifierCancel()));
-//    connect(this, SIGNAL(sigAppFullScreen()), SLOT(slotAppFullScreen()));
 }
 
 //  文档切换了

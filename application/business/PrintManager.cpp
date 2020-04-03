@@ -25,11 +25,13 @@
 #include "docview/docummentproxy.h"
 
 #include "CentralDocPage.h"
+#include "DocSheet.h"
 
-PrintManager::PrintManager(const QString &sPath, QObject *parent)
-    : QObject(parent)
+PrintManager::PrintManager(DocSheet *sheet, QObject *parent)
+    : QObject(parent), m_sheet(sheet)
 {
-    setPrintPath(sPath);
+    if (nullptr != m_sheet)
+        setPrintPath(m_sheet->qGetPath());
 }
 
 void PrintManager::showPrintDialog(DWidget *widget)
@@ -43,34 +45,34 @@ void PrintManager::showPrintDialog(DWidget *widget)
 
 void PrintManager::slotPrintPreview(QPrinter *printer)
 {
-    CentralDocPage *pMtwe = CentralDocPage::Instance();
-    if (pMtwe) {
-        DocummentProxy *_proxy =  pMtwe->getCurFileAndProxy(m_strPrintPath);
-        if (_proxy) {
-            //  文档实际大小
-            stFileInfo fileInfo;
-            _proxy->docBasicInfo(fileInfo);
+    if (nullptr == m_sheet)
+        return;
 
-            int nPageSize = _proxy->getPageSNum();  //  pdf 页数
+    DocummentProxy *_proxy =  m_sheet->getDocProxy();
+    if (_proxy) {
+        //  文档实际大小
+        stFileInfo fileInfo;
+        _proxy->docBasicInfo(fileInfo);
 
-            printer->setDocName(m_strPrintName);
+        int nPageSize = _proxy->getPageSNum();  //  pdf 页数
 
-            QPainter painter(printer);
-            painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
+        printer->setDocName(m_strPrintName);
 
-            QRect rect = painter.viewport();
+        QPainter painter(printer);
+        painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
 
-            for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
-                QImage image;
-                qreal deviceratio = qApp->devicePixelRatio() * 2.0;
-                bool rl = _proxy->getImage(iIndex, image, /*rect.width()*/fileInfo.iWidth * deviceratio, /*rect.height()*/fileInfo.iHeight * deviceratio);
-                if (rl) {
-                    QPixmap printpixmap = QPixmap::fromImage(image);
-                    printpixmap.setDevicePixelRatio(deviceratio);
-                    painter.drawPixmap(0, 0, printpixmap);
-                    if (iIndex < nPageSize - 1)
-                        printer->newPage();
-                }
+        QRect rect = painter.viewport();
+
+        for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
+            QImage image;
+            qreal deviceratio = qApp->devicePixelRatio() * 2.0;
+            bool rl = _proxy->getImage(iIndex, image, /*rect.width()*/fileInfo.iWidth * deviceratio, /*rect.height()*/fileInfo.iHeight * deviceratio);
+            if (rl) {
+                QPixmap printpixmap = QPixmap::fromImage(image);
+                printpixmap.setDevicePixelRatio(deviceratio);
+                painter.drawPixmap(0, 0, printpixmap);
+                if (iIndex < nPageSize - 1)
+                    printer->newPage();
             }
         }
     }
@@ -82,6 +84,5 @@ void PrintManager::setPrintPath(const QString &strPrintPath)
     QString sPath = strPrintPath;
     int nLastPos = sPath.lastIndexOf('/');
     nLastPos++;
-
     m_strPrintName = sPath.mid(nLastPos);
 }

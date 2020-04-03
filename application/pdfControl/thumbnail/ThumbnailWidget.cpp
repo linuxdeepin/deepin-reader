@@ -23,6 +23,7 @@
 
 #include "CentralDocPage.h"
 #include "DocSheet.h"
+#include "application.h"
 
 ThumbnailWidget::ThumbnailWidget(DocSheet *sheet, DWidget *parent)
     : CustomWidget(THUMBAIL_WIDGET, parent), m_sheet(sheet)
@@ -50,15 +51,12 @@ ThumbnailWidget::~ThumbnailWidget()
 // 处理消息事件
 int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        slotUpdateTheme();
-    } else if (msgType == MSG_VIEWCHANGE_ROTATE_VALUE) {  //  文档旋转了
+    if (msgType == MSG_VIEWCHANGE_ROTATE_VALUE) {  //  文档旋转了
         slotSetRotate(msgContent.toInt());
     } else if (MSG_FILE_PAGE_CHANGE == msgType) {
         slotDocFilePageChanged(msgContent);
         m_pPageWidget->dealWithData(msgType, msgContent);
     }
-
 
     return MSG_NO_OK;
 }
@@ -123,6 +121,8 @@ void ThumbnailWidget::addThumbnailItem(const int &iIndex)
 
 void ThumbnailWidget::initConnection()
 {
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &ThumbnailWidget::slotUpdateTheme);
+
     connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const int &, const QImage &)),
             this, SLOT(slotLoadImage(const int &, const QImage &)));
     connect(&m_ThreadLoadImage, SIGNAL(sigRotateImage(const int &)), SLOT(slotRotateThumbnail(const int &)));

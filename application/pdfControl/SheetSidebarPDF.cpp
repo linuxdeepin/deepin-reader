@@ -97,20 +97,10 @@ void SheetSidebarPDF::resizeEvent(QResizeEvent *event)
 
 int SheetSidebarPDF::dealWithData(const int &msgType, const QString &msgContent)
 {
-    int nRes = MSG_NO_OK;
-
-    if (m_pMsgList.contains(msgType)) {
-        nRes = MSG_OK;
-    }
-
-    if (nRes != MSG_OK) {
-        nRes = m_pStackedWidget->dealWithData(msgType, msgContent);
-    }
-
-    return nRes;
+    return  m_pStackedWidget->dealWithData(msgType, msgContent);
 }
 
-void SheetSidebarPDF::SetFindOperation(const int &iType)
+void SheetSidebarPDF::onSearch(const int &iType)
 {
     m_pMainOperationWidget->SetFindOperation(iType);
     m_pStackedWidget->SetFindOperation(iType);

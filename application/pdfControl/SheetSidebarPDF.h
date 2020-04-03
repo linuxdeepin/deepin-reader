@@ -36,7 +36,7 @@ public:
     int dealWithData(const int &, const QString &) override;
 
 public slots:
-    void SetFindOperation(const int &);
+    void onSearch(const int &);
 
     // CustomWidget interface
 protected:
