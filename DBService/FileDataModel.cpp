@@ -18,40 +18,6 @@
  */
 
 #include "FileDataModel.h"
-#include <QJsonObject>
-#include <QJsonDocument>
-
-QString FileDataModel::toJson()
-{
-    QJsonObject obj;
-    obj.insert("thumbnail", bThumbnail);
-    obj.insert("doubleShow", bDoubleShow);
-    obj.insert("fit", nFit);
-    obj.insert("rotate", nRotate);
-    obj.insert("scale", nScale);
-    obj.insert("leftIndex", nLeftIndex);
-    obj.insert("curPage", nCurPage);
-
-    QJsonDocument doc(obj);
-
-    return doc.toJson(QJsonDocument::Compact);
-}
-
-void FileDataModel::fromJson(const QString &sText)
-{
-    QJsonParseError error;
-    QJsonDocument doc = QJsonDocument::fromJson(sText.toLocal8Bit().data(), &error);
-    if (error.error == QJsonParseError::NoError) {
-        QJsonObject obj = doc.object();
-        bThumbnail = obj["thumbnail"].toBool();
-        bDoubleShow = obj["doubleShow"].toBool();
-        nFit = obj["fit"].toInt();
-        nRotate = obj["rotate"].toInt();
-        nScale = obj["scale"].toInt();
-        nLeftIndex = obj["leftIndex"].toInt();
-        nCurPage = obj["curPage"].toInt();
-    }
-}
 
 void FileDataModel::qSetData(const int &iKey, const double &iValue)
 {

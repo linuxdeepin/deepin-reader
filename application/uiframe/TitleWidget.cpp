@@ -162,16 +162,16 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
 {
     m_curSheet = sheet;
 
-    if (nullptr == sheet || sheet->type() == DocType_NULL) {
+    if (nullptr == m_curSheet || m_curSheet->type() == DocType_NULL) {
         SetBtnDisable(true);
 
         return;
 
-    } else if (DocType_PDF == sheet->type()) {
+    } else if (DocType_PDF == m_curSheet->type()) {
 
         SetBtnDisable(false);
 
-        FileDataModel fdm = sheet->qGetFileData();
+        FileDataModel fdm = m_curSheet->qGetFileData();
 
         int nState = fdm.qGetData(Thumbnail);
 
@@ -181,7 +181,7 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
 
         SetBtnDisable(false);
 
-        m_pSw->setSheet(sheet);
+        m_pSw->setSheet(m_curSheet);
     }
 }
 
@@ -201,11 +201,10 @@ void TitleWidget::OnFileShowChange(const QString &sPath)
 //  缩略图
 void TitleWidget::on_thumbnailBtn_clicked()
 {
-    bool rl = m_pThumbnailBtn->isChecked();
-
     if (m_curSheet.isNull())
         return;
 
+    bool rl = m_pThumbnailBtn->isChecked();
     m_curSheet->setData(Thumbnail, QString::number(rl));
     m_curSheet->setSidebarVisible(rl);
 }

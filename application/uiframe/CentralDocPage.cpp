@@ -157,13 +157,10 @@ void CentralDocPage::SaveFile(const int &iType, const QString &sPath)
             QJsonObject obj = doc.object();
             int nReturn = obj.value("return").toInt();
             if (nReturn == MSG_OK) {
-                DWidget *w = m_pStackedLayout->currentWidget();
-                if (w) {
-                    auto pSplitter = qobject_cast<DocSheet *>(w);
-                    if (pSplitter) {
-                        pSplitter->saveData();
-                        emit sigCurSheetChanged(pSplitter);
-                    }
+                DocSheet *sheet =  getSheet(sPath);
+                if (sheet) {
+                    sheet->saveData();
+                    emit sigCurSheetChanged(sheet);
                 }
             }
         }

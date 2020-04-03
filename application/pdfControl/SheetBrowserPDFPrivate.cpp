@@ -580,7 +580,9 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
 
         //从数据库中获取文件的字号信息
         dApp->m_pDBService->qSelectData(sPath, DB_HISTROY);
+
         FileDataModel fdm = dApp->m_pDBService->getHistroyData(sPath);
+
         m_pProxyFileDataModel->qSetFileData(fdm);
 
         int nAdapteState = fdm.qGetData(Fit);

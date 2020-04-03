@@ -49,7 +49,6 @@ private:
 
     void insertData(const QString &);
     void updateData(const QString &);
-    void deleteData();
 
     double GetKeyValue(const QString &sPath, const int &);
 

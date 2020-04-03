@@ -28,7 +28,6 @@ ProxyFileDataModel::ProxyFileDataModel(QObject *parent) : QObject(parent)
     _fvwParent = qobject_cast<SheetBrowserPDFPrivate *>(parent);
 }
 
-
 void ProxyFileDataModel::qDealWithData(const int &nType, const QString &sValue)
 {
     if (nType == MSG_LEFTBAR_STATE) {

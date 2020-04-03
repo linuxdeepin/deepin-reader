@@ -45,6 +45,7 @@ void HistroyDB::qSelectData(const QString &sPath)
     if (db.isValid()) {
         QMutexLocker mutex(&m_mutex);
         QSqlQuery query(db);
+
         query.setForwardOnly(true);
         QString sql = QString("SELECT * FROM %1 where FilePath = '%2'").arg(m_strTableName).arg(sPath);
 
@@ -100,10 +101,8 @@ void HistroyDB::checkDatabase()
     query.prepare("SELECT name FROM sqlite_master WHERE type=\"table\" AND name = \"FilesTable\"");
     if (query.exec() && query.first()) {
         tableExist = !query.value(0).toString().isEmpty();
-        qDebug() << __LINE__ << "   " << __FUNCTION__ << "   " << query.lastError() << tableExist;
     }
 
-    //if FilesTable not exist, create it.
     if (!tableExist) {
         QSqlQuery query(db);
         query.exec(QString("CREATE TABLE IF NOT EXISTS FilesTable ( "
@@ -163,10 +162,7 @@ void HistroyDB::insertData(const QString &sPath)
         query.addBindValue(GetKeyValue(sPath, LeftIndex));
         query.addBindValue(GetKeyValue(sPath, CurPage));
 
-        if (query.exec()) {
-            db.commit();
-        } else {
-            db.rollback();
+        if (!query.exec()) {
             qWarning() << __func__ << " error:  " << query.lastError();
         }
     }
@@ -174,6 +170,7 @@ void HistroyDB::insertData(const QString &sPath)
 
 void HistroyDB::updateData(const QString &sPath)
 {
+
     QSqlDatabase db = getDatabase();
     if (db.isValid()) {
         QMutexLocker mutex(&m_mutex);
@@ -188,8 +185,6 @@ void HistroyDB::updateData(const QString &sPath)
 
         double scale = 1.0;
         scale = GetKeyValue(sPath, Scale);
-        qDebug() << __LINE__ << "   " << __FUNCTION__ << "   scale:" << scale;
-
         query.addBindValue(GetKeyValue(sPath, Scale));
         query.addBindValue(GetKeyValue(sPath, DoubleShow));
         query.addBindValue(GetKeyValue(sPath, Fit));
@@ -199,18 +194,10 @@ void HistroyDB::updateData(const QString &sPath)
         query.addBindValue(GetKeyValue(sPath, CurPage));
         query.addBindValue(sPath);
 
-        if (query.exec()) {
-            db.commit();
-        } else {
-            db.rollback();
+        if (!query.exec()) {
             qWarning() << __func__ << " error:  " << query.lastError();
         }
     }
-}
-
-void HistroyDB::deleteData()
-{
-
 }
 
 double HistroyDB::GetKeyValue(const QString &sPath, const int &iKey)

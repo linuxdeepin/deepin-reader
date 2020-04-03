@@ -42,10 +42,6 @@ enum E_FDM_MSG {
 class FileDataModel
 {
 public:
-    QString toJson();
-    void fromJson(const QString &sText);
-
-public:
     void qSetData(const int &iKey, const double &iValue);
     double qGetData(const int &iKey) const;
 
