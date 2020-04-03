@@ -268,7 +268,7 @@ void CatalogTreeView::slotThemeChanged()
 {
     qInfo() << __LINE__ << "           " <<   __FUNCTION__;
 
-    auto color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().text().color(); s
+    auto color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().text().color();
     for (int index = 0; index < m_listTitle.count(); index++) {
         QStandardItem *item = m_listTitle.at(index);
         if (item) {
