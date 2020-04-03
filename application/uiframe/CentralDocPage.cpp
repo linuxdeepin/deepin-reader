@@ -438,15 +438,14 @@ void CentralDocPage::initWidget()
     connect(this, SIGNAL(sigRemoveFileTab(const QString &)), m_pTabBar, SLOT(SlotRemoveFileTab(const QString &)));
     connect(this, SIGNAL(sigOpenFileResult(const QString &, const bool &)), m_pTabBar, SLOT(SlotOpenFileResult(const QString &, const bool &)));
 
+    m_pStackedLayout = new QStackedLayout;
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
+
     mainLayout->addWidget(m_pTabBar);
-
-    m_pStackedLayout = new QStackedLayout(this);
-
     mainLayout->addItem(m_pStackedLayout);
-
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
+
     this->setLayout(mainLayout);
 }
 

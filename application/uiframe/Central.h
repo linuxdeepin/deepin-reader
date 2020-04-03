@@ -58,9 +58,7 @@ public slots:
 
     void onMenuTriggered(const QString &action);
 
-private:
-    void initConnections();
-
+private slots:
     void OnSetCurrentIndex();
 
     void onShowTip(const QString &);

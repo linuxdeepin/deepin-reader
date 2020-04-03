@@ -39,8 +39,6 @@ Central::Central(DWidget *parent)
     setAcceptDrops(true);
 
     initWidget();
-
-    initConnections();
 }
 
 Central::~Central()
@@ -74,10 +72,6 @@ void Central::keyPressEvent(QKeyEvent *event)
     }
 
     CustomWidget::keyPressEvent(event);
-}
-
-void Central::initConnections()
-{
 }
 
 void Central::OnSetCurrentIndex()
@@ -242,13 +236,11 @@ void Central::initWidget()
     setLayout(m_layout);
 
     connect(m_menu, SIGNAL(sigActionTriggered(QString)), this, SLOT(onMenuTriggered(QString)));
-
     connect(m_navPage, SIGNAL(sigOpenFilePaths(const QString &)), SLOT(SlotOpenFiles(const QString &)));
     connect(m_navPage, SIGNAL(filesOpened()), SLOT(onFilesOpened()));
-
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), this, SLOT(onCurSheetChanged(DocSheet *)));
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_menu, SLOT(onCurSheetChanged(DocSheet *)));
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_widget, SLOT(onCurSheetChanged(DocSheet *)));
     connect(m_docPage, SIGNAL(sigTitleShortCut(QString)), m_widget, SLOT(onTitleShortCut(QString)));
-    connect(m_docPage, SIGNAL(sigNeedShowTip(QString)), this, SLOT(onShowTip(QString)));
+    connect(m_docPage, SIGNAL(sigNeedShowTip(const QString &)), this, SLOT(onShowTip(const QString &)));
 }

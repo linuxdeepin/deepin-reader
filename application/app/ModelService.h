@@ -28,8 +28,6 @@ class ModelService : public QObject
 public:
     explicit ModelService(QObject *parent = nullptr);
 
-    ~ModelService() override;
-
 public:
     void addObserver(IObserver *obs) ;
 

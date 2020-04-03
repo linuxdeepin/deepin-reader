@@ -27,11 +27,6 @@ ModelService::ModelService(QObject *parent)
 
 }
 
-ModelService::~ModelService()
-{
-
-}
-
 void ModelService::addObserver(IObserver *obs)
 {
     m_observerList.append(obs);
