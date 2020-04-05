@@ -113,10 +113,13 @@ void ThumbnailWidget::addThumbnailItem(const int &iIndex)
     int tW = LEFTMINWIDTH;
     int tH = 212;
 //    dApp->adaptScreenView(tW, tH);
+    tW = static_cast<int>(static_cast<double>(LEFTMINWIDTH) * dApp->scale());
+    tH = static_cast<int>(static_cast<double>(tH) * dApp->scale());
     item->setSizeHint(QSize(tW, tH));
 
     m_pThumbnailListWidget->addItem(item);
     m_pThumbnailListWidget->setItemWidget(item, widget);
+    widget->adaptWindowSize(dApp->scale());
 }
 
 void ThumbnailWidget::initConnection()
@@ -352,7 +355,7 @@ void ThumbnailWidget::updateThumbnail(const int &page)
                     QImage image;
                     int tW = 146;
                     int tH = 174;
-                    dApp->adaptScreenView(tW, tH);
+//                    dApp->adaptScreenView(tW, tH);
                     dproxy->getImage(page, image, tW, tH);
                     itemWidget->setLabelImage(image);
                     return;
@@ -366,7 +369,7 @@ void ThumbnailWidget::updateThumbnail(const int &page)
 void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
 {
     m_strBindPath = sPath;
-
+    qInfo() << __LINE__ << "        " << __FUNCTION__;
     CentralDocPage *pMtwe = CentralDocPage::Instance();
     DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sPath);
     if (_proxy) {
@@ -489,7 +492,7 @@ void ThreadLoadImage::run()
 
         int tW = 146;
         int tH = 174;
-        dApp->adaptScreenView(tW, tH);
+//        dApp->adaptScreenView(tW, tH);
 
         for (int page = m_nStartPage; page <= m_nEndPage; page++) {
             if (!m_isLoaded)

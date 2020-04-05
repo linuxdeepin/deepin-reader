@@ -91,6 +91,7 @@ void SheetSidebarPDF::resizeEvent(QResizeEvent *event)
     double scale = static_cast<double>(width) / static_cast<double>(LEFTMINWIDTH);
 
     dApp->setScale(scale);
+    qInfo() << "    SheetSidebarPDF  scale:" << scale;
 
     emit sigAdaptWindowSize(scale);
 }

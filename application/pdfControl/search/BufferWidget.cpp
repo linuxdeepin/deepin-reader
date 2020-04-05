@@ -48,7 +48,7 @@ void BufferWidget::initWidget()
     int tW = 50;
     int tH = 50;
     dApp->adaptScreenView(tW, tH);
-    m_pSpinner->setFixedSize(tW, tH);
+    m_pSpinner->setFixedSize(tW, tW);
     m_pSpinner->stop();
 
     m_pHLayout->addStretch(1);

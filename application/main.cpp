@@ -26,10 +26,10 @@ int main(int argc, char *argv[])
     QSharedMemory share;
     bool hasWaited = false;
     share.setKey("deepin_reader");
-    while (!share.create(1)) {
-        hasWaited = true;
-        QThread::msleep(100);
-    }
+//    while (!share.create(1)) {
+//        hasWaited = true;
+//        QThread::msleep(100);
+//    }
     if (hasWaited) {
         share.detach();
     }

@@ -52,7 +52,7 @@ void CentralNavPage::initWidget()
     tW = 128;
     tH = 128;
     dApp->adaptScreenView(tW, tH);
-    iconSvg->setFixedSize(QSize(tW, tH));
+    iconSvg->setFixedSize(QSize(tW, tW));
     iconSvg->setObjectName("iconSvg");
 
     layout->addWidget(iconSvg, 0, Qt::AlignHCenter);

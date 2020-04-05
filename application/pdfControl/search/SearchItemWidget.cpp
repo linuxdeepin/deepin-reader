@@ -98,7 +98,7 @@ void SearchItemWidget::initWidget()
     m_pPicture = new ImageLabel(this);
     int tW = 48;
     int tH = 68;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     m_pPicture->setFixedSize(QSize(tW, tH));
     m_pPicture->setSize(QSize(tW, tH));
     m_pPicture->setAlignment(Qt::AlignCenter);
@@ -108,7 +108,7 @@ void SearchItemWidget::initWidget()
     m_pPageNumber = new PageNumberLabel(this);
     tW = 31;
     tH = 18;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     m_pPageNumber->setMinimumWidth(tW);
     m_pPageNumber->setFixedHeight(tH);
     m_pPageNumber->setForegroundRole(DPalette::WindowText);
@@ -124,7 +124,7 @@ void SearchItemWidget::initWidget()
     m_pTextLab->setTextFormat(Qt::PlainText);
     tW = 80;
     tH = 54;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     m_pTextLab->setFixedHeight(tH);
     m_pTextLab->setMinimumWidth(tW);
     //    m_pTextLab->setMaximumWidth(349);

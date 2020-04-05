@@ -15,7 +15,7 @@ NoteTipWidget::NoteTipWidget(DWidget *parnet)
     //  setFixedSize(200, 50);
     int tW = m_iwidth;
     int tH = m_iwidth;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     m_iwidth = tW;
     setFixedWidth(m_iwidth);
     DPlatformWindowHandle handle(this);

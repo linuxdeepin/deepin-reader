@@ -40,7 +40,7 @@ FindWidget::FindWidget(DWidget *parent)
 
     int tW = 414;
     int tH = 60;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     setMinimumSize(QSize(tW, tH));
     setWindowFlags(Qt::WindowStaysOnTopHint);
     setBlurBackgroundEnabled(true);
@@ -142,11 +142,11 @@ void FindWidget::initWidget()
     findNextButton->setToolTip(tr("Next"));
     int tW = 36;
     int tH = 36;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     findNextButton->setFixedSize(QSize(tW, tH));
     tW = 12;
     tH = 12;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     findNextButton->setIconSize(QSize(tW, tH));
     connect(findNextButton, &DIconButton::clicked, this, &FindWidget::slotFindNextBtnClicked);
 
@@ -154,29 +154,29 @@ void FindWidget::initWidget()
     findPrevButton->setToolTip(tr("Previous"));
     tW = 36;
     tH = 36;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     findPrevButton->setFixedSize(QSize(tW, tH));
     tW = 12;
     tH = 12;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     findPrevButton->setIconSize(QSize(tW, tH));
     connect(findPrevButton, &DIconButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
 
     auto closeButton = new DDialogCloseButton;
     tW = 28;
     tH = 28;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     closeButton->setIconSize(QSize(tW, tH /*20, 20*/));
     tW = 30;
     tH = 30;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     closeButton->setFixedSize(QSize(tW, tH /*22, 22*/));
     connect(closeButton, &DDialogCloseButton::clicked, this, &FindWidget::findCancel);
 
     m_pSearchEdit = new DSearchEdit;
     tW = 270;
     tH = 36;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     m_pSearchEdit->setFixedSize(QSize(tW, tH));
     m_pSearchEdit->setFocusPolicy(Qt::StrongFocus);
 
