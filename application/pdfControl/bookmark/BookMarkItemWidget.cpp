@@ -56,7 +56,7 @@ void BookMarkItemWidget::initWidget()
     m_pPageNumber = new PageNumberLabel(this);
     int tW = 31;
     int tH = 18;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     m_pPageNumber->setMinimumWidth(tW);
     m_pPageNumber->setFixedHeight(tH);
     m_pPageNumber->setForegroundRole(DPalette::WindowText);
@@ -70,13 +70,14 @@ void BookMarkItemWidget::initWidget()
     m_pPageVLayout->addWidget(m_pPageNumber);
 
     m_pRightVLayout->addItem(m_pPageVLayout);
+    m_pRightVLayout->addStretch(1);
     m_pRightVLayout->addWidget(hLine);
     m_pRightVLayout->setContentsMargins(20, 0, 10, 0);
 
     m_pPicture = new ImageLabel(this);
     tW = 48;
     tH = 68;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     m_pPicture->setFixedSize(QSize(tW, tH));
     m_pPicture->setSize(QSize(tW, tH));
     m_pPicture->setAlignment(Qt::AlignCenter);
@@ -119,5 +120,18 @@ void BookMarkItemWidget::adaptWindowSize(const double &scale)
 
     if (m_pPicture) {
         m_pPicture->scaleImage(scale);
+    }
+}
+
+/**
+ * @brief BookMarkItemWidget::imageAdaptView
+ * 书签缩略图自适应视图大小
+ * @param tw
+ * @param th
+ */
+void BookMarkItemWidget::imageAdaptView(const int &tw, const int &th)
+{
+    if (m_pPicture) {
+        m_pPicture->scaleImage(tw, th);
     }
 }

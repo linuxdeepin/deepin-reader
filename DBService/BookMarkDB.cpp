@@ -28,7 +28,7 @@ BookMarkDB::BookMarkDB(QObject *parent)
     : DBFactory(parent)
 {
     checkDatabase();
-    clearInvalidRecord();
+//    clearInvalidRecord();
 }
 
 BookMarkDB::~BookMarkDB()

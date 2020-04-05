@@ -83,10 +83,10 @@ DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QStrin
     btn->setToolTip(btnName);
     btn->setObjectName(objName);
     int tW = 36;
-    int tH = 36;
-    dApp->adaptScreenView(tW, tH);
-    btn->setFixedSize(QSize(tW, tH));
-    btn->setIconSize(QSize(tW, tH));
+//    int tH = 36;
+//    dApp->adaptScreenView(tW, tH);
+    btn->setFixedSize(QSize(tW, tW));
+    btn->setIconSize(QSize(tW, tW));
     btn->setCheckable(true);
     btn->setChecked(false);
 

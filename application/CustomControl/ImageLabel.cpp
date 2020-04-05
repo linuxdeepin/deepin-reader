@@ -123,6 +123,18 @@ void ImageLabel::scaleImage(const double &scale)
     update();
 }
 
+/**
+ * @brief ImageLabel::scaleImage
+ * 缩略图大小
+ * @param twidth     缩略图宽
+ * @param theight    缩略图高
+ */
+void ImageLabel::scaleImage(const int &twidth, const int &theight)
+{
+    setFixedSize(static_cast<int>(twidth), static_cast<int>(twidth));
+    update();
+}
+
 void ImageLabel::paintEvent(QPaintEvent *e)
 {
     DLabel::paintEvent(e);

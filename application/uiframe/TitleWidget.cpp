@@ -259,11 +259,11 @@ void TitleWidget::initBtns()
     m_pSearchBtn->setDisabled(true);
     int tW = 36;
     int tH = 36;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     m_pSearchBtn->setFixedSize(QSize(tW, tH));
     tW = 30;
     tH = 30;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     m_pSearchBtn->setIconSize(QSize(tW, tH));
     connect(m_pSearchBtn, SIGNAL(clicked()), SLOT(on_searchBtn_clicked()));
 }
@@ -277,7 +277,7 @@ void TitleWidget::__InitHandel()
     m_pHandleShapeBtn->setObjectName("defaultshape");
     int tW = 42;
     int tH = 36;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     m_pHandleShapeBtn->setFixedSize(QSize(tW, tH));
     m_pHandleShapeBtn->setIconSize(QSize(tW, tH));
     connect(m_pHandleShapeBtn, SIGNAL(clicked()), SLOT(on_handleShapeBtn_clicked()));
@@ -332,8 +332,8 @@ DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 {
     auto btn = new DPushButton(this);
     int tW = 36;
-    int tH = 36;
-    dApp->adaptScreenView(tW, tH);
+//    int tH = 36;
+//    dApp->adaptScreenView(tW, tH);
     btn->setFixedSize(QSize(tW, tW));
     btn->setIconSize(QSize(tW, tW));
     btn->setToolTip(btnName);

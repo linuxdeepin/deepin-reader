@@ -395,9 +395,9 @@ void BookMarkWidget::updateThumbnail(const int &page)
         return;
     }
     QImage image;
-    int tW = 48;
-    int tH = 68;
-    dApp->adaptScreenView(tW, tH);
+    int tW = 146;
+    int tH = 174;
+//    dApp->adaptScreenView(tW, tH);
 
     if (m_strBindPath != m_sheet->qGetPath())
         return;
@@ -476,7 +476,7 @@ void BookMarkWidget::initWidget()
     m_pAddBookMarkBtn = new DPushButton(this);
     int tW = 170;
     int tH = 36;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     m_pAddBookMarkBtn->setFixedHeight(tH);
     m_pAddBookMarkBtn->setMinimumWidth(tW);
     m_pAddBookMarkBtn->setText(tr("Add bookmark"));
@@ -526,16 +526,16 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
             //set item size
             width = static_cast<double>(LEFTMINWIDTH) * scale;
             height = static_cast<double>(80) * scale;
-            int tW = 48;
-            int tH = 68;
-            dApp->adaptScreenView(tW, tH);
+            int tW = 146;
+            int tH = 174;
+//            dApp->adaptScreenView(tW, tH);
             bool rl = proxy->getImage(page, t_image, tW, tH /*42, 62*/);
             if (rl) {
                 QImage img = Utils::roundImage(QPixmap::fromImage(t_image), ICON_SMALL);
                 auto item = m_pBookMarkListWidget->insertWidgetItem(page);
                 tW = LEFTMINWIDTH;
                 tH = 80;
-                dApp->adaptScreenView(tW, tH);
+//                dApp->adaptScreenView(tW, tH);
                 tW = static_cast<int>(width);
                 tH = static_cast<int>(height);
                 item->setSizeHint(QSize(tW, tH));
@@ -700,11 +700,10 @@ void LoadBookMarkThread::run()
                 if (m_nEndIndex >= m_bookMarks) {
                     m_nEndIndex = m_bookMarks - 1;
                 }
-//                int tW = 48;
-//                int tH = 68;
+
                 int tW = 146;
                 int tH = 174;
-                dApp->adaptScreenView(tW, tH);
+//                dApp->adaptScreenView(tW, tH);
                 for (int index = m_nStartIndex; index <= m_nEndIndex; index++) {
                     QImage image;
                     int page = -1;

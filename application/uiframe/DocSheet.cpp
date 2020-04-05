@@ -159,10 +159,10 @@ void DocSheet::initPDF()
     addWidget(m_pRightWidget);
 
     QList<int> list_src;
-    tW = LEFTNORMALWIDTH;
+    tW = LEFTMAXWIDTH;
     dApp->adaptScreenView(tW, tH);
     list_src.append(tW);
-    tW = 1000 - LEFTNORMALWIDTH;
+    tW = 1000 - LEFTMAXWIDTH;
     dApp->adaptScreenView(tW, tH);
     list_src.append(tW);
 

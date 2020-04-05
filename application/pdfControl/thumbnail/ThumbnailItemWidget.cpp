@@ -71,14 +71,14 @@ void ThumbnailItemWidget::initWidget()
     m_pPageNumber = new PageNumberLabel(this);
     int tW = 146;
     int tH = 18;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     m_pPageNumber->setMinimumSize(QSize(tW, tH));
     m_pPageNumber->setAlignment(Qt::AlignCenter);
 
     m_pPicture = new ImageLabel(this);
     tW = 146;
     tH = 174;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     m_pPicture->setFixedSize(QSize(tW, tH));
     m_pPicture->setSize(QSize(tW, tH));
     m_pPicture->setAlignment(Qt::AlignCenter);

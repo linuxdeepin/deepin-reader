@@ -68,6 +68,11 @@ int CustomItemWidget::nPageIndex() const
     return m_nPageIndex;
 }
 
+void CustomItemWidget::imageAdaptView(const int &, const int &)
+{
+    return;
+}
+
 void CustomItemWidget::resizeEvent(QResizeEvent *event)
 {
     CustomWidget::resizeEvent(event);

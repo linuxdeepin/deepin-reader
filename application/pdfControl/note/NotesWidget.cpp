@@ -103,7 +103,7 @@ void NotesWidget::initWidget()
     connect(m_pNotesList, SIGNAL(sigListMenuClick(const int &)), SLOT(slotListMenuClick(const int &)));
     int tW = 170;
     int tH = 36;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     m_pAddAnnotationBtn = new DPushButton(this);
     m_pAddAnnotationBtn->setFixedHeight(tH);
     m_pAddAnnotationBtn->setMinimumWidth(tW);
@@ -210,6 +210,7 @@ void NotesWidget::handleOpenSuccess()
         return;
 
     m_nIndex = 0;
+    m_bOpenFileOk = false;
     m_ThreadLoadImage.setIsLoaded(false);
     if (m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();
@@ -402,9 +403,9 @@ void NotesWidget::addNotesItem(const QString &text, const int &iType)
         if (nullptr == dproxy) {
             return;
         }
-        int tW = 48;
-        int tH = 68;
-        dApp->adaptScreenView(tW, tH);
+        int tW = 146;
+        int tH = 174;
+//        dApp->adaptScreenView(tW, tH);
         QImage image;
         bool rl = dproxy->getImage(t_nPage, image, tW, tH /*42, 62*/);
         if (rl) {
@@ -482,7 +483,7 @@ QListWidgetItem *NotesWidget::addNewItem(const QImage &image, const int &page, c
         itemWidget->setTextEditText(text);
         int tW = LEFTMINWIDTH;
         int tH = 80;
-        dApp->adaptScreenView(tW, tH);
+//        dApp->adaptScreenView(tW, tH);
         itemWidget->setBSelect(bNew);
 
         item->setFlags(Qt::NoItemFlags);
@@ -492,15 +493,15 @@ QListWidgetItem *NotesWidget::addNewItem(const QImage &image, const int &page, c
             double scale = 1.0;
             scale = dApp->scale();
             //set item size
-            width = static_cast<double>(LEFTMINWIDTH) * scale;
-            height = static_cast<double>(80) * scale;
+            width = static_cast<double>(tW) * scale;
+            height = static_cast<double>(tH) * scale;
             tW = static_cast<int>(width);
             tH = static_cast<int>(height);
-            itemWidget->setMinimumSize(QSize(tW, tH));
-            itemWidget->adaptWindowSize(scale);
+//            itemWidget->setMinimumSize(QSize(tW, tH));
             item->setSizeHint(QSize(tW, tH));
+            itemWidget->adaptWindowSize(scale);
         } else {
-            itemWidget->setMinimumSize(QSize(tW, tH));
+//            itemWidget->setMinimumSize(QSize(tW, tH));
             item->setSizeHint(QSize(tW, tH));
         }
 
@@ -574,7 +575,7 @@ void NotesWidget::updateThumbnail(const int &page)
     QImage image;
     int tW = 48;
     int tH = 68;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     CentralDocPage *pMtwe = CentralDocPage::Instance();
     auto dproxy = pMtwe->getCurFileAndProxy(m_strBindPath);
     dproxy->getImage(page, image, tW, tH);
@@ -653,7 +654,7 @@ void ThreadLoadImageOfNote::run()
             if (t_page != static_cast<int>(highContent.ipage)) {
                 t_page = static_cast<int>(highContent.ipage);
 
-                dApp->adaptScreenView(tW, tH);
+//                dApp->adaptScreenView(tW, tH);
                 bl = dproxy->getImage(t_page, image, tW, tH/*48, 68*/);
             }
             if (bl) {

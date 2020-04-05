@@ -25,8 +25,6 @@
  * @brief The BookMarkWidget class
  * @brief   书签列表item
  */
-
-
 class BookMarkItemWidget : public CustomItemWidget
 {
     Q_OBJECT
@@ -51,6 +49,10 @@ private:
     // CustomWidget interface
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
+
+    // CustomItemWidget interface
+public:
+    void imageAdaptView(const int &, const int &) Q_DECL_OVERRIDE;
 };
 
 #endif // BOOKMARKITEMWIDGET_H

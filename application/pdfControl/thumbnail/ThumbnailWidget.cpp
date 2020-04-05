@@ -112,7 +112,7 @@ void ThumbnailWidget::addThumbnailItem(const int &iIndex)
 
     int tW = LEFTMINWIDTH;
     int tH = 212;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     item->setSizeHint(QSize(tW, tH));
 
     m_pThumbnailListWidget->addItem(item);
@@ -299,7 +299,7 @@ void ThumbnailWidget::adaptWindowSize(const double &scale)
 
     int tW = LEFTMINWIDTH;
     int tH = 212;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
 
     //set item size
     width = static_cast<double>(tW) * scale;
@@ -316,11 +316,11 @@ void ThumbnailWidget::adaptWindowSize(const double &scale)
                     if (itemWidget) {
                         item->setSizeHint(QSize(static_cast<int>(width), static_cast<int>(height)));
                         itemWidget->adaptWindowSize(scale);
-                        m_pThumbnailListWidget->update();
                     }
                 }
             }
         }
+        m_pThumbnailListWidget->update();
     }
 }
 

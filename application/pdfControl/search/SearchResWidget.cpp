@@ -113,7 +113,7 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
         item->setFlags(Qt::NoItemFlags);
         int tW = LEFTMINWIDTH;
         int tH = 80;
-        dApp->adaptScreenView(tW, tH);
+//        dApp->adaptScreenView(tW, tH);
         item->setSizeHint(QSize(tW, tH));
 
         auto itemWidget = new SearchItemWidget(this);
@@ -123,15 +123,15 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
         itemWidget->setSerchResultText(tr("%1 items found").arg(resultNum));
         tW = LEFTMINWIDTH - 5;
         tH = 80;
-        dApp->adaptScreenView(tW, tH);
+//        dApp->adaptScreenView(tW, tH);
         itemWidget->setMinimumSize(QSize(tW, tH));
 
         auto dproxy = m_sheet->getDocProxy();
         if (nullptr != dproxy) {
             QImage image;
-            tW = 48;
-            tH = 68;
-            dApp->adaptScreenView(tW, tH);
+            int tW = 146;
+            int tH = 174;
+//            dApp->adaptScreenView(tW, tH);
             bool bl = dproxy->getImage(page, image, tW, tH /*42, 62*/);
             if (bl) {
                 itemWidget->setLabelImage(image);
@@ -152,7 +152,7 @@ void SearchResWidget::showTips()
     DFontSizeManager::instance()->bind(tipLab, DFontSizeManager::T6);
     int tW = 226;
     int tH = 528;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     tipWidget->setMinimumSize(QSize(tW, tH));
 
     hLayout->addStretch(1);
@@ -224,7 +224,7 @@ void SearchResWidget::adaptWindowSize(const double &scale)
     //set item size
     int tW = LEFTMINWIDTH;
     int tH = 80;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     width = static_cast<double>(tW) * scale;
     height = static_cast<double>(tH) * scale;
 
@@ -265,11 +265,10 @@ void SearchResWidget::updateThumbnail(const int &page)
         return;
     }
     QImage image;
-//    int tW = 48;
-//    int tH = 68;
+
     int tW = 146;
     int tH = 174;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
 
     auto dproxy = m_sheet->getDocProxy();
     dproxy->getImage(page, image, tW, tH);

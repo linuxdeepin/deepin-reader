@@ -44,6 +44,7 @@ public:
     void setLabelPage(const int &, const int &nShowPage = 0);
 
     int nPageIndex() const;
+    virtual void imageAdaptView(const int &, const int &);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

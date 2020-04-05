@@ -51,6 +51,7 @@ public:
     inline bool hasThumbnail() {return m_bHasThumbnail;}
     void setRotateAngle(const int &angle);
     void scaleImage(const double &);//缩略图自适应窗体大小  add by duanxiaohui 2020-3-20
+    void scaleImage(const int &, const int &);//缩略图自适应窗体大小  add by duanxiaohui 2020-4-5
     inline void setSize(const QSize &size)
     {
         m_size = size;

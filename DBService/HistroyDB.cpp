@@ -27,7 +27,7 @@ HistroyDB::HistroyDB(QObject *parent)
     : DBFactory(parent)
 {
     checkDatabase();
-    clearInvalidRecord();
+//    clearInvalidRecord();
 }
 
 void HistroyDB::saveData(const QString &newPath)

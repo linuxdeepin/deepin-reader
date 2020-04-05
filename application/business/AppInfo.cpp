@@ -20,6 +20,7 @@
 #include "AppInfo.h"
 #include "utils/utils.h"
 #include "ModuleHeader.h"
+#include <QDebug>
 
 #include <QDir>
 
@@ -161,6 +162,9 @@ void AppInfo::setMousePressLocal(const bool &highLight, const QPoint &point)
 void AppInfo::setScreenRect(const QRect &rect)
 {
     m_screenRect = rect;
+    m_dWidthScale = static_cast<double>((static_cast<double>(rect.width())) / static_cast<double>(m_nWidth));
+    m_dHeightScale = static_cast<double>((static_cast<double>(rect.height())) / static_cast<double>(m_nHeight));
+    qInfo() << "        m_dWidthScale:" << m_dWidthScale << "             m_dHeightScale:" << m_dHeightScale;
 }
 
 void AppInfo::setSmallNoteWidgetSize(const QSize &size)
@@ -198,16 +202,18 @@ QString AppInfo::getAppKeyValue(const int &iKey) const
  */
 void AppInfo::adaptScreenView(int &width, int &height)
 {
-    int twidth = 0;
-    int theight = 0;
+//    int twidth = 0;
+//    int theight = 0;
 
-    double scale = 1.0;
+//    double scale = 1.0;
 
-    twidth = m_screenRect.width();
-    theight = m_screenRect.height();
+//    twidth = m_screenRect.width();
+//    theight = m_screenRect.height();
 
-    scale = (static_cast<double>((twidth <= 1920) ? 1920 : twidth) / static_cast<double>(1920));
-    width = static_cast<int>(scale * static_cast<double>(width));
-    scale = (static_cast<double>((theight <= 1080) ? 1080 : theight) / static_cast<double>(1080));
-    height = static_cast<int>(scale * static_cast<double>(height));
+//    scale = (static_cast<double>((twidth <= 1920) ? 1920 : twidth) / static_cast<double>(1920));
+//    width = static_cast<int>(scale * static_cast<double>(width));
+//    scale = (static_cast<double>((theight <= 1080) ? 1080 : theight) / static_cast<double>(1080));
+//    height = static_cast<int>(scale * static_cast<double>(height));
+    width = static_cast<int>(m_dWidthScale * static_cast<double>(width));
+    height = static_cast<int>(m_dHeightScale * static_cast<double>(height));
 }

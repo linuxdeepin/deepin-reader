@@ -67,7 +67,7 @@ void ScaleWidget::initWidget()
     scaleComboBox->setDuplicatesEnabled(false); //  重复项 不允许添加
     int tW = 120;
     int tH = 0;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     scaleComboBox->setFixedWidth(tW);
     scaleComboBox->setEditable(true);
 
@@ -77,7 +77,7 @@ void ScaleWidget::initWidget()
     DIconButton *pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
     tW = 24;
     tH = 24;
-    dApp->adaptScreenView(tW, tH);
+//    dApp->adaptScreenView(tW, tH);
     pPreBtn->setFixedSize(QSize(tW, tH));
     connect(pPreBtn, SIGNAL(clicked()), SLOT(slotPrevScale()));
 
