@@ -40,7 +40,7 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
         m_pNextPage->setEnabled(true);
         m_pEndPage->setEnabled(true);
 
-        if (m_nRightPageNumber == 0) {    //  首页
+        if ((m_isDoubleShow == false) ? (m_nRightPageNumber == 0) : (m_nRightPageNumber <= 1)) { //  首页
             m_pFirstPage->setEnabled(false);
             m_pPrevPage->setEnabled(false);
         } else {
@@ -49,7 +49,7 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
                 int nPageNum = _proxy->getPageSNum();
                 nPageNum--;
 
-                if (m_nRightPageNumber == nPageNum) { //  最后一页
+                if ((m_isDoubleShow == false) ? (m_nRightPageNumber == nPageNum) : ((m_nRightPageNumber >= (--nPageNum)))) { //  最后一页
                     m_pNextPage->setEnabled(false);
                     m_pEndPage->setEnabled(false);
                 }

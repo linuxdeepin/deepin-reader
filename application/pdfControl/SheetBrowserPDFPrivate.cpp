@@ -541,10 +541,8 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
 
         m_pDefaultMenu->setClickpoint(pRightClickPoint);
 
-        m_pDefaultMenu->execMenu(tempPoint, clickPage);
-
         m_pDefaultMenu->setDoubleShow(m_pDocViewProxy->isDoubleShow());
-
+        m_pDefaultMenu->execMenu(tempPoint, clickPage);
     }
 }
 
