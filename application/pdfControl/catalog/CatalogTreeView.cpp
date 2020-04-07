@@ -99,14 +99,15 @@ void CatalogTreeView::parseCatalogData(const Section &ol, QStandardItem *parentI
 //  获取 一行的 三列数据
 QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const int &page, const qreal  &realleft, const qreal &realtop)
 {
-    auto color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().text().color();
+    QColor color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().text().color();
     auto item = new QStandardItem(title);
     item->setData(page);
     item->setData(realleft, Qt::UserRole + 2);
     item->setData(realtop, Qt::UserRole + 3);
 
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    item->setData(QVariant::fromValue(color), Qt::TextColorRole);
+//    item->setData(QVariant::fromValue(color), Qt::ForegroundRole);
+    item->setForeground(QBrush(color));
     m_listTitle.append(item);
 
     auto item1 = new QStandardItem();
@@ -121,7 +122,8 @@ QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const 
 
     item2->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
     color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().textTips().color();
-    item2->setData(QVariant::fromValue(color), Qt::TextColorRole);
+//    item2->setData(QVariant::fromValue(color), Qt::ForegroundRole);
+    item2->setForeground(QBrush(color));
     m_listPage.append(item2);
 
     return QList<QStandardItem *>() << item << item1 << item2;
@@ -266,13 +268,14 @@ void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelInd
 
 void CatalogTreeView::slotThemeChanged()
 {
-    qInfo() << __LINE__ << "           " <<   __FUNCTION__;
+//    qInfo() << __LINE__ << "           " <<   __FUNCTION__;
 
     auto color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().text().color();
     for (int index = 0; index < m_listTitle.count(); index++) {
         QStandardItem *item = m_listTitle.at(index);
         if (item) {
-            item->setData(QVariant::fromValue(color), Qt::TextColorRole);
+            item->setData(QVariant::fromValue(color), Qt::ForegroundRole);
+            item->setForeground(QBrush(color));
         }
     }
 
@@ -280,7 +283,8 @@ void CatalogTreeView::slotThemeChanged()
     for (int index = 0; index < m_listPage.count(); index++) {
         QStandardItem *item = m_listPage.at(index);
         if (item) {
-            item->setData(QVariant::fromValue(color), Qt::TextColorRole);
+            item->setData(QVariant::fromValue(color), Qt::ForegroundRole);
+            item->setForeground(QBrush(color));
         }
     }
     this->update();
