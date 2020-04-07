@@ -59,10 +59,13 @@ private:
     void OnFileShowChange(const QString &);
 
     void initBtns();
+
     void __InitHandel();
+
     void __InitSelectTool();
 
     void setDefaultShape();
+
     void setHandleShape();
 
     DPushButton *createBtn(const QString &btnName, bool bCheckable = false);
@@ -70,7 +73,9 @@ private:
     void SetBtnDisable(const bool &bAble);
 
     void OnShortCut_Alt1();
+
     void OnShortCut_Alt2();
+
     void OnShortCut_CtrlM();
 
 private:

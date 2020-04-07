@@ -594,7 +594,9 @@ void CentralDocPage::OnAppShortCut(const QString &s)
         OnOpenSliderShow();
     } else if (s == KeyStr::g_ctrl_shift_s) {   //  另存为
         saveAsCurFile();
-    } else if (s == KeyStr::g_esc) {   //  esc 统一处理
+    } else if (s == KeyStr::g_alt_z) {
+        OnOpenMagnifer();
+    } else if (s == KeyStr::g_esc) { //  esc 统一处理
         OnShortCutKey_Esc();
     } else {
         emit sigDealNotifyMsg(MSG_NOTIFY_KEY_MSG, s);

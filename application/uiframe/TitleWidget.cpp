@@ -373,11 +373,13 @@ int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
     }
 
     int nRes = m_pSw->dealWithData(msgType, msgContent);
+
     if (nRes == MSG_OK) {
         return MSG_OK;
     }
 
     nRes = m_pFontMenu->dealWithData(msgType, msgContent);
+
     if (nRes == MSG_OK) {
         return MSG_OK;
     }
