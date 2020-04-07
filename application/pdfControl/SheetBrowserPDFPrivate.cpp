@@ -26,7 +26,7 @@
 #include "DocSheet.h"
 
 SheetBrowserPDFPrivate::SheetBrowserPDFPrivate(DocSheet *sheet, SheetBrowserPDF *parent)
-    : q_ptr(parent), m_sheet(sheet)
+    : m_sheet(sheet), q_ptr(parent)
 {
     m_pProxyData = new ProxyData(this);
     connect(m_pProxyData, SIGNAL(signale_filechanged(bool)), q_ptr, SIGNAL(sigFileChanged(bool)));
@@ -585,17 +585,17 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
 
         m_pProxyFileDataModel->qSetFileData(fdm);
 
-        int nAdapteState = fdm.qGetData(Fit);
+        int nAdapteState = static_cast<int>(fdm.qGetData(Fit));
         m_pDocViewProxy->setAdapteState(nAdapteState);
 
-        int curPage = fdm.qGetData(CurPage);
-        int iscale  = fdm.qGetData(Scale);         // 缩放
+        int curPage = static_cast<int>(fdm.qGetData(CurPage));
+        int iscale  = static_cast<int>(fdm.qGetData(Scale));         // 缩放
         m_pDocViewProxy->setScale(iscale);
 
-        int doubPage = fdm.qGetData(DoubleShow);   // 是否是双页
+        int doubPage = static_cast<int>(fdm.qGetData(DoubleShow));   // 是否是双页
         m_pDocViewProxy->setDoubleShow(doubPage);
 
-        int rotate = fdm.qGetData(Rotate);         // 文档旋转角度(0,1,2,3,4)
+        int rotate = static_cast<int>(fdm.qGetData(Rotate));         // 文档旋转角度(0,1,2,3,4)
         m_pDocViewProxy->setRotateType(rotate);
 
         iscale = (iscale > 500 ? 500 : iscale) <= 0 ? 100 : iscale;
@@ -604,7 +604,7 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
         ViewMode_EM viewmode = static_cast<ViewMode_EM>(doubPage);
 
         m_pProxyData->setPath(sPath);
-        bool rl = m_pProxy->openFile(nCurDocType, sPath, curPage, rotatetype, scale, viewmode);
+        bool rl = m_pProxy->openFile(nCurDocType, sPath, static_cast<unsigned int>(curPage), rotatetype, scale, viewmode);
         if (rl) {
             m_pProxy->setViewFocus();
         }
