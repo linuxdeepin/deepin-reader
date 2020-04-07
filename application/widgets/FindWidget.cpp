@@ -31,7 +31,7 @@
 #include <QJsonDocument>
 
 #include "docview/docummentproxy.h"
-#include "CentralDocPage.h"
+#include "CustomControl/CustomWidget.h"
 
 FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)

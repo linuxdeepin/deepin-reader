@@ -22,10 +22,8 @@
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
 #include "DocSheet.h"
-#include "ModuleHeader.h"
-#include "MsgHeader.h"
-#include "WidgetHeader.h"
-#include "CentralDocPage.h"
+#include "CustomControl/CustomWidget.h"
+#include "app/ModuleHeader.h"
 
 #include <QDesktopServices>
 #include <QJsonObject>

@@ -25,8 +25,6 @@
 #include "CustomControl/CustomClickLabel.h"
 #include "CustomControl/DFMGlobal.h"
 #include "docview/docummentproxy.h"
-
-#include "CentralDocPage.h"
 #include "DocSheet.h"
 
 CatalogWidget::CatalogWidget(DocSheet *sheet, DWidget *parent)

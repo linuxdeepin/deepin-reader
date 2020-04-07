@@ -71,7 +71,6 @@ void ProxyFileDataModel::OnSetViewScale(const QString &sValue)
     QStringList sList = sValue.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (sList.size() == 2) {
         m_pFileDataModel.qSetData(Scale, sList.at(0).toDouble());
-        qInfo() << __LINE__ <<  "     " << __FUNCTION__ << "      sValue:" << sValue;
     }
 }
 

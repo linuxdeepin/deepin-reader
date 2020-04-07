@@ -10,8 +10,7 @@
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
 #include "docview/docummentproxy.h"
-
-#include "CentralDocPage.h"
+#include "CustomControl/CustomWidget.h"
 #include "DocSheet.h"
 
 PlayControlWidget::PlayControlWidget(DocSheet *sheet, DWidget *parnet)
@@ -217,7 +216,7 @@ void PlayControlWidget::slotNextClicked()
 
 void PlayControlWidget::slotExitClicked()
 {
-    CentralDocPage::Instance()->OnExitSliderShow();
+    m_sheet->quitSlide();
 }
 
 //  按了键盘 上下左右

@@ -2,7 +2,7 @@
 <context>
     <name>Application</name>
     <message>
-        <location filename="../application.cpp" line="45"/>
+        <location filename="../application.cpp" line="47"/>
         <source>Document Viewer</source>
         <translation>文档查看器</translation>
     </message>
@@ -15,92 +15,92 @@
 <context>
     <name>AttrScrollWidget</name>
     <message>
-        <location filename="../widgets/AttrScrollWidget.cpp" line="41"/>
+        <location filename="../widgets/AttrScrollWidget.cpp" line="40"/>
         <source>Location</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../widgets/AttrScrollWidget.cpp" line="42"/>
+        <location filename="../widgets/AttrScrollWidget.cpp" line="41"/>
         <source>Subject</source>
         <translation>主题</translation>
     </message>
     <message>
-        <location filename="../widgets/AttrScrollWidget.cpp" line="43"/>
+        <location filename="../widgets/AttrScrollWidget.cpp" line="42"/>
         <source>Author</source>
         <translation>作者</translation>
     </message>
     <message>
-        <location filename="../widgets/AttrScrollWidget.cpp" line="44"/>
+        <location filename="../widgets/AttrScrollWidget.cpp" line="43"/>
         <source>Keywords</source>
         <translation>关键词</translation>
     </message>
     <message>
-        <location filename="../widgets/AttrScrollWidget.cpp" line="45"/>
+        <location filename="../widgets/AttrScrollWidget.cpp" line="44"/>
         <source>Producer</source>
         <translation>制作者</translation>
     </message>
     <message>
-        <location filename="../widgets/AttrScrollWidget.cpp" line="46"/>
+        <location filename="../widgets/AttrScrollWidget.cpp" line="45"/>
         <source>Creator</source>
         <translation>创建者</translation>
     </message>
     <message>
-        <location filename="../widgets/AttrScrollWidget.cpp" line="47"/>
+        <location filename="../widgets/AttrScrollWidget.cpp" line="46"/>
         <source>Time created</source>
         <translation>创建于</translation>
     </message>
     <message>
-        <location filename="../widgets/AttrScrollWidget.cpp" line="48"/>
+        <location filename="../widgets/AttrScrollWidget.cpp" line="47"/>
         <source>Time modified</source>
         <translation>修改于</translation>
     </message>
     <message>
-        <location filename="../widgets/AttrScrollWidget.cpp" line="49"/>
+        <location filename="../widgets/AttrScrollWidget.cpp" line="48"/>
         <source>Format</source>
         <translation>格式</translation>
     </message>
     <message>
-        <location filename="../widgets/AttrScrollWidget.cpp" line="50"/>
+        <location filename="../widgets/AttrScrollWidget.cpp" line="49"/>
         <source>Pages</source>
         <translation>页数</translation>
     </message>
     <message>
-        <location filename="../widgets/AttrScrollWidget.cpp" line="51"/>
+        <location filename="../widgets/AttrScrollWidget.cpp" line="50"/>
         <source>Optimized</source>
         <translation>优化</translation>
     </message>
     <message>
-        <location filename="../widgets/AttrScrollWidget.cpp" line="52"/>
+        <location filename="../widgets/AttrScrollWidget.cpp" line="51"/>
         <source>Security</source>
         <translation>安全性</translation>
     </message>
     <message>
-        <location filename="../widgets/AttrScrollWidget.cpp" line="55"/>
+        <location filename="../widgets/AttrScrollWidget.cpp" line="54"/>
         <source>Page size</source>
         <translation>页面大小</translation>
     </message>
     <message>
-        <location filename="../widgets/AttrScrollWidget.cpp" line="57"/>
+        <location filename="../widgets/AttrScrollWidget.cpp" line="56"/>
         <source>File size</source>
         <translation>文件大小</translation>
     </message>
     <message>
-        <location filename="../widgets/AttrScrollWidget.cpp" line="62"/>
+        <location filename="../widgets/AttrScrollWidget.cpp" line="61"/>
         <source>Basic info</source>
         <translation>基本信息</translation>
     </message>
     <message>
-        <location filename="../widgets/AttrScrollWidget.cpp" line="93"/>
+        <location filename="../widgets/AttrScrollWidget.cpp" line="92"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../widgets/AttrScrollWidget.cpp" line="128"/>
+        <location filename="../widgets/AttrScrollWidget.cpp" line="127"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../widgets/AttrScrollWidget.cpp" line="128"/>
+        <location filename="../widgets/AttrScrollWidget.cpp" line="127"/>
         <source>No</source>
         <translation>否</translation>
     </message>
@@ -115,7 +115,7 @@
 <context>
     <name>BookMarkMenu</name>
     <message>
-        <location filename="../menu/BookMarkMenu.cpp" line="29"/>
+        <location filename="../pdfControl/menu/BookMarkMenu.cpp" line="30"/>
         <source>Remove bookmark</source>
         <translation>删除书签</translation>
     </message>
@@ -123,12 +123,12 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../pdfControl/bookmark/BookMarkWidget.cpp" line="318"/>
+        <location filename="../pdfControl/bookmark/BookMarkWidget.cpp" line="311"/>
         <source>The bookmark has been removed</source>
         <translation>已删除书签</translation>
     </message>
     <message>
-        <location filename="../pdfControl/bookmark/BookMarkWidget.cpp" line="398"/>
+        <location filename="../pdfControl/bookmark/BookMarkWidget.cpp" line="482"/>
         <source>Add bookmark</source>
         <translation>添加书签</translation>
     </message>
@@ -136,9 +136,67 @@
 <context>
     <name>CatalogWidget</name>
     <message>
-        <location filename="../pdfControl/catalog/CatalogWidget.cpp" line="97"/>
         <source>Unknown</source>
-        <translation>未知</translation>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>Central</name>
+    <message>
+        <location filename="../uiframe/Central.cpp" line="204"/>
+        <source>Unknown type</source>
+        <translation>文件类型未知</translation>
+    </message>
+    <message>
+        <location filename="../uiframe/Central.cpp" line="207"/>
+        <source>%1 is not supported</source>
+        <translation>不支持%1</translation>
+    </message>
+</context>
+<context>
+    <name>CentralDocPage</name>
+    <message>
+        <location filename="../uiframe/CentralDocPage.cpp" line="181"/>
+        <source>Saved successfully</source>
+        <translation>保存成功</translation>
+    </message>
+    <message>
+        <location filename="../uiframe/CentralDocPage.cpp" line="183"/>
+        <source>Save failed</source>
+        <translation>保存失败</translation>
+    </message>
+    <message>
+        <location filename="../uiframe/CentralDocPage.cpp" line="187"/>
+        <source>No changes</source>
+        <translation>文档未修改</translation>
+    </message>
+    <message>
+        <location filename="../uiframe/CentralDocPage.cpp" line="207"/>
+        <source>Save as</source>
+        <translation>另存为</translation>
+    </message>
+    <message>
+        <location filename="../uiframe/CentralDocPage.cpp" line="210"/>
+        <source>Invalid file name</source>
+        <translation>请输入有效的文件名</translation>
+    </message>
+    <message>
+        <location filename="../uiframe/CentralDocPage.cpp" line="213"/>
+        <source>OK</source>
+        <translation>确定</translation>
+    </message>
+</context>
+<context>
+    <name>CentralNavPage</name>
+    <message>
+        <location filename="../uiframe/CentralNavPage.cpp" line="33"/>
+        <source>Drag PDF files here</source>
+        <translation>拖拽PDF文件到此</translation>
+    </message>
+    <message>
+        <location filename="../uiframe/CentralNavPage.cpp" line="38"/>
+        <source>Select File</source>
+        <translation>选择文件</translation>
     </message>
 </context>
 <context>
@@ -148,14 +206,12 @@
         <translation type="vanished">确定</translation>
     </message>
     <message>
-        <location filename="../widgets/CentralWidget.cpp" line="162"/>
         <source>Unknown type</source>
-        <translation>文件类型未知</translation>
+        <translation type="vanished">文件类型未知</translation>
     </message>
     <message>
-        <location filename="../widgets/CentralWidget.cpp" line="165"/>
         <source>%1 is not supported</source>
-        <translation>不支持%1</translation>
+        <translation type="vanished">不支持%1</translation>
     </message>
     <message>
         <source>is not supported</source>
@@ -165,7 +221,7 @@
 <context>
     <name>ColorWidgetAction</name>
     <message>
-        <location filename="../menu/ColorWidgetAction.cpp" line="94"/>
+        <location filename="../pdfControl/menu/ColorWidgetAction.cpp" line="94"/>
         <source>Highlight</source>
         <translation>高亮</translation>
     </message>
@@ -185,48 +241,48 @@
 <context>
     <name>DefaultOperationMenu</name>
     <message>
-        <location filename="../menu/DefaultOperationMenu.cpp" line="29"/>
+        <location filename="../pdfControl/menu/DefaultOperationMenu.cpp" line="30"/>
         <source>Remove bookmark</source>
         <translation>删除书签</translation>
     </message>
     <message>
-        <location filename="../menu/DefaultOperationMenu.cpp" line="32"/>
-        <location filename="../menu/DefaultOperationMenu.cpp" line="75"/>
+        <location filename="../pdfControl/menu/DefaultOperationMenu.cpp" line="33"/>
+        <location filename="../pdfControl/menu/DefaultOperationMenu.cpp" line="74"/>
         <source>Add bookmark</source>
         <translation>添加书签</translation>
     </message>
     <message>
-        <location filename="../menu/DefaultOperationMenu.cpp" line="73"/>
+        <location filename="../pdfControl/menu/DefaultOperationMenu.cpp" line="72"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="../menu/DefaultOperationMenu.cpp" line="77"/>
+        <location filename="../pdfControl/menu/DefaultOperationMenu.cpp" line="76"/>
         <source>Add note</source>
         <translation>添加注释</translation>
     </message>
     <message>
-        <location filename="../menu/DefaultOperationMenu.cpp" line="79"/>
+        <location filename="../pdfControl/menu/DefaultOperationMenu.cpp" line="78"/>
         <source>First page</source>
         <translation>第一页</translation>
     </message>
     <message>
-        <location filename="../menu/DefaultOperationMenu.cpp" line="81"/>
+        <location filename="../pdfControl/menu/DefaultOperationMenu.cpp" line="80"/>
         <source>Previous page</source>
         <translation>前一页</translation>
     </message>
     <message>
-        <location filename="../menu/DefaultOperationMenu.cpp" line="83"/>
+        <location filename="../pdfControl/menu/DefaultOperationMenu.cpp" line="82"/>
         <source>Next page</source>
         <translation>后一页</translation>
     </message>
     <message>
-        <location filename="../menu/DefaultOperationMenu.cpp" line="85"/>
+        <location filename="../pdfControl/menu/DefaultOperationMenu.cpp" line="84"/>
         <source>Last page</source>
         <translation>最后一页</translation>
     </message>
     <message>
-        <location filename="../menu/DefaultOperationMenu.cpp" line="87"/>
+        <location filename="../pdfControl/menu/DefaultOperationMenu.cpp" line="86"/>
         <source>Exit fullscreen</source>
         <translation>退出全屏</translation>
     </message>
@@ -234,38 +290,28 @@
 <context>
     <name>DocFileHelper</name>
     <message>
-        <location filename="../gof/bridge/DocFileHelper.cpp" line="79"/>
         <source>Saved successfully</source>
-        <translation>保存成功</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Saved failed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../gof/bridge/DocFileHelper.cpp" line="81"/>
-        <source>Save failed</source>
-        <translation>保存失败</translation>
-    </message>
-    <message>
-        <location filename="../gof/bridge/DocFileHelper.cpp" line="85"/>
         <source>No changes</source>
-        <translation>文档未修改</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../gof/bridge/DocFileHelper.cpp" line="108"/>
         <source>Save as</source>
-        <translation>另存为</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../gof/bridge/DocFileHelper.cpp" line="111"/>
         <source>Invalid file name</source>
-        <translation>请输入有效的文件名</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../gof/bridge/DocFileHelper.cpp" line="114"/>
         <source>OK</source>
-        <translation>确定</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -333,28 +379,23 @@
 <context>
     <name>FileViewWidget</name>
     <message>
-        <location filename="../widgets/FileViewWidget.cpp" line="208"/>
-        <location filename="../widgets/FileViewWidget.cpp" line="225"/>
-        <location filename="../widgets/FileViewWidget.cpp" line="296"/>
-        <location filename="../widgets/FileViewWidget.cpp" line="396"/>
         <source>Please select the text</source>
-        <translation>请选择文本</translation>
+        <translation type="vanished">请选择文本</translation>
     </message>
     <message>
-        <location filename="../widgets/FileViewWidget.cpp" line="498"/>
         <source>Please check if the file is damaged</source>
-        <translation>请检查文件是否损坏</translation>
+        <translation type="vanished">请检查文件是否损坏</translation>
     </message>
 </context>
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../widgets/FindWidget.cpp" line="138"/>
+        <location filename="../widgets/FindWidget.cpp" line="142"/>
         <source>Next</source>
         <translation>下一个</translation>
     </message>
     <message>
-        <location filename="../widgets/FindWidget.cpp" line="144"/>
+        <location filename="../widgets/FindWidget.cpp" line="154"/>
         <source>Previous</source>
         <translation>上一个</translation>
     </message>
@@ -362,27 +403,27 @@
 <context>
     <name>FontMenu</name>
     <message>
-        <location filename="../menu/FontMenu.cpp" line="200"/>
+        <location filename="../widgets/FontMenu.cpp" line="203"/>
         <source>Two-Page View</source>
         <translation>双页显示</translation>
     </message>
     <message>
-        <location filename="../menu/FontMenu.cpp" line="201"/>
+        <location filename="../widgets/FontMenu.cpp" line="204"/>
         <source>Fit Height</source>
         <translation>适应高度</translation>
     </message>
     <message>
-        <location filename="../menu/FontMenu.cpp" line="202"/>
+        <location filename="../widgets/FontMenu.cpp" line="205"/>
         <source>Fit Width</source>
         <translation>适应宽度</translation>
     </message>
     <message>
-        <location filename="../menu/FontMenu.cpp" line="203"/>
+        <location filename="../widgets/FontMenu.cpp" line="206"/>
         <source>Rotate Left</source>
         <translation>左旋转</translation>
     </message>
     <message>
-        <location filename="../menu/FontMenu.cpp" line="204"/>
+        <location filename="../widgets/FontMenu.cpp" line="207"/>
         <source>Rotate Right</source>
         <translation>右旋转</translation>
     </message>
@@ -390,12 +431,12 @@
 <context>
     <name>HandleMenu</name>
     <message>
-        <location filename="../menu/HandleMenu.cpp" line="31"/>
+        <location filename="../widgets/HandleMenu.cpp" line="31"/>
         <source>Select Text</source>
         <translation>选择工具</translation>
     </message>
     <message>
-        <location filename="../menu/HandleMenu.cpp" line="41"/>
+        <location filename="../widgets/HandleMenu.cpp" line="41"/>
         <source>Hand Tool</source>
         <translation>手形工具</translation>
     </message>
@@ -403,35 +444,33 @@
 <context>
     <name>HomeWidget</name>
     <message>
-        <location filename="../widgets/HomeWidget.cpp" line="33"/>
         <source>Drag PDF files here</source>
-        <translation>拖拽PDF文件到此</translation>
+        <translation type="vanished">拖拽PDF文件到此</translation>
     </message>
     <message>
-        <location filename="../widgets/HomeWidget.cpp" line="38"/>
         <source>Select File</source>
-        <translation>选择文件</translation>
+        <translation type="vanished">选择文件</translation>
     </message>
 </context>
 <context>
     <name>MainOperationWidget</name>
     <message>
-        <location filename="../widgets/MainOperationWidget.cpp" line="36"/>
+        <location filename="../widgets/MainOperationWidget.cpp" line="35"/>
         <source>Thumbnails</source>
         <translation>缩略图</translation>
     </message>
     <message>
-        <location filename="../widgets/MainOperationWidget.cpp" line="36"/>
+        <location filename="../widgets/MainOperationWidget.cpp" line="35"/>
         <source>Bookmarks</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../widgets/MainOperationWidget.cpp" line="36"/>
+        <location filename="../widgets/MainOperationWidget.cpp" line="35"/>
         <source>Annotations</source>
         <translation>注释</translation>
     </message>
     <message>
-        <location filename="../widgets/MainOperationWidget.cpp" line="36"/>
+        <location filename="../widgets/MainOperationWidget.cpp" line="35"/>
         <source>Catalog</source>
         <translation>目录</translation>
     </message>
@@ -439,9 +478,8 @@
 <context>
     <name>MainTabBar</name>
     <message>
-        <location filename="../widgets/main/MainTabBar.cpp" line="106"/>
         <source>The file is already open</source>
-        <translation>文档已打开</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -502,12 +540,12 @@
 <context>
     <name>NoteMenu</name>
     <message>
-        <location filename="../menu/NoteMenu.cpp" line="29"/>
+        <location filename="../pdfControl/menu/NoteMenu.cpp" line="29"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../menu/NoteMenu.cpp" line="33"/>
+        <location filename="../pdfControl/menu/NoteMenu.cpp" line="33"/>
         <source>Remove annotation</source>
         <translation>删除注释</translation>
     </message>
@@ -526,12 +564,12 @@
 <context>
     <name>NotesWidget</name>
     <message>
-        <location filename="../pdfControl/note/NotesWidget.cpp" line="124"/>
+        <location filename="../pdfControl/note/NotesWidget.cpp" line="110"/>
         <source>Add annotation</source>
         <translation>添加注释</translation>
     </message>
     <message>
-        <location filename="../pdfControl/note/NotesWidget.cpp" line="170"/>
+        <location filename="../pdfControl/note/NotesWidget.cpp" line="157"/>
         <source>The annotation has been removed</source>
         <translation>已删除注释</translation>
     </message>
@@ -539,7 +577,8 @@
 <context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../pdfControl/thumbnail/PagingWidget.cpp" line="226"/>
+        <location filename="../pdfControl/thumbnail/PagingWidget.cpp" line="213"/>
+        <location filename="../pdfControl/thumbnail/PagingWidget.cpp" line="234"/>
         <source>Invalid page number</source>
         <translation>请输入有效的页码</translation>
     </message>
@@ -553,6 +592,14 @@
     <message>
         <source>OK</source>
         <translation type="vanished">确定</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="../uiframe/CentralDocPage.cpp" line="465"/>
+        <source>File not saved</source>
+        <translation>文档未保存</translation>
     </message>
 </context>
 <context>
@@ -585,262 +632,284 @@
         <translation type="vanished">个搜索结果</translation>
     </message>
     <message>
-        <location filename="../pdfControl/search/SearchResWidget.cpp" line="139"/>
+        <location filename="../pdfControl/search/SearchResWidget.cpp" line="150"/>
         <source>No search results</source>
         <translation>无搜索结果</translation>
     </message>
     <message>
-        <location filename="../pdfControl/search/SearchResWidget.cpp" line="118"/>
+        <location filename="../pdfControl/search/SearchResWidget.cpp" line="123"/>
         <source>%1 items found</source>
         <translation>%1个搜索结果</translation>
     </message>
 </context>
 <context>
+    <name>SheetBrowserPDFPrivate</name>
+    <message>
+        <location filename="../pdfControl/SheetBrowserPDFPrivate.cpp" line="168"/>
+        <location filename="../pdfControl/SheetBrowserPDFPrivate.cpp" line="185"/>
+        <location filename="../pdfControl/SheetBrowserPDFPrivate.cpp" line="202"/>
+        <location filename="../pdfControl/SheetBrowserPDFPrivate.cpp" line="213"/>
+        <source>Please select the text</source>
+        <translation>请选择文本</translation>
+    </message>
+    <message>
+        <location filename="../pdfControl/SheetBrowserPDFPrivate.cpp" line="556"/>
+        <source>Please check if the file is damaged</source>
+        <translation>请检查文件是否损坏</translation>
+    </message>
+</context>
+<context>
     <name>ShortCutShow</name>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="47"/>
+        <location filename="../business/ShortCutShow.cpp" line="48"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="68"/>
+        <location filename="../business/ShortCutShow.cpp" line="69"/>
         <source>Files</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="89"/>
+        <location filename="../business/ShortCutShow.cpp" line="90"/>
         <source>Display</source>
         <translation>视图</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="109"/>
+        <location filename="../business/ShortCutShow.cpp" line="110"/>
         <source>Tools</source>
         <translation>工具</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="131"/>
+        <location filename="../business/ShortCutShow.cpp" line="132"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="184"/>
-        <location filename="../business/ShortCutShow.cpp" line="196"/>
+        <location filename="../business/ShortCutShow.cpp" line="185"/>
+        <location filename="../business/ShortCutShow.cpp" line="197"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="184"/>
-        <location filename="../business/ShortCutShow.cpp" line="193"/>
+        <location filename="../business/ShortCutShow.cpp" line="185"/>
+        <location filename="../business/ShortCutShow.cpp" line="194"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="185"/>
-        <location filename="../business/ShortCutShow.cpp" line="198"/>
+        <location filename="../business/ShortCutShow.cpp" line="186"/>
+        <location filename="../business/ShortCutShow.cpp" line="199"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="185"/>
-        <location filename="../business/ShortCutShow.cpp" line="196"/>
+        <location filename="../business/ShortCutShow.cpp" line="186"/>
+        <location filename="../business/ShortCutShow.cpp" line="197"/>
         <source>Page up</source>
         <translation>上一页</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="185"/>
-        <location filename="../business/ShortCutShow.cpp" line="196"/>
+        <location filename="../business/ShortCutShow.cpp" line="186"/>
+        <location filename="../business/ShortCutShow.cpp" line="197"/>
         <source>Page down</source>
         <translation>下一页</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="185"/>
-        <location filename="../business/ShortCutShow.cpp" line="194"/>
+        <location filename="../business/ShortCutShow.cpp" line="186"/>
+        <location filename="../business/ShortCutShow.cpp" line="195"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="185"/>
-        <location filename="../business/ShortCutShow.cpp" line="196"/>
+        <location filename="../business/ShortCutShow.cpp" line="186"/>
+        <location filename="../business/ShortCutShow.cpp" line="197"/>
         <source>Zoom in</source>
         <translation>页面放大</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="186"/>
-        <location filename="../business/ShortCutShow.cpp" line="196"/>
+        <location filename="../business/ShortCutShow.cpp" line="187"/>
+        <location filename="../business/ShortCutShow.cpp" line="197"/>
         <source>Zoom out</source>
         <translation>页面缩小</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="186"/>
+        <location filename="../business/ShortCutShow.cpp" line="187"/>
         <source>Zoom in/Zoom out</source>
         <translation>页面放大/缩小</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="186"/>
-        <location filename="../business/ShortCutShow.cpp" line="194"/>
+        <location filename="../business/ShortCutShow.cpp" line="187"/>
+        <location filename="../business/ShortCutShow.cpp" line="195"/>
         <source>Save as</source>
         <translation>另存为</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="186"/>
-        <location filename="../business/ShortCutShow.cpp" line="194"/>
+        <location filename="../business/ShortCutShow.cpp" line="187"/>
+        <location filename="../business/ShortCutShow.cpp" line="195"/>
         <source>Print</source>
         <translation>打印</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="187"/>
-        <location filename="../business/ShortCutShow.cpp" line="194"/>
-        <location filename="../business/ShortCutShow.cpp" line="199"/>
+        <location filename="../business/ShortCutShow.cpp" line="188"/>
+        <location filename="../business/ShortCutShow.cpp" line="195"/>
+        <location filename="../business/ShortCutShow.cpp" line="200"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="187"/>
-        <location filename="../business/ShortCutShow.cpp" line="195"/>
+        <location filename="../business/ShortCutShow.cpp" line="188"/>
+        <location filename="../business/ShortCutShow.cpp" line="196"/>
         <source>Thumbnails</source>
         <translation>打开目录缩略图</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="187"/>
-        <location filename="../business/ShortCutShow.cpp" line="195"/>
+        <location filename="../business/ShortCutShow.cpp" line="188"/>
+        <location filename="../business/ShortCutShow.cpp" line="196"/>
         <source>Fit page</source>
         <translation>适合页面</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="187"/>
-        <location filename="../business/ShortCutShow.cpp" line="195"/>
+        <location filename="../business/ShortCutShow.cpp" line="188"/>
+        <location filename="../business/ShortCutShow.cpp" line="196"/>
         <source>Fit height</source>
         <translation>适合高度</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="188"/>
-        <location filename="../business/ShortCutShow.cpp" line="195"/>
+        <location filename="../business/ShortCutShow.cpp" line="189"/>
+        <location filename="../business/ShortCutShow.cpp" line="196"/>
         <source>Fit width</source>
         <translation>适合宽度</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="188"/>
-        <location filename="../business/ShortCutShow.cpp" line="195"/>
+        <location filename="../business/ShortCutShow.cpp" line="189"/>
+        <location filename="../business/ShortCutShow.cpp" line="196"/>
         <source>Rotate left</source>
         <translation>左旋转</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="188"/>
-        <location filename="../business/ShortCutShow.cpp" line="195"/>
+        <location filename="../business/ShortCutShow.cpp" line="189"/>
+        <location filename="../business/ShortCutShow.cpp" line="196"/>
         <source>Rotate right</source>
         <translation>右旋转</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="188"/>
-        <location filename="../business/ShortCutShow.cpp" line="197"/>
+        <location filename="../business/ShortCutShow.cpp" line="189"/>
+        <location filename="../business/ShortCutShow.cpp" line="198"/>
         <source>Select text</source>
         <translation>选择工具</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="189"/>
-        <location filename="../business/ShortCutShow.cpp" line="197"/>
+        <location filename="../business/ShortCutShow.cpp" line="190"/>
+        <location filename="../business/ShortCutShow.cpp" line="198"/>
         <source>Hand tool</source>
         <translation>手形工具</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="189"/>
-        <location filename="../business/ShortCutShow.cpp" line="197"/>
+        <location filename="../business/ShortCutShow.cpp" line="190"/>
+        <location filename="../business/ShortCutShow.cpp" line="198"/>
         <source>Add bookmark</source>
         <translation>添加书签</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="189"/>
-        <location filename="../business/ShortCutShow.cpp" line="197"/>
+        <location filename="../business/ShortCutShow.cpp" line="190"/>
+        <location filename="../business/ShortCutShow.cpp" line="198"/>
         <source>Add annotation</source>
         <translation>添加注释</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="189"/>
-        <location filename="../business/ShortCutShow.cpp" line="197"/>
+        <location filename="../business/ShortCutShow.cpp" line="190"/>
+        <location filename="../business/ShortCutShow.cpp" line="198"/>
         <source>Highlight</source>
         <translation>高亮</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="190"/>
-        <location filename="../business/ShortCutShow.cpp" line="197"/>
-        <location filename="../business/ShortCutShow.cpp" line="199"/>
+        <location filename="../business/ShortCutShow.cpp" line="191"/>
+        <location filename="../business/ShortCutShow.cpp" line="198"/>
+        <location filename="../business/ShortCutShow.cpp" line="200"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="190"/>
-        <location filename="../business/ShortCutShow.cpp" line="198"/>
+        <location filename="../business/ShortCutShow.cpp" line="191"/>
+        <location filename="../business/ShortCutShow.cpp" line="199"/>
         <source>Magnifier</source>
         <translation>放大镜</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="190"/>
-        <location filename="../business/ShortCutShow.cpp" line="199"/>
+        <location filename="../business/ShortCutShow.cpp" line="191"/>
+        <location filename="../business/ShortCutShow.cpp" line="200"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="190"/>
-        <location filename="../business/ShortCutShow.cpp" line="199"/>
+        <location filename="../business/ShortCutShow.cpp" line="191"/>
+        <location filename="../business/ShortCutShow.cpp" line="200"/>
         <source>Cut</source>
         <translation>剪切</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="190"/>
-        <location filename="../business/ShortCutShow.cpp" line="199"/>
+        <location filename="../business/ShortCutShow.cpp" line="191"/>
+        <location filename="../business/ShortCutShow.cpp" line="200"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="190"/>
-        <location filename="../business/ShortCutShow.cpp" line="198"/>
+        <location filename="../business/ShortCutShow.cpp" line="191"/>
+        <location filename="../business/ShortCutShow.cpp" line="199"/>
         <source>Slide show</source>
         <translation>幻灯片放映</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="191"/>
-        <location filename="../business/ShortCutShow.cpp" line="199"/>
+        <location filename="../business/ShortCutShow.cpp" line="192"/>
+        <location filename="../business/ShortCutShow.cpp" line="200"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="191"/>
-        <location filename="../business/ShortCutShow.cpp" line="199"/>
+        <location filename="../business/ShortCutShow.cpp" line="192"/>
+        <location filename="../business/ShortCutShow.cpp" line="200"/>
         <source>Select all</source>
         <translation>全选</translation>
     </message>
     <message>
-        <location filename="../business/ShortCutShow.cpp" line="191"/>
-        <location filename="../business/ShortCutShow.cpp" line="193"/>
+        <location filename="../business/ShortCutShow.cpp" line="192"/>
+        <location filename="../business/ShortCutShow.cpp" line="194"/>
         <source>Display shortcuts</source>
-        <translation>显示快捷键预览</translation>
+        <translation>显示快捷键</translation>
     </message>
 </context>
 <context>
     <name>TextOperationMenu</name>
     <message>
-        <location filename="../menu/TextOperationMenu.cpp" line="66"/>
+        <location filename="../pdfControl/menu/TextOperationMenu.cpp" line="71"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../menu/TextOperationMenu.cpp" line="36"/>
-        <location filename="../menu/TextOperationMenu.cpp" line="74"/>
+        <location filename="../pdfControl/menu/TextOperationMenu.cpp" line="39"/>
+        <location filename="../pdfControl/menu/TextOperationMenu.cpp" line="78"/>
         <source>Remove highlight</source>
         <translation>取消高亮</translation>
     </message>
     <message>
-        <location filename="../menu/TextOperationMenu.cpp" line="34"/>
+        <location filename="../pdfControl/menu/TextOperationMenu.cpp" line="25"/>
+        <source>Remove bookmark</source>
+        <translation>删除书签</translation>
+    </message>
+    <message>
+        <location filename="../pdfControl/menu/TextOperationMenu.cpp" line="34"/>
         <source>Remove annotation</source>
         <translation>删除注释</translation>
     </message>
     <message>
-        <location filename="../menu/TextOperationMenu.cpp" line="75"/>
+        <location filename="../pdfControl/menu/TextOperationMenu.cpp" line="79"/>
         <source>Add note</source>
         <translation>添加注释</translation>
     </message>
     <message>
-        <location filename="../menu/TextOperationMenu.cpp" line="77"/>
+        <location filename="../pdfControl/menu/TextOperationMenu.cpp" line="28"/>
+        <location filename="../pdfControl/menu/TextOperationMenu.cpp" line="81"/>
         <source>Add bookmark</source>
         <translation>添加书签</translation>
     </message>
@@ -856,42 +925,43 @@
         <translation type="vanished">打开</translation>
     </message>
     <message>
-        <location filename="../menu/TitleMenu.cpp" line="66"/>
+        <location filename="../uiframe/TitleMenu.cpp" line="75"/>
+        <location filename="../uiframe/TitleMenu.cpp" line="96"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../menu/TitleMenu.cpp" line="66"/>
+        <location filename="../uiframe/TitleMenu.cpp" line="96"/>
         <source>Save as</source>
         <translation>另存为</translation>
     </message>
     <message>
-        <location filename="../menu/TitleMenu.cpp" line="70"/>
+        <location filename="../uiframe/TitleMenu.cpp" line="100"/>
         <source>Display in file manager</source>
         <translation>在文件管理器中显示</translation>
     </message>
     <message>
-        <location filename="../menu/TitleMenu.cpp" line="66"/>
+        <location filename="../uiframe/TitleMenu.cpp" line="96"/>
         <source>Print</source>
         <translation>打印</translation>
     </message>
     <message>
-        <location filename="../menu/TitleMenu.cpp" line="57"/>
+        <location filename="../uiframe/TitleMenu.cpp" line="87"/>
         <source>New window</source>
         <translation>新窗口</translation>
     </message>
     <message>
-        <location filename="../menu/TitleMenu.cpp" line="57"/>
+        <location filename="../uiframe/TitleMenu.cpp" line="87"/>
         <source>New tab</source>
         <translation>新标签页</translation>
     </message>
     <message>
-        <location filename="../menu/TitleMenu.cpp" line="70"/>
+        <location filename="../uiframe/TitleMenu.cpp" line="100"/>
         <source>Document info</source>
         <translation>文档信息</translation>
     </message>
     <message>
-        <location filename="../menu/TitleMenu.cpp" line="70"/>
+        <location filename="../uiframe/TitleMenu.cpp" line="100"/>
         <source>Magnifer</source>
         <translation>放大镜</translation>
     </message>
@@ -900,7 +970,7 @@
         <translation type="vanished">搜索</translation>
     </message>
     <message>
-        <location filename="../menu/TitleMenu.cpp" line="66"/>
+        <location filename="../uiframe/TitleMenu.cpp" line="96"/>
         <source>Slide show</source>
         <translation>幻灯片放映</translation>
     </message>
@@ -916,18 +986,18 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../widgets/TitleWidget.cpp" line="272"/>
+        <location filename="../uiframe/TitleWidget.cpp" line="254"/>
         <source>Thumbnails</source>
         <translation>缩略图</translation>
     </message>
     <message>
-        <location filename="../widgets/TitleWidget.cpp" line="300"/>
+        <location filename="../uiframe/TitleWidget.cpp" line="290"/>
         <source>Page Display</source>
         <translation>视图调整</translation>
     </message>
     <message>
-        <location filename="../widgets/TitleWidget.cpp" line="288"/>
-        <location filename="../widgets/TitleWidget.cpp" line="329"/>
+        <location filename="../uiframe/TitleWidget.cpp" line="276"/>
+        <location filename="../uiframe/TitleWidget.cpp" line="299"/>
         <source>Select Text</source>
         <translation>选择工具</translation>
     </message>
@@ -936,7 +1006,7 @@
         <translation type="vanished">放大镜</translation>
     </message>
     <message>
-        <location filename="../widgets/TitleWidget.cpp" line="347"/>
+        <location filename="../uiframe/TitleWidget.cpp" line="317"/>
         <source>Hand Tool</source>
         <translation>手形工具</translation>
     </message>
@@ -944,7 +1014,7 @@
 <context>
     <name>TransparentTextEdit</name>
     <message>
-        <location filename="../pdfControl/note/TransparentTextEdit.cpp" line="82"/>
+        <location filename="../pdfControl/note/TransparentTextEdit.cpp" line="86"/>
         <source>Input limit reached</source>
         <translation>输入已达上限</translation>
     </message>

@@ -29,6 +29,8 @@ class HandleMenu : public CustomMenu
 public:
     explicit HandleMenu(DWidget *parent = nullptr);
 
+    void setHandShape(int index);
+
 protected:
     void initActions() override;
 
@@ -36,6 +38,9 @@ private slots:
     void slotHandTool();
     void slotSelectText();
 
+private:
+    QAction *m_textAction;
+    QAction *m_handAction;
 };
 
 #endif // HANDLEMENU_H

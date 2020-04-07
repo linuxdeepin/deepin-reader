@@ -19,6 +19,8 @@
 
 #include "FileDataModel.h"
 
+#include <QDebug>
+
 void FileDataModel::qSetData(const int &iKey, const double &iValue)
 {
     if (iKey == Thumbnail) {

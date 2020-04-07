@@ -1,29 +1,23 @@
 #include "SheetBrowserPDFPrivate.h"
-
-#include <QDesktopServices>
-#include <QFileInfo>
-
 #include "controller/Annotation.h"
 #include "controller/ProxyNotifyMsg.h"
 #include "controller/ProxyViewDisplay.h"
 #include "controller/ProxyMouseMove.h"
 #include "controller/ProxyData.h"
 #include "controller/ProxyFileDataModel.h"
-
 #include "menu/TextOperationMenu.h"
 #include "menu/DefaultOperationMenu.h"
-
 #include "business/FileFormatHelper.h"
 #include "widgets/FindWidget.h"
 #include "docview/docummentproxy.h"
 #include "business/AppInfo.h"
 #include "SheetBrowserPDF.h"
 #include "widgets/NoteTipWidget.h"
-
-
 #include "pdfControl/note/NoteViewWidget.h"
-#include "CentralDocPage.h"
 #include "DocSheet.h"
+
+#include <QDesktopServices>
+#include <QFileInfo>
 
 SheetBrowserPDFPrivate::SheetBrowserPDFPrivate(DocSheet *sheet, SheetBrowserPDF *parent)
     : m_sheet(sheet), q_ptr(parent)
@@ -134,7 +128,7 @@ void SheetBrowserPDFPrivate::AddHighLightAnnotation(const QString &msgContent)
 void SheetBrowserPDFPrivate::OnShortCutKey(const QString &sKey)
 {
     //  处于幻灯片模式下
-    int nState = CentralDocPage::Instance()->getCurrentState();
+    int nState = m_sheet->getCurrentState();
     if (nState == SLIDER_SHOW)
         return;
 
@@ -289,7 +283,7 @@ void SheetBrowserPDFPrivate::onSetHandShape(const QString &data)
     } else {
         __SetCursor(Qt::ArrowCursor);
     }
-    CentralDocPage::Instance()->setCurrentState(nRes);
+    m_sheet->setCurrentState(nRes);
 }
 
 void SheetBrowserPDFPrivate::showNoteViewWidget(const QString &sPage, const QString &t_strUUid, const QString &sText, const int &nType)
@@ -448,7 +442,7 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
 {
     Q_Q(SheetBrowserPDF);
     //  处于幻灯片模式下
-    int nState = CentralDocPage::Instance()->getCurrentState();
+    int nState = m_sheet->getCurrentState();
     if (nState == SLIDER_SHOW)
         return;
 

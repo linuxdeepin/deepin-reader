@@ -21,7 +21,6 @@
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
 #include "DocSheet.h"
-#include "CentralDocPage.h"
 
 BookMarkWidget::BookMarkWidget(DocSheet *sheet, DWidget *parent)
     : CustomWidget(BOOKMARK_WIDGET, parent), m_sheet(sheet)
@@ -126,7 +125,7 @@ void BookMarkWidget::slotAddBookMark()
         return;
     }
 
-    if (nullptr == m_sheet)
+    if (m_sheet.isNull())
         return;
 
     DocummentProxy *proxy =  m_sheet->getDocProxy();
@@ -140,9 +139,12 @@ void BookMarkWidget::slotAddBookMark()
 //  书签状态 添加指定页
 void BookMarkWidget::slotAddBookMark(const QString &sContent)
 {
+    if (m_sheet.isNull())
+        return;
+
     int nPage = sContent.toInt();
 
-    QString sPath = CentralDocPage::Instance()->qGetCurPath();
+    QString sPath = m_sheet->qGetPath();
     QList<int> pageList = dApp->m_pDBService->getBookMarkList(sPath);
     if (pageList.contains(nPage)) {
         return;
@@ -223,6 +225,7 @@ void BookMarkWidget::handleOpenSuccess()
     }
 
     m_loadBookMarkThread.setBookMarks(pageList.count());
+    m_loadBookMarkThread.setProxy(m_sheet->getDocProxy());
     m_loadBookMarkThread.start();
 }
 
@@ -298,12 +301,11 @@ void BookMarkWidget::deleteIndexPage(const int &pageIndex)
     if (nullptr == m_sheet)
         return;
 
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_strBindPath);
-    pageList.removeOne(pageIndex);
-    dApp->m_pDBService->setBookMarkList(m_strBindPath, pageList);
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->qGetPath());
 
-    if (m_strBindPath != m_sheet->qGetPath())
-        return;
+    pageList.removeOne(pageIndex);
+
+    dApp->m_pDBService->setBookMarkList(m_sheet->qGetPath(), pageList);
 
     DocummentProxy *proxy =  m_sheet->getDocProxy();
     if (proxy) {
@@ -389,6 +391,10 @@ void BookMarkWidget::updateThumbnail(const int &page)
     if (m_pBookMarkListWidget == nullptr) {
         return;
     }
+
+    if (m_sheet.isNull())
+        return;
+
     int itemNum = 0;
     itemNum = m_pBookMarkListWidget->count();
     if (itemNum <= 0) {
@@ -397,10 +403,6 @@ void BookMarkWidget::updateThumbnail(const int &page)
     QImage image;
     int tW = 146;
     int tH = 174;
-//    dApp->adaptScreenView(tW, tH);
-
-    if (m_strBindPath != m_sheet->qGetPath())
-        return;
 
     auto dproxy = m_sheet->getDocProxy();
     if (nullptr == dproxy)
@@ -422,11 +424,6 @@ void BookMarkWidget::updateThumbnail(const int &page)
             }
         }
     }
-}
-
-QString BookMarkWidget::getBindPath() const
-{
-    return m_strBindPath;
 }
 
 /**
@@ -513,49 +510,49 @@ void BookMarkWidget::initConnection()
  */
 QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
 {
-    CentralDocPage *pMtwe = CentralDocPage::Instance();
-    if (pMtwe) {
-        DocummentProxy *proxy =  pMtwe->getCurFileAndProxy(m_strBindPath);
+    if (m_sheet.isNull())
+        return nullptr;
 
-        if (nullptr != proxy) {
-            QImage t_image;
-            double width = 1.0;
-            double height = 1.0;
-            double scale = 1.0;
-            scale = dApp->scale();
-            //set item size
-            width = static_cast<double>(LEFTMINWIDTH) * scale;
-            height = static_cast<double>(80) * scale;
-            int tW = 146;
-            int tH = 174;
+    DocummentProxy *proxy =  m_sheet->getDocProxy();
+
+    if (nullptr != proxy) {
+        QImage t_image;
+        double width = 1.0;
+        double height = 1.0;
+        double scale = 1.0;
+        scale = dApp->scale();
+        //set item size
+        width = static_cast<double>(LEFTMINWIDTH) * scale;
+        height = static_cast<double>(80) * scale;
+        int tW = 146;
+        int tH = 174;
 //            dApp->adaptScreenView(tW, tH);
-            bool rl = proxy->getImage(page, t_image, tW, tH /*42, 62*/);
-            if (rl) {
-                QImage img = Utils::roundImage(QPixmap::fromImage(t_image), ICON_SMALL);
-                auto item = m_pBookMarkListWidget->insertWidgetItem(page);
-                tW = LEFTMINWIDTH;
-                tH = 80;
+        bool rl = proxy->getImage(page, t_image, tW, tH /*42, 62*/);
+        if (rl) {
+            QImage img = Utils::roundImage(QPixmap::fromImage(t_image), ICON_SMALL);
+            auto item = m_pBookMarkListWidget->insertWidgetItem(page);
+            tW = LEFTMINWIDTH;
+            tH = 80;
 //                dApp->adaptScreenView(tW, tH);
-                tW = static_cast<int>(width);
-                tH = static_cast<int>(height);
-                item->setSizeHint(QSize(tW, tH));
+            tW = static_cast<int>(width);
+            tH = static_cast<int>(height);
+            item->setSizeHint(QSize(tW, tH));
 
-                auto t_widget = new BookMarkItemWidget(this);
-                t_widget->setLabelImage(img);
-                t_widget->setLabelPage(page, 1);
-                m_pBookMarkListWidget->setItemWidget(item, t_widget);
-                t_widget->adaptWindowSize(scale);
+            auto t_widget = new BookMarkItemWidget(this);
+            t_widget->setLabelImage(img);
+            t_widget->setLabelPage(page, 1);
+            m_pBookMarkListWidget->setItemWidget(item, t_widget);
+            t_widget->adaptWindowSize(scale);
 
-                int nCurPage = proxy->currentPageNo();
-                if (nCurPage == page) {
+            int nCurPage = proxy->currentPageNo();
+            if (nCurPage == page) {
 
-                    t_widget->setBSelect(true);
+                t_widget->setBSelect(true);
 
-                    m_pBookMarkListWidget->setCurrentItem(item);
-                }
-
-                return item;
+                m_pBookMarkListWidget->setCurrentItem(item);
             }
+
+            return item;
         }
     }
     return nullptr;
@@ -644,6 +641,9 @@ int BookMarkWidget::qDealWithShortKey(const QString &s)
  */
 int BookMarkWidget::getBookMarkPage(const int &index)
 {
+    if (m_sheet.isNull())
+        return -1;
+
     auto pItem = m_pBookMarkListWidget->item(index);
     if (pItem) {
         auto pItemWidget =
@@ -651,7 +651,7 @@ int BookMarkWidget::getBookMarkPage(const int &index)
         if (pItemWidget) {
             int page = pItemWidget->nPageIndex();
 
-            QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_strBindPath);
+            QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->qGetPath());
             if (pageList.contains(page)) {
                 return page;
             }
@@ -687,52 +687,49 @@ void LoadBookMarkThread::stopThreadRun()
  */
 void LoadBookMarkThread::run()
 {
-    CentralDocPage *pMtwe = CentralDocPage::Instance();
-    if (pMtwe) {
-        DocummentProxy *proxy =  pMtwe->getCurFileAndProxy(m_pBookMarkWidget->getBindPath());
-        if (nullptr != proxy) {
-            while (m_isRunning) {
-                msleep(50);
+    if (nullptr == m_proxy)
+        return;
 
-                if (m_nStartIndex < 0) {
-                    m_nStartIndex = 0;
-                }
-                if (m_nEndIndex >= m_bookMarks) {
-                    m_nEndIndex = m_bookMarks - 1;
-                }
+    while (m_isRunning) {
+        msleep(50);
 
-                int tW = 146;
-                int tH = 174;
-//                dApp->adaptScreenView(tW, tH);
-                for (int index = m_nStartIndex; index <= m_nEndIndex; index++) {
-                    QImage image;
-                    int page = -1;
-
-                    if (!m_isRunning) {
-                        break;
-                    }
-
-                    if (!m_pBookMarkWidget) {
-                        break;
-                    }
-
-                    page = m_pBookMarkWidget->getBookMarkPage(index);
-
-                    if (page == -1) {
-                        continue;
-                    }
-
-                    bool bl = proxy->getImage(page, image, tW, tH /*42, 62*/);
-                    if (bl) {
-                        emit sigLoadImage(page, image);
-                    }
-
-                    msleep(50);
-                }
-
-                m_nStartIndex += FIRST_LOAD_PAGES;
-                m_nEndIndex += FIRST_LOAD_PAGES;
-            }
+        if (m_nStartIndex < 0) {
+            m_nStartIndex = 0;
         }
+        if (m_nEndIndex >= m_bookMarks) {
+            m_nEndIndex = m_bookMarks - 1;
+        }
+
+        int tW = 146;
+        int tH = 174;
+//                dApp->adaptScreenView(tW, tH);
+        for (int index = m_nStartIndex; index <= m_nEndIndex; index++) {
+            QImage image;
+            int page = -1;
+
+            if (!m_isRunning) {
+                break;
+            }
+
+            if (!m_pBookMarkWidget) {
+                break;
+            }
+
+            page = m_pBookMarkWidget->getBookMarkPage(index);
+
+            if (page == -1) {
+                continue;
+            }
+
+            bool bl = m_proxy->getImage(page, image, tW, tH /*42, 62*/);
+            if (bl) {
+                emit sigLoadImage(page, image);
+            }
+
+            msleep(50);
+        }
+
+        m_nStartIndex += FIRST_LOAD_PAGES;
+        m_nEndIndex += FIRST_LOAD_PAGES;
     }
 }

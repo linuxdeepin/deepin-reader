@@ -29,8 +29,6 @@
 #include "search/SearchResWidget.h"
 #include "DocSheet.h"
 
-#include "CentralDocPage.h"
-
 DataStackedWidget::DataStackedWidget(DocSheet *sheet, DWidget *parent)
     : DStackedWidget(parent), m_sheet(sheet)
 {

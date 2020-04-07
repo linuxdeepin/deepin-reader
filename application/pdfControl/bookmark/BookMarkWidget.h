@@ -24,6 +24,7 @@
 #include <QMap>
 #include <QThread>
 #include <QVBoxLayout>
+#include <QPointer>
 
 #include "../CustomListWidget.h"
 #include "CustomControl/CustomWidget.h"
@@ -35,7 +36,7 @@
  */
 
 class BookMarkWidget;
-
+class DocummentProxy;
 class LoadBookMarkThread : public QThread
 {
     Q_OBJECT
@@ -58,6 +59,11 @@ public:
         m_bookMarks = count;
     }
 
+    inline void setProxy(DocummentProxy *proxy)
+    {
+        m_proxy = proxy;
+    }
+
     void stopThreadRun();
 
 protected:
@@ -69,6 +75,7 @@ private:
     int m_nStartIndex = 0;    // 加载图片起始位置
     int m_nEndIndex = 19;     // 加载图片结束位置
     bool m_isRunning = true;  // 运行状态
+    DocummentProxy *m_proxy = nullptr;
 };
 
 class DocSheet;
@@ -94,8 +101,6 @@ public:
     int qDealWithShortKey(const QString &) override;
 
     int getBookMarkPage(const int &index);
-
-    QString getBindPath() const;
 
     void handleOpenSuccess();
 
@@ -127,8 +132,7 @@ private:
     CustomListWidget    *m_pBookMarkListWidget = nullptr;
     DPushButton         *m_pAddBookMarkBtn = nullptr;
     LoadBookMarkThread  m_loadBookMarkThread;
-    QString             m_strBindPath = "";
-    DocSheet           *m_sheet;
+    QPointer<DocSheet>    m_sheet;
     // CustomWidget interface
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;

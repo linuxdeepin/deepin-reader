@@ -752,7 +752,6 @@ void PageBase::quitThread()
     Q_D(PageBase);
     if (d->loadmagnifiercachethread.isRunning()) {
         d->loadmagnifiercachethread.quit();
-        // d->loadmagnifiercachethread.requestInterruption();
     }
     if (d->threadreander.isRunning())
         d->threadreander.setQuit();

@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "HandleMenu.h"
+#include <QDebug>
 
 HandleMenu::HandleMenu(DWidget *parent)
     : CustomMenu(HANDLE_MENU, parent)
@@ -24,27 +25,35 @@ HandleMenu::HandleMenu(DWidget *parent)
     initActions();
 }
 
+void HandleMenu::setHandShape(int index)
+{
+    if (1 == index)
+        m_handAction->setChecked(true);
+    else
+        m_textAction->setChecked(true);
+}
+
 void HandleMenu::initActions()
 {
     auto actionGroup = new QActionGroup(this);
 
-    auto action = new QAction(tr("Select Text"), this);
-    connect(action, SIGNAL(triggered()), SLOT(slotSelectText()));
-    action->setObjectName("defaultshape");
-    action->setCheckable(true);
-    action->setChecked(true);
+    m_textAction = new QAction(tr("Select Text"), this);
+    connect(m_textAction, SIGNAL(triggered()), SLOT(slotSelectText()));
+    m_textAction->setObjectName("defaultshape");
+    m_textAction->setCheckable(true);
+    m_textAction->setChecked(true);
 
-    actionGroup->addAction(action);
-    addAction(action);
+    actionGroup->addAction(m_textAction);
+    addAction(m_textAction);
     addSeparator();
 
-    action = new QAction(tr("Hand Tool"), this);
-    connect(action, SIGNAL(triggered()), SLOT(slotHandTool()));
-    action->setObjectName("handleshape");
-    action->setCheckable(true);
+    m_handAction = new QAction(tr("Hand Tool"), this);
+    connect(m_handAction, SIGNAL(triggered()), SLOT(slotHandTool()));
+    m_handAction->setObjectName("handleshape");
+    m_handAction->setCheckable(true);
 
-    actionGroup->addAction(action);
-    addAction(action);
+    actionGroup->addAction(m_handAction);
+    addAction(m_handAction);
 }
 
 void HandleMenu::slotHandTool()

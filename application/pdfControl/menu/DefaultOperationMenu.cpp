@@ -17,6 +17,7 @@ void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPa
     if (pMtwe) {
 
         m_showPoint = showPoint;
+
         m_nRightPageNumber = nClickPage;
 
         QString sCurPath = pMtwe->qGetCurPath();

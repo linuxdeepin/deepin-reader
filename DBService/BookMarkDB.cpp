@@ -146,10 +146,7 @@ void BookMarkDB::deleteData(const QString &strPath)
 
         query.addBindValue(strPath);
 
-        if (query.exec()) {
-            db.commit();
-        } else {
-            db.rollback();
+        if (!query.exec()) {
             qDebug() << __FUNCTION__ << "      error:      " << query.lastError();
         }
     }

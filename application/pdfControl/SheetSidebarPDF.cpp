@@ -9,7 +9,6 @@
 #include "docview/docummentproxy.h"
 #include "pdfControl/DataStackedWidget.h"
 #include "DocSheet.h"
-#include "CentralDocPage.h"
 
 SheetSidebarPDF::SheetSidebarPDF(DocSheet *parent)
     : CustomWidget(LEFT_SLIDERBAR_WIDGET, parent), m_sheet(parent)

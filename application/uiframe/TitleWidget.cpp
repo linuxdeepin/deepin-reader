@@ -6,7 +6,6 @@
 #include "widgets/FontMenu.h"
 #include "widgets/HandleMenu.h"
 #include "TitleMenu.h"
-#include "CentralDocPage.h"
 #include "utils/PublicFunction.h"
 #include "DocSheet.h"
 
@@ -66,29 +65,31 @@ void TitleWidget::SetBtnDisable(const bool &bAble)
 
 void TitleWidget::OnShortCut_Alt1()
 {
-    CentralDocPage *pMtwe = CentralDocPage::Instance();
-    if (pMtwe) {
-        pMtwe->OnExitMagnifer();
+    if (m_curSheet.isNull())
+        return;
 
-        int nState = pMtwe->getCurrentState();
+    m_curSheet->quitMagnifer();
 
-        if (Default_State != nState) {
-            setDefaultShape();
-        }
+    int nState = m_curSheet->getCurrentState();
+
+    if (Default_State != nState) {
+        setDefaultShape();
+        m_curSheet->setMouseDefault();
     }
 }
 
 void TitleWidget::OnShortCut_Alt2()
 {
-    CentralDocPage *pMtwe = CentralDocPage::Instance();
-    if (pMtwe) {
-        pMtwe->OnExitMagnifer();
+    if (m_curSheet.isNull())
+        return;
 
-        int nState = pMtwe->getCurrentState();
+    m_curSheet->quitMagnifer();
 
-        if (Handel_State != nState) {
-            setHandleShape();
-        }
+    int nState = m_curSheet->getCurrentState();
+
+    if (Handel_State != nState) {
+        setHandleShape();
+        m_curSheet->setMouseHand();
     }
 }
 
@@ -104,9 +105,12 @@ void TitleWidget::OnShortCut_CtrlM()
 
 void TitleWidget::slotOpenFileOk(const QString &sPath)
 {
+    if (m_curSheet.isNull())
+        return;
+
     SetBtnDisable(false);
 
-    FileDataModel fdm = CentralDocPage::Instance()->qGetFileData();
+    FileDataModel fdm = m_curSheet->qGetFileData();
 
     int nState = fdm.qGetData(Thumbnail);
 
@@ -166,6 +170,13 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
         SetBtnDisable(false);
 
         m_pSw->setSheet(m_curSheet);
+
+        m_pHandleMenu->setHandShape(m_curSheet->isMouseHand());
+
+        if (m_curSheet->isMouseHand())
+            setHandleShape();
+        else
+            setDefaultShape();
     }
 }
 
@@ -229,7 +240,10 @@ void TitleWidget::on_searchBtn_clicked()
 void TitleWidget::SlotSetCurrentTool(const int &sAction)
 {
     //  切换了选择工具, 需要取消放大镜的操作
-    CentralDocPage::Instance()->OnExitMagnifer();
+    if (m_curSheet.isNull())
+        return;
+
+    m_curSheet->quitMagnifer();
 
     if (sAction == E_HANDLE_SELECT_TEXT) {
         setDefaultShape();
@@ -300,14 +314,6 @@ void TitleWidget::setDefaultShape()
 
     QIcon icon = PF::getIcon(Pri::g_module + btnName);
     m_pHandleShapeBtn->setIcon(icon);
-
-    QJsonObject obj;
-    obj.insert("content", QString::number(Default_State));
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
-
-    QJsonDocument doc(obj);
-
-    notifyMsg(MSG_HANDLESHAPE, doc.toJson(QJsonDocument::Compact));
 }
 
 void TitleWidget::setHandleShape()
@@ -318,14 +324,6 @@ void TitleWidget::setHandleShape()
 
     QIcon icon = PF::getIcon(Pri::g_module + btnName);
     m_pHandleShapeBtn->setIcon(icon);
-
-    QJsonObject obj;
-    obj.insert("content", QString::number(Handel_State));
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
-
-    QJsonDocument doc(obj);
-
-    notifyMsg(MSG_HANDLESHAPE, doc.toJson(QJsonDocument::Compact));
 }
 
 DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
