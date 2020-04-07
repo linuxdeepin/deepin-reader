@@ -108,6 +108,24 @@ void DocSheet::setFileChanged(bool hasChanged)
         static_cast<SheetBrowserPDF *>(m_browser)->setFileChanged(hasChanged);
 }
 
+void DocSheet::setMouseDefault()
+{
+    if (DocType_PDF == m_type)
+        static_cast<SheetBrowserPDF *>(m_browser)->setMouseDefault();
+}
+
+void DocSheet::setMouseHand()
+{
+    if (DocType_PDF == m_type)
+        static_cast<SheetBrowserPDF *>(m_browser)->setMouseHand();
+}
+
+bool DocSheet::isMouseHand()
+{
+    if (DocType_PDF == m_type)
+        static_cast<SheetBrowserPDF *>(m_browser)->isMouseHand();
+}
+
 void DocSheet::initPDF()
 {
     m_pRightWidget = new QStackedWidget(this);
@@ -308,6 +326,15 @@ void DocSheet::showTips(const QString &tips)
     doc->showTips(tips);
 }
 
+void DocSheet::setCurrentState(int state)
+{
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return;
+
+    return doc->setCurrentState(state);
+}
+
 int DocSheet::getCurrentState()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
@@ -317,7 +344,47 @@ int DocSheet::getCurrentState()
     return doc->getCurrentState();
 }
 
-void DocSheet::setCurrentState(int state)
+void DocSheet::openSlide()
 {
-    m_currentState = state;
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return;
+
+    doc->OnOpenSliderShow();
+}
+
+void DocSheet::showControl()
+{
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return;
+
+    doc->showPlayControlWidget();
+}
+
+void DocSheet::quitSlide()
+{
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return;
+
+    doc->OnExitSliderShow();
+}
+
+void DocSheet::openMagnifer()
+{
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return;
+
+    doc->OnOpenMagnifer();
+}
+
+void DocSheet::quitMagnifer()
+{
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return;
+
+    doc->OnExitMagnifer();
 }

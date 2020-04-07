@@ -19,7 +19,6 @@
 #include "TitleMenu.h"
 
 #include <QSignalMapper>
-#include "CentralDocPage.h"
 #include "DocSheet.h"
 
 TitleMenu::TitleMenu(DWidget *parent)
@@ -40,7 +39,7 @@ void TitleMenu::onCurSheetChanged(DocSheet *sheet)
         a->setDisabled(false);
     }
 
-    flushSaveButton();
+    disableSaveButton(!sheet->qGetFileChange());
 }
 
 void TitleMenu::onCurSheetSaved(DocSheet *sheet)
@@ -56,11 +55,6 @@ void TitleMenu::onCurSheetSaved(DocSheet *sheet)
     }
 
     disableSaveButton(!sheet->qGetFileChange());
-}
-
-void TitleMenu::flushSaveButton()
-{
-    disableSaveButton(!CentralDocPage::Instance()->getCurFileChanged());
 }
 
 void TitleMenu::disableAllAction()

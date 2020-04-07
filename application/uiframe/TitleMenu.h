@@ -40,8 +40,6 @@ public slots:
     void onCurSheetSaved(DocSheet *);
 
 public:
-    void flushSaveButton();
-
     void disableAllAction();
 
 private:

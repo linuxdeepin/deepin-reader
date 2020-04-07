@@ -29,10 +29,6 @@ class HandleMenu : public CustomMenu
 public:
     explicit HandleMenu(DWidget *parent = nullptr);
 
-//signals:
-//    void sigCurrentTool(const QString &);
-
-    // CustomMenu interface
 protected:
     void initActions() override;
 

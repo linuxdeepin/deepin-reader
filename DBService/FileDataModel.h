@@ -30,7 +30,8 @@ enum E_FDM_MSG {
     Rotate,
     Thumbnail,
     LeftIndex,
-    CurPage
+    CurPage,
+    HandShape
 };
 
 
@@ -67,6 +68,8 @@ public:
     int getCurPage() const;
     void setCurPage(int value);
 
+    int getCurMouse() const;
+    void setCurMouse(int value);
 private:
     bool        bThumbnail = false;
     bool        bDoubleShow = false;
@@ -75,6 +78,7 @@ private:
     double      nScale = 0;
     int         nLeftIndex = 0;
     int         nCurPage = 0;
+    int         nCurMouse = 0;
 };
 
 #endif // FILEDATA_H

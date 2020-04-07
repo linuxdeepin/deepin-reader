@@ -51,9 +51,7 @@ ThumbnailWidget::~ThumbnailWidget()
 // 处理消息事件
 int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_VIEWCHANGE_ROTATE_VALUE) {  //  文档旋转了
-        slotSetRotate(msgContent.toInt());
-    } else if (MSG_FILE_PAGE_CHANGE == msgType) {
+    if (MSG_FILE_PAGE_CHANGE == msgType) {
         slotDocFilePageChanged(msgContent);
         m_pPageWidget->dealWithData(msgType, msgContent);
     }
@@ -140,8 +138,6 @@ void ThumbnailWidget::initConnection()
     connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const int &, const QImage &)),
             this, SLOT(slotLoadImage(const int &, const QImage &)));
     connect(&m_ThreadLoadImage, SIGNAL(sigRotateImage(const int &)), SLOT(slotRotateThumbnail(const int &)));
-
-    connect(this, SIGNAL(sigSetRotate(const int &)), SLOT(slotSetRotate(const int &)));
 }
 
 //  文件  当前页变化, 获取与 文档页  对应的 item, 设置 选中该item, 绘制item
@@ -161,17 +157,6 @@ void ThumbnailWidget::slotDocFilePageChanged(const QString &sPage)
 void ThumbnailWidget::slotUpdateTheme()
 {
     updateWidgetTheme();
-}
-
-void ThumbnailWidget::slotSetRotate(const int &angle)
-{
-    m_nRotate = angle;
-    if (m_ThreadLoadImage.isRunning()) {
-        m_ThreadLoadImage.stopThreadRun();
-    }
-
-    m_ThreadLoadImage.setIsLoaded(true);
-    m_ThreadLoadImage.start();
 }
 
 void ThumbnailWidget::slotRotateThumbnail(const int &index)

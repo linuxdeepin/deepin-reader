@@ -121,13 +121,10 @@ class ThumbnailWidget : public CustomWidget
 
 public:
     explicit ThumbnailWidget(DocSheet *sheet, DWidget *parent = nullptr);
+
     ~ThumbnailWidget() override;
 
-signals:
-    void sigSetRotate(const int &);
-
 public:
-    // IObserver interface
     int dealWithData(const int &, const QString &) override;
 
     void handleOpenSuccess();
@@ -140,11 +137,13 @@ public:
     }
 
     void prevPage();
+
     void nextPage();
+
     void adaptWindowSize(const double &scale) Q_DECL_OVERRIDE; //缩略图列表自适应窗体大小  add by duanxiaohui 2020-3-19
-//    void forScreenPageing(bool);
-    // CustomWidget interface
+
     void updateThumbnail(const int &) Q_DECL_OVERRIDE;
+
 protected:
     void initWidget() override;
 
@@ -161,8 +160,6 @@ private:
 private slots:
     void slotDocFilePageChanged(const QString &);
     void slotUpdateTheme();
-
-    void slotSetRotate(const int &);
     void slotRotateThumbnail(const int &);
     void slotLoadThumbnail(const int &);
     void slotLoadImage(const int &row, const QImage &image);
@@ -175,12 +172,11 @@ private:
     int m_totalPages = -1;                               // 总页码数
     ThreadLoadImage m_ThreadLoadImage;                   // 加载缩略图线程
     bool m_isLoading = false;                            // 缩略图list是否初始化完毕
-//    ThreadRotateImage m_threadRotateImage;               // 旋转缩略图
     int m_nRotate = 0;                                   // 旋转度数
     int m_nValuePreIndex = 0;                            // 每一个item所占scrollbar的大小
 
     QString     m_strBindPath = "";
-    DocSheet *m_sheet;
+    DocSheet   *m_sheet;
 };
 
 #endif  // THUMBNAILWIDGET_H

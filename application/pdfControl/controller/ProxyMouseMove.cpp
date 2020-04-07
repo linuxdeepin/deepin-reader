@@ -17,17 +17,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ProxyMouseMove.h"
-
-#include <QDesktopServices>
-
 #include "pdfControl/SheetBrowserPDFPrivate.h"
 #include "ProxyData.h"
-
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
-
 #include "DocSheet.h"
+#include "ModuleHeader.h"
+#include "MsgHeader.h"
+#include "WidgetHeader.h"
 #include "CentralDocPage.h"
+
+#include <QDesktopServices>
+#include <QJsonObject>
+#include <QJsonDocument>
 
 ProxyMouseMove::ProxyMouseMove(QObject *parent) : QObject(parent)
 {
@@ -39,15 +41,16 @@ void ProxyMouseMove::mouseMoveEvent(QMouseEvent *event)
     QPoint globalPos = event->globalPos();
     //  处于幻灯片模式下
     int nState = _fvwParent->m_sheet->getCurrentState();
+
     if (nState == SLIDER_SHOW) {
-        CentralDocPage::Instance()->showPlayControlWidget();   //  显示 幻灯片 控制
-    } else if (nState == Magnifer_State) {    //  当前是放大镜状态
+        _fvwParent->m_sheet->showControl(); //  显示 幻灯片 控制
+    } else if (nState == Magnifer_State) {                      //当前是放大镜状态
         __ShowMagnifier(globalPos);
-    } else if (nState == Handel_State) {  //   手型状态下， 按住鼠标左键 位置进行移动
+    } else if (_fvwParent->m_sheet->isMouseHand()) {            //手型状态下， 按住鼠标左键 位置进行移动
         if (m_bSelectOrMove) {
             __FilePageMove(globalPos);
         }
-    } else if (nState == Default_State) {
+    } else  {
         if (m_bSelectOrMove) {  //  鼠标已经按下，　则选中所经过的文字
             __MouseSelectText(globalPos);
         } else {
@@ -148,18 +151,19 @@ void ProxyMouseMove::__ShowFileNoteWidget(const QPoint &docPos)
 
 void ProxyMouseMove::mousePressEvent(QMouseEvent *event)
 {
-    int nState = CentralDocPage::Instance()->getCurrentState();
+    int nState = _fvwParent->m_sheet->getCurrentState();
+
     Qt::MouseButton nBtn = event->button();
     if (nBtn == Qt::RightButton) {  //  右键处理
         //  处于幻灯片模式下
         if (nState == SLIDER_SHOW) {
-            CentralDocPage::Instance()->OnExitSliderShow();
+            _fvwParent->m_sheet->quitSlide();
             return;
         }
 
         //  放大镜状态，
         if (nState == Magnifer_State) {
-            CentralDocPage::Instance()->OnExitMagnifer();
+            _fvwParent->m_sheet->quitMagnifer();
             return;
         }
     } else if (nBtn == Qt::LeftButton) { // 左键处理
@@ -171,9 +175,10 @@ void ProxyMouseMove::mousePressEvent(QMouseEvent *event)
 
         QPoint globalPos = event->globalPos();
         //  当前状态是 手, 先 拖动, 之后 在是否是链接之类
+
         if (nState == NOTE_ADD_State) {
             __AddIconAnnotation(globalPos);
-        } else if (nState == Handel_State) {
+        } else if (_fvwParent->m_sheet->isMouseHand()) {
             __HandlClicked(globalPos);
         } else {
             __OtherMousePress(globalPos);
@@ -201,7 +206,8 @@ void ProxyMouseMove::__AddIconAnnotation(const QPoint &globalPos)
                                  QString::number(nClickPage) + Constant::sQStringSep +
                                  QString::number(globalPos.x()) + Constant::sQStringSep +
                                  QString::number(globalPos.y());
-            CentralDocPage::Instance()->setCurrentState(Default_State);
+
+            _fvwParent->m_sheet->setCurrentState(Default_State);
 
             QJsonObject obj;
             obj.insert("content", strContent);
@@ -237,7 +243,7 @@ void ProxyMouseMove::__OtherMousePress(const QPoint &globalPos)
     if (pLink) {
         __ClickPageLink(pLink);
     } else {
-        int nState = CentralDocPage::Instance()->getCurrentState();
+        int nState = _fvwParent->m_sheet->getCurrentState();
         if (nState == Default_State) {
             _fvwParent->m_pProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
 

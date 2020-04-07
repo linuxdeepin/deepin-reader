@@ -92,7 +92,7 @@ private:
     Annotation          *m_pAnnotation = nullptr;           //  高亮 注释操作
     DocummentProxy      *m_pProxy = nullptr;                //  文档代理类
     QPoint              m_popwidgetshowpoint;
-    DocSheet *m_sheet;
+    DocSheet            *m_sheet;
     friend class Annotation;
     friend class ProxyViewDisplay;
     friend class ProxyMouseMove;

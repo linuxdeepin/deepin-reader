@@ -35,6 +35,8 @@ void FileDataModel::qSetData(const int &iKey, const double &iValue)
         setLeftIndex(iValue);
     } else if (iKey == CurPage) {
         setCurPage(iValue);
+    } else if (iKey == HandShape) {
+        setCurMouse(iValue);
     }
 }
 
@@ -60,6 +62,9 @@ double FileDataModel::qGetData(const int &iKey) const
     }
     if (iKey == CurPage) {
         return getCurPage();
+    }
+    if (iKey == HandShape) {
+        return getCurMouse();
     }
     return -1;
 }
@@ -132,4 +137,14 @@ int FileDataModel::getCurPage() const
 void FileDataModel::setCurPage(int value)
 {
     nCurPage = value;
+}
+
+int FileDataModel::getCurMouse() const
+{
+    return nCurMouse;
+}
+
+void FileDataModel::setCurMouse(int value)
+{
+    nCurMouse = value;
 }

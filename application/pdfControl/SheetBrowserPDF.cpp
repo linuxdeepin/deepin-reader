@@ -24,6 +24,7 @@
 #include "controller/ProxyData.h"
 #include "controller/ProxyFileDataModel.h"
 #include "controller/ProxyViewDisplay.h"
+#include "docview/docummentproxy.h"
 
 void SheetBrowserPDF::setDoubleShow(bool isShow)
 {
@@ -68,7 +69,43 @@ SheetBrowserPDF::~SheetBrowserPDF()
 void SheetBrowserPDF::setFileChanged(bool hasChanged)
 {
     Q_D(SheetBrowserPDF);
+
     d->m_pProxyData->setFileChanged(hasChanged);
+}
+
+void SheetBrowserPDF::setMouseDefault()
+{
+    Q_D(SheetBrowserPDF);
+
+    if (!d->m_pProxy)
+        return;
+
+    //  手型 切换 也需要将之前选中的文字清除 选中样式
+    d->m_pProxy->mouseSelectTextClear();
+
+    d->__SetCursor(Qt::ArrowCursor);
+
+    setData(HandShape, "0");
+}
+
+void SheetBrowserPDF::setMouseHand()
+{
+    Q_D(SheetBrowserPDF);
+
+    if (!d->m_pProxy)
+        return;
+
+    //  手型 切换 也需要将之前选中的文字清除 选中样式
+    d->m_pProxy->mouseSelectTextClear();
+
+    d->__SetCursor(Qt::OpenHandCursor);
+
+    setData(HandShape, "1");
+}
+
+bool SheetBrowserPDF::isMouseHand()
+{
+    return 1 == qGetFileData().getCurMouse();
 }
 
 void SheetBrowserPDF::initWidget()

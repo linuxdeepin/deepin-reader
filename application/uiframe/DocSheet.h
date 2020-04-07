@@ -42,6 +42,12 @@ public:
 
     void setFileChanged(bool hasChanged);
 
+    void setMouseDefault();     //默认工具
+
+    void setMouseHand();        //手型工具
+
+    bool isMouseHand();
+
     QString qGetPath();
 
     void qSetPath(const QString &strPath);
@@ -66,9 +72,20 @@ public:
 
     void showTips(const QString &tips);
 
+    void setCurrentState(int state);
+
     int getCurrentState();
 
-    void setCurrentState(int state);
+    void openSlide();
+
+    void showControl();
+
+    void quitSlide();
+
+    void openMagnifer();
+
+    void quitMagnifer();
+
 //    bool close();
 
 //    bool save();

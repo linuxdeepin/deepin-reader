@@ -420,8 +420,6 @@ void CentralDocPage::showPlayControlWidget() const
         int nScreenWidth = qApp->desktop()->geometry().width();
         int inScreenHeght = qApp->desktop()->geometry().height();
         int tH = 100;
-//        int tW = 0;
-//        dApp->adaptScreenView(tW, tH);
         m_pctrlwidget->activeshow((nScreenWidth - m_pctrlwidget->width()) / 2, inScreenHeght - tH);
     }
 }

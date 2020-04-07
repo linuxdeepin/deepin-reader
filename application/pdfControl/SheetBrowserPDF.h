@@ -47,6 +47,12 @@ public:
 
     void setFileChanged(bool hasChanged);
 
+    void setMouseDefault();
+
+    void setMouseHand();
+
+    bool isMouseHand();
+
 signals:
     void sigFileOpenResult(const QString &, const bool &);
     void sigFindOperation(const int &);
