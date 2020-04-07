@@ -21,8 +21,6 @@
 #include <QValidator>
 
 #include "docview/docummentproxy.h"
-
-#include "CentralDocPage.h"
 #include "DocSheet.h"
 
 PagingWidget::PagingWidget(DocSheet *sheet, DWidget *parent)
@@ -208,21 +206,20 @@ void PagingWidget::SlotJumpPageLineEditReturnPressed()
 
 void PagingWidget::__NormalChangePage()
 {
-    DocummentProxy *_proxy =  CentralDocPage::Instance()->getCurFileAndProxy(m_strBindPath);
+    DocummentProxy *_proxy = m_sheet->getDocProxy();
     QString sText = m_pJumpPageLineEdit->text();
     int iPage = sText.toInt();
     if (iPage <= 0 || iPage > _proxy->getPageSNum()) {
         m_sheet->showTips(tr("Invalid page number"));
     } else {
-        CentralDocPage::Instance()->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(iPage - 1));
+        m_sheet->pageJump(iPage - 1);
         setFocus();
     }
 }
 
 void PagingWidget::__PageNumberJump()
 {
-    CentralDocPage *pMtwe = CentralDocPage::Instance();
-    DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(m_strBindPath);
+    DocummentProxy *_proxy = m_sheet->getDocProxy();
     if (_proxy) {
         int nPageSum = _proxy->getPageSNum();
 
@@ -231,7 +228,7 @@ void PagingWidget::__PageNumberJump()
         int iPage = _proxy->label2pagenum(sText);
 
         if (iPage > -1 && iPage < nPageSum) {   //  输入的页码 必须在 0-最大值 之间, 才可以
-            CentralDocPage::Instance()->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(iPage));
+            m_sheet->pageJump(iPage);
             setFocus();
         } else {
             m_sheet->showTips(tr("Invalid page number"));
@@ -241,10 +238,10 @@ void PagingWidget::__PageNumberJump()
 
 void PagingWidget::slotPrePageBtnClicked()
 {
-    CentralDocPage::Instance()->qDealWithData(MSG_OPERATION_PREV_PAGE, "");
+    m_sheet->pageJumpByMsg(MSG_OPERATION_PREV_PAGE, "");
 }
 
 void PagingWidget::slotNextPageBtnClicked()
 {
-    CentralDocPage::Instance()->qDealWithData(MSG_OPERATION_NEXT_PAGE, "");
+    m_sheet->pageJumpByMsg(MSG_OPERATION_NEXT_PAGE, "");
 }

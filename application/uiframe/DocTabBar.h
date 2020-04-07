@@ -68,6 +68,8 @@ signals:
 
     void sigFileCountChanged(int);
 
+    void sigLastTabClosed();
+
 public:
     int dealWithData(const int &, const QString &) override;
 

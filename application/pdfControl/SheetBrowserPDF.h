@@ -34,10 +34,12 @@ class SheetBrowserPDF : public CustomWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(SheetBrowserPDF)
-
 public:
     explicit SheetBrowserPDF(DocSheet *sheet, DWidget *parent = nullptr);
+
     ~SheetBrowserPDF() override;
+
+    void setDoubleShow(bool isShow);
 
 signals:
     void sigFileOpenResult(const QString &, const bool &);

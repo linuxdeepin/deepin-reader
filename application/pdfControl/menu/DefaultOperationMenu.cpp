@@ -139,7 +139,7 @@ void DefaultOperationMenu::slotPrevPageClicked()
 
 void DefaultOperationMenu::slotNextPageClicked()
 {
-    CentralDocPage::Instance()->qDealWithData(MSG_OPERATION_NEXT_PAGE, m_isDoubleShow ? "doubleshow" : "");
+    CentralDocPage::Instance()->qDealWithData(MSG_OPERATION_NEXT_PAGE,  m_isDoubleShow ? "doubleshow" : "");
 }
 
 void DefaultOperationMenu::slotEndPageClicked()

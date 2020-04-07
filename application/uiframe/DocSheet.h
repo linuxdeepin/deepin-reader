@@ -19,9 +19,8 @@ class DocSheet : public DSplitter
 
 public:
     explicit DocSheet(DocType_EM type, DWidget *parent = nullptr);
-    ~DocSheet() override;
 
-    void openSliderShow();  //开启 幻灯片
+    ~DocSheet() override;
 
 signals:
     void sigOpenFileResult(const QString &, const bool &);
@@ -32,6 +31,8 @@ public:
     void pageJump(const int &pagenum);
 
     void pageJumpByMsg(const int &iType, const QString &param);
+
+    void setDoubleShow(bool isShow);
 
     void setFileChanged(bool hasChanged);
 

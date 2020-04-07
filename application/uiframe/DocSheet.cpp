@@ -43,40 +43,6 @@ DocSheet::~DocSheet()
 {
 }
 
-void DocSheet::openSliderShow()
-{
-//    int nState = getCurrentState();
-//    if (nState != SLIDER_SHOW) {
-//        setCurrentState(SLIDER_SHOW);
-
-//        m_pTabBar->setVisible(false);
-
-//        auto sheet = qobject_cast<DocSheet *>(m_pStackedLayout->currentWidget());
-//        if (sheet) {
-//            sheet->OnOpenSliderShow();
-
-//            MainWindow::Instance()->SetSliderShowState(0);
-
-//            QString sPath = sheet->qGetPath();
-
-//            m_strSliderPath = sPath;
-
-//            auto _proxy = getCurFileAndProxy(sPath);
-//            _proxy->setAutoPlaySlide(true);
-//            _proxy->showSlideModel();
-
-//            if (m_pctrlwidget == nullptr) {
-//                m_pctrlwidget = new PlayControlWidget(this);
-//            }
-
-//            m_pctrlwidget->setSliderPath(sPath);
-//            int nScreenWidth = qApp->desktop()->geometry().width();
-//            int inScreenHeght = qApp->desktop()->geometry().height();
-//            m_pctrlwidget->activeshow((nScreenWidth - m_pctrlwidget->width()) / 2, inScreenHeght - 100);
-//        }
-//    }
-}
-
 void DocSheet::pageJump(const int &pagenum)
 {
     if (DocType_PDF == m_type) {
@@ -116,6 +82,12 @@ void DocSheet::pageJumpByMsg(const int &iType, const QString &param)
 
         pageJump(iPage);
     }
+}
+
+void DocSheet::setDoubleShow(bool isShow)
+{
+    if (DocType_PDF == m_type)
+        static_cast<SheetBrowserPDF *>(m_browser)->setDoubleShow(isShow);
 }
 
 void DocSheet::setFileChanged(bool hasChanged)

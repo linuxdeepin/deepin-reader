@@ -12,11 +12,10 @@
 #include "docview/docummentproxy.h"
 
 #include "CentralDocPage.h"
+#include "DocSheet.h"
 
-
-
-PlayControlWidget::PlayControlWidget(DWidget *parnet)
-    : DFloatingWidget(parnet)
+PlayControlWidget::PlayControlWidget(DocSheet *sheet, DWidget *parnet)
+    : DFloatingWidget(parnet), m_sheet(sheet)
 {
     m_strObserverName = PLAY_CONTROL_WIDGET;
     m_bcanshow = false;
@@ -59,13 +58,10 @@ void PlayControlWidget::activeshow(int ix, int iy)
     if (m_bfirstshow) {
         m_bfirstshow = false;
 
-        CentralDocPage *pMtwe = CentralDocPage::Instance();
-        if (pMtwe) {
-            auto helper = pMtwe->getCurFileAndProxy(m_strSliderPath);
-            connect(helper, &DocummentProxy::signal_autoplaytoend, this, [this] {
-                this->changePlayStatus();
-            });
-        }
+        auto helper = m_sheet->getDocProxy();
+        connect(helper, &DocummentProxy::signal_autoplaytoend, this, [this] {
+            this->changePlayStatus();
+        });
     }
 
     if (m_ptimer->isActive())
@@ -135,25 +131,22 @@ DIconButton *PlayControlWidget::createBtn(const QString &strname)
 
 void PlayControlWidget::pagejump(const bool &bpre)
 {
-    CentralDocPage *pMtwe = CentralDocPage::Instance();
-    if (pMtwe) {
-        auto helper = pMtwe->getCurFileAndProxy(m_strSliderPath);
-        if (helper) {
-            bool bSatus = helper->getAutoPlaySlideStatu();
-            if (bSatus) {
-                helper->setAutoPlaySlide(false);
-            }
-            int nCurPage = helper->currentPageNo();
-            if (bpre)
-                nCurPage--;
-            else
-                nCurPage++;
+    auto helper = m_sheet->getDocProxy();
+    if (helper) {
+        bool bSatus = helper->getAutoPlaySlideStatu();
+        if (bSatus) {
+            helper->setAutoPlaySlide(false);
+        }
+        int nCurPage = helper->currentPageNo();
+        if (bpre)
+            nCurPage--;
+        else
+            nCurPage++;
 
-            CentralDocPage::Instance()->qDealWithData(MSG_DOC_JUMP_PAGE, QString::number(nCurPage));
+        m_sheet->pageJump(nCurPage);
 
-            if (bSatus) {
-                helper->setAutoPlaySlide(bSatus);
-            }
+        if (bSatus) {
+            helper->setAutoPlaySlide(bSatus);
         }
     }
 }

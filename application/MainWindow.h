@@ -20,15 +20,19 @@ class MainWindow : public DMainWindow, public IObserver
 
 public:
     explicit MainWindow(DMainWindow *parent = nullptr);
+
     ~MainWindow() override;
 
 private:
     static MainWindow *g_onlyMainWindow;
+
 public:
     static MainWindow *Instance();
 
     void openfile(const QString &filepath);
+
     void setSreenRect(const QRect &); //得到屏幕的分辨率
+
     void SetSliderShowState(const int &);
 
 public:
@@ -36,13 +40,18 @@ public:
 
 protected:
     void showEvent(QShowEvent *ev) override;
+
     void closeEvent(QCloseEvent *event) override;
 
 private:
     void initUI();
+
     void onAppExit();
+
     void initThemeChanged();
+
     void setCurTheme();
+
     void displayShortcuts();
 
     void notifyMsg(const int &, const QString &msgContent = "") override;

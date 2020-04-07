@@ -20,6 +20,7 @@
 #define FONTMENU_H
 
 #include "CustomControl/CustomMenu.h"
+#include <QPointer>
 
 class DocSheet;
 class FontMenu : public CustomMenu
@@ -65,6 +66,7 @@ private:
     bool            m_bDoubPage = false;                     // 双页
     bool            m_bFiteH = false;                        // 自适应高
     bool            m_bFiteW = false;                        // 自适应宽
+    QPointer<DocSheet> m_sheet;
 };
 
 #endif // FONTMENU_H

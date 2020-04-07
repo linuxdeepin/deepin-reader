@@ -41,7 +41,6 @@ public:
 private:
     void setThumbnailState(const QString &);
     void SetLeftWidgetIndex(const QString &sValue);
-    void OnSetViewChange(const QString &);
     void OnSetViewScale(const QString &);
     void OnSetViewRotate(const QString &);
     void OnSetViewHit(const QString &);

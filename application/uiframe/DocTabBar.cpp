@@ -28,7 +28,6 @@
 
 #include "CentralDocPage.h"
 #include "FileDataModel.h"
-#include "MainWindow.h"
 #include "app/ProcessController.h"
 #include "business/SaveDialog.h"
 
@@ -260,8 +259,9 @@ void DocTabBar::handleTabDroped(int index, Qt::DropAction da, QObject *target)
 
 void DocTabBar::onDroped()
 {
-    if (count() <= 0)
-        MainWindow::Instance()->close();
+    if (count() <= 0) {
+        emit sigLastTabClosed();
+    }
 }
 
 //  新增

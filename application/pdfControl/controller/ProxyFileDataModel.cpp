@@ -32,8 +32,6 @@ void ProxyFileDataModel::qDealWithData(const int &nType, const QString &sValue)
 {
     if (nType == MSG_LEFTBAR_STATE) {
         SetLeftWidgetIndex(sValue);
-    } else if (nType == MSG_VIEWCHANGE_DOUBLE_SHOW) {
-        OnSetViewChange(sValue);
     } else if (nType == MSG_VIEWCHANGE_ROTATE_VALUE) {
         OnSetViewRotate(sValue);
     } else if (nType == MSG_FILE_SCALE) {
@@ -68,11 +66,6 @@ void ProxyFileDataModel::setThumbnailState(const QString &sValue)
 void ProxyFileDataModel::SetLeftWidgetIndex(const QString &sValue)
 {
     m_pFileDataModel.qSetData(LeftIndex, sValue.toInt());
-}
-
-void ProxyFileDataModel::OnSetViewChange(const QString &sValue)
-{
-    m_pFileDataModel.qSetData(DoubleShow, sValue.toInt());
 }
 
 void ProxyFileDataModel::OnSetViewScale(const QString &sValue)

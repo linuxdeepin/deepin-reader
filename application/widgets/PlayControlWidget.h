@@ -9,12 +9,13 @@
 
 DWIDGET_USE_NAMESPACE
 
+class DocSheet;
 class PlayControlWidget : public DFloatingWidget, public IObserver
 {
     Q_OBJECT
     Q_DISABLE_COPY(PlayControlWidget)
 public:
-    explicit PlayControlWidget(DWidget *parnet = nullptr);
+    explicit PlayControlWidget(DocSheet *sheet, DWidget *parnet = nullptr);
     ~PlayControlWidget()override;
 
 public:
@@ -64,7 +65,7 @@ private:
     bool m_bcanshow = false;
     bool m_bautoplaying = false;
     bool m_bfirstshow = false;
-
+    DocSheet *m_sheet;
     QString m_strSliderPath = "";
 };
 

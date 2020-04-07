@@ -61,7 +61,7 @@ CentralDocPage::CentralDocPage(DWidget *parent)
     InitConnections();
     g_onlyApp = this;
     m_pMsgList = {E_APP_MSG_TYPE};
-    m_pMsgList2 = { MSG_DOC_JUMP_PAGE, MSG_OPERATION_FIRST_PAGE, MSG_OPERATION_END_PAGE, MSG_OPERATION_PREV_PAGE, MSG_OPERATION_NEXT_PAGE,
+    m_pMsgList2 = { MSG_OPERATION_FIRST_PAGE, MSG_OPERATION_END_PAGE, MSG_OPERATION_PREV_PAGE, MSG_OPERATION_NEXT_PAGE,
                     MSG_SAVE_FILE, MSG_NOT_SAVE_FILE, MSG_NOT_CHANGE_SAVE_FILE
                   };
 
@@ -260,10 +260,8 @@ void CentralDocPage::onCurFileChanged(bool isChanged)
 //  跳转页面
 QString CentralDocPage::qDealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_DOC_JUMP_PAGE) {              //  请求跳转页面
-        pageJump(msgContent.toInt());
-    } else if (msgType == MSG_OPERATION_FIRST_PAGE || msgType == MSG_OPERATION_PREV_PAGE ||
-               msgType == MSG_OPERATION_NEXT_PAGE || msgType == MSG_OPERATION_END_PAGE) {
+    if (msgType == MSG_OPERATION_FIRST_PAGE || msgType == MSG_OPERATION_PREV_PAGE ||
+            msgType == MSG_OPERATION_NEXT_PAGE || msgType == MSG_OPERATION_END_PAGE) {
         pageJumpByMsg(msgType, msgContent);
     } else if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == KeyStr::g_ctrl_shift_s) {
@@ -839,7 +837,7 @@ void CentralDocPage::OnOpenSliderShow()
         _proxy->showSlideModel();
 
         if (m_pctrlwidget == nullptr) {
-            m_pctrlwidget = new PlayControlWidget(this);
+            m_pctrlwidget = new PlayControlWidget(sheet, this);
         }
 
         m_pctrlwidget->setSliderPath(sPath);

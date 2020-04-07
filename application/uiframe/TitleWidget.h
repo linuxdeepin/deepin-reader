@@ -40,12 +40,19 @@ public slots:
 
 private slots:
     void slotUpdateTheme();
+
     void slotOpenFileOk(const QString &);
+
     void SlotSetCurrentTool(const int &);
+
     void SlotScaleChanged();
+
     void on_thumbnailBtn_clicked();
+
     void on_settingBtn_clicked();
+
     void on_handleShapeBtn_clicked();
+
     void on_searchBtn_clicked();
 
 private:

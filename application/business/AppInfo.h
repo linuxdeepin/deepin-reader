@@ -65,10 +65,8 @@ public:
     QList<QKeySequence> getKeyList() const;
 
     QString qGetCurrentTheme() const;
-    void qSetCurrentTheme(const QString &strCurrentTheme);
 
-    int qGetCurShowState() const;
-    void qSetCurShowState(const int &nState);
+    void qSetCurrentTheme(const QString &strCurrentTheme);
 
     void mousePressLocal(bool &highLight, QPoint &point);
 

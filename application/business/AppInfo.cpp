@@ -115,16 +115,6 @@ void AppInfo::qSetCurrentTheme(const QString &strCurrentTheme)
     m_strCurrentTheme = strCurrentTheme;
 }
 
-//int AppInfo::qGetCurShowState() const
-//{
-//    return  m_nCurShowState;
-//}
-
-//void AppInfo::qSetCurShowState(const int &nState)
-//{
-//    m_nCurShowState = nState;
-//}
-
 void AppInfo::mousePressLocal(bool &highLight, QPoint &point)
 {
     highLight = m_bIsHighLight;

@@ -23,6 +23,15 @@
 #include "SheetBrowserPDFPrivate.h"
 #include "controller/ProxyData.h"
 #include "controller/ProxyFileDataModel.h"
+#include "controller/ProxyViewDisplay.h"
+
+void SheetBrowserPDF::setDoubleShow(bool isShow)
+{
+    Q_D(SheetBrowserPDF);
+    d->m_pDocViewProxy->setDoubleShow(isShow);
+    d->m_pDocViewProxy->setScaleRotateViewModeAndShow();
+    d->handleResize(size());
+}
 
 SheetBrowserPDF::SheetBrowserPDF(DocSheet *sheet, DWidget *parent)
     : CustomWidget(FILE_VIEW_WIDGET, parent), d_ptr(new SheetBrowserPDFPrivate(sheet, this))

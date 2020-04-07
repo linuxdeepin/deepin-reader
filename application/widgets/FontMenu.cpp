@@ -20,6 +20,7 @@
 #include "DocSheet.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
+#include "docview/docummentproxy.h"
 
 FontMenu::FontMenu(DWidget *parent):
     CustomMenu(FONT_MENU, parent)
@@ -64,10 +65,12 @@ void FontMenu::resetAdaptive()
 
 void FontMenu::readCurDocParam(DocSheet *sheet)
 {
-    if (nullptr == sheet)
+    m_sheet = sheet;
+
+    if (m_sheet.isNull())
         return;
 
-    FileDataModel fdm = sheet->qGetFileData();
+    FileDataModel fdm = m_sheet->qGetFileData();
 
     //单双页
     int value = fdm.qGetData(DoubleShow);
@@ -99,21 +102,20 @@ void FontMenu::readCurDocParam(DocSheet *sheet)
  */
 void FontMenu::slotTwoPage()
 {
+    if (m_sheet.isNull())
+        return;
+
+
     m_bDoubPage = !m_bDoubPage;
 
-    QJsonObject obj;
-    obj.insert("content", QString::number(m_bDoubPage));
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
-
-    QJsonDocument doc(obj);
-
-    notifyMsg(MSG_VIEWCHANGE_DOUBLE_SHOW, doc.toJson(QJsonDocument::Compact));
+    m_sheet->setData(DoubleShow, QString::number(m_bDoubPage));
+    m_sheet->setDoubleShow(m_bDoubPage);
 
     //解决双页时文档不能自适应是视窗大小的问题
-    QJsonObject jsonObj;
+    QJsonObject obj;
     QString str{""};
     str = QString::number(1) + Constant::sQStringSep + QString::number(0);
-    obj.insert("content", str);//QString::number(1));
+    obj.insert("content", str);
     obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
     QJsonDocument jsonDoc(obj);
     notifyMsg(MSG_VIEWCHANGE_FIT, jsonDoc.toJson(QJsonDocument::Compact));
