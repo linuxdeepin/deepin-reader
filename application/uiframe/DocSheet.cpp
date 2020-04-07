@@ -90,6 +90,18 @@ void DocSheet::setDoubleShow(bool isShow)
         static_cast<SheetBrowserPDF *>(m_browser)->setDoubleShow(isShow);
 }
 
+void DocSheet::setRotateLeft()
+{
+    if (DocType_PDF == m_type)
+        static_cast<SheetBrowserPDF *>(m_browser)->setRotateLeft();
+}
+
+void DocSheet::setRotateRight()
+{
+    if (DocType_PDF == m_type)
+        static_cast<SheetBrowserPDF *>(m_browser)->setRotateRight();
+}
+
 void DocSheet::setFileChanged(bool hasChanged)
 {
     if (DocType_PDF == m_type)
@@ -117,11 +129,12 @@ void DocSheet::initPDF()
     connect(browser, SIGNAL(sigBookMarkMsg(const int &, const QString &)), sidebar, SIGNAL(sigBookMarkMsg(const int &, const QString &)));
     connect(browser, SIGNAL(sigUpdateThumbnail(const int &)), sidebar, SIGNAL(sigUpdateThumbnail(const int &)));
     connect(browser, SIGNAL(sigFileChanged(bool)), this, SIGNAL(sigFileChanged(bool)));
+    connect(browser, SIGNAL(sigRotateChanged(int)), sidebar, SLOT(onRotate(int)));
 
     int tW = 36;
     int tH = 36;
     dApp->adaptScreenView(tW, tH);
-    m_pSpinnerWidget->setSpinnerSize(QSize(tW, tW));
+    m_pSpinnerWidget->setSpinnerSize(QSize(tW, tH));
     m_pSpinnerWidget->startSpinner();
 
     m_pRightWidget->addWidget(m_pSpinnerWidget);

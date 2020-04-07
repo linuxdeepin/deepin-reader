@@ -38,6 +38,8 @@ public:
 public slots:
     void onSearch(const int &);
 
+    void onRotate(int);
+
     // CustomWidget interface
 protected:
     void initWidget() override;

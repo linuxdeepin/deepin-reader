@@ -33,6 +33,22 @@ void SheetBrowserPDF::setDoubleShow(bool isShow)
     d->handleResize(size());
 }
 
+void SheetBrowserPDF::setRotateLeft()
+{
+    Q_D(SheetBrowserPDF);
+    int rotate = d->m_pDocViewProxy->setViewRotateLeft();
+    setData(Rotate, QString::number(rotate));
+    emit sigRotateChanged(rotate);
+}
+
+void SheetBrowserPDF::setRotateRight()
+{
+    Q_D(SheetBrowserPDF);
+    int rotate = d->m_pDocViewProxy->setViewRotateRight();
+    setData(Rotate, QString::number(rotate));
+    emit sigRotateChanged(rotate);
+}
+
 SheetBrowserPDF::SheetBrowserPDF(DocSheet *sheet, DWidget *parent)
     : CustomWidget(FILE_VIEW_WIDGET, parent), d_ptr(new SheetBrowserPDFPrivate(sheet, this))
 {

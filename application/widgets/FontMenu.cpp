@@ -105,7 +105,6 @@ void FontMenu::slotTwoPage()
     if (m_sheet.isNull())
         return;
 
-
     m_bDoubPage = !m_bDoubPage;
 
     m_sheet->setData(DoubleShow, QString::number(m_bDoubPage));
@@ -155,13 +154,10 @@ void FontMenu::slotFiteW()
  */
 void FontMenu::slotRotateL()
 {
-    QJsonObject obj;
-    obj.insert("content", "-1");
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
+    if (m_sheet.isNull())
+        return;
 
-    QJsonDocument doc(obj);
-
-    notifyMsg(MSG_VIEWCHANGE_ROTATE, doc.toJson(QJsonDocument::Compact));
+    m_sheet->setRotateLeft();
 }
 
 /**
@@ -170,13 +166,10 @@ void FontMenu::slotRotateL()
  */
 void FontMenu::slotRotateR()
 {
-    QJsonObject obj;
-    obj.insert("content", "1");
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
+    if (m_sheet.isNull())
+        return;
 
-    QJsonDocument doc(obj);
-
-    notifyMsg(MSG_VIEWCHANGE_ROTATE, doc.toJson(QJsonDocument::Compact));
+    m_sheet->setRotateRight();
 }
 
 /**
@@ -194,10 +187,10 @@ void FontMenu::OnShortKey(const QString &keyType)
         slotFiteW();
     } else if (keyType == KeyStr::g_ctrl_r) {
         //左旋转
-        rotateThumbnail(false);
+        slotRotateL();
     } else if (keyType == KeyStr::g_ctrl_shift_r) {
         //右旋转
-        rotateThumbnail(true);
+        slotRotateR();
     }
 }
 
@@ -244,26 +237,6 @@ QAction *FontMenu::createAction(const QString &objName, const char *member, bool
         return action;
     }
     return nullptr;
-}
-
-/**
- * @brief FontMenu::rotateThumbnail 旋转文档和缩略图
- * @param direct true:向右 false:向左
- */
-void FontMenu::rotateThumbnail(const bool &direct)
-{
-    int nRes = -1;
-    if (direct) {
-        nRes = 1;
-    }
-
-    QJsonObject obj;
-    obj.insert("content", QString::number(nRes));
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
-
-    QJsonDocument doc(obj);
-
-    dApp->m_pModelService->notifyMsg(MSG_VIEWCHANGE_ROTATE, doc.toJson(QJsonDocument::Compact));
 }
 
 /**

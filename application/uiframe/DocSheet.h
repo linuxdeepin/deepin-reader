@@ -25,7 +25,9 @@ public:
 signals:
     void sigOpenFileResult(const QString &, const bool &);
 
-    void sigFileChanged(bool hasChanged);     //被修改了
+    void sigFileChanged(bool hasChanged);     //被修改了 书签 笔记
+
+    void sigTotateChanged();
 
 public:
     void pageJump(const int &pagenum);
@@ -33,6 +35,10 @@ public:
     void pageJumpByMsg(const int &iType, const QString &param);
 
     void setDoubleShow(bool isShow);
+
+    void setRotateLeft();
+
+    void setRotateRight();
 
     void setFileChanged(bool hasChanged);
 

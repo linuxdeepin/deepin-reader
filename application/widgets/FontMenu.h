@@ -50,7 +50,6 @@ private slots:
 private:
     void initConnection();
     QAction *createAction(const QString &objName, const char *, bool checked = false);
-    void rotateThumbnail(const bool &);
 
     void setAppSetFiteHAndW();
     void resetAdaptive();

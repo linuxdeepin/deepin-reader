@@ -91,7 +91,6 @@ void SheetSidebarPDF::resizeEvent(QResizeEvent *event)
     double scale = static_cast<double>(width) / static_cast<double>(LEFTMINWIDTH);
 
     dApp->setScale(scale);
-    qInfo() << "    SheetSidebarPDF  scale:" << scale;
 
     emit sigAdaptWindowSize(scale);
 }
@@ -120,4 +119,9 @@ void SheetSidebarPDF::onSearch(const int &iType)
             handleOpenSuccess();
         }
     }
+}
+
+void SheetSidebarPDF::onRotate(int rotate)
+{
+    m_pStackedWidget->handleRotate(rotate);
 }

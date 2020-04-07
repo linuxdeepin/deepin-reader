@@ -39,6 +39,8 @@ class DataStackedWidget : public DStackedWidget
 public:
     explicit DataStackedWidget(DocSheet *sheet, DWidget *parent = nullptr);
 
+    void handleRotate(int rotate);
+
 signals:
     void sigAnntationMsg(const int &, const QString &);
     void sigBookMarkMsg(const int &, const QString &);

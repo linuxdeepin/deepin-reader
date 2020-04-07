@@ -37,6 +37,11 @@ DataStackedWidget::DataStackedWidget(DocSheet *sheet, DWidget *parent)
     InitWidgets();
 }
 
+void DataStackedWidget::handleRotate(int rotate)
+{
+    m_pThWidget->handleRotate(rotate);
+}
+
 int DataStackedWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     int nRes = MSG_NO_OK;

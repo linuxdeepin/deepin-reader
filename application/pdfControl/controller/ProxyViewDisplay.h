@@ -34,10 +34,13 @@ class ProxyViewDisplay : public QObject
 public:
     explicit ProxyViewDisplay(QObject *parent = nullptr);
 
+    int setViewRotateLeft();  //左旋转
+
+    int setViewRotateRight();  //右旋转
+
 public:
     void onSetWidgetAdapt();
     void OnSetViewHit(const QString &msgContent);
-    void OnSetViewRotate(const QString &msgConent);
     void OnSetViewScale(const QString &msgConent);
     void OnSetViewChange(const QString &msgContent);
     void setScaleRotateViewModeAndShow();

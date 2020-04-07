@@ -36,6 +36,36 @@ ProxyViewDisplay::ProxyViewDisplay(QObject *parent) : QObject(parent)
     fvmPrivate = qobject_cast<SheetBrowserPDFPrivate *>(parent);
 }
 
+int ProxyViewDisplay::setViewRotateLeft()
+{
+    m_rotateType--;
+
+    if (m_rotateType < RotateType_0) {
+        m_rotateType = RotateType_270;
+    }
+
+    setScaleRotateViewModeAndShow();
+
+    onSetWidgetAdapt();
+
+    return m_rotateType;
+}
+
+int ProxyViewDisplay::setViewRotateRight()
+{
+    m_rotateType++;
+
+    if (m_rotateType > RotateType_270) {
+        m_rotateType = RotateType_0;
+    }
+
+    setScaleRotateViewModeAndShow();
+
+    onSetWidgetAdapt();
+
+    return m_rotateType;
+}
+
 void ProxyViewDisplay::OnSetViewHit(const QString &msgContent)
 {
     QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
@@ -43,10 +73,6 @@ void ProxyViewDisplay::OnSetViewHit(const QString &msgContent)
         m_nAdapteState = sList.at(0).toInt();
         qInfo() << "      m_nAdapteState:" << m_nAdapteState;
     }
-
-//    m_nAdapteState = msgContent.toInt();
-
-//    qInfo() << "      m_nAdapteState:" << m_nAdapteState;
 
     onSetWidgetAdapt();
 }
@@ -85,35 +111,6 @@ void ProxyViewDisplay::OnSetViewScale(const QString &msgConent)
 
         m_nAdapteState = Default_State;
     }
-}
-
-void ProxyViewDisplay::OnSetViewRotate(const QString &msgConent)
-{
-    int nTemp = msgConent.toInt();
-    if (nTemp == 1) { //  右旋转
-        m_rotateType++;
-    } else {
-        m_rotateType--;
-    }
-
-    if (m_rotateType > RotateType_270) {
-        m_rotateType = RotateType_0;
-    } else if (m_rotateType < RotateType_0) {
-        m_rotateType = RotateType_270;
-    }
-
-    QJsonObject obj;
-    obj.insert("content", QString::number(m_rotateType));
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
-
-    QJsonDocument doc(obj);
-
-    notifyMsg(MSG_VIEWCHANGE_ROTATE_VALUE, doc.toJson(QJsonDocument::Compact));
-
-    setScaleRotateViewModeAndShow();
-
-    //  旋转之后, 若是 双页显示
-    onSetWidgetAdapt();
 }
 
 void ProxyViewDisplay::OnSetViewChange(const QString &msgContent)

@@ -41,6 +41,12 @@ public:
 
     void setDoubleShow(bool isShow);
 
+    void setRotateLeft();
+
+    void setRotateRight();
+
+    void setFileChanged(bool hasChanged);
+
 signals:
     void sigFileOpenResult(const QString &, const bool &);
     void sigFindOperation(const int &);
@@ -51,9 +57,9 @@ signals:
 
     void sigFileChanged(bool hasChanged);
 
-public:
-    void setFileChanged(bool hasChanged);
+    void sigRotateChanged(int rotate);
 
+public:
     int dealWithData(const int &, const QString &) override;
     int qDealWithShortKey(const QString &) override;
 

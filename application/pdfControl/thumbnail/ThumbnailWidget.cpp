@@ -67,6 +67,17 @@ void ThumbnailWidget::handleOpenSuccess()
     m_pPageWidget->handleOpenSuccess();
 }
 
+void ThumbnailWidget::handleRotate(int rotate)
+{
+    m_nRotate = rotate;
+    if (m_ThreadLoadImage.isRunning()) {
+        m_ThreadLoadImage.stopThreadRun();
+    }
+
+    m_ThreadLoadImage.setIsLoaded(true);
+    m_ThreadLoadImage.start();
+}
+
 // 初始化界面
 void ThumbnailWidget::initWidget()
 {

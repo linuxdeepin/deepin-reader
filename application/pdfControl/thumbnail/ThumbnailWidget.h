@@ -132,6 +132,8 @@ public:
 
     void handleOpenSuccess();
 
+    void handleRotate(int rotate);
+
     inline bool isLoading()
     {
         return m_isLoading;

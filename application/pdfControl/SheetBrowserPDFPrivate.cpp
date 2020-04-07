@@ -240,7 +240,7 @@ int SheetBrowserPDFPrivate::qDealWithShortKey(const QString &sKey)
 int SheetBrowserPDFPrivate::dealWithData(const int &msgType, const QString &msgContent)
 {
     QList<int> msgList = { MSG_HANDLESHAPE,
-                           MSG_VIEWCHANGE_DOUBLE_SHOW, MSG_VIEWCHANGE_ROTATE, MSG_FILE_SCALE, MSG_VIEWCHANGE_FIT,
+                           MSG_FILE_SCALE, MSG_VIEWCHANGE_FIT,
                            MSG_OPERATION_TEXT_ADD_ANNOTATION,
                            MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, MSG_NOTE_PAGE_SHOW_NOTEWIDGET
                          };
@@ -257,12 +257,7 @@ int SheetBrowserPDFPrivate::dealWithData(const int &msgType, const QString &msgC
     //  数据变化
     m_pProxyFileDataModel->qDealWithData(msgType, msgContent);
 
-    if (msgType == MSG_VIEWCHANGE_DOUBLE_SHOW) {
-        m_pDocViewProxy->OnSetViewChange(msgContent);
-        handleResize(q->size());
-    } else if (msgType == MSG_VIEWCHANGE_ROTATE) {
-        m_pDocViewProxy->OnSetViewRotate(msgContent);
-    } else if (msgType == MSG_FILE_SCALE) {
+    if (msgType == MSG_FILE_SCALE) {
         m_pDocViewProxy->OnSetViewScale(msgContent);
     } else if (msgType == MSG_VIEWCHANGE_FIT) {
         m_pDocViewProxy->OnSetViewHit(msgContent);
