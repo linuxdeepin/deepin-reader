@@ -19,9 +19,6 @@
 #include "ThumbnailWidget.h"
 
 #include "docview/docummentproxy.h"
-
-
-#include "CentralDocPage.h"
 #include "DocSheet.h"
 #include "application.h"
 
@@ -259,7 +256,7 @@ void ThumbnailWidget::fillContantToList()
 
 void ThumbnailWidget::showItemBookMark()
 {
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_strBindPath);
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->qGetPath());
     foreach (int index, pageList) {
         auto pWidget = getItemWidget(m_pThumbnailListWidget->item(index));
         if (pWidget) {
@@ -274,7 +271,10 @@ void ThumbnailWidget::showItemBookMark()
  */
 void ThumbnailWidget::prevPage()
 {
-    CentralDocPage::Instance()->qDealWithData(MSG_OPERATION_PREV_PAGE, "");
+    if (m_sheet.isNull())
+        return;
+
+    m_sheet->pageJumpByMsg(MSG_OPERATION_PREV_PAGE, "");
 }
 
 /**
@@ -283,7 +283,10 @@ void ThumbnailWidget::prevPage()
  */
 void ThumbnailWidget::nextPage()
 {
-    CentralDocPage::Instance()->qDealWithData(MSG_OPERATION_NEXT_PAGE, "");
+    if (m_sheet.isNull())
+        return;
+
+    m_sheet->pageJumpByMsg(MSG_OPERATION_NEXT_PAGE, "");
 }
 
 /**
@@ -343,8 +346,7 @@ void ThumbnailWidget::updateThumbnail(const int &page)
             auto itemWidget = getItemWidget(item);
             if (itemWidget) {
                 if (itemWidget->nPageIndex() == page) {
-                    CentralDocPage *pMtwe = CentralDocPage::Instance();
-                    auto dproxy = pMtwe->getCurFileAndProxy(m_strBindPath);
+                    auto dproxy = m_sheet->getDocProxy();
                     if (nullptr == dproxy) {
                         return;
                     }
@@ -364,10 +366,7 @@ void ThumbnailWidget::updateThumbnail(const int &page)
 // 关联成功打开文件槽函数
 void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
 {
-    m_strBindPath = sPath;
-    qInfo() << __LINE__ << "        " << __FUNCTION__;
-    CentralDocPage *pMtwe = CentralDocPage::Instance();
-    DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sPath);
+    DocummentProxy *_proxy = m_sheet->getDocProxy();
     if (_proxy) {
         m_isLoading = true;
         m_ThreadLoadImage.setIsLoaded(false);
@@ -381,7 +380,7 @@ void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
         m_nValuePreIndex = 0;
         fillContantToList();
 
-        FileDataModel fdm = CentralDocPage::Instance()->qGetFileData(sPath);
+        FileDataModel fdm = m_sheet->qGetFileData();
         m_nRotate = fdm.qGetData(Rotate);
 
         if (m_nRotate < 0) {
@@ -392,6 +391,7 @@ void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
         int currentPage = _proxy->currentPageNo();
 
         m_ThreadLoadImage.setPages(m_totalPages);
+        m_ThreadLoadImage.setProxy(_proxy);
         m_ThreadLoadImage.setFilePath(sPath);
         if (!m_ThreadLoadImage.isRunning()) {
             m_ThreadLoadImage.clearList();;
@@ -480,9 +480,8 @@ void ThreadLoadImage::run()
         if (m_nEndPage >= m_pages) {
             m_nEndPage = m_pages - 1;
         }
-        CentralDocPage *pMtwe = CentralDocPage::Instance();
-        auto dproxy = pMtwe->getCurFileAndProxy(m_filepath);
-        if (nullptr == dproxy) {
+
+        if (nullptr == m_proxy) {
             break;
         }
 
@@ -499,7 +498,7 @@ void ThreadLoadImage::run()
                 continue;
             }
             QImage image;
-            bool bl = dproxy->getImage(page, image, tW, tH);
+            bool bl = m_proxy->getImage(page, image, tW, tH);
             if (bl) {
                 m_listLoad.append(page);
                 emit sigLoadImage(page, image);

@@ -53,6 +53,8 @@ public:
 
     bool isMouseHand();
 
+    bool isDoubleShow();
+
 signals:
     void sigFileOpenResult(const QString &, const bool &);
     void sigFindOperation(const int &);

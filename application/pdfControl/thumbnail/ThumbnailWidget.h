@@ -25,6 +25,7 @@
 #include <QThread>
 #include <QTimer>
 #include <QVBoxLayout>
+#include <QPointer>
 
 #include "CustomControl/CustomWidget.h"
 #include "../CustomListWidget.h"
@@ -90,6 +91,11 @@ public:
     void setFilePath(const QString &strfilepath)
     {
         m_filepath = strfilepath;
+    }
+
+    void setProxy(DocummentProxy *proxy )
+    {
+        m_proxy = proxy;
     }
 
 signals:
@@ -176,7 +182,7 @@ private:
     int m_nValuePreIndex = 0;                            // 每一个item所占scrollbar的大小
 
     QString     m_strBindPath = "";
-    DocSheet   *m_sheet;
+    QPointer<DocSheet>   m_sheet;
 };
 
 #endif  // THUMBNAILWIDGET_H

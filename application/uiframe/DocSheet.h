@@ -48,6 +48,8 @@ public:
 
     bool isMouseHand();
 
+    bool isDoubleShow();
+
     QString qGetPath();
 
     void qSetPath(const QString &strPath);

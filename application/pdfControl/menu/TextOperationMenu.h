@@ -20,13 +20,10 @@ public:
     explicit TextOperationMenu(DWidget *parent = nullptr);
 
 public:
-    void execMenu(const QPoint &, const bool &bHigh, const QString &sSelectText, const QString &sUuid);
+    void execMenu(const QString &filePath, const QPoint &, const bool &bHigh, const QString &sSelectText, const QString &sUuid);
     void setClickPoint(const QPoint &);
-
     void setClickPage(int nClickPage);
-
     void setPStartPoint(const QPoint &pStartPoint);
-
     void setPEndPoint(const QPoint &pEndPoint);
     void setRemoveEnabled(bool enable);
 

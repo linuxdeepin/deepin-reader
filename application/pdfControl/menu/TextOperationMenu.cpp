@@ -2,8 +2,8 @@
 
 #include "ColorWidgetAction.h"
 #include "business/AppInfo.h"
-#include "CentralDocPage.h"
 #include "MsgHeader.h"
+#include "utils/utils.h"
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)
     : CustomMenu(TEXT_OPERATION_MENU, parent)
@@ -11,12 +11,9 @@ TextOperationMenu::TextOperationMenu(DWidget *parent)
     initActions();
 }
 
-void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, const QString &sSelectText, const QString &sUuid)
+void TextOperationMenu::execMenu(const QString &filePath, const QPoint &showPoint, const bool &bHigh, const QString &sSelectText, const QString &sUuid)
 {
-    CentralDocPage *pMtwe = CentralDocPage::Instance();
-    QString sCurPath = pMtwe->qGetCurPath();
-
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(filePath);
 
     bool bBookState = pageList.contains(m_nClickPage);
 
@@ -42,7 +39,6 @@ void TextOperationMenu::execMenu(const QPoint &showPoint, const bool &bHigh, con
         //  m_pColorWidgetAction->setVisible(true);
     }
     m_strNoteUuid = sUuid;
-    qDebug() << bHigh;
     m_pColorWidgetAction->setBtnAddLightState(bHigh);
 
     //  当前显示状态状态
@@ -101,7 +97,6 @@ void TextOperationMenu::notifyMsgToFrame(const int &msgType, const QString &msgC
 
 void TextOperationMenu::slotSetHighLight(const int &nColor)
 {
-    qDebug() << __FUNCTION__ << "**++";
     m_pLightColor = nColor;
 
     bool bEnable = m_pRemoveHighLight->isEnabled();

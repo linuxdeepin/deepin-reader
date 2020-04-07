@@ -500,7 +500,7 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
         m_operatemenu->setRemoveEnabled(bremoveenable);
         bool isHigh{false};
         isHigh = m_pProxyMouseMove->sameHighLight();
-        m_operatemenu->execMenu(tempPoint, !isHigh/*true*/, sSelectText, struuid);
+        m_operatemenu->execMenu(m_sheet->qGetPath(), tempPoint, !isHigh/*true*/, sSelectText, struuid);
 
     } else if (sSelectText == "" && (bIsHighLight || bicon)) { //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
@@ -524,15 +524,14 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
 
         m_operatemenu->setRemoveEnabled(true);
 
-        m_operatemenu->execMenu(tempPoint, false, sSelectText, struuid);
+        m_operatemenu->execMenu(m_sheet->qGetPath(), tempPoint, false, sSelectText, struuid);
 
     } else {  //  否则弹出 文档操作菜单
         dApp->m_pAppInfo->setMousePressLocal(false, tempPoint);
 
         m_pDefaultMenu->setClickpoint(pRightClickPoint);
 
-        m_pDefaultMenu->setDoubleShow(m_pDocViewProxy->isDoubleShow());
-        m_pDefaultMenu->execMenu(tempPoint, clickPage);
+        m_pDefaultMenu->execMenu(m_sheet, tempPoint, clickPage);
     }
 }
 

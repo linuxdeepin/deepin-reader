@@ -108,6 +108,12 @@ bool SheetBrowserPDF::isMouseHand()
     return 1 == qGetFileData().getCurMouse();
 }
 
+bool SheetBrowserPDF::isDoubleShow()
+{
+    Q_D(SheetBrowserPDF);
+    return d->m_pDocViewProxy->isDoubleShow();
+}
+
 void SheetBrowserPDF::initWidget()
 {
 }

@@ -2,8 +2,9 @@
 
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
-
-#include "CentralDocPage.h"
+#include "DocSheet.h"
+#include "ModuleHeader.h"
+#include "MsgHeader.h"
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     : CustomMenu(DEFAULT_OPERATION_MENU, parent)
@@ -11,61 +12,57 @@ DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     initActions();
 }
 
-void DefaultOperationMenu::execMenu(const QPoint &showPoint, const int &nClickPage)
+void DefaultOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, const int &nClickPage)
 {
-    CentralDocPage *pMtwe = CentralDocPage::Instance();
-    if (pMtwe) {
+    m_sheet = sheet;
 
-        m_showPoint = showPoint;
+    if (m_sheet.isNull())
+        return;
 
-        m_nRightPageNumber = nClickPage;
+    m_showPoint = showPoint;
 
-        QString sCurPath = pMtwe->qGetCurPath();
+    m_nRightPageNumber = nClickPage;
 
-        QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
+    QString sCurPath = m_sheet->qGetPath();
 
-        bool bBookState = pageList.contains(m_nRightPageNumber);
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
 
-        if (bBookState) {
-            m_pBookMark->setProperty("data", 0);
-            m_pBookMark->setText(tr("Remove bookmark"));
-        } else {
-            m_pBookMark->setProperty("data", 1);
-            m_pBookMark->setText(tr("Add bookmark"));
-        }
+    bool bBookState = pageList.contains(m_nRightPageNumber);
 
-        m_pFirstPage->setEnabled(true);
-        m_pPrevPage->setEnabled(true);
-        m_pNextPage->setEnabled(true);
-        m_pEndPage->setEnabled(true);
+    if (bBookState) {
+        m_pBookMark->setProperty("data", 0);
+        m_pBookMark->setText(tr("Remove bookmark"));
+    } else {
+        m_pBookMark->setProperty("data", 1);
+        m_pBookMark->setText(tr("Add bookmark"));
+    }
 
-        if ((m_isDoubleShow == false) ? (m_nRightPageNumber == 0) : (m_nRightPageNumber <= 1)) { //  首页
-            m_pFirstPage->setEnabled(false);
-            m_pPrevPage->setEnabled(false);
-        } else {
-            DocummentProxy *_proxy = pMtwe->getCurFileAndProxy(sCurPath);
-            if (_proxy) {
-                int nPageNum = _proxy->getPageSNum();
-                nPageNum--;
+    m_pFirstPage->setEnabled(true);
+    m_pPrevPage->setEnabled(true);
+    m_pNextPage->setEnabled(true);
+    m_pEndPage->setEnabled(true);
 
-                if ((m_isDoubleShow == false) ? (m_nRightPageNumber == nPageNum) : ((m_nRightPageNumber >= (--nPageNum)))) { //  最后一页
-                    m_pNextPage->setEnabled(false);
-                    m_pEndPage->setEnabled(false);
-                }
+    if ((!m_sheet->isDoubleShow()) ? (m_nRightPageNumber == 0) : (m_nRightPageNumber <= 1)) { //  首页
+        m_pFirstPage->setEnabled(false);
+        m_pPrevPage->setEnabled(false);
+    } else {
+        DocummentProxy *_proxy = m_sheet->getDocProxy();
+        if (_proxy) {
+            int nPageNum = _proxy->getPageSNum();
+            nPageNum--;
+
+            if ((!m_sheet->isDoubleShow()) ? (m_nRightPageNumber == nPageNum) : ((m_nRightPageNumber >= (--nPageNum)))) { //  最后一页
+                m_pNextPage->setEnabled(false);
+                m_pEndPage->setEnabled(false);
             }
         }
-
-        m_pExitFullScreen->setVisible(false);
-        m_pSearch->setVisible(true);
-        m_pAddIconNote->setVisible(true);
-
-        this->exec(showPoint);
     }
-}
 
-void DefaultOperationMenu::setDoubleShow(const bool &isDoubleShow)
-{
-    m_isDoubleShow = isDoubleShow;
+    m_pExitFullScreen->setVisible(false);
+    m_pSearch->setVisible(true);
+    m_pAddIconNote->setVisible(true);
+
+    this->exec(showPoint);
 }
 
 void DefaultOperationMenu::initActions()
@@ -121,22 +118,22 @@ void DefaultOperationMenu::slotBookMarkClicked()
 
 void DefaultOperationMenu::slotFirstPageClicked()
 {
-    CentralDocPage::Instance()->qDealWithData(MSG_OPERATION_FIRST_PAGE, "");
+    m_sheet->pageJumpByMsg(MSG_OPERATION_FIRST_PAGE, "");
 }
 
 void DefaultOperationMenu::slotPrevPageClicked()
 {
-    CentralDocPage::Instance()->qDealWithData(MSG_OPERATION_PREV_PAGE, m_isDoubleShow ? "doubleshow" : "");
+    m_sheet->pageJumpByMsg(MSG_OPERATION_PREV_PAGE, "");
 }
 
 void DefaultOperationMenu::slotNextPageClicked()
 {
-    CentralDocPage::Instance()->qDealWithData(MSG_OPERATION_NEXT_PAGE,  m_isDoubleShow ? "doubleshow" : "");
+    m_sheet->pageJumpByMsg(MSG_OPERATION_NEXT_PAGE, "");
 }
 
 void DefaultOperationMenu::slotEndPageClicked()
 {
-    CentralDocPage::Instance()->qDealWithData(MSG_OPERATION_END_PAGE, "");
+    m_sheet->pageJumpByMsg(MSG_OPERATION_END_PAGE, "");
 }
 
 void DefaultOperationMenu::slotExitFullScreenClicked()
@@ -146,7 +143,10 @@ void DefaultOperationMenu::slotExitFullScreenClicked()
 
 void DefaultOperationMenu::slotAddIconNote()
 {
-    DocummentProxy *_proxy = CentralDocPage::Instance()->getCurFileAndProxy();
+    if (m_sheet.isNull())
+        return;
+
+    DocummentProxy *_proxy = m_sheet->getDocProxy();
     QString sUuid = _proxy->addIconAnnotation(m_pointclicked);        //  添加注释图标成功
     if (sUuid != "") {
         int nClickPage = _proxy->pointInWhichPage(m_pointclicked);

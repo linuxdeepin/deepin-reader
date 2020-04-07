@@ -2,12 +2,14 @@
 #define DEFAULTOPERATIONMENU_H
 
 #include "CustomControl/CustomMenu.h"
+#include <QPointer>
 
 /**
  * @brief The DefaultOperationWidget class
  * @brief   右键  默认菜单操作， 搜索、添加书签、第一页、上一页、下一页、最后一页
  */
 
+class DocSheet;
 class DefaultOperationMenu : public CustomMenu
 {
     Q_OBJECT
@@ -17,13 +19,11 @@ public:
     explicit DefaultOperationMenu(DWidget *parent = nullptr);
 
 public:
-    void execMenu(const QPoint &, const int &);
+    void execMenu(DocSheet *sheet, const QPoint &, const int &);
     inline void setClickpoint(const QPoint &pt)
     {
         m_pointclicked = pt;
     }
-
-    void setDoubleShow(const bool &isDoubleShow);
 
     // CustomMenu interface
 protected:
@@ -54,7 +54,7 @@ private:
     QAction *m_pExitFullScreen = nullptr;
     QPoint m_pointclicked;
     QPoint m_showPoint;
-    bool    m_isDoubleShow = false;
+    QPointer<DocSheet> m_sheet;
 };
 
 #endif // DEFAULTOPERATIONMENU_H

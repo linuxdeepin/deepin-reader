@@ -63,24 +63,27 @@ void DocSheet::pageJump(const int &pagenum)
 
 void DocSheet::pageJumpByMsg(const int &iType, const QString &param)
 {
-    DocummentProxy *_proxy =  getDocProxy();
+    if (DocType_PDF == m_type) {
+        DocummentProxy *_proxy =  getDocProxy();
+        bool isDoubleShow = static_cast<SheetBrowserPDF *>(m_browser)->isDoubleShow();
 
-    if (_proxy) {
-        int iPage = -1;
-        if (iType == MSG_OPERATION_FIRST_PAGE) {
-            iPage = 0;
-        } else if (iType == MSG_OPERATION_PREV_PAGE) {
-            int nCurPage = _proxy->currentPageNo();
-            iPage = nCurPage - (param == "doubleshow" ? 2 : 1);
-        } else if (iType == MSG_OPERATION_NEXT_PAGE) {
-            int nCurPage = _proxy->currentPageNo();
-            iPage = nCurPage + (param == "doubleshow" ? 2 : 1);
-        } else if (iType == MSG_OPERATION_END_PAGE) {
-            int nCurPage = _proxy->getPageSNum();
-            iPage = nCurPage - 1;
+        if (_proxy) {
+            int iPage = -1;
+            if (iType == MSG_OPERATION_FIRST_PAGE) {
+                iPage = 0;
+            } else if (iType == MSG_OPERATION_PREV_PAGE) {
+                int nCurPage = _proxy->currentPageNo();
+                iPage = nCurPage - (isDoubleShow ? 2 : 1);
+            } else if (iType == MSG_OPERATION_NEXT_PAGE) {
+                int nCurPage = _proxy->currentPageNo();
+                iPage = nCurPage + (isDoubleShow ? 2 : 1);
+            } else if (iType == MSG_OPERATION_END_PAGE) {
+                int nCurPage = _proxy->getPageSNum();
+                iPage = nCurPage - 1;
+            }
+
+            pageJump(iPage);
         }
-
-        pageJump(iPage);
     }
 }
 
@@ -123,7 +126,15 @@ void DocSheet::setMouseHand()
 bool DocSheet::isMouseHand()
 {
     if (DocType_PDF == m_type)
-        static_cast<SheetBrowserPDF *>(m_browser)->isMouseHand();
+        return static_cast<SheetBrowserPDF *>(m_browser)->isMouseHand();
+    return false;
+}
+
+bool DocSheet::isDoubleShow()
+{
+    if (DocType_PDF == m_type)
+        return static_cast<SheetBrowserPDF *>(m_browser)->isDoubleShow();
+    return false;
 }
 
 void DocSheet::initPDF()

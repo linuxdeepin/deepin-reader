@@ -23,6 +23,7 @@
 #include <DPushButton>
 
 #include <QThread>
+#include <QPointer>
 
 #include "../CustomListWidget.h"
 #include "CustomControl/CustomWidget.h"
@@ -30,7 +31,7 @@
 #include "NotesItemWidget.h"
 
 class NotesWidget;
-
+class DocummentProxy;
 class ThreadLoadImageOfNote : public QThread
 {
     Q_OBJECT
@@ -64,7 +65,10 @@ public:
     {
         m_pNoteWidget = thumbnail;
     }
-
+    void setProxy(DocummentProxy *proxy )
+    {
+        m_proxy = proxy;
+    }
 
 signals:
     void sigLoadImage(const QImage &);
@@ -76,6 +80,7 @@ private:
     bool m_isLoaded = false;                 // 是都加载完毕
     QList<stHighlightContent> m_stListNote;  // 新文件的注释列表
     NotesWidget *m_pNoteWidget = nullptr;
+    DocummentProxy *m_proxy = nullptr;
 };
 
 /**
@@ -145,7 +150,7 @@ private:
     QString m_strBindPath = "";
     bool m_bOpenFileOk = false;               //是否刚打开文件
 
-    DocSheet *m_sheet;
+    QPointer<DocSheet> m_sheet;
     // CustomWidget interface
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
