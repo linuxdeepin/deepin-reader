@@ -52,7 +52,10 @@ private:
 
 private:
     void mouseReleaseEvent(QMouseEvent *event);
-
+    bool sameHighLight() const
+    {
+        return m_bSameHighLight;
+    }
 private:
     void notifyMsg(const int &, const QString &);
 
@@ -61,7 +64,8 @@ private:
 
     bool            m_bSelectOrMove = false;
     QPoint          m_pMoveStartPoint;
-
+    QString m_strUUid{""};                                   //  鼠标左键点击高亮文字的UUid
+    bool m_bSameHighLight{false};                            //  鼠标选择的一段文字是否是同一个高亮
     friend class SheetBrowserPDFPrivate;
 };
 

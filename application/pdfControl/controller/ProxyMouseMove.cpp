@@ -132,8 +132,9 @@ void ProxyMouseMove::__ShowPageNoteWidget(const QPoint &docPos)
 //  显示 高亮注释 提示界面
 void ProxyMouseMove::__ShowFileNoteWidget(const QPoint &docPos)
 {
+    QString selectText{""};
+    QString t_strUUid{""};
 
-    QString selectText, t_strUUid;
     bool bIsHighLightReleasePoint = _fvwParent->m_pProxy->annotationClicked(docPos, selectText, t_strUUid);
     if (bIsHighLightReleasePoint) {
         int nPage = _fvwParent->m_pProxy->pointInWhichPage(docPos);
@@ -148,7 +149,6 @@ void ProxyMouseMove::__ShowFileNoteWidget(const QPoint &docPos)
 void ProxyMouseMove::mousePressEvent(QMouseEvent *event)
 {
     int nState = CentralDocPage::Instance()->getCurrentState();
-
     Qt::MouseButton nBtn = event->button();
     if (nBtn == Qt::RightButton) {  //  右键处理
         //  处于幻灯片模式下
@@ -163,6 +163,8 @@ void ProxyMouseMove::mousePressEvent(QMouseEvent *event)
             return;
         }
     } else if (nBtn == Qt::LeftButton) { // 左键处理
+        m_strUUid = "";
+        m_bSameHighLight = false;
         //  幻灯片模式下, 左键单击 不作任何处理
         if (nState == SLIDER_SHOW)
             return;
@@ -223,6 +225,12 @@ void ProxyMouseMove::__HandlClicked(const QPoint &globalPos)
 void ProxyMouseMove::__OtherMousePress(const QPoint &globalPos)
 {
     QPoint docGlobalPos = _fvwParent->m_pProxy->global2RelativePoint(globalPos);
+    QString selectText{""};
+
+    bool bIsHighLightReleasePoint = _fvwParent->m_pProxy->annotationClicked(docGlobalPos, selectText, m_strUUid);
+    if (!bIsHighLightReleasePoint) {
+        m_strUUid = "";
+    }
 
     //  点击的时候　先判断　点击处　　是否有链接之类
     auto pLink = _fvwParent->m_pProxy->mouseBeOverLink(docGlobalPos);
@@ -274,7 +282,8 @@ void ProxyMouseMove::mouseReleaseEvent(QMouseEvent *event)
 
     QPoint globalPos = event->globalPos();
     QPoint docGlobalPos = _fvwParent->m_pProxy->global2RelativePoint(globalPos);
-    QString selectText, t_strUUid;
+    QString selectText{""};
+    QString t_strUUid{""};
     bool bicon = _fvwParent->m_pProxy->iconAnnotationClicked(docGlobalPos, selectText, t_strUUid);
     //  放大镜状态， 右键则取消放大镜 并且 直接返回
     if (m_bSelectOrMove && !bicon) {
@@ -311,6 +320,12 @@ void ProxyMouseMove::mouseReleaseEvent(QMouseEvent *event)
         QJsonDocument doc(obj);
 
         notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, doc.toJson(QJsonDocument::Compact));
+    }
+    // 判断鼠标点击的地方是否有高亮
+    bool isHighLightReleasePoint = _fvwParent->m_pProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
+    //判断鼠标选取文字是否在同一个高亮中
+    if (isHighLightReleasePoint && (t_strUUid == m_strUUid)) {
+        m_bSameHighLight = true;
     }
 
     m_bSelectOrMove = false;

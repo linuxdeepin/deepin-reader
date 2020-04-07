@@ -509,8 +509,9 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
             bremoveenable = true;
 
         m_operatemenu->setRemoveEnabled(bremoveenable);
-
-        m_operatemenu->execMenu(tempPoint, true, sSelectText, struuid);
+        bool isHigh{false};
+        isHigh = m_pProxyMouseMove->sameHighLight();
+        m_operatemenu->execMenu(tempPoint, !isHigh/*true*/, sSelectText, struuid);
 
     } else if (sSelectText == "" && (bIsHighLight || bicon)) { //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
