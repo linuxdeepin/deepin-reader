@@ -27,17 +27,12 @@
 #include <QTimer>
 #include <QUuid>
 
-#include "CentralDocPage.h"
 #include "FileDataModel.h"
-#include "app/ProcessController.h"
-#include "business/SaveDialog.h"
 #include "DocSheet.h"
 
-DocTabBar::DocTabBar(CentralDocPage *parent)
-    : DTabBar(parent), m_docPage(parent)
+DocTabBar::DocTabBar(QWidget *parent)
+    : DTabBar(parent)
 {
-    m_strObserverName = "DocTabBar";
-
     this->setTabsClosable(true);
 
     this->setMovable(true);
@@ -46,15 +41,11 @@ DocTabBar::DocTabBar(CentralDocPage *parent)
 
     this->setElideMode(Qt::ElideMiddle);
 
-    m_pMsgList = {MSG_TAB_ADD, MSG_MENU_NEW_TAB};
-
     connect(this, SIGNAL(tabCloseRequested(int)), SLOT(SlotTabCloseRequested(int)));
 
     connect(this, SIGNAL(tabAddRequested()), SLOT(SlotTabAddRequested()));
 
-    connect(this, SIGNAL(currentChanged(int)), SLOT(SlotCurrentChanged(int)));
-
-    dApp->m_pModelService->addObserver(this);
+    connect(this, SIGNAL(currentChanged(int)), SLOT(onTabChanged(int)));
 
     connect(this, &DTabBar::tabReleaseRequested, this, &DocTabBar::handleTabReleased);
 
@@ -68,7 +59,7 @@ DocTabBar::DocTabBar(CentralDocPage *parent)
 
 DocTabBar::~DocTabBar()
 {
-    dApp->m_pModelService->removeObserver(this);
+
 }
 
 int DocTabBar::indexOfFilePath(const QString &filePath)
@@ -90,7 +81,9 @@ void DocTabBar::insertSheet(DocSheet *sheet, int index)
         index = insertTab(index, fileName);
 
     this->setTabData(index, DocSheet::getUuid(sheet));
+
     this->setTabMinimumSize(index, QSize(140, 36));
+
     this->setCurrentIndex(index);
 }
 
@@ -131,9 +124,10 @@ void DocTabBar::insertFromMimeData(int index, const QMimeData *source)
     QString id = source->data("deepin_reader/uuid");
 
     DocSheet *sheet = DocSheet::getSheet(id);
+
     if (nullptr != sheet) {
-        insertSheet(sheet, index);
         sigTabMoveIn(sheet);
+        insertSheet(sheet, index);
     }
 }
 
@@ -158,79 +152,6 @@ void DocTabBar::handleDragActionChanged(Qt::DropAction action)
     }
 }
 
-int DocTabBar::dealWithData(const int &msgType, const QString &msgContent)
-{
-    if (MSG_TAB_ADD == msgType) {
-        AddFileTab(msgContent);
-    } else if (MSG_MENU_NEW_TAB == msgType) {
-        SlotTabAddRequested();
-    }
-
-    if (m_pMsgList.contains(msgType)) {
-        return MSG_OK;
-    }
-
-    return MSG_NO_OK;
-}
-
-void DocTabBar::notifyMsg(const int &msgType, const QString &msgContent)
-{
-    dApp->m_pModelService->notifyMsg(msgType, msgContent);
-}
-
-void DocTabBar::SlotCurrentChanged(int index)
-{
-    QString id = tabData(index).toString();
-    sigTabChanged(DocSheet::getSheet(id));
-}
-
-void DocTabBar::AddFileTab(const QString &sContent, int index)
-{
-    if (m_docPage.isNull())
-        return;
-
-    QStringList filePaths;
-
-    QList<QString> sOpenFiles = m_docPage->qGetAllPath();
-
-    QStringList canOpenFileList = sContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-
-    foreach (auto s, canOpenFileList) {
-        if (!sOpenFiles.contains(s)) {
-            filePaths.append(s);
-        }
-    }
-
-    int nSize = filePaths.size();
-
-    if (nSize > 0) {
-        for (int i = 0; i < nSize; i++) {
-            QString filePath = filePaths.at(i);
-            if (filePath != "") {
-                QString fileName = getFileName(filePath);
-
-                if (index == -1)
-                    index = this->addTab(fileName);
-                else
-                    index = this->insertTab(index, fileName);
-
-                this->setTabData(index, filePath);
-                this->setTabMinimumSize(index, QSize(140, 36));
-                this->setCurrentIndex(index);
-                emit sigAddTab(filePath);
-            }
-        }
-
-        int nCurIndex = this->currentIndex();
-        if (nCurIndex > -1) {
-            SlotCurrentChanged(nCurIndex);
-        }
-    }
-
-    if (canOpenFileList.count()  > 0)
-        CentralDocPage::Instance()->setCurrentTabByFilePath(canOpenFileList.value(canOpenFileList.count() - 1));
-}
-
 QString DocTabBar::getFileName(const QString &strFilePath)
 {
     int nLastPos = strFilePath.lastIndexOf('/');
@@ -238,48 +159,50 @@ QString DocTabBar::getFileName(const QString &strFilePath)
     return strFilePath.mid(nLastPos);
 }
 
+void DocTabBar::onTabChanged(int index)
+{
+    QString id = tabData(index).toString();
+
+    sigTabChanged(DocSheet::getSheet(id));
+
+}
+
 void DocTabBar::handleTabReleased(int index)
 {
     if (count() <= 1)
         return;
 
-    QStringList sDataList = this->tabData(index).toString().split(Constant::sQStringSep, QString::SkipEmptyParts);
+    DocSheet *sheet = DocSheet::getSheet(this->tabData(index).toString());
 
-    QString sPath = sDataList.value(0);
-
-    CentralDocPage::Instance()->SaveFile(MSG_SAVE_FILE, sPath);
+    if (nullptr == sheet)
+        return;
 
     removeTab(index);
 
-    emit sigCloseTab(sPath);
-
-    QProcess app;
-
-    app.startDetached(QString("%1 \"%2\" newwindow").arg(qApp->applicationDirPath() + "/deepin-reader").arg(sPath));
-
-    QTimer::singleShot(50, this, SLOT(onDroped()));
+    emit sigTabNewWindow(sheet);
 }
 
 void DocTabBar::handleTabDroped(int index, Qt::DropAction da, QObject *target)
 {
     Q_UNUSED(da)    //同程序da可以根据目标传回，跨程序全是copyAction
 
-    if (nullptr != target) {//如果是本程序 同移出程序
-        handleTabReleased(index);
+    DocSheet *sheet = DocSheet::getSheet(this->tabData(index).toString());
+
+    if (nullptr == sheet)
         return;
+
+    if (nullptr == target) {
+        //如果是空则为新建窗口
+        if (count() <= 0) {//如果是最后一个，不允许
+            return;
+        }
+        removeTab(index);
+        emit sigTabNewWindow(sheet);
+    } else if (Qt::MoveAction == da) {
+        //如果是移动
+        removeTab(index);
+        emit sigTabMoveOut(sheet);
     }
-
-    QStringList sDataList = this->tabData(index).toString().split(Constant::sQStringSep, QString::SkipEmptyParts);
-
-    QString sPath = sDataList.value(0);
-
-    CentralDocPage::Instance()->SaveFile(MSG_SAVE_FILE, sPath);
-
-    removeTab(index);
-
-    emit sigCloseTab(sPath);
-
-    QTimer::singleShot(50, this, SLOT(onDroped()));
 }
 
 void DocTabBar::onDroped()
@@ -292,14 +215,18 @@ void DocTabBar::onDroped()
 //  新增
 void DocTabBar::SlotTabAddRequested()
 {
-    notifyMsg(E_OPEN_FILE);
+    emit sigNeedOpenFilesExec();
 }
 
 //  关闭
 void DocTabBar::SlotTabCloseRequested(int index)
 {
-    QString filePath = this->tabData(index).toString();
-    emit sigCloseTab(filePath);
+    DocSheet *sheet = DocSheet::getSheet(this->tabData(index).toString());
+
+    if (nullptr == sheet)
+        return;
+
+    emit sigTabClosed(sheet);
 }
 
 void DocTabBar::SlotRemoveFileTab(const QString &sPath)

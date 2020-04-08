@@ -42,10 +42,7 @@ ScaleWidget::~ScaleWidget()
 
 int ScaleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_FILE_FIT_SCALE) {
-        SetFitScale(msgContent);
-        return MSG_OK;
-    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
+    if (msgType == MSG_NOTIFY_KEY_MSG) {
         onShortKey(msgContent);
         if (m_pKeyMsgList.contains(msgContent)) {
             return MSG_OK;
@@ -62,7 +59,6 @@ void ScaleWidget::initWidget()
     setLayout(m_layout);
 
     scaleComboBox = new DComboBox();
-    connect(scaleComboBox, SIGNAL(currentIndexChanged(const QString &)), SLOT(SlotCurrentTextChanged(const QString &)));
     scaleComboBox->setInsertPolicy(QComboBox::NoInsert);
     scaleComboBox->setDuplicatesEnabled(false); //  重复项 不允许添加
     int tW = 120;
@@ -159,19 +155,10 @@ void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
     bool bOk = false;
     QString sTempData = sTempText.mid(0, nIndex);
     double dValue = sTempData.toDouble(&bOk);
+
     if (bOk && dValue >= 10.0 && dValue <= m_nMaxScale) {
-        qInfo() <<   "     scale  dValue:" << dValue;
-        QJsonObject obj;
-        QString str{""};
-        str = QString::number(dValue) + Constant::sQStringSep + QString::number(1);
-        obj.insert("content", str);//QString::number(dValue));
-        obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
-
-        QJsonDocument doc(obj);
-
-        dApp->m_pModelService->notifyMsg(MSG_FILE_SCALE, doc.toJson(QJsonDocument::Compact));
-
-        emit sigScaleChanged();
+        m_sheet->setScale(dValue);
+        m_sheet->setData(Fit, QString::number(NO_ADAPTE_State));
     }
     if (dApp->openFileOk()) {
         dApp->setFlush(true);
@@ -214,8 +201,12 @@ void ScaleWidget::SlotReturnPressed()
 
 void ScaleWidget::setSheet(DocSheet *sheet)
 {
+    m_sheet = sheet;
+
     if (nullptr == sheet)
         return;
+
+    disconnect(scaleComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(SlotCurrentTextChanged(const QString &)));
 
     auto _proxy = sheet->getDocProxy();
     if (_proxy) {
@@ -237,7 +228,9 @@ void ScaleWidget::setSheet(DocSheet *sheet)
         }
 
         FileDataModel fdm = sheet->qGetFileData();
+
         double nScale = fdm.qGetData(Scale);
+
         if (static_cast<int>(nScale) == 0) {
             nScale = 100;
         }
@@ -248,49 +241,21 @@ void ScaleWidget::setSheet(DocSheet *sheet)
                 break;
             }
         }
+
         dataList.indexOf(static_cast<int>(nScale));
+
         scaleComboBox->setCurrentIndex(index);
+
         if (index == -1) {
+
             QString sCurText = QString::number(nScale) + "%";
+
             scaleComboBox->setCurrentText(sCurText);
+
         }
+
         scaleComboBox->blockSignals(false);
     }
-}
 
-void ScaleWidget::SetFitScale(const QString &msgContent)
-{
-    scaleComboBox->blockSignals(true);
-
-    double dTemp = msgContent.toDouble() * 100;
-    int nScale = static_cast<int>(dTemp);
-    QString sCurText = QString::number(nScale) + "%";
-
-    qInfo() << "    sCurText1:" << sCurText;
-    int nIndex = scaleComboBox->findText(sCurText);
-    if (nIndex != -1) {
-        m_nCurrentIndex = nIndex;
-        scaleComboBox->setCurrentIndex(m_nCurrentIndex);
-    } else {
-        dataList.append(nScale);
-        qSort(dataList.begin(), dataList.end());
-
-        m_nCurrentIndex = dataList.indexOf(nScale);
-        dataList.removeOne(nScale);
-
-        m_nCurrentIndex--;
-
-        scaleComboBox->setCurrentIndex(-1);
-        scaleComboBox->setCurrentText(sCurText);
-    }
-
-    scaleComboBox->blockSignals(false);
-
-    QJsonObject obj;
-    QString str{""};
-    str = QString::number(nScale) + Constant::sQStringSep + QString::number(0);
-    obj.insert("content", str);//QString::number(dValue));
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
-    QJsonDocument doc(obj);
-    dApp->m_pModelService->notifyMsg(MSG_FILE_SCALE, doc.toJson(QJsonDocument::Compact));
+    connect(scaleComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(SlotCurrentTextChanged(const QString &)));
 }

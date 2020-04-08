@@ -14,9 +14,7 @@ public:
     ~CentralNavPage() override;
 
 signals:
-    void sigOpenFilePaths(const QString &);
-
-    void filesOpened();
+    void sigNeedOpenFileExec();
 
 public:
     int dealWithData(const int &, const QString &) override;
@@ -30,7 +28,6 @@ private slots:
     void slotUpdateTheme();
 
 private:
-    QStringList getOpenFileList();
 
     void initConnections();
 

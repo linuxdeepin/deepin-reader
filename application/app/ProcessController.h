@@ -38,8 +38,6 @@ public:
 
     bool listen();
 
-    static bool execOpenFiles();    //此方法会考虑是否已存在打开此文件进程
-
     static void processOpenFile(const QString &filePath);  //
 
 private slots:

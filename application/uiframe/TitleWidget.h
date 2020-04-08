@@ -45,8 +45,6 @@ private slots:
 
     void SlotSetCurrentTool(const int &);
 
-    void SlotScaleChanged();
-
     void on_thumbnailBtn_clicked();
 
     void on_settingBtn_clicked();

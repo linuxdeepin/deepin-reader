@@ -32,8 +32,6 @@ void ProxyFileDataModel::qDealWithData(const int &nType, const QString &sValue)
 {
     if (nType == MSG_LEFTBAR_STATE) {
         SetLeftWidgetIndex(sValue);
-    } else if (nType == MSG_FILE_SCALE) {
-        OnSetViewScale(sValue);
     } else if (nType == MSG_VIEWCHANGE_FIT) {
         OnSetViewHit(sValue);
     } else if (nType == MSG_FILE_PAGE_CHANGE) {

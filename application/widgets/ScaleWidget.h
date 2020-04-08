@@ -20,6 +20,7 @@
 #define SCALEWIDGET_H
 
 #include "CustomControl/CustomWidget.h"
+#include <QPointer>
 
 class DocSheet;
 class ScaleWidget : public CustomWidget
@@ -33,24 +34,22 @@ public:
 
     void setSheet(DocSheet *sheet);
 
-signals:
-    void sigScaleChanged();
-
 public:
     int dealWithData(const int &, const QString &) override;
 
-    // CustomWidget interface
 protected:
     void initWidget() override;
 
 private slots:
     void slotPrevScale();
+
     void slotNextScale();
+
     void SlotCurrentTextChanged(const QString &);
+
     void SlotReturnPressed();
 
 private:
-    void SetFitScale(const QString &);
     void onShortKey(const QString &keyType);
 
 private:
@@ -59,6 +58,7 @@ private:
     int         m_nMaxScale = 1000;
 
     QList<int> dataList;
+    QPointer<DocSheet> m_sheet;
 };
 
 #endif // SCALEWIDGET_H

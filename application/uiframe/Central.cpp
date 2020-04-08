@@ -81,6 +81,21 @@ void Central::openFilesExec()
     }
 }
 
+void Central::addSheet(DocSheet *sheet)
+{
+    m_docPage->addSheet(sheet);
+}
+
+bool Central::saveAll()
+{
+    return m_docPage->saveAll();
+}
+
+void Central::handleShortcut(QString shortcut)
+{
+    m_docPage->OnAppShortCut(shortcut);
+}
+
 void Central::onSheetCountChanged(int count)
 {
     auto pLayout = this->findChild<QStackedLayout *>();
@@ -116,16 +131,6 @@ void Central::OnSetCurrentIndex()
     }
 }
 
-void Central::SlotOpenFiles(const QString &filePaths)
-{
-    auto pLayout = this->findChild<QStackedLayout *>();
-    if (pLayout) {
-        pLayout->setCurrentIndex(1);
-    }
-
-    notifyMsg(MSG_TAB_ADD, filePaths);
-}
-
 void Central::onFilesOpened()
 {
     auto pLayout = this->findChild<QStackedLayout *>();
@@ -148,7 +153,7 @@ void Central::onMenuTriggered(const QString &action)
     if (action == "New window") {
         Utils::runApp(QString());
     } else if (action == "New tab") {
-        notifyMsg(E_OPEN_FILE);
+        openFilesExec();
     } else if (action == "Save") { //  保存当前显示文件
         m_docPage->saveCurFile();
     } else if (action == "Save as") {
@@ -166,6 +171,11 @@ void Central::onMenuTriggered(const QString &action)
     } else if (action == "Display in file manager") {    //  文件浏览器 显示
         m_docPage->OpenCurFileFolder();
     }
+}
+
+void Central::onOpenFilesExec()
+{
+    openFilesExec();
 }
 
 void Central::onShowTip(const QString &contant)
@@ -205,12 +215,14 @@ void Central::dragEnterEvent(QDragEnterEvent *event)
 void Central::dropEvent(QDropEvent *event)
 {
     auto mimeData = event->mimeData();
-    if (mimeData->hasFormat("reader/tabbar")) {
+    if (mimeData->hasFormat("deepin_reader/tabbar")) {
         event->setDropAction(Qt::MoveAction);
         event->accept();
 
-        QString filePath = mimeData->data("reader/filePath");
-        SlotOpenFiles(filePath);
+        QString id = mimeData->data("deepin_reader/uuid");
+        DocSheet *sheet = DocSheet::getSheet(id);
+        if (nullptr != sheet)
+            m_docPage->onCentralMoveIn(sheet);
 
     } else if (mimeData->hasUrls()) {
         QStringList noOpenFileList;
@@ -243,14 +255,9 @@ void Central::dropEvent(QDropEvent *event)
         }
 
         if (canOpenFileList.count() > 0) {
-            QString sRes = "";
-
             foreach (auto s, canOpenFileList) {
-                if (!ProcessController::existFilePath(s))
-                    sRes += s + Constant::sQStringSep;
+                openFile(s);
             }
-
-            SlotOpenFiles(sRes);
         }
     }
 }
@@ -270,8 +277,8 @@ void Central::initWidget()
     setLayout(m_layout);
 
     connect(m_menu, SIGNAL(sigActionTriggered(QString)), this, SLOT(onMenuTriggered(QString)));
-    connect(m_navPage, SIGNAL(sigOpenFilePaths(const QString &)), SLOT(SlotOpenFiles(const QString &)));
-    connect(m_navPage, SIGNAL(filesOpened()), SLOT(onFilesOpened()));
+    connect(m_navPage, SIGNAL(sigNeedOpenFileExec()), SLOT(onOpenFilesExec()));
+
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), this, SLOT(onCurSheetChanged(DocSheet *)));
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_menu, SLOT(onCurSheetChanged(DocSheet *)));
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_widget, SLOT(onCurSheetChanged(DocSheet *)));
@@ -279,4 +286,6 @@ void Central::initWidget()
     connect(m_docPage, SIGNAL(sigNeedShowTip(const QString &)), this, SLOT(onShowTip(const QString &)));
     connect(m_docPage, SIGNAL(sigNeedClose()), this, SIGNAL(sigNeedClose()));
     connect(m_docPage, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
+    connect(m_docPage, SIGNAL(sigNeedShowState(int)), this, SIGNAL(sigNeedShowState(int)));
+    connect(m_docPage, SIGNAL(sigNeedOpenFileExec()), SLOT(onOpenFilesExec()));
 }

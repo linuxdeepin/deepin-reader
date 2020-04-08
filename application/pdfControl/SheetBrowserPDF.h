@@ -55,6 +55,10 @@ public:
 
     bool isDoubleShow();
 
+    void setScale(double scale);
+
+    void setFit(int fit);
+
 signals:
     void sigFileOpenResult(const QString &, const bool &);
     void sigFindOperation(const int &);

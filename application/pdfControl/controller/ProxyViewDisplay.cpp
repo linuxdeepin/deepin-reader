@@ -71,30 +71,30 @@ void ProxyViewDisplay::OnSetViewHit(const QString &msgContent)
     QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (sList.size() == 2) {
         m_nAdapteState = sList.at(0).toInt();
-        qInfo() << "      m_nAdapteState:" << m_nAdapteState;
     }
 
     onSetWidgetAdapt();
 }
 
 //  设置　窗口　自适应　宽＼高　度
-void ProxyViewDisplay::onSetWidgetAdapt()
+int ProxyViewDisplay::onSetWidgetAdapt()
 {
     if (m_nAdapteState != Default_State) {
+
         if (!fvmPrivate->m_pProxy)
-            return;
+            return -1;
 
         double dScale = 0.0;
         if (m_nAdapteState == ADAPTE_WIDGET_State) {
             dScale = fvmPrivate->m_pProxy->adaptWidthAndShow(m_nWidth);
+            return dScale * 100;
         } else if (m_nAdapteState == ADAPTE_HEIGHT_State) {
             dScale = fvmPrivate->m_pProxy->adaptHeightAndShow(m_nHeight);
-        }
-
-        if (dScale > 0.0) {
-            notifyMsg(MSG_FILE_FIT_SCALE, QString::number(dScale));
+            return dScale * 100;
         }
     }
+
+    return -1;
 }
 
 //  比例调整了, 取消自适应 宽高状态
@@ -106,7 +106,6 @@ void ProxyViewDisplay::OnSetViewScale(const QString &msgConent)
             return;
         }
         m_nScale = sList.at(0).toDouble();
-//        m_nScale = msgConent.toDouble();
         setScaleRotateViewModeAndShow();
 
         m_nAdapteState = Default_State;
@@ -152,6 +151,12 @@ void ProxyViewDisplay::setWidth(const int &nWidth)
 void ProxyViewDisplay::setScale(const int &nScale)
 {
     m_nScale = nScale;
+}
+
+int ProxyViewDisplay::setFit(int fit)
+{
+    m_nAdapteState = fit;
+    return onSetWidgetAdapt();
 }
 
 void ProxyViewDisplay::setRotateType(const int &rotateType)

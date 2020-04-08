@@ -8,6 +8,7 @@ DWIDGET_USE_NAMESPACE
 
 class QSignalMapper;
 class Central;
+class DocSheet;
 class MainWindow : public DMainWindow, public IObserver
 {
     Q_OBJECT
@@ -18,12 +19,11 @@ public:
 
     ~MainWindow() override;
 
-private:
-    static MainWindow *g_onlyMainWindow;
+    void addSheet(DocSheet *sheet);
+
+    void addFile(const QString &filepath);
 
 public:
-    static MainWindow *Instance();
-
     void openfile(const QString &filepath);
 
     void setSreenRect(const QRect &); //得到屏幕的分辨率
@@ -58,10 +58,16 @@ private:
 private slots:
     void slotShortCut(const QString &);
 
+    void onShowState(int state);
+
 private:
     QList<int>          m_pMsgList;
     Qt::WindowStates    m_nOldState = Qt::WindowNoState;        //  旧的窗口状态
     Central            *m_central = nullptr;
+
+public:
+    static MainWindow *create();
+    static QList<MainWindow *> m_list;
 };
 
 #endif // MainWindow_H

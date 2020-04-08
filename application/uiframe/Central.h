@@ -37,6 +37,12 @@ public:
 
     void openFilesExec();
 
+    void addSheet(DocSheet *sheet);
+
+    bool saveAll();
+
+    void handleShortcut(QString shortcut);
+
 public slots:
     void onSheetCountChanged(int count);
 
@@ -44,6 +50,8 @@ signals:
     void sigOpenFiles(const QString &);
 
     void sigNeedClose();
+
+    void sigNeedShowState(int);
 
 public:
     int dealWithData(const int &, const QString &) override;
@@ -59,13 +67,13 @@ protected:
     void initWidget() override;
 
 public slots:
-    void SlotOpenFiles(const QString &);
-
     void onFilesOpened();
 
     void onCurSheetChanged(DocSheet *);
 
     void onMenuTriggered(const QString &action);
+
+    void onOpenFilesExec();
 
 private slots:
     void OnSetCurrentIndex();

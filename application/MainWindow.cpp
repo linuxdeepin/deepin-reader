@@ -14,16 +14,13 @@
 
 DWIDGET_USE_NAMESPACE
 
-MainWindow *MainWindow::g_onlyMainWindow = nullptr;
-
-MainWindow *MainWindow::Instance()
-{
-    return g_onlyMainWindow;
-}
+QList<MainWindow *> MainWindow::m_list;
 
 MainWindow::MainWindow(DMainWindow *parent)
     : DMainWindow(parent)
 {
+    m_list.append(this);
+
     setTitlebarShadowEnabled(true);
 
     m_strObserverName = "MainWindow";
@@ -37,8 +34,6 @@ MainWindow::MainWindow(DMainWindow *parent)
     initThemeChanged();
 
     initShortCut();
-
-    g_onlyMainWindow = this;
 
     dApp->m_pModelService->addObserver(this);
 
@@ -57,8 +52,18 @@ MainWindow::MainWindow(DMainWindow *parent)
 
 MainWindow::~MainWindow()
 {
-    // We don't need clean pointers because application has exit here.
+    m_list.removeOne(this);
     dApp->m_pModelService->removeObserver(this);
+}
+
+void MainWindow::addSheet(DocSheet *sheet)
+{
+    m_central->addSheet(sheet);
+}
+
+void MainWindow::addFile(const QString &filepath)
+{
+    m_central->openFile(filepath);
 }
 
 void MainWindow::openfile(const QString &filepath)
@@ -105,26 +110,28 @@ void MainWindow::showEvent(QShowEvent *ev)
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    event->ignore();
+    if (m_central->saveAll()) {
+        dApp->m_pAppInfo->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
 
-    dApp->m_pAppInfo->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
+        dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
 
-    dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
+        event->accept();
 
-    QJsonObject obj;
+        if (1 == m_list.count() && m_list.value(0) == this) {
+            qApp->quit();
+        }
 
-    obj.insert("type", "exit_app");
+        this->deleteLater();
 
-    QJsonDocument doc = QJsonDocument(obj);
-
-    notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
-
+    } else
+        event->ignore();
 }
 
 void MainWindow::initUI()
 {
     m_central = new Central(this);
     connect(m_central, SIGNAL(sigNeedClose()), this, SLOT(close()));
+    connect(m_central, SIGNAL(sigNeedShowState(int)), this, SLOT(onShowState(int)));
 
     setCentralWidget(m_central);
 
@@ -178,15 +185,38 @@ void MainWindow::slotShortCut(const QString &key)
     if (key == KeyStr::g_ctrl_shift_slash) { //  显示快捷键预览
         displayShortcuts();
     } else  if (key == KeyStr::g_ctrl_o) {
-        notifyMsg(E_OPEN_FILE);
+        m_central->openFilesExec();
     } else {
-        QJsonObject obj;
-        obj.insert("type", "ShortCut");
-        obj.insert("key", key);
-
-        QJsonDocument doc = QJsonDocument(obj);
-        notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
+        m_central->handleShortcut(key);
     }
+}
+
+void MainWindow::onShowState(int state)
+{
+    titlebar()->setVisible(state);
+
+    if (state == 1) {
+        if (windowState() == Qt::WindowFullScreen) {
+
+            showNormal();
+
+            if (m_nOldState == Qt::WindowMaximized) {
+                showMaximized();
+            }
+
+            m_nOldState = Qt::WindowNoState;        // 状态恢复     2019-12-23  wzx
+        }
+    } else {
+
+        m_nOldState = this->windowState();      //  全屏之前 保存当前状态     2019-12-23  wzx
+
+        this->setWindowState(Qt::WindowFullScreen);
+    }
+}
+
+MainWindow *MainWindow::create()
+{
+    return new MainWindow();
 }
 
 void MainWindow::notifyMsg(const int &msgType, const QString &msgContent)

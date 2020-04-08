@@ -44,8 +44,6 @@ public:
 
     friend class DocTabBar;
 public:
-    static CentralDocPage *Instance();
-
     void openFile(QString &filePath);
 
 public slots:
@@ -59,8 +57,21 @@ public slots:
 
     void onTabMoveOut(DocSheet *);        //被移动走了
 
+    void onTabNewWindow(DocSheet *);        //移出程序 新建窗口
+
+    void onCentralMoveIn(DocSheet *);       //从正文部分移入
+
+public:
+    void addSheet(DocSheet *);      //直接添加sheet
+
+    bool saveAll();
+
+    void clearState();
+
 signals:
     void sigSheetCountChanged(int);
+
+    void sigNeedOpenFileExec();
 
 public:
     int dealWithData(const int &, const QString &) override;
@@ -91,8 +102,6 @@ public:
     void OnExitSliderShow();
 
     void OnExitMagnifer();
-
-    void setCurrentTabByFilePath(const QString &filePath);
 
     void showTips(const QString &tips);
 
@@ -156,8 +165,6 @@ public:
 signals:
     void sigDealNotifyMsg(const int &, const QString &);
 
-    void sigOpenFileResult(const QString &, const bool &);
-
     void sigRemoveFileTab(const QString &);
 
     void sigTabBarIndexChange(const QString &);
@@ -170,17 +177,10 @@ signals:
 
     void sigNeedClose();
 
+    void sigNeedShowState(int);
+
 public slots:
-    void onCurFileChanged(bool isChanged);
-
-private slots:
-    void SlotSetCurrentIndexFile(const QString &);
-
-    void SlotAddTab(const QString &);
-
-    void SlotCloseTab(const QString &);
-
-    void SlotOpenFileResult(const QString &, const bool &);
+    void onSheetChanged(DocSheet *, bool hasChanged);
 
 private:
     QStackedLayout      *m_pStackedLayout = nullptr;
@@ -191,7 +191,6 @@ private:
     QDBusReply<QDBusUnixFileDescriptor> m_reply;
     QList<QVariant> m_arg;
     bool m_bBlockShutdown = false;
-    static CentralDocPage *g_onlyApp;
 
 private:
     QList<int>          m_pMsgList;

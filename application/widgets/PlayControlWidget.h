@@ -18,6 +18,9 @@ public:
     explicit PlayControlWidget(DocSheet *sheet, DWidget *parnet = nullptr);
     ~PlayControlWidget()override;
 
+signals:
+    void sigPlayBtnClicked();
+
 public:
     void activeshow(int ix = 0, int iy = 0);
     void killshow();

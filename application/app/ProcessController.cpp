@@ -91,32 +91,6 @@ bool ProcessController::listen()
     return m_localServer->listen(QString::number(pid));
 }
 
-bool ProcessController::execOpenFiles()
-{
-    DFileDialog dialog;
-    dialog.setFileMode(DFileDialog::ExistingFiles);
-    dialog.setNameFilter(Utils::getSuffixList());
-    dialog.setDirectory(QDir::homePath());
-
-    if (QDialog::Accepted != dialog.exec()) {
-        return false;
-    }
-
-    QStringList files = dialog.selectedFiles();
-
-    bool opened = false;
-    if (files.size() > 0) {
-        foreach (auto filePath, files) {
-            if (!ProcessController::existFilePath(filePath)) {
-                dApp->m_pModelService->notifyMsg(MSG_TAB_ADD, filePath);
-                opened = true;
-            }
-        }
-    }
-
-    return opened;
-}
-
 void ProcessController::processOpenFile(const QString &filePath)
 {
     QProcess app;
@@ -150,70 +124,72 @@ QString ProcessController::request(const QString &pid, const QString &message)
 
 void ProcessController::onReceiveMessage()
 {
-    //此处存在指令未接收全风险
-    QLocalSocket *localSocket = m_localServer->nextPendingConnection();
+    return;
 
-    if (!localSocket->waitForReadyRead(1000)) {
-        return;
-    }
+//    //此处存在指令未接收全风险
+//    QLocalSocket *localSocket = m_localServer->nextPendingConnection();
 
-    QByteArray byteArray = localSocket->readAll();
+//    if (!localSocket->waitForReadyRead(1000)) {
+//        return;
+//    }
 
-    Json json(QString::fromUtf8(byteArray.constData()));
+//    QByteArray byteArray = localSocket->readAll();
 
-    if ("checkFilePath" == json.getString("command")) {
+//    Json json(QString::fromUtf8(byteArray.constData()));
 
-        CentralDocPage *ex = CentralDocPage::Instance();
-        MainWindow *window = MainWindow::Instance();
-        QString filePath = json.getString("message");
+//    if ("checkFilePath" == json.getString("command")) {
 
-        if (ex && window && ex->qGetAllPath().contains(filePath)) {
-            localSocket->write("contains");
+//        CentralDocPage *ex = CentralDocPage::Instance();
+//        MainWindow *window = MainWindow::Instance();
+//        QString filePath = json.getString("message");
 
-        } else {
-            localSocket->write("none");
-        }
+//        if (ex && window && ex->qGetAllPath().contains(filePath)) {
+//            localSocket->write("contains");
 
-        localSocket->waitForBytesWritten(1000);
-    } else if ("existFilePath" == json.getString("command")) {
+//        } else {
+//            localSocket->write("none");
+//        }
 
-        CentralDocPage *ex = CentralDocPage::Instance();
-        MainWindow *window = MainWindow::Instance();
-        QString filePath = json.getString("message");
+//        localSocket->waitForBytesWritten(1000);
+//    } else if ("existFilePath" == json.getString("command")) {
 
-        if (ex && window && ex->qGetAllPath().contains(filePath)) {
-            localSocket->write("contains");
-            ex->setCurrentTabByFilePath(filePath);
-            window->activateWindow();
+//        CentralDocPage *ex = CentralDocPage::Instance();
+//        MainWindow *window = MainWindow::Instance();
+//        QString filePath = json.getString("message");
 
-        } else {
-            localSocket->write("none");
-        }
+//        if (ex && window && ex->qGetAllPath().contains(filePath)) {
+//            localSocket->write("contains");
+//            ex->setCurrentTabByFilePath(filePath);
+//            window->activateWindow();
 
-        localSocket->waitForBytesWritten(1000);
-    } else if ("openNewFile" == json.getString("command")) {
-        QStringList fileOpenList = json.getStringList("message");
+//        } else {
+//            localSocket->write("none");
+//        }
 
-        CentralDocPage *ex = CentralDocPage::Instance();
-        MainWindow *window = MainWindow::Instance();
+//        localSocket->waitForBytesWritten(1000);
+//    } else if ("openNewFile" == json.getString("command")) {
+//        QStringList fileOpenList = json.getStringList("message");
 
-        if (ex && window ) {
-            localSocket->write("exist");
+//        CentralDocPage *ex = CentralDocPage::Instance();
+//        MainWindow *window = MainWindow::Instance();
 
-            for (int i = 0 ; i < fileOpenList.count(); ++i) {
-                MainWindow::Instance()->openfile(fileOpenList.value(i));
-                if (i == fileOpenList.count() - 1)
-                    ex->setCurrentTabByFilePath(fileOpenList.value(i));
-            }
+//        if (ex && window ) {
+//            localSocket->write("exist");
 
-            window->activateWindow();
+//            for (int i = 0 ; i < fileOpenList.count(); ++i) {
+//                MainWindow::Instance()->openfile(fileOpenList.value(i));
+//                if (i == fileOpenList.count() - 1)
+//                    ex->setCurrentTabByFilePath(fileOpenList.value(i));
+//            }
 
-        } else {
-            localSocket->write("none");
-        }
-    }
+//            window->activateWindow();
 
-    localSocket->disconnectFromServer();
+//        } else {
+//            localSocket->write("none");
+//        }
+//    }
+
+//    localSocket->disconnectFromServer();
 }
 
 QStringList ProcessController::findReaderPids()

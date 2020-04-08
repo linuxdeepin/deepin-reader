@@ -30,13 +30,13 @@ DWIDGET_USE_NAMESPACE
 
 class CentralDocPage;
 class DocSheet;
-class DocTabBar : public DTabBar, public IObserver
+class DocTabBar : public DTabBar
 {
     Q_OBJECT
     Q_DISABLE_COPY(DocTabBar)
 
 public:
-    explicit DocTabBar(CentralDocPage *parent);
+    explicit DocTabBar(QWidget *parent);
 
     ~DocTabBar() override;
 
@@ -48,6 +48,14 @@ public:
 
 signals:
     void sigTabMoveIn(DocSheet *);
+
+    void sigTabClosed(DocSheet *);
+
+    void sigTabMoveOut(DocSheet *);
+
+    void sigTabNewWindow(DocSheet *);
+
+    void sigNeedOpenFilesExec();
 
 protected:
     QMimeData *createMimeDataFromTab(int index, const QStyleOptionTab &option) const;
@@ -80,18 +88,11 @@ signals:
 
     void sigTabChanged(DocSheet *);
 
-public:
-    int dealWithData(const int &, const QString &) override;
-
-    void notifyMsg(const int &, const QString &s = "") override;
-
 private:
-    void AddFileTab(const QString &, int index = -1);
-
     QString getFileName(const QString &strFilePath);
 
 private slots:
-    void SlotCurrentChanged(int);
+    void onTabChanged(int);
 
     void SlotTabAddRequested();
 
@@ -100,11 +101,6 @@ private slots:
     void SlotRemoveFileTab(const QString &);
 
     void SlotOpenFileResult(const QString &, const bool &);
-
-private:
-    QList <int> m_pMsgList;
-
-    QPointer<CentralDocPage> m_docPage;
 };
 
 #endif // MAINTABWIDGET_H

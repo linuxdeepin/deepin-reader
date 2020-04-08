@@ -39,7 +39,7 @@ public:
     int setViewRotateRight();  //右旋转
 
 public:
-    void onSetWidgetAdapt();
+    int onSetWidgetAdapt();
     void OnSetViewHit(const QString &msgContent);
     void OnSetViewScale(const QString &msgConent);
     void OnSetViewChange(const QString &msgContent);
@@ -49,6 +49,8 @@ public:
     void setDoubleShow(const int &nDoubleShow);
     void setRotateType(const int &rotateType);
     void setScale(const int &nScale);
+    int setFit(int fit);     //没更新是-1
+
     void setWidth(const int &nWidth);
     void setHeight(const int &nHeight);
 

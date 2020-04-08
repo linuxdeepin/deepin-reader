@@ -34,9 +34,9 @@ public:
     // CustomMenu interface
 public:
     int dealWithData(const int &, const QString &) override;
-    void CancelFitState();
+
     void readCurDocParam(DocSheet *sheet);
-    // CustomMenu interface
+
 protected:
     void initActions() override;
 

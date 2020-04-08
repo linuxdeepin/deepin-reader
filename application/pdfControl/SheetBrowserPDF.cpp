@@ -114,6 +114,24 @@ bool SheetBrowserPDF::isDoubleShow()
     return d->m_pDocViewProxy->isDoubleShow();
 }
 
+void SheetBrowserPDF::setScale(double scale)
+{
+    Q_D(SheetBrowserPDF);
+    setData(Scale, QString::number(scale));
+    d->m_pDocViewProxy->setScale(scale);
+    d->m_pDocViewProxy->setScaleRotateViewModeAndShow();
+}
+
+void SheetBrowserPDF::setFit(int fit)
+{
+    Q_D(SheetBrowserPDF);
+    setData(Fit, QString::number(fit));
+    int scale = d->m_pDocViewProxy->setFit(fit);
+    if (-1 != scale)
+        setData(Scale, QString::number(scale));
+    emit sigFileChanged(getFileChange());
+}
+
 void SheetBrowserPDF::initWidget()
 {
 }

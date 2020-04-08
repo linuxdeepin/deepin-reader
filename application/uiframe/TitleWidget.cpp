@@ -137,7 +137,6 @@ void TitleWidget::initWidget()
     m_layout->addWidget(m_pHandleShapeBtn);
 
     m_pSw = new ScaleWidget;
-    connect(m_pSw, SIGNAL(sigScaleChanged()), SLOT(SlotScaleChanged()));
     m_pSw->setDisabled(true);
 
     m_layout->addWidget(m_pSw);
@@ -229,12 +228,7 @@ void TitleWidget::on_handleShapeBtn_clicked()
 
 void TitleWidget::on_searchBtn_clicked()
 {
-    QJsonObject obj;
-    obj.insert("type", "ShortCut");
-    obj.insert("key", KeyStr::g_ctrl_f);
-
-    QJsonDocument doc = QJsonDocument(obj);
-    notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
+    m_curSheet->handleShortcut(KeyStr::g_ctrl_f);
 }
 
 void TitleWidget::SlotSetCurrentTool(const int &sAction)
@@ -250,17 +244,6 @@ void TitleWidget::SlotSetCurrentTool(const int &sAction)
     } else {
         setHandleShape();
     }
-}
-
-
-void TitleWidget::SlotScaleChanged()
-{
-//    m_pScaleMenuBtn->setText(QString::number(iScale) + "%");
-
-//    if (iFlag == 0) {
-    //  比例变化, 自适应宽\高 状态 取消
-    m_pFontMenu->CancelFitState();
-//    }
 }
 
 void TitleWidget::initBtns()
@@ -308,22 +291,34 @@ void TitleWidget::__InitSelectTool()
 
 void TitleWidget::setDefaultShape()
 {
+    if (m_curSheet.isNull())
+        return;
+
     QString btnName = "defaultshape";
 
     m_pHandleShapeBtn->setToolTip(tr("Select Text"));
 
     QIcon icon = PF::getIcon(Pri::g_module + btnName);
+
     m_pHandleShapeBtn->setIcon(icon);
+
+    m_curSheet->setMouseDefault();
 }
 
 void TitleWidget::setHandleShape()
 {
+    if (m_curSheet.isNull())
+        return;
+
     QString btnName = "handleshape";
 
     m_pHandleShapeBtn->setToolTip(tr("Hand Tool"));
 
     QIcon icon = PF::getIcon(Pri::g_module + btnName);
+
     m_pHandleShapeBtn->setIcon(icon);
+
+    m_curSheet->setMouseHand();
 }
 
 DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)

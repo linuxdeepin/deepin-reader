@@ -362,16 +362,11 @@ void SheetBrowserPDFPrivate::resizeEvent(QResizeEvent *event)
 void SheetBrowserPDFPrivate::wheelEvent(QWheelEvent *event)
 {
     if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
-        QJsonObject obj;
-        obj.insert("type", "ShortCut");
-
         if (event->delta() > 0) {
-            obj.insert("key", KeyStr::g_ctrl_larger);
+            m_sheet->handleShortcut(KeyStr::g_ctrl_larger);
         } else {
-            obj.insert("key", KeyStr::g_ctrl_smaller);
+            m_sheet->handleShortcut(KeyStr::g_ctrl_smaller);
         }
-        QJsonDocument doc = QJsonDocument(obj);
-        notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
     }
 }
 

@@ -24,13 +24,15 @@ public:
 
     ~DocSheet() override;
 
+    void handleShortcut(QString shortcut);
+
 public:
     void openFile(const QString &filePath);
 
 signals:
     void sigOpenFileResult(const QString &, const bool &);
 
-    void sigFileChanged(bool hasChanged);     //被修改了 书签 笔记
+    void sigFileChanged(DocSheet *, bool hasChanged);    //被修改了 书签 笔记
 
     void sigTotateChanged();
 
@@ -53,13 +55,15 @@ public:
 
     void setMouseHand();        //手型工具
 
+    void setScale(double scale);
+
+    void setFit(int fit);
+
     bool isMouseHand();
 
     bool isDoubleShow();
 
     QString qGetPath();
-
-    void qSetPath(const QString &strPath);
 
     int qGetFileChange();
 
@@ -114,6 +118,8 @@ private slots:
     void SlotNotifyMsg(const int &, const QString &);
 
     void onShowTips(const QString &tips);
+
+    void onFileChanged(bool);
 
 private:
     DocType_EM      m_type;

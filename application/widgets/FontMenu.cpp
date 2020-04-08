@@ -45,20 +45,13 @@ int FontMenu::dealWithData(const int &msgType, const QString &msgContent)
     return MSG_NO_OK;
 }
 
-void FontMenu::CancelFitState()
-{
-    m_bFiteH = m_bFiteW = false;
-    m_pFiteHAction->setChecked(false);
-    m_pFiteWAction->setChecked(false);
-}
-
 /**
  * @brief FontMenu::resetAdaptive
  * 手动改变(ctrl + 1)缩放比例时，复位自适应宽高
  */
 void FontMenu::resetAdaptive()
 {
-    CancelFitState();
+    //CancelFitState();
 
     setAppSetFiteHAndW();
 }
@@ -74,6 +67,7 @@ void FontMenu::readCurDocParam(DocSheet *sheet)
 
     //单双页
     int value = fdm.qGetData(DoubleShow);
+
     m_bDoubPage = (value == 1) ? true : false;
     if (m_pTwoPageAction) {
         m_pTwoPageAction->setChecked(m_bDoubPage);
@@ -81,6 +75,7 @@ void FontMenu::readCurDocParam(DocSheet *sheet)
 
     //自适应宽/高
     int adaptat = fdm.qGetData(Fit);
+
     if (adaptat == ADAPTE_WIDGET_State) {
         m_bFiteW = true;
         m_bFiteH = false;
@@ -257,13 +252,5 @@ void FontMenu::setAppSetFiteHAndW()
         iValue = ADAPTE_HEIGHT_State;
     }
 
-    QJsonObject obj;
-    QString str{""};
-    str = QString::number(iValue) + Constant::sQStringSep + QString::number(1);
-    obj.insert("content", str);//QString::number(iValue));
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
-
-    QJsonDocument doc(obj);
-
-    notifyMsg(MSG_VIEWCHANGE_FIT, doc.toJson(QJsonDocument::Compact));
+    m_sheet->setFit(iValue);
 }

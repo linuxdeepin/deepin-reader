@@ -49,6 +49,15 @@ DocSheet::~DocSheet()
     g_map.remove(m_uuid);
 }
 
+void DocSheet::handleShortcut(QString shortcut)
+{
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return;
+
+    doc->OnAppShortCut(shortcut);
+}
+
 void DocSheet::openFile(const QString &filePath)
 {
     if (DocType_PDF == m_type)
@@ -135,6 +144,18 @@ void DocSheet::setMouseHand()
         static_cast<SheetBrowserPDF *>(m_browser)->setMouseHand();
 }
 
+void DocSheet::setScale(double scale)
+{
+    if (DocType_PDF == m_type)
+        static_cast<SheetBrowserPDF *>(m_browser)->setScale(scale);
+}
+
+void DocSheet::setFit(int fit)
+{
+    if (DocType_PDF == m_type)
+        static_cast<SheetBrowserPDF *>(m_browser)->setFit(fit);
+}
+
 bool DocSheet::isMouseHand()
 {
     if (DocType_PDF == m_type)
@@ -169,7 +190,7 @@ void DocSheet::initPDF()
     connect(browser, SIGNAL(sigAnntationMsg(const int &, const QString &)), sidebar, SIGNAL(sigAnntationMsg(const int &, const QString &)));
     connect(browser, SIGNAL(sigBookMarkMsg(const int &, const QString &)), sidebar, SIGNAL(sigBookMarkMsg(const int &, const QString &)));
     connect(browser, SIGNAL(sigUpdateThumbnail(const int &)), sidebar, SIGNAL(sigUpdateThumbnail(const int &)));
-    connect(browser, SIGNAL(sigFileChanged(bool)), this, SIGNAL(sigFileChanged(bool)));
+    connect(browser, SIGNAL(sigFileChanged(bool)), this, SLOT(onFileChanged(bool)));
     connect(browser, SIGNAL(sigRotateChanged(int)), sidebar, SLOT(onRotate(int)));
 
     int tW = 36;
@@ -274,6 +295,11 @@ void DocSheet::onShowTips(const QString &tips)
     showTips(tips);
 }
 
+void DocSheet::onFileChanged(bool hasChanged)
+{
+    sigFileChanged(this, hasChanged);
+}
+
 QUuid DocSheet::getUuid(DocSheet *sheet)
 {
     return g_map.key(sheet);
@@ -283,17 +309,13 @@ DocSheet *DocSheet::getSheet(QString uuid)
 {
     if (g_map.contains(uuid))
         return g_map[uuid];
+
     return nullptr;
 }
 
 QString DocSheet::qGetPath()
 {
     return static_cast<SheetBrowserPDF *>(m_browser)->getFilePath();
-}
-
-void DocSheet::qSetPath(const QString &strPath)
-{
-    static_cast<SheetBrowserPDF *>(m_browser)->OpenFilePath(strPath);  //  proxy 打开文件
 }
 
 int DocSheet::qGetFileChange()

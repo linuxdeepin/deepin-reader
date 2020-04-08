@@ -80,22 +80,17 @@ int main(int argc, char *argv[])
     QApplication::desktop()->geometry();
     a.setSreenRect(a.desktop()->geometry());
 
-    MainWindow w;
+    MainWindow *w = MainWindow::create();
 
     controller.listen();
 
     share.detach();
 
-    if (arguments.contains("newwindow"))
-        w.move(QCursor::pos());
-
     foreach (const QString &filePath, waitOpenFilePathList) {
-        if (filePath.endsWith("pdf")) {
-            w.openfile(filePath);
-        }
+        w->addFile(filePath);
     }
 
-    w.show();
+    w->show();
 
     return a.exec();
 }

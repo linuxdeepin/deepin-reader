@@ -18,7 +18,6 @@ enum E_MSG_TYPE {
 
 enum E_HOMEWIDGET_MSG {
     E_HOMEWIDGET_MSG_BEGIN = E_MSG_TYPE_END + 50,
-    E_OPEN_FILE,
     E_HOMEWIDGET_MSG_END
 };
 
@@ -67,7 +66,6 @@ enum E_TAB_TYPE {
 enum E_MENU_MSG {
     E_MENU_MSG_BEGIN = MSG_TAB_MSG_END + 50,
     MSG_MENU_NEW_WINDOW,                // 新窗口打开一个文档
-    MSG_MENU_NEW_TAB,                   // 新增加一个文档
     MSG_OPERATION_EXIT,                 //  退出
     E_MENU_MSG_END
 };
@@ -132,7 +130,6 @@ enum E_FILE_VALUE_MSG {
     MSG_VIEWCHANGE_ROTATE_VALUE,        //  旋转
     MSG_HANDLE_SELECT,                  //  选择工具
     MSG_FILE_SCALE,                     //  当前比例
-    MSG_FILE_FIT_SCALE,                 //  当前比例        自适应的缩放比
     MSG_LEFTBAR_STATE,                  //  文档是否有变化
     E_FILE_VALUE_MSG_END
 };

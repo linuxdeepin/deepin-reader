@@ -6,7 +6,7 @@
 #include <DSuggestButton>
 #include <QVBoxLayout>
 #include <QSvgWidget>
-
+#include "MainWindow.h"
 #include "CustomControl/CustomClickLabel.h"
 #include "utils/PublicFunction.h"
 #include "app/ProcessController.h"
@@ -14,7 +14,7 @@
 CentralNavPage::CentralNavPage(DWidget *parent)
     : CustomWidget(HOME_WIDGET, parent)
 {
-    m_pMsgList = {MSG_MENU_NEW_WINDOW, E_OPEN_FILE};
+    m_pMsgList = {MSG_MENU_NEW_WINDOW};
 
     initWidget();
     initConnections();
@@ -67,8 +67,7 @@ void CentralNavPage::initWidget()
 
 void CentralNavPage::slotChooseBtnClicked()
 {
-    if (ProcessController::execOpenFiles())
-        emit filesOpened();
+    emit sigNeedOpenFileExec();
 }
 
 //  主题切换
@@ -92,39 +91,19 @@ void CentralNavPage::slotUpdateTheme()
     }
 }
 
-QStringList CentralNavPage::getOpenFileList()
-{
-    QStringList fileList;
-
-    DFileDialog dialog;
-    dialog.setFileMode(DFileDialog::ExistingFiles);
-    dialog.setNameFilter(Utils::getSuffixList());
-
-    QString historyDir = QDir::homePath();
-    dialog.setDirectory(historyDir);
-
-    if (QDialog::Accepted != dialog.exec()) {
-        return fileList;
-    }
-    fileList = dialog.selectedFiles();
-    return fileList;
-}
-
 void CentralNavPage::initConnections()
 {
 }
 
 void CentralNavPage::NewWindow()
 {
-    ProcessController::processOpenFile("");
+    MainWindow::create()->show();
 }
 
 int CentralNavPage::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_MENU_NEW_WINDOW == msgType) {
         NewWindow();
-    } else if (E_OPEN_FILE == msgType) {
-        slotChooseBtnClicked();
     } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
         slotUpdateTheme();
     }
