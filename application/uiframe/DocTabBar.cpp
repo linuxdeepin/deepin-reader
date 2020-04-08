@@ -260,7 +260,7 @@ void DocTabBar::handleTabDroped(int index, Qt::DropAction da, QObject *target)
 void DocTabBar::onDroped()
 {
     if (count() <= 0) {
-        emit sigLastTabClosed();
+        emit sigLastTabMoved();
     }
 }
 

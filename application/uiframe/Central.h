@@ -36,6 +36,8 @@ public:
 signals:
     void sigOpenFiles(const QString &);
 
+    void sigNeedClose();
+
 public:
     int dealWithData(const int &, const QString &) override;
 

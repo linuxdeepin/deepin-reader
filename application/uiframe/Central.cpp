@@ -243,4 +243,5 @@ void Central::initWidget()
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_widget, SLOT(onCurSheetChanged(DocSheet *)));
     connect(m_docPage, SIGNAL(sigTitleShortCut(QString)), m_widget, SLOT(onTitleShortCut(QString)));
     connect(m_docPage, SIGNAL(sigNeedShowTip(const QString &)), this, SLOT(onShowTip(const QString &)));
+    connect(m_docPage, SIGNAL(sigNeedClose()), this, SIGNAL(sigNeedClose()));
 }

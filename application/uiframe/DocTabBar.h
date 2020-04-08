@@ -68,7 +68,7 @@ signals:
 
     void sigFileCountChanged(int);
 
-    void sigLastTabClosed();
+    void sigLastTabMoved();     //最后一个tab移入其他程序
 
 public:
     int dealWithData(const int &, const QString &) override;

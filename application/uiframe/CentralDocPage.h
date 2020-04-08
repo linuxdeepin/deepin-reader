@@ -152,6 +152,8 @@ signals:
 
     void sigNeedShowTip(const QString &msg);
 
+    void sigNeedClose();
+
 public slots:
     void onCurFileChanged(bool isChanged);
 

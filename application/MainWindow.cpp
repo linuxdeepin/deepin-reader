@@ -123,7 +123,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::initUI()
 {
-    Central *central = new Central;
+    Central *central = new Central(this);
+    connect(central, SIGNAL(sigNeedClose()), this, SLOT(close()));
+
     setCentralWidget(central);
 
     titlebar()->setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
