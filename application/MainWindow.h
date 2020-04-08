@@ -7,12 +7,7 @@
 DWIDGET_USE_NAMESPACE
 
 class QSignalMapper;
-
-/**
- * @brief The MainWindow class
- * @brief 不做任何的业务处理， 只发送信号， 对应的模块处理相应的业务
- */
-
+class Central;
 class MainWindow : public DMainWindow, public IObserver
 {
     Q_OBJECT
@@ -59,8 +54,6 @@ private:
     void showDefaultSize();
 
     void initShortCut();
-signals:
-    void  sigopenfile(const QString &filepath);
 
 private slots:
     void slotShortCut(const QString &);
@@ -68,6 +61,7 @@ private slots:
 private:
     QList<int>          m_pMsgList;
     Qt::WindowStates    m_nOldState = Qt::WindowNoState;        //  旧的窗口状态
+    Central            *m_central = nullptr;
 };
 
 #endif // MainWindow_H

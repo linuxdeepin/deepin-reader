@@ -25,11 +25,13 @@
 #include <QProcess>
 #include <QDir>
 #include <QTimer>
+#include <QUuid>
 
 #include "CentralDocPage.h"
 #include "FileDataModel.h"
 #include "app/ProcessController.h"
 #include "business/SaveDialog.h"
+#include "DocSheet.h"
 
 DocTabBar::DocTabBar(CentralDocPage *parent)
     : DTabBar(parent), m_docPage(parent)
@@ -78,26 +80,46 @@ int DocTabBar::indexOfFilePath(const QString &filePath)
     return -1;
 }
 
+void DocTabBar::insertSheet(DocSheet *sheet, int index)
+{
+    QString fileName = getFileName(sheet->qGetPath());
+
+    if (-1 == index)
+        index = addTab(fileName);
+    else
+        index = insertTab(index, fileName);
+
+    this->setTabData(index, DocSheet::getUuid(sheet));
+    this->setTabMinimumSize(index, QSize(140, 36));
+    this->setCurrentIndex(index);
+}
+
+void DocTabBar::removeSheet(DocSheet *sheet)
+{
+    for (int i = 0; i < count(); ++i) {
+        if (DocSheet::getSheet(this->tabData(i).toString()) == sheet) {
+            removeTab(i);
+            return;
+        }
+    }
+}
+
 QMimeData *DocTabBar::createMimeDataFromTab(int index, const QStyleOptionTab &option) const
 {
     const QString tabName = tabText(index);
 
     QMimeData *mimeData = new QMimeData;
 
-    mimeData->setData("reader/tabbar", tabName.toUtf8());
+    mimeData->setData("deepin_reader/tabbar", tabName.toUtf8());
 
-    QStringList sDataList = this->tabData(index).toString().split(Constant::sQStringSep, QString::SkipEmptyParts);
-
-    QString sPath = sDataList.value(0);
-
-    mimeData->setData("reader/filePath", QByteArray().append(sPath));
+    mimeData->setData("deepin_reader/uuid", this->tabData(index).toByteArray());
 
     return mimeData;
 }
 
 void DocTabBar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
 {
-    const QString tabName = QString::fromUtf8(source->data("reader/tabbar"));
+    const QString tabName = QString::fromUtf8(source->data("deepin_reader/tabbar"));
 
     insertTab(index, tabName);
 
@@ -106,15 +128,18 @@ void DocTabBar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source
 
 void DocTabBar::insertFromMimeData(int index, const QMimeData *source)
 {
-    QString filePath = source->data("reader/filePath");
+    QString id = source->data("deepin_reader/uuid");
 
-    AddFileTab(filePath + Constant::sQStringSep, index);
+    DocSheet *sheet = DocSheet::getSheet(id);
+    if (nullptr != sheet) {
+        insertSheet(sheet, index);
+        sigTabMoveIn(sheet);
+    }
 }
 
 bool DocTabBar::canInsertFromMimeData(int index, const QMimeData *source) const
 {
-    //可以改为根据进程号当前进程不能给自己传
-    return source->hasFormat("reader/tabbar");
+    return source->hasFormat("deepin_reader/tabbar");
 }
 
 void DocTabBar::handleDragActionChanged(Qt::DropAction action)
@@ -155,8 +180,8 @@ void DocTabBar::notifyMsg(const int &msgType, const QString &msgContent)
 
 void DocTabBar::SlotCurrentChanged(int index)
 {
-    QString filePath = this->tabData(index).toString();
-    emit sigTabBarIndexChange(filePath);
+    QString id = tabData(index).toString();
+    sigTabChanged(DocSheet::getSheet(id));
 }
 
 void DocTabBar::AddFileTab(const QString &sContent, int index)

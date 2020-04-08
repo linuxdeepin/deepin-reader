@@ -33,6 +33,13 @@ public:
 
     TitleWidget *titleWidget();
 
+    void openFile(QString filePath);
+
+    void openFilesExec();
+
+public slots:
+    void onSheetCountChanged(int count);
+
 signals:
     void sigOpenFiles(const QString &);
 

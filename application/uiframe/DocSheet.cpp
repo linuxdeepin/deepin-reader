@@ -24,6 +24,7 @@
 #include <QJsonObject>
 #include <QStackedWidget>
 #include <QMimeData>
+#include <QUuid>
 
 #include "widgets/SpinnerWidget.h"
 #include "pdfControl/SheetBrowserPDF.h"
@@ -31,16 +32,27 @@
 #include "app/ProcessController.h"
 #include "docview/docummentproxy.h"
 
+QMap<QString, DocSheet *> DocSheet::g_map;
 DocSheet::DocSheet(DocType_EM type, DWidget *parent)
     : DSplitter(parent), m_type(type)
 {
     if (DocType_PDF == m_type) {
         initPDF();
     }
+
+    m_uuid = QUuid::createUuid().toString();
+    g_map[m_uuid] = this;
 }
 
 DocSheet::~DocSheet()
 {
+    g_map.remove(m_uuid);
+}
+
+void DocSheet::openFile(const QString &filePath)
+{
+    if (DocType_PDF == m_type)
+        static_cast<SheetBrowserPDF *>(m_browser)->OpenFilePath(filePath);
 }
 
 void DocSheet::pageJump(const int &pagenum)
@@ -200,20 +212,19 @@ void DocSheet::SlotFileOpenResult(const QString &s, const bool &res)
             m_pSpinnerWidget = nullptr;
         }
 
-        reloadFile();
+        handleOpenSuccess();
     }
+
+    emit sigOpened(this, res);
     emit sigOpenFileResult(s, res);
 }
 
-void DocSheet::reloadFile()
+void DocSheet::handleOpenSuccess()
 {
     if (DocType_PDF == m_type) {
         SheetSidebarPDF *sidebar = static_cast<SheetSidebarPDF *>(m_sidebar);
         if (sidebar) sidebar->handleOpenSuccess();
     }
-
-    //title widget 也需要通知reload
-
 }
 
 void DocSheet::setSidebarVisible(bool isVisible)
@@ -261,6 +272,18 @@ void DocSheet::SlotNotifyMsg(const int &msgType, const QString &msgContent)
 void DocSheet::onShowTips(const QString &tips)
 {
     showTips(tips);
+}
+
+QUuid DocSheet::getUuid(DocSheet *sheet)
+{
+    return g_map.key(sheet);
+}
+
+DocSheet *DocSheet::getSheet(QString uuid)
+{
+    if (g_map.contains(uuid))
+        return g_map[uuid];
+    return nullptr;
 }
 
 QString DocSheet::qGetPath()

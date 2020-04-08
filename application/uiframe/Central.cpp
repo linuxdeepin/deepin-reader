@@ -24,6 +24,7 @@
 #include <QUrl>
 #include <DMessageManager>
 #include <QStackedLayout>
+#include <DFileDialog>
 
 #include "business/AppInfo.h"
 #include "utils/utils.h"
@@ -53,6 +54,39 @@ TitleMenu *Central::titleMenu()
 TitleWidget *Central::titleWidget()
 {
     return m_widget;
+}
+
+void Central::openFile(QString filePath)
+{
+    m_docPage->openFile(filePath);
+}
+
+void Central::openFilesExec()
+{
+    DFileDialog dialog;
+    dialog.setFileMode(DFileDialog::ExistingFiles);
+    dialog.setNameFilter(Utils::getSuffixList());
+    dialog.setDirectory(QDir::homePath());
+
+    if (QDialog::Accepted != dialog.exec()) {
+        return;
+    }
+
+    QStringList files = dialog.selectedFiles();
+
+    if (files.size() > 0) {
+        foreach (auto filePath, files) {
+            m_docPage->openFile(filePath);
+        }
+    }
+}
+
+void Central::onSheetCountChanged(int count)
+{
+    auto pLayout = this->findChild<QStackedLayout *>();
+    if (pLayout) {
+        pLayout->setCurrentIndex(count > 0 ? 1 : 0);
+    }
 }
 
 void Central::keyPressEvent(QKeyEvent *event)
@@ -244,4 +278,5 @@ void Central::initWidget()
     connect(m_docPage, SIGNAL(sigTitleShortCut(QString)), m_widget, SLOT(onTitleShortCut(QString)));
     connect(m_docPage, SIGNAL(sigNeedShowTip(const QString &)), this, SLOT(onShowTip(const QString &)));
     connect(m_docPage, SIGNAL(sigNeedClose()), this, SIGNAL(sigNeedClose()));
+    connect(m_docPage, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
 }

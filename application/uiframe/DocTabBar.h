@@ -29,6 +29,7 @@
 DWIDGET_USE_NAMESPACE
 
 class CentralDocPage;
+class DocSheet;
 class DocTabBar : public DTabBar, public IObserver
 {
     Q_OBJECT
@@ -40,6 +41,13 @@ public:
     ~DocTabBar() override;
 
     int indexOfFilePath(const QString &filePath);
+
+    void insertSheet(DocSheet *sheet, int index = -1);
+
+    void removeSheet(DocSheet *sheet);
+
+signals:
+    void sigTabMoveIn(DocSheet *);
 
 protected:
     QMimeData *createMimeDataFromTab(int index, const QStyleOptionTab &option) const;
@@ -69,6 +77,8 @@ signals:
     void sigFileCountChanged(int);
 
     void sigLastTabMoved();     //最后一个tab移入其他程序
+
+    void sigTabChanged(DocSheet *);
 
 public:
     int dealWithData(const int &, const QString &) override;

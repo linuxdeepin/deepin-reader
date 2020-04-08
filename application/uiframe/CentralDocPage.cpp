@@ -49,8 +49,7 @@
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
 #include "CentralDocPage.h"
-
-
+#include "FileController.h"
 
 CentralDocPage *CentralDocPage::g_onlyApp = nullptr;
 
@@ -231,7 +230,7 @@ void CentralDocPage::saveAsCurFile()
                         //重新打开
                         DocSheet *sheet = getSheet(sFilePath);
                         if (nullptr != sheet) {
-                            sheet->reloadFile();
+                            sheet->handleOpenSuccess();
                         }
                     }
                 }
@@ -309,6 +308,82 @@ void CentralDocPage::pageJumpByMsg(const int &iType, const QString &param)
 CentralDocPage *CentralDocPage::Instance()
 {
     return g_onlyApp;
+}
+
+void CentralDocPage::openFile(QString &filePath)
+{
+    filePath = FileController::getUrlInfo(filePath).toLocalFile();
+
+    if (FileController::FileType_PDF == FileController::getFileType(filePath)) {
+
+        DocSheet *sheet = new DocSheet(DocType_PDF, this);
+
+        connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), SLOT(onOpened(DocSheet *, bool)));
+
+        sheet->openFile(filePath);
+
+        m_pStackedLayout->addWidget(sheet);
+
+        m_pStackedLayout->setCurrentWidget(sheet);
+
+        m_pTabBar->insertSheet(sheet);
+
+        emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+
+        emit sigSheetCountChanged(m_pStackedLayout->count());
+
+    }
+}
+
+void CentralDocPage::onOpened(DocSheet *sheet, bool ret)
+{
+    if (!ret) {
+        m_pStackedLayout->removeWidget(sheet);
+
+        m_pTabBar->removeSheet(sheet);
+
+        emit sigSheetCountChanged(m_pStackedLayout->count());
+
+        emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+
+        return;
+    }
+
+}
+
+void CentralDocPage::onTabChanged(DocSheet *sheet)
+{
+    emit sigCurSheetChanged(sheet);
+    m_pStackedLayout->setCurrentWidget(sheet);
+}
+
+void CentralDocPage::onTabMoveIn(DocSheet *sheet)
+{
+    m_pStackedLayout->addWidget(sheet);
+
+    emit sigSheetCountChanged(m_pStackedLayout->count());
+
+    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+}
+
+void CentralDocPage::onTabClosed(DocSheet *sheet)
+{
+    m_pStackedLayout->removeWidget(sheet);
+
+    delete sheet;
+
+    emit sigSheetCountChanged(m_pStackedLayout->count());
+
+    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+}
+
+void CentralDocPage::onTabMoveOut(DocSheet *sheet)
+{
+    m_pStackedLayout->removeWidget(sheet);
+
+    emit sigSheetCountChanged(m_pStackedLayout->count());
+
+    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 }
 
 int CentralDocPage::dealWithData(const int &msgType, const QString &msgContent)
@@ -430,7 +505,9 @@ void CentralDocPage::initWidget()
     connect(m_pTabBar, SIGNAL(sigTabBarIndexChange(const QString &)), SLOT(SlotSetCurrentIndexFile(const QString &)));
     connect(m_pTabBar, SIGNAL(sigAddTab(const QString &)), SLOT(SlotAddTab(const QString &)));
     connect(m_pTabBar, SIGNAL(sigCloseTab(const QString &)), SLOT(SlotCloseTab(const QString &)));
+
     connect(m_pTabBar, SIGNAL(sigLastTabMoved()), this, SIGNAL(sigNeedClose()));
+    connect(m_pTabBar, SIGNAL(sigTabChanged(DocSheet *)), this, SLOT(onTabChanged(DocSheet *)));
 
     connect(this, SIGNAL(sigRemoveFileTab(const QString &)), m_pTabBar, SLOT(SlotRemoveFileTab(const QString &)));
     connect(this, SIGNAL(sigOpenFileResult(const QString &, const bool &)), m_pTabBar, SLOT(SlotOpenFileResult(const QString &, const bool &)));

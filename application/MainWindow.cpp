@@ -63,7 +63,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::openfile(const QString &filepath)
 {
-    emit  sigopenfile(filepath);
+    m_central->openFile(filepath);
 }
 
 void MainWindow::setSreenRect(const QRect &rect)
@@ -123,17 +123,15 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::initUI()
 {
-    Central *central = new Central(this);
-    connect(central, SIGNAL(sigNeedClose()), this, SLOT(close()));
+    m_central = new Central(this);
+    connect(m_central, SIGNAL(sigNeedClose()), this, SLOT(close()));
 
-    setCentralWidget(central);
+    setCentralWidget(m_central);
 
     titlebar()->setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
     titlebar()->setTitle("");
-    titlebar()->setMenu(central->titleMenu());
-    titlebar()->addWidget(central->titleWidget(), Qt::AlignLeft);
-
-    connect(this, &MainWindow::sigopenfile, central, &Central::SlotOpenFiles);
+    titlebar()->setMenu(m_central->titleMenu());
+    titlebar()->addWidget(m_central->titleWidget(), Qt::AlignLeft);
 }
 
 void MainWindow::initThemeChanged()

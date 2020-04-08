@@ -1682,7 +1682,6 @@ bool DocummentBase::openFile(QString filepath, unsigned int ipage, RotateType_EM
     d->m_rotate = rotatetype;
     d->m_viewmode = viewmode;
     d->m_currentpageno = ipage;
-    qDebug() << scale << rotatetype << viewmode;
     d->donotneedreloaddoc = true;
     if (!loadDocumment(filepath))
         return false;

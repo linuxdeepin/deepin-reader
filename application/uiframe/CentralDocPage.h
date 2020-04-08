@@ -46,6 +46,22 @@ public:
 public:
     static CentralDocPage *Instance();
 
+    void openFile(QString &filePath);
+
+public slots:
+    void onOpened(DocSheet *, bool);
+
+    void onTabChanged(DocSheet *);      //切换
+
+    void onTabMoveIn(DocSheet *);          //添加
+
+    void onTabClosed(DocSheet *);       //被关闭了
+
+    void onTabMoveOut(DocSheet *);        //被移动走了
+
+signals:
+    void sigSheetCountChanged(int);
+
 public:
     int dealWithData(const int &, const QString &) override;
 

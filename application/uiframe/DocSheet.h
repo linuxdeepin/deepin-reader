@@ -2,6 +2,8 @@
 #define MAINSPLITTER_H
 
 #include <DSplitter>
+#include <QMap>
+
 #include "FileDataModel.h"
 #include "docview/commonstruct.h"
 
@@ -22,12 +24,17 @@ public:
 
     ~DocSheet() override;
 
+public:
+    void openFile(const QString &filePath);
+
 signals:
     void sigOpenFileResult(const QString &, const bool &);
 
     void sigFileChanged(bool hasChanged);     //被修改了 书签 笔记
 
     void sigTotateChanged();
+
+    void sigOpened(DocSheet *, bool);
 
 public:
     void pageJump(const int &pagenum);
@@ -94,7 +101,7 @@ public:
 
 //    bool saveAs(QString filePath);
 
-    void reloadFile();      //重新读取当前文档 除了浏览区域
+    void handleOpenSuccess();
 
     void setSidebarVisible(bool isVisible);
 
@@ -117,6 +124,12 @@ private:
     SpinnerWidget  *m_pSpinnerWidget = nullptr;
     bool            m_bOldState = false;
     int             m_currentState;
+    QString         m_uuid;
+
+public:
+    static QUuid     getUuid(DocSheet *);
+    static DocSheet *getSheet(QString uuid);
+    static QMap<QString, DocSheet *> g_map;
 };
 
 #endif // MAINSPLITTER_H
