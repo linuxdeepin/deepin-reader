@@ -74,6 +74,14 @@ public:
 
     void setScreenRect(const QRect &rect);
     void setSmallNoteWidgetSize(const QSize &size);
+    inline void setOpenFileOk(const bool &ok)
+    {
+        m_bOpenFileOk = ok;
+    }
+    inline bool openFileOk() const
+    {
+        return  m_bOpenFileOk;
+    }
 
 public:
     void setAppKeyValue(const int &, const QString &);
@@ -97,6 +105,7 @@ private:
     int m_nHeight = 1080;//标准高
     double m_dWidthScale = 1.0;//宽缩放比例
     double m_dHeightScale = 1.0;//高缩放比例
+    bool m_bOpenFileOk{false};
 };
 
 #endif // CONSTANTHEADER_H

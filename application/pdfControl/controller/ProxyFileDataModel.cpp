@@ -89,9 +89,9 @@ void ProxyFileDataModel::OnSetViewHit(const QString &sValue)
         if (tValue == 1) {
             tValue = sList.at(0).toInt();
             m_pFileDataModel.qSetData(Fit, tValue);//sValue.toInt());
-            if (dApp) {
-                dApp->setFlush((tValue == 1));
-            }
+//            if (dApp) {
+//                dApp->setFlush((tValue == 1));
+//            }
         }
     }
 }

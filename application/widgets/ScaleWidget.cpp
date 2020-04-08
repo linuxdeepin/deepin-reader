@@ -173,6 +173,9 @@ void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
 
         emit sigScaleChanged();
     }
+    if (dApp->openFileOk()) {
+        dApp->setFlush(true);
+    }
 }
 
 //  combobox 敲了回车
@@ -202,6 +205,10 @@ void ScaleWidget::SlotReturnPressed()
             scaleComboBox->setCurrentText(sShowText);
 
         }
+    }
+
+    if (dApp->openFileOk()) {
+        dApp->setFlush(true);
     }
 }
 

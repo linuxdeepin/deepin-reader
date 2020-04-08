@@ -132,6 +132,9 @@ void FontMenu::slotFiteH()
     m_pFiteHAction->setChecked(m_bFiteH);
 
     setAppSetFiteHAndW();
+    if (dApp->openFileOk()) {
+        dApp->setFlush(true);
+    }
 }
 
 /**

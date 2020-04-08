@@ -155,7 +155,7 @@ void DataStackedWidget::slotAdaptWindowSize(const double &scale)
     }
 
     if (dApp) {
-        if (!(dApp->bFlush())) {
+        if (dApp->openFileOk() && dApp->bFlush()) {
             //自动自适应宽
             QJsonObject obj;
             QString str{""};
@@ -164,10 +164,8 @@ void DataStackedWidget::slotAdaptWindowSize(const double &scale)
             obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
             QJsonDocument doc(obj);
             notifyMsg(MSG_VIEWCHANGE_FIT, doc.toJson(QJsonDocument::Compact));
-            dApp->setFlush(true);
-            qInfo() << "    bFlush:" << dApp->bFlush();
-        } else {
             dApp->setFlush(false);
+            qInfo() << "    bFlush:" << dApp->bFlush();
         }
     }
 }
@@ -300,5 +298,11 @@ void DataStackedWidget::handleOpenSuccess()
     m_pBookMarkWidget ->handleOpenSuccess();
     m_pNotesWidget->handleOpenSuccess();
     m_pSearchResWidget->handleOpenSuccess();
+}
+
+void DataStackedWidget::showEvent(QShowEvent *event)
+{
+    DStackedWidget::showEvent(event);
+    dApp->setOpenFileOk(true);
 }
 

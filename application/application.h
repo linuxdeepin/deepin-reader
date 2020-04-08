@@ -42,18 +42,21 @@ public:
     {
         m_dScal = scale;
     }
-    double scale() const
+    inline double scale() const
     {
         return m_dScal;
     }
-    void setFlush(const bool &flush)
+    inline void setFlush(const bool &flush)
     {
         m_bFlush = flush;
     }
-    bool bFlush()
+    inline bool bFlush() const
     {
         return m_bFlush;
     }
+
+    void setOpenFileOk(const bool &ok);
+    bool openFileOk() const;
 
 protected:
     void handleQuitAction() override;
@@ -63,7 +66,7 @@ public:
     ModelService        *m_pModelService = nullptr;
     AppInfo             *m_pAppInfo = nullptr;
     double m_dScal{1.0};//左侧列表缩放比例
-    bool m_bFlush{true};//是否自适应宽
+    bool m_bFlush{false};//是否自适应宽
 
 private:
     void initCfgPath();
