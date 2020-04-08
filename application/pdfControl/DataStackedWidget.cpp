@@ -303,6 +303,9 @@ void DataStackedWidget::handleOpenSuccess()
 void DataStackedWidget::showEvent(QShowEvent *event)
 {
     DStackedWidget::showEvent(event);
-    dApp->setOpenFileOk(true);
+    QTimer::singleShot(1000, this, [ = ] {
+        dApp->setOpenFileOk(true);
+        qInfo() << "       1111111111111111111           "; QTimer::singleShot(50, this, SLOT(onDroped()));
+    });
 }
 
