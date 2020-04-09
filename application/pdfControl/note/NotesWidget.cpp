@@ -33,8 +33,7 @@ NotesWidget::NotesWidget(DocSheet *sheet, DWidget *parent)
     initConnection();
 
     m_ThreadLoadImage.setParentWidget(this);
-    if (!m_sheet.isNull())
-        m_ThreadLoadImage.setProxy(sheet->getDocProxy());
+
     dApp->m_pModelService->addObserver(this);
 }
 
@@ -216,12 +215,10 @@ void NotesWidget::handleOpenSuccess()
         m_ThreadLoadImage.stopThreadRun();
     }
 
-    DocummentProxy *t_docPtr = m_sheet->getDocProxy();
-    if (t_docPtr) {
         m_pNotesList->clear();
 
         QList<stHighlightContent> list_note;
-        t_docPtr->getAllAnnotation(list_note);
+        m_sheet->getDocProxy()->getAllAnnotation(list_note);
 
         if (list_note.count() < 1) {
             m_bOpenFileOk = true;
@@ -244,10 +241,10 @@ void NotesWidget::handleOpenSuccess()
 
         m_ThreadLoadImage.setListNoteSt(list_note);
         m_ThreadLoadImage.setIsLoaded(true);
+        m_ThreadLoadImage.setProxy(m_sheet->getDocProxy());
         if (!m_ThreadLoadImage.isRunning()) {
             m_ThreadLoadImage.start();
         }
-    }
 }
 
 void NotesWidget::slotLoadImage(const QImage &image)
