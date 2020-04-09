@@ -42,27 +42,48 @@ void DefaultOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, co
     m_pNextPage->setEnabled(true);
     m_pEndPage->setEnabled(true);
 
-    if ((!m_sheet->isDoubleShow()) ? (m_nRightPageNumber == 0) : (m_nRightPageNumber <= 1)) { //  首页
+    DocummentProxy *_proxy = m_sheet->getDocProxy();
+    if(_proxy == nullptr){
         m_pFirstPage->setEnabled(false);
         m_pPrevPage->setEnabled(false);
-    } else {
-        DocummentProxy *_proxy = m_sheet->getDocProxy();
-        if (_proxy) {
-            int nPageNum = _proxy->getPageSNum();
-            nPageNum--;
+        m_pNextPage->setEnabled(false);
+        m_pEndPage->setEnabled(false);
+        return;
+    }else {
+        int currentPage = 0;
+        int pageSum = 0;
+        bool isSinglePage = false;//文档总页数是否是单页
 
-            if ((!m_sheet->isDoubleShow()) ? (m_nRightPageNumber == nPageNum) : ((m_nRightPageNumber >= (--nPageNum)))) { //  最后一页
-                m_pNextPage->setEnabled(false);
-                m_pEndPage->setEnabled(false);
+        pageSum = _proxy->getPageSNum();
+        currentPage = _proxy->currentPageNo();
+        isSinglePage = static_cast<bool>(pageSum%2);
+
+        if (currentPage == 0/*(!m_sheet->isDoubleShow()) ? (currentPage == 0) : (currentPage <= 1)*/) { //  首页
+            m_pFirstPage->setEnabled(false);
+            m_pPrevPage->setEnabled(false);
+        } else {
+            if (_proxy) {
+                pageSum--;
+
+                if ((!m_sheet->isDoubleShow()) ? (currentPage == pageSum) : (isSinglePage ? (currentPage >= pageSum) : (currentPage >= (--pageSum)))) { //  最后一页
+                    m_pNextPage->setEnabled(false);
+                    m_pEndPage->setEnabled(false);
+                }
             }
         }
+        if(_proxy->getPageSNum() == 1){
+            m_pFirstPage->setEnabled(false);
+            m_pPrevPage->setEnabled(false);
+            m_pNextPage->setEnabled(false);
+            m_pEndPage->setEnabled(false);
+        }
+
+        m_pExitFullScreen->setVisible(false);
+        m_pSearch->setVisible(true);
+        m_pAddIconNote->setVisible(true);
+
+        this->exec(showPoint);
     }
-
-    m_pExitFullScreen->setVisible(false);
-    m_pSearch->setVisible(true);
-    m_pAddIconNote->setVisible(true);
-
-    this->exec(showPoint);
 }
 
 void DefaultOperationMenu::initActions()

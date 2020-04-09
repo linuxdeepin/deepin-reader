@@ -493,6 +493,7 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
         dApp->m_pAppInfo->setMousePressLocal(false, tempPoint);
 
         m_pDefaultMenu->setClickpoint(pRightClickPoint);
+        textPage = m_pProxy->currentPageNo(); //当前在哪一页
 
         m_pDefaultMenu->execMenu(m_sheet, tempPoint, clickPage);
     }

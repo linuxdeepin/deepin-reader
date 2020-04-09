@@ -106,6 +106,8 @@ void DocSheet::pageNext()
 
         int page = nCurPage + (isDoubleShow ? 2 : 1);
 
+        page = (page >= (getDocProxy()->getPageSNum()-1)?(getDocProxy()->getPageSNum()-1) : page);
+
         pageJump(page);
     }
 }
