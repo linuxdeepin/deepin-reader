@@ -26,7 +26,8 @@ NotesItemWidget::NotesItemWidget(DWidget *parent)
     : CustomItemWidget(NOTE_ITEM_WIDGET, parent)
 {
     initWidget();
-    __InitConnections();
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NotesItemWidget::slotUpdateTheme);
 }
 
 void NotesItemWidget::setTextEditText(const QString &contant)
@@ -166,19 +167,6 @@ void NotesItemWidget::initWidget()
     m_pHLayout->setSpacing(1);
 
     this->setLayout(m_pHLayout);
-}
-
-void NotesItemWidget::__InitConnections()
-{
-
-}
-
-int NotesItemWidget::dealWithData(const int &msgType, const QString &)
-{
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        slotUpdateTheme();
-    }
-    return MSG_NO_OK;
 }
 
 void NotesItemWidget::paintEvent(QPaintEvent *e)

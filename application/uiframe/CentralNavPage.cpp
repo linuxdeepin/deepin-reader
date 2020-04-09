@@ -19,7 +19,7 @@ CentralNavPage::CentralNavPage(DWidget *parent)
     initWidget();
     initConnections();
     slotUpdateTheme();
-
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &CentralNavPage::slotUpdateTheme);
     dApp->m_pModelService->addObserver(this);
 }
 
@@ -104,8 +104,6 @@ int CentralNavPage::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (MSG_MENU_NEW_WINDOW == msgType) {
         NewWindow();
-    } else if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        slotUpdateTheme();
     }
 
     if (m_pMsgList.contains(msgType)) {

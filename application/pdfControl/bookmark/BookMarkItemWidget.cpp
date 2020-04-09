@@ -28,16 +28,6 @@ BookMarkItemWidget::BookMarkItemWidget(DWidget *parent)
     initWidget();
 }
 
-/**
- * @brief BookMarkItemWidget::dealWithData
- * 处理全局消息接口
- * @return
- */
-int BookMarkItemWidget::dealWithData(const int &, const QString &)
-{
-    return MSG_NO_OK;
-}
-
 void BookMarkItemWidget::setBSelect(const bool &paint)
 {
     if (m_pPicture) {

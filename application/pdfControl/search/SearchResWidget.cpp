@@ -25,13 +25,11 @@ SearchResWidget::SearchResWidget(DocSheet *sheet, DWidget *parent)
 {
     initWidget();
     initConnections();
-
-    dApp->m_pModelService->addObserver(this);
 }
 
 SearchResWidget::~SearchResWidget()
 {
-    dApp->m_pModelService->removeObserver(this);
+
 }
 
 //  查询有数据, 则填充
@@ -286,18 +284,6 @@ void SearchResWidget::updateThumbnail(const int &page)
             }
         }
     }
-}
-
-/**
- * @brief SearchResWidget::dealWithData
- * 处理全局信号函数
- * @param msgType
- * @param msgContent
- * @return
- */
-int SearchResWidget::dealWithData(const int &msgType, const QString &msgContent)
-{
-    return MSG_NO_OK;
 }
 
 void SearchResWidget::OnExitSearch()

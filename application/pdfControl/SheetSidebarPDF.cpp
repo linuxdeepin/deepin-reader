@@ -96,7 +96,7 @@ void SheetSidebarPDF::resizeEvent(QResizeEvent *event)
 
 int SheetSidebarPDF::dealWithData(const int &msgType, const QString &msgContent)
 {
-    return  m_pStackedWidget->dealWithData(msgType, msgContent);
+    return  MSG_NO_OK;
 }
 
 void SheetSidebarPDF::onSearch(const int &iType)
@@ -123,4 +123,9 @@ void SheetSidebarPDF::onSearch(const int &iType)
 void SheetSidebarPDF::onRotate(int rotate)
 {
     m_pStackedWidget->handleRotate(rotate);
+}
+
+void SheetSidebarPDF::onPageChanged(int page)
+{
+    m_pStackedWidget->handlePage(page);
 }

@@ -53,7 +53,7 @@ private:
     void onShortKey(const QString &keyType);
 
 private:
-    DComboBox *scaleComboBox     = nullptr;
+    DComboBox  *m_scaleComboBox     = nullptr;
     int         m_nCurrentIndex = -1;           //  当前选项
     int         m_nMaxScale = 1000;
 

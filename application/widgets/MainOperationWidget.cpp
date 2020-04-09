@@ -14,13 +14,12 @@ MainOperationWidget::MainOperationWidget(DocSheet *sheet, DWidget *parent)
     initWidget();
     initConnect();
     slotUpdateTheme();
-
-    dApp->m_pModelService->addObserver(this);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MainOperationWidget::slotUpdateTheme);
 }
 
 MainOperationWidget::~MainOperationWidget()
 {
-    dApp->m_pModelService->removeObserver(this);
+
 }
 
 void MainOperationWidget::initWidget()
@@ -137,18 +136,6 @@ void MainOperationWidget::slotUpdateTheme()
 void MainOperationWidget::slotButtonClicked(int id)
 {
     emit sigShowStackWidget(id);
-}
-
-int MainOperationWidget::dealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        slotUpdateTheme();
-    }
-
-    if (m_pMsgList.contains(msgType)) {
-        return MSG_OK;
-    }
-    return MSG_NO_OK;
 }
 
 void MainOperationWidget::SetFindOperation(const int &iType)

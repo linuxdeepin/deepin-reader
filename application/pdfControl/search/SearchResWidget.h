@@ -48,15 +48,12 @@ public:
 
     void handleOpenSuccess();
 public:
-    // IObserver interface
-    int dealWithData(const int &, const QString &) override;
     void OnExitSearch();
 
 protected:
     void initWidget() override;
 
 private slots:
-//    void slotFlushSearchWidget(const QString &);
     void slotGetSearchContant(const stSearchRes &);
     void slotSearchOver();
     void slotSelectItem(QListWidgetItem *);

@@ -53,9 +53,6 @@ signals:
 
     void sigNeedShowState(int);
 
-public:
-    int dealWithData(const int &, const QString &) override;
-
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
 

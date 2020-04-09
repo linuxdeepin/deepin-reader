@@ -26,6 +26,7 @@ SearchItemWidget::SearchItemWidget(DWidget *parent)
     : CustomItemWidget(SEARCH_ITEM_WIDGET, parent)
 {
     initWidget();
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SearchItemWidget::slotUpdateTheme);
 }
 
 SearchItemWidget::~SearchItemWidget()
@@ -161,14 +162,6 @@ void SearchItemWidget::initWidget()
     m_pHLayout->setSpacing(1);
 
     this->setLayout(m_pHLayout);
-}
-
-int SearchItemWidget::dealWithData(const int &msgType, const QString &)
-{
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        slotUpdateTheme();
-    }
-    return MSG_NO_OK;
 }
 
 void SearchItemWidget::resizeEvent(QResizeEvent *event)

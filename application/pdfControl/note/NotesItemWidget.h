@@ -36,10 +36,6 @@ public:
     explicit NotesItemWidget(DWidget *parent = nullptr);
 
 public:
-    // IObserver interface
-    int dealWithData(const int &, const QString &) override;
-
-public:
     void setTextEditText(const QString &);
     inline void setNoteUUid(const QString &uuid)
     {
@@ -70,14 +66,13 @@ public:
 
     void CopyItemText();
 
-    // QWidget interface
 protected:
     void paintEvent(QPaintEvent *e) override;
+
     void resizeEvent(QResizeEvent *event) override;
 
 private:
     void initWidget() override;
-    void __InitConnections();
 
 private slots:
     void slotUpdateTheme();

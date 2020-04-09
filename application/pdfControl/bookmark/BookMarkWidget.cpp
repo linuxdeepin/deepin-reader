@@ -37,7 +37,7 @@ BookMarkWidget::BookMarkWidget(DocSheet *sheet, DWidget *parent)
 
     m_pKeyMsgList = {KeyStr::g_ctrl_b};
 
-    dApp->m_pModelService->addObserver(this);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BookMarkWidget::slotUpdateTheme);
 }
 /**
  * @brief BookMarkWidget::~BookMarkWidget
@@ -46,7 +46,6 @@ BookMarkWidget::BookMarkWidget(DocSheet *sheet, DWidget *parent)
 BookMarkWidget::~BookMarkWidget()
 {
     m_loadBookMarkThread.stopThreadRun();
-    dApp->m_pModelService->removeObserver(this);
 }
 
 /**
@@ -229,12 +228,7 @@ void BookMarkWidget::handleOpenSuccess()
     m_loadBookMarkThread.start();
 }
 
-
-/**
- * @brief BookMarkWidget::slotDocFilePageChanged
- * @param page:当前活动页，页码
- */
-void BookMarkWidget::slotDocFilePageChanged(const QString &sPage)
+void BookMarkWidget::handlePage(int page)
 {
     //  先将当前的item 取消绘制
     clearItemColor();
@@ -250,7 +244,7 @@ void BookMarkWidget::slotDocFilePageChanged(const QString &sPage)
                 qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
             if (pItemWidget) {
                 int nWidgetPage = pItemWidget->nPageIndex();
-                if (nWidgetPage == sPage.toInt()) {
+                if (nWidgetPage == page) {
                     pItemWidget->setBSelect(true);
                     m_pAddBookMarkBtn->setEnabled(false);
                     m_pBookMarkListWidget->setCurrentItem(item);
@@ -598,28 +592,6 @@ void BookMarkWidget::slotListMenuClick(const int &iType)
     if (iType == E_BOOKMARK_DELETE) {
         DeleteItemByKey();
     }
-}
-
-/**
- * @brief BookMarkWidget::dealWithData
- * 处理全局消息
- * @param msgType:消息类型
- * @param msgContent:消息内容
- * @return
- */
-int BookMarkWidget::dealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {  //  主题变更消息
-        slotUpdateTheme();
-    } else if (MSG_FILE_PAGE_CHANGE == msgType) { //  文档页变化消息
-        slotDocFilePageChanged(msgContent);
-    }
-
-    if (m_pMsgList.contains(msgType)) {
-        return MSG_OK;
-    }
-    return MSG_NO_OK;
-
 }
 
 int BookMarkWidget::qDealWithShortKey(const QString &s)

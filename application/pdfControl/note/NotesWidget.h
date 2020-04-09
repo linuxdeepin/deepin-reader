@@ -39,6 +39,7 @@ class ThreadLoadImageOfNote : public QThread
 
 public:
     explicit ThreadLoadImageOfNote(QObject *parent = nullptr);
+
     ~ThreadLoadImageOfNote() override
     {
         stopThreadRun();
@@ -98,17 +99,19 @@ public:
     ~NotesWidget() override;
 
     void prevPage();
+
     void nextPage();
+
     void DeleteItemByKey();
+
     void handleOpenSuccess();
+
 signals:
     void sigDeleteContent(const int &, const QString &);
+
     void sigUpdateThumbnail(const int &page);
 
 public:
-    // IObserver interface
-    int dealWithData(const int &, const QString &) override;
-
     QString getBindPath() const;
 
 protected:

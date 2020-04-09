@@ -40,6 +40,8 @@ public slots:
 
     void onRotate(int);
 
+    void onPageChanged(int page);
+
     // CustomWidget interface
 protected:
     void initWidget() override;

@@ -35,7 +35,6 @@ public:
 
 private slots:
     void slotBookMarkStateChange(int, bool);
-    void slotDocFilePageChanged(int);
 
 private:
     SheetBrowserPDFPrivate   *_fvwParent = nullptr;

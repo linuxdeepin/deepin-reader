@@ -89,14 +89,13 @@ public:
     ~BookMarkWidget() override;
 
     void prevPage();
+
     void nextPage();
+
     void DeleteItemByKey();
 
-public:
-    // IObserver interface
-    int dealWithData(const int &, const QString &) override;
+    void handlePage(int page);
 
-    // CustomWidget interface
 public:
     int qDealWithShortKey(const QString &) override;
 
@@ -121,7 +120,7 @@ protected:
     void initWidget() override;
 
 private:
-    void slotDocFilePageChanged(const QString &);
+
     void initConnection();
     QListWidgetItem *addBookMarkItem(const int &);
     void deleteIndexPage(const int &pageIndex);

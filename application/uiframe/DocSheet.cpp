@@ -192,6 +192,7 @@ void DocSheet::initPDF()
     connect(browser, SIGNAL(sigUpdateThumbnail(const int &)), sidebar, SIGNAL(sigUpdateThumbnail(const int &)));
     connect(browser, SIGNAL(sigFileChanged(bool)), this, SLOT(onFileChanged(bool)));
     connect(browser, SIGNAL(sigRotateChanged(int)), sidebar, SLOT(onRotate(int)));
+    connect(browser, SIGNAL(sigPageChanged(int)), sidebar, SLOT(onPageChanged(int)));
 
     int tW = 36;
     int tH = 36;

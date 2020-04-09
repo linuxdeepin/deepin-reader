@@ -530,6 +530,15 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
     }
 }
 
+void SheetBrowserPDFPrivate::onPageChanged(int page)
+{
+    Q_Q(SheetBrowserPDF);
+
+    q->setData(CurPage, QString::number(page));
+
+    emit q->sigPageChanged(page);
+}
+
 void SheetBrowserPDFPrivate::SlotDocFileOpenResult(bool openresult)
 {
     Q_Q(SheetBrowserPDF);
@@ -554,7 +563,7 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
     m_pProxy = new DocummentProxy(q);
     if (m_pProxy) {
         connect(m_pProxy, SIGNAL(signal_bookMarkStateChange(int, bool)), m_pProxyNotifyMsg, SLOT(slotBookMarkStateChange(int, bool)));
-        connect(m_pProxy, SIGNAL(signal_pageChange(int)), m_pProxyNotifyMsg, SLOT(slotDocFilePageChanged(int)));
+        connect(m_pProxy, SIGNAL(signal_pageChange(int)), this, SLOT(onPageChanged(int)));
         connect(m_pProxy, SIGNAL(signal_openResult(bool)), SLOT(SlotDocFileOpenResult(bool)));
 
         QFileInfo info(sPath);

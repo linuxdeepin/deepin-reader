@@ -146,7 +146,6 @@ void MainWindow::initThemeChanged()
     //  主题变了
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ]() {
         setCurTheme();
-        notifyMsg(MSG_OPERATION_UPDATE_THEME);
     });
 }
 

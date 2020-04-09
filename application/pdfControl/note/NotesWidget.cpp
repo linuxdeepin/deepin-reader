@@ -602,16 +602,6 @@ QString NotesWidget::getBindPath() const
     return m_strBindPath;
 }
 
-/**
- * @brief NotesWidget::dealWithData
- * 处理全局信号函数
- * @return
- */
-int NotesWidget::dealWithData(const int &msgType, const QString &msgContent)
-{
-    return MSG_NO_OK;
-}
-
 /*********************class ThreadLoadImageOfNote***********************/
 /**********************加载注释列表***************************************/
 

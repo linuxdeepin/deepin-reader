@@ -41,15 +41,6 @@ CatalogWidget::~CatalogWidget()
     dApp->m_pModelService->removeObserver(this);
 }
 
-int CatalogWidget::dealWithData(const int &msgType, const QString &msgContent)
-{
-    if (MSG_FILE_PAGE_CHANGE == msgType) {
-        m_pTree->dealWithData(msgType, msgContent);
-    }
-
-    return MSG_NO_OK;
-}
-
 void CatalogWidget::initWidget()
 {
     QHBoxLayout *titleLayout = new QHBoxLayout;
@@ -128,4 +119,10 @@ void CatalogWidget::handleOpenSuccess()
     }
 
     m_pTree->handleOpenSuccess();
+}
+
+void CatalogWidget::handlePage(int page)
+{
+    m_pTree->setPage(page);
+    m_pTree->setRightControl(true);
 }

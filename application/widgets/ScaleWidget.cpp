@@ -58,16 +58,16 @@ void ScaleWidget::initWidget()
     m_layout->setSpacing(10);
     setLayout(m_layout);
 
-    scaleComboBox = new DComboBox();
-    scaleComboBox->setInsertPolicy(QComboBox::NoInsert);
-    scaleComboBox->setDuplicatesEnabled(false); //  重复项 不允许添加
+    m_scaleComboBox = new DComboBox();
+    m_scaleComboBox->setInsertPolicy(QComboBox::NoInsert);
+    m_scaleComboBox->setDuplicatesEnabled(false); //  重复项 不允许添加
     int tW = 120;
     int tH = 0;
 //    dApp->adaptScreenView(tW, tH);
-    scaleComboBox->setFixedWidth(tW);
-    scaleComboBox->setEditable(true);
+    m_scaleComboBox->setFixedWidth(tW);
+    m_scaleComboBox->setEditable(true);
 
-    QLineEdit *edit = scaleComboBox->lineEdit();
+    QLineEdit *edit = m_scaleComboBox->lineEdit();
     connect(edit, SIGNAL(returnPressed()), SLOT(SlotReturnPressed()));
 
     DIconButton *pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
@@ -82,7 +82,7 @@ void ScaleWidget::initWidget()
     connect(pNextBtn, SIGNAL(clicked()), SLOT(slotNextScale()));
 
     m_layout->addWidget(pPreBtn);
-    m_layout->addWidget(scaleComboBox);
+    m_layout->addWidget(m_scaleComboBox);
     m_layout->addWidget(pNextBtn);
 }
 
@@ -99,7 +99,7 @@ void ScaleWidget::onShortKey(const QString &keyType)
 
 void ScaleWidget::slotPrevScale()
 {
-    QString cuttext = scaleComboBox->currentText();
+    QString cuttext = m_scaleComboBox->currentText();
     int nIndex = cuttext.lastIndexOf("%");
     if (nIndex > 0)
         cuttext = cuttext.mid(0, nIndex);
@@ -116,13 +116,13 @@ void ScaleWidget::slotPrevScale()
         }
     }
     if (bok) {
-        scaleComboBox->setCurrentIndex(curindex);
+        m_scaleComboBox->setCurrentIndex(curindex);
     }
 }
 
 void ScaleWidget::slotNextScale()
 {
-    QString inputtext = scaleComboBox->currentText();
+    QString inputtext = m_scaleComboBox->currentText();
     int nIndex = inputtext.lastIndexOf("%");
     if (nIndex > 0)
         inputtext = inputtext.mid(0, nIndex);
@@ -138,7 +138,7 @@ void ScaleWidget::slotNextScale()
         }
     }
     if (bok) {
-        scaleComboBox->setCurrentIndex(curindex);
+        m_scaleComboBox->setCurrentIndex(curindex);
     }
 }
 
@@ -147,11 +147,11 @@ void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
     int nIndex = sText.lastIndexOf("%");
     if (nIndex == -1) {
         QString sssTemp = sText + "%";
-        scaleComboBox->setCurrentText(sssTemp);
+        m_scaleComboBox->setCurrentText(sssTemp);
         nIndex = sssTemp.lastIndexOf("%");
     }
 
-    QString sTempText = scaleComboBox->currentText();
+    QString sTempText = m_scaleComboBox->currentText();
     bool bOk = false;
     QString sTempData = sTempText.mid(0, nIndex);
     double dValue = sTempData.toDouble(&bOk);
@@ -168,9 +168,9 @@ void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
 //  combobox 敲了回车
 void ScaleWidget::SlotReturnPressed()
 {
-    QString sTempText = scaleComboBox->currentText();
+    QString sTempText = m_scaleComboBox->currentText();
 
-    int nIndex = scaleComboBox->findText(sTempText, Qt::MatchExactly);
+    int nIndex = m_scaleComboBox->findText(sTempText, Qt::MatchExactly);
     if (nIndex == -1) {     //  列表中没有输入的选项
 
         nIndex = sTempText.lastIndexOf("%");
@@ -188,8 +188,8 @@ void ScaleWidget::SlotReturnPressed()
 
             int curindex = dataList.indexOf(static_cast<int>(dValue));
             if (curindex < 0)
-                scaleComboBox->setCurrentIndex(curindex);
-            scaleComboBox->setCurrentText(sShowText);
+                m_scaleComboBox->setCurrentIndex(curindex);
+            m_scaleComboBox->setCurrentText(sShowText);
 
         }
     }
@@ -206,23 +206,23 @@ void ScaleWidget::setSheet(DocSheet *sheet)
     if (nullptr == sheet)
         return;
 
-    disconnect(scaleComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(SlotCurrentTextChanged(const QString &)));
+    disconnect(m_scaleComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(SlotCurrentTextChanged(const QString &)));
 
     auto _proxy = sheet->getDocProxy();
     if (_proxy) {
         double dMax = _proxy->getMaxZoomratio();
 
-        scaleComboBox->blockSignals(true);
+        m_scaleComboBox->blockSignals(true);
 
         int nTempMax = static_cast<int>(dMax) * 100;
 
         if (nTempMax != m_nMaxScale) {  //  判断当前最大显示 是否 和之前一样, 不一样, 清楚item, 重新添加
-            scaleComboBox->clear();
+            m_scaleComboBox->clear();
             m_nMaxScale = nTempMax;
 
             foreach (int iData, dataList) {
                 if (iData <= m_nMaxScale) {
-                    scaleComboBox->addItem(QString::number(iData) + "%");
+                    m_scaleComboBox->addItem(QString::number(iData) + "%");
                 }
             }
         }
@@ -244,18 +244,18 @@ void ScaleWidget::setSheet(DocSheet *sheet)
 
         dataList.indexOf(static_cast<int>(nScale));
 
-        scaleComboBox->setCurrentIndex(index);
+        m_scaleComboBox->setCurrentIndex(index);
 
         if (index == -1) {
 
             QString sCurText = QString::number(nScale) + "%";
 
-            scaleComboBox->setCurrentText(sCurText);
+            m_scaleComboBox->setCurrentText(sCurText);
 
         }
 
-        scaleComboBox->blockSignals(false);
+        m_scaleComboBox->blockSignals(false);
     }
 
-    connect(scaleComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(SlotCurrentTextChanged(const QString &)));
+    connect(m_scaleComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(SlotCurrentTextChanged(const QString &)));
 }

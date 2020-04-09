@@ -41,6 +41,8 @@ private slots:
     void SlotDocFileOpenResult(bool);
     void slotCustomContextMenuRequested(const QPoint &point);
 
+    void onPageChanged(int page);
+
 private:
     void resizeEvent(QResizeEvent *event);
     void wheelEvent(QWheelEvent *event);

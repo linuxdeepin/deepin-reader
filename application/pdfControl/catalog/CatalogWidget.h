@@ -40,14 +40,12 @@ public:
     ~CatalogWidget() override;
 
     void handleOpenSuccess();
-public:
-    int dealWithData(const int &, const QString &) override;
 
-    // CustomWidget interface
+    void handlePage(int page);
+
 protected:
     void initWidget() override;
 
-    // QWidget interface
 protected:
     void resizeEvent(QResizeEvent *event) override;
 

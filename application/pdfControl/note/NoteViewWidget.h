@@ -45,8 +45,6 @@ signals:
     void sigNeedShowTips(const QString &tips);
 
 public:
-    // IObserver interface
-    int dealWithData(const int &, const QString &) override;
 
 public:
     void showWidget(const QPoint &);

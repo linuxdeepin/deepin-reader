@@ -29,13 +29,12 @@ PagingWidget::PagingWidget(DocSheet *sheet, DWidget *parent)
     initWidget();
 
     slotUpdateTheme();
-
-    dApp->m_pModelService->addObserver(this);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &PagingWidget::slotUpdateTheme);
 }
 
 PagingWidget::~PagingWidget()
 {
-    dApp->m_pModelService->removeObserver(this);
+
 }
 
 /**
@@ -87,23 +86,6 @@ void PagingWidget::initWidget()
     this->setLayout(hLayout);
 }
 
-/**
- * @brief PagingWidget::dealWithData
- * 处理全局消息接口
- * @param msgType
- * @return
- */
-int PagingWidget::dealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {    //  颜色主题切换
-        slotUpdateTheme();
-    } else if (msgType == MSG_FILE_PAGE_CHANGE) {                  //  文档页变化了
-        OnDocFilePageChange(msgContent);
-    }
-
-    return MSG_NO_OK;
-}
-
 void PagingWidget::slotUpdateTheme()
 {
     if (m_pTotalPagesLab) {
@@ -133,7 +115,7 @@ void PagingWidget::__SetBtnState(const int &currntPage, const int &totalPage)
     }
 }
 
-void PagingWidget::OnDocFilePageChange(const QString &msgContent)
+void PagingWidget::setPage(int page)
 {
     if (nullptr == m_sheet)
         return;
@@ -143,7 +125,7 @@ void PagingWidget::OnDocFilePageChange(const QString &msgContent)
     if (_proxy) {
         int totalPage = _proxy->getPageSNum();
 
-        int inputData = msgContent.toInt();
+        int inputData = page;
 
         int currntPage = inputData + 1;     //  + 1 是为了 数字 从1 开始显示
         __SetBtnState(currntPage, totalPage);
@@ -190,7 +172,7 @@ void PagingWidget::handleOpenSuccess()
 
         int nCurPage = _proxy->currentPageNo();
 
-        OnDocFilePageChange(QString::number(nCurPage));
+        setPage(nCurPage);
     }
 }
 

@@ -30,8 +30,6 @@ ThumbnailWidget::ThumbnailWidget(DocSheet *sheet, DWidget *parent)
     initWidget();
 
     initConnection();
-
-    dApp->m_pModelService->addObserver(this);
 }
 
 ThumbnailWidget::~ThumbnailWidget()
@@ -41,18 +39,11 @@ ThumbnailWidget::~ThumbnailWidget()
         m_ThreadLoadImage.stopThreadRun();
         m_ThreadLoadImage.clearList();
     }
-
-    dApp->m_pModelService->removeObserver(this);
 }
 
 // 处理消息事件
 int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (MSG_FILE_PAGE_CHANGE == msgType) {
-        slotDocFilePageChanged(msgContent);
-        m_pPageWidget->dealWithData(msgType, msgContent);
-    }
-
     return MSG_NO_OK;
 }
 
@@ -71,6 +62,20 @@ void ThumbnailWidget::handleRotate(int rotate)
 
     m_ThreadLoadImage.setIsLoaded(true);
     m_ThreadLoadImage.start();
+}
+
+void ThumbnailWidget::handlePage(int page)
+{
+    auto curPageItem = m_pThumbnailListWidget->item(page);
+    if (curPageItem) {
+        auto curItem = m_pThumbnailListWidget->currentItem();
+        if (curItem == curPageItem)
+            return;
+
+        setSelectItemBackColor(curPageItem);
+    }
+
+    m_pPageWidget->setPage(page);
 }
 
 // 初始化界面
@@ -135,20 +140,6 @@ void ThumbnailWidget::initConnection()
     connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const int &, const QImage &)),
             this, SLOT(slotLoadImage(const int &, const QImage &)));
     connect(&m_ThreadLoadImage, SIGNAL(sigRotateImage(const int &)), SLOT(slotRotateThumbnail(const int &)));
-}
-
-//  文件  当前页变化, 获取与 文档页  对应的 item, 设置 选中该item, 绘制item
-void ThumbnailWidget::slotDocFilePageChanged(const QString &sPage)
-{
-    int page = sPage.toInt();
-    auto curPageItem = m_pThumbnailListWidget->item(page);
-    if (curPageItem) {
-        auto curItem = m_pThumbnailListWidget->currentItem();
-        if (curItem == curPageItem)
-            return;
-
-        setSelectItemBackColor(curPageItem);
-    }
 }
 
 void ThumbnailWidget::slotUpdateTheme()
@@ -399,7 +390,7 @@ void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
         }
         m_ThreadLoadImage.setIsLoaded(true);
         m_ThreadLoadImage.start();
-        slotDocFilePageChanged(QString::number(currentPage));
+        handlePage(currentPage);
     }
 }
 

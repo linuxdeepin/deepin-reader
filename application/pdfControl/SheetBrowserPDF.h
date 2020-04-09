@@ -71,6 +71,7 @@ signals:
 
     void sigRotateChanged(int rotate);
 
+    void sigPageChanged(int page);
 public:
     int dealWithData(const int &, const QString &) override;
     int qDealWithShortKey(const QString &) override;

@@ -39,7 +39,11 @@ class DataStackedWidget : public DStackedWidget
 public:
     explicit DataStackedWidget(DocSheet *sheet, DWidget *parent = nullptr);
 
+    void handleOpenSuccess();
+
     void handleRotate(int rotate);
+
+    void handlePage(int page);
 
 signals:
     void sigAnntationMsg(const int &, const QString &);
@@ -48,10 +52,8 @@ signals:
     void sigUpdateThumbnail(const int &);
 
 public:
-    int dealWithData(const int &, const QString &);
     void SetFindOperation(const int &);
 
-    // QWidget interface
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 
@@ -69,7 +71,7 @@ private:
     void DeleteItemByKey();
 
 public:
-    void handleOpenSuccess();
+
 
 private:
     ThumbnailWidget     *m_pThWidget = nullptr;

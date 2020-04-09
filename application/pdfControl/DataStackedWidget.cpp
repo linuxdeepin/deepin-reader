@@ -40,28 +40,11 @@ void DataStackedWidget::handleRotate(int rotate)
     m_pThWidget->handleRotate(rotate);
 }
 
-int DataStackedWidget::dealWithData(const int &msgType, const QString &msgContent)
+void DataStackedWidget::handlePage(int page)
 {
-    int nRes = MSG_NO_OK;
-
-    nRes = m_pThWidget->dealWithData(msgType, msgContent);
-    if (nRes != MSG_OK) {
-        nRes = m_pCatalogWidget->dealWithData(msgType, msgContent);
-        if (nRes != MSG_OK) {
-            nRes = m_pBookMarkWidget ->dealWithData(msgType, msgContent);
-            if (nRes != MSG_OK) {
-                nRes = m_pNotesWidget->dealWithData(msgType, msgContent);
-                if (nRes != MSG_OK) {
-                    nRes = m_pSearchResWidget->dealWithData(msgType, msgContent);
-
-                    if (nRes == MSG_OK)
-                        return MSG_OK;
-                }
-            }
-        }
-    }
-
-    return nRes;
+    m_pThWidget->handlePage(page);
+    m_pBookMarkWidget->handlePage(page);
+    m_pCatalogWidget->handlePage(page);
 }
 
 void DataStackedWidget::SetFindOperation(const int &iType)

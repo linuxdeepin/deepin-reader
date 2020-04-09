@@ -34,23 +34,19 @@ public:
     explicit BookMarkItemWidget(DWidget *parent = nullptr);
 
 public:
-    // IObserver interface
-    int dealWithData(const int &, const QString &) override;
-
     void setBSelect(const bool &paint);
 
 protected:
     void initWidget() override;
+
     void paintEvent(QPaintEvent *event) override;
 
 private:
     bool m_bPaint = false;                    // 是否绘制选中item
 
-    // CustomWidget interface
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
 
-    // CustomItemWidget interface
 public:
     void imageAdaptView(const int &, const int &) Q_DECL_OVERRIDE;
 };

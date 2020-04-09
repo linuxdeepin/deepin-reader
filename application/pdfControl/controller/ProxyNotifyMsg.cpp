@@ -47,15 +47,3 @@ void ProxyNotifyMsg::slotBookMarkStateChange(int nPage, bool bState)
     }
 }
 
-//  文档页变化了
-void ProxyNotifyMsg::slotDocFilePageChanged(int page)
-{
-    QJsonObject obj;
-    obj.insert("content", QString::number(page));
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET);
-
-    QJsonDocument doc(obj);
-
-    dApp->m_pModelService->notifyMsg(MSG_FILE_PAGE_CHANGE, doc.toJson(QJsonDocument::Compact));
-}
-

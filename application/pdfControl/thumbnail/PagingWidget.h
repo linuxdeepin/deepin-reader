@@ -42,8 +42,8 @@ public:
     ~PagingWidget() override;
 
     void handleOpenSuccess();
-public:
-    int dealWithData(const int &, const QString &) override;
+
+    void setPage(int page);
 
 private slots:
     void slotPrePageBtnClicked();
@@ -58,8 +58,6 @@ private:
 
     void __NormalChangePage();
     void __PageNumberJump();
-
-    void OnDocFilePageChange(const QString &);
 
 private:
     DLabel              *m_pTotalPagesLab = nullptr;        // 当前文档总页数标签

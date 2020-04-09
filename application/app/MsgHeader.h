@@ -42,7 +42,6 @@ enum E_FIND_WIDGET_MSG {
 enum MSG_TYPE {
     MSG_TYPE_BEGIN = E_CENTRAL_MSG_END + 50,
     MSG_HANDLESHAPE,                    //  手型 消息
-    MSG_OPERATION_UPDATE_THEME,         //  主题变了
     MSG_NOTIFY_KEY_MSG,                 //  按键通知消息
     MSG_TYPE_END,
 };
@@ -81,7 +80,6 @@ enum E_DOC_TYPE_MSG {
     MSG_OPERATION_PREV_PAGE,                            //  上一页
     MSG_OPERATION_NEXT_PAGE,                            //  下一页
     MSG_OPERATION_END_PAGE,                             //  最后一页
-    MSG_FILE_PAGE_CHANGE,                               //  文档 页码变化消息
     MSG_SAVE_FILE,                                      //  关闭当前文档　消息
     MSG_NOT_SAVE_FILE,                                  //  关闭当前文档　消息
     MSG_NOT_CHANGE_SAVE_FILE,                           //  关闭当前文档　消息
@@ -89,7 +87,7 @@ enum E_DOC_TYPE_MSG {
 
 //  书签消息
 enum E_BOOKMARK_MSG {
-    E_BOOKMARK_MSG_BEGIN = MSG_FILE_PAGE_CHANGE + 50,
+    E_BOOKMARK_MSG_BEGIN = MSG_NOT_CHANGE_SAVE_FILE + 50,
     MSG_OPERATION_ADD_BOOKMARK,            //  添加书签
     MSG_OPERATION_DELETE_BOOKMARK,          //  删除书签
     E_BOOKMARK_MSG_END

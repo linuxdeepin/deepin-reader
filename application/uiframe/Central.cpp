@@ -197,11 +197,6 @@ void Central::onShowTip(const QString &contant)
     }
 }
 
-int Central::dealWithData(const int &msgType, const QString &msgContent)
-{
-    return MSG_NO_OK;
-}
-
 void Central::dragEnterEvent(QDragEnterEvent *event)
 {
     auto mimeData = event->mimeData();

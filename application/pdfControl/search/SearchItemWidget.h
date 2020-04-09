@@ -35,10 +35,6 @@ public:
     ~SearchItemWidget() override;
 
 public:
-    // IObserver interface
-    int dealWithData(const int &, const QString &) override;
-
-public:
     void setTextEditText(const QString &);
     void setSerchResultText(const QString &);
     bool bSelect();

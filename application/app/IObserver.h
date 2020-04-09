@@ -14,8 +14,9 @@ public:
     virtual ~IObserver() {}
 
 public:
-    virtual int dealWithData(const int &, const QString &) = 0;
-    virtual void notifyMsg(const int &, const QString &) = 0;
+    virtual int dealWithData(const int &, const QString &) {}
+
+    virtual void notifyMsg(const int &, const QString &) {}
 
 public:
     QString getObserverName()

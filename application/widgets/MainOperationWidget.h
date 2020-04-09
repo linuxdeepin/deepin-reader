@@ -20,12 +20,11 @@ public:
 signals:
     void sigShowStackWidget(const int &);
 
-    // IObserver interface
 public:
-    int dealWithData(const int &, const QString &) override;
     void SetFindOperation(const int &);
+
     void handleOpenSuccess();
-    // CustomWidget interface
+
 protected:
     void initWidget() override;
 
@@ -40,6 +39,7 @@ private:
 
 private slots:
     void slotUpdateTheme();
+
     void slotButtonClicked(int);
 
 private:

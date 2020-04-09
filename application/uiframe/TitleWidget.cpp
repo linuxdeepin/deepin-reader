@@ -22,7 +22,7 @@ TitleWidget::TitleWidget(DWidget *parent)
 
     initWidget();
     slotUpdateTheme();
-
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &TitleWidget::slotUpdateTheme);
     dApp->m_pModelService->addObserver(this);
 }
 
@@ -361,10 +361,6 @@ void TitleWidget::setMagnifierState()
 //  处理 推送消息
 int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        slotUpdateTheme();
-    }
-
     int nRes = m_pSw->dealWithData(msgType, msgContent);
 
     if (nRes == MSG_OK) {

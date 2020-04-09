@@ -38,17 +38,18 @@ public:
     explicit CatalogTreeView(DocSheet *sheet, DWidget *parent = nullptr);
     ~CatalogTreeView() override;
 
-    // IObserver interface
+    void setPage(int page);
+
+    void setRightControl(bool hasControl);
+
 public:
-    int dealWithData(const int &, const QString &) override;
-
-    void notifyMsg(const int &, const QString &) override;
-
     void handleOpenSuccess();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
+
     void mousePressEvent(QMouseEvent *event) override;
+
     void keyPressEvent(QKeyEvent *event) override;
 
 signals:
@@ -56,16 +57,15 @@ signals:
 
 protected slots:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
+
     void slotThemeChanged();
 
 private:
     void initConnections();
+
     void parseCatalogData(const Section &, QStandardItem *);
 
-    QList<QStandardItem *>   getItemList(const QString &, const int &, const qreal  &realleft, const qreal &realtop);
-
-
-    void OnFilePageChanged(const QString &);
+    QList<QStandardItem *> getItemList(const QString &, const int &, const qreal  &realleft, const qreal &realtop);
 
 private slots:
     void SlotCollapsed(const QModelIndex &);

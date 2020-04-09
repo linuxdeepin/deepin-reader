@@ -42,20 +42,14 @@ NoteViewWidget::NoteViewWidget(DWidget *parent)
     initConnections();
     slotUpdateTheme();
 
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NoteViewWidget::slotUpdateTheme);
+
     dApp->m_pModelService->addObserver(this);
 }
 
 NoteViewWidget::~NoteViewWidget()
 {
     dApp->m_pModelService->removeObserver(this);
-}
-
-int NoteViewWidget::dealWithData(const int &msgType, const QString &)
-{
-    if (msgType == MSG_OPERATION_UPDATE_THEME) {
-        slotUpdateTheme();
-    }
-    return MSG_NO_OK;
 }
 
 void NoteViewWidget::setEditText(const QString &note)

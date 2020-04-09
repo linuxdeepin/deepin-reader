@@ -137,6 +137,8 @@ public:
 
     void handleRotate(int rotate);
 
+    void handlePage(int page);
+
     inline bool isLoading()
     {
         return m_isLoading;
@@ -164,7 +166,6 @@ private:
     ThumbnailItemWidget *getItemWidget(QListWidgetItem *);
 
 private slots:
-    void slotDocFilePageChanged(const QString &);
     void slotUpdateTheme();
     void slotRotateThumbnail(const int &);
     void slotLoadThumbnail(const int &);
