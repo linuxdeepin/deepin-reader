@@ -139,12 +139,8 @@ void DataStackedWidget::slotAdaptWindowSize(const double &scale)
     m_sheet->setFit(0);
     if (dApp) {
         if (dApp->openFileOk() && dApp->bFlush()) {
-<<<<<<< HEAD
             dApp->setFlush(true);
         } else {
-=======
-            m_sheet->setFit(0);
->>>>>>> Type:chore
             dApp->setFlush(false);
         }
     }
