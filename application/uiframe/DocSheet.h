@@ -26,19 +26,8 @@ public:
 
     void handleShortcut(QString shortcut);
 
-public:
     void openFile(const QString &filePath);
 
-signals:
-    void sigOpenFileResult(const QString &, const bool &);
-
-    void sigFileChanged(DocSheet *, bool hasChanged);    //被修改了 书签 笔记
-
-    void sigTotateChanged();
-
-    void sigOpened(DocSheet *, bool);
-
-public:
     void pageJump(int page);
 
     void pageFirst();
@@ -81,7 +70,7 @@ public:
 
     FileDataModel qGetFileData();
 
-    DocummentProxy *getDocProxy();
+    DocummentProxy *getDocProxy();      //在文档打开成功之前为空
 
     void OnOpenSliderShow();
 
@@ -116,6 +105,15 @@ public:
     void handleOpenSuccess();
 
     void setSidebarVisible(bool isVisible);
+
+signals:
+    void sigOpenFileResult(const QString &, const bool &);
+
+    void sigFileChanged(DocSheet *, bool hasChanged);    //被修改了 书签 笔记
+
+    void sigTotateChanged();
+
+    void sigOpened(DocSheet *, bool);
 
 private:
     void initPDF();
