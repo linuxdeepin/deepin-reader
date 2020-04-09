@@ -42,8 +42,12 @@ void TextOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, const
         m_pRemoveHighLight->setText(tr("Remove highlight"));
         insertAction(m_pRemoveHighLight, m_pColorWidgetAction);
         connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked(const int &)), this, SLOT(slotSetHighLight(const int &)));
+        if(m_pRemoveHighLight){
+            m_pRemoveHighLight->setEnabled(bHigh);
+        }
         //  m_pColorWidgetAction->setVisible(true);
     }
+
     m_strNoteUuid = sUuid;
     m_pColorWidgetAction->setBtnAddLightState(bHigh);
 
