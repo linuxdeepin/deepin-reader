@@ -66,7 +66,6 @@ enum E_DOC_TYPE_MSG {
     MSG_DOC_JUMP_PAGE = MSG_TAB_MSG_END + 50,             //  请求跳转页面
     MSG_OPEN_FILE_PATH,                                 //  打开的文件消息
     MSG_SAVE_AS_FILE_PATH,                              //  保存文件消息
-    //MSG_OPERATION_OPEN_FILE_OK,                         //  打开文件成功, 要告诉所有人
     MSG_OPERATION_OPEN_FILE_FAIL,                       //  打开文件失败
     MSG_OPERATION_FIRST_PAGE,                           //  第一页
     MSG_OPERATION_PREV_PAGE,                            //  上一页
@@ -109,19 +108,6 @@ enum E_NOTE_MSG {
     MSG_NOTE_PAGE_DELETE_CONTENT,       //  页面注释 删除内容
     MSG_NOTE_PAGE_DELETE_ITEM,          //  页面注释 删除节点
     E_NOTE_MSG_END,
-};
-
-//  文档显示变化消息
-enum E_FILE_VALUE_MSG {
-    E_FILE_VALUE_MSG_BEGIN = E_NOTE_MSG_END + 50,
-    MSG_TAB_FILE_CHANGE,                //  文档显示切换
-    MSG_VIEWCHANGE_FIT,                 //  自适应
-    MSG_VIEWCHANGE_ROTATE,              //  旋转
-    MSG_VIEWCHANGE_ROTATE_VALUE,        //  旋转
-    MSG_HANDLE_SELECT,                  //  选择工具
-    MSG_FILE_SCALE,                     //  当前比例
-    MSG_LEFTBAR_STATE,                  //  文档是否有变化
-    E_FILE_VALUE_MSG_END
 };
 
 }

@@ -97,13 +97,7 @@ void DataStackedWidget::slotSetStackCurIndex(const int &iIndex)
 
     //  前一个是 出来搜索结果了, 后一个是正在搜索, 两个都不需要保存在记录中
     if (iIndex != WIDGET_SEARCH) {
-        QJsonObject obj;
-        obj.insert("content", QString::number(iIndex));
-        obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + LEFT_SLIDERBAR_WIDGET);
-
-        QJsonDocument doc(obj);
-
-        dApp->m_pModelService->notifyMsg(MSG_LEFTBAR_STATE,  doc.toJson(QJsonDocument::Compact));
+        m_sheet->setData(LeftIndex, QString::number(iIndex));
     }
 }
 

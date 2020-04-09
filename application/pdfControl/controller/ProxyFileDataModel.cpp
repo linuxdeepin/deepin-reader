@@ -28,15 +28,6 @@ ProxyFileDataModel::ProxyFileDataModel(QObject *parent) : QObject(parent)
     _fvwParent = qobject_cast<SheetBrowserPDFPrivate *>(parent);
 }
 
-void ProxyFileDataModel::qDealWithData(const int &nType, const QString &sValue)
-{
-    if (nType == MSG_LEFTBAR_STATE) {
-        SetLeftWidgetIndex(sValue);
-    } else if (nType == MSG_VIEWCHANGE_FIT) {
-        OnSetViewHit(sValue);
-    }
-}
-
 void ProxyFileDataModel::setData(const int &nType, const QString &sValue)
 {
     m_pFileDataModel.qSetData(nType, sValue.toInt());
@@ -73,23 +64,6 @@ void ProxyFileDataModel::OnSetViewScale(const QString &sValue)
 void ProxyFileDataModel::OnSetViewRotate(const QString &sValue)
 {
     m_pFileDataModel.qSetData(Rotate, sValue.toInt());
-}
-
-void ProxyFileDataModel::OnSetViewHit(const QString &sValue)
-{
-    QStringList sList = sValue.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (sList.size() == 2) {
-        int tValue = 0;
-        tValue = sList.at(1).toInt();
-        qInfo() << "      tValue:" << tValue;
-        if (tValue == 1) {
-            tValue = sList.at(0).toInt();
-            m_pFileDataModel.qSetData(Fit, tValue);//sValue.toInt());
-//            if (dApp) {
-//                dApp->setFlush((tValue == 1));
-//            }
-        }
-    }
 }
 
 void ProxyFileDataModel::OnSetCurPage(const QString &sValue)

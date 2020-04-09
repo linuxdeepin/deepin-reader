@@ -66,16 +66,6 @@ int ProxyViewDisplay::setViewRotateRight()
     return m_rotateType;
 }
 
-void ProxyViewDisplay::OnSetViewHit(const QString &msgContent)
-{
-    QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (sList.size() == 2) {
-        m_nAdapteState = sList.at(0).toInt();
-    }
-
-    onSetWidgetAdapt();
-}
-
 //  设置　窗口　自适应　宽＼高　度
 int ProxyViewDisplay::onSetWidgetAdapt()
 {
@@ -95,21 +85,6 @@ int ProxyViewDisplay::onSetWidgetAdapt()
     }
 
     return -1;
-}
-
-//  比例调整了, 取消自适应 宽高状态
-void ProxyViewDisplay::OnSetViewScale(const QString &msgConent)
-{
-    QStringList sList = msgConent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (sList.size() == 2) {
-        if (sList.at(1).toInt() == 0) {
-            return;
-        }
-        m_nScale = sList.at(0).toDouble();
-        setScaleRotateViewModeAndShow();
-
-        m_nAdapteState = Default_State;
-    }
 }
 
 void ProxyViewDisplay::OnSetViewChange(const QString &msgContent)

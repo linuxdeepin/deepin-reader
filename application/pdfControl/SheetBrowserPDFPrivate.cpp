@@ -234,7 +234,6 @@ int SheetBrowserPDFPrivate::qDealWithShortKey(const QString &sKey)
 int SheetBrowserPDFPrivate::dealWithData(const int &msgType, const QString &msgContent)
 {
     QList<int> msgList = { MSG_HANDLESHAPE,
-                           MSG_FILE_SCALE, MSG_VIEWCHANGE_FIT,
                            MSG_OPERATION_TEXT_ADD_ANNOTATION,
                            MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, MSG_NOTE_PAGE_SHOW_NOTEWIDGET
                          };
@@ -248,14 +247,7 @@ int SheetBrowserPDFPrivate::dealWithData(const int &msgType, const QString &msgC
         }
     }
 
-    //  数据变化
-    m_pProxyFileDataModel->qDealWithData(msgType, msgContent);
-
-    if (msgType == MSG_FILE_SCALE) {
-        m_pDocViewProxy->OnSetViewScale(msgContent);
-    } else if (msgType == MSG_VIEWCHANGE_FIT) {
-        m_pDocViewProxy->OnSetViewHit(msgContent);
-    } else if (msgType == MSG_HANDLESHAPE) {
+    if (msgType == MSG_HANDLESHAPE) {
         onSetHandShape(msgContent);
     } else if (msgType == MSG_NOTE_PAGE_SHOW_NOTEWIDGET) {          //  显示注释窗口
         __ShowPageNoteWidget(msgContent);

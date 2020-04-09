@@ -104,15 +104,6 @@ void FontMenu::slotTwoPage()
 
     m_sheet->setData(DoubleShow, QString::number(m_bDoubPage));
     m_sheet->setDoubleShow(m_bDoubPage);
-
-    //解决双页时文档不能自适应是视窗大小的问题
-    QJsonObject obj;
-    QString str{""};
-    str = QString::number(1) + Constant::sQStringSep + QString::number(0);
-    obj.insert("content", str);
-    obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
-    QJsonDocument jsonDoc(obj);
-    notifyMsg(MSG_VIEWCHANGE_FIT, jsonDoc.toJson(QJsonDocument::Compact));
 }
 
 /**

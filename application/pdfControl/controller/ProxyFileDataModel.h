@@ -32,7 +32,6 @@ public:
     explicit ProxyFileDataModel(QObject *parent = nullptr);
 
 public:
-    void qDealWithData(const int &, const QString &);
     void setData(const int &, const QString &);
     void saveData();
 
@@ -43,7 +42,6 @@ private:
     void SetLeftWidgetIndex(const QString &sValue);
     void OnSetViewScale(const QString &);
     void OnSetViewRotate(const QString &);
-    void OnSetViewHit(const QString &);
     void OnSetCurPage(const QString &sValue);
 
 private:

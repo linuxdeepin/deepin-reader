@@ -40,8 +40,6 @@ public:
 
 public:
     int onSetWidgetAdapt();
-    void OnSetViewHit(const QString &msgContent);
-    void OnSetViewScale(const QString &msgConent);
     void OnSetViewChange(const QString &msgContent);
     void setScaleRotateViewModeAndShow();
 
