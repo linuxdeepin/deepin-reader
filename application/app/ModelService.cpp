@@ -18,7 +18,6 @@
  */
 #include "ModelService.h"
 #include "IObserver.h"
-#include "ModuleHeader.h"
 #include "MsgHeader.h"
 
 ModelService::ModelService(QObject *parent)

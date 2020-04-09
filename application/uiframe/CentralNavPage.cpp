@@ -1,4 +1,8 @@
 #include "CentralNavPage.h"
+#include "MainWindow.h"
+#include "CustomControl/CustomClickLabel.h"
+#include "utils/PublicFunction.h"
+#include "app/ProcessController.h"
 
 #include <DFileDialog>
 #include <DLabel>
@@ -6,26 +10,19 @@
 #include <DSuggestButton>
 #include <QVBoxLayout>
 #include <QSvgWidget>
-#include "MainWindow.h"
-#include "CustomControl/CustomClickLabel.h"
-#include "utils/PublicFunction.h"
-#include "app/ProcessController.h"
 
 CentralNavPage::CentralNavPage(DWidget *parent)
     : CustomWidget(HOME_WIDGET, parent)
 {
-    m_pMsgList = {MSG_MENU_NEW_WINDOW};
-
     initWidget();
     initConnections();
     slotUpdateTheme();
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &CentralNavPage::slotUpdateTheme);
-    dApp->m_pModelService->addObserver(this);
 }
 
 CentralNavPage::~CentralNavPage()
 {
-    dApp->m_pModelService->removeObserver(this);
+
 }
 
 void CentralNavPage::initWidget()
@@ -97,18 +94,6 @@ void CentralNavPage::initConnections()
 
 void CentralNavPage::NewWindow()
 {
-    MainWindow::create()->show();
+    //MainWindow::create()->show();
 }
 
-int CentralNavPage::dealWithData(const int &msgType, const QString &msgContent)
-{
-    if (MSG_MENU_NEW_WINDOW == msgType) {
-        NewWindow();
-    }
-
-    if (m_pMsgList.contains(msgType)) {
-        return MSG_OK;
-    }
-
-    return MSG_NO_OK;
-}

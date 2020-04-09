@@ -37,31 +37,25 @@ public:
 
 public:
     void setTextEditText(const QString &);
-    inline void setNoteUUid(const QString &uuid)
-    {
-        m_strUUid = uuid;
-    }
-    inline QString noteUUId() const
-    {
-        return m_strUUid;
-    }
-    inline QString note() const
-    {
-        return m_strNote;
-    }
 
-    inline void setNote(const QString &note)
-    {
-        m_strNote = note;
-    }
+    void setNoteUUid(const QString &uuid);
+
+    QString noteUUId();
+
+    QString note();
+
+    void setNote(const QString &note);
 
     bool bSelect();
+
     void setBSelect(const bool &paint);
 
     int nNoteType() const;
+
     void setNNoteType(const int &nNoteType);
 
     QString strPage() const;
+
     void setStrPage(const QString &strPage);
 
     void CopyItemText();

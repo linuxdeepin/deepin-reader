@@ -27,6 +27,7 @@
 #include "IObserver.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
+#include "MainWindow.h"
 
 namespace {
 
@@ -87,9 +88,8 @@ bool Application::openFileOk() const
 
 void Application::handleQuitAction()
 {
-    if (m_pModelService) {
-        m_pModelService->notifyMsg(MSG_OPERATION_EXIT);
-    }
+    foreach (MainWindow *window, MainWindow::m_list)
+        window->close();
 }
 
 //  初始化 deepin-reader 的配置文件目录, 包含 数据库, conf.cfg

@@ -61,17 +61,9 @@ enum E_TAB_TYPE {
     MSG_TAB_MSG_END,
 };
 
-//  菜单操作消息类型
-enum E_MENU_MSG {
-    E_MENU_MSG_BEGIN = MSG_TAB_MSG_END + 50,
-    MSG_MENU_NEW_WINDOW,                // 新窗口打开一个文档
-    MSG_OPERATION_EXIT,                 //  退出
-    E_MENU_MSG_END
-};
-
 //  文档操作消息
 enum E_DOC_TYPE_MSG {
-    MSG_DOC_JUMP_PAGE = E_MENU_MSG_END + 50,             //  请求跳转页面
+    MSG_DOC_JUMP_PAGE = MSG_TAB_MSG_END + 50,             //  请求跳转页面
     MSG_OPEN_FILE_PATH,                                 //  打开的文件消息
     MSG_SAVE_AS_FILE_PATH,                              //  保存文件消息
     //MSG_OPERATION_OPEN_FILE_OK,                         //  打开文件成功, 要告诉所有人

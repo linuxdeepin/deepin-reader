@@ -30,9 +30,6 @@ public:
 
     void SetSliderShowState(const int &);
 
-public:
-    int dealWithData(const int &, const QString &) override;
-
 protected:
     void showEvent(QShowEvent *ev) override;
 
@@ -61,7 +58,6 @@ private slots:
     void onShowState(int state);
 
 private:
-    QList<int>          m_pMsgList;
     Qt::WindowStates    m_nOldState = Qt::WindowNoState;        //  旧的窗口状态
     Central            *m_central = nullptr;
 

@@ -44,6 +44,26 @@ void NotesItemWidget::setTextEditText(const QString &contant)
     }
 }
 
+void NotesItemWidget::setNoteUUid(const QString &uuid)
+{
+    m_strUUid = uuid;
+}
+
+QString NotesItemWidget::noteUUId()
+{
+    return m_strUUid;
+}
+
+QString NotesItemWidget::note()
+{
+    return m_strNote;
+}
+
+void NotesItemWidget::setNote(const QString &note)
+{
+    m_strNote = note;
+}
+
 bool NotesItemWidget::bSelect()
 {
     if (m_pPicture) {

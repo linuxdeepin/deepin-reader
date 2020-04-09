@@ -25,8 +25,6 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     m_strObserverName = "MainWindow";
 
-    m_pMsgList = {MSG_OPERATION_EXIT};
-
     setCurTheme();
 
     initUI();
@@ -34,8 +32,6 @@ MainWindow::MainWindow(DMainWindow *parent)
     initThemeChanged();
 
     initShortCut();
-
-    dApp->m_pModelService->addObserver(this);
 
     //暂定752*360，后期根据最合适效果设定
     int tWidth = 752;
@@ -53,7 +49,6 @@ MainWindow::MainWindow(DMainWindow *parent)
 MainWindow::~MainWindow()
 {
     m_list.removeOne(this);
-    dApp->m_pModelService->removeObserver(this);
 }
 
 void MainWindow::addSheet(DocSheet *sheet)
@@ -111,15 +106,12 @@ void MainWindow::showEvent(QShowEvent *ev)
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (m_central->saveAll()) {
+
         dApp->m_pAppInfo->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
 
         dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
 
         event->accept();
-
-        if (1 == m_list.count() && m_list.value(0) == this) {
-            qApp->quit();
-        }
 
         this->deleteLater();
 
@@ -262,16 +254,4 @@ void MainWindow::initShortCut()
         connect(action, SIGNAL(triggered()), pSigManager, SLOT(map()));
         pSigManager->setMapping(action, key.toString());
     }
-}
-
-int MainWindow::dealWithData(const int &msgType, const QString &)
-{
-    if (msgType == MSG_OPERATION_EXIT) {
-        onAppExit();
-    }
-
-    if (m_pMsgList.contains(msgType)) {
-        return MSG_OK;
-    }
-    return MSG_NO_OK;
 }

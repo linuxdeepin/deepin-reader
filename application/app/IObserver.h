@@ -2,11 +2,7 @@
 #define IOBSERVER_H
 
 #include <QString>
-
-/**
- * @brief The IObserver class
- * @brief   订阅者 虚基类
- */
+#include "ModuleHeader.h"
 
 class IObserver
 {
@@ -14,7 +10,10 @@ public:
     virtual ~IObserver() {}
 
 public:
-    virtual int dealWithData(const int &, const QString &) {}
+    virtual int dealWithData(const int &, const QString &)
+    {
+        return MSG_OK;
+    }
 
     virtual void notifyMsg(const int &, const QString &) {}
 
