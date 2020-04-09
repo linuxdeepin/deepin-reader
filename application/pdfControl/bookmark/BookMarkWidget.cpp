@@ -30,10 +30,10 @@ BookMarkWidget::BookMarkWidget(DocSheet *sheet, DWidget *parent)
     m_loadBookMarkThread.setBookMark(this);
 
     initWidget();
-    initConnection();
-    slotUpdateTheme();
 
-    m_pMsgList = {MSG_OPERATION_DELETE_BOOKMARK, MSG_OPERATION_ADD_BOOKMARK};
+    initConnection();
+
+    slotUpdateTheme();
 
     m_pKeyMsgList = {KeyStr::g_ctrl_b};
 
@@ -250,6 +250,62 @@ void BookMarkWidget::handlePage(int page)
                     m_pBookMarkListWidget->setCurrentItem(item);
 
                     break;
+                }
+            }
+        }
+    }
+}
+
+void BookMarkWidget::setBookMark(int page, int state)
+{
+    if (state) {
+        if (m_sheet.isNull())
+            return;
+        QString sPath = m_sheet->qGetPath();
+        QList<int> pageList = dApp->m_pDBService->getBookMarkList(sPath);
+        if (pageList.contains(page)) {
+            return;
+        }
+
+        if (nullptr == m_sheet)
+            return;
+
+        auto item = addBookMarkItem(page);
+        if (item) {
+            pageList.append(page);
+            dApp->m_pDBService->setBookMarkList(sPath, pageList);
+            m_sheet->setFileChanged(true);
+        }
+
+        DocummentProxy *proxy =  m_sheet->getDocProxy();
+        if (proxy) {
+            int nCurPage = proxy->currentPageNo();
+            if (nCurPage == page) {  //  是当前页
+                proxy->setBookMarkState(page, true);
+                m_pAddBookMarkBtn->setEnabled(false);
+            }
+            emit sigSetBookMarkState(1, page);
+        }
+    } else {
+        int nSize = m_pBookMarkListWidget->count();
+        for (int iLoop = 0; iLoop < nSize; iLoop++) {
+            auto pItem = m_pBookMarkListWidget->item(iLoop);
+            if (pItem) {
+                auto t_widget =
+                    qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
+                if (t_widget) {
+                    int nPageIndex = t_widget->nPageIndex();
+                    if (nPageIndex == page) {
+                        t_widget->deleteLater();
+                        t_widget = nullptr;
+
+                        delete pItem;
+                        pItem = nullptr;
+
+                        deleteIndexPage(nPageIndex);
+
+                        break;
+                    }
                 }
             }
         }
@@ -575,15 +631,6 @@ void BookMarkWidget::slotSelectItemBackColor(QListWidgetItem *item)
         qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
     if (pItemWidget) {
         pItemWidget->setBSelect(true);
-    }
-}
-
-void BookMarkWidget::SlotBookMarkMsg(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_OPERATION_DELETE_BOOKMARK) {
-        slotDeleteBookItem(msgContent);
-    } else if (msgType == MSG_OPERATION_ADD_BOOKMARK) {
-        slotAddBookMark(msgContent);
     }
 }
 

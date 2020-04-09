@@ -96,6 +96,8 @@ public:
 
     void handlePage(int page);
 
+    void setBookMark(int page, int state);
+
 public:
     int qDealWithShortKey(const QString &) override;
 
@@ -108,14 +110,19 @@ signals:
 
 private slots:
     void slotAddBookMark();
+
     void slotAddBookMark(const QString &);
+
     void slotDeleteBookItem(const QString &);
+
     void slotLoadImage(const int &, const QImage &);
+
     void slotUpdateTheme();
+
     void slotSelectItemBackColor(QListWidgetItem *);
-    void SlotBookMarkMsg(const int &, const QString &);
 
     void slotListMenuClick(const int &);
+
 protected:
     void initWidget() override;
 

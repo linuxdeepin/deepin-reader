@@ -3,6 +3,7 @@
 
 #include "CustomControl/CustomMenu.h"
 #include "ModuleHeader.h"
+#include <QPointer>
 
 class ColorWidgetAction;
 
@@ -10,7 +11,7 @@ class ColorWidgetAction;
  * @brief The DefaultOperationWidget class
  * @brief   右键  文本菜单操作， 复制、高亮显示、移除高亮显示、添加注释、添加书签
  */
-
+class DocSheet;
 class TextOperationMenu : public CustomMenu
 {
     Q_OBJECT
@@ -20,11 +21,16 @@ public:
     explicit TextOperationMenu(DWidget *parent = nullptr);
 
 public:
-    void execMenu(const QString &filePath, const QPoint &, const bool &bHigh, const QString &sSelectText, const QString &sUuid);
+    void execMenu(DocSheet *sheet, const QPoint &, const bool &bHigh, const QString &sSelectText, const QString &sUuid);
+
     void setClickPoint(const QPoint &);
+
     void setClickPage(int nClickPage);
+
     void setPStartPoint(const QPoint &pStartPoint);
+
     void setPEndPoint(const QPoint &pEndPoint);
+
     void setRemoveEnabled(bool enable);
 
     inline void setType(Note_Type type)
@@ -66,6 +72,7 @@ private:
     QPoint      m_pEndPoint;            //  右键菜单的 结束点
     int         m_nClickPage = -1;
     Note_Type   m_nType = NOTE_HIGHLIGHT;
+    QPointer<DocSheet> m_sheet;
 };
 
 #endif // TEXTOPERATIONMENU_H

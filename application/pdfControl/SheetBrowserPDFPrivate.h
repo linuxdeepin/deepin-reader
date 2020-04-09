@@ -67,8 +67,6 @@ private:
 
 private:
     void initConnections();
-    void onSetHandShape(const QString &);
-
 private:
     void showNoteViewWidget(const QString &, const QString &t_strUUid = "", const QString &sText = "", const int &nType = NOTE_HIGHLIGHT);
     void onOpenNoteWidget(const QString &msgContent);
@@ -79,7 +77,6 @@ private:
     void __SetCursor(const QCursor &cursor);
     void OpenFilePath(const QString &sPath);
     void notifyMsg(const int &, const QString &);
-    void onBookMarkState(const int &, const QString &);
 
 private:
     NoteViewWidget          *m_pNoteViewWidget = nullptr;   //  注释内容显示框

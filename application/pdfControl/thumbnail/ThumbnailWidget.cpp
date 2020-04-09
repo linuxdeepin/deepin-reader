@@ -265,7 +265,7 @@ void ThumbnailWidget::prevPage()
     if (m_sheet.isNull())
         return;
 
-    m_sheet->pageJumpByMsg(MSG_OPERATION_PREV_PAGE, "");
+    m_sheet->pagePrev();
 }
 
 /**
@@ -277,7 +277,7 @@ void ThumbnailWidget::nextPage()
     if (m_sheet.isNull())
         return;
 
-    m_sheet->pageJumpByMsg(MSG_OPERATION_NEXT_PAGE, "");
+    m_sheet->pageNext();
 }
 
 /**

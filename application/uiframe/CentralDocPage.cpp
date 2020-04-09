@@ -57,9 +57,9 @@ CentralDocPage::CentralDocPage(DWidget *parent)
     initWidget();
     InitConnections();
     m_pMsgList = {E_APP_MSG_TYPE};
-    m_pMsgList2 = { MSG_OPERATION_FIRST_PAGE, MSG_OPERATION_END_PAGE, MSG_OPERATION_PREV_PAGE, MSG_OPERATION_NEXT_PAGE,
-                    MSG_SAVE_FILE, MSG_NOT_SAVE_FILE, MSG_NOT_CHANGE_SAVE_FILE
-                  };
+    m_pMsgList2 = {
+        MSG_SAVE_FILE, MSG_NOT_SAVE_FILE, MSG_NOT_CHANGE_SAVE_FILE
+    };
 
     dApp->m_pModelService->addObserver(this);
 }
@@ -115,8 +115,11 @@ void CentralDocPage::CloseFile(const int &iType, const QString &sPath)
 {
     DocummentProxy *_proxy = getCurFileAndProxy(sPath);
     if (_proxy) {
+
         if (MSG_SAVE_FILE == iType || MSG_NOT_SAVE_FILE == iType) {
+
             bool bSave = iType == MSG_SAVE_FILE ? true : false;
+
             _proxy->save(sPath, bSave);
 
             if (bSave) {
@@ -137,16 +140,16 @@ void CentralDocPage::saveCurFile()
             int nChange = sheet->qGetFileChange();
             if (nChange == 1) {
                 QString sPath = sheet->qGetPath();
-                SaveFile(MSG_SAVE_FILE, sPath);
+                SaveFile1(MSG_SAVE_FILE, sPath);
                 emit sigCurSheetChanged(sheet);
             }
         }
     }
 }
 
-void CentralDocPage::SaveFile(const int &iType, const QString &sPath)
+void CentralDocPage::SaveFile1(const int &iType, const QString &sPath)
 {
-    QString sRes = qDealWithData(iType, sPath);
+    QString sRes = qDealWithData1(iType, sPath);
     if (sRes != "") {
         QJsonParseError error;
         QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
@@ -252,21 +255,15 @@ void CentralDocPage::onSheetChanged(DocSheet *sheet, bool hasChanged)
 }
 
 //  跳转页面
-QString CentralDocPage::qDealWithData(const int &msgType, const QString &msgContent)
+QString CentralDocPage::qDealWithData1(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_OPERATION_FIRST_PAGE || msgType == MSG_OPERATION_PREV_PAGE ||
-            msgType == MSG_OPERATION_NEXT_PAGE || msgType == MSG_OPERATION_END_PAGE) {
-        pageJumpByMsg(msgType, msgContent);
-    } else if (msgType == MSG_NOTIFY_KEY_MSG) {
+    if (msgType == MSG_NOTIFY_KEY_MSG) {
         if (msgContent == KeyStr::g_ctrl_shift_s) {
             saveAsCurFile();
         }
-    } else if (MSG_SAVE_FILE == msgType || MSG_NOT_SAVE_FILE == msgType || MSG_NOT_CHANGE_SAVE_FILE == msgType)  {
+    } else if (MSG_SAVE_FILE == msgType || MSG_NOT_SAVE_FILE == msgType)  {
         CloseFile(msgType, msgContent);
-    } else if (msgType == MSG_SAVE_AS_FILE_PATH) {
-        saveAsCurFile();
     }
-
     int nRes = MSG_NO_OK;
 
     if (m_pMsgList2.contains(msgType)) {
@@ -279,25 +276,6 @@ QString CentralDocPage::qDealWithData(const int &msgType, const QString &msgCont
     QJsonDocument doc(obj);
 
     return doc.toJson(QJsonDocument::Compact);
-}
-
-void CentralDocPage::pageJump(const int &pagenum)
-{
-    DocSheet *sheet = getCurSheet();
-    if (nullptr == sheet)
-        return;
-
-    sheet->pageJump(pagenum);
-}
-
-//  前一页\第一页\后一页\最后一页 操作
-void CentralDocPage::pageJumpByMsg(const int &iType, const QString &param)
-{
-    DocSheet *sheet = getCurSheet();
-    if (nullptr == sheet)
-        return;
-
-    sheet->pageJumpByMsg(iType, param);
 }
 
 void CentralDocPage::openFile(QString &filePath)
@@ -441,50 +419,32 @@ void CentralDocPage::addSheet(DocSheet *sheet)
 
 bool CentralDocPage::saveAll()
 {
-    QStringList saveFileList;
-    QStringList noChangeFileList;
+    QList<DocSheet *> changedList;
 
-    auto splitterList = this->findChildren<DocSheet *>();
-    foreach (auto s, splitterList) {
-        QString sSplitterPath = s->qGetPath();
-        int iChange = s->qGetFileChange();
-        if (iChange == 1) {
-            saveFileList.append(sSplitterPath);
-        } else {
-            noChangeFileList.append(sSplitterPath);
-        }
+    auto sheets = this->findChildren<DocSheet *>();
+
+    foreach (auto sheet, sheets) {
+        if (sheet->qGetFileChange())
+            changedList.append(sheet);
     }
 
-    if (saveFileList.size() > 0) {
+    if (changedList.size() > 0) {   //需要提示保存
+
         SaveDialog sd;
+
         int nRes = sd.showDialog();
-        if (nRes <= 0) {
+
+        if (nRes <= 0) {    //放弃关闭
             return false;
         }
 
-        int nMsgType = MSG_NOT_SAVE_FILE;
         if (nRes == 2) {     //  保存
-            nMsgType = MSG_SAVE_FILE;
-        }
+            foreach (auto sheet, changedList) {
+                sheet->saveData();
 
-        foreach (auto s, splitterList) {
-            QString sSplitterPath = s->qGetPath();
-            if (saveFileList.contains(sSplitterPath)) {
-                SaveFile(nMsgType, sSplitterPath);
             }
         }
     }
-
-    foreach (auto s, splitterList) {
-        QString sSplitterPath = s->qGetPath();
-        if (noChangeFileList.contains(sSplitterPath)) {
-            SaveFile(MSG_NOT_CHANGE_SAVE_FILE, sSplitterPath);
-        }
-    }
-    foreach (auto s, splitterList) {
-        s->getDocProxy()->closeFileAndWaitThreadClearEnd();
-    }
-    topLevelWidget()->hide();
 
     return true;
 }
@@ -707,63 +667,11 @@ void CentralDocPage::OnAppMsgData(const QString &sText)
     if (error.error == QJsonParseError::NoError) {
         QJsonObject obj = doc.object();
         QString sType = obj.value("type").toString();
-        if (sType == "exit_app") {
-            OnAppExit();
-        } else if (sType == "keyPress") {
+        if (sType == "keyPress") {
             QString sKey = obj.value("key").toString();
             OnKeyPress(sKey);
         }
     }
-}
-
-//  应用退出, 删除所有文件
-void CentralDocPage::OnAppExit()
-{
-    QStringList saveFileList;
-    QStringList noChangeFileList;
-
-    auto splitterList = this->findChildren<DocSheet *>();
-    foreach (auto s, splitterList) {
-        QString sSplitterPath = s->qGetPath();
-        int iChange = s->qGetFileChange();
-        if (iChange == 1) {
-            saveFileList.append(sSplitterPath);
-        } else {
-            noChangeFileList.append(sSplitterPath);
-        }
-    }
-
-    if (saveFileList.size() > 0) {
-        SaveDialog sd;
-        int nRes = sd.showDialog();
-        if (nRes <= 0) {
-            return;
-        }
-
-        int nMsgType = MSG_NOT_SAVE_FILE;
-        if (nRes == 2) {     //  保存
-            nMsgType = MSG_SAVE_FILE;
-        }
-
-        foreach (auto s, splitterList) {
-            QString sSplitterPath = s->qGetPath();
-            if (saveFileList.contains(sSplitterPath)) {
-                SaveFile(nMsgType, sSplitterPath);
-            }
-        }
-    }
-
-    foreach (auto s, splitterList) {
-        QString sSplitterPath = s->qGetPath();
-        if (noChangeFileList.contains(sSplitterPath)) {
-            SaveFile(MSG_NOT_CHANGE_SAVE_FILE, sSplitterPath);
-        }
-    }
-    foreach (auto s, splitterList) {
-        s->getDocProxy()->closeFileAndWaitThreadClearEnd();
-    }
-    topLevelWidget()->hide();
-    dApp->exit(0);
 }
 
 void CentralDocPage::OnAppShortCut(const QString &s)

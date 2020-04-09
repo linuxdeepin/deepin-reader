@@ -64,47 +64,63 @@ void DocSheet::openFile(const QString &filePath)
         static_cast<SheetBrowserPDF *>(m_browser)->OpenFilePath(filePath);
 }
 
-void DocSheet::pageJump(const int &pagenum)
+void DocSheet::pageJump(int page)
 {
     if (DocType_PDF == m_type) {
         DocummentProxy *_proxy =  static_cast<SheetBrowserPDF *>(m_browser)->GetDocProxy();
         if (_proxy) {
             int nPageSize = _proxy->getPageSNum();      //  总页数
-            if (pagenum < 0 || pagenum == nPageSize) {
+            if (page < 0 || page == nPageSize) {
                 return;
             }
 
             int nCurPage = _proxy->currentPageNo();
-            if (nCurPage != pagenum) {
-                _proxy->pageJump(pagenum);
+            if (nCurPage != page) {
+                _proxy->pageJump(page);
             }
         }
     }
 }
 
-void DocSheet::pageJumpByMsg(const int &iType, const QString &param)
+void DocSheet::pageFirst()
 {
     if (DocType_PDF == m_type) {
-        DocummentProxy *_proxy =  getDocProxy();
+        pageJump(0);
+    }
+}
+
+void DocSheet::pageLast()
+{
+    if (DocType_PDF == m_type) {
+        pageJump(getDocProxy()->getPageSNum() - 1);
+    }
+}
+
+void DocSheet::pageNext()
+{
+    if (DocType_PDF == m_type) {
+
         bool isDoubleShow = static_cast<SheetBrowserPDF *>(m_browser)->isDoubleShow();
 
-        if (_proxy) {
-            int iPage = -1;
-            if (iType == MSG_OPERATION_FIRST_PAGE) {
-                iPage = 0;
-            } else if (iType == MSG_OPERATION_PREV_PAGE) {
-                int nCurPage = _proxy->currentPageNo();
-                iPage = nCurPage - (isDoubleShow ? 2 : 1);
-            } else if (iType == MSG_OPERATION_NEXT_PAGE) {
-                int nCurPage = _proxy->currentPageNo();
-                iPage = nCurPage + (isDoubleShow ? 2 : 1);
-            } else if (iType == MSG_OPERATION_END_PAGE) {
-                int nCurPage = _proxy->getPageSNum();
-                iPage = nCurPage - 1;
-            }
+        int nCurPage = getDocProxy()->currentPageNo();
 
-            pageJump(iPage);
-        }
+        int page = nCurPage + (isDoubleShow ? 2 : 1);
+
+        pageJump(page);
+    }
+}
+
+void DocSheet::pagePrev()
+{
+    if (DocType_PDF == m_type) {
+
+        bool isDoubleShow = static_cast<SheetBrowserPDF *>(m_browser)->isDoubleShow();
+
+        int nCurPage = getDocProxy()->currentPageNo();
+
+        int page = nCurPage - (isDoubleShow ? 2 : 1);
+
+        pageJump(page);
     }
 }
 
@@ -156,6 +172,14 @@ void DocSheet::setFit(int fit)
         static_cast<SheetBrowserPDF *>(m_browser)->setFit(fit);
 }
 
+void DocSheet::setBookMark(int page, int state)
+{
+    if (DocType_PDF == m_type) {
+        static_cast<SheetSidebarPDF *>(m_sidebar)->setBookMark(page, state);
+        static_cast<SheetBrowserPDF *>(m_browser)->setBookMark(page, state);
+    }
+}
+
 bool DocSheet::isMouseHand()
 {
     if (DocType_PDF == m_type)
@@ -188,7 +212,6 @@ void DocSheet::initPDF()
     connect(browser, SIGNAL(sigFileOpenResult(const QString &, const bool &)), SLOT(SlotFileOpenResult(const QString &, const bool &)));
     connect(browser, SIGNAL(sigFindOperation(const int &)), sidebar, SLOT(onSearch(const int &)));
     connect(browser, SIGNAL(sigAnntationMsg(const int &, const QString &)), sidebar, SIGNAL(sigAnntationMsg(const int &, const QString &)));
-    connect(browser, SIGNAL(sigBookMarkMsg(const int &, const QString &)), sidebar, SIGNAL(sigBookMarkMsg(const int &, const QString &)));
     connect(browser, SIGNAL(sigUpdateThumbnail(const int &)), sidebar, SIGNAL(sigUpdateThumbnail(const int &)));
     connect(browser, SIGNAL(sigFileChanged(bool)), this, SLOT(onFileChanged(bool)));
     connect(browser, SIGNAL(sigRotateChanged(int)), sidebar, SLOT(onRotate(int)));

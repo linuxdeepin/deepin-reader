@@ -59,11 +59,12 @@ public:
 
     void setFit(int fit);
 
+    void setBookMark(int page, int state);
+
 signals:
     void sigFileOpenResult(const QString &, const bool &);
     void sigFindOperation(const int &);
     void sigAnntationMsg(const int &, const QString &);
-    void sigBookMarkMsg(const int &, const QString &);
     void sigDeleteAnntation(const int &, const QString &);
     void sigUpdateThumbnail(const int &);
 

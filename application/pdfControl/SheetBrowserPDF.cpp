@@ -132,6 +132,13 @@ void SheetBrowserPDF::setFit(int fit)
     emit sigFileChanged(getFileChange());
 }
 
+void SheetBrowserPDF::setBookMark(int page, int state)
+{
+    Q_D(SheetBrowserPDF);
+
+    d->m_pProxy->setBookMarkState(page, state);
+}
+
 void SheetBrowserPDF::initWidget()
 {
 }
@@ -210,6 +217,7 @@ void SheetBrowserPDF::saveData()
     Q_D(SheetBrowserPDF);
     d->m_pProxyData->setFileChanged(false);
     d->m_pProxyFileDataModel->saveData();
+    d->m_pProxy->save(d->m_pProxyData->getPath(), true);
 }
 
 void SheetBrowserPDF::SlotFindOperation(const int &iType, const QString &strFind)

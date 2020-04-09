@@ -47,6 +47,11 @@ void DataStackedWidget::handlePage(int page)
     m_pCatalogWidget->handlePage(page);
 }
 
+void DataStackedWidget::handleBookMark(int page, int state)
+{
+    m_pBookMarkWidget->setBookMark(page, state);
+}
+
 void DataStackedWidget::SetFindOperation(const int &iType)
 {
     if (iType == E_FIND_CONTENT) {
@@ -166,9 +171,7 @@ void DataStackedWidget::InitWidgets()
     insertWidget(WIDGET_catalog, m_pCatalogWidget);
 
     m_pBookMarkWidget = new BookMarkWidget(m_sheet, this);
-    connect(m_pBookMarkWidget, SIGNAL(sigSetBookMarkState(const int &, const int &)),
-            m_pThWidget, SLOT(SlotSetBookMarkState(const int &, const int &)));
-    connect(this, SIGNAL(sigBookMarkMsg(const int &, const QString &)), m_pBookMarkWidget, SLOT(SlotBookMarkMsg(const int &, const QString &)));
+    connect(m_pBookMarkWidget, SIGNAL(sigSetBookMarkState(const int &, const int &)), m_pThWidget, SLOT(SlotSetBookMarkState(const int &, const int &)));
 
     insertWidget(WIDGET_BOOKMARK, m_pBookMarkWidget);
 

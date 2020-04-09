@@ -41,6 +41,7 @@ void ProxyFileDataModel::saveData()
     }
 
     dApp->m_pDBService->qSaveData(sPath, DB_HISTROY);
+    dApp->m_pDBService->qSaveData(sPath, DB_BOOKMARK);
 }
 
 void ProxyFileDataModel::setThumbnailState(const QString &sValue)

@@ -33,9 +33,6 @@ class ProxyNotifyMsg : public QObject
 public:
     explicit ProxyNotifyMsg(QObject *parent = nullptr);
 
-private slots:
-    void slotBookMarkStateChange(int, bool);
-
 private:
     SheetBrowserPDFPrivate   *_fvwParent = nullptr;
     friend class SheetBrowserPDFPrivate;

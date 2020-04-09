@@ -20,11 +20,13 @@ class SheetSidebarPDF : public CustomWidget
 
 public:
     explicit SheetSidebarPDF(DocSheet *parent = nullptr);
+
     ~SheetSidebarPDF() override;
+
+    void setBookMark(int page, int state);
 
 signals:
     void sigAnntationMsg(const int &, const QString &);
-    void sigBookMarkMsg(const int &, const QString &);
     void sigDeleteAnntation(const int &, const QString &);
     void sigAdaptWindowSize(const double &scale); //缩略图列表自适应窗体大小  add by duanxiaohui 2020-3-19
     void sigUpdateThumbnail(const int &page);

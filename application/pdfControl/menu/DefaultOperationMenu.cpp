@@ -105,30 +105,30 @@ void DefaultOperationMenu::slotBookMarkClicked()
 {
     int nData = m_pBookMark->property("data").toInt();
     if (nData == 0) {
-        emit sigActionTrigger(MSG_OPERATION_DELETE_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
+        m_sheet->setBookMark(m_nRightPageNumber, false);
     } else {
-        emit sigActionTrigger(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nRightPageNumber));
+        m_sheet->setBookMark(m_nRightPageNumber, true);
     }
 }
 
 void DefaultOperationMenu::slotFirstPageClicked()
 {
-    m_sheet->pageJumpByMsg(MSG_OPERATION_FIRST_PAGE, "");
+    m_sheet->pageFirst();
 }
 
 void DefaultOperationMenu::slotPrevPageClicked()
 {
-    m_sheet->pageJumpByMsg(MSG_OPERATION_PREV_PAGE, "");
+    m_sheet->pagePrev();
 }
 
 void DefaultOperationMenu::slotNextPageClicked()
 {
-    m_sheet->pageJumpByMsg(MSG_OPERATION_NEXT_PAGE, "");
+    m_sheet->pageNext();
 }
 
 void DefaultOperationMenu::slotEndPageClicked()
 {
-    m_sheet->pageJumpByMsg(MSG_OPERATION_END_PAGE, "");
+    m_sheet->pageLast();
 }
 
 void DefaultOperationMenu::slotExitFullScreenClicked()

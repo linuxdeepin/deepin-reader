@@ -38,6 +38,11 @@ SheetSidebarPDF::~SheetSidebarPDF()
     dApp->m_pModelService->removeObserver(this);
 }
 
+void SheetSidebarPDF::setBookMark(int page, int state)
+{
+    m_pStackedWidget->handleBookMark(page, state);
+}
+
 void SheetSidebarPDF::handleOpenSuccess()
 {
     FileDataModel fdm = m_sheet->qGetFileData();
@@ -68,7 +73,6 @@ void SheetSidebarPDF::initWidget()
 
     m_pStackedWidget = new DataStackedWidget(m_sheet, this);
     connect(this, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pStackedWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)));
-    connect(this, SIGNAL(sigBookMarkMsg(const int &, const QString &)), m_pStackedWidget, SIGNAL(sigBookMarkMsg(const int &, const QString &)));
     connect(m_pStackedWidget, SIGNAL(sigDeleteAnntation(const int &, const QString &)), this, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
     connect(this, SIGNAL(sigUpdateThumbnail(const int &)), m_pStackedWidget, SIGNAL(sigUpdateThumbnail(const int &)));
     pVBoxLayout->addWidget(m_pStackedWidget);

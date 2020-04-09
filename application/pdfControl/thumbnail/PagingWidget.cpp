@@ -220,10 +220,10 @@ void PagingWidget::__PageNumberJump()
 
 void PagingWidget::slotPrePageBtnClicked()
 {
-    m_sheet->pageJumpByMsg(MSG_OPERATION_PREV_PAGE, "");
+    m_sheet->pagePrev();
 }
 
 void PagingWidget::slotNextPageBtnClicked()
 {
-    m_sheet->pageJumpByMsg(MSG_OPERATION_NEXT_PAGE, "");
+    m_sheet->pageNext();
 }

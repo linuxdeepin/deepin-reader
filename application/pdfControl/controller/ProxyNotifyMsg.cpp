@@ -36,14 +36,3 @@ ProxyNotifyMsg::ProxyNotifyMsg(QObject *parent) : QObject(parent)
 {
     _fvwParent = qobject_cast<SheetBrowserPDFPrivate *>(parent);
 }
-
-//  文档书签状态改变
-void ProxyNotifyMsg::slotBookMarkStateChange(int nPage, bool bState)
-{
-    if (!bState) {
-        emit _fvwParent->q_func()->sigBookMarkMsg(MSG_OPERATION_DELETE_BOOKMARK, QString::number(nPage));
-    } else {
-        emit _fvwParent->q_func()->sigBookMarkMsg(MSG_OPERATION_ADD_BOOKMARK, QString::number(nPage));
-    }
-}
-

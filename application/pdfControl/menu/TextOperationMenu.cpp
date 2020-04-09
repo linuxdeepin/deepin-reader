@@ -4,6 +4,7 @@
 #include "business/AppInfo.h"
 #include "MsgHeader.h"
 #include "utils/utils.h"
+#include "DocSheet.h"
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)
     : CustomMenu(TEXT_OPERATION_MENU, parent)
@@ -11,9 +12,14 @@ TextOperationMenu::TextOperationMenu(DWidget *parent)
     initActions();
 }
 
-void TextOperationMenu::execMenu(const QString &filePath, const QPoint &showPoint, const bool &bHigh, const QString &sSelectText, const QString &sUuid)
+void TextOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, const bool &bHigh, const QString &sSelectText, const QString &sUuid)
 {
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList(filePath);
+    m_sheet = sheet;
+
+    if (m_sheet.isNull())
+        return;
+
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->qGetPath());
 
     bool bBookState = pageList.contains(m_nClickPage);
 
@@ -147,11 +153,12 @@ void TextOperationMenu::slotAddNoteClicked()
 
 void TextOperationMenu::slotAddBookMarkClicked()
 {
+
     int nData = m_pAddBookMark->property("data").toInt();
     if (nData == 0) {
-        emit sigActionTrigger(MSG_OPERATION_DELETE_BOOKMARK, QString("%1").arg(m_nClickPage));
+        m_sheet->setBookMark(m_nClickPage, false);
     } else {
-        emit sigActionTrigger(MSG_OPERATION_ADD_BOOKMARK, QString("%1").arg(m_nClickPage));
+        m_sheet->setBookMark(m_nClickPage, true);
     }
 }
 

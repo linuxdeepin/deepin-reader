@@ -111,15 +111,11 @@ public:
     QStringList GetAllPath();
 
 public:
-    void pageJump(const int &pagenum);
-
-    void pageJumpByMsg(const int &, const QString &param);
-
     void notifyMsg(const int &msgType, const QString &msgContent = "") ;
 
     void CloseFile(const int &iType, const QString &sPath);
 
-    QString qDealWithData(const int &msgType, const QString &msgContent);
+    QString qDealWithData1(const int &msgType, const QString &msgContent);
 
 protected:
     void initWidget() override;
@@ -135,11 +131,11 @@ public:
 
     void OnAppMsgData(const QString &);
 
-    void OnAppExit();
-
     void OnTabFileChangeMsg(const QString &);
 
-    void SaveFile(const int &nSaveType, const QString &);
+    void saveFile(const int &nSaveType, const QString &);
+
+    void SaveFile1(const int &nSaveType, const QString &);
 
     void OnAppShortCut(const QString &);
 

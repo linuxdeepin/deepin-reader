@@ -61,10 +61,6 @@ void SheetBrowserPDFPrivate::slotDealWithMenu(const int &msgType, const QString 
         onOpenNoteWidget(msgContent);
     } else if (msgType == MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) {
         onShowNoteWidget(msgContent);
-    } else if (msgType == MSG_OPERATION_DELETE_BOOKMARK) {      //  右键删除
-        onBookMarkState(msgType, msgContent);
-    } else if (msgType == MSG_OPERATION_ADD_BOOKMARK) {      //  右键添加
-        onBookMarkState(msgType, msgContent);
     }
 }
 
@@ -233,10 +229,10 @@ int SheetBrowserPDFPrivate::qDealWithShortKey(const QString &sKey)
 //  消息 数据 处理
 int SheetBrowserPDFPrivate::dealWithData(const int &msgType, const QString &msgContent)
 {
-    QList<int> msgList = { MSG_HANDLESHAPE,
-                           MSG_OPERATION_TEXT_ADD_ANNOTATION,
-                           MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, MSG_NOTE_PAGE_SHOW_NOTEWIDGET
-                         };
+    QList<int> msgList = {
+        MSG_OPERATION_TEXT_ADD_ANNOTATION,
+        MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, MSG_NOTE_PAGE_SHOW_NOTEWIDGET
+    };
 
     Q_Q(SheetBrowserPDF);
 
@@ -246,10 +242,7 @@ int SheetBrowserPDFPrivate::dealWithData(const int &msgType, const QString &msgC
             return nRes;
         }
     }
-
-    if (msgType == MSG_HANDLESHAPE) {
-        onSetHandShape(msgContent);
-    } else if (msgType == MSG_NOTE_PAGE_SHOW_NOTEWIDGET) {          //  显示注释窗口
+    if (msgType == MSG_NOTE_PAGE_SHOW_NOTEWIDGET) {          //  显示注释窗口
         __ShowPageNoteWidget(msgContent);
     }
 
@@ -259,23 +252,6 @@ int SheetBrowserPDFPrivate::dealWithData(const int &msgType, const QString &msgC
     }
 
     return MSG_NO_OK;
-}
-
-//  手势控制
-void SheetBrowserPDFPrivate::onSetHandShape(const QString &data)
-{
-    if (!m_pProxy)
-        return;
-
-    //  手型 切换 也需要将之前选中的文字清除 选中样式
-    m_pProxy->mouseSelectTextClear();
-    int nRes = data.toInt();
-    if (nRes == Handel_State) {  //  手形
-        __SetCursor(Qt::OpenHandCursor);
-    } else {
-        __SetCursor(Qt::ArrowCursor);
-    }
-    m_sheet->setCurrentState(nRes);
 }
 
 void SheetBrowserPDFPrivate::showNoteViewWidget(const QString &sPage, const QString &t_strUUid, const QString &sText, const int &nType)
@@ -487,7 +463,7 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
         m_operatemenu->setRemoveEnabled(bremoveenable);
         bool isHigh{false};
         isHigh = m_pProxyMouseMove->sameHighLight();
-        m_operatemenu->execMenu(m_sheet->qGetPath(), tempPoint, !isHigh/*true*/, sSelectText, struuid);
+        m_operatemenu->execMenu(m_sheet, tempPoint, !isHigh/*true*/, sSelectText, struuid);
 
     } else if (sSelectText == "" && (bIsHighLight || bicon)) { //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
@@ -511,7 +487,7 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
 
         m_operatemenu->setRemoveEnabled(true);
 
-        m_operatemenu->execMenu(m_sheet->qGetPath(), tempPoint, false, sSelectText, struuid);
+        m_operatemenu->execMenu(m_sheet, tempPoint, false, sSelectText, struuid);
 
     } else {  //  否则弹出 文档操作菜单
         dApp->m_pAppInfo->setMousePressLocal(false, tempPoint);
@@ -554,7 +530,6 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
     //  实际文档类  唯一实例化设置 父窗口
     m_pProxy = new DocummentProxy(q);
     if (m_pProxy) {
-        connect(m_pProxy, SIGNAL(signal_bookMarkStateChange(int, bool)), m_pProxyNotifyMsg, SLOT(slotBookMarkStateChange(int, bool)));
         connect(m_pProxy, SIGNAL(signal_pageChange(int)), this, SLOT(onPageChanged(int)));
         connect(m_pProxy, SIGNAL(signal_openResult(bool)), SLOT(SlotDocFileOpenResult(bool)));
 
@@ -600,16 +575,4 @@ void SheetBrowserPDFPrivate::notifyMsg(const int &msgType, const QString &msgCon
 {
     Q_Q(SheetBrowserPDF);
     q->notifyMsg(msgType, msgContent);
-}
-
-void SheetBrowserPDFPrivate::onBookMarkState(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_OPERATION_ADD_BOOKMARK) {
-        m_pProxy->setBookMarkState(msgContent.toInt(), true);
-    } else if (msgType == MSG_OPERATION_DELETE_BOOKMARK) {
-        m_pProxy->setBookMarkState(msgContent.toInt(), false);
-    }
-
-    Q_Q(SheetBrowserPDF);
-    emit q->sigBookMarkMsg(msgType, msgContent);
 }

@@ -39,9 +39,15 @@ signals:
     void sigOpened(DocSheet *, bool);
 
 public:
-    void pageJump(const int &pagenum);
+    void pageJump(int page);
 
-    void pageJumpByMsg(const int &iType, const QString &param);
+    void pageFirst();
+
+    void pageLast();
+
+    void pageNext();
+
+    void pagePrev();
 
     void setDoubleShow(bool isShow);
 
@@ -58,6 +64,8 @@ public:
     void setScale(double scale);
 
     void setFit(int fit);
+
+    void setBookMark(int page, int state);
 
     bool isMouseHand();
 
