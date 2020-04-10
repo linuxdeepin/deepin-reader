@@ -9,7 +9,7 @@ DWIDGET_USE_NAMESPACE
 class QSignalMapper;
 class Central;
 class DocSheet;
-class MainWindow : public DMainWindow, public IObserver
+class MainWindow : public DMainWindow
 {
     Q_OBJECT
     Q_DISABLE_COPY(MainWindow)

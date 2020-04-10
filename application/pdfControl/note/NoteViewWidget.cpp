@@ -132,12 +132,14 @@ void NoteViewWidget::__FileNoteHideEvent()
     if (m_pNoteUuid == "") {
         if (sText != "") {
             QString msgContent = sText + Constant::sQStringSep + m_pNotePage;
-            emit sigNoteViewMsg(MSG_NOTE_ADD_CONTENT, msgContent);
+            emit sigNeedAddHighLightAnnotation(msgContent);
         }
     } else {
         if (sText == "" && m_strNote != "") {   //  原来有内容, 被删了, 删除高亮
             QString msgContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage;
+
             emit sigNoteViewMsg(MSG_NOTE_DELETE_CONTENT, msgContent);
+
         } else if (sText != m_strNote) {
             QString msgContent = m_pNoteUuid  + Constant::sQStringSep +
                                  sText + Constant::sQStringSep +

@@ -52,8 +52,6 @@ signals:
 
     void sigDeleteAnntation(const int &, const QString &);
 
-    void sigUpdateThumbnail(const int &);
-
     void sigFitChanged(int state);
 
 public:
@@ -62,10 +60,11 @@ public:
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 
-    void notifyMsg(const int &, const QString &);
 private slots:
     void slotSetStackCurIndex(const int &);
+
     void slotAdaptWindowSize(const double &scale); //缩略图列表自适应窗体大小  add by duanxiaohui 2020-3-20
+
     void slotUpdateThumbnail(const int &page);//添加或者移除高亮，要更新列表中相应的缩略图 add by duanxiaohui 2020-3-26
 
 private:

@@ -156,7 +156,7 @@ void Central::onMenuTriggered(const QString &action)
     } else if (action == "New tab") {
         openFilesExec();
     } else if (action == "Save") { //  保存当前显示文件
-        m_docPage->saveCurFile();
+        m_docPage->saveCurrent();
     } else if (action == "Save as") {
         m_docPage->saveAsCurFile();
     } else if (action == "Print") {

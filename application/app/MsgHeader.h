@@ -51,7 +51,6 @@ enum E_DOC_TYPE_MSG {
 //  高亮&注释消息
 enum E_NOTE_MSG {
     E_NOTE_MSG_BEGIN = MSG_NOT_CHANGE_SAVE_FILE + 50,
-    MSG_NOTE_ADD_CONTENT,               //  添加注释内容 消息
     MSG_NOTE_ADD_HIGHLIGHT_COLOR,       //  添加高亮
     MSG_NOTE_UPDATE_HIGHLIGHT_COLOR,    //  更新 高亮显示
     MSG_NOTE_REMOVE_HIGHLIGHT,          //  移除 高亮显示
@@ -62,7 +61,6 @@ enum E_NOTE_MSG {
     MSG_NOTE_UPDATE_ITEM,               //  更新高亮注释节点
     MSG_NOTE_DELETE_CONTENT,            //  删除注释内容 消息
     MSG_NOTE_DELETE_ITEM,               //  删除注释子节点
-    MSG_NOTE_PAGE_SHOW_NOTEWIDGET,      //  页面注释显示 注释内容界面
     MSG_NOTE_PAGE_ADD_CONTENT,          //  页面注释 添加内容
     MSG_NOTE_PAGE_ADD_ITEM,             //  页面注释 添加节点
     MSG_NOTE_PAGE_UPDATE_CONTENT,       //  页面注释 更新内容

@@ -125,42 +125,6 @@ void CentralDocPage::CloseFile(const int &iType, const QString &sPath)
     }
 }
 
-//  保存当前显示文件
-void CentralDocPage::saveCurFile()
-{
-    DWidget *w = m_pStackedLayout->currentWidget();
-    if (w) {
-        auto sheet = qobject_cast<DocSheet *>(w);
-        if (sheet) {
-            int nChange = sheet->qGetFileChange();
-            if (nChange == 1) {
-                QString sPath = sheet->qGetPath();
-                SaveFile1(MSG_SAVE_FILE, sPath);
-                emit sigCurSheetChanged(sheet);
-            }
-        }
-    }
-}
-
-void CentralDocPage::SaveFile1(const int &iType, const QString &sPath)
-{
-    QString sRes = qDealWithData1(iType, sPath);
-    if (sRes != "") {
-        QJsonParseError error;
-        QJsonDocument doc = QJsonDocument::fromJson(sRes.toLocal8Bit().data(), &error);
-        if (error.error == QJsonParseError::NoError) {
-            QJsonObject obj = doc.object();
-            int nReturn = obj.value("return").toInt();
-            if (nReturn == MSG_OK) {
-                DocSheet *sheet =  getSheet(sPath);
-                if (sheet) {
-                    sheet->saveData();
-                }
-            }
-        }
-    }
-}
-
 //  保存 数据
 void CentralDocPage::onSaveFile()
 {
@@ -444,6 +408,23 @@ bool CentralDocPage::saveAll()
     return true;
 }
 
+bool CentralDocPage::saveCurrent()
+{
+    DocSheet *sheet = static_cast<DocSheet *>(m_pStackedLayout->currentWidget());
+
+    if(nullptr == sheet)
+        return false;
+
+    if(!sheet->qGetFileChange())
+        return false;
+
+    sheet->saveData();
+
+    sigCurSheetChanged(sheet);
+
+    return true;
+}
+
 void CentralDocPage::clearState()
 {
     //  切换文档 需要将放大镜状态 取消
@@ -678,7 +659,7 @@ void CentralDocPage::OnAppShortCut(const QString &s)
     if (s == KeyStr::g_ctrl_p) {
         OnPrintFile();
     } else if (s == KeyStr::g_ctrl_s) {
-        saveCurFile();
+        saveCurrent();
     } else if (s == KeyStr::g_alt_1 || s == KeyStr::g_alt_2 || s == KeyStr::g_ctrl_m  ||
                s == KeyStr::g_ctrl_1 || s == KeyStr::g_ctrl_2 || s == KeyStr::g_ctrl_3 ||
                s == KeyStr::g_ctrl_r || s == KeyStr::g_ctrl_shift_r ||

@@ -66,12 +66,16 @@ public:
 
     bool saveAll();
 
+    bool saveCurrent();
+
     void clearState();
 
 signals:
     void sigSheetCountChanged(int);
 
     void sigNeedOpenFileExec();
+
+    void sigCurSheetChanged(DocSheet *);        //当前的文档被 切换 改动 保存 等
 
 public:
     int dealWithData(const int &, const QString &) override;
@@ -131,10 +135,6 @@ public:
 
     void OnTabFileChangeMsg(const QString &);
 
-    void saveFile(const int &nSaveType, const QString &);
-
-    void SaveFile1(const int &nSaveType, const QString &);
-
     void OnAppShortCut(const QString &);
 
     void onSaveFile();
@@ -151,9 +151,6 @@ public:
 
     void OnKeyPress(const QString &);
 
-public:
-    void saveCurFile();
-
     void saveAsCurFile();
 
 signals:
@@ -162,8 +159,6 @@ signals:
     void sigRemoveFileTab(const QString &);
 
     void sigTabBarIndexChange(const QString &);
-
-    void sigCurSheetChanged(DocSheet *);        //当前的文档被 切换 改动 保存 等
 
     void sigTitleShortCut(QString shortcut);
 

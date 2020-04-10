@@ -55,7 +55,7 @@ void DataStackedWidget::handleBookMark(int page, int state)
 void DataStackedWidget::SetFindOperation(const int &iType)
 {
     if (iType == E_FIND_CONTENT) {
-        setCurrentIndex(WIDGET_SEARCH);
+        setCurrentWidget(m_pSearchResWidget);
         //解决搜索不能清除上一次搜索结果问题
         if (m_pSearchResWidget) {
             m_pSearchResWidget->OnExitSearch();
@@ -80,11 +80,6 @@ void DataStackedWidget::keyPressEvent(QKeyEvent *event)
     DStackedWidget::keyPressEvent(event);
 }
 
-void DataStackedWidget::notifyMsg(const int &msgType, const QString &msgContent)
-{
-    dApp->m_pModelService->notifyMsg(msgType, msgContent);
-}
-
 void DataStackedWidget::slotSetStackCurIndex(const int &iIndex)
 {
     setCurrentIndex(iIndex);
@@ -101,7 +96,7 @@ void DataStackedWidget::slotSetStackCurIndex(const int &iIndex)
     }
 
     //  前一个是 出来搜索结果了, 后一个是正在搜索, 两个都不需要保存在记录中
-    if (iIndex != WIDGET_SEARCH) {
+    if (currentWidget() != m_pSearchResWidget) {
         m_sheet->setData(LeftIndex, QString::number(iIndex));
     }
 }
@@ -117,20 +112,20 @@ void DataStackedWidget::slotAdaptWindowSize(const double &scale)
         return;
     }
 
-    int iIndex = this->currentIndex();
-    if (iIndex == WIDGET_THUMBNAIL) {
+    QWidget *widget = this->currentWidget();
+    if (widget == m_pThWidget) {
         if (m_pThWidget) {
             m_pThWidget->adaptWindowSize(scale);
         }
-    }  else if (iIndex == WIDGET_BOOKMARK) {
+    }  else if (widget == m_pBookMarkWidget) {
         if (m_pBookMarkWidget) {
             m_pBookMarkWidget->adaptWindowSize(scale);
         }
-    } else if (iIndex == WIDGET_NOTE) {
+    } else if (widget == m_pNotesWidget) {
         if (m_pNotesWidget) {
             m_pNotesWidget->adaptWindowSize(scale);
         }
-    } else if (iIndex == WIDGET_SEARCH) {
+    } else if (widget == m_pSearchResWidget) {
         if (m_pSearchResWidget) {
             m_pSearchResWidget->adaptWindowSize(scale);
         }
@@ -163,28 +158,25 @@ void DataStackedWidget::slotUpdateThumbnail(const int &page)
 void DataStackedWidget::InitWidgets()
 {
     m_pThWidget = new ThumbnailWidget(m_sheet, this);
-    insertWidget(WIDGET_THUMBNAIL, m_pThWidget);
+    addWidget(m_pThWidget);
 
     m_pCatalogWidget = new CatalogWidget(m_sheet, this);
-    insertWidget(WIDGET_catalog, m_pCatalogWidget);
+    addWidget(m_pCatalogWidget);
 
     m_pBookMarkWidget = new BookMarkWidget(m_sheet, this);
     connect(m_pBookMarkWidget, SIGNAL(sigSetBookMarkState(const int &, const int &)), m_pThWidget, SLOT(SlotSetBookMarkState(const int &, const int &)));
-
-    insertWidget(WIDGET_BOOKMARK, m_pBookMarkWidget);
+    addWidget(m_pBookMarkWidget);
 
     m_pNotesWidget = new NotesWidget(m_sheet, this);
     connect(this, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pNotesWidget, SLOT(SlotAnntationMsg(const int &, const QString &)));
     connect(m_pNotesWidget, SIGNAL(sigDeleteContent(const int &, const QString &)), this, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
     connect(m_pNotesWidget, SIGNAL(sigUpdateThumbnail(const int &)), this, SLOT(slotUpdateThumbnail(const int &)));
-
-    insertWidget(WIDGET_NOTE, m_pNotesWidget);
-    connect(this, SIGNAL(sigUpdateThumbnail(const int &)), this, SLOT(slotUpdateThumbnail(const int &)));
+    addWidget(m_pNotesWidget);
 
     m_pSearchResWidget = new SearchResWidget(m_sheet, this);
-    insertWidget(WIDGET_SEARCH, m_pSearchResWidget);
+    addWidget(m_pSearchResWidget);
 
-    setCurrentIndex(WIDGET_THUMBNAIL);
+    setCurrentWidget(m_pThWidget);
 }
 
 void DataStackedWidget::DealWithPressKey(const QString &sKey)
@@ -200,58 +192,50 @@ void DataStackedWidget::DealWithPressKey(const QString &sKey)
 
 void DataStackedWidget::onJumpToPrevPage()
 {
-    int iIndex = this->currentIndex();
-    if (iIndex == WIDGET_THUMBNAIL) {
-        auto widget = this->findChild<ThumbnailWidget *>();
-        if (widget) {
-            widget->prevPage();
+    QWidget *widget = this->currentWidget();
+    if (widget == m_pThWidget) {
+        if (m_pThWidget) {
+            m_pThWidget->prevPage();
         }
-    }  else if (iIndex == WIDGET_BOOKMARK) {
-        auto widget = this->findChild<BookMarkWidget *>();
-        if (widget) {
-            widget->prevPage();
+    }  else if (widget == m_pBookMarkWidget) {
+        if (m_pBookMarkWidget) {
+            m_pBookMarkWidget->prevPage();
         }
-    } else if (iIndex == WIDGET_NOTE) {
-        auto widget = this->findChild<NotesWidget *>();
-        if (widget) {
-            widget->prevPage();
+    } else if (widget == m_pNotesWidget) {
+        if (m_pNotesWidget) {
+            m_pNotesWidget->prevPage();
         }
     }
 }
 
 void DataStackedWidget::onJumpToNextPage()
 {
-    int iIndex = this->currentIndex();
-    if (iIndex == WIDGET_THUMBNAIL) {
-        auto widget = this->findChild<ThumbnailWidget *>();
-        if (widget) {
-            widget->nextPage();
+    QWidget *widget = this->currentWidget();
+    if (widget == m_pThWidget) {
+        if (m_pThWidget) {
+            m_pThWidget->nextPage();
         }
-    }  else if (iIndex == WIDGET_BOOKMARK) {
-        auto widget = this->findChild<BookMarkWidget *>();
-        if (widget) {
-            widget->nextPage();
+    }  else if (widget == m_pBookMarkWidget) {
+        if (m_pBookMarkWidget) {
+            m_pBookMarkWidget->nextPage();
         }
-    } else if (iIndex == WIDGET_NOTE) {
-        auto widget = this->findChild<NotesWidget *>();
-        if (widget) {
-            widget->nextPage();
+    } else if (widget == m_pNotesWidget) {
+        if (m_pNotesWidget) {
+            m_pNotesWidget->nextPage();
         }
     }
 }
 
 void DataStackedWidget::DeleteItemByKey()
 {
-    int iIndex = this->currentIndex();
-    if (iIndex == WIDGET_BOOKMARK) {
-        auto widget = this->findChild<BookMarkWidget *>();
-        if (widget) {
-            widget->DeleteItemByKey();
+    QWidget *widget = this->currentWidget();
+    if (widget == m_pBookMarkWidget) {
+        if (m_pBookMarkWidget) {
+            m_pBookMarkWidget->DeleteItemByKey();
         }
-    } else if (iIndex == WIDGET_NOTE) {
-        auto widget = this->findChild<NotesWidget *>();
-        if (widget) {
-            widget->DeleteItemByKey();
+    } else if  (widget == m_pNotesWidget){
+        if (m_pNotesWidget) {
+            m_pNotesWidget->DeleteItemByKey();
         }
     }
 }

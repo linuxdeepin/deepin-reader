@@ -23,8 +23,6 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     setTitlebarShadowEnabled(true);
 
-    m_strObserverName = "MainWindow";
-
     setCurTheme();
 
     initUI();

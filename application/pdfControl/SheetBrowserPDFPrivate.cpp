@@ -54,8 +54,7 @@ void SheetBrowserPDFPrivate::hidetipwidget()
 
 void SheetBrowserPDFPrivate::slotDealWithMenu(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_NOTE_REMOVE_HIGHLIGHT || msgType == MSG_NOTE_UPDATE_HIGHLIGHT_COLOR ||
-            msgType == MSG_NOTE_ADD_HIGHLIGHT_COLOR) {                 //  移除高亮注释 的高亮
+    if (msgType == MSG_NOTE_REMOVE_HIGHLIGHT || msgType == MSG_NOTE_UPDATE_HIGHLIGHT_COLOR || msgType == MSG_NOTE_ADD_HIGHLIGHT_COLOR) {
         m_pAnnotation->dealWithDataMsg(msgType, msgContent);
     } else if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {  //  添加注释
         onOpenNoteWidget(msgContent);
@@ -66,12 +65,16 @@ void SheetBrowserPDFPrivate::slotDealWithMenu(const int &msgType, const QString 
 
 void SheetBrowserPDFPrivate::SlotNoteViewMsg(const int &msgType, const QString &msgContent)
 {
-    if (msgType == MSG_NOTE_ADD_CONTENT) {                      //  新增高亮注释
-        AddHighLightAnnotation(msgContent);
-    } else if (msgType == MSG_NOTE_DELETE_CONTENT || msgType == MSG_NOTE_UPDATE_CONTENT || msgType == MSG_NOTE_PAGE_ADD_CONTENT
-               || msgType == MSG_NOTE_PAGE_UPDATE_CONTENT || msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {
+    if (msgType == MSG_NOTE_DELETE_CONTENT || msgType == MSG_NOTE_UPDATE_CONTENT
+            || msgType == MSG_NOTE_PAGE_ADD_CONTENT || msgType == MSG_NOTE_PAGE_UPDATE_CONTENT
+            || msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {
         m_pAnnotation->dealWithDataMsg(msgType, msgContent);
     }
+}
+
+void SheetBrowserPDFPrivate::onAddHighLightAnnotation(const QString &msgContent)
+{
+    AddHighLightAnnotation(msgContent);
 }
 
 //  按 delete 键 删除
@@ -231,7 +234,7 @@ int SheetBrowserPDFPrivate::dealWithData(const int &msgType, const QString &msgC
 {
     QList<int> msgList = {
         MSG_OPERATION_TEXT_ADD_ANNOTATION,
-        MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, MSG_NOTE_PAGE_SHOW_NOTEWIDGET
+        MSG_OPERATION_TEXT_SHOW_NOTEWIDGET
     };
 
     Q_Q(SheetBrowserPDF);
@@ -241,9 +244,6 @@ int SheetBrowserPDFPrivate::dealWithData(const int &msgType, const QString &msgC
         if (nRes == MSG_OK) {
             return nRes;
         }
-    }
-    if (msgType == MSG_NOTE_PAGE_SHOW_NOTEWIDGET) {          //  显示注释窗口
-        __ShowPageNoteWidget(msgContent);
     }
 
     bool rl = msgList.contains(msgType);
@@ -262,6 +262,7 @@ void SheetBrowserPDFPrivate::showNoteViewWidget(const QString &sPage, const QStr
         m_pNoteViewWidget = new NoteViewWidget(q);
         connect(m_pNoteViewWidget, SIGNAL(sigNoteViewMsg(const int &, const QString &)), SLOT(SlotNoteViewMsg(const int &, const QString &)));
         connect(m_pNoteViewWidget, SIGNAL(sigNeedShowTips(const QString &)), m_sheet, SLOT(onShowTips(const QString &)));
+        connect(m_pNoteViewWidget, SIGNAL(sigNeedAddHighLightAnnotation(QString)), SLOT(onAddHighLightAnnotation(QString)));
     }
     m_pNoteViewWidget->setEditText(sText);
     m_pNoteViewWidget->setNoteUuid(t_strUUid);
@@ -269,9 +270,13 @@ void SheetBrowserPDFPrivate::showNoteViewWidget(const QString &sPage, const QStr
     m_pNoteViewWidget->setWidgetType(nType);
 
     QPoint point;
+
     bool t_bHigh = false;
+
     dApp->m_pAppInfo->setSmallNoteWidgetSize(m_pNoteViewWidget->size());
+
     dApp->m_pAppInfo->mousePressLocal(t_bHigh, point);
+
     m_pNoteViewWidget->showWidget(point);
 }
 
@@ -364,23 +369,6 @@ void SheetBrowserPDFPrivate::onShowNoteWidget(const QString &contant)
     }
 }
 
-void SheetBrowserPDFPrivate::__ShowPageNoteWidget(const QString &msgContent)
-{
-    QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (sList.size() == 4) {
-        QString sUuid = sList.at(0);
-        QString sPage = sList.at(1);
-        QString sX = sList.at(2);
-        QString sY = sList.at(3);
-
-        QString sContant = "";
-
-        m_pProxy->getAnnotationText(sUuid, sContant, sPage.toInt());
-
-        showNoteViewWidget(sPage, sUuid, sContant, NOTE_ICON);
-    }
-}
-
 void SheetBrowserPDFPrivate::__ShowNoteTipWidget(const QString &sText)
 {
     Q_Q(SheetBrowserPDF);
@@ -392,7 +380,6 @@ void SheetBrowserPDFPrivate::__ShowNoteTipWidget(const QString &sText)
     m_pTipWidget->move(showRealPos);
     m_pTipWidget->show();
 }
-
 
 void SheetBrowserPDFPrivate::__CloseFileNoteWidget()
 {

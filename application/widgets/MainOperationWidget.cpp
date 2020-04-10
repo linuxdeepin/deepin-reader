@@ -48,7 +48,7 @@ void MainOperationWidget::initWidget()
     }
 
     auto pSearchBtn = __CreateHideBtn();
-    btnGroup->addButton(pSearchBtn, WIDGET_SEARCH);
+    btnGroup->addButton(pSearchBtn, nSize);
 
     this->setLayout(mLayout);
 }
@@ -141,7 +141,7 @@ void MainOperationWidget::slotButtonClicked(int id)
 void MainOperationWidget::SetFindOperation(const int &iType)
 {
     if (iType == E_FIND_CONTENT) {
-        __SetBtnCheckById(WIDGET_SEARCH);
+        __SetBtnCheckById(4);
     } else if (iType == E_FIND_EXIT) {
         handleOpenSuccess();
     }

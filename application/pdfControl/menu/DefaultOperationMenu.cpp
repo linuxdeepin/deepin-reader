@@ -163,24 +163,13 @@ void DefaultOperationMenu::slotAddIconNote()
         return;
 
     DocummentProxy *_proxy = m_sheet->getDocProxy();
+
     QString sUuid = _proxy->addIconAnnotation(m_pointclicked);        //  添加注释图标成功
 
     if (sUuid != "") {
-        int nClickPage = _proxy->pointInWhichPage(m_pointclicked);
-        QString strContent = sUuid.trimmed() + Constant::sQStringSep +
-                             QString::number(nClickPage) + Constant::sQStringSep +
-                             QString::number(m_showPoint.x()) + Constant::sQStringSep +
-                             QString::number(m_showPoint.y());
+        int page = _proxy->pointInWhichPage(m_pointclicked);
 
-        QJsonObject obj;
-        obj.insert("content", strContent);
-        obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
-
-        QJsonDocument doc(obj);
-
-        dApp->m_pModelService->notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, doc.toJson(QJsonDocument::Compact));
-
-
+        m_sheet->showNoteWidget(page,sUuid,NOTE_ICON);
 
     }
 }

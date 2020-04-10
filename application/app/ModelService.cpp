@@ -20,6 +20,8 @@
 #include "IObserver.h"
 #include "MsgHeader.h"
 
+#include <QDebug>
+
 ModelService::ModelService(QObject *parent)
     : QObject(parent)
 {
@@ -28,6 +30,7 @@ ModelService::ModelService(QObject *parent)
 
 void ModelService::addObserver(IObserver *obs)
 {
+    qDebug() << obs;
     m_observerList.append(obs);
 }
 
@@ -38,6 +41,8 @@ void ModelService::removeObserver(IObserver *obs)
 
 void ModelService::notifyMsg(const int &msgType, const QString &msgContent)
 {
+    qDebug() << msgType <<msgContent;
+
     QListIterator<IObserver *> iter(m_observerList);
     while (iter.hasNext()) {
         auto obs = iter.next();

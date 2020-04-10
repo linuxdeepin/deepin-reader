@@ -176,6 +176,8 @@ void ProxyMouseMove::mousePressEvent(QMouseEvent *event)
 
         if (nState == NOTE_ADD_State) {
             __AddIconAnnotation(globalPos);
+            _fvwParent->m_sheet->setCurrentState(Default_State);
+
         } else if (_fvwParent->m_sheet->isMouseHand()) {
             __HandlClicked(globalPos);
         } else {
@@ -191,33 +193,30 @@ void ProxyMouseMove::__AddIconAnnotation(const QPoint &globalPos)
 
     //  添加之前先判断, 点击处是否 注释图标
     bool bIsIcon = _fvwParent->m_pProxy->mouseovericonAnnotation(docGlobalPos);
+
+    int page = _fvwParent->m_pProxy->pointInWhichPage(docGlobalPos);
+
     if (bIsIcon) {
+
         QString sContent = "", sUuid = "";
-        if (_fvwParent->m_pProxy->iconAnnotationClicked(docGlobalPos, sContent, sUuid)) {
-        }
+
+        _fvwParent->m_pProxy->iconAnnotationClicked(docGlobalPos, sContent, sUuid);
+
+        _fvwParent->m_sheet->showNoteWidget(page,sUuid,NOTE_ICON);
+
     } else {
+
         QString sUuid = _fvwParent->m_pProxy->addIconAnnotation(docGlobalPos);        //  添加注释图标成功
+
         if (sUuid != "") {
+
             dApp->m_pAppInfo->setMousePressLocal(false, globalPos);
-            int nClickPage = _fvwParent->m_pProxy->pointInWhichPage(docGlobalPos);
-            QString strContent = sUuid.trimmed() + Constant::sQStringSep +
-                                 QString::number(nClickPage) + Constant::sQStringSep +
-                                 QString::number(globalPos.x()) + Constant::sQStringSep +
-                                 QString::number(globalPos.y());
 
-            _fvwParent->m_sheet->setCurrentState(Default_State);
+            _fvwParent->m_sheet->showNoteWidget(page,sUuid,NOTE_ICON);
 
-            QJsonObject obj;
-            obj.insert("content", strContent);
-            obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
-
-            QJsonDocument doc(obj);
-
-            notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, doc.toJson(QJsonDocument::Compact));
-        } else {
-            qWarning() << __FUNCTION__ << "          " << sUuid;;
         }
     }
+
 }
 
 void ProxyMouseMove::__HandlClicked(const QPoint &globalPos)
@@ -279,16 +278,24 @@ void ProxyMouseMove::mouseReleaseEvent(QMouseEvent *event)
 {
     //  幻灯片模式下, 左键单击 不作任何处理
     int nState = _fvwParent->m_sheet->getCurrentState();
+
     if (nState == SLIDER_SHOW)
         return;
 
     Qt::MouseButton nBtn = event->button();
 
     QPoint globalPos = event->globalPos();
+
     QPoint docGlobalPos = _fvwParent->m_pProxy->global2RelativePoint(globalPos);
+
     QString selectText{""};
+
     QString t_strUUid{""};
+
     bool bicon = _fvwParent->m_pProxy->iconAnnotationClicked(docGlobalPos, selectText, t_strUUid);
+
+    int page = _fvwParent->m_pProxy->pointInWhichPage(docGlobalPos);
+
     //  放大镜状态， 右键则取消放大镜 并且 直接返回
     if (m_bSelectOrMove && !bicon) {
         //判断鼠标左键松开的位置有没有高亮
@@ -301,29 +308,25 @@ void ProxyMouseMove::mouseReleaseEvent(QMouseEvent *event)
 
             dApp->m_pAppInfo->setMousePressLocal(bIsHighLightReleasePoint, globalPos);
             if (bIsHighLightReleasePoint) {
+
                 _fvwParent->__CloseFileNoteWidget();
-                int nPage = _fvwParent->m_pProxy->pointInWhichPage(docGlobalPos);
-                QString msgContent = t_strUUid.trimmed() + Constant::sQStringSep + QString::number(nPage);
+
+                QString msgContent = t_strUUid.trimmed() + Constant::sQStringSep + QString::number(page);
 
                 _fvwParent->slotDealWithMenu(MSG_OPERATION_TEXT_SHOW_NOTEWIDGET, msgContent);
             }
         }
     } else if (bicon) {
+
         dApp->m_pAppInfo->setMousePressLocal(false, globalPos);
+
         _fvwParent->__CloseFileNoteWidget();
 
-        int nPage = _fvwParent->m_pProxy->pointInWhichPage(docGlobalPos);
-        QString strContent = t_strUUid.trimmed() + Constant::sQStringSep + QString::number(nPage) + Constant::sQStringSep +
-                             QString::number(globalPos.x()) + Constant::sQStringSep +
-                             QString::number(globalPos.y());
+            QString sContent = "", sUuid = "";
 
-        QJsonObject obj;
-        obj.insert("content", strContent);
-        obj.insert("to", MAIN_TAB_WIDGET + Constant::sQStringSep + DOC_SHOW_SHELL_WIDGET);
+            _fvwParent->m_pProxy->iconAnnotationClicked(docGlobalPos, sContent, sUuid);
 
-        QJsonDocument doc(obj);
-
-        notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, doc.toJson(QJsonDocument::Compact));
+         _fvwParent->m_sheet->showNoteWidget(page,sUuid,NOTE_ICON);
     }
     // 判断鼠标点击的地方是否有高亮
     bool isHighLightReleasePoint = _fvwParent->m_pProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
@@ -335,7 +338,7 @@ void ProxyMouseMove::mouseReleaseEvent(QMouseEvent *event)
     m_bSelectOrMove = false;
 }
 
-void ProxyMouseMove::notifyMsg(const int &msgType, const QString &msgContent)
+bool ProxyMouseMove::sameHighLight()
 {
-    dApp->m_pModelService->notifyMsg(msgType, msgContent);
+    return m_bSameHighLight;
 }

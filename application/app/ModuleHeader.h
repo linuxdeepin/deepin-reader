@@ -19,14 +19,6 @@ enum E_CUR_STATE {
     NOTE_ADD_State
 };
 
-enum E_STACK_TYPE {
-    WIDGET_THUMBNAIL = 0, //  缩略图
-    WIDGET_catalog,     //  目录
-    WIDGET_BOOKMARK,    //  书签
-    WIDGET_NOTE,        //  注释
-    WIDGET_SEARCH,      //  搜索
-};
-
 // 注释类型
 enum Note_Type {
     NOTE_HIGHLIGHT = 0,     //  高亮注释

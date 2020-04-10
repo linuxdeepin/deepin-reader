@@ -34,30 +34,34 @@ public:
     explicit ProxyMouseMove(QObject *parent = nullptr);
 
 private:
+    void mousePressEvent(QMouseEvent *event);
+
+    void mouseReleaseEvent(QMouseEvent *event);
+
     void mouseMoveEvent(QMouseEvent *event);
 
+    bool sameHighLight();
+
+private:
     void __ShowMagnifier(const QPoint &clickPoint);
+
     void __FilePageMove(const QPoint &endPos);
+
     void __MouseSelectText(const QPoint &clickPoint);
+
     void __OtherMouseMove(const QPoint &globalPos);
+
     void __ShowPageNoteWidget(const QPoint &docPos);
+
     void __ShowFileNoteWidget(const QPoint &docPos);
 
-private:
-    void mousePressEvent(QMouseEvent *event);
     void __AddIconAnnotation(const QPoint &globalPos);
-    void __HandlClicked(const QPoint &globalPos);
-    void __OtherMousePress(const QPoint &globalPos);
-    void __ClickPageLink(Page::Link *pLink);
 
-private:
-    void mouseReleaseEvent(QMouseEvent *event);
-    bool sameHighLight() const
-    {
-        return m_bSameHighLight;
-    }
-private:
-    void notifyMsg(const int &, const QString &);
+    void __HandlClicked(const QPoint &globalPos);
+
+    void __OtherMousePress(const QPoint &globalPos);
+
+    void __ClickPageLink(Page::Link *pLink);
 
 private:
     SheetBrowserPDFPrivate   *_fvwParent = nullptr;

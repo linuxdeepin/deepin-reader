@@ -36,6 +36,8 @@ public:
 private slots:
     void slotDealWithMenu(const int &, const QString &);
     void SlotNoteViewMsg(const int &, const QString &);
+    void onAddHighLightAnnotation(const QString &msgContent);
+
     void SlotDeleteAnntation(const int &, const QString &);
 
     void SlotDocFileOpenResult(bool);
@@ -71,7 +73,6 @@ private:
     void showNoteViewWidget(const QString &, const QString &t_strUUid = "", const QString &sText = "", const int &nType = NOTE_HIGHLIGHT);
     void onOpenNoteWidget(const QString &msgContent);
     void onShowNoteWidget(const QString &contant);
-    void __ShowPageNoteWidget(const QString &msgContent);
     void __ShowNoteTipWidget(const QString &sText);
     void __CloseFileNoteWidget();
     void __SetCursor(const QCursor &cursor);

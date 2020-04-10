@@ -40,6 +40,8 @@ public:
     ~NoteViewWidget() override;
 
 signals:
+    void sigNeedAddHighLightAnnotation(const QString &msgContent);
+
     void sigNoteViewMsg(const int &, const QString &);
 
     void sigNeedShowTips(const QString &tips);
