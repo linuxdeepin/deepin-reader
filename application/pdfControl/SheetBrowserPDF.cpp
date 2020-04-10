@@ -75,6 +75,7 @@ void SheetBrowserPDF::setMouseDefault()
 {
     Q_D(SheetBrowserPDF);
 
+    qDebug() << "1";
     if (!d->m_pProxy)
         return;
 

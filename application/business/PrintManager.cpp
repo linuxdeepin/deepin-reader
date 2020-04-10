@@ -46,18 +46,20 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
         return;
 
     DocummentProxy *_proxy =  m_sheet->getDocProxy();
+
     if (_proxy) {
         //  文档实际大小
         stFileInfo fileInfo;
         _proxy->docBasicInfo(fileInfo);
-
-        int nPageSize = _proxy->getPageSNum();
 
         printer->setDocName(m_strPrintName);
 
         QPainter painter(printer);
         painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
 
+        if(printer->fromPage() == 0 && printer->toPage() == 0)
+        {
+            int nPageSize = _proxy->getPageSNum();
         for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
             QImage image;
             qreal deviceratio = qApp->devicePixelRatio() * 2.0;
@@ -69,6 +71,22 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
                 if (iIndex < nPageSize - 1)
                     printer->newPage();
             }
+        }
+        }
+        else
+        {
+        for (int iIndex = printer->fromPage()-1; iIndex < printer->toPage(); iIndex++) {
+            QImage image;
+            qreal deviceratio = qApp->devicePixelRatio() * 2.0;
+            bool rl = _proxy->getImage(iIndex, image, /*rect.width()*/fileInfo.iWidth * deviceratio, /*rect.height()*/fileInfo.iHeight * deviceratio);
+            if (rl) {
+                QPixmap printpixmap = QPixmap::fromImage(image);
+                printpixmap.setDevicePixelRatio(deviceratio);
+                painter.drawPixmap(0, 0, printpixmap);
+                if (iIndex < printer->toPage() - 1)
+                    printer->newPage();
+            }
+        }
         }
     }
 }

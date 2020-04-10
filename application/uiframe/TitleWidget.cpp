@@ -61,12 +61,7 @@ void TitleWidget::OnShortCut_Alt1()
 
     m_curSheet->quitMagnifer();
 
-    int nState = m_curSheet->getCurrentState();
-
-    if (Default_State != nState) {
-        setDefaultShape();
-        m_curSheet->setMouseDefault();
-    }
+    setDefaultShape();
 }
 
 void TitleWidget::OnShortCut_Alt2()
@@ -76,12 +71,7 @@ void TitleWidget::OnShortCut_Alt2()
 
     m_curSheet->quitMagnifer();
 
-    int nState = m_curSheet->getCurrentState();
-
-    if (Handel_State != nState) {
-        setHandleShape();
-        m_curSheet->setMouseHand();
-    }
+    setHandleShape();
 }
 
 void TitleWidget::OnShortCut_CtrlM()
@@ -90,7 +80,9 @@ void TitleWidget::OnShortCut_CtrlM()
         return;
 
     m_pThumbnailBtn->setChecked(true);
+
     m_curSheet->setData(Thumbnail, "1");
+
     m_curSheet->setSidebarVisible(true);
 }
 

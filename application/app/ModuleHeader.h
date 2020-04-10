@@ -15,7 +15,6 @@ enum E_CUR_STATE {
     Default_State,
     SLIDER_SHOW,
     Magnifer_State,
-    Handel_State,
     NOTE_ADD_State
 };
 

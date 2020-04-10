@@ -126,8 +126,10 @@ void SheetBrowserPDFPrivate::AddHighLightAnnotation(const QString &msgContent)
 
 void SheetBrowserPDFPrivate::OnShortCutKey(const QString &sKey)
 {
+    Q_Q(SheetBrowserPDF);
     //  处于幻灯片模式下
     int nState = m_sheet->getCurrentState();
+
     if (nState == SLIDER_SHOW)
         return;
 
@@ -136,7 +138,7 @@ void SheetBrowserPDFPrivate::OnShortCutKey(const QString &sKey)
         return;
 
     //  手型状态， 直接返回
-    if (nState == Handel_State)
+    if (q->isMouseHand())
         return;
 
     if (sKey == KeyStr::g_ctrl_c) {
@@ -370,7 +372,7 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
         return;
 
     //  手型状态， 直接返回
-    if (nState == Handel_State)
+    if (q->isMouseHand())
         return;
 
     QString sSelectText = "";
