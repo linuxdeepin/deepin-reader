@@ -23,7 +23,7 @@ SheetBrowserPDFPrivate::SheetBrowserPDFPrivate(DocSheet *sheet, SheetBrowserPDF 
     : m_sheet(sheet), q_ptr(parent)
 {
     m_pProxyData = new ProxyData(this);
-    connect(m_pProxyData, SIGNAL(signale_filechanged(bool)), q_ptr, SIGNAL(sigFileChanged(bool)));
+    connect(m_pProxyData, SIGNAL(signale_filechanged(bool)), q_ptr, SIGNAL(sigFileChanged()));
 
     m_operatemenu = new TextOperationMenu(parent);
     connect(m_operatemenu, SIGNAL(sigActionTrigger(const int &, const QString &)), SLOT(slotDealWithMenu(const int &, const QString &)));

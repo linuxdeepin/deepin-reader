@@ -72,7 +72,7 @@ signals:
     void sigDeleteAnntation(const int &, const QString &);
     void sigUpdateThumbnail(const int &);
 
-    void sigFileChanged(bool hasChanged);
+    void sigFileChanged();
 
     void sigRotateChanged(int rotate);
 

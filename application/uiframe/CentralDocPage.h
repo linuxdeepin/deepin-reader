@@ -160,7 +160,7 @@ signals:
     void sigNeedShowState(int);
 
 public slots:
-    void onSheetChanged(DocSheet *, bool hasChanged);
+    void onSheetChanged(DocSheet *);
 
 private:
     QStackedLayout      *m_pStackedLayout = nullptr;

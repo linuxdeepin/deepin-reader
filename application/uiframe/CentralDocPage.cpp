@@ -157,7 +157,7 @@ void CentralDocPage::saveAsCurFile()
     }
 }
 
-void CentralDocPage::onSheetChanged(DocSheet *sheet, bool hasChanged)
+void CentralDocPage::onSheetChanged(DocSheet *sheet)
 {
     if (nullptr == sheet && sheet != getCurSheet())
         return;
@@ -165,7 +165,7 @@ void CentralDocPage::onSheetChanged(DocSheet *sheet, bool hasChanged)
     sigCurSheetChanged(sheet);
 
     //...以下要改成记录所有的sheet,遍历一下，查看是否需要阻塞关机,目前只是记录最后一个文档被保存，有问题
-    if (hasChanged) {
+    if (sheet->qGetFileChange()) {
         BlockShutdown();
     } else {
         UnBlockShutdown();
@@ -179,8 +179,7 @@ void CentralDocPage::openFile(QString &filePath)
     if (FileController::FileType_PDF == FileController::getFileType(filePath)) {
 
         DocSheet *sheet = new DocSheet(DocType_PDF, this);
-
-        connect(sheet, SIGNAL(sigFileChanged(DocSheet *, bool)), this, SLOT(onSheetChanged(DocSheet *, bool)));
+        connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
         connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), SLOT(onOpened(DocSheet *, bool)));
 
         sheet->openFile(filePath);

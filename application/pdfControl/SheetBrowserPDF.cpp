@@ -111,15 +111,20 @@ bool SheetBrowserPDF::isMouseHand()
 bool SheetBrowserPDF::isDoubleShow()
 {
     Q_D(SheetBrowserPDF);
+
     return d->m_pDocViewProxy->isDoubleShow();
 }
 
 void SheetBrowserPDF::setScale(double scale)
 {
     Q_D(SheetBrowserPDF);
+
     setData(Scale, QString::number(scale));
+
     d->m_pDocViewProxy->setScale(scale);
+
     d->m_pDocViewProxy->setScaleRotateViewModeAndShow();
+
 }
 
 bool SheetBrowserPDF::setFit(int fit)
@@ -130,10 +135,14 @@ bool SheetBrowserPDF::setFit(int fit)
         return false;
 
     setData(Fit, QString::number(fit));
+
     int scale = d->m_pDocViewProxy->setFit(fit);
+
     if (-1 != scale)
         setData(Scale, QString::number(scale));
-    emit sigFileChanged(getFileChange());
+
+    emit sigFileChanged();
+
     return true;
 }
 

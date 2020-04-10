@@ -224,7 +224,7 @@ void DocSheet::initPDF()
     connect(browser, SIGNAL(sigFindOperation(const int &)), sidebar, SLOT(onSearch(const int &)));
     connect(browser, SIGNAL(sigAnntationMsg(const int &, const QString &)), sidebar, SIGNAL(sigAnntationMsg(const int &, const QString &)));
     connect(browser, SIGNAL(sigUpdateThumbnail(const int &)), sidebar, SIGNAL(sigUpdateThumbnail(const int &)));
-    connect(browser, SIGNAL(sigFileChanged(bool)), this, SLOT(onFileChanged(bool)));
+    connect(browser, SIGNAL(sigFileChanged()), this, SLOT(onFileChanged()));
     connect(browser, SIGNAL(sigRotateChanged(int)), sidebar, SLOT(onRotate(int)));
     connect(browser, SIGNAL(sigPageChanged(int)), sidebar, SLOT(onPageChanged(int)));
 
@@ -330,15 +330,15 @@ void DocSheet::onShowTips(const QString &tips)
     showTips(tips);
 }
 
-void DocSheet::onFileChanged(bool hasChanged)
+void DocSheet::onFileChanged()
 {
-    sigFileChanged(this, hasChanged);
+    emit sigFileChanged(this);
 }
 
 void DocSheet::onSplitterMoved(int a, int b)
 {
     setFit(0);
-    emit sigFileChanged(this,qGetFileChange());
+    emit sigFileChanged(this);
 }
 
 QUuid DocSheet::getUuid(DocSheet *sheet)
@@ -373,7 +373,7 @@ int DocSheet::qGetFileChange()
 void DocSheet::saveOper()
 {
     if (DocType_PDF == m_type)
-    static_cast<SheetBrowserPDF *>(m_browser)->saveOper();
+        static_cast<SheetBrowserPDF *>(m_browser)->saveOper();
 }
 
 bool DocSheet::saveData()

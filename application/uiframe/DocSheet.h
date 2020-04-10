@@ -109,7 +109,7 @@ public:
 signals:
     void sigOpenFileResult(const QString &, const bool &);
 
-    void sigFileChanged(DocSheet *, bool hasChanged);    //被修改了 书签 笔记
+    void sigFileChanged(DocSheet *);    //被修改了 书签 笔记
 
     void sigScaleChanged(DocSheet*);
 
@@ -127,7 +127,7 @@ private slots:
 
     void onShowTips(const QString &tips);
 
-    void onFileChanged(bool);
+    void onFileChanged();
 
     void onSplitterMoved(int,int);
 
