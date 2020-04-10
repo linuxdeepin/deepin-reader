@@ -32,11 +32,8 @@ class BufferWidget : public CustomWidget
     Q_DISABLE_COPY(BufferWidget)
 public:
     explicit BufferWidget(DWidget *parent = nullptr);
-    ~BufferWidget() override;
 
-public:
-    // IObserver interface
-    int dealWithData(const int &, const QString &) override;
+    ~BufferWidget() override;
 
 protected:
     void initWidget() override;

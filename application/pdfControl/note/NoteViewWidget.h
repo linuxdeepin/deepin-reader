@@ -68,7 +68,9 @@ protected:
 
 private:
     void initConnections();
+
     void __FileNoteHideEvent();
+
     void __PageNoteHideEvent();
 
 private slots:

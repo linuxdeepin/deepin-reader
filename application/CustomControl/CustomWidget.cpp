@@ -70,9 +70,3 @@ void CustomWidget::updateThumbnail(const int &page)
 {
 
 }
-
-//  通知消息
-void CustomWidget::notifyMsg(const int &msgType, const QString &msgContent)
-{
-    dApp->m_pModelService->notifyMsg(msgType, msgContent);
-}

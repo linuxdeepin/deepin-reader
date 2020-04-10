@@ -22,18 +22,11 @@ BufferWidget::BufferWidget(DWidget *parent)
     : CustomWidget(QString("BufferWidget"), parent)
 {
     initWidget();
-
-    dApp->m_pModelService->addObserver(this);
 }
 
 BufferWidget::~BufferWidget()
 {
-    dApp->m_pModelService->removeObserver(this);
-}
 
-int BufferWidget::dealWithData(const int &, const QString &)
-{
-    return 0;
 }
 
 void BufferWidget::initWidget()

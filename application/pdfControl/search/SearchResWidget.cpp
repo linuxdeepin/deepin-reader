@@ -52,12 +52,7 @@ void SearchResWidget::slotGetSearchContant(const stSearchRes &search)
 void SearchResWidget::slotSearchOver()
 {
     if (m_pSearchList->count() == 0) {      //  无结果
-        QJsonObject obj;
-        obj.insert("to", E_MAIN_TAB_WIDGET + Constant::sQStringSep + E_DOC_SHOW_SHELL_WIDGET + Constant::sQStringSep + E_FIND_WIDGET);
-
-        QJsonDocument doc(obj);
-
-        notifyMsg(MSG_FIND_NONE_CONTENT, doc.toJson(QJsonDocument::Compact));
+        emit sigNeedShowFindNone();
         showTips();
     }
 }

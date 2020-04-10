@@ -78,9 +78,6 @@ signals:
     void sigCurSheetChanged(DocSheet *);        //当前的文档被 切换 改动 保存 等
 
 public:
-    int dealWithData(const int &, const QString &) override;
-
-public:
     QStringList qGetAllPath();
 
     QString qGetCurPath();
@@ -171,10 +168,6 @@ private:
     QDBusReply<QDBusUnixFileDescriptor> m_reply;
     QList<QVariant> m_arg;
     bool m_bBlockShutdown = false;
-
-private:
-    QList<int>          m_pMsgList;
-    QList<int>          m_pMsgList2;
     QString             m_strSliderPath = "";
     QString             m_strMagniferPath = "";
     int                 m_nCurrentState = Default_State;

@@ -19,7 +19,6 @@
 
 #include <DApplication>
 #include "DBService.h"
-#include "ModelService.h"
 
 class AppInfo;
 
@@ -63,7 +62,6 @@ protected:
 
 public:
     DBService           *m_pDBService = nullptr;
-    ModelService        *m_pModelService = nullptr;
     AppInfo             *m_pAppInfo = nullptr;
     double m_dScal{1.0};//左侧列表缩放比例
 //    bool m_bFlush{false};//是否自适应宽

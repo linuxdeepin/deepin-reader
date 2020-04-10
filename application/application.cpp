@@ -107,7 +107,6 @@ void Application::initCfgPath()
 void Application::initChildren()
 {
     m_pDBService = new DBService(this);
-    m_pModelService = new ModelService(this);
     m_pAppInfo = new AppInfo(this);
 }
 

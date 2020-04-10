@@ -96,6 +96,7 @@ class NotesWidget : public CustomWidget
 
 public:
     explicit NotesWidget(DocSheet *sheet, DWidget *parent = nullptr);
+
     ~NotesWidget() override;
 
     void prevPage();
@@ -119,9 +120,13 @@ protected:
 
 private slots:
     void slotLoadImage(const QImage &);
+
     void slotListMenuClick(const int &);
+
     void slotSelectItem(QListWidgetItem *);
+
     void SlotRightDeleteItem();
+
     void slotAddAnnotation();
 
     void SlotAnntationMsg(const int &, const QString &);

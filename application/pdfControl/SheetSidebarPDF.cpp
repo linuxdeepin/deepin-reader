@@ -29,13 +29,11 @@ SheetSidebarPDF::SheetSidebarPDF(DocSheet *parent)
     slotUpdateTheme();
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SheetSidebarPDF::slotUpdateTheme);
-
-    dApp->m_pModelService->addObserver(this);
 }
 
 SheetSidebarPDF::~SheetSidebarPDF()
 {
-    dApp->m_pModelService->removeObserver(this);
+
 }
 
 void SheetSidebarPDF::setBookMark(int page, int state)
@@ -72,6 +70,7 @@ void SheetSidebarPDF::initWidget()
     this->setLayout(pVBoxLayout);
 
     m_pStackedWidget = new DataStackedWidget(m_sheet, this);
+    connect(m_pStackedWidget,SIGNAL(sigFindNone()),this,SIGNAL(sigFindNone()));
     connect(this, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pStackedWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)));
     connect(m_pStackedWidget, SIGNAL(sigDeleteAnntation(const int &, const QString &)), this, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
     pVBoxLayout->addWidget(m_pStackedWidget);
@@ -95,11 +94,6 @@ void SheetSidebarPDF::resizeEvent(QResizeEvent *event)
     dApp->setScale(scale);
 
     emit sigAdaptWindowSize(scale);
-}
-
-int SheetSidebarPDF::dealWithData(const int &msgType, const QString &msgContent)
-{
-    return  MSG_NO_OK;
 }
 
 void SheetSidebarPDF::onSearch(const int &iType)

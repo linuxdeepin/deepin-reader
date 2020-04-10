@@ -356,7 +356,6 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
 
 QByteArray Utils::getEncode(const QByteArray &data)
 {
-    // try to get HTML ../ModelService encoding.
     if (QTextCodec *codecForHtml = QTextCodec::codecForHtml(data, nullptr)) {
         return codecForHtml->name();
     }

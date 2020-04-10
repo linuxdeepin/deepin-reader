@@ -5,12 +5,10 @@
 #include <DFloatingWidget>
 #include <DIconButton>
 
-#include "IObserver.h"
-
 DWIDGET_USE_NAMESPACE
 
 class DocSheet;
-class PlayControlWidget : public DFloatingWidget, public IObserver
+class PlayControlWidget : public DFloatingWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(PlayControlWidget)
@@ -24,18 +22,8 @@ signals:
 public:
     void activeshow(int ix = 0, int iy = 0);
     void killshow();
-    void setCanShow(bool bshow)
-    {
-        m_bcanshow = bshow;
-    }
-    bool canShow()
-    {
-        return m_bcanshow;
-    }
-
-    // IObserver interface
-public:
-    int dealWithData(const int &, const QString &) override;
+    void setCanShow(bool bshow);
+    bool canShow();
 
     void setSliderPath(const QString &strSliderPath);
     void PageChangeByKey(const QString &);

@@ -32,13 +32,11 @@ CatalogWidget::CatalogWidget(DocSheet *sheet, DWidget *parent)
 {
     initWidget();
     initConnections();
-
-    dApp->m_pModelService->addObserver(this);
 }
 
 CatalogWidget::~CatalogWidget()
 {
-    dApp->m_pModelService->removeObserver(this);
+
 }
 
 void CatalogWidget::initWidget()

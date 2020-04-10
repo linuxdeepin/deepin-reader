@@ -47,6 +47,10 @@ public:
     ~SearchResWidget() override;
 
     void handleOpenSuccess();
+
+signals:
+    void sigNeedShowFindNone();    //需要设置搜索框什么也没搜到的提醒
+
 public:
     void OnExitSearch();
 

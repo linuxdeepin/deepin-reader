@@ -229,31 +229,6 @@ int SheetBrowserPDFPrivate::qDealWithShortKey(const QString &sKey)
     return MSG_NO_OK;
 }
 
-//  消息 数据 处理
-int SheetBrowserPDFPrivate::dealWithData(const int &msgType, const QString &msgContent)
-{
-    QList<int> msgList = {
-        MSG_OPERATION_TEXT_ADD_ANNOTATION,
-        MSG_OPERATION_TEXT_SHOW_NOTEWIDGET
-    };
-
-    Q_Q(SheetBrowserPDF);
-
-    if (q->m_pFindWidget) {
-        int nRes = q->m_pFindWidget->dealWithData(msgType, msgContent);
-        if (nRes == MSG_OK) {
-            return nRes;
-        }
-    }
-
-    bool rl = msgList.contains(msgType);
-    if (rl) {
-        return MSG_OK;
-    }
-
-    return MSG_NO_OK;
-}
-
 void SheetBrowserPDFPrivate::showNoteViewWidget(const QString &sPage, const QString &t_strUUid, const QString &sText, const int &nType)
 {
     Q_Q(SheetBrowserPDF);

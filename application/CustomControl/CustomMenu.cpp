@@ -19,7 +19,6 @@
 
 #include "CustomMenu.h"
 #include "application.h"
-#include "ModelService.h"
 #include "MsgHeader.h"
 #include "ModuleHeader.h"
 
@@ -29,11 +28,6 @@ CustomMenu::CustomMenu(const QString &, DWidget *parent)
     : DMenu(parent)
 {
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
-}
-
-void CustomMenu::notifyMsg(const int &msgType, const QString &msgContent)
-{
-    dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
 
 int CustomMenu::dealWithData(const int &, const QString &)

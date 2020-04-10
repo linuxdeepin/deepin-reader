@@ -55,9 +55,6 @@ public:
     bool isDoubleShow();
 
 private:
-    void notifyMsg(const int &msgType, const QString &msgContent);
-
-private:
     SheetBrowserPDFPrivate      *fvmPrivate = nullptr;
     friend class SheetBrowserPDFPrivate;
 

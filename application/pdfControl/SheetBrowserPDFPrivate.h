@@ -57,7 +57,6 @@ private:
     void AddHighLightAnnotation(const QString &msgContent);
 
 private:
-    int dealWithData(const int &msgType, const QString &msgContent);
     int qDealWithShortKey(const QString &sKey);
     void OnShortCutKey(const QString &);
     void DocFile_ctrl_l();

@@ -57,13 +57,11 @@ SheetBrowserPDF::SheetBrowserPDF(DocSheet *sheet, DWidget *parent)
 
     initWidget();
     initConnections();
-
-    dApp->m_pModelService->addObserver(this);
 }
 
 SheetBrowserPDF::~SheetBrowserPDF()
 {
-    dApp->m_pModelService->removeObserver(this);
+
 }
 
 void SheetBrowserPDF::setFileChanged(bool hasChanged)
@@ -223,9 +221,12 @@ void SheetBrowserPDF::leaveEvent(QEvent *event)
 
 void SheetBrowserPDF::ShowFindWidget()
 {
+    Q_D(SheetBrowserPDF);
     if (m_pFindWidget == nullptr) {
         m_pFindWidget = new FindWidget(this);
         connect(m_pFindWidget, SIGNAL(sigFindOperation(const int &, const QString &)), SLOT(SlotFindOperation(const int &, const QString &)));
+
+        connect(GetDocProxy(), SIGNAL(signal_searchRes(stSearchRes)), m_pFindWidget,SLOT(onSearchResult(const stSearchRes &)));
     }
 
     int nParentWidth = this->width();
@@ -280,13 +281,6 @@ void SheetBrowserPDF::initConnections()
     connect(this, SIGNAL(sigDeleteAnntation(const int &, const QString &)), d, SLOT(SlotDeleteAnntation(const int &, const QString &)));
 }
 
-//  消息 数据 处理
-int SheetBrowserPDF::dealWithData(const int &msgType, const QString &msgContent)
-{
-    Q_D(SheetBrowserPDF);
-    return d->dealWithData(msgType, msgContent);
-}
-
 int SheetBrowserPDF::qDealWithShortKey(const QString &sKey)
 {
     Q_D(SheetBrowserPDF);
@@ -321,4 +315,9 @@ void SheetBrowserPDF::qSetFileData(const FileDataModel &fdm)
 {
     Q_D(SheetBrowserPDF);
     d->m_pProxyFileDataModel->qSetFileData(fdm);
+}
+
+void SheetBrowserPDF::onFindNone()
+{
+    m_pFindWidget->setEditAlert(1);
 }

@@ -26,27 +26,24 @@
 #include <DWidget>
 #include <DFloatingWidget>
 #include <DSearchEdit>
-#include "IObserver.h"
 
 #include "application.h"
+#include "docview/commonstruct.h"
 
 DWIDGET_USE_NAMESPACE
 
-class FindWidget : public DFloatingWidget, public IObserver
+class FindWidget : public DFloatingWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(FindWidget)
 
 public:
     explicit FindWidget(DWidget *parent = nullptr);
+
     ~FindWidget() override;
 
 signals:
     void sigFindOperation(const int &, const QString &);
-
-    // IObserver interface
-public:
-    int dealWithData(const int &, const QString &) override;
 
 public:
     void showPosition(const int &);
@@ -64,8 +61,8 @@ private:
     void initWidget();
     void initConnection();
 
-//    void onFindExit();
-    void onSetEditAlert(const int &iFlag);
+public:
+    void setEditAlert(const int &iFlag);
 
 private:
     DSearchEdit     *m_pSearchEdit = nullptr;

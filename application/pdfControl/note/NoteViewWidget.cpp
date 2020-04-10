@@ -47,13 +47,11 @@ NoteViewWidget::NoteViewWidget(DWidget *parent)
     slotUpdateTheme();
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NoteViewWidget::slotUpdateTheme);
-
-    dApp->m_pModelService->addObserver(this);
 }
 
 NoteViewWidget::~NoteViewWidget()
 {
-    dApp->m_pModelService->removeObserver(this);
+
 }
 
 void NoteViewWidget::setEditText(const QString &note)

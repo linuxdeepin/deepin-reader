@@ -67,9 +67,13 @@ public:
 
 signals:
     void sigFileOpenResult(const QString &, const bool &);
+
     void sigFindOperation(const int &);
+
     void sigAnntationMsg(const int &, const QString &);
+
     void sigDeleteAnntation(const int &, const QString &);
+
     void sigUpdateThumbnail(const int &);
 
     void sigFileChanged();
@@ -79,8 +83,6 @@ signals:
     void sigPageChanged(int page);
 
 public:
-    int dealWithData(const int &, const QString &) override;
-
     int qDealWithShortKey(const QString &) override;
 
     void OpenFilePath(const QString &);
@@ -100,7 +102,10 @@ public:
     void setData(const int &, const QString &);
 
     FileDataModel qGetFileData();
+
     void qSetFileData(const FileDataModel &);
+public slots:
+    void onFindNone();
 
 protected:
     void initWidget() override;
@@ -108,10 +113,15 @@ protected:
     // QWidget interface
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
+
     void mousePressEvent(QMouseEvent *event) override;
+
     void mouseReleaseEvent(QMouseEvent *event) override;
+
     void resizeEvent(QResizeEvent *event) override;
+
     void wheelEvent(QWheelEvent *e) override;
+
     void leaveEvent(QEvent *)override;
 
 

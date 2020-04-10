@@ -96,12 +96,6 @@ QAction *TextOperationMenu::createAction(const QString &text, const char *member
     return action;
 }
 
-void TextOperationMenu::notifyMsgToFrame(const int &msgType, const QString &msgContent)
-{
-    dApp->m_pModelService->notifyMsg(msgType, msgContent);
-    this->hide();
-}
-
 void TextOperationMenu::slotSetHighLight(const int &nColor)
 {
     m_pLightColor = nColor;

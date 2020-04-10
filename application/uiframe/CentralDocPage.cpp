@@ -56,17 +56,11 @@ CentralDocPage::CentralDocPage(DWidget *parent)
 {
     initWidget();
     InitConnections();
-    m_pMsgList = {E_APP_MSG_TYPE};
-    m_pMsgList2 = {
-        MSG_SAVE_FILE, MSG_NOT_SAVE_FILE, MSG_NOT_CHANGE_SAVE_FILE
-    };
-
-    dApp->m_pModelService->addObserver(this);
 }
 
 CentralDocPage::~CentralDocPage()
 {
-    dApp->m_pModelService->removeObserver(this);
+
 }
 
 void CentralDocPage::OpenCurFileFolder()
@@ -387,31 +381,6 @@ void CentralDocPage::clearState()
             }
         }
     }
-}
-
-int CentralDocPage::dealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == E_APP_MSG_TYPE) {     //  应用类消息
-        OnAppMsgData(msgContent);
-    } else {
-        QJsonParseError error;
-        QJsonDocument doc = QJsonDocument::fromJson(msgContent.toLocal8Bit().data(), &error);
-        if (error.error == QJsonParseError::NoError) {
-            QJsonObject obj = doc.object();
-            QString sTo = obj.value("to").toString();
-
-            if (sTo.contains(this->m_strObserverName)) {
-                return MSG_OK;
-            }
-        }
-    }
-
-
-    if (m_pMsgList.contains(msgType)) {
-        return MSG_OK;
-    }
-
-    return MSG_NO_OK;
 }
 
 QStringList CentralDocPage::qGetAllPath()

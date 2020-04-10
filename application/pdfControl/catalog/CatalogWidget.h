@@ -37,6 +37,7 @@ class CatalogWidget : public CustomWidget
 
 public:
     explicit CatalogWidget(DocSheet *sheet, DWidget *parent = nullptr);
+
     ~CatalogWidget() override;
 
     void handleOpenSuccess();

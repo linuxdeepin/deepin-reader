@@ -55,7 +55,6 @@ public:
 
 protected:
     virtual void initActions() = 0;
-    void notifyMsg(const int &, const QString &);
 
     QStringList     shortKeyList;                 // 要处理的消息类型
     QList<int>     m_pMsgList;

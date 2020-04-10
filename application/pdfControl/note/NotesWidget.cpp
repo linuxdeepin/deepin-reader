@@ -33,14 +33,11 @@ NotesWidget::NotesWidget(DocSheet *sheet, DWidget *parent)
     initConnection();
 
     m_ThreadLoadImage.setParentWidget(this);
-
-    dApp->m_pModelService->addObserver(this);
 }
 
 NotesWidget::~NotesWidget()
 {
     m_ThreadLoadImage.stopThreadRun();
-    dApp->m_pModelService->removeObserver(this);
 }
 
 /**

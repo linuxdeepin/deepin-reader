@@ -36,11 +36,9 @@
 FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)
 {
-    m_strObserverName = FIND_WIDGET;
-
     int tW = 414;
     int tH = 60;
-//    dApp->adaptScreenView(tW, tH);
+
     setMinimumSize(QSize(tW, tH));
     setWindowFlags(Qt::WindowStaysOnTopHint);
     setBlurBackgroundEnabled(true);
@@ -81,7 +79,7 @@ void FindWidget::handleContentChanged()
     QString strFind = m_pSearchEdit->text().trimmed();
     if ((strFind != "") && (m_strLastFindText != strFind)) {
         m_strLastFindText = strFind;
-        onSetEditAlert(0);
+        setEditAlert(0);
         emit sigFindOperation(E_FIND_CONTENT, strFind);
     }
 }
@@ -101,7 +99,7 @@ void FindWidget::slotClearContent()
 {
     QString strNewFind = m_pSearchEdit->text();
     if (strNewFind == "") {
-        onSetEditAlert(0);
+        setEditAlert(0);
     }
 }
 
@@ -109,18 +107,8 @@ void FindWidget::slotClearContent()
 void FindWidget::slotEditAborted()
 {
 //    qDebug() << __FUNCTION__;
-    onSetEditAlert(0);
+    setEditAlert(0);
     emit sigFindOperation(E_FIND_EXIT, "");
-}
-
-int FindWidget::dealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_FIND_NONE_CONTENT) {
-        onSetEditAlert(1);
-        return MSG_OK;
-    }
-
-    return MSG_NO_OK;
 }
 
 void FindWidget::initWidget()
@@ -184,18 +172,8 @@ void FindWidget::initConnection()
 {
 }
 
-////  退出查询
-//void FindWidget::onFindExit()
-//{
-//    this->setVisible(false);
-
-//    if (m_pSearchEdit) {
-//        m_pSearchEdit->setText("");
-//    }
-//}
-
 //  设置 提醒红色
-void FindWidget::onSetEditAlert(const int &iFlag)
+void FindWidget::setEditAlert(const int &iFlag)
 {
     if (m_pSearchEdit) {
         bool bAlert = iFlag == 1 ? true : false;

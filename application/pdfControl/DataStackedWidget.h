@@ -54,6 +54,8 @@ signals:
 
     void sigFitChanged(int state);
 
+    void sigFindNone(); //搜索结束 什么都没有
+
 public:
     void SetFindOperation(const int &);
 

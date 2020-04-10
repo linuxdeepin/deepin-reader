@@ -17,7 +17,6 @@
 PlayControlWidget::PlayControlWidget(DocSheet *sheet, DWidget *parnet)
     : DFloatingWidget(parnet), m_sheet(sheet)
 {
-    m_strObserverName = PLAY_CONTROL_WIDGET;
     m_bcanshow = false;
     m_bautoplaying = true;
     m_bfirstshow = true;
@@ -34,18 +33,11 @@ PlayControlWidget::PlayControlWidget(DocSheet *sheet, DWidget *parnet)
     adjustSize();
 
     slotUpdateTheme();
-
-    dApp->m_pModelService->addObserver(this);
 }
 
 PlayControlWidget::~PlayControlWidget()
 {
-    dApp->m_pModelService->removeObserver(this);
-}
 
-int PlayControlWidget::dealWithData(const int &, const QString &)
-{
-    return  MSG_NO_OK;
 }
 
 void PlayControlWidget::activeshow(int ix, int iy)
@@ -73,6 +65,16 @@ void PlayControlWidget::killshow()
     m_pbtnplay->setIcon(QIcon(Utils::renderSVG(PF::getImagePath("suspend_normal", Pri::g_icons), QSize(36, 36))));
     m_ptimer->stop();
     hide();
+}
+
+void PlayControlWidget::setCanShow(bool bshow)
+{
+    m_bcanshow = bshow;
+}
+
+bool PlayControlWidget::canShow()
+{
+    return m_bcanshow;
 }
 
 void PlayControlWidget::initWidget()

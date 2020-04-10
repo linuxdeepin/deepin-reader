@@ -102,12 +102,6 @@ void ProxyViewDisplay::setScaleRotateViewModeAndShow()
     }
 }
 
-//  通知消息
-void ProxyViewDisplay::notifyMsg(const int &msgType, const QString &msgContent)
-{
-    dApp->m_pModelService->notifyMsg(msgType, msgContent);
-}
-
 void ProxyViewDisplay::setHeight(const int &nHeight)
 {
     m_nHeight = nHeight;

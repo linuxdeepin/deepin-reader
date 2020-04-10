@@ -41,16 +41,8 @@ enum E_ADAPTE_MSG {
     ADAPTE_HEIGHT_State
 };
 
-//  文档操作消息
-enum E_DOC_TYPE_MSG {
-    MSG_SAVE_FILE = ADAPTE_HEIGHT_State + 50,           //  关闭当前文档　消息
-    MSG_NOT_SAVE_FILE,                                  //  关闭当前文档　消息
-    MSG_NOT_CHANGE_SAVE_FILE,                           //  关闭当前文档　消息
-};
-
 //  高亮&注释消息
 enum E_NOTE_MSG {
-    E_NOTE_MSG_BEGIN = MSG_NOT_CHANGE_SAVE_FILE + 50,
     MSG_NOTE_ADD_HIGHLIGHT_COLOR,       //  添加高亮
     MSG_NOTE_UPDATE_HIGHLIGHT_COLOR,    //  更新 高亮显示
     MSG_NOTE_REMOVE_HIGHLIGHT,          //  移除 高亮显示
@@ -67,7 +59,6 @@ enum E_NOTE_MSG {
     MSG_NOTE_PAGE_UPDATE_ITEM,          //  页面注释 更新节点
     MSG_NOTE_PAGE_DELETE_CONTENT,       //  页面注释 删除内容
     MSG_NOTE_PAGE_DELETE_ITEM,          //  页面注释 删除节点
-    E_NOTE_MSG_END,
 };
 
 }

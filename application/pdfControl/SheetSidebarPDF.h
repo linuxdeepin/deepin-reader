@@ -30,12 +30,9 @@ signals:
     void sigDeleteAnntation(const int &, const QString &);
     void sigAdaptWindowSize(const double &scale); //缩略图列表自适应窗体大小  add by duanxiaohui 2020-3-19
     void sigUpdateThumbnail(const int &page);
-
-    // IObserver interface
+    void sigFindNone();
 public:
     void handleOpenSuccess();
-
-    int dealWithData(const int &, const QString &) override;
 
 public slots:
     void onSearch(const int &);

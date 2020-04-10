@@ -2,7 +2,6 @@
 #define MainWindow_H
 
 #include <DMainWindow>
-#include "IObserver.h"
 
 DWIDGET_USE_NAMESPACE
 

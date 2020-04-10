@@ -174,6 +174,7 @@ void DataStackedWidget::InitWidgets()
     addWidget(m_pNotesWidget);
 
     m_pSearchResWidget = new SearchResWidget(m_sheet, this);
+    connect(m_pSearchResWidget, SIGNAL(sigNeedShowFindNone()), this, SIGNAL(sigFindNone()));
     addWidget(m_pSearchResWidget);
 
     setCurrentWidget(m_pThWidget);

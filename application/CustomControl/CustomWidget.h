@@ -74,9 +74,6 @@ protected:
     void updateWidgetTheme();
 
 protected:
-    void notifyMsg(const int &msgType, const QString &msgContent = "") override;
-
-protected:
     CustomWidgetPrivate    *d_ptr = nullptr;
 
 protected:
