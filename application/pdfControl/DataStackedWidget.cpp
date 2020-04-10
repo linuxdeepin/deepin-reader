@@ -136,15 +136,12 @@ void DataStackedWidget::slotAdaptWindowSize(const double &scale)
         }
     }
 
-    m_sheet->setFit(0);
     if (dApp) {
-        if (dApp->openFileOk() && dApp->bFlush()) {
-            dApp->setFlush(true);
-        } else {
-            dApp->setFlush(false);
+        if (dApp->openFileOk() && (m_sheet != nullptr)) {
+//            dApp->setFlush(true);
+            m_sheet->setFit(1);
         }
     }
-
 }
 
 void DataStackedWidget::slotUpdateThumbnail(const int &page)

@@ -119,7 +119,8 @@ void FontMenu::slotFiteH()
 
     setAppSetFiteHAndW();
     if (dApp->openFileOk()) {
-        dApp->setFlush(true);
+//        dApp->setFlush(true);
+        m_sheet->setFit(1);
     }
 }
 

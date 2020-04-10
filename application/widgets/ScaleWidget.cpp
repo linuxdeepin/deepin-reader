@@ -160,8 +160,9 @@ void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
         m_sheet->setScale(dValue);
         m_sheet->setData(Fit, QString::number(NO_ADAPTE_State));
     }
-    if (dApp->openFileOk()) {
-        dApp->setFlush(true);
+    if (dApp->openFileOk() && (m_sheet != nullptr)) {
+//        dApp->setFlush(true);
+        m_sheet->setFit(1);
     }
 }
 
@@ -194,8 +195,9 @@ void ScaleWidget::SlotReturnPressed()
         }
     }
 
-    if (dApp->openFileOk()) {
-        dApp->setFlush(true);
+    if (dApp->openFileOk() && (m_sheet != nullptr)) {
+//        dApp->setFlush(true);
+        m_sheet->setFit(1);
     }
 }
 

@@ -75,7 +75,7 @@ void Application::setOpenFileOk(const bool &ok)
     if (m_pAppInfo) {
         m_pAppInfo->setOpenFileOk(ok);
     }
-    setFlush(ok);
+//    setFlush(ok);
 }
 
 bool Application::openFileOk() const
