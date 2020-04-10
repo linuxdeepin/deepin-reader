@@ -23,7 +23,7 @@ void DefaultOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, co
 
     m_nRightPageNumber = nClickPage;
 
-    QString sCurPath = m_sheet->qGetPath();
+    QString sCurPath = m_sheet->filePath();
 
     QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
 

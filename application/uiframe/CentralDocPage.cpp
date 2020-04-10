@@ -86,7 +86,7 @@ QStringList CentralDocPage::GetAllPath()
 
     auto sheets = findChildren<DocSheet *>();
     foreach (auto sheet, sheets) {
-        QString filePath = sheet->qGetPath();
+        QString filePath = sheet->filePath();
         if (filePath != "") {
             filePathList.append(filePath);
         }
@@ -98,7 +98,7 @@ int CentralDocPage::GetFileChange(const QString &sPath)
 {
     auto splitterList = findChildren<DocSheet *>();
     foreach (auto s, splitterList) {
-        QString sSplitterPath = s->qGetPath();
+        QString sSplitterPath = s->filePath();
         if (sSplitterPath == sPath) {
             return  s->qGetFileChange();
         }
@@ -122,28 +122,6 @@ void CentralDocPage::CloseFile(const int &iType, const QString &sPath)
             }
         }
         _proxy->closeFile();
-    }
-}
-
-//  保存 数据
-void CentralDocPage::onSaveFile()
-{
-    QString sCurPath = qGetCurPath();
-    if (sCurPath != "") {
-        if (GetFileChange(sCurPath)) {
-            DocummentProxy *_proxy = getCurFileAndProxy(sCurPath);
-            if (_proxy) {
-                bool rl = _proxy->save(sCurPath, true);
-                if (rl) {
-                    dApp->m_pDBService->qSaveData(sCurPath, DB_BOOKMARK);
-                    showTips(tr("Saved successfully"));
-                } else {
-                    showTips(tr("Save failed"));
-                }
-            }
-        } else {
-            showTips(tr("No changes"));
-        }
     }
 }
 
@@ -177,7 +155,7 @@ void CentralDocPage::saveAsCurFile()
 
             if (filePath != "") {
                 if (sCurPath == filePath) {
-                    onSaveFile();
+                    saveCurrent();
                 } else {
                     QString sFilePath = FFH::getFilePath(filePath, nCurDocType);
 
@@ -383,6 +361,8 @@ bool CentralDocPage::saveAll()
     auto sheets = this->findChildren<DocSheet *>();
 
     foreach (auto sheet, sheets) {
+        sheet->saveOper();
+
         if (sheet->qGetFileChange())
             changedList.append(sheet);
     }
@@ -393,14 +373,13 @@ bool CentralDocPage::saveAll()
 
         int nRes = sd.showDialog();
 
-        if (nRes <= 0) {    //放弃关闭
+        if (nRes <= 0) {
             return false;
         }
 
-        if (nRes == 2) {     //  保存
+        if (nRes == 2) {
             foreach (auto sheet, changedList) {
                 sheet->saveData();
-
             }
         }
     }
@@ -416,11 +395,22 @@ bool CentralDocPage::saveCurrent()
         return false;
 
     if(!sheet->qGetFileChange())
+    {
+        showTips(tr("No changes"));
         return false;
+    }
 
-    sheet->saveData();
+    if(!sheet->saveData())
+    {
+        showTips(tr("Save failed"));
+        return false;
+    }
+
+    sheet->saveOper();
 
     sigCurSheetChanged(sheet);
+
+    showTips(tr("Saved successfully"));
 
     return true;
 }
@@ -479,7 +469,7 @@ QString CentralDocPage::qGetCurPath()
     if (m_pStackedLayout != nullptr) {
         DocSheet *splitter = static_cast<DocSheet *>(m_pStackedLayout->currentWidget());
         if (splitter != nullptr)
-            return splitter->qGetPath();
+            return splitter->filePath();
     }
 
     return "";
@@ -501,7 +491,7 @@ FileDataModel CentralDocPage::qGetFileData(const QString &sPath)
     }
     auto splitterList = this->findChildren<DocSheet *>();
     foreach (auto sP, splitterList) {
-        QString sPPath = sP->qGetPath();
+        QString sPPath = sP->filePath();
         if (sPPath == sTempPath) {
             return sP->qGetFileData();
         }
@@ -518,7 +508,7 @@ DocummentProxy *CentralDocPage::getCurFileAndProxy(const QString &sPath)
 
     auto sheets = this->findChildren<DocSheet *>();
     foreach (auto sheet, sheets) {
-        if (sheet->qGetPath() == sTempPath) {
+        if (sheet->filePath() == sTempPath) {
             return sheet->getDocProxy();
         }
     }
@@ -538,7 +528,7 @@ DocSheet *CentralDocPage::getSheet(const QString &filePath)
 {
     auto sheets = this->findChildren<DocSheet *>();
     foreach (auto sheet, sheets) {
-        if (sheet->qGetPath() == filePath) {
+        if (sheet->filePath() == filePath) {
             return sheet;
         }
     }
@@ -772,7 +762,7 @@ void CentralDocPage::OnOpenSliderShow()
 
         emit sigNeedShowState(0);
 
-        QString sPath = sheet->qGetPath();
+        QString sPath = sheet->filePath();
 
         m_strSliderPath = sPath;
 
@@ -858,7 +848,7 @@ void CentralDocPage::OnExitMagnifer()
 
         auto sheet = qobject_cast<DocSheet *>(m_pStackedLayout->currentWidget());
         if (sheet) {
-            QString sPath = sheet->qGetPath();
+            QString sPath = sheet->filePath();
             DocummentProxy *_proxy = getCurFileAndProxy(sPath);
             if (!_proxy) {
                 return;

@@ -19,7 +19,7 @@ void TextOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, const
     if (m_sheet.isNull())
         return;
 
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->qGetPath());
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
 
     bool bBookState = pageList.contains(m_nClickPage);
 

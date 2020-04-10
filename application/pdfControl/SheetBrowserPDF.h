@@ -83,7 +83,9 @@ public:
 
     void OpenFilePath(const QString &);
     QString getFilePath();
-    void saveData();
+
+    void saveOper();
+    bool saveData();
     void ShowFindWidget();
 
     bool getFileChange();

@@ -137,8 +137,6 @@ public:
 
     void OnAppShortCut(const QString &);
 
-    void onSaveFile();
-
     void OnPrintFile();
 
     void ShowFindWidget();

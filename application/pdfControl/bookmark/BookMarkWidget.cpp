@@ -143,7 +143,7 @@ void BookMarkWidget::slotAddBookMark(const QString &sContent)
 
     int nPage = sContent.toInt();
 
-    QString sPath = m_sheet->qGetPath();
+    QString sPath = m_sheet->filePath();
     QList<int> pageList = dApp->m_pDBService->getBookMarkList(sPath);
     if (pageList.contains(nPage)) {
         return;
@@ -185,7 +185,7 @@ void BookMarkWidget::handleOpenSuccess()
 
     m_pBookMarkListWidget->clear();
 
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->qGetPath());
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
     if (pageList.size() == 0)
         return;
 
@@ -261,7 +261,7 @@ void BookMarkWidget::setBookMark(int page, int state)
     if (state) {
         if (m_sheet.isNull())
             return;
-        QString sPath = m_sheet->qGetPath();
+        QString sPath = m_sheet->filePath();
         QList<int> pageList = dApp->m_pDBService->getBookMarkList(sPath);
         if (pageList.contains(page)) {
             return;
@@ -351,11 +351,11 @@ void BookMarkWidget::deleteIndexPage(const int &pageIndex)
     if (nullptr == m_sheet)
         return;
 
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->qGetPath());
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
 
     pageList.removeOne(pageIndex);
 
-    dApp->m_pDBService->setBookMarkList(m_sheet->qGetPath(), pageList);
+    dApp->m_pDBService->setBookMarkList(m_sheet->filePath(), pageList);
 
     DocummentProxy *proxy =  m_sheet->getDocProxy();
     if (proxy) {
@@ -670,7 +670,7 @@ int BookMarkWidget::getBookMarkPage(const int &index)
         if (pItemWidget) {
             int page = pItemWidget->nPageIndex();
 
-            QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->qGetPath());
+            QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
             if (pageList.contains(page)) {
                 return page;
             }

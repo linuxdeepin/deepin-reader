@@ -33,6 +33,8 @@ public:
 
 public:
     void setData(const int &, const QString &);
+
+    void saveOper();
     void saveData();
 
     FileDataModel qGetFileData() const;

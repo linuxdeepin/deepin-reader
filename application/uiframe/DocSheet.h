@@ -64,11 +64,13 @@ public:
 
     bool isDoubleShow();
 
-    QString qGetPath();
+    QString filePath();
 
     int qGetFileChange();
 
-    void saveData();
+    void saveOper();
+
+    bool saveData();
 
     void setData(const int &, const QString &);
 
@@ -99,12 +101,6 @@ public:
     void openMagnifer();
 
     void quitMagnifer();
-
-//    bool close();
-
-//    bool save();
-
-//    bool saveAs(QString filePath);
 
     void handleOpenSuccess();
 

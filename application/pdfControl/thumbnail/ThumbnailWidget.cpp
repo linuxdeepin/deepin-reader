@@ -49,7 +49,7 @@ int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
 
 void ThumbnailWidget::handleOpenSuccess()
 {
-    slotOpenFileOk(m_sheet->qGetPath());
+    slotOpenFileOk(m_sheet->filePath());
     m_pPageWidget->handleOpenSuccess();
 }
 
@@ -247,7 +247,7 @@ void ThumbnailWidget::fillContantToList()
 
 void ThumbnailWidget::showItemBookMark()
 {
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->qGetPath());
+    QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
     foreach (int index, pageList) {
         auto pWidget = getItemWidget(m_pThumbnailListWidget->item(index));
         if (pWidget) {

@@ -346,7 +346,7 @@ DocSheet *DocSheet::getSheet(QString uuid)
     return nullptr;
 }
 
-QString DocSheet::qGetPath()
+QString DocSheet::filePath()
 {
     return static_cast<SheetBrowserPDF *>(m_browser)->getFilePath();
 }
@@ -359,9 +359,18 @@ int DocSheet::qGetFileChange()
     return  istatus;
 }
 
-void DocSheet::saveData()
+void DocSheet::saveOper()
 {
-    static_cast<SheetBrowserPDF *>(m_browser)->saveData();
+    if (DocType_PDF == m_type)
+    static_cast<SheetBrowserPDF *>(m_browser)->saveOper();
+}
+
+bool DocSheet::saveData()
+{
+    if (DocType_PDF == m_type)
+    return static_cast<SheetBrowserPDF *>(m_browser)->saveData();
+
+    return false;
 }
 
 void DocSheet::setData(const int &nType, const QString &sValue)

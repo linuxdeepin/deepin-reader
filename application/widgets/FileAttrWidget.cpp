@@ -52,7 +52,7 @@ void FileAttrWidget::setFileAttr(DocSheet *sheet)
         }
     }
 
-    QFileInfo info(sheet->qGetPath());
+    QFileInfo info(sheet->filePath());
     QString szTitle = info.fileName();
 
     addTitleFrame(szTitle);

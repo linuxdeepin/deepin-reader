@@ -28,7 +28,7 @@ PrintManager::PrintManager(DocSheet *sheet, QObject *parent)
     : QObject(parent), m_sheet(sheet)
 {
     if (nullptr != m_sheet)
-        setPrintPath(m_sheet->qGetPath());
+        setPrintPath(m_sheet->filePath());
 }
 
 void PrintManager::showPrintDialog(DWidget *widget)

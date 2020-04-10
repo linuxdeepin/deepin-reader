@@ -33,7 +33,7 @@ void ProxyFileDataModel::setData(const int &nType, const QString &sValue)
     m_pFileDataModel.qSetData(nType, sValue.toInt());
 }
 
-void ProxyFileDataModel::saveData()
+void ProxyFileDataModel::saveOper()
 {
     QString sPath = _fvwParent->m_pProxyData->getPath();
     for (int iLoop = Scale; iLoop < CurPage + 1; iLoop++) {
@@ -41,6 +41,11 @@ void ProxyFileDataModel::saveData()
     }
 
     dApp->m_pDBService->qSaveData(sPath, DB_HISTROY);
+}
+
+void ProxyFileDataModel::saveData()
+{
+    QString sPath = _fvwParent->m_pProxyData->getPath();
     dApp->m_pDBService->qSaveData(sPath, DB_BOOKMARK);
 }
 

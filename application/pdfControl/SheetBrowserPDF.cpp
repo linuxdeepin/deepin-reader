@@ -233,12 +233,23 @@ QString SheetBrowserPDF::getFilePath()
     return d->m_pProxyData->getPath();
 }
 
-void SheetBrowserPDF::saveData()
+void SheetBrowserPDF::saveOper()
 {
     Q_D(SheetBrowserPDF);
+    d->m_pProxyFileDataModel->saveOper();
+}
+
+bool SheetBrowserPDF::saveData()
+{
+    Q_D(SheetBrowserPDF);
+    bool result = d->m_pProxy->save(d->m_pProxyData->getPath(), true);
+    if(!result)
+        return false;
+
     d->m_pProxyData->setFileChanged(false);
     d->m_pProxyFileDataModel->saveData();
-    d->m_pProxy->save(d->m_pProxyData->getPath(), true);
+
+    return true;
 }
 
 void SheetBrowserPDF::SlotFindOperation(const int &iType, const QString &strFind)
