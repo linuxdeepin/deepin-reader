@@ -31,10 +31,9 @@ class FontMenu : public CustomMenu
 public:
     explicit FontMenu(DWidget *parent = nullptr);
 
-    // CustomMenu interface
-public:
-    int dealWithData(const int &, const QString &) override;
+    bool handleShortcut(QString shortcut);
 
+public:
     void readCurDocParam(DocSheet *sheet);
 
 protected:

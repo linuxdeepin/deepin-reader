@@ -25,8 +25,6 @@ public:
     ~TitleWidget() override;
 
 public:
-    int dealWithData(const int &, const QString &) override;
-
     void setMagnifierState();
 
 public slots:

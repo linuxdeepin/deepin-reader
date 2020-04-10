@@ -348,7 +348,10 @@ DocSheet *DocSheet::getSheet(QString uuid)
 
 QString DocSheet::filePath()
 {
+    if (DocType_PDF == m_type)
     return static_cast<SheetBrowserPDF *>(m_browser)->getFilePath();
+
+    return "";
 }
 
 int DocSheet::qGetFileChange()
@@ -375,12 +378,16 @@ bool DocSheet::saveData()
 
 void DocSheet::setData(const int &nType, const QString &sValue)
 {
-    return static_cast<SheetBrowserPDF *>(m_browser)->setData(nType, sValue);
+    if (DocType_PDF == m_type)
+     static_cast<SheetBrowserPDF *>(m_browser)->setData(nType, sValue);
 }
 
 FileDataModel DocSheet::qGetFileData()
 {
+    if (DocType_PDF == m_type)
     return static_cast<SheetBrowserPDF *>(m_browser)->qGetFileData();
+
+    return FileDataModel();
 }
 
 DocummentProxy *DocSheet::getDocProxy()
@@ -396,17 +403,21 @@ DocummentProxy *DocSheet::getDocProxy()
 
 void DocSheet::OnOpenSliderShow()
 {
+     if (DocType_PDF == m_type) {
     m_bOldState = static_cast<SheetSidebarPDF *>(m_sidebar)->isVisible();
     static_cast<SheetSidebarPDF *>(m_sidebar)->setVisible(false);
+     }
 }
 
 void DocSheet::OnExitSliderShow()
 {
+    if (DocType_PDF == m_type)
     static_cast<SheetSidebarPDF *>(m_sidebar)->setVisible(m_bOldState);
 }
 
 void DocSheet::ShowFindWidget()
 {
+    if (DocType_PDF == m_type)
     static_cast<SheetBrowserPDF *>(m_browser)->ShowFindWidget();
 }
 

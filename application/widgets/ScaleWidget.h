@@ -34,6 +34,8 @@ public:
 
     void setSheet(DocSheet *sheet);
 
+    bool handleShortcut(QString shortcut);
+
 public:
     int dealWithData(const int &, const QString &) override;
 
@@ -48,9 +50,6 @@ private slots:
     void SlotCurrentTextChanged(const QString &);
 
     void SlotReturnPressed();
-
-private:
-    void onShortKey(const QString &keyType);
 
 private:
     DComboBox  *m_scaleComboBox     = nullptr;

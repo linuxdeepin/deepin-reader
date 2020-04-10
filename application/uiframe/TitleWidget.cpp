@@ -12,23 +12,14 @@
 TitleWidget::TitleWidget(DWidget *parent)
     : CustomWidget(TITLE_WIDGET, parent)
 {
-    m_pMsgList = {E_FIND_CONTENT, E_FIND_EXIT};
-
-    shortKeyList = QStringList() << KeyStr::g_alt_1 << KeyStr::g_alt_2 << KeyStr::g_ctrl_m
-                   << KeyStr::g_alt_z
-                   << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3
-                   << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r
-                   << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_equal << KeyStr::g_ctrl_smaller;
-
     initWidget();
     slotUpdateTheme();
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &TitleWidget::slotUpdateTheme);
-    dApp->m_pModelService->addObserver(this);
 }
 
 TitleWidget::~TitleWidget()
 {
-    dApp->m_pModelService->removeObserver(this);
+
 }
 
 //  主题变了
@@ -358,49 +349,23 @@ void TitleWidget::setMagnifierState()
     m_pHandleShapeBtn->setIcon(icon);
 }
 
-//  处理 推送消息
-int TitleWidget::dealWithData(const int &msgType, const QString &msgContent)
-{
-    int nRes = m_pSw->dealWithData(msgType, msgContent);
-
-    if (nRes == MSG_OK) {
-        return MSG_OK;
-    }
-
-    nRes = m_pFontMenu->dealWithData(msgType, msgContent);
-
-    if (nRes == MSG_OK) {
-        return MSG_OK;
-    }
-
-    if (m_pMsgList.contains(msgType)) {
-        return MSG_OK;
-    }
-
-    return MSG_NO_OK;
-}
-
 int TitleWidget::onTitleShortCut(const QString &sKey)
 {
     if (sKey == KeyStr::g_alt_1) {
         OnShortCut_Alt1();
+        return MSG_OK;
     } else if (sKey == KeyStr::g_alt_2) {
         OnShortCut_Alt2();
+        return MSG_OK;
     } else if (sKey == KeyStr::g_ctrl_m) { //  显示缩略图
         OnShortCut_CtrlM();
-    } else {
-        int nRes = m_pFontMenu->dealWithData(MSG_NOTIFY_KEY_MSG, sKey);
-        if (nRes != MSG_OK) {
-            nRes = m_pSw->dealWithData(MSG_NOTIFY_KEY_MSG, sKey);
-
-            if (nRes == MSG_OK) {
-                return MSG_OK;
-            }
-        }
-    }
-
-    if (m_pKeyMsgList.contains(sKey)) {
         return MSG_OK;
+    } else {
+        if(m_pFontMenu->handleShortcut(sKey))
+            return MSG_OK;
+
+        if(m_pSw->handleShortcut(sKey))
+            return MSG_OK;
     }
 
     return MSG_NO_OK;

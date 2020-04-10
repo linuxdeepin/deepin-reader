@@ -445,7 +445,6 @@ int CentralDocPage::dealWithData(const int &msgType, const QString &msgContent)
             QString sTo = obj.value("to").toString();
 
             if (sTo.contains(this->m_strObserverName)) {
-                emit sigDealNotifyMsg(msgType, msgContent);
                 return MSG_OK;
             }
         }
@@ -665,8 +664,6 @@ void CentralDocPage::OnAppShortCut(const QString &s)
         OnOpenMagnifer();
     } else if (s == KeyStr::g_esc) { //  esc 统一处理
         OnShortCutKey_Esc();
-    } else {
-        emit sigDealNotifyMsg(MSG_NOTIFY_KEY_MSG, s);
     }
 }
 

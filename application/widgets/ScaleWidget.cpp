@@ -38,17 +38,7 @@ ScaleWidget::ScaleWidget(DWidget *parent)
 
 ScaleWidget::~ScaleWidget()
 {
-}
 
-int ScaleWidget::dealWithData(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_NOTIFY_KEY_MSG) {
-        onShortKey(msgContent);
-        if (m_pKeyMsgList.contains(msgContent)) {
-            return MSG_OK;
-        }
-    }
-    return MSG_NO_OK;
 }
 
 void ScaleWidget::initWidget()
@@ -63,7 +53,7 @@ void ScaleWidget::initWidget()
     m_scaleComboBox->setDuplicatesEnabled(false); //  重复项 不允许添加
     int tW = 120;
     int tH = 0;
-//    dApp->adaptScreenView(tW, tH);
+
     m_scaleComboBox->setFixedWidth(tW);
     m_scaleComboBox->setEditable(true);
 
@@ -73,7 +63,7 @@ void ScaleWidget::initWidget()
     DIconButton *pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
     tW = 24;
     tH = 24;
-//    dApp->adaptScreenView(tW, tH);
+
     pPreBtn->setFixedSize(QSize(tW, tH));
     connect(pPreBtn, SIGNAL(clicked()), SLOT(slotPrevScale()));
 
@@ -84,17 +74,6 @@ void ScaleWidget::initWidget()
     m_layout->addWidget(pPreBtn);
     m_layout->addWidget(m_scaleComboBox);
     m_layout->addWidget(pNextBtn);
-}
-
-void ScaleWidget::onShortKey(const QString &keyType)
-{
-    if (keyType == KeyStr::g_ctrl_smaller) {
-        slotPrevScale();
-    } else if (keyType == KeyStr::g_ctrl_larger || keyType == KeyStr::g_ctrl_equal) {
-        slotNextScale();
-    } else if (keyType == KeyStr::g_ctrl_1) {   // 恢复 100 比例
-        SlotCurrentTextChanged("100");
-    }
 }
 
 void ScaleWidget::slotPrevScale()
@@ -196,7 +175,6 @@ void ScaleWidget::SlotReturnPressed()
     }
 
     if (dApp->openFileOk() && (m_sheet != nullptr)) {
-//        dApp->setFlush(true);
         m_sheet->setFit(1);
     }
 }
@@ -260,4 +238,20 @@ void ScaleWidget::setSheet(DocSheet *sheet)
     }
 
     connect(m_scaleComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(SlotCurrentTextChanged(const QString &)));
+}
+
+bool ScaleWidget::handleShortcut(QString shortcut)
+{
+    if (shortcut == KeyStr::g_ctrl_smaller) {
+        slotPrevScale();
+        return true;
+    } else if (shortcut == KeyStr::g_ctrl_larger || shortcut == KeyStr::g_ctrl_equal) {
+        slotNextScale();
+        return true;
+    } else if (shortcut == KeyStr::g_ctrl_1) {   // 恢复 100 比例
+        SlotCurrentTextChanged("100");
+        return true;
+    }
+
+    return false;
 }

@@ -152,8 +152,6 @@ public:
     void saveAsCurFile();
 
 signals:
-    void sigDealNotifyMsg(const int &, const QString &);
-
     void sigRemoveFileTab(const QString &);
 
     void sigTabBarIndexChange(const QString &);

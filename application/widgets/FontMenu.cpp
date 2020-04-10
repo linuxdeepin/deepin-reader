@@ -33,16 +33,27 @@ FontMenu::FontMenu(DWidget *parent):
     initConnection();
 }
 
-int FontMenu::dealWithData(const int &msgType, const QString &msgContent)
+bool FontMenu::handleShortcut(QString shortcut)
 {
-    if (msgType == MSG_NOTIFY_KEY_MSG) {
-        OnShortKey(msgContent);
-        if (shortKeyList.contains(msgContent)) {
-            return MSG_OK;
-        }
+    if (shortcut == KeyStr::g_ctrl_2) {
+        //自适应高
+        slotFiteH();
+        return true;
+    } else if (shortcut == KeyStr::g_ctrl_3) {
+        //自适应宽
+        slotFiteW();
+        return true;
+    } else if (shortcut == KeyStr::g_ctrl_r) {
+        //左旋转
+        slotRotateL();
+        return true;
+    } else if (shortcut == KeyStr::g_ctrl_shift_r) {
+        //右旋转
+        slotRotateR();
+        return true;
     }
 
-    return MSG_NO_OK;
+    return false;
 }
 
 /**
@@ -160,28 +171,6 @@ void FontMenu::slotRotateR()
         return;
 
     m_sheet->setRotateRight();
-}
-
-/**
- * @brief FontMenu::slotDealWithShortKey
- * 处理键盘事件
- * @param keyType  事件内容
- */
-void FontMenu::OnShortKey(const QString &keyType)
-{
-    if (keyType == KeyStr::g_ctrl_2) {
-        //自适应高
-        slotFiteH();
-    } else if (keyType == KeyStr::g_ctrl_3) {
-        //自适应宽
-        slotFiteW();
-    } else if (keyType == KeyStr::g_ctrl_r) {
-        //左旋转
-        slotRotateL();
-    } else if (keyType == KeyStr::g_ctrl_shift_r) {
-        //右旋转
-        slotRotateR();
-    }
 }
 
 /**
