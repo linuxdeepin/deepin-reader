@@ -39,7 +39,6 @@ private slots:
     void slotPrevPageClicked();
     void slotNextPageClicked();
     void slotEndPageClicked();
-    void slotExitFullScreenClicked();
     void slotAddIconNote();
 
 private:
@@ -51,7 +50,6 @@ private:
     QAction *m_pPrevPage = nullptr;
     QAction *m_pNextPage = nullptr;
     QAction *m_pEndPage = nullptr;
-    QAction *m_pExitFullScreen = nullptr;
     QPoint m_pointclicked;
     QPoint m_showPoint;
     QPointer<DocSheet> m_sheet;

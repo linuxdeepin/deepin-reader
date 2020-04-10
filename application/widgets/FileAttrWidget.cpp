@@ -154,13 +154,6 @@ void FileAttrWidget::showScreenCenter()
 
 }
 
-int FileAttrWidget::dealWithData(const int &msgType, const QString &msgContent)
-{
-    if (MSG_NOTIFY_KEY_MSG == msgType && KeyStr::g_esc == msgContent)
-        close();
-    return MSG_NO_OK;
-}
-
 void FileAttrWidget::initWidget()
 {
     initCloseBtn();

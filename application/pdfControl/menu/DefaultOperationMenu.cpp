@@ -78,8 +78,8 @@ void DefaultOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, co
             m_pEndPage->setEnabled(false);
         }
 
-        m_pExitFullScreen->setVisible(false);
         m_pSearch->setVisible(true);
+
         m_pAddIconNote->setVisible(true);
 
         this->exec(showPoint);
@@ -101,8 +101,6 @@ void DefaultOperationMenu::initActions()
     m_pNextPage = createAction(tr("Next page"), SLOT(slotNextPageClicked()));
 
     m_pEndPage = createAction(tr("Last page"), SLOT(slotEndPageClicked()));
-
-    m_pExitFullScreen = createAction(tr("Exit fullscreen"), SLOT(slotExitFullScreenClicked()));
 }
 
 QAction *DefaultOperationMenu::createAction(const QString &name, const char *member)
@@ -150,11 +148,6 @@ void DefaultOperationMenu::slotNextPageClicked()
 void DefaultOperationMenu::slotEndPageClicked()
 {
     m_sheet->pageLast();
-}
-
-void DefaultOperationMenu::slotExitFullScreenClicked()
-{
-    dApp->m_pModelService->notifyMsg(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
 }
 
 void DefaultOperationMenu::slotAddIconNote()

@@ -36,9 +36,6 @@ public:
 
     bool handleShortcut(QString shortcut);
 
-public:
-    int dealWithData(const int &, const QString &) override;
-
 protected:
     void initWidget() override;
 

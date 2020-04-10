@@ -114,11 +114,6 @@ public:
 
     QStringList GetAllPath();
 
-public:
-    void CloseFile(const int &iType, const QString &sPath);
-
-    QString qDealWithData1(const int &msgType, const QString &msgContent);
-
 protected:
     void initWidget() override;
 
@@ -145,7 +140,7 @@ public:
 
     bool OnOpenMagnifer();
 
-    void OnShortCutKey_Esc();
+    void exitSpecialState();
 
     void OnKeyPress(const QString &);
 

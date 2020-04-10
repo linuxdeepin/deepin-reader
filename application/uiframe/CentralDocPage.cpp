@@ -106,25 +106,6 @@ int CentralDocPage::GetFileChange(const QString &sPath)
     return -1;
 }
 
-void CentralDocPage::CloseFile(const int &iType, const QString &sPath)
-{
-    DocummentProxy *_proxy = getCurFileAndProxy(sPath);
-    if (_proxy) {
-
-        if (MSG_SAVE_FILE == iType || MSG_NOT_SAVE_FILE == iType) {
-
-            bool bSave = iType == MSG_SAVE_FILE ? true : false;
-
-            _proxy->save(sPath, bSave);
-
-            if (bSave) {
-                dApp->m_pDBService->qSaveData(sPath, DB_BOOKMARK);
-            }
-        }
-        _proxy->closeFile();
-    }
-}
-
 //  另存为
 void CentralDocPage::saveAsCurFile()
 {
@@ -189,30 +170,6 @@ void CentralDocPage::onSheetChanged(DocSheet *sheet, bool hasChanged)
     } else {
         UnBlockShutdown();
     }
-}
-
-//  跳转页面
-QString CentralDocPage::qDealWithData1(const int &msgType, const QString &msgContent)
-{
-    if (msgType == MSG_NOTIFY_KEY_MSG) {
-        if (msgContent == KeyStr::g_ctrl_shift_s) {
-            saveAsCurFile();
-        }
-    } else if (MSG_SAVE_FILE == msgType || MSG_NOT_SAVE_FILE == msgType)  {
-        CloseFile(msgType, msgContent);
-    }
-    int nRes = MSG_NO_OK;
-
-    if (m_pMsgList2.contains(msgType)) {
-        nRes = MSG_OK;
-    }
-
-    QJsonObject obj;
-    obj.insert("return", nRes);
-
-    QJsonDocument doc(obj);
-
-    return doc.toJson(QJsonDocument::Compact);
 }
 
 void CentralDocPage::openFile(QString &filePath)
@@ -663,7 +620,7 @@ void CentralDocPage::OnAppShortCut(const QString &s)
     } else if (s == KeyStr::g_alt_z) {
         OnOpenMagnifer();
     } else if (s == KeyStr::g_esc) { //  esc 统一处理
-        OnShortCutKey_Esc();
+        exitSpecialState();
     }
 }
 
@@ -677,7 +634,7 @@ void CentralDocPage::OnPrintFile()
     p.showPrintDialog(this);
 }
 
-void CentralDocPage::OnShortCutKey_Esc()
+void CentralDocPage::exitSpecialState()
 {
     int nState = getCurrentState();
     if (nState == SLIDER_SHOW) {  //  当前是幻灯片模式

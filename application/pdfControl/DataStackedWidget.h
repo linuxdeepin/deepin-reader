@@ -69,13 +69,14 @@ private slots:
 
 private:
     void InitWidgets();
+
     void DealWithPressKey(const QString &sKey);
+
     void onJumpToPrevPage();
+
     void onJumpToNextPage();
+
     void DeleteItemByKey();
-
-public:
-
 
 private:
     ThumbnailWidget     *m_pThWidget = nullptr;

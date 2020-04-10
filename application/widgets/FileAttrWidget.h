@@ -9,21 +9,19 @@ DWIDGET_USE_NAMESPACE
 class DocSheet;
 class ImageLabel;
 class QVBoxLayout;
-class FileAttrWidget : public DAbstractDialog, public IObserver
+class FileAttrWidget : public DAbstractDialog
 {
     Q_OBJECT
     Q_DISABLE_COPY(FileAttrWidget)
 
 public:
     explicit FileAttrWidget(DWidget *parent = nullptr);
+
     ~FileAttrWidget() override;
 
     void setFileAttr(DocSheet *sheet);
 
     void showScreenCenter();
-
-public:
-    int dealWithData(const int &, const QString &) override;
 
 private:
     void initWidget();

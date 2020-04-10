@@ -77,20 +77,25 @@ signals:
     void sigRotateChanged(int rotate);
 
     void sigPageChanged(int page);
+
 public:
     int dealWithData(const int &, const QString &) override;
+
     int qDealWithShortKey(const QString &) override;
 
     void OpenFilePath(const QString &);
+
     QString getFilePath();
 
     void saveOper();
+
     bool saveData();
+
     void ShowFindWidget();
 
     bool getFileChange();
 
-    DocummentProxy     *GetDocProxy();
+    DocummentProxy *GetDocProxy();
 
     void setData(const int &, const QString &);
 

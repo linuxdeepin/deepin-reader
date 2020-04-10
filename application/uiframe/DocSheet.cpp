@@ -40,6 +40,8 @@ DocSheet::DocSheet(DocType_EM type, DWidget *parent)
         initPDF();
     }
 
+    connect(this,SIGNAL(splitterMoved(int,int)),this,SLOT(onSplitterMoved(int,int)));
+
     m_uuid = QUuid::createUuid().toString();
     g_map[m_uuid] = this;
 }
@@ -331,6 +333,12 @@ void DocSheet::onShowTips(const QString &tips)
 void DocSheet::onFileChanged(bool hasChanged)
 {
     sigFileChanged(this, hasChanged);
+}
+
+void DocSheet::onSplitterMoved(int a, int b)
+{
+    setFit(0);
+    emit sigFileChanged(this,qGetFileChange());
 }
 
 QUuid DocSheet::getUuid(DocSheet *sheet)

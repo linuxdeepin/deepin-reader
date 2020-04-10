@@ -111,6 +111,8 @@ signals:
 
     void sigFileChanged(DocSheet *, bool hasChanged);    //被修改了 书签 笔记
 
+    void sigScaleChanged(DocSheet*);
+
     void sigTotateChanged();
 
     void sigOpened(DocSheet *, bool);
@@ -126,6 +128,8 @@ private slots:
     void onShowTips(const QString &tips);
 
     void onFileChanged(bool);
+
+    void onSplitterMoved(int,int);
 
 private:
     DocType_EM      m_type;

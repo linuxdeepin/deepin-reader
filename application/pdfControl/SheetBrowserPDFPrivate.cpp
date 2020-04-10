@@ -309,27 +309,25 @@ void SheetBrowserPDFPrivate::FindOperation(const int &iType, const QString &strF
     }
 }
 
-void SheetBrowserPDFPrivate::handleResize(const QSize &size)
+int SheetBrowserPDFPrivate::handleResize(const QSize &size)
 {
     Q_Q(SheetBrowserPDF);
+
+    int scale = -1;
 
     if (!m_pProxyData->IsFirstShow() && m_pProxyData->getIsFileOpenOk()) {
 
         m_pDocViewProxy->setWidth(size.width());
         m_pDocViewProxy->setHeight(size.height());
-        m_pDocViewProxy->onSetWidgetAdapt();
+        scale = m_pDocViewProxy->onSetWidgetAdapt();
     }
 
     if (q->m_pFindWidget && q->m_pFindWidget->isVisible()) {
         int nParentWidth = q->width();
         q->m_pFindWidget->showPosition(nParentWidth);
     }
-}
 
-void SheetBrowserPDFPrivate::resizeEvent(QResizeEvent *event)
-{
-    QSize size = event->size();
-    handleResize(size);
+    return scale;
 }
 
 void SheetBrowserPDFPrivate::wheelEvent(QWheelEvent *event)

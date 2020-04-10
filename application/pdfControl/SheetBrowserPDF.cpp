@@ -189,7 +189,10 @@ void SheetBrowserPDF::mouseReleaseEvent(QMouseEvent *event)
 void SheetBrowserPDF::resizeEvent(QResizeEvent *event)
 {
     Q_D(SheetBrowserPDF);
-    d->resizeEvent(event);
+
+    int scale = d->handleResize(event->size());
+
+    setData(Scale,QString::number(scale));
 
     CustomWidget::resizeEvent(event);
 }

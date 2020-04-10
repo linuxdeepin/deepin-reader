@@ -83,11 +83,8 @@ void TextOperationMenu::initActions()
 
     m_pRemoveHighLight = createAction(tr("Remove highlight"), SLOT(slotRemoveHighLightClicked()));
     m_pAddNote = createAction(tr("Add note"), SLOT(slotAddNoteClicked()));
-
     m_pAddBookMark = createAction(tr("Add bookmark"), SLOT(slotAddBookMarkClicked()));
 
-
-//    m_pExitFullScreen = createAction(tr("Exit fullscreen"), SLOT(slotExitFullScreenClicked()));
 }
 
 QAction *TextOperationMenu::createAction(const QString &text, const char *member)
@@ -164,11 +161,6 @@ void TextOperationMenu::slotAddBookMarkClicked()
     } else {
         m_sheet->setBookMark(m_nClickPage, true);
     }
-}
-
-void TextOperationMenu::slotExitFullScreenClicked()
-{
-    notifyMsgToFrame(MSG_NOTIFY_KEY_MSG, KeyStr::g_esc);
 }
 
 void TextOperationMenu::setPEndPoint(const QPoint &pEndPoint)

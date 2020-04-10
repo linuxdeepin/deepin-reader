@@ -46,7 +46,6 @@ private slots:
     void onPageChanged(int page);
 
 private:
-    void resizeEvent(QResizeEvent *event);
     void wheelEvent(QWheelEvent *event);
 
 private:
@@ -65,7 +64,7 @@ private:
     void DocFile_ctrl_i();
     void DocFile_ctrl_c();
     void FindOperation(const int &iType, const QString &strFind);
-    void handleResize(const QSize &size);
+    int  handleResize(const QSize &size);
 
 private:
     void initConnections();
