@@ -10,7 +10,7 @@
 #include "DocSheet.h"
 
 TitleWidget::TitleWidget(DWidget *parent)
-    : CustomWidget(TITLE_WIDGET, parent)
+    : CustomWidget(parent)
 {
     initWidget();
     slotUpdateTheme();

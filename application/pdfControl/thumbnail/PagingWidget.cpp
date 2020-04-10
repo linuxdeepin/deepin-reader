@@ -24,7 +24,7 @@
 #include "DocSheet.h"
 
 PagingWidget::PagingWidget(DocSheet *sheet, DWidget *parent)
-    : CustomWidget(PAGE_WIDGET, parent), m_sheet(sheet)
+    : CustomWidget(parent), m_sheet(sheet)
 {
     initWidget();
 

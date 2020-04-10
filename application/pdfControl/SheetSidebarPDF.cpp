@@ -11,7 +11,7 @@
 #include "DocSheet.h"
 
 SheetSidebarPDF::SheetSidebarPDF(DocSheet *parent)
-    : CustomWidget(LEFT_SLIDERBAR_WIDGET, parent), m_sheet(parent)
+    : CustomWidget(parent), m_sheet(parent)
 {
     int tW = LEFTMINWIDTH;
     int tH = LEFTMINWIDTH;

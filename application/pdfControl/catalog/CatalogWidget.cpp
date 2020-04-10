@@ -28,7 +28,7 @@
 #include "DocSheet.h"
 
 CatalogWidget::CatalogWidget(DocSheet *sheet, DWidget *parent)
-    : CustomWidget(CATALOG_WIDGET, parent), m_sheet(sheet)
+    : CustomWidget(parent), m_sheet(sheet)
 {
     initWidget();
     initConnections();

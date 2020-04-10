@@ -23,17 +23,11 @@
 #include "business/AppInfo.h"
 
 ThumbnailItemWidget::ThumbnailItemWidget(DWidget *parent)
-    : CustomItemWidget(THUMBAIL_ITEM_WIDGET, parent)
+    : CustomItemWidget(parent)
 {
     setWindowFlags(Qt::FramelessWindowHint);
 
     initWidget();
-}
-
-// 处理消息接口
-int ThumbnailItemWidget::dealWithData(const int &, const QString &)
-{
-    return 0;
 }
 
 // 是否被选中，选中就就填充颜色

@@ -20,7 +20,7 @@
 #include <QDebug>
 
 HandleMenu::HandleMenu(DWidget *parent)
-    : CustomMenu(HANDLE_MENU, parent)
+    : CustomMenu( parent)
 {
     initActions();
 }

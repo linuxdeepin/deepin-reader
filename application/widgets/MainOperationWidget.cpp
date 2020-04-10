@@ -9,7 +9,7 @@
 #include "DocSheet.h"
 
 MainOperationWidget::MainOperationWidget(DocSheet *sheet, DWidget *parent)
-    : CustomWidget(MAIN_OPERATION_WIDGET, parent), m_sheet(sheet)
+    : CustomWidget(parent), m_sheet(sheet)
 {
     initWidget();
     initConnect();

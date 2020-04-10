@@ -23,9 +23,6 @@
 #include <DTabWidget>
 #include <QPointer>
 
-#include "application.h"
-#include "IObserver.h"
-
 DWIDGET_USE_NAMESPACE
 
 class CentralDocPage;

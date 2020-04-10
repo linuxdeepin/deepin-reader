@@ -20,7 +20,7 @@
 #include <QDebug>
 
 BookMarkMenu::BookMarkMenu(DWidget *parent)
-    : CustomMenu(BOOKMARK_MENU, parent)
+    : CustomMenu( parent)
 {
     initActions();
 }

@@ -7,7 +7,7 @@
 #include "MsgHeader.h"
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
-    : CustomMenu(DEFAULT_OPERATION_MENU, parent)
+    : CustomMenu(parent)
 {
     initActions();
 }

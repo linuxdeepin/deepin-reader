@@ -131,8 +131,6 @@ public:
     ~ThumbnailWidget() override;
 
 public:
-    int dealWithData(const int &, const QString &) override;
-
     void handleOpenSuccess();
 
     void handleRotate(int rotate);

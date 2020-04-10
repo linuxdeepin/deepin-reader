@@ -99,7 +99,7 @@ public:
     void setBookMark(int page, int state);
 
 public:
-    int qDealWithShortKey(const QString &) override;
+    int qDealWithShortKey(const QString &);
 
     int getBookMarkPage(const int &index);
 

@@ -83,7 +83,7 @@ signals:
     void sigPageChanged(int page);
 
 public:
-    int qDealWithShortKey(const QString &) override;
+    int qDealWithShortKey(const QString &);
 
     void OpenFilePath(const QString &);
 

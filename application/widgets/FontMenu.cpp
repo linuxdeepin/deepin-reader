@@ -23,11 +23,8 @@
 #include "docview/docummentproxy.h"
 
 FontMenu::FontMenu(DWidget *parent):
-    CustomMenu(FONT_MENU, parent)
+    CustomMenu( parent)
 {
-    shortKeyList << KeyStr::g_ctrl_2 << KeyStr::g_ctrl_3
-                 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r;
-
     initActions();
 
     initConnection();

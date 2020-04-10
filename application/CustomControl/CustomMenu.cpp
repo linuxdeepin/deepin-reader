@@ -24,7 +24,7 @@
 
 #include <DFontSizeManager>
 
-CustomMenu::CustomMenu(const QString &, DWidget *parent)
+CustomMenu::CustomMenu(DWidget *parent)
     : DMenu(parent)
 {
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);

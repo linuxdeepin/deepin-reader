@@ -22,18 +22,16 @@
 
 #include <DWidgetUtil>
 
-CustomWidget::CustomWidget(const QString &name, DWidget *parent)
+CustomWidget::CustomWidget(DWidget *parent)
     : DWidget(parent), d_ptr(new CustomWidgetPrivate(this))
 {
-    m_strObserverName = name;
     setWindowFlags(Qt::FramelessWindowHint);
     setFocusPolicy(Qt::StrongFocus);
-    setObjectName(name);
     setAutoFillBackground(true);
     setContextMenuPolicy(Qt::CustomContextMenu);//让widget支持右键菜单事件
 }
 
-CustomWidget::CustomWidget(CustomWidgetPrivate &cwp, const QString &name, DWidget *parent)
+CustomWidget::CustomWidget(CustomWidgetPrivate &cwp, DWidget *parent)
     : DWidget(parent), d_ptr(&cwp)
 {
 
@@ -44,11 +42,6 @@ void CustomWidget::updateWidgetTheme()
     auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
     plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
     setPalette(plt);
-}
-
-int CustomWidget::qDealWithShortKey(const QString &)
-{
-    return MSG_NO_OK;
 }
 
 /**

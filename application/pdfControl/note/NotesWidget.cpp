@@ -26,7 +26,7 @@
 #include "DocSheet.h"
 
 NotesWidget::NotesWidget(DocSheet *sheet, DWidget *parent)
-    : CustomWidget(NOTE_WIDGET, parent), m_sheet(sheet)
+    : CustomWidget(parent), m_sheet(sheet)
 {
     initWidget();
 

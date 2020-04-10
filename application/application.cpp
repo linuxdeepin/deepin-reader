@@ -23,8 +23,6 @@
 
 #include "business/AppInfo.h"
 #include "utils/utils.h"
-
-#include "IObserver.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
 #include "MainWindow.h"

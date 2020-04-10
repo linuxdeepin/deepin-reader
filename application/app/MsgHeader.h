@@ -18,18 +18,14 @@ enum E_MSG_TYPE {
 
 //  搜索框消息
 enum E_FIND_WIDGET_MSG {
-    E_FIND_WIDGET_BEGIN = E_MSG_TYPE_END + 50,
     E_FIND_PREV,
     E_FIND_NEXT,
     E_FIND_EXIT,
     E_FIND_CONTENT,
-    MSG_FIND_NONE_CONTENT,       //  未搜索到内容消息
-    E_FIND_WIDGET_END,
 };
 
 //  消息类型
 enum MSG_TYPE {
-    MSG_TYPE_BEGIN = E_FIND_WIDGET_END + 50,
     MSG_NOTIFY_KEY_MSG,                 //  按键通知消息
     MSG_TYPE_END,
 };

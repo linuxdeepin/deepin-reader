@@ -23,7 +23,7 @@
 #include <QHBoxLayout>
 
 BookMarkItemWidget::BookMarkItemWidget(DWidget *parent)
-    : CustomItemWidget(BOOKMARK_ITEM_WIDGET, parent)
+    : CustomItemWidget(parent)
 {
     initWidget();
 }

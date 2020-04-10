@@ -292,40 +292,6 @@ void DocSheet::setSidebarVisible(bool isVisible)
     }
 }
 
-void DocSheet::SlotNotifyMsg(const int &msgType, const QString &msgContent)
-{
-    if (this->isVisible()) {    //  只有显示的窗口 处理 CentralDocPage 发送的信号
-        if (msgType == MSG_NOTIFY_KEY_MSG) {
-            auto cwlist = this->findChildren<CustomWidget *>();
-            foreach (auto cw, cwlist) {
-                int nRes = cw->qDealWithShortKey(msgContent);
-                if (nRes == MSG_OK) {
-                    break;
-                }
-            }
-        } else {
-            QJsonParseError error;
-            QJsonDocument doc = QJsonDocument::fromJson(msgContent.toLocal8Bit().data(), &error);
-            if (error.error == QJsonParseError::NoError) {
-                QJsonObject obj = doc.object();
-
-                QString sContent = obj.value("content").toString();
-
-                int nRes = MSG_NO_OK;
-
-                if (DocType_PDF == m_type)
-                    nRes = static_cast<SheetSidebarPDF *>(m_sidebar)->dealWithData(msgType, sContent);
-
-                if (nRes != MSG_OK) {
-                    nRes = static_cast<SheetBrowserPDF *>(m_browser)->dealWithData(msgType, sContent);
-                    if (nRes == MSG_OK)
-                        return;
-                }
-            }
-        }
-    }
-}
-
 void DocSheet::onShowTips(const QString &tips)
 {
     showTips(tips);

@@ -35,7 +35,7 @@
 #include "TitleWidget.h"
 
 Central::Central(DWidget *parent)
-    : CustomWidget(CENTRAL_WIDGET, parent)
+    : CustomWidget(parent)
 {
     setAcceptDrops(true);
 

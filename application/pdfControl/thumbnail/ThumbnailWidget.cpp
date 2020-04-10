@@ -23,7 +23,7 @@
 #include "application.h"
 
 ThumbnailWidget::ThumbnailWidget(DocSheet *sheet, DWidget *parent)
-    : CustomWidget(THUMBAIL_WIDGET, parent), m_sheet(sheet)
+    : CustomWidget(parent), m_sheet(sheet)
 {
     m_ThreadLoadImage.setThumbnail(this);
 
@@ -39,12 +39,6 @@ ThumbnailWidget::~ThumbnailWidget()
         m_ThreadLoadImage.stopThreadRun();
         m_ThreadLoadImage.clearList();
     }
-}
-
-// 处理消息事件
-int ThumbnailWidget::dealWithData(const int &msgType, const QString &msgContent)
-{
-    return MSG_NO_OK;
 }
 
 void ThumbnailWidget::handleOpenSuccess()

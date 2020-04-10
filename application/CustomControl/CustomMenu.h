@@ -25,9 +25,7 @@
 #include <QJsonDocument>
 
 #include "application.h"
-#include "WidgetHeader.h"
 
-using namespace DR_SPACE;
 DWIDGET_USE_NAMESPACE
 
 enum E_MENU_ACTION {
@@ -44,7 +42,7 @@ class CustomMenu : public DMenu
     Q_DISABLE_COPY(CustomMenu)
 
 public:
-    CustomMenu(const QString &, DWidget *parent = nullptr);
+    CustomMenu(DWidget *parent = nullptr);
 
 signals:
     void sigClickAction(const int &);
@@ -55,9 +53,6 @@ public:
 
 protected:
     virtual void initActions() = 0;
-
-    QStringList     shortKeyList;                 // 要处理的消息类型
-    QList<int>     m_pMsgList;
 };
 
 

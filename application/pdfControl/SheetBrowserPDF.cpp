@@ -51,7 +51,7 @@ void SheetBrowserPDF::setRotateRight()
 }
 
 SheetBrowserPDF::SheetBrowserPDF(DocSheet *sheet, DWidget *parent)
-    : CustomWidget(FILE_VIEW_WIDGET, parent), d_ptr(new SheetBrowserPDFPrivate(sheet, this))
+    : CustomWidget( parent), d_ptr(new SheetBrowserPDFPrivate(sheet, this))
 {
     setMouseTracking(true);  //  接受 鼠标滑动事件
 
@@ -225,8 +225,6 @@ void SheetBrowserPDF::ShowFindWidget()
     if (m_pFindWidget == nullptr) {
         m_pFindWidget = new FindWidget(this);
         connect(m_pFindWidget, SIGNAL(sigFindOperation(const int &, const QString &)), SLOT(SlotFindOperation(const int &, const QString &)));
-
-        connect(GetDocProxy(), SIGNAL(signal_searchRes(stSearchRes)), m_pFindWidget,SLOT(onSearchResult(const stSearchRes &)));
     }
 
     int nParentWidth = this->width();
@@ -268,6 +266,7 @@ bool SheetBrowserPDF::saveData()
 void SheetBrowserPDF::SlotFindOperation(const int &iType, const QString &strFind)
 {
     Q_D(SheetBrowserPDF);
+
     emit sigFindOperation(iType);
 
     d->FindOperation(iType, strFind);

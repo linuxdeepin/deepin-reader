@@ -23,7 +23,7 @@
 #include <QVBoxLayout>
 
 SearchItemWidget::SearchItemWidget(DWidget *parent)
-    : CustomItemWidget(SEARCH_ITEM_WIDGET, parent)
+    : CustomItemWidget(parent)
 {
     initWidget();
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SearchItemWidget::slotUpdateTheme);

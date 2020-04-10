@@ -19,7 +19,7 @@
 #include "BufferWidget.h"
 
 BufferWidget::BufferWidget(DWidget *parent)
-    : CustomWidget(QString("BufferWidget"), parent)
+    : CustomWidget(parent)
 {
     initWidget();
 }

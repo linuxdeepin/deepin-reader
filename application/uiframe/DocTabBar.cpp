@@ -29,6 +29,7 @@
 
 #include "FileDataModel.h"
 #include "DocSheet.h"
+#include "application.h"
 
 DocTabBar::DocTabBar(QWidget *parent)
     : DTabBar(parent)

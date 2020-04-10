@@ -35,17 +35,15 @@ public:
     explicit ThumbnailItemWidget(DWidget *parent = nullptr);
 
 public:
-    // IObserver interface
-    int dealWithData(const int &, const QString &) override;
-
     void setBSelect(const bool &paint);
+
     void rotateThumbnail(int);
+
     void qSetBookMarkShowStatus(const bool &bshow);
-//    void adaptWindowSize(const double &scale);
+
 protected:
     void initWidget() override;
 
-    // CustomWidget interface
 public:
     void adaptWindowSize(const double &scale) Q_DECL_OVERRIDE;
 };

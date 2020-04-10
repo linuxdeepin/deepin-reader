@@ -28,10 +28,9 @@
 #include "DocSheet.h"
 
 ScaleWidget::ScaleWidget(DWidget *parent)
-    : CustomWidget("ScaleWidget", parent)
+    : CustomWidget(parent)
 {
     initWidget();
-    m_pKeyMsgList << KeyStr::g_ctrl_larger << KeyStr::g_ctrl_equal << KeyStr::g_ctrl_smaller << KeyStr::g_ctrl_1;
 
     dataList = {10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500};
 }

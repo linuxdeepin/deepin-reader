@@ -20,16 +20,14 @@
 #define CATALOGTREEVIEW_H
 
 #include <DTreeView>
-
 #include <QStandardItemModel>
 
-#include "IObserver.h"
 #include "docview/pagebase.h"
 
 DWIDGET_USE_NAMESPACE
 
 class DocSheet;
-class CatalogTreeView : public DTreeView, public IObserver
+class CatalogTreeView : public DTreeView
 {
     Q_OBJECT
     Q_DISABLE_COPY(CatalogTreeView)

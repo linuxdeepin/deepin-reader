@@ -7,7 +7,7 @@
 #include "DocSheet.h"
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)
-    : CustomMenu(TEXT_OPERATION_MENU, parent)
+    : CustomMenu(parent)
 {
     initActions();
 }

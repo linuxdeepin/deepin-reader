@@ -123,8 +123,6 @@ private:
 private slots:
     void SlotFileOpenResult(const QString &, const bool &);
 
-    void SlotNotifyMsg(const int &, const QString &);
-
     void onShowTips(const QString &tips);
 
     void onFileChanged();

@@ -12,7 +12,7 @@
 #include <QSvgWidget>
 
 CentralNavPage::CentralNavPage(DWidget *parent)
-    : CustomWidget(HOME_WIDGET, parent)
+    : CustomWidget( parent)
 {
     initWidget();
     initConnections();

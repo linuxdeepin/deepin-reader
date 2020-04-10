@@ -23,7 +23,7 @@
 #include "DocSheet.h"
 
 BookMarkWidget::BookMarkWidget(DocSheet *sheet, DWidget *parent)
-    : CustomWidget(BOOKMARK_WIDGET, parent), m_sheet(sheet)
+    : CustomWidget(parent), m_sheet(sheet)
 {
     setFocusPolicy(Qt::ClickFocus);
 
@@ -34,8 +34,6 @@ BookMarkWidget::BookMarkWidget(DocSheet *sheet, DWidget *parent)
     initConnection();
 
     slotUpdateTheme();
-
-    m_pKeyMsgList = {KeyStr::g_ctrl_b};
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BookMarkWidget::slotUpdateTheme);
 }
@@ -645,11 +643,9 @@ int BookMarkWidget::qDealWithShortKey(const QString &s)
 {
     if (s == KeyStr::g_ctrl_b) {
         slotAddBookMark();
-    }
-
-    if (m_pKeyMsgList.contains(s)) {
         return MSG_OK;
     }
+
     return MSG_NO_OK;
 }
 

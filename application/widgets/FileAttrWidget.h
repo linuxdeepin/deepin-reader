@@ -3,8 +3,6 @@
 
 #include <DAbstractDialog>
 #include <DWidget>
-#include "IObserver.h"
-
 DWIDGET_USE_NAMESPACE
 class DocSheet;
 class ImageLabel;

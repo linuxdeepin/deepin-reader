@@ -21,7 +21,7 @@
 #include "DocSheet.h"
 
 SearchResWidget::SearchResWidget(DocSheet *sheet, DWidget *parent)
-    : CustomWidget(SEARCH_RES_WIDGET, parent), m_sheet(sheet)
+    : CustomWidget(parent), m_sheet(sheet)
 {
     initWidget();
     initConnections();

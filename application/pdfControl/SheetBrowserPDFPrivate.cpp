@@ -267,10 +267,6 @@ void SheetBrowserPDFPrivate::__SetCursor(const QCursor &cs)
 
 void SheetBrowserPDFPrivate::FindOperation(const int &iType, const QString &strFind)
 {
-    if (iType == E_FIND_CONTENT || iType == E_FIND_EXIT) {
-        notifyMsg(iType, m_pProxyData->getPath());
-    }
-
     if (m_pProxy) {
         if (iType == E_FIND_NEXT) {
             m_pProxy->findNext();
@@ -530,10 +526,4 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
             m_pProxy->setViewFocus();
         }
     }
-}
-
-void SheetBrowserPDFPrivate::notifyMsg(const int &msgType, const QString &msgContent)
-{
-    Q_Q(SheetBrowserPDF);
-    q->notifyMsg(msgType, msgContent);
 }

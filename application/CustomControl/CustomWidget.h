@@ -32,7 +32,6 @@
 #include "WidgetHeader.h"
 #include "CustomMenu.h"
 #include "utils/utils.h"
-#include "IObserver.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
 
@@ -54,31 +53,29 @@ const int LEFTNORMALWIDTH = 266;//226  >>  266
 
 class CustomWidgetPrivate;
 
-class CustomWidget : public DWidget, public IObserver
+class CustomWidget : public DWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(CustomWidget)
     Q_DECLARE_PRIVATE(CustomWidget)
 
 public:
-    CustomWidget(const QString &, DWidget *parent = nullptr);
+    CustomWidget(DWidget *parent = nullptr);
 
 public:
-    virtual int qDealWithShortKey(const QString &);
     virtual void adaptWindowSize(const double &);
+
     virtual void updateThumbnail(const int &);
 
 protected:
-    CustomWidget(CustomWidgetPrivate &, const QString &name, DWidget *parent = nullptr);
+    CustomWidget(CustomWidgetPrivate &, DWidget *parent = nullptr);
+
     virtual void initWidget() = 0;
+
     void updateWidgetTheme();
 
 protected:
     CustomWidgetPrivate    *d_ptr = nullptr;
-
-protected:
-    QList<int>          m_pMsgList;         //  需要处理的消息列表
-    QList<QString>      m_pKeyMsgList;      //  需要处理的按键消息列表
 };
 
 #endif  // CUSTOMWIDGET_H

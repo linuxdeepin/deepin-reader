@@ -2,7 +2,6 @@ HEADERS += \
     $$PWD/json.h \
     $$PWD/ProcessController.h \
     $$PWD/FileController.h \
-    $$PWD/IObserver.h \
     $$PWD/MsgHeader.h \
     $$PWD/ModuleHeader.h \
     $$PWD/WidgetHeader.h

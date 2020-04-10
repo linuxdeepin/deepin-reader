@@ -19,7 +19,7 @@
 #include "NoteMenu.h"
 
 NoteMenu::NoteMenu(DWidget *parent)
-    : CustomMenu(NOTE_MENU, parent)
+    : CustomMenu( parent)
 {
     initActions();
 }

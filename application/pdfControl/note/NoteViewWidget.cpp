@@ -28,7 +28,7 @@
 #include "DocSheet.h"
 
 NoteViewWidget::NoteViewWidget(DWidget *parent)
-    : CustomWidget(NOTE_VIEW_WIDGET, parent)
+    : CustomWidget(parent)
 {
 
     m_nWidgetType = NOTE_HIGHLIGHT;

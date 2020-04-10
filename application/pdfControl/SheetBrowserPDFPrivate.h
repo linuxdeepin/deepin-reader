@@ -75,8 +75,6 @@ private:
     void __CloseFileNoteWidget();
     void __SetCursor(const QCursor &cursor);
     void OpenFilePath(const QString &sPath);
-    void notifyMsg(const int &, const QString &);
-
 private:
     NoteViewWidget          *m_pNoteViewWidget = nullptr;   //  注释内容显示框
     NoteTipWidget           *m_pTipWidget = nullptr;        //  注释提示框

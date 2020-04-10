@@ -25,6 +25,8 @@
 #include <QUrl>
 #include <QDesktopServices>
 #include <QStackedLayout>
+#include <DFileDialog>
+#include <DDialog>
 
 #include "CentralDocPage.h"
 #include "DocSheet.h"
@@ -34,17 +36,10 @@
 #include "business/SaveDialog.h"
 #include "business/PrintManager.h"
 #include "docview/docummentproxy.h"
-
 #include "widgets/FindWidget.h"
 #include "widgets/FileAttrWidget.h"
 #include "widgets/PlayControlWidget.h"
-
-
-#include <DFileDialog>
-#include <DDialog>
-
 #include "business/FileFormatHelper.h"
-
 #include "docview/docummentproxy.h"
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
@@ -52,7 +47,7 @@
 #include "FileController.h"
 
 CentralDocPage::CentralDocPage(DWidget *parent)
-    : CustomWidget(MAIN_TAB_WIDGET, parent)
+    : CustomWidget(parent)
 {
     initWidget();
     InitConnections();
