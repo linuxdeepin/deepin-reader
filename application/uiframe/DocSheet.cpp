@@ -182,6 +182,13 @@ void DocSheet::setBookMark(int page, int state)
     }
 }
 
+void DocSheet::showNoteWidget(int page, const QString &uuid, const int &type)
+{
+    if (DocType_PDF == m_type) {
+        static_cast<SheetBrowserPDF *>(m_browser)->showNoteWidget(page,uuid, type);
+    }
+}
+
 bool DocSheet::isMouseHand()
 {
     if (DocType_PDF == m_type)

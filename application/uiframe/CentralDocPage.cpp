@@ -106,11 +106,6 @@ int CentralDocPage::GetFileChange(const QString &sPath)
     return -1;
 }
 
-void CentralDocPage::notifyMsg(const int &msgType, const QString &msgContent)
-{
-    dApp->m_pModelService->notifyMsg(msgType, msgContent);
-}
-
 void CentralDocPage::CloseFile(const int &iType, const QString &sPath)
 {
     DocummentProxy *_proxy = getCurFileAndProxy(sPath);

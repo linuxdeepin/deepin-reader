@@ -25,8 +25,6 @@ public:
 public:
     int dealWithData(const int &, const QString &) override;
 
-    void notifyMsg(const int &, const QString &msgContent = "") override;
-
 private:
     void initWidget();
 

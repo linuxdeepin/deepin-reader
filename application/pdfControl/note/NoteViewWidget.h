@@ -50,15 +50,18 @@ public:
     void showWidget(const QPoint &);
 
     void setEditText(const QString &note);
+
     void setPointAndPage(const QString &);
+
     void setNoteUuid(const QString &pNoteUuid);
+
     void setNotePage(const QString &pNotePage);
 
     void setWidgetType(const int &nWidgetType);
 
-    //  QWidget interface
 protected:
     void hideEvent(QHideEvent *event) override;
+
     void initWidget() override;
 
 private:
@@ -76,8 +79,7 @@ private:
     TransparentTextEdit *m_pTextEdit = nullptr;    // 注释
     CustomClickLabel    *m_pCloseLab = nullptr;  // 关闭
     QString m_strNote = "";                   // 注释内容
-
-    int     m_nWidgetType = NOTE_HIGHLIGHT;         //  高亮注释\页面注释
+    int     m_nWidgetType;         //  高亮注释\页面注释
 };
 
 #endif  // NOTEVIEWWIDGET_H

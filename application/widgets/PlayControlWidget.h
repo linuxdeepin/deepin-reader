@@ -36,7 +36,6 @@ public:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
-    void notifyMsg(const int &, const QString &msgContent = "") override;
 
     void setSliderPath(const QString &strSliderPath);
     void PageChangeByKey(const QString &);

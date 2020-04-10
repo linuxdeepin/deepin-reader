@@ -12,6 +12,7 @@
 #include "docview/docummentproxy.h"
 #include "CustomControl/CustomWidget.h"
 #include "DocSheet.h"
+#include "CentralDocPage.h"
 
 PlayControlWidget::PlayControlWidget(DocSheet *sheet, DWidget *parnet)
     : DFloatingWidget(parnet), m_sheet(sheet)
@@ -45,11 +46,6 @@ PlayControlWidget::~PlayControlWidget()
 int PlayControlWidget::dealWithData(const int &, const QString &)
 {
     return  MSG_NO_OK;
-}
-
-void PlayControlWidget::notifyMsg(const int &msgType, const QString &msgContent)
-{
-    dApp->m_pModelService->notifyMsg(msgType, msgContent);
 }
 
 void PlayControlWidget::activeshow(int ix, int iy)
@@ -204,9 +200,12 @@ void PlayControlWidget::slotPlayClicked()
     QJsonObject obj;
     obj.insert("type", "keyPress");
     obj.insert("key", KeyStr::g_space);
-
     QJsonDocument doc = QJsonDocument(obj);
-    notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
+    CentralDocPage *docPage = static_cast<CentralDocPage*>(parent());
+    if(nullptr == docPage)
+        return;
+
+    docPage->OnAppMsgData(doc.toJson(QJsonDocument::Compact));
 }
 
 void PlayControlWidget::slotNextClicked()

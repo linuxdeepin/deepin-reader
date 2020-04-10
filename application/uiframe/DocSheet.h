@@ -6,6 +6,7 @@
 
 #include "FileDataModel.h"
 #include "docview/commonstruct.h"
+#include "ModuleHeader.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -14,6 +15,7 @@ class SheetBrowserPDF;
 class SheetSidebar;
 class DocummentProxy;
 class SheetBrowserArea;
+
 class DocSheet : public DSplitter
 {
     Q_OBJECT
@@ -55,6 +57,8 @@ public:
     void setFit(int fit);
 
     void setBookMark(int page, int state);
+
+    void showNoteWidget(int page, const QString &uuid, const int &type = NOTE_HIGHLIGHT);
 
     bool isMouseHand();
 

@@ -210,11 +210,6 @@ MainWindow *MainWindow::create()
     return new MainWindow();
 }
 
-void MainWindow::notifyMsg(const int &msgType, const QString &msgContent)
-{
-    dApp->m_pModelService->notifyMsg(msgType, msgContent);
-}
-
 //  窗口显示默认大小
 void MainWindow::showDefaultSize()
 {

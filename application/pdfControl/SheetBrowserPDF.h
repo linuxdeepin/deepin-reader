@@ -61,6 +61,10 @@ public:
 
     void setBookMark(int page, int state);
 
+    void showNoteWidget(int page, const QString &uuid, const int &type = NOTE_HIGHLIGHT);
+
+    void AddHighLightAnnotation(int page,QString text);
+
 signals:
     void sigFileOpenResult(const QString &, const bool &);
     void sigFindOperation(const int &);

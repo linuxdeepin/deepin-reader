@@ -27,12 +27,10 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
     m_pVBoxLayout->setContentsMargins(0, 0, 0, 10);
     this->setLayout(m_pVBoxLayout);
     initWidget();
-    dApp->m_pModelService->addObserver(this);
 }
 
 FileAttrWidget::~FileAttrWidget()
 {
-    dApp->m_pModelService->removeObserver(this);
 }
 
 void FileAttrWidget::setFileAttr(DocSheet *sheet)
@@ -161,11 +159,6 @@ int FileAttrWidget::dealWithData(const int &msgType, const QString &msgContent)
     if (MSG_NOTIFY_KEY_MSG == msgType && KeyStr::g_esc == msgContent)
         close();
     return MSG_NO_OK;
-}
-
-void FileAttrWidget::notifyMsg(const int &, const QString &)
-{
-
 }
 
 void FileAttrWidget::initWidget()

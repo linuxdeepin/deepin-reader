@@ -139,6 +139,22 @@ void SheetBrowserPDF::setBookMark(int page, int state)
     d->m_pProxy->setBookMarkState(page, state);
 }
 
+void SheetBrowserPDF::showNoteWidget(int page, const QString &uuid, const int &type)
+{
+    Q_D(SheetBrowserPDF);
+
+    QString text;
+
+    d->m_pProxy->getAnnotationText(uuid, text, page);
+
+    d->showNoteViewWidget(QString::number(page),uuid,text,type);
+}
+
+void SheetBrowserPDF::AddHighLightAnnotation(int page, QString text)
+{
+
+}
+
 void SheetBrowserPDF::initWidget()
 {
 }

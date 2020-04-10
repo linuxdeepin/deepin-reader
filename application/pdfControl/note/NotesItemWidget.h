@@ -21,7 +21,7 @@
 
 #include "../CustomItemWidget.h"
 #include "ModuleHeader.h"
-
+#include "DocSheet.h"
 /**
  * @brief The NotesItemWidget class
  * @brief   注释item

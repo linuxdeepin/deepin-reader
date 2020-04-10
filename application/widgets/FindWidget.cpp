@@ -45,18 +45,14 @@ FindWidget::FindWidget(DWidget *parent)
     setWindowFlags(Qt::WindowStaysOnTopHint);
     setBlurBackgroundEnabled(true);
 
-    m_pMsgList = {MSG_FIND_NONE_CONTENT};
     initWidget();
     initConnection();
 
     this->setVisible(false);
-
-    dApp->m_pModelService->addObserver(this);
 }
 
 FindWidget::~FindWidget()
 {
-    dApp->m_pModelService->removeObserver(this);
 }
 
 void FindWidget::showPosition(const int &nParentWidth)
@@ -121,19 +117,10 @@ int FindWidget::dealWithData(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_FIND_NONE_CONTENT) {
         onSetEditAlert(1);
-    }
-
-    if (m_pMsgList.contains(msgType)) {
         return MSG_OK;
     }
-    return MSG_NO_OK;
-}
 
-void FindWidget::notifyMsg(const int &msgType, const QString &msgContent)
-{
-    if (this->isVisible()) {
-        dApp->m_pModelService->notifyMsg(msgType, msgContent);
-    }
+    return MSG_NO_OK;
 }
 
 void FindWidget::initWidget()

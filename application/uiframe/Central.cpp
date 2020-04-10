@@ -117,7 +117,8 @@ void Central::keyPressEvent(QKeyEvent *event)
         obj.insert("key", key);
 
         QJsonDocument doc = QJsonDocument(obj);
-        notifyMsg(E_APP_MSG_TYPE, doc.toJson(QJsonDocument::Compact));
+
+        m_docPage->OnAppMsgData(doc.toJson(QJsonDocument::Compact));
     }
 
     CustomWidget::keyPressEvent(event);

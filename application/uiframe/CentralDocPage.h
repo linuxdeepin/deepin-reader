@@ -111,8 +111,6 @@ public:
     QStringList GetAllPath();
 
 public:
-    void notifyMsg(const int &msgType, const QString &msgContent = "") ;
-
     void CloseFile(const int &iType, const QString &sPath);
 
     QString qDealWithData1(const int &msgType, const QString &msgContent);

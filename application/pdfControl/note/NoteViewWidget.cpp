@@ -25,10 +25,14 @@
 
 #include "CustomControl/CustomClickLabel.h"
 #include "utils/PublicFunction.h"
+#include "DocSheet.h"
 
 NoteViewWidget::NoteViewWidget(DWidget *parent)
     : CustomWidget(NOTE_VIEW_WIDGET, parent)
 {
+
+    m_nWidgetType = NOTE_HIGHLIGHT;
+
     setWindowFlag(Qt::Popup);
     int tW = 250;
     int tH = 320;
@@ -89,7 +93,7 @@ void NoteViewWidget::initWidget()
 
     m_pCloseLab = new CustomClickLabel("");
     int tW = 24;
-    int tH = 24;
+    int tH = 24;m_nWidgetType = NOTE_HIGHLIGHT;
     dApp->adaptScreenView(tW, tH);
     m_pCloseLab->setFixedSize(QSize(tW, tH));
     connect(m_pCloseLab, SIGNAL(clicked()), this, SLOT(close()));

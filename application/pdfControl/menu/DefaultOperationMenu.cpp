@@ -164,6 +164,7 @@ void DefaultOperationMenu::slotAddIconNote()
 
     DocummentProxy *_proxy = m_sheet->getDocProxy();
     QString sUuid = _proxy->addIconAnnotation(m_pointclicked);        //  添加注释图标成功
+
     if (sUuid != "") {
         int nClickPage = _proxy->pointInWhichPage(m_pointclicked);
         QString strContent = sUuid.trimmed() + Constant::sQStringSep +
@@ -178,5 +179,8 @@ void DefaultOperationMenu::slotAddIconNote()
         QJsonDocument doc(obj);
 
         dApp->m_pModelService->notifyMsg(MSG_NOTE_PAGE_SHOW_NOTEWIDGET, doc.toJson(QJsonDocument::Compact));
+
+
+
     }
 }

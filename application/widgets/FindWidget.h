@@ -47,7 +47,6 @@ signals:
     // IObserver interface
 public:
     int dealWithData(const int &, const QString &) override;
-    void notifyMsg(const int &, const QString &msgContent = "") override;
 
 public:
     void showPosition(const int &);
@@ -70,8 +69,6 @@ private:
 
 private:
     DSearchEdit     *m_pSearchEdit = nullptr;
-
-    QList<int>      m_pMsgList;
     QString m_strLastFindText{""};//上一次查找内容
 };
 

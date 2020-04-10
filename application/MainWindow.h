@@ -46,8 +46,6 @@ private:
 
     void displayShortcuts();
 
-    void notifyMsg(const int &, const QString &msgContent = "") override;
-
     void showDefaultSize();
 
     void initShortCut();
