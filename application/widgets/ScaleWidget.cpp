@@ -210,8 +210,8 @@ void ScaleWidget::setSheet(DocSheet *sheet)
 
         double nScale = fdm.qGetData(Scale);
 
-        if (static_cast<int>(nScale) == 0) {
-            nScale = 100;
+        if (static_cast<int>(nScale) <= 0) {
+            nScale = 100.0;
         }
         int index = -1;
         for (int i = 0; i < dataList.size(); i++) {
@@ -227,10 +227,9 @@ void ScaleWidget::setSheet(DocSheet *sheet)
 
         if (index == -1) {
 
-            QString sCurText = QString::number(nScale) + "%";
+            QString sCurText = QString::number(static_cast<int>(nScale)) + "%";
 
             m_scaleComboBox->setCurrentText(sCurText);
-
         }
 
         m_scaleComboBox->blockSignals(false);
