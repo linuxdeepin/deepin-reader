@@ -25,11 +25,11 @@
 
 #include "application.h"
 #include "ModuleHeader.h"
-#include "WidgetHeader.h"
+
 
 #include "docview/docummentproxy.h"
 
-using namespace DR_SPACE;
+
 
 ProxyViewDisplay::ProxyViewDisplay(QObject *parent) : QObject(parent)
 {

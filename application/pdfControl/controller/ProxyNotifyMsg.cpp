@@ -28,9 +28,9 @@
 
 #include "MsgHeader.h"
 #include "ModuleHeader.h"
-#include "WidgetHeader.h"
 
-using namespace DR_SPACE;
+
+
 
 ProxyNotifyMsg::ProxyNotifyMsg(QObject *parent) : QObject(parent)
 {

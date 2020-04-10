@@ -24,6 +24,7 @@
 #include "MsgHeader.h"
 #include "ModuleHeader.h"
 #include "DocSheet.h"
+#include "WidgetHeader.h"
 
 NotesWidget::NotesWidget(DocSheet *sheet, DWidget *parent)
     : CustomWidget(parent), m_sheet(sheet)
@@ -94,7 +95,7 @@ void NotesWidget::initWidget()
     this->setLayout(m_pVLayout);
 
     m_pNotesList = new CustomListWidget(m_sheet, this);
-    m_pNotesList->setListType(E_NOTE_WIDGET);
+    m_pNotesList->setListType(DR_SPACE::E_NOTE_WIDGET);
     connect(m_pNotesList, SIGNAL(sigSelectItem(QListWidgetItem *)), SLOT(slotSelectItem(QListWidgetItem *)));
     connect(m_pNotesList, SIGNAL(sigListMenuClick(const int &)), SLOT(slotListMenuClick(const int &)));
     int tW = 170;

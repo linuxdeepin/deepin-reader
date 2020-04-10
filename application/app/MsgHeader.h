@@ -9,25 +9,12 @@
 
 namespace {
 
-//  消息类型
-enum E_MSG_TYPE {
-    E_MSG_TYPE_BEGIN = 0,
-    E_APP_MSG_TYPE,
-    E_MSG_TYPE_END
-};
-
 //  搜索框消息
 enum E_FIND_WIDGET_MSG {
     E_FIND_PREV,
     E_FIND_NEXT,
     E_FIND_EXIT,
     E_FIND_CONTENT,
-};
-
-//  消息类型
-enum MSG_TYPE {
-    MSG_NOTIFY_KEY_MSG,                 //  按键通知消息
-    MSG_TYPE_END,
 };
 
 //  窗口自适应状态

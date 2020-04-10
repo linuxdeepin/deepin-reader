@@ -12,7 +12,7 @@
 #include "docview/docummentproxy.h"
 #include "CustomControl/DFMGlobal.h"
 #include "CustomControl/ImageLabel.h"
-#include "WidgetHeader.h"
+
 #include "ModuleHeader.h"
 #include "application.h"
 #include "DocSheet.h"

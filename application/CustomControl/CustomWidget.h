@@ -29,7 +29,7 @@
 #include <DWidget>
 
 #include "application.h"
-#include "WidgetHeader.h"
+
 #include "CustomMenu.h"
 #include "utils/utils.h"
 #include "ModuleHeader.h"
@@ -37,7 +37,7 @@
 
 #include <QDebug>
 
-using namespace DR_SPACE;
+
 DWIDGET_USE_NAMESPACE
 
 /**

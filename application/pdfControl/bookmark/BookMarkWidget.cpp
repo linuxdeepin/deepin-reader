@@ -21,6 +21,7 @@
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
 #include "DocSheet.h"
+#include "WidgetHeader.h"
 
 BookMarkWidget::BookMarkWidget(DocSheet *sheet, DWidget *parent)
     : CustomWidget(parent), m_sheet(sheet)
@@ -514,7 +515,7 @@ void BookMarkWidget::slotUpdateTheme()
 void BookMarkWidget::initWidget()
 {
     m_pBookMarkListWidget = new CustomListWidget(m_sheet, this);
-    m_pBookMarkListWidget->setListType(E_BOOKMARK_WIDGET);
+    m_pBookMarkListWidget->setListType(DR_SPACE::E_BOOKMARK_WIDGET);
     connect(m_pBookMarkListWidget, SIGNAL(sigListMenuClick(const int &)), SLOT(slotListMenuClick(const int &)));
     connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem *)), SLOT(slotSelectItemBackColor(QListWidgetItem *)));
 

@@ -25,6 +25,7 @@
 #include "DocSheet.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
+#include "WidgetHeader.h"
 
 CustomListWidget::CustomListWidget(DocSheet *sheet, DWidget *parent)
     : DListWidget(parent), m_sheet(sheet)
@@ -86,9 +87,9 @@ void CustomListWidget::mousePressEvent(QMouseEvent *event)
         if (item != nullptr) {
             emit itemClicked(item);
 
-            if (m_nListType == E_NOTE_WIDGET) {
+            if (m_nListType == DR_SPACE::E_NOTE_WIDGET) {
                 showNoteMenu();
-            } else if (m_nListType == E_BOOKMARK_WIDGET) {
+            } else if (m_nListType == DR_SPACE::E_BOOKMARK_WIDGET) {
                 showBookMarkMenu();
             }
         }
