@@ -100,7 +100,15 @@ void Central::onSheetCountChanged(int count)
 {
     auto pLayout = this->findChild<QStackedLayout *>();
     if (pLayout) {
-        pLayout->setCurrentIndex(count > 0 ? 1 : 0);
+//        pLayout->setCurrentIndex(count > 0 ? 1 : 0);
+        if (count > 0) {
+            pLayout->setCurrentIndex(1);
+        } else if (count == 0) {
+            pLayout->setCurrentIndex(0);
+            if (m_widget) {
+                m_widget->setControlEnabled(false);
+            }
+        }
     }
 }
 

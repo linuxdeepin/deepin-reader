@@ -35,6 +35,7 @@ public:
     void setSheet(DocSheet *sheet);
 
     bool handleShortcut(QString shortcut);
+    void clearComboBox();
 
 protected:
     void initWidget() override;

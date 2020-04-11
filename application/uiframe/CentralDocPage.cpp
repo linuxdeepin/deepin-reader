@@ -233,10 +233,26 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
     if (nullptr == sheet)
         return;
 
+    //缺少提示是否保存文档,在文档被修改的之后
+    if (sheet->qGetFileChange()) {
+        SaveDialog sd;
+
+        int nRes = sd.showDialog();
+
+        if (nRes == 2) {
+            sheet->saveData();
+        }
+    }
+
     m_pStackedLayout->removeWidget(sheet);
+    //clsoe index TabBar
+    if (m_pTabBar) {
+        m_pTabBar->removeSheet(sheet);
+    }
 
     delete sheet;
-
+    sheet = nullptr;
+    qInfo() << "       current sheet count:" << m_pStackedLayout->count();
     emit sigSheetCountChanged(m_pStackedLayout->count());
 
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
@@ -336,17 +352,15 @@ bool CentralDocPage::saveCurrent()
 {
     DocSheet *sheet = static_cast<DocSheet *>(m_pStackedLayout->currentWidget());
 
-    if(nullptr == sheet)
+    if (nullptr == sheet)
         return false;
 
-    if(!sheet->qGetFileChange())
-    {
+    if (!sheet->qGetFileChange()) {
         showTips(tr("No changes"));
         return false;
     }
 
-    if(!sheet->saveData())
-    {
+    if (!sheet->saveData()) {
         showTips(tr("Save failed"));
         return false;
     }
@@ -369,7 +383,7 @@ void CentralDocPage::clearState()
 
         setCurrentState(Default_State);
 
-        if (getCurSheet() != nullptr ) {        //...需要修改为，要保存正在放大镜的doc
+        if (getCurSheet() != nullptr) {         //...需要修改为，要保存正在放大镜的doc
             auto proxy = getCurSheet()->getDocProxy();
             if (proxy) {
                 proxy->closeMagnifier();

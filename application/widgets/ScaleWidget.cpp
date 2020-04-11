@@ -253,3 +253,10 @@ bool ScaleWidget::handleShortcut(QString shortcut)
 
     return false;
 }
+
+void ScaleWidget::clearComboBox()
+{
+    if (m_scaleComboBox) {
+        m_scaleComboBox->lineEdit()->clear();
+    }
+}

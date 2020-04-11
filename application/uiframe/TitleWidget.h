@@ -26,6 +26,7 @@ public:
 
 public:
     void setMagnifierState();
+    void setControlEnabled(const bool &enable);
 
 public slots:
     int onTitleShortCut(const QString &);

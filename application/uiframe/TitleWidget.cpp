@@ -341,6 +341,34 @@ void TitleWidget::setMagnifierState()
     m_pHandleShapeBtn->setIcon(icon);
 }
 
+/**
+ * @brief TitleWidget::setControlEnabled
+ * 设置TitleWidget中空间的可用或者不可用
+ * @param enable  true:可用      false:不可用
+ */
+void TitleWidget::setControlEnabled(const bool &enable)
+{
+    if (m_pThumbnailBtn != nullptr) {
+        m_pThumbnailBtn->setChecked(false);
+        m_pThumbnailBtn->setEnabled(enable);
+    }
+    if (m_pSettingBtn != nullptr) {
+        m_pSettingBtn->setChecked(false);
+        m_pSettingBtn->setEnabled(enable);
+    }
+    if (m_pHandleShapeBtn != nullptr) {
+        m_pHandleShapeBtn->setChecked(false);
+        m_pHandleShapeBtn->setEnabled(enable);
+    }
+    if (m_pSearchBtn != nullptr) {
+        m_pSearchBtn->setChecked(false);
+        m_pSearchBtn->setEnabled(enable);
+    }
+    if (m_pSw) {
+        m_pSw->clearComboBox();
+    }
+}
+
 int TitleWidget::onTitleShortCut(const QString &sKey)
 {
     if (sKey == KeyStr::g_alt_1) {
@@ -353,10 +381,10 @@ int TitleWidget::onTitleShortCut(const QString &sKey)
         OnShortCut_CtrlM();
         return MSG_OK;
     } else {
-        if(m_pFontMenu->handleShortcut(sKey))
+        if (m_pFontMenu->handleShortcut(sKey))
             return MSG_OK;
 
-        if(m_pSw->handleShortcut(sKey))
+        if (m_pSw->handleShortcut(sKey))
             return MSG_OK;
     }
 

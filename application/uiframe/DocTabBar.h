@@ -55,13 +55,13 @@ signals:
     void sigNeedOpenFilesExec();
 
 protected:
-    QMimeData *createMimeDataFromTab(int index, const QStyleOptionTab &option) const;
+    QMimeData *createMimeDataFromTab(int index, const QStyleOptionTab &option) const override;
 
-    void insertFromMimeDataOnDragEnter(int index, const QMimeData *source); //只是先生成一个tab,结束后自动删除
+    void insertFromMimeDataOnDragEnter(int index, const QMimeData *source) override; //只是先生成一个tab,结束后自动删除
 
-    void insertFromMimeData(int index, const QMimeData *source);            //完全DROP 需要添加tab并打开对应的文档
+    void insertFromMimeData(int index, const QMimeData *source) override;            //完全DROP 需要添加tab并打开对应的文档
 
-    bool canInsertFromMimeData(int index, const QMimeData *source) const;
+    bool canInsertFromMimeData(int index, const QMimeData *source) const override;
 
     void handleDragActionChanged(Qt::DropAction action);
 
