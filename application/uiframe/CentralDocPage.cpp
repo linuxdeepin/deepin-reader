@@ -163,6 +163,15 @@ void CentralDocPage::onSheetChanged(DocSheet *sheet)
 
 void CentralDocPage::openFile(QString &filePath)
 {
+    //判断在打开的文档中是否有filePath，如果有则切到相应的sheet，反之执行打开操作
+    if (m_pTabBar) {
+        int index = -1;
+        index = m_pTabBar->indexOfFilePath(filePath);
+        if (index >= 0 && index < m_pTabBar->count()) {
+            m_pTabBar->setCurrentIndex(index);
+            return;
+        }
+    }
     filePath = FileController::getUrlInfo(filePath).toLocalFile();
 
     if (FileController::FileType_PDF == FileController::getFileType(filePath)) {

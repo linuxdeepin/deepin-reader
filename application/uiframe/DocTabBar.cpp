@@ -65,9 +65,15 @@ DocTabBar::~DocTabBar()
 
 int DocTabBar::indexOfFilePath(const QString &filePath)
 {
+    //修改成根据文件的绝对路径查重
+    DocSheet *docSheet{nullptr};
     for (int i = 0; i < count(); ++i) {
-        if (this->tabData(i).toString() == filePath)
+//        if (this->tabData(i).toString() == filePath)
+//            return i;
+        docSheet = DocSheet::getSheet(this->tabData(i).toString());
+        if (docSheet && (docSheet->filePath() == filePath)) {
             return i;
+        }
     }
     return -1;
 }

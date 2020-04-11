@@ -260,6 +260,7 @@ void Central::dropEvent(QDropEvent *event)
 
         if (canOpenFileList.count() > 0) {
             foreach (auto s, canOpenFileList) {
+                qInfo() << "       open file:" << s;
                 openFile(s);
             }
         }
