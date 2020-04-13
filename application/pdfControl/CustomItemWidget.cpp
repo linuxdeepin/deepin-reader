@@ -26,7 +26,6 @@ CustomItemWidget::CustomItemWidget(DWidget *parent)
 
 void CustomItemWidget::setImageSize(QSize size)
 {
-    qDebug() << size;
     m_pPicture->setFixedSize(size);
     m_pPicture->setSize(size);
 }

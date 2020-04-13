@@ -47,14 +47,14 @@ void MainOperationWidget::initWidget()
         }
     }
 
-    auto pSearchBtn = __CreateHideBtn();
+    auto pSearchBtn = createHideBtn();
     btnGroup->addButton(pSearchBtn, nSize);
 
     this->setLayout(mLayout);
 }
 
 //  创建 隐形的按钮, 搜索 和 搜索转圈圈
-DPushButton *MainOperationWidget::__CreateHideBtn()
+DPushButton *MainOperationWidget::createHideBtn()
 {
     auto pBtn = new DPushButton(this);
     pBtn->setVisible(false);
@@ -63,7 +63,7 @@ DPushButton *MainOperationWidget::__CreateHideBtn()
     return pBtn;
 }
 
-void MainOperationWidget::__SetBtnCheckById(const int &id)
+void MainOperationWidget::setBtnCheckById(const int &id)
 {
     auto btnGroup = this->findChild<QButtonGroup *>();
     if (btnGroup) {
@@ -141,7 +141,7 @@ void MainOperationWidget::slotButtonClicked(int id)
 void MainOperationWidget::SetFindOperation(const int &iType)
 {
     if (iType == E_FIND_CONTENT) {
-        __SetBtnCheckById(4);
+        setBtnCheckById(4);
     } else if (iType == E_FIND_EXIT) {
         handleOpenSuccess();
     }

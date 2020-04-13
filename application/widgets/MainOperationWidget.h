@@ -30,10 +30,14 @@ protected:
 
 private:
     DToolButton *createBtn(const QString &btnName, const QString &objName);
+
     QString findBtnName();
+
     void initConnect();
-    DPushButton *__CreateHideBtn();
-    void __SetBtnCheckById(const int &);
+
+    DPushButton *createHideBtn();
+
+    void setBtnCheckById(const int &);
 
     void onDocProxyMsg(const QString &);
 
@@ -43,7 +47,6 @@ private slots:
     void slotButtonClicked(int);
 
 private:
-    QString     m_strBindPath = "";
     QPointer<DocSheet> m_sheet;
 };
 

@@ -184,9 +184,6 @@ void ImageLabel::paintEvent(QPaintEvent *e)
         painter.drawPixmap(bprectangle, /*m_background*/ m_thumbPix);
         QRectF rectangle(local, local, width, heigh);
         painter.drawRoundedRect(rectangle, m_nRadius, m_nRadius);
-
-        qDebug() << width;
-        qDebug() << heigh;
     }
 
     if (m_bshowbookmark) {
