@@ -1702,8 +1702,28 @@ bool DocummentBase::getImage(int pagenum, QImage &image, double width, double he
     if (pagenum < 0 || pagenum >= d->m_pages.size()) {
         return false;
     }
-    // qDebug() << width << height << d->m_pages.at(pagenum)->devicePixelRatioF();
     qreal pixelratiof = d->m_pages.at(pagenum)->devicePixelRatioF();
+    if (!d->m_pages.at(pagenum)->getImage(image, width * pixelratiof, height * pixelratiof)) {
+        return false;
+    }
+    image.setDevicePixelRatio(d->m_pages.at(pagenum)->devicePixelRatioF());
+    return true;
+}
+
+bool DocummentBase::getImage(int pagenum, QImage &image, double width)
+{
+    Q_D(DocummentBase);
+    if (pagenum < 0 || pagenum >= d->m_pages.size()) {
+        return false;
+    }
+
+    double height = d->m_pages.at(pagenum)->getOriginalImageHeight() / d->m_pages.at(pagenum)->getOriginalImageWidth() * width;
+
+    if (height > width * 2)
+        height = 2 * width;
+
+    qreal pixelratiof = d->m_pages.at(pagenum)->devicePixelRatioF();
+
     if (!d->m_pages.at(pagenum)->getImage(image, width * pixelratiof, height * pixelratiof)) {
         return false;
     }

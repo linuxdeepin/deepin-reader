@@ -71,10 +71,18 @@ void ImageLabel::rotateImage()
             w = this->height();
             h = this->width();
         }
+        if (w < h) {
+            w = this->width();
+            h = this->height();
+        }
     } else {
         if (w < h) {
             w = this->height();
             h = this->width();
+        }
+        if (w > h) {
+            w = this->width();
+            h = this->height();
         }
     }
 
@@ -106,7 +114,6 @@ void ImageLabel::scaleImage(const double &scale)
     double width = 1.0;
     double height = 1.0;
 
-//    qInfo() << "      m_nRotate:" << m_nRotate;
     int w = m_size.width();
     int h = m_size.height();
 
@@ -119,7 +126,7 @@ void ImageLabel::scaleImage(const double &scale)
     }
 
     setFixedSize(static_cast<int>(width), static_cast<int>(height));
-//    qInfo() << "    image  label  width:" << this->width() << "    height:" << this->height()  <<   "     scale:" << scale;
+
     update();
 }
 
@@ -177,6 +184,9 @@ void ImageLabel::paintEvent(QPaintEvent *e)
         painter.drawPixmap(bprectangle, /*m_background*/ m_thumbPix);
         QRectF rectangle(local, local, width, heigh);
         painter.drawRoundedRect(rectangle, m_nRadius, m_nRadius);
+
+        qDebug() << width;
+        qDebug() << heigh;
     }
 
     if (m_bshowbookmark) {

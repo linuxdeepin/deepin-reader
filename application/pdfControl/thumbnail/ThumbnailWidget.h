@@ -93,7 +93,7 @@ public:
         m_filepath = strfilepath;
     }
 
-    void setProxy(DocummentProxy *proxy )
+    void setProxy(DocummentProxy *proxy)
     {
         m_proxy = proxy;
     }
@@ -137,10 +137,7 @@ public:
 
     void handlePage(int page);
 
-    inline bool isLoading()
-    {
-        return m_isLoading;
-    }
+    bool isLoading();
 
     void prevPage();
 
@@ -155,18 +152,28 @@ protected:
 
 private:
     void fillContantToList();
+
     void showItemBookMark();
+
     void setSelectItemBackColor(QListWidgetItem *);
+
     void addThumbnailItem(const int &);
+
     void initConnection();
+
     void slotOpenFileOk(const QString &);
+
     void SetSelectItemColor(QListWidgetItem *item, const bool &);
+
     ThumbnailItemWidget *getItemWidget(QListWidgetItem *);
 
 private slots:
     void slotUpdateTheme();
+
     void slotRotateThumbnail(const int &);
+
     void slotLoadThumbnail(const int &);
+
     void slotLoadImage(const int &row, const QImage &image);
 
     void SlotSetBookMarkState(const int &, const int &);

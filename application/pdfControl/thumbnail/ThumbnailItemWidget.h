@@ -34,6 +34,8 @@ class ThumbnailItemWidget : public CustomItemWidget
 public:
     explicit ThumbnailItemWidget(DWidget *parent = nullptr);
 
+    QSize setImage(QImage &image);
+
 public:
     void setBSelect(const bool &paint);
 

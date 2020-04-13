@@ -177,6 +177,7 @@ public:
     virtual bool loadDocumment(QString filepath) = 0;
     virtual bool bDocummentExist() = 0;
     virtual bool getImage(int pagenum, QImage &image, double width, double height);
+    virtual bool getImage(int pagenum, QImage &image, double width);        //等比例获取 最高宽高比不低于0.5
     virtual bool save(const QString &, bool)
     {
         return false;

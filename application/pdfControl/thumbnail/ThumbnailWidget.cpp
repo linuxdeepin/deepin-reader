@@ -72,6 +72,11 @@ void ThumbnailWidget::handlePage(int page)
     m_pPageWidget->setPage(page);
 }
 
+bool ThumbnailWidget::isLoading()
+{
+    return m_isLoading;
+}
+
 // 初始化界面
 void ThumbnailWidget::initWidget()
 {
@@ -115,15 +120,16 @@ void ThumbnailWidget::addThumbnailItem(const int &iIndex)
     auto item = new QListWidgetItem(m_pThumbnailListWidget);
     item->setFlags(Qt::NoItemFlags);
 
-    int tW = LEFTMINWIDTH;
+    int tW = 266;
     int tH = 212;
-//    dApp->adaptScreenView(tW, tH);
-    tW = static_cast<int>(static_cast<double>(LEFTMINWIDTH) * dApp->scale());
-    tH = static_cast<int>(static_cast<double>(tH) * dApp->scale());
-    item->setSizeHint(QSize(tW, tH));
+    tW = static_cast<int>(static_cast<double>(266) * dApp->scale());
+    tH = static_cast<int>(static_cast<double>(212) * dApp->scale());
+    item->setSizeHint(QSize(200, 200));
 
     m_pThumbnailListWidget->addItem(item);
+
     m_pThumbnailListWidget->setItemWidget(item, widget);
+
     widget->adaptWindowSize(dApp->scale());
 }
 
@@ -188,11 +194,32 @@ void ThumbnailWidget::slotLoadImage(const int &row, const QImage &image)
     if (!m_pThumbnailListWidget) {
         return;
     }
+
+//    QLabel *l = new QLabel;
+//    l->setPixmap(QPixmap::fromImage(image));
+//    l->show();
+
     auto item = m_pThumbnailListWidget->item(row);
     if (item) {
+
+        int tW = 266;
+        int tH = 212 - (174 - image.size().height());
+        tW = static_cast<int>(static_cast<double>(tW) * dApp->scale());
+        tH = static_cast<int>(static_cast<double>(tH) * dApp->scale());
+
         auto pWidget = getItemWidget(item);
+
+        if (m_nRotate % 180 == 0) {
+            item->setSizeHint(QSize(tW, tH));
+            pWidget->setFixedSize(QSize(tW, tH));
+        } else {
+            item->setSizeHint(QSize(tH, tW));
+            pWidget->setFixedSize(QSize(tH, tW));
+        }
+
         if (pWidget) {
             pWidget->rotateThumbnail(m_nRotate);
+            pWidget->setImageSize(QSize(146, image.size().height()));
             pWidget->setLabelImage(image);
         }
     }
@@ -286,9 +313,7 @@ void ThumbnailWidget::adaptWindowSize(const double &scale)
 
     int tW = LEFTMINWIDTH;
     int tH = 212;
-//    dApp->adaptScreenView(tW, tH);
 
-    //set item size
     width = static_cast<double>(tW) * scale;
     height = static_cast<double>(tH) * scale;
 
@@ -472,18 +497,18 @@ void ThreadLoadImage::run()
 
         int tW = 146;
         int tH = 174;
-//        dApp->adaptScreenView(tW, tH);
 
         for (int page = m_nStartPage; page <= m_nEndPage; page++) {
             if (!m_isLoaded)
                 break;
+
             if (m_listLoad.contains(page)) {
                 emit sigRotateImage(page);
                 msleep(50);
                 continue;
             }
             QImage image;
-            bool bl = m_proxy->getImage(page, image, tW, tH);
+            bool bl = m_proxy->getImage(page, image, tW);
             if (bl) {
                 m_listLoad.append(page);
                 emit sigLoadImage(page, image);

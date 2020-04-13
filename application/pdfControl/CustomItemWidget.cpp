@@ -24,6 +24,13 @@ CustomItemWidget::CustomItemWidget(DWidget *parent)
     setFocusPolicy(Qt::NoFocus);
 }
 
+void CustomItemWidget::setImageSize(QSize size)
+{
+    qDebug() << size;
+    m_pPicture->setFixedSize(size);
+    m_pPicture->setSize(size);
+}
+
 /**
  * @brief CustomItemWidget::setLabelImage
  * 给新label填充缩略图

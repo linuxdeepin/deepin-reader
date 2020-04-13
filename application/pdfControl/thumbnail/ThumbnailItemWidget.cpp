@@ -30,6 +30,12 @@ ThumbnailItemWidget::ThumbnailItemWidget(DWidget *parent)
     initWidget();
 }
 
+QSize ThumbnailItemWidget::setImage(QImage &image)
+{
+    m_pPicture->setFixedSize(QSize(image.width(), image.height()));
+    m_pPicture->setSize(QSize(image.width(), image.height()));
+}
+
 // 是否被选中，选中就就填充颜色
 void ThumbnailItemWidget::setBSelect(const bool &paint)
 {
@@ -65,14 +71,14 @@ void ThumbnailItemWidget::initWidget()
     m_pPageNumber = new PageNumberLabel(this);
     int tW = 146;
     int tH = 18;
-//    dApp->adaptScreenView(tW, tH);
-    m_pPageNumber->setMinimumSize(QSize(tW, tH));
+
+    m_pPageNumber->setFixedSize(QSize(tW, tH));
     m_pPageNumber->setAlignment(Qt::AlignCenter);
 
     m_pPicture = new ImageLabel(this);
     tW = 146;
     tH = 174;
-//    dApp->adaptScreenView(tW, tH);
+
     m_pPicture->setFixedSize(QSize(tW, tH));
     m_pPicture->setSize(QSize(tW, tH));
     m_pPicture->setAlignment(Qt::AlignCenter);
@@ -87,9 +93,7 @@ void ThumbnailItemWidget::initWidget()
 
     auto t_hLayout = new QHBoxLayout;
     t_hLayout->setContentsMargins(0, 0, 32, 0);
-    t_hLayout->addStretch(1);
     t_hLayout->addItem(t_vLayout);
-    t_hLayout->addStretch(1);
 
     this->setLayout(t_hLayout);
 }
@@ -100,14 +104,6 @@ void ThumbnailItemWidget::initWidget()
  */
 void ThumbnailItemWidget::adaptWindowSize(const double &scale)
 {
-//    double width = 1.0;
-//    double height = 1.0;
-
-//    width = static_cast<double>(this->width()) * scale;
-//    height = static_cast<double>(this->height()) * scale;
-
-//    this->resize(QSize(static_cast<int>(width), static_cast<int>(height)));
-
     if (m_pPicture) {
         m_pPicture->scaleImage(scale);
     }
