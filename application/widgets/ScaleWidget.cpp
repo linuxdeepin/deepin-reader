@@ -77,6 +77,9 @@ void ScaleWidget::initWidget()
 
 void ScaleWidget::slotPrevScale()
 {
+    if(m_sheet.isNull())
+        return;
+
     QString cuttext = m_scaleComboBox->currentText();
     int nIndex = cuttext.lastIndexOf("%");
     if (nIndex > 0)
@@ -100,6 +103,9 @@ void ScaleWidget::slotPrevScale()
 
 void ScaleWidget::slotNextScale()
 {
+    if(m_sheet.isNull())
+        return;
+
     QString inputtext = m_scaleComboBox->currentText();
     int nIndex = inputtext.lastIndexOf("%");
     if (nIndex > 0)
@@ -122,6 +128,9 @@ void ScaleWidget::slotNextScale()
 
 void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
 {
+    if(m_sheet.isNull())
+        return;
+
     int nIndex = sText.lastIndexOf("%");
     if (nIndex == -1) {
         QString sssTemp = sText + "%";
@@ -136,17 +145,17 @@ void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
 
     if (bOk && dValue >= 10.0 && dValue <= m_nMaxScale) {
         m_sheet->setScale(dValue);
-        m_sheet->setData(Fit, QString::number(NO_ADAPTE_State));
-    }
-    if (dApp->openFileOk() && (m_sheet != nullptr)) {
-//        dApp->setFlush(true);
-        m_sheet->setFit(1);
+        m_sheet->setFit(NO_ADAPTE_State);
+        //m_sheet->setData(Fit, QString::number(NO_ADAPTE_State));
     }
 }
 
 //  combobox 敲了回车
 void ScaleWidget::SlotReturnPressed()
 {
+    if(m_sheet.isNull())
+        return;
+
     QString sTempText = m_scaleComboBox->currentText();
 
     int nIndex = m_scaleComboBox->findText(sTempText, Qt::MatchExactly);
@@ -173,9 +182,7 @@ void ScaleWidget::SlotReturnPressed()
         }
     }
 
-    if (dApp->openFileOk() && (m_sheet != nullptr)) {
-        m_sheet->setFit(1);
-    }
+        m_sheet->setFit(NO_ADAPTE_State);
 }
 
 void ScaleWidget::setSheet(DocSheet *sheet)

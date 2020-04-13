@@ -44,6 +44,8 @@ private slots:
     void onReceiveMessage();
 
 private:
+    static QString request(const QString &message);
+
     static QString request(const QString &pid, const QString &message);
 
     static QStringList findReaderPids();

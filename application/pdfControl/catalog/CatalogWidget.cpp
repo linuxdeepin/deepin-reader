@@ -96,23 +96,21 @@ void CatalogWidget::setTitleTheme()
 
 void CatalogWidget::handleOpenSuccess()
 {
-    if (titleLabel) {
-        if (nullptr == m_sheet)
-            return;
+    if (nullptr == m_sheet)
+        return;
 
-        DocummentProxy *_pProxy = m_sheet->getDocProxy();
+    DocummentProxy *_pProxy = m_sheet->getDocProxy();
 
-        if (_pProxy) {
+    if (_pProxy) {
 
-            stFileInfo fileInfo;
+        stFileInfo fileInfo;
 
-            _pProxy->docBasicInfo(fileInfo);
+        _pProxy->docBasicInfo(fileInfo);
 
-            m_strTheme = fileInfo.strTheme;
+        m_strTheme = fileInfo.strTheme;
 
-            if (m_strTheme != "") {
-                setTitleTheme();
-            }
+        if (m_strTheme != "") {
+            setTitleTheme();
         }
     }
 

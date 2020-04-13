@@ -104,6 +104,16 @@ void DocTabBar::removeSheet(DocSheet *sheet)
     }
 }
 
+void DocTabBar::showSheet(DocSheet *sheet)
+{
+    for (int i = 0; i < count(); ++i) {
+        if (DocSheet::getSheet(this->tabData(i).toString()) == sheet) {
+            setCurrentIndex(i);
+            return;
+        }
+    }
+}
+
 QMimeData *DocTabBar::createMimeDataFromTab(int index, const QStyleOptionTab &option) const
 {
     const QString tabName = tabText(index);

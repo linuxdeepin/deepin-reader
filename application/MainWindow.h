@@ -22,6 +22,8 @@ public:
 
     void addFile(const QString &filepath);
 
+    bool hasSheet(DocSheet *sheet);
+
 public:
     void openfile(const QString &filepath);
 
@@ -59,6 +61,7 @@ private:
     Central            *m_central = nullptr;
 
 public:
+    static MainWindow *windowContainSheet(DocSheet *sheet);
     static MainWindow *create();
     static QList<MainWindow *> m_list;
 };

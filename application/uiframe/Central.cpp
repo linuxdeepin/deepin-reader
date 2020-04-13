@@ -86,6 +86,17 @@ void Central::addSheet(DocSheet *sheet)
     m_docPage->addSheet(sheet);
 }
 
+bool Central::hasSheet(DocSheet *sheet)
+{
+    if (m_docPage->hasSheet(sheet)) {
+        m_docPage->showSheet(sheet);
+
+        return true;
+    }
+
+    return false;
+}
+
 bool Central::saveAll()
 {
     return m_docPage->saveAll();
@@ -249,18 +260,12 @@ void Central::dropEvent(QDropEvent *event)
         }
 
         foreach (auto s, noOpenFileList) {
-            QString msgType = s;
-            if (msgType == "") {
-                msgType = tr("Unknown type");
-            }
-            QString msgTitle = QString("%1").arg(msgType);
-            QString msgContent = tr("%1 is not supported").arg(msgTitle);
+            QString msgContent = tr("The format is not supported");
             onShowTip(msgContent);
         }
 
         if (canOpenFileList.count() > 0) {
             foreach (auto s, canOpenFileList) {
-                qInfo() << "       open file:" << s;
                 openFile(s);
             }
         }

@@ -59,6 +59,11 @@ void MainWindow::addFile(const QString &filepath)
     m_central->openFile(filepath);
 }
 
+bool MainWindow::hasSheet(DocSheet *sheet)
+{
+    return m_central->hasSheet(sheet);
+}
+
 void MainWindow::openfile(const QString &filepath)
 {
     m_central->openFile(filepath);
@@ -201,6 +206,17 @@ void MainWindow::onShowState(int state)
 
         this->setWindowState(Qt::WindowFullScreen);
     }
+}
+
+MainWindow *MainWindow::windowContainSheet(DocSheet *sheet)
+{
+    foreach (MainWindow *window, m_list) {
+        if (window->hasSheet(sheet)) {
+            return window;
+        }
+    }
+
+    return nullptr;
 }
 
 MainWindow *MainWindow::create()

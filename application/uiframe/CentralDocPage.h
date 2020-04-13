@@ -40,9 +40,11 @@ class CentralDocPage : public CustomWidget
 
 public:
     explicit CentralDocPage(DWidget *parent = nullptr);
+
     ~CentralDocPage() override;
 
     friend class DocTabBar;
+
 public:
     void openFile(QString &filePath);
 
@@ -63,6 +65,10 @@ public slots:
 
 public:
     void addSheet(DocSheet *);      //直接添加sheet
+
+    bool hasSheet(DocSheet *sheet);
+
+    void showSheet(DocSheet *sheet);
 
     bool saveAll();
 

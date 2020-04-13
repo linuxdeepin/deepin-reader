@@ -43,6 +43,8 @@ public:
 
     void removeSheet(DocSheet *sheet);
 
+    void showSheet(DocSheet *sheet);
+
 signals:
     void sigTabMoveIn(DocSheet *);
 

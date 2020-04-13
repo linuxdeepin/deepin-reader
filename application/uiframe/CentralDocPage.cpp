@@ -261,7 +261,6 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
 
     delete sheet;
     sheet = nullptr;
-    qInfo() << "       current sheet count:" << m_pStackedLayout->count();
     emit sigSheetCountChanged(m_pStackedLayout->count());
 
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
@@ -322,6 +321,29 @@ void CentralDocPage::addSheet(DocSheet *sheet)
     emit sigSheetCountChanged(m_pStackedLayout->count());
 
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+}
+
+bool CentralDocPage::hasSheet(DocSheet *sheet)
+{
+    if (nullptr == sheet)
+        return false;
+
+    auto sheets = this->findChildren<DocSheet *>();
+
+    for (int i = 0; i < sheets.count(); ++i) {
+        if (sheets[i] == sheet)
+            return true;
+    }
+
+    return false;
+}
+
+void CentralDocPage::showSheet(DocSheet *sheet)
+{
+    if (nullptr == sheet)
+        return;
+
+    m_pTabBar->showSheet(sheet);
 }
 
 bool CentralDocPage::saveAll()

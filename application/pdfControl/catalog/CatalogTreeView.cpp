@@ -177,6 +177,7 @@ void CatalogTreeView::handleOpenSuccess()
         if (_proxy) {
 
             Outline ol = _proxy->outline();
+
             foreach (const Section &s, ol) {   //  1 级显示
                 if (s.link.page > 0) {
                     auto itemList = getItemList(s.title, s.link.page, s.link.left, s.link.top);

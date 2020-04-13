@@ -18,6 +18,8 @@
 #include <QApplication>
 #include <QJsonDocument>
 #include <DFileDialog>
+#include <QStandardPaths>
+#include <QUuid>
 
 ProcessController::ProcessController(QObject *parent) : QObject(parent)
 {
@@ -50,17 +52,13 @@ bool ProcessController::checkFilePathOpened(const QString &filePath)
 
 bool ProcessController::openIfAppExist(const QStringList &filePathList)
 {
-    QStringList list = findReaderPids();
-    if (list.count() <= 0)
-        return false;
-
     Json json;
     json.set("command", "openNewFile");
     json.set("message", filePathList);
 
-    QString result = request(list.value(0), json.toString());
+    QString result = request(json.toString());
 
-    return "exist" == result;
+    return "done" == result;
 }
 
 bool ProcessController::existFilePath(const QString &filePath)
@@ -83,13 +81,52 @@ bool ProcessController::existFilePath(const QString &filePath)
 
 bool ProcessController::listen()
 {
-    pid_t pid = getpid();
-
     m_localServer = new QLocalServer(this);
 
     connect(m_localServer, SIGNAL(newConnection()), this, SLOT(onReceiveMessage()));
 
-    return m_localServer->listen(QString::number(pid));
+    QString server = QUuid::createUuid().toString();
+
+    QFile file("./.listen");
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        return false;
+
+    file.write(QByteArray().append(server));
+
+    return m_localServer->listen(server);
+}
+
+QString ProcessController::request(const QString &message)
+{
+    QFile file("./.listen");
+
+    if (!file.open(QIODevice::ReadOnly))
+        return "";
+
+    QString server = file.readAll();
+
+    QString result;
+    QLocalSocket localSocket;
+    localSocket.connectToServer(server, QIODevice::ReadWrite);
+    if (!localSocket.waitForConnected(100)) {
+        qDebug() << localSocket.error();
+        return result;
+    }
+
+    localSocket.write(message.toUtf8());
+    if (!localSocket.waitForBytesWritten(100)) {
+        return result;
+    }
+
+    if (!localSocket.waitForReadyRead(100))
+        return result;
+
+    result  = localSocket.readAll();
+
+    localSocket.disconnectFromServer();
+
+    return result;
 }
 
 void ProcessController::processOpenFile(const QString &filePath)
@@ -125,9 +162,6 @@ QString ProcessController::request(const QString &pid, const QString &message)
 
 void ProcessController::onReceiveMessage()
 {
-    return;
-
-    //此处存在指令未接收全风险
     QLocalSocket *localSocket = m_localServer->nextPendingConnection();
 
     if (!localSocket->waitForReadyRead(1000)) {
@@ -140,35 +174,42 @@ void ProcessController::onReceiveMessage()
 
     if ("openNewFile" == json.getString("command")) {
 
+        localSocket->write("done");
+        localSocket->disconnectFromServer();
+
         QStringList filePathList = json.getStringList("message");
-        QList<DocSheet*> sheets = DocSheet::g_map.values();
+        QList<DocSheet *> sheets = DocSheet::g_map.values();
 
+        if (filePathList.count() <= 0) {
+            MainWindow::create()->show();
+            return;
+        }
 
-//        foreach(QString filePath,filePathList)
-//        {
-//            foreach()
-//        }
+        foreach (QString filePath, filePathList) {
+            //如果存在则活跃该窗口
+            foreach (DocSheet *sheet, sheets) {
+                if (sheet->filePath() == filePath) {
+                    MainWindow *window = MainWindow::windowContainSheet(sheet);
+                    if (nullptr != window) {
+                        window->activateWindow();
+                        return;
+                    }
+                }
+            }
 
+            //如果不存在则打开
+            if (MainWindow::m_list.count() > 0) {
+                MainWindow::m_list[0]->openfile(filePath);
+                return;
+            }
 
-//        MainWindow *window = MainWindow::m_list;
-//        DocSheet::
+            MainWindow::create()->openfile(filePath);
 
-//        if (ex && window ) {
-//            localSocket->write("exist");
-
-//            for (int i = 0 ; i < fileOpenList.count(); ++i) {
-//                MainWindow::Instance()->openfile(fileOpenList.value(i));
-//                if (i == fileOpenList.count() - 1)
-//                    ex->setCurrentTabByFilePath(fileOpenList.value(i));
-//            }
-
-//            window->activateWindow();
-
-//        } else {
-//            localSocket->write("none");
-//        }
+            return;
+        }
     }
 
+    localSocket->write("none");
     localSocket->disconnectFromServer();
 }
 

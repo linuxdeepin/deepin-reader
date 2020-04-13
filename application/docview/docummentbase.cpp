@@ -1724,7 +1724,6 @@ bool DocummentBase::loadData()
     Q_D(DocummentBase);
     if (!bDocummentExist())
         return false;
-    qDebug() << "loadWords start";
     QTime loadtime;
     loadtime.start();
     bool bfirst = true;
