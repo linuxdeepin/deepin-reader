@@ -116,7 +116,6 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
         case ViewMode_FacingPage:
             if (scrollBar_X)
                 scrollBar_X->setValue(d->m_widgetrects.at(d->m_currentpageno / 2).x() + d->m_pages.at(d->m_currentpageno)->x());
-            qDebug() << "-------scrollBar_X setValue:" << d->m_widgetrects.at(d->m_currentpageno / 2).x() + d->m_pages.at(d->m_currentpageno)->x();
             break;
         default:
             break;

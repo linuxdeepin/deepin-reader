@@ -10,13 +10,14 @@ class SearchTask : public QThread
 {
     Q_OBJECT
 public:
-    explicit SearchTask(QObject* parent = 0);
+    explicit SearchTask(QObject *parent = 0);
 
     bool wasCanceled() const { return loadCancellation() != NotCanceled; }
-   // int progress() const { return acquireProgress(); }
 
-    const QString& text() const { return m_text; }
+    const QString &text() const { return m_text; }
+
     bool matchCase() const { return m_matchCase; }
+
     bool wholeWords() const { return m_wholeWords; }
 
     void run();
@@ -25,11 +26,12 @@ signals:
     void progressChanged(int progress);
 
     void signal_resultReady(stSearchRes stres);
+
     void signal_restest();
 
 public slots:
-    void start(const QVector< PageBase* >& pages,
-               const QString& text, bool matchCase=false, bool wholeWords=false,
+    void start(const QVector< PageBase * > &pages,
+               const QString &text, bool matchCase = false, bool wholeWords = false,
                int beginAtPage = 1);
 
     void cancel() { setCancellation(); }
@@ -40,16 +42,15 @@ private:
     QAtomicInt m_wasCanceled;
     mutable QAtomicInt m_progress;
 
-    enum
-    {
+    enum {
         NotCanceled = 0,
         Canceled = 1
     };
 
-    void setCancellation(){ m_wasCanceled.storeRelease(Canceled);}
-    void resetCancellation(){ m_wasCanceled.storeRelease(NotCanceled);}
-    bool testCancellation(){return m_wasCanceled.load() != NotCanceled;}
-    int loadCancellation() const{ return m_wasCanceled.load();}
+    void setCancellation() { m_wasCanceled.storeRelease(Canceled);}
+    void resetCancellation() { m_wasCanceled.storeRelease(NotCanceled);}
+    bool testCancellation() {return m_wasCanceled.load() != NotCanceled;}
+    int loadCancellation() const { return m_wasCanceled.load();}
 
 //    void releaseProgress(int value);
 //    int acquireProgress() const;
@@ -58,8 +59,7 @@ private:
     template< typename Future >
     void processResults(Future future);
 
-
-    QVector< PageBase* > m_pages;
+    QVector< PageBase * > m_pages;
 
     QString m_text;
     bool m_matchCase;

@@ -210,7 +210,7 @@ void DocTabBar::handleTabDroped(int index, Qt::DropAction da, QObject *target)
 
     if (nullptr == target) {
         //如果是空则为新建窗口
-        if (count() <= 0) {//如果是最后一个，不允许
+        if (count() <= 1) {//如果是最后一个，不允许
             return;
         }
         removeTab(index);

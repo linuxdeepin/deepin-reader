@@ -67,13 +67,9 @@ void SearchTask::run()
 
     const Search search(m_text, m_matchCase, m_wholeWords);
 
-    if (m_parallelExecution) {
-        //processResults(QtConcurrent::mapped(pages, search));
-    } else {
+    if (!m_parallelExecution) {
         processResults(FutureWrapper(pages, search));
     }
-//    qDebug() << "+++++++++++" << "search end";
-
 }
 
 void SearchTask::start(const QVector<PageBase *> &pages, const QString &text, bool matchCase, bool wholeWords, int beginAtPage)
@@ -81,10 +77,15 @@ void SearchTask::start(const QVector<PageBase *> &pages, const QString &text, bo
     m_pages = pages;
 
     m_text = text;
+
     m_matchCase = matchCase;
+
     m_wholeWords = wholeWords;
+
     m_beginAtPage = beginAtPage;
+
     resetCancellation();
+
     QThread::start();
 }
 

@@ -39,11 +39,11 @@ void SearchItemWidget::setTextEditText(const QString &contant)
     m_strNote = contant;
     if (m_pTextLab) {
         m_pTextLab->clear();
-        QString note = m_strNote;
 
-        note.replace(QChar('\n'), QString(""));
-        note.replace(QChar('\t'), QString(""));
-        m_pTextLab->setText(calcText(m_pTextLab->font(), note, m_pTextLab->size()));
+        m_strNote.replace(QChar('\n'), QString(""));
+        m_strNote.replace(QChar('\t'), QString(""));
+        m_pTextLab->setText(m_strNote);
+        //m_pTextLab->setText(calcText(m_pTextLab->font(), m_strNote, m_pTextLab->size()));
     }
 }
 
@@ -125,10 +125,8 @@ void SearchItemWidget::initWidget()
     m_pTextLab->setTextFormat(Qt::PlainText);
     tW = 80;
     tH = 54;
-//    dApp->adaptScreenView(tW, tH);
     m_pTextLab->setFixedHeight(tH);
     m_pTextLab->setMinimumWidth(tW);
-    //    m_pTextLab->setMaximumWidth(349);
     m_pTextLab->setFrameStyle(QFrame::NoFrame);
     m_pTextLab->setWordWrap(true);
     m_pTextLab->setAlignment(Qt::AlignLeft);
@@ -166,11 +164,9 @@ void SearchItemWidget::initWidget()
 
 void SearchItemWidget::resizeEvent(QResizeEvent *event)
 {
-    QString note = m_strNote;
+//    QString note = m_strNote;
 
-    note.replace(QChar('\n'), QString(""));
-    note.replace(QChar('\t'), QString(""));
-    m_pTextLab->setText(calcText(m_pTextLab->font(), note, m_pTextLab->size()));
+//    m_pTextLab->setText(calcText(m_pTextLab->font(), note, m_pTextLab->size()));      //加上此行 效率低下
 
     CustomItemWidget::resizeEvent(event);
 }

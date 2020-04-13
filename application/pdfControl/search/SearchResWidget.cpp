@@ -42,7 +42,6 @@ void SearchResWidget::slotGetSearchContant(const stSearchRes &search)
     foreach (QString s, search.listtext) {
         strText += s.trimmed();
         strText += QString("    ");
-
         ++resultNum;
     }
 
@@ -106,25 +105,22 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
         item->setFlags(Qt::NoItemFlags);
         int tW = LEFTMINWIDTH;
         int tH = 80;
-//        dApp->adaptScreenView(tW, tH);
         item->setSizeHint(QSize(tW, tH));
 
         auto itemWidget = new SearchItemWidget(this);
 
         itemWidget->setLabelPage(page, 1);
-        itemWidget->setTextEditText(text);
         itemWidget->setSerchResultText(tr("%1 items found").arg(resultNum));
         tW = LEFTMINWIDTH - 5;
         tH = 80;
-//        dApp->adaptScreenView(tW, tH);
         itemWidget->setMinimumSize(QSize(tW, tH));
+        itemWidget->setTextEditText(text);
 
         auto dproxy = m_sheet->getDocProxy();
         if (nullptr != dproxy) {
             QImage image;
             int tW = 146;
             int tH = 174;
-//            dApp->adaptScreenView(tW, tH);
             bool bl = dproxy->getImage(page, image, tW, tH /*42, 62*/);
             if (bl) {
                 itemWidget->setLabelImage(image);
