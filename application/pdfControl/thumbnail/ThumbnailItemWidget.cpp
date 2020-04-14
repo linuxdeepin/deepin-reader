@@ -91,6 +91,7 @@ void ThumbnailItemWidget::initWidget()
 
     t_vLayout->addStretch();
     t_vLayout->addLayout(labelLayout);
+    t_vLayout->addSpacing(10);
     t_vLayout->addLayout(pageLayout);
     t_vLayout->addStretch();
 
