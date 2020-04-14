@@ -48,14 +48,14 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
     DocummentProxy *_proxy =  m_sheet->getDocProxy();
 
     if (_proxy) {
-        //  文档实际大小
-        stFileInfo fileInfo;
-        _proxy->docBasicInfo(fileInfo);
-
         printer->setDocName(m_strPrintName);
 
         QPainter painter(printer);
+
+        QRect rect = painter.viewport();
+
         painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
+
         int nPageSize = _proxy->getPageSNum();
 
         if (printer->fromPage() == 0 && printer->toPage() == 0) {
@@ -63,13 +63,16 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
             int reviewSize = nPageSize;
             for (int iIndex = 0; iIndex < reviewSize; iIndex++) {
                 QImage image;
-                qreal deviceratio = qApp->devicePixelRatio() * 2.0;
-                bool rl = _proxy->getImage(iIndex, image, /*rect.width()*/fileInfo.iWidth * deviceratio, /*rect.height()*/fileInfo.iHeight * deviceratio);
+
+                bool rl = _proxy->getImage(iIndex, image, rect.width(), rect.height());
+
                 if (rl) {
                     QPixmap printpixmap = QPixmap::fromImage(image);
-                    printpixmap.setDevicePixelRatio(deviceratio);
+
                     painter.drawPixmap(0, 0, printpixmap);
+
                     if (iIndex < reviewSize - 1)
+
                         printer->newPage();
                 }
             }
@@ -77,13 +80,16 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
             for (int iIndex = printer->fromPage() - 1; iIndex < printer->toPage(); iIndex++) {
                 if (iIndex >= nPageSize)
                     break;
+
                 QImage image;
-                qreal deviceratio = qApp->devicePixelRatio() * 2.0;
-                bool rl = _proxy->getImage(iIndex, image, /*rect.width()*/fileInfo.iWidth * deviceratio, /*rect.height()*/fileInfo.iHeight * deviceratio);
+
+                bool rl = _proxy->getImage(iIndex, image, rect.width(), rect.height());
+
                 if (rl) {
                     QPixmap printpixmap = QPixmap::fromImage(image);
-                    printpixmap.setDevicePixelRatio(deviceratio);
+
                     painter.drawPixmap(0, 0, printpixmap);
+
                     if (iIndex < printer->toPage() - 1)
                         printer->newPage();
                 }
