@@ -14,16 +14,6 @@
         <file>icons/deepin/builtin/dark/actions/import_photo.svg</file>
         <file>icons/deepin/builtin/light/icons/close.svg</file>
         <file>icons/deepin/builtin/dark/icons/close.svg</file>
-        <file>icons/deepin/builtin/light/icons/suspend_normal.svg</file>
-        <file>icons/deepin/builtin/light/icons/previous_normal.svg</file>
-        <file>icons/deepin/builtin/light/icons/play_normal.svg</file>
-        <file>icons/deepin/builtin/light/icons/next_normal.svg</file>
-        <file>icons/deepin/builtin/dark/icons/suspend_normal.svg</file>
-        <file>icons/deepin/builtin/dark/icons/previous_normal.svg</file>
-        <file>icons/deepin/builtin/dark/icons/play_normal.svg</file>
-        <file>icons/deepin/builtin/dark/icons/next_normal.svg</file>
-        <file>icons/deepin/builtin/dark/icons/exit_normal.svg</file>
-        <file>icons/deepin/builtin/light/icons/exit_normal.svg</file>
         <file>icons/deepin/builtin/dark/actions/exit_fullscreen.svg</file>
         <file>icons/deepin/builtin/light/actions/exit_fullscreen.svg</file>
         <file>icons/deepin/builtin/dark/actions/dr_defaultshape_small_16px.svg</file>
@@ -50,5 +40,15 @@
         <file>icons/deepin/builtin/dark/texts/dr_catalog_36px.svg</file>
         <file>icons/deepin/builtin/light/texts/dr_catalog_36px.svg</file>
         <file>icons/deepin/builtin/warning.svg</file>
+        <file>icons/deepin/builtin/light/texts/dr_exit_normal_36px.svg</file>
+        <file>icons/deepin/builtin/light/texts/dr_next_normal_36px.svg</file>
+        <file>icons/deepin/builtin/light/texts/dr_play_normal_36px.svg</file>
+        <file>icons/deepin/builtin/light/texts/dr_previous_normal_36px.svg</file>
+        <file>icons/deepin/builtin/light/texts/dr_suspend_normal_36px.svg</file>
+        <file>icons/deepin/builtin/dark/texts/dr_exit_normal_36px.svg</file>
+        <file>icons/deepin/builtin/dark/texts/dr_next_normal_36px.svg</file>
+        <file>icons/deepin/builtin/dark/texts/dr_play_normal_36px.svg</file>
+        <file>icons/deepin/builtin/dark/texts/dr_previous_normal_36px.svg</file>
+        <file>icons/deepin/builtin/dark/texts/dr_suspend_normal_36px.svg</file>
     </qresource>
 </RCC>

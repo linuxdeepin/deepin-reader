@@ -82,14 +82,11 @@ void PlayControlWidget::initWidget()
     QHBoxLayout *playout = new QHBoxLayout;
     playout->setContentsMargins(10, 10, 10, 10);
     playout->setSpacing(10);
-    m_pbtnpre = createBtn(QString("previous_normal"));
 
-    m_pbtnplay = createBtn(QString("suspend_normal"));
-    m_pbtnplay->setFixedSize(QSize(50, 50));
-    m_pbtnplay->setIconSize(QSize(36, 36));
-
-    m_pbtnnext = createBtn(QString("next_normal"));
-    m_pbtnexit = createBtn(QString("exit_normal"));
+    m_pbtnpre = createBtn(QString("previous_normal")); //new DIconButton(DStyle::SP_ArrowPrev)
+    m_pbtnplay = createBtn(QString("suspend_normal"));//new DIconButton(DStyle::SP_ArrowNext);
+    m_pbtnnext = createBtn(QString("next_normal"));// new DIconButton(DStyle::SP_ArrowNext);
+    m_pbtnexit = createBtn(QString("exit_normal"));//new DIconButton(DStyle::SP_CloseButton);
 
     playout->addWidget(m_pbtnpre);
     playout->addWidget(m_pbtnplay);
@@ -114,15 +111,11 @@ DIconButton *PlayControlWidget::createBtn(const QString &strname)
 {
     DIconButton *btn = new  DIconButton(this);
     btn->setObjectName(strname);
-    int tW = 50;
-    int tH = 50;
-//    dApp->adaptScreenView(tW, tH);
-    btn->setFixedSize(QSize(tW, tH));
-    btn->setIcon(QIcon(Utils::renderSVG(PF::getImagePath(strname, Pri::g_icons), QSize(36, 36))));
-    tW = 36;
-    tH = 36;
-//    dApp->adaptScreenView(tW, tH);
-    btn->setIconSize(QSize(tW, tH));
+    QSize size(50, 50);
+    btn->setFixedSize(size);
+    btn->setIcon(PF::getIcon(Pri::g_module + strname));//QIcon(Utils::renderSVG(PF::getImagePath(strname, Pri::g_icons), QSize(36, 36))));
+    size = QSize(36, 36);
+    btn->setIconSize(size);
     return  btn;
 }
 
@@ -150,11 +143,14 @@ void PlayControlWidget::pagejump(const bool &bpre)
 
 void PlayControlWidget::changePlayStatus()
 {
+    QString strName{""};
     m_bautoplaying = !m_bautoplaying;
-    if (m_bautoplaying)
-        m_pbtnplay->setIcon(QIcon(Utils::renderSVG(PF::getImagePath("suspend_normal", Pri::g_icons), QSize(36, 36))));
-    else {
-        m_pbtnplay->setIcon(QIcon(Utils::renderSVG(PF::getImagePath("play_normal", Pri::g_icons), QSize(36, 36))));
+    if (m_bautoplaying) {
+        strName = "suspend_normal";
+        m_pbtnplay->setIcon(PF::getIcon(Pri::g_module + strName));//QIcon(Utils::renderSVG(PF::getImagePath("suspend_normal", Pri::g_icons), QSize(36, 36))));
+    } else {
+        strName = "play_normal";
+        m_pbtnplay->setIcon(PF::getIcon(Pri::g_module + strName));//QIcon(Utils::renderSVG(PF::getImagePath("play_normal", Pri::g_icons), QSize(36, 36))));
     }
 }
 
@@ -178,18 +174,18 @@ void PlayControlWidget::leaveEvent(QEvent *event)
 
 void PlayControlWidget::slotUpdateTheme()
 {
-    QList<DIconButton *> plist = this->findChildren<DIconButton *>();
-    foreach (DIconButton *btn, plist) {
-        if (btn == m_pbtnplay) {
-            if (m_bautoplaying) {
-                m_pbtnplay->setIcon(QIcon(Utils::renderSVG(PF::getImagePath("suspend_normal", Pri::g_icons), QSize(36, 36))));
-            } else {
-                m_pbtnplay->setIcon(QIcon(Utils::renderSVG(PF::getImagePath("play_normal", Pri::g_icons), QSize(36, 36))));
-            }
-        } else {
-            btn->setIcon(QIcon(Utils::renderSVG(PF::getImagePath(btn->objectName(), Pri::g_icons), QSize(36, 36))));
-        }
-    }
+//    QList<DIconButton *> plist = this->findChildren<DIconButton *>();
+//    foreach (DIconButton *btn, plist) {
+//        if (btn == m_pbtnplay) {
+//            if (m_bautoplaying) {
+//                m_pbtnplay->setIcon(QIcon(Utils::renderSVG(PF::getImagePath("suspend_normal", Pri::g_icons), QSize(36, 36))));
+//            } else {
+//                m_pbtnplay->setIcon(QIcon(Utils::renderSVG(PF::getImagePath("play_normal", Pri::g_icons), QSize(36, 36))));
+//            }
+//        } else {
+//            btn->setIcon(QIcon(Utils::renderSVG(PF::getImagePath(btn->objectName(), Pri::g_icons), QSize(36, 36))));
+//        }
+//    }
 }
 
 void PlayControlWidget::slotPreClicked()
@@ -203,8 +199,8 @@ void PlayControlWidget::slotPlayClicked()
     obj.insert("type", "keyPress");
     obj.insert("key", KeyStr::g_space);
     QJsonDocument doc = QJsonDocument(obj);
-    CentralDocPage *docPage = static_cast<CentralDocPage*>(parent());
-    if(nullptr == docPage)
+    CentralDocPage *docPage = static_cast<CentralDocPage *>(parent());
+    if (nullptr == docPage)
         return;
 
     docPage->OnAppMsgData(doc.toJson(QJsonDocument::Compact));
