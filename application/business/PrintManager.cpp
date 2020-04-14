@@ -59,7 +59,8 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
         int nPageSize = _proxy->getPageSNum();
 
         if (printer->fromPage() == 0 && printer->toPage() == 0) {
-            int reviewSize = (nPageSize > 10 ? 10 : nPageSize);
+            //int reviewSize = (nPageSize > 10 ? 10 : nPageSize);       //减少打印数量防止卡死
+            int reviewSize = nPageSize;
             for (int iIndex = 0; iIndex < reviewSize; iIndex++) {
                 QImage image;
                 qreal deviceratio = qApp->devicePixelRatio() * 2.0;
