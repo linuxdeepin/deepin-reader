@@ -19,6 +19,7 @@
 #include "ThumbnailItemWidget.h"
 
 #include <QVBoxLayout>
+#include "CustomControl/RotateImageLabel.h"
 
 #include "business/AppInfo.h"
 
@@ -30,17 +31,19 @@ ThumbnailItemWidget::ThumbnailItemWidget(DWidget *parent)
     initWidget();
 }
 
-QSize ThumbnailItemWidget::setImage(QImage &image)
+void ThumbnailItemWidget::setLabelImage(const QImage &image)
 {
-    m_pPicture->setFixedSize(QSize(image.width(), image.height()));
-    m_pPicture->setSize(QSize(image.width(), image.height()));
+    if (m_label != nullptr) {
+        QPixmap pixmap = QPixmap::fromImage(image);
+        m_label->setBackgroundPix(pixmap);
+    }
 }
 
 // 是否被选中，选中就就填充颜色
 void ThumbnailItemWidget::setBSelect(const bool &paint)
 {
-    if (m_pPicture) {
-        m_pPicture->setSelect(paint);
+    if (m_label) {
+        m_label->setSelect(paint);
     }
 
     if (m_pPageNumber) {
@@ -50,7 +53,7 @@ void ThumbnailItemWidget::setBSelect(const bool &paint)
 
 void ThumbnailItemWidget::rotateThumbnail(int angle)
 {
-    auto imageLabel = this->findChild<ImageLabel *>();
+    auto imageLabel = this->findChild<RotateImageLabel *>();
     if (imageLabel) {
         imageLabel->setRotateAngle(angle);
         if (imageLabel->hasThumbnail()) {
@@ -61,41 +64,37 @@ void ThumbnailItemWidget::rotateThumbnail(int angle)
 
 void ThumbnailItemWidget::qSetBookMarkShowStatus(const bool &bshow)
 {
-    m_pPicture->setBookMarkStatus(bshow);
-    m_pPicture->update();
+    m_label->setBookMarkStatus(bshow);
+    m_label->update();
 }
 
 // 初始化界面
 void ThumbnailItemWidget::initWidget()
 {
+    m_label = new RotateImageLabel(this);
+    m_label->setRadius(ICON_BIG);
+    auto labelLayout = new QHBoxLayout;
+    labelLayout->addStretch();
+    labelLayout->addWidget(m_label);
+    labelLayout->addStretch();
+
     m_pPageNumber = new PageNumberLabel(this);
-    int tW = 146;
-    int tH = 18;
-
-    m_pPageNumber->setFixedSize(QSize(tW, tH));
     m_pPageNumber->setAlignment(Qt::AlignCenter);
-
-    m_pPicture = new ImageLabel(this);
-    tW = 146;
-    tH = 174;
-
-    m_pPicture->setFixedSize(QSize(tW, tH));
-    m_pPicture->setSize(QSize(tW, tH));
-    m_pPicture->setAlignment(Qt::AlignCenter);
-    m_pPicture->setRadius(ICON_BIG);
+    auto pageLayout = new QHBoxLayout;
+    pageLayout->addStretch();
+    pageLayout->addWidget(m_pPageNumber);
+    pageLayout->addStretch();
 
     auto t_vLayout = new QVBoxLayout;
-    t_vLayout->setContentsMargins(0, 0, 0, 0);
+    t_vLayout->setContentsMargins(0, 0, 36, 0);
     t_vLayout->setSpacing(0);
 
-    t_vLayout->addWidget(m_pPicture);
-    t_vLayout->addWidget(m_pPageNumber);
+    t_vLayout->addStretch();
+    t_vLayout->addLayout(labelLayout);
+    t_vLayout->addLayout(pageLayout);
+    t_vLayout->addStretch();
 
-    auto t_hLayout = new QHBoxLayout;
-    t_hLayout->setContentsMargins(0, 0, 32, 0);
-    t_hLayout->addItem(t_vLayout);
-
-    this->setLayout(t_hLayout);
+    this->setLayout(t_vLayout);
 }
 /**
  * @brief ThumbnailItemWidget::adaptWindowSize
@@ -104,8 +103,8 @@ void ThumbnailItemWidget::initWidget()
  */
 void ThumbnailItemWidget::adaptWindowSize(const double &scale)
 {
-    if (m_pPicture) {
-        m_pPicture->scaleImage(scale);
+    if (m_label) {
+        m_label->scaleImage(scale);
     }
 }
 

@@ -195,31 +195,12 @@ void ThumbnailWidget::slotLoadImage(const int &row, const QImage &image)
         return;
     }
 
-//    QLabel *l = new QLabel;
-//    l->setPixmap(QPixmap::fromImage(image));
-//    l->show();
-
     auto item = m_pThumbnailListWidget->item(row);
     if (item) {
-
-        int tW = 266;
-        int tH = 212 - (174 - image.size().height());
-        tW = static_cast<int>(static_cast<double>(tW) * dApp->scale());
-        tH = static_cast<int>(static_cast<double>(tH) * dApp->scale());
-
         auto pWidget = getItemWidget(item);
-
-        if (m_nRotate % 180 == 0) {
-            item->setSizeHint(QSize(tW, tH));
-            pWidget->setFixedSize(QSize(tW, tH));
-        } else {
-            item->setSizeHint(QSize(tH, tW));
-            pWidget->setFixedSize(QSize(tH, tW));
-        }
 
         if (pWidget) {
             pWidget->rotateThumbnail(m_nRotate);
-            pWidget->setImageSize(QSize(146, image.size().height()));
             pWidget->setLabelImage(image);
         }
     }
@@ -508,7 +489,7 @@ void ThreadLoadImage::run()
                 continue;
             }
             QImage image;
-            bool bl = m_proxy->getImage(page, image, tW);
+            bool bl = m_proxy->getImageMax(page, image, 174);
             if (bl) {
                 m_listLoad.append(page);
                 emit sigLoadImage(page, image);

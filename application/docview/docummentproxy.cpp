@@ -117,6 +117,17 @@ bool DocummentProxy::getImage(int pagenum, QImage &image, double width)
     return bre;
 }
 
+bool DocummentProxy::getImageMax(int pagenum, QImage &image, double max)
+{
+    bool bre = false;
+    QMutexLocker locker(&mutexlockgetimage);
+    if (!m_documment || bcloseing) {
+        return bre;
+    }
+    bre = m_documment->getImageMax(pagenum, image, max);
+    return bre;
+}
+
 int DocummentProxy::getPageSNum()
 {
     if (!m_documment || bcloseing)

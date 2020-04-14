@@ -1731,6 +1731,44 @@ bool DocummentBase::getImage(int pagenum, QImage &image, double width)
     return true;
 }
 
+bool DocummentBase::getImageMax(int pagenum, QImage &image, double max)
+{
+    Q_D(DocummentBase);
+    if (pagenum < 0 || pagenum >= d->m_pages.size()) {
+        return false;
+    }
+
+    double height = 0;
+    double width  = 0;
+
+    double oriHeight = d->m_pages.at(pagenum)->getOriginalImageHeight();
+    double oriWidth  = d->m_pages.at(pagenum)->getOriginalImageWidth();
+
+    if (oriHeight > oriWidth) {
+        height = max;
+        double ratio = d->m_pages.at(pagenum)->getOriginalImageWidth() / d->m_pages.at(pagenum)->getOriginalImageHeight();
+        if (ratio < 0.5)
+            ratio = 0.5;
+        width  =  ratio * height;
+    } else {
+        width  = max;
+        double ratio = d->m_pages.at(pagenum)->getOriginalImageHeight() / d->m_pages.at(pagenum)->getOriginalImageWidth();
+        if (ratio < 0.5)
+            ratio = 0.5;
+        height = ratio * width;
+    }
+
+    qreal pixelratiof = d->m_pages.at(pagenum)->devicePixelRatioF();
+
+    if (!d->m_pages.at(pagenum)->getImage(image, width * pixelratiof, height * pixelratiof)) {
+        return false;
+    }
+
+    image.setDevicePixelRatio(d->m_pages.at(pagenum)->devicePixelRatioF());
+
+    return true;
+}
+
 void DocummentBase::docBasicInfo(stFileInfo &info)
 {
     Q_D(DocummentBase);

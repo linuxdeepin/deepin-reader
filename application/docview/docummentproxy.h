@@ -28,6 +28,7 @@ public:
     void scaleRotateAndShow(double scale, RotateType_EM rotate);
     bool getImage(int pagenum, QImage &image, double width, double height);
     bool getImage(int pagenum, QImage &image, double width);
+    bool getImageMax(int pagenum, QImage &image, double max);
     int  getPageSNum();
     bool setViewModeAndShow(ViewMode_EM viewmode);
     bool showMagnifier(QPoint point);

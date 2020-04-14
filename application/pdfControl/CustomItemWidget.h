@@ -35,7 +35,6 @@ class CustomItemWidget : public CustomWidget
 public:
     CustomItemWidget(DWidget *parent = nullptr);
 
-    void setImageSize(QSize size);
 
 signals:
     void sigDeleteItem(const QString &);

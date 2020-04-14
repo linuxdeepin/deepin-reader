@@ -25,7 +25,7 @@
  * @brief The ThumbnailItemWidget class
  * @brief   缩略图中的item
  */
-
+class RotateImageLabel;
 class ThumbnailItemWidget : public CustomItemWidget
 {
     Q_OBJECT
@@ -34,7 +34,7 @@ class ThumbnailItemWidget : public CustomItemWidget
 public:
     explicit ThumbnailItemWidget(DWidget *parent = nullptr);
 
-    QSize setImage(QImage &image);
+    void setLabelImage(const QImage &);
 
 public:
     void setBSelect(const bool &paint);
@@ -48,6 +48,9 @@ protected:
 
 public:
     void adaptWindowSize(const double &scale) Q_DECL_OVERRIDE;
+
+private:
+    RotateImageLabel  *m_label = nullptr;          // 承载缩略图的label
 };
 
 #endif  // THUMBNAILITEMWIDGET_H
