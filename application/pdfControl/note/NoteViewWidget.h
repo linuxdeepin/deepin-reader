@@ -44,7 +44,7 @@ signals:
 
     void sigNoteViewMsg(const int &, const QString &);
 
-    void sigNeedShowTips(const QString &tips);
+    void sigNeedShowTips(const QString &tips, bool index);
 
 public:
 

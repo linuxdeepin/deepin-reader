@@ -292,9 +292,9 @@ void DocSheet::setSidebarVisible(bool isVisible)
     }
 }
 
-void DocSheet::onShowTips(const QString &tips)
+void DocSheet::onShowTips(const QString &tips, int index)
 {
-    showTips(tips);
+    showTips(tips, index);
 }
 
 void DocSheet::onFileChanged()
@@ -409,13 +409,13 @@ DocType_EM DocSheet::type()
     return m_type;
 }
 
-void DocSheet::showTips(const QString &tips)
+void DocSheet::showTips(const QString &tips, int iconIndex)
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
     if (nullptr == doc)
         return;
 
-    doc->showTips(tips);
+    doc->showTips(tips, iconIndex);
 }
 
 void DocSheet::setCurrentState(int state)

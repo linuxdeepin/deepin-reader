@@ -83,6 +83,6 @@ void TransparentTextEdit::slotTextEditMaxContantNum()
         this->setText(textContent);
         textCursor.setPosition(position - (length - m_nMaxContantLen));
         this->setTextCursor(textCursor);
-        sigNeedShowTips(tr("Input limit reached"));
+        sigNeedShowTips(tr("Input limit reached"), 1);
     }
 }

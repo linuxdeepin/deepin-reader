@@ -88,7 +88,7 @@ public:
 
     DocType_EM type();
 
-    void showTips(const QString &tips);
+    void showTips(const QString &tips, int iconIndex = 0);
 
     void setCurrentState(int state);
 
@@ -125,7 +125,7 @@ private:
 private slots:
     void SlotFileOpenResult(const QString &, const bool &);
 
-    void onShowTips(const QString &tips);
+    void onShowTips(const QString &tips, int);
 
     void onFileChanged();
 

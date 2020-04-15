@@ -91,7 +91,7 @@ void NoteViewWidget::initWidget()
 
     m_pCloseLab = new CustomClickLabel("");
     int tW = 24;
-    int tH = 24;m_nWidgetType = NOTE_HIGHLIGHT;
+    int tH = 24; m_nWidgetType = NOTE_HIGHLIGHT;
     dApp->adaptScreenView(tW, tH);
     m_pCloseLab->setFixedSize(QSize(tW, tH));
     connect(m_pCloseLab, SIGNAL(clicked()), this, SLOT(close()));
@@ -106,7 +106,7 @@ void NoteViewWidget::initWidget()
     m_pHLayoutContant->addStretch(0);
 
     m_pTextEdit = new TransparentTextEdit(this);
-    connect(m_pTextEdit, SIGNAL(sigNeedShowTips(QString)), this, SIGNAL(sigNeedShowTips(QString)));
+    connect(m_pTextEdit, SIGNAL(sigNeedShowTips(QString, int)), this, SIGNAL(sigNeedShowTips(QString, int)));
 
     m_pHLayoutContant->addWidget(m_pTextEdit);
 

@@ -112,7 +112,7 @@ public:
 
     void OnExitMagnifer();
 
-    void showTips(const QString &tips);
+    void showTips(const QString &tips, int iconIndex = 0);
 
 public:
     void OpenCurFileFolder();
@@ -156,7 +156,7 @@ signals:
 
     void sigTitleShortCut(QString shortcut);
 
-    void sigNeedShowTip(const QString &msg);
+    void sigNeedShowTips(const QString &msg, int);
 
     void sigNeedClose();
 

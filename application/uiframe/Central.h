@@ -79,7 +79,7 @@ public slots:
 private slots:
     void OnSetCurrentIndex();
 
-    void onShowTip(const QString &);
+    void onShowTips(const QString &text, int iconIndex = 0);
 
 private:
     QStackedLayout      *m_layout = nullptr;

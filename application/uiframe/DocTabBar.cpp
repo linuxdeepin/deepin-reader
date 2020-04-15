@@ -87,11 +87,11 @@ void DocTabBar::insertSheet(DocSheet *sheet, int index)
     else
         index = insertTab(index, fileName);
 
+    this->setCurrentIndex(index);
+
     this->setTabData(index, DocSheet::getUuid(sheet));
 
     this->setTabMinimumSize(index, QSize(140, 36));
-
-    this->setCurrentIndex(index);
 }
 
 void DocTabBar::removeSheet(DocSheet *sheet)

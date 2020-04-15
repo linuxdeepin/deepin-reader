@@ -657,9 +657,9 @@ void CentralDocPage::setCurrentState(const int &nCurrentState)
     m_nCurrentState = nCurrentState;
 }
 
-void CentralDocPage::showTips(const QString &tips)
+void CentralDocPage::showTips(const QString &tips, int iconIndex)
 {
-    emit sigNeedShowTip(tips);
+    emit sigNeedShowTips(tips, iconIndex);
 }
 
 int CentralDocPage::getCurrentState()

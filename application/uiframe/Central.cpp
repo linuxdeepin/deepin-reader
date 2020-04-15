@@ -217,23 +217,12 @@ void Central::onOpenFilesExec()
     openFilesExec();
 }
 
-void Central::onShowTip(const QString &contant)
+void Central::onShowTips(const QString &text, int iconIndex)
 {
-    int position = contant.indexOf("##**");
-    if (!contant.isEmpty() && position > 0) {
-        QString strright = contant.mid(position + QString("##**").length());
-        QString contents = contant.left(position);
-        QString iconname(":/icons/deepin/builtin/%1.svg");
-        if (strright == "warning ") {
-            iconname = iconname.arg(strright);
-        } else {
-            iconname = iconname.arg(strright);
-        }
-        DMessageManager::instance()->sendMessage(this, QIcon(iconname), contents);
-
-    } else {
-        DMessageManager::instance()->sendMessage(this, QIcon(":/icons/deepin/builtin/ok.svg"), contant);
-    }
+    if (0 == iconIndex)
+        DMessageManager::instance()->sendMessage(this, QIcon(":/icons/deepin/builtin/ok.svg"), text);
+    else
+        DMessageManager::instance()->sendMessage(this, QIcon(":/icons/deepin/builtin/warning.svg"), text);
 }
 
 void Central::dragEnterEvent(QDragEnterEvent *event)
@@ -280,7 +269,7 @@ void Central::dropEvent(QDropEvent *event)
 
         foreach (auto s, noOpenFileList) {
             QString msgContent = tr("The format is not supported");
-            onShowTip(msgContent);
+            onShowTips(msgContent, 1);
         }
 
         if (canOpenFileList.count() > 0) {
@@ -312,7 +301,7 @@ void Central::initWidget()
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_menu, SLOT(onCurSheetChanged(DocSheet *)));
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_widget, SLOT(onCurSheetChanged(DocSheet *)));
     connect(m_docPage, SIGNAL(sigTitleShortCut(QString)), m_widget, SLOT(onTitleShortCut(QString)));
-    connect(m_docPage, SIGNAL(sigNeedShowTip(const QString &)), this, SLOT(onShowTip(const QString &)));
+    connect(m_docPage, SIGNAL(sigNeedShowTips(const QString &, int)), this, SLOT(onShowTips(const QString &, int)));
     connect(m_docPage, SIGNAL(sigNeedClose()), this, SIGNAL(sigNeedClose()));
     connect(m_docPage, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
     connect(m_docPage, SIGNAL(sigNeedShowState(int)), this, SIGNAL(sigNeedShowState(int)));

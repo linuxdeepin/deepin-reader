@@ -238,7 +238,7 @@ void SheetBrowserPDFPrivate::showNoteViewWidget(const QString &sPage, const QStr
     if (m_pNoteViewWidget == nullptr) {
         m_pNoteViewWidget = new NoteViewWidget(q);
         connect(m_pNoteViewWidget, SIGNAL(sigNoteViewMsg(const int &, const QString &)), SLOT(SlotNoteViewMsg(const int &, const QString &)));
-        connect(m_pNoteViewWidget, SIGNAL(sigNeedShowTips(const QString &)), m_sheet, SLOT(onShowTips(const QString &)));
+        connect(m_pNoteViewWidget, SIGNAL(sigNeedShowTips(const QString &, int)), m_sheet, SLOT(onShowTips(const QString &, int)));
         connect(m_pNoteViewWidget, SIGNAL(sigNeedAddHighLightAnnotation(QString)), SLOT(onAddHighLightAnnotation(QString)));
     }
     m_pNoteViewWidget->setEditText(sText);
@@ -474,7 +474,7 @@ void SheetBrowserPDFPrivate::SlotDocFileOpenResult(bool openresult)
         m_pProxyData->setFirstShow(false);
         m_pProxyData->setIsFileOpenOk(true);
     } else {
-        m_sheet->showTips(tr("Please check if the file is damaged"));
+        m_sheet->showTips(tr("Please check if the file is damaged"), 1);
     }
 
     emit q->sigFileOpenResult(m_pProxyData->getPath(), openresult);
