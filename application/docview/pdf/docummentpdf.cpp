@@ -315,7 +315,7 @@ void DocummentPDF::search(const QString &strtext, QColor color)
     d->m_searchTask->start(d->m_pages, strtext, false, false, d->m_currentpageno + 1);
 }
 
-bool DocummentPDF::save(const QString &filePath, bool withChanges)
+bool DocummentPDF::save(const QString &filePath)
 {
     // Save document to temporary file...
     QTemporaryFile temporaryFile;
@@ -326,7 +326,7 @@ bool DocummentPDF::save(const QString &filePath, bool withChanges)
     }
 
     temporaryFile.close();
-    if (!pdfsave(temporaryFile.fileName(), withChanges)) {
+    if (!pdfsave(temporaryFile.fileName(), true)) {
         return false;
     }
 
@@ -352,35 +352,38 @@ bool DocummentPDF::save(const QString &filePath, bool withChanges)
 bool DocummentPDF::saveas(const QString &filePath, bool withChanges)
 {
     Q_D(DocummentPDF);
-    QString strsource = d->m_fileinfo->strFilepath;
-    bool bsuccess = false;
-    if (!strsource.isEmpty()) {
-        if (!withChanges) {
-            if (QFile::copy(strsource, filePath))
-                bsuccess = true;
 
-        } else {
-            QString strtmp = strsource.left(strsource.lastIndexOf(QChar('/')) + 1);
-            strtmp.append(PublicFunc::getUuid());
-            strtmp.append(".pdf");
+    return pdfsave(filePath, withChanges);
 
-            if (QFile::copy(strsource, strtmp)) {
-                if (save(strsource, true)) {
-                    if (QFile::copy(strsource, filePath)) {
-                        bsuccess = true;
+//    QString strsource = d->m_fileinfo->strFilepath;
+//    bool bsuccess = false;
+//    if (!strsource.isEmpty()) {
+//        if (!withChanges) {
+//            if (QFile::copy(strsource, filePath))
+//                bsuccess = true;
 
-                        if (QFile::remove(strsource)) {
-                            if (QFile::rename(strtmp, strsource))
-                                QFile::remove(strtmp);
-                        }
-                    } else {
-                        QFile::remove(strtmp);
-                    }
-                }
-            }
-        }
-    }
-    return  bsuccess;
+//        } else {
+//            QString strtmp = strsource.left(strsource.lastIndexOf(QChar('/')) + 1);
+//            strtmp.append(PublicFunc::getUuid());
+//            strtmp.append(".pdf");
+
+//            if (QFile::copy(strsource, strtmp)) {
+//                if (pdfsave(strsource, true)) {
+//                    if (QFile::copy(strsource, filePath)) {
+//                        bsuccess = true;
+
+//                        if (QFile::remove(strsource)) {
+//                            if (QFile::rename(strtmp, strsource))
+//                                QFile::remove(strtmp);
+//                        }
+//                    } else {
+//                        QFile::remove(strtmp);
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    return  bsuccess;
 }
 
 bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
@@ -510,8 +513,7 @@ bool DocummentPDF::freshFile(QString file)
         d->document = nullptr;
     }
     d->document = Poppler::Document::load(file);
-//    QVariant cloursemsg;
-//    Poppler::setDebugErrorFunction(debugfunc, cloursemsg);
+
     if (nullptr == d->document || d->document->numPages() <= 0) {
         return false;
     }

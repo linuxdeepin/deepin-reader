@@ -13,7 +13,7 @@ public:
     DocummentPDF(DWidget *parent = nullptr);
     ~DocummentPDF() override;
     bool bDocummentExist() override;
-    bool save(const QString &filePath, bool withChanges) override;
+    bool save(const QString &filePath) override;
     bool saveas(const QString &filePath, bool withChanges) override;
     void removeAllAnnotation();
     QString removeAnnotation(const QPoint &startpos, AnnoteType_Em type) override;

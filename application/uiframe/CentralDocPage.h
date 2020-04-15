@@ -74,12 +74,14 @@ public:
 
     bool saveCurrent();
 
+    bool saveAsCurrent();
+
     void clearState();
 
 signals:
     void sigSheetCountChanged(int);
 
-    void sigNeedOpenFileExec();
+    void sigNeedOpenFilesExec();
 
     void sigCurSheetChanged(DocSheet *);        //当前的文档被 切换 改动 保存 等
 
@@ -146,8 +148,6 @@ public:
     void exitSpecialState();
 
     void OnKeyPress(const QString &);
-
-    void saveAsCurFile();
 
 signals:
     void sigRemoveFileTab(const QString &);

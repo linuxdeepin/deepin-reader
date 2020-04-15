@@ -51,7 +51,7 @@ void SheetBrowserPDF::setRotateRight()
 }
 
 SheetBrowserPDF::SheetBrowserPDF(DocSheet *sheet, DWidget *parent)
-    : CustomWidget( parent), d_ptr(new SheetBrowserPDFPrivate(sheet, this))
+    : CustomWidget(parent), d_ptr(new SheetBrowserPDFPrivate(sheet, this))
 {
     setMouseTracking(true);  //  接受 鼠标滑动事件
 
@@ -130,7 +130,7 @@ bool SheetBrowserPDF::setFit(int fit)
 {
     Q_D(SheetBrowserPDF);
 
-    if(d->m_pProxyFileDataModel->qGetFileData().getFit() == fit)
+    if (d->m_pProxyFileDataModel->qGetFileData().getFit() == fit)
         return false;
 
     setData(Fit, QString::number(fit));
@@ -160,7 +160,7 @@ void SheetBrowserPDF::showNoteWidget(int page, const QString &uuid, const int &t
 
     d->m_pProxy->getAnnotationText(uuid, text, page);
 
-    d->showNoteViewWidget(QString::number(page),uuid,text,type);
+    d->showNoteViewWidget(QString::number(page), uuid, text, type);
 }
 
 void SheetBrowserPDF::AddHighLightAnnotation(int page, QString text)
@@ -200,7 +200,7 @@ void SheetBrowserPDF::resizeEvent(QResizeEvent *event)
 
     int scale = d->handleResize(event->size());
 
-    setData(Scale,QString::number(scale));
+    setData(Scale, QString::number(scale));
 
     CustomWidget::resizeEvent(event);
 }
@@ -254,12 +254,28 @@ void SheetBrowserPDF::saveOper()
 bool SheetBrowserPDF::saveData()
 {
     Q_D(SheetBrowserPDF);
-    bool result = d->m_pProxy->save(d->m_pProxyData->getPath(), true);
-    if(!result)
+
+    bool result = d->m_pProxy->save(d->m_pProxyData->getPath());
+    if (!result)
         return false;
 
     d->m_pProxyData->setFileChanged(false);
+
     d->m_pProxyFileDataModel->saveData();
+
+    return true;
+}
+
+bool SheetBrowserPDF::saveAsData(QString targetFilePath)
+{
+    Q_D(SheetBrowserPDF);
+
+    bool result = d->m_pProxy->save(targetFilePath);
+
+    if (!result)
+        return false;
+
+    d->m_pProxyFileDataModel->saveAsData(d->m_pProxyData->getPath(), targetFilePath);
 
     return true;
 }

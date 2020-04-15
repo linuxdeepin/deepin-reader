@@ -72,6 +72,8 @@ public:
 
     bool saveData();
 
+    bool saveAsData(QString filePath);
+
     void setData(const int &, const QString &);
 
     FileDataModel qGetFileData();
@@ -111,7 +113,7 @@ signals:
 
     void sigFileChanged(DocSheet *);    //被修改了 书签 笔记
 
-    void sigScaleChanged(DocSheet*);
+    void sigScaleChanged(DocSheet *);
 
     void sigTotateChanged();
 
@@ -127,7 +129,7 @@ private slots:
 
     void onFileChanged();
 
-    void onSplitterMoved(int,int);
+    void onSplitterMoved(int, int);
 
 private:
     DocType_EM      m_type;

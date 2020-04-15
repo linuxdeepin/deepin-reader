@@ -30,6 +30,11 @@ DBFactory::DBFactory(QObject *parent)
 
 }
 
+void DBFactory::saveAsData(QString originFilePath, QString targetFilePath)
+{
+
+}
+
 const QSqlDatabase DBFactory::getDatabase()
 {
     QString m_connectionName = "default_connection";

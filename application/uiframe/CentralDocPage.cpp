@@ -95,57 +95,6 @@ int CentralDocPage::GetFileChange(const QString &sPath)
     return -1;
 }
 
-//  另存为
-void CentralDocPage::saveAsCurFile()
-{
-    QString sCurPath = qGetCurPath();
-    if (sCurPath != "") {
-        QFileInfo info(sCurPath);
-
-        QString sCompleteSuffix = info.completeSuffix();
-        DocType_EM nCurDocType = FFH::setCurDocuType(sCompleteSuffix);
-
-        QString sFilter = FFH::getFileFilter(nCurDocType);
-
-        if (sFilter != "") {
-            QFileDialog dialog;
-            dialog.selectFile(sCurPath);
-            QString filePath = dialog.getSaveFileName(nullptr, tr("Save as"), sCurPath, sFilter);
-
-            if (filePath.endsWith("/.pdf")) {
-                DDialog dlg("", tr("Invalid file name"));
-                QIcon icon(PF::getIconPath("exception-logo"));
-                dlg.setIcon(icon /*QIcon(":/resources/exception-logo.svg")*/);
-                dlg.addButtons(QStringList() << tr("OK"));
-                QMargins mar(0, 0, 0, 30);
-                dlg.setContentLayoutContentsMargins(mar);
-                dlg.exec();
-                return;
-            }
-
-            if (filePath != "") {
-                if (sCurPath == filePath) {
-                    saveCurrent();
-                } else {
-                    QString sFilePath = FFH::getFilePath(filePath, nCurDocType);
-
-                    bool rl = getCurFileAndProxy(sCurPath)->saveas(sFilePath, true);
-                    if (rl) {
-                        //insert a new bookmark record to bookmarktabel
-                        dApp->m_pDBService->qSaveData(sFilePath, DB_BOOKMARK);
-
-                        //重新打开
-                        DocSheet *sheet = getSheet(sFilePath);
-                        if (nullptr != sheet) {
-                            sheet->handleOpenSuccess();
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
 void CentralDocPage::onSheetChanged(DocSheet *sheet)
 {
     if (nullptr == sheet && sheet != getCurSheet())
@@ -405,6 +354,36 @@ bool CentralDocPage::saveCurrent()
     return true;
 }
 
+bool CentralDocPage::saveAsCurrent()
+{
+    DocSheet *sheet = static_cast<DocSheet *>(m_pStackedLayout->currentWidget());
+    if (nullptr == sheet)
+        return false;
+
+    QFileInfo info(sheet->filePath());
+    QString sCompleteSuffix = info.completeSuffix();
+    DocType_EM nCurDocType = FFH::setCurDocuType(sCompleteSuffix);
+    QString sFilter = FFH::getFileFilter(nCurDocType);
+    QString saveFilePath;
+    if (sFilter != "") {
+        QFileDialog dialog;
+        dialog.selectFile(sheet->filePath());
+        saveFilePath = dialog.getSaveFileName(nullptr, tr("Save as"), sheet->filePath(), sFilter);
+        if (saveFilePath.endsWith("/.pdf")) {
+            DDialog dlg("", tr("Invalid file name"));
+            QIcon icon(PF::getIconPath("exception-logo"));
+            dlg.setIcon(icon /*QIcon(":/resources/exception-logo.svg")*/);
+            dlg.addButtons(QStringList() << tr("OK"));
+            QMargins mar(0, 0, 0, 30);
+            dlg.setContentLayoutContentsMargins(mar);
+            dlg.exec();
+            return false;
+        }
+    }
+
+    return sheet->saveAsData(saveFilePath);
+}
+
 void CentralDocPage::clearState()
 {
     //  切换文档 需要将放大镜状态 取消
@@ -519,7 +498,7 @@ void CentralDocPage::initWidget()
     connect(m_pTabBar, SIGNAL(sigTabClosed(DocSheet *)), this, SLOT(onTabClosed(DocSheet *)));
     connect(m_pTabBar, SIGNAL(sigTabMoveOut(DocSheet *)), this, SLOT(onTabMoveOut(DocSheet *)));
     connect(m_pTabBar, SIGNAL(sigTabNewWindow(DocSheet *)), this, SLOT(onTabNewWindow(DocSheet *)));
-    connect(m_pTabBar, SIGNAL(sigNeedOpenFilesExec()), this, SIGNAL(sigNeedOpenFileExec()));
+    connect(m_pTabBar, SIGNAL(sigNeedOpenFilesExec()), this, SIGNAL(sigNeedOpenFilesExec()));
 
     m_pStackedLayout = new QStackedLayout;
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
@@ -624,7 +603,7 @@ void CentralDocPage::OnAppShortCut(const QString &s)
     } else if (s == KeyStr::g_ctrl_h) {     //  开启幻灯片
         OnOpenSliderShow();
     } else if (s == KeyStr::g_ctrl_shift_s) {   //  另存为
-        saveAsCurFile();
+        saveAsCurrent();//saveAsCurFile();
     } else if (s == KeyStr::g_alt_z) {
         OnOpenMagnifer();
     } else if (s == KeyStr::g_esc) { //  esc 统一处理

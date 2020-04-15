@@ -28,21 +28,28 @@ DBService::DBService(QObject *parent)
     m_pHistroy = new HistroyDB(this);
 }
 
-void DBService::qSelectData(const QString &sPath, const int &iType)
+void DBService::qSelectData(const QString &sPath, const int &type)
 {
-    if (iType == DB_BOOKMARK) {
+    if (type == DB_BOOKMARK) {
         m_pBookMark->qSelectData(sPath);
     } else {
         m_pHistroy->qSelectData(sPath);
     }
 }
 
-void DBService::qSaveData(const QString &sPath, const int &iType)
+void DBService::qSaveData(const QString &sPath, const int &type)
 {
-    if (iType == DB_BOOKMARK) {
+    if (type == DB_BOOKMARK) {
         m_pBookMark->saveData(sPath);
     } else {
         m_pHistroy->saveData(sPath);
+    }
+}
+
+void DBService::saveAsData(const QString &originPath, const QString &targetPath, const int &type)
+{
+    if (type == DB_BOOKMARK) {
+        m_pBookMark->saveAsData(originPath, targetPath);
     }
 }
 

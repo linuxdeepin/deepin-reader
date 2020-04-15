@@ -187,26 +187,29 @@ void ProcessController::onReceiveMessage()
 
         foreach (QString filePath, filePathList) {
             //如果存在则活跃该窗口
+            bool hasFind = false;
             foreach (DocSheet *sheet, sheets) {
                 if (sheet->filePath() == filePath) {
                     MainWindow *window = MainWindow::windowContainSheet(sheet);
                     if (nullptr != window) {
                         window->activateWindow();
-                        return;
+                        hasFind = true;
+                        break;
                     }
                 }
             }
 
-            //如果不存在则打开
-            if (MainWindow::m_list.count() > 0) {
-                MainWindow::m_list[0]->openfile(filePath);
-                return;
+            if (!hasFind) {
+                //如果不存在则打开
+                if (MainWindow::m_list.count() > 0) {
+                    MainWindow::m_list[0]->openfile(filePath);
+                    continue;
+                } else
+                    MainWindow::create()->openfile(filePath);
             }
-
-            MainWindow::create()->openfile(filePath);
-
-            return;
         }
+
+        return;
     }
 
     localSocket->write("none");

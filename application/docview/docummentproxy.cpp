@@ -227,15 +227,15 @@ bool DocummentProxy::haslabel()
     return m_documment->haslabel();
 }
 
-bool DocummentProxy::save(const QString &filepath, bool withChanges)
+bool DocummentProxy::save(const QString &filepath)
 {
     if (!m_documment || bcloseing)
         return false;
 
-    if (!m_documment->save(filepath, withChanges)) {
+    if (!m_documment->save(filepath)) {
         return false;
     }
-    return m_documment->freshFile(filepath);
+    return true;//m_documment->freshFile(filepath);
 }
 
 bool DocummentProxy::saveas(const QString &filepath, bool withChanges)

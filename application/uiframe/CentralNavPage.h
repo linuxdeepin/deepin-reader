@@ -14,7 +14,7 @@ public:
     ~CentralNavPage() override;
 
 signals:
-    void sigNeedOpenFileExec();
+    void sigNeedOpenFilesExec();
 
 protected:
     void initWidget() override;

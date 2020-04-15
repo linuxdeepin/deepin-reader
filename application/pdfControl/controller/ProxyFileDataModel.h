@@ -36,6 +36,7 @@ public:
 
     void saveOper();
     void saveData();
+    void saveAsData(const QString &originPath, const QString &targetPath);
 
     FileDataModel qGetFileData() const;
     void qSetFileData(const FileDataModel &);

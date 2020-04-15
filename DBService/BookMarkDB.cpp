@@ -55,6 +55,29 @@ void BookMarkDB::saveData(const QString &sPath)
     }
 }
 
+void BookMarkDB::saveAsData(QString originFilePath, QString targetFilePath)
+{
+    QList<int> dataList = m_pBookMarkMap[originFilePath];
+
+    qDebug() << dataList;
+
+    if (dataList.size() == 0) {
+        deleteData(originFilePath);
+        deleteData(targetFilePath);
+    } else {
+        QString sPage = "";
+        foreach (int i, dataList) {
+            sPage += QString::number(i) + ",";
+        }
+
+        if (!hasFilePathDB(targetFilePath, m_strTableName)) {
+            insertData(targetFilePath, sPage);
+        } else {
+            updateData(targetFilePath, sPage);
+        }
+    }
+}
+
 void BookMarkDB::qSelectData(const QString &sPath)
 {
     const QSqlDatabase db = getDatabase();

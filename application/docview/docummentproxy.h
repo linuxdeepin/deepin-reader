@@ -35,7 +35,7 @@ public:
     bool closeMagnifier();
     bool setMagnifierStyle(int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 2);
     QString addAnnotation(const QPoint &startpos, const QPoint &endpos, QColor color = Qt::yellow);
-    bool save(const QString &filepath, bool withChanges);
+    bool save(const QString &filepath);
     bool saveas(const QString &filepath, bool withChanges);
     void search(const QString &strtext, const QColor &color = Qt::red);
     void clearsearch();

@@ -63,7 +63,7 @@ public:
 
     void showNoteWidget(int page, const QString &uuid, const int &type = NOTE_HIGHLIGHT);
 
-    void AddHighLightAnnotation(int page,QString text);
+    void AddHighLightAnnotation(int page, QString text);
 
 signals:
     void sigFileOpenResult(const QString &, const bool &);
@@ -92,6 +92,8 @@ public:
     void saveOper();
 
     bool saveData();
+
+    bool saveAsData(QString targetFilePath);
 
     void ShowFindWidget();
 

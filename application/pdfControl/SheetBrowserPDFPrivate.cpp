@@ -469,11 +469,8 @@ void SheetBrowserPDFPrivate::onPageChanged(int page)
 void SheetBrowserPDFPrivate::SlotDocFileOpenResult(bool openresult)
 {
     Q_Q(SheetBrowserPDF);
-    //  通知 其他窗口， 打开文件成功了！！！
     if (openresult) {
-
         dApp->m_pDBService->qSelectData(m_pProxyData->getPath(), DB_BOOKMARK);
-
         m_pProxyData->setFirstShow(false);
         m_pProxyData->setIsFileOpenOk(true);
     } else {

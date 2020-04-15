@@ -1769,6 +1769,11 @@ bool DocummentBase::getImageMax(int pagenum, QImage &image, double max)
     return true;
 }
 
+bool DocummentBase::save(const QString &)
+{
+    return false;
+}
+
 void DocummentBase::docBasicInfo(stFileInfo &info)
 {
     Q_D(DocummentBase);

@@ -32,6 +32,7 @@ public:
 
 public:
     virtual void saveData(const QString &) = 0;
+    virtual void saveAsData(QString originFilePath, QString targetFilePath);
     virtual void qSelectData(const QString &) = 0;
 
 protected:

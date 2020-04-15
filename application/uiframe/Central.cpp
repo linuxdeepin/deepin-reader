@@ -28,11 +28,11 @@
 
 #include "business/AppInfo.h"
 #include "utils/utils.h"
-#include "app/ProcessController.h"
 #include "CentralNavPage.h"
 #include "CentralDocPage.h"
 #include "TitleMenu.h"
 #include "TitleWidget.h"
+#include "MainWindow.h"
 
 Central::Central(DWidget *parent)
     : CustomWidget(parent)
@@ -72,11 +72,31 @@ void Central::openFilesExec()
         return;
     }
 
-    QStringList files = dialog.selectedFiles();
+    QStringList filePathList = dialog.selectedFiles();
 
-    if (files.size() > 0) {
-        foreach (auto filePath, files) {
-            m_docPage->openFile(filePath);
+    if (filePathList.count() <= 0) {
+        return;
+    }
+
+    QList<DocSheet *> sheets = DocSheet::g_map.values();
+
+    foreach (QString filePath, filePathList) {
+        //如果存在则活跃该窗口
+        bool hasFind = false;
+
+        foreach (DocSheet *sheet, sheets) {
+            if (sheet->filePath() == filePath) {
+                MainWindow *window = MainWindow::windowContainSheet(sheet);
+                if (nullptr != window) {
+                    window->activateWindow();
+                    hasFind = true;
+                    break;
+                }
+            }
+        }
+
+        if (!hasFind) {
+            openFile(filePath);
         }
     }
 }
@@ -177,7 +197,7 @@ void Central::onMenuTriggered(const QString &action)
     } else if (action == "Save") { //  保存当前显示文件
         m_docPage->saveCurrent();
     } else if (action == "Save as") {
-        m_docPage->saveAsCurFile();
+        m_docPage->saveAsCurrent();
     } else if (action == "Print") {
         m_docPage->OnPrintFile();
     } else if (action == "Slide show") { //  开启幻灯片
@@ -287,7 +307,7 @@ void Central::initWidget()
     setLayout(m_layout);
 
     connect(m_menu, SIGNAL(sigActionTriggered(QString)), this, SLOT(onMenuTriggered(QString)));
-    connect(m_navPage, SIGNAL(sigNeedOpenFileExec()), SLOT(onOpenFilesExec()));
+    connect(m_navPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
 
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), this, SLOT(onCurSheetChanged(DocSheet *)));
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_menu, SLOT(onCurSheetChanged(DocSheet *)));
@@ -297,5 +317,5 @@ void Central::initWidget()
     connect(m_docPage, SIGNAL(sigNeedClose()), this, SIGNAL(sigNeedClose()));
     connect(m_docPage, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
     connect(m_docPage, SIGNAL(sigNeedShowState(int)), this, SIGNAL(sigNeedShowState(int)));
-    connect(m_docPage, SIGNAL(sigNeedOpenFileExec()), SLOT(onOpenFilesExec()));
+    connect(m_docPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
 }

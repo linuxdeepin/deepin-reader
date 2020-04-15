@@ -12,7 +12,7 @@
 #include <QSvgWidget>
 
 CentralNavPage::CentralNavPage(DWidget *parent)
-    : CustomWidget( parent)
+    : CustomWidget(parent)
 {
     initWidget();
     initConnections();
@@ -64,7 +64,7 @@ void CentralNavPage::initWidget()
 
 void CentralNavPage::slotChooseBtnClicked()
 {
-    emit sigNeedOpenFileExec();
+    emit sigNeedOpenFilesExec();
 }
 
 //  主题切换

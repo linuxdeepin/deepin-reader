@@ -49,6 +49,11 @@ void ProxyFileDataModel::saveData()
     dApp->m_pDBService->qSaveData(sPath, DB_BOOKMARK);
 }
 
+void ProxyFileDataModel::saveAsData(const QString &originPath, const QString &targetPath)
+{
+    dApp->m_pDBService->saveAsData(originPath, targetPath, DB_BOOKMARK);
+}
+
 void ProxyFileDataModel::setThumbnailState(const QString &sValue)
 {
     m_pFileDataModel.qSetData(Thumbnail, sValue.toInt());

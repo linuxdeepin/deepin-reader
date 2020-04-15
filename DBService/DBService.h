@@ -42,6 +42,8 @@ public:
     void qSelectData(const QString &, const int &);
     void qSaveData(const QString &sPath, const int &);
 
+    void saveAsData(const QString &originPath, const QString &targetPath, const int &);
+
     QList<int> getBookMarkList(const QString &) const;
     void setBookMarkList(const QString &, const QList<int> &pBookMarkList);
 
