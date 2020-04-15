@@ -41,6 +41,8 @@ public:
 
     bool hasSheet(DocSheet *sheet);
 
+    void showSheet(DocSheet *sheet);
+
     bool saveAll();
 
     void handleShortcut(QString shortcut);

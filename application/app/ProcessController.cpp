@@ -192,7 +192,7 @@ void ProcessController::onReceiveMessage()
                 if (sheet->filePath() == filePath) {
                     MainWindow *window = MainWindow::windowContainSheet(sheet);
                     if (nullptr != window) {
-                        window->activateWindow();
+                        window->activateSheet(sheet);
                         hasFind = true;
                         break;
                     }

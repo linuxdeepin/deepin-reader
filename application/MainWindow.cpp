@@ -64,6 +64,12 @@ bool MainWindow::hasSheet(DocSheet *sheet)
     return m_central->hasSheet(sheet);
 }
 
+void MainWindow::activateSheet(DocSheet *sheet)
+{
+    this->activateWindow();
+    m_central->showSheet(sheet);
+}
+
 void MainWindow::openfile(const QString &filepath)
 {
     m_central->openFile(filepath);

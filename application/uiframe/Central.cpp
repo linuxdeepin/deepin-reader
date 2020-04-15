@@ -88,7 +88,7 @@ void Central::openFilesExec()
             if (sheet->filePath() == filePath) {
                 MainWindow *window = MainWindow::windowContainSheet(sheet);
                 if (nullptr != window) {
-                    window->activateWindow();
+                    window->activateSheet(sheet);
                     hasFind = true;
                     break;
                 }
@@ -108,13 +108,12 @@ void Central::addSheet(DocSheet *sheet)
 
 bool Central::hasSheet(DocSheet *sheet)
 {
-    if (m_docPage->hasSheet(sheet)) {
-        m_docPage->showSheet(sheet);
+    return m_docPage->hasSheet(sheet);
+}
 
-        return true;
-    }
-
-    return false;
+void Central::showSheet(DocSheet *sheet)
+{
+    m_docPage->showSheet(sheet);
 }
 
 bool Central::saveAll()

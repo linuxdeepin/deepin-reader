@@ -24,6 +24,8 @@ public:
 
     bool hasSheet(DocSheet *sheet);
 
+    void activateSheet(DocSheet *sheet);  //将该sheet显示到最前面
+
 public:
     void openfile(const QString &filepath);
 
