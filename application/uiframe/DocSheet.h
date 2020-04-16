@@ -133,6 +133,7 @@ private slots:
 
     void onSplitterMoved(int, int);
 
+    void onTitleShortCut(QString);
 private:
     DocType_EM      m_type;
     void *m_sidebar = nullptr;

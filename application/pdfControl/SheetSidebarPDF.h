@@ -33,6 +33,7 @@ signals:
     void sigFindNone();
 public:
     void handleOpenSuccess();
+    int qDealWithShortKey(const QString &);
 
 public slots:
     void onSearch(const int &);

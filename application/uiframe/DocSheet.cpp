@@ -213,7 +213,7 @@ void DocSheet::initPDF()
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
-    SheetBrowserPDF *browser = new SheetBrowserPDF(this);
+    SheetBrowserPDF *browser = new SheetBrowserPDF(this, this);
     SheetSidebarPDF *sidebar = new SheetSidebarPDF(this);
 
     m_sidebar = sidebar;
@@ -307,6 +307,21 @@ void DocSheet::onSplitterMoved(int a, int b)
 {
     setFit(0);
     emit sigFileChanged(this);
+}
+
+void DocSheet::onTitleShortCut(QString shortCut)
+{
+    if (shortCut == KeyStr::g_ctrl_b) {
+        auto side = this->findChild<SheetSidebarPDF *>();
+        if (side) {
+            side->qDealWithShortKey(shortCut);
+        }
+    } else {
+        auto brower = this->findChild<SheetBrowserPDF *>();
+        if (brower) {
+            brower->qDealWithShortKey(shortCut);
+        }
+    }
 }
 
 QUuid DocSheet::getUuid(DocSheet *sheet)

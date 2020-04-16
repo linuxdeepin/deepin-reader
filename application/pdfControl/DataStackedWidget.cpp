@@ -52,6 +52,11 @@ void DataStackedWidget::handleBookMark(int page, int state)
     m_pBookMarkWidget->setBookMark(page, state);
 }
 
+int DataStackedWidget::qDealWithShortKey(const QString &shortCut)
+{
+    return (m_pBookMarkWidget) ? m_pBookMarkWidget->qDealWithShortKey(shortCut) : MSG_NO_OK;
+}
+
 void DataStackedWidget::SetFindOperation(const int &iType)
 {
     if (iType == E_FIND_CONTENT) {

@@ -370,6 +370,7 @@ int TitleWidget::onTitleShortCut(const QString &sKey)
         OnShortCut_CtrlM();
         return MSG_OK;
     } else {
+        m_pFontMenu->readCurDocParam(m_curSheet.data());
         if (m_pFontMenu->handleShortcut(sKey))
             return MSG_OK;
 

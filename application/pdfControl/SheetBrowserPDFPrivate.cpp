@@ -152,6 +152,8 @@ void SheetBrowserPDFPrivate::OnShortCutKey(const QString &sKey)
         DocFile_ctrl_l();
     } else if (sKey == KeyStr::g_ctrl_i) {
         DocFile_ctrl_i();
+    } else if (sKey == KeyStr::g_ctrl_b) {
+        DocFile_ctrl_b();
     }
 }
 
@@ -188,7 +190,7 @@ void SheetBrowserPDFPrivate::DocFile_ctrl_l()
 
 void SheetBrowserPDFPrivate::DocFile_ctrl_i()
 {
-    if (m_pProxy) {
+    if (m_pProxy && m_sheet) {
         QString selectText;
         if (m_pProxy->getSelectTextString(selectText)) {
 
@@ -225,9 +227,25 @@ void SheetBrowserPDFPrivate::DocFile_ctrl_c()
     }
 }
 
+/**
+ * @brief SheetBrowserPDFPrivate::DocFile_ctrl_b
+ * 添加书签
+ */
+void SheetBrowserPDFPrivate::DocFile_ctrl_b()
+{
+    if (m_sheet == nullptr) {
+        return;
+    }
+    DocummentProxy *proxy =  m_sheet->getDocProxy();
+    if (proxy) {
+        int nPage = proxy->currentPageNo();
+        proxy->setBookMarkState(nPage, true);
+    }
+}
+
 int SheetBrowserPDFPrivate::qDealWithShortKey(const QString &sKey)
 {
-    QList<QString> KeyMsgList = {KeyStr::g_ctrl_l, KeyStr::g_ctrl_i, KeyStr::g_ctrl_c};
+    QList<QString> KeyMsgList = {KeyStr::g_ctrl_l, KeyStr::g_ctrl_i, KeyStr::g_ctrl_c, KeyStr::g_ctrl_b};
 
     if (KeyMsgList.contains(sKey)) {
         OnShortCutKey(sKey);

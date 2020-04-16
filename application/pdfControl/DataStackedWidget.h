@@ -46,6 +46,7 @@ public:
     void handlePage(int page);
 
     void handleBookMark(int page, int state);
+    int qDealWithShortKey(const QString &);
 
 signals:
     void sigAnntationMsg(const int &, const QString &);

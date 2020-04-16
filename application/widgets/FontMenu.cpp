@@ -216,6 +216,9 @@ QAction *FontMenu::createAction(const QString &objName, const char *member, bool
  */
 void FontMenu::setAppSetFiteHAndW()
 {
+    if (m_sheet.isNull())
+        return;
+
     int iValue = Default_State;
 
     if (m_bFiteW) {
