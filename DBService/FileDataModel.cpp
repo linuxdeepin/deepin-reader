@@ -21,28 +21,28 @@
 
 #include <QDebug>
 
-void FileDataModel::qSetData(const int &iKey, const double &iValue)
+void FileDataModel::setOper(const int &iKey, const QVariant &iValue)
 {
     if (iKey == Thumbnail) {
-        setThumbnail(iValue);
+        setThumbnail(iValue.toInt());
     } else if (iKey == DoubleShow) {
-        setDoubleShow(iValue);
+        setDoubleShow(iValue.toInt());
     } else if (iKey == Fit) {
-        setFit(iValue);
+        setFit(iValue.toInt());
     } else if (iKey == Rotate) {
-        setRotate(iValue);
+        setRotate(iValue.toInt());
     } else if (iKey == Scale) {
-        setScale(iValue);
+        setScale(iValue.toDouble());
     } else if (iKey == LeftIndex) {
-        setLeftIndex(iValue);
+        setLeftIndex(iValue.toInt());
     } else if (iKey == CurPage) {
-        setCurPage(iValue);
+        setCurPage(iValue.toInt());
     } else if (iKey == HandShape) {
-        setCurMouse(iValue);
+        setCurMouse(iValue.toInt());
     }
 }
 
-double FileDataModel::qGetData(const int &iKey) const
+QVariant FileDataModel::getOper(const int &iKey) const
 {
     if (iKey == Thumbnail) {
         return getThumbnail();
@@ -71,22 +71,22 @@ double FileDataModel::qGetData(const int &iKey) const
     return -1;
 }
 
-bool FileDataModel::getThumbnail() const
+int FileDataModel::getThumbnail() const
 {
     return bThumbnail;
 }
 
-void FileDataModel::setThumbnail(bool value)
+void FileDataModel::setThumbnail(int value)
 {
     bThumbnail = value;
 }
 
-bool FileDataModel::getDoubleShow() const
+int FileDataModel::getDoubleShow() const
 {
     return bDoubleShow;
 }
 
-void FileDataModel::setDoubleShow(bool value)
+void FileDataModel::setDoubleShow(int value)
 {
     bDoubleShow = value;
 }

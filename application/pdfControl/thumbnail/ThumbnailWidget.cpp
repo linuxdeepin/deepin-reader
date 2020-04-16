@@ -371,8 +371,7 @@ void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
         m_nValuePreIndex = 0;
         fillContantToList();
 
-        FileDataModel fdm = m_sheet->qGetFileData();
-        m_nRotate = fdm.qGetData(Rotate);
+        m_nRotate = m_sheet->getOper(Rotate).toInt();
 
         if (m_nRotate < 0) {
             m_nRotate = qAbs(m_nRotate);

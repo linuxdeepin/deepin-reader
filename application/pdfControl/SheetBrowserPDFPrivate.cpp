@@ -52,6 +52,11 @@ void SheetBrowserPDFPrivate::hidetipwidget()
     }
 }
 
+bool SheetBrowserPDFPrivate::hasOpened()
+{
+    return m_hasOpened;
+}
+
 void SheetBrowserPDFPrivate::slotDealWithMenu(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_NOTE_REMOVE_HIGHLIGHT || msgType == MSG_NOTE_UPDATE_HIGHLIGHT_COLOR || msgType == MSG_NOTE_ADD_HIGHLIGHT_COLOR) {
@@ -282,14 +287,13 @@ void SheetBrowserPDFPrivate::FindOperation(const int &iType, const QString &strF
     }
 }
 
-int SheetBrowserPDFPrivate::handleResize(const QSize &size)
+double SheetBrowserPDFPrivate::handleResize(const QSize &size)
 {
     Q_Q(SheetBrowserPDF);
 
-    int scale = -1;
+    double scale = q->getOper(Scale).toDouble();
 
     if (!m_pProxyData->IsFirstShow() && m_pProxyData->getIsFileOpenOk()) {
-
         m_pDocViewProxy->setWidth(size.width());
         m_pDocViewProxy->setHeight(size.height());
         scale = m_pDocViewProxy->onSetWidgetAdapt();
@@ -467,7 +471,7 @@ void SheetBrowserPDFPrivate::onPageChanged(int page)
 {
     Q_Q(SheetBrowserPDF);
 
-    q->setData(CurPage, QString::number(page));
+    q->setOper(CurPage, page);
 
     emit q->sigPageChanged(page);
 }
@@ -475,6 +479,9 @@ void SheetBrowserPDFPrivate::onPageChanged(int page)
 void SheetBrowserPDFPrivate::onFileOpenResult(bool openresult)
 {
     Q_Q(SheetBrowserPDF);
+
+    m_hasOpened = openresult;
+
     if (openresult) {
         dApp->m_pDBService->qSelectData(m_pProxyData->getPath(), DB_BOOKMARK);
 
@@ -509,28 +516,30 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
 
         FileDataModel fdm = dApp->m_pDBService->getHistroyData(sPath);
 
-        m_pProxyFileDataModel->qSetFileData(fdm);
+        m_pProxyFileDataModel->setModel(fdm);
 
-        int nAdapteState = static_cast<int>(fdm.qGetData(Fit));
+        double scale  = fdm.getOper(Scale).toDouble();        // 缩放
+        m_pDocViewProxy->setScale(scale);
+
+        int nAdapteState = fdm.getOper(Fit).toInt();
         m_pDocViewProxy->setAdapteState(nAdapteState);
 
-        int curPage = static_cast<int>(fdm.qGetData(CurPage));
-        int iscale  = static_cast<int>(fdm.qGetData(Scale));         // 缩放
-        m_pDocViewProxy->setScale(iscale);
-
-        int doubPage = static_cast<int>(fdm.qGetData(DoubleShow));   // 是否是双页
+        int doubPage = fdm.getOper(DoubleShow).toInt();   // 是否是双页
         m_pDocViewProxy->setDoubleShow(doubPage);
 
-        int rotate = static_cast<int>(fdm.qGetData(Rotate));         // 文档旋转角度(0,1,2,3,4)
+        int rotate = fdm.getOper(Rotate).toInt();         // 文档旋转角度(0,1,2,3,4)
         m_pDocViewProxy->setRotateType(rotate);
 
-        iscale = (iscale > 500 ? 500 : iscale) <= 0 ? 100 : iscale;
-        double scale = iscale / 100.0;
+        scale = (scale > 500 ? 500 : scale) <= 0 ? 100 : scale;
+        double scaleRatio = scale / 100.0;
+
         RotateType_EM rotatetype = static_cast<RotateType_EM>(rotate);
         ViewMode_EM viewmode = static_cast<ViewMode_EM>(doubPage);
 
         m_pProxyData->setPath(sPath);
-        bool rl = m_pProxy->openFile(nCurDocType, sPath, static_cast<unsigned int>(curPage), rotatetype, scale, viewmode);
+        int curPage = fdm.getOper(CurPage).toInt();
+        bool rl = m_pProxy->openFile(nCurDocType, sPath, static_cast<unsigned int>(curPage), rotatetype, scaleRatio, viewmode);
+
         if (rl) {
             m_pProxy->setViewFocus();
         }

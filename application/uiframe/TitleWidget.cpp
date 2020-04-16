@@ -86,22 +86,6 @@ void TitleWidget::OnShortCut_CtrlM()
     m_curSheet->setSidebarVisible(true);
 }
 
-void TitleWidget::slotOpenFileOk(const QString &sPath)
-{
-    if (m_curSheet.isNull())
-        return;
-
-    SetBtnDisable(false);
-
-    FileDataModel fdm = m_curSheet->qGetFileData();
-
-    int nState = fdm.qGetData(Thumbnail);
-
-    bool showLeft = nState == 1 ? true : false;
-
-    m_pThumbnailBtn->setChecked(showLeft);
-}
-
 void TitleWidget::initWidget()
 {
     initBtns();
@@ -134,16 +118,13 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
 
     if (nullptr == m_curSheet || m_curSheet->type() == DocType_NULL) {
         SetBtnDisable(true);
-
         return;
 
     } else if (DocType_PDF == m_curSheet->type()) {
 
         SetBtnDisable(false);
 
-        FileDataModel fdm = m_curSheet->qGetFileData();
-
-        int nState = fdm.qGetData(Thumbnail);
+        int nState = m_curSheet->getOper(Thumbnail).toInt();
 
         bool showLeft = nState == 1 ? true : false;
 
@@ -160,12 +141,6 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
         else
             setDefaultShape();
     }
-}
-
-//  文档切换了
-void TitleWidget::OnFileShowChange(const QString &sPath)
-{
-    slotOpenFileOk(sPath);
 }
 
 //  缩略图

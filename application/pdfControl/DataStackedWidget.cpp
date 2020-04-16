@@ -113,6 +113,7 @@ void DataStackedWidget::slotAdaptWindowSize(const double &scale)
     }
 
     QWidget *widget = this->currentWidget();
+
     if (widget == m_pThWidget) {
         if (m_pThWidget) {
             m_pThWidget->adaptWindowSize(scale);
@@ -131,12 +132,11 @@ void DataStackedWidget::slotAdaptWindowSize(const double &scale)
         }
     }
 
-    if (dApp) {
-        if (dApp->openFileOk() && (m_sheet != nullptr)) {
-//            dApp->setFlush(true);
-            m_sheet->setFit(1);
-        }
-    }
+//    if (dApp) {
+//        if (dApp->openFileOk() && (m_sheet != nullptr)) {
+//            m_sheet->setFit(1);
+//        }
+//    }
 }
 
 void DataStackedWidget::slotUpdateThumbnail(const int &page)
@@ -234,7 +234,7 @@ void DataStackedWidget::DeleteItemByKey()
         if (m_pBookMarkWidget) {
             m_pBookMarkWidget->DeleteItemByKey();
         }
-    } else if  (widget == m_pNotesWidget){
+    } else if (widget == m_pNotesWidget) {
         if (m_pNotesWidget) {
             m_pNotesWidget->DeleteItemByKey();
         }
@@ -243,8 +243,7 @@ void DataStackedWidget::DeleteItemByKey()
 
 void DataStackedWidget::handleOpenSuccess()
 {
-    FileDataModel fdm = m_sheet->qGetFileData();
-    int nId = static_cast<int>(fdm.qGetData(LeftIndex));
+    int nId = m_sheet->getOper(LeftIndex).toInt();
     if (nId == -1) {
         nId = 0;
     }

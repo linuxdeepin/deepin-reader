@@ -23,7 +23,7 @@
 #include "docview/docummentproxy.h"
 
 FontMenu::FontMenu(DWidget *parent):
-    CustomMenu( parent)
+    CustomMenu(parent)
 {
     initActions();
 
@@ -71,10 +71,8 @@ void FontMenu::readCurDocParam(DocSheet *sheet)
     if (m_sheet.isNull())
         return;
 
-    FileDataModel fdm = m_sheet->qGetFileData();
-
     //单双页
-    int value = fdm.qGetData(DoubleShow);
+    int value = m_sheet->getOper(DoubleShow).toInt();
 
     m_bDoubPage = (value == 1) ? true : false;
     if (m_pTwoPageAction) {
@@ -82,7 +80,7 @@ void FontMenu::readCurDocParam(DocSheet *sheet)
     }
 
     //自适应宽/高
-    int adaptat = fdm.qGetData(Fit);
+    int adaptat = m_sheet->getOper(Fit).toInt();
 
     if (adaptat == ADAPTE_WIDGET_State) {
         m_bFiteW = true;
@@ -110,7 +108,7 @@ void FontMenu::slotTwoPage()
 
     m_bDoubPage = !m_bDoubPage;
 
-    m_sheet->setData(DoubleShow, QString::number(m_bDoubPage));
+    m_sheet->setData(DoubleShow, (int)m_bDoubPage);
     m_sheet->setDoubleShow(m_bDoubPage);
 }
 

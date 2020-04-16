@@ -360,18 +360,18 @@ bool DocSheet::saveAsData(QString filePath)
     return false;
 }
 
-void DocSheet::setData(const int &nType, const QString &sValue)
+void DocSheet::setData(const int &type, const QVariant &value)
 {
     if (DocType_PDF == m_type)
-        static_cast<SheetBrowserPDF *>(m_browser)->setData(nType, sValue);
+        static_cast<SheetBrowserPDF *>(m_browser)->setOper(type, value);
 }
 
-FileDataModel DocSheet::qGetFileData()
+QVariant DocSheet::getOper(int type)
 {
     if (DocType_PDF == m_type)
-        return static_cast<SheetBrowserPDF *>(m_browser)->qGetFileData();
+        return static_cast<SheetBrowserPDF *>(m_browser)->getOper(type);
 
-    return FileDataModel();
+    return -1;
 }
 
 DocummentProxy *DocSheet::getDocProxy()

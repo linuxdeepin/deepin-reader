@@ -63,8 +63,6 @@ public:
 
     void showNoteWidget(int page, const QString &uuid, const int &type = NOTE_HIGHLIGHT);
 
-    void AddHighLightAnnotation(int page, QString text);
-
 signals:
     void sigFileOpenResult(const QString &, const bool &);
 
@@ -101,18 +99,16 @@ public:
 
     DocummentProxy *GetDocProxy();
 
-    void setData(const int &, const QString &);
+    void setOper(const int &, const QVariant &);
 
-    FileDataModel qGetFileData();
+    QVariant getOper(int type);
 
-    void qSetFileData(const FileDataModel &);
 public slots:
     void onFindNone();
 
 protected:
     void initWidget() override;
 
-    // QWidget interface
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
 

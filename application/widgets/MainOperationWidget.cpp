@@ -112,8 +112,7 @@ void MainOperationWidget::handleOpenSuccess()
             btn->setEnabled(true);
         }
     }
-    FileDataModel fdm = m_sheet->qGetFileData();
-    int nId = static_cast<int>(fdm.qGetData(LeftIndex));
+    int nId = m_sheet->getOper(LeftIndex).toInt();
     if (nId == -1) {
         nId = 0;
     }

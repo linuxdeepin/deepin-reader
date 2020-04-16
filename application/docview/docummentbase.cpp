@@ -743,16 +743,13 @@ bool DocummentBase::pageJump(int pagenum)
 
             QRect rectslideanimationlabel = d->pslideanimationlabel->geometry();
             QRect rectslidelabel = d->pslidelabel->geometry();
-//            qDebug() << "rectslideanimationlabel:" << rectslideanimationlabel << " rectslidelabel:" << rectslidelabel;
             if (d->m_slidepageno > pagenum) {
-//                qDebug() << "pageJump previous pagenum:" << pagenum;
                 d->animationfirst->setStartValue(rectslideanimationlabel);
                 d->animationfirst->setEndValue(QRect(d->m_slidewidget->width(), 10, d->pslideanimationlabel->width(), d->pslideanimationlabel->height()));
 
                 d->animationsecond->setStartValue(QRect(-d->m_slidewidget->width(), 10, d->pslidelabel->width(), d->pslidelabel->height()));
                 d->animationsecond->setEndValue(rectslidelabel);
             } else {
-//                qDebug() << "pageJump next pagenum:" << pagenum;
                 d->animationfirst->setStartValue(rectslideanimationlabel);
                 d->animationfirst->setEndValue(QRect(-d->m_slidewidget->width(), 10, d->pslideanimationlabel->width(), d->pslideanimationlabel->height()));
 
@@ -774,28 +771,22 @@ bool DocummentBase::pageJump(int pagenum)
     } else {
         DScrollBar *scrollBar_X = horizontalScrollBar();
         DScrollBar *scrollBar_Y = verticalScrollBar();
-        qDebug() << "-------pagenum:" << pagenum << " x():" << scrollBar_X->value() << " y():" << scrollBar_Y->value();
         switch (d->m_viewmode) {
         case ViewMode_SinglePage:
-//            qDebug() << "-------pagenum:" << pagenum << " x():" << d->m_widgets.at(pagenum)->x() << " y():" << d->m_widgets.at(pagenum)->y();
             if (scrollBar_X)
                 scrollBar_X->setValue(d->m_widgetrects.at(pagenum).x());
             if (scrollBar_Y)
                 scrollBar_Y->setValue(d->m_widgetrects.at(pagenum).y());
-            qDebug() << "-------scrollBar_X setValue:" << d->m_widgetrects.at(pagenum).x() << " scrollBar_Y setValue:" << d->m_widgetrects.at(pagenum).y();
             break;
         case ViewMode_FacingPage:
             if (scrollBar_X)
                 scrollBar_X->setValue(d->m_widgetrects.at(pagenum / 2).x() + d->m_pages.at(pagenum)->x());
             if (scrollBar_Y)
                 scrollBar_Y->setValue(d->m_widgetrects.at(pagenum / 2).y());
-            qDebug() << "-------scrollBar_X setValue:" << d->m_widgetrects.at(pagenum / 2).x() + d->m_pages.at(pagenum)->x() << " scrollBar_Y setValue:" << d->m_widgetrects.at(pagenum / 2).y();
             break;
         default:
             break;
         }
-//        d->m_currentpageno = pagenum;
-//        emit signal_pageChange(d->m_currentpageno);
 
         if (d->m_currentpageno != pagenum) {
             d->m_currentpageno = pagenum;
@@ -808,16 +799,19 @@ bool DocummentBase::pageJump(int pagenum)
 void DocummentBase::setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode)
 {
     Q_D(DocummentBase);
+
     double dscale = scale;
     if (viewmode != d->m_viewmode && (scale - d->m_scale < EPSINON && scale - d->m_scale > -EPSINON))
         dscale = 0;
     d->m_viewmode = viewmode;
+
     scaleAndShow(dscale, rotate);
 }
 
 void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
 {
     Q_D(DocummentBase);
+
     int currpageno = d->m_currentpageno;
     if (d->m_pages.size() < 1) {
         return;
@@ -837,7 +831,9 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     for (int i = 0; i < d->m_pages.size(); i++) {
         d->m_pages.at(i)->setScaleAndRotate(d->m_scale, d->m_rotate);
     }
+
     setViewModeAndShow(d->m_viewmode);
+
     d->m_currentpageno = currpageno;
 }
 
@@ -1331,6 +1327,7 @@ bool DocummentBase::loadPages()
 double DocummentBase::adaptWidthAndShow(double width)
 {
     Q_D(DocummentBase);
+
     if (!bDocummentExist() && d->m_pages.size() > 0)
         return -1;
     if (width < EPSINON) {
@@ -1342,25 +1339,30 @@ double DocummentBase::adaptWidthAndShow(double width)
     ViewMode_EM docviewmode = d->m_viewmode;
     width = width - d->m_vboxLayout->margin() * 2 - d->m_widgets.at(0)->layout()->margin() * 2 - d->m_pages.at(0)->margin() * 2 - 50;
     double scale = 1;
+
     if (ViewMode_FacingPage == docviewmode) {
         width -= d->m_widgets.at(0)->layout()->spacing();
         scale = width / 2 / imageoriginalwidth;
         if (RotateType_90 == docrotatetype || RotateType_270 == docrotatetype)
             scale = width / 2 / imageoriginalheight;
+
     } else {
         scale = width / imageoriginalwidth;
         if (RotateType_90 == docrotatetype || RotateType_270 == docrotatetype)
             scale = width / imageoriginalheight;
     }
+
+    qDebug() << scale;
     scaleAndShow(scale, RotateType_Normal);
     return scale;
 }
 double DocummentBase::adaptHeightAndShow(double height)
 {
     Q_D(DocummentBase);
-//    qDebug() << "adaptHeightAndShow height:" << height;
+
     if (!bDocummentExist() && d->m_pages.size() > 0)
         return -1;
+
     if (height < EPSINON) {
         return -1;
     }
@@ -1368,12 +1370,18 @@ double DocummentBase::adaptHeightAndShow(double height)
     double imageoriginalwidth = d->m_pages.at(0)->getOriginalImageWidth();
     RotateType_EM docrotatetype = d->m_rotate;
     height = height - d->m_vboxLayout->margin() - d->m_widgets.at(0)->layout()->margin() - d->m_widgets.at(0)->layout()->spacing() - d->m_pages.at(0)->margin();
+
     double scale = 1;
+
+    qDebug() << scale;
     scale = height / imageoriginalheight;
+
     if (RotateType_90 == docrotatetype || RotateType_270 == docrotatetype)
         scale = height / imageoriginalwidth;
-//    qDebug() << "adaptHeightAndShow scale:" << scale;
+
+    qDebug() << scale;
     scaleAndShow(scale, RotateType_Normal);
+
     return scale;
 }
 
@@ -1539,7 +1547,6 @@ void DocummentBase::slot_docummentLoaded(bool result)
 {
     Q_D(DocummentBase);
     if (!result) {
-//        emit signal_openResult(false);
         if (d->threadloaddata.isRunning()) {
             d->threadloaddata.requestInterruption();
             d->threadloaddata.wait();
@@ -1570,8 +1577,6 @@ void DocummentBase::slot_docummentLoaded(bool result)
     }
     initConnect();
     scaleAndShow(0, d->m_rotate);
-
-//    loadPages();
 }
 
 int DocummentBase::getPageSNum()
@@ -1682,6 +1687,7 @@ bool DocummentBase::openFile(QString filepath, unsigned int ipage, RotateType_EM
     d->m_viewmode = viewmode;
     d->m_currentpageno = ipage;
     d->donotneedreloaddoc = true;
+
     if (!loadDocumment(filepath))
         return false;
     return true;

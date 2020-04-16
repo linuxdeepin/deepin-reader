@@ -40,8 +40,6 @@ public slots:
 private slots:
     void slotUpdateTheme();
 
-    void slotOpenFileOk(const QString &);
-
     void SlotSetCurrentTool(const int &);
 
     void slotFindOperation(const int &);
@@ -55,8 +53,6 @@ private slots:
     void on_searchBtn_clicked();
 
 private:
-    void OnFileShowChange(const QString &);
-
     void initBtns();
 
     void __InitHandel();

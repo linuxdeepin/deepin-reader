@@ -20,7 +20,7 @@
 #define FILEDATAMODEL_H
 
 #include <QString>
-
+#include <QVariant>
 
 enum E_FDM_MSG {
     Path = 0,
@@ -43,15 +43,15 @@ enum E_FDM_MSG {
 class FileDataModel
 {
 public:
-    void qSetData(const int &iKey, const double &iValue);
-    double qGetData(const int &iKey) const;
+    void     setOper(const int &iKey, const QVariant &value);
+    QVariant getOper(const int &iKey) const;
 
 public:
-    bool getThumbnail() const;
-    void setThumbnail(bool value);
+    int  getThumbnail() const;
+    void setThumbnail(int value);
 
-    bool getDoubleShow() const;
-    void setDoubleShow(bool value);
+    int  getDoubleShow() const;
+    void setDoubleShow(int value);
 
     int getFit() const;
     void setFit(int value);
@@ -70,15 +70,16 @@ public:
 
     int getCurMouse() const;
     void setCurMouse(int value);
+
 private:
-    bool        bThumbnail = false;
-    bool        bDoubleShow = false;
-    int         nFit = false;
-    int         nRotate = 0;
-    double      nScale = 0;
-    int         nLeftIndex = 0;
-    int         nCurPage = 0;
-    int         nCurMouse = 0;
+    int        bThumbnail = 0;
+    int        bDoubleShow = 0;
+    int        nFit = 0;
+    int        nRotate = 0;
+    double     nScale = 0;
+    int        nLeftIndex = 0;
+    int        nCurPage = 0;
+    int        nCurMouse = 0;
 };
 
 #endif // FILEDATA_H

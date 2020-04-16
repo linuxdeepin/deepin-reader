@@ -191,25 +191,22 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
     if (nullptr == sheet)
         return;
 
-    //缺少提示是否保存文档,在文档被修改的之后
-    if (sheet->qGetFileChange()) {
-        SaveDialog sd;
+    sheet->saveOper();
 
-        int nRes = sd.showDialog();
-
-        if (nRes == 2) {
-            sheet->saveData();
-        }
+    if (sheet->qGetFileChange() && 2 == SaveDialog().showDialog()) {
+        sheet->saveData();
     }
 
     m_pStackedLayout->removeWidget(sheet);
-    //clsoe index TabBar
+
     if (m_pTabBar) {
         m_pTabBar->removeSheet(sheet);
     }
 
     delete sheet;
+
     sheet = nullptr;
+
     emit sigSheetCountChanged(m_pStackedLayout->count());
 
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
@@ -424,22 +421,6 @@ int CentralDocPage::getCurFileChanged()
         return 0;
 
     return GetFileChange(qGetCurPath());
-}
-
-FileDataModel CentralDocPage::qGetFileData(const QString &sPath)
-{
-    QString sTempPath = sPath;
-    if (sTempPath == "") {
-        sTempPath = qGetCurPath();
-    }
-    auto splitterList = this->findChildren<DocSheet *>();
-    foreach (auto sP, splitterList) {
-        QString sPPath = sP->filePath();
-        if (sPPath == sTempPath) {
-            return sP->qGetFileData();
-        }
-    }
-    return FileDataModel();
 }
 
 DocummentProxy *CentralDocPage::getCurFileAndProxy(const QString &sPath)

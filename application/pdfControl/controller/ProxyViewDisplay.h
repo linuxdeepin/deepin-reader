@@ -39,14 +39,14 @@ public:
     int setViewRotateRight();  //右旋转
 
 public:
-    int onSetWidgetAdapt();
+    double onSetWidgetAdapt();
     void OnSetViewChange(const QString &msgContent);
     void setScaleRotateViewModeAndShow();
 
     void setAdapteState(const int &nAdapteState);
     void setDoubleShow(const int &nDoubleShow);
     void setRotateType(const int &rotateType);
-    void setScale(const int &nScale);
+    void setScale(const double &nScale);
     int setFit(int fit);     //没更新是-1
 
     void setWidth(const int &nWidth);
@@ -63,7 +63,6 @@ private:
     int                 m_nDoubleShow = false;
     int                 m_rotateType = 0;            // 旋转类型(后台所需旋转类型)
     double              m_nScale = 0;
-
     int                 m_nWidth = 0;
     int                 m_nHeight = 0;
 };

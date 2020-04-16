@@ -96,8 +96,6 @@ public:
 
     int GetFileChange(const QString &sPath);
 
-    FileDataModel qGetFileData(const QString &sPath = "") ;
-
     DocummentProxy *getCurFileAndProxy(const QString &sPath = "");
 
     DocSheet *getCurSheet();

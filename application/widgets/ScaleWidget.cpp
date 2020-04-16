@@ -77,7 +77,7 @@ void ScaleWidget::initWidget()
 
 void ScaleWidget::slotPrevScale()
 {
-    if(m_sheet.isNull())
+    if (m_sheet.isNull())
         return;
 
     QString cuttext = m_scaleComboBox->currentText();
@@ -103,7 +103,7 @@ void ScaleWidget::slotPrevScale()
 
 void ScaleWidget::slotNextScale()
 {
-    if(m_sheet.isNull())
+    if (m_sheet.isNull())
         return;
 
     QString inputtext = m_scaleComboBox->currentText();
@@ -128,7 +128,7 @@ void ScaleWidget::slotNextScale()
 
 void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
 {
-    if(m_sheet.isNull())
+    if (m_sheet.isNull())
         return;
 
     int nIndex = sText.lastIndexOf("%");
@@ -144,16 +144,15 @@ void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
     double dValue = sTempData.toDouble(&bOk);
 
     if (bOk && dValue >= 10.0 && dValue <= m_nMaxScale) {
-        m_sheet->setScale(dValue);
         m_sheet->setFit(NO_ADAPTE_State);
-        //m_sheet->setData(Fit, QString::number(NO_ADAPTE_State));
+        m_sheet->setScale(dValue);
     }
 }
 
 //  combobox 敲了回车
 void ScaleWidget::SlotReturnPressed()
 {
-    if(m_sheet.isNull())
+    if (m_sheet.isNull())
         return;
 
     QString sTempText = m_scaleComboBox->currentText();
@@ -182,7 +181,7 @@ void ScaleWidget::SlotReturnPressed()
         }
     }
 
-        m_sheet->setFit(NO_ADAPTE_State);
+    m_sheet->setFit(NO_ADAPTE_State);
 }
 
 void ScaleWidget::setSheet(DocSheet *sheet)
@@ -213,9 +212,7 @@ void ScaleWidget::setSheet(DocSheet *sheet)
             }
         }
 
-        FileDataModel fdm = sheet->qGetFileData();
-
-        double nScale = fdm.qGetData(Scale);
+        double nScale = m_sheet->getOper(Scale).toDouble();
 
         if (static_cast<int>(nScale) <= 0) {
             nScale = 100.0;
@@ -228,16 +225,9 @@ void ScaleWidget::setSheet(DocSheet *sheet)
             }
         }
 
-        dataList.indexOf(static_cast<int>(nScale));
+        QString sCurText = m_sheet->getOper(Scale).toString() + "%";
 
-        m_scaleComboBox->setCurrentIndex(index);
-
-        if (index == -1) {
-
-            QString sCurText = QString::number(static_cast<int>(nScale)) + "%";
-
-            m_scaleComboBox->setCurrentText(sCurText);
-        }
+        m_scaleComboBox->setCurrentText(sCurText);
 
         m_scaleComboBox->blockSignals(false);
     }

@@ -38,7 +38,7 @@ void SheetBrowserPDF::setRotateLeft()
 {
     Q_D(SheetBrowserPDF);
     int rotate = d->m_pDocViewProxy->setViewRotateLeft();
-    setData(Rotate, QString::number(rotate));
+    setOper(Rotate, rotate);
     emit sigRotateChanged(rotate);
 }
 
@@ -46,7 +46,7 @@ void SheetBrowserPDF::setRotateRight()
 {
     Q_D(SheetBrowserPDF);
     int rotate = d->m_pDocViewProxy->setViewRotateRight();
-    setData(Rotate, QString::number(rotate));
+    setOper(Rotate, rotate);
     emit sigRotateChanged(rotate);
 }
 
@@ -75,7 +75,6 @@ void SheetBrowserPDF::setMouseDefault()
 {
     Q_D(SheetBrowserPDF);
 
-    qDebug() << "1";
     if (!d->m_pProxy)
         return;
 
@@ -84,7 +83,7 @@ void SheetBrowserPDF::setMouseDefault()
 
     d->__SetCursor(Qt::ArrowCursor);
 
-    setData(HandShape, "0");
+    setOper(HandShape, 0);
 }
 
 void SheetBrowserPDF::setMouseHand()
@@ -99,12 +98,12 @@ void SheetBrowserPDF::setMouseHand()
 
     d->__SetCursor(Qt::OpenHandCursor);
 
-    setData(HandShape, "1");
+    setOper(HandShape, 1);
 }
 
 bool SheetBrowserPDF::isMouseHand()
 {
-    return 1 == qGetFileData().getCurMouse();
+    return 1 == getOper(HandShape).toInt();
 }
 
 bool SheetBrowserPDF::isDoubleShow()
@@ -118,7 +117,8 @@ void SheetBrowserPDF::setScale(double scale)
 {
     Q_D(SheetBrowserPDF);
 
-    setData(Scale, QString::number(scale));
+    qDebug() << scale;
+    setOper(Scale, scale);
 
     d->m_pDocViewProxy->setScale(scale);
 
@@ -130,15 +130,15 @@ bool SheetBrowserPDF::setFit(int fit)
 {
     Q_D(SheetBrowserPDF);
 
-    if (d->m_pProxyFileDataModel->qGetFileData().getFit() == fit)
+    if (d->m_pProxyFileDataModel->getOper(Fit) == fit)
         return false;
 
-    setData(Fit, QString::number(fit));
+    setOper(Fit, fit);
 
-    int scale = d->m_pDocViewProxy->setFit(fit);
+    double scale = d->m_pDocViewProxy->setFit(fit);
 
     if (-1 != scale)
-        setData(Scale, QString::number(scale));
+        setOper(Scale, scale);
 
     emit sigFileChanged();
 
@@ -161,11 +161,6 @@ void SheetBrowserPDF::showNoteWidget(int page, const QString &uuid, const int &t
     d->m_pProxy->getAnnotationText(uuid, text, page);
 
     d->showNoteViewWidget(QString::number(page), uuid, text, type);
-}
-
-void SheetBrowserPDF::AddHighLightAnnotation(int page, QString text)
-{
-
 }
 
 void SheetBrowserPDF::initWidget()
@@ -198,9 +193,11 @@ void SheetBrowserPDF::resizeEvent(QResizeEvent *event)
 {
     Q_D(SheetBrowserPDF);
 
-    int scale = d->handleResize(event->size());
-
-    setData(Scale, QString::number(scale));
+    if (d->hasOpened()) {
+        double scale = d->handleResize(event->size());
+        qDebug() << scale;
+        setOper(Scale, scale);
+    }
 
     CustomWidget::resizeEvent(event);
 }
@@ -315,22 +312,16 @@ DocummentProxy *SheetBrowserPDF::GetDocProxy()
     return d->m_pProxy;
 }
 
-void SheetBrowserPDF::setData(const int &nType, const QString &sValue)
+void SheetBrowserPDF::setOper(const int &nType, const QVariant &sValue)
 {
     Q_D(SheetBrowserPDF);
-    return d->m_pProxyFileDataModel->setData(nType, sValue);
+    d->m_pProxyFileDataModel->setOper(nType, sValue);
 }
 
-FileDataModel SheetBrowserPDF::qGetFileData()
+QVariant SheetBrowserPDF::getOper(int type)
 {
     Q_D(SheetBrowserPDF);
-    return d->m_pProxyFileDataModel->qGetFileData();
-}
-
-void SheetBrowserPDF::qSetFileData(const FileDataModel &fdm)
-{
-    Q_D(SheetBrowserPDF);
-    d->m_pProxyFileDataModel->qSetFileData(fdm);
+    return d->m_pProxyFileDataModel->getOper(type);
 }
 
 void SheetBrowserPDF::onFindNone()

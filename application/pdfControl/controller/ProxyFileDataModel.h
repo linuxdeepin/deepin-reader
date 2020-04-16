@@ -32,23 +32,17 @@ public:
     explicit ProxyFileDataModel(QObject *parent = nullptr);
 
 public:
-    void setData(const int &, const QString &);
+    void    setOper(const int &, const QVariant &);
+    QVariant  getOper(int type);
 
     void saveOper();
     void saveData();
     void saveAsData(const QString &originPath, const QString &targetPath);
 
-    FileDataModel qGetFileData() const;
-    void qSetFileData(const FileDataModel &);
-private:
-    void setThumbnailState(const QString &);
-    void SetLeftWidgetIndex(const QString &sValue);
-    void OnSetViewScale(const QString &);
-    void OnSetViewRotate(const QString &);
-    void OnSetCurPage(const QString &sValue);
+    void setModel(FileDataModel model);
 
 private:
-    FileDataModel           m_pFileDataModel;        //  已打开的文档列表
+    FileDataModel           m_fileDataModel;        //  已打开的文档列表
     SheetBrowserPDFPrivate *_fvwParent = nullptr;
     friend class SheetBrowserPDFPrivate;
 };

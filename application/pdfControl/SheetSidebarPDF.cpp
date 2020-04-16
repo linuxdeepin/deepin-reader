@@ -43,11 +43,7 @@ void SheetSidebarPDF::setBookMark(int page, int state)
 
 void SheetSidebarPDF::handleOpenSuccess()
 {
-    FileDataModel fdm = m_sheet->qGetFileData();
-    int nShow = static_cast<int>(fdm.qGetData(Thumbnail));
-    bool showLeft = nShow == 1 ? true : false;
-    onSetWidgetVisible(showLeft);
-
+    onSetWidgetVisible(m_sheet->getOper(Thumbnail).toInt());
     m_pStackedWidget->handleOpenSuccess();
     m_pMainOperationWidget->handleOpenSuccess();
 }
@@ -70,7 +66,7 @@ void SheetSidebarPDF::initWidget()
     this->setLayout(pVBoxLayout);
 
     m_pStackedWidget = new DataStackedWidget(m_sheet, this);
-    connect(m_pStackedWidget,SIGNAL(sigFindNone()),this,SIGNAL(sigFindNone()));
+    connect(m_pStackedWidget, SIGNAL(sigFindNone()), this, SIGNAL(sigFindNone()));
     connect(this, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pStackedWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)));
     connect(m_pStackedWidget, SIGNAL(sigDeleteAnntation(const int &, const QString &)), this, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
     pVBoxLayout->addWidget(m_pStackedWidget);

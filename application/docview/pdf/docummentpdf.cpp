@@ -51,6 +51,7 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
         emit signal_docummentLoaded(false);
         return;
     }
+
     document->setRenderHint(Poppler::Document::TextAntialiasing, true);
     document->setRenderHint(Poppler::Document::Antialiasing, true);
     document->setRenderHint(Poppler::Document::ThinLineSolid, true);
@@ -414,7 +415,6 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
 
 void DocummentPDF::clearSearch()
 {
-//    qDebug() << "DocummentPDF::clearSearch";
     Q_D(DocummentPDF);
     d->m_searchTask->cancel();
     d->m_searchTask->wait();
@@ -466,17 +466,14 @@ void DocummentPDF::title(QString &title)
 }
 void DocummentPDF::setAnnotationText(int ipage, const QString &struuid, const QString &strtext)
 {
-//    qDebug() << "setAnnotationText********************";
     Q_D(DocummentPDF);
     if (ipage >= 0 && ipage < d_ptr->m_pages.size()) {
         Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(ipage))->GetPage();
         QList<Poppler::Annotation *> plistannote = page->annotations();
         foreach (Poppler::Annotation *annote, plistannote) {
             QString uniquename = annote->uniqueName();
-            //qDebug() << "setAnnotationText--" << uniquename << struuid;
             if (!uniquename.isEmpty() && uniquename.indexOf(struuid) >= 0) {
                 annote->setContents(strtext);
-                //qDebug() << "setAnnotationText++" << annote->contents();
             }
         }
         qDeleteAll(plistannote);
@@ -493,7 +490,6 @@ void DocummentPDF::getAnnotationText(const QString &struuid, QString &strtext, i
             QString uniquename = annote->uniqueName();
             if (!uniquename.isEmpty() && uniquename.indexOf(struuid) >= 0 && !struuid.isEmpty()) {
                 strtext = annote->contents();
-                //qDebug() << QString("getAnnotationText=%1=%2=%3=%4").arg(uniquename).arg(struuid).arg(ipage).arg(strtext);
                 qDeleteAll(plistannote);
                 return;
             }

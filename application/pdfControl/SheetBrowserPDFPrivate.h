@@ -33,9 +33,12 @@ public:
 public:
     void hidetipwidget();
 
+    bool hasOpened();
 private slots:
     void slotDealWithMenu(const int &, const QString &);
+
     void SlotNoteViewMsg(const int &, const QString &);
+
     void onAddHighLightAnnotation(const QString &msgContent);
 
     void SlotDeleteAnntation(const int &, const QString &);
@@ -53,7 +56,9 @@ private:
 
 private:
     void mouseMoveEvent(QMouseEvent *event);
+
     void mousePressEvent(QMouseEvent *event);
+
     void mouseReleaseEvent(QMouseEvent *event);
 
 private:
@@ -66,7 +71,7 @@ private:
     void DocFile_ctrl_i();
     void DocFile_ctrl_c();
     void FindOperation(const int &iType, const QString &strFind);
-    int  handleResize(const QSize &size);
+    double handleResize(const QSize &size);
 
 private:
     void initConnections();
@@ -79,6 +84,7 @@ private:
     void __SetCursor(const QCursor &cursor);
     void OpenFilePath(const QString &sPath);
 private:
+    bool m_hasOpened = false;
     NoteViewWidget          *m_pNoteViewWidget = nullptr;   //  注释内容显示框
     NoteTipWidget           *m_pTipWidget = nullptr;        //  注释提示框
     TextOperationMenu       *m_operatemenu = nullptr;

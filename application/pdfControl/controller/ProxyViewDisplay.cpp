@@ -17,19 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ProxyViewDisplay.h"
-
-#include <QJsonObject>
-#include <QJsonDocument>
-
 #include "pdfControl/SheetBrowserPDFPrivate.h"
-
 #include "application.h"
 #include "ModuleHeader.h"
-
-
 #include "docview/docummentproxy.h"
-
-
 
 ProxyViewDisplay::ProxyViewDisplay(QObject *parent) : QObject(parent)
 {
@@ -67,12 +58,11 @@ int ProxyViewDisplay::setViewRotateRight()
 }
 
 //  设置　窗口　自适应　宽＼高　度
-int ProxyViewDisplay::onSetWidgetAdapt()
+double ProxyViewDisplay::onSetWidgetAdapt()
 {
-    if (m_nAdapteState != Default_State) {
-
+    if (m_nAdapteState != NO_ADAPTE_State) {
         if (!fvmPrivate->m_pProxy)
-            return -1;
+            return m_nScale;
 
         double dScale = 0.0;
         if (m_nAdapteState == ADAPTE_WIDGET_State) {
@@ -84,7 +74,7 @@ int ProxyViewDisplay::onSetWidgetAdapt()
         }
     }
 
-    return -1;
+    return m_nScale;
 }
 
 void ProxyViewDisplay::OnSetViewChange(const QString &msgContent)
@@ -117,7 +107,7 @@ void ProxyViewDisplay::setWidth(const int &nWidth)
     m_nWidth = nWidth;
 }
 
-void ProxyViewDisplay::setScale(const int &nScale)
+void ProxyViewDisplay::setScale(const double &nScale)
 {
     m_nScale = nScale;
 }

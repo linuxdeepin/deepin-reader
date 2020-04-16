@@ -74,9 +74,9 @@ public:
 
     bool saveAsData(QString filePath);
 
-    void setData(const int &, const QString &);
+    void setData(const int &, const QVariant &);
 
-    FileDataModel qGetFileData();
+    QVariant getOper(int type);
 
     DocummentProxy *getDocProxy();      //在文档打开成功之前为空
 

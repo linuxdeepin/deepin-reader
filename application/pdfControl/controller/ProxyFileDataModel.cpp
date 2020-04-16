@@ -28,16 +28,21 @@ ProxyFileDataModel::ProxyFileDataModel(QObject *parent) : QObject(parent)
     _fvwParent = qobject_cast<SheetBrowserPDFPrivate *>(parent);
 }
 
-void ProxyFileDataModel::setData(const int &nType, const QString &sValue)
+void ProxyFileDataModel::setOper(const int &nType, const QVariant &sValue)
 {
-    m_pFileDataModel.qSetData(nType, sValue.toInt());
+    m_fileDataModel.setOper(nType, sValue);
+}
+
+QVariant ProxyFileDataModel::getOper(int type)
+{
+    return m_fileDataModel.getOper(type);
 }
 
 void ProxyFileDataModel::saveOper()
 {
     QString sPath = _fvwParent->m_pProxyData->getPath();
     for (int iLoop = Scale; iLoop < CurPage + 1; iLoop++) {
-        dApp->m_pDBService->setHistroyData(sPath, iLoop, m_pFileDataModel.qGetData(iLoop));
+        dApp->m_pDBService->setHistroyData(sPath, iLoop, m_fileDataModel.getOper(iLoop));
     }
 
     dApp->m_pDBService->qSaveData(sPath, DB_HISTROY);
@@ -54,40 +59,7 @@ void ProxyFileDataModel::saveAsData(const QString &originPath, const QString &ta
     dApp->m_pDBService->saveAsData(originPath, targetPath, DB_BOOKMARK);
 }
 
-void ProxyFileDataModel::setThumbnailState(const QString &sValue)
+void ProxyFileDataModel::setModel(FileDataModel model)
 {
-    m_pFileDataModel.qSetData(Thumbnail, sValue.toInt());
-}
-
-void ProxyFileDataModel::SetLeftWidgetIndex(const QString &sValue)
-{
-    m_pFileDataModel.qSetData(LeftIndex, sValue.toInt());
-}
-
-void ProxyFileDataModel::OnSetViewScale(const QString &sValue)
-{
-    QStringList sList = sValue.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (sList.size() == 2) {
-        m_pFileDataModel.qSetData(Scale, sList.at(0).toDouble());
-    }
-}
-
-void ProxyFileDataModel::OnSetViewRotate(const QString &sValue)
-{
-    m_pFileDataModel.qSetData(Rotate, sValue.toInt());
-}
-
-void ProxyFileDataModel::OnSetCurPage(const QString &sValue)
-{
-    m_pFileDataModel.qSetData(CurPage, sValue.toInt());
-}
-
-FileDataModel ProxyFileDataModel::qGetFileData() const
-{
-    return m_pFileDataModel;
-}
-
-void ProxyFileDataModel::qSetFileData(const FileDataModel &fd)
-{
-    m_pFileDataModel = fd;
+    m_fileDataModel = model;
 }
