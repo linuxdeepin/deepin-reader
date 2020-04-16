@@ -28,7 +28,7 @@
 #include "DocSheet.h"
 
 ScaleWidget::ScaleWidget(DWidget *parent)
-    : CustomWidget(parent)
+    : DWidget(parent)
 {
     initWidget();
 
@@ -256,4 +256,9 @@ void ScaleWidget::clearComboBox()
     if (m_scaleComboBox) {
         m_scaleComboBox->lineEdit()->clear();
     }
+}
+
+void ScaleWidget::paintEvent(QPaintEvent *event)
+{
+    return;
 }

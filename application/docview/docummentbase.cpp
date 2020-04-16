@@ -433,7 +433,6 @@ bool DocummentBase::showMagnifier(QPoint point)
     pagenum = pointInWhichPage(qpoint);
     if (-1 != pagenum) {
         if (pagenum != d->m_lastmagnifierpagenum && -1 != d->m_lastmagnifierpagenum) {
-//            qDebug() << "++++++" << pagenum << d->m_lastmagnifierpagenum;
             if (pagenum > d->m_lastmagnifierpagenum && d->m_lastmagnifierpagenum - 3 > 0) {
                 PageBase *ppage = d->m_pages.at(d->m_lastmagnifierpagenum - 3);
                 ppage->clearMagnifierPixmap();
@@ -490,7 +489,6 @@ bool DocummentBase::showMagnifier(QPoint point)
         }
         d->m_lastmagnifierpagenum = pagenum;
         PageBase *ppage = d->m_pages.at(pagenum);
-//        ppage = d->m_pages.at(pagenum);
         QPixmap pixmap;
         d->m_magnifierpage = pagenum;
 
@@ -503,10 +501,7 @@ bool DocummentBase::showMagnifier(QPoint point)
             left = (d->m_widgets.at(pagenum)->width() - curwidth) / 2.0;
             bool bcondition = (qpoint.x() < left - imaginfierradius || qpoint.x() > curwidth + left + imaginfierradius) && left > imaginfierradius;
             bool bcondition1 = (qpoint.x() < imaginfierradius - 10  || qpoint.x() > curwidth + left + 10) && left < imaginfierradius;
-            qDebug() << __FUNCTION__ << "!!!!!!!!!!" << qpoint.x() << left << imaginfierradius << bcondition << bcondition1 << curwidth << left ;
-            /*if (qpoint.x() < left - d->m_magnifierwidget->getMagnifierRadius() || qpoint.x() > curwidth + left + d->m_magnifierwidget->getMagnifierRadius())*/
             if (bcondition || bcondition1) {
-                qDebug() << __FUNCTION__ << "~~~~~~~~~~~~~~~xxx" << qpoint.x() << curwidth << left << imaginfierradius;
                 QPixmap pix(imaginfierradius * 2, imaginfierradius * 2);
                 pix.fill(Qt::transparent);
                 d->m_magnifierwidget->setPixmap(pix);
@@ -515,12 +510,10 @@ bool DocummentBase::showMagnifier(QPoint point)
                 d->m_magnifierwidget->update();
             } else {
                 if (ppage ->getMagnifierPixmap(pixmap, qpoint, d->m_magnifierwidget->getMagnifierRadius(), ppage->width()*d->m_magnifierwidget->getMagnifierScale(), ppage->height()*d->m_magnifierwidget->getMagnifierScale())) {
-                    qDebug() << __FUNCTION__ << "++++++++" << pixmap.size().width();
                     if (pixmap.size().width() < d->m_magnifierwidget->getMagnifierRadius() * 2) {
                         left = (d->m_widgets.at(pagenum)->width() - curwidth) / 2.0;
                         int ileft = qpoint.x() - left;
                         int iright = left + curwidth - qpoint.x();
-                        qDebug() << __FUNCTION__ << "=================" ;
                         int iwidth = d->m_magnifierwidget->getMagnifierRadius() * 2;
                         QPixmap pixres(QSize(iwidth, iwidth));
                         pixres.fill(Qt::transparent);
@@ -529,15 +522,12 @@ bool DocummentBase::showMagnifier(QPoint point)
                         {
                             //在右边
                             if (iright < 0 || ileft > iright) {
-                                qDebug() << __FUNCTION__ << "############$$$** right" << pixres.size() << pixmap.size() << iright << ileft << imaginfierradius;
                                 if (iright < 0) {
                                     pixmap = pixmap.copy(qpoint.x() - curwidth - left, 0, imaginfierradius - (qpoint.x() - curwidth - left), imaginfierradius * 2);
                                 }
                                 painter.drawPixmap(pixmap.rect(), pixmap);
 
                             } else {
-
-                                qDebug() << __FUNCTION__ << "############$$$## left" << pixres.size() << pixmap.size() << iright << ileft << imaginfierradius << qpoint;
                                 if (qpoint.x() - left < imaginfierradius && ileft < 0) {
                                     pixmap = pixmap.copy(/*left - qpoint.x()*/0, 0, imaginfierradius - (left - qpoint.x()), imaginfierradius * 2);
                                 } /*else if (qpoint.x() - left > 0 && qpoint.x() - left < 2 * imaginfierradius) {
@@ -546,7 +536,6 @@ bool DocummentBase::showMagnifier(QPoint point)
                                 int iorgwidth = pixmap.rect().width();
                                 int iorgheight = pixmap.rect().height();
                                 QRect rect(iwidth - iorgwidth, iwidth - iorgheight, iorgwidth, iorgheight);
-                                qDebug() << __FUNCTION__ << "############$$$++==" << pixres.size() << pixmap.size() << iright << ileft << imaginfierradius << iorgwidth << iorgheight;
                                 painter.drawPixmap(rect, pixmap);
                             }
                         }

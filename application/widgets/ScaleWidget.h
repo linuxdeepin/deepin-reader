@@ -23,7 +23,7 @@
 #include <QPointer>
 
 class DocSheet;
-class ScaleWidget : public CustomWidget
+class ScaleWidget : public DWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(ScaleWidget)
@@ -35,10 +35,13 @@ public:
     void setSheet(DocSheet *sheet);
 
     bool handleShortcut(QString shortcut);
+
     void clearComboBox();
 
+    void paintEvent(QPaintEvent *event);
+
 protected:
-    void initWidget() override;
+    void initWidget();
 
 private slots:
     void slotPrevScale();
