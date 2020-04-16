@@ -49,7 +49,7 @@ void BookMarkButton::paintEvent(QPaintEvent *e)
             }
         }
     }
-    QPixmap pixmap(Utils::renderSVG(ssPath,QSize(36,36)));
+    QPixmap pixmap(Utils::renderSVG(ssPath, QSize(36, 36)));
     painter.setRenderHints(QPainter::SmoothPixmapTransform);
     painter.drawPixmap(0, 0, this->width(), this->height(), pixmap);
     painter.end();
@@ -79,29 +79,8 @@ void BookMarkButton::mousePressEvent(QMouseEvent *e)
 void BookMarkButton::mouseReleaseEvent(QMouseEvent *e)
 {
     ispressed = false;
-    isclicked = !isclicked;
-    emit signal_bookMarkStateChange(isclicked);
+
+    emit sigClicked(!isclicked);
+
     repaint();
 }
-
-//void BookMarkButton::mouseEvent(QMouseEvent *e)
-
-//{
-//    float  w = this->width();
-//    float  h = this->height();
-//    int  x = e->x();
-//    int  y = e->y();
-//    float k = h / w;
-//    if ( y > -k * x + h / 2 &&
-
-//            y >= k * x - h / 2 &&
-
-//            y <= k * x + h / 2 &&
-
-//            y <= -k * x + 3 * h / 2) {
-//        ishovered = true;
-//    } else {
-//        ishovered = false;
-//    }
-//    repaint();
-//}

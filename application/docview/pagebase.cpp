@@ -137,8 +137,8 @@ PageBase::PageBase(PageBasePrivate *ptr, DWidget *parent)
     connect(this, &PageBase::signal_update, this, [ = ]() {
         this->update();
     });
-    connect(d->bookmarkbtn, &BookMarkButton::signal_bookMarkStateChange, this, [ = ](bool state) {
-        emit signal_bookMarkStateChange(d->m_pageno, state);
+    connect(d->bookmarkbtn, &BookMarkButton::sigClicked, this, [ = ](bool state) {
+        emit sigBookMarkButtonClicked(d->m_pageno, state);
     });
 }
 

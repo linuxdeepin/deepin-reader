@@ -239,7 +239,7 @@ void SheetBrowserPDFPrivate::showNoteViewWidget(const QString &sPage, const QStr
         m_pNoteViewWidget = new NoteViewWidget(q);
         connect(m_pNoteViewWidget, SIGNAL(sigNoteViewMsg(const int &, const QString &)), SLOT(SlotNoteViewMsg(const int &, const QString &)));
         connect(m_pNoteViewWidget, SIGNAL(sigNeedShowTips(const QString &, int)), m_sheet, SLOT(onShowTips(const QString &, int)));
-        connect(m_pNoteViewWidget, SIGNAL(sigNeedAddHighLightAnnotation(QString)), SLOT(onAddHighLightAnnotation(QString)));
+        connect(m_pNoteViewWidget, SIGNAL(sigNeedAddHighLightAnnotation(QString)), SLOT(onBookMarkStateChanged(int, bool)));
     }
     m_pNoteViewWidget->setEditText(sText);
     m_pNoteViewWidget->setNoteUuid(t_strUUid);
@@ -451,10 +451,16 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
         dApp->m_pAppInfo->setMousePressLocal(false, tempPoint);
 
         m_pDefaultMenu->setClickpoint(pRightClickPoint);
+
         textPage = m_pProxy->currentPageNo(); //当前在哪一页
 
         m_pDefaultMenu->execMenu(m_sheet, tempPoint, clickPage);
     }
+}
+
+void SheetBrowserPDFPrivate::onPageBookMarkButtonClicked(int page, bool state)
+{
+    m_sheet->setBookMark(page, state);
 }
 
 void SheetBrowserPDFPrivate::onPageChanged(int page)
@@ -466,15 +472,18 @@ void SheetBrowserPDFPrivate::onPageChanged(int page)
     emit q->sigPageChanged(page);
 }
 
-void SheetBrowserPDFPrivate::SlotDocFileOpenResult(bool openresult)
+void SheetBrowserPDFPrivate::onFileOpenResult(bool openresult)
 {
     Q_Q(SheetBrowserPDF);
     if (openresult) {
         dApp->m_pDBService->qSelectData(m_pProxyData->getPath(), DB_BOOKMARK);
+
         m_pProxyData->setFirstShow(false);
+
         m_pProxyData->setIsFileOpenOk(true);
     } else {
         m_sheet->showTips(tr("Please check if the file is damaged"), 1);
+
     }
 
     emit q->sigFileOpenResult(m_pProxyData->getPath(), openresult);
@@ -487,7 +496,8 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
     m_pProxy = new DocummentProxy(q);
     if (m_pProxy) {
         connect(m_pProxy, SIGNAL(signal_pageChange(int)), this, SLOT(onPageChanged(int)));
-        connect(m_pProxy, SIGNAL(signal_openResult(bool)), SLOT(SlotDocFileOpenResult(bool)));
+        connect(m_pProxy, SIGNAL(signal_openResult(bool)), SLOT(onFileOpenResult(bool)));
+        connect(m_pProxy, SIGNAL(sigPageBookMarkButtonClicked(int, bool)), SLOT(onPageBookMarkButtonClicked(int, bool)));
 
         QFileInfo info(sPath);
 

@@ -40,8 +40,11 @@ private slots:
 
     void SlotDeleteAnntation(const int &, const QString &);
 
-    void SlotDocFileOpenResult(bool);
+    void onFileOpenResult(bool);
+
     void slotCustomContextMenuRequested(const QPoint &point);
+
+    void onPageBookMarkButtonClicked(int, bool);
 
     void onPageChanged(int page);
 

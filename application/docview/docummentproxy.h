@@ -91,7 +91,7 @@ signals:
     void signal_setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode);
     void signal_scaleAndShow(double scale, RotateType_EM rotate);
     bool signal_setViewModeAndShow(ViewMode_EM viewmode);
-    void signal_bookMarkStateChange(int page, bool state);
+    void sigPageBookMarkButtonClicked(int page, bool state);
     void signal_openResult(bool);
     void signal_autoplaytoend();
 private slots:

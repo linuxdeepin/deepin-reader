@@ -271,7 +271,7 @@ signals:
     void signal_searchRes(stSearchRes);
     void signal_searchover();
     void signal_loadDocumment(QString);
-    void signal_bookMarkStateChange(int page, bool state);
+    void sigPageBookMarkButtonClicked(int page, bool state);
     void signal_openResult(bool);
     void signal_autoplaytoend();
 

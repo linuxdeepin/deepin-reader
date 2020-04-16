@@ -37,7 +37,7 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath, unsigned int ip
         connect(this, SIGNAL(signal_setScaleRotateViewModeAndShow(double, RotateType_EM, ViewMode_EM)), m_documment, SLOT(setScaleRotateViewModeAndShow(double, RotateType_EM, ViewMode_EM)));
         connect(this, SIGNAL(signal_scaleAndShow(double, RotateType_EM)), m_documment, SLOT(scaleAndShow(double, RotateType_EM)));
         connect(this, SIGNAL(signal_setViewModeAndShow(ViewMode_EM)), m_documment, SLOT(setViewModeAndShow(ViewMode_EM)));
-        connect(m_documment, SIGNAL(signal_bookMarkStateChange(int, bool)), this, SIGNAL(signal_bookMarkStateChange(int, bool)));
+        connect(m_documment, SIGNAL(sigPageBookMarkButtonClicked(int, bool)), this, SIGNAL(sigPageBookMarkButtonClicked(int, bool)));
         connect(m_documment, SIGNAL(signal_openResult(bool)), this, SIGNAL(signal_openResult(bool)));
         connect(m_documment, &DocummentBase::signal_autoplaytoend, this, &DocummentProxy::signal_autoplaytoend);
         bre = m_documment->openFile(m_path, ipage, rotatetype, scale, viewmode);
@@ -384,7 +384,7 @@ double DocummentProxy::adaptWidthAndShow(double width)
 {
     if (!m_documment || bcloseing)
         return -1;
-    qDebug() << "adaptWidthAndShow width:" << width;
+
     return m_documment->adaptWidthAndShow(width);
 }
 
@@ -392,6 +392,7 @@ double DocummentProxy::adaptHeightAndShow(double height)
 {
     if (!m_documment || bcloseing)
         return -1;
+
     return m_documment->adaptHeightAndShow(height);
 }
 

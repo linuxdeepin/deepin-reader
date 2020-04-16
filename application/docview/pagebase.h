@@ -273,7 +273,7 @@ public:
 
 signals:
     void signal_MagnifierPixmapCacheLoaded(int);
-    void signal_bookMarkStateChange(int page, bool state);
+    void sigBookMarkButtonClicked(int page, bool state);
     void signal_update();
 protected slots:
     void slot_loadMagnifierPixmapCache(QImage image, double width, double height);
