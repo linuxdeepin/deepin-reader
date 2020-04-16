@@ -35,6 +35,7 @@ RotateImageLabel::RotateImageLabel(DWidget *parent)
 void RotateImageLabel::setSelect(const bool &select)
 {
     m_bSelect = select;
+
     if (m_bSelect) {
         if (m_nRadius == 8) {
             m_nHighLightLineWidth = 4;
@@ -43,6 +44,16 @@ void RotateImageLabel::setSelect(const bool &select)
         }
     }
     update();
+}
+
+void RotateImageLabel::setRadius(const int radius)
+{
+    m_nRadius = radius;
+}
+
+void RotateImageLabel::setBookMarkStatus(bool bshow)
+{
+    m_bshowbookmark = bshow;
 }
 
 void RotateImageLabel::setBackgroundPix(QPixmap &pixmap)
@@ -73,6 +84,16 @@ void RotateImageLabel::rotateImage()
     setFixedSize(m_thumbPix.size().width() * m_scale, m_thumbPix.height()*m_scale);
 
     update();
+}
+
+void RotateImageLabel::setHasThumbnail(const bool has)
+{
+    m_bHasThumbnail = has;
+}
+
+bool RotateImageLabel::hasThumbnail()
+{
+    return m_bHasThumbnail;
 }
 
 void RotateImageLabel::setRotateAngle(const int &angle)

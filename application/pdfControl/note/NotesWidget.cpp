@@ -213,36 +213,36 @@ void NotesWidget::handleOpenSuccess()
         m_ThreadLoadImage.stopThreadRun();
     }
 
-        m_pNotesList->clear();
+    m_pNotesList->clear();
 
-        QList<stHighlightContent> list_note;
-        m_sheet->getDocProxy()->getAllAnnotation(list_note);
+    QList<stHighlightContent> list_note;
+    m_sheet->getDocProxy()->getAllAnnotation(list_note);
 
-        if (list_note.count() < 1) {
-            m_bOpenFileOk = true;
-            return;
-        }
-
-        for (int index = 0; index < list_note.count(); ++index) {
-            stHighlightContent st = list_note.at(index);
-            if (st.strcontents == QString("")) {
-                continue;
-            }
-
-            int page = static_cast<int>(st.ipage);
-            QString uuid = st.struuid;
-            QString contant = st.strcontents;
-
-            addNewItem(QImage(), page, uuid, contant);
-        }
+    if (list_note.count() < 1) {
         m_bOpenFileOk = true;
+        return;
+    }
 
-        m_ThreadLoadImage.setListNoteSt(list_note);
-        m_ThreadLoadImage.setIsLoaded(true);
-        m_ThreadLoadImage.setProxy(m_sheet->getDocProxy());
-        if (!m_ThreadLoadImage.isRunning()) {
-            m_ThreadLoadImage.start();
+    for (int index = 0; index < list_note.count(); ++index) {
+        stHighlightContent st = list_note.at(index);
+        if (st.strcontents == QString("")) {
+            continue;
         }
+
+        int page = static_cast<int>(st.ipage);
+        QString uuid = st.struuid;
+        QString contant = st.strcontents;
+
+        addNewItem(QImage(), page, uuid, contant);
+    }
+    m_bOpenFileOk = true;
+
+    m_ThreadLoadImage.setListNoteSt(list_note);
+    m_ThreadLoadImage.setIsLoaded(true);
+    m_ThreadLoadImage.setProxy(m_sheet->getDocProxy());
+    if (!m_ThreadLoadImage.isRunning()) {
+        m_ThreadLoadImage.start();
+    }
 }
 
 void NotesWidget::slotLoadImage(const QImage &image)
@@ -637,7 +637,6 @@ void ThreadLoadImageOfNote::run()
             if (t_page != static_cast<int>(highContent.ipage)) {
                 t_page = static_cast<int>(highContent.ipage);
 
-//                dApp->adaptScreenView(tW, tH);
                 bl = m_proxy->getImage(t_page, image, tW, tH/*48, 68*/);
             }
             if (bl) {
