@@ -61,7 +61,7 @@ private:
 
     void mouseReleaseEvent(QMouseEvent *event);
 
-private:
+private slots:
     void AddHighLightAnnotation(const QString &msgContent);
 
 private:

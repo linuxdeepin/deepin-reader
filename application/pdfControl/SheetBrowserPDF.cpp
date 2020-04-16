@@ -195,7 +195,6 @@ void SheetBrowserPDF::resizeEvent(QResizeEvent *event)
 
     if (d->hasOpened()) {
         double scale = d->handleResize(event->size());
-        qDebug() << scale;
         setOper(Scale, scale);
     }
 

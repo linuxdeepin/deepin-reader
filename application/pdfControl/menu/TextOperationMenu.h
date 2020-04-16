@@ -47,9 +47,13 @@ private:
 
 private slots:
     void slotSetHighLight(const int &);
+
     void slotCopyClicked();
+
     void slotRemoveHighLightClicked();
+
     void slotAddNoteClicked();
+
     void slotAddBookMarkClicked();
 
 private:

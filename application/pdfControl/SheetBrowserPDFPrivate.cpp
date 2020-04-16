@@ -262,7 +262,7 @@ void SheetBrowserPDFPrivate::showNoteViewWidget(const QString &sPage, const QStr
         m_pNoteViewWidget = new NoteViewWidget(q);
         connect(m_pNoteViewWidget, SIGNAL(sigNoteViewMsg(const int &, const QString &)), SLOT(SlotNoteViewMsg(const int &, const QString &)));
         connect(m_pNoteViewWidget, SIGNAL(sigNeedShowTips(const QString &, int)), m_sheet, SLOT(onShowTips(const QString &, int)));
-        connect(m_pNoteViewWidget, SIGNAL(sigNeedAddHighLightAnnotation(QString)), SLOT(onBookMarkStateChanged(int, bool)));
+        connect(m_pNoteViewWidget, SIGNAL(sigNeedAddHighLightAnnotation(QString)), SLOT(AddHighLightAnnotation(QString)));
     }
     m_pNoteViewWidget->setEditText(sText);
     m_pNoteViewWidget->setNoteUuid(t_strUUid);

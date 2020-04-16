@@ -72,7 +72,6 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
                     painter.drawPixmap(0, 0, printpixmap);
 
                     if (iIndex < reviewSize - 1)
-
                         printer->newPage();
                 }
             }
@@ -88,6 +87,8 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
                 if (rl) {
                     QPixmap printpixmap = QPixmap::fromImage(image);
 
+                    painter.setBrush(Qt::red);
+                    painter.drawRect(rect);
                     painter.drawPixmap(0, 0, printpixmap);
 
                     if (iIndex < printer->toPage() - 1)
