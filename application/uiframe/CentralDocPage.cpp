@@ -128,7 +128,7 @@ void CentralDocPage::openFile(QString &filePath)
         DocSheet *sheet = new DocSheet(DocType_PDF, this);
         connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
         connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), SLOT(onOpened(DocSheet *, bool)));
-
+        connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
         sheet->openFile(filePath);
 
         m_pStackedLayout->addWidget(sheet);

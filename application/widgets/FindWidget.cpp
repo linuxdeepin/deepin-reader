@@ -70,12 +70,13 @@ void FindWidget::findCancel()
 {
     m_pSearchEdit->setText("");
     slotEditAborted();
-
+    m_strLastFindText = "";
     this->close();
 }
 
 void FindWidget::handleContentChanged()
 {
+    qInfo() << __LINE__ << "      " << __FUNCTION__;
     QString strFind = m_pSearchEdit->text().trimmed();
     if ((strFind != "") && (m_strLastFindText != strFind)) {
         m_strLastFindText = strFind;
@@ -97,6 +98,7 @@ void FindWidget::slotFindPrevBtnClicked()
 //  文本内容变化, 为空, 则取消红色提示
 void FindWidget::slotClearContent()
 {
+    qInfo() << __LINE__ << "      " << __FUNCTION__;
     QString strNewFind = m_pSearchEdit->text();
     if (strNewFind == "") {
         setEditAlert(0);
@@ -106,7 +108,8 @@ void FindWidget::slotClearContent()
 //  点击 搜索框 里面 的 x
 void FindWidget::slotEditAborted()
 {
-//    qDebug() << __FUNCTION__;
+    qInfo() << __LINE__ << "      " << __FUNCTION__;
+    m_strLastFindText = "";
     setEditAlert(0);
     emit sigFindOperation(E_FIND_EXIT, "");
 }

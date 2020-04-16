@@ -85,6 +85,8 @@ signals:
 
     void sigCurSheetChanged(DocSheet *);        //当前的文档被 切换 改动 保存 等
 
+    void sigFindOperation(const int &);
+
 public:
     QStringList qGetAllPath();
 

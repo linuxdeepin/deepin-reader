@@ -65,6 +65,12 @@ DPushButton *MainOperationWidget::createHideBtn()
 
 void MainOperationWidget::setBtnCheckById(const int &id)
 {
+    foreach (auto btn, this->findChildren<DToolButton *>()) {
+        if (btn) {
+            btn->setChecked(false);
+            btn->setEnabled(false);
+        }
+    }
     auto btnGroup = this->findChild<QButtonGroup *>();
     if (btnGroup) {
         auto btn = btnGroup->button(id);
@@ -101,6 +107,11 @@ void MainOperationWidget::handleOpenSuccess()
     if (m_sheet.isNull())
         return;
 
+    foreach (auto btn, this->findChildren<DToolButton *>()) {
+        if (btn) {
+            btn->setEnabled(true);
+        }
+    }
     FileDataModel fdm = m_sheet->qGetFileData();
     int nId = static_cast<int>(fdm.qGetData(LeftIndex));
     if (nId == -1) {

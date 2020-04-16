@@ -229,6 +229,24 @@ void TitleWidget::SlotSetCurrentTool(const int &sAction)
     }
 }
 
+void TitleWidget::slotFindOperation(const int &sAction)
+{
+    if (sAction == E_FIND_CONTENT) {
+        qInfo() << "    11111111    E_FIND_CONTENT";
+        if (m_pThumbnailBtn) {
+            m_pThumbnailBtn->setChecked(true);
+        }
+    } else if (sAction == E_FIND_EXIT) {
+        qInfo() << "    22222222    E_FIND_EXIT       ";
+        if (m_curSheet) {
+            bool close = false;
+            FileDataModel fdm = m_curSheet->qGetFileData();
+            close = fdm.getThumbnail();
+            m_pThumbnailBtn->setChecked(close);
+        }
+    }
+}
+
 void TitleWidget::initBtns()
 {
     m_pThumbnailBtn = createBtn(tr("Thumbnails"), true);

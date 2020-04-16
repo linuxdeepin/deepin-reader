@@ -119,6 +119,8 @@ signals:
 
     void sigOpened(DocSheet *, bool);
 
+    void sigFindOperation(const int &);
+
 private:
     void initPDF();
 
