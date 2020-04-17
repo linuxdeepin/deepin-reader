@@ -269,12 +269,6 @@ void PagePdf::paintEvent(QPaintEvent *event)
     }
 }
 
-void PagePdf::removeAnnotation(Poppler::Annotation *annotation)
-{
-    Q_D(PagePdf);
-    d->m_page->removeAnnotation(annotation);
-}
-
 void PagePdf::setPage(Poppler::Page *page, int pageno)
 {
     Q_D(PagePdf);
@@ -321,7 +315,6 @@ QString PagePdf::addAnnotation(const QColor &color, const QRect &rect)
     Poppler::HighlightAnnotation *annotation = new Poppler::HighlightAnnotation();
 
     Poppler::HighlightAnnotation::Quad quad;
-    QList<Poppler::HighlightAnnotation::Quad> qlistquad;
     double curwidth = d->m_imagewidth;
     double curheight = d->m_imageheight;
     QRectF boundary;
@@ -413,7 +406,6 @@ QString PagePdf::addHighlightAnnotation(const QColor &color)
     recboundary.setWidth(largestx - smallestrx);
     recboundary.setHeight(largestry - smallestrx);
     annotation->setBoundary(recboundary);
-    qDebug() << "PagePdf::addHighlightAnnotation" << recboundary;
     annotation->setHighlightQuads(qlistquad);
     uniqueName = PublicFunc::getUuid();
     annotation->setUniqueName(uniqueName);
@@ -423,7 +415,7 @@ QString PagePdf::addHighlightAnnotation(const QColor &color)
     return  uniqueName;
 }
 
-QString PagePdf::removeAnnotation(const QPoint &pos, AnnoteType_Em type)
+QString PagePdf::removeAnnotation(const QPoint &pos)
 {
     Q_D(PagePdf);
     double curwidth = d->m_scale * d->m_imagewidth;
@@ -449,7 +441,7 @@ QString PagePdf::removeAnnotation(const QPoint &pos, AnnoteType_Em type)
                 }
                 if (rectbound.contains(ptf)) {
                     uniqueName = annote->uniqueName();
-                    removeAnnotation(annote);
+                    d->m_page->removeAnnotation(annote);
                     listannote.removeOne(annote);
                     break;
                 }
@@ -460,7 +452,7 @@ QString PagePdf::removeAnnotation(const QPoint &pos, AnnoteType_Em type)
             if (rectbound.contains(ptf)) {
                 uniqueName = annote->uniqueName();
                 listannote.removeOne(annote);
-                removeAnnotation(annote);
+                d->m_page->removeAnnotation(annote);
                 break;
             }
         }
@@ -479,9 +471,8 @@ void PagePdf::removeAnnotation(const QString &struuid)
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
     int index = 0;
     foreach (Poppler::Annotation *annote, listannote) {
-        /*annote->subType()==Poppler::Annotation::AHighlight&&*/
         if (!struuid.isEmpty() && annote->uniqueName().indexOf(struuid) >= 0) { //必须判断
-            removeAnnotation(annote);
+            d->m_page->removeAnnotation(annote);
             listannote.removeAt(index);
             QImage image;
             getImage(image, d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
@@ -518,6 +509,8 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext, QString &st
                 }
             }
         }
+
+
     }
     qDeleteAll(listannote);
     return  false;
@@ -645,4 +638,10 @@ bool PagePdf::getrectimage(QImage &image, double destwidth, double scalebase, do
     image = d->m_page->renderToImage(xres * scalebase, yres * scalebase, ptimage.x() - destwidth / 2, ptimage.y() - destwidth / 2, destwidth, destwidth);
     // qDebug() << pt << ptimage << ptimage.x() - destwidth / 2 << destwidth << "cost time:" << tm.elapsed();
     return true;
+}
+
+QImage PagePdf::thumbnail()
+{
+    Q_D(PagePdf);
+    return d->m_page->thumbnail();
 }

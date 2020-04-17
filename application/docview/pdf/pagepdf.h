@@ -22,14 +22,16 @@ public:
     bool getSlideImage(QImage &image, double &width, double &height) override;
     PageInterface *getInterFace() override;
     void setPage(Poppler::Page *page, int pageno);
+
     //Annotation
     QString addAnnotation(const QColor &color);
     QString addAnnotation(const QColor &color, const QRect &rect);
-    QString removeAnnotation(const QPoint &pos, AnnoteType_Em type);
+    QString addTextAnnotation(const QPoint &pos, const QColor &color, TextAnnoteType_Em type);      //添加图标注释
+    QString removeAnnotation(const QPoint &pos);
     void removeAnnotation(const QString &struuid);
     bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
-    bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
-    QString addTextAnnotation(const QPoint &pos, const QColor &color, TextAnnoteType_Em type);
+    bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);      //查看当前点击处是否有icon
+
     Poppler::Page *GetPage();
     stSearchRes search(const QString &text, bool matchCase, bool wholeWords) override;
     void changeAnnotationColor(const QString uuid, const QColor &color);
@@ -37,11 +39,12 @@ public:
     void freshPage(Poppler::Page *page);
     bool getrectimage(QImage &image, double width, double scalebase, double magnifierscale, QPoint &pt) override;
 
+    QImage thumbnail();
 protected:
     void paintEvent(QPaintEvent *event) override;
 private:
-    void removeAnnotation(Poppler::Annotation *annotation);
     QString addHighlightAnnotation(const QColor &color);
+
 private:
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), PagePdf)
 };

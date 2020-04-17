@@ -196,7 +196,7 @@ QString DocummentPDF::removeAnnotation(const QPoint &startpos, AnnoteType_Em typ
     int page = pointInWhichPage(pt);
     if (page < 0)
         return "";
-    QString uuid = static_cast<PagePdf *>(d->m_pages.at(page))->removeAnnotation(pt, type);
+    QString uuid = static_cast<PagePdf *>(d->m_pages.at(page))->removeAnnotation(pt);
     return uuid;
 }
 
@@ -263,22 +263,20 @@ QString DocummentPDF::addAnnotation(const QPoint &startpos, const QPoint &endpos
                     rect = QRect(endpt.x(), startpt.y(), iwidth, iheight);
             }
         }
-        //qDebug()<<"DocummentPDF::addAnnotation";
-        //rect=QRect(50,30,100,50);
         uuid = static_cast<PagePdf *>(d->m_pages.at(startpage))->addAnnotation(color, rect);
     } else {
 
-        if (startpage < 0) return "";
-        qDebug() << __FUNCTION__ << startpage << endpage;
+        if (startpage < 0)
+            return "";
+
         if (startpage > endpage) {
             startpage = startpage ^ endpage;
             endpage = startpage ^ endpage;
             startpage = startpage ^ endpage;
         }
-        qDebug() << __FUNCTION__ << startpage << endpage;
+
         for (int i = startpage; i <= endpage; i++) {
             uuid = static_cast<PagePdf *>(d->m_pages.at(i))->addAnnotation(color);
-            qDebug() << __FUNCTION__ << i << uuid;
         }
     }
     return uuid;

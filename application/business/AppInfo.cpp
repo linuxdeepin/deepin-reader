@@ -105,16 +105,6 @@ QList<QKeySequence> AppInfo::getKeyList() const
     return m_pKeyList;
 }
 
-QString AppInfo::qGetCurrentTheme() const
-{
-    return m_strCurrentTheme;
-}
-
-void AppInfo::qSetCurrentTheme(const QString &strCurrentTheme)
-{
-    m_strCurrentTheme = strCurrentTheme;
-}
-
 void AppInfo::mousePressLocal(bool &highLight, QPoint &point)
 {
     highLight = m_bIsHighLight;

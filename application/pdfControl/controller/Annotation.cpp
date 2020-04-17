@@ -37,7 +37,7 @@ Annotation::Annotation(QObject *parent)
     fvmPrivate = qobject_cast<SheetBrowserPDFPrivate *>(parent);
 }
 
-void Annotation::dealWithDataMsg(const int &msgType, const QString &msgContent)
+void Annotation::handleNote(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_NOTE_REMOVE_HIGHLIGHT) {                 //  移除高亮注释 的高亮
         RemoveHighLight(msgContent);

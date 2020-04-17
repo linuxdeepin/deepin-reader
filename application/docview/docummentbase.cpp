@@ -329,7 +329,6 @@ bool DocummentBase::mouseBeOverText(QPoint point)
     QPoint qpoint = point;
     int pagenum = -1;
     pagenum = pointInWhichPage(qpoint);
-    //    qDebug() << "mouseBeOverText pagenum:" << pagenum;
     if (-1 != pagenum) {
         return d->m_pages.at(pagenum)->ifMouseMoveOverText(qpoint);
     }

@@ -43,10 +43,6 @@ private:
 
     void onAppExit();
 
-    void initThemeChanged();
-
-    void setCurTheme();
-
     void displayShortcuts();
 
     void showDefaultSize();

@@ -23,11 +23,7 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     setTitlebarShadowEnabled(true);
 
-    setCurTheme();
-
     initUI();
-
-    initThemeChanged();
 
     initShortCut();
 
@@ -36,6 +32,7 @@ MainWindow::MainWindow(DMainWindow *parent)
     int tHeight = 360;
 
     dApp->adaptScreenView(tWidth, tHeight);
+
     setMinimumSize(tWidth, tHeight);
 
     showDefaultSize();
@@ -140,30 +137,6 @@ void MainWindow::initUI()
     titlebar()->setTitle("");
     titlebar()->setMenu(m_central->titleMenu());
     titlebar()->addWidget(m_central->titleWidget(), Qt::AlignLeft);
-}
-
-void MainWindow::initThemeChanged()
-{
-    //  主题变了
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ]() {
-        setCurTheme();
-    });
-}
-
-//  设置 主题
-void MainWindow::setCurTheme()
-{
-    DGuiApplicationHelper::ColorType colorType = DGuiApplicationHelper::instance()->themeType();
-    QString sTheme = "";
-    if (colorType == DGuiApplicationHelper::UnknownType) {  //  未知
-        sTheme = "Unknown";
-    } else if (colorType == DGuiApplicationHelper::LightType) { //  浅色
-        sTheme = "light";
-    } else if (colorType == DGuiApplicationHelper::DarkType) {  //  深色
-        sTheme = "dark";
-    }
-
-    dApp->m_pAppInfo->qSetCurrentTheme(sTheme);
 }
 
 //  显示快捷键

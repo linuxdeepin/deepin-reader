@@ -36,7 +36,7 @@ public:
     explicit Annotation(QObject *parent = nullptr);
 
 private:
-    void dealWithDataMsg(const int &, const QString &);
+    void handleNote(const int &, const QString &);
 
 public:
     void AddHighLight(const QString &);

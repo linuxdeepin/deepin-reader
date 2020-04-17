@@ -64,10 +64,6 @@ public:
 
     QList<QKeySequence> getKeyList() const;
 
-    QString qGetCurrentTheme() const;
-
-    void qSetCurrentTheme(const QString &strCurrentTheme);
-
     void mousePressLocal(bool &highLight, QPoint &point);
 
     void setMousePressLocal(const bool &highLight, const QPoint &point);
@@ -92,7 +88,6 @@ private:
     QList<QKeySequence>     m_pKeyList;                 //  快捷键对应
     QList<QColor>           m_listColor;                //  color list
     QColor                  m_selectColor;              // 高亮颜色
-    QString m_strCurrentTheme = "";                     //  当前主题
 //    int     m_nCurShowState = FILE_NORMAL;              //  文档当前显示状态
     bool m_bIsHighLight = false;                        // 鼠标左键点击位置有没有高亮
     QPoint m_point;                                     // 鼠标左键点击位置

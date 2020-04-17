@@ -60,7 +60,7 @@ bool SheetBrowserPDFPrivate::hasOpened()
 void SheetBrowserPDFPrivate::slotDealWithMenu(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_NOTE_REMOVE_HIGHLIGHT || msgType == MSG_NOTE_UPDATE_HIGHLIGHT_COLOR || msgType == MSG_NOTE_ADD_HIGHLIGHT_COLOR) {
-        m_pAnnotation->dealWithDataMsg(msgType, msgContent);
+        m_pAnnotation->handleNote(msgType, msgContent);
     } else if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {  //  添加注释
         onOpenNoteWidget(msgContent);
     } else if (msgType == MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) {
@@ -73,7 +73,7 @@ void SheetBrowserPDFPrivate::SlotNoteViewMsg(const int &msgType, const QString &
     if (msgType == MSG_NOTE_DELETE_CONTENT || msgType == MSG_NOTE_UPDATE_CONTENT
             || msgType == MSG_NOTE_PAGE_ADD_CONTENT || msgType == MSG_NOTE_PAGE_UPDATE_CONTENT
             || msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {
-        m_pAnnotation->dealWithDataMsg(msgType, msgContent);
+        m_pAnnotation->handleNote(msgType, msgContent);
     }
 }
 
@@ -86,7 +86,7 @@ void SheetBrowserPDFPrivate::onAddHighLightAnnotation(const QString &msgContent)
 void SheetBrowserPDFPrivate::SlotDeleteAnntation(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_NOTE_DELETE_CONTENT || msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {
-        m_pAnnotation->dealWithDataMsg(msgType, msgContent);
+        m_pAnnotation->handleNote(msgType, msgContent);
     }
 }
 
@@ -442,9 +442,10 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
             bremoveenable = true;
 
         m_operatemenu->setRemoveEnabled(bremoveenable);
-        bool isHigh{false};
-        isHigh = m_pProxyMouseMove->sameHighLight();
-        m_operatemenu->execMenu(m_sheet, tempPoint, isHigh/*true*/, sSelectText, struuid);
+
+        bool isHigh = m_pProxyMouseMove->sameHighLight();
+
+        m_operatemenu->execMenu(m_sheet, tempPoint, isHigh, sSelectText, struuid);
 
     } else if (sSelectText == "" && (bIsHighLight || bicon)) { //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
