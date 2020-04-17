@@ -109,7 +109,7 @@ void FileAttrWidget::addTitleFrame(const QString &sData)
         label->setAlignment(Qt::AlignHCenter);
         QHBoxLayout *hLayout = new QHBoxLayout;
 
-        textHeight += label->fontInfo().pixelSize() + 10;
+        textHeight += label->fontInfo().pixelSize() + 20;
 
         hLayout->addStretch(1);
         hLayout->addWidget(label);

@@ -17,9 +17,6 @@ class AttrScrollWidget : public DFrame
 public:
     explicit AttrScrollWidget(DocSheet *sheet, DWidget *parent  = nullptr);
 
-protected:
-    bool eventFilter(QObject *obj, QEvent *e) override;
-
 private:
     void createLabel(QGridLayout *layout, const int &index, const QString &objName, const QString &sData);
     void createLabel(QGridLayout *layout, const int &index, const QString &objName, const QDateTime &sData);

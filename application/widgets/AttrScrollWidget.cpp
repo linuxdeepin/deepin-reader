@@ -69,21 +69,13 @@ AttrScrollWidget::AttrScrollWidget(DocSheet *sheet, DWidget *parent)
     this->setLayout(vLayout);
 }
 
-bool AttrScrollWidget::eventFilter(QObject *obj, QEvent *e)
-{
-    if (e->type() == QEvent::FontChange) {
-        qDebug() << __FUNCTION__ << "FontChange";
-    }
-    return  DFrame::eventFilter(obj, e);
-}
-
 void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const QString &objName, const QString &sData)
 {
     DLabel *label = new DLabel(objName, this);
     DFontSizeManager::instance()->bind(label, DFontSizeManager::T8);
     label->setAlignment(Qt::AlignTop);
     label->setMaximumWidth(140);
-    label->setMinimumWidth(m_leftminwidth + 10);
+    label->setMinimumWidth(m_leftminwidth + 20);
     layout->addWidget(label, index, 0);
 
     if (sData == "") {
