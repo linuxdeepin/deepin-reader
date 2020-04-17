@@ -80,21 +80,19 @@ void SheetSidebarPDF::initWidget()
     connect(m_pMainOperationWidget, SIGNAL(sigShowStackWidget(const int &)), m_pStackedWidget, SLOT(slotSetStackCurIndex(const int &)));
 
     pVBoxLayout->addWidget(m_pMainOperationWidget, 0, Qt::AlignBottom);
-
-    connect(this, SIGNAL(sigAdaptWindowSize(const double &)), m_pStackedWidget, SLOT(slotAdaptWindowSize(const double &)));
 }
 
 void SheetSidebarPDF::resizeEvent(QResizeEvent *event)
 {
-    CustomWidget::resizeEvent(event);
-
-    int width = this->width();
+    int width = event->size().width();
 
     double scale = static_cast<double>(width) / static_cast<double>(LEFTMINWIDTH);
 
     dApp->setScale(scale);
 
-    emit sigAdaptWindowSize(scale);
+    m_pStackedWidget->adaptWindowSize(scale);
+
+    CustomWidget::resizeEvent(event);
 }
 
 void SheetSidebarPDF::onSearch(const int &iType)

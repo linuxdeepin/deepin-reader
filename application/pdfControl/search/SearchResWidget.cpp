@@ -207,15 +207,11 @@ SearchItemWidget *SearchResWidget::getItemWidget(QListWidgetItem *item)
  */
 void SearchResWidget::adaptWindowSize(const double &scale)
 {
-    double width = 1.0;
-    double height = 1.0;
-
-    //set item size
     int tW = LEFTMINWIDTH;
     int tH = 80;
-//    dApp->adaptScreenView(tW, tH);
-    width = static_cast<double>(tW) * scale;
-    height = static_cast<double>(tH) * scale;
+
+    double width = static_cast<double>(tW) * scale;
+    double height = static_cast<double>(tH) * scale;
 
     if (m_pSearchList) {
         int itemCount = 0;

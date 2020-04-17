@@ -100,6 +100,7 @@ private slots:
     void SlotRemoveFileTab(const QString &);
 
     void SlotOpenFileResult(const QString &, const bool &);
+
 };
 
 #endif // MAINTABWIDGET_H

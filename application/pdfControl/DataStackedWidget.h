@@ -46,7 +46,10 @@ public:
     void handlePage(int page);
 
     void handleBookMark(int page, int state);
+
     int qDealWithShortKey(const QString &);
+
+    void adaptWindowSize(const double &scale); //缩略图列表自适应窗体大小  add by duanxiaohui 2020-3-20
 
 signals:
     void sigAnntationMsg(const int &, const QString &);
@@ -66,7 +69,7 @@ protected:
 private slots:
     void slotSetStackCurIndex(const int &);
 
-    void slotAdaptWindowSize(const double &scale); //缩略图列表自适应窗体大小  add by duanxiaohui 2020-3-20
+
 
     void slotUpdateThumbnail(const int &page);//添加或者移除高亮，要更新列表中相应的缩略图 add by duanxiaohui 2020-3-26
 

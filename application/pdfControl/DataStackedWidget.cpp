@@ -97,7 +97,7 @@ void DataStackedWidget::slotSetStackCurIndex(const int &iIndex)
     if ((t_epsinon < -EPSINON) || (t_epsinon > EPSINON)) {
         //刷新当前列表视图大小,如果缩放比例有变化的话
         m_dScale = scale;
-        slotAdaptWindowSize(scale);
+        adaptWindowSize(scale);
     }
 
     //  前一个是 出来搜索结果了, 后一个是正在搜索, 两个都不需要保存在记录中
@@ -107,11 +107,11 @@ void DataStackedWidget::slotSetStackCurIndex(const int &iIndex)
 }
 
 /**
- * @brief DataStackedWidget::slotAdaptWindowSize
+ * @brief DataStackedWidget::adaptWindowSize
  * 缩略图列表自适应视窗大小
  * @param scale  缩放因子 大于0的数
  */
-void DataStackedWidget::slotAdaptWindowSize(const double &scale)
+void DataStackedWidget::adaptWindowSize(const double &scale)
 {
     if (scale < 0) {
         return;
@@ -136,12 +136,6 @@ void DataStackedWidget::slotAdaptWindowSize(const double &scale)
             m_pSearchResWidget->adaptWindowSize(scale);
         }
     }
-
-//    if (dApp) {
-//        if (dApp->openFileOk() && (m_sheet != nullptr)) {
-//            m_sheet->setFit(1);
-//        }
-//    }
 }
 
 void DataStackedWidget::slotUpdateThumbnail(const int &page)

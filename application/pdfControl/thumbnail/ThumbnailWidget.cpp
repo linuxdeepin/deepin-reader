@@ -115,15 +115,13 @@ void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 void ThumbnailWidget::addThumbnailItem(const int &iIndex)
 {
     auto widget = new ThumbnailItemWidget(this);
+
     widget->setLabelPage(iIndex);
 
     auto item = new QListWidgetItem(m_pThumbnailListWidget);
+
     item->setFlags(Qt::NoItemFlags);
 
-    int tW = 266;
-    int tH = 212;
-    tW = static_cast<int>(static_cast<double>(266) * dApp->scale());
-    tH = static_cast<int>(static_cast<double>(212) * dApp->scale());
     item->setSizeHint(QSize(200, 200));
 
     m_pThumbnailListWidget->addItem(item);
@@ -137,8 +135,7 @@ void ThumbnailWidget::initConnection()
 {
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &ThumbnailWidget::slotUpdateTheme);
 
-    connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const int &, const QImage &)),
-            this, SLOT(slotLoadImage(const int &, const QImage &)));
+    connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const int &, const QImage &)), this, SLOT(slotLoadImage(const int &, const QImage &)));
     connect(&m_ThreadLoadImage, SIGNAL(sigRotateImage(const int &)), SLOT(slotRotateThumbnail(const int &)));
 }
 
@@ -289,14 +286,8 @@ void ThumbnailWidget::nextPage()
  */
 void ThumbnailWidget::adaptWindowSize(const double &scale)
 {
-    double width = 1.0;
-    double height = 1.0;
-
-    int tW = LEFTMINWIDTH;
-    int tH = 212;
-
-    width = static_cast<double>(tW) * scale;
-    height = static_cast<double>(tH) * scale;
+    double width = static_cast<double>(LEFTMINWIDTH) * scale;
+    double height = static_cast<double>(212) * scale;
 
     if (m_pThumbnailListWidget) {
         int itemCount = 0;
@@ -307,13 +298,12 @@ void ThumbnailWidget::adaptWindowSize(const double &scale)
                 if (item) {
                     auto itemWidget = getItemWidget(item);
                     if (itemWidget) {
-                        item->setSizeHint(QSize(static_cast<int>(width), static_cast<int>(height)));
                         itemWidget->adaptWindowSize(scale);
+                        item->setSizeHint(QSize(static_cast<int>(width), static_cast<int>(height)));
                     }
                 }
             }
         }
-        m_pThumbnailListWidget->update();
     }
 }
 
@@ -344,7 +334,6 @@ void ThumbnailWidget::updateThumbnail(const int &page)
                     QImage image;
                     int tW = 146;
                     int tH = 174;
-//                    dApp->adaptScreenView(tW, tH);
                     dproxy->getImage(page, image, tW, tH);
                     itemWidget->setLabelImage(image);
                     return;
