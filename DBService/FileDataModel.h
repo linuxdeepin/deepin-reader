@@ -76,7 +76,7 @@ private:
     int        bDoubleShow = 0;
     int        nFit = 0;
     int        nRotate = 0;
-    double     nScale = 0;
+    double     nScale = 100;
     int        nLeftIndex = 0;
     int        nCurPage = 0;
     int        nCurMouse = 0;

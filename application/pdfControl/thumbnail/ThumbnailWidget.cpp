@@ -475,9 +475,6 @@ void ThreadLoadImage::run()
             break;
         }
 
-        int tW = 146;
-        int tH = 174;
-
         for (int page = m_nStartPage; page <= m_nEndPage; page++) {
             if (!m_isLoaded)
                 break;
@@ -488,7 +485,9 @@ void ThreadLoadImage::run()
                 continue;
             }
             QImage image;
+
             bool bl = m_proxy->getImageMax(page, image, 174);
+
             if (bl) {
                 m_listLoad.append(page);
                 emit sigLoadImage(page, image);

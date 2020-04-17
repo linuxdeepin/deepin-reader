@@ -143,8 +143,8 @@ void DocTabBar::insertFromMimeData(int index, const QMimeData *source)
     DocSheet *sheet = DocSheet::getSheet(id);
 
     if (nullptr != sheet) {
-        sigTabMoveIn(sheet);
         insertSheet(sheet, index);
+        sigTabMoveIn(sheet);
     }
 }
 
@@ -201,6 +201,7 @@ void DocTabBar::handleTabReleased(int index)
 
 void DocTabBar::handleTabDroped(int index, Qt::DropAction da, QObject *target)
 {
+    qDebug() << "1";
     Q_UNUSED(da)    //同程序da可以根据目标传回，跨程序全是copyAction
 
     DocSheet *sheet = DocSheet::getSheet(this->tabData(index).toString());

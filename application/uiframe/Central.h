@@ -70,15 +70,11 @@ protected:
 public slots:
     void onFilesOpened();
 
-    void onCurSheetChanged(DocSheet *);
-
     void onMenuTriggered(const QString &action);
 
     void onOpenFilesExec();
 
 private slots:
-    void OnSetCurrentIndex();
-
     void onShowTips(const QString &text, int iconIndex = 0);
 
 private:

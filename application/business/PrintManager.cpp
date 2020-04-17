@@ -59,21 +59,23 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
         int nPageSize = _proxy->getPageSNum();
 
         if (printer->fromPage() == 0 && printer->toPage() == 0) {
-            //int reviewSize = (nPageSize > 10 ? 10 : nPageSize);       //减少打印数量防止卡死
-            int reviewSize = nPageSize;
-            for (int iIndex = 0; iIndex < reviewSize; iIndex++) {
+            for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
                 QImage image;
 
-                bool rl = _proxy->getImage(iIndex, image, rect.width(), rect.height());
+                if (nPageSize > 100 && rect.width() > 800) {
+                    //当页数过多时，处理一下
+                    if (_proxy->getImage(iIndex, image, 200, 200.0 * (double)rect.height() / (double)rect.width())) {
+                        painter.drawImage(rect, image);
+                    }
 
-                if (rl) {
-                    QPixmap printpixmap = QPixmap::fromImage(image);
-
-                    painter.drawPixmap(0, 0, printpixmap);
-
-                    if (iIndex < reviewSize - 1)
-                        printer->newPage();
+                } else {
+                    if (_proxy->getImage(iIndex, image, rect.width(), rect.height())) {
+                        painter.drawImage(rect, image);
+                    }
                 }
+
+                if (iIndex < nPageSize - 1)
+                    printer->newPage();
             }
         } else {
             for (int iIndex = printer->fromPage() - 1; iIndex < printer->toPage(); iIndex++) {
@@ -82,18 +84,11 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
 
                 QImage image;
 
-                bool rl = _proxy->getImage(iIndex, image, rect.width(), rect.height());
+                if (_proxy->getImage(iIndex, image, rect.width(), rect.height()))
+                    painter.drawImage(rect, image);
 
-                if (rl) {
-                    QPixmap printpixmap = QPixmap::fromImage(image);
-
-                    painter.setBrush(Qt::red);
-                    painter.drawRect(rect);
-                    painter.drawPixmap(0, 0, printpixmap);
-
-                    if (iIndex < printer->toPage() - 1)
-                        printer->newPage();
-                }
+                if (iIndex < printer->toPage() - 1)
+                    printer->newPage();
             }
         }
     }

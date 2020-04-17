@@ -19,7 +19,6 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
 {
     qRegisterMetaType<stSearchRes>("&stSearchRes");
     Q_D(DocummentBase);
-    //    d->m_threadloadwords.setDoc(this);
     setWidgetResizable(true);
     setFrameShape(QFrame::NoFrame);
     d->qwfather = parent;
@@ -27,7 +26,6 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     d->m_widget = new DWidget(this);
     setWidget(d->m_widget);
     d->showslidwaittimer = new QTimer(this);
-//    d->loadpagewaittimer = new QTimer(this);
     d->autoplayslidtimer = new QTimer(this);
     d->pblankwidget = new DLabel(this);
     d->pblankwidget->setMouseTracking(true);
@@ -50,13 +48,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     gridlyout->addWidget(d->m_slidewidget, 0, 0);
     gridlyout->setMargin(0);
 
-
-    //    d->pslidelabel->lower();
-    //    d->pslideanimationlabel->lower();
-    //    d->m_slidewidget->lower();
-    //    d->m_slidewidget->raise();
     d->m_slidewidget->hide();
-    //    d->m_magnifierwidget->raise();
     d->m_magnifierwidget->hide();
     d->m_vboxLayout = new QVBoxLayout;
     d->m_widget->setLayout(d->m_vboxLayout);
@@ -77,9 +69,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     d->m_searchTask = new SearchTask(this);
 
     connect(this->verticalScrollBar(), &QScrollBar::rangeChanged, this, [ = ](int min, int max) {
-        qDebug() << "-------verticalScrollBar QScrollBar::rangeChanged min:" << min << " max:" << max << "curpage" << d->m_currentpageno;
         Q_D(DocummentBase);
-        qDebug() << d->m_widgetrects.size() << d->m_currentpageno;
         DScrollBar *scrollBar_Y = verticalScrollBar();
         if (d->m_currentpageno < 0 || d->m_widgetrects.size() <= 0) {
             return;
@@ -93,7 +83,6 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
         case ViewMode_FacingPage:
             if (scrollBar_Y)
                 scrollBar_Y->setValue(d->m_widgetrects.at(d->m_currentpageno / 2).y());
-            qDebug() << "++++++++++scrollBar_Y setValue:" << d->m_widgetrects.at(d->m_currentpageno / 2).y();
             break;
         default:
             break;
@@ -101,7 +90,6 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
         d->donotneedreloaddoc = false;
     });
     connect(this->horizontalScrollBar(), &QScrollBar::rangeChanged, this, [ = ](int min, int max) {
-        qDebug() << "-------horizontalScrollBar QScrollBar::rangeChanged min:" << min << " max:" << max << "curpage" << d->m_currentpageno;;
         Q_D(DocummentBase);
         DScrollBar *scrollBar_X = horizontalScrollBar();
         if (d->m_currentpageno < 0) {
@@ -132,7 +120,6 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
 
     connect(&d->threadloaddata, SIGNAL(signal_dataLoaded(bool)), this, SLOT(slot_dataLoaded(bool)));
     connect(d->showslidwaittimer, SIGNAL(timeout()), this, SLOT(showSlideModelTimerOut()));
-//    connect(d->loadpagewaittimer, SIGNAL(timeout()), this, SLOT(loadPageTimerOut()));
     connect(d->autoplayslidtimer, SIGNAL(timeout()), this, SLOT(autoplayslidTimerOut()));
 }
 

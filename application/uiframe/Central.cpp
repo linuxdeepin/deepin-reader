@@ -130,7 +130,6 @@ void Central::onSheetCountChanged(int count)
 {
     auto pLayout = this->findChild<QStackedLayout *>();
     if (pLayout) {
-//        pLayout->setCurrentIndex(count > 0 ? 1 : 0);
         if (count > 0) {
             pLayout->setCurrentIndex(1);
         } else if (count == 0) {
@@ -162,28 +161,11 @@ void Central::keyPressEvent(QKeyEvent *event)
     CustomWidget::keyPressEvent(event);
 }
 
-void Central::OnSetCurrentIndex()
-{
-    auto pLayout = this->findChild<QStackedLayout *>();
-    if (pLayout) {
-        pLayout->setCurrentIndex(0);
-    }
-}
-
 void Central::onFilesOpened()
 {
     auto pLayout = this->findChild<QStackedLayout *>();
     if (pLayout) {
         pLayout->setCurrentIndex(1);
-    }
-}
-
-void Central::onCurSheetChanged(DocSheet *sheet)
-{
-    if (nullptr == sheet) {
-        m_layout->setCurrentIndex(0);
-    } else {
-        m_layout->setCurrentIndex(1);
     }
 }
 
@@ -297,7 +279,6 @@ void Central::initWidget()
     connect(m_menu, SIGNAL(sigActionTriggered(QString)), this, SLOT(onMenuTriggered(QString)));
     connect(m_navPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
 
-    connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), this, SLOT(onCurSheetChanged(DocSheet *)));
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_menu, SLOT(onCurSheetChanged(DocSheet *)));
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_widget, SLOT(onCurSheetChanged(DocSheet *)));
     connect(m_docPage, SIGNAL(sigTitleShortCut(QString)), m_widget, SLOT(onTitleShortCut(QString)));
