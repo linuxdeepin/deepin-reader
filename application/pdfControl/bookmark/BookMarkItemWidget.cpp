@@ -55,15 +55,17 @@ void BookMarkItemWidget::initWidget()
     auto hLine = new DHorizontalLine(this);
     auto m_pRightVLayout = new QVBoxLayout;
 
-    auto m_pPageVLayout = new QHBoxLayout;
-    m_pPageVLayout->setContentsMargins(0, 18, 0, 44);
+    auto m_pPageVLayout = new QVBoxLayout;
+    m_pPageVLayout->setContentsMargins(2, 18, 0, 44);
     m_pPageVLayout->addWidget(m_pPageNumber);
 
     m_pRightVLayout->addItem(m_pPageVLayout);
     m_pRightVLayout->addStretch(1);
     m_pRightVLayout->addWidget(hLine);
-    m_pRightVLayout->setContentsMargins(20, 0, 10, 0);
+    m_pRightVLayout->setContentsMargins(18, 0, 10, 0);
 
+    auto m_pImageVLayout = new QVBoxLayout;
+    m_pImageVLayout->setContentsMargins(0, 0, 0, 10);
     m_pPicture = new ImageLabel(this);
     tW = 48;
     tH = 68;
@@ -71,11 +73,13 @@ void BookMarkItemWidget::initWidget()
     m_pPicture->setFixedSize(QSize(tW, tH));
     m_pPicture->setSize(QSize(tW, tH));
     m_pPicture->setAlignment(Qt::AlignCenter);
+    m_pImageVLayout->addWidget(m_pPicture);
 
     auto m_pHLayout = new QHBoxLayout;
-    m_pHLayout->setContentsMargins(0, 0, 10, 0);
-    m_pHLayout->setSpacing(1);
-    m_pHLayout->addWidget(m_pPicture);
+    m_pHLayout->setContentsMargins(0, 0, 0, 0);
+//    m_pHLayout->addStretch(1);
+//    m_pHLayout->addWidget(m_pPicture);
+    m_pHLayout->addItem(m_pImageVLayout);
     m_pHLayout->addItem(m_pRightVLayout);
 
     this->setLayout(m_pHLayout);
