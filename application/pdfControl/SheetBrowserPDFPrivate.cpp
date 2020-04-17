@@ -273,6 +273,7 @@ void SheetBrowserPDFPrivate::showNoteViewWidget(const QString &sPage, const QStr
 
     bool t_bHigh = false;
 
+
     dApp->m_pAppInfo->setSmallNoteWidgetSize(m_pNoteViewWidget->size());
 
     dApp->m_pAppInfo->mousePressLocal(t_bHigh, point);
