@@ -32,7 +32,8 @@ SaveDialog::SaveDialog(QObject *parent)
 
 int SaveDialog::showDialog()
 {
-    DDialog dlg("", tr("Do you want to save the changes?"));
+//    DDialog dlg("", tr("Do you want to save the changes?"));
+    DDialog dlg(tr("Do you want to save the changes?"), "");
 
     dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
 
@@ -40,7 +41,7 @@ int SaveDialog::showDialog()
 
     dlg.addButton(tr("Save"), true, DDialog::ButtonRecommend);
 
-    QMargins mar(0, 0, 0, 30);
+    QMargins mar(0, 0, 0, 0/*30*/);
 
     dlg.setContentLayoutContentsMargins(mar);
 
