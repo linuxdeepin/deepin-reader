@@ -75,6 +75,7 @@ void CentralNavPage::slotUpdateTheme()
         auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
         plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
         iconSvg->setPalette(plt);
+        iconSvg->setAutoFillBackground(true);
         QString sPixmap = PF::getImagePath("import_photo", Pri::g_actions);
         int tW = 128;
         int tH = 128;

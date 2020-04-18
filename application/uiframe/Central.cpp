@@ -212,8 +212,10 @@ void Central::dragEnterEvent(QDragEnterEvent *event)
     auto mimeData = event->mimeData();
     if (mimeData->hasUrls()) {
         event->accept();
+        activateWindow();
     } else if (mimeData->hasFormat("reader/tabbar")) {
         event->accept();
+        activateWindow();
     }
 }
 
@@ -223,6 +225,7 @@ void Central::dropEvent(QDropEvent *event)
     if (mimeData->hasFormat("deepin_reader/tabbar")) {
         event->setDropAction(Qt::MoveAction);
         event->accept();
+        activateWindow();
 
         QString id = mimeData->data("deepin_reader/uuid");
         DocSheet *sheet = DocSheet::getSheet(id);
