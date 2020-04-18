@@ -66,7 +66,11 @@ void DataStackedWidget::SetFindOperation(const int &iType)
             m_pSearchResWidget->OnExitSearch();
         }
     } else if (iType == E_FIND_EXIT) {
-        handleOpenSuccess();
+        int nId = m_sheet->getOper(LeftIndex).toInt();
+        if (nId == -1) {
+            nId = 0;
+        }
+        setCurrentIndex(nId);
         m_pSearchResWidget->OnExitSearch();
     }
 }

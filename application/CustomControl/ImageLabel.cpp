@@ -165,9 +165,9 @@ void ImageLabel::paintEvent(QPaintEvent *e)
             QPen(DGuiApplicationHelper::instance()->applicationPalette().highlight().color(),
                  penwidth, Qt::SolidLine));
     } else {
-        local = 2;
-        width -= 4;
-        heigh -= 4;
+        local = 1;
+        width -= 2;
+        heigh -= 2;
         penwidth = 1;
         painter.setPen(QPen(
                            DGuiApplicationHelper::instance()->applicationPalette().frameShadowBorder().color(),

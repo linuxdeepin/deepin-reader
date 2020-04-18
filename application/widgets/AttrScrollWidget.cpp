@@ -75,7 +75,7 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
     DFontSizeManager::instance()->bind(label, DFontSizeManager::T8);
     label->setAlignment(Qt::AlignTop);
     label->setMaximumWidth(140);
-    label->setMinimumWidth(m_leftminwidth + 20);
+    label->setMinimumWidth(70 + 20);
     layout->addWidget(label, index, 0);
 
     if (sData == "") {
@@ -123,6 +123,7 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
 
 DFrame *AttrScrollWidget::addTitleFrame(const QString &sData)
 {
+    qDebug() << sData;
     DFrame *m_textShowFrame = new DFrame(this);
 
     QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T8);

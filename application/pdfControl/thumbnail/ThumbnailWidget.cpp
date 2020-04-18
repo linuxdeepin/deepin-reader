@@ -336,9 +336,7 @@ void ThumbnailWidget::updateThumbnail(const int &page)
                         return;
                     }
                     QImage image;
-                    int tW = 146;
-                    int tH = 174;
-                    dproxy->getImage(page, image, tW, tH);
+                    dproxy->getImageMax(page, image, 174);
                     itemWidget->setLabelImage(image);
                     return;
                 }
