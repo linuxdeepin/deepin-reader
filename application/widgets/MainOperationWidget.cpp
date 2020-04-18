@@ -134,10 +134,12 @@ void MainOperationWidget::slotUpdateTheme()
     QIcon icon;
     auto btnList = this->findChildren<DToolButton *>();
     foreach (auto btn, btnList) {
-        QString objName = btn->objectName();
-        if (objName != "") {
-            icon = PF::getIcon(Pri::g_module + objName);
-            btn->setIcon(icon);
+        if (btn) {
+            QString objName = btn->objectName();
+            if (objName != "") {
+                icon = PF::getIcon(Pri::g_module + objName);
+                btn->setIcon(icon);
+            }
         }
     }
 }

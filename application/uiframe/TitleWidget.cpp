@@ -27,10 +27,12 @@ void TitleWidget::slotUpdateTheme()
 {
     auto btnList = this->findChildren<DPushButton *>();
     foreach (auto btn, btnList) {
-        QString objName = btn->objectName();
-        if (objName != "") {
-            QIcon icon = PF::getIcon(Pri::g_module + objName);
-            btn->setIcon(icon);
+        if (btn) {
+            QString objName = btn->objectName();
+            if (objName != "") {
+                QIcon icon = PF::getIcon(Pri::g_module + objName);
+                btn->setIcon(icon);
+            }
         }
     }
 
