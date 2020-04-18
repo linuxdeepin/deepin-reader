@@ -88,7 +88,6 @@ signals:
     void signal_searchRes(stSearchRes);
     void signal_searchover();
     bool signal_mouseSelectText(QPoint start, QPoint stop);
-    void signal_setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode);
     void signal_scaleAndShow(double scale, RotateType_EM rotate);
     bool signal_setViewModeAndShow(ViewMode_EM viewmode);
     void sigPageBookMarkButtonClicked(int page, bool state);

@@ -691,17 +691,13 @@ bool DocummentBase::pageJump(int pagenum)
             d->pslideanimationlabel = d->pslidelabel;
             d->pslidelabel = plabel;
         }
-        //        d->pslideanimationlabel->hide();
         d->pslidelabel->setGeometry((d->m_slidewidget->width() - width) / 2, (d->m_slidewidget->height() - height) / 2, width, height);
         QPixmap map = QPixmap::fromImage(image);
         d->pslidelabel->setPixmap(map);
         d->pslideanimationlabel->lower();
-        //        d->pslideanimationlabel->raise();
-        //        d->pslidelabel->raise();
         d->pslidelabel->show();
 
         if (-1 != d->m_slidepageno) {
-//            qDebug() << "bslidemodel pageJump pagenum:" << pagenum;
             if (!d->animationfirst) {
                 delete d->animationfirst;
                 d->animationfirst = nullptr;
@@ -735,10 +731,9 @@ bool DocummentBase::pageJump(int pagenum)
                 delete d->animationgroup;
                 d->animationgroup = nullptr;
             }
-            d->animationgroup = new QParallelAnimationGroup;
+            d->animationgroup = new QParallelAnimationGroup(this);
             d->animationgroup->addAnimation(d->animationfirst);
             d->animationgroup->addAnimation(d->animationsecond);
-            //            d->animationgroup->start(QAbstractAnimation::DeleteWhenStopped);
             d->animationgroup->start();
         }
 
@@ -776,8 +771,10 @@ void DocummentBase::setScaleRotateViewModeAndShow(double scale, RotateType_EM ro
     Q_D(DocummentBase);
 
     double dscale = scale;
+
     if (viewmode != d->m_viewmode && (scale - d->m_scale < EPSINON && scale - d->m_scale > -EPSINON))
         dscale = 0;
+
     d->m_viewmode = viewmode;
 
     scaleAndShow(dscale, rotate);
@@ -838,11 +835,6 @@ int DocummentBase::currentPageNo()
     switch (d->m_viewmode) {
     case ViewMode_SinglePage:
         for (int i = 0; i < d->m_widgets.size(); i++) {
-//            qDebug() << "----i:" << i << " widgets rect:" << d->m_widgets.at(i)->rect() << " rects rect:" << d->m_widgetrects.at(i) << " y_offset:" << y_offset << " x_offset:" << x_offset;
-//            if (y_offset < d->m_widgets.at(i)->y() + d->m_widgets.at(i)->height()) {
-//                pagenum = i;
-//                break;
-//            }
             if (y_offset < d->m_widgetrects.at(i).y() + d->m_widgetrects.at(i).height()) {
                 pagenum = i;
                 break;
@@ -850,29 +842,7 @@ int DocummentBase::currentPageNo()
         }
         break;
     case ViewMode_FacingPage:
-//        for (int i = 0; i < d->m_widgets.size() / 2; i++) {
-//            qDebug() << "----i:" << i << " widgets rect:" << d->m_widgets.at(i)->rect() << " rects rect:" << d->m_widgetrects.at(i);
-//            if (y_offset < d->m_widgets.at(i)->y() + d->m_widgets.at(i)->height()) {
-//                if (x_offset < d->m_widgets.at(i)->x() + d->m_pages.at(i * 2)->x() + d->m_pages.at(i * 2)->width()) {
-//                    pagenum = i * 2;
-//                } else {
-//                    pagenum = i * 2 + 1;
-//                }
-//                break;
-//            }
-//        }
-//        if (-1 == pagenum && d->m_widgets.size() % 2) {
-//            if (y_offset < d->m_widgets.at(d->m_pages.size() / 2)->y() + d->m_widgets.at(d->m_pages.size() / 2)->height()) {
-//                if (x_offset < d->m_widgets.at(d->m_pages.size() / 2)->x() + d->m_pages.at(d->m_pages.size() - 1)->x() + d->m_pages.at(d->m_pages.size() - 1)->width()) {
-//                    pagenum = d->m_pages.size() - 1;
-//                } else {
-//                    pagenum = d->m_pages.size();
-//                }
-//                break;
-//            }
-//        }
         for (int i = 0; i < d->m_widgets.size() / 2; i++) {
-//            qDebug() << "----i:" << i << " widgets rect:" << d->m_widgets.at(i)->rect() << " rects rect:" << d->m_widgetrects.at(i) << " y_offset:" << y_offset << " x_offset:" << x_offset;
             if (y_offset < d->m_widgetrects.at(i).y() + d->m_widgetrects.at(i).height()) {
                 if (x_offset < d->m_widgetrects.at(i).x() + d->m_pages.at(i * 2)->x() + d->m_pages.at(i * 2)->width()) {
                     pagenum = i * 2;
@@ -923,7 +893,6 @@ void DocummentBase::showFacingPage()
         d->m_widgets.at(i)->hide();
     }
     d->pblankwidget->hide();
-    qDebug() << "========DocummentBase::showFacingPage双页显示";
     for (int i = 0; i < d->m_pages.size() / 2; i++) {
         d->m_widgets.at(i)->layout()->addWidget(d->m_pages.at(i * 2));
         d->m_widgets.at(i)->layout()->addWidget(d->m_pages.at(i * 2 + 1));
@@ -963,7 +932,6 @@ Page::Link *DocummentBase::mouseBeOverLink(QPoint point)
     QPoint qpoint = point;
     int pagenum = -1;
     pagenum = pointInWhichPage(qpoint);
-    //    qDebug() << "mouseBeOverLink pagenum:" << pagenum;
     if (-1 != pagenum) {
         return d->m_pages.at(pagenum)->ifMouseMoveOverLink(qpoint);
     }
@@ -977,7 +945,6 @@ void DocummentBase::slot_vScrollBarValueChanged(int value)
         int pageno = currentPageNo();
         if (d->m_currentpageno != pageno) {
             d->m_currentpageno = pageno;
-            // qDebug() << "DocummentBase::slot_hScrollBarValueChanged^^^^^^^^^^";
             emit signal_pageChange(d->m_currentpageno);
         }
         loadPages();
@@ -991,7 +958,6 @@ void DocummentBase::slot_hScrollBarValueChanged(int value)
         int pageno = currentPageNo();
         if (d->m_currentpageno != pageno) {
             d->m_currentpageno = pageno;
-            qDebug() << "DocummentBase::slot_hScrollBarValueChanged********";
             emit signal_pageChange(d->m_currentpageno);
         }
         loadPages();
@@ -1045,8 +1011,6 @@ void DocummentBase::autoplayslidTimerOut()
         } else {
             pageJump(getCurrentPageNo() + 1);
             if (getCurrentPageNo() + 1 >= d->m_pages.size()) {
-
-                qDebug() << __FUNCTION__ << "emit signal_autoplaytoend()" << getCurrentPageNo() << d->m_pages.size() << d->m_slidepageno;
                 d->autoplayslidtimer->stop();
                 d->bautoplayslide = false;
                 emit signal_autoplaytoend();
@@ -1097,7 +1061,6 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool b
     double curwidth = d->m_scale * d->m_imagewidth;
     double curheight = d->m_scale * d->m_imageheight;
     PageBase *pagebase = d->m_pages.at(curpage);
-    //  d->m_widgets.at(curpage)->layout()->spacing();
     QRectF rectorg;
     if (bsearch) {
         pagebase->setCurSearchShow(true);
@@ -1111,7 +1074,6 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool b
         switch (d->m_rotate) {
         case RotateType_0:
         case RotateType_180: {
-//            qDebug() << "RotateType_0 RotateType_180";
             double topspace = (d->m_widgets.at(curpage)->height() - curheight) / 2;
             double leftspace = (d->m_widgets.at(curpage)->width() - curwidth) / 2;
             int widgetheight = frameRect().height();
@@ -1129,7 +1091,6 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool b
         break;
         case RotateType_90:
         case RotateType_270: {
-//            qDebug() << "RotateType_90  RotateType_270";
             double topspace = (d->m_widgets.at(curpage)->height() - curwidth) / 2;
             double leftspace = (d->m_widgets.at(curpage)->width() - curheight) / 2;
             int widgetheight = frameRect().height();
@@ -1205,9 +1166,13 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool b
 bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
 {
     Q_D(DocummentBase);
+
     int currpageno = d->m_currentpageno;
+
     d->m_viewmode = viewmode;
+
     d->donotneedreloaddoc = true;
+
     switch (d->m_viewmode) {
     case ViewMode_SinglePage:
         showSinglePage();
@@ -1219,12 +1184,14 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
         return false;
         break;
     }
+
     d->m_vboxLayout->update();
+
     pageJump(currpageno);
+
     loadPages();
 
     d->donotneedreloaddoc = false;
-//    d->loadpagewaittimer->start(10);
 
     return true;;
 }
@@ -1232,16 +1199,20 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
 bool DocummentBase::loadPages()
 {
     Q_D(DocummentBase);
+
     if (!bDocummentExist())
         return false;
+
     int firstpagenum = 0, lastpagenum = 0;
+
     int curheight = 1;
+
     if (d->m_rotate == RotateType_0 || d->m_rotate == RotateType_180 || d->m_rotate == RotateType_Normal) {
         curheight = d->m_scale * d->m_imageheight;
     } else {
         curheight = d->m_scale * d->m_imagewidth;
     }
-    //qDebug() << rect() << viewport()->rect() << d->qwfather->rect();
+
     int icount = curheight > 0 ? viewport()->rect().height() / (curheight) : 0; //当前页一共能显示多少个
     icount = icount > 0 ? icount + 2 : 2;
 
@@ -1268,16 +1239,8 @@ bool DocummentBase::loadPages()
             firstpagenum = d->m_currentpageno - 2 >= 0 ? d->m_currentpageno - 2 : 0;
             lastpagenum = d->m_currentpageno + (icount - 1) * 2 + 1;
         }
-
-//   if (icount > 4) {
-//        firstpagenum = d->m_currentpageno - (icount - 2) * 2 >= 0 ? d->m_currentpageno - (icount - 2) * 2 : 0;
-//        lastpagenum = d->m_currentpageno + icount * 2;
-//    } else {
-//        firstpagenum = d->m_currentpageno - 2 >= 0 ? d->m_currentpageno - 2 : d->m_currentpageno;
-//        lastpagenum = d->m_currentpageno + (icount - 1) * 2 + 1;
-//    }
     }
-    // qDebug() << "DocummentBase::loadPages" << d->m_pages.at(d->m_currentpageno)->rect() << viewport()->rect() << d->m_currentpageno << curheight << icount << firstpagenum << lastpagenum;
+
     for (int i = firstpagenum; i <= lastpagenum ; i++) {
         if (i >= 0 && i < d->m_pages.size())
             d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);
@@ -1296,6 +1259,7 @@ bool DocummentBase::loadPages()
     }
 
     update(viewport()->rect());
+
     return true;
 }
 
@@ -1362,12 +1326,9 @@ double DocummentBase::adaptHeightAndShow(double height)
 
 void DocummentBase::findNext()
 {
-    qDebug() << "----------findNext--" ;
     Q_D(DocummentBase);
     if (d->m_pagecountsearch.size() <= 0 || d->m_findcurpage < 0) return;
-    qDebug() << "----------findNext--" << d->m_findcurpage << "--" << d->m_pagecountsearch.lastKey() << d->m_pagecountsearch.size();
     if (d->m_findcurpage == d->m_pagecountsearch.lastKey() &&
-            /* d->m_cursearch >= d->m_pagecountsearch.find(d->m_findcurpage).value()*/
             d->m_cursearch > d->m_pagecountsearch.find(d->m_findcurpage).value()) {
         d->m_findcurpage = d->m_pagecountsearch.firstKey();
         d->m_cursearch = 1;
@@ -1376,7 +1337,6 @@ void DocummentBase::findNext()
     int xvalue = 0, yvalue = 0;
     int curpagecount = d->m_pagecountsearch.find(d->m_findcurpage).value();
     if (curpagecount >= d->m_cursearch) {
-        // qDebug() << "----------1" << d->m_cursearch << "--" << curpagecount;
         //从上一个切换至下一个，如果findPrev查找的m_cursearch为当前页第一个则此处需要判断是否越界
         if (!d->bfindnext && (d->m_cursearch <= 1 || d->m_cursearch + 2 > curpagecount)) { //前一次是向前查找
             if (d->m_cursearch + 2 > curpagecount) {
@@ -1400,7 +1360,6 @@ void DocummentBase::findNext()
         }
         d->m_cursearch++;
     } else {
-//        qDebug() << "----------2" << d->m_cursearch;
         d->m_pages.at(d->m_findcurpage)->setCurSearchShow(false);
         QMap<int, int>::const_iterator it = d->m_pagecountsearch.find(d->m_findcurpage);
         if (++it != d->m_pagecountsearch.end()) {
@@ -1429,17 +1388,19 @@ void DocummentBase::findNext()
 void DocummentBase::findPrev()
 {
     Q_D(DocummentBase);
-    if (d->m_pagecountsearch.size() <= 0 || d->m_findcurpage < 0) return;
-    qDebug() << d->m_pagecountsearch.size() << d->m_findcurpage << d->m_pagecountsearch.firstKey();
+
+    if (d->m_pagecountsearch.size() <= 0 || d->m_findcurpage < 0)
+        return;
+
     if (d->m_findcurpage <= d->m_pagecountsearch.firstKey() &&
             d->m_cursearch < 1) {
         d->m_findcurpage = d->m_pagecountsearch.lastKey();
         d->m_cursearch = d->m_pagecountsearch.find(d->m_findcurpage).value();
     }
+
     int xvalue = 0, yvalue = 0;
+
     if (d->m_cursearch >= 1) {
-        int curpagecount = d->m_pagecountsearch.find(d->m_findcurpage).value();
-//        qDebug() << "----------" << d->m_cursearch << "--" << curpagecount;
         //从下一个切换至上一个，如果findNext查找的m_cursearch为当前页最后一个则此处需要判断是否越界
         if (d->bfindnext && d->m_cursearch >= 1) { //前一次是向后查找
             if (d->m_cursearch - 2 >= 1) {
@@ -1480,7 +1441,7 @@ void DocummentBase::findPrev()
             }
             d->m_cursearch--;
         } else {
-            qDebug() << __FUNCTION__ << "the first page";
+            qDebug() << __FUNCTION__ << "first page";
         }
     }
     d->bfindnext = false;
@@ -1513,9 +1474,6 @@ void DocummentBase::slot_dataLoaded(bool result)
 {
     Q_D(DocummentBase);
     emit signal_openResult(result);
-//    if (result) {
-//        setViewModeAndShow(d->m_viewmode);
-//    }
 }
 
 void DocummentBase::slot_docummentLoaded(bool result)
@@ -1606,13 +1564,6 @@ void DocummentBase::pageMove(double mvx, double mvy)
     if (scrollBar_Y)
         scrollBar_Y->setValue(scrollBar_Y->value() + mvy);
 }
-
-//bool DocummentBase::isWordsBeLoad()
-//{
-//    Q_D(DocummentBase);
-//    return d->m_wordsbload;
-
-//}
 
 bool DocummentBase::setMagnifierStyle(int magnifierradius, int magnifierringwidth, double magnifierscale)
 {
@@ -1780,7 +1731,6 @@ bool DocummentBase::loadData()
         }
         d->m_pages.at(i)->getInterFace()->loadData();
     }
-    qDebug() << "loadWords end" << loadtime.elapsed();
     return true;
 }
 

@@ -34,7 +34,6 @@ bool DocummentProxy::openFile(DocType_EM type, QString filepath, unsigned int ip
         connect(this, SIGNAL(signal_pageJump(int)), m_documment, SLOT(pageJump(int)));
         connect(m_documment, SIGNAL(signal_searchRes(stSearchRes)), this, SIGNAL(signal_searchRes(stSearchRes)));
         connect(m_documment, SIGNAL(signal_searchover()), this, SIGNAL(signal_searchover()));
-        connect(this, SIGNAL(signal_setScaleRotateViewModeAndShow(double, RotateType_EM, ViewMode_EM)), m_documment, SLOT(setScaleRotateViewModeAndShow(double, RotateType_EM, ViewMode_EM)));
         connect(this, SIGNAL(signal_scaleAndShow(double, RotateType_EM)), m_documment, SLOT(scaleAndShow(double, RotateType_EM)));
         connect(this, SIGNAL(signal_setViewModeAndShow(ViewMode_EM)), m_documment, SLOT(setViewModeAndShow(ViewMode_EM)));
         connect(m_documment, SIGNAL(sigPageBookMarkButtonClicked(int, bool)), this, SIGNAL(sigPageBookMarkButtonClicked(int, bool)));
@@ -78,7 +77,7 @@ void DocummentProxy::setScaleRotateViewModeAndShow(double scale, RotateType_EM r
     if (!m_documment || bcloseing)
         return;
     mouseSelectTextClear();
-    emit signal_setScaleRotateViewModeAndShow(scale, rotate, viewmode);
+    m_documment->setScaleRotateViewModeAndShow(scale, rotate, viewmode);
 }
 void DocummentProxy::scaleRotateAndShow(double scale, RotateType_EM rotate)
 {

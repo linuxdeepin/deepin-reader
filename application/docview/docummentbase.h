@@ -265,6 +265,7 @@ public:
     int label2pagenum(QString label);
     bool haslabel();
     QPoint transformPoint(const QPoint &pt, RotateType_EM type, double scale);
+    void setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode);
 
 signals:
     void signal_pageChange(int);
@@ -284,7 +285,6 @@ protected slots:
     void slot_docummentLoaded(bool result);
     void slot_dataLoaded(bool result);
     bool pageJump(int pagenum);
-    void setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode);
     void scaleAndShow(double scale, RotateType_EM rotate);
     bool setViewModeAndShow(ViewMode_EM viewmode);
     void showSlideModelTimerOut();

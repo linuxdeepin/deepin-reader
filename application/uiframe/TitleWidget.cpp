@@ -94,7 +94,6 @@ void TitleWidget::initWidget()
 
     __InitHandel();
     __InitSelectTool();
-//    __InitScale();
 
     auto m_layout = new QHBoxLayout();
     m_layout->setContentsMargins(5, 0, 0, 0);
@@ -248,7 +247,6 @@ void TitleWidget::__InitHandel()
     m_pHandleShapeBtn->setObjectName("defaultshape");
     int tW = 42;
     int tH = 36;
-//    dApp->adaptScreenView(tW, tH);
     m_pHandleShapeBtn->setFixedSize(QSize(tW, tH));
     m_pHandleShapeBtn->setIconSize(QSize(tW, tH));
     connect(m_pHandleShapeBtn, SIGNAL(clicked()), SLOT(on_handleShapeBtn_clicked()));

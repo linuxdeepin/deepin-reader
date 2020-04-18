@@ -117,7 +117,6 @@ void SheetBrowserPDF::setScale(double scale)
 {
     Q_D(SheetBrowserPDF);
 
-    qDebug() << scale;
     setOper(Scale, scale);
 
     d->m_pDocViewProxy->setScale(scale);
