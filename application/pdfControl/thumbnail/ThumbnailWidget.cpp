@@ -60,6 +60,7 @@ void ThumbnailWidget::handleRotate(int rotate)
 
 void ThumbnailWidget::handlePage(int page)
 {
+    m_page = page;
     auto curPageItem = m_pThumbnailListWidget->item(page);
     if (curPageItem) {
         auto curItem = m_pThumbnailListWidget->currentItem();
@@ -304,7 +305,10 @@ void ThumbnailWidget::adaptWindowSize(const double &scale)
                 }
             }
         }
+
+        m_pThumbnailListWidget->scrollTo(m_pThumbnailListWidget->currentIndex());
     }
+
 }
 
 /**

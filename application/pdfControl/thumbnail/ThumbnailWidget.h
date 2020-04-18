@@ -100,6 +100,7 @@ public:
 
 signals:
     void sigLoadImage(const int &, const QImage &);
+
     void sigRotateImage(const int &index);
 
 protected:
@@ -189,6 +190,7 @@ private:
 
     QString     m_strBindPath = "";
     QPointer<DocSheet>   m_sheet;
+    int m_page;
 };
 
 #endif  // THUMBNAILWIDGET_H

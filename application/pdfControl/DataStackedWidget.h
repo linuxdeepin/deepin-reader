@@ -69,8 +69,6 @@ protected:
 private slots:
     void slotSetStackCurIndex(const int &);
 
-
-
     void slotUpdateThumbnail(const int &page);//添加或者移除高亮，要更新列表中相应的缩略图 add by duanxiaohui 2020-3-26
 
 private:

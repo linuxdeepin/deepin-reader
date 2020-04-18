@@ -225,7 +225,7 @@ void ScaleWidget::setSheet(DocSheet *sheet)
             }
         }
 
-        QString sCurText = m_sheet->getOper(Scale).toString() + "%";
+        QString sCurText = QString::number(m_sheet->getOper(Scale).toDouble(), 'f', 2) + "%";
 
         m_scaleComboBox->setCurrentText(sCurText);
 

@@ -1269,9 +1269,11 @@ double DocummentBase::adaptWidthAndShow(double width)
 
     if (!bDocummentExist() && d->m_pages.size() > 0)
         return -1;
+
     if (width < EPSINON) {
         return -1;
     }
+
     double imageoriginalheight = d->m_pages.at(0)->getOriginalImageHeight();
     double imageoriginalwidth = d->m_pages.at(0)->getOriginalImageWidth();
     RotateType_EM docrotatetype = d->m_rotate;
@@ -1291,7 +1293,6 @@ double DocummentBase::adaptWidthAndShow(double width)
             scale = width / imageoriginalheight;
     }
 
-    qDebug() << scale;
     scaleAndShow(scale, RotateType_Normal);
     return scale;
 }
@@ -1312,13 +1313,11 @@ double DocummentBase::adaptHeightAndShow(double height)
 
     double scale = 1;
 
-    qDebug() << scale;
     scale = height / imageoriginalheight;
 
     if (RotateType_90 == docrotatetype || RotateType_270 == docrotatetype)
         scale = height / imageoriginalwidth;
 
-    qDebug() << scale;
     scaleAndShow(scale, RotateType_Normal);
 
     return scale;
