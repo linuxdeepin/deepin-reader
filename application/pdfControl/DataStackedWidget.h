@@ -20,6 +20,7 @@
 #define DATASTACKEDWIDGET_H
 
 #include <DStackedWidget>
+#include "docview/commonstruct.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -47,6 +48,12 @@ public:
 
     void handleBookMark(int page, int state);
 
+    void handleFindOperation(const int &);
+
+    void handleFindContentComming(const stSearchRes &);
+
+    int  handleFindFinished();
+
     int qDealWithShortKey(const QString &);
 
     void adaptWindowSize(const double &scale); //缩略图列表自适应窗体大小  add by duanxiaohui 2020-3-20
@@ -57,11 +64,6 @@ signals:
     void sigDeleteAnntation(const int &, const QString &);
 
     void sigFitChanged(int state);
-
-    void sigFindNone(); //搜索结束 什么都没有
-
-public:
-    void SetFindOperation(const int &);
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;

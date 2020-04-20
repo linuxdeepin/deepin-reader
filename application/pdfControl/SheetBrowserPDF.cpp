@@ -216,19 +216,6 @@ void SheetBrowserPDF::leaveEvent(QEvent *event)
     CustomWidget::leaveEvent(event);
 }
 
-void SheetBrowserPDF::ShowFindWidget()
-{
-    Q_D(SheetBrowserPDF);
-    if (m_pFindWidget == nullptr) {
-        m_pFindWidget = new FindWidget(this);
-        connect(m_pFindWidget, SIGNAL(sigFindOperation(const int &, const QString &)), SLOT(SlotFindOperation(const int &, const QString &)));
-    }
-
-    int nParentWidth = this->width();
-    m_pFindWidget->showPosition(nParentWidth);
-    m_pFindWidget->setSearchEditFocus();
-}
-
 void SheetBrowserPDF::OpenFilePath(const QString &sPath)
 {
     Q_D(SheetBrowserPDF);
@@ -276,13 +263,26 @@ bool SheetBrowserPDF::saveAsData(QString targetFilePath)
     return true;
 }
 
-void SheetBrowserPDF::SlotFindOperation(const int &iType, const QString &strFind)
+void SheetBrowserPDF::handleFindOperation(const int &iType, const QString &strFind)
 {
     Q_D(SheetBrowserPDF);
 
-    emit sigFindOperation(iType);
+    if (iType == E_FIND_NEXT) {
+        d->m_pProxy->findNext();
+    } else if (iType == E_FIND_PREV) {
+        d->m_pProxy->findPrev();
+    } else if (iType == E_FIND_EXIT) {
+        d->m_pProxy->clearsearch();
+    } else {
+        d->m_pProxy->search(strFind);
+    }
+}
 
-    d->FindOperation(iType, strFind);
+void SheetBrowserPDF::setFindWidget(FindWidget *findWidget)
+{
+    Q_D(SheetBrowserPDF);
+
+    d->setFindWidget(findWidget);
 }
 
 //  信号槽　初始化
@@ -321,9 +321,4 @@ QVariant SheetBrowserPDF::getOper(int type)
 {
     Q_D(SheetBrowserPDF);
     return d->m_pProxyFileDataModel->getOper(type);
-}
-
-void SheetBrowserPDF::onFindNone()
-{
-    m_pFindWidget->setEditAlert(1);
 }

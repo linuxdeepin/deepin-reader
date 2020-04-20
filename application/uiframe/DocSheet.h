@@ -15,7 +15,7 @@ class SheetBrowserPDF;
 class SheetSidebar;
 class DocummentProxy;
 class SheetBrowserArea;
-
+class FindWidget;
 class DocSheet : public DSplitter
 {
     Q_OBJECT
@@ -134,6 +134,13 @@ private slots:
     void onSplitterMoved(int, int);
 
     void onTitleShortCut(QString);
+
+    void onFindOperation(int, QString);
+
+    void onFindContentComming(const stSearchRes &);
+
+    void onFindFinished();
+
 private:
     DocType_EM      m_type;
     void *m_sidebar = nullptr;
@@ -141,6 +148,8 @@ private:
 
     QStackedWidget *m_pRightWidget = nullptr;
     SpinnerWidget  *m_pSpinnerWidget = nullptr;
+    FindWidget     *m_pFindWidget = nullptr;
+
     bool            m_bOldState = false;
     int             m_currentState;
     QString         m_uuid;

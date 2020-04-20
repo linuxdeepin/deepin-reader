@@ -21,7 +21,7 @@ signals:
     void sigShowStackWidget(const int &);
 
 public:
-    void SetFindOperation(const int &);
+    void handleFindOperation(const int &);
 
     void handleOpenSuccess();
 

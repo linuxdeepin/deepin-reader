@@ -3,11 +3,13 @@
 
 #include <QObject>
 #include <QMouseEvent>
+#include <QPointer>
 
 #include "application.h"
 #include "MsgHeader.h"
 #include "docview/pagebase.h"
 #include "ModuleHeader.h"
+#include "widgets/FindWidget.h"
 
 class Annotation;
 class DocummentProxy;
@@ -34,6 +36,7 @@ public:
     void hidetipwidget();
 
     bool hasOpened();
+
 private slots:
     void slotDealWithMenu(const int &, const QString &);
 
@@ -50,6 +53,8 @@ private slots:
     void onPageBookMarkButtonClicked(int, bool);
 
     void onPageChanged(int page);
+
+    void setFindWidget(FindWidget *findWidget);
 
 private:
     void wheelEvent(QWheelEvent *event);
@@ -71,7 +76,6 @@ private:
     void DocFile_ctrl_i();
     void DocFile_ctrl_c();
     void DocFile_ctrl_b();
-    void FindOperation(const int &iType, const QString &strFind);
     double handleResize(const QSize &size);
 
 private:
@@ -90,15 +94,16 @@ private:
     NoteTipWidget           *m_pTipWidget = nullptr;        //  注释提示框
     TextOperationMenu       *m_operatemenu = nullptr;
     DefaultOperationMenu    *m_pDefaultMenu = nullptr;
-    ProxyData           *m_pProxyData = nullptr;            //  唯一 数据区
-    ProxyFileDataModel  *m_pProxyFileDataModel = nullptr;
-    ProxyMouseMove      *m_pProxyMouseMove = nullptr;       //  移动操作
-    ProxyNotifyMsg      *m_pProxyNotifyMsg = nullptr;       //  通知消息
-    ProxyViewDisplay    *m_pDocViewProxy = nullptr;         //  文档操作 旋转\单双页\自适应
-    Annotation          *m_pAnnotation = nullptr;           //  高亮 注释操作
-    DocummentProxy      *m_pProxy = nullptr;                //  文档代理类
-    QPoint              m_popwidgetshowpoint;
-    DocSheet            *m_sheet;
+    ProxyData               *m_pProxyData = nullptr;            //  唯一 数据区
+    ProxyFileDataModel      *m_pProxyFileDataModel = nullptr;
+    ProxyMouseMove          *m_pProxyMouseMove = nullptr;       //  移动操作
+    ProxyNotifyMsg          *m_pProxyNotifyMsg = nullptr;       //  通知消息
+    ProxyViewDisplay        *m_pDocViewProxy = nullptr;         //  文档操作 旋转\单双页\自适应
+    Annotation              *m_pAnnotation = nullptr;           //  高亮 注释操作
+    DocummentProxy          *m_pProxy = nullptr;                //  文档代理类
+    QPoint                  m_popwidgetshowpoint;
+    DocSheet                *m_sheet;
+    QPointer<FindWidget>    m_findWidget = nullptr;
     friend class Annotation;
     friend class ProxyViewDisplay;
     friend class ProxyMouseMove;

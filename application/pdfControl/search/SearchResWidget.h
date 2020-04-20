@@ -46,35 +46,36 @@ public:
 
     ~SearchResWidget() override;
 
-    void handleOpenSuccess();
+    void handFindContentComming(const stSearchRes &);
 
-signals:
-    void sigNeedShowFindNone();    //需要设置搜索框什么也没搜到的提醒
+    int handleFindFinished();
 
-public:
-    void OnExitSearch();
+    void clearFindResult();
 
 protected:
     void initWidget() override;
 
 private slots:
-    void slotGetSearchContant(const stSearchRes &);
-    void slotSearchOver();
     void slotSelectItem(QListWidgetItem *);
 
 private:
     void initConnections();
+
     void addSearchsItem(const int &page, const QString &text, const int &resultNum);
+
     void showTips();
+
     void setSelectItemBackColor(QListWidgetItem *);
+
     void clearItemColor();
+
     SearchItemWidget *getItemWidget(QListWidgetItem *);
 
 private:
     CustomListWidget *m_pSearchList = nullptr;       // 搜索结果列表
-    QString m_strBindPath = "";
+
     DocSheet *m_sheet;
-    // CustomWidget interface
+
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
     void updateThumbnail(const int &) Q_DECL_OVERRIDE;

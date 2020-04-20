@@ -33,7 +33,7 @@ SearchResWidget::~SearchResWidget()
 }
 
 //  查询有数据, 则填充
-void SearchResWidget::slotGetSearchContant(const stSearchRes &search)
+void SearchResWidget::handFindContentComming(const stSearchRes &search)
 {
     int resultNum = 0;
     QString strText = "";
@@ -48,12 +48,19 @@ void SearchResWidget::slotGetSearchContant(const stSearchRes &search)
     addSearchsItem(page, strText, resultNum);
 }
 
-void SearchResWidget::slotSearchOver()
+int  SearchResWidget::handleFindFinished()
 {
-    if (m_pSearchList->count() == 0) {      //  无结果
-        emit sigNeedShowFindNone();
-        showTips();
+    int count = m_pSearchList->count();;
+    if (count == 0) {      //  无结果
+        showTips();     //此处会增加一个count
     }
+
+    return count;
+}
+
+void SearchResWidget::clearFindResult()
+{
+    m_pSearchList->clear();
 }
 
 void SearchResWidget::slotSelectItem(QListWidgetItem *item)
@@ -63,19 +70,6 @@ void SearchResWidget::slotSelectItem(QListWidgetItem *item)
     }
 
     setSelectItemBackColor(item);
-}
-
-//  打开成功之后, 链接搜索信号
-void SearchResWidget::handleOpenSuccess()
-{
-    if (nullptr == m_sheet)
-        return;
-
-    DocummentProxy *_proxy = m_sheet->getDocProxy();
-    if (_proxy) {
-        connect(_proxy, SIGNAL(signal_searchRes(stSearchRes)), SLOT(slotGetSearchContant(const stSearchRes &)));
-        connect(_proxy, SIGNAL(signal_searchover()), SLOT(slotSearchOver()));
-    }
 }
 
 void SearchResWidget::initWidget()
@@ -141,7 +135,6 @@ void SearchResWidget::showTips()
     DFontSizeManager::instance()->bind(tipLab, DFontSizeManager::T6);
     int tW = 226;
     int tH = 528;
-//    dApp->adaptScreenView(tW, tH);
     tipWidget->setMinimumSize(QSize(tW, tH));
 
     hLayout->addStretch(1);
@@ -253,7 +246,6 @@ void SearchResWidget::updateThumbnail(const int &page)
 
     int tW = 146;
     int tH = 174;
-//    dApp->adaptScreenView(tW, tH);
 
     auto dproxy = m_sheet->getDocProxy();
     dproxy->getImage(page, image, tW, tH);
@@ -271,9 +263,4 @@ void SearchResWidget::updateThumbnail(const int &page)
             }
         }
     }
-}
-
-void SearchResWidget::OnExitSearch()
-{
-    m_pSearchList->clear();
 }

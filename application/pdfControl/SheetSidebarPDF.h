@@ -4,6 +4,7 @@
 #include <QResizeEvent>
 
 #include "CustomControl/CustomWidget.h"
+#include "docview/commonstruct.h"
 
 /**
  * @brief The LeftShowWidget class
@@ -25,28 +26,36 @@ public:
 
     void setBookMark(int page, int state);
 
+    void handleOpenSuccess();
+
+    void handleFindOperation(int);
+
+    void handleFindContentComming(const stSearchRes &);
+
+    int  handleFindFinished();      //返回搜索结果条数
+
 signals:
     void sigAnntationMsg(const int &, const QString &);
+
     void sigDeleteAnntation(const int &, const QString &);
+
     void sigAdaptWindowSize(const double &scale); //缩略图列表自适应窗体大小  add by duanxiaohui 2020-3-19
+
     void sigUpdateThumbnail(const int &page);
-    void sigFindNone();
+
 public:
-    void handleOpenSuccess();
-    int qDealWithShortKey(const QString &);
+    int  qDealWithShortKey(const QString &);
 
 public slots:
-    void onSearch(const int &);
+
 
     void onRotate(int);
 
     void onPageChanged(int page);
 
-    // CustomWidget interface
 protected:
     void initWidget() override;
 
-    // QWidget interface
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 

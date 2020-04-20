@@ -20,6 +20,7 @@
 #define FILEVIEWWIDGET_H
 
 #include "CustomControl/CustomWidget.h"
+#include "docview/commonstruct.h"
 
 class DocummentProxy;
 class ProxyFileDataModel;
@@ -63,10 +64,12 @@ public:
 
     void showNoteWidget(int page, const QString &uuid, const int &type = NOTE_HIGHLIGHT);
 
+    void handleFindOperation(const int &, const QString &strFind);
+
+    void setFindWidget(FindWidget *findWidget);
+
 signals:
     void sigFileOpenResult(const QString &, const bool &);
-
-    void sigFindOperation(const int &);
 
     void sigAnntationMsg(const int &, const QString &);
 
@@ -79,6 +82,10 @@ signals:
     void sigRotateChanged(int rotate);
 
     void sigPageChanged(int page);
+
+    void sigFindContantComming(const stSearchRes &);    //搜索到新的词
+
+    void sigFindFinished();                             //搜索完成
 
 public:
     int qDealWithShortKey(const QString &);
@@ -93,8 +100,6 @@ public:
 
     bool saveAsData(QString targetFilePath);
 
-    void ShowFindWidget();
-
     bool getFileChange();
 
     DocummentProxy *GetDocProxy();
@@ -102,9 +107,6 @@ public:
     void setOper(const int &, const QVariant &);
 
     QVariant getOper(int type);
-
-public slots:
-    void onFindNone();
 
 protected:
     void initWidget() override;
@@ -122,15 +124,8 @@ protected:
 
     void leaveEvent(QEvent *)override;
 
-
-private slots:
-    void SlotFindOperation(const int &, const QString &strFind);
-
 private:
     void initConnections();
-
-private:
-    FindWidget *m_pFindWidget = nullptr;
 
 private:
     SheetBrowserPDFPrivate *const d_ptr = nullptr;

@@ -51,14 +51,20 @@ public:
 
 private slots:
     void findCancel();
+
     void handleContentChanged();
+
     void slotFindNextBtnClicked();
+
     void slotFindPrevBtnClicked();
+
     void slotClearContent();
+
     void slotEditAborted();
 
 private:
     void initWidget();
+
     void initConnection();
 
 public:

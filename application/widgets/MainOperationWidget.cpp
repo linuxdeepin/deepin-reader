@@ -150,7 +150,7 @@ void MainOperationWidget::slotButtonClicked(int id)
     emit sigShowStackWidget(id);
 }
 
-void MainOperationWidget::SetFindOperation(const int &iType)
+void MainOperationWidget::handleFindOperation(const int &iType)
 {
     if (iType == E_FIND_CONTENT) {
         setBtnCheckById(4);

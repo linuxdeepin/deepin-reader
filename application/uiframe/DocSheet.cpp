@@ -31,6 +31,7 @@
 #include "CentralDocPage.h"
 #include "app/ProcessController.h"
 #include "docview/docummentproxy.h"
+#include "widgets/FindWidget.h"
 
 QMap<QString, DocSheet *> DocSheet::g_map;
 DocSheet::DocSheet(DocType_EM type, DWidget *parent)
@@ -220,15 +221,14 @@ void DocSheet::initPDF()
     m_browser = browser;
 
     connect(sidebar, SIGNAL(sigDeleteAnntation(const int &, const QString &)), browser, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
-    connect(sidebar, SIGNAL(sigFindNone()), browser, SLOT(onFindNone()));
     connect(browser, SIGNAL(sigFileOpenResult(const QString &, const bool &)), SLOT(SlotFileOpenResult(const QString &, const bool &)));
-    connect(browser, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
-    connect(browser, SIGNAL(sigFindOperation(const int &)), sidebar, SLOT(onSearch(const int &)));
     connect(browser, SIGNAL(sigAnntationMsg(const int &, const QString &)), sidebar, SIGNAL(sigAnntationMsg(const int &, const QString &)));
     connect(browser, SIGNAL(sigUpdateThumbnail(const int &)), sidebar, SIGNAL(sigUpdateThumbnail(const int &)));
     connect(browser, SIGNAL(sigFileChanged()), this, SLOT(onFileChanged()));
     connect(browser, SIGNAL(sigRotateChanged(int)), sidebar, SLOT(onRotate(int)));
     connect(browser, SIGNAL(sigPageChanged(int)), sidebar, SLOT(onPageChanged(int)));
+    connect(browser, SIGNAL(sigFindContantComming(const stSearchRes &)), this, SLOT(onFindContentComming(const stSearchRes &)));
+    connect(browser, SIGNAL(sigFindFinished()), this, SLOT(onFindFinished()));
 
     int tW = 36;
     int tH = 36;
@@ -324,6 +324,31 @@ void DocSheet::onTitleShortCut(QString shortCut)
     }
 }
 
+void DocSheet::onFindOperation(int type, QString text)
+{
+    if (DocType_PDF == m_type) {
+        static_cast<SheetSidebarPDF *>(m_sidebar)->handleFindOperation(type);
+        static_cast<SheetBrowserPDF *>(m_browser)->handleFindOperation(type, text);
+    }
+
+    emit sigFindOperation(type);
+}
+
+void DocSheet::onFindContentComming(const stSearchRes &res)
+{
+    if (DocType_PDF == m_type) {
+        static_cast<SheetSidebarPDF *>(m_sidebar)->handleFindContentComming(res);
+    }
+}
+
+void DocSheet::onFindFinished()
+{
+    if (DocType_PDF == m_type) {
+        int count = static_cast<SheetSidebarPDF *>(m_sidebar)->handleFindFinished();
+        m_pFindWidget->setEditAlert(count == 0);
+    }
+}
+
 QUuid DocSheet::getUuid(DocSheet *sheet)
 {
     return g_map.key(sheet);
@@ -416,8 +441,16 @@ void DocSheet::OnExitSliderShow()
 
 void DocSheet::ShowFindWidget()
 {
-    if (DocType_PDF == m_type)
-        static_cast<SheetBrowserPDF *>(m_browser)->ShowFindWidget();
+    if (m_pFindWidget == nullptr) {
+        m_pFindWidget = new FindWidget(static_cast<SheetBrowserPDF *>(m_browser));
+        static_cast<SheetBrowserPDF *>(m_browser)->setFindWidget(m_pFindWidget);
+        connect(m_pFindWidget, SIGNAL(sigFindOperation(const int &, const QString &)), this, SLOT(onFindOperation(const int &, const QString &)));
+    } else {
+        m_pFindWidget->setEditAlert(0);
+    }
+
+    m_pFindWidget->showPosition(static_cast<SheetBrowserPDF *>(m_browser)->width());
+    m_pFindWidget->setSearchEditFocus();
 }
 
 DocType_EM DocSheet::type()

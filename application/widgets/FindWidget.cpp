@@ -177,6 +177,8 @@ void FindWidget::setEditAlert(const int &iFlag)
 {
     if (m_pSearchEdit) {
         bool bAlert = iFlag == 1 ? true : false;
+        if (m_pSearchEdit->text().isEmpty())
+            bAlert = false;
         m_pSearchEdit->setAlert(bAlert);
     }
 }

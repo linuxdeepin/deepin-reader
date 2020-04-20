@@ -71,7 +71,6 @@ void SheetSidebarPDF::initWidget()
     this->setLayout(pVBoxLayout);
 
     m_pStackedWidget = new DataStackedWidget(m_sheet, this);
-    connect(m_pStackedWidget, SIGNAL(sigFindNone()), this, SIGNAL(sigFindNone()));
     connect(this, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pStackedWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)));
     connect(m_pStackedWidget, SIGNAL(sigDeleteAnntation(const int &, const QString &)), this, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
     pVBoxLayout->addWidget(m_pStackedWidget);
@@ -95,25 +94,33 @@ void SheetSidebarPDF::resizeEvent(QResizeEvent *event)
     CustomWidget::resizeEvent(event);
 }
 
-void SheetSidebarPDF::onSearch(const int &iType)
+void SheetSidebarPDF::handleFindOperation(int type)
 {
-    m_pMainOperationWidget->SetFindOperation(iType);
-    m_pStackedWidget->SetFindOperation(iType);
+    m_pMainOperationWidget->handleFindOperation(type);
+    m_pStackedWidget->handleFindOperation(type);
 
-    if (iType == E_FIND_CONTENT) {
+    if (type == E_FIND_CONTENT) {
         m_nSearch = 1;
         m_bOldVisible = this->isVisible();
         if (!m_bOldVisible) {
             this->setVisible(true);
         }
-    } else if (iType == E_FIND_EXIT) {
+    } else if (type == E_FIND_EXIT) {
         if (m_nSearch == 1) {
             m_nSearch = -1;
             this->setVisible(m_bOldVisible);
-        } else {
-            handleOpenSuccess();
         }
     }
+}
+
+void SheetSidebarPDF::handleFindContentComming(const stSearchRes &res)
+{
+    m_pStackedWidget->handleFindContentComming(res);
+}
+
+int SheetSidebarPDF::handleFindFinished()
+{
+    return m_pStackedWidget->handleFindFinished();
 }
 
 void SheetSidebarPDF::onRotate(int rotate)

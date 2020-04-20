@@ -229,11 +229,11 @@ void TitleWidget::initBtns()
     m_pSearchBtn->setDisabled(true);
     int tW = 36;
     int tH = 36;
-//    dApp->adaptScreenView(tW, tH);
+
     m_pSearchBtn->setFixedSize(QSize(tW, tH));
     tW = 30;
     tH = 30;
-//    dApp->adaptScreenView(tW, tH);
+
     m_pSearchBtn->setIconSize(QSize(tW, tH));
     connect(m_pSearchBtn, SIGNAL(clicked()), SLOT(on_searchBtn_clicked()));
 }

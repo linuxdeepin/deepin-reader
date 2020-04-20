@@ -52,27 +52,34 @@ void DataStackedWidget::handleBookMark(int page, int state)
     m_pBookMarkWidget->setBookMark(page, state);
 }
 
-int DataStackedWidget::qDealWithShortKey(const QString &shortCut)
-{
-    return (m_pBookMarkWidget) ? m_pBookMarkWidget->qDealWithShortKey(shortCut) : MSG_NO_OK;
-}
-
-void DataStackedWidget::SetFindOperation(const int &iType)
+void DataStackedWidget::handleFindOperation(const int &iType)
 {
     if (iType == E_FIND_CONTENT) {
+        m_pSearchResWidget->clearFindResult();
         setCurrentWidget(m_pSearchResWidget);
-        //解决搜索不能清除上一次搜索结果问题
-        if (m_pSearchResWidget) {
-            m_pSearchResWidget->OnExitSearch();
-        }
     } else if (iType == E_FIND_EXIT) {
         int nId = m_sheet->getOper(LeftIndex).toInt();
         if (nId == -1) {
             nId = 0;
         }
         setCurrentIndex(nId);
-        m_pSearchResWidget->OnExitSearch();
+        m_pSearchResWidget->clearFindResult();
     }
+}
+
+void DataStackedWidget::handleFindContentComming(const stSearchRes &res)
+{
+    m_pSearchResWidget->handFindContentComming(res);
+}
+
+int DataStackedWidget::handleFindFinished()
+{
+    return m_pSearchResWidget->handleFindFinished();
+}
+
+int DataStackedWidget::qDealWithShortKey(const QString &shortCut)
+{
+    return (m_pBookMarkWidget) ? m_pBookMarkWidget->qDealWithShortKey(shortCut) : MSG_NO_OK;
 }
 
 void DataStackedWidget::keyPressEvent(QKeyEvent *event)
@@ -177,7 +184,6 @@ void DataStackedWidget::InitWidgets()
     addWidget(m_pNotesWidget);
 
     m_pSearchResWidget = new SearchResWidget(m_sheet, this);
-    connect(m_pSearchResWidget, SIGNAL(sigNeedShowFindNone()), this, SIGNAL(sigFindNone()));
     addWidget(m_pSearchResWidget);
 
     setCurrentWidget(m_pThWidget);
@@ -256,7 +262,6 @@ void DataStackedWidget::handleOpenSuccess()
     m_pCatalogWidget->handleOpenSuccess();
     m_pBookMarkWidget ->handleOpenSuccess();
     m_pNotesWidget->handleOpenSuccess();
-    m_pSearchResWidget->handleOpenSuccess();
 }
 
 void DataStackedWidget::showEvent(QShowEvent *event)

@@ -289,22 +289,6 @@ void SheetBrowserPDFPrivate::__SetCursor(const QCursor &cs)
     }
 }
 
-
-void SheetBrowserPDFPrivate::FindOperation(const int &iType, const QString &strFind)
-{
-    if (m_pProxy) {
-        if (iType == E_FIND_NEXT) {
-            m_pProxy->findNext();
-        } else if (iType == E_FIND_PREV) {
-            m_pProxy->findPrev();
-        } else if (iType == E_FIND_EXIT) {
-            m_pProxy->clearsearch();
-        } else {
-            m_pProxy->search(strFind);
-        }
-    }
-}
-
 double SheetBrowserPDFPrivate::handleResize(const QSize &size)
 {
     Q_Q(SheetBrowserPDF);
@@ -317,9 +301,10 @@ double SheetBrowserPDFPrivate::handleResize(const QSize &size)
         scale = m_pDocViewProxy->onSetWidgetAdapt();
     }
 
-    if (q->m_pFindWidget && q->m_pFindWidget->isVisible()) {
-        int nParentWidth = q->width();
-        q->m_pFindWidget->showPosition(nParentWidth);
+    if (!m_findWidget.isNull()) {
+        if (m_findWidget->isVisible()) {
+            m_findWidget->showPosition(q->width());
+        }
     }
 
     return scale;
@@ -495,6 +480,11 @@ void SheetBrowserPDFPrivate::onPageChanged(int page)
     emit q->sigPageChanged(page);
 }
 
+void SheetBrowserPDFPrivate::setFindWidget(FindWidget *findWidget)
+{
+    m_findWidget = findWidget;
+}
+
 void SheetBrowserPDFPrivate::onFileOpenResult(bool openresult)
 {
     Q_Q(SheetBrowserPDF);
@@ -524,6 +514,8 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
         connect(m_pProxy, SIGNAL(signal_pageChange(int)), this, SLOT(onPageChanged(int)));
         connect(m_pProxy, SIGNAL(signal_openResult(bool)), SLOT(onFileOpenResult(bool)));
         connect(m_pProxy, SIGNAL(sigPageBookMarkButtonClicked(int, bool)), SLOT(onPageBookMarkButtonClicked(int, bool)));
+        connect(m_pProxy, SIGNAL(signal_searchRes(stSearchRes)), q, SIGNAL(sigFindContantComming(const stSearchRes &)));
+        connect(m_pProxy, SIGNAL(signal_searchover()), q, SIGNAL(sigFindFinished()));
 
         QFileInfo info(sPath);
 
