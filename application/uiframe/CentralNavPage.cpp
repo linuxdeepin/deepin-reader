@@ -15,7 +15,6 @@ CentralNavPage::CentralNavPage(DWidget *parent)
     : CustomWidget(parent)
 {
     initWidget();
-    initConnections();
     slotUpdateTheme();
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &CentralNavPage::slotUpdateTheme);
 }
@@ -87,14 +86,5 @@ void CentralNavPage::slotUpdateTheme()
     foreach (auto l, customClickLabelList) {
         l->setForegroundRole(DPalette::TextTips);
     }
-}
-
-void CentralNavPage::initConnections()
-{
-}
-
-void CentralNavPage::NewWindow()
-{
-    //MainWindow::create()->show();
 }
 

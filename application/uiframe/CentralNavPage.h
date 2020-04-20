@@ -24,12 +24,6 @@ private slots:
 
     void slotUpdateTheme();
 
-private:
-
-    void initConnections();
-
-    void NewWindow();
-
 };
 
 #endif // OPENFILEWIDGET_H

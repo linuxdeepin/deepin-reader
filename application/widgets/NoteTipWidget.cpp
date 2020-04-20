@@ -12,11 +12,6 @@ NoteTipWidget::NoteTipWidget(DWidget *parnet)
     , m_iwidth(254)
 {
     setWindowFlags(Qt::ToolTip);
-    //  setFixedSize(200, 50);
-    int tW = m_iwidth;
-    int tH = m_iwidth;
-//    dApp->adaptScreenView(tW, tH);
-    m_iwidth = tW;
     setFixedWidth(m_iwidth);
     DPlatformWindowHandle handle(this);
     int radius = 8;
@@ -24,8 +19,10 @@ NoteTipWidget::NoteTipWidget(DWidget *parnet)
     setWindowOpacity(0.97);
 
     initWidget();
-    initConnection();
+
     slotUpdateTheme();
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NoteTipWidget::slotUpdateTheme);
 }
 
 void NoteTipWidget::setTipContent(const QString &content)
@@ -56,13 +53,6 @@ void NoteTipWidget::setTipContent(const QString &content)
         pedit->setFixedWidth(m_iwidth - 16);
         pedit->setPlainText(strcontent);
     }
-}
-
-void NoteTipWidget::initConnection()
-{
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ]() {
-        slotUpdateTheme();
-    });
 }
 
 void NoteTipWidget::slotUpdateTheme()

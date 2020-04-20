@@ -22,7 +22,6 @@ public:
     void setTipContent(const QString &);
 
 private:
-    void initConnection();
     void initWidget();
 
 private slots:

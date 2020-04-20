@@ -34,6 +34,7 @@ class CatalogTreeView : public DTreeView
 
 public:
     explicit CatalogTreeView(DocSheet *sheet, DWidget *parent = nullptr);
+
     ~CatalogTreeView() override;
 
     void setPage(int page);
@@ -59,14 +60,13 @@ protected slots:
     void slotThemeChanged();
 
 private:
-    void initConnections();
-
     void parseCatalogData(const Section &, QStandardItem *);
 
     QList<QStandardItem *> getItemList(const QString &, const int &, const qreal  &realleft, const qreal &realtop);
 
 private slots:
     void SlotCollapsed(const QModelIndex &);
+
     void SlotExpanded(const QModelIndex &);
 
 private:
@@ -74,6 +74,7 @@ private:
     DocSheet *m_sheet;
     QList<QStandardItem *> m_listTitle;
     QList<QStandardItem *> m_listPage;
+    int m_page;
 };
 
 #endif // CATALOGTREEVIEW_H

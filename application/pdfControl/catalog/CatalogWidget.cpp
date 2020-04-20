@@ -42,12 +42,17 @@ CatalogWidget::~CatalogWidget()
 void CatalogWidget::initWidget()
 {
     QHBoxLayout *titleLayout = new QHBoxLayout;
+
     titleLayout->setSpacing(0);
+
     titleLayout->setContentsMargins(10, 0, 10, 0);
 
     titleLabel = new CustomClickLabel("", this);
+
     titleLabel->setForegroundRole(DPalette::TextTips);
+
     titleLabel->setAlignment(Qt::AlignCenter);
+
     DFontSizeManager::instance()->bind(titleLabel, DFontSizeManager::T8);
 
     titleLayout->addWidget(titleLabel);

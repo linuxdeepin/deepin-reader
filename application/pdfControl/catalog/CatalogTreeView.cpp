@@ -38,12 +38,16 @@ CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    setFocusPolicy(Qt::NoFocus);
 
     this->header()->setHidden(true);
     this->viewport()->setAutoFillBackground(false);
     this->setContentsMargins(0, 0, 0, 0);
-    initConnections();
 
+    slotThemeChanged();
+
+    connect(this, SIGNAL(collapsed(const QModelIndex &)), SLOT(SlotCollapsed(const QModelIndex &)));
+    connect(this, SIGNAL(expanded(const QModelIndex &)), SLOT(SlotExpanded(const QModelIndex &)));
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &CatalogTreeView::slotThemeChanged);
 }
 
@@ -54,45 +58,45 @@ CatalogTreeView::~CatalogTreeView()
 
 void CatalogTreeView::setPage(int page)
 {
-    if (this->isVisible()) {
-        this->clearSelection(); //  清除 之前的选中
-        m_listTitle.clear();
-        m_listPage.clear();
+    m_page = page;
+    this->clearSelection(); //  清除 之前的选中
+    m_listTitle.clear();
+    m_listPage.clear();
 
-        auto model = reinterpret_cast<QStandardItemModel *>(this->model());
-        if (model) {
-            page++;
-            auto itemList = model->findItems("*", Qt::MatchWildcard | Qt::MatchRecursive);
-            foreach (auto item, itemList) {
-                int itemPage = item->data().toInt();
-                if (itemPage == page) {    //  找到了
-                    auto curIndex = model->indexFromItem(item);
-                    if (curIndex.isValid()) {
-                        auto curSelIndex = curIndex;
-                        auto parentIndex = curIndex.parent();   //  父 节点
-                        if (parentIndex.isValid()) {    //  父节点存在
-                            auto grandpaIndex = parentIndex.parent();       //  是否还存在 爷爷节点
-                            if (grandpaIndex.isValid()) {    //  爷爷节点存在
-                                bool isGrandpaExpand = this->isExpanded(grandpaIndex);
-                                if (isGrandpaExpand) { //  爷爷节点 已 展开
-                                    bool isExpand = this->isExpanded(parentIndex);
-                                    if (!isExpand) {   //  父节点未展开, 则 父节点高亮
-                                        curSelIndex = parentIndex;
-                                    }
-                                } else {    //  爷爷节点 未展开, 则 爷爷节点高亮
-                                    curSelIndex = grandpaIndex;
-                                }
-                            } else {    //  没有 爷爷节点
+    auto model = reinterpret_cast<QStandardItemModel *>(this->model());
+    if (model) {
+        page++;
+        auto itemList = model->findItems("*", Qt::MatchWildcard | Qt::MatchRecursive);
+        foreach (auto item, itemList) {
+            int itemPage = item->data().toInt();
+
+            if (itemPage == page) {    //  找到了
+                auto curIndex = model->indexFromItem(item);
+                if (curIndex.isValid()) {
+                    auto curSelIndex = curIndex;
+                    auto parentIndex = curIndex.parent();   //  父 节点
+                    if (parentIndex.isValid()) {    //  父节点存在
+                        auto grandpaIndex = parentIndex.parent();       //  是否还存在 爷爷节点
+                        if (grandpaIndex.isValid()) {    //  爷爷节点存在
+                            bool isGrandpaExpand = this->isExpanded(grandpaIndex);
+                            if (isGrandpaExpand) { //  爷爷节点 已 展开
                                 bool isExpand = this->isExpanded(parentIndex);
-                                if (!isExpand)     //  父节点未展开, 则 父节点高亮
+                                if (!isExpand) {   //  父节点未展开, 则 父节点高亮
                                     curSelIndex = parentIndex;
+                                }
+                            } else {    //  爷爷节点 未展开, 则 爷爷节点高亮
+                                curSelIndex = grandpaIndex;
                             }
+                        } else {    //  没有 爷爷节点
+                            bool isExpand = this->isExpanded(parentIndex);
+                            if (!isExpand)     //  父节点未展开, 则 父节点高亮
+                                curSelIndex = parentIndex;
                         }
-                        this->selectionModel()->clearSelection();
-                        this->selectionModel()->select(curSelIndex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
                     }
-                    break;
+                    this->selectionModel()->clearSelection();
+                    this->selectionModel()->select(curSelIndex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
                 }
+                break;
             }
         }
     }
@@ -101,12 +105,6 @@ void CatalogTreeView::setPage(int page)
 void CatalogTreeView::setRightControl(bool hasControl)
 {
     rightnotifypagechanged = hasControl;
-}
-
-void CatalogTreeView::initConnections()
-{
-    connect(this, SIGNAL(collapsed(const QModelIndex &)), SLOT(SlotCollapsed(const QModelIndex &)));
-    connect(this, SIGNAL(expanded(const QModelIndex &)), SLOT(SlotExpanded(const QModelIndex &)));
 }
 
 //  递归解析
@@ -156,7 +154,6 @@ QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const 
 
     item2->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
     color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().textTips().color();
-//    item2->setData(QVariant::fromValue(color), Qt::ForegroundRole);
     item2->setForeground(QBrush(color));
     m_listPage.append(item2);
 
@@ -201,26 +198,18 @@ void CatalogTreeView::SlotCollapsed(const QModelIndex &index)
     if (nullptr == m_sheet)
         return;
 
-    DocummentProxy *_proxy = m_sheet->getDocProxy();
-    if (_proxy) {
-        int nCurPage = _proxy->currentPageNo();
-        setPage(nCurPage);
-    }
+    setPage(m_page);
 }
 
 //  展开 节点处理
 void CatalogTreeView::SlotExpanded(const QModelIndex &index)
 {
-    if (index == this->selectionModel()->currentIndex()) {  //  展开的节点 是 高亮节点
-        if (nullptr == m_sheet)
-            return;
+    Q_UNUSED(index);
 
-        DocummentProxy *_proxy = m_sheet->getDocProxy();
-        if (_proxy) {
-            int nCurPage = _proxy->currentPageNo();
-            setPage(nCurPage);
-        }
-    }
+    if (nullptr == m_sheet)
+        return;
+
+    setPage(m_page);
 }
 
 //  实现 上下左键 跳转
@@ -271,6 +260,7 @@ void CatalogTreeView::slotThemeChanged()
             item->setForeground(QBrush(color));
         }
     }
+
     this->update();
 }
 
