@@ -141,14 +141,13 @@ QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const 
     m_listTitle.append(item);
 
     auto item1 = new QStandardItem(QString::number(page));
-    item2->setData(page);
-    item2->setData(realleft, Qt::UserRole + 2);
-    item2->setData(realtop, Qt::UserRole + 3);
-    item2->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    item1->setData(page);
+    item1->setData(realleft, Qt::UserRole + 2);
+    item1->setData(realtop, Qt::UserRole + 3);
+    item1->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
     color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().textTips().color();
-    item2->setForeground(QBrush(color));
-
-    m_listPage.append(item2);
+    item1->setForeground(QBrush(color));
+    m_listPage.append(item1);
 
     return QList<QStandardItem *>() << item << item1;
 }
