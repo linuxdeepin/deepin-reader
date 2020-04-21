@@ -144,7 +144,7 @@ void AppInfo::setScreenRect(const QRect &rect)
     m_screenRect = rect;
     m_dWidthScale = static_cast<double>((static_cast<double>(rect.width())) / static_cast<double>(m_nWidth));
     m_dHeightScale = static_cast<double>((static_cast<double>(rect.height())) / static_cast<double>(m_nHeight));
-    qInfo() << "        m_dWidthScale:" << m_dWidthScale << "             m_dHeightScale:" << m_dHeightScale;
+//    qInfo() << "        m_dWidthScale:" << m_dWidthScale << "             m_dHeightScale:" << m_dHeightScale;
 }
 
 void AppInfo::setSmallNoteWidgetSize(const QSize &size)

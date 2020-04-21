@@ -202,7 +202,7 @@ void ProxyMouseMove::__AddIconAnnotation(const QPoint &globalPos)
 
         _fvwParent->m_pProxy->iconAnnotationClicked(docGlobalPos, sContent, sUuid);
 
-        _fvwParent->m_sheet->showNoteWidget(page,sUuid,NOTE_ICON);
+        _fvwParent->m_sheet->showNoteWidget(page, sUuid, NOTE_ICON);
 
     } else {
 
@@ -212,7 +212,7 @@ void ProxyMouseMove::__AddIconAnnotation(const QPoint &globalPos)
 
             dApp->m_pAppInfo->setMousePressLocal(false, globalPos);
 
-            _fvwParent->m_sheet->showNoteWidget(page,sUuid,NOTE_ICON);
+            _fvwParent->m_sheet->showNoteWidget(page, sUuid, NOTE_ICON);
 
         }
     }
@@ -322,11 +322,13 @@ void ProxyMouseMove::mouseReleaseEvent(QMouseEvent *event)
 
         _fvwParent->__CloseFileNoteWidget();
 
-            QString sContent = "", sUuid = "";
+        QString sContent = "", sUuid = "";
 
-            _fvwParent->m_pProxy->iconAnnotationClicked(docGlobalPos, sContent, sUuid);
+        _fvwParent->m_pProxy->iconAnnotationClicked(docGlobalPos, sContent, sUuid);
 
-         _fvwParent->m_sheet->showNoteWidget(page,sUuid,NOTE_ICON);
+        if (sContent != "") {
+            _fvwParent->m_sheet->showNoteWidget(page, sUuid, NOTE_ICON);
+        }
     }
     // 判断鼠标点击的地方是否有高亮
     bool isHighLightReleasePoint = _fvwParent->m_pProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
