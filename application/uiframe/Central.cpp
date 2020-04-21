@@ -166,14 +166,6 @@ void Central::keyPressEvent(QKeyEvent *event)
     CustomWidget::keyPressEvent(event);
 }
 
-void Central::onFilesOpened()
-{
-    auto pLayout = this->findChild<QStackedLayout *>();
-    if (pLayout) {
-        pLayout->setCurrentIndex(1);
-    }
-}
-
 void Central::onMenuTriggered(const QString &action)
 {
     if (action == "New window") {

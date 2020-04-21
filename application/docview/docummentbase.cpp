@@ -784,7 +784,6 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
 {
     Q_D(DocummentBase);
 
-    int currpageno = d->m_currentpageno;
     if (d->m_pages.size() < 1) {
         return;
     }
@@ -805,18 +804,19 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     }
 
     setViewModeAndShow(d->m_viewmode);
-
-    d->m_currentpageno = currpageno;
 }
 
 int DocummentBase::getCurrentPageNo()
 {
     Q_D(DocummentBase);
+
     if (d->m_bslidemodel) {
         return d->m_slidepageno;
     }
+
     if (d->m_currentpageno >= 0)
         return d->m_currentpageno;
+
     return currentPageNo();
 }
 
@@ -1478,6 +1478,7 @@ void DocummentBase::slot_dataLoaded(bool result)
 void DocummentBase::slot_docummentLoaded(bool result)
 {
     Q_D(DocummentBase);
+
     if (!result) {
         if (d->threadloaddata.isRunning()) {
             d->threadloaddata.requestInterruption();
@@ -1487,6 +1488,10 @@ void DocummentBase::slot_docummentLoaded(bool result)
         d->threadloaddata.start();
         return;
     }
+
+    if (d->m_currentpageno > (d->m_pages.size() - 1))
+        d->m_currentpageno = (d->m_pages.size() - 1);
+
     d->donotneedreloaddoc = false;
     if (d->threadloaddata.isRunning()) {
         d->threadloaddata.requestInterruption();
@@ -1507,6 +1512,7 @@ void DocummentBase::slot_docummentLoaded(bool result)
         d->m_widgets.append(qwidget);
         QApplication::processEvents();
     }
+
     initConnect();
     scaleAndShow(0, d->m_rotate);
 }

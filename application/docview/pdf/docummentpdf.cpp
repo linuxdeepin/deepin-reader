@@ -57,6 +57,7 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
     document->setRenderHint(Poppler::Document::ThinLineSolid, true);
     document->setRenderHint(Poppler::Document::ThinLineShape, true);
     m_pages.clear();
+
     int countlabelnotmatch = 0;
     for (int i = 0; i < document->numPages(); i++) {
         PagePdf *page = new PagePdf(q);
@@ -86,7 +87,9 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
         m_maxzoomratio = m_maxzoomratio > 5.0 ? 5.0 : m_maxzoomratio;
         m_scale = m_scale > m_maxzoomratio ? m_maxzoomratio : m_scale;
     }
+
     setBasicInfo(filepath);
+
     emit signal_docummentLoaded(true);
 }
 
@@ -417,16 +420,18 @@ void DocummentPDF::clearSearch()
     d->m_searchTask->cancel();
     d->m_searchTask->wait();
     if (d->m_pagecountsearch.size() > 0) {
-
         foreach (int key, d->m_pagecountsearch.keys()) {
             d->m_pages.at(key)->clearHighlightRects();
             d->m_pages.at(key)->setCurSearchShow(false);
         }
     }
+
     if (d->m_currentpageno - 1 >= 0)
         d->m_pages.at(d->m_currentpageno - 1)->update();
+
     if (d->m_currentpageno + 1 < d->m_pages.size())
         d->m_pages.at(d->m_currentpageno + 1)->update();
+
     d->m_pages.at(d->m_currentpageno)->update();//刷新当前页
     d->m_pagecountsearch.clear();
 }
@@ -436,7 +441,8 @@ void DocummentPDF::refreshOnePage(int ipage)
     Q_D(DocummentPDF);
     if (!d->document)
         return ;
-    d->m_pages.at(ipage)->showImage(d->m_scale, d->m_rotate);
+    if (d->m_pages.count() > ipage)
+        d->m_pages.at(ipage)->showImage(d->m_scale, d->m_rotate);
 }
 
 bool DocummentPDF::bDocummentExist()
@@ -453,7 +459,8 @@ bool DocummentPDF::annotationClicked(const QPoint &pos, QString &strtext, QStrin
     Q_D(DocummentPDF);
     QPoint pt(pos);
     int ipage = pointInWhichPage(pt);
-    if (ipage < 0) return  false;
+    if (ipage < 0)
+        return  false;
     return (static_cast<PagePdf *>(d->m_pages.at(ipage)))->annotationClicked(pt, strtext, struuid);
 }
 

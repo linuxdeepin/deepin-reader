@@ -552,7 +552,9 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
         ViewMode_EM viewmode = static_cast<ViewMode_EM>(doubPage);
 
         m_pProxyData->setPath(sPath);
+
         int curPage = fdm.getOper(CurPage).toInt();
+
         bool rl = m_pProxy->openFile(nCurDocType, sPath, static_cast<unsigned int>(curPage), rotatetype, scaleRatio, viewmode);
 
         if (rl) {

@@ -70,8 +70,6 @@ protected:
     void initWidget() override;
 
 public slots:
-    void onFilesOpened();
-
     void onMenuTriggered(const QString &action);
 
     void onOpenFilesExec();
