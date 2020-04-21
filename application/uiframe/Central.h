@@ -76,6 +76,8 @@ public slots:
 
     void onOpenFilesExec();
 
+    void onNeedActivateWindow();
+
 private slots:
     void onShowTips(const QString &text, int iconIndex = 0);
 

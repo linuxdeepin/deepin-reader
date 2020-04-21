@@ -398,20 +398,27 @@ void NotesWidget::addNotesItem(const QString &text, const int &iType)
         int t_nPage = t_strList.at(2).trimmed().toInt();
 
         auto dproxy = m_sheet->getDocProxy();
+
         if (nullptr == dproxy) {
             return;
         }
         int tW = 146;
         int tH = 174;
-//        dApp->adaptScreenView(tW, tH);
+
         QImage image;
-        bool rl = dproxy->getImage(t_nPage, image, tW, tH /*42, 62*/);
+
+        bool rl = dproxy->getImage(t_nPage, image, tW, tH);
+
         if (rl) {
             QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_SMALL);
+
             auto item = addNewItem(img, t_nPage, t_strUUid, t_strText, true, iType);
+
             if (item) {
                 m_pNotesList->setCurrentItem(item);
+
                 emit sigUpdateThumbnail(t_nPage);
+
             }
         }
     }
@@ -481,25 +488,19 @@ QListWidgetItem *NotesWidget::addNewItem(const QImage &image, const int &page, c
         itemWidget->setTextEditText(text);
         int tW = LEFTMINWIDTH;
         int tH = 80;
-//        dApp->adaptScreenView(tW, tH);
         itemWidget->setBSelect(bNew);
 
         item->setFlags(Qt::NoItemFlags);
         if (m_bOpenFileOk) {
             double width = 1.0;
             double height = 1.0;
-            double scale = 1.0;
-            scale = dApp->scale();
-            //set item size
-            width = static_cast<double>(tW) * scale;
-            height = static_cast<double>(tH) * scale;
+            width = static_cast<double>(tW) * m_scale;
+            height = static_cast<double>(tH) * m_scale;
             tW = static_cast<int>(width);
             tH = static_cast<int>(height);
-//            itemWidget->setMinimumSize(QSize(tW, tH));
             item->setSizeHint(QSize(tW, tH));
-            itemWidget->adaptWindowSize(scale);
+            itemWidget->adaptWindowSize(m_scale);
         } else {
-//            itemWidget->setMinimumSize(QSize(tW, tH));
             item->setSizeHint(QSize(tW, tH));
         }
 
@@ -533,9 +534,10 @@ void NotesWidget::adaptWindowSize(const double &scale)
     double width = 1.0;
     double height = 1.0;
 
+    m_scale = scale;
     //set item size
-    width = static_cast<double>(LEFTMINWIDTH) * scale;
-    height = static_cast<double>(80) * scale;
+    width = static_cast<double>(LEFTMINWIDTH) * m_scale;
+    height = static_cast<double>(80) * m_scale;
 
     if (m_pNotesList) {
         int itemCount = 0;
@@ -547,7 +549,7 @@ void NotesWidget::adaptWindowSize(const double &scale)
                     auto itemWidget = getItemWidget(item);
                     if (itemWidget) {
                         item->setSizeHint(QSize(static_cast<int>(width), static_cast<int>(height)));
-                        itemWidget->adaptWindowSize(scale);
+                        itemWidget->adaptWindowSize(m_scale);
                     }
                 }
             }
@@ -570,12 +572,15 @@ void NotesWidget::updateThumbnail(const int &page)
     if (itemNum <= 0) {
         return;
     }
+
     QImage image;
     int tW = 146;
     int tH = 174;
-//    dApp->adaptScreenView(tW, tH);
+
     auto dproxy = m_sheet->getDocProxy();
+
     dproxy->getImage(page, image, tW, tH);
+
     for (int index = 0; index < itemNum; index++) {
         auto item = m_pNotesList->item(index);
         if (item) {
@@ -591,14 +596,6 @@ void NotesWidget::updateThumbnail(const int &page)
         }
     }
 }
-
-QString NotesWidget::getBindPath() const
-{
-    return m_strBindPath;
-}
-
-/*********************class ThreadLoadImageOfNote***********************/
-/**********************加载注释列表***************************************/
 
 ThreadLoadImageOfNote::ThreadLoadImageOfNote(QObject *parent)
     : QThread(parent)

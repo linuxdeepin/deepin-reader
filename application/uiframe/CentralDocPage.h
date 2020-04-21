@@ -162,6 +162,8 @@ signals:
 
     void sigNeedShowState(int);
 
+    void sigNeedActivateWindow();
+
 public slots:
     void onSheetChanged(DocSheet *);
 

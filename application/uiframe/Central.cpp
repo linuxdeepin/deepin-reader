@@ -204,6 +204,11 @@ void Central::onOpenFilesExec()
     openFilesExec();
 }
 
+void Central::onNeedActivateWindow()
+{
+    activateWindow();
+}
+
 void Central::onShowTips(const QString &text, int iconIndex)
 {
     if (0 == iconIndex)
@@ -221,7 +226,8 @@ void Central::dragEnterEvent(QDragEnterEvent *event)
     } else if (mimeData->hasFormat("reader/tabbar")) {
         event->accept();
         activateWindow();
-    }
+    } else
+        event->ignore();
 }
 
 void Central::dropEvent(QDropEvent *event)
@@ -238,32 +244,15 @@ void Central::dropEvent(QDropEvent *event)
             m_docPage->onCentralMoveIn(sheet);
 
     } else if (mimeData->hasUrls()) {
-        QStringList noOpenFileList;
-        QStringList canOpenFileList;
+        QStringList filePathList;
 
         for (auto url : mimeData->urls()) {
             QString sFilePath = url.toLocalFile();
-
-            QFileInfo file(sFilePath);
-            if (file.isFile()) {
-                QString sSuffix = file.completeSuffix();
-                if (sSuffix == "pdf" || sFilePath.endsWith(QString(".pdf"))) {  //  打开第一个pdf文件
-                    canOpenFileList.append(sFilePath);
-                } else {
-                    if (!noOpenFileList.contains(sSuffix)) {
-                        noOpenFileList.append(sSuffix);
-                    }
-                }
-            }
+            filePathList.append(sFilePath);
         }
 
-        foreach (auto s, noOpenFileList) {
-            QString msgContent = tr("The format is not supported");
-            onShowTips(msgContent, 1);
-        }
-
-        if (canOpenFileList.count() > 0) {
-            openFiles(canOpenFileList);
+        if (filePathList.count() > 0) {
+            openFiles(filePathList);
         }
     }
 }
@@ -294,4 +283,5 @@ void Central::initWidget()
     connect(m_docPage, SIGNAL(sigNeedShowState(int)), this, SIGNAL(sigNeedShowState(int)));
     connect(m_docPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
     connect(m_docPage, SIGNAL(sigFindOperation(const int &)), m_widget, SLOT(slotFindOperation(const int &)));
+    connect(m_docPage, SIGNAL(sigNeedActivateWindow()), this, SLOT(onNeedActivateWindow()));
 }

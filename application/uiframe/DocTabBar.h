@@ -87,6 +87,8 @@ signals:
 
     void sigTabChanged(DocSheet *);
 
+    void sigNeedActivateWindow();
+
 private:
     QString getFileName(const QString &strFilePath);
 

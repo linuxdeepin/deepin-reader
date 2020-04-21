@@ -139,7 +139,7 @@ private:
     DPushButton         *m_pAddBookMarkBtn = nullptr;
     LoadBookMarkThread  m_loadBookMarkThread;
     QPointer<DocSheet>    m_sheet;
-    // CustomWidget interface
+    double m_scale = 1.0;
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
     void updateThumbnail(const int &) Q_DECL_OVERRIDE;

@@ -131,18 +131,13 @@ void CentralDocPage::openFile(QString &filePath)
         connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
         connect(this, SIGNAL(sigTitleShortCut(QString)), sheet, SLOT(onTitleShortCut(QString)));
         sheet->openFile(filePath);
-
         m_pStackedLayout->addWidget(sheet);
-
         m_pStackedLayout->setCurrentWidget(sheet);
-
         m_pTabBar->insertSheet(sheet);
-
         emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
-
         emit sigSheetCountChanged(m_pStackedLayout->count());
-
-    }
+    } else
+        showTips(tr("The format is not supported"), 1);
 }
 
 void CentralDocPage::onOpened(DocSheet *sheet, bool ret)
@@ -480,6 +475,7 @@ void CentralDocPage::initWidget()
     connect(m_pTabBar, SIGNAL(sigTabMoveOut(DocSheet *)), this, SLOT(onTabMoveOut(DocSheet *)));
     connect(m_pTabBar, SIGNAL(sigTabNewWindow(DocSheet *)), this, SLOT(onTabNewWindow(DocSheet *)));
     connect(m_pTabBar, SIGNAL(sigNeedOpenFilesExec()), this, SIGNAL(sigNeedOpenFilesExec()));
+    connect(m_pTabBar, SIGNAL(sigNeedActivateWindow()), this, SIGNAL(sigNeedActivateWindow()));
 
     m_pStackedLayout = new QStackedLayout;
     QVBoxLayout *mainLayout = new QVBoxLayout(this);

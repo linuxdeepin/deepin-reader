@@ -129,6 +129,11 @@ void DocTabBar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source
 {
     const QString tabName = QString::fromUtf8(source->data("deepin_reader/tabbar"));
 
+    if (tabName.isEmpty())
+        return;
+
+    emit sigNeedActivateWindow();
+
     insertTab(index, tabName);
 
     setTabMinimumSize(index, QSize(140, 36));
@@ -137,6 +142,9 @@ void DocTabBar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source
 void DocTabBar::insertFromMimeData(int index, const QMimeData *source)
 {
     QString id = source->data("deepin_reader/uuid");
+
+    if (id.isEmpty())
+        return;
 
     DocSheet *sheet = DocSheet::getSheet(id);
 

@@ -405,12 +405,12 @@ BookMarkItemWidget *BookMarkWidget::getItemWidget(QListWidgetItem *item)
  */
 void BookMarkWidget::adaptWindowSize(const double &scale)
 {
+    m_scale = scale;
     double width = 1.0;
     double height = 1.0;
 
-    //set item size
-    width = static_cast<double>(LEFTMINWIDTH) * scale;
-    height = static_cast<double>(80) * scale;
+    width = static_cast<double>(LEFTMINWIDTH) * m_scale;
+    height = static_cast<double>(80) * m_scale;
 
     if (m_pBookMarkListWidget) {
         int itemCount = 0;
@@ -422,7 +422,7 @@ void BookMarkWidget::adaptWindowSize(const double &scale)
                     auto itemWidget = getItemWidget(item);
                     if (itemWidget) {
                         item->setSizeHint(QSize(static_cast<int>(width), static_cast<int>(height)));
-                        itemWidget->adaptWindowSize(scale);
+                        itemWidget->adaptWindowSize(m_scale);
                     }
                 }
             }
@@ -568,21 +568,20 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
         QImage t_image;
         double width = 1.0;
         double height = 1.0;
-        double scale = 1.0;
-        scale = dApp->scale();
-        //set item size
-        width = static_cast<double>(LEFTMINWIDTH) * scale;
-        height = static_cast<double>(80) * scale;
+
+
+        width = static_cast<double>(LEFTMINWIDTH) * m_scale;
+        height = static_cast<double>(80) * m_scale;
         int tW = 146;
         int tH = 174;
-//            dApp->adaptScreenView(tW, tH);
+
         bool rl = proxy->getImage(page, t_image, tW, tH /*42, 62*/);
         if (rl) {
             QImage img = Utils::roundImage(QPixmap::fromImage(t_image), ICON_SMALL);
             auto item = m_pBookMarkListWidget->insertWidgetItem(page);
             tW = LEFTMINWIDTH;
             tH = 80;
-//                dApp->adaptScreenView(tW, tH);
+
             tW = static_cast<int>(width);
             tH = static_cast<int>(height);
             item->setSizeHint(QSize(tW, tH));
@@ -591,7 +590,7 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
             t_widget->setLabelImage(img);
             t_widget->setLabelPage(page, 1);
             m_pBookMarkListWidget->setItemWidget(item, t_widget);
-            t_widget->adaptWindowSize(scale);
+            t_widget->adaptWindowSize(m_scale);
 
             int nCurPage = proxy->currentPageNo();
             if (nCurPage == page) {
