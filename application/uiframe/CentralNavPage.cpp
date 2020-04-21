@@ -72,7 +72,7 @@ void CentralNavPage::slotUpdateTheme()
     auto iconSvg = this->findChild<DLabel *>("iconSvg");
     if (iconSvg) {
         auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
-        plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
+        plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Window/*Base*/));
         iconSvg->setPalette(plt);
         QString sPixmap = PF::getImagePath("import_photo", Pri::g_actions);
         int tW = 128;
