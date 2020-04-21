@@ -136,28 +136,21 @@ QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const 
     item->setData(page);
     item->setData(realleft, Qt::UserRole + 2);
     item->setData(realtop, Qt::UserRole + 3);
-
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-//    item->setData(QVariant::fromValue(color), Qt::ForegroundRole);
     item->setForeground(QBrush(color));
     m_listTitle.append(item);
 
-    auto item1 = new QStandardItem();
-    item1->setData(page);
-    item1->setData(realleft, Qt::UserRole + 2);
-    item1->setData(realtop, Qt::UserRole + 3);
-
-    auto item2 = new QStandardItem(QString::number(page));
+    auto item1 = new QStandardItem(QString::number(page));
     item2->setData(page);
     item2->setData(realleft, Qt::UserRole + 2);
     item2->setData(realtop, Qt::UserRole + 3);
-
     item2->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
     color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().textTips().color();
     item2->setForeground(QBrush(color));
+
     m_listPage.append(item2);
 
-    return QList<QStandardItem *>() << item << item1 << item2;
+    return QList<QStandardItem *>() << item << item1;
 }
 
 //  文档打开成功, 加载对应目录
@@ -267,9 +260,8 @@ void CatalogTreeView::slotThemeChanged()
 //  窗口大小变化, 列的宽度随之变化
 void CatalogTreeView::resizeEvent(QResizeEvent *event)
 {
-    setColumnWidth(0, this->width() - 120);
-    setColumnWidth(1, 22);
-    setColumnWidth(2, 60);
+    setColumnWidth(0, this->width() - 60);
+    setColumnWidth(1, 50);
 
     DTreeView::resizeEvent(event);
 }
