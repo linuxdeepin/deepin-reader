@@ -54,13 +54,15 @@ public:
 
     int  handleFindFinished();
 
+    void handleUpdateThumbnail(const int &page);//添加或者移除高亮，要更新列表中相应的缩略图 add by duanxiaohui 2020-3-26
+
+    void handleAnntationMsg(const int &, const QString &);
+
     int qDealWithShortKey(const QString &);
 
     void adaptWindowSize(const double &scale); //缩略图列表自适应窗体大小  add by duanxiaohui 2020-3-20
 
 signals:
-    void sigAnntationMsg(const int &, const QString &);
-
     void sigDeleteAnntation(const int &, const QString &);
 
     void sigFitChanged(int state);
@@ -70,8 +72,6 @@ protected:
 
 private slots:
     void slotSetStackCurIndex(const int &);
-
-    void slotUpdateThumbnail(const int &page);//添加或者移除高亮，要更新列表中相应的缩略图 add by duanxiaohui 2020-3-26
 
 private:
     void InitWidgets();

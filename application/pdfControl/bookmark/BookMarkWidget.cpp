@@ -32,10 +32,9 @@ BookMarkWidget::BookMarkWidget(DocSheet *sheet, DWidget *parent)
 
     initWidget();
 
-    initConnection();
-
     slotUpdateTheme();
 
+    connect(&m_loadBookMarkThread, SIGNAL(sigLoadImage(const int &, const QImage &)), SLOT(slotLoadImage(const int &, const QImage &)));
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BookMarkWidget::slotUpdateTheme);
 }
 /**
@@ -311,6 +310,17 @@ void BookMarkWidget::setBookMark(int page, int state)
     }
 }
 
+void BookMarkWidget::handleRotate(int rotate)
+{
+    int nSize = m_pBookMarkListWidget->count();
+    for (int i = 0; i < nSize; i++) {
+        auto itemWidget = qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(m_pBookMarkListWidget->item(i)));
+        if (itemWidget) {
+            //itemWidget->rotate();
+        }
+    }
+}
+
 /**
  * @brief BookMarkWidget::slotDeleteBookItem
  * 按页码删除书签
@@ -522,7 +532,6 @@ void BookMarkWidget::initWidget()
     m_pAddBookMarkBtn = new DPushButton(this);
     int tW = 170;
     int tH = 36;
-//    dApp->adaptScreenView(tW, tH);
     m_pAddBookMarkBtn->setFixedHeight(tH);
     m_pAddBookMarkBtn->setMinimumWidth(tW);
     m_pAddBookMarkBtn->setText(tr("Add bookmark"));
@@ -540,16 +549,6 @@ void BookMarkWidget::initWidget()
     m_pVBoxLayout->addWidget(m_pBookMarkListWidget);
     m_pVBoxLayout->addWidget(new DHorizontalLine(this));
     m_pVBoxLayout->addItem(m_pHBoxLayout);
-}
-
-/**
- * @brief BookMarkWidget::initConnection
- *初始化connect
- */
-void BookMarkWidget::initConnection()
-{
-    connect(&m_loadBookMarkThread, SIGNAL(sigLoadImage(const int &, const QImage &)),
-            SLOT(slotLoadImage(const int &, const QImage &)));
 }
 
 /**

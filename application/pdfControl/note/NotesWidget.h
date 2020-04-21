@@ -107,6 +107,10 @@ public:
 
     void handleOpenSuccess();
 
+    void handleRotate(int rotate);
+
+    void handleAnntationMsg(const int &, const QString &);
+
 signals:
     void sigDeleteContent(const int &, const QString &);
 
@@ -125,8 +129,6 @@ private slots:
     void SlotRightDeleteItem();
 
     void slotAddAnnotation();
-
-    void SlotAnntationMsg(const int &, const QString &);
 
 private:
     void CopyNoteContent();

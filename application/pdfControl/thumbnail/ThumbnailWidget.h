@@ -162,8 +162,6 @@ private:
 
     void initConnection();
 
-    void slotOpenFileOk(const QString &);
-
     void SetSelectItemColor(QListWidgetItem *item, const bool &);
 
     ThumbnailItemWidget *getItemWidget(QListWidgetItem *);

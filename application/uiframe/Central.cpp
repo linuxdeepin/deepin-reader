@@ -211,6 +211,14 @@ void Central::onNeedActivateWindow()
 
 void Central::onShowTips(const QString &text, int iconIndex)
 {
+    if (m_layout->currentIndex() == 0) {
+        if (0 == iconIndex)
+            DMessageManager::instance()->sendMessage(m_navPage, QIcon(":/icons/deepin/builtin/ok.svg"), text);
+        else
+            DMessageManager::instance()->sendMessage(m_navPage, QIcon(":/icons/deepin/builtin/warning.svg"), text);
+        return;
+    }
+
     if (0 == iconIndex)
         DMessageManager::instance()->sendMessage(this, QIcon(":/icons/deepin/builtin/ok.svg"), text);
     else

@@ -245,6 +245,11 @@ void NotesWidget::handleOpenSuccess()
     }
 }
 
+void NotesWidget::handleRotate(int rotate)
+{
+
+}
+
 void NotesWidget::slotLoadImage(const QImage &image)
 {
     if (m_pNotesList->count() < 1 || m_nIndex >= m_pNotesList->count()) {
@@ -357,7 +362,7 @@ void NotesWidget::slotAddAnnotation()
     m_sheet->setCurrentState(NOTE_ADD_State);
 }
 
-void NotesWidget::SlotAnntationMsg(const int &msgType, const QString &msgContent)
+void NotesWidget::handleAnntationMsg(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_NOTE_ADD_ITEM) {
         __AddNoteItem(msgContent);

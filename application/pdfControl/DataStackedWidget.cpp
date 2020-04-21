@@ -38,6 +38,8 @@ DataStackedWidget::DataStackedWidget(DocSheet *sheet, DWidget *parent)
 void DataStackedWidget::handleRotate(int rotate)
 {
     m_pThWidget->handleRotate(rotate);
+    m_pBookMarkWidget->handleRotate(rotate);
+    m_pNotesWidget->handleRotate(rotate);
 }
 
 void DataStackedWidget::handlePage(int page)
@@ -149,7 +151,7 @@ void DataStackedWidget::adaptWindowSize(const double &scale)
     }
 }
 
-void DataStackedWidget::slotUpdateThumbnail(const int &page)
+void DataStackedWidget::handleUpdateThumbnail(const int &page)
 {
     if (m_pThWidget) {
         m_pThWidget->updateThumbnail(page);
@@ -165,6 +167,11 @@ void DataStackedWidget::slotUpdateThumbnail(const int &page)
     }
 }
 
+void DataStackedWidget::handleAnntationMsg(const int &type, const QString &text)
+{
+    m_pNotesWidget->handleAnntationMsg(type, text);
+}
+
 void DataStackedWidget::InitWidgets()
 {
     m_pThWidget = new ThumbnailWidget(m_sheet, this);
@@ -178,9 +185,7 @@ void DataStackedWidget::InitWidgets()
     addWidget(m_pBookMarkWidget);
 
     m_pNotesWidget = new NotesWidget(m_sheet, this);
-    connect(this, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pNotesWidget, SLOT(SlotAnntationMsg(const int &, const QString &)));
     connect(m_pNotesWidget, SIGNAL(sigDeleteContent(const int &, const QString &)), this, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
-    connect(m_pNotesWidget, SIGNAL(sigUpdateThumbnail(const int &)), this, SLOT(slotUpdateThumbnail(const int &)));
     addWidget(m_pNotesWidget);
 
     m_pSearchResWidget = new SearchResWidget(m_sheet, this);

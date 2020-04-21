@@ -98,6 +98,8 @@ public:
 
     void setBookMark(int page, int state);
 
+    void handleRotate(int rotate);
+
 public:
     int qDealWithShortKey(const QString &);
 
@@ -127,18 +129,19 @@ protected:
     void initWidget() override;
 
 private:
-
-    void initConnection();
     QListWidgetItem *addBookMarkItem(const int &);
+
     void deleteIndexPage(const int &pageIndex);
+
     void clearItemColor();
+
     BookMarkItemWidget *getItemWidget(QListWidgetItem *);
 
 private:
     CustomListWidget    *m_pBookMarkListWidget = nullptr;
     DPushButton         *m_pAddBookMarkBtn = nullptr;
-    LoadBookMarkThread  m_loadBookMarkThread;
-    QPointer<DocSheet>    m_sheet;
+    LoadBookMarkThread   m_loadBookMarkThread;
+    QPointer<DocSheet>   m_sheet;
     double m_scale = 1.0;
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;

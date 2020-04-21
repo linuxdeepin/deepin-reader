@@ -71,7 +71,6 @@ void SheetSidebarPDF::initWidget()
     this->setLayout(pVBoxLayout);
 
     m_pStackedWidget = new DataStackedWidget(m_sheet, this);
-    connect(this, SIGNAL(sigAnntationMsg(const int &, const QString &)), m_pStackedWidget, SIGNAL(sigAnntationMsg(const int &, const QString &)));
     connect(m_pStackedWidget, SIGNAL(sigDeleteAnntation(const int &, const QString &)), this, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
     pVBoxLayout->addWidget(m_pStackedWidget);
 
@@ -123,9 +122,19 @@ int SheetSidebarPDF::handleFindFinished()
     return m_pStackedWidget->handleFindFinished();
 }
 
-void SheetSidebarPDF::onRotate(int rotate)
+void SheetSidebarPDF::handleRotate(int rotate)
 {
     m_pStackedWidget->handleRotate(rotate);
+}
+
+void SheetSidebarPDF::handleUpdateThumbnail(const int &page)
+{
+    m_pStackedWidget->handleUpdateThumbnail(page);
+}
+
+void SheetSidebarPDF::handleAnntationMsg(const int &msg, const QString &text)
+{
+    m_pStackedWidget->handleAnntationMsg(msg, text);
 }
 
 void SheetSidebarPDF::onPageChanged(int page)

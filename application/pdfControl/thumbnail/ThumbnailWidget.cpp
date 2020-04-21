@@ -43,7 +43,44 @@ ThumbnailWidget::~ThumbnailWidget()
 
 void ThumbnailWidget::handleOpenSuccess()
 {
-    slotOpenFileOk(m_sheet->filePath());
+    if (m_sheet.isNull())
+        return;
+
+    DocummentProxy *_proxy = m_sheet->getDocProxy();
+    if (_proxy) {
+        m_isLoading = true;
+        m_ThreadLoadImage.setIsLoaded(false);
+        if (m_ThreadLoadImage.isRunning()) {
+            m_ThreadLoadImage.stopThreadRun();
+        }
+
+        m_totalPages = _proxy->getPageSNum();
+
+        m_pThumbnailListWidget->clear();
+        m_nValuePreIndex = 0;
+        fillContantToList();
+
+        m_nRotate = m_sheet->getOper(Rotate).toInt();
+
+        if (m_nRotate < 0) {
+            m_nRotate = qAbs(m_nRotate);
+        }
+        m_nRotate %= 360;
+
+        int currentPage = _proxy->currentPageNo();
+
+        m_ThreadLoadImage.setPages(m_totalPages);
+        m_ThreadLoadImage.setProxy(_proxy);
+        m_ThreadLoadImage.setFilePath(m_sheet->filePath());
+        if (!m_ThreadLoadImage.isRunning()) {
+            m_ThreadLoadImage.clearList();;
+            m_ThreadLoadImage.setStartAndEndIndex(currentPage - (FIRST_LOAD_PAGES / 2), currentPage + (FIRST_LOAD_PAGES / 2));
+        }
+        m_ThreadLoadImage.setIsLoaded(true);
+        m_ThreadLoadImage.start();
+        handlePage(currentPage);
+    }
+
     m_pPageWidget->handleOpenSuccess();
 }
 
@@ -342,45 +379,6 @@ void ThumbnailWidget::updateThumbnail(const int &page)
                 }
             }
         }
-    }
-}
-
-// 关联成功打开文件槽函数
-void ThumbnailWidget::slotOpenFileOk(const QString &sPath)
-{
-    DocummentProxy *_proxy = m_sheet->getDocProxy();
-    if (_proxy) {
-        m_isLoading = true;
-        m_ThreadLoadImage.setIsLoaded(false);
-        if (m_ThreadLoadImage.isRunning()) {
-            m_ThreadLoadImage.stopThreadRun();
-        }
-
-        m_totalPages = _proxy->getPageSNum();
-
-        m_pThumbnailListWidget->clear();
-        m_nValuePreIndex = 0;
-        fillContantToList();
-
-        m_nRotate = m_sheet->getOper(Rotate).toInt();
-
-        if (m_nRotate < 0) {
-            m_nRotate = qAbs(m_nRotate);
-        }
-        m_nRotate %= 360;
-
-        int currentPage = _proxy->currentPageNo();
-
-        m_ThreadLoadImage.setPages(m_totalPages);
-        m_ThreadLoadImage.setProxy(_proxy);
-        m_ThreadLoadImage.setFilePath(sPath);
-        if (!m_ThreadLoadImage.isRunning()) {
-            m_ThreadLoadImage.clearList();;
-            m_ThreadLoadImage.setStartAndEndIndex(currentPage - (FIRST_LOAD_PAGES / 2), currentPage + (FIRST_LOAD_PAGES / 2));
-        }
-        m_ThreadLoadImage.setIsLoaded(true);
-        m_ThreadLoadImage.start();
-        handlePage(currentPage);
     }
 }
 

@@ -221,12 +221,11 @@ void DocSheet::initPDF()
     m_browser = browser;
 
     connect(sidebar, SIGNAL(sigDeleteAnntation(const int &, const QString &)), browser, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
-    connect(browser, SIGNAL(sigFileOpenResult(const QString &, const bool &)), SLOT(SlotFileOpenResult(const QString &, const bool &)));
-    connect(browser, SIGNAL(sigAnntationMsg(const int &, const QString &)), sidebar, SIGNAL(sigAnntationMsg(const int &, const QString &)));
-    connect(browser, SIGNAL(sigUpdateThumbnail(const int &)), sidebar, SIGNAL(sigUpdateThumbnail(const int &)));
-    connect(browser, SIGNAL(sigFileChanged()), this, SLOT(onFileChanged()));
-    connect(browser, SIGNAL(sigRotateChanged(int)), sidebar, SLOT(onRotate(int)));
     connect(browser, SIGNAL(sigPageChanged(int)), sidebar, SLOT(onPageChanged(int)));
+    connect(browser, SIGNAL(sigFileOpenResult(const QString &, const bool &)), this, SLOT(SlotFileOpenResult(const QString &, const bool &)));
+    connect(browser, SIGNAL(sigAnntationMsg(const int &, const QString &)), this, SLOT(onAnntationMsg(int, QString)));
+    connect(browser, SIGNAL(sigFileChanged()), this, SLOT(onFileChanged()));
+    connect(browser, SIGNAL(sigRotateChanged(int)), this, SLOT(onRotate(int)));
     connect(browser, SIGNAL(sigFindContantComming(const stSearchRes &)), this, SLOT(onFindContentComming(const stSearchRes &)));
     connect(browser, SIGNAL(sigFindFinished()), this, SLOT(onFindFinished()));
 
@@ -346,6 +345,26 @@ void DocSheet::onFindFinished()
     if (DocType_PDF == m_type) {
         int count = static_cast<SheetSidebarPDF *>(m_sidebar)->handleFindFinished();
         m_pFindWidget->setEditAlert(count == 0);
+    }
+}
+
+void DocSheet::onRotate(int rotate)
+{
+    if (DocType_PDF == m_type) {
+        static_cast<SheetSidebarPDF *>(m_sidebar)->handleRotate(rotate);
+    }
+}
+
+void DocSheet::onAnntationMsg(const int &msg, const QString &text)
+{
+    if (DocType_PDF == m_type) {
+        static_cast<SheetSidebarPDF *>(m_sidebar)->handleAnntationMsg(msg, text);
+
+        QStringList t_strList = text.split(Constant::sQStringSep, QString::SkipEmptyParts);
+        if (t_strList.count() == 3) {
+            int page = t_strList.at(2).trimmed().toInt();
+            static_cast<SheetSidebarPDF *>(m_sidebar)->handleUpdateThumbnail(page);
+        }
     }
 }
 

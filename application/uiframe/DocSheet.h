@@ -141,6 +141,10 @@ private slots:
 
     void onFindFinished();
 
+    void onRotate(int rotate);
+
+    void onAnntationMsg(const int &, const QString &);
+
 private:
     DocType_EM      m_type;
     void *m_sidebar = nullptr;
