@@ -176,8 +176,9 @@ void ScaleWidget::SlotReturnPressed()
             int curindex = dataList.indexOf(static_cast<int>(dValue));
             if (curindex < 0)
                 m_scaleComboBox->setCurrentIndex(curindex);
-            m_scaleComboBox->setCurrentText(sShowText);
 
+            m_scaleComboBox->setCurrentText(sShowText);
+            m_scaleComboBox->lineEdit()->setCursorPosition(0);
         }
     }
 
@@ -215,8 +216,10 @@ void ScaleWidget::setSheet(DocSheet *sheet)
         double nScale = m_sheet->getOper(Scale).toDouble();
 
         if (static_cast<int>(nScale) <= 0) {
-            nScale = 100.0;
+            nScale = 100;
+            m_sheet->setData(Scale, 100);
         }
+
         int index = -1;
         for (int i = 0; i < dataList.size(); i++) {
             if (qAbs(dataList.at(i) - nScale) < 0.001) {
@@ -225,9 +228,11 @@ void ScaleWidget::setSheet(DocSheet *sheet)
             }
         }
 
-        QString sCurText = QString::number(m_sheet->getOper(Scale).toDouble(), 'f', 2) + "%";
+        QString sCurText = QString::number(QString::number(m_sheet->getOper(Scale).toDouble(), 'f', 2).toDouble()) + "%";
 
         m_scaleComboBox->setCurrentText(sCurText);
+
+        m_scaleComboBox->lineEdit()->setCursorPosition(0);
 
         m_scaleComboBox->blockSignals(false);
     }

@@ -20,14 +20,14 @@ public:
 
     void addSheet(DocSheet *sheet);
 
-    void addFile(const QString &filepath);
-
     bool hasSheet(DocSheet *sheet);
 
     void activateSheet(DocSheet *sheet);  //将该sheet显示到最前面
 
 public:
-    void openfile(const QString &filepath);
+    void openfiles(const QStringList &filepaths);
+
+    void doOpenFile(const QString &filePath);
 
     void setSreenRect(const QRect &); //得到屏幕的分辨率
 

@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
         return -1;
 
     foreach (const QString &filePath, arguments) {
-        w->addFile(filePath);
+        w->doOpenFile(filePath);
     }
 
     w->show();

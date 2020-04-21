@@ -203,10 +203,10 @@ void ProcessController::onReceiveMessage()
                 //如果不存在则打开
                 if (MainWindow::m_list.count() > 0) {
                     MainWindow::m_list[0]->activateWindow();
-                    MainWindow::m_list[0]->openfile(filePath);
+                    MainWindow::m_list[0]->doOpenFile(filePath);
                     continue;
                 } else
-                    MainWindow::create()->openfile(filePath);
+                    MainWindow::create()->doOpenFile(filePath);
             }
         }
 

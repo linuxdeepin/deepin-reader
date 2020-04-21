@@ -33,9 +33,9 @@ public:
 
     TitleWidget *titleWidget();
 
-    void openFile(QString filePath);
-
     void openFilesExec();
+
+    void openFiles(QStringList filePathList);
 
     void addSheet(DocSheet *sheet);
 
@@ -46,6 +46,8 @@ public:
     bool saveAll();
 
     void handleShortcut(QString shortcut);
+
+    void doOpenFile(QString filePath);
 
 public slots:
     void onSheetCountChanged(int count);

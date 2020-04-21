@@ -56,7 +56,7 @@ TitleWidget *Central::titleWidget()
     return m_widget;
 }
 
-void Central::openFile(QString filePath)
+void Central::doOpenFile(QString filePath)
 {
     m_docPage->openFile(filePath);
 }
@@ -78,6 +78,11 @@ void Central::openFilesExec()
         return;
     }
 
+    openFiles(filePathList);
+}
+
+void Central::openFiles(QStringList filePathList)
+{
     QList<DocSheet *> sheets = DocSheet::g_map.values();
 
     foreach (QString filePath, filePathList) {
@@ -96,7 +101,7 @@ void Central::openFilesExec()
         }
 
         if (!hasFind) {
-            openFile(filePath);
+            doOpenFile(filePath);
         }
     }
 }
@@ -258,9 +263,7 @@ void Central::dropEvent(QDropEvent *event)
         }
 
         if (canOpenFileList.count() > 0) {
-            foreach (auto s, canOpenFileList) {
-                openFile(s);
-            }
+            openFiles(canOpenFileList);
         }
     }
 }

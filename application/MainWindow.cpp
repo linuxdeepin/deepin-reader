@@ -51,11 +51,6 @@ void MainWindow::addSheet(DocSheet *sheet)
     m_central->addSheet(sheet);
 }
 
-void MainWindow::addFile(const QString &filepath)
-{
-    m_central->openFile(filepath);
-}
-
 bool MainWindow::hasSheet(DocSheet *sheet)
 {
     return m_central->hasSheet(sheet);
@@ -67,9 +62,14 @@ void MainWindow::activateSheet(DocSheet *sheet)
     m_central->showSheet(sheet);
 }
 
-void MainWindow::openfile(const QString &filepath)
+void MainWindow::openfiles(const QStringList &filepaths)
 {
-    m_central->openFile(filepath);
+    m_central->openFiles(filepaths);
+}
+
+void MainWindow::doOpenFile(const QString &filePath)
+{
+    m_central->doOpenFile(filePath);
 }
 
 void MainWindow::setSreenRect(const QRect &rect)
