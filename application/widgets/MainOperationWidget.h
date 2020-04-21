@@ -33,11 +33,7 @@ private:
 
     QString findBtnName();
 
-    void initConnect();
-
     DPushButton *createHideBtn();
-
-    void setBtnCheckById(const int &);
 
     void onDocProxyMsg(const QString &);
 

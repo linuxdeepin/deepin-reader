@@ -334,7 +334,6 @@ bool CentralDocPage::saveCurrent()
         return false;
 
     if (!sheet->qGetFileChange()) {
-        showTips(tr("No changes"));
         return false;
     }
 

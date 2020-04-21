@@ -12,7 +12,6 @@ MainOperationWidget::MainOperationWidget(DocSheet *sheet, DWidget *parent)
     : CustomWidget(parent), m_sheet(sheet)
 {
     initWidget();
-    initConnect();
     slotUpdateTheme();
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MainOperationWidget::slotUpdateTheme);
 }
@@ -63,43 +62,18 @@ DPushButton *MainOperationWidget::createHideBtn()
     return pBtn;
 }
 
-void MainOperationWidget::setBtnCheckById(const int &id)
-{
-    foreach (auto btn, this->findChildren<DToolButton *>()) {
-        if (btn) {
-            btn->setChecked(false);
-            btn->setEnabled(false);
-        }
-    }
-    auto btnGroup = this->findChild<QButtonGroup *>();
-    if (btnGroup) {
-        auto btn = btnGroup->button(id);
-        if (btn) {
-            btn->setChecked(true);
-        }
-
-        slotButtonClicked(id);
-    }
-}
-
 DToolButton *MainOperationWidget::createBtn(const QString &btnName, const QString &objName)
 {
     auto btn = new DToolButton(this);
     btn->setToolTip(btnName);
     btn->setObjectName(objName);
     int tW = 36;
-//    int tH = 36;
-//    dApp->adaptScreenView(tW, tH);
     btn->setFixedSize(QSize(tW, tW));
     btn->setIconSize(QSize(tW, tW));
     btn->setCheckable(true);
     btn->setChecked(false);
 
     return btn;
-}
-
-void MainOperationWidget::initConnect()
-{
 }
 
 void MainOperationWidget::handleOpenSuccess()
@@ -153,7 +127,20 @@ void MainOperationWidget::slotButtonClicked(int id)
 void MainOperationWidget::handleFindOperation(const int &iType)
 {
     if (iType == E_FIND_CONTENT) {
-        setBtnCheckById(4);
+        foreach (auto btn, this->findChildren<DToolButton *>()) {
+            if (btn) {
+                btn->setChecked(false);
+                btn->setEnabled(false);
+            }
+        }
+        auto btnGroup = this->findChild<QButtonGroup *>();
+        if (btnGroup) {
+            auto btn = btnGroup->button(4);
+            if (btn) {
+                btn->setChecked(true);
+            }
+            emit sigShowStackWidget(4);
+        }
     } else if (iType == E_FIND_EXIT) {
         handleOpenSuccess();
     }
