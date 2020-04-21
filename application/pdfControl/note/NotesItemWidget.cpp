@@ -116,6 +116,13 @@ void NotesItemWidget::CopyItemText()
     }
 }
 
+void NotesItemWidget::setRotate(int rotate)
+{
+    qDebug() << rotate;
+    m_pPicture->setRotateAngle(rotate);
+    m_pPicture->rotateImage();
+}
+
 int NotesItemWidget::nNoteType() const
 {
     return m_nNoteType;
@@ -133,17 +140,18 @@ void NotesItemWidget::initWidget()
     m_pPicture = new ImageLabel(this);
     int tW = 48;
     int tH = 68;
-//    dApp->adaptScreenView(tW, tH);
+
     m_pPicture->setFixedSize(QSize(tW, tH));
     m_pPicture->setSize(QSize(tW, tH));
     m_pPicture->setAlignment(Qt::AlignCenter);
+
     t_vLayoutPicture->addWidget(m_pPicture);
     t_vLayoutPicture->addStretch(1);
 
     m_pPageNumber = new PageNumberLabel(this);
     tW = 31;
     tH = 18;
-//    dApp->adaptScreenView(tW, tH);
+
     m_pPageNumber->setMinimumWidth(tW);
     m_pPageNumber->setFixedHeight(tH);
     m_pPageNumber->setForegroundRole(DPalette::WindowText);

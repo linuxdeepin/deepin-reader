@@ -247,7 +247,11 @@ void NotesWidget::handleOpenSuccess()
 
 void NotesWidget::handleRotate(int rotate)
 {
-
+    for (int i = 0; i < m_pNotesList->count(); ++i) {
+        NotesItemWidget *itemWidget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNotesList->item(i)));
+        if (itemWidget)
+            itemWidget->setRotate(rotate);
+    }
 }
 
 void NotesWidget::slotLoadImage(const QImage &image)
@@ -491,6 +495,9 @@ QListWidgetItem *NotesWidget::addNewItem(const QImage &image, const int &page, c
         itemWidget->setStrPage(QString::number(page));
         itemWidget->setLabelPage(page, 1);
         itemWidget->setTextEditText(text);
+        if (!m_sheet.isNull())
+            itemWidget->setRotate(m_sheet->getOper(Rotate).toInt());
+
         int tW = LEFTMINWIDTH;
         int tH = 80;
         itemWidget->setBSelect(bNew);

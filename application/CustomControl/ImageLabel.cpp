@@ -71,18 +71,10 @@ void ImageLabel::rotateImage()
             w = this->height();
             h = this->width();
         }
-        if (w < h) {
-            w = this->width();
-            h = this->height();
-        }
     } else {
         if (w < h) {
             w = this->height();
             h = this->width();
-        }
-        if (w > h) {
-            w = this->width();
-            h = this->height();
         }
     }
 

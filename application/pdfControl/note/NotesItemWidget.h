@@ -60,6 +60,8 @@ public:
 
     void CopyItemText();
 
+    void setRotate(int rotate);
+
 protected:
     void paintEvent(QPaintEvent *e) override;
 

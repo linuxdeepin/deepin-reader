@@ -37,6 +37,12 @@ void BookMarkItemWidget::setBSelect(const bool &paint)
     update();
 }
 
+void BookMarkItemWidget::setRotate(int rotate)
+{
+    m_pPicture->setRotateAngle(rotate);
+    m_pPicture->rotateImage();
+}
+
 /**
  * @brief BookMarkItemWidget::initWidget
  * 初始化界面

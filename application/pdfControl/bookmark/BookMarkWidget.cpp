@@ -312,11 +312,10 @@ void BookMarkWidget::setBookMark(int page, int state)
 
 void BookMarkWidget::handleRotate(int rotate)
 {
-    int nSize = m_pBookMarkListWidget->count();
-    for (int i = 0; i < nSize; i++) {
+    for (int i = 0; i < m_pBookMarkListWidget->count(); i++) {
         auto itemWidget = qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(m_pBookMarkListWidget->item(i)));
         if (itemWidget) {
-            //itemWidget->rotate();
+            itemWidget->setRotate(rotate);
         }
     }
 }
@@ -588,8 +587,10 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
             auto t_widget = new BookMarkItemWidget(this);
             t_widget->setLabelImage(img);
             t_widget->setLabelPage(page, 1);
+
             m_pBookMarkListWidget->setItemWidget(item, t_widget);
             t_widget->adaptWindowSize(m_scale);
+            t_widget->setRotate(m_sheet->getOper(Rotate).toInt());
 
             int nCurPage = proxy->currentPageNo();
             if (nCurPage == page) {

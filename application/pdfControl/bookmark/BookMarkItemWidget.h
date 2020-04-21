@@ -36,6 +36,8 @@ public:
 public:
     void setBSelect(const bool &paint);
 
+    void setRotate(int rotate);
+
 protected:
     void initWidget() override;
 
