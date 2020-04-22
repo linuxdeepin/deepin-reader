@@ -50,8 +50,6 @@ void TextOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, const
     m_strNoteUuid = sUuid;
     m_pColorWidgetAction->setBtnAddLightState(bHigh);
 
-    m_pRemoveHighLight->setEnabled(sSelectText != "");
-
     this->exec(showPoint);
 }
 

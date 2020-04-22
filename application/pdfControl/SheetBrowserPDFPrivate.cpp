@@ -431,11 +431,7 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
 
         m_operatemenu->execMenu(m_sheet, tempPoint, isHigh, sSelectText, struuid);
 
-    } else if (sSelectText == "" && (bIsHighLight || bicon)) {  //  选中区域 有文字, 弹出 文字操作菜单
-        if (sAnnotationText == "") {
-            return;
-        }
-
+    } else if (sSelectText == "" && (bIsHighLight || (bicon && sAnnotationText != ""))) {  //  选中区域 有文字, 弹出 文字操作菜单
         //  需要　区别　当前选中的区域，　弹出　不一样的　菜单选项
         m_operatemenu->setClickPoint(pRightClickPoint);
 
