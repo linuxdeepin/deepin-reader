@@ -20,6 +20,7 @@
 #include <DFileDialog>
 #include <QStandardPaths>
 #include <QUuid>
+#include <QTimer>
 
 ProcessController::ProcessController(QObject *parent) : QObject(parent)
 {
@@ -85,30 +86,29 @@ bool ProcessController::listen()
 
     connect(m_localServer, SIGNAL(newConnection()), this, SLOT(onReceiveMessage()));
 
-    QString server = QUuid::createUuid().toString();
+    m_timer = new QTimer(this);
 
-    QFile file("./.listen");
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(onHeart()));
 
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
-        return false;
+    m_timer->start(5000);
 
-    file.write(QByteArray().append(server));
+    m_listenText = QUuid::createUuid().toString();
 
-    return m_localServer->listen(server);
+    writeListenText(m_listenText);
+
+    return m_localServer->listen(m_listenText);
 }
 
 QString ProcessController::request(const QString &message)
 {
-    QFile file("./.listen");
+    QString listenText = readListenText();
 
-    if (!file.open(QIODevice::ReadOnly))
+    if (listenText.isEmpty())
         return "";
-
-    QString server = file.readAll();
 
     QString result;
     QLocalSocket localSocket;
-    localSocket.connectToServer(server, QIODevice::ReadWrite);
+    localSocket.connectToServer(listenText, QIODevice::ReadWrite);
     if (!localSocket.waitForConnected(100)) {
         qDebug() << localSocket.error();
         return result;
@@ -133,6 +133,32 @@ void ProcessController::processOpenFile(const QString &filePath)
 {
     QProcess app;
     app.startDetached(QString("%1 \"%2\"").arg(qApp->applicationDirPath() + "/deepin-reader").arg(filePath));
+}
+
+void ProcessController::writeListenText(QString listenText)
+{
+    QFile file("./.listen");
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        return;
+
+    file.write(QByteArray().append(listenText));
+
+    file.close();
+}
+
+QString ProcessController::readListenText()
+{
+    QFile file("./.listen");
+
+    QString listenText;
+
+    if (file.open(QIODevice::ReadOnly))
+        listenText = file.readAll();
+
+    file.close();
+
+    return listenText;
 }
 
 QString ProcessController::request(const QString &pid, const QString &message)
@@ -215,6 +241,18 @@ void ProcessController::onReceiveMessage()
 
     localSocket->write("none");
     localSocket->disconnectFromServer();
+}
+
+void ProcessController::onHeart()
+{
+    if (!m_localServer->isListening()) {
+        listen();
+    }
+
+    QString listenText = readListenText();
+
+    if (listenText != m_listenText)
+        writeListenText(m_listenText);
 }
 
 QStringList ProcessController::findReaderPids()

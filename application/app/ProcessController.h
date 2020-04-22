@@ -22,6 +22,7 @@
 #include <QObject>
 
 class QLocalServer;
+class QTimer;
 class ProcessController : public QObject
 {
     Q_OBJECT
@@ -40,8 +41,15 @@ public:
 
     static void processOpenFile(const QString &filePath);  //
 
+private:
+    static void writeListenText(QString listenText);
+
+    static QString readListenText();
+
 private slots:
     void onReceiveMessage();
+
+    void onHeart();
 
 private:
     static QString request(const QString &message);
@@ -52,7 +60,8 @@ private:
 
 private:
     QLocalServer *m_localServer = nullptr;
-
+    QString m_listenText;
+    QTimer *m_timer;
 };
 
 #endif // PROCESSCONTROLLER_H
