@@ -53,12 +53,6 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
 
         QPainter painter(printer);
 
-        qDebug() << printer->devicePixelRatioF();
-        qDebug() << printer->margins().left;
-        qDebug() << printer->margins().right;
-        qDebug() << printer->margins().top;
-        qDebug() << printer->margins().bottom;
-
         QRect rect = painter.viewport();
 
         painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
@@ -90,6 +84,10 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
                     break;
 
                 QImage image;
+
+                rect.setWidth(rect.width() - 10);
+
+                painter.setPen(Qt::NoPen);
 
                 if (_proxy->getImage(iIndex, image, rect.width(), rect.height()))      //公司只有一台打印机，会发生向右偏移
                     painter.drawImage(rect, image);
