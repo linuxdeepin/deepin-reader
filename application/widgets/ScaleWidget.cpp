@@ -59,14 +59,15 @@ void ScaleWidget::initWidget()
     QLineEdit *edit = m_scaleComboBox->lineEdit();
     connect(edit, SIGNAL(returnPressed()), SLOT(SlotReturnPressed()));
 
-    DIconButton *pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
     tW = 24;
     tH = 24;
-
+    DIconButton *pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
+    DStyle::setFrameRadius(pPreBtn, 12);
     pPreBtn->setFixedSize(QSize(tW, tH));
     connect(pPreBtn, SIGNAL(clicked()), SLOT(slotPrevScale()));
 
     DIconButton *pNextBtn = new DIconButton(DStyle::SP_IncreaseElement);
+    DStyle::setFrameRadius(pNextBtn, 12);
     pNextBtn->setFixedSize(QSize(tW, tH));
     connect(pNextBtn, SIGNAL(clicked()), SLOT(slotNextScale()));
 
