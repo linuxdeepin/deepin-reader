@@ -89,8 +89,16 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
 
                 painter.setPen(Qt::NoPen);
 
+                // painter.setViewport(rect.x(), rect.y(),size.width(), size.height());
+
+
                 if (_proxy->getImage(iIndex, image, rect.width(), rect.height()))      //公司只有一台打印机，会发生向右偏移
                     painter.drawImage(rect, image);
+
+//                    painter.setViewport(rect.x(), rect.y(),size.width(), size.height());
+//                    painter.setWindow(image.rect());
+
+//                    painter.drawPixmap(0,0,image); /* 数据显示至预览界面 */
 
                 if (iIndex < printer->toPage() - 1)
                     printer->newPage();

@@ -40,6 +40,7 @@ void DataStackedWidget::handleRotate(int rotate)
     m_pThWidget->handleRotate(rotate);
     m_pBookMarkWidget->handleRotate(rotate);
     m_pNotesWidget->handleRotate(rotate);
+    m_pSearchResWidget->handleRotate(rotate);
 }
 
 void DataStackedWidget::handlePage(int page)

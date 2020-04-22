@@ -39,7 +39,7 @@ public:
     void setSerchResultText(const QString &);
     bool bSelect();
     void setBSelect(const bool &paint);
-
+    void setRotate(int rotate);
 protected:
     void initWidget() override;
 

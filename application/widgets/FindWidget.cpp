@@ -135,6 +135,7 @@ void FindWidget::initWidget()
     tH = 12;
 //    dApp->adaptScreenView(tW, tH);
     findPrevButton->setIconSize(QSize(tW, tH));
+
     connect(findPrevButton, &DIconButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
 
     auto closeButton = new DDialogCloseButton;

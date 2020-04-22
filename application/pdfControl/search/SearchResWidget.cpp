@@ -63,6 +63,15 @@ void SearchResWidget::clearFindResult()
     m_pSearchList->clear();
 }
 
+void SearchResWidget::handleRotate(int rotate)
+{
+    for (int i = 0; i < m_pSearchList->count(); ++i) {
+        SearchItemWidget *itemWidget = reinterpret_cast<SearchItemWidget *>(m_pSearchList->itemWidget(m_pSearchList->item(i)));
+        if (itemWidget)
+            itemWidget->setRotate(rotate);
+    }
+}
+
 void SearchResWidget::slotSelectItem(QListWidgetItem *item)
 {
     if (item == nullptr) {
@@ -109,6 +118,7 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
         tH = 80;
         itemWidget->setMinimumSize(QSize(tW, tH));
         itemWidget->setTextEditText(text);
+        itemWidget->setRotate(m_sheet->getOper(Rotate).toInt());
 
         auto dproxy = m_sheet->getDocProxy();
         if (nullptr != dproxy) {

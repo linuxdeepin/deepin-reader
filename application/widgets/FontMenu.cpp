@@ -110,6 +110,12 @@ void FontMenu::slotTwoPage()
 
     m_sheet->setData(DoubleShow, (int)m_bDoubPage);
     m_sheet->setDoubleShow(m_bDoubPage);
+
+    if (DoubleShow) {
+        if (m_sheet->getOper(Thumbnail).toInt() == 1 || ADAPTE_WIDGET_State == m_sheet->getOper(Fit).toInt() || QString::number(m_sheet->getOper(Scale).toDouble(), 'f', 2) == "100.00")
+            m_sheet->setFit(ADAPTE_WIDGET_State);
+    } else
+        m_sheet->setFit(ADAPTE_WIDGET_State);
 }
 
 /**

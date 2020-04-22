@@ -151,8 +151,11 @@ void TitleWidget::on_thumbnailBtn_clicked()
         return;
 
     bool rl = m_pThumbnailBtn->isChecked();
+
     m_curSheet->setData(Thumbnail, QString::number(rl));
+
     m_curSheet->setSidebarVisible(rl);
+
 }
 
 //  文档显示

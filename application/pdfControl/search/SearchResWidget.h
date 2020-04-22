@@ -52,6 +52,8 @@ public:
 
     void clearFindResult();
 
+    void handleRotate(int rotate);
+
 protected:
     void initWidget() override;
 

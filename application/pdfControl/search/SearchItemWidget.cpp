@@ -72,6 +72,12 @@ void SearchItemWidget::setBSelect(const bool &paint)
     update();
 }
 
+void SearchItemWidget::setRotate(int rotate)
+{
+    m_pPicture->setRotateAngle(rotate);
+    m_pPicture->rotateImage();
+}
+
 void SearchItemWidget::slotUpdateTheme()
 {
     if (m_pPageNumber) {

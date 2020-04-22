@@ -47,8 +47,6 @@ signals:
     void sigNeedShowTips(const QString &tips, int index);
 
 public:
-
-public:
     void showWidget(const QPoint &);
 
     void setEditText(const QString &note);
