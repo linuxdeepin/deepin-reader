@@ -105,11 +105,11 @@ void DataStackedWidget::slotSetStackCurIndex(const int &iIndex)
     double scale = 1.0;
     double t_epsinon = 1.0;
 
-    scale = dApp->scale();
-    t_epsinon = scale - m_dScale;
+    t_epsinon = m_scale - m_dScale;
+
     if ((t_epsinon < -EPSINON) || (t_epsinon > EPSINON)) {
         //刷新当前列表视图大小,如果缩放比例有变化的话
-        m_dScale = scale;
+        m_dScale = m_scale;
         adaptWindowSize(scale);
     }
 
@@ -129,6 +129,8 @@ void DataStackedWidget::adaptWindowSize(const double &scale)
     if (scale < 0) {
         return;
     }
+
+    m_scale = scale;
 
     QWidget *widget = this->currentWidget();
 

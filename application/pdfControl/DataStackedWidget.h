@@ -93,6 +93,7 @@ private:
 
     QString             m_strBindPath = "";
     DocSheet    *m_sheet = nullptr;
+    double m_scale = 1.0;
     double m_dScale{1.0};
 
     // QWidget interface

@@ -67,7 +67,7 @@ void CatalogWidget::initWidget()
 
     m_pTree->setModel(pModel);
 
-    pModel->setColumnCount(3);
+    pModel->setColumnCount(2);
 
     mainLayout->addWidget(m_pTree);
 

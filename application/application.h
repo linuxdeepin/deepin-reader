@@ -37,23 +37,6 @@ public:
     Application(int &argc, char **argv);
     void setSreenRect(const QRect &rect);
     void adaptScreenView(int &w, int &h);
-    inline void setScale(const double &scale)
-    {
-        m_dScal = scale;
-    }
-    inline double scale() const
-    {
-        return m_dScal;
-    }
-//    inline void setFlush(const bool &flush)
-//    {
-//        m_bFlush = flush;
-//    }
-//    inline bool bFlush() const
-//    {
-//        return m_bFlush;
-//    }
-
     void setOpenFileOk(const bool &ok);
     bool openFileOk() const;
 
@@ -61,10 +44,8 @@ protected:
     void handleQuitAction() override;
 
 public:
-    DBService           *m_pDBService = nullptr;
-    AppInfo             *m_pAppInfo = nullptr;
-    double m_dScal{1.0};//左侧列表缩放比例
-//    bool m_bFlush{false};//是否自适应宽
+    DBService *m_pDBService = nullptr;
+    AppInfo   *m_pAppInfo = nullptr;
 
 private:
     void initCfgPath();

@@ -200,6 +200,8 @@ SearchItemWidget *SearchResWidget::getItemWidget(QListWidgetItem *item)
  */
 void SearchResWidget::adaptWindowSize(const double &scale)
 {
+    m_scale = scale;
+
     int tW = LEFTMINWIDTH;
     int tH = 80;
 

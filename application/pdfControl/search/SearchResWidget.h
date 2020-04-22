@@ -76,6 +76,7 @@ private:
 
     DocSheet *m_sheet;
 
+    double m_scale = 1.0;
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
     void updateThumbnail(const int &) Q_DECL_OVERRIDE;

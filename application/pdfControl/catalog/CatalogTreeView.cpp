@@ -48,6 +48,7 @@ CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
 
     connect(this, SIGNAL(collapsed(const QModelIndex &)), SLOT(SlotCollapsed(const QModelIndex &)));
     connect(this, SIGNAL(expanded(const QModelIndex &)), SLOT(SlotExpanded(const QModelIndex &)));
+    connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(onItemClicked(QModelIndex)));
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &CatalogTreeView::slotThemeChanged);
 }
 
@@ -231,6 +232,27 @@ void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelInd
     rightnotifypagechanged = false;
 
     return DTreeView::currentChanged(current, previous);
+}
+
+void CatalogTreeView::onItemClicked(const QModelIndex &current)
+{
+    if (nullptr == m_sheet)
+        return;
+
+    DocummentProxy *_proxy =  m_sheet->getDocProxy();
+
+    if (_proxy) {
+        int nPage = current.data(Qt::UserRole + 1).toInt();
+
+        nPage--;
+
+        double left = current.data(Qt::UserRole + 2).toDouble();
+
+        double top = current.data(Qt::UserRole + 3).toDouble();
+
+        _proxy->jumpToOutline(left, top, nPage);
+
+    }
 }
 
 void CatalogTreeView::slotThemeChanged()

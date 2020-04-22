@@ -547,7 +547,7 @@ void NotesWidget::adaptWindowSize(const double &scale)
     double height = 1.0;
 
     m_scale = scale;
-    //set item size
+
     width = static_cast<double>(LEFTMINWIDTH) * m_scale;
     height = static_cast<double>(80) * m_scale;
 

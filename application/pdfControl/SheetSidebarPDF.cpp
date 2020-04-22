@@ -86,8 +86,6 @@ void SheetSidebarPDF::resizeEvent(QResizeEvent *event)
 
     double scale = static_cast<double>(width) / static_cast<double>(LEFTMINWIDTH);
 
-    dApp->setScale(scale);
-
     m_pStackedWidget->adaptWindowSize(scale);
 
     CustomWidget::resizeEvent(event);

@@ -166,7 +166,7 @@ void ThumbnailWidget::addThumbnailItem(const int &iIndex)
 
     m_pThumbnailListWidget->setItemWidget(item, widget);
 
-    widget->adaptWindowSize(dApp->scale());
+    widget->adaptWindowSize(m_scale);
 }
 
 void ThumbnailWidget::initConnection()
@@ -324,6 +324,7 @@ void ThumbnailWidget::nextPage()
  */
 void ThumbnailWidget::adaptWindowSize(const double &scale)
 {
+    m_scale = scale;
     double width = static_cast<double>(LEFTMINWIDTH) * scale;
     double height = static_cast<double>(212) * scale;
 

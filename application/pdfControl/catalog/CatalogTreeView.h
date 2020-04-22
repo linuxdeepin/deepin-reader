@@ -51,11 +51,10 @@ protected:
 
     void keyPressEvent(QKeyEvent *event) override;
 
-signals:
-    void sigThemeChanged();
-
 protected slots:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
+
+    void onItemClicked(const QModelIndex &current);
 
     void slotThemeChanged();
 

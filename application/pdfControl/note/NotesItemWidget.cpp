@@ -118,7 +118,6 @@ void NotesItemWidget::CopyItemText()
 
 void NotesItemWidget::setRotate(int rotate)
 {
-    qDebug() << rotate;
     m_pPicture->setRotateAngle(rotate);
     m_pPicture->rotateImage();
 }

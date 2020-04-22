@@ -27,10 +27,6 @@
 #include "MsgHeader.h"
 #include "MainWindow.h"
 
-namespace {
-
-}  // namespace
-
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
 {

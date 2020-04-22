@@ -47,10 +47,17 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
 
     DocummentProxy *_proxy =  m_sheet->getDocProxy();
 
+
     if (_proxy) {
         printer->setDocName(m_strPrintName);
 
         QPainter painter(printer);
+
+        qDebug() << printer->devicePixelRatioF();
+        qDebug() << printer->margins().left;
+        qDebug() << printer->margins().right;
+        qDebug() << printer->margins().top;
+        qDebug() << printer->margins().bottom;
 
         QRect rect = painter.viewport();
 
@@ -84,7 +91,7 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
 
                 QImage image;
 
-                if (_proxy->getImage(iIndex, image, rect.width(), rect.height()))
+                if (_proxy->getImage(iIndex, image, rect.width(), rect.height()))      //公司只有一台打印机，会发生向右偏移
                     painter.drawImage(rect, image);
 
                 if (iIndex < printer->toPage() - 1)

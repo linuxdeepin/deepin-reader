@@ -189,6 +189,7 @@ private:
     QString     m_strBindPath = "";
     QPointer<DocSheet>   m_sheet;
     int m_page;
+    double m_scale = 1.0;
 };
 
 #endif  // THUMBNAILWIDGET_H
