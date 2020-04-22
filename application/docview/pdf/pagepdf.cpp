@@ -490,6 +490,7 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext, QString &st
     double curwidth = d->m_scale * d->m_imagewidth;
     double curheight = d->m_scale * d->m_imageheight;
 
+    int ret = false;
     QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
     foreach (Poppler::Annotation *annote, listannote) {
@@ -504,16 +505,13 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext, QString &st
                 if (rectbound.contains(ptf)) {
                     struuid = annote->uniqueName();
                     strtext = annote->contents();
-                    qDeleteAll(listannote);
-                    return true;
+                    ret = true;
                 }
             }
         }
-
-
     }
     qDeleteAll(listannote);
-    return  false;
+    return  ret;
 }
 
 bool PagePdf::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
