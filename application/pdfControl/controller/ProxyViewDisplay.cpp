@@ -112,7 +112,7 @@ void ProxyViewDisplay::setScale(const double &nScale)
     m_nScale = nScale;
 }
 
-int ProxyViewDisplay::setFit(int fit)
+double ProxyViewDisplay::setFit(int fit)
 {
     m_nAdapteState = fit;
     return onSetWidgetAdapt();

@@ -47,7 +47,7 @@ public:
     void setDoubleShow(const int &nDoubleShow);
     void setRotateType(const int &rotateType);
     void setScale(const double &nScale);
-    int setFit(int fit);     //没更新是-1
+    double setFit(int fit);     //没更新是-1
 
     void setWidth(const int &nWidth);
     void setHeight(const int &nHeight);
