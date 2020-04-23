@@ -51,7 +51,7 @@ private slots:
     void slotUpdateTheme();
 
     void SlotJumpPageLineEditReturnPressed();
-
+    void onEditFinished();
 private:
     void initWidget() override;
     void __SetBtnState(const int &currntPage, const int &totalPage);
@@ -65,8 +65,8 @@ private:
     DIconButton         *m_pPrePageBtn = nullptr;           // 按钮 前一页
     DIconButton         *m_pNextPageBtn = nullptr;          // 按钮 后一页
     DLineEdit           *m_pJumpPageLineEdit = nullptr;     // 输入框 跳转页码
-    DocSheet *m_sheet;
-    QString             m_strBindPath = "";
+    DocSheet            *m_sheet;
+    int                  m_curPage = 0;
 };
 
 #endif // PAGINGWIDGET_H

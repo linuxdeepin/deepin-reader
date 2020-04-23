@@ -58,6 +58,7 @@ void ScaleWidget::initWidget()
 
     QLineEdit *edit = m_scaleComboBox->lineEdit();
     connect(edit, SIGNAL(returnPressed()), SLOT(SlotReturnPressed()));
+    connect(edit, SIGNAL(editingFinished()), SLOT(onEditFinished()));
 
     tW = 24;
     tH = 24;
@@ -165,6 +166,7 @@ void ScaleWidget::SlotReturnPressed()
         if (nIndex != -1) {
             sTempText = sTempText.mid(0, nIndex);
         }
+
         bool bOk = false;
         double dValue = sTempText.toDouble(&bOk);
         if (bOk && dValue >= 10.0 && dValue <= m_nMaxScale) {
@@ -182,8 +184,13 @@ void ScaleWidget::SlotReturnPressed()
             m_scaleComboBox->lineEdit()->setCursorPosition(0);
         }
     }
+}
 
-    m_sheet->setFit(NO_ADAPTE_State);
+void ScaleWidget::onEditFinished()
+{
+    QString sCurText = QString::number(QString::number(m_sheet->getOper(Scale).toDouble(), 'f', 2).toDouble()) + "%";
+
+    m_scaleComboBox->setCurrentText(sCurText);
 }
 
 void ScaleWidget::setSheet(DocSheet *sheet)

@@ -64,6 +64,7 @@ void PagingWidget::initWidget()
 //    dApp->adaptScreenView(tW, tH);
     m_pJumpPageLineEdit->setFixedSize(tW, tH);
     connect(m_pJumpPageLineEdit, SIGNAL(returnPressed()), SLOT(SlotJumpPageLineEditReturnPressed()));
+    connect(m_pJumpPageLineEdit, SIGNAL(editingFinished()), SLOT(onEditFinished()));
     m_pJumpPageLineEdit->setClearButtonEnabled(false);
     DFontSizeManager::instance()->bind(m_pJumpPageLineEdit, DFontSizeManager::T6);
     m_pJumpPageLineEdit->setForegroundRole(DPalette::Text);
@@ -120,21 +121,18 @@ void PagingWidget::setPage(int page)
     if (nullptr == m_sheet)
         return;
 
+    m_curPage = page;
     DocummentProxy *_proxy = m_sheet->getDocProxy();
 
     if (_proxy) {
         int totalPage = _proxy->getPageSNum();
-
         int inputData = page;
-
         int currntPage = inputData + 1;     //  + 1 是为了 数字 从1 开始显示
         __SetBtnState(currntPage, totalPage);
 
         if (m_pCurrantPageLab) {
             m_pCurrantPageLab->setText(QString::number(currntPage));
-
             QString sPage = _proxy->pagenum2label(inputData);
-
             m_pJumpPageLineEdit->setText(sPage);
         } else {
             m_pJumpPageLineEdit->setText(QString::number(currntPage));
@@ -184,6 +182,12 @@ void PagingWidget::SlotJumpPageLineEditReturnPressed()
     } else {
         __PageNumberJump();
     }
+}
+
+void PagingWidget::onEditFinished()
+{
+    if (m_curPage > 0)
+        setPage(m_curPage);
 }
 
 void PagingWidget::__NormalChangePage()

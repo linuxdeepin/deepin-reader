@@ -52,6 +52,8 @@ private slots:
 
     void SlotReturnPressed();
 
+    void onEditFinished();
+
 private:
     DComboBox  *m_scaleComboBox     = nullptr;
     int         m_nCurrentIndex = -1;           //  当前选项
