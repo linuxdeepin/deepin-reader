@@ -129,7 +129,7 @@ void CentralDocPage::openFile(QString &filePath)
         connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
         connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), SLOT(onOpened(DocSheet *, bool)));
         connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
-        connect(this, SIGNAL(sigTitleShortCut(QString)), sheet, SLOT(onTitleShortCut(QString)));
+//        connect(this, SIGNAL(sigTitleShortCut(QString)), sheet, SLOT(onTitleShortCut(QString)));
         sheet->openFile(filePath);
         m_pStackedLayout->addWidget(sheet);
         m_pStackedLayout->setCurrentWidget(sheet);
@@ -569,7 +569,7 @@ void CentralDocPage::OnAppMsgData(const QString &sText)
 void CentralDocPage::OnAppShortCut(const QString &s)
 {
     auto children = this->findChildren<DocSheet *>();
-    if (children.size() == 0)
+    if (children.size() == 0 && getCurSheet())
         return;
 
     if (s == KeyStr::g_ctrl_p) {
@@ -582,6 +582,7 @@ void CentralDocPage::OnAppShortCut(const QString &s)
                s == KeyStr::g_ctrl_larger || s == KeyStr::g_ctrl_equal || s == KeyStr::g_ctrl_smaller ||
                s == KeyStr::g_ctrl_c || s == KeyStr::g_ctrl_l || s == KeyStr::g_ctrl_i || s == KeyStr::g_ctrl_b) {
         emit sigTitleShortCut(s);
+        getCurSheet()->onTitleShortCut(s);
     } else if (s == KeyStr::g_ctrl_f) {     //  搜索
         ShowFindWidget();
     } else if (s == KeyStr::g_ctrl_h) {     //  开启幻灯片

@@ -167,7 +167,7 @@ void SheetBrowserPDFPrivate::DocFile_ctrl_l()
     int nEy = m_pProxyData->getEndSelectPoint().y();
 
     if (nSx == nEx && nSy == nEy) {
-        m_sheet->showTips(tr("Please select the text"));
+        m_sheet->showTips(tr("Please select the text"), 1);
         return;
     }
 
@@ -184,7 +184,7 @@ void SheetBrowserPDFPrivate::DocFile_ctrl_l()
 
         m_pAnnotation->AddHighLight(sContent);
     } else {
-        m_sheet->showTips(tr("Please select the text"));
+        m_sheet->showTips(tr("Please select the text"), 1);
     }
 }
 
@@ -201,7 +201,7 @@ void SheetBrowserPDFPrivate::DocFile_ctrl_i()
             int nEy = m_pProxyData->getEndSelectPoint().y();
 
             if ((nSx == nEx && nSy == nEy)) {
-                m_sheet->showTips(tr("Please select the text"));
+                m_sheet->showTips(tr("Please select the text"), 1);
                 return;
             }
 
@@ -212,7 +212,7 @@ void SheetBrowserPDFPrivate::DocFile_ctrl_i()
 
             onOpenNoteWidget(msgContent);
         } else {
-            m_sheet->showTips(tr("Please select the text"));
+            m_sheet->showTips(tr("Please select the text"), 1);
         }
     }
 }
