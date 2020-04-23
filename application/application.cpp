@@ -31,17 +31,16 @@ Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
 {
     setAttribute(Qt::AA_UseHighDpiPixmaps);
-
-    initI18n();
-    initCfgPath();
-    initChildren();
-
     setApplicationName(ConstantMsg::g_app_name);
     setOrganizationName("deepin");
     setWindowIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
     setApplicationDisplayName(tr("Document Viewer"));
     setApplicationVersion(DApplication::buildVersion("20191227"));
     setApplicationAcknowledgementPage(Constant::sAcknowledgementLink);
+
+    initI18n();
+    initCfgPath();
+    initChildren();
 
     QPixmap px(QIcon::fromTheme(ConstantMsg::g_app_name).pixmap(256 * qApp->devicePixelRatio(), 256 * qApp->devicePixelRatio()));
     px.setDevicePixelRatio(qApp->devicePixelRatio());

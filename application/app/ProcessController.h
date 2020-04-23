@@ -26,30 +26,33 @@ class QTimer;
 class ProcessController : public QObject
 {
     Q_OBJECT
+
+    Q_CLASSINFO("D-Bus Interface", "com.deepin.Reader")
 public:
     explicit ProcessController(QObject *parent = nullptr);
 
     virtual ~ProcessController();
 
+    bool listen();
+
+public slots:
+    void onReceiveMessage();
+
+    void onHeart();
+
+    Q_SCRIPTABLE void handleFiles(QStringList filePathList);
+
+public:
     static bool checkFilePathOpened(const QString &filePath);   //仅仅查看是否被打开
 
     static bool existFilePath(const QString &filePath);   //获取打开对应文档程序的pid，为空则文档未打开
 
-    bool openIfAppExist(const QStringList &filePathList);
-
-    bool listen();
-
-    static void processOpenFile(const QString &filePath);  //
+    static bool openIfAppExist(const QStringList &filePathList);
 
 private:
     static void writeListenText(QString listenText);
 
     static QString readListenText();
-
-private slots:
-    void onReceiveMessage();
-
-    void onHeart();
 
 private:
     static QString request(const QString &message);
@@ -61,7 +64,7 @@ private:
 private:
     QLocalServer *m_localServer = nullptr;
     QString m_listenText;
-    QTimer *m_timer;
+    QTimer *m_timer = nullptr;
 };
 
 #endif // PROCESSCONTROLLER_H

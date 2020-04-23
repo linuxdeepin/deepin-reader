@@ -89,6 +89,8 @@ void DocTabBar::insertSheet(DocSheet *sheet, int index)
     else
         index = insertTab(index, fileName);
 
+    //this->setEnabledEmbedStyle(true);
+
     this->setCurrentIndex(index);
 
     this->setTabData(index, DocSheet::getUuid(sheet));

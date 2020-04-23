@@ -7,6 +7,9 @@
 #include "app/json.h"
 #include "app/FileController.h"
 #include <QLockFile>
+#include <QDebug>
+#include <QDBusConnection>
+#include <QDBusInterface>
 
 DWIDGET_USE_NAMESPACE
 
@@ -23,23 +26,18 @@ int main(int argc, char *argv[])
 
     QStringList arguments = parser.positionalArguments();
 
-    //进程同步 解决选中多个文件同时右击打开不在同一个窗口的问题
-    QLockFile file("./.deepin-reader-lock");
-    int tryTimes = 0;
-    while (!file.tryLock(1000)) {
-        QThread::msleep(100);
-        if (tryTimes++ > 4)
-            break;
-    }
-
     //=======通知已经打开的进程
-    ProcessController controller;
-
-    if (controller.openIfAppExist(arguments)) {
-        file.unlock();
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    if (!dbus.registerService("com.deepin.Reader")) {
+        QDBusInterface notification("com.deepin.Reader", "/com/deepin/Reader", "com.deepin.Reader", QDBusConnection::sessionBus());
+        QList<QVariant> args;
+        args.append(arguments);
+        notification.callWithArgumentList(QDBus::Block, "handleFiles", args).errorMessage();
         return 0;
     }
-    //通知==========END
+
+    ProcessController controller;
+    dbus.registerObject("/com/deepin/Reader", &controller, QDBusConnection::ExportScriptableSlots);
 
     DApplicationSettings savetheme;
     Dtk::Core::DLogManager::registerConsoleAppender();
@@ -49,16 +47,11 @@ int main(int argc, char *argv[])
 
     MainWindow *w = MainWindow::create();
 
-    if (!controller.listen())
-        return -1;
-
     foreach (const QString &filePath, arguments) {
         w->doOpenFile(filePath);
     }
 
     w->show();
-
-    file.unlock();
 
     return a.exec();
 }

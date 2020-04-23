@@ -45,9 +45,7 @@ const QSqlDatabase DBFactory::getDatabase()
     } else {
         //if database not open, open it.
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);
-        QString sDbPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-        qDebug() << __LINE__ << __FUNCTION__ << "         sDbPath:" << sDbPath;
-        db.setDatabaseName(sDbPath + "/" + g_db_name);
+        db.setDatabaseName(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + g_db_name);
         if (! db.open()) {
             qWarning() << "Open database error:" << db.lastError();
             return QSqlDatabase();

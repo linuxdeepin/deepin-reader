@@ -24,13 +24,21 @@
 
 ProcessController::ProcessController(QObject *parent) : QObject(parent)
 {
-
+//    start();
+//    moveToThread(this);
 }
 
 ProcessController::~ProcessController()
 {
     if (m_localServer)
         m_localServer->close();
+
+    if (m_localServer)
+        delete m_localServer;
+    if (m_timer)
+        delete m_timer;
+
+    //quit();
 }
 
 bool ProcessController::checkFilePathOpened(const QString &filePath)
@@ -62,6 +70,41 @@ bool ProcessController::openIfAppExist(const QStringList &filePathList)
     return "done" == result;
 }
 
+void ProcessController::handleFiles(QStringList filePathList)
+{
+    QList<DocSheet *> sheets = DocSheet::g_map.values();
+
+    if (filePathList.count() <= 0) {
+        MainWindow::create()->show();
+        return;
+    }
+
+    foreach (QString filePath, filePathList) {
+        //如果存在则活跃该窗口
+        bool hasFind = false;
+        foreach (DocSheet *sheet, sheets) {
+            if (sheet->filePath() == filePath) {
+                MainWindow *window = MainWindow::windowContainSheet(sheet);
+                if (nullptr != window) {
+                    window->activateSheet(sheet);
+                    hasFind = true;
+                    break;
+                }
+            }
+        }
+
+        if (!hasFind) {
+            //如果不存在则打开
+            if (MainWindow::m_list.count() > 0) {
+                MainWindow::m_list[0]->activateWindow();
+                MainWindow::m_list[0]->doOpenFile(filePath);
+                continue;
+            } else
+                MainWindow::create()->doOpenFile(filePath);
+        }
+    }
+}
+
 bool ProcessController::existFilePath(const QString &filePath)
 {
     QStringList list = findReaderPids();
@@ -82,11 +125,11 @@ bool ProcessController::existFilePath(const QString &filePath)
 
 bool ProcessController::listen()
 {
-    m_localServer = new QLocalServer(this);
+    m_localServer = new QLocalServer;
 
     connect(m_localServer, SIGNAL(newConnection()), this, SLOT(onReceiveMessage()));
 
-    m_timer = new QTimer(this);
+    m_timer = new QTimer;
 
     connect(m_timer, SIGNAL(timeout()), this, SLOT(onHeart()));
 
@@ -109,17 +152,17 @@ QString ProcessController::request(const QString &message)
     QString result;
     QLocalSocket localSocket;
     localSocket.connectToServer(listenText, QIODevice::ReadWrite);
-    if (!localSocket.waitForConnected(100)) {
+    if (!localSocket.waitForConnected(10000)) {
         qDebug() << localSocket.error();
         return result;
     }
 
     localSocket.write(message.toUtf8());
-    if (!localSocket.waitForBytesWritten(100)) {
+    if (!localSocket.waitForBytesWritten(10000)) {
         return result;
     }
 
-    if (!localSocket.waitForReadyRead(100))
+    if (!localSocket.waitForReadyRead(10000))
         return result;
 
     result  = localSocket.readAll();
@@ -129,15 +172,10 @@ QString ProcessController::request(const QString &message)
     return result;
 }
 
-void ProcessController::processOpenFile(const QString &filePath)
-{
-    QProcess app;
-    app.startDetached(QString("%1 \"%2\"").arg(qApp->applicationDirPath() + "/deepin-reader").arg(filePath));
-}
 
 void ProcessController::writeListenText(QString listenText)
 {
-    QFile file("./.listen");
+    QFile file(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/.listenText");
 
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
         return;
@@ -149,7 +187,7 @@ void ProcessController::writeListenText(QString listenText)
 
 QString ProcessController::readListenText()
 {
-    QFile file("./.listen");
+    QFile file(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/.listenText");
 
     QString listenText;
 
@@ -166,17 +204,17 @@ QString ProcessController::request(const QString &pid, const QString &message)
     QString result;
     QLocalSocket localSocket;
     localSocket.connectToServer(pid, QIODevice::ReadWrite);
-    if (!localSocket.waitForConnected(100)) {
+    if (!localSocket.waitForConnected(10000)) {
         qDebug() << localSocket.error();
         return result;
     }
 
     localSocket.write(message.toUtf8());
-    if (!localSocket.waitForBytesWritten(100)) {
+    if (!localSocket.waitForBytesWritten(10000)) {
         return result;
     }
 
-    if (!localSocket.waitForReadyRead(100))
+    if (!localSocket.waitForReadyRead(10000))
         return result;
 
     result  = localSocket.readAll();
@@ -190,51 +228,25 @@ void ProcessController::onReceiveMessage()
 {
     QLocalSocket *localSocket = m_localServer->nextPendingConnection();
 
-    if (!localSocket->waitForReadyRead(1000)) {
+    qDebug() << "reveive";
+    if (!localSocket->waitForReadyRead(10000)) {
         return;
     }
-
+    qDebug() << "reveiveF";
     QByteArray byteArray = localSocket->readAll();
 
     Json json(QString::fromUtf8(byteArray.constData()));
 
     if ("openNewFile" == json.getString("command")) {
 
+        qDebug() << json.getStringList("message");
+
         localSocket->write("done");
         localSocket->disconnectFromServer();
 
         QStringList filePathList = json.getStringList("message");
-        QList<DocSheet *> sheets = DocSheet::g_map.values();
 
-        if (filePathList.count() <= 0) {
-            MainWindow::create()->show();
-            return;
-        }
-
-        foreach (QString filePath, filePathList) {
-            //如果存在则活跃该窗口
-            bool hasFind = false;
-            foreach (DocSheet *sheet, sheets) {
-                if (sheet->filePath() == filePath) {
-                    MainWindow *window = MainWindow::windowContainSheet(sheet);
-                    if (nullptr != window) {
-                        window->activateSheet(sheet);
-                        hasFind = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!hasFind) {
-                //如果不存在则打开
-                if (MainWindow::m_list.count() > 0) {
-                    MainWindow::m_list[0]->activateWindow();
-                    MainWindow::m_list[0]->doOpenFile(filePath);
-                    continue;
-                } else
-                    MainWindow::create()->doOpenFile(filePath);
-            }
-        }
+        handleFiles(filePathList);
 
         return;
     }
