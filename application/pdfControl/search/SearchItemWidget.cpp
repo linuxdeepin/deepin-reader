@@ -19,6 +19,7 @@
 #include "SearchItemWidget.h"
 #include "MsgHeader.h"
 #include "ModuleHeader.h"
+#include "CustomControl/RotateImageLabel.h"
 
 #include <QVBoxLayout>
 
@@ -31,6 +32,14 @@ SearchItemWidget::SearchItemWidget(DWidget *parent)
 
 SearchItemWidget::~SearchItemWidget()
 {
+}
+
+void SearchItemWidget::setLabelImage(const QImage &image)
+{
+    if (m_label != nullptr) {
+        QPixmap pixmap = QPixmap::fromImage(image);
+        m_label->setBackgroundPix(pixmap);
+    }
 }
 
 //  搜索显示内容
@@ -57,16 +66,16 @@ void SearchItemWidget::setSerchResultText(const QString &result)
 
 bool SearchItemWidget::bSelect()
 {
-    if (m_pPicture) {
-        return m_pPicture->bSelect();
+    if (m_label) {
+        m_label->setSelect(true);
     }
-    return false;
+    return true;
 }
 
 void SearchItemWidget::setBSelect(const bool &paint)
 {
-    if (m_pPicture) {
-        m_pPicture->setSelect(paint);
+    if (m_label) {
+        m_label->setSelect(paint);
     }
     m_bPaint = paint;
     update();
@@ -74,8 +83,8 @@ void SearchItemWidget::setBSelect(const bool &paint)
 
 void SearchItemWidget::setRotate(int rotate)
 {
-    m_pPicture->setRotateAngle(rotate);
-    m_pPicture->rotateImage();
+    m_label->setRotateAngle(rotate);
+    m_label->rotateImage();
 }
 
 void SearchItemWidget::slotUpdateTheme()
@@ -93,8 +102,8 @@ void SearchItemWidget::slotUpdateTheme()
 
 void SearchItemWidget::adaptWindowSize(const double &scale)
 {
-    if (m_pPicture) {
-        m_pPicture->scaleImage(scale);
+    if (m_label) {
+        m_label->scaleImage(scale);
     }
 }
 
@@ -102,14 +111,10 @@ void SearchItemWidget::initWidget()
 {
     auto t_vLayoutPicture = new QVBoxLayout;
     t_vLayoutPicture->setContentsMargins(0, 3, 0, 0);
-    m_pPicture = new ImageLabel(this);
+    m_label = new RotateImageLabel(this);
     int tW = 48;
     int tH = 68;
-//    dApp->adaptScreenView(tW, tH);
-    m_pPicture->setFixedSize(QSize(tW, tH));
-    m_pPicture->setSize(QSize(tW, tH));
-    m_pPicture->setAlignment(Qt::AlignCenter);
-    t_vLayoutPicture->addWidget(m_pPicture);
+    t_vLayoutPicture->addWidget(m_label);
     t_vLayoutPicture->addStretch(1);
 
     m_pPageNumber = new PageNumberLabel(this);
@@ -159,7 +164,7 @@ void SearchItemWidget::initWidget()
 
     m_pHLayout->setSpacing(1);
     m_pHLayout->setContentsMargins(0, 0, 10, 0);
-//    m_pHLayout->addWidget(m_pPicture);
+//    m_pHLayout->addWidget(m_label);
     m_pHLayout->addItem(t_vLayoutPicture);
     m_pHLayout->addItem(t_vLayout);
     m_pHLayout->setSpacing(1);
@@ -182,8 +187,8 @@ void SearchItemWidget::paintEvent(QPaintEvent *e)
 
     //  涉及到 主题颜色
     if (m_bPaint) {
-        m_pPicture->setForegroundRole(DPalette::Highlight);
+        m_label->setForegroundRole(DPalette::Highlight);
     } else {
-        m_pPicture->setForegroundRole(QPalette::Shadow);
+        m_label->setForegroundRole(QPalette::Shadow);
     }
 }

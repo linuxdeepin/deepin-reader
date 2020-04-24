@@ -466,7 +466,7 @@ void BookMarkWidget::updateThumbnail(const int &page)
     if (nullptr == dproxy)
         return;
 
-    dproxy->getImage(page, image, tW, tH);
+    dproxy->getImageMax(page, image, 75);
     for (int index = 0; index < itemNum; index++) {
         auto item = m_pBookMarkListWidget->item(index);
         if (item) {
@@ -573,7 +573,7 @@ QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
         int tW = 146;
         int tH = 174;
 
-        bool rl = proxy->getImage(page, t_image, tW, tH /*42, 62*/);
+        bool rl = proxy->getImageMax(page, t_image, 75);
         if (rl) {
             QImage img = Utils::roundImage(QPixmap::fromImage(t_image), ICON_SMALL);
             auto item = m_pBookMarkListWidget->insertWidgetItem(page);
@@ -736,7 +736,7 @@ void LoadBookMarkThread::run()
                 continue;
             }
 
-            bool bl = m_proxy->getImage(page, image, tW, tH /*42, 62*/);
+            bool bl = m_proxy->getImageMax(page, image, 75);
             if (bl) {
                 emit sigLoadImage(page, image);
             }

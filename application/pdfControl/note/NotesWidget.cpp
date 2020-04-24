@@ -265,6 +265,7 @@ void NotesWidget::slotLoadImage(const QImage &image)
         NotesItemWidget *t_widget =
             reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
         if (t_widget) {
+            //t_widget->rotateThumbnail(m_nRotate);
             t_widget->setLabelImage(image);
         }
     }
@@ -630,8 +631,6 @@ void ThreadLoadImageOfNote::run()
         int t_page = -1;
         QImage image;
         bool bl = false;
-        int tW = 146;
-        int tH = 174;
 
         for (int page = 0; page < m_stListNote.count(); page++) {
             if (!m_isLoaded)
@@ -646,7 +645,7 @@ void ThreadLoadImageOfNote::run()
             if (t_page != static_cast<int>(highContent.ipage)) {
                 t_page = static_cast<int>(highContent.ipage);
 
-                bl = m_proxy->getImage(t_page, image, tW, tH/*48, 68*/);
+                bl = m_proxy->getImageMax(t_page, image, 75);
             }
             if (bl) {
                 emit sigLoadImage(image);

@@ -19,6 +19,7 @@
 #include "NotesItemWidget.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
+#include <CustomControl/RotateImageLabel.h>
 
 #include <QVBoxLayout>
 
@@ -28,6 +29,14 @@ NotesItemWidget::NotesItemWidget(DWidget *parent)
     initWidget();
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NotesItemWidget::slotUpdateTheme);
+}
+
+void NotesItemWidget::setLabelImage(const QImage &image)
+{
+    if (m_label != nullptr) {
+        QPixmap pixmap = QPixmap::fromImage(image);
+        m_label->setBackgroundPix(pixmap);
+    }
 }
 
 void NotesItemWidget::setTextEditText(const QString &contant)
@@ -66,16 +75,16 @@ void NotesItemWidget::setNote(const QString &note)
 
 bool NotesItemWidget::bSelect()
 {
-    if (m_pPicture) {
-        return m_pPicture->bSelect();
+    if (m_label) {
+        m_label->setSelect(true);
     }
-    return false;
+    return true;
 }
 
 void NotesItemWidget::setBSelect(const bool &paint)
 {
-    if (m_pPicture) {
-        m_pPicture->setSelect(paint);
+    if (m_label) {
+        m_label->setSelect(paint);
     }
     m_bPaint = paint;
     update();
@@ -93,8 +102,8 @@ void NotesItemWidget::slotUpdateTheme()
 
 void NotesItemWidget::adaptWindowSize(const double &scale)
 {
-    if (m_pPicture) {
-        m_pPicture->scaleImage(scale);
+    if (m_label) {
+        m_label->scaleImage(scale);
     }
 }
 
@@ -118,8 +127,8 @@ void NotesItemWidget::CopyItemText()
 
 void NotesItemWidget::setRotate(int rotate)
 {
-    m_pPicture->setRotateAngle(rotate);
-    m_pPicture->rotateImage();
+    m_label->setRotateAngle(rotate);
+    m_label->rotateImage();
 }
 
 int NotesItemWidget::nNoteType() const
@@ -136,15 +145,11 @@ void NotesItemWidget::initWidget()
 {
     auto t_vLayoutPicture = new QVBoxLayout;
     t_vLayoutPicture->setContentsMargins(0, 3, 0, 0);
-    m_pPicture = new ImageLabel(this);
+    m_label = new RotateImageLabel(this);
     int tW = 48;
     int tH = 68;
 
-    m_pPicture->setFixedSize(QSize(tW, tH));
-    m_pPicture->setSize(QSize(tW, tH));
-    m_pPicture->setAlignment(Qt::AlignCenter);
-
-    t_vLayoutPicture->addWidget(m_pPicture);
+    t_vLayoutPicture->addWidget(m_label);
     t_vLayoutPicture->addStretch(1);
 
     m_pPageNumber = new PageNumberLabel(this);
@@ -202,9 +207,9 @@ void NotesItemWidget::paintEvent(QPaintEvent *e)
 
     //  涉及到 主题颜色
     if (m_bPaint) {
-        m_pPicture->setForegroundRole(DPalette::Highlight);
+        m_label->setForegroundRole(DPalette::Highlight);
     } else {
-        m_pPicture->setForegroundRole(QPalette::Shadow);
+        m_label->setForegroundRole(QPalette::Shadow);
     }
 }
 

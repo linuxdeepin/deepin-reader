@@ -27,6 +27,7 @@
  * @brief   注释item
  */
 
+class RotateImageLabel;
 class NotesItemWidget : public CustomItemWidget
 {
     Q_OBJECT
@@ -34,6 +35,8 @@ class NotesItemWidget : public CustomItemWidget
 
 public:
     explicit NotesItemWidget(DWidget *parent = nullptr);
+
+    void setLabelImage(const QImage &);
 
 public:
     void setTextEditText(const QString &);
@@ -80,7 +83,7 @@ private:
     QString     m_strPage = "";     // 注释页面
     int         m_nNoteType = NOTE_HIGHLIGHT;   // 注释类型, 0,高亮注释; 1,页面注释
     bool        m_bPaint = false;
-
+    RotateImageLabel  *m_label = nullptr;
     // CustomWidget interface
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;

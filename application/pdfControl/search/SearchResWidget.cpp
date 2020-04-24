@@ -125,7 +125,7 @@ void SearchResWidget::addSearchsItem(const int &page, const QString &text, const
             QImage image;
             int tW = 146;
             int tH = 174;
-            bool bl = dproxy->getImage(page, image, tW, tH /*42, 62*/);
+            bool bl = dproxy->getImageMax(page, image, 75);
             if (bl) {
                 itemWidget->setLabelImage(image);
             }
@@ -260,7 +260,9 @@ void SearchResWidget::updateThumbnail(const int &page)
     int tH = 174;
 
     auto dproxy = m_sheet->getDocProxy();
-    dproxy->getImage(page, image, tW, tH);
+
+    dproxy->getImageMax(page, image, 75);
+
     for (int index = 0; index < itemNum; index++) {
         auto item = m_pSearchList->item(index);
         if (item) {

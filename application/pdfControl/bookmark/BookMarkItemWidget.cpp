@@ -18,6 +18,7 @@
  */
 #include "BookMarkItemWidget.h"
 #include "ModuleHeader.h"
+#include "CustomControl/RotateImageLabel.h"
 
 #include <DLabel>
 #include <QHBoxLayout>
@@ -28,10 +29,18 @@ BookMarkItemWidget::BookMarkItemWidget(DWidget *parent)
     initWidget();
 }
 
+void BookMarkItemWidget::setLabelImage(const QImage &image)
+{
+    if (m_label != nullptr) {
+        QPixmap pixmap = QPixmap::fromImage(image);
+        m_label->setBackgroundPix(pixmap);
+    }
+}
+
 void BookMarkItemWidget::setBSelect(const bool &paint)
 {
-    if (m_pPicture) {
-        m_pPicture->setSelect(paint);
+    if (m_label) {
+        m_label->setSelect(paint);
     }
     m_bPaint = paint;
     update();
@@ -39,8 +48,8 @@ void BookMarkItemWidget::setBSelect(const bool &paint)
 
 void BookMarkItemWidget::setRotate(int rotate)
 {
-    m_pPicture->setRotateAngle(rotate);
-    m_pPicture->rotateImage();
+    m_label->setRotateAngle(rotate);
+    m_label->rotateImage();
 }
 
 /**
@@ -72,19 +81,16 @@ void BookMarkItemWidget::initWidget()
 
     auto m_pImageVLayout = new QVBoxLayout;
     m_pImageVLayout->setContentsMargins(0, 0, 0, 10);
-    m_pPicture = new ImageLabel(this);
+    m_label = new RotateImageLabel(this);
     tW = 48;
     tH = 68;
-//    dApp->adaptScreenView(tW, tH);
-    m_pPicture->setFixedSize(QSize(tW, tH));
-    m_pPicture->setSize(QSize(tW, tH));
-    m_pPicture->setAlignment(Qt::AlignCenter);
-    m_pImageVLayout->addWidget(m_pPicture);
+    m_label->setAlignment(Qt::AlignCenter);
+    m_pImageVLayout->addWidget(m_label);
 
     auto m_pHLayout = new QHBoxLayout;
     m_pHLayout->setContentsMargins(0, 0, 0, 0);
 //    m_pHLayout->addStretch(1);
-//    m_pHLayout->addWidget(m_pPicture);
+//    m_pHLayout->addWidget(m_label);
     m_pHLayout->addItem(m_pImageVLayout);
     m_pHLayout->addItem(m_pRightVLayout);
 
@@ -97,9 +103,9 @@ void BookMarkItemWidget::paintEvent(QPaintEvent *event)
 
     //  涉及到 主题颜色
     if (m_bPaint) {
-        m_pPicture->setForegroundRole(DPalette::Highlight);
+        m_label->setForegroundRole(DPalette::Highlight);
     } else {
-        m_pPicture->setForegroundRole(QPalette::Shadow);
+        m_label->setForegroundRole(QPalette::Shadow);
     }
 }
 
@@ -118,20 +124,7 @@ void BookMarkItemWidget::adaptWindowSize(const double &scale)
 
 //    this->resize(QSize(static_cast<int>(width), static_cast<int>(height)));
 
-    if (m_pPicture) {
-        m_pPicture->scaleImage(scale);
-    }
-}
-
-/**
- * @brief BookMarkItemWidget::imageAdaptView
- * 书签缩略图自适应视图大小
- * @param tw
- * @param th
- */
-void BookMarkItemWidget::imageAdaptView(const int &tw, const int &th)
-{
-    if (m_pPicture) {
-        m_pPicture->scaleImage(tw, th);
+    if (m_label) {
+        m_label->scaleImage(scale);
     }
 }

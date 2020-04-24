@@ -25,6 +25,7 @@
  * @brief   搜索item
  */
 
+class RotateImageLabel;
 class SearchItemWidget : public CustomItemWidget
 {
     Q_OBJECT
@@ -34,6 +35,7 @@ public:
     explicit SearchItemWidget(DWidget *parent = nullptr);
     ~SearchItemWidget() override;
 
+    void setLabelImage(const QImage &);
 public:
     void setTextEditText(const QString &);
     void setSerchResultText(const QString &);
@@ -54,7 +56,7 @@ private:
     DLabel *m_pTextLab = nullptr;
     QString m_strNote = "";   // 注释内容
     bool    m_bPaint = false;
-
+    RotateImageLabel  *m_label = nullptr;
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
 };

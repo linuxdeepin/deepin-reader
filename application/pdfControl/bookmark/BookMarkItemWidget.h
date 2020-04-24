@@ -25,6 +25,7 @@
  * @brief The BookMarkWidget class
  * @brief   书签列表item
  */
+class RotateImageLabel;
 class BookMarkItemWidget : public CustomItemWidget
 {
     Q_OBJECT
@@ -33,6 +34,7 @@ class BookMarkItemWidget : public CustomItemWidget
 public:
     explicit BookMarkItemWidget(DWidget *parent = nullptr);
 
+    void setLabelImage(const QImage &);
 public:
     void setBSelect(const bool &paint);
 
@@ -46,11 +48,9 @@ protected:
 private:
     bool m_bPaint = false;                    // 是否绘制选中item
 
+    RotateImageLabel  *m_label = nullptr;
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
-
-public:
-    void imageAdaptView(const int &, const int &) Q_DECL_OVERRIDE;
 };
 
 #endif // BOOKMARKITEMWIDGET_H
