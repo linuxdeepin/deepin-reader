@@ -78,16 +78,24 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
     label->setMinimumWidth(70 + 20);
     layout->addWidget(label, index, 0);
 
-    if (sData == "") {
-        DLabel *labelText = new DLabel(this);
-        DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
-        labelText->setText(tr("Unknown")); /*labelText->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);*/
-        layout->addWidget(labelText, index, 1);
-    } else {
-        DFrame *widgets = addTitleFrame(sData);
-        widgets->setFrameShape(QFrame::NoFrame);
-        layout->addWidget(widgets, index, 1);
-    }
+    QString text = sData.isEmpty() ? tr("Unknown") : sData;
+    DLabel *labelText = new DLabel(this);
+    DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
+    labelText->setWordWrap(true);
+    labelText->setFixedWidth(LAEBL_TEXT_WIDTH);
+    labelText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    labelText->setText(sData);
+    layout->addWidget(labelText, index, 1);
+//    if (sData == "") {
+//        DLabel *labelText = new DLabel(this);
+//        DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
+//        labelText->setText(tr("Unknown")); /*labelText->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);*/
+//        layout->addWidget(labelText, index, 1);
+//    } else {
+//        DFrame *widgets = addTitleFrame(sData);
+//        widgets->setFrameShape(QFrame::NoFrame);
+//        layout->addWidget(widgets, index, 1);
+//    }
 }
 
 void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const QString &objName, const QDateTime &sData)
