@@ -12,6 +12,7 @@
 #include "docview/docummentproxy.h"
 #include "CustomControl/DFMGlobal.h"
 #include "CustomControl/ImageLabel.h"
+#include "CustomControl/wordwraplabel.h"
 
 #include "ModuleHeader.h"
 #include "application.h"
@@ -87,77 +88,25 @@ void FileAttrWidget::setFileAttr(DocSheet *sheet)
 
 void FileAttrWidget::addTitleFrame(const QString &sData)
 {
-    QFrame *m_textShowFrame = new QFrame(this);
-
-    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T8);
-    QString t = DFMGlobal::elideText(sData, QSize(260, 60), QTextOption::WrapAnywhere, font,
-                                     Qt::ElideMiddle, 0);
-    QStringList labelTexts = t.split("\n");
-    const int maxLineCount = 3;
-
-    int textHeight = 0;
-    QVBoxLayout *textShowLayout = new QVBoxLayout;
-    for (int i = 0; i < labelTexts.length(); i++) {
-        if (i > (maxLineCount - 1)) {
-            break;
-        }
-        QString labelText = labelTexts.at(i);
-        DLabel *label = new DLabel(labelText, m_textShowFrame);
-        DFontSizeManager::instance()->bind(label, DFontSizeManager::T8);
-        label->setForegroundRole(DPalette::BrightText);
-
-        label->setAlignment(Qt::AlignHCenter);
-        QHBoxLayout *hLayout = new QHBoxLayout;
-
-        textHeight += label->fontInfo().pixelSize() + 20;
-
-        hLayout->addStretch(1);
-        hLayout->addWidget(label);
-        if (i < (labelTexts.length() - 1) && i != (maxLineCount - 1)) {
-            if (label->fontMetrics().width(labelText) > (300 - 10)) {
-                label->setFixedWidth(300);
-            }
-        } else {
-            // the final line of file name label, with a edit btn.
-            if (labelTexts.length() >= maxLineCount) {
-                for (int idx = i + 1; idx < labelTexts.length(); idx++) {
-                    labelText += labelTexts.at(idx);
-                }
-            }
-
-            if (label->fontMetrics().width(labelText) > 300 &&
-                    labelTexts.length() >= maxLineCount) {
-                labelText = label->fontMetrics().elidedText(labelText, Qt::ElideMiddle, 260);
-            }
-            label->setText(labelText);
-            hLayout->addSpacing(2);
-        }
-        textShowLayout->addLayout(hLayout);
-        hLayout->addStretch(1);
-    }
-
-    textShowLayout->setContentsMargins(0, 6, 0, 0);
-    textShowLayout->setSpacing(0);
-    m_textShowFrame->setLayout(textShowLayout);
-    textShowLayout->addStretch();
-
-    m_textShowFrame->setFixedHeight(textHeight);
-
-    m_pVBoxLayout->addWidget(m_textShowFrame);
+    WordWrapLabel *labelText = new WordWrapLabel(this);
+    DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
+    labelText->setFixedWidth(this->width());
+    labelText->setMargin(20);
+    labelText->setAlignment(Qt::AlignCenter);
+    labelText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    labelText->setText(sData);
+    m_pVBoxLayout->addWidget(labelText);
 }
 
 void FileAttrWidget::showScreenCenter()
 {
     Dtk::Widget::moveToCenter(this);
-
     this->show();
-
 }
 
 void FileAttrWidget::initWidget()
 {
     initCloseBtn();
-
     initImageLabel();
 }
 

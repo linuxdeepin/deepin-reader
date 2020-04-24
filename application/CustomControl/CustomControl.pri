@@ -7,7 +7,8 @@ HEADERS += \
     $$PWD/RoundColorWidget.h \
     $$PWD/CustomMenu.h \
     $$PWD/CustomWidgetPrivate.h \
-    $$PWD/RotateImageLabel.h
+    $$PWD/RotateImageLabel.h \
+    $$PWD/wordwraplabel.h
 
 SOURCES += \
     $$PWD/CustomWidget.cpp \
@@ -18,4 +19,5 @@ SOURCES += \
     $$PWD/RoundColorWidget.cpp \
     $$PWD/CustomMenu.cpp \
     $$PWD/CustomWidgetPrivate.cpp \
-    $$PWD/RotateImageLabel.cpp
+    $$PWD/RotateImageLabel.cpp \
+    $$PWD/wordwraplabel.cpp

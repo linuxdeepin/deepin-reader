@@ -9,9 +9,9 @@
 #include "docview/docummentproxy.h"
 #include "utils/utils.h"
 #include "DocSheet.h"
+#include "CustomControl/wordwraplabel.h"
 
 #define LAEBL_TEXT_WIDTH   165
-
 AttrScrollWidget::AttrScrollWidget(DocSheet *sheet, DWidget *parent)
     : DFrame(parent)
     , m_leftminwidth(60)
@@ -79,23 +79,13 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
     layout->addWidget(label, index, 0);
 
     QString text = sData.isEmpty() ? tr("Unknown") : sData;
-    DLabel *labelText = new DLabel(this);
+    WordWrapLabel *labelText = new WordWrapLabel(this);
     DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
-    labelText->setWordWrap(true);
     labelText->setFixedWidth(LAEBL_TEXT_WIDTH);
     labelText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    labelText->setText(sData);
+
+    labelText->setText(text);
     layout->addWidget(labelText, index, 1);
-//    if (sData == "") {
-//        DLabel *labelText = new DLabel(this);
-//        DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
-//        labelText->setText(tr("Unknown")); /*labelText->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);*/
-//        layout->addWidget(labelText, index, 1);
-//    } else {
-//        DFrame *widgets = addTitleFrame(sData);
-//        widgets->setFrameShape(QFrame::NoFrame);
-//        layout->addWidget(widgets, index, 1);
-//    }
 }
 
 void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const QString &objName, const QDateTime &sData)
@@ -127,65 +117,4 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
     labelText->setText(bData ? tr("Yes") : tr("No"));
     labelText->setAlignment(Qt::AlignTop);
     layout->addWidget(labelText, index, 1);
-}
-
-DFrame *AttrScrollWidget::addTitleFrame(const QString &sData)
-{
-    qDebug() << sData;
-    DFrame *m_textShowFrame = new DFrame(this);
-
-    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T8);
-    QString t = DFMGlobal::elideText(sData, QSize(LAEBL_TEXT_WIDTH, 60), QTextOption::WrapAnywhere, font, Qt::ElideMiddle, 0);
-    QStringList labelTexts = t.split("\n");
-    const int maxLineCount = 3;
-
-    int textHeight = 0;
-
-    QVBoxLayout *hLayout = new QVBoxLayout;
-    for (int i = 0; i < labelTexts.length(); i++) {
-        if (i > (maxLineCount - 1)) {
-            break;
-        }
-        QString labelText = labelTexts.at(i);
-        QLabel *label = new QLabel(labelText, m_textShowFrame);
-        DFontSizeManager::instance()->bind(label, DFontSizeManager::T8);
-
-        label->setAlignment(Qt::AlignLeft);
-
-        textHeight += label->fontInfo().pixelSize() + 10;
-
-        hLayout->addWidget(label);
-        if (i < (labelTexts.length() - 1) && i != (maxLineCount - 1)) {
-            if (label->fontMetrics().width(labelText) > (LAEBL_TEXT_WIDTH - 10)) {
-                label->setFixedWidth(LAEBL_TEXT_WIDTH);
-            }
-        } else {
-            // the final line of file name label, with a edit btn.
-            if (labelTexts.length() >= maxLineCount) {
-                for (int idx = i + 1; idx < labelTexts.length(); idx++) {
-                    labelText += labelTexts.at(idx);
-                }
-            }
-
-            if (label->fontMetrics().width(labelText) > LAEBL_TEXT_WIDTH && labelTexts.length() >= maxLineCount) {
-                labelText = label->fontMetrics().elidedText(labelText, Qt::ElideMiddle, LAEBL_TEXT_WIDTH);
-            }
-            label->setText(labelText);
-        }
-    }
-    hLayout->addStretch(1);
-
-    QHBoxLayout *textShowLayout = new QHBoxLayout;
-    textShowLayout->setContentsMargins(0, 0, 0, 0);
-    textShowLayout->setSpacing(0);
-
-    m_textShowFrame->setLayout(textShowLayout);
-
-    textShowLayout->addLayout(hLayout);
-
-    textShowLayout->addStretch(1);
-
-    m_textShowFrame->setFixedHeight(textHeight);
-
-    return m_textShowFrame;
 }

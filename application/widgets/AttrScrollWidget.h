@@ -25,7 +25,6 @@ private:
     void updateTheme();
 
 private:
-    DFrame *addTitleFrame(const QString &sData);
     int m_leftminwidth;
 };
 
