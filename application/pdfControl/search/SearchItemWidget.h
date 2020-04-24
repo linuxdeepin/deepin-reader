@@ -53,9 +53,8 @@ private:
     DLabel *m_pSearchResultNum = nullptr;
     DLabel *m_pTextLab = nullptr;
     QString m_strNote = "";   // 注释内容
-    bool m_bPaint = false;
+    bool    m_bPaint = false;
 
-    // CustomWidget interface
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
 };

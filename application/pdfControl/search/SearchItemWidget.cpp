@@ -135,8 +135,7 @@ void SearchItemWidget::initWidget()
     m_pTextLab->setMinimumWidth(tW);
     m_pTextLab->setFrameStyle(QFrame::NoFrame);
     m_pTextLab->setWordWrap(true);
-    m_pTextLab->setAlignment(Qt::AlignLeft);
-    m_pTextLab->setAlignment(Qt::AlignTop);
+    m_pTextLab->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     m_pTextLab->setForegroundRole(DPalette::BrightText);
     DFontSizeManager::instance()->bind(m_pTextLab, DFontSizeManager::T9);
 
