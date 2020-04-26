@@ -67,6 +67,8 @@ protected:
 
     void handleDragActionChanged(Qt::DropAction action);
 
+    void resizeEvent(QResizeEvent *event) override;
+
 private slots:
     void handleTabReleased(int index);                                  //方法测试结果为当tab从bar移除释放
 
@@ -91,6 +93,7 @@ signals:
 
 private:
     QString getFileName(const QString &strFilePath);
+    void updateTabWidth();
 
 private slots:
     void onTabChanged(int);

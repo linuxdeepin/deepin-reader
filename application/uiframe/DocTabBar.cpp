@@ -94,6 +94,8 @@ void DocTabBar::insertSheet(DocSheet *sheet, int index)
     this->setTabData(index, DocSheet::getUuid(sheet));
 
     this->setTabMinimumSize(index, QSize(140, 36));
+
+    updateTabWidth();
 }
 
 void DocTabBar::removeSheet(DocSheet *sheet)
@@ -101,6 +103,7 @@ void DocTabBar::removeSheet(DocSheet *sheet)
     for (int i = 0; i < count(); ++i) {
         if (DocSheet::getSheet(this->tabData(i).toString()) == sheet) {
             removeTab(i);
+            updateTabWidth();
             return;
         }
     }
@@ -141,6 +144,8 @@ void DocTabBar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source
     insertTab(index, tabName);
 
     setTabMinimumSize(index, QSize(140, 36));
+
+    updateTabWidth();
 }
 
 void DocTabBar::insertFromMimeData(int index, const QMimeData *source)
@@ -155,6 +160,7 @@ void DocTabBar::insertFromMimeData(int index, const QMimeData *source)
     if (nullptr != sheet) {
         insertSheet(sheet, index);
         sigTabMoveIn(sheet);
+        updateTabWidth();
     }
 }
 
@@ -179,11 +185,36 @@ void DocTabBar::handleDragActionChanged(Qt::DropAction action)
     }
 }
 
+void DocTabBar::resizeEvent(QResizeEvent *event)
+{
+    DTabBar::resizeEvent(event);
+    updateTabWidth();
+}
+
 QString DocTabBar::getFileName(const QString &strFilePath)
 {
     int nLastPos = strFilePath.lastIndexOf('/');
     nLastPos++;
     return strFilePath.mid(nLastPos);
+}
+
+void DocTabBar::updateTabWidth()
+{
+    int tabWidth = 140;
+    if (count() != 0) {
+        tabWidth = (width() - 40) / count();
+        qInfo() << "      tabWidth:" << tabWidth;
+        for (int i = 0; i < count(); i++) {
+            if (tabWidth < 140) {
+                setUsesScrollButtons(true);
+                // 此处设置最小高度为37是为了能够在resize的时候进行重绘
+                setTabMinimumSize(i, QSize(140, 36));
+            } else {
+                setUsesScrollButtons(false);
+                setTabMinimumSize(i, QSize(tabWidth, 36));
+            }
+        }
+    }
 }
 
 void DocTabBar::onTabChanged(int index)
