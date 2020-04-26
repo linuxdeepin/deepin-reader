@@ -79,6 +79,8 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
                     printer->newPage();
             }
         } else {
+            printer->setPageMargins(1, 1, 1, 1, Inch);
+
             for (int iIndex = printer->fromPage() - 1; iIndex < printer->toPage(); iIndex++) {
                 if (iIndex >= nPageSize)
                     break;
@@ -87,18 +89,8 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
 
                 rect.setWidth(rect.width() - 10);
 
-                painter.setPen(Qt::NoPen);
-
-                // painter.setViewport(rect.x(), rect.y(),size.width(), size.height());
-
-
                 if (_proxy->getImage(iIndex, image, rect.width(), rect.height()))      //公司只有一台打印机，会发生向右偏移
                     painter.drawImage(rect, image);
-
-//                    painter.setViewport(rect.x(), rect.y(),size.width(), size.height());
-//                    painter.setWindow(image.rect());
-
-//                    painter.drawPixmap(0,0,image); /* 数据显示至预览界面 */
 
                 if (iIndex < printer->toPage() - 1)
                     printer->newPage();

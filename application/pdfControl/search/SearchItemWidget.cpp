@@ -45,14 +45,13 @@ void SearchItemWidget::setLabelImage(const QImage &image)
 //  搜索显示内容
 void SearchItemWidget::setTextEditText(const QString &contant)
 {
-    m_strNote = contant;
+    QString strNote = contant;
     if (m_pTextLab) {
         m_pTextLab->clear();
 
-        m_strNote.replace(QChar('\n'), QString(""));
-        m_strNote.replace(QChar('\t'), QString(""));
-        m_pTextLab->setText(m_strNote);
-        //m_pTextLab->setText(calcText(m_pTextLab->font(), m_strNote, m_pTextLab->size()));
+        strNote.replace(QChar('\n'), QString(""));
+        strNote.replace(QChar('\t'), QString(""));
+        m_pTextLab->setText(strNote);
     }
 }
 
@@ -109,18 +108,13 @@ void SearchItemWidget::adaptWindowSize(const double &scale)
 
 void SearchItemWidget::initWidget()
 {
-    auto t_vLayoutPicture = new QVBoxLayout;
-    t_vLayoutPicture->setContentsMargins(0, 3, 0, 0);
     m_label = new RotateImageLabel(this);
     int tW = 48;
     int tH = 68;
-    t_vLayoutPicture->addWidget(m_label);
-    t_vLayoutPicture->addStretch(1);
 
     m_pPageNumber = new PageNumberLabel(this);
     tW = 31;
     tH = 18;
-//    dApp->adaptScreenView(tW, tH);
     m_pPageNumber->setMinimumWidth(tW);
     m_pPageNumber->setFixedHeight(tH);
     m_pPageNumber->setForegroundRole(DPalette::WindowText);
@@ -133,18 +127,18 @@ void SearchItemWidget::initWidget()
     DFontSizeManager::instance()->bind(m_pSearchResultNum, DFontSizeManager::T10);
 
     m_pTextLab = new DLabel(this);
-    m_pTextLab->setTextFormat(Qt::PlainText);
-    tW = 80;
-    tH = 54;
-    m_pTextLab->setFixedHeight(tH);
-    m_pTextLab->setMinimumWidth(tW);
     m_pTextLab->setFrameStyle(QFrame::NoFrame);
     m_pTextLab->setWordWrap(true);
     m_pTextLab->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    m_pTextLab->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     m_pTextLab->setForegroundRole(DPalette::BrightText);
+    m_pTextLab->setTextFormat(Qt::RichText);
     DFontSizeManager::instance()->bind(m_pTextLab, DFontSizeManager::T9);
 
-    auto hLine = new DHorizontalLine(this);
+    auto t_vLayoutPicture = new QVBoxLayout;
+    t_vLayoutPicture->setContentsMargins(0, 3, 0, 0);
+    t_vLayoutPicture->addWidget(m_label);
+    t_vLayoutPicture->addStretch(1);
 
     auto t_hLayout = new QHBoxLayout;
     t_hLayout->setContentsMargins(0, 0, 0, 0);
@@ -158,27 +152,16 @@ void SearchItemWidget::initWidget()
     t_vLayout->addItem(t_hLayout);
     t_vLayout->addWidget(m_pTextLab);
     t_vLayout->addStretch(1);
-    t_vLayout->addWidget(hLine);
+    t_vLayout->addWidget(new DHorizontalLine(this));
 
     auto m_pHLayout = new QHBoxLayout;
-
     m_pHLayout->setSpacing(1);
     m_pHLayout->setContentsMargins(0, 0, 10, 0);
-//    m_pHLayout->addWidget(m_label);
     m_pHLayout->addItem(t_vLayoutPicture);
     m_pHLayout->addItem(t_vLayout);
     m_pHLayout->setSpacing(1);
 
     this->setLayout(m_pHLayout);
-}
-
-void SearchItemWidget::resizeEvent(QResizeEvent *event)
-{
-//    QString note = m_strNote;
-
-//    m_pTextLab->setText(calcText(m_pTextLab->font(), note, m_pTextLab->size()));      //加上此行 效率低下
-
-    CustomItemWidget::resizeEvent(event);
 }
 
 void SearchItemWidget::paintEvent(QPaintEvent *e)

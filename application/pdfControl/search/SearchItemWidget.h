@@ -33,19 +33,25 @@ class SearchItemWidget : public CustomItemWidget
 
 public:
     explicit SearchItemWidget(DWidget *parent = nullptr);
+
     ~SearchItemWidget() override;
 
     void setLabelImage(const QImage &);
+
 public:
     void setTextEditText(const QString &);
+
     void setSerchResultText(const QString &);
+
     bool bSelect();
+
     void setBSelect(const bool &paint);
+
     void setRotate(int rotate);
+
 protected:
     void initWidget() override;
 
-    void resizeEvent(QResizeEvent *event) override;
     void paintEvent(QPaintEvent *e) override;
 
 private slots:
@@ -54,7 +60,6 @@ private slots:
 private:
     DLabel *m_pSearchResultNum = nullptr;
     DLabel *m_pTextLab = nullptr;
-    QString m_strNote = "";   // 注释内容
     bool    m_bPaint = false;
     RotateImageLabel  *m_label = nullptr;
 public:
