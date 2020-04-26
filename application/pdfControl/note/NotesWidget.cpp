@@ -412,12 +412,10 @@ void NotesWidget::addNotesItem(const QString &text, const int &iType)
         if (nullptr == dproxy) {
             return;
         }
-        int tW = 146;
-        int tH = 174;
 
         QImage image;
 
-        bool rl = dproxy->getImage(t_nPage, image, tW, tH);
+        bool rl = dproxy->getImageMax(t_nPage, image, 75);
 
         if (rl) {
             QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_SMALL);
@@ -587,12 +585,10 @@ void NotesWidget::updateThumbnail(const int &page)
     }
 
     QImage image;
-    int tW = 146;
-    int tH = 174;
 
     auto dproxy = m_sheet->getDocProxy();
 
-    dproxy->getImage(page, image, tW, tH);
+    dproxy->getImageMax(page, image, 75);
 
     for (int index = 0; index < itemNum; index++) {
         auto item = m_pNotesList->item(index);
