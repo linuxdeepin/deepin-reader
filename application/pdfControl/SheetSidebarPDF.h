@@ -47,11 +47,6 @@ signals:
 
     void sigAdaptWindowSize(const double &scale); //缩略图列表自适应窗体大小  add by duanxiaohui 2020-3-19
 
-    //void sigUpdateThumbnail(const int &page);
-
-public:
-    int  qDealWithShortKey(const QString &);
-
 public slots:
     void onPageChanged(int page);
 

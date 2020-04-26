@@ -126,16 +126,23 @@ void CentralDocPage::openFile(QString &filePath)
     if (FileController::FileType_PDF == FileController::getFileType(filePath)) {
 
         DocSheet *sheet = new DocSheet(DocType_PDF, this);
+
         connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
-        connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), SLOT(onOpened(DocSheet *, bool)));
+        connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
         connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
-//        connect(this, SIGNAL(sigTitleShortCut(QString)), sheet, SLOT(onTitleShortCut(QString)));
+
         sheet->openFile(filePath);
+
         m_pStackedLayout->addWidget(sheet);
+
         m_pStackedLayout->setCurrentWidget(sheet);
+
         m_pTabBar->insertSheet(sheet);
+
         emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+
         emit sigSheetCountChanged(m_pStackedLayout->count());
+
     } else
         showTips(tr("The format is not supported"), 1);
 }
@@ -241,6 +248,10 @@ void CentralDocPage::onTabNewWindow(DocSheet *sheet)
 
     MainWindow *w = MainWindow::create();
 
+    disconnect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
+    disconnect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
+    disconnect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
+
     w->addSheet(sheet);
 
     w->move(QCursor::pos());
@@ -259,6 +270,10 @@ void CentralDocPage::addSheet(DocSheet *sheet)
         return;
 
     sheet->setParent(this);
+
+    connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
+    connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
+    connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
 
     m_pTabBar->insertSheet(sheet);
 
@@ -566,7 +581,7 @@ void CentralDocPage::OnAppMsgData(const QString &sText)
     }
 }
 
-void CentralDocPage::OnAppShortCut(const QString &s)
+void CentralDocPage::handleShortcut(const QString &s)
 {
     auto children = this->findChildren<DocSheet *>();
     if (children.size() == 0 && getCurSheet())
@@ -576,12 +591,15 @@ void CentralDocPage::OnAppShortCut(const QString &s)
         OnPrintFile();
     } else if (s == KeyStr::g_ctrl_s) {
         saveCurrent();
+    } else if (s == KeyStr::g_ctrl_b) {
+        DocSheet *sheet = getCurSheet();
+        if (sheet != nullptr)
+            sheet->setBookMark(sheet->getDocProxy()->currentPageNo(), true);
     } else if (s == KeyStr::g_alt_1 || s == KeyStr::g_alt_2 || s == KeyStr::g_ctrl_m  ||
                s == KeyStr::g_ctrl_1 || s == KeyStr::g_ctrl_2 || s == KeyStr::g_ctrl_3 ||
                s == KeyStr::g_ctrl_r || s == KeyStr::g_ctrl_shift_r ||
                s == KeyStr::g_ctrl_larger || s == KeyStr::g_ctrl_equal || s == KeyStr::g_ctrl_smaller ||
-               s == KeyStr::g_ctrl_c || s == KeyStr::g_ctrl_l || s == KeyStr::g_ctrl_i || s == KeyStr::g_ctrl_b) {
-        emit sigTitleShortCut(s);
+               s == KeyStr::g_ctrl_c || s == KeyStr::g_ctrl_l || s == KeyStr::g_ctrl_i) {
         getCurSheet()->onTitleShortCut(s);
     } else if (s == KeyStr::g_ctrl_f) {     //  搜索
         ShowFindWidget();

@@ -29,8 +29,8 @@ public:
 
     void setControlEnabled(const bool &enable);
 
-public slots:
-    int onTitleShortCut(const QString &);
+public:
+    int handleShortcut(const QString &);
 
 protected:
     void initWidget() override;

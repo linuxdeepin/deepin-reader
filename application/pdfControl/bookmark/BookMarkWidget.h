@@ -101,8 +101,6 @@ public:
     void handleRotate(int rotate);
 
 public:
-    int qDealWithShortKey(const QString &);
-
     int getBookMarkPage(const int &index);
 
     void handleOpenSuccess();
@@ -111,9 +109,7 @@ signals:
     void sigSetBookMarkState(const int &, const int &);
 
 private slots:
-    void slotAddBookMark();
-
-    void slotAddBookMark(const QString &);
+    void onAddBookMarkClicked();
 
     void slotDeleteBookItem(const QString &);
 

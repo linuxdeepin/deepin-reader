@@ -58,8 +58,6 @@ public:
 
     void handleAnntationMsg(const int &, const QString &);
 
-    int qDealWithShortKey(const QString &);
-
     void adaptWindowSize(const double &scale); //缩略图列表自适应窗体大小  add by duanxiaohui 2020-3-20
 
 signals:

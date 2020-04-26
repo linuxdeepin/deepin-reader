@@ -361,7 +361,7 @@ void TitleWidget::setControlEnabled(const bool &enable)
     }
 }
 
-int TitleWidget::onTitleShortCut(const QString &sKey)
+int TitleWidget::handleShortcut(const QString &sKey)
 {
     if (sKey == KeyStr::g_alt_1) {
         OnShortCut_Alt1();

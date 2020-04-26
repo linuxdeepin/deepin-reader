@@ -75,7 +75,6 @@ private:
     void DocFile_ctrl_l();
     void DocFile_ctrl_i();
     void DocFile_ctrl_c();
-    void DocFile_ctrl_b();
     double handleResize(const QSize &size);
 
 private:

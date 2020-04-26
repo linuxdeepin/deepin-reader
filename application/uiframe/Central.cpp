@@ -128,7 +128,9 @@ bool Central::saveAll()
 
 void Central::handleShortcut(QString shortcut)
 {
-    m_docPage->OnAppShortCut(shortcut);
+    qDebug() << shortcut;
+    m_widget->handleShortcut(shortcut);
+    m_docPage->handleShortcut(shortcut);
 }
 
 void Central::onSheetCountChanged(int count)
@@ -276,7 +278,6 @@ void Central::initWidget()
 
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_menu, SLOT(onCurSheetChanged(DocSheet *)));
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_widget, SLOT(onCurSheetChanged(DocSheet *)));
-    connect(m_docPage, SIGNAL(sigTitleShortCut(QString)), m_widget, SLOT(onTitleShortCut(QString)));
     connect(m_docPage, SIGNAL(sigNeedShowTips(const QString &, int)), this, SLOT(onShowTips(const QString &, int)));
     connect(m_docPage, SIGNAL(sigNeedClose()), this, SIGNAL(sigNeedClose()));
     connect(m_docPage, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));

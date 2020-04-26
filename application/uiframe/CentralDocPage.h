@@ -48,6 +48,8 @@ public:
 public:
     void openFile(QString &filePath);
 
+    void handleShortcut(const QString &);
+
 public slots:
     void onOpened(DocSheet *, bool);
 
@@ -135,7 +137,7 @@ public:
 
     void OnTabFileChangeMsg(const QString &);
 
-    void OnAppShortCut(const QString &);
+
 
     void OnPrintFile();
 
@@ -153,8 +155,6 @@ signals:
     void sigRemoveFileTab(const QString &);
 
     void sigTabBarIndexChange(const QString &);
-
-    void sigTitleShortCut(QString shortcut);
 
     void sigNeedShowTips(const QString &msg, int);
 

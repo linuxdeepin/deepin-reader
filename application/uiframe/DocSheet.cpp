@@ -58,7 +58,7 @@ void DocSheet::handleShortcut(QString shortcut)
     if (nullptr == doc)
         return;
 
-    doc->OnAppShortCut(shortcut);
+    doc->handleShortcut(shortcut);
 }
 
 void DocSheet::openFile(const QString &filePath)
@@ -310,16 +310,9 @@ void DocSheet::onSplitterMoved(int a, int b)
 
 void DocSheet::onTitleShortCut(QString shortCut)
 {
-    if (shortCut == KeyStr::g_ctrl_b) {
-        auto side = this->findChild<SheetSidebarPDF *>();
-        if (side) {
-            side->qDealWithShortKey(shortCut);
-        }
-    } else {
-        auto brower = this->findChild<SheetBrowserPDF *>();
-        if (brower) {
-            brower->qDealWithShortKey(shortCut);
-        }
+    auto brower = this->findChild<SheetBrowserPDF *>();
+    if (brower) {
+        brower->qDealWithShortKey(shortCut);
     }
 }
 

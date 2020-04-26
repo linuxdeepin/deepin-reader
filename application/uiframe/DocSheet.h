@@ -109,6 +109,7 @@ public:
     void setSidebarVisible(bool isVisible);
 
     void onTitleShortCut(QString);
+
 signals:
     void sigOpenFileResult(const QString &, const bool &);
 

@@ -80,11 +80,6 @@ int DataStackedWidget::handleFindFinished()
     return m_pSearchResWidget->handleFindFinished();
 }
 
-int DataStackedWidget::qDealWithShortKey(const QString &shortCut)
-{
-    return (m_pBookMarkWidget) ? m_pBookMarkWidget->qDealWithShortKey(shortCut) : MSG_NO_OK;
-}
-
 void DataStackedWidget::keyPressEvent(QKeyEvent *event)
 {
     QStringList pFilterList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown

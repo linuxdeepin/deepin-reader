@@ -93,6 +93,7 @@ signals:
 
 private:
     QString getFileName(const QString &strFilePath);
+
     void updateTabWidth();
 
 private slots:

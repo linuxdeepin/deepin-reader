@@ -112,11 +112,7 @@ void BookMarkWidget::DeleteItemByKey()
     }
 }
 
-/**
- * @brief BookMarkWidget::slotAddBookMark
- * @brief 点击按钮添加 当前页 为 书签
- */
-void BookMarkWidget::slotAddBookMark()
+void BookMarkWidget::onAddBookMarkClicked()
 {
     if (!m_pAddBookMarkBtn->isEnabled()) {
         return;
@@ -128,45 +124,10 @@ void BookMarkWidget::slotAddBookMark()
     DocummentProxy *proxy =  m_sheet->getDocProxy();
     if (proxy) {
         int nPage = proxy->currentPageNo();
-        slotAddBookMark(QString::number(nPage));
-        proxy->setBookMarkState(nPage, true);
+        m_sheet->setBookMark(nPage, true);
     }
 }
 
-//  书签状态 添加指定页
-void BookMarkWidget::slotAddBookMark(const QString &sContent)
-{
-    if (m_sheet.isNull())
-        return;
-
-    int nPage = sContent.toInt();
-
-    QString sPath = m_sheet->filePath();
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList(sPath);
-    if (pageList.contains(nPage)) {
-        return;
-    }
-
-    if (nullptr == m_sheet)
-        return;
-
-    auto item = addBookMarkItem(nPage);
-    if (item) {
-        pageList.append(nPage);
-        dApp->m_pDBService->setBookMarkList(sPath, pageList);
-        m_sheet->setFileChanged(true);
-    }
-
-    DocummentProxy *proxy =  m_sheet->getDocProxy();
-    if (proxy) {
-        int nCurPage = proxy->currentPageNo();
-        if (nCurPage == nPage) {  //  是当前页
-            proxy->setBookMarkState(nPage, true);
-            m_pAddBookMarkBtn->setEnabled(false);
-        }
-        emit sigSetBookMarkState(1, nPage);
-    }
-}
 
 /**
  * @brief BookMarkWidget::slotOpenFileOk
@@ -535,7 +496,7 @@ void BookMarkWidget::initWidget()
     m_pAddBookMarkBtn->setMinimumWidth(tW);
     m_pAddBookMarkBtn->setText(tr("Add bookmark"));
     DFontSizeManager::instance()->bind(m_pAddBookMarkBtn, DFontSizeManager::T6);
-    connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(slotAddBookMark()));
+    connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(onAddBookMarkClicked()));
 
     auto m_pHBoxLayout = new QHBoxLayout;
     m_pHBoxLayout->setContentsMargins(10, 6, 10, 6);
@@ -637,16 +598,6 @@ void BookMarkWidget::slotListMenuClick(const int &iType)
     if (iType == E_BOOKMARK_DELETE) {
         DeleteItemByKey();
     }
-}
-
-int BookMarkWidget::qDealWithShortKey(const QString &s)
-{
-    if (s == KeyStr::g_ctrl_b) {
-        slotAddBookMark();
-        return MSG_OK;
-    }
-
-    return MSG_NO_OK;
 }
 
 /**

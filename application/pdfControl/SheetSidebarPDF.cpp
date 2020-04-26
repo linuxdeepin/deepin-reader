@@ -48,11 +48,6 @@ void SheetSidebarPDF::handleOpenSuccess()
     m_pMainOperationWidget->handleOpenSuccess();
 }
 
-int SheetSidebarPDF::qDealWithShortKey(const QString &shortCut)
-{
-    return (m_pStackedWidget) ? m_pStackedWidget->qDealWithShortKey(shortCut) : MSG_NO_OK;
-}
-
 void SheetSidebarPDF::onSetWidgetVisible(const int &nVis)
 {
     this->setVisible(nVis);
