@@ -102,8 +102,6 @@ void BookMarkDB::qSelectData(const QString &sPath)
                 qSort(dataList.begin(), dataList.end());
 
                 m_pBookMarkMap.insert(sPath, dataList);
-            } else {
-                qWarning() << __func__ << " no data ";
             }
         }
     }

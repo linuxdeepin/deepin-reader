@@ -203,7 +203,6 @@ void DocTabBar::updateTabWidth()
     int tabWidth = 140;
     if (count() != 0) {
         tabWidth = (width() - 40) / count();
-        qInfo() << "      tabWidth:" << tabWidth;
         for (int i = 0; i < count(); i++) {
             if (tabWidth < 140) {
                 setUsesScrollButtons(true);

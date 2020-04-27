@@ -515,9 +515,7 @@ void PageBase::slot_RenderFinish(QImage image)
     Q_D(PageBase);
     d->m_spinner->stop();
     d->m_spinner->hide();
-    // qDebug() << "page RenderFinish pagenum:" << d->m_pageno;
     d->havereander = true;
-//    double originwidth = image.width(), originheight = image.height();
     QMatrix leftmatrix;
     switch (d->m_rotate) {
     case RotateType_90:
@@ -537,12 +535,6 @@ void PageBase::slot_RenderFinish(QImage image)
     map = map.transformed(leftmatrix, Qt::SmoothTransformation);
     map.setDevicePixelRatio(devicePixelRatioF());
     setPixmap(map);
-
-//    d->m_pixmapshow = QPixmap::fromImage(image);
-//    d->m_pixmapshow = d->m_pixmapshow.transformed(leftmatrix, Qt::SmoothTransformation);
-//    d->m_pixmapshow.setDevicePixelRatio(devicePixelRatioF());
-//    qDebug() << "PageBase::slot_RenderFinish to setPixmap" << d->m_pixmapshow.rect();
-//    update();
     setSelectTextRects();
 }
 

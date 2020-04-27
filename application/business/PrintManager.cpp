@@ -79,7 +79,7 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
                     printer->newPage();
             }
         } else {
-            printer->setPageMargins(1, 1, 1, 1, Inch);
+            printer->setPageMargins(1, 1, 1, 1, QPrinter::Inch);
 
             for (int iIndex = printer->fromPage() - 1; iIndex < printer->toPage(); iIndex++) {
                 if (iIndex >= nPageSize)
