@@ -1,6 +1,6 @@
 [Desktop Entry]
 Categories=Office;Viewer;
-Exec=deepin-reader %f
+Exec=deepin-reader %F
 StartupNotify=true
 TryExec=deepin-reader
 Type=Application

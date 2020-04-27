@@ -79,15 +79,13 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
                     printer->newPage();
             }
         } else {
-            printer->setPageMargins(1, 1, 1, 1, QPrinter::Inch);
+            printer->setPageMargins(5, 5, 5, 5, QPrinter::Inch);
 
             for (int iIndex = printer->fromPage() - 1; iIndex < printer->toPage(); iIndex++) {
                 if (iIndex >= nPageSize)
                     break;
 
                 QImage image;
-
-                rect.setWidth(rect.width() - 10);
 
                 if (_proxy->getImage(iIndex, image, rect.width(), rect.height()))      //公司只有一台打印机，会发生向右偏移
                     painter.drawImage(rect, image);
