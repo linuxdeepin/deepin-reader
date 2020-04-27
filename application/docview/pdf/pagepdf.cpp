@@ -3,6 +3,8 @@
 #include <QDebug>
 #include <QPainter>
 
+#include <exception>
+
 class PagePdfPrivate: public PageBasePrivate, public  PageInterface
 {
 public:
@@ -470,18 +472,30 @@ void PagePdf::removeAnnotation(const QString &struuid)
     Q_D(PagePdf);
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
     int index = 0;
-    foreach (Poppler::Annotation *annote, listannote) {
-        if (!struuid.isEmpty() && annote->uniqueName().indexOf(struuid) >= 0) { //必须判断
-            d->m_page->removeAnnotation(annote);
-            listannote.removeAt(index);
-            QImage image;
-            getImage(image, d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
-            slot_RenderFinish(image);
-            break;
+    try {
+        foreach (Poppler::Annotation *annote, listannote) {
+            if (!struuid.isEmpty() && annote->uniqueName().indexOf(struuid) >= 0) { //必须判断
+                if (annote->subType() == Poppler::Annotation::AText) {
+                    Poppler::TextAnnotation *textAnnot = dynamic_cast<Poppler::TextAnnotation *>(annote);
+                    if (textAnnot) {
+                        qInfo() << "    annote  text type:" << textAnnot->textType() << "       flag:" << textAnnot->flags();
+                    }
+                }
+                qInfo() << "    annote  sub type:" << annote->subType() << "       flag:" << annote->flags() << "   annote  UUID:" << annote->uniqueName();
+                d->m_page->removeAnnotation(annote);
+                listannote.removeAt(index);
+                QImage image;
+                getImage(image, d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
+                slot_RenderFinish(image);
+                break;
+            }
+            ++index;
         }
-        ++index;
+        qDeleteAll(listannote);
+    } catch (QString exception) {
+        qInfo() << "        error:" << exception;
+        qDeleteAll(listannote);
     }
-    qDeleteAll(listannote);
 }
 
 bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
@@ -523,7 +537,7 @@ bool PagePdf::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString
     QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
     foreach (Poppler::Annotation *annote, listannote) {
-        if (annote->subType() == Poppler::Annotation::AText) { //必须判断
+        if (annote->subType() == Poppler::Annotation::AText && annote->flags() == static_cast<Poppler::Annotation::Flag>(0)) { //必须判断,其他软件添加的flag不一定是0
             if (annote->boundary().contains(ptf)) {
                 strtext = annote->contents();
                 struuid = annote->uniqueName();

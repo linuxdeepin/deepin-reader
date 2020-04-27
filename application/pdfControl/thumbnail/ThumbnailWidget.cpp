@@ -73,9 +73,10 @@ void ThumbnailWidget::handleOpenSuccess()
         m_ThreadLoadImage.setProxy(_proxy);
         m_ThreadLoadImage.setFilePath(m_sheet->filePath());
         if (!m_ThreadLoadImage.isRunning()) {
-            m_ThreadLoadImage.clearList();;
+            m_ThreadLoadImage.clearList();
             m_ThreadLoadImage.setStartAndEndIndex(currentPage - (FIRST_LOAD_PAGES / 2), currentPage + (FIRST_LOAD_PAGES / 2));
         }
+        m_firstLoadingImage = true;
         m_ThreadLoadImage.setIsLoaded(true);
         m_ThreadLoadImage.start();
         handlePage(currentPage);
@@ -90,6 +91,7 @@ void ThumbnailWidget::handleRotate(int rotate)
     if (m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();
     }
+    qInfo() << __LINE__ << "    111111111111111    " << __FUNCTION__;
 
     m_ThreadLoadImage.setIsLoaded(true);
     m_ThreadLoadImage.start();
@@ -135,6 +137,13 @@ void ThumbnailWidget::initWidget()
     this->setLayout(m_pvBoxLayout);
 }
 
+void ThumbnailWidget::resizeEvent(QResizeEvent *event)
+{
+    CustomWidget::resizeEvent(event);
+
+    reCalcItemSize();
+}
+
 //  画 选中项的背景颜色
 void ThumbnailWidget::setSelectItemBackColor(QListWidgetItem *item)
 {
@@ -175,6 +184,10 @@ void ThumbnailWidget::initConnection()
 
     connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const int &, const QImage &)), this, SLOT(slotLoadImage(const int &, const QImage &)));
     connect(&m_ThreadLoadImage, SIGNAL(sigRotateImage(const int &)), SLOT(slotRotateThumbnail(const int &)));
+    connect(&m_ThreadLoadImage, &ThreadLoadImage::sigLoadingImageOk, this, [ = ] {
+        this->m_firstLoadingImage = false;
+        this->reCalcItemSize();
+    });
 }
 
 void ThumbnailWidget::slotUpdateTheme()
@@ -205,6 +218,8 @@ void ThumbnailWidget::slotRotateThumbnail(const int &index)
  */
 void ThumbnailWidget::slotLoadThumbnail(const int &value)
 {
+    if (m_firstLoadingImage)
+        return;
     if (m_nValuePreIndex < 1 || value < 1)
         return;
 
@@ -219,6 +234,7 @@ void ThumbnailWidget::slotLoadThumbnail(const int &value)
     if (m_ThreadLoadImage.isRunning()) {
         m_ThreadLoadImage.stopThreadRun();
     }
+    qInfo() << __LINE__ << "   " << __FUNCTION__ << "    loadStart:" << loadStart << "        loadEnd:" << loadEnd;
     m_ThreadLoadImage.setStartAndEndIndex(loadStart, loadEnd);
     m_ThreadLoadImage.setIsLoaded(true);
     m_ThreadLoadImage.start();
@@ -271,12 +287,8 @@ void ThumbnailWidget::fillContantToList()
         if (item) {
             SetSelectItemColor(item, true);
         }
-        /**
-         * @brief listCount
-         * 计算每个item的大小
-         */
-        int listCount = m_pThumbnailListWidget->count();
-        m_nValuePreIndex = m_pThumbnailListWidget->verticalScrollBar()->maximum() / listCount;
+
+        reCalcItemSize();
     }
 
     m_isLoading = false;
@@ -404,6 +416,19 @@ ThumbnailItemWidget *ThumbnailWidget::getItemWidget(QListWidgetItem *item)
     return nullptr;
 }
 
+/**
+ * @brief ThumbnailWidget::reCalcItemSize
+ * 计算每个item的大小
+ */
+void ThumbnailWidget::reCalcItemSize()
+{
+    if (!m_isLoading) {
+        int listCount = m_pThumbnailListWidget->count();
+        if (listCount > 0)
+            m_nValuePreIndex = m_pThumbnailListWidget->verticalScrollBar()->maximum() / listCount;
+    }
+}
+
 /*******************************ThreadLoadImage*************************************************/
 
 ThreadLoadImage::ThreadLoadImage(QObject *parent)
@@ -443,6 +468,7 @@ void ThreadLoadImage::setStartAndEndIndex(int startIndex, int endIndex)
 // 加载缩略图线程
 void ThreadLoadImage::run()
 {
+    m_listLoad.clear();
     do {
         msleep(50);
 
@@ -481,9 +507,11 @@ void ThreadLoadImage::run()
             if (bl) {
                 m_listLoad.append(page);
                 emit sigLoadImage(page, image);
+                qInfo() << "      loading    page:" << page << "       image";
                 msleep(50);
             }
         }
 
     } while (0);
+    emit sigLoadingImageOk();
 }

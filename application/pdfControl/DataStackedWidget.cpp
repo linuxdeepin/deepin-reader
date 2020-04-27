@@ -263,7 +263,7 @@ void DataStackedWidget::handleOpenSuccess()
 
     m_pThWidget->handleOpenSuccess();
     m_pCatalogWidget->handleOpenSuccess();
-    m_pBookMarkWidget ->handleOpenSuccess();
+    m_pBookMarkWidget->handleOpenSuccess();
     m_pNotesWidget->handleOpenSuccess();
 }
 

@@ -291,7 +291,7 @@ void DocummentPDF::getAllAnnotation(QList<stHighlightContent> &listres)
     for (int i = 0; i < d->m_pages.size(); ++i) {
         QList<Poppler::Annotation *> listannote = static_cast<PagePdf *>(d->m_pages.at(i))->GetPage()->annotations();
         foreach (Poppler::Annotation *annote, listannote) {
-            if (annote->subType() == Poppler::Annotation::AHighlight || annote->subType() == Poppler::Annotation::AText) {
+            if (annote->subType() == Poppler::Annotation::AHighlight || (annote->subType() == Poppler::Annotation::AText && annote->flags() == static_cast<Poppler::Annotation::Flag>(0))) {
                 stHighlightContent stres;
                 QString struuid = annote->uniqueName();
                 if (struuid.isEmpty()) {

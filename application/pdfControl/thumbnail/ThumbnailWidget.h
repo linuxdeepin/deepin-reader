@@ -103,6 +103,8 @@ signals:
 
     void sigRotateImage(const int &index);
 
+    void sigLoadingImageOk();
+
 protected:
     void run() override;
 
@@ -151,6 +153,8 @@ public:
 protected:
     void initWidget() override;
 
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
 private:
     void fillContantToList();
 
@@ -165,6 +169,8 @@ private:
     void SetSelectItemColor(QListWidgetItem *item, const bool &);
 
     ThumbnailItemWidget *getItemWidget(QListWidgetItem *);
+
+    void reCalcItemSize();
 
 private slots:
     void slotUpdateTheme();
@@ -182,7 +188,7 @@ private:
     PagingWidget *m_pPageWidget = nullptr;               // 跳页界面
     int m_totalPages = -1;                               // 总页码数
     ThreadLoadImage m_ThreadLoadImage;                   // 加载缩略图线程
-    bool m_isLoading = false;                            // 缩略图list是否初始化完毕
+    bool m_isLoading = true;                            // 缩略图list是否初始化完毕
     int m_nRotate = 0;                                   // 旋转度数
     int m_nValuePreIndex = 0;                            // 每一个item所占scrollbar的大小
 
@@ -190,6 +196,7 @@ private:
     QPointer<DocSheet>   m_sheet;
     int m_page;
     double m_scale = 1.0;
+    bool m_firstLoadingImage = false;                    // 缩略图list是否初始化完毕
 };
 
 #endif  // THUMBNAILWIDGET_H
