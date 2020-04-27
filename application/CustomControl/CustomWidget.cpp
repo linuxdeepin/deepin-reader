@@ -31,6 +31,11 @@ CustomWidget::CustomWidget(DWidget *parent)
     setContextMenuPolicy(Qt::CustomContextMenu);//让widget支持右键菜单事件
 }
 
+CustomWidget::~CustomWidget()
+{
+
+}
+
 CustomWidget::CustomWidget(CustomWidgetPrivate &cwp, DWidget *parent)
     : DWidget(parent), d_ptr(&cwp)
 {

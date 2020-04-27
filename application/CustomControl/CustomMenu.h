@@ -43,6 +43,7 @@ class CustomMenu : public DMenu
 
 public:
     CustomMenu(DWidget *parent = nullptr);
+    virtual ~CustomMenu();
 
 signals:
     void sigClickAction(const int &);

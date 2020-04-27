@@ -24,6 +24,11 @@ CustomItemWidget::CustomItemWidget(DWidget *parent)
     setFocusPolicy(Qt::NoFocus);
 }
 
+CustomItemWidget::~CustomItemWidget()
+{
+
+}
+
 /**
  * @brief CustomItemWidget::setLabelImage
  * 给新label填充缩略图

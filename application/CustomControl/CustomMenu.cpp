@@ -30,6 +30,10 @@ CustomMenu::CustomMenu(DWidget *parent)
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
 }
 
+CustomMenu::~CustomMenu()
+{
+}
+
 int CustomMenu::dealWithData(const int &, const QString &)
 {
     return MSG_NO_OK;

@@ -34,7 +34,7 @@ class CustomItemWidget : public CustomWidget
 
 public:
     CustomItemWidget(DWidget *parent = nullptr);
-
+    virtual ~CustomItemWidget() override;
 
 signals:
     void sigDeleteItem(const QString &);

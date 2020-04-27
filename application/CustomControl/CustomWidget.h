@@ -61,6 +61,7 @@ class CustomWidget : public DWidget
 
 public:
     CustomWidget(DWidget *parent = nullptr);
+    virtual ~CustomWidget();
 
 public:
     virtual void adaptWindowSize(const double &);
