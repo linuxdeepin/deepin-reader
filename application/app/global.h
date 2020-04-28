@@ -70,7 +70,7 @@ enum ShowMode {
     SliderMode      = 1,
     MagniferMode    = 2,
     FullScreenMode  = 3,
-    NumberOfShowMode = 4
+    NumberOfShowModes = 4
 };
 
 enum LayoutMode {

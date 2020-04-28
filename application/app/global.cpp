@@ -2,7 +2,7 @@
 
 #include <QMimeType>
 #include <QMimeDatabase>
-
+namespace deepin_reader {
 FileType matchFileType(const QString &filePath)
 {
     FileType fileType = FileType::Unknown;
@@ -20,4 +20,5 @@ FileType matchFileType(const QString &filePath)
     }
 
     return fileType;
+}
 }
