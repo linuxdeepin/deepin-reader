@@ -135,8 +135,6 @@ private slots:
 
     void onSplitterMoved(int, int);
 
-//    void onTitleShortCut(QString);
-
     void onFindOperation(int, QString);
 
     void onFindContentComming(const stSearchRes &);
