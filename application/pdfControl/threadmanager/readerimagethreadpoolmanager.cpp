@@ -78,7 +78,6 @@ void ReaderImageThreadPoolManager::addgetDocImageTask(const ReaderImageParam_t &
             QRunnable *runable = m_taskList.at(index).task;
             if(this->tryTake(runable)){
                 delete runable;
-                qDebug() << "take runTask = " << m_taskList.at(index).pageNum;
                 m_taskList.removeAt(index);
                 index--;
             }
@@ -96,7 +95,6 @@ void ReaderImageThreadPoolManager::addgetDocImageTask(const ReaderImageParam_t &
 
 void ReaderImageThreadPoolManager::onTaskFinished(const ReaderImageParam_t& task, const QImage& image)
 {
-    qDebug() << "onTaskFinished " << task.pageNum;
     QMutexLocker mutext(&m_runMutex);
     if(m_docSheetImgMap.contains(task.docProxy))
         m_docSheetImgMap[task.docProxy][task.pageNum] = QPixmap::fromImage(image);

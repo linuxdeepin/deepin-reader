@@ -26,6 +26,8 @@ ImageListView::ImageListView(DocSheet *sheet, QWidget* parent)
     , m_docSheet(sheet)
 {
     initControl();
+    setProperty("adaptScale", 1.0);
+    setSpacing(4);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setResizeMode(QListView::Fixed);

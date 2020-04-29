@@ -36,6 +36,7 @@ ImageViewDelegate::ImageViewDelegate(QAbstractItemView* parent)
 void ImageViewDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
     if (index.isValid()){
+        qreal pixscale = m_parent->property("adaptScale").toDouble();
         int rotate = index.data(ImageinfoType_e::IMAGE_ROTATE).toInt();
         bool bShowBookMark = index.data(ImageinfoType_e::IMAGE_BOOKMARK).toBool();
         QMatrix matrix;
@@ -43,13 +44,11 @@ void ImageViewDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         const QPixmap& pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>().transformed(matrix);
 
         if(!pixmap.isNull()){
-            const int margin = 20;
-            const int textheight = painter->fontMetrics().height();;
             const int borderRadius = 6;
 
-            const QPixmap& scalePix = pixmap.scaled(option.rect.width() - 2 * margin, option.rect.height() - margin - textheight, Qt::KeepAspectRatio);
+            const QPixmap& scalePix = pixmap.scaled(pixmap.width() * pixscale, pixmap.height() * pixscale, Qt::KeepAspectRatio);
             const QSize& scalePixSize = scalePix.size();
-            const QRect& rect = QRect(option.rect.center().x() - scalePixSize.width() / 2, option.rect.y() + margin, scalePixSize.width(), scalePixSize.height());
+            const QRect& rect = QRect(option.rect.center().x() - scalePixSize.width() / 2, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
 
             //clipPath pixmap
             painter->save();
@@ -71,7 +70,7 @@ void ImageViewDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
                 painter->drawRoundedRect(rect, borderRadius, borderRadius);
                 painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().windowText().color()));
             }
-            painter->drawText(rect.x(), rect.bottom() + borderRadius, rect.width(), option.rect.bottom() - rect.bottom(), Qt::AlignHCenter | Qt::AlignTop, QString::number(index.row() + 1));
+            painter->drawText(rect.x(), rect.bottom() + 4, rect.width(), option.rect.bottom() - rect.bottom(), Qt::AlignHCenter | Qt::AlignTop, QString::number(index.row() + 1));
             painter->restore();
             //drawMark
             drawBookMark(painter, rect, bShowBookMark);
