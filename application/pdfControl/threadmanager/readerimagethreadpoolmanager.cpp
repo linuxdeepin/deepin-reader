@@ -72,6 +72,7 @@ void ReaderImageThreadPoolManager::addgetDocImageTask(const ReaderImageParam_t &
         connect(readImageParam.docProxy, &QObject::destroyed, this, &ReaderImageThreadPoolManager::onDocProxyDestroyed);
     }
 
+    //remove invalid task
     QMutexLocker mutext(&m_runMutex);
     if(m_taskList.size() >= maxTaskList){
         for(int index = maxTaskList; index < m_taskList.size(); index++){

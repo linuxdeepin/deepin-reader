@@ -21,6 +21,8 @@
 #include "pdfControl/imageviewmodel.h"
 #include "application.h"
 
+#include <QMouseEvent>
+
 ImageListView::ImageListView(DocSheet *sheet, QWidget* parent)
     : DListView(parent)
     , m_docSheet(sheet)
@@ -57,7 +59,7 @@ void ImageListView::handleOpenSuccess()
 {
     DocummentProxy* docProxy = m_docSheet->getDocProxy();
     Q_ASSERT(docProxy);
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_docSheet->filePath());
+    const QList<int>& pageList = dApp->m_pDBService->getBookMarkList(m_docSheet->filePath());
     for(int pageIndex : pageList){
         m_imageModel->setBookMarkVisible(pageIndex, true, false);
     }
@@ -84,4 +86,10 @@ void ImageListView::scrollToIndex(int pageIndex)
     const QModelIndex &index = this->model()->index(pageIndex, 0);
     this->scrollTo(index);
     this->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
+}
+
+void ImageListView::mousePressEvent(QMouseEvent *event)
+{
+    DListView::mousePressEvent(event);
+    onItemClicked(this->indexAt(event->pos()));
 }

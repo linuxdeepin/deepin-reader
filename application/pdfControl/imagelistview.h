@@ -42,6 +42,9 @@ private slots:
     void onUpdatePageImage(int pageIndex);
     void onItemClicked(const QModelIndex &index);
 
+protected:
+    void mousePressEvent(QMouseEvent *event);
+
 private:
     DocSheet *m_docSheet;
     ImageViewModel *m_imageModel;
