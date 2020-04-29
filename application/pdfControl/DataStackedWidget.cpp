@@ -20,6 +20,7 @@
 
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QTimer>
 
 #include "thumbnail/ThumbnailWidget.h"
 #include "catalog/CatalogWidget.h"
@@ -179,7 +180,7 @@ void DataStackedWidget::InitWidgets()
     addWidget(m_pCatalogWidget);
 
     m_pBookMarkWidget = new BookMarkWidget(m_sheet, this);
-    connect(m_pBookMarkWidget, SIGNAL(sigSetBookMarkState(const int &, const int &)), m_pThWidget, SLOT(SlotSetBookMarkState(const int &, const int &)));
+    connect(m_pBookMarkWidget, SIGNAL(sigSetBookMarkState(const int &, const int &)), m_pThWidget, SLOT(onSetBookMarkState(const int &, const int &)));
     addWidget(m_pBookMarkWidget);
 
     m_pNotesWidget = new NotesWidget(m_sheet, this);

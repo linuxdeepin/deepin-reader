@@ -1,10 +1,14 @@
 HEADERS += \
     $$PWD/CustomListWidget.h \
     $$PWD/CustomItemWidget.h \
+    $$PWD/imagelistview.h \
+    $$PWD/imageviewdelegate.h \
+    $$PWD/imageviewmodel.h \
     $$PWD/note/NotesWidget.h \
     $$PWD/note/NotesItemWidget.h \
     $$PWD/catalog/CatalogTreeView.h \
     $$PWD/catalog/CatalogWidget.h \
+    $$PWD/threadmanager/readerimagethreadpoolmanager.h \
     $$PWD/thumbnail/PagingWidget.h \
     $$PWD/thumbnail/ThumbnailItemWidget.h \
     $$PWD/thumbnail/ThumbnailWidget.h \
@@ -34,10 +38,14 @@ HEADERS += \
 SOURCES += \
     $$PWD/CustomListWidget.cpp \
     $$PWD/CustomItemWidget.cpp \
+    $$PWD/imagelistview.cpp \
+    $$PWD/imageviewdelegate.cpp \
+    $$PWD/imageviewmodel.cpp \
     $$PWD/note/NotesWidget.cpp \
     $$PWD/note/NotesItemWidget.cpp \
     $$PWD/catalog/CatalogTreeView.cpp \
     $$PWD/catalog/CatalogWidget.cpp \
+    $$PWD/threadmanager/readerimagethreadpoolmanager.cpp \
     $$PWD/thumbnail/PagingWidget.cpp \
     $$PWD/thumbnail/ThumbnailItemWidget.cpp \
     $$PWD/thumbnail/ThumbnailWidget.cpp \

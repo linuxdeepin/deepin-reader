@@ -22,8 +22,6 @@ private:
     void createLabel(QGridLayout *layout, const int &index, const QString &objName, const QDateTime &sData);
     void createLabel(QGridLayout *layout, const int &index, const QString &objName, const bool &bData);
 
-    void updateTheme();
-
 private:
     int m_leftminwidth;
 };
