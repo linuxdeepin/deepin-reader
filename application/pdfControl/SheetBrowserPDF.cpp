@@ -321,8 +321,6 @@ DocummentProxy *SheetBrowserPDF::GetDocProxy()
 
 void SheetBrowserPDF::setOper(const int &nType, const QVariant &sValue)
 {
-    if (nType == Scale)
-        qDebug() << sValue;
     Q_D(SheetBrowserPDF);
     d->m_pProxyFileDataModel->setOper(nType, sValue);
 }
