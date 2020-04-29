@@ -29,9 +29,13 @@
 void SheetBrowserPDF::setDoubleShow(bool isShow)
 {
     Q_D(SheetBrowserPDF);
+    setOper(DoubleShow, isShow);
     d->m_pDocViewProxy->setDoubleShow(isShow);
     d->m_pDocViewProxy->setScaleRotateViewModeAndShow();
-    d->handleResize(size());
+
+    double scale = d->handleResize(size());
+    setOper(Scale, scale);
+    emit setFileChanged(getFileChange());
 }
 
 void SheetBrowserPDF::setRotateLeft()

@@ -38,7 +38,6 @@ DocTabBar::DocTabBar(QWidget *parent)
     this->setExpanding(true);//设置平铺窗口模式
     this->setTabsClosable(true);
     this->setMovable(true);
-//    this->expanding();
     this->setElideMode(Qt::ElideMiddle);
     this->setVisibleAddButton(true);
     this->setDragable(true);

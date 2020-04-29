@@ -108,14 +108,20 @@ void FontMenu::slotTwoPage()
 
     m_bDoubPage = !m_bDoubPage;
 
-    m_sheet->setData(DoubleShow, (int)m_bDoubPage);
     m_sheet->setDoubleShow(m_bDoubPage);
 
-    if (DoubleShow) {
-        if (m_sheet->getOper(Thumbnail).toInt() == 1 || ADAPTE_WIDGET_State == m_sheet->getOper(Fit).toInt() || QString::number(m_sheet->getOper(Scale).toDouble(), 'f', 2) == "100.00")
-            m_sheet->setFit(ADAPTE_WIDGET_State);
-    } else
+    if (!m_bDoubPage) {//如果切成单页，需要自适应宽度
         m_sheet->setFit(ADAPTE_WIDGET_State);
+    } else if (m_bDoubPage && m_sheet->getOper(Thumbnail).toInt()) { //从单页切双页，如果缩略图开着,则适应宽度
+        m_sheet->setFit(ADAPTE_WIDGET_State);
+    } else if (QString::number(m_sheet->getOper(Scale).toDouble(), 'f', 2) == "100.00") { //如果没有人为调整过，则适应
+        m_sheet->setFit(ADAPTE_WIDGET_State);
+    } else if (m_bDoubPage && m_sheet->getOper(Scale).toDouble() > 100.0001) { //从单页切双页，原来比例大于100,则适应宽度
+        m_sheet->setFit(ADAPTE_WIDGET_State);
+    } else if (ADAPTE_WIDGET_State == m_sheet->getOper(Fit).toInt()) {        //从单页切双页，原来比例大于100,则适应宽度
+        m_sheet->setFit(ADAPTE_WIDGET_State);
+    } else
+        m_sheet->setFit(NO_ADAPTE_State);
 }
 
 /**

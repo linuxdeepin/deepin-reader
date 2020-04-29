@@ -507,7 +507,6 @@ void ThreadLoadImage::run()
             if (bl) {
                 m_listLoad.append(page);
                 emit sigLoadImage(page, image);
-                qInfo() << "      loading    page:" << page << "       image";
                 msleep(50);
             }
         }
