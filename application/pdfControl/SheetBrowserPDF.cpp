@@ -136,8 +136,9 @@ bool SheetBrowserPDF::setFit(int fit)
 
     double scale = d->m_pDocViewProxy->setFit(fit);
 
-    if (-1 != scale)
+    if (-1 != scale && fit != NO_ADAPTE_State) {
         setOper(Scale, scale);
+    }
 
     emit sigFileChanged();
 
@@ -194,8 +195,11 @@ void SheetBrowserPDF::resizeEvent(QResizeEvent *event)
 
     if (d->hasOpened()) {
         double scale = d->handleResize(event->size());
-        setOper(Scale, scale);
-        emit setFileChanged(getFileChange());
+
+        if (getOper(Fit) != NO_ADAPTE_State) {
+            setOper(Scale, scale);
+            emit setFileChanged(getFileChange());
+        }
     }
 
     CustomWidget::resizeEvent(event);
@@ -313,6 +317,8 @@ DocummentProxy *SheetBrowserPDF::GetDocProxy()
 
 void SheetBrowserPDF::setOper(const int &nType, const QVariant &sValue)
 {
+    if (nType == Scale)
+        qDebug() << sValue;
     Q_D(SheetBrowserPDF);
     d->m_pProxyFileDataModel->setOper(nType, sValue);
 }

@@ -63,7 +63,6 @@ double ProxyViewDisplay::onSetWidgetAdapt()
     if (m_nAdapteState != NO_ADAPTE_State) {
         if (!fvmPrivate->m_pProxy)
             return m_nScale;
-
         double dScale = 0.0;
         if (m_nAdapteState == ADAPTE_WIDGET_State) {
             dScale = fvmPrivate->m_pProxy->adaptWidthAndShow(m_nWidth);
