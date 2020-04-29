@@ -35,16 +35,14 @@ DocTabBar::DocTabBar(QWidget *parent)
     : DTabBar(parent)
 {
     this->setEnabledEmbedStyle(true);//设置直角样式
-
     this->setExpanding(true);//设置平铺窗口模式
-
     this->setTabsClosable(true);
-
     this->setMovable(true);
-
-    this->expanding();
-
+//    this->expanding();
     this->setElideMode(Qt::ElideMiddle);
+    this->setVisibleAddButton(true);
+    this->setDragable(true);
+    this->setFocusPolicy(Qt::NoFocus);
 
     connect(this, SIGNAL(tabCloseRequested(int)), SLOT(SlotTabCloseRequested(int)));
 
@@ -57,9 +55,6 @@ DocTabBar::DocTabBar(QWidget *parent)
     connect(this, &DTabBar::tabDroped, this, &DocTabBar::handleTabDroped);
 
     connect(this, &DTabBar::dragActionChanged, this, &DocTabBar::handleDragActionChanged);
-
-    setDragable(true);
-
 }
 
 DocTabBar::~DocTabBar()
@@ -89,13 +84,15 @@ void DocTabBar::insertSheet(DocSheet *sheet, int index)
     else
         index = insertTab(index, fileName);
 
-    this->setCurrentIndex(index);
+    this->setTabMinimumSize(index, QSize(140, 36));
 
     this->setTabData(index, DocSheet::getUuid(sheet));
 
-    this->setTabMinimumSize(index, QSize(140, 36));
+//    this->setCurrentIndex(index);
 
-    updateTabWidth();
+    updateTabWidth(93);
+
+    this->setCurrentIndex(index);
 }
 
 void DocTabBar::removeSheet(DocSheet *sheet)
@@ -103,7 +100,6 @@ void DocTabBar::removeSheet(DocSheet *sheet)
     for (int i = 0; i < count(); ++i) {
         if (DocSheet::getSheet(this->tabData(i).toString()) == sheet) {
             removeTab(i);
-            updateTabWidth();
             return;
         }
     }
@@ -113,7 +109,7 @@ void DocTabBar::showSheet(DocSheet *sheet)
 {
     for (int i = 0; i < count(); ++i) {
         if (DocSheet::getSheet(this->tabData(i).toString()) == sheet) {
-            setCurrentIndex(i);
+            this->setCurrentIndex(i);
             return;
         }
     }
@@ -145,7 +141,9 @@ void DocTabBar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source
 
     setTabMinimumSize(index, QSize(140, 36));
 
-    updateTabWidth();
+//    updateTabWidth(144);
+
+//    this->setCurrentIndex(index);
 }
 
 void DocTabBar::insertFromMimeData(int index, const QMimeData *source)
@@ -160,7 +158,6 @@ void DocTabBar::insertFromMimeData(int index, const QMimeData *source)
     if (nullptr != sheet) {
         insertSheet(sheet, index);
         sigTabMoveIn(sheet);
-        updateTabWidth();
     }
 }
 
@@ -188,7 +185,9 @@ void DocTabBar::handleDragActionChanged(Qt::DropAction action)
 void DocTabBar::resizeEvent(QResizeEvent *event)
 {
     DTabBar::resizeEvent(event);
-    updateTabWidth();
+    updateTabWidth(190);
+    this->resize(this->width(), 36);
+    this->update();
 }
 
 QString DocTabBar::getFileName(const QString &strFilePath)
@@ -198,22 +197,24 @@ QString DocTabBar::getFileName(const QString &strFilePath)
     return strFilePath.mid(nLastPos);
 }
 
-void DocTabBar::updateTabWidth()
+void DocTabBar::updateTabWidth(int line)
 {
-    int tabWidth = 140;
+    int tabWidth = 100;
     if (count() != 0) {
-        tabWidth = (width() - 40) / count();
+        tabWidth = (this->width() - 0/*40*/) / count();
         for (int i = 0; i < count(); i++) {
-            if (tabWidth < 140) {
+            if (tabWidth <= 140) {
                 setUsesScrollButtons(true);
-                // 此处设置最小高度为37是为了能够在resize的时候进行重绘
+                // 此处设置最小高度为36是为了能够在resize的时候进行重绘
                 setTabMinimumSize(i, QSize(140, 36));
             } else {
                 setUsesScrollButtons(false);
                 setTabMinimumSize(i, QSize(tabWidth, 36));
             }
         }
+//        qInfo() << "      tabWidth: " << tabWidth << "      1111111111111    line:" << line;
     }
+
 }
 
 void DocTabBar::onTabChanged(int index)
