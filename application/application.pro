@@ -22,6 +22,7 @@ include (docview/docview.pri)
 include (pdfControl/pdfControl.pri)
 include (utils/utils.pri)
 include (widgets/widgets.pri)
+include (djvu/djvu.pri)
 
 INCLUDEPATH += $$PWD/uiframe
 
@@ -50,6 +51,7 @@ HEADERS +=\
     uiframe/CentralDocPage.h \
     uiframe/DocTabBar.h \
     uiframe/DocSheet.h
+
 #    stable.h
 
 TRANSLATIONS += \

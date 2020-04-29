@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     QApplication::desktop()->geometry();
     a.setSreenRect(a.desktop()->geometry());
 
-    MainWindow *w = MainWindow::create();
+    MainWindow *w = MainWindow::createWindow();
 
     foreach (const QString &filePath, arguments) {
         w->doOpenFile(filePath);

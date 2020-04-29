@@ -33,7 +33,10 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     dApp->adaptScreenView(tWidth, tHeight);
 
-    setMinimumSize(tWidth, tHeight);
+    if (tWidth > 752 && tHeight > 360)
+        setMinimumSize(tWidth, tHeight);
+    else
+        setMinimumSize(752, 360);
 
     showDefaultSize();
 
@@ -198,7 +201,7 @@ MainWindow *MainWindow::windowContainSheet(DocSheet *sheet)
     return nullptr;
 }
 
-MainWindow *MainWindow::create()
+MainWindow *MainWindow::createWindow()
 {
     return new MainWindow();
 }

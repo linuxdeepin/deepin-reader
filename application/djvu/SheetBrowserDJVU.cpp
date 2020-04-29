@@ -22,7 +22,7 @@ along with qpdfview.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#include "documentview.h"
+#include "SheetBrowserDJVU.h"
 
 #include <QApplication>
 #include <QInputDialog>
@@ -194,7 +194,7 @@ int addCMYKorRGBColorModel(cups_dest_t *dest, int num_options, cups_option_t **o
 
 bool modifiersUseMouseButton(Settings *settings, Qt::MouseButton mouseButton)
 {
-    return ((settings->documentView().zoomModifiers() | settings->documentView().rotateModifiers() | settings->documentView().scrollModifiers()) & mouseButton) != 0;
+    return ((settings->SheetBrowserDJVU().zoomModifiers() | settings->SheetBrowserDJVU().rotateModifiers() | settings->SheetBrowserDJVU().scrollModifiers()) & mouseButton) != 0;
 }
 
 inline int pageOfResult(const QModelIndex &index)
@@ -211,11 +211,11 @@ inline QRectF rectOfResult(const QModelIndex &index)
 
 namespace qpdfview {
 
-Settings *DocumentView::s_settings = 0;
-ShortcutHandler *DocumentView::s_shortcutHandler = 0;
-SearchModel *DocumentView::s_searchModel = 0;
+Settings *SheetBrowserDJVU::s_settings = 0;
+ShortcutHandler *SheetBrowserDJVU::s_shortcutHandler = 0;
+SearchModel *SheetBrowserDJVU::s_searchModel = 0;
 
-DocumentView::DocumentView(QWidget *parent) : QGraphicsView(parent),
+SheetBrowserDJVU::SheetBrowserDJVU(QWidget *parent) : QGraphicsView(parent),
     m_autoRefreshWatcher(0),
     m_autoRefreshTimer(0),
     m_prefetchTimer(0),
@@ -225,8 +225,6 @@ DocumentView::DocumentView(QWidget *parent) : QGraphicsView(parent),
     m_wasModified(false),
     m_currentPage(-1),
     m_firstPage(-1),
-    m_past(),
-    m_future(),
     m_layout(new SinglePageLayout),
     m_continuousMode(false),
     m_scaleMode(ScaleFactorMode),
@@ -235,7 +233,6 @@ DocumentView::DocumentView(QWidget *parent) : QGraphicsView(parent),
     m_invertColors(false),
     m_convertToGrayscale(false),
     m_highlightAll(false),
-    m_rubberBandMode(ModifiersMode),
     m_pageItems(),
     m_thumbnailItems(),
     m_highlight(0),
@@ -243,8 +240,7 @@ DocumentView::DocumentView(QWidget *parent) : QGraphicsView(parent),
     m_thumbnailsScene(0),
     m_outlineModel(0),
     m_propertiesModel(0),
-    m_currentResult(),
-    m_searchTask(0)
+    m_currentResult()
 {
     if (s_settings == 0) {
         s_settings = Settings::instance();
@@ -278,21 +274,12 @@ DocumentView::DocumentView(QWidget *parent) : QGraphicsView(parent),
     m_highlight->setVisible(false);
     scene()->addItem(m_highlight);
 
-    // search
-
-    m_searchTask = new SearchTask(this);
-
-    connect(m_searchTask, SIGNAL(finished()), SIGNAL(searchFinished()));
-
-    connect(m_searchTask, SIGNAL(progressChanged(int)), SLOT(on_searchTask_progressChanged(int)));
-    connect(m_searchTask, SIGNAL(resultsReady(int, QList<QRectF>)), SLOT(on_searchTask_resultsReady(int, QList<QRectF>)));
-
     // auto-refresh
 
     m_autoRefreshWatcher = new QFileSystemWatcher(this);
 
     m_autoRefreshTimer = new QTimer(this);
-    m_autoRefreshTimer->setInterval(s_settings->documentView().autoRefreshTimeout());
+    m_autoRefreshTimer->setInterval(s_settings->SheetBrowserDJVU().autoRefreshTimeout());
     m_autoRefreshTimer->setSingleShot(true);
 
     connect(m_autoRefreshWatcher, SIGNAL(fileChanged(QString)), m_autoRefreshTimer, SLOT(start()));
@@ -302,7 +289,7 @@ DocumentView::DocumentView(QWidget *parent) : QGraphicsView(parent),
     // prefetch
 
     m_prefetchTimer = new QTimer(this);
-    m_prefetchTimer->setInterval(s_settings->documentView().prefetchTimeout());
+    m_prefetchTimer->setInterval(s_settings->SheetBrowserDJVU().prefetchTimeout());
     m_prefetchTimer->setSingleShot(true);
 
     connect(this, SIGNAL(currentPageChanged(int)), m_prefetchTimer, SLOT(start()));
@@ -316,24 +303,21 @@ DocumentView::DocumentView(QWidget *parent) : QGraphicsView(parent),
 
     // settings
 
-    m_continuousMode = s_settings->documentView().continuousMode();
-    m_layout.reset(DocumentLayout::fromLayoutMode(s_settings->documentView().layoutMode()));
-    m_rightToLeftMode = s_settings->documentView().rightToLeftMode();
+    m_continuousMode = s_settings->SheetBrowserDJVU().continuousMode();
+    m_layout.reset(DocumentLayout::fromLayoutMode(s_settings->SheetBrowserDJVU().layoutMode()));
+    m_rightToLeftMode = s_settings->SheetBrowserDJVU().rightToLeftMode();
 
-    m_scaleMode = s_settings->documentView().scaleMode();
-    m_scaleFactor = s_settings->documentView().scaleFactor();
-    m_rotation = s_settings->documentView().rotation();
+    m_scaleMode = s_settings->SheetBrowserDJVU().scaleMode();
+    m_scaleFactor = s_settings->SheetBrowserDJVU().scaleFactor();
+    m_rotation = s_settings->SheetBrowserDJVU().rotation();
 
-    m_invertColors = s_settings->documentView().invertColors();
-    m_convertToGrayscale = s_settings->documentView().convertToGrayscale();
-    m_highlightAll = s_settings->documentView().highlightAll();
+    m_invertColors = s_settings->SheetBrowserDJVU().invertColors();
+    m_convertToGrayscale = s_settings->SheetBrowserDJVU().convertToGrayscale();
+    m_highlightAll = s_settings->SheetBrowserDJVU().highlightAll();
 }
 
-DocumentView::~DocumentView()
+SheetBrowserDJVU::~SheetBrowserDJVU()
 {
-    m_searchTask->cancel();
-    m_searchTask->wait();
-
     s_searchModel->clearResults(this);
 
     qDeleteAll(m_pageItems);
@@ -343,7 +327,7 @@ DocumentView::~DocumentView()
     delete m_document;
 }
 
-void DocumentView::setFirstPage(int firstPage)
+void SheetBrowserDJVU::setFirstPage(int firstPage)
 {
     if (m_firstPage != firstPage) {
         m_firstPage = firstPage;
@@ -362,7 +346,7 @@ void DocumentView::setFirstPage(int firstPage)
     }
 }
 
-QString DocumentView::defaultPageLabelFromNumber(int number) const
+QString SheetBrowserDJVU::defaultPageLabelFromNumber(int number) const
 {
     QLocale modifiedLocale = locale();
 
@@ -371,7 +355,7 @@ QString DocumentView::defaultPageLabelFromNumber(int number) const
     return modifiedLocale.toString(number);
 }
 
-QString DocumentView::pageLabelFromNumber(int number) const
+QString SheetBrowserDJVU::pageLabelFromNumber(int number) const
 {
     QString label;
 
@@ -396,7 +380,7 @@ QString DocumentView::pageLabelFromNumber(int number) const
     return label;
 }
 
-int DocumentView::pageNumberFromLabel(const QString &label) const
+int SheetBrowserDJVU::pageNumberFromLabel(const QString &label) const
 {
     if (hasFrontMatter()) {
         bool ok = false;
@@ -424,7 +408,7 @@ int DocumentView::pageNumberFromLabel(const QString &label) const
     return locale().toInt(label);
 }
 
-QString DocumentView::title() const
+QString SheetBrowserDJVU::title() const
 {
     QString title;
 
@@ -443,7 +427,7 @@ QString DocumentView::title() const
     return title;
 }
 
-QStringList DocumentView::openFilter()
+QStringList SheetBrowserDJVU::openFilter()
 {
     QStringList openFilter;
     QStringList supportedFormats;
@@ -476,17 +460,17 @@ QStringList DocumentView::openFilter()
     return openFilter;
 }
 
-QStringList DocumentView::saveFilter() const
+QStringList SheetBrowserDJVU::saveFilter() const
 {
     return m_document->saveFilter();
 }
 
-bool DocumentView::canSave() const
+bool SheetBrowserDJVU::canSave() const
 {
     return m_document->canSave();
 }
 
-void DocumentView::setContinuousMode(bool continuousMode)
+void SheetBrowserDJVU::setContinuousMode(bool continuousMode)
 {
     if (m_continuousMode != continuousMode) {
         m_continuousMode = continuousMode;
@@ -500,16 +484,16 @@ void DocumentView::setContinuousMode(bool continuousMode)
 
         emit continuousModeChanged(m_continuousMode);
 
-        s_settings->documentView().setContinuousMode(m_continuousMode);
+        s_settings->SheetBrowserDJVU().setContinuousMode(m_continuousMode);
     }
 }
 
-LayoutMode DocumentView::layoutMode() const
+LayoutMode SheetBrowserDJVU::layoutMode() const
 {
     return m_layout->layoutMode();
 }
 
-void DocumentView::setLayoutMode(LayoutMode layoutMode)
+void SheetBrowserDJVU::setLayoutMode(LayoutMode layoutMode)
 {
     if (m_layout->layoutMode() != layoutMode && layoutMode >= 0 && layoutMode < NumberOfLayoutModes) {
         m_layout.reset(DocumentLayout::fromLayoutMode(layoutMode));
@@ -525,11 +509,11 @@ void DocumentView::setLayoutMode(LayoutMode layoutMode)
 
         emit layoutModeChanged(layoutMode);
 
-        s_settings->documentView().setLayoutMode(layoutMode);
+        s_settings->SheetBrowserDJVU().setLayoutMode(layoutMode);
     }
 }
 
-void DocumentView::setRightToLeftMode(bool rightToLeftMode)
+void SheetBrowserDJVU::setRightToLeftMode(bool rightToLeftMode)
 {
     if (m_rightToLeftMode != rightToLeftMode) {
         m_rightToLeftMode = rightToLeftMode;
@@ -539,11 +523,11 @@ void DocumentView::setRightToLeftMode(bool rightToLeftMode)
 
         emit rightToLeftModeChanged(m_rightToLeftMode);
 
-        s_settings->documentView().setRightToLeftMode(m_rightToLeftMode);
+        s_settings->SheetBrowserDJVU().setRightToLeftMode(m_rightToLeftMode);
     }
 }
 
-void DocumentView::setScaleMode(ScaleMode scaleMode)
+void SheetBrowserDJVU::setScaleMode(ScaleMode scaleMode)
 {
     if (m_scaleMode != scaleMode && scaleMode >= 0 && scaleMode < NumberOfScaleModes) {
         m_scaleMode = scaleMode;
@@ -558,15 +542,15 @@ void DocumentView::setScaleMode(ScaleMode scaleMode)
 
         emit scaleModeChanged(m_scaleMode);
 
-        s_settings->documentView().setScaleMode(m_scaleMode);
+        s_settings->SheetBrowserDJVU().setScaleMode(m_scaleMode);
     }
 }
 
-void DocumentView::setScaleFactor(qreal scaleFactor)
+void SheetBrowserDJVU::setScaleFactor(qreal scaleFactor)
 {
     if (!qFuzzyCompare(m_scaleFactor, scaleFactor)
-            && scaleFactor >= s_settings->documentView().minimumScaleFactor()
-            && scaleFactor <= s_settings->documentView().maximumScaleFactor()) {
+            && scaleFactor >= s_settings->SheetBrowserDJVU().minimumScaleFactor()
+            && scaleFactor <= s_settings->SheetBrowserDJVU().maximumScaleFactor()) {
         m_scaleFactor = scaleFactor;
 
         if (m_scaleMode == ScaleFactorMode) {
@@ -579,11 +563,11 @@ void DocumentView::setScaleFactor(qreal scaleFactor)
 
         emit scaleFactorChanged(m_scaleFactor);
 
-        s_settings->documentView().setScaleFactor(m_scaleFactor);
+        s_settings->SheetBrowserDJVU().setScaleFactor(m_scaleFactor);
     }
 }
 
-void DocumentView::setRotation(Rotation rotation)
+void SheetBrowserDJVU::setRotation(Rotation rotation)
 {
     if (m_rotation != rotation && rotation >= 0 && rotation < NumberOfRotations) {
         m_rotation = rotation;
@@ -593,11 +577,11 @@ void DocumentView::setRotation(Rotation rotation)
 
         emit rotationChanged(m_rotation);
 
-        s_settings->documentView().setRotation(rotation);
+        s_settings->SheetBrowserDJVU().setRotation(rotation);
     }
 }
 
-void DocumentView::setInvertColors(bool invertColors)
+void SheetBrowserDJVU::setInvertColors(bool invertColors)
 {
     if (m_invertColors != invertColors) {
         m_invertColors = invertColors;
@@ -614,11 +598,11 @@ void DocumentView::setInvertColors(bool invertColors)
 
         emit invertColorsChanged(m_invertColors);
 
-        s_settings->documentView().setInvertColors(m_invertColors);
+        s_settings->SheetBrowserDJVU().setInvertColors(m_invertColors);
     }
 }
 
-void DocumentView::setConvertToGrayscale(bool convertToGrayscale)
+void SheetBrowserDJVU::setConvertToGrayscale(bool convertToGrayscale)
 {
     if (m_convertToGrayscale != convertToGrayscale) {
         m_convertToGrayscale = convertToGrayscale;
@@ -633,11 +617,11 @@ void DocumentView::setConvertToGrayscale(bool convertToGrayscale)
 
         emit convertToGrayscaleChanged(m_convertToGrayscale);
 
-        s_settings->documentView().setConvertToGrayscale(m_convertToGrayscale);
+        s_settings->SheetBrowserDJVU().setConvertToGrayscale(m_convertToGrayscale);
     }
 }
 
-void DocumentView::setHighlightAll(bool highlightAll)
+void SheetBrowserDJVU::setHighlightAll(bool highlightAll)
 {
     if (m_highlightAll != highlightAll) {
         m_highlightAll = highlightAll;
@@ -658,34 +642,11 @@ void DocumentView::setHighlightAll(bool highlightAll)
 
         emit highlightAllChanged(m_highlightAll);
 
-        s_settings->documentView().setHighlightAll(highlightAll);
+        s_settings->SheetBrowserDJVU().setHighlightAll(highlightAll);
     }
 }
 
-void DocumentView::setRubberBandMode(RubberBandMode rubberBandMode)
-{
-    if (m_rubberBandMode != rubberBandMode && rubberBandMode >= 0 && rubberBandMode < NumberOfRubberBandModes) {
-        m_rubberBandMode = rubberBandMode;
-
-        foreach (PageItem *page, m_pageItems) {
-            page->setRubberBandMode(m_rubberBandMode);
-        }
-
-        emit rubberBandModeChanged(m_rubberBandMode);
-    }
-}
-
-bool DocumentView::searchWasCanceled() const
-{
-    return m_searchTask->wasCanceled();
-}
-
-int DocumentView::searchProgress() const
-{
-    return m_searchTask->progress();
-}
-
-void DocumentView::setThumbnailsOrientation(Qt::Orientation thumbnailsOrientation)
+void SheetBrowserDJVU::setThumbnailsOrientation(Qt::Orientation thumbnailsOrientation)
 {
     if (m_thumbnailsOrientation != thumbnailsOrientation) {
         m_thumbnailsOrientation = thumbnailsOrientation;
@@ -694,7 +655,7 @@ void DocumentView::setThumbnailsOrientation(Qt::Orientation thumbnailsOrientatio
     }
 }
 
-QStandardItemModel *DocumentView::fontsModel() const
+QStandardItemModel *SheetBrowserDJVU::fontsModel() const
 {
     QStandardItemModel *fontsModel = new QStandardItemModel();
 
@@ -703,17 +664,17 @@ QStandardItemModel *DocumentView::fontsModel() const
     return fontsModel;
 }
 
-QString DocumentView::searchText() const
+QString SheetBrowserDJVU::searchText() const
 {
-    return m_searchTask->text();
+
 }
 
-bool DocumentView::searchMatchCase() const
+bool SheetBrowserDJVU::searchMatchCase() const
 {
-    return m_searchTask->matchCase();
+
 }
 
-QString DocumentView::surroundingText(int page, const QRectF &rect) const
+QString SheetBrowserDJVU::surroundingText(int page, const QRectF &rect) const
 {
     if (page < 1 || page > m_pages.size() || rect.isEmpty()) {
         return QString();
@@ -723,20 +684,18 @@ QString DocumentView::surroundingText(int page, const QRectF &rect) const
     const qreal pageWidth = m_pages.at(page - 1)->size().width();
     const qreal width = qMax(rect.width(), pageWidth / qreal(2));
     const qreal x = qBound(qreal(0), rect.x() + rect.width() / qreal(2) - width / qreal(2), pageWidth - width);
-
     const QRectF surroundingRect(x, rect.top(), width, rect.height());
-
     return m_pages.at(page - 1)->text(surroundingRect).simplified();
 }
 
-void DocumentView::show()
+void SheetBrowserDJVU::show()
 {
     QGraphicsView::show();
 
     prepareView();
 }
 
-bool DocumentView::open(const QString &filePath)
+bool SheetBrowserDJVU::open(const QString &filePath)
 {
     Model::Document *document = PluginHandler::instance()->loadDocument(filePath);
 
@@ -755,9 +714,6 @@ bool DocumentView::open(const QString &filePath)
 
         m_currentPage = 1;
 
-        m_past.clear();
-        m_future.clear();
-
         prepareDocument(document, pages);
 
         loadDocumentDefaults();
@@ -770,12 +726,8 @@ bool DocumentView::open(const QString &filePath)
         prepareThumbnailsScene();
 
         emit documentChanged();
-
         emit numberOfPagesChanged(m_pages.count());
         emit currentPageChanged(m_currentPage);
-
-        emit canJumpChanged(false, false);
-
         emit continuousModeChanged(m_continuousMode);
         emit layoutModeChanged(m_layout->layoutMode());
         emit rightToLeftModeChanged(m_rightToLeftMode);
@@ -784,48 +736,7 @@ bool DocumentView::open(const QString &filePath)
     return document != 0;
 }
 
-bool DocumentView::refresh()
-{
-    Model::Document *document = PluginHandler::instance()->loadDocument(m_fileInfo.filePath());
-
-    if (document != 0) {
-        QVector< Model::Page * > pages;
-
-        if (!checkDocument(m_fileInfo.filePath(), document, pages)) {
-            delete document;
-            qDeleteAll(pages);
-
-            return false;
-        }
-
-        MainWindow::instance()->m_outlineView->saveExpansionState(m_outlineModel->invisibleRootItem()->index());
-
-        qreal left = 0.0, top = 0.0;
-        saveLeftAndTop(left, top);
-
-        m_wasModified = false;
-
-        m_currentPage = qMin(m_currentPage, document->numberOfPages());
-
-        prepareDocument(document, pages);
-
-        prepareScene();
-        prepareView(left, top);
-
-        prepareThumbnailsScene();
-
-        emit documentChanged();
-
-        emit numberOfPagesChanged(m_pages.count());
-        emit currentPageChanged(m_currentPage);
-        MainWindow::instance()->m_outlineView->loadExpansionState(m_outlineModel->invisibleRootItem()->index());
-        MainWindow::instance()->m_outlineView->restoreExpansion(m_outlineModel->invisibleRootItem()->index());
-    }
-
-    return document != 0;
-}
-
-bool DocumentView::save(const QString &filePath, bool withChanges)
+bool SheetBrowserDJVU::save(const QString &filePath, bool withChanges)
 {
     QTemporaryFile temporaryFile;
     QFile file(filePath);
@@ -864,7 +775,7 @@ bool DocumentView::save(const QString &filePath, bool withChanges)
     return false;
 }
 
-bool DocumentView::print(QPrinter *printer, const PrintOptions &printOptions)
+bool SheetBrowserDJVU::print(QPrinter *printer, const PrintOptions &printOptions)
 {
     const int fromPage = printer->fromPage() != 0 ? printer->fromPage() : 1;
     const int toPage = printer->toPage() != 0 ? printer->toPage() : m_pages.count();
@@ -880,39 +791,33 @@ bool DocumentView::print(QPrinter *printer, const PrintOptions &printOptions)
     return printUsingQt(printer, printOptions, fromPage, toPage);
 }
 
-void DocumentView::previousPage()
+void SheetBrowserDJVU::previousPage()
 {
     jumpToPage(m_layout->previousPage(m_currentPage));
 }
 
-void DocumentView::nextPage()
+void SheetBrowserDJVU::nextPage()
 {
     jumpToPage(m_layout->nextPage(m_currentPage, m_pages.count()));
 }
 
-void DocumentView::firstPage()
+void SheetBrowserDJVU::firstPage()
 {
     jumpToPage(1);
 }
 
-void DocumentView::lastPage()
+void SheetBrowserDJVU::lastPage()
 {
     jumpToPage(m_pages.count());
 }
 
-void DocumentView::jumpToPage(int page, bool trackChange, qreal changeLeft, qreal changeTop)
+void SheetBrowserDJVU::jumpToPage(int page, bool trackChange, qreal changeLeft, qreal changeTop)
 {
     if (page >= 1 && page <= m_pages.count()) {
         qreal left = 0.0, top = 0.0;
         saveLeftAndTop(left, top);
 
         if (m_currentPage != m_layout->currentPage(page) || qAbs(left - changeLeft) > 0.01 || qAbs(top - changeTop) > 0.01) {
-            if (trackChange) {
-                m_past.append(Position(m_currentPage, left, top));
-                m_future.clear();
-
-                emit canJumpChanged(true, false);
-            }
 
             m_currentPage = m_layout->currentPage(page);
 
@@ -923,56 +828,16 @@ void DocumentView::jumpToPage(int page, bool trackChange, qreal changeLeft, qrea
     }
 }
 
-bool DocumentView::canJumpBackward() const
-{
-    return !m_past.isEmpty();
-}
-
-void DocumentView::jumpBackward()
-{
-    if (!m_past.isEmpty()) {
-        qreal left = 0.0, top = 0.0;
-        saveLeftAndTop(left, top);
-
-        m_future.prepend(Position(m_currentPage, left, top));
-
-        const Position pos = m_past.takeLast();
-        jumpToPage(pos.page, false, pos.left, pos.top);
-
-        emit canJumpChanged(!m_past.isEmpty(), !m_future.isEmpty());
-    }
-}
-
-bool DocumentView::canJumpForward() const
-{
-    return !m_future.isEmpty();
-}
-
-void DocumentView::jumpForward()
-{
-    if (!m_future.isEmpty()) {
-        qreal left = 0.0, top = 0.0;
-        saveLeftAndTop(left, top);
-
-        m_past.append(Position(m_currentPage, left, top));
-
-        const Position pos = m_future.takeFirst();
-        jumpToPage(pos.page, false, pos.left, pos.top);
-
-        emit canJumpChanged(!m_past.isEmpty(), !m_future.isEmpty());
-    }
-}
-
-void DocumentView::temporaryHighlight(int page, const QRectF &highlight)
+void SheetBrowserDJVU::temporaryHighlight(int page, const QRectF &highlight)
 {
     if (page >= 1 && page <= m_pages.count() && !highlight.isNull()) {
         prepareHighlight(page - 1, highlight);
 
-        QTimer::singleShot(s_settings->documentView().highlightDuration(), this, SLOT(on_temporaryHighlight_timeout()));
+        QTimer::singleShot(s_settings->SheetBrowserDJVU().highlightDuration(), this, SLOT(on_temporaryHighlight_timeout()));
     }
 }
 
-void DocumentView::startSearch(const QString &text, bool matchCase)
+void SheetBrowserDJVU::startSearch(const QString &text, bool matchCase)
 {
     cancelSearch();
     clearResults();
@@ -980,13 +845,13 @@ void DocumentView::startSearch(const QString &text, bool matchCase)
     m_searchTask->start(m_pages, text, matchCase, m_currentPage);
 }
 
-void DocumentView::cancelSearch()
+void SheetBrowserDJVU::cancelSearch()
 {
     m_searchTask->cancel();
     m_searchTask->wait();
 }
 
-void DocumentView::clearResults()
+void SheetBrowserDJVU::clearResults()
 {
     s_searchModel->clearResults(this);
 
@@ -1002,12 +867,12 @@ void DocumentView::clearResults()
         page->setHighlights(QList< QRectF >());
     }
 
-    if (s_settings->documentView().limitThumbnailsToResults()) {
+    if (s_settings->SheetBrowserDJVU().limitThumbnailsToResults()) {
         prepareThumbnailsScene();
     }
 }
 
-void DocumentView::findPrevious()
+void SheetBrowserDJVU::findPrevious()
 {
     checkResult();
 
@@ -1016,7 +881,7 @@ void DocumentView::findPrevious()
     applyResult();
 }
 
-void DocumentView::findNext()
+void SheetBrowserDJVU::findNext()
 {
     checkResult();
 
@@ -1025,7 +890,7 @@ void DocumentView::findNext()
     applyResult();
 }
 
-void DocumentView::findResult(const QModelIndex &index)
+void SheetBrowserDJVU::findResult(const QModelIndex &index)
 {
     const int page = pageOfResult(index);
     const QRectF rect = rectOfResult(index);
@@ -1037,39 +902,39 @@ void DocumentView::findResult(const QModelIndex &index)
     }
 }
 
-void DocumentView::zoomIn()
+void SheetBrowserDJVU::zoomIn()
 {
     if (scaleMode() != ScaleFactorMode) {
-        setScaleFactor(qMin(m_pageItems.at(m_currentPage - 1)->scaleFactor() * s_settings->documentView().zoomFactor(),
-                            s_settings->documentView().maximumScaleFactor()));
+        setScaleFactor(qMin(m_pageItems.at(m_currentPage - 1)->scaleFactor() * s_settings->SheetBrowserDJVU().zoomFactor(),
+                            s_settings->SheetBrowserDJVU().maximumScaleFactor()));
 
         setScaleMode(ScaleFactorMode);
     } else {
-        setScaleFactor(qMin(m_scaleFactor * s_settings->documentView().zoomFactor(),
-                            s_settings->documentView().maximumScaleFactor()));
+        setScaleFactor(qMin(m_scaleFactor * s_settings->SheetBrowserDJVU().zoomFactor(),
+                            s_settings->SheetBrowserDJVU().maximumScaleFactor()));
     }
 }
 
-void DocumentView::zoomOut()
+void SheetBrowserDJVU::zoomOut()
 {
     if (scaleMode() != ScaleFactorMode) {
-        setScaleFactor(qMax(m_pageItems.at(m_currentPage - 1)->scaleFactor() / s_settings->documentView().zoomFactor(),
-                            s_settings->documentView().minimumScaleFactor()));
+        setScaleFactor(qMax(m_pageItems.at(m_currentPage - 1)->scaleFactor() / s_settings->SheetBrowserDJVU().zoomFactor(),
+                            s_settings->SheetBrowserDJVU().minimumScaleFactor()));
 
         setScaleMode(ScaleFactorMode);
     } else {
-        setScaleFactor(qMax(m_scaleFactor / s_settings->documentView().zoomFactor(),
-                            s_settings->documentView().minimumScaleFactor()));
+        setScaleFactor(qMax(m_scaleFactor / s_settings->SheetBrowserDJVU().zoomFactor(),
+                            s_settings->SheetBrowserDJVU().minimumScaleFactor()));
     }
 }
 
-void DocumentView::originalSize()
+void SheetBrowserDJVU::originalSize()
 {
     setScaleFactor(1.0);
     setScaleMode(ScaleFactorMode);
 }
 
-void DocumentView::rotateLeft()
+void SheetBrowserDJVU::rotateLeft()
 {
     switch (m_rotation) {
     default:
@@ -1088,7 +953,7 @@ void DocumentView::rotateLeft()
     }
 }
 
-void DocumentView::rotateRight()
+void SheetBrowserDJVU::rotateRight()
 {
     switch (m_rotation) {
     default:
@@ -1107,7 +972,7 @@ void DocumentView::rotateRight()
     }
 }
 
-void DocumentView::startPresentation()
+void SheetBrowserDJVU::startPresentation()
 {
     const int screen = s_settings->presentationView().screen();
 
@@ -1132,7 +997,7 @@ void DocumentView::startPresentation()
     }
 }
 
-void DocumentView::on_verticalScrollBar_valueChanged()
+void SheetBrowserDJVU::on_verticalScrollBar_valueChanged()
 {
     if (!m_continuousMode) {
         return;
@@ -1159,7 +1024,7 @@ void DocumentView::on_verticalScrollBar_valueChanged()
 
         emit currentPageChanged(m_currentPage);
 
-        if (s_settings->documentView().highlightCurrentThumbnail()) {
+        if (s_settings->SheetBrowserDJVU().highlightCurrentThumbnail()) {
             for (int index = 0; index < m_thumbnailItems.count(); ++index) {
                 m_thumbnailItems.at(index)->setHighlighted(index == m_currentPage - 1);
             }
@@ -1167,7 +1032,7 @@ void DocumentView::on_verticalScrollBar_valueChanged()
     }
 }
 
-void DocumentView::on_autoRefresh_timeout()
+void SheetBrowserDJVU::on_autoRefresh_timeout()
 {
     if (m_fileInfo.exists()) {
         refresh();
@@ -1178,7 +1043,7 @@ void DocumentView::on_autoRefresh_timeout()
     }
 }
 
-void DocumentView::on_prefetch_timeout()
+void SheetBrowserDJVU::on_prefetch_timeout()
 {
     const QPair< int, int > prefetchRange = m_layout->prefetchRange(m_currentPage, m_pages.count());
 
@@ -1202,19 +1067,19 @@ void DocumentView::on_prefetch_timeout()
     }
 }
 
-void DocumentView::on_temporaryHighlight_timeout()
+void SheetBrowserDJVU::on_temporaryHighlight_timeout()
 {
     m_highlight->setVisible(false);
 }
 
-void DocumentView::on_searchTask_progressChanged(int progress)
+void SheetBrowserDJVU::on_searchTask_progressChanged(int progress)
 {
     s_searchModel->updateProgress(this);
 
     emit searchProgressChanged(progress);
 }
 
-void DocumentView::on_searchTask_resultsReady(int index, const QList< QRectF > &results)
+void SheetBrowserDJVU::on_searchTask_resultsReady(int index, const QList< QRectF > &results)
 {
     if (m_searchTask->wasCanceled()) {
         return;
@@ -1227,7 +1092,7 @@ void DocumentView::on_searchTask_resultsReady(int index, const QList< QRectF > &
         m_thumbnailItems.at(index)->setHighlights(results);
     }
 
-    if (s_settings->documentView().limitThumbnailsToResults()) {
+    if (s_settings->SheetBrowserDJVU().limitThumbnailsToResults()) {
         prepareThumbnailsScene();
     }
 
@@ -1238,7 +1103,7 @@ void DocumentView::on_searchTask_resultsReady(int index, const QList< QRectF > &
     }
 }
 
-void DocumentView::on_pages_cropRectChanged()
+void SheetBrowserDJVU::on_pages_cropRectChanged()
 {
     qreal left = 0.0, top = 0.0;
     saveLeftAndTop(left, top);
@@ -1247,12 +1112,12 @@ void DocumentView::on_pages_cropRectChanged()
     prepareView(left, top);
 }
 
-void DocumentView::on_thumbnails_cropRectChanged()
+void SheetBrowserDJVU::on_thumbnails_cropRectChanged()
 {
     prepareThumbnailsScene();
 }
 
-void DocumentView::on_pages_linkClicked(bool newTab, int page, qreal left, qreal top)
+void SheetBrowserDJVU::on_pages_linkClicked(bool newTab, int page, qreal left, qreal top)
 {
     page = qMax(page, 1);
     page = qMin(page, m_pages.count());
@@ -1270,16 +1135,16 @@ void DocumentView::on_pages_linkClicked(bool newTab, int page, qreal left, qreal
     }
 }
 
-void DocumentView::on_pages_linkClicked(bool newTab, const QString &fileName, int page)
+void SheetBrowserDJVU::on_pages_linkClicked(bool newTab, const QString &fileName, int page)
 {
     const QString filePath = QFileInfo(fileName).isAbsolute() ? fileName : m_fileInfo.dir().filePath(fileName);
 
     emit linkClicked(newTab, filePath, page);
 }
 
-void DocumentView::on_pages_linkClicked(const QString &url)
+void SheetBrowserDJVU::on_pages_linkClicked(const QString &url)
 {
-    if (s_settings->documentView().openUrl()) {
+    if (s_settings->SheetBrowserDJVU().openUrl()) {
         QUrl resolvedUrl(url);
 
         if (resolvedUrl.isRelative() && QFileInfo(url).isRelative()) {
@@ -1292,16 +1157,11 @@ void DocumentView::on_pages_linkClicked(const QString &url)
     }
 }
 
-void DocumentView::on_pages_rubberBandFinished()
-{
-    setRubberBandMode(ModifiersMode);
-}
-
-void DocumentView::on_pages_editSourceRequested(int page, const QPointF &pos)
+void SheetBrowserDJVU::on_pages_editSourceRequested(int page, const QPointF &pos)
 {
 #ifdef WITH_SYNCTEX
 
-    if (s_settings->documentView().sourceEditor().isEmpty()) {
+    if (s_settings->SheetBrowserDJVU().sourceEditor().isEmpty()) {
         return;
     }
 
@@ -1317,7 +1177,7 @@ void DocumentView::on_pages_editSourceRequested(int page, const QPointF &pos)
                 sourceLine = sourceLine >= 0 ? sourceLine : 0;
                 sourceColumn = sourceColumn >= 0 ? sourceColumn : 0;
 
-                QProcess::startDetached(s_settings->documentView().sourceEditor().arg(m_fileInfo.dir().absoluteFilePath(sourceName), QString::number(sourceLine), QString::number(sourceColumn)));
+                QProcess::startDetached(s_settings->SheetBrowserDJVU().sourceEditor().arg(m_fileInfo.dir().absoluteFilePath(sourceName), QString::number(sourceLine), QString::number(sourceColumn)));
 
                 break;
             }
@@ -1336,7 +1196,7 @@ void DocumentView::on_pages_editSourceRequested(int page, const QPointF &pos)
 #endif // WITH_SYNCTEX
 }
 
-void DocumentView::on_pages_zoomToSelectionRequested(int page, const QRectF &rect)
+void SheetBrowserDJVU::on_pages_zoomToSelectionRequested(int page, const QRectF &rect)
 {
     if (rect.isEmpty()) {
         return;
@@ -1350,21 +1210,21 @@ void DocumentView::on_pages_zoomToSelectionRequested(int page, const QRectF &rec
 
     setScaleFactor(qMin(qMin(visibleWidth / displayedWidth / rect.width(),
                              visibleHeight / displayedHeight / rect.height()),
-                        Defaults::DocumentView::maximumScaleFactor()));
+                        Defaults::SheetBrowserDJVU::maximumScaleFactor()));
 
     setScaleMode(ScaleFactorMode);
 
     jumpToPage(page, false, rect.left(), rect.top());
 }
 
-void DocumentView::on_pages_wasModified()
+void SheetBrowserDJVU::on_pages_wasModified()
 {
     m_wasModified = true;
 
     emit documentModified();
 }
 
-void DocumentView::resizeEvent(QResizeEvent *event)
+void SheetBrowserDJVU::resizeEvent(QResizeEvent *event)
 {
     QGraphicsView::resizeEvent(event);
 
@@ -1377,7 +1237,7 @@ void DocumentView::resizeEvent(QResizeEvent *event)
     }
 }
 
-void DocumentView::keyPressEvent(QKeyEvent *event)
+void SheetBrowserDJVU::keyPressEvent(QKeyEvent *event)
 {
     foreach (const PageItem *page, m_pageItems) {
         if (page->showsAnnotationOverlay() || page->showsFormFieldOverlay()) {
@@ -1449,7 +1309,7 @@ void DocumentView::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void DocumentView::mousePressEvent(QMouseEvent *event)
+void SheetBrowserDJVU::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::XButton1) {
         event->accept();
@@ -1464,11 +1324,11 @@ void DocumentView::mousePressEvent(QMouseEvent *event)
     QGraphicsView::mousePressEvent(event);
 }
 
-void DocumentView::wheelEvent(QWheelEvent *event)
+void SheetBrowserDJVU::wheelEvent(QWheelEvent *event)
 {
-    const Qt::KeyboardModifiers zoomModifiers = s_settings->documentView().zoomModifiers();
-    const Qt::KeyboardModifiers rotateModifiers = s_settings->documentView().rotateModifiers();
-    const Qt::KeyboardModifiers scrollModifiers = s_settings->documentView().scrollModifiers();
+    const Qt::KeyboardModifiers zoomModifiers = s_settings->SheetBrowserDJVU().zoomModifiers();
+    const Qt::KeyboardModifiers rotateModifiers = s_settings->SheetBrowserDJVU().rotateModifiers();
+    const Qt::KeyboardModifiers scrollModifiers = s_settings->SheetBrowserDJVU().scrollModifiers();
 
     if (event->modifiers() == zoomModifiers || event->buttons() == zoomModifiers) {
         if (event->delta() > 0) {
@@ -1517,7 +1377,7 @@ void DocumentView::wheelEvent(QWheelEvent *event)
     QGraphicsView::wheelEvent(event);
 }
 
-void DocumentView::contextMenuEvent(QContextMenuEvent *event)
+void SheetBrowserDJVU::contextMenuEvent(QContextMenuEvent *event)
 {
     if (event->reason() == QContextMenuEvent::Mouse && modifiersUseMouseButton(s_settings, Qt::RightButton)) {
         event->accept();
@@ -1537,7 +1397,7 @@ void DocumentView::contextMenuEvent(QContextMenuEvent *event)
 
 #ifdef WITH_CUPS
 
-bool DocumentView::printUsingCUPS(QPrinter *printer, const PrintOptions &printOptions, int fromPage, int toPage)
+bool SheetBrowserDJVU::printUsingCUPS(QPrinter *printer, const PrintOptions &printOptions, int fromPage, int toPage)
 {
     int num_dests = 0;
     cups_dest_t *dests = 0;
@@ -1728,7 +1588,7 @@ bool DocumentView::printUsingCUPS(QPrinter *printer, const PrintOptions &printOp
 
 #endif // WITH_CUPS
 
-bool DocumentView::printUsingQt(QPrinter *printer, const PrintOptions &printOptions, int fromPage, int toPage)
+bool SheetBrowserDJVU::printUsingQt(QPrinter *printer, const PrintOptions &printOptions, int fromPage, int toPage)
 {
     QScopedPointer< QProgressDialog > progressDialog(new QProgressDialog(this));
     progressDialog->setLabelText(tr("Printing '%1'...").arg(m_fileInfo.completeBaseName()));
@@ -1779,7 +1639,7 @@ bool DocumentView::printUsingQt(QPrinter *printer, const PrintOptions &printOpti
     return true;
 }
 
-void DocumentView::saveLeftAndTop(qreal &left, qreal &top) const
+void SheetBrowserDJVU::saveLeftAndTop(qreal &left, qreal &top) const
 {
     const PageItem *page = m_pageItems.at(m_currentPage - 1);
 
@@ -1790,7 +1650,7 @@ void DocumentView::saveLeftAndTop(qreal &left, qreal &top) const
     top = (topLeft.y() - boundingRect.y()) / boundingRect.height();
 }
 
-bool DocumentView::checkDocument(const QString &filePath, Model::Document *document, QVector< Model::Page * > &pages)
+bool SheetBrowserDJVU::checkDocument(const QString &filePath, Model::Document *document, QVector< Model::Page * > &pages)
 {
     if (document->isLocked()) {
         QString password = QInputDialog::getText(this, tr("Unlock %1").arg(QFileInfo(filePath).completeBaseName()), tr("Password:"), QLineEdit::Password);
@@ -1825,7 +1685,7 @@ bool DocumentView::checkDocument(const QString &filePath, Model::Document *docum
     return true;
 }
 
-void DocumentView::loadFallbackOutline()
+void SheetBrowserDJVU::loadFallbackOutline()
 {
     m_outlineModel->clear();
 
@@ -1845,7 +1705,7 @@ void DocumentView::loadFallbackOutline()
     m_outlineModel->invisibleRootItem()->setData(true); // Flags this as a fallback outline.
 }
 
-void DocumentView::loadDocumentDefaults()
+void SheetBrowserDJVU::loadDocumentDefaults()
 {
     if (m_document->wantsContinuousMode()) {
         m_continuousMode = true;
@@ -1864,7 +1724,7 @@ void DocumentView::loadDocumentDefaults()
     }
 }
 
-void DocumentView::adjustScrollBarPolicy()
+void SheetBrowserDJVU::adjustScrollBarPolicy()
 {
     switch (m_scaleMode) {
     default:
@@ -1883,7 +1743,7 @@ void DocumentView::adjustScrollBarPolicy()
     }
 }
 
-void DocumentView::prepareDocument(Model::Document *document, const QVector< Model::Page * > &pages)
+void SheetBrowserDJVU::prepareDocument(Model::Document *document, const QVector< Model::Page * > &pages)
 {
     m_prefetchTimer->blockSignals(true);
     m_prefetchTimer->stop();
@@ -1904,7 +1764,7 @@ void DocumentView::prepareDocument(Model::Document *document, const QVector< Mod
         m_autoRefreshWatcher->removePaths(m_autoRefreshWatcher->files());
     }
 
-    if (s_settings->documentView().autoRefresh()) {
+    if (s_settings->SheetBrowserDJVU().autoRefresh()) {
         m_autoRefreshWatcher->addPath(m_fileInfo.filePath());
     }
 
@@ -1921,13 +1781,13 @@ void DocumentView::prepareDocument(Model::Document *document, const QVector< Mod
         loadFallbackOutline();
     }
 
-    if (s_settings->documentView().prefetch()) {
+    if (s_settings->SheetBrowserDJVU().prefetch()) {
         m_prefetchTimer->blockSignals(false);
         m_prefetchTimer->start();
     }
 }
 
-void DocumentView::preparePages()
+void SheetBrowserDJVU::preparePages()
 {
     m_pageItems.clear();
     m_pageItems.reserve(m_pages.count());
@@ -1936,7 +1796,6 @@ void DocumentView::preparePages()
         PageItem *page = new PageItem(m_pages.at(index), index);
 
         page->setInvertColors(m_invertColors);
-        page->setRubberBandMode(m_rubberBandMode);
 
         scene()->addItem(page);
         m_pageItems.append(page);
@@ -1956,7 +1815,7 @@ void DocumentView::preparePages()
     }
 }
 
-void DocumentView::prepareThumbnails()
+void SheetBrowserDJVU::prepareThumbnails()
 {
     m_thumbnailItems.clear();
     m_thumbnailItems.reserve(m_pages.count());
@@ -1975,7 +1834,7 @@ void DocumentView::prepareThumbnails()
     }
 }
 
-void DocumentView::prepareBackground()
+void SheetBrowserDJVU::prepareBackground()
 {
     QColor backgroundColor;
 
@@ -1993,7 +1852,7 @@ void DocumentView::prepareBackground()
     m_thumbnailsScene->setBackgroundBrush(QBrush(backgroundColor));
 }
 
-void DocumentView::prepareScene()
+void SheetBrowserDJVU::prepareScene()
 {
     // prepare scale factor and rotation
 
@@ -2032,7 +1891,7 @@ void DocumentView::prepareScene()
 
     qreal left = 0.0;
     qreal right = 0.0;
-    qreal height = s_settings->documentView().pageSpacing();
+    qreal height = s_settings->SheetBrowserDJVU().pageSpacing();
 
     m_layout->prepareLayout(m_pageItems, m_rightToLeftMode,
                             left, right, height);
@@ -2040,7 +1899,7 @@ void DocumentView::prepareScene()
     scene()->setSceneRect(left, 0.0, right - left, height);
 }
 
-void DocumentView::prepareView(qreal changeLeft, qreal changeTop, int visiblePage)
+void SheetBrowserDJVU::prepareView(qreal changeLeft, qreal changeTop, int visiblePage)
 {
     qreal left = scene()->sceneRect().left();
     qreal top = scene()->sceneRect().top();
@@ -2053,7 +1912,7 @@ void DocumentView::prepareView(qreal changeLeft, qreal changeTop, int visiblePag
     visiblePage = visiblePage == 0 ? m_currentPage : visiblePage;
 
     const int highlightIsOnPage = m_currentResult.isValid() ? pageOfResult(m_currentResult) : 0;
-    const bool highlightCurrentThumbnail = s_settings->documentView().highlightCurrentThumbnail();
+    const bool highlightCurrentThumbnail = s_settings->SheetBrowserDJVU().highlightCurrentThumbnail();
 
     for (int index = 0; index < m_pageItems.count(); ++index) {
         PageItem *page = m_pageItems.at(index);
@@ -2065,8 +1924,8 @@ void DocumentView::prepareView(qreal changeLeft, qreal changeTop, int visiblePag
             if (m_layout->leftIndex(index) == m_currentPage - 1) {
                 page->setVisible(true);
 
-                top = boundingRect.top() - s_settings->documentView().pageSpacing();
-                height = boundingRect.height() + 2.0 * s_settings->documentView().pageSpacing();
+                top = boundingRect.top() - s_settings->SheetBrowserDJVU().pageSpacing();
+                height = boundingRect.height() + 2.0 * s_settings->SheetBrowserDJVU().pageSpacing();
             } else {
                 page->setVisible(false);
 
@@ -2097,16 +1956,16 @@ void DocumentView::prepareView(qreal changeLeft, qreal changeTop, int visiblePag
     viewport()->update();
 }
 
-void DocumentView::prepareThumbnailsScene()
+void SheetBrowserDJVU::prepareThumbnailsScene()
 {
-    const qreal thumbnailSpacing = s_settings->documentView().thumbnailSpacing();
+    const qreal thumbnailSpacing = s_settings->SheetBrowserDJVU().thumbnailSpacing();
 
     qreal left = 0.0;
     qreal right = m_thumbnailsOrientation == Qt::Vertical ? 0.0 : thumbnailSpacing;
     qreal top = 0.0;
     qreal bottom = m_thumbnailsOrientation == Qt::Vertical ? thumbnailSpacing : 0.0;
 
-    const bool limitThumbnailsToResults = s_settings->documentView().limitThumbnailsToResults();
+    const bool limitThumbnailsToResults = s_settings->SheetBrowserDJVU().limitThumbnailsToResults();
 
     for (int index = 0; index < m_thumbnailItems.count(); ++index) {
         ThumbnailItem *page = m_thumbnailItems.at(index);
@@ -2131,8 +1990,8 @@ void DocumentView::prepareThumbnailsScene()
 
         page->setResolution(logicalDpiX(), logicalDpiY());
 
-        page->setScaleFactor(qMin(s_settings->documentView().thumbnailSize() / page->displayedWidth(),
-                                  s_settings->documentView().thumbnailSize() / page->displayedHeight()));
+        page->setScaleFactor(qMin(s_settings->SheetBrowserDJVU().thumbnailSize() / page->displayedWidth(),
+                                  s_settings->SheetBrowserDJVU().thumbnailSize() / page->displayedHeight()));
 
         // prepare layout
 
@@ -2156,7 +2015,7 @@ void DocumentView::prepareThumbnailsScene()
     m_thumbnailsScene->setSceneRect(left, top, right - left, bottom - top);
 }
 
-void DocumentView::prepareHighlight(int index, const QRectF &rect)
+void SheetBrowserDJVU::prepareHighlight(int index, const QRectF &rect)
 {
     PageItem *page = m_pageItems.at(index);
 
@@ -2177,14 +2036,14 @@ void DocumentView::prepareHighlight(int index, const QRectF &rect)
     viewport()->update();
 }
 
-void DocumentView::checkResult()
+void SheetBrowserDJVU::checkResult()
 {
     if (m_currentResult.isValid() && m_layout->currentPage(pageOfResult(m_currentResult)) != m_currentPage) {
         m_currentResult = QModelIndex();
     }
 }
 
-void DocumentView::applyResult()
+void SheetBrowserDJVU::applyResult()
 {
     if (m_currentResult.isValid()) {
         const int page = pageOfResult(m_currentResult);

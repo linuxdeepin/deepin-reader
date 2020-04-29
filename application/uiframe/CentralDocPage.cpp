@@ -246,7 +246,7 @@ void CentralDocPage::onTabNewWindow(DocSheet *sheet)
 
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 
-    MainWindow *w = MainWindow::create();
+    MainWindow *w = MainWindow::createWindow();
 
     disconnect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
     disconnect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));

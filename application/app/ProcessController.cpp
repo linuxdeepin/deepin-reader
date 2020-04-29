@@ -75,7 +75,7 @@ void ProcessController::handleFiles(QStringList filePathList)
     QList<DocSheet *> sheets = DocSheet::g_map.values();
 
     if (filePathList.count() <= 0) {
-        MainWindow::create()->show();
+        MainWindow::createWindow()->show();
         return;
     }
 
@@ -100,7 +100,7 @@ void ProcessController::handleFiles(QStringList filePathList)
                 MainWindow::m_list[0]->doOpenFile(filePath);
                 continue;
             } else
-                MainWindow::create()->doOpenFile(filePath);
+                MainWindow::createWindow()->doOpenFile(filePath);
         }
     }
 }
