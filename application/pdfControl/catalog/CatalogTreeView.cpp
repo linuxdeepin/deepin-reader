@@ -38,7 +38,7 @@ CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    setFocusPolicy(Qt::NoFocus);
+//    setFocusPolicy(Qt::NoFocus);
 
     this->header()->setHidden(true);
     this->viewport()->setAutoFillBackground(false);

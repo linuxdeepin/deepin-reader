@@ -278,6 +278,10 @@ void TitleWidget::setDefaultShape()
     m_pHandleShapeBtn->setIcon(icon);
 
     m_curSheet->setMouseDefault();
+
+    if (m_pHandleMenu) {
+        m_pHandleMenu->setHandShape(0);
+    }
 }
 
 void TitleWidget::setHandleShape()
@@ -294,6 +298,10 @@ void TitleWidget::setHandleShape()
     m_pHandleShapeBtn->setIcon(icon);
 
     m_curSheet->setMouseHand();
+
+    if (m_pHandleMenu) {
+        m_pHandleMenu->setHandShape(1);
+    }
 }
 
 DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
