@@ -584,6 +584,7 @@ void CentralDocPage::OnAppMsgData(const QString &sText)
 void CentralDocPage::handleShortcut(const QString &s)
 {
     auto children = this->findChildren<DocSheet *>();
+
     if (children.size() == 0 && getCurSheet())
         return;
 
@@ -591,6 +592,12 @@ void CentralDocPage::handleShortcut(const QString &s)
         OnPrintFile();
     } else if (s == KeyStr::g_ctrl_s) {
         saveCurrent();
+    } else if (s == KeyStr::g_ctrl_larger || s == KeyStr::g_ctrl_equal) {
+        if (getCurSheet())
+            getCurSheet()->zoomin();
+    } else if (s == KeyStr::g_ctrl_smaller) {
+        if (getCurSheet())
+            getCurSheet()->zoomout();
     } else if (s == KeyStr::g_ctrl_b) {
         DocSheet *sheet = getCurSheet();
         if (sheet != nullptr)
@@ -598,9 +605,9 @@ void CentralDocPage::handleShortcut(const QString &s)
     } else if (s == KeyStr::g_alt_1 || s == KeyStr::g_alt_2 || s == KeyStr::g_ctrl_m  ||
                s == KeyStr::g_ctrl_1 || s == KeyStr::g_ctrl_2 || s == KeyStr::g_ctrl_3 ||
                s == KeyStr::g_ctrl_r || s == KeyStr::g_ctrl_shift_r ||
-               s == KeyStr::g_ctrl_larger || s == KeyStr::g_ctrl_equal || s == KeyStr::g_ctrl_smaller ||
                s == KeyStr::g_ctrl_c || s == KeyStr::g_ctrl_l || s == KeyStr::g_ctrl_i) {
-        getCurSheet()->onTitleShortCut(s);
+        if (getCurSheet())
+            getCurSheet()->onTitleShortCut(s);
     } else if (s == KeyStr::g_ctrl_f) {     //  搜索
         ShowFindWidget();
     } else if (s == KeyStr::g_ctrl_h) {     //  开启幻灯片

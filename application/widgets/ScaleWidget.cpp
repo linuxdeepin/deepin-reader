@@ -82,25 +82,7 @@ void ScaleWidget::slotPrevScale()
     if (m_sheet.isNull())
         return;
 
-    QString cuttext = m_scaleComboBox->currentText();
-    int nIndex = cuttext.lastIndexOf("%");
-    if (nIndex > 0)
-        cuttext = cuttext.mid(0, nIndex);
-    bool bok;
-    int curindex = -1;
-    double curscale = cuttext.toDouble(&bok);
-    if (curscale <= dataList.front()) {
-        return;
-    }
-    for (int i = 1; i < dataList.size(); i++) {
-        if (dataList.at(i) >= curscale && dataList.at(i - 1) < curscale) {
-            curindex = i - 1;
-            break;
-        }
-    }
-    if (bok) {
-        m_scaleComboBox->setCurrentIndex(curindex);
-    }
+    m_sheet->zoomout();
 }
 
 void ScaleWidget::slotNextScale()
@@ -108,24 +90,7 @@ void ScaleWidget::slotNextScale()
     if (m_sheet.isNull())
         return;
 
-    QString inputtext = m_scaleComboBox->currentText();
-    int nIndex = inputtext.lastIndexOf("%");
-    if (nIndex > 0)
-        inputtext = inputtext.mid(0, nIndex);
-    bool bok;
-    double inputscale = inputtext.toDouble(&bok);
-    int curindex = -1;
-    if (inputscale >= dataList.back())
-        return;
-    for (int i = 0; i < dataList.size(); i++) {
-        if (dataList.at(i) > inputscale) {
-            curindex = i;
-            break;
-        }
-    }
-    if (bok) {
-        m_scaleComboBox->setCurrentIndex(curindex);
-    }
+    m_sheet->zoomin();
 }
 
 void ScaleWidget::SlotCurrentTextChanged(const QString &sText)

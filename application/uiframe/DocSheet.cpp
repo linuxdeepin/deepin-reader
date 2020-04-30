@@ -129,6 +129,32 @@ void DocSheet::pagePrev()
     }
 }
 
+void DocSheet::zoomin()
+{
+    QList<int> dataList = {10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500};
+
+    for (int i = 0; i < dataList.count(); ++i) {
+        if (dataList[i] > getOper(Scale).toDouble()) {
+            setScale(dataList[i]);
+            emit sigFileChanged(this);
+            return;
+        }
+    }
+}
+
+void DocSheet::zoomout()
+{
+    QList<int> dataList = {10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500};
+
+    for (int i = dataList.count() - 1; i > 0; --i) {
+        if (dataList[i] < getOper(Scale).toInt()) {
+            setScale(dataList[i]);
+            emit sigFileChanged(this);
+            return;
+        }
+    }
+}
+
 void DocSheet::setDoubleShow(bool isShow)
 {
     if (DocType_PDF == m_type)
@@ -311,6 +337,7 @@ void DocSheet::onSplitterMoved(int a, int b)
 void DocSheet::onTitleShortCut(QString shortCut)
 {
     auto brower = this->findChild<SheetBrowserPDF *>();
+
     if (brower) {
         brower->qDealWithShortKey(shortCut);
     }

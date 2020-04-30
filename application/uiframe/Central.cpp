@@ -128,7 +128,6 @@ bool Central::saveAll()
 
 void Central::handleShortcut(QString shortcut)
 {
-    qDebug() << shortcut;
     m_widget->handleShortcut(shortcut);
     m_docPage->handleShortcut(shortcut);
 }

@@ -40,6 +40,10 @@ public:
 
     void pagePrev();
 
+    void zoomin();  //放大一级
+
+    void zoomout();
+
     void setDoubleShow(bool isShow);
 
     void setRotateLeft();
