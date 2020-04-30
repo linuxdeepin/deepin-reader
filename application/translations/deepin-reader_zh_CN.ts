@@ -220,7 +220,7 @@
     </message>
     <message>
         <source>Add note</source>
-        <translation>添加注释</translation>
+        <translation type="vanished">添加注释</translation>
     </message>
     <message>
         <source>First page</source>
@@ -241,6 +241,10 @@
     <message>
         <source>Exit fullscreen</source>
         <translation type="vanished">退出全屏</translation>
+    </message>
+    <message>
+        <source>Add annotation</source>
+        <translation>添加注释</translation>
     </message>
 </context>
 <context>
@@ -720,7 +724,7 @@
     </message>
     <message>
         <source>Add note</source>
-        <translation>添加注释</translation>
+        <translation type="vanished">添加注释</translation>
     </message>
     <message>
         <source>Add bookmark</source>
@@ -729,6 +733,10 @@
     <message>
         <source>Exit fullscreen</source>
         <translation type="vanished">退出全屏</translation>
+    </message>
+    <message>
+        <source>Add annotation</source>
+        <translation>添加注释</translation>
     </message>
 </context>
 <context>

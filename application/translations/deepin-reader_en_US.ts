@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="en">
 <context>
     <name>Application</name>
     <message>
@@ -220,7 +222,7 @@
     </message>
     <message>
         <source>Add note</source>
-        <translation>Add note</translation>
+        <translation type="vanished">Add note</translation>
     </message>
     <message>
         <source>First page</source>
@@ -241,6 +243,10 @@
     <message>
         <source>Exit fullscreen</source>
         <translation type="vanished">Exit fullscreen</translation>
+    </message>
+    <message>
+        <source>Add annotation</source>
+        <translation type="unfinished">Add annotation</translation>
     </message>
 </context>
 <context>
@@ -720,7 +726,7 @@
     </message>
     <message>
         <source>Add note</source>
-        <translation>Add note</translation>
+        <translation type="vanished">Add note</translation>
     </message>
     <message>
         <source>Add bookmark</source>
@@ -729,6 +735,10 @@
     <message>
         <source>Exit fullscreen</source>
         <translation type="vanished">Exit fullscreen</translation>
+    </message>
+    <message>
+        <source>Add annotation</source>
+        <translation type="unfinished">Add annotation</translation>
     </message>
 </context>
 <context>

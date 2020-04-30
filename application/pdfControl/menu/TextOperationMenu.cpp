@@ -73,7 +73,7 @@ void TextOperationMenu::initActions()
     this->addSeparator();
 
     m_pRemoveHighLight = createAction(tr("Remove highlight"), SLOT(slotRemoveHighLightClicked()));
-    m_pAddNote = createAction(tr("Add note"), SLOT(slotAddNoteClicked()));
+    m_pAddNote = createAction(tr("Add annotation"), SLOT(slotAddNoteClicked()));
     m_pAddBookMark = createAction(tr("Add bookmark"), SLOT(slotAddBookMarkClicked()));
 
 }

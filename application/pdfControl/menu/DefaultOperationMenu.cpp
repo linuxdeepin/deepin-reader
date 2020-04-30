@@ -43,20 +43,20 @@ void DefaultOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, co
     m_pEndPage->setEnabled(true);
 
     DocummentProxy *_proxy = m_sheet->getDocProxy();
-    if(_proxy == nullptr){
+    if (_proxy == nullptr) {
         m_pFirstPage->setEnabled(false);
         m_pPrevPage->setEnabled(false);
         m_pNextPage->setEnabled(false);
         m_pEndPage->setEnabled(false);
         return;
-    }else {
+    } else {
         int currentPage = 0;
         int pageSum = 0;
         bool isSinglePage = false;//文档总页数是否是单页
 
         pageSum = _proxy->getPageSNum();
         currentPage = _proxy->currentPageNo();
-        isSinglePage = static_cast<bool>(pageSum%2);
+        isSinglePage = static_cast<bool>(pageSum % 2);
 
         if (currentPage == 0/*(!m_sheet->isDoubleShow()) ? (currentPage == 0) : (currentPage <= 1)*/) { //  首页
             m_pFirstPage->setEnabled(false);
@@ -71,7 +71,7 @@ void DefaultOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, co
                 }
             }
         }
-        if(_proxy->getPageSNum() == 1){
+        if (_proxy->getPageSNum() == 1) {
             m_pFirstPage->setEnabled(false);
             m_pPrevPage->setEnabled(false);
             m_pNextPage->setEnabled(false);
@@ -92,7 +92,7 @@ void DefaultOperationMenu::initActions()
 
     m_pBookMark = createAction(tr("Add bookmark"), SLOT(slotBookMarkClicked()));
 
-    m_pAddIconNote = createAction(tr("Add note"), SLOT(slotAddIconNote()));
+    m_pAddIconNote = createAction(tr("Add annotation"), SLOT(slotAddIconNote()));
 
     m_pFirstPage = createAction(tr("First page"), SLOT(slotFirstPageClicked()));
 
@@ -162,7 +162,7 @@ void DefaultOperationMenu::slotAddIconNote()
     if (sUuid != "") {
         int page = _proxy->pointInWhichPage(m_pointclicked);
 
-        m_sheet->showNoteWidget(page,sUuid,NOTE_ICON);
+        m_sheet->showNoteWidget(page, sUuid, NOTE_ICON);
 
     }
 }
