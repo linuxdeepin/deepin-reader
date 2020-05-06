@@ -537,7 +537,7 @@ bool PagePdf::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString
     QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
     foreach (Poppler::Annotation *annote, listannote) {
-        if (annote->subType() == Poppler::Annotation::AText && annote->flags() == static_cast<Poppler::Annotation::Flag>(0)) { //必须判断,其他软件添加的flag不一定是0
+        if (annote->subType() == Poppler::Annotation::AText /*&& annote->flags() == static_cast<Poppler::Annotation::Flag>(6)*/) { //必须判断,其他软件添加的flag不一定是6
             if (annote->boundary().contains(ptf)) {
                 strtext = annote->contents();
                 struuid = annote->uniqueName();
