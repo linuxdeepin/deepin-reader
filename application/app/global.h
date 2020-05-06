@@ -3,7 +3,9 @@
 
 #include <QString>
 
-namespace deepin_reader {
+//deepin-reader
+
+namespace Dr {
 
 enum FileType {
     Unknown = 0,

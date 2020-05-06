@@ -2,7 +2,7 @@
 
 #include <QMimeType>
 #include <QMimeDatabase>
-namespace deepin_reader {
+namespace Dr {
 FileType matchFileType(const QString &filePath)
 {
     FileType fileType = FileType::Unknown;

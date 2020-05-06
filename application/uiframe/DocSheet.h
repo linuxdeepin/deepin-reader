@@ -1,14 +1,13 @@
-#ifndef MAINSPLITTER_H
-#define MAINSPLITTER_H
+#ifndef DOCSHEET_H
+#define DOCSHEET_H
 
 #include <DSplitter>
 #include <QMap>
 
 #include "FileDataModel.h"
+#include "global.h"
 #include "docview/commonstruct.h"
 #include "ModuleHeader.h"
-
-DWIDGET_USE_NAMESPACE
 
 class SpinnerWidget;
 class SheetBrowserPDF;
@@ -16,81 +15,89 @@ class SheetSidebar;
 class DocummentProxy;
 class SheetBrowserArea;
 class FindWidget;
-class DocSheet : public DSplitter
+class DocSheet : public Dtk::Widget::DSplitter
 {
     Q_OBJECT
     Q_DISABLE_COPY(DocSheet)
 
 public:
-    explicit DocSheet(DocType_EM type, DWidget *parent = nullptr);
+    explicit DocSheet(Dr::FileType type, Dtk::Widget::DWidget *parent = nullptr);
 
-    ~DocSheet() override;
+    virtual ~DocSheet() override;
 
-    void handleShortcut(QString shortcut);
+    virtual void handleShortcut(QString shortcut);
 
-    void openFile(const QString &filePath);
+    virtual void openFile(const QString &filePath);
 
-    void pageJump(int page);
+    virtual bool openFileExec(const QString &filePath);
 
-    void pageFirst();
+    virtual void pageJump(int page);
 
-    void pageLast();
+    virtual void pageFirst();
 
-    void pageNext();
+    virtual void pageLast();
 
-    void pagePrev();
+    virtual void pageNext();
 
-    void zoomin();  //放大一级
+    virtual void pagePrev();
 
-    void zoomout();
+    virtual void zoomin();  //放大一级
 
-    void setDoubleShow(bool isShow);
+    virtual void zoomout();
 
-    void setRotateLeft();
+    virtual void setDoubleShow(bool isShow);
 
-    void setRotateRight();
+    virtual void setRotateLeft();
 
-    void setFileChanged(bool hasChanged);
+    virtual void setRotateRight();
 
-    void setMouseDefault();     //默认工具
+    virtual void setFileChanged(bool hasChanged);
 
-    void setMouseHand();        //手型工具
+    virtual void setMouseDefault();     //默认工具
 
-    void setScale(double scale);
+    virtual void setMouseHand();        //手型工具
 
-    void setFit(int fit);
+    virtual void setScale(double scale);
 
-    void setBookMark(int page, int state);
+    virtual void setFit(int fit);
 
-    void showNoteWidget(int page, const QString &uuid, const int &type = NOTE_HIGHLIGHT);
+    virtual void setBookMark(int page, int state);
 
-    bool isMouseHand();
+    virtual void showNoteWidget(int page, const QString &uuid, const int &type = NOTE_HIGHLIGHT);
 
-    bool isDoubleShow();
+    virtual bool isMouseHand();
 
-    QString filePath();
+    virtual bool isDoubleShow();
 
-    int qGetFileChange();
+    virtual QString filePath();
 
-    void saveOper();
+    virtual int qGetFileChange();
 
-    bool saveData();
+    virtual void saveOper();
 
-    bool saveAsData(QString filePath);
+    virtual bool saveData();
 
-    void setData(const int &, const QVariant &);
+    virtual bool saveAsData(QString filePath);
 
-    QVariant getOper(int type);
+    virtual void setData(const int &, const QVariant &);
 
-    DocummentProxy *getDocProxy();      //在文档打开成功之前为空
+    virtual QVariant getOper(int type);
 
-    void OnOpenSliderShow();
+    virtual DocummentProxy *getDocProxy();      //在文档打开成功之前为空
 
-    void OnExitSliderShow();
+    virtual void OnOpenSliderShow();
 
-    void ShowFindWidget();
+    virtual void OnExitSliderShow();
 
-    DocType_EM type();
+    virtual void ShowFindWidget();
+
+    virtual void onTitleShortCut(QString);
+
+    virtual void handleOpenSuccess();
+
+    virtual void setSidebarVisible(bool isVisible);
+
+    Dr::FileType type();
 
     void showTips(const QString &tips, int iconIndex = 0);
 
@@ -108,12 +115,6 @@ public:
 
     void quitMagnifer();
 
-    void handleOpenSuccess();
-
-    void setSidebarVisible(bool isVisible);
-
-    void onTitleShortCut(QString);
-
 signals:
     void sigOpenFileResult(const QString &, const bool &);
 
@@ -128,44 +129,12 @@ signals:
     void sigFindOperation(const int &);
 
 private:
-    void initPDF();
-
-private slots:
-    void SlotFileOpenResult(const QString &, const bool &);
-
-    void onShowTips(const QString &tips, int);
-
-    void onFileChanged();
-
-    void onSplitterMoved(int, int);
-
-    void onFindOperation(int, QString);
-
-    void onFindContentComming(const stSearchRes &);
-
-    void onFindFinished();
-
-    void onRotate(int rotate);
-
-    void onAnntationMsg(const int &, const QString &);
-
-private:
-    DocType_EM      m_type;
-    void *m_sidebar = nullptr;
-    void *m_browser = nullptr;
-
-    QStackedWidget *m_pRightWidget = nullptr;
-    SpinnerWidget  *m_pSpinnerWidget = nullptr;
-    FindWidget     *m_pFindWidget = nullptr;
-
-    bool            m_bOldState = false;
-    int             m_currentState;
-    QString         m_uuid;
-
+    Dr::FileType m_type;
+    QString      m_uuid;
 public:
     static QUuid     getUuid(DocSheet *);
     static DocSheet *getSheet(QString uuid);
     static QMap<QString, DocSheet *> g_map;
 };
 
-#endif // MAINSPLITTER_H
+#endif // DOCSHEET_H

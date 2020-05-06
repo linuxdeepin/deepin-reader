@@ -32,17 +32,14 @@
 #include "app/ProcessController.h"
 #include "docview/docummentproxy.h"
 #include "widgets/FindWidget.h"
+#include "djvu/SheetBrowserDJVU.h"
+
+DWIDGET_USE_NAMESPACE
 
 QMap<QString, DocSheet *> DocSheet::g_map;
-DocSheet::DocSheet(DocType_EM type, DWidget *parent)
+DocSheet::DocSheet(Dr::FileType type, DWidget *parent)
     : DSplitter(parent), m_type(type)
 {
-    if (DocType_PDF == m_type) {
-        initPDF();
-    }
-
-    connect(this, SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
-
     m_uuid = QUuid::createUuid().toString();
     g_map[m_uuid] = this;
 }
@@ -54,338 +51,127 @@ DocSheet::~DocSheet()
 
 void DocSheet::handleShortcut(QString shortcut)
 {
-    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
-    if (nullptr == doc)
-        return;
 
-    doc->handleShortcut(shortcut);
 }
 
 void DocSheet::openFile(const QString &filePath)
 {
-    if (DocType_PDF == m_type)
-        static_cast<SheetBrowserPDF *>(m_browser)->OpenFilePath(filePath);
+
+}
+
+bool DocSheet::openFileExec(const QString &filePath)
+{
+    return false;
 }
 
 void DocSheet::pageJump(int page)
 {
-    if (DocType_PDF == m_type) {
-        DocummentProxy *_proxy =  static_cast<SheetBrowserPDF *>(m_browser)->GetDocProxy();
-        if (_proxy) {
-            int nPageSize = _proxy->getPageSNum();      //  总页数
-            if (page < 0 || page == nPageSize) {
-                return;
-            }
 
-            int nCurPage = _proxy->currentPageNo();
-            if (nCurPage != page) {
-                _proxy->pageJump(page);
-            }
-        }
-    }
 }
 
 void DocSheet::pageFirst()
 {
-    if (DocType_PDF == m_type) {
-        pageJump(0);
-    }
+
 }
 
 void DocSheet::pageLast()
 {
-    if (DocType_PDF == m_type) {
-        pageJump(getDocProxy()->getPageSNum() - 1);
-    }
+
 }
 
 void DocSheet::pageNext()
 {
-    if (DocType_PDF == m_type) {
 
-        bool isDoubleShow = static_cast<SheetBrowserPDF *>(m_browser)->isDoubleShow();
-
-        int nCurPage = getDocProxy()->currentPageNo();
-
-        int page = nCurPage + (isDoubleShow ? 2 : 1);
-
-        page = (page >= (getDocProxy()->getPageSNum() - 1) ? (getDocProxy()->getPageSNum() - 1) : page);
-
-        pageJump(page);
-    }
 }
 
 void DocSheet::pagePrev()
 {
-    if (DocType_PDF == m_type) {
 
-        bool isDoubleShow = static_cast<SheetBrowserPDF *>(m_browser)->isDoubleShow();
-
-        int nCurPage = getDocProxy()->currentPageNo();
-
-        int page = nCurPage - (isDoubleShow ? 2 : 1);
-
-        pageJump(page);
-    }
 }
 
 void DocSheet::zoomin()
 {
-    QList<int> dataList = {10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500};
 
-    for (int i = 0; i < dataList.count(); ++i) {
-        if (dataList[i] > getOper(Scale).toDouble()) {
-            setScale(dataList[i]);
-            emit sigFileChanged(this);
-            return;
-        }
-    }
 }
 
 void DocSheet::zoomout()
 {
-    QList<int> dataList = {10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500};
 
-    for (int i = dataList.count() - 1; i > 0; --i) {
-        if (dataList[i] < getOper(Scale).toInt()) {
-            setScale(dataList[i]);
-            emit sigFileChanged(this);
-            return;
-        }
-    }
 }
 
 void DocSheet::setDoubleShow(bool isShow)
 {
-    if (DocType_PDF == m_type)
-        static_cast<SheetBrowserPDF *>(m_browser)->setDoubleShow(isShow);
+
 }
 
 void DocSheet::setRotateLeft()
 {
-    if (DocType_PDF == m_type)
-        static_cast<SheetBrowserPDF *>(m_browser)->setRotateLeft();
+
 }
 
 void DocSheet::setRotateRight()
 {
-    if (DocType_PDF == m_type)
-        static_cast<SheetBrowserPDF *>(m_browser)->setRotateRight();
+
 }
 
 void DocSheet::setFileChanged(bool hasChanged)
 {
-    if (DocType_PDF == m_type)
-        static_cast<SheetBrowserPDF *>(m_browser)->setFileChanged(hasChanged);
+
 }
 
 void DocSheet::setMouseDefault()
 {
-    if (DocType_PDF == m_type)
-        static_cast<SheetBrowserPDF *>(m_browser)->setMouseDefault();
+
 }
 
 void DocSheet::setMouseHand()
 {
-    if (DocType_PDF == m_type)
-        static_cast<SheetBrowserPDF *>(m_browser)->setMouseHand();
+
 }
 
 void DocSheet::setScale(double scale)
 {
-    if (DocType_PDF == m_type)
-        static_cast<SheetBrowserPDF *>(m_browser)->setScale(scale);
+
 }
 
 void DocSheet::setFit(int fit)
 {
-    if (DocType_PDF == m_type)
-        static_cast<SheetBrowserPDF *>(m_browser)->setFit(fit);
+
 }
 
 void DocSheet::setBookMark(int page, int state)
 {
-    if (DocType_PDF == m_type) {
-        static_cast<SheetSidebarPDF *>(m_sidebar)->setBookMark(page, state);
-        static_cast<SheetBrowserPDF *>(m_browser)->setBookMark(page, state);
-    }
+
 }
 
 void DocSheet::showNoteWidget(int page, const QString &uuid, const int &type)
 {
-    if (DocType_PDF == m_type) {
-        static_cast<SheetBrowserPDF *>(m_browser)->showNoteWidget(page, uuid, type);
-    }
+
 }
 
 bool DocSheet::isMouseHand()
 {
-    if (DocType_PDF == m_type)
-        return static_cast<SheetBrowserPDF *>(m_browser)->isMouseHand();
-    return false;
+
 }
 
 bool DocSheet::isDoubleShow()
 {
-    if (DocType_PDF == m_type)
-        return static_cast<SheetBrowserPDF *>(m_browser)->isDoubleShow();
-    return false;
-}
 
-void DocSheet::initPDF()
-{
-    m_pRightWidget = new QStackedWidget(this);
-    m_pSpinnerWidget = new SpinnerWidget(this);
-
-    setHandleWidth(5);
-    setChildrenCollapsible(false);  //  子部件不可拉伸到 0
-
-    SheetBrowserPDF *browser = new SheetBrowserPDF(this, this);
-    SheetSidebarPDF *sidebar = new SheetSidebarPDF(this);
-
-    m_sidebar = sidebar;
-    m_browser = browser;
-
-    connect(sidebar, SIGNAL(sigDeleteAnntation(const int &, const QString &)), browser, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
-    connect(browser, SIGNAL(sigPageChanged(int)), sidebar, SLOT(onPageChanged(int)));
-    connect(browser, SIGNAL(sigFileOpenResult(const QString &, const bool &)), this, SLOT(SlotFileOpenResult(const QString &, const bool &)));
-    connect(browser, SIGNAL(sigAnntationMsg(const int &, const QString &)), this, SLOT(onAnntationMsg(int, QString)));
-    connect(browser, SIGNAL(sigFileChanged()), this, SLOT(onFileChanged()));
-    connect(browser, SIGNAL(sigRotateChanged(int)), this, SLOT(onRotate(int)));
-    connect(browser, SIGNAL(sigFindContantComming(const stSearchRes &)), this, SLOT(onFindContentComming(const stSearchRes &)));
-    connect(browser, SIGNAL(sigFindFinished()), this, SLOT(onFindFinished()));
-
-    int tW = 36;
-    int tH = 36;
-    dApp->adaptScreenView(tW, tH);
-    m_pSpinnerWidget->setSpinnerSize(QSize(tW, tH));
-    m_pSpinnerWidget->startSpinner();
-
-    m_pRightWidget->addWidget(m_pSpinnerWidget);
-    m_pRightWidget->addWidget(browser);
-
-    addWidget(sidebar);
-    addWidget(m_pRightWidget);
-
-    QList<int> list_src;
-    tW = LEFTNORMALWIDTH;
-    dApp->adaptScreenView(tW, tH);
-    list_src.append(tW);
-    tW = 1000 - LEFTNORMALWIDTH;
-    dApp->adaptScreenView(tW, tH);
-    list_src.append(tW);
-
-    setSizes(list_src);
-
-    setAcceptDrops(true);
-
-//    //文档刚打开时，模拟鼠标点击文档区域事件
-//    QPoint pos(m_pRightWidget->geometry().x() + 10, m_pRightWidget->geometry().y() + 10);
-//    QMouseEvent event0(QEvent::MouseButtonPress, pos, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-//    QApplication::sendEvent(m_pRightWidget, &event0);
-}
-
-void DocSheet::SlotFileOpenResult(const QString &s, const bool &res)
-{
-    if (res) {
-        if (m_pRightWidget && m_pSpinnerWidget) {
-            m_pRightWidget->removeWidget(m_pSpinnerWidget);
-
-            delete  m_pSpinnerWidget;
-            m_pSpinnerWidget = nullptr;
-        }
-
-        handleOpenSuccess();
-    }
-
-    emit sigOpened(this, res);
-    emit sigOpenFileResult(s, res);
 }
 
 void DocSheet::handleOpenSuccess()
 {
-    if (DocType_PDF == m_type) {
-        SheetSidebarPDF *sidebar = static_cast<SheetSidebarPDF *>(m_sidebar);
-        if (sidebar) sidebar->handleOpenSuccess();
-    }
+
 }
 
 void DocSheet::setSidebarVisible(bool isVisible)
 {
-    if (DocType_PDF == m_type) {
-        SheetSidebarPDF *sidebar = static_cast<SheetSidebarPDF *>(m_sidebar);
-        if (sidebar) sidebar->setVisible(isVisible);
-    }
-}
 
-void DocSheet::onShowTips(const QString &tips, int index)
-{
-    showTips(tips, index);
-}
-
-void DocSheet::onFileChanged()
-{
-    emit sigFileChanged(this);
-}
-
-void DocSheet::onSplitterMoved(int a, int b)
-{
-    setFit(0);
-    emit sigFileChanged(this);
 }
 
 void DocSheet::onTitleShortCut(QString shortCut)
 {
-    auto brower = this->findChild<SheetBrowserPDF *>();
 
-    if (brower) {
-        brower->qDealWithShortKey(shortCut);
-    }
-}
-
-void DocSheet::onFindOperation(int type, QString text)
-{
-    if (DocType_PDF == m_type) {
-        static_cast<SheetSidebarPDF *>(m_sidebar)->handleFindOperation(type);
-        static_cast<SheetBrowserPDF *>(m_browser)->handleFindOperation(type, text);
-    }
-
-    emit sigFindOperation(type);
-}
-
-void DocSheet::onFindContentComming(const stSearchRes &res)
-{
-    if (DocType_PDF == m_type) {
-        static_cast<SheetSidebarPDF *>(m_sidebar)->handleFindContentComming(res);
-    }
-}
-
-void DocSheet::onFindFinished()
-{
-    if (DocType_PDF == m_type) {
-        int count = static_cast<SheetSidebarPDF *>(m_sidebar)->handleFindFinished();
-        m_pFindWidget->setEditAlert(count == 0);
-    }
-}
-
-void DocSheet::onRotate(int rotate)
-{
-    if (DocType_PDF == m_type) {
-        static_cast<SheetSidebarPDF *>(m_sidebar)->handleRotate(rotate);
-    }
-}
-
-void DocSheet::onAnntationMsg(const int &msg, const QString &text)
-{
-    if (DocType_PDF == m_type) {
-        static_cast<SheetSidebarPDF *>(m_sidebar)->handleAnntationMsg(msg, text);
-
-        QStringList t_strList = text.split(Constant::sQStringSep, QString::SkipEmptyParts);
-        if (t_strList.count() == 3) {
-            int page = t_strList.at(2).trimmed().toInt();
-            static_cast<SheetSidebarPDF *>(m_sidebar)->handleUpdateThumbnail(page);
-        }
-    }
 }
 
 QUuid DocSheet::getUuid(DocSheet *sheet)
@@ -403,96 +189,60 @@ DocSheet *DocSheet::getSheet(QString uuid)
 
 QString DocSheet::filePath()
 {
-    if (DocType_PDF == m_type)
-        return static_cast<SheetBrowserPDF *>(m_browser)->getFilePath();
-
     return "";
 }
 
 int DocSheet::qGetFileChange()
 {
-    int istatus = -1;
-    if (nullptr != static_cast<SheetBrowserPDF *>(m_browser))
-        istatus = static_cast<SheetBrowserPDF *>(m_browser)->getFileChange() ? 1 : 0;
-    return  istatus;
+    return false;
 }
 
 void DocSheet::saveOper()
 {
-    if (DocType_PDF == m_type)
-        static_cast<SheetBrowserPDF *>(m_browser)->saveOper();
+
 }
 
 bool DocSheet::saveData()
 {
-    if (DocType_PDF == m_type)
-        return static_cast<SheetBrowserPDF *>(m_browser)->saveData();
-
     return false;
 }
 
 bool DocSheet::saveAsData(QString filePath)
 {
-    if (DocType_PDF == m_type)
-        return static_cast<SheetBrowserPDF *>(m_browser)->saveAsData(filePath);
-
     return false;
 }
 
 void DocSheet::setData(const int &type, const QVariant &value)
 {
-    if (DocType_PDF == m_type)
-        static_cast<SheetBrowserPDF *>(m_browser)->setOper(type, value);
+
 }
 
 QVariant DocSheet::getOper(int type)
 {
-    if (DocType_PDF == m_type)
-        return static_cast<SheetBrowserPDF *>(m_browser)->getOper(type);
-
     return -1;
 }
 
 DocummentProxy *DocSheet::getDocProxy()
 {
-    if (DocType_PDF == m_type) {
-        SheetBrowserPDF *browser = static_cast<SheetBrowserPDF *>(m_browser);
-        if (browser)
-            return browser->GetDocProxy();
-    }
-
     return nullptr;
 }
 
 void DocSheet::OnOpenSliderShow()
 {
-    if (DocType_PDF == m_type) {
-        m_bOldState = static_cast<SheetSidebarPDF *>(m_sidebar)->isVisible();
-        static_cast<SheetSidebarPDF *>(m_sidebar)->setVisible(false);
-    }
+
 }
 
 void DocSheet::OnExitSliderShow()
 {
-    if (DocType_PDF == m_type)
-        static_cast<SheetSidebarPDF *>(m_sidebar)->setVisible(m_bOldState);
+
 }
 
 void DocSheet::ShowFindWidget()
 {
-    if (m_pFindWidget == nullptr) {
-        m_pFindWidget = new FindWidget(static_cast<SheetBrowserPDF *>(m_browser));
-        static_cast<SheetBrowserPDF *>(m_browser)->setFindWidget(m_pFindWidget);
-        connect(m_pFindWidget, SIGNAL(sigFindOperation(const int &, const QString &)), this, SLOT(onFindOperation(const int &, const QString &)));
-    } else {
-        m_pFindWidget->setEditAlert(0);
-    }
 
-    m_pFindWidget->showPosition(static_cast<SheetBrowserPDF *>(m_browser)->width());
-    m_pFindWidget->setSearchEditFocus();
 }
 
-DocType_EM DocSheet::type()
+Dr::FileType DocSheet::type()
 {
     return m_type;
 }

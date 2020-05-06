@@ -34,7 +34,8 @@ HEADERS += \
     $$PWD/controller/ProxyViewDisplay.h \
     $$PWD/SheetSidebarPDF.h \
     $$PWD/SheetBrowserPDF.h \
-    $$PWD/SheetBrowserPDFPrivate.h
+    $$PWD/SheetBrowserPDFPrivate.h \
+    $$PWD/DocSheetPDF.h
 
 SOURCES += \
     $$PWD/CustomListWidget.cpp \
@@ -72,4 +73,5 @@ SOURCES += \
     $$PWD/controller/ProxyViewDisplay.cpp \
     $$PWD/SheetSidebarPDF.cpp \
     $$PWD/SheetBrowserPDF.cpp \
-    $$PWD/SheetBrowserPDFPrivate.cpp
+    $$PWD/SheetBrowserPDFPrivate.cpp \
+    $$PWD/DocSheetPDF.cpp

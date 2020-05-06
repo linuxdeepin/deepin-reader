@@ -27,6 +27,8 @@
 #include <QStackedLayout>
 #include <DFileDialog>
 #include <DDialog>
+#include <QMimeType>
+#include <QMimeDatabase>
 
 #include "CentralDocPage.h"
 #include "DocSheet.h"
@@ -45,6 +47,9 @@
 #include "utils/utils.h"
 #include "CentralDocPage.h"
 #include "FileController.h"
+#include "global.h"
+#include "pdfControl/DocSheetPDF.h"
+#include "djvu/DocSheetDJVU.h"
 
 CentralDocPage::CentralDocPage(DWidget *parent)
     : CustomWidget(parent)
@@ -121,11 +126,26 @@ void CentralDocPage::openFile(QString &filePath)
             return;
         }
     }
-    filePath = FileController::getUrlInfo(filePath).toLocalFile();
+    //filePath = FileController::getUrlInfo(filePath).toLocalFile();
 
-    if (FileController::FileType_PDF == FileController::getFileType(filePath)) {
+    const QMimeType mimeType = QMimeDatabase().mimeTypeForFile(filePath, QMimeDatabase::MatchContent);
 
-        DocSheet *sheet = new DocSheet(DocType_PDF, this);
+    int fileType = Dr::Unknown;
+
+    if (mimeType.name() == QLatin1String("application/pdf")) {
+        fileType = Dr::PDF;
+    } /*else if (mimeType.name() == QLatin1String("application/postscript")) {
+        fileType = Dr::PS;
+    } */else if (mimeType.name() == QLatin1String("image/vnd.djvu") || mimeType.name() == QLatin1String("image/vnd.djvu+multipage")) {
+        fileType = Dr::DjVu;
+    } else {
+        showTips(tr("The format is not supported"), 1);
+        return;
+    }
+
+    if (Dr::PDF == fileType) {
+
+        DocSheet *sheet = new DocSheetPDF(this);
 
         connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
         connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
@@ -139,12 +159,27 @@ void CentralDocPage::openFile(QString &filePath)
 
         m_pTabBar->insertSheet(sheet);
 
-        emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+    } else if (Dr::DjVu == fileType) {
+        DocSheet *sheet = new DocSheetDJVU(this);
 
-        emit sigSheetCountChanged(m_pStackedLayout->count());
+        connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
+        connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
 
-    } else
-        showTips(tr("The format is not supported"), 1);
+        if (!sheet->openFileExec(filePath))
+            return;
+
+        onOpened(sheet, true);
+
+        m_pStackedLayout->addWidget(sheet);
+
+        m_pStackedLayout->setCurrentWidget(sheet);
+
+        m_pTabBar->insertSheet(sheet);
+    }
+
+    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+
+    emit sigSheetCountChanged(m_pStackedLayout->count());
 }
 
 void CentralDocPage::onOpened(DocSheet *sheet, bool ret)
