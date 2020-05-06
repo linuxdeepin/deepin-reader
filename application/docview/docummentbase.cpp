@@ -22,7 +22,6 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     setWidgetResizable(true);
     setFrameShape(QFrame::NoFrame);
     d->qwfather = parent;
-    parent->setMinimumSize(400, 500);
     d->m_widget = new DWidget(this);
     setWidget(d->m_widget);
     d->showslidwaittimer = new QTimer(this);
