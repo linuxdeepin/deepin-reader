@@ -23,20 +23,32 @@ DWIDGET_USE_NAMESPACE
 class DocSheet;
 class ImageViewModel;
 class ImageViewDelegate;
+class BookMarkMenu;
+class NoteMenu;
 class ImageListView : public DListView
 {
     Q_OBJECT
 public:
     ImageListView(DocSheet *sheet, QWidget* parent = nullptr);
 
+signals:
+    void sigListMenuClick(const int &);
+
 public:
     void handleOpenSuccess();
     void setBoolMarkVisible(int pageIndex, bool visible);
+    void setListType(int type);
     void updatePageIndex(int index);
-    void scrollToIndex(int pageIndex);
+    void insertPageIndex(int pageIndex);
+    void removePageIndex(int pageIndex);
+    bool scrollToIndex(int pageIndex, bool scrollTo = true);
+    int  getModelIndexForPageIndex(int pageIndex);
+    int  getPageIndexForModelIndex(int row);
 
 private:
     void initControl();
+    void showNoteMenu();
+    void showBookMarkMenu();
 
 private slots:
     void onUpdatePageImage(int pageIndex);
@@ -46,9 +58,12 @@ protected:
     void mousePressEvent(QMouseEvent *event);
 
 private:
+    int m_listType;
     DocSheet *m_docSheet;
     ImageViewModel *m_imageModel;
-    ImageViewDelegate *m_imageDelegate;
+
+    BookMarkMenu *m_pBookMarkMenu;
+    NoteMenu *m_pNoteMenu;
 };
 
 #endif // IMAGELISTVIEW_H

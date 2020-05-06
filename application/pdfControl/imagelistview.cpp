@@ -17,9 +17,11 @@
 #include "imagelistview.h"
 #include "DocSheet.h"
 #include "docview/docummentproxy.h"
-#include "pdfControl/imageviewdelegate.h"
 #include "pdfControl/imageviewmodel.h"
 #include "application.h"
+#include "WidgetHeader.h"
+#include "menu/BookMarkMenu.h"
+#include "menu/NoteMenu.h"
 
 #include <QMouseEvent>
 
@@ -30,6 +32,8 @@ ImageListView::ImageListView(DocSheet *sheet, QWidget* parent)
     initControl();
     setProperty("adaptScale", 1.0);
     setSpacing(4);
+    setFocusPolicy(Qt::NoFocus);
+    setFrameShape(QFrame::NoFrame);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setResizeMode(QListView::Fixed);
@@ -40,12 +44,12 @@ ImageListView::ImageListView(DocSheet *sheet, QWidget* parent)
 
 void ImageListView::initControl()
 {
+    m_pBookMarkMenu = nullptr;
+    m_pNoteMenu = nullptr;
+    m_listType = DR_SPACE::E_THUMBAIL_WIDGET;
     m_imageModel = new ImageViewModel(this);
     m_imageModel->setDocSheet(m_docSheet);
     this->setModel(m_imageModel);
-
-    m_imageDelegate = new ImageViewDelegate(this);
-    this->setItemDelegate(m_imageDelegate);
 
     connect(this, &DListView::clicked, this, &ImageListView::onItemClicked);
 }
@@ -55,15 +59,30 @@ void ImageListView::setBoolMarkVisible(int pageIndex, bool visible)
     m_imageModel->setBookMarkVisible(pageIndex, visible);
 }
 
+void ImageListView::setListType(int type)
+{
+    m_listType = type;
+}
+
 void ImageListView::handleOpenSuccess()
 {
     DocummentProxy* docProxy = m_docSheet->getDocProxy();
     Q_ASSERT(docProxy);
     const QList<int>& pageList = dApp->m_pDBService->getBookMarkList(m_docSheet->filePath());
-    for(int pageIndex : pageList){
-        m_imageModel->setBookMarkVisible(pageIndex, true, false);
+    if(m_listType == DR_SPACE::E_THUMBAIL_WIDGET){
+        for(int pageIndex : pageList){
+            m_imageModel->setBookMarkVisible(pageIndex, true, false);
+        }
+
+        QList<int> pageSrclst;
+        int pagesNum = docProxy->getPageSNum();
+        for(int index = 0; index < pagesNum; index++)
+            pageSrclst << index;
+        m_imageModel->initModelLst(pageSrclst);
     }
-    m_imageModel->setPageCount(docProxy->getPageSNum());
+    else if(m_listType == DR_SPACE::E_BOOKMARK_WIDGET){
+        m_imageModel->initModelLst(pageList, true);
+    }
 }
 
 void ImageListView::onUpdatePageImage(int pageIndex)
@@ -76,20 +95,81 @@ void ImageListView::updatePageIndex(int index)
     m_imageModel->updatePageIndex(index);
 }
 
-void ImageListView::onItemClicked(const QModelIndex &index)
+void ImageListView::insertPageIndex(int pageIndex)
 {
-    m_docSheet->pageJump(index.row());
+    m_imageModel->insertPageIndex(pageIndex);
+}
+void ImageListView::removePageIndex(int pageIndex)
+{
+    m_imageModel->removePageIndex(pageIndex);
 }
 
-void ImageListView::scrollToIndex(int pageIndex)
+void ImageListView::onItemClicked(const QModelIndex &index)
 {
-    const QModelIndex &index = this->model()->index(pageIndex, 0);
-    this->scrollTo(index);
-    this->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
+    m_docSheet->pageJump(m_imageModel->getPageIndexForModelIndex(index.row()));
+}
+
+bool ImageListView::scrollToIndex(int pageIndex, bool scrollTo)
+{
+    const QModelIndex &index = m_imageModel->getModelIndexForPageIndex(pageIndex);
+    if(index.isValid()){
+        if(scrollTo)
+            this->scrollTo(index);
+        this->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
+        this->setCurrentIndex(index);
+        return true;
+    }
+    else{
+        this->clearSelection();
+        return false;
+    }
 }
 
 void ImageListView::mousePressEvent(QMouseEvent *event)
 {
     DListView::mousePressEvent(event);
     onItemClicked(this->indexAt(event->pos()));
+    //Menu
+    if (event->button() == Qt::RightButton) {
+        const QModelIndex &modelIndex = this->indexAt(event->pos());
+        if (modelIndex.isValid()) {
+            if (m_listType == DR_SPACE::E_NOTE_WIDGET) {
+                showNoteMenu();
+            } else if (m_listType == DR_SPACE::E_BOOKMARK_WIDGET) {
+                showBookMarkMenu();
+            }
+        }
+    }
+}
+
+void ImageListView::showNoteMenu()
+{
+    if (m_pNoteMenu == nullptr) {
+        m_pNoteMenu = new NoteMenu(this);
+        connect(m_pNoteMenu, SIGNAL(sigClickAction(const int &)), this, SIGNAL(sigListMenuClick(const int &)));
+    }
+    m_pNoteMenu->exec(QCursor::pos());
+}
+
+void ImageListView::showBookMarkMenu()
+{
+    if (m_pBookMarkMenu == nullptr) {
+        m_pBookMarkMenu = new BookMarkMenu(this);
+        connect(m_pBookMarkMenu, SIGNAL(sigClickAction(const int &)), this, SIGNAL(sigListMenuClick(const int &)));
+    }
+    m_pBookMarkMenu->exec(QCursor::pos());
+}
+
+int  ImageListView::getModelIndexForPageIndex(int pageIndex)
+{
+    const QModelIndex &index = m_imageModel->getModelIndexForPageIndex(pageIndex);
+    if(index.isValid()){
+        return index.row();
+    }
+    return -1;
+}
+
+int  ImageListView::getPageIndexForModelIndex(int row)
+{
+    return m_imageModel->getPageIndexForModelIndex(row);
 }

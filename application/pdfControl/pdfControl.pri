@@ -1,8 +1,9 @@
 HEADERS += \
     $$PWD/CustomListWidget.h \
     $$PWD/CustomItemWidget.h \
+    $$PWD/thumbnail/ThumbnailDelegate.h \
+    $$PWD/bookmark/bookmarkdelegate.h \
     $$PWD/imagelistview.h \
-    $$PWD/imageviewdelegate.h \
     $$PWD/imageviewmodel.h \
     $$PWD/note/NotesWidget.h \
     $$PWD/note/NotesItemWidget.h \
@@ -38,8 +39,9 @@ HEADERS += \
 SOURCES += \
     $$PWD/CustomListWidget.cpp \
     $$PWD/CustomItemWidget.cpp \
+    $$PWD/thumbnail/ThumbnailDelegate.cpp \
+    $$PWD/bookmark/bookmarkdelegate.cpp \
     $$PWD/imagelistview.cpp \
-    $$PWD/imageviewdelegate.cpp \
     $$PWD/imageviewmodel.cpp \
     $$PWD/note/NotesWidget.cpp \
     $$PWD/note/NotesItemWidget.cpp \

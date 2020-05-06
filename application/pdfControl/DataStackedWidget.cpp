@@ -53,7 +53,7 @@ void DataStackedWidget::handlePage(int page)
 
 void DataStackedWidget::handleBookMark(int page, int state)
 {
-    m_pBookMarkWidget->setBookMark(page, state);
+    m_pBookMarkWidget->handleBookMark(page, state);
 }
 
 void DataStackedWidget::handleFindOperation(const int &iType)

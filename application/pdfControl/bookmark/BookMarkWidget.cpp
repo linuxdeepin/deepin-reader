@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
  *
- * Author:     duanxiaohui
+ * Author:     leiyu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,685 +17,202 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "BookMarkWidget.h"
-
-#include "business/AppInfo.h"
-#include "docview/docummentproxy.h"
 #include "DocSheet.h"
 #include "WidgetHeader.h"
+#include "docview/docummentproxy.h"
+#include "pdfControl/imagelistview.h"
+#include "bookmarkdelegate.h"
 
+#include <DHorizontalLine>
+
+const int LEFTMINHEIGHT = 80;
 BookMarkWidget::BookMarkWidget(DocSheet *sheet, DWidget *parent)
     : CustomWidget(parent), m_sheet(sheet)
 {
-    setFocusPolicy(Qt::ClickFocus);
-
-    m_loadBookMarkThread.setBookMark(this);
-
     initWidget();
-
-    slotUpdateTheme();
-
-    connect(&m_loadBookMarkThread, SIGNAL(sigLoadImage(const int &, const QImage &)), SLOT(slotLoadImage(const int &, const QImage &)));
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BookMarkWidget::slotUpdateTheme);
+    onUpdateTheme();
 }
-/**
- * @brief BookMarkWidget::~BookMarkWidget
- * 等待子线程退出
- */
+
 BookMarkWidget::~BookMarkWidget()
 {
-    m_loadBookMarkThread.stopThreadRun();
+
 }
 
-/**
- * @brief BookMarkWidget::prevPage
- * 上一页
- */
+void BookMarkWidget::initWidget()
+{
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BookMarkWidget::onUpdateTheme);
+
+    m_pImageListView = new ImageListView(m_sheet, this);
+    m_pImageListView->setSpacing(0);
+    m_pImageListView->setListType(DR_SPACE::E_BOOKMARK_WIDGET);
+    BookMarkDelegate* imageDelegate = new BookMarkDelegate(m_pImageListView);
+    m_pImageListView->setItemDelegate(imageDelegate);
+
+    m_pAddBookMarkBtn = new DPushButton(this);
+    m_pAddBookMarkBtn->setFixedHeight(36);
+    m_pAddBookMarkBtn->setMinimumWidth(170);
+    m_pAddBookMarkBtn->setText(tr("Add bookmark"));
+    DFontSizeManager::instance()->bind(m_pAddBookMarkBtn, DFontSizeManager::T6);
+    connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(onAddBookMarkClicked()));
+
+    QHBoxLayout *pHBoxLayout = new QHBoxLayout;
+    pHBoxLayout->setContentsMargins(10, 6, 10, 6);
+    pHBoxLayout->addWidget(m_pAddBookMarkBtn);
+
+    QVBoxLayout *pVBoxLayout = new QVBoxLayout;
+    pVBoxLayout->setContentsMargins(0, 10, 0, 0);
+    pVBoxLayout->setSpacing(0);
+
+    pVBoxLayout->addWidget(m_pImageListView);
+    pVBoxLayout->addWidget(new DHorizontalLine(this));
+    pVBoxLayout->addItem(pHBoxLayout);
+    this->setLayout(pVBoxLayout);
+
+    connect(m_pImageListView, SIGNAL(sigListMenuClick(const int &)), SLOT(onListMenuClick(const int &)));
+}
+
+
 void BookMarkWidget::prevPage()
 {
-    if (m_pBookMarkListWidget == nullptr) {
+    if(m_sheet.isNull())
         return;
-    }
-
-    if (m_pBookMarkListWidget->count() <= 0) {
+    int curPage = m_pImageListView->currentIndex().row() - 1;
+    if(curPage < 0)
         return;
-    }
-
-    int nCurIndex  = m_pBookMarkListWidget->currentRow();
-    nCurIndex--;
-    if (nCurIndex < 0)
-        return;
-    auto pCurItem = m_pBookMarkListWidget->item(nCurIndex);
-    if (pCurItem != nullptr) {
-        auto t_widget = qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
-        if (t_widget) {
-            if (nullptr != m_sheet)
-                m_sheet->pageJump(t_widget->nPageIndex());
-        }
-    }
+    m_sheet->pageJump(m_pImageListView->getPageIndexForModelIndex(curPage));
 }
 
-/**
- * @brief BookMarkWidget::nextPage
- * 下一页
- */
 void BookMarkWidget::nextPage()
 {
-    if (m_pBookMarkListWidget->count() <= 0) {
+    int curPage = m_pImageListView->currentIndex().row()+ 1;
+    if(curPage >= m_pImageListView->model()->rowCount())
         return;
-    }
-
-    int curIndex = m_pBookMarkListWidget->currentRow();
-    curIndex++;
-    if (curIndex >= m_pBookMarkListWidget->count())
-        return;
-    auto pCurItem = m_pBookMarkListWidget->item(curIndex);
-    if (pCurItem) {
-        auto t_widget = qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
-        if (t_widget) {
-            if (nullptr != m_sheet)
-                m_sheet->pageJump(t_widget->nPageIndex());
-        }
-    }
+    m_sheet->pageJump(m_pImageListView->getPageIndexForModelIndex(curPage));
 }
 
-void BookMarkWidget::DeleteItemByKey()
-{
-    auto pCurItem = m_pBookMarkListWidget->currentItem();
-    if (pCurItem) {
-        auto t_widget =
-            qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
-        if (t_widget) {
-            int nPageIndex = t_widget->nPageIndex();
-
-            slotDeleteBookItem(QString::number(nPageIndex));
-        }
-    }
-}
-
-void BookMarkWidget::onAddBookMarkClicked()
-{
-    if (!m_pAddBookMarkBtn->isEnabled()) {
-        return;
-    }
-
-    if (m_sheet.isNull())
-        return;
-
-    DocummentProxy *proxy =  m_sheet->getDocProxy();
-    if (proxy) {
-        int nPage = proxy->currentPageNo();
-        m_sheet->setBookMark(nPage, true);
-    }
-}
-
-
-/**
- * @brief BookMarkWidget::slotOpenFileOk
- *  打开文件成功，　获取该文件的书签数据
- */
 void BookMarkWidget::handleOpenSuccess()
 {
-    if (nullptr == m_sheet)
-        return;
-
-    if (m_loadBookMarkThread.isRunning()) {
-        m_loadBookMarkThread.stopThreadRun();
-    }
-
-    m_pBookMarkListWidget->clear();
-
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
-    if (pageList.size() == 0)
-        return;
-
-    clearItemColor();
-
+    const QList<int>& pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
     DocummentProxy *proxy =  m_sheet->getDocProxy();
-
     if (proxy) {
-        foreach (int iPage, pageList) {
-            addBookMarkItem(iPage);
-            proxy->setBookMarkState(iPage, true);
-        }
-
-        //  第一页 就是书签, 添加书签按钮 不能点
         int nCurPage = proxy->currentPageNo();
-        if (pageList.contains(nCurPage)) {      //  当前页 是书签, 按钮不可点
-            m_pAddBookMarkBtn->setEnabled(false);
-
-            int nSize = m_pBookMarkListWidget->count();
-            for (int iLoop = 0; iLoop < nSize; iLoop++) {
-                auto item = m_pBookMarkListWidget->item(iLoop);
-                if (item) {
-                    auto pItemWidget =
-                        qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
-                    if (pItemWidget) {
-                        if (pItemWidget->nPageIndex() == nCurPage) {
-                            pItemWidget->setBSelect(true);
-
-                            m_pBookMarkListWidget->setCurrentItem(item);
-                            break;
-                        }
-                    }
-                }
-            }
+        for (int iPage : pageList) {
+            proxy->setBookMarkState(iPage, true);
+            if(iPage == nCurPage) m_pAddBookMarkBtn->setEnabled(false);
         }
+        m_pImageListView->handleOpenSuccess();
     }
-
-    m_loadBookMarkThread.setBookMarks(pageList.count());
-    m_loadBookMarkThread.setProxy(m_sheet->getDocProxy());
-    m_loadBookMarkThread.start();
 }
 
 void BookMarkWidget::handlePage(int page)
 {
-    //  先将当前的item 取消绘制
-    clearItemColor();
-
-    m_pAddBookMarkBtn->setEnabled(true);
-
-    //  包含了该书签, 之后 才进行绘制
-    int nSize = m_pBookMarkListWidget->count();
-    for (int iLoop = 0; iLoop < nSize; iLoop++) {
-        auto item = m_pBookMarkListWidget->item(iLoop);
-        if (item) {
-            auto pItemWidget =
-                qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
-            if (pItemWidget) {
-                int nWidgetPage = pItemWidget->nPageIndex();
-                if (nWidgetPage == page) {
-                    pItemWidget->setBSelect(true);
-                    m_pAddBookMarkBtn->setEnabled(false);
-                    m_pBookMarkListWidget->setCurrentItem(item);
-
-                    break;
-                }
-            }
-        }
-    }
+    bool result = m_pImageListView->scrollToIndex(page);
+    m_pAddBookMarkBtn->setDisabled(result);
 }
 
-void BookMarkWidget::setBookMark(int page, int state)
+void BookMarkWidget::handleBookMark(int page, int state)
 {
     if (state) {
-        if (m_sheet.isNull())
-            return;
-        QString sPath = m_sheet->filePath();
+        //addPageIndex
+        const QString &sPath = m_sheet->filePath();
         QList<int> pageList = dApp->m_pDBService->getBookMarkList(sPath);
         if (pageList.contains(page)) {
             return;
         }
 
-        if (nullptr == m_sheet)
-            return;
-
-        auto item = addBookMarkItem(page);
-        if (item) {
-            pageList.append(page);
-            dApp->m_pDBService->setBookMarkList(sPath, pageList);
-            m_sheet->setFileChanged(true);
-        }
+        pageList.append(page);
+        dApp->m_pDBService->setBookMarkList(sPath, pageList);
+        m_sheet->setFileChanged(true);
 
         DocummentProxy *proxy =  m_sheet->getDocProxy();
         if (proxy) {
             int nCurPage = proxy->currentPageNo();
-            if (nCurPage == page) {  //  是当前页
+            if (nCurPage == page) {
                 proxy->setBookMarkState(page, true);
                 m_pAddBookMarkBtn->setEnabled(false);
             }
-            emit sigSetBookMarkState(1, page);
+            emit sigSetBookMarkState(true, page);
         }
+        m_pImageListView->insertPageIndex(page);
     } else {
-        int nSize = m_pBookMarkListWidget->count();
-        for (int iLoop = 0; iLoop < nSize; iLoop++) {
-            auto pItem = m_pBookMarkListWidget->item(iLoop);
-            if (pItem) {
-                auto t_widget =
-                    qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
-                if (t_widget) {
-                    int nPageIndex = t_widget->nPageIndex();
-                    if (nPageIndex == page) {
-                        t_widget->deleteLater();
-                        t_widget = nullptr;
+        //deletePageIndex
+        QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
+        if (!pageList.contains(page)) {
+            return;
+        }
 
-                        delete pItem;
-                        pItem = nullptr;
+        pageList.removeAll(page);
+        dApp->m_pDBService->setBookMarkList(m_sheet->filePath(), pageList);
+        m_sheet->setFileChanged(true);
 
-                        deleteIndexPage(nPageIndex);
-
-                        break;
-                    }
-                }
+        DocummentProxy *proxy =  m_sheet->getDocProxy();
+        if (proxy) {
+            m_sheet->showTips(tr("The bookmark has been removed"));
+            proxy->setBookMarkState(page, false);
+            int nCurPage = proxy->currentPageNo();
+            if (nCurPage == page) {
+                m_pAddBookMarkBtn->setEnabled(true);
             }
+            emit sigSetBookMarkState(false, page);
         }
+        m_pImageListView->removePageIndex(page);
     }
+    scrollToCurrentPage();
 }
 
-void BookMarkWidget::handleRotate(int rotate)
+void BookMarkWidget::handleRotate(int)
 {
-    for (int i = 0; i < m_pBookMarkListWidget->count(); i++) {
-        auto itemWidget = qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(m_pBookMarkListWidget->item(i)));
-        if (itemWidget) {
-            itemWidget->setRotate(rotate);
-        }
-    }
+    //Not toDO
 }
 
-/**
- * @brief BookMarkWidget::slotDeleteBookItem
- * 按页码删除书签
- * @param nPage：要删除的书签页
- */
-void BookMarkWidget::slotDeleteBookItem(const QString &sContent)
+void BookMarkWidget::DeleteItemByKey()
 {
-    int nPage = sContent.toInt();
-
-    int nSize = m_pBookMarkListWidget->count();
-    for (int iLoop = 0; iLoop < nSize; iLoop++) {
-        auto pItem = m_pBookMarkListWidget->item(iLoop);
-        if (pItem) {
-            auto t_widget =
-                qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
-            if (t_widget) {
-                int nPageIndex = t_widget->nPageIndex();
-                if (nPageIndex == nPage) {
-                    t_widget->deleteLater();
-                    t_widget = nullptr;
-
-                    delete pItem;
-                    pItem = nullptr;
-
-                    deleteIndexPage(nPageIndex);
-
-                    break;
-                }
-            }
-        }
-    }
+    int curPage = m_pImageListView->getPageIndexForModelIndex(m_pImageListView->currentIndex().row());
+    if(curPage >= 0)
+        handleBookMark(curPage, false);
 }
 
-//  删除指定页
-void BookMarkWidget::deleteIndexPage(const int &pageIndex)
+void BookMarkWidget::onAddBookMarkClicked()
 {
-    if (nullptr == m_sheet)
-        return;
-
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
-
-    pageList.removeOne(pageIndex);
-
-    dApp->m_pDBService->setBookMarkList(m_sheet->filePath(), pageList);
-
+    if (m_sheet.isNull()) return;
     DocummentProxy *proxy =  m_sheet->getDocProxy();
     if (proxy) {
-        m_sheet->setFileChanged(true);
-        m_sheet->showTips(tr("The bookmark has been removed"));
-
-        proxy->setBookMarkState(pageIndex, false);
-
-        int nCurPage = proxy->currentPageNo();
-        if (nCurPage == pageIndex) {  //  当前页被删了
-            m_pAddBookMarkBtn->setEnabled(true);
-        }
-
-        emit sigSetBookMarkState(-1, pageIndex);
+        int nPage = proxy->currentPageNo();
+        handleBookMark(nPage, true);
     }
 }
 
-void BookMarkWidget::clearItemColor()
-{
-    if (m_pBookMarkListWidget == nullptr)
-        return;
-    auto pCurItem = m_pBookMarkListWidget->currentItem();
-    if (pCurItem) {
-        auto pItemWidget =
-            qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pCurItem));
-        if (pItemWidget) {
-            pItemWidget->setBSelect(false);
-        }
-    }
-}
-
-BookMarkItemWidget *BookMarkWidget::getItemWidget(QListWidgetItem *item)
-{
-    if (m_pBookMarkListWidget == nullptr) {
-        return nullptr;
-    }
-    auto pWidget = qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
-    if (pWidget) {
-        return pWidget;
-    }
-    return nullptr;
-}
-
-/**
- * @brief BookMarkWidget::adaptWindowSize
- * 书签缩略图列表自适应视窗大小
- * @param scale  缩放因子 大于0的数
- */
 void BookMarkWidget::adaptWindowSize(const double &scale)
 {
-    m_scale = scale;
-    double width = 1.0;
-    double height = 1.0;
-
-    width = static_cast<double>(LEFTMINWIDTH) * m_scale;
-    height = static_cast<double>(80) * m_scale;
-
-    if (m_pBookMarkListWidget) {
-        int itemCount = 0;
-        itemCount = m_pBookMarkListWidget->count();
-        if (itemCount > 0) {
-            for (int index = 0; index < itemCount; index++) {
-                auto item = m_pBookMarkListWidget->item(index);
-                if (item) {
-                    auto itemWidget = getItemWidget(item);
-                    if (itemWidget) {
-                        item->setSizeHint(QSize(static_cast<int>(width), static_cast<int>(height)));
-                        itemWidget->adaptWindowSize(m_scale);
-                    }
-                }
-            }
-        }
-    }
+    m_pImageListView->setProperty("adaptScale", scale);
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * scale, LEFTMINHEIGHT * scale));
+    m_pImageListView->reset();
+    scrollToCurrentPage();
 }
 
-/**
- * @brief BookMarkWidget::updateThumbnail
- * 高亮操作之后要跟换相应的缩略图
- * @param page 页码数，从0开始
- */
 void BookMarkWidget::updateThumbnail(const int &page)
 {
-    if (m_pBookMarkListWidget == nullptr) {
-        return;
-    }
-
-    if (m_sheet.isNull())
-        return;
-
-    int itemNum = 0;
-    itemNum = m_pBookMarkListWidget->count();
-    if (itemNum <= 0) {
-        return;
-    }
-    QImage image;
-    int tW = 146;
-    int tH = 174;
-
-    auto dproxy = m_sheet->getDocProxy();
-    if (nullptr == dproxy)
-        return;
-
-    dproxy->getImageMax(page, image, 75);
-    for (int index = 0; index < itemNum; index++) {
-        auto item = m_pBookMarkListWidget->item(index);
-        if (item) {
-            auto itemWidget = getItemWidget(item);
-            if (itemWidget) {
-                if (itemWidget->nPageIndex() == page) {
-                    if (nullptr == dproxy) {
-                        return;
-                    }
-                    itemWidget->setLabelImage(image);
-                    return;
-                }
-            }
-        }
-    }
+    m_pImageListView->updatePageIndex(page);
 }
 
-/**
- * @brief BookMarkWidget::slotLoadImage
- * 填充书签缩略图
- * @param page
- * @param image
- */
-void BookMarkWidget::slotLoadImage(const int &page, const QImage &image)
+void BookMarkWidget::onUpdateTheme()
 {
-    int nSize = m_pBookMarkListWidget->count();
-    for (int iLoop = 0; iLoop < nSize; iLoop++) {
-        auto pItem = m_pBookMarkListWidget->item(iLoop);
-        if (pItem) {
-            auto t_widget =
-                qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
-            if (t_widget) {
-                int nPageIndex = t_widget->nPageIndex();
-                if (nPageIndex == page) {
-                    t_widget->setLabelImage(image);
-                    break;
-                }
-            }
-        }
-    }
-}
-
-void BookMarkWidget::slotUpdateTheme()
-{
-    auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
+    DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
     plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
     setPalette(plt);
     m_pAddBookMarkBtn->setPalette(plt);
 }
 
-/**
- * @brief BookMarkWidget::initWidget
- * 初始化书签窗体
- */
-void BookMarkWidget::initWidget()
+void BookMarkWidget::scrollToCurrentPage()
 {
-    m_pBookMarkListWidget = new CustomListWidget(m_sheet, this);
-    m_pBookMarkListWidget->setListType(DR_SPACE::E_BOOKMARK_WIDGET);
-    connect(m_pBookMarkListWidget, SIGNAL(sigListMenuClick(const int &)), SLOT(slotListMenuClick(const int &)));
-    connect(m_pBookMarkListWidget, SIGNAL(sigSelectItem(QListWidgetItem *)), SLOT(slotSelectItemBackColor(QListWidgetItem *)));
-
-    m_pAddBookMarkBtn = new DPushButton(this);
-    int tW = 170;
-    int tH = 36;
-    m_pAddBookMarkBtn->setFixedHeight(tH);
-    m_pAddBookMarkBtn->setMinimumWidth(tW);
-    m_pAddBookMarkBtn->setText(tr("Add bookmark"));
-    DFontSizeManager::instance()->bind(m_pAddBookMarkBtn, DFontSizeManager::T6);
-    connect(m_pAddBookMarkBtn, SIGNAL(clicked()), this, SLOT(onAddBookMarkClicked()));
-
-    auto m_pHBoxLayout = new QHBoxLayout;
-    m_pHBoxLayout->setContentsMargins(10, 6, 10, 6);
-    m_pHBoxLayout->addWidget(m_pAddBookMarkBtn);
-
-    auto m_pVBoxLayout = new QVBoxLayout;
-    m_pVBoxLayout->setContentsMargins(0, 10, 0, 0);
-    m_pVBoxLayout->setSpacing(0);
-    this->setLayout(m_pVBoxLayout);
-    m_pVBoxLayout->addWidget(m_pBookMarkListWidget);
-    m_pVBoxLayout->addWidget(new DHorizontalLine(this));
-    m_pVBoxLayout->addItem(m_pHBoxLayout);
+    DocummentProxy* docProxy = m_sheet->getDocProxy();
+    if(docProxy)
+        m_pImageListView->scrollToIndex(docProxy->currentPageNo(), false);
 }
 
-/**
- * @brief BookMarkWidget::addBookMarkItem
- * 添加书签
- * @param page：要增加的书签页
- */
-QListWidgetItem *BookMarkWidget::addBookMarkItem(const int &page)
-{
-    if (m_sheet.isNull())
-        return nullptr;
-
-    DocummentProxy *proxy =  m_sheet->getDocProxy();
-
-    if (nullptr != proxy) {
-        QImage t_image;
-        double width = 1.0;
-        double height = 1.0;
-
-
-        width = static_cast<double>(LEFTMINWIDTH) * m_scale;
-        height = static_cast<double>(80) * m_scale;
-        int tW = 146;
-        int tH = 174;
-
-        bool rl = proxy->getImageMax(page, t_image, 75);
-        if (rl) {
-            QImage img = Utils::roundImage(QPixmap::fromImage(t_image), ICON_SMALL);
-            auto item = m_pBookMarkListWidget->insertWidgetItem(page);
-            tW = LEFTMINWIDTH;
-            tH = 80;
-
-            tW = static_cast<int>(width);
-            tH = static_cast<int>(height);
-            item->setSizeHint(QSize(tW, tH));
-
-            auto t_widget = new BookMarkItemWidget(this);
-            t_widget->setLabelImage(img);
-            t_widget->setLabelPage(page, 1);
-
-            m_pBookMarkListWidget->setItemWidget(item, t_widget);
-            t_widget->adaptWindowSize(m_scale);
-            t_widget->setRotate(m_sheet->getOper(Rotate).toInt());
-
-            int nCurPage = proxy->currentPageNo();
-            if (nCurPage == page) {
-
-                t_widget->setBSelect(true);
-
-                m_pBookMarkListWidget->setCurrentItem(item);
-            }
-
-            return item;
-        }
-    }
-    return nullptr;
-}
-
-/**
- * @brief BookMarkWidget::slotSelectItemBackColor
- * 绘制选中外边框,蓝色
- */
-void BookMarkWidget::slotSelectItemBackColor(QListWidgetItem *item)
-{
-    if (item == nullptr) {
-        return;
-    }
-
-    auto curItem = m_pBookMarkListWidget->currentItem();
-    if (curItem == item) {
-        return;
-    }
-
-    clearItemColor();
-
-    m_pBookMarkListWidget->setCurrentItem(item);
-
-    auto pItemWidget =
-        qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(item));
-    if (pItemWidget) {
-        pItemWidget->setBSelect(true);
-    }
-}
-
-void BookMarkWidget::slotListMenuClick(const int &iType)
+void BookMarkWidget::onListMenuClick(const int &iType)
 {
     if (iType == E_BOOKMARK_DELETE) {
         DeleteItemByKey();
-    }
-}
-
-/**
- * @brief BookMarkWidget::getBookMarkPage
- * @param index(list item 从0开始)
- * @return 返回要填充缩略图的页码，不一定是index
- */
-int BookMarkWidget::getBookMarkPage(const int &index)
-{
-    if (m_sheet.isNull())
-        return -1;
-
-    auto pItem = m_pBookMarkListWidget->item(index);
-    if (pItem) {
-        auto pItemWidget =
-            qobject_cast<BookMarkItemWidget *>(m_pBookMarkListWidget->itemWidget(pItem));
-        if (pItemWidget) {
-            int page = pItemWidget->nPageIndex();
-
-            QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
-            if (pageList.contains(page)) {
-                return page;
-            }
-        }
-    }
-
-    return -1;
-}
-
-/*************************************LoadBookMarkThread**************************************/
-/*************************************加载书签列表线程******************************************/
-
-LoadBookMarkThread::LoadBookMarkThread(QObject *parent)
-    : QThread(parent)
-{
-}
-
-/**
- * @brief LoadBookMarkThread::stopThreadRun
- * 线程退出
- */
-void LoadBookMarkThread::stopThreadRun()
-{
-    m_isRunning = false;
-
-    quit();
-    wait();  //阻塞等待
-}
-
-/**
- * @brief LoadBookMarkThread::run
- * 线程主工作区，加载相应缩略图
- */
-void LoadBookMarkThread::run()
-{
-    if (nullptr == m_proxy)
-        return;
-
-    while (m_isRunning) {
-        msleep(50);
-
-        if (m_nStartIndex < 0) {
-            m_nStartIndex = 0;
-        }
-        if (m_nEndIndex >= m_bookMarks) {
-            m_nEndIndex = m_bookMarks - 1;
-        }
-
-        int tW = 146;
-        int tH = 174;
-//                dApp->adaptScreenView(tW, tH);
-        for (int index = m_nStartIndex; index <= m_nEndIndex; index++) {
-            QImage image;
-            int page = -1;
-
-            if (!m_isRunning) {
-                break;
-            }
-
-            if (!m_pBookMarkWidget) {
-                break;
-            }
-
-            page = m_pBookMarkWidget->getBookMarkPage(index);
-
-            if (page == -1) {
-                continue;
-            }
-
-            bool bl = m_proxy->getImageMax(page, image, 75);
-            if (bl) {
-                emit sigLoadImage(page, image);
-            }
-
-            msleep(50);
-        }
-
-        m_nStartIndex += FIRST_LOAD_PAGES;
-        m_nEndIndex += FIRST_LOAD_PAGES;
     }
 }

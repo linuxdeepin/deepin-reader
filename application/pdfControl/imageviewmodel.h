@@ -21,9 +21,10 @@
 #include <QMap>
 
 typedef enum ImageinfoType_e{
-    IMAGE_PIXMAP    = Qt::UserRole,
-    IMAGE_BOOKMARK  = Qt::UserRole + 1,
-    IMAGE_ROTATE    = Qt::UserRole + 2,
+    IMAGE_PIXMAP     = Qt::UserRole,
+    IMAGE_BOOKMARK   = Qt::UserRole + 1,
+    IMAGE_ROTATE     = Qt::UserRole + 2,
+    IMAGE_INDEX_TEXT = Qt::UserRole + 3,
 }ImageinfoType_e;
 
 class DocSheet;
@@ -35,10 +36,15 @@ public:
     ImageViewModel(QObject *parent = nullptr);
 
 public:
-    void setPageCount(int pagecount);
+    void initModelLst(const QList<int>& pagelst, bool sort = false);
     void setDocSheet(DocSheet *sheet);
     void setBookMarkVisible(int pageIndex, bool visible, bool updateIndex = true);
     void updatePageIndex(int pageIndex);
+    void insertPageIndex(int pageIndex);
+    void removePageIndex(int pageIndex);
+
+    QModelIndex getModelIndexForPageIndex(int pageIndex);
+    int getPageIndexForModelIndex(int row);
 
 public slots:
     void onUpdatePageImage(int pageIndex);
@@ -51,9 +57,9 @@ protected:
     bool setData(const QModelIndex &index, const QVariant &data, int role) override;
 
 private:
-    int m_pageCount;
     QObject *m_parent;
     DocSheet *m_docSheet;
+    QList<int> m_pagelst;
     QMap<int, bool> m_cacheBookMarkMap;
 };
 

@@ -26,10 +26,11 @@ ImageViewModel::ImageViewModel(QObject *parent)
     m_docSheet = nullptr;
 }
 
-void ImageViewModel::setPageCount(int pagecount)
+void ImageViewModel::initModelLst(const QList<int>& pagelst, bool sort)
 {
-    m_pageCount = pagecount;
     beginResetModel();
+    m_pagelst = pagelst;
+    if (sort) qSort(m_pagelst.begin(), m_pagelst.end());
     endResetModel();
 }
 
@@ -42,7 +43,7 @@ void ImageViewModel::setBookMarkVisible(int pageIndex, bool visible, bool update
 {
     m_cacheBookMarkMap.insert(pageIndex, visible);
     if(updateIndex){
-        const QModelIndex &modelIndex = this->index(pageIndex);
+        const QModelIndex &modelIndex = getModelIndexForPageIndex(pageIndex);
         emit dataChanged(modelIndex, modelIndex);
     }
 }
@@ -54,7 +55,7 @@ void ImageViewModel::updatePageIndex(int pageIndex)
 
 int ImageViewModel::rowCount(const QModelIndex &) const
 {
-    return m_pageCount;
+    return m_pagelst.size();
 }
 
 int ImageViewModel::columnCount(const QModelIndex &) const
@@ -66,7 +67,7 @@ QVariant ImageViewModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
-    int nRow = index.row();
+    int nRow = m_pagelst.at(index.row());
     if(role == ImageinfoType_e::IMAGE_PIXMAP){
         const QPixmap &image =ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet->getDocProxy(), nRow);
         if(image.isNull())
@@ -84,6 +85,9 @@ QVariant ImageViewModel::data(const QModelIndex &index, int role) const
     else if(role == ImageinfoType_e::IMAGE_ROTATE){
         return QVariant::fromValue(m_docSheet->getOper(Rotate).toInt() * 90);
     }
+    else if(role == ImageinfoType_e::IMAGE_INDEX_TEXT){
+        return QVariant::fromValue(tr("Page %1").arg(nRow + 1));
+    }
     return QVariant();
 }
 
@@ -94,9 +98,24 @@ bool ImageViewModel::setData(const QModelIndex &index, const QVariant &data, int
     return QAbstractListModel::setData(index, data, role);
 }
 
+QModelIndex ImageViewModel::getModelIndexForPageIndex(int pageIndex)
+{
+    int index = m_pagelst.indexOf(pageIndex);
+    if(index >= 0)
+        return this->index(index);
+    return QModelIndex();
+}
+
+int ImageViewModel::getPageIndexForModelIndex(int row)
+{
+    if(row >= 0 && row < m_pagelst.size())
+        return m_pagelst.at(row);
+    return -1;
+}
+
 void ImageViewModel::onUpdatePageImage(int pageIndex)
 {
-    const QModelIndex &modelIndex = this->index(pageIndex);
+    const QModelIndex &modelIndex = getModelIndexForPageIndex(pageIndex);
     emit dataChanged(modelIndex, modelIndex);
 }
 
@@ -110,5 +129,24 @@ void ImageViewModel::onFetchImage(int nRow) const
         tParam.receiver = m_parent;
         tParam.slotFun = "onUpdatePageImage";
         ReaderImageThreadPoolManager::getInstance()->addgetDocImageTask(tParam);
+    }
+}
+
+void ImageViewModel::insertPageIndex(int pageIndex)
+{
+    if(!m_pagelst.contains(pageIndex)){
+        beginResetModel();
+        m_pagelst << pageIndex;
+        qSort(m_pagelst.begin(), m_pagelst.end());
+        endResetModel();
+    }
+}
+
+void ImageViewModel::removePageIndex(int pageIndex)
+{
+    if(m_pagelst.contains(pageIndex)){
+        beginResetModel();
+        m_pagelst.removeAll(pageIndex);
+        endResetModel();
     }
 }

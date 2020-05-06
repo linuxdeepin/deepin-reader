@@ -22,6 +22,7 @@
 #include "PagingWidget.h"
 #include "pdfControl/imagelistview.h"
 #include "docview/docummentproxy.h"
+#include "pdfControl/thumbnail/ThumbnailDelegate.h"
 
 #include <QVBoxLayout>
 #include <DHorizontalLine>
@@ -43,6 +44,9 @@ void ThumbnailWidget::initWidget()
 {
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &ThumbnailWidget::onUpdateTheme);
     m_pImageListView = new ImageListView(m_sheet, this);
+    ThumbnailDelegate* imageDelegate = new ThumbnailDelegate(m_pImageListView);
+    m_pImageListView->setItemDelegate(imageDelegate);
+
     m_pPageWidget = new PagingWidget(m_sheet, this);
 
     QVBoxLayout* vBoxLayout = new QVBoxLayout(this);
@@ -78,7 +82,7 @@ void ThumbnailWidget::onUpdateTheme()
 
 void ThumbnailWidget::onSetBookMarkState(const int &type, const int &pageIndex)
 {
-    m_pImageListView->setBoolMarkVisible(pageIndex, type != -1);
+    m_pImageListView->setBoolMarkVisible(pageIndex, type);
 }
 
 void ThumbnailWidget::prevPage()
