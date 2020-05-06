@@ -10,7 +10,7 @@
 #include <QMutex>
 #include <QRunnable>
 #include "commonstruct.h"
-#include "bookmarkbutton.h"
+#include "widgets/bookmarkbutton.h"
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE

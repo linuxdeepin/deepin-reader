@@ -34,7 +34,7 @@ protected:
 private:
     bool  ishovered;
     bool  ispressed;
-    bool isclicked;
+    bool  isclicked;
 };
 
 #endif // BOOKMARKBUTTON_H

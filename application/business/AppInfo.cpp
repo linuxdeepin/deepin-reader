@@ -182,18 +182,8 @@ QString AppInfo::getAppKeyValue(const int &iKey) const
  */
 void AppInfo::adaptScreenView(int &width, int &height)
 {
-//    int twidth = 0;
-//    int theight = 0;
-
-//    double scale = 1.0;
-
-//    twidth = m_screenRect.width();
-//    theight = m_screenRect.height();
-
-//    scale = (static_cast<double>((twidth <= 1920) ? 1920 : twidth) / static_cast<double>(1920));
-//    width = static_cast<int>(scale * static_cast<double>(width));
-//    scale = (static_cast<double>((theight <= 1080) ? 1080 : theight) / static_cast<double>(1080));
-//    height = static_cast<int>(scale * static_cast<double>(height));
-    width = static_cast<int>(m_dWidthScale * static_cast<double>(width));
-    height = static_cast<int>(m_dHeightScale * static_cast<double>(height));
+    if (m_dWidthScale > 1.0000)
+        width = static_cast<int>(m_dWidthScale * static_cast<double>(width));
+    if (m_dHeightScale > 1.0000)
+        height = static_cast<int>(m_dHeightScale * static_cast<double>(height));
 }

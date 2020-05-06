@@ -45,7 +45,6 @@
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
 #include "CentralDocPage.h"
-#include "FileController.h"
 #include "global.h"
 #include "pdfControl/DocSheetPDF.h"
 #include "djvu/DocSheetDJVU.h"
@@ -117,29 +116,17 @@ void CentralDocPage::openFile(QString &filePath)
 {
     //判断在打开的文档中是否有filePath，如果有则切到相应的sheet，反之执行打开操作
     if (m_pTabBar) {
-        int index = -1;
-        index = m_pTabBar->indexOfFilePath(filePath);
+        int index = m_pTabBar->indexOfFilePath(filePath);
+
         if (index >= 0 && index < m_pTabBar->count()) {
+
             m_pTabBar->setCurrentIndex(index);
+
             return;
         }
     }
-    //filePath = FileController::getUrlInfo(filePath).toLocalFile();
 
-    const QMimeType mimeType = QMimeDatabase().mimeTypeForFile(filePath, QMimeDatabase::MatchContent);
-
-    int fileType = Dr::Unknown;
-
-    if (mimeType.name() == QLatin1String("application/pdf")) {
-        fileType = Dr::PDF;
-    } /*else if (mimeType.name() == QLatin1String("application/postscript")) {
-        fileType = Dr::PS;
-    } */else if (mimeType.name() == QLatin1String("image/vnd.djvu") || mimeType.name() == QLatin1String("image/vnd.djvu+multipage")) {
-        fileType = Dr::DjVu;
-    } else {
-        showTips(tr("The format is not supported"), 1);
-        return;
-    }
+    int fileType = Dr::fileType(filePath);
 
     if (Dr::PDF == fileType) {
         DocSheet *sheet = new DocSheetPDF(this);
@@ -155,6 +142,10 @@ void CentralDocPage::openFile(QString &filePath)
         m_pStackedLayout->setCurrentWidget(sheet);
 
         m_pTabBar->insertSheet(sheet);
+
+        emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+
+        emit sigSheetCountChanged(m_pStackedLayout->count());
 
     } else if (Dr::DjVu == fileType) {
         DocSheet *sheet = new DocSheetDJVU(this);
@@ -172,11 +163,16 @@ void CentralDocPage::openFile(QString &filePath)
         m_pStackedLayout->setCurrentWidget(sheet);
 
         m_pTabBar->insertSheet(sheet);
+
+        emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+
+        emit sigSheetCountChanged(m_pStackedLayout->count());
+
+    } else {
+        showTips(tr("The format is not supported"), 1);
     }
 
-    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 
-    emit sigSheetCountChanged(m_pStackedLayout->count());
 }
 
 void CentralDocPage::onOpened(DocSheet *sheet, bool ret)

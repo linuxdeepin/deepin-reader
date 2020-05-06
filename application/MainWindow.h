@@ -3,12 +3,10 @@
 
 #include <DMainWindow>
 
-DWIDGET_USE_NAMESPACE
-
 class QSignalMapper;
 class Central;
 class DocSheet;
-class MainWindow : public DMainWindow
+class MainWindow : public Dtk::Widget::DMainWindow
 {
     Q_OBJECT
     Q_DISABLE_COPY(MainWindow)

@@ -3,7 +3,6 @@
 #include <DTitlebar>
 #include <DWidgetUtil>
 #include <QSignalMapper>
-#include <QDebug>
 #include <DGuiApplicationHelper>
 
 #include "business/ShortCutShow.h"
@@ -32,11 +31,7 @@ MainWindow::MainWindow(DMainWindow *parent)
     int tHeight = 360;
 
     dApp->adaptScreenView(tWidth, tHeight);
-
-    if (tWidth > 752 && tHeight > 360)
-        setMinimumSize(tWidth, tHeight);
-    else
-        setMinimumSize(752, 360);
+    setMinimumSize(tWidth, tHeight);
 
     showDefaultSize();
 

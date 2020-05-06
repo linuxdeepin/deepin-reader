@@ -3,7 +3,7 @@
 #include <QMimeType>
 #include <QMimeDatabase>
 namespace Dr {
-FileType matchFileType(const QString &filePath)
+FileType fileType(const QString &filePath)
 {
     FileType fileType = FileType::Unknown;
 

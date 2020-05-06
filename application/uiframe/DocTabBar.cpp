@@ -87,8 +87,6 @@ void DocTabBar::insertSheet(DocSheet *sheet, int index)
 
     this->setTabData(index, DocSheet::getUuid(sheet));
 
-//    this->setCurrentIndex(index);
-
     updateTabWidth(92);
 
     this->setCurrentIndex(index);

@@ -5,7 +5,6 @@
 #include <QDesktopWidget>
 #include "app/ProcessController.h"
 #include "app/json.h"
-#include "app/FileController.h"
 #include <QLockFile>
 #include <QDebug>
 #include <QDBusConnection>

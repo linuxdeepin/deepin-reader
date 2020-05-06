@@ -9,7 +9,8 @@ HEADERS += \
     $$PWD/SpinnerWidget.h \
     $$PWD/FontMenu.h \
     $$PWD/HandleMenu.h \
-    $$PWD/ScaleWidget.h
+    $$PWD/ScaleWidget.h \
+    $$PWD/bookmarkbutton.h
 
 SOURCES += \
     $$PWD/MainOperationWidget.cpp \
@@ -21,4 +22,5 @@ SOURCES += \
     $$PWD/SpinnerWidget.cpp \
     $$PWD/FontMenu.cpp \
     $$PWD/HandleMenu.cpp \
-    $$PWD/ScaleWidget.cpp
+    $$PWD/ScaleWidget.cpp \
+    $$PWD/bookmarkbutton.cpp
