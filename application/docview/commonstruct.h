@@ -12,15 +12,6 @@ enum ViewMode_EM {
     ViewMode_FacingPage
 };
 
-enum DocType_EM {
-    DocType_NULL = 0,
-    DocType_PDF,
-    DocType_DJVU,
-    DocType_TIFF,
-    DocType_PS,
-    DocType_XPS
-};
-
 enum RotateType_EM {
     RotateType_0 = 0,
     RotateType_90,

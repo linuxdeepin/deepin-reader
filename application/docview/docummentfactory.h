@@ -10,7 +10,7 @@ class DocummentFactory
 public:
     DocummentFactory();
 
-    static DocummentBase *creatDocumment(DocType_EM type, DWidget *father);
+    static DocummentBase *creatDocumment(Dr::FileType, DWidget *father);
 
 };
 

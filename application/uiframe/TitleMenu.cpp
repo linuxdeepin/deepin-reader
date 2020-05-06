@@ -22,7 +22,7 @@
 #include "DocSheet.h"
 
 TitleMenu::TitleMenu(DWidget *parent)
-    : CustomMenu( parent)
+    : CustomMenu(parent)
 {
     initActions();
 }
@@ -39,7 +39,7 @@ void TitleMenu::onCurSheetChanged(DocSheet *sheet)
         a->setDisabled(false);
     }
 
-    disableSaveButton(!sheet->qGetFileChange());
+    disableSaveButton(!sheet->getFileChanged());
 }
 
 void TitleMenu::onCurSheetSaved(DocSheet *sheet)
@@ -54,7 +54,7 @@ void TitleMenu::onCurSheetSaved(DocSheet *sheet)
         a->setDisabled(false);
     }
 
-    disableSaveButton(!sheet->qGetFileChange());
+    disableSaveButton(!sheet->getFileChanged());
 }
 
 void TitleMenu::disableAllAction()

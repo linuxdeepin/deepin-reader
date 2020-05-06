@@ -129,21 +129,17 @@ public:
 
     void UnBlockShutdown();
 
-    void InitConnections();
-
     void onShowFileAttr();
 
     void OnAppMsgData(const QString &);
 
     void OnTabFileChangeMsg(const QString &);
 
-
-
     void OnPrintFile();
 
     void ShowFindWidget();
 
-    void OnOpenSliderShow();
+    void OnOpenSliderShow();    //  开启 幻灯片
 
     bool OnOpenMagnifer();
 

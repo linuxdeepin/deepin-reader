@@ -11,24 +11,12 @@ DocummentFactory::DocummentFactory()
 
 }
 
-DocummentBase *DocummentFactory::creatDocumment(DocType_EM type, DWidget *father)
+DocummentBase *DocummentFactory::creatDocumment(Dr::FileType type, DWidget *father)
 {
     DocummentBase *documment = nullptr;
     switch (type) {
-    case DocType_PDF:
+    case Dr::PDF:
         documment = new DocummentPDF(father);
-        break;
-    case DocType_DJVU:
-        documment = new DocummentDJVU(father);
-        break;
-    case DocType_TIFF:
-        documment = new DocummentTiff(father);
-        break;
-    case DocType_PS:
-        documment = new DocummentPS(father);
-        break;
-    case DocType_XPS:
-        documment = new DocummentXPS(father);
         break;
     default:
         break;

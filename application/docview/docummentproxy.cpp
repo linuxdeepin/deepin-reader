@@ -17,7 +17,7 @@ DocummentProxy::DocummentProxy(QObject *parent)
     pwgt = (DWidget *)parent;
 }
 
-bool DocummentProxy::openFile(DocType_EM type, QString filepath, unsigned int ipage, RotateType_EM rotatetype, double scale, ViewMode_EM viewmode)
+bool DocummentProxy::openFile(Dr::FileType type, QString filepath, unsigned int ipage, RotateType_EM rotatetype, double scale, ViewMode_EM viewmode)
 {
     bool bre = false;
     m_path = filepath;

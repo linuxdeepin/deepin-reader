@@ -1,7 +1,6 @@
 HEADERS += \
     $$PWD/ShortCutShow.h \
     $$PWD/PrintManager.h \
-    $$PWD/FileFormatHelper.h \
     $$PWD/SaveDialog.h \
     $$PWD/AppInfo.h
 

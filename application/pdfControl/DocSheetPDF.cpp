@@ -43,20 +43,17 @@ DocSheetPDF::DocSheetPDF(DWidget *parent)
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
-    SheetBrowserPDF *browser = new SheetBrowserPDF(this, this);
-    SheetSidebarPDF *sidebar = new SheetSidebarPDF(this);
+    m_browser = new SheetBrowserPDF(this, this);
+    m_sidebar = new SheetSidebarPDF(this);
 
-    m_sidebar = sidebar;
-    m_browser = browser;
-
-    connect(sidebar, SIGNAL(sigDeleteAnntation(const int &, const QString &)), browser, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
-    connect(browser, SIGNAL(sigPageChanged(int)), sidebar, SLOT(onPageChanged(int)));
-    connect(browser, SIGNAL(sigFileOpenResult(const QString &, const bool &)), this, SLOT(SlotFileOpenResult(const QString &, const bool &)));
-    connect(browser, SIGNAL(sigAnntationMsg(const int &, const QString &)), this, SLOT(onAnntationMsg(int, QString)));
-    connect(browser, SIGNAL(sigFileChanged()), this, SLOT(onFileChanged()));
-    connect(browser, SIGNAL(sigRotateChanged(int)), this, SLOT(onRotate(int)));
-    connect(browser, SIGNAL(sigFindContantComming(const stSearchRes &)), this, SLOT(onFindContentComming(const stSearchRes &)));
-    connect(browser, SIGNAL(sigFindFinished()), this, SLOT(onFindFinished()));
+    connect(m_sidebar, SIGNAL(sigDeleteAnntation(const int &, const QString &)), m_browser, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
+    connect(m_browser, SIGNAL(sigPageChanged(int)), m_sidebar, SLOT(onPageChanged(int)));
+    connect(m_browser, SIGNAL(sigFileOpenResult(const QString &, const bool &)), this, SLOT(SlotFileOpenResult(const QString &, const bool &)));
+    connect(m_browser, SIGNAL(sigAnntationMsg(const int &, const QString &)), this, SLOT(onAnntationMsg(int, QString)));
+    connect(m_browser, SIGNAL(sigFileChanged()), this, SLOT(onFileChanged()));
+    connect(m_browser, SIGNAL(sigRotateChanged(int)), this, SLOT(onRotate(int)));
+    connect(m_browser, SIGNAL(sigFindContantComming(const stSearchRes &)), this, SLOT(onFindContentComming(const stSearchRes &)));
+    connect(m_browser, SIGNAL(sigFindFinished()), this, SLOT(onFindFinished()));
 
     int tW = 36;
     int tH = 36;
@@ -65,9 +62,9 @@ DocSheetPDF::DocSheetPDF(DWidget *parent)
     m_pSpinnerWidget->startSpinner();
 
     m_pRightWidget->addWidget(m_pSpinnerWidget);
-    m_pRightWidget->addWidget(browser);
+    m_pRightWidget->addWidget(m_browser);
 
-    addWidget(sidebar);
+    addWidget(m_sidebar);
     addWidget(m_pRightWidget);
 
     QList<int> list_src;
@@ -95,34 +92,25 @@ DocSheetPDF::~DocSheetPDF()
 
 }
 
-void DocSheetPDF::handleShortcut(QString shortcut)
-{
-    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
-    if (nullptr == doc)
-        return;
-
-    doc->handleShortcut(shortcut);
-}
-
 void DocSheetPDF::openFile(const QString &filePath)
 {
-
     m_browser->OpenFilePath(filePath);
 }
 
 void DocSheetPDF::pageJump(int page)
 {
-    DocummentProxy *_proxy =  m_browser->GetDocProxy();
-    if (_proxy) {
-        int nPageSize = _proxy->getPageSNum();      //  总页数
-        if (page < 0 || page == nPageSize) {
-            return;
-        }
+    if (!m_browser->GetDocProxy())
+        return;
 
-        int nCurPage = _proxy->currentPageNo();
-        if (nCurPage != page) {
-            _proxy->pageJump(page);
-        }
+    DocummentProxy *_proxy =  m_browser->GetDocProxy();
+    int nPageSize = _proxy->getPageSNum();      //  总页数
+    if (page < 0 || page == nPageSize) {
+        return;
+    }
+
+    int nCurPage = _proxy->currentPageNo();
+    if (nCurPage != page) {
+        _proxy->pageJump(page);
     }
 }
 
@@ -133,11 +121,17 @@ void DocSheetPDF::pageFirst()
 
 void DocSheetPDF::pageLast()
 {
+    if (!m_browser->GetDocProxy())
+        return;
+
     pageJump(getDocProxy()->getPageSNum() - 1);
 }
 
 void DocSheetPDF::pageNext()
 {
+    if (!m_browser->GetDocProxy())
+        return;
+
     bool isDoubleShow = m_browser->isDoubleShow();
 
     int nCurPage = getDocProxy()->currentPageNo();
@@ -151,6 +145,9 @@ void DocSheetPDF::pageNext()
 
 void DocSheetPDF::pagePrev()
 {
+    if (!m_browser->GetDocProxy())
+        return;
+
     bool isDoubleShow = m_browser->isDoubleShow();
 
     int nCurPage = getDocProxy()->currentPageNo();
@@ -344,10 +341,14 @@ QString DocSheetPDF::filePath()
     return m_browser->getFilePath();
 }
 
-int DocSheetPDF::qGetFileChange()
+QString DocSheetPDF::filter()
 {
-    int istatus = m_browser->getFileChange() ? 1 : 0;
-    return  istatus;
+    return "Pdf File (*.pdf)";
+}
+
+bool DocSheetPDF::getFileChanged()
+{
+    return m_browser->getFileChange();
 }
 
 void DocSheetPDF::saveOper()
@@ -367,7 +368,6 @@ bool DocSheetPDF::saveAsData(QString filePath)
 
 void DocSheetPDF::setData(const int &type, const QVariant &value)
 {
-
     m_browser->setOper(type, value);
 }
 
@@ -387,9 +387,8 @@ void DocSheetPDF::OnOpenSliderShow()
     m_sidebar->setVisible(false);
 }
 
-void DocSheetPDF::OnExitSliderShow()
+void DocSheetPDF::exitSliderShow()
 {
-
     m_sidebar->setVisible(m_bOldState);
 }
 

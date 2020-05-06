@@ -7,7 +7,6 @@
 #include "controller/ProxyFileDataModel.h"
 #include "menu/TextOperationMenu.h"
 #include "menu/DefaultOperationMenu.h"
-#include "business/FileFormatHelper.h"
 #include "widgets/FindWidget.h"
 #include "docview/docummentproxy.h"
 #include "business/AppInfo.h"
@@ -499,11 +498,6 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
         connect(m_pProxy, SIGNAL(signal_searchRes(stSearchRes)), q, SIGNAL(sigFindContantComming(const stSearchRes &)));
         connect(m_pProxy, SIGNAL(signal_searchover()), q, SIGNAL(sigFindFinished()));
 
-        QFileInfo info(sPath);
-
-        QString sCompleteSuffix = info.completeSuffix();
-        DocType_EM nCurDocType = FFH::setCurDocuType(sCompleteSuffix);
-
         //从数据库中获取文件的字号信息
         dApp->m_pDBService->qSelectData(sPath, DB_HISTROY);
 
@@ -533,7 +527,7 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
 
         int curPage = fdm.getOper(CurPage).toInt();
 
-        bool rl = m_pProxy->openFile(nCurDocType, sPath, static_cast<unsigned int>(curPage), rotatetype, scaleRatio, viewmode);
+        bool rl = m_pProxy->openFile(Dr::PDF, sPath, static_cast<unsigned int>(curPage), rotatetype, scaleRatio, viewmode);
 
         if (rl) {
             m_pProxy->setViewFocus();

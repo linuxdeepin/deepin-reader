@@ -51,7 +51,11 @@ DocSheet::~DocSheet()
 
 void DocSheet::handleShortcut(QString shortcut)
 {
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return;
 
+    doc->handleShortcut(shortcut);
 }
 
 void DocSheet::openFile(const QString &filePath)
@@ -192,7 +196,12 @@ QString DocSheet::filePath()
     return "";
 }
 
-int DocSheet::qGetFileChange()
+QString DocSheet::filter()
+{
+    return "";
+}
+
+bool DocSheet::getFileChanged()
 {
     return false;
 }
@@ -232,7 +241,7 @@ void DocSheet::OnOpenSliderShow()
 
 }
 
-void DocSheet::OnExitSliderShow()
+void DocSheet::exitSliderShow()
 {
 
 }

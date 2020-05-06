@@ -117,11 +117,11 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
 {
     m_curSheet = sheet;
 
-    if (nullptr == m_curSheet || m_curSheet->type() == DocType_NULL) {
+    if (nullptr == m_curSheet || m_curSheet->type() == Dr::Unknown) {
         SetBtnDisable(true);
         return;
 
-    } else if (DocType_PDF == m_curSheet->type()) {
+    } else if (Dr::PDF == m_curSheet->type()) {
 
         SetBtnDisable(false);
 

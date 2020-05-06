@@ -25,8 +25,6 @@ public:
 
     virtual ~DocSheet() override;
 
-    virtual void handleShortcut(QString shortcut);
-
     virtual void openFile(const QString &filePath);
 
     virtual bool openFileExec(const QString &filePath);
@@ -71,7 +69,9 @@ public:
 
     virtual QString filePath();
 
-    virtual int qGetFileChange();
+    virtual QString filter();
+
+    virtual bool getFileChanged();
 
     virtual void saveOper();
 
@@ -87,7 +87,7 @@ public:
 
     virtual void OnOpenSliderShow();
 
-    virtual void OnExitSliderShow();
+    virtual void exitSliderShow();
 
     virtual void ShowFindWidget();
 
@@ -96,6 +96,8 @@ public:
     virtual void handleOpenSuccess();
 
     virtual void setSidebarVisible(bool isVisible);
+
+    void handleShortcut(QString shortcut);
 
     Dr::FileType type();
 

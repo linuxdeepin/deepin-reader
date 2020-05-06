@@ -26,8 +26,6 @@ public:
 
     virtual ~DocSheetPDF() override;
 
-    void handleShortcut(QString shortcut)override;
-
     void openFile(const QString &filePath)override;
 
     void pageJump(int page)override;
@@ -70,7 +68,9 @@ public:
 
     QString filePath()override;
 
-    int qGetFileChange()override;
+    virtual QString filter();
+
+    bool getFileChanged()override;
 
     void saveOper()override;
 
@@ -86,7 +86,7 @@ public:
 
     void OnOpenSliderShow()override;
 
-    void OnExitSliderShow()override;
+    void exitSliderShow()override;
 
     void ShowFindWidget()override;
 
@@ -122,7 +122,6 @@ private:
     SpinnerWidget  *m_pSpinnerWidget = nullptr;
     FindWidget     *m_pFindWidget = nullptr;
     bool            m_bOldState = false;
-
 };
 
 #endif // DOCSHEETPDF_H

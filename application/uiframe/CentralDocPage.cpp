@@ -41,7 +41,6 @@
 #include "widgets/FindWidget.h"
 #include "widgets/FileAttrWidget.h"
 #include "widgets/PlayControlWidget.h"
-#include "business/FileFormatHelper.h"
 #include "docview/docummentproxy.h"
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
@@ -55,7 +54,6 @@ CentralDocPage::CentralDocPage(DWidget *parent)
     : CustomWidget(parent)
 {
     initWidget();
-    InitConnections();
 }
 
 CentralDocPage::~CentralDocPage()
@@ -94,7 +92,7 @@ int CentralDocPage::GetFileChange(const QString &sPath)
     foreach (auto s, splitterList) {
         QString sSplitterPath = s->filePath();
         if (sSplitterPath == sPath) {
-            return  s->qGetFileChange();
+            return  s->getFileChanged();
         }
     }
     return -1;
@@ -108,7 +106,7 @@ void CentralDocPage::onSheetChanged(DocSheet *sheet)
     sigCurSheetChanged(sheet);
 
     //...以下要改成记录所有的sheet,遍历一下，查看是否需要阻塞关机,目前只是记录最后一个文档被保存，有问题
-    if (sheet->qGetFileChange()) {
+    if (sheet->getFileChanged()) {
         BlockShutdown();
     } else {
         UnBlockShutdown();
@@ -144,7 +142,6 @@ void CentralDocPage::openFile(QString &filePath)
     }
 
     if (Dr::PDF == fileType) {
-
         DocSheet *sheet = new DocSheetPDF(this);
 
         connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
@@ -237,7 +234,7 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
 
     sheet->saveOper();
 
-    if (sheet->qGetFileChange() && 2 == SaveDialog().showDialog()) {
+    if (sheet->getFileChanged() && 2 == SaveDialog().showDialog()) {
         sheet->saveData();
     }
 
@@ -353,7 +350,7 @@ bool CentralDocPage::saveAll()
     foreach (auto sheet, sheets) {
         sheet->saveOper();
 
-        if (sheet->qGetFileChange())
+        if (sheet->getFileChanged())
             changedList.append(sheet);
     }
 
@@ -384,7 +381,7 @@ bool CentralDocPage::saveCurrent()
     if (nullptr == sheet)
         return false;
 
-    if (!sheet->qGetFileChange()) {
+    if (!sheet->getFileChanged()) {
         return false;
     }
 
@@ -405,18 +402,19 @@ bool CentralDocPage::saveCurrent()
 bool CentralDocPage::saveAsCurrent()
 {
     DocSheet *sheet = static_cast<DocSheet *>(m_pStackedLayout->currentWidget());
+
     if (nullptr == sheet)
         return false;
 
-    QFileInfo info(sheet->filePath());
-    QString sCompleteSuffix = info.completeSuffix();
-    DocType_EM nCurDocType = FFH::setCurDocuType(sCompleteSuffix);
-    QString sFilter = FFH::getFileFilter(nCurDocType);
+    QString sFilter = sheet->filter();
+
     QString saveFilePath;
+
     if (sFilter != "") {
         QFileDialog dialog;
         dialog.selectFile(sheet->filePath());
         saveFilePath = dialog.getSaveFileName(nullptr, tr("Save as"), sheet->filePath(), sFilter);
+
         if (saveFilePath.endsWith("/.pdf")) {
             DDialog dlg("", tr("Invalid file name"));
             QIcon icon(PF::getIconPath("exception-logo"));
@@ -575,7 +573,7 @@ void CentralDocPage::UnBlockShutdown()
 {
     auto splitterList = this->findChildren<DocSheet *>();
     foreach (auto mainsplit, splitterList) {
-        if (mainsplit->qGetFileChange())
+        if (mainsplit->getFileChanged())
             return;
     }
 
@@ -584,10 +582,6 @@ void CentralDocPage::UnBlockShutdown()
         m_reply = QDBusReply<QDBusUnixFileDescriptor>();
         m_bBlockShutdown = false;
     }
-}
-
-void CentralDocPage::InitConnections()
-{
 }
 
 void CentralDocPage::onShowFileAttr()
@@ -648,7 +642,7 @@ void CentralDocPage::handleShortcut(const QString &s)
     } else if (s == KeyStr::g_ctrl_h) {     //  开启幻灯片
         OnOpenSliderShow();
     } else if (s == KeyStr::g_ctrl_shift_s) {   //  另存为
-        saveAsCurrent();//saveAsCurFile();
+        saveAsCurrent();
     } else if (s == KeyStr::g_alt_z) {
         OnOpenMagnifer();
     } else if (s == KeyStr::g_esc) { //  esc 统一处理
@@ -712,7 +706,6 @@ int CentralDocPage::getCurrentState()
     return m_nCurrentState;
 }
 
-//  搜索框
 void CentralDocPage::ShowFindWidget()
 {
     int nState = getCurrentState();
@@ -728,7 +721,6 @@ void CentralDocPage::ShowFindWidget()
     }
 }
 
-//  开启 幻灯片
 void CentralDocPage::OnOpenSliderShow()
 {
     DocSheet *sheet = getCurSheet();
@@ -790,7 +782,7 @@ void CentralDocPage::OnExitSliderShow()
 
         if (sheet) {
 
-            sheet->OnExitSliderShow();
+            sheet->exitSliderShow();
 
             DocummentProxy *_proxy = sheet->getDocProxy();
 
