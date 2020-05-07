@@ -30,9 +30,40 @@
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
 
+#include <QProxyStyle>
+#include <QPainter>
+#include <QStylePainter>
+
+class ActiveProxyStyle : public QProxyStyle
+{
+public:
+    ActiveProxyStyle(DWidget *parent){
+        this->setParent(parent);
+    };
+
+    virtual void	drawComplexControl(QStyle::ComplexControl control, const QStyleOptionComplex *option, QPainter *painter, const QWidget *widget = nullptr) const{
+        QStyleOptionComplex *op = const_cast<QStyleOptionComplex*>(option);
+        op->state = option->state | QStyle::State_Active;
+        QProxyStyle::drawComplexControl(control, op, painter, widget);
+    }
+    virtual void	drawControl(QStyle::ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const{
+        QStyleOption *op = const_cast<QStyleOption*>(option);
+        op->state = option->state | QStyle::State_Active;
+        QProxyStyle::drawControl(element, op, painter, widget);
+    }
+
+    virtual void	drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const{
+        QStyleOption *op = const_cast<QStyleOption*>(option);
+        op->state = option->state | QStyle::State_Active;
+        QProxyStyle::drawPrimitive(element, op, painter, widget);
+    }
+};
+
 CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
     : DTreeView(parent), m_sheet(sheet)
 {
+    ActiveProxyStyle *style = new ActiveProxyStyle(this);
+    setStyle(style);
     setFrameShape(QFrame::NoFrame);
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -296,10 +327,4 @@ void CatalogTreeView::keyPressEvent(QKeyEvent *event)
 {
     rightnotifypagechanged = false;
     DTreeView::keyPressEvent(event);
-}
-
-void CatalogTreeView::showEvent(QShowEvent *event)
-{
-    DTreeView::showEvent(event);
-    setFocus();
 }
