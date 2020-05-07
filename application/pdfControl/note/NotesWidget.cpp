@@ -51,7 +51,6 @@ void NotesWidget::initWidget()
     this->setLayout(pVLayout);
 
     m_pImageListView = new ImageListView(m_sheet, this);
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * 1.0, LEFTMINHEIGHT * 1.0));
     m_pImageListView->setListType(DR_SPACE::E_NOTE_WIDGET);
     NotesDelegate *imageDelegate = new NotesDelegate(m_pImageListView);
     m_pImageListView->setItemDelegate(imageDelegate);
@@ -71,6 +70,8 @@ void NotesWidget::initWidget()
     pVLayout->addWidget(new DHorizontalLine(this));
     pHBoxLayout->addWidget(m_pAddAnnotationBtn);
     pVLayout->addItem(pHBoxLayout);
+
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * 1.0, LEFTMINHEIGHT * 1.0));
 }
 
 void NotesWidget::prevPage()
@@ -124,6 +125,9 @@ void NotesWidget::addNoteItem(const QString &text, const int &iType)
         tImagePageInfo.struuid = strList.at(0).trimmed();
         tImagePageInfo.strcontents = strList.at(1).trimmed();
         m_pImageListView->insertPageIndex(tImagePageInfo);
+
+        int modelIndex = m_pImageListView->findItemForuuid(tImagePageInfo.struuid);
+        scrollToModelInexPage(m_pImageListView->model()->index(modelIndex, 0));
     }
 }
 

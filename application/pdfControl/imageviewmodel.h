@@ -45,6 +45,7 @@ typedef struct ImagePageInfo_t {
 
     ImagePageInfo_t(int page){
         this->iPage = page;
+        this->iType = -1;
     }
 
     bool operator == (const ImagePageInfo_t &other) const{

@@ -44,7 +44,6 @@ void ThumbnailWidget::initWidget()
 {
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &ThumbnailWidget::onUpdateTheme);
     m_pImageListView = new ImageListView(m_sheet, this);
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * 1.0, LEFTMINHEIGHT * 1.0));
     ThumbnailDelegate* imageDelegate = new ThumbnailDelegate(m_pImageListView);
     m_pImageListView->setItemDelegate(imageDelegate);
 
@@ -57,6 +56,7 @@ void ThumbnailWidget::initWidget()
     vBoxLayout->addWidget(new DHorizontalLine(this));
     vBoxLayout->addWidget(m_pPageWidget);
     this->setLayout(vBoxLayout);
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * 1.0, LEFTMINHEIGHT * 1.0));
 }
 
 void ThumbnailWidget::handleOpenSuccess()

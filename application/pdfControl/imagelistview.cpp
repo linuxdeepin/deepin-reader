@@ -83,7 +83,7 @@ void ImageListView::handleOpenSuccess()
         QList<ImagePageInfo_t> pageSrclst;
         int pagesNum = pageList.size();
         for (int index = 0; index < pagesNum; index++)
-            pageSrclst << index;
+            pageSrclst << pageList.at(index);
         m_imageModel->initModelLst(pageSrclst, true);
     } else if (m_listType == DR_SPACE::E_NOTE_WIDGET) {
         QList<stHighlightContent> noteLst;
@@ -215,4 +215,9 @@ int  ImageListView::getPageIndexForModelIndex(int row)
 void ImageListView::getModelIndexImageInfo(int modelIndex, ImagePageInfo_t &tImagePageInfo)
 {
     m_imageModel->getModelIndexImageInfo(modelIndex, tImagePageInfo);
+}
+
+int  ImageListView::findItemForuuid(const QString &uuid)
+{
+    m_imageModel->findItemForuuid(uuid);
 }

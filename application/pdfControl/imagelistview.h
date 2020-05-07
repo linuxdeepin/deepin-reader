@@ -50,6 +50,7 @@ public:
     bool scrollToIndex(int pageIndex, bool scrollTo = true);
     int  getModelIndexForPageIndex(int pageIndex);
     int  getPageIndexForModelIndex(int row);
+    int  findItemForuuid(const QString &uuid);
     void getModelIndexImageInfo(int modelIndex, ImagePageInfo_t &tImagePageInfo);
 
 private:

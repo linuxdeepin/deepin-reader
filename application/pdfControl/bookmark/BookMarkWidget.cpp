@@ -43,7 +43,6 @@ void BookMarkWidget::initWidget()
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BookMarkWidget::onUpdateTheme);
 
     m_pImageListView = new ImageListView(m_sheet, this);
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * 1.0, LEFTMINHEIGHT * 1.0));
     m_pImageListView->setListType(DR_SPACE::E_BOOKMARK_WIDGET);
     BookMarkDelegate* imageDelegate = new BookMarkDelegate(m_pImageListView);
     m_pImageListView->setItemDelegate(imageDelegate);
@@ -69,6 +68,7 @@ void BookMarkWidget::initWidget()
     this->setLayout(pVBoxLayout);
 
     connect(m_pImageListView, SIGNAL(sigListMenuClick(const int &)), SLOT(onListMenuClick(const int &)));
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * 1.0, LEFTMINHEIGHT * 1.0));
 }
 
 
