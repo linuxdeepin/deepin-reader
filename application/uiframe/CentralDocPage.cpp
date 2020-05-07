@@ -47,7 +47,7 @@
 #include "CentralDocPage.h"
 #include "global.h"
 #include "pdfControl/DocSheetPDF.h"
-#include "djvu/DocSheetDJVU.h"
+#include "djvuControl/DocSheetDJVU.h"
 
 CentralDocPage::CentralDocPage(DWidget *parent)
     : CustomWidget(parent)

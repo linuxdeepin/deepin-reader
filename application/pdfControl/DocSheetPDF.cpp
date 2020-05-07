@@ -32,7 +32,7 @@
 #include "app/ProcessController.h"
 #include "pdfControl/docview/docummentproxy.h"
 #include "widgets/FindWidget.h"
-#include "djvu/SheetBrowserDJVU.h"
+#include "djvuControl/SheetBrowserDJVU.h"
 
 DocSheetPDF::DocSheetPDF(DWidget *parent)
     : DocSheet(Dr::PDF, parent)
