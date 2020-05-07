@@ -37,23 +37,27 @@
 class ActiveProxyStyle : public QProxyStyle
 {
 public:
-    ActiveProxyStyle(DWidget *parent){
+    ActiveProxyStyle(DWidget *parent)
+    {
         this->setParent(parent);
     };
 
-    virtual void	drawComplexControl(QStyle::ComplexControl control, const QStyleOptionComplex *option, QPainter *painter, const QWidget *widget = nullptr) const{
-        QStyleOptionComplex *op = const_cast<QStyleOptionComplex*>(option);
+    virtual void    drawComplexControl(QStyle::ComplexControl control, const QStyleOptionComplex *option, QPainter *painter, const QWidget *widget = nullptr) const
+    {
+        QStyleOptionComplex *op = const_cast<QStyleOptionComplex *>(option);
         op->state = option->state | QStyle::State_Active;
         QProxyStyle::drawComplexControl(control, op, painter, widget);
     }
-    virtual void	drawControl(QStyle::ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const{
-        QStyleOption *op = const_cast<QStyleOption*>(option);
+    virtual void    drawControl(QStyle::ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const
+    {
+        QStyleOption *op = const_cast<QStyleOption *>(option);
         op->state = option->state | QStyle::State_Active;
         QProxyStyle::drawControl(element, op, painter, widget);
     }
 
-    virtual void	drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const{
-        QStyleOption *op = const_cast<QStyleOption*>(option);
+    virtual void    drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const
+    {
+        QStyleOption *op = const_cast<QStyleOption *>(option);
         op->state = option->state | QStyle::State_Active;
         QProxyStyle::drawPrimitive(element, op, painter, widget);
     }
@@ -91,8 +95,8 @@ void CatalogTreeView::setPage(int page)
 {
     m_page = page;
     this->clearSelection(); //  清除 之前的选中
-    m_listTitle.clear();
-    m_listPage.clear();
+//    m_listTitle.clear();
+//    m_listPage.clear();
 
     auto model = reinterpret_cast<QStandardItemModel *>(this->model());
     if (model) {
@@ -162,23 +166,23 @@ void CatalogTreeView::parseCatalogData(const Section &ol, QStandardItem *parentI
 //  获取 一行的 三列数据
 QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const int &page, const qreal  &realleft, const qreal &realtop)
 {
-    //QColor color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().text().color();
+//    QColor color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().text().color();
     auto item = new QStandardItem(title);
     item->setData(page);
     item->setData(realleft, Qt::UserRole + 2);
     item->setData(realtop, Qt::UserRole + 3);
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    //item->setForeground(QBrush(color));
-    m_listTitle.append(item);
+//    item->setForeground(QBrush(color));
+//    m_listTitle.append(item);
 
     auto item1 = new QStandardItem(QString::number(page));
     item1->setData(page);
     item1->setData(realleft, Qt::UserRole + 2);
     item1->setData(realtop, Qt::UserRole + 3);
     item1->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    //color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().textTips().color();
-    //item1->setForeground(QBrush(color));
-    m_listPage.append(item1);
+    QColor color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().textTips().color();
+    item1->setForeground(QBrush(color));
+//    m_listPage.append(item1);
 
     return QList<QStandardItem *>() << item << item1;
 }

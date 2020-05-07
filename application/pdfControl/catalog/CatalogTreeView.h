@@ -69,8 +69,8 @@ private slots:
 private:
     bool rightnotifypagechanged = false;
     DocSheet *m_sheet;
-    QList<QStandardItem *> m_listTitle;
-    QList<QStandardItem *> m_listPage;
+//    QList<QStandardItem *> m_listTitle;
+//    QList<QStandardItem *> m_listPage;
     int m_page;
 };
 
