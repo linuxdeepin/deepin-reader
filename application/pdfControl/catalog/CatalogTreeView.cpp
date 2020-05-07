@@ -38,7 +38,6 @@ CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-//    setFocusPolicy(Qt::NoFocus);
 
     this->header()->setHidden(true);
     this->viewport()->setAutoFillBackground(false);
@@ -132,13 +131,13 @@ void CatalogTreeView::parseCatalogData(const Section &ol, QStandardItem *parentI
 //  获取 一行的 三列数据
 QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const int &page, const qreal  &realleft, const qreal &realtop)
 {
-    QColor color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().text().color();
+    //QColor color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().text().color();
     auto item = new QStandardItem(title);
     item->setData(page);
     item->setData(realleft, Qt::UserRole + 2);
     item->setData(realtop, Qt::UserRole + 3);
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    item->setForeground(QBrush(color));
+    //item->setForeground(QBrush(color));
     m_listTitle.append(item);
 
     auto item1 = new QStandardItem(QString::number(page));
@@ -146,8 +145,8 @@ QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const 
     item1->setData(realleft, Qt::UserRole + 2);
     item1->setData(realtop, Qt::UserRole + 3);
     item1->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().textTips().color();
-    item1->setForeground(QBrush(color));
+    //color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().textTips().color();
+    //item1->setForeground(QBrush(color));
     m_listPage.append(item1);
 
     return QList<QStandardItem *>() << item << item1;
@@ -257,25 +256,25 @@ void CatalogTreeView::onItemClicked(const QModelIndex &current)
 
 void CatalogTreeView::slotThemeChanged()
 {
-    auto color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().text().color();
-    for (int index = 0; index < m_listTitle.count(); index++) {
-        QStandardItem *item = m_listTitle.at(index);
-        if (item) {
-            item->setData(QVariant::fromValue(color), Qt::ForegroundRole);
-            item->setForeground(QBrush(color));
-        }
-    }
+//    auto color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().text().color();
+//    for (int index = 0; index < m_listTitle.count(); index++) {
+//        QStandardItem *item = m_listTitle.at(index);
+//        if (item) {
+//            item->setData(QVariant::fromValue(color), Qt::ForegroundRole);
+//            item->setForeground(QBrush(color));
+//        }
+//    }
 
-    color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().textTips().color();
-    for (int index = 0; index < m_listPage.count(); index++) {
-        QStandardItem *item = m_listPage.at(index);
-        if (item) {
-            item->setData(QVariant::fromValue(color), Qt::ForegroundRole);
-            item->setForeground(QBrush(color));
-        }
-    }
+//    color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().textTips().color();
+//    for (int index = 0; index < m_listPage.count(); index++) {
+//        QStandardItem *item = m_listPage.at(index);
+//        if (item) {
+//            item->setData(QVariant::fromValue(color), Qt::ForegroundRole);
+//            item->setForeground(QBrush(color));
+//        }
+//    }
 
-    this->update();
+//    this->update();
 }
 
 //  窗口大小变化, 列的宽度随之变化
@@ -297,4 +296,16 @@ void CatalogTreeView::keyPressEvent(QKeyEvent *event)
 {
     rightnotifypagechanged = false;
     DTreeView::keyPressEvent(event);
+}
+
+void CatalogTreeView::showEvent(QShowEvent *event)
+{
+    DTreeView::showEvent(event);
+    setFocus();
+}
+
+void CatalogTreeView::focusOutEvent(QFocusEvent *)
+{
+    if(isVisible())
+        setFocus();
 }

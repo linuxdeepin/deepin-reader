@@ -46,10 +46,10 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
-
     void mousePressEvent(QMouseEvent *event) override;
-
     void keyPressEvent(QKeyEvent *event) override;
+    void showEvent(QShowEvent *event) override;
+    void focusOutEvent(QFocusEvent *event) override;
 
 protected slots:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
