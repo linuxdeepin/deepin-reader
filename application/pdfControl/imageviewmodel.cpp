@@ -26,7 +26,7 @@ ImageViewModel::ImageViewModel(QObject *parent)
     m_docSheet = nullptr;
 }
 
-void ImageViewModel::initModelLst(const QList<int>& pagelst, bool sort)
+void ImageViewModel::initModelLst(const QList<ImagePageInfo_t> &pagelst, bool sort)
 {
     beginResetModel();
     m_pagelst = pagelst;
@@ -42,15 +42,11 @@ void ImageViewModel::setDocSheet(DocSheet *sheet)
 void ImageViewModel::setBookMarkVisible(int pageIndex, bool visible, bool updateIndex)
 {
     m_cacheBookMarkMap.insert(pageIndex, visible);
-    if(updateIndex){
-        const QModelIndex &modelIndex = getModelIndexForPageIndex(pageIndex);
-        emit dataChanged(modelIndex, modelIndex);
+    if (updateIndex) {
+        const QList<QModelIndex> &modelIndexlst = getModelIndexForPageIndex(pageIndex);
+        for (const QModelIndex &modelIndex : modelIndexlst)
+            emit dataChanged(modelIndex, modelIndex);
     }
-}
-
-void ImageViewModel::updatePageIndex(int pageIndex)
-{
-    onFetchImage(pageIndex);
 }
 
 int ImageViewModel::rowCount(const QModelIndex &) const
@@ -67,26 +63,25 @@ QVariant ImageViewModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
-    int nRow = m_pagelst.at(index.row());
-    if(role == ImageinfoType_e::IMAGE_PIXMAP){
-        const QPixmap &image =ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet->getDocProxy(), nRow);
-        if(image.isNull())
+    int nRow = m_pagelst.at(index.row()).iPage;
+    if (role == ImageinfoType_e::IMAGE_PIXMAP) {
+        const QPixmap &image = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet->getDocProxy(), nRow);
+        if (image.isNull())
             onFetchImage(nRow);
-        else{
+        else {
             return QVariant::fromValue(image);
         }
-    }
-    else if(role == ImageinfoType_e::IMAGE_BOOKMARK){
-        if(m_cacheBookMarkMap.contains(nRow)){
+    } else if (role == ImageinfoType_e::IMAGE_BOOKMARK) {
+        if (m_cacheBookMarkMap.contains(nRow)) {
             return QVariant::fromValue(m_cacheBookMarkMap.value(nRow));
         }
         return QVariant::fromValue(false);
-    }
-    else if(role == ImageinfoType_e::IMAGE_ROTATE){
+    } else if (role == ImageinfoType_e::IMAGE_ROTATE) {
         return QVariant::fromValue(m_docSheet->getOper(Rotate).toInt() * 90);
-    }
-    else if(role == ImageinfoType_e::IMAGE_INDEX_TEXT){
+    } else if (role == ImageinfoType_e::IMAGE_INDEX_TEXT) {
         return QVariant::fromValue(tr("Page %1").arg(nRow + 1));
+    } else if (role == ImageinfoType_e::IMAGE_CONTENT_TEXT) {
+        return QVariant::fromValue(m_pagelst.at(index.row()));
     }
     return QVariant();
 }
@@ -98,31 +93,35 @@ bool ImageViewModel::setData(const QModelIndex &index, const QVariant &data, int
     return QAbstractListModel::setData(index, data, role);
 }
 
-QModelIndex ImageViewModel::getModelIndexForPageIndex(int pageIndex)
+QList<QModelIndex> ImageViewModel::getModelIndexForPageIndex(int pageIndex)
 {
-    int index = m_pagelst.indexOf(pageIndex);
-    if(index >= 0)
-        return this->index(index);
-    return QModelIndex();
+    QList<QModelIndex> modelIndexlst;
+    int pageSize = m_pagelst.size();
+    for (int index = 0; index < pageSize; index++) {
+        if (m_pagelst.at(index) == pageIndex)
+            modelIndexlst << this->index(index);
+    }
+    return modelIndexlst;
 }
 
 int ImageViewModel::getPageIndexForModelIndex(int row)
 {
-    if(row >= 0 && row < m_pagelst.size())
-        return m_pagelst.at(row);
+    if (row >= 0 && row < m_pagelst.size())
+        return m_pagelst.at(row).iPage;
     return -1;
 }
 
 void ImageViewModel::onUpdatePageImage(int pageIndex)
 {
-    const QModelIndex &modelIndex = getModelIndexForPageIndex(pageIndex);
-    emit dataChanged(modelIndex, modelIndex);
+    const QList<QModelIndex> &modelIndexlst = getModelIndexForPageIndex(pageIndex);
+    for (const QModelIndex &modelIndex : modelIndexlst)
+        emit dataChanged(modelIndex, modelIndex);
 }
 
 void ImageViewModel::onFetchImage(int nRow) const
 {
-    DocummentProxy* docProxy = m_docSheet->getDocProxy();
-    if(docProxy){
+    DocummentProxy *docProxy = m_docSheet->getDocProxy();
+    if (docProxy) {
         ReaderImageParam_t tParam;
         tParam.pageNum = nRow;
         tParam.docProxy = docProxy;
@@ -132,9 +131,14 @@ void ImageViewModel::onFetchImage(int nRow) const
     }
 }
 
+void ImageViewModel::updatePageIndex(int pageIndex)
+{
+    onFetchImage(pageIndex);
+}
+
 void ImageViewModel::insertPageIndex(int pageIndex)
 {
-    if(!m_pagelst.contains(pageIndex)){
+    if (!m_pagelst.contains(pageIndex)) {
         beginResetModel();
         m_pagelst << pageIndex;
         qSort(m_pagelst.begin(), m_pagelst.end());
@@ -142,11 +146,61 @@ void ImageViewModel::insertPageIndex(int pageIndex)
     }
 }
 
+void ImageViewModel::insertPageIndex(const ImagePageInfo_t &tImagePageInfo)
+{
+    int index = findItemForuuid(tImagePageInfo.struuid);
+    if(index == -1){
+        beginResetModel();
+        m_pagelst << tImagePageInfo;
+        qSort(m_pagelst.begin(), m_pagelst.end());
+        endResetModel();
+    }
+    else{
+        m_pagelst[index].strcontents = tImagePageInfo.strcontents;
+        emit dataChanged(this->index(index), this->index(index));
+    }
+}
+
 void ImageViewModel::removePageIndex(int pageIndex)
 {
-    if(m_pagelst.contains(pageIndex)){
+    if (m_pagelst.contains(pageIndex)) {
         beginResetModel();
         m_pagelst.removeAll(pageIndex);
         endResetModel();
     }
+}
+
+void ImageViewModel::removeModelIndex(int modelIndex)
+{
+    if (modelIndex >= 0 && modelIndex < m_pagelst.size()) {
+        m_pagelst.removeAt(modelIndex);
+    }
+}
+
+void ImageViewModel::removeItemForuuid(const QString &uuid)
+{
+    int index = findItemForuuid(uuid);
+    if(index >= 0){
+        beginResetModel();
+        m_pagelst.removeAt(index);
+        endResetModel();
+    }
+}
+
+void ImageViewModel::getModelIndexImageInfo(int modelIndex, ImagePageInfo_t &tImagePageInfo)
+{
+    if (modelIndex >= 0 && modelIndex < m_pagelst.size()) {
+        tImagePageInfo = m_pagelst.at(modelIndex);
+    }
+}
+
+int ImageViewModel::findItemForuuid(const QString &uuid)
+{
+    int count = m_pagelst.size();
+    for(int index = 0; index < count; index++){
+        if(uuid == m_pagelst.at(index).struuid){
+            return index;
+        }
+    }
+    return -1;
 }

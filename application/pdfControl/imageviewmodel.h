@@ -20,12 +20,46 @@
 #include <QAbstractListModel>
 #include <QMap>
 
-typedef enum ImageinfoType_e{
-    IMAGE_PIXMAP     = Qt::UserRole,
-    IMAGE_BOOKMARK   = Qt::UserRole + 1,
-    IMAGE_ROTATE     = Qt::UserRole + 2,
-    IMAGE_INDEX_TEXT = Qt::UserRole + 3,
-}ImageinfoType_e;
+#include "docview/commonstruct.h"
+
+typedef enum ImageinfoType_e {
+    IMAGE_PIXMAP       = Qt::UserRole,
+    IMAGE_BOOKMARK     = Qt::UserRole + 1,
+    IMAGE_ROTATE       = Qt::UserRole + 2,
+    IMAGE_INDEX_TEXT   = Qt::UserRole + 3,
+    IMAGE_CONTENT_TEXT = Qt::UserRole + 4
+} ImageinfoType_e;
+
+typedef struct ImagePageInfo_t {
+    int iPage;
+    int iType;
+    QString strcontents;
+    QString struuid;
+
+    ImagePageInfo_t(){
+        iPage = -1;
+        iType = -1;
+        struuid = "";
+        strcontents = "";
+    }
+
+    ImagePageInfo_t(int page){
+        this->iPage = page;
+    }
+
+    bool operator == (const ImagePageInfo_t &other) const{
+        return (this->iPage == other.iPage);
+    }
+
+    bool operator < (const ImagePageInfo_t &other) const{
+        return (this->iPage < other.iPage);
+    }
+
+    bool operator > (const ImagePageInfo_t &other) const{
+        return (this->iPage > other.iPage);
+    }
+} ImagePageInfo_t;
+Q_DECLARE_METATYPE(ImagePageInfo_t);
 
 class DocSheet;
 class ImageViewModel : public QAbstractListModel
@@ -36,15 +70,20 @@ public:
     ImageViewModel(QObject *parent = nullptr);
 
 public:
-    void initModelLst(const QList<int>& pagelst, bool sort = false);
+    void initModelLst(const QList<ImagePageInfo_t> &pagelst, bool sort = false);
     void setDocSheet(DocSheet *sheet);
     void setBookMarkVisible(int pageIndex, bool visible, bool updateIndex = true);
     void updatePageIndex(int pageIndex);
     void insertPageIndex(int pageIndex);
+    void insertPageIndex(const ImagePageInfo_t &tImagePageInfo);
     void removePageIndex(int pageIndex);
+    void removeModelIndex(int modelIndex);
+    void removeItemForuuid(const QString &uuid);
 
-    QModelIndex getModelIndexForPageIndex(int pageIndex);
+    QList<QModelIndex> getModelIndexForPageIndex(int pageIndex);
+    void getModelIndexImageInfo(int modelIndex, ImagePageInfo_t &tImagePageInfo);
     int getPageIndexForModelIndex(int row);
+    int findItemForuuid(const QString &uuid);
 
 public slots:
     void onUpdatePageImage(int pageIndex);
@@ -59,7 +98,7 @@ protected:
 private:
     QObject *m_parent;
     DocSheet *m_docSheet;
-    QList<int> m_pagelst;
+    QList<ImagePageInfo_t> m_pagelst;
     QMap<int, bool> m_cacheBookMarkMap;
 };
 

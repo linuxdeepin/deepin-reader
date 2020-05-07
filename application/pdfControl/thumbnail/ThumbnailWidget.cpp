@@ -44,6 +44,7 @@ void ThumbnailWidget::initWidget()
 {
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &ThumbnailWidget::onUpdateTheme);
     m_pImageListView = new ImageListView(m_sheet, this);
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * 1.0, LEFTMINHEIGHT * 1.0));
     ThumbnailDelegate* imageDelegate = new ThumbnailDelegate(m_pImageListView);
     m_pImageListView->setItemDelegate(imageDelegate);
 
@@ -100,7 +101,7 @@ void ThumbnailWidget::nextPage()
 void ThumbnailWidget::adaptWindowSize(const double &scale)
 {
     m_pImageListView->setProperty("adaptScale", scale);
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * scale, LEFTMINHEIGHT * scale));
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * scale, qMax(LEFTMINHEIGHT * scale, LEFTMINHEIGHT * 1.0)));
     m_pImageListView->reset();
     scrollToCurrentPage();
 }

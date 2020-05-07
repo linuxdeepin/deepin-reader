@@ -20,6 +20,8 @@
 #include <DListView>
 
 DWIDGET_USE_NAMESPACE
+struct ImagePageInfo_t;
+
 class DocSheet;
 class ImageViewModel;
 class ImageViewDelegate;
@@ -29,10 +31,11 @@ class ImageListView : public DListView
 {
     Q_OBJECT
 public:
-    ImageListView(DocSheet *sheet, QWidget* parent = nullptr);
+    ImageListView(DocSheet *sheet, QWidget *parent = nullptr);
 
 signals:
     void sigListMenuClick(const int &);
+    void sigListItemClicked(int row);
 
 public:
     void handleOpenSuccess();
@@ -40,10 +43,14 @@ public:
     void setListType(int type);
     void updatePageIndex(int index);
     void insertPageIndex(int pageIndex);
+    void insertPageIndex(const ImagePageInfo_t &tImagePageInfo);
     void removePageIndex(int pageIndex);
+    void removeModelIndex(int modelIndex);
+    void removeItemForuuid(const QString &uuid);
     bool scrollToIndex(int pageIndex, bool scrollTo = true);
     int  getModelIndexForPageIndex(int pageIndex);
     int  getPageIndexForModelIndex(int row);
+    void getModelIndexImageInfo(int modelIndex, ImagePageInfo_t &tImagePageInfo);
 
 private:
     void initControl();

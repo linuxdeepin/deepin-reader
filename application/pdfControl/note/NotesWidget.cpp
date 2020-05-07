@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
  *
- * Author:     duanxiaohui
+ * Author:     leiyu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,352 +17,162 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "NotesWidget.h"
-
 #include "business/AppInfo.h"
 #include "docview/docummentproxy.h"
+#include "pdfControl/imagelistview.h"
+#include "pdfControl/imageviewmodel.h"
+#include "notesdelegate.h"
 
+#include "DocSheet.h"
 #include "MsgHeader.h"
 #include "ModuleHeader.h"
-#include "DocSheet.h"
 #include "WidgetHeader.h"
 
+#include <DPushButton>
+#include <DHorizontalLine>
+
+const int LEFTMINHEIGHT = 80;
 NotesWidget::NotesWidget(DocSheet *sheet, DWidget *parent)
     : CustomWidget(parent), m_sheet(sheet)
 {
     initWidget();
-
-    initConnection();
-
-    m_ThreadLoadImage.setParentWidget(this);
 }
 
 NotesWidget::~NotesWidget()
 {
-    m_ThreadLoadImage.stopThreadRun();
+
 }
 
-/**
- * @brief NotesWidget::prevPage
- * 上一页
- */
+void NotesWidget::initWidget()
+{
+    QVBoxLayout *pVLayout = new QVBoxLayout;
+    pVLayout->setContentsMargins(0, 8, 0, 0);
+    pVLayout->setSpacing(0);
+    this->setLayout(pVLayout);
+
+    m_pImageListView = new ImageListView(m_sheet, this);
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * 1.0, LEFTMINHEIGHT * 1.0));
+    m_pImageListView->setListType(DR_SPACE::E_NOTE_WIDGET);
+    NotesDelegate *imageDelegate = new NotesDelegate(m_pImageListView);
+    m_pImageListView->setItemDelegate(imageDelegate);
+    connect(m_pImageListView, SIGNAL(sigListMenuClick(const int &)), SLOT(onListMenuClick(const int &)));
+    connect(m_pImageListView, SIGNAL(sigListItemClicked(int)), SLOT(onListItemClicked(int)));
+
+    m_pAddAnnotationBtn = new DPushButton(this);
+    m_pAddAnnotationBtn->setFixedHeight(36);
+    m_pAddAnnotationBtn->setMinimumWidth(170);
+    m_pAddAnnotationBtn->setText(tr("Add annotation"));
+    DFontSizeManager::instance()->bind(m_pAddAnnotationBtn, DFontSizeManager::T6);
+    connect(m_pAddAnnotationBtn, SIGNAL(clicked()), this, SLOT(onAddAnnotation()));
+
+    QHBoxLayout *pHBoxLayout = new QHBoxLayout;
+    pHBoxLayout->setContentsMargins(10, 6, 10, 6);
+    pVLayout->addWidget(m_pImageListView);
+    pVLayout->addWidget(new DHorizontalLine(this));
+    pHBoxLayout->addWidget(m_pAddAnnotationBtn);
+    pVLayout->addItem(pHBoxLayout);
+}
+
 void NotesWidget::prevPage()
 {
-    __JumpToPrevItem();
+    if (m_sheet.isNull())
+        return;
+    int curPage = m_pImageListView->currentIndex().row() - 1;
+    if (curPage < 0)
+        return;
+    int pageIndex = m_pImageListView->getPageIndexForModelIndex(curPage);
+    m_sheet->pageJump(pageIndex);
+    m_pImageListView->scrollToIndex(pageIndex);
 }
 
-/**
- * @brief NotesWidget::nextPage
- * 下一页
- */
 void NotesWidget::nextPage()
 {
-    __JumpToNextItem();
+    if (m_sheet.isNull())
+        return;
+    int curPage = m_pImageListView->currentIndex().row() + 1;
+    if (curPage < 0)
+        return;
+    int pageIndex = m_pImageListView->getPageIndexForModelIndex(curPage);
+    m_sheet->pageJump(pageIndex);
+    m_pImageListView->scrollToIndex(pageIndex);
 }
 
 void NotesWidget::DeleteItemByKey()
 {
-    auto curItem = m_pNotesList->currentItem();
-    if (curItem == nullptr)
-        return;
-
-    auto t_widget = qobject_cast<NotesItemWidget *>(m_pNotesList->itemWidget(curItem));
-    if (t_widget) {
-        if (t_widget->bSelect()) {
-            int nType = t_widget->nNoteType();
-
-            QString t_uuid = t_widget->noteUUId();
-            int page = t_widget->nPageIndex();
-            QString sContent = t_uuid + Constant::sQStringSep + QString::number(page);
-
-            if (nType == NOTE_HIGHLIGHT) {
-                emit sigDeleteContent(MSG_NOTE_DELETE_CONTENT, sContent);
-            } else {
-                emit sigDeleteContent(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
-            }
+    ImagePageInfo_t tImagePageInfo;
+    m_pImageListView->getModelIndexImageInfo(m_pImageListView->currentIndex().row(), tImagePageInfo);
+    if(tImagePageInfo.iPage >= 0){
+        int nType = tImagePageInfo.iType;
+        int page = tImagePageInfo.iPage;
+        QString uuid = tImagePageInfo.struuid;
+        QString sContent = uuid + Constant::sQStringSep + QString::number(page);
+        if (nType == NOTE_HIGHLIGHT) {
+            emit sigDeleteContent(MSG_NOTE_DELETE_CONTENT, sContent);
+        } else {
+            emit sigDeleteContent(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
         }
     }
 }
 
-/**
- * @brief NotesWidget::initWidget
- * 初始化界面
- */
-void NotesWidget::initWidget()
+void NotesWidget::addNoteItem(const QString &text, const int &iType)
 {
-    auto m_pVLayout = new QVBoxLayout;
-    m_pVLayout->setContentsMargins(0, 8, 0, 0);
-    m_pVLayout->setSpacing(0);
-    this->setLayout(m_pVLayout);
-
-    m_pNotesList = new CustomListWidget(m_sheet, this);
-    m_pNotesList->setListType(DR_SPACE::E_NOTE_WIDGET);
-    connect(m_pNotesList, SIGNAL(sigSelectItem(QListWidgetItem *)), SLOT(slotSelectItem(QListWidgetItem *)));
-    connect(m_pNotesList, SIGNAL(sigListMenuClick(const int &)), SLOT(slotListMenuClick(const int &)));
-    int tW = 170;
-    int tH = 36;
-//    dApp->adaptScreenView(tW, tH);
-    m_pAddAnnotationBtn = new DPushButton(this);
-    m_pAddAnnotationBtn->setFixedHeight(tH);
-    m_pAddAnnotationBtn->setMinimumWidth(tW);
-    m_pAddAnnotationBtn->setText(tr("Add annotation"));
-    DFontSizeManager::instance()->bind(m_pAddAnnotationBtn, DFontSizeManager::T6);
-    connect(m_pAddAnnotationBtn, SIGNAL(clicked()), this, SLOT(slotAddAnnotation()));
-
-    auto m_pHBoxLayout = new QHBoxLayout;
-    m_pHBoxLayout->setContentsMargins(10, 6, 10, 6);
-    m_pVLayout->addWidget(m_pNotesList);
-    m_pVLayout->addWidget(new DHorizontalLine(this));
-    m_pHBoxLayout->addWidget(m_pAddAnnotationBtn);
-    m_pVLayout->addItem(m_pHBoxLayout);
-}
-
-/**
- * @brief NotesWidget::slotAddNoteItem
- * 增加注释缩略图Item
- */
-void NotesWidget::__AddNoteItem(const QString &note, const int &iType)
-{
-    clearItemColor();
-    addNotesItem(note, iType);
-}
-
-/**
- * @brief NotesWidget::__DeleteNoteItem
- *       根据 uuid    删除注释item
- */
-void NotesWidget::__DeleteNoteItem(const QString &sUuid)
-{
-    if (m_pNotesList == nullptr) {
-        return;
-    }
-
-    for (int row = 0; row < m_pNotesList->count(); ++row) {
-        auto pItem = m_pNotesList->item(row);
-        if (pItem) {
-            auto t_widget = qobject_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
-            if (t_widget) {
-                QString t_uuid = t_widget->noteUUId();
-                if (t_uuid == sUuid) {
-                    int t_nPage = t_widget->nPageIndex();
-                    emit sigUpdateThumbnail(t_nPage);
-
-                    t_widget->deleteLater();
-                    t_widget = nullptr;
-
-                    delete pItem;
-                    pItem = nullptr;
-                    m_sheet->showTips(tr("The annotation has been removed"));
-                    break;
-                }
-            }
-        }
+    const QStringList &strList = text.split(Constant::sQStringSep, QString::SkipEmptyParts);
+    if (strList.count() == 3) {
+        ImagePageInfo_t tImagePageInfo;
+        tImagePageInfo.iPage = strList.at(2).trimmed().toInt();
+        tImagePageInfo.iType = iType;
+        tImagePageInfo.struuid = strList.at(0).trimmed();
+        tImagePageInfo.strcontents = strList.at(1).trimmed();
+        m_pImageListView->insertPageIndex(tImagePageInfo);
     }
 }
 
-void NotesWidget::__UpdateNoteItem(const QString &msgContent)
+void NotesWidget::deleteNoteItem(const QString &sUuid)
 {
-    QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (sList.size() == 3) {
-        QString sUuid = sList.at(0);
-        QString sText = sList.at(1);
-        QString sPage = sList.at(2);
+    m_pImageListView->removeItemForuuid(sUuid);
+    m_sheet->showTips(tr("The annotation has been removed"));
+}
 
-        bool rl = false;
-
-        int iCount = m_pNotesList->count();
-        for (int iLoop = 0; iLoop < iCount; iLoop++) {
-            auto pItem = m_pNotesList->item(iLoop);
-            if (pItem) {
-                auto t_widget = qobject_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
-                if (t_widget) {
-                    if (t_widget->nPageIndex() == sPage.toInt() && t_widget->noteUUId() == sUuid) {
-                        clearItemColor();
-
-                        rl = true;
-                        t_widget->setBSelect(true);
-                        t_widget->setTextEditText(sText);
-
-                        m_pNotesList->setCurrentItem(pItem);
-
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (!rl) {
-            QString sContent = sUuid + Constant::sQStringSep +
-                               sText + Constant::sQStringSep +
-                               sPage;
-
-            __AddNoteItem(sContent);
-        }
-    }
+void NotesWidget::updateNoteItem(const QString &msgContent)
+{
+    addNoteItem(msgContent);
 }
 
 
 void NotesWidget::handleOpenSuccess()
 {
-    if (nullptr == m_sheet)
-        return;
-
-    m_nIndex = 0;
-    m_bOpenFileOk = false;
-    m_ThreadLoadImage.setIsLoaded(false);
-    if (m_ThreadLoadImage.isRunning()) {
-        m_ThreadLoadImage.stopThreadRun();
-    }
-
-    m_pNotesList->clear();
-
-    QList<stHighlightContent> list_note;
-    m_sheet->getDocProxy()->getAllAnnotation(list_note);
-
-    if (list_note.count() < 1) {
-        m_bOpenFileOk = true;
-        return;
-    }
-
-    for (int index = 0; index < list_note.count(); ++index) {
-        stHighlightContent st = list_note.at(index);
-        if (st.strcontents == QString("")) {
-            continue;
-        }
-
-        int page = static_cast<int>(st.ipage);
-        QString uuid = st.struuid;
-        QString contant = st.strcontents;
-
-        addNewItem(QImage(), page, uuid, contant);
-    }
-    m_bOpenFileOk = true;
-
-    m_ThreadLoadImage.setListNoteSt(list_note);
-    m_ThreadLoadImage.setIsLoaded(true);
-    m_ThreadLoadImage.setProxy(m_sheet->getDocProxy());
-    if (!m_ThreadLoadImage.isRunning()) {
-        m_ThreadLoadImage.start();
-    }
+    m_pImageListView->handleOpenSuccess();
 }
 
-void NotesWidget::handleRotate(int rotate)
+void NotesWidget::handleRotate(int)
 {
-    for (int i = 0; i < m_pNotesList->count(); ++i) {
-        NotesItemWidget *itemWidget = reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(m_pNotesList->item(i)));
-        if (itemWidget)
-            itemWidget->setRotate(rotate);
-    }
+    //not Todo
 }
 
-void NotesWidget::slotLoadImage(const QImage &image)
-{
-    if (m_pNotesList->count() < 1 || m_nIndex >= m_pNotesList->count()) {
-        return;
-    }
-
-    QListWidgetItem *pItem = m_pNotesList->item(m_nIndex);
-    if (pItem) {
-        NotesItemWidget *t_widget =
-            reinterpret_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pItem));
-        if (t_widget) {
-            //t_widget->rotateThumbnail(m_nRotate);
-            t_widget->setLabelImage(image);
-        }
-    }
-    ++m_nIndex;
-}
-
-void NotesWidget::slotListMenuClick(const int &iAction)
+void NotesWidget::onListMenuClick(const int &iAction)
 {
     if (iAction == E_NOTE_COPY) {
-        CopyNoteContent();
+        copyNoteContent();
     } else if (iAction == E_NOTE_DELETE) {
         DeleteItemByKey();
     }
 }
 
-void NotesWidget::slotSelectItem(QListWidgetItem *item)
+void NotesWidget::onListItemClicked(int row)
 {
-    if (m_sheet.isNull())
-        return;
-
-    if (item == nullptr) {
-        return;
-    }
-
-    setSelectItemBackColor(item);
-
-    auto t_widget = qobject_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
-    if (t_widget) {
-        QString t_uuid = t_widget->noteUUId();
-        int page = t_widget->nPageIndex();
-
-        auto pDocProxy = m_sheet->getDocProxy();
+    ImagePageInfo_t tImagePageInfo;
+    m_pImageListView->getModelIndexImageInfo(row, tImagePageInfo);
+    if(tImagePageInfo.iPage >= 0){
+        int page = tImagePageInfo.iPage;
+        const QString &uuid = tImagePageInfo.struuid;
+        DocummentProxy *pDocProxy = m_sheet->getDocProxy();
         if (pDocProxy) {
-            pDocProxy->jumpToHighLight(t_uuid, page);
+            pDocProxy->jumpToHighLight(uuid, page);
         }
     }
 }
 
-void NotesWidget::SlotRightDeleteItem()
-{
-    DeleteItemByKey();
-}
-
-void NotesWidget::__JumpToPrevItem()
-{
-    if (m_pNotesList == nullptr) {
-        return;
-    }
-    if (m_pNotesList->count() <= 0) {
-        return;
-    }
-
-    auto current_item = m_pNotesList->currentItem();
-    if (current_item) {
-        int t_index = m_pNotesList->row(current_item);
-        t_index--;
-        if (t_index < 0)
-            return;
-
-        auto item = m_pNotesList->item(t_index);
-        if (item == nullptr)
-            return;
-
-        slotSelectItem(item);
-    }
-}
-
-void NotesWidget::__JumpToNextItem()
-{
-    if (m_pNotesList == nullptr) {
-        return;
-    }
-
-    if (m_pNotesList->count() <= 0) {
-        return;
-    }
-
-    auto current_item = m_pNotesList->currentItem();
-    if (current_item) {
-        int t_index = m_pNotesList->row(current_item);
-        t_index++;
-        if (t_index < 0)
-            return;
-
-        auto item = m_pNotesList->item(t_index);
-        if (item == nullptr)
-            return;
-
-        slotSelectItem(item);
-    }
-}
-
-/**
- * @brief NotesWidget::slotAddAnnotation
- * 添加注释按钮
- */
-void NotesWidget::slotAddAnnotation()
+void NotesWidget::onAddAnnotation()
 {
     m_sheet->setCurrentState(NOTE_ADD_State);
 }
@@ -370,287 +180,41 @@ void NotesWidget::slotAddAnnotation()
 void NotesWidget::handleAnntationMsg(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_NOTE_ADD_ITEM) {
-        __AddNoteItem(msgContent);
-    } else if (msgType == MSG_NOTE_DELETE_ITEM || msgType == MSG_NOTE_PAGE_DELETE_ITEM) {
-        __DeleteNoteItem(msgContent);
-    } else if (msgType == MSG_NOTE_UPDATE_ITEM || msgType == MSG_NOTE_PAGE_UPDATE_ITEM) {
-        __UpdateNoteItem(msgContent);
+        addNoteItem(msgContent, NOTE_HIGHLIGHT);
     } else if (msgType == MSG_NOTE_PAGE_ADD_ITEM) {
-        __AddNoteItem(msgContent, NOTE_ICON);
+        addNoteItem(msgContent, NOTE_ICON);
+    }else if (msgType == MSG_NOTE_DELETE_ITEM || msgType == MSG_NOTE_PAGE_DELETE_ITEM) {
+        deleteNoteItem(msgContent);
+    } else if (msgType == MSG_NOTE_UPDATE_ITEM || msgType == MSG_NOTE_PAGE_UPDATE_ITEM) {
+        updateNoteItem(msgContent);
     }
 }
 
-void NotesWidget::CopyNoteContent()
+void NotesWidget::copyNoteContent()
 {
-    auto curItem = m_pNotesList->currentItem();
-    if (curItem == nullptr)
-        return;
-
-    auto t_widget = qobject_cast<NotesItemWidget *>(m_pNotesList->itemWidget(curItem));
-    if (t_widget) {
-        t_widget->CopyItemText();
+    ImagePageInfo_t tImagePageInfo;
+    m_pImageListView->getModelIndexImageInfo(m_pImageListView->currentIndex().row(), tImagePageInfo);
+    if(tImagePageInfo.iPage >= 0){
+        Utils::copyText(tImagePageInfo.strcontents);
     }
 }
 
-/**
- * @brief NotesWidget::addNotesItem
- * 给新节点填充内容（包括文字、缩略图等内容）
- * @param image
- * @param page
- * @param text
- */
-void NotesWidget::addNotesItem(const QString &text, const int &iType)
-{
-    QStringList t_strList = text.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (t_strList.count() == 3) {
-        QString t_strUUid = t_strList.at(0).trimmed();
-        QString t_strText = t_strList.at(1).trimmed();
-        int t_nPage = t_strList.at(2).trimmed().toInt();
-
-        auto dproxy = m_sheet->getDocProxy();
-
-        if (nullptr == dproxy) {
-            return;
-        }
-
-        QImage image;
-
-        bool rl = dproxy->getImageMax(t_nPage, image, 75);
-
-        if (rl) {
-            QImage img = Utils::roundImage(QPixmap::fromImage(image), ICON_SMALL);
-
-            auto item = addNewItem(img, t_nPage, t_strUUid, t_strText, true, iType);
-
-            if (item) {
-                m_pNotesList->setCurrentItem(item);
-
-                emit sigUpdateThumbnail(t_nPage);
-
-            }
-        }
-    }
-}
-
-/**
- * @brief NotesWidget::initConnection
- * 初始化信号槽
- */
-void NotesWidget::initConnection()
-{
-    connect(&m_ThreadLoadImage, SIGNAL(sigLoadImage(const QImage &)), SLOT(slotLoadImage(const QImage &)));
-}
-
-/**
- * @brief BookMarkWidget::setSelectItemBackColor
- * 绘制选中外边框,蓝色
- */
-void NotesWidget::setSelectItemBackColor(QListWidgetItem *item)
-{
-    if (item == nullptr) {
-        return;
-    }
-
-    clearItemColor();
-
-    m_pNotesList->setCurrentItem(item);
-
-    auto t_widget = qobject_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
-    if (t_widget) {
-        t_widget->setBSelect(true);
-    }
-}
-
-void NotesWidget::clearItemColor()
-{
-    if (m_pNotesList == nullptr)
-        return;
-    auto pCurItem = m_pNotesList->currentItem();
-    if (pCurItem) {
-        auto pItemWidget = qobject_cast<NotesItemWidget *>(m_pNotesList->itemWidget(pCurItem));
-        if (pItemWidget) {
-            pItemWidget->setBSelect(false);
-        }
-    }
-}
-
-/**
- * @brief NotesWidget::addNewItem
- * 增加新的注释item
- * @param image
- * @param page
- * @param uuid
- * @param text
- */
-QListWidgetItem *NotesWidget::addNewItem(const QImage &image, const int &page, const QString &uuid, const QString &text,
-                                         const bool &bNew, const int &iType)
-{
-    auto item = m_pNotesList->insertWidgetItem(page);
-    if (item) {
-        auto itemWidget = new NotesItemWidget(this);
-        itemWidget->setNNoteType(iType);
-        itemWidget->setLabelImage(image);
-        itemWidget->setNoteUUid(uuid);
-        itemWidget->setStrPage(QString::number(page));
-        itemWidget->setLabelPage(page, 1);
-        itemWidget->setTextEditText(text);
-        if (!m_sheet.isNull())
-            itemWidget->setRotate(m_sheet->getOper(Rotate).toInt());
-
-        int tW = LEFTMINWIDTH;
-        int tH = 80;
-        itemWidget->setBSelect(bNew);
-
-        item->setFlags(Qt::NoItemFlags);
-        if (m_bOpenFileOk) {
-            double width = 1.0;
-            double height = 1.0;
-            width = static_cast<double>(tW) * m_scale;
-            height = static_cast<double>(tH) * m_scale;
-            tW = static_cast<int>(width);
-            tH = static_cast<int>(height);
-            item->setSizeHint(QSize(tW, tH));
-            itemWidget->adaptWindowSize(m_scale);
-        } else {
-            item->setSizeHint(QSize(tW, tH));
-        }
-
-        m_pNotesList->setItemWidget(item, itemWidget);
-
-        return item;
-    }
-
-    return nullptr;
-}
-
-NotesItemWidget *NotesWidget::getItemWidget(QListWidgetItem *item)
-{
-    if (m_pNotesList == nullptr) {
-        return nullptr;
-    }
-    auto pWidget = qobject_cast<NotesItemWidget *>(m_pNotesList->itemWidget(item));
-    if (pWidget) {
-        return pWidget;
-    }
-    return nullptr;
-}
-
-/**
- * @brief NotesWidget::adaptWindowSize
- * 注释缩略图自适应视窗大小
- * @param scale  缩放因子 大于0的数
- */
 void NotesWidget::adaptWindowSize(const double &scale)
 {
-    double width = 1.0;
-    double height = 1.0;
-
-    m_scale = scale;
-
-    width = static_cast<double>(LEFTMINWIDTH) * m_scale;
-    height = static_cast<double>(80) * m_scale;
-
-    if (m_pNotesList) {
-        int itemCount = 0;
-        itemCount = m_pNotesList->count();
-        if (itemCount > 0) {
-            for (int index = 0; index < itemCount; index++) {
-                auto item = m_pNotesList->item(index);
-                if (item) {
-                    auto itemWidget = getItemWidget(item);
-                    if (itemWidget) {
-                        item->setSizeHint(QSize(static_cast<int>(width), static_cast<int>(height)));
-                        itemWidget->adaptWindowSize(m_scale);
-                    }
-                }
-            }
-        }
-    }
+    const QModelIndex &curModelIndex = m_pImageListView->currentIndex();
+    m_pImageListView->setProperty("adaptScale", scale);
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * scale, qMax(LEFTMINHEIGHT * scale, LEFTMINHEIGHT * 1.0)));
+    m_pImageListView->reset();
+    scrollToModelInexPage(curModelIndex);
 }
 
-/**
- * @brief NotesWidget::updateThumbnail
- * 高亮操作之后要跟换相应的缩略图
- * @param page 页码数，从0开始
- */
 void NotesWidget::updateThumbnail(const int &page)
 {
-    if (m_pNotesList == nullptr) {
-        return;
-    }
-    int itemNum = 0;
-    itemNum = m_pNotesList->count();
-    if (itemNum <= 0) {
-        return;
-    }
-
-    QImage image;
-
-    auto dproxy = m_sheet->getDocProxy();
-
-    dproxy->getImageMax(page, image, 75);
-
-    for (int index = 0; index < itemNum; index++) {
-        auto item = m_pNotesList->item(index);
-        if (item) {
-            auto itemWidget = getItemWidget(item);
-            if (itemWidget) {
-                if (itemWidget->nPageIndex() == page) {
-                    if (nullptr == dproxy) {
-                        return;
-                    }
-                    itemWidget->setLabelImage(image);
-                }
-            }
-        }
-    }
+    m_pImageListView->updatePageIndex(page);
 }
 
-ThreadLoadImageOfNote::ThreadLoadImageOfNote(QObject *parent)
-    : QThread(parent)
+void NotesWidget::scrollToModelInexPage(const QModelIndex &index)
 {
-}
-
-void ThreadLoadImageOfNote::stopThreadRun()
-{
-    m_isLoaded = false;
-
-    quit();
-    wait();
-}
-
-void ThreadLoadImageOfNote::run()
-{
-    while (m_isLoaded && m_proxy != nullptr) {
-        msleep(50);
-
-        int t_page = -1;
-        QImage image;
-        bool bl = false;
-
-        for (int page = 0; page < m_stListNote.count(); page++) {
-            if (!m_isLoaded)
-                break;
-
-            stHighlightContent highContent = m_stListNote.at(page);
-
-            if (highContent.strcontents == QString("")) {
-                continue;
-            }
-
-            if (t_page != static_cast<int>(highContent.ipage)) {
-                t_page = static_cast<int>(highContent.ipage);
-
-                bl = m_proxy->getImageMax(t_page, image, 75);
-            }
-            if (bl) {
-                emit sigLoadImage(image);
-            }
-            msleep(50);
-        }
-
-        m_isLoaded = false;
-        m_stListNote.clear();
-        break;
-    }
+    m_pImageListView->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
+    m_pImageListView->setCurrentIndex(index);
 }

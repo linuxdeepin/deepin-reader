@@ -43,7 +43,7 @@ void BookMarkWidget::initWidget()
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BookMarkWidget::onUpdateTheme);
 
     m_pImageListView = new ImageListView(m_sheet, this);
-    m_pImageListView->setSpacing(0);
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * 1.0, LEFTMINHEIGHT * 1.0));
     m_pImageListView->setListType(DR_SPACE::E_BOOKMARK_WIDGET);
     BookMarkDelegate* imageDelegate = new BookMarkDelegate(m_pImageListView);
     m_pImageListView->setItemDelegate(imageDelegate);
@@ -185,7 +185,7 @@ void BookMarkWidget::onAddBookMarkClicked()
 void BookMarkWidget::adaptWindowSize(const double &scale)
 {
     m_pImageListView->setProperty("adaptScale", scale);
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * scale, LEFTMINHEIGHT * scale));
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * scale, qMax(LEFTMINHEIGHT * scale, LEFTMINHEIGHT * 1.0)));
     m_pImageListView->reset();
     scrollToCurrentPage();
 }
