@@ -303,9 +303,3 @@ void CatalogTreeView::showEvent(QShowEvent *event)
     DTreeView::showEvent(event);
     setFocus();
 }
-
-void CatalogTreeView::focusOutEvent(QFocusEvent *)
-{
-    if(isVisible())
-        setFocus();
-}
