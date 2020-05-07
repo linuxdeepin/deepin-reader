@@ -98,8 +98,6 @@ void DataStackedWidget::keyPressEvent(QKeyEvent *event)
 void DataStackedWidget::slotSetStackCurIndex(const int &iIndex)
 {
     setCurrentIndex(iIndex);
-
-    double scale = 1.0;
     double t_epsinon = 1.0;
 
     t_epsinon = m_scale - m_dScale;
@@ -107,7 +105,7 @@ void DataStackedWidget::slotSetStackCurIndex(const int &iIndex)
     if ((t_epsinon < -EPSINON) || (t_epsinon > EPSINON)) {
         //刷新当前列表视图大小,如果缩放比例有变化的话
         m_dScale = m_scale;
-        adaptWindowSize(scale);
+        adaptWindowSize(m_scale);
     }
 
     //  前一个是 出来搜索结果了, 后一个是正在搜索, 两个都不需要保存在记录中
