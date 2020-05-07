@@ -10,7 +10,6 @@
 
 #include "AttrScrollWidget.h"
 #include "docview/docummentproxy.h"
-#include "CustomControl/DFMGlobal.h"
 #include "CustomControl/ImageLabel.h"
 #include "CustomControl/wordwraplabel.h"
 

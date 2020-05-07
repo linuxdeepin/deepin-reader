@@ -4,12 +4,14 @@ HEADERS += \
     $$PWD/MsgHeader.h \
     $$PWD/ModuleHeader.h \
     $$PWD/WidgetHeader.h \
-    $$PWD/global.h
+    $$PWD/global.h \
+    $$PWD/database.h
 
 SOURCES += \
     $$PWD/json.cpp \
     $$PWD/ProcessController.cpp \
-    $$PWD/global.cpp
+    $$PWD/global.cpp \
+    $$PWD/database.cpp
 
 INCLUDEPATH += $$PWD
 

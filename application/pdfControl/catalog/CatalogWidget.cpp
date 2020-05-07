@@ -23,7 +23,6 @@
 #include "CatalogTreeView.h"
 
 #include "CustomControl/CustomClickLabel.h"
-#include "CustomControl/DFMGlobal.h"
 #include "docview/docummentproxy.h"
 #include "DocSheet.h"
 

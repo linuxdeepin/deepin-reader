@@ -32,7 +32,6 @@ SaveDialog::SaveDialog(QObject *parent)
 
 int SaveDialog::showDialog()
 {
-//    DDialog dlg("", tr("Do you want to save the changes?"));
     DDialog dlg(tr("Do you want to save the changes?"), "");
 
     dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));

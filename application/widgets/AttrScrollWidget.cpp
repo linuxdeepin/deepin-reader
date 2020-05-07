@@ -4,7 +4,6 @@
 #include <DFontSizeManager>
 #include <DTextBrowser>
 
-#include "CustomControl/DFMGlobal.h"
 #include "docview/commonstruct.h"
 #include "docview/docummentproxy.h"
 #include "utils/utils.h"
