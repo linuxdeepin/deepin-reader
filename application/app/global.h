@@ -23,6 +23,12 @@ enum Rotation {
     NumberOfRotations = 4
 };
 
+enum MouseShape {
+    MouseShapeNormal = 0,
+    MouseShapeHand = 1,
+    NumberOfMouseShapes = 2
+};
+
 struct RenderResolution {
     int resolutionX;
     int resolutionY;

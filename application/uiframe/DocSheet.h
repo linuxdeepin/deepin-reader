@@ -15,6 +15,16 @@ class SheetSidebar;
 class DocummentProxy;
 class SheetBrowserArea;
 class FindWidget;
+struct DocOperation {
+    Dr::ScaleMode scaleMode     = Dr::ScaleFactorMode;
+    Dr::Rotation rotation       = Dr::RotateBy0;
+    Dr::MouseShape mouseShape   = Dr::MouseShapeNormal;
+    Dr::LayoutMode layoutMode   = Dr::SinglePageMode;
+    double scale                = 100.00;
+    bool openThumbnail          = false;
+    int  leftIndex              = 0;
+    int  currentPage            = 1;
+};
 class DocSheet : public Dtk::Widget::DSplitter
 {
     Q_OBJECT
@@ -117,6 +127,8 @@ public:
 
     void quitMagnifer();
 
+    DocOperation operation();
+
 signals:
     void sigOpenFileResult(const QString &, const bool &);
 
@@ -132,6 +144,7 @@ signals:
 
 private:
     Dr::FileType m_type;
+    DocOperation m_operation;
     QString      m_uuid;
 public:
     static QUuid     getUuid(DocSheet *);

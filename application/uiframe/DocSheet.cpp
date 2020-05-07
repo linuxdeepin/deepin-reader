@@ -327,3 +327,8 @@ void DocSheet::quitMagnifer()
 
     doc->OnExitMagnifer();
 }
+
+DocOperation DocSheet::operation()
+{
+    return m_operation;
+}

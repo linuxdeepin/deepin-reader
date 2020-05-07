@@ -28,7 +28,9 @@ void DocSheetDJVU::zoomout()
 bool DocSheetDJVU::openFileExec(const QString &filePath)
 {
     if (m_browser->openFilePath(filePath)) {
-        m_browser->loadPages();
+        //readOperation();
+
+        m_browser->loadPages(operation().scaleMode, operation().scale, operation().rotation, operation().mouseShape, operation().currentPage);
         return true;
     }
 

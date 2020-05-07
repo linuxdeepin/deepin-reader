@@ -32,7 +32,6 @@ along with qpdfview.  If not, see <http://www.gnu.org/licenses/>.
 
 class QColor;
 class QImage;
-class QPrinter;
 class QSizeF;
 
 #include "global.h"

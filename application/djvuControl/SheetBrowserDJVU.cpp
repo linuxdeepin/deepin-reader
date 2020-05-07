@@ -4,12 +4,14 @@
 
 #include <QDebug>
 #include <QGraphicsItem>
-#
+#include <QScrollBar>
+#include <QTimer>
+
 SheetBrowserDJVU::SheetBrowserDJVU(QWidget *parent) : QGraphicsView(parent)
 {
     setScene(new QGraphicsScene());
 
-    //setDragMode(QGraphicsView::ScrollHandDrag);
+    connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onVerticalScrollBarValueChanged(int)));
 }
 
 SheetBrowserDJVU::~SheetBrowserDJVU()
@@ -28,7 +30,7 @@ bool SheetBrowserDJVU::openFilePath(const QString &filePath)
     return true;
 }
 
-void SheetBrowserDJVU::loadPages()
+void SheetBrowserDJVU::loadPages(Dr::ScaleMode mode, double scale, Dr::Rotation rotation, Dr::MouseShape mouseShape, int currentPage)
 {
     if (nullptr == m_document)
         return;
@@ -47,11 +49,22 @@ void SheetBrowserDJVU::loadPages()
         scene()->addItem(item);
     }
 
-    setScale(m_mode, m_scale, m_rotion);
+    setScale(mode, scale, rotation);
+    setMouseShape(mouseShape);
+    setCurrentPage(5);
 }
 
 void SheetBrowserDJVU::setScale(Dr::ScaleMode mode, double scale, Dr::Rotation rotation)
 {
+//保持中心不变的放大
+//    QPointF center = my_qgv->viewPort().rect().center();
+//    center = my_qgv->mapToScene(center);
+//    ...
+//    // user edit; reconstruct scene
+//    //
+//    my_qgv->centerOn(center);
+
+
     m_mode   = mode;
     m_rotion = rotation;
 
@@ -98,4 +111,42 @@ void SheetBrowserDJVU::setScale(Dr::ScaleMode mode, double scale, Dr::Rotation r
     }
 
     scene()->setSceneRect(0, 0, width, height);
+}
+
+void SheetBrowserDJVU::setMouseShape(Dr::MouseShape mouseShape)
+{
+    m_mouseShape = mouseShape;
+    if (Dr::MouseShapeHand == m_mouseShape)
+        setDragMode(QGraphicsView::ScrollHandDrag);
+    else
+        setDragMode(QGraphicsView::NoDrag);
+}
+
+void SheetBrowserDJVU::setCurrentPage(int page)
+{
+    scrollValue = 0;
+    for (int i = 0; i < page - 1; ++i) {
+        if (m_items.count() <= i)
+            break;
+        scrollValue += m_items.at(i)->boundingRect().height() + 5;
+    }
+
+    QTimer::singleShot(1, this, SLOT(onScroll()));
+}
+
+void SheetBrowserDJVU::onVerticalScrollBarValueChanged(int value)
+{
+    int y = 0;
+    for (int i = 0; i < m_items.count(); ++i) {
+        y += m_items.at(i)->boundingRect().height() + 5;
+        if (y > value) {
+            emit sigScrollPage(i + 1);
+            break;
+        }
+    }
+}
+
+void SheetBrowserDJVU::onScroll()
+{
+    verticalScrollBar()->setValue(scrollValue);
 }
