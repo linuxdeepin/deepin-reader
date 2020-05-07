@@ -38,6 +38,7 @@ signals:
     void sigListItemClicked(int row);
 
 public:
+    void resetData();
     void handleOpenSuccess();
     void setBoolMarkVisible(int pageIndex, bool visible);
     void setListType(int type);

@@ -52,6 +52,11 @@ void ImageListView::initControl()
     this->setModel(m_imageModel);
 }
 
+void ImageListView::resetData()
+{
+    m_imageModel->resetData();
+}
+
 void ImageListView::setBoolMarkVisible(int pageIndex, bool visible)
 {
     m_imageModel->setBookMarkVisible(pageIndex, visible);

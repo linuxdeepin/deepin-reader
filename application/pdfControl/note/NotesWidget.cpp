@@ -83,7 +83,7 @@ void NotesWidget::prevPage()
         return;
     int pageIndex = m_pImageListView->getPageIndexForModelIndex(curPage);
     m_sheet->pageJump(pageIndex);
-    m_pImageListView->scrollToIndex(pageIndex);
+    m_pImageListView->setCurrentIndex(m_pImageListView->model()->index(curPage, 0));
 }
 
 void NotesWidget::nextPage()
@@ -91,11 +91,11 @@ void NotesWidget::nextPage()
     if (m_sheet.isNull())
         return;
     int curPage = m_pImageListView->currentIndex().row() + 1;
-    if (curPage < 0)
+    if (curPage >= m_pImageListView->model()->rowCount())
         return;
     int pageIndex = m_pImageListView->getPageIndexForModelIndex(curPage);
     m_sheet->pageJump(pageIndex);
-    m_pImageListView->scrollToIndex(pageIndex);
+    m_pImageListView->setCurrentIndex(m_pImageListView->model()->index(curPage, 0));
 }
 
 void NotesWidget::DeleteItemByKey()
@@ -141,7 +141,6 @@ void NotesWidget::updateNoteItem(const QString &msgContent)
 {
     addNoteItem(msgContent);
 }
-
 
 void NotesWidget::handleOpenSuccess()
 {

@@ -71,6 +71,7 @@ public:
     ImageViewModel(QObject *parent = nullptr);
 
 public:
+    void resetData();
     void initModelLst(const QList<ImagePageInfo_t> &pagelst, bool sort = false);
     void setDocSheet(DocSheet *sheet);
     void setBookMarkVisible(int pageIndex, bool visible, bool updateIndex = true);

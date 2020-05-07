@@ -26,6 +26,12 @@ ImageViewModel::ImageViewModel(QObject *parent)
     m_docSheet = nullptr;
 }
 
+void ImageViewModel::resetData()
+{
+    beginResetModel();
+    endResetModel();
+}
+
 void ImageViewModel::initModelLst(const QList<ImagePageInfo_t> &pagelst, bool sort)
 {
     beginResetModel();
