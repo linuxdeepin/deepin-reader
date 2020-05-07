@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="46px" height="46px" viewBox="0 0 46 46" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61.2 (89653) - https://sketch.com -->
+    <title>indicator </title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <circle id="path-1" cx="15" cy="15" r="15"></circle>
+        <filter x="-33.3%" y="-26.7%" width="166.7%" height="166.7%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.521512681   0 0 0 0 0.29198328   0 0 0 0 0  0 0 0 0.2 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="批注_indicator-2">
+            <g id="批注_indicator" transform="translate(8.000000, 8.000000)">
+                <g id="Oval-3">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill="#C2752B" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+                <g id="批注" stroke-width="1" fill-rule="evenodd" transform="translate(3.000000, 3.000000)">
+                    <rect id="Rectangle-6" fill-opacity="0" fill="#D8D8D8" x="0" y="0" width="24" height="24"></rect>
+                    <path d="M10.3412977,5.00032181 L5,5 L5,20 L17,20 L16.9998085,12.9170737 C17.343913,12.8593554 17.6780866,12.7723479 17.9996782,12.6587023 L18,21 L4,21 L4,4 L10.8026704,4.00003939 C10.6196997,4.31634664 10.4647754,4.65090758 10.3412977,5.00032181 Z M16,17 L16,18 L6,18 L6,17 L16,17 Z M16,14 L16,15 L6,15 L6,14 L16,14 Z M12.6834702,12.0008411 L6,12 L6,11 L11.5285648,11.0008689 C11.8689178,11.3809934 12.2570309,11.7174621 12.6834702,12.0008411 Z M16,2.5 C18.4852814,2.5 20.5,4.51471863 20.5,7 C20.5,9.48528137 18.4852814,11.5 16,11.5 C13.5147186,11.5 11.5,9.48528137 11.5,7 C11.5,4.51471863 13.5147186,2.5 16,2.5 Z M16,3.5 C14.0670034,3.5 12.5,5.06700338 12.5,7 C12.5,8.93299662 14.0670034,10.5 16,10.5 C17.9329966,10.5 19.5,8.93299662 19.5,7 C19.5,5.06700338 17.9329966,3.5 16,3.5 Z M10.3416539,9.00068588 L6,9 L6,8 L10.0830939,8.00080686 C10.1408733,8.34491883 10.2279439,8.67909573 10.3416539,9.00068588 Z" fill="#FFFFFF" fill-rule="nonzero"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
