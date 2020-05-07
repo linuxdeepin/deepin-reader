@@ -36,7 +36,7 @@ void BookMarkDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
         const QPixmap& pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>();
         if(!pixmap.isNull()){
             const int borderRadius = 6;
-            const QPixmap& scalePix = pixmap.scaled(62, 62, Qt::KeepAspectRatio);
+            const QPixmap& scalePix = pixmap.scaled(62, 62, Qt::KeepAspectRatio, Qt::SmoothTransformation);
             const QSize& scalePixSize = scalePix.size();
             const QRect& rect = QRect(option.rect.x() + 10, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
 
