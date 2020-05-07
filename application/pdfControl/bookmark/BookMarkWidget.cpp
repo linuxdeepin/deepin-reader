@@ -19,7 +19,7 @@
 #include "BookMarkWidget.h"
 #include "DocSheet.h"
 #include "WidgetHeader.h"
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/docummentproxy.h"
 #include "pdfControl/imagelistview.h"
 #include "bookmarkdelegate.h"
 

@@ -7,7 +7,7 @@
 #include "DocSheet.h"
 
 #include "CustomControl/CustomWidget.h"
-#include "docview/commonstruct.h"
+#include "pdfControl/docview/commonstruct.h"
 
 //class ScaleMenu;
 class FontMenu;

@@ -24,7 +24,7 @@
 #include <DIconButton>
 #include <DComboBox>
 
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/docummentproxy.h"
 #include "DocSheet.h"
 
 ScaleWidget::ScaleWidget(DWidget *parent)
@@ -190,7 +190,7 @@ void ScaleWidget::setSheet(DocSheet *sheet)
 
         if (static_cast<int>(nScale) <= 0) {
             nScale = 100;
-            m_sheet->setData(Scale, 100);
+            m_sheet->setOper(Scale, 100);
         }
 
         int index = -1;

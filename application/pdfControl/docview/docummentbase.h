@@ -1,8 +1,8 @@
 #ifndef DOCUMMENTBASE_H
 #define DOCUMMENTBASE_H
 
-#include "docview/commonstruct.h"
-#include "docview/generatorclass.h"
+#include "pdfControl/docview/commonstruct.h"
+#include "pdfControl/docview/generatorclass.h"
 #include "searchtask.h"
 #include <DWidget>
 #include <DScrollArea>

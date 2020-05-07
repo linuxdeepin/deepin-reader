@@ -4,7 +4,7 @@
 #include <QResizeEvent>
 
 #include "CustomControl/CustomWidget.h"
-#include "docview/commonstruct.h"
+#include "pdfControl/docview/commonstruct.h"
 
 /**
  * @brief The LeftShowWidget class

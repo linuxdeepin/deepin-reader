@@ -16,7 +16,7 @@
 */
 #include "imagelistview.h"
 #include "DocSheet.h"
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/docummentproxy.h"
 #include "pdfControl/imageviewmodel.h"
 #include "application.h"
 #include "WidgetHeader.h"
@@ -146,7 +146,7 @@ void ImageListView::removeItemForuuid(const QString &uuid)
 
 void ImageListView::onItemClicked(const QModelIndex &index)
 {
-    if(index.isValid()){
+    if (index.isValid()) {
         m_docSheet->pageJump(m_imageModel->getPageIndexForModelIndex(index.row()));
         emit sigListItemClicked(index.row());
     }

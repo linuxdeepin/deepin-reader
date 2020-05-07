@@ -6,7 +6,7 @@
 
 #include "FileDataModel.h"
 #include "global.h"
-#include "docview/commonstruct.h"
+#include "pdfControl/docview/commonstruct.h"
 #include "ModuleHeader.h"
 
 class SpinnerWidget;
@@ -73,15 +73,15 @@ public:
 
     virtual bool getFileChanged();
 
-    virtual void saveOper();
-
     virtual bool saveData();
 
     virtual bool saveAsData(QString filePath);
 
-    virtual void setData(const int &, const QVariant &);
-
     virtual QVariant getOper(int type);
+
+    virtual void setOper(const int &, const QVariant &);
+
+    virtual void saveOper();
 
     virtual DocummentProxy *getDocProxy();      //在文档打开成功之前为空
 

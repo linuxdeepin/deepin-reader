@@ -112,7 +112,7 @@ void DataStackedWidget::slotSetStackCurIndex(const int &iIndex)
 
     //  前一个是 出来搜索结果了, 后一个是正在搜索, 两个都不需要保存在记录中
     if (currentWidget() != m_pSearchResWidget) {
-        m_sheet->setData(LeftIndex, QString::number(iIndex));
+        m_sheet->setOper(LeftIndex, QString::number(iIndex));
     }
 }
 

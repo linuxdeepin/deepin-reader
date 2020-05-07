@@ -1,10 +1,5 @@
 #include "docummentfactory.h"
 #include "pdf/docummentpdf.h"
-#include "djvu/docummentdjvu.h"
-#include "tiff/documentiff.h"
-#include "ps/docummentps.h"
-#include "xps/docummentxps.h"
-
 
 DocummentFactory::DocummentFactory()
 {

@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SearchResWidget.h"
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/docummentproxy.h"
 #include "DocSheet.h"
 
 SearchResWidget::SearchResWidget(DocSheet *sheet, DWidget *parent)

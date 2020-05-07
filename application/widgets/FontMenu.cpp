@@ -20,7 +20,7 @@
 #include "DocSheet.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/docummentproxy.h"
 
 FontMenu::FontMenu(DWidget *parent):
     CustomMenu(parent)

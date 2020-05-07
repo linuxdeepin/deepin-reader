@@ -1,5 +1,5 @@
 #include "generatorclass.h"
-#include "docview/pagebase.h"
+#include "pdfControl/docview/pagebase.h"
 #include "docummentbase.h"
 
 MagnifierImageRender::MagnifierImageRender()

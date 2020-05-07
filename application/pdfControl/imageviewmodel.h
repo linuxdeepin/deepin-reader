@@ -20,7 +20,7 @@
 #include <QAbstractListModel>
 #include <QMap>
 
-#include "docview/commonstruct.h"
+#include "pdfControl/docview/commonstruct.h"
 
 typedef enum ImageinfoType_e {
     IMAGE_PIXMAP       = Qt::UserRole,

@@ -1,7 +1,7 @@
 #include "docummentpdf.h"
 #include "pagepdf.h"
 #include "../searchtask.h"
-#include "docview/publicfunc.h"
+#include "pdfControl/docview/publicfunc.h"
 //#include "../docummentbase.cpp"
 #include <DScrollBar>
 #include <QImage>

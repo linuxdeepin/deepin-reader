@@ -4,8 +4,8 @@
 #include <DFontSizeManager>
 #include <DTextBrowser>
 
-#include "docview/commonstruct.h"
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/commonstruct.h"
+#include "pdfControl/docview/docummentproxy.h"
 #include "utils/utils.h"
 #include "DocSheet.h"
 #include "CustomControl/wordwraplabel.h"

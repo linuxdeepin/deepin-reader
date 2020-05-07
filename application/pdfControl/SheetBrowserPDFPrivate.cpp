@@ -8,7 +8,7 @@
 #include "menu/TextOperationMenu.h"
 #include "menu/DefaultOperationMenu.h"
 #include "widgets/FindWidget.h"
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/docummentproxy.h"
 #include "business/AppInfo.h"
 #include "SheetBrowserPDF.h"
 #include "widgets/NoteTipWidget.h"
@@ -222,17 +222,6 @@ void SheetBrowserPDFPrivate::DocFile_ctrl_c()
             Utils::copyText(sSelectText);
         }
     }
-}
-
-int SheetBrowserPDFPrivate::qDealWithShortKey(const QString &sKey)
-{
-    QList<QString> KeyMsgList = {KeyStr::g_ctrl_l, KeyStr::g_ctrl_i, KeyStr::g_ctrl_c};
-
-    if (KeyMsgList.contains(sKey)) {
-        OnShortCutKey(sKey);
-        return MSG_OK;
-    }
-    return MSG_NO_OK;
 }
 
 void SheetBrowserPDFPrivate::showNoteViewWidget(const QString &sPage, const QString &t_strUUid, const QString &sText, const int &nType)

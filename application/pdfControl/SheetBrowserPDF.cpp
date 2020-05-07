@@ -24,7 +24,7 @@
 #include "controller/ProxyData.h"
 #include "controller/ProxyFileDataModel.h"
 #include "controller/ProxyViewDisplay.h"
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/docummentproxy.h"
 
 void SheetBrowserPDF::setDoubleShow(bool isShow)
 {
@@ -301,10 +301,10 @@ void SheetBrowserPDF::initConnections()
     connect(this, SIGNAL(sigDeleteAnntation(const int &, const QString &)), d, SLOT(SlotDeleteAnntation(const int &, const QString &)));
 }
 
-int SheetBrowserPDF::qDealWithShortKey(const QString &sKey)
+void SheetBrowserPDF::qDealWithShortKey(const QString &sKey)
 {
     Q_D(SheetBrowserPDF);
-    return d->qDealWithShortKey(sKey);
+    d->OnShortCutKey(sKey);
 }
 
 bool SheetBrowserPDF::getFileChange()

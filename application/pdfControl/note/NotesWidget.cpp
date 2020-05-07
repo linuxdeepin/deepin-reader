@@ -18,7 +18,7 @@
  */
 #include "NotesWidget.h"
 #include "business/AppInfo.h"
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/docummentproxy.h"
 #include "pdfControl/imagelistview.h"
 #include "pdfControl/imageviewmodel.h"
 #include "notesdelegate.h"

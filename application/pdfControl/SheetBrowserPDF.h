@@ -20,7 +20,7 @@
 #define FILEVIEWWIDGET_H
 
 #include "CustomControl/CustomWidget.h"
-#include "docview/commonstruct.h"
+#include "pdfControl/docview/commonstruct.h"
 
 class DocummentProxy;
 class ProxyFileDataModel;
@@ -88,7 +88,7 @@ signals:
     void sigFindFinished();                             //搜索完成
 
 public:
-    int qDealWithShortKey(const QString &);
+    void qDealWithShortKey(const QString &);
 
     void OpenFilePath(const QString &);
 

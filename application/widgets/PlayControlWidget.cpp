@@ -9,7 +9,7 @@
 
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/docummentproxy.h"
 #include "CustomControl/CustomWidget.h"
 #include "DocSheet.h"
 #include "CentralDocPage.h"

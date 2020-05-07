@@ -16,7 +16,7 @@
 */
 #include "imageviewmodel.h"
 #include "DocSheet.h"
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/docummentproxy.h"
 #include "threadmanager/readerimagethreadpoolmanager.h"
 
 ImageViewModel::ImageViewModel(QObject *parent)

@@ -20,7 +20,7 @@
 
 #include <QValidator>
 
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/docummentproxy.h"
 #include "DocSheet.h"
 
 PagingWidget::PagingWidget(DocSheet *sheet, DWidget *parent)

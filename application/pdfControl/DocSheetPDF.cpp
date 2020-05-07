@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "DocSheetPDF.h"
-#include "docview/commonstruct.h"
+#include "pdfControl/docview/commonstruct.h"
 #include "pdfControl/SheetSidebarPDF.h"
 
 #include <QJsonDocument>
@@ -30,7 +30,7 @@
 #include "pdfControl/SheetBrowserPDF.h"
 #include "CentralDocPage.h"
 #include "app/ProcessController.h"
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/docummentproxy.h"
 #include "widgets/FindWidget.h"
 #include "djvu/SheetBrowserDJVU.h"
 
@@ -185,49 +185,41 @@ void DocSheetPDF::zoomout()
 
 void DocSheetPDF::setDoubleShow(bool isShow)
 {
-
     m_browser->setDoubleShow(isShow);
 }
 
 void DocSheetPDF::setRotateLeft()
 {
-
     m_browser->setRotateLeft();
 }
 
 void DocSheetPDF::setRotateRight()
 {
-
     m_browser->setRotateRight();
 }
 
 void DocSheetPDF::setFileChanged(bool hasChanged)
 {
-
     m_browser->setFileChanged(hasChanged);
 }
 
 void DocSheetPDF::setMouseDefault()
 {
-
     m_browser->setMouseDefault();
 }
 
 void DocSheetPDF::setMouseHand()
 {
-
     m_browser->setMouseHand();
 }
 
 void DocSheetPDF::setScale(double scale)
 {
-
     m_browser->setScale(scale);
 }
 
 void DocSheetPDF::setFit(int fit)
 {
-
     m_browser->setFit(fit);
 }
 
@@ -249,7 +241,6 @@ bool DocSheetPDF::isMouseHand()
 
 bool DocSheetPDF::isDoubleShow()
 {
-
     return m_browser->isDoubleShow();
 }
 
@@ -366,14 +357,14 @@ bool DocSheetPDF::saveAsData(QString filePath)
     return m_browser->saveAsData(filePath);
 }
 
-void DocSheetPDF::setData(const int &type, const QVariant &value)
-{
-    m_browser->setOper(type, value);
-}
-
 QVariant DocSheetPDF::getOper(int type)
 {
     return m_browser->getOper(type);
+}
+
+void DocSheetPDF::setOper(const int &type, const QVariant &value)
+{
+    m_browser->setOper(type, value);
 }
 
 DocummentProxy *DocSheetPDF::getDocProxy()

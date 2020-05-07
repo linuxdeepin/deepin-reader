@@ -27,7 +27,7 @@
 #include "ProxyData.h"
 
 #include "business/AppInfo.h"
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/docummentproxy.h"
 
 #include "pdfControl/SheetBrowserPDF.h"
 

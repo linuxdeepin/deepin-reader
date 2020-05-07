@@ -30,7 +30,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/docummentproxy.h"
 #include "CustomControl/CustomWidget.h"
 
 FindWidget::FindWidget(DWidget *parent)

@@ -1,5 +1,5 @@
 #include "pagepdf.h"
-#include "docview/publicfunc.h"
+#include "pdfControl/docview/publicfunc.h"
 #include <QDebug>
 #include <QPainter>
 

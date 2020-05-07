@@ -21,7 +21,7 @@
 
 #include "CustomControl/CustomWidget.h"
 #include "../CustomListWidget.h"
-#include "docview/commonstruct.h"
+#include "pdfControl/docview/commonstruct.h"
 #include "SearchItemWidget.h"
 
 /**

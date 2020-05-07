@@ -20,7 +20,7 @@
 #include "pdfControl/SheetBrowserPDFPrivate.h"
 #include "ProxyData.h"
 #include "business/AppInfo.h"
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/docummentproxy.h"
 #include "DocSheet.h"
 #include "CustomControl/CustomWidget.h"
 #include "app/ModuleHeader.h"

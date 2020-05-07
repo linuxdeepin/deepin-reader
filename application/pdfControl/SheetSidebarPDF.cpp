@@ -6,7 +6,7 @@
 
 #include "widgets/MainOperationWidget.h"
 
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/docummentproxy.h"
 #include "pdfControl/DataStackedWidget.h"
 #include "DocSheet.h"
 

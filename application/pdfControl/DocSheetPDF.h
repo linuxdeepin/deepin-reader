@@ -5,7 +5,7 @@
 #include <QMap>
 
 #include "FileDataModel.h"
-#include "docview/commonstruct.h"
+#include "pdfControl/docview/commonstruct.h"
 #include "ModuleHeader.h"
 #include "DocSheet.h"
 
@@ -68,19 +68,19 @@ public:
 
     QString filePath()override;
 
-    virtual QString filter();
+    QString filter()override;
 
     bool getFileChanged()override;
-
-    void saveOper()override;
 
     bool saveData()override;
 
     bool saveAsData(QString filePath)override;
 
-    void setData(const int &, const QVariant &)override;
-
     QVariant getOper(int type)override;
+
+    void setOper(const int &, const QVariant &)override;
+
+    void saveOper()override;
 
     DocummentProxy *getDocProxy()override;//在文档打开成功之前为空
 

@@ -83,7 +83,7 @@ void TitleWidget::OnShortCut_CtrlM()
 
     m_pThumbnailBtn->setChecked(true);
 
-    m_curSheet->setData(Thumbnail, "1");
+    m_curSheet->setOper(Thumbnail, "1");
 
     m_curSheet->setSidebarVisible(true);
 }
@@ -152,7 +152,7 @@ void TitleWidget::on_thumbnailBtn_clicked()
 
     bool rl = m_pThumbnailBtn->isChecked();
 
-    m_curSheet->setData(Thumbnail, QString::number(rl));
+    m_curSheet->setOper(Thumbnail, QString::number(rl));
 
     m_curSheet->setSidebarVisible(rl);
 

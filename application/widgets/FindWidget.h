@@ -28,7 +28,7 @@
 #include <DSearchEdit>
 
 #include "application.h"
-#include "docview/commonstruct.h"
+#include "pdfControl/docview/commonstruct.h"
 
 DWIDGET_USE_NAMESPACE
 

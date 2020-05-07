@@ -18,7 +18,6 @@ CONFIG += c++11 link_pkgconfig
 include (app/app.pri)
 include (business/business.pri)
 include (CustomControl/CustomControl.pri)
-include (docview/docview.pri)
 include (pdfControl/pdfControl.pri)
 include (utils/utils.pri)
 include (widgets/widgets.pri)
@@ -40,7 +39,8 @@ SOURCES += \
     uiframe/DocSheet.cpp
 
 RESOURCES +=         \
-    icons.qrc
+    icons.qrc \
+    image.qrc
 
 HEADERS +=\
     application.h \

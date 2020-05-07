@@ -7,7 +7,7 @@
 
 #include "application.h"
 #include "MsgHeader.h"
-#include "docview/pagebase.h"
+#include "pdfControl/docview/pagebase.h"
 #include "ModuleHeader.h"
 #include "widgets/FindWidget.h"
 
@@ -70,7 +70,6 @@ private slots:
     void AddHighLightAnnotation(const QString &msgContent);
 
 private:
-    int qDealWithShortKey(const QString &sKey);
     void OnShortCutKey(const QString &);
     void DocFile_ctrl_l();
     void DocFile_ctrl_i();

@@ -21,7 +21,7 @@
 #include "application.h"
 #include "PagingWidget.h"
 #include "pdfControl/imagelistview.h"
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/docummentproxy.h"
 #include "pdfControl/thumbnail/ThumbnailDelegate.h"
 
 #include <QVBoxLayout>
@@ -44,12 +44,12 @@ void ThumbnailWidget::initWidget()
 {
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &ThumbnailWidget::onUpdateTheme);
     m_pImageListView = new ImageListView(m_sheet, this);
-    ThumbnailDelegate* imageDelegate = new ThumbnailDelegate(m_pImageListView);
+    ThumbnailDelegate *imageDelegate = new ThumbnailDelegate(m_pImageListView);
     m_pImageListView->setItemDelegate(imageDelegate);
 
     m_pPageWidget = new PagingWidget(m_sheet, this);
 
-    QVBoxLayout* vBoxLayout = new QVBoxLayout(this);
+    QVBoxLayout *vBoxLayout = new QVBoxLayout(this);
     vBoxLayout->setSpacing(0);
     vBoxLayout->setContentsMargins(0, 0, 0, 0);
     vBoxLayout->addWidget(m_pImageListView);
@@ -113,7 +113,7 @@ void ThumbnailWidget::updateThumbnail(const int &pageIndex)
 
 void ThumbnailWidget::scrollToCurrentPage()
 {
-    DocummentProxy* docProxy = m_sheet->getDocProxy();
-    if(docProxy)
+    DocummentProxy *docProxy = m_sheet->getDocProxy();
+    if (docProxy)
         m_pImageListView->scrollToIndex(docProxy->currentPageNo());
 }

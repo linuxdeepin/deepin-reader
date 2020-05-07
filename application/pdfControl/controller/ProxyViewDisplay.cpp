@@ -20,7 +20,7 @@
 #include "pdfControl/SheetBrowserPDFPrivate.h"
 #include "application.h"
 #include "ModuleHeader.h"
-#include "docview/docummentproxy.h"
+#include "pdfControl/docview/docummentproxy.h"
 
 ProxyViewDisplay::ProxyViewDisplay(QObject *parent) : QObject(parent)
 {
