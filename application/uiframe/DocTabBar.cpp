@@ -34,8 +34,8 @@
 DocTabBar::DocTabBar(QWidget *parent)
     : DTabBar(parent)
 {
-    this->setEnabledEmbedStyle(true);//设置直角样式
-    this->setExpanding(true);//设置平铺窗口模式
+//    this->setEnabledEmbedStyle(true);//设置直角样式
+//    this->setExpanding(true);//设置平铺窗口模式
     this->setTabsClosable(true);
     this->setMovable(true);
     this->setElideMode(Qt::ElideMiddle);
@@ -140,7 +140,6 @@ void DocTabBar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source
 
     updateTabWidth(143);
 
-//    this->setCurrentIndex(index);
 }
 
 void DocTabBar::insertFromMimeData(int index, const QMimeData *source)
@@ -209,7 +208,6 @@ void DocTabBar::updateTabWidth(int line)
                 setTabMinimumSize(i, QSize(tabWidth, 37));
             }
         }
-//        qInfo() << "       tab count:" << this->count() << "      tabWidth: " << tabWidth << "      1111111111111    line:" << line;
     }
 
 }

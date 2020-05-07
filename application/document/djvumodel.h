@@ -48,9 +48,12 @@ public:
 
     QImage render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, const QRect &boundingRect) const;
 
+    QImage render(qreal horizontalResolution = 72.0, qreal verticalResolution = 72.0, Dr::Rotation rotation = Dr::RotateBy0, const double scale = 100.00) const;
+
     QList< Link * > links() const;
 
     QString text(const QRectF &rect) const;
+
     QList< QRectF > search(const QString &text, bool matchCase) const;
 
 private:
@@ -61,7 +64,9 @@ private:
     const class DjVuDocument *m_parent;
 
     int m_index;
+
     QSizeF m_size;
+
     int m_resolution;
 
 };

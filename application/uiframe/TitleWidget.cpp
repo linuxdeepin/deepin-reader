@@ -141,6 +141,10 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
             setHandleShape();
         else
             setDefaultShape();
+    } else if (Dr::DjVu == m_curSheet->type()) {
+        SetBtnDisable(false);
+
+        m_pSw->setSheet(m_curSheet);
     }
 }
 

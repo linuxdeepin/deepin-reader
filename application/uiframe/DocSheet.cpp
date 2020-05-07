@@ -95,7 +95,7 @@ void DocSheet::pagePrev()
 
 void DocSheet::zoomin()
 {
-
+    qDebug() << "DocSheet::zoomin()";
 }
 
 void DocSheet::zoomout()

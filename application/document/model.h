@@ -105,6 +105,8 @@ public:
 
     virtual QImage render(qreal horizontalResolution = 72.0, qreal verticalResolution = 72.0, Dr::Rotation rotation = Dr::RotateBy0, const QRect &boundingRect = QRect()) const = 0;
 
+    virtual QImage render(qreal horizontalResolution = 72.0, qreal verticalResolution = 72.0, Dr::Rotation rotation = Dr::RotateBy0, const double scale = 100.0) const = 0;
+
     virtual QString label() const { return QString(); }
 
     virtual QList< Link * > links() const { return QList< Link * >(); }

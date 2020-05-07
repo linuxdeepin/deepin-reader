@@ -483,6 +483,91 @@ QImage DjVuPage::render(qreal horizontalResolution, qreal verticalResolution, Dr
     return image;
 }
 
+QImage DjVuPage::render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, const double scale) const
+{
+    LOCK_PAGE
+
+    ddjvu_page_t *page = ddjvu_page_create_by_pageno(m_parent->m_document, m_index);
+
+    if (page == 0) {
+        return QImage();
+    }
+
+    ddjvu_status_t status;
+
+    while (true) {
+        status = ddjvu_page_decoding_status(page);
+
+        if (status < DDJVU_JOB_OK) {
+            clearMessageQueue(m_parent->m_context, true);
+        } else {
+            break;
+        }
+    }
+
+    if (status >= DDJVU_JOB_FAILED) {
+        ddjvu_page_release(page);
+
+        return QImage();
+    }
+
+    switch (rotation) {
+    default:
+    case Dr::RotateBy0:
+        ddjvu_page_set_rotation(page, DDJVU_ROTATE_0);
+        break;
+    case Dr::RotateBy90:
+        ddjvu_page_set_rotation(page, DDJVU_ROTATE_270);
+        break;
+    case Dr::RotateBy180:
+        ddjvu_page_set_rotation(page, DDJVU_ROTATE_180);
+        break;
+    case Dr::RotateBy270:
+        ddjvu_page_set_rotation(page, DDJVU_ROTATE_90);
+        break;
+    }
+
+    ddjvu_rect_t pagerect;
+
+    pagerect.x = 0;
+    pagerect.y = 0;
+
+    switch (rotation) {
+    default:
+    case Dr::RotateBy0:
+    case Dr::RotateBy180:
+        pagerect.w = qRound(horizontalResolution / m_resolution * m_size.width());
+        pagerect.h = qRound(verticalResolution / m_resolution * m_size.height());
+        break;
+    case Dr::RotateBy90:
+    case Dr::RotateBy270:
+        pagerect.w = qRound(horizontalResolution / m_resolution * m_size.height());
+        pagerect.h = qRound(verticalResolution / m_resolution * m_size.width());
+        break;
+    }
+
+    pagerect.w = (double)pagerect.w * scale / 100.00;
+    pagerect.h = (double)pagerect.h * scale / 100.00;
+
+    ddjvu_rect_t renderrect;
+    renderrect.x = pagerect.x;
+    renderrect.y = pagerect.y;
+    renderrect.w = pagerect.w;
+    renderrect.h = pagerect.h;
+
+    QImage image(renderrect.w, renderrect.h, QImage::Format_RGB32);
+
+    if (!ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pagerect, &renderrect, m_parent->m_format, image.bytesPerLine(), reinterpret_cast< char * >(image.bits()))) {
+        image = QImage();
+    }
+
+    clearMessageQueue(m_parent->m_context, false);
+
+    ddjvu_page_release(page);
+
+    return image;
+}
+
 QList< Link * > DjVuPage::links() const
 {
     LOCK_PAGE
