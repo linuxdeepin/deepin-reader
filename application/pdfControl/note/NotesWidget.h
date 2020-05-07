@@ -62,7 +62,7 @@ private:
     void addNoteItem(const QString &, const int &iType = NOTE_HIGHLIGHT);
     void deleteNoteItem(const QString &);
     void updateNoteItem(const QString &);
-    void scrollToModelInexPage(const QModelIndex &index);
+    void scrollToModelInexPage(const QModelIndex &index, bool scrollto = true);
 
 private:
     QPointer<DocSheet> m_sheet;

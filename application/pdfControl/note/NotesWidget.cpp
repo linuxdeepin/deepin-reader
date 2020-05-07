@@ -83,7 +83,7 @@ void NotesWidget::prevPage()
         return;
     int pageIndex = m_pImageListView->getPageIndexForModelIndex(curPage);
     m_sheet->pageJump(pageIndex);
-    m_pImageListView->setCurrentIndex(m_pImageListView->model()->index(curPage, 0));
+    scrollToModelInexPage(m_pImageListView->model()->index(curPage, 0));
 }
 
 void NotesWidget::nextPage()
@@ -95,7 +95,7 @@ void NotesWidget::nextPage()
         return;
     int pageIndex = m_pImageListView->getPageIndexForModelIndex(curPage);
     m_sheet->pageJump(pageIndex);
-    m_pImageListView->setCurrentIndex(m_pImageListView->model()->index(curPage, 0));
+    scrollToModelInexPage(m_pImageListView->model()->index(curPage, 0));
 }
 
 void NotesWidget::DeleteItemByKey()
@@ -208,7 +208,7 @@ void NotesWidget::adaptWindowSize(const double &scale)
     m_pImageListView->setProperty("adaptScale", scale);
     m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * scale, qMax(LEFTMINHEIGHT * scale, LEFTMINHEIGHT * 1.0)));
     m_pImageListView->reset();
-    scrollToModelInexPage(curModelIndex);
+    scrollToModelInexPage(curModelIndex, false);
 }
 
 void NotesWidget::updateThumbnail(const int &page)
@@ -216,8 +216,9 @@ void NotesWidget::updateThumbnail(const int &page)
     m_pImageListView->updatePageIndex(page);
 }
 
-void NotesWidget::scrollToModelInexPage(const QModelIndex &index)
+void NotesWidget::scrollToModelInexPage(const QModelIndex &index, bool scrollto)
 {
     m_pImageListView->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
     m_pImageListView->setCurrentIndex(index);
+    if(scrollto) m_pImageListView->scrollTo(index);
 }

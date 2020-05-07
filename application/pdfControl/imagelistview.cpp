@@ -30,6 +30,7 @@ ImageListView::ImageListView(DocSheet *sheet, QWidget *parent)
     , m_docSheet(sheet)
 {
     initControl();
+    setAutoScroll(false);
     setProperty("adaptScale", 1.0);
     setSpacing(4);
     setFocusPolicy(Qt::NoFocus);
