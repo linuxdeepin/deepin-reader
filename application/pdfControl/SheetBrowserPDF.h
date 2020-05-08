@@ -68,6 +68,12 @@ public:
 
     void setFindWidget(FindWidget *findWidget);
 
+    void copySelectedText();
+
+    void highlightSelectedText();
+
+    void addSelectedTextHightlightAnnotation();
+
 signals:
     void sigFileOpenResult(const QString &, const bool &);
 
@@ -88,8 +94,6 @@ signals:
     void sigFindFinished();                             //搜索完成
 
 public:
-    void qDealWithShortKey(const QString &);
-
     void OpenFilePath(const QString &);
 
     QString getFilePath();

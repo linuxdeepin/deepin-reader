@@ -34,8 +34,6 @@ public:
 
     void setSheet(DocSheet *sheet);
 
-    bool handleShortcut(QString shortcut);
-
     void clearComboBox();
 
     void paintEvent(QPaintEvent *event);

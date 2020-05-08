@@ -110,9 +110,15 @@ public:
 
     void setCurrentState(const int &nCurrentState);
 
-    void OnExitSliderShow();
+    void openSlide();
 
-    void OnExitMagnifer();
+    void quitSlide();
+
+    bool openMagnifer();
+
+    void quitMagnifer();
+
+    void quitSpecialState();
 
     void showTips(const QString &tips, int iconIndex = 0);
 
@@ -134,16 +140,6 @@ public:
     void OnAppMsgData(const QString &);
 
     void OnTabFileChangeMsg(const QString &);
-
-    void OnPrintFile();
-
-    void ShowFindWidget();
-
-    void OnOpenSliderShow();    //  开启 幻灯片
-
-    bool OnOpenMagnifer();
-
-    void exitSpecialState();
 
     void OnKeyPress(const QString &);
 

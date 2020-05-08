@@ -116,7 +116,7 @@ QAction *DefaultOperationMenu::createAction(const QString &name, const char *mem
 
 void DefaultOperationMenu::slotSearchClicked()
 {
-    m_sheet->handleShortcut(KeyStr::g_ctrl_f);
+    m_sheet->handleSearch();
 }
 
 void DefaultOperationMenu::slotBookMarkClicked()

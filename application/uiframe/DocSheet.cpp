@@ -49,15 +49,6 @@ DocSheet::~DocSheet()
     g_map.remove(m_uuid);
 }
 
-void DocSheet::handleShortcut(QString shortcut)
-{
-    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
-    if (nullptr == doc)
-        return;
-
-    doc->handleShortcut(shortcut);
-}
-
 void DocSheet::openFile(const QString &filePath)
 {
 
@@ -173,6 +164,31 @@ void DocSheet::setSidebarVisible(bool isVisible)
 
 }
 
+void DocSheet::copySelectedText()
+{
+
+}
+
+void DocSheet::highlightSelectedText()
+{
+
+}
+
+void DocSheet::addSelectedTextHightlightAnnotation()
+{
+
+}
+
+void DocSheet::openSideBar()
+{
+
+}
+
+void DocSheet::print()
+{
+
+}
+
 void DocSheet::onTitleShortCut(QString shortCut)
 {
 
@@ -246,7 +262,7 @@ void DocSheet::exitSliderShow()
 
 }
 
-void DocSheet::ShowFindWidget()
+void DocSheet::handleSearch()
 {
 
 }
@@ -283,15 +299,6 @@ int DocSheet::getCurrentState()
     return doc->getCurrentState();
 }
 
-void DocSheet::openSlide()
-{
-    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
-    if (nullptr == doc)
-        return;
-
-    doc->OnOpenSliderShow();
-}
-
 void DocSheet::showControl()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
@@ -307,7 +314,7 @@ void DocSheet::quitSlide()
     if (nullptr == doc)
         return;
 
-    doc->OnExitSliderShow();
+    doc->quitSlide();
 }
 
 void DocSheet::openMagnifer()
@@ -316,7 +323,7 @@ void DocSheet::openMagnifer()
     if (nullptr == doc)
         return;
 
-    doc->OnOpenMagnifer();
+    doc->openMagnifer();
 }
 
 void DocSheet::quitMagnifer()
@@ -325,7 +332,7 @@ void DocSheet::quitMagnifer()
     if (nullptr == doc)
         return;
 
-    doc->OnExitMagnifer();
+    doc->quitMagnifer();
 }
 
 DocOperation DocSheet::operation()

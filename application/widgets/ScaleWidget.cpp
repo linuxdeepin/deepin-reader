@@ -213,22 +213,6 @@ void ScaleWidget::setSheet(DocSheet *sheet)
     connect(m_scaleComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(SlotCurrentTextChanged(const QString &)));
 }
 
-bool ScaleWidget::handleShortcut(QString shortcut)
-{
-    if (shortcut == KeyStr::g_ctrl_smaller) {
-        slotPrevScale();
-        return true;
-    } else if (shortcut == KeyStr::g_ctrl_larger || shortcut == KeyStr::g_ctrl_equal) {
-        slotNextScale();
-        return true;
-    } else if (shortcut == KeyStr::g_ctrl_1) {   // 恢复 100 比例
-        SlotCurrentTextChanged("100");
-        return true;
-    }
-
-    return false;
-}
-
 void ScaleWidget::clearComboBox()
 {
     if (m_scaleComboBox) {

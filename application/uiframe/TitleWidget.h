@@ -29,9 +29,6 @@ public:
 
     void setControlEnabled(const bool &enable);
 
-public:
-    int handleShortcut(const QString &);
-
 protected:
     void initWidget() override;
 
@@ -71,8 +68,6 @@ private:
     void OnShortCut_Alt1();
 
     void OnShortCut_Alt2();
-
-    void OnShortCut_CtrlM();
 
 private:
     QStringList shortKeyList;

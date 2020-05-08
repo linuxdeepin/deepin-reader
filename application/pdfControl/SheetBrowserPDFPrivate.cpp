@@ -128,32 +128,6 @@ void SheetBrowserPDFPrivate::AddHighLightAnnotation(const QString &msgContent)
     }
 }
 
-void SheetBrowserPDFPrivate::OnShortCutKey(const QString &sKey)
-{
-    Q_Q(SheetBrowserPDF);
-    //  处于幻灯片模式下
-    int nState = m_sheet->getCurrentState();
-
-    if (nState == SLIDER_SHOW)
-        return;
-
-    //  放大镜状态， 直接返回
-    if (nState == Magnifer_State)
-        return;
-
-    //  手型状态， 直接返回
-    if (q->isMouseHand())
-        return;
-
-    if (sKey == KeyStr::g_ctrl_c) {
-        DocFile_ctrl_c();
-    } else if (sKey == KeyStr::g_ctrl_l) {
-        DocFile_ctrl_l();
-    } else if (sKey == KeyStr::g_ctrl_i) {
-        DocFile_ctrl_i();
-    }
-}
-
 //  添加高亮颜色  快捷键
 void SheetBrowserPDFPrivate::DocFile_ctrl_l()
 {
@@ -284,9 +258,9 @@ void SheetBrowserPDFPrivate::wheelEvent(QWheelEvent *event)
 {
     if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
         if (event->delta() > 0) {
-            m_sheet->handleShortcut(KeyStr::g_ctrl_larger);
+            m_sheet->zoomin();
         } else {
-            m_sheet->handleShortcut(KeyStr::g_ctrl_smaller);
+            m_sheet->zoomout();
         }
     }
 }

@@ -76,18 +76,6 @@ void TitleWidget::OnShortCut_Alt2()
     setHandleShape();
 }
 
-void TitleWidget::OnShortCut_CtrlM()
-{
-    if (m_curSheet.isNull())
-        return;
-
-    m_pThumbnailBtn->setChecked(true);
-
-    m_curSheet->setOper(Thumbnail, "1");
-
-    m_curSheet->setSidebarVisible(true);
-}
-
 void TitleWidget::initWidget()
 {
     initBtns();
@@ -141,6 +129,7 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
             setHandleShape();
         else
             setDefaultShape();
+
     } else if (Dr::DjVu == m_curSheet->type()) {
         SetBtnDisable(false);
 
@@ -194,21 +183,18 @@ void TitleWidget::on_handleShapeBtn_clicked()
 
 void TitleWidget::on_searchBtn_clicked()
 {
-    m_curSheet->handleShortcut(KeyStr::g_ctrl_f);
+    m_curSheet->handleSearch();
 }
 
 void TitleWidget::SlotSetCurrentTool(const int &sAction)
 {
-    //  切换了选择工具, 需要取消放大镜的操作
     if (m_curSheet.isNull())
         return;
 
-    m_curSheet->quitMagnifer();
-
     if (sAction == E_HANDLE_SELECT_TEXT) {
-        setDefaultShape();
+        m_curSheet->setMouseDefault();
     } else {
-        setHandleShape();
+        m_curSheet->setMouseHand();
     }
 }
 
@@ -281,8 +267,6 @@ void TitleWidget::setDefaultShape()
 
     m_pHandleShapeBtn->setIcon(icon);
 
-    m_curSheet->setMouseDefault();
-
     if (m_pHandleMenu) {
         m_pHandleMenu->setHandShape(0);
     }
@@ -300,8 +284,6 @@ void TitleWidget::setHandleShape()
     QIcon icon = PF::getIcon(Pri::g_module + btnName);
 
     m_pHandleShapeBtn->setIcon(icon);
-
-    m_curSheet->setMouseHand();
 
     if (m_pHandleMenu) {
         m_pHandleMenu->setHandShape(1);
@@ -371,27 +353,4 @@ void TitleWidget::setControlEnabled(const bool &enable)
     if (m_pSw) {
         m_pSw->clearComboBox();
     }
-}
-
-int TitleWidget::handleShortcut(const QString &sKey)
-{
-    if (sKey == KeyStr::g_alt_1) {
-        OnShortCut_Alt1();
-        return MSG_OK;
-    } else if (sKey == KeyStr::g_alt_2) {
-        OnShortCut_Alt2();
-        return MSG_OK;
-    } else if (sKey == KeyStr::g_ctrl_m) { //  显示缩略图
-        OnShortCut_CtrlM();
-        return MSG_OK;
-    } else {
-        m_pFontMenu->readCurDocParam(m_curSheet.data());
-        if (m_pFontMenu->handleShortcut(sKey))
-            return MSG_OK;
-
-        if (m_pSw->handleShortcut(sKey))
-            return MSG_OK;
-    }
-
-    return MSG_NO_OK;
 }

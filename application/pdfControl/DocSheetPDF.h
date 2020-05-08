@@ -88,13 +88,21 @@ public:
 
     void exitSliderShow()override;
 
-    void ShowFindWidget()override;
+    void handleSearch()override;
 
     void handleOpenSuccess()override;
 
     void setSidebarVisible(bool isVisible)override;
 
-    void onTitleShortCut(QString)override;
+    void copySelectedText()override;                    //复制选中文字
+
+    void highlightSelectedText()override;                   //高亮选中文字
+
+    void addSelectedTextHightlightAnnotation()override;       //对选中文字添加高亮注释
+
+    void openSideBar()override;
+
+    void print()override;
 
 private slots:
     void SlotFileOpenResult(const QString &, const bool &);

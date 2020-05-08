@@ -30,29 +30,6 @@ FontMenu::FontMenu(DWidget *parent):
     initConnection();
 }
 
-bool FontMenu::handleShortcut(QString shortcut)
-{
-    if (shortcut == KeyStr::g_ctrl_2) {
-        //自适应高
-        slotFiteH();
-        return true;
-    } else if (shortcut == KeyStr::g_ctrl_3) {
-        //自适应宽
-        slotFiteW();
-        return true;
-    } else if (shortcut == KeyStr::g_ctrl_r) {
-        //左旋转
-        slotRotateL();
-        return true;
-    } else if (shortcut == KeyStr::g_ctrl_shift_r) {
-        //右旋转
-        slotRotateR();
-        return true;
-    }
-
-    return false;
-}
-
 /**
  * @brief FontMenu::resetAdaptive
  * 手动改变(ctrl + 1)缩放比例时，复位自适应宽高

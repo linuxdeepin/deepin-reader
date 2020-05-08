@@ -36,7 +36,7 @@
 #include "MainWindow.h"
 #include "business/AppInfo.h"
 #include "business/SaveDialog.h"
-#include "business/PrintManager.h"
+
 #include "pdfControl/docview/docummentproxy.h"
 #include "widgets/FindWidget.h"
 #include "widgets/FileAttrWidget.h"
@@ -393,7 +393,7 @@ bool CentralDocPage::saveCurrent()
 
 bool CentralDocPage::saveAsCurrent()
 {
-    DocSheet *sheet = static_cast<DocSheet *>(m_pStackedLayout->currentWidget());
+    DocSheet *sheet = getCurSheet();
 
     if (nullptr == sheet)
         return false;
@@ -604,61 +604,79 @@ void CentralDocPage::OnAppMsgData(const QString &sText)
 
 void CentralDocPage::handleShortcut(const QString &s)
 {
-    auto children = this->findChildren<DocSheet *>();
-
-    if (children.size() == 0 && getCurSheet())
-        return;
-
-    if (s == KeyStr::g_ctrl_p) {
-        OnPrintFile();
-    } else if (s == KeyStr::g_ctrl_s) {
+    if (s == KeyStr::g_ctrl_s) {
         saveCurrent();
-    } else if (s == KeyStr::g_ctrl_larger || s == KeyStr::g_ctrl_equal) {
+    } else if (s == KeyStr::g_ctrl_shift_s) {
+        saveAsCurrent();
+    } else if (s == KeyStr::g_ctrl_h) {
+        openSlide();
+    } else if (s == KeyStr::g_alt_z) {
+        openMagnifer();
+    } else if (s == KeyStr::g_esc) {
+        quitSpecialState();
+    } else if (s == KeyStr::g_ctrl_p) {
+        if (getCurSheet())
+            getCurSheet()->print();
+    } else if (s == KeyStr::g_alt_1) {
+        if (getCurSheet())
+            getCurSheet()->setMouseDefault();
+    } else if (s == KeyStr::g_alt_2) {
+        if (getCurSheet())
+            getCurSheet()->setMouseHand();
+    } else if (s == KeyStr::g_ctrl_1) {
+        if (getCurSheet()) {
+            getCurSheet()->setFit(NO_ADAPTE_State);
+            getCurSheet()->setScale(100);
+        }
+    } else if (s == KeyStr::g_ctrl_m) {
+        if (getCurSheet())
+            getCurSheet()->openSideBar();
+    } else if (s == KeyStr::g_ctrl_2) {
+        if (getCurSheet())
+            getCurSheet()->setFit(ADAPTE_HEIGHT_State);
+    } else if (s == KeyStr::g_ctrl_3) {
+        if (getCurSheet())
+            getCurSheet()->setFit(ADAPTE_WIDGET_State);
+    } else if (s == KeyStr::g_ctrl_r) {
+        if (getCurSheet())
+            getCurSheet()->setRotateLeft();
+    } else if (s == KeyStr::g_ctrl_shift_r) {
+        if (getCurSheet())
+            getCurSheet()->setRotateLeft();
+    }  else if (s == KeyStr::g_ctrl_larger) {
+        if (getCurSheet())
+            getCurSheet()->zoomin();
+    } else if (s == KeyStr::g_ctrl_equal) {
         if (getCurSheet())
             getCurSheet()->zoomin();
     } else if (s == KeyStr::g_ctrl_smaller) {
         if (getCurSheet())
             getCurSheet()->zoomout();
     } else if (s == KeyStr::g_ctrl_b) {
-        DocSheet *sheet = getCurSheet();
-        if (sheet != nullptr)
-            sheet->setBookMark(sheet->getDocProxy()->currentPageNo(), true);
-    } else if (s == KeyStr::g_alt_1 || s == KeyStr::g_alt_2 || s == KeyStr::g_ctrl_m  ||
-               s == KeyStr::g_ctrl_1 || s == KeyStr::g_ctrl_2 || s == KeyStr::g_ctrl_3 ||
-               s == KeyStr::g_ctrl_r || s == KeyStr::g_ctrl_shift_r ||
-               s == KeyStr::g_ctrl_c || s == KeyStr::g_ctrl_l || s == KeyStr::g_ctrl_i) {
         if (getCurSheet())
-            getCurSheet()->onTitleShortCut(s);
-    } else if (s == KeyStr::g_ctrl_f) {     //  搜索
-        ShowFindWidget();
-    } else if (s == KeyStr::g_ctrl_h) {     //  开启幻灯片
-        OnOpenSliderShow();
-    } else if (s == KeyStr::g_ctrl_shift_s) {   //  另存为
-        saveAsCurrent();
-    } else if (s == KeyStr::g_alt_z) {
-        OnOpenMagnifer();
-    } else if (s == KeyStr::g_esc) { //  esc 统一处理
-        exitSpecialState();
+            getCurSheet()->setBookMark(getCurSheet()->getDocProxy()->currentPageNo(), true);
+    } else if (s == KeyStr::g_ctrl_f) {
+        if (getCurSheet())
+            getCurSheet()->handleSearch();
+    } else if (s == KeyStr::g_ctrl_c) {
+        if (getCurSheet())
+            getCurSheet()->copySelectedText();
+    } else if (s == KeyStr::g_ctrl_l) {
+        if (getCurSheet())
+            getCurSheet()->highlightSelectedText();
+    } else if (s == KeyStr::g_ctrl_i) {
+        if (getCurSheet())
+            getCurSheet()->addSelectedTextHightlightAnnotation();
     }
 }
 
-//  打印
-void CentralDocPage::OnPrintFile()
-{
-    if (nullptr == getCurSheet())
-        return;
-
-    PrintManager p(getCurSheet());
-    p.showPrintDialog(this);
-}
-
-void CentralDocPage::exitSpecialState()
+void CentralDocPage::quitSpecialState()
 {
     int nState = getCurrentState();
     if (nState == SLIDER_SHOW) {  //  当前是幻灯片模式
-        OnExitSliderShow();
+        quitSlide();
     } else if (nState == Magnifer_State) {
-        OnExitMagnifer();
+        quitMagnifer();
     }
 
     setCurrentState(Default_State);
@@ -698,22 +716,7 @@ int CentralDocPage::getCurrentState()
     return m_nCurrentState;
 }
 
-void CentralDocPage::ShowFindWidget()
-{
-    int nState = getCurrentState();
-    if (nState == SLIDER_SHOW)
-        return;
-
-    DWidget *w = m_pStackedLayout->currentWidget();
-    if (w) {
-        auto sheet = qobject_cast<DocSheet *>(w);
-        if (sheet) {
-            sheet->ShowFindWidget();
-        }
-    }
-}
-
-void CentralDocPage::OnOpenSliderShow()
+void CentralDocPage::openSlide()
 {
     DocSheet *sheet = getCurSheet();
 
@@ -758,7 +761,7 @@ void CentralDocPage::OnOpenSliderShow()
 }
 
 //  退出幻灯片
-void CentralDocPage::OnExitSliderShow()
+void CentralDocPage::quitSlide()
 {
     int nState = getCurrentState();
 
@@ -792,7 +795,7 @@ void CentralDocPage::OnExitSliderShow()
     }
 }
 
-bool CentralDocPage::OnOpenMagnifer()
+bool CentralDocPage::openMagnifer()
 {
     int nState = getCurrentState();
 
@@ -810,7 +813,7 @@ bool CentralDocPage::OnOpenMagnifer()
 }
 
 //  取消放大镜
-void CentralDocPage::OnExitMagnifer()
+void CentralDocPage::quitMagnifer()
 {
     int nState = getCurrentState();
     if (nState == Magnifer_State) {

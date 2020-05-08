@@ -25,6 +25,7 @@
 #include "controller/ProxyFileDataModel.h"
 #include "controller/ProxyViewDisplay.h"
 #include "pdfControl/docview/docummentproxy.h"
+#include "DocSheet.h"
 
 void SheetBrowserPDF::setDoubleShow(bool isShow)
 {
@@ -88,6 +89,8 @@ void SheetBrowserPDF::setMouseDefault()
     d->__SetCursor(Qt::ArrowCursor);
 
     setOper(HandShape, 0);
+
+    emit sigFileChanged();
 }
 
 void SheetBrowserPDF::setMouseHand()
@@ -103,6 +106,8 @@ void SheetBrowserPDF::setMouseHand()
     d->__SetCursor(Qt::OpenHandCursor);
 
     setOper(HandShape, 1);
+
+    emit sigFileChanged();
 }
 
 bool SheetBrowserPDF::isMouseHand()
@@ -293,18 +298,72 @@ void SheetBrowserPDF::setFindWidget(FindWidget *findWidget)
     d->setFindWidget(findWidget);
 }
 
+void SheetBrowserPDF::copySelectedText()
+{
+    Q_D(SheetBrowserPDF);
+    //  处于幻灯片模式下
+    int nState = d->m_sheet->getCurrentState();
+
+    if (nState == SLIDER_SHOW)
+        return;
+
+    //  放大镜状态， 直接返回
+    if (nState == Magnifer_State)
+        return;
+
+    //  手型状态， 直接返回
+    if (isMouseHand())
+        return;
+
+    d->DocFile_ctrl_c();
+}
+
+void SheetBrowserPDF::highlightSelectedText()
+{
+    Q_D(SheetBrowserPDF);
+    //  处于幻灯片模式下
+    int nState = d->m_sheet->getCurrentState();
+
+    if (nState == SLIDER_SHOW)
+        return;
+
+    //  放大镜状态， 直接返回
+    if (nState == Magnifer_State)
+        return;
+
+    //  手型状态， 直接返回
+    if (isMouseHand())
+        return;
+
+    d->DocFile_ctrl_l();
+}
+
+void SheetBrowserPDF::addSelectedTextHightlightAnnotation()
+{
+    Q_D(SheetBrowserPDF);
+    //  处于幻灯片模式下
+    int nState = d->m_sheet->getCurrentState();
+
+    if (nState == SLIDER_SHOW)
+        return;
+
+    //  放大镜状态， 直接返回
+    if (nState == Magnifer_State)
+        return;
+
+    //  手型状态， 直接返回
+    if (isMouseHand())
+        return;
+
+    d->DocFile_ctrl_i();
+}
+
 //  信号槽　初始化
 void SheetBrowserPDF::initConnections()
 {
     Q_D(SheetBrowserPDF);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), d, SLOT(slotCustomContextMenuRequested(const QPoint &)));
     connect(this, SIGNAL(sigDeleteAnntation(const int &, const QString &)), d, SLOT(SlotDeleteAnntation(const int &, const QString &)));
-}
-
-void SheetBrowserPDF::qDealWithShortKey(const QString &sKey)
-{
-    Q_D(SheetBrowserPDF);
-    d->OnShortCutKey(sKey);
 }
 
 bool SheetBrowserPDF::getFileChange()

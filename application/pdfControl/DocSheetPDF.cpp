@@ -33,6 +33,7 @@
 #include "pdfControl/docview/docummentproxy.h"
 #include "widgets/FindWidget.h"
 #include "djvuControl/SheetBrowserDJVU.h"
+#include "business/PrintManager.h"
 
 DocSheetPDF::DocSheetPDF(DWidget *parent)
     : DocSheet(Dr::PDF, parent)
@@ -163,6 +164,7 @@ void DocSheetPDF::zoomin()
 
     for (int i = 0; i < dataList.count(); ++i) {
         if (dataList[i] > getOper(Scale).toDouble()) {
+            setFit(NO_ADAPTE_State);
             setScale(dataList[i]);
             emit sigFileChanged(this);
             return;
@@ -176,6 +178,7 @@ void DocSheetPDF::zoomout()
 
     for (int i = dataList.count() - 1; i > 0; --i) {
         if (dataList[i] < getOper(Scale).toInt()) {
+            setFit(NO_ADAPTE_State);
             setScale(dataList[i]);
             emit sigFileChanged(this);
             return;
@@ -205,11 +208,15 @@ void DocSheetPDF::setFileChanged(bool hasChanged)
 
 void DocSheetPDF::setMouseDefault()
 {
+    quitMagnifer();
+
     m_browser->setMouseDefault();
 }
 
 void DocSheetPDF::setMouseHand()
 {
+    quitMagnifer();
+
     m_browser->setMouseHand();
 }
 
@@ -283,13 +290,38 @@ void DocSheetPDF::onFileChanged()
 
 void DocSheetPDF::onSplitterMoved(int a, int b)
 {
-    setFit(0);
+    setFit(NO_ADAPTE_State);
     emit sigFileChanged(this);
 }
 
-void DocSheetPDF::onTitleShortCut(QString shortCut)
+void DocSheetPDF::copySelectedText()
 {
-    m_browser->qDealWithShortKey(shortCut);
+    m_browser->copySelectedText();
+}
+
+void DocSheetPDF::highlightSelectedText()
+{
+    m_browser->highlightSelectedText();
+}
+
+void DocSheetPDF::addSelectedTextHightlightAnnotation()
+{
+    m_browser->addSelectedTextHightlightAnnotation();
+}
+
+void DocSheetPDF::openSideBar()
+{
+    setSidebarVisible(true);
+
+    setOper(Thumbnail, "1");
+
+    emit sigFileChanged(this);
+}
+
+void DocSheetPDF::print()
+{
+    PrintManager p(this);
+    p.showPrintDialog(this);
 }
 
 void DocSheetPDF::onFindOperation(int type, QString text)
@@ -383,7 +415,7 @@ void DocSheetPDF::exitSliderShow()
     m_sidebar->setVisible(m_bOldState);
 }
 
-void DocSheetPDF::ShowFindWidget()
+void DocSheetPDF::handleSearch()
 {
     if (m_pFindWidget == nullptr) {
         m_pFindWidget = new FindWidget(m_browser);

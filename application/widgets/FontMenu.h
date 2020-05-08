@@ -31,8 +31,6 @@ class FontMenu : public CustomMenu
 public:
     explicit FontMenu(DWidget *parent = nullptr);
 
-    bool handleShortcut(QString shortcut);
-
 public:
     void readCurDocParam(DocSheet *sheet);
 

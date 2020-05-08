@@ -70,7 +70,6 @@ private slots:
     void AddHighLightAnnotation(const QString &msgContent);
 
 private:
-    void OnShortCutKey(const QString &);
     void DocFile_ctrl_l();
     void DocFile_ctrl_i();
     void DocFile_ctrl_c();

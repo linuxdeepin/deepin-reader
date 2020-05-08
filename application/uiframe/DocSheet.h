@@ -99,7 +99,7 @@ public:
 
     virtual void exitSliderShow();
 
-    virtual void ShowFindWidget();
+    virtual void handleSearch();
 
     virtual void onTitleShortCut(QString);
 
@@ -107,7 +107,15 @@ public:
 
     virtual void setSidebarVisible(bool isVisible);
 
-    void handleShortcut(QString shortcut);
+    virtual void copySelectedText();                    //复制选中文字
+
+    virtual void highlightSelectedText();                   //高亮选中文字
+
+    virtual void addSelectedTextHightlightAnnotation();       //对选中文字添加高亮注释
+
+    virtual void openSideBar();
+
+    virtual void print();
 
     Dr::FileType type();
 
@@ -116,8 +124,6 @@ public:
     void setCurrentState(int state);
 
     int getCurrentState();
-
-    void openSlide();
 
     void showControl();
 
