@@ -70,18 +70,19 @@ void SearchResDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
             painter->setFont(font);
             const QString& pageText = index.data(ImageinfoType_e::IMAGE_INDEX_TEXT).toString();
             int pagetextHeight = painter->fontMetrics().height();
-            painter->drawText(textStartX, rect.y(), option.rect.width(), pagetextHeight, Qt::AlignTop | Qt::AlignLeft, pageText);
+            painter->drawText(textStartX, rect.y(), option.rect.width(), pagetextHeight, Qt::AlignVCenter | Qt::AlignLeft, pageText);
             painter->restore();
 
             //drawSearchCount
             painter->save();
             painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().textTips().color()));
             QFont sfont = painter->font();
-            font = DFontSizeManager::instance()->t8(sfont);
+            sfont = DFontSizeManager::instance()->t10(sfont);
             painter->setFont(sfont);
             const QString& searchCountText = index.data(ImageinfoType_e::IMAGE_SEARCH_COUNT).toString();
-            //int pagetextHeight = painter->fontMetrics().height();
-            painter->drawText(textStartX, rect.y(), option.rect.width(), pagetextHeight, Qt::AlignTop | Qt::AlignLeft, pageText);
+            int searchCountTextHeight = painter->fontMetrics().height();
+            int searchCountTextWidth = painter->fontMetrics().width(searchCountText);
+            painter->drawText(option.rect.right() - searchCountTextWidth - 20, rect.y(), option.rect.width(), searchCountTextHeight, Qt::AlignVCenter | Qt::AlignLeft, searchCountText);
             painter->restore();
 
             //drawPageContenttext
