@@ -131,9 +131,11 @@ bool ImageListView::scrollToIndex(int pageIndex, bool scrollTo)
 
 void ImageListView::scrollToModelInexPage(const QModelIndex &index, bool scrollto)
 {
-    this->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
-    this->setCurrentIndex(index);
-    if(scrollto) this->scrollTo(index);
+    if(index.isValid()){
+        this->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
+        this->setCurrentIndex(index);
+        if(scrollto) this->scrollTo(index);
+    }
 }
 
 void ImageListView::mousePressEvent(QMouseEvent *event)
