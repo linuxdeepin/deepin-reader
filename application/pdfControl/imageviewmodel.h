@@ -27,20 +27,24 @@ typedef enum ImageinfoType_e {
     IMAGE_BOOKMARK     = Qt::UserRole + 1,
     IMAGE_ROTATE       = Qt::UserRole + 2,
     IMAGE_INDEX_TEXT   = Qt::UserRole + 3,
-    IMAGE_CONTENT_TEXT = Qt::UserRole + 4
+    IMAGE_CONTENT_TEXT = Qt::UserRole + 4,
+    IMAGE_SEARCH_COUNT = Qt::UserRole + 5,
 } ImageinfoType_e;
 
 typedef struct ImagePageInfo_t {
     int iPage;
     int iType;
-    QString strcontents;
+
     QString struuid;
+    QString strcontents;
+    QString strSearchcount;
 
     ImagePageInfo_t(){
         iPage = -1;
         iType = -1;
         struuid = "";
         strcontents = "";
+        strSearchcount = "";
     }
 
     ImagePageInfo_t(int page){

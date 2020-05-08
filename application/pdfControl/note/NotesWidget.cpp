@@ -83,7 +83,7 @@ void NotesWidget::prevPage()
         return;
     int pageIndex = m_pImageListView->getPageIndexForModelIndex(curPage);
     m_sheet->pageJump(pageIndex);
-    scrollToModelInexPage(m_pImageListView->model()->index(curPage, 0));
+    m_pImageListView->scrollToModelInexPage(m_pImageListView->model()->index(curPage, 0));
 }
 
 void NotesWidget::nextPage()
@@ -95,13 +95,13 @@ void NotesWidget::nextPage()
         return;
     int pageIndex = m_pImageListView->getPageIndexForModelIndex(curPage);
     m_sheet->pageJump(pageIndex);
-    scrollToModelInexPage(m_pImageListView->model()->index(curPage, 0));
+    m_pImageListView->scrollToModelInexPage(m_pImageListView->model()->index(curPage, 0));
 }
 
 void NotesWidget::DeleteItemByKey()
 {
     ImagePageInfo_t tImagePageInfo;
-    m_pImageListView->getModelIndexImageInfo(m_pImageListView->currentIndex().row(), tImagePageInfo);
+    m_pImageListView->getImageModel()->getModelIndexImageInfo(m_pImageListView->currentIndex().row(), tImagePageInfo);
     if(tImagePageInfo.iPage >= 0){
         int nType = tImagePageInfo.iType;
         int page = tImagePageInfo.iPage;
@@ -124,16 +124,17 @@ void NotesWidget::addNoteItem(const QString &text, const int &iType)
         tImagePageInfo.iType = iType;
         tImagePageInfo.struuid = strList.at(0).trimmed();
         tImagePageInfo.strcontents = strList.at(1).trimmed();
-        m_pImageListView->insertPageIndex(tImagePageInfo);
+        m_pImageListView->getImageModel()->insertPageIndex(tImagePageInfo);
 
-        int modelIndex = m_pImageListView->findItemForuuid(tImagePageInfo.struuid);
-        scrollToModelInexPage(m_pImageListView->model()->index(modelIndex, 0));
+        int modelIndex = m_pImageListView->getImageModel()->findItemForuuid(tImagePageInfo.struuid);
+        if(modelIndex >= 0)
+            m_pImageListView->scrollToModelInexPage(m_pImageListView->model()->index(modelIndex, 0));
     }
 }
 
 void NotesWidget::deleteNoteItem(const QString &sUuid)
 {
-    m_pImageListView->removeItemForuuid(sUuid);
+    m_pImageListView->getImageModel()->removeItemForuuid(sUuid);
     m_sheet->showTips(tr("The annotation has been removed"));
 }
 
@@ -164,7 +165,7 @@ void NotesWidget::onListMenuClick(const int &iAction)
 void NotesWidget::onListItemClicked(int row)
 {
     ImagePageInfo_t tImagePageInfo;
-    m_pImageListView->getModelIndexImageInfo(row, tImagePageInfo);
+    m_pImageListView->getImageModel()->getModelIndexImageInfo(row, tImagePageInfo);
     if(tImagePageInfo.iPage >= 0){
         int page = tImagePageInfo.iPage;
         const QString &uuid = tImagePageInfo.struuid;
@@ -196,7 +197,7 @@ void NotesWidget::handleAnntationMsg(const int &msgType, const QString &msgConte
 void NotesWidget::copyNoteContent()
 {
     ImagePageInfo_t tImagePageInfo;
-    m_pImageListView->getModelIndexImageInfo(m_pImageListView->currentIndex().row(), tImagePageInfo);
+    m_pImageListView->getImageModel()->getModelIndexImageInfo(m_pImageListView->currentIndex().row(), tImagePageInfo);
     if(tImagePageInfo.iPage >= 0){
         Utils::copyText(tImagePageInfo.strcontents);
     }
@@ -208,17 +209,10 @@ void NotesWidget::adaptWindowSize(const double &scale)
     m_pImageListView->setProperty("adaptScale", scale);
     m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * scale, qMax(LEFTMINHEIGHT * scale, LEFTMINHEIGHT * 1.0)));
     m_pImageListView->reset();
-    scrollToModelInexPage(curModelIndex, false);
+    m_pImageListView->scrollToModelInexPage(curModelIndex, false);
 }
 
 void NotesWidget::updateThumbnail(const int &page)
 {
-    m_pImageListView->updatePageIndex(page);
-}
-
-void NotesWidget::scrollToModelInexPage(const QModelIndex &index, bool scrollto)
-{
-    m_pImageListView->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
-    m_pImageListView->setCurrentIndex(index);
-    if(scrollto) m_pImageListView->scrollTo(index);
+    m_pImageListView->getImageModel()->updatePageIndex(page);
 }

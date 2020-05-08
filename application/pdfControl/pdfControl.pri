@@ -6,6 +6,7 @@ HEADERS += \
     $$PWD/CustomListWidget.h \
     $$PWD/CustomItemWidget.h \
     $$PWD/note/notesdelegate.h \
+    $$PWD/search/searchresdelegate.h \
     $$PWD/thumbnail/ThumbnailDelegate.h \
     $$PWD/bookmark/bookmarkdelegate.h \
     $$PWD/imagelistview.h \
@@ -56,6 +57,7 @@ SOURCES += \
     $$PWD/CustomListWidget.cpp \
     $$PWD/CustomItemWidget.cpp \
     $$PWD/note/notesdelegate.cpp \
+    $$PWD/search/searchresdelegate.cpp \
     $$PWD/thumbnail/ThumbnailDelegate.cpp \
     $$PWD/bookmark/bookmarkdelegate.cpp \
     $$PWD/imagelistview.cpp \

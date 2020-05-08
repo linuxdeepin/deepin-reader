@@ -14,7 +14,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "notesdelegate.h"
+#include "searchresdelegate.h"
 #include "pdfControl/imageviewmodel.h"
 
 #include <QPainter>
@@ -24,13 +24,13 @@
 
 #include <DGuiApplicationHelper>
 
-NotesDelegate::NotesDelegate(QAbstractItemView *parent)
+SearchResDelegate::SearchResDelegate(QAbstractItemView* parent)
     : DStyledItemDelegate(parent)
 {
     m_parent = parent;
 }
 
-void NotesDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
+void SearchResDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
     if (index.isValid()){
         const QPixmap& pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>();
@@ -62,7 +62,6 @@ void NotesDelegate::paint(QPainter * painter, const QStyleOptionViewItem & optio
             painter->restore();
 
             //drawPagetext
-            int bottomlineHeight = 1;
             int textStartX = rect.right() + 18;
             painter->save();
             painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().windowText().color()));
@@ -70,6 +69,17 @@ void NotesDelegate::paint(QPainter * painter, const QStyleOptionViewItem & optio
             font = DFontSizeManager::instance()->t8(font);
             painter->setFont(font);
             const QString& pageText = index.data(ImageinfoType_e::IMAGE_INDEX_TEXT).toString();
+            int pagetextHeight = painter->fontMetrics().height();
+            painter->drawText(textStartX, rect.y(), option.rect.width(), pagetextHeight, Qt::AlignTop | Qt::AlignLeft, pageText);
+            painter->restore();
+
+            //drawSearchCount
+            painter->save();
+            painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().textTips().color()));
+            QFont sfont = painter->font();
+            font = DFontSizeManager::instance()->t8(sfont);
+            painter->setFont(sfont);
+            const QString& searchCountText = index.data(ImageinfoType_e::IMAGE_SEARCH_COUNT).toString();
             int pagetextHeight = painter->fontMetrics().height();
             painter->drawText(textStartX, rect.y(), option.rect.width(), pagetextHeight, Qt::AlignTop | Qt::AlignLeft, pageText);
             painter->restore();
@@ -97,6 +107,7 @@ void NotesDelegate::paint(QPainter * painter, const QStyleOptionViewItem & optio
 
             //drawBottomLine
             painter->save();
+            int bottomlineHeight = 1;
             painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().frameBorder().color(), bottomlineHeight));
             painter->drawLine(textStartX, option.rect.bottom() - bottomlineHeight, option.rect.right(), option.rect.bottom() - bottomlineHeight);
             painter->restore();
@@ -104,7 +115,8 @@ void NotesDelegate::paint(QPainter * painter, const QStyleOptionViewItem & optio
     }
 }
 
-QSize NotesDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QSize SearchResDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     return DStyledItemDelegate::sizeHint(option, index);
 }
+

@@ -53,14 +53,9 @@ void ImageListView::initControl()
     this->setModel(m_imageModel);
 }
 
-void ImageListView::resetData()
+ImageViewModel *ImageListView::getImageModel()
 {
-    m_imageModel->resetData();
-}
-
-void ImageListView::setBoolMarkVisible(int pageIndex, bool visible)
-{
-    m_imageModel->setBookMarkVisible(pageIndex, visible);
+    return m_imageModel;
 }
 
 void ImageListView::setListType(int type)
@@ -110,41 +105,6 @@ void ImageListView::handleOpenSuccess()
     }
 }
 
-void ImageListView::onUpdatePageImage(int pageIndex)
-{
-    m_imageModel->onUpdatePageImage(pageIndex);
-}
-
-void ImageListView::updatePageIndex(int index)
-{
-    m_imageModel->updatePageIndex(index);
-}
-
-void ImageListView::insertPageIndex(int pageIndex)
-{
-    m_imageModel->insertPageIndex(pageIndex);
-}
-
-void ImageListView::insertPageIndex(const ImagePageInfo_t &tImagePageInfo)
-{
-    m_imageModel->insertPageIndex(tImagePageInfo);
-}
-
-void ImageListView::removePageIndex(int pageIndex)
-{
-    m_imageModel->removePageIndex(pageIndex);
-}
-
-void ImageListView::removeModelIndex(int modelIndex)
-{
-    m_imageModel->removeModelIndex(modelIndex);
-}
-
-void ImageListView::removeItemForuuid(const QString &uuid)
-{
-    m_imageModel->removeItemForuuid(uuid);
-}
-
 void ImageListView::onItemClicked(const QModelIndex &index)
 {
     if (index.isValid()) {
@@ -167,6 +127,13 @@ bool ImageListView::scrollToIndex(int pageIndex, bool scrollTo)
         this->clearSelection();
         return false;
     }
+}
+
+void ImageListView::scrollToModelInexPage(const QModelIndex &index, bool scrollto)
+{
+    this->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
+    this->setCurrentIndex(index);
+    if(scrollto) this->scrollTo(index);
 }
 
 void ImageListView::mousePressEvent(QMouseEvent *event)
@@ -218,12 +185,7 @@ int  ImageListView::getPageIndexForModelIndex(int row)
     return m_imageModel->getPageIndexForModelIndex(row);
 }
 
-void ImageListView::getModelIndexImageInfo(int modelIndex, ImagePageInfo_t &tImagePageInfo)
+void ImageListView::onUpdatePageImage(int pageIndex)
 {
-    m_imageModel->getModelIndexImageInfo(modelIndex, tImagePageInfo);
-}
-
-int  ImageListView::findItemForuuid(const QString &uuid)
-{
-    m_imageModel->findItemForuuid(uuid);
+    m_imageModel->onUpdatePageImage(pageIndex);
 }

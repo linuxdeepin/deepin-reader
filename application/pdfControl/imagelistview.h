@@ -38,21 +38,13 @@ signals:
     void sigListItemClicked(int row);
 
 public:
-    void resetData();
     void handleOpenSuccess();
-    void setBoolMarkVisible(int pageIndex, bool visible);
     void setListType(int type);
-    void updatePageIndex(int index);
-    void insertPageIndex(int pageIndex);
-    void insertPageIndex(const ImagePageInfo_t &tImagePageInfo);
-    void removePageIndex(int pageIndex);
-    void removeModelIndex(int modelIndex);
-    void removeItemForuuid(const QString &uuid);
     bool scrollToIndex(int pageIndex, bool scrollTo = true);
+    void scrollToModelInexPage(const QModelIndex &index, bool scrollto = true);
     int  getModelIndexForPageIndex(int pageIndex);
     int  getPageIndexForModelIndex(int row);
-    int  findItemForuuid(const QString &uuid);
-    void getModelIndexImageInfo(int modelIndex, ImagePageInfo_t &tImagePageInfo);
+    ImageViewModel *getImageModel();
 
 private:
     void initControl();

@@ -29,6 +29,7 @@ ImageViewModel::ImageViewModel(QObject *parent)
 void ImageViewModel::resetData()
 {
     beginResetModel();
+    m_pagelst.clear();
     endResetModel();
 }
 
@@ -87,7 +88,10 @@ QVariant ImageViewModel::data(const QModelIndex &index, int role) const
     } else if (role == ImageinfoType_e::IMAGE_INDEX_TEXT) {
         return QVariant::fromValue(tr("Page %1").arg(nRow + 1));
     } else if (role == ImageinfoType_e::IMAGE_CONTENT_TEXT) {
-        return QVariant::fromValue(m_pagelst.at(index.row()));
+        return QVariant::fromValue(m_pagelst.at(index.row()).strcontents);
+    }
+    else if (role == ImageinfoType_e::IMAGE_SEARCH_COUNT) {
+        return QVariant::fromValue(m_pagelst.at(index.row()).strSearchcount);
     }
     return QVariant();
 }

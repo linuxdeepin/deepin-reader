@@ -21,6 +21,7 @@
 #include "WidgetHeader.h"
 #include "pdfControl/docview/docummentproxy.h"
 #include "pdfControl/imagelistview.h"
+#include "pdfControl/imageviewmodel.h"
 #include "bookmarkdelegate.h"
 
 #include <DHorizontalLine>
@@ -133,7 +134,7 @@ void BookMarkWidget::handleBookMark(int page, int state)
             }
             emit sigSetBookMarkState(true, page);
         }
-        m_pImageListView->insertPageIndex(page);
+        m_pImageListView->getImageModel()->insertPageIndex(page);
     } else {
         //deletePageIndex
         QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
@@ -155,7 +156,7 @@ void BookMarkWidget::handleBookMark(int page, int state)
             }
             emit sigSetBookMarkState(false, page);
         }
-        m_pImageListView->removePageIndex(page);
+        m_pImageListView->getImageModel()->removePageIndex(page);
     }
     scrollToCurrentPage();
 }
@@ -192,7 +193,7 @@ void BookMarkWidget::adaptWindowSize(const double &scale)
 
 void BookMarkWidget::updateThumbnail(const int &page)
 {
-    m_pImageListView->updatePageIndex(page);
+    m_pImageListView->getImageModel()->updatePageIndex(page);
 }
 
 void BookMarkWidget::onUpdateTheme()

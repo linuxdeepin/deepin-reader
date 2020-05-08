@@ -23,6 +23,7 @@
 #include "pdfControl/imagelistview.h"
 #include "pdfControl/docview/docummentproxy.h"
 #include "pdfControl/thumbnail/ThumbnailDelegate.h"
+#include "pdfControl/imageviewmodel.h"
 
 #include <QVBoxLayout>
 #include <DHorizontalLine>
@@ -83,7 +84,7 @@ void ThumbnailWidget::onUpdateTheme()
 
 void ThumbnailWidget::onSetBookMarkState(const int &type, const int &pageIndex)
 {
-    m_pImageListView->setBoolMarkVisible(pageIndex, type);
+    m_pImageListView->getImageModel()->setBookMarkVisible(pageIndex, type);
 }
 
 void ThumbnailWidget::prevPage()
@@ -108,7 +109,7 @@ void ThumbnailWidget::adaptWindowSize(const double &scale)
 
 void ThumbnailWidget::updateThumbnail(const int &pageIndex)
 {
-    m_pImageListView->updatePageIndex(pageIndex);
+    m_pImageListView->getImageModel()->updatePageIndex(pageIndex);
 }
 
 void ThumbnailWidget::scrollToCurrentPage()
