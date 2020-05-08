@@ -38,15 +38,23 @@ void TextOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, const
         m_pRemoveHighLight->setText(tr("Remove annotation"));
         disconnect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked(const int &)), this, SLOT(slotSetHighLight(const int &)));
         removeAction(m_pColorWidgetAction);
-        removeAction(m_pSeparator);
-        delete m_pSeparator;
-        m_pSeparator = nullptr;
+        if (!m_bSeparator) {
+            removeAction(m_pSeparator);
+            m_bSeparator = true;
+        }
+//        delete m_pSeparator;
+//        m_pSeparator = nullptr;
     } else if (m_nType == NOTE_HIGHLIGHT) {
         m_pRemoveHighLight->setText(tr("Remove highlight"));
         insertAction(m_pRemoveHighLight, m_pColorWidgetAction);
         connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked(const int &)), this, SLOT(slotSetHighLight(const int &)));
         if (m_pRemoveHighLight) {
             m_pRemoveHighLight->setEnabled(bHigh);
+        }
+        if (m_bSeparator) {
+            m_pSeparator = this->insertSeparator(m_pAddNote);
+
+            m_bSeparator = false;
         }
         //  m_pColorWidgetAction->setVisible(true);
     }
@@ -77,9 +85,10 @@ void TextOperationMenu::initActions()
 //    this->addSeparator();
 
     m_pRemoveHighLight = createAction(tr("Remove highlight"), SLOT(slotRemoveHighLightClicked()));
-    m_pSeparator = this->addSeparator();
+//    m_pSeparator = this->addSeparator();
     m_pAddNote = createAction(tr("Add annotation"), SLOT(slotAddNoteClicked()));
     m_pAddBookMark = createAction(tr("Add bookmark"), SLOT(slotAddBookMarkClicked()));
+    m_pSeparator = this->insertSeparator(m_pAddNote);
 }
 
 QAction *TextOperationMenu::createAction(const QString &text, const char *member)

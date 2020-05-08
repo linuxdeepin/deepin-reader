@@ -75,6 +75,7 @@ private:
     int         m_nClickPage = -1;
     Note_Type   m_nType = NOTE_HIGHLIGHT;
     QPointer<DocSheet> m_sheet;
+    bool        m_bSeparator = false;//是否要添加分隔线
 };
 
 #endif // TEXTOPERATIONMENU_H
