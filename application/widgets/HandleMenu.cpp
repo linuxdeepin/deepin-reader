@@ -20,7 +20,7 @@
 #include <QDebug>
 
 HandleMenu::HandleMenu(DWidget *parent)
-    : CustomMenu( parent)
+    : CustomMenu(parent)
 {
     initActions();
 }
@@ -45,7 +45,7 @@ void HandleMenu::initActions()
 
     actionGroup->addAction(m_textAction);
     addAction(m_textAction);
-    addSeparator();
+//    addSeparator();
 
     m_handAction = new QAction(tr("Hand Tool"), this);
     connect(m_handAction, SIGNAL(triggered()), SLOT(slotHandTool()));

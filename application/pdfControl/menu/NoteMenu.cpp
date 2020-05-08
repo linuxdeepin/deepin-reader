@@ -19,7 +19,7 @@
 #include "NoteMenu.h"
 
 NoteMenu::NoteMenu(DWidget *parent)
-    : CustomMenu( parent)
+    : CustomMenu(parent)
 {
     initActions();
 }
@@ -28,7 +28,7 @@ void NoteMenu::initActions()
 {
     QAction *copyAction = this->addAction(tr("Copy"));
     connect(copyAction, SIGNAL(triggered()), this, SLOT(slotCopy()));
-    this->addSeparator();
+//    this->addSeparator();
 
     QAction *delAction = this->addAction(tr("Remove annotation"));
     connect(delAction, SIGNAL(triggered()), this, SLOT(slotDelete()));

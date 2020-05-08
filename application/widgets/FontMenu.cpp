@@ -185,6 +185,7 @@ void FontMenu::initActions()
     m_pTwoPageAction = createAction(tr("Two-Page View"), SLOT(slotTwoPage()), true);
     m_pFiteHAction = createAction(tr("Fit Height"), SLOT(slotFiteH()), true);
     m_pFiteWAction = createAction(tr("Fit Width"), SLOT(slotFiteW()), true);
+    this->addSeparator();
     m_pRotateLAction = createAction(tr("Rotate Left"), SLOT(slotRotateL()));
     m_pRotateRAction = createAction(tr("Rotate Right"), SLOT(slotRotateR()));
 }
@@ -214,7 +215,7 @@ QAction *FontMenu::createAction(const QString &objName, const char *member, bool
         connect(action, SIGNAL(triggered()), this, member);
 
         this->addAction(action);
-        this->addSeparator();
+//        this->addSeparator();
 
         return action;
     }

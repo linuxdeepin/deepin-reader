@@ -89,11 +89,10 @@ void DefaultOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, co
 void DefaultOperationMenu::initActions()
 {
     m_pSearch = createAction(tr("Search"), SLOT(slotSearchClicked()));
-
+    this->addSeparator();
     m_pBookMark = createAction(tr("Add bookmark"), SLOT(slotBookMarkClicked()));
-
     m_pAddIconNote = createAction(tr("Add annotation"), SLOT(slotAddIconNote()));
-
+    this->addSeparator();
     m_pFirstPage = createAction(tr("First page"), SLOT(slotFirstPageClicked()));
 
     m_pPrevPage = createAction(tr("Previous page"), SLOT(slotPrevPageClicked()));
@@ -110,7 +109,7 @@ QAction *DefaultOperationMenu::createAction(const QString &name, const char *mem
     connect(action, SIGNAL(triggered()), member);
 
     this->addAction(action);
-    this->addSeparator();
+//    this->addSeparator();
 
     return action;
 }

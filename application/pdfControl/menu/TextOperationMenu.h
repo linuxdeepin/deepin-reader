@@ -65,6 +65,7 @@ private:
     QAction     *m_pRemoveHighLight = nullptr;
     QAction     *m_pAddNote = nullptr;
     QAction     *m_pAddBookMark = nullptr;
+    QAction     *m_pSeparator = nullptr;
 
     ColorWidgetAction   *m_pColorWidgetAction = nullptr;
 
