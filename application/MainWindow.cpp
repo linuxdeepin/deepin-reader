@@ -155,8 +155,6 @@ void MainWindow::slotShortCut(const QString &key)
 {
     if (key == KeyStr::g_ctrl_shift_slash) { //  显示快捷键预览
         displayShortcuts();
-    } else  if (key == KeyStr::g_ctrl_o) {
-        m_central->openFilesExec();
     } else {
         m_central->handleShortcut(key);
     }
@@ -232,12 +230,16 @@ void MainWindow::initShortCut()
     connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(slotShortCut(const QString &)));
 
     auto keyList = dApp->m_pAppInfo->getKeyList();
+
     foreach (auto key, keyList) {
         auto action = new QAction;
+
         action->setShortcut(key);
+
         this->addAction(action);
 
         connect(action, SIGNAL(triggered()), pSigManager, SLOT(map()));
+
         pSigManager->setMapping(action, key.toString());
     }
 }

@@ -64,8 +64,6 @@ protected:
 
     void dropEvent(QDropEvent *event) override;
 
-    void keyPressEvent(QKeyEvent *event) override;
-
 protected:
     void initWidget() override;
 

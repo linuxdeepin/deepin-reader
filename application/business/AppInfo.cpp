@@ -78,6 +78,10 @@ void AppInfo::InitKeyList()
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_Minus));      //  ctrl+-
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_Equal));      //  ctrl+=
 
+    m_pKeyList.append(QKeySequence(Qt::Key_Left));
+    m_pKeyList.append(QKeySequence(Qt::Key_Right));
+    m_pKeyList.append(QKeySequence(Qt::Key_Space));
+
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_Plus));       //  ctrl++
 
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));

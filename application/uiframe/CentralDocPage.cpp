@@ -590,6 +590,26 @@ void CentralDocPage::onShowFileAttr()
 
 void CentralDocPage::handleShortcut(const QString &s)
 {
+    if (getCurrentState() == SLIDER_SHOW) {
+        if (s == KeyStr::g_esc) {
+            quitSpecialState();
+        }
+        if (nullptr == m_pctrlwidget) {
+            setCurrentState(Default_State);
+            return;
+        }
+        auto helper = getCurFileAndProxy(m_strSliderPath);
+        if (helper) {
+            if (helper->getAutoPlaySlideStatu()) {
+                helper->setAutoPlaySlide(false);
+            } else  {
+                helper->setAutoPlaySlide(true);
+            }
+        }
+        m_pctrlwidget->PageChangeByKey(s);
+        return;
+    }
+
     if (s == KeyStr::g_ctrl_s) {
         saveCurrent();
     } else if (s == KeyStr::g_ctrl_shift_s) {
@@ -598,8 +618,6 @@ void CentralDocPage::handleShortcut(const QString &s)
         openSlide();
     } else if (s == KeyStr::g_alt_z) {
         openMagnifer();
-    } else if (s == KeyStr::g_esc) {
-        quitSpecialState();
     } else if (s == KeyStr::g_ctrl_p) {
         if (getCurSheet())
             getCurSheet()->print();
@@ -653,21 +671,6 @@ void CentralDocPage::handleShortcut(const QString &s)
     } else if (s == KeyStr::g_ctrl_i) {
         if (getCurSheet())
             getCurSheet()->addSelectedTextHightlightAnnotation();
-    } else if (s == KeyStr::g_pgup || s == KeyStr::g_pgdown
-               || s == KeyStr::g_down || s == KeyStr::g_up
-               || s == KeyStr::g_left || s == KeyStr::g_right
-               || s == KeyStr::g_space) {
-        if (getCurrentState() == SLIDER_SHOW && m_pctrlwidget) {
-            auto helper = getCurFileAndProxy(m_strSliderPath);
-            if (helper) {
-                if (helper->getAutoPlaySlideStatu()) {
-                    helper->setAutoPlaySlide(false);
-                } else  {
-                    helper->setAutoPlaySlide(true);
-                }
-            }
-            m_pctrlwidget->PageChangeByKey(s);
-        }
     }
 }
 

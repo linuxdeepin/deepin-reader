@@ -202,7 +202,7 @@ void PlayControlWidget::PageChangeByKey(const QString &sKey)
     } else {
         if (sKey == KeyStr::g_up || sKey == KeyStr::g_pgup || sKey == KeyStr::g_left) {
             pagejump(true);
-        } else {
+        } else if (sKey == KeyStr::g_right) {
             pagejump(false);
         }
     }

@@ -128,7 +128,10 @@ bool Central::saveAll()
 
 void Central::handleShortcut(QString shortcut)
 {
-    m_docPage->handleShortcut(shortcut);
+    if (shortcut == KeyStr::g_ctrl_o) {
+        openFilesExec();
+    } else
+        m_docPage->handleShortcut(shortcut);
 }
 
 void Central::onSheetCountChanged(int count)
@@ -146,20 +149,6 @@ void Central::onSheetCountChanged(int count)
     }
 }
 
-void Central::keyPressEvent(QKeyEvent *event)
-{
-    //  不是正常显示, 则是全屏模式或者幻灯片模式, 进行页面跳转
-    QStringList pFilterList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown
-                              << KeyStr::g_down << KeyStr::g_up
-                              << KeyStr::g_left << KeyStr::g_right << KeyStr::g_space;
-    QString key = Utils::getKeyshortcut(event);
-    if (pFilterList.contains(key)) {
-        m_docPage->handleShortcut(key);
-    }
-
-    CustomWidget::keyPressEvent(event);
-}
-
 void Central::onMenuTriggered(const QString &action)
 {
     if (action == "New window") {
@@ -175,9 +164,8 @@ void Central::onMenuTriggered(const QString &action)
     } else if (action == "Slide show") { //  开启幻灯片
         m_docPage->openSlide();
     } else if (action == "Magnifer") {   //  开启放大镜
-        if (m_docPage->openMagnifer()) {
+        if (m_docPage->openMagnifer())
             m_widget->setMagnifierState();
-        }
     } else if (action == "Document info") {
         m_docPage->onShowFileAttr();
     } else if (action == "Display in file manager") {    //  文件浏览器 显示
