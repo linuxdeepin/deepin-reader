@@ -30,7 +30,7 @@ typedef struct ReaderImageParam_t{
     DocummentProxy* docProxy = nullptr;
 
     QObject *receiver = nullptr;
-    const char* slotFun = "";
+    QString slotFun = "";
 
     bool operator == (const ReaderImageParam_t& other) const{
         return (this->pageNum == other.pageNum && this->maxPixel == other.maxPixel && this->docProxy == other.docProxy);
