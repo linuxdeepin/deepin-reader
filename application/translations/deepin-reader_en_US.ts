@@ -379,6 +379,13 @@
     </message>
 </context>
 <context>
+    <name>ImageViewModel</name>
+    <message>
+        <source>Page %1</source>
+        <translation type="unfinished">Page %1</translation>
+    </message>
+</context>
+<context>
     <name>MainOperationWidget</name>
     <message>
         <source>Thumbnails</source>

@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_CN">
 <context>
     <name>Application</name>
     <message>
@@ -374,6 +376,13 @@
     <message>
         <source>Select File</source>
         <translation type="vanished">选择文件</translation>
+    </message>
+</context>
+<context>
+    <name>ImageViewModel</name>
+    <message>
+        <source>Page %1</source>
+        <translation type="unfinished">第%1页</translation>
     </message>
 </context>
 <context>

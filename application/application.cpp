@@ -35,7 +35,7 @@ Application::Application(int &argc, char **argv)
     setOrganizationName("deepin");
     setWindowIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
     setApplicationDisplayName(tr("Document Viewer"));
-    setApplicationVersion(DApplication::buildVersion("20191227"));
+    setApplicationVersion(DApplication::buildVersion("1.0"));
     setApplicationAcknowledgementPage(Constant::sAcknowledgementLink);
 
     initI18n();
