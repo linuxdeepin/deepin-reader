@@ -31,6 +31,7 @@ MainWindow::MainWindow(DMainWindow *parent)
     int tHeight = 360;
 
     dApp->adaptScreenView(tWidth, tHeight);
+
     setMinimumSize(tWidth, tHeight);
 
     showDefaultSize();
@@ -75,42 +76,10 @@ void MainWindow::setSreenRect(const QRect &rect)
     dApp->m_pAppInfo->setScreenRect(rect);
 }
 
-//  0 开启幻灯片, 1 取消幻灯片
-void MainWindow::SetSliderShowState(const int &nState)
-{
-    titlebar()->setVisible(nState);
-
-    if (nState == 1) {
-        if (windowState() == Qt::WindowFullScreen) {
-
-            showNormal();
-
-            if (m_nOldState == Qt::WindowMaximized) {
-                showMaximized();
-            }
-
-            m_nOldState = Qt::WindowNoState;        // 状态恢复     2019-12-23  wzx
-        }
-    } else {
-
-        m_nOldState = this->windowState();      //  全屏之前 保存当前状态     2019-12-23  wzx
-
-        this->setWindowState(Qt::WindowFullScreen);
-    }
-}
-
-//  临时 添加 焦点
-void MainWindow::showEvent(QShowEvent *ev)
-{
-    this->setFocus();
-    DMainWindow::showEvent(ev);
-}
-
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (m_central->saveAll()) {
-
         dApp->m_pAppInfo->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
 
         dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
@@ -144,14 +113,8 @@ void MainWindow::displayShortcuts()
     show.show();
 }
 
-//  退出 应用
-void MainWindow::onAppExit()
-{
-    close();
-}
-
 //  快捷键 实现
-void MainWindow::slotShortCut(const QString &key)
+void MainWindow::onShortCut(const QString &key)
 {
     if (key == KeyStr::g_ctrl_shift_slash) { //  显示快捷键预览
         displayShortcuts();
@@ -227,7 +190,8 @@ void MainWindow::showDefaultSize()
 void MainWindow::initShortCut()
 {
     auto pSigManager = new QSignalMapper(this);
-    connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(slotShortCut(const QString &)));
+
+    connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(onShortCut(const QString &)));
 
     auto keyList = dApp->m_pAppInfo->getKeyList();
 

@@ -29,17 +29,11 @@ public:
 
     void setSreenRect(const QRect &); //得到屏幕的分辨率
 
-    void SetSliderShowState(const int &);
-
 protected:
-    void showEvent(QShowEvent *ev) override;
-
     void closeEvent(QCloseEvent *event) override;
 
 private:
     void initUI();
-
-    void onAppExit();
 
     void displayShortcuts();
 
@@ -48,7 +42,7 @@ private:
     void initShortCut();
 
 private slots:
-    void slotShortCut(const QString &);
+    void onShortCut(const QString &);
 
     void onShowState(int state);
 
