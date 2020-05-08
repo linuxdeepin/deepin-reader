@@ -30,22 +30,23 @@
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
 {
-    setAttribute(Qt::AA_UseHighDpiPixmaps);
-    setApplicationName(ConstantMsg::g_app_name);
-    setOrganizationName("deepin");
-    setWindowIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
-    setApplicationDisplayName(tr("Document Viewer"));
-    setApplicationVersion(DApplication::buildVersion("1.0"));
-    setApplicationAcknowledgementPage(Constant::sAcknowledgementLink);
-
     initI18n();
     initCfgPath();
     initChildren();
 
+    setAttribute(Qt::AA_UseHighDpiPixmaps);
+    setApplicationName(ConstantMsg::g_app_name);
+    setOrganizationName("deepin");
+    setWindowIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
+    setApplicationVersion(DApplication::buildVersion("1.0"));
+    setApplicationAcknowledgementPage(Constant::sAcknowledgementLink);
+    setApplicationDisplayName(tr("Document Viewer"));
+    setApplicationDescription(tr("Document Viewer is a simple PDF reader, supporting bookmarks, highlights and annotations."));
+
     QPixmap px(QIcon::fromTheme(ConstantMsg::g_app_name).pixmap(256 * qApp->devicePixelRatio(), 256 * qApp->devicePixelRatio()));
     px.setDevicePixelRatio(qApp->devicePixelRatio());
     setProductIcon(QIcon(px));
-    setApplicationDescription(tr("Document Viewer is a simple PDF reader, supporting bookmarks, highlights and annotations."));
+
     setOpenFileOk(false);
 }
 
