@@ -31,8 +31,6 @@ PlayControlWidget::PlayControlWidget(DocSheet *sheet, DWidget *parnet)
     initWidget();
     initConnections();
     adjustSize();
-
-    slotUpdateTheme();
 }
 
 PlayControlWidget::~PlayControlWidget()
@@ -172,22 +170,6 @@ void PlayControlWidget::leaveEvent(QEvent *event)
     DFloatingWidget::leaveEvent(event);
 }
 
-void PlayControlWidget::slotUpdateTheme()
-{
-//    QList<DIconButton *> plist = this->findChildren<DIconButton *>();
-//    foreach (DIconButton *btn, plist) {
-//        if (btn == m_pbtnplay) {
-//            if (m_bautoplaying) {
-//                m_pbtnplay->setIcon(QIcon(Utils::renderSVG(PF::getImagePath("suspend_normal", Pri::g_icons), QSize(36, 36))));
-//            } else {
-//                m_pbtnplay->setIcon(QIcon(Utils::renderSVG(PF::getImagePath("play_normal", Pri::g_icons), QSize(36, 36))));
-//            }
-//        } else {
-//            btn->setIcon(QIcon(Utils::renderSVG(PF::getImagePath(btn->objectName(), Pri::g_icons), QSize(36, 36))));
-//        }
-//    }
-}
-
 void PlayControlWidget::slotPreClicked()
 {
     pagejump(true);
@@ -195,15 +177,11 @@ void PlayControlWidget::slotPreClicked()
 
 void PlayControlWidget::slotPlayClicked()
 {
-    QJsonObject obj;
-    obj.insert("type", "keyPress");
-    obj.insert("key", KeyStr::g_space);
-    QJsonDocument doc = QJsonDocument(obj);
     CentralDocPage *docPage = static_cast<CentralDocPage *>(parent());
     if (nullptr == docPage)
         return;
 
-    docPage->OnAppMsgData(doc.toJson(QJsonDocument::Compact));
+    docPage->handleShortcut(KeyStr::g_space);
 }
 
 void PlayControlWidget::slotNextClicked()

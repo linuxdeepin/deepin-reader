@@ -137,11 +137,7 @@ public:
 
     void onShowFileAttr();
 
-    void OnAppMsgData(const QString &);
-
     void OnTabFileChangeMsg(const QString &);
-
-    void OnKeyPress(const QString &);
 
 signals:
     void sigRemoveFileTab(const QString &);

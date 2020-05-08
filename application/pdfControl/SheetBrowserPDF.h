@@ -58,7 +58,7 @@ public:
 
     void setScale(double scale);
 
-    bool setFit(int fit);
+    void setFit(int fit);
 
     void setBookMark(int page, int state);
 

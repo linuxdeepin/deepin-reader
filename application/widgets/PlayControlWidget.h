@@ -33,7 +33,6 @@ protected:
     void leaveEvent(QEvent *) override;
 
 private slots:
-    void slotUpdateTheme();
     void slotPreClicked();
     void slotPlayClicked();
     void slotNextClicked();

@@ -132,14 +132,15 @@ void SheetBrowserPDF::setScale(double scale)
 
     d->m_pDocViewProxy->setScaleRotateViewModeAndShow();
 
+    emit sigFileChanged();
 }
 
-bool SheetBrowserPDF::setFit(int fit)
+void SheetBrowserPDF::setFit(int fit)
 {
     Q_D(SheetBrowserPDF);
 
     if (d->m_pProxyFileDataModel->getOper(Fit) == fit)
-        return false;
+        return;
 
     setOper(Fit, fit);
 
@@ -150,8 +151,6 @@ bool SheetBrowserPDF::setFit(int fit)
     }
 
     emit sigFileChanged();
-
-    return true;
 }
 
 void SheetBrowserPDF::setBookMark(int page, int state)

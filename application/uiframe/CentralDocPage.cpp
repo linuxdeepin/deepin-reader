@@ -588,20 +588,6 @@ void CentralDocPage::onShowFileAttr()
 
 }
 
-void CentralDocPage::OnAppMsgData(const QString &sText)
-{
-    QJsonParseError error;
-    QJsonDocument doc = QJsonDocument::fromJson(sText.toLocal8Bit().data(), &error);
-    if (error.error == QJsonParseError::NoError) {
-        QJsonObject obj = doc.object();
-        QString sType = obj.value("type").toString();
-        if (sType == "keyPress") {
-            QString sKey = obj.value("key").toString();
-            OnKeyPress(sKey);
-        }
-    }
-}
-
 void CentralDocPage::handleShortcut(const QString &s)
 {
     if (s == KeyStr::g_ctrl_s) {
@@ -667,6 +653,21 @@ void CentralDocPage::handleShortcut(const QString &s)
     } else if (s == KeyStr::g_ctrl_i) {
         if (getCurSheet())
             getCurSheet()->addSelectedTextHightlightAnnotation();
+    } else if (s == KeyStr::g_pgup || s == KeyStr::g_pgdown
+               || s == KeyStr::g_down || s == KeyStr::g_up
+               || s == KeyStr::g_left || s == KeyStr::g_right
+               || s == KeyStr::g_space) {
+        if (getCurrentState() == SLIDER_SHOW && m_pctrlwidget) {
+            auto helper = getCurFileAndProxy(m_strSliderPath);
+            if (helper) {
+                if (helper->getAutoPlaySlideStatu()) {
+                    helper->setAutoPlaySlide(false);
+                } else  {
+                    helper->setAutoPlaySlide(true);
+                }
+            }
+            m_pctrlwidget->PageChangeByKey(s);
+        }
     }
 }
 
@@ -680,25 +681,6 @@ void CentralDocPage::quitSpecialState()
     }
 
     setCurrentState(Default_State);
-}
-
-void CentralDocPage::OnKeyPress(const QString &sKey)
-{
-    int nState = getCurrentState();
-    if (nState == SLIDER_SHOW && m_pctrlwidget) {
-        if (sKey == KeyStr::g_space) {
-            auto helper = getCurFileAndProxy(m_strSliderPath);
-            if (helper) {
-                if (helper->getAutoPlaySlideStatu()) {
-                    helper->setAutoPlaySlide(false);
-                } else  {
-                    helper->setAutoPlaySlide(true);
-                }
-            }
-        }
-
-        m_pctrlwidget->PageChangeByKey(sKey);
-    }
 }
 
 void CentralDocPage::setCurrentState(const int &nCurrentState)

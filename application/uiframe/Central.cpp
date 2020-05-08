@@ -154,13 +154,7 @@ void Central::keyPressEvent(QKeyEvent *event)
                               << KeyStr::g_left << KeyStr::g_right << KeyStr::g_space;
     QString key = Utils::getKeyshortcut(event);
     if (pFilterList.contains(key)) {
-        QJsonObject obj;
-        obj.insert("type", "keyPress");
-        obj.insert("key", key);
-
-        QJsonDocument doc = QJsonDocument(obj);
-
-        m_docPage->OnAppMsgData(doc.toJson(QJsonDocument::Compact));
+        m_docPage->handleShortcut(key);
     }
 
     CustomWidget::keyPressEvent(event);
