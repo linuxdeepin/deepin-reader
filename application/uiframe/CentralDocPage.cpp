@@ -147,7 +147,7 @@ void CentralDocPage::openFile(QString &filePath)
 
         emit sigSheetCountChanged(m_pStackedLayout->count());
 
-    } else if (Dr::DjVu == fileType) {
+    } /*else if (Dr::DjVu == fileType) {
         DocSheet *sheet = new DocSheetDJVU(this);
 
         connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
@@ -164,7 +164,7 @@ void CentralDocPage::openFile(QString &filePath)
 
         onOpened(sheet, true);
 
-    } else {
+    } */else {
         showTips(tr("The format is not supported"), 1);
     }
 
