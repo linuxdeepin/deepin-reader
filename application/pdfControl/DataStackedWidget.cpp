@@ -26,7 +26,6 @@
 #include "catalog/CatalogWidget.h"
 #include "bookmark/BookMarkWidget.h"
 #include "note/NotesWidget.h"
-#include "search/BufferWidget.h"
 #include "search/SearchResWidget.h"
 #include "DocSheet.h"
 

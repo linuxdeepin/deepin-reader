@@ -16,7 +16,6 @@ HEADERS += \
     $$PWD/thumbnail/PagingWidget.h \
     $$PWD/thumbnail/ThumbnailWidget.h \
     $$PWD/search/SearchResWidget.h \
-    $$PWD/search/BufferWidget.h \
     $$PWD/bookmark/BookMarkWidget.h \
     $$PWD/note/NoteViewWidget.h \
     $$PWD/note/TransparentTextEdit.h \
@@ -60,7 +59,6 @@ SOURCES += \
     $$PWD/threadmanager/readerimagethreadpoolmanager.cpp \
     $$PWD/thumbnail/PagingWidget.cpp \
     $$PWD/thumbnail/ThumbnailWidget.cpp \
-    $$PWD/search/BufferWidget.cpp \
     $$PWD/search/SearchResWidget.cpp \
     $$PWD/bookmark/BookMarkWidget.cpp \
     $$PWD/note/NoteViewWidget.cpp \
