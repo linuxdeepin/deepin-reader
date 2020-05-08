@@ -80,9 +80,8 @@ void SearchResDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
             sfont = DFontSizeManager::instance()->t10(sfont);
             painter->setFont(sfont);
             const QString& searchCountText = index.data(ImageinfoType_e::IMAGE_SEARCH_COUNT).toString();
-            int searchCountTextHeight = painter->fontMetrics().height();
             int searchCountTextWidth = painter->fontMetrics().width(searchCountText);
-            painter->drawText(option.rect.right() - searchCountTextWidth - 20, rect.y(), option.rect.width(), searchCountTextHeight, Qt::AlignVCenter | Qt::AlignLeft, searchCountText);
+            painter->drawText(option.rect.right() - searchCountTextWidth - 20, rect.y(), option.rect.width(), pagetextHeight, Qt::AlignVCenter | Qt::AlignLeft, searchCountText);
             painter->restore();
 
             //drawPageContenttext
