@@ -46,8 +46,6 @@ Application::Application(int &argc, char **argv)
     QPixmap px(QIcon::fromTheme(ConstantMsg::g_app_name).pixmap(256 * qApp->devicePixelRatio(), 256 * qApp->devicePixelRatio()));
     px.setDevicePixelRatio(qApp->devicePixelRatio());
     setProductIcon(QIcon(px));
-
-    setOpenFileOk(false);
 }
 
 void Application::setSreenRect(const QRect &rect)
@@ -62,22 +60,6 @@ void Application::adaptScreenView(int &w, int &h)
     if (m_pAppInfo) {
         m_pAppInfo->adaptScreenView(w, h);
     }
-}
-
-void Application::setOpenFileOk(const bool &ok)
-{
-    if (m_pAppInfo) {
-        m_pAppInfo->setOpenFileOk(ok);
-    }
-//    setFlush(ok);
-}
-
-bool Application::openFileOk() const
-{
-    if (m_pAppInfo) {
-        return  m_pAppInfo->openFileOk();
-    }
-    return false;
 }
 
 void Application::handleQuitAction()

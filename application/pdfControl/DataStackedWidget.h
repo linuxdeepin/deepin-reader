@@ -93,10 +93,6 @@ private:
     DocSheet    *m_sheet = nullptr;
     double m_scale = 1.0;
     double m_dScale{1.0};
-
-    // QWidget interface
-protected:
-    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
 };
 
 #endif // DATASTACKEDWIDGET_H

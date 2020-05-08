@@ -37,8 +37,6 @@ public:
     Application(int &argc, char **argv);
     void setSreenRect(const QRect &rect);
     void adaptScreenView(int &w, int &h);
-    void setOpenFileOk(const bool &ok);
-    bool openFileOk() const;
 
 protected:
     void handleQuitAction() override;

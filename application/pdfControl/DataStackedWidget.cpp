@@ -264,12 +264,3 @@ void DataStackedWidget::handleOpenSuccess()
     m_pBookMarkWidget->handleOpenSuccess();
     m_pNotesWidget->handleOpenSuccess();
 }
-
-void DataStackedWidget::showEvent(QShowEvent *event)
-{
-    DStackedWidget::showEvent(event);
-    QTimer::singleShot(1000, this, [ = ] {
-        dApp->setOpenFileOk(true);
-    });
-}
-
