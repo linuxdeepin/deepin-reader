@@ -146,8 +146,11 @@ void AppInfo::setMousePressLocal(const bool &highLight, const QPoint &point)
 void AppInfo::setScreenRect(const QRect &rect)
 {
     m_screenRect = rect;
-    m_dWidthScale = static_cast<double>((static_cast<double>(rect.width())) / static_cast<double>(m_nWidth));
-    m_dHeightScale = static_cast<double>((static_cast<double>(rect.height())) / static_cast<double>(m_nHeight));
+
+//    m_dWidthScale = static_cast<double>((static_cast<double>(rect.width())) / static_cast<double>(m_nWidth));
+//    m_dHeightScale = static_cast<double>((static_cast<double>(rect.height())) / static_cast<double>(m_nHeight));
+    qInfo() << "        dApp->devicePixelRatio():" << dApp->devicePixelRatio();
+
 }
 
 void AppInfo::setSmallNoteWidgetSize(const QSize &size)
@@ -185,8 +188,11 @@ QString AppInfo::getAppKeyValue(const int &iKey) const
  */
 void AppInfo::adaptScreenView(int &width, int &height)
 {
-    if (m_dWidthScale > 1.0000)
-        width = static_cast<int>(m_dWidthScale * static_cast<double>(width));
-    if (m_dHeightScale > 1.0000)
-        height = static_cast<int>(m_dHeightScale * static_cast<double>(height));
+//    if (m_dWidthScale > 1.0000)
+//    width = static_cast<int>(m_dWidthScale * static_cast<double>(width));
+//    if (m_dHeightScale > 1.0000)
+//    height = static_cast<int>(m_dHeightScale * static_cast<double>(height));
+
+    width = static_cast<int>(width * dApp->devicePixelRatio());
+    height = static_cast<int>(height * dApp->devicePixelRatio());
 }
