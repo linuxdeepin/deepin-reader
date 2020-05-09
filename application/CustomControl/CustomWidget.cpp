@@ -42,6 +42,11 @@ CustomWidget::CustomWidget(CustomWidgetPrivate &cwp, DWidget *parent)
 
 }
 
+void CustomWidget::initWidget()
+{
+
+}
+
 void CustomWidget::updateWidgetTheme()
 {
     auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();

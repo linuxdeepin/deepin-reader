@@ -34,12 +34,37 @@
 #include "TitleWidget.h"
 #include "MainWindow.h"
 
-Central::Central(DWidget *parent)
+Central::Central(QWidget *parent)
     : CustomWidget(parent)
 {
     setAcceptDrops(true);
 
-    initWidget();
+    m_menu    = new TitleMenu(this);
+    connect(m_menu, SIGNAL(sigActionTriggered(QString)), this, SLOT(onMenuTriggered(QString)));
+
+    m_widget  = new TitleWidget(this);
+
+    m_docPage = new CentralDocPage(this);
+    connect(m_docPage, SIGNAL(sigNeedShowTips(const QString &, int)), this, SLOT(onShowTips(const QString &, int)));
+    connect(m_docPage, SIGNAL(sigNeedClose()), this, SIGNAL(sigNeedClose()));
+    connect(m_docPage, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
+    connect(m_docPage, SIGNAL(sigNeedShowState(int)), this, SIGNAL(sigNeedShowState(int)));
+    connect(m_docPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
+    connect(m_docPage, SIGNAL(sigNeedActivateWindow()), this, SLOT(onNeedActivateWindow()));
+
+    m_navPage = new CentralNavPage(this);
+    connect(m_navPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
+
+    m_layout = new QStackedLayout(this);
+    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->setSpacing(0);
+    m_layout->addWidget(m_navPage);
+    m_layout->addWidget(m_docPage);
+    setLayout(m_layout);
+
+    connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_menu, SLOT(onCurSheetChanged(DocSheet *)));
+    connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_widget, SLOT(onCurSheetChanged(DocSheet *)));
+    connect(m_docPage, SIGNAL(sigFindOperation(const int &)), m_widget, SLOT(slotFindOperation(const int &)));
 }
 
 Central::~Central()
@@ -239,29 +264,3 @@ void Central::dropEvent(QDropEvent *event)
     }
 }
 
-void Central::initWidget()
-{
-    m_menu    = new TitleMenu(this);
-    m_widget  = new TitleWidget(this);
-    m_docPage = new CentralDocPage(this);
-    m_navPage = new CentralNavPage(this);
-
-    m_layout = new QStackedLayout(this);
-    m_layout->setContentsMargins(0, 0, 0, 0);
-    m_layout->setSpacing(0);
-    m_layout->addWidget(m_navPage);
-    m_layout->addWidget(m_docPage);
-    setLayout(m_layout);
-
-    connect(m_menu, SIGNAL(sigActionTriggered(QString)), this, SLOT(onMenuTriggered(QString)));
-    connect(m_navPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
-    connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_menu, SLOT(onCurSheetChanged(DocSheet *)));
-    connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_widget, SLOT(onCurSheetChanged(DocSheet *)));
-    connect(m_docPage, SIGNAL(sigNeedShowTips(const QString &, int)), this, SLOT(onShowTips(const QString &, int)));
-    connect(m_docPage, SIGNAL(sigNeedClose()), this, SIGNAL(sigNeedClose()));
-    connect(m_docPage, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
-    connect(m_docPage, SIGNAL(sigNeedShowState(int)), this, SIGNAL(sigNeedShowState(int)));
-    connect(m_docPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
-    connect(m_docPage, SIGNAL(sigFindOperation(const int &)), m_widget, SLOT(slotFindOperation(const int &)));
-    connect(m_docPage, SIGNAL(sigNeedActivateWindow()), this, SLOT(onNeedActivateWindow()));
-}

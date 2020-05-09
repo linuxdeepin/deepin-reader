@@ -71,7 +71,7 @@ public:
 protected:
     CustomWidget(CustomWidgetPrivate &, DWidget *parent = nullptr);
 
-    virtual void initWidget() = 0;
+    virtual void initWidget();
 
     void updateWidgetTheme();
 

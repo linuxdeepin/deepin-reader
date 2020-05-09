@@ -7,9 +7,8 @@ CentralDocPage(DocTabbar DocSheets)
 
 DocSheet(SheetSidebar SheetBrowserArea document)
  */
-
-#ifndef FRAME_MAINWIDGET_H
-#define FRAME_MAINWIDGET_H
+#ifndef CENTRAL_H
+#define CENTRAL_H
 
 #include "CustomControl/CustomWidget.h"
 
@@ -25,9 +24,9 @@ class Central : public CustomWidget
     Q_DISABLE_COPY(Central)
 
 public:
-    explicit Central(DWidget *parent = nullptr);
+    explicit Central(QWidget *parent = nullptr);
 
-    ~Central() override;
+    ~Central();
 
     TitleMenu *titleMenu();
 
@@ -49,9 +48,6 @@ public:
 
     void doOpenFile(QString filePath);
 
-public slots:
-    void onSheetCountChanged(int count);
-
 signals:
     void sigOpenFiles(const QString &);
 
@@ -64,17 +60,15 @@ protected:
 
     void dropEvent(QDropEvent *event) override;
 
-protected:
-    void initWidget() override;
-
 public slots:
+    void onSheetCountChanged(int count);
+
     void onMenuTriggered(const QString &action);
 
     void onOpenFilesExec();
 
     void onNeedActivateWindow();
 
-private slots:
     void onShowTips(const QString &text, int iconIndex = 0);
 
 private:
@@ -85,4 +79,4 @@ private:
     TitleWidget         *m_widget = nullptr;
 };
 
-#endif  // MAINSTACKWIDGET_H
+#endif  // CENTRAL_H
