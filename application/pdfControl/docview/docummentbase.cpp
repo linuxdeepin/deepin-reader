@@ -1312,8 +1312,16 @@ double DocummentBase::adaptHeightAndShow(double height)
     if (height < EPSINON) {
         return -1;
     }
-    double imageoriginalheight = d->m_pages.at(0)->getOriginalImageHeight();
-    double imageoriginalwidth = d->m_pages.at(0)->getOriginalImageWidth();
+
+    double imageoriginalheight = 0;
+    double imageoriginalwidth = 0;
+    foreach (PageBase *base, d->m_pages) {
+        if (base->getOriginalImageWidth() > imageoriginalwidth)
+            imageoriginalwidth = base->getOriginalImageWidth();
+        if (base->getOriginalImageHeight() > imageoriginalheight)
+            imageoriginalheight = base->getOriginalImageHeight();
+    }
+
     RotateType_EM docrotatetype = d->m_rotate;
     height = height - d->m_vboxLayout->margin() - d->m_widgets.at(0)->layout()->margin() - d->m_widgets.at(0)->layout()->spacing() - d->m_pages.at(0)->margin();
 
