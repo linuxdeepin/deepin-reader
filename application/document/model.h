@@ -59,6 +59,11 @@ struct Link {
 
 };
 
+struct Word {
+    QString text;
+    QRect rect;
+};
+
 class Annotation : public QObject
 {
     Q_OBJECT

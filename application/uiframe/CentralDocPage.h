@@ -136,9 +136,6 @@ signals:
 
     void sigNeedActivateWindow();
 
-protected:
-    void initWidget() override;
-
 private:
     QStackedLayout      *m_pStackedLayout = nullptr;
     DocTabBar           *m_pTabBar = nullptr;

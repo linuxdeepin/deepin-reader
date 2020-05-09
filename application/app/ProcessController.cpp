@@ -99,8 +99,9 @@ void ProcessController::handleFiles(QStringList filePathList)
                 MainWindow::m_list[0]->activateWindow();
                 MainWindow::m_list[0]->doOpenFile(filePath);
                 continue;
-            } else
+            } else {
                 MainWindow::createWindow()->doOpenFile(filePath);
+            }
         }
     }
 }

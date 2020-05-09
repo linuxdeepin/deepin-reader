@@ -44,6 +44,9 @@ int main(int argc, char *argv[])
     QApplication::desktop()->geometry();
     a.setSreenRect(a.desktop()->geometry());
 
+    if (!MainWindow::allowCreateWindow())
+        return -1;
+
     MainWindow *w = MainWindow::createWindow();
 
     foreach (const QString &filePath, arguments) {

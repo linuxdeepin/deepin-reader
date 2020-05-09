@@ -177,7 +177,8 @@ void Central::onSheetCountChanged(int count)
 void Central::onMenuTriggered(const QString &action)
 {
     if (action == "New window") {
-        MainWindow::createWindow()->show();
+        if (MainWindow::allowCreateWindow())
+            MainWindow::createWindow()->show();
     } else if (action == "New tab") {
         openFilesExec();
     } else if (action == "Save") { //  保存当前显示文件

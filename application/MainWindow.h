@@ -52,6 +52,7 @@ private:
 
 public:
     static MainWindow *windowContainSheet(DocSheet *sheet);
+    static bool allowCreateWindow();
     static MainWindow *createWindow();
     static QList<MainWindow *> m_list;
 };

@@ -52,7 +52,25 @@
 CentralDocPage::CentralDocPage(DWidget *parent)
     : CustomWidget(parent)
 {
-    initWidget();
+    m_pTabBar = new DocTabBar(this);
+    connect(m_pTabBar, SIGNAL(sigLastTabMoved()), this, SIGNAL(sigNeedClose()));
+    connect(m_pTabBar, SIGNAL(sigTabChanged(DocSheet *)), this, SLOT(onTabChanged(DocSheet *)));
+    connect(m_pTabBar, SIGNAL(sigTabMoveIn(DocSheet *)), this, SLOT(onTabMoveIn(DocSheet *)));
+    connect(m_pTabBar, SIGNAL(sigTabClosed(DocSheet *)), this, SLOT(onTabClosed(DocSheet *)));
+    connect(m_pTabBar, SIGNAL(sigTabMoveOut(DocSheet *)), this, SLOT(onTabMoveOut(DocSheet *)));
+    connect(m_pTabBar, SIGNAL(sigTabNewWindow(DocSheet *)), this, SLOT(onTabNewWindow(DocSheet *)));
+    connect(m_pTabBar, SIGNAL(sigNeedOpenFilesExec()), this, SIGNAL(sigNeedOpenFilesExec()));
+    connect(m_pTabBar, SIGNAL(sigNeedActivateWindow()), this, SIGNAL(sigNeedActivateWindow()));
+
+    m_pStackedLayout = new QStackedLayout;
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+
+    mainLayout->addWidget(m_pTabBar);
+    mainLayout->addItem(m_pStackedLayout);
+    mainLayout->setMargin(0);
+    mainLayout->setSpacing(0);
+
+    this->setLayout(mainLayout);
 }
 
 CentralDocPage::~CentralDocPage()
@@ -245,17 +263,17 @@ void CentralDocPage::onTabNewWindow(DocSheet *sheet)
 
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 
-    MainWindow *w = MainWindow::createWindow();
-
     disconnect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
     disconnect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
     disconnect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
 
-    w->addSheet(sheet);
+    MainWindow *window = MainWindow::createWindow();
 
-    w->move(QCursor::pos());
+    window->addSheet(sheet);
 
-    w->show();
+    window->move(QCursor::pos());
+
+    window->show();
 }
 
 void CentralDocPage::onCentralMoveIn(DocSheet *sheet)
@@ -453,29 +471,6 @@ void CentralDocPage::showPlayControlWidget()
         int tH = 100;
         m_pctrlwidget->activeshow((nScreenWidth - m_pctrlwidget->width()) / 2, inScreenHeght - tH);
     }
-}
-
-void CentralDocPage::initWidget()
-{
-    m_pTabBar = new DocTabBar(this);
-    connect(m_pTabBar, SIGNAL(sigLastTabMoved()), this, SIGNAL(sigNeedClose()));
-    connect(m_pTabBar, SIGNAL(sigTabChanged(DocSheet *)), this, SLOT(onTabChanged(DocSheet *)));
-    connect(m_pTabBar, SIGNAL(sigTabMoveIn(DocSheet *)), this, SLOT(onTabMoveIn(DocSheet *)));
-    connect(m_pTabBar, SIGNAL(sigTabClosed(DocSheet *)), this, SLOT(onTabClosed(DocSheet *)));
-    connect(m_pTabBar, SIGNAL(sigTabMoveOut(DocSheet *)), this, SLOT(onTabMoveOut(DocSheet *)));
-    connect(m_pTabBar, SIGNAL(sigTabNewWindow(DocSheet *)), this, SLOT(onTabNewWindow(DocSheet *)));
-    connect(m_pTabBar, SIGNAL(sigNeedOpenFilesExec()), this, SIGNAL(sigNeedOpenFilesExec()));
-    connect(m_pTabBar, SIGNAL(sigNeedActivateWindow()), this, SIGNAL(sigNeedActivateWindow()));
-
-    m_pStackedLayout = new QStackedLayout;
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
-
-    mainLayout->addWidget(m_pTabBar);
-    mainLayout->addItem(m_pStackedLayout);
-    mainLayout->setMargin(0);
-    mainLayout->setSpacing(0);
-
-    this->setLayout(mainLayout);
 }
 
 void CentralDocPage::BlockShutdown()

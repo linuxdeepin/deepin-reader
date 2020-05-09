@@ -157,6 +157,11 @@ MainWindow *MainWindow::windowContainSheet(DocSheet *sheet)
     return nullptr;
 }
 
+bool MainWindow::allowCreateWindow()
+{
+    return m_list.count() < 20;
+}
+
 MainWindow *MainWindow::createWindow()
 {
     return new MainWindow();
