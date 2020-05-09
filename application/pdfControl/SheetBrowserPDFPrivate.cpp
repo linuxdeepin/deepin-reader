@@ -11,9 +11,9 @@
 #include "pdfControl/docview/docummentproxy.h"
 #include "business/AppInfo.h"
 #include "SheetBrowserPDF.h"
-#include "widgets/NoteTipWidget.h"
 #include "pdfControl/note/NoteViewWidget.h"
 #include "DocSheet.h"
+#include "CustomControl/TipsWidget.h"
 
 #include <QDesktopServices>
 #include <QFileInfo>
@@ -295,9 +295,9 @@ void SheetBrowserPDFPrivate::__ShowNoteTipWidget(const QString &sText)
 {
     Q_Q(SheetBrowserPDF);
     if (m_pTipWidget == nullptr) {
-        m_pTipWidget = new NoteTipWidget(q);
+        m_pTipWidget = new TipsWidget(q);
     }
-    m_pTipWidget->setTipContent(sText);
+    m_pTipWidget->setText(sText);
     QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 10);
     m_pTipWidget->move(showRealPos);
     m_pTipWidget->show();

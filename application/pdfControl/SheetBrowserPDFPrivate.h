@@ -17,7 +17,7 @@ class ProxyViewDisplay;
 class ProxyNotifyMsg;
 class ProxyMouseMove;
 class ProxyFileDataModel;
-class NoteTipWidget;
+class TipsWidget;
 class NoteViewWidget;
 class TextOperationMenu;
 class DefaultOperationMenu;
@@ -88,7 +88,7 @@ private:
 private:
     bool m_hasOpened = false;
     NoteViewWidget          *m_pNoteViewWidget = nullptr;   //  注释内容显示框
-    NoteTipWidget           *m_pTipWidget = nullptr;        //  注释提示框
+    TipsWidget           *m_pTipWidget = nullptr;        //  注释提示框
     TextOperationMenu       *m_operatemenu = nullptr;
     DefaultOperationMenu    *m_pDefaultMenu = nullptr;
     ProxyData               *m_pProxyData = nullptr;            //  唯一 数据区

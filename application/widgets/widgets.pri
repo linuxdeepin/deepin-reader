@@ -1,7 +1,6 @@
 HEADERS += \
     $$PWD/FileViewWidget.h \
     $$PWD/MainOperationWidget.h \
-    $$PWD/NoteTipWidget.h \
     $$PWD/PlayControlWidget.h \
     $$PWD/AttrScrollWidget.h \
     $$PWD/FileAttrWidget.h \
@@ -14,7 +13,6 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/MainOperationWidget.cpp \
-    $$PWD/NoteTipWidget.cpp \
     $$PWD/PlayControlWidget.cpp \
     $$PWD/AttrScrollWidget.cpp \
     $$PWD/FileAttrWidget.cpp \

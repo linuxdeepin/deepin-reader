@@ -6,6 +6,7 @@ HEADERS += \
     $$PWD/RoundColorWidget.h \
     $$PWD/CustomMenu.h \
     $$PWD/CustomWidgetPrivate.h \
+    $$PWD/TipsWidget.h \
     $$PWD/wordwraplabel.h
 
 SOURCES += \
@@ -16,4 +17,5 @@ SOURCES += \
     $$PWD/RoundColorWidget.cpp \
     $$PWD/CustomMenu.cpp \
     $$PWD/CustomWidgetPrivate.cpp \
+    $$PWD/TipsWidget.cpp \
     $$PWD/wordwraplabel.cpp

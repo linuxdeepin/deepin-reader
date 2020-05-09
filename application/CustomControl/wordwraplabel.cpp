@@ -53,7 +53,7 @@ void WordWrapLabel::paintEvent(QPaintEvent *event)
 void WordWrapLabel::adjustContent()
 {
     QFontMetrics fontMetris(this->font());
-    int wordHeight = fontMetris.boundingRect(0, 0, this->width() - 2 * m_margin, 0, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWrapAnywhere, m_text).height();
+    int wordHeight = fontMetris.boundingRect(0, 0, this->width() - 2 * m_margin, 0, this->alignment() | Qt::TextWrapAnywhere, m_text).height();
     if(this->height() == wordHeight) return;
     setFixedSize(this->width(), wordHeight);
 }
