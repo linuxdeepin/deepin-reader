@@ -91,7 +91,7 @@ void DocSheet::zoomin()
 
 void DocSheet::zoomout()
 {
-
+    qDebug() << "DocSheet::zoomout()";
 }
 
 void DocSheet::setDoubleShow(bool isShow)

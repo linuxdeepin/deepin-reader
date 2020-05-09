@@ -24,8 +24,6 @@ public:
     void killshow();
     void setCanShow(bool bshow);
     bool canShow();
-
-    void setSliderPath(const QString &strSliderPath);
     void PageChangeByKey(const QString &);
 
 protected:
@@ -55,7 +53,6 @@ private:
     bool m_bautoplaying = false;
     bool m_bfirstshow = false;
     DocSheet *m_sheet;
-    QString m_strSliderPath = "";
 };
 
 #endif // PLAYCONTROLWIDGET_H

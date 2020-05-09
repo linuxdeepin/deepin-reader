@@ -152,7 +152,7 @@ void Central::onSheetCountChanged(int count)
 void Central::onMenuTriggered(const QString &action)
 {
     if (action == "New window") {
-        Utils::runApp(QString());
+        MainWindow::createWindow()->show();
     } else if (action == "New tab") {
         openFilesExec();
     } else if (action == "Save") { //  保存当前显示文件
@@ -167,9 +167,9 @@ void Central::onMenuTriggered(const QString &action)
         if (m_docPage->openMagnifer())
             m_widget->setMagnifierState();
     } else if (action == "Document info") {
-        m_docPage->onShowFileAttr();
+        m_docPage->showFileAttr();
     } else if (action == "Display in file manager") {    //  文件浏览器 显示
-        m_docPage->OpenCurFileFolder();
+        m_docPage->openCurFileFolder();
     }
 }
 

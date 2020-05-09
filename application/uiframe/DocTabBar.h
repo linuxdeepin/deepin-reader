@@ -21,7 +21,6 @@
 
 #include <DTabBar>
 #include <DTabWidget>
-#include <QPointer>
 
 DWIDGET_USE_NAMESPACE
 

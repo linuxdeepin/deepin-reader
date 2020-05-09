@@ -21,18 +21,19 @@
 
 #include "CustomControl/CustomWidget.h"
 #include "app/ModuleHeader.h"
+#include "DocSheet.h"
 
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QDBusUnixFileDescriptor>
 #include <QMap>
+#include <QPointer>
 
 class FileDataModel;
 class DocummentProxy;
 class QStackedLayout;
 class DocTabBar;
 class PlayControlWidget;
-class DocSheet;
 class CentralDocPage : public CustomWidget
 {
     Q_OBJECT
@@ -48,24 +49,6 @@ public:
 public:
     void openFile(QString &filePath);
 
-    void handleShortcut(const QString &);
-
-public slots:
-    void onOpened(DocSheet *, bool);
-
-    void onTabChanged(DocSheet *);      //切换
-
-    void onTabMoveIn(DocSheet *);          //添加
-
-    void onTabClosed(DocSheet *);       //被关闭了
-
-    void onTabMoveOut(DocSheet *);        //被移动走了
-
-    void onTabNewWindow(DocSheet *);        //移出程序 新建窗口
-
-    void onCentralMoveIn(DocSheet *);       //从正文部分移入
-
-public:
     void addSheet(DocSheet *);      //直接添加sheet
 
     bool hasSheet(DocSheet *sheet);
@@ -80,23 +63,7 @@ public:
 
     void clearState();
 
-signals:
-    void sigSheetCountChanged(int);
-
-    void sigNeedOpenFilesExec();
-
-    void sigCurSheetChanged(DocSheet *);        //当前的文档被 切换 改动 保存 等
-
-    void sigFindOperation(const int &);
-
-public:
-    QStringList qGetAllPath();
-
-    QString qGetCurPath();
-
-    int getCurFileChanged();
-
-    int GetFileChange(const QString &sPath);
+    void handleShortcut(const QString &);
 
     DocummentProxy *getCurFileAndProxy(const QString &sPath = "");
 
@@ -104,11 +71,11 @@ public:
 
     DocSheet *getSheet(const QString &filePath);
 
-    void showPlayControlWidget() const;
+    void showFileAttr();
 
-    int getCurrentState();
+    void showTips(const QString &tips, int iconIndex = 0);
 
-    void setCurrentState(const int &nCurrentState);
+    void showPlayControlWidget();
 
     void openSlide();
 
@@ -120,24 +87,41 @@ public:
 
     void quitSpecialState();
 
-    void showTips(const QString &tips, int iconIndex = 0);
+    void openCurFileFolder();
 
-public:
-    void OpenCurFileFolder();
-
-    QStringList GetAllPath();
-
-protected:
-    void initWidget() override;
-
-public:
     void BlockShutdown();
 
     void UnBlockShutdown();
 
-    void onShowFileAttr();
+    int getCurrentState();
 
-    void OnTabFileChangeMsg(const QString &);
+    void setCurrentState(const int &currentState);
+
+public slots:
+    void onOpened(DocSheet *, bool);
+
+    void onTabChanged(DocSheet *);          //切换
+
+    void onTabMoveIn(DocSheet *);           //移入添加
+
+    void onTabClosed(DocSheet *);           //被关闭
+
+    void onTabMoveOut(DocSheet *);          //被移走
+
+    void onTabNewWindow(DocSheet *);        //移出程序 新建窗口
+
+    void onCentralMoveIn(DocSheet *);       //从正文部分移入
+
+    void onSheetChanged(DocSheet *);        //文档被修改
+
+signals:
+    void sigSheetCountChanged(int);
+
+    void sigNeedOpenFilesExec();
+
+    void sigCurSheetChanged(DocSheet *);        //当前的文档被 切换 改动 保存 等
+
+    void sigFindOperation(const int &);
 
 signals:
     void sigRemoveFileTab(const QString &);
@@ -152,8 +136,8 @@ signals:
 
     void sigNeedActivateWindow();
 
-public slots:
-    void onSheetChanged(DocSheet *);
+protected:
+    void initWidget() override;
 
 private:
     QStackedLayout      *m_pStackedLayout = nullptr;
@@ -164,9 +148,10 @@ private:
     QDBusReply<QDBusUnixFileDescriptor> m_reply;
     QList<QVariant> m_arg;
     bool m_bBlockShutdown = false;
-    QString             m_strSliderPath = "";
-    QString             m_strMagniferPath = "";
-    int                 m_nCurrentState = Default_State;
+
+    QPointer<DocSheet>  m_slideSheet = nullptr;
+    QPointer<DocSheet>  m_magniferSheet = nullptr;
+    int m_currentState = Default_State;
 };
 
 #endif // MAINTABWIDGETEX_H

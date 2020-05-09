@@ -152,11 +152,6 @@ void PlayControlWidget::changePlayStatus()
     }
 }
 
-void PlayControlWidget::setSliderPath(const QString &strSliderPath)
-{
-    m_strSliderPath = strSliderPath;
-}
-
 void PlayControlWidget::enterEvent(QEvent *event)
 {
     m_ptimer->stop();

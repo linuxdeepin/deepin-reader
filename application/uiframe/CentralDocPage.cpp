@@ -60,41 +60,17 @@ CentralDocPage::~CentralDocPage()
 
 }
 
-void CentralDocPage::OpenCurFileFolder()
+void CentralDocPage::openCurFileFolder()
 {
-    QString sPath = qGetCurPath();
-    if (sPath != "") {
-        int nLastPos = sPath.lastIndexOf('/');
-        sPath = sPath.mid(0, nLastPos);
-        sPath = QString("file://") + sPath;
-        QDesktopServices::openUrl(QUrl(sPath));
-    }
-}
+    DocSheet *sheet = getCurSheet();
+    if (nullptr == sheet)
+        return;
 
-QStringList CentralDocPage::GetAllPath()
-{
-    QStringList filePathList;
-
-    auto sheets = findChildren<DocSheet *>();
-    foreach (auto sheet, sheets) {
-        QString filePath = sheet->filePath();
-        if (filePath != "") {
-            filePathList.append(filePath);
-        }
-    }
-    return filePathList;
-}
-
-int CentralDocPage::GetFileChange(const QString &sPath)
-{
-    auto splitterList = findChildren<DocSheet *>();
-    foreach (auto s, splitterList) {
-        QString sSplitterPath = s->filePath();
-        if (sSplitterPath == sPath) {
-            return  s->getFileChanged();
-        }
-    }
-    return -1;
+    QString filePath = sheet->filePath();
+    int nLastPos = filePath.lastIndexOf('/');
+    filePath = filePath.mid(0, nLastPos);
+    filePath = QString("file://") + filePath;
+    QDesktopServices::openUrl(QUrl(filePath));
 }
 
 void CentralDocPage::onSheetChanged(DocSheet *sheet)
@@ -176,7 +152,9 @@ void CentralDocPage::onOpened(DocSheet *sheet, bool ret)
     this->activateWindow();
     //文档刚打开时，模拟鼠标点击文档区域事件
     QPoint pos(this->geometry().x(), this->geometry().y());
+
     QMouseEvent event0(QEvent::MouseButtonPress, pos, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+
     QApplication::sendEvent(this, &event0);
 
     if (!ret) {
@@ -188,7 +166,6 @@ void CentralDocPage::onOpened(DocSheet *sheet, bool ret)
 
         emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 
-        return;
     }
 
 }
@@ -236,9 +213,7 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
         m_pTabBar->removeSheet(sheet);
     }
 
-    delete sheet;
-
-    sheet = nullptr;
+    sheet->deleteLater();
 
     emit sigSheetCountChanged(m_pStackedLayout->count());
 
@@ -440,44 +415,13 @@ void CentralDocPage::clearState()
     }
 }
 
-QStringList CentralDocPage::qGetAllPath()
-{
-    return GetAllPath();
-}
-
-QString CentralDocPage::qGetCurPath()
-{
-    if (m_pStackedLayout != nullptr) {
-        DocSheet *splitter = static_cast<DocSheet *>(m_pStackedLayout->currentWidget());
-        if (splitter != nullptr)
-            return splitter->filePath();
-    }
-
-    return "";
-}
-
-int CentralDocPage::getCurFileChanged()
-{
-    if (qGetCurPath().isEmpty())
-        return 0;
-
-    return GetFileChange(qGetCurPath());
-}
-
 DocummentProxy *CentralDocPage::getCurFileAndProxy(const QString &sPath)
 {
-    QString sTempPath = sPath;
-    if (sTempPath == "") {
-        sTempPath = qGetCurPath();
-    }
+    DocSheet *sheet = getSheet(sPath);
+    if (nullptr == sheet)
+        return nullptr;
 
-    auto sheets = this->findChildren<DocSheet *>();
-    foreach (auto sheet, sheets) {
-        if (sheet->filePath() == sTempPath) {
-            return sheet->getDocProxy();
-        }
-    }
-    return nullptr;
+    return sheet->getDocProxy();
 }
 
 DocSheet *CentralDocPage::getCurSheet()
@@ -501,7 +445,7 @@ DocSheet *CentralDocPage::getSheet(const QString &filePath)
     return nullptr;
 }
 
-void CentralDocPage::showPlayControlWidget() const
+void CentralDocPage::showPlayControlWidget()
 {
     if (m_pctrlwidget) {
         int nScreenWidth = qApp->desktop()->geometry().width();
@@ -576,7 +520,17 @@ void CentralDocPage::UnBlockShutdown()
     }
 }
 
-void CentralDocPage::onShowFileAttr()
+void CentralDocPage::setCurrentState(const int &currentState)
+{
+    m_currentState = currentState;
+}
+
+int CentralDocPage::getCurrentState()
+{
+    return m_currentState;
+}
+
+void CentralDocPage::showFileAttr()
 {
     auto pFileAttrWidget = new FileAttrWidget;
 
@@ -598,12 +552,15 @@ void CentralDocPage::handleShortcut(const QString &s)
             setCurrentState(Default_State);
             return;
         }
-        auto helper = getCurFileAndProxy(m_strSliderPath);
-        if (helper) {
-            if (helper->getAutoPlaySlideStatu()) {
-                helper->setAutoPlaySlide(false);
-            } else  {
-                helper->setAutoPlaySlide(true);
+
+        if (!m_slideSheet.isNull()) {
+            auto helper = m_slideSheet->getDocProxy();
+            if (!m_slideSheet.isNull()) {
+                if (helper->getAutoPlaySlideStatu()) {
+                    helper->setAutoPlaySlide(false);
+                } else  {
+                    helper->setAutoPlaySlide(true);
+                }
             }
         }
         m_pctrlwidget->PageChangeByKey(s);
@@ -686,19 +643,9 @@ void CentralDocPage::quitSpecialState()
     setCurrentState(Default_State);
 }
 
-void CentralDocPage::setCurrentState(const int &nCurrentState)
-{
-    m_nCurrentState = nCurrentState;
-}
-
 void CentralDocPage::showTips(const QString &tips, int iconIndex)
 {
     emit sigNeedShowTips(tips, iconIndex);
-}
-
-int CentralDocPage::getCurrentState()
-{
-    return m_nCurrentState;
 }
 
 void CentralDocPage::openSlide()
@@ -720,9 +667,7 @@ void CentralDocPage::openSlide()
 
         emit sigNeedShowState(0);
 
-        QString sPath = sheet->filePath();
-
-        m_strSliderPath = sPath;
+        m_slideSheet = sheet;
 
         auto _proxy = sheet->getDocProxy();
 
@@ -733,8 +678,6 @@ void CentralDocPage::openSlide()
         if (m_pctrlwidget == nullptr) {
             m_pctrlwidget = new PlayControlWidget(sheet, this);
         }
-
-        m_pctrlwidget->setSliderPath(sPath);
 
         int nScreenWidth = qApp->desktop()->geometry().width();
 
@@ -758,25 +701,22 @@ void CentralDocPage::quitSlide()
 
         m_pTabBar->setVisible(true);
 
-        auto sheet = getSheet(m_strSliderPath);
+        if (!m_slideSheet.isNull()) {
 
-        if (sheet) {
+            m_slideSheet->exitSliderShow();
 
-            sheet->exitSliderShow();
-
-            DocummentProxy *_proxy = sheet->getDocProxy();
+            DocummentProxy *_proxy = m_slideSheet->getDocProxy();
 
             if (!_proxy) {
                 return;
             }
+
             _proxy->exitSlideModel();
 
             delete m_pctrlwidget;
 
             m_pctrlwidget = nullptr;
         }
-
-        m_strSliderPath = "";
     }
 }
 
@@ -788,10 +728,9 @@ bool CentralDocPage::openMagnifer()
 
         setCurrentState(Magnifer_State);
 
-        m_strMagniferPath = qGetCurPath();
+        m_magniferSheet = getCurSheet();
 
         return true;
-
     }
 
     return false;
@@ -804,14 +743,14 @@ void CentralDocPage::quitMagnifer()
     if (nState == Magnifer_State) {
         setCurrentState(Default_State);
 
-        auto sheet = qobject_cast<DocSheet *>(m_pStackedLayout->currentWidget());
-        if (sheet) {
-            QString sPath = sheet->filePath();
-            DocummentProxy *_proxy = getCurFileAndProxy(sPath);
-            if (!_proxy) {
-                return;
-            }
-            _proxy->closeMagnifier();
+        if (m_magniferSheet.isNull())
+            return;
+
+        DocummentProxy *proxy = m_magniferSheet->getDocProxy();
+        if (!proxy) {
+            return;
         }
+
+        proxy->closeMagnifier();
     }
 }
