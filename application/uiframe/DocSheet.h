@@ -101,8 +101,6 @@ public:
 
     virtual void handleSearch();
 
-    virtual void onTitleShortCut(QString);
-
     virtual void handleOpenSuccess();
 
     virtual void setSidebarVisible(bool isVisible);

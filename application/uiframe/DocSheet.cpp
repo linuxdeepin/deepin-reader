@@ -189,11 +189,6 @@ void DocSheet::print()
 
 }
 
-void DocSheet::onTitleShortCut(QString shortCut)
-{
-
-}
-
 QUuid DocSheet::getUuid(DocSheet *sheet)
 {
     return g_map.key(sheet);
