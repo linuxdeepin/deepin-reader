@@ -40,23 +40,25 @@ public:
     ActiveProxyStyle(DWidget *parent)
     {
         this->setParent(parent);
-    };
+    }
 
-    virtual void    drawComplexControl(QStyle::ComplexControl control, const QStyleOptionComplex *option, QPainter *painter, const QWidget *widget = nullptr) const
+    virtual void drawComplexControl(QStyle::ComplexControl control, const QStyleOptionComplex *option, QPainter *painter, const QWidget *widget = nullptr) const
     {
         QStyleOptionComplex *op = const_cast<QStyleOptionComplex *>(option);
         op->state = option->state | QStyle::State_Active;
         QProxyStyle::drawComplexControl(control, op, painter, widget);
     }
-    virtual void    drawControl(QStyle::ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const
+    virtual void drawControl(QStyle::ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const
     {
         QStyleOption *op = const_cast<QStyleOption *>(option);
         op->state = option->state | QStyle::State_Active;
         QProxyStyle::drawControl(element, op, painter, widget);
     }
 
-    virtual void    drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const
+    virtual void drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const
     {
+        if (element == QStyle::PE_IndicatorBranch)
+            painter->setPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().text().color());
         QStyleOption *op = const_cast<QStyleOption *>(option);
         op->state = option->state | QStyle::State_Active;
         QProxyStyle::drawPrimitive(element, op, painter, widget);

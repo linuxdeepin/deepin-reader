@@ -24,36 +24,40 @@
 #include <QMutex>
 
 class DocummentProxy;
-typedef struct ReaderImageParam_t{
+typedef struct ReaderImageParam_t {
     int pageNum = 0;
     int maxPixel = 174;
-    DocummentProxy* docProxy = nullptr;
+    DocummentProxy *docProxy = nullptr;
 
     QObject *receiver = nullptr;
     QString slotFun = "";
 
-    bool operator == (const ReaderImageParam_t& other) const{
+    bool operator == (const ReaderImageParam_t &other) const
+    {
         return (this->pageNum == other.pageNum && this->maxPixel == other.maxPixel && this->docProxy == other.docProxy);
     }
 
-    bool operator < (const ReaderImageParam_t& other) const{
+    bool operator < (const ReaderImageParam_t &other) const
+    {
         return (this->pageNum < other.pageNum);
     }
 
-    bool operator > (const ReaderImageParam_t& other) const{
+    bool operator > (const ReaderImageParam_t &other) const
+    {
         return (this->pageNum > other.pageNum);
     }
 
 private:
     friend class ReaderImageThreadPoolManager;
     QRunnable *task = nullptr;
-}ReaderImageParam_t;
+} ReaderImageParam_t;
 Q_DECLARE_METATYPE(ReaderImageParam_t);
 
-class ReadImageTask: public QRunnable{
+class ReadImageTask: public QRunnable
+{
 public:
     void addgetDocImageTask(const ReaderImageParam_t &readImageParam);
-    void setThreadPoolManager(QObject* object);
+    void setThreadPoolManager(QObject *object);
     void run() override;
 
 private:
@@ -67,21 +71,21 @@ class ReaderImageThreadPoolManager: public QThreadPool
 
 public:
     explicit ReaderImageThreadPoolManager();
-    static ReaderImageThreadPoolManager* getInstance();
+    static ReaderImageThreadPoolManager *getInstance();
 
 public:
     void addgetDocImageTask(const ReaderImageParam_t &readImageParam);
-    QPixmap getImageForDocSheet(DocummentProxy* docproxy, int pageIndex);
+    QPixmap getImageForDocSheet(DocummentProxy *docproxy, int pageIndex);
 
 private slots:
-    void onTaskFinished(const ReaderImageParam_t& task, const QImage& image);
+    void onTaskFinished(const ReaderImageParam_t &task, const QImage &image);
     void onDocProxyDestroyed(QObject *obj);
 
 private:
     QMutex m_runMutex;
     QList<QObject *> m_docProxylst;
     QList<ReaderImageParam_t> m_taskList;
-    QMap<QObject*, QVector<QPixmap>> m_docSheetImgMap;
+    QMap<QObject *, QVector<QPixmap>> m_docSheetImgMap;
 };
 
 #endif // READERIMAGETHREADPOOLMANAGER_H;
