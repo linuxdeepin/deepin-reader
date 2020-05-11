@@ -42,8 +42,7 @@ void DefaultOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, co
     m_pNextPage->setEnabled(true);
     m_pEndPage->setEnabled(true);
 
-    DocummentProxy *_proxy = m_sheet->getDocProxy();
-    if (_proxy == nullptr) {
+    if (!m_sheet->isOpen()) {
         m_pFirstPage->setEnabled(false);
         m_pPrevPage->setEnabled(false);
         m_pNextPage->setEnabled(false);
@@ -54,24 +53,21 @@ void DefaultOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, co
         int pageSum = 0;
         bool isSinglePage = false;//文档总页数是否是单页
 
-        pageSum = _proxy->getPageSNum();
-        currentPage = _proxy->currentPageNo();
+        pageSum = m_sheet->getPageSNum();
+        currentPage = m_sheet->currentPageNo();
         isSinglePage = static_cast<bool>(pageSum % 2);
 
         if (currentPage == 0/*(!m_sheet->isDoubleShow()) ? (currentPage == 0) : (currentPage <= 1)*/) { //  首页
             m_pFirstPage->setEnabled(false);
             m_pPrevPage->setEnabled(false);
         } else {
-            if (_proxy) {
-                pageSum--;
-
-                if ((!m_sheet->isDoubleShow()) ? (currentPage == pageSum) : (isSinglePage ? (currentPage >= pageSum) : (currentPage >= (--pageSum)))) { //  最后一页
-                    m_pNextPage->setEnabled(false);
-                    m_pEndPage->setEnabled(false);
-                }
+            pageSum--;
+            if ((!m_sheet->isDoubleShow()) ? (currentPage == pageSum) : (isSinglePage ? (currentPage >= pageSum) : (currentPage >= (--pageSum)))) { //  最后一页
+                m_pNextPage->setEnabled(false);
+                m_pEndPage->setEnabled(false);
             }
         }
-        if (_proxy->getPageSNum() == 1) {
+        if (m_sheet->getPageSNum() == 1) {
             m_pFirstPage->setEnabled(false);
             m_pPrevPage->setEnabled(false);
             m_pNextPage->setEnabled(false);
@@ -154,13 +150,9 @@ void DefaultOperationMenu::slotAddIconNote()
     if (m_sheet.isNull())
         return;
 
-    DocummentProxy *_proxy = m_sheet->getDocProxy();
-
-    QString sUuid = _proxy->addIconAnnotation(m_pointclicked);        //  添加注释图标成功
-
+    QString sUuid = m_sheet->addIconAnnotation(m_pointclicked);        //  添加注释图标成功
     if (sUuid != "") {
-        int page = _proxy->pointInWhichPage(m_pointclicked);
-
+        int page = m_sheet->pointInWhichPage(m_pointclicked);
         m_sheet->showNoteWidget(page, sUuid, NOTE_ICON);
 
     }

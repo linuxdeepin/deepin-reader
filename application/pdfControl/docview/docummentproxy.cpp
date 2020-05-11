@@ -1,6 +1,7 @@
 #include "docummentproxy.h"
 #include "docummentfactory.h"
 #include "publicfunc.h"
+#include "DocSheet.h"
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QDebug>
@@ -8,11 +9,12 @@
 
 static QMutex mutexlockgetimage;
 
-DocummentProxy::DocummentProxy(QObject *parent)
-    : QObject(parent),
-      m_path(""),
-      m_documment(nullptr),
-      bcloseing(false)
+DocummentProxy::DocummentProxy(DocSheet *sheet, QObject *parent)
+    : QObject(parent)
+    , m_sheet(sheet)
+    , m_path("")
+    , m_documment(nullptr)
+    , bcloseing(false)
 {
     pwgt = (DWidget *)parent;
 }
@@ -38,7 +40,7 @@ bool DocummentProxy::openFile(Dr::FileType type, QString filepath, unsigned int 
         connect(this, SIGNAL(signal_setViewModeAndShow(ViewMode_EM)), m_documment, SLOT(setViewModeAndShow(ViewMode_EM)));
         connect(m_documment, SIGNAL(sigPageBookMarkButtonClicked(int, bool)), this, SIGNAL(sigPageBookMarkButtonClicked(int, bool)));
         connect(m_documment, SIGNAL(signal_openResult(bool)), this, SIGNAL(signal_openResult(bool)));
-        connect(m_documment, &DocummentBase::signal_autoplaytoend, this, &DocummentProxy::signal_autoplaytoend);
+        connect(m_documment, &DocummentBase::signal_autoplaytoend, m_sheet, &DocSheet::signalAutoplaytoend);
         bre = m_documment->openFile(m_path, ipage, rotatetype, scale, viewmode);
     }
     bcloseing = false;

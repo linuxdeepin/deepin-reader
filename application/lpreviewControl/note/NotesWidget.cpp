@@ -169,10 +169,7 @@ void NotesWidget::onListItemClicked(int row)
     if (tImagePageInfo.iPage >= 0) {
         int page = tImagePageInfo.iPage;
         const QString &uuid = tImagePageInfo.struuid;
-        DocummentProxy *pDocProxy = m_sheet->getDocProxy();
-        if (pDocProxy) {
-            pDocProxy->jumpToHighLight(uuid, page);
-        }
+        m_sheet->jumpToHighLight(uuid, page);
     }
 }
 

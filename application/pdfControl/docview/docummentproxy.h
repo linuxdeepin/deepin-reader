@@ -7,11 +7,12 @@
 #include <DWidget>
 #include <QMap>
 
+class DocSheet;
 class DocummentProxy: public QObject
 {
     Q_OBJECT
 public:
-    DocummentProxy(QObject *parent = nullptr);
+    DocummentProxy(DocSheet *sheet, QObject *parent = nullptr);
     ~DocummentProxy()
     {
         if (!bcloseing && m_documment)
@@ -93,13 +94,14 @@ signals:
     bool signal_setViewModeAndShow(ViewMode_EM viewmode);
     void sigPageBookMarkButtonClicked(int page, bool state);
     void signal_openResult(bool);
-    void signal_autoplaytoend();
+
 private slots:
     void slot_pageChange(int);
 
 
 private:
     DWidget *pwgt = nullptr;
+    DocSheet *m_sheet;
     QString m_path;
     DocummentBase *m_documment = nullptr;
     bool bcloseing;

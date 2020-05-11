@@ -72,7 +72,7 @@ QVariant ImageViewModel::data(const QModelIndex &index, int role) const
         return QVariant();
     int nRow = m_pagelst.at(index.row()).iPage;
     if (role == ImageinfoType_e::IMAGE_PIXMAP) {
-        const QPixmap &image = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet->getDocProxy(), nRow);
+        const QPixmap &image = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet, nRow);
         if (image.isNull())
             onFetchImage(nRow);
         else {
@@ -129,15 +129,12 @@ void ImageViewModel::onUpdatePageImage(int pageIndex)
 
 void ImageViewModel::onFetchImage(int nRow) const
 {
-    DocummentProxy *docProxy = m_docSheet->getDocProxy();
-    if (docProxy) {
-        ReaderImageParam_t tParam;
-        tParam.pageNum = nRow;
-        tParam.docProxy = docProxy;
-        tParam.receiver = m_parent;
-        tParam.slotFun = "onUpdatePageImage";
-        ReaderImageThreadPoolManager::getInstance()->addgetDocImageTask(tParam);
-    }
+    ReaderImageParam_t tParam;
+    tParam.pageNum = nRow;
+    tParam.sheet = m_docSheet;
+    tParam.receiver = m_parent;
+    tParam.slotFun = "onUpdatePageImage";
+    ReaderImageThreadPoolManager::getInstance()->addgetDocImageTask(tParam);
 }
 
 void ImageViewModel::updatePageIndex(int pageIndex)

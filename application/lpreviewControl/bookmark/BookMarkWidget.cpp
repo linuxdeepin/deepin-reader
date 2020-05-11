@@ -94,15 +94,12 @@ void BookMarkWidget::nextPage()
 void BookMarkWidget::handleOpenSuccess()
 {
     const QList<int> &pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
-    DocummentProxy *proxy =  m_sheet->getDocProxy();
-    if (proxy) {
-        int nCurPage = proxy->currentPageNo();
-        for (int iPage : pageList) {
-            proxy->setBookMarkState(iPage, true);
-            if (iPage == nCurPage) m_pAddBookMarkBtn->setEnabled(false);
-        }
-        m_pImageListView->handleOpenSuccess();
+    int nCurPage = m_sheet->currentPageNo();
+    for (int iPage : pageList) {
+        m_sheet->setBookMarkState(iPage, true);
+        if (iPage == nCurPage) m_pAddBookMarkBtn->setEnabled(false);
     }
+    m_pImageListView->handleOpenSuccess();
 }
 
 void BookMarkWidget::handlePage(int page)
@@ -125,15 +122,12 @@ void BookMarkWidget::handleBookMark(int page, int state)
         dApp->m_pDBService->setBookMarkList(sPath, pageList);
         m_sheet->setFileChanged(true);
 
-        DocummentProxy *proxy =  m_sheet->getDocProxy();
-        if (proxy) {
-            int nCurPage = proxy->currentPageNo();
-            if (nCurPage == page) {
-                proxy->setBookMarkState(page, true);
-                m_pAddBookMarkBtn->setEnabled(false);
-            }
-            emit sigSetBookMarkState(true, page);
+        int nCurPage = m_sheet->currentPageNo();
+        if (nCurPage == page) {
+            m_sheet->setBookMarkState(page, true);
+            m_pAddBookMarkBtn->setEnabled(false);
         }
+        emit sigSetBookMarkState(true, page);
         m_pImageListView->getImageModel()->insertPageIndex(page);
     } else {
         //deletePageIndex
@@ -146,16 +140,13 @@ void BookMarkWidget::handleBookMark(int page, int state)
         dApp->m_pDBService->setBookMarkList(m_sheet->filePath(), pageList);
         m_sheet->setFileChanged(true);
 
-        DocummentProxy *proxy =  m_sheet->getDocProxy();
-        if (proxy) {
-            m_sheet->showTips(tr("The bookmark has been removed"));
-            proxy->setBookMarkState(page, false);
-            int nCurPage = proxy->currentPageNo();
-            if (nCurPage == page) {
-                m_pAddBookMarkBtn->setEnabled(true);
-            }
-            emit sigSetBookMarkState(false, page);
+        m_sheet->showTips(tr("The bookmark has been removed"));
+        m_sheet->setBookMarkState(page, false);
+        int nCurPage = m_sheet->currentPageNo();
+        if (nCurPage == page) {
+            m_pAddBookMarkBtn->setEnabled(true);
         }
+        emit sigSetBookMarkState(false, page);
         m_pImageListView->getImageModel()->removePageIndex(page);
     }
     scrollToCurrentPage();
@@ -176,11 +167,8 @@ void BookMarkWidget::DeleteItemByKey()
 void BookMarkWidget::onAddBookMarkClicked()
 {
     if (m_sheet.isNull()) return;
-    DocummentProxy *proxy =  m_sheet->getDocProxy();
-    if (proxy) {
-        int nPage = proxy->currentPageNo();
-        handleBookMark(nPage, true);
-    }
+    int nPage = m_sheet->currentPageNo();
+    handleBookMark(nPage, true);
 }
 
 void BookMarkWidget::adaptWindowSize(const double &scale)
@@ -206,9 +194,7 @@ void BookMarkWidget::onUpdateTheme()
 
 void BookMarkWidget::scrollToCurrentPage()
 {
-    DocummentProxy *docProxy = m_sheet->getDocProxy();
-    if (docProxy)
-        m_pImageListView->scrollToIndex(docProxy->currentPageNo(), false);
+    m_pImageListView->scrollToIndex(m_sheet->currentPageNo(), false);
 }
 
 void BookMarkWidget::onListMenuClick(const int &iType)

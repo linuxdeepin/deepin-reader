@@ -45,54 +45,39 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
     if (nullptr == m_sheet)
         return;
 
-    DocummentProxy *_proxy =  m_sheet->getDocProxy();
+    printer->setDocName(m_strPrintName);
+    QPainter painter(printer);
+    QRect rect = painter.viewport();
+    painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
+    int nPageSize = m_sheet->getPageSNum();
 
-
-    if (_proxy) {
-        printer->setDocName(m_strPrintName);
-
-        QPainter painter(printer);
-
-        QRect rect = painter.viewport();
-
-        painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
-
-        int nPageSize = _proxy->getPageSNum();
-
-        if (printer->fromPage() == 0 && printer->toPage() == 0) {
-            for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
-                QImage image;
-
-                if (nPageSize > 100 && rect.width() > 800) {
-                    //当页数过多时，处理一下
-                    if (_proxy->getImage(iIndex, image, 200, 200.0 * (double)rect.height() / (double)rect.width())) {
-                        painter.drawImage(rect, image);
-                    }
-
-                } else {
-                    if (_proxy->getImage(iIndex, image, rect.width(), rect.height())) {
-                        painter.drawImage(rect, image);
-                    }
-                }
-
-                if (iIndex < nPageSize - 1)
-                    printer->newPage();
-            }
-        } else {
-            printer->setPageMargins(5, 5, 5, 5, QPrinter::Inch);
-
-            for (int iIndex = printer->fromPage() - 1; iIndex < printer->toPage(); iIndex++) {
-                if (iIndex >= nPageSize)
-                    break;
-
-                QImage image;
-
-                if (_proxy->getImage(iIndex, image, rect.width(), rect.height()))      //公司只有一台打印机，会发生向右偏移
+    if (printer->fromPage() == 0 && printer->toPage() == 0) {
+        for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
+            QImage image;
+            if (nPageSize > 100 && rect.width() > 800) {
+                //当页数过多时，处理一下
+                if (m_sheet->getImage(iIndex, image, 200, 200.0 * (double)rect.height() / (double)rect.width())) {
                     painter.drawImage(rect, image);
-
-                if (iIndex < printer->toPage() - 1)
-                    printer->newPage();
+                }
+            } else {
+                if (m_sheet->getImage(iIndex, image, rect.width(), rect.height())) {
+                    painter.drawImage(rect, image);
+                }
             }
+            if (iIndex < nPageSize - 1)
+                printer->newPage();
+        }
+    } else {
+        printer->setPageMargins(5, 5, 5, 5, QPrinter::Inch);
+        for (int iIndex = printer->fromPage() - 1; iIndex < printer->toPage(); iIndex++) {
+            if (iIndex >= nPageSize)
+                break;
+            QImage image;
+            if (m_sheet->getImage(iIndex, image, rect.width(), rect.height()))      //公司只有一台打印机，会发生向右偏移
+                painter.drawImage(rect, image);
+
+            if (iIndex < printer->toPage() - 1)
+                printer->newPage();
         }
     }
 }

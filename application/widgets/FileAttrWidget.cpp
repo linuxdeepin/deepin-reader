@@ -38,13 +38,8 @@ void FileAttrWidget::setFileAttr(DocSheet *sheet)
     if (sheet == nullptr)
         return;
 
-    auto dproxy = sheet->getDocProxy();
-
-    if (nullptr == dproxy)
-        return;
-
     QImage image;
-    bool rl = dproxy->getImage(0, image, 94, 113);
+    bool rl = sheet->getImage(0, image, 94, 113);
     if (rl) {
         if (frameImage) {
             QPixmap pixmap = QPixmap::fromImage(image);

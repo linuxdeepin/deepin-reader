@@ -15,19 +15,19 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "readerimagethreadpoolmanager.h"
-#include "pdfControl/docview/docummentproxy.h"
+#include "DocSheet.h"
 
 #include <QDebug>
 
 const int maxThreadCnt = 5;
 const int maxTaskList = 5;
-const char* threadPoolSlotFun = "onTaskFinished";
+const char *threadPoolSlotFun = "onTaskFinished";
 void ReadImageTask::addgetDocImageTask(const ReaderImageParam_t &readImageParam)
 {
     m_docParam = readImageParam;
 }
 
-void ReadImageTask::setThreadPoolManager(QObject* object)
+void ReadImageTask::setThreadPoolManager(QObject *object)
 {
     m_threadpoolManager = object;
 }
@@ -35,13 +35,13 @@ void ReadImageTask::setThreadPoolManager(QObject* object)
 void ReadImageTask::run()
 {
     QImage image;
-    DocummentProxy* docProxy = m_docParam.docProxy;
-    Q_ASSERT(docProxy);
-    if(docProxy){
-        int totalPage = docProxy->getPageSNum();
+    DocSheet *sheet = m_docParam.sheet;
+    Q_ASSERT(sheet);
+    if (sheet) {
+        int totalPage = sheet->getPageSNum();
         m_docParam.pageNum = qBound(0, m_docParam.pageNum, totalPage - 1);
-        bool bl = docProxy->getImageMax(m_docParam.pageNum, image, m_docParam.maxPixel);
-        if (bl) QMetaObject::invokeMethod(m_threadpoolManager, threadPoolSlotFun, Qt::QueuedConnection, Q_ARG(const ReaderImageParam_t&, m_docParam), Q_ARG(const QImage&, image));
+        bool bl = sheet->getImageMax(m_docParam.pageNum, image, m_docParam.maxPixel);
+        if (bl) QMetaObject::invokeMethod(m_threadpoolManager, threadPoolSlotFun, Qt::QueuedConnection, Q_ARG(const ReaderImageParam_t &, m_docParam), Q_ARG(const QImage &, image));
         QThread::sleep(1);
     }
 }
@@ -52,7 +52,7 @@ ReaderImageThreadPoolManager::ReaderImageThreadPoolManager()
     setMaxThreadCount(maxThreadCnt);
 }
 
-ReaderImageThreadPoolManager* ReaderImageThreadPoolManager::getInstance()
+ReaderImageThreadPoolManager *ReaderImageThreadPoolManager::getInstance()
 {
     return theInstance();
 }
@@ -60,24 +60,24 @@ ReaderImageThreadPoolManager* ReaderImageThreadPoolManager::getInstance()
 void ReaderImageThreadPoolManager::addgetDocImageTask(const ReaderImageParam_t &readImageParam)
 {
     //To avoid repetitive tasks
-    if(m_taskList.contains(readImageParam)){
+    if (m_taskList.contains(readImageParam)) {
         return;
     }
 
     //only initOnce
-    if(!m_docProxylst.contains(readImageParam.docProxy)){
-        m_docProxylst << readImageParam.docProxy;
-        QVector<QPixmap> imagelst(readImageParam.docProxy->getPageSNum());
-        m_docSheetImgMap.insert(readImageParam.docProxy, imagelst);
-        connect(readImageParam.docProxy, &QObject::destroyed, this, &ReaderImageThreadPoolManager::onDocProxyDestroyed);
+    if (!m_docProxylst.contains(readImageParam.sheet)) {
+        m_docProxylst << readImageParam.sheet;
+        QVector<QPixmap> imagelst(readImageParam.sheet->getPageSNum());
+        m_docSheetImgMap.insert(readImageParam.sheet, imagelst);
+        connect(readImageParam.sheet, &QObject::destroyed, this, &ReaderImageThreadPoolManager::onDocProxyDestroyed);
     }
 
     //remove invalid task
     QMutexLocker mutext(&m_runMutex);
-    if(m_taskList.size() >= maxTaskList){
-        for(int index = maxTaskList; index < m_taskList.size(); index++){
+    if (m_taskList.size() >= maxTaskList) {
+        for (int index = maxTaskList; index < m_taskList.size(); index++) {
             QRunnable *runable = m_taskList.at(index).task;
-            if(this->tryTake(runable)){
+            if (this->tryTake(runable)) {
                 delete runable;
                 m_taskList.removeAt(index);
                 index--;
@@ -86,7 +86,7 @@ void ReaderImageThreadPoolManager::addgetDocImageTask(const ReaderImageParam_t &
     }
 
     ReaderImageParam_t tParam = readImageParam;
-    ReadImageTask* task = new ReadImageTask;
+    ReadImageTask *task = new ReadImageTask;
     tParam.task = task;
     task->setThreadPoolManager(this);
     task->addgetDocImageTask(tParam);
@@ -94,20 +94,20 @@ void ReaderImageThreadPoolManager::addgetDocImageTask(const ReaderImageParam_t &
     this->start(task);
 }
 
-void ReaderImageThreadPoolManager::onTaskFinished(const ReaderImageParam_t& task, const QImage& image)
+void ReaderImageThreadPoolManager::onTaskFinished(const ReaderImageParam_t &task, const QImage &image)
 {
     QMutexLocker mutext(&m_runMutex);
-    if(m_docSheetImgMap.contains(task.docProxy))
-        m_docSheetImgMap[task.docProxy][task.pageNum] = QPixmap::fromImage(image);
+    if (m_docSheetImgMap.contains(task.sheet))
+        m_docSheetImgMap[task.sheet][task.pageNum] = QPixmap::fromImage(image);
     if (task.receiver)
         QMetaObject::invokeMethod(task.receiver, task.slotFun.toStdString().c_str(), Qt::QueuedConnection, Q_ARG(int, task.pageNum));
     m_taskList.removeAll(task);
 }
 
-QPixmap ReaderImageThreadPoolManager::getImageForDocSheet(DocummentProxy* docproxy, int pageIndex)
+QPixmap ReaderImageThreadPoolManager::getImageForDocSheet(DocSheet *sheet, int pageIndex)
 {
-    if (m_docSheetImgMap.contains(docproxy)){
-        return m_docSheetImgMap[docproxy][pageIndex];
+    if (m_docSheetImgMap.contains(sheet)) {
+        return m_docSheetImgMap[sheet][pageIndex];
     }
     return QPixmap();
 }

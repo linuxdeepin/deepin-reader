@@ -80,8 +80,6 @@ public:
 
     void saveOper()override;
 
-    DocummentProxy *getDocProxy()override;//在文档打开成功之前为空
-
     void OnOpenSliderShow()override;
 
     void exitSliderShow()override;
@@ -101,6 +99,33 @@ public:
     void openSideBar()override;
 
     void print()override;
+
+    virtual Outline outline() override;
+    virtual int getPageSNum() override;
+    virtual int currentPageNo() override;
+    virtual int  pointInWhichPage(QPoint pos) override;
+    virtual int label2pagenum(QString label) override;
+
+    virtual bool isOpen() override;
+    virtual bool haslabel() override;
+    virtual bool closeMagnifier() override;
+    virtual bool showSlideModel() override;
+    virtual bool exitSlideModel() override;
+    virtual bool getAutoPlaySlideStatu() override;
+    virtual bool setBookMarkState(int page, bool state) override;
+    virtual bool getImage(int pagenum, QImage &image, double width, double height) override;
+    virtual bool getImageMax(int pagenum, QImage &image, double max) override;
+
+    virtual void jumpToHighLight(const QString &uuid, int ipage) override;
+    virtual void docBasicInfo(stFileInfo &info) override;
+    virtual void setAutoPlaySlide(bool autoplay, int timemsec = 3000) override;
+    virtual void getAllAnnotation(QList<stHighlightContent> &listres) override;
+    virtual void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage = 0) override;
+
+    virtual double getMaxZoomratio() override;
+
+    virtual QString pagenum2label(int index) override;
+    virtual QString addIconAnnotation(const QPoint &pos, const QColor &color = Qt::yellow, TextAnnoteType_Em type = TextAnnoteType_Note) override;
 
 private slots:
     void SlotFileOpenResult(const QString &, const bool &);

@@ -65,8 +65,6 @@ public:
 
     void handleShortcut(const QString &);
 
-    DocummentProxy *getCurFileAndProxy(const QString &sPath = "");
-
     DocSheet *getCurSheet();
 
     DocSheet *getSheet(const QString &filePath);

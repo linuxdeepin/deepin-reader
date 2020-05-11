@@ -65,9 +65,6 @@ void ImageListView::setListType(int type)
 
 void ImageListView::handleOpenSuccess()
 {
-    DocummentProxy *docProxy = m_docSheet->getDocProxy();
-    Q_ASSERT(docProxy);
-
     if (m_listType == DR_SPACE::E_THUMBAIL_WIDGET) {
         const QList<int> &pageList = dApp->m_pDBService->getBookMarkList(m_docSheet->filePath());
         for (int pageIndex : pageList) {
@@ -75,7 +72,7 @@ void ImageListView::handleOpenSuccess()
         }
 
         QList<ImagePageInfo_t> pageSrclst;
-        int pagesNum = docProxy->getPageSNum();
+        int pagesNum = m_docSheet->getPageSNum();
         for (int index = 0; index < pagesNum; index++)
             pageSrclst << index;
         m_imageModel->initModelLst(pageSrclst);
@@ -88,7 +85,7 @@ void ImageListView::handleOpenSuccess()
         m_imageModel->initModelLst(pageSrclst, true);
     } else if (m_listType == DR_SPACE::E_NOTE_WIDGET) {
         QList<stHighlightContent> noteLst;
-        docProxy->getAllAnnotation(noteLst);
+        m_docSheet->getAllAnnotation(noteLst);
         QList<ImagePageInfo_t> pageSrclst;
         int pagesNum = noteLst.size();
         for (int index = 0; index < pagesNum; index++) {

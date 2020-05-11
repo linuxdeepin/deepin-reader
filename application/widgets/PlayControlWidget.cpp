@@ -43,8 +43,7 @@ void PlayControlWidget::activeshow(int ix, int iy)
     if (m_bfirstshow) {
         m_bfirstshow = false;
 
-        auto helper = m_sheet->getDocProxy();
-        connect(helper, &DocummentProxy::signal_autoplaytoend, this, [this] {
+        connect(m_sheet, &DocSheet::signalAutoplaytoend, this, [this] {
             this->changePlayStatus();
         });
     }
@@ -119,23 +118,20 @@ DIconButton *PlayControlWidget::createBtn(const QString &strname)
 
 void PlayControlWidget::pagejump(const bool &bpre)
 {
-    auto helper = m_sheet->getDocProxy();
-    if (helper) {
-        bool bSatus = helper->getAutoPlaySlideStatu();
-        if (bSatus) {
-            helper->setAutoPlaySlide(false);
-        }
-        int nCurPage = helper->currentPageNo();
-        if (bpre)
-            nCurPage--;
-        else
-            nCurPage++;
+    bool bSatus = m_sheet->getAutoPlaySlideStatu();
+    if (bSatus) {
+        m_sheet->setAutoPlaySlide(false);
+    }
+    int nCurPage = m_sheet->currentPageNo();
+    if (bpre)
+        nCurPage--;
+    else
+        nCurPage++;
 
-        m_sheet->pageJump(nCurPage);
+    m_sheet->pageJump(nCurPage);
 
-        if (bSatus) {
-            helper->setAutoPlaySlide(bSatus);
-        }
+    if (bSatus) {
+        m_sheet->setAutoPlaySlide(bSatus);
     }
 }
 

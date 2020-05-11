@@ -23,10 +23,7 @@ AttrScrollWidget::AttrScrollWidget(DocSheet *sheet, DWidget *parent)
     gridLayout->setSpacing(3);
 
     stFileInfo fileInfo;
-    DocummentProxy *_proxy = sheet->getDocProxy();
-    if (_proxy) {
-        _proxy->docBasicInfo(fileInfo);
-    }
+    sheet->docBasicInfo(fileInfo);
     QLocale locale;
     QFontMetrics fm(font());
     //用最长字符来计算左侧最小宽度

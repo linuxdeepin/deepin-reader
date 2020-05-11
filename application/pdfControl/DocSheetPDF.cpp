@@ -125,7 +125,7 @@ void DocSheetPDF::pageLast()
     if (!m_browser->GetDocProxy())
         return;
 
-    pageJump(getDocProxy()->getPageSNum() - 1);
+    pageJump(this->getPageSNum() - 1);
 }
 
 void DocSheetPDF::pageNext()
@@ -135,11 +135,11 @@ void DocSheetPDF::pageNext()
 
     bool isDoubleShow = m_browser->isDoubleShow();
 
-    int nCurPage = getDocProxy()->currentPageNo();
+    int nCurPage = this->currentPageNo();
 
     int page = nCurPage + (isDoubleShow ? 2 : 1);
 
-    page = (page >= (getDocProxy()->getPageSNum() - 1) ? (getDocProxy()->getPageSNum() - 1) : page);
+    page = (page >= (this->getPageSNum() - 1) ? (this->getPageSNum() - 1) : page);
 
     pageJump(page);
 }
@@ -151,7 +151,7 @@ void DocSheetPDF::pagePrev()
 
     bool isDoubleShow = m_browser->isDoubleShow();
 
-    int nCurPage = getDocProxy()->currentPageNo();
+    int nCurPage = this->currentPageNo();
 
     int page = nCurPage - (isDoubleShow ? 2 : 1);
 
@@ -394,11 +394,6 @@ void DocSheetPDF::setOper(const int &type, const QVariant &value)
     m_browser->setOper(type, value);
 }
 
-DocummentProxy *DocSheetPDF::getDocProxy()
-{
-    return m_browser->GetDocProxy();
-}
-
 void DocSheetPDF::OnOpenSliderShow()
 {
     m_bOldState = m_sidebar->isVisible();
@@ -422,4 +417,194 @@ void DocSheetPDF::handleSearch()
 
     m_pFindWidget->showPosition(m_browser->width());
     m_pFindWidget->setSearchEditFocus();
+}
+
+int DocSheetPDF::getPageSNum()
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        return docProxy->getPageSNum();
+    }
+    return -1;
+}
+
+int DocSheetPDF::currentPageNo()
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        return docProxy->currentPageNo();
+    }
+    return -1;
+}
+
+bool DocSheetPDF::getImage(int pagenum, QImage &image, double width, double height)
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        return docProxy->getImage(pagenum, image, width, height);
+    }
+    return false;
+}
+
+void DocSheetPDF::docBasicInfo(stFileInfo &info)
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        docProxy->docBasicInfo(info);
+    }
+}
+
+bool DocSheetPDF::getAutoPlaySlideStatu()
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        return docProxy->getAutoPlaySlideStatu();
+    }
+    return false;
+}
+
+void DocSheetPDF::setAutoPlaySlide(bool autoplay, int timemsec)
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        return docProxy->setAutoPlaySlide(autoplay, timemsec);
+    }
+}
+
+double DocSheetPDF::getMaxZoomratio()
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        return docProxy->getMaxZoomratio();
+    }
+    return 0;
+}
+
+void DocSheetPDF::getAllAnnotation(QList<stHighlightContent> &listres)
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        docProxy->getAllAnnotation(listres);
+    }
+}
+
+bool DocSheetPDF::getImageMax(int pagenum, QImage &image, double max)
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        return docProxy->getImageMax(pagenum, image, max);
+    }
+    return false;
+}
+
+bool DocSheetPDF::setBookMarkState(int page, bool state)
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        return docProxy->setBookMarkState(page, state);
+    }
+    return false;
+}
+
+Outline DocSheetPDF::outline()
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        return docProxy->outline();
+    }
+    return Outline();
+}
+
+void DocSheetPDF::jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage)
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        docProxy->jumpToOutline(realleft, realtop, ipage);
+    }
+}
+
+bool DocSheetPDF::isOpen()
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    return docProxy != nullptr;
+}
+
+QString DocSheetPDF::addIconAnnotation(const QPoint &pos, const QColor &color, TextAnnoteType_Em type)
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        return docProxy->addIconAnnotation(pos, color, type);
+    }
+    return "";
+}
+
+int  DocSheetPDF::pointInWhichPage(QPoint pos)
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        return docProxy->pointInWhichPage(pos);
+    }
+    return -1;
+}
+
+void DocSheetPDF::jumpToHighLight(const QString &uuid, int ipage)
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        docProxy->jumpToHighLight(uuid, ipage);
+    }
+}
+
+QString DocSheetPDF::pagenum2label(int index)
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        return docProxy->pagenum2label(index);
+    }
+    return QString();
+}
+
+bool DocSheetPDF::haslabel()
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        return docProxy->haslabel();
+    }
+    return false;
+}
+
+int DocSheetPDF::label2pagenum(QString label)
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        return docProxy->label2pagenum(label);
+    }
+    return -1;
+}
+
+bool DocSheetPDF::closeMagnifier()
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        return docProxy->closeMagnifier();
+    }
+    return false;
+}
+
+bool DocSheetPDF::showSlideModel()
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        return docProxy->showSlideModel();
+    }
+    return false;
+}
+
+bool DocSheetPDF::exitSlideModel()
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        return docProxy->exitSlideModel();
+    }
+    return false;
 }

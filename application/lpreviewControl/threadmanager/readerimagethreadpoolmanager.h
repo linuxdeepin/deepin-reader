@@ -23,18 +23,18 @@
 #include <QMap>
 #include <QMutex>
 
-class DocummentProxy;
+class DocSheet;
 typedef struct ReaderImageParam_t {
     int pageNum = 0;
     int maxPixel = 174;
-    DocummentProxy *docProxy = nullptr;
+    DocSheet *sheet = nullptr;
 
     QObject *receiver = nullptr;
     QString slotFun = "";
 
     bool operator == (const ReaderImageParam_t &other) const
     {
-        return (this->pageNum == other.pageNum && this->maxPixel == other.maxPixel && this->docProxy == other.docProxy);
+        return (this->pageNum == other.pageNum && this->maxPixel == other.maxPixel && this->sheet == other.sheet);
     }
 
     bool operator < (const ReaderImageParam_t &other) const
@@ -75,7 +75,7 @@ public:
 
 public:
     void addgetDocImageTask(const ReaderImageParam_t &readImageParam);
-    QPixmap getImageForDocSheet(DocummentProxy *docproxy, int pageIndex);
+    QPixmap getImageForDocSheet(DocSheet *sheet, int pageIndex);
 
 private slots:
     void onTaskFinished(const ReaderImageParam_t &task, const QImage &image);

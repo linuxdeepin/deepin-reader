@@ -203,6 +203,116 @@ QList<qreal> DocSheet::scaleFactorList()
     return  dataList;
 }
 
+int DocSheet::getPageSNum()
+{
+    return -1;
+}
+
+int DocSheet::currentPageNo()
+{
+    return -1;
+}
+
+bool DocSheet::getImage(int, QImage &, double, double)
+{
+    return false;
+}
+
+void DocSheet::docBasicInfo(stFileInfo &)
+{
+
+}
+
+bool DocSheet::getAutoPlaySlideStatu()
+{
+    return false;
+}
+
+void DocSheet::setAutoPlaySlide(bool, int)
+{
+
+}
+
+double DocSheet::getMaxZoomratio()
+{
+    return 0;
+}
+
+void DocSheet::getAllAnnotation(QList<stHighlightContent> &)
+{
+
+}
+
+bool DocSheet::getImageMax(int, QImage &, double)
+{
+    return false;
+}
+
+bool DocSheet::setBookMarkState(int, bool)
+{
+    return false;
+}
+
+Outline DocSheet::outline()
+{
+    return Outline();
+}
+
+void DocSheet::jumpToOutline(const qreal &, const qreal &, unsigned int)
+{
+
+}
+
+bool DocSheet::isOpen()
+{
+    return false;
+}
+
+QString DocSheet::addIconAnnotation(const QPoint &, const QColor &, TextAnnoteType_Em)
+{
+    return "";
+}
+
+int  DocSheet::pointInWhichPage(QPoint)
+{
+    return -1;
+}
+
+void DocSheet::jumpToHighLight(const QString &, int)
+{
+
+}
+
+QString DocSheet::pagenum2label(int)
+{
+    return QString();
+}
+
+bool DocSheet::haslabel()
+{
+    return false;
+}
+
+int DocSheet::label2pagenum(QString label)
+{
+    return -1;
+}
+
+bool DocSheet::closeMagnifier()
+{
+    return false;
+}
+
+bool DocSheet::showSlideModel()
+{
+    return false;
+}
+
+bool DocSheet::exitSlideModel()
+{
+    return false;
+}
+
 QUuid DocSheet::getUuid(DocSheet *sheet)
 {
     return g_map.key(sheet);
@@ -254,11 +364,6 @@ void DocSheet::setOper(const int &, const QVariant &)
 QVariant DocSheet::getOper(int type)
 {
     return -1;
-}
-
-DocummentProxy *DocSheet::getDocProxy()
-{
-    return nullptr;
 }
 
 void DocSheet::OnOpenSliderShow()

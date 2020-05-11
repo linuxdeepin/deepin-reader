@@ -114,7 +114,5 @@ void ThumbnailWidget::updateThumbnail(const int &pageIndex)
 
 void ThumbnailWidget::scrollToCurrentPage()
 {
-    DocummentProxy *docProxy = m_sheet->getDocProxy();
-    if (docProxy)
-        m_pImageListView->scrollToIndex(docProxy->currentPageNo());
+    m_pImageListView->scrollToIndex(m_sheet->currentPageNo());
 }

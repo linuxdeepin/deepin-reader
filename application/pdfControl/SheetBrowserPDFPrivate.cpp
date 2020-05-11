@@ -453,7 +453,7 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
 {
     Q_Q(SheetBrowserPDF);
     //  实际文档类  唯一实例化设置 父窗口
-    m_pProxy = new DocummentProxy(q);
+    m_pProxy = new DocummentProxy(m_sheet, q);
     if (m_pProxy) {
         connect(m_pProxy, SIGNAL(signal_pageChange(int)), this, SLOT(onPageChanged(int)));
         connect(m_pProxy, SIGNAL(signal_openResult(bool)), SLOT(onFileOpenResult(bool)));

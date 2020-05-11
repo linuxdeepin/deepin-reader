@@ -94,8 +94,6 @@ public:
 
     virtual void saveOper();
 
-    virtual DocummentProxy *getDocProxy();      //在文档打开成功之前为空
-
     virtual void OnOpenSliderShow();
 
     virtual void exitSliderShow();
@@ -120,6 +118,34 @@ public:
 
     QList<qreal> scaleFactorList();
 
+    //replace docProxy api 2020.05.11
+    virtual Outline outline();
+    virtual int getPageSNum();
+    virtual int currentPageNo();
+    virtual int  pointInWhichPage(QPoint pos);
+    virtual int label2pagenum(QString label);
+
+    virtual bool isOpen();
+    virtual bool haslabel();
+    virtual bool closeMagnifier();
+    virtual bool showSlideModel();
+    virtual bool exitSlideModel();
+    virtual bool getAutoPlaySlideStatu();
+    virtual bool setBookMarkState(int page, bool state);
+    virtual bool getImage(int pagenum, QImage &image, double width, double height);
+    virtual bool getImageMax(int pagenum, QImage &image, double max);
+
+    virtual void jumpToHighLight(const QString &uuid, int ipage);
+    virtual void docBasicInfo(stFileInfo &info);
+    virtual void setAutoPlaySlide(bool autoplay, int timemsec = 3000);
+    virtual void getAllAnnotation(QList<stHighlightContent> &listres);
+    virtual void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage = 0);
+
+    virtual double getMaxZoomratio();
+
+    virtual QString pagenum2label(int index);
+    virtual QString addIconAnnotation(const QPoint &pos, const QColor &color = Qt::yellow, TextAnnoteType_Em type = TextAnnoteType_Note);
+
     Dr::FileType type();
 
     void showTips(const QString &tips, int iconIndex = 0);
@@ -140,16 +166,12 @@ public:
 
 signals:
     void sigOpenFileResult(const QString &, const bool &);
-
     void sigFileChanged(DocSheet *);    //被修改了 书签 笔记
-
     void sigScaleChanged(DocSheet *);
-
     void sigTotateChanged();
-
     void sigOpened(DocSheet *, bool);
-
     void sigFindOperation(const int &);
+    void signalAutoplaytoend();
 
 private:
     QString      m_filePath;

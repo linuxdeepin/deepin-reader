@@ -122,21 +122,17 @@ void PagingWidget::setPage(int page)
         return;
 
     m_curPage = page;
-    DocummentProxy *_proxy = m_sheet->getDocProxy();
+    int totalPage = m_sheet->getPageSNum();
+    int inputData = page;
+    int currntPage = inputData + 1;     //  + 1 是为了 数字 从1 开始显示
+    __SetBtnState(currntPage, totalPage);
 
-    if (_proxy) {
-        int totalPage = _proxy->getPageSNum();
-        int inputData = page;
-        int currntPage = inputData + 1;     //  + 1 是为了 数字 从1 开始显示
-        __SetBtnState(currntPage, totalPage);
-
-        if (m_pCurrantPageLab) {
-            m_pCurrantPageLab->setText(QString::number(currntPage));
-            QString sPage = _proxy->pagenum2label(inputData);
-            m_pJumpPageLineEdit->setText(sPage);
-        } else {
-            m_pJumpPageLineEdit->setText(QString::number(currntPage));
-        }
+    if (m_pCurrantPageLab) {
+        m_pCurrantPageLab->setText(QString::number(currntPage));
+        QString sPage = m_sheet->pagenum2label(inputData);
+        m_pJumpPageLineEdit->setText(sPage);
+    } else {
+        m_pJumpPageLineEdit->setText(QString::number(currntPage));
     }
 }
 
@@ -151,27 +147,20 @@ void PagingWidget::handleOpenSuccess()
     if (nullptr == m_sheet)
         return;
 
-    DocummentProxy *_proxy = m_sheet->getDocProxy();
-
-    if (_proxy) {
-        bool isHasLabel = _proxy->haslabel();
-        if (!isHasLabel) {
-            delete m_pCurrantPageLab;
-            m_pCurrantPageLab =  nullptr;
-        }
-
-        int totalPage = _proxy->getPageSNum();
-
-        if (m_pCurrantPageLab == nullptr) {   //  不可读取页码, 则设置只能输入大于 0 的数字
-            //  m_pJumpPageLineEdit->lineEdit()->setValidator(new QIntValidator(1, totalPage, this));
-        }
-
-        m_pTotalPagesLab->setText(QString("/ %1").arg(totalPage));
-
-        int nCurPage = _proxy->currentPageNo();
-
-        setPage(nCurPage);
+    bool isHasLabel = m_sheet->haslabel();
+    if (!isHasLabel) {
+        delete m_pCurrantPageLab;
+        m_pCurrantPageLab =  nullptr;
     }
+
+    int totalPage = m_sheet->getPageSNum();
+    if (m_pCurrantPageLab == nullptr) {   //  不可读取页码, 则设置只能输入大于 0 的数字
+        //  m_pJumpPageLineEdit->lineEdit()->setValidator(new QIntValidator(1, totalPage, this));
+    }
+
+    m_pTotalPagesLab->setText(QString("/ %1").arg(totalPage));
+    int nCurPage = m_sheet->currentPageNo();
+    setPage(nCurPage);
 }
 
 //  输入框  敲回车键 响应
@@ -192,10 +181,9 @@ void PagingWidget::onEditFinished()
 
 void PagingWidget::__NormalChangePage()
 {
-    DocummentProxy *_proxy = m_sheet->getDocProxy();
     QString sText = m_pJumpPageLineEdit->text();
     int iPage = sText.toInt();
-    if (iPage <= 0 || iPage > _proxy->getPageSNum()) {
+    if (iPage <= 0 || iPage > m_sheet->getPageSNum()) {
         m_sheet->showTips(tr("Invalid page number"));
     } else {
         m_sheet->pageJump(iPage - 1);
@@ -205,20 +193,15 @@ void PagingWidget::__NormalChangePage()
 
 void PagingWidget::__PageNumberJump()
 {
-    DocummentProxy *_proxy = m_sheet->getDocProxy();
-    if (_proxy) {
-        int nPageSum = _proxy->getPageSNum();
+    int nPageSum = m_sheet->getPageSNum();
+    QString sText = m_pJumpPageLineEdit->text();
+    int iPage = m_sheet->label2pagenum(sText);
 
-        QString sText = m_pJumpPageLineEdit->text();
-
-        int iPage = _proxy->label2pagenum(sText);
-
-        if (iPage > -1 && iPage < nPageSum) {   //  输入的页码 必须在 0-最大值 之间, 才可以
-            m_sheet->pageJump(iPage);
-            setFocus();
-        } else {
-            m_sheet->showTips(tr("Invalid page number"));
-        }
+    if (iPage > -1 && iPage < nPageSum) {   //  输入的页码 必须在 0-最大值 之间, 才可以
+        m_sheet->pageJump(iPage);
+        setFocus();
+    } else {
+        m_sheet->showTips(tr("Invalid page number"));
     }
 }
 

@@ -199,23 +199,18 @@ void CatalogTreeView::handleOpenSuccess()
         if (nullptr == m_sheet)
             return;
 
-        DocummentProxy *_proxy =  m_sheet->getDocProxy();
-        if (_proxy) {
+        const Outline &ol = m_sheet->outline();
+        foreach (const Section &s, ol) {   //  1 级显示
+            if (s.link.page > 0) {
+                auto itemList = getItemList(s.title, s.link.page, s.link.left, s.link.top);
+                model->appendRow(itemList);
 
-            Outline ol = _proxy->outline();
-
-            foreach (const Section &s, ol) {   //  1 级显示
-                if (s.link.page > 0) {
-                    auto itemList = getItemList(s.title, s.link.page, s.link.left, s.link.top);
-                    model->appendRow(itemList);
-
-                    parseCatalogData(s, itemList.at(0));
-                }
+                parseCatalogData(s, itemList.at(0));
             }
-
-            int nCurPage = _proxy->currentPageNo();
-            setPage(nCurPage);
         }
+
+        int nCurPage = m_sheet->currentPageNo();
+        setPage(nCurPage);
     }
 }
 
@@ -250,20 +245,11 @@ void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelInd
         if (nullptr == m_sheet)
             return;
 
-        DocummentProxy *_proxy =  m_sheet->getDocProxy();
-
-        if (_proxy) {
-            int nPage = current.data(Qt::UserRole + 1).toInt();
-
-            nPage--;
-
-            double left = current.data(Qt::UserRole + 2).toDouble();
-
-            double top = current.data(Qt::UserRole + 3).toDouble();
-
-            _proxy->jumpToOutline(left, top, nPage);
-
-        }
+        int nPage = current.data(Qt::UserRole + 1).toInt();
+        nPage--;
+        double left = current.data(Qt::UserRole + 2).toDouble();
+        double top = current.data(Qt::UserRole + 3).toDouble();
+        m_sheet->jumpToOutline(left, top, nPage);
     }
     rightnotifypagechanged = false;
 
@@ -275,20 +261,11 @@ void CatalogTreeView::onItemClicked(const QModelIndex &current)
     if (nullptr == m_sheet)
         return;
 
-    DocummentProxy *_proxy =  m_sheet->getDocProxy();
-
-    if (_proxy) {
-        int nPage = current.data(Qt::UserRole + 1).toInt();
-
-        nPage--;
-
-        double left = current.data(Qt::UserRole + 2).toDouble();
-
-        double top = current.data(Qt::UserRole + 3).toDouble();
-
-        _proxy->jumpToOutline(left, top, nPage);
-
-    }
+    int nPage = current.data(Qt::UserRole + 1).toInt();
+    nPage--;
+    double left = current.data(Qt::UserRole + 2).toDouble();
+    double top = current.data(Qt::UserRole + 3).toDouble();
+    m_sheet->jumpToOutline(left, top, nPage);
 }
 
 void CatalogTreeView::slotThemeChanged()

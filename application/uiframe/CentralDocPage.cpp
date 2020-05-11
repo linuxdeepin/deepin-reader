@@ -425,21 +425,9 @@ void CentralDocPage::clearState()
         setCurrentState(Default_State);
 
         if (getCurSheet() != nullptr) {         //...需要修改为，要保存正在放大镜的doc
-            auto proxy = getCurSheet()->getDocProxy();
-            if (proxy) {
-                proxy->closeMagnifier();
-            }
+            getCurSheet()->closeMagnifier();
         }
     }
-}
-
-DocummentProxy *CentralDocPage::getCurFileAndProxy(const QString &sPath)
-{
-    DocSheet *sheet = getSheet(sPath);
-    if (nullptr == sheet)
-        return nullptr;
-
-    return sheet->getDocProxy();
 }
 
 DocSheet *CentralDocPage::getCurSheet()
@@ -549,12 +537,11 @@ void CentralDocPage::handleShortcut(const QString &s)
         }
 
         if (!m_slideSheet.isNull()) {
-            auto helper = m_slideSheet->getDocProxy();
             if (!m_slideSheet.isNull()) {
-                if (helper->getAutoPlaySlideStatu()) {
-                    helper->setAutoPlaySlide(false);
+                if (m_slideSheet->getAutoPlaySlideStatu()) {
+                    m_slideSheet->setAutoPlaySlide(false);
                 } else  {
-                    helper->setAutoPlaySlide(true);
+                    m_slideSheet->setAutoPlaySlide(true);
                 }
             }
         }
@@ -610,7 +597,7 @@ void CentralDocPage::handleShortcut(const QString &s)
             getCurSheet()->zoomout();
     } else if (s == KeyStr::g_ctrl_b) {
         if (getCurSheet())
-            getCurSheet()->setBookMark(getCurSheet()->getDocProxy()->currentPageNo(), true);
+            getCurSheet()->setBookMark(getCurSheet()->currentPageNo(), true);
     } else if (s == KeyStr::g_ctrl_f) {
         if (getCurSheet())
             getCurSheet()->handleSearch();
@@ -664,11 +651,8 @@ void CentralDocPage::openSlide()
 
         m_slideSheet = sheet;
 
-        auto _proxy = sheet->getDocProxy();
-
-        _proxy->setAutoPlaySlide(true);
-
-        _proxy->showSlideModel();
+        sheet->setAutoPlaySlide(true);
+        sheet->showSlideModel();
 
         if (m_pctrlwidget == nullptr) {
             m_pctrlwidget = new PlayControlWidget(sheet, this);
@@ -699,14 +683,7 @@ void CentralDocPage::quitSlide()
         if (!m_slideSheet.isNull()) {
 
             m_slideSheet->exitSliderShow();
-
-            DocummentProxy *_proxy = m_slideSheet->getDocProxy();
-
-            if (!_proxy) {
-                return;
-            }
-
-            _proxy->exitSlideModel();
+            m_slideSheet->exitSlideModel();
 
             delete m_pctrlwidget;
 
@@ -740,12 +717,6 @@ void CentralDocPage::quitMagnifer()
 
         if (m_magniferSheet.isNull())
             return;
-
-        DocummentProxy *proxy = m_magniferSheet->getDocProxy();
-        if (!proxy) {
-            return;
-        }
-
-        proxy->closeMagnifier();
+        m_magniferSheet->closeMagnifier();
     }
 }

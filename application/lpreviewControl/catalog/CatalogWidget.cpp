@@ -103,21 +103,12 @@ void CatalogWidget::handleOpenSuccess()
     if (nullptr == m_sheet)
         return;
 
-    DocummentProxy *_pProxy = m_sheet->getDocProxy();
-
-    if (_pProxy) {
-
-        stFileInfo fileInfo;
-
-        _pProxy->docBasicInfo(fileInfo);
-
-        m_strTheme = fileInfo.strTheme;
-
-        if (m_strTheme != "") {
-            setTitleTheme();
-        }
+    stFileInfo fileInfo;
+    m_sheet->docBasicInfo(fileInfo);
+    m_strTheme = fileInfo.strTheme;
+    if (m_strTheme != "") {
+        setTitleTheme();
     }
-
     m_pTree->handleOpenSuccess();
 }
 
