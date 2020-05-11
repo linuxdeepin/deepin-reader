@@ -433,8 +433,8 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
             foreach (Poppler::HighlightAnnotation::Quad quad, listquad) {
                 rectbound.setTopLeft(quad.points[0]);
                 rectbound.setTopRight(quad.points[1]);
-                rectbound.setBottomLeft(quad.points[2]);
-                rectbound.setBottomRight(quad.points[3]);
+                rectbound.setBottomLeft(quad.points[3]);
+                rectbound.setBottomRight(quad.points[2]);
                 if (d->m_rotate == RotateType_180) {
                     rectbound.setTop(1 - rectbound.top());
                     rectbound.setBottom(1 - rectbound.bottom());
