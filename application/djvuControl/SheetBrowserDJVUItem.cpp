@@ -34,11 +34,11 @@ QRectF SheetBrowserDJVUItem::boundingRect() const
     switch (m_rotation) {
     case Dr::RotateBy90:
     case Dr::RotateBy270:
-        return QRectF(0, 0, (double)m_page->size().height() * m_scale / 100.00, (double)m_page->size().width() * m_scale / 100.00);
+        return QRectF(0, 0, (double)m_page->size().height() * m_scaleFactor, (double)m_page->size().width() * m_scaleFactor);
     default: break;
     }
 
-    return QRectF(0, 0, (double)m_page->size().width() * m_scale / 100.00, (double)m_page->size().height() * m_scale / 100.00);
+    return QRectF(0, 0, (double)m_page->size().width() * m_scaleFactor, (double)m_page->size().height() * m_scaleFactor);
 }
 
 void SheetBrowserDJVUItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -46,24 +46,24 @@ void SheetBrowserDJVUItem::paint(QPainter *painter, const QStyleOptionGraphicsIt
     if (m_image.isNull()) {
         painter->setBrush(Qt::white);
         painter->drawRect(option->rect);
-        render(m_scale, m_rotation, false);
+        render(m_scaleFactor, m_rotation, false);
     } else
         painter->drawImage(option->rect, m_image);
 }
 
-void SheetBrowserDJVUItem::render(double scale, Dr::Rotation rotation, bool readerLater)
+void SheetBrowserDJVUItem::render(double scaleFactor, Dr::Rotation rotation, bool readerLater)
 {
     if (nullptr == m_page)
         return;
 
-    if (!m_image.isNull() && qFuzzyCompare(scale, m_scale) && rotation == m_rotation)
+    if (!m_image.isNull() && qFuzzyCompare(scaleFactor, m_scaleFactor) && rotation == m_rotation)
         return;
 
-    m_scale     = scale;
+    m_scaleFactor = scaleFactor;
     m_rotation  = rotation;
 
     if (!readerLater)
-        m_image = m_page->render(72, 72, m_rotation, scale);
+        m_image = m_page->render(72, 72, m_rotation, m_scaleFactor);
     else
         m_image = QImage();
 

@@ -30,7 +30,7 @@ bool DocSheetDJVU::openFileExec(const QString &filePath)
     if (m_browser->openFilePath(filePath)) {
         //readOperation();
 
-        m_browser->loadPages(operation().scaleMode, operation().scale, operation().rotation, operation().mouseShape, operation().currentPage);
+        m_browser->loadPages(operation().scaleMode, operation().scaleFactor, operation().rotation, operation().mouseShape, operation().currentPage);
         return true;
     }
 

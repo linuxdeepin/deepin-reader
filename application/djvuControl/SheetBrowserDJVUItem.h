@@ -31,7 +31,7 @@ private:
 private:
     deepin_reader::Page *m_page = nullptr;
     QImage m_image;
-    double m_scale          = -1;
+    double m_scaleFactor        = -1;
     Dr::Rotation m_rotation = Dr::NumberOfRotations;
 };
 

@@ -421,7 +421,31 @@ Database::Database(QObject *parent) : QObject(parent)
 //        limitPerFileSettings();
 //    } else {
 //        qDebug() << m_database.lastError();
-//    }
+    //    }
+}
+
+bool Database::prepareTables()
+{
+    Transaction transaction(m_database);
+
+    QSqlQuery query(m_database);
+    query.exec("CREATE TABLE operation "
+               "(filePath TEXT"
+               ",LayoutMode INTEGER"
+               ",MouseShape INTEGER"
+               ",ScaleMode INTEGER"
+               ",Rotation INTEGER"
+               ",scaleMode INTEGER"
+               ",scaleFactor REAL"
+               ",rotation INTEGER)");
+
+    if (!query.isActive()) {
+        qDebug() << query.lastError();
+        return false;
+    }
+
+    transaction.commit();
+    return true;
 }
 
 //QString Database::instanceName()

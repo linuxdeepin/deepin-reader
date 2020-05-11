@@ -16,11 +16,11 @@ class DocummentProxy;
 class SheetBrowserArea;
 class FindWidget;
 struct DocOperation {
+    Dr::LayoutMode layoutMode   = Dr::SinglePageMode;
+    Dr::MouseShape mouseShape   = Dr::MouseShapeNormal;
     Dr::ScaleMode scaleMode     = Dr::ScaleFactorMode;
     Dr::Rotation rotation       = Dr::RotateBy0;
-    Dr::MouseShape mouseShape   = Dr::MouseShapeNormal;
-    Dr::LayoutMode layoutMode   = Dr::SinglePageMode;
-    double scale                = 100.00;
+    qreal scaleFactor           = 1.0;
     bool openThumbnail          = false;
     int  leftIndex              = 0;
     int  currentPage            = 1;

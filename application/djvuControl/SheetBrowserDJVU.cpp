@@ -30,7 +30,7 @@ bool SheetBrowserDJVU::openFilePath(const QString &filePath)
     return true;
 }
 
-void SheetBrowserDJVU::loadPages(Dr::ScaleMode mode, double scale, Dr::Rotation rotation, Dr::MouseShape mouseShape, int currentPage)
+void SheetBrowserDJVU::loadPages(Dr::ScaleMode mode, double scaleFactor, Dr::Rotation rotation, Dr::MouseShape mouseShape, int currentPage)
 {
     if (nullptr == m_document)
         return;
@@ -49,12 +49,12 @@ void SheetBrowserDJVU::loadPages(Dr::ScaleMode mode, double scale, Dr::Rotation 
         scene()->addItem(item);
     }
 
-    setScale(mode, scale, rotation);
+    setScale(mode, scaleFactor, rotation);
     setMouseShape(mouseShape);
     setCurrentPage(5);
 }
 
-void SheetBrowserDJVU::setScale(Dr::ScaleMode mode, double scale, Dr::Rotation rotation)
+void SheetBrowserDJVU::setScale(Dr::ScaleMode mode, double scaleFactor, Dr::Rotation rotation)
 {
 //保持中心不变的放大
 //    QPointF center = my_qgv->viewPort().rect().center();
@@ -73,29 +73,29 @@ void SheetBrowserDJVU::setScale(Dr::ScaleMode mode, double scale, Dr::Rotation r
     case Dr::RotateBy0:
     case Dr::RotateBy180:
         if (Dr::FitToPageWidthMode == m_mode) {
-            m_scale = (double)this->width() * 100.00 / (double) m_maxWidth ;
+            m_scaleFactor = (double)this->width()  / (double) m_maxWidth ;
         } else if (Dr::FitToPageHeightMode == m_mode) {
-            m_scale = (double)this->height() * 100.00 / (double) m_maxHeight ;
+            m_scaleFactor = (double)this->height() / (double) m_maxHeight ;
         } else {
             m_mode = Dr::ScaleFactorMode;
-            m_scale = scale;
+            m_scaleFactor = scaleFactor;
         }
         break;
     case Dr::RotateBy90:
     case Dr::RotateBy270:
         if (Dr::FitToPageWidthMode == m_mode) {
-            m_scale = (double)this->width() * 100.00 / (double) m_maxHeight ;
+            m_scaleFactor = (double)this->width()  / (double) m_maxHeight ;
         } else if (Dr::FitToPageHeightMode == m_mode) {
-            m_scale = (double)this->height() * 100.00 / (double) m_maxWidth ;
+            m_scaleFactor = (double)this->height() / (double) m_maxWidth ;
         } else {
             m_mode = Dr::ScaleFactorMode;
-            m_scale = scale;
+            m_scaleFactor = scaleFactor;
         }
         break;
     }
 
     for (int i = 0; i < m_items.count(); ++i) {
-        m_items.at(i)->render(m_scale, m_rotion, true);
+        m_items.at(i)->render(m_scaleFactor, m_rotion, true);
     }
 
     int width = 0;

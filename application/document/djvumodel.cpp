@@ -483,7 +483,7 @@ QImage DjVuPage::render(qreal horizontalResolution, qreal verticalResolution, Dr
     return image;
 }
 
-QImage DjVuPage::render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, const double scale) const
+QImage DjVuPage::render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, const double scaleFactor) const
 {
     LOCK_PAGE
 
@@ -546,8 +546,8 @@ QImage DjVuPage::render(qreal horizontalResolution, qreal verticalResolution, Dr
         break;
     }
 
-    pagerect.w = (double)pagerect.w * scale / 100.00;
-    pagerect.h = (double)pagerect.h * scale / 100.00;
+    pagerect.w = (double)pagerect.w * scaleFactor ;
+    pagerect.h = (double)pagerect.h * scaleFactor ;
 
     ddjvu_rect_t renderrect;
     renderrect.x = pagerect.x;

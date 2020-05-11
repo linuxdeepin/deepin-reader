@@ -16,9 +16,9 @@ public:
 
     bool openFilePath(const QString &);
 
-    void loadPages(Dr::ScaleMode mode, double scale, Dr::Rotation rotation, Dr::MouseShape mouseShape, int currentPage);
+    void loadPages(Dr::ScaleMode mode, double scaleFactor, Dr::Rotation rotation, Dr::MouseShape mouseShape, int currentPage);
 
-    void setScale(Dr::ScaleMode mode, double scale, Dr::Rotation rotation);
+    void setScale(Dr::ScaleMode mode, double scaleFactor, Dr::Rotation rotation);
 
     void setMouseShape(Dr::MouseShape mouseShape);
 
@@ -39,7 +39,7 @@ private:
     Dr::Rotation m_rotion = Dr::RotateBy0;
     Dr::ScaleMode m_mode = Dr::ScaleFactorMode;
     Dr::MouseShape m_mouseShape = Dr::MouseShapeNormal;
-    double m_scale = 100.0;
+    double m_scaleFactor = 1;
 
     int m_maxWidth = 0;
     int m_maxHeight = 0;

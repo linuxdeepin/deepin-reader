@@ -40,6 +40,8 @@ private:
 
 //    static QString instanceName();
 
+    bool prepareTables();
+
 //    bool prepareTabs_v3();
 //    bool prepareBookmarks_v3();
 //    bool preparePerFileSettings_v3();
