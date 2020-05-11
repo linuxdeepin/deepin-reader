@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "ThumbnailDelegate.h"
-#include "pdfControl/imageviewmodel.h"
+#include "lpreviewControl/ImageViewModel.h"
 #include "utils/utils.h"
 
 #include <QPainter>
@@ -25,28 +25,28 @@
 
 #include <DGuiApplicationHelper>
 
-ThumbnailDelegate::ThumbnailDelegate(QAbstractItemView* parent)
+ThumbnailDelegate::ThumbnailDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
 {
     m_parent = parent;
 }
 
-void ThumbnailDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
+void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if (index.isValid()){
+    if (index.isValid()) {
         qreal pixscale = m_parent->property("adaptScale").toDouble();
         int rotate = index.data(ImageinfoType_e::IMAGE_ROTATE).toInt();
         bool bShowBookMark = index.data(ImageinfoType_e::IMAGE_BOOKMARK).toBool();
         QMatrix matrix;
         matrix.rotate(rotate);
-        const QPixmap& pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>().transformed(matrix);
+        const QPixmap &pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>().transformed(matrix);
 
-        if(!pixmap.isNull()){
+        if (!pixmap.isNull()) {
             const int borderRadius = 6;
 
-            const QPixmap& scalePix = pixmap.scaled(pixmap.width() * pixscale, pixmap.height() * pixscale, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            const QSize& scalePixSize = scalePix.size();
-            const QRect& rect = QRect(option.rect.center().x() - scalePixSize.width() / 2, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
+            const QPixmap &scalePix = pixmap.scaled(pixmap.width() * pixscale, pixmap.height() * pixscale, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            const QSize &scalePixSize = scalePix.size();
+            const QRect &rect = QRect(option.rect.center().x() - scalePixSize.width() / 2, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
 
             //clipPath pixmap
             painter->save();
@@ -59,11 +59,10 @@ void ThumbnailDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
             painter->save();
             painter->setBrush(Qt::NoBrush);
             painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
-            if(m_parent->selectionModel()->isRowSelected(index.row(), index.parent())){
+            if (m_parent->selectionModel()->isRowSelected(index.row(), index.parent())) {
                 painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color(), 2));
                 painter->drawRoundedRect(rect, borderRadius, borderRadius);
-            }
-            else{
+            } else {
                 painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().frameShadowBorder().color(), 1));
                 painter->drawRoundedRect(rect, borderRadius, borderRadius);
                 painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().windowText().color()));
@@ -81,9 +80,9 @@ QSize ThumbnailDelegate::sizeHint(const QStyleOptionViewItem &option, const QMod
     return DStyledItemDelegate::sizeHint(option, index);
 }
 
-void ThumbnailDelegate::drawBookMark(QPainter* painter, const QRect& rect, bool visible) const
+void ThumbnailDelegate::drawBookMark(QPainter *painter, const QRect &rect, bool visible) const
 {
-    if (visible){
+    if (visible) {
         QString ssPath = ":/resources/image/";
         DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
         if (themeType == DGuiApplicationHelper::LightType)

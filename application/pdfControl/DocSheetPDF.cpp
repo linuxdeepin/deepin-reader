@@ -18,7 +18,7 @@
  */
 #include "DocSheetPDF.h"
 #include "pdfControl/docview/commonstruct.h"
-#include "pdfControl/SheetSidebarPDF.h"
+#include "lpreviewControl/SheetSidebar.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -45,7 +45,7 @@ DocSheetPDF::DocSheetPDF(DWidget *parent)
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
     m_browser = new SheetBrowserPDF(this, this);
-    m_sidebar = new SheetSidebarPDF(this);
+    m_sidebar = new SheetSidebar(this);
 
     connect(m_sidebar, SIGNAL(sigDeleteAnntation(const int &, const QString &)), m_browser, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
     connect(m_browser, SIGNAL(sigPageChanged(int)), m_sidebar, SLOT(onPageChanged(int)));

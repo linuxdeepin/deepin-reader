@@ -18,7 +18,6 @@
  */
 #include "DocSheet.h"
 #include "pdfControl/docview/commonstruct.h"
-#include "pdfControl/SheetSidebarPDF.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>

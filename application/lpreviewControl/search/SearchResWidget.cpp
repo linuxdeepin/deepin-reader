@@ -19,8 +19,8 @@
 #include "SearchResWidget.h"
 #include "DocSheet.h"
 #include "pdfControl/docview/docummentproxy.h"
-#include "pdfControl/imagelistview.h"
-#include "pdfControl/imageviewmodel.h"
+#include "lpreviewControl/ImageListview.h"
+#include "lpreviewControl/ImageViewModel.h"
 #include "WidgetHeader.h"
 #include "searchresdelegate.h"
 
@@ -49,7 +49,7 @@ void SearchResWidget::initWidget()
 
     m_pImageListView = new ImageListView(m_sheet, this);
     m_pImageListView->setListType(DR_SPACE::E_SEARCH_RES_WIDGET);
-    SearchResDelegate* imageDelegate = new SearchResDelegate(m_pImageListView);
+    SearchResDelegate *imageDelegate = new SearchResDelegate(m_pImageListView);
     m_pImageListView->setItemDelegate(imageDelegate);
     m_stackLayout->addWidget(m_pImageListView);
 
@@ -75,7 +75,7 @@ void SearchResWidget::handFindContentComming(const stSearchRes &search)
 int  SearchResWidget::handleFindFinished()
 {
     int searchCount = m_pImageListView->model()->rowCount();
-    if(searchCount <= 0)
+    if (searchCount <= 0)
         m_stackLayout->setCurrentIndex(TIPS_INDEX);
     return searchCount;
 }

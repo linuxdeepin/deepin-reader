@@ -14,7 +14,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "imageviewmodel.h"
+#include "ImageViewModel.h"
 #include "DocSheet.h"
 #include "pdfControl/docview/docummentproxy.h"
 #include "threadmanager/readerimagethreadpoolmanager.h"
@@ -89,8 +89,7 @@ QVariant ImageViewModel::data(const QModelIndex &index, int role) const
         return QVariant::fromValue(tr("Page %1").arg(nRow + 1));
     } else if (role == ImageinfoType_e::IMAGE_CONTENT_TEXT) {
         return QVariant::fromValue(m_pagelst.at(index.row()).strcontents);
-    }
-    else if (role == ImageinfoType_e::IMAGE_SEARCH_COUNT) {
+    } else if (role == ImageinfoType_e::IMAGE_SEARCH_COUNT) {
         return QVariant::fromValue(m_pagelst.at(index.row()).strSearchcount);
     }
     return QVariant();
@@ -159,13 +158,12 @@ void ImageViewModel::insertPageIndex(int pageIndex)
 void ImageViewModel::insertPageIndex(const ImagePageInfo_t &tImagePageInfo)
 {
     int index = findItemForuuid(tImagePageInfo.struuid);
-    if(index == -1){
+    if (index == -1) {
         beginResetModel();
         m_pagelst << tImagePageInfo;
         qSort(m_pagelst.begin(), m_pagelst.end());
         endResetModel();
-    }
-    else{
+    } else {
         m_pagelst[index].strcontents = tImagePageInfo.strcontents;
         emit dataChanged(this->index(index), this->index(index));
     }
@@ -190,7 +188,7 @@ void ImageViewModel::removeModelIndex(int modelIndex)
 void ImageViewModel::removeItemForuuid(const QString &uuid)
 {
     int index = findItemForuuid(uuid);
-    if(index >= 0){
+    if (index >= 0) {
         beginResetModel();
         m_pagelst.removeAt(index);
         endResetModel();
@@ -207,8 +205,8 @@ void ImageViewModel::getModelIndexImageInfo(int modelIndex, ImagePageInfo_t &tIm
 int ImageViewModel::findItemForuuid(const QString &uuid)
 {
     int count = m_pagelst.size();
-    for(int index = 0; index < count; index++){
-        if(uuid == m_pagelst.at(index).struuid){
+    for (int index = 0; index < count; index++) {
+        if (uuid == m_pagelst.at(index).struuid) {
             return index;
         }
     }

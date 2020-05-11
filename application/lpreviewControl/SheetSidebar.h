@@ -14,15 +14,15 @@
 class MainOperationWidget;
 class DataStackedWidget;
 class DocSheet;
-class SheetSidebarPDF : public CustomWidget
+class SheetSidebar : public CustomWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(SheetSidebarPDF)
+    Q_DISABLE_COPY(SheetSidebar)
 
 public:
-    explicit SheetSidebarPDF(DocSheet *parent = nullptr);
+    explicit SheetSidebar(DocSheet *parent = nullptr);
 
-    ~SheetSidebarPDF() override;
+    ~SheetSidebar() override;
 
     void setBookMark(int page, int state);
 

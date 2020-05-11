@@ -23,6 +23,7 @@ include (utils/utils.pri)
 include (widgets/widgets.pri)
 include (djvuControl/djvuControl.pri)
 include (document/document.pri)
+include (lpreviewControl//lpreviewControl.pri)
 
 INCLUDEPATH += $$PWD/uiframe
 

@@ -20,8 +20,8 @@
 #include "DocSheet.h"
 #include "WidgetHeader.h"
 #include "pdfControl/docview/docummentproxy.h"
-#include "pdfControl/imagelistview.h"
-#include "pdfControl/imageviewmodel.h"
+#include "lpreviewControl/ImageListview.h"
+#include "lpreviewControl/ImageViewModel.h"
 #include "bookmarkdelegate.h"
 
 #include <DHorizontalLine>
@@ -45,7 +45,7 @@ void BookMarkWidget::initWidget()
 
     m_pImageListView = new ImageListView(m_sheet, this);
     m_pImageListView->setListType(DR_SPACE::E_BOOKMARK_WIDGET);
-    BookMarkDelegate* imageDelegate = new BookMarkDelegate(m_pImageListView);
+    BookMarkDelegate *imageDelegate = new BookMarkDelegate(m_pImageListView);
     m_pImageListView->setItemDelegate(imageDelegate);
 
     m_pAddBookMarkBtn = new DPushButton(this);
@@ -75,31 +75,31 @@ void BookMarkWidget::initWidget()
 
 void BookMarkWidget::prevPage()
 {
-    if(m_sheet.isNull())
+    if (m_sheet.isNull())
         return;
     int curPage = m_pImageListView->currentIndex().row() - 1;
-    if(curPage < 0)
+    if (curPage < 0)
         return;
     m_sheet->pageJump(m_pImageListView->getPageIndexForModelIndex(curPage));
 }
 
 void BookMarkWidget::nextPage()
 {
-    int curPage = m_pImageListView->currentIndex().row()+ 1;
-    if(curPage >= m_pImageListView->model()->rowCount())
+    int curPage = m_pImageListView->currentIndex().row() + 1;
+    if (curPage >= m_pImageListView->model()->rowCount())
         return;
     m_sheet->pageJump(m_pImageListView->getPageIndexForModelIndex(curPage));
 }
 
 void BookMarkWidget::handleOpenSuccess()
 {
-    const QList<int>& pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
+    const QList<int> &pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
     DocummentProxy *proxy =  m_sheet->getDocProxy();
     if (proxy) {
         int nCurPage = proxy->currentPageNo();
         for (int iPage : pageList) {
             proxy->setBookMarkState(iPage, true);
-            if(iPage == nCurPage) m_pAddBookMarkBtn->setEnabled(false);
+            if (iPage == nCurPage) m_pAddBookMarkBtn->setEnabled(false);
         }
         m_pImageListView->handleOpenSuccess();
     }
@@ -169,7 +169,7 @@ void BookMarkWidget::handleRotate(int)
 void BookMarkWidget::DeleteItemByKey()
 {
     int curPage = m_pImageListView->getPageIndexForModelIndex(m_pImageListView->currentIndex().row());
-    if(curPage >= 0)
+    if (curPage >= 0)
         handleBookMark(curPage, false);
 }
 
@@ -206,8 +206,8 @@ void BookMarkWidget::onUpdateTheme()
 
 void BookMarkWidget::scrollToCurrentPage()
 {
-    DocummentProxy* docProxy = m_sheet->getDocProxy();
-    if(docProxy)
+    DocummentProxy *docProxy = m_sheet->getDocProxy();
+    if (docProxy)
         m_pImageListView->scrollToIndex(docProxy->currentPageNo(), false);
 }
 

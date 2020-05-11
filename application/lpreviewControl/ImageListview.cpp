@@ -14,10 +14,10 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "imagelistview.h"
+#include "ImageListview.h"
 #include "DocSheet.h"
 #include "pdfControl/docview/docummentproxy.h"
-#include "pdfControl/imageviewmodel.h"
+#include "ImageViewModel.h"
 #include "application.h"
 #include "WidgetHeader.h"
 #include "menu/BookMarkMenu.h"
@@ -131,10 +131,10 @@ bool ImageListView::scrollToIndex(int pageIndex, bool scrollTo)
 
 void ImageListView::scrollToModelInexPage(const QModelIndex &index, bool scrollto)
 {
-    if(index.isValid()){
+    if (index.isValid()) {
         this->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
         this->setCurrentIndex(index);
-        if(scrollto) this->scrollTo(index);
+        if (scrollto) this->scrollTo(index);
     }
 }
 

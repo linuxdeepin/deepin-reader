@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "notesdelegate.h"
-#include "pdfControl/imageviewmodel.h"
+#include "lpreviewControl/ImageViewModel.h"
 
 #include <QPainter>
 #include <QDebug>
@@ -30,15 +30,15 @@ NotesDelegate::NotesDelegate(QAbstractItemView *parent)
     m_parent = parent;
 }
 
-void NotesDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
+void NotesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if (index.isValid()){
-        const QPixmap& pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>();
-        if(!pixmap.isNull()){
+    if (index.isValid()) {
+        const QPixmap &pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>();
+        if (!pixmap.isNull()) {
             const int borderRadius = 6;
-            const QPixmap& scalePix = pixmap.scaled(62, 62, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            const QSize& scalePixSize = scalePix.size();
-            const QRect& rect = QRect(option.rect.x() + 10, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
+            const QPixmap &scalePix = pixmap.scaled(62, 62, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            const QSize &scalePixSize = scalePix.size();
+            const QRect &rect = QRect(option.rect.x() + 10, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
 
             //clipPath pixmap
             painter->save();
@@ -51,11 +51,10 @@ void NotesDelegate::paint(QPainter * painter, const QStyleOptionViewItem & optio
             painter->save();
             painter->setBrush(Qt::NoBrush);
             painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
-            if(m_parent->selectionModel()->isRowSelected(index.row(), index.parent())){
+            if (m_parent->selectionModel()->isRowSelected(index.row(), index.parent())) {
                 painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color(), 2));
                 painter->drawRoundedRect(rect, borderRadius, borderRadius);
-            }
-            else{
+            } else {
                 painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().frameShadowBorder().color(), 1));
                 painter->drawRoundedRect(rect, borderRadius, borderRadius);
             }
@@ -69,7 +68,7 @@ void NotesDelegate::paint(QPainter * painter, const QStyleOptionViewItem & optio
             QFont font = painter->font();
             font = DFontSizeManager::instance()->t8(font);
             painter->setFont(font);
-            const QString& pageText = index.data(ImageinfoType_e::IMAGE_INDEX_TEXT).toString();
+            const QString &pageText = index.data(ImageinfoType_e::IMAGE_INDEX_TEXT).toString();
             int pagetextHeight = painter->fontMetrics().height();
             painter->drawText(textStartX, rect.y(), option.rect.width(), pagetextHeight, Qt::AlignTop | Qt::AlignLeft, pageText);
             painter->restore();

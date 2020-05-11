@@ -20,10 +20,10 @@
 #include "DocSheet.h"
 #include "application.h"
 #include "PagingWidget.h"
-#include "pdfControl/imagelistview.h"
+#include "lpreviewControl/ImageListview.h"
 #include "pdfControl/docview/docummentproxy.h"
-#include "pdfControl/thumbnail/ThumbnailDelegate.h"
-#include "pdfControl/imageviewmodel.h"
+#include "lpreviewControl/thumbnail/ThumbnailDelegate.h"
+#include "lpreviewControl/ImageViewModel.h"
 
 #include <QVBoxLayout>
 #include <DHorizontalLine>

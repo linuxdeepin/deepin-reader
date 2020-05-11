@@ -1,4 +1,4 @@
-#include "SheetSidebarPDF.h"
+#include "SheetSidebar.h"
 
 #include <DStackedWidget>
 #include <QButtonGroup>
@@ -7,10 +7,10 @@
 #include "widgets/MainOperationWidget.h"
 
 #include "pdfControl/docview/docummentproxy.h"
-#include "pdfControl/DataStackedWidget.h"
+#include "lpreviewControl/DataStackedWidget.h"
 #include "DocSheet.h"
 
-SheetSidebarPDF::SheetSidebarPDF(DocSheet *parent)
+SheetSidebar::SheetSidebar(DocSheet *parent)
     : CustomWidget(parent), m_sheet(parent)
 {
     int tW = LEFTMINWIDTH;
@@ -28,37 +28,37 @@ SheetSidebarPDF::SheetSidebarPDF(DocSheet *parent)
     onSetWidgetVisible(0);  //  默认 隐藏
     slotUpdateTheme();
 
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SheetSidebarPDF::slotUpdateTheme);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SheetSidebar::slotUpdateTheme);
 }
 
-SheetSidebarPDF::~SheetSidebarPDF()
+SheetSidebar::~SheetSidebar()
 {
 
 }
 
-void SheetSidebarPDF::setBookMark(int page, int state)
+void SheetSidebar::setBookMark(int page, int state)
 {
     m_pStackedWidget->handleBookMark(page, state);
 }
 
-void SheetSidebarPDF::handleOpenSuccess()
+void SheetSidebar::handleOpenSuccess()
 {
     onSetWidgetVisible(m_sheet->getOper(Thumbnail).toInt());
     m_pStackedWidget->handleOpenSuccess();
     m_pMainOperationWidget->handleOpenSuccess();
 }
 
-void SheetSidebarPDF::onSetWidgetVisible(const int &nVis)
+void SheetSidebar::onSetWidgetVisible(const int &nVis)
 {
     this->setVisible(nVis);
 }
 
-void SheetSidebarPDF::slotUpdateTheme()
+void SheetSidebar::slotUpdateTheme()
 {
     updateWidgetTheme();
 }
 
-void SheetSidebarPDF::initWidget()
+void SheetSidebar::initWidget()
 {
     auto pVBoxLayout = new QVBoxLayout;
     pVBoxLayout->setContentsMargins(0, 0, 0, 0);
@@ -75,7 +75,7 @@ void SheetSidebarPDF::initWidget()
     pVBoxLayout->addWidget(m_pMainOperationWidget, 0, Qt::AlignBottom);
 }
 
-void SheetSidebarPDF::resizeEvent(QResizeEvent *event)
+void SheetSidebar::resizeEvent(QResizeEvent *event)
 {
     int width = event->size().width();
 
@@ -86,7 +86,7 @@ void SheetSidebarPDF::resizeEvent(QResizeEvent *event)
     CustomWidget::resizeEvent(event);
 }
 
-void SheetSidebarPDF::handleFindOperation(int type)
+void SheetSidebar::handleFindOperation(int type)
 {
     m_pMainOperationWidget->handleFindOperation(type);
     m_pStackedWidget->handleFindOperation(type);
@@ -105,32 +105,32 @@ void SheetSidebarPDF::handleFindOperation(int type)
     }
 }
 
-void SheetSidebarPDF::handleFindContentComming(const stSearchRes &res)
+void SheetSidebar::handleFindContentComming(const stSearchRes &res)
 {
     m_pStackedWidget->handleFindContentComming(res);
 }
 
-int SheetSidebarPDF::handleFindFinished()
+int SheetSidebar::handleFindFinished()
 {
     return m_pStackedWidget->handleFindFinished();
 }
 
-void SheetSidebarPDF::handleRotate(int rotate)
+void SheetSidebar::handleRotate(int rotate)
 {
     m_pStackedWidget->handleRotate(rotate);
 }
 
-void SheetSidebarPDF::handleUpdateThumbnail(const int &page)
+void SheetSidebar::handleUpdateThumbnail(const int &page)
 {
     m_pStackedWidget->handleUpdateThumbnail(page);
 }
 
-void SheetSidebarPDF::handleAnntationMsg(const int &msg, const QString &text)
+void SheetSidebar::handleAnntationMsg(const int &msg, const QString &text)
 {
     m_pStackedWidget->handleAnntationMsg(msg, text);
 }
 
-void SheetSidebarPDF::onPageChanged(int page)
+void SheetSidebar::onPageChanged(int page)
 {
     m_pStackedWidget->handlePage(page);
 }

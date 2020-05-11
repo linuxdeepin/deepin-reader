@@ -19,8 +19,8 @@
 #include "NotesWidget.h"
 #include "business/AppInfo.h"
 #include "pdfControl/docview/docummentproxy.h"
-#include "pdfControl/imagelistview.h"
-#include "pdfControl/imageviewmodel.h"
+#include "lpreviewControl/ImageListview.h"
+#include "lpreviewControl/ImageViewModel.h"
 #include "notesdelegate.h"
 
 #include "DocSheet.h"
@@ -102,7 +102,7 @@ void NotesWidget::DeleteItemByKey()
 {
     ImagePageInfo_t tImagePageInfo;
     m_pImageListView->getImageModel()->getModelIndexImageInfo(m_pImageListView->currentIndex().row(), tImagePageInfo);
-    if(tImagePageInfo.iPage >= 0){
+    if (tImagePageInfo.iPage >= 0) {
         int nType = tImagePageInfo.iType;
         int page = tImagePageInfo.iPage;
         QString uuid = tImagePageInfo.struuid;
@@ -127,7 +127,7 @@ void NotesWidget::addNoteItem(const QString &text, const int &iType)
         m_pImageListView->getImageModel()->insertPageIndex(tImagePageInfo);
 
         int modelIndex = m_pImageListView->getImageModel()->findItemForuuid(tImagePageInfo.struuid);
-        if(modelIndex >= 0)
+        if (modelIndex >= 0)
             m_pImageListView->scrollToModelInexPage(m_pImageListView->model()->index(modelIndex, 0));
     }
 }
@@ -166,7 +166,7 @@ void NotesWidget::onListItemClicked(int row)
 {
     ImagePageInfo_t tImagePageInfo;
     m_pImageListView->getImageModel()->getModelIndexImageInfo(row, tImagePageInfo);
-    if(tImagePageInfo.iPage >= 0){
+    if (tImagePageInfo.iPage >= 0) {
         int page = tImagePageInfo.iPage;
         const QString &uuid = tImagePageInfo.struuid;
         DocummentProxy *pDocProxy = m_sheet->getDocProxy();
@@ -187,7 +187,7 @@ void NotesWidget::handleAnntationMsg(const int &msgType, const QString &msgConte
         addNoteItem(msgContent, NOTE_HIGHLIGHT);
     } else if (msgType == MSG_NOTE_PAGE_ADD_ITEM) {
         addNoteItem(msgContent, NOTE_ICON);
-    }else if (msgType == MSG_NOTE_DELETE_ITEM || msgType == MSG_NOTE_PAGE_DELETE_ITEM) {
+    } else if (msgType == MSG_NOTE_DELETE_ITEM || msgType == MSG_NOTE_PAGE_DELETE_ITEM) {
         deleteNoteItem(msgContent);
     } else if (msgType == MSG_NOTE_UPDATE_ITEM || msgType == MSG_NOTE_PAGE_UPDATE_ITEM) {
         updateNoteItem(msgContent);
@@ -198,7 +198,7 @@ void NotesWidget::copyNoteContent()
 {
     ImagePageInfo_t tImagePageInfo;
     m_pImageListView->getImageModel()->getModelIndexImageInfo(m_pImageListView->currentIndex().row(), tImagePageInfo);
-    if(tImagePageInfo.iPage >= 0){
+    if (tImagePageInfo.iPage >= 0) {
         Utils::copyText(tImagePageInfo.strcontents);
     }
 }

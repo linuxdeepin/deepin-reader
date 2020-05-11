@@ -11,7 +11,7 @@
 
 class SpinnerWidget;
 class SheetBrowserPDF;
-class SheetSidebarPDF;
+class SheetSidebar;
 class DocummentProxy;
 class SheetBrowserArea;
 class FindWidget;
@@ -124,7 +124,7 @@ private slots:
     void onAnntationMsg(const int &, const QString &);
 
 private:
-    SheetSidebarPDF *m_sidebar = nullptr;
+    SheetSidebar *m_sidebar = nullptr;
     SheetBrowserPDF *m_browser = nullptr;
     QStackedWidget *m_pRightWidget = nullptr;
     SpinnerWidget  *m_pSpinnerWidget = nullptr;
