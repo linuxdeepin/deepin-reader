@@ -514,8 +514,8 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext, QString &st
                 QRectF rectbound;
                 rectbound.setTopLeft(quad.points[0]);
                 rectbound.setTopRight(quad.points[1]);
-                rectbound.setBottomLeft(quad.points[2]);
-                rectbound.setBottomRight(quad.points[3]);
+                rectbound.setBottomLeft(quad.points[3]);
+                rectbound.setBottomRight(quad.points[2]);
                 if (rectbound.contains(ptf)) {
                     struuid = annote->uniqueName();
                     strtext = annote->contents();

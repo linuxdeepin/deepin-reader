@@ -148,8 +148,8 @@ void DocummentPDF::jumpToHighLight(const QString &uuid, int ipage)
                     QRectF rectbound;
                     rectbound.setTopLeft(listquad.at(0).points[0]);
                     rectbound.setTopRight(listquad.at(0).points[1]);
-                    rectbound.setBottomLeft(listquad.at(0).points[2]);
-                    rectbound.setBottomRight(listquad.at(0).points[3]);
+                    rectbound.setBottomLeft(listquad.at(0).points[3]);
+                    rectbound.setBottomRight(listquad.at(0).points[2]);
                     int xvalue = 0, yvalue = 0;
                     rectbound.setX(rectbound.x()*d->m_imagewidth);
                     rectbound.setY(rectbound.y()*d->m_imageheight);
