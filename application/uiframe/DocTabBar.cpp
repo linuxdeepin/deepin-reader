@@ -52,9 +52,9 @@ DocTabBar::DocTabBar(QWidget *parent)
 
     connect(this, SIGNAL(currentChanged(int)), SLOT(onTabChanged(int)));
 
-    connect(this, &DTabBar::tabReleaseRequested, this, &DocTabBar::handleTabReleased);
+    connect(this, &DTabBar::tabReleaseRequested, this, &DocTabBar::onTabReleased);
 
-    connect(this, &DTabBar::tabDroped, this, &DocTabBar::handleTabDroped);
+    connect(this, &DTabBar::tabDroped, this, &DocTabBar::onTabDroped);
 
     connect(this, &DTabBar::dragActionChanged, this, &DocTabBar::handleDragActionChanged);
 }
@@ -223,7 +223,7 @@ void DocTabBar::onTabChanged(int index)
 
 }
 
-void DocTabBar::handleTabReleased(int index)
+void DocTabBar::onTabReleased(int index)
 {
     if (count() <= 1)
         return;
@@ -238,7 +238,7 @@ void DocTabBar::handleTabReleased(int index)
     emit sigTabNewWindow(sheet);
 }
 
-void DocTabBar::handleTabDroped(int index, Qt::DropAction da, QObject *target)
+void DocTabBar::onTabDroped(int index, Qt::DropAction da, QObject *target)
 {
     Q_UNUSED(da)    //同程序da可以根据目标传回，跨程序全是copyAction
 

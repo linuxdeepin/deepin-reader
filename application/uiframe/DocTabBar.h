@@ -69,9 +69,9 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private slots:
-    void handleTabReleased(int index);                                  //方法测试结果为当tab从bar移除释放
+    void onTabReleased(int index);                                  //方法测试结果为当tab从bar移除释放
 
-    void handleTabDroped(int index, Qt::DropAction da, QObject *target);//方法测试结果为当tab添加到其他的bar里释放
+    void onTabDroped(int index, Qt::DropAction da, QObject *target);//方法测试结果为当tab添加到其他的bar里释放
 
     void onDroped();
 
