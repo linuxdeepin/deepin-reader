@@ -25,19 +25,20 @@ struct DocOperation {
     int  leftIndex              = 0;
     int  currentPage            = 1;
 };
+
 class DocSheet : public Dtk::Widget::DSplitter
 {
     Q_OBJECT
     Q_DISABLE_COPY(DocSheet)
 
 public:
-    explicit DocSheet(Dr::FileType type, Dtk::Widget::DWidget *parent = nullptr);
+    explicit DocSheet(Dr::FileType type, QString filePath, Dtk::Widget::DWidget *parent = nullptr);
 
     virtual ~DocSheet() override;
 
-    virtual void openFile(const QString &filePath);
+    virtual void openFile();
 
-    virtual bool openFileExec(const QString &filePath);
+    virtual bool openFileExec();
 
     virtual void pageJump(int page);
 
@@ -67,6 +68,8 @@ public:
 
     virtual void setScale(double scale);
 
+    virtual void setScaleFactor(qreal scaleFactor);
+
     virtual void setFit(int fit);
 
     virtual void setBookMark(int page, int state);
@@ -76,8 +79,6 @@ public:
     virtual bool isMouseHand();
 
     virtual bool isDoubleShow();
-
-    virtual QString filePath();
 
     virtual QString filter();
 
@@ -115,6 +116,10 @@ public:
 
     virtual void print();
 
+    QString filePath();
+
+    QList<qreal> scaleFactorList();
+
     Dr::FileType type();
 
     void showTips(const QString &tips, int iconIndex = 0);
@@ -131,7 +136,7 @@ public:
 
     void quitMagnifer();
 
-    DocOperation operation();
+    DocOperation &operation();
 
 signals:
     void sigOpenFileResult(const QString &, const bool &);
@@ -147,6 +152,7 @@ signals:
     void sigFindOperation(const int &);
 
 private:
+    QString      m_filePath;
     Dr::FileType m_type;
     DocOperation m_operation;
     QString      m_uuid;

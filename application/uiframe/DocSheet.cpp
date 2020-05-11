@@ -25,6 +25,7 @@
 #include <QMimeData>
 #include <QUuid>
 
+#include "database.h"
 #include "widgets/SpinnerWidget.h"
 #include "pdfControl/SheetBrowserPDF.h"
 #include "CentralDocPage.h"
@@ -36,24 +37,26 @@
 DWIDGET_USE_NAMESPACE
 
 QMap<QString, DocSheet *> DocSheet::g_map;
-DocSheet::DocSheet(Dr::FileType type, DWidget *parent)
-    : DSplitter(parent), m_type(type)
+DocSheet::DocSheet(Dr::FileType type, QString filePath, DWidget *parent)
+    : DSplitter(parent), m_type(type), m_filePath(filePath)
 {
     m_uuid = QUuid::createUuid().toString();
     g_map[m_uuid] = this;
+    Database::instance()->readOperation(this);
 }
 
 DocSheet::~DocSheet()
 {
+    Database::instance()->saveOperation(this);
     g_map.remove(m_uuid);
 }
 
-void DocSheet::openFile(const QString &filePath)
+void DocSheet::openFile()
 {
 
 }
 
-bool DocSheet::openFileExec(const QString &filePath)
+bool DocSheet::openFileExec()
 {
     return false;
 }
@@ -128,6 +131,11 @@ void DocSheet::setScale(double scale)
 
 }
 
+void DocSheet::setScaleFactor(qreal scaleFactor)
+{
+
+}
+
 void DocSheet::setFit(int fit)
 {
 
@@ -188,6 +196,13 @@ void DocSheet::print()
 
 }
 
+QList<qreal> DocSheet::scaleFactorList()
+{
+    QList<qreal> dataList = {0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3, 4, 5};
+
+    return  dataList;
+}
+
 QUuid DocSheet::getUuid(DocSheet *sheet)
 {
     return g_map.key(sheet);
@@ -203,7 +218,7 @@ DocSheet *DocSheet::getSheet(QString uuid)
 
 QString DocSheet::filePath()
 {
-    return "";
+    return m_filePath;
 }
 
 QString DocSheet::filter()
@@ -329,7 +344,7 @@ void DocSheet::quitMagnifer()
     doc->quitMagnifer();
 }
 
-DocOperation DocSheet::operation()
+DocOperation &DocSheet::operation()
 {
     return m_operation;
 }

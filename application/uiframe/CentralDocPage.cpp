@@ -123,13 +123,13 @@ void CentralDocPage::openFile(QString &filePath)
     int fileType = Dr::fileType(filePath);
 
     if (Dr::PDF == fileType) {
-        DocSheet *sheet = new DocSheetPDF(this);
+        DocSheet *sheet = new DocSheetPDF(filePath, this);
 
         connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
         connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
         connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
 
-        sheet->openFile(filePath);
+        sheet->openFile();
 
         m_pStackedLayout->addWidget(sheet);
 
@@ -141,13 +141,13 @@ void CentralDocPage::openFile(QString &filePath)
 
         emit sigSheetCountChanged(m_pStackedLayout->count());
 
-    } /*else if (Dr::DjVu == fileType) {
-        DocSheet *sheet = new DocSheetDJVU(this);
+    } else if (Dr::DjVu == fileType) {
+        DocSheet *sheet = new DocSheetDJVU(filePath, this);
 
         connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
         connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
 
-        if (!sheet->openFileExec(filePath))
+        if (!sheet->openFileExec())
             return;
 
         m_pStackedLayout->addWidget(sheet);
@@ -158,7 +158,7 @@ void CentralDocPage::openFile(QString &filePath)
 
         onOpened(sheet, true);
 
-    } */else {
+    } else {
         showTips(tr("The format is not supported"), 1);
     }
 

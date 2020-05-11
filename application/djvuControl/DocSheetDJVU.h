@@ -10,7 +10,7 @@ class DocSheetDJVU : public DocSheet
     Q_DISABLE_COPY(DocSheetDJVU)
 
 public:
-    explicit DocSheetDJVU(QWidget *parent = nullptr);
+    explicit DocSheetDJVU(QString filePath, QWidget *parent = nullptr);
 
     ~DocSheetDJVU();
 
@@ -18,9 +18,12 @@ public:
 
     void zoomout() override;
 
-    bool openFileExec(const QString &filePath);
+    void setScaleFactor(qreal scaleFactor)override;
+
+    bool openFileExec()override;
 
 private:
+    SheetSidebar     *m_sidebar = nullptr;
     SheetBrowserDJVU *m_browser = nullptr;
 };
 

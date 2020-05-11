@@ -35,8 +35,8 @@
 #include "djvuControl/SheetBrowserDJVU.h"
 #include "business/PrintManager.h"
 
-DocSheetPDF::DocSheetPDF(DWidget *parent)
-    : DocSheet(Dr::PDF, parent)
+DocSheetPDF::DocSheetPDF(QString filePath, DWidget *parent)
+    : DocSheet(Dr::PDF, filePath, parent)
 {
     m_pRightWidget = new QStackedWidget(this);
     m_pSpinnerWidget = new SpinnerWidget(this);
@@ -93,9 +93,9 @@ DocSheetPDF::~DocSheetPDF()
 
 }
 
-void DocSheetPDF::openFile(const QString &filePath)
+void DocSheetPDF::openFile()
 {
-    m_browser->OpenFilePath(filePath);
+    m_browser->OpenFilePath(filePath());
 }
 
 void DocSheetPDF::pageJump(int page)
@@ -357,11 +357,6 @@ void DocSheetPDF::onAnntationMsg(const int &msg, const QString &text)
         int page = t_strList.at(2).trimmed().toInt();
         m_sidebar->handleUpdateThumbnail(page);
     }
-}
-
-QString DocSheetPDF::filePath()
-{
-    return m_browser->getFilePath();
 }
 
 QString DocSheetPDF::filter()

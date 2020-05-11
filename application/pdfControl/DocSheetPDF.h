@@ -22,11 +22,11 @@ class DocSheetPDF : public DocSheet
     Q_DISABLE_COPY(DocSheetPDF)
 
 public:
-    explicit DocSheetPDF(Dtk::Widget::DWidget *parent = nullptr);
+    explicit DocSheetPDF(QString filePath, Dtk::Widget::DWidget *parent = nullptr);
 
     virtual ~DocSheetPDF() override;
 
-    void openFile(const QString &filePath)override;
+    void openFile()override;
 
     void pageJump(int page)override;
 
@@ -65,8 +65,6 @@ public:
     bool isMouseHand()override;
 
     bool isDoubleShow()override;
-
-    QString filePath()override;
 
     QString filter()override;
 

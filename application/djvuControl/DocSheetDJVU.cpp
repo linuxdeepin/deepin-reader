@@ -1,11 +1,21 @@
 #include "DocSheetDJVU.h"
+#include "lpreviewControl/SheetSidebar.h"
 #include "SheetBrowserDJVU.h"
 
 #include <QDebug>
 
-DocSheetDJVU::DocSheetDJVU(QWidget *parent) : DocSheet(Dr::DjVu, parent)
+DocSheetDJVU::DocSheetDJVU(QString filePath, QWidget *parent) : DocSheet(Dr::DjVu, filePath, parent)
 {
+    setHandleWidth(5);
+    setChildrenCollapsible(false);  //  子部件不可拉伸到 0
+
+    m_sidebar = new SheetSidebar(this);
     m_browser = new SheetBrowserDJVU(this);
+
+    addWidget(m_sidebar);
+    addWidget(m_browser);
+
+    setAcceptDrops(true);
 }
 
 DocSheetDJVU::~DocSheetDJVU()
@@ -15,19 +25,40 @@ DocSheetDJVU::~DocSheetDJVU()
 
 void DocSheetDJVU::zoomin()
 {
-    QList<int> dataList = {10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500};
+    QList<qreal> dataList = scaleFactorList();
 
-    m_browser->setScale(Dr::ScaleFactorMode, 150, Dr::RotateBy0);
+    for (int i = 0; i < dataList.count(); ++i) {
+        if (dataList[i] > (operation().scaleFactor)) {
+            setScaleFactor(dataList[i]);
+            return;
+        }
+    }
 }
 
 void DocSheetDJVU::zoomout()
 {
-    m_browser->setScale(Dr::ScaleFactorMode, 100, Dr::RotateBy90);
+    QList<qreal> dataList = scaleFactorList();
+
+    for (int i = dataList.count() - 1; i >= 0; --i) {
+        if (dataList[i] < (operation().scaleFactor)) {
+            setScaleFactor(dataList[i]);
+            return;
+        }
+    }
 }
 
-bool DocSheetDJVU::openFileExec(const QString &filePath)
+void DocSheetDJVU::setScaleFactor(qreal scaleFactor)
 {
-    if (m_browser->openFilePath(filePath)) {
+    operation().scaleMode = Dr::ScaleFactorMode;
+    operation().scaleFactor = scaleFactor;
+
+    m_browser->setScale(Dr::ScaleFactorMode, scaleFactor, operation().rotation);
+    emit sigFileChanged(this);
+}
+
+bool DocSheetDJVU::openFileExec()
+{
+    if (m_browser->openFilePath(filePath())) {
         //readOperation();
 
         m_browser->loadPages(operation().scaleMode, operation().scaleFactor, operation().rotation, operation().mouseShape, operation().currentPage);

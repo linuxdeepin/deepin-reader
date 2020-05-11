@@ -64,7 +64,6 @@ void SheetBrowserDJVU::setScale(Dr::ScaleMode mode, double scaleFactor, Dr::Rota
 //    //
 //    my_qgv->centerOn(center);
 
-
     m_mode   = mode;
     m_rotion = rotation;
 
