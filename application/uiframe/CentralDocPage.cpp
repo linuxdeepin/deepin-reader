@@ -585,7 +585,7 @@ void CentralDocPage::handleShortcut(const QString &s)
             getCurSheet()->setRotateLeft();
     } else if (s == KeyStr::g_ctrl_shift_r) {
         if (getCurSheet())
-            getCurSheet()->setRotateLeft();
+            getCurSheet()->setRotateRight();
     }  else if (s == KeyStr::g_ctrl_larger) {
         if (getCurSheet())
             getCurSheet()->zoomin();
