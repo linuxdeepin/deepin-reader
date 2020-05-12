@@ -149,17 +149,23 @@ void DataStackedWidget::adaptWindowSize(const double &scale)
 
 void DataStackedWidget::handleUpdateThumbnail(const int &page)
 {
-    if (m_pThWidget) {
-        m_pThWidget->updateThumbnail(page);
-    }
-    if (m_pBookMarkWidget) {
-        m_pBookMarkWidget->updateThumbnail(page);
-    }
-    if (m_pNotesWidget) {
-        m_pNotesWidget->updateThumbnail(page);
-    }
-    if (m_pSearchResWidget) {
-        m_pSearchResWidget->updateThumbnail(page);
+    QWidget *widget = this->currentWidget();
+    if (widget == m_pThWidget) {
+        if (m_pThWidget) {
+            m_pThWidget->updateThumbnail(page);
+        }
+    }  else if (widget == m_pBookMarkWidget) {
+        if (m_pBookMarkWidget) {
+            m_pBookMarkWidget->updateThumbnail(page);
+        }
+    } else if (widget == m_pNotesWidget) {
+        if (m_pNotesWidget) {
+            m_pNotesWidget->updateThumbnail(page);
+        }
+    } else if (widget == m_pSearchResWidget) {
+        if (m_pSearchResWidget) {
+            m_pSearchResWidget->updateThumbnail(page);
+        }
     }
 }
 
