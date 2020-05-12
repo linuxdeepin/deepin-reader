@@ -90,13 +90,15 @@ void ImageListView::handleOpenSuccess()
         int pagesNum = noteLst.size();
         for (int index = 0; index < pagesNum; index++) {
             const stHighlightContent &stH = noteLst.at(index);
-            int pageIndex = stH.ipage;
-            ImagePageInfo_t tImagePageInfo;
-            tImagePageInfo.iPage = pageIndex;
-            tImagePageInfo.iType = Note_Type::NOTE_HIGHLIGHT;
-            tImagePageInfo.struuid = stH.struuid;
-            tImagePageInfo.strcontents = stH.strcontents;
-            pageSrclst << tImagePageInfo;
+            if (!stH.strcontents.isEmpty()) {
+                int pageIndex = stH.ipage;
+                ImagePageInfo_t tImagePageInfo;
+                tImagePageInfo.iPage = pageIndex;
+                tImagePageInfo.iType = Note_Type::NOTE_HIGHLIGHT;
+                tImagePageInfo.struuid = stH.struuid;
+                tImagePageInfo.strcontents = stH.strcontents;
+                pageSrclst << tImagePageInfo;
+            }
         }
         m_imageModel->initModelLst(pageSrclst, true);
     }
