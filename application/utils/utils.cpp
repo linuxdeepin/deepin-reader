@@ -673,10 +673,11 @@ QString Utils::getElidedText(const QFontMetrics &fontMetrics, const QSize &size,
     int textLength = text.length();
     QString tmptext;
     for (int index = 0; index < textLength; index++) {
-        tmptext = text.left(index + 1);
-        if (fontMetrics.boundingRect(0, 0, size.width(), size.height(), alignment | Qt::TextWrapAnywhere, tmptext + QString("......")).height() > size.height()) {
+        const QString &ltext = text.left(index + 1);
+        if (fontMetrics.boundingRect(0, 0, size.width(), size.height(), alignment | Qt::TextWrapAnywhere, ltext + QString("...")).height() > size.height()) {
             break;
         }
+        tmptext = ltext;
     }
     if (tmptext.length() < textLength)
         tmptext.append("...");
