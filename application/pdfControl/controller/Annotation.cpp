@@ -63,14 +63,16 @@ void Annotation::DeletePageIconAnnotation(const QString &msgContent)
 {
     if (fvmPrivate->m_pProxy) {
         QStringList sList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-        if (sList.size() == 2) {
+        if (sList.size() == 3) {
             QString sUuid = sList.at(0);
             QString sPage = sList.at(1);
+            int firstAdd = sList.at(2).toInt();
 
             fvmPrivate->m_pProxy->removeAnnotation(sUuid, sPage.toInt());
 
             if (sUuid != "") {
-                emit fvmPrivate->q_func()->sigAnntationMsg(MSG_NOTE_PAGE_DELETE_ITEM, sUuid);
+                if (firstAdd == 0)
+                    emit fvmPrivate->q_func()->sigAnntationMsg(MSG_NOTE_PAGE_DELETE_ITEM, sUuid);
                 fvmPrivate->m_pProxyData->setFileChanged(true);
             }
         }
@@ -173,12 +175,17 @@ void Annotation::RemoveHighLight(const QString &msgContent)
             QString annoteText{""};
             QString t_strUUid{""};
 
-            fvmPrivate->m_pProxy->annotationClicked(tempPoint, annoteText, t_strUUid);
+            bool isHighLight = fvmPrivate->m_pProxy->annotationClicked(tempPoint, annoteText, t_strUUid);
 
             QString sUuid = fvmPrivate->m_pProxy->removeAnnotation(tempPoint);
             if (sUuid != "") {
-                if (annoteText != "")
+                if (isHighLight) {
+                    if (annoteText != "") {
+                        emit fvmPrivate->q_func()->sigAnntationMsg(MSG_NOTE_DELETE_ITEM, sUuid);
+                    }
+                } else {
                     emit fvmPrivate->q_func()->sigAnntationMsg(MSG_NOTE_DELETE_ITEM, sUuid);
+                }
                 fvmPrivate->m_pProxyData->setFileChanged(true);
                 int page = 0;
                 page = fvmPrivate->m_pProxy->pointInWhichPage(tempPoint);

@@ -161,12 +161,12 @@ void NoteViewWidget::__PageNoteHideEvent()
                                      m_pNotePage;
                 emit sigNoteViewMsg(MSG_NOTE_PAGE_ADD_CONTENT, msgContent);
             } else {
-                QString sContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage;
+                QString sContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage + Constant::sQStringSep + "1";
                 emit sigNoteViewMsg(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
             }
         } else {
             if (sText == "") {
-                QString sContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage;
+                QString sContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage + Constant::sQStringSep + "0";
                 emit sigNoteViewMsg(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
             } else if (sText != m_strNote) {  //  只有 和 原来已有注释内容不一样, 才会提示 保存
                 QString msgContent = m_pNoteUuid  + Constant::sQStringSep +

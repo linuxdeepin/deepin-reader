@@ -110,6 +110,7 @@ void NotesWidget::DeleteItemByKey()
         if (nType == NOTE_HIGHLIGHT) {
             emit sigDeleteContent(MSG_NOTE_DELETE_CONTENT, sContent);
         } else {
+            sContent += Constant::sQStringSep + "0";
             emit sigDeleteContent(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
         }
     }
