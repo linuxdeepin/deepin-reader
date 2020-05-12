@@ -32,6 +32,11 @@ void DocSheetDJVU::pageJump(int page)
     m_browser->setCurrentPage(page);
 }
 
+void DocSheetDJVU::indexJump(int index)
+{
+    m_browser->setCurrentPage(index + 1);
+}
+
 void DocSheetDJVU::pageFirst()
 {
     m_browser->setCurrentPage(1);

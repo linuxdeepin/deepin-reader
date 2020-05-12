@@ -74,7 +74,7 @@ void ThumbnailWidget::handleRotate(int)
 void ThumbnailWidget::handlePage(int page)
 {
     m_pImageListView->scrollToIndex(page);
-    m_pPageWidget->setPage(page);
+    m_pPageWidget->setIndex(page);
 }
 
 void ThumbnailWidget::onUpdateTheme()

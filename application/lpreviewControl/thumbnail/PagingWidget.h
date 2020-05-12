@@ -43,7 +43,7 @@ public:
 
     void handleOpenSuccess();
 
-    void setPage(int page);
+    void setIndex(int index);
 
 private slots:
     void slotPrePageBtnClicked();
@@ -66,7 +66,7 @@ private:
     DIconButton         *m_pNextPageBtn = nullptr;          // 按钮 后一页
     DLineEdit           *m_pJumpPageLineEdit = nullptr;     // 输入框 跳转页码
     DocSheet            *m_sheet;
-    int                  m_curPage = 0;
+    int                  m_curIndex = 0;
 };
 
 #endif // PAGINGWIDGET_H

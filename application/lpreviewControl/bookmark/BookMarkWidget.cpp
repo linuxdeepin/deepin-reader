@@ -80,7 +80,7 @@ void BookMarkWidget::prevPage()
     int curPage = m_pImageListView->currentIndex().row() - 1;
     if (curPage < 0)
         return;
-    m_sheet->pageJump(m_pImageListView->getPageIndexForModelIndex(curPage));
+    m_sheet->indexJump(m_pImageListView->getPageIndexForModelIndex(curPage));
 }
 
 void BookMarkWidget::nextPage()
@@ -88,7 +88,7 @@ void BookMarkWidget::nextPage()
     int curPage = m_pImageListView->currentIndex().row() + 1;
     if (curPage >= m_pImageListView->model()->rowCount())
         return;
-    m_sheet->pageJump(m_pImageListView->getPageIndexForModelIndex(curPage));
+    m_sheet->indexJump(m_pImageListView->getPageIndexForModelIndex(curPage));
 }
 
 void BookMarkWidget::handleOpenSuccess()

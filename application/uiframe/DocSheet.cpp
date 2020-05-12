@@ -62,7 +62,7 @@ bool DocSheet::openFileExec()
     return false;
 }
 
-void DocSheet::pageJump(int page)
+void DocSheet::indexJump(int index)
 {
     qDebug() << "unrealized";
 }

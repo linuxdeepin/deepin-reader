@@ -42,7 +42,7 @@ public:
 
     virtual bool openFileExec();
 
-    virtual void pageJump(int page);
+    virtual void indexJump(int index);
 
     virtual void pageFirst();
 
@@ -51,6 +51,8 @@ public:
     virtual void pageNext();
 
     virtual void pagePrev();
+
+    virtual void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage = 0);
 
     virtual void zoomin();  //放大一级
 
@@ -143,7 +145,6 @@ public:
     virtual void docBasicInfo(stFileInfo &info);
     virtual void setAutoPlaySlide(bool autoplay, int timemsec = 3000);
     virtual void getAllAnnotation(QList<stHighlightContent> &listres);
-    virtual void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage = 0);
 
     virtual double getMaxZoomratio();
 

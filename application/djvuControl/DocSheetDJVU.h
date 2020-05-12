@@ -14,7 +14,9 @@ public:
 
     ~DocSheetDJVU()override;
 
-    void pageJump(int page)override;
+    void pageJump(int page);
+
+    void indexJump(int index)override;
 
     void pageFirst()override;
 

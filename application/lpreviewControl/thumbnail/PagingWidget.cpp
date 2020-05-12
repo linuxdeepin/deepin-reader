@@ -116,14 +116,14 @@ void PagingWidget::__SetBtnState(const int &currntPage, const int &totalPage)
     }
 }
 
-void PagingWidget::setPage(int page)
+void PagingWidget::setIndex(int index)
 {
     if (nullptr == m_sheet)
         return;
 
-    m_curPage = page;
+    m_curIndex = index;
     int totalPage = m_sheet->pagesNumber();
-    int inputData = page;
+    int inputData = index;
     int currntPage = inputData + 1;     //  + 1 是为了 数字 从1 开始显示
     __SetBtnState(currntPage, totalPage);
 
@@ -159,8 +159,8 @@ void PagingWidget::handleOpenSuccess()
     }
 
     m_pTotalPagesLab->setText(QString("/ %1").arg(totalPage));
-    int nCurPage = m_sheet->currentIndex();
-    setPage(nCurPage);
+    int currentIndex = m_sheet->currentIndex();
+    setIndex(currentIndex);
 }
 
 //  输入框  敲回车键 响应
@@ -175,8 +175,8 @@ void PagingWidget::SlotJumpPageLineEditReturnPressed()
 
 void PagingWidget::onEditFinished()
 {
-    if (m_curPage > 0)
-        setPage(m_curPage);
+    if (m_curIndex > 0)
+        setIndex(m_curIndex);
 }
 
 void PagingWidget::__NormalChangePage()
@@ -186,7 +186,7 @@ void PagingWidget::__NormalChangePage()
     if (iPage <= 0 || iPage > m_sheet->pagesNumber()) {
         m_sheet->showTips(tr("Invalid page number"));
     } else {
-        m_sheet->pageJump(iPage - 1);
+        m_sheet->indexJump(iPage - 1);
         setFocus();
     }
 }
@@ -198,7 +198,7 @@ void PagingWidget::__PageNumberJump()
     int iPage = m_sheet->label2pagenum(sText);
 
     if (iPage > -1 && iPage < nPageSum) {   //  输入的页码 必须在 0-最大值 之间, 才可以
-        m_sheet->pageJump(iPage);
+        m_sheet->indexJump(iPage);
         setFocus();
     } else {
         m_sheet->showTips(tr("Invalid page number"));

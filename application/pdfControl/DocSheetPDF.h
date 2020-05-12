@@ -28,7 +28,7 @@ public:
 
     void openFile()override;
 
-    void pageJump(int page)override;
+    void indexJump(int index)override;
 
     void pageFirst()override;
 
