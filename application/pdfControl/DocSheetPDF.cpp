@@ -160,7 +160,7 @@ void DocSheetPDF::pagePrev()
 
 void DocSheetPDF::zoomin()
 {
-    QList<int> dataList = {10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500};
+    QList<double> dataList = {10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500};
 
     for (int i = 0; i < dataList.count(); ++i) {
         if (dataList[i] > getOper(Scale).toDouble()) {
@@ -174,10 +174,10 @@ void DocSheetPDF::zoomin()
 
 void DocSheetPDF::zoomout()
 {
-    QList<int> dataList = {10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500};
+    QList<double> dataList = {10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500};
 
     for (int i = dataList.count() - 1; i >= 0; --i) {
-        if (dataList[i] < getOper(Scale).toInt()) {
+        if (dataList[i] < getOper(Scale).toDouble()) {
             setFit(NO_ADAPTE_State);
             setScale(dataList[i]);
             emit sigFileChanged(this);

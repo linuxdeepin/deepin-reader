@@ -59,7 +59,7 @@ bool Database::prepareOperation()
 
     QSqlQuery query(m_database);
     query.exec("CREATE TABLE operation "
-               "(filePath TEXT primary key,"
+               "(filePath TEXT primary key"
                ",layoutMode INTEGER"
                ",mouseShape INTEGER"
                ",scaleMode INTEGER"
@@ -132,6 +132,7 @@ Database::Database(QObject *parent) : QObject(parent)
 
     m_database = QSqlDatabase::addDatabase("QSQLITE");
     m_database.setDatabaseName(QDir(path).filePath("database"));
+    qDebug() << QDir(path);
     m_database.open();
 
     if (m_database.isOpen()) {

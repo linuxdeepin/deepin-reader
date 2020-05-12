@@ -46,7 +46,9 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
+
     void mousePressEvent(QMouseEvent *event) override;
+
     void keyPressEvent(QKeyEvent *event) override;
 
 protected slots:

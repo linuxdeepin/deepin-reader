@@ -166,6 +166,16 @@ void DocSheet::handleOpenSuccess()
 
 }
 
+void DocSheet::showSidebar()
+{
+
+}
+
+void DocSheet::hideSidebar()
+{
+
+}
+
 void DocSheet::setSidebarVisible(bool isVisible)
 {
 

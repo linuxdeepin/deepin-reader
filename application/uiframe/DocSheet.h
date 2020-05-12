@@ -36,6 +36,8 @@ public:
 
     virtual ~DocSheet() override;
 
+    virtual bool isOpen();
+
     virtual void openFile();
 
     virtual bool openFileExec();
@@ -102,6 +104,10 @@ public:
 
     virtual void handleOpenSuccess();
 
+    virtual void showSidebar();
+
+    virtual void hideSidebar();
+
     virtual void setSidebarVisible(bool isVisible);
 
     virtual void copySelectedText();                    //复制选中文字
@@ -114,10 +120,6 @@ public:
 
     virtual void print();
 
-    QString filePath();
-
-    QList<qreal> scaleFactorList();
-
     //replace docProxy api 2020.05.11
     virtual Outline outline();
     virtual int getPageSNum();
@@ -125,7 +127,6 @@ public:
     virtual int  pointInWhichPage(QPoint pos);
     virtual int label2pagenum(QString label);
 
-    virtual bool isOpen();
     virtual bool haslabel();
     virtual bool closeMagnifier();
     virtual bool showSlideModel();
@@ -145,6 +146,10 @@ public:
 
     virtual QString pagenum2label(int index);
     virtual QString addIconAnnotation(const QPoint &pos, const QColor &color = Qt::yellow, TextAnnoteType_Em type = TextAnnoteType_Note);
+
+    QString filePath();
+
+    QList<qreal> scaleFactorList();
 
     Dr::FileType type();
 
@@ -166,11 +171,13 @@ public:
 
 signals:
     void sigOpenFileResult(const QString &, const bool &);
+
     void sigFileChanged(DocSheet *);    //被修改了 书签 笔记
-    void sigScaleChanged(DocSheet *);
-    void sigTotateChanged();
+
     void sigOpened(DocSheet *, bool);
+
     void sigFindOperation(const int &);
+
     void signalAutoplaytoend();
 
 private:
