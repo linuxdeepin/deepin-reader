@@ -408,6 +408,8 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
 
         m_pDefaultMenu->execMenu(m_sheet, tempPoint, clickPage);
     }
+
+    m_pProxy->mouseSelectTextClear();
 }
 
 void SheetBrowserPDFPrivate::onPageBookMarkButtonClicked(int page, bool state)
