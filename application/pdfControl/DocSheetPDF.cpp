@@ -397,12 +397,6 @@ void DocSheetPDF::setOper(const int &type, const QVariant &value)
     m_browser->setOper(type, value);
 }
 
-void DocSheetPDF::OnOpenSliderShow()
-{
-    m_bOldState = m_sidebar->isVisible();
-    m_sidebar->setVisible(false);
-}
-
 void DocSheetPDF::exitSliderShow()
 {
     m_sidebar->setVisible(m_bOldState);
@@ -596,6 +590,9 @@ bool DocSheetPDF::closeMagnifier()
 
 bool DocSheetPDF::showSlideModel()
 {
+    m_bOldState = m_sidebar->isVisible();
+    m_sidebar->setVisible(false);
+
     DocummentProxy *docProxy = m_browser->GetDocProxy();
     if (docProxy) {
         return docProxy->showSlideModel();

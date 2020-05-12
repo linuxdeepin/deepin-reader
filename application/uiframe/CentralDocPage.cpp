@@ -651,13 +651,12 @@ void CentralDocPage::openSlide()
 
         m_pTabBar->setVisible(false);
 
-        sheet->OnOpenSliderShow();
-
         emit sigNeedShowState(0);
 
         m_slideSheet = sheet;
 
         sheet->setAutoPlaySlide(true);
+
         sheet->showSlideModel();
 
         if (m_pctrlwidget == nullptr) {
@@ -689,6 +688,7 @@ void CentralDocPage::quitSlide()
         if (!m_slideSheet.isNull()) {
 
             m_slideSheet->exitSliderShow();
+
             m_slideSheet->exitSlideModel();
 
             delete m_pctrlwidget;

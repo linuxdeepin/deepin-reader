@@ -80,8 +80,6 @@ public:
 
     void saveOper()override;
 
-    void OnOpenSliderShow()override;
-
     void exitSliderShow()override;
 
     void handleSearch()override;

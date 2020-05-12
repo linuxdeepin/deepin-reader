@@ -53,157 +53,159 @@ DocSheet::~DocSheet()
 
 void DocSheet::openFile()
 {
-
+    qDebug() << "unrealized";
 }
 
 bool DocSheet::openFileExec()
 {
+    qDebug() << "unrealized";
     return false;
 }
 
 void DocSheet::pageJump(int page)
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::pageFirst()
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::pageLast()
 {
+    qDebug() << "unrealized";
 
 }
 
 void DocSheet::pageNext()
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::pagePrev()
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::zoomin()
 {
-    qDebug() << "DocSheet::zoomin()";
+    qDebug() << "unrealized";
 }
 
 void DocSheet::zoomout()
 {
-    qDebug() << "DocSheet::zoomout()";
+    qDebug() << "unrealized";
 }
 
 void DocSheet::setDoubleShow(bool isShow)
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::setRotateLeft()
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::setRotateRight()
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::setFileChanged(bool hasChanged)
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::setMouseDefault()
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::setMouseHand()
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::setMouseShape(Dr::MouseShape shape)
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::setScale(double scale)
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::setScaleFactor(qreal scaleFactor)
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::setFit(int fit)
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::setScaleMode(Dr::ScaleMode mode)
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::setBookMark(int page, int state)
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::showNoteWidget(int page, const QString &uuid, const int &type)
 {
-
+    qDebug() << "unrealized";
 }
 
 bool DocSheet::isMouseHand()
 {
-
+    qDebug() << "unrealized";
 }
 
 bool DocSheet::isDoubleShow()
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::handleOpenSuccess()
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::setSidebarVisible(bool isVisible)
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::copySelectedText()
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::highlightSelectedText()
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::addSelectedTextHightlightAnnotation()
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::openSideBar()
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::print()
 {
-
+    qDebug() << "unrealized";
 }
 
 QList<qreal> DocSheet::scaleFactorList()
@@ -215,111 +217,128 @@ QList<qreal> DocSheet::scaleFactorList()
 
 int DocSheet::getPageSNum()
 {
+    qDebug() << "unrealized";
     return -1;
 }
 
 int DocSheet::currentPageNo()
 {
+    qDebug() << "unrealized";
     return -1;
 }
 
 bool DocSheet::getImage(int, QImage &, double, double)
 {
+    qDebug() << "unrealized";
     return false;
 }
 
 void DocSheet::docBasicInfo(stFileInfo &)
 {
-
+    qDebug() << "unrealized";
 }
 
 bool DocSheet::getAutoPlaySlideStatu()
 {
+    qDebug() << "unrealized";
     return false;
 }
 
 void DocSheet::setAutoPlaySlide(bool, int)
 {
-
+    qDebug() << "unrealized";
 }
 
 double DocSheet::getMaxZoomratio()
 {
+    qDebug() << "unrealized";
     return 0;
 }
 
 void DocSheet::getAllAnnotation(QList<stHighlightContent> &)
 {
-
+    qDebug() << "unrealized";
 }
 
 bool DocSheet::getImageMax(int, QImage &, double)
 {
+    qDebug() << "unrealized";
     return false;
 }
 
 bool DocSheet::setBookMarkState(int, bool)
 {
+    qDebug() << "unrealized";
     return false;
 }
 
 Outline DocSheet::outline()
 {
+    qDebug() << "unrealized";
     return Outline();
 }
 
 void DocSheet::jumpToOutline(const qreal &, const qreal &, unsigned int)
 {
-
+    qDebug() << "unrealized";
 }
 
 bool DocSheet::isOpen()
 {
+    qDebug() << "unrealized";
     return false;
 }
 
 QString DocSheet::addIconAnnotation(const QPoint &, const QColor &, TextAnnoteType_Em)
 {
+    qDebug() << "unrealized";
     return "";
 }
 
 int  DocSheet::pointInWhichPage(QPoint)
 {
+    qDebug() << "unrealized";
     return -1;
 }
 
 void DocSheet::jumpToHighLight(const QString &, int)
 {
-
+    qDebug() << "unrealized";
 }
 
 QString DocSheet::pagenum2label(int)
 {
+    qDebug() << "unrealized";
     return QString();
 }
 
 bool DocSheet::haslabel()
 {
+    qDebug() << "unrealized";
     return false;
 }
 
 int DocSheet::label2pagenum(QString label)
 {
+    qDebug() << "unrealized";
     return -1;
 }
 
 bool DocSheet::closeMagnifier()
 {
+    qDebug() << "unrealized";
     return false;
 }
 
 bool DocSheet::showSlideModel()
 {
+    qDebug() << "unrealized";
     return false;
 }
 
 bool DocSheet::exitSlideModel()
 {
+    qDebug() << "unrealized";
     return false;
 }
 
@@ -343,32 +362,36 @@ QString DocSheet::filePath()
 
 QString DocSheet::filter()
 {
+    qDebug() << "unrealized";
     return "";
 }
 
 bool DocSheet::getFileChanged()
 {
+    qDebug() << "unrealized";
     return false;
 }
 
 void DocSheet::saveOper()
 {
-
+    qDebug() << "unrealized";
 }
 
 bool DocSheet::saveData()
 {
+    qDebug() << "unrealized";
     return false;
 }
 
 bool DocSheet::saveAsData(QString filePath)
 {
+    qDebug() << "unrealized";
     return false;
 }
 
 void DocSheet::setOper(const int &, const QVariant &)
 {
-
+    qDebug() << "unrealized";
 }
 
 QVariant DocSheet::getOper(int type)
@@ -376,19 +399,14 @@ QVariant DocSheet::getOper(int type)
     return -1;
 }
 
-void DocSheet::OnOpenSliderShow()
-{
-
-}
-
 void DocSheet::exitSliderShow()
 {
-
+    qDebug() << "unrealized";
 }
 
 void DocSheet::handleSearch()
 {
-
+    qDebug() << "unrealized";
 }
 
 Dr::FileType DocSheet::type()

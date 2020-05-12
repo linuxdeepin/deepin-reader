@@ -1,11 +1,13 @@
 #include "SheetBrowserDJVU.h"
 #include "document/djvumodel.h"
 #include "SheetBrowserDJVUItem.h"
+#include "DocSheet.h"
 
 #include <QDebug>
 #include <QGraphicsItem>
 #include <QScrollBar>
 #include <QTimer>
+#include <QApplication>
 
 SheetBrowserDJVU::SheetBrowserDJVU(QWidget *parent) : QGraphicsView(parent)
 {
@@ -58,7 +60,7 @@ void SheetBrowserDJVU::setScale(Dr::ScaleMode mode, double scaleFactor, Dr::Rota
 {
     m_scaleFactor = scaleFactor;
     m_scaleMode   = mode;
-    m_rotion = rotation;
+    m_rotion      = rotation;
     deform();
 }
 
@@ -79,6 +81,24 @@ void SheetBrowserDJVU::onVerticalScrollBarValueChanged(int value)
     emit sigPageChanged(currentPage());
 }
 
+void SheetBrowserDJVU::wheelEvent(QWheelEvent *event)
+{
+    if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
+
+        DocSheet *sheet = static_cast<DocSheet *>(parentWidget());
+        if (nullptr == sheet)
+            return;
+
+        if (event->delta() > 0) {
+            sheet->zoomin();
+        } else {
+            sheet->zoomout();
+        }
+    }
+
+    QGraphicsView::wheelEvent(event);
+}
+
 void SheetBrowserDJVU::deform()
 {
     int page = currentPage();
@@ -88,7 +108,7 @@ void SheetBrowserDJVU::deform()
     case Dr::RotateBy0:
     case Dr::RotateBy180:
         if (Dr::FitToPageWidthMode == m_scaleMode) {
-            m_scaleFactor = (double)this->width()  / (double) m_maxWidth ;
+            m_scaleFactor = ((double)this->width() - 25.0)  / (double) m_maxWidth ;
         } else if (Dr::FitToPageHeightMode == m_scaleMode) {
             m_scaleFactor = (double)this->height() / (double) m_maxHeight ;
         } else {
@@ -98,7 +118,7 @@ void SheetBrowserDJVU::deform()
     case Dr::RotateBy90:
     case Dr::RotateBy270:
         if (Dr::FitToPageWidthMode == m_scaleMode) {
-            m_scaleFactor = (double)this->width()  / (double) m_maxHeight ;
+            m_scaleFactor = ((double)this->width() - 25.0)   / (double) m_maxHeight ;
         } else if (Dr::FitToPageHeightMode == m_scaleMode) {
             m_scaleFactor = (double)this->height() / (double) m_maxWidth ;
         } else {
@@ -125,6 +145,8 @@ void SheetBrowserDJVU::deform()
     }
 
     setSceneRect(0, 0, width, height);
+
+    emit sigScaleChanged(m_scaleMode, m_scaleFactor);
 }
 
 bool SheetBrowserDJVU::hasLoaded()

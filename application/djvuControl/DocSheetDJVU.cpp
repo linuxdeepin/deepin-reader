@@ -10,7 +10,11 @@ DocSheetDJVU::DocSheetDJVU(QString filePath, QWidget *parent) : DocSheet(Dr::DjV
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
     m_sidebar = new SheetSidebar(this);
+    m_sidebar->setVisible(true);
+
     m_browser = new SheetBrowserDJVU(this);
+    connect(m_browser, SIGNAL(sigPageChanged(int)), this, SLOT(onBrowserPageChanged(int)));
+    connect(m_browser, SIGNAL(sigScaleChanged(Dr::ScaleMode, qreal)), this, SLOT(onBrowserScaleChanged(Dr::ScaleMode, qreal)));
 
     addWidget(m_sidebar);
     addWidget(m_browser);
@@ -108,4 +112,18 @@ void DocSheetDJVU::setMouseShape(Dr::MouseShape shape)
 void DocSheetDJVU::setScaleMode(Dr::ScaleMode mode)
 {
     m_browser->setScale(operation().scaleMode, 0, operation().rotation);
+}
+
+void DocSheetDJVU::onBrowserPageChanged(int page)
+{
+
+}
+
+void DocSheetDJVU::onBrowserScaleChanged(Dr::ScaleMode mode, qreal scaleFactor)
+{
+    if (operation().scaleMode != mode || operation().scaleFactor != scaleFactor) {
+        operation().scaleMode = mode;
+        operation().scaleFactor = scaleFactor;
+        emit sigFileChanged(this);
+    }
 }

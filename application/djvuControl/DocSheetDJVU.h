@@ -36,6 +36,11 @@ public:
 
     void setScaleMode(Dr::ScaleMode mode)override;
 
+private slots:
+    void onBrowserPageChanged(int page);
+
+    void onBrowserScaleChanged(Dr::ScaleMode mode, qreal scaleFactor);
+
 private:
     SheetSidebar     *m_sidebar = nullptr;
     SheetBrowserDJVU *m_browser = nullptr;

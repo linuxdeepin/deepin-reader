@@ -100,8 +100,6 @@ public:
 
     virtual void saveOper();
 
-    virtual void OnOpenSliderShow();
-
     virtual void exitSliderShow();
 
     virtual void handleSearch();

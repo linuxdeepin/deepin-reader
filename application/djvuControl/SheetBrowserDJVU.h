@@ -37,21 +37,29 @@ public:
     void showEvent(QShowEvent *event);
 
 signals:
-    void sigPageChanged(int page);   //滚动到某页
+    void sigPageChanged(int page);
 
-    void sigOperationChanged();
+    void sigScaleChanged(Dr::ScaleMode mode, qreal scaleFactor);
+
+    void sigNeedZoomin();
+
+    void sigNeedZoomout();
 
 private slots:
     void onVerticalScrollBarValueChanged(int value);
 
 private:
+    void wheelEvent(QWheelEvent *event);
+
+private:
     deepin_reader::Document *m_document = nullptr;
     QList<SheetBrowserDJVUItem *> m_items;
 
-    Dr::Rotation m_rotion = Dr::RotateBy0;
-    Dr::ScaleMode m_scaleMode = Dr::ScaleFactorMode;
+    Dr::LayoutMode m_layoutMode = Dr::SinglePageMode;
+    Dr::Rotation m_rotion       = Dr::RotateBy0;
+    Dr::ScaleMode m_scaleMode   = Dr::ScaleFactorMode;
     Dr::MouseShape m_mouseShape = Dr::MouseShapeNormal;
-    double m_scaleFactor = 1;
+    qreal m_scaleFactor         = 1;
 
     int m_maxWidth = 0;     //最大一页的宽度
     int m_maxHeight = 0;    //最大一页的高度
