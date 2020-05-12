@@ -167,7 +167,7 @@ class PageBase: public DLabel
     Q_OBJECT
 public:
     PageBase(PageBasePrivate *ptr = nullptr, DWidget *parent = nullptr);
-    ~PageBase();
+    virtual ~PageBase() override;
     virtual bool getImage(QImage &image, double width, double height) = 0;
     virtual bool getSlideImage(QImage &image, double &width, double &height) = 0;
     virtual PageInterface *getInterFace() = 0;
