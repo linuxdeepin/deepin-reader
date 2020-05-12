@@ -124,7 +124,7 @@ public:
     virtual Outline outline();
     virtual int getPageSNum();
     virtual int currentPageNo();
-    virtual int  pointInWhichPage(QPoint pos);
+    virtual int pointInWhichPage(QPoint pos);
     virtual int label2pagenum(QString label);
 
     virtual bool haslabel();

@@ -174,7 +174,7 @@ void BookMarkWidget::onAddBookMarkClicked()
 void BookMarkWidget::adaptWindowSize(const double &scale)
 {
     m_pImageListView->setProperty("adaptScale", scale);
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * scale, qMax(LEFTMINHEIGHT * scale, LEFTMINHEIGHT * 1.0)));
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * scale, LEFTMINHEIGHT));
     m_pImageListView->reset();
     scrollToCurrentPage();
 }

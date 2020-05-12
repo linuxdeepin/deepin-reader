@@ -205,7 +205,7 @@ void NotesWidget::adaptWindowSize(const double &scale)
 {
     const QModelIndex &curModelIndex = m_pImageListView->currentIndex();
     m_pImageListView->setProperty("adaptScale", scale);
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * scale, qMax(LEFTMINHEIGHT * scale, LEFTMINHEIGHT * 1.0)));
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * scale, LEFTMINHEIGHT));
     m_pImageListView->reset();
     m_pImageListView->scrollToModelInexPage(curModelIndex, false);
 }

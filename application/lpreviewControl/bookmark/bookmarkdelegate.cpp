@@ -61,6 +61,7 @@ void BookMarkDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             painter->restore();
 
             //drawPagetext
+            int margin = 2;
             int bottomlineHeight = 1;
             painter->save();
             painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().windowText().color()));
@@ -68,7 +69,8 @@ void BookMarkDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             font = DFontSizeManager::instance()->t8(font);
             painter->setFont(font);
             const QString &pageText = index.data(ImageinfoType_e::IMAGE_INDEX_TEXT).toString();
-            painter->drawText(rect.right() + 18, rect.y(), option.rect.width(), option.rect.height() - bottomlineHeight, Qt::AlignTop | Qt::AlignLeft, pageText);
+            int pagetextHeight = painter->fontMetrics().height();
+            painter->drawText(rect.right() + 18, option.rect.y() + margin, option.rect.width(), pagetextHeight, Qt::AlignVCenter | Qt::AlignLeft, pageText);
             painter->restore();
 
             //drawBottomLine

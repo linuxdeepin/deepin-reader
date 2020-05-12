@@ -68,6 +68,7 @@ void ReaderImageThreadPoolManager::addgetDocImageTask(const ReaderImageParam_t &
     if (!m_docProxylst.contains(readImageParam.sheet)) {
         m_docProxylst << readImageParam.sheet;
         QVector<QPixmap> imagelst(readImageParam.sheet->getPageSNum());
+        Q_ASSERT(imagelst.size() > 0 && "pagesNum == 0");
         m_docSheetImgMap.insert(readImageParam.sheet, imagelst);
         connect(readImageParam.sheet, &QObject::destroyed, this, &ReaderImageThreadPoolManager::onDocProxyDestroyed);
     }

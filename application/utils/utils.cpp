@@ -667,3 +667,18 @@ void  Utils::copyText(const QString &sText)
         clipboard->setText(sText);
     }
 }
+
+QString Utils::getElidedText(const QFontMetrics &fontMetrics, const QSize &size, const QString &text, Qt::Alignment alignment)
+{
+    int textLength = text.length();
+    QString tmptext;
+    for (int index = 0; index < textLength; index++) {
+        tmptext = text.left(index + 1);
+        if (fontMetrics.boundingRect(0, 0, size.width(), size.height(), alignment | Qt::TextWrapAnywhere, tmptext + QString("......")).height() > size.height()) {
+            break;
+        }
+    }
+    if (tmptext.length() < textLength)
+        tmptext.append("...");
+    return tmptext;
+}

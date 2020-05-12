@@ -72,6 +72,7 @@ public:
     static QPixmap roundQPixmap(const QPixmap &img_in, int radius);
 
     static void copyText(const QString &sText);
+    static QString getElidedText(const QFontMetrics &fontMetrics, const QSize &size, const QString &text, Qt::Alignment alignment);
 };
 
 #endif // UTILS_H

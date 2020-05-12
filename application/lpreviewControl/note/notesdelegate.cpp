@@ -16,6 +16,7 @@
 */
 #include "notesdelegate.h"
 #include "lpreviewControl/ImageViewModel.h"
+#include "utils/utils.h"
 
 #include <QPainter>
 #include <QDebug>
@@ -61,6 +62,7 @@ void NotesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
             painter->restore();
 
             //drawPagetext
+            int margin = 2;
             int bottomlineHeight = 1;
             int textStartX = rect.right() + 18;
             painter->save();
@@ -70,7 +72,7 @@ void NotesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
             painter->setFont(font);
             const QString &pageText = index.data(ImageinfoType_e::IMAGE_INDEX_TEXT).toString();
             int pagetextHeight = painter->fontMetrics().height();
-            painter->drawText(textStartX, rect.y(), option.rect.width(), pagetextHeight, Qt::AlignTop | Qt::AlignLeft, pageText);
+            painter->drawText(textStartX, option.rect.y() + margin, option.rect.width(), pagetextHeight, Qt::AlignVCenter | Qt::AlignLeft, pageText);
             painter->restore();
 
             //drawPageContenttext
@@ -86,12 +88,9 @@ void NotesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
             contentOption.setAlignment(Qt::AlignTop | Qt::AlignLeft);
             contentOption.setWrapMode(QTextOption::WrapAnywhere);
 
-            QSize contentSize(option.rect.right() - textStartX, option.rect.bottom() - pagetextHeight - rect.y() - 10);
-            int contentHeight = painter->fontMetrics().height();
-            int maxLineCount = qMax(contentSize.height() / contentHeight, 1);
-            int maxContentWidth = contentSize.width() * maxLineCount;
-            const QString &elidedContentText = painter->fontMetrics().elidedText(contentText, Qt::ElideRight, maxContentWidth);
-            painter->drawText(QRect(textStartX, rect.y() + pagetextHeight, contentSize.width(), contentSize.height()), elidedContentText, contentOption);
+            QSize contentSize(option.rect.right() - textStartX, option.rect.height() - pagetextHeight - 2 * margin);
+            const QString &elidedContentText = Utils::getElidedText(painter->fontMetrics(), contentSize, contentText, contentOption.alignment());
+            painter->drawText(QRect(textStartX, option.rect.y() + margin + pagetextHeight, contentSize.width(), contentSize.height()), elidedContentText, contentOption);
             painter->restore();
 
             //drawBottomLine
