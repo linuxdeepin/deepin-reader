@@ -75,6 +75,8 @@ void ScaleWidget::initWidget()
     m_layout->addWidget(pPreBtn);
     m_layout->addWidget(m_scaleComboBox);
     m_layout->addWidget(pNextBtn);
+
+    connect(m_scaleComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(SlotCurrentTextChanged(const QString &)));
 }
 
 void ScaleWidget::slotPrevScale()
@@ -165,49 +167,59 @@ void ScaleWidget::setSheet(DocSheet *sheet)
     if (nullptr == sheet)
         return;
 
-    disconnect(m_scaleComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(SlotCurrentTextChanged(const QString &)));
-
-    double dMax = m_sheet->getMaxZoomratio();
-
     m_scaleComboBox->blockSignals(true);
 
-    int nTempMax = static_cast<int>(dMax) * 100;
-
-    if (nTempMax != m_nMaxScale) {  //  判断当前最大显示 是否 和之前一样, 不一样, 清楚item, 重新添加
+    if (Dr::DjVu == m_sheet->type()) {
         m_scaleComboBox->clear();
-        m_nMaxScale = nTempMax;
 
-        foreach (int iData, dataList) {
-            if (iData <= m_nMaxScale) {
-                m_scaleComboBox->addItem(QString::number(iData) + "%");
+        for (int i = 0; i < m_sheet->scaleFactorList().count(); ++i) {
+            m_scaleComboBox->addItem(QString::number(m_sheet->scaleFactorList().at(i) * 100) + "%");
+        }
+
+        QString sCurText = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
+
+        m_scaleComboBox->setCurrentText(sCurText);
+
+    } else {
+        double dMax = m_sheet->getMaxZoomratio();
+
+        int nTempMax = static_cast<int>(dMax) * 100;
+
+        if (nTempMax != m_nMaxScale) {  //  判断当前最大显示 是否 和之前一样, 不一样, 清楚item, 重新添加
+            m_scaleComboBox->clear();
+            m_nMaxScale = nTempMax;
+
+            foreach (int iData, dataList) {
+                if (iData <= m_nMaxScale) {
+                    m_scaleComboBox->addItem(QString::number(iData) + "%");
+                }
             }
         }
-    }
 
-    double nScale = m_sheet->getOper(Scale).toDouble();
+        double nScale = m_sheet->getOper(Scale).toDouble();
 
-    if (static_cast<int>(nScale) <= 0) {
-        nScale = 100;
-        m_sheet->setOper(Scale, 100);
-    }
-
-    int index = -1;
-    for (int i = 0; i < dataList.size(); i++) {
-        if (qAbs(dataList.at(i) - nScale) < 0.001) {
-            index = i;
-            break;
+        if (static_cast<int>(nScale) <= 0) {
+            nScale = 100;
+            m_sheet->setOper(Scale, 100);
         }
+
+        int index = -1;
+        for (int i = 0; i < dataList.size(); i++) {
+            if (qAbs(dataList.at(i) - nScale) < 0.001) {
+                index = i;
+                break;
+            }
+        }
+
+        QString sCurText = QString::number(QString::number(m_sheet->getOper(Scale).toDouble(), 'f', 2).toDouble()) + "%";
+
+        m_scaleComboBox->setCurrentText(sCurText);
+
+        m_scaleComboBox->lineEdit()->setCursorPosition(0);
     }
 
-    QString sCurText = QString::number(QString::number(m_sheet->getOper(Scale).toDouble(), 'f', 2).toDouble()) + "%";
-
-    m_scaleComboBox->setCurrentText(sCurText);
-
-    m_scaleComboBox->lineEdit()->setCursorPosition(0);
 
     m_scaleComboBox->blockSignals(false);
-
-    connect(m_scaleComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(SlotCurrentTextChanged(const QString &)));
 }
 
 void ScaleWidget::clearComboBox()

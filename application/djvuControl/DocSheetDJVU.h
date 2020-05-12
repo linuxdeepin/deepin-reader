@@ -12,7 +12,17 @@ class DocSheetDJVU : public DocSheet
 public:
     explicit DocSheetDJVU(QString filePath, QWidget *parent = nullptr);
 
-    ~DocSheetDJVU();
+    ~DocSheetDJVU()override;
+
+    void pageJump(int page)override;
+
+    void pageFirst()override;
+
+    void pageLast()override;
+
+    void pageNext()override;
+
+    void pagePrev()override;
 
     void zoomin()override;  //放大一级
 
@@ -21,6 +31,10 @@ public:
     void setScaleFactor(qreal scaleFactor)override;
 
     bool openFileExec()override;
+
+    void setMouseShape(Dr::MouseShape shape)override;
+
+    void setScaleMode(Dr::ScaleMode mode)override;
 
 private:
     SheetSidebar     *m_sidebar = nullptr;

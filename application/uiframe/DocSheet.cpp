@@ -126,6 +126,11 @@ void DocSheet::setMouseHand()
 
 }
 
+void DocSheet::setMouseShape(Dr::MouseShape shape)
+{
+
+}
+
 void DocSheet::setScale(double scale)
 {
 
@@ -137,6 +142,11 @@ void DocSheet::setScaleFactor(qreal scaleFactor)
 }
 
 void DocSheet::setFit(int fit)
+{
+
+}
+
+void DocSheet::setScaleMode(Dr::ScaleMode mode)
 {
 
 }
@@ -162,16 +172,6 @@ bool DocSheet::isDoubleShow()
 }
 
 void DocSheet::handleOpenSuccess()
-{
-
-}
-
-void DocSheet::showSidebar()
-{
-
-}
-
-void DocSheet::hideSidebar()
 {
 
 }

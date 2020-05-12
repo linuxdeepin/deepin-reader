@@ -43,12 +43,11 @@ QRectF SheetBrowserDJVUItem::boundingRect() const
 
 void SheetBrowserDJVUItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    if (m_image.isNull()) {
-        painter->setBrush(Qt::white);
-        painter->drawRect(option->rect);
+    painter->drawImage(option->rect, m_image);
+
+    if (m_image.isNull() || m_imageScaleFactor != m_scaleFactor) {
         render(m_scaleFactor, m_rotation, false);
-    } else
-        painter->drawImage(option->rect, m_image);
+    }
 }
 
 void SheetBrowserDJVUItem::render(double scaleFactor, Dr::Rotation rotation, bool readerLater)
@@ -62,10 +61,10 @@ void SheetBrowserDJVUItem::render(double scaleFactor, Dr::Rotation rotation, boo
     m_scaleFactor = scaleFactor;
     m_rotation  = rotation;
 
-    if (!readerLater)
+    if (!readerLater) {
+        m_imageScaleFactor = m_scaleFactor;
         m_image = m_page->render(72, 72, m_rotation, m_scaleFactor);
-    else
-        m_image = QImage();
+    }
 
     update();
 }

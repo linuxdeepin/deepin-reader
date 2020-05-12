@@ -133,6 +133,13 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
     } else if (Dr::DjVu == m_curSheet->type()) {
         SetBtnDisable(false);
 
+        m_pThumbnailBtn->setChecked(m_curSheet->operation().sidebarVisible);
+
+        if (Dr::MouseShapeHand == m_curSheet->operation().mouseShape)
+            setHandleShape();
+        else
+            setDefaultShape();
+
         m_pSw->setSheet(m_curSheet);
     }
 }
@@ -191,11 +198,20 @@ void TitleWidget::SlotSetCurrentTool(const int &sAction)
     if (m_curSheet.isNull())
         return;
 
-    if (sAction == E_HANDLE_SELECT_TEXT) {
-        m_curSheet->setMouseDefault();
+    if (Dr::DjVu == m_curSheet->type()) {
+        if (sAction == E_HANDLE_SELECT_TEXT) {
+            m_curSheet->setMouseShape(Dr::MouseShapeNormal);
+        } else {
+            m_curSheet->setMouseShape(Dr::MouseShapeHand);
+        }
     } else {
-        m_curSheet->setMouseHand();
+        if (sAction == E_HANDLE_SELECT_TEXT) {
+            m_curSheet->setMouseDefault();
+        } else {
+            m_curSheet->setMouseHand();
+        }
     }
+
 }
 
 void TitleWidget::slotFindOperation(const int &sAction)

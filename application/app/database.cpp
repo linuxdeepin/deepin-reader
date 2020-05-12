@@ -65,8 +65,8 @@ bool Database::prepareOperation()
                ",scaleMode INTEGER"
                ",rotation INTEGER"
                ",scaleFactor REAL"
-               ",openThumbnail INTEGER"
-               ",leftIndex INTEGER"
+               ",sidebarVisible INTEGER"
+               ",sidebarIndex INTEGER"
                ",currentPage INTEGER)");
 
     if (!query.isActive()) {
@@ -91,8 +91,8 @@ bool Database::readOperation(DocSheet *sheet)
             sheet->operation().scaleMode = (Dr::ScaleMode)query.value("scaleMode").toInt();
             sheet->operation().rotation = (Dr::Rotation)query.value("rotation").toInt();
             sheet->operation().scaleFactor = query.value("scaleFactor").toInt();
-            sheet->operation().openThumbnail = query.value("openThumbnail").toInt();
-            sheet->operation().leftIndex = query.value("leftIndex").toInt();
+            sheet->operation().sidebarVisible = query.value("sidebarVisible").toInt();
+            sheet->operation().sidebarIndex = query.value("sidebarIndex").toInt();
             sheet->operation().currentPage = query.value("currentPage").toInt();
             return true;
         }
@@ -106,8 +106,8 @@ bool Database::saveOperation(DocSheet *sheet)
         QSqlQuery query(m_database);
 
         query.prepare(" replace into "
-                      " operation(filePath,layoutMode,mouseShape,scaleMode,rotation,scaleFactor,openThumbnail,leftIndex,currentPage)"
-                      " VALUES(:filePath,:layoutMode,:mouseShape,:scaleMode,:rotation,:scaleFactor,:openThumbnail,:leftIndex,currentPage)");
+                      " operation(filePath,layoutMode,mouseShape,scaleMode,rotation,scaleFactor,sidebarVisible,sidebarIndex,currentPage)"
+                      " VALUES(:filePath,:layoutMode,:mouseShape,:scaleMode,:rotation,:scaleFactor,:sidebarVisible,:sidebarIndex,currentPage)");
 
         query.bindValue(":filePath", sheet->filePath());
         query.bindValue(":layoutMode", sheet->operation().layoutMode);
@@ -115,8 +115,8 @@ bool Database::saveOperation(DocSheet *sheet)
         query.bindValue(":scaleMode", sheet->operation().scaleMode);
         query.bindValue(":rotation", sheet->operation().rotation);
         query.bindValue(":scaleFactor", sheet->operation().scaleFactor);
-        query.bindValue(":openThumbnail", sheet->operation().openThumbnail);
-        query.bindValue(":leftIndex", sheet->operation().leftIndex);
+        query.bindValue(":sidebarVisible", sheet->operation().sidebarVisible);
+        query.bindValue(":sidebarIndex", sheet->operation().sidebarIndex);
         query.bindValue(":currentPage", sheet->operation().currentPage);
         return query.exec();
     }
@@ -161,7 +161,7 @@ bool Database::prepareBookmarks()
     Transaction transaction(m_database);
 
     QSqlQuery query(m_database);
-    query.exec("CREATE TABLE bookmarks_v3 "
+    query.exec("CREATE TABLE bookmarks "
                "(filePath TEXT"
                ",page INTEGER"
                ",label TEXT"

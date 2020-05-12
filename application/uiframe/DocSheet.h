@@ -21,8 +21,8 @@ struct DocOperation {
     Dr::ScaleMode scaleMode     = Dr::ScaleFactorMode;
     Dr::Rotation rotation       = Dr::RotateBy0;
     qreal scaleFactor           = 1.0;
-    bool openThumbnail          = false;
-    int  leftIndex              = 0;
+    bool sidebarVisible         = false;
+    int  sidebarIndex           = 0;
     int  currentPage            = 1;
 };
 
@@ -68,11 +68,15 @@ public:
 
     virtual void setMouseHand();        //手型工具
 
+    virtual void setMouseShape(Dr::MouseShape shape);
+
     virtual void setScale(double scale);
 
-    virtual void setScaleFactor(qreal scaleFactor);
+    virtual void setScaleFactor(qreal scaleFactor);     //base is 1
 
     virtual void setFit(int fit);
+
+    virtual void setScaleMode(Dr::ScaleMode mode);
 
     virtual void setBookMark(int page, int state);
 
@@ -103,10 +107,6 @@ public:
     virtual void handleSearch();
 
     virtual void handleOpenSuccess();
-
-    virtual void showSidebar();
-
-    virtual void hideSidebar();
 
     virtual void setSidebarVisible(bool isVisible);
 

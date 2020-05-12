@@ -529,7 +529,7 @@ void CentralDocPage::handleShortcut(const QString &s)
 {
     if (getCurrentState() == SLIDER_SHOW) {
         if (s == KeyStr::g_esc) {
-            quitSpecialState();
+            quitSlide();
         }
         if (nullptr == m_pctrlwidget) {
             setCurrentState(Default_State);
@@ -547,6 +547,12 @@ void CentralDocPage::handleShortcut(const QString &s)
         }
         m_pctrlwidget->PageChangeByKey(s);
         return;
+    }
+
+    if (getCurrentState() == Magnifer_State) {
+        if (s == KeyStr::g_esc) {
+            quitMagnifer();
+        }
     }
 
     if (s == KeyStr::g_ctrl_s) {
