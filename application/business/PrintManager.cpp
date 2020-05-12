@@ -49,7 +49,7 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
     QPainter painter(printer);
     QRect rect = painter.viewport();
     painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
-    int nPageSize = m_sheet->getPageSNum();
+    int nPageSize = m_sheet->pagesNumber();
 
     if (printer->fromPage() == 0 && printer->toPage() == 0) {
         for (int iIndex = 0; iIndex < nPageSize; iIndex++) {

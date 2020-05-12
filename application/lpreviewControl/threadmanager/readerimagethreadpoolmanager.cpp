@@ -38,7 +38,7 @@ void ReadImageTask::run()
     DocSheet *sheet = m_docParam.sheet;
     Q_ASSERT(sheet);
     if (sheet) {
-        int totalPage = sheet->getPageSNum();
+        int totalPage = sheet->pagesNumber();
         m_docParam.pageNum = qBound(0, m_docParam.pageNum, totalPage - 1);
         bool bl = sheet->getImageMax(m_docParam.pageNum, image, m_docParam.maxPixel);
         if (bl) QMetaObject::invokeMethod(m_threadpoolManager, threadPoolSlotFun, Qt::QueuedConnection, Q_ARG(const ReaderImageParam_t &, m_docParam), Q_ARG(const QImage &, image));
@@ -67,7 +67,7 @@ void ReaderImageThreadPoolManager::addgetDocImageTask(const ReaderImageParam_t &
     //only initOnce
     if (!m_docProxylst.contains(readImageParam.sheet)) {
         m_docProxylst << readImageParam.sheet;
-        QVector<QPixmap> imagelst(readImageParam.sheet->getPageSNum());
+        QVector<QPixmap> imagelst(readImageParam.sheet->pagesNumber());
         Q_ASSERT(imagelst.size() > 0 && "pagesNum == 0");
         m_docSheetImgMap.insert(readImageParam.sheet, imagelst);
         connect(readImageParam.sheet, &QObject::destroyed, this, &ReaderImageThreadPoolManager::onDocProxyDestroyed);

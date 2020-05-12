@@ -122,7 +122,7 @@ void PagingWidget::setPage(int page)
         return;
 
     m_curPage = page;
-    int totalPage = m_sheet->getPageSNum();
+    int totalPage = m_sheet->pagesNumber();
     int inputData = page;
     int currntPage = inputData + 1;     //  + 1 是为了 数字 从1 开始显示
     __SetBtnState(currntPage, totalPage);
@@ -153,13 +153,13 @@ void PagingWidget::handleOpenSuccess()
         m_pCurrantPageLab =  nullptr;
     }
 
-    int totalPage = m_sheet->getPageSNum();
+    int totalPage = m_sheet->pagesNumber();
     if (m_pCurrantPageLab == nullptr) {   //  不可读取页码, 则设置只能输入大于 0 的数字
         //  m_pJumpPageLineEdit->lineEdit()->setValidator(new QIntValidator(1, totalPage, this));
     }
 
     m_pTotalPagesLab->setText(QString("/ %1").arg(totalPage));
-    int nCurPage = m_sheet->currentPageNo();
+    int nCurPage = m_sheet->currentIndex();
     setPage(nCurPage);
 }
 
@@ -183,7 +183,7 @@ void PagingWidget::__NormalChangePage()
 {
     QString sText = m_pJumpPageLineEdit->text();
     int iPage = sText.toInt();
-    if (iPage <= 0 || iPage > m_sheet->getPageSNum()) {
+    if (iPage <= 0 || iPage > m_sheet->pagesNumber()) {
         m_sheet->showTips(tr("Invalid page number"));
     } else {
         m_sheet->pageJump(iPage - 1);
@@ -193,7 +193,7 @@ void PagingWidget::__NormalChangePage()
 
 void PagingWidget::__PageNumberJump()
 {
-    int nPageSum = m_sheet->getPageSNum();
+    int nPageSum = m_sheet->pagesNumber();
     QString sText = m_pJumpPageLineEdit->text();
     int iPage = m_sheet->label2pagenum(sText);
 

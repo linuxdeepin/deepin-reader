@@ -603,7 +603,7 @@ void CentralDocPage::handleShortcut(const QString &s)
             getCurSheet()->zoomout();
     } else if (s == KeyStr::g_ctrl_b) {
         if (getCurSheet())
-            getCurSheet()->setBookMark(getCurSheet()->currentPageNo(), true);
+            getCurSheet()->setBookMark(getCurSheet()->currentIndex(), true);
     } else if (s == KeyStr::g_ctrl_f) {
         if (getCurSheet())
             getCurSheet()->handleSearch();

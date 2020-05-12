@@ -215,13 +215,19 @@ QList<qreal> DocSheet::scaleFactorList()
     return  dataList;
 }
 
-int DocSheet::getPageSNum()
+int DocSheet::pagesNumber()
+{
+    qDebug() << "unrealized";
+    return 0;
+}
+
+int DocSheet::currentPage()
 {
     qDebug() << "unrealized";
     return -1;
 }
 
-int DocSheet::currentPageNo()
+int DocSheet::currentIndex()
 {
     qDebug() << "unrealized";
     return -1;

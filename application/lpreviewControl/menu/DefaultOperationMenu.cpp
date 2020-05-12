@@ -53,8 +53,8 @@ void DefaultOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, co
         int pageSum = 0;
         bool isSinglePage = false;//文档总页数是否是单页
 
-        pageSum = m_sheet->getPageSNum();
-        currentPage = m_sheet->currentPageNo();
+        pageSum = m_sheet->pagesNumber();
+        currentPage = m_sheet->currentIndex();
         isSinglePage = static_cast<bool>(pageSum % 2);
 
         if (currentPage == 0/*(!m_sheet->isDoubleShow()) ? (currentPage == 0) : (currentPage <= 1)*/) { //  首页
@@ -67,7 +67,7 @@ void DefaultOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, co
                 m_pEndPage->setEnabled(false);
             }
         }
-        if (m_sheet->getPageSNum() == 1) {
+        if (m_sheet->pagesNumber() == 1) {
             m_pFirstPage->setEnabled(false);
             m_pPrevPage->setEnabled(false);
             m_pNextPage->setEnabled(false);

@@ -94,7 +94,7 @@ void BookMarkWidget::nextPage()
 void BookMarkWidget::handleOpenSuccess()
 {
     const QList<int> &pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
-    int nCurPage = m_sheet->currentPageNo();
+    int nCurPage = m_sheet->currentIndex();
     for (int iPage : pageList) {
         m_sheet->setBookMarkState(iPage, true);
         if (iPage == nCurPage) m_pAddBookMarkBtn->setEnabled(false);
@@ -122,7 +122,7 @@ void BookMarkWidget::handleBookMark(int page, int state)
         dApp->m_pDBService->setBookMarkList(sPath, pageList);
         m_sheet->setFileChanged(true);
 
-        int nCurPage = m_sheet->currentPageNo();
+        int nCurPage = m_sheet->currentIndex();
         if (nCurPage == page) {
             m_sheet->setBookMarkState(page, true);
             m_pAddBookMarkBtn->setEnabled(false);
@@ -142,7 +142,7 @@ void BookMarkWidget::handleBookMark(int page, int state)
 
         m_sheet->showTips(tr("The bookmark has been removed"));
         m_sheet->setBookMarkState(page, false);
-        int nCurPage = m_sheet->currentPageNo();
+        int nCurPage = m_sheet->currentIndex();
         if (nCurPage == page) {
             m_pAddBookMarkBtn->setEnabled(true);
         }
@@ -167,7 +167,7 @@ void BookMarkWidget::DeleteItemByKey()
 void BookMarkWidget::onAddBookMarkClicked()
 {
     if (m_sheet.isNull()) return;
-    int nPage = m_sheet->currentPageNo();
+    int nPage = m_sheet->currentIndex();
     handleBookMark(nPage, true);
 }
 
@@ -194,7 +194,7 @@ void BookMarkWidget::onUpdateTheme()
 
 void BookMarkWidget::scrollToCurrentPage()
 {
-    m_pImageListView->scrollToIndex(m_sheet->currentPageNo(), false);
+    m_pImageListView->scrollToIndex(m_sheet->currentIndex(), false);
 }
 
 void BookMarkWidget::onListMenuClick(const int &iType)

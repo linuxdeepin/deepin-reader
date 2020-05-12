@@ -72,7 +72,7 @@ void ImageListView::handleOpenSuccess()
         }
 
         QList<ImagePageInfo_t> pageSrclst;
-        int pagesNum = m_docSheet->getPageSNum();
+        int pagesNum = m_docSheet->pagesNumber();
         for (int index = 0; index < pagesNum; index++)
             pageSrclst << index;
         m_imageModel->initModelLst(pageSrclst);

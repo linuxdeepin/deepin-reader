@@ -114,5 +114,5 @@ void ThumbnailWidget::updateThumbnail(const int &pageIndex)
 
 void ThumbnailWidget::scrollToCurrentPage()
 {
-    m_pImageListView->scrollToIndex(m_sheet->currentPageNo());
+    m_pImageListView->scrollToIndex(m_sheet->currentIndex());
 }

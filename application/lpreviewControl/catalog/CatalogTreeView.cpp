@@ -209,7 +209,7 @@ void CatalogTreeView::handleOpenSuccess()
             }
         }
 
-        int nCurPage = m_sheet->currentPageNo();
+        int nCurPage = m_sheet->currentIndex();
         setPage(nCurPage);
     }
 }

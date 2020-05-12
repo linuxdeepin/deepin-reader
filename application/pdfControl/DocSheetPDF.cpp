@@ -128,7 +128,7 @@ void DocSheetPDF::pageLast()
     if (!m_browser->GetDocProxy())
         return;
 
-    pageJump(this->getPageSNum() - 1);
+    pageJump(this->pagesNumber() - 1);
 }
 
 void DocSheetPDF::pageNext()
@@ -138,11 +138,11 @@ void DocSheetPDF::pageNext()
 
     bool isDoubleShow = m_browser->isDoubleShow();
 
-    int nCurPage = this->currentPageNo();
+    int nCurPage = this->currentIndex();
 
     int page = nCurPage + (isDoubleShow ? 2 : 1);
 
-    page = (page >= (this->getPageSNum() - 1) ? (this->getPageSNum() - 1) : page);
+    page = (page >= (this->pagesNumber() - 1) ? (this->pagesNumber() - 1) : page);
 
     pageJump(page);
 }
@@ -154,7 +154,7 @@ void DocSheetPDF::pagePrev()
 
     bool isDoubleShow = m_browser->isDoubleShow();
 
-    int nCurPage = this->currentPageNo();
+    int nCurPage = this->currentIndex();
 
     int page = nCurPage - (isDoubleShow ? 2 : 1);
 
@@ -416,7 +416,7 @@ void DocSheetPDF::handleSearch()
     m_pFindWidget->setSearchEditFocus();
 }
 
-int DocSheetPDF::getPageSNum()
+int DocSheetPDF::pagesNumber()
 {
     DocummentProxy *docProxy = m_browser->GetDocProxy();
     if (docProxy) {
@@ -425,7 +425,7 @@ int DocSheetPDF::getPageSNum()
     return -1;
 }
 
-int DocSheetPDF::currentPageNo()
+int DocSheetPDF::currentIndex()
 {
     DocummentProxy *docProxy = m_browser->GetDocProxy();
     if (docProxy) {

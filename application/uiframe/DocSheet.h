@@ -118,10 +118,15 @@ public:
 
     virtual void print();
 
+    virtual int pagesNumber();
+
+    virtual int currentPage();      //从1开始
+
+    virtual int currentIndex();     //从0开始
+
     //replace docProxy api 2020.05.11
     virtual Outline outline();
-    virtual int getPageSNum();
-    virtual int currentPageNo();
+
     virtual int pointInWhichPage(QPoint pos);
     virtual int label2pagenum(QString label);
 

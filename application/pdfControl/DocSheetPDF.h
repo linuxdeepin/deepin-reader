@@ -99,8 +99,10 @@ public:
     void print()override;
 
     virtual Outline outline() override;
-    virtual int getPageSNum() override;
-    virtual int currentPageNo() override;
+
+    virtual int pagesNumber() override;
+
+    virtual int currentIndex() override;
     virtual int  pointInWhichPage(QPoint pos) override;
     virtual int label2pagenum(QString label) override;
 
