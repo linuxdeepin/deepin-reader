@@ -206,8 +206,10 @@ void Annotation::ChangeAnnotationColor(const QString &msgContent)
             QString sPage = contentList.at(2);
 
             int iIndex = sIndex.toInt();
+
             QColor color = dApp->m_pAppInfo->getLightColorList().at(iIndex);
             fvmPrivate->m_pProxy->changeAnnotationColor(sPage.toInt(), sUuid, color);     //  更新高亮顏色,  是对文档进行了操作
+            dApp->m_pAppInfo->setSelectColor(color);
             fvmPrivate->m_pProxyData->setFileChanged(true);
             emit fvmPrivate->q_func()->sigUpdateThumbnail(sPage.toInt());
         }
