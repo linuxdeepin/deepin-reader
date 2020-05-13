@@ -60,11 +60,15 @@ void SheetBrowserPDFPrivate::slotDealWithMenu(const int &msgType, const QString 
 {
     if (msgType == MSG_NOTE_REMOVE_HIGHLIGHT || msgType == MSG_NOTE_UPDATE_HIGHLIGHT_COLOR || msgType == MSG_NOTE_ADD_HIGHLIGHT_COLOR) {
         m_pAnnotation->handleNote(msgType, msgContent);
+        clearSelect();
     } else if (msgType == MSG_OPERATION_TEXT_ADD_ANNOTATION) {  //  添加注释
         onOpenNoteWidget(msgContent);
     } else if (msgType == MSG_OPERATION_TEXT_SHOW_NOTEWIDGET) {
         onShowNoteWidget(msgContent);
+        clearSelect();
     }
+    if (msgContent == "Copy")
+        clearSelect();
 }
 
 void SheetBrowserPDFPrivate::SlotNoteViewMsg(const int &msgType, const QString &msgContent)

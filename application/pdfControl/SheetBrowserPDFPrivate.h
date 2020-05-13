@@ -85,6 +85,7 @@ private:
     void __CloseFileNoteWidget();
     void __SetCursor(const QCursor &cursor);
     void OpenFilePath(const QString &sPath);
+    void clearSelect();
 private:
     bool m_hasOpened = false;
     NoteViewWidget          *m_pNoteViewWidget = nullptr;   //  注释内容显示框
