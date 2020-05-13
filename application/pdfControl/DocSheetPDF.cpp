@@ -278,6 +278,7 @@ void DocSheetPDF::handleOpenSuccess()
 
 void DocSheetPDF::setSidebarVisible(bool isVisible)
 {
+    setOper(Thumbnail, QString::number(isVisible));
     m_sidebar->setVisible(isVisible);
 }
 

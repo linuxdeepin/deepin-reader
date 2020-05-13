@@ -483,6 +483,11 @@ void DocSheet::quitMagnifer()
     doc->quitMagnifer();
 }
 
+DocOperation DocSheet::getOperation()
+{
+    return m_operation;
+}
+
 DocOperation &DocSheet::operation()
 {
     return m_operation;

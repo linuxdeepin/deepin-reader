@@ -30,7 +30,8 @@ class DocSheet : public Dtk::Widget::DSplitter
 {
     Q_OBJECT
     Q_DISABLE_COPY(DocSheet)
-
+    friend class Database;
+    friend class SheetSideBar;
 public:
     explicit DocSheet(Dr::FileType type, QString filePath, Dtk::Widget::DWidget *parent = nullptr);
 
@@ -171,6 +172,9 @@ public:
 
     void quitMagnifer();
 
+    DocOperation getOperation();
+
+protected:
     DocOperation &operation();
 
 signals:

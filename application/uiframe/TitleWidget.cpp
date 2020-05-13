@@ -133,9 +133,9 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
     } else if (Dr::DjVu == m_curSheet->type()) {
         SetBtnDisable(false);
 
-        m_pThumbnailBtn->setChecked(m_curSheet->operation().sidebarVisible);
+        m_pThumbnailBtn->setChecked(m_curSheet->getOperation().sidebarVisible);
 
-        if (Dr::MouseShapeHand == m_curSheet->operation().mouseShape)
+        if (Dr::MouseShapeHand == m_curSheet->getOperation().mouseShape)
             setHandleShape();
         else
             setDefaultShape();
@@ -151,8 +151,6 @@ void TitleWidget::on_thumbnailBtn_clicked()
         return;
 
     bool rl = m_pThumbnailBtn->isChecked();
-
-    m_curSheet->setOper(Thumbnail, QString::number(rl));
 
     m_curSheet->setSidebarVisible(rl);
 
