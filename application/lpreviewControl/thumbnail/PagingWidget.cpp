@@ -186,7 +186,7 @@ void PagingWidget::__NormalChangePage()
     if (iPage <= 0 || iPage > m_sheet->pagesNumber()) {
         m_sheet->showTips(tr("Invalid page number"));
     } else {
-        m_sheet->indexJump(iPage - 1);
+        m_sheet->jumpToIndex(iPage - 1);
         setFocus();
     }
 }
@@ -198,7 +198,7 @@ void PagingWidget::__PageNumberJump()
     int iPage = m_sheet->label2pagenum(sText);
 
     if (iPage > -1 && iPage < nPageSum) {   //  输入的页码 必须在 0-最大值 之间, 才可以
-        m_sheet->indexJump(iPage);
+        m_sheet->jumpToIndex(iPage);
         setFocus();
     } else {
         m_sheet->showTips(tr("Invalid page number"));
@@ -207,10 +207,10 @@ void PagingWidget::__PageNumberJump()
 
 void PagingWidget::slotPrePageBtnClicked()
 {
-    m_sheet->pagePrev();
+    m_sheet->jumpToPrevPage();
 }
 
 void PagingWidget::slotNextPageBtnClicked()
 {
-    m_sheet->pageNext();
+    m_sheet->jumpToNextPage();
 }

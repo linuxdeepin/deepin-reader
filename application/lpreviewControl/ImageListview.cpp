@@ -107,7 +107,7 @@ void ImageListView::handleOpenSuccess()
 void ImageListView::onItemClicked(const QModelIndex &index)
 {
     if (index.isValid()) {
-        m_docSheet->indexJump(m_imageModel->getPageIndexForModelIndex(index.row()));
+        m_docSheet->jumpToIndex(m_imageModel->getPageIndexForModelIndex(index.row()));
         emit sigListItemClicked(index.row());
     }
 }

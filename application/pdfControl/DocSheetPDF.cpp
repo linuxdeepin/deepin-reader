@@ -101,7 +101,7 @@ void DocSheetPDF::openFile()
     m_browser->OpenFilePath(filePath());
 }
 
-void DocSheetPDF::indexJump(int page)
+void DocSheetPDF::jumpToIndex(int page)
 {
     if (!m_browser->GetDocProxy())
         return;
@@ -118,20 +118,20 @@ void DocSheetPDF::indexJump(int page)
     }
 }
 
-void DocSheetPDF::pageFirst()
+void DocSheetPDF::jumpToFirstPage()
 {
-    indexJump(0);
+    jumpToIndex(0);
 }
 
-void DocSheetPDF::pageLast()
+void DocSheetPDF::jumpToLastPage()
 {
     if (!m_browser->GetDocProxy())
         return;
 
-    indexJump(this->pagesNumber() - 1);
+    jumpToIndex(this->pagesNumber() - 1);
 }
 
-void DocSheetPDF::pageNext()
+void DocSheetPDF::jumpToNextPage()
 {
     if (!m_browser->GetDocProxy())
         return;
@@ -144,10 +144,10 @@ void DocSheetPDF::pageNext()
 
     page = (page >= (this->pagesNumber() - 1) ? (this->pagesNumber() - 1) : page);
 
-    indexJump(page);
+    jumpToIndex(page);
 }
 
-void DocSheetPDF::pagePrev()
+void DocSheetPDF::jumpToPrevPage()
 {
     if (!m_browser->GetDocProxy())
         return;
@@ -158,7 +158,7 @@ void DocSheetPDF::pagePrev()
 
     int jIndex = curIndex - (isDoubleShow ? 2 : 1);
 
-    indexJump(jIndex);
+    jumpToIndex(jIndex);
 }
 
 void DocSheetPDF::zoomin()

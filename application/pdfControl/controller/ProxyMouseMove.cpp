@@ -263,7 +263,7 @@ void ProxyMouseMove::__ClickPageLink(Page::Link *pLink)
 
     } else if (linkType == Page::LinkType_Goto) {
         int page = pLink->page - 1;
-        _fvwParent->m_sheet->indexJump(page);
+        _fvwParent->m_sheet->jumpToIndex(page);
     } else if (linkType == Page::LinkType_GotoOtherFile) {
 
     } else if (linkType == Page::LinkType_Browse) {

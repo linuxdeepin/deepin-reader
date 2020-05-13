@@ -43,17 +43,21 @@ public:
 
     virtual bool openFileExec();
 
-    virtual void indexJump(int index);
+    virtual void jumpToIndex(int index);
 
-    virtual void pageFirst();
+    virtual void jumpToPage(int page);
 
-    virtual void pageLast();
+    virtual void jumpToFirstPage();
 
-    virtual void pageNext();
+    virtual void jumpToLastPage();
 
-    virtual void pagePrev();
+    virtual void jumpToNextPage();
+
+    virtual void jumpToPrevPage();
 
     virtual void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage = 0);
+
+    virtual void jumpToHighLight(const QString &uuid, int ipage);
 
     virtual void zoomin();  //放大一级
 
@@ -142,7 +146,7 @@ public:
     virtual bool getImage(int pagenum, QImage &image, double width, double height);
     virtual bool getImageMax(int pagenum, QImage &image, double max);
 
-    virtual void jumpToHighLight(const QString &uuid, int ipage);
+
     virtual void docBasicInfo(stFileInfo &info);
     virtual void setAutoPlaySlide(bool autoplay, int timemsec = 3000);
     virtual void getAllAnnotation(QList<stHighlightContent> &listres);

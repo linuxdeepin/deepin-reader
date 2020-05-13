@@ -128,7 +128,7 @@ void PlayControlWidget::pagejump(const bool &bpre)
     else
         currentIndex++;
 
-    m_sheet->indexJump(currentIndex);
+    m_sheet->jumpToIndex(currentIndex);
 
     if (bSatus) {
         m_sheet->setAutoPlaySlide(bSatus);

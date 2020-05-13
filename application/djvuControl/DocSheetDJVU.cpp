@@ -32,22 +32,22 @@ void DocSheetDJVU::pageJump(int page)
     m_browser->setCurrentPage(page);
 }
 
-void DocSheetDJVU::indexJump(int index)
+void DocSheetDJVU::jumpToIndex(int index)
 {
     m_browser->setCurrentPage(index + 1);
 }
 
-void DocSheetDJVU::pageFirst()
+void DocSheetDJVU::jumpToFirstPage()
 {
     m_browser->setCurrentPage(1);
 }
 
-void DocSheetDJVU::pageLast()
+void DocSheetDJVU::jumpToLastPage()
 {
     pageJump(m_browser->allPages());
 }
 
-void DocSheetDJVU::pageNext()
+void DocSheetDJVU::jumpToNextPage()
 {
     int page = m_browser->currentPage() + (operation().layoutMode == Dr::TwoPagesMode ? 2 : 1);
 
@@ -56,7 +56,7 @@ void DocSheetDJVU::pageNext()
     pageJump(page);
 }
 
-void DocSheetDJVU::pagePrev()
+void DocSheetDJVU::jumpToPrevPage()
 {
     int page = m_browser->currentPage() - (operation().layoutMode == Dr::TwoPagesMode ? 2 : 1);
 

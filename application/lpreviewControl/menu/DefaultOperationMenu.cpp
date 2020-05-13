@@ -127,22 +127,22 @@ void DefaultOperationMenu::slotBookMarkClicked()
 
 void DefaultOperationMenu::slotFirstPageClicked()
 {
-    m_sheet->pageFirst();
+    m_sheet->jumpToFirstPage();
 }
 
 void DefaultOperationMenu::slotPrevPageClicked()
 {
-    m_sheet->pagePrev();
+    m_sheet->jumpToPrevPage();
 }
 
 void DefaultOperationMenu::slotNextPageClicked()
 {
-    m_sheet->pageNext();
+    m_sheet->jumpToNextPage();
 }
 
 void DefaultOperationMenu::slotEndPageClicked()
 {
-    m_sheet->pageLast();
+    m_sheet->jumpToLastPage();
 }
 
 void DefaultOperationMenu::slotAddIconNote()

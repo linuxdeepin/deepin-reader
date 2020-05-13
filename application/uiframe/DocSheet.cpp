@@ -62,28 +62,33 @@ bool DocSheet::openFileExec()
     return false;
 }
 
-void DocSheet::indexJump(int index)
+void DocSheet::jumpToIndex(int index)
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::pageFirst()
+void DocSheet::jumpToPage(int page)
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::pageLast()
+void DocSheet::jumpToFirstPage()
+{
+    qDebug() << "unrealized";
+}
+
+void DocSheet::jumpToLastPage()
 {
     qDebug() << "unrealized";
 
 }
 
-void DocSheet::pageNext()
+void DocSheet::jumpToNextPage()
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::pagePrev()
+void DocSheet::jumpToPrevPage()
 {
     qDebug() << "unrealized";
 }

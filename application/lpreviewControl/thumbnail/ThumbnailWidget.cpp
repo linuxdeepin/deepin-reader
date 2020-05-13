@@ -90,13 +90,13 @@ void ThumbnailWidget::onSetBookMarkState(const int &type, const int &pageIndex)
 void ThumbnailWidget::prevPage()
 {
     if (!m_sheet.isNull())
-        m_sheet->pagePrev();
+        m_sheet->jumpToPrevPage();
 }
 
 void ThumbnailWidget::nextPage()
 {
     if (!m_sheet.isNull())
-        m_sheet->pageNext();
+        m_sheet->jumpToNextPage();
 }
 
 void ThumbnailWidget::adaptWindowSize(const double &scale)

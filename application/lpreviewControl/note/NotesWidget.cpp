@@ -82,7 +82,7 @@ void NotesWidget::prevPage()
     if (curPage < 0)
         return;
     int pageIndex = m_pImageListView->getPageIndexForModelIndex(curPage);
-    m_sheet->indexJump(pageIndex);
+    m_sheet->jumpToIndex(pageIndex);
     m_pImageListView->scrollToModelInexPage(m_pImageListView->model()->index(curPage, 0));
 }
 
@@ -94,7 +94,7 @@ void NotesWidget::nextPage()
     if (curPage >= m_pImageListView->model()->rowCount())
         return;
     int pageIndex = m_pImageListView->getPageIndexForModelIndex(curPage);
-    m_sheet->indexJump(pageIndex);
+    m_sheet->jumpToIndex(pageIndex);
     m_pImageListView->scrollToModelInexPage(m_pImageListView->model()->index(curPage, 0));
 }
 

@@ -28,15 +28,15 @@ public:
 
     void openFile()override;
 
-    void indexJump(int index)override;
+    void jumpToIndex(int index)override;
 
-    void pageFirst()override;
+    void jumpToFirstPage()override;
 
-    void pageLast()override;
+    void jumpToLastPage()override;
 
-    void pageNext()override;
+    void jumpToNextPage()override;
 
-    void pagePrev()override;
+    void jumpToPrevPage()override;
 
     void zoomin()override;//放大一级
 
