@@ -1,7 +1,7 @@
 QT += core gui svg sql printsupport
 QT += dtkwidget
 QT += xml
-
+QT += KCodecs
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

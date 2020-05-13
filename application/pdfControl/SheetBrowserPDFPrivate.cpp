@@ -399,6 +399,7 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
 
         m_operatemenu->execMenu(m_sheet, tempPoint, bIsHighLight/*false*/, sSelectText, struuid);
 
+        clearSelect();
     } else {  //  否则弹出 文档操作菜单
         dApp->m_pAppInfo->setMousePressLocal(false, tempPoint);
 
@@ -407,9 +408,9 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
         textPage = m_pProxy->currentPageNo(); //当前在哪一页
 
         m_pDefaultMenu->execMenu(m_sheet, tempPoint, clickPage);
-    }
 
-    m_pProxy->mouseSelectTextClear();
+        clearSelect();
+    }
 }
 
 void SheetBrowserPDFPrivate::onPageBookMarkButtonClicked(int page, bool state)
@@ -498,4 +499,10 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
             m_pProxy->setViewFocus();
         }
     }
+}
+
+void SheetBrowserPDFPrivate::clearSelect()
+{
+    if (m_pProxy)
+        m_pProxy->mouseSelectTextClear();
 }
