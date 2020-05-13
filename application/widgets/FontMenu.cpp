@@ -138,7 +138,7 @@ void FontMenu::slotRotateL()
     if (m_sheet.isNull())
         return;
 
-    m_sheet->setRotateLeft();
+    m_sheet->rotateLeft();
 }
 
 /**
@@ -150,7 +150,7 @@ void FontMenu::slotRotateR()
     if (m_sheet.isNull())
         return;
 
-    m_sheet->setRotateRight();
+    m_sheet->rotateRight();
 }
 
 /**

@@ -42,9 +42,9 @@ public:
 
     void setDoubleShow(bool isShow);
 
-    void setRotateLeft();
+    void rotateLeft();
 
-    void setRotateRight();
+    void rotateRight();
 
     void setFileChanged(bool hasChanged);
 

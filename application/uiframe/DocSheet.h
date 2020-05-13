@@ -43,6 +43,12 @@ public:
 
     virtual bool openFileExec();
 
+    virtual int pagesNumber();
+
+    virtual int currentPage();      //从1开始
+
+    virtual int currentIndex();     //从0开始
+
     virtual void jumpToIndex(int index);
 
     virtual void jumpToPage(int page);
@@ -63,11 +69,52 @@ public:
 
     virtual void zoomout();
 
+    virtual void rotateLeft();
+
+    virtual void rotateRight();
+
+    virtual void setScaleMode(Dr::ScaleMode mode);
+
+    virtual void setScaleFactor(qreal scaleFactor);     //base is 1 ;设置后自动取消自适应
+
+    virtual void setMouseShape(Dr::MouseShape shape);
+
+    virtual void sidebarLeft();
+
+    virtual void sidebarRight();
+
+    virtual QString filter();
+
+    virtual void print();
+
+    DocOperation getOperation();
+
+    QString filePath();
+
+    QList<qreal> scaleFactorList();
+
+    Dr::FileType type();
+
+protected:
+    DocOperation &operation();
+
+signals:
+    void sigFileChanged(DocSheet *);    //被修改了 书签 笔记
+
+private:
+    QString      m_filePath;
+    Dr::FileType m_type;
+    DocOperation m_operation;
+    QString      m_uuid;
+public:
+    static QUuid     getUuid(DocSheet *);
+    static DocSheet *getSheet(QString uuid);
+    static QMap<QString, DocSheet *> g_map;
+
+    //===========以上是改版后的,优先使用(pdf看情况，如果未实现则不用) ,以下则逐步替换和删除
+
+public:
     virtual void setDoubleShow(bool isShow);
-
-    virtual void setRotateLeft();
-
-    virtual void setRotateRight();
 
     virtual void setFileChanged(bool hasChanged);
 
@@ -75,15 +122,9 @@ public:
 
     virtual void setMouseHand();        //手型工具
 
-    virtual void setMouseShape(Dr::MouseShape shape);
-
     virtual void setScale(double scale);
 
-    virtual void setScaleFactor(qreal scaleFactor);     //base is 1
-
     virtual void setFit(int fit);
-
-    virtual void setScaleMode(Dr::ScaleMode mode);
 
     virtual void setBookMark(int page, int state);
 
@@ -92,8 +133,6 @@ public:
     virtual bool isMouseHand();
 
     virtual bool isDoubleShow();
-
-    virtual QString filter();
 
     virtual bool getFileChanged();
 
@@ -123,44 +162,39 @@ public:
 
     virtual void openSideBar();
 
-    virtual void print();
-
-    virtual int pagesNumber();
-
-    virtual int currentPage();      //从1开始
-
-    virtual int currentIndex();     //从0开始
-
-    //replace docProxy api 2020.05.11
     virtual Outline outline();
 
     virtual int pointInWhichPage(QPoint pos);
+
     virtual int label2pagenum(QString label);
 
     virtual bool haslabel();
+
     virtual bool closeMagnifier();
+
     virtual bool showSlideModel();
+
     virtual bool exitSlideModel();
+
     virtual bool getAutoPlaySlideStatu();
+
     virtual bool setBookMarkState(int page, bool state);
+
     virtual bool getImage(int pagenum, QImage &image, double width, double height);
+
     virtual bool getImageMax(int pagenum, QImage &image, double max);
 
-
     virtual void docBasicInfo(stFileInfo &info);
+
     virtual void setAutoPlaySlide(bool autoplay, int timemsec = 3000);
+
     virtual void getAllAnnotation(QList<stHighlightContent> &listres);
 
     virtual double getMaxZoomratio();
 
     virtual QString pagenum2label(int index);
+
     virtual QString addIconAnnotation(const QPoint &pos, const QColor &color = Qt::yellow, TextAnnoteType_Em type = TextAnnoteType_Note);
-
-    QString filePath();
-
-    QList<qreal> scaleFactorList();
-
-    Dr::FileType type();
 
     void showTips(const QString &tips, int iconIndex = 0);
 
@@ -176,15 +210,8 @@ public:
 
     void quitMagnifer();
 
-    DocOperation getOperation();
-
-protected:
-    DocOperation &operation();
-
 signals:
     void sigOpenFileResult(const QString &, const bool &);
-
-    void sigFileChanged(DocSheet *);    //被修改了 书签 笔记
 
     void sigOpened(DocSheet *, bool);
 
@@ -192,15 +219,6 @@ signals:
 
     void signalAutoplaytoend();
 
-private:
-    QString      m_filePath;
-    Dr::FileType m_type;
-    DocOperation m_operation;
-    QString      m_uuid;
-public:
-    static QUuid     getUuid(DocSheet *);
-    static DocSheet *getSheet(QString uuid);
-    static QMap<QString, DocSheet *> g_map;
 };
 
 #endif // DOCSHEET_H

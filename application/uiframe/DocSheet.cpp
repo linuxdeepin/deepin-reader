@@ -108,12 +108,12 @@ void DocSheet::setDoubleShow(bool isShow)
     qDebug() << "unrealized";
 }
 
-void DocSheet::setRotateLeft()
+void DocSheet::rotateLeft()
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::setRotateRight()
+void DocSheet::rotateRight()
 {
     qDebug() << "unrealized";
 }
@@ -134,6 +134,16 @@ void DocSheet::setMouseHand()
 }
 
 void DocSheet::setMouseShape(Dr::MouseShape shape)
+{
+    qDebug() << "unrealized";
+}
+
+void DocSheet::sidebarLeft()
+{
+    qDebug() << "unrealized";
+}
+
+void DocSheet::sidebarRight()
 {
     qDebug() << "unrealized";
 }

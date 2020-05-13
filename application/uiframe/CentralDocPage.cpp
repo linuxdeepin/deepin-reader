@@ -553,6 +553,7 @@ void CentralDocPage::handleShortcut(const QString &s)
         if (s == KeyStr::g_esc) {
             quitMagnifer();
         }
+        return;
     }
 
     if (s == KeyStr::g_ctrl_s) {
@@ -588,10 +589,10 @@ void CentralDocPage::handleShortcut(const QString &s)
             getCurSheet()->setFit(ADAPTE_WIDGET_State);
     } else if (s == KeyStr::g_ctrl_r) {
         if (getCurSheet())
-            getCurSheet()->setRotateLeft();
+            getCurSheet()->rotateLeft();
     } else if (s == KeyStr::g_ctrl_shift_r) {
         if (getCurSheet())
-            getCurSheet()->setRotateRight();
+            getCurSheet()->rotateRight();
     }  else if (s == KeyStr::g_ctrl_larger) {
         if (getCurSheet())
             getCurSheet()->zoomin();
@@ -616,6 +617,12 @@ void CentralDocPage::handleShortcut(const QString &s)
     } else if (s == KeyStr::g_ctrl_i) {
         if (getCurSheet())
             getCurSheet()->addSelectedTextHightlightAnnotation();
+    } else if (s == KeyStr::g_left) {
+        if (getCurSheet())
+            getCurSheet()->sidebarLeft();
+    } else if (s == KeyStr::g_right) {
+        if (getCurSheet())
+            getCurSheet()->sidebarRight();
     }
 }
 

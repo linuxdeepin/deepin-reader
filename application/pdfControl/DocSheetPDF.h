@@ -44,9 +44,9 @@ public:
 
     void setDoubleShow(bool isShow)override;
 
-    void setRotateLeft()override;
+    void rotateLeft()override;
 
-    void setRotateRight()override;
+    void rotateRight()override;
 
     void setFileChanged(bool hasChanged)override;
 

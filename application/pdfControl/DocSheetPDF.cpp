@@ -194,14 +194,14 @@ void DocSheetPDF::setDoubleShow(bool isShow)
     m_browser->setDoubleShow(isShow);
 }
 
-void DocSheetPDF::setRotateLeft()
+void DocSheetPDF::rotateLeft()
 {
-    m_browser->setRotateLeft();
+    m_browser->rotateLeft();
 }
 
-void DocSheetPDF::setRotateRight()
+void DocSheetPDF::rotateRight()
 {
-    m_browser->setRotateRight();
+    m_browser->rotateRight();
 }
 
 void DocSheetPDF::setFileChanged(bool hasChanged)
@@ -236,7 +236,7 @@ void DocSheetPDF::setFit(int fit)
 void DocSheetPDF::setBookMark(int page, int state)
 {
     m_sidebar->setBookMark(page, state);
-    m_browser->setBookMark(page, state);
+    //m_browser->setBookMark(page, state);      //因为sidebar也会调用一次
 }
 
 void DocSheetPDF::showNoteWidget(int page, const QString &uuid, const int &type)
