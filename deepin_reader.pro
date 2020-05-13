@@ -1,8 +1,8 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    application \
-    DBService
+    DBService \
+    application
 
 #QMAKE_CFLAGS += -g -O0
 #QMAKE_CXXFLAGS += -g -O0

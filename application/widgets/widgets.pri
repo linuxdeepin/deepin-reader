@@ -1,6 +1,5 @@
 HEADERS += \
     $$PWD/FileViewWidget.h \
-    $$PWD/MainOperationWidget.h \
     $$PWD/PlayControlWidget.h \
     $$PWD/AttrScrollWidget.h \
     $$PWD/FileAttrWidget.h \
@@ -12,7 +11,6 @@ HEADERS += \
     $$PWD/bookmarkbutton.h
 
 SOURCES += \
-    $$PWD/MainOperationWidget.cpp \
     $$PWD/PlayControlWidget.cpp \
     $$PWD/AttrScrollWidget.cpp \
     $$PWD/FileAttrWidget.cpp \

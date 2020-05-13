@@ -80,12 +80,9 @@ CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
     this->viewport()->setAutoFillBackground(false);
     this->setContentsMargins(0, 0, 0, 0);
 
-    slotThemeChanged();
-
     connect(this, SIGNAL(collapsed(const QModelIndex &)), SLOT(SlotCollapsed(const QModelIndex &)));
     connect(this, SIGNAL(expanded(const QModelIndex &)), SLOT(SlotExpanded(const QModelIndex &)));
     connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(onItemClicked(QModelIndex)));
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &CatalogTreeView::slotThemeChanged);
 }
 
 CatalogTreeView::~CatalogTreeView()
@@ -266,29 +263,6 @@ void CatalogTreeView::onItemClicked(const QModelIndex &current)
     double left = current.data(Qt::UserRole + 2).toDouble();
     double top = current.data(Qt::UserRole + 3).toDouble();
     m_sheet->jumpToOutline(left, top, nPage);
-}
-
-void CatalogTreeView::slotThemeChanged()
-{
-//    auto color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().text().color();
-//    for (int index = 0; index < m_listTitle.count(); index++) {
-//        QStandardItem *item = m_listTitle.at(index);
-//        if (item) {
-//            item->setData(QVariant::fromValue(color), Qt::ForegroundRole);
-//            item->setForeground(QBrush(color));
-//        }
-//    }
-
-//    color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().textTips().color();
-//    for (int index = 0; index < m_listPage.count(); index++) {
-//        QStandardItem *item = m_listPage.at(index);
-//        if (item) {
-//            item->setData(QVariant::fromValue(color), Qt::ForegroundRole);
-//            item->setForeground(QBrush(color));
-//        }
-//    }
-
-//    this->update();
 }
 
 //  窗口大小变化, 列的宽度随之变化

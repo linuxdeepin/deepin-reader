@@ -28,7 +28,7 @@
 #include <QVBoxLayout>
 #include <DHorizontalLine>
 
-const int LEFTMINHEIGHT = 212;
+const int LEFTMINHEIGHT = 220;
 ThumbnailWidget::ThumbnailWidget(DocSheet *sheet, DWidget *parent)
     : CustomWidget(parent)
     , m_sheet(sheet)
@@ -43,7 +43,6 @@ ThumbnailWidget::~ThumbnailWidget()
 
 void ThumbnailWidget::initWidget()
 {
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &ThumbnailWidget::onUpdateTheme);
     m_pImageListView = new ImageListView(m_sheet, this);
     ThumbnailDelegate *imageDelegate = new ThumbnailDelegate(m_pImageListView);
     m_pImageListView->setItemDelegate(imageDelegate);
@@ -75,11 +74,6 @@ void ThumbnailWidget::handlePage(int page)
 {
     m_pImageListView->scrollToIndex(page);
     m_pPageWidget->setIndex(page);
-}
-
-void ThumbnailWidget::onUpdateTheme()
-{
-    updateWidgetTheme();
 }
 
 void ThumbnailWidget::onSetBookMarkState(const int &type, const int &pageIndex)

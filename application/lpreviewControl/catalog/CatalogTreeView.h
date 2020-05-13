@@ -56,8 +56,6 @@ protected slots:
 
     void onItemClicked(const QModelIndex &current);
 
-    void slotThemeChanged();
-
 private:
     void parseCatalogData(const Section &, QStandardItem *);
 

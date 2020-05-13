@@ -1,5 +1,4 @@
 HEADERS += \
-    $$PWD/DataStackedWidget.h \
     $$PWD/ImageListview.h \
     $$PWD/ImageViewModel.h \
     $$PWD/SheetSidebar.h \
@@ -24,7 +23,6 @@ HEADERS += \
     $$PWD/thumbnail/ThumbnailWidget.h
 
 SOURCES += \
-    $$PWD/DataStackedWidget.cpp \
     $$PWD/ImageListview.cpp \
     $$PWD/ImageViewModel.cpp \
     $$PWD/SheetSidebar.cpp \
