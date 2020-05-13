@@ -25,6 +25,7 @@
 #include <QMimeData>
 #include <QUuid>
 
+#include "lpreviewControl/SheetSidebar.h"
 #include "database.h"
 #include "widgets/SpinnerWidget.h"
 #include "pdfControl/SheetBrowserPDF.h"
@@ -138,16 +139,6 @@ void DocSheet::setMouseShape(Dr::MouseShape shape)
     qDebug() << "unrealized";
 }
 
-void DocSheet::sidebarLeft()
-{
-    qDebug() << "unrealized";
-}
-
-void DocSheet::sidebarRight()
-{
-    qDebug() << "unrealized";
-}
-
 void DocSheet::setScale(double scale)
 {
     qDebug() << "unrealized";
@@ -190,12 +181,14 @@ bool DocSheet::isDoubleShow()
 
 void DocSheet::handleOpenSuccess()
 {
-    qDebug() << "unrealized";
+    m_sidebar->handleOpenSuccess();
 }
 
 void DocSheet::setSidebarVisible(bool isVisible)
 {
-    qDebug() << "unrealized";
+    operation().sidebarVisible = isVisible;
+    setOper(Thumbnail, QString::number(isVisible));
+    m_sidebar->setVisible(isVisible);
 }
 
 void DocSheet::copySelectedText()

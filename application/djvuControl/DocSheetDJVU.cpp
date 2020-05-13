@@ -9,7 +9,7 @@ DocSheetDJVU::DocSheetDJVU(QString filePath, QWidget *parent) : DocSheet(Dr::DjV
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
-    m_sidebar = new SheetSidebar(this);
+    m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL);
     m_sidebar->setVisible(true);
 
     m_browser = new SheetBrowserDJVU(this);

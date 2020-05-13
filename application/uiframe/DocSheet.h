@@ -79,9 +79,7 @@ public:
 
     virtual void setMouseShape(Dr::MouseShape shape);
 
-    virtual void sidebarLeft();
-
-    virtual void sidebarRight();
+    void setSidebarVisible(bool isVisible);
 
     virtual QString filter();
 
@@ -93,19 +91,24 @@ public:
 
     QList<qreal> scaleFactorList();
 
+    void handleOpenSuccess();
+
     Dr::FileType type();
 
 protected:
     DocOperation &operation();
 
+    SheetSidebar *m_sidebar = nullptr;
+
 signals:
     void sigFileChanged(DocSheet *);    //被修改了 书签 笔记
 
 private:
-    QString      m_filePath;
-    Dr::FileType m_type;
-    DocOperation m_operation;
-    QString      m_uuid;
+    QString         m_filePath;
+    Dr::FileType    m_type;
+    DocOperation    m_operation;
+    QString         m_uuid;
+
 public:
     static QUuid     getUuid(DocSheet *);
     static DocSheet *getSheet(QString uuid);
@@ -149,10 +152,6 @@ public:
     virtual void exitSliderShow();
 
     virtual void handleSearch();
-
-    virtual void handleOpenSuccess();
-
-    virtual void setSidebarVisible(bool isVisible);
 
     virtual void copySelectedText();                    //复制选中文字
 

@@ -619,10 +619,10 @@ void CentralDocPage::handleShortcut(const QString &s)
             getCurSheet()->addSelectedTextHightlightAnnotation();
     } else if (s == KeyStr::g_left) {
         if (getCurSheet())
-            getCurSheet()->sidebarLeft();
+            getCurSheet()->jumpToPrevPage();
     } else if (s == KeyStr::g_right) {
         if (getCurSheet())
-            getCurSheet()->sidebarRight();
+            getCurSheet()->jumpToNextPage();
     }
 }
 

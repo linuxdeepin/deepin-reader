@@ -84,10 +84,6 @@ public:
 
     void handleSearch()override;
 
-    void handleOpenSuccess()override;
-
-    void setSidebarVisible(bool isVisible)override;
-
     void copySelectedText()override;                    //复制选中文字
 
     void highlightSelectedText()override;                   //高亮选中文字
@@ -147,7 +143,6 @@ private slots:
     void onAnntationMsg(const int &, const QString &);
 
 private:
-    SheetSidebar *m_sidebar = nullptr;
     SheetBrowserPDF *m_browser = nullptr;
     QStackedWidget *m_pRightWidget = nullptr;
     SpinnerWidget  *m_pSpinnerWidget = nullptr;

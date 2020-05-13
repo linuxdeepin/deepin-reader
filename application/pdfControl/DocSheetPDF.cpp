@@ -271,17 +271,6 @@ void DocSheetPDF::SlotFileOpenResult(const QString &s, const bool &res)
     emit sigOpenFileResult(s, res);
 }
 
-void DocSheetPDF::handleOpenSuccess()
-{
-    m_sidebar->handleOpenSuccess();
-}
-
-void DocSheetPDF::setSidebarVisible(bool isVisible)
-{
-    setOper(Thumbnail, QString::number(isVisible));
-    m_sidebar->setVisible(isVisible);
-}
-
 void DocSheetPDF::onShowTips(const QString &tips, int index)
 {
     showTips(tips, index);
