@@ -81,8 +81,6 @@ DocSheetPDF::DocSheetPDF(QString filePath, DWidget *parent)
 
     setSizes(list_src);
 
-    setAcceptDrops(true);
-
 //    //文档刚打开时，模拟鼠标点击文档区域事件
 //    QPoint pos(m_pRightWidget->geometry().x() + 10, m_pRightWidget->geometry().y() + 10);
 //    QMouseEvent event0(QEvent::MouseButtonPress, pos, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);

@@ -132,6 +132,7 @@ bool DocSheetDJVU::openFileExec()
 {
     if (m_browser->openFilePath(filePath())) {
         m_browser->loadPages(m_operation.scaleMode, m_operation.scaleFactor, m_operation.rotation, m_operation.mouseShape, m_operation.currentPage);
+        handleOpenSuccess();
         return true;
     }
 

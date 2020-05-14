@@ -161,8 +161,6 @@ void CentralDocPage::openFile(QString &filePath)
     } else {
         showTips(tr("The format is not supported"), 1);
     }
-
-
 }
 
 void CentralDocPage::onOpened(DocSheet *sheet, bool ret)

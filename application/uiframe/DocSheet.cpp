@@ -44,6 +44,7 @@ DocSheet::DocSheet(Dr::FileType type, QString filePath, DWidget *parent)
     m_uuid = QUuid::createUuid().toString();
     g_map[m_uuid] = this;
     Database::instance()->readOperation(this);
+    setAcceptDrops(true);
 }
 
 DocSheet::~DocSheet()
@@ -81,7 +82,6 @@ void DocSheet::jumpToFirstPage()
 void DocSheet::jumpToLastPage()
 {
     qDebug() << "unrealized";
-
 }
 
 void DocSheet::jumpToNextPage()
@@ -181,7 +181,8 @@ bool DocSheet::isDoubleShow()
 
 void DocSheet::handleOpenSuccess()
 {
-    m_sidebar->handleOpenSuccess();
+    if (m_sidebar)
+        m_sidebar->handleOpenSuccess();
 }
 
 void DocSheet::setSidebarVisible(bool isVisible)

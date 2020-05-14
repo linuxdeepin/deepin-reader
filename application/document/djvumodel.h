@@ -1,27 +1,3 @@
-/*
-
-Copyright 2013 Adam Reichold
-Copyright 2013 Alexander Volkov
-
-This file is part of qpdfview.
-
-The implementation is based on KDjVu by Pino Toscano.
-
-qpdfview is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or
-(at your option) any later version.
-
-qpdfview is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with qpdfview.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
-
 #ifndef DJVUMODEL_H
 #define DJVUMODEL_H
 
@@ -85,9 +61,11 @@ public:
     QStringList saveFilter() const;
 
     bool canSave() const;
+
     bool save(const QString &filePath, bool withChanges) const;
 
     void loadOutline(QStandardItemModel *outlineModel) const;
+
     void loadProperties(QStandardItemModel *propertiesModel) const;
 
     static deepin_reader::DjVuDocument *loadDocument(const QString &filePath);
@@ -100,7 +78,9 @@ private:
     mutable QMutex m_mutex;
 
     ddjvu_context_t *m_context;
+
     ddjvu_document_t *m_document;
+
     ddjvu_format_t *m_format;
 
     QHash< QString, int > m_indexByName;
