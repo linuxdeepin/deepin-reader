@@ -184,7 +184,7 @@ void PagingWidget::__NormalChangePage()
     QString sText = m_pJumpPageLineEdit->text();
     int iPage = sText.toInt();
     if (iPage <= 0 || iPage > m_sheet->pagesNumber()) {
-        m_sheet->showTips(tr("Invalid page number"));
+        m_sheet->showTips(tr("Invalid page number"), 1);
     } else {
         m_sheet->jumpToIndex(iPage - 1);
         setFocus();
@@ -201,7 +201,7 @@ void PagingWidget::__PageNumberJump()
         m_sheet->jumpToIndex(iPage);
         setFocus();
     } else {
-        m_sheet->showTips(tr("Invalid page number"));
+        m_sheet->showTips(tr("Invalid page number"), 1);
     }
 }
 
