@@ -99,7 +99,7 @@ void CentralDocPage::onSheetChanged(DocSheet *sheet)
     sigCurSheetChanged(sheet);
 
     //...以下要改成记录所有的sheet,遍历一下，查看是否需要阻塞关机,目前只是记录最后一个文档被保存，有问题
-    if (sheet->getFileChanged()) {
+    if (sheet->fileChanged()) {
         BlockShutdown();
     } else {
         UnBlockShutdown();
@@ -221,7 +221,7 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
 
     sheet->saveOper();
 
-    if (sheet->getFileChanged() && 2 == SaveDialog().showDialog()) {
+    if (sheet->fileChanged() && 2 == SaveDialog().showDialog()) {
         sheet->saveData();
     }
 
@@ -335,7 +335,7 @@ bool CentralDocPage::saveAll()
     foreach (auto sheet, sheets) {
         sheet->saveOper();
 
-        if (sheet->getFileChanged())
+        if (sheet->fileChanged())
             changedList.append(sheet);
     }
 
@@ -366,7 +366,7 @@ bool CentralDocPage::saveCurrent()
     if (nullptr == sheet)
         return false;
 
-    if (!sheet->getFileChanged()) {
+    if (!sheet->fileChanged()) {
         return false;
     }
 
@@ -492,7 +492,7 @@ void CentralDocPage::UnBlockShutdown()
 {
     auto splitterList = this->findChildren<DocSheet *>();
     foreach (auto mainsplit, splitterList) {
-        if (mainsplit->getFileChanged())
+        if (mainsplit->fileChanged())
             return;
     }
 
@@ -580,7 +580,7 @@ void CentralDocPage::handleShortcut(const QString &s)
         }
     } else if (s == KeyStr::g_ctrl_m) {
         if (getCurSheet())
-            getCurSheet()->openSideBar();
+            getCurSheet()->setSidebarVisible(true);
     } else if (s == KeyStr::g_ctrl_2) {
         if (getCurSheet())
             getCurSheet()->setFit(ADAPTE_HEIGHT_State);
@@ -725,11 +725,13 @@ bool CentralDocPage::openMagnifer()
 void CentralDocPage::quitMagnifer()
 {
     int nState = getCurrentState();
+
     if (nState == Magnifer_State) {
         setCurrentState(Default_State);
 
         if (m_magniferSheet.isNull())
             return;
+
         m_magniferSheet->closeMagnifier();
     }
 }

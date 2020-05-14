@@ -48,29 +48,35 @@ void FontMenu::readCurDocParam(DocSheet *sheet)
     if (m_sheet.isNull())
         return;
 
-    //单双页
-    int value = m_sheet->getOper(DoubleShow).toInt();
+    if (Dr::PDF == m_sheet->type()) {
+        //单双页
+        int value = m_sheet->getOper(DoubleShow).toInt();
 
-    m_bDoubPage = (value == 1) ? true : false;
-    if (m_pTwoPageAction) {
-        m_pTwoPageAction->setChecked(m_bDoubPage);
-    }
+        m_bDoubPage = (value == 1) ? true : false;
+        if (m_pTwoPageAction) {
+            m_pTwoPageAction->setChecked(m_bDoubPage);
+        }
 
-    //自适应宽/高
-    int adaptat = m_sheet->getOper(Fit).toInt();
+        //自适应宽/高
+        int adaptat = m_sheet->getOper(Fit).toInt();
 
-    if (adaptat == ADAPTE_WIDGET_State) {
-        m_bFiteW = true;
-        m_bFiteH = false;
-    } else if (adaptat == ADAPTE_HEIGHT_State) {
-        m_bFiteH = true;
-        m_bFiteW = false;
+        if (adaptat == ADAPTE_WIDGET_State) {
+            m_bFiteW = true;
+            m_bFiteH = false;
+        } else if (adaptat == ADAPTE_HEIGHT_State) {
+            m_bFiteH = true;
+            m_bFiteW = false;
+        } else {
+            m_bFiteW = false;
+            m_bFiteH = false;
+        }
+        m_pFiteWAction->setChecked(m_bFiteW);
+        m_pFiteHAction->setChecked(m_bFiteH);
     } else {
-        m_bFiteW = false;
-        m_bFiteH = false;
+        m_pTwoPageAction->setChecked(m_sheet->operation().layoutMode == Dr::TwoPagesMode);
+        m_pFiteWAction->setChecked(m_sheet->operation().scaleMode == Dr::FitToPageWidthMode);
+        m_pFiteHAction->setChecked(m_sheet->operation().scaleMode == Dr::FitToPageHeightMode);
     }
-    m_pFiteWAction->setChecked(m_bFiteW);
-    m_pFiteHAction->setChecked(m_bFiteH);
 }
 
 
@@ -85,20 +91,38 @@ void FontMenu::slotTwoPage()
 
     m_bDoubPage = !m_bDoubPage;
 
-    m_sheet->setDoubleShow(m_bDoubPage);
+    if (m_bDoubPage)
+        m_sheet->setLayoutMode(Dr::TwoPagesMode);
+    else
+        m_sheet->setLayoutMode(Dr::SinglePageMode);
 
-    if (!m_bDoubPage) {//如果切成单页，需要自适应宽度
-        m_sheet->setFit(ADAPTE_WIDGET_State);
-    } else if (m_bDoubPage && m_sheet->getOper(Thumbnail).toInt()) { //从单页切双页，如果缩略图开着,则适应宽度
-        m_sheet->setFit(ADAPTE_WIDGET_State);
-    } else if (QString::number(m_sheet->getOper(Scale).toDouble(), 'f', 2) == "100.00") { //如果没有人为调整过，则适应
-        m_sheet->setFit(ADAPTE_WIDGET_State);
-    } else if (m_bDoubPage && m_sheet->getOper(Scale).toDouble() > 100.0001) { //从单页切双页，原来比例大于100,则适应宽度
-        m_sheet->setFit(ADAPTE_WIDGET_State);
-    } else if (ADAPTE_WIDGET_State == m_sheet->getOper(Fit).toInt()) {        //从单页切双页，原来比例大于100,则适应宽度
-        m_sheet->setFit(ADAPTE_WIDGET_State);
-    } else
-        m_sheet->setFit(NO_ADAPTE_State);
+    if (Dr::PDF == m_sheet->type()) {
+        if (!m_bDoubPage) {//如果切成单页，需要自适应宽度
+            m_sheet->setFit(ADAPTE_WIDGET_State);
+        } else if (m_bDoubPage && m_sheet->getOper(Thumbnail).toInt()) { //从单页切双页，如果缩略图开着,则适应宽度
+            m_sheet->setFit(ADAPTE_WIDGET_State);
+        } else if (QString::number(m_sheet->getOper(Scale).toDouble(), 'f', 2) == "100.00") { //如果没有人为调整过，则适应
+            m_sheet->setFit(ADAPTE_WIDGET_State);
+        } else if (m_bDoubPage && m_sheet->getOper(Scale).toDouble() > 100.0001) { //从单页切双页，原来比例大于100,则适应宽度
+            m_sheet->setFit(ADAPTE_WIDGET_State);
+        } else if (ADAPTE_WIDGET_State == m_sheet->getOper(Fit).toInt()) {        //从单页切双页，原来比例大于100,则适应宽度
+            m_sheet->setFit(ADAPTE_WIDGET_State);
+        } else
+            m_sheet->setFit(NO_ADAPTE_State);
+    } else {
+        if (!m_bDoubPage) {//如果切成单页，需要自适应宽度
+            m_sheet->setScaleMode(Dr::FitToPageWidthMode);
+        } else if (m_bDoubPage && m_sheet->getOper(Thumbnail).toInt()) {                //从单页切双页，如果缩略图开着,则适应宽度
+            m_sheet->setScaleMode(Dr::FitToPageWidthMode);
+        } else if (qFuzzyCompare(m_sheet->operation().scaleFactor, 1.00)) {             //如果没有人为调整过，则适应
+            m_sheet->setScaleMode(Dr::FitToPageWidthMode);
+        } else if (m_bDoubPage && m_sheet->operation().scaleFactor > 1.01) {            //从单页切双页，原来比例大于100,则适应宽度
+            m_sheet->setScaleMode(Dr::FitToPageWidthMode);
+        } else if (Dr::FitToPageWidthMode == m_sheet->operation().scaleMode) {          //从单页切双页，原来比例大于100,则适应宽度
+            m_sheet->setScaleMode(Dr::FitToPageWidthMode);
+        } else
+            m_sheet->setScaleMode(Dr::ScaleFactorMode);
+    }
 }
 
 /**
@@ -211,11 +235,18 @@ void FontMenu::setAppSetFiteHAndW()
 
     int iValue = Default_State;
 
-    if (m_bFiteW) {
-        iValue = ADAPTE_WIDGET_State;
-    } else if (m_bFiteH) {
-        iValue = ADAPTE_HEIGHT_State;
+    if (Dr::PDF == m_sheet->type()) {
+        if (m_bFiteW) {
+            iValue = ADAPTE_WIDGET_State;
+        } else if (m_bFiteH) {
+            iValue = ADAPTE_HEIGHT_State;
+        }
+        m_sheet->setFit(iValue);
+    } else {
+        if (m_bFiteW) {
+            m_sheet->setScaleMode(Dr::FitToPageWidthMode);
+        } else if (m_bFiteH) {
+            m_sheet->setScaleMode(Dr::FitToPageHeightMode);
+        }
     }
-
-    m_sheet->setFit(iValue);
 }

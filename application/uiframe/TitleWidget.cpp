@@ -131,11 +131,15 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
             setDefaultShape();
 
     } else if (Dr::DjVu == m_curSheet->type()) {
-        SetBtnDisable(false);
+        m_pThumbnailBtn->setDisabled(false);
+        m_pSettingBtn->setDisabled(false);
+        m_pHandleShapeBtn->setDisabled(false);
+        m_pSearchBtn->setDisabled(true);
+        m_pSw->setDisabled(false);
 
-        m_pThumbnailBtn->setChecked(m_curSheet->getOperation().sidebarVisible);
+        m_pThumbnailBtn->setChecked(m_curSheet->operation().sidebarVisible);
 
-        if (Dr::MouseShapeHand == m_curSheet->getOperation().mouseShape)
+        if (Dr::MouseShapeHand == m_curSheet->operation().mouseShape)
             setHandleShape();
         else
             setDefaultShape();

@@ -59,8 +59,6 @@ SheetBrowserPDF::SheetBrowserPDF(DocSheet *sheet, DWidget *parent)
     : CustomWidget(parent), d_ptr(new SheetBrowserPDFPrivate(sheet, this))
 {
     setMouseTracking(true);  //  接受 鼠标滑动事件
-
-    initWidget();
     initConnections();
 }
 
@@ -169,10 +167,6 @@ void SheetBrowserPDF::showNoteWidget(int page, const QString &uuid, const int &t
     d->m_pProxy->getAnnotationText(uuid, text, page);
 
     d->showNoteViewWidget(QString::number(page), uuid, text, type);
-}
-
-void SheetBrowserPDF::initWidget()
-{
 }
 
 //  鼠标移动
@@ -301,7 +295,7 @@ void SheetBrowserPDF::copySelectedText()
 {
     Q_D(SheetBrowserPDF);
     //  处于幻灯片模式下
-    int nState = d->m_sheet->getCurrentState();
+    int nState = d->m_sheet->currentState();
 
     if (nState == SLIDER_SHOW)
         return;
@@ -321,7 +315,7 @@ void SheetBrowserPDF::highlightSelectedText()
 {
     Q_D(SheetBrowserPDF);
     //  处于幻灯片模式下
-    int nState = d->m_sheet->getCurrentState();
+    int nState = d->m_sheet->currentState();
 
     if (nState == SLIDER_SHOW)
         return;
@@ -341,7 +335,7 @@ void SheetBrowserPDF::addSelectedTextHightlightAnnotation()
 {
     Q_D(SheetBrowserPDF);
     //  处于幻灯片模式下
-    int nState = d->m_sheet->getCurrentState();
+    int nState = d->m_sheet->currentState();
 
     if (nState == SLIDER_SHOW)
         return;

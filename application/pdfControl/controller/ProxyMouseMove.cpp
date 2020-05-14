@@ -38,10 +38,10 @@ void ProxyMouseMove::mouseMoveEvent(QMouseEvent *event)
 {
     QPoint globalPos = event->globalPos();
     //  处于幻灯片模式下
-    int nState = _fvwParent->m_sheet->getCurrentState();
+    int nState = _fvwParent->m_sheet->currentState();
 
     if (nState == SLIDER_SHOW) {
-        _fvwParent->m_sheet->showControl(); //  显示 幻灯片 控制
+        _fvwParent->m_sheet->showSlideControl();                //显示幻灯片控制
     } else if (nState == Magnifer_State) {                      //当前是放大镜状态
         __ShowMagnifier(globalPos);
     } else if (_fvwParent->m_sheet->isMouseHand()) {            //手型状态下， 按住鼠标左键 位置进行移动
@@ -149,7 +149,7 @@ void ProxyMouseMove::__ShowFileNoteWidget(const QPoint &docPos)
 
 void ProxyMouseMove::mousePressEvent(QMouseEvent *event)
 {
-    int nState = _fvwParent->m_sheet->getCurrentState();
+    int nState = _fvwParent->m_sheet->currentState();
 
     Qt::MouseButton nBtn = event->button();
     if (nBtn == Qt::RightButton) {  //  右键处理
@@ -240,7 +240,7 @@ void ProxyMouseMove::__OtherMousePress(const QPoint &globalPos)
     if (pLink) {
         __ClickPageLink(pLink);
     } else {
-        int nState = _fvwParent->m_sheet->getCurrentState();
+        int nState = _fvwParent->m_sheet->currentState();
         if (nState == Default_State) {
             _fvwParent->m_pProxy->mouseSelectTextClear();  //  清除之前选中的文字高亮
 
@@ -277,7 +277,7 @@ void ProxyMouseMove::__ClickPageLink(Page::Link *pLink)
 void ProxyMouseMove::mouseReleaseEvent(QMouseEvent *event)
 {
     //  幻灯片模式下, 左键单击 不作任何处理
-    int nState = _fvwParent->m_sheet->getCurrentState();
+    int nState = _fvwParent->m_sheet->currentState();
 
     if (nState == SLIDER_SHOW)
         return;

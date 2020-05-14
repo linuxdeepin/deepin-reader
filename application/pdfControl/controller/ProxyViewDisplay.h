@@ -40,7 +40,6 @@ public:
 
 public:
     double onSetWidgetAdapt();
-    void OnSetViewChange(const QString &msgContent);
     void setScaleRotateViewModeAndShow();
 
     void setAdapteState(const int &nAdapteState);

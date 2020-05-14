@@ -104,17 +104,17 @@ void DocSheet::zoomout()
     qDebug() << "unrealized";
 }
 
-void DocSheet::setDoubleShow(bool isShow)
-{
-    qDebug() << "unrealized";
-}
-
 void DocSheet::rotateLeft()
 {
     qDebug() << "unrealized";
 }
 
 void DocSheet::rotateRight()
+{
+    qDebug() << "unrealized";
+}
+
+void DocSheet::setLayoutMode(Dr::LayoutMode mode)
 {
     qDebug() << "unrealized";
 }
@@ -186,9 +186,11 @@ void DocSheet::handleOpenSuccess()
 
 void DocSheet::setSidebarVisible(bool isVisible)
 {
-    operation().sidebarVisible = isVisible;
+    m_operation.sidebarVisible = isVisible;
     setOper(Thumbnail, QString::number(isVisible));
-    m_sidebar->setVisible(isVisible);
+    if (m_sidebar)
+        m_sidebar->setVisible(isVisible);
+    emit sigFileChanged(this);
 }
 
 void DocSheet::copySelectedText()
@@ -202,11 +204,6 @@ void DocSheet::highlightSelectedText()
 }
 
 void DocSheet::addSelectedTextHightlightAnnotation()
-{
-    qDebug() << "unrealized";
-}
-
-void DocSheet::openSideBar()
 {
     qDebug() << "unrealized";
 }
@@ -380,7 +377,7 @@ QString DocSheet::filter()
     return "";
 }
 
-bool DocSheet::getFileChanged()
+bool DocSheet::fileChanged()
 {
     qDebug() << "unrealized";
     return false;
@@ -446,7 +443,7 @@ void DocSheet::setCurrentState(int state)
     return doc->setCurrentState(state);
 }
 
-int DocSheet::getCurrentState()
+int DocSheet::currentState()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
     if (nullptr == doc)
@@ -455,7 +452,7 @@ int DocSheet::getCurrentState()
     return doc->getCurrentState();
 }
 
-void DocSheet::showControl()
+void DocSheet::showSlideControl()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
     if (nullptr == doc)
@@ -473,15 +470,6 @@ void DocSheet::quitSlide()
     doc->quitSlide();
 }
 
-void DocSheet::openMagnifer()
-{
-    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
-    if (nullptr == doc)
-        return;
-
-    doc->openMagnifer();
-}
-
 void DocSheet::quitMagnifer()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
@@ -491,12 +479,7 @@ void DocSheet::quitMagnifer()
     doc->quitMagnifer();
 }
 
-DocOperation DocSheet::getOperation()
-{
-    return m_operation;
-}
-
-DocOperation &DocSheet::operation()
+DocOperation DocSheet::operation()
 {
     return m_operation;
 }

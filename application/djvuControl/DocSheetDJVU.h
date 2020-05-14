@@ -14,7 +14,15 @@ public:
 
     ~DocSheetDJVU()override;
 
-    void pageJump(int page);
+    bool openFileExec()override;
+
+    int pagesNumber()override;
+
+    int currentPage()override;      //从1开始
+
+    int currentIndex()override;     //从0开始
+
+    void jumpToPage(int page)override;
 
     void jumpToIndex(int index)override;
 
@@ -30,13 +38,19 @@ public:
 
     void zoomout() override;
 
-    void setScaleFactor(qreal scaleFactor)override;
+    void rotateLeft()override;
 
-    bool openFileExec()override;
+    void rotateRight()override;
+
+    void setLayoutMode(Dr::LayoutMode mode)override;
+
+    void setScaleFactor(qreal scaleFactor)override;
 
     void setMouseShape(Dr::MouseShape shape)override;
 
     void setScaleMode(Dr::ScaleMode mode)override;
+
+    bool fileChanged()override;
 
 private slots:
     void onBrowserPageChanged(int page);
@@ -44,7 +58,6 @@ private slots:
     void onBrowserScaleChanged(Dr::ScaleMode mode, qreal scaleFactor);
 
 private:
-    SheetSidebar     *m_sidebar = nullptr;
     SheetBrowserDJVU *m_browser = nullptr;
 };
 

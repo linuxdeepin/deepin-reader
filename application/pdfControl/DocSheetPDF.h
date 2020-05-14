@@ -28,6 +28,8 @@ public:
 
     void openFile()override;
 
+    void jumpToPage(int page)override;
+
     void jumpToIndex(int index)override;
 
     void jumpToFirstPage()override;
@@ -41,8 +43,6 @@ public:
     void zoomin()override;//放大一级
 
     void zoomout()override;
-
-    void setDoubleShow(bool isShow)override;
 
     void rotateLeft()override;
 
@@ -62,13 +62,15 @@ public:
 
     void showNoteWidget(int page, const QString &uuid, const int &type = NOTE_HIGHLIGHT)override;
 
+    void setLayoutMode(Dr::LayoutMode mode)override;
+
     bool isMouseHand()override;
 
     bool isDoubleShow()override;
 
     QString filter()override;
 
-    bool getFileChanged()override;
+    bool fileChanged()override;
 
     bool saveData()override;
 
@@ -89,8 +91,6 @@ public:
     void highlightSelectedText()override;                   //高亮选中文字
 
     void addSelectedTextHightlightAnnotation()override;       //对选中文字添加高亮注释
-
-    void openSideBar()override;
 
     void print()override;
 

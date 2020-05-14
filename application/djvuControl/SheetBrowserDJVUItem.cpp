@@ -59,7 +59,11 @@ void SheetBrowserDJVUItem::render(double scaleFactor, Dr::Rotation rotation, boo
         return;
 
     m_scaleFactor = scaleFactor;
-    m_rotation  = rotation;
+
+    if (m_rotation != rotation) {//旋转变化则强制移除
+        m_image = QImage();
+        m_rotation  = rotation;
+    }
 
     if (!readerLater) {
         m_imageScaleFactor = m_scaleFactor;

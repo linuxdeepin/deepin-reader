@@ -101,6 +101,11 @@ void DocSheetPDF::openFile()
     m_browser->OpenFilePath(filePath());
 }
 
+void DocSheetPDF::jumpToPage(int page)
+{
+    jumpToIndex(page - 1);
+}
+
 void DocSheetPDF::jumpToIndex(int page)
 {
     if (!m_browser->GetDocProxy())
@@ -189,11 +194,6 @@ void DocSheetPDF::zoomout()
     }
 }
 
-void DocSheetPDF::setDoubleShow(bool isShow)
-{
-    m_browser->setDoubleShow(isShow);
-}
-
 void DocSheetPDF::rotateLeft()
 {
     m_browser->rotateLeft();
@@ -242,6 +242,18 @@ void DocSheetPDF::setBookMark(int page, int state)
 void DocSheetPDF::showNoteWidget(int page, const QString &uuid, const int &type)
 {
     m_browser->showNoteWidget(page, uuid, type);
+}
+
+void DocSheetPDF::setLayoutMode(Dr::LayoutMode mode)
+{
+    if (Dr::SinglePageMode == mode)
+        m_browser->setDoubleShow(false);
+    else if (Dr::TwoPagesMode == mode)
+        m_browser->setDoubleShow(true);
+    else
+        return;
+
+    m_operation.layoutMode = mode;
 }
 
 bool DocSheetPDF::isMouseHand()
@@ -302,15 +314,6 @@ void DocSheetPDF::addSelectedTextHightlightAnnotation()
     m_browser->addSelectedTextHightlightAnnotation();
 }
 
-void DocSheetPDF::openSideBar()
-{
-    setSidebarVisible(true);
-
-    setOper(Thumbnail, "1");
-
-    emit sigFileChanged(this);
-}
-
 void DocSheetPDF::print()
 {
     PrintManager p(this);
@@ -357,7 +360,7 @@ QString DocSheetPDF::filter()
     return "Pdf File (*.pdf)";
 }
 
-bool DocSheetPDF::getFileChanged()
+bool DocSheetPDF::fileChanged()
 {
     return m_browser->getFileChange();
 }

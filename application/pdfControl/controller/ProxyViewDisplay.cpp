@@ -76,12 +76,6 @@ double ProxyViewDisplay::onSetWidgetAdapt()
     return m_nScale;
 }
 
-void ProxyViewDisplay::OnSetViewChange(const QString &msgContent)
-{
-    m_nDoubleShow = msgContent.toInt();
-    setScaleRotateViewModeAndShow();
-}
-
 void ProxyViewDisplay::setScaleRotateViewModeAndShow()
 {
     if (fvmPrivate->m_pProxy) {

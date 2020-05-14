@@ -86,14 +86,14 @@ bool Database::readOperation(DocSheet *sheet)
         query.prepare(" select * from operation where filePath = :filePath");
         query.bindValue(":filePath", sheet->filePath());
         if (query.exec() && query.next()) {
-            sheet->operation().layoutMode = (Dr::LayoutMode)query.value("layoutMode").toInt();
-            sheet->operation().mouseShape = (Dr::MouseShape)query.value("mouseShape").toInt();
-            sheet->operation().scaleMode = (Dr::ScaleMode)query.value("scaleMode").toInt();
-            sheet->operation().rotation = (Dr::Rotation)query.value("rotation").toInt();
-            sheet->operation().scaleFactor = query.value("scaleFactor").toInt();
-            sheet->operation().sidebarVisible = query.value("sidebarVisible").toInt();
-            sheet->operation().sidebarIndex = query.value("sidebarIndex").toInt();
-            sheet->operation().currentPage = query.value("currentPage").toInt();
+            sheet->m_operation.layoutMode = (Dr::LayoutMode)query.value("layoutMode").toInt();
+            sheet->m_operation.mouseShape = (Dr::MouseShape)query.value("mouseShape").toInt();
+            sheet->m_operation.scaleMode = (Dr::ScaleMode)query.value("scaleMode").toInt();
+            sheet->m_operation.rotation = (Dr::Rotation)query.value("rotation").toInt();
+            sheet->m_operation.scaleFactor = query.value("scaleFactor").toInt();
+            sheet->m_operation.sidebarVisible = query.value("sidebarVisible").toInt();
+            sheet->m_operation.sidebarIndex = query.value("sidebarIndex").toInt();
+            sheet->m_operation.currentPage = query.value("currentPage").toInt();
             return true;
         }
     }
@@ -110,14 +110,14 @@ bool Database::saveOperation(DocSheet *sheet)
                       " VALUES(:filePath,:layoutMode,:mouseShape,:scaleMode,:rotation,:scaleFactor,:sidebarVisible,:sidebarIndex,currentPage)");
 
         query.bindValue(":filePath", sheet->filePath());
-        query.bindValue(":layoutMode", sheet->operation().layoutMode);
-        query.bindValue(":mouseShape", sheet->operation().mouseShape);
-        query.bindValue(":scaleMode", sheet->operation().scaleMode);
-        query.bindValue(":rotation", sheet->operation().rotation);
-        query.bindValue(":scaleFactor", sheet->operation().scaleFactor);
-        query.bindValue(":sidebarVisible", sheet->operation().sidebarVisible);
-        query.bindValue(":sidebarIndex", sheet->operation().sidebarIndex);
-        query.bindValue(":currentPage", sheet->operation().currentPage);
+        query.bindValue(":layoutMode", sheet->m_operation.layoutMode);
+        query.bindValue(":mouseShape", sheet->m_operation.mouseShape);
+        query.bindValue(":scaleMode", sheet->m_operation.scaleMode);
+        query.bindValue(":rotation", sheet->m_operation.rotation);
+        query.bindValue(":scaleFactor", sheet->m_operation.scaleFactor);
+        query.bindValue(":sidebarVisible", sheet->m_operation.sidebarVisible);
+        query.bindValue(":sidebarIndex", sheet->m_operation.sidebarIndex);
+        query.bindValue(":currentPage", sheet->m_operation.currentPage);
         return query.exec();
     }
 

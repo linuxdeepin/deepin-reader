@@ -318,7 +318,7 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
 {
     Q_Q(SheetBrowserPDF);
     //  处于幻灯片模式下
-    int nState = m_sheet->getCurrentState();
+    int nState = m_sheet->currentState();
     if (nState == SLIDER_SHOW)
         return;
 

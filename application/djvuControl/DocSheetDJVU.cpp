@@ -10,14 +10,10 @@ DocSheetDJVU::DocSheetDJVU(QString filePath, QWidget *parent) : DocSheet(Dr::DjV
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
     m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL);
-    m_sidebar->setVisible(true);
 
     m_browser = new SheetBrowserDJVU(this);
     connect(m_browser, SIGNAL(sigPageChanged(int)), this, SLOT(onBrowserPageChanged(int)));
     connect(m_browser, SIGNAL(sigScaleChanged(Dr::ScaleMode, qreal)), this, SLOT(onBrowserScaleChanged(Dr::ScaleMode, qreal)));
-
-    addWidget(m_sidebar);
-    addWidget(m_browser);
 
     setAcceptDrops(true);
 }
@@ -27,7 +23,7 @@ DocSheetDJVU::~DocSheetDJVU()
 
 }
 
-void DocSheetDJVU::pageJump(int page)
+void DocSheetDJVU::jumpToPage(int page)
 {
     m_browser->setCurrentPage(page);
 }
@@ -44,25 +40,25 @@ void DocSheetDJVU::jumpToFirstPage()
 
 void DocSheetDJVU::jumpToLastPage()
 {
-    pageJump(m_browser->allPages());
+    jumpToPage(m_browser->allPages());
 }
 
 void DocSheetDJVU::jumpToNextPage()
 {
-    int page = m_browser->currentPage() + (operation().layoutMode == Dr::TwoPagesMode ? 2 : 1);
+    int page = m_browser->currentPage() + (m_operation.layoutMode == Dr::TwoPagesMode ? 2 : 1);
 
     page = page >= m_browser->allPages() ? m_browser->allPages() : page;
 
-    pageJump(page);
+    jumpToPage(page);
 }
 
 void DocSheetDJVU::jumpToPrevPage()
 {
-    int page = m_browser->currentPage() - (operation().layoutMode == Dr::TwoPagesMode ? 2 : 1);
+    int page = m_browser->currentPage() - (m_operation.layoutMode == Dr::TwoPagesMode ? 2 : 1);
 
     page = page < 1 ? 1 : page;
 
-    pageJump(page);
+    jumpToPage(page);
 }
 
 void DocSheetDJVU::zoomin()
@@ -70,7 +66,7 @@ void DocSheetDJVU::zoomin()
     QList<qreal> dataList = scaleFactorList();
 
     for (int i = 0; i < dataList.count(); ++i) {
-        if (dataList[i] > (operation().scaleFactor)) {
+        if (dataList[i] > (m_operation.scaleFactor)) {
             setScaleFactor(dataList[i]);
             return;
         }
@@ -82,41 +78,107 @@ void DocSheetDJVU::zoomout()
     QList<qreal> dataList = scaleFactorList();
 
     for (int i = dataList.count() - 1; i >= 0; --i) {
-        if (dataList[i] < (operation().scaleFactor)) {
+        if (dataList[i] < (m_operation.scaleFactor)) {
             setScaleFactor(dataList[i]);
             return;
         }
     }
 }
 
+void DocSheetDJVU::rotateLeft()
+{
+    if (Dr::RotateBy0 == m_operation.rotation)
+        m_operation.rotation = Dr::RotateBy270;
+    else if (Dr::RotateBy270 == m_operation.rotation)
+        m_operation.rotation = Dr::RotateBy180;
+    else if (Dr::RotateBy180 == m_operation.rotation)
+        m_operation.rotation = Dr::RotateBy90;
+    else if (Dr::RotateBy90 == m_operation.rotation)
+        m_operation.rotation = Dr::RotateBy0;
+
+    m_browser->setRotation(m_operation.rotation);
+}
+
+void DocSheetDJVU::rotateRight()
+{
+    if (Dr::RotateBy0 == m_operation.rotation)
+        m_operation.rotation = Dr::RotateBy90;
+    else if (Dr::RotateBy90 == m_operation.rotation)
+        m_operation.rotation = Dr::RotateBy180;
+    else if (Dr::RotateBy180 == m_operation.rotation)
+        m_operation.rotation = Dr::RotateBy270;
+    else if (Dr::RotateBy270 == m_operation.rotation)
+        m_operation.rotation = Dr::RotateBy0;
+
+    m_browser->setRotation(m_operation.rotation);
+}
+
+void DocSheetDJVU::setLayoutMode(Dr::LayoutMode mode)
+{
+    if (mode >= 0 && mode < Dr::NumberOfLayoutModes) {
+        m_operation.layoutMode = mode;
+        m_browser->setLayoutMode(mode);
+    }
+}
+
 void DocSheetDJVU::setScaleFactor(qreal scaleFactor)
 {
-    operation().scaleMode = Dr::ScaleFactorMode;
-    operation().scaleFactor = scaleFactor;
-
-    m_browser->setScale(Dr::ScaleFactorMode, scaleFactor, operation().rotation);
-    emit sigFileChanged(this);
+    m_operation.scaleMode = Dr::ScaleFactorMode;
+    m_operation.scaleFactor = scaleFactor;
+    m_browser->setScale(Dr::ScaleFactorMode, scaleFactor, m_operation.rotation);
 }
 
 bool DocSheetDJVU::openFileExec()
 {
     if (m_browser->openFilePath(filePath())) {
-        m_browser->loadPages(operation().scaleMode, operation().scaleFactor, operation().rotation, operation().mouseShape, operation().currentPage);
+        m_browser->loadPages(m_operation.scaleMode, m_operation.scaleFactor, m_operation.rotation, m_operation.mouseShape, m_operation.currentPage);
         return true;
     }
 
     return false;
 }
 
+int DocSheetDJVU::pagesNumber()
+{
+    if (m_browser)
+        return m_browser->allPages();
+
+    return 0;
+}
+
+int DocSheetDJVU::currentPage()
+{
+    if (m_browser)
+        return m_browser->currentPage();
+
+    return 1;
+}
+
+int DocSheetDJVU::currentIndex()
+{
+    if (m_browser)
+        return m_browser->currentPage() - 1;
+
+    return 0;
+}
+
 void DocSheetDJVU::setMouseShape(Dr::MouseShape shape)
 {
-    operation().mouseShape = m_browser->setMouseShape(shape);
-    emit sigFileChanged(this);
+    if (shape > 0 && shape < Dr::NumberOfMouseShapes) {
+        m_operation.mouseShape = shape;
+        m_browser->setMouseShape(shape);
+        emit sigFileChanged(this);
+    }
 }
 
 void DocSheetDJVU::setScaleMode(Dr::ScaleMode mode)
 {
-    m_browser->setScale(operation().scaleMode, 0, operation().rotation);
+    m_browser->setScale(mode, m_operation.scaleMode, m_operation.rotation);
+}
+
+bool DocSheetDJVU::fileChanged()
+{
+    return false;
 }
 
 void DocSheetDJVU::onBrowserPageChanged(int page)
@@ -126,9 +188,9 @@ void DocSheetDJVU::onBrowserPageChanged(int page)
 
 void DocSheetDJVU::onBrowserScaleChanged(Dr::ScaleMode mode, qreal scaleFactor)
 {
-    if (operation().scaleMode != mode || operation().scaleFactor != scaleFactor) {
-        operation().scaleMode = mode;
-        operation().scaleFactor = scaleFactor;
+    if (m_operation.scaleMode != mode || m_operation.scaleFactor != scaleFactor) {
+        m_operation.scaleMode = mode;
+        m_operation.scaleFactor = scaleFactor;
         emit sigFileChanged(this);
     }
 }

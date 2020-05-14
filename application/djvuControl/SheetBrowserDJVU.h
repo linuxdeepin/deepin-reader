@@ -20,13 +20,15 @@ public:
 
     void setScale(Dr::ScaleMode mode, double scaleFactor, Dr::Rotation rotation);
 
-    Dr::MouseShape setMouseShape(Dr::MouseShape mouseShape);
+    void setRotation(Dr::Rotation rotation);
+
+    void setLayoutMode(Dr::LayoutMode mode);
+
+    void setMouseShape(Dr::MouseShape mouseShape);
 
     void deform();      //根据当前参数进行变换
 
     bool hasLoaded();
-
-    void resizeEvent(QResizeEvent *event) override;
 
     int allPages();
 
@@ -34,7 +36,10 @@ public:
 
     void setCurrentPage(int page);
 
-    void showEvent(QShowEvent *event);
+protected:
+    void showEvent(QShowEvent *event) override;
+
+    void resizeEvent(QResizeEvent *event) override;
 
 signals:
     void sigPageChanged(int page);
@@ -60,7 +65,7 @@ private:
     Dr::ScaleMode m_scaleMode   = Dr::ScaleFactorMode;
     Dr::MouseShape m_mouseShape = Dr::MouseShapeNormal;
     qreal m_scaleFactor         = 1;
-
+    int m_curPage = 0;
     int m_maxWidth = 0;     //最大一页的宽度
     int m_maxHeight = 0;    //最大一页的高度
     bool m_hasLoaded = false;//是否已经加载过每页的信息

@@ -13,6 +13,8 @@ SheetBrowserDJVU::SheetBrowserDJVU(QWidget *parent) : QGraphicsView(parent)
 {
     setScene(new QGraphicsScene());
 
+    setFrameShape(QFrame::NoFrame);
+
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onVerticalScrollBarValueChanged(int)));
 }
 
@@ -64,21 +66,35 @@ void SheetBrowserDJVU::setScale(Dr::ScaleMode mode, double scaleFactor, Dr::Rota
     deform();
 }
 
-Dr::MouseShape SheetBrowserDJVU::setMouseShape(Dr::MouseShape mouseShape)
+void SheetBrowserDJVU::setRotation(Dr::Rotation rotation)
+{
+    m_rotion = rotation;
+    deform();
+}
+
+void SheetBrowserDJVU::setLayoutMode(Dr::LayoutMode mode)
+{
+    m_layoutMode = mode;
+    deform();
+}
+
+void SheetBrowserDJVU::setMouseShape(Dr::MouseShape mouseShape)
 {
     if (Dr::MouseShapeHand == mouseShape) {
         m_mouseShape = mouseShape;
         setDragMode(QGraphicsView::ScrollHandDrag);
-    } else {
+    } else if (Dr::MouseShapeNormal == mouseShape) {
         m_mouseShape = Dr::MouseShapeNormal;
         setDragMode(QGraphicsView::NoDrag);
     }
-    return m_mouseShape;
 }
 
 void SheetBrowserDJVU::onVerticalScrollBarValueChanged(int value)
 {
-    emit sigPageChanged(currentPage());
+    if (m_curPage != currentPage()) {
+        m_curPage = currentPage();
+        emit sigPageChanged(currentPage());
+    }
 }
 
 void SheetBrowserDJVU::wheelEvent(QWheelEvent *event)
@@ -102,28 +118,28 @@ void SheetBrowserDJVU::wheelEvent(QWheelEvent *event)
 void SheetBrowserDJVU::deform()
 {
     int page = currentPage();
+    int width = 0;
+    int height = 0;
 
     switch (m_rotion) {
     default:
     case Dr::RotateBy0:
     case Dr::RotateBy180:
-        if (Dr::FitToPageWidthMode == m_scaleMode) {
-            m_scaleFactor = ((double)this->width() - 25.0)  / (double) m_maxWidth ;
-        } else if (Dr::FitToPageHeightMode == m_scaleMode) {
+        if (Dr::FitToPageWidthMode == m_scaleMode)
+            m_scaleFactor = ((double)this->width() - 25.0)  / (double) m_maxWidth / (Dr::TwoPagesMode == m_layoutMode ? 2 : 1);
+        else if (Dr::FitToPageHeightMode == m_scaleMode)
             m_scaleFactor = (double)this->height() / (double) m_maxHeight ;
-        } else {
+        else
             m_scaleMode = Dr::ScaleFactorMode;
-        }
         break;
     case Dr::RotateBy90:
     case Dr::RotateBy270:
-        if (Dr::FitToPageWidthMode == m_scaleMode) {
-            m_scaleFactor = ((double)this->width() - 25.0)   / (double) m_maxHeight ;
-        } else if (Dr::FitToPageHeightMode == m_scaleMode) {
+        if (Dr::FitToPageWidthMode == m_scaleMode)
+            m_scaleFactor = ((double)this->width() - 25.0)   / (double) m_maxHeight / (Dr::TwoPagesMode == m_layoutMode ? 2 : 1);
+        else if (Dr::FitToPageHeightMode == m_scaleMode)
             m_scaleFactor = (double)this->height() / (double) m_maxWidth ;
-        } else {
+        else
             m_scaleMode = Dr::ScaleFactorMode;
-        }
         break;
     }
 
@@ -131,21 +147,43 @@ void SheetBrowserDJVU::deform()
         m_items.at(i)->render(m_scaleFactor, m_rotion, true);
     }
 
-    int width = 0;
-    int height = 0;
-    for (int i = 0; i < m_items.count(); ++i) {
-        m_items.at(i)->setPos(0, height);
+    if (Dr::SinglePageMode == m_layoutMode) {
+        for (int i = 0; i < m_items.count(); ++i) {
+            m_items.at(i)->setPos(0, height);
+            height += m_items.at(i)->boundingRect().height() + 5;
+            if (m_items.at(i)->boundingRect().width() > width)
+                width = m_items.at(i)->boundingRect().width();
+        }
+    } else if (Dr::TwoPagesMode == m_layoutMode) {
+        for (int i = 0; i < m_items.count(); ++i) {
+            if (i % 2 == 1)
+                continue;
 
-        height += m_items.at(i)->boundingRect().height() + 5;
+            if (m_items.count() > i + 1) {
+                m_items.at(i)->setPos(0, height);
+                m_items.at(i + 1)->setPos(m_items.at(i)->boundingRect().width() + 5, height);
+            } else {
+                m_items.at(i)->setPos(0, height);
+            }
 
-        if (m_items.at(i)->boundingRect().width() > width)
-            width = m_items.at(i)->boundingRect().width();
+            if (m_items.count() > i + 1) {
+                height +=  qMax(m_items.at(i)->boundingRect().height(), m_items.at(i + 1)->boundingRect().height()) + 5;
+            } else
+                height += m_items.at(i)->boundingRect().height() + 5;
 
-        setCurrentPage(page);
+            if (m_items.count() > i + 1) {
+                if (m_items.at(i)->boundingRect().width() + m_items.at(i + 1)->boundingRect().width() > width)
+                    width = m_items.at(i)->boundingRect().width() + m_items.at(i + 1)->boundingRect().width();
+            } else {
+                if (m_items.at(i)->boundingRect().width() > width)
+                    width = m_items.at(i)->boundingRect().width();
+            }
+
+        }
     }
 
+    setCurrentPage(page);
     setSceneRect(0, 0, width, height);
-
     emit sigScaleChanged(m_scaleMode, m_scaleFactor);
 }
 
@@ -169,7 +207,15 @@ int SheetBrowserDJVU::allPages()
 
 int SheetBrowserDJVU::currentPage()
 {
-    SheetBrowserDJVUItem *item = static_cast<SheetBrowserDJVUItem *>(itemAt(QPoint(1, 1)));
+    SheetBrowserDJVUItem *item = nullptr;
+
+    for (int i = 20 ; i < 100; i = i + 5) {
+        item  = static_cast<SheetBrowserDJVUItem *>(itemAt(QPoint(i, i)));
+
+        if (nullptr != item)
+            break;
+    }
+
     if (nullptr == item)
         return 1;
 
@@ -181,12 +227,7 @@ void SheetBrowserDJVU::setCurrentPage(int page)
     if (page < 1 && page > allPages())
         return;
 
-    int height = 0;
-    for (int i = 0; i < page - 1; ++i) {
-        height += m_items.at(i)->boundingRect().height() + 5;
-    }
-
-    verticalScrollBar()->setValue(height);
+    verticalScrollBar()->setValue(m_items.at(page - 1)->pos().y());
 }
 
 void SheetBrowserDJVU::showEvent(QShowEvent *event)
@@ -198,3 +239,4 @@ void SheetBrowserDJVU::showEvent(QShowEvent *event)
 
     QGraphicsView::showEvent(event);
 }
+

@@ -176,7 +176,7 @@ void ScaleWidget::setSheet(DocSheet *sheet)
             m_scaleComboBox->addItem(QString::number(m_sheet->scaleFactorList().at(i) * 100) + "%");
         }
 
-        QString sCurText = QString::number(QString::number(m_sheet->getOperation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
+        QString sCurText = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
 
         m_scaleComboBox->setCurrentText(sCurText);
 

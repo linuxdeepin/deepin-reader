@@ -113,9 +113,6 @@ public:
     QVariant getOper(int type);
 
 protected:
-    void initWidget() override;
-
-protected:
     void mouseMoveEvent(QMouseEvent *event) override;
 
     void mousePressEvent(QMouseEvent *event) override;
