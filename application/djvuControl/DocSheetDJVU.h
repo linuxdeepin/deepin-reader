@@ -50,6 +50,8 @@ public:
 
     void setScaleMode(Dr::ScaleMode mode)override;
 
+    bool getImageMax(int index, QImage &image, double max)override;
+
     bool fileChanged()override;
 
 private slots:

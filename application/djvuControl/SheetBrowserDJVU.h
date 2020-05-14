@@ -36,6 +36,8 @@ public:
 
     void setCurrentPage(int page);
 
+    bool getImageMax(int index, QImage &image, double max);
+
 protected:
     void showEvent(QShowEvent *event) override;
 

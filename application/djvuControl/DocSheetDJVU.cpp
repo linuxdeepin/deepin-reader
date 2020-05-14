@@ -176,6 +176,14 @@ void DocSheetDJVU::setScaleMode(Dr::ScaleMode mode)
     m_browser->setScale(mode, m_operation.scaleMode, m_operation.rotation);
 }
 
+bool DocSheetDJVU::getImageMax(int index, QImage &image, double max)
+{
+    if (m_browser)
+        return m_browser->getImageMax(index, image, max);
+
+    return false;
+}
+
 bool DocSheetDJVU::fileChanged()
 {
     return false;

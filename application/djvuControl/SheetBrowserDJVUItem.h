@@ -25,6 +25,8 @@ public:
 
     void render(double scale, Dr::Rotation rotation, bool readerLater = false);
 
+    QImage getImageMax(double max);
+
 private:
     void onReaderFinished();
 
