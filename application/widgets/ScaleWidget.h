@@ -57,7 +57,7 @@ private:
     int         m_nCurrentIndex = -1;           //  当前选项
     int         m_nMaxScale = 1000;
 
-    QList<int> dataList;
+    QList<double> dataList;
     QPointer<DocSheet> m_sheet;
 };
 
