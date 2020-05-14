@@ -151,11 +151,18 @@ void SheetSidebar::setBookMark(int page, int state)
 
 void SheetSidebar::handleOpenSuccess()
 {
-    this->setVisible(m_sheet->getOper(Thumbnail).toInt());
-    int nId = qBound(0, m_sheet->getOper(LeftIndex).toInt(), m_stackLayout->count() - 2);
+    if (Dr::PDF == m_sheet->type()) {
+        this->setVisible(m_sheet->getOper(Thumbnail).toInt());
+        int nId = qBound(0, m_sheet->getOper(LeftIndex).toInt(), m_stackLayout->count() - 2);
+        QAbstractButton *btn = m_btnGroup->button(nId);
+        if (btn) m_btnGroup->buttonClicked(nId);
+    } else {
+        this->setVisible(m_sheet->operation().sidebarVisible);
+        int nId = qBound(0, m_sheet->operation().sidebarIndex, m_stackLayout->count() - 2);
+        QAbstractButton *btn = m_btnGroup->button(nId);
+        if (btn) m_btnGroup->buttonClicked(nId);
+    }
 
-    QAbstractButton *btn = m_btnGroup->button(nId);
-    if (btn) m_btnGroup->buttonClicked(nId);
     if (m_thumbnailWidget) m_thumbnailWidget->handleOpenSuccess();
     if (m_catalogWidget) m_catalogWidget->handleOpenSuccess();
     if (m_bookmarkWidget) m_bookmarkWidget->handleOpenSuccess();

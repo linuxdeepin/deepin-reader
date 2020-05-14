@@ -15,10 +15,6 @@ public:
 
     ~SheetBrowserDJVUItem();
 
-    void setScale(double scale);
-
-    void setRotation(Dr::Rotation rotation);
-
     QRectF boundingRect()const;
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
@@ -35,7 +31,7 @@ private:
     QImage m_image;
     double m_imageScaleFactor   = 1;
     double m_scaleFactor        = -1;
-    Dr::Rotation m_rotation = Dr::NumberOfRotations;
+    Dr::Rotation m_rotation = Dr::RotateBy0;
 };
 
 #endif // SHEETBROWSERDJVUITEM_H
