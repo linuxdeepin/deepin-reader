@@ -140,7 +140,9 @@ private:
     QString         m_uuid;
 
 public:
-    static QUuid     getUuid(DocSheet *);
+    static bool existFileChanged();
+
+    static QUuid getUuid(DocSheet *);
 
     static DocSheet *getSheet(QString uuid);
 

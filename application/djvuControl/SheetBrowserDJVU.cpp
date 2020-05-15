@@ -51,10 +51,9 @@ void SheetBrowserDJVU::loadPages(Dr::ScaleMode mode, double scaleFactor, Dr::Rot
         scene()->addItem(item);
     }
 
-    mode = Dr::FitToPageWidthMode;
     setScale(mode, scaleFactor, rotation);
     setMouseShape(mouseShape);
-    m_initPage = 5;
+    m_initPage = currentPage;
     m_hasLoaded = true;
 }
 

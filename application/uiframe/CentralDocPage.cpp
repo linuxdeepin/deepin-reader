@@ -62,7 +62,7 @@ CentralDocPage::CentralDocPage(DWidget *parent)
     connect(m_pTabBar, SIGNAL(sigNeedOpenFilesExec()), this, SIGNAL(sigNeedOpenFilesExec()));
     connect(m_pTabBar, SIGNAL(sigNeedActivateWindow()), this, SIGNAL(sigNeedActivateWindow()));
 
-    m_pStackedLayout = new QStackedLayout(this);
+    m_pStackedLayout = new QStackedLayout;
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
     mainLayout->addWidget(m_pTabBar);
@@ -98,8 +98,7 @@ void CentralDocPage::onSheetChanged(DocSheet *sheet)
 
     sigCurSheetChanged(sheet);
 
-    //...以下要改成记录所有的sheet,遍历一下，查看是否需要阻塞关机,目前只是记录最后一个文档被保存，有问题
-    if (sheet->fileChanged()) {
+    if (DocSheet::existFileChanged()) {
         BlockShutdown();
     } else {
         UnBlockShutdown();

@@ -85,7 +85,12 @@ bool Database::readOperation(DocSheet *sheet)
 
         query.prepare(" select * from operation where filePath = :filePath");
         query.bindValue(":filePath", sheet->filePath());
-        if (query.exec() && query.next()) {
+        if (!query.exec()) {
+            qDebug() << query.lastError().text();
+            return false;
+        }
+
+        if (query.next()) {
             sheet->m_operation.layoutMode = (Dr::LayoutMode)query.value("layoutMode").toInt();
             sheet->m_operation.mouseShape = (Dr::MouseShape)query.value("mouseShape").toInt();
             sheet->m_operation.scaleMode = (Dr::ScaleMode)query.value("scaleMode").toInt();
@@ -94,10 +99,10 @@ bool Database::readOperation(DocSheet *sheet)
             sheet->m_operation.sidebarVisible = query.value("sidebarVisible").toInt();
             sheet->m_operation.sidebarIndex = query.value("sidebarIndex").toInt();
             sheet->m_operation.currentPage = query.value("currentPage").toInt();
-            return true;
         }
     }
-    return false;
+
+    return true;
 }
 
 bool Database::saveOperation(DocSheet *sheet)
@@ -107,7 +112,7 @@ bool Database::saveOperation(DocSheet *sheet)
 
         query.prepare(" replace into "
                       " operation(filePath,layoutMode,mouseShape,scaleMode,rotation,scaleFactor,sidebarVisible,sidebarIndex,currentPage)"
-                      " VALUES(:filePath,:layoutMode,:mouseShape,:scaleMode,:rotation,:scaleFactor,:sidebarVisible,:sidebarIndex,currentPage)");
+                      " VALUES(:filePath,:layoutMode,:mouseShape,:scaleMode,:rotation,:scaleFactor,:sidebarVisible,:sidebarIndex,:currentPage)");
 
         query.bindValue(":filePath", sheet->filePath());
         query.bindValue(":layoutMode", sheet->m_operation.layoutMode);
@@ -118,10 +123,12 @@ bool Database::saveOperation(DocSheet *sheet)
         query.bindValue(":sidebarVisible", sheet->m_operation.sidebarVisible);
         query.bindValue(":sidebarIndex", sheet->m_operation.sidebarIndex);
         query.bindValue(":currentPage", sheet->m_operation.currentPage);
-        return query.exec();
-    }
 
-    return false;
+        if (!query.exec())
+            qDebug() << query.lastError().text();
+        return false;
+    }
+    return true;
 }
 
 Database::Database(QObject *parent) : QObject(parent)

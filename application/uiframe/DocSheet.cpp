@@ -456,6 +456,16 @@ void DocSheet::showSlideControl()
     doc->showPlayControlWidget();
 }
 
+bool DocSheet::existFileChanged()
+{
+    foreach (DocSheet *sheet, g_map.values()) {
+        if (sheet->fileChanged())
+            return true;
+    }
+
+    return false;
+}
+
 void DocSheet::quitSlide()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
