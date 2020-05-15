@@ -42,7 +42,6 @@ public:
     void nextPage();
     void DeleteItemByKey();
     void handleOpenSuccess();
-    void handleRotate(int rotate);
     void handleAnntationMsg(const int &, const QString &);
 
 public:

@@ -97,7 +97,6 @@ void SheetSidebar::initWidget()
 
     if (m_widgetsFlag.testFlag(PREVIEW_BOOKMARK)) {
         m_bookmarkWidget = new BookMarkWidget(m_sheet, this);
-        if (m_thumbnailWidget) connect(m_bookmarkWidget, SIGNAL(sigSetBookMarkState(const int &, const int &)), m_thumbnailWidget, SLOT(onSetBookMarkState(const int &, const int &)));
         int index = m_stackLayout->addWidget(m_bookmarkWidget);
         DToolButton *btn = createBtn(tr("Bookmarks"), "bookmark");
         m_btnGroup->addButton(btn, index);
@@ -131,6 +130,7 @@ void SheetSidebar::initWidget()
     pVBoxLayout->addLayout(hLayout);
     onUpdateWidgetTheme();
     this->setVisible(false);
+    m_btnGroup->buttonClicked(0);
 }
 
 void SheetSidebar::onBtnClicked(int index)
@@ -144,9 +144,8 @@ void SheetSidebar::onBtnClicked(int index)
 
 void SheetSidebar::setBookMark(int page, int state)
 {
-    if (m_bookmarkWidget) {
-        m_bookmarkWidget->handleBookMark(page, state);
-    }
+    if (m_bookmarkWidget) m_bookmarkWidget->handleBookMark(page, state);
+    if (m_thumbnailWidget) m_thumbnailWidget->setBookMarkState(page, state);
 }
 
 void SheetSidebar::handleOpenSuccess()

@@ -149,11 +149,6 @@ void NotesWidget::handleOpenSuccess()
     m_pImageListView->handleOpenSuccess();
 }
 
-void NotesWidget::handleRotate(int)
-{
-    //not Todo
-}
-
 void NotesWidget::onListMenuClick(const int &iAction)
 {
     if (iAction == E_NOTE_COPY) {

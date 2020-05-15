@@ -233,8 +233,30 @@ void DocSheetPDF::setFit(int fit)
 
 void DocSheetPDF::setBookMark(int page, int state)
 {
+    if (state) {
+        const QString &sPath = this->filePath();
+        QList<int> pageList = dApp->m_pDBService->getBookMarkList(sPath);
+        if (pageList.contains(page)) {
+            return;
+        }
+
+        pageList.append(page);
+        dApp->m_pDBService->setBookMarkList(sPath, pageList);
+        this->setFileChanged(true);
+    } else {
+        QList<int> pageList = dApp->m_pDBService->getBookMarkList(this->filePath());
+        if (!pageList.contains(page)) {
+            return;
+        }
+
+        pageList.removeAll(page);
+        dApp->m_pDBService->setBookMarkList(this->filePath(), pageList);
+        this->setFileChanged(true);
+
+        this->showTips(tr("The bookmark has been removed"));
+    }
     m_sidebar->setBookMark(page, state);
-    //m_browser->setBookMark(page, state);      //因为sidebar也会调用一次
+    m_browser->setBookMark(page, state);
 }
 
 void DocSheetPDF::showNoteWidget(int page, const QString &uuid, const int &type)
@@ -481,15 +503,6 @@ bool DocSheetPDF::getImageMax(int pagenum, QImage &image, double max)
     DocummentProxy *docProxy = m_browser->GetDocProxy();
     if (docProxy) {
         return docProxy->getImageMax(pagenum, image, max);
-    }
-    return false;
-}
-
-bool DocSheetPDF::setBookMarkState(int page, bool state)
-{
-    DocummentProxy *docProxy = m_browser->GetDocProxy();
-    if (docProxy) {
-        return docProxy->setBookMarkState(page, state);
     }
     return false;
 }

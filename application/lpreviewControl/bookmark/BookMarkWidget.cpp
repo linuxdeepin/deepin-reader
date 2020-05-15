@@ -94,11 +94,8 @@ void BookMarkWidget::nextPage()
 void BookMarkWidget::handleOpenSuccess()
 {
     const QList<int> &pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
-    int nCurPage = m_sheet->currentIndex();
-    for (int iPage : pageList) {
-        m_sheet->setBookMarkState(iPage, true);
-        if (iPage == nCurPage) m_pAddBookMarkBtn->setEnabled(false);
-    }
+    if (pageList.contains(m_sheet->currentIndex()))
+        m_pAddBookMarkBtn->setEnabled(false);
     m_pImageListView->handleOpenSuccess();
 }
 
@@ -111,64 +108,29 @@ void BookMarkWidget::handlePage(int page)
 void BookMarkWidget::handleBookMark(int page, int state)
 {
     if (state) {
-        //addPageIndex
-        const QString &sPath = m_sheet->filePath();
-        QList<int> pageList = dApp->m_pDBService->getBookMarkList(sPath);
-        if (pageList.contains(page)) {
-            return;
-        }
-
-        pageList.append(page);
-        dApp->m_pDBService->setBookMarkList(sPath, pageList);
-        m_sheet->setFileChanged(true);
-
         int nCurPage = m_sheet->currentIndex();
-        if (nCurPage == page) {
-            m_sheet->setBookMarkState(page, true);
-            m_pAddBookMarkBtn->setEnabled(false);
-        }
-        emit sigSetBookMarkState(true, page);
+        if (nCurPage == page) m_pAddBookMarkBtn->setEnabled(false);
         m_pImageListView->getImageModel()->insertPageIndex(page);
     } else {
-        //deletePageIndex
-        QList<int> pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
-        if (!pageList.contains(page)) {
-            return;
-        }
-
-        pageList.removeAll(page);
-        dApp->m_pDBService->setBookMarkList(m_sheet->filePath(), pageList);
-        m_sheet->setFileChanged(true);
-
-        m_sheet->showTips(tr("The bookmark has been removed"));
-        m_sheet->setBookMarkState(page, false);
         int nCurPage = m_sheet->currentIndex();
-        if (nCurPage == page) {
-            m_pAddBookMarkBtn->setEnabled(true);
-        }
-        emit sigSetBookMarkState(false, page);
+        if (nCurPage == page) m_pAddBookMarkBtn->setEnabled(true);
         m_pImageListView->getImageModel()->removePageIndex(page);
     }
-    scrollToCurrentPage();
-}
-
-void BookMarkWidget::handleRotate(int)
-{
-    //Not toDO
+    m_pImageListView->scrollToIndex(m_sheet->currentIndex(), true);
 }
 
 void BookMarkWidget::DeleteItemByKey()
 {
     int curPage = m_pImageListView->getPageIndexForModelIndex(m_pImageListView->currentIndex().row());
     if (curPage >= 0)
-        handleBookMark(curPage, false);
+        m_sheet->setBookMark(curPage, false);
 }
 
 void BookMarkWidget::onAddBookMarkClicked()
 {
     if (m_sheet.isNull()) return;
     int nPage = m_sheet->currentIndex();
-    handleBookMark(nPage, true);
+    m_sheet->setBookMark(nPage, true);
 }
 
 void BookMarkWidget::adaptWindowSize(const double &scale)
@@ -176,7 +138,7 @@ void BookMarkWidget::adaptWindowSize(const double &scale)
     m_pImageListView->setProperty("adaptScale", scale);
     m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * scale, LEFTMINHEIGHT));
     m_pImageListView->reset();
-    scrollToCurrentPage();
+    m_pImageListView->scrollToIndex(m_sheet->currentIndex(), false);
 }
 
 void BookMarkWidget::updateThumbnail(const int &page)
@@ -190,11 +152,6 @@ void BookMarkWidget::onUpdateTheme()
     plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
     setPalette(plt);
     m_pAddBookMarkBtn->setPalette(plt);
-}
-
-void BookMarkWidget::scrollToCurrentPage()
-{
-    m_pImageListView->scrollToIndex(m_sheet->currentIndex(), false);
 }
 
 void BookMarkWidget::onListMenuClick(const int &iType)

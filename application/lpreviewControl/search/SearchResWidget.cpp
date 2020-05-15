@@ -86,11 +86,6 @@ void SearchResWidget::clearFindResult()
     m_pImageListView->getImageModel()->resetData();
 }
 
-void SearchResWidget::handleRotate(int)
-{
-    //not Todo
-}
-
 void SearchResWidget::addSearchsItem(const int &page, const QString &text, const int &resultNum)
 {
     if (nullptr == m_sheet)

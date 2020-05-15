@@ -39,6 +39,7 @@ public:
     void handleOpenSuccess();
     void handlePage(int page);
     void handleRotate(int rotate);
+    void setBookMarkState(const int &pageIndex, const int &type);
 
     void prevPage();
     void nextPage();
@@ -48,9 +49,6 @@ public:
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;
-
-private slots:
-    void onSetBookMarkState(const int &type, const int &pageIndex);
 
 private:
     void scrollToCurrentPage();

@@ -444,10 +444,13 @@ void SheetBrowserPDFPrivate::onFileOpenResult(bool openresult)
 
     if (openresult) {
         dApp->m_pDBService->qSelectData(m_pProxyData->getPath(), DB_BOOKMARK);
-
         m_pProxyData->setFirstShow(false);
-
         m_pProxyData->setIsFileOpenOk(true);
+
+        const QList<int> &pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
+        for (int page  : pageList) {
+            q->setBookMark(page, true);
+        }
     } else {
         m_sheet->showTips(tr("Please check if the file is damaged"), 1);
 

@@ -191,8 +191,6 @@ public:
 
     virtual bool getAutoPlaySlideStatu();
 
-    virtual bool setBookMarkState(int page, bool state);
-
     virtual void docBasicInfo(stFileInfo &info);
 
     virtual void setAutoPlaySlide(bool autoplay, int timemsec = 3000);

@@ -77,7 +77,7 @@ void ThumbnailWidget::handlePage(int page)
     m_pPageWidget->setIndex(page);
 }
 
-void ThumbnailWidget::onSetBookMarkState(const int &type, const int &pageIndex)
+void ThumbnailWidget::setBookMarkState(const int &pageIndex, const int &type)
 {
     m_pImageListView->getImageModel()->setBookMarkVisible(pageIndex, type);
 }

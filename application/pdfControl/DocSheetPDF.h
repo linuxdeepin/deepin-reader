@@ -99,7 +99,7 @@ public:
     virtual int pagesNumber() override;
 
     virtual int currentIndex() override;
-    virtual int  pointInWhichPage(QPoint pos) override;
+    virtual int pointInWhichPage(QPoint pos) override;
     virtual int label2pagenum(QString label) override;
 
     virtual bool isOpen() override;
@@ -108,7 +108,6 @@ public:
     virtual bool showSlideModel() override;
     virtual bool exitSlideModel() override;
     virtual bool getAutoPlaySlideStatu() override;
-    virtual bool setBookMarkState(int page, bool state) override;
     virtual bool getImage(int pagenum, QImage &image, double width, double height) override;
     virtual bool getImageMax(int pagenum, QImage &image, double max) override;
 

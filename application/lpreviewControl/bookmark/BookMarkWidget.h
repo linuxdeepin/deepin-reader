@@ -30,9 +30,6 @@ class BookMarkWidget : public CustomWidget
     Q_OBJECT
     Q_DISABLE_COPY(BookMarkWidget)
 
-signals:
-    void sigSetBookMarkState(const int &, const int &);
-
 public:
     explicit BookMarkWidget(DocSheet *sheet, DWidget *parent = nullptr);
     ~BookMarkWidget() override;
@@ -42,7 +39,6 @@ public:
     void DeleteItemByKey();
 
     void handlePage(int page);
-    void handleRotate(int rotate);
     void handleOpenSuccess();
     void handleBookMark(int page, int state);
 
@@ -55,9 +51,6 @@ private slots:
     void onUpdateTheme();
     void onAddBookMarkClicked();
     void onListMenuClick(const int &iType);
-
-private:
-    void scrollToCurrentPage();
 
 private:
     QPointer<DocSheet>   m_sheet;

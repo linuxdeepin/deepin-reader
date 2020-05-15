@@ -278,12 +278,6 @@ bool DocSheet::getImageMax(int, QImage &, double)
     return false;
 }
 
-bool DocSheet::setBookMarkState(int, bool)
-{
-    qDebug() << "unrealized";
-    return false;
-}
-
 Outline DocSheet::outline()
 {
     qDebug() << "unrealized";

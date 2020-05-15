@@ -36,7 +36,6 @@ public:
 
     void clearFindResult();
     int  handleFindFinished();
-    void handleRotate(int rotate);
     void handFindContentComming(const stSearchRes &);
 
 public:
