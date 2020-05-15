@@ -30,6 +30,7 @@ class SheetBrowserPDFPrivate: public QObject
 
 public:
     SheetBrowserPDFPrivate(DocSheet *sheet, SheetBrowserPDF *parent);
+
     ~SheetBrowserPDFPrivate() override;
 
 public:
@@ -59,7 +60,6 @@ private slots:
 private:
     void wheelEvent(QWheelEvent *event);
 
-private:
     void mouseMoveEvent(QMouseEvent *event);
 
     void mousePressEvent(QMouseEvent *event);
@@ -71,12 +71,13 @@ private slots:
 
 private:
     void DocFile_ctrl_l();
+
     void DocFile_ctrl_i();
+
     void DocFile_ctrl_c();
+
     double handleResize(const QSize &size);
 
-private:
-    void initConnections();
 private:
     void showNoteViewWidget(const QString &, const QString &t_strUUid = "", const QString &sText = "", const int &nType = NOTE_HIGHLIGHT);
     void onOpenNoteWidget(const QString &msgContent);
@@ -88,8 +89,8 @@ private:
     void clearSelect();
 private:
     bool m_hasOpened = false;
-    NoteViewWidget          *m_pNoteViewWidget = nullptr;   //  注释内容显示框
-    TipsWidget           *m_pTipWidget = nullptr;        //  注释提示框
+    NoteViewWidget          *m_pNoteViewWidget = nullptr;       //  注释内容显示框
+    TipsWidget              *m_pTipWidget = nullptr;            //  注释提示框
     TextOperationMenu       *m_operatemenu = nullptr;
     DefaultOperationMenu    *m_pDefaultMenu = nullptr;
     ProxyData               *m_pProxyData = nullptr;            //  唯一 数据区

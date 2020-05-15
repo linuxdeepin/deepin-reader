@@ -62,7 +62,7 @@ CentralDocPage::CentralDocPage(DWidget *parent)
     connect(m_pTabBar, SIGNAL(sigNeedOpenFilesExec()), this, SIGNAL(sigNeedOpenFilesExec()));
     connect(m_pTabBar, SIGNAL(sigNeedActivateWindow()), this, SIGNAL(sigNeedActivateWindow()));
 
-    m_pStackedLayout = new QStackedLayout;
+    m_pStackedLayout = new QStackedLayout(this);
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
     mainLayout->addWidget(m_pTabBar);
