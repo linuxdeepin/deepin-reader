@@ -603,6 +603,9 @@ QString PagePdf::addTextAnnotation(const QPoint &pos, const QColor &color, TextA
     annotation->setPopup(popup);
     annotation->setUniqueName(uuid);
     d->m_page->addAnnotation(annotation);
+
+    delete annotation;
+
     QImage image;
     getImage(image, d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
     slot_RenderFinish(image);

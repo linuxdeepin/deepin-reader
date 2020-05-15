@@ -12,6 +12,24 @@ DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     initActions();
 }
 
+DefaultOperationMenu::~DefaultOperationMenu()
+{
+    if (nullptr != m_pSearch)
+        delete m_pSearch;
+    if (nullptr != m_pBookMark)
+        delete m_pBookMark;
+    if (nullptr != m_pAddIconNote)
+        delete m_pAddIconNote;
+    if (nullptr != m_pFirstPage)
+        delete m_pFirstPage;
+    if (nullptr != m_pPrevPage)
+        delete m_pPrevPage;
+    if (nullptr != m_pNextPage)
+        delete m_pNextPage;
+    if (nullptr != m_pEndPage)
+        delete m_pEndPage;
+}
+
 void DefaultOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, const int &nClickPage)
 {
     m_sheet = sheet;
@@ -85,10 +103,15 @@ void DefaultOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, co
 void DefaultOperationMenu::initActions()
 {
     m_pSearch = createAction(tr("Search"), SLOT(slotSearchClicked()));
+
     this->addSeparator();
+
     m_pBookMark = createAction(tr("Add bookmark"), SLOT(slotBookMarkClicked()));
+
     m_pAddIconNote = createAction(tr("Add annotation"), SLOT(slotAddIconNote()));
+
     this->addSeparator();
+
     m_pFirstPage = createAction(tr("First page"), SLOT(slotFirstPageClicked()));
 
     m_pPrevPage = createAction(tr("Previous page"), SLOT(slotPrevPageClicked()));
@@ -105,7 +128,6 @@ QAction *DefaultOperationMenu::createAction(const QString &name, const char *mem
     connect(action, SIGNAL(triggered()), member);
 
     this->addAction(action);
-//    this->addSeparator();
 
     return action;
 }

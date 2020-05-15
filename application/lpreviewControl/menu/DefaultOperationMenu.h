@@ -18,6 +18,8 @@ class DefaultOperationMenu : public CustomMenu
 public:
     explicit DefaultOperationMenu(DWidget *parent = nullptr);
 
+    ~DefaultOperationMenu();
+
 public:
     void execMenu(DocSheet *sheet, const QPoint &, const int &);
     inline void setClickpoint(const QPoint &pt)
