@@ -56,6 +56,8 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
     document->setRenderHint(Poppler::Document::Antialiasing, true);
     document->setRenderHint(Poppler::Document::ThinLineSolid, true);
     document->setRenderHint(Poppler::Document::ThinLineShape, true);
+
+    qDeleteAll(m_pages);
     m_pages.clear();
 
     int countlabelnotmatch = 0;

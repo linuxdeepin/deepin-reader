@@ -64,7 +64,7 @@ SheetBrowserPDF::SheetBrowserPDF(DocSheet *sheet, DWidget *parent)
 
 SheetBrowserPDF::~SheetBrowserPDF()
 {
-
+    delete d_ptr;
 }
 
 void SheetBrowserPDF::setFileChanged(bool hasChanged)

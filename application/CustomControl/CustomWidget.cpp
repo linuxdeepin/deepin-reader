@@ -33,7 +33,7 @@ CustomWidget::CustomWidget(DWidget *parent)
 
 CustomWidget::~CustomWidget()
 {
-
+    delete d_ptr;
 }
 
 CustomWidget::CustomWidget(CustomWidgetPrivate &cwp, DWidget *parent)

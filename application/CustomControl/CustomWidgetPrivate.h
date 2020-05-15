@@ -30,13 +30,12 @@ class CustomWidgetPrivate : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(CustomWidgetPrivate)
-    Q_DECLARE_PUBLIC(CustomWidget)
 
 public:
     CustomWidgetPrivate(CustomWidget *cw);
 
-protected:
-    virtual ~CustomWidgetPrivate() {}
+public:
+    virtual ~CustomWidgetPrivate();
 
 public:
     QList<int> getMsgList() const;
@@ -44,9 +43,6 @@ public:
 
     QString getBindPath() const;
     void setBindPath(const QString &strBindPath);
-
-protected:
-    CustomWidget     *q_ptr = nullptr;
 
 protected:
     QList<int>          m_pMsgList;         //  需要处理的消息列表

@@ -18,7 +18,11 @@
 #include "CustomWidgetPrivate.h"
 
 CustomWidgetPrivate::CustomWidgetPrivate(CustomWidget *cw)
-    : q_ptr(cw)
+{
+
+}
+
+CustomWidgetPrivate::~CustomWidgetPrivate()
 {
 
 }

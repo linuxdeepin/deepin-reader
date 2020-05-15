@@ -107,7 +107,7 @@ public:
         connect(&threadreander, SIGNAL(signal_RenderFinish(QImage)), this, SIGNAL(signal_RenderFinish(QImage)));
     }
 
-    ~PageBasePrivate()
+    virtual ~PageBasePrivate()
     {
 //        qDebug() << "~PageBasePrivate";
         qDeleteAll(m_links);

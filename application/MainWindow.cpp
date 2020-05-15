@@ -201,7 +201,7 @@ void MainWindow::initShortCut()
     auto keyList = dApp->m_pAppInfo->getKeyList();
 
     foreach (auto key, keyList) {
-        auto action = new QAction;
+        auto action = new QAction(this);
 
         action->setShortcut(key);
 

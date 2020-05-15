@@ -74,7 +74,7 @@ public:
         m_pagenum2label.clear();
     }
 
-    ~DocummentBasePrivate()
+    virtual ~DocummentBasePrivate()
     {
         if (!animationfirst) {
             animationfirst->deleteLater();
@@ -126,10 +126,8 @@ public:
     double m_maxzoomratio;//最大放大比例
     mutable bool m_bModified;
     bool m_bslidemodel;
-    //    ThreadLoadWords m_threadloadwords;
     RotateType_EM m_rotate;
     bool donotneedreloaddoc;
-    //    bool m_wordsbload;
     QPoint m_magnifierpoint;
     QPropertyAnimation *animationfirst;
     QPropertyAnimation *animationsecond;
@@ -146,9 +144,7 @@ public:
     bool m_bScanningcopy;//当前打开的是否为扫描件
     QTimer *showslidwaittimer;
     DWidget *qwfather;
-//    QTimer *loadpagewaittimer;
-    stFileInfo *m_fileinfo;
-//    ThreadLoadDocumment threadloaddoc;
+    stFileInfo *m_fileinfo = nullptr;
     ThreadLoadData threadloaddata;
     bool bautoplayslide;
     QTimer *autoplayslidtimer;
@@ -156,8 +152,6 @@ public:
     bool m_bautoplayslidreset;//播放到最后一页重置状态从头可以从头开始播放
     QMap<QString, int> m_label2pagenum;
     QMap<int, QString> m_pagenum2label;
-
-
 signals:
     void signal_docummentLoaded(bool);
 protected slots:
@@ -173,7 +167,7 @@ class DocummentBase: public DScrollArea
     Q_OBJECT
 public:
     DocummentBase(DocummentBasePrivate *ptr = nullptr, DWidget *parent = nullptr);
-    ~DocummentBase();
+    virtual ~DocummentBase();
     virtual bool loadDocumment(QString filepath) = 0;
     virtual bool bDocummentExist() = 0;
     virtual bool getImage(int pagenum, QImage &image, double width, double height);
