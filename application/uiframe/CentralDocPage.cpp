@@ -29,6 +29,7 @@
 #include <DDialog>
 #include <QMimeType>
 #include <QMimeDatabase>
+#include <QProcess>
 
 #include "CentralDocPage.h"
 #include "DocSheet.h"
@@ -85,10 +86,10 @@ void CentralDocPage::openCurFileFolder()
         return;
 
     QString filePath = sheet->filePath();
-    int nLastPos = filePath.lastIndexOf('/');
-    filePath = filePath.mid(0, nLastPos);
-    filePath = QString("file://") + filePath;
-    QDesktopServices::openUrl(QUrl(filePath));
+    bool result = QProcess::startDetached(QString("dde-file-manager %1 --show-item").arg(filePath));
+    if (!result) {
+        QDesktopServices::openUrl(QUrl(QFileInfo(filePath).dir().path()));
+    }
 }
 
 void CentralDocPage::onSheetChanged(DocSheet *sheet)
