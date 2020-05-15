@@ -16,8 +16,6 @@ DocSheetDJVU::DocSheetDJVU(QString filePath, QWidget *parent) : DocSheet(Dr::DjV
     connect(m_browser, SIGNAL(sigSizeChanged()), this, SLOT(onBrowserSizeChanged()));
     connect(m_browser, SIGNAL(sigWheelUp()), this, SLOT(onBrowserWheelUp()));
     connect(m_browser, SIGNAL(sigWheelDown()), this, SLOT(onBrowserWheelDown()));
-
-    setAcceptDrops(true);
 }
 
 DocSheetDJVU::~DocSheetDJVU()
@@ -117,23 +115,6 @@ void DocSheetDJVU::rotateRight()
     emit sigFileChanged(this);
 }
 
-void DocSheetDJVU::setLayoutMode(Dr::LayoutMode mode)
-{
-    if (mode >= 0 && mode < Dr::NumberOfLayoutModes) {
-        m_operation.layoutMode = mode;
-        m_browser->deform(m_operation);
-        emit sigFileChanged(this);
-    }
-}
-
-void DocSheetDJVU::setScaleFactor(qreal scaleFactor)
-{
-    m_operation.scaleMode = Dr::ScaleFactorMode;
-    m_operation.scaleFactor = scaleFactor;
-    m_browser->deform(m_operation);
-    emit sigFileChanged(this);
-}
-
 bool DocSheetDJVU::openFileExec()
 {
     if (m_browser->openFilePath(filePath())) {
@@ -170,6 +151,15 @@ int DocSheetDJVU::currentIndex()
     return 0;
 }
 
+void DocSheetDJVU::setLayoutMode(Dr::LayoutMode mode)
+{
+    if (mode >= 0 && mode < Dr::NumberOfLayoutModes) {
+        m_operation.layoutMode = mode;
+        m_browser->deform(m_operation);
+        emit sigFileChanged(this);
+    }
+}
+
 void DocSheetDJVU::setMouseShape(Dr::MouseShape shape)
 {
     if (shape > 0 && shape < Dr::NumberOfMouseShapes) {
@@ -181,7 +171,17 @@ void DocSheetDJVU::setMouseShape(Dr::MouseShape shape)
 
 void DocSheetDJVU::setScaleMode(Dr::ScaleMode mode)
 {
-    m_operation.scaleMode = mode;
+    if (mode > 0 && mode < Dr::NumberOfScaleModes) {
+        m_operation.scaleMode = mode;
+        m_browser->deform(m_operation);
+        emit sigFileChanged(this);
+    }
+}
+
+void DocSheetDJVU::setScaleFactor(qreal scaleFactor)
+{
+    m_operation.scaleMode = Dr::ScaleFactorMode;
+    m_operation.scaleFactor = scaleFactor;
     m_browser->deform(m_operation);
     emit sigFileChanged(this);
 }

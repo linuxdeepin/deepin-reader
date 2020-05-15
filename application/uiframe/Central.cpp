@@ -90,7 +90,7 @@ void Central::openFilesExec()
 {
     DFileDialog dialog;
     dialog.setFileMode(DFileDialog::ExistingFiles);
-    dialog.setNameFilter(Utils::getSuffixList());
+    dialog.setNameFilter("document Files (*.pdf *.djvu)");
     dialog.setDirectory(QDir::homePath());
 
     if (QDialog::Accepted != dialog.exec()) {

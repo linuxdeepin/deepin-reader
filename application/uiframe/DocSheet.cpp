@@ -44,7 +44,6 @@ DocSheet::DocSheet(Dr::FileType type, QString filePath, DWidget *parent)
     m_uuid = QUuid::createUuid().toString();
     g_map[m_uuid] = this;
     Database::instance()->readOperation(this);
-    setAcceptDrops(true);
 }
 
 DocSheet::~DocSheet()

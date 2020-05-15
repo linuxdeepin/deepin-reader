@@ -213,6 +213,11 @@ bool SheetBrowserDJVU::getImageMax(int index, QImage &image, double max)
     return true;
 }
 
+void SheetBrowserDJVU::dragEnterEvent(QDragEnterEvent *event)
+{
+    event->ignore();
+}
+
 void SheetBrowserDJVU::showEvent(QShowEvent *event)
 {
     if (1 != m_initPage) {

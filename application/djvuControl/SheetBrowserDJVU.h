@@ -33,6 +33,8 @@ public:
 
     bool getImageMax(int index, QImage &image, double max);
 
+    void dragEnterEvent(QDragEnterEvent *event);
+
 protected:
     void showEvent(QShowEvent *event) override;
 

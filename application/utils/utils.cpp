@@ -598,7 +598,7 @@ QString Utils::getConfigPath()
 
 QString Utils::getSuffixList()
 {
-    return QString("%1;;%2;;%3;;%4;;%5").arg(Constant::sPdf_Filter).arg(Constant::sTiff_Filter).arg(Constant::sPs_Filter).arg(Constant::sXps_Filter).arg(Constant::sDjvu_Filter);
+    return QString("%1;%2").arg(Constant::sPdf_Filter).arg(Constant::sDjvu_Filter);
 }
 
 QString Utils::getInputDataSize(const qint64 &dSize)
