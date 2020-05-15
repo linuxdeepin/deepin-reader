@@ -203,7 +203,7 @@ void DocSheetDJVU::onBrowserPageChanged(int page)
 {
     if (m_operation.currentPage != page) {
         m_operation.currentPage = page;
-        m_sidebar->onPageChanged(page);
+        m_sidebar->setCurrentPage(page);
     }
 }
 

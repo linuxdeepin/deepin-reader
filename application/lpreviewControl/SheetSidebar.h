@@ -58,6 +58,7 @@ public :
     ~SheetSidebar() override;
 
     void setBookMark(int index, int state);
+    void setCurrentPage(int page);
     void handleOpenSuccess();
     void handleFindOperation(int);
     void handleFindContentComming(const stSearchRes &);
@@ -65,7 +66,6 @@ public :
     void handleRotate(int);
     void handleUpdateThumbnail(const int &index);
     void handleAnntationMsg(const int &, const QString &);
-
 public slots:
     void onPageChanged(int index);
 

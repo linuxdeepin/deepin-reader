@@ -148,6 +148,13 @@ void SheetSidebar::setBookMark(int index, int state)
     if (m_thumbnailWidget) m_thumbnailWidget->setBookMarkState(index, state);
 }
 
+void SheetSidebar::setCurrentPage(int page)
+{
+    if (m_thumbnailWidget) m_thumbnailWidget->handlePage(page - 1);
+    if (m_bookmarkWidget) m_bookmarkWidget->handlePage(page - 1);
+    if (m_catalogWidget) m_catalogWidget->handlePage(page - 1);
+}
+
 void SheetSidebar::handleOpenSuccess()
 {
     if (Dr::PDF == m_sheet->type()) {
