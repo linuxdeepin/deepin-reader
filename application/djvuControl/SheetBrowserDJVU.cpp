@@ -101,7 +101,7 @@ void SheetBrowserDJVU::deform(DocOperation &operation)
     case Dr::RotateBy0:
     case Dr::RotateBy180:
         if (Dr::FitToPageWidthMode == operation.scaleMode)
-            operation.scaleFactor = ((double)this->width() - 25.0)  / (double) m_maxWidth / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
+            operation.scaleFactor = ((double)this->width() - 25.0) / (double) m_maxWidth / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
         else if (Dr::FitToPageHeightMode == operation.scaleMode)
             operation.scaleFactor = (double)this->height() / (double) m_maxHeight ;
         else
@@ -110,7 +110,7 @@ void SheetBrowserDJVU::deform(DocOperation &operation)
     case Dr::RotateBy90:
     case Dr::RotateBy270:
         if (Dr::FitToPageWidthMode == operation.scaleMode)
-            operation.scaleFactor = ((double)this->width() - 25.0)   / (double) m_maxHeight / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
+            operation.scaleFactor = ((double)this->width() - 25.0) / (double) m_maxHeight / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
         else if (Dr::FitToPageHeightMode == operation.scaleMode)
             operation.scaleFactor = (double)this->height() / (double) m_maxWidth ;
         else
@@ -216,7 +216,7 @@ bool SheetBrowserDJVU::getImageMax(int index, QImage &image, double max)
 void SheetBrowserDJVU::showEvent(QShowEvent *event)
 {
     if (1 != m_initPage) {
-        setCurrentPage(5);
+        setCurrentPage(m_initPage);
         m_initPage = 1;
     }
 

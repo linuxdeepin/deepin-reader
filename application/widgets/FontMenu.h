@@ -45,13 +45,9 @@ private slots:
     void slotRotateR();
 
 private:
-    void initConnection();
     QAction *createAction(const QString &objName, const char *, bool checked = false);
 
     void setAppSetFiteHAndW();
-    void resetAdaptive();
-
-    void OnShortKey(const QString &keyType);
 
 private:
     QAction         *m_pTwoPageAction = nullptr;          // 双页

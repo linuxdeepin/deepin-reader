@@ -26,19 +26,6 @@ FontMenu::FontMenu(DWidget *parent):
     CustomMenu(parent)
 {
     initActions();
-
-    initConnection();
-}
-
-/**
- * @brief FontMenu::resetAdaptive
- * 手动改变(ctrl + 1)缩放比例时，复位自适应宽高
- */
-void FontMenu::resetAdaptive()
-{
-    //CancelFitState();
-
-    setAppSetFiteHAndW();
 }
 
 void FontMenu::readCurDocParam(DocSheet *sheet)
@@ -76,6 +63,21 @@ void FontMenu::readCurDocParam(DocSheet *sheet)
         m_pTwoPageAction->setChecked(m_sheet->operation().layoutMode == Dr::TwoPagesMode);
         m_pFiteWAction->setChecked(m_sheet->operation().scaleMode == Dr::FitToPageWidthMode);
         m_pFiteHAction->setChecked(m_sheet->operation().scaleMode == Dr::FitToPageHeightMode);
+
+        m_bDoubPage = (m_sheet->operation().layoutMode == Dr::TwoPagesMode);
+
+        int adaptat = m_sheet->operation().scaleMode;
+
+        if (adaptat == Dr::FitToPageWidthMode) {
+            m_bFiteW = true;
+            m_bFiteH = false;
+        } else if (adaptat == Dr::FitToPageHeightMode) {
+            m_bFiteH = true;
+            m_bFiteW = false;
+        } else {
+            m_bFiteW = false;
+            m_bFiteH = false;
+        }
     }
 }
 
@@ -192,14 +194,6 @@ void FontMenu::initActions()
 }
 
 /**
- * @brief FontMenu::initConnection
- * 初始化信号槽
- */
-void FontMenu::initConnection()
-{
-}
-
-/**
  * @brief FontMenu::createAction   创建菜单action
  * @param objName                  action名称
  * @param member                   action所关联的响应函数
@@ -233,9 +227,8 @@ void FontMenu::setAppSetFiteHAndW()
     if (m_sheet.isNull())
         return;
 
-    int iValue = Default_State;
-
     if (Dr::PDF == m_sheet->type()) {
+        int iValue = Default_State;
         if (m_bFiteW) {
             iValue = ADAPTE_WIDGET_State;
         } else if (m_bFiteH) {
@@ -247,6 +240,7 @@ void FontMenu::setAppSetFiteHAndW()
             m_sheet->setScaleMode(Dr::FitToPageWidthMode);
         } else if (m_bFiteH) {
             m_sheet->setScaleMode(Dr::FitToPageHeightMode);
-        }
+        } else
+            m_sheet->setScaleMode(Dr::ScaleFactorMode);
     }
 }
