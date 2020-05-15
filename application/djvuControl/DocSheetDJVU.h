@@ -57,7 +57,11 @@ public:
 private slots:
     void onBrowserPageChanged(int page);
 
-    void onBrowserScaleChanged(Dr::ScaleMode mode, qreal scaleFactor);
+    void onBrowserSizeChanged();
+
+    void onBrowserWheelUp();
+
+    void onBrowserWheelDown();
 
 private:
     SheetBrowserDJVU *m_browser = nullptr;
