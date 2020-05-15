@@ -128,6 +128,8 @@ DocummentPDF::DocummentPDF(DWidget *parent):
 
 DocummentPDF::~DocummentPDF()
 {
+    Q_D(DocummentPDF);
+    delete d;
 }
 
 bool DocummentPDF::loadDocumment(QString filepath)
