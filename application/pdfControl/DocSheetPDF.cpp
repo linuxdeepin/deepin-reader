@@ -548,11 +548,11 @@ int  DocSheetPDF::pointInWhichPage(QPoint pos)
     return -1;
 }
 
-void DocSheetPDF::jumpToHighLight(const QString &uuid, int ipage)
+void DocSheetPDF::jumpToHighLight(const QString &uuid, int index)
 {
     DocummentProxy *docProxy = m_browser->GetDocProxy();
     if (docProxy) {
-        docProxy->jumpToHighLight(uuid, ipage);
+        docProxy->jumpToHighLight(uuid, index);
     }
 }
 

@@ -90,21 +90,19 @@ CatalogTreeView::~CatalogTreeView()
 
 }
 
-void CatalogTreeView::setPage(int page)
+void CatalogTreeView::setPage(int index)
 {
-    m_page = page;
-    this->clearSelection(); //  清除 之前的选中
-//    m_listTitle.clear();
-//    m_listPage.clear();
+    m_index = index;
+    this->clearSelection();
 
     auto model = reinterpret_cast<QStandardItemModel *>(this->model());
     if (model) {
-        page++;
+        index++;
         auto itemList = model->findItems("*", Qt::MatchWildcard | Qt::MatchRecursive);
         foreach (auto item, itemList) {
             int itemPage = item->data().toInt();
 
-            if (itemPage == page) {    //  找到了
+            if (itemPage == index) {    //  找到了
                 auto curIndex = model->indexFromItem(item);
                 if (curIndex.isValid()) {
                     auto curSelIndex = curIndex;
@@ -147,13 +145,13 @@ void CatalogTreeView::parseCatalogData(const Section &ol, QStandardItem *parentI
     auto model = reinterpret_cast<QStandardItemModel *>(this->model());
     if (model) {
         foreach (auto s, ol.children) { //  2级显示
-            if (s.link.page > 0) {
-                auto itemList = getItemList(s.title, s.link.page, s.link.left, s.link.top);
+            if (s.link.pageIndex > 0) {
+                auto itemList = getItemList(s.title, s.link.pageIndex, s.link.left, s.link.top);
                 parentItem->appendRow(itemList);
 
                 foreach (auto s1, s.children) { //  3级显示
-                    if (s1.link.page > 0) {
-                        auto itemList1 = getItemList(s1.title, s1.link.page, s1.link.left, s1.link.top);
+                    if (s1.link.pageIndex > 0) {
+                        auto itemList1 = getItemList(s1.title, s1.link.pageIndex, s1.link.left, s1.link.top);
                         itemList.at(0)->appendRow(itemList1);
                     }
                 }
@@ -163,19 +161,19 @@ void CatalogTreeView::parseCatalogData(const Section &ol, QStandardItem *parentI
 }
 
 //  获取 一行的 三列数据
-QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const int &page, const qreal  &realleft, const qreal &realtop)
+QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const int &index, const qreal  &realleft, const qreal &realtop)
 {
 //    QColor color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().text().color();
     auto item = new QStandardItem(title);
-    item->setData(page);
+    item->setData(index);
     item->setData(realleft, Qt::UserRole + 2);
     item->setData(realtop, Qt::UserRole + 3);
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 //    item->setForeground(QBrush(color));
 //    m_listTitle.append(item);
 
-    auto item1 = new QStandardItem(QString::number(page));
-    item1->setData(page);
+    auto item1 = new QStandardItem(QString::number(index));
+    item1->setData(index);
     item1->setData(realleft, Qt::UserRole + 2);
     item1->setData(realtop, Qt::UserRole + 3);
     item1->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -198,8 +196,8 @@ void CatalogTreeView::handleOpenSuccess()
 
         const Outline &ol = m_sheet->outline();
         foreach (const Section &s, ol) {   //  1 级显示
-            if (s.link.page > 0) {
-                auto itemList = getItemList(s.title, s.link.page, s.link.left, s.link.top);
+            if (s.link.pageIndex > 0) {
+                auto itemList = getItemList(s.title, s.link.pageIndex, s.link.left, s.link.top);
                 model->appendRow(itemList);
 
                 parseCatalogData(s, itemList.at(0));
@@ -219,7 +217,7 @@ void CatalogTreeView::SlotCollapsed(const QModelIndex &index)
     if (nullptr == m_sheet)
         return;
 
-    setPage(m_page);
+    setPage(m_index);
 }
 
 //  展开 节点处理
@@ -230,7 +228,7 @@ void CatalogTreeView::SlotExpanded(const QModelIndex &index)
     if (nullptr == m_sheet)
         return;
 
-    setPage(m_page);
+    setPage(m_index);
 }
 
 //  实现 上下左键 跳转

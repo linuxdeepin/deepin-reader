@@ -39,8 +39,8 @@ void ReadImageTask::run()
     Q_ASSERT(sheet);
     if (sheet) {
         int totalPage = sheet->pagesNumber();
-        m_docParam.pageNum = qBound(0, m_docParam.pageNum, totalPage - 1);
-        bool bl = sheet->getImageMax(m_docParam.pageNum, image, m_docParam.maxPixel);
+        m_docParam.pageIndex = qBound(0, m_docParam.pageIndex, totalPage - 1);
+        bool bl = sheet->getImageMax(m_docParam.pageIndex, image, m_docParam.maxPixel);
         if (bl) QMetaObject::invokeMethod(m_threadpoolManager, threadPoolSlotFun, Qt::QueuedConnection, Q_ARG(const ReaderImageParam_t &, m_docParam), Q_ARG(const QImage &, image));
         QThread::sleep(1);
     }
@@ -99,9 +99,9 @@ void ReaderImageThreadPoolManager::onTaskFinished(const ReaderImageParam_t &task
 {
     QMutexLocker mutext(&m_runMutex);
     if (m_docSheetImgMap.contains(task.sheet))
-        m_docSheetImgMap[task.sheet][task.pageNum] = QPixmap::fromImage(image);
+        m_docSheetImgMap[task.sheet][task.pageIndex] = QPixmap::fromImage(image);
     if (task.receiver)
-        QMetaObject::invokeMethod(task.receiver, task.slotFun.toStdString().c_str(), Qt::QueuedConnection, Q_ARG(int, task.pageNum));
+        QMetaObject::invokeMethod(task.receiver, task.slotFun.toStdString().c_str(), Qt::QueuedConnection, Q_ARG(int, task.pageIndex));
     m_taskList.removeAll(task);
 }
 

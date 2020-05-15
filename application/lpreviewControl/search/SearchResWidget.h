@@ -46,7 +46,7 @@ protected:
     void initWidget() Q_DECL_OVERRIDE;
 
 private:
-    void addSearchsItem(const int &page, const QString &text, const int &resultNum);
+    void addSearchsItem(const int &pageIndex, const QString &text, const int &resultNum);
 
 private:
     DocSheet *m_sheet;

@@ -38,9 +38,9 @@ public:
     void nextPage();
     void DeleteItemByKey();
 
-    void handlePage(int page);
+    void handlePage(int index);
     void handleOpenSuccess();
-    void handleBookMark(int page, int state);
+    void handleBookMark(int index, int state);
 
 public:
     void initWidget() Q_DECL_OVERRIDE;

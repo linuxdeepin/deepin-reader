@@ -86,13 +86,13 @@ void SearchResWidget::clearFindResult()
     m_pImageListView->getImageModel()->resetData();
 }
 
-void SearchResWidget::addSearchsItem(const int &page, const QString &text, const int &resultNum)
+void SearchResWidget::addSearchsItem(const int &pageIndex, const QString &text, const int &resultNum)
 {
     if (nullptr == m_sheet)
         return;
     ImagePageInfo_t tImagePageInfo;
-    tImagePageInfo.iPage = page;
-    tImagePageInfo.struuid = QString::number(page);
+    tImagePageInfo.pageIndex = pageIndex;
+    tImagePageInfo.struuid = QString::number(pageIndex);
     tImagePageInfo.strcontents = text;
     tImagePageInfo.strSearchcount = tr("%1 items found").arg(resultNum);
     m_pImageListView->getImageModel()->insertPageIndex(tImagePageInfo);
@@ -107,7 +107,7 @@ void SearchResWidget::adaptWindowSize(const double &scale)
     m_pImageListView->scrollToModelInexPage(curModelIndex, false);
 }
 
-void SearchResWidget::updateThumbnail(const int &page)
+void SearchResWidget::updateThumbnail(const int &pageIndex)
 {
-    m_pImageListView->getImageModel()->updatePageIndex(page);
+    m_pImageListView->getImageModel()->updatePageIndex(pageIndex);
 }

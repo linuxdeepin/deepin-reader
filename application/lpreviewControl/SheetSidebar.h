@@ -57,17 +57,17 @@ public :
     explicit SheetSidebar(DocSheet *parent = nullptr, PreviewWidgesFlags widgesFlag = PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK | PREVIEW_NOTE);
     ~SheetSidebar() override;
 
-    void setBookMark(int page, int state);
+    void setBookMark(int index, int state);
     void handleOpenSuccess();
     void handleFindOperation(int);
     void handleFindContentComming(const stSearchRes &);
     int  handleFindFinished();
     void handleRotate(int);
-    void handleUpdateThumbnail(const int &page);
+    void handleUpdateThumbnail(const int &index);
     void handleAnntationMsg(const int &, const QString &);
 
 public slots:
-    void onPageChanged(int page);
+    void onPageChanged(int index);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;

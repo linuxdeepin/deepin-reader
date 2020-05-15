@@ -37,15 +37,15 @@ public:
 
 public:
     void handleOpenSuccess();
-    void handlePage(int page);
+    void handlePage(int index);
     void handleRotate(int rotate);
-    void setBookMarkState(const int &pageIndex, const int &type);
+    void setBookMarkState(const int &index, const int &type);
 
     void prevPage();
     void nextPage();
 
     void adaptWindowSize(const double &scale)  Q_DECL_OVERRIDE;
-    void updateThumbnail(const int &pageIndex) Q_DECL_OVERRIDE;
+    void updateThumbnail(const int &index) Q_DECL_OVERRIDE;
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;

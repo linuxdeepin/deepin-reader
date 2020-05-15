@@ -93,7 +93,7 @@ void ImageListView::handleOpenSuccess()
             if (!stH.strcontents.isEmpty()) {
                 int pageIndex = stH.ipage;
                 ImagePageInfo_t tImagePageInfo;
-                tImagePageInfo.iPage = pageIndex;
+                tImagePageInfo.pageIndex = pageIndex;
                 tImagePageInfo.iType = Note_Type::NOTE_HIGHLIGHT;
                 tImagePageInfo.struuid = stH.struuid;
                 tImagePageInfo.strcontents = stH.strcontents;
@@ -112,9 +112,9 @@ void ImageListView::onItemClicked(const QModelIndex &index)
     }
 }
 
-bool ImageListView::scrollToIndex(int pageIndex, bool scrollTo)
+bool ImageListView::scrollToIndex(int index, bool scrollTo)
 {
-    const QList<QModelIndex> &indexlst = m_imageModel->getModelIndexForPageIndex(pageIndex);
+    const QList<QModelIndex> &indexlst = m_imageModel->getModelIndexForPageIndex(index);
     if (indexlst.size() > 0) {
         const QModelIndex &index = indexlst.first();
         if (scrollTo)

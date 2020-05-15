@@ -142,10 +142,10 @@ void SheetSidebar::onBtnClicked(int index)
         m_sheet->setOper(LeftIndex, QString::number(index));
 }
 
-void SheetSidebar::setBookMark(int page, int state)
+void SheetSidebar::setBookMark(int index, int state)
 {
-    if (m_bookmarkWidget) m_bookmarkWidget->handleBookMark(page, state);
-    if (m_thumbnailWidget) m_thumbnailWidget->setBookMarkState(page, state);
+    if (m_bookmarkWidget) m_bookmarkWidget->handleBookMark(index, state);
+    if (m_thumbnailWidget) m_thumbnailWidget->setBookMarkState(index, state);
 }
 
 void SheetSidebar::handleOpenSuccess()
@@ -205,10 +205,10 @@ void SheetSidebar::handleRotate(int rotate)
     if (m_thumbnailWidget) m_thumbnailWidget->handleRotate(rotate);
 }
 
-void SheetSidebar::handleUpdateThumbnail(const int &page)
+void SheetSidebar::handleUpdateThumbnail(const int &index)
 {
     CustomWidget *curWidget = dynamic_cast<CustomWidget *>(m_stackLayout->currentWidget());
-    if (curWidget) curWidget->updateThumbnail(page);
+    if (curWidget) curWidget->updateThumbnail(index);
 }
 
 void SheetSidebar::handleAnntationMsg(const int &msg, const QString &text)
@@ -216,11 +216,11 @@ void SheetSidebar::handleAnntationMsg(const int &msg, const QString &text)
     if (m_notesWidget) m_notesWidget->handleAnntationMsg(msg, text);
 }
 
-void SheetSidebar::onPageChanged(int page)
+void SheetSidebar::onPageChanged(int index)
 {
-    if (m_thumbnailWidget) m_thumbnailWidget->handlePage(page);
-    if (m_bookmarkWidget) m_bookmarkWidget->handlePage(page);
-    if (m_catalogWidget) m_catalogWidget->handlePage(page);
+    if (m_thumbnailWidget) m_thumbnailWidget->handlePage(index);
+    if (m_bookmarkWidget) m_bookmarkWidget->handlePage(index);
+    if (m_catalogWidget) m_catalogWidget->handlePage(index);
 }
 
 DToolButton *SheetSidebar::createBtn(const QString &btnName, const QString &objName)

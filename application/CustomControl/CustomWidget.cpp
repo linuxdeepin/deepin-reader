@@ -67,9 +67,9 @@ void CustomWidget::adaptWindowSize(const double &scale)
 /**
  * @brief CustomWidget::updateThumbnail
  * 高亮操作之后要跟换相应的缩略图
- * @param page 页码数，从0开始
+ * @param index 页码数，从0开始
  */
-void CustomWidget::updateThumbnail(const int &page)
+void CustomWidget::updateThumbnail(const int &index)
 {
 
 }

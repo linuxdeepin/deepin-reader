@@ -99,22 +99,22 @@ void BookMarkWidget::handleOpenSuccess()
     m_pImageListView->handleOpenSuccess();
 }
 
-void BookMarkWidget::handlePage(int page)
+void BookMarkWidget::handlePage(int index)
 {
-    bool result = m_pImageListView->scrollToIndex(page);
+    bool result = m_pImageListView->scrollToIndex(index);
     m_pAddBookMarkBtn->setDisabled(result);
 }
 
-void BookMarkWidget::handleBookMark(int page, int state)
+void BookMarkWidget::handleBookMark(int index, int state)
 {
     if (state) {
-        int nCurPage = m_sheet->currentIndex();
-        if (nCurPage == page) m_pAddBookMarkBtn->setEnabled(false);
-        m_pImageListView->getImageModel()->insertPageIndex(page);
+        int nCurIndex = m_sheet->currentIndex();
+        if (nCurIndex == index) m_pAddBookMarkBtn->setEnabled(false);
+        m_pImageListView->getImageModel()->insertPageIndex(index);
     } else {
-        int nCurPage = m_sheet->currentIndex();
-        if (nCurPage == page) m_pAddBookMarkBtn->setEnabled(true);
-        m_pImageListView->getImageModel()->removePageIndex(page);
+        int nCurIndex = m_sheet->currentIndex();
+        if (nCurIndex == index) m_pAddBookMarkBtn->setEnabled(true);
+        m_pImageListView->getImageModel()->removePageIndex(index);
     }
     m_pImageListView->scrollToIndex(m_sheet->currentIndex(), true);
 }
@@ -141,9 +141,9 @@ void BookMarkWidget::adaptWindowSize(const double &scale)
     m_pImageListView->scrollToIndex(m_sheet->currentIndex(), false);
 }
 
-void BookMarkWidget::updateThumbnail(const int &page)
+void BookMarkWidget::updateThumbnail(const int &index)
 {
-    m_pImageListView->getImageModel()->updatePageIndex(page);
+    m_pImageListView->getImageModel()->updatePageIndex(index);
 }
 
 void BookMarkWidget::onUpdateTheme()

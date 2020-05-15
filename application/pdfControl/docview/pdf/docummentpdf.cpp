@@ -138,11 +138,11 @@ bool DocummentPDF::loadDocumment(QString filepath)
     return true;
 }
 
-void DocummentPDF::jumpToHighLight(const QString &uuid, int ipage)
+void DocummentPDF::jumpToHighLight(const QString &uuid, int ipageIndex)
 {
     Q_D(DocummentPDF);
-    if (ipage >= 0 && ipage < d->m_pages.size()) {
-        Poppler::Page *page = static_cast<PagePdf *>(d->m_pages.at(ipage))->GetPage();
+    if (ipageIndex >= 0 && ipageIndex < d->m_pages.size()) {
+        Poppler::Page *page = static_cast<PagePdf *>(d->m_pages.at(ipageIndex))->GetPage();
         QList<Poppler::Annotation *> listannote = page->annotations();
         foreach (Poppler::Annotation *annote, listannote) {
             if (annote->subType() == Poppler::Annotation::AHighlight && annote->uniqueName().indexOf(uuid) >= 0) {
@@ -159,7 +159,7 @@ void DocummentPDF::jumpToHighLight(const QString &uuid, int ipage)
                     rectbound.setY(rectbound.y()*d->m_imageheight);
                     rectbound.setWidth(rectbound.width()*d->m_imagewidth);
                     rectbound.setHeight(rectbound.height()*d->m_imageheight);
-                    cacularValueXY(xvalue, yvalue, ipage, false, rectbound);
+                    cacularValueXY(xvalue, yvalue, ipageIndex, false, rectbound);
                     QScrollBar *scrollBar_Y = verticalScrollBar();
                     if (scrollBar_Y)
                         scrollBar_Y->setValue(yvalue);
@@ -571,12 +571,12 @@ Outline DocummentPDF::loadOutline(const QDomNode &parent, Poppler::Document *doc
         }
 
         if (destination) {
-            int page = destination->pageNumber();
+            int pageIndex = destination->pageNumber();
             qreal left = qQNaN();
             qreal top = qQNaN();
 
-            page = page >= 1 ? page : 1;
-            page = page <= document->numPages() ? page : document->numPages();
+            pageIndex = pageIndex >= 1 ? pageIndex : 1;
+            pageIndex = pageIndex <= document->numPages() ? pageIndex : document->numPages();
 
             //if (destination->isChangeLeft())
             {
@@ -595,7 +595,7 @@ Outline DocummentPDF::loadOutline(const QDomNode &parent, Poppler::Document *doc
             }
 
             Page::Link &link = section.link;
-            link.page = page;
+            link.pageIndex = pageIndex;
             link.left = left;
             link.top = top;
 

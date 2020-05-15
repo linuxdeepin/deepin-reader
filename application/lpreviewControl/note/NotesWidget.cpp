@@ -102,11 +102,11 @@ void NotesWidget::DeleteItemByKey()
 {
     ImagePageInfo_t tImagePageInfo;
     m_pImageListView->getImageModel()->getModelIndexImageInfo(m_pImageListView->currentIndex().row(), tImagePageInfo);
-    if (tImagePageInfo.iPage >= 0) {
+    if (tImagePageInfo.pageIndex >= 0) {
         int nType = tImagePageInfo.iType;
-        int page = tImagePageInfo.iPage;
+        int pageIndex = tImagePageInfo.pageIndex;
         QString uuid = tImagePageInfo.struuid;
-        QString sContent = uuid + Constant::sQStringSep + QString::number(page);
+        QString sContent = uuid + Constant::sQStringSep + QString::number(pageIndex);
         if (nType == NOTE_HIGHLIGHT) {
             emit sigDeleteContent(MSG_NOTE_DELETE_CONTENT, sContent);
         } else {
@@ -121,7 +121,7 @@ void NotesWidget::addNoteItem(const QString &text, const int &iType)
     const QStringList &strList = text.split(Constant::sQStringSep, QString::SkipEmptyParts);
     if (strList.count() == 3) {
         ImagePageInfo_t tImagePageInfo;
-        tImagePageInfo.iPage = strList.at(2).trimmed().toInt();
+        tImagePageInfo.pageIndex = strList.at(2).trimmed().toInt();
         tImagePageInfo.iType = iType;
         tImagePageInfo.struuid = strList.at(0).trimmed();
         tImagePageInfo.strcontents = strList.at(1).trimmed();
@@ -162,10 +162,10 @@ void NotesWidget::onListItemClicked(int row)
 {
     ImagePageInfo_t tImagePageInfo;
     m_pImageListView->getImageModel()->getModelIndexImageInfo(row, tImagePageInfo);
-    if (tImagePageInfo.iPage >= 0) {
-        int page = tImagePageInfo.iPage;
+    if (tImagePageInfo.pageIndex >= 0) {
+        int index = tImagePageInfo.pageIndex;
         const QString &uuid = tImagePageInfo.struuid;
-        m_sheet->jumpToHighLight(uuid, page);
+        m_sheet->jumpToHighLight(uuid, index);
     }
 }
 
@@ -191,7 +191,7 @@ void NotesWidget::copyNoteContent()
 {
     ImagePageInfo_t tImagePageInfo;
     m_pImageListView->getImageModel()->getModelIndexImageInfo(m_pImageListView->currentIndex().row(), tImagePageInfo);
-    if (tImagePageInfo.iPage >= 0) {
+    if (tImagePageInfo.pageIndex >= 0) {
         Utils::copyText(tImagePageInfo.strcontents);
     }
 }
@@ -205,7 +205,7 @@ void NotesWidget::adaptWindowSize(const double &scale)
     m_pImageListView->scrollToModelInexPage(curModelIndex, false);
 }
 
-void NotesWidget::updateThumbnail(const int &page)
+void NotesWidget::updateThumbnail(const int &pageIndex)
 {
-    m_pImageListView->getImageModel()->updatePageIndex(page);
+    m_pImageListView->getImageModel()->updatePageIndex(pageIndex);
 }

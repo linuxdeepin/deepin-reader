@@ -119,17 +119,17 @@ enum LinkType_EM {
 
 struct Link {
     QRectF boundary;
-    int page;
+    int pageIndex;
     qreal left;
     qreal top;
 
     QString urlOrFileName;
     LinkType_EM type;
 
-    Link() : boundary(), page(-1), left(qQNaN()), top(qQNaN()), urlOrFileName(), type(LinkType_NULL) {}
-    Link(const QRectF &boundingRect, int page, qreal left = qQNaN(), qreal top = qQNaN()) : boundary(boundingRect), page(page), left(left), top(top), urlOrFileName(), type(LinkType_Goto) {}
-    Link(const QRectF &boundingRect, const QString &url, LinkType_EM type = LinkType_Browse) : boundary(boundingRect), page(-1), left(qQNaN()), top(qQNaN()), urlOrFileName(url), type(type) {}
-    Link(const QRectF &boundingRect, const QString &fileName, int page) : boundary(boundingRect), page(page), left(qQNaN()), top(qQNaN()), urlOrFileName(fileName), type(LinkType_GotoOtherFile) {}
+    Link() : boundary(), pageIndex(-1), left(qQNaN()), top(qQNaN()), urlOrFileName(), type(LinkType_NULL) {}
+    Link(const QRectF &boundingRect, int index, qreal left = qQNaN(), qreal top = qQNaN()) : boundary(boundingRect), pageIndex(index), left(left), top(top), urlOrFileName(), type(LinkType_Goto) {}
+    Link(const QRectF &boundingRect, const QString &url, LinkType_EM type = LinkType_Browse) : boundary(boundingRect), pageIndex(-1), left(qQNaN()), top(qQNaN()), urlOrFileName(url), type(type) {}
+    Link(const QRectF &boundingRect, const QString &fileName, int index) : boundary(boundingRect), pageIndex(index), left(qQNaN()), top(qQNaN()), urlOrFileName(fileName), type(LinkType_GotoOtherFile) {}
 };
 }
 

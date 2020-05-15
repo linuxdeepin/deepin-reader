@@ -46,11 +46,11 @@ void ImageViewModel::setDocSheet(DocSheet *sheet)
     m_docSheet = sheet;
 }
 
-void ImageViewModel::setBookMarkVisible(int pageIndex, bool visible, bool updateIndex)
+void ImageViewModel::setBookMarkVisible(int index, bool visible, bool updateIndex)
 {
-    m_cacheBookMarkMap.insert(pageIndex, visible);
+    m_cacheBookMarkMap.insert(index, visible);
     if (updateIndex) {
-        const QList<QModelIndex> &modelIndexlst = getModelIndexForPageIndex(pageIndex);
+        const QList<QModelIndex> &modelIndexlst = getModelIndexForPageIndex(index);
         for (const QModelIndex &modelIndex : modelIndexlst)
             emit dataChanged(modelIndex, modelIndex);
     }
@@ -70,7 +70,7 @@ QVariant ImageViewModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
-    int nRow = m_pagelst.at(index.row()).iPage;
+    int nRow = m_pagelst.at(index.row()).pageIndex;
     if (role == ImageinfoType_e::IMAGE_PIXMAP) {
         const QPixmap &image = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet, nRow);
         if (image.isNull())
@@ -119,7 +119,7 @@ QList<QModelIndex> ImageViewModel::getModelIndexForPageIndex(int pageIndex)
 int ImageViewModel::getPageIndexForModelIndex(int row)
 {
     if (row >= 0 && row < m_pagelst.size())
-        return m_pagelst.at(row).iPage;
+        return m_pagelst.at(row).pageIndex;
     return -1;
 }
 
@@ -130,19 +130,19 @@ void ImageViewModel::onUpdatePageImage(int pageIndex)
         emit dataChanged(modelIndex, modelIndex);
 }
 
-void ImageViewModel::onFetchImage(int nRow) const
+void ImageViewModel::onFetchImage(int index) const
 {
     ReaderImageParam_t tParam;
-    tParam.pageNum = nRow;
+    tParam.pageIndex = index;
     tParam.sheet = m_docSheet;
     tParam.receiver = m_parent;
     tParam.slotFun = "onUpdatePageImage";
     ReaderImageThreadPoolManager::getInstance()->addgetDocImageTask(tParam);
 }
 
-void ImageViewModel::updatePageIndex(int pageIndex)
+void ImageViewModel::updatePageIndex(int index)
 {
-    onFetchImage(pageIndex);
+    onFetchImage(index);
 }
 
 void ImageViewModel::insertPageIndex(int pageIndex)

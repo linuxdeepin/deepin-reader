@@ -32,36 +32,41 @@ typedef enum ImageinfoType_e {
 } ImageinfoType_e;
 
 typedef struct ImagePageInfo_t {
-    int iPage;
+    int pageIndex;
     int iType;
 
     QString struuid;
     QString strcontents;
     QString strSearchcount;
 
-    ImagePageInfo_t(){
-        iPage = -1;
+    ImagePageInfo_t()
+    {
+        pageIndex = -1;
         iType = -1;
         struuid = "";
         strcontents = "";
         strSearchcount = "";
     }
 
-    ImagePageInfo_t(int page){
-        this->iPage = page;
+    ImagePageInfo_t(int index)
+    {
+        this->pageIndex = index;
         this->iType = -1;
     }
 
-    bool operator == (const ImagePageInfo_t &other) const{
-        return (this->iPage == other.iPage);
+    bool operator == (const ImagePageInfo_t &other) const
+    {
+        return (this->pageIndex == other.pageIndex);
     }
 
-    bool operator < (const ImagePageInfo_t &other) const{
-        return (this->iPage < other.iPage);
+    bool operator < (const ImagePageInfo_t &other) const
+    {
+        return (this->pageIndex < other.pageIndex);
     }
 
-    bool operator > (const ImagePageInfo_t &other) const{
-        return (this->iPage > other.iPage);
+    bool operator > (const ImagePageInfo_t &other) const
+    {
+        return (this->pageIndex > other.pageIndex);
     }
 } ImagePageInfo_t;
 Q_DECLARE_METATYPE(ImagePageInfo_t);

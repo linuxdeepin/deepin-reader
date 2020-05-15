@@ -71,15 +71,15 @@ void ThumbnailWidget::handleRotate(int)
     scrollToCurrentPage();
 }
 
-void ThumbnailWidget::handlePage(int page)
+void ThumbnailWidget::handlePage(int index)
 {
-    m_pImageListView->scrollToIndex(page);
-    m_pPageWidget->setIndex(page);
+    m_pImageListView->scrollToIndex(index);
+    m_pPageWidget->setIndex(index);
 }
 
-void ThumbnailWidget::setBookMarkState(const int &pageIndex, const int &type)
+void ThumbnailWidget::setBookMarkState(const int &index, const int &type)
 {
-    m_pImageListView->getImageModel()->setBookMarkVisible(pageIndex, type);
+    m_pImageListView->getImageModel()->setBookMarkVisible(index, type);
 }
 
 void ThumbnailWidget::prevPage()
@@ -102,9 +102,9 @@ void ThumbnailWidget::adaptWindowSize(const double &scale)
     scrollToCurrentPage();
 }
 
-void ThumbnailWidget::updateThumbnail(const int &pageIndex)
+void ThumbnailWidget::updateThumbnail(const int &index)
 {
-    m_pImageListView->getImageModel()->updatePageIndex(pageIndex);
+    m_pImageListView->getImageModel()->updatePageIndex(index);
 }
 
 void ThumbnailWidget::scrollToCurrentPage()

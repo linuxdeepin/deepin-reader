@@ -25,7 +25,7 @@
 
 class DocSheet;
 typedef struct ReaderImageParam_t {
-    int pageNum = 0;
+    int pageIndex = 0;
     int maxPixel = 174;
     DocSheet *sheet = nullptr;
 
@@ -34,17 +34,17 @@ typedef struct ReaderImageParam_t {
 
     bool operator == (const ReaderImageParam_t &other) const
     {
-        return (this->pageNum == other.pageNum && this->maxPixel == other.maxPixel && this->sheet == other.sheet);
+        return (this->pageIndex == other.pageIndex && this->maxPixel == other.maxPixel && this->sheet == other.sheet);
     }
 
     bool operator < (const ReaderImageParam_t &other) const
     {
-        return (this->pageNum < other.pageNum);
+        return (this->pageIndex < other.pageIndex);
     }
 
     bool operator > (const ReaderImageParam_t &other) const
     {
-        return (this->pageNum > other.pageNum);
+        return (this->pageIndex > other.pageIndex);
     }
 
 private:

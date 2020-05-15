@@ -37,7 +37,7 @@ public:
 
     ~CatalogTreeView() override;
 
-    void setPage(int page);
+    void setPage(int index);
 
     void setRightControl(bool hasControl);
 
@@ -67,11 +67,9 @@ private slots:
     void SlotExpanded(const QModelIndex &);
 
 private:
+    int m_index;
     bool rightnotifypagechanged = false;
     DocSheet *m_sheet;
-//    QList<QStandardItem *> m_listTitle;
-//    QList<QStandardItem *> m_listPage;
-    int m_page;
 };
 
 #endif // CATALOGTREEVIEW_H

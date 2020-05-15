@@ -420,11 +420,11 @@ int DocummentProxy::pointInWhichPage(QPoint pos)
     return  -1;
 }
 
-void DocummentProxy::jumpToHighLight(const QString &uuid, int ipage)
+void DocummentProxy::jumpToHighLight(const QString &uuid, int index)
 {
 //    qDebug() << "DocummentProxy::jumpToHighLight";
     if (m_documment) {
-        m_documment->jumpToHighLight(uuid, ipage);
+        m_documment->jumpToHighLight(uuid, index);
     }
 }
 
