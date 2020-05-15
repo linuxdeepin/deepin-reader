@@ -192,7 +192,7 @@ bool DocSheetDJVU::fileChanged()
 
 void DocSheetDJVU::onBrowserPageChanged(int page)
 {
-    operation().currentPage = page;
+    m_operation.currentPage = page;
 }
 
 void DocSheetDJVU::onBrowserScaleChanged(Dr::ScaleMode mode, qreal scaleFactor)
