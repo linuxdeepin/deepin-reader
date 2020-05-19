@@ -21,6 +21,8 @@ SheetBrowserDJVU::SheetBrowserDJVU(QWidget *parent) : QGraphicsView(parent)
 
 SheetBrowserDJVU::~SheetBrowserDJVU()
 {
+    qDeleteAll(m_items);
+
     if (nullptr != m_document)
         delete m_document;
 }

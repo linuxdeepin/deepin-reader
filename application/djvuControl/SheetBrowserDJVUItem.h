@@ -2,6 +2,8 @@
 #define SHEETBROWSERDJVUITEM_H
 
 #include <QGraphicsItem>
+#include <QSet>
+
 #include "global.h"
 
 namespace deepin_reader {
@@ -31,12 +33,16 @@ public:
 
     void handleRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image);
 
+    static bool existInstance(SheetBrowserDJVUItem *item);
+
 private:
     deepin_reader::Page *m_page = nullptr;
     QImage m_image;
     double m_imageScaleFactor   = 1;
     double m_scaleFactor        = -1;
     Dr::Rotation m_rotation = Dr::RotateBy0;
+
+    static QSet<SheetBrowserDJVUItem *> items;
 };
 
 #endif // SHEETBROWSERDJVUITEM_H

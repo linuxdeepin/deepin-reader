@@ -50,12 +50,17 @@ void RenderThreadDJVU::run()
     m_quit = false;
 
     while (!m_quit) {
-        if (m_tasks.count() <= 0)
+        if (m_tasks.count() <= 0) {
+            sleep(1);
             break;
+        }
 
         m_mutex.lock();
         RenderTaskDJVU task = m_tasks.pop();
         m_mutex.unlock();
+
+        if (!SheetBrowserDJVUItem::existInstance(task.item))
+            continue;
 
         QImage image = task.item->getImage(task.scaleFactor, task.rotation);
 
@@ -66,5 +71,6 @@ void RenderThreadDJVU::run()
 
 void RenderThreadDJVU::onTaskFinished(SheetBrowserDJVUItem *item, QImage image, double scaleFactor, int rotation)
 {
-    item->handleRenderFinished(scaleFactor, (Dr::Rotation)rotation, image);
+    if (SheetBrowserDJVUItem::existInstance(item))
+        item->handleRenderFinished(scaleFactor, (Dr::Rotation)rotation, image);
 }

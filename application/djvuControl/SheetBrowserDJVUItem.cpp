@@ -6,13 +6,16 @@
 #include <QStyleOptionGraphicsItem>
 #include <QDebug>
 
+QSet<SheetBrowserDJVUItem *> SheetBrowserDJVUItem::items;
 SheetBrowserDJVUItem::SheetBrowserDJVUItem(deepin_reader::Page *page) : QGraphicsItem()
 {
     m_page = page;
+    items.insert(this);
 }
 
 SheetBrowserDJVUItem::~SheetBrowserDJVUItem()
 {
+    items.remove(this);
     if (nullptr != m_page)
         delete m_page;
 }
@@ -93,4 +96,9 @@ void SheetBrowserDJVUItem::handleRenderFinished(double scaleFactor, Dr::Rotation
         m_image = image;
         update();
     }
+}
+
+bool SheetBrowserDJVUItem::existInstance(SheetBrowserDJVUItem *item)
+{
+    return items.contains(item);
 }
