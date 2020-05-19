@@ -80,6 +80,7 @@ public:
 private slots:
     void onTaskFinished(const ReaderImageParam_t &task, const QImage &image);
     void onDocProxyDestroyed(QObject *obj);
+    void onReceiverDestroyed(QObject *obj);
 
 private:
     QMutex m_runMutex;

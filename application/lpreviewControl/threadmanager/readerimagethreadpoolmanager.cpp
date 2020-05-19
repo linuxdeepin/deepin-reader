@@ -86,6 +86,7 @@ void ReaderImageThreadPoolManager::addgetDocImageTask(const ReaderImageParam_t &
         }
     }
 
+    connect(readImageParam.receiver, &QObject::destroyed, this, &ReaderImageThreadPoolManager::onReceiverDestroyed);
     ReaderImageParam_t tParam = readImageParam;
     ReadImageTask *task = new ReadImageTask;
     tParam.task = task;
@@ -100,7 +101,7 @@ void ReaderImageThreadPoolManager::onTaskFinished(const ReaderImageParam_t &task
     QMutexLocker mutext(&m_runMutex);
     if (m_docSheetImgMap.contains(task.sheet))
         m_docSheetImgMap[task.sheet][task.pageIndex] = QPixmap::fromImage(image);
-    if (task.receiver)
+    if (m_taskList.contains(task))
         QMetaObject::invokeMethod(task.receiver, task.slotFun.toStdString().c_str(), Qt::QueuedConnection, Q_ARG(int, task.pageIndex));
     m_taskList.removeAll(task);
 }
@@ -117,4 +118,14 @@ void ReaderImageThreadPoolManager::onDocProxyDestroyed(QObject *obj)
 {
     m_docProxylst.removeAll(obj);
     m_docSheetImgMap.remove(obj);
+}
+
+void ReaderImageThreadPoolManager::onReceiverDestroyed(QObject *obj)
+{
+    for (const ReaderImageParam_t &iter : m_taskList) {
+        if (iter.receiver == obj) {
+            m_taskList.removeAll(iter);
+            return;
+        }
+    }
 }
