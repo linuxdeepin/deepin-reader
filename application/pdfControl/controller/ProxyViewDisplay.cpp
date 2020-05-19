@@ -60,14 +60,14 @@ int ProxyViewDisplay::setViewRotateRight()
 //  设置　窗口　自适应　宽＼高　度
 double ProxyViewDisplay::onSetWidgetAdapt()
 {
-    if (m_nAdapteState != NO_ADAPTE_State) {
+    if (m_nAdapteState != Dr::ScaleFactorMode) {
         if (!fvmPrivate->m_pProxy)
             return m_nScale;
         double dScale = 0.0;
-        if (m_nAdapteState == ADAPTE_WIDGET_State) {
+        if (m_nAdapteState == Dr::FitToPageWidthMode) {
             dScale = fvmPrivate->m_pProxy->adaptWidthAndShow(m_nWidth);
             return dScale * 100;
-        } else if (m_nAdapteState == ADAPTE_HEIGHT_State) {
+        } else if (m_nAdapteState == Dr::FitToPageHeightMode) {
             dScale = fvmPrivate->m_pProxy->adaptHeightAndShow(m_nHeight);
             return dScale * 100;
         }

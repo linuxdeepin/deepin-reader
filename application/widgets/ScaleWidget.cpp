@@ -113,8 +113,8 @@ void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
     double dValue = sTempData.toDouble(&bOk);
 
     if (bOk && dValue >= 10.0 && dValue <= m_nMaxScale) {
-        m_sheet->setFit(NO_ADAPTE_State);
-        m_sheet->setScale(dValue);
+        m_sheet->setScaleMode(Dr::ScaleFactorMode);
+        m_sheet->setScaleFactor(dValue);
     }
 }
 
@@ -155,7 +155,7 @@ void ScaleWidget::SlotReturnPressed()
 
 void ScaleWidget::onEditFinished()
 {
-    QString sCurText = QString::number(QString::number(m_sheet->getOper(Scale).toDouble(), 'f', 2).toDouble()) + "%";
+    QString sCurText = QString::number(QString::number(m_sheet->operation().scaleFactor, 'f', 2).toDouble()) + "%";
 
     m_scaleComboBox->setCurrentText(sCurText);
 }
@@ -196,7 +196,7 @@ void ScaleWidget::setSheet(DocSheet *sheet)
             }
         }
 
-        double nScale = m_sheet->getOper(Scale).toDouble();
+        double nScale = m_sheet->operation().scaleFactor;
 
         if (static_cast<int>(nScale) <= 0) {
             nScale = 100;
@@ -214,7 +214,7 @@ void ScaleWidget::setSheet(DocSheet *sheet)
         if (curindex < 0)
             m_scaleComboBox->setCurrentIndex(curindex);
 
-        QString sCurText = QString::number(QString::number(m_sheet->getOper(Scale).toDouble(), 'f', 2).toDouble()) + "%";
+        QString sCurText = QString::number(QString::number(m_sheet->operation().scaleFactor, 'f', 2).toDouble()) + "%";
 
         m_scaleComboBox->setCurrentText(sCurText);
 

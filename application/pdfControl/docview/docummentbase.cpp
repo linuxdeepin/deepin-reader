@@ -1824,7 +1824,7 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, i
                 double leftposition = curwidth * realleft + leftspace;
                 double topposition = curheight * realtop + topspace;
                 yvalue = d->m_widgets.at(ipage)->y() + topposition;
-                qDebug() << realleft << realtop << leftposition << topposition << yvalue;
+
                 //横向有缩放
                 if (frameRect().width() < curwidth) {
                     if (leftposition > frameRect().width()) {

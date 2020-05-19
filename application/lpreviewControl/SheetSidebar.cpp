@@ -138,8 +138,9 @@ void SheetSidebar::onBtnClicked(int index)
     m_btnGroup->button(index)->setChecked(true);
     m_stackLayout->setCurrentIndex(index);
     adaptWindowSize(m_scale);
-    if (m_stackLayout->currentWidget() != m_searchWidget)
-        m_sheet->setOper(LeftIndex, QString::number(index));
+    if (m_stackLayout->currentWidget() != m_searchWidget) {
+        m_sheet->setSidebarIndex(index);
+    }
 }
 
 void SheetSidebar::setBookMark(int index, int state)
@@ -157,17 +158,10 @@ void SheetSidebar::setCurrentPage(int page)
 
 void SheetSidebar::handleOpenSuccess()
 {
-    if (Dr::PDF == m_sheet->type()) {
-        this->setVisible(m_sheet->getOper(Thumbnail).toInt());
-        int nId = qBound(0, m_sheet->getOper(LeftIndex).toInt(), m_stackLayout->count() - 2);
-        QAbstractButton *btn = m_btnGroup->button(nId);
-        if (btn) m_btnGroup->buttonClicked(nId);
-    } else {
-        this->setVisible(m_sheet->operation().sidebarVisible);
-        int nId = qBound(0, m_sheet->operation().sidebarIndex, m_stackLayout->count() - 2);
-        QAbstractButton *btn = m_btnGroup->button(nId);
-        if (btn) m_btnGroup->buttonClicked(nId);
-    }
+    this->setVisible(m_sheet->operation().sidebarVisible);
+    int nId = qBound(0, m_sheet->operation().sidebarIndex, m_stackLayout->count() - 2);
+    QAbstractButton *btn = m_btnGroup->button(nId);
+    if (btn) m_btnGroup->buttonClicked(nId);
 
     if (m_thumbnailWidget) m_thumbnailWidget->handleOpenSuccess();
     if (m_catalogWidget) m_catalogWidget->handleOpenSuccess();
@@ -189,10 +183,10 @@ void SheetSidebar::handleFindOperation(int type)
         const QList<QAbstractButton *> &btns = m_btnGroup->buttons();
         for (QAbstractButton *btn : btns) btn->setEnabled(true);
 
-        int nId = qBound(0, m_sheet->getOper(LeftIndex).toInt(), m_stackLayout->count() - 1);
+        int nId = qBound(0, m_sheet->operation().sidebarIndex, m_stackLayout->count() - 1);
         QAbstractButton *btn = m_btnGroup->button(nId);
         if (btn) m_btnGroup->buttonClicked(nId);
-        this->setVisible(m_sheet->getOper(Thumbnail).toInt());
+        this->setVisible(m_sheet->operation().sidebarVisible);
         m_searchWidget->clearFindResult();
     }
 }

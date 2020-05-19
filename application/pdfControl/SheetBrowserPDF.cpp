@@ -30,12 +30,12 @@
 void SheetBrowserPDF::setDoubleShow(bool isShow)
 {
     Q_D(SheetBrowserPDF);
-    setOper(DoubleShow, isShow);
+
     d->m_pDocViewProxy->setDoubleShow(isShow);
     d->m_pDocViewProxy->setScaleRotateViewModeAndShow();
 
     double scale = d->handleResize(size());
-    setOper(Scale, scale);
+    d->m_sheet->setScaleFactor(scale);
     emit setFileChanged(getFileChange());
 }
 
@@ -43,7 +43,7 @@ void SheetBrowserPDF::rotateLeft()
 {
     Q_D(SheetBrowserPDF);
     int rotate = d->m_pDocViewProxy->setViewRotateLeft();
-    setOper(Rotate, rotate);
+    d->m_sheet->setRotation((Dr::Rotation)rotate);
     emit sigRotateChanged(rotate);
 }
 
@@ -51,7 +51,7 @@ void SheetBrowserPDF::rotateRight()
 {
     Q_D(SheetBrowserPDF);
     int rotate = d->m_pDocViewProxy->setViewRotateRight();
-    setOper(Rotate, rotate);
+    d->m_sheet->setRotation((Dr::Rotation)rotate);
     emit sigRotateChanged(rotate);
 }
 
@@ -86,8 +86,6 @@ void SheetBrowserPDF::setMouseDefault()
 
     d->__SetCursor(Qt::ArrowCursor);
 
-    setOper(HandShape, 0);
-
     emit sigFileChanged();
 }
 
@@ -103,14 +101,7 @@ void SheetBrowserPDF::setMouseHand()
 
     d->__SetCursor(Qt::OpenHandCursor);
 
-    setOper(HandShape, 1);
-
     emit sigFileChanged();
-}
-
-bool SheetBrowserPDF::isMouseHand()
-{
-    return 1 == getOper(HandShape).toInt();
 }
 
 bool SheetBrowserPDF::isDoubleShow()
@@ -124,12 +115,8 @@ void SheetBrowserPDF::setScale(double scale)
 {
     Q_D(SheetBrowserPDF);
 
-    setOper(Scale, scale);
-
     d->m_pDocViewProxy->setScale(scale);
-
     d->m_pDocViewProxy->setScaleRotateViewModeAndShow();
-
     emit sigFileChanged();
 }
 
@@ -137,17 +124,10 @@ void SheetBrowserPDF::setFit(int fit)
 {
     Q_D(SheetBrowserPDF);
 
-    if (d->m_pProxyFileDataModel->getOper(Fit) == fit)
-        return;
-
-    setOper(Fit, fit);
-
     double scale = d->m_pDocViewProxy->setFit(fit);
-
-    if (-1 != scale && fit != NO_ADAPTE_State) {
-        setOper(Scale, scale);
+    if (-1 != scale && d->m_sheet->operation().scaleMode != Dr::ScaleFactorMode) {
+        d->m_sheet->setScaleFactor(scale);
     }
-
     emit sigFileChanged();
 }
 
@@ -198,8 +178,8 @@ void SheetBrowserPDF::resizeEvent(QResizeEvent *event)
     if (d->hasOpened()) {
         double scale = d->handleResize(event->size());
 
-        if (getOper(Fit) != NO_ADAPTE_State) {
-            setOper(Scale, scale);
+        if (d->m_sheet->operation().scaleMode != Dr::ScaleMode::ScaleFactorMode) {
+            d->m_sheet->setScaleFactor(scale);
             emit setFileChanged(getFileChange());
         }
     }
@@ -305,7 +285,7 @@ void SheetBrowserPDF::copySelectedText()
         return;
 
     //  手型状态， 直接返回
-    if (isMouseHand())
+    if (Dr::MouseShapeHand == d->m_sheet->operation().mouseShape)
         return;
 
     d->DocFile_ctrl_c();
@@ -325,7 +305,7 @@ void SheetBrowserPDF::highlightSelectedText()
         return;
 
     //  手型状态， 直接返回
-    if (isMouseHand())
+    if (Dr::MouseShapeHand == d->m_sheet->operation().mouseShape)
         return;
 
     d->DocFile_ctrl_l();
@@ -345,7 +325,7 @@ void SheetBrowserPDF::addSelectedTextHightlightAnnotation()
         return;
 
     //  手型状态， 直接返回
-    if (isMouseHand())
+    if (Dr::MouseShapeHand == d->m_sheet->operation().mouseShape)
         return;
 
     d->DocFile_ctrl_i();
@@ -369,16 +349,4 @@ DocummentProxy *SheetBrowserPDF::GetDocProxy()
 {
     Q_D(SheetBrowserPDF);
     return d->m_pProxy;
-}
-
-void SheetBrowserPDF::setOper(const int &nType, const QVariant &sValue)
-{
-    Q_D(SheetBrowserPDF);
-    d->m_pProxyFileDataModel->setOper(nType, sValue);
-}
-
-QVariant SheetBrowserPDF::getOper(int type)
-{
-    Q_D(SheetBrowserPDF);
-    return d->m_pProxyFileDataModel->getOper(type);
 }

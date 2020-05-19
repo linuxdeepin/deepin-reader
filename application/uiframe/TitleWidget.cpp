@@ -113,19 +113,15 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
 
         SetBtnDisable(false);
 
-        int nState = m_curSheet->getOper(Thumbnail).toInt();
-
-        bool showLeft = nState == 1 ? true : false;
-
-        m_pThumbnailBtn->setChecked(showLeft);
+        m_pThumbnailBtn->setChecked(m_curSheet->operation().sidebarVisible);
 
         SetBtnDisable(false);
 
         m_pSw->setSheet(m_curSheet);
 
-        m_pHandleMenu->setHandShape(m_curSheet->isMouseHand());
+        m_pHandleMenu->setHandShape(m_curSheet->operation().mouseShape);
 
-        if (m_curSheet->isMouseHand())
+        if (Dr::MouseShapeHand == m_curSheet->operation().mouseShape)
             setHandleShape();
         else
             setDefaultShape();
@@ -200,18 +196,10 @@ void TitleWidget::SlotSetCurrentTool(const int &sAction)
     if (m_curSheet.isNull())
         return;
 
-    if (Dr::DjVu == m_curSheet->type()) {
-        if (sAction == E_HANDLE_SELECT_TEXT) {
-            m_curSheet->setMouseShape(Dr::MouseShapeNormal);
-        } else {
-            m_curSheet->setMouseShape(Dr::MouseShapeHand);
-        }
+    if (sAction == E_HANDLE_SELECT_TEXT) {
+        m_curSheet->setMouseShape(Dr::MouseShapeNormal);
     } else {
-        if (sAction == E_HANDLE_SELECT_TEXT) {
-            m_curSheet->setMouseDefault();
-        } else {
-            m_curSheet->setMouseHand();
-        }
+        m_curSheet->setMouseShape(Dr::MouseShapeHand);
     }
 
 }
@@ -224,7 +212,7 @@ void TitleWidget::slotFindOperation(const int &sAction)
         }
     } else if (sAction == E_FIND_EXIT) {
         if (m_curSheet) {
-            bool close = m_curSheet->getOper(Thumbnail).toBool();
+            bool close = m_curSheet->operation().sidebarVisible;
             m_pThumbnailBtn->setChecked(close);
         }
     }

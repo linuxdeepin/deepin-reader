@@ -241,7 +241,7 @@ double SheetBrowserPDFPrivate::handleResize(const QSize &size)
 {
     Q_Q(SheetBrowserPDF);
 
-    double scale = q->getOper(Scale).toDouble();
+    double scale = m_sheet->operation().scaleFactor;
 
     if (!m_pProxyData->IsFirstShow() && m_pProxyData->getIsFileOpenOk()) {
         m_pDocViewProxy->setWidth(size.width());
@@ -327,7 +327,7 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
         return;
 
     //  手型状态， 直接返回
-    if (q->isMouseHand())
+    if (Dr::MouseShapeHand == m_sheet->operation().mouseShape)
         return;
 
     QString sSelectText = "";
@@ -422,13 +422,11 @@ void SheetBrowserPDFPrivate::onPageBookMarkButtonClicked(int page, bool state)
     m_sheet->setBookMark(page, state);
 }
 
-void SheetBrowserPDFPrivate::onPageChanged(int page)
+void SheetBrowserPDFPrivate::onPageChanged(int index)
 {
     Q_Q(SheetBrowserPDF);
-
-    q->setOper(CurPage, page);
-
-    emit q->sigPageChanged(page);
+    m_sheet->setCurrentPage(index + 1);
+    emit q->sigPageChanged(index);
 }
 
 void SheetBrowserPDFPrivate::setFindWidget(FindWidget *findWidget)
@@ -498,9 +496,9 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
 
         m_pProxyData->setPath(sPath);
 
-        int curPage = fdm.getOper(CurPage).toInt();
+        int curIndex = fdm.getOper(CurIndex).toInt();
 
-        bool rl = m_pProxy->openFile(Dr::PDF, sPath, static_cast<unsigned int>(curPage), rotatetype, scaleRatio, viewmode);
+        bool rl = m_pProxy->openFile(Dr::PDF, sPath, curIndex, rotatetype, scaleRatio, viewmode);
 
         if (rl) {
             m_pProxy->setViewFocus();

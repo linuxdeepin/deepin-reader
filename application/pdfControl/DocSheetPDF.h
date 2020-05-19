@@ -4,7 +4,6 @@
 #include <DSplitter>
 #include <QMap>
 
-#include "FileDataModel.h"
 #include "pdfControl/docview/commonstruct.h"
 #include "ModuleHeader.h"
 #include "DocSheet.h"
@@ -50,21 +49,17 @@ public:
 
     void setFileChanged(bool hasChanged)override;
 
-    void setMouseDefault()override;//默认工具
-
-    void setMouseHand()override;//手型工具
-
-    void setScale(double scale)override;
-
-    void setFit(int fit)override;
-
     void setBookMark(int page, int state)override;
 
     void showNoteWidget(int page, const QString &uuid, const int &type = NOTE_HIGHLIGHT)override;
 
     void setLayoutMode(Dr::LayoutMode mode)override;
 
-    bool isMouseHand()override;
+    void setMouseShape(Dr::MouseShape shape) override;
+
+    void setScaleMode(Dr::ScaleMode mode) override;
+
+    void setScaleFactor(qreal scaleFactor) override;
 
     bool isDoubleShow()override;
 
@@ -75,10 +70,6 @@ public:
     bool saveData()override;
 
     bool saveAsData(QString filePath)override;
-
-    QVariant getOper(int type)override;
-
-    void setOper(const int &, const QVariant &)override;
 
     void saveOper()override;
 
@@ -94,33 +85,32 @@ public:
 
     void print()override;
 
-    virtual Outline outline() override;
+    Outline outline() override;
 
-    virtual int pagesNumber() override;
+    int pagesNumber() override;
+    int currentIndex() override;
+    int pointInWhichPage(QPoint pos) override;
+    int label2pagenum(QString label) override;
 
-    virtual int currentIndex() override;
-    virtual int pointInWhichPage(QPoint pos) override;
-    virtual int label2pagenum(QString label) override;
+    bool isOpen() override;
+    bool haslabel() override;
+    bool closeMagnifier() override;
+    bool showSlideModel() override;
+    bool exitSlideModel() override;
+    bool getAutoPlaySlideStatu() override;
+    bool getImage(int pagenum, QImage &image, double width, double height) override;
+    bool getImageMax(int pagenum, QImage &image, double max) override;
 
-    virtual bool isOpen() override;
-    virtual bool haslabel() override;
-    virtual bool closeMagnifier() override;
-    virtual bool showSlideModel() override;
-    virtual bool exitSlideModel() override;
-    virtual bool getAutoPlaySlideStatu() override;
-    virtual bool getImage(int pagenum, QImage &image, double width, double height) override;
-    virtual bool getImageMax(int pagenum, QImage &image, double max) override;
+    void jumpToHighLight(const QString &uuid, int ipage) override;
+    void docBasicInfo(stFileInfo &info) override;
+    void setAutoPlaySlide(bool autoplay, int timemsec = 3000) override;
+    void getAllAnnotation(QList<stHighlightContent> &listres) override;
+    void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage = 0) override;
 
-    virtual void jumpToHighLight(const QString &uuid, int ipage) override;
-    virtual void docBasicInfo(stFileInfo &info) override;
-    virtual void setAutoPlaySlide(bool autoplay, int timemsec = 3000) override;
-    virtual void getAllAnnotation(QList<stHighlightContent> &listres) override;
-    virtual void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage = 0) override;
+    double getMaxZoomratio() override;
 
-    virtual double getMaxZoomratio() override;
-
-    virtual QString pagenum2label(int index) override;
-    virtual QString addIconAnnotation(const QPoint &pos, const QColor &color = Qt::yellow, TextAnnoteType_Em type = TextAnnoteType_Note) override;
+    QString pagenum2label(int index) override;
+    QString addIconAnnotation(const QPoint &pos, const QColor &color = Qt::yellow, TextAnnoteType_Em type = TextAnnoteType_Note) override;
 
 private slots:
     void SlotFileOpenResult(const QString &, const bool &);

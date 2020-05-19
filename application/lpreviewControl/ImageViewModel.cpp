@@ -84,10 +84,7 @@ QVariant ImageViewModel::data(const QModelIndex &index, int role) const
         }
         return QVariant::fromValue(false);
     } else if (role == ImageinfoType_e::IMAGE_ROTATE) {
-        if (Dr::PDF == m_docSheet->type())
-            return QVariant::fromValue(m_docSheet->getOper(Rotate).toInt() * 90);
-        else
-            return QVariant::fromValue(m_docSheet->operation().rotation * 90);
+        return QVariant::fromValue(m_docSheet->operation().rotation * 90);
     } else if (role == ImageinfoType_e::IMAGE_INDEX_TEXT) {
         return QVariant::fromValue(tr("Page %1").arg(nRow + 1));
     } else if (role == ImageinfoType_e::IMAGE_CONTENT_TEXT) {

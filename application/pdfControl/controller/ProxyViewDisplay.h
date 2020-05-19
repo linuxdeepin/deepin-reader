@@ -57,7 +57,7 @@ private:
     SheetBrowserPDFPrivate      *fvmPrivate = nullptr;
     friend class SheetBrowserPDFPrivate;
 
-    int                 m_nAdapteState = NO_ADAPTE_State;       //  当前自适应状态
+    int                 m_nAdapteState = 0;       //  当前自适应状态
 
     int                 m_nDoubleShow = false;
     int                 m_rotateType = 0;            // 旋转类型(后台所需旋转类型)

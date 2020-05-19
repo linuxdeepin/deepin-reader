@@ -38,6 +38,7 @@
 DocSheetPDF::DocSheetPDF(QString filePath, DWidget *parent)
     : DocSheet(Dr::PDF, filePath, parent)
 {
+    m_operation.scaleFactor = 100.0;
     m_pRightWidget = new QStackedWidget(this);
     m_pSpinnerWidget = new SpinnerWidget(this);
 
@@ -169,10 +170,9 @@ void DocSheetPDF::zoomin()
     QList<double> dataList = {10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500};
 
     for (int i = 0; i < dataList.count(); ++i) {
-        if (dataList[i] > getOper(Scale).toDouble()) {
-            setFit(NO_ADAPTE_State);
-            setScale(dataList[i]);
-            emit sigFileChanged(this);
+        if (dataList[i] > this->operation().scaleFactor) {
+            this->setScaleMode(Dr::ScaleFactorMode);
+            this->setScaleFactor(dataList[i]);
             return;
         }
     }
@@ -183,10 +183,9 @@ void DocSheetPDF::zoomout()
     QList<double> dataList = {10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500};
 
     for (int i = dataList.count() - 1; i >= 0; --i) {
-        if (dataList[i] < getOper(Scale).toDouble()) {
-            setFit(NO_ADAPTE_State);
-            setScale(dataList[i]);
-            emit sigFileChanged(this);
+        if (dataList[i] < this->operation().scaleFactor) {
+            this->setScaleMode(Dr::ScaleFactorMode);
+            this->setScaleFactor(dataList[i]);
             return;
         }
     }
@@ -205,30 +204,6 @@ void DocSheetPDF::rotateRight()
 void DocSheetPDF::setFileChanged(bool hasChanged)
 {
     m_browser->setFileChanged(hasChanged);
-}
-
-void DocSheetPDF::setMouseDefault()
-{
-    quitMagnifer();
-
-    m_browser->setMouseDefault();
-}
-
-void DocSheetPDF::setMouseHand()
-{
-    quitMagnifer();
-
-    m_browser->setMouseHand();
-}
-
-void DocSheetPDF::setScale(double scale)
-{
-    m_browser->setScale(scale);
-}
-
-void DocSheetPDF::setFit(int fit)
-{
-    m_browser->setFit(fit);
 }
 
 void DocSheetPDF::setBookMark(int page, int state)
@@ -266,19 +241,35 @@ void DocSheetPDF::showNoteWidget(int page, const QString &uuid, const int &type)
 
 void DocSheetPDF::setLayoutMode(Dr::LayoutMode mode)
 {
+    m_operation.layoutMode = mode;
     if (Dr::SinglePageMode == mode)
         m_browser->setDoubleShow(false);
     else if (Dr::TwoPagesMode == mode)
         m_browser->setDoubleShow(true);
     else
         return;
-
-    m_operation.layoutMode = mode;
 }
 
-bool DocSheetPDF::isMouseHand()
+void DocSheetPDF::setMouseShape(Dr::MouseShape shape)
 {
-    return m_browser->isMouseHand();
+    m_operation.mouseShape = shape;
+    quitMagnifer();
+    if (shape == Dr::MouseShapeNormal)
+        m_browser->setMouseDefault();
+    else if (shape == Dr::MouseShapeHand)
+        m_browser->setMouseHand();
+}
+
+void DocSheetPDF::setScaleMode(Dr::ScaleMode mode)
+{
+    m_operation.scaleMode = mode;
+    m_browser->setFit(mode);
+}
+
+void DocSheetPDF::setScaleFactor(qreal scaleFactor)
+{
+    m_operation.scaleFactor = scaleFactor;
+    m_browser->setScale(scaleFactor);
 }
 
 bool DocSheetPDF::isDoubleShow()
@@ -315,8 +306,7 @@ void DocSheetPDF::onFileChanged()
 
 void DocSheetPDF::onSplitterMoved(int a, int b)
 {
-    setFit(NO_ADAPTE_State);
-    emit sigFileChanged(this);
+    setScaleMode(Dr::ScaleFactorMode);
 }
 
 void DocSheetPDF::copySelectedText()
@@ -398,16 +388,6 @@ bool DocSheetPDF::saveData()
 bool DocSheetPDF::saveAsData(QString filePath)
 {
     return m_browser->saveAsData(filePath);
-}
-
-QVariant DocSheetPDF::getOper(int type)
-{
-    return m_browser->getOper(type);
-}
-
-void DocSheetPDF::setOper(const int &type, const QVariant &value)
-{
-    m_browser->setOper(type, value);
 }
 
 void DocSheetPDF::exitSliderShow()

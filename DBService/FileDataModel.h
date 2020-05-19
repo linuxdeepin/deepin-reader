@@ -30,7 +30,7 @@ enum E_FDM_MSG {
     Rotate,
     Thumbnail,
     LeftIndex,
-    CurPage,
+    CurIndex,
     HandShape
 };
 

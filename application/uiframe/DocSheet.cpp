@@ -52,6 +52,11 @@ DocSheet::~DocSheet()
     g_map.remove(m_uuid);
 }
 
+void DocSheet::initOperationData(const DocOperation &opera)
+{
+    m_operation = opera;
+}
+
 void DocSheet::openFile()
 {
     qDebug() << "unrealized";
@@ -113,29 +118,24 @@ void DocSheet::rotateRight()
     qDebug() << "unrealized";
 }
 
-void DocSheet::setLayoutMode(Dr::LayoutMode mode)
-{
-    qDebug() << "unrealized";
-}
-
 void DocSheet::setFileChanged(bool hasChanged)
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::setMouseDefault()
+void DocSheet::setLayoutMode(Dr::LayoutMode mode)
 {
-    qDebug() << "unrealized";
-}
-
-void DocSheet::setMouseHand()
-{
-    qDebug() << "unrealized";
+    m_operation.layoutMode = mode;
 }
 
 void DocSheet::setMouseShape(Dr::MouseShape shape)
 {
-    qDebug() << "unrealized";
+    m_operation.mouseShape = shape;
+}
+
+void DocSheet::setCurrentPage(int page)
+{
+    m_operation.currentPage = page;
 }
 
 void DocSheet::openMagnifier()
@@ -143,24 +143,24 @@ void DocSheet::openMagnifier()
     qDebug() << "unrealized";
 }
 
-void DocSheet::setScale(double scale)
-{
-    qDebug() << "unrealized";
-}
-
 void DocSheet::setScaleFactor(qreal scaleFactor)
 {
-    qDebug() << "unrealized";
+    m_operation.scaleFactor = scaleFactor;
 }
 
-void DocSheet::setFit(int fit)
+void DocSheet::setSidebarIndex(int index)
 {
-    qDebug() << "unrealized";
+    m_operation.sidebarIndex = index;
+}
+
+void DocSheet::setRotation(Dr::Rotation rotation)
+{
+    m_operation.rotation = rotation;
 }
 
 void DocSheet::setScaleMode(Dr::ScaleMode mode)
 {
-    qDebug() << "unrealized";
+    m_operation.scaleMode = mode;
 }
 
 void DocSheet::setBookMark(int page, int state)
@@ -169,11 +169,6 @@ void DocSheet::setBookMark(int page, int state)
 }
 
 void DocSheet::showNoteWidget(int page, const QString &uuid, const int &type)
-{
-    qDebug() << "unrealized";
-}
-
-bool DocSheet::isMouseHand()
 {
     qDebug() << "unrealized";
 }
@@ -192,7 +187,6 @@ void DocSheet::handleOpenSuccess()
 void DocSheet::setSidebarVisible(bool isVisible)
 {
     m_operation.sidebarVisible = isVisible;
-    setOper(Thumbnail, QString::number(isVisible));
     if (m_sidebar)
         m_sidebar->setVisible(isVisible);
     emit sigFileChanged(this);
@@ -403,16 +397,6 @@ bool DocSheet::saveAsData(QString filePath)
 {
     qDebug() << "unrealized";
     return false;
-}
-
-void DocSheet::setOper(const int &, const QVariant &)
-{
-    qDebug() << "unrealized";
-}
-
-QVariant DocSheet::getOper(int type)
-{
-    return -1;
 }
 
 void DocSheet::exitSliderShow()

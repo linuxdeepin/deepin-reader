@@ -588,24 +588,24 @@ void CentralDocPage::handleShortcut(const QString &s)
             getCurSheet()->print();
     } else if (s == KeyStr::g_alt_1) {
         if (getCurSheet())
-            getCurSheet()->setMouseDefault();
+            getCurSheet()->setMouseShape(Dr::MouseShapeNormal);
     } else if (s == KeyStr::g_alt_2) {
         if (getCurSheet())
-            getCurSheet()->setMouseHand();
+            getCurSheet()->setMouseShape(Dr::MouseShapeHand);
     } else if (s == KeyStr::g_ctrl_1) {
         if (getCurSheet()) {
-            getCurSheet()->setFit(NO_ADAPTE_State);
-            getCurSheet()->setScale(100);
+            getCurSheet()->setScaleMode(Dr::ScaleFactorMode);
+            getCurSheet()->setScaleFactor(100);
         }
     } else if (s == KeyStr::g_ctrl_m) {
         if (getCurSheet())
             getCurSheet()->setSidebarVisible(true);
     } else if (s == KeyStr::g_ctrl_2) {
         if (getCurSheet())
-            getCurSheet()->setFit(ADAPTE_HEIGHT_State);
+            getCurSheet()->setScaleMode(Dr::FitToPageHeightMode);
     } else if (s == KeyStr::g_ctrl_3) {
         if (getCurSheet())
-            getCurSheet()->setFit(ADAPTE_WIDGET_State);
+            getCurSheet()->setScaleMode(Dr::FitToPageWidthMode);
     } else if (s == KeyStr::g_ctrl_r) {
         if (getCurSheet())
             getCurSheet()->rotateLeft();

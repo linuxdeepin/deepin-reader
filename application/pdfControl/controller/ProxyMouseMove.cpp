@@ -44,7 +44,7 @@ void ProxyMouseMove::mouseMoveEvent(QMouseEvent *event)
         _fvwParent->m_sheet->showSlideControl();                //显示幻灯片控制
     } else if (nState == Magnifer_State) {                      //当前是放大镜状态
         __ShowMagnifier(globalPos);
-    } else if (_fvwParent->m_sheet->isMouseHand()) {            //手型状态下， 按住鼠标左键 位置进行移动
+    } else if (Dr::MouseShapeHand == _fvwParent->m_sheet->operation().mouseShape) {            //手型状态下， 按住鼠标左键 位置进行移动
         if (m_bSelectOrMove) {
             __FilePageMove(globalPos);
         }
@@ -178,7 +178,7 @@ void ProxyMouseMove::mousePressEvent(QMouseEvent *event)
             __AddIconAnnotation(globalPos);
             _fvwParent->m_sheet->setCurrentState(Default_State);
 
-        } else if (_fvwParent->m_sheet->isMouseHand()) {
+        } else if (Dr::MouseShapeHand == _fvwParent->m_sheet->operation().mouseShape) {
             __HandlClicked(globalPos);
         } else {
             __OtherMousePress(globalPos);

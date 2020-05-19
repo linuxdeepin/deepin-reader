@@ -57,7 +57,7 @@ void HistroyDB::qSelectData(const QString &sPath)
                 dataObj.setOper(Rotate, query.value("FileRotate"));         // 文档旋转角度(0~360)
                 dataObj.setOper(Thumbnail, query.value("FileShowLeft"));    //  左侧列表窗口是否显示
                 dataObj.setOper(LeftIndex, query.value("ListIndex"));       // 在哪个列表
-                dataObj.setOper(CurPage, query.value("CurPage"));           // 文档当前页
+                dataObj.setOper(CurIndex, query.value("CurPage"));           // 文档当前页
 
                 m_pDataMapObj.insert(sPath, dataObj);
             } else {
@@ -159,7 +159,7 @@ void HistroyDB::insertData(const QString &sPath)
         query.addBindValue(GetKeyValue(sPath, Rotate));
         query.addBindValue(GetKeyValue(sPath, Thumbnail));
         query.addBindValue(GetKeyValue(sPath, LeftIndex));
-        query.addBindValue(GetKeyValue(sPath, CurPage));
+        query.addBindValue(GetKeyValue(sPath, CurIndex));
 
         if (!query.exec()) {
             qWarning() << __func__ << " error:  " << query.lastError();
@@ -188,7 +188,7 @@ void HistroyDB::updateData(const QString &sPath)
         query.addBindValue(GetKeyValue(sPath, Rotate));
         query.addBindValue(GetKeyValue(sPath, Thumbnail));
         query.addBindValue(GetKeyValue(sPath, LeftIndex));
-        query.addBindValue(GetKeyValue(sPath, CurPage));
+        query.addBindValue(GetKeyValue(sPath, CurIndex));
         query.addBindValue(sPath);
 
         if (!query.exec()) {

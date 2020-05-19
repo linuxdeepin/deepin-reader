@@ -53,7 +53,7 @@ private slots:
 
     void onPageBookMarkButtonClicked(int, bool);
 
-    void onPageChanged(int page);
+    void onPageChanged(int index);
 
     void setFindWidget(FindWidget *findWidget);
 

@@ -4,7 +4,6 @@
 #include <DSplitter>
 #include <QMap>
 
-#include "FileDataModel.h"
 #include "global.h"
 #include "pdfControl/docview/commonstruct.h"
 #include "ModuleHeader.h"
@@ -31,6 +30,8 @@ public:
     explicit DocSheet(Dr::FileType type, QString filePath, Dtk::Widget::DWidget *parent = nullptr);
 
     virtual ~DocSheet() override;
+
+    virtual void initOperationData(const DocOperation &opera);
 
     virtual bool isOpen();
 
@@ -74,11 +75,17 @@ public:
 
     virtual void setScaleFactor(qreal scaleFactor);     //base is 1 ;设置后自动取消自适应
 
+    virtual void setSidebarIndex(int index);
+
+    virtual void setRotation(Dr::Rotation rotation);
+
     virtual void setMouseShape(Dr::MouseShape shape);
 
     virtual void openMagnifier();
 
     virtual bool closeMagnifier();
+
+    virtual void setCurrentPage(int page);
 
     virtual bool fileChanged();
 
@@ -159,25 +166,11 @@ public:
 public:
     virtual void setFileChanged(bool hasChanged);
 
-    virtual void setMouseDefault();     //默认工具
-
-    virtual void setMouseHand();        //手型工具
-
-    virtual void setScale(double scale);
-
-    virtual void setFit(int fit);
-
     virtual void setBookMark(int page, int state);
 
     virtual void showNoteWidget(int page, const QString &uuid, const int &type = NOTE_HIGHLIGHT);
 
-    virtual bool isMouseHand();
-
     virtual bool isDoubleShow();
-
-    virtual QVariant getOper(int type);
-
-    virtual void setOper(const int &, const QVariant &);
 
     virtual void saveOper();
 

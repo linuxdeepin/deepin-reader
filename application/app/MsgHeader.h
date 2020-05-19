@@ -17,13 +17,6 @@ enum E_FIND_WIDGET_MSG {
     E_FIND_CONTENT,
 };
 
-//  窗口自适应状态
-enum E_ADAPTE_MSG {
-    NO_ADAPTE_State,
-    ADAPTE_WIDGET_State,
-    ADAPTE_HEIGHT_State
-};
-
 //  高亮&注释消息
 enum E_NOTE_MSG {
     MSG_NOTE_ADD_HIGHLIGHT_COLOR,       //  添加高亮

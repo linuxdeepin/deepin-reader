@@ -32,9 +32,6 @@ public:
     explicit ProxyFileDataModel(QObject *parent = nullptr);
 
 public:
-    void    setOper(const int &, const QVariant &);
-    QVariant  getOper(int type);
-
     void saveOper();
     void saveData();
     void saveAsData(const QString &originPath, const QString &targetPath);
@@ -42,7 +39,6 @@ public:
     void setModel(FileDataModel model);
 
 private:
-    FileDataModel           m_fileDataModel;        //  已打开的文档列表
     SheetBrowserPDFPrivate *_fvwParent = nullptr;
     friend class SheetBrowserPDFPrivate;
 };

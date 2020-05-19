@@ -30,6 +30,7 @@ class FindWidget;
  * @brief   文档显示区域
  */
 class DocSheet;
+class DocSheetPDF;
 class SheetBrowserPDFPrivate;
 class SheetBrowserPDF : public CustomWidget
 {
@@ -39,8 +40,6 @@ public:
     explicit SheetBrowserPDF(DocSheet *sheet, DWidget *parent = nullptr);
 
     ~SheetBrowserPDF() override;
-
-    void setDoubleShow(bool isShow);
 
     void rotateLeft();
 
@@ -52,13 +51,7 @@ public:
 
     void setMouseHand();
 
-    bool isMouseHand();
-
     bool isDoubleShow();
-
-    void setScale(double scale);
-
-    void setFit(int fit);
 
     void setBookMark(int page, int state);
 
@@ -87,7 +80,7 @@ signals:
 
     void sigRotateChanged(int rotate);
 
-    void sigPageChanged(int page);
+    void sigPageChanged(int index);
 
     void sigFindContantComming(const stSearchRes &);    //搜索到新的词
 
@@ -108,10 +101,6 @@ public:
 
     DocummentProxy *GetDocProxy();
 
-    void setOper(const int &, const QVariant &);
-
-    QVariant getOper(int type);
-
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
 
@@ -127,8 +116,12 @@ protected:
 
 private:
     void initConnections();
+    void setFit(int fit);
+    void setScale(double scale);
+    void setDoubleShow(bool isShow);
 
 private:
+    friend DocSheetPDF;
     SheetBrowserPDFPrivate *const d_ptr = nullptr;
     Q_DECLARE_PRIVATE(SheetBrowserPDF)
 };

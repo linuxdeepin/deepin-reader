@@ -35,7 +35,7 @@ void FileDataModel::setOper(const int &iKey, const QVariant &iValue)
         setScale(iValue.toDouble());
     } else if (iKey == LeftIndex) {
         setLeftIndex(iValue.toInt());
-    } else if (iKey == CurPage) {
+    } else if (iKey == CurIndex) {
         setCurPage(iValue.toInt());
     } else if (iKey == HandShape) {
         setCurMouse(iValue.toInt());
@@ -62,7 +62,7 @@ QVariant FileDataModel::getOper(const int &iKey) const
     if (iKey == LeftIndex) {
         return getLeftIndex();
     }
-    if (iKey == CurPage) {
+    if (iKey == CurIndex) {
         return getCurPage();
     }
     if (iKey == HandShape) {

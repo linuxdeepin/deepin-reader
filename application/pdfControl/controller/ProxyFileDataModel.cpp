@@ -22,29 +22,24 @@
 #include "pdfControl/SheetBrowserPDFPrivate.h"
 #include "MsgHeader.h"
 #include "ProxyData.h"
+#include "DocSheet.h"
 
 ProxyFileDataModel::ProxyFileDataModel(QObject *parent) : QObject(parent)
 {
     _fvwParent = qobject_cast<SheetBrowserPDFPrivate *>(parent);
 }
 
-void ProxyFileDataModel::setOper(const int &nType, const QVariant &sValue)
-{
-    m_fileDataModel.setOper(nType, sValue);
-}
-
-QVariant ProxyFileDataModel::getOper(int type)
-{
-    return m_fileDataModel.getOper(type);
-}
-
 void ProxyFileDataModel::saveOper()
 {
     QString sPath = _fvwParent->m_pProxyData->getPath();
-    for (int iLoop = Scale; iLoop < CurPage + 1; iLoop++) {
-        dApp->m_pDBService->setHistroyData(sPath, iLoop, m_fileDataModel.getOper(iLoop));
-    }
-
+    dApp->m_pDBService->setHistroyData(sPath, Scale, _fvwParent->m_sheet->operation().scaleFactor);
+    dApp->m_pDBService->setHistroyData(sPath, DoubleShow, _fvwParent->m_sheet->operation().layoutMode);
+    dApp->m_pDBService->setHistroyData(sPath, Fit, _fvwParent->m_sheet->operation().scaleMode);
+    dApp->m_pDBService->setHistroyData(sPath, Rotate, _fvwParent->m_sheet->operation().rotation);
+    dApp->m_pDBService->setHistroyData(sPath, Thumbnail, _fvwParent->m_sheet->operation().sidebarVisible);
+    dApp->m_pDBService->setHistroyData(sPath, LeftIndex, _fvwParent->m_sheet->operation().sidebarIndex);
+    dApp->m_pDBService->setHistroyData(sPath, CurIndex, _fvwParent->m_sheet->operation().currentPage - 1);
+    dApp->m_pDBService->setHistroyData(sPath, HandShape, _fvwParent->m_sheet->operation().mouseShape);
     dApp->m_pDBService->qSaveData(sPath, DB_HISTROY);
 }
 
@@ -61,5 +56,14 @@ void ProxyFileDataModel::saveAsData(const QString &originPath, const QString &ta
 
 void ProxyFileDataModel::setModel(FileDataModel model)
 {
-    m_fileDataModel = model;
+    DocOperation opera;
+    opera.layoutMode = (Dr::LayoutMode)model.getOper(DoubleShow).toInt();
+    opera.mouseShape = (Dr::MouseShape)model.getOper(HandShape).toInt();
+    opera.scaleMode = (Dr::ScaleMode)model.getOper(Fit).toInt();
+    opera.rotation = (Dr::Rotation)model.getOper(Rotate).toInt();
+    opera.scaleFactor = (Dr::Rotation)model.getOper(Scale).toDouble();
+    opera.sidebarVisible = model.getOper(Thumbnail).toBool();
+    opera.sidebarIndex = model.getOper(LeftIndex).toInt();
+    opera.currentPage = model.getOper(CurIndex).toInt() + 1;
+    _fvwParent->m_sheet->initOperationData(opera);
 }
