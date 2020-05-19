@@ -572,7 +572,7 @@ bool PagePdf::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString
     Q_D(PagePdf);
     bool bclicked = false;
     QPointF tpos = globalPoint2Iner(pos);
-    qInfo() <<    "         icon text pos:" << tpos;
+//    qInfo() <<    "         icon text pos:" << tpos;
 //    double curwidth = d->m_scale * d->m_imagewidth;
 //    double curheight = d->m_scale * d->m_imageheight;
 //    QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
