@@ -127,6 +127,11 @@ bool DocSheetDJVU::openFileExec()
     return false;
 }
 
+bool DocSheetDJVU::saveAsData(QString filePath)
+{
+    return QFile::copy(this->filePath(), filePath);
+}
+
 int DocSheetDJVU::pagesNumber()
 {
     if (m_browser)
@@ -162,7 +167,7 @@ void DocSheetDJVU::setLayoutMode(Dr::LayoutMode mode)
 
 void DocSheetDJVU::setMouseShape(Dr::MouseShape shape)
 {
-    if (shape > 0 && shape < Dr::NumberOfMouseShapes) {
+    if (shape >= 0 && shape < Dr::NumberOfMouseShapes) {
         m_operation.mouseShape = shape;
         m_browser->loadMouseShape(m_operation);
         emit sigFileChanged(this);
@@ -171,7 +176,7 @@ void DocSheetDJVU::setMouseShape(Dr::MouseShape shape)
 
 void DocSheetDJVU::setScaleMode(Dr::ScaleMode mode)
 {
-    if (mode > 0 && mode < Dr::NumberOfScaleModes) {
+    if (mode >= 0 && mode < Dr::NumberOfScaleModes) {
         m_operation.scaleMode = mode;
         m_browser->deform(m_operation);
         emit sigFileChanged(this);
@@ -197,6 +202,23 @@ bool DocSheetDJVU::getImageMax(int index, QImage &image, double max)
 bool DocSheetDJVU::fileChanged()
 {
     return false;
+}
+
+void DocSheetDJVU::openMagnifier()
+{
+    if (m_browser)
+        m_browser->openMagnifier();
+}
+
+bool DocSheetDJVU::closeMagnifier()
+{
+    if (m_browser)
+        m_browser->closeMagnifier();
+}
+
+int DocSheetDJVU::pointInPage(QPoint point)
+{
+
 }
 
 void DocSheetDJVU::onBrowserPageChanged(int page)

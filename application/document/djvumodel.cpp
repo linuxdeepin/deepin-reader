@@ -368,97 +368,97 @@ QSizeF DjVuPage::size() const
     return 72.0 / m_resolution * m_size;
 }
 
-QImage DjVuPage::render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, const QRect &boundingRect) const
-{
-    LOCK_PAGE
+//QImage DjVuPage::render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, const QRect &boundingRect) const
+//{
+//    LOCK_PAGE
 
-    ddjvu_page_t *page = ddjvu_page_create_by_pageno(m_parent->m_document, m_index);
+//    ddjvu_page_t *page = ddjvu_page_create_by_pageno(m_parent->m_document, m_index);
 
-    if (page == 0) {
-        return QImage();
-    }
+//    if (page == 0) {
+//        return QImage();
+//    }
 
-    ddjvu_status_t status;
+//    ddjvu_status_t status;
 
-    while (true) {
-        status = ddjvu_page_decoding_status(page);
+//    while (true) {
+//        status = ddjvu_page_decoding_status(page);
 
-        if (status < DDJVU_JOB_OK) {
-            clearMessageQueue(m_parent->m_context, true);
-        } else {
-            break;
-        }
-    }
+//        if (status < DDJVU_JOB_OK) {
+//            clearMessageQueue(m_parent->m_context, true);
+//        } else {
+//            break;
+//        }
+//    }
 
-    if (status >= DDJVU_JOB_FAILED) {
-        ddjvu_page_release(page);
+//    if (status >= DDJVU_JOB_FAILED) {
+//        ddjvu_page_release(page);
 
-        return QImage();
-    }
+//        return QImage();
+//    }
 
-    switch (rotation) {
-    default:
-    case Dr::RotateBy0:
-        ddjvu_page_set_rotation(page, DDJVU_ROTATE_0);
-        break;
-    case Dr::RotateBy90:
-        ddjvu_page_set_rotation(page, DDJVU_ROTATE_270);
-        break;
-    case Dr::RotateBy180:
-        ddjvu_page_set_rotation(page, DDJVU_ROTATE_180);
-        break;
-    case Dr::RotateBy270:
-        ddjvu_page_set_rotation(page, DDJVU_ROTATE_90);
-        break;
-    }
+//    switch (rotation) {
+//    default:
+//    case Dr::RotateBy0:
+//        ddjvu_page_set_rotation(page, DDJVU_ROTATE_0);
+//        break;
+//    case Dr::RotateBy90:
+//        ddjvu_page_set_rotation(page, DDJVU_ROTATE_270);
+//        break;
+//    case Dr::RotateBy180:
+//        ddjvu_page_set_rotation(page, DDJVU_ROTATE_180);
+//        break;
+//    case Dr::RotateBy270:
+//        ddjvu_page_set_rotation(page, DDJVU_ROTATE_90);
+//        break;
+//    }
 
-    ddjvu_rect_t pagerect;
+//    ddjvu_rect_t pagerect;
 
-    pagerect.x = 0;
-    pagerect.y = 0;
+//    pagerect.x = 0;
+//    pagerect.y = 0;
 
-    switch (rotation) {
-    default:
-    case Dr::RotateBy0:
-    case Dr::RotateBy180:
-        pagerect.w = qRound(horizontalResolution / m_resolution * m_size.width());
-        pagerect.h = qRound(verticalResolution / m_resolution * m_size.height());
-        break;
-    case Dr::RotateBy90:
-    case Dr::RotateBy270:
-        pagerect.w = qRound(horizontalResolution / m_resolution * m_size.height());
-        pagerect.h = qRound(verticalResolution / m_resolution * m_size.width());
-        break;
-    }
+//    switch (rotation) {
+//    default:
+//    case Dr::RotateBy0:
+//    case Dr::RotateBy180:
+//        pagerect.w = qRound(horizontalResolution / m_resolution * m_size.width());
+//        pagerect.h = qRound(verticalResolution / m_resolution * m_size.height());
+//        break;
+//    case Dr::RotateBy90:
+//    case Dr::RotateBy270:
+//        pagerect.w = qRound(horizontalResolution / m_resolution * m_size.height());
+//        pagerect.h = qRound(verticalResolution / m_resolution * m_size.width());
+//        break;
+//    }
 
-    ddjvu_rect_t renderrect;
+//    ddjvu_rect_t renderrect;
 
-    if (boundingRect.isNull()) {
-        renderrect.x = pagerect.x;
-        renderrect.y = pagerect.y;
-        renderrect.w = pagerect.w;
-        renderrect.h = pagerect.h;
-    } else {
-        renderrect.x = boundingRect.x();
-        renderrect.y = boundingRect.y();
-        renderrect.w = boundingRect.width();
-        renderrect.h = boundingRect.height();
-    }
+//    if (boundingRect.isNull()) {
+//        renderrect.x = pagerect.x;
+//        renderrect.y = pagerect.y;
+//        renderrect.w = pagerect.w;
+//        renderrect.h = pagerect.h;
+//    } else {
+//        renderrect.x = boundingRect.x();
+//        renderrect.y = boundingRect.y();
+//        renderrect.w = boundingRect.width();
+//        renderrect.h = boundingRect.height();
+//    }
 
-    QImage image(renderrect.w, renderrect.h, QImage::Format_RGB32);
+//    QImage image(renderrect.w, renderrect.h, QImage::Format_RGB32);
 
-    if (!ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pagerect, &renderrect, m_parent->m_format, image.bytesPerLine(), reinterpret_cast< char * >(image.bits()))) {
-        image = QImage();
-    }
+//    if (!ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pagerect, &renderrect, m_parent->m_format, image.bytesPerLine(), reinterpret_cast< char * >(image.bits()))) {
+//        image = QImage();
+//    }
 
-    clearMessageQueue(m_parent->m_context, false);
+//    clearMessageQueue(m_parent->m_context, false);
 
-    ddjvu_page_release(page);
+//    ddjvu_page_release(page);
 
-    return image;
-}
+//    return image;
+//}
 
-QImage DjVuPage::render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, const double scaleFactor) const
+QImage DjVuPage::render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, const double scaleFactor, const QRect &boundingRect) const
 {
     LOCK_PAGE
 
@@ -525,10 +525,18 @@ QImage DjVuPage::render(qreal horizontalResolution, qreal verticalResolution, Dr
     pagerect.h = (double)pagerect.h * scaleFactor ;
 
     ddjvu_rect_t renderrect;
-    renderrect.x = pagerect.x;
-    renderrect.y = pagerect.y;
-    renderrect.w = pagerect.w;
-    renderrect.h = pagerect.h;
+
+    if (boundingRect.isNull()) {
+        renderrect.x = pagerect.x;
+        renderrect.y = pagerect.y;
+        renderrect.w = pagerect.w;
+        renderrect.h = pagerect.h;
+    } else {
+        renderrect.x = boundingRect.x();
+        renderrect.y = boundingRect.y();
+        renderrect.w = boundingRect.width();
+        renderrect.h = boundingRect.height();
+    }
 
     QImage image(renderrect.w, renderrect.h, QImage::Format_RGB32);
 
@@ -542,6 +550,91 @@ QImage DjVuPage::render(qreal horizontalResolution, qreal verticalResolution, Dr
 
     return image;
 }
+
+//QImage DjVuPage::render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, const double scaleFactor) const
+//{
+//    LOCK_PAGE
+
+//    ddjvu_page_t *page = ddjvu_page_create_by_pageno(m_parent->m_document, m_index);
+
+//    if (page == 0) {
+//        return QImage();
+//    }
+
+//    ddjvu_status_t status;
+
+//    while (true) {
+//        status = ddjvu_page_decoding_status(page);
+
+//        if (status < DDJVU_JOB_OK) {
+//            clearMessageQueue(m_parent->m_context, true);
+//        } else {
+//            break;
+//        }
+//    }
+
+//    if (status >= DDJVU_JOB_FAILED) {
+//        ddjvu_page_release(page);
+
+//        return QImage();
+//    }
+
+//    switch (rotation) {
+//    default:
+//    case Dr::RotateBy0:
+//        ddjvu_page_set_rotation(page, DDJVU_ROTATE_0);
+//        break;
+//    case Dr::RotateBy90:
+//        ddjvu_page_set_rotation(page, DDJVU_ROTATE_270);
+//        break;
+//    case Dr::RotateBy180:
+//        ddjvu_page_set_rotation(page, DDJVU_ROTATE_180);
+//        break;
+//    case Dr::RotateBy270:
+//        ddjvu_page_set_rotation(page, DDJVU_ROTATE_90);
+//        break;
+//    }
+
+//    ddjvu_rect_t pagerect;
+
+//    pagerect.x = 0;
+//    pagerect.y = 0;
+
+//    switch (rotation) {
+//    default:
+//    case Dr::RotateBy0:
+//    case Dr::RotateBy180:
+//        pagerect.w = qRound(horizontalResolution / m_resolution * m_size.width());
+//        pagerect.h = qRound(verticalResolution / m_resolution * m_size.height());
+//        break;
+//    case Dr::RotateBy90:
+//    case Dr::RotateBy270:
+//        pagerect.w = qRound(horizontalResolution / m_resolution * m_size.height());
+//        pagerect.h = qRound(verticalResolution / m_resolution * m_size.width());
+//        break;
+//    }
+
+//    pagerect.w = (double)pagerect.w * scaleFactor ;
+//    pagerect.h = (double)pagerect.h * scaleFactor ;
+
+//    ddjvu_rect_t renderrect;
+//    renderrect.x = pagerect.x;
+//    renderrect.y = pagerect.y;
+//    renderrect.w = pagerect.w;
+//    renderrect.h = pagerect.h;
+
+//    QImage image(renderrect.w, renderrect.h, QImage::Format_RGB32);
+
+//    if (!ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pagerect, &renderrect, m_parent->m_format, image.bytesPerLine(), reinterpret_cast< char * >(image.bits()))) {
+//        image = QImage();
+//    }
+
+//    clearMessageQueue(m_parent->m_context, false);
+
+//    ddjvu_page_release(page);
+
+//    return image;
+//}
 
 QList< Link * > DjVuPage::links() const
 {

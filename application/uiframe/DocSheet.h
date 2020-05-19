@@ -76,6 +76,10 @@ public:
 
     virtual void setMouseShape(Dr::MouseShape shape);
 
+    virtual void openMagnifier();
+
+    virtual bool closeMagnifier();
+
     virtual bool fileChanged();
 
     virtual bool saveData();
@@ -93,6 +97,8 @@ public:
     virtual bool getImage(int pagenum, QImage &image, double width, double height);
 
     virtual bool getImageMax(int pagenum, QImage &image, double max);
+
+    virtual bool getImagePoint(int pagenum, QImage &image, double scaleFactor, QPoint point);   //返回该坐标的一个100*100的图像
 
     virtual QString filter();
 
@@ -184,8 +190,6 @@ public:
     virtual int label2pagenum(QString label);
 
     virtual bool haslabel();
-
-    virtual bool closeMagnifier();
 
     virtual bool showSlideModel();
 

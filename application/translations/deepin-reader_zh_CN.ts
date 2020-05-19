@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>Application</name>
     <message>
@@ -105,7 +103,7 @@
     <name>BookMarkWidget</name>
     <message>
         <source>The bookmark has been removed</source>
-        <translation>已删除书签</translation>
+        <translation type="vanished">已删除书签</translation>
     </message>
     <message>
         <source>Add bookmark</source>
@@ -203,7 +201,7 @@
     </message>
     <message>
         <source>Page %1</source>
-        <translation>第%1页</translation>
+        <translation type="vanished">第%1页</translation>
     </message>
 </context>
 <context>
@@ -247,6 +245,13 @@
     <message>
         <source>Add annotation</source>
         <translation>添加注释</translation>
+    </message>
+</context>
+<context>
+    <name>DocSheetPDF</name>
+    <message>
+        <source>The bookmark has been removed</source>
+        <translation>已删除书签</translation>
     </message>
 </context>
 <context>
@@ -382,26 +387,26 @@
     <name>ImageViewModel</name>
     <message>
         <source>Page %1</source>
-        <translation type="unfinished">第%1页</translation>
+        <translation>第%1页</translation>
     </message>
 </context>
 <context>
     <name>MainOperationWidget</name>
     <message>
         <source>Thumbnails</source>
-        <translation>缩略图</translation>
+        <translation type="vanished">缩略图</translation>
     </message>
     <message>
         <source>Bookmarks</source>
-        <translation>书签</translation>
+        <translation type="vanished">书签</translation>
     </message>
     <message>
         <source>Annotations</source>
-        <translation>注释</translation>
+        <translation type="vanished">注释</translation>
     </message>
     <message>
         <source>Catalog</source>
-        <translation>目录</translation>
+        <translation type="vanished">目录</translation>
     </message>
 </context>
 <context>
@@ -563,6 +568,25 @@
     </message>
 </context>
 <context>
+    <name>SheetSidebar</name>
+    <message>
+        <source>Thumbnails</source>
+        <translation>缩略图</translation>
+    </message>
+    <message>
+        <source>Catalog</source>
+        <translation>目录</translation>
+    </message>
+    <message>
+        <source>Bookmarks</source>
+        <translation>书签</translation>
+    </message>
+    <message>
+        <source>Annotations</source>
+        <translation>注释</translation>
+    </message>
+</context>
+<context>
     <name>ShortCutShow</name>
     <message>
         <source>Settings</source>
@@ -638,15 +662,15 @@
     </message>
     <message>
         <source>Fit page</source>
-        <translation>适合页面</translation>
+        <translation>适应页面</translation>
     </message>
     <message>
         <source>Fit height</source>
-        <translation>适合高度</translation>
+        <translation>适应高度</translation>
     </message>
     <message>
         <source>Fit width</source>
-        <translation>适合宽度</translation>
+        <translation>适应宽度</translation>
     </message>
     <message>
         <source>Rotate left</source>

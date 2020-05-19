@@ -16,6 +16,8 @@ public:
 
     bool openFileExec()override;
 
+    bool saveAsData(QString filePath)override;
+
     int pagesNumber()override;
 
     int currentPage()override;      //从1开始
@@ -53,6 +55,12 @@ public:
     bool getImageMax(int index, QImage &image, double max)override;
 
     bool fileChanged()override;
+
+    void openMagnifier()override;
+
+    bool closeMagnifier()override;
+
+    int  pointInPage(QPoint point);
 
 private slots:
     void onBrowserPageChanged(int page);

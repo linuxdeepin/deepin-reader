@@ -16,6 +16,7 @@ SheetBrowserDJVU::SheetBrowserDJVU(QWidget *parent) : QGraphicsView(parent)
     setFrameShape(QFrame::NoFrame);
 
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onVerticalScrollBarValueChanged(int)));
+
 }
 
 SheetBrowserDJVU::~SheetBrowserDJVU()
@@ -92,6 +93,7 @@ void SheetBrowserDJVU::wheelEvent(QWheelEvent *event)
 
 void SheetBrowserDJVU::deform(DocOperation &operation)
 {
+    m_lastScaleFactor = operation.scaleFactor;
     int page = currentPage();
     int width = 0;
     int height = 0;
@@ -174,6 +176,19 @@ void SheetBrowserDJVU::resizeEvent(QResizeEvent *event)
     QGraphicsView::resizeEvent(event);
 }
 
+void SheetBrowserDJVU::mouseMoveEvent(QMouseEvent *event)
+{
+    if (m_magnifierLabel) {
+        QImage image;
+        getImagePoint(event->pos(), m_lastScaleFactor + 2, image);
+
+        m_magnifierLabel->setPixmap(QPixmap::fromImage(image));
+        m_magnifierLabel->move(QPoint(event->pos().x() - 50, event->pos().y() - 50));
+    }
+
+    QGraphicsView::mouseMoveEvent(event);
+}
+
 int SheetBrowserDJVU::allPages()
 {
     return m_items.count();
@@ -196,12 +211,37 @@ int SheetBrowserDJVU::currentPage()
     return m_items.indexOf(item) + 1;
 }
 
+int SheetBrowserDJVU::viewPointInPage(QPoint viewPoint)
+{
+    SheetBrowserDJVUItem *item  = static_cast<SheetBrowserDJVUItem *>(itemAt(viewPoint));
+
+    return m_items.indexOf(item) + 1;
+}
+
 void SheetBrowserDJVU::setCurrentPage(int page)
 {
     if (page < 1 && page > allPages())
         return;
 
     verticalScrollBar()->setValue(m_items.at(page - 1)->pos().y());
+}
+
+bool SheetBrowserDJVU::getImagePoint(QPoint viewPoint, double scaleFactor, QImage &image)
+{
+    SheetBrowserDJVUItem *item  = static_cast<SheetBrowserDJVUItem *>(itemAt(viewPoint));
+    if (nullptr == item)
+        return false;
+
+    QPointF itemPoint = item->mapFromScene(mapToScene(viewPoint));
+
+    if (!item->contains(itemPoint))
+        return false;
+
+    QPoint point = QPoint(itemPoint.x(), itemPoint.y());
+
+    image = item->getImagePoint(scaleFactor, point);
+
+    return true;
 }
 
 bool SheetBrowserDJVU::getImageMax(int index, QImage &image, double max)
@@ -211,6 +251,29 @@ bool SheetBrowserDJVU::getImageMax(int index, QImage &image, double max)
 
     image = m_items.at(index)->getImageMax(max);
     return true;
+}
+
+void SheetBrowserDJVU::openMagnifier()
+{
+    if (nullptr == m_magnifierLabel) {
+        m_magnifierLabel = new QLabel(this);
+        m_magnifierLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
+        m_magnifierLabel->setWindowFlag(Qt::FramelessWindowHint);
+        m_magnifierLabel->resize(100, 100);
+    }
+    m_magnifierLabel->show();
+    setMouseTracking(true);
+    setCursor(QCursor(Qt::BlankCursor));
+}
+
+void SheetBrowserDJVU::closeMagnifier()
+{
+    if (nullptr != m_magnifierLabel) {
+        m_magnifierLabel->deleteLater();
+        m_magnifierLabel = nullptr;
+    }
+    setMouseTracking(false);
+    setCursor(QCursor(Qt::ArrowCursor));
 }
 
 void SheetBrowserDJVU::dragEnterEvent(QDragEnterEvent *event)

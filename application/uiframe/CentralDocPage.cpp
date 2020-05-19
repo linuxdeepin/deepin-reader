@@ -391,26 +391,49 @@ bool CentralDocPage::saveAsCurrent()
 
     QString sFilter = sheet->filter();
 
-    QString saveFilePath;
+    if (Dr::PDF == sheet->type()) {
+        QString saveFilePath;
 
-    if (sFilter != "") {
-        QFileDialog dialog;
-        dialog.selectFile(sheet->filePath());
-        saveFilePath = dialog.getSaveFileName(nullptr, tr("Save as"), sheet->filePath(), sFilter);
+        if (sFilter != "") {
+            QFileDialog dialog;
+            dialog.selectFile(sheet->filePath());
+            saveFilePath = dialog.getSaveFileName(nullptr, tr("Save as"), sheet->filePath(), sFilter);
 
-        if (saveFilePath.endsWith("/.pdf")) {
-            DDialog dlg("", tr("Invalid file name"));
-            QIcon icon(PF::getIconPath("exception-logo"));
-            dlg.setIcon(icon /*QIcon(":/resources/exception-logo.svg")*/);
-            dlg.addButtons(QStringList() << tr("OK"));
-            QMargins mar(0, 0, 0, 30);
-            dlg.setContentLayoutContentsMargins(mar);
-            dlg.exec();
-            return false;
+            if (saveFilePath.endsWith("/.pdf")) {
+                DDialog dlg("", tr("Invalid file name"));
+                QIcon icon(PF::getIconPath("exception-logo"));
+                dlg.setIcon(icon /*QIcon(":/resources/exception-logo.svg")*/);
+                dlg.addButtons(QStringList() << tr("OK"));
+                QMargins mar(0, 0, 0, 30);
+                dlg.setContentLayoutContentsMargins(mar);
+                dlg.exec();
+                return false;
+            }
         }
+        return sheet->saveAsData(saveFilePath);
+    } else if (Dr::DjVu == sheet->type()) {
+        QString saveFilePath;
+
+        if (sFilter != "") {
+            QFileDialog dialog;
+            dialog.selectFile(sheet->filePath());
+            saveFilePath = dialog.getSaveFileName(nullptr, tr("Save as"), sheet->filePath(), sFilter);
+
+            if (saveFilePath.endsWith("/.djvu")) {
+                DDialog dlg("", tr("Invalid file name"));
+                QIcon icon(PF::getIconPath("exception-logo"));
+                dlg.setIcon(icon /*QIcon(":/resources/exception-logo.svg")*/);
+                dlg.addButtons(QStringList() << tr("OK"));
+                QMargins mar(0, 0, 0, 30);
+                dlg.setContentLayoutContentsMargins(mar);
+                dlg.exec();
+                return false;
+            }
+        }
+        return sheet->saveAsData(saveFilePath);
     }
 
-    return sheet->saveAsData(saveFilePath);
+    return false;
 }
 
 void CentralDocPage::clearState()
@@ -419,9 +442,7 @@ void CentralDocPage::clearState()
     int nState = getCurrentState();
 
     if (nState == Magnifer_State) {
-
         setCurrentState(Default_State);
-
         if (getCurSheet() != nullptr) {         //...需要修改为，要保存正在放大镜的doc
             getCurSheet()->closeMagnifier();
         }
@@ -712,6 +733,8 @@ bool CentralDocPage::openMagnifer()
         setCurrentState(Magnifer_State);
 
         m_magniferSheet = getCurSheet();
+
+        m_magniferSheet->openMagnifier();
 
         return true;
     }

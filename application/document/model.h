@@ -66,8 +66,9 @@ class Page
 public:
     virtual ~Page() {}
     virtual QSizeF size() const = 0;
-    virtual QImage render(qreal horizontalResolution = 72.0, qreal verticalResolution = 72.0, Dr::Rotation rotation = Dr::RotateBy0, const QRect &boundingRect = QRect()) const = 0;
-    virtual QImage render(qreal horizontalResolution = 72.0, qreal verticalResolution = 72.0, Dr::Rotation rotation = Dr::RotateBy0, const double scale = 100.0) const = 0;
+//    virtual QImage render(qreal horizontalResolution = 72.0, qreal verticalResolution = 72.0, Dr::Rotation rotation = Dr::RotateBy0, const QRect &boundingRect = QRect()) const = 0;
+//    virtual QImage render(qreal horizontalResolution = 72.0, qreal verticalResolution = 72.0, Dr::Rotation rotation = Dr::RotateBy0, const double scale = 100.0) const = 0;
+    virtual QImage render(qreal horizontalResolution = 72.0, qreal verticalResolution = 72.0, Dr::Rotation rotation = Dr::RotateBy0, const double scaleFactor = 1.00, const QRect &boundingRect = QRect()) const = 0;
     virtual QString label() const { return QString(); }
     virtual QList< Link * > links() const { return QList< Link * >(); }
     virtual QString text(const QRectF &rect) const { Q_UNUSED(rect); return QString(); }

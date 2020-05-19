@@ -138,6 +138,11 @@ void DocSheet::setMouseShape(Dr::MouseShape shape)
     qDebug() << "unrealized";
 }
 
+void DocSheet::openMagnifier()
+{
+    qDebug() << "unrealized";
+}
+
 void DocSheet::setScale(double scale)
 {
     qDebug() << "unrealized";
@@ -272,6 +277,12 @@ void DocSheet::getAllAnnotation(QList<stHighlightContent> &)
 }
 
 bool DocSheet::getImageMax(int, QImage &, double)
+{
+    qDebug() << "unrealized";
+    return false;
+}
+
+bool DocSheet::getImagePoint(int pagenum, QImage &image, double scaleFactor, QPoint point)
 {
     qDebug() << "unrealized";
     return false;

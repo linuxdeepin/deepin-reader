@@ -4,6 +4,7 @@
 #include <QGraphicsView>
 #include "document/model.h"
 #include "global.h"
+#include <QLabel>
 
 class DocOperation;
 class SheetBrowserDJVUItem;
@@ -29,16 +30,15 @@ public:
 
     int currentPage();
 
+    int  viewPointInPage(QPoint viewPoint);
+
     void setCurrentPage(int page);
 
     bool getImageMax(int index, QImage &image, double max);
 
-    void dragEnterEvent(QDragEnterEvent *event);
+    void openMagnifier();
 
-protected:
-    void showEvent(QShowEvent *event) override;
-
-    void resizeEvent(QResizeEvent *event) override;
+    void closeMagnifier();
 
 signals:
     void sigPageChanged(int page);
@@ -49,20 +49,31 @@ signals:
 
     void sigSizeChanged();
 
+protected:
+    void showEvent(QShowEvent *event) override;
+
+    void resizeEvent(QResizeEvent *event) override;
+
+    void mouseMoveEvent(QMouseEvent *event);
+
+    void dragEnterEvent(QDragEnterEvent *event);
+
+    void wheelEvent(QWheelEvent *event);
+
+    bool getImagePoint(QPoint viewPoint, double scaleFactor, QImage &image);
+
 private slots:
     void onVerticalScrollBarValueChanged(int value);
 
 private:
-    void wheelEvent(QWheelEvent *event);
-
-private:
     deepin_reader::Document *m_document = nullptr;
     QList<SheetBrowserDJVUItem *> m_items;
-
-    int m_maxWidth = 0;     //最大一页的宽度
-    int m_maxHeight = 0;    //最大一页的高度
-    bool m_hasLoaded = false;//是否已经加载过每页的信息
-    int m_initPage = 1;     //用于刚显示跳转的页数
+    double m_lastScaleFactor = 0;
+    int m_maxWidth = 0;         //最大一页的宽度
+    int m_maxHeight = 0;        //最大一页的高度
+    bool m_hasLoaded = false;   //是否已经加载过每页的信息
+    int m_initPage = 1;         //用于刚显示跳转的页数
+    QLabel *m_magnifierLabel = nullptr;
 };
 
 #endif // SHEETBROWSERDJVU_H

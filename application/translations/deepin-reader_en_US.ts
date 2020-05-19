@@ -105,7 +105,7 @@
     <name>BookMarkWidget</name>
     <message>
         <source>The bookmark has been removed</source>
-        <translation>The bookmark has been removed</translation>
+        <translation type="vanished">The bookmark has been removed</translation>
     </message>
     <message>
         <source>Add bookmark</source>
@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Page %1</source>
-        <translation>Page %1</translation>
+        <translation type="vanished">Page %1</translation>
     </message>
 </context>
 <context>
@@ -247,6 +247,13 @@
     <message>
         <source>Add annotation</source>
         <translation type="unfinished">Add annotation</translation>
+    </message>
+</context>
+<context>
+    <name>DocSheetPDF</name>
+    <message>
+        <source>The bookmark has been removed</source>
+        <translation type="unfinished">The bookmark has been removed</translation>
     </message>
 </context>
 <context>
@@ -389,19 +396,19 @@
     <name>MainOperationWidget</name>
     <message>
         <source>Thumbnails</source>
-        <translation>Thumbnails</translation>
+        <translation type="vanished">Thumbnails</translation>
     </message>
     <message>
         <source>Bookmarks</source>
-        <translation>Bookmarks</translation>
+        <translation type="vanished">Bookmarks</translation>
     </message>
     <message>
         <source>Annotations</source>
-        <translation>Annotations</translation>
+        <translation type="vanished">Annotations</translation>
     </message>
     <message>
         <source>Catalog</source>
-        <translation>Catalog</translation>
+        <translation type="vanished">Catalog</translation>
     </message>
 </context>
 <context>
@@ -560,6 +567,25 @@
     <message>
         <source>Please check if the file is damaged</source>
         <translation>Please check if the file is damaged</translation>
+    </message>
+</context>
+<context>
+    <name>SheetSidebar</name>
+    <message>
+        <source>Thumbnails</source>
+        <translation type="unfinished">Thumbnails</translation>
+    </message>
+    <message>
+        <source>Catalog</source>
+        <translation type="unfinished">Catalog</translation>
+    </message>
+    <message>
+        <source>Bookmarks</source>
+        <translation type="unfinished">Bookmarks</translation>
+    </message>
+    <message>
+        <source>Annotations</source>
+        <translation type="unfinished">Annotations</translation>
     </message>
 </context>
 <context>

@@ -41,15 +41,11 @@ void TitleMenu::onCurSheetChanged(DocSheet *sheet)
             a->setDisabled(true);
             continue;
         }
-        if (sheet->type() == Dr::DjVu && a->text() == tr("Magnifer")) {
-            a->setDisabled(true);
-            continue;
-        }
+//        if (sheet->type() == Dr::DjVu && a->text() == tr("Magnifer")) {
+//            a->setDisabled(true);
+//            continue;
+//        }
         if (sheet->type() == Dr::DjVu && a->text() == tr("Save")) {
-            a->setDisabled(true);
-            continue;
-        }
-        if (sheet->type() == Dr::DjVu && a->text() == tr("Save as")) {
             a->setDisabled(true);
             continue;
         }

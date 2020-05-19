@@ -22,9 +22,11 @@ public:
 
     QSizeF size() const;
 
-    QImage render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, const QRect &boundingRect) const;
+    //QImage render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, const QRect &boundingRect) const;
 
-    QImage render(qreal horizontalResolution = 72.0, qreal verticalResolution = 72.0, Dr::Rotation rotation = Dr::RotateBy0, const double scaleFactor = 1) const;
+    QImage render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, const double scaleFactor = 1, const QRect &boundingRect = QRect()) const;
+
+    //QImage render(qreal horizontalResolution = 72.0, qreal verticalResolution = 72.0, Dr::Rotation rotation = Dr::RotateBy0, const double scaleFactor = 1) const;
 
     QList< Link * > links() const;
 
