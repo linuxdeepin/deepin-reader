@@ -300,8 +300,6 @@ DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 {
     auto btn = new DPushButton(this);
     int tW = 36;
-//    int tH = 36;
-//    dApp->adaptScreenView(tW, tH);
     btn->setFixedSize(QSize(tW, tW));
     btn->setIconSize(QSize(tW, tW));
     btn->setToolTip(btnName);
@@ -319,18 +317,23 @@ DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 //  开启放大镜
 void TitleWidget::setMagnifierState()
 {
-    //  开启了放大镜, 需要把选择工具 切换为 选择工具
-    auto actionList = this->findChildren<QAction *>();
-    foreach (auto a, actionList) {
-        QString objName = a->objectName();
-        if (objName == "defaultshape") {
-            a->setChecked(true);
-            break;
-        }
-    }
+    if (m_curSheet.isNull())
+        return;
 
-    QIcon icon = PF::getIcon(Pri::g_module + "defaultshape");
-    m_pHandleShapeBtn->setIcon(icon);
+    //  开启了放大镜, 需要把选择工具 切换为 选择工具
+    if (Dr::PDF == m_curSheet->type()) {
+        auto actionList = this->findChildren<QAction *>();
+        foreach (auto a, actionList) {
+            QString objName = a->objectName();
+            if (objName == "defaultshape") {
+                a->setChecked(true);
+                break;
+            }
+        }
+
+        QIcon icon = PF::getIcon(Pri::g_module + "defaultshape");
+        m_pHandleShapeBtn->setIcon(icon);
+    }
 }
 
 /**

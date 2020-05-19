@@ -4,4 +4,3 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/djvumodel.cpp
-

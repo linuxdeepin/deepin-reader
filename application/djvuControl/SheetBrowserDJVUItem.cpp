@@ -1,5 +1,6 @@
 #include "SheetBrowserDJVUItem.h"
 #include "document/model.h"
+#include "RenderThreadDJVU.h"
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
@@ -56,12 +57,17 @@ void SheetBrowserDJVUItem::render(double scaleFactor, Dr::Rotation rotation, boo
     }
 
     if (!readerLater) {
-        m_image = m_page->render(72, 72, m_rotation, m_scaleFactor);
-
+        //之后替换为线程reader
+        RenderThreadDJVU::appendTask(this, m_scaleFactor, m_rotation);
         m_imageScaleFactor = m_scaleFactor;
     }
 
     update();
+}
+
+QImage SheetBrowserDJVUItem::getImage(double scaleFactor, Dr::Rotation rotation)
+{
+    return m_page->render(72, 72, rotation, scaleFactor);
 }
 
 QImage SheetBrowserDJVUItem::getImageMax(double max)
@@ -79,4 +85,12 @@ QImage SheetBrowserDJVUItem::getImagePoint(double scaleFactor, QPoint point)
 {
     QRect rect = QRect(point.x() * scaleFactor / m_scaleFactor - 50, point .y() * scaleFactor / m_scaleFactor  - 50, 100, 100);
     return m_page->render(72, 72, m_rotation, scaleFactor, rect);
+}
+
+void SheetBrowserDJVUItem::handleRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image)
+{
+    if (m_imageScaleFactor == scaleFactor && m_rotation == rotation) {
+        m_image = image;
+        update();
+    }
 }
