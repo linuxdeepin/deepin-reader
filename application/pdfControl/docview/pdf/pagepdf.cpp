@@ -417,6 +417,44 @@ QString PagePdf::addHighlightAnnotation(const QColor &color)
     return  uniqueName;
 }
 
+QPointF PagePdf::globalPoint2Iner(const QPoint point)
+{
+    Q_D(PagePdf);
+    double curwidth = d->m_scale * d->m_imagewidth;
+    double curheight = d->m_scale * d->m_imageheight;
+    QPointF tpoint(0, 0);
+    switch (d->m_rotate) {
+    case RotateType_90: {
+        //ok
+        QPoint tmpP(point.y(), this->width() - point.x());
+        tpoint = QPointF(abs(static_cast<double>(tmpP.x() - x()) - static_cast<double>(this->height() - curwidth) / 2.0) / static_cast<double>(curwidth),
+                         static_cast<double>(abs(tmpP.y() - y() - (this->width() - curheight))) / static_cast<double>(curheight));
+        break;
+    }
+    case RotateType_180: {
+        //err
+        QPoint tmpP(this->width() - point.x(), this->height() - point.y());
+        tpoint = QPointF(abs(static_cast<double>(tmpP.x() - x()) - static_cast<double>(this->width() - curwidth) / 2.0) / static_cast<double>(curwidth),
+                         static_cast<double>(abs(tmpP.y() - y() - (this->height() - curheight))) / static_cast<double>(curheight));
+        break;
+    }
+    case RotateType_270: {
+        //ok
+        QPoint tmpP(this->height() - point.y(), point.x());
+        tpoint = QPointF(abs(static_cast<double>(tmpP.x() - x()) - static_cast<double>(this->height() - curwidth) / 2.0) / static_cast<double>(curwidth),
+                         static_cast<double>(abs(tmpP.y() - y() - (this->width() - curheight))) / static_cast<double>(curheight));
+        break;
+    }
+    default:
+        //ok
+        tpoint = QPointF((static_cast<double>(point.x() - x()) - static_cast<double>(this->width() - curwidth) / 2.0) / curwidth,
+                         (static_cast<double>(point.y() - y()) - static_cast<double>(this->height() - curheight)) / static_cast<double>(curheight));
+        break;
+    }
+
+    return  tpoint;
+}
+
 QString PagePdf::removeAnnotation(const QPoint &pos)
 {
     Q_D(PagePdf);
@@ -506,6 +544,7 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext, QString &st
 
     int ret = false;
     QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
+//    QPointF tpos = globalPoint2Iner(pos);
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
     foreach (Poppler::Annotation *annote, listannote) {
         if (annote->subType() == Poppler::Annotation::AHighlight) { //必须判断
@@ -531,14 +570,16 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext, QString &st
 bool PagePdf::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {
     Q_D(PagePdf);
-    double curwidth = d->m_scale * d->m_imagewidth;
-    double curheight = d->m_scale * d->m_imageheight;
     bool bclicked = false;
-    QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
+    QPointF tpos = globalPoint2Iner(pos);
+    qInfo() <<    "         icon text pos:" << tpos;
+//    double curwidth = d->m_scale * d->m_imagewidth;
+//    double curheight = d->m_scale * d->m_imageheight;
+//    QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
     foreach (Poppler::Annotation *annote, listannote) {
-        if (annote->subType() == Poppler::Annotation::AText /*&& annote->flags() == static_cast<Poppler::Annotation::Flag>(6)*/) { //必须判断,其他软件添加的flag不一定是6
-            if (annote->boundary().contains(ptf)) {
+        if (annote->subType() == Poppler::Annotation::AText) { //必须判断
+            if (annote->boundary().contains(/*ptf*/tpos)) {
                 strtext = annote->contents();
                 struuid = annote->uniqueName();
                 bclicked = true;

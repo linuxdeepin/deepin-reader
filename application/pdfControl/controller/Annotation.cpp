@@ -167,18 +167,25 @@ void Annotation::RemoveHighLight(const QString &msgContent)
 {
     if (fvmPrivate->m_pProxy) {
         QStringList contentList = msgContent.split(Constant::sQStringSep, QString::SkipEmptyParts);
-        if (contentList.size() == 2) {
+        if (contentList.size() == 3) {
             QString sX = contentList.at(0);
             QString sY = contentList.at(1);
 
             QPoint tempPoint(sX.toInt(), sY.toInt());
             QString annoteText{""};
-            QString t_strUUid{""};
+            QString t_strUUid = contentList.at(2);
 
             bool isHighLight = fvmPrivate->m_pProxy->annotationClicked(tempPoint, annoteText, t_strUUid);
 
-            QString sUuid = fvmPrivate->m_pProxy->removeAnnotation(tempPoint);
+            QString sUuid{""};// = fvmPrivate->m_pProxy->removeAnnotation(tempPoint);
+
+            int curPage = -1;
+
+            curPage  = fvmPrivate->m_pProxy->pointInWhichPage(tempPoint);
+            sUuid = contentList.at(2);
+
             if (sUuid != "") {
+                fvmPrivate->m_pProxy->removeAnnotation(sUuid, curPage);
                 if (isHighLight) {
                     if (annoteText != "") {
                         emit fvmPrivate->q_func()->sigAnntationMsg(MSG_NOTE_DELETE_ITEM, sUuid);

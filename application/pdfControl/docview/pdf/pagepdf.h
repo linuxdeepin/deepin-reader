@@ -47,6 +47,10 @@ private:
 
 private:
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), PagePdf)
+
+    // PageBase interface
+protected:
+    QPointF globalPoint2Iner(const QPoint point) override;
 };
 
 #endif // PAGEPDF_H

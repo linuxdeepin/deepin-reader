@@ -241,6 +241,7 @@ protected:
 protected:
     void getImagePoint(QPointF &point);
     void setSelectTextRects();
+    virtual QPointF globalPoint2Iner(const QPoint point);
 
     PageBasePrivate *d_ptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), PageBase)

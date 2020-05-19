@@ -135,8 +135,14 @@ void TextOperationMenu::slotCopyClicked()
 
 void TextOperationMenu::slotRemoveHighLightClicked()
 {
-    QString sContent = QString::number(m_pClickPoint.x()) + Constant::sQStringSep +  QString::number(m_pClickPoint.y());
-    emit sigActionTrigger(MSG_NOTE_REMOVE_HIGHLIGHT, sContent);
+    QString sContent = QString::number(m_pClickPoint.x()) + Constant::sQStringSep +  QString::number(m_pClickPoint.y()) + Constant::sQStringSep +  QString::number(m_pClickPoint.y());
+//    QString sContent = QString::number(m_pClickPoint.x()) + Constant::sQStringSep +  QString::number(m_pClickPoint.y());
+//    emit sigActionTrigger(MSG_NOTE_REMOVE_HIGHLIGHT, sContent);
+    if (m_strNoteUuid != "") {
+        QString sContent = QString::number(m_pClickPoint.x()) + Constant::sQStringSep +  QString::number(m_pClickPoint.y()) + Constant::sQStringSep +  m_strNoteUuid;
+        emit sigActionTrigger(MSG_NOTE_REMOVE_HIGHLIGHT, sContent);
+        m_strNoteUuid = "";
+    }
 }
 
 void TextOperationMenu::slotAddNoteClicked()

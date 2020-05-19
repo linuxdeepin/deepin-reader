@@ -387,6 +387,11 @@ void PageBase::setSelectTextRects()
     d->paintrects.append(paintrect);
 }
 
+QPointF PageBase::globalPoint2Iner(const QPoint)
+{
+    return QPointF(0, 0);
+}
+
 bool PageBase::ifMouseMoveOverText(const QPoint point)
 {
     Q_D(PageBase);
