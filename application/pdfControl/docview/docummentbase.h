@@ -76,31 +76,31 @@ public:
 
     virtual ~DocummentBasePrivate()
     {
-        if (!animationfirst) {
-            animationfirst->deleteLater();
-            animationfirst = nullptr;
-        }
-        if (!animationsecond) {
-            animationsecond->deleteLater();
-            animationsecond = nullptr;
-        }
-        if (!animationgroup) {
-            animationgroup->deleteLater();
-            animationgroup = nullptr;
-        }
-        if (m_searchTask) {
-            delete m_searchTask;
-            m_searchTask = nullptr;
-        }
-        if (m_magnifierwidget) {
-            m_magnifierwidget->deleteLater();
-            m_magnifierwidget = nullptr;
+//        if (!animationfirst) {
+//            animationfirst->deleteLater();
+//            animationfirst = nullptr;
+//        }
+//        if (!animationsecond) {
+//            animationsecond->deleteLater();
+//            animationsecond = nullptr;
+//        }
+//        if (!animationgroup) {
+//            animationgroup->deleteLater();
+//            animationgroup = nullptr;
+//        }
+//        if (m_searchTask) {
+//            delete m_searchTask;
+//            m_searchTask = nullptr;
+//        }
+//        if (m_magnifierwidget) {
+//            m_magnifierwidget->deleteLater();
+//            m_magnifierwidget = nullptr;
 
-        }
-        if (m_slidewidget) {
-            m_slidewidget->deleteLater();
-            m_slidewidget = nullptr;
-        }
+//        }
+//        if (m_slidewidget) {
+//            m_slidewidget->deleteLater();
+//            m_slidewidget = nullptr;
+//        }
         if (nullptr != m_fileinfo) {
             delete m_fileinfo;
             m_fileinfo = nullptr;

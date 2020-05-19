@@ -101,9 +101,10 @@ void ReaderImageThreadPoolManager::onTaskFinished(const ReaderImageParam_t &task
     QMutexLocker mutext(&m_runMutex);
     if (m_docSheetImgMap.contains(task.sheet))
         m_docSheetImgMap[task.sheet][task.pageIndex] = QPixmap::fromImage(image);
-    if (m_taskList.contains(task))
+    if (m_taskList.contains(task)) {
         QMetaObject::invokeMethod(task.receiver, task.slotFun.toStdString().c_str(), Qt::QueuedConnection, Q_ARG(int, task.pageIndex));
-    m_taskList.removeAll(task);
+        m_taskList.removeAll(task);
+    }
 }
 
 QPixmap ReaderImageThreadPoolManager::getImageForDocSheet(DocSheet *sheet, int pageIndex)
