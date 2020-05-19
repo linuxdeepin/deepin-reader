@@ -133,6 +133,7 @@ void SheetBrowserDJVU::deform(DocOperation &operation)
             if (m_items.at(i)->boundingRect().width() > width)
                 width = m_items.at(i)->boundingRect().width();
         }
+        setCurrentPage(page);
     } else if (Dr::TwoPagesMode == operation.layoutMode) {
         for (int i = 0; i < m_items.count(); ++i) {
             if (i % 2 == 1)
@@ -159,9 +160,9 @@ void SheetBrowserDJVU::deform(DocOperation &operation)
             }
 
         }
+        setCurrentPage(page);
     }
 
-    setCurrentPage(page);
     setSceneRect(0, 0, width, height);
 }
 

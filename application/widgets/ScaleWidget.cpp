@@ -114,7 +114,7 @@ void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
 
     if (bOk && dValue >= 10.0 && dValue <= m_nMaxScale) {
         m_sheet->setScaleMode(Dr::ScaleFactorMode);
-        m_sheet->setScaleFactor(dValue);
+        m_sheet->setScaleFactor(dValue / (double)100);
     }
 }
 

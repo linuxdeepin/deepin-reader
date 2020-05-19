@@ -39,9 +39,12 @@ void SheetBrowserDJVUItem::paint(QPainter *painter, const QStyleOptionGraphicsIt
 {
     if (m_image.isNull() || !qFuzzyCompare(m_imageScaleFactor, m_scaleFactor)) {
         render(m_scaleFactor, m_rotation, false);
-        painter->drawImage(option->rect, m_image);
-    } else
-        painter->drawImage(option->rect, m_image);
+    }
+
+    if (m_image.isNull())
+        painter->drawImage(option->rect, m_leftImage);
+    else
+        painter->drawImage(option->rect.x(), option->rect.y(), m_image);
 }
 
 void SheetBrowserDJVUItem::render(double scaleFactor, Dr::Rotation rotation, bool readerLater)
@@ -54,16 +57,24 @@ void SheetBrowserDJVUItem::render(double scaleFactor, Dr::Rotation rotation, boo
 
     m_scaleFactor = scaleFactor;
 
+    if (!m_image.isNull())
+        m_leftImage = m_image;
+
     if (m_rotation != rotation) {//旋转变化则强制移除
-        m_image = QImage();
+        m_leftImage = QImage();
         m_rotation  = rotation;
     }
 
     if (!readerLater) {
+        if (m_leftImage.isNull())
+            m_leftImage = getImage(0.1, rotation);
+
         //之后替换为线程reader
         RenderThreadDJVU::appendTask(this, m_scaleFactor, m_rotation);
         m_imageScaleFactor = m_scaleFactor;
     }
+
+    m_image = QImage();
 
     update();
 }
@@ -92,10 +103,8 @@ QImage SheetBrowserDJVUItem::getImagePoint(double scaleFactor, QPoint point)
 
 void SheetBrowserDJVUItem::handleRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image)
 {
-    if (m_imageScaleFactor == scaleFactor && m_rotation == rotation) {
-        m_image = image;
-        update();
-    }
+    m_image = image;
+    update();
 }
 
 bool SheetBrowserDJVUItem::existInstance(SheetBrowserDJVUItem *item)

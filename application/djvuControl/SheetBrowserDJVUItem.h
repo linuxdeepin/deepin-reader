@@ -38,6 +38,7 @@ public:
 private:
     deepin_reader::Page *m_page = nullptr;
     QImage m_image;
+    QImage m_leftImage;
     double m_imageScaleFactor   = 1;
     double m_scaleFactor        = -1;
     Dr::Rotation m_rotation = Dr::RotateBy0;

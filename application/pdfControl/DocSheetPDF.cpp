@@ -269,7 +269,7 @@ void DocSheetPDF::setScaleMode(Dr::ScaleMode mode)
 void DocSheetPDF::setScaleFactor(qreal scaleFactor)
 {
     m_operation.scaleFactor = scaleFactor;
-    m_browser->setScale(scaleFactor);
+    m_browser->setScale(scaleFactor * 100);
 }
 
 bool DocSheetPDF::isDoubleShow()
