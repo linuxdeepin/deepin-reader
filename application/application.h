@@ -18,7 +18,7 @@
 #define APPLICATION_H_
 
 #include <DApplication>
-#include "DBService.h"
+#include "pdfControl/database/DBService.h"
 
 class AppInfo;
 

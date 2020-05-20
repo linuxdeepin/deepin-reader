@@ -21,7 +21,7 @@
 
 #include <QObject>
 
-#include "FileDataModel.h"
+#include "pdfControl/database/FileDataModel.h"
 
 class SheetBrowserPDFPrivate;
 

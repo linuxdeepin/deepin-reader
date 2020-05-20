@@ -21,7 +21,13 @@ HEADERS += \
     $$PWD/docview/publicfunc.h \
     $$PWD/docview/searchtask.h \
     $$PWD/docview/pdf/pagepdf.h \
-    $$PWD/docview/pdf/docummentpdf.h
+    $$PWD/docview/pdf/docummentpdf.h \
+    $$PWD/database/BookMarkDB.h \
+    $$PWD/database/DBFactory.h \
+    $$PWD/database/dbservice_global.h \
+    $$PWD/database/DBService.h \
+    $$PWD/database/FileDataModel.h \
+    $$PWD/database/HistroyDB.h
 
 SOURCES += \
     $$PWD/controller/Annotation.cpp \
@@ -41,4 +47,9 @@ SOURCES += \
     $$PWD/docview/publicfunc.cpp \
     $$PWD/docview/searchtask.cpp \
     $$PWD/docview/pdf/pagepdf.cpp \
-    $$PWD/docview/pdf/docummentpdf.cpp
+    $$PWD/docview/pdf/docummentpdf.cpp \
+    $$PWD/database/BookMarkDB.cpp \
+    $$PWD/database/DBFactory.cpp \
+    $$PWD/database/DBService.cpp \
+    $$PWD/database/FileDataModel.cpp \
+    $$PWD/database/HistroyDB.cpp

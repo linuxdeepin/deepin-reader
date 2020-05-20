@@ -90,8 +90,3 @@ CONFIG(release, debug|release) {
 
 INSTALLS += target desktop icon_files
 
-LIBS += -L$$OUT_PWD/../DBService/ -lDBService
-
-INCLUDEPATH += $$PWD/../DBService
-DEPENDPATH += $$PWD/../DBService
-
