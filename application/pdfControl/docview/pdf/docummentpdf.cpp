@@ -64,6 +64,11 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
     for (int i = 0; i < document->numPages(); i++) {
         PagePdf *page = new PagePdf(q);
         Poppler::Page *popplerpage = document->page(i);
+        if (nullptr == popplerpage) {
+            emit signal_docummentLoaded(false);
+            return;
+        }
+
         page->setPage(popplerpage, i);
         QString strlabel = popplerpage->label();
 
