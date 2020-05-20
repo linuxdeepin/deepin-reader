@@ -54,13 +54,6 @@ HEADERS +=\
     uiframe/DocTabBar.h \
     uiframe/DocSheet.h
 
-#    stable.h
-
-TRANSLATIONS += \
-    translations/deepin-reader_en_US.ts\
-    translations/deepin-reader_zh_CN.ts
-
-
 APPICONDIR = $$PREFIX/share/icons/deepin/apps/scalable
 
 isEmpty(BINDIR):BINDIR=/usr/bin
