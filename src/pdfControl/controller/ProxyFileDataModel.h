@@ -35,9 +35,7 @@ public:
     void saveOper();
     void saveData();
     void saveAsData(const QString &originPath, const QString &targetPath);
-
     void setModel(FileDataModel model);
-
 private:
     SheetBrowserPDFPrivate *_fvwParent = nullptr;
     friend class SheetBrowserPDFPrivate;
