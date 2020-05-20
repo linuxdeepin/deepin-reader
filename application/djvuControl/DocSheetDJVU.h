@@ -36,10 +36,6 @@ public:
 
     void jumpToPrevPage()override;
 
-    void zoomin()override;  //放大一级
-
-    void zoomout() override;
-
     void rotateLeft()override;
 
     void rotateRight()override;
@@ -59,8 +55,6 @@ public:
     void openMagnifier()override;
 
     bool closeMagnifier()override;
-
-    int  pointInPage(QPoint point);
 
 private slots:
     void onBrowserPageChanged(int page);

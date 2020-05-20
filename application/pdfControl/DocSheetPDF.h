@@ -39,10 +39,6 @@ public:
 
     void jumpToPrevPage()override;
 
-    void zoomin()override;//放大一级
-
-    void zoomout()override;
-
     void rotateLeft()override;
 
     void rotateRight()override;

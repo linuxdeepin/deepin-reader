@@ -61,30 +61,6 @@ void DocSheetDJVU::jumpToPrevPage()
     jumpToPage(page);
 }
 
-void DocSheetDJVU::zoomin()
-{
-    QList<qreal> dataList = scaleFactorList();
-
-    for (int i = 0; i < dataList.count(); ++i) {
-        if (dataList[i] > (m_operation.scaleFactor)) {
-            setScaleFactor(dataList[i]);
-            return;
-        }
-    }
-}
-
-void DocSheetDJVU::zoomout()
-{
-    QList<qreal> dataList = scaleFactorList();
-
-    for (int i = dataList.count() - 1; i >= 0; --i) {
-        if (dataList[i] < (m_operation.scaleFactor)) {
-            setScaleFactor(dataList[i]);
-            return;
-        }
-    }
-}
-
 void DocSheetDJVU::rotateLeft()
 {
     if (Dr::RotateBy0 == m_operation.rotation)
@@ -214,11 +190,6 @@ bool DocSheetDJVU::closeMagnifier()
 {
     if (m_browser)
         m_browser->closeMagnifier();
-}
-
-int DocSheetDJVU::pointInPage(QPoint point)
-{
-
 }
 
 void DocSheetDJVU::onBrowserPageChanged(int page)

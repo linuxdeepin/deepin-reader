@@ -98,16 +98,6 @@ void DocSheet::jumpToPrevPage()
     qDebug() << "unrealized";
 }
 
-void DocSheet::zoomin()
-{
-    qDebug() << "unrealized";
-}
-
-void DocSheet::zoomout()
-{
-    qDebug() << "unrealized";
-}
-
 void DocSheet::rotateLeft()
 {
     qDebug() << "unrealized";
@@ -210,13 +200,6 @@ void DocSheet::addSelectedTextHightlightAnnotation()
 void DocSheet::print()
 {
     qDebug() << "unrealized";
-}
-
-QList<qreal> DocSheet::scaleFactorList()
-{
-    QList<qreal> dataList = {0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3, 4, 5};
-
-    return  dataList;
 }
 
 int DocSheet::pagesNumber()
@@ -368,6 +351,37 @@ DocSheet *DocSheet::getSheet(QString uuid)
 QString DocSheet::filePath()
 {
     return m_filePath;
+}
+
+QList<qreal> DocSheet::scaleFactorList()
+{
+    QList<qreal> dataList = {0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3, 4, 5};
+
+    return  dataList;
+}
+
+void DocSheet::zoomin()
+{
+    QList<qreal> dataList = scaleFactorList();
+
+    for (int i = 0; i < dataList.count(); ++i) {
+        if (dataList[i] > (m_operation.scaleFactor)) {
+            setScaleFactor(dataList[i]);
+            return;
+        }
+    }
+}
+
+void DocSheet::zoomout()
+{
+    QList<qreal> dataList = scaleFactorList();
+
+    for (int i = dataList.count() - 1; i >= 0; --i) {
+        if (dataList[i] < (m_operation.scaleFactor)) {
+            setScaleFactor(dataList[i]);
+            return;
+        }
+    }
 }
 
 QString DocSheet::filter()

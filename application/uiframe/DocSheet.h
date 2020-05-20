@@ -61,10 +61,6 @@ public:
 
     virtual void jumpToHighLight(const QString &uuid, int ipage);
 
-    virtual void zoomin();  //放大一级
-
-    virtual void zoomout();
-
     virtual void rotateLeft();
 
     virtual void rotateRight();
@@ -118,6 +114,10 @@ public:
     QString filePath();
 
     QList<qreal> scaleFactorList();
+
+    void zoomin();  //放大一级
+
+    void zoomout();
 
     void setSidebarVisible(bool isVisible);
 

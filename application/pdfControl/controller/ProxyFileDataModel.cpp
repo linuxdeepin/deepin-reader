@@ -32,7 +32,7 @@ ProxyFileDataModel::ProxyFileDataModel(QObject *parent) : QObject(parent)
 void ProxyFileDataModel::saveOper()
 {
     QString sPath = _fvwParent->m_pProxyData->getPath();
-    dApp->m_pDBService->setHistroyData(sPath, Scale, _fvwParent->m_sheet->operation().scaleFactor);
+    dApp->m_pDBService->setHistroyData(sPath, Scale, _fvwParent->m_sheet->operation().scaleFactor * 100.0);
     dApp->m_pDBService->setHistroyData(sPath, DoubleShow, _fvwParent->m_sheet->operation().layoutMode);
     dApp->m_pDBService->setHistroyData(sPath, Fit, _fvwParent->m_sheet->operation().scaleMode);
     dApp->m_pDBService->setHistroyData(sPath, Rotate, _fvwParent->m_sheet->operation().rotation);
@@ -61,7 +61,7 @@ void ProxyFileDataModel::setModel(FileDataModel model)
     opera.mouseShape = (Dr::MouseShape)model.getOper(HandShape).toInt();
     opera.scaleMode = (Dr::ScaleMode)model.getOper(Fit).toInt();
     opera.rotation = (Dr::Rotation)model.getOper(Rotate).toInt();
-    opera.scaleFactor = (Dr::Rotation)model.getOper(Scale).toDouble();
+    opera.scaleFactor = model.getOper(Scale).toDouble() / 100.0;
     opera.sidebarVisible = model.getOper(Thumbnail).toBool();
     opera.sidebarIndex = model.getOper(LeftIndex).toInt();
     opera.currentPage = model.getOper(CurIndex).toInt() + 1;

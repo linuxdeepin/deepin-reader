@@ -155,7 +155,7 @@ void ScaleWidget::SlotReturnPressed()
 
 void ScaleWidget::onEditFinished()
 {
-    QString sCurText = QString::number(QString::number(m_sheet->operation().scaleFactor, 'f', 2).toDouble()) + "%";
+    QString sCurText = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
 
     m_scaleComboBox->setCurrentText(sCurText);
 }
@@ -180,7 +180,7 @@ void ScaleWidget::setSheet(DocSheet *sheet)
 
         m_scaleComboBox->setCurrentText(sCurText);
 
-    } else {
+    } else if (Dr::PDF == m_sheet->type()) {
         double dMax = m_sheet->getMaxZoomratio();
 
         int nTempMax = static_cast<int>(dMax) * 100;
@@ -214,11 +214,12 @@ void ScaleWidget::setSheet(DocSheet *sheet)
         if (curindex < 0)
             m_scaleComboBox->setCurrentIndex(curindex);
 
-        QString sCurText = QString::number(QString::number(m_sheet->operation().scaleFactor, 'f', 2).toDouble()) + "%";
+        QString sCurText = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
 
         m_scaleComboBox->setCurrentText(sCurText);
 
         m_scaleComboBox->lineEdit()->setCursorPosition(0);
+
     }
 
     m_scaleComboBox->blockSignals(false);

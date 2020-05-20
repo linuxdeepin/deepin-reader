@@ -165,32 +165,6 @@ void DocSheetPDF::jumpToPrevPage()
     jumpToIndex(jIndex);
 }
 
-void DocSheetPDF::zoomin()
-{
-    QList<double> dataList = {10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500};
-
-    for (int i = 0; i < dataList.count(); ++i) {
-        if (dataList[i] > this->operation().scaleFactor) {
-            this->setScaleMode(Dr::ScaleFactorMode);
-            this->setScaleFactor(dataList[i]);
-            return;
-        }
-    }
-}
-
-void DocSheetPDF::zoomout()
-{
-    QList<double> dataList = {10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500};
-
-    for (int i = dataList.count() - 1; i >= 0; --i) {
-        if (dataList[i] < this->operation().scaleFactor) {
-            this->setScaleMode(Dr::ScaleFactorMode);
-            this->setScaleFactor(dataList[i]);
-            return;
-        }
-    }
-}
-
 void DocSheetPDF::rotateLeft()
 {
     m_browser->rotateLeft();
