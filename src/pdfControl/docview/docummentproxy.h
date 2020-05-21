@@ -51,8 +51,6 @@ public:
     Page::Link *mouseBeOverLink(QPoint point);
     bool getSelectTextString(QString &st);
     bool getSelectTextString(QString &st, int &page);
-    bool showSlideModel();
-    bool exitSlideModel();
     void findNext();
     void findPrev();
     void closeFileAndWaitThreadClearEnd();
@@ -68,8 +66,6 @@ public:
     bool setBookMarkState(int page, bool state);
     void changeAnnotationColor(int ipage, const QString uuid, const QColor &color);
     void selectAllText();
-    void setAutoPlaySlide(bool autoplay, int timemsec = 3000);
-    bool getAutoPlaySlideStatu();
     bool isOpendFile();
     void setViewFocus();
     double getMaxZoomratio();

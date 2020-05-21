@@ -96,7 +96,6 @@ void MainWindow::initUI()
 {
     m_central = new Central(this);
     connect(m_central, SIGNAL(sigNeedClose()), this, SLOT(close()));
-    connect(m_central, SIGNAL(sigNeedShowState(int)), this, SLOT(onShowState(int)));
 
     setCentralWidget(m_central);
 
@@ -120,29 +119,6 @@ void MainWindow::onShortCut(const QString &key)
         displayShortcuts();
     } else {
         m_central->handleShortcut(key);
-    }
-}
-
-void MainWindow::onShowState(int state)
-{
-    titlebar()->setVisible(state);
-
-    if (state == 1) {
-        if (windowState() == Qt::WindowFullScreen) {
-
-            showNormal();
-
-            if (m_nOldState == Qt::WindowMaximized) {
-                showMaximized();
-            }
-
-            m_nOldState = Qt::WindowNoState;        // 状态恢复     2019-12-23  wzx
-        }
-    } else {
-
-        m_nOldState = this->windowState();      //  全屏之前 保存当前状态     2019-12-23  wzx
-
-        this->setWindowState(Qt::WindowFullScreen);
     }
 }
 

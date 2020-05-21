@@ -19,7 +19,6 @@ public:
     PagePdf(QWidget *parent = nullptr);
     ~PagePdf() override;
     bool getImage(QImage &image, double width, double height) override;
-    bool getSlideImage(QImage &image, double &width, double &height) override;
     PageInterface *getInterFace() override;
     void setPage(Poppler::Page *page, int pageno);
 

@@ -9,6 +9,7 @@
 #include "ModuleHeader.h"
 
 class SheetSidebar;
+class SlideWidget;
 struct DocOperation {
     Dr::LayoutMode layoutMode   = Dr::SinglePageMode;
     Dr::MouseShape mouseShape   = Dr::MouseShapeNormal;
@@ -127,15 +128,14 @@ public:
 
     int  currentState();
 
-    void quitSlide();
-
     void quitMagnifer();
 
-    void showSlideControl();
+    void openSlideWidget();
+    void closeSlideWidget();
 
 protected:
     DocOperation  m_operation;
-
+    SlideWidget  *m_slideWidget = nullptr;
     SheetSidebar *m_sidebar = nullptr;
 
 signals:
@@ -164,21 +164,11 @@ public:
 public:
     virtual void setBookMark(int page, int state);
 
-    virtual void exitSliderShow();
-
     virtual int label2pagenum(QString label);
 
     virtual bool haslabel();
 
-    virtual bool showSlideModel();
-
-    virtual bool exitSlideModel();
-
-    virtual bool getAutoPlaySlideStatu();
-
     virtual void docBasicInfo(stFileInfo &info);
-
-    virtual void setAutoPlaySlide(bool autoplay, int timemsec = 3000);
 
     virtual void getAllAnnotation(QList<stHighlightContent> &listres);
 
@@ -192,8 +182,6 @@ signals:
     void sigOpenFileResult(const QString &, const bool &);
 
     void sigFindOperation(const int &);
-
-    void signalAutoplaytoend();
 
 };
 

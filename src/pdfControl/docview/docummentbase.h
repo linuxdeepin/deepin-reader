@@ -35,13 +35,8 @@ public:
         m_widget = nullptr;
         m_vboxLayout = nullptr;
         m_magnifierwidget = nullptr;
-        m_slidewidget = nullptr;
-        pslidelabel = nullptr;
-        pslideanimationlabel = nullptr;
         pblankwidget = nullptr;
         m_bModified = false;
-        m_bslidemodel = false;
-        m_slidepageno = -1;
         m_currentpageno = 0;
         m_scale = 1.0;
         m_maxzoomratio = 5.0;
@@ -50,9 +45,6 @@ public:
         m_magnifierpage = -1;
         m_viewmode = ViewMode_SinglePage;
         m_lastmagnifierpagenum = -1;
-        animationfirst = nullptr;
-        animationsecond = nullptr;
-        animationgroup = nullptr;
         m_bsearchfirst = true;
         m_findcurpage = -1;
         m_imagewidth = 0.1;
@@ -62,45 +54,14 @@ public:
         m_searchTask = nullptr;
         bfindnext = true;
         m_bScanningcopy = false;
-        showslidwaittimer = nullptr;
         qwfather = nullptr;
-//        loadpagewaittimer = nullptr;
         m_fileinfo = new stFileInfo;
-        bautoplayslide = false;
-        autoplayslidtimer = nullptr;
-        m_autoplayslidmsec = 0;
-        m_bautoplayslidreset = false;
         m_label2pagenum.clear();
         m_pagenum2label.clear();
     }
 
     virtual ~DocummentBasePrivate()
     {
-//        if (!animationfirst) {
-//            animationfirst->deleteLater();
-//            animationfirst = nullptr;
-//        }
-//        if (!animationsecond) {
-//            animationsecond->deleteLater();
-//            animationsecond = nullptr;
-//        }
-//        if (!animationgroup) {
-//            animationgroup->deleteLater();
-//            animationgroup = nullptr;
-//        }
-//        if (m_searchTask) {
-//            delete m_searchTask;
-//            m_searchTask = nullptr;
-//        }
-//        if (m_magnifierwidget) {
-//            m_magnifierwidget->deleteLater();
-//            m_magnifierwidget = nullptr;
-
-//        }
-//        if (m_slidewidget) {
-//            m_slidewidget->deleteLater();
-//            m_slidewidget = nullptr;
-//        }
         if (nullptr != m_fileinfo) {
             delete m_fileinfo;
             m_fileinfo = nullptr;
@@ -113,25 +74,17 @@ public:
     DWidget *m_widget;
     QVBoxLayout *m_vboxLayout;
     MagnifierWidget *m_magnifierwidget;
-    SlidWidget *m_slidewidget;
-    DLabel *pslideanimationlabel;
-    DLabel *pslidelabel;
     DLabel *pblankwidget;
     ViewMode_EM m_viewmode;
     int m_lastmagnifierpagenum;
     int m_magnifierpage;
-    int m_slidepageno;
     int m_currentpageno;
     double m_scale;
     double m_maxzoomratio;//最大放大比例
     mutable bool m_bModified;
-    bool m_bslidemodel;
     RotateType_EM m_rotate;
     bool donotneedreloaddoc;
     QPoint m_magnifierpoint;
-    QPropertyAnimation *animationfirst;
-    QPropertyAnimation *animationsecond;
-    QParallelAnimationGroup *animationgroup;
     SearchTask *m_searchTask;
     int m_findcurpage;
     QMap<int, int> m_pagecountsearch; //搜索结果页对应当前页个数
@@ -142,14 +95,9 @@ public:
     bool bcloseing;
     bool bfindnext;//上一次搜索结果是向前翻还是向后翻
     bool m_bScanningcopy;//当前打开的是否为扫描件
-    QTimer *showslidwaittimer;
     DWidget *qwfather;
     stFileInfo *m_fileinfo = nullptr;
     ThreadLoadData threadloaddata;
-    bool bautoplayslide;
-    QTimer *autoplayslidtimer;
-    int m_autoplayslidmsec;
-    bool m_bautoplayslidreset;//播放到最后一页重置状态从头可以从头开始播放
     QMap<QString, int> m_label2pagenum;
     QMap<int, QString> m_pagenum2label;
 signals:
@@ -238,20 +186,16 @@ public:
     bool loadData();
     bool loadDoc(QString);
     int getPageSNum();
-    bool exitSlideModel();
     QVector<PageBase *> *getPages();
     PageBase *getPage(int index);
     void magnifierClear();
     void pageMove(double mvx, double mvy);
     bool setMagnifierStyle(int magnifierradius = 100, int magnifierringwidth = 10, double magnifierscale = 3);
-    bool showSlideModel();
     void cacularValueXY(int &xvalue, int &yvalue, int curpage, bool bsearch = true, QRectF rect = QRectF());
     int pointInWhichPage(QPoint &qpoint);
     bool setBookMarkState(int page, bool state);
     bool mouseSelectText(QPoint start, QPoint stop);
     void selectAllText();
-    void setAutoPlaySlide(bool autoplay, int timemsec);
-    bool getAutoPlaySlideStatu();
     void setViewFocus();
     double getMaxZoomratio();
     void jumpToOutline(const qreal  &realleft, const qreal &realtop, int ipage);
@@ -281,8 +225,6 @@ protected slots:
     bool pageJump(int pagenum);
     void scaleAndShow(double scale, RotateType_EM rotate);
     bool setViewModeAndShow(ViewMode_EM viewmode);
-    void showSlideModelTimerOut();
-    void autoplayslidTimerOut();
 
 protected:
     void showSinglePage();

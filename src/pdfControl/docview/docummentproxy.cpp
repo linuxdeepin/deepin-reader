@@ -40,7 +40,6 @@ bool DocummentProxy::openFile(Dr::FileType type, QString filepath, unsigned int 
         connect(this, SIGNAL(signal_setViewModeAndShow(ViewMode_EM)), m_documment, SLOT(setViewModeAndShow(ViewMode_EM)));
         connect(m_documment, SIGNAL(sigPageBookMarkButtonClicked(int, bool)), this, SIGNAL(sigPageBookMarkButtonClicked(int, bool)));
         connect(m_documment, SIGNAL(signal_openResult(bool)), this, SIGNAL(signal_openResult(bool)));
-        connect(m_documment, &DocummentBase::signal_autoplaytoend, m_sheet, &DocSheet::signalAutoplaytoend);
         bre = m_documment->openFile(m_path, ipage, rotatetype, scale, viewmode);
     }
     bcloseing = false;
@@ -340,19 +339,6 @@ bool DocummentProxy::getSelectTextString(QString &st, int &page)
     return m_documment->getSelectTextString(st, page);
 }
 
-bool DocummentProxy::showSlideModel()
-{
-    if (!m_documment || bcloseing)
-        return false;
-    return m_documment->showSlideModel();
-}
-bool DocummentProxy::exitSlideModel()
-{
-    if (!m_documment || bcloseing)
-        return false;
-    return m_documment->exitSlideModel();
-}
-
 void DocummentProxy::findNext()
 {
     if (m_documment || !bcloseing) {
@@ -483,20 +469,6 @@ void DocummentProxy::selectAllText()
 {
     if (m_documment)
         m_documment->selectAllText();
-}
-
-
-void DocummentProxy::setAutoPlaySlide(bool autoplay, int timemsec)
-{
-    if (!m_documment || bcloseing)
-        return;
-    return m_documment->setAutoPlaySlide(autoplay, timemsec);
-}
-bool DocummentProxy::getAutoPlaySlideStatu()
-{
-    if (!m_documment || bcloseing)
-        return false;
-    return m_documment->getAutoPlaySlideStatu();
 }
 
 bool DocummentProxy::isOpendFile()

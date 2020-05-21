@@ -67,7 +67,6 @@ class PageInterface
 {
 public:
     virtual bool getImage(QImage &image, double width, double height) = 0;
-    virtual bool getSlideImage(QImage &image, double &width, double &height) = 0;
     virtual bool loadData() = 0;
 };
 class PageBasePrivate: public QObject
@@ -169,7 +168,6 @@ public:
     PageBase(PageBasePrivate *ptr = nullptr, DWidget *parent = nullptr);
     virtual ~PageBase() override;
     virtual bool getImage(QImage &image, double width, double height) = 0;
-    virtual bool getSlideImage(QImage &image, double &width, double &height) = 0;
     virtual PageInterface *getInterFace() = 0;
     virtual stSearchRes search(const QString &text, bool matchCase, bool wholeWords)
     {

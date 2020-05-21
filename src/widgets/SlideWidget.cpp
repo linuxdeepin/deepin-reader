@@ -169,7 +169,7 @@ void SlideWidget::onNextBtnClicked()
 
 void SlideWidget::onExitBtnClicked()
 {
-    //m_docSheet->closeSlideWidget();
+    m_docSheet->closeSlideWidget();
 }
 
 void SlideWidget::playImage()

@@ -213,21 +213,6 @@ void ThreadLoadData::run()
     }
 }
 
-/*
- *
-*/
-SlidWidget::SlidWidget(DWidget *parent): DWidget(parent)
-{
-    setMouseTracking(true);
-}
-
-void SlidWidget::paintEvent(QPaintEvent *event)
-{
-    DWidget::paintEvent(event);
-    update();
-}
-
-
 
 
 

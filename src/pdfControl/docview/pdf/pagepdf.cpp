@@ -30,25 +30,6 @@ public:
         image = m_page->renderToImage(xres * scalex, yres * scaley);
         return true;
     }
-    bool getSlideImage(QImage &image, double &width, double &height) override
-    {
-        int xres = 72.0, yres = 72.0;
-        double scalex = (width - 20) / m_imagewidth;
-        double scaley = (height - 20) / m_imageheight;
-        double scale = 1;
-        if (scalex > scaley) {
-            scale = scaley;
-        } else {
-            scale = scalex;
-        }
-        width = m_imagewidth * scale;
-        height = m_imageheight * scale;
-        if (!m_page)
-            return false;
-        image = m_page->renderToImage(xres * scale * pixelratiof, yres * scale * pixelratiof);
-        image.setDevicePixelRatio(pixelratiof);
-        return true;
-    }
     bool loadData() override
     {
         loadWords();
@@ -275,13 +256,6 @@ void PagePdf::setPage(Poppler::Page *page, int pageno)
 {
     Q_D(PagePdf);
     d->setPage(page, pageno);
-}
-
-bool PagePdf::getSlideImage(QImage &image, double &width, double &height)
-{
-    Q_D(PagePdf);
-
-    return d->getSlideImage(image, width, height);
 }
 
 bool PagePdf::getImage(QImage &image, double width, double height)

@@ -53,8 +53,6 @@ signals:
 
     void sigNeedClose();
 
-    void sigNeedShowState(int);
-
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
 

@@ -35,6 +35,7 @@
 #include "widgets/FindWidget.h"
 #include "djvuControl/SheetBrowserDJVU.h"
 #include "business/PrintManager.h"
+#include "widgets/SlideWidget.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -219,17 +220,6 @@ void DocSheet::docBasicInfo(stFileInfo &)
     qDebug() << "unrealized";
 }
 
-bool DocSheet::getAutoPlaySlideStatu()
-{
-    qDebug() << "unrealized";
-    return false;
-}
-
-void DocSheet::setAutoPlaySlide(bool, int)
-{
-    qDebug() << "unrealized";
-}
-
 double DocSheet::getMaxZoomratio()
 {
     qDebug() << "unrealized";
@@ -294,18 +284,6 @@ int DocSheet::label2pagenum(QString label)
 }
 
 bool DocSheet::closeMagnifier()
-{
-    qDebug() << "unrealized";
-    return false;
-}
-
-bool DocSheet::showSlideModel()
-{
-    qDebug() << "unrealized";
-    return false;
-}
-
-bool DocSheet::exitSlideModel()
 {
     qDebug() << "unrealized";
     return false;
@@ -384,11 +362,6 @@ bool DocSheet::saveAsData(QString filePath)
     return false;
 }
 
-void DocSheet::exitSliderShow()
-{
-    qDebug() << "unrealized";
-}
-
 void DocSheet::handleSearch()
 {
     qDebug() << "unrealized";
@@ -426,15 +399,6 @@ int DocSheet::currentState()
     return doc->getCurrentState();
 }
 
-void DocSheet::showSlideControl()
-{
-    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
-    if (nullptr == doc)
-        return;
-
-    doc->showPlayControlWidget();
-}
-
 bool DocSheet::existFileChanged()
 {
     foreach (DocSheet *sheet, g_map.values()) {
@@ -443,15 +407,6 @@ bool DocSheet::existFileChanged()
     }
 
     return false;
-}
-
-void DocSheet::quitSlide()
-{
-    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
-    if (nullptr == doc)
-        return;
-
-    doc->quitSlide();
 }
 
 void DocSheet::quitMagnifer()
@@ -466,4 +421,19 @@ void DocSheet::quitMagnifer()
 DocOperation DocSheet::operation()
 {
     return m_operation;
+}
+
+void DocSheet::openSlideWidget()
+{
+    if (m_slideWidget == nullptr) {
+        m_slideWidget = new SlideWidget(this);
+    }
+}
+
+void DocSheet::closeSlideWidget()
+{
+    if (m_slideWidget) {
+        delete m_slideWidget;
+        m_slideWidget = nullptr;
+    }
 }

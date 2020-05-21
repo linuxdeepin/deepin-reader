@@ -61,8 +61,6 @@ public:
 
     bool saveAsData(QString filePath)override;
 
-    void exitSliderShow()override;
-
     void handleSearch()override;
 
     void copySelectedText()override;                    //复制选中文字
@@ -85,12 +83,6 @@ public:
 
     bool closeMagnifier() override;
 
-    bool showSlideModel() override;
-
-    bool exitSlideModel() override;
-
-    bool getAutoPlaySlideStatu() override;
-
     bool getImage(int index, QImage &image, double width, double height) override;
 
     bool getImageMax(int index, QImage &image, double max) override;
@@ -98,8 +90,6 @@ public:
     void jumpToHighLight(const QString &uuid, int ipage) override;
 
     void docBasicInfo(stFileInfo &info) override;
-
-    void setAutoPlaySlide(bool autoplay, int timemsec = 3000) override;
 
     void getAllAnnotation(QList<stHighlightContent> &listres) override;
 

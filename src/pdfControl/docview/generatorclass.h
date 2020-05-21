@@ -93,18 +93,6 @@ private:
     bool restart;
 };
 
-/*
-*/
-
-class SlidWidget: public DWidget
-{
-    Q_OBJECT
-public:
-    SlidWidget(DWidget *parent = nullptr);
-protected:
-    void paintEvent(QPaintEvent *event) override;
-};
-
 
 
 #endif // GENERATORCLASS_H

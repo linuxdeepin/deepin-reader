@@ -44,10 +44,7 @@ private:
 private slots:
     void onShortCut(const QString &);
 
-    void onShowState(int state);
-
 private:
-    Qt::WindowStates    m_nOldState = Qt::WindowNoState;        //  旧的窗口状态
     Central            *m_central = nullptr;
 
 public:

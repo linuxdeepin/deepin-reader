@@ -41,7 +41,7 @@ void ProxyMouseMove::mouseMoveEvent(QMouseEvent *event)
     int nState = _fvwParent->m_sheet->currentState();
 
     if (nState == SLIDER_SHOW) {
-        _fvwParent->m_sheet->showSlideControl();                //显示幻灯片控制
+        //显示幻灯片控制
     } else if (nState == Magnifer_State) {                      //当前是放大镜状态
         __ShowMagnifier(globalPos);
     } else if (Dr::MouseShapeHand == _fvwParent->m_sheet->operation().mouseShape) {            //手型状态下， 按住鼠标左键 位置进行移动
@@ -153,12 +153,6 @@ void ProxyMouseMove::mousePressEvent(QMouseEvent *event)
 
     Qt::MouseButton nBtn = event->button();
     if (nBtn == Qt::RightButton) {  //  右键处理
-        //  处于幻灯片模式下
-        if (nState == SLIDER_SHOW) {
-            _fvwParent->m_sheet->quitSlide();
-            return;
-        }
-
         //  放大镜状态，
         if (nState == Magnifer_State) {
             _fvwParent->m_sheet->quitMagnifer();

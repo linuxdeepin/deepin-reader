@@ -24,17 +24,10 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     d->qwfather = parent;
     d->m_widget = new DWidget(this);
     setWidget(d->m_widget);
-    d->showslidwaittimer = new QTimer(this);
-    d->autoplayslidtimer = new QTimer(this);
     d->pblankwidget = new DLabel(this);
     d->pblankwidget->setMouseTracking(true);
     d->pblankwidget->hide();
     d->m_magnifierwidget = new MagnifierWidget(parent);
-    d->m_slidewidget = new SlidWidget(parent);
-    d->pslidelabel = new DLabel(d->m_slidewidget);
-    d->pslideanimationlabel = new DLabel(d->m_slidewidget);
-    d->pslidelabel->setGeometry(-200, -200, 100, 100);
-    d->pslideanimationlabel->setGeometry(-200, -200, 100, 100);
     delete parent->layout();
 
     QGridLayout *gridlyout = new QGridLayout(parent);
@@ -44,26 +37,15 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     gridlyout->setSpacing(0);
     gridlyout->addWidget(this, 0, 0);
     gridlyout->addWidget(d->m_magnifierwidget, 0, 0);
-    gridlyout->addWidget(d->m_slidewidget, 0, 0);
     gridlyout->setMargin(0);
 
-    d->m_slidewidget->hide();
     d->m_magnifierwidget->hide();
     d->m_vboxLayout = new QVBoxLayout;
     d->m_widget->setLayout(d->m_vboxLayout);
     d->m_vboxLayout->setMargin(0);
     d->m_vboxLayout->setSpacing(0);
     d->m_widget->setMouseTracking(true);
-    d->pslidelabel->setMouseTracking(true);
-    d->pslideanimationlabel->setMouseTracking(true);
     setMouseTracking(true);
-
-    //设置背景黑色
-    QPalette pal(d->m_slidewidget->palette());
-    pal.setColor(QPalette::Background, Qt::black);
-    d->m_slidewidget->setAutoFillBackground(true);
-    d->m_slidewidget->setPalette(pal);
-
 
     d->m_searchTask = new SearchTask(this);
 
@@ -118,8 +100,6 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     connect(this, SIGNAL(signal_loadDocumment(QString)), d, SLOT(loadDocumment(QString)));
 
     connect(&d->threadloaddata, SIGNAL(signal_dataLoaded(bool)), this, SLOT(slot_dataLoaded(bool)));
-    connect(d->showslidwaittimer, SIGNAL(timeout()), this, SLOT(showSlideModelTimerOut()));
-    connect(d->autoplayslidtimer, SIGNAL(timeout()), this, SLOT(autoplayslidTimerOut()));
 }
 
 DocummentBase::~DocummentBase()
@@ -679,88 +659,29 @@ bool DocummentBase::pageJump(int pagenum)
     Q_D(DocummentBase);
     if (pagenum < 0 || pagenum >= d->m_pages.size())
         return false;
-    if (d->m_bslidemodel) {
-        QImage image;
-        double width = d->m_slidewidget->width(), height = d->m_slidewidget->height();
-        if (!d->m_pages.at(pagenum)->getSlideImage(image, width, height)) {
-            return false;
-        }
-        if (-1 != d->m_slidepageno) {
-            DLabel *plabel = d->pslideanimationlabel;
-            d->pslideanimationlabel = d->pslidelabel;
-            d->pslidelabel = plabel;
-        }
-        d->pslidelabel->setGeometry((d->m_slidewidget->width() - width) / 2, (d->m_slidewidget->height() - height) / 2, width, height);
-        QPixmap map = QPixmap::fromImage(image);
-        d->pslidelabel->setPixmap(map);
-        d->pslideanimationlabel->lower();
-        d->pslidelabel->show();
 
-        if (-1 != d->m_slidepageno) {
-            if (!d->animationfirst) {
-                delete d->animationfirst;
-                d->animationfirst = nullptr;
-            }
-            d->animationfirst = new QPropertyAnimation(d->pslideanimationlabel, "geometry", this);
-            d->animationfirst->setDuration(500);
+    DScrollBar *scrollBar_X = horizontalScrollBar();
+    DScrollBar *scrollBar_Y = verticalScrollBar();
+    switch (d->m_viewmode) {
+    case ViewMode_SinglePage:
+        if (scrollBar_X)
+            scrollBar_X->setValue(d->m_widgetrects.at(pagenum).x());
+        if (scrollBar_Y)
+            scrollBar_Y->setValue(d->m_widgetrects.at(pagenum).y());
+        break;
+    case ViewMode_FacingPage:
+        if (scrollBar_X)
+            scrollBar_X->setValue(d->m_widgetrects.at(pagenum / 2).x() + d->m_pages.at(pagenum)->x());
+        if (scrollBar_Y)
+            scrollBar_Y->setValue(d->m_widgetrects.at(pagenum / 2).y());
+        break;
+    default:
+        break;
+    }
 
-            if (!d->animationsecond) {
-                delete d->animationsecond;
-                d->animationsecond = nullptr;
-            }
-            d->animationsecond = new QPropertyAnimation(d->pslidelabel, "geometry", this);
-            d->animationsecond->setDuration(500);
-
-            QRect rectslideanimationlabel = d->pslideanimationlabel->geometry();
-            QRect rectslidelabel = d->pslidelabel->geometry();
-            if (d->m_slidepageno > pagenum) {
-                d->animationfirst->setStartValue(rectslideanimationlabel);
-                d->animationfirst->setEndValue(QRect(d->m_slidewidget->width(), 10, d->pslideanimationlabel->width(), d->pslideanimationlabel->height()));
-
-                d->animationsecond->setStartValue(QRect(-d->m_slidewidget->width(), 10, d->pslidelabel->width(), d->pslidelabel->height()));
-                d->animationsecond->setEndValue(rectslidelabel);
-            } else {
-                d->animationfirst->setStartValue(rectslideanimationlabel);
-                d->animationfirst->setEndValue(QRect(-d->m_slidewidget->width(), 10, d->pslideanimationlabel->width(), d->pslideanimationlabel->height()));
-
-                d->animationsecond->setStartValue(QRect(d->m_slidewidget->width(), 10, d->pslidelabel->width(), d->pslidelabel->height()));
-                d->animationsecond->setEndValue(rectslidelabel);
-            }
-            if (!d->animationgroup) {
-                delete d->animationgroup;
-                d->animationgroup = nullptr;
-            }
-            d->animationgroup = new QParallelAnimationGroup(this);
-            d->animationgroup->addAnimation(d->animationfirst);
-            d->animationgroup->addAnimation(d->animationsecond);
-            d->animationgroup->start();
-        }
-
-        d->m_slidepageno = pagenum;
-    } else {
-        DScrollBar *scrollBar_X = horizontalScrollBar();
-        DScrollBar *scrollBar_Y = verticalScrollBar();
-        switch (d->m_viewmode) {
-        case ViewMode_SinglePage:
-            if (scrollBar_X)
-                scrollBar_X->setValue(d->m_widgetrects.at(pagenum).x());
-            if (scrollBar_Y)
-                scrollBar_Y->setValue(d->m_widgetrects.at(pagenum).y());
-            break;
-        case ViewMode_FacingPage:
-            if (scrollBar_X)
-                scrollBar_X->setValue(d->m_widgetrects.at(pagenum / 2).x() + d->m_pages.at(pagenum)->x());
-            if (scrollBar_Y)
-                scrollBar_Y->setValue(d->m_widgetrects.at(pagenum / 2).y());
-            break;
-        default:
-            break;
-        }
-
-        if (d->m_currentpageno != pagenum) {
-            d->m_currentpageno = pagenum;
-            emit signal_pageChange(d->m_currentpageno);
-        }
+    if (d->m_currentpageno != pagenum) {
+        d->m_currentpageno = pagenum;
+        emit signal_pageChange(d->m_currentpageno);
     }
     return true;
 }
@@ -808,10 +729,6 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
 int DocummentBase::getCurrentPageNo()
 {
     Q_D(DocummentBase);
-
-    if (d->m_bslidemodel) {
-        return d->m_slidepageno;
-    }
 
     if (d->m_currentpageno >= 0)
         return d->m_currentpageno;
@@ -998,60 +915,6 @@ bool DocummentBase::getSelectTextString(QString &st, int &page)
         }
     }
     return bselectexit;
-}
-
-void DocummentBase::autoplayslidTimerOut()
-{
-    Q_D(DocummentBase);
-    if (d->m_bslidemodel) {
-        if (d->m_bautoplayslidreset && getCurrentPageNo() + 1 >= d->m_pages.size()) {
-            pageJump(0);
-            d->m_bautoplayslidreset = false;
-        } else {
-            pageJump(getCurrentPageNo() + 1);
-            if (getCurrentPageNo() + 1 >= d->m_pages.size()) {
-                d->autoplayslidtimer->stop();
-                d->bautoplayslide = false;
-                emit signal_autoplaytoend();
-                d->m_bautoplayslidreset = true;
-            }
-        }
-    } else {
-        d->autoplayslidtimer->stop();
-    }
-}
-
-void DocummentBase::showSlideModelTimerOut()
-{
-    Q_D(DocummentBase);
-    d->showslidwaittimer->stop();
-    int curpageno = getCurrentPageNo();
-    if (curpageno < 0) {
-        curpageno = 0;
-    }
-    d->m_bslidemodel = true;
-    if (pageJump(curpageno)) {
-        d->autoplayslidtimer->stop();
-        if (d->bautoplayslide)
-            d->autoplayslidtimer->start(d->m_autoplayslidmsec);
-        return;
-    }
-    d->m_slidepageno = -1;
-    d->m_bslidemodel = false;
-    this->show();
-    d->m_slidewidget->hide();
-}
-
-bool DocummentBase::showSlideModel()
-{
-    Q_D(DocummentBase);
-    if (!bDocummentExist()) {
-        return false;
-    }
-    this->hide();
-    d->m_slidewidget->show();
-    d->showslidwaittimer->start(100);
-    return true;
 }
 
 void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool bsearch, QRectF rectsource)
@@ -1537,17 +1400,6 @@ int DocummentBase::getPageSNum()
     return d->m_pages.size();
 }
 
-bool DocummentBase::exitSlideModel()
-{
-    Q_D(DocummentBase);
-    d->autoplayslidtimer->stop();
-    d->m_slidewidget->hide();
-    this->show();
-    d->m_bslidemodel = false;
-    d->m_slidepageno = -1;
-    return true;
-}
-
 QVector<PageBase *> *DocummentBase::getPages()
 {
     Q_D(DocummentBase);
@@ -1769,24 +1621,6 @@ void DocummentBase::selectAllText()
     for (int i = 0; i < d->m_pages.size(); i++) {
         d->m_pages.at(i)->selectAllText();
     }
-}
-
-void DocummentBase::setAutoPlaySlide(bool autoplay, int timemsec)
-{
-    Q_D(DocummentBase);
-    d->bautoplayslide = autoplay;
-    d->m_autoplayslidmsec = timemsec;
-    if (d->m_bslidemodel) {
-        d->autoplayslidtimer->stop();
-        if (d->bautoplayslide)
-            d->autoplayslidtimer->start(timemsec);
-    }
-}
-
-bool DocummentBase::getAutoPlaySlideStatu()
-{
-    Q_D(DocummentBase);
-    return d->bautoplayslide;
 }
 
 void DocummentBase::setViewFocus()

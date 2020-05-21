@@ -33,7 +33,6 @@ class FileDataModel;
 class DocummentProxy;
 class QStackedLayout;
 class DocTabBar;
-class PlayControlWidget;
 class CentralDocPage : public CustomWidget
 {
     Q_OBJECT
@@ -73,17 +72,9 @@ public:
 
     void showTips(const QString &tips, int iconIndex = 0);
 
-    void showPlayControlWidget();
-
-    void openSlide();
-
-    void quitSlide();
-
     bool openMagnifer();
 
     void quitMagnifer();
-
-    void quitSpecialState();
 
     void openCurFileFolder();
 
@@ -130,21 +121,17 @@ signals:
 
     void sigNeedClose();
 
-    void sigNeedShowState(int);
-
     void sigNeedActivateWindow();
 
 private:
     QStackedLayout      *m_pStackedLayout = nullptr;
     DocTabBar           *m_pTabBar = nullptr;
-    PlayControlWidget   *m_pctrlwidget = nullptr;
     QDBusInterface      *m_pLoginManager = nullptr;
 
     QDBusReply<QDBusUnixFileDescriptor> m_reply;
     QList<QVariant> m_arg;
     bool m_bBlockShutdown = false;
 
-    QPointer<DocSheet>  m_slideSheet = nullptr;
     QPointer<DocSheet>  m_magniferSheet = nullptr;
     int m_currentState = Default_State;
 };

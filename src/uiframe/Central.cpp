@@ -48,7 +48,6 @@ Central::Central(QWidget *parent)
     connect(m_docPage, SIGNAL(sigNeedShowTips(const QString &, int)), this, SLOT(onShowTips(const QString &, int)));
     connect(m_docPage, SIGNAL(sigNeedClose()), this, SIGNAL(sigNeedClose()));
     connect(m_docPage, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
-    connect(m_docPage, SIGNAL(sigNeedShowState(int)), this, SIGNAL(sigNeedShowState(int)));
     connect(m_docPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
     connect(m_docPage, SIGNAL(sigNeedActivateWindow()), this, SLOT(onNeedActivateWindow()));
 
@@ -188,7 +187,7 @@ void Central::onMenuTriggered(const QString &action)
     } else if (action == "Print") {
         m_docPage->handleShortcut(KeyStr::g_ctrl_p);
     } else if (action == "Slide show") { //  开启幻灯片
-        m_docPage->openSlide();
+        m_docPage->getCurSheet()->openSlideWidget();
     } else if (action == "Magnifer") {   //  开启放大镜
         if (m_docPage->openMagnifer())
             m_widget->setMagnifierState();

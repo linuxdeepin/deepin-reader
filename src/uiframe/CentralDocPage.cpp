@@ -41,7 +41,6 @@
 #include "pdfControl/docview/docummentproxy.h"
 #include "widgets/FindWidget.h"
 #include "widgets/FileAttrWidget.h"
-#include "widgets/PlayControlWidget.h"
 #include "pdfControl/docview/docummentproxy.h"
 #include "utils/PublicFunction.h"
 #include "utils/utils.h"
@@ -468,16 +467,6 @@ DocSheet *CentralDocPage::getSheet(const QString &filePath)
     return nullptr;
 }
 
-void CentralDocPage::showPlayControlWidget()
-{
-    if (m_pctrlwidget) {
-        int nScreenWidth = qApp->desktop()->geometry().width();
-        int inScreenHeght = qApp->desktop()->geometry().height();
-        int tH = 100;
-        m_pctrlwidget->activeshow((nScreenWidth - m_pctrlwidget->width()) / 2, inScreenHeght - tH);
-    }
-}
-
 void CentralDocPage::BlockShutdown()
 {
     if (m_bBlockShutdown)
@@ -546,23 +535,8 @@ void CentralDocPage::handleShortcut(const QString &s)
 {
     if (getCurrentState() == SLIDER_SHOW) {
         if (s == KeyStr::g_esc) {
-            quitSlide();
+            getCurSheet()->closeSlideWidget();
         }
-        if (nullptr == m_pctrlwidget) {
-            setCurrentState(Default_State);
-            return;
-        }
-
-        if (!m_slideSheet.isNull()) {
-            if (!m_slideSheet.isNull()) {
-                if (m_slideSheet->getAutoPlaySlideStatu()) {
-                    m_slideSheet->setAutoPlaySlide(false);
-                } else  {
-                    m_slideSheet->setAutoPlaySlide(true);
-                }
-            }
-        }
-        m_pctrlwidget->PageChangeByKey(s);
         return;
     }
 
@@ -578,7 +552,7 @@ void CentralDocPage::handleShortcut(const QString &s)
     } else if (s == KeyStr::g_ctrl_shift_s) {
         saveAsCurrent();
     } else if (s == KeyStr::g_ctrl_h) {
-        openSlide();
+        getCurSheet()->openSlideWidget();
     } else if (s == KeyStr::g_alt_z) {
         openMagnifer();
     } else if (s == KeyStr::g_ctrl_p) {
@@ -643,83 +617,9 @@ void CentralDocPage::handleShortcut(const QString &s)
     }
 }
 
-void CentralDocPage::quitSpecialState()
-{
-    int nState = getCurrentState();
-    if (nState == SLIDER_SHOW) {  //  当前是幻灯片模式
-        quitSlide();
-    } else if (nState == Magnifer_State) {
-        quitMagnifer();
-    }
-
-    setCurrentState(Default_State);
-}
-
 void CentralDocPage::showTips(const QString &tips, int iconIndex)
 {
     emit sigNeedShowTips(tips, iconIndex);
-}
-
-void CentralDocPage::openSlide()
-{
-    DocSheet *sheet = getCurSheet();
-
-    if (nullptr == sheet)
-        return;
-
-    int nState = getCurrentState();
-
-    if (nState != SLIDER_SHOW) {
-
-        setCurrentState(SLIDER_SHOW);
-
-        m_pTabBar->setVisible(false);
-
-        emit sigNeedShowState(0);
-
-        m_slideSheet = sheet;
-
-        sheet->setAutoPlaySlide(true);
-
-        sheet->showSlideModel();
-
-        if (m_pctrlwidget == nullptr) {
-            m_pctrlwidget = new PlayControlWidget(sheet, this);
-        }
-
-        int nScreenWidth = qApp->desktop()->geometry().width();
-
-        int inScreenHeght = qApp->desktop()->geometry().height();
-
-        m_pctrlwidget->activeshow((nScreenWidth - m_pctrlwidget->width()) / 2, inScreenHeght - 100);
-
-    }
-}
-
-//  退出幻灯片
-void CentralDocPage::quitSlide()
-{
-    int nState = getCurrentState();
-
-    if (nState == SLIDER_SHOW) {
-
-        setCurrentState(Default_State);
-
-        emit sigNeedShowState(1);
-
-        m_pTabBar->setVisible(true);
-
-        if (!m_slideSheet.isNull()) {
-
-            m_slideSheet->exitSliderShow();
-
-            m_slideSheet->exitSlideModel();
-
-            delete m_pctrlwidget;
-
-            m_pctrlwidget = nullptr;
-        }
-    }
 }
 
 bool CentralDocPage::openMagnifer()

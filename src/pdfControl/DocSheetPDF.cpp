@@ -359,11 +359,6 @@ bool DocSheetPDF::saveAsData(QString filePath)
     return m_browser->saveAsData(filePath);
 }
 
-void DocSheetPDF::exitSliderShow()
-{
-    m_sidebar->setVisible(m_bOldState);
-}
-
 void DocSheetPDF::handleSearch()
 {
     if (m_pFindWidget == nullptr) {
@@ -410,23 +405,6 @@ void DocSheetPDF::docBasicInfo(stFileInfo &info)
     DocummentProxy *docProxy = m_browser->GetDocProxy();
     if (docProxy) {
         docProxy->docBasicInfo(info);
-    }
-}
-
-bool DocSheetPDF::getAutoPlaySlideStatu()
-{
-    DocummentProxy *docProxy = m_browser->GetDocProxy();
-    if (docProxy) {
-        return docProxy->getAutoPlaySlideStatu();
-    }
-    return false;
-}
-
-void DocSheetPDF::setAutoPlaySlide(bool autoplay, int timemsec)
-{
-    DocummentProxy *docProxy = m_browser->GetDocProxy();
-    if (docProxy) {
-        return docProxy->setAutoPlaySlide(autoplay, timemsec);
     }
 }
 
@@ -537,27 +515,6 @@ bool DocSheetPDF::closeMagnifier()
     DocummentProxy *docProxy = m_browser->GetDocProxy();
     if (docProxy) {
         return docProxy->closeMagnifier();
-    }
-    return false;
-}
-
-bool DocSheetPDF::showSlideModel()
-{
-    m_bOldState = m_sidebar->isVisible();
-    m_sidebar->setVisible(false);
-
-    DocummentProxy *docProxy = m_browser->GetDocProxy();
-    if (docProxy) {
-        return docProxy->showSlideModel();
-    }
-    return false;
-}
-
-bool DocSheetPDF::exitSlideModel()
-{
-    DocummentProxy *docProxy = m_browser->GetDocProxy();
-    if (docProxy) {
-        return docProxy->exitSlideModel();
     }
     return false;
 }
