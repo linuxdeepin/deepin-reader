@@ -114,7 +114,7 @@ void SlideWidget::mouseMoveEvent(QMouseEvent *event)
     DWidget::mouseMoveEvent(event);
     m_slidePlayWidget->showControl();
 }
-(
+
 void SlideWidget::setWidgetState(bool full)
 {
     if (m_parentIsDestroyed)
@@ -169,7 +169,7 @@ void SlideWidget::onNextBtnClicked()
 
 void SlideWidget::onExitBtnClicked()
 {
-    m_docSheet->closeSlideWidget();
+    //m_docSheet->closeSlideWidget();
 }
 
 void SlideWidget::playImage()
@@ -182,7 +182,7 @@ void SlideWidget::playImage()
         m_imageAnimation->setStartValue(0);
         m_imageAnimation->setEndValue(0 - width());
 
-        m_docSheet->getImageMax(m_preInde(x, limage, maxPix);
+        m_docSheet->getImageMax(m_preIndex, limage, maxPix);
         m_docSheet->getImageMax(m_curPageIndex, rimage, maxPix);
 
     } else {
