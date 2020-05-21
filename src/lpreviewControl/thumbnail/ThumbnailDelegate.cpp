@@ -69,7 +69,6 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
             }
             painter->drawText(rect.x(), rect.bottom() + 4, rect.width(), option.rect.bottom() - rect.bottom(), Qt::AlignHCenter | Qt::AlignTop, QString::number(index.row() + 1));
             painter->restore();
-            //drawMark
             drawBookMark(painter, rect, bShowBookMark);
         }
     }
@@ -83,15 +82,8 @@ QSize ThumbnailDelegate::sizeHint(const QStyleOptionViewItem &option, const QMod
 void ThumbnailDelegate::drawBookMark(QPainter *painter, const QRect &rect, bool visible) const
 {
     if (visible) {
-        QString ssPath = ":/resources/image/";
-        DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
-        if (themeType == DGuiApplicationHelper::LightType)
-            ssPath += "light";
-        else if (themeType == DGuiApplicationHelper::DarkType)
-            ssPath += "dark";
-
-        ssPath += "/checked/bookmarkbig_checked_light.svg";
-        QPixmap pixmap(Utils::renderSVG(ssPath, QSize(36, 36)));
+        QString iconPath = ":/custom/bookmark.svg";
+        QPixmap pixmap(Utils::renderSVG(iconPath, QSize(36, 36)));
         painter->drawPixmap(rect.right() - 42, rect.y(), pixmap);
     }
 }

@@ -32,24 +32,20 @@ void BookMarkButton::paintEvent(QPaintEvent *e)
 {
     QPainter painter;
     painter.begin(this);
-    QString ssPath = ":/resources/image/";
-    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
-    if (themeType == DGuiApplicationHelper::LightType)
-        ssPath += "light";
-    else if (themeType == DGuiApplicationHelper::DarkType)
-        ssPath += "dark";
+
+    QString iconPath;
     if (isclicked) {
-        ssPath += "/checked/bookmarkbig_checked_light.svg";
+        iconPath += ":/custom/bookmark.svg";
     } else {
         if (ispressed) {
-            ssPath += "/press/bookmarkbig_press_light.svg";
+            iconPath += ":/custom/bookmark_pressed.svg";
         } else {
             if (ishovered) {
-                ssPath += "/hover/bookmarkbig_hover_light.svg";
+                iconPath += ":/custom/bookmark_hover.svg";
             }
         }
     }
-    QPixmap pixmap(Utils::renderSVG(ssPath, QSize(36, 36)));
+    QPixmap pixmap(Utils::renderSVG(iconPath, QSize(36, 36)));
     painter.setRenderHints(QPainter::SmoothPixmapTransform);
     painter.drawPixmap(0, 0, this->width(), this->height(), pixmap);
     painter.end();

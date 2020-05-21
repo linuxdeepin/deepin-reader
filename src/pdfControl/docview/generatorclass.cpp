@@ -110,7 +110,7 @@ void MagnifierWidget::paintEvent(QPaintEvent *event)
     qpainter.setPen(QPen(QColor(255, 255, 255), 0));
     qpainter.setBrush(brush);
     qpainter.drawEllipse(smallcirclex, smallcircley, m_magnifiermapradius * 2, m_magnifiermapradius * 2);
-    QPixmap pix(":/resources/image/maganifier.svg");
+    QPixmap pix(":/custom/maganifier.svg");
     const qreal ratio = qApp->devicePixelRatio();
     pix.setDevicePixelRatio(ratio);
     pix = pix.scaled(234, 234, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);

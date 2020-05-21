@@ -161,17 +161,6 @@ void PageBase::paintEvent(QPaintEvent *event)
     for (int i = 0; i < d->paintrects.size(); i++) {
         qpainter.drawRect(d->paintrects[i]);
     }
-
-//    foreach (ICONANNOTATION annote, d->m_iconannotationlist) {
-//        double rx, ry;
-//        rx = annote.position.x() * d->m_scale * d->m_imagewidth - ICONANNOTE_WIDTH / 2;
-//        ry = annote.position.y() * d->m_scale * d->m_imageheight - ICONANNOTE_HEIGHT / 2;
-
-//        QPointF pt(rx, ry);
-
-//        QPixmap pixtag(Utils::renderSVG(":/resources/image/iconannotation.svg", QSize(46, 46)));
-//        qpainter.drawPixmap(pt, pixtag);
-//    }
 }
 
 bool PageBase::setSelectTextStyle(QColor paintercolor, QColor pencolor, int penwidth)

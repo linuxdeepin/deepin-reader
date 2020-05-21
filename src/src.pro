@@ -37,8 +37,7 @@ SOURCES += \
     uiframe/DocSheet.cpp
 
 RESOURCES +=         \
-    icons.qrc \
-    image.qrc
+    ../resources/resources.qrc
 
 HEADERS +=\
     application.h \
@@ -62,17 +61,11 @@ target.path = $$INSTROOT$$BINDIR
 desktop.path = $$INSTROOT$$APPDIR
 desktop.files = $$PWD/deepin-reader.desktop
 
-icon_files.path = /usr/share/icons/hicolor/scalable/apps
-icon_files.files = $$PWD/icons/deepin/builtin/deepin-reader.svg
-
-INSTALLS += target desktop icon_files
+INSTALLS += target desktop
 
 TRANSLATIONS += \
     ../translations/deepin-reader_en_US.ts\
     ../translations/deepin-reader_zh_CN.ts
-
-SUBDIRS += \
-    src
 
 CONFIG(release, debug|release) {
     #遍历目录中的ts文件，调用lrelease将其生成为qm文件

@@ -401,8 +401,8 @@ bool CentralDocPage::saveAsCurrent()
 
             if (saveFilePath.endsWith("/.pdf")) {
                 DDialog dlg("", tr("Invalid file name"));
-                QIcon icon(PF::getIconPath("exception-logo"));
-                dlg.setIcon(icon /*QIcon(":/resources/exception-logo.svg")*/);
+                QIcon icon(":/custom/exception-logo");
+                dlg.setIcon(icon);
                 dlg.addButtons(QStringList() << tr("OK"));
                 QMargins mar(0, 0, 0, 30);
                 dlg.setContentLayoutContentsMargins(mar);
@@ -421,8 +421,8 @@ bool CentralDocPage::saveAsCurrent()
 
             if (saveFilePath.endsWith("/.djvu")) {
                 DDialog dlg("", tr("Invalid file name"));
-                QIcon icon(PF::getIconPath("exception-logo"));
-                dlg.setIcon(icon /*QIcon(":/resources/exception-logo.svg")*/);
+                QIcon icon(":/custom/exception-logo");
+                dlg.setIcon(icon);
                 dlg.addButtons(QStringList() << tr("OK"));
                 QMargins mar(0, 0, 0, 30);
                 dlg.setContentLayoutContentsMargins(mar);

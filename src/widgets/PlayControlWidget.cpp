@@ -141,10 +141,10 @@ void PlayControlWidget::changePlayStatus()
     m_bautoplaying = !m_bautoplaying;
     if (m_bautoplaying) {
         strName = "suspend_normal";
-        m_pbtnplay->setIcon(PF::getIcon(Pri::g_module + strName));//QIcon(Utils::renderSVG(PF::getImagePath("suspend_normal", Pri::g_icons), QSize(36, 36))));
+        m_pbtnplay->setIcon(PF::getIcon(Pri::g_module + strName));
     } else {
         strName = "play_normal";
-        m_pbtnplay->setIcon(PF::getIcon(Pri::g_module + strName));//QIcon(Utils::renderSVG(PF::getImagePath("play_normal", Pri::g_icons), QSize(36, 36))));
+        m_pbtnplay->setIcon(PF::getIcon(Pri::g_module + strName));
     }
 }
 
