@@ -339,24 +339,24 @@ QString PagePdf::addHighlightAnnotation(const QColor &color)
     double curheight = d->m_imageheight;
     if (d->m_selecttextendword < 1 || d->m_selecttextendword < 0 || d->m_selecttextendword > d->m_words.size() ||
             d->m_selecttextstartword > d->m_words.size())return "";
-
-    qreal averangeheight = d->m_words.at(d->m_selecttextstartword).rect.height();
-    for (int i = d->m_selecttextstartword; i <= d->m_selecttextendword; ++i) {
-        if (d->m_words.at(i).rect.height() < averangeheight && d->m_words.at(i).rect.height() > 0) {
-            averangeheight = d->m_words.at(i).rect.height();
-        }
-    }
+    //处理高亮文字矩形大小不一致问题，统一采用最小矩形     之前讨论的结果
+    //现在改成按照实际范围添加高亮       2020-5-21    add by  dxh
+//    qreal averangeheight = d->m_words.at(d->m_selecttextstartword).rect.height();
+//    for (int i = d->m_selecttextstartword; i <= d->m_selecttextendword; ++i) {
+//        if (d->m_words.at(i).rect.height() < averangeheight && d->m_words.at(i).rect.height() > 0) {
+//            averangeheight = d->m_words.at(i).rect.height();
+//        }
+//    }
     double smallestrx = 1.0, largestx = 0.0;
     double smallestry = 1.0, largestry = 0.0;
     for (int i = d->m_selecttextstartword; i <= d->m_selecttextendword; ++i) {
-
         rec = d->m_words.at(i).rect;
-        //处理高亮文字矩形大小不一致问题，统一采用最小矩形
-
-        if (rec.height() > averangeheight) {
-            rec.setY(rec.y() + (rec.height() - averangeheight) / 2.0);
-            rec.setHeight(averangeheight);
-        }
+        //处理高亮文字矩形大小不一致问题，统一采用最小矩形     之前讨论的结果
+        //现在改成按照实际范围添加高亮       2020-5-21    add by  dxh
+//        if (rec.height() > averangeheight) {
+//            rec.setY(rec.y() + (rec.height() - averangeheight) / 2.0);
+//            rec.setHeight(averangeheight);
+//        }
         recboundary.setTopLeft(QPointF(rec.left() / curwidth,
                                        rec.top() / curheight));
         recboundary.setTopRight(QPointF(rec.right() / curwidth,
