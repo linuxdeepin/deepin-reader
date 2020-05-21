@@ -54,6 +54,7 @@ private slots:
 protected:
     void paintEvent(QPaintEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
 
 private:
     int m_curPageIndex = 0;

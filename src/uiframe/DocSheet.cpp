@@ -433,7 +433,7 @@ void DocSheet::openSlideWidget()
 void DocSheet::closeSlideWidget()
 {
     if (m_slideWidget) {
-        delete m_slideWidget;
+        m_slideWidget->close();
         m_slideWidget = nullptr;
     }
 }

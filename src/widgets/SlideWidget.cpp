@@ -48,6 +48,7 @@ void SlideWidget::initControl()
     m_preIndex = m_curPageIndex;
 
     setMouseTracking(true);
+    setAttribute(Qt::WA_DeleteOnClose);
     m_docSheet->setCurrentState(SLIDER_SHOW);
     setWidgetState(true);
     parentWidget()->stackUnder(this);
@@ -74,7 +75,7 @@ void SlideWidget::initImageControl()
     m_imageTimer = new QTimer(this);
     m_imageTimer->setInterval(3000);
     connect(m_imageTimer, &QTimer::timeout, this, &SlideWidget::onImageShowTimeOut);
-    onPlayBtnClicked();
+    m_imageTimer->start();
 
     m_imageAnimation = new QPropertyAnimation(this, "");
     m_imageAnimation->setEasingCurve(QEasingCurve::Linear);
@@ -224,4 +225,12 @@ QPixmap SlideWidget::drawImage(const QImage &srcImage)
     painter.setRenderHints(QPainter::SmoothPixmapTransform);
     painter.drawImage((pixmap.width() - srcImage.width()) / 2.0, (pixmap.height() - srcImage.height()) / 2.0, srcImage);
     return pixmap;
+}
+
+void SlideWidget::mousePressEvent(QMouseEvent *event)
+{
+    DWidget::mousePressEvent(event);
+    if (event->button() == Qt::RightButton) {
+        onExitBtnClicked();
+    }
 }
