@@ -228,6 +228,11 @@ void DocSheetDJVU::docBasicInfo(stFileInfo &info)
 
 }
 
+QString DocSheetDJVU::filter()
+{
+    return "Djvu File (*.djvu)";
+}
+
 void DocSheetDJVU::onBrowserPageChanged(int page)
 {
     if (m_operation.currentPage != page) {

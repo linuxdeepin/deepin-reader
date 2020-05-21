@@ -138,12 +138,6 @@ void DocSheet::setScaleFactor(qreal scaleFactor)
     m_operation.scaleFactor = scaleFactor;
 }
 
-void DocSheet::setSidebarIndex(int index)
-{
-    qDebug() << "unrealized";
-    m_operation.sidebarIndex = index;
-}
-
 void DocSheet::setRotation(Dr::Rotation rotation)
 {
     qDebug() << "unrealized";

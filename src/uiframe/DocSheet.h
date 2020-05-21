@@ -25,7 +25,7 @@ class DocSheet : public Dtk::Widget::DSplitter
     Q_OBJECT
     Q_DISABLE_COPY(DocSheet)
     friend class Database;
-    friend class SheetSideBar;
+    friend class SheetSidebar;
 public:
     explicit DocSheet(Dr::FileType type, QString filePath, Dtk::Widget::DWidget *parent = nullptr);
 
@@ -72,8 +72,6 @@ public:
     virtual void setScaleMode(Dr::ScaleMode mode);
 
     virtual void setScaleFactor(qreal scaleFactor);     //base is 1 ;设置后自动取消自适应
-
-    virtual void setSidebarIndex(int index);
 
     virtual void setRotation(Dr::Rotation rotation);
 

@@ -139,7 +139,7 @@ void SheetSidebar::onBtnClicked(int index)
     m_stackLayout->setCurrentIndex(index);
     adaptWindowSize(m_scale);
     if (m_stackLayout->currentWidget() != m_searchWidget) {
-        m_sheet->setSidebarIndex(index);
+        m_sheet->m_operation.sidebarIndex = index;
     }
 }
 

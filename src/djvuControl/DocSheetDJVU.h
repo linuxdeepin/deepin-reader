@@ -60,6 +60,8 @@ public:
 
     void docBasicInfo(stFileInfo &info)override;
 
+    QString filter()override;
+
 private slots:
     void onBrowserPageChanged(int page);
 
