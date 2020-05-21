@@ -4,6 +4,9 @@ TRANSLATIONS += \
     ./translations/deepin-reader_en_US.ts\
     ./translations/deepin-reader_zh_CN.ts
 
+SUBDIRS += \
+    src
+
 CONFIG(release, debug|release) {
     #遍历目录中的ts文件，调用lrelease将其生成为qm文件
     TRANSLATIONFILES= $$files($$PWD/translations/*.ts)
@@ -17,8 +20,6 @@ CONFIG(release, debug|release) {
     INSTALLS += dtk_translations
 }
 
-SUBDIRS += \
-    src
 
 #QMAKE_CFLAGS += -g -O0
 #QMAKE_CXXFLAGS += -g -O0
