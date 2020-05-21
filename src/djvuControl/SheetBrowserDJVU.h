@@ -34,6 +34,8 @@ public:
 
     void setCurrentPage(int page);
 
+    bool getImage(int index, QImage &image, double width, double height);
+
     bool getImageMax(int index, QImage &image, double max);
 
     void openMagnifier();

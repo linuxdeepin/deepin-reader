@@ -34,6 +34,7 @@
 #include "pdfControl/docview/docummentproxy.h"
 #include "widgets/FindWidget.h"
 #include "djvuControl/SheetBrowserDJVU.h"
+#include "business/PrintManager.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -199,7 +200,8 @@ void DocSheet::addSelectedTextHightlightAnnotation()
 
 void DocSheet::print()
 {
-    qDebug() << "unrealized";
+    PrintManager p(this);
+    p.showPrintDialog(this);
 }
 
 int DocSheet::pagesNumber()
@@ -254,12 +256,6 @@ void DocSheet::getAllAnnotation(QList<stHighlightContent> &)
 }
 
 bool DocSheet::getImageMax(int, QImage &, double)
-{
-    qDebug() << "unrealized";
-    return false;
-}
-
-bool DocSheet::getImagePoint(int pagenum, QImage &image, double scaleFactor, QPoint point)
 {
     qDebug() << "unrealized";
     return false;

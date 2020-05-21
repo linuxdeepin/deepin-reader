@@ -97,15 +97,13 @@ public:
 
     virtual void addSelectedTextHightlightAnnotation();       //对选中文字添加高亮注释
 
-    virtual bool getImage(int pagenum, QImage &image, double width, double height);
+    virtual bool getImage(int index, QImage &image, double width, double height);
 
-    virtual bool getImageMax(int pagenum, QImage &image, double max);
-
-    virtual bool getImagePoint(int pagenum, QImage &image, double scaleFactor, QPoint point);   //返回该坐标的一个100*100的图像
+    virtual bool getImageMax(int index, QImage &image, double max);
 
     virtual QString filter();
 
-    virtual void print();
+    void print();
 
     DocOperation operation();
 

@@ -53,10 +53,10 @@ void TitleMenu::onCurSheetChanged(DocSheet *sheet)
             a->setDisabled(true);
             continue;
         }
-        if (sheet->type() == Dr::DjVu && a->text() == tr("Print")) {
-            a->setDisabled(true);
-            continue;
-        }
+//        if (sheet->type() == Dr::DjVu && a->text() == tr("Print")) {
+//            a->setDisabled(true);
+//            continue;
+//        }
 
         a->setDisabled(false);
 

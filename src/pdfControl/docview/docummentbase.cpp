@@ -1647,75 +1647,75 @@ bool DocummentBase::setBookMarkState(int page, bool state)
     return d->m_pages.at(page)->setBookMarkState(state);
 }
 
-bool DocummentBase::getImage(int pagenum, QImage &image, double width, double height)
+bool DocummentBase::getImage(int index, QImage &image, double width, double height)
 {
     Q_D(DocummentBase);
-    if (pagenum < 0 || pagenum >= d->m_pages.size()) {
+    if (index < 0 || index >= d->m_pages.size()) {
         return false;
     }
-    qreal pixelratiof = d->m_pages.at(pagenum)->devicePixelRatioF();
-    if (!d->m_pages.at(pagenum)->getImage(image, width * pixelratiof, height * pixelratiof)) {
+    qreal pixelratiof = d->m_pages.at(index)->devicePixelRatioF();
+    if (!d->m_pages.at(index)->getImage(image, width * pixelratiof, height * pixelratiof)) {
         return false;
     }
-    image.setDevicePixelRatio(d->m_pages.at(pagenum)->devicePixelRatioF());
+    image.setDevicePixelRatio(d->m_pages.at(index)->devicePixelRatioF());
     return true;
 }
 
-bool DocummentBase::getImage(int pagenum, QImage &image, double width)
+bool DocummentBase::getImage(int index, QImage &image, double width)
 {
     Q_D(DocummentBase);
-    if (pagenum < 0 || pagenum >= d->m_pages.size()) {
+    if (index < 0 || index >= d->m_pages.size()) {
         return false;
     }
 
-    double height = d->m_pages.at(pagenum)->getOriginalImageHeight() / d->m_pages.at(pagenum)->getOriginalImageWidth() * width;
+    double height = d->m_pages.at(index)->getOriginalImageHeight() / d->m_pages.at(index)->getOriginalImageWidth() * width;
 
     if (height > width * 2)
         height = 2 * width;
 
-    qreal pixelratiof = d->m_pages.at(pagenum)->devicePixelRatioF();
+    qreal pixelratiof = d->m_pages.at(index)->devicePixelRatioF();
 
-    if (!d->m_pages.at(pagenum)->getImage(image, width * pixelratiof, height * pixelratiof)) {
+    if (!d->m_pages.at(index)->getImage(image, width * pixelratiof, height * pixelratiof)) {
         return false;
     }
-    image.setDevicePixelRatio(d->m_pages.at(pagenum)->devicePixelRatioF());
+    image.setDevicePixelRatio(d->m_pages.at(index)->devicePixelRatioF());
     return true;
 }
 
-bool DocummentBase::getImageMax(int pagenum, QImage &image, double max)
+bool DocummentBase::getImageMax(int index, QImage &image, double max)
 {
     Q_D(DocummentBase);
-    if (pagenum < 0 || pagenum >= d->m_pages.size()) {
+    if (index < 0 || index >= d->m_pages.size()) {
         return false;
     }
 
     double height = 0;
     double width  = 0;
 
-    double oriHeight = d->m_pages.at(pagenum)->getOriginalImageHeight();
-    double oriWidth  = d->m_pages.at(pagenum)->getOriginalImageWidth();
+    double oriHeight = d->m_pages.at(index)->getOriginalImageHeight();
+    double oriWidth  = d->m_pages.at(index)->getOriginalImageWidth();
 
     if (oriHeight > oriWidth) {
         height = max;
-        double ratio = d->m_pages.at(pagenum)->getOriginalImageWidth() / d->m_pages.at(pagenum)->getOriginalImageHeight();
+        double ratio = d->m_pages.at(index)->getOriginalImageWidth() / d->m_pages.at(index)->getOriginalImageHeight();
         if (ratio < 0.5)
             ratio = 0.5;
         width  =  ratio * height;
     } else {
         width  = max;
-        double ratio = d->m_pages.at(pagenum)->getOriginalImageHeight() / d->m_pages.at(pagenum)->getOriginalImageWidth();
+        double ratio = d->m_pages.at(index)->getOriginalImageHeight() / d->m_pages.at(index)->getOriginalImageWidth();
         if (ratio < 0.5)
             ratio = 0.5;
         height = ratio * width;
     }
 
-    qreal pixelratiof = d->m_pages.at(pagenum)->devicePixelRatioF();
+    qreal pixelratiof = d->m_pages.at(index)->devicePixelRatioF();
 
-    if (!d->m_pages.at(pagenum)->getImage(image, width * pixelratiof, height * pixelratiof)) {
+    if (!d->m_pages.at(index)->getImage(image, width * pixelratiof, height * pixelratiof)) {
         return false;
     }
 
-    image.setDevicePixelRatio(d->m_pages.at(pagenum)->devicePixelRatioF());
+    image.setDevicePixelRatio(d->m_pages.at(index)->devicePixelRatioF());
 
     return true;
 }

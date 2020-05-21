@@ -69,10 +69,6 @@ void SheetBrowserDJVU::loadPages(DocOperation &operation)
 
 void SheetBrowserDJVU::loadMouseShape(DocOperation &operation)
 {
-    if (m_magnifierLabel) {
-        closeMagnifier();
-    }
-
     if (Dr::MouseShapeHand == operation.mouseShape) {
         setDragMode(QGraphicsView::ScrollHandDrag);
     } else if (Dr::MouseShapeNormal == operation.mouseShape) {
@@ -187,6 +183,7 @@ void SheetBrowserDJVU::resizeEvent(QResizeEvent *event)
     if (hasLoaded()) {
         sigSizeChanged();
     }
+
     QGraphicsView::resizeEvent(event);
 }
 
@@ -268,6 +265,15 @@ void SheetBrowserDJVU::setCurrentPage(int page)
     verticalScrollBar()->setValue(m_items.at(page - 1)->pos().y());
 }
 
+bool SheetBrowserDJVU::getImage(int index, QImage &image, double width, double height)
+{
+    if (m_items.count() <= index)
+        return false;
+
+    image = m_items.at(index)->getImageFit(width, height);
+    return true;
+}
+
 bool SheetBrowserDJVU::getImagePoint(QPoint viewPoint, double scaleFactor, QImage &image)
 {
     SheetBrowserDJVUItem *item  = static_cast<SheetBrowserDJVUItem *>(itemAt(viewPoint));
@@ -304,8 +310,8 @@ void SheetBrowserDJVU::openMagnifier()
         m_magnifierLabel->setWindowFlag(Qt::FramelessWindowHint);
         m_magnifierLabel->resize(234, 234);
     }
-    m_magnifierLabel->show();
 
+    m_magnifierLabel->show();
     setDragMode(QGraphicsView::NoDrag);
     setMouseTracking(true);
     setCursor(QCursor(Qt::BlankCursor));

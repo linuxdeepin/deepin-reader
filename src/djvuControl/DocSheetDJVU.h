@@ -48,6 +48,8 @@ public:
 
     void setScaleMode(Dr::ScaleMode mode)override;
 
+    bool getImage(int index, QImage &image, double width, double height) override;
+
     bool getImageMax(int index, QImage &image, double max)override;
 
     bool fileChanged()override;

@@ -84,6 +84,11 @@ QImage SheetBrowserDJVUItem::getImage(double scaleFactor, Dr::Rotation rotation)
     return m_page->render(72, 72, rotation, scaleFactor);
 }
 
+QImage SheetBrowserDJVUItem::getImageFit(int width, int height)
+{
+    return m_page->renderFit(72, 72, width, height);
+}
+
 QImage SheetBrowserDJVUItem::getImageMax(double max)
 {
     qreal scaleFactor = max / qMax(m_page->size().height(), m_page->size().width());

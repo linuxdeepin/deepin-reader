@@ -33,7 +33,6 @@
 #include "pdfControl/docview/docummentproxy.h"
 #include "widgets/FindWidget.h"
 #include "djvuControl/SheetBrowserDJVU.h"
-#include "business/PrintManager.h"
 
 DocSheetPDF::DocSheetPDF(QString filePath, DWidget *parent)
     : DocSheet(Dr::PDF, filePath, parent)
@@ -215,29 +214,35 @@ void DocSheetPDF::showNoteWidget(int page, const QString &uuid, const int &type)
 
 void DocSheetPDF::setLayoutMode(Dr::LayoutMode mode)
 {
-    m_operation.layoutMode = mode;
-    if (Dr::SinglePageMode == mode)
-        m_browser->setDoubleShow(false);
-    else if (Dr::TwoPagesMode == mode)
-        m_browser->setDoubleShow(true);
-    else
-        return;
+    if (mode >= 0 && mode < Dr::NumberOfLayoutModes) {
+        m_operation.layoutMode = mode;
+        if (Dr::SinglePageMode == mode)
+            m_browser->setDoubleShow(false);
+        else if (Dr::TwoPagesMode == mode)
+            m_browser->setDoubleShow(true);
+    }
 }
 
 void DocSheetPDF::setMouseShape(Dr::MouseShape shape)
 {
-    m_operation.mouseShape = shape;
-    quitMagnifer();
-    if (shape == Dr::MouseShapeNormal)
-        m_browser->setMouseDefault();
-    else if (shape == Dr::MouseShapeHand)
-        m_browser->setMouseHand();
+    if (shape >= 0 && shape < Dr::NumberOfMouseShapes) {
+        quitMagnifer();
+        m_operation.mouseShape = shape;
+
+        if (shape == Dr::MouseShapeNormal)
+            m_browser->setMouseDefault();
+        else if (shape == Dr::MouseShapeHand)
+            m_browser->setMouseHand();
+        emit sigFileChanged(this);
+    }
 }
 
 void DocSheetPDF::setScaleMode(Dr::ScaleMode mode)
 {
-    m_operation.scaleMode = mode;
-    m_browser->setFit(mode);
+    if (mode >= 0 && mode < Dr::NumberOfScaleModes) {
+        m_operation.scaleMode = mode;
+        m_browser->setFit(mode);
+    }
 }
 
 void DocSheetPDF::setScaleFactor(qreal scaleFactor)
@@ -296,12 +301,6 @@ void DocSheetPDF::highlightSelectedText()
 void DocSheetPDF::addSelectedTextHightlightAnnotation()
 {
     m_browser->addSelectedTextHightlightAnnotation();
-}
-
-void DocSheetPDF::print()
-{
-    PrintManager p(this);
-    p.showPrintDialog(this);
 }
 
 void DocSheetPDF::onFindOperation(int type, QString text)
@@ -401,11 +400,11 @@ int DocSheetPDF::currentIndex()
     return -1;
 }
 
-bool DocSheetPDF::getImage(int pagenum, QImage &image, double width, double height)
+bool DocSheetPDF::getImage(int index, QImage &image, double width, double height)
 {
     DocummentProxy *docProxy = m_browser->GetDocProxy();
     if (docProxy) {
-        return docProxy->getImage(pagenum, image, width, height);
+        return docProxy->getImage(index, image, width, height);
     }
     return false;
 }
@@ -452,11 +451,11 @@ void DocSheetPDF::getAllAnnotation(QList<stHighlightContent> &listres)
     }
 }
 
-bool DocSheetPDF::getImageMax(int pagenum, QImage &image, double max)
+bool DocSheetPDF::getImageMax(int index, QImage &image, double max)
 {
     DocummentProxy *docProxy = m_browser->GetDocProxy();
     if (docProxy) {
-        return docProxy->getImageMax(pagenum, image, max);
+        return docProxy->getImageMax(index, image, max);
     }
     return false;
 }

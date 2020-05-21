@@ -79,8 +79,6 @@ public:
 
     void addSelectedTextHightlightAnnotation()override;       //对选中文字添加高亮注释
 
-    void print()override;
-
     Outline outline() override;
 
     int pagesNumber() override;
@@ -94,8 +92,8 @@ public:
     bool showSlideModel() override;
     bool exitSlideModel() override;
     bool getAutoPlaySlideStatu() override;
-    bool getImage(int pagenum, QImage &image, double width, double height) override;
-    bool getImageMax(int pagenum, QImage &image, double max) override;
+    bool getImage(int index, QImage &image, double width, double height) override;
+    bool getImageMax(int index, QImage &image, double max) override;
 
     void jumpToHighLight(const QString &uuid, int ipage) override;
     void docBasicInfo(stFileInfo &info) override;
