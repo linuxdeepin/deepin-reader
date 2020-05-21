@@ -3,6 +3,7 @@
 #include "SheetBrowserDJVU.h"
 
 #include <QDebug>
+#include <QFileInfo>
 
 DocSheetDJVU::DocSheetDJVU(QString filePath, QWidget *parent) : DocSheet(Dr::DjVu, filePath, parent)
 {
@@ -199,6 +200,32 @@ bool DocSheetDJVU::closeMagnifier()
 {
     if (m_browser)
         m_browser->closeMagnifier();
+}
+
+void DocSheetDJVU::docBasicInfo(stFileInfo &info)
+{
+    info.strFilepath = filePath();
+
+    QFileInfo fileInfo(filePath());
+    info.size = fileInfo.size();
+    info.CreateTime = fileInfo.birthTime();
+    info.ChangeTime = fileInfo.lastModified();
+    info.strAuther = fileInfo.owner();
+    info.strFilepath = fileInfo.filePath();
+
+    if (m_browser) {
+        info.strFormat = QString("djvu");
+//        info.boptimization = document->isLinearized();
+//        info.strKeyword = document->keywords();
+//        info.strTheme = document->title();
+//        info.strProducter = document->producer();
+//        info.strCreater = document->creator();
+//        info.bsafe = document->isEncrypted();
+        info.iWidth = m_browser->maxWidth();
+        info.iHeight = m_browser->maxHeight();
+        info.iNumpages = m_browser->allPages();
+    }
+
 }
 
 void DocSheetDJVU::onBrowserPageChanged(int page)

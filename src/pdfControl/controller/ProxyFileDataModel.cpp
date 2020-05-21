@@ -22,7 +22,7 @@
 #include "pdfControl/SheetBrowserPDFPrivate.h"
 #include "MsgHeader.h"
 #include "ProxyData.h"
-#include "DocSheet.h"
+#include "pdfControl/DocSheetPDF.h"
 
 ProxyFileDataModel::ProxyFileDataModel(QObject *parent) : QObject(parent)
 {

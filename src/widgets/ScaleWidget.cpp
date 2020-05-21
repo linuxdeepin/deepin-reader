@@ -180,6 +180,8 @@ void ScaleWidget::setSheet(DocSheet *sheet)
 
         m_scaleComboBox->setCurrentText(sCurText);
 
+        m_scaleComboBox->lineEdit()->setCursorPosition(0);
+
     } else if (Dr::PDF == m_sheet->type()) {
         double dMax = m_sheet->getMaxZoomratio();
 

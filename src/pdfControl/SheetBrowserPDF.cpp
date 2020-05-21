@@ -25,7 +25,7 @@
 #include "controller/ProxyFileDataModel.h"
 #include "controller/ProxyViewDisplay.h"
 #include "pdfControl/docview/docummentproxy.h"
-#include "DocSheet.h"
+#include "pdfControl/DocSheetPDF.h"
 
 void SheetBrowserPDF::setDoubleShow(bool isShow)
 {
@@ -55,7 +55,7 @@ void SheetBrowserPDF::rotateRight()
     emit sigRotateChanged(rotate);
 }
 
-SheetBrowserPDF::SheetBrowserPDF(DocSheet *sheet, DWidget *parent)
+SheetBrowserPDF::SheetBrowserPDF(DocSheetPDF *sheet, DWidget *parent)
     : CustomWidget(parent), d_ptr(new SheetBrowserPDFPrivate(sheet, this))
 {
     setMouseTracking(true);  //  接受 鼠标滑动事件

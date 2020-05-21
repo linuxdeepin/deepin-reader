@@ -9,7 +9,7 @@
  * @brief   右键  默认菜单操作， 搜索、添加书签、第一页、上一页、下一页、最后一页
  */
 
-class DocSheet;
+class DocSheetPDF;
 class DefaultOperationMenu : public CustomMenu
 {
     Q_OBJECT
@@ -21,7 +21,7 @@ public:
     ~DefaultOperationMenu();
 
 public:
-    void execMenu(DocSheet *sheet, const QPoint &, const int &);
+    void execMenu(DocSheetPDF *sheet, const QPoint &, const int &);
     inline void setClickpoint(const QPoint &pt)
     {
         m_pointclicked = pt;
@@ -54,7 +54,7 @@ private:
     QAction *m_pEndPage = nullptr;
     QPoint m_pointclicked;
     QPoint m_showPoint;
-    QPointer<DocSheet> m_sheet;
+    QPointer<DocSheetPDF> m_sheet;
 };
 
 #endif // DEFAULTOPERATIONMENU_H

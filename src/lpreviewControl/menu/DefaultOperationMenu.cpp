@@ -2,7 +2,7 @@
 
 #include "business/AppInfo.h"
 #include "pdfControl/docview/docummentproxy.h"
-#include "DocSheet.h"
+#include "pdfControl/DocSheetPDF.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
 
@@ -30,7 +30,7 @@ DefaultOperationMenu::~DefaultOperationMenu()
         delete m_pEndPage;
 }
 
-void DefaultOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, const int &nClickPage)
+void DefaultOperationMenu::execMenu(DocSheetPDF *sheet, const QPoint &showPoint, const int &nClickPage)
 {
     m_sheet = sheet;
 

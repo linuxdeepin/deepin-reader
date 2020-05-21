@@ -42,6 +42,10 @@ public:
 
     void closeMagnifier();
 
+    int maxWidth();
+
+    int maxHeight();
+
 signals:
     void sigPageChanged(int page);
 

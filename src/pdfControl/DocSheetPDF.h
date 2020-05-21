@@ -43,11 +43,7 @@ public:
 
     void rotateRight()override;
 
-    void setFileChanged(bool hasChanged)override;
-
     void setBookMark(int page, int state)override;
-
-    void showNoteWidget(int page, const QString &uuid, const int &type = NOTE_HIGHLIGHT)override;
 
     void setLayoutMode(Dr::LayoutMode mode)override;
 
@@ -56,8 +52,6 @@ public:
     void setScaleMode(Dr::ScaleMode mode) override;
 
     void setScaleFactor(qreal scaleFactor) override;
-
-    bool isDoubleShow()override;
 
     QString filter()override;
 
@@ -80,29 +74,50 @@ public:
     Outline outline() override;
 
     int pagesNumber() override;
+
     int currentIndex() override;
-    int pointInWhichPage(QPoint pos) override;
+
     int label2pagenum(QString label) override;
 
     bool isOpen() override;
+
     bool haslabel() override;
+
     bool closeMagnifier() override;
+
     bool showSlideModel() override;
+
     bool exitSlideModel() override;
+
     bool getAutoPlaySlideStatu() override;
+
     bool getImage(int index, QImage &image, double width, double height) override;
+
     bool getImageMax(int index, QImage &image, double max) override;
 
     void jumpToHighLight(const QString &uuid, int ipage) override;
+
     void docBasicInfo(stFileInfo &info) override;
+
     void setAutoPlaySlide(bool autoplay, int timemsec = 3000) override;
+
     void getAllAnnotation(QList<stHighlightContent> &listres) override;
+
     void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage = 0) override;
 
     double getMaxZoomratio() override;
 
     QString pagenum2label(int index) override;
+
     QString addIconAnnotation(const QPoint &pos, const QColor &color = Qt::yellow, TextAnnoteType_Em type = TextAnnoteType_Note) override;
+
+    int pointInWhichPage(QPoint pos);
+
+    void setFileChanged(bool hasChanged);
+
+    void showNoteWidget(int page, const QString &uuid, const int &type = NOTE_HIGHLIGHT);
+
+    bool isDoubleShow();
 
 private slots:
     void SlotFileOpenResult(const QString &, const bool &);

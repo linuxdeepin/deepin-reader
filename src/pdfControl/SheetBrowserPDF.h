@@ -29,7 +29,7 @@ class FindWidget;
  * @brief The SheetBrowserPDF class
  * @brief   文档显示区域
  */
-class DocSheet;
+
 class DocSheetPDF;
 class SheetBrowserPDFPrivate;
 class SheetBrowserPDF : public CustomWidget
@@ -37,7 +37,7 @@ class SheetBrowserPDF : public CustomWidget
     Q_OBJECT
     Q_DISABLE_COPY(SheetBrowserPDF)
 public:
-    explicit SheetBrowserPDF(DocSheet *sheet, DWidget *parent = nullptr);
+    explicit SheetBrowserPDF(DocSheetPDF *sheet, DWidget *parent = nullptr);
 
     ~SheetBrowserPDF() override;
 
@@ -121,7 +121,7 @@ private:
     void setDoubleShow(bool isShow);
 
 private:
-    friend DocSheetPDF;
+    friend class DocSheetPDF;
     SheetBrowserPDFPrivate *const d_ptr = nullptr;
     Q_DECLARE_PRIVATE(SheetBrowserPDF)
 };

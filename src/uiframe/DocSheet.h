@@ -57,6 +57,8 @@ public:
 
     virtual void jumpToPrevPage();
 
+    virtual Outline outline();
+
     virtual void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage = 0);
 
     virtual void jumpToHighLight(const QString &uuid, int ipage);
@@ -162,19 +164,9 @@ public:
     //===========以上是改版后的,优先使用(pdf看情况，如果未实现则不用) ,以下则逐步替换和删除
 
 public:
-    virtual void setFileChanged(bool hasChanged);
-
     virtual void setBookMark(int page, int state);
 
-    virtual void showNoteWidget(int page, const QString &uuid, const int &type = NOTE_HIGHLIGHT);
-
-    virtual bool isDoubleShow();
-
     virtual void exitSliderShow();
-
-    virtual Outline outline();
-
-    virtual int pointInWhichPage(QPoint pos);
 
     virtual int label2pagenum(QString label);
 

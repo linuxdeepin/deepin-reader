@@ -45,10 +45,8 @@ AttrScrollWidget::AttrScrollWidget(DocSheet *sheet, DWidget *parent)
     createLabel(gridLayout, 9, tr("Pages"), QString("%1").arg(fileInfo.iNumpages));
     createLabel(gridLayout, 10, tr("Optimized"), fileInfo.boptimization);
     createLabel(gridLayout, 11, tr("Security"), fileInfo.bsafe);
-
-    QString sPaperSize = QString("%1*%2mm").arg(fileInfo.iWidth).arg(fileInfo.iHeight);
+    QString sPaperSize = QString("%1*%2").arg(fileInfo.iWidth).arg(fileInfo.iHeight);
     createLabel(gridLayout, 12, tr("Page size"), sPaperSize);
-
     createLabel(gridLayout, 13, tr("File size"), Utils::getInputDataSize(fileInfo.size));
 
     auto vLayout = new QVBoxLayout;

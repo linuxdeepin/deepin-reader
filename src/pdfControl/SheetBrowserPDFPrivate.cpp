@@ -12,13 +12,13 @@
 #include "business/AppInfo.h"
 #include "SheetBrowserPDF.h"
 #include "lpreviewControl/note/NoteViewWidget.h"
-#include "DocSheet.h"
+#include "DocSheetPDF.h"
 #include "CustomControl/TipsWidget.h"
 
 #include <QDesktopServices>
 #include <QFileInfo>
 
-SheetBrowserPDFPrivate::SheetBrowserPDFPrivate(DocSheet *sheet, SheetBrowserPDF *parent)
+SheetBrowserPDFPrivate::SheetBrowserPDFPrivate(DocSheetPDF *sheet, SheetBrowserPDF *parent)
     : m_sheet(sheet), q_ptr(parent)
 {
     m_pProxyData = new ProxyData(this);

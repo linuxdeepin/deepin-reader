@@ -109,23 +109,21 @@ void DocSheet::rotateRight()
     qDebug() << "unrealized";
 }
 
-void DocSheet::setFileChanged(bool hasChanged)
-{
-    qDebug() << "unrealized";
-}
-
 void DocSheet::setLayoutMode(Dr::LayoutMode mode)
 {
+    qDebug() << "unrealized";
     m_operation.layoutMode = mode;
 }
 
 void DocSheet::setMouseShape(Dr::MouseShape shape)
 {
+    qDebug() << "unrealized";
     m_operation.mouseShape = shape;
 }
 
 void DocSheet::setCurrentPage(int page)
 {
+    qDebug() << "unrealized";
     m_operation.currentPage = page;
 }
 
@@ -136,35 +134,29 @@ void DocSheet::openMagnifier()
 
 void DocSheet::setScaleFactor(qreal scaleFactor)
 {
+    qDebug() << "unrealized";
     m_operation.scaleFactor = scaleFactor;
 }
 
 void DocSheet::setSidebarIndex(int index)
 {
+    qDebug() << "unrealized";
     m_operation.sidebarIndex = index;
 }
 
 void DocSheet::setRotation(Dr::Rotation rotation)
 {
+    qDebug() << "unrealized";
     m_operation.rotation = rotation;
 }
 
 void DocSheet::setScaleMode(Dr::ScaleMode mode)
 {
+    qDebug() << "unrealized";
     m_operation.scaleMode = mode;
 }
 
 void DocSheet::setBookMark(int page, int state)
-{
-    qDebug() << "unrealized";
-}
-
-void DocSheet::showNoteWidget(int page, const QString &uuid, const int &type)
-{
-    qDebug() << "unrealized";
-}
-
-bool DocSheet::isDoubleShow()
 {
     qDebug() << "unrealized";
 }
@@ -282,12 +274,6 @@ QString DocSheet::addIconAnnotation(const QPoint &, const QColor &, TextAnnoteTy
 {
     qDebug() << "unrealized";
     return "";
-}
-
-int  DocSheet::pointInWhichPage(QPoint)
-{
-    qDebug() << "unrealized";
-    return -1;
 }
 
 void DocSheet::jumpToHighLight(const QString &, int)

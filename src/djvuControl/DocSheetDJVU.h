@@ -58,6 +58,8 @@ public:
 
     bool closeMagnifier()override;
 
+    void docBasicInfo(stFileInfo &info)override;
+
 private slots:
     void onBrowserPageChanged(int page);
 

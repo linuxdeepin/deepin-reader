@@ -1731,7 +1731,6 @@ void DocummentBase::docBasicInfo(stFileInfo &info)
     info = *(d->m_fileinfo);
 }
 
-
 bool DocummentBase::loadData()
 {
     Q_D(DocummentBase);
@@ -1752,7 +1751,6 @@ bool DocummentBase::loadData()
     }
     return true;
 }
-
 
 bool DocummentBase::loadDoc(QString path)
 {

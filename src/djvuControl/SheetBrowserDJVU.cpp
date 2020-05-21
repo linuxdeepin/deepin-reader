@@ -60,6 +60,9 @@ void SheetBrowserDJVU::loadPages(DocOperation &operation)
         m_items.append(item);
         scene()->addItem(item);
     }
+//    QStandardItemModel *model = new QStandardItemModel(this);
+//    m_document->loadProperties(model);
+//    m_document->loadOutline(model);
 
     loadMouseShape(operation);
     deform(operation);
@@ -325,6 +328,16 @@ void SheetBrowserDJVU::closeMagnifier()
     }
     setMouseTracking(false);
     setCursor(QCursor(Qt::ArrowCursor));
+}
+
+int SheetBrowserDJVU::maxWidth()
+{
+    return m_maxWidth;
+}
+
+int SheetBrowserDJVU::maxHeight()
+{
+    return m_maxHeight;
 }
 
 void SheetBrowserDJVU::dragEnterEvent(QDragEnterEvent *event)
